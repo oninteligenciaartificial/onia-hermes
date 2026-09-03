@@ -484,11 +484,53 @@ test("sin horarios reales el bot NO inventa ni muestra el placeholder: saluda y 
   assert.match(texto, /coordina uno personalmente/, "se le dice la verdad: el horario lo pone un humano");
   assert.match(texto, /a qué se dedica tu negocio/, "y no se pierde la calificacion");
 
-  assert.equal(result.nextState.botStage, "handoff_humano", "queda a cargo de un humano, no esperando una eleccion imposible");
+  // ESTA LINEA EXIGIA `handoff_humano` Y ERA EL BLINDAJE DEL BUG. Verificaba que el mensaje fuera
+  // correcto y nunca que la conversacion pudiera seguir. Derivar a un humano es correcto —los dos
+  // efectos de abajo lo hacen— pero `handoff_humano` ademas MATA al bot: es la barrera que
+  // devuelve cero respuestas para siempre (barrera 1 de step()). Como los slots nunca se
+  // definieron, TODA conversacion caia ahi: el bot saludaba y no volvia a hablar. Cinco personas
+  // escribieron entre el 24 y el 29 de agosto; a cuatro no les contesto nadie. El test quedaba
+  // verde igual. `esperando_horario` deriva IGUAL y sigue calificando; lo prueba el test de
+  // abajo, que es el que mira el segundo turno.
+  assert.equal(result.nextState.botStage, "esperando_horario", "deriva al humano SIN quedarse mudo: handoff_humano no responde nunca mas");
   assert.ok(result.notes.includes("sin_horarios_que_ofrecer"));
   const tipos = result.sideEffects.map((effect) => effect.type);
   assert.ok(tipos.includes("lead_upsert"), "el lead nace igual: el prospecto no se pierde");
   assert.ok(tipos.includes("notify_sergio"), "y Sergio se entera de que tiene que proponer hora");
+});
+
+// EL SEGUNDO TURNO ES EL QUE PAGA. El test de arriba miraba el mensaje de bienvenida, y por eso
+// estuvo VERDE toda la semana en que el bot saludaba y se callaba: `handoff_humano` es la barrera
+// que hace que step() devuelva CERO respuestas para siempre (bot-engine.mjs, case "handoff_humano").
+// Como los slots de config.mjs siguen en "pendiente de definir", CADA conversacion caia ahi.
+// Medido el 2026-09-02 en la base de produccion: de las conversaciones de personas reales desde el
+// 24-ago, ninguna recibio jamas una SEGUNDA respuesta. Un test que solo mira el primer mensaje no
+// ve un sistema que muere en el segundo.
+test("sin horarios el bot sigue vivo en el SEGUNDO mensaje: contesta al que cuenta su negocio", () => {
+  const bienvenida = step(createState({ channel: "sim", contactRef: "t" }), { text: "DEMO", receivedAt: T0 }, { config: DEFAULT_CONFIG });
+  assert.equal(bienvenida.replies.length, 1, "saluda");
+
+  const segundo = step(
+    bienvenida.nextState,
+    { text: "Tengo una clinica dental en Santa Cruz, somos 4 personas", receivedAt: "2026-07-27T14:06:00Z" },
+    { config: DEFAULT_CONFIG },
+  );
+
+  assert.ok(segundo.replies.length > 0, "el bot NO puede quedarse mudo en el segundo mensaje");
+  const texto = segundo.replies.map((reply) => reply.text).join("\n");
+  assert.ok(!/pendiente de definir/i.test(texto), "el placeholder NUNCA puede llegarle al prospecto");
+  assert.ok(!texto.includes("{{"), "ninguna variable sin resolver");
+  assert.match(texto, /odontolog/i, "acusa recibo del dato que dio, no lo vuelve a preguntar");
+  assert.ok(!segundo.notes.includes("silencio:handoff_en_curso"), "el silencio del handoff es exactamente el bug");
+
+  // TERCER turno: un bot que contesta una vez mas y se apaga tampoco sirve. El silencio se podia
+  // haber corrido un turno en vez de arreglarse, y solo un tercer mensaje lo distingue.
+  const tercero = step(
+    segundo.nextState,
+    { text: "atendemos de 9 a 19", receivedAt: "2026-07-27T14:12:00Z" },
+    { config: DEFAULT_CONFIG },
+  );
+  assert.ok(tercero.replies.length >= 1, "y sigue contestando, no se agota en un turno");
 });
 
 test("con horarios reales el guion normal no cambia ni una coma", () => {

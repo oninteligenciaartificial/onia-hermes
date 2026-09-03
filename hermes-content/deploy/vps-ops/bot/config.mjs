@@ -89,6 +89,17 @@ export const SCRIPT = Object.freeze({
   // recibo (para que no repita lo que ya dijo) y se le vuelven a poner los dos horarios sobre la
   // mesa. Mandarlo a la rama LLM por un mensaje que se entendio perfecto gasta una respuesta y,
   // al segundo, un handoff — en alguien que esta colaborando.
+  // M0b_SIN_HORARIOS — el mismo acuse que M0b, pero cuando `slots` sigue en "pendiente de
+  // definir". M0b re-ofrece **A)** y **B)**, y sin horarios reales eso sale literal como
+  // "HORARIO A (pendiente de definir)": el prospecto no puede elegir nada y la charla se
+  // estanca repitiendo la misma frase. Aca se acusa el dato, se avanza pidiendo lo unico
+  // accionable (el contacto) y la hora la coordina Sergio.
+  M0b_SIN_HORARIOS: [
+    "Perfecto, anotado {{datos_que_si_dio}} — el resto lo vemos en la demo.",
+    "",
+    "{{humano}} te coordina el horario personalmente, así que no te hago elegir nada acá. ¿A qué número o correo te escribe?",
+  ].join("\n"),
+
   M0b: [
     "Perfecto, anotado {{datos_que_si_dio}} — el resto lo vemos en la demo.",
     "",
@@ -224,6 +235,16 @@ export const SCRIPT = Object.freeze({
     "Eso lo tiene que ver {{humano}}, no yo — soy un bot y no quiero inventarte una respuesta.",
     "",
     "Ya le pasé tu consulta con todo lo que me contaste. Te escribe él desde este mismo número, en horario de oficina ({{horario_frase}}). Si es urgente, decime \"urgente\" y lo marco.",
+  ].join("\n"),
+
+  // M5_ACUSE — el mensaje que llega DESPUES de haber derivado, mientras el humano todavia no
+  // aparecio. No reabre la conversacion ni promete nada nuevo: solo confirma que lo que escribio
+  // llego. Nace de medir, el 2026-09-03, que tras cada M5 el mensaje siguiente del prospecto se
+  // comia un silencio total — la persona ve "entregado" y nunca una respuesta.
+  M5_ACUSE: [
+    "Te leo, y esto también se lo paso a {{humano}} — sigo siendo el bot, así que no te lo contesto yo para no inventarte nada.",
+    "",
+    "Ya está todo en su bandeja. Te responde desde acá mismo en horario de oficina ({{horario_frase}}).",
   ].join("\n"),
 
   // M8_SOPORTE — SEGUNDO CAMINO: el que escribe YA es cliente (o dice que ya tiene el sistema, o

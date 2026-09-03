@@ -60,6 +60,36 @@ poner() {  # poner <origen> <destino>
 }
 
 poner "$FUENTE/onia-loop.sh" "$DESTINO_BIN/onia-loop.sh"
+
+# El sincronizador se despliega A SI MISMO. Sin esta linea es el unico archivo del
+# sistema que hay que copiar a mano, y por lo tanto el unico cuyas mejoras nunca se
+# encienden solas — el mismo bug que este script existe para resolver, aplicado a
+# si mismo. Medido el 2026-09-02: se le agrego el despliegue del tablero, corrio, y
+# desplego los 8 prompts pero NO el tablero, porque el que corria era el viejo.
+# Es seguro auto-reemplazarse: `poner` hace `mv`, que cambia el inodo, y bash sigue
+# leyendo el inodo viejo que ya tiene abierto hasta terminar esta corrida.
+poner "$FUENTE/sincronizar.sh" "$DESTINO_BIN/onia-loops-sync.sh"
+
+# El tablero, como herramienta del VPS y NO como archivo del worktree.
+#
+# Nace del 2026-09-02: el prompt de los nueve loops dice "el tablero va primero" e
+# invocaba `scripts/kanban/tablero.sh`, ruta RELATIVA al worktree de cada carril.
+# Pero cada carril esta parado en SU rama, y el script se creo en `main` ese mismo
+# dia: en `onia-hermes-chatbot`, `-canario` y `-web-venta` el archivo directamente
+# NO EXISTIA. La regla mas importante del arranque fallaba con "No such file".
+#
+# El corredor no mergea `main` hacia las ramas de carril (a proposito: le arrancaria
+# el arbol de abajo a un loop en curso), asi que una herramienta compartida NO puede
+# vivir en una rama — llega solo a quien casualmente este actualizado. Va a /root/bin
+# junto a onia-tg.sh, que es exactamente el mismo caso y por eso nunca fallo.
+poner "$REPO/scripts/kanban/tablero.sh" "$DESTINO_BIN/onia-tablero.sh"
+
+# El lector de Telegram, por la misma razon que el tablero: es una herramienta del
+# VPS, no un archivo de carril. Si no se despliega solo, es el unico camino de
+# ENTRADA de Sergio y solo se actualiza a mano — justo lo contrario de lo que
+# existe para lograr (que pueda apagar la laptop).
+poner "$REPO/scripts/kanban/telegram-entrada.py" "$DESTINO_BIN/onia-tg-entrada.py"
+
 mkdir -p "$DESTINO_BIN/loops"
 for f in "$FUENTE"/prompts/*.md; do
   [ -f "$f" ] || continue

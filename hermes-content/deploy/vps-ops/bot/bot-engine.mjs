@@ -85,6 +85,10 @@ export function createState(input = {}) {
     inboxId: input.inboxId || null,
     humanTookOver: Boolean(input.humanTookOver),
     humanTookOverAt: input.humanTookOverAt || null,
+    // Cuando se ACUSO el primer inbound posterior a un handoff. `handoff_humano` no significa
+    // que un humano haya llegado, solo que el bot derivo; sin esta marca la persona escribe al
+    // vacio. Se persiste en `bot_conversations.raw`, no en columna: no hace falta DDL.
+    handoffAckAt: input.handoffAckAt || null,
     optInAt: input.optInAt || null,
     optInSource: input.optInSource || null,
     optOutAt: input.optOutAt || null,
@@ -154,6 +158,7 @@ export function toConversationRow(state) {
       outboundSeq: state.outboundSeq,
       scheduledLabel: state.scheduledLabel,
       branchAsked: state.branchAsked,
+      handoffAckAt: state.handoffAckAt,
     },
   };
 }
@@ -298,7 +303,7 @@ function finalize(ctx, next, replies, effects = [], notes = []) {
  */
 function handoffResult(ctx, base, reason, leadingReplies = [], bodyKey = "M5") {
   const { config, prev, msg } = ctx;
-  const next = { ...base, botStage: "handoff_humano" };
+  const next = { ...base, botStage: "handoff_humano", handoffAckAt: null };
   const summary = summarize(next, msg, reason, config);
   const effects = [
     stageEffect(prev, next, reason),
@@ -336,7 +341,20 @@ function welcomeResult(ctx, base, { reason = "disparador_demo", notes = ["bienve
   const sinHorarios = slotsPending(config);
   const next = {
     ...base,
-    botStage: sinHorarios ? "handoff_humano" : "esperando_horario",
+    // SIN HORARIOS NO ES SILENCIO. Antes esto era `handoff_humano`, y `handoff_humano`
+    // significa que el bot NO vuelve a hablar nunca (barrera 1 de step()). Como los slots de
+    // config.mjs siguen en "pendiente de definir", CADA conversacion caia ahi: el bot saludaba
+    // y se callaba en el segundo mensaje. Medido el 2026-09-02 sobre las 13 conversaciones
+    // desde el 24-ago: en el inbox de QA sostuvo 5 mensajes por 5 respuestas; a las personas
+    // reales les contesto como maximo UNA vez, SIEMPRE. Cinco escribieron, cuatro sin respuesta.
+    // Ahora entra igual a `esperando_horario`, que es la rama VIVA del guion (handleHorario):
+    // sigue calificando —lo unico que puede hacer sin agenda— y el humano coordina la hora en
+    // paralelo; los dos efectos de abajo (review_queue + notify_sergio) se mantienen intactos.
+    // OJO: no sirve `esperando_calificacion`. Ese es el guion VIEJO y su rama del switch
+    // reenvia la bienvenida ("migracion_guion_nuevo"), asi que el bot queda saludando en bucle
+    // a cada mensaje — probado antes de elegir esta. `slotsOffered` ya queda [] mas abajo, asi
+    // que handleHorario no puede leer una eleccion de horario que no se ofrecio.
+    botStage: "esperando_horario",
     slotsOffered: sinHorarios ? [] : config.slots.map((slot) => ({ ...slot })),
     optInAt: base.optInAt || msg.receivedAt,
     optInSource: base.optInSource || "inbound_demo",
@@ -575,9 +593,25 @@ export function step(state, incoming, options = {}) {
         : handoffResult(ctx, base, "escribio_tras_descarte");
     case "demo_realizada":
       return handoffResult(ctx, base, "escribio_tras_la_demo");
-    case "handoff_humano":
-      // Ya esta en manos de Sergio: se registra el inbound y el bot no vuelve a hablar.
-      return finalize(ctx, base, [], [], ["silencio:handoff_en_curso"]);
+    case "handoff_humano": {
+      // DERIVAR NO ES QUE ALGUIEN HAYA LLEGADO. Aca decia "ya esta en manos de Sergio" y callaba
+      // para siempre, pero `handoff_humano` lo prende el BOT al decidir derivar: nadie contesto
+      // todavia. El candado legitimo es `humanTookOver` (mas arriba en step()), que se prende
+      // cuando un humano ESCRIBE de verdad.
+      //
+      // Medido en produccion el 2026-09-03, conversacion 49 (widget de la web): Chatwoot entrego
+      // el mensaje 287 y el bot lo proceso 4,08 s — corrio el turno entero y no produjo NADA. En
+      // las 8 corridas horarias de la sonda la correlacion es perfecta: cada M5 ("eso lo tiene
+      // que ver Sergio") dejaba mudo al mensaje siguiente. Del otro lado hay una persona que ve
+      // su mensaje entregado y ninguna respuesta, nunca.
+      //
+      // UNA sola vez: acusar cada mensaje seria spam, y encima taparia a Sergio cuando entre.
+      if (base.handoffAckAt) return finalize(ctx, base, [], [], ["silencio:handoff_en_curso"]);
+      const acusado = { ...base, handoffAckAt: msg.receivedAt || new Date().toISOString() };
+      // Cero efectos: el aviso a Sergio y la cola de revision ya salieron con el handoff. Este
+      // turno es solo decirle a la persona que su mensaje llego.
+      return finalize(ctx, acusado, [say("M5_ACUSE", acusado, config)], [], ["handoff:acuse_de_recibo"]);
+    }
     default:
       return handoffResult(ctx, base, "estado_desconocido");
   }
@@ -603,7 +637,11 @@ function handleHorario(ctx, base) {
     // Contesto contando su negocio en vez de elegir: se le acusa recibo y se le vuelven a poner
     // los dos horarios. El dato queda guardado, asi que M2 despues no se lo vuelve a pedir.
     if (Object.keys(ctx.found || {}).length > 0) {
-      const reply = say("M0b", base, config, { datos_que_si_dio: joinEs(capturedLabels(base.qualification, config)) });
+      // Sin horarios reales, M0b vuelve a ofrecer "**A)** HORARIO A (pendiente de definir)":
+      // el prospecto no puede elegir NADA y la charla se estanca repitiendo la misma frase.
+      // Medido el 2026-09-02: mensajes 2 y 3 salian identicos. Con slots pendientes se acusa
+      // el dato y se pide el contacto, que es lo unico accionable sin agenda.
+      const reply = say(slotsPending(config) ? "M0b_SIN_HORARIOS" : "M0b", base, config, { datos_que_si_dio: joinEs(capturedLabels(base.qualification, config)) });
       // El dato tambien va al CRM, no solo a la conversacion. Sin esto, quien contaba su negocio en
       // vez de elegir horario y despues se callaba quedaba en el CRM como "sin definir" y sin
       // ciudad: el rubro y el tamano vivian en `bot_conversations` y nadie los veia en el panel.

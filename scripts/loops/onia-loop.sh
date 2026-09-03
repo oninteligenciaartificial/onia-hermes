@@ -8,7 +8,7 @@
 # entonces ninguno habia corrido. Y con la laptop apagada no corren nunca.
 # Por eso se mudan a cron acá.
 #
-# Uso:  onia-loop.sh <canario-visual|chatbot-cola|marca-personal|onia-cola|docs-auditoria|web-venta>
+# Uso:  onia-loop.sh <canario-visual|chatbot-cola|marca-personal|kpis-semanal|onia-cola|docs-auditoria|web-venta>
 # APAGAR: crontab -e y comentar la linea del loop.
 #
 # Forma copiada de /root/bin/claude-guardia.sh (secretos por .hermes/.env, unset
@@ -20,11 +20,39 @@
 set -uo pipefail
 
 NOMBRE="${1:-}"
+
+# 🔴 `tg` se define ACA ARRIBA, antes del `case`, y no junto a `avisar`.
+# El 2026-09-02 `investigacion` y `kpis-semanal` perdieron su `case` (alguien
+# reescribio este archivo hacia atras) y sus crons los llamaron durante horas:
+# cada corrida moria en el `*)` con exit 64 — ANTES de que `avisar` existiera —
+# asi que no salio ni un aviso. Un loop registrado, con prompt en disco y cron
+# perfecto, que no corria y no lo decia. Todo lo que falle antes de esta linea
+# falla MUDO, y por eso esta linea va lo mas arriba posible.
+tg() { /root/bin/onia-tg.sh "$1" >/dev/null 2>&1 || true; }
+
+# Los ids conocidos se leen del `case` de abajo, no de una lista a mano: la que
+# habia escrita nombraba 7 y ya se habia olvidado de `kpis-semanal`. Un mensaje
+# de uso que miente sobre que loops existen manda a buscar el problema al lugar
+# equivocado.
+IDS=$(sed -n 's/^  \([a-z][a-z0-9-]*\))$/\1/p' "$0" 2>/dev/null | paste -sd'|' -)
+
 # Tope de turnos por vuelta. 120 alcanza para cerrar UN item de cola; el
 # integrador necesita mas, porque cada carril son fetch + merge + gates + push.
 TURNOS=120
+# Modelo y esfuerzo por loop. Default: lo caro, porque la mayoria de los carriles
+# decide algo. Sergio, 2026-09-02: "me parece que tenemos que bajar el uso de
+# claude opus 5 max en algunas tareas, mira las menos usables o que no necesitan
+# mucho razonamiento". Se baja SOLO donde el trabajo es mecanico: abrir, comparar,
+# contar. Donde hay que decidir que esta mal y por que, sigue Opus.
+MODELO=claude-opus-5
+ESFUERZO=max
 case "$NOMBRE" in
   canario-visual)
+    # Abre 10 pantallas, compara contra baseline y escribe la diferencia. El juicio
+    # duro (si un defecto es real) lo hace el carril dueño cuando lo toma; aca el
+    # trabajo es mecanico. Sonnet alcanza y cuesta una fraccion.
+    MODELO=claude-sonnet-5
+    ESFUERZO=medium
     WT=/root/loops/onia-hermes-canario
     RAMA=claude/canario-visual
     # 5 pantallas con Playwright + mirar 5 capturas. Cada 6 h: sobra margen.
@@ -69,6 +97,17 @@ case "$NOMBRE" in
     TOPE=2400
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
+  kpis-semanal)
+    # Junta numeros y los presenta. No decide nada: no necesita Opus.
+    MODELO=claude-sonnet-5
+    ESFUERZO=medium
+    # KPIs de lunes del carril marca personal. Mismo worktree que marca-personal;
+    # corre lunes 13:07 UTC, lejos de las corridas :56 de ese loop.
+    WT=/root/loops/onia-hermes-marca-personal
+    RAMA=claude/marca-personal-loop
+    TOPE=1800
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
   web-venta)
     # Dueno de onia.com.bo/ y /empezar — la puerta de entrada del producto, que
     # hasta el 2026-09-02 no tenia carril: el canario dejaba defectos ahi y nadie
@@ -93,8 +132,75 @@ case "$NOMBRE" in
     TOPE=2400
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
+  lucia)
+    # Carril Lucia / modelos (Higgsfield). Era una sesion de Windows: se mudo al
+    # VPS el 2026-09-02 para que corra con la laptop apagada.
+    # 🔴 Es el UNICO carril que puede quemar plata solo. Su prompt le prohibe
+    # generar video y dar de alta plataformas: deja todo listo y Sergio dispara.
+    WT=/root/loops/onia-hermes-lucia
+    RAMA=claude/lucia-vps
+    TOPE=2700
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
+  recorrido-cliente)
+    # Recorre el producto de punta a punta como un cliente real: home -> alta ->
+    # rubro -> cargar un dato -> pantalla de cobro -> bandeja. El canario mira
+    # pantallas SUELTAS; este mira el CAMINO, que es donde se pierde la plata.
+    # Playwright como root necesita --no-sandbox: sin eso no abre y la vuelta se
+    # pierde creyendo que el sitio esta caido.
+    WT=/root/loops/onia-hermes-recorrido
+    RAMA=claude/recorrido-cliente
+    TOPE=2700
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
+  tendencias)
+    # Investiga que funciona AHORA (formatos, ganchos, estructura de carrusel) y
+    # lo convierte en recetas EJECUTABLES para los carriles de contenido. El
+    # radar viejo era solo de la marca personal; para producto y ads no habia
+    # nada. Solo fuentes publicas: no se loguea a ninguna red ni gasta.
+    WT=/root/loops/onia-hermes-tendencias
+    RAMA=claude/tendencias
+    TOPE=2400
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
+  web-factory-dev)
+    # Webs de cliente. Se APAGO el 2026-09-02 por quedarse sin cola y se volvio a
+    # encender el MISMO dia al medir que LOOP_COLA.md tenia 7 items reales otra
+    # vez. Un carril con trabajo y sin nadie que lo haga es lo contrario de
+    # "todo el tiempo trabajando".
+    WT=/root/loops/onia-hermes-webfactory
+    RAMA=claude/web-factory-dev
+    TOPE=2700
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
+  calidad-generado)
+    # Juzga lo que Higgsfield genera y cuida que Lucia sea SIEMPRE la misma cara.
+    # No genera nada: abre las piezas del ultimo lote, las mira contra la rubrica,
+    # y escribe en la bitacora POR QUE salio bien la que salio bien — eso es lo
+    # que hace que la proxima no sea suerte. La deriva de un rasgo no se nota
+    # hasta que ya se publicaron veinte piezas.
+    WT=/root/loops/onia-hermes-calidad
+    RAMA=claude/calidad-generado
+    TOPE=2400
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
+  supervisor)
+    # Audita a los OTROS loops: abre sus commits y dice si el trabajo sirve.
+    # Ninguno se mira a si mismo, y un loop que produce basura no falla — commitea,
+    # reporta bien, y se ve igual que uno que sirve. Contar commits mide actividad;
+    # abrirlos mide valor.
+    WT=/root/loops/onia-hermes-supervisor
+    RAMA=claude/supervisor
+    TOPE=2400
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
   *)
-    echo "uso: $0 <canario-visual|chatbot-cola|marca-personal|onia-cola|docs-auditoria|web-venta|investigacion>" >&2; exit 64 ;;
+    # Este es el camino por el que un loop muere sin que nadie se entere: el cron
+    # lo sigue llamando cada hora y el unico rastro es un exit 64 en un log que
+    # nadie abre. Ahora grita.
+    echo "uso: $0 <${IDS:-?}>" >&2
+    tg "🔴 <b>Loop sin <code>case</code></b>: <code>${NOMBRE:-(vacio)}</code> no existe en <code>$0</code>, pero algo lo esta llamando (su cron). Muere con exit 64 en cada corrida. Conocidos: <code>${IDS:-?}</code>"
+    exit 64 ;;
 esac
 
 LOG=/var/log/onia-loop-$NOMBRE.log
@@ -114,7 +220,7 @@ export ONIA_LOOP_ID="$NOMBRE"
 
 log() { printf '%s %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$*" >> "$LOG"; }
 
-tg() { /root/bin/onia-tg.sh "$1" >/dev/null 2>&1 || true; }
+# (`tg` ya quedo definida arriba del `case`, a proposito: ver el comentario ahi.)
 
 # Un monitor que se muere en silencio es peor que no tener monitor. Pero avisar
 # cada vuelta de lo mismo es ruido: como mucho un aviso cada 6 h por loop.
@@ -170,7 +276,7 @@ log "===== ARRANCA $NOMBRE — rama $RAMA — HEAD $ANTES — tope ${TOPE}s ====
 # Modelo y esfuerzo: decision de Sergio el 2026-09-02 — "cambialos todos a opus 5
 # en max, pero quiero que terminen de una vez". Antes era claude-sonnet-5 sin
 # --effort. Cuesta mas por vuelta; el rendimiento por vuelta es lo que se compra.
-timeout "$TOPE" claude -p --model claude-opus-5 --effort max --max-turns "$TURNOS" \
+timeout "$TOPE" claude -p --model "$MODELO" --effort "$ESFUERZO" --max-turns "$TURNOS" \
   --allowedTools "$TOOLS" < "$PROMPT" >> "$LOG" 2>&1
 RC=$?
 
@@ -209,6 +315,41 @@ GITDIR=$(git -C "$WT" rev-parse --git-dir 2>/dev/null || echo /dev/null)
 if [ -f "$GITDIR/MERGE_HEAD" ]; then
   CONF=$(git -C "$WT" diff --name-only --diff-filter=U | wc -l)
   avisar "quedo un MERGE ABIERTO en $RAMA ($CONF archivo(s) en conflicto). No lo cierra nadie solo: hay que resolver a mano en <code>$WT</code>"
+fi
+
+# ── reporte a Sergio por Telegram, TODAS las vueltas -------------------------
+# Sergio, 2026-09-02: "quiero revisar cada que hagan algo, que me lo envien por
+# telegram". Antes solo avisaba cuando algo FALLABA: el trabajo bueno era
+# invisible y habia que entrar al VPS a leer un log para saber que hizo un loop.
+#
+# Se manda la PRIMERA linea util que escribio el agente — la regla de todos los
+# prompts es empezar con una linea en castellano llano para Sergio, asi que esa
+# es exactamente la que sirve. REPORTE A SERGIO.
+#
+# Desde la ULTIMA vuelta, no la primera: `sed -n "/ARRANCA/,$p"` arranca en la
+# PRIMERA coincidencia del archivo, y el log acumula TODAS las vueltas del dia.
+# Resultado medido el 2026-09-02, con los mensajes en la mano de Sergio:
+# "✅ canario-visual · 252s · 1 commit(s)" venia acompanado de "Not logged in ·
+# Please run /login", y onia-cola reportaba un "Reached max turns" fechado a las
+# 02:38 — lineas de vueltas viejas presentadas como el informe de esta. El loop
+# habia trabajado bien; el reporte decia otra cosa. Un informe que miente es peor
+# que no tener informe, porque Sergio actua sobre el.
+INICIO=$(grep -n "===== ARRANCA $NOMBRE" "$LOG" 2>/dev/null | tail -1 | cut -d: -f1)
+LINEA=$(tail -n +"${INICIO:-1}" "$LOG" 2>/dev/null \
+  | grep -vE "^[0-9]{4}-[0-9]{2}-[0-9]{2}T|^\s*$|^={3,}" \
+  | sed 's/^[*_#> -]*//' \
+  | grep -vE "^(Detalle|Resumen|Vuelta|##)" \
+  | grep -vE "^(Not logged in|Please run|Error: Reached max turns|Execution error|API Error|Credit balance)" \
+  | head -1 | cut -c1-450)
+
+if [ -n "$LINEA" ]; then
+  ESTADO="✅"; [ "$RC" != 0 ] && ESTADO="⚠️"
+  COMMITS=""; [ "$ANTES" != "$DESPUES" ] && COMMITS=" · $(git log --oneline "$ANTES..$DESPUES" | wc -l) commit(s)"
+  tg "$ESTADO <b>$NOMBRE</b> · ${T}s${COMMITS}
+$LINEA"
+else
+  # Sin linea no se manda nada: mejor silencio que un mensaje vacio cada vuelta.
+  log "(sin linea para Sergio en esta vuelta)"
 fi
 
 # ── rotacion: 24 vueltas por dia llenan un disco -----------------------------

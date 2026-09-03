@@ -213,3 +213,56 @@ produce solo". Los ganchos del banco (RADAR §2) se cruzan con estos temas.
       captura real de un sticker de IG** — pedírsela a Sergio (una captura de pantalla
       pegando una encuesta, 10 seg) y recién ahí calibrar `.zona`. Anotado acá para que la
       próxima corrida no lo invente a ojo.
+
+## 7 · Decisiones de diseno de Sergio (02-sep tarde) — MANDAN sobre lo anterior
+
+- **Mascota: cartoon 2D SVG** (references/ui-patterns/mascota-onia/), estilo axelyastro:
+  linea negra + verde plano. Los 3 candidatos 3D clay quedan DESCARTADOS. La mascota
+  protagoniza contenido (tiras, sketches, venta), no decora.
+- **Menos es mas**: "hay informacion innecesaria" — 1 idea por lamina, cero metadata
+  decorativa. El experimento marco spec-sheet queda DESCARTADO.
+- **Verde Onia (#00C661) y tipografia de marca (Archivo + Geist Mono) SIEMPRE.**
+
+### Estado de aplicacion de esta seccion (el loop la ejecuta, no la lee)
+
+- [x] **Verde #00C661 aplicado** (02-sep, tanda intensiva) — **la seccion 7 se escribio
+      como decision y NADIE la habia ejecutado sobre el codigo.** Contados los 12
+      generadores de `scripts/marca-personal/`, **cuatro estaban en `#1F7A4D`**, un verde
+      oscuro que no decidio nadie: `generar-carrusel-atender.py`, `-chatbot.py`,
+      `-sistema.py` y `-tareas.py` — es decir **las dos piezas de venta y los dos
+      carruseles mas nuevos**. Los otros ocho ya usaban el verde correcto o no usaban
+      verde. Corregido en los cuatro.
+- [x] **Como se usa el verde: experimento A/B/C con el contraste MEDIDO** (02-sep) —
+      renderizado en `carousels/out/experimento-verde-marca/` sobre la lamina de CTA
+      real (la palabra "COMUNIDAD", que es la que dispara toda la conversion).
+      **Cambiar el hex a secas habria roto la pieza**, y por eso el item se hizo como
+      experimento y no como buscar-y-reemplazar: en esos generadores el verde era
+      **color de texto**, y `#00C661` es un verde claro.
+
+      | | tratamiento | contraste WCAG sobre `#F7F7F7` | veredicto |
+      |---|---|---|---|
+      | A | `#1F7A4D` como texto (lo que habia) | **4,96:1** ✅ pasa | legible, pero es el verde equivocado y tan oscuro que ni se lee como verde |
+      | B | `#00C661` como texto (arreglo ingenuo) | **2,12:1** ❌ reprueba | verde correcto y visualmente el mas debil: se lava sobre fondo claro |
+      | C | `#00C661` de **fondo** + tinta `#0A0A0A` | **8,72:1** ✅ el mejor | **GANA** |
+
+      **Gana C**, y mirada la hoja comparada no es cerca: el bloque verde convierte el CTA
+      en lo segundo mas fuerte de la lamina despues del titulo, mientras que B queda mas
+      apagado que el gris que lo rodea. C ademas **no era invento**: es exactamente como
+      ya lo usaban `generar-lamina-grid-senales.py` y `generar-carrusel-comunidad.py`
+      (`.hl{background:#00C661}`) — esa familia ya tenia razon y la otra se habia
+      desviado. **Regla que queda:** el verde de marca es un **relleno**, nunca un color
+      de texto sobre fondo claro. Aplicado a los 4 generadores, las 4 piezas regeneradas.
+- [x] **Marco spec-sheet retirado** (02-sep) — Sergio lo descarto arriba y **seguia vivo
+      en los mismos 4 generadores**, imprimiendo "ONIA SYSTEM · GRID 1080×1350 / V1.0" y
+      "TECHNICAL SPEC · TEMA: …" en cada portada: justo la "informacion innecesaria" que
+      el pidio sacar. Retirado del CSS y del markup, y **corregidos los docstrings**, que
+      seguian anunciandolo como "ganador del experimento" — un comentario que miente sobre
+      el codigo manda a la sesion siguiente a reponerlo.
+- [x] **Bug de paso: el CTA del carrusel de tareas no era verde** — `generar-carrusel-tareas.py`
+      declaraba la variable de verde pero **no la usaba**: su "COMUNIDAD" salia en negro,
+      distinto al de los otros carruseles. El CTA es una regla del carril y tiene que
+      verse igual siempre. Unificado.
+- [ ] **Pendiente que abre esto:** las portadas de `chatbot`, `sistema` y `tareas` todavia
+      llevan el subtitulo gris que el experimento de miniatura (P22) declaro peso muerto.
+      Pasarlas al patron contexto-chico + remate-gigante exige **elegir el remate de cada
+      una a mano** — es decision de copy, no mecanica.

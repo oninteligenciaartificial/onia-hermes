@@ -56,6 +56,23 @@ instrucción: los loops corren sin nadie mirando.
 **Uno más, que no es mío:** `contenido-cola` corre en Windows y **lo maneja Sergio en su propia
 sesión**. Ningún loop del VPS lo toca ni lo rearma.
 
+### Y una capa ARRIBA de todos: Hermes Agent
+
+Los siete loops tienen un techo que ninguno puede romper solo: **cada uno come de su propia cola.
+Ninguno decide qué importa más esta semana.** Eso lo hacía Sergio, todos los días, o no lo hacía
+nadie.
+
+**Hermes Agent** (de NousResearch, en el VPS) cubre exactamente eso: **12 trabajos programados**
+que entregan por Telegram — agenda diaria con 3 prioridades, kickoff los lunes, revisión de
+finanzas los viernes, cierre los domingos. **No programa**: cuando hace falta código, delega a
+Claude Code igual que `onia-loop.sh`.
+
+Detalle completo, cómo se opera y su historia en [`../HERMES_AGENT.md`](../HERMES_AGENT.md).
+
+⚠️ **Estuvo nueve días con 12 de 13 trabajos fallando y nadie se enteró** — sus API keys daban
+401. Es el mismo modo de falla de este archivo, en otra caja. Ahora tiene su vigía horario
+(`hermes-vigia.sh`), que es su mitad del bloque *"tenés que poder FALLAR a la vista"*.
+
 ### Los dos que ALIMENTAN, y por qué el sistema se moría sin ellos
 
 `canario-visual` y `docs-auditoria` **no cierran ítems: los fabrican.** Es la distinción que casi
@@ -138,6 +155,34 @@ corren **cada hora**: son ~48 vueltas de Opus-max por día sólo entre esos dos.
 rendimiento por vuelta, no más vueltas. Si en algún momento hay que bajar el gasto, lo primero es
 **espaciar los horarios**, no volver a Sonnet: una vuelta peor deja trabajo mal hecho que después
 alguien tiene que deshacer.
+
+## 🔴 El agujero que ningun loop podia ver, y como se tapa
+
+Sergio, 2026-09-02, mirando que el bot seguia mudo: *"esos problemas no se supone que los loops
+los arreglan? Osea de verdad se estan corriendo?"*.
+
+**Si corrian** —21 vueltas del carril chatbot esa noche, 17 con commit— y aun asi el bot llevaba
+una semana contestando el saludo y callandose en el segundo mensaje, con cinco personas reales
+esperando. El loop no fallo: **reporto la verdad de lo que podia ver.** Su cola no tenia el bug,
+y no lo tenia porque **nadie habia escrito nunca al bot**.
+
+Ahi esta la regla, y es la misma que ya nos mordio una vez:
+
+> **Un carril sin productor es un carril ciego.** No se planta: reporta "todo bien" mientras su
+> superficie esta rota, y suena mas convincente cada vuelta.
+
+Teniamos productor para **pantallas** (`canario-visual`, que las abre y las mira) y para
+**decisiones** (`investigacion`, que las cotiza). **No teniamos ninguno para conversaciones**, que
+es justo la superficie donde se pierde un cliente.
+
+**Como se tapo, y por que asi:** en vez de un octavo loop, el carril chatbot **prueba su propia
+definicion de hecho al empezar cada vuelta** — escribe DOS mensajes al widget y cuenta las
+respuestas. Su objetivo ya decia *"que un desconocido escriba y esa conversacion se vea en la
+bandeja"*; era una **frase**, no un chequeo. Ahora es un chequeo.
+
+**La leccion, para el proximo carril que se arme:** un objetivo que no se ejecuta cada vuelta es
+decoracion. Si la definicion de hecho de un carril no se puede correr, el carril no puede saber
+si esta hecho — y va a reportar que si.
 
 ## Cómo se sabe que el equipo está sano
 

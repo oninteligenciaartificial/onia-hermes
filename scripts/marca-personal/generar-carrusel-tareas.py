@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Carrusel #3 del plan mensual — "Las 5 tareas que mas tiempo te roban (y como
-las automatizo)", 7 laminas 1080x1350, patron statement-3d-minimal con marco
-spec-sheet en portada (ganador del experimento 02-sep, ver BASE_CONTENIDO SS6).
+las automatizo)", 7 laminas 1080x1350, patron statement-3d-minimal. Sin marco
+spec-sheet: Sergio lo descarto el 02-sep (BASE_CONTENIDO SS7).
 Salida: carousels/out/carrusel-tareas-automatizadas/.
 
 Las 5 tareas son las que Sergio automatiza DE VERDAD en su propia operacion (ver
@@ -31,7 +31,7 @@ CHROME = _chrome()
 CSS = """
 @import url('https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Geist+Mono:wght@500&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#F7F7F7;--ink:#0A0A0A;--muted:#8E8E8E;--card:#FFFFFF;--verde:#1F7A4D}
+:root{--bg:#F7F7F7;--ink:#0A0A0A;--muted:#8E8E8E;--card:#FFFFFF;--verde:#00C661}
 html,body{width:1080px;height:1350px}
 body{background:var(--bg);font-family:'Archivo',sans-serif;overflow:hidden}
 .lienzo{width:1080px;height:1350px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:90px 100px;position:relative}
@@ -41,23 +41,17 @@ body{background:var(--bg);font-family:'Archivo',sans-serif;overflow:hidden}
 .icono-sm{width:210px;height:210px;object-fit:contain}
 .titulo{font-size:88px;font-weight:900;font-variation-settings:'wdth' 62;color:var(--ink);letter-spacing:0;word-spacing:.09em;text-align:center;line-height:1.02}
 .sub{font-size:44px;font-weight:600;color:var(--muted);text-align:center}
+.cta{font-weight:900;color:var(--ink);background:var(--verde);border-radius:10px;padding:2px 16px 6px}
 .caja{background:var(--card);border-radius:36px;padding:56px 60px;font-size:40px;line-height:1.45;color:var(--ink);box-shadow:0 18px 50px rgba(0,0,0,.07);width:100%}
 .caja b{font-weight:600;background:#EFEDEA;border-radius:8px;padding:0 8px}
 .fila{display:flex;gap:110px;justify-content:center;align-items:flex-end}
 .item{display:flex;flex-direction:column;align-items:center;gap:14px}
 .item .lbl{font-size:30px;font-weight:400;color:var(--ink)}
-.marco-top{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;
-  padding:44px 56px;font-family:'Geist Mono',monospace;font-size:24px;font-weight:500;
-  letter-spacing:.08em;text-transform:uppercase;color:var(--ink);border-bottom:2px solid var(--ink)}
-.marco-bottom{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-between;
-  padding:36px 56px 96px;font-family:'Geist Mono',monospace;font-size:22px;font-weight:500;
-  letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-top:2px solid var(--ink)}
 """
 
 SLIDES = [
-    # 1 portada — marco spec-sheet
+    # 1 portada
     f"""<div class="lienzo" style="gap:56px;padding-top:150px;padding-bottom:150px">
-  <div class="marco-top"><span>ONIA SYSTEM &middot; GRID 1080&times;1350</span><span>V1.0</span></div>
   <div class="fila">
     <div class="item"><img class="icono-sm" src="{ICONOS}/spiral_calendar.png"><div class="lbl">Tiempo</div></div>
     <div class="item"><img class="icono-sm" src="{ICONOS}/robot.png"><div class="lbl">Automatico</div></div>
@@ -70,7 +64,6 @@ SLIDES = [
     <div class="item"><img class="icono-sm" src="{ICONOS}/chart_increasing.png"><div class="lbl">Sin humo</div></div>
     <div class="item"><img class="icono-sm" src="{ICONOS}/white_check_mark.png"><div class="lbl">Probado</div></div>
   </div>
-  <div class="marco-bottom"><span>TECHNICAL SPEC &middot; TEMA: AUTOMATIZACION</span><span>FORMATO: CARRUSEL</span></div>
   <div class="handle">@sergiourcullo</div>
 </div>""",
     # 2 producir contenido
@@ -127,7 +120,7 @@ SLIDES = [
     f"""<div class="lienzo" style="gap:56px">
   <img class="icono" src="{ICONOS}/light_bulb.png">
   <div class="titulo">Ninguna la armé<br>de un d&iacute;a para otro</div>
-  <div class="sub">Comentá <b style="color:var(--ink)">COMUNIDAD</b> y te paso el enlace para unirte</div>
+  <div class="sub">Comentá <span class="cta">COMUNIDAD</span> y te paso el enlace para unirte</div>
   <div class="handle">@sergiourcullo</div>
 </div>""",
 ]

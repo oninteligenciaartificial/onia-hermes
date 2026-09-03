@@ -501,7 +501,7 @@ la base de Chatwoot en el propio VPS), dos nuevas del 01-sep ("tengo una ferrete
 dental en Santa Cruz, somos 4 personas"). **Cinco de las seis no dejaron teléfono ni correo**:
 sólo se les puede contestar desde el widget mismo, así que un inbox sin dueño no es una demora,
 es una pérdida. El límite de una org = un inbox sigue siendo real
-(`clinic_settings.chatwootInboxId` es `Int?` único). Anotado como **S12** en
+(`clinic_settings.chatwootInboxId` es `Int?` único). Anotado como **S14** en
 `hermes-content/docs/cola/chatbot.md`, sin tocar la decisión: sigue esperando que Sergio elija
 entre la opción 2 (org "Onia Bandeja", ~10 min) o extender el schema a N inboxes.
 
@@ -759,77 +759,43 @@ mueven la aguja son distintos y se pueden hacer por separado:
   la web sigue recibiendo la respuesta genérica, y una cita sigue derivándose a mano — que es
   justo lo que `pricing.ts` cobra como resuelto.
 
-  🔴 **La pregunta (a) ya no es la correcta — medido en vivo el 2026-09-02 21:40 UTC. El deploy
-  SE HIZO HOY, y quedó a la mitad.** A las 17:19 alguien copió el motor al VPS y se llevó **2 de
-  los 5 archivos del cambio**. Nadie lo anotó, y este radar seguía diciendo que no se había
-  desplegado nada.
-
-  Verificado contra el proceso que de verdad corre —`node /tmp/onia-bot/webhook-server.mjs`
-  (PID arrancado 17:19) dentro del contenedor `onia-center`, **no** contra `/opt/onia/bot/`:
-
-  ```
-  # diff --strip-trailing-cr  main(hermes-content/deploy/vps-ops/bot)  vs  onia-center:/tmp/onia-bot
-  IGUAL a main    bot-engine.mjs        ← desplegado hoy 17:19 (.bak-20260902-171939)
-  IGUAL a main    config.mjs            ← desplegado hoy 17:19
-  ATRASADO        recepcionista.mjs  (57 lineas)
-  ATRASADO        knowledge.mjs      (26 lineas)
-  ATRASADO        intents.mjs        (27 lineas)
-
-  docker exec onia-center grep -c wantsToBook   /tmp/onia-bot/intents.mjs       →  0
-  docker exec onia-center grep -c linkDeReserva /tmp/onia-bot/recepcionista.mjs →  0
-  ```
-
-  ⚠️ **El primer diff mentía y por poco lo reporto:** sin `--strip-trailing-cr` los cinco archivos
-  daban "1.634 líneas distintas" con las **mismas líneas a ambos lados** — es CRLF contra LF, el
-  mismo instrumento roto que ya costó el rojo del gate del espejo (§15). Los 3 atrasos de arriba
-  son los que sobreviven a cambiar el instrumento.
-
-  **Qué significa, en concreto:** el bot que atiende ahora mismo **no agenda** —no tiene el código
-  que manda `/book/<slug>`— y el CTA de `/v1/empezar` **sigue sin matchear por prefijo**, así que
-  el lead que declara su rubro ("…Mi negocio es: veterinaria") recibe igual el saludo genérico.
-  No está *roto*: `bot-engine.mjs` no llama a `wantsToBook` ni a `linkDeReserva`, así que no hay
-  error de import — está **silenciosamente atrasado**, que es peor de detectar.
-
-  **Y la premisa comercial de esta fila venció.** Decía que la cita derivada a mano es *"justo lo
-  que `pricing.ts` cobra como resuelto"*. Ya no: `onia-platform@f47d615` (**2026-08-31 20:03**,
-  en `master`) es literalmente *"fix(pricing): vendiamos que el bot agenda y el bot no agenda"*, y
-  hoy `lib/pricing.ts:22` ordena lo contrario — *"⚠️ NO decir que el bot 'agenda': no agenda"*.
-  **Nadie está prometiendo de más.** Los dos carriles resolvieron el mismo problema en direcciones
-  opuestas y con un día de diferencia: producto bajó la promesa el 31-ago, chatbot subió la
-  capacidad el 1-sep.
-
-### 16-bis. ¿Se termina el deploy del bot que quedó a medias hoy? (2026-09-02)
-
-**Qué se decide.** El motor nuevo ya corre en producción, pero sin las 3 piezas que le dan la
-capacidad de agendar y de leer el CTA. O se completan los 3 archivos, o se saca de `main` el
-código que nunca va a correr. Mientras no se decida, `main` y producción dicen cosas distintas y
-el próximo deploy parcial vuelve a pasar sin que nadie lo note.
-
-| opción | qué cuesta | cuánto tarda | qué se pierde |
-|---|---|---|---|
-| **A — completar los 3 archivos** | Bs 0 | Copiar 3 archivos a `/opt/onia/bot/` + `webhook-server.sh restart`, que hace `docker cp` del directorio entero (`webhook-server.sh:123`). El reinicio anterior figura caído y sano **dentro del mismo segundo** en el log del watchdog (`21:42:01 … reiniciando` / `21:42:01 OK: webhook de vuelta arriba`) | Hay que mover la copia de venta **en el mismo paso**: `ONIA_CATALOGO_DE_VENTA.md` y `pricing.ts:22` hoy declaran que el bot NO agenda, y `scripts/venta-honestidad.test.mjs` se pone **roja a propósito** cuando eso deja de ser cierto |
-| **B — revertir en `main`** | Bs 0 | 1 vuelta de loop del carril chatbot | Se tira trabajo mergeado y verificado, **y el CTA de `/v1/empezar` sigue roto** — ese arreglo viaja en los mismos 3 archivos y no tiene nada que ver con agendar |
-| **C — dejarlo así** | Bs 0 | — | `main` y producción quedan divergentes en 3 archivos sin que nada lo vigile: exactamente el modo de falla de §22, ahora en el motor que le habla a los clientes |
-
-**Recomendación: A.** La agenda pública ya está viva y verificada mirándola
-(`/book/zz-qa-clinica-chatbot-9k651` renderiza el asistente de 4 pasos con profesionales reales,
-§16 arriba), el diseño es *fail-closed* —sin slug limpio el bot deriva exactamente como hoy— y el
-add-on de **Bs 390/mes** (`lib/pricing.ts:30`) hoy entrega menos de lo que el código ya sabe hacer.
-El costo real de A no es técnico: es aceptar que la copia pase a decir "agenda".
-
-**Lo que NO es opción, y por qué:**
-
-- **Partir A en dos** (desplegar sólo el arreglo del CTA y dejar la agenda) **no sale gratis**:
-  las dos cosas están entreveradas en los mismos `recepcionista.mjs` / `intents.mjs`, así que
-  separarlas es escribir código nuevo, no copiar archivos.
-- **A no se enciende en silencio.** Es el mismo caso que el pedido (§27): el día que el bot
-  agende, la copia que dice que no agenda pasa a mentir al revés. Motor y copia se mueven en el
-  mismo paso, o no se mueve ninguno.
-- **Y el borde real sigue abierto:** una org puede tener slug y **no** tener la agenda
-  configurada; ahí el cliente final recibe un link a una página vacía. Si la respuesta es A, eso
-  se cierra **antes** de encender.
-
-**Quién lo hace:** el carril chatbot es el dueño del motor. Este loop no toca código ni despliega.
+  > 🔴 **Medido en vivo el 2026-09-03 01:40 UTC por el integrador, y ahora incluye el arreglo más
+  > caro de la semana.** Esta opción (a) dejó de ser "campañas y agenda": **el bot que atiende
+  > leads AHORA MISMO no tiene el fix de que se moría al llegar el mensaje.**
+  >
+  > **Dónde corre de verdad, que no es donde parecía.** El proceso es
+  > `node /tmp/onia-bot/webhook-server.mjs` (PID 869520, arrancado 00:04:04Z) y **corre DENTRO del
+  > contenedor `onia-center`**, no en el host: `/tmp/onia-bot/` está vacío visto desde el VPS y el
+  > cwd del proceso es `/app/apps/site`. La cadena de deploy es
+  > `repo → /opt/onia/bot/ (staging) → /tmp/onia-bot/ del contenedor`.
+  >
+  > **La prueba de que está atrás**, por `md5sum`, no por fecha:
+  >
+  > | archivo | vivo (contenedor) | `main` de hoy |
+  > |---|---|---|
+  > | `bot-engine.mjs` | `afe24f58…` | `ab0181ed…` |
+  > | `config.mjs` | `cfabb292…` | `35dc9d8f…` |
+  > | `persistence.mjs` | `555ff62c…` | `ada07d4d…` |
+  > | `knowledge.onia.json` | **no existe** | presente |
+  > | `rescate-run.mjs` | **no existe** | presente |
+  >
+  > `/opt/onia/bot/bot-engine.mjs` da el **mismo** `afe24f58…` que la copia viva: el staging
+  > también está atrás, así que no alcanza con reiniciar el contenedor.
+  >
+  > **Cuánto hay parado:** la copia viva es del **2026-09-02 17:19**; desde esa marca `main`
+  > acumuló **10 commits que tocan `bot/`**, incluidos los 4 mergeados hoy (`51057fb9e`,
+  > `3c2f4ef89`, `f22f47bcb` y su merge). El más caro es **`3c2f4ef89`**: el bot no se callaba,
+  > estaba **muerto** cuando llegaba el mensaje, y Chatwoot no reintenta — o sea que hoy un lead
+  > real todavía puede escribir al vacío.
+  >
+  > ⚠️ **Y hay un segundo motivo, independiente de qué versión sea la buena:** el código vivo
+  > está en **`/tmp` de un contenedor**. Cuando `onia-center` reinicia, se lo lleva puesto — es
+  > exactamente el reinicio de las 00:03:32Z que `3c2f4ef89` diagnosticó. El `webhook-watchdog.sh`
+  > (cron cada 2 min) lo vuelve a levantar, pero **desde el staging viejo**.
+  >
+  > **Lo que este carril NO puede hacer:** el deploy. Sigue siendo tuyo. Lo que sí queda listo es
+  > la cuenta: son 10 commits, el instalador es `/opt/onia/bot/webhook-server.sh knowledge` para
+  > el conocimiento, y el motor se copia por la misma cadena de arriba.
 - ~~**(b) El script de marca de Chatwoot.** Cinco minutos, sin riesgo de motor, y saca el logo
   ajeno de una pantalla que ven los clientes desde el 16-ago.~~ ⚠️ **VENCIDA — verificada en vivo
   el 2026-09-02. No le pidan a Sergio esta decisión: ya está tomada y automatizada.** El script
@@ -1249,20 +1215,21 @@ para que la próxima vuelta no rehaga la bisección.
 
 </details>
 
-## 20. La plataforma le muestra al cliente el NOMBRE de un icono en vez del icono, y el arreglo lleva siete commits sin desplegar (2026-09-02) — decisión de Sergio
-
-> 🔄 **Re-medido en vivo el 2026-09-02 17:36 UTC — y cambió desde la mañana.** Este punto se
-> escribió diciendo *"tres commits… el login"*. Hoy son **siete**, y **el peor ya no es el del
-> login**: es el menú lateral de TODA pantalla del dashboard. Un dato heredado de hace ocho horas
-> también hay que contarlo de nuevo.
+## 20. OCHO commits arreglan la plataforma y NINGUNO está en producción (2026-09-02) — decisión de Sergio
 
 **No confundir con la §16**: aquella es el deploy del **motor del bot** y de `web-factory`. Esta
 es el deploy de **`onia-platform`**, el contenedor que sirve `app.onia.com.bo`. Son dos deploys
 distintos, con riesgos distintos, y se pueden hacer por separado.
 
-**Qué se decide.** Correr o no el swap de `onia-platform` con `master` (`503af44`). Mientras no
-se corra, el cliente que paga entra al sistema y ve la palabra `ASSIGNMENT_TURNED_IN` en letras
-gigantes en el menú, en toda pantalla.
+**Medido en vivo el 2026-09-02, no deducido.** El contenedor `onia-platform` monta
+`/opt/onia-platform/runtime-next`, cuyo `.next/BUILD_ID` es `lNDdVgrRvP1mizzu3BVXc` — el mismo
+que `/opt/onia-platform/build-8a3b5a6`. O sea: **producción corre `8a3b5a6`**.
+
+⚠️ **Este ítem decía "tres commits" y hoy son OCHO.** Recontado en vivo a las 22:45 UTC
+(`git log --oneline 8a3b5a6..master | wc -l` = 8), no releído del párrafo anterior. La pila crece
+sola cada vez que el integrador mergea y nadie despliega: **el número envejece más rápido que el
+resto del ítem**, así que se cuenta de nuevo antes de citarlo. Es la misma trampa que ya costó
+una vuelta con los horarios de `loops.md`.
 
 ### Lo que está vivo en producción AHORA — medido, no deducido
 
@@ -1272,17 +1239,19 @@ Producción corre `8a3b5a6` (el contenedor bind-montea `/opt/onia-platform/runti
 
 | Commit | Qué arregla | Prueba de que NO está en producción (hoy 17:36 UTC) |
 |---|---|---|
-| `22fd088` | 🔴 **El menú dibuja `ASSIGNMENT_TURNED_IN` como texto a 20em** en el ítem "Requerimientos" — se ve en el sidebar de **toda pantalla del dashboard**, `/inbox` incluida | `docker exec onia-platform grep -rl assignment_turned_in /app/.next` → **4 chunks**. El glifo no viajó en la fuente subseteada y Material Symbols dibuja por ligadura: sin glifo, el navegador pinta el texto crudo |
-| `bdf0935` + `5888a13` | El login le deletrea los nombres de los iconos al lector de pantalla, y si la fuente tarda más de 12 s se los muestra como texto a cualquiera | El HTML servido trae los tres `<span class="material-symbols-outlined …">bolt<`, `credit_card_off`, `smart_toy` **sin `aria-hidden`**, y el script del `<head>` sigue cerrando con `setTimeout(ok,12000)`; `d.fonts.status` aparece **0 veces** |
-| `efaffe8` | La CSP bloqueaba el beacon de Cloudflare Web Analytics en toda la plataforma | `curl -sSI https://app.onia.com.bo/login \| grep -ci cloudflareinsights` → **0** |
-| `675541b` | La ferretería leía "La cita" y "en el consultorio" en su editor | (vocabulario por rubro; mismo deploy) |
-| `d62beeb` | `gate:iconos` existía y no lo corría nadie — ahora está cableado a `ci` | es un gate, no cambia la pantalla |
+| `22fd088` + `d62beeb` | **El menú dibuja `ASSIGNMENT_TURNED_IN` en letras gigantes en TODA pantalla del dashboard** — el bug más caro de la pila: lo ve cualquier cliente que entre, en cada pantalla | Producción corre `8a3b5a6`, anterior a los dos commits |
+| `bdf0935` + `5888a13` (merge) | **El login le deletrea los nombres de los iconos al lector de pantalla**, y si la fuente tarda más de 12 s se los muestra como texto a cualquiera (`bolt`, `credit_card_off`, `smart_toy`) | El HTML servido hoy trae los tres `<span>` **sin `aria-hidden`**, y el script del `<head>` sigue cerrando con `setTimeout(ok,12000)` en vez de la guarda `d.fonts.status` |
+| `675541b` | **Una ferretería lee "La cita" y "en el consultorio"** en el editor de su propio chatbot | Producción corre `8a3b5a6`, anterior al commit |
+| `15e3910` | **El cliente que paga el add-on del chatbot (Bs 390) queda sin bandeja** hasta que descubre y aprieta un botón: aprobar el pago encendía el booleano y no creaba el inbox de Chatwoot. Ahora la aprobación enciende el canal web sola, fuera de la transacción del cobro y sin poder tumbarlo | Medido en la base: **cero orgs de cliente** con `chatwootInboxId`. El commit es de hoy y no hay build posterior a `8a3b5a6` |
+| `efaffe8` | **La CSP bloqueaba el beacon de Cloudflare Web Analytics en toda la plataforma** | La cabecera `content-security-policy` servida hoy no menciona `cloudflareinsights` en ningún lado |
 
-**Por qué el nuevo es peor que el del login.** Los dos son el mismo bug de agosto que Sergio
-encontró a mano —la pantalla mostrando `credit_card_off` como palabra— pero el del login **sólo
-aparece si la fuente tarda >12 s**, y el del menú **aparece siempre**: el glifo directamente no
-está en el archivo que se sirve. Y lo ve el cliente que ya pagó y entró, no el visitante.
-La medición del tamaño (20em contra 1em de los otros 34 iconos) está en el propio `22fd088`.
+Tocan **21 archivos, +647/−44**, y **9 de los 21 son tests o snapshots** (recontado en vivo el
+2026-09-02 22:45 UTC junto con el número de commits). La superficie de riesgo real sigue siendo
+chica y sin migraciones: `components/auth/AuthShell.tsx`, `lib/iconos-script.ts`,
+`next.config.ts`, `components/layout/navigation.ts`, `lib/onboarding/vocabulario.ts` y
+`app/api/admin/subscription-payments/route.ts`. **Ninguno toca base de datos ni sesiones**; el de
+`subscription-payments` toca el cobro, pero sólo agrega un efecto posterior a la transacción que
+no puede hacerla fallar (probado con Chatwoot caído).
 
 ⚠️ **Dos huecos que este deploy NO cierra** (quedan como ítems del carril producto, no decisión
 de Sergio): `scripts/subset-iconos.mjs` **se rinde en silencio y sale 0** si falta `pyftsubset`
@@ -1292,22 +1261,18 @@ nadie lo atajó.
 
 ### Qué cuesta desplegarlo — medido sobre el último build real
 
-| opción | qué cuesta | cuánto tarda | qué se pierde |
-|---|---|---|---|
-| **A. Desplegar `master` (`503af44`)** | 0 Bs. Build en el VPS + `deploy-gates-swap.sh 503af44`, que corre 5 gates y **sólo swapea si `FAIL=0`** | **~2 min de build** (el de `8a3b5a6` fue 22:25:43→22:27:45) + rsync de 36 MB + `docker restart` ≈ **3 min en total**, con unos segundos de corte | nada: el script hace `cp -a` del runtime vivo a `runtime-next.prev-<TS>` **antes** del rsync, así que la vuelta atrás es una copia |
-| **B. Desplegar sólo el icono del menú** (cherry-pick de `22fd088`) | mismo build, más el trabajo de armar una rama de un commit | ~10 min | los otros 6 commits siguen valiendo cero, y el próximo deploy los arrastra igual — el riesgo no se evita, se pospone |
-| **C. No desplegar** | 0 | — | el cliente que paga sigue viendo `ASSIGNMENT_TURNED_IN` en el menú de cada pantalla, y cada día que pasa el swap arrastra más commits juntos |
+**Recomendación: hacerlo.** Sigue siendo de los deploys baratos del radar: seis archivos de
+código, **ninguno toca base de datos ni sesiones**, y cierra ítems que ya están verdes en código y
+valen cero hasta que se enciendan.
 
-**Recomendación: A.** Es el deploy más barato del radar: 3 minutos, ningún commit toca base de
-datos, pagos ni sesiones, y el rollback es una carpeta que el propio script deja hecha. Contra
-eso, lo que está vivo es exactamente el bug que `CLAUDE.md` cita como el peor error de agosto.
-
-**Lo que NO es opción, y por qué:** buildear con un `.env.local` presente. Next hornea los
-`NEXT_PUBLIC_*` en el bundle y publica `127.0.0.1` — hay que buildear en el VPS con `app.env`.
-El `GATE 4` de `deploy-gates-swap.sh` lo atrapa (`cero 127.0.0.1 nuevo`), pero costaría el build.
-
-**Lo que este loop NO hace:** desplegar. Es código y producción — lo corre el carril dueño con OK
-explícito de Sergio.
+⚠️ **Un matiz que antes no existía y hay que decir en voz alta.** Hasta el 2026-09-02 acá decía
+"ninguno toca base de datos, **pagos** ni sesiones". Con `15e3910` eso dejó de ser cierto: ese
+commit sí toca la ruta que aprueba pagos. Lo que agrega es un efecto **posterior** a la
+transacción del cobro —crear el inbox de Chatwoot— envuelto en `try/catch`, así que no puede
+hacer fallar ni revertir una aprobación; hay un test que lo prueba con Chatwoot caído, y otro que
+fija que aprobar un plan normal **no** cree inbox (regalarlo sería entregar gratis un add-on de
+Bs 390). Aun así, **es código de plata y merece que Sergio lo sepa antes de desplegar**, no que
+quede tapado por una frase escrita cuando la pila era otra.
 
 ## 21. Nadie mira nunca el panel del chatbot del cliente — falta una credencial de sólo lectura (2026-09-02) — decisión de Sergio
 
@@ -1602,3 +1567,314 @@ de cobro real no existe todavía.
 **Qué falta medir para poner el "cuánto tarda"** (no se inventa acá): el flujo de pedido no
 existe en ninguna forma —0 apariciones de carrito/checkout en los 59 `.mjs` del motor—, así que
 estimarlo exige que el carril dueño del bot lo diseñe primero. Este loop no toca código.
+
+---
+
+## 28. Un loop escribe ítems y NINGUNO tiene bandeja de entrada: `canario-visual` no puede recibir trabajo (2026-09-02) — decisión de Sergio
+
+**Qué se midió, leyendo los prompts que corren HOY** (`/root/bin/loops/*.md`, no de memoria):
+
+- De los siete loops del VPS, **seis nombran la cola de la que sacan trabajo**. `canario-visual`
+  **no nombra ninguna**: su prompt sólo cita `ONIA_RADAR_DECISIONES_PRODUCTO.md` y
+  `cola/loops.md`.
+- Y su prompt lista *"Arreglar el defecto que encontrás"* entre sus **PROHIBICIONES** — junto con
+  *"Tocar otro carril más allá de escribir el ítem en su cola"*. Está diseñado como **productor
+  puro**: mira pantallas, escribe ítems en la cola del dueño, no arregla nada.
+
+**Por qué importa, con el costo contado.** El 2026-09-02 una vuelta de `onia-cola` escribió en
+`COLA.md` el ítem del 429 de Chatwoot y lo cerró con *"No lo tomo yo: el archivo es del carril
+`canario-visual`, cuyo loop corre a las 16:41 UTC"*. Ese destinatario **no puede tomarlo por
+construcción**: ni lo ve (no lee `COLA.md`) ni podría arreglarlo (lo tiene prohibido). El ítem
+quedó de carta muerta al tope de "Ahora" y **consumió tres vueltas** del integrador —12:35 lo
+re-midió, 15:35 y 16:34 lo saltaron—, cada una gastando su Gate 1 en un ítem que nadie iba a
+hacer nunca.
+
+Es la forma espejo del agujero que este carril ya pagó dos veces (*"un carril que el integrador
+no enumera no se cuenta nunca"*): acá **un ítem que su destinatario no puede leer no se hace
+nunca**, y encima tapa la cola.
+
+**Las tres opciones, cotizadas:**
+
+| | Qué se hace | Cuesta | Qué queda |
+|---|---|---|---|
+| **A** | Al que escribe un ítem se le prohíbe derivarlo a `canario-visual`: si el arreglo cae en un archivo sin dueño con loop propio, **lo toma quien lo encontró**. Sólo se toca el prompt de `onia-cola`. | ~15 min, 1 archivo | El más barato. Pero deja intacta la asimetría: el canario sigue sin bandeja, y otro loop puede volver a derivarle |
+| **B** | `canario-visual` estrena cola propia (`hermes-content/docs/cola/canario.md`) y su prompt la lee. Deja de ser productor puro. | ~40 min, prompt + cola + `loops.md` | Simétrico con los otros seis. **Contra:** su prompt prohíbe arreglar a propósito —"si lo arreglás vos, dos manos tocan el mismo archivo y el dueño pierde su cola"— así que esto **reabre una decisión ya tomada**, no la ejecuta |
+| **C** | Se le da dueño explícito a `scripts/canario_visual.mjs` en `COORDINATION_MANIFEST.md` y ese dueño es `onia-cola` (el integrador), no el canario. | ~20 min, 1 tabla | Resuelve el caso concreto y todos los futuros del mismo archivo, sin tocar el diseño del canario |
+
+**Lo que este loop recomienda: C.** El canario fue diseñado a propósito para no arreglar —esa
+regla tiene su historia escrita y no hay que reabrirla—, así que el defecto no es que le falte
+bandeja: es que **su propio script no figura como de nadie**, y por eso cada quien se lo deriva
+al otro. Poner el dueño en la tabla cierra la causa sin discutir el diseño.
+
+**Lo que NO hace falta decidir para avanzar:** el 429 en sí. Es autoinducido (24 pedidos al host
+de Chatwoot por pantalla, medidos del lado del navegador, todos 200 en la última corrida) y
+ningún visitante real lo sufrió — cero IPs de terceros bloqueadas en 24 h, medido dos veces. No
+corre riesgo mientras esto se decide.
+
+---
+
+## 29. Tres packs de carrusel quedaron fuera del motor porque sus archivos viven en el carril de contenido (2026-09-02) — decisión de Sergio
+
+**Qué se midió, ejecutando el render (no leyendo la lista).** El merge del carril de Lucía a
+`main` agregó cuatro packs a `PACKS` de `scripts/carousel_render.js`, que es **la lista blanca
+del CLI**. De los cuatro, sólo `bloque-solido` trajo su módulo:
+
+| pack | ¿en `PACKS`? | ¿su archivo en `main`? | qué pasaba al renderar |
+|---|---|---|---|
+| `bloque-solido` | sí | sí (`carousel_pack_solido.js`) | **renderiza** |
+| `papel-subrayado` | sí | **no** | `Pack no disponible (./carousel_pack_papel falta en el repo)` |
+| `dato-ilustrado` | sí | **no** | `Pack no disponible (./carousel_pack_dato falta en el repo)` |
+| `tarjeta-empleado` | sí | **no** | `Pack no disponible (./carousel_pack_empleado falta en el repo)` |
+
+Los tres archivos **sí existen**, commiteados el 27 y 28 de agosto — pero **sólo en
+`claude/ads-creatividades-publicos`**, el carril de contenido, que el integrador tiene prohibido
+mergear (*"el de contenido lo maneja su sesión"*, Sergio 2026-09-01). Nunca llegaron a `main`.
+
+**Por qué importaba.** Como los packs se cargan perezoso, el CLI **aceptaba** `--pack
+dato-ilustrado` y reventaba después, al renderar: una entrada de menú para un plato que la cocina
+no puede hacer. Y el test que debía cazarlo comparaba `PACKS` contra un literal —la constante del
+motor contra una copia de sí misma—, así que pasaba con el nombre puesto sin mirar nunca el
+render. Ya había rotado igual el 2026-08-20 con `editorial-clean`.
+
+**Qué se hizo en la misma vuelta** (commit `032ca24e`): los tres salen del registro con el
+comentario que los devuelve en una línea, y se agrega el test `todo pack listado RENDERIZA`, que
+llama a cada renderer y exige HTML completo. `main` volvió a verde.
+
+**Lo que queda para Sergio, y es una sola pregunta:** los tres packs son trabajo terminado que
+está varado en el carril de contenido. Vuelven solos cuando ese carril cierre y sus archivos
+entren a `main` — no hay nada que construir.
+
+| | Qué se hace | Cuesta | Qué queda |
+|---|---|---|---|
+| **A** | Nada ahora: entran cuando Sergio cierre el carril de contenido. | 0 | Los tres packs siguen sin poder usarse hasta ese día. Es el estado de hoy |
+| **B** | Sergio autoriza traer **sólo esos 3 archivos** del carril de contenido (cherry-pick de `5e8d66cd`, `8c7638b6`, `12c8b3f0`, que tocan un archivo nuevo cada uno). | ~15 min, 3 archivos nuevos, cero borrados | Los packs quedan usables ya. Requiere permiso explícito: hoy ese carril es intocable para los loops |
+
+**Lo que este loop recomienda: B**, si Sergio va a querer esos packs antes de cerrar contenido —
+son tres archivos nuevos que no pisan nada, y el guard nuevo verifica solo que rendericen al
+volver a listarlos. Si no hay apuro, **A** no cuesta nada.
+---
+
+## 30. La home dice "5 rubros vivos en producción hoy" y el catálogo dice que vivo = un cliente real lo usó (2026-09-02) — decisión de Sergio
+
+**Está vivo en producción ahora**, verificado con `curl https://onia.com.bo/` contra el
+contenedor `onia-landing` (no `main`, no Vercel): la primera banda debajo del hero —la que el
+código rotula *"BANDA DE PRUEBA — solo hechos verificables, cero logos/testimonios"*
+(`web-factory/apps/onia-platform/src/app/(sitio)/page.tsx:492-499`)— abre con
+**`5` · "rubros vivos en producción hoy"**.
+
+**El choque, y por qué no es una discusión de palabras.** El catálogo es la fuente de verdad
+de qué se vende y **define su propio vocabulario** (`ONIA_CATALOGO_DE_VENTA.md`, tabla "Los
+tres estados"):
+
+- 🟢 **Vivo** = *"tiene tablas, pantallas y **un cliente real lo usó**"*.
+- Y dos líneas después, el mismo archivo: *"La base de producción sigue con **0 organizaciones
+  de cliente**, así que 🟡 es el estado por defecto de casi todo"*.
+- En la tabla de rubros, sólo Clínica dental lleva *"el único con recorrido real"*.
+
+O sea: por el diccionario que nos escribimos nosotros, **cero rubros están "vivos"**, y la home
+declara cinco. Lo que el catálogo sí respalda es otra frase: *"desde el 2026-08-30 los CINCO
+ofrecidos **se pueden vender**"*. La cifra `5` es correcta; el que no calza es el adjetivo.
+
+**Por qué lo traigo acá en vez de arreglarlo yo**, que es lo que este carril hace con un
+defecto:
+1. **No es un defecto, es una promesa** — y la regla de `CLAUDE.md` dice que una promesa que
+   cambia *"se barre en TODA la superficie, no solo donde la estabas tocando"*. `/rubros` dice
+   **"Cinco rubros vivos y vendibles hoy"** (verificado en producción y en
+   `(sitio)/rubros/page.tsx:164`). Tocar sólo la home deja las dos páginas discrepando, que es
+   exactamente el bug que esa regla existe para evitar.
+2. **El que vende sos vos.** Cuál de las dos lecturas querés que reciba un lead —"cinco rubros
+   ya andando" vs "cinco rubros que puedo venderte hoy"— es decisión comercial, no un typo.
+
+**Tres caminos, ninguno cuesta plata y ninguno toca el diseño:**
+- **a) Alinear con el catálogo (barato y seguro).** `5` → *"rubros que se venden hoy"* en la
+  home, y `/rubros` a la frase equivalente. Una vuelta, dos archivos, cero píxeles movidos, y
+  la banda vuelve a cumplir lo que su propio comentario promete ("hechos verificables"). Es lo
+  que yo elegiría.
+- **b) Cambiar la palabra, no el marco.** *"rubros encendidos en producción hoy"*: es
+  literalmente cierto (los cinco tracks están activos en el `app.env` de producción) y conserva
+  el peso de "producción". Mismo costo que (a).
+- **c) Dejarlo.** Si tu lectura de "vivo" es "el software del rubro funciona", no hay nada roto
+  y se anota acá como excepción para que ninguna vuelta futura lo vuelva a levantar. Costo
+  cero — el riesgo es que "en producción hoy" le suene a un lead como "ya hay cinco rubros de
+  clientes usándolo", que es la prueba social que no tenemos.
+
+**Lo que NO pude contar yo:** cuántas organizaciones de cliente hay hoy en la base. Ese dato
+vive en la base self-hosted del VPS y es del carril `onia-db`; el "0" de arriba es del catálogo,
+no un `SELECT` de hoy. Si ese número cambió, cambia el color del ítem —pero no la opción (a),
+que es correcta con cualquier número.
+
+## 31. Falta un TERCER deploy que la sección 16 no nombra: el del sitio de venta (2026-09-02) — decisión de Sergio
+
+**El agujero.** La sección 16 de este mismo radar pide dos deploys —(a) el motor del bot y (b) el
+script de marca de Chatwoot— y **ninguno de los dos publica `onia.com.bo`**. Esa la sirve el
+contenedor `onia-landing`, que es un tercer deploy que nadie estaba pidiendo. Resultado: los
+arreglos de la cara del producto se verifican, se commitean, y se quedan.
+
+**Medido hoy, mirando producción con Chromium real (no `headless_shell`) en iPhone 390×844:**
+
+- `onia.com.bo/` cierra con **73 px** de franja clara debajo del pie negro; `/empezar`, con
+  **74 px**. Son los mismos dos números que el commit `f0248601` midió y arregló.
+- El contenedor arrancó **16:53 UTC**; el arreglo se commiteó **19:59 UTC**. Sirve código de
+  antes: no es que el arreglo falle, es que nunca se publicó.
+
+**Lo que está listo y esperando** (rama `claude/web-venta`, gates verdes, mirado renderizado):
+
+| Commit | Qué arregla en la pantalla que ve el lead |
+|---|---|
+| `36d2576d` | La home abría con una franja en blanco en el iPhone más común |
+| `f0248601` | Las dos pantallas cerraban con una franja clara bajo el pie negro |
+| `2dbb3acf` | El test que impide que esa franja vuelva |
+| `def54931` | El guard de capturas era ciego a 4 rutas publicadas y a la cabecera |
+
+**Por qué no lo decido yo.** Publicar `onia.com.bo` es tuyo, y con razón: el 2026-08-20 se
+publicó una landing que no habías visto y hubo que revertir en producción. Esto **no es** ese
+caso —son cuatro arreglos de defecto, cero cambio de dirección visual, cero copy nuevo— pero el
+permiso de publicar sigue siendo tuyo.
+
+> ✅ **La mitad que dependía de un loop ya está hecha (2026-09-02, `onia-cola`).** Los 7 commits
+> de este carril están en `main` (merge `d700da8`, `npm test` exit 0). Lo que queda **no es un
+> merge: es el deploy**, y ese sigue siendo de Sergio. El camino (a) de abajo ya no espera nada.
+
+**Tres caminos, ninguno cuesta plata:**
+- **a) Desplegar `onia-landing`** (`scripts/deploy-onia-landing.sh`, que ya corre `tsc --noEmit`
+  antes del build). ~~cuando `onia-cola` mergee a `main`~~ — ya mergeado, la condición se cumplió.
+  Es lo que yo elegiría: son defectos, no diseño.
+- **b) Mirar primero.** Te mando las capturas del build local (pie al borde, sin franja) y
+  desplegás después. Cuesta una vuelta más y cero riesgo.
+- **c) Esperar y juntar.** Cada vuelta de este carril suma arreglos que valen cero hasta el
+  deploy; la deuda crece pero el sitio no empeora.
+
+**Lo que este carril NO puede hacer:** el deploy en sí, ni el merge a `main` (es de `onia-cola`).
+Mientras tanto, la definición de hecho de `CLAUDE.md` —*"encendido en producción y verificado
+ahí"*— dice que estos cuatro commits valen **cero**.
+
+---
+
+## 32. Nuestros propios loops agotan el cupo del widget de chat, y el canario lo reporta como caída (2026-09-03) — decisión de Sergio
+
+**Lo medido, en vivo, no heredado.** El widget de Chatwoot devuelve **429** en `/chatbot`,
+`home` y `/empezar`. Es real: `curl` plano, cinco de cinco, "Retry later". Pero **no es una
+caída y no afecta a ningún cliente**:
+
+- El servicio está sano: `/`, `/api` y el SDK dan **200**; sólo `/widget` da 429.
+- Chatwoot limita `/widget` sin `cw_conversation` a **5 cargas por hora POR IP** (initializer de
+  Rack::Attack, línea 176, dentro del contenedor). Ese límite **no tiene variable de entorno
+  propia**.
+- El contador de Redis está a nombre de **una sola IP: `187.77.16.63`, la del propio VPS**, con
+  34 cargas contra un límite de 5. **En 6 h, las 222 peticiones al widget salieron de esa misma
+  IP.** Cero visitantes reales.
+- Cada visitante real cuenta con su IP y su cupo: **su chat abre normal.** Verificado que el
+  proxy sobrescribe `X-Forwarded-For`, así que Chatwoot ve IPs de visitante de verdad y no una
+  IP compartida — si las colapsara, ahí sí un cliente se comería el 429 de otro.
+
+**El costo, contado:** el ítem ya consumió **cuatro vueltas** de `onia-cola` como 🔴 "la página
+que VENDE el chatbot es la única del sitio sin chat". Y se va a repetir: el canario corre 8×/día
+y cada pasada vuelve a gastar el cupo, fotografía el 429 y lo reporta de nuevo.
+
+**El daño que sí es real, y es de medición:** mientras nuestra IP esté limitada, **el canario es
+estructuralmente incapaz de ver el widget como lo ve un cliente** en cualquier pantalla que lo
+lleve. Es la regla nº4 del prompt (medí con el instrumento correcto) con otro disfraz.
+
+**Las opciones, cotizadas:**
+
+- **a) Safelistear la IP del VPS** — `RACK_ATTACK_ALLOWED_IPS=187.77.16.63` en el contenedor
+  `onia-chatbot_chatwoot`, más reinicio. El initializer ya lo soporta de fábrica
+  (`Rack::Attack.safelist('trusted IPs')`), así que es **encender, no construir**. Nuestro
+  monitoreo deja de gastar cupo y vuelve a ver lo que ve el cliente; **el cliente conserva su
+  protección de 5/hora** contra bombardeo de conversaciones. Costo: un cambio de env + un
+  reinicio del chat (corta conversaciones vivas unos segundos). **Es la que recomiendo.**
+- **b) Apagar el throttle del widget entero** — `ENABLE_RACK_ATTACK_WIDGET_API=false`. Más
+  simple, pero se lleva puesta también la protección anti-bombardeo de conversaciones y de
+  contactos. **No la recomiendo:** desprotege al cliente para arreglar un problema nuestro.
+- **c) No tocar producción y bajarle la mano al monitoreo** — que los loops dejen de cargar el
+  widget. Cero riesgo y cero permiso, pero no arregla la ceguera: el canario seguiría sin poder
+  mirar el chat, que es justo lo que tiene que mirar.
+
+**Lo que ya está hecho y no espera a nadie:** la sonda
+`hermes-content/deploy/vps-ops/widget-429-de-quien.sh` contesta "¿es nuestro o del cliente?" en
+segundos, con el contador y el desglose de IPs a la vista, y está probada en los **dos** sentidos
+(con la IP real dice `AUTOINDUCIDO`; forzando otra IP alerta `puede haber clientes afectados`).
+Con eso, la próxima vuelta que vea un 429 no vuelve a gastar una sesión derivándolo.
+
+**Lo que depende de Sergio:** sólo el OK para (a) — es un cambio de entorno en el contenedor de
+chat de producción, con reinicio, y eso no se toca sin su palabra.
+
+---
+
+## 33. El bot NO puede decir un precio, y los precios están publicados en la web (2026-09-02) — decisión de Sergio
+
+**Medido, no supuesto.** El motor tiene un candado explícito: el guardrail `declara_precio`
+(`/opt/onia/bot/guardrails.mjs:27`) rechaza **todo string con una cifra de plata**
+(`/\d+\s*bs\b/`), y el allowlist de la capa de conocimiento
+(`/opt/onia/bot/knowledge.mjs:74`) no tiene ningún campo `precio`, `planes`, `desde` ni
+`tarifa` — textual: *"no hay dónde escribir una cifra"*. Su razón, también textual:
+
+> `N1 — el bot no cotiza: el precio depende del plan y de los módulos que use el negocio`
+
+Se descubrió al intentar cargar el conocimiento real de Onia: el borrador con los planes
+**lo rechazaba el validador entero** (40 errores, `node knowledge.mjs --check`). Las cifras
+estaban bien —320/750/1500/2900 y 390/150/70, verificadas contra
+`lib/subscription-plans.ts` y `lib/pricing.ts`—; el problema es que **no hay dónde ponerlas**.
+
+**Lo que hace que la decisión valga la pena mirarla hoy:** el candado se escribió cuando el
+precio dependía de una demo. Hoy los planes están **publicados en la web** con esos mismos
+números. O sea que el bot le contesta *"eso lo ve Sergio"* a alguien que puede leer el precio
+en `onia.com.bo` dos clics antes. La pregunta de precio es, además, la más frecuente de un
+desconocido que escribe por WhatsApp.
+
+**Las dos opciones, cotizadas:**
+
+| | Qué se hace | Costo | Riesgo |
+|---|---|---|---|
+| **A. Se queda como está** | Nada. La pregunta de precio ya cae al embudo de demo desde el commit `f22f47bcb` (9 disparadores nuevos: "planes", "cuánto sería", "qué incluye", "quiero contratar") | **Cero** — ya está hecho y commiteado | El lead que sólo quería un número se va a buscarlo a la web, o no lo busca |
+| **B. El bot dice el precio de lista** | Un campo `planes` en el allowlist, alimentado desde `subscription-plans.ts` (no escrito a mano), y afinar `declara_precio` para que permita SÓLO ese campo | ~1 vuelta de carril, con test en rojo primero | Un precio desactualizado en un canal que no se mira. Se mitiga leyendo de la fuente, no copiando |
+
+**Lo que NO se hizo a propósito:** meter los precios por la ventana (el nombre de un producto
+sí pasa el guardrail — `productos[].nombre` no lo dispara). Sería esquivar un candado
+deliberado con una decisión de producto adentro, que es de Sergio y no de una vuelta de loop.
+
+**Dónde está el trabajo hecho:** `hermes-content/deploy/vps-ops/bot/knowledge.onia.json`,
+verde contra el validador. **Commiteado, NO desplegado**: se instala con
+`/opt/onia/bot/webhook-server.sh knowledge` y eso cambia lo que oye un lead real.
+
+---
+
+## 34. Siete commits de plataforma sin desplegar, y el próximo despliegue tiene un ORDEN que no se puede invertir (2026-09-03) — acción de Sergio
+
+**Lo desplegado hoy es del 2026-09-01 22:27** (`BUILD_ID` del contenedor `onia-platform`, medido —
+no deducido del repo). Todo lo que entró a `master` después sigue sin llegar al cliente:
+
+| commit | qué arregla | quién lo sufre hoy |
+|---|---|---|
+| `22fd088` | el menú dibujaba `ASSIGNMENT_TURNED_IN` en letras gigantes | **todo el que abre el dashboard**, en cada pantalla |
+| `15e3910` | el que PAGA el add-on quedaba sin bandeja hasta encontrar un botón | el cliente que ya pagó |
+| `675541b` | el editor le decía "La cita" y "en el consultorio" a una ferretería | los rubros que no son dental |
+| `3523c79` | el cliente puede conectar SU WhatsApp (mitad servidor) | el add-on de WhatsApp, hoy inentregable |
+| `503af44`, `d62beeb` | merge + cablear el gate de iconos al CI | nadie (interno) |
+| `efaffe8` | CSP para el beacon de Cloudflare Analytics | la medición |
+
+El más caro es `22fd088`: no es sutil ni intermitente, es una palabra en mayúsculas gigantes en
+**toda** pantalla del dashboard, y lleva así desde el 09-02.
+
+### 🔴 El orden importa, y al revés rompe la plataforma entera
+
+`3523c79` agrega la columna `clinic_settings.chatwootWhatsappInboxId` y la **selecciona** en
+`/api/chatbot-canal-whatsapp` y en el `include` del perfil. Prisma no degrada: si el código sale
+antes que la columna, revienta la consulta y se cae la pantalla de chatbot **para todos**, no sólo
+para el que intenta conectar WhatsApp. O sea: un despliegue en el orden equivocado convierte un
+add-on nuevo en una caída general.
+
+1. `prisma/migrations/20260903000000_add_chatwoot_whatsapp_inbox` (runbook quirúrgico —
+   `ALTER TABLE ... ADD COLUMN` nullable, no toca ni una fila de las 4 orgs vivas).
+2. `META_APP_ID=1078962684709749` y `META_CONFIG_ID=1824225392073753` en el `app.env`.
+   Son los IDs **públicos** de la app "Onia Bot"; el `APP_SECRET` no va acá y no debe: vive sólo
+   en Chatwoot, que es quien canjea el código.
+3. Recién ahí, el build y el swap.
+
+**Por qué es de Sergio y no de una vuelta de loop:** desplegar al VPS necesita su OK explícito, y
+tocar la base de producción va por el runbook. Lo que sí es nuestro —el código, los tests, la
+migración escrita y la nota de orden— ya está hecho.
+
+**Lo que se destraba al desplegar:** el punto 3 del tablero `t_43947a6a` (la tarjeta del panel con
+el Embedded Signup de Meta) no se puede construir antes, porque es una pantalla de cliente y la
+regla es abrirla y MIRARLA renderizada — imposible mientras la columna no exista.
