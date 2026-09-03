@@ -628,6 +628,40 @@ decisión de Sergio, no código.
       `hermes-content/deploy/vps-ops/bot/webhook-server.mjs` y la cubren tres tests de
       `hermes-content/deploy/vps-ops/bot/webhook-server.test.mjs` (lineas 688, 701 y 726).
 
+- [ ] **El bot del CLIENTE escribe el nombre de su encargada en minúscula a mitad de frase.**
+      Abierto el 2026-09-03 al recorrer el circuito de conocimiento (tablero `t_ff51abdc`).
+      Lo ve el cliente del cliente, en la primera respuesta.
+
+      **Reproducción exacta (30 s), ya medida en vivo:**
+      ```
+      ONIA_WIDGET_TOKEN=vsB37FKgVPH2wWxkCZunUNsf \
+      ONIA_SONDA_ESTADO=/root/.onia/sonda-widget-qa7.json \
+      node scripts/sonda_widget.mjs
+      docker exec onia-chatbot_chatwoot-db.1.nhgizxt2v01lnhebx9jtdwm5q \
+        psql -U postgres -d onia-chatbot -tAc \
+        "select message_type, content from messages where conversation_id=51 order by id;"
+      ```
+      Devuelve, textual: `_(Estoy respondiendo automático fuera de horario de oficina.`
+      **`la encargada`** `te confirma en la mañana.)_`
+
+      **Causa, en un solo punto.** `renderTemplate()`
+      (`hermes-content/deploy/vps-ops/bot/config.mjs:653`) sustituye `{{humano}}` por el valor
+      crudo de `identity.humanName` del conocimiento de la org. Con el humano de Onia el valor es
+      un nombre propio (`Sergio`) y nunca se notó; el conocimiento de un cliente trae un **cargo
+      en minúscula** (`la encargada`), y hay **cuatro plantillas donde `{{humano}} cae al empezar
+      una oración**: `config.mjs:100`, `:166` (después de `.`), `:264` (M7) y `:313`.
+
+      **Arreglo propuesto** (no hecho: se abrió a 8 minutos del tope de la vuelta, y meter una
+      función a medias con sus tests deja el árbol sin compilar). En el callback de
+      `renderTemplate` ya está disponible el `offset`: si el texto anterior está vacío o termina
+      en `.`/`!`/`?`/salto de línea, capitalizar la primera letra del valor **sólo si es
+      minúscula**. Con `:` NO — `"Anotado: {{datos}}"` va en minúscula en castellano.
+      El test tiene que fallar en ROJO por el motivo correcto: `renderTemplate("{{h}} llega",
+      {h:"la encargada"})` → `"La encargada llega"`, y `renderTemplate("lo ve {{h}} hoy", …)`
+      debe seguir dando `"lo ve la encargada hoy"`.
+      ⚠️ Es el repo `onia-hermes`, no `onia-platform`: los gates son los de este árbol, y
+      commitear **no lo despliega** (`/opt/onia/bot` es rsync, no un checkout).
+
 ## Después
 
 - [ ] **El disco de la máquina de Sergio se llenó al 100% y bloqueó el build.**
