@@ -2251,3 +2251,52 @@ repo llama "una regla sin su historia".
 
 **Lo que hace falta de Sergio:** una línea. Si es C, este carril lo escribe y lo deja pasar por los
 gates del integrador.
+
+---
+
+## 40. El carril Web Factory corre en Windows y sus 12 commits no llegan a `main` (2026-09-03) — decisión de Sergio
+
+**Lo medido, en vivo, hoy 07:40 UTC** (no heredado): la rama `claude/onia-web-architecture-b37eca`
+tiene **12 commits** que `main` no tiene, el último de las **01:53 UTC de hoy** — o sea que el
+carril **está vivo y trabajando**. El integrador no la enumeraba, y por eso nunca los mergeó.
+
+**Por qué se escapó de las tres enumeraciones a la vez, que es lo que hace a este caso distinto:**
+su worktree vive en `C:\dev\proyectos\onia-hermes\.claude\worktrees\hyperframes-onia-export-formats-053cf9`,
+en **Windows**. Entonces:
+
+- no tiene `case` ni `RAMA=` en `scripts/loops/onia-loop.sh` — el corredor sólo mueve loops del VPS;
+- no sale en `git worktree list` del VPS — su árbol no está en esta máquina;
+- no está en la tabla VPS de `hermes-content/docs/cola/loops.md` — y **no debe estarlo**: esa tabla
+  es de crons, y `npm test` (`loops_registrados`) fallaría si se la agregara.
+
+Las seis ramas que se colaron el 2026-09-03 04:40 UTC eran loops del VPS que la lista no había
+alcanzado a nombrar; **contra un carril de Windows, el `--no-merged` no es un respaldo de la lista:
+es el único instrumento que lo ve.** Ya está corregido en el prompt del integrador.
+
+**Su cola ya lo nombraba hace días** (`web-factory/docs/LOOP_COLA.md:46`,
+`hermes-content/docs/cola/README.md:31`, `COORDINATION_MANIFEST.md`): el dato no faltaba en el
+repo, faltaba en la lista del que integra.
+
+**Lo que trae, contado:** 14 archivos, **+478 / −7**, **cero borrados** (guarda dura pasada con
+holgura: el tope es 200 borrados). Toca sólo `web-factory/` — `docs/`, `packages/templates/src/`,
+`tests/e2e/` y sus snapshots visuales—, que es **su zona propia** según `COORDINATION_MANIFEST.md`
+y que ningún otro carril posee. Contenido: el gate visual del carril y arreglos de sus propios
+servidores de prueba.
+
+**Por qué NO lo mergeé solo, y la duda honesta que deja.** La regla del integrador dice que una
+rama **>100 commits atrás de `main`** la decide Sergio, y ésta está **667 atrás**. Obedecí.
+Pero conviene decir que el umbral **está mal calibrado y esta rama lo demuestra**: 667 no mide
+antigüedad de la rama sino **tráfico de `main`**, y con 15 loops mergeando cada hora `main` avanza
+cientos de commits por día. Una rama que commiteó hace **cinco horas** aparece "divergida hace
+semanas" sin estarlo. El umbral en commits mide la máquina, no el riesgo.
+
+**Las tres opciones, cotizadas:**
+
+| | Qué se hace | Cuesta | Qué queda |
+|---|---|---|---|
+| **A. Mergearla** (lo que este loop recomienda) | El integrador la toma en su próxima vuelta como un carril más | Una vuelta. Riesgo bajo medido: 0 borrados, zona propia sin dueño rival, gates del repo verdes | Los 12 commits entran y el carril deja de acumular. No arregla el umbral |
+| **B. Cambiar el umbral a días** | `>100 commits atrás` pasa a `sin commits propios hace >14 días` | ~15 min, toca sólo el prompt del integrador | Deja de escalarte ramas vivas por tráfico ajeno. Hay que elegir el número de días |
+| **C. Dejarlo como está** | Cada vuelta vuelve a escalarte esta rama | 0 hoy | Los 12 commits crecen y te llega la misma decisión cada hora |
+
+**Lo que hace falta de Sergio:** una línea — A, B, o las dos. Si es A, el integrador la mergea en
+la vuelta siguiente sin volver a preguntar.

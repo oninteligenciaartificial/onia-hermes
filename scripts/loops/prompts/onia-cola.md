@@ -268,6 +268,21 @@ Ramas de carril activas en **`onia-hermes`** (base `origin/main`):
 - `claude/calidad-generado` — que no se publique una pieza mala (loop `calidad-generado`)
 - `claude/supervisor` — audita a los otros loops (loop `supervisor`)
 - `claude/git-status-935f47` — la sesion de control (Sergio y el orquestador escriben ahi)
+- `claude/onia-web-architecture-b37eca` — carril **Web Factory** (webs de cliente + dashboard),
+  cola en `web-factory/docs/LOOP_COLA.md`. ⚠️ **Su worktree vive en WINDOWS**, no en el VPS, así
+  que **ningún `RAMA=` del corredor lo nombra y `git worktree list` del VPS no lo muestra** — las
+  dos enumeraciones que este prompt manda hacer son ciegas a él por construcción. Se lo encuentra
+  sólo con el `--no-merged` de más abajo. **NO lo confundas con `claude/web-factory-dev`**, que es
+  otro carril, del VPS, sobre la misma carpeta.
+
+⚠️ **Y una séptima el 2026-09-03 07:40 UTC: `claude/onia-web-architecture-b37eca`, con 12
+commits.** Es la primera que se cuela por un agujero **distinto** al de las seis de abajo: aquéllas
+eran loops del VPS que la lista no había alcanzado a nombrar, y ésta **no tiene loop en el VPS en
+absoluto**. Su dueño corre en Windows, así que las dos fuentes que este prompt declara "mejores que
+la lista" —el `RAMA=` del corredor y los worktrees— **no la pueden ver ninguna de las dos**. Contra
+un carril de Windows, el `--no-merged` no es un respaldo: es el **único** instrumento. Su cola
+(`web-factory/docs/LOOP_COLA.md:46`) y `hermes-content/docs/cola/README.md:31` ya lo nombraban
+hace días; el que no lo nombraba era este archivo.
 
 ⚠️ **Y volvió a pasar el 2026-09-03: faltaban SEIS.** Medido en vivo a las 04:40 UTC:
 `lucia-vps` 4, `recorrido-cliente` 3, `web-factory-dev` 2, `calidad-generado` 2, `supervisor` 2,
