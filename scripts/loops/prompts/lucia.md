@@ -92,12 +92,12 @@ mirar:
 avanza.
 
 ⚠️ **El motivo va PEGADO al id y `--kind` al final. No lo reordenes.** Hasta el 2026-09-03 esta
-línea enseñaba `block <id> --kind needs_input "motivo"`, y esa forma **no bloquea nada**: muere en
+línea enseñaba `block <id> "motivo" --kind needs_input`, y esa forma **no bloquea nada**: muere en
 `hermes: error: unrecognized arguments: motivo` con exit 2. Es el bug clásico de argparse — la
 firma real es `block task_id [reason ...]` con `--kind` opcional, y un posicional de cola detrás
 de un opcional no se puede parsear. Medido contra un id inexistente, para ver sólo el parseo:
 
-    block <id> --kind needs_input "motivo"   → unrecognized arguments   exit=2   NO BLOQUEA
+    block <id> "motivo" --kind needs_input   → unrecognized arguments   exit=2   NO BLOQUEA
     block <id> "motivo" --kind needs_input   → unknown task             exit=1   parseo OK
 
 **Y mirá el código de salida.** Este prompt no te pedía mirarlo, así que la pieza quedaba en
@@ -290,10 +290,12 @@ Una tarea bloqueada en el tablero le llega por Telegram y la contesta desde el t
 
     T=/root/bin/onia-tablero.sh
     ID=$($T create "Pregunta corta y concreta" --body "Qué necesito decidido, las opciones que ya miré y qué cambia según cada una" --priority 1 --json | python3 -c 'import sys,json;print(json.load(sys.stdin)["id"])')
-    $T block "$ID" --kind needs_input "Espera decisión de Sergio"
+    $T block "$ID" "Espera decisión de Sergio" --kind needs_input
 
-⚠️ El motivo va **posicional**, no con `--reason` — verificado contra `block --help`, porque
-escribirlo mal en 15 prompts los rompía a los 15 en silencio.
+⚠️ **El motivo va ANTES de `--kind`.** Medido en vivo el 2026-09-03: `block ID --kind needs_input
+"motivo"` devuelve `unrecognized arguments` y la tarea queda `ready` — o sea **no bloquea nada** y la
+pregunta nunca le llega a Sergio. `--reason` tampoco existe. Esta línea estuvo mal escrita en 15
+prompts durante medio día: se había verificado `--help`, no el comando.
 
 Sergio contesta `ok <id>` y la tarea vuelve a ready sola. Reglas:
 
