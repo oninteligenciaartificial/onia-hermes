@@ -1864,6 +1864,30 @@ a ver el contenedor sano y la franja viva, y no es una contradicción.
 sin defecto medible en las 10 vistas; producción falla en 6 (320 · 390 · 768, las dos pantallas).
 Capturas miradas: `/tmp/venta-0903/` (producción, franja viva) y `/tmp/venta-rama/` (pie al borde).
 
+### ✅ Opción (b) EJECUTADA — las capturas ya están en tu Telegram (2026-09-03 04:5x UTC)
+
+La opción (b) decía *"te mando las capturas del build local y desplegás después"*. Estaba escrita
+como oferta y nunca se hizo: las capturas vivían en `/tmp` del VPS, donde no las ves. **Ya te
+llegaron las dos** (`pie-hoy.png` y `pie-arreglado.png`, home en teléfono 390 px) por el mismo bot
+de Telegram, vía `sendPhoto`. La decisión ya no te pide imaginar el resultado.
+
+**Y el remedio dejó de ser una hipótesis.** Hasta hoy el radar decía que publicar cierra la franja
+porque el gate compara informes. Esta vuelta se probó por el camino que importa: `next build` +
+`next start` del código de la rama, servido de verdad, medido con el mismo instrumento que midió
+producción. **6 de 6 combinaciones** (320 · 390 · 768 × `/` y `/empezar`) pasan de franja a cero, y
+se ve la causa exacta en el DOM: `body.paddingBottom` **73,6 px → 0 px**. Producción, medida en la
+misma corrida, sigue en 73–74 px en las 6.
+
+Importa la distinción porque el 2026-09-03 ya se anunció un arreglo del bot que no arreglaba nada:
+**una hipótesis no probada no se anuncia como arreglo**. Ésta se probó antes de contarla.
+
+**Verificado de paso, sin hallazgos** (para que la próxima vuelta no lo re-mida): las dos pantallas
+no exhiben obra —el `borrador` que aparece en la home es vocabulario del producto, *"te espera el
+borrador de a quién llamar, para que lo apruebes"*, no estado de construcción— y los precios
+publicados (320 · 750 · 1.500) coinciden **exacto** con `DEFAULT_PLAN_AMOUNTS` de
+`onia-platform/lib/subscription-plans.ts`, sin `SUBSCRIPTION_PRICE_*` pisando nada en el
+contenedor de producción. El sitio publica lo que el checkout cobra.
+
 ---
 
 ## 32. Nuestros propios loops agotan el cupo del widget de chat, y el canario lo reporta como caída (2026-09-03) — decisión de Sergio

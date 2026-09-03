@@ -467,6 +467,78 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       worktrees de carril, y `claude/canario-visual` está 91 commits atrás. El canario tiene que
       traer `main` a su rama antes de que sus fotos salgan limpias.
 
+### Medido el 2026-09-03 — el recorrido entero de las dos pantallas, no sólo el pie
+
+- [x] 🟡 **FANTASMA — REFUTADO Y CERRADO el 2026-09-03. El header a 1440 nunca apareció ni
+      desapareció: mentía la captura, no la barra.** La causa es
+      `src/app/globals.css:194` → `scroll-behavior: smooth`. Con eso, `window.scrollTo(0, 12480)`
+      **anima**, y una captura tras un timeout fijo fotografía la página **en tránsito**.
+      **Medido en vivo** (build de esta rama en `:3987`, 1440×900, `scrollY` muestreado): a los
+      500 ms el scroll estaba en **7847**, al segundo en **11811**, y recién a los 1500 ms llegó
+      a **12480**. Las dos tomas del experimento anterior salieron distintas por eso — no por el
+      `backdrop-filter` ni por el rasterizador.
+      **Con el scroll ASENTADO el header está sano.** Esperando por condición
+      (`waitForFunction`: `scrollY` deja de moverse Y está a <3px del objetivo) en vez de por
+      reloj, seis muestras consecutivas dan `top: 0`, `bottom: 61`, `opacity: 1`,
+      `visibility: visible`, `transform: none`. **No se mueve.** Captura mirada:
+      `/tmp/venta-header-1440.png` — logo, los 5 links del nav, "Entrar" y el botón verde
+      completos, y el texto que pasa por debajo sale **difuminado**: el `blur(10px)` sí se
+      compone en la captura, que era justo la sospecha que no se podía descartar.
+      **Y responde la pista que quedaba abierta — cuál de los dos `sticky` es la barra:** es
+      `.header` de `src/app/(sitio)/sitio.module.css:1473` (`z-index: 20`, `blur(10px)`,
+      `color-mix(… 88%)`), **no** `site-header.module.css` (`blur(12px)`, `82%`). La pila de
+      `elementsFromPoint(720, 35)` devuelve `A.sitio_navLink → NAV → DIV.headerInner → HEADER`:
+      lo que hay arriba en ese punto es el **propio nav del header**, no texto de la página.
+      **El gate del carril NO sufre esta mentira** — verificado, no supuesto:
+      `scripts/mirar-venta.mjs:141-166` ya documenta `scroll-behavior: smooth`, fuerza
+      `behavior: 'instant'` y repite hasta que `scrollY` deja de moverse. Nada que arreglar ahí.
+      **Regla que deja:** contra este sitio, una captura que espera por **reloj** puede mentir;
+      hay que esperar por **condición**. Es la misma familia del rasterizador que costó 3 días.
+
+      ⚠️ **Anotado al pasar, NO investigado (no abrir frente en esta vuelta):** conviven dos
+      hojas de header — `sitio.module.css` (la que pinta) y `components/site-header.module.css`.
+      Vale mirar si la segunda es código muerto, pero es otro ítem.
+
+<details><summary>Lo que se creía (2026-09-02) — historia, ya refutado</summary>
+
+      Se anotaba porque era reproducible y barato, no porque estuviera probado — el experimento
+      que lo iba a decidir salió **confundido**, y eso era la mitad del valor de este ítem.
+      **Qué se vio:** recorriendo `/` a 1440 viewport por viewport (scroll real, no `fullPage`),
+      la vista 16 de 18 (`window.scrollTo(0, 12480)`, zona de PREGUNTAS FRECUENTES) muestra la
+      pregunta "¿Los datos del Excel o del cuaderno los cargo yo?" y su `+` **por encima de la
+      barra**, chocando con los links del nav.
+      **Por qué no se anuncia como roto:** el header es translúcido a propósito
+      (`src/components/site-header.module.css:18` — `color-mix(in srgb, var(--bg) 82%,
+      transparent)` + `backdrop-filter: blur(12px)`), así que algo se ve debajo **por diseño**.
+      La sospecha era que el `backdrop-filter` no se compone en la captura y por eso el texto
+      sale nítido en vez de difuminado — el mismo tipo de mentira del rasterizador que ya costó
+      tres días con `"Ent regamos t u sist ema"`.
+      **El experimento y por qué NO concluye:** dos tomas del mismo recorte (1440×70, offset
+      12480), la segunda con `backdrop-filter: none !important` inyectado. Salieron distintas
+      (md5 `e61bf628…` vs `fd6d8459…`) — pero **no por el blur**: en la primera el header **no
+      está** (banda vacía) y en la segunda entra corrido ~16px hacia abajo. O sea que la barra
+      se movió sola entre las dos tomas, así que la comparación no aísla nada. Y la explicación
+      fácil está descartada: `grep -n "translate\|scroll\|hidden" src/components/site-header.tsx
+      src/components/site-header.module.css` devuelve **cero líneas** — no hay ocultar-al-bajar
+      en ese componente.
+      **La pista para la próxima vuelta, que es donde hay que empezar:** hay un SEGUNDO
+      `position: sticky` con `backdrop-filter: blur(10px)` en `src/app/(sitio)/sitio.module.css:1473`.
+      Antes de mirar el blur hay que saber **cuál de los dos elementos** es la barra que sale en
+      la captura, y si el de la landing deja de pegarse porque su contenedor termina.
+      **Repro en 30 segundos** (con el build de la rama servido en `:3987`): abrir a 1440,
+      `window.scrollTo(0, 12480)`, esperar 500 ms y capturar; repetir esperando 2 s. Si las dos
+      tomas difieren con el scroll quieto, el problema es la barra, no el rasterizador.
+      **Lo que sí quedó probado hoy, y por eso el resto de la pantalla no es sospechoso:** el
+      recorrido completo de `/` (19 vistas a 390, 18 a 1440) y de `/empezar` (5 y 4) contra el
+      build de esta rama no muestra ningún otro defecto — ni texto cortado, ni desborde, ni
+      solapamiento. Y los precios de la home salen de la fuente que cobra: `PLANES` de
+      `src/lib/pricing.ts` (320 · 750 · 1.500) coincide con `DEFAULT_PLAN_AMOUNTS` de
+      `/root/loops/onia-platform/lib/subscription-plans.ts` leído hoy en vivo, no con la nota
+      heredada del encabezado de ese archivo (que cita un tip de `master` de agosto y una ruta
+      `C:\` que en el VPS no existe).
+
+</details>
+
 ### Medido el 2026-09-01 — el sitio de venta no lo cubre ningún gate
 
 - [x] 🟠 **Decir "`main` compila" no dice NADA sobre `onia.com.bo`: ningún gate corre `tsc`
@@ -906,6 +978,23 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Gates:** `npm run typecheck` exit 0 · `npm run build` exit 0.
       **No se desplegó:** `onia.com.bo` la sirve el contenedor `onia-landing` y publicar es de
       Sergio — la franja sigue viva en producción hasta ese deploy.
+
+      🔁 **Re-verificado el 2026-09-03 — el bloqueo NO está vencido, y ahora está probado por
+      las dos puntas.** No se re-mide un bloqueo por rutina; se re-midió porque un bloqueo
+      vencido le pide a Sergio una decisión que ya tomó, y eso es peor que un fantasma.
+      - **Producción, hoy:** `node scripts/mirar-venta.mjs` → **6 fallas** (`home` y `/empezar`
+        en 320, 390 y 768; las anchas pasan). Capturas en `/tmp/venta-0903/`.
+      - **El mismo build de esta rama, hoy:** servido en `:3987` → **0 fallas**, exit 0.
+      - **La causa, medida por DOM en producción y no supuesta:** `body` sigue con
+        `padding-bottom: 73.6px` y `background: rgb(249,251,250)`; el hueco entre
+        `footer.bottom` y `scrollHeight` es **73.42px** (home) y **73.53px** (`/empezar`) —
+        exactamente ese padding. `sospechosos: []`: **no hay ningún elemento debajo del pie**,
+        es el `<body>` pintando su propio fondo.
+      - **El arreglo está en `origin/main`** desde `f02486011` (verificado con
+        `git log origin/main -- …/globals.css`).
+
+      **O sea: el código está bien y el sitio está roto. La única diferencia entre las 6 fallas
+      y las 0 es el deploy.** No hay nada que codear acá; publicar es de Sergio.
 
       ✅ **Y ahora tiene gate — `web-factory/apps/onia-platform/src/app/(sitio)/cierre.test.ts`,
       2026-09-02.** El arreglo de
