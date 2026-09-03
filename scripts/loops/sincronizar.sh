@@ -59,7 +59,25 @@ poner() {  # poner <origen> <destino>
   CAMBIOS=$((CAMBIOS + 1))
 }
 
-poner "$FUENTE/onia-loop.sh" "$DESTINO_BIN/onia-loop.sh"
+# 🔴 Guarda contra DEGRADAR el corredor. Nace del 2026-09-03: el runner con la
+# inyeccion de memoria se desplego a mano al VPS a las 11:5x, y `main` todavia no
+# lo tenia. Sin esta guarda, la corrida de las 12:44 lo habria pisado con la
+# version vieja de main — y los 15 loops habrian vuelto a arrancar sin memoria,
+# sin ninguna alerta, igual que anoche con contenido-cola. "Sincronizar desde
+# main" es correcto cuando main va ADELANTE; cuando main va atras del VPS, es
+# borrar trabajo. La marca se elige por capacidad, no por fecha: si el
+# desplegado sabe hacer algo que el de main no, no se reemplaza.
+MARCA_RUNNER="memoria inyectada"
+if grep -q "$MARCA_RUNNER" "$DESTINO_BIN/onia-loop.sh" 2>/dev/null \
+   && ! grep -q "$MARCA_RUNNER" "$FUENTE/onia-loop.sh" 2>/dev/null; then
+  log "RECHAZADO onia-loop.sh: main esta ATRAS del VPS (le falta '$MARCA_RUNNER') — se espera al integrador"
+  if [ ! -f /var/lib/onia-sync-degradacion.avisado ] || [ $(( $(date +%s) - $(stat -c %Y /var/lib/onia-sync-degradacion.avisado) )) -gt 21600 ]; then
+    /root/bin/onia-tg.sh "⚠️ <b>Sync</b>: <code>main</code> tiene un corredor MAS VIEJO que el desplegado (sin memoria compartida). No lo pisé. Falta que el integrador mergee la rama que lo trae." >/dev/null 2>&1 || true
+    touch /var/lib/onia-sync-degradacion.avisado
+  fi
+else
+  poner "$FUENTE/onia-loop.sh" "$DESTINO_BIN/onia-loop.sh"
+fi
 
 # El sincronizador se despliega A SI MISMO. Sin esta linea es el unico archivo del
 # sistema que hay que copiar a mano, y por lo tanto el unico cuyas mejoras nunca se
