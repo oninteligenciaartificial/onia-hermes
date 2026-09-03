@@ -2137,6 +2137,87 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       - **Zona:** `scripts/verificar_cola.js`, de este carril (`onia-cola`). No entraba en la
         vuelta de hoy: se arregló la clase del repo hermano, que era la que ensuciaba las rutas
         del producto, y se dejó medido el resto en vez de empezar lo que no se puede terminar.
+### Del canario visual — corrida del 2026-09-03 ~06:42 UTC (diez pantallas, sin ítems nuevos)
+
+- [x] 🟢 **Diez pantallas abiertas y MIRADAS. Sin disparo mecánico en ninguna, sin defecto
+      nuevo a la vista.** `home` (2.360 KB/316 ms), `precios` (2.110 KB/210 ms, widget de
+      Chatwoot SÍ visible, tarjeta de WhatsApp Bs 390/mes completa), `empezar` (2.104 KB/139 ms),
+      `rubros` (2.527 KB/143 ms), `chatbot-landing` (2.107 KB/184 ms, widget visible, precio Bs
+      390/mes correcto), `contacto` (322 KB/231 ms), `register` (702 KB/124 ms, asistente de 2
+      pasos, 5 rubros con íconos legibles), `login-plataforma` (696 KB/96 ms, "Pedí tu acceso"
+      presente, íconos legibles), `login-chat` (3.499 KB/1.221 ms, formulario Chatwoot propio,
+      no está caído), `panel-chatbot` (702 KB/135 ms, redirige a `/login` sin sesión: "no
+      medida", no "OK"). Ninguna baseline tocada.
+  - **La banda vacía de `home` y `rubros` en la captura full-page NO es el bug ya cerrado
+    (scroll de espera corto).** Tiene otra causa, más simple: ambas pantallas usan un
+    conmutador `position: sticky` (`switcher.tsx`, el "runway" de rubros que también vive en
+    home) que se pinea mientras vos scrolleás. Un `fullPage` screenshot no repite el elemento
+    pineado en cada tramo del scroll: lo captura UNA vez, en su lugar natural, y el resto del
+    contenedor alto (~5 rubros × alto de paso) queda en blanco en la imagen — aunque el DOM
+    tiene todo el contenido (confirmado con `visto.texto`, que trae los 5 rubros completos más
+    abajo, después de la banda). Coincide con la nota ya escrita en este mismo archivo sobre
+    "el pin del scrollytelling... eso SÍ es esperado". **No es un ítem: es una limitación
+    conocida del instrumento (captura full-page + `position:sticky`), no del sitio.**
+  - **El 429 del widget: corrí la sonda oficial ANTES de escribir nada** (regla del
+    CLAUDE.md tras el falso positivo del 2026-09-02 y el falso "OJO" mal interpretado antes
+    de eso). Esta vez:
+    ```
+    == 2. ¿A nombre de QUÉ IP está el contador del throttle? ==
+       187.77.16.63       10 cargas (el límite es 5/hora)
+    == 3. ¿Quién pidió /widget en las últimas 6 h? ==
+       187.77.16.63       261 peticiones
+       192.223.122.70     1 peticiones
+       190.180.28.134     1 peticiones
+    VEREDICTO: AUTOINDUCIDO. 261 de 263 (99%) son del propio VPS.
+    ```
+    **El veredicto cambia de corrida a corrida** (la vuelta anterior, 03:41 UTC, dio "OJO: 2
+    IPs ajenas"; ésta da AUTOINDUCIDO) porque la ventana del throttle es de 1 h y depende de
+    qué tráfico cayó en esa hora puntual — no cierra ni reabre el ítem 🔴 de arriba por sí
+    sola, sólo agrega un dato más a su serie. **El ítem 🔴 del widget caído queda como
+    estaba** (abierto, sin dueño), con esta lectura sumada a su historial.
+  - ⚠️ **Nota operativa propia, no un hallazgo del sitio:** después de la corrida oficial
+    reejecuté `home` sola 3 veces para investigar por qué el peso variaba (2.360 KB vs los
+    2.310 KB de la baseline vieja) — eso agotó el cupo de 5 cargas/hora del widget en
+    `onia.com.bo` y las 3 reejecuciones sí vieron el 429 (581 KB, sin widget). **El
+    `home.json`/`home.png` que quedan en `.canario-out/` después de esta vuelta son de esas
+    reejecuciones, no de la corrida oficial** — reflejan un estado autoinducido por mí, no el
+    estado real del sitio. La cifra correcta de esta vuelta es la de la corrida oficial (2.360
+    KB, sin error de consola), citada arriba. Lección para la próxima: no reejecutar una
+    pantalla sola para "confirmar" peso — el propio acto de medir de nuevo quema el cupo del
+    widget y ensucia la evidencia.
+  - **Aparte, sin ser ítem:** el copy del hero de `home` cambió respecto a la baseline
+    versionada ("Tu negocio no pierde citas ni cobros..." / CTA "Pedí tu acceso" → "Cerrás
+    vos. El negocio no." / CTA "Creá tu cuenta"), y es consistente con `empezar` y `register`
+    (los tres ya dicen "Creá tu cuenta" y el asistente de 2 pasos existe y funciona visualmente).
+    Parece un cambio de copy intencional y coherente en toda la superficie, no una promesa
+    rota — lo dejo anotado porque es la clase de cosa que la regla de "una promesa que cambia
+    se barre en TODA la superficie" pide vigilar, pero sin confirmar si `/register` ya crea
+    cuentas de verdad no corresponde declararlo bug ni arreglo. No se tocó la baseline.
+
+- [ ] 🟡 **`onia.com.bo/chatbot` — el header sticky deja pasar el texto de atrás y se vuelve
+      ilegible al llegar al final de la página.** Canario visual, 2026-09-03. El `<header>`
+      del sitio tiene fondo con **88% de opacidad** (`color(srgb .976 .984 .980 / 0.88)`) y
+      `backdrop-filter: blur(10px)` — no es opaco de verdad. Cuando el scroll llega a la
+      sección verde oscura de precio ("Bs 390/mes, sin instalación."), el título blanco en
+      negrita queda posicionado justo detrás del header y **se ve fantasma, superpuesto al
+      nav** ("Rubros · Precios · Comparativa..."), volviendo confusos los dos.
+      Evidencia: `hermes-content/docs/historial/canario-visual/2026-09-03-chatbot-ghost-header.png`
+      (capturada con espera de 2.500 ms — descarta que sea una animación a mitad de camino).
+      Reproducir: abrir `https://onia.com.bo/chatbot`, scrollear al final, mirar el header.
+      Estilo computado verificado con Playwright: `backgroundColor: color(srgb 0.976471
+      0.984314 0.980392 / 0.88)`, `backdropFilter: blur(10px)`, `opacity: 1`.
+      Probé en `/precios` y `/empezar` con el mismo scroll al fondo: ahí no se ve, porque no
+      hay texto blanco en negrita justo bajo el header en ese punto — el defecto es del CSS
+      del header (opacidad no total), no de una sola página; sólo se nota donde el contraste
+      es alto. Sin dueño derivado — el header vive en el layout global del sitio, no en un
+      componente de `/chatbot`.
+      ⚠️ **Nota sobre el propio instrumento**: esto casi se reportó mal. La primera pasada de
+      esta vuelta mostraba el mismo fantasma en CASI TODAS las pantallas (home, rubros,
+      precios) con la espera vieja de 350 ms — resultó ser la herramienta fotografiando una
+      animación `whileInView` a mitad de camino (con 900-1500 ms de espera, esas desaparecían).
+      Se subió el piso de espera de la herramienta (`scripts/canario_visual.mjs`, 350→900ms,
+      con self-check verde) ANTES de escribir este ítem, y sólo quedó **éste**, que persiste
+      incluso a 2.500 ms — por eso es real y no un artefacto de captura.
 
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 
