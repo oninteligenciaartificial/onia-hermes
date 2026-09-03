@@ -1177,6 +1177,86 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       una línea en el radar, porque "un loop productor sin bandeja" es diseño del sistema de loops
       y eso lo decide Sergio.
 
+### Del canario visual — corrida del 2026-09-02 16:41 UTC (diez pantallas)
+
+- [ ] 🔴 **El widget de chat de `/chatbot` está caído: devuelve 429 y ya no carga. La página que
+      VENDE el chatbot es la única del sitio sin chat.** Sin dueño declarado (vive en
+      `web-factory/apps/onia-platform/`).
+      - **Qué se rompió:** `https://onia-chatbot-chatwoot.hqdqgh.easypanel.host/widget?website_token=9k5i7xnAgCbSse1EZwVChZLw`
+        responde **429**. El host es el Chatwoot propio, no Cloudflare de `onia.com.bo`.
+      - **Esto cierra la duda que dejó abierta la pasada de las 04:41 UTC** (líneas 604-612), con
+        su propio criterio: *"si un loop futuro lo ve fresco, sin haber golpeado el sitio antes,
+        ahí sí es un ítem"*. Hoy lo vio la **corrida oficial única**, que fue lo PRIMERO que
+        ejecutó esta vuelta — cero requests previas al sitio. Criterio cumplido.
+      - **Evidencia nueva que aquella pasada no tenía — el peso:** `chatbot-landing` cayó de
+        **2.232 KB (baseline de ayer, con `erroresConsola: []`) a 449 KB**, tres corridas
+        seguidas. Son ~1,8 MB que faltan: es el bundle del widget que ya no baja. El widget
+        cargaba ayer y hoy no. Un `-80 %` de peso **no dispara umbral** (sólo miramos subidas
+        > +40 %) — se ve mirando, que es de lo que se trata.
+      - **Confirmado fuera del navegador:** tres `curl` planos seguidos al endpoint → `429`,
+        `429`, `429`. No es artefacto de Playwright ni de mis corridas repetidas.
+      - **Por qué importa comercialmente:** el visitante que llega a la página del chatbot para
+        preguntar por el chatbot no encuentra dónde escribir. Es la burbuja de chat ausente en la
+        esquina inferior derecha de la captura.
+      - **Sospecha para el que lo tome (no verificada, no la reporto como hecho):** un 429 propio
+        del Chatwoot huele a rate-limit del contenedor. El VPS le pega cada hora con
+        `chatwoot-brand-onia.sh` (cron minuto 17) además del motor del bot. **No lo toqué**:
+        contenedores y crons ajenos no son de este carril.
+      **Evidencia:** `hermes-content/docs/historial/canario-visual/2026-09-02-chatbot-landing.png`
+      — 449 KB / 684 ms / status 200 / `erroresConsola: ["…status of 429"]`.
+
+- [ ] 🟠 **La captura full-page de este canario es CIEGA en bandas enteras, y hoy se comió la
+      banda de precio de `/chatbot`.** Defecto de la herramienta propia
+      (`scripts/canario_visual.mjs`), no del sitio. Lo dejo escrito, no arreglado: se me acabó
+      la vuelta.
+      - La pasada de las 04:41 UTC ya lo había visto en `rubros` y `contacto` (líneas 593-599) y
+        lo cerró como "artefacto conocido". **Hoy demuestra ser peor que un artefacto cosmético:**
+        en `/chatbot` la banda verde que salió vacía es la que dice **"Bs 390/mes, sin
+        instalación"** — el precio publicado, en el proyecto cuyo fallo mejor documentado es
+        "cuatro precios vivos del mismo chatbot". El canario existe para MIRAR precios y
+        justamente ahí no ve.
+      - **Verificado que el sitio está sano:** el `<h2>` "Lo que necesitás vos" mide
+        `opacity: 1`, `visibility: visible`, 542×25 px en `top: 2083`. Llevado al viewport y
+        capturado sin `fullPage`, todo el contenido aparece perfecto.
+        Prueba: `…/2026-09-02-chatbot-landing-viewport-precio.png`.
+      - **Intento fallido (para no repetirlo):** el commit `bed8b9a1` agregó un scroll por tramos
+        antes de capturar y **no alcanza**. También probé inyectar
+        `*{content-visibility:visible !important; contain-intrinsic-size:auto !important}`
+        antes del `screenshot({fullPage:true})` — **tampoco**: las bandas siguen vacías. La causa
+        no es `content-visibility` ni la falta de scroll.
+      - **Siguiente paso sugerido:** abandonar `fullPage` y capturar por viewports sucesivos,
+        cosiendo las imágenes. Es el método que ya se sabe que funciona (es como se sacaron las
+        dos capturas de prueba de hoy y la de ayer).
+      - **Mientras tanto, una banda vacía en una captura de este canario NO prueba nada** — ni que
+        el sitio esté roto ni que esté bien. Hay que ir al viewport.
+
+- [ ] 🟢 **Las otras nueve pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
+      Pesos/tiempos de hoy: home 2.857 KB/367 ms · precios 2.108 KB/803 ms · empezar 2.253 KB/464 ms ·
+      rubros 2.587 KB/377 ms · contacto 322 KB/429 ms · register 704 KB/456 ms ·
+      login-plataforma 699 KB/457 ms · login-chat 3.499 KB/1.249 ms.
+      `panel-chatbot` 702 KB/440 ms **redirige a `/login` sin sesión: queda "no medida", no "OK"**.
+      **Ninguna baseline se actualizó esta vuelta.** La de `chatbot-landing` (2.232 KB) se deja
+      intacta a propósito: pisarla con los 449 KB de hoy taparía el ítem del widget caído.
+
+### Del canario visual — corrida del 2026-09-02 21:41 UTC (diez pantallas, sin ítems nuevos)
+
+- [ ] 🔴 **Los dos ítems 🔴/🟠 de arriba (widget de `/chatbot` caído y captura full-page ciega)
+      siguen exactamente igual, 5 horas después.** No los duplico, los confirmo con evidencia
+      fresca porque nadie los tomó:
+      - `chatbot-landing` sigue en **331 KB / status 200 / `429`** (era 449 KB a las 16:41 UTC —
+        sigue faltando el bundle del widget, no hay burbuja de chat visible en la captura). Tres
+        pantallas más (`precios`, `rubros`) SÍ muestran la burbuja verde flotante del widget
+        propio del sitio — el 429 es específico de `/chatbot`, no del sitio entero.
+      - La banda de precio "Bs 390/mes" de `/chatbot` sigue vacía en la captura full-page (mismo
+        artefacto ciego, no arreglado).
+      - Home y `/empezar` siguen mostrando el rediseño *"Cerrás vos. El negocio no."* / "Creá tu
+        cuenta" en vez del copy de la baseline vieja ("Pedí tu acceso"). Sigue sin dueño.
+      **Las otras siete pantallas, sin novedad.** Pesos de hoy: home 2.362 KB/486 ms · precios
+      2.109 KB/317 ms · empezar 2.104 KB/300 ms · rubros 2.362 KB/329 ms · contacto 322 KB/160 ms ·
+      register 704 KB/161 ms · login-plataforma 696 KB/119 ms · login-chat 3.500 KB/954 ms ·
+      panel-chatbot 702 KB/215 ms (redirige a `/login`, sigue "no medida"). Ninguna baseline
+      tocada.
+
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 
 - **F1 · Sumar `/patients` al nav de servicios profesionales.** Lo intenté, escribí el test,
