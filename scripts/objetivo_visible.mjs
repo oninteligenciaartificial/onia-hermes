@@ -61,13 +61,45 @@
  */
 
 import { execFileSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
 /** El inbox cuya bandeja ES el objetivo del carril (el WhatsApp del +591 75414930). */
 export const INBOX = 5;
 
-/** Donde vive `@supabase/ssr`: el worktree de `onia-platform`, que es quien lo usa de verdad. */
-export const SSR_POR_DEFECTO = '/root/loops/onia-platform-chatbot';
+/**
+ * Donde puede vivir `@supabase/ssr`: en un checkout de `onia-platform`, que es quien lo usa de
+ * verdad. Son DOS candidatos y no uno por lo mismo que el vigia y el rescate del carril tienen
+ * dos: **una ruta sola arranca rota el dia que ese arbol no esta, y se queda rota en silencio.**
+ *
+ * ⚠️ Medido el 2026-09-03: la ruta era una sola —el worktree del carril— y ese worktree **nunca
+ * tuvo `npm ci`**. El gate salio `NO MEDIDO — Cannot find module …/@supabase/ssr/…`, o sea que
+ * la mitad "y esa conversacion se ve en la bandeja" del objetivo del carril llevaba sin medirse
+ * desde que se escribio. El clon de `main` (`/root/loops/onia-platform`) SI lo tiene instalado.
+ *
+ * El orden es worktree primero: si el carril algun dia cambia la version de la libreria, se
+ * prueba contra la suya. El clon de `main` es el respaldo que hace que igual haya medicion.
+ */
+export const SSR_CANDIDATOS = ['/root/loops/onia-platform-chatbot', '/root/loops/onia-platform'];
+
+/** El archivo concreto que se importa; que exista es la unica prueba de que el modulo sirve. */
+export const SSR_SUBRUTA = 'node_modules/@supabase/ssr/dist/main/index.js';
+
+/**
+ * El primer candidato que TIENE el modulo. `existe` se inyecta para poder probar la eleccion
+ * sin disco. Si ninguno lo tiene explota nombrandolos a todos: un `Cannot find module` con una
+ * ruta sola manda a instalar justo donde no hace falta.
+ */
+export function elegirSsrDir(candidatos = SSR_CANDIDATOS, existe = existsSync) {
+  const probados = (candidatos ?? []).filter(Boolean).map((d) => String(d).replace(/\/+$/, ''));
+  const elegido = probados.find((d) => existe(`${d}/${SSR_SUBRUTA}`));
+  if (elegido) return elegido;
+  throw new Error(
+    `\`@supabase/ssr\` no esta en ninguno de: ${probados.join(', ') || '(ningun candidato)'} ` +
+      `(se busco \`${SSR_SUBRUTA}\` en cada uno). Corre \`npm ci\` en un checkout de ` +
+      '`onia-platform`, o apunta `ONIA_SSR_DIR` a uno que ya lo tenga.',
+  );
+}
 
 /**
  * Los telefonos que somos NOSOTROS. El objetivo dice, con todas las letras, "una persona que no
@@ -375,6 +407,50 @@ function selfCheck() {
   };
   afirmar(juzgar(otro).codigo === 0, 'con OTRO desconocido distinto sigue verde');
 
+  // DONDE VIVE `@supabase/ssr`. El 2026-09-03 el gate salio `NO MEDIDO — Cannot find module
+  // '/root/loops/onia-platform-chatbot/node_modules/@supabase/ssr/…'`: ese worktree nunca tuvo
+  // `npm ci`. La ruta era UNA sola y hardcodeada, asi que la mitad "se ve en la bandeja" del
+  // objetivo del carril quedo sin medir. Se prueba con un `existe` inyectado: la eleccion es
+  // pura y no necesita disco.
+  const hay = (...rutas) => (r) => rutas.some((x) => r.startsWith(x));
+  afirmar(
+    elegirSsrDir(['/no/esta', '/si/esta'], hay('/si/esta')) === '/si/esta',
+    'si el primer candidato no tiene el modulo, usa el segundo',
+  );
+  afirmar(
+    elegirSsrDir(['/si/esta', '/otro'], hay('/si/esta', '/otro')) === '/si/esta',
+    'con los dos disponibles gana el primero',
+  );
+  let exploto = null;
+  try {
+    elegirSsrDir(['/no/esta', '/tampoco'], () => false);
+  } catch (e) {
+    exploto = e.message;
+  }
+  afirmar(exploto !== null, 'sin ningun candidato con el modulo, explota en vez de seguir');
+  afirmar(
+    exploto?.includes('/no/esta') && exploto?.includes('/tampoco'),
+    'y el error nombra TODOS los candidatos que probo, no solo el ultimo',
+  );
+  afirmar(/npm ci/.test(exploto ?? ''), 'y dice como arreglarlo (npm ci), no solo que fallo');
+
+  // ⚠️ El guardia contra disco REAL. Sin este caso, los cuatro de arriba pasan verdes con el
+  // modulo ausente de la maquina y el gate vuelve a morir recien en produccion — que es
+  // exactamente como se perdio esta medicion. Solo corre donde hay algun candidato en disco:
+  // fuera del VPS no hay nada que custodiar y un rojo ahi seria falso.
+  const candidatosEnDisco = SSR_CANDIDATOS.filter((d) => existsSync(d));
+  if (candidatosEnDisco.length) {
+    let vivo = true;
+    try {
+      elegirSsrDir(SSR_CANDIDATOS);
+    } catch {
+      vivo = false;
+    }
+    afirmar(vivo, `\`@supabase/ssr\` sigue instalado en alguno de: ${SSR_CANDIDATOS.join(', ')}`);
+  } else {
+    console.log('  (salteado: ningun candidato de `@supabase/ssr` en disco — no es el VPS)');
+  }
+
   if (!process.exitCode) console.log(`self-check: ok — ${total()} casos`);
   process.exit(process.exitCode || 0);
 }
@@ -383,11 +459,13 @@ async function main() {
   const plataforma = process.env.ONIA_PLATFORM_CONTAINER || 'onia-platform';
   const base = process.env.ONIA_DB_CONTAINER || 'supabase-db';
   const appUrl = (process.env.ONIA_APP_URL || 'https://app.onia.com.bo').replace(/\/$/, '');
-  const ssrDir = process.env.ONIA_SSR_DIR || SSR_POR_DEFECTO;
+  const candidatos = process.env.ONIA_SSR_DIR ? [process.env.ONIA_SSR_DIR] : SSR_CANDIDATOS;
 
   let respuesta;
   try {
-    respuesta = await medir({ plataforma, base, appUrl, ssrDir });
+    // Dentro del `try` a proposito: si no hay ningun checkout con el modulo, eso es NO MEDIDO
+    // —con su motivo y su arreglo— y no un stack de `Cannot find module` sin diagnostico.
+    respuesta = await medir({ plataforma, base, appUrl, ssrDir: elegirSsrDir(candidatos) });
   } catch (e) {
     console.error(
       `NO MEDIDO — ${e.message.split('\n')[0]}. No medir NO es estar bien: el objetivo del carril ` +

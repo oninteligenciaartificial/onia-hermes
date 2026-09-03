@@ -158,6 +158,45 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **La mitad "y esa conversación SE VE en la bandeja" del objetivo del carril llevaba sin
+      medirse desde que se escribió: su gate moría con `Cannot find module`.** CERRADO el
+      2026-09-03. Lo encontró el chequeo de arranque, no la cola.
+      **La medición que lo destapó:** `node scripts/objetivo_visible.mjs` →
+      *"NO MEDIDO — Cannot find module `/root/loops/onia-platform-chatbot/node_modules/@supabase/ssr/dist/main/index.js`"*,
+      `exit 2`. La ruta de `@supabase/ssr` era **una sola y hardcodeada** (`SSR_POR_DEFECTO`), y
+      apuntaba al worktree del carril, que **nunca tuvo `npm ci`**
+      (`ls: /root/loops/onia-platform-chatbot/node_modules: No such file or directory`). El clon
+      de `main`, `/root/loops/onia-platform`, sí lo tiene instalado.
+      ✅ **Lo bueno: el gate fallaba en ROJO honesto, no en falso verde** — `exit 2` y el texto
+      *"No medir NO es estar bien"*. Por eso esto es una medición perdida, no una mentira.
+      **El arreglo son los dos candidatos que el carril ya usa** en el vigía y en el rescate
+      (clon de `main` + worktree, y explota nombrándolos a los dos si falta en ambos):
+      `SSR_CANDIDATOS` + `elegirSsrDir(candidatos, existe)` en `scripts/objetivo_visible.mjs`.
+      La elección es pura y el `existe` se inyecta, así que se prueba sin disco. **Una ruta sola
+      arranca rota el día que ese árbol no está** — es el mismo modo de falla que el carril ya
+      tenía escrito para los crons de un solo path.
+      **Rojo primero, por el motivo correcto:** `ReferenceError: elegirSsrDir is not defined`.
+      **31 → 36 casos**, verde.
+      ⚠️ **Y el caso que hace que esto no se vuelva a perder: un guardia contra disco REAL.** Los
+      cuatro casos con `existe` inyectado pasan verdes **con el módulo ausente de la máquina** —
+      o sea que solos habrían dejado el gate muriendo en producción otra vez. El quinto afirma
+      que `@supabase/ssr` sigue instalado en alguno de los candidatos, y se saltea con aviso
+      donde no hay ninguno en disco (fuera del VPS, donde un rojo sería falso).
+      **Verificado corriéndolo contra producción, no contra el test:**
+      `node scripts/objetivo_visible.mjs` → `exit 0`, *"OBJETIVO VISIBLE — la bandeja del dueño
+      trae 2 conversacion(es) de gente que no somos nosotros: #37 mariohassen +59173021804 · #35 F
+      +59173232758"*, por el camino completo (sesión → `/api/bandeja` → Chatwoot → lista).
+      🔴 **De paso, otro contacto de sonda que figuraba como desconocido: la conv 50.** Nació hoy
+      02:06 en el inbox 4 —el de los leads reales— con el contacto anónimo `quiet-shape-612` y
+      **los dos mensajes textuales del guion de la sonda**, el primero a 0,1 s de crearse la
+      conversación. Sin teléfono, sin correo, sin identifier, una sola conversación. No la dejó
+      `scripts/sonda_widget.mjs` (su bootstrap ya crea el contacto CON nombre desde el 2026-09-02): la
+      dejó una corrida a mano del guion del chequeo de arranque, que abre el widget sin ese
+      bootstrap. **Hoy no envenenaba ningún conteo** —medido, no supuesto: el vigía en seco da
+      *"5 colgado(s)"* y la 50 no está, porque el bot sí le contestó— pero cualquier recuento de
+      desconocidos del inbox 4 la habría sumado. Renombrada a `Sonda QA carril chatbot`, que es
+      el nombre que `esNuestra` ya excluye. Mismo tratamiento que recibieron las convs 45, 46 y 47.
+
 - [x] 🔴 **Cinco desconocidos escribieron y nadie les contestó — el más viejo hace NUEVE DÍAS —
       y no existía nada que avisara.** CERRADO el 2026-09-03. Es la mitad abierta del ítem de
       abajo: ese ítem dice, con todas las letras, que el mensaje *"no se contesta nunca **y nadie
