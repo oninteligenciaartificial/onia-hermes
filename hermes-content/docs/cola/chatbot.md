@@ -158,6 +158,35 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [ ] 🔴 **El cron del rescate corre la copia VIEJA a propósito, así que un arreglo del carril
+      no llega a producción hasta que alguien mergea — y mientras tanto nada lo dice.**
+      Abierto el 2026-09-03 **auditando los `[x]`** (escalón 2), no por la cola.
+      **La medición, tres relojes pegados:** el testigo del rescate se arregló en `2309fec87`
+      (10:25 UTC, pusheado, gate `node --test` **751/751**); el integrador corrió a las
+      **10:33–10:39** y commiteó 5 commits **sin mergear esta rama**; a las **11:04** el cron
+      seguía cargando `/root/loops/onia-hermes/…/rescate-run.mjs`, donde `.slice(0, 300)` sigue
+      **intacto** (`grep -n "respuesta: redactar"` en los dos árboles lo muestra en una línea).
+      O sea: **39 minutos y cuatro barridos con el testigo roto ya arreglado en el repo.**
+      **No es un fallo del integrador: es la lista de candidatos del envoltorio.**
+      `/root/bin/onia-rescate-mensaje-perdido.sh` prueba primero el clon de `main` y después el
+      worktree del carril, y su propio comentario explica por qué: *"hasta ese momento el archivo
+      sólo existe en el worktree del carril"*. Esa premisa cubre el caso **archivo nuevo**; el caso
+      de hoy es **archivo que existe en los dos y el del carril es más nuevo**, y ahí el orden
+      elige la versión vieja **en silencio**.
+      ⚠️ **El arreglo NO es dar vuelta el orden.** Preferir siempre el worktree pondría código de
+      carril sin revisar corriendo en producción de forma permanente — peor que el problema.
+      **Lo que falta es que se VEA**, que es la regla 3 de este carril y la que
+      `hermes-content/docs/cola/loops.md` ya prescribe para el corredor y los prompts:
+      *"lo que falta es que el propio corredor avise de
+      la diferencia"*. El envoltorio tiene que comparar los dos candidatos y, cuando difieren,
+      decirlo en su línea de log — sigue corriendo el de `main`, pero deja de ser mudo.
+      **Reproducción en 30 s, para no volver a investigarlo:**
+      `grep -n "respuesta: redactar" /root/loops/onia-hermes{,-chatbot}/hermes-content/deploy/vps-ops/bot/rescate-run.mjs`
+      → dos líneas distintas ⇒ el cron está corriendo la vieja. `tail /var/log/onia-rescate-mensaje-perdido.log`
+      dice **cuál** usó, y hoy no dice que había otra.
+      **Archivo a tocar:** `hermes-content/deploy/vps-ops/onia-rescate-mensaje-perdido.sh`
+      (el que se despliega a `/root/bin/`). Es del carril: no toca crons ajenos.
+
 - [x] 🔴 **La mitad "y esa conversación SE VE en la bandeja" del objetivo del carril llevaba sin
       medirse desde que se escribió: su gate moría con `Cannot find module`.** CERRADO el
       2026-09-03. Lo encontró el chequeo de arranque, no la cola.
