@@ -16,7 +16,7 @@ Plan: ultra, 3000 creditos.
 
 | Barato | Medio | Caro (evitar salvo aprobacion) |
 |---|---|---|
-| z_image 0.15 · soul_2 / soul_cinematic ~0.12 · nano_banana ~2 · marketing_studio_image 2 · seed_audio ~2.4/voz | nano_banana_2 1k/2k/4k = 1.5/2/3 · recraft 8 · gpt_image 7 · kling3_0_turbo 7.5/5s · veo3.1_lite (batch) | seedance_2_0 45-135 · kling3_0 (audio/4k) · veo3.1 preview/ultra · cinema studio 4k |
+| z_image 0.15 · text2image_soul_v2 / soul_cinematic ~0.12 · nano_banana ~2 · marketing_studio_image 2 · seed_audio ~2.4/voz | nano_banana_2 1k/2k/4k = 1.5/2/3 · recraft 8 · gpt_image 7 · kling3_0_turbo 7.5/5s · veo3.1_lite (batch) | seedance_2_0 45-135 · kling3_0 (audio/4k) · veo3.1 preview/ultra · cinema studio 4k |
 
 Movimiento "movido" barato = kling3_0_turbo (7.5/clip) o edicion en nuestro editor (0.12/foto). Video con voz/lipsync realista = caro (wan2.7/kling3/seedance): solo con aprobacion.
 
@@ -25,7 +25,7 @@ Movimiento "movido" barato = kling3_0_turbo (7.5/clip) o edicion en nuestro edit
 | Modelo | Uso | Tier |
 |---|---|---|
 | **z_image** | explorar caras/estilos rapido (text-only, cara distinta c/vez) | barato |
-| **soul_2 / soul_v2** | UGC/retrato con **Soul entrenado** (identidad fija) | barato ~0.12 |
+| **text2image_soul_v2 / soul_v2** | UGC/retrato con **Soul entrenado** (identidad fija) | barato ~0.12 |
 | **soul_cinematic** | igual pero look cine | barato |
 | **nano_banana** / **nano_banana_2** (Pro) / **_lite** / **_shots** | image-to-image, **banco de identidad** desde 1 foto ref, 4K, texto/diagramas (Pro) | medio |
 | **seedream_v4_5 / v5_lite** | edicion por instruccion, 4-6K, transformaciones | medio |
@@ -76,8 +76,8 @@ Movimiento "movido" barato = kling3_0_turbo (7.5/clip) o edicion en nuestro edit
 
 - **z_image** -> explorar y elegir UNA cara (barato).
 - **nano_banana (2/Pro)** con esa cara como **image ref** -> **contact sheet** multi-pose (mismo rostro). Recortar en fotos individuales = banco de identidad. (Probado: mantiene identidad.)
-- **show_characters (Soul train)**: subir 5-20 fotos del banco -> **Soul entrenado** (~10 min, **25cr** — corregido 2026-07-06, se creyo gratis por error). Genera con **soul_2** a ~0.12/img. Solo soul_2 / soul_cinematic.
-- **show_reference_elements**: guardar 1 imagen como **Element** reusable (instantaneo) -> sirve con nano/seedream/gpt/kling/seedance/cinema (NO soul_2). Para multi-personaje o modelos sin Soul.
+- **show_characters (Soul train)**: subir 5-20 fotos del banco -> **Soul entrenado** (~10 min, **25cr** — corregido 2026-07-06, se creyo gratis por error). Genera con **text2image_soul_v2** a ~0.12/img. Solo text2image_soul_v2 / soul_cinematic.
+- **show_reference_elements**: guardar 1 imagen como **Element** reusable (instantaneo) -> sirve con nano/seedream/gpt/kling/seedance/cinema (NO text2image_soul_v2). Para multi-personaje o modelos sin Soul.
 - **Cuerpo completo / vestuario**: generar sheets de cuerpo y looks con nano/soul y documentarlos en el bible.
 - Souls actuales: Mara `b8f5c353` (pelirroja) + 4 de Sergio. Modelo 2 (morena m2-05): banco listo, falta entrenar Soul.
 
@@ -116,9 +116,9 @@ Remotion para branded/preciso/barato; Marketing Studio para UGC con avatar habla
 
 ## 9. MAPEO A ONIA (estrategia barato-first)
 
-1. **Crear modelo** (barato): z_image (elegir cara) -> nano contact sheet (banco) -> Soul train (gratis) -> soul_2 0.12/img. Bible por modelo (rostro/cuerpo/vestuario/voz/personalidad).
+1. **Crear modelo** (barato): z_image (elegir cara) -> nano contact sheet (banco) -> Soul train (gratis) -> text2image_soul_v2 0.12/img. Bible por modelo (rostro/cuerpo/vestuario/voz/personalidad).
 2. **Producir contenido**:
-   - **Branded/product-sell/preciso** -> nuestro **editor Remotion** (content-engine), movimiento por edicion (barato). Fotos de la modelo con soul_2.
+   - **Branded/product-sell/preciso** -> nuestro **editor Remotion** (content-engine), movimiento por edicion (barato). Fotos de la modelo con text2image_soul_v2.
    - **Movido/trend/lifestyle de la cuenta** -> foto Soul -> **higgsfield_preset** (viral) o **kling3_0_turbo** (animar). 
    - **UGC con avatar hablando** (cuando valga) -> **marketing_studio_video** o **wan2.7/kling3** (lipsync) — caro, aprobacion.
 3. **Voz**: seed_audio/elevenlabs por modelo; clonar voz propia (create_voice) para consistencia.

@@ -14,7 +14,7 @@
 
 | Necesidad | Modelo | Nota de costo/uso |
 |---|---|---|
-| Cara REAL de Sergio en una escena | **Soul + texto** — ÚNICO método aprobado para cara consistente | ~0,12 cr por imagen 2k con soul_2 |
+| Cara REAL de Sergio en una escena | **Soul + texto** — ÚNICO método aprobado para cara consistente | ~0,12 cr por imagen 2k con text2image_soul_v2 |
 | Ediciones sobre una imagen, negaciones, objetos | **nano_banana** (+ Element para fijar atuendo/props) | las negaciones FUNCIONAN por esta vía |
 | Video barato (movimiento simple) | **kling** | video = permiso caso por caso |
 | Íconos/artes planas estilo 3D | NO usar Higgsfield: plantilla + Fluent 3D (gratis, ya probado) | 0 |

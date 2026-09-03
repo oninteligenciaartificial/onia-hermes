@@ -312,7 +312,7 @@ Si no sabés dónde va, **preguntá** antes de inventar carpeta.
 - **Gasto — imagen y video NO son el mismo permiso:**
   - **VIDEO generado (Higgsfield, ElevenLabs, fal.ai): permiso explícito caso por caso**,
     cotizado con `get_cost:true` ANTES de generar. Por defecto gratis (Speaches, HyperFrames).
-  - **IMAGEN en lote chico: gasto trivial, ya validado.** `soul_2` a 2k son ~0,12 créditos;
+  - **IMAGEN en lote chico: gasto trivial, ya validado.** `text2image_soul_v2` a 2k son ~0,12 créditos;
     un lote de 6 fotos cuesta menos de 1 crédito de un pool de ~2.100. Se genera y se
     **registra el lote** (prompts, modelo, costo). Sigue haciendo falta permiso para un
     volumen grande o para dar de alta una plataforma nueva.

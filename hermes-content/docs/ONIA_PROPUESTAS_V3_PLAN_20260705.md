@@ -32,7 +32,7 @@ Secciones opcionales nuevas en `generador/generar-propuestas.js` (TDD, 16 tests)
 
 Aplicado a: `dentalgest` (imagen + próximos pasos + CTA) y `onia-empresarial`
 (portada + resumen ejecutivo + imagen + comparativa TR4 + próximos pasos + CTA).
-Imágenes de ambientación generadas con Higgsfield (soul_2, 2K) en
+Imágenes de ambientación generadas con Higgsfield (text2image_soul_v2, 2K) en
 `propuestas/assets/`.
 
 ## Fase 2 — Contenido real (bloqueado por hechos, no por código)

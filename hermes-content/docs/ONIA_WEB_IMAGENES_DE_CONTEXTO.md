@@ -74,7 +74,7 @@ pone el CSS (`--r-block`), no la imagen.
 
 ## 4. ⚠️ La trampa del modelo: la lista de "evitar" INVOCA lo que nombra
 
-**`soul_2` no tiene parámetro `negative_prompt`.** Verificado con `models_explore get soul_2`:
+**`text2image_soul_v2` no tiene parámetro `negative_prompt`.** Verificado con `models_explore get text2image_soul_v2`:
 sus únicos parámetros son `quality` y `soul_id`. Todo lo que se escriba va al MISMO campo de
 texto — así que una sección "Avoid: dashboards, blue neon, candlestick charts, man in a suit
 pointing at a whiteboard" no prohíbe nada: **describe la imagen**.
@@ -183,9 +183,9 @@ el Libro de Ventas IVA y el vencimiento por último dígito del NIT.
 
 | Lote | Modelo | Imágenes | Costo aprox. | Resultado |
 |---|---|---|---|---|
-| 1 | `soul_2` 2k | 6 | ~0,7 cr | **6/6 rechazadas** — método con lista "Avoid" (§4) |
-| 2 | `soul_2` 2k | 6 | ~0,7 cr | **5/6 aprobadas**; dental rechazada |
-| 3 | `soul_2` 2k | 2 | ~0,25 cr | dental, dos variantes: **1 aprobada** |
+| 1 | `text2image_soul_v2` 2k | 6 | ~0,7 cr | **6/6 rechazadas** — método con lista "Avoid" (§4) |
+| 2 | `text2image_soul_v2` 2k | 6 | ~0,7 cr | **5/6 aprobadas**; dental rechazada |
+| 3 | `text2image_soul_v2` 2k | 2 | ~0,25 cr | dental, dos variantes: **1 aprobada** |
 
 Total ~1,7 cr de un saldo de 2.178 (plan `ultra`).
 
@@ -281,9 +281,9 @@ confundiría con un screenshot— no afirma nada falso.
 *"se leía como una imagen que no cargó"*. La ilustración tiene que ser **reconocible** como
 agenda, caja o panel. Formas abstractas no son una salida.
 
-### El modelo correcto: `recraft_v4_1`, no `soul_2`
+### El modelo correcto: `recraft_v4_1`, no `text2image_soul_v2`
 
-`soul_2` es para fotografía realista de personas — herramienta equivocada. `recraft_v4_1` con
+`text2image_soul_v2` es para fotografía realista de personas — herramienta equivocada. `recraft_v4_1` con
 `model_type: "utility_vector"` resuelve el problema de raíz porque **acepta la marca como
 parámetro**, no como adjetivo:
 

@@ -14,7 +14,7 @@ Prioridad absoluta: misma persona reconocible en todos los angulos y encuadres.
 
 - `ced20cc2-3388-4d98-92ee-b0fcd961aa62` (Reference Element `lucia-face-real-anchor`) —
   frame REAL del video de Sergio (pecas-A-15), escalado 2K, sin generacion de IA.
-- Modelo: `nano_banana_pro` (rutea a `nano_banana_2`), NO `soul_2` — `soul_2` es el que
+- Modelo: `nano_banana_pro` (rutea a `nano_banana_2`), NO `text2image_soul_v2` — `text2image_soul_v2` es el que
   produce el artefacto de forehead "abollado" en expresiones fuertes.
 
 ## Rasgos que son sagrados (de `lucia-onia-identity-bible.md`)
@@ -73,7 +73,7 @@ pero cambia algun rasgo, se rechaza y se regenera.
 Las 10 tomas generadas, fondo blanco liso, `nano_banana_pro` + ancla real
 `ced20cc2-...` (mismo metodo que el Identity Kit anterior). QA:
 - Forehead liso en las 10, incluso en la sonrisa grande (03) — sin el artefacto de
-  arrugas de `soul_2`.
+  arrugas de `text2image_soul_v2`.
 - Pecas, cejas, ojos, nariz, forma de labios y pelo consistentes en las 10 tomas.
 - **Nota de QA (no es error de identidad):** las pecas se ven mas marcadas en las
   tomas frontales (01-03) que en perfil/tres-cuartos (04-07) — es una variacion normal

@@ -18,7 +18,7 @@ real** (sourced de Pinterest, sin caras de terceros) subida como **Reference Ele
 | `lucia-place-bedroom` | environment | `6a721405-d019-48b3-b3e6-92bdf6a4474e` | Pinterest dormitorio cozy sin gente |
 | `lucia-surgical-anchor` ⭐ **USAR ESTE para combos** | character | `902eeebb-89e9-4477-8426-c555b20f7ecc` | Foto 03 (sonrisa completa) del photoshoot quirurgico fondo blanco, **aprobado por Sergio 2026-07-07** como identidad definitiva. Ver `LUCIA_SURGICAL_FACE_LOCK.md` |
 | `lucia-face-real-anchor` (ground-truth QA, no combos) | character | `ced20cc2-3388-4d98-92ee-b0fcd961aa62` | Frame REAL del video de Sergio (pecas-A-15) escalado 2K, sin generacion IA — sigue siendo la verdad ultima para comparar, pero para GENERAR combos usar `lucia-surgical-anchor` |
-| ~~`lucia-face-element`~~ (legacy, no usar) | character | `de586dbb-0cdd-4ca2-aaac-173d11741c86` | Foto generada por soul_2 — ya tiene 1 paso de deriva de IA (pecas reposicionadas, piel mas pareja) |
+| ~~`lucia-face-element`~~ (legacy, no usar) | character | `de586dbb-0cdd-4ca2-aaac-173d11741c86` | Foto generada por text2image_soul_v2 — ya tiene 1 paso de deriva de IA (pecas reposicionadas, piel mas pareja) |
 
 | `lucia-place-cafe` | environment | `5cfbdab5-3fdd-4cda-b0e3-efb60aa5a9b4` | Pinterest cafe/cocina calida, mostrador madera |
 | `lucia-place-street` | environment | `cddfa484-8dea-4920-8d6b-9d00f896ae51` | Pinterest vereda urbana arbolada |
@@ -60,7 +60,7 @@ poreless smooth forehead skin zero wrinkles, no brand logos.
 ## Fix de deriva de identidad (2026-07-06, pedido de Sergio)
 
 Sergio pidio ver la referencia usada y "perfeccionarla para que no rompa la cara". Diagnostico:
-`lucia-face-element` (legacy) era una foto ya GENERADA por `soul_2` — un paso de aproximacion
+`lucia-face-element` (legacy) era una foto ya GENERADA por `text2image_soul_v2` — un paso de aproximacion
 de IA sobre la real, con leve suavizado (pecas reposicionadas, piel mas pareja, labios un
 toque mas llenos). Cada hop generativo adicional (ej. animar con wan2.7) compone esa deriva.
 
@@ -78,7 +78,7 @@ mas fiel — sonrisa/dientes/pecas genuinamente suyas, sin el suavizado sutil de
 (o su version escalada), nunca una foto ya generada por otro modelo — asi se evita
 acumular deriva en cadena.
 
-**Costo: 2cr por imagen** (nano_banana_2 2k). Mas caro que soul_2 solo (0.12cr) pero da
+**Costo: 2cr por imagen** (nano_banana_2 2k). Mas caro que text2image_soul_v2 solo (0.12cr) pero da
 **fidelidad exacta del outfit/lugar real** (accesorios, joyeria, cartera, mueblaje) en vez
 de una aproximacion por texto.
 
@@ -98,7 +98,7 @@ nano_banana_2) queda validado para produccion.
 
 | Necesito | Via | Costo |
 |---|---|---|
-| Solo la cara, escena generica/aproximada por texto | `soul_2` + soul_id | 0.12cr |
+| Solo la cara, escena generica/aproximada por texto | `text2image_soul_v2` + soul_id | 0.12cr |
 | Cara + outfit/lugar EXACTOS de una foto real | `nano_banana_2` + 3 Elements | 2cr |
 | Hablando con lip sync | `wan2_7` (still + audio) | 15cr/10s |
 | UGC con producto en mano, guion auto | Marketing Studio | 42-75cr |
