@@ -27,7 +27,7 @@ interiores minimalistas luminosos). Solo cambió la cara, no la línea estética
 
 ## Cómo se construyó (repetible para modelo 3, 4, 5)
 
-1. **Casting:** 4 caras con `soul_2` sin `soul_id` (texto puro), mismo set y misma luz para
+1. **Casting:** 4 caras con `text2image_soul_v2` sin `soul_id` (texto puro), mismo set y misma luz para
    que la única variable sea el rostro → `casting-20260806/_CASTING-MARA-BO.jpg`. ~0,5 cr.
 2. **Element:** la cara elegida se convierte en Reference Element (instantáneo, gratis).
 3. **Set de entrenamiento:** 11 fotos con `nano_banana_2` + el placeholder `<<<element_id>>>`,

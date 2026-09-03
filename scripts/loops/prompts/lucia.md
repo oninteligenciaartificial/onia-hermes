@@ -38,7 +38,7 @@ llevar la cuenta es cómo se funde un saldo sin que nadie sepa en qué.
 exacto, el modelo, cuántos créditos costó y si la pieza pasó la rúbrica. **Una generación sin
 registro es plata que no se puede auditar.**
 
-**2. Tope por vuelta: hasta ~5 créditos.** Alcanza para practicar de verdad (una imagen `soul_2`
+**2. Tope por vuelta: hasta ~5 créditos.** Alcanza para practicar de verdad (una imagen `text2image_soul_v2`
 a 2k son ~0,12 créditos: son decenas de intentos). **Si una sola pieza cuesta más que eso —un
 video largo, un modelo caro— NO la generes**: dejala propuesta con su costo y que decida Sergio.
 No es desconfianza: es que un tope te deja practicar sin poder fundir el saldo en una vuelta mala.
@@ -46,9 +46,29 @@ No es desconfianza: es que un tope te deja practicar sin poder fundir el saldo e
 **3. Antes de generar, mirá el saldo.** Si no lo podés ver, **asumí que está bajo** y quedate en
 imagen chica. Nunca compres créditos ni des de alta una plataforma: eso es de Sergio, siempre.
 
-⚠️ **Higgsfield SÓLO por navegador, NUNCA por MCP.** Medido: el MCP **sustituye el modelo en
-silencio** y te cobra igual — pagás un modelo y recibís otro. Si sólo tenés el MCP a mano, **no
-generes**: dejá el prompt listo y decilo.
+⚠️ **Higgsfield se usa por el CLI del VPS. Nunca por el MCP.**
+
+    higgsfield account status                            # saldo, gratis
+    higgsfield model list --image                        # los job_type REALES
+    higgsfield generate cost <job_type> --prompt "…"     # cotiza ANTES, gratis
+    higgsfield generate image <job_type> --prompt "…"    # recién acá se cobra
+
+> **Corregido el 2026-09-02, y era caro.** Acá decía *"SÓLO por navegador… si sólo tenés el MCP,
+> no generes"*. Vos corrés por `cron`, headless, sin navegador: esa línea significaba **"no
+> generes nunca"**, y por eso este carril venía sin producir. El CLI oficial está instalado en
+> `/usr/bin/higgsfield` y **autenticado** con la cuenta de Sergio — verificado en vivo:
+> `higgsfield account status` devuelve el saldo real del plan ultra. Otros loops ya generaron
+> con él.
+>
+> El MCP sigue prohibido, pero por su motivo propio: **no cotiza antes**. El CLI sí, y
+> `generate cost` es gratis de verdad (ocho cotizaciones seguidas y el saldo no se movió un
+> decimal) y **coincide exacto con el cobro**. Esa es la baranda que ninguna otra vía te da.
+>
+> ⚠️ **Los nombres de modelo de Higgsfield colisionan entre sí**: el `job_type`
+> `nano_banana_flash` se llama, en su propia tabla, *"Nano Banana 2"*. Pedir un modelo "por su
+> nombre" es como se paga uno y llega otro. **Sacá el `job_type` de `model list`, nunca de
+> memoria ni de un doc.** El barato de imagen es `text2image_soul_v2` (0,12 cr); `soul_2` NO
+> EXISTE y el CLI lo rechaza con `No model with job_type "soul_2"`.
 
 ⚠️ **Y practicar no es generar por generar.** Cada tanda tiene que tener una pregunta atrás:
 *"¿este encuadre retiene más?"*, *"¿este prompt mantiene la cara?"*. Una tanda sin pregunta es

@@ -32,7 +32,7 @@ render.mjs                render programatico; sanea assets faltantes -> placeho
 public/                   assets servidos por Remotion (staticFile)
   brand/     logo Nuvia
   product/   packshot del producto
-  mara/      tomas de la presentadora (Higgsfield soul_2)
+  mara/      tomas de la presentadora (Higgsfield text2image_soul_v2)
   audio/     voz IA (vo.mp3)
 out/         MP4 renderizado
 ```
@@ -57,7 +57,7 @@ npm run render:isdin   # renderiza out/nuvia-isdin-fusion-water-spf50-001.mp4
 
 ## Reglas (de la sesion)
 
-- **Solo modelos baratos** para generar: `soul_2` ~0.12cr/img (Mara), `z_image` 0.15cr.
+- **Solo modelos baratos** para generar: `text2image_soul_v2` ~0.12cr/img (Mara), `z_image` 0.15cr.
   Evitar Seedance (45-135cr) y video caro. El movimiento lo pone el editor (Ken Burns), no
   un modelo de video caro.
 - **No publicar sin aprobacion.** El v1 exporta el MP4 y prepara el post; no publica.

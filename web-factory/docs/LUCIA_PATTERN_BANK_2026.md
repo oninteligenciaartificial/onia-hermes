@@ -147,7 +147,7 @@ vale **a igual resolución** — no es que el modelo cueste 12,50 siempre.
 | `nano_banana_2_lite` | 1,00 | buena, pero **aclara el pelo**. Respaldo |
 | `gpt_image_2` low | 0,50 | ensancha la cara. No para primer plano |
 | `z_image` | **0,15** | ❌ **no es Lucía** · ✅ el más barato para ambientes y gente de fondo |
-| `soul_2` | 0,12 | ⚠️ **sin veredicto** — cobró, pero el job de la Fase A no volvió. El workflow oficial lo marca para UGC **con de-slop obligatorio** (sale con piel cerosa) |
+| `text2image_soul_v2` | 0,12 | ⚠️ **sin veredicto** — cobró, pero el job de la Fase A no volvió. El workflow oficial lo marca para UGC **con de-slop obligatorio** (sale con piel cerosa) |
 
 **Una pieza de 32 s hablando con `kling3_0_turbo`: ~52 cr.** De b-roll: **~32 cr** mudo
 (4 planos de 8 s) · **~35 cr** con la voz montada encima.
@@ -295,7 +295,7 @@ Y de paso resuelve el bug del `video_extension` sin una tanda aparte.
 Relacionado: **`LUCIA_BANCO_DE_PRUEBAS_2026.md`** — la rúbrica de 9 criterios con la que se
 decide si un modelo sirve, los prompts listos para pegar, y las reglas del workflow oficial de
 Higgsfield (frases prohibidas, expresiones de media acción, densidad de habla, el de-slop de
-`soul_2`). **Se abre antes de generar un solo crédito.**
+`text2image_soul_v2`). **Se abre antes de generar un solo crédito.**
 
 También: `CAROUSEL_PATTERN_BANK_2026.md` · `MOTION_PATTERN_BANK_2026.md` ·
 `ADS_PATTERN_BANK_2026.md`.

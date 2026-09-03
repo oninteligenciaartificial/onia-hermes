@@ -4,7 +4,7 @@
 - **Objetivo:** dejar a Mara DEFINIDA como avatar reusable (identidad fija) via Higgsfield Soul, aprobado por Sergio.
 - **Soul ID:** `b8f5c353-faaf-44eb-ae5a-4e0bacfd333f`
 - **Nombre:** `Mara ONIA v1`
-- **Tipo:** `soul_2` (Higgsfield Soul V2)
+- **Tipo:** `text2image_soul_v2` (Higgsfield Soul V2)
 - **Estado:** training (arrancado 2026-07-05; ~10 min).
 
 ## Identidad entrenada
@@ -23,16 +23,16 @@ media_ids subidos a Higgsfield:
 ## Costo (REGLA Sergio: solo barato)
 
 - Entrenar Soul: **25cr** (corregido 2026-07-06 — se creyo "sin cargo" por error, ver AVATAR-CONSISTENCY-SCHEME.md).
-- Generar con `soul_2` + este soul_id: **~0.12 cr/imagen**.
+- Generar con `text2image_soul_v2` + este soul_id: **~0.12 cr/imagen**.
 - Comparar: nano_banana_2 1.5-3cr; z_image 0.15cr (no fija identidad); Seedance video 45-135cr (evitar). Ver [[radar-ia-content-production]] y [[gasto-plataformas-validar-primero]].
 
 ## Como usar el Soul (cuando este `ready`)
 
 ```
-generate_image  model=soul_2  soul_id=b8f5c353-faaf-44eb-ae5a-4e0bacfd333f
+generate_image  model=text2image_soul_v2  soul_id=b8f5c353-faaf-44eb-ae5a-4e0bacfd333f
                 quality=2k  aspect_ratio=9:16  prompt="<escena/outfit/luz>"
 ```
-Solo funciona con `soul_2` (Soul V2) y `soul_cinema_studio`. Para otros modelos (nano/seedream/kling/seedance) usar Reference Element en su lugar.
+Solo funciona con `text2image_soul_v2` (Soul V2) y `soul_cinema_studio`. Para otros modelos (nano/seedream/kling/seedance) usar Reference Element en su lugar.
 
 ## Siguiente
 

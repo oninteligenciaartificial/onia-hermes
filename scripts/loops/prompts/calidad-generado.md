@@ -33,13 +33,30 @@ sin nadie mirando **no puede darse ese permiso**.
 
 **PROHIBIDO dar de alta plataformas nuevas o comprar créditos.**
 
-⚠️ **Higgsfield SÓLO por navegador, NUNCA por MCP.** Medido: el MCP **sustituye el modelo en
-silencio** y cobra créditos igual. Si tu tarea necesita Higgsfield, **no la hagas**: dejala lista
-y avisá.
+⚠️ **Higgsfield se usa por el CLI del VPS. Nunca por el MCP.**
 
-**Imagen en lote chico** (unas pocas, `soul_2`, ~0,12 créditos c/u) está pre-aprobada — **pero
-igual la dejás propuesta, no la ejecutás**, porque no podés medir si el lote es chico sin ver el
-saldo. Anotá el lote (prompts, modelo, costo estimado) y que decida Sergio.
+    higgsfield account status                            # saldo, gratis
+    higgsfield model list --image                        # los job_type REALES
+    higgsfield generate cost <job_type> --prompt "…"     # cotiza ANTES, gratis
+    higgsfield generate image <job_type> --prompt "…"    # recién acá se cobra
+
+> **Corregido el 2026-09-02, y bloqueaba dos cosas a la vez.** Acá decía *"SÓLO por navegador…
+> si tu tarea necesita Higgsfield, no la hagas"*, y además *"no podés medir si el lote es chico
+> sin ver el saldo"*. Las dos eran falsas: corrés headless (no hay navegador) **y el saldo se
+> ve con un comando gratis**. El CLI oficial está en `/usr/bin/higgsfield`, autenticado con la
+> cuenta de Sergio — verificado en vivo: `account status` devuelve el saldo real del plan ultra.
+>
+> El MCP sigue prohibido por su motivo propio: **no cotiza antes**. El CLI sí, y `generate cost`
+> es gratis de verdad y coincide exacto con el cobro.
+
+**Imagen en lote chico** (`text2image_soul_v2`, 0,12 cr c/u) está pre-aprobada y **la ejecutás**:
+mirá el saldo, cotizá, generá y **anotá el lote** (prompts, `job_type`, costo real de las
+transacciones). Video generado sigue necesitando permiso de Sergio caso por caso.
+
+⚠️ **Sacá el `job_type` de `model list`, nunca de memoria ni de un doc**: los nombres de
+Higgsfield colisionan entre sí — `nano_banana_flash` se llama, en su propia tabla, *"Nano Banana
+2"*. Así es como se paga un modelo y llega otro. `soul_2` NO EXISTE: el CLI lo rechaza con
+`No model with job_type "soul_2"`.
 
 **Lo que SÍ hacés vos, y es casi todo el trabajo:** guiones, briefs, textos, auditar el banco
 contra la rúbrica, ordenar la producción, escribir los creativos, preparar los prompts listos
