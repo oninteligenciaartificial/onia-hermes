@@ -182,10 +182,36 @@ function juzgar(datos, baseInyectada) {
     motivos.push(`tiempo ×${(datos.msMirable / base.msMirable).toFixed(1)} vs baseline (${base.msMirable} → ${datos.msMirable} ms)`);
   }
   const erroresViejos = new Set(base.erroresConsola || []);
-  const nuevos = (datos.erroresConsola || []).filter((e) => !erroresViejos.has(e));
+  const nuevos = (datos.erroresConsola || []).filter((e) => !erroresViejos.has(e) && !esHuellaPropia(e, datos));
   if (nuevos.length) motivos.push(`error de consola nuevo: ${nuevos[0]}`);
 
-  return { motivos, baseline: 'comparada' };
+  return { motivos, baseline: 'comparada', huellaPropia: huellasDe(datos) };
+}
+
+/** El endpoint exacto que el canario se rate-limita a sí mismo. Deliberadamente estrecho. */
+const RE_WIDGET_CHATWOOT = /^https:\/\/onia-chatbot-chatwoot\.[^/]+\/widget\b/;
+
+/** Las respuestas de esta pasada que son huella nuestra y no un defecto del producto. */
+function huellasDe(datos) {
+  return (datos.respuestasFallidas || [])
+    .filter((r) => r.status === 429 && RE_WIDGET_CHATWOOT.test(r.url))
+    .map((r) => `429 de ${r.url.slice(0, 60)}… — cupo propio (5/h por IP), no una caída`);
+}
+
+/**
+ * ¿Este error de consola lo causó el propio canario? Sólo para UN caso, medido y probado:
+ * el 429 de `/widget` de Chatwoot, que es el cupo de Rack::Attack consumido por nuestra
+ * propia IP al abrir diez pantallas seguidas (diagnóstico completo en COLA.md, 00:55 UTC).
+ *
+ * Fail-CLOSED a propósito, y las cuatro guardas del `--self-check` lo fijan: se silencia
+ * sólo si vimos la respuesta que lo explica Y **todos** los 429 de la pasada son del widget.
+ * Un 429 ajeno, un 500 del widget, o un 429 sin respuesta que lo explique siguen siendo ítem.
+ * Una excepción que silencia de más es peor que el fantasma que vino a matar.
+ */
+function esHuellaPropia(texto, datos) {
+  if (!/status of 429/.test(texto)) return false;
+  const cuatro29 = (datos.respuestasFallidas || []).filter((r) => r.status === 429);
+  return cuatro29.length > 0 && cuatro29.every((r) => RE_WIDGET_CHATWOOT.test(r.url));
 }
 
 /**
@@ -236,7 +262,13 @@ async function medir(browser, { nombre, url, cola, duenio, requiereSesion }) {
   // llevaba 4 días arriba): la baseline decía 2310 KB y tres corridas seguidas dieron
   // 582, 509 y 500 KB. Un umbral de peso sobre ese número habría disparado al azar — el
   // canario existe justamente para no reportar verde con cara de éxito.
+  // Las respuestas 4xx/5xx se guardan CON SU URL. El texto que la consola imprime por un
+  // recurso caído es genérico ("...status of 429 ()") y no dice de qué endpoint vino: sin
+  // esta lista no hay forma de distinguir el 429 que nos hacemos nosotros del que sería una
+  // caída real. Es el dato que le faltaba a `juzgar` para no gritar un fantasma por vuelta.
+  const respuestasFallidas = [];
   page.on('response', (r) => {
+    if (r.status() >= 400) respuestasFallidas.push({ url: r.url().slice(0, 200), status: r.status() });
     pesajes.push(
       r.request().sizes()
         .then((s) => { bytes += (s.responseBodySize || 0) + (s.responseHeadersSize || 0); })
@@ -299,9 +331,12 @@ async function medir(browser, { nombre, url, cola, duenio, requiereSesion }) {
   const medida = fallo ? null : llegoALaPantalla(url, visto.urlFinal);
   if (medida === false && !motivoNoMedida) motivoNoMedida = `desviada a ${visto.urlFinal}`;
 
-  const datos = { nombre, url, cola, duenio, status, fallo, bytes, msMirable, msTotal, medida, motivoNoMedida, erroresConsola: errores.slice(0, 10), visto };
+  const datos = { nombre, url, cola, duenio, status, fallo, bytes, msMirable, msTotal, medida, motivoNoMedida, erroresConsola: errores.slice(0, 10), respuestasFallidas: respuestasFallidas.slice(0, 20), visto };
   const veredicto = juzgar(datos);
   datos.baseline = veredicto.baseline;
+  // Lo que se silencia queda ESCRITO, no escondido: un filtro invisible se vuelve mentira el
+  // día que silencia de más, y nadie lo revisa porque no deja rastro.
+  if (veredicto.huellaPropia?.length) datos.huellaPropia = veredicto.huellaPropia;
   // `motivos` son las razones MECÁNICAS por las que esto ya es un ítem. Vacío NO significa
   // "OK": significa "nada que la máquina pueda ver". El ojo sigue siendo obligatorio — el
   // diff no ve un icono que dice "credit_card_off" ni un botón que promete algo falso.
@@ -345,6 +380,42 @@ if (filtro.includes('--self-check')) {
   afirmar(motivosDe({ msMirable: 9_000 }).some((m) => m.includes('techo de tiempo')), '9 s cruza el techo absoluto');
   afirmar(motivosDe({ erroresConsola: ['viejo', 'nuevo'] }).some((m) => m.includes('consola')), 'un error de consola nuevo es un item');
   afirmar(motivosDe({ erroresConsola: ['viejo'] }).length === 0, 'un error que YA estaba en la baseline no se repite como item');
+
+  // --- El 429 del widget de Chatwoot es la huella del PROPIO canario, no una caída ---
+  // Chatwoot limita /widget a 5 cargas por hora POR IP (Rack::Attack, dentro del contenedor
+  // onia-chatbot_chatwoot). El canario abre diez pantallas seguidas desde una sola IP: de la
+  // sexta en adelante se come su propio 429. Medido el 2026-09-03 09:38 UTC: curl frio 200,
+  // home/precios/empezar 200 con la burbuja visible (64x64), rubros y chatbot 429 — el corte
+  // cae EXACTO en la quinta carga. Un visitante real cuenta con su IP y su cupo.
+  // Sin esta excepcion el canario escribia un 🔴 falso por vuelta, y ya costo cuatro.
+  const TXT_429 = 'Failed to load resource: the server responded with a status of 429 ()';
+  const URL_WIDGET = 'https://onia-chatbot-chatwoot.hqdqgh.easypanel.host/widget?website_token=9k5i7xnAgCbSse1EZwVChZLw';
+  const AJENO = 'https://app.onia.com.bo/api/algo';
+  afirmar(
+    motivosDe({ erroresConsola: ['viejo', TXT_429], respuestasFallidas: [{ url: URL_WIDGET, status: 429 }] }).length === 0,
+    'el 429 del widget de Chatwoot NO es un item: es la huella del propio canario',
+  );
+  // Las cuatro de abajo son el precio de la de arriba: una excepcion que silencia de mas es
+  // peor que el fantasma que vino a matar, porque tapa la caida del dia que sea real.
+  afirmar(
+    motivosDe({ erroresConsola: ['viejo', TXT_429], respuestasFallidas: [{ url: AJENO, status: 429 }] }).some((m) => m.includes('consola')),
+    'un 429 de OTRO endpoint SI es un item',
+  );
+  afirmar(
+    motivosDe({ erroresConsola: ['viejo', TXT_429], respuestasFallidas: [{ url: URL_WIDGET, status: 429 }, { url: AJENO, status: 429 }] }).some((m) => m.includes('consola')),
+    'el 429 del widget NO tapa un 429 ajeno en la misma pantalla',
+  );
+  afirmar(
+    motivosDe({ erroresConsola: ['viejo', TXT_429], respuestasFallidas: [] }).some((m) => m.includes('consola')),
+    'un 429 sin respuesta que lo explique SI es un item: no se silencia a ciegas',
+  );
+  afirmar(
+    motivosDe({
+      erroresConsola: ['viejo', 'Failed to load resource: the server responded with a status of 500 ()'],
+      respuestasFallidas: [{ url: URL_WIDGET, status: 500 }],
+    }).some((m) => m.includes('consola')),
+    'el widget CAIDO de verdad (500) SI es un item: la excepcion es solo para el 429',
+  );
   afirmar(motivosDe({ status: 500 }).some((m) => m.includes('status')), 'un 500 es un item');
   afirmar(motivosDe({ fallo: 'timeout' }).some((m) => m.includes('no abrió')), 'una pantalla que no abre es un item');
   // El caso que originó el carril: 3,9 MB y 117 s con status 200.

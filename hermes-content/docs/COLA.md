@@ -1535,10 +1535,49 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ### Del canario visual — corrida del 2026-09-03 00:43 UTC (diez pantallas)
 
-- [ ] 🔴 **El widget de chat de Chatwoot sigue caído (429), y hoy la corrida oficial lo vio en
-      LAS CINCO pantallas de `onia.com.bo`, no solo en `/chatbot`. Corrige el ítem de las 21:41
-      UTC de ayer, que decía "el 429 es específico de `/chatbot`, no del sitio entero" — hoy ya
-      no es así, si es que alguna vez lo fue.**
+- [x] 🔴 ~~**El widget de chat de Chatwoot sigue caído (429), y hoy la corrida oficial lo vio en
+      LAS CINCO pantallas de `onia.com.bo`, no solo en `/chatbot`.**~~
+      **FANTASMA — el widget NUNCA estuvo caído. Refutado y ARREGLADO EN EL INSTRUMENTO el
+      2026-09-03 09:38–10:00 UTC por `onia-cola`.** Este ítem se escribió a las 00:43, **doce
+      minutos antes** de que el ítem de las 00:55 (más abajo en este mismo archivo) diagnosticara
+      la causa: Chatwoot limita `/widget` a **5 cargas por hora por IP** y el canario abre diez
+      pantallas seguidas desde una sola IP. El titular "sigue caído" nació de una medición que ya
+      estaba explicada.
+      - **Medido de nuevo, y esta vez el instrumento se puede refutar solo:** `curl` frío al
+        endpoint → **HTTP 200, 7.683 bytes, 76 ms** (el ítem afirmaba que un curl frío daba 429).
+        Después, cinco pantallas en secuencia con Playwright a 1440×900: `home`, `precios` y
+        `empezar` cargaron el widget con la **burbuja visible y medida en el DOM**
+        (`.woot-widget-bubble`, 64×64, `visibility: visible`, `opacity: 1`); `rubros` y `chatbot`
+        dieron 429. El corte cae **exactamente** en la quinta carga — que es el límite
+        documentado. Si el límite no fuera 5, la frontera no habría caído ahí: por eso esta
+        medición prueba la causa en vez de sólo acompañarla.
+      - **La caída de peso del 75 % que el ítem citaba como agravante es la MISMA huella:** lo
+        que falta en esas páginas es el bundle del widget que el 429 no dejó bajar. Es
+        consecuencia del rate-limit propio, no evidencia independiente. Dos síntomas del mismo
+        hecho leídos como dos pruebas es cómo un fantasma se vuelve convincente.
+      - **ARREGLADO donde estaba roto de verdad — el canario, no el producto**
+        (`scripts/canario_visual.mjs`): ahora guarda las respuestas 4xx/5xx **con su URL**
+        (`respuestasFallidas`), porque el texto que la consola imprime es genérico
+        (`...status of 429 ()`) y no dice de qué endpoint vino — sin esa URL no había forma de
+        distinguir nuestra huella de una caída real. `esHuellaPropia()` descarta ese error
+        **sólo** si todos los 429 de la pasada son de `/widget` de Chatwoot, y lo descartado se
+        escribe en el JSON (`huellaPropia`), no se esconde.
+      - **Fail-closed, fijado por cuatro tests que serían el precio de equivocarse:** un 429 de
+        otro endpoint, un 429 del widget junto a uno ajeno, un 429 sin respuesta que lo explique
+        y un **500 del widget** siguen siendo ítem. Una excepción que silencia de más es peor que
+        el fantasma que vino a matar. Los cinco tests se escribieron **en rojo primero** y falló
+        sólo el que debía. `--self-check`: **74 casos verdes**.
+      - **Verificado end-to-end contra el sitio real**, no sólo con datos inyectados:
+        `CANARIO_OUT=/tmp/canario-prueba node scripts/canario_visual.mjs rubros` → la página
+        recibió el 429 de verdad, quedó registrado con su URL, **`motivos: []`** (antes levantaba
+        este 🔴) y `huellaPropia` explica qué se silenció y por qué.
+      - **Costo evitado:** este fantasma ya se había llevado cuatro vueltas y volvía a nacer cada
+        3 h con la corrida del canario. Lo que sigue abierto y es de Sergio no cambia: safelistear
+        la IP del VPS (`RACK_ATTACK_ALLOWED_IPS`) para que el canario mida el widget de verdad en
+        vez de saltearlo — cotizado en
+        `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md`.
+      ~~**Detalle original de la medición del 2026-09-03 00:43 UTC, conservado porque la
+      refutación se lee contra él:**~~
       - **Evidencia de la corrida oficial única** (`node scripts/canario_visual.mjs`, primer
         comando de la vuelta, cero requests previos al sitio): `home`, `precios`, `empezar`,
         `rubros` y `chatbot-landing` — las cinco — dispararon `ITEM` por
