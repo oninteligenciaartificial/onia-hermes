@@ -56,7 +56,10 @@ Las tres formas de fantasma que ya aparecieron acá:
    runbook de salud de abajo manda a levantar. El carril tenía prohibido tocar su propia obra.
 4. **UNA tarea por vuelta**, la primera no-bloqueada del carril que toque. Gates
    antes de commit: `pnpm typecheck:packages` (+ `pnpm test` si tocás packages;
-   `tsc --noEmit` en `apps/dental-premium` si la tocás) + **mirar renderizado**
+   **`npm run gates` dentro de `apps/dental-premium` si la tocás** — encadena
+   typecheck + pliegue + contraste; el `tsc --noEmit` suelto que decía acá **no
+   miraba ni un color**, y por eso el segundo botón del hero pasó todos los
+   gates siendo invisible, ver A11) + **mirar renderizado**
    + **`pnpm e2e` si cambiaste UN SOLO PIXEL de lo que se dibuja** (y si el cambio
    de geometría era el objetivo, `--update-snapshots` y **mirar la baseline nueva**
    antes de commitearla: una baseline se refresca MIRÁNDOLA, nunca a ciegas).
@@ -120,21 +123,20 @@ Las tres formas de fantasma que ya aparecieron acá:
       **Hecho cuando**: `npm run gate:pliegue` pasa con 1366×768 agregado a `VIEWPORTS`, y la
       captura del titular nuevo a 1440 mirada y aprobada.
 
-- [ ] **El segundo botón del hero de la dental es ILEGIBLE: tinta casi negra sobre el verde oscuro.**
-      Apareció al MIRAR la captura de dental-premium después de arreglar A10 — el bug de opacidad
-      tapaba este otro: mientras el CTA era invisible, nadie podía ver que el de al lado tampoco
-      se leía.
-      **Evidencia** (medida el 2026-09-03 sobre el bundle de producción, a 1440×800):
-      `.hero .actions .btn--ghost` ("Ver tratamientos") computa
-      `color: rgb(23, 36, 32)` y `border-color: …/0.12` **sobre el hero verde oscuro**, con
-      `opacity: 1` — o sea que no es la animación, es el color. En la captura el botón
-      prácticamente no existe al lado del sólido.
-      **Causa**: `web-factory/apps/dental-premium/src/app/globals.css:75` define
-      `.btn--ghost { color: var(--ink); border: 1px solid var(--line) }` con los tokens de
-      superficie CLARA, y el hero es la única superficie oscura donde ese botón se usa.
-      **Hecho cuando**: el ghost del hero usa el par sobre-oscuro (el mismo criterio que ya
-      aplica `.on-steel` en la ferretería), medido ≥4,5:1 contra el fondo real del hero, y la
-      captura a 1440×800 mirada con los DOS botones legibles.
+- [ ] **El contorno del ghost sobre papel claro mide 1,27:1 y el piso de un control es 3.**
+      Lo encontró el gate de contraste nuevo al medir TODOS los `.btn` de la página, no sólo el
+      del hero. **No es el mismo defecto que el del hero y por eso no se arregló con él**: acá el
+      texto se lee perfecto (14,74:1, tinta oscura sobre papel), lo que casi no se ve es la
+      píldora que lo rodea — el botón se identifica igual por su texto.
+      **Evidencia** (2026-09-03, bundle de producción, las tres pantallas): «Pedir presupuesto»
+      de `.closer` da `borde 1.27:1 (piso 3) sobre #f8f5ef`. Sale impreso como aviso en cada
+      corrida de `npm run gate:contraste` — no está escondido.
+      **Por qué NO lo cerré solo**: subir el borde de `--line` (tinta al 12 %) hasta 3:1 exige
+      llevarlo a ~55 % de tinta, y eso **cambia cómo se ve el botón en toda la superficie clara**.
+      Es un cambio visible de dirección, no un arreglo de defecto — y un rediseño se muestra
+      renderizado y espera el OK sobre ESA pieza (2026-08-20).
+      **Hecho cuando**: Sergio ve las dos versiones del botón lado a lado y elige, o se decide
+      dejarlo como está y el aviso del gate se convierte en excepción declarada con su motivo.
 
 - [ ] **La ferretería pesa 192 kB de First Load contra un presupuesto de 150.**
       También anotado por A3 al cerrar y nunca convertido en línea. Es el sitio de un negocio
@@ -280,6 +282,51 @@ Las tres formas de fantasma que ya aparecieron acá:
 ---
 
 ## Cerrado — carril A (build)
+
+- [x] **A11 · El segundo botón del hero de la dental ya se lee: pasó de 1,00:1 a 15,16:1**
+      (2026-09-03).
+      Era el color, no la animación: `.btn--ghost` heredaba en el hero los tokens de superficie
+      CLARA (`--ink` #172420, `--line` = tinta al 12 %) y el hero es la única superficie oscura
+      de la app. Sobre el verde profundo daba **1,00:1 de texto y 1,01:1 de borde** — el botón
+      ocupaba su lugar y era invisible. El gate del pliegue lo daba por bueno porque mide
+      geometría y opacidad, **no color**.
+      **Qué se hizo**: clase `.on-green` que REBINDEA `--ink`/`--ink-soft`/`--line` sobre
+      superficie oscura (`globals.css`), aplicada al hero en `components/HeroScene.tsx`. Mismo
+      criterio que `.on-steel` en ferreteria-sur. No se tocó la regla genérica `.btn--ghost`, así
+      que la superficie clara queda igual.
+      **Medido** (bundle de producción, `npm run gate:contraste`):
+
+      | pantalla | antes texto | después texto | antes borde | después borde |
+      |---|---|---|---|---|
+      | 1440×800 | 1,00:1 | **15,16:1** | 1,01:1 | **4,15:1** |
+      | 1440×900 | 1,01:1 | **15,32:1** | 1,01:1 | **4,16:1** |
+      | 390×844 | 1,01:1 | **15,15:1** | 1,01:1 | **4,16:1** |
+
+      **Mirado** renderizado a 1440×800 y 390×844: los dos botones del hero legibles, el ghost
+      con su píldora visible al lado del sólido. `npm run gates` verde (typecheck + pliegue +
+      contraste).
+      **Gate nuevo, y por qué así**: `scripts/gate-contraste.mjs` saca sus sujetos del **DOM**
+      (mide todos los `.btn` que la página renderice), no de una lista escrita a mano — un gate
+      con lista de inclusión falla ABIERTO el día que aparece un botón nuevo. Y samplea el fondo
+      del **PNG de la captura** en vez de deducirlo del CSS, porque detrás del ghost del hero no
+      hay un color sino tres degradados y un scrim.
+      **Tres falsos positivos del instrumento** antes de creerle una sola medición — los tres del
+      mismo tipo (fotografiar un fotograma que el visitante nunca ve):
+      · el `Reveal` envuelve a sus hijos en un `motion.div`, así que el nodo animado es el
+        **abuelo** del botón; mirar `parentElement` leía `.actions`, que nunca se anima, y daba
+        por asentado un botón todavía en `opacity:0`. Un botón verde sólido salía medido como
+        `#eaede6` — el papel de atrás — y el gate acusaba al sitio.
+      · `scroll-behavior: smooth` hace que scrollear ANIME: la captura sale a mitad del viaje.
+        Se apaga con `addStyleTag` antes de mover nada.
+      · `scrollIntoViewIfNeeded` deja la última sección pegada al borde inferior, por debajo del
+        `margin: -12%` que dispara `whileInView` — el reveal no arrancaba y sólo fallaba a
+        1440×900. Se scrollea al **centro**.
+      **Barrido a la app hermana**: las dos comparten `motion.tsx` por copia y ya habían
+      compartido el bug de A10, así que se midió ferreteria-sur con el mismo gate
+      (`BASE_URL=… node scripts/gate-contraste.mjs`): **sus 7 botones pasan** (ghost del hero
+      14,90:1). El defecto era sólo de la dental — su `.on-steel` ya cubría el caso.
+      **Queda abierto y a la vista**: el contorno del ghost sobre papel claro (1,27:1). Es ítem
+      propio en "Ahora" y el gate lo imprime como aviso en cada corrida.
 
 - [x] **A10 · El CTA del hero de la ferretería ya entra en el pliegue — y estaba roto de DOS
       maneras, no de una** (2026-09-03).

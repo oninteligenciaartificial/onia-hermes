@@ -29,5 +29,8 @@ export function HeroScene({ children }: { children: React.ReactNode }) {
     return () => ctx.revert();
   }, []);
 
-  return <div ref={root} className="hero">{children}</div>;
+  // `on-green` marca esta superficie como OSCURA y rebindea los tokens de tinta
+  // (ver globals.css). Sin eso, `.btn--ghost` del hero se pintaba con la tinta
+  // de superficie clara y quedaba invisible sobre el verde profundo.
+  return <div ref={root} className="hero on-green">{children}</div>;
 }
