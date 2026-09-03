@@ -19,6 +19,7 @@ import {
   construirUrlWebhook,
   postAlWebhook,
   clasificarRespuesta,
+  armarAvisoRescate,
 } from "./rescate-run.mjs";
 
 const T0 = Date.parse("2026-09-03T00:00:00Z");
@@ -326,4 +327,86 @@ test("el barrido separa lo mandado de lo CONTESTADO, que es lo unico que salva u
   assert.equal(res.contestados, 1, "pero solo uno produjo respuesta");
   const conv47 = res.detalle.find((d) => d.conversationId === 47);
   assert.equal(conv47.resultado, "mensaje_ya_procesado", "y el barrido dice POR QUE el otro no");
+});
+
+// ─────────────────────────────────────────────────────────────────────────────────────────
+// EL AVISO. Un barrido que corre solo cada 10 min y NO cuenta a nadie lo que hizo repite,
+// en su propio cuerpo, el bug que vino a cerrar: el mensaje se pierde y nadie se entera.
+// Y es ademas la unica forma de conseguir la prueba que le falta al circuito —un rescate
+// que produzca una respuesta VISIBLE—: cuando aparezca el proximo huerfano real, el aviso
+// lo va a decir. Sin esto habria que estar mirando el log en el minuto exacto.
+
+test("avisa SOLO cuando salvo a alguien de verdad, no cuando solo mando", async () => {
+  const avisos = [];
+  await runRescateSweep(
+    { ahoraMs: T0 + min(5), emitir: true },
+    {
+      leerFilas: async () => [fila({ conversationId: 47, messageId: 249 })],
+      postWebhook: async () => ({
+        ok: true,
+        respuesta: '{"ok":true,"deduped":true,"sent":[],"reason":"mensaje_ya_procesado"}',
+      }),
+      avisar: async (texto) => avisos.push(texto),
+    },
+  );
+  assert.deepEqual(avisos, [], "reinyectar sin contestar no salva a nadie: no se avisa");
+
+  await runRescateSweep(
+    { ahoraMs: T0 + min(7), emitir: true },
+    {
+      leerFilas: async () => [fila({ conversationId: 49, messageId: 282 })],
+      postWebhook: async () => ({ ok: true, respuesta: '{"ok":true,"sent":[{"id":1}]}' }),
+      avisar: async (texto) => avisos.push(texto),
+    },
+  );
+  assert.equal(avisos.length, 1, "un lead rescatado SI se avisa");
+  assert.match(avisos[0], /conv(ersacion)? 49/i, "el aviso dice cual conversacion mirar");
+  assert.match(avisos[0], /7 min/, "y cuanto tiempo estuvo esperando esa persona");
+});
+
+test("en seco no avisa nunca, aunque haya huerfanos", async () => {
+  const avisos = [];
+  const res = await runRescateSweep(
+    { ahoraMs: T0 + min(5), emitir: false },
+    {
+      leerFilas: async () => [fila()],
+      postWebhook: async () => ({ ok: true, respuesta: '{"ok":true,"sent":[{"id":1}]}' }),
+      avisar: async (texto) => avisos.push(texto),
+    },
+  );
+  assert.equal(res.huerfanos, 1);
+  assert.deepEqual(avisos, [], "el modo seco no puede tocar Telegram");
+});
+
+test("el aviso va en HTML y escapa el texto de la persona: un < suelto lo hace NO llegar", () => {
+  const texto = armarAvisoRescate({
+    contestados: 1,
+    detalle: [
+      {
+        conversationId: 49,
+        messageId: 282,
+        edadMin: 41,
+        texto: 'tengo una <clinica> & "4 doctores"',
+        resultado: "contestado",
+      },
+    ],
+  });
+  assert.ok(!/<clinica>/.test(texto), "el < del cliente no puede viajar crudo a Telegram");
+  assert.match(texto, /&lt;clinica&gt;/);
+  assert.match(texto, /&amp;/);
+  assert.match(texto, /<b>/, "pero el formato propio del aviso SI es HTML");
+});
+
+test("si un aviso falla, el barrido no pierde el rescate que ya hizo", async () => {
+  const res = await runRescateSweep(
+    { ahoraMs: T0 + min(5), emitir: true },
+    {
+      leerFilas: async () => [fila({ conversationId: 49, messageId: 282 })],
+      postWebhook: async () => ({ ok: true, respuesta: '{"ok":true,"sent":[{"id":1}]}' }),
+      avisar: async () => {
+        throw new Error("telegram caido");
+      },
+    },
+  );
+  assert.equal(res.contestados, 1, "el lead se salvo igual: Telegram es el testigo, no el trabajo");
 });
