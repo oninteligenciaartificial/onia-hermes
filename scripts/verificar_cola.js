@@ -162,6 +162,15 @@ function evidenciaDe(textoCrudo) {
     // siempre (medido el 2026-09-02 sobre COLA.md). Ningun archivo del repo tiene `*`.
     if (/\*/.test(ruta)) continue;
 
+    // Una EXPANSION DE LLAVES tampoco: es un GLOB con otra sintaxis. La cola escribe
+    // `hermes-content/docs/historial/canario-visual/2026-09-03-{home,precios,empezar}.png`
+    // para citar las cinco capturas de una corrida sin repetir la carpeta larga. El gate
+    // buscaba en disco el literal CON las llaves y daba fantasma sobre archivos que existen
+    // (medido el 2026-09-03: 2 de sus 10 errores sobre COLA.md, items 1538 y 1675).
+    // Se piden las DOS llaves y en orden, que es lo que impide que esto afloje el gate: un
+    // archivo con una llave suelta en el nombre se sigue verificando.
+    if (/\{[^}]*\}/.test(ruta)) continue;
+
     // Una cita ABREVIADA tampoco es un archivo. La cola escribe
     // `…/2026-09-02-mismo-html-chromium-real-login.png` para no repetir la carpeta larga: el
     // archivo existe, lo que no existe es esa forma de escribirlo. Medido el 2026-09-02:
@@ -689,6 +698,18 @@ function selfCheck() {
   ok(!r.problemas.length, 'un glob de zona no es una ruta');
   r = revisarCola('## Ahora\n- [ ] Zona `carpeta/*.webp` · `existe.png`\n', tmp);
   ok(!r.problemas.length, 'un glob con comodin de nombre tampoco');
+
+  // (1c) Una EXPANSION DE LLAVES de shell tampoco es un archivo: es la forma corta de nombrar
+  // varios. La cola escribe `.../2026-09-03-{home,precios,empezar,rubros}.png` para citar las
+  // cinco capturas de una corrida en un renglon. Es el MISMO caso que el glob de (1) —una
+  // notacion que denota un conjunto— y salia fantasma por el mismo motivo: se buscaba en disco
+  // el literal con las llaves adentro. Medido el 2026-09-03 sobre COLA.md: 2 de los 10 errores
+  // del gate eran esto, en los items 1538 y 1675, sobre capturas que SI existen.
+  r = revisarCola('## Ahora\n- [ ] Fotos `carpeta/2026-{a,b}.png` · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'una expansion de llaves no es una ruta');
+  // Su reciproco: hacen falta las DOS llaves. Una ruta con una llave suelta no se tapa.
+  r = revisarCola('## Ahora\n- [ ] Roto `carpeta/no-existe{.png`\n', tmp);
+  ok(r.problemas.length === 1, 'una llave suelta NO convierte la ruta en expansion');
 
   // (1b) Un paquete de npm CON SCOPE tiene barra y no es un archivo del repo. La cola de chatbot
   // salio en rojo el 2026-09-02 por citar `@supabase/ssr`, la libreria con la que se arman las

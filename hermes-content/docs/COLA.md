@@ -1984,6 +1984,26 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Después
 
+- [x] 🟡 **El mismo gate seguía ladrando en falso por una CUARTA clase de ruido — ARREGLADO el
+      2026-09-03 por `onia-cola`, auditando los `[x]` (escalón 2).** Corriendo
+      `node scripts/verificar_cola.js hermes-content/docs/COLA.md` salían **10 errores**, y **2
+      eran del detector, no de la cola**: los ítems de las líneas 1538 y 1675 citan las cinco
+      capturas de una corrida con la **expansión de llaves** de shell
+      (`.../2026-09-03-{home,precios,empezar,rubros,chatbot-landing}.png`) y el gate buscaba en
+      disco el literal **con las llaves adentro**. Verificado antes de tocar nada: los cinco
+      archivos **existen** en `hermes-content/docs/historial/canario-visual/`.
+      Es el mismo caso que el glob `*` que la carve-out (1) ya contemplaba —una notación que
+      denota un conjunto— con otra sintaxis. **Su recíproco:** se piden las **dos** llaves, así
+      que una ruta con una llave suelta se sigue verificando (`carpeta/no-existe{.png` sale
+      fantasma igual).
+      **Test primero, en rojo por el motivo correcto**: `una expansion de llaves no es una ruta`
+      falló con `AssertionError` antes del arreglo. Después: self-check **73 casos** verde y el
+      gate de `COLA.md` bajó de **10 a 8** errores — los 8 que quedan son de la cola, no del
+      detector (un duplicado real 1607/1707, dos 🟢 sin ruta, y rutas del **otro repo**
+      `onia-platform/lib/*.ts`, que este verificador no resuelve).
+      **Por qué importa:** un gate que grita en falso se termina salteando, que es el motivo
+      escrito de las otras carve-outs — y este gate es obligatorio en el prompt de dos loops.
+
 - [x] 🟡 **El gate de la cola (`scripts/verificar_cola.js`) ladraba 4 "fantasmas" que no lo son
       — ARREGLADO el 2026-09-02, y eran TRES defectos distintos, no uno.** El diagnóstico
       heredado era correcto en los tres síntomas pero los trataba como un solo "detector
