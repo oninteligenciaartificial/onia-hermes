@@ -158,6 +158,44 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [ ] 🔴 **Un lead pregunta "¿el sistema hace X?" y el bot le contesta con la oferta de horarios,
+      como si no hubiera preguntado nada.** Encontrado el 2026-09-03 recorriendo el frente
+      (escalón 3), no por la cola: los dos gates del carril estaban en VERDE.
+      **La medición, en producción y no en un test:** conversación 49 del widget (inbox 4),
+      mensajes 339-340. El prospecto, ya en `esperando_horario`, escribió *"Antes de elegir
+      horario, ¿el sistema manda recordatorios por WhatsApp a los pacientes?"* y recibió
+      *"¿Querés que te reserve para el viernes 4 a las 14:00 o el sábado 5 a las 9:00?"*.
+      La pregunta desapareció: no hubo "no sé" ni "lo ve Sergio". Y el motor **no se cayó** —
+      la traza del turno dice `rama: "respondio"`, o sea que para el sistema ese turno salió bien.
+      **La causa:** `RE_PRODUCTO_DETALLE` era una lista blanca de SUSTANTIVOS técnicos
+      (`se integra con`, `rayos x`, `api`, `offline`). No cubría la forma en que la gente
+      pregunta de verdad, que es SUJETO + VERBO. Al no matchear ninguna intención caía en
+      `offScriptResult`, cuya tarea al LLM es —textual— *"reformular la pregunta pendiente del
+      embudo, sin dar datos nuevos"*, con `features` en `forbidden`. **El off-guion está
+      DISEÑADO para no contestar y hace lo que debe: el agujero estaba un paso antes**, en el
+      router que nunca lo mandó a handoff.
+      ⚠️ **Lo que hacía invisible el bug:** el mensaje 341 de esa MISMA conversación
+      (*"¿el sistema guarda la historia clínica?"*) sí salió bien — pero por casualidad, porque
+      traía la palabra "clinica" y lo salvó `isClinicalOrLegal`. Dos preguntas del mismo tipo,
+      una contestada y otra tragada, decidido por una palabra que no tenía nada que ver.
+      Mirar sólo la que salió bien daba "el bot contesta preguntas de producto".
+      **Reproducción en 30 s:** `docker exec <chatwoot-db> psql -U postgres -d onia-chatbot -tAc
+      "select id,message_type,content from messages where conversation_id=49 and id between 339 and 344 order by id;"`
+      **Lo que se hizo:** `hermes-content/deploy/vps-ops/bot/intents.mjs` suma `RE_PRODUCTO_HACE` (sujeto = el producto + verbo de
+      capacidad) a `isProductDetail`, así la pregunta va a handoff — que es el lado seguro que el
+      código YA había elegido (*"el bot NO adivina"*). **No se toca el ORDEN del router**:
+      soporte, precio, SIAT y clínico se siguen juzgando antes.
+      **Rojo primero, por el motivo correcto:** los dos tests nuevos fallaron con
+      `+ 'esperando_horario' - 'handoff_humano'`. **754/754 verde** (`npm run test:bot`).
+      🔎 **Una frontera que se midió en vez de suponerla:** *"¿el software emite facturas?"*
+      también matchea la regla nueva, pero **no llega**: `isSiatQuestion` la agarra antes y tiene
+      su propia respuesta. Mandarla a handoff habría EMPEORADO una pregunta que hoy se contesta
+      bien. Queda pinchado con su propio assert.
+      🔴 **FALTA PARA CERRARLO — commiteado, NO desplegado.** `/opt/onia/bot` no es un checkout
+      de git: hasta que alguien copie ese `intents.mjs` ahí, **el bot vivo sigue tragándose la
+      pregunta**. Es el mismo deploy que ya esperan otros dos arreglos (tablero `t_8f88919e`,
+      bloqueado). No marcar `[x]` hasta verificarlo contra producción con la sonda.
+
 - [x] 🔴 **El cron del rescate corre la copia VIEJA a propósito, así que un arreglo del carril
       no llega a producción hasta que alguien mergea — y mientras tanto nada lo dice.**
       CERRADO el 2026-09-03. Abierto el mismo día **auditando los `[x]`** (escalón 2), no por la cola.
