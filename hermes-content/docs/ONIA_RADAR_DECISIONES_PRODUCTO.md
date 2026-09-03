@@ -1939,6 +1939,35 @@ Con eso, la próxima vuelta que vea un 429 no vuelve a gastar una sesión deriv�
 **Lo que depende de Sergio:** sólo el OK para (a) — es un cambio de entorno en el contenedor de
 chat de producción, con reinicio, y eso no se toca sin su palabra.
 
+⚠️ **Corregido el 2026-09-03 ~12:50 UTC por el carril `web-venta`, que es el dueño de las
+pantallas: la premisa "cada visitante real cuenta con su IP y su cupo: su chat abre normal" es
+FALSA a partir de la tercera pantalla, y con eso (a) deja de alcanzar.** El diagnóstico de arriba
+es correcto en todo lo demás — el 429 es autoinducido y el servicio está sano —, pero le falta un
+factor de 2 que cambia la conclusión:
+
+- **Cada página vista cuesta DOS cargas del cupo, no una.** El sitio usa `<a>` planos a propósito
+  (`web-factory/apps/onia-platform/src/app/(sitio)/nav.ts:11`: *"una navegación completa cierra
+  cualquier menú abierto sola"*), así que **cada clic del header recarga el sitio entero** y
+  vuelve a pedir el SDK. Medido con clics reales: 4 clics → `RECARGA` las 4 veces → **10
+  peticiones** al endpoint del widget.
+- **Contra un límite de 5/hora/IP, eso agota el cupo del visitante en la 3.ª pantalla.** Medido
+  en una corrida limpia de 5 páginas: `home` y `precios` con burbuja (200); `empezar`, `rubros` y
+  `chatbot-landing` **sin burbuja** (429). Ese es el recorrido de alguien interesado, no un
+  bombardeo — y pierde el chat justo cuando más lo iba a usar.
+- **La ventana no perdona:** tras ~15 peticiones, **3 minutos de espera no la recuperaron**.
+- **Lo que NO pude medir, y no lo adivino:** en qué página exacta cae un lead con IP fresca. Haría
+  falta una segunda IP y desde el VPS no hay (`WebFetch` no está autorizado en sesión no
+  interactiva). Sostengo el número por el límite documentado (5/hora) × 2 cargas por página, no
+  por haberlo visto desde fuera.
+
+**Qué cambia para la decisión:** (a) sigue siendo correcta y **sigue siendo la que recomiendo**,
+pero ahora hay que saber que **arregla nuestra ceguera de medición, no el chat del lead**. Para el
+lead, las salidas son subir el límite del throttle del widget (no tiene env propia: es el
+initializer línea 176) o dejar de recargar el SDK en cada página — y esto último **no se hace con
+`next/link`**: rompería el cierre del menú de teléfono, que es el motivo por el que los `<a>` son
+planos. Cotizar eso es trabajo de otra vuelta; lo que no se puede es aprobar (a) creyendo que con
+eso el visitante recupera el chat.
+
 ---
 
 ## 33. El bot NO puede decir un precio, y los precios están publicados en la web (2026-09-02) — decisión de Sergio
@@ -2254,7 +2283,18 @@ gates del integrador.
 
 ---
 
-## 40. El carril Web Factory corre en Windows y sus 12 commits no llegan a `main` (2026-09-03) — decisión de Sergio
+## 40. El carril Web Factory corre en Windows y sus 12 commits no llegan a `main` (2026-09-03) — ✅ RESUELTO 11:58 UTC, ya no hay decisión
+
+> ⚠️ **La opción A ya se ejecutó: no hace falta que Sergio decida nada acá.** Recontado en vivo a
+> las 11:58 UTC del mismo día: `origin/main...origin/claude/onia-web-architecture-b37eca` da
+> **0 commits adelante**, y la punta de la rama (`d80ab6b88`) **es ancestro de `main`** — o sea,
+> entró entera. Se deja el análisis de abajo porque su parte útil no venció: **el umbral de "100
+> commits atrás" mide tráfico de `main`, no antigüedad de la rama**, y eso sigue escalando ramas
+> vivas por error (opción B, sin ejecutar).
+>
+> Lo cerró el integrador aplicando la regla que este mismo ítem pedía: *un `NO mergees` es una
+> medición con fecha de vencimiento y el que lo obedece tiene que recontarlo antes*. Un bloqueo
+> vencido es peor que un fantasma — le pide a Sergio una decisión que ya tomó.
 
 **Lo medido, en vivo, hoy 07:40 UTC** (no heredado): la rama `claude/onia-web-architecture-b37eca`
 tiene **12 commits** que `main` no tiene, el último de las **01:53 UTC de hoy** — o sea que el
@@ -2300,3 +2340,34 @@ semanas" sin estarlo. El umbral en commits mide la máquina, no el riesgo.
 
 **Lo que hace falta de Sergio:** una línea — A, B, o las dos. Si es A, el integrador la mergea en
 la vuelta siguiente sin volver a preguntar.
+
+---
+
+## 41. El arreglo del alta está en `master` y el cliente sigue perdiendo la cuenta (2026-09-03) — decisión de Sergio
+
+**Qué se arregló.** Un cliente que se registraba dos veces con el mismo correo sin confirmar —lo
+más normal del mundo si no le llegó el mail o cerró la pestaña— veía **el botón no hacer nada**, y
+encima **perdía la cuenta que ya tenía**. Quedaban organizaciones huérfanas en la base de
+producción. Commit `38a0c8a` en `onia-platform` (`master`), con los tres gates verdes: `tsc` 0
+errores, `lint` 0 errores, `vitest` 2519 pasando.
+
+**Por qué te llega igual.** Está **commiteado y NO desplegado**. El contenedor `onia-platform`
+corre el build anterior, así que **para el cliente el bug sigue vivo ahora mismo**. Desplegar al
+VPS necesita tu OK explícito: no lo hace un loop.
+
+**Cuánto vale esperar.** Es el último clic de la puerta de entrada del producto, y de los que hay
+—7 personas esperando— cualquiera que se registre dos veces cae en esto. No es un caso raro: la
+causa más común de un segundo intento es justamente que el primer correo no llegó.
+
+| | Qué se hace | Cuesta | Qué queda |
+|---|---|---|---|
+| **A. Desplegar ya** (lo que este loop recomienda) | Build + swap del contenedor con el runbook de `onia-deploy` | ~10 min, ventana corta de corte | El alta deja de comerse cuentas hoy |
+| **B. Esperar y juntarlo con lo próximo** | Queda para el siguiente despliegue | 0 hoy | Cada alta repetida sigue borrando una cuenta y dejando una organización huérfana |
+
+**Lo que hace falta de Sergio:** una línea — A o B.
+
+**Dato que conviene saber para el despliegue.** Al medir esto se vio que el SMTP **rechaza los
+dominios sin MX** (`example.com` → `556 Recipient address rejected ... (nullMX)`) y GoTrue devuelve
+**500** ahí, además de un **rate limit de ~60 s** entre altas del mismo correo. Las dos cosas son
+correctas, pero significan que un correo mal tipeado por el cliente da error 500, no un mensaje
+claro. No se tocó: es otro ítem, y este loop cierra uno por vuelta.

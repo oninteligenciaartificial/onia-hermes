@@ -34,7 +34,7 @@ entre plano y plano.
 
 ## La receta con nuestros assets
 
-**Insumos (los tres son imagen fija, y la imagen es gasto trivial: ~0,12 créditos en soul_2 2k):**
+**Insumos (los tres son imagen fija, y la imagen es gasto trivial: ~0,12 créditos en text2image_soul_v2 2k):**
 
 | Insumo | De dónde sale acá |
 |---|---|
@@ -255,7 +255,7 @@ total; presupuestar TIEMPO por cantidad de tomas.
 | **Dos que caminan** | 45 s | 3 (15×3) | **45 cr** | 157,5 cr | 405 cr |
 | | | **Total** | **107 cr** | **374,5 cr** | 963 cr |
 
-Sumar aparte, y es despreciable: los 3 insumos de imagen **0,36 cr** con `soul_2` (o 6 cr si van
+Sumar aparte, y es despreciable: los 3 insumos de imagen **0,36 cr** con `text2image_soul_v2` (o 6 cr si van
 con `nano_banana_2` 2k, que es la vía ganadora para cara) · narración ElevenLabs ~2,4 cr.
 
 **Contra un saldo de 2.853 cr:** prototipar las tres en mini 480p cuesta **107 cr = 3,7% del

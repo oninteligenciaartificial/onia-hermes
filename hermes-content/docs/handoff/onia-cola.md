@@ -87,3 +87,61 @@ vuelta**.
   diseño** — pero **recontá con `git merge-tree` antes de obedecer esta nota**: es una medición
   con vencimiento, y así se destrabó `lucia-vps`.
 - `claude/onia-core-adoption-sprint5` (onia-platform) sigue siendo decisión de Sergio (radar 26).
+
+---
+
+## Vuelta 2026-09-03 ~13:00 UTC — el alta borra la cuenta del cliente (t_a906491b, EN CURSO)
+
+**Estado: diagnosticado y PROBADO, sin arreglar.** La tarea sigue reclamada por `onia-cola` a
+propósito: no está hecha. La próxima vuelta arranca desde acá, no desde cero.
+
+**Qué pasa (lo reportó `recorrido-cliente`, lo confirmé yo leyendo el código y el env de producción):**
+registrarse dos veces con un correo que ya existe y **sin confirmar** no muestra nada en pantalla
+**y le borra al cliente la cuenta que ya tenía**, dejando su organización huérfana.
+
+**El mecanismo, ya no es hipótesis:**
+
+1. Producción corre el camino `signUp()`, no el camino admin. Medido en vivo:
+   `docker exec onia-platform env` → `ONIA_REGISTRO_CONFIRMA_CORREO=si`, y
+   `docker exec supabase-auth2 env` → `GOTRUE_MAILER_AUTOCONFIRM=false`.
+2. `app/api/auth/register/route.ts:180-187` confía en que GoTrue delata al correo repetido
+   devolviendo `identities: []`. **GoTrue sólo ofusca así a los correos CONFIRMADOS.** Con uno
+   sin confirmar hace un *resend* legítimo: manda de nuevo el mail (`user_confirmation_requested`
+   en los logs, que es justo lo que se observó) y devuelve el user **con `identities` lleno**.
+   Por eso el 409 "Este correo ya está registrado" nunca dispara.
+3. Entonces `route.ts:189-190` hace `userId = signUpData.user.id` — que es el id del usuario
+   **que ya existía** — y marca `createdAuthUser = true`, que es **falso**: no lo creamos nosotros.
+4. `provisionOrganization` choca con el negocio duplicado y tira `ProvisioningError`.
+5. El `catch` de `route.ts:317-321` ve `createdAuthUser === true` y ejecuta
+   `supabaseAdmin.auth.admin.deleteUser(userId)` → **borra al usuario del cliente**.
+   La organización del alta ORIGINAL queda sin dueño: exactamente las filas huérfanas que se
+   encontraron (`organizations` + `profiles` + `organization_entitlements` sin usuario en `auth.users`).
+
+Eso explica las tres observaciones a la vez: el `/signup` de GoTrue en 200, la fila de `auth.users`
+desaparecida, y la organización que quedó.
+
+**Intento fallido / callejón que la próxima NO tiene que repetir:** la primera lectura fue "la ruta
+ya maneja el duplicado, esto debe ser el formulario que no pinta el error". Es falso y cuesta una
+vuelta: el 409 existe en el código pero es **inalcanzable** en el camino que corre producción. El
+bug no es de pintura, es que se borra una cuenta.
+
+### ✅ Cerrado en la vuelta de las 11:33 UTC — commit `38a0c8a` de `onia-platform` (`master`)
+
+La hipótesis de arriba **se probó antes de contarse**, midiendo contra producción (11:41 UTC):
+repetir el alta con un correo sin confirmar devuelve **HTTP 200 con el user entero** — mismo `id`
+que el alta original, `identities` con 1 elemento y **`created_at` con la fecha ORIGINAL**. Eso
+confirma las dos mitades: el 409 por `identities` vacío nunca dispara, y `createdAuthUser=true` es
+falso.
+
+- **La señal es `created_at`**: anterior a la petición ⇒ la cuenta ya existía y no es nuestra ⇒ 409
+  con mensaje, sin provisionar y sin borrar. Margen de 60 s por desfase de reloj.
+- **Cuatro tests, en ROJO antes por los motivos correctos**: `expected 200 to be 409`, provisioning
+  sobre cuenta ajena, y `deleteUser` *"been called 1 times"* — el borrado de la cuenta reproducido
+  en un test. El cuarto (alta legítima con `created_at` de ahora ⇒ 200) es la guardia de regresión.
+- El test que ya existía cubría el correo **confirmado**, que es el caso que **funciona**: otra vez
+  el patrón de "el test mira el primer paso y el sistema muere en el segundo".
+- Gates: `tsc` 0 errores, `lint` 0 errores, `vitest` 2519 pasando.
+- Usuario de prueba borrado de `auth.users`; cero organizaciones huérfanas.
+
+⚠️ **Está en `master`, NO desplegado: para el cliente el bug SIGUE VIVO.** El contenedor
+`onia-platform` corre el build anterior. Desplegar es de Sergio → radar ítem 41.

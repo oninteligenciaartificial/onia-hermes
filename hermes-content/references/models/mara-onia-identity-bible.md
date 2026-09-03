@@ -7,7 +7,7 @@
 - **Nombre:** Mara
 - **Rol:** modelo IA / influencer de skincare-beauty y ecommerce (Nuvia y clientes).
 - **Estado:** Soul entrenado y en uso. Video Nuvia/ISDIN v1 producido.
-- **Higgsfield Soul:** `6c94bbf0-bc71-4fe1-841e-f366bdb00b6e` (`soul_2` / Soul V2). Gen ~0.12cr/img.
+- **Higgsfield Soul:** `6c94bbf0-bc71-4fe1-841e-f366bdb00b6e` (`text2image_soul_v2` / Soul V2). Gen ~0.12cr/img.
 - **Banco de identidad:** `hermes-content/references/ai-ecommerce-model/identity-bank-50/`.
 
 ## Rostro (face lock)
@@ -44,5 +44,5 @@ No app interface, no Instagram/story UI, no username, no on-screen text, no logo
 watermark, no plastic skin, no identity drift, no distorted hands, no fake product labels.
 
 ## Nota de produccion
-- soul_2 estilo "General" hornea chrome de IG -> recortar ~150px arriba/abajo (ffmpeg).
+- text2image_soul_v2 estilo "General" hornea chrome de IG -> recortar ~150px arriba/abajo (ffmpeg).
 - Cuenta IG propia + automatizacion: ver [[content-engine-remotion]] (fase 2 n8n).

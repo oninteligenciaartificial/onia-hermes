@@ -536,7 +536,7 @@ generada, que es **la luz demasiado perfecta y la óptica demasiado limpia.**
 | 11 | Cierre | `Shot on iPhone, natural light, slight film grain, no beauty filter, no smoothing. Not a 3D render, not AI-looking, not plastic, not doll-like, not airbrushed. No brand logos, no text, no watermark.` |
 
 ⚠️ El bloque 11 lleva **negaciones**: funcionan en la vía `nano_banana_2` + Element. Con
-`soul_2` producen lo que nombran — ahí se corta después de *"no smoothing"*.
+`text2image_soul_v2` producen lo que nombran — ahí se corta después de *"no smoothing"*.
 
 **Cámara — 4 colas:**
 
@@ -965,7 +965,7 @@ funciona"* — buscar referencias espectaculares es lo que hace que el UGC se ve
 | `LUCIA-REAL-v2-clean` | `36305a9b-af24-4390-959b-885082dddd5d` | ⛔ **NO USAR.** Dos motivos: sale con la **piel roja** e **ignora el atuendo pedido** (§2), y fue entrenado con frames de **una persona real sin permiso documentado** |
 | **`LUCIA-SINTETICA-v3`** | `e6d8703c-ea48-4d37-9e66-afae59ebe84a` | 🟡 **RESPALDO, no principal** — ver veredicto abajo. Entrenado con 6 imágenes 100% GENERADAS desde el ancla: rooftop, oficina, café, gimnasio, playa y selfie UGC. Identidad sintética pura — sin deuda de consentimiento |
 
-⚠️ Un Soul solo corre en `soul_2` y `soul_cinema_studio`. Para nano_banana / gpt_image /
+⚠️ Un Soul solo corre en `text2image_soul_v2` y `soul_cinema_studio`. Para nano_banana / gpt_image /
 kling / seedance sigue siendo el **Element ancla** el que manda.
 
 ## Elements de cara
@@ -1000,14 +1000,14 @@ b-roll actual y no tiene turnaround propio.
 - **Primer plano / cara reconocible** → Element ancla `58bbd635-9b90-4bd2-b08a-1cd4915bd563` + `nano_banana_2`, fondo simple.
 - **Variedad de escena** → ancla + descripción de escena EN TEXTO. Nunca combinar cara +
   outfit-Element + lugar-Element en la misma pieza de feed: se promedian y la cara deriva.
-- **Soul nuevo** → solo con `soul_2`, y se valida contra el ancla antes de darlo por bueno.
+- **Soul nuevo** → solo con `text2image_soul_v2`, y se valida contra el ancla antes de darlo por bueno.
 
 ### Veredicto del Soul v3 — probado contra el ancla el 22-ago (no ganó)
 
 Misma escena, mismo prompt, dos vías. Resultado mirado, no supuesto
 (`prueba-soul-v3/A-soul-v3.png` vs `B-ancla-actual.png`):
 
-| | Soul v3 (`soul_2`) | **Ancla `58bbd635-9b90-4bd2-b08a-1cd4915bd563` (`nano_banana_2`)** |
+| | Soul v3 (`text2image_soul_v2`) | **Ancla `58bbd635-9b90-4bd2-b08a-1cd4915bd563` (`nano_banana_2`)** |
 |---|---|---|
 | Mirada a cámara (pedida en el prompt) | ❌ mira de costado | ✅ obedece |
 | Pecas (rasgo sagrado) | tenues | ✅ marcadas |
@@ -1017,7 +1017,7 @@ Misma escena, mismo prompt, dos vías. Resultado mirado, no supuesto
 **Conclusión: el ANCLA sigue siendo la vía principal.** El Soul v3 mejora al viejo
 (`36305a9b`: adiós piel roja y adiós deuda de consentimiento) pero **no le gana al Element**
 en fidelidad ni en obediencia al prompt. Queda como respaldo para cuando algo exija
-`soul_2` sí o sí.
+`text2image_soul_v2` sí o sí.
 
 Esto confirma el patrón que el archivo ya tenía escrito: **la identidad se sostiene en LA
 REFERENCIA, no en el entrenamiento.** Un Soul promedia; un Element se copia.

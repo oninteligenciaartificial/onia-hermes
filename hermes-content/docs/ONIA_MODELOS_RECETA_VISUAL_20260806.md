@@ -84,7 +84,7 @@ Estructura invariable: `[apertura] + [bloque de identidad] + [atuendo] + [escena
 | **R3 · UGC / frame de reel** | lo que parece grabado con celular | `A casual candid snapshot taken by a friend standing close to her in <lugar cotidiano>, mid-sentence talking, available window light only, slightly imperfect handheld framing, everyday vertical phone photo` | **L14, M14 — las mejores del lote** |
 | **R4 · Beauty / producto** | Mara vendiendo | `Extreme close-up, her head and shoulders fill the whole frame; background is a smooth <color> wall completely out of focus. 85mm f/2, high-end skincare campaign photography` | M13 |
 
-Parámetros fijos: `model: soul_2` · `quality: 2k` · `use_unlim: false` ·
+Parámetros fijos: `model: text2image_soul_v2` · `quality: 2k` · `use_unlim: false` ·
 `aspect_ratio`: `3:4` feed · `9:16` reel/story · `1:1` avatar. Costo medido: **0,12 cr/imagen**.
 
 **Nunca** meter en el prompt: negaciones de cualquier tipo · `app`/`interfaz`/`story`/`pantalla` ·
@@ -132,7 +132,7 @@ motores de imagen de la cuenta**:
 | Motor | Parámetros que expone |
 |---|---|
 | `nano_banana_2` · `nano_banana_pro` | `resolution` |
-| `soul_2` · `soul_cinematic` | `quality`, `soul_id` |
+| `text2image_soul_v2` · `soul_cinematic` | `quality`, `soul_id` |
 | `gpt_image_2` | `resolution`, `quality` |
 | `cinematic_studio_2_5` · `marketing_studio_image` | `resolution` |
 | `ms_image` | `style_id` (obligatorio), `brand_kit_id`, `resolution`, `quality`, `batch_size`, `product_ids` |
@@ -206,7 +206,7 @@ nota a un metro. Los 8 prompts fuente la aplican sin excepción.
 
 > **Ninguno está generado.** Es texto listo para que Sergio apruebe. Costos medidos en
 > `web-factory/docs/MODELOS_IA_QUE_USAR_PARA_QUE.md`: `nano_banana_2` 2.00 cr · `gpt_image_2` low
-> 0.50 cr · `z_image` 0.15 cr · `soul_2` 0.12 cr.
+> 0.50 cr · `z_image` 0.15 cr · `text2image_soul_v2` 0.12 cr.
 
 ### 3.1 — Catálogo de producto · Nuvia (proyecto propio, catálogo real)
 
