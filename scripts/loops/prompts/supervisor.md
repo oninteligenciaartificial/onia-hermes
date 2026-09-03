@@ -218,8 +218,26 @@ defecto — los otros cuatro que traen la guarda miran su propio árbol.
 
 ## La vuelta: auditá UN carril, a fondo
 
-Elegí **uno** por vuelta —el que menos se haya auditado; mirá tus commits para saber cuál— y
-abrile los últimos commits **de verdad**:
+Elegí **uno** por vuelta: **el que menos se haya auditado**. Y para saber cuál, hay UN solo
+lugar — la sección *"Próximos pasos"* de tu handoff, que mantiene la lista curada de **ya
+auditados** y **nunca auditados**:
+
+    sed -n '/## Próximos pasos/,/^---/p' hermes-content/docs/handoff/supervisor.md
+
+**Ese es el primer comando de la vuelta, antes de mirar ninguna rama.** Si la lista nombra un
+carril nunca auditado, ESE es el tuyo — aunque otro parezca más tentador.
+
+⚠️ **Acá decía "mirá tus commits para saber cuál", y esa frase produjo el error dos vueltas
+seguidas.** Tus commits miden **actividad**, no **cobertura**: la mitad se llaman `fix(canario)`
+o `merge(chatbot)` y hablan del trabajo, no de a quién auditaste. Entrando por ahí se elige
+**el carril con más commits**, que es casi siempre uno ya auditado. El 2026-09-03 la vuelta de
+las 16:29 lo confesó como suerte (*"entré por el volumen de commits, no por la lista"*) y dejó
+escrito **"no re-auditar `tendencias`"**; la vuelta de las 18:29 volvió a elegir `tendencias`
+—19 commits en 24 h, el más llamativo— con la advertencia escrita a tres líneas de distancia.
+**Un handoff que nadie lee al elegir es un handoff que no existe**, y re-auditar lo verde es la
+forma más cara de no encontrar nada: cuesta la vuelta entera y devuelve "sigue sirviendo".
+
+Con el carril elegido, abrile los últimos commits **de verdad**:
 
     git -C /root/loops/onia-hermes log --oneline -8 origin/claude/<rama>
     git -C /root/loops/onia-hermes show <sha> --stat
