@@ -1071,3 +1071,77 @@ que medirla contra `STACK-rasgos-10-angulos.jpg` después.
   gratis: conviene hacerlo **antes** de gastar.
 - **El CLI no tiene `generate image`.** El subcomando real es **`generate create`**
   (`generate image` no existe y muere en el parseo). Varios docs del carril lo escriben mal.
+
+---
+
+# E10 · El motor de 2 cr sostiene la cara Y obedece el encuadre — medido el 2026-09-03, 2 cr
+
+## La pregunta
+
+E9 midió que `text2image_soul_v2` (0,12 cr) **copia el lugar y cambia la persona**. La pregunta
+inversa, que faltaba: `nano_banana_pro` (2 cr) con foto-como-referencia, ¿sostiene la persona y
+**obedece** un cambio de pose y encuadre, o devuelve la referencia otra vez?
+
+**Sí a las dos.** Es el primer caso medido en que la referencia manda identidad y el prompt manda
+composición, cada uno en lo suyo.
+
+## Para qué se generó — no fue práctica suelta
+
+El carrusel fijado L2 tenía **6 fotos para 7 lugares**: la lámina 7 (el cierre) repetía la foto de
+la portada, píxel por píxel. Era una de las dos decisiones abiertas de Sergio en `t_a9ff7367`.
+Ahora la 7 tiene foto propia y esa decisión **ya no hay que tomarla**.
+
+## El comando exacto
+
+```sh
+higgsfield generate cost   nano_banana_pro --prompt "<abajo>" --aspect-ratio 4:5 --resolution 2k \
+  --image-references generadas-20260902/E2-B-rooftop.jpg      # -> 2 credits (gratis, antes)
+higgsfield generate create nano_banana_pro --prompt "<abajo>" --aspect-ratio 4:5 --resolution 2k \
+  --image-references generadas-20260902/E2-B-rooftop.jpg --wait --wait-timeout 5m
+```
+
+Prompt (guardado también en `generadas-20260903/_S3-prompt.txt`):
+
+> Same young woman as the reference photo: dark brown hair, prominent freckles across nose and
+> cheeks, warm olive skin, small gold hoop earrings and a thin gold chain, wearing the same
+> oatmeal linen tee. Rooftop terrace in Santa Cruz de la Sierra at golden hour, glass and steel
+> railing, low city rooftops behind her. She stands on the RIGHT side of the frame in
+> three-quarter back view, one hand resting on the railing, turned away from camera and looking
+> out toward the horizon, calm half-smile visible in profile. Open sky and soft out-of-focus
+> rooftop floor fill the LOWER LEFT of the frame, empty and uncluttered. Vertical portrait, 35mm,
+> shallow depth of field, warm low side light from the setting sun. natural true-to-life colors,
+> no color grading, no filter look, accurate white balance. [TEXT RULE - MANDATORY] No legible
+> text anywhere in frame.
+
+## Resultado — mirado, no supuesto
+
+`generadas-20260903/S3-rooftop-cierre.jpg` · **1856×2304 = ratio 0,806** (4:5 nativo, sin recorte).
+
+| Casilla | Veredicto |
+|---|---|
+| Identidad (pecas, cejas, ojos, aro de oro, cadena) | ✅ es Lucía — pecas presentes, el rasgo sagrado #1 que S1 perdió |
+| Raccord con la portada (misma remera de lino crudo, mismo golden hour) | ✅ |
+| Obedeció la escena pedida (rooftop, perfil, mano en la baranda) | ✅ — **no** repitió la pose de la referencia |
+| Espacio de texto abajo-izquierda | ✅ piso de terraza vacío, es donde cae el bloque |
+| Texto ilegible en cuadro | ✅ ninguno |
+| Manos | ✅ una mano visible sobre la baranda, dedos correctos |
+
+## Las dos ranuras, ahora medidas las dos
+
+| Motor | Ranura de referencia | Qué manda de verdad | Costo |
+|---|---|---|---:|
+| `text2image_soul_v2` | `--image-references` | **estilo y lugar** — cambia la cara (E9) | 0,12 |
+| `nano_banana_pro` | `--image-references` | **identidad** — el prompt manda la escena (E10) | 2 |
+
+**Regla que sale de acá:** cara reconocible ⇒ `nano_banana_pro`, sin excepción. Los 0,12 cr de
+Soul v2 no son "lo mismo más barato": son otro trabajo. Un carril que elige por precio elige mal.
+
+## Costo
+
+| Concepto | Créditos |
+|---|---:|
+| S3 — `nano_banana_pro` 4:5 2k | **2,00** |
+| **Total del lote** | **2,00** |
+
+Cotizado antes con `generate cost` (2 credits) y el cobro coincidió **exacto**:
+saldo 1934,14 → 1932,14.
