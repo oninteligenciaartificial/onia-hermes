@@ -212,7 +212,7 @@ const DIA = [
     id: "estetica",
     momento: "De noche",
     texto:
-      "Bajás la persiana y el paquete que quedó por la mitad no se pierde: a la mañana te espera el borrador de a quién llamar, para que lo apruebes.",
+      "Bajás la persiana y el paquete que quedó por la mitad no se pierde: a la mañana te espera el borrador de a quién llamar, para que lo aprobés.",
     alt: "Dueña de un centro de estética junto a la camilla vacía con papel nuevo puesto, con el celular en la mano.",
   },
 ] as const;

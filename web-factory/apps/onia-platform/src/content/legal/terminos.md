@@ -21,7 +21,7 @@ un negocio declara tener autoridad para hacerlo.
 1.1. Onia es un software de gestión para negocios provisto como servicio por
 internet (SaaS): agenda, clientes o pacientes, ventas, cobros, recordatorios,
 reportes y agentes de inteligencia artificial que **proponen** acciones para que
-vos las apruebes. Onia pone la herramienta; la operación del negocio sigue siendo
+vos las aprobés. Onia pone la herramienta; la operación del negocio sigue siendo
 tuya.
 
 1.2. **Qué NO es el servicio.** Onia no es, no reemplaza y no incluye:
