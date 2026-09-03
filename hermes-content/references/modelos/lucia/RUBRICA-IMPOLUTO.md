@@ -19,14 +19,30 @@
 | 7 | **Piel con poros** | Zoom al pómulo: ¿hay textura, o es plástico? | El «campaign look» alisa la piel y rompe la casilla 1 al mismo tiempo |
 | 8 | **Colores true-to-life** | ¿Los verdes son verdes de Santa Cruz o verdes de filtro? | El teal-and-orange marca la pieza como IA de 2023 |
 | 9 | **La cara aguanta el clip entero** | Video: 4 frames (inicio, ⅓, ⅔, final). La cara está en los 4 | El defecto de `V04`: se da vuelta en el segundo 5 y pierde la cara |
+| 10 | **El copy no afirma nada que no exista** | Leer CADA línea de texto preguntando «¿esto es verdad hoy?». Cazar sobre todo el plural que infla: *equipo, nuestros clientes, cientos de, ya confían* | Es la única casilla que no se ve mirando la imagen — y la que puede publicar una mentira sobre la empresa en una pieza 9/9 |
 
 ## Cómo se puntúa
 
 ```
-IMPOLUTA   9/9  -> va al calendario, se anota en el LEEME
-CASI       8/9  -> se anota QUE casilla fallo y se regenera cambiando UNA variable
-ROTA      <8/9  -> se anota el defecto y NO se regenera igual: se cambia la receta
+IMPOLUTA  10/10  -> va al calendario, se anota en el LEEME
+CASI       9/10  -> se anota QUE casilla fallo y se regenera cambiando UNA variable
+ROTA      <9/10  -> se anota el defecto y NO se regenera igual: se cambia la receta
 ```
+
+## 🔴 Por qué existe la casilla 10 (2026-09-03)
+
+Las 9 casillas originales son **todas visuales**. El carrusel **fijado** del perfil (L2) sacó 9/9
+—cara fiel, 1080×1350 exacto, manos, luz, poros, colores— y aun así la lámina 2 decía «creada por
+**el equipo** de @oniahq» y la 4 titulaba «Un **equipo** boliviano».
+
+**Onia no tiene equipo: es Sergio.** `CLAUDE.md` lo dice sin ambigüedad («el que vende es Sergio,
+no hay vendedora ni colaboradores») y prohíbe fabricar. La pieza iba a quedar FIJADA arriba del
+perfil: la primera que lee todo el que entra, y la que más se cita.
+
+**Lo que enseña:** una rúbrica que sólo mira píxeles aprueba una pieza impecable que miente. El
+render no inventó nada — el texto venía del brief, y nadie lo leyó contra la realidad de la
+empresa. Arreglado en el mismo brief y re-rendeado a 0 créditos (lámina 2 sin «el equipo de»,
+lámina 4 → «Hecha en *Bolivia*», que además es verdad y entra en una sola línea).
 
 🔴 **Una casilla fallada se anota SIEMPRE**, aunque la pieza se descarte. El valor de la ventana
 no son las piezas: es **saber qué variable del prompt causa cada defecto**.

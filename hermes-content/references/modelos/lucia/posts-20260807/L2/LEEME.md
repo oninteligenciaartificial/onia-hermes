@@ -49,6 +49,29 @@ mejor documentado del carril — `lucia-skin-v1`, Nano Banana Pro, 2K 9:16, audi
 **Las 6 comparten la misma remera de lino beige**, así que el carrusel tiene raccord de vestuario
 sin haber generado nada.
 
+## 🔴 El copy decía que Onia tiene equipo — corregido el 2026-09-03
+
+La primera versión rendeada sacó **9/9 en la rúbrica visual** y aun así afirmaba algo falso:
+
+| Lámina | Decía | Dice ahora |
+|---|---|---|
+| 2 (body) | «Creada con inteligencia artificial por **el equipo de** @oniahq» | «Creada con inteligencia artificial **en** @oniahq, desde Santa Cruz de la Sierra» |
+| 4 (headline) | «Un **equipo** boliviano» | «**Hecha en Bolivia**» |
+
+**Onia no tiene equipo: es Sergio.** `CLAUDE.md` lo fija («el que vende es Sergio; no hay
+vendedora ni colaboradores comerciales») y prohíbe fabricar. Y esta es la pieza que queda
+**FIJADA** arriba del perfil — la primera que lee todo el que entra.
+
+Se corrigió **en el brief** (no sobre el JPG) y se volvió a rendear con el mismo comando:
+**0 créditos**, porque es texto compuesto sobre fotos que ya existían. Sólo cambiaron `slide-02`
+y `slide-04`; las otras cinco salieron byte-idénticas, lo que confirma que el render es
+determinista. «Hecha en Bolivia» además **entra en una sola línea** — el titular quedó más limpio
+que el original de dos.
+
+**Lo que dejó como regla:** la rúbrica tenía 9 casillas y las 9 miraban píxeles. Ahora tiene una
+décima —*el copy no afirma nada que no exista*— en `RUBRICA-IMPOLUTO.md`. Una pieza impecable
+puede publicar una mentira, y ninguna casilla visual la ve.
+
 🔴 **La lámina 7 repite la foto de la portada, y es a propósito.** Hay 6 fotos para 7 lugares:
 alguna tenía que repetirse. Se puso el par en los extremos (1 y 7) porque es la **máxima distancia
 posible** — entre las dos hay cinco láminas — y porque abrir preguntando «¿es real?» y cerrar en

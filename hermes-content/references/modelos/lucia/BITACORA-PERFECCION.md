@@ -580,3 +580,47 @@ El brief de **L6 tiene el mismo defecto**: sus 7 `bg` apuntan a los mismos PNG i
 repuntó a propósito — L6 ya tiene render bueno (verde, en la rama de ads) y cambiarle los fondos
 cambiaría la pieza que Sergio va a aprobar. Anotado en el plan: si alguna vez hay que re-rendear
 L6, primero se repuntan los fondos.
+
+---
+
+### E10 · La rúbrica aprobó una pieza que mentía (2026-09-03, 0 créditos)
+
+**La pregunta de la tanda:** ¿qué NO ve una rúbrica de 9 casillas visuales?
+
+**Respuesta medida:** el texto. El carrusel **fijado** L2 —el que queda arriba del perfil— sacó
+9/9 la vuelta anterior, con auditoría honesta y mirada a resolución completa. Y aun así decía:
+
+- lámina 2: «Creada con inteligencia artificial por **el equipo de** @oniahq»
+- lámina 4 (titular): «Un **equipo** boliviano»
+
+**Onia no tiene equipo: es Sergio.** `CLAUDE.md` lo fija explícitamente y prohíbe fabricar. La
+rúbrica no lo cazó porque sus 9 casillas —cara, formato, texto legible EN LA FOTO, manos, gesto,
+luz, poros, colores, cara en el clip— miran **píxeles**, no afirmaciones. Y el LEEME de la pieza
+había chequeado las 9 con rigor: el error no fue negligencia, fue **instrumento incompleto**.
+
+**Arreglo (0 créditos):** corregido en el brief y re-rendeado con el comando de siempre. Es
+composición de texto sobre fotos ya generadas — no se llamó a ningún modelo.
+
+```sh
+node scripts/carousel_render.js --brief .../lucia-quien-es-fijado.json \
+  --out .../L2 --account lucia --pack editorial-clean --format feed
+```
+
+| Antes | Ahora |
+|---|---|
+| «por el equipo de @oniahq» | «en @oniahq, desde Santa Cruz de la Sierra» |
+| «Un *equipo* boliviano» | «Hecha en *Bolivia*» |
+
+**Control que vale la pena guardar:** de las 7 láminas sólo cambiaron `slide-02` (182 569 →
+181 458 B) y `slide-04` (200 009 → 196 744 B). Las otras cinco salieron **byte-idénticas**. El
+render es determinista, así que un re-render acotado se puede verificar por tamaño sin abrir las 7.
+Igual se abrieron y miraron las dos corregidas: cara intacta, verde `#10C26B`, pie
+`@lucia.antelo.oficial`. Bonus: «Hecha en Bolivia» entra en **una línea** — titular más limpio
+que el original de dos.
+
+**Lo que cambia para siempre:** `RUBRICA-IMPOLUTO.md` pasa de 9 a **10 casillas**. La décima es
+*«el copy no afirma nada que no exista»*, y caza el plural que infla: **equipo, nuestros clientes,
+cientos de, ya confían**. Es la única casilla que no se marca mirando la imagen.
+
+> Una pieza puede ser impecable y falsa al mismo tiempo. El render nunca inventó nada — el texto
+> venía del brief, y hasta hoy ninguna casilla lo leía contra la realidad de la empresa.
