@@ -1,22 +1,24 @@
 {
-  "cuando": "2026-09-03T01:17:27.009Z",
-  "escribio": false,
-  "llegoHasta": 4,
+  "cuando": "2026-09-03T04:15:17.637Z",
+  "escribio": true,
+  "llegoHasta": 8,
   "deCuantos": 8,
-  "corte": {
-    "paso": 5,
-    "nombre": "elegir-rubro",
-    "estado": "no-medido",
-    "detalle": "el onboarding está a la vista y SIN TERMINAR (pide \"¿Cómo se llama tu negocio?\"). Completarlo automáticamente todavía no está escrito: por eso los pasos 6-8 no se pueden medir"
+  "corte": null,
+  "datosQA": {
+    "nombre": "zz-qa-2026-09-03",
+    "negocio": "zz-qa-2026-09-03-negocio",
+    "email": "zz-qa-2026-09-03@onia.com.bo",
+    "whatsapp": "59170000000",
+    "ciudad": "zz-qa-ciudad",
+    "password": "zz-qa-2026-09-03-Passw0rd!"
   },
-  "datosQA": null,
   "pasos": [
     {
       "n": 1,
       "nombre": "home",
       "que": "Entrar a onia.com.bo y que se VEA",
       "estado": "ok",
-      "detalle": "cargó en 888 ms, 6977 caracteres visibles",
+      "detalle": "cargó en 1558 ms, 6977 caracteres visibles",
       "captura": "hermes-content/docs/recorrido/capturas/paso-01-home.png",
       "dom": {
         "textoVisible": 6977,
@@ -80,8 +82,8 @@
       "n": 3,
       "nombre": "pedir-acceso",
       "que": "Pedir acceso / registrarse con datos zz-qa-",
-      "estado": "no-medido",
-      "detalle": "el alta pide contraseña (parece crear cuenta), pero no se envió: --escribir está apagado",
+      "estado": "ok",
+      "detalle": "enviado; la URL pasó de https://app.onia.com.bo/register a https://app.onia.com.bo/register",
       "campos": [
         {
           "tag": "input",
@@ -141,9 +143,10 @@
         }
       ],
       "altaCreaCuenta": true,
-      "captura": "hermes-content/docs/recorrido/capturas/paso-03-pedir-acceso.png",
+      "urlTrasEnviar": "https://app.onia.com.bo/register",
+      "captura": "hermes-content/docs/recorrido/capturas/paso-03b-pedir-acceso-enviado.png",
       "dom": {
-        "textoVisible": 1050,
+        "textoVisible": 1102,
         "secciones": 2,
         "seccionesInvisibles": 0,
         "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
@@ -154,7 +157,7 @@
       "nombre": "entrar",
       "que": "Entrar a la plataforma con esa cuenta",
       "estado": "ok",
-      "detalle": "entró con RECORRIDO_USER/RECORRIDO_PASS; quedó en https://app.onia.com.bo/onboarding",
+      "detalle": "entró con la cuenta recién creada; quedó en https://app.onia.com.bo/onboarding",
       "captura": "hermes-content/docs/recorrido/capturas/paso-04-entrar.png",
       "dom": {
         "textoVisible": 356,
@@ -167,81 +170,114 @@
       "n": 5,
       "nombre": "elegir-rubro",
       "que": "Elegir rubro y terminar el onboarding",
-      "estado": "no-medido",
-      "detalle": "el onboarding está a la vista y SIN TERMINAR (pide \"¿Cómo se llama tu negocio?\"). Completarlo automáticamente todavía no está escrito: por eso los pasos 6-8 no se pueden medir",
+      "estado": "ok",
+      "detalle": "onboarding COMPLETADO en 6 pantallas (pregunta → negocio → asistente-2 → asistente-3 → equipo → listo); /dashboard ya no rebota",
+      "traza": [
+        {
+          "pantalla": "pregunta",
+          "vio": "¿Cómo se llama tu negocio?",
+          "apreto": "Completar el formulario"
+        },
+        {
+          "pantalla": "negocio",
+          "vio": "Contanos de tu negocio",
+          "apreto": "Continuar"
+        },
+        {
+          "pantalla": "asistente-2",
+          "vio": "¿Cuándo atendés?",
+          "apreto": "Saltar por ahora"
+        },
+        {
+          "pantalla": "asistente-3",
+          "vio": "¿Qué hacés y a cuánto?",
+          "apreto": "Saltar por ahora"
+        },
+        {
+          "pantalla": "equipo",
+          "vio": "¿Quién más trabaja con vos?",
+          "apreto": "Saltar por ahora (cierra el alta)"
+        },
+        {
+          "pantalla": "listo",
+          "vio": "zz-qa-2026-09-03-negocio ya está en Onia",
+          "apreto": "—"
+        }
+      ],
+      "capturaAsistente": "hermes-content/docs/recorrido/capturas/paso-05b-onboarding-listo.png",
       "status": 200,
-      "ms": 858,
-      "urlFinal": "https://app.onia.com.bo/onboarding",
-      "captura": "hermes-content/docs/recorrido/capturas/paso-05-elegir-rubro.png",
+      "ms": 2965,
+      "urlFinal": "https://app.onia.com.bo/dashboard",
+      "captura": "hermes-content/docs/recorrido/capturas/paso-05c-gate-levantado.png",
       "dom": {
-        "textoVisible": 356,
-        "secciones": 0,
+        "textoVisible": 2769,
+        "secciones": 8,
         "seccionesInvisibles": 0,
         "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
       },
-      "destino": "/onboarding",
-      "pedida": "/onboarding",
+      "destino": "/dashboard",
+      "pedida": "/dashboard",
       "llego": true
     },
     {
       "n": 6,
       "nombre": "cargar-dato",
       "que": "Cargar un dato real del rubro (un cliente, un paciente, un producto)",
-      "estado": "no-medido",
-      "detalle": "no se llegó hasta la pantalla de datos: pedí /patients y el producto redirigió a /onboarding. El onboarding es obligatorio y sigue sin completarse — NO es que la pantalla esté rota, es que el camino no llega hasta ahí",
+      "estado": "ok",
+      "detalle": "pantalla de datos en https://app.onia.com.bo/patients (200)",
       "status": 200,
-      "ms": 1013,
-      "urlFinal": "https://app.onia.com.bo/onboarding",
+      "ms": 4590,
+      "urlFinal": "https://app.onia.com.bo/patients",
       "captura": "hermes-content/docs/recorrido/capturas/paso-06-cargar-dato.png",
       "dom": {
-        "textoVisible": 356,
-        "secciones": 0,
+        "textoVisible": 2194,
+        "secciones": 3,
         "seccionesInvisibles": 0,
         "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
       },
-      "destino": "/onboarding",
+      "destino": "/patients",
       "pedida": "/patients",
-      "llego": false
+      "llego": true
     },
     {
       "n": 7,
       "nombre": "cobro",
       "que": "Llegar a la pantalla de cobro y MIRARLA. Frenar ahí",
-      "estado": "no-medido",
-      "detalle": "no se llegó hasta la pantalla de cobro: pedí /billing y el producto redirigió a /onboarding. El onboarding es obligatorio y sigue sin completarse — NO es que la pantalla esté rota, es que el camino no llega hasta ahí",
+      "estado": "ok",
+      "detalle": "pantalla de cobro a la vista en https://app.onia.com.bo/billing — FRENADO acá a propósito",
       "status": 200,
-      "ms": 1030,
-      "urlFinal": "https://app.onia.com.bo/onboarding",
+      "ms": 2696,
+      "urlFinal": "https://app.onia.com.bo/billing",
       "captura": "hermes-content/docs/recorrido/capturas/paso-07-cobro.png",
       "dom": {
-        "textoVisible": 356,
-        "secciones": 0,
+        "textoVisible": 2216,
+        "secciones": 3,
         "seccionesInvisibles": 0,
         "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
       },
-      "destino": "/onboarding",
+      "destino": "/billing",
       "pedida": "/billing",
-      "llego": false
+      "llego": true
     },
     {
       "n": 8,
       "nombre": "bandeja",
       "que": "Abrir la bandeja / el panel y ver si el dato del paso 6 aparece",
-      "estado": "no-medido",
-      "detalle": "no se llegó hasta el panel: pedí /dashboard y el producto redirigió a /onboarding. El onboarding es obligatorio y sigue sin completarse — NO es que la pantalla esté rota, es que el camino no llega hasta ahí",
+      "estado": "ok",
+      "detalle": "panel en https://app.onia.com.bo/dashboard (200)",
       "status": 200,
-      "ms": 1379,
-      "urlFinal": "https://app.onia.com.bo/onboarding",
+      "ms": 3008,
+      "urlFinal": "https://app.onia.com.bo/dashboard",
       "captura": "hermes-content/docs/recorrido/capturas/paso-08-bandeja.png",
       "dom": {
-        "textoVisible": 356,
-        "secciones": 0,
+        "textoVisible": 2769,
+        "secciones": 8,
         "seccionesInvisibles": 0,
         "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
       },
-      "destino": "/onboarding",
+      "destino": "/dashboard",
       "pedida": "/dashboard",
-      "llego": false
+      "llego": true
     }
   ]
 }

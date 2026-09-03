@@ -159,6 +159,95 @@ function motivoDesvio(v, ctx, comoSeLlama) {
 }
 
 /**
+ * En qué pantalla del asistente de alta está parado, leído del DOM.
+ *
+ * El onboarding NO es una pantalla: es un asistente de seis (pregunta → buscando → negocio →
+ * horarios → servicios → equipo → listo). Una secuencia de clics a ciegas contra posiciones
+ * fijas se rompe el día que se agrega un paso, y encima miente: reporta "completado" porque
+ * apretó cuatro botones. Se pregunta DÓNDE se está antes de cada clic.
+ */
+async function subPasoOnboarding(page) {
+  return page.evaluate(() => {
+    const texto = document.body.innerText || '';
+    const h1 = (document.querySelector('h1')?.innerText || '').replace(/\s+/g, ' ').trim();
+    const barra = document.querySelector('[role=progressbar]');
+    const numero = barra ? Number(barra.getAttribute('aria-valuenow')) : 0;
+    let cual = 'desconocido';
+    if (/ya está en Onia/i.test(texto)) cual = 'listo';
+    else if (/cómo se llama tu negocio/i.test(h1)) cual = 'pregunta';
+    else if (/^buscando/i.test(h1)) cual = 'buscando';
+    else if (numero >= 1) cual = `asistente-${numero}`;
+    return { cual, h1, numero };
+  });
+}
+
+/**
+ * Completa el alta del negocio como lo haría su dueño, y devuelve la TRAZA de lo que hizo.
+ *
+ * 🔴 NO aprieta "Buscar mi negocio". Ese botón sale a internet a extraer el perfil del negocio
+ * desde su web o sus redes, y este loop corre 8 veces por día: dispararlo sería gasto recurrente
+ * buscando un negocio que no existe. Se toma el otro camino que el PRODUCTO ya ofrece
+ * ("Completar el formulario"), que es el mismo asistente sin la búsqueda.
+ *
+ * 🔴 Y devuelve traza —una línea por pantalla, con qué vio y qué apretó— porque sin eso un
+ * asistente que se planta en el sub-paso 3 se reporta igual que uno que nunca arrancó. Adivinar
+ * cuál de los dos fue ya costó una semana en otro carril.
+ */
+async function completarOnboarding(page) {
+  const traza = [];
+  const apretar = async (patron, comoSeLlama) => {
+    const boton = page.getByRole('button', { name: patron }).first();
+    await boton.click({ timeout: 10_000 });
+    await page.waitForTimeout(1800);
+    return comoSeLlama;
+  };
+
+  // Tope de vueltas: el asistente tiene 6 pantallas; 12 deja margen para un reintento y corta
+  // en seco si el producto entra en un bucle. Un instrumento colgado no reporta nada.
+  for (let vuelta = 0; vuelta < 12; vuelta++) {
+    const donde = await subPasoOnboarding(page);
+
+    if (donde.cual === 'listo') {
+      traza.push({ pantalla: 'listo', vio: donde.h1, apreto: '—' });
+      return { traza, cerro: true };
+    }
+
+    try {
+      if (donde.cual === 'pregunta') {
+        traza.push({ pantalla: 'pregunta', vio: donde.h1, apreto: await apretar(/completar el formulario/i, 'Completar el formulario') });
+      } else if (donde.cual === 'buscando') {
+        // No debería pasar (nunca se aprieta buscar), pero si el producto entra solo, se sale.
+        traza.push({ pantalla: 'buscando', vio: donde.h1, apreto: await apretar(/cancelar|completar/i, 'salir de la búsqueda') });
+      } else if (donde.cual === 'asistente-1') {
+        // "Continuar" sólo se habilita con un nombre de 2+ letras. Viene precargado del alta;
+        // si no vino, se escribe, porque quedarse mirando un botón gris no es un hallazgo.
+        const seguir = page.getByRole('button', { name: /^continuar/i }).first();
+        if (await seguir.isDisabled().catch(() => false)) {
+          await page.locator('input[type=text]').first().fill(QA.negocio).catch(() => {});
+          await page.waitForTimeout(500);
+        }
+        traza.push({ pantalla: 'negocio', vio: donde.h1, apreto: await apretar(/^continuar/i, 'Continuar') });
+      } else if (donde.cual === 'asistente-2' || donde.cual === 'asistente-3') {
+        // Horarios y servicios son opcionales para el producto: se saltan igual que los saltaría
+        // alguien apurado. Es el camino MÍNIMO hasta tener cuenta usable, que es lo que se mide.
+        traza.push({ pantalla: donde.cual, vio: donde.h1, apreto: await apretar(/saltar por ahora/i, 'Saltar por ahora') });
+      } else if (donde.cual === 'asistente-4') {
+        // El último salto es el que CIERRA el alta (manda el POST sin miembro de equipo).
+        traza.push({ pantalla: 'equipo', vio: donde.h1, apreto: await apretar(/saltar por ahora/i, 'Saltar por ahora (cierra el alta)') });
+        await page.waitForTimeout(4000);
+      } else {
+        traza.push({ pantalla: 'desconocida', vio: donde.h1 || '(sin título)', apreto: '—' });
+        return { traza, cerro: false, motivo: `el asistente mostró una pantalla que no sé leer: "${donde.h1 || 'sin título'}"` };
+      }
+    } catch (e) {
+      traza.push({ pantalla: donde.cual, vio: donde.h1, apreto: `FALLÓ: ${e.message.split('\n')[0]}` });
+      return { traza, cerro: false, motivo: `se plantó en "${donde.h1 || donde.cual}": no pudo apretar el botón que sigue` };
+    }
+  }
+  return { traza, cerro: false, motivo: 'el asistente no terminó en 12 pantallas: puede estar en bucle' };
+}
+
+/**
  * LOS PASOS. En orden, y el recorrido FRENA en el primero que no sale bien: saber hasta dónde
  * llega un cliente es justamente el dato que este carril produce.
  *
@@ -414,21 +503,36 @@ const PASOS = [
       const v = await llegar(page, '/onboarding', 'paso-05-elegir-rubro.png');
       if (v.status >= 400) return { estado: 'roto', detalle: `el onboarding devolvió ${v.status}`, ...v };
 
-      // Que la pantalla ABRA no es que el onboarding esté TERMINADO. Mientras siga pendiente el
-      // producto retiene ahí al usuario, y eso es lo que hace que los pasos 6-8 no existan
-      // todavía. Se dice tal cual en vez de cantar OK.
-      const pendiente = await page.evaluate(() =>
-        /c[oó]mo se llama tu negocio|buscar mi negocio|complet[ae]r el formulario/i.test(document.body.innerText || '')
-      );
-      ctx.onboardingPendiente = pendiente;
-      if (pendiente) {
+      // Que la pantalla ABRA no es que el onboarding esté TERMINADO: mientras siga pendiente, el
+      // producto retiene ahí al usuario y los pasos 6-8 no existen. Así que se COMPLETA.
+      const { traza, cerro, motivo } = await completarOnboarding(page);
+      ctx.trazaOnboarding = traza;
+      for (const t of traza) console.log(`        · ${t.pantalla}: "${t.vio}" → ${t.apreto}`);
+      const despues = await mirar(page, 'paso-05b-onboarding-listo.png');
+
+      // 🔴 LA VERIFICACIÓN NO ES HABER APRETADO LOS BOTONES. Cuatro clics y una pantalla de
+      // "listo" es exactamente la clase de evidencia que ya hizo cantar RECORRIDO COMPLETO a
+      // este mismo script sobre un camino roto. Lo que prueba que el alta se cerró es el EFECTO:
+      // el producto retiene en /onboarding a toda cuenta sin `onboardingCompletedAt`, así que
+      // si /dashboard deja de rebotar, el gate se levantó. Se mide el efecto, no la acción.
+      const prueba = await llegar(page, '/dashboard', 'paso-05c-gate-levantado.png');
+      ctx.onboardingPendiente = !prueba.llego;
+      if (!prueba.llego) {
         return {
-          estado: 'no-medido',
-          detalle: `el onboarding está a la vista y SIN TERMINAR (pide "¿Cómo se llama tu negocio?"). Completarlo automáticamente todavía no está escrito: por eso los pasos 6-8 no se pueden medir`,
-          ...v,
+          estado: 'roto',
+          detalle: `el onboarding NO quedó cerrado: ${motivo || 'el asistente dijo haber terminado'}, pero /dashboard sigue rebotando a ${prueba.destino}. Traza: ${traza.map((t) => t.pantalla).join(' → ')}`,
+          traza,
+          capturaAsistente: despues.captura,
+          ...prueba,
         };
       }
-      return { estado: 'ok', detalle: `onboarding en ${page.url()} (${v.status}, ${v.ms} ms)`, ...v };
+      return {
+        estado: 'ok',
+        detalle: `onboarding COMPLETADO en ${traza.length} pantallas (${traza.map((t) => t.pantalla).join(' → ')})${cerro ? '' : ' — el asistente no mostró el cierre, pero el gate se levantó igual'}; /dashboard ya no rebota`,
+        traza,
+        capturaAsistente: despues.captura,
+        ...prueba,
+      };
     },
   },
 
