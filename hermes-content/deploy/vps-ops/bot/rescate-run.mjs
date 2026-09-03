@@ -217,7 +217,14 @@ export async function postAlWebhook(payload, deps = {}) {
       "exec", contenedor, "sh", "-c",
       `printf '%s' '${cuerpo}' | wget -qO- --timeout=30 --header='Content-Type: application/json' --post-file=- ${url}`,
     ]);
-    return { ok: true, respuesta: redactar(stdout, secreto).slice(0, 300) };
+    // ⚠️ Acá había un `.slice(0, 300)` y era EL bug, medido el 2026-09-03 con el primer
+    // rescate real: el cuerpo de exito son ~903 caracteres (lleva adentro el mensaje que el
+    // bot mando) y cortado a 300 deja de ser JSON. El de dedup son 101 y sobrevivia intacto.
+    // O sea que el corte rompia UNICAMENTE el caso que salva un lead, y por eso todo lo que
+    // se habia probado —dedup— salio verde siempre. El cuerpo se devuelve entero: lo unico
+    // que lo lee es `clasificarRespuesta`, y truncar lo que hay que parsear no es acotar, es
+    // corromper. Quien quiera mostrarlo, que lo acote al mostrarlo.
+    return { ok: true, respuesta: redactar(stdout, secreto) };
   } catch (error) {
     throw new Error(redactar(error?.message || error, secreto));
   }
@@ -314,6 +321,12 @@ export async function runRescateSweep(options = {}, deps = {}) {
       const veredicto = clasificarRespuesta(enviado?.respuesta);
       linea.resultado = veredicto.motivo;
       if (veredicto.contestado) resultado.contestados += 1;
+      // No poder LEER el resultado no es "no paso nada": es un desconocido que quiza quedo
+      // sin contestar y nadie lo sabe. Salia con exit 0 y "0 CONTESTADOS", igual que una
+      // vuelta sin trabajo — asi el testigo roto del 3-sep vivio doce corridas en silencio.
+      else if (veredicto.motivo === "respuesta_ilegible") {
+        resultado.fallidos.push({ ...linea, motivo: "respuesta_ilegible del webhook" });
+      }
     } catch (error) {
       // El fallo de uno no puede cancelar el rescate de los otros: son leads distintos.
       resultado.fallidos.push({ ...linea, motivo: String(error?.message || error) });

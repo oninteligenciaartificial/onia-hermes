@@ -92,12 +92,12 @@ mirar:
 avanza.
 
 ⚠️ **El motivo va PEGADO al id y `--kind` al final. No lo reordenes.** Hasta el 2026-09-03 esta
-línea enseñaba `block <id> --kind needs_input "motivo"`, y esa forma **no bloquea nada**: muere en
+línea enseñaba `block <id> "motivo" --kind needs_input`, y esa forma **no bloquea nada**: muere en
 `hermes: error: unrecognized arguments: motivo` con exit 2. Es el bug clásico de argparse — la
 firma real es `block task_id [reason ...]` con `--kind` opcional, y un posicional de cola detrás
 de un opcional no se puede parsear. Medido contra un id inexistente, para ver sólo el parseo:
 
-    block <id> --kind needs_input "motivo"   → unrecognized arguments   exit=2   NO BLOQUEA
+    block <id> "motivo" --kind needs_input   → unrecognized arguments   exit=2   NO BLOQUEA
     block <id> "motivo" --kind needs_input   → unknown task             exit=1   parseo OK
 
 **Y mirá el código de salida.** Este prompt no te pedía mirarlo, así que la pieza quedaba en
@@ -290,10 +290,12 @@ Una tarea bloqueada en el tablero le llega por Telegram y la contesta desde el t
 
     T=/root/bin/onia-tablero.sh
     ID=$($T create "Pregunta corta y concreta" --body "Qué necesito decidido, las opciones que ya miré y qué cambia según cada una" --priority 1 --json | python3 -c 'import sys,json;print(json.load(sys.stdin)["id"])')
-    $T block "$ID" --kind needs_input "Espera decisión de Sergio"
+    $T block "$ID" "Espera decisión de Sergio" --kind needs_input
 
-⚠️ El motivo va **posicional**, no con `--reason` — verificado contra `block --help`, porque
-escribirlo mal en 15 prompts los rompía a los 15 en silencio.
+⚠️ **El motivo va ANTES de `--kind`.** Medido en vivo el 2026-09-03: `block ID --kind needs_input
+"motivo"` devuelve `unrecognized arguments` y la tarea queda `ready` — o sea **no bloquea nada** y la
+pregunta nunca le llega a Sergio. `--reason` tampoco existe. Esta línea estuvo mal escrita en 15
+prompts durante medio día: se había verificado `--help`, no el comando.
 
 Sergio contesta `ok <id>` y la tarea vuelve a ready sola. Reglas:
 
@@ -326,3 +328,50 @@ ahí. Un flag apagado, una migración sin aplicar o un módulo que nadie llama v
 Si de estos frentes cerrás unos y otros no, **no marques `[x]`**: dejá el ítem abierto con lo
 que falta escrito. Un `[x]` falso cuesta más caro que un ítem abierto, porque nadie vuelve a
 mirarlo.
+
+## 🧠 MEMORIA COMPARTIDA — la leés al arrancar, le escribís al cerrar
+
+> **Nace del 2026-09-03.** Sergio: *"que los loops usen la memoria de hermes también, pero
+> haz que funcione… que hermes siempre aprenda sobre mí y cómo hacemos las cosas mientras más
+> trabajemos."* Hasta hoy cada carril arrancaba "sin memoria", y volvía a descubrir por su
+> cuenta que `onia.com.bo` no es Vercel, que `soul_2` no existe, que Sergio quiere las horas en
+> La Paz. Quince carriles pagando el mismo error quince veces.
+
+**Arriba de este prompt ya tenés la memoria del sistema**: lo que Onia sabe (`MEMORY.md`) y lo
+que sabe de Sergio (`USER.md`). El corredor la pega antes de tu carril, en cada vuelta. Es
+**contexto, no cola**: no te da tareas, te evita repetir errores.
+
+### Al cerrar la vuelta: si aprendiste algo que le sirve a OTRO carril, dejalo
+
+**Lo normal es NO anotar nada.** Una vuelta común no aprende nada que quince carriles necesiten
+saber. Si anotás una cosa por vuelta, a 140 vueltas por día la memoria se llena en 17 horas y
+deja de servir. Anotá **sólo** cuando el hecho cumpla las tres: le sirve a otro carril, no está
+ya arriba, y lo mediste (no lo supusiste).
+
+    /root/bin/onia-aprender.sh "<un hecho, 1-3 frases, con el qué, el POR QUÉ importa, y DÓNDE se ve>"
+
+Qué va: una trampa del sistema que costó una vuelta, un dato de un doc que resultó falso, una
+preferencia o corrección de Sergio (textual, con fecha), un comando que NO es como parece, un
+límite real de una herramienta. **Siempre con la ruta, el comando o la fecha** que lo hace
+verificable: *"el bot muere en el segundo turno"* no alcanza; *"el bot muere en el segundo
+turno — medido 4 de 16 mensajes el 2026-09-02, ver bot-engine.mjs:338"* sí.
+
+Qué NO va: tu log, lo que ya está en la memoria que leíste arriba, opiniones ("creo que el bot
+anda mal"), nada que sea solo de tu carril, y **nada sobre tu propio corredor o tu propio
+prompt** — eso va al radar, no a la memoria. Y **al cerrar**, no a mitad de vuelta: un hecho a
+medio medir es una opinión con fecha.
+
+**Un hecho por llamada.** El script rechaza menos de 40 caracteres (una frase suelta no es un
+hecho) y más de 1.200 (eso es un log). Cada entrada queda firmada con tu carril y la fecha:
+en un mes alguien tiene que poder saber si sigue vigente.
+
+**No escribe en `MEMORY.md` directo**: deja tu entrada en una bandeja y un consolidador con
+cerrojo la integra, descartando lo repetido. Quince carriles escribiendo el mismo archivo a la
+vez es como se corrompe una memoria, y una memoria corrupta parece que anda.
+
+### Lo que NO va acá: las reglas de la casa
+
+La memoria compartida se **compacta** cuando crece (se midió: Hermes resumió 21 entradas a 11
+y tiró cinco reglas). Por eso las reglas que no se pueden perder viven en `SOUL.md` de Hermes y
+en `CLAUDE.md` del repo, no en la memoria. Si lo que aprendiste es una **regla** ("nunca X
+porque Y"), además de anotarlo, decilo por `onia-tg.sh`: una regla nueva la decide Sergio.

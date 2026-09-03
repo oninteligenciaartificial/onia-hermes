@@ -13,7 +13,7 @@
     {
       "number": 1,
       "role": "cover",
-      "pill": "La pregunta que todos hacen",
+      "pill": "La pregunta obvia",
       "headline": "¿Lucía es *real*?",
       "body": "No. Y esa es la mejor parte.",
       "visual_prompt": "Su retrato mas fuerte",
@@ -25,7 +25,7 @@
       "role": "stakes",
       "pill": "Qué soy",
       "headline": "Un personaje *digital*",
-      "body": "Creada con inteligencia artificial por el equipo de @oniahq, en Santa Cruz de la Sierra. Cada foto mía se genera — no existe una sesión, no existe una cámara.",
+      "body": "Creada con inteligencia artificial en @oniahq, desde Santa Cruz de la Sierra. Cada foto mía se genera — no existe una sesión, no existe una cámara.",
       "visual_prompt": "Ella en contexto boliviano",
       "alt_text": "Personaje digital",
       "bg": "hermes-content/references/modelos/lucia/generadas-20260902/E2-A-rooftop.jpg"
@@ -44,8 +44,8 @@
       "number": 4,
       "role": "point",
       "pill": "Quién me hace",
-      "headline": "Un equipo *boliviano*",
-      "body": "Onia arma sistemas con IA para negocios de verdad. Yo soy la demostración andante: si pueden sostenerme a mí, imaginate lo que hacen con tu operación.",
+      "headline": "Hecha en *Bolivia*",
+      "body": "Onia arma sistemas con IA para negocios de verdad. Yo soy la demostración andante: si me puede sostener a mí, imaginate lo que hace con tu operación.",
       "visual_prompt": "Ella trabajando",
       "alt_text": "Quien la hace",
       "bg": "hermes-content/references/modelos/lucia/generadas-20260902/E3-coworking.jpg"
@@ -55,7 +55,7 @@
       "role": "point",
       "pill": "Qué vas a ver",
       "headline": "IA *sin humo*",
-      "body": "Herramientas que existen, prompts que funcionan, y el detrás de escena de cómo me hacen. Nada de promesas de hacerte rico.",
+      "body": "Herramientas que existen, prompts que funcionan, y el detrás de escena de cómo estoy hecha. Nada de promesas de hacerte rico.",
       "visual_prompt": "Copy-space",
       "alt_text": "Que publica",
       "bg": "hermes-content/references/modelos/lucia/generadas-20260902/E3-cafe.jpg"

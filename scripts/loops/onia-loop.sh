@@ -276,7 +276,20 @@ cd "$WT" || { avisar "no se pudo entrar a $WT"; exit 2; }
 # prompt viejo sigue trabajando; uno que no arranca, no.
 FUENTE=/root/loops/onia-hermes/scripts/loops/prompts/$NOMBRE.md
 if [ -f "$FUENTE" ] && ! diff -q --strip-trailing-cr "$FUENTE" "$PROMPT" >/dev/null 2>&1; then
-  avisar "el prompt desplegado (<code>$PROMPT</code>) difiere del versionado en main: puede estar corriendo una version vieja"
+  # 🔴 Solo es "version vieja" si main sabe algo que el desplegado NO. Al reves
+  # —el desplegado tiene una capacidad que main todavia no mergeo— el que va
+  # atras es main, y avisar "puede estar corriendo una version vieja" es FALSO.
+  # Medido el 2026-09-03: 15 prompts con el bloque de memoria compartida
+  # desplegados a mano, main una hora atras, y cada loop mando un rojo a Sergio
+  # en su primera vuelta. Sergio: "apaga los fallos falsos". La marca es la misma
+  # que usa el sincronizador para negarse a degradar: si el sync no lo pisaria,
+  # el runner no tiene por que gritar.
+  MARCA_PROMPT="MEMORIA COMPARTIDA — la leés al arrancar"
+  if grep -q "$MARCA_PROMPT" "$PROMPT" 2>/dev/null && ! grep -q "$MARCA_PROMPT" "$FUENTE" 2>/dev/null; then
+    log "prompt mas nuevo que main (main aun sin '$MARCA_PROMPT'): no es drift, se espera al integrador"
+  else
+    avisar "el prompt desplegado (<code>$PROMPT</code>) difiere del versionado en main: puede estar corriendo una version vieja"
+  fi
 fi
 
 # ── la vuelta ----------------------------------------------------------------
@@ -295,16 +308,65 @@ log "===== ARRANCA $NOMBRE — rama $RAMA — HEAD $ANTES — tope ${TOPE}s ====
 # Modelo y esfuerzo: decision de Sergio el 2026-09-02 — "cambialos todos a opus 5
 # en max, pero quiero que terminen de una vez". Antes era claude-sonnet-5 sin
 # --effort. Cuesta mas por vuelta; el rendimiento por vuelta es lo que se compra.
+# ── memoria compartida: el loop arranca sabiendo lo que el sistema ya sabe ----
+# Sergio, 2026-09-03: "que los loops usen la memoria de hermes tambien". Hasta
+# aca cada loop arrancaba "sin memoria: todo esta en los archivos" — y volvia a
+# descubrir por su cuenta que onia.com.bo no es Vercel, que soul_2 no existe, o
+# que Sergio quiere las horas en La Paz. Ahora el prompt que entra a claude es
+# MEMORIA + PROMPT: lo que Hermes sabe de Onia (MEMORY.md), lo que aprendio de
+# Sergio (USER.md), y recien despues las instrucciones del carril. Pesa ~2.000
+# tokens: nada, contra una vuelta de 120 turnos que repite un error ya conocido.
+# Se arma en un temporal para no tocar $PROMPT, que es lo que la guarda de
+# arriba compara contra main.
+MEMORIA_DIR=/root/.hermes/memories
+PROMPT_FINAL=$(mktemp /tmp/onia-prompt-$NOMBRE-XXXXXX.md)
+# El temporal se borra tambien si el corredor mismo muere (reboot, OOM, kill -9):
+# el `rm -f` de abajo solo corre si el script llega vivo hasta ahi. /tmp aca es
+# disco, no tmpfs — un sobrante sobrevive reinicios.
+trap 'rm -f "$PROMPT_FINAL"' EXIT
+{
+  if [ -s "$MEMORIA_DIR/MEMORY.md" ] || [ -s "$MEMORIA_DIR/USER.md" ]; then
+    echo "# MEMORIA COMPARTIDA DEL SISTEMA — es contexto, no es tu cola"
+    echo
+    echo "Lo que Onia ya aprendio, a veces caro. Leelo antes de trabajar y NO lo vuelvas a"
+    echo "descubrir. Si algo de aca contradice un doc del repo, medi cual esta vigente y"
+    echo "avisá. Al cerrar la vuelta, lo que aprendiste que le sirva a otro carril va con"
+    echo "\`/root/bin/onia-aprender.sh \"<hecho>\"\` (ver tu bloque de memoria compartida)."
+    echo
+    if [ -s "$MEMORIA_DIR/MEMORY.md" ]; then
+      echo "## Lo que el sistema sabe de Onia"; echo
+      cat "$MEMORIA_DIR/MEMORY.md"; echo
+    fi
+    if [ -s "$MEMORIA_DIR/USER.md" ]; then
+      echo "## Lo que el sistema sabe de Sergio"; echo
+      cat "$MEMORIA_DIR/USER.md"; echo
+    fi
+    echo; echo "---"; echo; echo "# TU CARRIL"; echo
+  fi
+  cat "$PROMPT"
+} > "$PROMPT_FINAL"
+# `grep -c` imprime "0" Y sale con 1 en un archivo vacio: con `|| echo 0` salian DOS
+# ceros en lineas distintas, y la segunda —sin timestamp— pasaba el filtro del
+# reporte a Telegram como si fuera "el informe" de la vuelta.
+HECHOS=$(grep -c '^§$' "$MEMORIA_DIR/MEMORY.md" 2>/dev/null || true)
+log "memoria inyectada: $(wc -c < "$PROMPT_FINAL") bytes de prompt (${HECHOS:-0} hechos de MEMORY.md)"
+
 timeout "$TOPE" claude -p --model "$MODELO" --effort "$ESFUERZO" --max-turns "$TURNOS" \
-  --allowedTools "$TOOLS" < "$PROMPT" >> "$LOG" 2>&1
+  --allowedTools "$TOOLS" < "$PROMPT_FINAL" >> "$LOG" 2>&1
 RC=$?
+rm -f "$PROMPT_FINAL"
+
+# Lo que este loop aprendio en la vuelta entra a la memoria compartida ahora, no
+# "en algun momento": el consolidador es idempotente y con cerrojo, asi que es
+# seguro llamarlo desde 15 loops. Si no hay nada en la bandeja, no hace nada.
+/root/bin/onia-consolidar-memoria.sh >> "$LOG" 2>&1 || true
 
 T=$(( $(date +%s) - T0 ))
 DESPUES=$(git rev-parse --short HEAD)
 if [ "$ANTES" = "$DESPUES" ]; then
   HECHO="sin commit (vuelta valida si lo dijo)"
 else
-  HECHO="commiteo $ANTES..$DESPUES — $(git log --oneline "$ANTES..$DESPUES" | wc -l) commit(s)"
+  HECHO="commiteo $ANTES..$DESPUES — $(git rev-list --count --first-parent "$ANTES..$DESPUES") commit(s)"
 fi
 SINPUSH=$(git log --oneline "@{u}..HEAD" 2>/dev/null | wc -l)
 
@@ -363,7 +425,7 @@ LINEA=$(tail -n +"${INICIO:-1}" "$LOG" 2>/dev/null \
 
 if [ -n "$LINEA" ]; then
   ESTADO="✅"; [ "$RC" != 0 ] && ESTADO="⚠️"
-  COMMITS=""; [ "$ANTES" != "$DESPUES" ] && COMMITS=" · $(git log --oneline "$ANTES..$DESPUES" | wc -l) commit(s)"
+  COMMITS=""; [ "$ANTES" != "$DESPUES" ] && COMMITS=" · $(git rev-list --count --first-parent "$ANTES..$DESPUES") commit(s)"
   tg "$ESTADO <b>$NOMBRE</b> · ${T}s${COMMITS}
 $LINEA"
 else

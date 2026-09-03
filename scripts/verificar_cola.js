@@ -100,7 +100,12 @@ function evidenciaDe(textoCrudo) {
 
     // "lib/plan-limits.ts:396" es como se cita una linea. El archivo es lo de la izquierda;
     // el sufijo no es parte del nombre, y buscarlo tal cual daba fantasmas falsos.
-    const ruta = t.replace(/:\d+(?::\d+)?$/, '');
+    // Tambien "bot-engine.mjs:141-166", que es como se cita un BLOQUE y no una linea suelta.
+    // Sin el `-`, el rango quedaba pegado al nombre y el archivo salia fantasma aunque
+    // existiera: medido el 2026-09-03, `scripts/mirar-venta.mjs:141-166` daba fantasma con el
+    // archivo vivo en `web-factory/apps/onia-platform/scripts/mirar-venta.mjs`. El gate acusaba
+    // de inexistente un archivo real por como se lo citaba.
+    const ruta = t.replace(/:\d+(?:[-:]\d+)?$/, '');
 
     // "/inbox", "/requerimientos", "/root/bin" son URLs de la app o rutas del VPS: no se
     // verifican contra ESTE disco. No son evidencia, pero llamarlas fantasma es el gate
@@ -260,6 +265,16 @@ function existeEnAlgunRepo(ruta, baseDir) {
   for (let i = 0; i < 6; i++) {
     for (const repo of REPOS_HERMANOS) {
       if (fs.existsSync(path.join(path.dirname(dir), repo, ruta))) return true;
+      // Y la misma ruta escrita CON el nombre del repo adelante
+      // (`onia-platform/lib/pricing.ts`), que es como la escribe CLAUDE.md para fijar la
+      // fuente de verdad de precios. Sin este renglon el prefijo se unia al repo hermano
+      // —que se llama igual— y quedaba `onia-platform/onia-platform/lib/...`: fantasma
+      // garantizado sobre el archivo mas citado del carril. No afloja nada: se sigue
+      // exigiendo que exista DENTRO del hermano, solo se deja de contar el nombre dos veces.
+      if (ruta.startsWith(repo + '/')) {
+        const sinPrefijo = ruta.slice(repo.length + 1);
+        if (fs.existsSync(path.join(path.dirname(dir), repo, sinPrefijo))) return true;
+      }
     }
     const padre = path.dirname(dir);
     if (padre === dir) break;
@@ -273,7 +288,77 @@ function existeEnAlgunRepo(ruta, baseDir) {
   // exigiendo que el archivo exista de verdad; solo deja de exigir el prefijo entero.
   // Se aplica solo CON barra: `page.tsx` suelto matchearia cualquiera de los cientos que hay.
   if (ruta.includes('/')) return existeComoSufijo(ruta, baseDir);
-  return false;
+
+  // Sin barra se resuelve por sufijo SOLO si el nombre es unico en el arbol. El motivo por el
+  // que esto estuvo prohibido durante meses era, textual, que "un `page.tsx` suelto matchearia
+  // cientos" — un argumento sobre AMBIGUEDAD, no sobre existencia. Con exactamente UNA
+  // coincidencia no hay ambiguedad: hay un solo archivo con ese nombre y resolverlo es
+  // determinista.
+  //
+  // Corregido el 2026-09-03 por `onia-cola`. La carve-out anterior tapaba el caso de CIENTOS
+  // (`nombreSueltoAmbiguo`, >=2, se ignora) y dejaba vivo el de UNO, que es peor: el gate
+  // decia "ese archivo NO existe" sobre un archivo que existe. Medido despues de mergear
+  // `web-venta` y `canario-visual`: seis nombres reales (`compartir.test.ts`, `indexar.test.ts`,
+  // `cierre.test.ts`, `legal-page.tsx`, `switcher.tsx`, `apple-icon.png`) acusados de
+  // inexistentes, y el gate de 3 a 16 errores. Un gate rojo de fabrica se saltea, y ahi deja
+  // de proteger — la misma leccion que el vigia que grita mal.
+  //
+  // Los tres tramos, y son excluyentes: 0 coincidencias -> fantasma de verdad (`no-esta.png`);
+  // 1 -> se resuelve aca; >=2 -> `nombreSueltoAmbiguo` ya lo filtro antes de llegar, sin
+  // evidencia y sin error. El indice no mira `node_modules` ni `.next`, asi que las copias de
+  // build no cuentan: `apple-icon.png` tiene tres archivos en disco y UNO en fuente.
+  return cuantosSeLlamanAsi(ruta, baseDir) === 1;
+}
+
+// Los arboles donde puede vivir un archivo citado. NO se incluyen las `APPS_DEL_REPO`: cuelgan
+// de `baseDir` y su indice ya las cubre — sumarlas contaria dos veces el mismo archivo y un
+// nombre unico pasaria por ambiguo.
+function dirsDeBusqueda(baseDir) {
+  const dirs = [path.resolve(baseDir)];
+  let dir = path.resolve(baseDir);
+  for (let i = 0; i < 6; i++) {
+    for (const repo of REPOS_HERMANOS) {
+      const cand = path.join(path.dirname(dir), repo);
+      if (fs.existsSync(cand)) dirs.push(cand);
+    }
+    const padre = path.dirname(dir);
+    if (padre === dir) break;
+    dir = padre;
+  }
+  return [...new Set(dirs)];
+}
+
+// Cuantos archivos del arbol se llaman asi. Es lo que distingue un nombre suelto AMBIGUO —que
+// el gate decidio no resolver, y por eso no puede acusarlo— de uno que de verdad no existe.
+function cuantosSeLlamanAsi(nombre, baseDir) {
+  let n = 0;
+  for (const d of dirsDeBusqueda(baseDir)) n += (indiceDe(d).get(nombre) || []).length;
+  return n;
+}
+
+// Un nombre suelto que matchea VARIOS archivos es irresoluble por diseño: `existeComoSufijo`
+// se niega a buscarlo justamente porque `page.tsx` matchearia cientos. Reportarlo como
+// fantasma es el gate acusando "ese archivo NO existe" sobre algo que decidio no buscar — y un
+// gate que se acusa a si mismo sale rojo de fabrica y se termina salteando. Medido el
+// 2026-09-03 sobre COLA.md: `page.tsx` tiene 155 archivos con ese nombre entre los dos repos y
+// `globals.css` 6. Ni evidencia ni error: se ignora.
+function nombreSueltoAmbiguo(ruta, baseDir) {
+  if (ruta.includes('/')) return false;
+  return cuantosSeLlamanAsi(ruta, baseDir) >= 2;
+}
+
+// Un especificador de MODULO no es un archivo de este arbol, aunque tenga barra.
+// `@/lib/pricing` es un alias de TypeScript (se resuelve por `tsconfig`, no por disco),
+// `next/link` un paquete de npm y `packs/js/sdk.js` el SDK de Chatwoot que sirve OTRO host.
+// Los tres salian fantasma sobre archivos que nunca fueron de este repo.
+const MODULOS_EXTERNOS = new Set(['next/link', 'packs/js/sdk.js']);
+
+function esEspecificadorDeModulo(ruta) {
+  // El alias `@/` es la unica forma generica que se puede descartar sin riesgo: ninguna ruta
+  // real empieza con arroba-barra. Un paquete CON scope (`@supabase/ssr`) ya lo descarta la
+  // regla del extractor, y esa exige un nombre entre el `@` y la barra.
+  if (/^@\//.test(ruta)) return true;
+  return MODULOS_EXTERNOS.has(ruta);
 }
 
 // Indice perezoso de los archivos del arbol, por nombre. Se construye UNA vez y solo si algun
@@ -498,7 +583,17 @@ function revisarCola(texto, baseDir = process.cwd(), resolverShas = null) {
   }
 
   for (const [i, it] of items.entries()) {
-    const { rutas, comandos } = evidenciaDe(it.texto);
+    const { rutas: crudas, comandos } = evidenciaDe(it.texto);
+
+    // Lo que el gate NO PUEDE decidir se descarta ANTES de contar evidencia, no despues: un
+    // nombre suelto ambiguo y un especificador de modulo no son ni prueba ni fantasma. Va
+    // aca —y no en el extractor— porque hace falta el disco para saber si un nombre es
+    // ambiguo, y el extractor solo ve texto. Que caiga antes del `!rutas.length` es a
+    // proposito: un item que SOLO cita cosas irresolubles queda `sin-evidencia`, que es la
+    // verdad, en vez de pasar con una prueba que nadie puede seguir.
+    const rutas = crudas.filter(
+      (r) => !esEspecificadorDeModulo(r) && !nombreSueltoAmbiguo(r, baseDir),
+    );
 
     if (!rutas.length) {
       problemas.push({
@@ -541,6 +636,14 @@ function selfCheck() {
   fs.rmSync(tmp, { recursive: true, force: true });
   fs.mkdirSync(tmp, { recursive: true });
   fs.writeFileSync(path.join(tmp, 'existe.png'), 'x');
+  // Fixtures de los casos de nombre suelto. Van ACA y no junto a su caso porque el indice por
+  // nombre se construye una vez por directorio y queda cacheado: un archivo creado despues de
+  // la primera revision no lo ve, y el caso falla por la cache y no por la regla.
+  fs.mkdirSync(path.join(tmp, 'a'), { recursive: true });
+  fs.mkdirSync(path.join(tmp, 'b'), { recursive: true });
+  fs.writeFileSync(path.join(tmp, 'a', 'page.tsx'), 'x');   // ambiguo: dos con el mismo nombre
+  fs.writeFileSync(path.join(tmp, 'b', 'page.tsx'), 'x');
+  fs.writeFileSync(path.join(tmp, 'a', 'unico-nombre.tsx'), 'x');  // sin ambiguedad: uno solo
 
   // El caso que da nombre al archivo: 4 de 6 eran fantasma.
   let r = revisarCola('## Ahora\n- [ ] Publicar algo · `existe.png` · 10 min\n', tmp);
@@ -574,6 +677,80 @@ function selfCheck() {
   // Pero un archivo con punto NO es un dominio: sin barra, se sigue verificando.
   r = revisarCola('## Ahora\n- [ ] Publicar `no-esta.png`\n', tmp);
   ok(r.problemas.some((p) => p.regla === 'fantasma'), 'el filtro de dominios no se come un archivo suelto');
+
+  // --- Nombre suelto AMBIGUO: el gate acusandose a si mismo ---
+  // `existeComoSufijo` se niega a propósito a resolver un nombre sin barra, porque un
+  // `page.tsx` suelto matchearia cientos. Pero despues se reportaba como fantasma: el gate
+  // declaraba "ese archivo NO existe" sobre algo que decidio no buscar. Medido el 2026-09-03
+  // sobre COLA.md: `page.tsx` tiene 155 archivos con ese nombre entre los dos repos y
+  // `globals.css` 6. Lo honesto es ignorarlo — ni evidencia ni error.
+  r = revisarCola('## Ahora\n- [ ] Algo · `existe.png` · y el `page.tsx`\n', tmp);
+  ok(!r.problemas.some((p) => p.regla === 'fantasma'),
+    'un nombre suelto que matchea varios archivos no es fantasma: el gate decidio no resolverlo');
+
+  // Reciproco 1 — y es el que impide que esto afloje el gate: ambiguo NO es evidencia.
+  // Si lo fuera, cualquier item pasaria escribiendo `page.tsx`.
+  r = revisarCola('## Ahora\n- [ ] Algo · `page.tsx`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'sin-evidencia'),
+    'un nombre suelto ambiguo no cuenta como evidencia');
+
+  // Reciproco 2: un nombre suelto que no matchea NADA sigue siendo fantasma de verdad.
+  // Es la diferencia medida entre `page.tsx` (155 archivos) y `no-esta.png` (cero).
+  r = revisarCola('## Ahora\n- [ ] Algo · `existe.png` · y el `no-existe-en-ningun-lado.tsx`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'),
+    'un nombre suelto sin ninguna coincidencia sigue siendo fantasma');
+
+  // Reciproco 3 — el limite exacto, CORREGIDO el 2026-09-03 por `onia-cola`. Antes este caso
+  // exigia `fantasma` con UNA sola coincidencia, y era el ultimo resto del defecto que este
+  // gate ya se habia arreglado a medias: acusar de inexistente un archivo que existe. La
+  // carve-out de ambiguedad tapaba el caso de CIENTOS y dejaba vivo el de UNO.
+  //
+  // El razonamiento original de "sin barra no hay resolucion por sufijo" era, textual, que
+  // "un `page.tsx` suelto matchearia cientos" — o sea un argumento sobre AMBIGUEDAD. Con una
+  // sola coincidencia no hay ninguna: hay exactamente un archivo en el arbol con ese nombre y
+  // resolverlo es determinista. Medido el 2026-09-03 sobre COLA.md despues de mergear los
+  // carriles `web-venta` y `canario-visual`: seis nombres — `compartir.test.ts`,
+  // `indexar.test.ts`, `cierre.test.ts`, `legal-page.tsx`, `switcher.tsx` y `apple-icon.png` —
+  // se reportaban como "ese archivo NO existe" existiendo, uno solo cada uno. El gate paso de
+  // 3 a 16 errores de golpe, y un gate que sale rojo de fabrica se saltea: ahi deja de proteger.
+  r = revisarCola('## Ahora\n- [ ] Algo · `unico-nombre.tsx`\n', tmp);
+  ok(!r.problemas.some((p) => p.regla === 'fantasma'),
+    'con una sola coincidencia se resuelve: no hay ambiguedad que lo impida');
+
+  // Y resuelve DE VERDAD, o sea tambien cuenta como evidencia. Sin esto el arreglo seria
+  // cosmetico: el item dejaria de salir `fantasma` para salir `sin-evidencia`, y el gate
+  // seguiria rojo por el mismo archivo que si existe.
+  ok(!r.problemas.length,
+    'un nombre suelto unico es evidencia: el archivo existe y se encontro');
+
+  // --- Rango de lineas: "archivo.mjs:141-166" cita un BLOQUE, no una linea ---
+  // El limpiador entendia `:141` y `:141:5` pero no el rango, asi que el `-166` quedaba
+  // pegado al nombre y el archivo salia fantasma existiendo.
+  r = revisarCola('## Ahora\n- [ ] Ver `existe.png:141-166`\n', tmp);
+  ok(!r.problemas.length, 'un rango de lineas no convierte en fantasma un archivo que existe');
+  // Reciproco: sacar el rango no puede volver verde un archivo que NO esta.
+  r = revisarCola('## Ahora\n- [ ] Ver `no-esta.png:141-166`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'), 'sacar el rango no tapa un archivo que falta');
+
+  // --- Especificador de MODULO: no es un archivo de este arbol ---
+  // `@/lib/pricing` es un alias de TypeScript, `next/link` un paquete de npm y
+  // `packs/js/sdk.js` el SDK de Chatwoot servido por otro host. Los tres tienen barra, asi
+  // que caian en "esto parece una ruta" y salian fantasma sobre archivos que no son de acá.
+  for (const mod of ['@/lib/pricing', 'next/link', 'packs/js/sdk.js']) {
+    r = revisarCola(`## Ahora\n- [ ] Algo · \`existe.png\` · importa \`${mod}\`\n`, tmp);
+    ok(!r.problemas.some((p) => p.regla === 'fantasma'), `${mod} no es una ruta de este repo`);
+  }
+
+  // Reciproco: un especificador de modulo tampoco es evidencia de que algo exista.
+  r = revisarCola('## Ahora\n- [ ] Algo · `@/lib/pricing`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'sin-evidencia'),
+    'un especificador de modulo no cuenta como evidencia');
+
+  // Y el alias no puede tapar una carpeta de verdad que empiece con arroba: se exige
+  // que el `@` vaya seguido de barra, que es la forma del alias y de ninguna ruta real.
+  r = revisarCola('## Ahora\n- [ ] Algo · `@scope/paquete/no-esta.js`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'sin-evidencia'),
+    'un paquete con scope sigue sin ser evidencia');
 
   r = revisarCola('## Ahora\n- [ ] Terminar el sistema de publicacion\n', tmp);
   ok(r.problemas.some((p) => p.regla === 'sin-evidencia'), 'un item sin ruta no entra');
@@ -682,9 +859,22 @@ function selfCheck() {
   r = revisarCola('## Ahora\n- [ ] Gatear el add-on · `lib/plan-limits.ts:396`\n', path.join(tmp, 'onia-hermes'));
   ok(!r.problemas.length, 'una ruta del repo hermano onia-platform resuelve');
 
+  // (5b) La MISMA ruta pero escrita CON el nombre del repo adelante. Es la forma que usa
+  // CLAUDE.md para fijar la fuente de verdad de precios (`onia-platform/lib/pricing.ts`), o sea
+  // la forma mas autorizada que hay — y era un fantasma garantizado: al unir el prefijo con el
+  // repo hermano, que se llama igual, salia `onia-platform/onia-platform/lib/...`. Medido el
+  // 2026-09-03: 3 de los 8 errores de COLA.md eran esto, sobre archivos que existen.
+  fs.writeFileSync(path.join(tmp, 'onia-platform', 'lib', 'pricing.ts'), 'x');
+  r = revisarCola('## Ahora\n- [ ] Leer precios · `onia-platform/lib/pricing.ts`\n', path.join(tmp, 'onia-hermes'));
+  ok(!r.problemas.length, 'una ruta del hermano CON el prefijo del repo tambien resuelve');
+
   // Y su limite: lo que no esta ni aca ni en el hermano sigue siendo fantasma.
   r = revisarCola('## Ahora\n- [ ] Algo · `lib/no-existe-en-ningun-lado.ts`\n', path.join(tmp, 'onia-hermes'));
   ok(r.problemas.some((p) => p.regla === 'fantasma'), 'el repo hermano no vuelve verde cualquier ruta');
+
+  // Ni el prefijo del repo hermano vuelve verde un archivo que no existe ahi.
+  r = revisarCola('## Ahora\n- [ ] Algo · `onia-platform/lib/tampoco-existe.ts`\n', path.join(tmp, 'onia-hermes'));
+  ok(r.problemas.some((p) => p.regla === 'fantasma'), 'el prefijo del hermano no absuelve una ruta inventada');
 
 
   // --- Los cuatro falsos positivos medidos el 2026-09-02 sobre la propia COLA.md ---
@@ -810,9 +1000,22 @@ function selfCheck() {
   // Su reciproco 2: el sufijo corta en limite de segmento, no a media palabra.
   r = revisarCola('## Ahora\n- [ ] Ver `itio)/og.tsx`\n', tmpSufijo);
   ok(r.problemas.some((p) => p.regla === 'fantasma'), 'el sufijo no matchea a media carpeta');
-  // Su reciproco 3: un nombre suelto sin barra NO resuelve por sufijo.
+  // Su reciproco 3: sin barra SI resuelve, pero solo si el nombre es unico en el arbol —
+  // corregido el 2026-09-03 junto con el caso de `unico-nombre.tsx` de mas arriba, que es donde
+  // esta el razonamiento completo. `og.tsx` existe una sola vez en este fixture.
   r = revisarCola('## Ahora\n- [ ] Ver `og.tsx`\n', tmpSufijo);
-  ok(r.problemas.some((p) => p.regla === 'fantasma'), 'sin barra no hay resolucion por sufijo');
+  ok(!r.problemas.length, 'sin barra resuelve cuando el nombre es unico');
+
+  // Y su limite: en cuanto el mismo nombre aparece DOS veces deja de ser resoluble, y entonces
+  // manda el filtro de ambiguedad — ni evidencia ni error, nunca un fantasma sobre algo que el
+  // gate decidio no buscar. Es la frontera exacta de lo que se afloja.
+  fs.mkdirSync(path.join(tmpSufijo, 'app', '(otro)'), { recursive: true });
+  fs.writeFileSync(path.join(tmpSufijo, 'app', '(otro)', 'og.tsx'), 'x');
+  const tmpAmbiguo = fs.mkdtempSync(path.join(require('os').tmpdir(), 'cola-ambiguo-'));
+  fs.cpSync(tmpSufijo, tmpAmbiguo, { recursive: true });
+  r = revisarCola('## Ahora\n- [ ] Ver `og.tsx`\n', tmpAmbiguo);
+  ok(!r.problemas.some((p) => p.regla === 'fantasma'), 'con dos copias el nombre suelto no es fantasma');
+  ok(r.problemas.some((p) => p.regla === 'sin-evidencia'), 'con dos copias tampoco es evidencia');
 
   // --- Duplicados: "cerrar un item no cierra su copia" ---
   // Este defecto ya golpeo DOS veces por escrito en la propia cola. El 2026-08-31 se encontro
