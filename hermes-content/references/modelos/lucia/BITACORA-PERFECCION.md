@@ -971,4 +971,103 @@ sólo si después del cambio de UUID la cara todavía no cierra.
   hipótesis fuerte con evidencia en disco, **no un arreglo verificado** — y confirmarla cuesta
   2 cr que este loop no puede gastar.
 - **No se puede medir tendencia de deriva con n=1** (el lote más nuevo tiene una imagen).
-- **Ninguna pieza de este carril fue generada por este loop.** Acá no se dispara nada pago.
+- ~~Ninguna pieza de este carril fue generada por este loop. Acá no se dispara nada pago.~~
+  ⚠️ **Falso desde el 2026-09-03 16:52 UTC.** Este loop generó `S1` por CLI y pagó 0,12 cr
+  (ver E9 abajo). La frase quedó de cuando el prompt del carril prohibía generar; Sergio lo
+  habilitó el 2026-09-02 (*"Lucía tiene permitido generar, si no no podría practicar"*).
+
+---
+
+# E9 · ¿El motor barato sostiene la cara? — medido el 2026-09-03, 0,12 cr
+
+**La pregunta, y por qué vale la pena:** el carril genera con `nano_banana_pro` a **2 cr por
+imagen**. `text2image_soul_v2` cuesta **0,12 cr** — 16× menos — y su tabla de params (`model get`)
+muestra que **sí acepta `image_references`**. Si sostuviera la identidad, un lote de 6 pasaría de
+12 cr a 0,72 cr y el carril podría practicar diez veces más por el mismo dinero.
+
+**Respuesta: NO. Y el motivo es estructural, no de prompt.**
+
+## Lo que se disparó
+
+| # | Qué se probó | Costo real | Resultado |
+|---|---|---|---|
+| **S1** | `image_references` = foto canónica de Lucía (`E3-hotel.jpg`, ruta local, se sube sola) | **0,12 cr** | ⛔ **Falla doble** |
+| **S2** | `custom_reference_id` = el Element `lucia-skin-v1` (`58bbd635-…`) | **0 cr** | `Error: Character not found` |
+
+Comando de S1:
+
+```bash
+higgsfield generate create text2image_soul_v2 \
+  --prompt "<E2 base + frase de LUZ §12>" \
+  --aspect-ratio 9:16 --quality 2k \
+  --image-references …/generadas-20260902/E3-hotel.jpg \
+  --wait --wait-timeout 5m
+```
+
+Cotizado antes con `generate cost` = 0,12 cr; el cobro en `account transactions` fue **−0,12
+exacto**. Saldo 1939,06 → 1938,94. **S2 falló sin cobrar**: un job rechazado por referencia
+inválida sale gratis.
+
+## Por qué S1 falla, y es lo contrario de lo que uno espera
+
+`S1-rooftop-soulv2.jpg` **copió lo que debía cambiar y cambió lo que debía copiar**:
+
+| Eje | Pedido en el prompt | Qué salió |
+|---|---|---|
+| **Escena** | Rooftop abierto en Santa Cruz, baranda de vidrio, atardecer, vaso para llevar, ciudad de fondo | ⛔ **El hall de hotel de la foto de referencia** — sofás de cuero, lámparas, techo de madera. Sin rooftop, sin baranda, sin ciudad, sin café |
+| **Cara** | «the same woman as in the reference image, keep the exact same face» | ⛔ **No es Lucía.** Sin pecas, pelo castaño claro con mechas, cara más angulosa y genérica |
+| Rasgos sagrados | pecas > argollas + cadenita | ⛔ pecas **ausentes** · ✅ argollas y cadenita presentes |
+
+**El diagnóstico:** en `text2image_soul_v2`, `image_references` es una referencia de **estilo y
+escena**, no de identidad. Por eso clonó el lobby y descartó el rostro. No es un prompt flojo: es
+la ranura equivocada.
+
+## Dónde está la ranura de identidad, y por qué tampoco sirve HOY
+
+S2 devolvió `Character not found` — **distinto** del `Media input not found` que da
+`--image-references` con el mismo UUID (§11 de `TECNICA-HIGGSFIELD.md`). Son **dos registros
+separados**:
+
+- `custom_reference_id` lee **Soul refs** (`higgsfield soul-id list`).
+- `image_references` lee **uploads / job ids**.
+- El ancla buena, `lucia-skin-v1` (`58bbd635-…`), es un **Element** — un tercer registro, que
+  **ningún** parámetro de Soul v2 puede leer.
+
+Y las únicas dos Soul refs de Lucía que existen en la cuenta son **exactamente las dos que el
+banco prohíbe**:
+
+| ID | Nombre | Estado en `BANCO-OFICIAL.md` |
+|---|---|---|
+| `36305a9b-…` | `LUCIA-REAL-v2-clean` | ⛔ **PROHIBIDO** — piel roja; entrenada con frames de una persona real sin permiso documentado |
+| `e6d8703c-…` | `LUCIA-SINTETICA-v3` | ⛔ perdió el A/B del 22-ago; le cambia los ojos a gris azulado |
+
+**Conclusión operativa: el ahorro de 16× no está disponible hoy, y no lo destraba ningún prompt.**
+La receta de §11 (`nano_banana_pro` + `--image-references <foto>`, 2 cr) sigue siendo la única
+probada para cara protagonista.
+
+## Lo que SÍ lo destrabaría — cotizado hasta donde se puede
+
+Entrenar una **Soul ref nueva** con las 7 fotos del ancla vigente:
+
+```bash
+higgsfield soul-id create --name "LUCIA-ancla-v1" --soul-2 \
+  --image <foto1> … --image <foto7>     # acepta 5–20, ruta local o upload id
+```
+
+⚠️ **El costo del entrenamiento NO se pudo cotizar**: `generate cost` sólo cotiza jobs de
+generación, y `soul-id create` no tiene equivalente. Es el dato que falta y **no se estima acá**.
+Si el entrenamiento resultara barato, cada imagen posterior costaría 0,12 en vez de 2 cr.
+
+**Y hay un riesgo que no se puede saltear:** las dos Soul refs anteriores de Lucía salieron mal
+(piel roja, ojos grises). Una tercera puede salir mal igual. Entrenar no garantiza la cara: hay
+que medirla contra `STACK-rasgos-10-angulos.jpg` después.
+
+## Lo que este experimento deja escrito para el próximo
+
+- **`model get <job_type>` muestra la ranura, no dice para qué sirve.** Ver `image_references` en
+  la tabla de Soul v2 hace pensar «sostiene identidad». Sostiene **estilo**. La tabla de params no
+  es documentación de comportamiento.
+- **Un job rechazado por referencia inválida no cobra.** Probar un UUID en la ranura dudosa es
+  gratis: conviene hacerlo **antes** de gastar.
+- **El CLI no tiene `generate image`.** El subcomando real es **`generate create`**
+  (`generate image` no existe y muere en el parseo). Varios docs del carril lo escriben mal.

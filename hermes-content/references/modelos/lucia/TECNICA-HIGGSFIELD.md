@@ -1110,6 +1110,22 @@ El **element es otra cosa** y sólo existe dentro del `@` del navegador.
 element. Se usa el asset id de una pieza buena y reciente. Los ids están en los `LEEME.md` de
 cada carpeta — por eso se anotan.
 
+#### 🔴 Son TRES registros distintos, no dos (medido 2026-09-03, E9)
+
+El mismo UUID falla con **dos errores diferentes** según la ranura, y esa diferencia es el mapa:
+
+| Ranura | Qué registro lee | Con `58bbd635…` (Element) devuelve |
+|---|---|---|
+| `--image-references` | uploads / job ids | `Media input not found` |
+| `--custom-reference-id` (sólo Soul v2) | **Soul refs** — `higgsfield soul-id list` | `Character not found` |
+| el `@` del navegador | **Elements** | ✅ es el único que lo lee |
+
+**El ancla buena vive en el tercer registro y ningún parámetro del CLI la alcanza.** Por eso la
+receta por CLI usa foto-como-referencia y no hay forma de mejorarla cambiando el flag.
+
+⚠️ **Un job rechazado por referencia inválida NO cobra** (saldo intacto tras el `Character not
+found`). Probar un UUID en una ranura dudosa es gratis: hacerlo **antes** de gastar.
+
 ⚠️ **Y hay una diferencia de calidad que conviene medir con más piezas:** la cara sale un poco
 más plana que con el element entrenado, y en `B08` el pelo quedó recogido aunque el prompt pedía
 suelto. El element manda mejor la identidad; la referencia por foto manda bien pero no igual.
