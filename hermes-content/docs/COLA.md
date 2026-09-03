@@ -822,6 +822,63 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       (699 KB/114 ms, redirige a `/login` sin sesión: "no medida", no "OK"). Ninguna
       baseline tocada.
 
+### Del canario visual — corrida del 2026-09-03 ~06:42 UTC (diez pantallas, sin ítems nuevos)
+
+- [x] 🟢 **Diez pantallas abiertas y MIRADAS. Sin disparo mecánico en ninguna, sin defecto
+      nuevo a la vista.** `home` (2.360 KB/316 ms), `precios` (2.110 KB/210 ms, widget de
+      Chatwoot SÍ visible, tarjeta de WhatsApp Bs 390/mes completa), `empezar` (2.104 KB/139 ms),
+      `rubros` (2.527 KB/143 ms), `chatbot-landing` (2.107 KB/184 ms, widget visible, precio Bs
+      390/mes correcto), `contacto` (322 KB/231 ms), `register` (702 KB/124 ms, asistente de 2
+      pasos, 5 rubros con íconos legibles), `login-plataforma` (696 KB/96 ms, "Pedí tu acceso"
+      presente, íconos legibles), `login-chat` (3.499 KB/1.221 ms, formulario Chatwoot propio,
+      no está caído), `panel-chatbot` (702 KB/135 ms, redirige a `/login` sin sesión: "no
+      medida", no "OK"). Ninguna baseline tocada.
+  - **La banda vacía de `home` y `rubros` en la captura full-page NO es el bug ya cerrado
+    (scroll de espera corto).** Tiene otra causa, más simple: ambas pantallas usan un
+    conmutador `position: sticky` (`switcher.tsx`, el "runway" de rubros que también vive en
+    home) que se pinea mientras vos scrolleás. Un `fullPage` screenshot no repite el elemento
+    pineado en cada tramo del scroll: lo captura UNA vez, en su lugar natural, y el resto del
+    contenedor alto (~5 rubros × alto de paso) queda en blanco en la imagen — aunque el DOM
+    tiene todo el contenido (confirmado con `visto.texto`, que trae los 5 rubros completos más
+    abajo, después de la banda). Coincide con la nota ya escrita en este mismo archivo sobre
+    "el pin del scrollytelling... eso SÍ es esperado". **No es un ítem: es una limitación
+    conocida del instrumento (captura full-page + `position:sticky`), no del sitio.**
+  - **El 429 del widget: corrí la sonda oficial ANTES de escribir nada** (regla del
+    CLAUDE.md tras el falso positivo del 2026-09-02 y el falso "OJO" mal interpretado antes
+    de eso). Esta vez:
+    ```
+    == 2. ¿A nombre de QUÉ IP está el contador del throttle? ==
+       187.77.16.63       10 cargas (el límite es 5/hora)
+    == 3. ¿Quién pidió /widget en las últimas 6 h? ==
+       187.77.16.63       261 peticiones
+       192.223.122.70     1 peticiones
+       190.180.28.134     1 peticiones
+    VEREDICTO: AUTOINDUCIDO. 261 de 263 (99%) son del propio VPS.
+    ```
+    **El veredicto cambia de corrida a corrida** (la vuelta anterior, 03:41 UTC, dio "OJO: 2
+    IPs ajenas"; ésta da AUTOINDUCIDO) porque la ventana del throttle es de 1 h y depende de
+    qué tráfico cayó en esa hora puntual — no cierra ni reabre el ítem 🔴 de arriba por sí
+    sola, sólo agrega un dato más a su serie. **El ítem 🔴 del widget caído queda como
+    estaba** (abierto, sin dueño), con esta lectura sumada a su historial.
+  - ⚠️ **Nota operativa propia, no un hallazgo del sitio:** después de la corrida oficial
+    reejecuté `home` sola 3 veces para investigar por qué el peso variaba (2.360 KB vs los
+    2.310 KB de la baseline vieja) — eso agotó el cupo de 5 cargas/hora del widget en
+    `onia.com.bo` y las 3 reejecuciones sí vieron el 429 (581 KB, sin widget). **El
+    `home.json`/`home.png` que quedan en `.canario-out/` después de esta vuelta son de esas
+    reejecuciones, no de la corrida oficial** — reflejan un estado autoinducido por mí, no el
+    estado real del sitio. La cifra correcta de esta vuelta es la de la corrida oficial (2.360
+    KB, sin error de consola), citada arriba. Lección para la próxima: no reejecutar una
+    pantalla sola para "confirmar" peso — el propio acto de medir de nuevo quema el cupo del
+    widget y ensucia la evidencia.
+  - **Aparte, sin ser ítem:** el copy del hero de `home` cambió respecto a la baseline
+    versionada ("Tu negocio no pierde citas ni cobros..." / CTA "Pedí tu acceso" → "Cerrás
+    vos. El negocio no." / CTA "Creá tu cuenta"), y es consistente con `empezar` y `register`
+    (los tres ya dicen "Creá tu cuenta" y el asistente de 2 pasos existe y funciona visualmente).
+    Parece un cambio de copy intencional y coherente en toda la superficie, no una promesa
+    rota — lo dejo anotado porque es la clase de cosa que la regla de "una promesa que cambia
+    se barre en TODA la superficie" pide vigilar, pero sin confirmar si `/register` ya crea
+    cuentas de verdad no corresponde declararlo bug ni arreglo. No se tocó la baseline.
+
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 
 - **F1 · Sumar `/patients` al nav de servicios profesionales.** Lo intenté, escribí el test,
