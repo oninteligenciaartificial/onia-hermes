@@ -1668,6 +1668,45 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         pero **no lo arregló**: no entraba en la vuelta y no se empieza un refactor que no se
         puede terminar ni verificar.
 
+      ⚠️ **SEGUNDA CEGUERA EN EL MISMO SCROLL, y el arreglo de viewports NO alcanza para taparla
+      — medida el 2026-09-03 ~09:40 UTC por el carril `web-venta`, tropezándome con ella en mi
+      propio instrumento.** No es una variante de `fullPage`: es independiente, y muerde también
+      a quien capture por viewports creyendo que ya está a salvo.
+      - **El sitio trae `scroll-behavior: smooth` en `<html>`** (`globals.css:194`, correctamente
+        detrás de `prefers-reduced-motion: no-preference` — el sitio está bien, no hay nada que
+        arreglar ahí). Medido en vivo: `getComputedStyle(document.documentElement).scrollBehavior`
+        → `"smooth"`.
+      - **Con eso, `window.scrollTo(0, y)` NO salta: ANIMA.** Vuelve enseguida y la página sigue
+        viajando. Una foto disparada a los 300 ms sale **a mitad de camino**, con el encuadre
+        entre dos franjas — y lo que se ve es una tarjeta o un titular **cortado por la mitad**,
+        que es exactamente la firma del defecto que este ítem persigue.
+      - **Lo que me pasó, y por eso lo sé:** capturé `/empezar` a 390 px y el primer frame
+        (scroll 0) mostraba el titular `"Creá tu cuenta y usalo de verdad 14 días."` **cortado
+        por arriba**, como si el header pegajoso se lo comiera. Estuve a un paso de abrirlo como
+        ítem. Lo medí antes: a scroll 0 el `<h1>` está en `top: 208` y el header termina en
+        `bottom: 61` — **no lo toca ni de cerca**. El frame estaba tomado mientras la página
+        todavía volvía desde el fondo (3.689 px) hacia arriba.
+      - **Por qué el canario es MÁS vulnerable que yo, no menos:** su bucle
+        (`canario_visual.mjs:268-276`) hace `scrollTo` cada 0,8 de viewport con 300 ms, y **cada
+        `scrollTo` re-apunta la animación anterior en vez de esperarla**, así que la página nunca
+        se asienta en ningún paso: planea. Y el `scrollTo(0, 0)` final con 800 ms tiene que
+        deshacer **14.569 px** en la home — un scroll suave de esa distancia no termina ni cerca
+        en 800 ms.
+      - **El arreglo es de una línea y es previo al refactor de viewports:** antes de scrollear,
+        `await page.addStyleTag({ content: 'html{scroll-behavior:auto !important}' })`. Y para
+        que no vuelva a envejecer, **esperar a que el scroll haya llegado de verdad** en vez de
+        confiar en un `setTimeout`:
+        `await page.waitForFunction((t) => Math.abs(window.scrollY - t) < 3, y)`.
+      - **Repro en 30 segundos:** cargar `https://onia.com.bo/empezar` a 390×844, `scrollTo` al
+        fondo, después `scrollTo(0, 0)`, esperar 300 ms y capturar. El titular sale cortado. Con
+        `html{scroll-behavior:auto}` inyectado antes, sale entero. La misma página, el mismo
+        instante, dos verdades distintas.
+      - **Por qué importa más que un frame feo:** es el **tercer** defecto de instrumento de esta
+        familia (rasterizador → 3 días perdidos; `fullPage` → este ítem; ahora el scroll suave), y
+        los tres fabrican la MISMA firma — "algo cortado o en blanco" — sobre un sitio sano. Cada
+        uno gasta vueltas de este carril persiguiendo fantasmas. **Verificado que el sitio no
+        tiene la culpa en los tres.**
+
 - [ ] 🟢 **Las otras cinco pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
       Miradas una por una: `contacto` (322 KB/104 ms, formulario y CTAs completos),
       `register` (705 KB/153 ms, asistente de 2 pasos con 5 rubros, íconos legibles),
