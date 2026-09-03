@@ -1171,25 +1171,59 @@ async function main() {
   // donde no había nada roto.
   corte = resultados.find((r) => r.estado !== 'ok' && r.n > ultimoOk) || null;
 
+  // 🔴 NACE DEL FALSO VERDE DEL 2026-09-03 EN IMPORTADORA, y es una recaída del mismo que este
+  // script ya tuvo: `ultimoOk` guarda el ÚLTIMO paso que salió bien, NO hasta dónde se llegó de
+  // corrida. En importadora el paso 7 salió `no-medido` (el producto redirige /billing a
+  // /dashboard porque ese rubro no tiene Facturación) y el 8 salió verde, así que `ultimoOk`
+  // valía 8, `ultimoOk === PASOS.length` daba verdadero y el script cantó "RECORRIDO COMPLETO:
+  // los 8 pasos" sobre una pantalla de cobro que NUNCA se vio. Peor: `corte` también salió null,
+  // porque busca un fallo con `n > ultimoOk` y no hay paso después del 8 — el agujero desapareció
+  // hasta del resumen.json.
+  //
+  // Un agujero tapado por un verde POSTERIOR es invisible, y es exactamente la forma que tiene
+  // este carril de no servir para nada: reportar en verde el camino que el cliente no puede hacer.
+  // Por eso "completo" ahora exige que NO haya ni un paso fuera de OK, y los agujeros se enumeran
+  // todos, estén donde estén.
+  const agujeros = resultados.filter((r) => r.estado !== 'ok');
+  // Hasta dónde llegó DE CORRIDA: el primer agujero corta, haya verdes después o no.
+  const seguidos = agujeros.length ? agujeros[0].n - 1 : PASOS.length;
+  // Los TAPADOS son los agujeros que tienen un paso VERDE después: los únicos que el veredicto
+  // viejo borraba. Los demás (la cola de "sin sesión" que arrastra un corte temprano) ya los
+  // explica el corte, y enumerarlos sólo hace ruido. Acá se separa el agujero que engaña del
+  // que se deduce.
+  const tapados = agujeros.filter((a) => resultados.some((r) => r.estado === 'ok' && r.n > a.n));
+
   await navegador.close();
 
   const resumen = {
     cuando: new Date().toISOString(),
     escribio: ESCRIBIR,
-    llegoHasta: ultimoOk,
+    // `llegoHasta` es de CORRIDA: el primer agujero lo corta. `ultimoOkSuelto` queda al lado
+    // sólo para que se vea la diferencia cuando hay un hueco en el medio — era el número que
+    // hacía cantar completo a un recorrido incompleto.
+    llegoHasta: seguidos,
+    ultimoOkSuelto: ultimoOk,
+    completo: agujeros.length === 0,
     deCuantos: PASOS.length,
     corte: corte ? { paso: corte.n, nombre: corte.nombre, estado: corte.estado, detalle: corte.detalle } : null,
+    agujeros: agujeros.map((a) => ({ paso: a.n, nombre: a.nombre, estado: a.estado, detalle: a.detalle })),
     datosQA: ESCRIBIR ? QA : null,
     pasos: resultados,
   };
   writeFileSync(join(OUT, 'resumen.json'), JSON.stringify(resumen, null, 2));
 
   console.log('');
-  if (ultimoOk === PASOS.length) {
+  if (!agujeros.length) {
     console.log(`RECORRIDO COMPLETO: los ${PASOS.length} pasos. Eso es la noticia.`);
   } else {
-    console.log(`LLEGÓ HASTA EL PASO ${ultimoOk} de ${PASOS.length}.`);
+    console.log(`LLEGÓ HASTA EL PASO ${seguidos} de ${PASOS.length} de corrida.`);
     if (corte) console.log(`CORTE en el paso ${corte.n} (${corte.nombre}) — ${corte.estado}: ${corte.detalle}`);
+    // El agujero TAPADO por un verde posterior es el que nadie mira, y es el que hizo cantar
+    // completo a un recorrido incompleto. Se nombra aunque el corte esté en otro lado.
+    for (const a of tapados) {
+      if (corte && a.n === corte.n) continue;
+      console.log(`AGUJERO en el paso ${a.n} (${a.nombre}) — ${a.estado}: ${a.detalle}`);
+    }
   }
   // El aviso enumera TODO lo creado, no sólo la cuenta: desde que el paso 6 carga un paciente,
   // un aviso que sólo nombre el correo deja basura anónima en producción — y basura anónima ya
