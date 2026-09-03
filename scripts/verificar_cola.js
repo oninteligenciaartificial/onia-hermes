@@ -289,11 +289,25 @@ function existeEnAlgunRepo(ruta, baseDir) {
   // Se aplica solo CON barra: `page.tsx` suelto matchearia cualquiera de los cientos que hay.
   if (ruta.includes('/')) return existeComoSufijo(ruta, baseDir);
 
-  // Sin barra no se resuelve por sufijo — decision deliberada, con su reciproco en el
-  // self-check ("sin barra no hay resolucion por sufijo"). Los AMBIGUOS los filtra
-  // `nombreSueltoAmbiguo` antes de llegar aca; el resto sigue siendo fantasma, que es lo que
-  // separa `page.tsx` (155 archivos con ese nombre) de `no-esta.png` (ninguno).
-  return false;
+  // Sin barra se resuelve por sufijo SOLO si el nombre es unico en el arbol. El motivo por el
+  // que esto estuvo prohibido durante meses era, textual, que "un `page.tsx` suelto matchearia
+  // cientos" — un argumento sobre AMBIGUEDAD, no sobre existencia. Con exactamente UNA
+  // coincidencia no hay ambiguedad: hay un solo archivo con ese nombre y resolverlo es
+  // determinista.
+  //
+  // Corregido el 2026-09-03 por `onia-cola`. La carve-out anterior tapaba el caso de CIENTOS
+  // (`nombreSueltoAmbiguo`, >=2, se ignora) y dejaba vivo el de UNO, que es peor: el gate
+  // decia "ese archivo NO existe" sobre un archivo que existe. Medido despues de mergear
+  // `web-venta` y `canario-visual`: seis nombres reales (`compartir.test.ts`, `indexar.test.ts`,
+  // `cierre.test.ts`, `legal-page.tsx`, `switcher.tsx`, `apple-icon.png`) acusados de
+  // inexistentes, y el gate de 3 a 16 errores. Un gate rojo de fabrica se saltea, y ahi deja
+  // de proteger — la misma leccion que el vigia que grita mal.
+  //
+  // Los tres tramos, y son excluyentes: 0 coincidencias -> fantasma de verdad (`no-esta.png`);
+  // 1 -> se resuelve aca; >=2 -> `nombreSueltoAmbiguo` ya lo filtro antes de llegar, sin
+  // evidencia y sin error. El indice no mira `node_modules` ni `.next`, asi que las copias de
+  // build no cuentan: `apple-icon.png` tiene tres archivos en disco y UNO en fuente.
+  return cuantosSeLlamanAsi(ruta, baseDir) === 1;
 }
 
 // Los arboles donde puede vivir un archivo citado. NO se incluyen las `APPS_DEL_REPO`: cuelgan
@@ -686,15 +700,28 @@ function selfCheck() {
   ok(r.problemas.some((p) => p.regla === 'fantasma'),
     'un nombre suelto sin ninguna coincidencia sigue siendo fantasma');
 
-  // Reciproco 3 — el limite exacto de lo que se afloja: con UNA sola coincidencia NO hay
-  // ambiguedad, asi que el filtro no aplica y el nombre suelto sigue tratandose como antes
-  // (fantasma, salvo que este en la raiz). Es a proposito: "sin barra no hay resolucion por
-  // sufijo" es una decision ya tomada y con su propio caso mas abajo, y este item no la
-  // reabre. La carve-out empieza recien en DOS coincidencias, que es donde el gate deja de
-  // poder decidir.
+  // Reciproco 3 — el limite exacto, CORREGIDO el 2026-09-03 por `onia-cola`. Antes este caso
+  // exigia `fantasma` con UNA sola coincidencia, y era el ultimo resto del defecto que este
+  // gate ya se habia arreglado a medias: acusar de inexistente un archivo que existe. La
+  // carve-out de ambiguedad tapaba el caso de CIENTOS y dejaba vivo el de UNO.
+  //
+  // El razonamiento original de "sin barra no hay resolucion por sufijo" era, textual, que
+  // "un `page.tsx` suelto matchearia cientos" — o sea un argumento sobre AMBIGUEDAD. Con una
+  // sola coincidencia no hay ninguna: hay exactamente un archivo en el arbol con ese nombre y
+  // resolverlo es determinista. Medido el 2026-09-03 sobre COLA.md despues de mergear los
+  // carriles `web-venta` y `canario-visual`: seis nombres — `compartir.test.ts`,
+  // `indexar.test.ts`, `cierre.test.ts`, `legal-page.tsx`, `switcher.tsx` y `apple-icon.png` —
+  // se reportaban como "ese archivo NO existe" existiendo, uno solo cada uno. El gate paso de
+  // 3 a 16 errores de golpe, y un gate que sale rojo de fabrica se saltea: ahi deja de proteger.
   r = revisarCola('## Ahora\n- [ ] Algo · `unico-nombre.tsx`\n', tmp);
-  ok(r.problemas.some((p) => p.regla === 'fantasma'),
-    'con una sola coincidencia no hay ambiguedad: el filtro no se aplica');
+  ok(!r.problemas.some((p) => p.regla === 'fantasma'),
+    'con una sola coincidencia se resuelve: no hay ambiguedad que lo impida');
+
+  // Y resuelve DE VERDAD, o sea tambien cuenta como evidencia. Sin esto el arreglo seria
+  // cosmetico: el item dejaria de salir `fantasma` para salir `sin-evidencia`, y el gate
+  // seguiria rojo por el mismo archivo que si existe.
+  ok(!r.problemas.length,
+    'un nombre suelto unico es evidencia: el archivo existe y se encontro');
 
   // --- Rango de lineas: "archivo.mjs:141-166" cita un BLOQUE, no una linea ---
   // El limpiador entendia `:141` y `:141:5` pero no el rango, asi que el `-166` quedaba
@@ -973,9 +1000,22 @@ function selfCheck() {
   // Su reciproco 2: el sufijo corta en limite de segmento, no a media palabra.
   r = revisarCola('## Ahora\n- [ ] Ver `itio)/og.tsx`\n', tmpSufijo);
   ok(r.problemas.some((p) => p.regla === 'fantasma'), 'el sufijo no matchea a media carpeta');
-  // Su reciproco 3: un nombre suelto sin barra NO resuelve por sufijo.
+  // Su reciproco 3: sin barra SI resuelve, pero solo si el nombre es unico en el arbol —
+  // corregido el 2026-09-03 junto con el caso de `unico-nombre.tsx` de mas arriba, que es donde
+  // esta el razonamiento completo. `og.tsx` existe una sola vez en este fixture.
   r = revisarCola('## Ahora\n- [ ] Ver `og.tsx`\n', tmpSufijo);
-  ok(r.problemas.some((p) => p.regla === 'fantasma'), 'sin barra no hay resolucion por sufijo');
+  ok(!r.problemas.length, 'sin barra resuelve cuando el nombre es unico');
+
+  // Y su limite: en cuanto el mismo nombre aparece DOS veces deja de ser resoluble, y entonces
+  // manda el filtro de ambiguedad — ni evidencia ni error, nunca un fantasma sobre algo que el
+  // gate decidio no buscar. Es la frontera exacta de lo que se afloja.
+  fs.mkdirSync(path.join(tmpSufijo, 'app', '(otro)'), { recursive: true });
+  fs.writeFileSync(path.join(tmpSufijo, 'app', '(otro)', 'og.tsx'), 'x');
+  const tmpAmbiguo = fs.mkdtempSync(path.join(require('os').tmpdir(), 'cola-ambiguo-'));
+  fs.cpSync(tmpSufijo, tmpAmbiguo, { recursive: true });
+  r = revisarCola('## Ahora\n- [ ] Ver `og.tsx`\n', tmpAmbiguo);
+  ok(!r.problemas.some((p) => p.regla === 'fantasma'), 'con dos copias el nombre suelto no es fantasma');
+  ok(r.problemas.some((p) => p.regla === 'sin-evidencia'), 'con dos copias tampoco es evidencia');
 
   // --- Duplicados: "cerrar un item no cierra su copia" ---
   // Este defecto ya golpeo DOS veces por escrito en la propia cola. El 2026-08-31 se encontro
