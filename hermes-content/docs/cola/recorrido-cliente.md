@@ -8,12 +8,24 @@ Instrumento: `scripts/recorrido_cliente.mjs`.
 
 ## Abierto
 
-### 1. Faltan TRES rubros de los cinco que ofrece el alta
+### 0. Volver a correr IMPORTADORA para medir su paso 7 de verdad
 
-Cerrado comercio (abajo), queda: **importadora/distribuidora, estética y spa, servicios
-profesionales**. Se corren igual, cambiando la variable:
+En la corrida del 2026-09-03 19:14 el paso 7 salió `no-medido` porque el instrumento pedía
+`/billing`, que ese rubro **no tiene**. Ya está arreglado (ahora busca **Créditos** en el menú),
+pero el paso 7 de importadora **nunca se midió**: hasta que se corra, ese rubro está en 7 de 8.
 
-    RECORRIDO_RUBRO='Estética y spa' node scripts/recorrido_cliente.mjs --escribir
+    RECORRIDO_RUBRO='Importadora / distribuidora' node scripts/recorrido_cliente.mjs --escribir
+
+Lo que hay que ver: que el paso 7 llegue a `/comercio/fiados` ("Créditos") y que la pantalla se
+vea. ⚠️ Este rubro deja fila en `onia_commerce_products` **y** en
+`onia_commerce_product_variants`.
+
+### 1. Faltan DOS rubros de los cinco que ofrece el alta
+
+Cerrados comercio y **estética y spa** (abajo), queda: **importadora/distribuidora** (parcial:
+7 de 8, ver el ítem 0) y **servicios profesionales**. Se corren igual, cambiando la variable:
+
+    RECORRIDO_RUBRO='Servicios profesionales' node scripts/recorrido_cliente.mjs --escribir
 
 El instrumento ya no está atado a dental: descubre la pantalla del dato y la del cobro **del
 menú** que el producto le muestra a ese rubro. Lo que hay que mirar en cada uno es si
@@ -40,6 +52,21 @@ hay que reportar. Ojo con los precios: los que muestre la pantalla se **comparan
 una licencia para corregir nada.
 
 ## Cerrado
+
+- **El veredicto cantaba "RECORRIDO COMPLETO" sobre un paso que nunca midió** — cerrado el
+  2026-09-03 (`17aaec727`). En importadora el paso 7 salió `no-medido` y el 8 verde; como el
+  veredicto miraba `ultimoOk` (el **último** paso verde, no hasta dónde se llegó de corrida),
+  valía 8 y el script imprimió "RECORRIDO COMPLETO: los 8 pasos", con `corte: null` en el
+  `resumen.json`: el agujero desaparecía hasta del JSON. Ahora "completo" exige que no haya ni un
+  paso fuera de OK, y el agujero **tapado por un verde posterior** se enumera aparte. Rojo antes /
+  verde después, con los datos reales de esa corrida, en `../recorrido/ULTIMO_RECORRIDO.md`.
+
+- **El recorrido entero en ESTÉTICA Y SPA, el tercer rubro** — cerrado el 2026-09-03 19:09 UTC,
+  8 de 8 (`RECORRIDO_RUBRO='Estética y spa' node scripts/recorrido_cliente.mjs --escribir`).
+  Vocabulario del rubro correcto de punta a punta ("Clientas", "Buscar clientas…", botón
+  "Clienta"), dato cargado y encontrado de vuelta, y el panel **contó la clienta nueva**: pasó de
+  "0 clienta(s) nuevas este mes" a "1" entre `paso-06-menu.png` y `paso-08-bandeja.png`. Nada del
+  producto se rompió.
 
 - **El recorrido entero en COMERCIO, el segundo rubro** — cerrado el 2026-09-03 16:14 UTC, 8 de 8
   (`RECORRIDO_RUBRO='Comercio / tienda' node scripts/recorrido_cliente.mjs --escribir`). Producto
@@ -87,19 +114,17 @@ una licencia para corregir nada.
 
 ## Procedimiento vigente para correr el recorrido entero
 
-Son **DOS corridas**, y no se puede evitar:
+Es **UNA sola corrida**:
 
-    node scripts/recorrido_cliente.mjs --escribir     # crea la cuenta zz-qa- y frena en el paso 4
+    node scripts/recorrido_cliente.mjs --escribir     # los 8 pasos de punta a punta
 
-⚠️ Con la cuenta recién creada **el paso 4 rebota a propósito**: el alta manda correo de
-confirmación y sin confirmar no se entra (`email_not_confirmed`). Para seguir hay que confirmar
-**la fila `zz-qa-` y sólo esa**:
-
-    docker exec -i supabase-db psql -U postgres -d postgres \
-      -c "update auth.users set email_confirmed_at=now() where email like 'zz-qa-%';"
-
-(`confirmed_at` es columna generada: no se puede tocar y devuelve error. Es esperado.)
-Después, la segunda corrida mide del 4 al 8.
+⚠️ **Acá decía "son DOS corridas, y no se puede evitar"**, y mandaba a correr a mano un
+`update auth.users set email_confirmed_at=now()`. Las dos cosas son falsas desde que el
+instrumento tiene `confirmarComoElCliente()`: lee el `confirmation_token` con un **SELECT**
+acotado a `zz-qa-` y **abre el enlace real del mail en el mismo navegador**, igual que el
+cliente. Escribir `email_confirmed_at` a mano sería fingir justo el paso que se está midiendo —y
+dejaría de avisar el día que el correo no salga—, así que **no se hace**. Un procedimiento
+vencido que manda a escribir en `auth.users` es de los peores docs que puede tener este carril.
 
 ⚠️ **Todo esto escribe en la base de PRODUCCIÓN** (`supabase-db` del VPS, schema `public`).
 Reglas que no se negocian:

@@ -12,6 +12,58 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## Medido el 2026-09-03 19:14 UTC — rubros ESTÉTICA e IMPORTADORA
+
+### 🟢 Estética y spa: los 8 pasos, tercer rubro entero
+
+    RECORRIDO_RUBRO='Estética y spa' node scripts/recorrido_cliente.mjs --escribir
+
+Sin una sola sorpresa. El vocabulario del rubro está bien puesto de punta a punta: el menú dice
+**Clientas**, el buscador "Buscar clientas…", el botón "Clienta" y el pie del panel
+"1 clienta(s) nuevas este mes". El dato se cargó en Clientas (`/patients`), se encontró de vuelta
+en la lista, y el panel **contó la clienta nueva**: `paso-06-menu.png` decía "0 clienta(s) nuevas
+este mes" y `paso-08-bandeja.png`, después del alta, dice "1". La pantalla de cobro es
+**Facturación** (`/billing`) y se vio entera.
+
+### 🔴 Importadora: el recorrido cantó COMPLETO sobre un paso que nunca midió
+
+    RECORRIDO_RUBRO='Importadora / distribuidora' node scripts/recorrido_cliente.mjs --escribir
+
+Los pasos 1-6 y el 8 salieron verdes; **el 7 salió `no-medido`** —"pedí `/billing` y terminé en
+`/dashboard`"— y aun así el script imprimió **"RECORRIDO COMPLETO: los 8 pasos"**, con
+`corte: null` en el `resumen.json`. **Ese fue el hallazgo de la vuelta, y era del instrumento, no
+del producto.**
+
+La causa: el veredicto miraba `ultimoOk`, que guarda el **último** paso verde y no hasta dónde se
+llegó de corrida. Con el 7 en agujero y el 8 en verde valía 8, la comparación contra los 8 pasos
+daba verdadero, y `corte` salía null porque busca un fallo con `n > ultimoOk` y no hay paso
+después del 8. **El agujero desaparecía hasta del JSON.** Es la misma familia de falso verde que
+este script ya tuvo en los pasos 5-8, con otra forma: antes por confiar en un 200, ahora por
+confiar en el último verde.
+
+Arreglado (`17aaec727`). Rojo antes, con los datos reales de esa corrida: `RECORRIDO COMPLETO:
+los 8 pasos`. Verde después: `LLEGÓ HASTA EL PASO 6 de 8 de corrida` + `AGUJERO en el paso 7`.
+Ahora "completo" exige que **no haya ni un paso fuera de OK**, y el agujero **tapado por un verde
+posterior** —el único que el veredicto viejo borraba— se enumera aparte.
+
+### Y el paso 7 de importadora tampoco era culpa del producto
+
+Antes de acusar al producto miré su código: **el pack de importadora no trae Caja ni Facturación
+a propósito** (`onia-platform/lib/platform/vertical-pack.ts:155-156`). Ese rubro cobra por
+**Créditos** (`/comercio/fiados`) y **Cotizaciones** (`/importadora/cotizaciones`) — se ve en
+`capturas/paso-07-cobro.png`, que muestra el menú completo sin Facturación por ningún lado.
+
+El patrón que busca la pantalla de cobro en el menú (`caja|cobro|facturación|billing|pagos`) no
+conocía esos nombres, se cayó al `/billing` de dental y el producto redirigió al panel. Corregido
+en el mismo carril: ahora busca en tres tandas, en el orden en que un rubro cobra —donde entra la
+plata (caja, facturación, créditos/fiados) y recién después el paso previo (cotizaciones)—.
+Verificado contra los cuatro menús reales: importadora→Créditos, comercio→Caja,
+dental→Facturación, estética→Facturación.
+
+**Falta volver a correr importadora** para medir su paso 7 de verdad. Queda en la cola.
+
+---
+
 ## Medido el 2026-09-03 16:14 UTC — rubro COMERCIO
 
 ### 🟢 Los 8 pasos, y por primera vez en un rubro que no es dental

@@ -1096,8 +1096,23 @@ const PASOS = [
       // comercio rebota al panel, y el paso reportaba "no se llegó a la pantalla de cobro" como
       // si el producto no la tuviera — estaba ahí, en el menú, con otro nombre. La pantalla de
       // cobro se busca en el menú que ve ESTE rubro y sólo se cae a /billing si no hay ninguna.
+      //
+      // 🔴 Y el 2026-09-03 volvió a pasar, con IMPORTADORA: su pack no tiene Caja NI Facturación
+      // —verificado en el código del producto, `lib/platform/vertical-pack.ts:155-156`: ese rubro
+      // trae "Créditos" (`/comercio/fiados`) y "Cotizaciones" (`/importadora/cotizaciones`)— así
+      // que ningún nombre del patrón matcheaba, se cayó al `/billing` de dental, el producto
+      // redirigió al panel y el paso salió no-medido. NO es un fallo del producto: es este patrón
+      // que no conocía cómo se llama el cobro en ese rubro. Por eso los nombres se agregan acá,
+      // en el orden en que un rubro cobra: primero donde entra la plata (caja, facturación,
+      // créditos/fiados) y recién después el paso previo (cotización), que es cobro futuro.
       const menu = ctx.menu?.length ? ctx.menu : await descubrirMenu(page);
-      const cobro = menu.find((m) => /caja|cobro|facturaci[óo]n|billing|pagos/i.test(m.texto));
+      const COBRO = [
+        /caja|cobro|facturaci[óo]n|billing|pagos/i,   // dental, comercio, servicios, estética
+        /cr[ée]ditos|fiados|cuentas por cobrar/i,     // importadora: la plata que le deben
+        /cotizaciones|presupuestos/i,                 // importadora: el paso previo al cobro
+      ];
+      let cobro = null;
+      for (const p of COBRO) { cobro = menu.find((m) => p.test(m.texto)); if (cobro) break; }
       const ruta = cobro?.ruta || '/billing';
       const v = await llegar(page, ruta, 'paso-07-cobro.png');
       const comoSeLlama = `la pantalla de cobro (${cobro?.texto?.replace(/^\S+\s/, '') || 'Facturación'})`;
