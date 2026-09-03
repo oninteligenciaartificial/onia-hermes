@@ -19,6 +19,7 @@ TOPE_ENTRADAS=120   # a partir de aca se le pide a Hermes que compacte SOLO lo a
 [ -d "$INBOX" ] || exit 0
 mkdir -p "$HECHOS"
 shopt -s nullglob
+# Mirada barata ANTES del cerrojo: si no hay nada, no vale la pena pelear por el.
 PENDIENTES=("$INBOX"/*.md)
 [ ${#PENDIENTES[@]} -eq 0 ] && exit 0
 
@@ -28,6 +29,16 @@ normalizar() {  # minusculas, sin acentos ni puntuacion ni espacios dobles: dos 
 
 exec 9>"$LOCK"
 if ! flock -w 30 9; then echo "no consegui el cerrojo de la memoria en 30s"; exit 1; fi
+
+# 🔴 La lista se toma DE NUEVO, ya con el cerrojo. Medido el 2026-09-03 con dos
+# consolidadores a la vez: los dos tomaron la misma lista antes del cerrojo, el
+# primero proceso y movio los archivos, y el segundo —con la lista vieja— hizo
+# `cat` de archivos que ya no estaban, obtuvo vacio, y METIO UNA ENTRADA VACIA en
+# MEMORY.md. El cerrojo serializaba bien; lo que no estaba protegido era la foto
+# de la bandeja. Una entrada vacia en la memoria es peor que un archivo corrupto:
+# no rompe nada y se queda para siempre.
+PENDIENTES=("$INBOX"/*.md)
+[ ${#PENDIENTES[@]} -eq 0 ] && { flock -u 9; exit 0; }
 
 # Firmas de lo que YA esta, para no repetir. La firma del bloque es la del hecho
 # sin su linea de "aprendido por": dos loops que aprendieron lo mismo en dias
@@ -42,7 +53,11 @@ fi
 
 AGREGADOS=0; REPETIDOS=0
 for f in "${PENDIENTES[@]}"; do
+  # Defensa en profundidad: aunque la lista ya es de adentro del cerrojo, un
+  # archivo ausente o vacio NUNCA se convierte en entrada. Vacio = se descarta.
+  [ -s "$f" ] || { rm -f "$f" 2>/dev/null; continue; }
   cuerpo=$(cat "$f")
+  [ -n "$(printf '%s' "$cuerpo" | tr -d '[:space:]')" ] || { rm -f "$f"; continue; }
   h=$(printf '%s' "$cuerpo" | grep -v '^— aprendido por' | normalizar | md5sum | cut -c1-16)
   if [ -n "${YA[$h]:-}" ]; then
     REPETIDOS=$((REPETIDOS + 1))
