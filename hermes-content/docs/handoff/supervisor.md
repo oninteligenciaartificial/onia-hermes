@@ -3,142 +3,125 @@
 Audita a los otros loops: que ninguno cobre por trabajo que no sirve. Rama `claude/supervisor`.
 No mergea a `main` (eso es de `onia-cola`) y no arregla carriles ajenos: deja la tarea en el tablero.
 
-**Última vuelta: 2026-09-03 18:29 UTC.**
+**Última vuelta: 2026-09-03 20:29 UTC.**
 
 ---
 
 ## Objetivo de la vuelta
 
-Auditar a fondo el carril **menos mirado**. **Fallé en elegirlo** —volví a `tendencias`, que el
-handoff anterior marcaba como "no re-auditar"— y el hallazgo de la vuelta terminó siendo **el
-error de selección en mi propio prompt**, que ya lo había cometido la vuelta anterior.
+Auditar a fondo el carril **menos mirado**. Esta vez **el handoff sí eligió**: entré por
+*"Próximos pasos"* (la corrección de prompt de la vuelta anterior funcionó) y me tocó
+**`docs-auditoria`** — nunca auditado, y el más parecido a mí: su trabajo es que lo escrito sea
+cierto.
 
 **Hecho =** decir si el trabajo de un carril sirve o no, con evidencia **medida**, no leída.
 
+## Veredicto: `docs-auditoria` SIRVE — pero hace 7 h no puede entregar nada
+
+Las dos mitades importan y son independientes:
+
+**Su trabajo es bueno.** Spot-check de su commit `68540a6cb`: afirmaba que
+`ONIA_CATALOGO_DE_VENTA.md` decía *"se venden 3"* rubros y son **5**. Verificado contra el
+producto, no contra su prosa:
+
+    git -C /root/loops/onia-platform show origin/master:lib/platform/rubros-activos.ts | grep -cE "^\s+\{"   # → 5
+
+Cita las tres fuentes (`rubros-activos.ts` = 5, `SUPPORTED_VERTICAL_TRACK_IDS` = 7,
+`contract.json` = 11 tracks) y explica **por qué importaba**: el barrido del 30-ago arregló la
+prosa y la tabla y se olvidó de la línea de resumen, que es la que se lee cuando se busca el
+número — le sacaba dos rubros a la venta. Es exactamente su definición de hecho, y la última
+vuelta (17:24) además **retiró un bloqueo vencido** y **corrigió una evidencia muerta** en el
+tablero, dejando bloqueado lo que no era su decisión. Nada de las seis señales de basura.
+
+**Y no llega a nadie.** `git push` de `claude/docs-auditoria` viene **rechazado por
+non-fast-forward** desde la vuelta de las 13:24 UTC:
+
+    cd /root/loops/onia-hermes-docs && git push --dry-run origin claude/docs-auditoria
+    # ! [rejected]  claude/docs-auditoria -> claude/docs-auditoria (non-fast-forward)
+
+La rama remota **se reescribió debajo suyo**: `origin/…` (`68540a6cb`) no es ancestro del HEAD
+local (`6c81192b4`), y la prueba de la reescritura es que el commit local `6716983f5` y el remoto
+`68540a6cb` tienen **contenido idéntico y sha distinto** (`diff` de los dos `show` → vacío).
+Divergencia: `git rev-list --left-right --count origin/claude/docs-auditoria...HEAD` → `1 34`.
+
+**Se perdió 1 commit, no 34.** `6c81192b4` (34 líneas en
+`hermes-content/references/modelos/lucia/BITACORA-PERFECCION.md`) **no existe en ninguna rama
+publicada** — buscado con `git grep` del texto del arreglo sobre las 40 refs de `origin`: cero.
+Los otros 33 ya están publicados por otras ramas (32) o son el duplicado de contenido (1).
+
+**Barrido a los 17 worktrees del VPS: `docs-auditoria` es el único atrapado.** (`onia-hermes`
+está 12 detrás de `main`, que es fast-forward, no divergencia.)
+
+## La alerta grita 34 cuando el daño es 1
+
+`/root/bin/onia-loop.sh:371` cuenta con `git log @{u}..HEAD`, que **incluye todo lo ya publicado
+por otras ramas**. El número honesto es `git log HEAD --not --remotes=origin`:
+
+| lo que cuenta | resultado |
+|---|---|
+| `@{u}..HEAD` — lo que grita el aviso | **34** |
+| `HEAD --not --remotes=origin` — huérfanos reales | **2** |
+| trabajo genuino perdido (el otro es duplicado) | **1** |
+
+Es el modo de falla del vigía que ya nos costó caro: **un aviso inflado 34× se deja de leer**, y
+éste va a repetirse cada 4 h para siempre porque la divergencia no se cura sola.
+**No toqué el corredor**: la maquinaria de loops está congelada 7 días por decisión del 2026-09-03
+16:23, y esto no es un loop muerto sino uno mudo. Queda escrito en la tarea.
+
 ## Qué quedó en producción
 
-Nada desplegado — este carril no despliega. Lo que quedó:
+Nada desplegado — este carril no despliega.
 
-- **`scripts/loops/prompts/supervisor.md` corregido** (abajo el porqué). Se enciende solo en la
-  próxima vuelta: `onia-loops-sync.sh` copia desde `main` cada hora al minuto 44, así que
-  **necesita que `onia-cola` mergee esta rama primero**.
-- **`tendencias` confirmado SIRVE**, ahora con 4 de 4 fuentes verificadas en vivo (antes 1).
-- **Un ítem fantasma medido** en la cola de `tendencias` (no lo toqué: no es mi zona).
-
-## El hallazgo de la vuelta: mi prompt me mandaba a elegir mal, y ya había fallado igual
-
-`scripts/loops/prompts/supervisor.md:221` decía: *"el que menos se haya auditado; **mirá tus
-commits** para saber cuál"*.
-
-**Tus commits miden actividad, no cobertura.** La mitad se llaman `fix(canario)` o
-`merge(chatbot)` y hablan del trabajo, no de a quién auditaste. Entrando por ahí se elige **el
-carril con más commits** — casi siempre uno ya auditado. Pasó dos vueltas seguidas:
-
-| vuelta | eligió | por qué | lo que decía el handoff |
-|---|---|---|---|
-| 16:29 | `web-venta` | volumen de commits | *"ya auditado"* — lo confesó: *"fue suerte, no método"* |
-| 18:29 | `tendencias` | 19 commits en 24 h | **"No re-auditar `tendencias`"**, tres líneas más arriba |
-
-La lista curada de **ya auditados / nunca auditados** existe y vive en la sección *Próximos
-pasos* de este mismo archivo. El prompt **nunca la nombraba**. Corregido: ahora el primer
-comando de la vuelta, antes de mirar ninguna rama, es
-
-    sed -n '/## Próximos pasos/,/^---/p' hermes-content/docs/handoff/supervisor.md
-
-**Probado antes de escribirlo en el prompt** (exit 0, devuelve la lista entera).
-
-## `tendencias` SIRVE — y es el único carril cuyo producto puede auditar un tercero
-
-Su receta de gancho de ads (`d3dec5004`) cita **8 anuncios reales con su `Library ID`** de la
-Biblioteca de Anuncios de Meta. **Abrí 4, con el chromium que el propio documento nombra:**
-
-| Library ID | Qué declaraba | Qué devolvió el DOM |
-|---|---|---|
-| `1449643883671583` | Sinergya (BO) · *¿TODAVÍA MANEJAS VENTAS, INVENTARIO…?* | ✅ exacto |
-| `2278391992977905` | Skyia (AR) · *Turnos desordenados, historias clínicas sueltas…* | ✅ exacto |
-| `984827984515873` | Easysocio · alta 27 may 2026 | ✅ `Started running on May 27, 2026`, `Active` |
-| `28387590097593386` | Omnia Salud · 17 dígitos (los demás tienen 16) | ✅ real, resuelve a `Omnia` |
-
-El de Easysocio importa aparte: sostiene la **única** afirmación cercana a rendimiento del
-documento (*"más de tres meses de gasto continuo"*), y el documento ya la marca como **inferencia,
-no métrica**. La ruta de reproducción (`chromium-1234`) **existe y corre**; no era un placeholder.
-
-**Lo que NO verifiqué, y no lo voy a escribir como verificado:** el agregado *"16 de 30 anuncios
-abren nombrando la herramienta vieja"*. Comprobé los átomos auditables (los `Library ID`), no el
-recuento — habría que rehacer las 4 búsquedas enteras.
-
-## Ítem fantasma en la cola de `tendencias` — anotado, NO tocado
-
-`hermes-content/docs/cola/tendencias.md`, sección *"Visto fuera de mi zona"*, afirma:
-
-> *"Hay 5 loops en `crontab -l` del VPS que NO figuran en la tabla de `docs/cola/loops.md`:
-> `tendencias`, `recorrido-cliente`, `web-factory-dev`, `calidad-generado` y `supervisor`."*
-
-**Falso hoy.** Los 5 están en la tabla y en el cron — medido en el chequeo de arranque de esta
-misma vuelta, y de nuevo uno por uno:
-
-    for l in tendencias recorrido-cliente web-factory-dev calidad-generado supervisor; do
-      grep -c "^| \`$l\`" hermes-content/docs/cola/loops.md; done   # → 1,2,2,2,2 (nunca 0)
-
-Era cierto cuando se escribió y lo cerró `docs-auditoria` después. **Es zona de `tendencias`: no
-edité su archivo.** Cuesta poco (es una nota al pie, no un `[x]` falso), pero es el ítem que su
-próxima vuelta debería borrar en 30 segundos.
+- **`t_655483f6`** (prioridad 1, `ready`) para el integrador: la divergencia, el commit exacto
+  que se perdió, y la recuperación **ya probada limpia** — la base del commit y la de `origin`
+  son el mismo archivo de 582 líneas (`cmp -s`), así que el cherry-pick aplica sin conflicto.
+- Aviso a Sergio por Telegram, una línea, en castellano llano.
 
 ## Archivos
 
-- `scripts/loops/prompts/supervisor.md` — regla de selección de carril (línea 219+)
 - `hermes-content/docs/handoff/supervisor.md` (este)
+- Tarea `t_655483f6` en el tablero (no es archivo del repo)
 
 ## Intentos fallidos — lo que NO era
 
-1. **"El integrador está ciego a `tendencias`."** **Refutado midiendo**, y era la hipótesis
-   atractiva: su receta lleva 6 h 30 sin llegar a `main`. Pero `origin/claude/tendencias` en el
-   clon del integrador apunta a `d3dec5004` (ref **fresco**, igual que `ls-remote`), la rama
-   **sí aparece** en su enumeración `--no-merged`, y el merge da **0 conflictos**. El integrador
-   corrió 6 veces en esas horas, todas `exit 0`, mergeando otros carriles de a ~2 por vuelta con
-   los gates completos. **No es un fallo: es cola.** Reportarlo como bug habría mandado a alguien
-   a arreglar algo sano — el modo de falla que este carril existe para no cometer.
-2. **"El archivo de la receta no existe."** Casi lo reporto en los primeros 2 minutos: `ls` daba
-   *No such file or directory*. Es **mi worktree con `sparse-checkout`** (`supervisor` no está en
-   la lista `NO_TOCAR` de `onia-aligerar-worktrees.sh`, y esa lista excluye
-   `/hermes-content/references`). El contenido está en el objeto git y se lee con
-   `git show <rama>:<ruta>`. **Un `ls` desde este worktree no prueba que un archivo no exista.**
-3. **"El `chromium-1234` del comando documentado es un placeholder."** No: es un build real
-   instalado (`chromium-1223` y `chromium-1234` conviven en `/root/.cache/ms-playwright/`).
+1. **"El corredor sale exit 0 y por eso nadie se entera."** **Refutado.** Era la hipótesis
+   atractiva —calca el caso `lucia-ugc.sh` de la memoria compartida— y es **falsa acá**:
+   `onia-loop.sh:385` sí llama a `avisar` cuando `SINPUSH != 0`, y el aviso salió las dos veces.
+   El defecto real no es el silencio sino **el número**. Reportarlo como "falla muda" habría
+   mandado a alguien a arreglar un mecanismo que funciona.
+2. **"Se perdieron 34 commits."** Lo que dice el log del corredor, y es el número que casi
+   escribo. 32 ya estaban publicados por otras ramas y 1 es duplicado de contenido.
+3. **"`docs-auditoria` está seco o inventa."** No: sus dos últimas vueltas produjeron un arreglo
+   real sobre una fuente de verdad y una limpieza de evidencia vencida en el tablero, y la del
+   17:24 **reportó honestamente "sin commit"** y confesó que su `merge --ff-only` había fallado.
+   Una vuelta sin commit por rama trabada es honestidad, no basura.
 
 ## Qué depende de Sergio
 
-**Nada nuevo.** No abrí tarea ni anoté en el radar: lo único vivo sigue siendo `t_68671bc3`
-(publicar `onia.com.bo`), ya preguntada desde las 03:50 y con el precio corregido la vuelta
-pasada. Repetirle una decisión ya hecha es peor que no preguntar.
+**Nada nuevo.** `t_655483f6` es una decisión técnica, y por la regla del 2026-09-03 ésas las toma
+la sesión de control y quedan escritas en la tarea: a Sergio sólo se le piden plata, marca y
+contactar personas. Por eso quedó `ready`, **no** `needs_input`.
 
 ## Próximos pasos
 
-1. **Auditar `docs-auditoria`. Es el próximo, y no se negocia por volumen de commits.** Es el
-   más valioso de los nunca mirados: su trabajo es el más parecido al mío (que lo escrito sea
-   cierto), así que si produce basura, la produce **sobre la verdad del repo**.
+1. **Auditar `web-factory-dev`.** Es el próximo de los nunca mirados.
    **Ya auditados:** `web-venta`, `chatbot`, `lucia`, `onia-cola`, `recorrido-cliente`,
-   `calidad-generado`, `tendencias`.
-   **Nunca auditados:** `docs-auditoria`, `web-factory-dev`, `marca-personal`, `canario-visual`,
-   `investigacion`.
-2. **No re-auditar `web-venta` ni `tendencias`.** Para `web-venta`, listo =
-   `curl -s -o /dev/null -w '%{http_code}\n' https://onia.com.bo/favicon.ico` devuelve `200`.
-   Mientras dé 404, todo lo que commitee ese carril sigue sin llegar al cliente.
-3. **Observación sin daño probado, para no perderla:** la enumeración `--no-merged` del
-   integrador devuelve **34 ramas y sólo 11 están vivas** (commit de hoy); las otras **23 llevan
-   muertas desde julio/mediados de agosto** y arrastran 129 commits viejos. No probé que eso le
-   cueste nada — el integrador acierta el carril igual. **No abrir tarea hasta poder demostrar
-   el daño**, o se manda a alguien a limpiar por estética.
-4. Sigue abierto de tres handoffs atrás: la rama de `kpis-semanal`
+   `calidad-generado`, `tendencias`, `docs-auditoria`.
+   **Nunca auditados:** `web-factory-dev`, `marca-personal`, `canario-visual`, `investigacion`.
+2. **Verificar que `t_655483f6` se ejecutó.** Listo =
+   `git -C /root/loops/onia-hermes-docs log --oneline HEAD --not --remotes=origin` devuelve
+   **vacío**. Mientras devuelva algo, ese carril sigue trabajando para nadie.
+3. **`loops.md` quedó atrás del `crontab` en 5 loops** (`canario-visual`, `docs-auditoria`,
+   `investigacion`, `marca-personal`, `supervisor`): las cadencias se bajaron el 2026-09-03 16:23
+   y la tabla versionada sigue con las viejas. **No lo toqué** —es zona de `docs-auditoria`, y
+   justo ese carril no puede pushear— pero tiene un filo: el chequeo de arranque de los 15
+   prompts manda a *"volver a poner la línea exactamente como dice la columna `cron`"*, así que
+   un loop podría **restaurar la cadencia alta que Sergio bajó a propósito**. No probé que haya
+   pasado; medirlo antes de abrir tarea.
+4. Sigue abierto de cuatro handoffs atrás: la rama de `kpis-semanal`
    (`claude/marca-personal-loop`) no figura en `loops.md`. Listo = saber si debe estar.
-5. Ninguna tarea `ready` del tablero era de esta zona: `t_8baa5891` y `t_13eaa0ae` son pruebas,
-   `t_ad2df41f` está reclamada por `carril-tendencias`. No se reclamaron a propósito.
+5. **Observación sin daño probado** (de la vuelta anterior, no re-medida): la enumeración
+   `--no-merged` del integrador devuelve 34 ramas y sólo 11 están vivas. No abrir tarea hasta
+   poder demostrar el daño.
 
 ---
-
-## Chequeo de arranque — 2026-09-03 18:29 UTC
-
-**Los 15 loops de `loops.md` tienen línea en `crontab -l`, y los 15 corrieron.** Verificado en
-los dos pasos: registro (`crontab -l`) **y** ejecución (última línea `ARRANCA` de
-`/var/log/onia-loop-<id>.log`). Comparadas **las dos direcciones** —cron→tabla y tabla→cron—
-con `comm`: **cero diferencias**. Ninguno quedó atrás de su cadencia. Nada que rearmar.
