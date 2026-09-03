@@ -163,6 +163,10 @@ poner "$FUENTE/hermes-vigia.sh"            "$DESTINO_BIN/hermes-vigia.sh"
 poner "$FUENTE/vigia-aprobaciones.sh"      "$DESTINO_BIN/onia-vigia-aprobaciones.sh"
 # Renovar la sesion OAuth de Higgsfield desde un VPS sin navegador (2026-09-03:
 # el servidor la revoco sin que venciera; el CLI solo sabe abrir un navegador).
+# Reinicio del gateway de Hermes con SUS comandos (gateway stop / run), nunca
+# pkill: el 2026-09-03 pkill dejaba vivo al supervisor de Hermes, que relanzaba
+# al hijo -> "Gateway (re)started 6 times in 120s", dos instancias peleando.
+poner "$FUENTE/hermes-gateway-restart.sh"  "$DESTINO_BIN/hermes-gateway-restart.sh"
 poner "$FUENTE/hf-login-start.sh"          "$DESTINO_BIN/hf-login-start.sh"
 poner "$FUENTE/hf-login-finish.sh"         "$DESTINO_BIN/hf-login-finish.sh"
 
