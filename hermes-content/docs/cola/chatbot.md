@@ -329,6 +329,35 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       vez (`grep -c` → 0) y **eso no es el bug** — le pasa el `result` entero a
       `buildBotTurnEvent` (línea 450), así que el aviso sube bien. Muere en el envío, no en el
       armado.
+      ✅ **CONSTRUIDO HASTA EL BORDE el 2026-09-03 20:20 UTC — falta el deploy, no la decisión.**
+      La opción (a) del tablero está escrita, probada y apagada: `hermes-content/deploy/vps-ops/bot/aviso-telegram.mjs` +
+      su test (18 casos), cableado en `hermes-content/deploy/vps-ops/bot/webhook-server.mjs`. Encenderla es
+      `ONIA_BOT_TG_AVISO=true`; si Sergio elige (b) n8n, el flag se queda en `false` y no cambia
+      nada. **No se decidió por él: se le sacó el trabajo de encima para que su respuesta sea un
+      "sí" y no un proyecto.**
+      🔎 **La justificación del canal muerto era FALSA, y por eso esto se pudo escribir sin
+      pedir nada.** `hermes-content/deploy/vps-ops/bot/chatwoot-adapter.mjs:761` dice que el aviso va por n8n *"porque ahí vive la
+      credencial de Telegram (el plan VPS no soporta `$env` en los nodos, así que el token no
+      puede vivir acá)"*. Lo de n8n es cierto; **la conclusión no**: el límite es de los NODOS de
+      n8n, no del bot. El bot es un proceso de Node en el mismo VPS y el token ya está en dos
+      archivos que otros procesos leen hace meses — `/root/.hermes/.env` (`TELEGRAM_BOT_TOKEN`,
+      lo usa `/root/bin/onia-tg.sh`) y `/root/.config/onia/backup.env` (`TG_BOT_TOKEN`/`TG_CHAT_ID`, lo usa
+      `/opt/onia/bot/webhook-watchdog.sh` **cada 2 minutos por cron**). No faltaba ninguna credencial: faltaba
+      el código. Un comentario que explica por qué algo no se puede hacer es una hipótesis, y
+      esta llevaba semanas sin que nadie la midiera.
+      **Dos cosas distintas ya no comparten interruptor**, que es el bug de fondo y sobrevive a
+      cualquiera de las tres opciones: el aviso viajaba como un campo (`notifyCount`) DENTRO del
+      evento de n8n, así que apagar la analítica apagaba también lo único de ese evento que no es
+      analítica. Ahora sale por su propio camino y deja línea en el log **salga o no** — el modo
+      de falla de este carril es justamente el aviso que no sale y nadie lo nota.
+      **Rojo primero, por el motivo correcto** (pinchando el módulo a propósito y restaurándolo):
+      sin el escape de HTML el `<script>` de un prospecto sale crudo, y sin mirar el `ok:false`
+      un 200 de Telegram que descartó el mensaje se lee como enviado — los dos falsos verdes que
+      harían que el aviso muera igual que ahora, pero con mejor cara. **772 casos verdes** en
+      `node --test` (754 → 772).
+      🔴 **NO DESPLEGADO** — `hermes-content/deploy/vps-ops/bot/espejo-check.mjs` lo dice:
+      el archivo nuevo falta en el VPS y `hermes-content/deploy/vps-ops/bot/webhook-server.mjs` difiere. El deploy es de `onia-cola`. Y sigue pendiente la decisión de
+      Sergio (`t_b18ca430`), que ahora es sólo encender un flag.
 
 - [x] 🔴 **El que ESPERA a un humano prometido era invisible para todo el sistema: el único vigía
       que mira la bandeja lo descartaba con un `// ya le contestaron` que en un handoff es
