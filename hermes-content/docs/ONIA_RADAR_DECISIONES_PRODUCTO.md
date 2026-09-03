@@ -1910,3 +1910,47 @@ verdad.**
 
 **Lo que ya es nuestro y está hecho:** el `case` del corredor, el prompt versionado, el worktree en
 la rama que no invade la suya, y la fila de `loops.md` alineada al cron real.
+
+---
+
+## 36. Dos carriles escribieron los MISMOS tres documentos de Lucía, y ninguno es dueño (2026-09-03) — decisión de Sergio
+
+**Lo que pasa.** `lucia` y `calidad-generado` crearon por separado, en la misma carpeta
+`hermes-content/references/modelos/lucia/`, los **mismos tres archivos** con el mismo propósito y
+contenido distinto:
+
+| archivo | versión de `lucia` (ya en `main`) | versión de `calidad-generado` |
+|---|---|---|
+| `RUBRICA-IMPOLUTO.md` | 45 líneas | 118 líneas |
+| `BANCO-OFICIAL.md` | 176 líneas | 146 líneas |
+| `BITACORA-PERFECCION.md` | 582 líneas | 176 líneas |
+
+**Ninguno es superconjunto del otro**: no se resuelve quedándose con el más largo.
+
+**Cómo se descubrió.** Al integrar el 2026-09-03: `lucia` mergeó limpio y, cuarenta segundos
+después, `calidad-generado` chocó `add/add` en los tres archivos. El merge se **abortó** —abortar
+es gratis— y sus 2 commits quedan sin mergear a propósito.
+
+**Por qué NO lo resuelve el integrador.** Elegir cuál rúbrica manda es decidir **con qué vara se
+mide la cara de Lucía**, y eso es contenido, no integración. Peor: fusionar las dos crearía
+*"dos fuentes de verdad del mismo tema"*, que es exactamente lo que `CLAUDE.md` prohíbe. La regla
+de ese archivo es explícita: *"Si hay dos versiones, no elegir la más linda: preguntar."*
+
+**La causa de fondo, que va a repetirse.** `COORDINATION_MANIFEST.md` **no nombra**
+`hermes-content/references/modelos/lucia/`. Sin dueño declarado, los dos carriles siguen
+escribiendo ahí y el choque vuelve en cada vuelta. Los dos loops están vivos y corren cada 3 h
+(`lucia` en `37 0,3,6,…`, `calidad-generado` en `5 3,9,15,21`).
+
+**Las dos opciones, cotizadas:**
+
+| | quién queda dueño | costo |
+|---|---|---|
+| **A. `calidad-generado`** | Es literalmente su oficio según `loops.md`: *"que Lucía sea SIEMPRE la misma cara"*. Su rúbrica es 2,6× más detallada | Hay que rehacer/portar lo que `lucia` ya dejó en `main`, incluida una bitácora de 582 líneas |
+| **B. `lucia`** | La carpeta lleva su nombre y su versión ya está viva en `main` | Se descarta la rúbrica más detallada y `calidad-generado` queda sin la herramienta de su propio trabajo |
+
+**Lo que hace falta de Sergio:** una línea — quién manda sobre `references/modelos/lucia/`. Con
+eso se anota en `COORDINATION_MANIFEST.md`, el otro carril deja de escribir ahí, y los 2 commits
+varados se mergean o se descartan según corresponda.
+
+**Lo que ya es nuestro y está hecho:** los otros cinco carriles varados (14 commits) están en
+`main`, y el merge conflictivo quedó **abortado y limpio**, no a medias.
