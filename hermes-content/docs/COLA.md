@@ -1061,6 +1061,36 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Discrimina** (mismo comando, resultados opuestos): producción **ROJO exit 1 · 6 fallas**;
       build de esta rama **VERDE exit 0**.
 
+      📮 **2026-09-03 — el deploy YA está pedido, con su número: `t_68671bc3` en el tablero,
+      `blocked / needs_input`.** Hasta hoy el pedido vivía sólo en el radar, que es un doc que
+      Sergio no lee desde el teléfono: por eso la franja llevaba **más de un día** viva en
+      producción con el arreglo ya en `main` (`f0248601`, del 2026-09-02). El tablero sí le
+      llega. **La próxima vuelta NO vuelve a preguntar** — mira `onia-tablero.sh list`; si
+      `t_68671bc3` sigue `blocked`, el deploy sigue sin decidirse y la franja sigue viva.
+      **Re-medido hoy con el instrumento arreglado, no heredado:** producción **6 fallas** en
+      `home` y `empezar` × 320 · 390 · 768, mirada la captura
+      (`/tmp/venta-0903/home-movil-390-pie.png`: pie negro y **debajo la franja clara**);
+      el build de esta rama, servido en `127.0.0.1:3987`, **sin defecto medible**, y mirado
+      también (`/tmp/venta-rama-0903/home-movil-390-pie.png`: el negro llega al borde).
+      **Gates de hoy:** `tsc --noEmit` exit 0 · `vitest` 132 pasan (5 archivos) · `next build`
+      exit 0, 32/32 páginas.
+
+      ✅ **Los precios de las dos pantallas se verificaron hoy contra las DOS fuentes de verdad,
+      y no hay deriva.** Se hizo porque la home imprime montos (`2.900 Bs/mes`,
+      `implementación desde 3.500 Bs`) desde una copia — `src/lib/pricing.ts` de esta app — que
+      vive en OTRO repo que el que manda, y nada la ataba. Contados uno por uno contra
+      `onia-platform/lib/subscription-plans.ts` (`DEFAULT_PLAN_AMOUNTS`): Básico 320/89/3.200 ·
+      Pro 750/199/7.500 · Full 1.500/–/15.000 · Grupo 2.900/–/29.000 — **los cuatro coinciden**.
+      Add-ons contra `onia-platform/lib/pricing.ts`: chatbot 390/3.900, reservas 150, usuario
+      extra 70 — **coinciden**. Ninguna pantalla define un número: la home los lee de
+      `@/lib/pricing` (`page.tsx:4`).
+      ⚠️ **Lo que queda sin dueño, y es un ítem para quien pueda cruzar de repo:** esa copia
+      coincide **hoy, por disciplina, no por un gate**. Un cambio de precio en `onia-platform`
+      no rompe nada acá: el sitio de venta seguiría publicando el número viejo mientras el
+      checkout cobra el nuevo. Un test de esta app no lo puede atar (el otro repo no viaja al
+      contenedor que sirve el sitio), así que el gate tiene que vivir del lado que tiene los dos
+      árboles a la vista.
+
 ### Encontrado el 2026-09-02, corriendo el canario — no es zona de este carril
 
 - [ ] 🟡 **El widget de chat (Chatwoot) responde 429 en `home` y `/empezar` — confirmado en vivo,
