@@ -127,7 +127,41 @@ function sonda(vw) {
     alPie: puntos,
     recortados: recortados.slice(0, 5),
     scrolleable: doc.scrollHeight > window.innerHeight + 2,
+    // Cuanto falta para el fondo real. Si esto no es ~0, la sonda de arriba midio a
+    // mitad de la pagina y NO vio el pie: ver `bajarHastaElFondo`.
+    faltaParaElFondo: Math.max(0, doc.scrollHeight - (window.scrollY + window.innerHeight)),
   };
+}
+
+/**
+ * Bajar hasta el fondo DE VERDAD, y decir si se llego.
+ *
+ * Un solo `window.scrollTo(0, scrollHeight)` no alcanza, y el falso verde que eso produjo
+ * es el motivo por el que existe esta funcion. Medido el 2026-09-03 contra produccion, en
+ * la home a 390px: `scrollHeight` = 14569, y despues del scrollTo + 700ms la pagina quedaba
+ * en `scrollY` = 11299 — a 2426px del fondo. Ahi `elementFromPoint` devuelve el DIV de una
+ * seccion cualquiera en vez de BODY, asi que el gate daba VERDE con la franja clara viva
+ * abajo (73px, el mismo numero que ya se habia medido a mano el dia anterior). El gate era
+ * ciego justo en la pantalla mas importante del sitio: la home.
+ *
+ * Dos causas, y se cubren las dos:
+ *  - `globals.css` tiene `scroll-behavior: smooth`, asi que el scrollTo ANIMA; 14569px de
+ *    animacion no entran en 700ms. Por eso `behavior: 'instant'`.
+ *  - la pagina puede crecer al revelar contenido, asi que el destino se corre mientras se
+ *    baja. Por eso se repite hasta que `scrollY` deja de moverse.
+ */
+async function bajarHastaElFondo(page) {
+  await page.evaluate(async () => {
+    let anterior = -1;
+    for (let i = 0; i < 40; i++) {
+      const y = window.scrollY;
+      if (y === anterior) break;
+      anterior = y;
+      window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' });
+      await new Promise((r) => setTimeout(r, 250));
+    }
+  });
+  await page.waitForTimeout(700);
 }
 
 mkdirSync(OUT, { recursive: true });
@@ -162,8 +196,7 @@ for (const vista of VISTAS) {
     const resp = await page.goto(url, { waitUntil: 'networkidle', timeout: 60_000 });
     const ms = Date.now() - t0;
     await page.waitForTimeout(900);
-    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-    await page.waitForTimeout(700);
+    await bajarHastaElFondo(page);
 
     const m = await page.evaluate(sonda, vista.width);
     const captura = join(OUT, `${pantalla.nombre}-${vista.nombre}-pie.png`);
@@ -177,6 +210,19 @@ for (const vista of VISTAS) {
       fallas.push(`${id}: texto recortado — "${m.recortados[0].txt}"`);
     }
     if (m.scrolleable) {
+      /**
+       * Antes de creerle a la sonda, exigirle que haya mirado el fondo. Sin esto el gate
+       * miente por OMISION: mide a mitad de pagina, no ve el pie, y como ahi hay contenido
+       * y no BODY, canta verde. Eso ya paso — es el bug que arreglo esta funcion. Una falla
+       * del INSTRUMENTO se reporta como falla, nunca como verde: si el gate no pudo mirar,
+       * no sabe, y "no sé" no es "está bien".
+       */
+      if (m.faltaParaElFondo > 2) {
+        fallas.push(
+          `${id}: el gate no llego al fondo (faltaron ${m.faltaParaElFondo}px) — no pudo mirar el pie, ` +
+            `asi que este resultado NO dice que la pantalla este bien`,
+        );
+      }
       const fondo = m.alPie.filter((p) => p.tag === 'BODY' || p.tag === 'HTML');
       if (fondo.length) {
         fallas.push(

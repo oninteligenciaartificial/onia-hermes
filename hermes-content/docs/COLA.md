@@ -1012,6 +1012,28 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       rojo para siempre por algo que no puede arreglar es un gate que nadie lee.
       **Gates:** `typecheck` exit 0 · `build` exit 0 · suite **132 pasan (5 archivos)**.
 
+      ⚠️ **Ese gate nació ciego en la HOME, y lo tapaba con un verde — corregido el 2026-09-03,
+      con la medición.** Bajaba con **un solo** `window.scrollTo(0, scrollHeight)` + 700 ms, y
+      `globals.css:194` tiene `scroll-behavior: smooth`: el scroll **anima**, y 14.569 px de
+      home no entran en 700 ms. Medido contra producción en móvil-390: quedaba en
+      `scrollY = 11299`, **a 2.426 px del fondo**. Ahí `elementFromPoint` devuelve el `DIV` de
+      una sección cualquiera en vez de `BODY` — así que el gate **daba verde con la franja
+      clara viva abajo** (73 px, exactamente el número que este mismo carril ya había medido a
+      mano el día anterior). O sea: el instrumento nuevo declaraba sana la pantalla **más
+      importante del sitio**, la primera que ve un lead.
+      **Arreglado en `scripts/mirar-venta.mjs`**, y no sólo la causa de hoy:
+      `bajarHastaElFondo()` usa `behavior: 'instant'` (mata la animación) y repite hasta que
+      `scrollY` deja de moverse (cubre la página que crece al revelar contenido). Y sobre todo,
+      la sonda ahora devuelve `faltaParaElFondo`: **si el gate no llegó al fondo, eso es una
+      FALLA, no un verde.** Un instrumento que no pudo mirar no sabe, y "no sé" no es "está
+      bien" — sin esa aserción, la próxima causa vuelve a producir un verde mentiroso.
+      **Lo que destapó, en números:** contra el mismo producción de siempre pasó de **2 fallas
+      a 6**. Las 4 que escondía son `home` en 320 · 390 · 768 (las tres, nunca vistas) y
+      `empezar @ movil-320`. Capturas miradas: `/tmp/venta-rojo/home-movil-390-pie.png` — se ve
+      el pie negro entero y **debajo la franja clara**.
+      **Discrimina** (mismo comando, resultados opuestos): producción **ROJO exit 1 · 6 fallas**;
+      build de esta rama **VERDE exit 0**.
+
 ### Encontrado el 2026-09-02, corriendo el canario — no es zona de este carril
 
 - [ ] 🟡 **El widget de chat (Chatwoot) responde 429 en `home` y `/empezar` — confirmado en vivo,
