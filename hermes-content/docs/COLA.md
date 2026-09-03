@@ -1406,10 +1406,31 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Evidencia:** `hermes-content/docs/historial/canario-visual/2026-09-02-chatbot-landing.png`
       — 449 KB / 684 ms / status 200 / `erroresConsola: ["…status of 429"]`.
 
-- [ ] 🟠 **La captura full-page de este canario es CIEGA en bandas enteras, y hoy se comió la
-      banda de precio de `/chatbot`.** Defecto de la herramienta propia
-      (`scripts/canario_visual.mjs`), no del sitio. Lo dejo escrito, no arreglado: se me acabó
-      la vuelta.
+- [x] 🟠 **CERRADO PARCIAL el 2026-09-03 07:55 UTC por `onia-cola` en `scripts/canario_visual.mjs`:
+      en `/chatbot` ya NO reproduce.
+      El defecto sigue vivo en `rubros`, y NO por el motivo que decía este ítem** — ver el ítem
+      de `rubros` más abajo, que ahora tiene la causa medida.
+      **Medido con el instrumento EXACTO del canario** (1440×900, `launch` **sin** `channel`
+      como lo lanza su copia, mismo scroll 300/800 ms, `fullPage: true`): la banda verde de
+      `/chatbot` sale **completa y legible** — *"PRECIO · Bs 390/mes, sin instalación · Es el
+      12 % del salario mínimo nacional 2026…"*. Captura mirada, no un exit code.
+      **Por qué se arregló sola:** el propio carril del canario subió el scroll de espera de
+      120/400 ms a 300/800 ms en `a0eafdcb1`, el **2026-09-03 03:46:17 UTC**. La última corrida
+      que reportó la ceguera fue la de las **03:41 — cinco minutos ANTES del arreglo**. El ítem
+      nació muerto: ya estaba arreglado cuando se escribió.
+      ⚠️ **Y una hipótesis mía que probé y salió FALSA, anotada para que nadie la repita:**
+      sospeché que la ceguera era el mismo rasterizador que causó `"Ent regamos t u sist ema"`,
+      porque el worktree del canario **no tiene** `opcionesDeChromium`/`channel: 'chromium'`.
+      Capturé la misma página en el mismo instante **con y sin** `channel`: la banda sale
+      perfecta en las dos. No es el rasterizador. Probarla costó dos minutos.
+      ⚠️ **Lo que sí sigue siendo cierto y es del carril del canario:** su worktree está
+      **281 commits atrás de `main`** (el ítem de arriba decía 91 — ese número ya venció) y no
+      tiene el `channel: 'chromium'`. No causa *esta* ceguera, pero es deuda viva.
+
+<details><summary>Lo que decía este ítem antes de medirlo — historia</summary>
+
+      Defecto de la herramienta propia (`scripts/canario_visual.mjs`), no del sitio. Lo dejo
+      escrito, no arreglado: se me acabó la vuelta.
       - La pasada de las 04:41 UTC ya lo había visto en `rubros` y `contacto` (líneas 593-599) y
         lo cerró como "artefacto conocido". **Hoy demuestra ser peor que un artefacto cosmético:**
         en `/chatbot` la banda verde que salió vacía es la que dice **"Bs 390/mes, sin
@@ -1430,6 +1451,8 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         dos capturas de prueba de hoy y la de ayer).
       - **Mientras tanto, una banda vacía en una captura de este canario NO prueba nada** — ni que
         el sitio esté roto ni que esté bien. Hay que ir al viewport.
+
+</details>
 
 - [ ] 🟢 **Las otras nueve pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
       Pesos/tiempos de hoy: home 2.857 KB/367 ms · precios 2.108 KB/803 ms · empezar 2.253 KB/464 ms ·
@@ -1545,11 +1568,41 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Evidencia:** capturas de hoy (foto de un día, no baseline) en
       `hermes-content/docs/historial/canario-visual/2026-09-03-{home,precios,empezar,rubros,chatbot-landing}.png`.
 
-- [ ] 🟠 **La captura full-page ciega (ya reportada 2026-09-02) sigue igual en `rubros`.** Banda
-      completa en blanco entre el hero y la sección oscura, y la sección oscura sin texto visible
-      en la captura full-page. Mismo artefacto conocido de la herramienta propia
-      (`scripts/canario_visual.mjs`), no del sitio — no lo duplico como ítem nuevo, lo confirmo
-      vivo. Nadie lo tomó todavía.
+- [ ] 🟠 **SIGUE VIVO en `rubros`, y el 2026-09-03 07:58 UTC `onia-cola` midió POR QUÉ. No es
+      timing ni rasterizador: `fullPage` destruye las secciones movidas por scroll.**
+      Reproducido en vivo con el instrumento exacto del canario (1440×900, sin `channel`, scroll
+      300/800 ms). **El sitio está sano; miente la captura** — probado con las dos tomas de la
+      misma franja en el mismo instante:
+      - **`fullPage: true`** → tarjeta cortada al medio mostrando *"Caja del día / Efectivo"*
+        (rubro **Comercio**) y debajo una banda blanca enorme y vacía.
+      - **Por viewport** (`scrollTo(0, 850)`, esperar, capturar sin `fullPage`) → la tarjeta
+        **entera** *"Hoy en la agenda / Dental — 09:00 Ortodoncia · 10:30 Limpieza · 11:15
+        Control"* más la lista de rubros. Nada roto. Y el DOM concuerda: `opacity: 1`,
+        `visibility: visible`, `transform: none`.
+      - **La causa, medida:** `rubros` mide **8.332 px** de alto y tiene un `position: sticky`
+        que es el corazón de la página — `DIV.sitio_stage__ZSE2e`, la tarjeta que va cambiando de
+        rubro (Dental → Comercio → Importadora → Estética → Servicios) **a medida que scrolleás**.
+        Hay además **13 elementos más altos que dos pantallas**. `fullPage: true` funciona
+        agrandando el viewport hasta los 8.332 px: con la página entera dentro de una sola
+        pantalla **ya no queda scroll que maneje la animación**, así que el `stage` se congela en
+        un fotograma y su carril largo sale en blanco. Por eso ninguna espera lo arregla — el
+        problema no es *cuándo* se captura, es que en modo `fullPage` la página **está en otro
+        estado**.
+      - **Y por eso el arreglo de 300/800 ms no podía cerrarlo:** ese arreglo sirve para lo que se
+        activa por `IntersectionObserver` (es lo que destrabó `/chatbot`, 3.377 px y sin `stage`),
+        pero no puede devolverle scroll a una sección que ya no tiene ninguno.
+      - **Repro en 30 segundos:** capturar `https://onia.com.bo/rubros` a 1440×900 con
+        `fullPage: true` y recortar `y=850..1470`; después `scrollTo(0, 850)`, esperar 1,5 s y
+        capturar **sin** `fullPage`. Las dos franjas muestran cosas distintas: la segunda es la
+        verdadera.
+      - **El arreglo, ya sin la duda de qué método usar:** capturar por viewports sucesivos
+        —scrolleando de verdad— en vez de `fullPage`. Es lo único compatible con una página
+        movida por scroll. ⚠️ En el VPS **no hay `sharp` ni ImageMagick**, así que coser las
+        imágenes hay que hacerlo dentro del propio Chromium (dibujar los trozos en un `<canvas>`)
+        o guardar un PNG por viewport y renunciar a la imagen única.
+      - **Zona:** `scripts/canario_visual.mjs`, del carril `canario-visual`. `onia-cola` lo midió
+        pero **no lo arregló**: no entraba en la vuelta y no se empieza un refactor que no se
+        puede terminar ni verificar.
 
 - [ ] 🟢 **Las otras cinco pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
       Miradas una por una: `contacto` (322 KB/104 ms, formulario y CTAs completos),
