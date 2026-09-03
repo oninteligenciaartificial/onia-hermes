@@ -186,21 +186,42 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       **Medido contra producción, no contra el test:** `node rescate-run.mjs` (seco) →
       *"conv 47 msg 249 — 427 min sin respuesta — «Tengo una clinica dental en Santa Cruz, somos 4
       personas»"*. **Encontró un huérfano real que nadie había visto.** La selección funciona.
-      🔴 **Lo que FALTA, y es la última milla — 401:** `node rescate-run.mjs --emit` →
-      `wget: server returned error: HTTP/1.1 401 Unauthorized`. El webhook autentica
-      (`hermes-content/deploy/vps-ops/bot/webhook-security.mjs`) y la reinyección no va firmada. **Reproducción en 30 s:** correr ese
-      comando. **El camino más corto está identificado, no hay que investigarlo de nuevo:** el
-      `authenticateChatwootRequest` acepta **secreto en la ruta** (`/webhook/chatwoot/<secreto>`,
-      `verifyPathSecret`, línea 122) además de la firma HMAC. El secreto **no** está en el env del
-      proceso (`cat /proc/<pid>/environ` sólo trae `ONIA_WEBHOOK_PORT`): vive en el archivo que
-      apunta `ONIA_WEBHOOK_ENV_FILE` en `hermes-content/deploy/vps-ops/bot/webhook-server.sh`. Leerlo de ahí y agregarlo a la URL de
-      `postAlWebhook` cierra el ítem.
-      ⚠️ **Y falta desplegarlo**: `/opt/onia/bot` es rsync, no git. Commiteado, **NO desplegado**.
-      ⚠️ **De paso, medido: el log por mensaje que esta cola da por cerrado NO está corriendo.**
-      `/opt/onia/bot/webhook-server.mjs` es del **29-ago** y tiene **cero** llamadas a `traza(`;
-      el del repo tiene 2. Por eso `/tmp/onia-bot-webhook.log` sigue teniendo **sólo** líneas de
-      arranque. El ítem de abajo es honesto (dice "commiteado"), pero mientras no se despliegue el
-      loop sigue diagnosticando a ciegas — que es exactamente lo que costó la semana.
+      ✅ **El 401 está CERRADO el 2026-09-03, y verificado contra producción, no contra el test.**
+      `postAlWebhook` lee `ONIA_CHATWOOT_WEBHOOK_PATH_SECRET` del **mismo** archivo que sourcea
+      `hermes-content/deploy/vps-ops/bot/webhook-server.sh` (`ONIA_WEBHOOK_ENV_FILE`, por defecto `/opt/onia/bot/webhook.env`) y lo
+      pone en la ruta: `/webhook/chatwoot/<secreto>`. **7 casos nuevos, rojo primero** por
+      `does not provide an export named 'construirUrlWebhook'`; **25/25** verde.
+      **La prueba en vivo, reinyectando un mensaje YA contestado** (el dedup lo corta, nadie recibe
+      nada): el webhook devolvió
+      `{"ok":true,"deduped":true,"duplicate":true,"sent":[],"reason":"mensaje_ya_procesado"}` —
+      antes eso era `HTTP/1.1 401 Unauthorized`. **Corregido de paso un dato de este mismo ítem que
+      era falso:** decía que el secreto *"no está en el env del proceso"*. Sí está —
+      `tr '\0' '\n' < /proc/<pid>/environ | grep ONIA_CHATWOOT` trae las cuatro claves. Lo que
+      pasaba es que el `grep` original miraba el proceso equivocado: el webhook vivo no cuelga de
+      `/opt/onia/bot/webhook-server.mjs` sino de **`/tmp/onia-bot/webhook-server.mjs`** dentro de
+      `onia-center`, y ese sí rutea el secreto (su `WEBHOOK_PATH`, línea 213-215).
+      🔴 **Y apareció un defecto que sólo se ve corriéndolo: el barrido contaba rescates que no
+      existían.** El único huérfano de producción (conv 47) está en **`handoff_humano`** — el bot
+      calla **por diseño**, no por el webhook caído. La reinyección salía sin error y el barrido
+      informaba *"1 reinyectado"* habiendo salvado **cero**. En un carril cuya doctrina es que un
+      dato que nadie mira no prueba nada, un contador que dice éxito sin éxito es peor que no
+      tenerlo. Arreglado con `clasificarRespuesta` (5 casos más): ahora separa **mandado** de
+      **CONTESTADO** y dice el motivo. Salida real de hoy:
+      *"1 sin respuesta · 1 reinyectados · 0 CONTESTADOS"*, con `-> mensaje_ya_procesado` en la línea.
+      🔴 **Lo que FALTA para que esto valga algo — y es lo único que queda:**
+      1. **Desplegar.** `/opt/onia/bot` es rsync, no git: **commiteado, NO desplegado.** Mientras
+         tanto el rescate no corre solo ni una vez.
+      2. **Su línea de cron**, que todavía no existe. Sin horario, un barrido es un script que
+         nadie ejecuta. Va después del deploy y lo hace `onia-cola`.
+      3. **Falta la prueba de un rescate que produzca una respuesta VISIBLE.** Hoy no se pudo:
+         el único huérfano disponible estaba en handoff. Que la reinyección llega al motor sí está
+         probado —el dedup cambió de estado— pero eso no es lo mismo. **Cómo probarlo cuando haya
+         uno:** correr `--emit` y exigir `CONTESTADOS ≥ 1`, no `reinyectados`.
+      ⚠️ **El log por mensaje YA está desplegado — el párrafo que decía lo contrario era viejo.**
+      Recontado hoy: `/tmp/onia-bot/webhook-server.mjs` (el que corre) es del **3-sep 01:58**, no
+      del 29-ago, y su stdout va a `/tmp/onia-bot-webhook.log` **dentro del contenedor** — por eso
+      en el host el archivo no existe (`ls: cannot access`). Se lee con
+      `docker exec onia-center tail -f /tmp/onia-bot-webhook.log`.
 
 - [x] 🔴 **La sonda reusa UNA conversación para siempre, así que desde la segunda vuelta ya no
       mide "un desconocido escribe dos veces": mide una charla con ocho turnos encima.**
@@ -565,18 +586,41 @@ decisión de Sergio, no código.
 - [x] ✅ **RESUELTO el 2026-09-02 — el bot contesta el segundo mensaje.** La causa se sacó
       corriendo el motor contra el caso, no leyendo código: `MSG1 → stage handoff_humano, notes
       ["bienvenida","sin_horarios_que_ofrecer"]` · `MSG2 → replies 0, notes
-      ["silencio:handoff_en_curso"]`. Sin Cal.com instalado, los slots de `config.mjs` siguen en
+      ["silencio:handoff_en_curso"]`. Sin Cal.com instalado, los slots de `hermes-content/deploy/vps-ops/bot/config.mjs` siguen en
       *"HORARIO A (pendiente de definir)"*, así que `slotsPending` es SIEMPRE true y
       `welcomeResult` mandaba **toda** conversación a `handoff_humano` — que es silencio
       permanente. Y no había humano.
-      **Lo más caro fue el test que lo protegía:** `knowledge.test.mjs` verificaba que el mensaje
+      **Lo más caro fue el test que lo protegía:** `hermes-content/deploy/vps-ops/bot/knowledge.test.mjs` verificaba que el mensaje
       de bienvenida fuera correcto y **exigía `handoff_humano`**. Verde, y la conversación moría.
       Un test que mira el primer mensaje no puede ver un bot que enmudece en el segundo.
       **Arreglado:** `esperando_horario` (la rama viva) + `M0b_SIN_HORARIOS`, que acusa el dato y
       pide el contacto en vez de re-ofrecer un horario que no existe. 689 tests verdes, test nuevo
       que falla en rojo antes. Desplegado a `/opt/onia/bot` y **verificado en el widget real**.
       ⏭️ **Queda lo otro, y es de Sergio:** definir los dos horarios o instalar Cal.com (tablero
-      `t_af8f44ad`). Hasta entonces el bot dice la verdad — "Sergio te coordina el horario".
+      `t_af8f44ad`).
+
+- [x] 🔴 **"Hasta entonces el bot dice la verdad" era FALSO por un tercer camino — y el placeholder
+      SÍ salió a producción.** Lo de arriba tapó el saludo (`M0_SIN_HORARIOS`) y la re-oferta
+      (`M0b_SIN_HORARIOS`), pero quedó vivo el de la **re-pregunta**. Medido en la base, no leído
+      — `message_type=1`, conv 49: a las **21:09 UTC** *"¿En qué horario te viene mejor que te
+      reserve, horario A o horario B?"* y a las **23:03** *"en la opción A o en la B"*.
+      **Por qué las guardas no lo vieron:** buscan el literal `pendiente de definir`, y estos dos
+      son **paráfrasis del LLM**. `hermes-content/deploy/vps-ops/bot/bot-engine.mjs:786` le pasa `pendingAsk` al modelo como
+      `pendingQuestion`; el modelo recibió los dos labels y los reescribió. La misma frase salía
+      además literal por `hermes-content/deploy/vps-ops/bot/bot-engine.mjs:440`. Reproducido:
+      `pendingAsk({botStage:"esperando_horario", slotsOffered:[]}, DEFAULT_CONFIG)` →
+      *"¿Te reservo **HORARIO A (pendiente de definir)** o **HORARIO B (pendiente de definir)**?"*.
+      **El tercer turno YA estaba testeado** — pero sólo por `replies.length >= 1`, o sea "¿habla?"
+      y nunca "¿qué dice?". Los dos turnos anteriores sí miran el texto; el agujero quedó justo
+      donde el guion cae a `pendingAsk`.
+      **Arreglado** con `PENDING_HORARIO_SIN_HORARIOS`, elegida por el flag `pending` de cada slot
+      (`hayHorarioReal`), que tapa el camino determinista y el del LLM de una sola vez.
+      **Intento fallido que vale anotar:** el primer arreglo fue en `activeSlots`, distinguiendo
+      `[]` de sin-definir. Es la causa más limpia, pero rompió `hermes-content/deploy/vps-ops/bot/followup-run.test.mjs:462` — ese
+      fallback a `config.slots` está **documentado y es deliberado**, porque lo comparte una ruta
+      de plantillas de WhatsApp **pagas**. Revertido: el arreglo va en el punto de la fuga, no en
+      la semántica compartida. **721/721 verdes**, test nuevo rojo antes por el motivo correcto.
+      ⚠️ **Commiteado, NO desplegado** — `/opt/onia/bot` es rsync, no git.
 
 - [x] ~~🔴 **El bot contesta el saludo y se calla en el SEGUNDO mensaje. Reproducido hoy, en vivo, en el inbox de los leads reales.**
       **Cómo se reproduce** (30 segundos, sin tocar nada): abrir
@@ -601,6 +645,43 @@ decisión de Sergio, no código.
       eso se sigue adivinando.
       ⚠️ **Ojo con dar por buena una hipótesis sin probarla**: la del add-on parecía cerrada y era
       falsa. La conversación de prueba de hoy queda en el inbox 4 a propósito, para reproducir.
+      **Evidencia del arreglo de la traza:** vive en
+      `hermes-content/deploy/vps-ops/bot/webhook-server.mjs` y la cubren tres tests de
+      `hermes-content/deploy/vps-ops/bot/webhook-server.test.mjs` (lineas 688, 701 y 726).
+
+- [ ] **El bot del CLIENTE escribe el nombre de su encargada en minúscula a mitad de frase.**
+      Abierto el 2026-09-03 al recorrer el circuito de conocimiento (tablero `t_ff51abdc`).
+      Lo ve el cliente del cliente, en la primera respuesta.
+
+      **Reproducción exacta (30 s), ya medida en vivo:**
+      ```
+      ONIA_WIDGET_TOKEN=vsB37FKgVPH2wWxkCZunUNsf \
+      ONIA_SONDA_ESTADO=/root/.onia/sonda-widget-qa7.json \
+      node scripts/sonda_widget.mjs
+      docker exec onia-chatbot_chatwoot-db.1.nhgizxt2v01lnhebx9jtdwm5q \
+        psql -U postgres -d onia-chatbot -tAc \
+        "select message_type, content from messages where conversation_id=51 order by id;"
+      ```
+      Devuelve, textual: `_(Estoy respondiendo automático fuera de horario de oficina.`
+      **`la encargada`** `te confirma en la mañana.)_`
+
+      **Causa, en un solo punto.** `renderTemplate()`
+      (`hermes-content/deploy/vps-ops/bot/config.mjs:653`) sustituye `{{humano}}` por el valor
+      crudo de `identity.humanName` del conocimiento de la org. Con el humano de Onia el valor es
+      un nombre propio (`Sergio`) y nunca se notó; el conocimiento de un cliente trae un **cargo
+      en minúscula** (`la encargada`), y hay **cuatro plantillas donde `{{humano}} cae al empezar
+      una oración**: `config.mjs:100`, `:166` (después de `.`), `:264` (M7) y `:313`.
+
+      **Arreglo propuesto** (no hecho: se abrió a 8 minutos del tope de la vuelta, y meter una
+      función a medias con sus tests deja el árbol sin compilar). En el callback de
+      `renderTemplate` ya está disponible el `offset`: si el texto anterior está vacío o termina
+      en `.`/`!`/`?`/salto de línea, capitalizar la primera letra del valor **sólo si es
+      minúscula**. Con `:` NO — `"Anotado: {{datos}}"` va en minúscula en castellano.
+      El test tiene que fallar en ROJO por el motivo correcto: `renderTemplate("{{h}} llega",
+      {h:"la encargada"})` → `"La encargada llega"`, y `renderTemplate("lo ve {{h}} hoy", …)`
+      debe seguir dando `"lo ve la encargada hoy"`.
+      ⚠️ Es el repo `onia-hermes`, no `onia-platform`: los gates son los de este árbol, y
+      commitear **no lo despliega** (`/opt/onia/bot` es rsync, no un checkout).
 
 ## Después
 

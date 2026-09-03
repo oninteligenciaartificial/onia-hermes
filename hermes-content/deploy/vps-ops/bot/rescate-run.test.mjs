@@ -15,6 +15,10 @@ import {
   MIN_EDAD_MS,
   MAX_EDAD_MS,
   runRescateSweep,
+  parsearSecretoDeRuta,
+  construirUrlWebhook,
+  postAlWebhook,
+  clasificarRespuesta,
 } from "./rescate-run.mjs";
 
 const T0 = Date.parse("2026-09-03T00:00:00Z");
@@ -184,4 +188,142 @@ test("si el webhook rechaza uno, el barrido sigue con los demas y lo reporta", a
   assert.equal(res.reinyectados, 1, "el fallo de uno no puede cancelar el rescate del otro");
   assert.equal(res.fallidos.length, 1);
   assert.equal(res.fallidos[0].conversationId, 49);
+});
+
+// ---------------------------------------------------------------------------
+// LA ULTIMA MILLA: el 401. El barrido seleccionaba bien y moria al reinyectar
+// ("wget: server returned error: HTTP/1.1 401 Unauthorized") porque pegaba contra
+// `/webhook/chatwoot` pelado. El webhook autentica, y de sus dos mecanismos el que
+// siempre esta disponible desde adentro del contenedor es el SECRETO EN LA RUTA.
+// ---------------------------------------------------------------------------
+
+test("el secreto sale del MISMO archivo que usa webhook-server.sh, no de una copia", () => {
+  const contenido = [
+    "# comentario",
+    "",
+    "ONIA_CHATWOOT_WEBHOOK_SECRET=otra-cosa",
+    'ONIA_CHATWOOT_WEBHOOK_PATH_SECRET="s3cr3-to"',
+    "ONIA_BOT_DRY_RUN=false",
+  ].join("\n");
+  assert.equal(parsearSecretoDeRuta(contenido), "s3cr3-to");
+});
+
+test("el archivo lo escribe un shell: aguanta export, comillas simples y espacios", () => {
+  assert.equal(parsearSecretoDeRuta("export ONIA_CHATWOOT_WEBHOOK_PATH_SECRET='abc'"), "abc");
+  assert.equal(parsearSecretoDeRuta("ONIA_CHATWOOT_WEBHOOK_PATH_SECRET = abc  "), "abc");
+  assert.equal(parsearSecretoDeRuta("#ONIA_CHATWOOT_WEBHOOK_PATH_SECRET=comentado"), undefined);
+  assert.equal(parsearSecretoDeRuta(""), undefined);
+});
+
+test("EL 401: con secreto, la URL lo lleva en la ruta — que es lo que el webhook acepta", () => {
+  assert.equal(
+    construirUrlWebhook({ puerto: "3020", secreto: "abc" }),
+    "http://127.0.0.1:3020/webhook/chatwoot/abc",
+  );
+});
+
+test("un secreto con caracteres raros va escapado, no rompe la URL", () => {
+  assert.equal(
+    construirUrlWebhook({ puerto: "3020", secreto: "a/b c" }),
+    "http://127.0.0.1:3020/webhook/chatwoot/a%2Fb%20c",
+  );
+});
+
+test("sin secreto NO inventa una ruta: pega pelado y que el 401 se vea", () => {
+  assert.equal(
+    construirUrlWebhook({ puerto: "3020", secreto: undefined }),
+    "http://127.0.0.1:3020/webhook/chatwoot",
+  );
+});
+
+test("postAlWebhook manda el secreto de verdad, no solo lo sabe calcular", async () => {
+  let comando = "";
+  const res = await postAlWebhook(
+    { event: "message_created", conversation: { id: 49 } },
+    {
+      run: async (_bin, args) => {
+        comando = args[args.length - 1];
+        return { stdout: "ok" };
+      },
+      leerEnv: () => "ONIA_CHATWOOT_WEBHOOK_PATH_SECRET=s3cr3-to",
+      env: { ONIA_WEBHOOK_PORT: "3020", ONIA_BOT_CONTAINER: "onia-center" },
+    },
+  );
+  assert.ok(
+    comando.includes("http://127.0.0.1:3020/webhook/chatwoot/s3cr3-to"),
+    `la URL tiene que llevar el secreto; fue: ${comando}`,
+  );
+  assert.equal(res.ok, true);
+});
+
+test("el secreto NUNCA sale en un error: wget lo imprime en el comando y eso va al log", async () => {
+  await assert.rejects(
+    () =>
+      postAlWebhook(
+        { event: "message_created", conversation: { id: 49 } },
+        {
+          run: async (_bin, args) => {
+            // execFile pone el comando entero en el mensaje de error. Ese es el filtrado.
+            throw new Error(`Command failed: docker ${args.join(" ")}`);
+          },
+          leerEnv: () => "ONIA_CHATWOOT_WEBHOOK_PATH_SECRET=s3cr3-to",
+          env: { ONIA_WEBHOOK_PORT: "3020" },
+        },
+      ),
+    (error) => {
+      assert.ok(!error.message.includes("s3cr3-to"), `el secreto se filtro al error: ${error.message}`);
+      assert.ok(error.message.includes("***"), "y tiene que verse que ahi habia un secreto");
+      return true;
+    },
+  );
+});
+
+// ---------------------------------------------------------------------------
+// MEDIDO CONTRA PRODUCCION el 2026-09-03, y no era lo que este archivo suponia: el unico
+// huerfano del barrido (conv 47) estaba en `handoff_humano` — el bot calla POR DISEÑO. La
+// reinyeccion salio sin error y el barrido conto "1 reinyectado" habiendo rescatado CERO.
+// En un carril cuya doctrina es que un dato que no se mira no prueba nada, un contador que
+// dice exito sin exito es peor que no tenerlo: se repite cada vuelta y nadie lo revisa.
+// ---------------------------------------------------------------------------
+
+test("mandar no es rescatar: si el webhook dedupea, no se cuenta como contestado", () => {
+  const r = clasificarRespuesta('{"ok":true,"deduped":true,"duplicate":true,"sent":[],"reason":"mensaje_ya_procesado"}');
+  assert.equal(r.contestado, false);
+  assert.equal(r.motivo, "mensaje_ya_procesado");
+});
+
+test("rescate de verdad: el webhook dice que salio algo", () => {
+  const r = clasificarRespuesta('{"ok":true,"sent":[{"id":1}]}');
+  assert.equal(r.contestado, true);
+});
+
+test("el bot en handoff no contesta y eso NO es un rescate", () => {
+  const r = clasificarRespuesta('{"ok":true,"sent":[],"reason":"handoff_humano"}');
+  assert.equal(r.contestado, false);
+  assert.equal(r.motivo, "handoff_humano");
+});
+
+test("una respuesta que no es JSON no rompe el barrido ni se cuenta como exito", () => {
+  assert.equal(clasificarRespuesta("<html>502</html>").contestado, false);
+  assert.equal(clasificarRespuesta(undefined).contestado, false);
+});
+
+test("el barrido separa lo mandado de lo CONTESTADO, que es lo unico que salva un lead", async () => {
+  const res = await runRescateSweep(
+    { ahoraMs: T0 + min(5), emitir: true },
+    {
+      leerFilas: async () => [
+        fila({ conversationId: 49, messageId: 282 }),
+        fila({ conversationId: 47, messageId: 249 }),
+      ],
+      postWebhook: async (p) =>
+        p.conversation.id === 49
+          ? { ok: true, respuesta: '{"ok":true,"sent":[{"id":1}]}' }
+          : { ok: true, respuesta: '{"ok":true,"deduped":true,"sent":[],"reason":"mensaje_ya_procesado"}' },
+    },
+  );
+  assert.equal(res.reinyectados, 2, "los dos se mandaron");
+  assert.equal(res.contestados, 1, "pero solo uno produjo respuesta");
+  const conv47 = res.detalle.find((d) => d.conversationId === 47);
+  assert.equal(conv47.resultado, "mensaje_ya_procesado", "y el barrido dice POR QUE el otro no");
 });
