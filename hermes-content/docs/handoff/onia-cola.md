@@ -1,72 +1,70 @@
 # Handoff — carril `onia-cola` (el integrador)
 
-Un archivo por carril, sin fecha en el nombre: se EDITA, no se duplica.
-Última vuelta reflejada: **2026-09-03 00:33–01:15 UTC**.
+**Última vuelta: 2026-09-03 04:33–04:55 UTC.**
 
-## Objetivo
+## Objetivo de la vuelta
 
-Que las ramas de carril lleguen a `main` (soy el único que puede mergear), y después construir
-la cola de plataforma. `main` alimenta el deploy del VPS, el de Vercel y —desde el 2026-09-02—
-el sincronizador que despliega los prompts y el corredor de todos los loops.
+Tarea del tablero `t_0e929acc`: el integrador no enumeraba 6 carriles vivos, 14 commits varados,
+y los arreglos de prompt no se encendían. **Cerrada.**
 
-## Qué quedó en producción
+## Qué quedó EN PRODUCCIÓN (`main`, pusheado)
 
-**Nada desplegado**: este carril no despliega, mergea. En `main` (`4dbe844df`) quedaron 6
-commits nuevos esta vuelta:
+**11 de los 13 carriles integrados — 25 commits.** `supervisor`, `lucia-vps`, `recorrido-cliente`,
+`web-factory-dev`, `tendencias`, `web-venta`, `investigacion`, `docs-auditoria`,
+`chatbots-platform-review-0d1d09`, `canario-visual`, `marca-personal-loop`.
 
-- El merge de `claude/canario-visual` (4 commits): el arreglo de la captura ciega, sus 6
-  capturas de evidencia y el handoff de ese carril.
-- El cierre medido del 429 del widget de Chatwoot (ver abajo).
+**El efecto medido, no supuesto:** el sync de las 04:44 copió los prompts desde `main` y
+`/root/bin/loops/lucia.md:69` pasó de la forma rota a la correcta. Verificado leyendo el archivo
+vivo después del sync, no antes.
 
-⚠️ **Mergear no es desplegar.** Lo que entró a `main` sigue valiendo cero hasta que Sergio
-despliegue; el radar lleva la cuenta de lo que espera.
+## Qué quedó a medias, y dónde
 
-## Qué quedó a medias y dónde
+**Dos carriles NO se mergearon, los dos por la misma causa** (radar ítem 36):
 
-- **El 🟠 de la captura full-page ciega sigue ABIERTO a propósito** (`COLA.md`, sección del
-  canario del 2026-09-02 16:41). Es un defecto real de `scripts/canario_visual.mjs` con causa
-  distinta a la del 429: el `screenshot({fullPage:true})` devuelve bandas vacías. El propio
-  canario ya dejó escrito el siguiente paso (capturar por viewports sucesivos y coser) y los dos
-  intentos que NO funcionan — no repetirlos.
-- **12 carriles con commits sin mergear**, el mayor con 3. Se mergea **UNO por vuelta**, a
-  propósito: el 2026-09-02 intentar cinco de corrido dejó un `MERGE_HEAD` abierto sobre `main`.
+| rama | commits | choca en |
+|---|---|---|
+| `claude/calidad-generado` | 2 | `RUBRICA-IMPOLUTO.md`, `BANCO-OFICIAL.md`, `BITACORA-PERFECCION.md` (add/add) |
+| `claude/git-status-935f47` | 2 | `LUCIA.md` — **118 KB** de conflicto |
 
-## Archivos
+`references/modelos/lucia/` lo escriben tres manos sin dueño declarado. **Los dos merges van a
+seguir abortando en cada vuelta** hasta que Sergio diga quién manda. Ninguna rama perdió trabajo.
 
-- `hermes-content/deploy/vps-ops/widget-429-de-quien.sh` — sonda nueva (¿el 429 es nuestro o del
-  cliente?), probada en los dos sentidos.
-- `hermes-content/docs/COLA.md` — 3 ítems cerrados con la medición; sección *"El 429 del widget
-  era nuestro"*.
-- `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` — ítem 32, cotizado.
+## Archivos tocados
 
-## Intentos fallidos (el campo que casi nadie escribe)
+- `scripts/loops/prompts/onia-cola.md` — lista de 13 ramas sin duplicados; síntesis lista-vs-comando;
+  el corredor (`RAMA=` de cada `case`) como mapa loop→rama; recuadro de `lucia-vps` corregido.
+- `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` — ítems 36, 37 y 38.
 
-- **Falsear la IP con `X-Forwarded-For` para probar que otro visitante recibe 200: NO funciona.**
-  El proxy sobrescribe la cabecera con la IP real del socket y no aparece clave nueva en Redis.
-  No lo repitas esperando otro resultado — pero el intento **no fue inútil**: que no se pueda
-  falsear es justamente la prueba de que Chatwoot ve IPs de visitante de verdad y no una IP de
-  proxy compartida, que era la hipótesis grave.
-- **Buscar el contador en Redis sin autenticar falla mudo** (`NOAUTH`), y el `--scan` devuelve
-  vacío como si no hubiera claves. Hay que pasar `-a "$REDIS_PASSWORD" --no-auth-warning`, si no
-  se concluye "no hay throttle" que es exactamente lo contrario de la verdad.
-- **No dupliqué el arreglo de la lista de carriles** aunque lo detecté en vivo: ya existe en
-  `claude/docs-auditoria` (`c7a9bc3d3`) y toca el mismo archivo. Arreglarlo por mi cuenta habría
-  fabricado un conflicto contra una rama que ya lo resolvió.
+## Intentos fallidos y trampas (lo que casi cuesta caro)
+
+1. **Una advertencia `NO mergees` vencida vara un carril para siempre.** El prompt decía no mergear
+   `lucia-vps` por "+88,2 MB en 59 binarios". Era cierto al medirse (09-02 17:30). Recontado hoy:
+   **4 commits, 1,3 MB, 14 archivos** — porque el álbum ya había entrado directo a `main` el 09-02
+   a las **03:24**, catorce horas ANTES de que se escribiera la advertencia. Protegía una puerta
+   con el caballo adentro. **Un `NO mergees` es una medición con vencimiento: recontá antes de
+   obedecer.** Cuesta un `git diff --shortstat`.
+2. **Dos carriles pueden arreglar lo mismo y sacar conclusiones opuestas.** `supervisor` y
+   `docs-auditoria` corrigieron los dos la lista de ramas; uno concluía "gana el comando", el otro
+   "se mantiene la lista". Pegar ambos habría dejado el prompt contradiciéndose. **Se sintetizó.**
+3. **Resolver un conflicto con regex deja el marcador de apertura huérfano.** Borrar el bloque
+   `=======…>>>>>>>` no borra el `<<<<<<< HEAD`. Verificar SIEMPRE con grep después.
+4. **Un merge limpio puede duplicar contenido igual.** `docs-auditoria` agregó las mismas 6 ramas
+   en otro lugar del archivo: git las mergeó sin conflicto y la lista quedó con **19 entradas y 6
+   duplicados**. Sin conflicto ≠ correcto.
+5. **`docs-auditoria` tenía razón y `main` estaba mal** en una fecha (13:38 vs 18:33 UTC).
+   Se verificó con `git log -S` contra el commit real (`9d8e23e07`), no eligiendo la más nueva.
 
 ## Qué depende de Sergio
 
-1. **Radar ítem 32** — OK para safelistear la IP del VPS en el contenedor de chat
-   (`RACK_ATTACK_ALLOWED_IPS=187.77.16.63`). Es cambio de entorno + reinicio del chat. Sin eso el
-   canario **no puede** ver el widget como lo ve un cliente.
-2. **Radar ítem 26** — `claude/onia-core-adoption-sprint5` en `onia-platform`: 383 commits atrás
-   con 1 propio. No la mergeo yo.
-3. Lo ya anotado que sigue esperando deploy.
+1. **Radar 36 — quién es dueño de `references/modelos/lucia/`.** Una línea. Destraba 4 commits y
+   deja de romper dos merges por vuelta.
+2. **Radar 38 — 761,7 MB de assets de Lucía en `main`** (87 videos), que todo clon se lleva. Se
+   recomienda **B** (dejar de agregar; 20 min, reversible).
+3. **Radar 31 — `onia.com.bo` se puede publicar ya.** La condición ("cuando `onia-cola` mergee")
+   se cumplió. **Un reinicio NO alcanza: hay que rebuildear.**
 
 ## Próximos pasos
 
-1. Mergear `claude/docs-auditoria` (2 commits): trae el arreglo de la lista de carriles de **mi
-   propio prompt**, que hoy enumera 7 ramas cuando hay 13 con trabajo. Es el que más se paga.
-2. Seguir de a un carril por vuelta, el de más commits primero.
-3. **Enumerar SIEMPRE en vivo los dos repos** (`onia-hermes` base `origin/main`, `onia-platform`
-   base `origin/master`) y contrastar con `loops.md`: la lista escrita en el prompt se atrasó
-   tres veces, y un carril que nadie enumera no llega nunca a `main`.
+- Con la respuesta al 36: mergear `calidad-generado` y `git-status-935f47`.
+- Sin ella: **no reintentar esos dos merges a ojo** — abortan por diseño.
+- `claude/onia-core-adoption-sprint5` (onia-platform) sigue siendo decisión de Sergio (radar 26).
