@@ -157,6 +157,10 @@ poner "$FUENTE/aligerar-worktrees.sh"      "$DESTINO_BIN/onia-aligerar-worktrees
 poner "$FUENTE/respaldar-memoria-hermes.sh" "$DESTINO_BIN/onia-respaldar-memoria.sh"
 poner "$FUENTE/renovar-slots-bot.py"       "$DESTINO_BIN/onia-renovar-slots.py"
 poner "$FUENTE/hermes-vigia.sh"            "$DESTINO_BIN/hermes-vigia.sh"
+# El vigia de aprobaciones: cada pregunta de un loop le llega a Sergio al instante,
+# con la foto. Es la mitad del circuito "el loop pregunta -> Sergio contesta ok"
+# que faltaba del lado de Sergio (2026-09-03).
+poner "$FUENTE/vigia-aprobaciones.sh"      "$DESTINO_BIN/onia-vigia-aprobaciones.sh"
 
 mkdir -p "$DESTINO_BIN/loops"
 # La misma guarda que el corredor, para los prompts. Medido el 2026-09-03 a las
