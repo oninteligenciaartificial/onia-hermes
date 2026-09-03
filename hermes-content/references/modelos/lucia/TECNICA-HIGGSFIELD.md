@@ -1379,6 +1379,23 @@ tanto imagen como video por CLI hasta que resetea.
 (un `CREATIVO.md` que falte, o auditar una pieza vieja) y se anota. El `generate cost` sí sigue
 respondiendo gratis aunque el `create` esté bloqueado — medir no cuenta contra el cupo.
 
+### ⚠️ 2026-09-03 — hay un SEGUNDO bloqueo, distinto: la sesión del CLI expira
+
+`higgsfield account status` (y cualquier `generate`) devolvió `Error: Session expired. Hint: Run:
+hf auth login`. **No es el cupo diario** — es la sesión de auth del CLI que caducó. La diferencia
+importa para la regla 0:
+
+| Bloqueo | Qué lo cura | Se reintenta al día siguiente? |
+|---|---|---|
+| `grace_daily_limit_reached` | esperar al reset diario | **sí** — otra fecha, se reintenta |
+| `Session expired` (auth) | `hf auth login` **interactivo** | **no** por sí solo — necesita un login humano |
+
+🔴 En una sesión de loop **no interactiva** el `hf auth login` no se puede correr (abre flujo OAuth),
+y el balance por MCP (`mcp__…higgsfield__balance`) pide un permiso que la sesión headless no puede
+conceder. O sea: con la sesión expirada, **generar y hasta medir el saldo quedan bloqueados de raíz**
+hasta que un turno interactivo re-loguee. Igual que el cupo diario: se anota, se hace la tarea de 0
+créditos y se cierra la vuelta. No re-medir dentro del mismo turno.
+
 ## 18. ✅ El vaso PARA LLEVAR salva la casilla 9 en un retrato (E7-rooftop, 2026-09-03)
 
 `E2-B-rooftop` es un **retrato** (mira al lente, un vaso para llevar en la mano, la otra en la

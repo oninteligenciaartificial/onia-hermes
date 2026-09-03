@@ -12,9 +12,9 @@ Generadas con `lucia-skin-v1` (`58bbd635-…`) por CLI en el VPS, Nano Banana Pr
 
 | Archivo | Qué es | Asset id | Estado |
 |---|---|---|---|
-| `E2-A-rooftop.png` | Rooftop de Santa Cruz al atardecer, vaso para llevar sobre la baranda de vidrio — toma A | `460df6ae-a209-4953-82c9-16e719bb940f` | ✅ variante de la escena rooftop |
+| `E2-A-rooftop.png` | Rooftop de Santa Cruz al atardecer, vaso para llevar sobre la baranda de vidrio — toma A | `460df6ae-a209-4953-82c9-16e719bb940f` | ✅ **la 2ª mejor rooftop, y la próxima a animar** — pelo suelto, identidad fiel, sin carteles. **Auditada 2026-09-03, ver abajo** |
 | `E2-B-rooftop.png` | Misma rooftop — **toma B, la referencia de LUZ de la receta (§12)** | `378291da-bfc4-4795-963c-101206116865` | ✅ **la mejor rooftop** — pelo suelto, pecas marcadas, rim dorado, cara fiel al ancla, sin pantallas ni texto. **Animada 2026-09-03 → `E7-rooftop-seedance.mp4`** |
-| `E2-C-rooftop.png` | Misma rooftop — toma C | `af2771c7-e66b-4592-86e8-0fe59b02128a` | ✅ variante de la escena rooftop |
+| `E2-C-rooftop.png` | Misma rooftop — toma C | `af2771c7-e66b-4592-86e8-0fe59b02128a` | ⚠️ **pelo recogido** (falla §6) pero la piel y la acción (dos manos al vaso) son las mejores de las tres. Feed sí, base de video sólo si se quiere ese gesto. **Auditada 2026-09-03, ver abajo** |
 | `E3-cafe.png` | Café de especialidad, luz cálida de ventana, ladrillo, plantas colgando, **las dos manos en la taza** (acción a medias) | `c31c1333-dbd6-4be7-890f-07dcbb1cfc59` | ✅ **la prueba 9/9 de la receta** — es la que se animó (→ E4/E6) |
 | `E3-coworking.png` | Coworking de diseño, sol de ventana con flare, plantas, laptop con UI | `bc39fa80-5144-4230-8171-c56bfc77aee5` | ⚠️ fancy y fiel, pero **pelo recogido** y **laptop con UI** en cuadro (de canto y suave, no legible de frente). Sin animar — **auditada 2026-09-02, ver abajo** |
 | `E3-hotel.png` | Hall de hotel con boiserie de madera, lámparas cálidas, ventanal al jardín | `43bb8397-45ed-4307-b4f8-ba592ff2bdaa` | ✅ **la más limpia** — pelo suelto, sin pantallas ni texto, cara muy fiel al ancla. **Animada 2026-09-03 → `E5-hotel-seedance.mp4`** |
@@ -88,3 +88,32 @@ tienen la acción a medias con las dos manos sobre un objeto — son retratos. A
 (parpadeo, mechón, cambio de peso) manteniendo la cara en cuadro, no una acción que se resuelve.
 `E3-coworking` además arrastra el pelo recogido y la laptop; si sólo hay cupo para un video, va
 **hotel**.
+
+## 🔍 Auditoría de las variantes rooftop `E2-A` y `E2-C` contra el brief (2026-09-03, mirada)
+
+Vuelta con **generación bloqueada por auth** (`hf auth login` da *Session expired* y el balance por
+MCP pide un permiso que esta sesión no interactiva no puede conceder — bloqueo duro, distinto del
+`grace_daily_limit` que resetea por día). Sin poder generar, trabajo de cero créditos: auditar las
+dos tomas rooftop que el LEEME sólo etiquetaba «variante», mirándolas a resolución completa (los
+`.jpg`) contra el brief §6 y con `E2-B` (la canonizada) como ancla de identidad.
+
+| Eje del brief | `E2-A` | `E2-C` |
+|---|---|---|
+| Cara fiel al ancla | ✅ cejas gruesas, ojos marrones, pecas en nariz/pómulos, aro de oro + cadenita | ✅ ídem, + pulsera de oro en la muñeca. Identidad intacta |
+| Piel real (poros/pecas/asimetría) | ✅ pecas marcadas, textura, cero alisado | ✅ **de las mejores del banco** — pecas muy marcadas |
+| Luz real / fancy | ✅ golden hour con pérgola metálica arriba; algo **más frontal/plana** que B (menos rim dorado) | ✅ golden hour fuerte, rim cálido en la cara — la más «influencer» de las tres |
+| **Pelo suelto** | ✅ **suelto**, ondas sobre el hombro | ❌ **recogido** (tirante). Falla §6, misma marca que coworking |
+| **Acción a medias** | ⚠️ una mano al vaso, el otro brazo en la baranda — semi-acción, animable a un sorbo (como se resolvió B en E7) | ✅ **las dos manos envuelven el vaso** — la acción-a-medias más limpia de las tres |
+| **Sin carteles legibles** | ✅ skyline de fondo, ningún cartel/pantalla | ✅ ídem |
+
+**Veredicto:**
+- **`E2-A` es la próxima rooftop a animar** cuando vuelva el cupo: pelo suelto, identidad fiel, sin
+  riesgo de cartel, y da un **segundo ángulo de la misma escena** para A/B-testear contra `E7` sin
+  cambiar de set. Mismo comando que hotel/E7 con `--start-image E2-A-rooftop.png`. Único reparo: la
+  luz es más plana que B, así que el prompt debe pedir el rim dorado (`warm golden hour backlight`).
+- **`E2-C` es excelente como imagen fija de feed** (piel y luz top), pero **como base de video
+  arrastra el pelo recogido** — igual que coworking, se queda en CASI del §14. Se anima sólo si se
+  quiere expresamente el gesto de las dos manos al vaso, asumiendo el recogido.
+
+Orden de animación rooftop pendiente cuando haya cupo: **`E2-A` primero** (suelto), luego `E2-C`
+sólo si se busca el gesto de dos manos.
