@@ -1,27 +1,65 @@
 {
-  "cuando": "2026-09-03T04:15:17.637Z",
-  "escribio": true,
-  "llegoHasta": 8,
+  "cuando": "2026-09-03T19:19:47.999Z",
+  "escribio": false,
+  "llegoHasta": 2,
+  "ultimoOkSuelto": 2,
+  "completo": false,
   "deCuantos": 8,
-  "corte": null,
-  "datosQA": {
-    "nombre": "zz-qa-2026-09-03",
-    "negocio": "zz-qa-2026-09-03-negocio",
-    "email": "zz-qa-2026-09-03@onia.com.bo",
-    "whatsapp": "59170000000",
-    "ciudad": "zz-qa-ciudad",
-    "password": "zz-qa-2026-09-03-Passw0rd!"
+  "corte": {
+    "paso": 3,
+    "nombre": "pedir-acceso",
+    "estado": "no-medido",
+    "detalle": "el alta pide contraseña (parece crear cuenta), pero no se envió: --escribir está apagado"
   },
+  "agujeros": [
+    {
+      "paso": 3,
+      "nombre": "pedir-acceso",
+      "estado": "no-medido",
+      "detalle": "el alta pide contraseña (parece crear cuenta), pero no se envió: --escribir está apagado"
+    },
+    {
+      "paso": 4,
+      "nombre": "entrar",
+      "estado": "no-medido",
+      "detalle": "no hay con qué entrar: --escribir está apagado (no se creó cuenta) y faltan RECORRIDO_USER/RECORRIDO_PASS"
+    },
+    {
+      "paso": 5,
+      "nombre": "elegir-rubro",
+      "estado": "no-medido",
+      "detalle": "sin sesión: el paso 4 no pudo entrar"
+    },
+    {
+      "paso": 6,
+      "nombre": "cargar-dato",
+      "estado": "no-medido",
+      "detalle": "sin sesión: el paso 4 no pudo entrar"
+    },
+    {
+      "paso": 7,
+      "nombre": "cobro",
+      "estado": "no-medido",
+      "detalle": "sin sesión: el paso 4 no pudo entrar"
+    },
+    {
+      "paso": 8,
+      "nombre": "bandeja",
+      "estado": "no-medido",
+      "detalle": "sin sesión: el paso 4 no pudo entrar"
+    }
+  ],
+  "datosQA": null,
   "pasos": [
     {
       "n": 1,
       "nombre": "home",
       "que": "Entrar a onia.com.bo y que se VEA",
       "estado": "ok",
-      "detalle": "cargó en 1558 ms, 6977 caracteres visibles",
+      "detalle": "cargó en 1107 ms, 6976 caracteres visibles",
       "captura": "hermes-content/docs/recorrido/capturas/paso-01-home.png",
       "dom": {
-        "textoVisible": 6977,
+        "textoVisible": 6976,
         "secciones": 13,
         "seccionesInvisibles": 0,
         "titulo": "Onia · Cerrás vos, el negocio no | Software de gestión Bolivia"
@@ -82,8 +120,8 @@
       "n": 3,
       "nombre": "pedir-acceso",
       "que": "Pedir acceso / registrarse con datos zz-qa-",
-      "estado": "ok",
-      "detalle": "enviado; la URL pasó de https://app.onia.com.bo/register a https://app.onia.com.bo/register",
+      "estado": "no-medido",
+      "detalle": "el alta pide contraseña (parece crear cuenta), pero no se envió: --escribir está apagado",
       "campos": [
         {
           "tag": "input",
@@ -143,10 +181,9 @@
         }
       ],
       "altaCreaCuenta": true,
-      "urlTrasEnviar": "https://app.onia.com.bo/register",
-      "captura": "hermes-content/docs/recorrido/capturas/paso-03b-pedir-acceso-enviado.png",
+      "captura": "hermes-content/docs/recorrido/capturas/paso-03-pedir-acceso.png",
       "dom": {
-        "textoVisible": 1102,
+        "textoVisible": 1050,
         "secciones": 2,
         "seccionesInvisibles": 0,
         "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
@@ -156,128 +193,36 @@
       "n": 4,
       "nombre": "entrar",
       "que": "Entrar a la plataforma con esa cuenta",
-      "estado": "ok",
-      "detalle": "entró con la cuenta recién creada; quedó en https://app.onia.com.bo/onboarding",
-      "captura": "hermes-content/docs/recorrido/capturas/paso-04-entrar.png",
-      "dom": {
-        "textoVisible": 356,
-        "secciones": 0,
-        "seccionesInvisibles": 0,
-        "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
-      }
+      "estado": "no-medido",
+      "detalle": "no hay con qué entrar: --escribir está apagado (no se creó cuenta) y faltan RECORRIDO_USER/RECORRIDO_PASS"
     },
     {
       "n": 5,
       "nombre": "elegir-rubro",
       "que": "Elegir rubro y terminar el onboarding",
-      "estado": "ok",
-      "detalle": "onboarding COMPLETADO en 6 pantallas (pregunta → negocio → asistente-2 → asistente-3 → equipo → listo); /dashboard ya no rebota",
-      "traza": [
-        {
-          "pantalla": "pregunta",
-          "vio": "¿Cómo se llama tu negocio?",
-          "apreto": "Completar el formulario"
-        },
-        {
-          "pantalla": "negocio",
-          "vio": "Contanos de tu negocio",
-          "apreto": "Continuar"
-        },
-        {
-          "pantalla": "asistente-2",
-          "vio": "¿Cuándo atendés?",
-          "apreto": "Saltar por ahora"
-        },
-        {
-          "pantalla": "asistente-3",
-          "vio": "¿Qué hacés y a cuánto?",
-          "apreto": "Saltar por ahora"
-        },
-        {
-          "pantalla": "equipo",
-          "vio": "¿Quién más trabaja con vos?",
-          "apreto": "Saltar por ahora (cierra el alta)"
-        },
-        {
-          "pantalla": "listo",
-          "vio": "zz-qa-2026-09-03-negocio ya está en Onia",
-          "apreto": "—"
-        }
-      ],
-      "capturaAsistente": "hermes-content/docs/recorrido/capturas/paso-05b-onboarding-listo.png",
-      "status": 200,
-      "ms": 2965,
-      "urlFinal": "https://app.onia.com.bo/dashboard",
-      "captura": "hermes-content/docs/recorrido/capturas/paso-05c-gate-levantado.png",
-      "dom": {
-        "textoVisible": 2769,
-        "secciones": 8,
-        "seccionesInvisibles": 0,
-        "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
-      },
-      "destino": "/dashboard",
-      "pedida": "/dashboard",
-      "llego": true
+      "estado": "no-medido",
+      "detalle": "sin sesión: el paso 4 no pudo entrar"
     },
     {
       "n": 6,
       "nombre": "cargar-dato",
       "que": "Cargar un dato real del rubro (un cliente, un paciente, un producto)",
-      "estado": "ok",
-      "detalle": "pantalla de datos en https://app.onia.com.bo/patients (200)",
-      "status": 200,
-      "ms": 4590,
-      "urlFinal": "https://app.onia.com.bo/patients",
-      "captura": "hermes-content/docs/recorrido/capturas/paso-06-cargar-dato.png",
-      "dom": {
-        "textoVisible": 2194,
-        "secciones": 3,
-        "seccionesInvisibles": 0,
-        "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
-      },
-      "destino": "/patients",
-      "pedida": "/patients",
-      "llego": true
+      "estado": "no-medido",
+      "detalle": "sin sesión: el paso 4 no pudo entrar"
     },
     {
       "n": 7,
       "nombre": "cobro",
       "que": "Llegar a la pantalla de cobro y MIRARLA. Frenar ahí",
-      "estado": "ok",
-      "detalle": "pantalla de cobro a la vista en https://app.onia.com.bo/billing — FRENADO acá a propósito",
-      "status": 200,
-      "ms": 2696,
-      "urlFinal": "https://app.onia.com.bo/billing",
-      "captura": "hermes-content/docs/recorrido/capturas/paso-07-cobro.png",
-      "dom": {
-        "textoVisible": 2216,
-        "secciones": 3,
-        "seccionesInvisibles": 0,
-        "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
-      },
-      "destino": "/billing",
-      "pedida": "/billing",
-      "llego": true
+      "estado": "no-medido",
+      "detalle": "sin sesión: el paso 4 no pudo entrar"
     },
     {
       "n": 8,
       "nombre": "bandeja",
       "que": "Abrir la bandeja / el panel y ver si el dato del paso 6 aparece",
-      "estado": "ok",
-      "detalle": "panel en https://app.onia.com.bo/dashboard (200)",
-      "status": 200,
-      "ms": 3008,
-      "urlFinal": "https://app.onia.com.bo/dashboard",
-      "captura": "hermes-content/docs/recorrido/capturas/paso-08-bandeja.png",
-      "dom": {
-        "textoVisible": 2769,
-        "secciones": 8,
-        "seccionesInvisibles": 0,
-        "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
-      },
-      "destino": "/dashboard",
-      "pedida": "/dashboard",
-      "llego": true
+      "estado": "no-medido",
+      "detalle": "sin sesión: el paso 4 no pudo entrar"
     }
   ]
 }
