@@ -1707,6 +1707,40 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         uno gasta vueltas de este carril persiguiendo fantasmas. **Verificado que el sitio no
         tiene la culpa en los tres.**
 
+### Del carril `web-venta` — corrida del 2026-09-03 10:45 UTC (las dos pantallas, instrumento ya corregido)
+
+- [x] 🟠 **La home cambiaba de voseo a tuteo DENTRO de la misma oración — CERRADO
+      (`95500f82`), con gate.** La tarjeta "De noche" decía *"**Bajás** la persiana … para que
+      lo **apruebes**"*. No era estilo: el sitio conjuga ese verbo en voseo en cinco lugares
+      (`aprobás`). **Barrido a toda la superficie**, no sólo donde saltó — el mismo `apruebes`
+      estaba en los TÉRMINOS (pegado a un `vos`: *"para que vos las apruebes"*) y en
+      `content/requisitos.ts`, que se renderiza en la home y en `/chatbot`.
+      - **Gate nuevo `(sitio)/voz.test.ts`**, que corre en `prebuild` (el comando real del
+        deploy). Caza la **clase**, no el literal: 25 formas de tuteo inequívocas sobre todo
+        archivo de cliente **descubierto del disco**. Lista deliberadamente conservadora —
+        quedan fuera las formas que tuteo y voseo comparten (`tengas`, `estás`, `te`, `tu`) y
+        `prueba`, que es sustantivo del sitio. Un gate que grita por algo correcto se apaga.
+      - **Verificado en ROJO antes**, por el motivo correcto. Y ese rojo destapó un defecto del
+        propio gate: apuntaba a `page.tsx:122` para algo que estaba en la **215**, porque al
+        sacar comentarios corría la cuenta de líneas. Ahora se blanquean conservando los saltos.
+      - **Gates:** typecheck exit 0 · 157 tests (132 + 25) · build exit 0.
+
+- [x] 🟢 **`/empezar` está sana, y muere el fantasma del titular cortado.** Miradas las 10
+      capturas (1440 y 390) con el instrumento arreglado —scroll real por viewports,
+      `scroll-behavior:auto` inyectado, y espera a que el scroll **llegue** en vez de un
+      `setTimeout`—. El titular *"Creá tu cuenta y usalo de verdad 14 días."* sale **entero**:
+      lo de la vuelta pasada era el scroll suave, no el sitio. Y aparece el **cuarto** miembro
+      de la familia de falsos positivos: un revisor visual reportó *"Al dia"* sin tilde en la
+      home y **el string no existe en la fuente** (`grep "Al dia"` → cero). El `grep` sirvió
+      para lo único que sirve: **descartar**.
+
+- [x] 🟠 **Bloqueo del pie REVERIFICADO y vigente (tablero `t_68671bc3`) — no re-medirlo.**
+      74 px de franja clara bajo el pie negro a 390 px, cero a 1440. **Descartadas dos causas
+      falsas antes de creerle a la foto:** no es el widget de Chatwoot (ocultarlo no mueve el
+      alto, 3689 → 3689) y no es artefacto (`culpables: []`, ningún elemento vive ahí abajo).
+      Arreglo `f0248601` en `main`, gate `cierre.test.ts` puesto, decisión ya cotizada en el
+      radar. **Del lado del código no queda nada: falta sólo el deploy, que es de Sergio.**
+
 - [ ] 🟢 **Las otras cinco pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
       Miradas una por una: `contacto` (322 KB/104 ms, formulario y CTAs completos),
       `register` (705 KB/153 ms, asistente de 2 pasos con 5 rubros, íconos legibles),
