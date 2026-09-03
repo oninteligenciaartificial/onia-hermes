@@ -698,9 +698,10 @@ decisión de Sergio, no código.
       `hermes-content/deploy/vps-ops/bot/webhook-server.mjs` y la cubren tres tests de
       `hermes-content/deploy/vps-ops/bot/webhook-server.test.mjs` (lineas 688, 701 y 726).
 
-- [ ] **El bot del CLIENTE escribe el nombre de su encargada en minúscula a mitad de frase.**
+- [x] **El bot del CLIENTE escribe el nombre de su encargada en minúscula a mitad de frase.**
       Abierto el 2026-09-03 al recorrer el circuito de conocimiento (tablero `t_ff51abdc`).
       Lo ve el cliente del cliente, en la primera respuesta.
+      ✅ **ARREGLADO el 2026-09-03 — commiteado, NO desplegado** (ver el punto de deploy al final).
 
       **Reproducción exacta (30 s), ya medida en vivo:**
       ```
@@ -721,16 +722,32 @@ decisión de Sergio, no código.
       en minúscula** (`la encargada`), y hay **cuatro plantillas donde `{{humano}} cae al empezar
       una oración**: `config.mjs:100`, `:166` (después de `.`), `:264` (M7) y `:313`.
 
-      **Arreglo propuesto** (no hecho: se abrió a 8 minutos del tope de la vuelta, y meter una
-      función a medias con sus tests deja el árbol sin compilar). En el callback de
-      `renderTemplate` ya está disponible el `offset`: si el texto anterior está vacío o termina
-      en `.`/`!`/`?`/salto de línea, capitalizar la primera letra del valor **sólo si es
-      minúscula**. Con `:` NO — `"Anotado: {{datos}}"` va en minúscula en castellano.
-      El test tiene que fallar en ROJO por el motivo correcto: `renderTemplate("{{h}} llega",
-      {h:"la encargada"})` → `"La encargada llega"`, y `renderTemplate("lo ve {{h}} hoy", …)`
-      debe seguir dando `"lo ve la encargada hoy"`.
-      ⚠️ Es el repo `onia-hermes`, no `onia-platform`: los gates son los de este árbol, y
-      commitear **no lo despliega** (`/opt/onia/bot` es rsync, no un checkout).
+      **El arreglo, tal como quedó.** `renderTemplate` usa el `offset` que ya le da el callback
+      de `replace`: si lo anterior está vacío o termina en `.`/`!`/`?`/salto de línea, capitaliza
+      la primera letra del valor **sólo si es minúscula**. Con `:` NO — `"Anotado: {{datos}}"` va
+      en minúscula en castellano, y ese caso es el que separa la regla de un `toUpperCase` a lo
+      bruto. **La regla mira el offset y no la clave a propósito**: atarla a `humano` dejaría el
+      mismo defecto vivo en la próxima plantilla que alguien escriba.
+      **Rojo primero, por el motivo correcto:** `config.test.mjs` (nuevo, 11 casos) salió **5
+      fallando** con el texto del bug en la salida —
+      `"…demo.\n\nla encargada te coordina el horario…"` — y los 6 guardarraíles (mitad de frase,
+      `:`, nombre propio, viñeta, `**negrita**`, clave sin valor) verdes desde el principio.
+      Después del arreglo: **11/11**, y la suite entera del bot **744/744**.
+
+      🔴 **Y era más ancho de lo que decía el reporte: NO es sólo el cliente que puso "la
+      encargada".** `knowledge.mjs:860` pone como fallback `humanName: "el equipo"` cuando el
+      cliente no cargó humano — también minúscula. O sea que **todo bot de cliente sin humano
+      cargado** mandaba `"…fuera de horario de oficina. el equipo te confirma…"`. Medido por el
+      camino real (`reply-builder.say`, no el helper suelto), las tres variantes hoy:
+      `la encargada` → `"…oficina. La encargada te confirma…"` · `el equipo` → `"…oficina. El
+      equipo te confirma…"` · `Sergio` → intacto.
+
+      ⚠️ **Es el repo `onia-hermes`, no `onia-platform`**: los gates son los de este árbol
+      (`cd hermes-content/deploy/vps-ops/bot && node --test` → 744/744), y **commitear no lo
+      despliega** — `/opt/onia/bot` es rsync, no un checkout. **Hasta que se sincronice
+      `config.mjs`, producción sigue mandando el cargo en minúscula.** El deploy lo hace
+      `onia-cola` con OK de Sergio; se verifica con la misma reproducción de arriba, exigiendo
+      `La encargada` en la conversación nueva.
 
 ## Después
 
