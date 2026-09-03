@@ -960,8 +960,11 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ### Encontrado el 2026-09-02, corriendo el canario — no es zona de este carril
 
-- [ ] 🟡 **El widget de chat (Chatwoot) responde 429 en `home` y `/empezar` — confirmado en vivo,
-      dueño real es el carril chatbot/infra, no `web-factory/apps/onia-platform`.**
+- [x] 🟡 ~~**El widget de chat (Chatwoot) responde 429 en `home` y `/empezar` — confirmado en vivo,
+      dueño real es el carril chatbot/infra, no `web-factory/apps/onia-platform`.**~~
+      **CERRADO el 2026-09-03 00:55 UTC por `onia-cola`: misma causa que el 🔴 de `/chatbot` —
+      el 429 lo produce nuestro propio tráfico, no una caída.** Ver *"El 429 del widget era
+      nuestro"* al final de esta cola.
       `node scripts/canario_visual.mjs home empezar` salió con un error de consola NUEVO en las
       dos: `Failed to load resource: ...429`. Rastreado con un script propio a
       `https://onia-chatbot-chatwoot.hqdqgh.easypanel.host/widget?website_token=...` — confirmado
@@ -1179,9 +1182,12 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ### Del canario visual — corrida del 2026-09-02 16:41 UTC (diez pantallas)
 
-- [ ] 🔴 **El widget de chat de `/chatbot` está caído: devuelve 429 y ya no carga. La página que
-      VENDE el chatbot es la única del sitio sin chat.** Sin dueño declarado (vive en
-      `web-factory/apps/onia-platform/`).
+- [x] 🔴 ~~**El widget de chat de `/chatbot` está caído: devuelve 429 y ya no carga. La página que
+      VENDE el chatbot es la única del sitio sin chat.**~~ **CERRADO el 2026-09-03 00:55 UTC por
+      `onia-cola`: el 429 es REAL pero NO es del cliente — es nuestro.** El titular era falso en
+      su mitad más cara ("la página que vende el chatbot es la única sin chat"): un visitante
+      real abre el chat normal. Medición completa en la sección *"El 429 del widget era nuestro"*
+      al final de esta cola.
       - **Qué se rompió:** `https://onia-chatbot-chatwoot.hqdqgh.easypanel.host/widget?website_token=9k5i7xnAgCbSse1EZwVChZLw`
         responde **429**. El host es el Chatwoot propio, no Cloudflare de `onia.com.bo`.
       - **Esto cierra la duda que dejó abierta la pasada de las 04:41 UTC** (líneas 604-612), con
@@ -1244,9 +1250,11 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ### Del canario visual — corrida del 2026-09-02 21:41 UTC (diez pantallas, sin ítems nuevos)
 
-- [ ] 🔴 **Los dos ítems 🔴/🟠 de arriba (widget de `/chatbot` caído y captura full-page ciega)
-      siguen exactamente igual, 5 horas después.** No los duplico, los confirmo con evidencia
-      fresca porque nadie los tomó:
+- [x] 🔴 ~~**Los dos ítems 🔴/🟠 de arriba (widget de `/chatbot` caído y captura full-page ciega)
+      siguen exactamente igual, 5 horas después.**~~ **La mitad del widget quedó CERRADA el
+      2026-09-03 (era nuestro propio tráfico); la mitad de la captura full-page ciega SIGUE
+      ABIERTA y es un defecto real — está en el 🟠 de arriba.** Confirmación de entonces, que
+      ahora se lee como lo que era (el canario fotografiando su propia huella):
       - `chatbot-landing` sigue en **331 KB / status 200 / `429`** (era 449 KB a las 16:41 UTC —
         sigue faltando el bundle del widget, no hay burbuja de chat visible en la captura). Tres
         pantallas más (`precios`, `rubros`) SÍ muestran la burbuja verde flotante del widget
@@ -1265,6 +1273,48 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       (331 KB, la esquina inferior derecha sigue sin burbuja de chat) ·
       `hermes-content/docs/historial/canario-visual/2026-09-02-chatbot-landing-viewport-precio.png`
       (la misma banda de precio, capturada por viewport, SÍ se ve).
+
+### El 429 del widget era nuestro — 2026-09-03 00:55 UTC, `onia-cola`
+
+- [x] **El 429 del widget de Chatwoot es REAL, y NO es una caída: se lo hace el VPS a sí mismo.
+      Cerró tres ítems (🟡 de `home`/`empezar`, 🔴 de `/chatbot`, 🔴 de confirmación) que juntos
+      consumieron cuatro vueltas.**
+      **La causa, leída del código que corre** — el initializer de Rack::Attack, línea 176,
+      **dentro del contenedor `onia-chatbot_chatwoot` (no en este repo)**: Chatwoot limita
+      `/widget` **sin**
+      `cw_conversation` a **5 cargas por hora POR IP**. No tiene variable de entorno propia — el
+      único interruptor es `ENABLE_RACK_ATTACK_WIDGET_API`, que apaga el grupo entero.
+      **Por qué el titular era falso.** El ítem decía *"la página que VENDE el chatbot es la
+      única del sitio sin chat"*, y eso vale sólo para nosotros:
+      - El servicio **no está caído**: `/`, `/api` y `/packs/js/sdk.js` responden **200**; sólo
+        `/widget` da 429. Un host sano con una regla puntual, no un contenedor muerto.
+      - **El contador está a nombre de UNA sola IP: `187.77.16.63`, la del propio VPS**, con 21→34
+        cargas contra un límite de 5. Leído en Redis, que es donde Rack::Attack lo guarda (una
+        clave por IP): `velma:rack::attack:<ventana>:widget?...:187.77.16.63`.
+      - **En 6 h hubo 222 peticiones a `/widget` y las 222 son de esa misma IP.** Cero visitantes
+        reales. 207 de 232 iban sin `cw_conversation`, o sea que **gastaban cupo**. Los picos
+        caen en las corridas de nuestros loops (el de 21:41 es el canario).
+      - Cada visitante real cuenta con **su** IP y **su** cupo, así que su chat abre normal.
+      **Instrumento verificado, no supuesto** (la trampa que este archivo ya documenta): probé
+      falsear la IP con `X-Forwarded-For: 203.0.113.77` y **no** apareció una clave nueva — el
+      proxy sobrescribe la cabecera con la IP real del socket. Eso prueba justamente lo que hacía
+      falta: Chatwoot ve IPs de visitante de verdad, no una IP de proxy compartida. Si las
+      colapsara, ahí sí un cliente podría comerse el 429 de otro.
+      **Es el mismo modo de falla que el canario ya pagó con el rasterizador:** el instrumento
+      mide su propia huella y la reporta como una caída del producto. La diferencia es que esta
+      vez el 429 existía — lo falso era de quién.
+      **El arreglo, para que no se re-derive nunca más:**
+      `hermes-content/deploy/vps-ops/widget-429-de-quien.sh` — contesta en segundos con el
+      contador y el desglose de IPs a la vista. **Probado en los dos sentidos**, que es lo que lo
+      hace confiable: con la IP real da `AUTOINDUCIDO`; forzando `ONIA_VPS_IP=10.0.0.99` las 234
+      peticiones pasan a ajenas y sale `OJO: … puede haber clientes afectados`. Una sonda que
+      sólo sabe decir "es nuestro" no sirve para el día en que no lo sea.
+      **Lo que NO hice y es de Sergio:** safelistear la IP del VPS
+      (`RACK_ATTACK_ALLOWED_IPS=187.77.16.63`) es un cambio de entorno del contenedor de chat en
+      producción, con reinicio — no se toca sin su OK. Cotizado en
+      `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md`.
+      **Queda ABIERTO y no lo toqué:** el 🟠 de la captura full-page ciega. Ese sí es un defecto
+      real de `scripts/canario_visual.mjs`, con causa distinta y dueño distinto.
 
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 

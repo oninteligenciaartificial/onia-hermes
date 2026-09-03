@@ -1706,3 +1706,54 @@ permiso de publicar sigue siendo tuyo.
 **Lo que este carril NO puede hacer:** el deploy en sí, ni el merge a `main` (es de `onia-cola`).
 Mientras tanto, la definición de hecho de `CLAUDE.md` —*"encendido en producción y verificado
 ahí"*— dice que estos cuatro commits valen **cero**.
+
+---
+
+## 32. Nuestros propios loops agotan el cupo del widget de chat, y el canario lo reporta como caída (2026-09-03) — decisión de Sergio
+
+**Lo medido, en vivo, no heredado.** El widget de Chatwoot devuelve **429** en `/chatbot`,
+`home` y `/empezar`. Es real: `curl` plano, cinco de cinco, "Retry later". Pero **no es una
+caída y no afecta a ningún cliente**:
+
+- El servicio está sano: `/`, `/api` y el SDK dan **200**; sólo `/widget` da 429.
+- Chatwoot limita `/widget` sin `cw_conversation` a **5 cargas por hora POR IP** (initializer de
+  Rack::Attack, línea 176, dentro del contenedor). Ese límite **no tiene variable de entorno
+  propia**.
+- El contador de Redis está a nombre de **una sola IP: `187.77.16.63`, la del propio VPS**, con
+  34 cargas contra un límite de 5. **En 6 h, las 222 peticiones al widget salieron de esa misma
+  IP.** Cero visitantes reales.
+- Cada visitante real cuenta con su IP y su cupo: **su chat abre normal.** Verificado que el
+  proxy sobrescribe `X-Forwarded-For`, así que Chatwoot ve IPs de visitante de verdad y no una
+  IP compartida — si las colapsara, ahí sí un cliente se comería el 429 de otro.
+
+**El costo, contado:** el ítem ya consumió **cuatro vueltas** de `onia-cola` como 🔴 "la página
+que VENDE el chatbot es la única del sitio sin chat". Y se va a repetir: el canario corre 8×/día
+y cada pasada vuelve a gastar el cupo, fotografía el 429 y lo reporta de nuevo.
+
+**El daño que sí es real, y es de medición:** mientras nuestra IP esté limitada, **el canario es
+estructuralmente incapaz de ver el widget como lo ve un cliente** en cualquier pantalla que lo
+lleve. Es la regla nº4 del prompt (medí con el instrumento correcto) con otro disfraz.
+
+**Las opciones, cotizadas:**
+
+- **a) Safelistear la IP del VPS** — `RACK_ATTACK_ALLOWED_IPS=187.77.16.63` en el contenedor
+  `onia-chatbot_chatwoot`, más reinicio. El initializer ya lo soporta de fábrica
+  (`Rack::Attack.safelist('trusted IPs')`), así que es **encender, no construir**. Nuestro
+  monitoreo deja de gastar cupo y vuelve a ver lo que ve el cliente; **el cliente conserva su
+  protección de 5/hora** contra bombardeo de conversaciones. Costo: un cambio de env + un
+  reinicio del chat (corta conversaciones vivas unos segundos). **Es la que recomiendo.**
+- **b) Apagar el throttle del widget entero** — `ENABLE_RACK_ATTACK_WIDGET_API=false`. Más
+  simple, pero se lleva puesta también la protección anti-bombardeo de conversaciones y de
+  contactos. **No la recomiendo:** desprotege al cliente para arreglar un problema nuestro.
+- **c) No tocar producción y bajarle la mano al monitoreo** — que los loops dejen de cargar el
+  widget. Cero riesgo y cero permiso, pero no arregla la ceguera: el canario seguiría sin poder
+  mirar el chat, que es justo lo que tiene que mirar.
+
+**Lo que ya está hecho y no espera a nadie:** la sonda
+`hermes-content/deploy/vps-ops/widget-429-de-quien.sh` contesta "¿es nuestro o del cliente?" en
+segundos, con el contador y el desglose de IPs a la vista, y está probada en los **dos** sentidos
+(con la IP real dice `AUTOINDUCIDO`; forzando otra IP alerta `puede haber clientes afectados`).
+Con eso, la próxima vuelta que vea un 429 no vuelve a gastar una sesión derivándolo.
+
+**Lo que depende de Sergio:** sólo el OK para (a) — es un cambio de entorno en el contenedor de
+chat de producción, con reinicio, y eso no se toca sin su palabra.
