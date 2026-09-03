@@ -1200,7 +1200,8 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         esquina inferior derecha de la captura.
       - **Sospecha para el que lo tome (no verificada, no la reporto como hecho):** un 429 propio
         del Chatwoot huele a rate-limit del contenedor. El VPS le pega cada hora con
-        `chatwoot-brand-onia.sh` (cron minuto 17) además del motor del bot. **No lo toqué**:
+        `hermes-content/deploy/vps-ops/chatwoot-brand-onia.sh` (cron minuto 17, desplegado en
+        `/root/bin/`) además del motor del bot. **No lo toqué**:
         contenedores y crons ajenos no son de este carril.
       **Evidencia:** `hermes-content/docs/historial/canario-visual/2026-09-02-chatbot-landing.png`
       — 449 KB / 684 ms / status 200 / `erroresConsola: ["…status of 429"]`.
@@ -1237,6 +1238,9 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       `panel-chatbot` 702 KB/440 ms **redirige a `/login` sin sesión: queda "no medida", no "OK"**.
       **Ninguna baseline se actualizó esta vuelta.** La de `chatbot-landing` (2.232 KB) se deja
       intacta a propósito: pisarla con los 449 KB de hoy taparía el ítem del widget caído.
+      **Evidencia:** `hermes-content/docs/historial/canario-visual/2026-09-02-home.png` ·
+      `hermes-content/docs/historial/canario-visual/2026-09-02-rubros.png`; baselines sin tocar en
+      `hermes-content/references/canario-visual/chatbot-landing/baseline.json`.
 
 ### Del canario visual — corrida del 2026-09-02 21:41 UTC (diez pantallas, sin ítems nuevos)
 
@@ -1256,6 +1260,11 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       register 704 KB/161 ms · login-plataforma 696 KB/119 ms · login-chat 3.500 KB/954 ms ·
       panel-chatbot 702 KB/215 ms (redirige a `/login`, sigue "no medida"). Ninguna baseline
       tocada.
+      **Evidencia:**
+      `hermes-content/docs/historial/canario-visual/2026-09-02-chatbot-landing-2141utc.png`
+      (331 KB, la esquina inferior derecha sigue sin burbuja de chat) ·
+      `hermes-content/docs/historial/canario-visual/2026-09-02-chatbot-landing-viewport-precio.png`
+      (la misma banda de precio, capturada por viewport, SÍ se ve).
 
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 
