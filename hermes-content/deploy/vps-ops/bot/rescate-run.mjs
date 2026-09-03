@@ -242,12 +242,58 @@ export function clasificarRespuesta(respuesta) {
   return { contestado: false, motivo: String(cuerpo?.reason || "sin_respuesta") };
 }
 
+/**
+ * Telegram va en HTML (`onia-tg.sh`), asi que el texto de la persona se escapa SIEMPRE: un `<`
+ * suelto no rompe el mensaje, lo hace no llegar — y el aviso que no llega es el bug otra vez.
+ *
+ * Se escribe aca en vez de importarlo de `scripts/`: este archivo se rsyncea plano a
+ * `/opt/onia/bot`, donde esa carpeta no existe, y `espejo-check.mjs` compara el juego de
+ * archivos. Un import que cruce el espejo revienta en produccion, no en el test.
+ */
+function escaparHtml(texto) {
+  return String(texto ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+/**
+ * El aviso de un rescate CONSUMADO.
+ *
+ * Solo se arma con los que el webhook contesto de verdad: los que se reinyectaron y salieron
+ * deduplicados no salvaron a nadie, y avisar de ellos entrena a no leer los avisos.
+ */
+export function armarAvisoRescate(resultado) {
+  const salvados = (resultado?.detalle || []).filter((d) => d.resultado === "contestado");
+  if (!salvados.length) return null;
+  const cabeza =
+    salvados.length === 1
+      ? "🛟 <b>Rescatado un mensaje perdido</b>"
+      : `🛟 <b>Rescatados ${salvados.length} mensajes perdidos</b>`;
+  const lineas = salvados.map(
+    (d) =>
+      `· conv ${d.conversationId}: esperaba hace ${d.edadMin} min — «${escaparHtml(d.texto)}»`,
+  );
+  return [
+    cabeza,
+    "El webhook estaba caido cuando entro y Chatwoot no reintenta. El bot ya le contesto.",
+    ...lineas,
+  ].join("\n");
+}
+
 export async function runRescateSweep(options = {}, deps = {}) {
   const ahoraMs = Number.isFinite(options.ahoraMs) ? options.ahoraMs : Date.now();
   const emitir = options.emitir === true;
   const limite = Number.isFinite(options.limit) && options.limit > 0 ? Math.floor(options.limit) : 20;
   const leerFilas = deps.leerFilas || leerFilasDeChatwoot;
   const postWebhook = deps.postWebhook || postAlWebhook;
+  const avisar =
+    deps.avisar ||
+    (async (texto) => {
+      const { execFile } = await import("node:child_process");
+      const { promisify } = await import("node:util");
+      await promisify(execFile)("/root/bin/onia-tg.sh", [texto]);
+    });
 
   const filas = await leerFilas({ desdeMs: ahoraMs - MAX_EDAD_MS - MIN_EDAD_MS, ahoraMs });
   const huerfanos = seleccionarHuerfanos(filas, { ahoraMs }).slice(0, limite);
@@ -271,6 +317,18 @@ export async function runRescateSweep(options = {}, deps = {}) {
     } catch (error) {
       // El fallo de uno no puede cancelar el rescate de los otros: son leads distintos.
       resultado.fallidos.push({ ...linea, motivo: String(error?.message || error) });
+    }
+  }
+
+  // Telegram es el TESTIGO del rescate, no el rescate. Si el aviso falla, la persona ya fue
+  // contestada igual: tirar aca convertiria un exito en un exit 2 y el proximo barrido
+  // reinyectaria de gusto.
+  const aviso = emitir ? armarAvisoRescate(resultado) : null;
+  if (aviso) {
+    try {
+      await avisar(aviso);
+    } catch (error) {
+      resultado.avisoFallido = String(error?.message || error);
     }
   }
   return resultado;

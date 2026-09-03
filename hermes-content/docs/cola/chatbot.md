@@ -158,6 +158,94 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **La mitad "y esa conversación SE VE en la bandeja" del objetivo del carril llevaba sin
+      medirse desde que se escribió: su gate moría con `Cannot find module`.** CERRADO el
+      2026-09-03. Lo encontró el chequeo de arranque, no la cola.
+      **La medición que lo destapó:** `node scripts/objetivo_visible.mjs` →
+      *"NO MEDIDO — Cannot find module `/root/loops/onia-platform-chatbot/node_modules/@supabase/ssr/dist/main/index.js`"*,
+      `exit 2`. La ruta de `@supabase/ssr` era **una sola y hardcodeada** (`SSR_POR_DEFECTO`), y
+      apuntaba al worktree del carril, que **nunca tuvo `npm ci`**
+      (`ls: /root/loops/onia-platform-chatbot/node_modules: No such file or directory`). El clon
+      de `main`, `/root/loops/onia-platform`, sí lo tiene instalado.
+      ✅ **Lo bueno: el gate fallaba en ROJO honesto, no en falso verde** — `exit 2` y el texto
+      *"No medir NO es estar bien"*. Por eso esto es una medición perdida, no una mentira.
+      **El arreglo son los dos candidatos que el carril ya usa** en el vigía y en el rescate
+      (clon de `main` + worktree, y explota nombrándolos a los dos si falta en ambos):
+      `SSR_CANDIDATOS` + `elegirSsrDir(candidatos, existe)` en `scripts/objetivo_visible.mjs`.
+      La elección es pura y el `existe` se inyecta, así que se prueba sin disco. **Una ruta sola
+      arranca rota el día que ese árbol no está** — es el mismo modo de falla que el carril ya
+      tenía escrito para los crons de un solo path.
+      **Rojo primero, por el motivo correcto:** `ReferenceError: elegirSsrDir is not defined`.
+      **31 → 36 casos**, verde.
+      ⚠️ **Y el caso que hace que esto no se vuelva a perder: un guardia contra disco REAL.** Los
+      cuatro casos con `existe` inyectado pasan verdes **con el módulo ausente de la máquina** —
+      o sea que solos habrían dejado el gate muriendo en producción otra vez. El quinto afirma
+      que `@supabase/ssr` sigue instalado en alguno de los candidatos, y se saltea con aviso
+      donde no hay ninguno en disco (fuera del VPS, donde un rojo sería falso).
+      **Verificado corriéndolo contra producción, no contra el test:**
+      `node scripts/objetivo_visible.mjs` → `exit 0`, *"OBJETIVO VISIBLE — la bandeja del dueño
+      trae 2 conversacion(es) de gente que no somos nosotros: #37 mariohassen +59173021804 · #35 F
+      +59173232758"*, por el camino completo (sesión → `/api/bandeja` → Chatwoot → lista).
+      🔴 **De paso, otro contacto de sonda que figuraba como desconocido: la conv 50.** Nació hoy
+      02:06 en el inbox 4 —el de los leads reales— con el contacto anónimo `quiet-shape-612` y
+      **los dos mensajes textuales del guion de la sonda**, el primero a 0,1 s de crearse la
+      conversación. Sin teléfono, sin correo, sin identifier, una sola conversación. No la dejó
+      `scripts/sonda_widget.mjs` (su bootstrap ya crea el contacto CON nombre desde el 2026-09-02): la
+      dejó una corrida a mano del guion del chequeo de arranque, que abre el widget sin ese
+      bootstrap. **Hoy no envenenaba ningún conteo** —medido, no supuesto: el vigía en seco da
+      *"5 colgado(s)"* y la 50 no está, porque el bot sí le contestó— pero cualquier recuento de
+      desconocidos del inbox 4 la habría sumado. Renombrada a `Sonda QA carril chatbot`, que es
+      el nombre que `esNuestra` ya excluye. Mismo tratamiento que recibieron las convs 45, 46 y 47.
+
+- [x] 🔴 **Cinco desconocidos escribieron y nadie les contestó — el más viejo hace NUEVE DÍAS —
+      y no existía nada que avisara.** CERRADO el 2026-09-03. Es la mitad abierta del ítem de
+      abajo: ese ítem dice, con todas las letras, que el mensaje *"no se contesta nunca **y nadie
+      se entera**"*. El rescate resuelve "no se contesta" para una ventana de 12 h y **hoy ni
+      siquiera está desplegado**; "nadie se entera" no lo resolvía nada.
+      **Lo que había, revisado uno por uno y no supuesto:** `/root/bin/onia-leads-vigia.sh` mira
+      `access_requests` (el formulario de `/empezar`), **no Chatwoot** · `/root/bin/onia-vigia-embudo.sh`
+      mira que la landing, Cal.com y Postiz respondan por HTTP · `/opt/onia/bot/webhook-watchdog.sh` mira que
+      el puerto 3020 esté vivo · `hermes-content/deploy/vps-ops/bot/rescate-run.mjs` sólo toca de 3 min a 12 h. **Ninguno de los
+      cuatro puede ver a una persona esperando.**
+      **La medida que lo destapó** (base de Chatwoot, inboxes 4 y 5, último mensaje entrante sin
+      ningún saliente después): **conv 37** (WhatsApp, 6 d, *"Hola, vengo de la web de Onia…"*) y
+      **conv 35** (WhatsApp, 8 d, *"…evaluando un sistema de gestión para una clínica"*) **nunca
+      recibieron un solo mensaje saliente**; más conv 36, 40 y 34. Contestarlos es **S7** y vende
+      Sergio — lo que faltaba no era la respuesta, era que alguien supiera que están ahí.
+      **Construido:** `scripts/vigia_sin_respuesta.mjs` + `scripts/vigia_sin_respuesta.test.mjs`
+      (**15/15**, rojo primero por `Cannot find module`) y el envoltorio
+      `hermes-content/deploy/vps-ops/onia-vigia-sin-respuesta.sh`. Sólo LECTURA sobre Chatwoot,
+      seco por defecto. Reusa `esNuestra` de `scripts/objetivo_visible.mjs` en vez de reimplementar quién
+      es "nosotros": dos definiciones del mismo concepto envejecen en direcciones distintas.
+      **Tres decisiones que valen más que el código:**
+      1. **Avisa de `handoff_humano`, no lo calla.** Cuando el bot deriva, su silencio es
+         correcto; que el humano no llegue nunca no lo es. Es exactamente el huérfano real de hoy
+         (conv 47), el que el rescate cuenta y no salva a propósito.
+      2. **No tiene techo de edad**, al revés que el rescate. El rescate ESCRIBE (contestar a
+         alguien de hace tres días llega fuera de contexto y fuera de la ventana de 24 h de Meta);
+         esto sólo AVISA, y avisar de un lead viejo no daña a nadie.
+      3. **Avisa una vez por MENSAJE, no por conversación.** Si la persona insiste, vuelve a
+         avisar: cada insistencia es un lead más caliente. Un vigía que avisa una vez y calla
+         para siempre repite el bug que vino a vigilar.
+      🔴 **Y de paso se arregló un dato falso que envenenaba TODA medición futura del carril: las
+      conversaciones 45, 46 y 47 son de la sonda y figuraban como desconocidos.** La primera
+      corrida las contó a las tres (8 "colgados" en vez de 5). No se asumió: se leyeron sus
+      mensajes —el guion textual de la sonda— y sus contactos (`delicate-cloud-154`,
+      `dawn-glade-230`, `white-pine-699`, **una sola conversación cada uno**, sin teléfono ni
+      correo). Son de antes de que la sonda nombrara `Sonda QA` a su contacto a propósito.
+      Renombrados a `Sonda QA` en la base, que es el nombre que `scripts/objetivo_visible.mjs` ya excluye:
+      con eso el vigía, el gate del objetivo y cualquier conteo a mano dejan de contar nuestro
+      propio tráfico como un lead. **Es el instrumento que se da la razón a sí mismo, en forma de
+      dato.**
+      **Verificado en vivo, no en el test:** en seco → *"5 colgado(s) · 5 sin avisar"*;
+      `--emit` → Telegram salió; segunda corrida → *"5 colgado(s) · **0** sin avisar"* (no repite);
+      estado en `/root/loops/estado/vigia-sin-respuesta.json`.
+      **Encendido**: `/root/bin/onia-vigia-sin-respuesta.sh`, cron `39 */2 * * *`, log
+      `/var/log/onia-vigia-sin-respuesta.log`. El envoltorio busca el script en el clon de `main`
+      y, si todavía no llegó, en el worktree del carril — y **si no lo encuentra en ninguno avisa
+      por Telegram**: un cron que apunta a un solo path arranca roto y se queda roto en silencio,
+      que es el modo de falla que este vigía vino a cerrar.
+
 - [ ] 🔴 **Un mensaje que llega mientras el webhook está caído se pierde PARA SIEMPRE, y pasa
       una vez por día.** Abierto el 2026-09-03 **por el chequeo de arranque, no por la cola**:
       `node scripts/sonda_widget.mjs` salió *"EL BOT SE QUEDO MUDO — conversacion 49: #1 → 0
@@ -208,15 +296,45 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       tenerlo. Arreglado con `clasificarRespuesta` (5 casos más): ahora separa **mandado** de
       **CONTESTADO** y dice el motivo. Salida real de hoy:
       *"1 sin respuesta · 1 reinyectados · 0 CONTESTADOS"*, con `-> mensaje_ya_procesado` en la línea.
-      🔴 **Lo que FALTA para que esto valga algo — y es lo único que queda:**
-      1. **Desplegar.** `/opt/onia/bot` es rsync, no git: **commiteado, NO desplegado.** Mientras
-         tanto el rescate no corre solo ni una vez.
-      2. **Su línea de cron**, que todavía no existe. Sin horario, un barrido es un script que
-         nadie ejecuta. Va después del deploy y lo hace `onia-cola`.
-      3. **Falta la prueba de un rescate que produzca una respuesta VISIBLE.** Hoy no se pudo:
-         el único huérfano disponible estaba en handoff. Que la reinyección llega al motor sí está
-         probado —el dedup cambió de estado— pero eso no es lo mismo. **Cómo probarlo cuando haya
-         uno:** correr `--emit` y exigir `CONTESTADOS ≥ 1`, no `reinyectados`.
+      ✅ **ENCENDIDO el 2026-09-03: el barrido corre solo cada 10 minutos.** Hasta hoy este ítem
+      esperaba un deploy a `/opt/onia/bot` que **nunca hizo falta**, y ese era todo el bloqueo.
+      🔴 **El deploy era un requisito FALSO, y se probó ejecutando, no razonando.** El barrido no
+      es parte del motor: es un **cliente** suyo. Lee Chatwoot por `docker exec` y postea al
+      webhook por HTTP a `127.0.0.1`, tomando el secreto de `/opt/onia/bot/webhook.env`, que ya
+      está ahí. Corrido **desde el repo** contra producción, reinyectando el msg 257 de la conv 49
+      (ya contestado, así que el dedup lo corta y nadie recibe nada):
+      `{"ok":true,"duplicate":true,"stageBefore":"esperando_horario","sent":[]}`. **El circuito
+      entero anda sin copiar un solo archivo al bot** — o sea que los puntos 1 y 2 eran uno solo,
+      y era una línea de cron.
+      ⚠️ **Y el deploy no sólo era innecesario: apuntarle era el error.** Hay una copia vieja en
+      `/opt/onia/bot/rescate-run.mjs` (3-sep 01:58, md5 distinto), **sin** el arreglo del 401 ni
+      `clasificarRespuesta`. Cablear el cron a ese path —que es lo que decía este ítem— habría
+      encendido la versión rota. Por eso el envoltorio **excluye ese path a propósito** y sólo
+      mira los dos checkouts de git.
+      **Encendido:** `/root/bin/onia-rescate-mensaje-perdido.sh` (espejo versionado en
+      `hermes-content/deploy/vps-ops/onia-rescate-mensaje-perdido.sh`), cron
+      `4,14,24,34,44,54 * * * *`, log `/var/log/onia-rescate-mensaje-perdido.log`. Mismo patrón de
+      dos candidatos que el vigía: clon de `main` primero, worktree del carril como respaldo, y
+      **Telegram si no encuentra ninguno** — un cron de un solo path arranca roto y se queda roto
+      en silencio. Verificado corriéndolo a mano (`0 sin respuesta`, exit 0) y **disparado por
+      cron**, no sólo instalado.
+      🔴 **Y el barrido ahora AVISA cuando salva a alguien — sin eso repetía, en su propio cuerpo,
+      el bug que vino a cerrar.** Un rescate que ocurre a las 03:00 y sólo queda en un log que
+      nadie abre es indistinguible de no haber ocurrido. `armarAvisoRescate` manda una línea a
+      Telegram **sólo con los CONTESTADOS** (los reinyectados que salieron deduplicados no
+      salvaron a nadie, y avisar de ellos entrena a no leer los avisos), con la conversación,
+      cuánto esperó la persona y qué había escrito. **Rojo primero:** `armarAvisoRescate is not
+      defined` y el caso del aviso `esperaba 1 y fue 0`. **25/25 → 29/29.**
+      Cuatro decisiones que el test fija: el texto de la persona se **escapa a HTML** (un `<`
+      suelto no rompe el mensaje, hace que **no llegue**) · en **seco no avisa nunca** · si
+      Telegram falla, el rescate **sigue contando como hecho** (es el testigo, no el trabajo) · y
+      el escapador se escribe local en vez de importarlo de `scripts/` porque este archivo se
+      rsyncea plano al bot, donde esa carpeta no existe, y el import reventaría en producción, no
+      en el test.
+      3. **Falta todavía la prueba de un rescate que produzca una respuesta VISIBLE.** Hoy tampoco
+         se pudo: el barrido mide **0 huérfanos** (el de ayer, conv 47, estaba en handoff). Ya no
+         hay que acordarse de mirar: con el cron encendido, **el próximo huérfano real se rescata
+         solo y el aviso lo cuenta**. Hecho = llega ese Telegram, o el log dice `CONTESTADOS ≥ 1`.
       ⚠️ **El log por mensaje YA está desplegado — el párrafo que decía lo contrario era viejo.**
       Recontado hoy: `/tmp/onia-bot/webhook-server.mjs` (el que corre) es del **3-sep 01:58**, no
       del 29-ago, y su stdout va a `/tmp/onia-bot-webhook.log` **dentro del contenedor** — por eso
