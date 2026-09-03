@@ -161,6 +161,10 @@ poner "$FUENTE/hermes-vigia.sh"            "$DESTINO_BIN/hermes-vigia.sh"
 # con la foto. Es la mitad del circuito "el loop pregunta -> Sergio contesta ok"
 # que faltaba del lado de Sergio (2026-09-03).
 poner "$FUENTE/vigia-aprobaciones.sh"      "$DESTINO_BIN/onia-vigia-aprobaciones.sh"
+# Renovar la sesion OAuth de Higgsfield desde un VPS sin navegador (2026-09-03:
+# el servidor la revoco sin que venciera; el CLI solo sabe abrir un navegador).
+poner "$FUENTE/hf-login-start.sh"          "$DESTINO_BIN/hf-login-start.sh"
+poner "$FUENTE/hf-login-finish.sh"         "$DESTINO_BIN/hf-login-finish.sh"
 
 mkdir -p "$DESTINO_BIN/loops"
 # La misma guarda que el corredor, para los prompts. Medido el 2026-09-03 a las
