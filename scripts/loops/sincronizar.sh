@@ -166,6 +166,16 @@ poner "$FUENTE/vigia-aprobaciones.sh"      "$DESTINO_BIN/onia-vigia-aprobaciones
 poner "$FUENTE/hf-login-start.sh"          "$DESTINO_BIN/hf-login-start.sh"
 poner "$FUENTE/hf-login-finish.sh"         "$DESTINO_BIN/hf-login-finish.sh"
 
+# El runbook de deploy de la LANDING (onia.com.bo). Vivia solo en
+# /opt/onia-landing/_deploy: build-and-stage.sh sin versionar, y
+# swap-and-verify.sh con el bit de ejecucion perdido ("Permission denied" el
+# 2026-09-03, a mitad de un deploy). `poner` hace bash -n y chmod 755 en cada
+# copia: un runbook que no se puede ejecutar no vuelve a pasar en silencio.
+if [ -d /opt/onia-landing/_deploy ]; then
+  poner "$REPO/hermes-content/deploy/onia-landing/build-and-stage.sh"  /opt/onia-landing/_deploy/build-and-stage.sh
+  poner "$REPO/hermes-content/deploy/onia-landing/swap-and-verify.sh"  /opt/onia-landing/_deploy/swap-and-verify.sh
+fi
+
 mkdir -p "$DESTINO_BIN/loops"
 # La misma guarda que el corredor, para los prompts. Medido el 2026-09-03 a las
 # 12:04: la guarda de arriba salvo onia-loop.sh, y en la MISMA corrida el sync
