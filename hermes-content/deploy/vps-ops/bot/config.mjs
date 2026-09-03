@@ -649,11 +649,43 @@ export function slotsPending(config = DEFAULT_CONFIG) {
   return (config.slots || []).some((slot) => slot && slot.pending === true);
 }
 
-/** Reemplaza {{clave}} por su valor. Corre SIEMPRE DESPUES del guardrail (spec §3.1). */
+/**
+ * ¿Lo que viene ANTES de este marcador abre una oracion nueva?
+ *
+ * Abre oracion si no hay nada antes, o si lo anterior termina en `.`, `!`, `?` o salto de linea.
+ * Los dos puntos NO abren oracion en castellano ("Anotado: agenda y cobros"), y por eso se
+ * excluyen a mano: es la unica diferencia entre esta regla y un capitalizado a lo bruto.
+ */
+function abreOracion(anterior) {
+  const previo = anterior.replace(/[ \t]+$/, "");
+  return previo === "" || /[.!?\n]$/.test(previo);
+}
+
+/**
+ * Reemplaza {{clave}} por su valor. Corre SIEMPRE DESPUES del guardrail (spec §3.1).
+ *
+ * Capitaliza el valor cuando cae a empezar oracion. Nace de un defecto que salio a produccion y
+ * lo vio el cliente del cliente (conversacion 51, 2026-09-03), textual:
+ *
+ *     _(Estoy respondiendo automatico fuera de horario de oficina. la encargada te confirma
+ *     en la mañana.)_
+ *
+ * El humano de Onia es un nombre propio (`Sergio`) y por eso nunca se noto; el conocimiento de
+ * un cliente trae un CARGO en minuscula, y hay cuatro plantillas donde `{{humano}}` abre frase.
+ * La regla mira el offset y no la clave a proposito: atarla a `humano` dejaria el mismo bug vivo
+ * en la proxima plantilla que alguien escriba. Solo toca la primera letra si es minuscula, asi
+ * que un nombre propio, una viñeta o un `**negrita**` pasan intactos.
+ */
 export function renderTemplate(text, vars = {}) {
-  return String(text ?? "").replace(/\{\{\s*([a-z0-9_]+)\s*\}\}/gi, (match, key) => {
+  const plantilla = String(text ?? "");
+  return plantilla.replace(/\{\{\s*([a-z0-9_]+)\s*\}\}/gi, (match, key, offset) => {
     const value = vars[key];
-    return value === undefined || value === null ? match : String(value);
+    if (value === undefined || value === null) return match;
+    const rendered = String(value);
+    if (!abreOracion(plantilla.slice(0, offset))) return rendered;
+    const inicial = rendered.charAt(0);
+    if (inicial !== inicial.toLowerCase() || inicial === inicial.toUpperCase()) return rendered;
+    return inicial.toUpperCase() + rendered.slice(1);
   });
 }
 

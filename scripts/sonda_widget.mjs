@@ -157,6 +157,22 @@ export function juzgar({ enviados, mensajes, conversacionId }) {
         `no un exito parcial: es como el bot paso una semana con gente real del otro lado.`,
     };
   }
+
+  // Contestar no es contestar BIEN. Al primer "hola, quiero informacion" de alguien que todavia
+  // no conto nada, derivar a un humano es la respuesta equivocada — y con el conteo solo, esa
+  // vuelta es indistinguible de una sana. Ver el comentario largo de `esExtrano`.
+  if (mios[0].respuestas.some(esDerivacion)) {
+    return {
+      codigo: 1,
+      texto:
+        `EL BOT DERIVO EN EL PRIMER TURNO — conversacion ${conversacionId ?? '?'}: ${detalle}. ` +
+        `A "${String(mios[0].entrante).slice(0, 40)}" contesto "${normalizar(mios[0].respuestas[0]).slice(0, 60)}...", ` +
+        'que es la derivacion a un humano. Un desconocido que recien saluda no tiene nada que ' +
+        'derivar: o el motor arranco con el embudo cargado (mirar `esExtrano` sobre ' +
+        '`onia_center.bot_conversations`), o el bot deriva de una a todo el mundo.',
+    };
+  }
+
   return {
     codigo: 0,
     texto: `EL BOT CONTESTO LOS ${MENSAJES.length} — conversacion ${conversacionId ?? '?'}: ${detalle}.`,
@@ -216,6 +232,88 @@ export function necesitaDesarme(fila) {
   if (!fila) return false;
   if (fila.humanTookOver === true) return true;
   return ESTADOS_QUE_CALLAN.has(String(fila.botStage || ''));
+}
+
+// ────────────── Y por que el desarme SOLO no alcanzaba: la sonda seguia envenenada ──────────────
+//
+// Medido el 2026-09-03 sobre la conversacion 49, con los MISMOS dos mensajes, en tres vueltas
+// consecutivas del loop. Las tres salieron "EL BOT CONTESTO LOS 2", exit 0, verde:
+//
+//   03:04  #1 → "¡Hola! Soy el asistente automatico de Onia. Si, un bot."   ← lo que ve un extrano
+//   04:03  #1 → "¿Queres que te reserve para el viernes 4 de septiembre?"   ← ya le ofrece hora
+//   05:03  #1 → "Eso lo tiene que ver Sergio, no yo" (M5)                   ← lo deriva de una
+//
+// El bot no se rompio: la SONDA se degrado. `clearHumanTakeover` (bot-engine.mjs:121) devuelve
+// `bot_stage` a "nuevo" y nada mas — y hace bien, porque para un lead de verdad olvidarle el
+// rubro seria el bug. Pero la fila de la sonda seguia con `qualification={city,industry,teamSize}`,
+// dos `slots_offered` y `off_script_count=2`: el motor arrancaba cada vuelta con el embudo YA
+// completo y derivaba en el primer turno. Un desconocido nunca recibe eso.
+//
+// La sonda no lo podia ver porque CONTABA las respuestas sin LEERLAS. Es el defecto exacto que
+// el carril tiene escrito —"un test que mira el primer paso no ve un sistema que muere en el
+// segundo"— una vuelta mas adentro: un test que cuenta no ve un sistema que contesta cualquier cosa.
+
+/**
+ * ¿Esta fila es la de alguien que escribe por PRIMERA vez?
+ *
+ * Es la precondicion de toda la medicion: la sonda dice medir "un desconocido escribe dos veces",
+ * y si el motor ya sabe el rubro, el tamano y la ciudad, lo que se mide es otra cosa. Sin fila
+ * es el caso mas extrano de todos (conversacion recien creada), no un error.
+ */
+export function esExtrano(fila) {
+  if (!fila) return true;
+  if (fila.humanTookOver === true) return false;
+  if (String(fila.botStage || 'nuevo') !== 'nuevo') return false;
+  if (Object.keys(fila.qualification || {}).length > 0) return false;
+  if ((fila.slotsOffered || []).length > 0) return false;
+  if (Number(fila.offScriptCount || 0) !== 0) return false;
+  if (fila.scheduledAt) return false;
+  if (fila.optOutAt) return false;
+  return true;
+}
+
+/** Lo que hay que blanquear para que el motor vuelva a ver a un desconocido. */
+export function guionBlanqueo(conversacionId) {
+  return (
+    'update onia_center.bot_conversations set ' +
+    "bot_stage = 'nuevo', human_took_over = false, human_took_over_at = null, " +
+    "qualification = '{}'::jsonb, slots_offered = '[]'::jsonb, scheduled_at = null, " +
+    'calendar_event_id = null, off_script_count = 0, followup_step = 0, opt_out_at = null, ' +
+    'updated_at = now() ' +
+    `where conversation_key = 'chatwoot:${Number(conversacionId)}';`
+  );
+}
+
+/**
+ * Las frases con las que el bot DERIVA a un humano, tal como las fija `config.mjs` del bot
+ * (M5, M5_ACUSE y M8_SOPORTE). Normalizadas: sin acentos de dibujo, en minuscula y con los
+ * guiones largos vueltos guion comun, que es donde estas comparaciones se rompen.
+ *
+ * Recibir esto en el PRIMER turno es el bug: el prospecto todavia no conto nada, asi que no hay
+ * nada que derivar. En el segundo puede ser exactamente lo correcto y por eso no se mira.
+ */
+export const CONFIG_DEL_BOT =
+  process.env.ONIA_BOT_CONFIG || new URL('../hermes-content/deploy/vps-ops/bot/config.mjs', import.meta.url).pathname;
+
+export const FRASES_DE_DERIVACION = [
+  'no yo - soy un bot',
+  'sigo siendo el bot',
+  'esto no es una demo de venta: es soporte',
+];
+
+/** Minuscula, guiones largos a guion comun y espacios colapsados. */
+export function normalizar(texto) {
+  return String(texto || '')
+    .toLowerCase()
+    .replace(/[—–]/g, '-')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/** ¿Este texto es una derivacion a un humano? */
+export function esDerivacion(texto) {
+  const t = normalizar(texto);
+  return FRASES_DE_DERIVACION.some((f) => t.includes(f));
 }
 
 /** El guion de Rails. Separado y exportado para poder afirmarlo sin levantar un contenedor. */
@@ -344,26 +442,43 @@ function conversacionDelToken(token) {
  * del `supabase-db` self-hosted. Mirar solo Chatwoot fue lo que hizo invisible este bug: alli
  * la conversacion figura `open` y perfectamente sana.
  */
+function psqlMotor(sql) {
+  return execFileSync('docker', ['exec', ESTADO_DB, 'psql', '-U', 'postgres', '-d', 'postgres', '-tAc', sql], {
+    encoding: 'utf8',
+    timeout: 30_000,
+  }).trim();
+}
+
 function estadoDelBot(conversacionId) {
-  const fila = execFileSync(
-    'docker',
-    [
-      'exec',
-      ESTADO_DB,
-      'psql',
-      '-U',
-      'postgres',
-      '-d',
-      'postgres',
-      '-tAc',
-      `select bot_stage || '|' || human_took_over from onia_center.bot_conversations ` +
-        `where conversation_key = 'chatwoot:${Number(conversacionId)}';`,
-    ],
-    { encoding: 'utf8', timeout: 30_000 },
-  ).trim();
+  // Por JSON y no por `||'|'||`: `qualification` trae texto libre del prospecto (ciudad, rubro)
+  // y cualquier separador que se elija puede aparecer adentro.
+  const fila = psqlMotor(
+    `select json_build_object('botStage', bot_stage, 'humanTookOver', human_took_over, ` +
+      `'qualification', qualification, 'slotsOffered', slots_offered, 'offScriptCount', off_script_count, ` +
+      `'scheduledAt', scheduled_at, 'optOutAt', opt_out_at)::text ` +
+      `from onia_center.bot_conversations where conversation_key = 'chatwoot:${Number(conversacionId)}';`,
+  );
   if (!fila) return null;
-  const [botStage, tomada] = fila.split('|');
-  return { botStage, humanTookOver: tomada === 't' || tomada === 'true' };
+  return JSON.parse(fila);
+}
+
+/**
+ * Deja la conversacion de sonda como la de alguien que nunca escribio.
+ *
+ * DOS pasos, y el orden importa. Primero el desarme por Rails, que es la semantica del propio
+ * producto y de paso verifica cada vuelta que ese camino siga vivo. Despues el blanqueo del
+ * embudo por SQL — y esto SI es escribir la base a mano, a falta de camino de producto: el bot
+ * no tiene (ni debe tener) un "olvidate de este lead". Al reves de lo que se dio por bueno el
+ * 2026-09-02, resetear el estado del motor NO alcanzaba: lo que envenenaba la medicion no era
+ * `bot_stage` sino el embudo que sobrevive intacto al desarme.
+ *
+ * Blanquear DESPUES del desarme y no antes: resolver viaja por Sidekiq y el adapter reescribe
+ * la fila al llegar, asi que un blanqueo previo se lo lleva puesto.
+ */
+function dejarComoExtrano(conversacionId) {
+  if (necesitaDesarme(estadoDelBot(conversacionId)) && !desarmar(conversacionId)) return false;
+  psqlMotor(guionBlanqueo(conversacionId));
+  return esExtrano(estadoDelBot(conversacionId));
 }
 
 /**
@@ -446,25 +561,21 @@ async function correr() {
   // ahi no mide al bot — grita que esta mudo con el bot sano, una vez por hora, para siempre.
   try {
     const previa = conversacionDelToken(estado.cw_conversation);
-    if (previa) {
+    if (previa && !dejarComoExtrano(previa)) {
+      // Fallar hacia "no se pudo medir" (2) y NUNCA hacia "el bot esta mudo" (1): no medir
+      // no es estar roto, y confundirlos es como este carril perdio una vuelta entera.
       const fila = estadoDelBot(previa);
-      if (necesitaDesarme(fila)) {
-        const ok = desarmar(previa);
-        if (!ok) {
-          // Fallar hacia "no se pudo medir" (2) y NUNCA hacia "el bot esta mudo" (1): no medir
-          // no es estar roto, y confundirlos es como este carril perdio una vuelta entera.
-          return {
-            codigo: 2,
-            texto:
-              `NO SE PUDO MEDIR — la conversacion ${previa} quedo en "${fila.botStage}" (el bot calla por ` +
-              'diseno) y el desarme por `resolved` no la devolvio a "nuevo". Revisar que Chatwoot siga ' +
-              'emitiendo `conversation_status_changed` y que el adapter lo traduzca.',
-          };
-        }
-      }
+      return {
+        codigo: 2,
+        texto:
+          `NO SE PUDO MEDIR — la conversacion ${previa} no quedo como la de un desconocido: ` +
+          `${JSON.stringify(fila)}. Si sigue en "handoff_humano", revisar que Chatwoot emita ` +
+          '`conversation_status_changed` y que el adapter lo traduzca; si lo que quedo cargado es ' +
+          'el embudo (`qualification`, `slots_offered`), revisar `guionBlanqueo`.',
+      };
     }
   } catch (e) {
-    return { codigo: 2, texto: `NO SE PUDO MEDIR — fallo el desarme previo: ${e.message}` };
+    return { codigo: 2, texto: `NO SE PUDO MEDIR — fallo dejar la conversacion como nueva: ${e.message}` };
   }
 
   const url = `${HOST}/widget?website_token=${WEBSITE_TOKEN}&cw_conversation=${encodeURIComponent(estado.cw_conversation)}`;
@@ -835,6 +946,112 @@ function selfCheck() {
 
   caso('sin fila todavia no hay nada que desarmar', () => {
     assert.strictEqual(necesitaDesarme(null), false);
+  });
+
+  // ── El desarme NO alcanzaba, y la sonda lo tapaba contando ────────────────────────────
+  // Medido el 2026-09-03 sobre la conversacion 49, con los MISMOS dos mensajes, tres vueltas
+  // seguidas del propio loop — y las tres salieron "EL BOT CONTESTO LOS 2", exit 0:
+  //
+  //   03:04  #1 → "¡Hola! Soy el asistente automatico de Onia. Si, un bot."   ← un desconocido
+  //   04:03  #1 → "¿Queres que te reserve para el viernes 4 de septiembre?"   ← ya le ofrece hora
+  //   05:03  #1 → "Eso lo tiene que ver Sergio, no yo" (M5, handoff)          ← lo derivo de una
+  //
+  // La causa: `clearHumanTakeover` (bot-engine.mjs:121) devuelve `bot_stage` a "nuevo" y NADA
+  // mas — a proposito, porque para un lead de verdad olvidarle el rubro seria el bug. La fila
+  // seguia con `qualification={city,industry,teamSize}`, dos `slots_offered` y
+  // `off_script_count=2`, asi que el motor arrancaba cada vuelta con el embudo YA completo y
+  // derivaba en el primer turno. La sonda contaba 2 respuestas y daba verde.
+  caso('la fila con el embudo cargado NO es la de un desconocido', () => {
+    assert.strictEqual(
+      esExtrano({
+        botStage: 'nuevo',
+        humanTookOver: false,
+        qualification: { city: 'Santa Cruz', industry: 'dental', teamSize: 4 },
+        slotsOffered: [{ key: 'A' }, { key: 'B' }],
+        offScriptCount: 2,
+      }),
+      false,
+    );
+  });
+
+  caso('la fila en blanco SI es la de un desconocido', () => {
+    assert.strictEqual(
+      esExtrano({ botStage: 'nuevo', humanTookOver: false, qualification: {}, slotsOffered: [], offScriptCount: 0 }),
+      true,
+    );
+  });
+
+  caso('sin fila todavia, el desconocido es de verdad desconocido', () => {
+    // Primera vuelta de una conversacion recien creada: no hay fila, y eso es lo mas extrano
+    // que puede haber. Devolver false aca frenaria la sonda para siempre en su primer arranque.
+    assert.strictEqual(esExtrano(null), true);
+  });
+
+  caso('"nuevo" con hora ya reservada tampoco es un desconocido', () => {
+    assert.strictEqual(
+      esExtrano({
+        botStage: 'nuevo',
+        humanTookOver: false,
+        qualification: {},
+        slotsOffered: [],
+        offScriptCount: 0,
+        scheduledAt: '2026-09-04T18:00:00Z',
+      }),
+      false,
+    );
+  });
+
+  // El otro medio arreglo: el veredicto tiene que LEER la respuesta, no contarla. Con el
+  // conteo solo, las tres vueltas de arriba son indistinguibles.
+  caso('derivar a un humano en el PRIMER turno es el bug, aunque haya contestado los dos', () => {
+    const DERIVADA_EN_EL_PRIMERO = [
+      m(0, '2026-09-03 05:03:57', 'Hola, quiero informacion sobre el sistema'),
+      m(1, '2026-09-03 05:03:57', 'Eso lo tiene que ver Sergio, no yo — soy un bot y no quiero inventarte una respuesta.'),
+      m(0, '2026-09-03 05:04:12', 'Tengo una clinica dental en Santa Cruz, somos 4 personas'),
+      m(1, '2026-09-03 05:04:12', 'Te leo, y esto tambien se lo paso a Sergio — sigo siendo el bot.'),
+    ];
+    const v = juzgar({ enviados: 2, mensajes: DERIVADA_EN_EL_PRIMERO, conversacionId: 49 });
+    assert.strictEqual(v.codigo, 1, `deberia ser 1 y fue ${v.codigo}: ${v.texto}`);
+    assert.match(v.texto, /primer/i, 'el texto tiene que decir que el problema es el PRIMER turno');
+  });
+
+  caso('el saludo de bienvenida en el primer turno sigue siendo verde', () => {
+    const SANA = [
+      m(0, '2026-09-03 03:04:31', 'Hola, quiero informacion sobre el sistema'),
+      m(1, '2026-09-03 03:04:32', '¡Hola! Soy el asistente automatico de Onia. Si, un bot. Y estoy para ayudarte.'),
+      m(0, '2026-09-03 03:04:46', 'Tengo una clinica dental en Santa Cruz, somos 4 personas'),
+      m(1, '2026-09-03 03:04:47', 'Perfecto, anotado que te dedicas a odontologia, que son 4 personas.'),
+    ];
+    const v = juzgar({ enviados: 2, mensajes: SANA, conversacionId: 49 });
+    assert.strictEqual(v.codigo, 0, `deberia ser 0 y fue ${v.codigo}: ${v.texto}`);
+  });
+
+  // Sin esto las huellas se vuelven ciegas en silencio el dia que alguien retoque el copy del
+  // bot: el guardia seguiria en verde sin poder detectar nada, que es el peor estado posible
+  // para un guardia. Se afirma contra el config REAL del bot, no contra una copia de aca.
+  caso('las frases de derivacion siguen existiendo en el config del bot', () => {
+    const config = require('node:fs').readFileSync(CONFIG_DEL_BOT, 'utf8');
+    const vivo = normalizar(config);
+    const perdidas = FRASES_DE_DERIVACION.filter((f) => !vivo.includes(f));
+    assert.deepStrictEqual(
+      perdidas,
+      [],
+      `estas frases ya no estan en ${CONFIG_DEL_BOT}: el guardia del primer turno quedo ciego. ` +
+        'Actualizar FRASES_DE_DERIVACION con el texto nuevo de M5 / M5_ACUSE / M8_SOPORTE.',
+    );
+  });
+
+  caso('derivar en el SEGUNDO turno no es el bug: ahi puede ser lo correcto', () => {
+    // El prospecto ya conto rubro y tamano; derivar entonces es exactamente lo que el bot
+    // tiene que hacer. Marcarlo rojo convertiria a la sonda en el falso rojo de la otra punta.
+    const DERIVA_TARDE = [
+      m(0, '2026-09-03 03:04:31', 'Hola, quiero informacion sobre el sistema'),
+      m(1, '2026-09-03 03:04:32', '¡Hola! Soy el asistente automatico de Onia.'),
+      m(0, '2026-09-03 03:04:46', 'Tengo una clinica dental en Santa Cruz, somos 4 personas'),
+      m(1, '2026-09-03 03:04:47', 'Eso lo tiene que ver Sergio, no yo — soy un bot y no quiero inventarte nada.'),
+    ];
+    const v = juzgar({ enviados: 2, mensajes: DERIVA_TARDE, conversacionId: 49 });
+    assert.strictEqual(v.codigo, 0, `deberia ser 0 y fue ${v.codigo}: ${v.texto}`);
   });
 
   let fallados = 0;

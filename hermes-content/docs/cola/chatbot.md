@@ -223,6 +223,40 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       en el host el archivo no existe (`ls: cannot access`). Se lee con
       `docker exec onia-center tail -f /tmp/onia-bot-webhook.log`.
 
+- [x] 🔴 **La sonda daba VERDE mientras el bot le contestaba a un desconocido "eso lo tiene que
+      ver Sergio, no yo".** CERRADO el 2026-09-03. Lo encontró el chequeo de arranque, mirando el
+      texto de las respuestas que la sonda había contado sin leer.
+      **La medición que lo destapó** — los mismos dos mensajes, tres vueltas seguidas, las tres
+      `exit 0`: `#1` pasó de *"¡Hola! Soy el asistente automático de Onia"* (03:04) a *"¿Querés que
+      te reserve para el viernes 4?"* (04:03) a la derivación M5 (05:03). No se rompió el bot: **se
+      degradó la sonda**, porque el desarme devuelve `bot_stage` a `nuevo` y deja el embudo
+      (`qualification`, `slots_offered`, `off_script_count`) intacto. Detalle arriba.
+      **El arreglo son DOS mitades, y hacen falta las dos.** Archivo: `scripts/sonda_widget.mjs`.
+      1. **`dejarComoExtrano()`** deja la fila como la de alguien que nunca escribió. Mantiene el
+         desarme por Rails (la semántica del producto, y así cada vuelta verifica que ese camino
+         siga vivo) y **después** blanquea el embudo por SQL (`guionBlanqueo`). El orden importa:
+         resolver viaja por Sidekiq y el adapter reescribe la fila al llegar, así que blanquear
+         antes se lo lleva puesto. Es escribir la base a mano **a falta de camino de producto**: el
+         bot no tiene —ni debe tener— un "olvidate de este lead".
+      2. **`juzgar()` ahora LEE el primer turno.** Derivar a un humano ante un "hola, quiero
+         información" de alguien que todavía no contó nada es el bug (`esDerivacion`, huellas de
+         M5/M5_ACUSE/M8_SOPORTE). **En el segundo turno NO se mira**: ahí derivar puede ser
+         exactamente lo correcto, y marcarlo rojo haría el falso rojo de la otra punta.
+      **Rojo primero, por el motivo correcto:** `esExtrano is not defined` (4 casos) y el caso del
+      veredicto fallando **con las filas reales del 05:03** — `deberia ser 1 y fue 0: EL BOT
+      CONTESTO LOS 2`, o sea el bug de producción reproducido en un test. **27/32 → 33/33.**
+      **Y el guardia no puede quedar ciego en silencio:** un caso afirma que las huellas siguen
+      existiendo en el config **real** del bot (`hermes-content/deploy/vps-ops/bot/config.mjs`,
+      donde viven M5, M5_ACUSE y M8_SOPORTE). Probado que falla:
+      `ONIA_BOT_CONFIG=/etc/hostname node scripts/sonda_widget.mjs --self-check` → *"el guardia del
+      primer turno quedó ciego"*.
+      **Verificado contra producción, no contra el test:** `node scripts/sonda_widget.mjs` →
+      `exit 0`, y esta vez el texto que recibió el desconocido es el que corresponde —
+      `#1 →` *"¡Hola! Soy el asistente automático de Onia. Sí, un bot. Y esto que estás viendo es
+      justo lo que vendemos…"* (msg 316), `#2 →` *"Perfecto, anotado que te dedicás a odontología,
+      que son 4 personas y que estás en Santa Cruz…"* (msg 318). La fila del motor terminó en
+      `esperando_horario` con el embudo lleno **desde cero**: la prueba de que arrancó en frío.
+
 - [x] 🔴 **La sonda reusa UNA conversación para siempre, así que desde la segunda vuelta ya no
       mide "un desconocido escribe dos veces": mide una charla con ocho turnos encima.**
       **CERRADO el 2026-09-02.** La causa medida no era la que este ítem suponía, y la diferencia
@@ -249,9 +283,24 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       **Verificación final:** `node scripts/sonda_widget.mjs` → **exit 0**, *"EL BOT CONTESTO LOS 2
       — conversacion 49"*. Antes del arreglo, mismo comando: exit 1, 2 de 2 sin respuesta.
       ⚠️ **La corrección que este ítem proponía (resolver para que se abra una conversación NUEVA)
-      no es lo que pasó:** medido, el widget siguió escribiendo en la **49**. Alcanza igual, porque
-      lo que había que resetear era el estado del motor, no el hilo. Anotado para que nadie
+      no es lo que pasó:** medido, el widget siguió escribiendo en la **49**. Anotado para que nadie
       "arregle" después el hecho de que la conversación no se renueve.
+      🔴 **Y "alcanza igual, porque lo que había que resetear era el estado del motor, no el hilo"
+      era FALSO — lo desmintió la producción el 2026-09-03.** El desarme resetea `bot_stage` y
+      **nada más**, así que el embudo sobrevive intacto. Los MISMOS dos mensajes, tres vueltas
+      seguidas del loop, y las tres **exit 0 · "EL BOT CONTESTO LOS 2"**:
+      **03:04** `#1 →` *"¡Hola! Soy el asistente automático de Onia. Sí, un bot."* ← lo que ve un
+      desconocido · **04:03** `#1 →` *"¿Querés que te reserve para el viernes 4 de septiembre?"* ←
+      ya le ofrece hora · **05:03** `#1 →` *"Eso lo tiene que ver Sergio, no yo"* (M5) ← lo deriva
+      de una. La fila del motor a las 05:04:
+      `qualification={"city":"Santa Cruz","industry":"dental","teamSize":4}`, dos `slots_offered`,
+      `off_script_count=2`. El motor arrancaba cada vuelta con el embudo YA lleno.
+      **`clearHumanTakeover` hace bien en no borrarlo** (`bot-engine.mjs:121`): para un lead de
+      verdad, olvidarle el rubro sería el bug. Para la sonda es el veneno.
+      **La sonda no lo podía ver porque CONTABA las respuestas sin LEERLAS** — el defecto escrito
+      del carril ("un test que mira el primer paso no ve un sistema que muere en el segundo") una
+      vuelta más adentro: **un test que cuenta no ve un sistema que contesta cualquier cosa.**
+      Cerrado abajo, en el ítem del 2026-09-03.
       <!-- Diagnóstico original, conservado: llegó a la causa correcta a medias -->
       Medido hoy
       2026-09-02, no supuesto — y es un **falso rojo**, el peor defecto posible en el instrumento
@@ -649,9 +698,10 @@ decisión de Sergio, no código.
       `hermes-content/deploy/vps-ops/bot/webhook-server.mjs` y la cubren tres tests de
       `hermes-content/deploy/vps-ops/bot/webhook-server.test.mjs` (lineas 688, 701 y 726).
 
-- [ ] **El bot del CLIENTE escribe el nombre de su encargada en minúscula a mitad de frase.**
+- [x] **El bot del CLIENTE escribe el nombre de su encargada en minúscula a mitad de frase.**
       Abierto el 2026-09-03 al recorrer el circuito de conocimiento (tablero `t_ff51abdc`).
       Lo ve el cliente del cliente, en la primera respuesta.
+      ✅ **ARREGLADO el 2026-09-03 — commiteado, NO desplegado** (ver el punto de deploy al final).
 
       **Reproducción exacta (30 s), ya medida en vivo:**
       ```
@@ -672,16 +722,32 @@ decisión de Sergio, no código.
       en minúscula** (`la encargada`), y hay **cuatro plantillas donde `{{humano}} cae al empezar
       una oración**: `config.mjs:100`, `:166` (después de `.`), `:264` (M7) y `:313`.
 
-      **Arreglo propuesto** (no hecho: se abrió a 8 minutos del tope de la vuelta, y meter una
-      función a medias con sus tests deja el árbol sin compilar). En el callback de
-      `renderTemplate` ya está disponible el `offset`: si el texto anterior está vacío o termina
-      en `.`/`!`/`?`/salto de línea, capitalizar la primera letra del valor **sólo si es
-      minúscula**. Con `:` NO — `"Anotado: {{datos}}"` va en minúscula en castellano.
-      El test tiene que fallar en ROJO por el motivo correcto: `renderTemplate("{{h}} llega",
-      {h:"la encargada"})` → `"La encargada llega"`, y `renderTemplate("lo ve {{h}} hoy", …)`
-      debe seguir dando `"lo ve la encargada hoy"`.
-      ⚠️ Es el repo `onia-hermes`, no `onia-platform`: los gates son los de este árbol, y
-      commitear **no lo despliega** (`/opt/onia/bot` es rsync, no un checkout).
+      **El arreglo, tal como quedó.** `renderTemplate` usa el `offset` que ya le da el callback
+      de `replace`: si lo anterior está vacío o termina en `.`/`!`/`?`/salto de línea, capitaliza
+      la primera letra del valor **sólo si es minúscula**. Con `:` NO — `"Anotado: {{datos}}"` va
+      en minúscula en castellano, y ese caso es el que separa la regla de un `toUpperCase` a lo
+      bruto. **La regla mira el offset y no la clave a propósito**: atarla a `humano` dejaría el
+      mismo defecto vivo en la próxima plantilla que alguien escriba.
+      **Rojo primero, por el motivo correcto:** `config.test.mjs` (nuevo, 11 casos) salió **5
+      fallando** con el texto del bug en la salida —
+      `"…demo.\n\nla encargada te coordina el horario…"` — y los 6 guardarraíles (mitad de frase,
+      `:`, nombre propio, viñeta, `**negrita**`, clave sin valor) verdes desde el principio.
+      Después del arreglo: **11/11**, y la suite entera del bot **744/744**.
+
+      🔴 **Y era más ancho de lo que decía el reporte: NO es sólo el cliente que puso "la
+      encargada".** `knowledge.mjs:860` pone como fallback `humanName: "el equipo"` cuando el
+      cliente no cargó humano — también minúscula. O sea que **todo bot de cliente sin humano
+      cargado** mandaba `"…fuera de horario de oficina. el equipo te confirma…"`. Medido por el
+      camino real (`reply-builder.say`, no el helper suelto), las tres variantes hoy:
+      `la encargada` → `"…oficina. La encargada te confirma…"` · `el equipo` → `"…oficina. El
+      equipo te confirma…"` · `Sergio` → intacto.
+
+      ⚠️ **Es el repo `onia-hermes`, no `onia-platform`**: los gates son los de este árbol
+      (`cd hermes-content/deploy/vps-ops/bot && node --test` → 744/744), y **commitear no lo
+      despliega** — `/opt/onia/bot` es rsync, no un checkout. **Hasta que se sincronice
+      `config.mjs`, producción sigue mandando el cargo en minúscula.** El deploy lo hace
+      `onia-cola` con OK de Sergio; se verifica con la misma reproducción de arriba, exigiendo
+      `La encargada` en la conversación nueva.
 
 ## Después
 
