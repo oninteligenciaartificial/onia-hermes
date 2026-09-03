@@ -102,25 +102,6 @@ Las tres formas de fantasma que ya aparecieron acá:
 > **Cada ítem trae su evidencia re-verificada el 2026-09-01** — y cinco de los siete
 > estaban escritos DENTRO de ítems ya cerrados, donde ningún loop los iba a ver.
 
-- [ ] **Las dos webs de cliente están terminadas y no se pueden publicar con un comando.**
-      `web-factory/apps/dental-premium` y `web-factory/apps/ferreteria-sur` son dos sitios
-      Next terminados, mirados y con gates verdes, y hoy **no existe ninguna forma de
-      publicarlos**: cero proyectos en Vercel (medido con la API el 2026-09-01 — 15 proyectos,
-      ninguno es estos dos), cero entrada en `.github/workflows/`, y el `vercel.json` de la raíz
-      trae deploy por git apagado para todo el repo. El add-on se cierra mandando un link por
-      WhatsApp, y ese link no existe.
-      **Evidencia**: `$ grep -rln dental-premium .github/ scripts/` → 0 · las dos apps ya traen
-      salida standalone (`web-factory/apps/dental-premium/next.config.ts:6`), o sea el MISMO
-      modelo de despliegue que ya usa `scripts/deploy-onia-landing.sh` para onia.com.bo.
-      **Qué hace este ítem** (no publica — la regla 6 lo prohíbe): (a) correr
-      `pnpm --filter dental-premium build` y `pnpm --filter ferreteria-sur build` y pegar la
-      salida, incluido el First Load de cada ruta; (b) dejar en `web-factory/scripts/` un
-      deploy-web-cliente.sh parametrizado por app + subdominio, copiado de
-      `scripts/deploy-onia-landing.sh` (build → tarball → stage → swap con backup y rollback).
-      **Hecho cuando**: los dos builds salen exit 0 con su server.js de standalone listado, y
-      el script pasa `bash -n`. **Bloqueado sólo el último paso**: el subdominio lo elige
-      Sergio — abajo están las dos opciones, cotizadas las dos en Bs 0.
-
 - [ ] **El CTA del hero de la ferretería queda FUERA del pliegue a 1440×800.**
       Lo dejó anotado A3 al cerrar ("entra por 82px a 1440×900 y queda fuera a 1440×800") y
       nunca fue línea de cola, así que ningún loop lo iba a tomar. Es el botón que convierte,
@@ -131,7 +112,11 @@ Las tres formas de fantasma que ya aparecieron acá:
       `web-factory/apps/ferreteria-sur/src/app/sections.css:15`.
       **Hecho cuando**: medido en el navegador a 1440×800, 1440×900 y 390×844, el CTA queda
       **entero dentro del primer viewport en los tres**, con la captura mirada.
-      Re-verificar el número antes de tocar: la medición es del 31-ago.
+      ✅ **Re-verificado el 2026-09-03 y sigue vivo**, ahora contra el bundle de producción
+      (runtime standalone levantado con `node server.js`, no `next dev`): en la captura a
+      **1440×900** el primer viewport termina en el párrafo y la tarjeta de horarios, y el CTA
+      del hero **ya no entra** — o sea que el margen de 82 px que midió A3 a esa misma altura se
+      consumió. A 1440×800 está peor. El único botón visible arriba es el del header.
 
 - [ ] **La ferretería pesa 192 kB de First Load contra un presupuesto de 150.**
       También anotado por A3 al cerrar y nunca convertido en línea. Es el sitio de un negocio
@@ -142,6 +127,11 @@ Las tres formas de fantasma que ya aparecieron acá:
       **Hecho cuando**: la salida de `pnpm --filter ferreteria-sur build` muestra First Load
       **≤150 kB** en la ruta raíz, pegada en el commit, y el sitio mirado renderizado a 1440 y
       390 para probar que la animación sigue viva (import dinámico, no animación borrada).
+      ✅ **Re-medido el 2026-09-03: 192 kB, exacto — y no es sólo la ferretería.**
+      `dental-premium` está en **187 kB** con las mismas dos dependencias planas
+      (`motion` + `gsap`) y el mismo consumidor único, así que el arreglo es el mismo dos veces
+      y este ítem cubre las dos apps. El piso compartido son 102 kB, o sea que lo propio de cada
+      página son 90 kB (ferretería) y 85 kB (dental): el recorte tiene que salir de ahí.
 
 - [ ] **La primitiva de hover-lift existe, está documentada, y no la usa ni un bloque.**
       T34 se cerró como fantasma con esta frase adentro: *"lo que SÍ falta y no es esto:
@@ -272,6 +262,37 @@ Las tres formas de fantasma que ya aparecieron acá:
 ---
 
 ## Cerrado — carril A (build)
+
+- [x] **A9 · Las dos webs de cliente ya se publican con un comando — y el standalone con el que
+      se iba a publicar estaba ROTO** (2026-09-03).
+      El ítem pedía correr los dos builds y dejar un `deploy-web-cliente.sh`. Los builds salieron
+      exit 0 **y el `server.js` no estaba donde el modelo de deploy lo espera**: ninguna de las
+      dos apps declaraba `outputFileTracingRoot`, así que Next infería la raíz del trazado sola,
+      se iba más arriba de `web-factory/` y **horneaba la ruta absoluta del checkout dentro del
+      bundle**. Medido buildeando en el VPS, el server.js quedó en
+      `.next/standalone/loops/onia-hermes-webfactory/web-factory/apps/dental-premium/server.js`.
+      O sea: la ruta cambiaba según DÓNDE se buildeó —otra en el runner de CI, otra en cada
+      worktree— y cualquier script copiado del de onia.com.bo (que espera
+      `standalone/apps/<app>/server.js`) fallaba, y fallaba distinto en cada máquina. **Un build
+      exit 0 no dice nada sobre si el bundle se puede desplegar**: por eso el "hecho cuando"
+      pedía LISTAR el server.js, y por eso apareció.
+      **Qué se hizo**: `outputFileTracingRoot: monorepoRoot` en el `next.config.ts` de las dos
+      apps —el mismo patrón que `apps/onia-platform/next.config.ts:37`, que es por lo que ESA sí
+      se despliega— con el motivo escrito adentro; y `web-factory/scripts/deploy-web-cliente.sh`
+      parametrizado por `APP` + `SITE_DOMAIN` (build → tarball → stage → swap con backup,
+      health check y rollback), que además **crea el contenedor si es el primer deploy** e
+      imprime el fragmento de vhost sin aplicarlo (traefik es infra de un solo dueño).
+      Con `DEPLOY_SWAP=false`, el default, buildea y deja el runtime staged sin tocar nada
+      publicado: ése es el modo que puede correr un loop.
+      **Medido, no supuesto**: `pnpm install --frozen-lockfile` exit 0 · los dos builds exit 0
+      (dental **187 kB** First Load en `/`, ferretería **192 kB**) · `server.js` presente en
+      `apps/<app>/.next/standalone/apps/<app>/server.js` en las dos · `bash -n` del script OK ·
+      `pnpm typecheck:packages` verde. Y el runtime ensamblado igual que lo hace el script se
+      **levantó y se miró**: `node apps/<app>/server.js` arranca en ~90 ms, HTTP 200 en 32 ms
+      (27 kB dental / 43 kB ferretería), y las dos home renderizadas a 1440×900 con **cero
+      errores de consola y cero respuestas 4xx**.
+      **Queda para Sergio, y es lo único**: elegir el subdominio (ítem de la sección Bloqueado) y
+      apretar el swap. Desplegar sigue sin ser de este carril.
 
 - [x] **A8 · Sacada la causa por la que una app de este carril tumbaba la publicación de
       onia.com.bo** (2026-09-02).
