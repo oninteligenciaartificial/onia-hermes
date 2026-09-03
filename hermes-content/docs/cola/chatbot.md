@@ -305,14 +305,13 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       `/inbox`. O sea que el dato existe: lo que falta es que algo golpee la puerta. Por eso esto
       **no es** "se pierde el lead", es "Sergio se entera sólo si abre el panel" — que es
       exactamente lo que el comentario del adapter dice que quería evitar.
-      🔴 **Y el vigía del colgado NO lo tapa, aunque su cabecera diga que el handoff es su caso.**
-      `scripts/vigia_sin_respuesta.mjs:93` descarta toda conversación cuyo último mensaje sea
-      saliente (`if (Number(ultimo.messageType) !== ENTRANTE) continue; // ya le contestaron`), y
-      en un handoff el último mensaje es justamente el del bot. El vigía lo agarra recién desde el
-      **siguiente** entrante —cuando la persona vuelve a escribir y el bot ya calla a propósito
-      (`hermes-content/deploy/vps-ops/bot/webhook-server.mjs:284-285`)—, así que **mientras el
-      prospecto no insista, nada lo ve**.
-      No es un bug del vigía: es que su red empieza un mensaje después de donde se hace la promesa.
+      ✅ **El vigía del colgado ya NO lo tapa — arreglado el 2026-09-03, ítem de abajo.** Decía
+      acá que `scripts/vigia_sin_respuesta.mjs:93` descarta toda conversación cuyo último mensaje
+      sea saliente (`// ya le contestaron`), y que en un handoff ese último mensaje es el del bot,
+      así que **mientras el prospecto no insista, nada lo ve**. Eso era cierto hasta hoy: ahora
+      `seleccionarEsperandoHumano()` mira ese caso aparte. **Lo que sigue faltando es el aviso en
+      el momento**, que es la decisión de Sergio de acá abajo — la red nueva avisa a los 30 min,
+      no al instante.
       📈 **Y esto se volvió MÁS frecuente hoy, por el arreglo de abajo.** Hasta las 18:04 una
       pregunta de producto se la tragaba el off-guion; ahora va a handoff, que es lo correcto —
       pero suma un motivo más a un aviso que no sale. Los motivos que ya caían acá:
@@ -330,6 +329,73 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       vez (`grep -c` → 0) y **eso no es el bug** — le pasa el `result` entero a
       `buildBotTurnEvent` (línea 450), así que el aviso sube bien. Muere en el envío, no en el
       armado.
+
+- [x] 🔴 **El que ESPERA a un humano prometido era invisible para todo el sistema: el único vigía
+      que mira la bandeja lo descartaba con un `// ya le contestaron` que en un handoff es
+      mentira.** Encontrado el 2026-09-03 19:00 UTC recorriendo el frente del ítem de arriba, con
+      `npm test` entero en verde y el vigía corriendo cada 2 h **sin poder ver este caso**.
+      **La medición, en producción y no en un test:** el bot deriva y le dice a la persona
+      *"Ya le pasé tu consulta con todo lo que me contaste. Te escribe él desde este mismo
+      número"*. Ese es el último mensaje de la conversación, y es **saliente**. El vigía
+      (`scripts/vigia_sin_respuesta.mjs`) descarta toda conversación cuyo último mensaje sea
+      saliente, así que la persona que hizo bien en esperar desaparecía de la única red que mira
+      la bandeja. Sólo reaparecía si **volvía a insistir** — o sea que el vigía veía al impaciente
+      y perdía al que confió. Y el que confía es el que se va sin decir nada.
+      ⚠️ **Por qué ningún gate lo veía, y no es el mismo motivo que arriba:** el gate
+      `demo:agendada` mira las promesas de reserva (M2) y el vigía mira a los que nadie contestó.
+      El handoff (M5) caía **entre los dos**: para el gate no es una demo, y para el vigía "ya le
+      contestaron" porque técnicamente salió un mensaje. Dos redes correctas con un agujero justo
+      en el medio, que es donde el bot manda a todo lead con una pregunta que no sabe responder —
+      y hoy son seis motivos, uno más desde el arreglo de las 18:04.
+      **Lo que se hizo:** `seleccionarEsperandoHumano()` en el mismo archivo (no un script nuevo:
+      dos definiciones de "nadie lo atendió" en el mismo carril envejecen en direcciones
+      distintas). Mira el lado **append-only** —los mensajes de Chatwoot, que no se reescriben— y
+      no el `bot_stage` del motor, que la sonda del propio carril blanquea cada hora: es la
+      lección que este carril ya pagó con `scripts/demo_agendada_real.mjs`.
+      **Cómo decide que el humano no llegó, sin hardcodear a nadie:** el bot es **el sender de la
+      propia promesa**, y cualquier saliente posterior de OTRO sender es una persona y cierra el
+      caso. Derivarlo del mensaje —en vez de escribir `sender_id = 3` acá— mantiene el criterio
+      cierto el día que el bot cambie de token. Que el bot siga hablando (el `M5_ACUSE`) **no**
+      cuenta como que llegó el humano: si tapara el aviso, el acuse de recibo sería el mejor
+      escondite del embudo. Y un entrante posterior lo saca de esta lista a propósito — ese caso
+      ya es del vigía de arriba, y dos avisos por la misma conversación es como se le deja de
+      creer a un vigía.
+      **La frase se saca de `M5` del guion del propio bot**
+      (`hermes-content/deploy/vps-ops/bot/config.mjs:233-237`) y **no se
+      hardcodea**: pegada acá, el día que alguien reescriba M5 el vigía quedaría ciego en silencio
+      buscando un texto que ya nadie manda. De las tres líneas de M5 se queda con la **más larga**
+      —la primera, *"Eso lo tiene que ver…"*, es corta y marcaría cualquier cosa— y hay un guardia
+      contra el guion REAL en disco, porque los otros casos usan texto inyectado y pasarían igual
+      con `config.mjs` ausente.
+      **Y el aviso separa los dos grupos**, no los suma: al que nadie contestó hay que
+      contestarle, y al que espera un humano el bot **ya le prometió** que le escriben. Bajo el
+      título viejo (*"escribieron y nadie contesto"*) el segundo grupo sería falso, y un vigía que
+      grita mal no molesta: inutiliza. El aviso muestra **lo último que dijo la persona**, no el
+      texto del bot: Sergio necesita saber a qué contestar, y su propia promesa no se lo dice.
+      **Rojo primero, por el motivo correcto:** `SyntaxError: does not provide an export named
+      'CONFIG_DEL_BOT'`. **15 → 28 casos**, verde, y `npm test` entero en verde (exit 0).
+      ✅ **Verificado contra PRODUCCIÓN, no contra el test, y con los dos controles que importan.**
+      Sobre las 191 filas reales de Chatwoot: la frase sacada del guion aparece **en 5 mensajes
+      reales** del bot (o sea que el texto que busca es el que el bot manda de verdad). Hoy en
+      vivo da **0 esperando humano**, y eso es correcto: las 5 promesas son de la conv 49, que es
+      `Sonda QA carril chatbot` — no hay ninguna persona plantada ahora mismo. Para probar que la
+      red **engancha** y no que está rota, se cortaron las filas reales justo después de la
+      promesa (msg 389) —que es literalmente "la persona no volvió a escribir"—: sale **conv 49,
+      66 min esperando, sender de la promesa = 3**, mostrando la consulta real de la persona
+      (*"Antes de elegir horario, ¿el sistema manda recordatorios por WhatsApp…"*). Y los dos
+      controles sobre esas mismas filas: con un saliente del **SuperAdmin (sender 2)** después →
+      **0**, con uno más del **bot (sender 3)** → **1**.
+      🔎 **Un defecto de arrastre encontrado al medir, no al leer:** la consulta traía el contenido
+      con sus saltos de línea, y el parseo corta por `\n`. Un mensaje multilínea —M5 lo es— se
+      partía en filas de menos de 9 columnas que el `.filter()` tiraba **en silencio**: el saliente
+      desaparecía y su conversación podía contarse como colgada. Ahora el `\n` se aplana en el SQL.
+      🔴 **NO ESTÁ ENCENDIDO — y esto no es una formalidad.** El cron
+      (`39 */2 * * * /root/bin/onia-vigia-sin-respuesta.sh`) elige el script de una lista y toma
+      **el primero que existe**: `/root/loops/onia-hermes/scripts/vigia_sin_respuesta.mjs`, o sea
+      el clon de `main`. Medido: ahí `grep -c seleccionarEsperandoHumano` → **0**. Hasta que
+      `onia-cola` mergee esta rama, el que corre cada 2 h es el vigía viejo, ciego a este caso.
+      **Reproducción en 30 s:** `node scripts/vigia_sin_respuesta.mjs` → la última línea dice
+      cuántos hay de cada tipo (`N sin respuesta · M esperando a un humano prometido`).
 
 - [x] 🔴 **Un lead pregunta "¿el sistema hace X?" y el bot le contesta con la oferta de horarios,
       como si no hubiera preguntado nada.** Encontrado el 2026-09-03 recorriendo el frente
