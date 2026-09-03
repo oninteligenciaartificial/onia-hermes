@@ -59,7 +59,26 @@ for (const target of PAGES) {
           // suficiente para tragarse un marcador que duplica su radio (lo medi,
           // pasaba en verde). En absoluto, el ruido de antialiasing entra y un
           // elemento que cambia de tamanio, no.
-          maxDiffPixels: 400,
+          //
+          // 400 tampoco alcanzaba (A10, 2026-09-02). A9 llevo 4 marcadores de
+          // 5,03 a 8,05px de diametro y movio la polilinea de los 4 sparks: la
+          // suite paso 8/8 EN VERDE sin tocar una baseline. Bajando el tope a 0
+          // el gate reporto la cifra real, 81 a 184 pixeles por captura — o sea
+          // que 400 era 2-5x mas grande que un cambio que casi duplica un
+          // marcador. Un tope generoso sobre una captura fullPage no protege un
+          // defecto LOCALIZADO: lo unico que caza es un corrimiento de toda la
+          // pagina, que es contra lo que W6 lo habia validado (`PAD_L` 34->44).
+          //
+          // El piso se MIDIO, no se estimo: con las baselines al dia y el tope
+          // en 0, cuatro corridas limpias seguidas dieron 8/8 verde — el ruido
+          // real entre corridas es CERO, y el flap de alto 1840<->1839 que
+          // anoto A10 no reaparecio (y de todos modos un alto distinto es un
+          // size mismatch, que ningun presupuesto de pixeles tapa).
+          // 20 deja aire para el antialiasing de un Chromium futuro y sigue 4x
+          // por debajo del defecto real mas chico jamas medido aca (81px).
+          // Verificado MUTANDO: con `dotR` de vuelta en 3 (el estado pre-A9) el
+          // gate cae 8/8; con 400 pasaba en verde.
+          maxDiffPixels: 20,
         });
       });
     }
