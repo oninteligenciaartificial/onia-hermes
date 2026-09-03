@@ -353,7 +353,7 @@ DESPUES=$(git rev-parse --short HEAD)
 if [ "$ANTES" = "$DESPUES" ]; then
   HECHO="sin commit (vuelta valida si lo dijo)"
 else
-  HECHO="commiteo $ANTES..$DESPUES — $(git log --oneline "$ANTES..$DESPUES" | wc -l) commit(s)"
+  HECHO="commiteo $ANTES..$DESPUES — $(git rev-list --count --first-parent "$ANTES..$DESPUES") commit(s)"
 fi
 SINPUSH=$(git log --oneline "@{u}..HEAD" 2>/dev/null | wc -l)
 
@@ -412,7 +412,7 @@ LINEA=$(tail -n +"${INICIO:-1}" "$LOG" 2>/dev/null \
 
 if [ -n "$LINEA" ]; then
   ESTADO="✅"; [ "$RC" != 0 ] && ESTADO="⚠️"
-  COMMITS=""; [ "$ANTES" != "$DESPUES" ] && COMMITS=" · $(git log --oneline "$ANTES..$DESPUES" | wc -l) commit(s)"
+  COMMITS=""; [ "$ANTES" != "$DESPUES" ] && COMMITS=" · $(git rev-list --count --first-parent "$ANTES..$DESPUES") commit(s)"
   tg "$ESTADO <b>$NOMBRE</b> · ${T}s${COMMITS}
 $LINEA"
 else
