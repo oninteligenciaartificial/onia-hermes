@@ -158,6 +158,51 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [ ] 🔴 **El bot cierra la venta y la demo NO EXISTE: dice "Listo, agendado" sin reserva y sin
+      avisarle a nadie.** Encontrado el 2026-09-03 recorriendo el frente (escalón 3), con los
+      **tres** gates del carril en VERDE al mismo tiempo.
+      **La medición, en producción y no en un test.** Se mandó el turno 3 por el widget real
+      (conversación 49, mensajes 370-371):
+      persona → *"Dale, reservame el viernes 4 a las 14:00"* ·
+      bot → *"**Listo, agendado: viernes 4 de septiembre, 14:00**. … (Estoy confirmando ese
+      horario con Sergio)"*. Y en la base del motor esa misma conversación quedó
+      `bot_stage=demo_agendada · scheduled_at=2026-09-04 18:00Z · calendar_event_id=NULL`.
+      **La demo no existe en ningún lado, y Sergio no sabe que existe.** El viernes a las 14:00
+      no va nadie.
+      **Las dos causas, verificadas contra el VPS y no leídas:** (1) `/opt/onia/bot/webhook.env`
+      **no tiene `CALCOM_BASE_URL`**, así que `createBooking` sale por `reason:"sin_config"` antes
+      de intentar nada — y Cal.com está muerto igual (cero contenedores, `cal.onia.com.bo` → 302 a
+      `/empezar`); (2) `ONIA_N8N_ENABLED=false` y `ONIA_N8N_EVENT_URL` **vacío**, así que el
+      efecto `notify_sergio` no llega a ningún lado, y es fire-and-forget a propósito.
+      ⚠️ **Por qué ningún gate lo veía, que es lo que vale más que el bug: "contestó" no es
+      "agendó".** La sonda dice *"EL BOT CONTESTO LOS 3"*, el vigía del colgado no dispara (el bot
+      sí contestó) y `objetivo_visible` ve la conversación en la bandeja. Los tres miden que
+      **salga un mensaje**, y el mensaje sale — entusiasta. Es el mismo modo de falla que este
+      carril ya tiene escrito (*"un test que mira el primer paso no ve un sistema que muere en el
+      segundo"*) corrido **un piso más arriba**: ahora muere en el turno que vale plata, con todos
+      los anteriores en verde.
+      **Lo que se hizo — hacer que se VEA, que es la regla 3 y lo único que no depende de Sergio:**
+      `scripts/demo_agendada_real.mjs` (+ `npm run demo:agendada`, self-check cableado en `npm test`
+      como `test:demo-agendada`). **No mide mensajes: mide el ESTADO que el motor escribió de sí
+      mismo** — toda fila en `demo_agendada` tiene que tener `calendar_event_id`. Sólo lectura.
+      **16/16** en seco y **exit 1 contra producción**, nombrando la conversación y el horario que
+      le prometió. Un caso pinchado a propósito: con la tabla vacía sale 0 pero dice *"nada que
+      festejar"* — cero demos no es un éxito, es que nadie llegó todavía al turno que vale.
+      🔎 **Se descubrió corriéndolo, no leyéndolo:** la primera versión pedía `scheduled_label`,
+      que no es columna (el texto lo arma el motor), y salió **2 — `column does not exist`**. Falló
+      en rojo honesto en vez de dar un verde falso, que es para lo que existe el código 2.
+      **Y una costura, no un cambio de guion:** `ONIA_SONDA_GUION` en `scripts/sonda_widget.mjs`
+      permite medir un turno que el guion fijo no cubre (mismo patrón que `ONIA_RESCATE_CANDIDATOS`).
+      **El default NO cambia** y hay tres casos que lo pinchan: sin la variable, la sonda horaria
+      manda exactamente los dos mensajes del prompt. **33 → 36 casos**, verde.
+      🔴 **FALTA PARA CERRARLO, y NO lo puede hacer este carril:** que la reserva funcione de
+      verdad. Son dos decisiones de Sergio que ya existen y hoy se cotizan solas —
+      **S12/S13** (el aviso: Telegram directo reusando el `TG_BOT_TOKEN` que el watchdog ya usa,
+      vs. crear el workflow de n8n) y **revivir Cal.com o dejar de prometer lo que no se reserva**.
+      Mientras tanto el gate está en **rojo y a la vista**, que es lo que faltaba: hasta hoy una
+      demo prometida e inexistente no disparaba absolutamente nada.
+      **Reproducción en 30 s:** `npm run demo:agendada` → exit 1.
+
 - [ ] 🔴 **Un lead pregunta "¿el sistema hace X?" y el bot le contesta con la oferta de horarios,
       como si no hubiera preguntado nada.** Encontrado el 2026-09-03 recorriendo el frente
       (escalón 3), no por la cola: los dos gates del carril estaban en VERDE.
