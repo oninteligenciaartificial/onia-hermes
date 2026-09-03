@@ -2091,9 +2091,30 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         `<h1>` correcto en cada destino. El pie pasa a 4 columnas recién a 900px (entre 700 y
         900 van 2×2: a 700 con cuatro columnas "Marketing IA" partía en dos renglones).
       - **Gates:** typecheck exit 0 · `vitest run` **239 verdes** en 13 archivos · build exit 0.
-      - ⚠️ **No está en producción**: `onia.com.bo` la sirve el contenedor `onia-landing` y
-        publicar es de Sergio. Es el **décimo** arreglo esperando el mismo deploy de
-        `t_68671bc3`.
+      - ⚠️ **No está en producción todavía** — y acá se corrige de paso una premisa que este
+        archivo venía arrastrando. **`t_68671bc3` SÍ se desplegó**: el build que sirve
+        `onia.com.bo` es de **hoy 18:10 UTC**
+        (`ls -l /opt/onia-landing/runtime-next/apps/onia-platform/.next/BUILD_ID`), no del
+        02-sep, y lleva los cuatro arreglos del carril anteriores a esa hora —verificado
+        mirando el resultado, no el commit: `/favicon.ico` devuelve **3.083 bytes** de icono
+        (era 29 KB de HTML de error) y la `description` de `/terminos` ya no dice "borrador"—.
+        Lo que falta **no es el deploy: es el merge**.
+
+- [ ] 🔴 **Tres arreglos del carril están commiteados hace horas y NO llegan al cliente porque
+      `claude/web-venta` no se mergeó a `main`.** No es "esperando a Sergio": el integrador
+      (`onia-cola`) mergea, y el deploy ya demostró hoy que corre solo. Medido con
+      `git merge-base --is-ancestor <sha> origin/main`:
+      - `ea150d179` (17:58) — **el que más cuesta**: los dos CTA de `/contacto` agendan contra
+        `cal.onia.com.bo`, un Cal.com muerto. **Sigue vivo en producción ahora mismo**:
+        `curl -s https://onia.com.bo/contacto | grep cal.onia.com.bo` → dos aciertos.
+      - `088a6d235` (19:03) — el gate que impide que los precios se desincronicen.
+      - `1fbf9dc2a` (20:02) — este ítem.
+
+      **Por qué se anota como ítem y no como comentario:** los cuatro arreglos que SÍ llegaron
+      pasaron por main antes de las 18:10. Estos tres entraron después y quedaron detrás de una
+      rama sin mergear, así que un arreglo verificado, gateado y pusheado sigue valiendo **cero**
+      para el lead que abre `/contacto` hoy. Construido ≠ terminado, y el eslabón que falta no
+      es de este carril.
 
 - [x] 🟢 **Checklist de pre-entrega, puntos 5 y 11–16: corridos contra producción, todos
       verdes.** `<html lang="es">` en las 16 · exactamente **una** `<h1>` por página en las 16 ·
