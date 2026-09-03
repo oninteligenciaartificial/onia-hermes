@@ -160,7 +160,31 @@ Acá el registro es el **crontab del VPS**, no la app:
    cuál faltaba y que lo rearmaste.
 4. Los que digan **`Windows`** **no son tuyos**: viven en la app de Claude Code, no los ves desde
    acá y **no los toques**. Que falten en `crontab -l` es lo esperado, no una falla.
-5. Seguí con tu vuelta normal.
+5. **Y ahora la parte que faltaba: que esté registrado NO es que esté corriendo.** Los pasos 1-4
+   miran el `crontab`, que es el paso uno. Un loop puede tener su línea perfecta y no haberse
+   ejecutado nunca. Comprobá la EJECUCIÓN, que es el paso dos:
+
+       for id in $(crontab -l | grep -oE 'onia-loop\.sh [a-z-]+' | awk '{print $2}' | sort -u); do
+         L=/var/log/onia-loop-$id.log
+         if [ ! -s "$L" ]; then
+           echo "🔴 $id — TIENE LINEA EN CRON Y NUNCA CORRIO (sin log)"
+         else
+           echo "$id — ultima: $(grep 'ARRANCA' "$L" | tail -1 | cut -c1-20) — vueltas: $(grep -c 'ARRANCA' "$L")"
+         fi
+       done
+
+   Un log ausente o vacío en un loop registrado es un **loop muerto con cara de vivo**, y es la
+   peor de las fallas porque el crontab lo declara sano. Si además su última corrida quedó atrás
+   de su propia cadencia (un loop de cada hora cuya última vuelta fue hace 6 h), es lo mismo.
+   Reportalo por `onia-tg.sh` con el id, la cadencia y la última corrida.
+
+   > **Nace del 2026-09-02.** En la vuelta de las 20:29 La Paz cerraste diciendo *"los 14 loops
+   > están activos, ninguno caído"*. Era falso: `kpis-semanal` nunca escribió un log, nunca tomó
+   > su lock y cron nunca lo invocó en todo el rango retenido del journal. Contaste el crontab.
+   > El único loop cuyo trabajo es cazar loops muertos declaró sano a un muerto, y de paso se
+   > declaró a sí mismo confiable — que es lo que hace que nadie más vaya a mirar.
+
+6. Seguí con tu vuelta normal.
 
 **Nunca te re-registres a vos mismo** — si estás corriendo, estás registrado. **Nunca rearmes los
 de la tabla "Apagados a propósito"** de `loops.md`.
