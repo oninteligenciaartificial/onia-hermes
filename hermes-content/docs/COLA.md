@@ -1010,6 +1010,33 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **El 429 del widget de chat sale como aviso, no como falla**, porque el ítem de abajo ya
       midió que los bloqueos vienen del propio monitoreo y el límite vive en otro carril: un gate
       rojo para siempre por algo que no puede arreglar es un gate que nadie lee.
+
+      ✅ **Y ese gate no decía DE QUIÉN era el trabajo — cerrado el 2026-09-03, misma jornada.**
+      Corriendo el gate como definición de hecho de la vuelta salió **rojo, 6 fallas**: la franja
+      bajo el pie viva en `/` y `/empezar` en 320, 390 y 768. Averiguar si había que **tocar
+      código** o sólo faltaba **publicar** costó **25 minutos a mano** (build, `next start` en un
+      puerto libre y una segunda corrida). La respuesta era "ya está arreglado, falta el deploy":
+      **cero código que tocar**. Repetir esa investigación cada vuelta es caro; el error caro de
+      verdad es el otro — leer el rojo de producción y "arreglar" lo que ya estaba arreglado, que
+      es el fantasma que esta misma cola mide entre el **25% y el 46%** de los pendientes
+      heredados.
+      **Qué cambió:** cada falla se guarda con su **clase** (`home @ movil-390 | franja`), no sólo
+      con su texto — el texto lleva píxeles y rutas del día y no es comparable entre dos corridas.
+      Con eso, `--comparar-con=<informe.json de la rama>` clasifica sola cada falla y **el
+      veredicto lo escribe el script, no la sesión**.
+      **Probado en las DOS ramas, con el experimento que estaba servido:** producción contra el
+      informe de la rama sana → **exit 3**, *"6 fallas YA ARREGLADAS en la rama — falta PUBLICAR,
+      no tocar código"*; producción contra **sí misma** → **exit 1**, *"6 fallas que TAMBIÉN
+      fallan en la rama — esto sí es código"*. Sin esta segunda prueba el camino de "es código"
+      podría no dispararse nunca y el gate sería decorativo.
+      **Exit 3 y no exit 0 a propósito:** producción sigue rota para el lead, así que disfrazarlo
+      de verde sería mentir; pero el trabajo no es de este carril, y el código propio lo dice sin
+      esconderlo.
+      **Medido hoy contra el contenedor `onia-landing`** (no Vercel, no `main`): la franja sigue
+      viva en las 6 vistas, mirada en la captura (`/tmp/venta-0903/home-movil-390-pie.png`), y el
+      build de esta rama sale **sin defecto medible**. Sigue esperando el deploy de Sergio
+      (radar, sección 20).
+      **Gates:** `typecheck` exit 0 · `vitest` **132 pasan (5 archivos)** · `build` exit 0.
       **Gates:** `typecheck` exit 0 · `build` exit 0 · suite **132 pasan (5 archivos)**.
 
       ⚠️ **Ese gate nació ciego en la HOME, y lo tapaba con un verde — corregido el 2026-09-03,

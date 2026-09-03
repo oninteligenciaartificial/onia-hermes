@@ -21,12 +21,14 @@
  *   node scripts/mirar-venta.mjs                          # produccion (lo que ve un lead)
  *   node scripts/mirar-venta.mjs --base=http://127.0.0.1:3987   # el build de esta rama
  *   node scripts/mirar-venta.mjs --out=/tmp/venta         # donde deja las capturas
+ *   node scripts/mirar-venta.mjs --comparar-con=/tmp/rama/informe.json  # de quien es el trabajo
  *
- * Sale 0 si las dos pasan, 1 si alguna falla. Las capturas quedan en `--out` para MIRARLAS:
+ * Sale 0 si las dos pasan, 1 si alguna falla, y 3 si con `--comparar-con` resulta
+ * que produccion esta rota SOLO por falta de deploy (ver el bloque del final). Las capturas quedan en `--out` para MIRARLAS:
  * este script descarta lo medible, el ojo sigue haciendo falta para lo demas.
  */
 import { existsSync } from 'node:fs';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import { join } from 'node:path';
 
@@ -171,7 +173,16 @@ mkdirSync(OUT, { recursive: true });
  *  (costo medido: 3 dias de un item abierto contra una pantalla que se veia perfecta). */
 const navegador = await abrirNavegador();
 
+/**
+ * Una falla se guarda con su CLASE, no sólo con su texto.
+ *
+ * El texto lleva medidas del día (píxeles, rutas de captura) y cambia entre dos
+ * corridas de la MISMA pantalla rota. La clase es lo que se puede comparar:
+ * `home @ movil-390 | franja` es la misma falla ayer y hoy, en producción y en
+ * la rama. Sin eso, `--comparar-con` no puede decidir nada.
+ */
 const fallas = [];
+const falla = (id, clase, texto) => fallas.push({ id, clase, texto, clave: `${id} | ${clase}` });
 const avisos = [];
 const informe = [];
 
@@ -204,10 +215,10 @@ for (const vista of VISTAS) {
 
     const id = `${pantalla.nombre} @ ${vista.nombre}`;
     const status = resp?.status() ?? 0;
-    if (status !== 200) fallas.push(`${id}: respondio ${status}`);
-    if (m.desborde > 0) fallas.push(`${id}: desborde horizontal de ${m.desborde}px`);
+    if (status !== 200) falla(id, 'status', `${id}: respondio ${status}`);
+    if (m.desborde > 0) falla(id, 'desborde', `${id}: desborde horizontal de ${m.desborde}px`);
     if (m.recortados.length) {
-      fallas.push(`${id}: texto recortado — "${m.recortados[0].txt}"`);
+      falla(id, 'recortado', `${id}: texto recortado — "${m.recortados[0].txt}"`);
     }
     if (m.scrolleable) {
       /**
@@ -218,14 +229,18 @@ for (const vista of VISTAS) {
        * no sabe, y "no sé" no es "está bien".
        */
       if (m.faltaParaElFondo > 2) {
-        fallas.push(
+        falla(
+          id,
+          'no-llego-al-fondo',
           `${id}: el gate no llego al fondo (faltaron ${m.faltaParaElFondo}px) — no pudo mirar el pie, ` +
             `asi que este resultado NO dice que la pantalla este bien`,
         );
       }
       const fondo = m.alPie.filter((p) => p.tag === 'BODY' || p.tag === 'HTML');
       if (fondo.length) {
-        fallas.push(
+        falla(
+          id,
+          'franja',
           `${id}: al pie del ultimo viewport se ve el fondo de la pagina (${fondo
             .map((p) => `x=${p.x}`)
             .join(', ')}), no el pie — franja bajo el footer. Captura: ${captura}`,
@@ -243,7 +258,9 @@ for (const vista of VISTAS) {
     const esRuidoDelWidget = (t) => t.includes('429');
     const propios = errores.filter((t) => !esRuidoDelWidget(t));
     const ajenos = errores.filter(esRuidoDelWidget);
-    if (propios.length) fallas.push(`${id}: ${propios.length} error(es) de consola — ${propios[0]}`);
+    if (propios.length) {
+      falla(id, 'consola', `${id}: ${propios.length} error(es) de consola — ${propios[0]}`);
+    }
     if (ajenos.length) avisos.push(`${id}: widget de chat con 429 (limite de Chatwoot, otro carril)`);
 
     informe.push({ pantalla: pantalla.nombre, vista: vista.nombre, status, ms, ...m, errores });
@@ -253,7 +270,7 @@ for (const vista of VISTAS) {
 }
 
 await navegador.close();
-writeFileSync(join(OUT, 'informe.json'), JSON.stringify({ base: BASE, informe }, null, 2));
+writeFileSync(join(OUT, 'informe.json'), JSON.stringify({ base: BASE, fallas, informe }, null, 2));
 
 console.log(`Mirado: ${BASE} — ${PANTALLAS.length} pantallas x ${VISTAS.length} vistas`);
 console.log(`Capturas y informe: ${OUT}`);
@@ -261,9 +278,51 @@ if (avisos.length) {
   console.log(`\n${avisos.length} aviso(s) de fuera de esta zona:`);
   for (const a of avisos) console.log(`  · ${a}`);
 }
+
+/**
+ * Sin referencia, un rojo contra produccion NO dice de quien es el trabajo.
+ *
+ * El 2026-09-03 este script salio rojo con las 6 mismas fallas de la franja bajo
+ * el pie. Averiguar si habia que TOCAR CODIGO o solo faltaba PUBLICAR costo 25
+ * minutos a mano: build, `next start` en un puerto libre y una segunda corrida.
+ * La respuesta era "ya esta arreglado, falta el deploy de Sergio" — o sea, cero
+ * codigo que tocar. Repetir esa investigacion cada vuelta es caro; y el error
+ * caro de verdad es el otro: leer el rojo de produccion y "arreglar" algo que ya
+ * estaba arreglado. Eso es el fantasma que la cola mide entre el 25% y el 46% de
+ * los pendientes heredados.
+ *
+ * Con `--comparar-con` el veredicto lo escribe el script y no la sesion:
+ *   node scripts/mirar-venta.mjs --base=http://127.0.0.1:3991 --out=/tmp/rama
+ *   node scripts/mirar-venta.mjs --comparar-con=/tmp/rama/informe.json
+ *
+ * Una falla que esta en produccion y NO en la rama ya tiene su arreglo escrito:
+ * es deploy, y el deploy es de Sergio. Una que esta en las DOS es codigo vivo, y
+ * esa si es trabajo de este carril.
+ */
+const REF = arg('comparar-con', '');
+if (REF && fallas.length) {
+  const previas = new Set((JSON.parse(readFileSync(REF, 'utf8')).fallas ?? []).map((f) => f.clave));
+  const deCodigo = fallas.filter((f) => previas.has(f.clave));
+  const soloAca = fallas.filter((f) => !previas.has(f.clave));
+
+  if (soloAca.length) {
+    console.error(`\n${soloAca.length} falla(s) YA ARREGLADAS en la rama — falta PUBLICAR, no tocar codigo:`);
+    for (const f of soloAca) console.error(`  · ${f.texto}`);
+  }
+  if (deCodigo.length) {
+    console.error(`\n${deCodigo.length} falla(s) que TAMBIEN fallan en la rama — esto si es codigo:`);
+    for (const f of deCodigo) console.error(`  · ${f.texto}`);
+    process.exit(1);
+  }
+  // Produccion sigue rota para el lead, asi que no es un verde. Pero el trabajo
+  // no es de este carril: un exit propio lo dice sin disfrazarlo de exito.
+  console.error(`\nProduccion esta rota, y el arreglo YA esta en la rama. Falta el deploy (es de Sergio).`);
+  process.exit(3);
+}
+
 if (fallas.length) {
   console.error(`\n${fallas.length} falla(s):`);
-  for (const f of fallas) console.error(`  · ${f}`);
+  for (const f of fallas) console.error(`  · ${f.texto}`);
   process.exit(1);
 }
 console.log('Sin defecto medible. Las capturas siguen necesitando ojo.');
