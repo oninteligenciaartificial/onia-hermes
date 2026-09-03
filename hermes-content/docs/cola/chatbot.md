@@ -186,21 +186,42 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       **Medido contra producción, no contra el test:** `node rescate-run.mjs` (seco) →
       *"conv 47 msg 249 — 427 min sin respuesta — «Tengo una clinica dental en Santa Cruz, somos 4
       personas»"*. **Encontró un huérfano real que nadie había visto.** La selección funciona.
-      🔴 **Lo que FALTA, y es la última milla — 401:** `node rescate-run.mjs --emit` →
-      `wget: server returned error: HTTP/1.1 401 Unauthorized`. El webhook autentica
-      (`hermes-content/deploy/vps-ops/bot/webhook-security.mjs`) y la reinyección no va firmada. **Reproducción en 30 s:** correr ese
-      comando. **El camino más corto está identificado, no hay que investigarlo de nuevo:** el
-      `authenticateChatwootRequest` acepta **secreto en la ruta** (`/webhook/chatwoot/<secreto>`,
-      `verifyPathSecret`, línea 122) además de la firma HMAC. El secreto **no** está en el env del
-      proceso (`cat /proc/<pid>/environ` sólo trae `ONIA_WEBHOOK_PORT`): vive en el archivo que
-      apunta `ONIA_WEBHOOK_ENV_FILE` en `hermes-content/deploy/vps-ops/bot/webhook-server.sh`. Leerlo de ahí y agregarlo a la URL de
-      `postAlWebhook` cierra el ítem.
-      ⚠️ **Y falta desplegarlo**: `/opt/onia/bot` es rsync, no git. Commiteado, **NO desplegado**.
-      ⚠️ **De paso, medido: el log por mensaje que esta cola da por cerrado NO está corriendo.**
-      `/opt/onia/bot/webhook-server.mjs` es del **29-ago** y tiene **cero** llamadas a `traza(`;
-      el del repo tiene 2. Por eso `/tmp/onia-bot-webhook.log` sigue teniendo **sólo** líneas de
-      arranque. El ítem de abajo es honesto (dice "commiteado"), pero mientras no se despliegue el
-      loop sigue diagnosticando a ciegas — que es exactamente lo que costó la semana.
+      ✅ **El 401 está CERRADO el 2026-09-03, y verificado contra producción, no contra el test.**
+      `postAlWebhook` lee `ONIA_CHATWOOT_WEBHOOK_PATH_SECRET` del **mismo** archivo que sourcea
+      `hermes-content/deploy/vps-ops/bot/webhook-server.sh` (`ONIA_WEBHOOK_ENV_FILE`, por defecto `/opt/onia/bot/webhook.env`) y lo
+      pone en la ruta: `/webhook/chatwoot/<secreto>`. **7 casos nuevos, rojo primero** por
+      `does not provide an export named 'construirUrlWebhook'`; **25/25** verde.
+      **La prueba en vivo, reinyectando un mensaje YA contestado** (el dedup lo corta, nadie recibe
+      nada): el webhook devolvió
+      `{"ok":true,"deduped":true,"duplicate":true,"sent":[],"reason":"mensaje_ya_procesado"}` —
+      antes eso era `HTTP/1.1 401 Unauthorized`. **Corregido de paso un dato de este mismo ítem que
+      era falso:** decía que el secreto *"no está en el env del proceso"*. Sí está —
+      `tr '\0' '\n' < /proc/<pid>/environ | grep ONIA_CHATWOOT` trae las cuatro claves. Lo que
+      pasaba es que el `grep` original miraba el proceso equivocado: el webhook vivo no cuelga de
+      `/opt/onia/bot/webhook-server.mjs` sino de **`/tmp/onia-bot/webhook-server.mjs`** dentro de
+      `onia-center`, y ese sí rutea el secreto (su `WEBHOOK_PATH`, línea 213-215).
+      🔴 **Y apareció un defecto que sólo se ve corriéndolo: el barrido contaba rescates que no
+      existían.** El único huérfano de producción (conv 47) está en **`handoff_humano`** — el bot
+      calla **por diseño**, no por el webhook caído. La reinyección salía sin error y el barrido
+      informaba *"1 reinyectado"* habiendo salvado **cero**. En un carril cuya doctrina es que un
+      dato que nadie mira no prueba nada, un contador que dice éxito sin éxito es peor que no
+      tenerlo. Arreglado con `clasificarRespuesta` (5 casos más): ahora separa **mandado** de
+      **CONTESTADO** y dice el motivo. Salida real de hoy:
+      *"1 sin respuesta · 1 reinyectados · 0 CONTESTADOS"*, con `-> mensaje_ya_procesado` en la línea.
+      🔴 **Lo que FALTA para que esto valga algo — y es lo único que queda:**
+      1. **Desplegar.** `/opt/onia/bot` es rsync, no git: **commiteado, NO desplegado.** Mientras
+         tanto el rescate no corre solo ni una vez.
+      2. **Su línea de cron**, que todavía no existe. Sin horario, un barrido es un script que
+         nadie ejecuta. Va después del deploy y lo hace `onia-cola`.
+      3. **Falta la prueba de un rescate que produzca una respuesta VISIBLE.** Hoy no se pudo:
+         el único huérfano disponible estaba en handoff. Que la reinyección llega al motor sí está
+         probado —el dedup cambió de estado— pero eso no es lo mismo. **Cómo probarlo cuando haya
+         uno:** correr `--emit` y exigir `CONTESTADOS ≥ 1`, no `reinyectados`.
+      ⚠️ **El log por mensaje YA está desplegado — el párrafo que decía lo contrario era viejo.**
+      Recontado hoy: `/tmp/onia-bot/webhook-server.mjs` (el que corre) es del **3-sep 01:58**, no
+      del 29-ago, y su stdout va a `/tmp/onia-bot-webhook.log` **dentro del contenedor** — por eso
+      en el host el archivo no existe (`ls: cannot access`). Se lee con
+      `docker exec onia-center tail -f /tmp/onia-bot-webhook.log`.
 
 - [x] 🔴 **La sonda reusa UNA conversación para siempre, así que desde la segunda vuelta ya no
       mide "un desconocido escribe dos veces": mide una charla con ocho turnos encima.**

@@ -139,19 +139,107 @@ async function leerFilasDeChatwoot({ desdeMs, ahoraMs }) {
     }));
 }
 
-async function postAlWebhook(payload) {
-  const puerto = process.env.ONIA_WEBHOOK_PORT || "3020";
-  const contenedor = process.env.ONIA_BOT_CONTAINER || "onia-center";
-  const { execFile } = await import("node:child_process");
-  const { promisify } = await import("node:util");
-  const run = promisify(execFile);
+/** La misma ruta que sirve `webhook-server.mjs` (su `WEBHOOK_PATH`). */
+const RUTA_WEBHOOK = "/webhook/chatwoot";
+
+/** La clave tal como `webhook-server.sh` la exporta al proceso del webhook. */
+const CLAVE_SECRETO_RUTA = "ONIA_CHATWOOT_WEBHOOK_PATH_SECRET";
+
+/** El archivo que `webhook-server.sh` sourcea (`ENV_FILE`) para armar ese env. */
+const ENV_FILE_POR_DEFECTO = "/opt/onia/bot/webhook.env";
+
+/**
+ * Saca el secreto de ruta del contenido del env file.
+ *
+ * Se lee del MISMO archivo que usa `webhook-server.sh`, no de una copia: un secreto duplicado
+ * en dos lados es un secreto que se desincroniza y vuelve el 401 sin que nadie sepa por que.
+ * El archivo lo escribe y lo sourcea un shell, asi que aguanta `export`, comillas y espacios.
+ */
+export function parsearSecretoDeRuta(contenido) {
+  for (const linea of String(contenido ?? "").split("\n")) {
+    const limpia = linea.trim().replace(/^export\s+/, "");
+    if (!limpia || limpia.startsWith("#")) continue;
+    const igual = limpia.indexOf("=");
+    if (igual < 0 || limpia.slice(0, igual).trim() !== CLAVE_SECRETO_RUTA) continue;
+    return limpia.slice(igual + 1).trim().replace(/^(['"])([\s\S]*)\1$/, "$2") || undefined;
+  }
+  return undefined;
+}
+
+/**
+ * La URL contra la que se reinyecta.
+ *
+ * EL 401 VIVIA ACA. De los dos mecanismos de `authenticateChatwootRequest`, la firma HMAC exige
+ * el `rawBody` exacto y un timestamp fresco; el secreto en la ruta es el piso garantizado y el
+ * unico que se puede armar desde afuera del proceso. Sin secreto NO se inventa una ruta: se pega
+ * pelado a proposito, para que el 401 se vea en vez de disfrazarse de otra cosa.
+ */
+export function construirUrlWebhook({ puerto, secreto } = {}) {
+  const base = `http://127.0.0.1:${puerto || "3020"}${RUTA_WEBHOOK}`;
+  return secreto ? `${base}/${encodeURIComponent(secreto)}` : base;
+}
+
+/** El comando entero viaja en el mensaje de error de execFile, y de ahi al log. */
+function redactar(texto, secreto) {
+  let salida = String(texto ?? "");
+  if (!secreto) return salida;
+  for (const forma of new Set([secreto, encodeURIComponent(secreto)])) {
+    salida = salida.split(forma).join("***");
+  }
+  return salida;
+}
+
+export async function postAlWebhook(payload, deps = {}) {
+  const env = deps.env || process.env;
+  const puerto = env.ONIA_WEBHOOK_PORT || "3020";
+  const contenedor = env.ONIA_BOT_CONTAINER || "onia-center";
+  const leerEnv = deps.leerEnv || (async () => {
+    const { readFileSync } = await import("node:fs");
+    try {
+      return readFileSync(env.ONIA_WEBHOOK_ENV_FILE || ENV_FILE_POR_DEFECTO, "utf8");
+    } catch {
+      return ""; // sin archivo se pega pelado y el 401 dice la verdad
+    }
+  });
+  let run = deps.run;
+  if (!run) {
+    const { execFile } = await import("node:child_process");
+    const { promisify } = await import("node:util");
+    run = promisify(execFile);
+  }
+
+  const secreto = String(env[CLAVE_SECRETO_RUTA] || "").trim() || parsearSecretoDeRuta(await leerEnv());
+  const url = construirUrlWebhook({ puerto, secreto });
   // wget desde adentro del contenedor: el 3020 escucha en su loopback, no en el host.
   const cuerpo = JSON.stringify(payload).replace(/'/g, "'\\''");
-  const { stdout } = await run("docker", [
-    "exec", contenedor, "sh", "-c",
-    `printf '%s' '${cuerpo}' | wget -qO- --timeout=30 --header='Content-Type: application/json' --post-file=- http://127.0.0.1:${puerto}/webhook/chatwoot`,
-  ]);
-  return { ok: true, respuesta: stdout.slice(0, 300) };
+  try {
+    const { stdout } = await run("docker", [
+      "exec", contenedor, "sh", "-c",
+      `printf '%s' '${cuerpo}' | wget -qO- --timeout=30 --header='Content-Type: application/json' --post-file=- ${url}`,
+    ]);
+    return { ok: true, respuesta: redactar(stdout, secreto).slice(0, 300) };
+  } catch (error) {
+    throw new Error(redactar(error?.message || error, secreto));
+  }
+}
+
+/**
+ * Que hizo el webhook con la reinyeccion.
+ *
+ * MANDAR NO ES RESCATAR. Medido el 2026-09-03: el unico huerfano estaba en `handoff_humano`,
+ * la reinyeccion salio sin error y el barrido conto "1 reinyectado" habiendo salvado CERO.
+ * Lo unico que salva un lead es que el webhook diga que salio algo (`sent`).
+ */
+export function clasificarRespuesta(respuesta) {
+  let cuerpo;
+  try {
+    cuerpo = JSON.parse(String(respuesta ?? ""));
+  } catch {
+    return { contestado: false, motivo: "respuesta_ilegible" };
+  }
+  const salidas = Array.isArray(cuerpo?.sent) ? cuerpo.sent.length : 0;
+  if (salidas > 0) return { contestado: true, motivo: "contestado" };
+  return { contestado: false, motivo: String(cuerpo?.reason || "sin_respuesta") };
 }
 
 export async function runRescateSweep(options = {}, deps = {}) {
@@ -164,7 +252,7 @@ export async function runRescateSweep(options = {}, deps = {}) {
   const filas = await leerFilas({ desdeMs: ahoraMs - MAX_EDAD_MS - MIN_EDAD_MS, ahoraMs });
   const huerfanos = seleccionarHuerfanos(filas, { ahoraMs }).slice(0, limite);
 
-  const resultado = { huerfanos: huerfanos.length, reinyectados: 0, fallidos: [], detalle: [] };
+  const resultado = { huerfanos: huerfanos.length, reinyectados: 0, contestados: 0, fallidos: [], detalle: [] };
   for (const fila of huerfanos) {
     const linea = {
       conversationId: fila.conversationId,
@@ -175,8 +263,11 @@ export async function runRescateSweep(options = {}, deps = {}) {
     resultado.detalle.push(linea);
     if (!emitir) continue;
     try {
-      await postWebhook(construirPayloadRescate(fila));
+      const enviado = await postWebhook(construirPayloadRescate(fila));
       resultado.reinyectados += 1;
+      const veredicto = clasificarRespuesta(enviado?.respuesta);
+      linea.resultado = veredicto.motivo;
+      if (veredicto.contestado) resultado.contestados += 1;
     } catch (error) {
       // El fallo de uno no puede cancelar el rescate de los otros: son leads distintos.
       resultado.fallidos.push({ ...linea, motivo: String(error?.message || error) });
@@ -201,11 +292,12 @@ if (esCLI) {
   runRescateSweep(opciones)
     .then((r) => {
       for (const d of r.detalle) {
-        console.log(`conv ${d.conversationId} msg ${d.messageId} — ${d.edadMin} min sin respuesta — "${d.texto}"`);
+        const veredicto = d.resultado ? ` -> ${d.resultado}` : "";
+        console.log(`conv ${d.conversationId} msg ${d.messageId} — ${d.edadMin} min sin respuesta — "${d.texto}"${veredicto}`);
       }
       for (const f of r.fallidos) console.log(`FALLO conv ${f.conversationId}: ${f.motivo}`);
       console.log(
-        `${r.huerfanos} sin respuesta · ${r.reinyectados} reinyectados${opciones.emitir ? "" : " (SECO — agregar --emit)"}`,
+        `${r.huerfanos} sin respuesta · ${r.reinyectados} reinyectados · ${r.contestados} CONTESTADOS${opciones.emitir ? "" : " (SECO — agregar --emit)"}`,
       );
       process.exit(r.fallidos.length ? 1 : 0);
     })
