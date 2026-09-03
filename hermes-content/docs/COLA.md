@@ -704,6 +704,57 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       panel-chatbot 702 KB/215 ms (redirige a `/login`, sigue "no medida"). Ninguna baseline
       tocada.
 
+### Del canario visual — corrida del 2026-09-03 00:43 UTC (diez pantallas)
+
+- [ ] 🔴 **El widget de chat de Chatwoot sigue caído (429), y hoy la corrida oficial lo vio en
+      LAS CINCO pantallas de `onia.com.bo`, no solo en `/chatbot`. Corrige el ítem de las 21:41
+      UTC de ayer, que decía "el 429 es específico de `/chatbot`, no del sitio entero" — hoy ya
+      no es así, si es que alguna vez lo fue.**
+      - **Evidencia de la corrida oficial única** (`node scripts/canario_visual.mjs`, primer
+        comando de la vuelta, cero requests previos al sitio): `home`, `precios`, `empezar`,
+        `rubros` y `chatbot-landing` — las cinco — dispararon `ITEM` por
+        `error de consola nuevo: Failed to load resource: the server responded with a status of
+        429 ()`.
+      - **Confirmado sin ambigüedad de "corrida propia repetida"** (la duda que dejó abierta la
+        pasada de las 04:41 UTC de ayer, líneas 604-612): corrí `home` y `precios` cada una SOLA,
+        en procesos Playwright nuevos, con 15-20 s de espera antes, escuchando el evento
+        `response` en vez de la consola. Las dos pegan al mismo endpoint y las dos dan 429:
+        `https://onia-chatbot-chatwoot.hqdqgh.easypanel.host/widget?website_token=9k5i7xnAgCbSse1EZwVChZLw`.
+        Un `curl` plano y frío al mismo endpoint, aislado de cualquier corrida: también 429.
+      - **Evidencia de peso — hoy es mucho más claro que ayer:** las cuatro páginas con
+        baseline de peso comparable cayeron **todas** más del 75 % contra su baseline (ninguna
+        dispara umbral: sólo miramos subidas > +40 %, se ve mirando):
+        home 2.366→**580 KB**, precios 2.159→**327 KB**, empezar 2.497→**323 KB**,
+        rubros 2.650→**495 KB**. Es el mismo patrón que ya se había visto en `chatbot-landing`
+        (2.232 KB → 324 KB hoy): falta el bundle del widget en las cinco, no en una.
+      - **Mirado en las capturas:** ninguna de las cinco muestra la burbuja de chat flotante
+        (verde) en la esquina inferior derecha. El resto del contenido de las cinco está sano —
+        home, precios, empezar y rubros con su copy y sus precios (`Bs 390/mes` visible completo
+        en `/precios`) correctos a la vista.
+      - **No lo toqué**: contenedor y cron del widget son ajenos a este carril (ver la sospecha
+        de rate-limit del contenedor, ya anotada ayer 16:41 UTC).
+      - **Van ~8 horas de caída** (primera detección 2026-09-02 16:41 UTC, confirmada 21:41 UTC,
+        confirmada de nuevo y ampliada ahora 2026-09-03 00:43 UTC). Sin dueño declarado (vive en
+        `web-factory/apps/onia-platform/`).
+      **Evidencia:** capturas de hoy (foto de un día, no baseline) en
+      `hermes-content/docs/historial/canario-visual/2026-09-03-{home,precios,empezar,rubros,chatbot-landing}.png`.
+
+- [ ] 🟠 **La captura full-page ciega (ya reportada 2026-09-02) sigue igual en `rubros`.** Banda
+      completa en blanco entre el hero y la sección oscura, y la sección oscura sin texto visible
+      en la captura full-page. Mismo artefacto conocido de la herramienta propia
+      (`scripts/canario_visual.mjs`), no del sitio — no lo duplico como ítem nuevo, lo confirmo
+      vivo. Nadie lo tomó todavía.
+
+- [ ] 🟢 **Las otras cinco pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
+      Miradas una por una: `contacto` (322 KB/104 ms, formulario y CTAs completos),
+      `register` (705 KB/153 ms, asistente de 2 pasos con 5 rubros, íconos legibles),
+      `login-plataforma` (696 KB/128 ms, íconos legibles, "Pedí tu acceso" presente),
+      `login-chat` (3.499 KB/925 ms, formulario Chatwoot normal — este SÍ es el chat propio de
+      Onia, no el widget embebido del sitio, y no está caído),
+      `panel-chatbot` (702 KB/228 ms, redirige a `/login` sin sesión: queda "no medida", no "OK",
+      como corresponde). **Ninguna baseline se tocó esta vuelta** — pisar la de las cinco páginas
+      afectadas taparía el ítem del widget caído, igual que ayer con `chatbot-landing`.
+
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 
 - **F1 · Sumar `/patients` al nav de servicios profesionales.** Lo intenté, escribí el test,
