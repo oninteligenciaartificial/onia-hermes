@@ -202,6 +202,44 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       Mientras tanto el gate está en **rojo y a la vista**, que es lo que faltaba: hasta hoy una
       demo prometida e inexistente no disparaba absolutamente nada.
       **Reproducción en 30 s:** `npm run demo:agendada` → exit 1.
+      🔴 **AMPLIADO el 2026-09-03 (vuelta siguiente): ese gate "en rojo y a la vista" llevaba una
+      hora en VERDE, y lo apagaba el propio chequeo de arranque de este carril.** Lo encontró el
+      chequeo de arranque, no la cola: la sonda salió *"EL BOT CONTESTO LOS 2"* y, acto seguido,
+      `npm run demo:agendada` salió **exit 0 — "SIN DEMOS AGENDADAS"**. La promesa de arriba no se
+      había cumplido: había desaparecido.
+      **Los tres relojes, medidos sobre la misma conversación 49:**
+      `15:09Z` la promesa (msg 371) deja la fila en `demo_agendada · calendar_event_id=NULL` →
+      gate **exit 1**, correcto · `16:04Z` corre `sonda_widget.mjs` (msgs 372-375) y la fila queda
+      `esperando_horario · scheduled_at=NULL · calendar_event_id=NULL` · `16:05Z` gate **exit 0**.
+      **La causa, y está escrita a propósito en el código:** `guionBlanqueo()` de
+      `scripts/sonda_widget.mjs:294` hace `bot_stage='nuevo', scheduled_at=null,
+      calendar_event_id=null` sobre la conversación que la sonda reusa — que es **la misma** que el
+      gate lee. La sonda tiene razón en blanquear (sin eso el motor arranca con el embudo lleno y
+      deriva en el primer turno, ya está medido arriba). El error era del gate: sacaba su lista de
+      sujetos de `where bot_stage='demo_agendada'`, un estado **mutable**, así que su única fila
+      roja se borraba sola cada hora. **Un gate cuya evidencia puede desaparecer no es un gate: es
+      un permiso.** Es el modo de falla que el carril ya tiene escrito para el gate de compartir
+      de `web-venta` (*"sacar la LISTA DE SUJETOS de una lista de inclusión falla ABIERTO"*), con la vuelta de
+      tuerca de que acá **el que vaciaba la lista era el instrumento del propio carril**.
+      **Lo que se hizo:** `scripts/demo_agendada_real.mjs` ya no mide el estado del motor, mide el
+      lado **append-only**: los mensajes salientes de Chatwoot que contienen la promesa. Chatwoot no
+      reescribe `messages`, así que una promesa dicha no se desdice borrando una fila — y una fila
+      blanqueada ahora **destapa** el hueco en vez de taparlo. La frase se saca de `M2` del guion del
+      propio bot (`hermes-content/deploy/vps-ops/bot/config.mjs:147`) y **no se hardcodea**: pegada acá, el día que alguien reescriba
+      M2 el gate quedaría verde para siempre buscando un texto que ya nadie manda — el mismo bug un
+      piso más abajo. Sin M2 legible sale **2**, que es *"no medir NO es estar bien"*.
+      **Rojo primero, por el motivo correcto:** `ReferenceError: frasePromesa is not defined`.
+      **16 → 26 casos**, verde, con un guardia contra el guion REAL en disco (los casos con texto
+      inyectado pasarían igual con `config.mjs` ausente).
+      ✅ **Verificado contra producción, no contra el test, y con la prueba más limpia que había:
+      misma base, mismo instante, veredicto opuesto.** Sobre el estado que la sonda dejó a las
+      16:04 —el que ponía el gate viejo en verde— el nuevo sale **exit 1**: *"1 de 1 DEMO(S)
+      PROMETIDAS QUE NO EXISTEN: conv 49 (\"Listo, agendado: viernes 4 de septiembre, 14:00\")"*.
+      **Mañana** a las 14:00 nadie va a esa demo, y ahora eso vuelve a estar dicho en voz alta.
+      🔎 **Lo que este ítem NO arregla, a propósito:** la reserva sigue sin funcionar (Cal.com
+      muerto, `CALCOM_BASE_URL` ausente, `notify_sergio` a ningún lado). Eso son **S12/S13** y
+      decide Sergio. Lo que se recuperó es la capacidad de VERLO — que es lo único que no dependía
+      de él, y que llevaba una hora perdida sin que nadie lo notara.
 
 - [ ] 🔴 **Un lead pregunta "¿el sistema hace X?" y el bot le contesta con la oferta de horarios,
       como si no hubiera preguntado nada.** Encontrado el 2026-09-03 recorriendo el frente
