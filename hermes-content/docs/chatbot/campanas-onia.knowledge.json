@@ -1,23 +1,26 @@
 {
   "schema": "onia.bot.knowledge/1",
-  "version": "2026-08-31.2",
-  "updatedBy": "carril-chatbot",
-
+  "version": "2026-09-03.1",
+  "updatedBy": "carril-onia-cola",
   "identity": {
     "productName": "Onia",
     "humanName": "Sergio",
     "botName": "el asistente automático de Onia"
   },
-
   "empresa": {
     "horario": {
-      "dias": [1, 2, 3, 4, 5],
+      "dias": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
       "desde": 9,
       "hasta": 18,
       "frase": "lun-vie, 9:00-18:00"
     }
   },
-
   "campanas": [
     {
       "frase": "Hola, quiero conocer Onia",
@@ -43,9 +46,16 @@
     {
       "frase": "Hola, vengo de la página del chatbot de Onia. Tengo una consulta antes de elegir el stack.",
       "respuesta": "¡Hola! Soy el asistente automático de Onia — de hecho, soy el mismo tipo de asistente que estarías contratando. Preguntá tranquilo: si es algo que sé, te lo contesto acá mismo; si es una decisión técnica de tu caso, te la responde Sergio y te coordino la charla. ¿Qué querés saber antes de elegir?"
+    },
+    {
+      "frase": "Hola, vengo de la web de Onia. Quiero agendar la consulta comercial de 20 minutos.",
+      "respuesta": "¡Hola! Soy el asistente automático de Onia. La consulta de 20 minutos la da Sergio y sirve para una cosa concreta: decirte qué módulo te toca y qué resuelve en tu negocio, sin vueltas. Para que esos 20 minutos rindan, contame de qué es tu negocio y cuánta gente trabaja con vos. Con eso te confirmo el horario acá mismo."
+    },
+    {
+      "frase": "Hola, vengo de la web de Onia. Quiero agendar la demo de 45 minutos con mi caso.",
+      "respuesta": "¡Hola! Soy el asistente automático de Onia. La demo de 45 minutos la hace Sergio sobre TU caso: se ve el sistema funcionando con tus datos, no una presentación. Contame de qué es tu negocio y qué proceso te está costando más tiempo hoy — agenda, clientes, ventas o cobros — así llega preparado. Con eso te confirmo el horario acá mismo."
     }
   ],
-
   "faq": [
     {
       "id": "siat",
@@ -53,10 +63,11 @@
       "body": "Sobre facturación en línea te contesto sólo lo que es público: desde el 30 de septiembre es obligatoria y el SIN tiene un portal gratis. Lo que hace {{producto}} es que los datos ya estén cargados para que no tipees dos veces. El detalle exacto de tu caso lo ve {{humano}} en la demo.",
       "status": "publicado",
       "vigenteHasta": "2026-09-30",
-      "tags": ["fiscal"]
+      "tags": [
+        "fiscal"
+      ]
     }
   ],
-
   "triggersExtra": {
     "demo": []
   }

@@ -22,7 +22,7 @@ Por qué esta y no otra:
 | Guía de PRDs (el tema del original) | Mercado equivocado. Nuestro comprador es dueño de negocio, no fundador técnico |
 | "10 tips para tu clínica" / por rubro | Sin fecha límite no hay urgencia, y parte la audiencia en tres |
 | "Qué exige el SIN el 1-oct" | Ya está publicado y gratis en `/facturacion`. Un magnet que repite una página pública no vale un correo |
-| **Cómo habilitarte, paso a paso** | ✅ Es la pregunta que aparece DESPUÉS de leer `/facturacion`, no está en ningún lado en una sola hoja, aplica a los 3 rubros vendibles (todos tienen NIT), y la hicimos con nuestro propio NIT — no se fabrica nada |
+| **Cómo habilitarte, paso a paso** | ✅ Es la pregunta que aparece DESPUÉS de leer `/facturacion`, no está en ningún lado en una sola hoja, aplica a los 5 rubros vendibles (todos tienen NIT), y la hicimos con nuestro propio NIT — no se fabrica nada |
 
 El gancho es la fecha: **RND 102600000007** fija el 30-sep-2026 como último día de transición
 para los grupos 9° al 12°. Desde el 1-oct esos NITs emiten solo en línea.
