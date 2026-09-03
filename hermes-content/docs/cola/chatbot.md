@@ -238,8 +238,19 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       **Mañana** a las 14:00 nadie va a esa demo, y ahora eso vuelve a estar dicho en voz alta.
       🔎 **Lo que este ítem NO arregla, a propósito:** la reserva sigue sin funcionar (Cal.com
       muerto, `CALCOM_BASE_URL` ausente, `notify_sergio` a ningún lado). Eso son **S12/S13** y
-      decide Sergio. Lo que se recuperó es la capacidad de VERLO — que es lo único que no dependía
+      decide Sergio (ya preguntado: tablero `t_b18ca430`, bloqueado — **no volver a preguntarlo**).
+      Lo que se recuperó es la capacidad de VERLO — que es lo único que no dependía
       de él, y que llevaba una hora perdida sin que nadie lo notara.
+      ⚠️ **Y para que nadie se asuste leyendo el rojo: hoy la conv 49 es `Sonda QA carril chatbot`,
+      no una persona.** Verificado, no supuesto (join `conversations→contact_inboxes→contacts`).
+      O sea que mañana a las 14:00 **no** hay un humano esperando: el motor hizo lo incorrecto, pero
+      no hay nadie colgado. Por eso esta vuelta **no mandó alarma a Sergio** — un aviso de "alguien
+      va a una reunión vacía" que no tiene a nadie del otro lado es exactamente cómo se dejó de
+      creerle al vigía del embudo.
+      **Próximo paso, chico y acotado:** que la salida del gate diga **quién** es la conversación
+      (nombre del contacto), para que un rojo de QA y un rojo de un lead real no se lean igual.
+      **NO se resuelve excluyendo a la sonda**: una lista de exclusión devuelve el gate a fallar
+      abierto, que es el bug que esta vuelta acaba de cerrar. Se informa, no se filtra.
 
 - [ ] 🔴 **Un lead pregunta "¿el sistema hace X?" y el bot le contesta con la oferta de horarios,
       como si no hubiera preguntado nada.** Encontrado el 2026-09-03 recorriendo el frente
