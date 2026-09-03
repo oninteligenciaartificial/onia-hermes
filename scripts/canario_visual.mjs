@@ -203,7 +203,13 @@ async function medir(browser, { nombre, url, cola, duenio }) {
       y,
       { timeout: 5000 },
     ).catch(() => {});
-    await page.waitForTimeout(350);
+    // 350ms no alcanzaba: dejaba fotografiado el fade-in "whileInView" a mitad de camino, y el
+    // texto de la sección siguiente quedaba semitransparente y montado sobre el header sticky —
+    // parece un bug de superposición del sitio y es la propia herramienta fotografiando en
+    // tránsito. Verificado a mano el 2026-09-03 en /chatbot, /home y /rubros: con 1500ms el
+    // fantasma desaparece; 900ms es el piso que ya usa el resto del sitio para esta misma
+    // animación (ver comentario de arriba, "300ms/800ms medían apagados").
+    await page.waitForTimeout(900);
     const f = join(OUT, `${nombre}-${String(i).padStart(2, '0')}.png`);
     await page.screenshot({ path: f });
     capturas.push(f);

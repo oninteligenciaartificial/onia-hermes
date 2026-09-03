@@ -879,6 +879,31 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
     se barre en TODA la superficie" pide vigilar, pero sin confirmar si `/register` ya crea
     cuentas de verdad no corresponde declararlo bug ni arreglo. No se tocó la baseline.
 
+- [ ] 🟡 **`onia.com.bo/chatbot` — el header sticky deja pasar el texto de atrás y se vuelve
+      ilegible al llegar al final de la página.** Canario visual, 2026-09-03. El `<header>`
+      del sitio tiene fondo con **88% de opacidad** (`color(srgb .976 .984 .980 / 0.88)`) y
+      `backdrop-filter: blur(10px)` — no es opaco de verdad. Cuando el scroll llega a la
+      sección verde oscura de precio ("Bs 390/mes, sin instalación."), el título blanco en
+      negrita queda posicionado justo detrás del header y **se ve fantasma, superpuesto al
+      nav** ("Rubros · Precios · Comparativa..."), volviendo confusos los dos.
+      Evidencia: `hermes-content/docs/historial/canario-visual/2026-09-03-chatbot-ghost-header.png`
+      (capturada con espera de 2.500 ms — descarta que sea una animación a mitad de camino).
+      Reproducir: abrir `https://onia.com.bo/chatbot`, scrollear al final, mirar el header.
+      Estilo computado verificado con Playwright: `backgroundColor: color(srgb 0.976471
+      0.984314 0.980392 / 0.88)`, `backdropFilter: blur(10px)`, `opacity: 1`.
+      Probé en `/precios` y `/empezar` con el mismo scroll al fondo: ahí no se ve, porque no
+      hay texto blanco en negrita justo bajo el header en ese punto — el defecto es del CSS
+      del header (opacidad no total), no de una sola página; sólo se nota donde el contraste
+      es alto. Sin dueño derivado — el header vive en el layout global del sitio, no en un
+      componente de `/chatbot`.
+      ⚠️ **Nota sobre el propio instrumento**: esto casi se reportó mal. La primera pasada de
+      esta vuelta mostraba el mismo fantasma en CASI TODAS las pantallas (home, rubros,
+      precios) con la espera vieja de 350 ms — resultó ser la herramienta fotografiando una
+      animación `whileInView` a mitad de camino (con 900-1500 ms de espera, esas desaparecían).
+      Se subió el piso de espera de la herramienta (`scripts/canario_visual.mjs`, 350→900ms,
+      con self-check verde) ANTES de escribir este ítem, y sólo quedó **éste**, que persiste
+      incluso a 2.500 ms — por eso es real y no un artefacto de captura.
+
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 
 - **F1 · Sumar `/patients` al nav de servicios profesionales.** Lo intenté, escribí el test,
