@@ -90,3 +90,179 @@ Variables conocidas hasta hoy:
 | Modelo video | `seedance1_5` (4,8), `kling3_0_turbo` (7,5), `kling3_0` (8,75) | Seedance da vertical AUNQUE la fuente sea 3:4 |
 | Cierre anti-cartel | con / sin `No signs, no labels…` | Pedir el cartel gana sobre pedir que no se lea (caso B05) |
 | Léxico de estilo | `fashion campaign` ⛔ / `NATURAL TRUE-TO-LIFE COLORS` ✅ | «campaign» cambia la cara |
+
+---
+
+# PARTE II · Cómo se MIRA cada casilla
+
+> **Fusionado el 2026-09-03.** La Parte II la escribió el carril `calidad-generado` en su rama, en
+> un archivo con **este mismo nombre** y sin saber que la Parte I existía. Git las veía como
+> `add/add` — el archivo entero en conflicto — y mergear cualquiera de los dos lados borraba el
+> otro. **No se eligió: se fusionaron**, porque no dicen lo mismo.
+>
+> **La Parte I es el MARCADOR** (qué se puntúa y cuándo se publica). **La Parte II es el MÉTODO**
+> (cómo se mira, con qué comando, contra qué). Una rúbrica sin método se aplica de memoria; un
+> método sin puntaje no decide si la pieza sale. **Se usan juntas: se mira con la Parte II y se
+> puntúa con la Parte I.**
+
+## Cómo se corresponden las dos partes
+
+| Casilla (Parte I) | Se verifica con (Parte II) |
+|---|---|
+| 1 · La cara es Lucía | **Bloque 1 entero**, empezando por **1.0 la tira del lote** |
+| 2 · 9:16 exacto | 5.2 Aspecto |
+| 3 · Cero texto legible | **Bloque 3** (3.1, 3.2) |
+| 4 · Manos correctas | 2.1 Manos |
+| 5 · Acción a medias | *sin equivalente — se mira como dice la Parte I* |
+| 6 · Luz del lugar | *sin equivalente — se mira como dice la Parte I* |
+| 7 · Piel con poros | 5.3 Nitidez |
+| 8 · Colores true-to-life | 4.5 Naturalidad |
+| 9 · La cara aguanta el clip | *sin equivalente — se mira como dice la Parte I* |
+| 10 · El copy no afirma nada falso | **Bloque 4 entero** (4.1–4.4) |
+
+🔴 **Dos checks de la Parte II no tienen casilla en la Parte I, y valen puntaje igual:**
+
+- **1.0 · la tira del lote completo.** Es el único check que mira el LOTE y no la pieza: seis
+  piezas que pasan de a una pueden ser dos caras distintas juntas (P7 de la bitácora). Si la tira
+  falla, **el lote no se publica aunque todas saquen 10/10**.
+- **2.2 · la herramienta tiene que ser mecánicamente posible.** La casilla 4 cuenta dedos; no mira
+  el objeto que la mano sostiene. Ahí murió `G06-peluqueria.jpg`, dado por "verificado mirándolo".
+
+**Mientras no estén numeradas como casillas, se marcan como bloqueantes**: cualquier ✗ en 1.0 o
+2.2 es ROTA, sin importar el puntaje de las 10.
+
+**Para qué existe:** que Onia no publique una pieza mala, y que Lucía sea siempre la misma cara.
+Una pieza **pasa o no pasa**. No hay "casi".
+
+> Escrita el 2026-09-02 a partir de piezas reales abiertas y miradas, no de teoría. Cada
+> ítem que está acá está porque **ya falló** en el banco, o porque es el rasgo que
+> discrimina la cara. Un ítem sin caso real no entra.
+
+---
+
+## Cómo se aplica — y por qué así
+
+1. **Se abre la imagen y se mira.** Un `grep`, un peso de archivo o un nombre no son
+   verificación. Un `ls` sirve para **descartar**, nunca para **confirmar**.
+2. **Se amplía.** Los defectos de manos, props y texto **no se ven al 100 %**. Recorte y zoom
+   sobre manos, herramientas y cualquier objeto que se toque:
+   `ffmpeg -i pieza.jpg -vf "crop=W:H:X:Y,scale=1080:-1" /tmp/zoom.png`
+3. **Se mira lo último, no lo primero.** En un carrusel, la última lámina. En un video, el
+   último segundo. Lo que falla suele estar donde nadie llegó.
+4. **El veredicto se escribe con el motivo concreto.** "La tijera tiene una sola argolla y la
+   mano no entra en ella", no "se ve rara".
+
+**Cualquier ✗ en el Bloque 1 o el Bloque 2 = NO PASA.** No se negocia.
+
+---
+
+## Bloque 1 — Identidad (el que más se pierde)
+
+Se compara contra `BANCO-OFICIAL.md` §2. Los tres primeros son los **rasgos
+discriminantes**: son los que separaron la Familia A de la Familia B, así que son los que hay
+que mirar primero y con más dureza.
+
+| # | Check | Pasa si |
+|---|---|---|
+| 1.1 | **Cejas** | Arqueadas, grosor medio, con cola que baja. **No** rectas, gruesas y bajas |
+| 1.2 | **Mandíbula y largo de cara** | Óvalo de mandíbula suave. **No** cara larga con mandíbula ancha |
+| 1.3 | **Edad aparente** | 25–27. **No** 30+ |
+| 1.4 | Pelo | Castaño medio, puntas acarameladas ⚠️ *el pelo mojado se lee mucho más oscuro: no cuenta como falla si la escena lo justifica* |
+| 1.5 | Pecas | Presentes en nariz y pómulos, finas y dispersas |
+| 1.6 | Ojos | Marrones, almendrados, **los dos del mismo tamaño y con el mismo pliegue** |
+| 1.7 | Piel | Cálida y tostada, tono parejo entre frente, pómulos y cuello. ⚠️ **Manchones rojos en pómulos y nariz = ✗**, aunque el banco los tenga: es el artefacto del `soul_2` en plano cerrado, no un rasgo de Lucía (P6 de la bitácora) |
+| 1.8 | Accesorios | Si hay: argollas doradas chicas, cadenita fina. Nada que contradiga el inventario |
+
+⚠️ **Un rasgo que se corre de a poco lote a lote no se nota hasta que ya se publicaron veinte
+piezas.** Por eso 1.1–1.3 se miran **contra el banco**, nunca contra el lote anterior: comparar
+cada lote con el que le sigue es cómo se llega lejos sin que ninguna comparación dé mal.
+
+### 1.0 · La tira del lote completo — se hace ANTES que los ítems de arriba
+
+**Todas las piezas del lote, recortadas a la misma altura, en una sola imagen.** Sin excepciones y
+sin elegir cuáles:
+
+```
+ffmpeg -i P1.jpg -i P2.jpg ... -filter_complex \
+  "[0]crop=W:H:X:Y,scale=-1:520[a];[1]...[b];[a][b][...]hstack=inputs=N" /tmp/tira.png
+```
+
+Pasa si **todas** las caras son la misma. Si una sola se sale, **el lote no se publica**, aunque
+cada pieza mirada sola pase.
+
+> **Nació de `posts-20260807`**, seis piezas del mismo día declaradas "listas para subir" en cuatro
+> documentos: montada la tira, **P4 y P5 son otra cara** (P7 de la bitácora). Y en la misma carpeta
+> vivía `_AUDITORIA-CARAS.jpg`, una auditoría de consistencia que comparó **dos** cuadros — los dos
+> que coinciden. **Elegir la muestra es elegir el resultado** (P8). Por eso este ítem va primero y
+> por eso dice *todas*.
+
+---
+
+## Bloque 2 — Anatomía y objetos
+
+| # | Check | Pasa si |
+|---|---|---|
+| 2.1 | **Manos** | 5 dedos, proporción y articulación creíbles, sin dedos fundidos ni "manopla" |
+| 2.2 | **Herramienta que se sostiene** | **Mecánicamente posible**: un objeto con dos partes tiene las dos, el pivote es coherente, y la mano lo agarra por donde se agarra |
+| 2.3 | Contacto | Lo que se toca se deforma como corresponde; nada flota ni atraviesa |
+| 2.4 | Simetría | Aros, mangas, cuellos y hombros coinciden entre lados |
+| 2.5 | Fondo | Sin objetos derretidos, personas a medias ni geometría imposible |
+| 2.6 | Reflejos | En espejo: el texto va invertido y la escena es consistente con el punto de vista |
+
+> **2.2 nació de `G06-peluqueria.jpg`**, donde la tijera tiene una sola argolla, blades sin
+> pivote coherente, y la mano de abajo con los dedos fundidos sin entrar en la argolla. La
+> pieza había sido dada por "verificada mirándola" — pero mirando la cara y los aros, no la
+> herramienta. **El defecto estaba en el objeto que define la escena.**
+
+---
+
+## Bloque 3 — Texto
+
+| # | Check | Pasa si |
+|---|---|---|
+| 3.1 | Texto legible en cuadro | **No hay**, salvo que sea intencional y esté bien escrito en castellano |
+| 3.2 | Etiquetas y envases | Si se leen, dicen algo real; no letras inventadas |
+
+La regla operativa vigente del carril ya es `[TEXT RULE — MANDATORY] No legible text anywhere
+in frame.` Si aparece texto legible, **el prompt no se respetó**: es señal de método, no solo
+de pieza.
+
+---
+
+## Bloque 4 — Marca y verdad
+
+| # | Check | Pasa si |
+|---|---|---|
+| 4.1 | **Lucía es IA y no se esconde** | La pieza va con etiqueta de contenido generado con IA |
+| 4.2 | Cero prueba social fabricada | Sin testimonios, logos ni cifras de clientes. **No hay clientes pagando** |
+| 4.3 | No se exhibe obra | Sin "muy pronto", "beta", "en construcción" |
+| 4.4 | Vocabulario | Nada de "tus pacientes" en pieza genérica: son 7 rubros |
+| 4.5 | Naturalidad | Colores reales, sin look de filtro; velocidad real |
+
+---
+
+## Bloque 5 — Técnico
+
+| # | Check | Pasa si |
+|---|---|---|
+| 5.1 | Peso | > 50 KB. Un archivo liviano suele ser un fallo con cara de éxito |
+| 5.2 | Aspecto | El que pedía la pieza (9:16, 3:4, 1:1) |
+| 5.3 | Nitidez | Sin bloques de compresión ni zonas "plastificadas" mezcladas con zonas texturadas |
+
+---
+
+## Plantilla de veredicto
+
+Se copia a `BITACORA-PERFECCION.md`, una por pieza:
+
+```
+### <archivo> — <PASA | NO PASA>
+- Lote / fecha:
+- Método (Soul / Element ancla / otro) e id:
+- Bloque 1 Identidad: <✓ o el # que falla y por qué>
+- Bloque 2 Anatomía:  <✓ o el # que falla y por qué>
+- Bloque 3 Texto:     <✓ / ✗>
+- Bloque 4 Marca:     <✓ / ✗>
+- Bloque 5 Técnico:   <✓ / ✗>
+- Motivo del veredicto, en una línea concreta:
+```

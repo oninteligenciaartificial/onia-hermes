@@ -7,8 +7,11 @@
 
 ## Reglas que aplican a TODAS (de LUCIA.md §9, §11, §12, §13)
 
-- Identidad: ancla `452d8375-fb67-4df7-9ae0-8f1b257aa51f`, **fondo simple cuando la cara
-  tiene que ser reconocible**; escenario cargado solo si la cara no es el punto.
+- Identidad: ancla `58bbd635-9b90-4bd2-b08a-1cd4915bd563` (`lucia-skin-v1`), **fondo simple cuando
+  la cara tiene que ser reconocible**; escenario cargado solo si la cara no es el punto.
+  ⛔ Corregido el 2026-09-03: acá decía `452d8375-…`, que `BANCO-OFICIAL.md` ya tenía **jubilada** y
+  que es la causa medida de la deriva de la cara. Este es el plan del mes: cada pieza se habría
+  generado con el ancla equivocada. La reconciliación de los tres UUID está en `BANCO-OFICIAL.md`.
 - Color: `natural true-to-life colors, no color grading, no filter look, accurate white balance`.
 - Movimiento: `natural real-time speed, no slow motion` — sin adverbios de lentitud.
 - `[TEXT RULE — MANDATORY] No legible text anywhere in frame.`
