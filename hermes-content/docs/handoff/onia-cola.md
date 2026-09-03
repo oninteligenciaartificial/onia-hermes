@@ -1,70 +1,89 @@
 # Handoff — carril `onia-cola` (el integrador)
 
-**Última vuelta: 2026-09-03 04:33–04:55 UTC.**
+**Última vuelta: 2026-09-03 05:33–06:10 UTC.**
 
 ## Objetivo de la vuelta
 
-Tarea del tablero `t_0e929acc`: el integrador no enumeraba 6 carriles vivos, 14 commits varados,
-y los arreglos de prompt no se encendían. **Cerrada.**
+Integrar el carril con más commits varados, y después construir. **Los dos, cerrados.**
 
 ## Qué quedó EN PRODUCCIÓN (`main`, pusheado)
 
-**11 de los 13 carriles integrados — 25 commits.** `supervisor`, `lucia-vps`, `recorrido-cliente`,
-`web-factory-dev`, `tendencias`, `web-venta`, `investigacion`, `docs-auditoria`,
-`chatbots-platform-review-0d1d09`, `canario-visual`, `marca-personal-loop`.
+**1. Integrado `claude/docs-auditoria`** (`00a0ae5d0`, 1 commit, 3 archivos, +125/−0): los 13
+worktrees de carril nunca ven `main`, así que auditan sobre un repo viejo y **pueden revertir
+arreglos ajenos**. Gate `npm test` verde. Quedó en el radar como ítem 39 con las tres opciones
+cotizadas — la de raíz toca `onia-loop.sh`, el archivo compartido por los 15 loops, y es de Sergio.
 
-**El efecto medido, no supuesto:** el sync de las 04:44 copió los prompts desde `main` y
-`/root/bin/loops/lucia.md:69` pasó de la forma rota a la correcta. Verificado leyendo el archivo
-vivo después del sync, no antes.
+**2. Arreglada la sonda del 429 del widget** (`c6b031aaf`). Es el ítem 🔴 que llevaba **cinco
+vueltas** reabriéndose. **El sitio nunca estuvo roto: mentía el instrumento.**
+
+- Medido en vivo: `/widget` responde **200**, contador en 2 de 5, y **287 de 289 peticiones
+  (99 %) salen del propio VPS**. Ráfagas en `:48–:56` de cada hora (el loop `web-venta` abriendo
+  sus 5 páginas) y en `:41` (canario). Con 5/hora por IP, **cada corrida se autolimita sola**.
+- Los dos defectos de `widget-429-de-quien.sh`, que empujaban al mismo error: **falso negativo**
+  (widget en 200 ⇒ "nada que diagnosticar", tirando las 286 peticiones que mostraba dos líneas
+  antes) y **falso positivo** (contaba *peticiones* ajenas, no *IPs ajenas que llegaran al
+  límite*: 2 visitas legítimas gritaban "clientes afectados" — de ahí salió el ítem, textual).
+- La decisión se mudó a `scripts/veredicto_widget.mjs`: función pura, `--self-check`, **dentro de
+  `npm test`** (`test:veredicto-widget`, cableado verificado por `guards-cableados`).
 
 ## Qué quedó a medias, y dónde
 
-**Dos carriles NO se mergearon, los dos por la misma causa** (radar ítem 36):
+**Nada abierto de esta vuelta.** Sin `MERGE_HEAD`, sin paths en conflicto, árbol limpio.
+
+**Siguen sin mergear los dos de siempre, y se recontó en vez de obedecer la nota vieja**
+(la lección #1 del handoff anterior): `git merge-tree` confirma que **el conflicto sigue vivo**,
+no venció. Es el mismo choque de `references/modelos/lucia/` — radar ítem 36.
 
 | rama | commits | choca en |
 |---|---|---|
-| `claude/calidad-generado` | 2 | `RUBRICA-IMPOLUTO.md`, `BANCO-OFICIAL.md`, `BITACORA-PERFECCION.md` (add/add) |
-| `claude/git-status-935f47` | 2 | `LUCIA.md` — **118 KB** de conflicto |
+| `claude/calidad-generado` | 2 | `RUBRICA-IMPOLUTO.md`, `BANCO-OFICIAL.md`, `BITACORA-PERFECCION.md` |
+| `claude/git-status-935f47` | 2 | `LUCIA.md` |
+| `claude/web-venta` | 1 | **nuevo**: `ONIA_RADAR_DECISIONES_PRODUCTO.md` |
 
-`references/modelos/lucia/` lo escriben tres manos sin dueño declarado. **Los dos merges van a
-seguir abortando en cada vuelta** hasta que Sergio diga quién manda. Ninguna rama perdió trabajo.
+**Limpia y lista para la vuelta que viene:** `claude/chatbots-platform-review-0d1d09` (1 commit,
+arregla una sonda del bot que daba verde falso). No se mergeó por la regla de **un carril por
+vuelta**.
 
 ## Archivos tocados
 
-- `scripts/loops/prompts/onia-cola.md` — lista de 13 ramas sin duplicados; síntesis lista-vs-comando;
-  el corredor (`RAMA=` de cada `case`) como mapa loop→rama; recuadro de `lucia-vps` corregido.
-- `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md` — ítems 36, 37 y 38.
+- `scripts/veredicto_widget.mjs` — **nuevo**, la lógica del veredicto con su self-check.
+- `hermes-content/deploy/vps-ops/widget-429-de-quien.sh` — delega el veredicto; ya no decide.
+- `package.json` — `test:veredicto-widget` dentro de `npm test`.
+- `hermes-content/docs/COLA.md` — el 🔴 cerrado con la medición y el porqué era falso.
 
 ## Intentos fallidos y trampas (lo que casi cuesta caro)
 
-1. **Una advertencia `NO mergees` vencida vara un carril para siempre.** El prompt decía no mergear
-   `lucia-vps` por "+88,2 MB en 59 binarios". Era cierto al medirse (09-02 17:30). Recontado hoy:
-   **4 commits, 1,3 MB, 14 archivos** — porque el álbum ya había entrado directo a `main` el 09-02
-   a las **03:24**, catorce horas ANTES de que se escribiera la advertencia. Protegía una puerta
-   con el caballo adentro. **Un `NO mergees` es una medición con vencimiento: recontá antes de
-   obedecer.** Cuesta un `git diff --shortstat`.
-2. **Dos carriles pueden arreglar lo mismo y sacar conclusiones opuestas.** `supervisor` y
-   `docs-auditoria` corrigieron los dos la lista de ramas; uno concluía "gana el comando", el otro
-   "se mantiene la lista". Pegar ambos habría dejado el prompt contradiciéndose. **Se sintetizó.**
-3. **Resolver un conflicto con regex deja el marcador de apertura huérfano.** Borrar el bloque
-   `=======…>>>>>>>` no borra el `<<<<<<< HEAD`. Verificar SIEMPRE con grep después.
-4. **Un merge limpio puede duplicar contenido igual.** `docs-auditoria` agregó las mismas 6 ramas
-   en otro lugar del archivo: git las mergeó sin conflicto y la lista quedó con **19 entradas y 6
-   duplicados**. Sin conflicto ≠ correcto.
-5. **`docs-auditoria` tenía razón y `main` estaba mal** en una fecha (13:38 vs 18:33 UTC).
-   Se verificó con `git log -S` contra el commit real (`9d8e23e07`), no eligiendo la más nueva.
+1. **Casi arreglo el sitio en vez del instrumento.** El ítem decía "el widget sigue caído en las
+   5 páginas" con capturas reales. La primera medición en vivo lo desarmó: **HTTP 200**. Si me
+   hubiera saltado el Gate 1, habría ido a buscar un bug de producto que no existe — y es la
+   **tercera** vez que este repo paga el mismo modo de falla (el rasterizador del canario, la
+   sonda del bot, y ahora esta). **El instrumento se mide a sí mismo y reporta su huella como
+   una caída del producto.**
+2. **La sonda anterior era MÍA, escrita hace 5 horas, y estaba mal.** La escribí en esta misma
+   vuelta anterior "para que no se re-derive nunca más" — y su veredicto dependía del minuto en
+   que se la corriera. Una sonda sin test es una opinión con horario.
+3. **El rojo se verificó de verdad, no se asumió.** Reimplementé la lógica vieja en `/tmp` y le
+   pasé los mismos casos: **3 de 4 fallan**. Sin eso, "el test pasa" no prueba que arregle nada.
+4. **`verificar_cola.js` tiene 9 errores preexistentes** (`pricing.ts`, rutas con llaves
+   `{home,precios,…}`). Se contó antes y después del cambio: **9 = 9**. No es gate de `npm test`;
+   ojo con leerlo como una regresión propia.
 
 ## Qué depende de Sergio
 
 1. **Radar 36 — quién es dueño de `references/modelos/lucia/`.** Una línea. Destraba 4 commits y
-   deja de romper dos merges por vuelta.
-2. **Radar 38 — 761,7 MB de assets de Lucía en `main`** (87 videos), que todo clon se lleva. Se
-   recomienda **B** (dejar de agregar; 20 min, reversible).
-3. **Radar 31 — `onia.com.bo` se puede publicar ya.** La condición ("cuando `onia-cola` mergee")
-   se cumplió. **Un reinicio NO alcanza: hay que rebuildear.**
+   deja de romper dos merges por vuelta. **Ya va un día entero.**
+2. **Radar 39 (nuevo) — los 13 worktrees nunca ven `main`.** El loop recomienda **C** (`fetch` +
+   `merge --ff-only` en el corredor, ~20 min). Toca el archivo compartido por los 15 loops.
+3. **Safelistear la IP del VPS en Chatwoot** (`RACK_ATTACK_ALLOWED_IPS=187.77.16.63`). Con eso el
+   canario vuelve a ver lo que ve un cliente en vez de su propia huella. Cambio de entorno del
+   contenedor de chat, con reinicio.
+4. **Radar 31 — `onia.com.bo` se puede publicar ya.** Sigue pendiente. Un reinicio NO alcanza:
+   hay que rebuildear.
 
 ## Próximos pasos
 
-- Con la respuesta al 36: mergear `calidad-generado` y `git-status-935f47`.
-- Sin ella: **no reintentar esos dos merges a ojo** — abortan por diseño.
+- Mergear `claude/chatbots-platform-review-0d1d09` (limpia, 1 commit).
+- Con la respuesta al 36: `calidad-generado` y `git-status-935f47`. Sin ella, **abortan por
+  diseño** — pero **recontá con `git merge-tree` antes de obedecer esta nota**: es una medición
+  con vencimiento, y así se destrabó `lucia-vps`.
 - `claude/onia-core-adoption-sprint5` (onia-platform) sigue siendo decisión de Sergio (radar 26).
