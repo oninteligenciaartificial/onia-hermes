@@ -1551,10 +1551,11 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ### Del canario visual — corrida del 2026-09-03 00:43 UTC (diez pantallas)
 
-- [ ] 🔴 **El widget de chat de Chatwoot sigue caído (429), y hoy la corrida oficial lo vio en
-      LAS CINCO pantallas de `onia.com.bo`, no solo en `/chatbot`. Corrige el ítem de las 21:41
-      UTC de ayer, que decía "el 429 es específico de `/chatbot`, no del sitio entero" — hoy ya
-      no es así, si es que alguna vez lo fue.**
+- [x] 🔴 ~~**El widget de chat de Chatwoot sigue caído (429), y hoy la corrida oficial lo vio en
+      LAS CINCO pantallas de `onia.com.bo`, no solo en `/chatbot`.**~~ **RECLASIFICADO el
+      2026-09-03 ~12:48 UTC por `web-venta`, que ES el dueño: el widget NO está caído. Es un
+      rate-limit por IP, y el diagnóstico "lleva 8 horas caído" era el instrumento midiéndose a
+      sí mismo.** Detalle abajo, después de la evidencia original.
       - **Evidencia de la corrida oficial única** (`node scripts/canario_visual.mjs`, primer
         comando de la vuelta, cero requests previos al sitio): `home`, `precios`, `empezar`,
         `rubros` y `chatbot-landing` — las cinco — dispararon `ITEM` por
@@ -1583,6 +1584,53 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         `web-factory/apps/onia-platform/`).
       **Evidencia:** capturas de hoy (foto de un día, no baseline) en
       `hermes-content/docs/historial/canario-visual/2026-09-03-{home,precios,empezar,rubros,chatbot-landing}.png`.
+
+      ---
+      **CIERRE del carril `web-venta` (2026-09-03 ~12:48 UTC) — el widget está VIVO y el ítem
+      medía nuestra propia IP.** Nada de esto contradice a quien lo escribió: cada corrida vio un
+      429 real. Lo que faltaba era preguntarle al 429 **de quién** era.
+      - **Primer comando de la vuelta, IP fresca:** `curl` al endpoint del widget → **HTTP 200,
+        7.683 bytes**, 92 ms. Y `packs/js/sdk.js` → 200, 28.764 bytes. No hay contenedor caído.
+      - **`onia.com.bo/` y `/empezar` abiertas y MIRADAS** (1440×900, Chromium completo, por
+        viewports con scroll asentado — nunca `fullPage`): la **burbuja verde está presente y
+        visible**, `64x64` en `1356,816`, con su `iframe` y `window.chatwootSDK` cargado. **Cero
+        errores de consola, cero respuestas ≥400.** El peso volvió a su baseline: home **2.828
+        KB** y empezar **2.512 KB** (baselines 2.366 / 2.497), contra los 580 / 323 KB que el
+        ítem citaba como prueba de la caída. El bundle del widget está de vuelta.
+      - **El mecanismo, reproducido en una sola corrida de 5 páginas seguidas:** las **dos
+        primeras** dan 200 con burbuja; de la **tercera en adelante**, 429 y sin burbuja.
+        ```
+        home             618 KB  burbuja 64x64   err=0 4xx=0
+        precios          890 KB  burbuja 64x64   err=0 4xx=0
+        empezar          155 KB  SIN BURBUJA     429 …/widget?website_token=…
+        rubros           120 KB  SIN BURBUJA     429 …
+        chatbot-landing   86 KB  SIN BURBUJA     429 …
+        ```
+        No es una caída que empieza a una hora y termina a otra: **es un umbral que se cruza a
+        mitad de la propia corrida**. El canario barre 10 pantallas cada 3 h desde la misma IP,
+        así que deja la IP del VPS **quemada casi todo el tiempo** — y en la corrida siguiente
+        vuelve a "encontrar" el widget caído. Las "8 horas de caída" son ocho horas de eso.
+      - **La ventana de recuperación es larga:** tras ~15 peticiones, **3 minutos de espera no
+        alcanzaron** (las 5 páginas siguientes seguían en 429). Al arrancar la vuelta, con la IP
+        en reposo, daba 200.
+      - **Por qué cada página cuenta doble, y por qué NO se arregla con `next/link`:** el sitio
+        usa `<a>` planos, así que cada página vista es una carga completa que vuelve a pedir el
+        SDK — **2 peticiones por página**. Medido con clics reales en el header: 4 clics → `RECARGA`
+        las 4 veces → **10 peticiones** al endpoint. Fui a "arreglarlo" con `next/link` y **el
+        propio código me refutó**: `src/app/(sitio)/nav.ts:11` dice que los `<a>` planos son
+        **deliberados** — *"una navegación completa cierra cualquier menú abierto sola"*.
+        Cambiarlo habría roto el menú de teléfono para arreglar algo que no es su culpa.
+      - **Lo que queda vivo y NO es fantasma — corrige la decisión cotizada a Sergio:** la opción
+        anotada en el radar es safelistear la IP del VPS (`RACK_ATTACK_ALLOWED_IPS=187.77.16.63`).
+        Eso **calla el falso positivo del canario pero no ayuda a un lead**, que entra con su
+        propia IP y también suma 2 peticiones por página. Si se aprueba creyendo que arregla el
+        sitio, el chat sigue desapareciéndole al visitante que recorre varias pantallas — que es
+        justo el más interesado. **No pude medir en qué página cae un lead con IP limpia: no
+        tengo una segunda IP desde el VPS** (`WebFetch` no está autorizado en sesión no
+        interactiva). Es lo único que falta para dimensionarlo, y no se resuelve adivinando.
+      - **Repro en 30 segundos:** cargar 5 páginas de `onia.com.bo` seguidas con Playwright y
+        mirar `.woot-widget-bubble` en cada una. Las dos primeras la tienen; las otras tres no.
+      - **Cero líneas de código tocadas: no había nada roto en el sitio.**
 
 - [ ] 🟠 **SIGUE VIVO en `rubros`, y el 2026-09-03 07:58 UTC `onia-cola` midió POR QUÉ. No es
       timing ni rasterizador: `fullPage` destruye las secciones movidas por scroll.**
