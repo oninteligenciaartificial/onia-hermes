@@ -804,6 +804,22 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       fallar no prueba nada.
       **Verificado sobre el HTML servido del build nuevo** (no el DOM, no `main`): las **16**
       rutas del sitemap devuelven `og:image` `200 image/png` de 40.888 B. Antes: 12.
+
+      ✅ **Re-auditado el 2026-09-03 por `web-venta` — el `[x]` AGUANTA, y queda escrita la pista
+      falsa para que la próxima no la persiga.** Barrido sobre el HTML servido de las **25** rutas
+      públicas del build (no las 16 del sitemap: se enumeraron desde `find src/app -name page.tsx`,
+      a propósito más ancho que el guard). Las 14 rutas de venta traen `og:image` **y**
+      `twitter:card: summary_large_image`.
+      ⚠️ **Aparecen 7 rutas SIN `og:image` — `/patrones` y las seis `/v1/*` — y NO son un defecto.**
+      `robots.txt` las declara `Disallow: /patrones` y `Disallow: /v1`, y ninguna está en el
+      sitemap: son superficies internas, no linkeadas desde el sitio. Es exactamente el mismo
+      patrón que causó el bug real de ayer (`opengraph-image` no baja a segmentos anidados: `/v1`
+      la tiene, sus hijas no), y por eso engaña — pero acá el guard tiene razón en ignorarlas,
+      porque su lista sale del sitemap. **Agregarles tarjeta sería trabajo inventado.**
+      Se verificó además que ninguna de las 14 rutas de venta exhibe obra: cero "muy pronto",
+      "próximamente", "en construcción" ni "beta". El "14 días gratis" de `/` y `/precios` es
+      **cierto**, no una promesa vieja: `TRIAL_DAYS = 14` en
+      `onia-platform/lib/subscription/plan-state.ts`, leído en vivo.
       **Evidencia mirada, no supuesta:**
       `hermes-content/docs/historial/canario-visual/2026-09-02-tarjeta-social-rutas-fuera-de-sitio.png`
       — la tarjeta de `/servicios/consultoria`, 1200×630, dibujada, cero captura, cero obra.
