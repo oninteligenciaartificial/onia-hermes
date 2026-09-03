@@ -2008,6 +2008,216 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         publicar es de Sergio. Es el **séptimo** arreglo esperando el mismo deploy de
         `t_68671bc3`.
 
+### Del carril `web-venta` — corrida del 2026-09-03 17:48 UTC (a dónde LLEGA cada botón que sale del sitio)
+
+- [x] 🔴 **Los dos botones de `/contacto` mandaban al lead a un calendario que ya no existe, y
+      caían en un formulario de alta — ARREGLADO EN CÓDIGO, con gate.** Es el defecto más caro
+      que encontró este carril: la página cuyo trabajo entero es que alguien consiga **hablar
+      con una persona** tenía sus dos únicos CTA muertos, en silencio.
+      - **Cómo apareció, y por qué nadie lo había visto:** el punto 15 del checklist de
+        pre-entrega ("cero enlaces internos rotos") sólo mira los `href` **internos**. Los
+        enlaces que SALEN del sitio —los que llevan al lead al final del embudo— no los mira
+        nadie. Extraídos a mano los de las 16 URLs del sitemap, aparecieron dos hacia
+        `cal.onia.com.bo`.
+      - **Medido, no supuesto:** `curl -s -o /dev/null -w '%{http_code} %{redirect_url}'
+        https://cal.onia.com.bo/onia/demo-onia` → **302 → `https://onia.com.bo/empezar`**. Con
+        `-L` los dos enlaces devuelven **200 y exactamente 41.474 bytes** — el mismo tamaño para
+        `demo-onia`, `consulta-inicial` y un slug **inventado**. Ninguna herramienta los ve
+        rotos. El lead que hacía clic en «Agendar la demo» aterrizaba en el asistente de alta.
+      - **La página se contradecía a sí misma en su último clic.** Su bajada dice, textual: *"No
+        hay formulario que caiga en un buzón. Elegís vos el día y la hora **en nuestra agenda**"*
+        — y los dos botones entregaban exactamente un formulario.
+      - **Por qué está muerto y no vuelve:** no hay contenedor de Cal.com en el VPS
+        (`docker ps -a | grep -i cal` → vacío), y el 2026-09-02 22:55 La Paz **Sergio decidió lo
+        contrario**: ventanas fijas para el bot en vez de revivir Cal.com (tablero
+        `t_af8f44ad`, cerrada). O sea que el sitio llevaba días apuntando a la opción
+        descartada. El comentario del código decía *"Verificado 2026-07-30: los dos enlaces
+        responden 200 en público"* — cierto entonces, y sin significado hoy: un 200 sobrevive a
+        la muerte del servicio que lo daba.
+      - **El arreglo, el mínimo posible y sin rediseñar nada:** las dos citas salen ahora por el
+        **mismo WhatsApp que ya atiende toda la web** (`waLink`, el número único de `site.ts`),
+        cada una diciendo cuál eligió el que escribe ("la consulta comercial de 20 minutos" /
+        "la demo de 45 minutos con mi caso"), que es donde el bot propone los dos horarios
+        concretos del día. **Layout, tarjetas y etiquetas de los botones intactos**; sólo
+        cambian los `href` y las tres frases que prometían un calendario (bajada, `description`
+        y el comentario del archivo). `og:description` no se tocó: seguía siendo cierta.
+      - **Verificado MIRANDO**, contra un servidor de producción real (`next start` sobre el
+        build, no `dev`), a **1440 y a 390**: la página se ve igual que en producción, los dos
+        botones apuntan a `wa.me/59175414930` con su texto, y los dos destinos responden
+        **200**. Y el `<head>` mirado aparte —la metadata no se ve en una captura—: cero
+        coincidencias de `cal.onia` en todo el HTML servido.
+      - **Gate nuevo `(sitio)/enlaces.test.ts`**, en `prebuild` (el comando real del deploy).
+        Caza la **clase**: todo host absoluto de la superficie de venta tiene que estar
+        declarado con su motivo, y **ningún subdominio nuestro que no publiquemos** —el caso
+        exacto de `cal.`, que resuelve a nuestra IP y contesta 200 tras redirigir—. La lista de
+        archivos se **deriva del disco** (`(sitio)/**` más los módulos de `@/lib` y `@/content`
+        que esas páginas importan, un salto que hacía falta: los enlaces al SIN viven en
+        `lib/siat.ts`, no en una página), así una página nueva nace cubierta.
+      - **Verificado en ROJO antes**, por el motivo correcto: fallaban los dos casos de host
+        con `cal.onia.com.bo`, y el caso "mira una superficie de verdad" en verde.
+      - **Gates:** typecheck exit 0 · build exit 0 (con `prebuild` = `tsc --noEmit && vitest run`).
+      - **Barrido a toda la superficie**, no sólo donde saltó: `cal.onia.com.bo` no queda en
+        ningún archivo del repo, y el enlace de la home *"O agendá una demo con horario →"*
+        apunta a `/contacto`, que ahora sí termina en una conversación.
+      - ⚠️ **No está en producción**: `onia.com.bo` la sirve el contenedor `onia-landing` y
+        publicar es de Sergio. Es el **octavo** arreglo esperando el mismo deploy de
+        `t_68671bc3` — y el primero que le cuesta leads mientras espera.
+
+### Del carril `web-venta` — corrida del 2026-09-03 18:48 UTC (de dónde saca su número cada precio)
+
+- [x] 🟠 **El sitio tenía CUATRO copias tipeadas a mano de los precios de los planes —
+      ARREGLADO, con gate.** Coincidían con la tabla por suerte, no por construcción: el día
+      que Sergio cambia un plan, cambia `PLANES` y las cuatro frases siguen anunciando el
+      precio viejo. Es la regla que abre `CLAUDE.md`, y el desastre que la originó (cuatro
+      precios vivos del mismo chatbot) empezó exactamente así.
+      - **Medido antes de tocar nada, y el veredicto fue "no hay defecto vivo":** los cuatro
+        literales (320 · 750 · 1.500 · 89 · 199) **coinciden hoy** con `PLANES`, y `PLANES`
+        coincide a su vez con `DEFAULT_PLAN_AMOUNTS` del producto
+        (`/root/loops/onia-platform/lib/subscription-plans.ts`: basic 320/89/3200 ·
+        professional 750/199/7500 · clinic 1500/15000 · enterprise 2900/29000). **No se
+        arregló un precio: se arregló que un precio pueda desincronizarse en silencio.**
+      - **Quiénes eran, encontrados barriendo el disco (no una lista):** la `description` de
+        `/precios`, el chip del hero de `/v1`, nuestra propia fila de la comparativa
+        (`lib/proof.ts`) y la letra chica del semanal (`lib/pricing.ts`, dos copias del mismo
+        número **dentro del archivo que lo define**). Las cuatro ahora se arman con `bs()`
+        desde `PLANES`.
+      - **Y una de ellas era METADATA**, que es la parte de la superficie de cliente que **no
+        se ve mirando**: toda captura da verde sobre ese defecto. Es la misma trampa que se
+        pagó hoy a las 12:55 con la `description` de `/terminos`.
+      - **Gate nuevo `(sitio)/precios.test.ts`**, en `prebuild` (`tsc --noEmit && vitest run`,
+        el comando real del deploy). Caza la **clase**: ningún archivo de la superficie de
+        venta puede escribir como literal un monto que declare `PLANES`/`GRUPO`. Sujetos
+        derivados del **disco**, no de una lista de inclusión — un archivo nuevo nace cubierto.
+      - ⚠️ **El gate deliberadamente NO mira los add-ons, y eso lo midió el propio barrido:**
+        `Bs 390` es el chatbot **y** el plan «Cuidado Web Crecimiento» de `content/webs.ts`,
+        que es correcto y no tiene nada que ver. Un gate por número suelto habría gritado por
+        código sano en su primera corrida — y un gate que grita por algo correcto se apaga.
+      - **Verificado en ROJO antes**, por el motivo correcto: reintroducido el chip del hero,
+        falló **un solo** caso, con archivo y línea exactos (`hero.tsx:10`) y los dos anclas
+        en verde. El ancla no escribe ningún número esperado: hacerlo habría sido la quinta
+        copia a mano, dentro del gate que las prohíbe.
+      - **Es un refactor, no un cambio de copy, y se probó como tal:** el HTML servido por el
+        build nuevo es **byte a byte idéntico al de producción** en las cuatro superficies
+        (`description` de `/precios`, `/` y `/comparativa`; la fila «Bs 320 – 1.500 / mes»; la
+        frase del semanal; el chip «Desde Bs 320/mes» de `/v1`).
+      - **MIRADO renderizado** sobre el build de producción real (`next start`, no `dev`):
+        `/precios` a 1440 y 390 con la grilla entera — 320 / 750 / 1.500, anuales
+        3.200 / 7.500 / 15.000, semanales 89 / 199.
+        ⚠️ La primera captura salió **en blanco** y no era el sitio: el servidor local servía
+        un chunk 404 (`3413-…js`). Es el **cuarto** falso positivo de instrumento de esta
+        familia; se confirmó mirando el 4xx antes de creerle a la foto, y con el servidor
+        sano la página mide 6.016 px en vez de 844.
+      - **Gates:** typecheck exit 0 · `vitest run` **222 verdes** en 12 archivos · build exit 0.
+      - ⚠️ **No está en producción**: `onia.com.bo` la sirve el contenedor `onia-landing` y
+        publicar es de Sergio. Es el **noveno** arreglo esperando el mismo deploy de
+        `t_68671bc3`.
+
+- [x] 🟢 **El formulario de captura de `/guia-facturacion` entrega de verdad — medido de punta
+      a punta, no por su pantalla.** Es el único `<form>` de la superficie de venta y su
+      pantalla de éxito («Listo. La hoja es tuya.») se muestra **pase lo que pase**: el cliente
+      traga todos los errores y el endpoint responde 204 incluso cuando no reenvía nada. O sea
+      que el primer paso **no puede fallar a la vista**, que es justo la firma del bug que mató
+      al bot dos veces.
+      - **Probado el segundo paso, que es el que se pierde:** POST real a
+        `https://onia.com.bo/api/agenda-intake` → la fila **apareció** en
+        `onia_center.leads` (`source=gate-web-venta`), y la red interna
+        `onia-landing → onia-center:3012` devolvió `{"ok":true}`. Las dos filas de prueba se
+        **borraron** (`delete … where public_contact like '%example.invalid'` → 0 quedan).
+      - **Cero leads perdidos:** el histórico de `onia_center.leads` tiene sólo
+        `prospector-osm` (94) y `bot:onia-demo-bot` (26). **Nadie llenó nunca ese formulario**,
+        así que no hay nada que rescatar. No es un ítem: es una medición que faltaba.
+      - **El plazo de la guía sigue vigente** (30-09-2026), o sea que la página no está vieja.
+
+### Del carril `web-venta` — corrida del 2026-09-03 19:48 UTC (quién enlaza a quién)
+
+- [x] 🟠 **Dos servicios que Onia COBRA sólo se podían alcanzar entrando por la política de
+      privacidad — ARREGLADO, con gate.** `/servicios/marketing-ia` y `/servicios/consultoria`
+      están publicadas y el sitemap las pide indexar, pero desde la superficie de venta entera
+      —portada, `/precios`, `/empezar`, `/rubros`, `/chatbot`, `/agentes`, `/facturacion`,
+      `/comparativa`, `/contacto`, `/nosotros`— no había **un solo enlace**.
+      - **Medido, no supuesto:** bajadas las 16 páginas que sirve `onia.com.bo` y contados los
+        enlaces entrantes en el HTML servido. Todas las demás tienen **16**; estas dos tienen
+        **4**, y las cuatro son `/privacidad`, `/terminos` y ellas dos entre sí.
+      - **La causa:** las dos siguen en `app/servicios/` —el árbol viejo, con el `SiteFooter`
+        archivado, el mismo cromo que `/v1`, que es `noindex` justamente por viejo—. Por eso
+        los únicos enlaces vivían en un pie que **ninguna pantalla de venta usa**.
+      - **Es el bug de `/nosotros` (2026-08-23) sin terminar de barrer.** Aquella vez se
+        rescató UNA página metiéndola en `NAV_DECIDIR` y ahí quedó, sin mirar a las hermanas
+        que estaban en el mismo cromo muerto. Es exactamente lo que `CLAUDE.md` llama arreglar
+        el síntoma donde saltó y dejar vivos a los que llaman a lo mismo.
+      - **Verificado que enlazarlas es correcto ANTES de enlazarlas:** las dos páginas se
+        leyeron enteras. Cero obra ("muy pronto", "beta"), cero prueba social fabricada —
+        marketing-ia dice de frente *"no tenemos un muro de logos ni casos de éxito… antes que
+        inventarlos, preferimos no tenerlos todavía"*—, y consultoría está en el catálogo de
+        venta como servicio que se cobra (`ONIA_CATALOGO_DE_VENTA.md:147`).
+      - **El arreglo:** apartado `Servicios` (Webs · Marketing IA · Consultoría) en el mapa
+        único del sitio (`(sitio)/nav.ts`), que leen el pie y el menú de teléfono. `webs` va
+        con las otras dos aunque ya era alcanzable: una lista partida en dos lugares es la que
+        se desincroniza. **No es un rediseño** — el pie archivado ya tenía esa misma columna.
+      - **Gate nuevo `app/alcance.test.ts`**, en `prebuild` (el comando real del deploy): toda
+        página publicada tiene que estar enlazada desde `app/(sitio)/`. Sujetos derivados del
+        **disco** (`PAGINAS_PUBLICAS`, reusada de `rutas.ts` en vez de recalcularla), así una
+        página nueva nace cubierta y sacarla exige prohibirla en `robots.ts`, que se ve.
+        ⚠️ **Y exige que el enlace salga del árbol VIVO, no de cualquier página** — ésa es la
+        trampa que dejó el defecto suelto: preguntar "¿la enlaza alguien?" da verde, porque
+        `/privacidad` la enlazaba… con el pie muerto.
+      - **Verificado en ROJO antes**, por el motivo correcto: sacadas las dos entradas, falla
+        **exactamente** en esas dos rutas, nombrando archivo y ruta.
+      - **MIRADO renderizado** sobre el build de producción (`next start`, escuchando 4xx antes
+        de creerle a la foto, y con `scroll-behavior:auto` inyectado): pie a 1440 y 390 con las
+        cuatro columnas enteras y ningún enlace desbordado, y el menú de teléfono abierto con
+        el apartado nuevo. **Segundo turno probado:** clic real en los tres enlaces → 200 y el
+        `<h1>` correcto en cada destino. El pie pasa a 4 columnas recién a 900px (entre 700 y
+        900 van 2×2: a 700 con cuatro columnas "Marketing IA" partía en dos renglones).
+      - **Gates:** typecheck exit 0 · `vitest run` **239 verdes** en 13 archivos · build exit 0.
+      - ⚠️ **No está en producción todavía** — y acá se corrige de paso una premisa que este
+        archivo venía arrastrando. **`t_68671bc3` SÍ se desplegó**: el build que sirve
+        `onia.com.bo` es de **hoy 18:10 UTC**
+        (`ls -l /opt/onia-landing/runtime-next/apps/onia-platform/.next/BUILD_ID`), no del
+        02-sep, y lleva los cuatro arreglos del carril anteriores a esa hora —verificado
+        mirando el resultado, no el commit: `/favicon.ico` devuelve **3.083 bytes** de icono
+        (era 29 KB de HTML de error) y la `description` de `/terminos` ya no dice "borrador"—.
+        Lo que falta **no es el deploy: es el merge**.
+
+- [ ] 🔴 **Tres arreglos del carril están commiteados hace horas y NO llegan al cliente porque
+      `claude/web-venta` no se mergeó a `main`.** No es "esperando a Sergio": el integrador
+      (`onia-cola`) mergea, y el deploy ya demostró hoy que corre solo. Medido con
+      `git merge-base --is-ancestor <sha> origin/main`:
+      - `ea150d179` (17:58) — **el que más cuesta**: los dos CTA de `/contacto` agendan contra
+        `cal.onia.com.bo`, un Cal.com muerto. **Sigue vivo en producción ahora mismo**:
+        `curl -s https://onia.com.bo/contacto | grep cal.onia.com.bo` → dos aciertos.
+      - `088a6d235` (19:03) — el gate que impide que los precios se desincronicen.
+      - `1fbf9dc2a` (20:02) — este ítem.
+
+      **Por qué se anota como ítem y no como comentario:** los cuatro arreglos que SÍ llegaron
+      pasaron por main antes de las 18:10. Estos tres entraron después y quedaron detrás de una
+      rama sin mergear, así que un arreglo verificado, gateado y pusheado sigue valiendo **cero**
+      para el lead que abre `/contacto` hoy. Construido ≠ terminado, y el eslabón que falta no
+      es de este carril.
+
+- [x] 🟢 **Checklist de pre-entrega, puntos 5 y 11–16: corridos contra producción, todos
+      verdes.** `<html lang="es">` en las 16 · exactamente **una** `<h1>` por página en las 16 ·
+      canonical propio en las 16 · cero contenido mixto `http://` · las 25 `<img>` con `width`,
+      `height` y `alt` real (son fotos de contexto, no capturas del sistema: cumplen la regla) ·
+      los 19 enlaces internos y assets responden 200.
+
+- [ ] 🟢 **`/guia-facturacion` la enlaza UNA sola página (`/facturacion`) — no lo toqué, y el
+      motivo importa.** Salió del mismo conteo. No es el mismo defecto que los servicios: está
+      enlazada desde el árbol VIVO, así que un lead sí puede llegar. Parece deliberado (es el
+      imán de la página de facturación). Queda anotado por si el dueño del contenido lo quiere
+      también en el pie; el gate ya la cubre y hoy pasa.
+
+- [ ] 🟢 **Cloudflare ofusca el correo de contacto en `/privacidad` y `/terminos`, y para un
+      rastreador sin JS el contacto legal dice `[email protected]`.** Medido: el HTML servido
+      trae `<a href="/cdn-cgi/l/email-protection">` en 7 lugares de 4 páginas. **Mirado
+      renderizado: para un humano NO hay defecto** — el decodificador de Cloudflare corre y la
+      pantalla muestra `business@onia.com.bo` con su `mailto:` bien puesto. El residuo es que
+      `/privacidad` es indexable **a propósito porque el rastreador de Meta valida esa URL al
+      publicar la app del chatbot**, y ese rastreador no ejecuta JS: ve el marcador. Y la
+      ofuscación no protege nada igual — el correo viaja en claro en el payload RSC de las 16
+      páginas. **Se apaga en el panel de Cloudflare (Scrape Shield → Email Address
+      Obfuscation), que no es código ni es mi zona:** es de Sergio.
+
 ### Del canario visual — corrida del 2026-09-03 ~03:41 UTC (diez pantallas)
 
 - [x] 🟠 **El ítem de "captura full-page ciega" (abierto 2026-09-02, confirmado vivo en

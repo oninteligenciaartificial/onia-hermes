@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import {
   NAV_HEADER,
   NAV_PRODUCTO,
+  NAV_SERVICIOS,
   NAV_DECIDIR,
   NAV_LEGAL,
   EMPEZAR_URL,
@@ -511,6 +512,15 @@ export function Footer() {
         <nav className={s.footerNav} aria-label="Producto">
           <p className={s.footerGroup}>Producto</p>
           {NAV_PRODUCTO.map((item) => (
+            <a key={item.href} href={item.href}>
+              {item.label}
+            </a>
+          ))}
+        </nav>
+
+        <nav className={s.footerNav} aria-label="Servicios">
+          <p className={s.footerGroup}>Servicios</p>
+          {NAV_SERVICIOS.map((item) => (
             <a key={item.href} href={item.href}>
               {item.label}
             </a>
