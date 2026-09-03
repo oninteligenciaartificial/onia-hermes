@@ -1875,3 +1875,38 @@ migración escrita y la nota de orden— ya está hecho.
 **Lo que se destraba al desplegar:** el punto 3 del tablero `t_43947a6a` (la tarjeta del panel con
 el Embedded Signup de Meta) no se puede construir antes, porque es una pantalla de cliente y la
 regla es abrirla y MIRARLA renderizada — imposible mientras la columna no exista.
+
+## 35. El carril de contenido puede estar corriendo DOS veces: se montó en el VPS "en pausa" y su cron quedó activo (2026-09-03) — decisión de Sergio
+
+**Lo medido en el VPS**, no deducido:
+
+- `crontab -l | grep onia-loop.sh` → `11 */3 * * * /root/bin/onia-loop.sh contenido-cola`.
+  **Activa, sin comentar.**
+- Worktree `/root/loops/onia-hermes-contenido-cola` existe, parado en
+  `claude/ads-creatividades-publicos` (no en `claude/carril-contenido`, la de Sergio — eso está
+  bien y es deliberado).
+- Prompt en `/root/bin/loops/contenido-cola.md`.
+
+**La contradicción:** el commit que lo montó (`c43b04a24`, sesión de control) dice textual *"en
+pausa hasta que Sergio apague el de Windows"*. Pero *en pausa* no se implementó en ningún lado: la
+línea de cron está viva y el loop se dispara cada 3 horas. Lo único que lo venía frenando era un
+**accidente** — el corredor no tenía su `case` y moría con `exit 64`. Ese accidente se arregló hoy
+al mergear esa misma rama a `main`, así que **a partir del próximo sync el loop arranca de
+verdad.**
+
+**Por qué es de Sergio:** desde el VPS no se puede ver si la tarea de Windows sigue registrada —
+`list_scheduled_tasks` vive en la app de Claude Code de su laptop, y este loop no la alcanza. Sólo
+él puede mirarlo.
+
+**Las dos opciones, cotizadas:**
+
+| | qué pasa | costo si se elige mal |
+|---|---|---|
+| **A. El de Windows ya está apagado** | El del VPS es el único: corre con la laptop apagada, que era el objetivo de la mudanza | Ninguno. Es el estado buscado |
+| **B. El de Windows sigue registrado** | **Dos loops sobre el mismo carril.** El de Windows escribe `claude/carril-contenido` y el del VPS `claude/ads-creatividades-publicos`: no comparten rama, así que no se pisan el árbol — pero duplican el gasto de tokens y publican contenido dos veces | Gasto doble y trabajo repetido, silencioso: ninguno de los dos se entera del otro |
+
+**Lo que hace falta de Sergio:** una sola mirada a `list_scheduled_tasks` en su laptop y decir si
+`contenido-cola` sigue ahí. Si sigue, se apaga ese y queda el del VPS.
+
+**Lo que ya es nuestro y está hecho:** el `case` del corredor, el prompt versionado, el worktree en
+la rama que no invade la suya, y la fila de `loops.md` alineada al cron real.
