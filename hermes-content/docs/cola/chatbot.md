@@ -282,7 +282,56 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       en un proceso hijo** (en este el módulo ya está cacheado y el test pasaría en falso).
       **Reproducción en 30 s:** `npm run demo:agendada` → exit 1 nombrando al contacto.
 
-- [ ] 🔴 **Un lead pregunta "¿el sistema hace X?" y el bot le contesta con la oferta de horarios,
+- [ ] 🔴 **El bot promete "ya le pasé tu consulta a Sergio, te escribe él" y NADIE se lo pasa:
+      el aviso del handoff viaja hasta un canal apagado.** Encontrado el 2026-09-03 18:10 UTC
+      cerrando el ítem de abajo, mirando el frente *"lo que promete"* — no por la cola.
+      **La medición, en producción:** conversación 49, mensaje 389 (recién derivada por el arreglo
+      de abajo). Texto literal del bot: *"Eso lo tiene que ver Sergio, no yo… **Ya le pasé tu
+      consulta con todo lo que me contaste. Te escribe él desde este mismo número**, en horario de
+      oficina"*. Nadie recibió nada.
+      **La cadena entera, seguida archivo por archivo hasta el final — y el final no existe:**
+      `hermes-content/deploy/vps-ops/bot/bot-engine.mjs:319` emite el efecto `notify_sergio` ·
+      `hermes-content/deploy/vps-ops/bot/chatwoot-adapter.mjs:756-762` lo propaga hacia arriba (con
+      un comentario que dice, textual, que antes *"ESTE archivo lo tiraba"*) ·
+      `hermes-content/deploy/vps-ops/bot/n8n-event.mjs:161-165` lo mete en el evento del turno como
+      `notifyCount` / `notifyReasons`, marcados ahí mismo como *"lo único de este evento que NO es
+      analítica"* ·
+      y ese evento sale por n8n, que en `/opt/onia/bot/webhook.env` está **`ONIA_N8N_ENABLED=false`
+      con `ONIA_N8N_EVENT_URL` vacío** (medido hoy, no leído de un doc). Cuatro archivos que se
+      pasan la posta con cuidado hacia una puerta tapiada.
+      ⚠️ **No está perdido, está mudo — y la diferencia importa para elegir el arreglo.** El lead
+      SÍ queda en `onia_center.review_queue`
+      (`hermes-content/deploy/vps-ops/bot/persistence.mjs:731`) y la conversación se ve en
+      `/inbox`. O sea que el dato existe: lo que falta es que algo golpee la puerta. Por eso esto
+      **no es** "se pierde el lead", es "Sergio se entera sólo si abre el panel" — que es
+      exactamente lo que el comentario del adapter dice que quería evitar.
+      🔴 **Y el vigía del colgado NO lo tapa, aunque su cabecera diga que el handoff es su caso.**
+      `scripts/vigia_sin_respuesta.mjs:93` descarta toda conversación cuyo último mensaje sea
+      saliente (`if (Number(ultimo.messageType) !== ENTRANTE) continue; // ya le contestaron`), y
+      en un handoff el último mensaje es justamente el del bot. El vigía lo agarra recién desde el
+      **siguiente** entrante —cuando la persona vuelve a escribir y el bot ya calla a propósito
+      (`hermes-content/deploy/vps-ops/bot/webhook-server.mjs:284-285`)—, así que **mientras el
+      prospecto no insista, nada lo ve**.
+      No es un bug del vigía: es que su red empieza un mensaje después de donde se hace la promesa.
+      📈 **Y esto se volvió MÁS frecuente hoy, por el arreglo de abajo.** Hasta las 18:04 una
+      pregunta de producto se la tragaba el off-guion; ahora va a handoff, que es lo correcto —
+      pero suma un motivo más a un aviso que no sale. Los motivos que ya caían acá:
+      `soporte_cliente`, `consulta_clinica_o_legal`, `queja_o_desconfianza`,
+      `pidio_hablar_con_humano`, `ningun_horario_le_sirve`.
+      🔴 **DEPENDE DE SERGIO — y es la MISMA decisión que ya está preguntada, no una nueva:**
+      tablero `t_b18ca430`, opciones (a) Telegram directo reusando el `TG_BOT_TOKEN` que el
+      watchdog ya usa · (b) n8n · (c) las dos. **No volver a preguntarlo.** Lo único que cambió es
+      el tamaño: esa tarea está redactada como "la demo agendada", y el canal muerto se lleva
+      puesto **todo handoff**, que es bastante más que las demos. Anotado como comentario en esa
+      tarea el 2026-09-03, para que la decisión se tome sabiendo el alcance real.
+      **Reproducción en 30 s:** `grep -E '^ONIA_N8N_(ENABLED|EVENT_URL)' /opt/onia/bot/webhook.env`
+      → `false` y vacío. Ése es el corte, y conviene decir dónde NO está para que nadie lo busque
+      dos veces: `hermes-content/deploy/vps-ops/bot/webhook-server.mjs` no nombra `notify` ni una
+      vez (`grep -c` → 0) y **eso no es el bug** — le pasa el `result` entero a
+      `buildBotTurnEvent` (línea 450), así que el aviso sube bien. Muere en el envío, no en el
+      armado.
+
+- [x] 🔴 **Un lead pregunta "¿el sistema hace X?" y el bot le contesta con la oferta de horarios,
       como si no hubiera preguntado nada.** Encontrado el 2026-09-03 recorriendo el frente
       (escalón 3), no por la cola: los dos gates del carril estaban en VERDE.
       **La medición, en producción y no en un test:** conversación 49 del widget (inbox 4),
@@ -315,10 +364,34 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       también matchea la regla nueva, pero **no llega**: `isSiatQuestion` la agarra antes y tiene
       su propia respuesta. Mandarla a handoff habría EMPEORADO una pregunta que hoy se contesta
       bien. Queda pinchado con su propio assert.
-      🔴 **FALTA PARA CERRARLO — commiteado, NO desplegado.** `/opt/onia/bot` no es un checkout
-      de git: hasta que alguien copie ese `intents.mjs` ahí, **el bot vivo sigue tragándose la
-      pregunta**. Es el mismo deploy que ya esperan otros dos arreglos (tablero `t_8f88919e`,
-      bloqueado). No marcar `[x]` hasta verificarlo contra producción con la sonda.
+      ✅ **CERRADO el 2026-09-03 18:07 UTC — desplegado y VERIFICADO en producción, que era la
+      única condición que este ítem se había puesto para marcarse.** El deploy que faltaba se hizo
+      a las 18:04 (tablero `t_8f88919e`, hoy `done`), y esta vuelta lo comprobó en vez de creerle a
+      la fecha.
+      **Que el código nuevo esté CORRIENDO no se dedujo del `cp`: el proceso vive en otro lado.**
+      `/opt/onia/bot` es el origen del rsync, pero el webhook corre **dentro del contenedor
+      `onia-center`** sobre `/tmp/onia-bot/`, con `docker exec -d`. Medido en el árbol que ejecuta:
+      `docker exec onia-center grep -c RE_PRODUCTO_HACE /tmp/onia-bot/intents.mjs` → **2**, y
+      `ps -eo pid,lstart,args` da el reinicio a las **18:04:12**, o sea *después* de la copia —
+      Node cachea los módulos, así que sin ese reinicio el archivo nuevo no habría entrado igual.
+      Copiar no es desplegar y desplegar no es reiniciar: los tres se midieron por separado.
+      **La prueba de verdad, con la sonda y el turno exacto del bug** (`ONIA_SONDA_GUION` con los
+      tres mensajes, conversación 49, mensajes 388-389):
+      persona → *"Antes de elegir horario, ¿el sistema manda recordatorios por WhatsApp a los
+      pacientes?"* · bot → *"**Eso lo tiene que ver Sergio, no yo — soy un bot y no quiero
+      inventarte una respuesta.** Ya le pasé tu consulta con todo lo que me contaste."*
+      Antes ese mismo texto devolvía la oferta de horarios. Y el motor lo confirma de su lado:
+      `onia_center.bot_conversations` para `chatwoot:49` quedó en **`stage=handoff_humano`**, no en
+      `esperando_horario` — que es exactamente el assert que los dos tests nuevos habían puesto en
+      rojo. **Leído el contenido del mensaje, no contado**: "contestó" no habría probado nada acá,
+      porque el bug consistía justamente en contestar otra cosa.
+      **Reproducción en 30 s:** `ONIA_SONDA_GUION='Hola, quiero informacion sobre el sistema|Tengo
+      una clinica dental en Santa Cruz, somos 4 personas|Antes de elegir horario, ¿el sistema manda
+      recordatorios por WhatsApp a los pacientes?' node scripts/sonda_widget.mjs`, y mirar el último
+      saliente de la conversación.
+      🔎 **Lo que este ítem NO arregla y descubrió al cerrarse:** la promesa *"ya le pasé tu
+      consulta"* hoy no la cumple nadie. Es el ítem nuevo de acá abajo — no una duda sobre este
+      arreglo, que hace lo correcto: derivar en vez de tragarse la pregunta.
 
 - [x] 🔴 **El cron del rescate corre la copia VIEJA a propósito, así que un arreglo del carril
       no llega a producción hasta que alguien mergea — y mientras tanto nada lo dice.**
