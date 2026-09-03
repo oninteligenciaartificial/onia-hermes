@@ -1378,3 +1378,20 @@ tanto imagen como video por CLI hasta que resetea.
 (escalera de agotamiento, regla 0). Si aparece, la vuelta se cierra con la tarea de 0 créditos
 (un `CREATIVO.md` que falte, o auditar una pieza vieja) y se anota. El `generate cost` sí sigue
 respondiendo gratis aunque el `create` esté bloqueado — medir no cuenta contra el cupo.
+
+## 18. ✅ El vaso PARA LLEVAR salva la casilla 9 en un retrato (E7-rooftop, 2026-09-03)
+
+`E2-B-rooftop` es un **retrato** (mira al lente, un vaso para llevar en la mano, la otra en la
+baranda) — la misma familia que hotel y coworking, que preocupaban por la casilla 9 (sin las dos
+manos sobre un objeto, animan a b-roll sutil que NO resuelve una acción). El hallazgo: **si hay un
+vaso en la mano, el gesto de resolución existe gratis** — «levanta el vaso, da un sorbo, lo baja».
+`seedance1_5` lo ejecuta limpio y **cierra sobre la cara plenamente visible** al bajar el vaso, que
+es exactamente lo que pide la casilla 9. Salió a la primera, 4,8 cr medidos, identidad intacta en
+los 6 frames.
+
+**La regla:** un retrato con un objeto-en-mano (vaso, taza, celular bajado) anima MEJOR que uno de
+manos vacías — el objeto da el arco «subir → usar → bajar» que devuelve la cara al cuadro. El
+prompt que funcionó: `She slowly raises the to-go coffee cup toward her lips for a small sip, then
+lowers it slightly, blinks softly and keeps her gaze toward the lens.` (misma estructura que el
+mechón del hotel §17, pero con resolución real en vez de b-roll puro). Orden de preferencia para
+animar un retrato: **objeto-en-mano que se usa (rooftop) > mechón/peso (hotel) > sólo parpadeo.**

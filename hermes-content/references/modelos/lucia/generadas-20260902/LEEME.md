@@ -13,7 +13,7 @@ Generadas con `lucia-skin-v1` (`58bbd635-…`) por CLI en el VPS, Nano Banana Pr
 | Archivo | Qué es | Asset id | Estado |
 |---|---|---|---|
 | `E2-A-rooftop.png` | Rooftop de Santa Cruz al atardecer, vaso para llevar sobre la baranda de vidrio — toma A | `460df6ae-a209-4953-82c9-16e719bb940f` | ✅ variante de la escena rooftop |
-| `E2-B-rooftop.png` | Misma rooftop — **toma B, la referencia de LUZ de la receta (§12)** | `378291da-bfc4-4795-963c-101206116865` | ✅ **la mejor rooftop** — pelo suelto, pecas marcadas, rim dorado, cara fiel al ancla, sin pantallas ni texto |
+| `E2-B-rooftop.png` | Misma rooftop — **toma B, la referencia de LUZ de la receta (§12)** | `378291da-bfc4-4795-963c-101206116865` | ✅ **la mejor rooftop** — pelo suelto, pecas marcadas, rim dorado, cara fiel al ancla, sin pantallas ni texto. **Animada 2026-09-03 → `E7-rooftop-seedance.mp4`** |
 | `E2-C-rooftop.png` | Misma rooftop — toma C | `af2771c7-e66b-4592-86e8-0fe59b02128a` | ✅ variante de la escena rooftop |
 | `E3-cafe.png` | Café de especialidad, luz cálida de ventana, ladrillo, plantas colgando, **las dos manos en la taza** (acción a medias) | `c31c1333-dbd6-4be7-890f-07dcbb1cfc59` | ✅ **la prueba 9/9 de la receta** — es la que se animó (→ E4/E6) |
 | `E3-coworking.png` | Coworking de diseño, sol de ventana con flare, plantas, laptop con UI | `bc39fa80-5144-4230-8171-c56bfc77aee5` | ⚠️ fancy y fiel, pero **pelo recogido** y **laptop con UI** en cuadro (de canto y suave, no legible de frente). Sin animar — **auditada 2026-09-02, ver abajo** |
@@ -24,7 +24,7 @@ tomas alternas de la misma escena; **B es la que la receta canonizó** como pala
 (`warm golden hour backlight, soft falloff, shallow depth of field`), la que NO cuesta la casilla
 de identidad.
 
-## Videos (todos animan `E3-cafe.png` — la misma escena)
+## Videos (E4/E6 animan `E3-cafe.png`; E5 anima `E3-hotel.png`; E7 anima `E2-B-rooftop.png`)
 
 Formatos verificados con `ffprobe` (detalle y creativos en [`CREATIVO.md`](CREATIVO.md)):
 
@@ -34,6 +34,7 @@ Formatos verificados con `ffprobe` (detalle y creativos en [`CREATIVO.md`](CREAT
 | `E6-cafe-seedance-8s.mp4` | 720×1280 = 9:16 exacto · aac | 8,0 s | `seedance1_5` | 9,6 cr | ✅ b-roll largo/relajado; el medio es el sorbo (§16) |
 | `E4-cafe-kling3_0.mp4` ⛔ | 716×1284 (necesita recorte) · aac | 5,0 s | `kling3_0` | 8,75 cr | ⚠️ **NO se publica** — termina cabizbaja, cara tapada (§15). Se guarda como contraejemplo |
 | `E5-hotel-seedance.mp4` 🎯 | 720×1280 = 9:16 exacto · aac | 4,0 s | `seedance1_5` | 4,8 cr | ✅ **publicable** — anima `E3-hotel.png`: se acomoda un mechón (acción a medias real), parpadeo suave, cierra sobre la cara (casilla 9). Cara fiel al ancla en los 6 frames. Asset id del MP4: `0a7c63e4-5075-4c92-ab6e-7ce9d2ecae40` (rescatado del nombre de descarga — este SÍ quedó guardado) |
+| `E7-rooftop-seedance.mp4` 🎯 | 720×1280 = 9:16 exacto · aac | 4,0 s | `seedance1_5` | 4,8 cr | ✅ **publicable** — anima `E2-B-rooftop.png`: **levanta el vaso para llevar, da un sorbo y lo baja** (acción a medias que SÍ se resuelve, mejor que hotel/coworking que son retratos), parpadeo suave, cierra sobre la cara plenamente visible (casilla 9). Identidad intacta en los 6 frames (`_E7-rooftop-frames.jpg`): cejas gruesas, pecas marcadas, aro de oro, pelo suelto, golden hour. Sin pantallas ni texto. Job id del MP4: `5a80fdb2-1a0d-46ba-a1c3-87fdd7572802` (del nombre de descarga; seed 28172) |
 
 🔴 **Los `job_id` de estos tres videos NO quedaron guardados.** La `CREATIVO.md` decía que estaban
 en los `_E*.log`, pero esos logs son **sólo de imágenes** (contienen la URL del PNG, no la del
