@@ -25,10 +25,26 @@
 Preview: `reel-lanzamiento-20260822/renders/preview-v4-verde-360.mp4`.
 CTA: seguir (sin palabra — es presentación). **Es la pieza que abre todo.**
 
-## L2 · Carrusel fijado "¿Quién es Lucía?" — brief listo, falta render
+## L2 · Carrusel fijado "¿Quién es Lucía?" — ✅ RENDERIZADO 2026-09-03, espera OK
 
-7 slides, pack `editorial-clean`, fotos aprobadas del banco.
-Brief: `posts-20260807/briefs/lucia-quien-es-fijado.json`. CTA: pregunta abierta + seguir.
+7 slides, pack `editorial-clean`, **0 créditos** (fotos del banco `generadas-20260902/`).
+
+- Brief: `posts-20260807/briefs/lucia-quien-es-fijado.json`
+- Render bueno: **`posts-20260807/L2/slide-01..07.jpg`** — las 7 medidas en `1080×1350`
+- Detalle, comando reproducible y chequeo de rúbrica: `posts-20260807/L2/LEEME.md`
+- CTA: pregunta abierta + seguir. Se fija al perfil.
+
+⚠️ **Corregido 2026-09-03 — el brief apuntaba a 6 fotos que no existen en ninguna rama.** Citaba
+`tanda-20260821/*.png`; contado en vivo, esa carpeta tiene **0 imágenes** en disco, **0** en
+`origin/main` y **0** en `origin/claude/ads-creatividades-publicos`: sólo `.mp4` y `.mp3`. No
+estaban "en otra rama" — **nunca entraron a git**, porque eran PNG y `*.png` está ignorado en todo
+`references/modelos/`. Repuntado al banco commiteado del 2026-09-02 y **rendeado en el VPS**, que
+es la prueba de que ahora se puede reconstruir desde un clon limpio.
+
+🔴 **El brief de L6 tiene el MISMO defecto y sigue sin arreglar**: sus 7 `bg` también apuntan a
+`tanda-20260821/*.png` inexistentes. No se tocó a propósito — L6 ya tiene su render bueno (verde,
+en la rama de ads) y repuntarlo cambiaría la pieza que Sergio va a aprobar. Queda anotado: si
+alguna vez hay que **re-rendear** L6, primero hay que repuntar sus fondos.
 
 ---
 

@@ -18,7 +18,7 @@
       "body": "No. Y esa es la mejor parte.",
       "visual_prompt": "Su retrato mas fuerte",
       "alt_text": "Lucia es real?",
-      "bg": "hermes-content/references/modelos/lucia/tanda-20260821/BROLL-TEST/IMG-05-ugc-selfie.png"
+      "bg": "hermes-content/references/modelos/lucia/generadas-20260902/E2-B-rooftop.jpg"
     },
     {
       "number": 2,
@@ -28,7 +28,7 @@
       "body": "Creada con inteligencia artificial por el equipo de @oniahq, en Santa Cruz de la Sierra. Cada foto mía se genera — no existe una sesión, no existe una cámara.",
       "visual_prompt": "Ella en contexto boliviano",
       "alt_text": "Personaje digital",
-      "bg": "hermes-content/references/modelos/lucia/tanda-20260821/L1b-rooftop-natural.png"
+      "bg": "hermes-content/references/modelos/lucia/generadas-20260902/E2-A-rooftop.jpg"
     },
     {
       "number": 3,
@@ -38,7 +38,7 @@
       "body": "Las cuentas IA que lo esconden pierden la cuenta. Las que lo declaran, crecen. Yo nací declarada: etiqueta de IA activada desde el primer post.",
       "visual_prompt": "Copy-space",
       "alt_text": "IA declarada",
-      "bg": "hermes-content/references/modelos/lucia/tanda-20260821/L2b-cafe-natural.png"
+      "bg": "hermes-content/references/modelos/lucia/generadas-20260902/E3-hotel.jpg"
     },
     {
       "number": 4,
@@ -48,7 +48,7 @@
       "body": "Onia arma sistemas con IA para negocios de verdad. Yo soy la demostración andante: si pueden sostenerme a mí, imaginate lo que hacen con tu operación.",
       "visual_prompt": "Ella trabajando",
       "alt_text": "Quien la hace",
-      "bg": "hermes-content/references/modelos/lucia/tanda-20260821/BROLL-TEST/IMG-01-trabajando.png"
+      "bg": "hermes-content/references/modelos/lucia/generadas-20260902/E3-coworking.jpg"
     },
     {
       "number": 5,
@@ -58,7 +58,7 @@
       "body": "Herramientas que existen, prompts que funcionan, y el detrás de escena de cómo me hacen. Nada de promesas de hacerte rico.",
       "visual_prompt": "Copy-space",
       "alt_text": "Que publica",
-      "bg": "hermes-content/references/modelos/lucia/tanda-20260821/BROLL-TEST/IMG-02-estudiando.png"
+      "bg": "hermes-content/references/modelos/lucia/generadas-20260902/E3-cafe.jpg"
     },
     {
       "number": 6,
@@ -68,7 +68,7 @@
       "body": "Porque técnicamente ya lo estás pensando. Decime en los comentarios qué te gustaría ver acá.",
       "visual_prompt": "Su mirada directa",
       "alt_text": "Pregunta abierta",
-      "bg": "hermes-content/references/modelos/lucia/tanda-20260821/BROLL-TEST/IMG-05-ugc-selfie.png"
+      "bg": "hermes-content/references/modelos/lucia/generadas-20260902/E2-C-rooftop.jpg"
     },
     {
       "number": 7,
@@ -78,7 +78,7 @@
       "body": "Seguime para ver hasta dónde llega. Y si tenés un negocio y querés lo que hay detrás de mí, está todo en @oniahq.",
       "visual_prompt": "Su retrato de cierre",
       "alt_text": "Seguime",
-      "bg": "hermes-content/references/modelos/lucia/tanda-20260821/BROLL-TEST/IMG-03b-playa-cubierta.png"
+      "bg": "hermes-content/references/modelos/lucia/generadas-20260902/E2-B-rooftop.jpg"
     }
   ]
 }

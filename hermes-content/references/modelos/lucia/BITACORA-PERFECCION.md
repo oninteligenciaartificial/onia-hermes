@@ -507,3 +507,76 @@ real, no porque el comando avisara.
 **Regla:** después de `block`, un `list` que confirme el `⊘ blocked`. El tablero ya tiene una
 tarea cerrada sobre esta sintaxis (`t_70696f24`), pero el orden equivocado **sigue vivo en los
 prompts** — no es de este carril arreglarlo ahí.
+
+---
+
+### E10 · L2 rendeado — la primera pieza que este carril puede reconstruir solo — 2026-09-03 · **0 créditos**
+
+**Pregunta de la vuelta:** *¿queda alguna pieza del plan que se pueda terminar sin gastar?* Sí: L2,
+el carrusel fijado «¿Quién es Lucía?», que figuraba **«brief listo, falta render»** desde el 22-ago.
+Doce días parado por nada — el render es local y cuesta cero.
+
+**Entregable: `posts-20260807/L2/slide-01..07.jpg`**, 7 láminas 1080×1350, bloqueadas esperando OK.
+
+#### Lo que apareció al ir a rendear: E9 se quedó corta
+
+E9 (vuelta anterior) midió que las 70 láminas del carril viven sólo en
+`claude/ads-creatividades-publicos` y que `main` tiene 0. Correcto, pero **contó los productos y no
+los insumos**. Al abrir el brief de L2, sus 7 fondos apuntaban a `tanda-20260821/*.png`. Contado en
+vivo, en las tres ramas:
+
+| dónde | imágenes de `tanda-20260821/` |
+|---|---|
+| disco de este worktree | **0** |
+| `origin/main` | **0** |
+| `origin/claude/ads-creatividades-publicos` | **0** |
+
+**No están "en otra rama": nunca entraron a git.** Esa carpeta contiene 24 archivos y son todos
+`.mp4`/`.mp3`. El banco de fotos que alimenta L2 **y L6** existió sólo en la máquina que lo generó.
+
+Esto sube la gravedad de lo que E9 llamó «la trampa del PNG». No es que el output quede sin
+publicar: es que **el insumo se evapora y con él la capacidad de re-rendear la pieza**. Un brief
+cuyos `bg` no están versionados es un brief que sólo funciona una vez, en una sola computadora.
+
+#### Cómo se arregló, y por qué el arreglo es la prueba
+
+Repuntados los 7 fondos al banco `generadas-20260902/` (6 imágenes, **todas commiteadas**, las
+mejor auditadas del carril) y **rendeado acá, en el VPS**. Que el render haya corrido en la máquina
+donde el loop vive —y no en la de Sergio— es la demostración de que la pieza ahora se reconstruye
+desde un clon limpio. Antes no.
+
+Ventaja no buscada: las 6 fotos del banco 0902 **comparten la remera de lino beige**, así que el
+carrusel salió con raccord de vestuario sin generar nada.
+
+#### La secuencia que hay que repetir para no perder láminas
+
+El renderer escribe **PNG** y `references/modelos/.gitignore` ignora `*.png` **en todo el árbol**.
+Rendear y commitear sin más deja el entregable invisible, y `git status` **no dice una palabra**:
+
+```sh
+node scripts/carousel_render.js --brief <b> --out <d> --account lucia --pack editorial-clean --format feed
+for f in slide-*.png; do ffmpeg -loglevel error -y -i "$f" -q:v 3 "${f%.png}.jpg"; done && rm -f slide-*.png
+git check-ignore -v <d>/*.jpg   # VACÍO (exit 1) o no entró
+git ls-files <d>                # tiene que listar las 7
+```
+
+Verificado para estas 7: ninguna ignorada, las 7 versionadas. **Un `git commit` que no se queja no
+prueba que el entregable entró.**
+
+#### Rúbrica: 9/9, mirado a resolución completa
+
+Abiertas 1, 2, 4 y 7 —incluida **la última, que es donde nadie llega**—: misma cara en las 7 (pecas,
+cejas, aro, cadenita), `1080×1350` medido con `ffprobe`, cero texto legible (la pantalla de la
+lámina 4 es UI borrosa), manos correctas, luz de lugar, piel con poros, verde `#10C26B` y pie
+`@lucia.antelo.oficial` — **no** `@oniahq`, que es lo que sale si se olvida `--account lucia`.
+
+**Decisión que Sergio puede querer revertir:** hay 6 fotos para 7 lugares, así que la lámina 7
+repite la portada. Se puso el par en los extremos (máxima distancia) y el texto lo convierte en
+remate. Si no le cierra, una foto nueva de cierre son ~2 cr.
+
+#### Lo que queda armado y no se tocó
+
+El brief de **L6 tiene el mismo defecto**: sus 7 `bg` apuntan a los mismos PNG inexistentes. No se
+repuntó a propósito — L6 ya tiene render bueno (verde, en la rama de ads) y cambiarle los fondos
+cambiaría la pieza que Sergio va a aprobar. Anotado en el plan: si alguna vez hay que re-rendear
+L6, primero se repuntan los fondos.
