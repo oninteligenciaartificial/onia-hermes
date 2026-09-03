@@ -55,4 +55,26 @@ Ultima copia buena: <code>${ULTIMA:-NINGUNA}</code>" >/dev/null 2>&1 || true
 fi
 
 [ "$CAMBIOS" -gt 0 ] && echo "$CAMBIOS archivo(s) con cambios respaldados"
+
+# ── el ESTADO entero de Hermes, no solo la memoria ───────────────────────────
+# Sergio, 2026-09-03: "he avanzado harto con ella". Lo que avanzo vive en TRES
+# lugares y hasta hoy se respaldaba uno: memories/ (esto de arriba), state.db
+# (las sesiones: cada conversacion con el) y kanban.db + kanban/boards (el
+# tablero). Un state.db corrupto o borrado se lleva semanas de contexto y no hay
+# como rehacerlo. Una foto cada 6 h, con `.backup` de sqlite (consistente aunque
+# el gateway este escribiendo), rotada a 12 (= 3 dias).
+EST="/root/backups/hermes-estado"; mkdir -p "$EST"
+SNAP="$EST/$(date -u '+%Y%m%dT%H%M%SZ')"
+mkdir -p "$SNAP" && {
+  cp -a /root/.hermes/SOUL.md /root/.hermes/config.yaml "$SNAP/" 2>/dev/null
+  cp -a "$ORIGEN" "$SNAP/memories" 2>/dev/null
+  for db in state.db kanban.db; do
+    [ -f "/root/.hermes/$db" ] || continue
+    sqlite3 "/root/.hermes/$db" ".backup '$SNAP/$db'" 2>/dev/null || cp -a "/root/.hermes/$db" "$SNAP/$db"
+  done
+  [ -d /root/.hermes/kanban/boards ] && cp -a /root/.hermes/kanban/boards "$SNAP/kanban-boards"
+  chmod -R go-rwx "$SNAP"
+  echo "estado de Hermes respaldado: $SNAP ($(du -sh "$SNAP" | cut -f1))"
+  ls -1dt "$EST"/*/ 2>/dev/null | tail -n +13 | xargs -r rm -rf
+}
 exit 0
