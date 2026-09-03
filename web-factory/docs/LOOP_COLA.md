@@ -102,21 +102,39 @@ Las tres formas de fantasma que ya aparecieron acá:
 > **Cada ítem trae su evidencia re-verificada el 2026-09-01** — y cinco de los siete
 > estaban escritos DENTRO de ítems ya cerrados, donde ningún loop los iba a ver.
 
-- [ ] **El CTA del hero de la ferretería queda FUERA del pliegue a 1440×800.**
-      Lo dejó anotado A3 al cerrar ("entra por 82px a 1440×900 y queda fuera a 1440×800") y
-      nunca fue línea de cola, así que ningún loop lo iba a tomar. Es el botón que convierte,
-      en la altura de pantalla más común de una laptop.
-      **Evidencia**: el hero no declara alto propio —
-      `$ grep -rnE "100vh|100svh" web-factory/apps/ferreteria-sur/src` devuelve 0 — así que el
-      pliegue sale del padding acumulado en
-      `web-factory/apps/ferreteria-sur/src/app/sections.css:15`.
-      **Hecho cuando**: medido en el navegador a 1440×800, 1440×900 y 390×844, el CTA queda
-      **entero dentro del primer viewport en los tres**, con la captura mirada.
-      ✅ **Re-verificado el 2026-09-03 y sigue vivo**, ahora contra el bundle de producción
-      (runtime standalone levantado con `node server.js`, no `next dev`): en la captura a
-      **1440×900** el primer viewport termina en el párrafo y la tarjeta de horarios, y el CTA
-      del hero **ya no entra** — o sea que el margen de 82 px que midió A3 a esa misma altura se
-      consumió. A 1440×800 está peor. El único botón visible arriba es el del header.
+- [ ] **El CTA del hero de la ferretería tampoco entra a 1366×768: le faltan 14 px.**
+      Sale de cerrar A10 (abajo): con el arreglo del pliegue, 1440×800 pasó a sobrar 18 px y
+      1366×768 quedó a **−14 px**. No estaba en el criterio de A10 (que pedía 1440×800,
+      1440×900 y 390×844) y se mide aparte para no dar por cerrado algo que no lo está.
+      **Evidencia** (medida el 2026-09-03 sobre el bundle de producción): `ctaBottom=782`
+      contra un pliegue de 768. El padding de arriba ya está en su piso (`2.25rem` = 36 px),
+      así que **de padding no sale más**: los 14 px tienen que salir del titular, que mide
+      **451 px** (5 líneas de 90,24 px) porque `--t-mega` topa en `6rem` y la columna del grid
+      es de 754 px.
+      ⚠️ **No es un arreglo suelto, es una decisión de tipografía**: el tope de `6rem` está
+      puesto a propósito y con su medición escrita en
+      `web-factory/apps/ferreteria-sur/src/app/globals.css:56` (*"con el tope en 8.5rem el
+      titular medía 767px … Tope en 6rem: el hero entra completo en 900px de viewport"*). O sea
+      que el token ya se afinó una vez para 900, no para 768. Bajarlo cambia cómo se ve el
+      titular en TODAS las pantallas, y eso es de los que Sergio mira renderizado antes.
+      **Hecho cuando**: `npm run gate:pliegue` pasa con 1366×768 agregado a `VIEWPORTS`, y la
+      captura del titular nuevo a 1440 mirada y aprobada.
+
+- [ ] **El segundo botón del hero de la dental es ILEGIBLE: tinta casi negra sobre el verde oscuro.**
+      Apareció al MIRAR la captura de dental-premium después de arreglar A10 — el bug de opacidad
+      tapaba este otro: mientras el CTA era invisible, nadie podía ver que el de al lado tampoco
+      se leía.
+      **Evidencia** (medida el 2026-09-03 sobre el bundle de producción, a 1440×800):
+      `.hero .actions .btn--ghost` ("Ver tratamientos") computa
+      `color: rgb(23, 36, 32)` y `border-color: …/0.12` **sobre el hero verde oscuro**, con
+      `opacity: 1` — o sea que no es la animación, es el color. En la captura el botón
+      prácticamente no existe al lado del sólido.
+      **Causa**: `web-factory/apps/dental-premium/src/app/globals.css:75` define
+      `.btn--ghost { color: var(--ink); border: 1px solid var(--line) }` con los tokens de
+      superficie CLARA, y el hero es la única superficie oscura donde ese botón se usa.
+      **Hecho cuando**: el ghost del hero usa el par sobre-oscuro (el mismo criterio que ya
+      aplica `.on-steel` en la ferretería), medido ≥4,5:1 contra el fondo real del hero, y la
+      captura a 1440×800 mirada con los DOS botones legibles.
 
 - [ ] **La ferretería pesa 192 kB de First Load contra un presupuesto de 150.**
       También anotado por A3 al cerrar y nunca convertido en línea. Es el sitio de un negocio
@@ -262,6 +280,65 @@ Las tres formas de fantasma que ya aparecieron acá:
 ---
 
 ## Cerrado — carril A (build)
+
+- [x] **A10 · El CTA del hero de la ferretería ya entra en el pliegue — y estaba roto de DOS
+      maneras, no de una** (2026-09-03).
+      El ítem pedía geometría: "queda fuera del pliegue a 1440×800". Midiéndolo sobre el bundle
+      de producción aparecieron **dos fallas distintas**, y la segunda era la peor:
+      1. **Geometría** — a 1440×800 el CTA caía **66 px por debajo** del pliegue (`ctaBottom=866`,
+         viewport 800).
+      2. **Visibilidad** — a **1440×900 el CTA estaba DENTRO del pliegue (`bottom` 842 < 900) y
+         aun así no se veía**: `opacity: 0`, `transform: translateY(24px)`. Su `Reveal` usa
+         `whileInView` con `viewport={{ margin: "0px 0px -12% 0px" }}`, que exige estar un 12 %
+         por encima del borde inferior para disparar. El CTA nace por debajo de esa línea, así
+         que **nunca entraba "en viewport" y se quedaba invisible hasta que el visitante
+         scrolleara**. Un bloque que ya está sobre el pliegue no puede depender de un scroll que
+         no va a pasar.
+      Eso explica la contradicción del re-chequeo anterior, que a 1440×900 no veía el botón
+      aunque la cuenta diera que entraba: entraba, pero era invisible.
+      **Qué se hizo** (dos cambios, uno por falla):
+      · `components/motion.tsx`: `Reveal` acepta `alMontar`, que cambia `whileInView` por
+        `animate`. Los cinco `Reveal` del hero de `app/page.tsx` lo llevan. La animación sigue
+        viva (misma curva, mismos delays) y ahora **siempre termina visible**.
+      · `app/site.css`: el `padding-top` del hero era función SÓLO del ancho (`7vw` → 96 px a
+        1440), o sea que gastaba su máximo justo en la laptop ancha y BAJA. Ahora es
+        `min(clamp(2.5rem, 1rem + 7vw, 6rem), max(2.25rem, 100svh - 49rem))`: por encima de
+        900 px de alto **el valor calculado no cambia**, y sólo por debajo cede aire. Se toca
+        únicamente el padding de ARRIBA, porque el de abajo cae después del CTA y no mueve el
+        pliegue.
+      **Medido en el navegador, no supuesto** — `ctaBottom` contra el pliegue, `opacity`,
+      `transform` y hit-test con `elementFromPoint` (que el botón sea de verdad clickeable),
+      × `prefers-reduced-motion` en sus dos valores:
+      | viewport | antes | después |
+      |---|---|---|
+      | 1440×800 | −66 px, `opacity 0`, no clickeable | **+18 px, visible, clickeable** |
+      | 1440×900 | dentro, pero `opacity 0` | **+58 px, visible, clickeable** |
+      | 390×844 | ok | **+258 px** (sin cambios: `padTop` 43,3 px antes y después) |
+      1440×1080 y 768×1024 quedan idénticos al estado anterior. **Capturas miradas** a las tres
+      medidas del criterio: los dos botones ("Pasar mi lista" / "Ver qué hay") entran enteros.
+      **El gate que faltaba**: ningún gate del repo miraba esta app —`playwright.config.ts`
+      apunta a `out/<slug>` y `playwright.next.config.ts` a `apps/site`—, así que las dos fallas
+      podían volver sin que nada avisara. Queda `apps/ferreteria-sur/scripts/gate-pliegue.mjs`
+      (`npm run gate:pliegue`), que mide las **dos** cosas: geometría y visibilidad real.
+      **Verificado en ROJO antes**: corrido contra el código sin el arreglo (`git stash` + build)
+      falla 4 de 6 mediciones y las nombra por separado — a 1440×900 falla **sólo por
+      `opacity=0`**, que es exactamente el caso que un gate de pura geometría habría dado por
+      bueno. Con el arreglo, 6/6 verde.
+      **Gates**: `tsc --noEmit` de la app verde · `next build` exit 0 · `pnpm typecheck:packages`
+      verde.
+      **Y se barrió el hermano, no sólo donde saltó** (`CLAUDE.md`: *"una promesa que cambia se
+      barre en TODA la superficie"*). `dental-premium` tiene el MISMO `Reveal` por copia, así que
+      se midió en vez de suponer: su CTA estaba **dentro del pliegue en las tres medidas y aun
+      así invisible** a 1440×800 (`bottom` 757, `opacity 0`) y 1440×900 (`bottom` 849,
+      `opacity 0`). Ahí la geometría nunca estuvo mal — **sólo la visibilidad** —, que es
+      justamente por lo que el ítem original, escrito como "queda fuera del pliegue", jamás iba
+      a encontrarlo en esta app. Mismo arreglo de `alMontar` + su propio `gate:pliegue`: 6/6
+      verde, captura mirada.
+      **Lo que NO cierra**: a **1366×768** siguen faltando 14 px en la ferretería; queda como
+      línea propia en `## Ahora` porque el único lever que queda es el tamaño del titular, y eso
+      es decisión visual de Sergio, no un arreglo. Y mirar la captura de la dental destapó un
+      defecto que el bug de opacidad escondía —su segundo botón es ilegible sobre el verde—,
+      también anotado arriba con su medición.
 
 - [x] **A9 · Las dos webs de cliente ya se publican con un comando — y el standalone con el que
       se iba a publicar estaba ROTO** (2026-09-03).
