@@ -74,6 +74,10 @@ SA=$SRC/apps/onia-platform/.next/standalone
 echo "== [4/5] assemble staged runtime -> $STAGE =="
 rm -rf "$STAGE"; mkdir -p "$STAGE"
 cp -a "$SA/." "$STAGE/"
+# El .commit va en el STAGE (lo que se publica), no solo en $BUILD, que se borra al final:
+# medido 2026-09-03, el runtime vivo quedaba "sin .commit" y saber que corre volvia a ser a mano.
+printf '%s
+' "$COMMIT" > "$STAGE/.commit"
 cp -a "$SRC/apps/onia-platform/.next/static" "$STAGE/apps/onia-platform/.next/static"
 mkdir -p "$STAGE/apps/onia-platform/public"
 cp -a "$SRC/apps/onia-platform/public/." "$STAGE/apps/onia-platform/public/" 2>/dev/null || true
