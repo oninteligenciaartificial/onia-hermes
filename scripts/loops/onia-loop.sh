@@ -325,10 +325,21 @@ fi
 # Se manda la PRIMERA linea util que escribio el agente — la regla de todos los
 # prompts es empezar con una linea en castellano llano para Sergio, asi que esa
 # es exactamente la que sirve. REPORTE A SERGIO.
-LINEA=$(sed -n "/===== ARRANCA $NOMBRE/,\$p" "$LOG" 2>/dev/null \
+#
+# Desde la ULTIMA vuelta, no la primera: `sed -n "/ARRANCA/,$p"` arranca en la
+# PRIMERA coincidencia del archivo, y el log acumula TODAS las vueltas del dia.
+# Resultado medido el 2026-09-02, con los mensajes en la mano de Sergio:
+# "✅ canario-visual · 252s · 1 commit(s)" venia acompanado de "Not logged in ·
+# Please run /login", y onia-cola reportaba un "Reached max turns" fechado a las
+# 02:38 — lineas de vueltas viejas presentadas como el informe de esta. El loop
+# habia trabajado bien; el reporte decia otra cosa. Un informe que miente es peor
+# que no tener informe, porque Sergio actua sobre el.
+INICIO=$(grep -n "===== ARRANCA $NOMBRE" "$LOG" 2>/dev/null | tail -1 | cut -d: -f1)
+LINEA=$(tail -n +"${INICIO:-1}" "$LOG" 2>/dev/null \
   | grep -vE "^[0-9]{4}-[0-9]{2}-[0-9]{2}T|^\s*$|^={3,}" \
   | sed 's/^[*_#> -]*//' \
   | grep -vE "^(Detalle|Resumen|Vuelta|##)" \
+  | grep -vE "^(Not logged in|Please run|Error: Reached max turns|Execution error|API Error|Credit balance)" \
   | head -1 | cut -c1-450)
 
 if [ -n "$LINEA" ]; then
