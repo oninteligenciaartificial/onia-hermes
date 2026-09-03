@@ -1831,6 +1831,70 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         `curl -s https://onia.com.bo/sitemap.xml | grep terminos` → la lista. `/privacidad` no
         tiene el problema (es indexable a propósito, con su motivo escrito).
         **Zona:** `web-factory/apps/onia-platform/src/app/{sitemap.ts,terminos/page.tsx}`.
+        → **CERRADO en la vuelta siguiente**, abajo.
+
+### Del carril `web-venta` — corrida del 2026-09-03 15:48 UTC (el ítem que la vuelta anterior dejó anotado)
+
+- [x] 🟢 **El sitemap pedía indexar `/terminos` y la propia página lo prohibía — ARREGLADO Y CON
+      GATE.** El sitio se desmentía a sí mismo en la única superficie que lee un buscador.
+      - **Confirmado vivo en producción antes de tocar nada**, contra el contenedor que sirve el
+        dominio (no `main`, no Vercel): `curl -s https://onia.com.bo/terminos | grep -o
+        'name="robots"[^>]*'` → `content="noindex"`, y `curl -s https://onia.com.bo/sitemap.xml`
+        lista `<loc>https://onia.com.bo/terminos</loc>`. No era fantasma.
+      - **Por qué importa y no es cosmético:** un sitemap no enumera contenidos, **pide
+        indexación**. Search Console reporta el choque como error (*"Submitted URL marked
+        'noindex'"*) y gasta rastreo en una página que nosotros mismos excluimos.
+      - **Qué lado cede, y por qué NO el otro:** se saca del sitemap, **no** se le quita el
+        `noindex`. El `noindex` es el lado deliberado — los Términos son un borrador pendiente de
+        revisión por abogado, y el propio archivo ya dejaba escrito *"esta página no la querés en
+        Google, pero sí se manda por WhatsApp"*. Quitarlo habría publicado un borrador legal al
+        buscador: eso es una decisión de Sergio, no de un arreglo. `/privacidad` se queda en el
+        sitemap porque su indexabilidad también está escrita y motivada (el rastreador de Meta
+        valida esa URL al publicar la app del chatbot).
+      - **La regla ya existía en el código y nadie la medía:** `v1/layout.tsx:11` dice
+        *"robots.ts y fuera del sitemap"*, y `/patrones` y `/v1` la cumplen. `/terminos` era la
+        **única** de las 25 páginas del disco que la violaba (barridas las 6 declaraciones de
+        `robots` que hay en la app).
+      - **Gate nuevo `src/app/indexar.test.ts`**, en `prebuild` (`tsc --noEmit && vitest run`, el
+        comando real del deploy). Caza la **clase**: para cada ruta del sitemap exige que exista
+        su `page.tsx` (si no, el sitemap publica un 404), que `robots.ts` no la deshabilite, y que
+        no declare `noindex` — **en las dos formas que acepta Next** (`{ index: false }` y
+        `robots: "noindex"`), porque un gate que sólo entiende la que se usó hoy pasa en verde el
+        día que alguien escribe la otra.
+      - **Verificado en ROJO antes**, por el motivo correcto: falló **sólo** `/terminos`, con los
+        otros 16 casos en verde.
+      - ⚠️ **El arreglo abría un agujero de gate y por eso la vuelta no termina ahí.**
+        `compartir.test.ts` (el gate de `og:url` de ayer) tomaba su lista de rutas **del
+        sitemap** — así que al sacar `/terminos` de ahí, la página habría quedado publicada,
+        compartible y **sin gate, sin que nada se pusiera en rojo**. Un criterio de cobertura que
+        se encoge solo cuando cambia una política de indexación **falla ABIERTO**. Corregido: la
+        lista ahora es **el disco menos el `disallow` de `robots.ts`** —la declaración que el
+        propio sitio ya hace de qué no publica—, así una página nueva nace cubierta y hay que
+        excluirla a mano, a la vista, para que deje de estarlo. **Medido: los casos de
+        `compartir` siguen siendo 16 y `/terminos` sigue entre ellos.**
+      - Los dos gates compartían el mismo parser de metadata; se extrajo a `src/app/rutas.ts` en
+        vez de copiarlo, que era garantizar que en un mes midieran cosas distintas.
+      - **Verificado sobre el HTML que EMITE el build, no sobre el fuente** (`next start` sobre el
+        build de producción, no `dev`): `sitemap.xml` pasa de 16 a **15 URLs**, sin `/terminos` y
+        con `/privacidad` intacta; `/terminos` sigue **200**, con sus **diez** etiquetas OG,
+        `og:url` y `canonical` correctas y su `noindex`. Y **abierta y MIRADA** renderizada a
+        1440×900 y 390×844 (`/tmp/wv-terminos-{escritorio,telefono}-0.png`): título, índice y
+        cuerpo enteros, sin recortes. Los únicos errores de consola son el 429 del widget de
+        Chatwoot, ya medido como falso positivo de la IP del VPS.
+      - **Gates:** typecheck exit 0 · `vitest run` **199 verdes** en 9 archivos · build exit 0.
+      - ⚠️ **No está en producción**: `onia.com.bo` la sirve el contenedor `onia-landing` y
+        publicar es de Sergio. Este arreglo es el **sexto** que se acumula esperando el mismo
+        deploy de `t_68671bc3`.
+
+- [ ] 🟢 **Encontrado de paso, NO arreglado** (es otro ítem, no lo abro en la misma vuelta): la
+      `<meta name="description">` de `/terminos` dice *"(borrador, pendiente de revisión por
+      abogado)"*. Es **estado de obra en una superficie de cliente**, que la regla de Sergio del
+      2026-08-20 prohíbe. Hoy lo ve poca gente —la página es `noindex` y la tarjeta de WhatsApp
+      usa la descripción OG, que está limpia—, pero está en el HTML y sale en cualquier lector
+      que use la `description`. Repro: `curl -s https://onia.com.bo/terminos | grep -o
+      'name="description" content="[^"]*"'`. **El cuerpo visible NO tiene el problema**: sus
+      "borradores" son los que propone la IA para que el cliente apruebe, que es la promesa real
+      del producto. **Zona:** `web-factory/apps/onia-platform/src/app/terminos/page.tsx`.
 
 ### Del canario visual — corrida del 2026-09-03 ~03:41 UTC (diez pantallas)
 
