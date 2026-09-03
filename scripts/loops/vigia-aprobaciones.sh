@@ -85,11 +85,17 @@ import sys,json,re,os,shlex
 d=json.load(sys.stdin); t=d["task"]; ev=[e for e in d.get("events",[]) if e.get("kind")=="blocked"]
 p=(ev[-1].get("payload") or {}) if ev else {}
 kind=p.get("kind") or ""; motivo=(p.get("reason") or ""); cuerpo=(t.get("body") or "")
-ruta=""
+# TODAS las rutas validas, en orden y sin repetir: un carrusel son 5-7 laminas y
+# Sergio tiene que verlas todas para aprobarlo (2026-09-03: "para ver como haces
+# los carruseles"). Hasta 10, que es el tope de un album de Telegram.
+rutas=[]
 for m in re.findall(r"(/[\w./@+:-]+\.(?:png|jpe?g|webp|mp4|mov))", cuerpo+" "+motivo, flags=re.I):
-    if os.path.isfile(m) and os.path.getsize(m)>1024: ruta=m; break
+    if m not in rutas and os.path.isfile(m) and os.path.getsize(m)>1024: rutas.append(m)
+rutas=rutas[:10]
 print("KIND="+shlex.quote(kind)); print("TITULO="+shlex.quote(t.get("title","")))
-print("MOTIVO="+shlex.quote(motivo)); print("CUERPO="+shlex.quote(cuerpo[:600])); print("RUTA="+shlex.quote(ruta))')"
+print("MOTIVO="+shlex.quote(motivo)); print("CUERPO="+shlex.quote(cuerpo[:600]))
+print("RUTA="+shlex.quote(rutas[0] if rutas else ""))
+print("RUTAS=("+" ".join(shlex.quote(r) for r in rutas)+")")')"
   # Solo lo que espera a Sergio. Un bloqueo tecnico (dependency, capability) es
   # de los loops, no suyo: mandarselo es ruido con cara de pregunta.
   [ "$KIND" = "needs_input" ] || { echo "$id" >> "$AVISADAS"; continue; }
@@ -103,11 +109,31 @@ $(printf '%s' "$CUERPO" | esc)
 
 Contestá: <code>ok $id</code> · <code>no $id motivo</code>"
   OK=0
-  case "${RUTA##*.}" in
-    png|jpg|jpeg|webp|PNG|JPG|JPEG|WEBP) tg_foto "$RUTA" "$(printf '%s' "$TXT" | head -c 1000)" && OK=1 ;;
-    mp4|mov|MP4|MOV)                     tg_video "$RUTA" "$(printf '%s' "$TXT" | head -c 1000)" && OK=1 ;;
-    *)                                   tg_texto "$TXT" && OK=1 ;;
-  esac
+  # Dos o mas imagenes = un carrusel: va como ALBUM (sendMediaGroup), con el
+  # texto de pie en la primera lamina. Se arma en python para no pelear con las
+  # comillas del JSON de Telegram dentro de bash.
+  if [ "${#RUTAS[@]}" -ge 2 ] && ! printf '%s\n' "${RUTAS[@]}" | grep -qiE '\.(mp4|mov)$'; then
+    if python3 - "$API" "$TELEGRAM_HOME_CHANNEL" "$(printf '%s' "$TXT" | head -c 1000)" "${RUTAS[@]}" <<'PYA'
+import sys, json, subprocess
+api, chat, pie, *rutas = sys.argv[1:]
+media = [{"type": "photo", "media": "attach://f%d" % i} for i in range(len(rutas))]
+media[0]["caption"] = pie; media[0]["parse_mode"] = "HTML"
+args = ["curl", "-s", "--max-time", "180", api + "/sendMediaGroup", "-F", "chat_id=" + chat, "-F", "media=" + json.dumps(media)]
+for i, r in enumerate(rutas): args += ["-F", "f%d=@%s" % (i, r)]
+out = subprocess.run(args, capture_output=True, text=True).stdout
+ok = '"ok":true' in out
+if not ok: print("  telegram rechazo el album: " + out[:160])
+sys.exit(0 if ok else 1)
+PYA
+    then OK=1; RUTA="${#RUTAS[@]} laminas"; fi
+  fi
+  if [ "$OK" = 0 ]; then
+    case "${RUTA##*.}" in
+      png|jpg|jpeg|webp|PNG|JPG|JPEG|WEBP) tg_foto "$RUTA" "$(printf '%s' "$TXT" | head -c 1000)" && OK=1 ;;
+      mp4|mov|MP4|MOV)                     tg_video "$RUTA" "$(printf '%s' "$TXT" | head -c 1000)" && OK=1 ;;
+      *)                                   tg_texto "$TXT" && OK=1 ;;
+    esac
+  fi
   # Si el archivo no paso (muy pesado, formato raro), la pregunta va igual en
   # texto: Sergio tiene que enterarse aunque no vea la foto.
   if [ "$OK" = 0 ] && [ -n "$RUTA" ]; then
