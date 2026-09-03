@@ -223,6 +223,40 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       en el host el archivo no existe (`ls: cannot access`). Se lee con
       `docker exec onia-center tail -f /tmp/onia-bot-webhook.log`.
 
+- [x] 🔴 **La sonda daba VERDE mientras el bot le contestaba a un desconocido "eso lo tiene que
+      ver Sergio, no yo".** CERRADO el 2026-09-03. Lo encontró el chequeo de arranque, mirando el
+      texto de las respuestas que la sonda había contado sin leer.
+      **La medición que lo destapó** — los mismos dos mensajes, tres vueltas seguidas, las tres
+      `exit 0`: `#1` pasó de *"¡Hola! Soy el asistente automático de Onia"* (03:04) a *"¿Querés que
+      te reserve para el viernes 4?"* (04:03) a la derivación M5 (05:03). No se rompió el bot: **se
+      degradó la sonda**, porque el desarme devuelve `bot_stage` a `nuevo` y deja el embudo
+      (`qualification`, `slots_offered`, `off_script_count`) intacto. Detalle arriba.
+      **El arreglo son DOS mitades, y hacen falta las dos.** Archivo: `scripts/sonda_widget.mjs`.
+      1. **`dejarComoExtrano()`** deja la fila como la de alguien que nunca escribió. Mantiene el
+         desarme por Rails (la semántica del producto, y así cada vuelta verifica que ese camino
+         siga vivo) y **después** blanquea el embudo por SQL (`guionBlanqueo`). El orden importa:
+         resolver viaja por Sidekiq y el adapter reescribe la fila al llegar, así que blanquear
+         antes se lo lleva puesto. Es escribir la base a mano **a falta de camino de producto**: el
+         bot no tiene —ni debe tener— un "olvidate de este lead".
+      2. **`juzgar()` ahora LEE el primer turno.** Derivar a un humano ante un "hola, quiero
+         información" de alguien que todavía no contó nada es el bug (`esDerivacion`, huellas de
+         M5/M5_ACUSE/M8_SOPORTE). **En el segundo turno NO se mira**: ahí derivar puede ser
+         exactamente lo correcto, y marcarlo rojo haría el falso rojo de la otra punta.
+      **Rojo primero, por el motivo correcto:** `esExtrano is not defined` (4 casos) y el caso del
+      veredicto fallando **con las filas reales del 05:03** — `deberia ser 1 y fue 0: EL BOT
+      CONTESTO LOS 2`, o sea el bug de producción reproducido en un test. **27/32 → 33/33.**
+      **Y el guardia no puede quedar ciego en silencio:** un caso afirma que las huellas siguen
+      existiendo en el config **real** del bot (`hermes-content/deploy/vps-ops/bot/config.mjs`,
+      donde viven M5, M5_ACUSE y M8_SOPORTE). Probado que falla:
+      `ONIA_BOT_CONFIG=/etc/hostname node scripts/sonda_widget.mjs --self-check` → *"el guardia del
+      primer turno quedó ciego"*.
+      **Verificado contra producción, no contra el test:** `node scripts/sonda_widget.mjs` →
+      `exit 0`, y esta vez el texto que recibió el desconocido es el que corresponde —
+      `#1 →` *"¡Hola! Soy el asistente automático de Onia. Sí, un bot. Y esto que estás viendo es
+      justo lo que vendemos…"* (msg 316), `#2 →` *"Perfecto, anotado que te dedicás a odontología,
+      que son 4 personas y que estás en Santa Cruz…"* (msg 318). La fila del motor terminó en
+      `esperando_horario` con el embudo lleno **desde cero**: la prueba de que arrancó en frío.
+
 - [x] 🔴 **La sonda reusa UNA conversación para siempre, así que desde la segunda vuelta ya no
       mide "un desconocido escribe dos veces": mide una charla con ocho turnos encima.**
       **CERRADO el 2026-09-02.** La causa medida no era la que este ítem suponía, y la diferencia
@@ -249,9 +283,24 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       **Verificación final:** `node scripts/sonda_widget.mjs` → **exit 0**, *"EL BOT CONTESTO LOS 2
       — conversacion 49"*. Antes del arreglo, mismo comando: exit 1, 2 de 2 sin respuesta.
       ⚠️ **La corrección que este ítem proponía (resolver para que se abra una conversación NUEVA)
-      no es lo que pasó:** medido, el widget siguió escribiendo en la **49**. Alcanza igual, porque
-      lo que había que resetear era el estado del motor, no el hilo. Anotado para que nadie
+      no es lo que pasó:** medido, el widget siguió escribiendo en la **49**. Anotado para que nadie
       "arregle" después el hecho de que la conversación no se renueve.
+      🔴 **Y "alcanza igual, porque lo que había que resetear era el estado del motor, no el hilo"
+      era FALSO — lo desmintió la producción el 2026-09-03.** El desarme resetea `bot_stage` y
+      **nada más**, así que el embudo sobrevive intacto. Los MISMOS dos mensajes, tres vueltas
+      seguidas del loop, y las tres **exit 0 · "EL BOT CONTESTO LOS 2"**:
+      **03:04** `#1 →` *"¡Hola! Soy el asistente automático de Onia. Sí, un bot."* ← lo que ve un
+      desconocido · **04:03** `#1 →` *"¿Querés que te reserve para el viernes 4 de septiembre?"* ←
+      ya le ofrece hora · **05:03** `#1 →` *"Eso lo tiene que ver Sergio, no yo"* (M5) ← lo deriva
+      de una. La fila del motor a las 05:04:
+      `qualification={"city":"Santa Cruz","industry":"dental","teamSize":4}`, dos `slots_offered`,
+      `off_script_count=2`. El motor arrancaba cada vuelta con el embudo YA lleno.
+      **`clearHumanTakeover` hace bien en no borrarlo** (`bot-engine.mjs:121`): para un lead de
+      verdad, olvidarle el rubro sería el bug. Para la sonda es el veneno.
+      **La sonda no lo podía ver porque CONTABA las respuestas sin LEERLAS** — el defecto escrito
+      del carril ("un test que mira el primer paso no ve un sistema que muere en el segundo") una
+      vuelta más adentro: **un test que cuenta no ve un sistema que contesta cualquier cosa.**
+      Cerrado abajo, en el ítem del 2026-09-03.
       <!-- Diagnóstico original, conservado: llegó a la causa correcta a medias -->
       Medido hoy
       2026-09-02, no supuesto — y es un **falso rojo**, el peor defecto posible en el instrumento
