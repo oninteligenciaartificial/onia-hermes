@@ -624,3 +624,62 @@ cientos de, ya confían**. Es la única casilla que no se marca mirando la image
 
 > Una pieza puede ser impecable y falsa al mismo tiempo. El render nunca inventó nada — el texto
 > venía del brief, y hasta hoy ninguna casilla lo leía contra la realidad de la empresa.
+
+---
+
+### E11 · El arreglo de E10 dejó la misma mentira en la misma lámina (2026-09-03, 0 créditos)
+
+**La pregunta de la tanda:** ¿alcanza con buscar la palabra prohibida?
+
+**Respuesta medida: no, y el contraejemplo es la lámina que E10 acababa de corregir.** E10 buscó
+«equipo», lo encontró dos veces y reescribió esas dos líneas. Abierta de nuevo la pieza el mismo
+día, seguía diciendo que Onia es un grupo de personas — **sin usar la palabra ni una vez**:
+
+| Lámina | Seguía diciendo | Dónde estaba |
+|---|---|---|
+| 4 (body) | «si **pueden** sostenerme a mí, imaginate lo que **hacen** con tu operación» | **3 líneas debajo** del titular que E10 arregló |
+| 5 (body) | «el detrás de escena de cómo me **hacen**» | lámina que E10 no abrió |
+| 1 (pill) | «La pregunta que **todos** hacen» | la **portada** |
+
+Los dos primeros son plural de tercera persona: sujeto implícito «ellos». El tercero es otra
+familia de la misma casilla 10 — **fabrica una audiencia**: el perfil tiene 0 posts publicados,
+así que nadie hizo esa pregunta todavía. Prueba social inventada, que `CLAUDE.md` prohíbe.
+
+**Arreglo (0 créditos, mismo comando):** `si me puede sostener` · `lo que hace` · `cómo estoy
+hecha` · `La pregunta obvia`. Cambiaron 3 láminas; las otras 4 **byte-idénticas** (`git status`
+sólo marcó `slide-01`, `slide-04`, `slide-05`). Tercera vez que el render se confirma determinista.
+Miradas las tres a resolución completa: sin desborde de caja, el cuerpo de la 4 entra en 4 líneas
+sin tocar el pie, la portada mantiene el titular en una línea.
+
+**Las dos reglas que deja, y la segunda es la que importa:**
+
+1. **`grep` de la palabra prohibida descarta, no confirma** — la regla de `CLAUDE.md` aplicada al
+   copy. Un defecto de copy no vive en un sustantivo: vive en la **conjugación**, el pronombre y
+   el plural implícito, y los tres son invisibles a la búsqueda que encontró el primero. La
+   casilla 10 se marca leyendo cada lámina entera y preguntando **quién es el sujeto de cada
+   verbo**.
+2. **El arreglo de un defecto es el lugar más probable del segundo.** La lámina 4 pasó *dos*
+   auditorías con el plural intacto: una que le puso 9/9 y otra que le reescribió el titular por
+   este mismo motivo. Las dos miraron la línea que tocaban. Al corregir una lámina se re-lee
+   **entera**.
+
+**Y un defecto que sólo se ve MIRANDO, que no puedo cerrar yo:** la lámina 4 tiene **dos personas
+borrosas con laptops al fondo**, bajo el pill «QUIÉN ME HACE». El texto ya no dice equipo; la foto
+lo sugiere. No lo cambio —cambiar la foto es cambiar la pieza— pero queda como decisión de Sergio
+en el LEEME y en `t_5af29849`. Notar que la lámina 5 también tiene gente al fondo y ahí **no**
+molesta: su pill es «QUÉ VAS A VER». **El mismo píxel miente o no según el texto que tiene encima**
+— que es por qué la casilla 10 no se puede separar de las 9 visuales.
+
+**Higgsfield sigue bloqueado y eso cierra una salida.** El LEEME ofrecía «generar una foto nueva,
+~2 cr». No se puede: no genera ni con el modelo de 0,12 cr (`a60aa0665`, tarea `t_2a90f301`), y el
+saldo no se pudo leer en esta vuelta — por regla, saldo bajo y no se genera. **0 créditos gastados
+en toda la vuelta.** Las salidas reales para las dos decisiones abiertas son aprobar como está o
+reordenar las 6 fotos que ya existen.
+
+**Defecto de instrumento corregido:** `RUBRICA-IMPOLUTO.md` decía «9 casillas» en el encabezado
+teniendo 10 en la tabla y `10/10` en el bloque de puntaje. El mismo documento se contradecía. Una
+rúbrica que no sabe cuántas casillas tiene se aplica de memoria — y de memoria se aplican las 9 de
+siempre, justo salteando la nueva.
+
+> E10 escribió la casilla que caza esto y la aplicó buscando una palabra. La casilla estaba bien;
+> la forma de marcarla, no. Un instrumento nuevo se equivoca la primera vez que se usa.

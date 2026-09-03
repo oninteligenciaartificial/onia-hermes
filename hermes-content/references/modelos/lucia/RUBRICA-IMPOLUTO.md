@@ -3,10 +3,16 @@
 > Escrita el **2026-09-02** para la ventana de perfeccionamiento de 2 h.
 > Sergio: *«prueba absolutamente todo hasta que tus generaciones sean impolutas»*.
 >
-> «Impoluto» no es una opinión: es **9 casillas que se marcan MIRANDO la pieza**. Una pieza con
-> las 9 se publica sin retoque. Una pieza con 8 se anota y se regenera cambiando UNA variable.
+> «Impoluto» no es una opinión: es **10 casillas que se marcan MIRANDO la pieza**. Una pieza con
+> las 10 se publica sin retoque. Una pieza con 9 se anota y se regenera cambiando UNA variable.
+>
+> ⚠️ **Este encabezado decía «9» hasta el 2026-09-03**: se agregó la casilla 10 y sólo se editó la
+> tabla. El conteo y el «una pieza con 8» quedaron viejos mientras el bloque de puntaje de abajo
+> ya decía `10/10` — el mismo documento se contradecía. Una rúbrica que no sabe cuántas casillas
+> tiene se aplica de memoria, y de memoria se aplican **las 9 de siempre**: justo la casilla nueva
+> es la que se saltea.
 
-## Las 9 casillas
+## Las 10 casillas
 
 | # | Casilla | Cómo se verifica | Por qué mata la pieza si falla |
 |---|---|---|---|
@@ -43,6 +49,31 @@ perfil: la primera que lee todo el que entra, y la que más se cita.
 render no inventó nada — el texto venía del brief, y nadie lo leyó contra la realidad de la
 empresa. Arreglado en el mismo brief y re-rendeado a 0 créditos (lámina 2 sin «el equipo de»,
 lámina 4 → «Hecha en *Bolivia*», que además es verdad y entra en una sola línea).
+
+### 🔴 Y la casilla 10 se aplica por LÁMINA, no por string (2026-09-03, segunda pasada)
+
+El arreglo de arriba se hizo buscando la **palabra** «equipo» y cambiando las dos líneas donde
+aparecía. Mirado de nuevo el mismo día, la misma pieza seguía diciendo lo mismo **sin usar la
+palabra** — en verbos, y uno de ellos en la lámina 4, la que se acababa de corregir:
+
+| Lámina | Seguía diciendo | Por qué es la misma mentira |
+|---|---|---|
+| 4 (body) | «si **pueden** sostenerme a mí, imaginate lo que **hacen**» | plural de tercera persona = un grupo. Y está **debajo** del titular que se arregló |
+| 5 (body) | «el detrás de escena de cómo me **hacen**» | mismo plural, misma implicación |
+| 1 (pill) | «La pregunta que **todos** hacen» | fabrica una audiencia: el perfil tiene 0 posts, nadie preguntó nada todavía |
+
+Corregido a `si me puede sostener` / `lo que hace` / `cómo estoy hecha` / `La pregunta obvia`.
+0 créditos: 3 láminas re-rendeadas, las otras 4 byte-idénticas.
+
+**La regla que deja:** un `grep` de la palabra prohibida **descarta, no confirma** — es la regla de
+`CLAUDE.md` aplicada al copy. La casilla 10 se marca **leyendo cada lámina completa en voz alta y
+preguntando quién es el sujeto de cada verbo**, no buscando el sustantivo que ya conocés. Un
+defecto de copy no vive en una palabra: vive en la conjugación, en el pronombre y en el plural
+implícito, y esos tres son invisibles a la búsqueda que encontró el primero.
+
+**Y el arreglo de un defecto es el lugar MÁS probable del segundo**: la lámina 4 pasó dos
+auditorías —una que le puso 9/9 y otra que le reescribió el titular— con el plural intacto en el
+párrafo de abajo. Al corregir una lámina se re-lee **entera**, no la línea que se toca.
 
 🔴 **Una casilla fallada se anota SIEMPRE**, aunque la pieza se descarte. El valor de la ventana
 no son las piezas: es **saber qué variable del prompt causa cada defecto**.

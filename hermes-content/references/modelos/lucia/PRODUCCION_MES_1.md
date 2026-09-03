@@ -33,6 +33,11 @@ CTA: seguir (sin palabra — es presentación). **Es la pieza que abre todo.**
 - Render bueno: **`posts-20260807/L2/slide-01..07.jpg`** — las 7 medidas en `1080×1350`
 - Detalle, comando reproducible y chequeo de rúbrica: `posts-20260807/L2/LEEME.md`
 - CTA: pregunta abierta + seguir. Se fija al perfil.
+- ⚠️ **Segunda corrección de copy el 2026-09-03** (láminas 1, 4 y 5, 0 créditos): el arreglo del
+  «equipo» había buscado la palabra y quedaron los **verbos en plural** («si pueden sostenerme»,
+  «cómo me hacen») diciendo lo mismo, más un «la pregunta que todos hacen» en la portada de un
+  perfil con 0 posts. Detalle en el LEEME; la regla, en `RUBRICA-IMPOLUTO.md` (casilla 10 se
+  aplica por lámina, no por string). **Quedan 2 decisiones de Sergio en `t_5af29849`.**
 
 ⚠️ **Corregido 2026-09-03 — el brief apuntaba a 6 fotos que no existen en ninguna rama.** Citaba
 `tanda-20260821/*.png`; contado en vivo, esa carpeta tiene **0 imágenes** en disco, **0** en

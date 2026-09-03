@@ -72,6 +72,47 @@ que el original de dos.
 décima —*el copy no afirma nada que no exista*— en `RUBRICA-IMPOLUTO.md`. Una pieza impecable
 puede publicar una mentira, y ninguna casilla visual la ve.
 
+## 🔴 Segunda pasada, mismo día: la palabra se fue, el plural quedó
+
+El arreglo de arriba buscó la **palabra** «equipo». La pieza seguía diciendo lo mismo **sin
+usarla**, en verbos — y uno estaba en la lámina 4, tres líneas debajo del titular que se acababa
+de corregir:
+
+| Lámina | Decía (tras el 1er arreglo) | Dice ahora |
+|---|---|---|
+| 1 (pill) | «La pregunta que **todos** hacen» | «La pregunta **obvia**» |
+| 4 (body) | «si **pueden** sostenerme a mí… lo que **hacen** con tu operación» | «si **me puede sostener** a mí… lo que **hace** con tu operación» |
+| 5 (body) | «el detrás de escena de cómo me **hacen**» | «el detrás de escena de cómo **estoy hecha**» |
+
+- **1**: el perfil tiene **0 posts publicados**. «La pregunta que todos hacen» inventa una
+  audiencia que todavía no existe — prueba social fabricada, que `CLAUDE.md` prohíbe.
+- **4 y 5**: `pueden` / `hacen` / `me hacen` son plurales de tercera persona. Dicen «un grupo de
+  personas», que es exactamente lo que se había sacado del titular.
+
+**0 créditos otra vez.** Re-rendeadas 3 láminas; las otras 4 salieron **byte-idénticas** (`git
+status` sólo marcó `slide-01`, `slide-04`, `slide-05`) — tercera confirmación de que el render es
+determinista.
+
+Verificado **mirando** las tres a resolución completa: ningún desborde de caja, el cuerpo de la 4
+entra en 4 líneas sin tocar el pie, y la 1 mantiene el titular en una sola línea.
+
+## 🟡 Dos cosas para que decida Sergio — ninguna la puedo cerrar yo
+
+1. **La lámina 4 muestra dos personas borrosas al fondo**, con laptops, debajo del pill «QUIÉN ME
+   HACE» y el titular «Hecha en Bolivia». El texto ya no dice «equipo»; **la foto lo sugiere**.
+   Es un coworking (gente ajena, que es justo donde trabaja alguien que trabaja solo), así que
+   defendible — pero es la lámina que responde «quién me hace» y es la pieza FIJADA. Cambiar la
+   foto es cambiar la pieza: no lo hago sin OK. La 5 tiene gente al fondo también y ahí **no**
+   molesta, porque su pill es «QUÉ VAS A VER»: un café con desconocidos es sólo un café.
+2. **La lámina 7 repite la foto de la portada** (6 fotos para 7 lugares) — decisión que ya venía
+   abierta.
+
+⚠️ **La salida barata que este archivo ofrecía para las dos NO está disponible.** Decía que
+generar una foto nueva son «~2 cr y se vuelve a rendear». Higgsfield está **bloqueado**: no genera
+ni con el modelo de 0,12 cr (medido el 2026-09-02, commit `a60aa0665`; tarea `t_2a90f301` con
+1948 créditos parados). Y el saldo no se pudo leer en esta vuelta. Mientras eso siga así, las
+únicas salidas son **aprobar como está** o **reordenar con las 6 fotos que ya existen**.
+
 🔴 **La lámina 7 repite la foto de la portada, y es a propósito.** Hay 6 fotos para 7 lugares:
 alguna tenía que repetirse. Se puso el par en los extremos (1 y 7) porque es la **máxima distancia
 posible** — entre las dos hay cinco láminas — y porque abrir preguntando «¿es real?» y cerrar en
