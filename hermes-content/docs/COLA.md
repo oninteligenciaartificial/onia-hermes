@@ -1929,6 +1929,61 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         publicar es de Sergio. Es el **séptimo** arreglo esperando el mismo deploy de
         `t_68671bc3`.
 
+### Del carril `web-venta` — corrida del 2026-09-03 17:48 UTC (a dónde LLEGA cada botón que sale del sitio)
+
+- [x] 🔴 **Los dos botones de `/contacto` mandaban al lead a un calendario que ya no existe, y
+      caían en un formulario de alta — ARREGLADO EN CÓDIGO, con gate.** Es el defecto más caro
+      que encontró este carril: la página cuyo trabajo entero es que alguien consiga **hablar
+      con una persona** tenía sus dos únicos CTA muertos, en silencio.
+      - **Cómo apareció, y por qué nadie lo había visto:** el punto 15 del checklist de
+        pre-entrega ("cero enlaces internos rotos") sólo mira los `href` **internos**. Los
+        enlaces que SALEN del sitio —los que llevan al lead al final del embudo— no los mira
+        nadie. Extraídos a mano los de las 16 URLs del sitemap, aparecieron dos hacia
+        `cal.onia.com.bo`.
+      - **Medido, no supuesto:** `curl -s -o /dev/null -w '%{http_code} %{redirect_url}'
+        https://cal.onia.com.bo/onia/demo-onia` → **302 → `https://onia.com.bo/empezar`**. Con
+        `-L` los dos enlaces devuelven **200 y exactamente 41.474 bytes** — el mismo tamaño para
+        `demo-onia`, `consulta-inicial` y un slug **inventado**. Ninguna herramienta los ve
+        rotos. El lead que hacía clic en «Agendar la demo» aterrizaba en el asistente de alta.
+      - **La página se contradecía a sí misma en su último clic.** Su bajada dice, textual: *"No
+        hay formulario que caiga en un buzón. Elegís vos el día y la hora **en nuestra agenda**"*
+        — y los dos botones entregaban exactamente un formulario.
+      - **Por qué está muerto y no vuelve:** no hay contenedor de Cal.com en el VPS
+        (`docker ps -a | grep -i cal` → vacío), y el 2026-09-02 22:55 La Paz **Sergio decidió lo
+        contrario**: ventanas fijas para el bot en vez de revivir Cal.com (tablero
+        `t_af8f44ad`, cerrada). O sea que el sitio llevaba días apuntando a la opción
+        descartada. El comentario del código decía *"Verificado 2026-07-30: los dos enlaces
+        responden 200 en público"* — cierto entonces, y sin significado hoy: un 200 sobrevive a
+        la muerte del servicio que lo daba.
+      - **El arreglo, el mínimo posible y sin rediseñar nada:** las dos citas salen ahora por el
+        **mismo WhatsApp que ya atiende toda la web** (`waLink`, el número único de `site.ts`),
+        cada una diciendo cuál eligió el que escribe ("la consulta comercial de 20 minutos" /
+        "la demo de 45 minutos con mi caso"), que es donde el bot propone los dos horarios
+        concretos del día. **Layout, tarjetas y etiquetas de los botones intactos**; sólo
+        cambian los `href` y las tres frases que prometían un calendario (bajada, `description`
+        y el comentario del archivo). `og:description` no se tocó: seguía siendo cierta.
+      - **Verificado MIRANDO**, contra un servidor de producción real (`next start` sobre el
+        build, no `dev`), a **1440 y a 390**: la página se ve igual que en producción, los dos
+        botones apuntan a `wa.me/59175414930` con su texto, y los dos destinos responden
+        **200**. Y el `<head>` mirado aparte —la metadata no se ve en una captura—: cero
+        coincidencias de `cal.onia` en todo el HTML servido.
+      - **Gate nuevo `(sitio)/enlaces.test.ts`**, en `prebuild` (el comando real del deploy).
+        Caza la **clase**: todo host absoluto de la superficie de venta tiene que estar
+        declarado con su motivo, y **ningún subdominio nuestro que no publiquemos** —el caso
+        exacto de `cal.`, que resuelve a nuestra IP y contesta 200 tras redirigir—. La lista de
+        archivos se **deriva del disco** (`(sitio)/**` más los módulos de `@/lib` y `@/content`
+        que esas páginas importan, un salto que hacía falta: los enlaces al SIN viven en
+        `lib/siat.ts`, no en una página), así una página nueva nace cubierta.
+      - **Verificado en ROJO antes**, por el motivo correcto: fallaban los dos casos de host
+        con `cal.onia.com.bo`, y el caso "mira una superficie de verdad" en verde.
+      - **Gates:** typecheck exit 0 · build exit 0 (con `prebuild` = `tsc --noEmit && vitest run`).
+      - **Barrido a toda la superficie**, no sólo donde saltó: `cal.onia.com.bo` no queda en
+        ningún archivo del repo, y el enlace de la home *"O agendá una demo con horario →"*
+        apunta a `/contacto`, que ahora sí termina en una conversación.
+      - ⚠️ **No está en producción**: `onia.com.bo` la sirve el contenedor `onia-landing` y
+        publicar es de Sergio. Es el **octavo** arreglo esperando el mismo deploy de
+        `t_68671bc3` — y el primero que le cuesta leads mientras espera.
+
 ### Del canario visual — corrida del 2026-09-03 ~03:41 UTC (diez pantallas)
 
 - [x] 🟠 **El ítem de "captura full-page ciega" (abierto 2026-09-02, confirmado vivo en
