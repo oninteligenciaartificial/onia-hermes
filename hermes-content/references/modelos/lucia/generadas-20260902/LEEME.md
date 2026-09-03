@@ -12,7 +12,7 @@ Generadas con `lucia-skin-v1` (`58bbd635-…`) por CLI en el VPS, Nano Banana Pr
 
 | Archivo | Qué es | Asset id | Estado |
 |---|---|---|---|
-| `E2-A-rooftop.png` | Rooftop de Santa Cruz al atardecer, vaso para llevar sobre la baranda de vidrio — toma A | `460df6ae-a209-4953-82c9-16e719bb940f` | ✅ **la 2ª mejor rooftop, y la próxima a animar** — pelo suelto, identidad fiel, sin carteles. **Auditada 2026-09-03, ver abajo. Creativo de still 2026-09-03 → [`CREATIVO-STILLS.md`](CREATIVO-STILLS.md) concepto 1 (A/B con E2-C).** Ojo: tatuaje chico en el antebrazo |
+| `E2-A-rooftop.png` | Rooftop de Santa Cruz al atardecer, vaso para llevar sobre la baranda de vidrio — toma A | `460df6ae-a209-4953-82c9-16e719bb940f` | ✅ **la 2ª mejor rooftop** — pelo suelto, identidad fiel, sin carteles. **Animada 2026-09-03 → `E8-rooftop-A-seedance.mp4`** (2º ángulo rooftop para A/B contra E7). Auditada 2026-09-03, ver abajo. Creativo de still 2026-09-03 → [`CREATIVO-STILLS.md`](CREATIVO-STILLS.md) concepto 1 (A/B con E2-C). Ojo: tatuaje chico en el antebrazo |
 | `E2-B-rooftop.png` | Misma rooftop — **toma B, la referencia de LUZ de la receta (§12)** | `378291da-bfc4-4795-963c-101206116865` | ✅ **la mejor rooftop** — pelo suelto, pecas marcadas, rim dorado, cara fiel al ancla, sin pantallas ni texto. **Animada 2026-09-03 → `E7-rooftop-seedance.mp4`** |
 | `E2-C-rooftop.png` | Misma rooftop — toma C | `af2771c7-e66b-4592-86e8-0fe59b02128a` | ⚠️ **pelo recogido** (falla §6) pero la piel y la acción (dos manos al vaso) son las mejores de las tres. Feed sí, base de video sólo si se quiere ese gesto. **Auditada 2026-09-03, ver abajo. Creativo de still 2026-09-03 → [`CREATIVO-STILLS.md`](CREATIVO-STILLS.md) concepto 1 (la still de feed más limpia).** |
 | `E3-cafe.png` | Café de especialidad, luz cálida de ventana, ladrillo, plantas colgando, **las dos manos en la taza** (acción a medias) | `c31c1333-dbd6-4be7-890f-07dcbb1cfc59` | ✅ **la prueba 9/9 de la receta** — es la que se animó (→ E4/E6) |
@@ -24,7 +24,7 @@ tomas alternas de la misma escena; **B es la que la receta canonizó** como pala
 (`warm golden hour backlight, soft falloff, shallow depth of field`), la que NO cuesta la casilla
 de identidad.
 
-## Videos (E4/E6 animan `E3-cafe.png`; E5 anima `E3-hotel.png`; E7 anima `E2-B-rooftop.png`)
+## Videos (E4/E6 animan `E3-cafe.png`; E5 anima `E3-hotel.png`; E7 anima `E2-B-rooftop.png`; E8 anima `E2-A-rooftop.png`)
 
 Formatos verificados con `ffprobe` (detalle y creativos en [`CREATIVO.md`](CREATIVO.md)):
 
@@ -35,6 +35,7 @@ Formatos verificados con `ffprobe` (detalle y creativos en [`CREATIVO.md`](CREAT
 | `E4-cafe-kling3_0.mp4` ⛔ | 716×1284 (necesita recorte) · aac | 5,0 s | `kling3_0` | 8,75 cr | ⚠️ **NO se publica** — termina cabizbaja, cara tapada (§15). Se guarda como contraejemplo |
 | `E5-hotel-seedance.mp4` 🎯 | 720×1280 = 9:16 exacto · aac | 4,0 s | `seedance1_5` | 4,8 cr | ✅ **publicable** — anima `E3-hotel.png`: se acomoda un mechón (acción a medias real), parpadeo suave, cierra sobre la cara (casilla 9). Cara fiel al ancla en los 6 frames. Asset id del MP4: `0a7c63e4-5075-4c92-ab6e-7ce9d2ecae40` (rescatado del nombre de descarga — este SÍ quedó guardado). **Creativo escrito 2026-09-03 → [`CREATIVO.md`](CREATIVO.md) §hotel** |
 | `E7-rooftop-seedance.mp4` 🎯 | 720×1280 = 9:16 exacto · aac | 4,0 s | `seedance1_5` | 4,8 cr | ✅ **publicable** — anima `E2-B-rooftop.png`: **levanta el vaso para llevar, da un sorbo y lo baja** (acción a medias que SÍ se resuelve, mejor que hotel/coworking que son retratos), parpadeo suave, cierra sobre la cara plenamente visible (casilla 9). Identidad intacta en los 6 frames (`_E7-rooftop-frames.jpg`): cejas gruesas, pecas marcadas, aro de oro, pelo suelto, golden hour. Sin pantallas ni texto. Job id del MP4: `5a80fdb2-1a0d-46ba-a1c3-87fdd7572802` (del nombre de descarga; seed 28172). **Creativo escrito 2026-09-03 → [`CREATIVO.md`](CREATIVO.md) §rooftop** |
+| `E8-rooftop-A-seedance.mp4` 🎯 | 720×1280 = 9:16 exacto · aac | 4,0 s | `seedance1_5` | 4,8 cr | ✅ **publicable — 2º ángulo rooftop** — anima `E2-A-rooftop.png`: misma acción que E7 (**levanta el vaso, sorbo, lo baja y cierra sobre la cara**, casilla 9) pero desde un ángulo más frontal/plano de la MISMA rooftop → sirve para A/B contra E7 sin cambiar de set. Identidad intacta en los 6 frames (`_E8-rooftop-A-frames.jpg`): cejas gruesas, pecas marcadas, ojos marrones, aro de oro, pelo suelto en ondas, golden hour skyline. Tatuaje chico en el antebrazo visible (viene de E2-A). Sin pantallas ni texto. Job id del MP4: `c6ac3634-c16c-4070-ab0c-b7333e55ca4c` (seed 128085; ESTE sí quedó guardado, ver abajo). Creativo pendiente |
 
 🔴 **Los `job_id` de estos tres videos NO quedaron guardados.** La `CREATIVO.md` decía que estaban
 en los `_E*.log`, pero esos logs son **sólo de imágenes** (contienen la URL del PNG, no la del
