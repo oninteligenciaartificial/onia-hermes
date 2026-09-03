@@ -8,17 +8,22 @@ Instrumento: `scripts/recorrido_cliente.mjs`.
 
 ## Abierto
 
-### 1. El mismo recorrido con otro rubro
+### 1. Faltan TRES rubros de los cinco que ofrece el alta
 
-El alta ofrece cinco: clínica dental, comercio/tienda, importadora/distribuidora, estética y
-spa, servicios profesionales. **Sólo se probó dental.** El script ya acepta
-`RECORRIDO_RUBRO="Comercio / tienda"`, pero esa variable nunca se ejercitó. Un rubro encendido
-que rompe el onboarding es justo el fallo que no ve nadie.
+Cerrado comercio (abajo), queda: **importadora/distribuidora, estética y spa, servicios
+profesionales**. Se corren igual, cambiando la variable:
 
-⚠️ **El paso 6 apunta fijo a `/patients`**, que es la pantalla de datos del rubro DENTAL. Para
-comercio hay que resolver la ruta y el formulario según el rubro, o el paso va a reportar un
-desvío que no es un fallo del producto. Lo mismo con el selector de campo: el nombre del paciente
-se busca por `input[placeholder="Ej: Juan Carlos Mamani"]`, que en comercio no existe.
+    RECORRIDO_RUBRO='Estética y spa' node scripts/recorrido_cliente.mjs --escribir
+
+El instrumento ya no está atado a dental: descubre la pantalla del dato y la del cobro **del
+menú** que el producto le muestra a ese rubro. Lo que hay que mirar en cada uno es si
+`pantallaDelDato()` acierta — el mapa de `PORRUBRO` tiene patrones para los cinco, pero sólo dos
+se ejercitaron. Si ninguno matchea, el paso 6 sale rojo con el menú completo en el detalle, que
+es el dato que sirve para decidir si falta la pantalla o falta el mapa.
+
+⚠️ **Y hay que limpiar según el rubro.** Comercio deja fila en `onia_commerce_products` **y** en
+`onia_commerce_product_variants`; dental en `patients`. Un borrado escrito para un rubro deja
+basura del otro.
 
 ### 2. El paso 7 mira el cobro vacío: nunca hubo una factura que cobrar
 
@@ -35,6 +40,14 @@ hay que reportar. Ojo con los precios: los que muestre la pantalla se **comparan
 una licencia para corregir nada.
 
 ## Cerrado
+
+- **El recorrido entero en COMERCIO, el segundo rubro** — cerrado el 2026-09-03 16:14 UTC, 8 de 8
+  (`RECORRIDO_RUBRO='Comercio / tienda' node scripts/recorrido_cliente.mjs --escribir`). Producto
+  cargado en Catálogo, encontrado de vuelta en la lista y visible en el panel; capturas miradas
+  una por una. En el camino se cazó un **falso rojo del propio instrumento**: `despejar()` cerraba
+  el modal de alta —su botón de cancelar se llama «Cerrar», igual que el del tour— y el relleno
+  terminaba escribiendo en el buscador de la lista, así que el informe acusaba al producto de no
+  tener botón de guardar teniéndolo. Detalle y evidencia en `../recorrido/ULTIMO_RECORRIDO.md`.
 
 - **Los pasos 6, 7 y 8 cantaban "pantalla a la vista" sobre una pantalla TAPADA** — cerrado el
   2026-09-03. El modal "Primeros pasos" (`fixed inset-0 z-[60]`, el 100 % del viewport) cubría
