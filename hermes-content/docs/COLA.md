@@ -1679,7 +1679,39 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         mirar `.woot-widget-bubble` en cada una. Las dos primeras la tienen; las otras tres no.
       - **Cero líneas de código tocadas: no había nada roto en el sitio.**
 
-- [ ] 🟠 **SIGUE VIVO en `rubros`, y el 2026-09-03 07:58 UTC `onia-cola` midió POR QUÉ. No es
+- [x] 🟠 **CERRADO el 2026-09-03 17:38 UTC por `onia-cola`, mergeando el arreglo que el carril
+      `canario-visual` ya tenía escrito y varado en su rama** (`ddd48bfae` fullPage +
+      `6bd2ec177` scroll suave → `main` en `ea86a894a`). **No lo construí de nuevo a propósito:
+      ya existía, y escribirlo otra vez en `main` habría chocado add/add contra el mismo archivo
+      de su dueño.** El instrumento quedó como pedía este ítem: captura **por viewport**,
+      `html{scroll-behavior:auto !important}` inyectado antes de scrollear, y
+      `waitForFunction(scrollY≈y)` en vez de un `setTimeout` optimista.
+      - **Verificado MIRANDO las dos fotos, no con un grep** — mismo instante, misma franja de
+        `https://onia.com.bo/rubros` a 1440×900, `document.body.scrollHeight` = **8.332 px**
+        (idéntico a la medición de las 07:58) y `scrollY` real = 850, o sea el scroll **llegó**:
+        - **viejo (`fullPage: true`)** → la tarjeta cortada por arriba y una banda blanca vacía
+          ocupando dos tercios del cuadro. La firma exacta que este ítem perseguía.
+        - **nuevo (por viewport)** → la tarjeta **entera** *"Hoy en la agenda / Dental — 09:00
+          Ortodoncia · 10:30 Limpieza · 11:15 Control / Cada paciente con su hora, su
+          tratamiento y su teléfono"*, más la lista de rubros (Dental activo, Comercio ·
+          Importadora · Estética · Servicios en gris) y la burbuja de Chatwoot visible.
+      - **Un detalle que vale anotar porque contradice a medias la medición vieja:** hoy el
+        fotograma congelado por `fullPage` era **Dental**, no *"Caja del día / Efectivo"*
+        (Comercio) como el 07:58. El rubro en que se congela **varía entre corridas**; lo que no
+        varía es el defecto. Un ítem que hubiera exigido ver *"Caja del día"* para darse por
+        reproducido se habría declarado fantasma hoy.
+      - **El repro quedó como script, no como párrafo:** `scripts/verificar_canario_rubros.mjs`
+        saca las dos fotos a `/tmp/verificar-canario/` en 30 segundos. No es un gate y no está
+        en `npm test`: es para volver a MIRAR, que es lo único que decide esto.
+      - ⚠️ **El merge salió en conflicto en `scripts/canario_visual.mjs` y se resolvió por
+        UNIÓN, no eligiendo un lado.** Los dos lados le habían agregado campos distintos al
+        MISMO objeto `datos`: `main` el chequeo de desvío (`medida` / `motivoNoMedida` /
+        `respuestasFallidas`) y la rama la lista de `capturas` por viewport. `--ours` o
+        `--theirs` habrían borrado media herramienta **en silencio**, y el canario habría
+        seguido corriendo en verde, ciego de un ojo.
+
+      **El diagnóstico original, que es la mejor explicación de POR QUÉ pasaba:**
+      **SIGUE VIVO en `rubros`, y el 2026-09-03 07:58 UTC `onia-cola` midió POR QUÉ. No es
       timing ni rasterizador: `fullPage` destruye las secciones movidas por scroll.**
       Reproducido en vivo con el instrumento exacto del canario (1440×900, sin `channel`, scroll
       300/800 ms). **El sitio está sano; miente la captura** — probado con las dos tomas de la
