@@ -164,3 +164,47 @@ git ls-files <ruta>          # tiene que devolver la ruta
 ```
 
 Verificado para estas 7 el 2026-09-03: ninguna ignorada, las 7 versionadas.
+
+---
+
+## 2026-09-03 21:47 UTC — la mano en disputa sale de la PORTADA (0 créditos)
+
+`carril-calidad` frenó el lote: la portada (`slide-01`) se apoyaba en `E2-B-rooftop.jpg` y
+contó **seis dedos** en la mano que sostiene el vaso (4 pliegues = 5 crestas + pulgar).
+
+**Recontado acá sobre la foto FUENTE, no sobre la lámina** (regla del velo+texto), con cuatro
+instrumentos: zoom 4x y 5x de la columna de dedos, zoom 8x del tercio superior, y `edgedetect`
+sobre la columna completa. **Los cuatro dan 3 pliegues = 4 crestas + el pulgar = 5 dedos.**
+
+```sh
+SRC=../../generadas-20260902/E2-B-rooftop.jpg
+ffmpeg -y -i "$SRC" -vf "crop=320:660:1180:1450,scale=iw*3:ih*3,format=gray,edgedetect=low=0.06:high=0.18,negate" /tmp/edges.jpg
+```
+
+**No se resuelve la discrepancia a favor de nadie, y no hace falta**: lo que sí es indiscutible
+y se ve en todos los recortes es que **el dorso no tiene ni un nudillo**, y que dos auditorías
+independientes contaron distinto. Una mano que se discute no va en la lámina FIJADA arriba del
+perfil, que es la más mirada de la cuenta.
+
+**Lo que se hizo, sin gastar:**
+
+| Lámina | Antes | Ahora | Por qué |
+|---|---|---|---|
+| 1 · portada | `E2-B-rooftop.jpg` | **`E3-hotel.jpg`** | «la más limpia», cara muy fiel al ancla, **sin manos en cuadro** y con el tercio inferior tranquilo, que es lo que el layout necesita para el texto |
+| 3 · «No lo escondo» | `E3-hotel.jpg` | **`E2-B-rooftop.jpg`** | la mano discutida queda en una lámina interior, no en la portada |
+
+**No se duplicó ninguna foto**: siguen siendo 7 fotos distintas para 7 láminas. Es un
+intercambio, no un reemplazo — justo lo que evita repetir el defecto que se arregló en la
+lámina 7 el mismo día.
+
+De regalo arregla algo que nadie había anotado: antes la portada y la lámina 2 eran **dos tomas
+de la misma escena de rooftop** (B y A), una atrás de la otra. Ahora la portada abre en interior
+y el rooftop empieza en la 2.
+
+⚠️ **Por qué NO se reemplazó `E2-B` del todo:** requiere generar una foto nueva (2 cr,
+`nano_banana_pro`, cotizado). Se intentó y el CLI devolvió
+`grace_daily_limit_reached` — **cupo diario agotado, no error de prompt**. El rechazo **no
+cobra**: saldo 1932,14 antes y después. Queda como decisión de Sergio en `t_a9ff7367`.
+
+**Determinismo verificado:** al re-renderizar, las cinco láminas que no se tocaron salieron
+**byte a byte idénticas** (02, 04, 05, 06, 07); sólo cambiaron 01 y 03.
