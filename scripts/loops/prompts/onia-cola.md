@@ -261,7 +261,21 @@ Ramas de carril activas en **`onia-hermes`** (base `origin/main`):
 - `claude/docs-auditoria` — carril docs/infra (loop `docs-auditoria`)
 - `claude/web-venta` — sitio de venta (loop `web-venta`)
 - `claude/investigacion` — cotiza las decisiones del radar (loop `investigacion`)
+- `claude/lucia-vps` — carril modelos/Higgsfield (loop `lucia`)
+- `claude/recorrido-cliente` — recorre el camino del cliente (loop `recorrido-cliente`)
+- `claude/web-factory-dev` — webs de cliente (loop `web-factory-dev`)
+- `claude/tendencias` — recetas de contenido con su fuente (loop `tendencias`)
+- `claude/calidad-generado` — que no se publique una pieza mala (loop `calidad-generado`)
+- `claude/supervisor` — audita a los otros loops (loop `supervisor`)
 - `claude/git-status-935f47` — la sesion de control (Sergio y el orquestador escriben ahi)
+
+⚠️ **Y volvió a pasar el 2026-09-03: faltaban SEIS.** `lucia-vps`, `recorrido-cliente`,
+`web-factory-dev`, `tendencias`, `calidad-generado` y `supervisor` estaban en `loops.md`, con cron
+y con commits propios sin mergear — y esta lista nombraba siete carriles cuando ya había trece.
+Se cazaron **sólo porque el paso de enumerar en vivo existe**; la lista escrita los habría dejado
+varados otra vez. Es la tercera repetición del mismo agujero, y la moraleja ya no es "actualizar
+la lista": es que **la lista es una ayuda, y el `git branch -r` de abajo es la fuente**. Si alguna
+vez discrepan, gana el comando.
 
 ⚠️ **`web-venta` e `investigacion` faltaban en esta lista hasta el 2026-09-02 18:33 UTC, y los
 dos tenían un commit varado.** Sus loops se crearon ese mismo día, con cron registrado y

@@ -1833,3 +1833,45 @@ deliberado con una decisión de producto adentro, que es de Sergio y no de una v
 **Dónde está el trabajo hecho:** `hermes-content/deploy/vps-ops/bot/knowledge.onia.json`,
 verde contra el validador. **Commiteado, NO desplegado**: se instala con
 `/opt/onia/bot/webhook-server.sh knowledge` y eso cambia lo que oye un lead real.
+
+---
+
+## 34. Siete commits de plataforma sin desplegar, y el próximo despliegue tiene un ORDEN que no se puede invertir (2026-09-03) — acción de Sergio
+
+**Lo desplegado hoy es del 2026-09-01 22:27** (`BUILD_ID` del contenedor `onia-platform`, medido —
+no deducido del repo). Todo lo que entró a `master` después sigue sin llegar al cliente:
+
+| commit | qué arregla | quién lo sufre hoy |
+|---|---|---|
+| `22fd088` | el menú dibujaba `ASSIGNMENT_TURNED_IN` en letras gigantes | **todo el que abre el dashboard**, en cada pantalla |
+| `15e3910` | el que PAGA el add-on quedaba sin bandeja hasta encontrar un botón | el cliente que ya pagó |
+| `675541b` | el editor le decía "La cita" y "en el consultorio" a una ferretería | los rubros que no son dental |
+| `3523c79` | el cliente puede conectar SU WhatsApp (mitad servidor) | el add-on de WhatsApp, hoy inentregable |
+| `503af44`, `d62beeb` | merge + cablear el gate de iconos al CI | nadie (interno) |
+| `efaffe8` | CSP para el beacon de Cloudflare Analytics | la medición |
+
+El más caro es `22fd088`: no es sutil ni intermitente, es una palabra en mayúsculas gigantes en
+**toda** pantalla del dashboard, y lleva así desde el 09-02.
+
+### 🔴 El orden importa, y al revés rompe la plataforma entera
+
+`3523c79` agrega la columna `clinic_settings.chatwootWhatsappInboxId` y la **selecciona** en
+`/api/chatbot-canal-whatsapp` y en el `include` del perfil. Prisma no degrada: si el código sale
+antes que la columna, revienta la consulta y se cae la pantalla de chatbot **para todos**, no sólo
+para el que intenta conectar WhatsApp. O sea: un despliegue en el orden equivocado convierte un
+add-on nuevo en una caída general.
+
+1. `prisma/migrations/20260903000000_add_chatwoot_whatsapp_inbox` (runbook quirúrgico —
+   `ALTER TABLE ... ADD COLUMN` nullable, no toca ni una fila de las 4 orgs vivas).
+2. `META_APP_ID=1078962684709749` y `META_CONFIG_ID=1824225392073753` en el `app.env`.
+   Son los IDs **públicos** de la app "Onia Bot"; el `APP_SECRET` no va acá y no debe: vive sólo
+   en Chatwoot, que es quien canjea el código.
+3. Recién ahí, el build y el swap.
+
+**Por qué es de Sergio y no de una vuelta de loop:** desplegar al VPS necesita su OK explícito, y
+tocar la base de producción va por el runbook. Lo que sí es nuestro —el código, los tests, la
+migración escrita y la nota de orden— ya está hecho.
+
+**Lo que se destraba al desplegar:** el punto 3 del tablero `t_43947a6a` (la tarjeta del panel con
+el Embedded Signup de Meta) no se puede construir antes, porque es una pantalla de cliente y la
+regla es abrirla y MIRARLA renderizada — imposible mientras la columna no exista.
