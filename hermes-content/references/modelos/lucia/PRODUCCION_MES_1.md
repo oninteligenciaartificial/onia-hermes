@@ -30,7 +30,9 @@ CTA: seguir (sin palabra — es presentación). **Es la pieza que abre todo.**
 
 ## L2 · Carrusel fijado "¿Quién es Lucía?" — ✅ RENDERIZADO 2026-09-03, espera OK
 
-7 slides, pack `editorial-clean`, **0 créditos** (fotos del banco `generadas-20260902/`).
+7 slides, pack `editorial-clean`, **2 créditos** (6 fotos del banco `generadas-20260902/` + la
+foto de cierre `generadas-20260903/S3-rooftop-cierre.jpg`, generada el 03-sep para que la lámina 7
+dejara de repetir la portada — bitácora § E10).
 
 - Brief: `posts-20260807/briefs/lucia-quien-es-fijado.json`
 - Render bueno: **`posts-20260807/L2/slide-01..07.jpg`** — las 7 medidas en `1080×1350`

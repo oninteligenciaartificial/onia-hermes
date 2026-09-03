@@ -1002,4 +1002,177 @@ sólo si después del cambio de UUID la cara todavía no cierra.
   hipótesis fuerte con evidencia en disco, **no un arreglo verificado** — y confirmarla cuesta
   2 cr que este loop no puede gastar.
 - **No se puede medir tendencia de deriva con n=1** (el lote más nuevo tiene una imagen).
-- **Ninguna pieza de este carril fue generada por este loop.** Acá no se dispara nada pago.
+- ~~Ninguna pieza de este carril fue generada por este loop. Acá no se dispara nada pago.~~
+  ⚠️ **Falso desde el 2026-09-03 16:52 UTC.** Este loop generó `S1` por CLI y pagó 0,12 cr
+  (ver E9 abajo). La frase quedó de cuando el prompt del carril prohibía generar; Sergio lo
+  habilitó el 2026-09-02 (*"Lucía tiene permitido generar, si no no podría practicar"*).
+
+---
+
+# E9 · ¿El motor barato sostiene la cara? — medido el 2026-09-03, 0,12 cr
+
+**La pregunta, y por qué vale la pena:** el carril genera con `nano_banana_pro` a **2 cr por
+imagen**. `text2image_soul_v2` cuesta **0,12 cr** — 16× menos — y su tabla de params (`model get`)
+muestra que **sí acepta `image_references`**. Si sostuviera la identidad, un lote de 6 pasaría de
+12 cr a 0,72 cr y el carril podría practicar diez veces más por el mismo dinero.
+
+**Respuesta: NO. Y el motivo es estructural, no de prompt.**
+
+## Lo que se disparó
+
+| # | Qué se probó | Costo real | Resultado |
+|---|---|---|---|
+| **S1** | `image_references` = foto canónica de Lucía (`E3-hotel.jpg`, ruta local, se sube sola) | **0,12 cr** | ⛔ **Falla doble** |
+| **S2** | `custom_reference_id` = el Element `lucia-skin-v1` (`58bbd635-…`) | **0 cr** | `Error: Character not found` |
+
+Comando de S1:
+
+```bash
+higgsfield generate create text2image_soul_v2 \
+  --prompt "<E2 base + frase de LUZ §12>" \
+  --aspect-ratio 9:16 --quality 2k \
+  --image-references …/generadas-20260902/E3-hotel.jpg \
+  --wait --wait-timeout 5m
+```
+
+Cotizado antes con `generate cost` = 0,12 cr; el cobro en `account transactions` fue **−0,12
+exacto**. Saldo 1939,06 → 1938,94. **S2 falló sin cobrar**: un job rechazado por referencia
+inválida sale gratis.
+
+## Por qué S1 falla, y es lo contrario de lo que uno espera
+
+`S1-rooftop-soulv2.jpg` **copió lo que debía cambiar y cambió lo que debía copiar**:
+
+| Eje | Pedido en el prompt | Qué salió |
+|---|---|---|
+| **Escena** | Rooftop abierto en Santa Cruz, baranda de vidrio, atardecer, vaso para llevar, ciudad de fondo | ⛔ **El hall de hotel de la foto de referencia** — sofás de cuero, lámparas, techo de madera. Sin rooftop, sin baranda, sin ciudad, sin café |
+| **Cara** | «the same woman as in the reference image, keep the exact same face» | ⛔ **No es Lucía.** Sin pecas, pelo castaño claro con mechas, cara más angulosa y genérica |
+| Rasgos sagrados | pecas > argollas + cadenita | ⛔ pecas **ausentes** · ✅ argollas y cadenita presentes |
+
+**El diagnóstico:** en `text2image_soul_v2`, `image_references` es una referencia de **estilo y
+escena**, no de identidad. Por eso clonó el lobby y descartó el rostro. No es un prompt flojo: es
+la ranura equivocada.
+
+## Dónde está la ranura de identidad, y por qué tampoco sirve HOY
+
+S2 devolvió `Character not found` — **distinto** del `Media input not found` que da
+`--image-references` con el mismo UUID (§11 de `TECNICA-HIGGSFIELD.md`). Son **dos registros
+separados**:
+
+- `custom_reference_id` lee **Soul refs** (`higgsfield soul-id list`).
+- `image_references` lee **uploads / job ids**.
+- El ancla buena, `lucia-skin-v1` (`58bbd635-…`), es un **Element** — un tercer registro, que
+  **ningún** parámetro de Soul v2 puede leer.
+
+Y las únicas dos Soul refs de Lucía que existen en la cuenta son **exactamente las dos que el
+banco prohíbe**:
+
+| ID | Nombre | Estado en `BANCO-OFICIAL.md` |
+|---|---|---|
+| `36305a9b-…` | `LUCIA-REAL-v2-clean` | ⛔ **PROHIBIDO** — piel roja; entrenada con frames de una persona real sin permiso documentado |
+| `e6d8703c-…` | `LUCIA-SINTETICA-v3` | ⛔ perdió el A/B del 22-ago; le cambia los ojos a gris azulado |
+
+**Conclusión operativa: el ahorro de 16× no está disponible hoy, y no lo destraba ningún prompt.**
+La receta de §11 (`nano_banana_pro` + `--image-references <foto>`, 2 cr) sigue siendo la única
+probada para cara protagonista.
+
+## Lo que SÍ lo destrabaría — cotizado hasta donde se puede
+
+Entrenar una **Soul ref nueva** con las 7 fotos del ancla vigente:
+
+```bash
+higgsfield soul-id create --name "LUCIA-ancla-v1" --soul-2 \
+  --image <foto1> … --image <foto7>     # acepta 5–20, ruta local o upload id
+```
+
+⚠️ **El costo del entrenamiento NO se pudo cotizar**: `generate cost` sólo cotiza jobs de
+generación, y `soul-id create` no tiene equivalente. Es el dato que falta y **no se estima acá**.
+Si el entrenamiento resultara barato, cada imagen posterior costaría 0,12 en vez de 2 cr.
+
+**Y hay un riesgo que no se puede saltear:** las dos Soul refs anteriores de Lucía salieron mal
+(piel roja, ojos grises). Una tercera puede salir mal igual. Entrenar no garantiza la cara: hay
+que medirla contra `STACK-rasgos-10-angulos.jpg` después.
+
+## Lo que este experimento deja escrito para el próximo
+
+- **`model get <job_type>` muestra la ranura, no dice para qué sirve.** Ver `image_references` en
+  la tabla de Soul v2 hace pensar «sostiene identidad». Sostiene **estilo**. La tabla de params no
+  es documentación de comportamiento.
+- **Un job rechazado por referencia inválida no cobra.** Probar un UUID en la ranura dudosa es
+  gratis: conviene hacerlo **antes** de gastar.
+- **El CLI no tiene `generate image`.** El subcomando real es **`generate create`**
+  (`generate image` no existe y muere en el parseo). Varios docs del carril lo escriben mal.
+
+---
+
+# E10 · El motor de 2 cr sostiene la cara Y obedece el encuadre — medido el 2026-09-03, 2 cr
+
+## La pregunta
+
+E9 midió que `text2image_soul_v2` (0,12 cr) **copia el lugar y cambia la persona**. La pregunta
+inversa, que faltaba: `nano_banana_pro` (2 cr) con foto-como-referencia, ¿sostiene la persona y
+**obedece** un cambio de pose y encuadre, o devuelve la referencia otra vez?
+
+**Sí a las dos.** Es el primer caso medido en que la referencia manda identidad y el prompt manda
+composición, cada uno en lo suyo.
+
+## Para qué se generó — no fue práctica suelta
+
+El carrusel fijado L2 tenía **6 fotos para 7 lugares**: la lámina 7 (el cierre) repetía la foto de
+la portada, píxel por píxel. Era una de las dos decisiones abiertas de Sergio en `t_a9ff7367`.
+Ahora la 7 tiene foto propia y esa decisión **ya no hay que tomarla**.
+
+## El comando exacto
+
+```sh
+higgsfield generate cost   nano_banana_pro --prompt "<abajo>" --aspect-ratio 4:5 --resolution 2k \
+  --image-references generadas-20260902/E2-B-rooftop.jpg      # -> 2 credits (gratis, antes)
+higgsfield generate create nano_banana_pro --prompt "<abajo>" --aspect-ratio 4:5 --resolution 2k \
+  --image-references generadas-20260902/E2-B-rooftop.jpg --wait --wait-timeout 5m
+```
+
+Prompt (guardado también en `generadas-20260903/_S3-prompt.txt`):
+
+> Same young woman as the reference photo: dark brown hair, prominent freckles across nose and
+> cheeks, warm olive skin, small gold hoop earrings and a thin gold chain, wearing the same
+> oatmeal linen tee. Rooftop terrace in Santa Cruz de la Sierra at golden hour, glass and steel
+> railing, low city rooftops behind her. She stands on the RIGHT side of the frame in
+> three-quarter back view, one hand resting on the railing, turned away from camera and looking
+> out toward the horizon, calm half-smile visible in profile. Open sky and soft out-of-focus
+> rooftop floor fill the LOWER LEFT of the frame, empty and uncluttered. Vertical portrait, 35mm,
+> shallow depth of field, warm low side light from the setting sun. natural true-to-life colors,
+> no color grading, no filter look, accurate white balance. [TEXT RULE - MANDATORY] No legible
+> text anywhere in frame.
+
+## Resultado — mirado, no supuesto
+
+`generadas-20260903/S3-rooftop-cierre.jpg` · **1856×2304 = ratio 0,806** (4:5 nativo, sin recorte).
+
+| Casilla | Veredicto |
+|---|---|
+| Identidad (pecas, cejas, ojos, aro de oro, cadena) | ✅ es Lucía — pecas presentes, el rasgo sagrado #1 que S1 perdió |
+| Raccord con la portada (misma remera de lino crudo, mismo golden hour) | ✅ |
+| Obedeció la escena pedida (rooftop, perfil, mano en la baranda) | ✅ — **no** repitió la pose de la referencia |
+| Espacio de texto abajo-izquierda | ✅ piso de terraza vacío, es donde cae el bloque |
+| Texto ilegible en cuadro | ✅ ninguno |
+| Manos | ✅ una mano visible sobre la baranda, dedos correctos |
+
+## Las dos ranuras, ahora medidas las dos
+
+| Motor | Ranura de referencia | Qué manda de verdad | Costo |
+|---|---|---|---:|
+| `text2image_soul_v2` | `--image-references` | **estilo y lugar** — cambia la cara (E9) | 0,12 |
+| `nano_banana_pro` | `--image-references` | **identidad** — el prompt manda la escena (E10) | 2 |
+
+**Regla que sale de acá:** cara reconocible ⇒ `nano_banana_pro`, sin excepción. Los 0,12 cr de
+Soul v2 no son "lo mismo más barato": son otro trabajo. Un carril que elige por precio elige mal.
+
+## Costo
+
+| Concepto | Créditos |
+|---|---:|
+| S3 — `nano_banana_pro` 4:5 2k | **2,00** |
+| **Total del lote** | **2,00** |
+
+Cotizado antes con `generate cost` (2 credits) y el cobro coincidió **exacto**:
+saldo 1934,14 → 1932,14.
