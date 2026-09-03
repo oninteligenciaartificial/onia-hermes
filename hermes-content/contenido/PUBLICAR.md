@@ -1,4 +1,9 @@
-# PUBLICAR — Lucía, día 0 y día 1 (kit de teléfono)
+# PUBLICAR — Lucía: los 7 días y las 12 historias (kit de teléfono)
+
+<!-- El título decía "día 0 y día 1" y quedó viejo: desde el 03-sep el archivo cubre los días
+     0 a 6 (cada uno con su CAPTION.md) y el Paso 3 con las 12 historias. Un manual que anuncia
+     menos de lo que tiene se lee como si lo que falta no estuviera escrito. -->
+
 
 > **Para qué existe:** la cola tenía tres pendientes de Sergio que decían *qué* hacer pero no
 > el texto exacto ni el orden de las láminas. Este archivo es lo único que hay que abrir en el
@@ -430,6 +435,80 @@ Seguime y mirá hasta dónde llega.
 
 El reel ya declara "no soy real" en el primer segundo, hablado y subtitulado: doble
 declaración con la etiqueta del Paso 0. Deriva a Onia **una sola vez**, y a propósito.
+
+---
+
+## Paso 3 — las 12 historias (van CON un post, no sueltas)
+
+> **Por qué aparece recién ahora, y es un agujero, no un olvido.** Las 12 historias están
+> renderizadas desde el 23 y el 29-ago, medidas y miradas una por una el 03-sep. Hasta hoy
+> este manual **no las nombraba ni una vez** — `grep -i historia` sobre este archivo daba
+> cero, y los nueve pasos de arriba hablan de carruseles y del reel. O sea: doce piezas
+> terminadas, sin orden de publicación, sin decir a qué post empujan y sin nadie avisando que
+> **H07 no puede salir todavía**. Es el mismo último metro que tuvo trabado al día 2 durante
+> tres días: la pieza estaba, el camino al teléfono no.
+
+**Dónde están:** `hermes-content/references/modelos/lucia/historias-20260823/final/` (H01–H08)
+y `hermes-content/references/modelos/lucia/historias-20260829/final/` (H09–H12). Son MP4
+verticales de 5 a 8 s con el texto ya quemado en el video: **no hay nada que copiar y pegar**.
+
+**Cómo llegan al teléfono** — igual que un carrusel, y por la misma razón (estas carpetas viven
+sólo en la rama del carril, así que el camino del Paso 0.5 por la PC no las tiene):
+
+```
+node scripts/entregar_historia.js --id H09
+```
+
+Llega por Telegram con el día que acompaña y por qué. Se manda con `sendDocument` y no con
+`sendVideo`, así **Telegram no lo recomprime**: llega byte a byte igual que en disco (H08
+comprobado, 3.359.671 B en disco y en Telegram). Que la app a veces te lo *muestre* como video
+es cosa de la app, no del archivo. `--estado` muestra las 12 y cuáles están listas hoy.
+
+🟢 **Ya están entregadas las dos del día 2** (H06 y H08), el 03-sep: están en el mismo chat que
+el carrusel del día 2. Van el mismo día que él.
+
+### La regla: una historia sale el día que sale su post
+
+No son relleno. Cinco de las ocho de la primera tanda **son láminas del carrusel del día 3** —el
+`plan.json` de esa tanda lo dice: *«reciclan las señales del carrusel L6 para que la historia
+empuje al post»*—, así que publicarlas un día suelto desperdicia el empujón. Las de pilar B
+(H09–H12) no piden nada a propósito, y por eso ésas sí van sueltas, en los días sin carrusel.
+
+<!-- TABLA-HISTORIAS: la genera scripts/entregar_historia.js --escribir. No editar a mano. -->
+
+| # | Historia | Sale con | Por qué |
+|---|---|---|---|
+| H01 | El margen que calculás de memoria | **día 3** — L6 | es la lamina 3 de L6 (cuanto ganaste, no cuanto vendiste) |
+| H02 | Te preguntan a las 10 de la noche | **día 3** — L6 | es la lamina 2 de L6 (te escriben fuera de hora) |
+| H03 | El fiado sin fecha no se cobra | **día 3** — L6 | es la lamina 4 de L6 (el fiado sin fecha) |
+| H04 | Si el stock lo sabe una sola persona | **día 3** — L6 | es la lamina 5 de L6 (el stock en una sola cabeza) |
+| H05 | Tres días armando el cierre del mes | **día 3** — L6 | es la lamina 6 de L6 (el cierre del mes) |
+| H06 | No me canso porque no existo | **día 2** — L09 | declara que es IA, igual que el carrusel del dia 2 |
+| H07 | 5 herramientas de IA que sí sirven acá | **día 5** — L08 | manda a comentar HUMO, que es la palabra del dia 5 |
+| H08 | Esta cara no existe | **día 2** — L09 | "esta cara no existe" es el titulo del carrusel del dia 2 |
+| H09 | Entrás por una cosa | suelta (día sin carrusel) | pilar B: observacion sin llamada a la accion |
+| H10 | La casera te fía sin anotar nada | suelta (día sin carrusel) | pilar B: observacion sin llamada a la accion |
+| H11 | El vuelto sale del cajón | suelta (día sin carrusel) | pilar B: observacion sin llamada a la accion |
+| H12 | Media mañana en una fila | suelta (día sin carrusel) | pilar B: observacion sin llamada a la accion |
+
+<!-- /TABLA-HISTORIAS -->
+
+### 🔴 H07 no se sube todavía, y no es una opinión
+
+H07 dice *«comentá HUMO en el último post y te las paso»*. Hoy, quien comente HUMO recibe el PDF
+**viejo**: la web sirve `574b11ba9653` y el repo tiene `ca8d30d02976`. Es el mismo bloqueo del
+día 5, y H07 es una **segunda** pieza colgando de él. El entregador lo corta solo —
+`node scripts/entregar_historia.js --id H07` sale en rojo y no manda un byte— y **se destraba
+solo** el día que ese PDF se suba: se vuelve a medir con `node scripts/verificar_recompensas.js`.
+
+### La etiqueta de IA en una historia — lo que NO está verificado
+
+El Paso 0-ter documenta la etiqueta de **publicación** con sus fuentes, y está mirada en feed y
+reel. **En el compositor de historias no se comprobó**, así que acá no se afirma que el
+interruptor exista ni dónde está: se mira al subir la primera. Lo que sí es cierto y no depende
+de Instagram: **H06 y H08 llevan la declaración quemada en el propio video** (*«no me canso
+porque no existo, soy IA»*, *«esta cara no existe»*), así que la promesa del perfil se sostiene
+aunque el interruptor no aparezca.
 
 ---
 

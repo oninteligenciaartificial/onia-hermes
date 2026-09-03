@@ -149,6 +149,34 @@ function llamar(token, metodo, campos, archivo) {
   return json;
 }
 
+/**
+ * Cuantos bytes dice Telegram que guardo, sea cual sea el campo en que los devolvio.
+ *
+ * ESTO NO ES UN DETALLE, y costo una entrega a medias el 03-sep: `sendDocument` con un mp4
+ * NO siempre contesta `result.document`. Telegram decide solo, archivo por archivo, si lo
+ * muestra como documento o como video — H06 volvio en `document` y H08, del mismo tamano,
+ * mismo 1080x1920 y misma carpeta, volvio en `result.video`. La comprobacion miraba
+ * `result.document.file_size` fijo, asi que para H08 leyo `undefined`, lo llamo "llego
+ * cortado" y corto el envio despues de la cabecera. El archivo estaba PERFECTO: 3.359.671 B
+ * en disco y 3.359.671 B en Telegram (medido con la respuesta cruda). O sea que la guarda
+ * buena —comparar el tamano— fallaba por preguntar por el campo equivocado, que es el mismo
+ * defecto de sentido que este carril ya pago en carousel_render, verificar_recompensas y el
+ * gate de arranque: contestar con seguridad la pregunta equivocada.
+ *
+ * Devuelve null si Telegram no mando ningun campo con tamano: null NO es "esta bien", es
+ * "no se pudo medir", y el que llama tiene que tratarlo como rojo.
+ */
+function tamanoRecibido(result) {
+  if (!result) return null;
+  for (const campo of ['document', 'video', 'animation', 'audio', 'voice', 'video_note']) {
+    const m = result[campo];
+    if (m && Number.isFinite(m.file_size)) return m.file_size;
+  }
+  // `photo` viene como lista de tamanos reescalados: ahi comparar contra el disco no tiene
+  // sentido y por eso se devuelve null en vez de un numero que enganaria.
+  return null;
+}
+
 // ------------------------------------------------------------------ el envio
 
 function entregar({ dia, ensayo }) {
@@ -233,7 +261,8 @@ function entregar({ dia, ensayo }) {
       // una lamina a medias sin un solo error de por medio.
       if (p.metodo === 'sendDocument') {
         const local = fs.statSync(p.archivo.ruta).size;
-        const remoto = r.result && r.result.document && r.result.document.file_size;
+        const remoto = tamanoRecibido(r.result);
+        if (remoto === null) throw new Error(`Telegram no dijo cuanto guardo (campos: ${Object.keys(r.result || {}).join(',')})`);
         if (remoto !== local) throw new Error(`llego cortado: ${remoto} B de ${local} B`);
       }
       n++;
@@ -325,4 +354,8 @@ function principal(argv) {
 
 if (require.main === module) process.exit(principal(process.argv.slice(2)));
 
-module.exports = { revisarPieza, escaparHtml, extraerBloques };
+// `credenciales` y `llamar` se exportan para que `entregar_historia.js` hable con Telegram
+// por ACA y no nazca una segunda version del envio: la leccion de `--form-string` (un `-F`
+// con caption largo sale http 000 y el mensaje no llega, sin error visible) y la de mirar
+// `ok` del JSON en vez del codigo de salida de curl valen igual para una historia.
+module.exports = { revisarPieza, escaparHtml, extraerBloques, credenciales, llamar, tamanoRecibido };
