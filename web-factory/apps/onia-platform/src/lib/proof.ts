@@ -29,6 +29,8 @@
  * cambia en el doc fuente, se cambia aca y no al reves.
  */
 
+import { PLANES, bs } from "@/lib/pricing";
+
 /** Fecha en que se consultaron todos los precios de la comparacion. */
 export const FECHA_CONSULTA = "30 de julio de 2026";
 
@@ -103,7 +105,12 @@ export const CONTENDIENTES: readonly Contendiente[] = [
     id: "onia",
     quien: "Onia",
     ejemplos: "una plataforma, el rubro dental andando hoy",
-    precio: "Bs 320 – 1.500 / mes",
+    // Nuestra propia fila de la comparativa: el rango sale de PLANES. Escrito a
+    // mano quedaba viejo el día que cambia un plan, justo en la tabla que un
+    // lead usa para compararnos con la competencia.
+    precio: `Bs ${bs(Math.min(...PLANES.map((p) => p.mensual)))} – ${bs(
+      Math.max(...PLANES.map((p) => p.mensual)),
+    )} / mes`,
     precioNota: "precio de lanzamiento, publicado más abajo",
     estados: { gestion: "si", siat: "tramite", agentes: "si" },
     veredicto:

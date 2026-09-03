@@ -283,7 +283,13 @@ export const NO_INCLUYE: readonly Excluido[] = [
 
 export const CONDICIONES: readonly string[] = [
   "Pagás semanal, mensual o anual. El anual cobra 10 meses: dos van de regalo.",
-  "El semanal existe en Básico (Bs 89) y en Pro (Bs 199). Full se cobra mensual o anual.",
+  // Armado de PLANES: esta frase nombraba los dos semanales a mano, al lado de
+  // la tabla que los define. Dos copias del mismo número en el mismo archivo.
+  `El semanal existe en ${PLANES.filter((p) => p.semanal !== null)
+    .map((p) => `${p.nombre} (Bs ${bs(p.semanal as number)})`)
+    .join(" y en ")}. ${PLANES.filter((p) => p.semanal === null)
+    .map((p) => p.nombre)
+    .join(" y ")} se cobra mensual o anual.`,
   "14 días de prueba sin tarjeta, con el Pro completo. Al vencer, la cuenta queda en solo lectura — nada se borra.",
   "En los tres planes de arriba no cobramos implementación ni migración: el checkout cobra solo el plan. Grupo / Empresarial sí lleva implementación acompañada y se cotiza aparte.",
   "Tus datos son tuyos: los exportás en CSV desde el plan más chico.",

@@ -1984,6 +1984,71 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         publicar es de Sergio. Es el **octavo** arreglo esperando el mismo deploy de
         `t_68671bc3` — y el primero que le cuesta leads mientras espera.
 
+### Del carril `web-venta` — corrida del 2026-09-03 18:48 UTC (de dónde saca su número cada precio)
+
+- [x] 🟠 **El sitio tenía CUATRO copias tipeadas a mano de los precios de los planes —
+      ARREGLADO, con gate.** Coincidían con la tabla por suerte, no por construcción: el día
+      que Sergio cambia un plan, cambia `PLANES` y las cuatro frases siguen anunciando el
+      precio viejo. Es la regla que abre `CLAUDE.md`, y el desastre que la originó (cuatro
+      precios vivos del mismo chatbot) empezó exactamente así.
+      - **Medido antes de tocar nada, y el veredicto fue "no hay defecto vivo":** los cuatro
+        literales (320 · 750 · 1.500 · 89 · 199) **coinciden hoy** con `PLANES`, y `PLANES`
+        coincide a su vez con `DEFAULT_PLAN_AMOUNTS` del producto
+        (`/root/loops/onia-platform/lib/subscription-plans.ts`: basic 320/89/3200 ·
+        professional 750/199/7500 · clinic 1500/15000 · enterprise 2900/29000). **No se
+        arregló un precio: se arregló que un precio pueda desincronizarse en silencio.**
+      - **Quiénes eran, encontrados barriendo el disco (no una lista):** la `description` de
+        `/precios`, el chip del hero de `/v1`, nuestra propia fila de la comparativa
+        (`lib/proof.ts`) y la letra chica del semanal (`lib/pricing.ts`, dos copias del mismo
+        número **dentro del archivo que lo define**). Las cuatro ahora se arman con `bs()`
+        desde `PLANES`.
+      - **Y una de ellas era METADATA**, que es la parte de la superficie de cliente que **no
+        se ve mirando**: toda captura da verde sobre ese defecto. Es la misma trampa que se
+        pagó hoy a las 12:55 con la `description` de `/terminos`.
+      - **Gate nuevo `(sitio)/precios.test.ts`**, en `prebuild` (`tsc --noEmit && vitest run`,
+        el comando real del deploy). Caza la **clase**: ningún archivo de la superficie de
+        venta puede escribir como literal un monto que declare `PLANES`/`GRUPO`. Sujetos
+        derivados del **disco**, no de una lista de inclusión — un archivo nuevo nace cubierto.
+      - ⚠️ **El gate deliberadamente NO mira los add-ons, y eso lo midió el propio barrido:**
+        `Bs 390` es el chatbot **y** el plan «Cuidado Web Crecimiento» de `content/webs.ts`,
+        que es correcto y no tiene nada que ver. Un gate por número suelto habría gritado por
+        código sano en su primera corrida — y un gate que grita por algo correcto se apaga.
+      - **Verificado en ROJO antes**, por el motivo correcto: reintroducido el chip del hero,
+        falló **un solo** caso, con archivo y línea exactos (`hero.tsx:10`) y los dos anclas
+        en verde. El ancla no escribe ningún número esperado: hacerlo habría sido la quinta
+        copia a mano, dentro del gate que las prohíbe.
+      - **Es un refactor, no un cambio de copy, y se probó como tal:** el HTML servido por el
+        build nuevo es **byte a byte idéntico al de producción** en las cuatro superficies
+        (`description` de `/precios`, `/` y `/comparativa`; la fila «Bs 320 – 1.500 / mes»; la
+        frase del semanal; el chip «Desde Bs 320/mes» de `/v1`).
+      - **MIRADO renderizado** sobre el build de producción real (`next start`, no `dev`):
+        `/precios` a 1440 y 390 con la grilla entera — 320 / 750 / 1.500, anuales
+        3.200 / 7.500 / 15.000, semanales 89 / 199.
+        ⚠️ La primera captura salió **en blanco** y no era el sitio: el servidor local servía
+        un chunk 404 (`3413-…js`). Es el **cuarto** falso positivo de instrumento de esta
+        familia; se confirmó mirando el 4xx antes de creerle a la foto, y con el servidor
+        sano la página mide 6.016 px en vez de 844.
+      - **Gates:** typecheck exit 0 · `vitest run` **222 verdes** en 12 archivos · build exit 0.
+      - ⚠️ **No está en producción**: `onia.com.bo` la sirve el contenedor `onia-landing` y
+        publicar es de Sergio. Es el **noveno** arreglo esperando el mismo deploy de
+        `t_68671bc3`.
+
+- [x] 🟢 **El formulario de captura de `/guia-facturacion` entrega de verdad — medido de punta
+      a punta, no por su pantalla.** Es el único `<form>` de la superficie de venta y su
+      pantalla de éxito («Listo. La hoja es tuya.») se muestra **pase lo que pase**: el cliente
+      traga todos los errores y el endpoint responde 204 incluso cuando no reenvía nada. O sea
+      que el primer paso **no puede fallar a la vista**, que es justo la firma del bug que mató
+      al bot dos veces.
+      - **Probado el segundo paso, que es el que se pierde:** POST real a
+        `https://onia.com.bo/api/agenda-intake` → la fila **apareció** en
+        `onia_center.leads` (`source=gate-web-venta`), y la red interna
+        `onia-landing → onia-center:3012` devolvió `{"ok":true}`. Las dos filas de prueba se
+        **borraron** (`delete … where public_contact like '%example.invalid'` → 0 quedan).
+      - **Cero leads perdidos:** el histórico de `onia_center.leads` tiene sólo
+        `prospector-osm` (94) y `bot:onia-demo-bot` (26). **Nadie llenó nunca ese formulario**,
+        así que no hay nada que rescatar. No es un ítem: es una medición que faltaba.
+      - **El plazo de la guía sigue vigente** (30-09-2026), o sea que la página no está vieja.
+
 ### Del canario visual — corrida del 2026-09-03 ~03:41 UTC (diez pantallas)
 
 - [x] 🟠 **El ítem de "captura full-page ciega" (abierto 2026-09-02, confirmado vivo en
