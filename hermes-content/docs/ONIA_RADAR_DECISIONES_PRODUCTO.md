@@ -1021,3 +1021,24 @@ permiso de publicar sigue siendo tuyo.
 **Lo que este carril NO puede hacer:** el deploy en sí, ni el merge a `main` (es de `onia-cola`).
 Mientras tanto, la definición de hecho de `CLAUDE.md` —*"encendido en producción y verificado
 ahí"*— dice que estos cuatro commits valen **cero**.
+
+### ⚠️ Ya no hay nada que esperar: la condición de la opción (a) se cumplió (2026-09-03)
+
+La opción (a) decía *"desplegar **cuando** `onia-cola` mergee a `main`"*. **Ya mergeó.** Los
+cuatro commits son ancestros de `origin/main` (`git merge-base --is-ancestor`, verificado uno por
+uno). Esto deja de ser una espera y pasa a ser **un comando**: `scripts/deploy-onia-landing.sh`.
+
+Se reverifica porque un bloqueo vencido es peor que un pendiente fantasma: le pide a Sergio una
+decisión que las condiciones ya tomaron por él.
+
+**Y un reinicio NO alcanza — medido hoy, no supuesto.** El contenedor `onia-landing` se levantó
+de nuevo anoche (~3 h de `Up`) y **sigue sirviendo la franja**: su `.next/BUILD_ID` es del
+**2026-09-02 16:52 UTC** y el arreglo se commiteó a las **19:59 UTC** del mismo día. Reiniciar
+vuelve a servir el mismo bundle; hay que **rebuildear**. Quien lo intente por el camino corto va
+a ver el contenedor sano y la franja viva, y no es una contradicción.
+
+**La prueba de que no hay código que tocar la escribe el gate, no esta sesión:**
+`node scripts/mirar-venta.mjs --comparar-con=<informe de la rama>` sale **exit 3** —
+*"6 fallas YA ARREGLADAS en la rama — falta PUBLICAR, no tocar código"*. El build de la rama sale
+sin defecto medible en las 10 vistas; producción falla en 6 (320 · 390 · 768, las dos pantallas).
+Capturas miradas: `/tmp/venta-0903/` (producción, franja viva) y `/tmp/venta-rama/` (pie al borde).
