@@ -12,9 +12,110 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
-## Medido el 2026-09-03 10:18 UTC
+## Medido el 2026-09-03 16:14 UTC — rubro COMERCIO
 
-### 🟢 Los 8 pasos — y esta vez el paso 3 PODÍA salir rojo
+### 🟢 Los 8 pasos, y por primera vez en un rubro que no es dental
+
+    RECORRIDO_RUBRO='Comercio / tienda' node scripts/recorrido_cliente.mjs --escribir
+
+| # | paso | estado | qué se vio |
+|---|---|---|---|
+| 1 | Entrar a `onia.com.bo` y que se VEA | ✔ OK | cargó en 2.150 ms, 6.977 caracteres visibles |
+| 2 | Encontrar el camino de alta | ✔ OK | 7 botones; el camino es "Creá tu cuenta", **2 clics** |
+| 3 | Registrarse con datos `zz-qa-` | ✔ OK | cuenta creada; el alta pide confirmar el correo antes del primer login |
+| 4 | Entrar a la plataforma | ✔ OK | entró tras abrir el enlace de confirmación, como el cliente con el mail |
+| 5 | Elegir rubro y terminar el onboarding | ✔ OK | 6 pantallas del asistente; `/dashboard` dejó de rebotar |
+| 6 | Cargar un dato del rubro | ✔ OK | creó el producto `zz-qa-…-paciente` en **Catálogo** (`/comercio`) y lo encontró de vuelta en la lista |
+| 7 | Pantalla de cobro (mirar y FRENAR) | ✔ OK | la pantalla de cobro de comercio se llama **Caja** (`/comercio/caja`); **frenado ahí a propósito** |
+| 8 | Abrir la bandeja / el panel | ✔ OK | el producto **sí figura** en el panel, en *Stock crítico* |
+
+**Un comercio recorre el producto entero igual que una clínica.** Las capturas de los 8 pasos se
+miraron una por una: `paso-06c` muestra "1 producto(s) en el catálogo" con la fila cargada, y
+`paso-08` lo muestra otra vez en el panel. Nada del producto se rompió en esta vuelta.
+
+Dos diferencias reales entre rubros, que el recorrido antes no podía ver porque navegaba a rutas
+fijas de dental: la pantalla del dato es **Catálogo (`/comercio`)** y no `/patients`, y la de
+cobro es **Caja (`/comercio/caja`)** y no `/billing`. Pedir `/billing` con una cuenta de comercio
+rebota — y eso se leía como "el producto no tiene pantalla de cobro" cuando la tiene, con otro
+nombre. Ahora las dos se **descubren del menú** que el producto le muestra a ese rubro.
+
+⚠️ **Lo que el paso 6 NO prueba en comercio:** carga el nombre del producto y nada más. Precio y
+stock quedan vacíos (se ven como `—` y `0 unidad` en la captura) porque el instrumento no
+inventa cifras. Que el producto guarde un precio **no está medido**.
+
+### 🔴 El falso ROJO que se arregló esta vuelta: el instrumento cerraba el formulario que abría
+
+La vuelta anterior dejó el paso 6 en rojo con este texto:
+
+    el formulario de alta de "storefront Catálogo" no tiene botón de guardar
+
+**Era mentira, y la culpa era del instrumento.** Medido en vivo entrando con una cuenta ya
+creada: al apretar «Nuevo producto» el modal abre bien, con sus campos y con el botón
+**«Guardar producto»** — está en `capturas/evidencia-06-modal-comercio-abierto.png`. Lo que pasaba
+después es que el paso llamaba a `despejar(page)`, que aprieta los botones **«Cerrar por ahora»** y
+**«Cerrar»** para sacarse de encima el tour de bienvenida… y el botón de cancelar de ese modal se
+llama **exactamente «Cerrar»**. El instrumento cerraba el formulario que acababa de abrir.
+
+Y entonces venía la segunda mitad del daño: con el modal cerrado, el relleno buscaba "el primer
+campo de texto de la página" y encontraba el **buscador** de la lista (`Buscar productos…`).
+Escribía el `zz-qa-…` ahí —se veía en la captura, arriba, en la lupa— y el alta se enviaba vacía.
+
+En dental nunca se notó: ahí el alta es una **página** (`/patients/new`), no un modal, así que no
+había ningún «Cerrar» que apretar. **Un instrumento afinado a un solo rubro acusa al producto en
+todos los demás.**
+
+Tres arreglos, y el orden importa:
+
+1. **Se quitó el `despejar()` de adentro del paso 6.** No hace falta: el tour ya lo sacó
+   `llegar()` en esa misma pantalla, y apretar un botón no puede invocarlo de nuevo.
+2. **El formulario se ACOTA antes de llenarlo** (`acotarFormulario`), y la raíz se deduce del
+   **botón de guardar hacia arriba** — no de `role=dialog`, que este modal no declara, ni de una
+   clase CSS. Es la única definición que sirve en los 7 rubros: el formulario es lo que rodea al
+   botón que lo envía. Fuera de esa raíz no se escribe una letra.
+3. **Nunca se llena un buscador** (`buscar|search|filtrar` o `type=search`), aunque sea el primer
+   campo de texto que aparezca.
+
+Y el paso ahora distingue dos fallos que antes se reportaban con el mismo texto: *"apreté el
+camino de alta y no apareció ningún formulario"* (con la lista de botones a la vista) es distinto
+de *"el formulario no tiene botón de guardar"*. El primero acusa al camino; el segundo al
+formulario.
+
+> **La lección, que vale para cualquier carril que maneje un navegador:** una rutina que cierra
+> overlays por el TEXTO del botón acabará cerrando algo que hacía falta. `despejar` se escribió
+> para un tour y terminó apretando el cancelar de un alta. Un cierre a ciegas es una acción
+> destructiva con cara de higiene.
+
+### Lo que se escribió en producción esta vuelta, y cómo quedó
+
+Se borraron **tres** cuentas, no una: además de la de esta corrida quedaban **dos de la vuelta
+anterior**, que murió por tiempo antes de limpiar (`zz-qa-2026-09-03-1317` y `-1320`). Impresas
+antes de tocarlas, borradas en una transacción **por prefijo `zz-qa-`**, nunca por fecha ni por
+rango:
+
+```
+auth.users                        3   zz-qa-2026-09-03-{1317,1320,1614}@onia.com.bo
+auth.identities                   3
+profiles                          3
+organizations                     3   zz-qa-2026-09-03-{1317,1320,1614}
+organization_entitlements         3   module.agents
+onia_commerce_products            1   zz-qa-2026-09-03-1614-paciente
+onia_commerce_product_variants    1
+```
+
+Recuento posterior: **0 filas `zz-qa-`** en las cinco tablas. Lo real intacto: **4
+organizaciones · 6 perfiles · 1 paciente · 3 productos · 3 solicitudes**. Los 6 perfiles que
+quedan son todos del 16 al 31 de agosto — ninguno de hoy, o sea que no quedó basura anónima.
+
+⚠️ **Las columnas de estas tablas son camelCase de Prisma y van entre comillas dobles**:
+`"organizationId"`, `"productId"`, `"featureKey"`. Un `WHERE organization_id = …` no falla en
+silencio —da `ERROR: column does not exist`—, pero dentro de un heredoc largo ese error pasa
+desapercibido y el borrado queda a medias.
+
+---
+
+## Vuelta anterior — 2026-09-03 10:18 UTC, rubro dental
+
+### 🟢 Los 8 pasos — y esa vez el paso 3 PODÍA salir rojo
 
 | # | paso | estado | qué se vio |
 |---|---|---|---|
@@ -171,19 +272,26 @@ doble opt-in funciona y sin confirmar no se entra.
 
 ## Cómo se corre entero
 
-Son **dos corridas**, y no se puede evitar:
+**Una sola corrida**, y el rubro se elige por variable de entorno:
 
-    node scripts/recorrido_cliente.mjs --escribir    # 1) crea la cuenta, frena en el paso 4
-    docker exec -i supabase-db psql -U postgres -d postgres \
-      -c "update auth.users set email_confirmed_at=now() where email like 'zz-qa-%';"
-    node scripts/recorrido_cliente.mjs --escribir    # 2) mide del 4 al 8
+    node scripts/recorrido_cliente.mjs --escribir                          # dental (por defecto)
+    RECORRIDO_RUBRO='Comercio / tienda' node scripts/recorrido_cliente.mjs --escribir
 
-Y después **se borra en la misma vuelta** (los seis ids de arriba, por id exacto — `patients`
-primero o junto al resto: cae por `ON DELETE CASCADE` de `organizations`, pero no se confía en
-eso, se borra explícito y se cuenta).
+⚠️ **Acá decía que hacían falta DOS corridas** con un `update auth.users set email_confirmed_at`
+en el medio. Ya no: el script abre **el mismo enlace de confirmación que se le manda al cliente**
+(`confirmarComoElCliente`), que es lo que hace un cliente de verdad. Tocar `email_confirmed_at` a
+mano sería fingir el paso que se está midiendo — y dejaría el doble opt-in sin medir nunca.
+
+Y después **se borra en la misma vuelta**, por prefijo `zz-qa-` y contando lo que se borró:
+
+    docker exec -i supabase-db psql -U postgres -d postgres   # ver el bloque de limpieza de arriba
 
 ⚠️ `docker exec` **va con `-i`**: sin él el heredoc no llega a psql, no borra nada y **sale sin
 error**. Contar las filas después de borrar no es opcional.
+
+⚠️ **La limpieza tiene que cubrir el rubro que se corrió.** El paso 6 crea un paciente en dental
+pero un **producto + su variante** en comercio (`onia_commerce_products`,
+`onia_commerce_product_variants`). Un borrado escrito para dental deja el producto vivo.
 
 ## Trampas del instrumento que siguen vigentes
 

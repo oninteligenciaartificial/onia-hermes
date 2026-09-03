@@ -296,6 +296,152 @@ function motivoDesvio(v, ctx, comoSeLlama) {
 }
 
 /**
+ * El menú que el producto le muestra a ESTE rubro, leído de la pantalla.
+ *
+ * POR QUÉ EXISTE: el producto se vende como "se adapta a tu rubro: pantallas, vocabulario y
+ * agentes a tu medida". Si eso es cierto, un comercio no ve las mismas pantallas que una
+ * clínica — y un recorrido que navega a rutas fijas mide el rubro con el que se lo escribió,
+ * no el que está probando. Lo único que un cliente puede usar es lo que el menú le ofrece.
+ */
+async function descubrirMenu(page) {
+  await llegar(page, '/dashboard', 'paso-06-menu.png');
+  return page.evaluate(() =>
+    [...document.querySelectorAll('a[href^="/"]')]
+      .map((a) => ({
+        ruta: new URL(a.href).pathname.replace(/\/$/, ''),
+        texto: (a.innerText || '').replace(/\s+/g, ' ').trim(),
+      }))
+      .filter((x) => x.texto && x.ruta && x.ruta !== '/dashboard' && !/^\/(login|logout|onboarding)/.test(x.ruta))
+      .filter((x, i, arr) => arr.findIndex((y) => y.ruta === x.ruta) === i)
+  );
+}
+
+/**
+ * De todo el menú, cuál es la pantalla donde este rubro carga el dato central de su negocio.
+ *
+ * Se elige por lo que el enlace DICE, no por la ruta: el vocabulario por rubro es una promesa
+ * del producto (`lib/onboarding/vocabulario.ts`), así que un comercio debería decir "Productos"
+ * o "Clientes" donde una clínica dice "Pacientes". Si ninguna coincide, el paso sale rojo con
+ * el menú completo — que es el dato que sirve para decidir si falta la pantalla o falta el mapa.
+ */
+function pantallaDelDato(menu, rubro) {
+  const PORRUBRO = {
+    'Clínica dental': [/paciente/i],
+    'Comercio / tienda': [/producto|cat[áa]logo|art[íi]culo/i, /cliente/i],
+    'Importadora / distribuidora': [/producto|cat[áa]logo|art[íi]culo/i, /cliente/i],
+    'Estética y spa': [/client[ae]/i, /paciente/i],
+    'Servicios profesionales': [/client[ae]/i, /paciente/i],
+  };
+  // El genérico va SIEMPRE al final: si el mapa del rubro falla, todavía se puede cargar algo,
+  // pero el detalle va a decir por cuál pantalla se entró y eso queda a la vista en el informe.
+  const patrones = [...(PORRUBRO[rubro] || []), /paciente|client[ae]|producto|cat[áa]logo/i];
+  for (const p of patrones) {
+    const hit = menu.find((m) => p.test(m.texto));
+    if (hit) return hit;
+  }
+  return null;
+}
+
+/** Lo que dice el botón que GUARDA un alta. Se usa para encontrar el formulario y para enviarlo. */
+const GUARDAR = /guardar|crear|registrar|a[ñn]adir|agregar/i;
+/** El selector del formulario ya acotado. Marcarlo en el DOM es lo que permite no salirse de él. */
+const EN_FORM = '[data-recorrido-form] input:not([type=hidden]), [data-recorrido-form] textarea';
+
+/**
+ * Acota el formulario de alta al pedazo de pantalla que lo contiene, y lo marca en el DOM.
+ *
+ * 🔴 NACE DEL FALSO ROJO DEL 2026-09-03, y es el peor que tuvo este paso: en comercio el alta
+ * es un modal encima de la lista, y detrás del modal sigue visible el buscador
+ * («Buscar productos…»). Llenar "el primer campo de texto de la PÁGINA" escribía el dato en el
+ * BUSCADOR —se ve en `paso-06b-alta-dato.png`, con el `zz-qa-…` arriba, en la lupa— y el
+ * formulario se enviaba vacío. El informe salía "el Catálogo no tiene botón de guardar" con
+ * «Guardar producto» a la vista: una acusación falsa al producto, firmada por el instrumento.
+ *
+ * La raíz se deduce del BOTÓN DE GUARDAR hacia arriba, no de una clase CSS ni de `role=dialog`
+ * (medido: este modal no lo declara). Es la única definición que sirve en los 7 rubros: el
+ * formulario es lo que está alrededor del botón que lo envía.
+ */
+async function acotarFormulario(page, guardarSrc) {
+  return page.evaluate((src) => {
+    const GUARDA = new RegExp(src, 'i');
+    const visible = (el) => el.offsetParent !== null || el.getClientRects().length > 0;
+    document.querySelectorAll('[data-recorrido-form]').forEach((el) => el.removeAttribute('data-recorrido-form'));
+    const botones = [...document.querySelectorAll('button, input[type=submit]')].filter(visible);
+    const guardar = botones.find((b) => GUARDA.test((b.innerText || b.value || '').replace(/\s+/g, ' ').trim()));
+    const nombres = botones.map((b) => (b.innerText || b.value || '').replace(/\s+/g, ' ').trim()).filter(Boolean);
+    if (!guardar) return { hayGuardar: false, botones: nombres };
+    const conCampos = (n) => [...n.querySelectorAll('input:not([type=hidden]), textarea')].some(visible);
+    let raiz = guardar.closest('form');
+    if (!raiz) {
+      let n = guardar.parentElement;
+      while (n && n !== document.body) {
+        if (conCampos(n)) { raiz = n; break; }
+        n = n.parentElement;
+      }
+    }
+    (raiz || document.body).setAttribute('data-recorrido-form', '1');
+    return {
+      hayGuardar: true,
+      acotado: !!raiz,
+      guardarTexto: (guardar.innerText || guardar.value || '').replace(/\s+/g, ' ').trim(),
+      botones: nombres,
+    };
+  }, guardarSrc);
+}
+
+/**
+ * Llena el formulario YA ACOTADO descubriendo sus campos, y devuelve qué llenó.
+ *
+ * POR QUÉ NO SE HARDCODEA: cada rubro tiene su propio formulario. Un selector fijo
+ * (`input[placeholder="Ej: Juan Carlos Mamani"]`) sólo existe en dental; en comercio no llena
+ * nada y el envío sale vacío, que se parece muchísimo a un producto que no guarda. Los números
+ * van en 1 y no en un precio inventado: acá no se fabrica un dato que después alguien lea como
+ * real. El honeypot se saltea igual que en el alta.
+ */
+async function llenarFormulario(page, dato) {
+  // ⚠️ El índice tiene que salir de la MISMA colección que después se localiza. Contar sobre
+  // `input, textarea, select` y localizar sobre `input, textarea` corre los índices en cuanto
+  // el formulario tiene un desplegable: se llena el campo de al lado y el informe dice otra cosa.
+  // Por eso acá se indexa TODA la colección y se descarta al llenar, nunca al contar.
+  const campos = await page.evaluate((sel) =>
+    [...document.querySelectorAll(sel)].map((el, i) => ({
+      i,
+      tag: el.tagName.toLowerCase(),
+      tipo: el.type || '',
+      name: el.name || '',
+      placeholder: el.placeholder || '',
+      etiqueta: el.getAttribute('aria-label') || '',
+      requerido: el.required,
+      visible: el.offsetParent !== null || el.getClientRects().length > 0,
+    })), EN_FORM
+  );
+  const HONEYPOT = /sitioweb|website|honey/i;
+  // Un buscador es un campo de texto más, y en el modal de comercio está a un `nth()` de
+  // distancia del nombre del producto. Escribir ahí no da error: filtra la lista y sigue.
+  const BUSCADOR = /buscar|search|filtrar/i;
+  let nombreCargado = false;
+  for (const c of campos) {
+    const seña = `${c.name} ${c.placeholder} ${c.etiqueta}`;
+    if (!c.visible) continue;
+    if (HONEYPOT.test(seña) || BUSCADOR.test(seña) || c.tipo === 'search') continue;
+    if (['checkbox', 'radio', 'file', 'submit', 'button'].includes(c.tipo)) continue;
+    const loc = page.locator(EN_FORM).nth(c.i);
+    if (!(await loc.count().catch(() => 0))) continue;
+    let valor = null;
+    if (!nombreCargado && (c.tag === 'textarea' || ['text', ''].includes(c.tipo))) {
+      valor = dato;
+      nombreCargado = true;
+    } else if (c.requerido && c.tipo === 'number') valor = '1';
+    else if (c.requerido && c.tipo === 'email') valor = QA.email;
+    else if (c.requerido && c.tipo === 'tel') valor = QA.whatsapp;
+    else if (c.requerido && (c.tag === 'textarea' || ['text', ''].includes(c.tipo))) valor = dato;
+    if (valor === null) continue;
+    await loc.fill(valor).catch(() => {});
+  }
+  return { nombreCargado, campos };
+}
+
+/**
  * En qué pantalla del asistente de alta está parado, leído del DOM.
  *
  * El onboarding NO es una pantalla: es un asistente de seis (pregunta → buscando → negocio →
@@ -488,10 +634,41 @@ const PASOS = [
           .filter((el) => el.type !== 'hidden')
           .map((el) => ({ tag: el.tagName.toLowerCase(), tipo: el.type || '', name: el.name || '', id: el.id || '', placeholder: el.placeholder || '', requerido: el.required }))
       );
+      // 🔴 Acá el clic del rubro se tragaba su propio error (`.catch(() => {})`) y seteaba
+      // `ctx.rubroElegido` igual. Pedir un rubro que no existe daba RECORRIDO COMPLETO
+      // "en comercio" habiendo recorrido dental: el falso verde exacto que este carril caza.
+      // Ahora el rubro se elige contra la lista REAL que ofrece la pantalla, y si no está —
+      // o si al elegirlo el asistente no avanza — el paso sale ROJO con los rubros que sí hay.
       if ((await leerCampos()).length === 0) {
         const rubro = process.env.RECORRIDO_RUBRO || 'Clínica dental';
-        await page.getByText(rubro).first().click({ timeout: 10_000 }).catch(() => {});
+        const ofrecidos = await page.evaluate(() =>
+          [...document.querySelectorAll('button')]
+            .map((el) => (el.innerText || '').trim().replace(/\s+/g, ' '))
+            .filter((t) => t.length > 2)
+        );
+        const tarjeta = page.locator('button', { hasText: rubro }).first();
+        if (!(await tarjeta.count().catch(() => 0))) {
+          const vista = await mirar(page, 'paso-03-pedir-acceso.png');
+          return {
+            estado: 'roto',
+            detalle: `el alta no ofrece el rubro "${rubro}". Los que ofrece: ${ofrecidos.map((t) => t.split(' ').slice(1, 4).join(' ')).join(' · ') || '(ninguno)'}`,
+            rubrosOfrecidos: ofrecidos,
+            ...vista,
+          };
+        }
+        await tarjeta.click({ timeout: 10_000 }).catch(() => {});
         await page.waitForTimeout(2500);
+
+        // Elegir el rubro tiene que ABRIR el formulario de cuenta. Si después del clic sigue
+        // sin haber un solo campo, el asistente no avanzó y todo lo que venga después es humo.
+        if ((await leerCampos()).length === 0) {
+          const vista = await mirar(page, 'paso-03-pedir-acceso.png');
+          return {
+            estado: 'roto',
+            detalle: `se eligió el rubro "${rubro}" y el alta NO avanzó al formulario de cuenta: sigue sin un solo campo en ${page.url()}`,
+            ...vista,
+          };
+        }
         ctx.rubroElegido = rubro;
       }
 
@@ -778,58 +955,129 @@ const PASOS = [
      * y volver a encontrarlo, que es exactamente lo que hace un cliente el primer día.
      */
     async correr(page, ctx) {
-      const lista = await llegar(page, '/patients', 'paso-06-cargar-dato.png');
-      if (lista.status >= 400) return { estado: 'roto', detalle: `la pantalla de datos devolvió ${lista.status}`, ...lista };
-      if (!lista.llego) return { estado: 'no-medido', detalle: motivoNoLlego(lista, ctx, 'la pantalla de datos'), ...lista };
+      // 🔴 Este paso apuntaba fijo a `/patients`, que es la pantalla del rubro DENTAL. Con
+      // cualquier otro rubro medía la pantalla equivocada: o rebotaba y culpaba al producto de
+      // un fallo que no tiene, o —peor— encontraba pacientes en un comercio. La pantalla del
+      // dato ahora se DESCUBRE del menú que el producto le muestra a ESTE rubro, que es lo
+      // único que un cliente puede usar. Si el menú no ofrece ninguna, eso sí es un hallazgo.
+      const menu = await descubrirMenu(page);
+      ctx.menu = menu;
+      const objetivo = pantallaDelDato(menu, ctx.rubroElegido);
+      if (!objetivo) {
+        const vista = await mirar(page, 'paso-06-cargar-dato.png');
+        return {
+          estado: 'roto',
+          detalle: `el menú de "${ctx.rubroElegido || 'este rubro'}" no ofrece ninguna pantalla donde cargar un dato del negocio. Ofrece: ${menu.map((m) => `${m.texto} (${m.ruta})`).join(' · ') || '(el menú está vacío)'}`,
+          menu,
+          ...vista,
+        };
+      }
+      ctx.pantallaDato = objetivo;
+
+      const lista = await llegar(page, objetivo.ruta, 'paso-06-cargar-dato.png');
+      if (lista.status >= 400) return { estado: 'roto', detalle: `la pantalla de datos (${objetivo.texto}, ${objetivo.ruta}) devolvió ${lista.status}`, menu, ...lista };
+      if (!lista.llego) return { estado: 'no-medido', detalle: motivoNoLlego(lista, ctx, `la pantalla de datos (${objetivo.texto})`), menu, ...lista };
 
       if (!ESCRIBIR) {
-        return { estado: 'no-medido', detalle: `pantalla de datos a la vista en ${page.url()}, pero sin --escribir no se carga ningún dato`, ...lista };
+        return { estado: 'no-medido', detalle: `pantalla de datos "${objetivo.texto}" a la vista en ${page.url()}, pero sin --escribir no se carga ningún dato`, menu, ...lista };
       }
 
-      // El alta de paciente es una PÁGINA (`<a href="/patients/new">`), no un modal. Se navega
-      // por el enlace que ofrece la pantalla, no a la URL a mano: si el producto mueve el botón,
-      // el que tiene que fallar es este paso, no un `goto` que siempre acierta.
-      const alta = page.locator('a[href="/patients/new"]').first();
+      // Se entra por el camino que OFRECE la pantalla, no por una URL a mano: si el producto
+      // mueve el botón, el que tiene que fallar es este paso, no un `goto` que siempre acierta.
+      //
+      // 🔴 Y ese camino NO tiene la misma forma en todos los rubros. En dental el alta es una
+      // página (`<a href="/patients/new">`); en comercio es un `<button>` que abre un modal.
+      // Buscar sólo `<a>` daba ROTO —"el Catálogo no ofrece ningún camino para cargar un
+      // producto"— con el botón «Nuevo producto» a la vista en la captura. Era una acusación
+      // falsa al producto, firmada por el instrumento. Se acepta enlace O botón.
+      //
+      // ⚠️ Y el orden importa: `a[href^="/patients/"]` también matchea `/patients/<id>` de un
+      // registro que YA existe. Con la lista vacía acierta de casualidad y el día que hay un
+      // dato entra a verlo en vez de crear uno — y el paso reporta "no guardó" sobre un alta
+      // que nunca se abrió. Primero la ruta exacta de alta, después lo que diga "nuevo".
+      const ALTA = /nuevo|nueva|agregar|a[ñn]adir|crear|registrar/i;
+      let alta = page.locator(`a[href="${objetivo.ruta}/new"]`).first();
       if (!(await alta.count().catch(() => 0))) {
-        return { estado: 'roto', detalle: 'la pantalla de pacientes no ofrece ningún camino para cargar uno: no hay enlace a /patients/new', ...lista };
+        alta = page.locator(`a[href^="${objetivo.ruta}/"]`).filter({ hasText: ALTA }).first();
+      }
+      if (!(await alta.count().catch(() => 0))) {
+        alta = page.getByRole('button', { name: ALTA }).first();
+      }
+      if (!(await alta.count().catch(() => 0))) {
+        return { estado: 'roto', detalle: `la pantalla "${objetivo.texto}" (${objetivo.ruta}) no ofrece ningún camino para cargar un dato: no hay enlace ni botón de alta`, menu, ...lista };
       }
       await alta.click({ timeout: 10_000 }).catch(() => {});
       await page.waitForLoadState('networkidle', { timeout: TIMEOUT }).catch(() => {});
       await page.waitForTimeout(1200);
-      await despejar(page);
+
+      // 🔴 Acá había un `despejar(page)`, y CERRABA EL FORMULARIO QUE ACABABA DE ABRIR. En
+      // comercio el alta es un modal cuyo botón de cancelar se llama exactamente «Cerrar», que
+      // es uno de los dos nombres que `despejar` aprieta para sacar el tour de encima. Medido en
+      // vivo el 2026-09-03: tras el clic el modal trae sus campos y «Guardar producto»; después
+      // de `despejar` no queda ni un campo. El paso reportaba entonces "no tiene botón de
+      // guardar" — contra un producto que sí lo tiene. No hace falta despejar acá: el tour ya lo
+      // sacó `llegar()` en esta misma pantalla, y apretar un botón no puede invocarlo de nuevo.
 
       // ⚠️ Los campos NO tienen `name` ni `id`: sólo `placeholder` (medido el 2026-09-03). Un
-      // relleno que busque por `name` no llena nada y el formulario se envía vacío.
-      const nombre = page.locator('input[placeholder="Ej: Juan Carlos Mamani"]').first();
-      if (!(await nombre.count().catch(() => 0))) {
+      // relleno que busque por `name` no llena nada y el formulario se envía vacío. Y como cada
+      // rubro tiene su propio formulario, los campos se DESCUBREN y se llenan por tipo: el
+      // primer texto lleva el dato zz-qa-, los números un 1, para que valide sin inventar nada.
+      // Primero se ACOTA al formulario: fuera de él está el buscador de la lista, y llenarlo a
+      // él manda el alta vacía (ver `acotarFormulario`).
+      const forma = await acotarFormulario(page, GUARDAR.source);
+      if (!forma.hayGuardar) {
         const vista = await mirar(page, 'paso-06b-alta-dato.png');
-        return { estado: 'roto', detalle: `el formulario de alta de paciente no tiene el campo de nombre en ${page.url()}`, ...vista };
+        return {
+          estado: 'roto',
+          detalle: `en "${objetivo.texto}" se apretó el camino de alta y no apareció ningún formulario con botón de guardar, en ${page.url()}. Los botones a la vista: ${forma.botones.join(' · ') || '(ninguno)'}`,
+          botones: forma.botones,
+          ...vista,
+        };
       }
-      await nombre.fill(QA.paciente);
-      const guardar = page.getByRole('button', { name: /Guardar Paciente/i }).first();
+      const llenado = await llenarFormulario(page, QA.paciente);
+      if (!llenado.nombreCargado) {
+        const vista = await mirar(page, 'paso-06b-alta-dato.png');
+        return {
+          estado: 'roto',
+          detalle: `el formulario de alta de "${objetivo.texto}" no tiene ni un campo de texto donde escribir el dato, en ${page.url()}`,
+          campos: llenado.campos,
+          ...vista,
+        };
+      }
+      // El botón se busca DENTRO del formulario acotado: en la lista de atrás también hay un
+      // «Nuevo producto», y `getByRole` a nivel página puede quedarse con ese y no enviar nada.
+      const guardar = page.locator('[data-recorrido-form]').getByRole('button', { name: GUARDAR }).first();
+      if (!(await guardar.count().catch(() => 0))) {
+        const vista = await mirar(page, 'paso-06b-alta-dato.png');
+        return { estado: 'roto', detalle: `el formulario de alta de "${objetivo.texto}" no tiene botón de guardar en ${page.url()}`, campos: llenado.campos, ...vista };
+      }
       await guardar.click({ timeout: 10_000 }).catch(() => {});
       await page.waitForLoadState('networkidle', { timeout: TIMEOUT }).catch(() => {});
       await page.waitForTimeout(2500);
-      await despejar(page);
+      // Tampoco se despeja acá: si el alta falló, el formulario sigue abierto CON el error
+      // adentro, y ésa es justo la foto que hay que traer. Cerrarlo antes de mirar deja una
+      // captura de una lista vacía y un informe que no sabe explicar por qué está vacía.
       const guardado = await mirar(page, 'paso-06b-alta-dato.png');
 
       // La verificación NO es haber apretado "Guardar": es volver a la LISTA y encontrarlo.
       // Un formulario que se vacía y no dice nada se parece muchísimo a uno que guardó.
-      const vuelta = await llegar(page, '/patients', 'paso-06c-dato-en-la-lista.png');
+      const vuelta = await llegar(page, objetivo.ruta, 'paso-06c-dato-en-la-lista.png');
       const aparece = await page.evaluate((n) => (document.body.innerText || '').includes(n), QA.paciente);
       ctx.datoCargado = aparece ? QA.paciente : null;
       if (!aparece) {
         return {
           estado: 'roto',
-          detalle: `se cargó el paciente "${QA.paciente}" y NO aparece en la lista de ${page.url()}: el producto no lo guardó, o no lo muestra`,
+          detalle: `se cargó "${QA.paciente}" en ${objetivo.texto} y NO aparece en la lista de ${page.url()}: el producto no lo guardó, o no lo muestra`,
           capturaAlta: guardado.captura,
+          campos: llenado.campos,
           ...vuelta,
         };
       }
       return {
         estado: 'ok',
-        detalle: `paciente "${QA.paciente}" cargado y encontrado de vuelta en la lista de ${page.url()}`,
+        detalle: `"${QA.paciente}" cargado en ${objetivo.texto} (${objetivo.ruta}) y encontrado de vuelta en la lista`,
         capturaAlta: guardado.captura,
+        campos: llenado.campos,
         ...vuelta,
       };
     },
@@ -843,10 +1091,19 @@ const PASOS = [
     que: 'Llegar a la pantalla de cobro y MIRARLA. Frenar ahí',
     requiereSesion: true,
     async correr(page, ctx) {
-      const v = await llegar(page, '/billing', 'paso-07-cobro.png');
-      if (v.status >= 400) return { estado: 'roto', detalle: `la pantalla de cobro devolvió ${v.status}`, ...v };
-      if (!v.llego) return { estado: 'no-medido', detalle: motivoNoLlego(v, ctx, 'la pantalla de cobro'), ...v };
-      return { estado: 'ok', detalle: `pantalla de cobro a la vista en ${page.url()} — FRENADO acá a propósito`, ...v };
+      // 🔴 Acá estaba `/billing` fijo, que es el cobro del rubro DENTAL. Un comercio no tiene
+      // esa ruta: su cobro se llama "Caja" (`/comercio/caja`). Pedir /billing con una cuenta de
+      // comercio rebota al panel, y el paso reportaba "no se llegó a la pantalla de cobro" como
+      // si el producto no la tuviera — estaba ahí, en el menú, con otro nombre. La pantalla de
+      // cobro se busca en el menú que ve ESTE rubro y sólo se cae a /billing si no hay ninguna.
+      const menu = ctx.menu?.length ? ctx.menu : await descubrirMenu(page);
+      const cobro = menu.find((m) => /caja|cobro|facturaci[óo]n|billing|pagos/i.test(m.texto));
+      const ruta = cobro?.ruta || '/billing';
+      const v = await llegar(page, ruta, 'paso-07-cobro.png');
+      const comoSeLlama = `la pantalla de cobro (${cobro?.texto?.replace(/^\S+\s/, '') || 'Facturación'})`;
+      if (v.status >= 400) return { estado: 'roto', detalle: `${comoSeLlama} devolvió ${v.status} en ${ruta}`, menuCobro: cobro || null, ...v };
+      if (!v.llego) return { estado: 'no-medido', detalle: motivoNoLlego(v, ctx, comoSeLlama), menuCobro: cobro || null, ...v };
+      return { estado: 'ok', detalle: `${comoSeLlama} a la vista en ${page.url()} — FRENADO acá a propósito`, menuCobro: cobro || null, ...v };
     },
   },
 
@@ -870,8 +1127,8 @@ const PASOS = [
       return {
         estado: 'ok',
         detalle: enElPanel
-          ? `panel en ${page.url()}: el paciente "${ctx.datoCargado}" del paso 6 aparece acá`
-          : `panel en ${page.url()}: el paciente "${ctx.datoCargado}" NO figura en el panel — sí quedó guardado y visible en su lista (paso 6). El panel no lista pacientes: no es un fallo, es lo que muestra`,
+          ? `panel en ${page.url()}: el dato "${ctx.datoCargado}" del paso 6 aparece acá`
+          : `panel en ${page.url()}: el dato "${ctx.datoCargado}" NO figura en el panel — sí quedó guardado y visible en ${ctx.pantallaDato?.texto || 'su lista'} (paso 6). El panel no lista ${(ctx.pantallaDato?.texto || 'esos datos').toLowerCase()}: no es un fallo, es lo que muestra`,
         datoEnElPanel: enElPanel,
         ...v,
       };
