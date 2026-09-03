@@ -38,7 +38,7 @@ sin nadie mirando **no puede darse ese permiso**.
     higgsfield account status                            # saldo, gratis
     higgsfield model list --image                        # los job_type REALES
     higgsfield generate cost <job_type> --prompt "…"     # cotiza ANTES, gratis
-    higgsfield generate image <job_type> --prompt "…"    # recién acá se cobra
+    higgsfield generate create <job_type> --prompt "…"   # recién acá se cobra ("generate image" NO existe)
 
 > **Corregido el 2026-09-02, y bloqueaba dos cosas a la vez.** Acá decía *"SÓLO por navegador…
 > si tu tarea necesita Higgsfield, no la hagas"*, y además *"no podés medir si el lote es chico

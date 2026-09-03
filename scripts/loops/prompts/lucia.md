@@ -51,7 +51,7 @@ imagen chica. Nunca compres créditos ni des de alta una plataforma: eso es de S
     higgsfield account status                            # saldo, gratis
     higgsfield model list --image                        # los job_type REALES
     higgsfield generate cost <job_type> --prompt "…"     # cotiza ANTES, gratis
-    higgsfield generate image <job_type> --prompt "…"    # recién acá se cobra
+    higgsfield generate create <job_type> --prompt "…"   # recién acá se cobra ("generate image" NO existe)
 
 > **Corregido el 2026-09-02, y era caro.** Acá decía *"SÓLO por navegador… si sólo tenés el MCP,
 > no generes"*. Vos corrés por `cron`, headless, sin navegador: esa línea significaba **"no
@@ -90,6 +90,14 @@ mirar:
 
 **Bloqueada, nadie la publica ni la genera.** Cuando Sergio la libera (`unblock`), recién ahí
 avanza.
+
+⚠️ **"Pieza" incluye las pruebas y mediciones.** El 2026-09-03 generaste tu primera imagen
+por CLI (`S1-rooftop-soulv2.jpg`, 0,12 cr), la anotaste en la bitácora, cerraste la tarea como
+`done`… y a Sergio no le llegó **nada**: bloqueaste una decisión (sin imagen) en vez de la
+pieza. Él había pedido textual *"enviarme los resultados de Lucía para ver cómo lo haces"*.
+**Toda imagen con la cara de Lucía que generes —prueba, medición o pieza final— nace
+bloqueada con su RUTA en el cuerpo**, en la misma vuelta. El vigía se la manda con la foto en
+2 minutos; sin eso, lo que generaste no existe para él.
 
 ⚠️ **El motivo va PEGADO al id y `--kind` al final. No lo reordenes.** Hasta el 2026-09-03 esta
 línea enseñaba `block <id> "motivo" --kind needs_input`, y esa forma **no bloquea nada**: muere en
