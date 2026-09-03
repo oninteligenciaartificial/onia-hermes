@@ -205,8 +205,16 @@ sobre el mismo nombre y el segundo en pushear quedaba rechazado. Ya paso una vez
 escribieron `loops.md` en paralelo y hubo que resolver el conflicto a mano. **Un carril, una
 rama.**
 
-`git -C /root/loops/onia-hermes-docs branch --show-current` **primero**. Si no es esa, PARÁ y
-avisá por `onia-tg.sh`.
+`git -C /root/loops/onia-hermes-supervisor branch --show-current` **primero**. Si no dice
+`claude/supervisor`, PARÁ y avisá por `onia-tg.sh`.
+
+⚠️ **Corregido 2026-09-03: esta línea apuntaba a `/root/loops/onia-hermes-docs`** — el worktree
+de OTRO carril, que está clavado en `claude/docs-auditoria`. La guarda que existe para que dos
+carriles no escriban la misma rama medía el árbol equivocado, así que su condición de parada
+(*"si no es esa"*) se cumplía en TODAS las vueltas: seis la pasaron por alto sin que nadie lo
+notara. **Una guarda que grita siempre se ignora siempre.** Barrido el mismo día sobre los 15
+prompts (`grep -oE 'git -C /root/loops/onia-hermes[a-z-]* branch'`): éste era el único con el
+defecto — los otros cuatro que traen la guarda miran su propio árbol.
 
 ## La vuelta: auditá UN carril, a fondo
 
