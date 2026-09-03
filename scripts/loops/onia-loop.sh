@@ -276,7 +276,20 @@ cd "$WT" || { avisar "no se pudo entrar a $WT"; exit 2; }
 # prompt viejo sigue trabajando; uno que no arranca, no.
 FUENTE=/root/loops/onia-hermes/scripts/loops/prompts/$NOMBRE.md
 if [ -f "$FUENTE" ] && ! diff -q --strip-trailing-cr "$FUENTE" "$PROMPT" >/dev/null 2>&1; then
-  avisar "el prompt desplegado (<code>$PROMPT</code>) difiere del versionado en main: puede estar corriendo una version vieja"
+  # 🔴 Solo es "version vieja" si main sabe algo que el desplegado NO. Al reves
+  # —el desplegado tiene una capacidad que main todavia no mergeo— el que va
+  # atras es main, y avisar "puede estar corriendo una version vieja" es FALSO.
+  # Medido el 2026-09-03: 15 prompts con el bloque de memoria compartida
+  # desplegados a mano, main una hora atras, y cada loop mando un rojo a Sergio
+  # en su primera vuelta. Sergio: "apaga los fallos falsos". La marca es la misma
+  # que usa el sincronizador para negarse a degradar: si el sync no lo pisaria,
+  # el runner no tiene por que gritar.
+  MARCA_PROMPT="MEMORIA COMPARTIDA — la leés al arrancar"
+  if grep -q "$MARCA_PROMPT" "$PROMPT" 2>/dev/null && ! grep -q "$MARCA_PROMPT" "$FUENTE" 2>/dev/null; then
+    log "prompt mas nuevo que main (main aun sin '$MARCA_PROMPT'): no es drift, se espera al integrador"
+  else
+    avisar "el prompt desplegado (<code>$PROMPT</code>) difiere del versionado en main: puede estar corriendo una version vieja"
+  fi
 fi
 
 # ── la vuelta ----------------------------------------------------------------
