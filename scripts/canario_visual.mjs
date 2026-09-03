@@ -262,14 +262,17 @@ async function medir(browser, { nombre, url, cola, duenio, requiereSesion }) {
   // Recorrer la página entera antes de capturar. Sin esto, todo lo que aparece al
   // scrollear (IntersectionObserver, opacity:0) sale como bloques de color VACÍOS y la
   // captura miente en la dirección peor: parece rota una página que está sana.
+  // 120ms/400ms medían apagados: la tarjeta de add-on de WhatsApp en /precios (animación
+  // "whileInView" con delay) quedaba en blanco con esos tiempos y aparecía completa con
+  // 300ms/800ms — verificado a mano el 2026-09-03. No es el sitio, es el instrumento.
   await page.evaluate(async () => {
     const paso = window.innerHeight * 0.8;
     for (let y = 0; y < document.body.scrollHeight; y += paso) {
       window.scrollTo(0, y);
-      await new Promise((r) => setTimeout(r, 120));
+      await new Promise((r) => setTimeout(r, 300));
     }
     window.scrollTo(0, 0);
-    await new Promise((r) => setTimeout(r, 400));
+    await new Promise((r) => setTimeout(r, 800));
   });
 
   const png = join(OUT, `${nombre}.png`);
