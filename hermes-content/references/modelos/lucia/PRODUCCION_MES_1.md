@@ -118,8 +118,29 @@ terminando en plata. Si no nombra el dolor exacto, no sale.
 `tanda-20260821/`; el render es local con `scripts/carousel_render.js`. No hizo falta generar.
 
 - Brief: `posts-20260807/briefs/lucia-l6-cinco-senales.json`
-- Render: `posts-20260807/render-l6/slide-01..07.png` + `_CONTACTO-L6.png` (hoja de contactos)
+- Render bueno: **`posts-20260807/L6/slide-01..07.jpg`** + `_HOJA-DE-CONTACTO.jpg`
 - Comando: `node scripts/carousel_render.js --brief <brief> --out <dir> --account lucia --pack editorial-clean --format feed`
+
+⚠️ **Corregido 2026-09-03 — esta línea mandaba a publicar la versión DESCARTADA.** Decía
+`render-l6/slide-01..07.png`, y esa carpeta lleva adentro un `_NO-SUBIR.md` que dice, textual:
+*"⛔ NO SUBIR — esta versión quedó superada… Subí `L6/` en su lugar"*. Es el lote de acento
+**mostaza**, reemplazado el 28-ago cuando el feed se unificó al **verde Onia**. Una sesión que
+siguiera este plan al pie de la letra publicaba el carrusel del color equivocado — el plan era
+la única fuente que no se había enterado del cambio de color.
+
+Se corrigieron **dos** errores en esa sola línea, y el segundo esconde al primero:
+
+1. **Carpeta equivocada** (`render-l6/` descartada → `L6/` buena).
+2. **Extensión equivocada** (`.png` → `.jpg`). Las láminas se rendean en PNG pero al repo
+   entran convertidas: `references/modelos/.gitignore` ignora `*.png` en todo el árbol
+   ("originales pesados, quedan locales; los JPG q3 son los assets usables"). Copiar la ruta
+   del render y pegarla en un doc produce una cita a un archivo que **git nunca va a tener**.
+
+🔴 **Y ninguna de las dos carpetas está en `main`.** Verificado el 2026-09-03:
+`origin/main` tiene **0** láminas de Lucía; las **70** viven sólo en
+`origin/claude/ads-creatividades-publicos`, que va **151 commits adelante de main**. Desde un
+clon limpio —o desde el VPS, que es donde corre este loop— L6 **no se puede abrir**. Integrar
+esa rama es de `onia-cola`, no de este carril: anotado en el tablero, no se toca desde acá.
 - ⚠️ **`--account lucia`**, no `onia`: con `onia` el pie sale `@oniahq` en una pieza de Lucía.
 - CTA: **SISTEMA** → entrega "mapa del negocio (vía @oniahq)", que está 🟢 vivo.
 - Las 5 señales nombran DOLOR, no prometen función: nada de factura electrónica, multi-sede,
