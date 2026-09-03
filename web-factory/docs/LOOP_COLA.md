@@ -1040,6 +1040,35 @@ Las tres formas de fantasma que ya aparecieron acá:
       y despues del e2e; typecheck verde; **zombies: ninguno mio** — 24 `node.exe` en la maquina,
       el mismo cuadro de AUD9 y AUD10, son `next dev/start` de otros worktrees. Se avisa, no se toca.
 
+- [x] **AUD12 · El servidor del carril estaba CAIDO — once vueltas de "200" y esta vez daba 000**
+      (2026-09-02). Duodecima vuelta de escalon 2 (`CARRIL A` y `CARRIL B` con **cero** `- [ ]`;
+      los 4 sin marcar viven en *Bloqueadas* y *Sin verificar*, que no son cola).
+      **El hallazgo, y por primera vez en cinco vueltas el runbook de salud hizo trabajo real,
+      no verificacion.** `curl` a `http://localhost:4319/dental-amanecer/` devolvio **000**: el
+      `serve-out` que AUD8-AUD11 dieron por vivo cuatro vueltas seguidas ya no existia. Se
+      relanzo (`node scripts/serve-out.mjs 4319`) y volvio a **200** al primer intento.
+      **Por que se cayo, y esa es la leccion**: la maquina paso de **24 `node.exe` / 1.040 MB**
+      (el cuadro identico que midieron AUD9, AUD10 y AUD11) a **1 solo `node.exe`** antes de
+      relanzar. No murio este proceso: murieron **todos** — los `next dev`/`next start` de
+      `hero-en-home` y `web-venta` incluidos. Un barrido de la maquina, no un defecto del carril.
+      **Y eso desmiente por accion una nota de tres vueltas**: AUD9/AUD10/AUD11 cerraron con
+      "zombies: ninguno mio, los otros son de otros carriles, se avisa y no se toca". Cierto
+      entonces; hoy no queda ninguno que avisar. El chequeo 4 quedo en **2 `node.exe` / 83 MB**,
+      y uno es el mio.
+      **El unico `[x]` sin mirar era AUD11, y su hallazgo central se sostiene**: la resta cierra
+      —no queda `[x]` sin auditar— y por eso el escalon 2 se auto-audita. Esta vuelta lo prueba
+      al reves: el escalon 2 **no** estaba vacio, lo que estaba vacio era su mitad de auditoria.
+      La mitad de salud tenia trabajo esperando y ninguna de las tres vueltas anteriores lo
+      podia ver, porque el servidor se cayo despues de la ultima. **Un runbook que da verde once
+      veces no es un runbook inutil: es uno que todavia no encontro su falla.**
+      **Salud, los cuatro puntos**: 4319 **000 → 200** (remediado, no solo medido); rama
+      `claude/onia-web-architecture-b37eca` al dia con `origin` (`97cc6990`) y arbol limpio;
+      `typecheck:packages` **exit 0**; zombies **ninguno**. Sin `pnpm e2e`: esta vuelta no toco
+      un solo pixel de lo que se dibuja.
+      **Bloqueo re-verificado (escalon 0), sigue vivo**: `list_scheduled_tasks` da
+      `web-factory-dev-loop` con `enabled: true`, `cron 45 * * * *`, `lastRunAt`
+      2026-09-03T01:49Z. Sigue siendo un acto de un click, de Sergio.
+
 ## CARRIL B — ANALIZAR (aprender/refill; el cron de análisis lo alimenta)
 
 - [x] **B1 · Cerrar rubros SIN-ANCLA** (2026-08-31). Evidencia re-verificada antes de
