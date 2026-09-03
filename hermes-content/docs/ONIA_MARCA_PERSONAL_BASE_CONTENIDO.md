@@ -231,14 +231,15 @@ produce solo". Los ganchos del banco (RADAR §2) se cruzan con estos temas.
       Aplicado a `generar-carrusel-prompts.py` (**las 7 láminas regeneradas**) y usado desde
       cero en el generador nuevo `generar-carrusel-equipo.py`. FICHA de
       `carrusel-pinterest-refs` actualizada con la receta.
-- [ ] **Los otros generadores a la tipografía de marca** (abierto 02-sep, **2 de 12 hechos**):
+- [ ] **Los otros generadores a la tipografía de marca** (abierto 02-sep, **3 de 12 hechos**):
       quedan `generar-carrusel-atender.py` · `-chatbot.py` · `-comunidad.py` · `-cursos.py` ·
-      `-sistema.py` · `-tareas.py` · `generar-historia-quiz.py` · `-grid-senales.py` ·
+      `-sistema.py` · `-tareas.py` · `-grid-senales.py` ·
       `generar-statement-16anos.py` · `generar-statement-post.py`.
       **Receta exacta arriba** — no es buscar-y-reemplazar: peso + jerarquía van juntos, y hay
       que MIRAR el render por el desborde del eje `wdth`. Una por vuelta alcanza; cada una
       necesita elegir a mano su remate de 2-3 palabras.
       ✅ 03-sep: `generar-lamina-grid-ia.py` migrado (ver el ítem de abajo).
+      ✅ 03-sep: `generar-historia-quiz.py` migrado (ver el último ítem de esta sección).
 - [x] **La receta ganadora sobre una lámina GRID 2x3** (03-sep) — A/B/C/C2 renderizado y
       comparado a 33 % y 13 % en `carousels/out/experimento-grid-tipografia/`, sobre la
       lámina real "Lo que la IA ya hace por tu negocio". La pregunta no era migrar por
@@ -268,6 +269,62 @@ produce solo". Los ganchos del banco (RADAR §2) se cruzan con estos temas.
       `grayscale(1)` que las celdas. La regla de las capas collage viene del patrón de
       carrusel, donde el fondo es claro y los íconos van a color — **al portarla a un
       patrón grayscale hay que portar también su disciplina de color**, no sólo el markup.
+- [x] **La receta ganadora sobre una HISTORIA 9:16** (03-sep) — A/B/C/**C2** en
+      `carousels/out/experimento-historia-tipografia/`, sobre la historia-01 real.
+      La pregunta tenía que poder salir que NO: la receta se midió dos veces con el
+      **mismo instrumento** (la miniatura a 33 % y 13 %, o sea sobrevivir a la grilla del
+      perfil) y **una historia nunca se ve chica** — ocupa la pantalla, dura 5 segundos y
+      el enemigo es la interfaz de IG, no el tamaño. Bien podía ganar el condensed 900,
+      que mete más palabras en el mismo ancho de banda. Por eso acá **no se juzgó a 13 %**:
+      usar ese instrumento habría sido medir con la regla de otro formato.
+      **Gana C2, y la parte tipográfica de la receta transfiere entera**: con A y B la
+      tarjeta y la banda pesan lo mismo y en 5 segundos el ojo no sabe dónde caer; C2 baja
+      la tarjeta a peso de cuerpo (450) y sube la pregunta a remate (650 / wdth 96, 74px).
+      **B vuelve a ser un retroceso — tercera medición seguida**: el peso sin la jerarquía
+      no cambia nada.
+      **Lo que NO transfiere, y es el hallazgo:** en portada y en grid el remate es una
+      frase corta de 2-3 palabras elegida a mano. En un quiz **la pregunta ES la carga
+      útil** y no se puede degradar para hacerle lugar a un remate: la variante C hizo
+      exactamente eso —pregunta en micro-mono y un *"Adiviná"* gigante arriba— y quedó una
+      lámina que no pregunta nada. Es la "metadata decorativa" que la §7 de Sergio prohíbe,
+      entrando por la puerta de atrás de una regla de diseño. **Regla: el remate se elige
+      entre lo que la pieza YA tenía que decir, nunca se inventa uno para cumplir la forma.**
+      **Dos defectos de superficie que sólo se ven al 100 %,** y los dos son de portar el
+      collage a un fondo distinto: (1) los íconos Fluent 3D son blancos/lavanda y **sobre el
+      verde de marca gritan fuera de paleta** — van apoyados en la tarjeta negra, que es
+      donde el patrón aprobado (`generar-curso-dia1.py`) los tenía, sobre la tarjeta blanca
+      del chat; (2) el **sticker negro sobre la banda negra no lee como sticker, lee como
+      mancha** — va sobre el lienzo verde mordiendo el borde de la banda. Es la misma
+      lección que la cinta de la lámina grid: *portar el markup del collage sin portar su
+      disciplina de superficie no es portar el patrón.*
+      **Y un defecto que el peso del PNG jamás habría mostrado:** `.card` no tenía
+      `position:relative`, así que las capas collage se anclaban al lienzo entero y las
+      **7 historias** salieron con la cinta y el ícono metidos debajo de las barras de
+      progreso de IG. Lo atrapó `CHEQUEO-banda-segura.png` en la primera corrida.
+      Aplicado a `generar-historia-quiz.py`, las **7 regeneradas** (la 07 es nueva).
+- [x] **La banda segura no había llegado al kit del día 1** (03-sep) — hallazgo de la
+      misma vuelta, y el más caro de los dos. El arreglo del 02-sep se aplicó **donde saltó
+      el defecto** (`generar-historia-quiz.py`, commit `8ec3c4f14`, 10:05 UTC) y no al
+      FORMATO: `generar-curso-dia1.py` nació a las 18:54 del mismo día (`d51ce3545`) sin
+      banda segura. Corrido el gate sobre su carpeta, **las 5 historias tenían el handle
+      debajo de la barra "Enviar mensaje"** y la zona de encuesta metida en la franja que
+      tapa la UI — y es **el kit que Sergio aprobó**, o sea el más cerca de publicarse.
+      Corregido: paddings inline quitados (ganaban sobre cualquier regla), banda segura
+      inyectada sólo a las piezas de 1920 (el post de feed 1080×1350 no tiene esa UI) y
+      **dos stickers absolutos bajados a mano** — el padding no los movía porque se anclan
+      al lienzo, no al contenido. Las 5 regeneradas y miradas.
+      **De paso:** la carpeta tenía **4 historias huérfanas** de la secuencia v1 que ya
+      nadie lista en `PARA-PUBLICAR-CURSO-DIA1.md`, que el generador de hoy no reproduce y
+      que seguían rotas. Borradas — una carpeta de publicación con piezas que nadie
+      mantiene es una trampa para el que publica.
+      **La regla que queda:** un gate de formato se corre sobre **cada carpeta**, no una
+      vez sobre la que motivó el arreglo. Si el arreglo vive en un generador y no en el
+      formato, el generador siguiente nace roto.
+      **Cobertura, para no exagerarla:** el gate se corrió sobre las DOS carpetas 9:16 que
+      produce este carril (`historias-quiz`, 7 piezas, y `curso-dia1`, 5). Quedan **sin
+      cubrir** `carousels/out/VARIANTE-story` y `carousels/out/formato-story` — 15 PNGs 9:16
+      del 15 y el 20-ago que ningún generador actual reproduce y que ningún doc de
+      publicación lista. No son de este formato ni los creó este carril: anotados, no tocados.
 - [ ] **Próximo experimento — ¿la zona punteada es del tamaño del sticker real?**
       El gate de arriba prueba que la zona de encuesta está DENTRO de la banda segura,
       pero nadie verificó que su **tamaño** coincida con el del sticker de encuesta de IG:
