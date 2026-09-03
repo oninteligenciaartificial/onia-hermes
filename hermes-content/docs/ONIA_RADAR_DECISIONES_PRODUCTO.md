@@ -6,7 +6,7 @@
 
 ## Cerradas — vencidas, verificadas contra el sistema en vivo (última: 2026-09-03)
 
-Estas **seis** (A–F) dejaron de necesitar una decisión de Sergio: el propio sistema (u otra
+Estas **siete** (A–G) dejaron de necesitar una decisión de Sergio: el propio sistema (u otra
 sesión) ya las resolvió. Se cierran acá con la medición, no se borran del historial de
 "Para decidir" — ese punto queda con una nota que apunta para acá.
 
@@ -130,6 +130,50 @@ oficina. **l**a encargada te confirma"* — el cargo en minúscula a mitad de fr
 trae `PENDING_HORARIO_SIN_HORARIOS`, que evita el *"¿Te reservo HORARIO A (pendiente de definir)
 o HORARIO B (pendiente de definir)?"* que ya salió a producción. O sea: **el deploy grande se
 hizo, y el que falta es el que arregla lo que se está leyendo en una conversación real.**
+
+**G. §8 — "Disco C: al 100%, frena TODOS los gates". Ya no frena nada: los gates se mudaron
+de máquina.** El punto pedía tres permisos de limpieza (borrar 7 copias de un zip, el mp4 del
+temporal, `codex-runtimes`) porque con `C:` lleno *"`tsc`, `vitest` y `lint` no pueden escribir
+sus temporales y fallan sin poder correr"*. Esa cadena se cortó sola: **los 15 loops corren hoy
+en el VPS, no en Windows.** Medido el 2026-09-03:
+
+```
+crontab -l | grep "onia-loop.sh\|lucia-ugc"     # 16 líneas: los 15 de loops.md, todos en el VPS
+ls -l /var/log/onia-loop-contenido-cola.log     # 15:14 de HOY — y es la ÚNICA fila que
+                                                # loops.md todavía llama "Windows"
+git -C /root/loops/onia-hermes log origin/main --since=2026-09-01 | wc -l   # 401 commits
+```
+
+Cuatrocientos un commits entraron a `main` desde la mudanza, con `node v20.20.2` en el VPS: los
+gates que el punto daba por bloqueados vienen corriendo hace días **en otro disco**.
+
+⚠️ **Cómo se cerró, porque no fue con el mismo instrumento y hay que decirlo.** La regla de arriba
+pide re-medir con el instrumento que denunció. Acá es **imposible**: el punto acusó con un `df`
+sobre `C:`, y desde el VPS no se ve esa máquina. **No sé cuánto espacio tiene hoy el disco de
+Sergio, y no lo estoy afirmando.** Lo que se midió es otra cosa —que ninguna de las tres cosas
+que el punto decía que se rompían ocurre ya en esa máquina— y eso alcanza para cerrar, porque
+**la premisa no era "el disco está lleno" sino "por eso el carril producto no pasa sus gates"**.
+La segunda es falsa hoy, se mida como se mida.
+
+**Lo que queda para Sergio ya no es una decisión, es un minuto opcional.** Los 7,4 GB de las
+7 copias del zip y el mp4 siguen ahí hasta que él los borre, pero **no bloquean ningún carril**:
+si nunca los toca, no pasa nada. Se saca de "para decidir" y no vuelve.
+
+**Y el riesgo no desapareció: cambió de dirección, y allá ya está atendido.** El mismo modo de
+falla —un worktree nuevo se lleva otra copia entera de `hermes-content`— vive ahora en el VPS,
+donde Docker comparte disco con `onia.com.bo`, la base y n8n. Medido hoy: **80% de uso, 41 GB
+libres**, `/root/loops` = 70 GB en 18 worktrees. Tiene dueño y automatización desde el 2026-09-02
+(`/root/bin/onia-aligerar-worktrees.sh`, cron `51 */4`, `git sparse-checkout`).
+
+⚠️ **Y acá casi escribo un hallazgo falso, que es la parte que vale.** Conté 7 de 13 worktrees con
+`sparse-checkout` aplicado y los 6 sin aplicar eran justo los más gordos (~5,5 GB c/u) — parecía
+la automatización a medio andar, el clásico "construido ≠ terminado". **Leí el script antes de
+escribirlo y era al revés**: esos 6 (`calidad`, `canario`, `lucia`, `marca-personal`,
+`tendencias`, `contenido-cola`, más el integrador) están en una lista `NO_TOCAR` explícita, con
+el motivo al lado — **son los carriles que SÍ miran `hermes-content/references`**, y aligerarlos
+les sacaría los archivos que su trabajo necesita. La cuenta daba "6 rotos" y la respuesta correcta
+era "6 exentos a propósito". **Contar no es diagnosticar: el número era cierto y la conclusión,
+falsa.**
 
 ## 1. ¿Chatwoot o plataforma de chat PROPIA hecha por Onia?
 
@@ -256,7 +300,13 @@ factura FISCAL SIAT (bloqueada por NIT, a confirmar) · cobro de Onia a sus clie
 (hoy comprobante manual). Sale en `ONIA_FACTURACION_ESTADO_REAL.md` con una respuesta
 clara para la venta: se puede decir "Onia te factura" SÍ/NO/con qué asterisco.
 
-## 8. Disco C: al 100% — frena TODOS los gates (2026-08-31)
+## 8. ~~Disco C: al 100% — frena TODOS los gates~~ — CERRADO 2026-09-03, ver **G** arriba
+
+> **Ya no hay decisión.** Los 15 loops corren en el VPS desde el 2026-09-01: los gates que este
+> punto daba por bloqueados llevan **401 commits** a `main` corriendo en otro disco. Borrar los
+> 7,4 GB del temporal sigue siendo cosa de Sergio, pero **no bloquea ningún carril**. La medición
+> completa —y el falso hallazgo que casi escribo sobre el disco del VPS— están en la entrada
+> **G** de *Cerradas*. Lo de abajo queda como historia del 2026-08-31.
 
 **Encontrado en vivo:** `C:` tenía **0 bytes libres**. No es una molestia de fondo: con el disco
 lleno `tsc`, `vitest` y `lint` no pueden escribir sus temporales y **fallan sin poder correr**, y
