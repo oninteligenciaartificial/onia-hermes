@@ -811,7 +811,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       a propósito más ancho que el guard). Las 14 rutas de venta traen `og:image` **y**
       `twitter:card: summary_large_image`.
       ⚠️ **Aparecen 7 rutas SIN `og:image` — `/patrones` y las seis `/v1/*` — y NO son un defecto.**
-      `robots.txt` las declara `Disallow: /patrones` y `Disallow: /v1`, y ninguna está en el
+      `/robots.txt` las declara `Disallow: /patrones` y `Disallow: /v1`, y ninguna está en el
       sitemap: son superficies internas, no linkeadas desde el sitio. Es exactamente el mismo
       patrón que causó el bug real de ayer (`opengraph-image` no baja a segmentos anidados: `/v1`
       la tiene, sus hijas no), y por eso engaña — pero acá el guard tiene razón en ignorarlas,
@@ -1861,8 +1861,44 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       (699 KB/114 ms, redirige a `/login` sin sesión: "no medida", no "OK"). Ninguna
       baseline tocada.
 
-- [ ] 🟠 **Al gate de la cola le quedan 7 falsos positivos, y son de DOS clases distintas.
-      Medido el 2026-09-03 12:47 UTC por `onia-cola`, que ya cerró la tercera.**
+- [x] 🟠 **ARREGLADO el 2026-09-03 por `onia-cola`: los 7 falsos positivos son CERO, y eran
+      TRES clases, no dos.** `node scripts/verificar_cola.js hermes-content/docs/COLA.md` pasó
+      de **10** errores a **3**, y los 3 que quedan son el gate funcionando: 1 `duplicado` real
+      (los ítems de las líneas 1757 y 1857 son la misma nota de dos corridas del canario) y los
+      2 `sin-evidencia` que este ítem ya daba por legítimos. **Ni un `fantasma`.**
+      - **Clase A — nombre suelto AMBIGUO** (`nombreSueltoAmbiguo`): `existeComoSufijo` se
+        niega **a propósito** a resolver un nombre sin barra, y después el gate lo reportaba
+        como *"ese archivo NO existe"*. Acusaba de inexistente algo que había decidido no
+        buscar. Ahora se ignora — ni evidencia ni error — **sólo desde DOS coincidencias**,
+        que es donde el gate deja de poder decidir. Con una sola no hay ambigüedad y la regla
+        vieja sigue mandando: *"sin barra no hay resolución por sufijo"* tiene su propio caso
+        en el self-check y **este ítem no la reabrió**.
+      - **Clase B — especificador de módulo** (`esEspecificadorDeModulo`): `@/lib/pricing` es
+        un alias de TypeScript (lo resuelve `tsconfig`, no el disco); `next/link` y
+        `packs/js/sdk.js` son un paquete de npm y el SDK de Chatwoot que sirve **otro host**.
+      - 🔴 **Clase C — la que este ítem NO había visto, y era la peor: el rango de líneas.**
+        El limpiador entendía `archivo:141` y `archivo:141:5` pero **no** `archivo:141-166`,
+        que es como se cita un BLOQUE. El rango quedaba pegado al nombre y el archivo salía
+        fantasma **existiendo**. Medido: `scripts/mirar-venta.mjs:141-166` se reportaba como
+        inexistente con el archivo vivo en
+        `web-factory/apps/onia-platform/scripts/mirar-venta.mjs`. Las otras dos clases hacen
+        ruido; **ésta esconde trabajo real detrás de una cita bien escrita.**
+      - ⚠️ **Y robots.txt no era ninguna de las tres: la cita estaba mal.** (Va sin backticks
+        por lo que avisa el párrafo de más abajo: entre backticks se vuelve a extraer como
+        ruta y este mismo renglón sumaría el error que describe — pasó al escribirlo.) Este ítem lo
+        había puesto en la clase A "nombre suelto", pero medido da **cero** archivos con ese
+        nombre en los dos repos — en el repo es `robots.ts`, y el `.txt` es lo que Next
+        **sirve**. Se corrigió la cita a `/robots.txt` (una URL, que el gate ya ignoraba). La
+        clasificación heredada no se sostuvo al contarla: `page.tsx` tiene 155 archivos con
+        ese nombre y `globals.css` 6, pero robots.txt tenía 0, igual que un fantasma de
+        verdad.
+      - ✅ **El self-check ya lo corre `npm test`** (`test:cola-selfcheck` en `package.json`):
+        pasó de **75 casos que nadie ejecutaba** a **86 que corren en cada gate de `main`**.
+      - **Lo que queda, y NO es de este carril:** el `duplicado` de 1757/1857 es una nota de
+        "no encontré defecto" escrita dos veces por `canario-visual` en dos corridas. Cerrarla
+        o borrarla es de ese carril; `onia-cola` no toca los registros de otro.
+
+      **El diagnóstico original, que sigue siendo la mejor explicación de POR QUÉ importaba:**
       `node scripts/verificar_cola.js hermes-content/docs/COLA.md` daba **13** errores; con el
       arreglo de hoy (prefijo del repo hermano) da **10**, de los cuales 2 son `sin-evidencia`
       legítimos. Los 7 `fantasma` que sobran NO son items rotos: son formas que el extractor
