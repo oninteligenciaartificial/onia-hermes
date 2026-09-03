@@ -2199,6 +2199,43 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Después
 
+- [x] 🟠 **La "guarda de las guardas" fallaba ABIERTO: había TRES suites de test en disco que no
+      corría nadie, con `npm test` en verde — ARREGLADO el 2026-09-03 por `onia-cola`, escalón 3
+      (recorrer el frente propio).** No salió de la cola: salió de tropezarme con el agujero
+      mientras mergeaba.
+      - **Lo que estaba pasando, contado en vivo:** `scripts/docs-hygiene.test.mjs` (18 casos),
+        `scripts/video-scenes.test.mjs` (1) y `scripts/vigia_sin_respuesta.test.mjs` (15) estaban
+        en el repo, **verdes**, y ningún corredor los invocaba. **34 afirmaciones invisibles.**
+        Verificado con `grep` sobre `.json`/`.yml`/`.sh`/`.mjs`: las únicas menciones son los
+        archivos de implementación nombrándose a sí mismos, nunca al `.test.mjs`.
+      - **Por qué `scripts/guards-cableados.test.mjs` no podía verlo, y es el punto del ítem:**
+        preguntaba *"¿todo `test:*` **declarado** está cableado a `npm test`?"*. Su lista de
+        sujetos salía de `package.json` — **una lista de inclusión**, así que el día que un
+        archivo existe en disco sin declararse, no tiene gate y nada se pone en rojo. Es el mismo
+        modo de falla que `web-venta` midió hoy con `sitemap.ts`, en otro archivo.
+      - **Cómo se cuela, medido esta misma vuelta:** al mergear `claude/chatbots-platform-review-0d1d09`,
+        `package.json` salió **en conflicto** porque dos carriles le habían agregado un gate cada
+        uno a la misma cadena `test`. Resolver eligiendo un lado —lo natural con el reloj en
+        contra— borra el `test:*` del otro lado **junto con su declaración**, mientras el
+        `.test.mjs` entra igual al árbol por su propio hunk sin conflicto. Sin huérfano
+        declarado, la guarda vieja pasa. Se resolvió por **unión** (21 gates), no eligiendo.
+      - **El arreglo:** dos tests nuevos en `scripts/guards-cableados.test.mjs` que sacan los
+        sujetos del **DISCO** (`readdirSync` de `scripts/`) menos un `EXCLUIDOS` explícito, hoy
+        vacío a propósito. Así un test nuevo **nace cubierto** y hay que excluirlo a mano, a la
+        vista, con su motivo escrito. Los tres huérfanos se **cablearon**, no se excluyeron.
+      - **Test primero, en ROJO por el motivo correcto:** falló nombrando exactamente los tres
+        (`docs-hygiene.test.mjs, video-scenes.test.mjs, vigia_sin_respuesta.test.mjs`) **con las
+        dos guardas viejas en verde al lado** — que es la prueba de que eran ciegas a esto.
+      - **Los dos recíprocos, probados en vivo, no razonados:** un `.test.mjs` nuevo en `scripts/`
+        sale en rojo solo (fixture creado y borrado); y una entrada de `EXCLUIDOS` que apunte a
+        un archivo inexistente **también** sale en rojo, para que una exclusión vencida no pueda
+        tapar la siguiente.
+      - **Alcance, dicho para que no se lea como más de lo que es:** cubre **sólo `scripts/`**,
+        la carpeta cuya cadena `test` vive en este `package.json`. Los otros ~250 `*.test.*` del
+        repo (`.claude/skills/`, `web-factory/` con vitest, `onia-core/`, `video-factory/`,
+        `hermes-content/deploy/vps-ops/bot/`) tienen su propio corredor y **no** los cubre.
+      - **Medido:** `npm test` **exit 0** con las tres suites nuevas adentro — de 21 a 24 gates.
+
 - [x] 🟡 **El mismo gate seguía ladrando en falso por una CUARTA clase de ruido — ARREGLADO el
       2026-09-03 por `onia-cola`, auditando los `[x]` (escalón 2).** Corriendo
       `node scripts/verificar_cola.js hermes-content/docs/COLA.md` salían **10 errores**, y **2
