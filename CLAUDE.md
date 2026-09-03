@@ -147,6 +147,14 @@ Instrucciones de proyecto. Override sobre defaults.
   detalle en la skill `onia-frontend`).
 - ⚠️ `Gestios` y `Ganaderos-Os` existen como repos pero son **legado**: no se les agrega
   nada sin decidir si se archivan o se absorben.
+- **El SISTEMA es la oferta; el chatbot es un add-on.** Sergio, 2026-09-03: *"el sistema no
+  ofrece directamente el bot, ofrece solo el sistema… hay inconsistencias en la web, datos que
+  no son importantes, habla de nuestras competencias… la referencia es Lety y Dapta, mirá cómo
+  venden"*. La web y todo material de venta hablan del sistema de gestión por rubro; el bot
+  aparece como add-on (`pricing.ts`), nunca como el titular. **Cero autobombo**: nada sobre
+  nosotros, nuestras competencias, nuestro equipo o datos que no le importan al dueño de un
+  negocio. Cómo se vende se mide contra `lety.ai` y `dapta.ai` de HOY (titular, clics hasta
+  empezar, un precio claro, beneficio antes que característica), no de memoria.
 
 ## La venta nunca exhibe obra (REGLA)
 
