@@ -18,8 +18,10 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const crypto = require('crypto');
 
 const REGISTRO = path.join(__dirname, 'recompensas.json');
+const RAIZ = path.join(__dirname, '..');
 
 /**
  * Pide la URL y REINTENTA una vez si falla por red.
@@ -50,14 +52,60 @@ function pedir(url, redirecciones = 3) {
         res.resume();
         return resolve(pedir(new URL(headers.location, url).href, redirecciones - 1));
       }
+      // Se hashea AL VUELO en vez de juntar el cuerpo en memoria: el sha sale gratis
+      // sobre bytes que ya estabamos leyendo para contarlos, y no cambia el consumo.
       let bytes = 0;
-      res.on('data', (c) => { bytes += c.length; });
-      res.on('end', () => resolve({ statusCode, tipo: headers['content-type'] || '', bytes }));
+      const hash = crypto.createHash('sha256');
+      res.on('data', (c) => { bytes += c.length; hash.update(c); });
+      res.on('end', () => resolve({
+        statusCode, tipo: headers['content-type'] || '', bytes, sha: hash.digest('hex'),
+      }));
     });
     req.on('timeout', () => { req.destroy(); resolve({ statusCode: 0, tipo: 'timeout', bytes: 0 }); });
     req.on('error', (e) => resolve({ statusCode: 0, tipo: e.code || 'error', bytes: 0 }));
     req.end();
   });
+}
+
+/**
+ * ¿La web sirve EL MISMO archivo que el repo promete en `entrega`?
+ *
+ * Nace del 2026-09-03. Hasta hoy esto preguntaba "¿respondio 200 y es un pdf?", y con eso
+ * HUMO daba `OK` mientras onia.com.bo servia un PDF DISTINTO al del repo: la tapa promete
+ * "3 de las cinco son gratis" y la version publicada etiquetaba CUATRO con esa palabra. El
+ * arreglo se hizo en la fuente el 02-sep y se re-rindio, pero la subida es un deploy — y
+ * durante ese hueco el que comenta HUMO recibia el numero que no cierra, con el verificador
+ * en verde. Es el mismo defecto que `carousel_render.js` tuvo con las 7 laminas identicas:
+ * preguntar "¿aparecio un archivo?" en vez de "¿aparecio EL archivo?".
+ *
+ * Por eso NO se mete dentro de `ok`: responder y entregar-lo-correcto son dos cosas, igual
+ * que `activa` y `publicado` ya son dos en el registro. Esta es la tercera: `al dia`.
+ *
+ * Solo aplica a `tipo: "pdf"`. Una `pagina` no tiene copia local byte a byte —
+ * compararla seria un rojo permanente, que es la forma mas rapida de que nadie mire.
+ *
+ * `leerSha` se inyecta para poder probar las cuatro ramas sin red y sin tocar disco.
+ */
+function veredictoEntrega(r, shaServido, leerSha) {
+  if (r.tipo !== 'pdf' || !r.entrega) return { aplica: false };
+  const shaLocal = leerSha(r.entrega);
+  if (shaLocal === null) {
+    return { aplica: true, ok: false, motivo: `el registro promete \`${r.entrega}\` y ese archivo NO esta en el repo` };
+  }
+  if (shaLocal !== shaServido) {
+    return {
+      aplica: true,
+      ok: false,
+      motivo: `la web sirve OTRO archivo: repo ${shaLocal.slice(0, 12)} != web ${String(shaServido).slice(0, 12)} — falta subir \`${r.entrega}\``,
+    };
+  }
+  return { aplica: true, ok: true };
+}
+
+function shaDeArchivo(rel) {
+  const abs = path.join(RAIZ, rel);
+  if (!fs.existsSync(abs)) return null;
+  return crypto.createHash('sha256').update(fs.readFileSync(abs)).digest('hex');
 }
 
 async function main() {
@@ -92,6 +140,15 @@ async function main() {
       console.log(`      ⚠️  el registro dice publicado:${Boolean(r.publicado)} y la realidad es ${ok}`);
       fallas++;
     }
+
+    // Responder no es entregar: que lo servido sea EL archivo, no uno cualquiera.
+    if (ok) {
+      const v = veredictoEntrega(r, res.sha, shaDeArchivo);
+      if (v.aplica && !v.ok) {
+        console.log(`      🔴 ${v.motivo}`);
+        fallas++;
+      }
+    }
   }
 
   console.log(fallas ? `\n${fallas} problema(s)` : '\ntodas las recompensas responden');
@@ -123,6 +180,29 @@ async function selfCheck() {
   ok(s.statusCode === 200, 'una URL sana responde 200');
   ok(!s.reintentado, 'una URL sana NO reintenta');
   ok(Date.now() - t1 < 1500, 'y no paga la espera del reintento');
+  ok(typeof s.sha === 'string' && s.sha.length === 64, 'y trae el sha256 de lo que sirvio');
+
+  // c) las cuatro ramas de veredictoEntrega, sin red y sin disco. Se prueba con inyeccion
+  //    porque el caso que importa —repo != web— solo ocurre durante un deploy pendiente,
+  //    o sea casi nunca, o sea que un bug ahi no se nota hasta el dia que hace falta.
+  const HAY = 'a'.repeat(64);
+  const OTRO = 'b'.repeat(64);
+  const nunca = () => { throw new Error('no deberia leer disco'); };
+
+  ok(veredictoEntrega({ tipo: 'pagina', entrega: 'x.pdf' }, HAY, nunca).aplica === false,
+    'una pagina no se compara byte a byte');
+  ok(veredictoEntrega({ tipo: 'pdf', entrega: null }, HAY, nunca).aplica === false,
+    'un pdf sin `entrega` declarada no se compara');
+  ok(veredictoEntrega({ tipo: 'pdf', entrega: 'x.pdf' }, HAY, () => HAY).ok === true,
+    'mismo sha => al dia');
+
+  const distinto = veredictoEntrega({ tipo: 'pdf', entrega: 'x.pdf' }, OTRO, () => HAY);
+  ok(distinto.ok === false, 'sha distinto => rojo');
+  ok(/falta subir/.test(distinto.motivo), 'y dice que falta subirlo');
+
+  const ausente = veredictoEntrega({ tipo: 'pdf', entrega: 'x.pdf' }, HAY, () => null);
+  ok(ausente.ok === false, 'si el archivo prometido no esta en el repo => rojo');
+  ok(/NO esta en el repo/.test(ausente.motivo), 'y lo dice con esas palabras');
 
   console.log(`self-check ok: ${casos} casos`);
 }

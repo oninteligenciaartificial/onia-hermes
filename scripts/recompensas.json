@@ -34,7 +34,8 @@
       "activa": true,
       "publicado": true,
       "_verificado": "2026-08-28: 200, 306.319 bytes, application/pdf. Re-comprobado en vivo el 2026-09-02 con verificar_recompensas.js: sigue 200 y 306.319 bytes.",
-      "_falta_subir": "2026-09-02: el PDF del repo esta ADELANTE del publicado. La tapa dice '3 de las cinco son gratis' y la pagina 2 etiquetaba CUATRO con la palabra gratis; se corrigio la etiqueta de ElevenLabs en humo.html ('plan gratis corto - desde Bs 35 al mes') y se re-rindio el PDF (306.651 bytes). Hasta que se suba a onia.com.bo/recursos/5-herramientas-ia-bolivia.pdf, el lead que comenta HUMO sigue recibiendo la version con el numero que no cierra."
+      "_falta_subir": "2026-09-02: el PDF del repo esta ADELANTE del publicado. La tapa dice '3 de las cinco son gratis' y la pagina 2 etiquetaba CUATRO con la palabra gratis; se corrigio la etiqueta de ElevenLabs en humo.html ('plan gratis corto - desde Bs 35 al mes') y se re-rindio el PDF (306.651 bytes). Hasta que se suba a onia.com.bo/recursos/5-herramientas-ia-bolivia.pdf, el lead que comenta HUMO sigue recibiendo la version con el numero que no cierra.",
+      "_sigue_sin_subir": "2026-09-03 02:39 UTC, medido por sha256 y no por tamano: la web sirve 574b11ba9653 (306.319 b, last-modified 01-sep 19:06) y el repo tiene ca8d30d02976 (306.651 b). Desde hoy no hace falta volver a medirlo a mano: verificar_recompensas.js compara lo servido contra `entrega` y sale en rojo SOLO por esto. Se pone verde solo cuando alguien lo suba — o sea que este bloqueo se cierra a si mismo y nadie tiene que re-preguntarle a Sergio cada vuelta."
     },
     "LISTA": {
       "promete": "la lista de por dónde empezar",
