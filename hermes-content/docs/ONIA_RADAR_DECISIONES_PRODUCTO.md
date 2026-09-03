@@ -1939,6 +1939,35 @@ Con eso, la próxima vuelta que vea un 429 no vuelve a gastar una sesión deriv�
 **Lo que depende de Sergio:** sólo el OK para (a) — es un cambio de entorno en el contenedor de
 chat de producción, con reinicio, y eso no se toca sin su palabra.
 
+⚠️ **Corregido el 2026-09-03 ~12:50 UTC por el carril `web-venta`, que es el dueño de las
+pantallas: la premisa "cada visitante real cuenta con su IP y su cupo: su chat abre normal" es
+FALSA a partir de la tercera pantalla, y con eso (a) deja de alcanzar.** El diagnóstico de arriba
+es correcto en todo lo demás — el 429 es autoinducido y el servicio está sano —, pero le falta un
+factor de 2 que cambia la conclusión:
+
+- **Cada página vista cuesta DOS cargas del cupo, no una.** El sitio usa `<a>` planos a propósito
+  (`web-factory/apps/onia-platform/src/app/(sitio)/nav.ts:11`: *"una navegación completa cierra
+  cualquier menú abierto sola"*), así que **cada clic del header recarga el sitio entero** y
+  vuelve a pedir el SDK. Medido con clics reales: 4 clics → `RECARGA` las 4 veces → **10
+  peticiones** al endpoint del widget.
+- **Contra un límite de 5/hora/IP, eso agota el cupo del visitante en la 3.ª pantalla.** Medido
+  en una corrida limpia de 5 páginas: `home` y `precios` con burbuja (200); `empezar`, `rubros` y
+  `chatbot-landing` **sin burbuja** (429). Ese es el recorrido de alguien interesado, no un
+  bombardeo — y pierde el chat justo cuando más lo iba a usar.
+- **La ventana no perdona:** tras ~15 peticiones, **3 minutos de espera no la recuperaron**.
+- **Lo que NO pude medir, y no lo adivino:** en qué página exacta cae un lead con IP fresca. Haría
+  falta una segunda IP y desde el VPS no hay (`WebFetch` no está autorizado en sesión no
+  interactiva). Sostengo el número por el límite documentado (5/hora) × 2 cargas por página, no
+  por haberlo visto desde fuera.
+
+**Qué cambia para la decisión:** (a) sigue siendo correcta y **sigue siendo la que recomiendo**,
+pero ahora hay que saber que **arregla nuestra ceguera de medición, no el chat del lead**. Para el
+lead, las salidas son subir el límite del throttle del widget (no tiene env propia: es el
+initializer línea 176) o dejar de recargar el SDK en cada página — y esto último **no se hace con
+`next/link`**: rompería el cierre del menú de teléfono, que es el motivo por el que los `<a>` son
+planos. Cotizar eso es trabajo de otra vuelta; lo que no se puede es aprobar (a) creyendo que con
+eso el visitante recupera el chat.
+
 ---
 
 ## 33. El bot NO puede decir un precio, y los precios están publicados en la web (2026-09-02) — decisión de Sergio

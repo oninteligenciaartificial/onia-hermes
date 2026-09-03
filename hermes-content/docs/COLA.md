@@ -804,6 +804,22 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       fallar no prueba nada.
       **Verificado sobre el HTML servido del build nuevo** (no el DOM, no `main`): las **16**
       rutas del sitemap devuelven `og:image` `200 image/png` de 40.888 B. Antes: 12.
+
+      ✅ **Re-auditado el 2026-09-03 por `web-venta` — el `[x]` AGUANTA, y queda escrita la pista
+      falsa para que la próxima no la persiga.** Barrido sobre el HTML servido de las **25** rutas
+      públicas del build (no las 16 del sitemap: se enumeraron desde `find src/app -name page.tsx`,
+      a propósito más ancho que el guard). Las 14 rutas de venta traen `og:image` **y**
+      `twitter:card: summary_large_image`.
+      ⚠️ **Aparecen 7 rutas SIN `og:image` — `/patrones` y las seis `/v1/*` — y NO son un defecto.**
+      `robots.txt` las declara `Disallow: /patrones` y `Disallow: /v1`, y ninguna está en el
+      sitemap: son superficies internas, no linkeadas desde el sitio. Es exactamente el mismo
+      patrón que causó el bug real de ayer (`opengraph-image` no baja a segmentos anidados: `/v1`
+      la tiene, sus hijas no), y por eso engaña — pero acá el guard tiene razón en ignorarlas,
+      porque su lista sale del sitemap. **Agregarles tarjeta sería trabajo inventado.**
+      Se verificó además que ninguna de las 14 rutas de venta exhibe obra: cero "muy pronto",
+      "próximamente", "en construcción" ni "beta". El "14 días gratis" de `/` y `/precios` es
+      **cierto**, no una promesa vieja: `TRIAL_DAYS = 14` en
+      `onia-platform/lib/subscription/plan-state.ts`, leído en vivo.
       **Evidencia mirada, no supuesta:**
       `hermes-content/docs/historial/canario-visual/2026-09-02-tarjeta-social-rutas-fuera-de-sitio.png`
       — la tarjeta de `/servicios/consultoria`, 1200×630, dibujada, cero captura, cero obra.
@@ -1576,6 +1592,15 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         la IP del VPS (`RACK_ATTACK_ALLOWED_IPS`) para que el canario mida el widget de verdad en
         vez de saltearlo — cotizado en
         `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md`.
+      - **`web-venta`, que ES el dueño de la superficie, llegó a la MISMA conclusión por su
+        cuenta a las ~12:48 UTC, sin haber visto esta refutación** (su detalle está más abajo,
+        en el bloque «CIERRE del carril `web-venta`»). Dos carriles midiendo por separado y
+        cayendo en el mismo veredicto es la confirmación más barata que hay — pero también
+        significa que **el fantasma se investigó dos veces**: el arreglo del instrumento ya
+        estaba hecho a las 10:00 y no había llegado a `main` cuando `web-venta` arrancó.
+        Su medición **no es redundante**: fijó el umbral con clics reales (cada página del
+        sitio cuesta **2** peticiones porque los `<a>` son planos a propósito) y refutó que
+        `next/link` fuera el arreglo.
       ~~**Detalle original de la medición del 2026-09-03 00:43 UTC, conservado porque la
       refutación se lee contra él:**~~
       - **Evidencia de la corrida oficial única** (`node scripts/canario_visual.mjs`, primer
@@ -1606,6 +1631,53 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         `web-factory/apps/onia-platform/`).
       **Evidencia:** capturas de hoy (foto de un día, no baseline) en
       `hermes-content/docs/historial/canario-visual/2026-09-03-{home,precios,empezar,rubros,chatbot-landing}.png`.
+
+      ---
+      **CIERRE del carril `web-venta` (2026-09-03 ~12:48 UTC) — el widget está VIVO y el ítem
+      medía nuestra propia IP.** Nada de esto contradice a quien lo escribió: cada corrida vio un
+      429 real. Lo que faltaba era preguntarle al 429 **de quién** era.
+      - **Primer comando de la vuelta, IP fresca:** `curl` al endpoint del widget → **HTTP 200,
+        7.683 bytes**, 92 ms. Y `packs/js/sdk.js` → 200, 28.764 bytes. No hay contenedor caído.
+      - **`onia.com.bo/` y `/empezar` abiertas y MIRADAS** (1440×900, Chromium completo, por
+        viewports con scroll asentado — nunca `fullPage`): la **burbuja verde está presente y
+        visible**, `64x64` en `1356,816`, con su `iframe` y `window.chatwootSDK` cargado. **Cero
+        errores de consola, cero respuestas ≥400.** El peso volvió a su baseline: home **2.828
+        KB** y empezar **2.512 KB** (baselines 2.366 / 2.497), contra los 580 / 323 KB que el
+        ítem citaba como prueba de la caída. El bundle del widget está de vuelta.
+      - **El mecanismo, reproducido en una sola corrida de 5 páginas seguidas:** las **dos
+        primeras** dan 200 con burbuja; de la **tercera en adelante**, 429 y sin burbuja.
+        ```
+        home             618 KB  burbuja 64x64   err=0 4xx=0
+        precios          890 KB  burbuja 64x64   err=0 4xx=0
+        empezar          155 KB  SIN BURBUJA     429 …/widget?website_token=…
+        rubros           120 KB  SIN BURBUJA     429 …
+        chatbot-landing   86 KB  SIN BURBUJA     429 …
+        ```
+        No es una caída que empieza a una hora y termina a otra: **es un umbral que se cruza a
+        mitad de la propia corrida**. El canario barre 10 pantallas cada 3 h desde la misma IP,
+        así que deja la IP del VPS **quemada casi todo el tiempo** — y en la corrida siguiente
+        vuelve a "encontrar" el widget caído. Las "8 horas de caída" son ocho horas de eso.
+      - **La ventana de recuperación es larga:** tras ~15 peticiones, **3 minutos de espera no
+        alcanzaron** (las 5 páginas siguientes seguían en 429). Al arrancar la vuelta, con la IP
+        en reposo, daba 200.
+      - **Por qué cada página cuenta doble, y por qué NO se arregla con `next/link`:** el sitio
+        usa `<a>` planos, así que cada página vista es una carga completa que vuelve a pedir el
+        SDK — **2 peticiones por página**. Medido con clics reales en el header: 4 clics → `RECARGA`
+        las 4 veces → **10 peticiones** al endpoint. Fui a "arreglarlo" con `next/link` y **el
+        propio código me refutó**: `src/app/(sitio)/nav.ts:11` dice que los `<a>` planos son
+        **deliberados** — *"una navegación completa cierra cualquier menú abierto sola"*.
+        Cambiarlo habría roto el menú de teléfono para arreglar algo que no es su culpa.
+      - **Lo que queda vivo y NO es fantasma — corrige la decisión cotizada a Sergio:** la opción
+        anotada en el radar es safelistear la IP del VPS (`RACK_ATTACK_ALLOWED_IPS=187.77.16.63`).
+        Eso **calla el falso positivo del canario pero no ayuda a un lead**, que entra con su
+        propia IP y también suma 2 peticiones por página. Si se aprueba creyendo que arregla el
+        sitio, el chat sigue desapareciéndole al visitante que recorre varias pantallas — que es
+        justo el más interesado. **No pude medir en qué página cae un lead con IP limpia: no
+        tengo una segunda IP desde el VPS** (`WebFetch` no está autorizado en sesión no
+        interactiva). Es lo único que falta para dimensionarlo, y no se resuelve adivinando.
+      - **Repro en 30 segundos:** cargar 5 páginas de `onia.com.bo` seguidas con Playwright y
+        mirar `.woot-widget-bubble` en cada una. Las dos primeras la tienen; las otras tres no.
+      - **Cero líneas de código tocadas: no había nada roto en el sitio.**
 
 - [ ] 🟠 **SIGUE VIVO en `rubros`, y el 2026-09-03 07:58 UTC `onia-cola` midió POR QUÉ. No es
       timing ni rasterizador: `fullPage` destruye las secciones movidas por scroll.**
@@ -1642,6 +1714,45 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       - **Zona:** `scripts/canario_visual.mjs`, del carril `canario-visual`. `onia-cola` lo midió
         pero **no lo arregló**: no entraba en la vuelta y no se empieza un refactor que no se
         puede terminar ni verificar.
+
+      ⚠️ **SEGUNDA CEGUERA EN EL MISMO SCROLL, y el arreglo de viewports NO alcanza para taparla
+      — medida el 2026-09-03 ~09:40 UTC por el carril `web-venta`, tropezándome con ella en mi
+      propio instrumento.** No es una variante de `fullPage`: es independiente, y muerde también
+      a quien capture por viewports creyendo que ya está a salvo.
+      - **El sitio trae `scroll-behavior: smooth` en `<html>`** (`globals.css:194`, correctamente
+        detrás de `prefers-reduced-motion: no-preference` — el sitio está bien, no hay nada que
+        arreglar ahí). Medido en vivo: `getComputedStyle(document.documentElement).scrollBehavior`
+        → `"smooth"`.
+      - **Con eso, `window.scrollTo(0, y)` NO salta: ANIMA.** Vuelve enseguida y la página sigue
+        viajando. Una foto disparada a los 300 ms sale **a mitad de camino**, con el encuadre
+        entre dos franjas — y lo que se ve es una tarjeta o un titular **cortado por la mitad**,
+        que es exactamente la firma del defecto que este ítem persigue.
+      - **Lo que me pasó, y por eso lo sé:** capturé `/empezar` a 390 px y el primer frame
+        (scroll 0) mostraba el titular `"Creá tu cuenta y usalo de verdad 14 días."` **cortado
+        por arriba**, como si el header pegajoso se lo comiera. Estuve a un paso de abrirlo como
+        ítem. Lo medí antes: a scroll 0 el `<h1>` está en `top: 208` y el header termina en
+        `bottom: 61` — **no lo toca ni de cerca**. El frame estaba tomado mientras la página
+        todavía volvía desde el fondo (3.689 px) hacia arriba.
+      - **Por qué el canario es MÁS vulnerable que yo, no menos:** su bucle
+        (`canario_visual.mjs:268-276`) hace `scrollTo` cada 0,8 de viewport con 300 ms, y **cada
+        `scrollTo` re-apunta la animación anterior en vez de esperarla**, así que la página nunca
+        se asienta en ningún paso: planea. Y el `scrollTo(0, 0)` final con 800 ms tiene que
+        deshacer **14.569 px** en la home — un scroll suave de esa distancia no termina ni cerca
+        en 800 ms.
+      - **El arreglo es de una línea y es previo al refactor de viewports:** antes de scrollear,
+        `await page.addStyleTag({ content: 'html{scroll-behavior:auto !important}' })`. Y para
+        que no vuelva a envejecer, **esperar a que el scroll haya llegado de verdad** en vez de
+        confiar en un `setTimeout`:
+        `await page.waitForFunction((t) => Math.abs(window.scrollY - t) < 3, y)`.
+      - **Repro en 30 segundos:** cargar `https://onia.com.bo/empezar` a 390×844, `scrollTo` al
+        fondo, después `scrollTo(0, 0)`, esperar 300 ms y capturar. El titular sale cortado. Con
+        `html{scroll-behavior:auto}` inyectado antes, sale entero. La misma página, el mismo
+        instante, dos verdades distintas.
+      - **Por qué importa más que un frame feo:** es el **tercer** defecto de instrumento de esta
+        familia (rasterizador → 3 días perdidos; `fullPage` → este ítem; ahora el scroll suave), y
+        los tres fabrican la MISMA firma — "algo cortado o en blanco" — sobre un sitio sano. Cada
+        uno gasta vueltas de este carril persiguiendo fantasmas. **Verificado que el sitio no
+        tiene la culpa en los tres.**
 
 - [ ] 🟢 **Las otras cinco pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
       Miradas una por una: `contacto` (322 KB/104 ms, formulario y CTAs completos),
