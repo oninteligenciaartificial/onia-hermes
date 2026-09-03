@@ -1794,12 +1794,43 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         publicar es de Sergio. Este arreglo es el **cuarto** que se acumula esperando el mismo
         deploy de `t_68671bc3`.
 
-- [ ] 🟢 **`/terminos` y `/privacidad` son las dos únicas rutas sin `og:url`** (tienen las otras
-      nueve etiquetas Open Graph, imagen incluida; las 14 restantes tienen las diez). Sale del
-      mismo barrido de arriba. Es chico y no toca a un lead que llega por buscador, pero es una
-      asimetría real y sin motivo. Reproducción en 30 s: `curl -s https://onia.com.bo/terminos |
-      grep -o 'property="og:[a-z:]*"' | sort -u` y comparar contra la home.
-      **Zona:** `web-factory/apps/onia-platform/`, donde se arma la metadata de esas dos rutas.
+- [x] 🟢 **`/terminos` y `/privacidad` son las dos únicas rutas sin `og:url` — ARREGLADO Y CON
+      GATE el 2026-09-03 por `web-venta`.** (Tenían las otras nueve etiquetas Open Graph, imagen
+      incluida; las 14 restantes tenían las diez.)
+      - **Confirmado vivo en producción antes de tocar nada**, contra el contenedor que sirve el
+        dominio: `curl -s https://onia.com.bo/terminos | grep -o 'property="og:[a-z:]*"' | sort -u`
+        → nueve etiquetas, sin `og:url`; la home y `/precios` traen las diez.
+      - **La causa:** ninguna de las dos declaraba `openGraph`, así que heredaban el del layout
+        raíz — y `og:url` es la única etiqueta que **no se puede heredar**, porque cambia en cada
+        página. Por eso el hueco pasó desapercibido: la tarjeta se veía casi bien.
+      - **El arreglo:** `openGraph` propio en `src/app/terminos/page.tsx` y
+        `src/app/privacidad/page.tsx`, con `url` igual a su `canonical`.
+      - **Verificado sobre el HTML que EMITE el build, no sobre el fuente** (`next start` en
+        :3987 + `curl`): las dos ahora sirven las diez etiquetas, con
+        `og:url = https://onia.com.bo/terminos` y `…/privacidad`, absolutas. Barrido de **las 16
+        rutas del sitemap**: las 16 con `og:url` correcta. Las dos páginas además **abiertas y
+        MIRADAS** renderizadas a 1440×900 (`/tmp/wv-terminos.png`): siguen sanas.
+      - **Y ahora tiene gate — `web-factory/apps/onia-platform/src/app/compartir.test.ts`**, que
+        corre en `prebuild` (`tsc --noEmit && vitest run`), el comando real del deploy.
+        **Verificado en ROJO antes**, por el motivo correcto: fallaron **sólo** `/terminos` y
+        `/privacidad`, con las otras 14 rutas y el ancla en verde.
+        El corte del gate es el **sitemap**, no la carpeta ni el `noindex`, y las dos
+        alternativas obvias estaban mal: por carpeta se pierde `/terminos`, `/privacidad` y
+        `/servicios/consultoria` (viven fuera de `(sitio)`), y por `noindex` se pierde
+        `/terminos`, que declara `index: false` y **es una de las dos rotas** — compartir e
+        indexar son cosas distintas. Una ruta nueva queda cubierta con sólo agregarla al
+        sitemap, que es lo que ese archivo ya obliga a hacer.
+      - **Gates:** typecheck exit 0 · `vitest run` 183 verdes en 8 archivos · build exit 0.
+      - ⚠️ **No está en producción**: `onia.com.bo` la sirve el contenedor `onia-landing` y
+        publicar es de Sergio. Este arreglo es el **quinto** que se acumula esperando el mismo
+        deploy de `t_68671bc3`.
+      - **Encontrado de paso, NO arreglado** (es otro ítem, no lo abro en la misma vuelta):
+        `/terminos` está en el `sitemap.xml` **y** declara `robots: { index: false }`. El sitemap
+        dice "indexá esto" y la etiqueta dice lo contrario. Repro: `curl -s
+        https://onia.com.bo/terminos | grep -o 'name="robots"[^>]*'` → `content="noindex"`, y
+        `curl -s https://onia.com.bo/sitemap.xml | grep terminos` → la lista. `/privacidad` no
+        tiene el problema (es indexable a propósito, con su motivo escrito).
+        **Zona:** `web-factory/apps/onia-platform/src/app/{sitemap.ts,terminos/page.tsx}`.
 
 ### Del canario visual — corrida del 2026-09-03 ~03:41 UTC (diez pantallas)
 
