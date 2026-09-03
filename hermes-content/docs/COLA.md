@@ -958,6 +958,111 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       El arreglo espera el deploy de Sergio; el gate ya impide que se pierda.
       **Gates:** `typecheck` exit 0 · `build` exit 0 · suite **132 pasan (5 archivos)**.
 
+      ✅ **Cerrada la otra mitad el 2026-09-03: ahora hay un gate que ABRE las dos pantallas.**
+      Los cuatro tests de al lado leen el código fuente: son rápidos, corren en cada build y
+      **no abren nada** — la franja no la encontró ninguno, la encontró una captura. Y el que la
+      guarda vigila la CAUSA de ese día (una barra fija que ya no existe): si vuelve por otro
+      camino, pasa en verde.
+      `web-factory/apps/onia-platform/scripts/mirar-venta.mjs` mide el **síntoma**: abre `/` y
+      `/empezar` en 5 anchos (320 · 390 · 768 · 1440 · 1920), scrollea hasta el fondo y pregunta
+      **qué elemento está pintado al pie del último viewport**. Si es `BODY`/`HTML`, lo que se ve
+      abajo de todo es el fondo de la página y no el pie. También mide desborde horizontal, texto
+      recortado y errores de consola.
+      **Probado con el experimento que estaba servido, no con uno inventado:** el mismo comando
+      contra producción (build viejo, defecto vivo) sale **ROJO, exit 1**, nombrando
+      `/empezar` en móvil-390 y tablet-768 con la captura
+      (`/tmp/gate-prod/empezar-tablet-768-pie.png`, mirada: franja clara de ~55px bajo el pie
+      negro); contra el build de esta rama sale **VERDE, exit 0**. Mismo instrumento, resultados
+      opuestos: discrimina.
+      **Lo que NO se hizo, a propósito:** no se cableó en `prebuild`. El deploy real corre
+      `pnpm --filter onia-platform build`, y meterle un navegador a ese camino cambia un gate por
+      un riesgo. Se corre a mano cada vuelta del loop; `playwright` no se sumó al `package.json`
+      (se elige el que ARRANCA entre los ya instalados — el del worktree pide un Chromium que
+      nadie bajó).
+      **El 429 del widget de chat sale como aviso, no como falla**, porque el ítem de abajo ya
+      midió que los bloqueos vienen del propio monitoreo y el límite vive en otro carril: un gate
+      rojo para siempre por algo que no puede arreglar es un gate que nadie lee.
+
+      ✅ **Y ese gate no decía DE QUIÉN era el trabajo — cerrado el 2026-09-03, misma jornada.**
+      Corriendo el gate como definición de hecho de la vuelta salió **rojo, 6 fallas**: la franja
+      bajo el pie viva en `/` y `/empezar` en 320, 390 y 768. Averiguar si había que **tocar
+      código** o sólo faltaba **publicar** costó **25 minutos a mano** (build, `next start` en un
+      puerto libre y una segunda corrida). La respuesta era "ya está arreglado, falta el deploy":
+      **cero código que tocar**. Repetir esa investigación cada vuelta es caro; el error caro de
+      verdad es el otro — leer el rojo de producción y "arreglar" lo que ya estaba arreglado, que
+      es el fantasma que esta misma cola mide entre el **25% y el 46%** de los pendientes
+      heredados.
+      **Qué cambió:** cada falla se guarda con su **clase** (`home @ movil-390 | franja`), no sólo
+      con su texto — el texto lleva píxeles y rutas del día y no es comparable entre dos corridas.
+      Con eso, `--comparar-con=<informe.json de la rama>` clasifica sola cada falla y **el
+      veredicto lo escribe el script, no la sesión**.
+      **Probado en las DOS ramas, con el experimento que estaba servido:** producción contra el
+      informe de la rama sana → **exit 3**, *"6 fallas YA ARREGLADAS en la rama — falta PUBLICAR,
+      no tocar código"*; producción contra **sí misma** → **exit 1**, *"6 fallas que TAMBIÉN
+      fallan en la rama — esto sí es código"*. Sin esta segunda prueba el camino de "es código"
+      podría no dispararse nunca y el gate sería decorativo.
+      **Exit 3 y no exit 0 a propósito:** producción sigue rota para el lead, así que disfrazarlo
+      de verde sería mentir; pero el trabajo no es de este carril, y el código propio lo dice sin
+      esconderlo.
+      **Medido hoy contra el contenedor `onia-landing`** (no Vercel, no `main`): la franja sigue
+      viva en las 6 vistas, mirada en la captura (`/tmp/venta-0903/home-movil-390-pie.png`), y el
+      build de esta rama sale **sin defecto medible**. Sigue esperando el deploy de Sergio
+      (radar, sección 20).
+      **Gates:** `typecheck` exit 0 · `vitest` **132 pasan (5 archivos)** · `build` exit 0.
+      **Gates:** `typecheck` exit 0 · `build` exit 0 · suite **132 pasan (5 archivos)**.
+
+      ⚠️ **Ese gate nació ciego en la HOME, y lo tapaba con un verde — corregido el 2026-09-03,
+      con la medición.** Bajaba con **un solo** `window.scrollTo(0, scrollHeight)` + 700 ms, y
+      `globals.css:194` tiene `scroll-behavior: smooth`: el scroll **anima**, y 14.569 px de
+      home no entran en 700 ms. Medido contra producción en móvil-390: quedaba en
+      `scrollY = 11299`, **a 2.426 px del fondo**. Ahí `elementFromPoint` devuelve el `DIV` de
+      una sección cualquiera en vez de `BODY` — así que el gate **daba verde con la franja
+      clara viva abajo** (73 px, exactamente el número que este mismo carril ya había medido a
+      mano el día anterior). O sea: el instrumento nuevo declaraba sana la pantalla **más
+      importante del sitio**, la primera que ve un lead.
+      **Arreglado en `scripts/mirar-venta.mjs`**, y no sólo la causa de hoy:
+      `bajarHastaElFondo()` usa `behavior: 'instant'` (mata la animación) y repite hasta que
+      `scrollY` deja de moverse (cubre la página que crece al revelar contenido). Y sobre todo,
+      la sonda ahora devuelve `faltaParaElFondo`: **si el gate no llegó al fondo, eso es una
+      FALLA, no un verde.** Un instrumento que no pudo mirar no sabe, y "no sé" no es "está
+      bien" — sin esa aserción, la próxima causa vuelve a producir un verde mentiroso.
+      **Lo que destapó, en números:** contra el mismo producción de siempre pasó de **2 fallas
+      a 6**. Las 4 que escondía son `home` en 320 · 390 · 768 (las tres, nunca vistas) y
+      `empezar @ movil-320`. Capturas miradas: `/tmp/venta-rojo/home-movil-390-pie.png` — se ve
+      el pie negro entero y **debajo la franja clara**.
+      **Discrimina** (mismo comando, resultados opuestos): producción **ROJO exit 1 · 6 fallas**;
+      build de esta rama **VERDE exit 0**.
+
+      📮 **2026-09-03 — el deploy YA está pedido, con su número: `t_68671bc3` en el tablero,
+      `blocked / needs_input`.** Hasta hoy el pedido vivía sólo en el radar, que es un doc que
+      Sergio no lee desde el teléfono: por eso la franja llevaba **más de un día** viva en
+      producción con el arreglo ya en `main` (`f0248601`, del 2026-09-02). El tablero sí le
+      llega. **La próxima vuelta NO vuelve a preguntar** — mira `onia-tablero.sh list`; si
+      `t_68671bc3` sigue `blocked`, el deploy sigue sin decidirse y la franja sigue viva.
+      **Re-medido hoy con el instrumento arreglado, no heredado:** producción **6 fallas** en
+      `home` y `empezar` × 320 · 390 · 768, mirada la captura
+      (`/tmp/venta-0903/home-movil-390-pie.png`: pie negro y **debajo la franja clara**);
+      el build de esta rama, servido en `127.0.0.1:3987`, **sin defecto medible**, y mirado
+      también (`/tmp/venta-rama-0903/home-movil-390-pie.png`: el negro llega al borde).
+      **Gates de hoy:** `tsc --noEmit` exit 0 · `vitest` 132 pasan (5 archivos) · `next build`
+      exit 0, 32/32 páginas.
+
+      ✅ **Los precios de las dos pantallas se verificaron hoy contra las DOS fuentes de verdad,
+      y no hay deriva.** Se hizo porque la home imprime montos (`2.900 Bs/mes`,
+      `implementación desde 3.500 Bs`) desde una copia — `src/lib/pricing.ts` de esta app — que
+      vive en OTRO repo que el que manda, y nada la ataba. Contados uno por uno contra
+      `onia-platform/lib/subscription-plans.ts` (`DEFAULT_PLAN_AMOUNTS`): Básico 320/89/3.200 ·
+      Pro 750/199/7.500 · Full 1.500/–/15.000 · Grupo 2.900/–/29.000 — **los cuatro coinciden**.
+      Add-ons contra `onia-platform/lib/pricing.ts`: chatbot 390/3.900, reservas 150, usuario
+      extra 70 — **coinciden**. Ninguna pantalla define un número: la home los lee de
+      `@/lib/pricing` (`page.tsx:4`).
+      ⚠️ **Lo que queda sin dueño, y es un ítem para quien pueda cruzar de repo:** esa copia
+      coincide **hoy, por disciplina, no por un gate**. Un cambio de precio en `onia-platform`
+      no rompe nada acá: el sitio de venta seguiría publicando el número viejo mientras el
+      checkout cobra el nuevo. Un test de esta app no lo puede atar (el otro repo no viaja al
+      contenedor que sirve el sitio), así que el gate tiene que vivir del lado que tiene los dos
+      árboles a la vista.
+
 ### Encontrado el 2026-09-02, corriendo el canario — no es zona de este carril
 
 - [x] 🟡 ~~**El widget de chat (Chatwoot) responde 429 en `home` y `/empezar` — confirmado en vivo,
