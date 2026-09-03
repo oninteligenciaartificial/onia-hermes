@@ -33,7 +33,8 @@ for ruta in "/" "/packs/js/sdk.js"; do
 done
 WIDGET=$(curl -s -o /dev/null -w '%{http_code}' "$HOST/widget?website_token=$TOKEN")
 printf '   %-22s HTTP %s\n' "/widget" "$WIDGET"
-echo "   (host 200 + widget 429 = throttle puntual, NO un servicio caído)"
+echo "   (host 200 + widget 429 = throttle puntual, NO un servicio caído. Y widget 200 NO"
+echo "    cierra el caso: el throttle dura 1 h y se apaga solo entre ráfagas — ver VEREDICTO)"
 
 echo
 echo "== 2. ¿A nombre de QUÉ IP está el contador del throttle? =="
@@ -42,6 +43,7 @@ echo "== 2. ¿A nombre de QUÉ IP está el contador del throttle? =="
 CLAVES=$(docker exec "$RED" sh -c \
   'redis-cli -a "$REDIS_PASSWORD" --no-auth-warning --scan --pattern "*attack*widget*" 2>/dev/null' \
   2>/dev/null)
+CONTADORES=""
 if [ -z "$CLAVES" ]; then
   echo "   (sin contador vivo: la ventana de 1 h se venció, nadie está limitado ahora mismo)"
 else
@@ -49,30 +51,31 @@ else
     v=$(docker exec "$RED" sh -c \
       "redis-cli -a \"\$REDIS_PASSWORD\" --no-auth-warning get '$k'" 2>/dev/null)
     printf '   %-18s %s cargas (el límite es 5/hora)\n' "${k##*:}" "$v"
+    CONTADORES="$CONTADORES,${k##*:}:$v"
   done
 fi
 
 echo
 echo "== 3. ¿Quién pidió /widget en las últimas 6 h? =="
-docker logs --since 6h "$APP" 2>&1 \
+DESGLOSE=$(docker logs --since 6h "$APP" 2>&1 \
   | grep -aoE 'Started GET "/widget[^"]*" for [0-9.]+' \
-  | grep -oE '[0-9.]+$' | sort | uniq -c | sort -rn \
-  | while read -r n ip; do printf '   %-18s %s peticiones\n' "$ip" "$n"; done
+  | grep -oE '[0-9.]+$' | sort | uniq -c | sort -rn)
+echo "$DESGLOSE" | while read -r n ip; do
+  [ -n "$ip" ] && printf '   %-18s %s peticiones\n' "$ip" "$n"
+done
+PETICIONES=$(echo "$DESGLOSE" | while read -r n ip; do
+  [ -n "$ip" ] && printf ',%s:%s' "$ip" "$n"
+done)
 
 echo
-AJENAS=$(docker logs --since 6h "$APP" 2>&1 \
-  | grep -aoE 'Started GET "/widget[^"]*" for [0-9.]+' \
-  | grep -oE '[0-9.]+$' | grep -vc "^${NUESTRA_IP}$")
-
 echo "== VEREDICTO =="
-if [ "$WIDGET" != "429" ]; then
-  echo "   El widget responde $WIDGET: no hay throttle activo. Nada que diagnosticar."
-elif [ "$AJENAS" -eq 0 ]; then
-  echo "   AUTOINDUCIDO. El 429 es real pero se lo hizo el VPS solo ($NUESTRA_IP): en 6 h"
-  echo "   ninguna IP ajena pidió el widget. Un visitante real abre el chat sin problema."
-  echo "   NO es un ítem de producto. Lo que sí conviene: safelistear nuestra IP para que"
-  echo "   el canario vuelva a ver lo que ve un cliente (ver el radar, decisión de Sergio)."
-else
-  echo "   OJO: $AJENAS peticiones vinieron de IPs ajenas. Puede haber clientes afectados de"
-  echo "   verdad — mirar el desglose del punto 3 antes de descartarlo como ruido nuestro."
-fi
+# La decisión NO se toma acá. Vive en scripts/veredicto_widget.mjs, que tiene self-check y
+# entra en `npm test`: hasta el 2026-09-03 este bloque decidía por el código HTTP del
+# instante y contestaba distinto según el minuto en que se lo corriera — el throttle dura
+# 1 hora y se enciende sólo durante la ráfaga de nuestros propios loops. Peor: contaba
+# PETICIONES ajenas en vez de IPs ajenas que llegaran al límite, así que con 2 visitas
+# legítimas de 288 gritaba "puede haber clientes afectados". De ahí salió el ítem 🔴 del
+# 03:41 UTC. Un veredicto sin test es una opinión que cambia de humor cada hora.
+node "$(dirname "$0")/../../../scripts/veredicto_widget.mjs" \
+  --widget "$WIDGET" --nuestra-ip "$NUESTRA_IP" \
+  --peticiones "${PETICIONES#,}" --contadores "${CONTADORES#,}"

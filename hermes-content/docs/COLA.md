@@ -1499,8 +1499,38 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         como el estado normal, exactamente lo que ya se evitó con `chatbot-landing` el
         2026-09-02. Se retoman cuando ese ítem cierre.
 
-- [ ] 🔴 **El widget de Chatwoot sigue caído (429) en las 5 páginas de `onia.com.bo`, y la
-      sonda oficial confirma que NO es sólo tráfico propio: hay IPs ajenas pegándole.**
+- [x] 🔴 ~~**El widget de Chatwoot sigue caído (429) en las 5 páginas de `onia.com.bo`, y la
+      sonda oficial confirma que NO es sólo tráfico propio: hay IPs ajenas pegándole.**~~
+      **FALSO, y la culpa era de la sonda — ARREGLADA 2026-09-03 05:35 UTC, `onia-cola`.**
+      El titular se apoyaba en *2 peticiones ajenas de 288*, y ninguna de esas dos IPs llegó
+      nunca al límite. Medido en vivo hoy: `/widget` responde **HTTP 200**, contador en 2 de 5,
+      y **287 de 289 peticiones (99 %) salen del propio VPS**. Un visitante real abre el chat
+      sin problema — Rack::Attack cuenta **una clave por IP**, así que la única forma de que
+      un cliente vea el 429 es que **su propia IP** llegue a 5/hora. Nunca pasó.
+      **De quién es la huella, medido por minuto** (`docker logs` del contenedor de chat):
+      ráfagas en `:48–:56` de **cada** hora, de 10 a 14 cargas — el loop `web-venta`, que abre
+      las 5 páginas cada hora — y en `:41`, el canario. Con 5/hora por IP, **cada corrida se
+      autolimita sola** y deja el cupo quemado para el loop siguiente.
+      **La causa de que esto se reabriera cinco veces era el instrumento, no el sitio.**
+      `hermes-content/deploy/vps-ops/widget-429-de-quien.sh` decidía por el código HTTP
+      **del instante**, y el throttle es
+      intermitente (ventana de 1 h): contestaba distinto según el minuto en que se la corriera.
+      Dos defectos, los dos empujando al mismo error caro:
+      - **falso negativo** — widget en 200 ⇒ *"nada que diagnosticar"*, tirando a la basura las
+        286 peticiones propias que ya estaba mostrando dos líneas más arriba;
+      - **falso positivo** — contaba **peticiones** ajenas en vez de **IPs ajenas que llegaran
+        al límite**, así que 2 visitas legítimas gritaban *"puede haber clientes afectados"*.
+        De ahí salió, textual, este ítem.
+      **El arreglo:** la decisión se mudó a `scripts/veredicto_widget.mjs` — función pura, con
+      `--self-check` y **dentro de `npm test`** (`test:veredicto-widget`). Los tres casos que
+      importan fallaban en ROJO contra la lógica vieja (3 de 4) y pasan con la nueva. Sigue
+      sabiendo salir positivo: una IP ajena que llega al límite da `CLIENTES-AFECTADOS` y la
+      nombra — una sonda que sólo sabe decir "es nuestro" no sirve para el día en que no lo sea.
+      **Lo que NO cambió y sigue siendo de Sergio:** safelistear la IP del VPS
+      (`RACK_ATTACK_ALLOWED_IPS=187.77.16.63`) para que el canario vuelva a ver lo que ve un
+      cliente. Es un cambio de entorno del contenedor de chat en producción, con reinicio.
+
+- [x] ~~🔴 **Titular original, conservado para no perder de dónde salió:**~~
       Corrida oficial (`node scripts/canario_visual.mjs`): `home`, `precios`, `empezar`,
       `rubros`, `chatbot-landing` — las cinco — con `error de consola nuevo: ... status of
       429 ()`. Mismo patrón de peso que ayer (bundle del widget ausente): home 580 KB,
