@@ -368,9 +368,16 @@ if [ "$ANTES" = "$DESPUES" ]; then
 else
   HECHO="commiteo $ANTES..$DESPUES — $(git rev-list --count --first-parent "$ANTES..$DESPUES") commit(s)"
 fi
-SINPUSH=$(git log --oneline "@{u}..HEAD" 2>/dev/null | wc -l)
+# Cuantos commits quedaron sin publicar. OJO con el instrumento: `@{u}..HEAD`
+# cuenta contra la rama propia, asi que incluye TODO lo que entro por un merge de
+# main y ya esta publicado en origin — laburo que no corre ningun riesgo. El
+# 2026-09-03 docs-auditoria avisaba "34 commits SIN pushear" y los huerfanos
+# reales eran DOS: los otros 32 ya vivian en origin/main. Un aviso inflado 17x se
+# deja de leer, que es el modo de falla del vigia que ya conocemos.
+# Lo que de verdad se puede PERDER es lo que no esta en ningun ref del remoto.
+HUERFANOS=$(git -C "$WT" log --oneline HEAD --not --remotes=origin 2>/dev/null | wc -l)
 
-log "===== TERMINA $NOMBRE — ${T}s — exit $RC — $HECHO — sin pushear: $SINPUSH ====="
+log "===== TERMINA $NOMBRE — ${T}s — exit $RC — $HECHO — sin publicar en ningun remoto: $HUERFANOS ====="
 
 # 124 = lo corto el timeout. Es un fallo: la vuelta quedo a medias.
 if [ "$RC" = 124 ]; then
@@ -382,8 +389,18 @@ elif [ "$RC" != 0 ]; then
   else
     avisar "claude salio con codigo $RC"
   fi
-elif [ "$SINPUSH" != 0 ]; then
-  avisar "quedaron $SINPUSH commit(s) SIN pushear en $RAMA"
+elif [ "$HUERFANOS" != 0 ]; then
+  # Por que no se pudo pushear importa mas que cuantos quedaron: si la rama
+  # remota fue reescrita debajo del carril (divergencia), TODOS los push futuros
+  # se rechazan por non-fast-forward y el loop sigue commiteando al vacio vuelta
+  # tras vuelta. Nombrarlo es la diferencia entre un arreglo de 2 minutos y un
+  # carril que produce para nadie durante horas.
+  if git -C "$WT" rev-parse --verify -q "origin/${RAMA#origin/}" >/dev/null 2>&1 &&
+     ! git -C "$WT" merge-base --is-ancestor "origin/${RAMA#origin/}" HEAD 2>/dev/null; then
+    avisar "$RAMA DIVERGIO de su remota (la reescribieron debajo): el push viene rechazado y hay $HUERFANOS commit(s) en ningun lado. Se arregla en <code>$WT</code> con <code>git merge origin/${RAMA#origin/}</code> y push"
+  else
+    avisar "quedaron $HUERFANOS commit(s) SIN pushear en $RAMA"
+  fi
 fi
 
 # ── un merge abierto NO se deja pasar en silencio ----------------------------
