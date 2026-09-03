@@ -84,6 +84,12 @@ poner "$FUENTE/sincronizar.sh" "$DESTINO_BIN/onia-loops-sync.sh"
 # junto a onia-tg.sh, que es exactamente el mismo caso y por eso nunca fallo.
 poner "$REPO/scripts/kanban/tablero.sh" "$DESTINO_BIN/onia-tablero.sh"
 
+# El lector de Telegram, por la misma razon que el tablero: es una herramienta del
+# VPS, no un archivo de carril. Si no se despliega solo, es el unico camino de
+# ENTRADA de Sergio y solo se actualiza a mano — justo lo contrario de lo que
+# existe para lograr (que pueda apagar la laptop).
+poner "$REPO/scripts/kanban/telegram-entrada.py" "$DESTINO_BIN/onia-tg-entrada.py"
+
 mkdir -p "$DESTINO_BIN/loops"
 for f in "$FUENTE"/prompts/*.md; do
   [ -f "$f" ] || continue
