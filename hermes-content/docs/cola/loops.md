@@ -78,7 +78,29 @@ manda. Un loop se compara **sólo contra el registro de su propia máquina**:
 | `tendencias` | **VPS** | `51 11,23 * * *` (UTC) | Convierte lo que funciona AHORA en el rubro en recetas accionables de contenido, cada una con su fuente pública (rama `claude/tendencias`) |
 | `calidad-generado` | **VPS** | `5 3,9,15,21 * * *` (UTC) | Que Onia no publique una pieza mala y que Lucía sea SIEMPRE la misma cara (rama `claude/calidad-generado`) |
 | `supervisor` | **VPS** | `29 */2 * * *` (UTC) | **Audita a los otros loops**: que ninguno cobre por trabajo que no sirve (rama `claude/supervisor`). No mergea a `main` — deja lo que encuentra en el tablero |
-| `contenido-cola` | Windows | `31 */3 * * *` | Carril contenido: publicar lo que YA existe hasta que el feed esté vivo. **Lo maneja Sergio en su propia sesión — ningún loop lo toca** |
+| `contenido-cola` | **VPS** | `11 */3 * * *` (UTC) | Carril contenido: publicar lo que YA existe hasta que el feed esté vivo. Trabaja sobre `claude/ads-creatividades-publicos`; **`claude/carril-contenido` sigue siendo de Sergio y ningún loop la toca** |
+
+⚠️ **Corregido 2026-09-03 03:33 UTC — `contenido-cola` decía `Windows` y hacía tres días que
+corría en el VPS.** Es la última fila que quedaba desalineada, y su desalineación **rompía el
+gate `npm test` de `main`** (`loops_registrados`: *"corre en cron y NO está en la tabla"*). Se
+alinea al cron —`11 */3`, no `31 */3`— por la regla de más abajo: cuando el cron y la tabla
+difieren, gana el cron.
+
+Y no era sólo la fila. **El loop llevaba días muriendo en cada corrida**: tenía cron activo,
+worktree y log, pero `/root/bin/onia-loop.sh` lo rechazaba con `uso: …` y `exit 64` porque su
+`case` sólo existía hand-editado en el VPS y `onia-loops-sync.sh` lo pisó con la versión de
+`main`, que no lo tenía. Es **el peligro que este mismo archivo documentaba, cumplido**: el `case`
+vivía en la rama de la sesión de control (`c43b04a24`) sin llegar a `main`, y el sync copia desde
+`main`. Destrabado al mergear esa rama el 2026-09-03.
+
+⚠️ **Y esto NO es un caso del "falla mudo antes de `avisar()`"** que se describe más abajo —
+conviene no confundirlos, porque la primera versión de esta misma nota lo dio por hecho copiando
+la explicación de al lado **sin medirla**. Verificado en el corredor que corre hoy: `tg()` se
+define en la **línea 31** y el caso por defecto grita en la **202**, así que el fallo **sí manda
+Telegram** en cada corrida. Lo que no deja rastro es el **log**: `tg()` redirige su salida a
+`/dev/null`, de modo que en `/var/log/onia-loop-contenido-cola.log` sólo se ve el `uso: …` pelado.
+El agujero de la línea 97/121 era el corredor **viejo**; citarlo acá habría sido diagnosticar por
+memoria contra un archivo que ya cambió.
 
 ⚠️ **Corregido 2026-09-02 20:40 UTC — la tabla tenía 10 filas y el cron 14.** Faltaban
 `recorrido-cliente`, `web-factory-dev`, `tendencias`, `calidad-generado` y `supervisor`: los cinco
@@ -227,8 +249,13 @@ las dos habría quedado con el push rechazado. Ya tiene rama propia (`claude/doc
 **Un carril, una rama** — la regla estaba escrita en `CLAUDE.md` y se rompió igual, porque crear
 un worktree apuntando a una rama que ya tiene dueño **no avisa nada**.
 
-**`contenido-cola` se queda en Windows a propósito**, y esto sí es una decisión, no una omisión:
-Sergio, 2026-09-01 — *"no toques el de contenido, el de contenido lo maneja su sesión"*.
+⚠️ **Acá decía que `contenido-cola` "se queda en Windows a propósito", y desde el 2026-09-02 es
+falso: corre en el VPS.** Lo que sigue vigente es la mitad que importa — Sergio, 2026-09-01:
+*"no toques el de contenido, el de contenido lo maneja su sesión"*. Esa frase protege la **rama**
+`claude/carril-contenido`, no la máquina: el loop del VPS trabaja sobre
+`claude/ads-creatividades-publicos` justamente para no pisarla. **Se mudó porque quedarse en
+Windows era el modo de falla más silencioso que tenía el sistema**: moría al apagar la laptop, y
+el bloque de auto-cura del VPS tenía *prohibido* rearmarlo por estar marcado `Windows`.
 
 ### 🔴 El sistema integraba y auditaba, y no construía nada
 
@@ -306,8 +333,11 @@ estaban registrados: estaban, en las líneas 60 y 62. "Rearmar" una línea que y
 [`README.md`](README.md), sección *"3. El registro del horario se pierde"*. En una línea: si se
 pierden **todos** a la vez, o la máquina está apagada, no queda nadie adentro para notarlo.
 
-Y hay un agujero por diseño: **ningún lado vigila al otro.** Si se cae el crontab del VPS,
-`contenido-cola` no se entera; si se desregistra `contenido-cola`, los del VPS tampoco.
+⚠️ **Acá decía que hay "un agujero por diseño: ningún lado vigila al otro", con `contenido-cola`
+como el vigía del lado Windows. Desde el 2026-09-02 ya no hay dos lados: se mudó al VPS y
+Windows quedó en CERO loops.** El agujero de "ningún lado vigila al otro" desapareció con el
+segundo lado; el que queda es el de siempre, y es peor porque ahora **todo** cuelga de él: si se
+cae el crontab del VPS, no queda nadie afuera para notarlo.
 
 ⚠️ **Acá decía que "todo fallo sale por Telegram" del lado del VPS. Es falso, y su excepción es
 exactamente la que dejó muerto a `investigacion` seis horas.** El corredor define `avisar()` en la
@@ -316,11 +346,11 @@ línea 121 falla mudo** — medido el 2026-09-02 corriendo
 `/root/bin/onia-loop.sh nombre-que-no-existe`: imprime el uso, sale 64, no manda nada. Lo que sí
 avisa es lo que falla *después* de esa línea, como mucho uno cada 6 h por loop.
 
-⚠️ Desde el 2026-09-02 el desbalance es fuerte: **casi todos los loops en el VPS y uno solo en
-Windows** (el conteo exacto, en la tabla de arriba).
-La auto-cura del lado de Windows cuelga de ese único loop — si `contenido-cola` se desregistra,
-**no queda nadie de ese lado para rearmarlo**, y los del VPS no lo ven ni lo tocan a propósito.
-Lo nota una persona: cero commits del carril de contenido en varios días.
+⚠️ **Desde el 2026-09-02 no hay desbalance: hay UN solo lado.** Los 15 loops corren en el VPS y
+Windows quedó vacío. Eso **borra** el riesgo que decía acá (que la auto-cura de Windows colgara de
+un único loop irreemplazable) y a cambio concentra todo en el crontab del VPS: la redundancia del
+bloque de arranque —pegado idéntico en cada prompt— pasa a ser la **única** red que queda. Por eso
+no se optimiza sacándolo de los demás.
 
 ## Cómo se agrega o se saca un loop del VPS
 
