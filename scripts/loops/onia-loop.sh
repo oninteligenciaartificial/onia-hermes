@@ -343,6 +343,19 @@ trap 'rm -f "$PROMPT_FINAL"' EXIT
     fi
     echo; echo "---"; echo; echo "# TU CARRIL"; echo
   fi
+  # Sergio, 2026-09-03: "¿no se supone que aprenden de si mismos y solucionan sus
+  # errores?". No: un modelo no cambia al correr; "aprende" solo por lo que le
+  # entra en contexto. Hasta aca cada vuelta arrancaba sin ver la anterior, y
+  # repetia el mismo callejon (46 % de vueltas sin commit, medido hoy). Ahora ve
+  # su ULTIMA vuelta: OBJETIVO/RAZON/LECCION que dejo escritas y como termino.
+  # Es la penultima ARRANCA del log (la ultima es la de ahora, ya escrita arriba).
+  PREV_INI=$(grep -n "===== ARRANCA $NOMBRE" "$LOG" 2>/dev/null | tail -2 | head -1 | cut -d: -f1)
+  PREV_FIN=$(grep -n "===== ARRANCA $NOMBRE" "$LOG" 2>/dev/null | tail -1 | cut -d: -f1)
+  if [ -n "$PREV_INI" ] && [ -n "$PREV_FIN" ] && [ "$PREV_INI" != "$PREV_FIN" ]; then
+    echo "# TU ULTIMA VUELTA (lo que vos mismo dejaste escrito; si fallo, cambia el metodo)"; echo
+    sed -n "${PREV_INI},${PREV_FIN}p" "$LOG"       | sed -E 's/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:]+Z //'       | grep -E "^(OBJETIVO|RAZ[OÓ]N|LECCI[OÓ]N):|===== (ARRANCA|TERMINA) "       | tail -12
+    echo; echo "---"; echo
+  fi
   cat "$PROMPT"
 } > "$PROMPT_FINAL"
 # `grep -c` imprime "0" Y sale con 1 en un archivo vacio: con `|| echo 0` salian DOS
@@ -359,6 +372,11 @@ rm -f "$PROMPT_FINAL"
 # Lo que este loop aprendio en la vuelta entra a la memoria compartida ahora, no
 # "en algun momento": el consolidador es idempotente y con cerrojo, asi que es
 # seguro llamarlo desde 15 loops. Si no hay nada en la bandeja, no hace nada.
+# Lo que el loop escribio como `LECCION: ...` en ESTA vuelta va solo a la memoria
+# compartida: asi la leccion no depende de que el loop se acuerde de llamar a
+# onia-aprender.sh. Tope 5 por vuelta; el consolidador deduplica.
+CUR_INI=$(grep -n "===== ARRANCA $NOMBRE" "$LOG" 2>/dev/null | tail -1 | cut -d: -f1)
+tail -n +"${CUR_INI:-1}" "$LOG" 2>/dev/null   | sed -E 's/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:]+Z //; s/^[*_#> -]*//'   | grep -E "^LECCI[OÓ]N: ." | cut -c1-600 | head -5   | while IFS= read -r LEC; do /root/bin/onia-aprender.sh "[$NOMBRE] ${LEC#LECCI*N: }" >/dev/null 2>&1 || true; done
 /root/bin/onia-consolidar-memoria.sh >> "$LOG" 2>&1 || true
 
 T=$(( $(date +%s) - T0 ))
