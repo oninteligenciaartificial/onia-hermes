@@ -51,10 +51,9 @@ const QA = {
 };
 
 /**
- * Credenciales de una cuenta YA EXISTENTE, para los pasos que viven detrás de sesión.
- * Sin ellas los pasos 4-8 se reportan NO MEDIDOS con el motivo — nunca OK.
- * El alta del producto hoy no crea cuentas (ver paso 3), así que sin esto el recorrido
- * no puede pasar del 3, y eso es un dato del producto, no una falla del script.
+ * Credenciales de una cuenta YA EXISTENTE. Son el ÚLTIMO recurso, no el primero: con
+ * `--escribir` el recorrido entra con la cuenta que acaba de crear, que es lo que hace un
+ * cliente de verdad. Sin ellas y sin `--escribir`, los pasos 4-8 se reportan NO MEDIDOS.
  */
 const SESION = {
   user: process.env.RECORRIDO_USER || '',
@@ -122,6 +121,41 @@ async function ir(page, url) {
   const resp = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: TIMEOUT });
   await page.waitForLoadState('networkidle', { timeout: TIMEOUT }).catch(() => {});
   return { status: resp?.status() ?? 0, ms: Date.now() - t0, urlFinal: page.url() };
+}
+
+/**
+ * Abre una ruta y EXIGE haber llegado a ella.
+ *
+ * 🔴 Nace del falso verde del 2026-09-03, y es el peor que tuvo este carril: los pasos 5 a 8
+ * pedían /onboarding, /patients, /billing y /dashboard, el producto redirigía las cuatro a
+ * /onboarding —porque el onboarding es obligatorio y estaba sin terminar— y como las cuatro
+ * respondían 200, el script cantó "RECORRIDO COMPLETO: los 8 pasos". Vio UNA pantalla cuatro
+ * veces y la contó como cuatro. Ese mensaje estuvo a un paso de irse a Telegram como la
+ * noticia del carril.
+ *
+ * Un 200 no dice DÓNDE estás. Comparar la URL final con la pedida sí, y es la diferencia entre
+ * "recorrí el producto" y "me quedé en la puerta cuatro veces".
+ */
+async function llegar(page, ruta, archivo) {
+  const r = await ir(page, `${APP}${ruta}`);
+  const vista = await mirar(page, archivo);
+  const destino = new URL(page.url()).pathname.replace(/\/$/, '');
+  const pedida = ruta.replace(/\/$/, '');
+  const llego = destino === pedida;
+  return { ...r, ...vista, destino, pedida, llego };
+}
+
+/**
+ * Traduce un desvío a una frase que se pueda leer sin abrir el código, y —sobre todo— que NO
+ * culpe al producto de algo que no hizo. Que /billing te mande al onboarding no es "el cobro
+ * está roto": es "todavía no llegaste al cobro". La diferencia es un ítem de cola falso.
+ */
+function motivoDesvio(v, ctx, comoSeLlama) {
+  if (/onboarding/.test(v.destino)) {
+    return `no se llegó hasta ${comoSeLlama}: pedí ${v.pedida} y el producto redirigió a ${v.destino}. El onboarding es obligatorio y sigue sin completarse — NO es que la pantalla esté rota, es que el camino no llega hasta ahí`;
+  }
+  if (/login/.test(v.destino)) return `no se llegó hasta ${comoSeLlama}: pedí ${v.pedida} y volvió al login — la sesión se cayó a mitad del recorrido`;
+  return `no se llegó hasta ${comoSeLlama}: pedí ${v.pedida} y terminé en ${v.destino}`;
 }
 
 /**
@@ -317,27 +351,57 @@ const PASOS = [
     nombre: 'entrar',
     que: 'Entrar a la plataforma con esa cuenta',
     async correr(page, ctx) {
-      if (!SESION.user || !SESION.pass) {
+      // 🔴 Acá vivía el defecto que condenaba al recorrido a morir en el paso 3 PARA SIEMPRE,
+      // aunque el alta funcionara perfecto: este paso exigía credenciales de entorno y no
+      // miraba la cuenta que el paso 3 acababa de crear. El producto te deja adentro y el
+      // instrumento pedía una llave aparte. Un cliente no tiene una segunda cuenta: entra con
+      // la que se acaba de hacer. Orden correcto, del más real al menos real:
+      //   1. la sesión que el alta YA dejó abierta  2. la cuenta recién creada  3. la de env.
+      if (ctx.enviado && ctx.altaCreaCuenta) {
+        const url = page.url();
+        if (/app\.onia\.com\.bo/.test(url) && !/\/(login|register)\b/.test(url)) {
+          const vista = await mirar(page, 'paso-04-entrar.png');
+          ctx.conSesion = true;
+          ctx.comoEntro = 'el alta dejó la sesión abierta';
+          return { estado: 'ok', detalle: `el alta dejó la sesión abierta: quedó en ${url}`, ...vista };
+        }
+      }
+
+      const llaveros = [];
+      if (ctx.enviado && ctx.altaCreaCuenta) llaveros.push({ user: QA.email, pass: QA.password, de: 'la cuenta recién creada' });
+      if (SESION.user && SESION.pass) llaveros.push({ user: SESION.user, pass: SESION.pass, de: 'RECORRIDO_USER/RECORRIDO_PASS' });
+      if (!llaveros.length) {
         return {
           estado: 'no-medido',
-          detalle: ctx.altaCreaCuenta === false
-            ? 'el alta no crea cuenta, y no hay credenciales en RECORRIDO_USER/RECORRIDO_PASS: no hay con qué entrar'
-            : 'faltan credenciales en RECORRIDO_USER/RECORRIDO_PASS',
+          detalle: 'no hay con qué entrar: --escribir está apagado (no se creó cuenta) y faltan RECORRIDO_USER/RECORRIDO_PASS',
         };
       }
-      const r = await ir(page, `${APP}/login`);
-      await page.fill('input[type=email], input[name=email]', SESION.user).catch(() => {});
-      await page.fill('input[type=password], input[name=password]', SESION.pass).catch(() => {});
-      await page.click('button[type=submit]').catch(() => {});
-      await page.waitForTimeout(6000);
+
+      let ultimo = '';
+      for (const llave of llaveros) {
+        const r = await ir(page, `${APP}/login`);
+        await page.fill('input[type=email], input[name=email]', llave.user).catch(() => {});
+        await page.fill('input[type=password], input[name=password]', llave.pass).catch(() => {});
+        await page.click('button[type=submit]').catch(() => {});
+        await page.waitForTimeout(6000);
+        if (!/\/login\b/.test(page.url())) {
+          const vista = await mirar(page, 'paso-04-entrar.png');
+          ctx.conSesion = true;
+          ctx.comoEntro = llave.de;
+          return { estado: 'ok', detalle: `entró con ${llave.de}; quedó en ${page.url()}`, ...vista };
+        }
+        // El login que rebota deja su motivo EN LA PANTALLA ("confirmá tu correo", "cuenta
+        // pendiente"). Sin leerlo, el reporte dice "no entró" y el arreglo empieza a ciegas.
+        const motivo = await page.evaluate(() => {
+          const t = [...document.querySelectorAll('[role=alert], .error, .text-red-500, .text-destructive, p, span')]
+            .map((el) => (el.innerText || '').trim())
+            .filter((x) => x && x.length < 200 && /(incorrect|inv[aá]lid|error|confirm|pendiente|verific|no existe|credencial)/i.test(x));
+          return t[0] || '';
+        });
+        ultimo = `con ${llave.de} (${llave.user}) rebotó en ${page.url()}${motivo ? ` — la pantalla dice: "${motivo}"` : ' — sin mensaje visible'}`;
+      }
       const vista = await mirar(page, 'paso-04-entrar.png');
-      const dentro = !/\/login/.test(page.url());
-      ctx.conSesion = dentro;
-      return {
-        estado: dentro ? 'ok' : 'roto',
-        detalle: dentro ? `entró; quedó en ${page.url()}` : `no entró: sigue en ${page.url()} (login devolvió ${r.status})`,
-        ...vista,
-      };
+      return { estado: 'roto', detalle: `no entró: ${ultimo}`, ...vista };
     },
   },
 
@@ -346,11 +410,25 @@ const PASOS = [
     nombre: 'elegir-rubro',
     que: 'Elegir rubro y terminar el onboarding',
     requiereSesion: true,
-    async correr(page) {
-      const r = await ir(page, `${APP}/onboarding`);
-      const vista = await mirar(page, 'paso-05-elegir-rubro.png');
-      if (r.status >= 400) return { estado: 'roto', detalle: `el onboarding devolvió ${r.status}`, ...vista };
-      return { estado: 'ok', detalle: `onboarding en ${page.url()} (${r.status}, ${r.ms} ms)`, ...vista };
+    async correr(page, ctx) {
+      const v = await llegar(page, '/onboarding', 'paso-05-elegir-rubro.png');
+      if (v.status >= 400) return { estado: 'roto', detalle: `el onboarding devolvió ${v.status}`, ...v };
+
+      // Que la pantalla ABRA no es que el onboarding esté TERMINADO. Mientras siga pendiente el
+      // producto retiene ahí al usuario, y eso es lo que hace que los pasos 6-8 no existan
+      // todavía. Se dice tal cual en vez de cantar OK.
+      const pendiente = await page.evaluate(() =>
+        /c[oó]mo se llama tu negocio|buscar mi negocio|complet[ae]r el formulario/i.test(document.body.innerText || '')
+      );
+      ctx.onboardingPendiente = pendiente;
+      if (pendiente) {
+        return {
+          estado: 'no-medido',
+          detalle: `el onboarding está a la vista y SIN TERMINAR (pide "¿Cómo se llama tu negocio?"). Completarlo automáticamente todavía no está escrito: por eso los pasos 6-8 no se pueden medir`,
+          ...v,
+        };
+      }
+      return { estado: 'ok', detalle: `onboarding en ${page.url()} (${v.status}, ${v.ms} ms)`, ...v };
     },
   },
 
@@ -359,11 +437,11 @@ const PASOS = [
     nombre: 'cargar-dato',
     que: 'Cargar un dato real del rubro (un cliente, un paciente, un producto)',
     requiereSesion: true,
-    async correr(page) {
-      const r = await ir(page, `${APP}/patients`);
-      const vista = await mirar(page, 'paso-06-cargar-dato.png');
-      if (r.status >= 400) return { estado: 'roto', detalle: `la pantalla de datos devolvió ${r.status}`, ...vista };
-      return { estado: 'ok', detalle: `pantalla de datos en ${page.url()} (${r.status})`, ...vista };
+    async correr(page, ctx) {
+      const v = await llegar(page, '/patients', 'paso-06-cargar-dato.png');
+      if (v.status >= 400) return { estado: 'roto', detalle: `la pantalla de datos devolvió ${v.status}`, ...v };
+      if (!v.llego) return { estado: 'no-medido', detalle: motivoDesvio(v, ctx, 'la pantalla de datos'), ...v };
+      return { estado: 'ok', detalle: `pantalla de datos en ${page.url()} (${v.status})`, ...v };
     },
   },
 
@@ -374,11 +452,11 @@ const PASOS = [
     // mete una tarjeta. Que el botón exista y se vea es todo lo que hay que reportar.
     que: 'Llegar a la pantalla de cobro y MIRARLA. Frenar ahí',
     requiereSesion: true,
-    async correr(page) {
-      const r = await ir(page, `${APP}/billing`);
-      const vista = await mirar(page, 'paso-07-cobro.png');
-      if (r.status >= 400) return { estado: 'roto', detalle: `la pantalla de cobro devolvió ${r.status}`, ...vista };
-      return { estado: 'ok', detalle: `pantalla de cobro a la vista en ${page.url()} — FRENADO acá a propósito`, ...vista };
+    async correr(page, ctx) {
+      const v = await llegar(page, '/billing', 'paso-07-cobro.png');
+      if (v.status >= 400) return { estado: 'roto', detalle: `la pantalla de cobro devolvió ${v.status}`, ...v };
+      if (!v.llego) return { estado: 'no-medido', detalle: motivoDesvio(v, ctx, 'la pantalla de cobro'), ...v };
+      return { estado: 'ok', detalle: `pantalla de cobro a la vista en ${page.url()} — FRENADO acá a propósito`, ...v };
     },
   },
 
@@ -387,11 +465,11 @@ const PASOS = [
     nombre: 'bandeja',
     que: 'Abrir la bandeja / el panel y ver si el dato del paso 6 aparece',
     requiereSesion: true,
-    async correr(page) {
-      const r = await ir(page, `${APP}/dashboard`);
-      const vista = await mirar(page, 'paso-08-bandeja.png');
-      if (r.status >= 400) return { estado: 'roto', detalle: `el panel devolvió ${r.status}`, ...vista };
-      return { estado: 'ok', detalle: `panel en ${page.url()} (${r.status})`, ...vista };
+    async correr(page, ctx) {
+      const v = await llegar(page, '/dashboard', 'paso-08-bandeja.png');
+      if (v.status >= 400) return { estado: 'roto', detalle: `el panel devolvió ${v.status}`, ...v };
+      if (!v.llego) return { estado: 'no-medido', detalle: motivoDesvio(v, ctx, 'el panel'), ...v };
+      return { estado: 'ok', detalle: `panel en ${page.url()} (${v.status})`, ...v };
     },
   },
 ];
@@ -424,8 +502,12 @@ async function main() {
     const marca = r.estado === 'ok' ? '✔' : r.estado === 'roto' ? '✖' : '·';
     console.log(`  ${marca}  ${etiqueta}: ${r.estado.toUpperCase()} — ${r.detalle}`);
     if (r.estado === 'ok') ultimoOk = paso.n;
-    else if (!corte) corte = r;
   }
+
+  // El corte es el primero que frenó el AVANCE, no el primero que no salió OK. Con el paso 3
+  // salteado a propósito (sin --escribir) y el 4 en verde, "corte en el paso 3" mandaba a mirar
+  // donde no había nada roto.
+  corte = resultados.find((r) => r.estado !== 'ok' && r.n > ultimoOk) || null;
 
   await navegador.close();
 

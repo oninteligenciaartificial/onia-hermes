@@ -7,85 +7,123 @@ Cómo se reproduce, y es un comando, no una intención:
 
     cd /root/loops/onia-hermes-recorrido && node scripts/recorrido_cliente.mjs
 
+Para los pasos que viven detrás de sesión hace falta una cuenta ya confirmada:
+
+    RECORRIDO_USER=<correo> RECORRIDO_PASS=<clave> node scripts/recorrido_cliente.mjs
+
 ---
 
-## Medido el 2026-09-02 22:20 UTC
+## Medido el 2026-09-03 01:17 UTC
 
-**Llegó hasta el paso 2 de 8.** El corte NO es una rotura del producto: el paso 3 crea una
-cuenta real en la base de producción y por eso está detrás de `--escribir`, apagado por defecto.
+**Llegó hasta el paso 4 de 8.** Corte en el paso 5: el onboarding es obligatorio y el script
+todavía no lo sabe completar.
 
 | # | paso | estado | qué se vio |
 |---|---|---|---|
-| 1 | Entrar a `onia.com.bo` y que se VEA | ✔ OK | cargó en 1,8 s, 6.977 caracteres visibles |
+| 1 | Entrar a `onia.com.bo` y que se VEA | ✔ OK | cargó en 885 ms, 6.977 caracteres visibles |
 | 2 | Encontrar el camino de alta | ✔ OK | 7 botones de alta; **2 clics** hasta el formulario |
-| 3 | Pedir acceso / registrarse | · no medido | el formulario **existe y pide contraseña**. No se envió: `--escribir` apagado |
-| 4 | Entrar a la plataforma | · no medido | sin cuenta y sin `RECORRIDO_USER`/`RECORRIDO_PASS` |
-| 5-8 | rubro · dato · cobro · bandeja | · no medido | sin sesión |
+| 3 | Registrarse con datos `zz-qa-` | ✔ **OK, medido de verdad** | el alta **crea la cuenta** y manda el correo de confirmación |
+| 4 | Entrar a la plataforma | ✔ OK | entró y quedó en `/onboarding` |
+| 5 | Elegir rubro y terminar el onboarding | · no medido | el onboarding está a la vista **sin terminar**: completarlo no está escrito |
+| 6-8 | dato · cobro · bandeja | · no medido | el producto redirige las tres a `/onboarding` |
 
-Capturas: `capturas/paso-01-home.png`, `paso-02-camino-de-alta.png`,
-`paso-03-pedir-acceso.png`. Datos crudos en `capturas/resumen.json`.
-
-**No se escribió nada en la base esta vuelta.** Cero filas creadas, cero por limpiar.
+Capturas en `capturas/`. Datos crudos en `capturas/resumen.json`.
 
 ---
 
-## 🔴 El alta NO está cerrada. Lo que dice la documentación es falso
+## 🔴 Lo más importante de esta vuelta: el instrumento cantó COMPLETO y era MENTIRA
 
-`CLAUDE.md` y el prompt de este carril dan por conocida esta trampa:
+En la primera corrida con sesión, el script imprimió:
 
-> «`/register` dejó de crear cuentas y `/empezar` es un formulario de "Pedí tu acceso"».
+    RECORRIDO COMPLETO: los 8 pasos. Eso es la noticia.
 
-**Medido en vivo hoy, las dos mitades son falsas:**
+**Era falso, y estuvo a un mensaje de Telegram de ser "la noticia" del carril.** Los pasos 5, 6,
+7 y 8 pedían `/onboarding`, `/patients`, `/billing` y `/dashboard`; el producto redirigió **las
+cuatro** a `/onboarding`, porque el onboarding es obligatorio y estaba sin terminar. Como las
+cuatro respondían **200**, las cuatro se dieron por buenas.
 
-- **`/empezar` no es un formulario.** Tiene **0 `<input>` y 0 `<form>`** — contado con el DOM,
-  dos veces, con dos instrumentos distintos. Es una landing cuyo título es *"Creá tu cuenta y
-  usalo de verdad 14 días"* y cuyos botones saltan a `app.onia.com.bo/register`.
-- **`/register` está VIVO y crea cuentas.** Es un asistente de dos pasos —(1) tu rubro, entre
-  cinco tarjetas; (2) tu cuenta— con nombre, correo, contraseña, nombre del negocio y un botón
-  **"Crear mi cuenta — 14 días gratis"**. Se ve en `capturas/paso-03-pedir-acceso.png`.
+El instrumento vio **una sola pantalla, cuatro veces**, y la contó como cuatro pasos distintos.
+La prueba más limpia está en el peso de los archivos: `paso-04`, `paso-05`, `paso-06`, `paso-07`
+y `paso-08` pesaban **63.688 bytes las cinco** — es literalmente la misma imagen.
 
-Por qué importa: la regla existe para que nadie prometa un alta inexistente. Hoy manda al revés
-— hace creer que la puerta está cerrada cuando está abierta, y cualquier sesión que la lea va a
-"arreglar" una promesa que el producto sí cumple. **La corrección es del carril dueño de
-`CLAUDE.md`, no de este.**
+**Un 200 no dice DÓNDE estás.** Ese es el defecto entero: nunca se comparó la URL de llegada con
+la pedida. Arreglado en esta vuelta con la función `llegar()`, que exige haber llegado y, si no,
+lo dice con las dos URLs en la mano.
 
-## Lo que sí es un dato de fricción: el alta está a DOS clics, en otro host
+Y con el arreglo puesto, el mismo comando que cantaba victoria ahora dice:
 
-El camino completo es `onia.com.bo/` → `onia.com.bo/empezar` → `app.onia.com.bo/register`.
-`/empezar` es una pantalla intermedia que **no pide ningún dato**: sólo vuelve a prometer y
-manda a otro lado. Es una pregunta abierta —no un defecto probado— si conviene que el primer
-clic caiga directo en el formulario.
+    LLEGÓ HASTA EL PASO 4 de 8.
+    CORTE en el paso 5 (elegir-rubro) — el onboarding está a la vista y SIN TERMINAR
 
-## Dos trampas del instrumento, encontradas y evitadas
+Por qué importa más que cualquier bug del producto: **este carril existe para que nadie reporte
+verde un camino roto.** Un instrumento que se da la razón a sí mismo no es una red de seguridad,
+es una alarma desconectada que además tranquiliza.
 
-Las dos son de la familia *"medí con el instrumento correcto"*, y las dos me habrían hecho
-reportar un defecto inexistente:
+## Lo segundo: el alta funciona ENTERA, y ahora está medido
 
-1. **Los nombres de iconos en el texto NO son el bug del login.** El DOM de `/register`
-   devuelve `dentistry`, `credit_card_off`, `smart_toy` como texto — idéntico al defecto que
-   Sergio encontró en producción. Pero es una fuente de **ligaduras**: el texto del DOM *es* el
-   nombre del icono y renderiza como glifo. **Mirada la captura, se ven los dibujos, no las
-   palabras.** El DOM sirvió para sospechar; sólo la imagen podía confirmar o descartar.
-2. **El único campo con `name` es el honeypot.** Los cuatro campos reales del alta no tienen
-   `name` ni `id`, sólo `placeholder`. El único con `name` es `sitioWeb`, la trampa anti-bots.
-   Un relleno que busque por `name` —lo obvio— llena **exactamente la trampa y nada más**, y
-   después culpa al producto por rechazar el alta. El script lo saltea a propósito.
+Se envió el alta de verdad (`--escribir`) por primera vez. El producto hizo todo bien:
+
+- Creó la cuenta en `auth.users`, la organización en `organizations` y el perfil en `profiles`
+  con rol **ADMIN** — las tres filas, en una sola operación.
+- Le dio el entitlement `module.agents` en estado `trial` hasta el 2026-09-17 (14 días).
+- Mostró **"Verificá tu correo — Tu cuenta ya fue creada"** (`capturas/paso-03b-...png`).
+- **Mandó el correo, y salió de verdad.** En el log de `onia-mail`:
+  `to=<zz-qa-2026-09-03@onia.com.bo>, relay=route2.mx.cloudflare.net, status=sent (250 2.0.0 Ok)`,
+  firmado con DKIM.
+
+**El rebote del paso 4 no es un bug**: es `email_not_confirmed`, el doble opt-in funcionando.
+Para poder medir lo que hay detrás, se confirmó a mano **la fila `zz-qa-` y sólo esa**
+(`update auth.users set email_confirmed_at=now() where email like 'zz-qa-%'` → `UPDATE 1`).
+Queda dicho porque es un salteo deliberado del instrumento, no algo que haga un cliente.
+
+## Lo que se escribió en producción, y cómo quedó
+
+Estado antes del alta: **4 organizaciones, 6 perfiles**. Filas creadas y **borradas en la misma
+vuelta**, impresas antes de tocarlas:
+
+```
+auth.users     a8c367d1-f1e5-4cb7-af30-2e8355e4b03a  zz-qa-2026-09-03@onia.com.bo
+profiles       cmtktyoll000101khphfayh1w             zz-qa-2026-09-03@onia.com.bo  ADMIN
+organizations  cmtktyol5000001kh725lmlpv             zz-qa-2026-09-03-negocio
+organization_entitlements  cmtktyomf000301khbsabh820  module.agents / trial
+auth.identities dd8e270b-fc28-4878-85ad-e9d0aae58c76  email
+```
+
+Borradas por **id exacto**, dentro de una transacción: `DELETE 1` cinco veces, `COMMIT`.
+Verificado después: **0 filas `zz-qa-`**, totales de vuelta en **4 orgs / 6 perfiles**, y las
+**3 solicitudes reales de `access_requests` intactas**. Nada quedó sin limpiar.
+
+⚠️ **Y el borrado falló mudo la primera vez.** `docker exec supabase-db psql <<'SQL'` **sin
+`-i`** no conecta stdin: psql no recibe nada, no borra nada y **sale sin error**. El comando se
+veía exitoso. Sólo el recuento posterior lo delató. Va con `docker exec -i` siempre, y el
+recuento después del borrado no es opcional.
+
+## Dos trampas del instrumento, de vueltas anteriores (siguen vigentes)
+
+1. **Los nombres de iconos en el texto NO son el bug del login.** El DOM de `/register` devuelve
+   `dentistry`, `credit_card_off` como texto, igual que el defecto real de producción. Es una
+   fuente de ligaduras: en la captura se ven los dibujos. El DOM sirve para sospechar; sólo la
+   imagen confirma.
+2. **El único campo con `name` es el honeypot** (`sitioWeb`). Los cuatro campos reales sólo
+   tienen `placeholder`. Un relleno que busque por `name` llena **exactamente la trampa** y
+   después culpa al producto por rechazar el alta.
 
 ## Estado del instrumento
 
-`scripts/recorrido_cliente.mjs` existe y corre. Lo que ya sabe hacer:
+`scripts/recorrido_cliente.mjs`. Lo que ya sabe hacer:
 
-- Captura con **scroll real** antes de la foto (`fullPage` solo devuelve tiras en blanco en
-  este sitio: las secciones se revelan con `IntersectionObserver`) y con el **Chromium
-  completo** (`channel: 'chromium'`), no el `headless_shell` que inventa texto roto.
-- **Sigue la cadena** de alta en vez de asumir que es una pantalla. Es lo que falló en la
-  primera corrida de hoy: tomó `/empezar` por el formulario, contó cero campos y reportó "el
-  alta no crea cuenta" — un falso hallazgo que contradecía al producto.
-- **Descubre los campos** en vez de hardcodearlos, para que un cambio de forma se note en vez
-  de romper un selector.
-- Sale con código 0 aunque el recorrido se corte: "se corta en el paso 3" es el **reporte**, no
-  una caída del script.
+- **Exige llegar a donde pidió** (`llegar()`): un redirect ya no puede pasar por éxito.
+- **Entra con la cuenta que acaba de crear**, no con una llave aparte. Antes el paso 4 exigía
+  `RECORRIDO_USER`/`RECORRIDO_PASS` y **ni miraba** la cuenta del paso 3 — eso solo condenaba al
+  recorrido a morir en el 3 para siempre, aunque el alta funcionara perfecto.
+- **Lee el motivo del rebote en la pantalla** cuando el login falla, en vez de reportar "no entró".
+- **El corte es el paso que frenó el avance**, no el primero que no dio OK: con el paso 3
+  salteado a propósito, antes decía "corte en el paso 3" y mandaba a mirar donde no había nada.
+- Captura con **scroll real** y con el **Chromium completo** (`channel: 'chromium'`), no el
+  `headless_shell` que le inventó texto roto al canario durante tres días.
+- Sale con código 0 aunque el recorrido se corte: "se corta en el paso 5" es el **reporte**.
 
-Lo que le falta: los pasos 4 a 8 nunca se ejecutaron todavía. Están escritos contra rutas
-supuestas (`/onboarding`, `/patients`, `/billing`, `/dashboard`) que **nadie verificó**.
-Hasta que una corrida con sesión las toque, esas cuatro rutas son una hipótesis.
+**Lo que le falta, y es lo próximo:** completar el onboarding (nombre del negocio → "Buscar mi
+negocio") para que los pasos 6, 7 y 8 se puedan medir por primera vez. Hasta que eso exista,
+**`/patients`, `/billing` y `/dashboard` siguen sin haber sido vistas nunca por este carril** —
+existen en el build, pero nadie las miró renderizadas con una cuenta nueva.
