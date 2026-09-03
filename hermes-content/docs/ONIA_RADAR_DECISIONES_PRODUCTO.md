@@ -2071,8 +2071,20 @@ escribiendo ahí y el choque vuelve en cada vuelta. Los dos loops están vivos y
 eso se anota en `COORDINATION_MANIFEST.md`, el otro carril deja de escribir ahí, y los 2 commits
 varados se mergean o se descartan según corresponda.
 
-**Lo que ya es nuestro y está hecho:** los otros cinco carriles varados (14 commits) están en
-`main`, y el merge conflictivo quedó **abortado y limpio**, no a medias.
+⚠️ **Y no es un carril: son DOS, por la misma causa.** En la misma vuelta,
+`claude/git-status-935f47` (la sesión de control) chocó en
+`references/modelos/lucia/LUCIA.md` — el archivo canónico de la identidad de Lucía— con un
+conflicto de **118 KB**. También se abortó. Elegir mal ahí no es un detalle de formato: `LUCIA.md`
+es de donde se copia el UUID de la cara, y el propio archivo documenta que ya mandó **seis veces**
+al Element jubilado. Un merge a ojo ahí produce fotos con la cara equivocada.
+
+**Los dos conflictos tienen la misma raíz**, y por eso van juntos: `references/modelos/lucia/` lo
+escriben `lucia`, `calidad-generado` y la sesión de control, **sin dueño declarado**. Mientras eso
+siga así, el integrador va a abortar estos dos merges en cada vuelta, para siempre.
+
+**Lo que ya es nuestro y está hecho:** **once** de los trece carriles están en `main` (25 commits
+integrados esta vuelta), y los dos merges conflictivos quedaron **abortados y limpios**, no a
+medias. Ninguna rama perdió trabajo: siguen pusheadas en `origin`.
 
 ---
 ## 37. El carril de Lucia no lo enumeraba nadie (2026-09-02) — RESUELTO 2026-09-03, ya no hay decisión
