@@ -2049,6 +2049,75 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         así que no hay nada que rescatar. No es un ítem: es una medición que faltaba.
       - **El plazo de la guía sigue vigente** (30-09-2026), o sea que la página no está vieja.
 
+### Del carril `web-venta` — corrida del 2026-09-03 19:48 UTC (quién enlaza a quién)
+
+- [x] 🟠 **Dos servicios que Onia COBRA sólo se podían alcanzar entrando por la política de
+      privacidad — ARREGLADO, con gate.** `/servicios/marketing-ia` y `/servicios/consultoria`
+      están publicadas y el sitemap las pide indexar, pero desde la superficie de venta entera
+      —portada, `/precios`, `/empezar`, `/rubros`, `/chatbot`, `/agentes`, `/facturacion`,
+      `/comparativa`, `/contacto`, `/nosotros`— no había **un solo enlace**.
+      - **Medido, no supuesto:** bajadas las 16 páginas que sirve `onia.com.bo` y contados los
+        enlaces entrantes en el HTML servido. Todas las demás tienen **16**; estas dos tienen
+        **4**, y las cuatro son `/privacidad`, `/terminos` y ellas dos entre sí.
+      - **La causa:** las dos siguen en `app/servicios/` —el árbol viejo, con el `SiteFooter`
+        archivado, el mismo cromo que `/v1`, que es `noindex` justamente por viejo—. Por eso
+        los únicos enlaces vivían en un pie que **ninguna pantalla de venta usa**.
+      - **Es el bug de `/nosotros` (2026-08-23) sin terminar de barrer.** Aquella vez se
+        rescató UNA página metiéndola en `NAV_DECIDIR` y ahí quedó, sin mirar a las hermanas
+        que estaban en el mismo cromo muerto. Es exactamente lo que `CLAUDE.md` llama arreglar
+        el síntoma donde saltó y dejar vivos a los que llaman a lo mismo.
+      - **Verificado que enlazarlas es correcto ANTES de enlazarlas:** las dos páginas se
+        leyeron enteras. Cero obra ("muy pronto", "beta"), cero prueba social fabricada —
+        marketing-ia dice de frente *"no tenemos un muro de logos ni casos de éxito… antes que
+        inventarlos, preferimos no tenerlos todavía"*—, y consultoría está en el catálogo de
+        venta como servicio que se cobra (`ONIA_CATALOGO_DE_VENTA.md:147`).
+      - **El arreglo:** apartado `Servicios` (Webs · Marketing IA · Consultoría) en el mapa
+        único del sitio (`(sitio)/nav.ts`), que leen el pie y el menú de teléfono. `webs` va
+        con las otras dos aunque ya era alcanzable: una lista partida en dos lugares es la que
+        se desincroniza. **No es un rediseño** — el pie archivado ya tenía esa misma columna.
+      - **Gate nuevo `app/alcance.test.ts`**, en `prebuild` (el comando real del deploy): toda
+        página publicada tiene que estar enlazada desde `app/(sitio)/`. Sujetos derivados del
+        **disco** (`PAGINAS_PUBLICAS`, reusada de `rutas.ts` en vez de recalcularla), así una
+        página nueva nace cubierta y sacarla exige prohibirla en `robots.ts`, que se ve.
+        ⚠️ **Y exige que el enlace salga del árbol VIVO, no de cualquier página** — ésa es la
+        trampa que dejó el defecto suelto: preguntar "¿la enlaza alguien?" da verde, porque
+        `/privacidad` la enlazaba… con el pie muerto.
+      - **Verificado en ROJO antes**, por el motivo correcto: sacadas las dos entradas, falla
+        **exactamente** en esas dos rutas, nombrando archivo y ruta.
+      - **MIRADO renderizado** sobre el build de producción (`next start`, escuchando 4xx antes
+        de creerle a la foto, y con `scroll-behavior:auto` inyectado): pie a 1440 y 390 con las
+        cuatro columnas enteras y ningún enlace desbordado, y el menú de teléfono abierto con
+        el apartado nuevo. **Segundo turno probado:** clic real en los tres enlaces → 200 y el
+        `<h1>` correcto en cada destino. El pie pasa a 4 columnas recién a 900px (entre 700 y
+        900 van 2×2: a 700 con cuatro columnas "Marketing IA" partía en dos renglones).
+      - **Gates:** typecheck exit 0 · `vitest run` **239 verdes** en 13 archivos · build exit 0.
+      - ⚠️ **No está en producción**: `onia.com.bo` la sirve el contenedor `onia-landing` y
+        publicar es de Sergio. Es el **décimo** arreglo esperando el mismo deploy de
+        `t_68671bc3`.
+
+- [x] 🟢 **Checklist de pre-entrega, puntos 5 y 11–16: corridos contra producción, todos
+      verdes.** `<html lang="es">` en las 16 · exactamente **una** `<h1>` por página en las 16 ·
+      canonical propio en las 16 · cero contenido mixto `http://` · las 25 `<img>` con `width`,
+      `height` y `alt` real (son fotos de contexto, no capturas del sistema: cumplen la regla) ·
+      los 19 enlaces internos y assets responden 200.
+
+- [ ] 🟢 **`/guia-facturacion` la enlaza UNA sola página (`/facturacion`) — no lo toqué, y el
+      motivo importa.** Salió del mismo conteo. No es el mismo defecto que los servicios: está
+      enlazada desde el árbol VIVO, así que un lead sí puede llegar. Parece deliberado (es el
+      imán de la página de facturación). Queda anotado por si el dueño del contenido lo quiere
+      también en el pie; el gate ya la cubre y hoy pasa.
+
+- [ ] 🟢 **Cloudflare ofusca el correo de contacto en `/privacidad` y `/terminos`, y para un
+      rastreador sin JS el contacto legal dice `[email protected]`.** Medido: el HTML servido
+      trae `<a href="/cdn-cgi/l/email-protection">` en 7 lugares de 4 páginas. **Mirado
+      renderizado: para un humano NO hay defecto** — el decodificador de Cloudflare corre y la
+      pantalla muestra `business@onia.com.bo` con su `mailto:` bien puesto. El residuo es que
+      `/privacidad` es indexable **a propósito porque el rastreador de Meta valida esa URL al
+      publicar la app del chatbot**, y ese rastreador no ejecuta JS: ve el marcador. Y la
+      ofuscación no protege nada igual — el correo viaja en claro en el payload RSC de las 16
+      páginas. **Se apaga en el panel de Cloudflare (Scrape Shield → Email Address
+      Obfuscation), que no es código ni es mi zona:** es de Sergio.
+
 ### Del canario visual — corrida del 2026-09-03 ~03:41 UTC (diez pantallas)
 
 - [x] 🟠 **El ítem de "captura full-page ciega" (abierto 2026-09-02, confirmado vivo en
