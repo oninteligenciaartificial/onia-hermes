@@ -40,7 +40,7 @@ export function HowItWorks() {
             <Shot title="app.onia.com.bo · crear cuenta" bodyless>
               <ShotImage
                 src="/capturas/rubros-onia.webp"
-                alt="Pantalla real de Onia al crear una cuenta: elegís el tipo de negocio entre seis rubros disponibles — clínica dental, comercio o tienda, importadora, estética y spa, veterinaria y servicios profesionales."
+                alt="Pantalla real de Onia al crear una cuenta: elegís el tipo de negocio entre cinco rubros disponibles — clínica dental, comercio o tienda, importadora, estética y spa, y servicios profesionales."
                 width={1200}
                 height={824}
               />
