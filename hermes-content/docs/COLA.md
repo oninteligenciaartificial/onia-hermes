@@ -1861,6 +1861,35 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       (699 KB/114 ms, redirige a `/login` sin sesión: "no medida", no "OK"). Ninguna
       baseline tocada.
 
+- [ ] 🟠 **Al gate de la cola le quedan 7 falsos positivos, y son de DOS clases distintas.
+      Medido el 2026-09-03 12:47 UTC por `onia-cola`, que ya cerró la tercera.**
+      `node scripts/verificar_cola.js hermes-content/docs/COLA.md` daba **13** errores; con el
+      arreglo de hoy (prefijo del repo hermano) da **10**, de los cuales 2 son `sin-evidencia`
+      legítimos. Los 7 `fantasma` que sobran NO son items rotos: son formas que el extractor
+      toma por rutas de repo y no lo son. **Un gate que sale rojo de fábrica se saltea, y ahí
+      deja de proteger** — es la misma lección del vigía que grita mal.
+      ⚠️ Los seis literales de abajo van **sin backticks a propósito**: citarlos entre backticks
+      los vuelve a extraer como rutas y este mismo ítem sumaba 6 errores nuevos al gate que
+      viene a describir. Se comprobó en vivo antes de escribirlo así.
+      - **Clase A — nombre de archivo suelto, sin barra:** robots.txt (línea 781),
+        page.tsx (961), globals.css (1682). `existeEnAlgunRepo` los rechaza **a propósito**
+        (`scripts/verificar_cola.js:275`: sin barra no se resuelve por sufijo, porque un
+        page.tsx suelto matchearía cientos). El defecto es que algo deliberadamente irresoluble
+        se reporte como ERROR en vez de ignorarse: el gate se acusa a sí mismo.
+      - **Clase B — especificador de módulo, no ruta:** @/lib/pricing (961), next/link
+        (1554), packs/js/sdk.js (1554). Son un alias de TypeScript, un paquete de npm y el SDK
+        de Chatwoot servido por otro host. Ninguno es un archivo de este árbol y ninguno debería
+        buscarse en disco.
+      - **Repro en 30 segundos:** `node scripts/verificar_cola.js hermes-content/docs/COLA.md`
+        y leer las líneas `ERROR fantasma`. Cada una nombra el literal que no resolvió.
+      - ⚠️ **Y un hallazgo aparte, más barato de arreglar que de explicar:** el validador tiene
+        un self-check de **75 casos** (`node scripts/verificar_cola.js --self-check`) que
+        **`npm test` no corre** — no está en `package.json`. Un gate con pruebas que nadie
+        ejecuta se rompe sin que nadie se entere.
+      - **Zona:** `scripts/verificar_cola.js`, de este carril (`onia-cola`). No entraba en la
+        vuelta de hoy: se arregló la clase del repo hermano, que era la que ensuciaba las rutas
+        del producto, y se dejó medido el resto en vez de empezar lo que no se puede terminar.
+
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 
 - **F1 · Sumar `/patients` al nav de servicios profesionales.** Lo intenté, escribí el test,

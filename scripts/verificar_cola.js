@@ -260,6 +260,16 @@ function existeEnAlgunRepo(ruta, baseDir) {
   for (let i = 0; i < 6; i++) {
     for (const repo of REPOS_HERMANOS) {
       if (fs.existsSync(path.join(path.dirname(dir), repo, ruta))) return true;
+      // Y la misma ruta escrita CON el nombre del repo adelante
+      // (`onia-platform/lib/pricing.ts`), que es como la escribe CLAUDE.md para fijar la
+      // fuente de verdad de precios. Sin este renglon el prefijo se unia al repo hermano
+      // —que se llama igual— y quedaba `onia-platform/onia-platform/lib/...`: fantasma
+      // garantizado sobre el archivo mas citado del carril. No afloja nada: se sigue
+      // exigiendo que exista DENTRO del hermano, solo se deja de contar el nombre dos veces.
+      if (ruta.startsWith(repo + '/')) {
+        const sinPrefijo = ruta.slice(repo.length + 1);
+        if (fs.existsSync(path.join(path.dirname(dir), repo, sinPrefijo))) return true;
+      }
     }
     const padre = path.dirname(dir);
     if (padre === dir) break;
@@ -682,9 +692,22 @@ function selfCheck() {
   r = revisarCola('## Ahora\n- [ ] Gatear el add-on · `lib/plan-limits.ts:396`\n', path.join(tmp, 'onia-hermes'));
   ok(!r.problemas.length, 'una ruta del repo hermano onia-platform resuelve');
 
+  // (5b) La MISMA ruta pero escrita CON el nombre del repo adelante. Es la forma que usa
+  // CLAUDE.md para fijar la fuente de verdad de precios (`onia-platform/lib/pricing.ts`), o sea
+  // la forma mas autorizada que hay — y era un fantasma garantizado: al unir el prefijo con el
+  // repo hermano, que se llama igual, salia `onia-platform/onia-platform/lib/...`. Medido el
+  // 2026-09-03: 3 de los 8 errores de COLA.md eran esto, sobre archivos que existen.
+  fs.writeFileSync(path.join(tmp, 'onia-platform', 'lib', 'pricing.ts'), 'x');
+  r = revisarCola('## Ahora\n- [ ] Leer precios · `onia-platform/lib/pricing.ts`\n', path.join(tmp, 'onia-hermes'));
+  ok(!r.problemas.length, 'una ruta del hermano CON el prefijo del repo tambien resuelve');
+
   // Y su limite: lo que no esta ni aca ni en el hermano sigue siendo fantasma.
   r = revisarCola('## Ahora\n- [ ] Algo · `lib/no-existe-en-ningun-lado.ts`\n', path.join(tmp, 'onia-hermes'));
   ok(r.problemas.some((p) => p.regla === 'fantasma'), 'el repo hermano no vuelve verde cualquier ruta');
+
+  // Ni el prefijo del repo hermano vuelve verde un archivo que no existe ahi.
+  r = revisarCola('## Ahora\n- [ ] Algo · `onia-platform/lib/tampoco-existe.ts`\n', path.join(tmp, 'onia-hermes'));
+  ok(r.problemas.some((p) => p.regla === 'fantasma'), 'el prefijo del hermano no absuelve una ruta inventada');
 
 
   // --- Los cuatro falsos positivos medidos el 2026-09-02 sobre la propia COLA.md ---
