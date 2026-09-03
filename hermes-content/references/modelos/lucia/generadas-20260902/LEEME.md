@@ -17,7 +17,7 @@ Generadas con `lucia-skin-v1` (`58bbd635-…`) por CLI en el VPS, Nano Banana Pr
 | `E2-C-rooftop.png` | Misma rooftop — toma C | `af2771c7-e66b-4592-86e8-0fe59b02128a` | ✅ variante de la escena rooftop |
 | `E3-cafe.png` | Café de especialidad, luz cálida de ventana, ladrillo, plantas colgando, **las dos manos en la taza** (acción a medias) | `c31c1333-dbd6-4be7-890f-07dcbb1cfc59` | ✅ **la prueba 9/9 de la receta** — es la que se animó (→ E4/E6) |
 | `E3-coworking.png` | Coworking de diseño, sol de ventana con flare, plantas, laptop con UI | `bc39fa80-5144-4230-8171-c56bfc77aee5` | ⚠️ fancy y fiel, pero **pelo recogido** y **laptop con UI** en cuadro (de canto y suave, no legible de frente). Sin animar — **auditada 2026-09-02, ver abajo** |
-| `E3-hotel.png` | Hall de hotel con boiserie de madera, lámparas cálidas, ventanal al jardín | `43bb8397-45ed-4307-b4f8-ba592ff2bdaa` | ✅ **la más limpia** — pelo suelto, sin pantallas ni texto, cara muy fiel al ancla. **Es la próxima a animar** (ver abajo) |
+| `E3-hotel.png` | Hall de hotel con boiserie de madera, lámparas cálidas, ventanal al jardín | `43bb8397-45ed-4307-b4f8-ba592ff2bdaa` | ✅ **la más limpia** — pelo suelto, sin pantallas ni texto, cara muy fiel al ancla. **Animada 2026-09-03 → `E5-hotel-seedance.mp4`** |
 
 **Las tres tomas E2 salen del mismo base prompt** — está en `_E2-BASE-prompt.txt`. A y C son
 tomas alternas de la misma escena; **B es la que la receta canonizó** como palanca de luz fancy
@@ -33,6 +33,7 @@ Formatos verificados con `ffprobe` (detalle y creativos en [`CREATIVO.md`](CREAT
 | `E4-cafe-seedance1_5.mp4` 🎯 | 720×1280 = 9:16 exacto · aac | 4,0 s | `seedance1_5` | 4,8 cr | ✅ **el default publicable** — cierra sobre su cara (casilla 9) |
 | `E6-cafe-seedance-8s.mp4` | 720×1280 = 9:16 exacto · aac | 8,0 s | `seedance1_5` | 9,6 cr | ✅ b-roll largo/relajado; el medio es el sorbo (§16) |
 | `E4-cafe-kling3_0.mp4` ⛔ | 716×1284 (necesita recorte) · aac | 5,0 s | `kling3_0` | 8,75 cr | ⚠️ **NO se publica** — termina cabizbaja, cara tapada (§15). Se guarda como contraejemplo |
+| `E5-hotel-seedance.mp4` 🎯 | 720×1280 = 9:16 exacto · aac | 4,0 s | `seedance1_5` | 4,8 cr | ✅ **publicable** — anima `E3-hotel.png`: se acomoda un mechón (acción a medias real), parpadeo suave, cierra sobre la cara (casilla 9). Cara fiel al ancla en los 6 frames. Asset id del MP4: `0a7c63e4-5075-4c92-ab6e-7ce9d2ecae40` (rescatado del nombre de descarga — este SÍ quedó guardado) |
 
 🔴 **Los `job_id` de estos tres videos NO quedaron guardados.** La `CREATIVO.md` decía que estaban
 en los `_E*.log`, pero esos logs son **sólo de imágenes** (contienen la URL del PNG, no la del
@@ -63,12 +64,16 @@ prompt que **fije la laptop quieta y fuera de foco** (nada de paneo hacia la pan
 despertar la casilla 3. Como imagen fija sirve para feed; como base de video es la más riesgosa de
 las tres E3.
 
-## ⛔ Pendiente heredado a la próxima vuelta: animar `E3-hotel.png`
+## ✅ Resuelto 2026-09-03: `E3-hotel.png` animada → `E5-hotel-seedance.mp4`
 
-`E3-hotel.png` es la mejor imagen sin video del banco. Esta vuelta (2026-09-02) se intentó animarla
-por CLI y **el servidor devolvió `grace_daily_limit_reached`**: el límite diario de generación de
-video ya estaba agotado. El costo se midió antes (**4,8 cr**, `seedance1_5` 9:16 4 s) y la generación
-NO se llegó a lanzar. Comando exacto para la próxima vuelta con cupo:
+El límite diario del 02-sep (`grace_daily_limit_reached`) **se reseteó al cambiar de día**: el
+03-sep la generación de video volvió a funcionar sin tocar nada. Se lanzó el comando de abajo tal
+cual (4,8 cr medidos y confirmados antes de generar), salió a la primera y se miró frame por frame
+(`_E5-hotel-frames.jpg`): identidad intacta, pelo suelto, acomoda un mechón, cierra sobre la cara.
+Publicable. **Lección:** un `grace_daily_limit_reached` NO es un bloqueo permanente — es la cuota
+del día; la próxima vuelta en fecha distinta se reintenta, no se re-mide dentro del mismo día.
+
+Comando que se usó (queda como receta para re-animar el hotel):
 
 ```bash
 IMG="hermes-content/references/modelos/lucia/generadas-20260902/E3-hotel.png"
