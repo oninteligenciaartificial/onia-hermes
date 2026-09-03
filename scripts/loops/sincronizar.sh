@@ -191,6 +191,18 @@ if [ -d /opt/onia-landing/_deploy ]; then
   poner "$REPO/hermes-content/deploy/onia-landing/swap-and-verify.sh"  /opt/onia-landing/_deploy/swap-and-verify.sh
 fi
 
+# El runbook de deploy de la PLATAFORMA (app.onia.com.bo). Mismo agujero que la
+# landing, en la mitad de al lado: deploy-gates-swap.sh estaba scripteado y el
+# BUILD no. Habia un build-<sha>.sh suelto por deploy (copias identicas salvo el
+# sha) y el deploy del 2026-09-03 se hizo entero a mano, sin dejar script. Un
+# paso a mano en el medio de la cadena es por que un commit verde pasa dias sin
+# llegar al cliente. deploy-gates-swap.sh NO se sincroniza: sigue siendo el
+# unico paso que pide OK de Sergio, y se edita en el VPS a proposito.
+if [ -d /opt/onia-platform ]; then
+  poner "$REPO/hermes-content/deploy/onia-platform/build-and-stage.sh"    /opt/onia-platform/build-and-stage.sh
+  poner "$REPO/hermes-content/deploy/onia-platform/recreate-container.sh" /opt/onia-platform/recreate-container.sh
+fi
+
 mkdir -p "$DESTINO_BIN/loops"
 # La misma guarda que el corredor, para los prompts. Medido el 2026-09-03 a las
 # 12:04: la guarda de arriba salvo onia-loop.sh, y en la MISMA corrida el sync
