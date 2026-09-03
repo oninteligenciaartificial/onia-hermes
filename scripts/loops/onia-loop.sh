@@ -295,9 +295,50 @@ log "===== ARRANCA $NOMBRE — rama $RAMA — HEAD $ANTES — tope ${TOPE}s ====
 # Modelo y esfuerzo: decision de Sergio el 2026-09-02 — "cambialos todos a opus 5
 # en max, pero quiero que terminen de una vez". Antes era claude-sonnet-5 sin
 # --effort. Cuesta mas por vuelta; el rendimiento por vuelta es lo que se compra.
+# ── memoria compartida: el loop arranca sabiendo lo que el sistema ya sabe ----
+# Sergio, 2026-09-03: "que los loops usen la memoria de hermes tambien". Hasta
+# aca cada loop arrancaba "sin memoria: todo esta en los archivos" — y volvia a
+# descubrir por su cuenta que onia.com.bo no es Vercel, que soul_2 no existe, o
+# que Sergio quiere las horas en La Paz. Ahora el prompt que entra a claude es
+# MEMORIA + PROMPT: lo que Hermes sabe de Onia (MEMORY.md), lo que aprendio de
+# Sergio (USER.md), y recien despues las instrucciones del carril. Pesa ~2.000
+# tokens: nada, contra una vuelta de 120 turnos que repite un error ya conocido.
+# Se arma en un temporal para no tocar $PROMPT, que es lo que la guarda de
+# arriba compara contra main.
+MEMORIA_DIR=/root/.hermes/memories
+PROMPT_FINAL=$(mktemp /tmp/onia-prompt-$NOMBRE-XXXXXX.md)
+{
+  if [ -s "$MEMORIA_DIR/MEMORY.md" ] || [ -s "$MEMORIA_DIR/USER.md" ]; then
+    echo "# MEMORIA COMPARTIDA DEL SISTEMA — es contexto, no es tu cola"
+    echo
+    echo "Lo que Onia ya aprendio, a veces caro. Leelo antes de trabajar y NO lo vuelvas a"
+    echo "descubrir. Si algo de aca contradice un doc del repo, medi cual esta vigente y"
+    echo "avisá. Al cerrar la vuelta, lo que aprendiste que le sirva a otro carril va con"
+    echo "\`/root/bin/onia-aprender.sh \"<hecho>\"\` (ver tu bloque de memoria compartida)."
+    echo
+    if [ -s "$MEMORIA_DIR/MEMORY.md" ]; then
+      echo "## Lo que el sistema sabe de Onia"; echo
+      cat "$MEMORIA_DIR/MEMORY.md"; echo
+    fi
+    if [ -s "$MEMORIA_DIR/USER.md" ]; then
+      echo "## Lo que el sistema sabe de Sergio"; echo
+      cat "$MEMORIA_DIR/USER.md"; echo
+    fi
+    echo; echo "---"; echo; echo "# TU CARRIL"; echo
+  fi
+  cat "$PROMPT"
+} > "$PROMPT_FINAL"
+log "memoria inyectada: $(wc -c < "$PROMPT_FINAL") bytes de prompt ($(grep -c '^§$' "$MEMORIA_DIR/MEMORY.md" 2>/dev/null || echo 0) hechos de MEMORY.md)"
+
 timeout "$TOPE" claude -p --model "$MODELO" --effort "$ESFUERZO" --max-turns "$TURNOS" \
-  --allowedTools "$TOOLS" < "$PROMPT" >> "$LOG" 2>&1
+  --allowedTools "$TOOLS" < "$PROMPT_FINAL" >> "$LOG" 2>&1
 RC=$?
+rm -f "$PROMPT_FINAL"
+
+# Lo que este loop aprendio en la vuelta entra a la memoria compartida ahora, no
+# "en algun momento": el consolidador es idempotente y con cerrojo, asi que es
+# seguro llamarlo desde 15 loops. Si no hay nada en la bandeja, no hace nada.
+/root/bin/onia-consolidar-memoria.sh >> "$LOG" 2>&1 || true
 
 T=$(( $(date +%s) - T0 ))
 DESPUES=$(git rev-parse --short HEAD)

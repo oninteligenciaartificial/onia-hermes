@@ -90,6 +90,19 @@ poner "$REPO/scripts/kanban/tablero.sh" "$DESTINO_BIN/onia-tablero.sh"
 # existe para lograr (que pueda apagar la laptop).
 poner "$REPO/scripts/kanban/telegram-entrada.py" "$DESTINO_BIN/onia-tg-entrada.py"
 
+# La memoria compartida: el corredor la inyecta y los loops le escriben por estos
+# dos. Si no se despliegan solos, el corredor de main llama a un script que no
+# existe en /root/bin y los 15 loops fallan mudos en la primera linea.
+poner "$FUENTE/aprender.sh"            "$DESTINO_BIN/onia-aprender.sh"
+poner "$FUENTE/consolidar-memoria.sh"  "$DESTINO_BIN/onia-consolidar-memoria.sh"
+# Los vigias y el renovador de horarios, por la misma razon: existian solo en
+# /root/bin y una reinstalacion desde el repo los borraba sin avisar.
+poner "$FUENTE/vigia-disco.sh"             "$DESTINO_BIN/onia-vigia-disco.sh"
+poner "$FUENTE/aligerar-worktrees.sh"      "$DESTINO_BIN/onia-aligerar-worktrees.sh"
+poner "$FUENTE/respaldar-memoria-hermes.sh" "$DESTINO_BIN/onia-respaldar-memoria.sh"
+poner "$FUENTE/renovar-slots-bot.py"       "$DESTINO_BIN/onia-renovar-slots.py"
+poner "$FUENTE/hermes-vigia.sh"            "$DESTINO_BIN/hermes-vigia.sh"
+
 mkdir -p "$DESTINO_BIN/loops"
 for f in "$FUENTE"/prompts/*.md; do
   [ -f "$f" ] || continue
