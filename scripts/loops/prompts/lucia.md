@@ -66,10 +66,23 @@ despublica — ya la vio alguien.
 mirar:
 
     scripts/kanban/tablero.sh create "Reel peluquería día 1 — listo para revisar"       --body "Archivo: <ruta exacta>. Qué es, para qué cuenta, y qué falta si algo falta." --priority 2
-    scripts/kanban/tablero.sh block <id> --kind needs_input "Sergio: mirar la pieza y aprobar o rechazar"
+    scripts/kanban/tablero.sh block <id> "Sergio: mirar la pieza y aprobar o rechazar" --kind needs_input
 
 **Bloqueada, nadie la publica ni la genera.** Cuando Sergio la libera (`unblock`), recién ahí
 avanza.
+
+⚠️ **El motivo va PEGADO al id y `--kind` al final. No lo reordenes.** Hasta el 2026-09-03 esta
+línea enseñaba `block <id> --kind needs_input "motivo"`, y esa forma **no bloquea nada**: muere en
+`hermes: error: unrecognized arguments: motivo` con exit 2. Es el bug clásico de argparse — la
+firma real es `block task_id [reason ...]` con `--kind` opcional, y un posicional de cola detrás
+de un opcional no se puede parsear. Medido contra un id inexistente, para ver sólo el parseo:
+
+    block <id> --kind needs_input "motivo"   → unrecognized arguments   exit=2   NO BLOQUEA
+    block <id> "motivo" --kind needs_input   → unknown task             exit=1   parseo OK
+
+**Y mirá el código de salida.** Este prompt no te pedía mirarlo, así que la pieza quedaba en
+`ready` —tomable y publicable por cualquiera— justo cuando vos creías haberla dejado esperando el
+OK de Sergio. El bloqueo que falla en silencio es peor que no bloquear.
 
 ⚠️ **En el cuerpo va la RUTA del archivo, siempre.** Sergio tiene que poder abrirlo y mirarlo en
 diez segundos. Una tarea que dice "el carrusel está listo" sin decir dónde le hace perder el

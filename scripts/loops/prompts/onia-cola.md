@@ -269,13 +269,29 @@ Ramas de carril activas en **`onia-hermes`** (base `origin/main`):
 - `claude/supervisor` — audita a los otros loops (loop `supervisor`)
 - `claude/git-status-935f47` — la sesion de control (Sergio y el orquestador escriben ahi)
 
-⚠️ **Y volvió a pasar el 2026-09-03: faltaban SEIS.** `lucia-vps`, `recorrido-cliente`,
-`web-factory-dev`, `tendencias`, `calidad-generado` y `supervisor` estaban en `loops.md`, con cron
-y con commits propios sin mergear — y esta lista nombraba siete carriles cuando ya había trece.
-Se cazaron **sólo porque el paso de enumerar en vivo existe**; la lista escrita los habría dejado
-varados otra vez. Es la tercera repetición del mismo agujero, y la moraleja ya no es "actualizar
-la lista": es que **la lista es una ayuda, y el `git branch -r` de abajo es la fuente**. Si alguna
-vez discrepan, gana el comando.
+⚠️ **Y volvió a pasar el 2026-09-03: faltaban SEIS.** Medido en vivo a las 04:40 UTC:
+`lucia-vps` 4, `recorrido-cliente` 3, `web-factory-dev` 2, `calidad-generado` 2, `supervisor` 2,
+`tendencias` 1 — **14 commits de loops vivos que no llegaban a `main`**. Los seis tenían cron,
+prompt y worktree desde el 2026-09-02; esta lista se escribió antes y **nadie la actualizó**,
+igual que con `web-venta` e `investigacion` el día anterior. Es la MISMA falla a seis veces la
+escala, y la tercera repetición del agujero.
+
+**La lista y el comando NO compiten: hacen falta los dos, y por motivos distintos.** Dos carriles
+resolvieron esto a la vez y cada uno sacó media conclusión —una decía "gana el comando", la otra
+"se mantiene la lista"—; pegarlas sin más habría dejado este prompt contradiciéndose. La síntesis,
+que es lo que se obedece:
+
+- **La lista es lo que el loop obedece**, así que se mantiene. El párrafo de "enumerá en vivo" de
+  acá abajo **ya existía cuando esto volvió a pasar**: por sí solo no alcanzó.
+- **El comando es la fuente.** Si alguna vez discrepan, **gana el comando** — y la lista se
+  corrige en esa misma vuelta, no en la siguiente.
+
+⚠️ **Y el costo no es "tarda en llegar": para un prompt, un commit varado NO EXISTE.**
+`onia-loops-sync.sh` copia los prompts a `/root/bin/loops/` **desde `main`**, cada hora al :44. El
+2026-09-03 a las 00:32 el carril `supervisor` arregló en `lucia.md` la sintaxis de `block` que
+falla muda (`f5c4aa895`); cuatro horas y cuatro vueltas de integrador después,
+`/root/bin/loops/lucia.md:89` **seguía enseñando la forma rota**, porque el arreglo vivía en una
+rama que esta lista no nombraba. Un carril que no puede publicar sus arreglos audita gratis.
 
 ⚠️ **`web-venta` e `investigacion` faltaban en esta lista hasta el 2026-09-02 18:33 UTC, y los
 dos tenían un commit varado.** Sus loops se crearon ese mismo día, con cron registrado y
