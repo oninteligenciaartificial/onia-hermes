@@ -247,10 +247,40 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       no hay nadie colgado. Por eso esta vuelta **no mandó alarma a Sergio** — un aviso de "alguien
       va a una reunión vacía" que no tiene a nadie del otro lado es exactamente cómo se dejó de
       creerle al vigía del embudo.
-      **Próximo paso, chico y acotado:** que la salida del gate diga **quién** es la conversación
-      (nombre del contacto), para que un rojo de QA y un rojo de un lead real no se lean igual.
-      **NO se resuelve excluyendo a la sonda**: una lista de exclusión devuelve el gate a fallar
-      abierto, que es el bug que esta vuelta acaba de cerrar. Se informa, no se filtra.
+      ✅ **HECHO el 2026-09-03 (vuelta siguiente): el gate ya dice QUIÉN está del otro lado.** Era
+      el próximo paso anotado acá, y hacía falta porque la frase de cierre era **falsa**: salía
+      siempre *"Del otro lado hay alguien que va a llegar a una reunión vacía"*, y la única promesa
+      hueca era `Sonda QA carril chatbot`, el instrumento de este mismo carril. Nadie iba a ninguna
+      reunión. **Un vigía que grita mal no molesta: INUTILIZA** — es exactamente como se dejó de
+      creerle al vigía del embudo, y este gate iba camino a lo mismo en su segundo día de vida.
+      **Se informa, NO se filtra, y el código de salida lo prueba: 1 en los dos casos.** Excluir a
+      la sonda de los sujetos devolvería el gate a fallar abierto, que es el bug de la vuelta
+      anterior. Lo único que cambia es la frase — que es lo que decide si Sergio deja todo y actúa.
+      **Los dos veredictos, medidos con identidades REALES de la base y no con fixtures:**
+      · hoy → `1 de 1 … conv 49 «Sonda QA carril chatbot» … Hoy son TODAS de la sonda QA de este
+      carril, así que no hay nadie plantado — pero el motor prometió exactamente lo mismo que le
+      prometería a un lead, y por eso sigue en rojo.`
+      · con los dos desconocidos de verdad de la bandeja (`F` +59173232758 y `mariohassen`
+      +59173021804, tal como salen del join a `contacts`) → `2 de 2 … conv 35 «F» · conv 37
+      «mariohassen» … Del otro lado hay alguien que va a llegar a una reunión vacía.`
+      **El predicado de "quiénes somos nosotros" se IMPORTA de `scripts/objetivo_visible.mjs`, no se
+      copia** (`esNuestra`, con el celular de Sergio y los nombres de QA): dos listas del mismo
+      tema divergen el día que alguien agrega un número a una sola, y `CLAUDE.md` pide una fuente
+      por tema.
+      ⚠️ **El sesgo va al REVÉS que en el otro gate, a propósito.** En `scripts/objetivo_visible.mjs` "parece
+      nuestro" pone el gate más rojo; acá bajaría el volumen. Por eso **un contacto que no se pudo
+      leer se trata como persona real** y grita: equivocarse gritando se investiga en un minuto,
+      equivocarse callando deja a alguien plantado.
+      **Rojo primero, por el motivo correcto:** los 7 casos nuevos fallaron por lo que tenían que
+      fallar (`nombra al contacto de la promesa hueca`, `no inventa un humano esperando cuando es
+      la sonda`, …). **38 → 44 casos**, verde, y `npm test` entero en verde.
+      🔎 **Y un defecto encontrado al EJECUTARLO, no al leerlo: `demo_agendada_real.mjs` no tenía
+      la guarda de `argv[1]`.** Importar el módulo para probar `juzgar` con datos reales disparaba
+      **dos `docker exec` contra producción y un `process.exit()`** como efecto de cargarlo: el
+      proceso que importaba se moría antes de su primera línea. `scripts/objetivo_visible.mjs` ya tenía la
+      guarda y este archivo la había copiado sin ella. Arreglado y **pinchado con un caso que corre
+      en un proceso hijo** (en este el módulo ya está cacheado y el test pasaría en falso).
+      **Reproducción en 30 s:** `npm run demo:agendada` → exit 1 nombrando al contacto.
 
 - [ ] 🔴 **Un lead pregunta "¿el sistema hace X?" y el bot le contesta con la oferta de horarios,
       como si no hubiera preguntado nada.** Encontrado el 2026-09-03 recorriendo el frente
