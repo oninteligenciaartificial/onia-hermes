@@ -1547,3 +1547,51 @@ al otro. Poner el dueño en la tabla cierra la causa sin discutir el diseño.
 de Chatwoot por pantalla, medidos del lado del navegador, todos 200 en la última corrida) y
 ningún visitante real lo sufrió — cero IPs de terceros bloqueadas en 24 h, medido dos veces. No
 corre riesgo mientras esto se decide.
+
+---
+
+## 29. La cara de Lucía deriva porque el ancla vigente es la equivocada — el arreglo es gratis (2026-09-03) — decisión de Sergio
+
+**Qué se midió.** Se abrieron uno por uno los cuadros sueltos de
+`references/modelos/lucia/prueba-motor-20260813/` y se compararon contra el banco canónico
+(`INVENTARIO-caras.jpg`). Evidencia en
+`hermes-content/docs/research/calidad-generado/evidencia-anclas-20260903/`.
+
+**El test del 13/08 se reportó como un A/B de dos métodos y en realidad tiene TRES brazos:**
+
+| Fuente | Cara que sostiene | Micro-detalle |
+|---|---|---|
+| Soul `36305a9b…` (`LUCIA-REAL-v2-clean`) | Familia A | ✗ pastosa, piel manchada de rojo |
+| Element **`452d8375…`** (`lucia-ancla-2026-08`) ← **la vigente** | **la que deriva** | ✓ |
+| Element `902eeebb…` (`lucia-surgical-anchor`) | **la del banco** | ✓ **la mejor de las tres** |
+
+**Por qué importa.** `ORDEN-DE-DISPARO-L3-L4-L7-L8.md` fijó `452d8375…` como ancla vigente el
+23/08. Con esa se generó `G06-peluqueria.jpg` el 28/08, cuya cara no es la del banco. **La deriva
+no es azar del modelo ni culpa del método: es un UUID mal elegido.** Se eligió bien la familia
+(Element) y mal el miembro, porque la pregunta binaria *"¿Soul o Element?"* metía a los dos
+Elements en la misma bolsa.
+
+**Lo que hay que romper, y por eso decide Sergio: dos papeles se contradicen.**
+
+- `ONIA_MODELOS_RAIZ.md` — **sin fecha, así que manda por la regla de `CLAUDE.md`** — rotula
+  `452d8375…` como *"Element (PRIMER PLANO)"* y `902eeebb…` como *"Element (photoshoot)"*.
+- `ONIA_MODELOS_PERFILES_ALTA_20260806.md` prescribe lo inverso y con motivo: `nano_banana_2 +
+  <<<902eeebb…>>>` **para primer plano**, porque es el ancla que resolvió el *"se ve muy IA"*
+  después de 11 avatares malos.
+
+**Los píxeles le dan la razón al segundo; la regla de precedencia, al primero.** Este loop no
+rompe ese empate solo.
+
+**Las opciones, cotizadas en créditos:**
+
+| | Qué se hace | Cuesta | Qué queda |
+|---|---|---|---|
+| **A — recomendada** | Cambiar el ancla vigente a `902eeebb…` en `ORDEN-DE-DISPARO`, y corregir `ONIA_MODELOS_RAIZ.md` para que su rótulo coincida. Después, **una** imagen de confirmación con el prompt de G06. | **0 cr** el cambio · **2 cr** la confirmación | La cara vuelve al banco **y** se gana nitidez. Cierra la contradicción de los dos papeles |
+| **B** | Sólo cambiar el UUID, sin confirmar con una imagen. | **0 cr** | Gratis, pero queda como hipótesis: la próxima pieza es la prueba, y si falla se descubre con la pieza ya hecha |
+| **C** | No tocar nada y seguir con `452d8375…`. | 0 cr | La cara sigue corriéndose pieza a pieza. Hoy hay **0 piezas publicadas**, así que el costo de arreglarlo nunca va a ser más bajo que ahora |
+
+**Lo que este loop recomienda: A.** Es la única que además deja los dos documentos diciendo lo
+mismo, que es la causa por la que cada sesión nueva venía eligiendo mal.
+
+⚠️ **Nada de esto lo ejecuta el loop de calidad**: `ORDEN-DE-DISPARO` y `ONIA_MODELOS_RAIZ.md`
+están fuera de su zona, y los 2 cr de la confirmación son permiso de gasto de Sergio.

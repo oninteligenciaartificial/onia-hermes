@@ -67,29 +67,73 @@ familias visuales nítidas:
 | Gesto | Sonriente | **Neutro, más severo** |
 | Edad que aparenta | 25–27 | **28–32** |
 
+⚠️ **Corregido 2026-09-03: el "rubor marcado" NO sirve como rasgo discriminante.** Abierto
+`B-soul-closeup.jpg` a tamaño real, ese rubor no es rubor: es **piel manchada de rojo**, con la
+textura pastosa y los pelos de ceja apelmazados. Es exactamente la falla que
+`ONIA_MODELOS_PERFILES_ALTA_20260806.md` ya había registrado del `soul_2` en plano cerrado
+(*"piel manchada de rojo, nariz difusa, dientes con artefactos"*, tras 11 avatares malos).
+
+Y los cuadros 3, 4 y 5 de `INVENTARIO-caras.jpg` **muestran ese mismo manchón**. O sea: es
+probable que el propio banco canónico tenga el artefacto del generador horneado adentro. **Se
+canonizó un defecto como si fuera un rasgo de la cara.**
+
+Consecuencia práctica: los rasgos en los que hay que confiar son los **estructurales** —
+cejas (1.1), mandíbula y largo de cara (1.2), edad aparente (1.3)—, que es justo lo que la
+rúbrica ya pone primero. El rubor sale de la lista.
+
 **Esto importa más que cualquier pieza suelta:** la deriva no empezó en el lote del 28/08.
 Ya estaba **el 13/08**, dentro del test que eligió el método. El ancla que quedó vigente
 codifica la Familia B, y el banco de referencia de caras muestra sobre todo la Familia A. Por
 eso cada pieza nueva "se corre" de forma consistente: no es azar del modelo, es el ancla.
 
-⚠️ **No está resuelto qué cuadro corresponde a qué método.** Los nombres de archivo
-(`A-soul-*`, `C/D/E-elem-*`) sugieren el mapeo pero la hoja de contacto no lo rotula, y no voy
-a afirmar lo que no puedo leer. **Lo que sí está probado es que hay dos caras.**
+### ✅ Resuelto el 2026-09-03: el mapeo, abriendo los cuadros SUELTOS
 
-### La contradicción de método — necesita a Sergio
+Acá decía *"no está resuelto qué cuadro corresponde a qué método"* porque se había mirado sólo
+la hoja de contacto, que no rotula. **Pero los cuadros sueltos existen y sí traen el método en
+el nombre.** Abiertos y mirados uno por uno el 2026-09-03. Evidencia guardada en
+`hermes-content/docs/research/calidad-generado/evidencia-anclas-20260903/`.
 
-Hay **dos doctrinas vivas y opuestas** sobre cómo se sostiene la cara:
+**Y el test no era de dos métodos: es de TRES fuentes de identidad distintas.**
 
-- **`ORDEN-DE-DISPARO-L3-L4-L7-L8.md`** (23/08) dice: se usa el **Element ancla**
-  `452d8375-fb67-4df7-9ae0-8f1b257aa51f` (`lucia-ancla-2026-08`), y que
-  *"el Soul `LUCIA-SINTETICA-v3` **NO se usa**: probado A/B, no le gana al Element"*.
-- **La doctrina del carril de calidad** dice que el método aprobado es **Soul + texto**, y que
-  es el único que da consistencia de cara.
+| Cuadros | Fuente | Cara que sostiene | Micro-detalle |
+|---|---|---|---|
+| `A-soul-medio`, `B-soul-closeup` | **Soul** `36305a9b…` (`LUCIA-REAL-v2-clean`) | **Familia A** | ✗ pastosa |
+| `C-elem-ancla-closeup`, `D-elem-ancla-medio` | **Element `452d8375…`** (`lucia-ancla-2026-08`) | **Familia B** | ✓ fotográfico |
+| `E-elem-surgical-closeup` | **Element `902eeebb…`** (`lucia-surgical-anchor`) | **coincide con el canon** | ✓ fotográfico |
 
-Las dos no pueden ser ciertas. Es exactamente el problema que `CLAUDE.md` prohíbe: dos fuentes
-de verdad del mismo tema, y cada sesión nueva elige mal. **Decide Sergio** — y la evidencia de
-§3 le da un dato que el A/B original no miró: el Element gana en *nitidez*, pero la cara que
-sostiene **no es la del banco de referencia**.
+El mapeo de `E` sale de que **`lucia-surgical-anchor` es el único Element "surgical" del
+registro** (`ONIA_MODELOS_RAIZ.md` §3), y lo corrobora el píxel por dos lados independientes:
+`E` tiene el micro-detalle de un Element (no la pasta del Soul) y su cara **no** es la de
+`452d8375…`. Son dos líneas que convergen, no una inferencia de nombre suelta.
+
+### 🔴 El ancla vigente es la EQUIVOCADA, y cambiarla es gratis
+
+`ORDEN-DE-DISPARO-L3-L4-L7-L8.md` (23/08) fijó como vigente
+`452d8375-fb67-4df7-9ae0-8f1b257aa51f` — **la que produce la Familia B**. Con esa se generó
+`G06-peluqueria.jpg`, y por eso su cara no es la del banco.
+
+**No es "Soul contra Element": es que hay DOS Elements y quedó escrito el que deriva.** El otro
+(`902eeebb…`) da la cara del banco **y además** el mejor micro-detalle de los tres. Corregirlo
+es cambiar un UUID dentro del prompt: **cero créditos.**
+
+⚠️ Pero los papeles se contradicen sobre cuál va en primer plano, y esto **decide Sergio**:
+
+- `ONIA_MODELOS_RAIZ.md` (sin fecha ⇒ fuente de verdad) rotula `452d8375…` como
+  *"Element (PRIMER PLANO)"* y `902eeebb…` como *"Element (photoshoot)"*.
+- `ONIA_MODELOS_PERFILES_ALTA_20260806.md` prescribe lo inverso y con motivo:
+  `nano_banana_2 + <<<902eeebb…>>>` **para primer plano**, porque es el ancla que resolvió el
+  *"se ve muy IA"*.
+
+Los píxeles le dan la razón al segundo. Pero el que manda por regla de `CLAUDE.md` es el
+primero — así que la corrección la firma Sergio, no este loop.
+
+### La contradicción de método — qué queda de ella
+
+La doctrina del carril de calidad dice que el aprobado es **Soul + texto** y que es *"el único
+que da consistencia de cara"*. **Medido, eso es falso en primer plano de cara:** el Soul sostiene
+la Familia A pero entrega piel pastosa y manchada; el Element `902eeebb…` sostiene la misma cara
+**y** resuelve pelo, pestañas y pecas de verdad. La consistencia no la da el Soul: la da **usar
+el ancla correcta**.
 
 ---
 

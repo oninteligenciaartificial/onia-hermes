@@ -22,8 +22,7 @@ corre igual y en la misma dirección porque el ancla es la misma. **No es azar d
 el ancla.** Juzgar pieza por pieza nunca lo iba a encontrar — sólo se ve comparando contra el
 banco.
 
-**Qué lo destraba:** la decisión de método (Soul vs Element ancla) que hoy está contradicha
-entre dos documentos. Es de Sergio.
+**Qué lo destraba:** ✅ **encontrado el 2026-09-03 — ver P5. No era el método: era el UUID.**
 
 ### P2 · "Verificada mirándola" no alcanza si se mira sólo la cara
 
@@ -59,6 +58,45 @@ con puntas acarameladas del banco. **Pero la escena es una peluquería y el pelo
 que oscurece de verdad. No cuenta como falla de identidad. Lo que **no** explica el agua es la
 forma de la ceja ni el ancho de la mandíbula — y ahí sí hay deriva. Anotado como ítem 1.4 de
 la rúbrica con su salvedad.
+
+### P5 · Hay DOS anclas Element, y la que quedó escrita es la que deriva
+
+**El hallazgo que cierra P1, y no costó un crédito.** P1 quedó abierto porque se miró la hoja de
+contacto —que no rotula— y se concluyó *"no se puede saber qué cuadro es qué método"*. **Los
+cuadros sueltos sí traen el método en el nombre.** Abiertos el 2026-09-03; tabla y evidencia en
+`BANCO-OFICIAL.md` §3 y en `docs/research/calidad-generado/evidencia-anclas-20260903/`.
+
+El test del 13/08 no comparaba dos métodos sino **tres fuentes de identidad**:
+
+| | Cara | Micro-detalle |
+|---|---|---|
+| Soul `36305a9b…` | Familia A | ✗ pastosa, piel manchada |
+| Element **`452d8375…`** ← **la vigente** | **Familia B (la deriva)** | ✓ |
+| Element `902eeebb…` (`lucia-surgical-anchor`) | **la del canon** | ✓ **la mejor** |
+
+**La causa raíz de toda la deriva es una línea de `ORDEN-DE-DISPARO-L3-L4-L7-L8.md`** que fijó
+`452d8375…` como ancla vigente el 23/08. Con esa se generó G06 el 28/08. **Arreglarlo es cambiar
+un UUID en el prompt: cero créditos.**
+
+**Por qué nadie lo vio antes:** el A/B original preguntó *"¿Soul o Element?"* y esa pregunta no
+tiene la respuesta adentro — **hay dos Elements y la pregunta binaria los mete en la misma
+bolsa.** Se eligió bien la familia y mal el miembro. Toda la evidencia estaba en disco desde el
+13/08.
+
+**La lección transferible:** cuando una comparación se escribe como A-contra-B, verificar
+primero que A y B sean *uno* cada uno. Un A/B con tres brazos reportado como dos oculta al
+tercero — y acá el tercero era el ganador.
+
+### P6 · Un defecto del generador se puede canonizar como rasgo de la cara
+
+`BANCO-OFICIAL.md` §3 listaba **"rubor marcado en pómulos y nariz"** como rasgo discriminante de
+la Familia A. Mirado a tamaño real en `B-soul-closeup.jpg`, ese rubor **no es rubor**: es la piel
+manchada de rojo del `soul_2` en plano cerrado — falla ya registrada en agosto tras 11 avatares
+malos. Y los cuadros 3–5 del propio `INVENTARIO-caras.jpg` la tienen.
+
+**El banco de referencia puede traer el artefacto horneado adentro.** Por eso los rasgos que
+valen son los estructurales (cejas, mandíbula, edad), y por eso la rúbrica los pone primero.
+Un rasgo que sólo aparece en piezas de un mismo generador es sospechoso de ser del generador.
 
 ---
 
@@ -101,19 +139,26 @@ depende del ancla** — sirva o no la pieza.
 
 Este loop **no genera nada**. Las dos cosas que destraban el carril son decisiones suyas:
 
-**1 · La contradicción de método (gratis, es sólo decidir).** `ORDEN-DE-DISPARO` dice que se
-usa el **Element ancla** y que el Soul *"NO se usa: probado A/B, no le gana al Element"*. La
-doctrina del carril de calidad dice que el aprobado es **Soul + texto** y que es el único que
-da consistencia de cara. Las dos no pueden ser ciertas y cada sesión nueva elige mal. El dato
-que el A/B original no miró: el Element gana en nitidez, pero **la cara que sostiene no es la
-del banco**.
+**1 · Cambiar el ancla vigente de `452d8375…` a `902eeebb…` — GRATIS, es editar un UUID.**
+Es la decisión que destraba el carril entero, y ya no necesita comprar información: los tres
+brazos del test están medidos (P5). `452d8375…` sostiene la Familia B; `902eeebb…`
+(`lucia-surgical-anchor`) sostiene la cara del banco **y** tiene el mejor micro-detalle de los
+tres. Toca `ORDEN-DE-DISPARO-L3-L4-L7-L8.md`, que **no es zona de este loop**.
 
-**2 · El test que separa ancla de escena — 2 créditos.** Una sola imagen: **misma ancla, mismo
-prompt de G06, fondo simple**. Si la cara vuelve al banco, el culpable era la escena cargada
-(P3) y se arregla escribiendo prompts, gratis. Si no vuelve, es el ancla (P1) y hay que
-rehacerla. Costo de referencia: G06 costó **2 cr** de un saldo de ~2.100. **Es la pregunta más
-barata que se puede comprar en este carril** — pero el permiso de gasto es de Sergio, así que
-queda propuesto, no ejecutado.
+⚠️ Lo que hace falta que firme Sergio es que **los dos papeles se contradicen**:
+`ONIA_MODELOS_RAIZ.md` (sin fecha ⇒ manda por `CLAUDE.md`) rotula `452d8375…` como *"PRIMER
+PLANO"*; `ONIA_MODELOS_PERFILES_ALTA_20260806.md` prescribe `902eeebb…` para primer plano, con
+motivo. **Los píxeles le dan la razón al segundo, la regla de precedencia al primero.** Este
+loop no rompe el empate solo.
+
+**2 · Confirmar el cambio con UNA imagen — 2 créditos.** Después de cambiar el UUID: mismo
+prompt de G06 con `902eeebb…`. Confirma en un solo disparo que la cara vuelve al banco. Costo
+de referencia: G06 costó **2 cr** de un saldo de ~2.100.
+
+**3 · Separar ancla de escena — 2 créditos, y bajó de prioridad.** Era la pregunta cara cuando
+no sabíamos si el culpable era el ancla o el fondo cargado (P3). Con P5 medido, el ancla ya
+explica la deriva; este test sólo diría **cuánto suma además** la escena cargada. Vale la pena
+sólo si después del cambio de UUID la cara todavía no cierra.
 
 ---
 
@@ -121,6 +166,11 @@ queda propuesto, no ejecutado.
 
 - **No se puede medir tendencia de deriva con n=1.** El lote más nuevo tiene una imagen. La
   deriva de P1 está probada *contra el banco*, no como pendiente entre lotes.
-- **No está resuelto qué cuadro de la hoja de contacto corresponde a qué método.** Los nombres
-  de archivo lo sugieren; la hoja no lo rotula. No se afirma lo que no se puede leer.
+- ~~No está resuelto qué cuadro corresponde a qué método.~~ ✅ **Resuelto el 2026-09-03 (P5)**,
+  abriendo los cuadros sueltos en vez de la hoja de contacto.
+- **No está confirmado en una pieza nueva que `902eeebb…` devuelva la cara del banco.** Está
+  probado sobre el material del 13/08, no sobre una generación hecha para comprobarlo. Es una
+  hipótesis fuerte con evidencia en disco, **no un arreglo verificado** — y confirmarla cuesta
+  2 cr que este loop no puede gastar.
+- **No se puede medir tendencia de deriva con n=1** (el lote más nuevo tiene una imagen).
 - **Ninguna pieza de este carril fue generada por este loop.** Acá no se dispara nada pago.

@@ -39,7 +39,7 @@ que mirar primero y con más dureza.
 | 1.4 | Pelo | Castaño medio, puntas acarameladas ⚠️ *el pelo mojado se lee mucho más oscuro: no cuenta como falla si la escena lo justifica* |
 | 1.5 | Pecas | Presentes en nariz y pómulos, finas y dispersas |
 | 1.6 | Ojos | Marrones, almendrados, **los dos del mismo tamaño y con el mismo pliegue** |
-| 1.7 | Piel | Cálida y tostada, tono parejo entre frente, pómulos y cuello |
+| 1.7 | Piel | Cálida y tostada, tono parejo entre frente, pómulos y cuello. ⚠️ **Manchones rojos en pómulos y nariz = ✗**, aunque el banco los tenga: es el artefacto del `soul_2` en plano cerrado, no un rasgo de Lucía (P6 de la bitácora) |
 | 1.8 | Accesorios | Si hay: argollas doradas chicas, cadenita fina. Nada que contradiga el inventario |
 
 ⚠️ **Un rasgo que se corre de a poco lote a lote no se nota hasta que ya se publicaron veinte
