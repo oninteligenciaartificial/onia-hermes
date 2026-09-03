@@ -16,7 +16,7 @@ y NO son fuente de verdad.
 | (raíz) | 4 | — | Anclas: `INVENTARIO-caras`, `INVENTARIO-ropa`, `FIJADO-ancla-outfits-lugares`, `STACK-rasgos-10-angulos` |
 | `avatar-20260806` | 8 | — | Foto de perfil y alternativas |
 | `perfil-20260806` | 8 | — | Set de perfil (P1–P6 + grid) |
-| `posts-20260807` | 16 | — | 6 posts + auditorías y descartes |
+| `posts-20260807` | 16 | — | 6 posts + auditorías y descartes. ⚠️ **4 de los 6 NO PASAN** — ver §4 |
 | `biblioteca-20260808` | 2 | — | Café/celular |
 | `calibracion-20260806` | 16 | — | L1–L15 + contacto |
 | `prueba-motor-20260813` | 7 | — | **A/B Soul vs Element ancla** (ver §3) |
@@ -137,7 +137,31 @@ el ancla correcta**.
 
 ---
 
-## 4. Qué NO existe
+## 4. 🔴 Y el banco tampoco contiene una cara POR LOTE
+
+**Encontrado el 2026-09-03 montando la tira de las seis caras de `posts-20260807`.** §3 probó que
+el banco tiene dos familias *entre* métodos. Esto es peor y es aparte: **dentro de un solo lote,
+del mismo día y del mismo método, hay dos caras.**
+
+- **P1, P2, P6** → la cara del banco: óvalo suave, pecas densas, 25–27.
+- **P3** → la misma cara, con los manchones rojos del `soul_2` encima.
+- **P4, P5** → **otra**: cara larga y angosta, mandíbula marcada, 28–32.
+
+Tira en `docs/research/calidad-generado/evidencia-posts-20260807/TIRA-6-caras.png`. Veredictos
+pieza por pieza y salvedades de ángulo/gesto en `BITACORA-PERFECCION.md` (P7).
+
+⚠️ **Consecuencia para este archivo:** *"qué piezas hay"* no es lo mismo que *"qué piezas sirven"*.
+El inventario de §1 cuenta 76 imágenes; **las que se pueden publicar hoy son P1 y P6**. Todo lo
+demás es material de prueba, descarte o pieza sin juzgar.
+
+⚠️ **Y la deriva no empezó donde decía §3.** Acá se leía que la deriva estaba *"ya el 13/08"*, en
+el test que eligió el método. Con la tira, **el 07/08 el lote ya traía dos caras** — seis días
+antes, y antes de cualquier ancla Element. La causa del ancla (§3) sigue en pie para la
+*dirección* del corrimiento; no explica la *dispersión* dentro de un lote.
+
+---
+
+## 5. Qué NO existe
 
 - **No hay video aprobado como canónico.** Los 73 videos son tests de motor, renders
   intermedios y bases. El único terminado es `reel-lanzamiento-20260822/final/lucia-lanzamiento-v7.mp4`.

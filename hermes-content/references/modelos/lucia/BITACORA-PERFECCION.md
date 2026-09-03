@@ -87,6 +87,60 @@ bolsa.** Se eligió bien la familia y mal el miembro. Toda la evidencia estaba e
 primero que A y B sean *uno* cada uno. Un A/B con tres brazos reportado como dos oculta al
 tercero — y acá el tercero era el ganador.
 
+### P7 · 🔴 La deriva no es entre lotes: es DENTRO del mismo lote
+
+**El hallazgo más caro del 2026-09-03, y contradice cómo veníamos buscando.** Hasta acá la deriva
+se buscaba comparando lote contra lote (P1, P5). Montada la tira de las seis caras de
+`posts-20260807` —el lote que cuatro documentos declaran *"listas para subir"*— **las seis no son
+la misma mujer**, y son del **mismo día**.
+
+Evidencia: `docs/research/calidad-generado/evidencia-posts-20260807/TIRA-6-caras.png`
+(las seis caras recortadas a la misma altura, una al lado de la otra).
+
+| | Cara | Contra el canon |
+|---|---|---|
+| P1, P2, P6 | Óvalo suave, pecas densas, 25–27 | **coinciden entre sí y con el banco** |
+| P3 | Óvalo, pero **piel manchada de rojo** en pómulos y nariz | el artefacto del `soul_2` (P6) |
+| P4, P5 | **Cara larga y angosta, mandíbula marcada, 28–32** | **otra cara** |
+
+**Por qué importa más que la deriva del ancla:** arreglar el UUID (P5) corrige la dirección en la
+que se corre la cara, **pero no esto**. Seis escenas generadas por separado no comparten identidad
+aunque salgan del mismo ancla el mismo día — y ninguna comparación lote-contra-lote lo iba a ver,
+porque el promedio del lote sí da parecido al banco. **La consistencia hay que medirla dentro del
+lote, no solo contra el banco.**
+
+⚠️ Salvedad honesta: P4 está de perfil 3/4 con el pelo tirante y P5 se está riendo fuerte; las dos
+cosas alargan cualquier cara. Lo que **no** explican el ángulo ni el gesto es la mandíbula ni el
+puente de la nariz, y son los dos rasgos estructurales que la rúbrica pone primero (1.2). Con eso
+alcanza para no publicar; no alcanza para decir cuánto es ángulo y cuánto es modelo.
+
+### P8 · 🔴 Una auditoría que elige la muestra siempre se da la razón
+
+**Lo que hizo que estas seis piezas parecieran aprobadas.** En la misma carpeta vive
+`_AUDITORIA-CARAS.jpg`: una hoja de auditoría de caras, hecha en su momento para verificar
+justamente la consistencia. **Compara dos cuadros: P1 y P6.** Son —abierta la tira— exactamente
+**las dos que sí coinciden entre sí**. P3, P4 y P5 no entraron a la hoja.
+
+Una auditoría de 2 sobre 6, con la muestra elegida a ojo, **no puede fallar**: informa
+"consistente" y deja el lote marcado como verificado. Después cuatro documentos lo heredaron como
+*"listas para subir"* sin volver a abrir nada.
+
+**La regla que sale de acá, y va a la rúbrica:** la comparación de identidad es **de todas las
+piezas del lote a la vez**, en una sola tira, o no es. Elegir cuáles comparar es elegir el
+resultado. Es el mismo modo de falla que el canario visual: *cuando una verificación no puede
+refutar su hipótesis, más evidencia la vuelve más convincente, no más cierta.*
+
+### P9 · El texto prohibido entra por los props, no por el cartel
+
+Tres piezas del mismo lote traen texto legible inventado y **ninguna lo pone como protagonista**:
+está en las teclas de una notebook (P2), en envases y calendario (G06). Nadie lo puso ahí — lo
+puso el modelo, en el objeto de utilería.
+
+`[TEXT RULE — MANDATORY] No legible text anywhere in frame` se lee como una regla sobre carteles,
+y por eso se da por cumplida cuando la pieza "no tiene texto". **Se cumple o no en los props**, y
+los props no se miran al 100 %: hay que recortar. En P2 el defecto ocupa 400 px de 1080 y es
+invisible en el feed — hasta que alguien mira de cerca una pieza de una marca que vende software.
+
 ### P6 · Un defecto del generador se puede canonizar como rasgo de la cara
 
 `BANCO-OFICIAL.md` §3 listaba **"rubor marcado en pómulos y nariz"** como rasgo discriminante de
@@ -101,6 +155,35 @@ Un rasgo que sólo aparece en piezas de un mismo generador es sospechoso de ser 
 ---
 
 ## Veredictos
+
+### `posts-20260807/` P1–P6 — **el lote NO se publica: 4 de 6 NO PASAN**
+
+Las seis abiertas y miradas una por una el 2026-09-03, más recortes a 2× de manos, props y texto.
+**Son las piezas que Onia estaba a punto de publicar**: `ONIA_AUDITORIA_MARKETING_LUCIA_20260812.md`
+las da *"listas para subir"* y `ONIA_PLAN_CONTENIDO_Y_ADS_20260820.md` *"publicables"*. Nunca habían
+pasado por esta rúbrica. Todas 1080×1350 (4:5), > 200 KB, nítidas → **Bloque 5 ✓ en las seis**.
+Bloque 4 ✓ en las seis en lo juzgable de la imagen (la etiqueta de IA se verifica al publicar).
+
+| | Veredicto | Motivo concreto |
+|---|---|---|
+| **P1** `hace-un-ano` | **PASA** | Cara del banco, pecas y argolla dorada correctas; overlay en castellano bien escrito. La más cerrada del lote y aguanta el zoom |
+| **P2** `martes-10-manana` | **NO PASA** | **Bloque 3 ✗**: las teclas del MacBook dicen letras inventadas y **espejadas** — se lee "Confirm" al revés y dos cadenas ilegibles donde va la fila inferior |
+| **P3** `tres-sistemas` | **NO PASA** | **Bloque 1 ✗ (1.7)**: manchones rojos en los dos pómulos y la nariz. Es el artefacto del `soul_2`, el mismo que la rúbrica marca ✗ aunque el banco lo tenga |
+| **P4** `no-soy-real` | **NO PASA** | **Bloque 1 ✗ (1.2, 1.3)** cara larga y mandíbula marcada, aparenta 30+ · **Bloque 2 ✗ (2.1)** los dedos apoyan planos sobre el dorso del celular con las uñas hacia el espejo, y el que cruza el logo mide casi el ancho del teléfono |
+| **P5** `nadie-escribio` | **NO PASA** | **Bloque 2 ✗ (2.2, 2.3)** sostiene un filamento metálico doblado que no es ninguna herramienta y no se apoya en nada · **Bloque 1** misma cara larga que P4 |
+| **P6** `cuanto-tardas` | **PASA con reserva** | Cara del banco. La mano de la falda es blanda y de bajo contraste: dedos parejos sin nudillos visibles. **No es concluyente y no se declara falla** — es zona oscura y desenfocada, y acusar sobre eso sería el error del canario |
+
+> **Motivo en una línea:** el lote que estaba por publicarse tiene dos caras distintas, texto
+> inventado en las teclas de una notebook y una mano imposible — y su propia hoja de auditoría
+> sólo miró las dos piezas que coinciden.
+
+**Lo que sí hizo bien, y conviene conservar:** P1 y P6 son la mejor cara del banco entero fuera de
+las anclas, y las dos tienen **el fondo fuera de foco y la cara como punto** — lo que pide
+`PRODUCCION_MES_1.md` y lo que G06 rompió (P3 de esta bitácora). Las cuatro que fallan son las
+cuatro de fondo nítido y cargado: café con seis personas, calle, gimnasio, cocina. **6 sobre 6 en
+el mismo sentido, y encima las fallas de Bloque 2 y 3 están todas en el fondo o en un prop, nunca
+en la cara.** No prueba causalidad con n=6, pero es la tercera vez que el fondo cargado aparece
+del lado de las piezas que no pasan (P3, G06, y ahora este lote).
 
 ### `generadas-20260828/G06-peluqueria.jpg` — **NO PASA**
 
@@ -137,7 +220,15 @@ depende del ancla** — sirva o no la pieza.
 
 ## Lo que necesita a Sergio — cotizado, sin disparar
 
-Este loop **no genera nada**. Las dos cosas que destraban el carril son decisiones suyas:
+Este loop **no genera nada**. Las cosas que destraban el carril son decisiones suyas:
+
+**0 · 🔴 LO URGENTE, Y NO CUESTA UN CRÉDITO: no publicar `posts-20260807` como está.**
+Cuatro documentos lo declaran *"listas para subir"* / *"publicables"* y es el arranque previsto de
+la cuenta de Lucía. **Cuatro de las seis no pasan** (tabla arriba). Publicables hoy: **P1 y P6**,
+que además son las dos que sostienen la cara del banco. Con dos piezas no se arranca una cuenta,
+así que la decisión real es: **arrancar con P1 + P6 y regenerar las otras cuatro, o esperar.**
+Los cuatro documentos que dicen "listas" viven en `hermes-content/docs/`, que **no es zona de este
+loop** — la corrección la hace el carril de docs o Sergio.
 
 **1 · Cambiar el ancla vigente de `452d8375…` a `902eeebb…` — GRATIS, es editar un UUID.**
 Es la decisión que destraba el carril entero, y ya no necesita comprar información: los tres
@@ -164,8 +255,14 @@ sólo si después del cambio de UUID la cara todavía no cierra.
 
 ## Lo que todavía no se puede afirmar
 
-- **No se puede medir tendencia de deriva con n=1.** El lote más nuevo tiene una imagen. La
-  deriva de P1 está probada *contra el banco*, no como pendiente entre lotes.
+- ~~No se puede medir tendencia de deriva con n=1.~~ ✅ **Medida el 2026-09-03 con n=6**, pero no
+  donde se la buscaba: el lote `posts-20260807` da **dos caras dentro del mismo día** (P7). La
+  deriva *entre* lotes sigue sin cuantificarse; la de *dentro* del lote ya está probada, y es la
+  que manda para publicar.
+- **No se sabe si arreglar el ancla (P5) arregla también P7.** Son dos fallas distintas: el ancla
+  fija hacia dónde se corre la cara, la generación escena-por-escena hace que cada pieza se corra
+  por su cuenta. **Cambiar el UUID no tiene por qué resolver la segunda.** Medirlo cuesta un lote
+  de 6 con el ancla nueva — está cotizado abajo, no disparado.
 - ~~No está resuelto qué cuadro corresponde a qué método.~~ ✅ **Resuelto el 2026-09-03 (P5)**,
   abriendo los cuadros sueltos en vez de la hoja de contacto.
 - **No está confirmado en una pieza nueva que `902eeebb…` devuelva la cara del banco.** Está

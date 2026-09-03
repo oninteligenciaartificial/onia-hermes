@@ -46,6 +46,25 @@ que mirar primero y con más dureza.
 piezas.** Por eso 1.1–1.3 se miran **contra el banco**, nunca contra el lote anterior: comparar
 cada lote con el que le sigue es cómo se llega lejos sin que ninguna comparación dé mal.
 
+### 1.0 · La tira del lote completo — se hace ANTES que los ítems de arriba
+
+**Todas las piezas del lote, recortadas a la misma altura, en una sola imagen.** Sin excepciones y
+sin elegir cuáles:
+
+```
+ffmpeg -i P1.jpg -i P2.jpg ... -filter_complex \
+  "[0]crop=W:H:X:Y,scale=-1:520[a];[1]...[b];[a][b][...]hstack=inputs=N" /tmp/tira.png
+```
+
+Pasa si **todas** las caras son la misma. Si una sola se sale, **el lote no se publica**, aunque
+cada pieza mirada sola pase.
+
+> **Nació de `posts-20260807`**, seis piezas del mismo día declaradas "listas para subir" en cuatro
+> documentos: montada la tira, **P4 y P5 son otra cara** (P7 de la bitácora). Y en la misma carpeta
+> vivía `_AUDITORIA-CARAS.jpg`, una auditoría de consistencia que comparó **dos** cuadros — los dos
+> que coinciden. **Elegir la muestra es elegir el resultado** (P8). Por eso este ítem va primero y
+> por eso dice *todas*.
+
 ---
 
 ## Bloque 2 — Anatomía y objetos
