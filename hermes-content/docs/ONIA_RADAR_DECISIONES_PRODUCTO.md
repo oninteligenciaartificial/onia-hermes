@@ -2180,3 +2180,50 @@ cuesta 20 minutos y frena lo que crece; C es la única que achica, pero su costo
 de trabajo sino coordinar catorce árboles vivos sin perder nada.
 
 **Lo que hace falta de Sergio:** una línea. Si es B, este carril lo hace en la vuelta siguiente.
+
+---
+
+## 39. Los 13 worktrees de los loops nunca se sincronizan con `main`: auditan y editan sobre un repo viejo (2026-09-03) — decisión de Sergio
+
+**El corredor `onia-loop.sh` no trae `main` al worktree del carril.** El `case` fija carpeta, rama
+y tope y arranca; no hay `fetch` ni `merge` de `origin/main` en ninguna parte del script. El sync
+del minuto 44 despliega **el corredor y los prompts** desde `main` — o sea lo que el loop
+*ejecuta*, nunca los archivos que el loop *lee y edita*.
+
+**Medido hoy 05:30 UTC** (`git rev-list --count HEAD..origin/main` en cada árbol): `contenido-cola`
+**788** commits atrás · `canario-visual` 268 · `web-venta` 235 · `lucia` 233 · `calidad-generado` y
+`tendencias` 126 · `web-factory-dev` 124 · `marca-personal` 93 · `recorrido-cliente` 92 ·
+`chatbot-cola` 78 · `supervisor` 72 · `investigacion` 49. Ninguno en 0.
+
+**Qué rompe, con el caso de hoy.** `docs-auditoria` estaba 113 atrás y el tablero le pidió arreglar
+la fila de `contenido-cola` en `loops.md`. En su checkout la fila decía `Windows` y
+`npm run loops:registrados` salía **rojo**; en `main` el integrador ya la había corregido a las
+03:33 y contra `origin/main` el gate estaba **verde**. Un paso más y reescribía la línea sobre una
+base de 113 commits: conflicto, o peor, **el merge devuelve la fila mentirosa y deshace el arreglo
+del integrador**. El daño escala con lo que el carril toca: `canario-visual` compara pantallas
+contra archivos del repo 268 commits viejos, y `web-venta` es dueño de `onia.com.bo/` con 235.
+
+**Es el generador estructural de ítems fantasma** — parte del 25–46 % de pendientes que las colas
+declaraban y no existían no eran ítems mal escritos: ya estaban hechos en `main` y el carril no
+podía verlos.
+
+**Por qué es de Sergio.** El arreglo de raíz es una línea en `scripts/loops/onia-loop.sh`, que es
+**el archivo compartido por los 15 loops** — y el propio `loops.md` lo marca como "el frágil": ya
+falló dos veces en un día y una reinstalación desde el repo estuvo a punto de borrar dos carriles
+y bajarle el modelo a todos. Un cambio ahí lo tiene que decidir una persona, no un loop.
+
+**Las tres opciones, cotizadas:**
+
+| | Qué se hace | Cuesta | Qué queda |
+|---|---|---|---|
+| **A. Nada** | Cada carril sigue como está | 0 | Los atrasos crecen solos. `contenido-cola` ya va por 788: a ese atraso, casi cualquier hallazgo suyo es sobre un repo que no existe |
+| **B. Sólo en los prompts** | Cada prompt arranca con `fetch` + `merge --ff-only origin/main`. **Ya está hecho en `docs-auditoria`** (esta vuelta) | ~10 min por carril, cero riesgo compartido, reversible | Arregla uno por uno y **sólo los que se editen**. Un prompt que nadie toca queda viejo para siempre |
+| **C. En el corredor, una vez** | `fetch` + `merge --ff-only origin/main` en `onia-loop.sh`, antes de invocar a Claude. Si el carril tiene trabajo sin mergear, `--ff-only` **falla sin tocar nada** y el loop sigue con el árbol como está | ~20 min + gates. Riesgo: toca los 15 loops de una vez | Lo arregla de raíz y para los que vengan. Es el único que no hay que acordarse de repetir |
+
+**Lo que este loop recomienda: C**, con `--ff-only` (nunca un merge que invente commits) y avisando
+por Telegram cuando un carril no pueda avanzar. B ya quedó aplicado en `docs-auditoria` como
+paliativo, pero pedirle a trece prompts que se acuerden de lo mismo es exactamente lo que este
+repo llama "una regla sin su historia".
+
+**Lo que hace falta de Sergio:** una línea. Si es C, este carril lo escribe y lo deja pasar por los
+gates del integrador.
