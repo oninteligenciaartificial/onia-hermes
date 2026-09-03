@@ -1,11 +1,76 @@
 # Handoff — carril `claude/git-status-935f47` (plataforma · infra · integración)
 
 > Formato: `hermes-content/docs/handoff/README.md`. Se sobrescribe; es el estado ACTUAL.
-> Última escritura: **2026-08-31 ~23:40 La Paz** (03:40 UTC del 1-sep).
+> Última escritura: **2026-09-03 ~17:15 La Paz** (21:15 UTC).
 >
 > ⚠️ Las horas de este archivo van en **La Paz**, no UTC. Sergio corrigió el 31-ago:
 > *"arregla tus horas, aqui somos america/la paz"*. El VPS y los logs son UTC-4 respecto de
 > lo que él lee, y entre las 20:00 y las 24:00 **cambia el día**.
+
+---
+
+## 0. Estado al 2026-09-03 — lo vigente (lo de abajo es historia y sigue valiendo como lección)
+
+**Objetivo del día:** Sergio opera solo por Telegram con la PC apagada, y el sistema pasa de
+"terminar" a "llegar" (reel de @eriktaveras: *"no es terminar el SaaS, es llegar antes"*).
+Definición de hecho: base probada + leads contestados + decisiones en UNA hoja `ok/no`.
+
+**En producción, verificado mirando:**
+- `app.onia.com.bo` corre master `38a0c8a` desde las 15:44 (migración WhatsApp + META en `app.env`,
+  contenedor recreado; el viejo quedó como `onia-platform-prev-20260903-194404`).
+- `onia.com.bo/contacto` ya no manda a `cal.onia.com.bo` (muerto): main `1c26cc337`, `DEPLOY_OK`,
+  `grep -c cal.onia.com.bo` = 0, CTA → WhatsApp.
+- Cuenta de Sergio `sergio@onia.com.bo` (org `clinica-sergio-p2ljs`) creada por el flujo real y
+  refutada por un segundo agente: agenda usable. Clave SOLO en `/root/.config/onia/sergio-cuenta.env`.
+- Hermes en `gpt-5-mini`; memoria compartida con 64 entradas (4 de hoy); 15 loops en el VPS.
+  Los 6 loops con >60 % de vueltas vacías bajaron de cadencia (crontab respaldado en `/root/backups/crontab-*.bak`).
+- Contenido: 195 commits en GitHub (`claude/carril-contenido` = `c859167b`) sin `b3.mp4`
+  (156 MB; respaldo en el bundle y en `C:/dev/proyectos/_respaldo-contenido/`). El worktree
+  Windows quedó en ese HEAD con `reset --soft`: sus 5 láminas modificadas siguen sin commitear.
+- `CLAUDE.md` §3: el sistema es la oferta, el bot add-on, cero autobombo, vender como Lety/Dapta
+  (`62a74a56`). Runbook landing: `.commit` queda en el stage publicado (`0ea6dfe1`).
+
+**A medias, y dónde:**
+- Tarjeta Embedded Signup `t_6bf938b7`: código en `claude/chatbots-platform-review-0d1d09`
+  (`14f1ab7`, gates verdes), SIN merge, deploy ni captura — se le anotó lo que falta.
+- D2 aviso por Telegram `t_b18ca430`: construido apagado (`7d13e4a0f`); falta flag + merge + deploy
+  del bot + prueba con captura.
+- Lucía: cron de video pausado y push de `claude/lucia-vps` (8 commits varados) en manos de un
+  subagente (`t_d2a99e3b`); reactivar el cron es plata → espera `video sí/no`.
+- Tareas de base creadas hoy para los loops: `t_6f5b8f52` bandeja lee 4 y 5 · `t_72ddeedb`
+  "Saltar por ahora" mata la agenda · `t_ef571e36` D1/D4 · `t_8ba6bb4e` agentes 0 acciones ·
+  `t_9f4baa34` corte de mediodía · `t_1b78de19` un recordatorio real · `t_0651707c` precios en
+  el bot · `t_3a60bfef` Onia interna fuera del rubro dental · `t_3dbed2c4` web como Lety/Dapta.
+
+**Archivos tocados hoy:** `CLAUDE.md`; `hermes-content/deploy/onia-landing/build-and-stage.sh`;
+`hermes-content/docs/research/whatsapp-chatwoot-embedded-signup.md` (movido de la raíz);
+memoria local (`feedback-objetivo-es-llegar-no-terminar`, `onia-vende-el-sistema-no-el-bot`,
+`cuenta-sergio-en-el-sistema`, + 2 ampliadas). VPS: crontab; `/root/.hermes/memories`;
+`/root/qa-audit/sergio/*` (capturas); `/root/onia-leads-borradores.md`.
+
+**Intentos fallidos / trampas de hoy (no repetir):**
+- `hermes kanban edit --priority` no existe (`edit` exige `--result`): la prioridad va al crear.
+- El Bash tool corta a los 120 s: `gemini-see-video.mjs` necesita `timeout` ≥ 300 s.
+- `[ -d .git ]` falla en un worktree (`.git` es archivo): usar `git -C … rev-parse`.
+- El `pre-push` de `.githooks` bloquea push a main salvo `ONIA_LOOP_ID=onia-cola`; un `| tail`
+  enmascaró el rc y el swap corrió antes del push (quedó consistente, pero el orden es build → push → swap).
+- chatbot-cola comentó "HECHO Y PUSHEADO" sin deploy ni captura, y el runner contó la vuelta
+  "sin commit" porque mide el worktree de onia-hermes, no el de onia-platform. Se dice, no se
+  arregla: maquinaria congelada hasta el 10-sep salvo loop muerto.
+- El verificador refutó 8 puntos de los 7 borradores a leads (recordatorios jamás enviados en prod,
+  CSV solo en plan Completo, cita cancelada cuenta como cita, fechas UTC vs La Paz, "sesiones"
+  no existe): **material de cliente nunca sale sin refutador**.
+
+**Depende de Sergio (ya está en su Telegram, 4 mensajes):** mandar los 7 mensajes con su voz y
+marcar "contactado" en `/admin/solicitudes`; contestar la hoja `ok/no` (`t_7282a714`, `t_a9ff7367`,
+`t_3b261fb7` + cuenta, `t_8919077e`, `t_92c0755d`, `t_4f09995c`, `video sí/no`, Meta App Review);
+cambiar su contraseña; credenciales BCP; Punto de Venta 1 en el SIN (límite 04/11/2026).
+
+**Próximos pasos de la sesión de control:** (1) reporte del subagente de Lucía; (2) cuando un
+loop bloquee `needs_input` con captura, el vigía se la manda; (3) deploy del bot cuando
+`t_b18ca430` comente `DEPLOY BOT PEDIDO <sha>`; (4) build + swap de `app.onia.com.bo` cuando
+`t_6bf938b7`/`t_72ddeedb` lleguen a master (runbook en `onia-platform-oferta-en-prod`);
+(5) nada de maquinaria de loops hasta el 10-sep.
 
 ---
 
