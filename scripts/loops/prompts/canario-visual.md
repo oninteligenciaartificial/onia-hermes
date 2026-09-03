@@ -320,10 +320,36 @@ navegador). Un umbral roto en silencio deja el carril en verde para siempre.
 > de obra. La regla de siempre, otra vez: **un `grep` sirve para descartar, nunca para
 > confirmar.** Buscá la palabra para saber **dónde mirar**, y decidí con la captura.
 
-> ⚠️ **Tus propias corridas repetidas te pueden devolver un `429`.** Apareció midiendo la home
-> muchas veces seguidas, y las baselines de esa misma pantalla tienen `erroresConsola: []`. Un 429
-> que sólo aparece cuando remedís no es un defecto del sitio: es tuyo. Confirmalo con una corrida
-> sola antes de escribirlo.
+> 🔴 **Un `429` del widget de chat NO se escribe como ítem sin correr la sonda. Y "una corrida
+> sola" NO alcanza como prueba — ese criterio ya falló.**
+>
+> Acá decía: *"un 429 que sólo aparece cuando remedís es tuyo; confirmalo con una corrida sola
+> antes de escribirlo"*. **Ese consejo produjo un ítem 🔴 falso.** El 2026-09-02 este canario hizo
+> exactamente lo que pedía —una corrida oficial única, lo primero de la vuelta, cero pedidos
+> previos—, siguió viendo 429, dio el criterio por cumplido y escribió *"la página que VENDE el
+> chatbot es la única del sitio sin chat"*. Costó **cuatro vueltas** de `onia-cola`.
+>
+> **Por qué el criterio era malo, medido el 2026-09-03:** Chatwoot limita `/widget` a **5 cargas
+> por hora POR IP**, y **una sola pasada tuya de diez pantallas ya lo excede** — varias pantallas
+> embeben el widget. O sea: la corrida "sola y fresca" **se autoenvenena antes de terminar**, y
+> encima deja el cupo quemado por el resto de la hora. Un test que no puede salir negativo no
+> prueba nada.
+>
+> **El test correcto, que sí puede salir en los dos sentidos:**
+>
+>     sh /root/loops/onia-hermes/hermes-content/deploy/vps-ops/widget-429-de-quien.sh
+>
+> **Ruta absoluta a propósito, no la cambies por una relativa:** la sonda vive en `main` y tu
+> worktree (`/root/loops/onia-hermes-canario`) está en tu propia rama, que no la tiene. Una ruta
+> relativa te daría "no such file" y volverías a decidir a ojo.
+>
+> Lee el contador real de Rack::Attack en Redis y el desglose de IPs de las últimas 6 h.
+> - Dice **`AUTOINDUCIDO`** → es nuestro propio tráfico. **No es un ítem.** No lo escribas.
+> - Dice **`OJO: … IPs ajenas`** → ahí sí hay clientes afectados: va como ítem, con esa salida
+>   pegada como evidencia.
+>
+> **Y no confundas las dos mitades.** Que el 429 sea nuestro **no** vuelve buena la captura: la
+> banda vacía del full-page es un defecto **aparte y real**. Cada una con su instrumento.
 
 ## La pasada
 
