@@ -4,8 +4,18 @@ import { loadLegalDoc } from "@/lib/legal";
 
 export const metadata: Metadata = {
   title: "Términos y Condiciones — Onia",
+  /**
+   * El paréntesis "(borrador, pendiente de revisión por abogado)" vivió acá
+   * hasta el 2026-09-03, y era obra a la vista además de falso: el documento se
+   * declara `status: "vigente"` en su propio frontmatter
+   * (`src/content/legal/terminos.md`). Quedó de cuando el aviso de borrador
+   * estaba hardcodeado en `legal-page.tsx`: se arregló el cartel VISIBLE para
+   * que respetara el frontmatter, y esta línea —que no se ve abriendo la
+   * página— siguió repitiendo la frase vieja en el `<head>`. Lo cuida
+   * `obra.test.ts`.
+   */
   description:
-    "Términos y Condiciones de uso de la plataforma Onia (borrador, pendiente de revisión por abogado): servicio, planes y pagos en Bs, datos del cliente, agentes IA con aprobación humana y jurisdicción en Bolivia.",
+    "Términos y Condiciones de uso de la plataforma Onia: servicio, planes y pagos en Bs, datos del cliente, agentes IA con aprobación humana y jurisdicción en Bolivia.",
   alternates: { canonical: "/terminos" },
   robots: { index: false },
   /**

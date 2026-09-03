@@ -1886,15 +1886,48 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         publicar es de Sergio. Este arreglo es el **sexto** que se acumula esperando el mismo
         deploy de `t_68671bc3`.
 
-- [ ] 🟢 **Encontrado de paso, NO arreglado** (es otro ítem, no lo abro en la misma vuelta): la
-      `<meta name="description">` de `/terminos` dice *"(borrador, pendiente de revisión por
-      abogado)"*. Es **estado de obra en una superficie de cliente**, que la regla de Sergio del
-      2026-08-20 prohíbe. Hoy lo ve poca gente —la página es `noindex` y la tarjeta de WhatsApp
-      usa la descripción OG, que está limpia—, pero está en el HTML y sale en cualquier lector
-      que use la `description`. Repro: `curl -s https://onia.com.bo/terminos | grep -o
-      'name="description" content="[^"]*"'`. **El cuerpo visible NO tiene el problema**: sus
-      "borradores" son los que propone la IA para que el cliente apruebe, que es la promesa real
-      del producto. **Zona:** `web-factory/apps/onia-platform/src/app/terminos/page.tsx`.
+- [x] 🟢 ~~**Encontrado de paso, NO arreglado**: la `<meta name="description">` de `/terminos`
+      dice *"(borrador, pendiente de revisión por abogado)"*.~~ **ARREGLADO 2026-09-03 ~16:55 UTC
+      (`web-venta`), y era peor de lo que decía el ítem: no sólo era obra, era FALSO.**
+      - **Lo que el ítem no sabía:** el documento se declara `status: "vigente"` en su propio
+        frontmatter (`src/content/legal/terminos.md`). O sea, la página llamaba "borrador" a un
+        texto que el sitio publica como vigente, y por eso tampoco muestra ningún cartel de
+        borrador. *(El ítem decía que el cuerpo estaba limpio porque sus "borradores" son los que
+        propone la IA. La conclusión era correcta, el motivo no: el cuerpo SÍ tiene un aviso de
+        borrador —`legal-page.tsx:48`— pero está condicionado al frontmatter y hoy no se dibuja.)*
+      - **Por qué sobrevivió, que es lo que vale:** el aviso visible estaba **hardcodeado**; se
+        arregló ahí para que respetara el frontmatter —una política publicada como "borrador" no
+        sirve para dar de alta la app en Meta—, el frontmatter pasó a `vigente`, el cartel
+        desapareció de la pantalla… y la `description` siguió repitiendo la frase vieja en el
+        `<head>`. **Un barrido que se verifica MIRANDO la página no alcanza para la metadata**,
+        que es la parte de la superficie de cliente que no se ve mirando.
+      - **Y contagió a un tercero:** `indexar.test.ts` justificaba el `noindex` de `/terminos`
+        con *"los Términos son un borrador pendiente de revisión por abogado"*. Premisa vencida
+        dentro de la justificación de un gate: se lee como vigente y decide por la próxima sesión.
+        Corregida; **el `noindex` no se tocó** (sigue en pie por su otro motivo, el escrito en el
+        propio archivo).
+      - **Gate nuevo, y es la parte reutilizable:** `src/app/obra.test.ts` — ninguna página
+        publicada declara obra en su metadata (8 frases: "muy pronto", "próximamente", "en
+        construcción", "beta", "en desarrollo", "estamos trabajando", "pendiente de revisión",
+        "borrador de trabajo"). Es la regla de Sergio del 2026-08-20 vuelta comando.
+        **Los sujetos salen del DISCO menos el `disallow` de `robots.ts`**, no de una lista de
+        inclusión: una página nueva nace cubierta. Y **NO prohíbe "borrador" a secas ni "todavía
+        no"** a propósito —el primero es una capacidad real del producto (`/agentes`) y el segundo
+        es honestidad aprobada sobre los límites (`/comparativa`)—; una lista que grita de más
+        termina borrada. Trae ancla propia: si alguien vacía las frases, el gate se pone en rojo.
+      - **Verificado en ROJO primero** por el motivo correcto (1 fallo, `/terminos`,
+        `pendiente de revisi[oó]n`) y con las otras 16 páginas en verde: cero falsos positivos en
+        toda la superficie pública.
+      - **Gates:** typecheck exit 0 · `vitest run` **216 verdes** en 10 archivos (eran 199 en 9) ·
+        build exit 0.
+      - **MIRADO renderizado sobre el build real** (standalone en `:3987`, no `main` ni Vercel) a
+        1440×900 y 390×844 — `/root/wv-terminos-{escritorio,telefono}.png`: título, línea de
+        versión, índice y cuerpo enteros, **sin cartel de borrador**, `robots: noindex` intacto,
+        cero errores de JS. Y medido sobre el HTML servido: **cero coincidencias de obra en toda
+        la página**, no sólo en la `description`.
+      - ⚠️ **No está en producción**: `onia.com.bo` la sirve el contenedor `onia-landing` y
+        publicar es de Sergio. Es el **séptimo** arreglo esperando el mismo deploy de
+        `t_68671bc3`.
 
 ### Del canario visual — corrida del 2026-09-03 ~03:41 UTC (diez pantallas)
 

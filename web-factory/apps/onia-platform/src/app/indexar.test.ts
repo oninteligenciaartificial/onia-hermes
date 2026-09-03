@@ -25,12 +25,21 @@ import {
  *     → <loc>https://onia.com.bo/terminos</loc>
  *
  * Se resolvió sacándola del sitemap y no quitándole el `noindex`, porque el
- * `noindex` es el lado deliberado: los Términos son un borrador pendiente de
- * revisión por abogado y su propio archivo ya dejaba escrito que *"esta página
- * no la querés en Google, pero sí se manda por WhatsApp"*. Quitárselo habría
- * publicado un borrador legal al buscador — una decisión que no es de un gate.
+ * `noindex` es el lado deliberado: su propio archivo ya dejaba escrito que
+ * *"esta página no la querés en Google, pero sí se manda por WhatsApp"*.
+ * Quitárselo es una decisión, no la salida barata de un gate en rojo.
  * `/privacidad` sí es indexable, y con su motivo escrito: el rastreador de Meta
  * valida esa URL al publicar la app del chatbot.
+ *
+ * ⚠️ **Acá decía además que los Términos son "un borrador pendiente de revisión
+ * por abogado". Es falso, y se corrigió el 2026-09-03**: el documento se declara
+ * `status: "vigente"` en su frontmatter (`src/content/legal/terminos.md`), y por
+ * eso la página no muestra ningún cartel de borrador. La frase venía de la
+ * `description` de `/terminos`, que arrastraba el mismo texto viejo y ya se
+ * limpió (ver `obra.test.ts`). Queda escrito porque una premisa vencida dentro
+ * de la justificación de un gate se lee como vigente y decide por la próxima
+ * sesión: el `noindex` sigue en pie por lo de arriba, no por un borrador que no
+ * existe.
  *
  * El sitio ya tenía la regla escrita en `v1/layout.tsx` (*"robots.ts y fuera
  * del sitemap"*) y la cumplía en `/patrones` y en `/v1`. Lo que faltaba no era
