@@ -158,9 +158,9 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
-- [ ] 🔴 **El cron del rescate corre la copia VIEJA a propósito, así que un arreglo del carril
+- [x] 🔴 **El cron del rescate corre la copia VIEJA a propósito, así que un arreglo del carril
       no llega a producción hasta que alguien mergea — y mientras tanto nada lo dice.**
-      Abierto el 2026-09-03 **auditando los `[x]`** (escalón 2), no por la cola.
+      CERRADO el 2026-09-03. Abierto el mismo día **auditando los `[x]`** (escalón 2), no por la cola.
       **La medición, tres relojes pegados:** el testigo del rescate se arregló en `2309fec87`
       (10:25 UTC, pusheado, gate `node --test` **751/751**); el integrador corrió a las
       **10:33–10:39** y commiteó 5 commits **sin mergear esta rama**; a las **11:04** el cron
@@ -184,8 +184,39 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       `grep -n "respuesta: redactar" /root/loops/onia-hermes{,-chatbot}/hermes-content/deploy/vps-ops/bot/rescate-run.mjs`
       → dos líneas distintas ⇒ el cron está corriendo la vieja. `tail /var/log/onia-rescate-mensaje-perdido.log`
       dice **cuál** usó, y hoy no dice que había otra.
-      **Archivo a tocar:** `hermes-content/deploy/vps-ops/onia-rescate-mensaje-perdido.sh`
+      **Lo que se hizo:** `hermes-content/deploy/vps-ops/onia-rescate-mensaje-perdido.sh` compara
+      ahora los candidatos con `cmp -s` y, cuando difieren, lo dice en su línea de log nombrando
+      al que quedó afuera. **El orden NO se dio vuelta**: sigue corriendo el de `main`.
+      Distingue los dos casos, porque no valen lo mismo: si el que queda afuera es **más viejo**
+      (worktree atrasado, inofensivo) lo dice y sigue; si es **más nuevo** —un arreglo esperando
+      merge, el caso caro— además lo cuenta contra un umbral. **Avisa a Telegram sólo si la
+      divergencia sobrevive 2 h** (dos pasadas del integrador, que mergea cada hora) **y una sola
+      vez**: seis barridos por hora repitiendo la misma alarma es exactamente cómo se dejó de
+      creerle a los avisos del vigía. Converger borra el estado, así que la próxima alarma es nueva.
+      **Rojo primero, por el motivo correcto:** los 8 casos fallaron porque el envoltorio ignoraba los
+      candidatos de prueba y su log decía sólo `usando <path>` —
+      *"The input did not match /VIEJA/ … usando /root/loops/onia-hermes/…"*.
+      **El test corre el artefacto REAL**, no una función pura que el envoltorio podría no estar usando:
+      `scripts/rescate_envoltorio.test.mjs` ejecuta el envoltorio de verdad con candidatos de mentira
+      (seams por env: `ONIA_RESCATE_CANDIDATOS`, `ONIA_TG_BIN`, `ONIA_RESCATE_ESTADO`,
+      `ONIA_RESCATE_UMBRAL_S`; los defaults siguen siendo producción). **8/8 verde**, cableado en
+      `npm test` como `test:rescate-envoltorio` — un test que nadie corre es un test que no existe.
+      ✅ **Verificado en producción, no en el test: la prueba está en el propio log, dos corridas
+      seguidas del mismo cron.** `12:04:01Z usando …/onia-hermes/…rescate-run.mjs` (mudo) y
+      `12:14:01Z usando …/onia-hermes/…rescate-run.mjs` + `12:14:01Z DIFERENTE y MAS NUEVO:
+      /root/loops/onia-hermes-chatbot/…/rescate-run.mjs — corro el de main igual, pero ese arreglo
+      NO está en producción hasta que el integrador lo mergee`. El barrido siguió funcionando
+      (`0 sin respuesta · 0 reinyectados · 0 CONTESTADOS`).
+      ⚠️ **Se instaló en `/root/bin/` para que el cron lo corra, y eso es un deploy: queda a la
+      vista de Sergio.** Sin eso el arreglo habría quedado commiteado y mudo — que es el bug que
+      este ítem cierra. Es el cron **del propio carril** (lo instaló `038a66b88`), no toca crons
+      ajenos, el camino de ejecución no cambió (sigue `node "$SCRIPT" --emit` sobre el de `main`),
+      y hay respaldo: `/root/bin/onia-rescate-mensaje-perdido.sh.bak-20260903-120800`.
+      **Archivo tocado:** `hermes-content/deploy/vps-ops/onia-rescate-mensaje-perdido.sh`
       (el que se despliega a `/root/bin/`). Es del carril: no toca crons ajenos.
+      🔎 **Lo que este ítem NO arregla, a propósito:** la divergencia sigue existiendo — el
+      testigo arreglado en `2309fec87` sigue sin correr en producción hasta que el integrador
+      mergee esta rama. Ahora **se ve**, que era el pedido; que se mergee es de `onia-cola`.
 
 - [x] 🔴 **La mitad "y esa conversación SE VE en la bandeja" del objetivo del carril llevaba sin
       medirse desde que se escribió: su gate moría con `Cannot find module`.** CERRADO el

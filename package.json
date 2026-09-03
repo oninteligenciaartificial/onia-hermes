@@ -34,7 +34,7 @@
     "test:dentalgest-bridge": "node scripts/hermes_command_dentalgest.test.js",
     "test:venta-honestidad": "node --test scripts/venta-honestidad.test.mjs",
     "test:propuestas": "node hermes-content/propuestas/generador/generar-propuestas.test.js",
-    "test": "npm run validate:onia-core && npm run test:guards-cableados && npm run test:deploy-alcanzable && npm run test:bloqueos-vencidos && npm run test:s11-desplegado && npm run test:canario-mirable && npm run test:inbox-tenencia && npm run test:objetivo-visible && npm run test:sonda-widget && npm run test:bot && npm run test:marca-chatwoot && npm run test:campanas-vivas && npm run test:venta-honestidad && npm run test:propuestas && npm run test:carousel && npm run test:dentalgest-bridge && npm run test:loops-registrados",
+    "test": "npm run validate:onia-core && npm run test:guards-cableados && npm run test:deploy-alcanzable && npm run test:bloqueos-vencidos && npm run test:s11-desplegado && npm run test:canario-mirable && npm run test:inbox-tenencia && npm run test:objetivo-visible && npm run test:sonda-widget && npm run test:bot && npm run test:marca-chatwoot && npm run test:campanas-vivas && npm run test:venta-honestidad && npm run test:propuestas && npm run test:carousel && npm run test:dentalgest-bridge && npm run test:loops-registrados && npm run test:rescate-envoltorio",
     "health:propuestas": "node -e \"require('http').get('http://127.0.0.1:3031/health',r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>console.log(d))}).on('error',e=>{console.error('Offline:',e.message);process.exitCode=1})\"",
     "mara:prompt-matrix": "node scripts/mara_prompt_matrix.js --limit 12 --routes comfy_ltx23 --run-name pond-smoke-001",
     "mara:comfyui:queue": "node scripts/mara_comfyui_queue.js --workflow C:\\Users\\PC\\Downloads\\video_ltx2_3_i2v.json --mapping hermes-content\\references\\ai-ecommerce-model\\comfyui\\video_ltx2_3_i2v.mapping.json",
@@ -63,6 +63,7 @@
     "objetivo:visible": "node scripts/objetivo_visible.mjs",
     "test:objetivo-visible": "node scripts/objetivo_visible.mjs --self-check",
     "sonda:widget": "node scripts/sonda_widget.mjs",
-    "test:sonda-widget": "node scripts/sonda_widget.mjs --self-check"
+    "test:sonda-widget": "node scripts/sonda_widget.mjs --self-check",
+    "test:rescate-envoltorio": "node --test scripts/rescate_envoltorio.test.mjs"
   }
 }
