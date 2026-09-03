@@ -144,4 +144,4 @@ falso.
 - Usuario de prueba borrado de `auth.users`; cero organizaciones huérfanas.
 
 ⚠️ **Está en `master`, NO desplegado: para el cliente el bug SIGUE VIVO.** El contenedor
-`onia-platform` corre el build anterior. Desplegar es de Sergio → radar ítem 39.
+`onia-platform` corre el build anterior. Desplegar es de Sergio → radar ítem 41.
