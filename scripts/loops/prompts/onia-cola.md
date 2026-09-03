@@ -575,10 +575,20 @@ Una tarea bloqueada en el tablero le llega por Telegram y la contesta desde el t
 
     T=/root/bin/onia-tablero.sh
     ID=$($T create "Pregunta corta y concreta" --body "Qué necesito decidido, las opciones que ya miré y qué cambia según cada una" --priority 1 --json | python3 -c 'import sys,json;print(json.load(sys.stdin)["id"])')
-    $T block "$ID" --kind needs_input "Espera decisión de Sergio"
+    $T block --kind needs_input "$ID" "Espera decisión de Sergio"
 
-⚠️ El motivo va **posicional**, no con `--reason` — verificado contra `block --help`, porque
-escribirlo mal en 15 prompts los rompía a los 15 en silencio.
+⚠️ **`--kind` va ANTES del id.** `reason` es un positional variadico: con `--kind` escrito
+entre el id y el motivo, argparse escupe el `usage` de `hermes`, sale con **exit 2** y **no
+bloquea nada** — la tarea queda en `ready` y Sergio NUNCA se entera. Medido en vivo el
+2026-09-03 sobre tres tareas reales, cambiando sólo el orden:
+
+    block <id> --kind needs_input "motivo"   exit=2  status=ready     ← ROTA (la que estuvo aca)
+    block <id> "motivo" --kind needs_input   exit=0  status=blocked   ← tambien sirve
+    block --kind needs_input <id> "motivo"   exit=0  status=blocked   ← la de arriba
+
+`block --help` NO alcanza para ver esto: muestra que `reason` es posicional y da la razón a la
+forma rota. Hay que correrlo contra una tarea REAL y mirar el `status` — con un id inventado
+todas fallan en la búsqueda y parecen iguales.
 
 Sergio contesta `ok <id>` y la tarea vuelve a ready sola. Reglas:
 
