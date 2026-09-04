@@ -207,3 +207,39 @@ test("dispararAvisoTelegram no propaga el fallo al llamador", async () => {
   assert.equal(resultado.ok, false);
   assert.match(resultado.reason, /caida/);
 });
+
+// ---------------------------------------------------------------------------
+// La plantilla tiene que documentar el encendido
+//
+// POR QUE. Este modulo nace apagado y se enciende con variables de entorno que viven en
+// `/opt/onia/bot/webhook.env`, que esta FUERA de git: la unica memoria de que existen es
+// `webhook.env.example`. El 2026-09-04 el modulo estaba desplegado y vivo en produccion desde
+// hacia horas y la plantilla no nombraba ni una de sus tres variables — o sea que el aviso ya
+// funcionaba y encenderlo dependia de que alguien se acordara de leer el .mjs. Peor: rehacer el
+// env desde la plantilla lo apaga de nuevo EN SILENCIO, que es el bug exacto del que venimos.
+//
+// La lista de variables se saca del CODIGO, no de una lista escrita a mano aca: una variable
+// nueva nace cubierta. Un gate cuya lista de sujetos se escribe a mano falla abierto el dia que
+// alguien agrega la cuarta variable y no toca el test.
+// ---------------------------------------------------------------------------
+
+test("webhook.env.example documenta TODAS las variables que el aviso lee", async () => {
+  const { readFileSync } = await import("node:fs");
+  const { fileURLToPath } = await import("node:url");
+  const dir = fileURLToPath(new URL(".", import.meta.url));
+
+  const fuente = readFileSync(`${dir}aviso-telegram.mjs`, "utf8");
+  const plantilla = readFileSync(`${dir}webhook.env.example`, "utf8");
+
+  // Todo `env.NOMBRE` que el modulo consulta es, por definicion, parte de su interfaz de encendido.
+  const leidas = [...new Set([...fuente.matchAll(/\benv\.([A-Z][A-Z0-9_]+)/g)].map((m) => m[1]))];
+  assert.ok(leidas.length >= 3, `el modulo deberia leer al menos 3 variables, encontro ${leidas.length}`);
+
+  const sinDocumentar = leidas.filter((nombre) => !new RegExp(`^\\s*#?\\s*${nombre}\\b`, "m").test(plantilla));
+  assert.deepEqual(
+    sinDocumentar,
+    [],
+    `webhook.env.example no documenta: ${sinDocumentar.join(", ")}. ` +
+      "Sin eso, rehacer el env desde la plantilla apaga el aviso en silencio.",
+  );
+});

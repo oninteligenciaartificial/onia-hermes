@@ -335,6 +335,27 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       `ONIA_BOT_TG_AVISO=true`; si Sergio elige (b) n8n, el flag se queda en `false` y no cambia
       nada. **No se decidió por él: se le sacó el trabajo de encima para que su respuesta sea un
       "sí" y no un proyecto.**
+      ⚠️ **"Encenderla es `ONIA_BOT_TG_AVISO=true`" era FALSO — corregido el 2026-09-04 (`28863e0e3`).**
+      No estaba construido hasta el borde: faltaba el último centímetro, y era invisible. El
+      lanzador **no arranca el bot con el entorno del shell**: lo arranca con `docker exec -d` y
+      una **lista blanca** de `-e VAR=...` (`hermes-content/deploy/vps-ops/bot/webhook-server.sh`), y **ninguna de las cinco
+      variables del aviso estaba en esa lista**. O sea: copiar el token a `/opt/onia/bot/webhook.env` y poner el
+      flag en `true` **no habría encendido nada, y sin fallar** — el log habría seguido diciendo
+      `apagado (ONIA_BOT_TG_AVISO)` y el que lo intentaba habría concluido que el código está roto.
+      Medido en el proceso VIVO, no en el `.env`:
+      `docker exec onia-center sh -c "tr '\0' '\n' < /proc/6741/environ" | grep TG_` → **vacío**.
+      Mientras tanto, en producción: `[aviso] skipped (...)` sobre handoffs **reales** (conversaciones
+      53 y 55, 2026-09-04). Arreglado: el lanzador pasa las tres, y saca token y chat de
+      `/root/.config/onia/backup.env` — de donde ya los lee `webhook-watchdog.sh` cada 2 min—, así
+      que **no hay credencial nueva ni nada que copiar a mano**. Probado de punta a punta con el
+      módulo y el token reales: `enviarAvisoTelegram` → `{ok:true,status:"sent"}`, el mensaje llegó.
+      Gate nuevo `hermes-content/deploy/vps-ops/bot/lanzador-pasa-env.test.mjs`: saca los sujetos de
+      `webhook.env.example` (no de una lista a mano, que **falla abierto**), así una variable
+      documentada nace cubierta. Rojo antes por los 3 nombres, verde ahora; 818/818 en `node --test`.
+      **Sigue COMMITEADO y NO DESPLEGADO** — `/opt/onia/bot` corre el lanzador viejo. Deploy pedido
+      en el tablero `t_59b4761d` con el diff ya verificado en las dos direcciones (cero líneas
+      exclusivas de producción: copiar no borra nada). Después del deploy, encenderlo **sí** es una
+      sola línea.
       🔎 **La justificación del canal muerto era FALSA, y por eso esto se pudo escribir sin
       pedir nada.** `hermes-content/deploy/vps-ops/bot/chatwoot-adapter.mjs:761` dice que el aviso va por n8n *"porque ahí vive la
       credencial de Telegram (el plan VPS no soporta `$env` en los nodos, así que el token no
