@@ -105,9 +105,21 @@ if ! "$DEST/webhook-server.sh" restart; then
 fi
 
 # --- 6. Verificar que quedo vivo. El PID puede existir con el puerto mudo ----------------------
+#
+# SE MIRA EL JSON, NO EL CODIGO DE SALIDA, y las dos mitades de eso costaron un susto el
+# 2026-09-04: aca decia `if ! "$DEST/webhook-server.sh" health`, y `health` no existe
+# (los subcomandos son start|stop|restart|status|logs|knowledge). El script imprimia la
+# linea de uso y cantaba "el bot no responde tras el deploy" sobre un bot sano, con el
+# backup en pantalla invitando a revertir un deploy bueno.
+#
+# Y cambiarlo por `status` a secas tampoco sirve: `status` hace `wget ... || echo
+# '{"ok":false}'` y termina en `exit 0` SIEMPRE, asi que un `if !` sobre el no puede
+# ponerse rojo nunca — falla ABIERTO. La salud esta en el cuerpo de la respuesta.
 echo
 echo "-- /health"
-if ! "$DEST/webhook-server.sh" health; then
+SALUD="$("$DEST/webhook-server.sh" status 2>&1)"
+echo "$SALUD"
+if ! printf '%s' "$SALUD" | grep -q '"ok":true'; then
   echo "ERROR: el bot no responde tras el deploy. Backup en $BACKUP" >&2
   exit 1
 fi
