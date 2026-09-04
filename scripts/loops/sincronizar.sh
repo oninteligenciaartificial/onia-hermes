@@ -179,6 +179,14 @@ poner "$FUENTE/scripts/kanban/tablero.sh" "$DESTINO_BIN/onia-tablero.sh"
 # nadie llegue hasta ahí. Lo cubre `npm run test:telegram-un-consumidor`.
 poner "$FUENTE/scripts/kanban/telegram-entrada.py" "$DESTINO_BIN/onia-tg-entrada.py"
 
+# El publicador que corre cuando Sergio contesta `ok <id>`, y el cliente de Postiz
+# que usa. Van a /root/bin por la MISMA razon que el tablero: los llama el lector
+# de Telegram, que no vive en ningun worktree y por lo tanto no tiene el repo al
+# lado. Sin estos dos, `ok <id>` vuelve a ser solo un `unblock` y la pieza se
+# queda en el disco — que es exactamente el bug que se arreglo el 2026-09-04.
+poner "$FUENTE/scripts/kanban/publicar-aprobado.mjs" "$DESTINO_BIN/onia-publicar-aprobado.mjs"
+poner "$FUENTE/scripts/postiz_schedule.mjs"          "$DESTINO_BIN/onia-postiz-schedule.mjs"
+
 # La memoria compartida: el corredor la inyecta y los loops le escriben por estos
 # dos. Si no se despliegan solos, el corredor de main llama a un script que no
 # existe en /root/bin y los 15 loops fallan mudos en la primera linea.

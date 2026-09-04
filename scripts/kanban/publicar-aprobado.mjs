@@ -1,0 +1,172 @@
+#!/usr/bin/env node
+// Publica la pieza de una tarea APROBADA. Es el cable que faltaba entre
+// "Sergio contesta `ok <id>`" y que la pieza salga de verdad.
+//
+//   node scripts/kanban/publicar-aprobado.mjs t_ab12cd34
+//   node scripts/kanban/publicar-aprobado.mjs --autotest
+//
+// POR QUE EXISTE. Medido el 2026-09-04: `ok <id>` corria `kanban unblock` y NADA
+// mas. La tarea quedaba desbloqueada y la pieza se quedaba en el disco. Peor: los
+// loops habian aprendido a pedirle a Sergio que publicara A MANO desde el
+// telefono ("descargalas en orden, guardalas en la galeria y subilas"), asi que
+// el circuito entero terminaba en una tarea manual que no ocurre. Resultado
+// medido: 1.196 imagenes generadas en 3 dias, 0 publicadas.
+//
+// COMO SE USA DESDE UN LOOP. La tarea que pide el OK lleva UNA linea asi en el
+// cuerpo (y solo una):
+//
+//   PUBLICAR: cuenta=lucia imagenes=/ruta/al/dir-o-archivo.png texto=/ruta/brief.json
+//
+// Sin esa linea esto no publica nada y sale con codigo 2 — que NO es un fallo:
+// la mayoria de las tareas del tablero no son piezas.
+//
+// 🔴 LA LINEA ES DATOS, NO UN COMANDO. El cuerpo de la tarea lo escribe un loop
+// (un LLM). Ejecutar texto que viene de ahi seria darle una shell. Por eso se
+// parsean TRES campos, se validan contra una lista blanca de cuentas y contra el
+// disco, y se invoca el publicador con execFile (sin shell, sin interpolacion).
+
+import { execFileSync } from 'node:child_process';
+import { existsSync, readFileSync, statSync, readdirSync } from 'node:fs';
+import { isAbsolute, dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const AQUI = dirname(fileURLToPath(import.meta.url));
+// Este archivo vive en DOS layouts: `scripts/kanban/` en el repo y, desplegado
+// por sincronizar.sh, plano en /root/bin. Resolver solo con '..' funcionaba en
+// el repo y apuntaba a /root/postiz_schedule.mjs en el VPS — o sea andaba en la
+// laptop y fallaba justo donde importa.
+const CANDIDATOS = [
+  process.env.POSTIZ_SCHEDULE,
+  join(AQUI, '..', 'postiz_schedule.mjs'),
+  join(AQUI, 'onia-postiz-schedule.mjs'),
+].filter(Boolean);
+const PUBLICADOR = CANDIDATOS.find((p) => existsSync(p)) || CANDIDATOS[CANDIDATOS.length - 1];
+const KEY_FILE = process.env.POSTIZ_KEY_FILE || '/root/.postiz-api-key';
+
+// Lista blanca. Los ids salen de la API de Postiz
+// (GET /public/v1/integrations), verificados el 2026-09-04. Un nombre que no
+// este aca no se publica: asi una tarea no puede mandar una pieza de Lucia a la
+// cuenta de la marca por un typo, ni inventar una cuenta.
+const CUENTAS = {
+  oniahq: 'cmsw091nx0001lq9c8kr6dsg8', // Onia | Sistemas con IA
+  sergio: 'cmt39kug00022lq9cnw5z12wb', // Sergio Urcullo (marca personal)
+  lucia: 'cmt1sv4eh001alq9cl3y6q7es', // Lucia Antelo
+};
+
+const IMAGEN = /\.(png|jpe?g)$/i;
+
+export function parsearLinea(cuerpo) {
+  // La primera linea PUBLICAR: gana. Dos lineas serian dos publicaciones y
+  // ninguna forma de saber cual quiso el loop — se toma una y se avisa.
+  const lineas = String(cuerpo || '')
+    .split('\n')
+    .map((l) => l.trim())
+    .filter((l) => /^PUBLICAR:/i.test(l));
+  if (!lineas.length) return null;
+
+  const campos = {};
+  for (const m of lineas[0].slice(lineas[0].indexOf(':') + 1).matchAll(/(\w+)=(\S+)/g)) {
+    campos[m[1].toLowerCase()] = m[2];
+  }
+  const faltan = ['cuenta', 'imagenes', 'texto'].filter((k) => !campos[k]);
+  if (faltan.length) throw new Error(`la linea PUBLICAR: no trae ${faltan.join(', ')}`);
+  if (!CUENTAS[campos.cuenta]) {
+    throw new Error(`cuenta desconocida "${campos.cuenta}" (validas: ${Object.keys(CUENTAS).join(', ')})`);
+  }
+  for (const k of ['imagenes', 'texto']) {
+    // Rutas absolutas y sin "..": una relativa depende del cwd del que llame y
+    // un ".." sale del arbol de trabajo.
+    if (!isAbsolute(campos[k]) || campos[k].includes('..')) {
+      throw new Error(`${k} tiene que ser una ruta absoluta sin ".." (vino "${campos[k]}")`);
+    }
+  }
+  if (!/\.json$/i.test(campos.texto)) throw new Error('texto tiene que ser un .json con el caption');
+  return { cuenta: campos.cuenta, integracion: CUENTAS[campos.cuenta], imagenes: campos.imagenes, texto: campos.texto, varias: lineas.length > 1 };
+}
+
+export function validarEnDisco(pieza) {
+  if (!existsSync(pieza.texto)) throw new Error(`no existe el brief ${pieza.texto}`);
+  const brief = JSON.parse(readFileSync(pieza.texto, 'utf8'));
+  if (!brief.caption || !String(brief.caption).trim()) throw new Error(`${pieza.texto} no trae "caption"`);
+  if (!existsSync(pieza.imagenes)) throw new Error(`no existe ${pieza.imagenes}`);
+
+  if (statSync(pieza.imagenes).isDirectory()) {
+    const slides = readdirSync(pieza.imagenes).filter((f) => /^slide-\d+\.png$/.test(f));
+    if (!slides.length) throw new Error(`${pieza.imagenes} no tiene slide-N.png`);
+    return { modo: '--slides', laminas: slides.length, caption: brief.caption };
+  }
+  if (!IMAGEN.test(pieza.imagenes)) throw new Error(`${pieza.imagenes} no es png/jpg`);
+  // Un PNG de 0 bytes es el fallo tipico de un render a medias, y publicado se
+  // ve como una pieza rota en el feed.
+  if (statSync(pieza.imagenes).size < 1024) throw new Error(`${pieza.imagenes} pesa menos de 1 KB (render a medias?)`);
+  return { modo: '--image', laminas: 1, caption: brief.caption };
+}
+
+function cuerpoDeTarea(tid) {
+  const py = process.env.PY_HERMES || '/usr/local/lib/hermes-agent/venv/bin/python';
+  const salida = execFileSync(
+    py,
+    ['-m', 'hermes_cli.main', 'kanban', '--board', process.env.ONIA_TABLERO || 'onia', 'show', tid, '--json'],
+    { encoding: 'utf8', env: { ...process.env, HOME: '/root' }, timeout: 120000 },
+  );
+  return JSON.parse(salida).task?.body || '';
+}
+
+function autotest() {
+  const ok = (c, m) => { if (!c) throw new Error('AUTOTEST: ' + m); };
+  ok(parsearLinea('sin nada aca') === null, 'sin linea PUBLICAR debe dar null');
+  const p = parsearLinea('bla\nPUBLICAR: cuenta=lucia imagenes=/tmp/a.png texto=/tmp/b.json\nbla');
+  ok(p.integracion === CUENTAS.lucia, 'no resolvio la integracion de lucia');
+  ok(p.imagenes === '/tmp/a.png', 'no leyo imagenes');
+  const cae = (t, frag) => {
+    try { parsearLinea(t); } catch (e) { ok(String(e.message).includes(frag), `esperaba "${frag}", dio "${e.message}"`); return; }
+    throw new Error(`AUTOTEST: "${t}" tenia que fallar por ${frag}`);
+  };
+  cae('PUBLICAR: cuenta=elonmusk imagenes=/tmp/a.png texto=/tmp/b.json', 'cuenta desconocida');
+  cae('PUBLICAR: cuenta=lucia imagenes=../../etc/passwd texto=/tmp/b.json', 'absoluta');
+  cae('PUBLICAR: cuenta=lucia imagenes=/tmp/a.png texto=/tmp/b.txt', '.json');
+  cae('PUBLICAR: cuenta=lucia texto=/tmp/b.json', 'imagenes');
+  // El payload con shell adentro se parsea como DATO y muere en la lista blanca,
+  // no se ejecuta.
+  cae('PUBLICAR: cuenta=$(rm -rf /) imagenes=/tmp/a.png texto=/tmp/b.json', 'cuenta desconocida');
+  console.log('autotest OK');
+}
+
+const main = () => {
+  const arg = process.argv[2];
+  if (arg === '--autotest') return autotest();
+  if (!arg) throw new Error('uso: publicar-aprobado.mjs <id-de-tarea>');
+
+  const pieza = parsearLinea(cuerpoDeTarea(arg));
+  if (!pieza) {
+    // Codigo 2 = "no habia nada que publicar". Distinto de fallar.
+    console.log(JSON.stringify({ publicable: false, motivo: 'la tarea no trae linea PUBLICAR:' }));
+    process.exit(2);
+  }
+  const info = validarEnDisco(pieza);
+
+  // ONIA_PUBLICAR_DRY=1 recorre el circuito ENTERO (parseo, validacion, subida
+  // de las laminas, POST a la API) pero deja el post como borrador, que no sale.
+  // Es como se prueba esto: no hay cuenta de prueba — @oniahq, sergio_urcullo y
+  // lucia.antelo son las tres reales.
+  const seco = process.env.ONIA_PUBLICAR_DRY === '1';
+  const salida = execFileSync(
+    process.execPath,
+    [PUBLICADOR, info.modo, pieza.imagenes, '--caption-from', pieza.texto,
+     '--integration', pieza.integracion, seco ? '--draft' : '--now', '--key-file', KEY_FILE],
+    { encoding: 'utf8', timeout: 300000 },
+  );
+  const out = JSON.parse(salida);
+  console.log(JSON.stringify({
+    publicable: true, ok: true, seco: seco || undefined, cuenta: pieza.cuenta, laminas: info.laminas,
+    postId: out?.out?.[0]?.postId ?? null,
+    aviso: pieza.varias ? 'la tarea traia mas de una linea PUBLICAR: se uso la primera' : undefined,
+  }));
+};
+
+try {
+  main();
+} catch (e) {
+  console.error(String(e?.message || e).slice(0, 800));
+  process.exit(1);
+}
