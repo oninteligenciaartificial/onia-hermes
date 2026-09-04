@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CTA_ALTA } from "./(sitio)/alta";
+import { EMPEZAR_URL } from "./(sitio)/nav";
 
 export const metadata: Metadata = {
   title: "Página no encontrada — Onia",
@@ -39,7 +40,7 @@ export default function NotFound() {
             <a href="/precios" className="btn btn-ghost">
               Ver precios
             </a>
-            <a href="/empezar" className="btn btn-ghost">
+            <a href={EMPEZAR_URL} className="btn btn-ghost">
               {CTA_ALTA}
             </a>
           </div>
