@@ -390,8 +390,19 @@ Radar, ítem 38.
 
 Ramas de carril activas en **`onia-platform`** (base `origin/master`):
 
-- *(al 2026-09-02 13:38 UTC, ninguna de carril.* `claude/chatbots-platform-review-0d1d09`
-  **ya está mergeada a `master`** — se destrabó ese día y por eso salió de esta lista.*)*
+- `claude/onia-v1-servicios-98acde` — **la sesión de control** (Onia v1, packs por rubro). Apareció
+  el 2026-09-04 22:25 UTC con 2 commits y **0 atrás de `master`**: arregla que el rubro de
+  servicios no pudiera cobrar ni cargar un cliente, y que la ficha compartida le dijera "este
+  paciente" a un estudio contable. 25 archivos, +878/−233, cero borrados, con `.test.ts` propio.
+  **Es la quinta vez que este archivo se entera tarde de un carril**, y la primera en este repo.
+  Si sigue sin mergear, mergeala: al 2026-09-04 tenía 30 min de vida, por eso no entró todavía.
+  ⚠️ Sus gates **no se pueden medir en un worktree pelado**: sin `node_modules`, `npx tsc` ni
+  siquiera es el compilador (baja otro paquete y avisa "This is not the tsc command you are
+  looking for"), y encadenado a un `| tail` el `$?` da **0** — un verde que no midió nada. Los
+  tres gates van desde `/root/loops/onia-platform`, que sí los tiene.
+- *(`claude/chatbots-platform-review-0d1d09` **ya está mergeada a `master`** desde el 2026-09-02
+  — se destrabó ese día y por eso salió de esta lista. Ojo que su homónima de `onia-hermes` sigue
+  viva y es otro carril.)*
 - `claude/onia-core-adoption-sprint5` — **NO la mergees**: 382 commits atrás de `master` con 1
   commit propio (`aa8f211`, +910/−240 en 2 archivos de schema del core). Diverge hace demasiado,
   así que es decisión de Sergio — anotada en el radar, ítem 26.
