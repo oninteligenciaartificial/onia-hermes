@@ -141,6 +141,26 @@ cablea, después se promete.
 pedido vago de la 6 deja **dos** llamados distintos, y dos llamados son ninguno. La casilla se
 marca cuando hay **uno solo** y lleva la palabra.
 
+### El comando de arriba mira UNA palabra. El gate las mira TODAS
+
+```sh
+python3 hermes-content/references/modelos/lucia/scripts/palabras-cableadas.py   # exit 0 = verde
+```
+
+Verificar a mano antes de escribir una palabra sólo cuida la pieza que estás tocando. El
+2026-09-04, con la casilla 11 ya corregida y el carrusel fijado ya arreglado, quedaban **cinco CTA
+más** pidiendo `ONIA` y `COMUNIDAD` en guiones listos para publicar (`generadas-20260828/`,
+`-20260901/`, `-20260902/` ×2) — ninguno era la pieza que motivó la casilla, así que ninguna
+verificación a mano los iba a mirar. Los cinco prometían «te paso cómo se ve», que es exactamente
+lo que responde `SISTEMA`: quedaron con esa palabra, a 0 créditos.
+
+El gate saca los sujetos del **disco** (todo `.md`/`.json` del árbol) y las palabras válidas del
+**workflow n8n activo**. Ninguna de las dos listas se escribe a mano, así que una pieza nueva nace
+cubierta y un cambio de cableado se detecta solo. Si no puede leer n8n **sale rojo**: no aprueba
+por no haber podido mirar. Distingue lo que se publica (un brief `.json`, una línea `**CTA:**`) de
+la prosa que sólo *narra* el error — esa sale como aviso, para que una bitácora no obligue a
+reescribir lo que pasó, pero tampoco se vuelva un agujero silencioso.
+
 ## La regla del experimento
 
 **Una variante cambia UNA variable.** Si se cambian dos y mejora, no se sabe cuál fue.

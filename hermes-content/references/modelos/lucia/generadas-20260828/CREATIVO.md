@@ -105,7 +105,7 @@ Ahí es donde un sistema deja de ser un lujo y pasa a ser el único que se acuer
 de todo.
 ```
 
-**CTA:** `Comentá ONIA y te paso cómo se ve por dentro.`
+**CTA:** `Comentá SISTEMA y te paso cómo se ve por dentro.`
 
 ---
 
@@ -205,7 +205,7 @@ Tu negocio puede tener su propio contenido con movimiento, sin esperar una
 producción entera.
 ```
 
-**CTA:** `Comentá COMUNIDAD y te muestro cómo se hace el de tu local.`
+**CTA:** `Comentá SISTEMA y te muestro cómo se hace el de tu local.`
 
 ⚠️ **Cifras vacías a propósito**, como el resto del doc: antes de publicar, traer un número real
 (un presupuesto de filmación, lo que cobra un camarógrafo en Santa Cruz) y anotar de dónde salió.
