@@ -1,0 +1,16 @@
+{
+  "id": "onia_product_day1",
+  "title": "Onia Platform - Producto (carrusel)",
+  "slides": [
+    {"file":"01_home.png","caption":"Cansado de perder tiempo con turnos y cobros? Onia lo automatiza."},
+    {"file":"02_precios.png","caption":"Agenda manual = sobrecarga. Menos pacientes atendidos."},
+    {"file":"03_empezar.png","caption":"Agenda + clientes + cobros + contabilidad en un mismo lugar."},
+    {"file":"04_rubros.png","caption":"Agentes IA dejan borradores listos para validar."},
+    {"file":"05_chatbot.png","caption":"Conecta WhatsApp por cliente y gestiona desde el panel."},
+    {"file":"06_contacto.png","caption":"Menos tiempo administrativo = mas pacientes."},
+    {"file":"07_register.png","caption":"CTA: Comenta 'COMUNIDAD' y te paso el link para la demo."}
+  ],
+  "caption_full":"Onia Platform centraliza agenda, clientes, cobros y contabilidad. Menos papel, mas pacientes. Comenta 'COMUNIDAD' para la demo.",
+  "format":"1080x1350",
+  "path":"/root/loops/onia-hermes/out/carousels/onia_product_day1"
+}

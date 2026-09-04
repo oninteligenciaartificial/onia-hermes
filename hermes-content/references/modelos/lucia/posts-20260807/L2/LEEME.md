@@ -1,6 +1,7 @@
 # L2 · Carrusel fijado «¿Quién es Lucía?» — renderizado 2026-09-03
 
-**7 láminas, 1080×1350 (feed 4:5), 0 créditos.** Espera el OK de Sergio.
+**7 láminas, 1080×1350 (feed 4:5), 2 créditos** (6 fotos del banco ya existente + 1 generada para
+el cierre el 03-sep). Espera el OK de Sergio.
 
 - Brief: [`../briefs/lucia-quien-es-fijado.json`](../briefs/lucia-quien-es-fijado.json)
 - Láminas: `slide-01.jpg` … `slide-07.jpg`
@@ -44,16 +45,94 @@ mejor documentado del carril — `lucia-skin-v1`, Nano Banana Pro, 2K 9:16, audi
 | 4 | «ella trabajando» | `E3-coworking.jpg` | única con laptop. La pantalla queda **borrosa, sin texto legible** — mirado a resolución completa, pasa la casilla 3 |
 | 5 | copy-space | `E3-cafe.jpg` | **la prueba 9/9 de la receta**; luz de ventana cálida |
 | 6 | «su mirada directa» | `E2-C-rooftop.jpg` | mirada a cámara, media sonrisa |
-| 7 | «su retrato de cierre» | `E2-B-rooftop.jpg` | **repetición deliberada de la portada** — ver abajo |
+| 7 | «su retrato de cierre» | `S3-rooftop-cierre.jpg` | generada el 03-sep (2 cr) para que el cierre **no** repita la portada — ver abajo |
 
-**Las 6 comparten la misma remera de lino beige**, así que el carrusel tiene raccord de vestuario
-sin haber generado nada.
+**Las 7 comparten la misma remera de lino beige**, así que el carrusel tiene raccord de vestuario:
+las 6 del banco por venir de la misma tanda, y la 7ª porque se generó pidiéndolo explícitamente.
 
-🔴 **La lámina 7 repite la foto de la portada, y es a propósito.** Hay 6 fotos para 7 lugares:
-alguna tenía que repetirse. Se puso el par en los extremos (1 y 7) porque es la **máxima distancia
-posible** — entre las dos hay cinco láminas — y porque abrir preguntando «¿es real?» y cerrar en
-el mismo retrato con «esto recién empieza» es un remate, no un descuido. Si a Sergio le parece
-error, la salida barata es generar UNA foto nueva de cierre (~2 cr) y volver a rendear.
+## 🔴 El copy decía que Onia tiene equipo — corregido el 2026-09-03
+
+La primera versión rendeada sacó **9/9 en la rúbrica visual** y aun así afirmaba algo falso:
+
+| Lámina | Decía | Dice ahora |
+|---|---|---|
+| 2 (body) | «Creada con inteligencia artificial por **el equipo de** @oniahq» | «Creada con inteligencia artificial **en** @oniahq, desde Santa Cruz de la Sierra» |
+| 4 (headline) | «Un **equipo** boliviano» | «**Hecha en Bolivia**» |
+
+**Onia no tiene equipo: es Sergio.** `CLAUDE.md` lo fija («el que vende es Sergio; no hay
+vendedora ni colaboradores comerciales») y prohíbe fabricar. Y esta es la pieza que queda
+**FIJADA** arriba del perfil — la primera que lee todo el que entra.
+
+Se corrigió **en el brief** (no sobre el JPG) y se volvió a rendear con el mismo comando:
+**0 créditos**, porque es texto compuesto sobre fotos que ya existían. Sólo cambiaron `slide-02`
+y `slide-04`; las otras cinco salieron byte-idénticas, lo que confirma que el render es
+determinista. «Hecha en Bolivia» además **entra en una sola línea** — el titular quedó más limpio
+que el original de dos.
+
+**Lo que dejó como regla:** la rúbrica tenía 9 casillas y las 9 miraban píxeles. Ahora tiene una
+décima —*el copy no afirma nada que no exista*— en `RUBRICA-IMPOLUTO.md`. Una pieza impecable
+puede publicar una mentira, y ninguna casilla visual la ve.
+
+## 🔴 Segunda pasada, mismo día: la palabra se fue, el plural quedó
+
+El arreglo de arriba buscó la **palabra** «equipo». La pieza seguía diciendo lo mismo **sin
+usarla**, en verbos — y uno estaba en la lámina 4, tres líneas debajo del titular que se acababa
+de corregir:
+
+| Lámina | Decía (tras el 1er arreglo) | Dice ahora |
+|---|---|---|
+| 1 (pill) | «La pregunta que **todos** hacen» | «La pregunta **obvia**» |
+| 4 (body) | «si **pueden** sostenerme a mí… lo que **hacen** con tu operación» | «si **me puede sostener** a mí… lo que **hace** con tu operación» |
+| 5 (body) | «el detrás de escena de cómo me **hacen**» | «el detrás de escena de cómo **estoy hecha**» |
+
+- **1**: el perfil tiene **0 posts publicados**. «La pregunta que todos hacen» inventa una
+  audiencia que todavía no existe — prueba social fabricada, que `CLAUDE.md` prohíbe.
+- **4 y 5**: `pueden` / `hacen` / `me hacen` son plurales de tercera persona. Dicen «un grupo de
+  personas», que es exactamente lo que se había sacado del titular.
+
+**0 créditos otra vez.** Re-rendeadas 3 láminas; las otras 4 salieron **byte-idénticas** (`git
+status` sólo marcó `slide-01`, `slide-04`, `slide-05`) — tercera confirmación de que el render es
+determinista.
+
+Verificado **mirando** las tres a resolución completa: ningún desborde de caja, el cuerpo de la 4
+entra en 4 líneas sin tocar el pie, y la 1 mantiene el titular en una sola línea.
+
+## 🟡 Dos cosas para que decida Sergio — ninguna la puedo cerrar yo
+
+1. **La lámina 4 muestra dos personas borrosas al fondo**, con laptops, debajo del pill «QUIÉN ME
+   HACE» y el titular «Hecha en Bolivia». El texto ya no dice «equipo»; **la foto lo sugiere**.
+   Es un coworking (gente ajena, que es justo donde trabaja alguien que trabaja solo), así que
+   defendible — pero es la lámina que responde «quién me hace» y es la pieza FIJADA. Cambiar la
+   foto es cambiar la pieza: no lo hago sin OK. La 5 tiene gente al fondo también y ahí **no**
+   molesta, porque su pill es «QUÉ VAS A VER»: un café con desconocidos es sólo un café.
+2. ~~**La lámina 7 repite la foto de la portada**~~ — ✅ **RESUELTO el 2026-09-03, 2 cr.** Ya no
+   repite: tiene foto propia.
+
+## ✅ La lámina 7 dejó de repetir la portada — 2026-09-03, 2 créditos
+
+**Antes:** había 6 fotos para 7 lugares y la 7 reusaba `E2-B-rooftop.jpg`, la misma de la portada,
+píxel por píxel. Se defendía como remate deliberado (par en los extremos, máxima distancia), pero
+era una de las **dos decisiones que esta pieza le pedía a Sergio**.
+
+**Qué cambió:** Higgsfield volvió a generar (la tarea `t_2a90f301` estaba bloqueada por un corte
+que ya no existe — cerrada el 2026-09-03 con `account status` en vivo). Con la cuenta viva, la
+salida barata que este archivo ofrecía **sí** estaba disponible y se tomó:
+
+| | |
+|---|---|
+| Foto nueva | `../../generadas-20260903/S3-rooftop-cierre.jpg` (1856×2304, 4:5 nativo) |
+| Motor | `nano_banana_pro` + `--image-references E2-B-rooftop.jpg` |
+| Costo | **2,00 cr** — cotizado antes con `generate cost`, cobro exacto (1934,14 → 1932,14) |
+| Registro | `BITACORA-PERFECCION.md` § **E10**, con el prompt completo |
+
+**Por qué esta foto y no otra:** cierra mirando la ciudad de perfil, que es lo que dice el copy
+(«seguime para ver hasta dónde llega»), y deja el piso de terraza vacío abajo-izquierda, que es
+donde cae el bloque de texto. Mantiene remera, luz y joyería de la portada — es la misma tarde,
+no otra sesión.
+
+**Verificado mirando el render, no el brief:** al re-rendear, las otras seis salieron
+**byte-idénticas** (mismo tamaño exacto) y sólo `slide-07.jpg` cambió (154.725 → 135.562 bytes) —
+cuarta confirmación de que el render es determinista y de que no se tocó nada más.
 
 ## Chequeo contra la rúbrica — mirado, no supuesto
 

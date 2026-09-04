@@ -1,0 +1,2 @@
+Prompt para doblaje/voz IA (short5):
+"Genera una voz femenina adulta, tono cercano, velocidad 0.95, para un guion de 30s. Exportar mp3 44.1kHz."

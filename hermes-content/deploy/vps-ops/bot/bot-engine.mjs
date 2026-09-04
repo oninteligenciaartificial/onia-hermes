@@ -463,6 +463,18 @@ export function step(state, incoming, options = {}) {
   // --- Barrera 1: un humano tomo la conversacion. El bot NO habla. Falla hacia el SILENCIO.
   if (state.humanTookOver) return finalize(ctx, base, [], [], ["silencio:humano_a_cargo"]);
 
+  // --- Barrera 1b: CUOTA MENSUAL AGOTADA (la manda /published; null = seguir atendiendo).
+  // Hasta hoy el bot se CALLABA al agotarse: el cliente del cliente escribia y nadie contestaba.
+  // Ahora: texto fijo SIEMPRE (nunca LLM) y el handoff de siempre (review_queue + notify)
+  // UNA sola vez por conversacion — en handoff_humano ya no se repiten los efectos.
+  // Opt-out previo sigue mandando: a quien dijo basta no se le escribe ni para avisarle esto.
+  if (config.cuota?.agotada === true && !state.optOutAt) {
+    if (state.botStage === "handoff_humano") {
+      return finalize(ctx, base, [say("R_CUOTA_AGOTADA", base, config)], [], ["cuota_agotada:ya_derivada"]);
+    }
+    return handoffResult(ctx, base, "cuota_agotada", [], "R_CUOTA_AGOTADA");
+  }
+
   // --- MODO RECEPCIONISTA: el bot de un CLIENTE de Onia (conocimiento con fuente "db").
   // Va ANTES de la barrera de opt-out porque la reapertura por "DEMO" es del funnel de venta;
   // el recepcionista maneja su propio opt-out (silencio, sin reapertura). Todo el guion de

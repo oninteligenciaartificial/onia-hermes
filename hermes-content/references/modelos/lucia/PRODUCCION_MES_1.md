@@ -7,8 +7,11 @@
 
 ## Reglas que aplican a TODAS (de LUCIA.md §9, §11, §12, §13)
 
-- Identidad: ancla `452d8375-fb67-4df7-9ae0-8f1b257aa51f`, **fondo simple cuando la cara
-  tiene que ser reconocible**; escenario cargado solo si la cara no es el punto.
+- Identidad: ancla `58bbd635-9b90-4bd2-b08a-1cd4915bd563` (`lucia-skin-v1`), **fondo simple cuando
+  la cara tiene que ser reconocible**; escenario cargado solo si la cara no es el punto.
+  ⛔ Corregido el 2026-09-03: acá decía `452d8375-…`, que `BANCO-OFICIAL.md` ya tenía **jubilada** y
+  que es la causa medida de la deriva de la cara. Este es el plan del mes: cada pieza se habría
+  generado con el ancla equivocada. La reconciliación de los tres UUID está en `BANCO-OFICIAL.md`.
 - Color: `natural true-to-life colors, no color grading, no filter look, accurate white balance`.
 - Movimiento: `natural real-time speed, no slow motion` — sin adverbios de lentitud.
 - `[TEXT RULE — MANDATORY] No legible text anywhere in frame.`
@@ -27,12 +30,19 @@ CTA: seguir (sin palabra — es presentación). **Es la pieza que abre todo.**
 
 ## L2 · Carrusel fijado "¿Quién es Lucía?" — ✅ RENDERIZADO 2026-09-03, espera OK
 
-7 slides, pack `editorial-clean`, **0 créditos** (fotos del banco `generadas-20260902/`).
+7 slides, pack `editorial-clean`, **2 créditos** (6 fotos del banco `generadas-20260902/` + la
+foto de cierre `generadas-20260903/S3-rooftop-cierre.jpg`, generada el 03-sep para que la lámina 7
+dejara de repetir la portada — bitácora § E10).
 
 - Brief: `posts-20260807/briefs/lucia-quien-es-fijado.json`
 - Render bueno: **`posts-20260807/L2/slide-01..07.jpg`** — las 7 medidas en `1080×1350`
 - Detalle, comando reproducible y chequeo de rúbrica: `posts-20260807/L2/LEEME.md`
 - CTA: pregunta abierta + seguir. Se fija al perfil.
+- ⚠️ **Segunda corrección de copy el 2026-09-03** (láminas 1, 4 y 5, 0 créditos): el arreglo del
+  «equipo» había buscado la palabra y quedaron los **verbos en plural** («si pueden sostenerme»,
+  «cómo me hacen») diciendo lo mismo, más un «la pregunta que todos hacen» en la portada de un
+  perfil con 0 posts. Detalle en el LEEME; la regla, en `RUBRICA-IMPOLUTO.md` (casilla 10 se
+  aplica por lámina, no por string). **Quedan 2 decisiones de Sergio en `t_5af29849`.**
 
 ⚠️ **Corregido 2026-09-03 — el brief apuntaba a 6 fotos que no existen en ninguna rama.** Citaba
 `tanda-20260821/*.png`; contado en vivo, esa carpeta tiene **0 imágenes** en disco, **0** en

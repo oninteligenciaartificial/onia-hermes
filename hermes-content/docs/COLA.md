@@ -811,7 +811,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       a propósito más ancho que el guard). Las 14 rutas de venta traen `og:image` **y**
       `twitter:card: summary_large_image`.
       ⚠️ **Aparecen 7 rutas SIN `og:image` — `/patrones` y las seis `/v1/*` — y NO son un defecto.**
-      `robots.txt` las declara `Disallow: /patrones` y `Disallow: /v1`, y ninguna está en el
+      `/robots.txt` las declara `Disallow: /patrones` y `Disallow: /v1`, y ninguna está en el
       sitemap: son superficies internas, no linkeadas desde el sitio. Es exactamente el mismo
       patrón que causó el bug real de ayer (`opengraph-image` no baja a segmentos anidados: `/v1`
       la tiene, sus hijas no), y por eso engaña — pero acá el guard tiene razón en ignorarlas,
@@ -1679,7 +1679,39 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         mirar `.woot-widget-bubble` en cada una. Las dos primeras la tienen; las otras tres no.
       - **Cero líneas de código tocadas: no había nada roto en el sitio.**
 
-- [ ] 🟠 **SIGUE VIVO en `rubros`, y el 2026-09-03 07:58 UTC `onia-cola` midió POR QUÉ. No es
+- [x] 🟠 **CERRADO el 2026-09-03 17:38 UTC por `onia-cola`, mergeando el arreglo que el carril
+      `canario-visual` ya tenía escrito y varado en su rama** (`ddd48bfae` fullPage +
+      `6bd2ec177` scroll suave → `main` en `ea86a894a`). **No lo construí de nuevo a propósito:
+      ya existía, y escribirlo otra vez en `main` habría chocado add/add contra el mismo archivo
+      de su dueño.** El instrumento quedó como pedía este ítem: captura **por viewport**,
+      `html{scroll-behavior:auto !important}` inyectado antes de scrollear, y
+      `waitForFunction(scrollY≈y)` en vez de un `setTimeout` optimista.
+      - **Verificado MIRANDO las dos fotos, no con un grep** — mismo instante, misma franja de
+        `https://onia.com.bo/rubros` a 1440×900, `document.body.scrollHeight` = **8.332 px**
+        (idéntico a la medición de las 07:58) y `scrollY` real = 850, o sea el scroll **llegó**:
+        - **viejo (`fullPage: true`)** → la tarjeta cortada por arriba y una banda blanca vacía
+          ocupando dos tercios del cuadro. La firma exacta que este ítem perseguía.
+        - **nuevo (por viewport)** → la tarjeta **entera** *"Hoy en la agenda / Dental — 09:00
+          Ortodoncia · 10:30 Limpieza · 11:15 Control / Cada paciente con su hora, su
+          tratamiento y su teléfono"*, más la lista de rubros (Dental activo, Comercio ·
+          Importadora · Estética · Servicios en gris) y la burbuja de Chatwoot visible.
+      - **Un detalle que vale anotar porque contradice a medias la medición vieja:** hoy el
+        fotograma congelado por `fullPage` era **Dental**, no *"Caja del día / Efectivo"*
+        (Comercio) como el 07:58. El rubro en que se congela **varía entre corridas**; lo que no
+        varía es el defecto. Un ítem que hubiera exigido ver *"Caja del día"* para darse por
+        reproducido se habría declarado fantasma hoy.
+      - **El repro quedó como script, no como párrafo:** `scripts/verificar_canario_rubros.mjs`
+        saca las dos fotos a `/tmp/verificar-canario/` en 30 segundos. No es un gate y no está
+        en `npm test`: es para volver a MIRAR, que es lo único que decide esto.
+      - ⚠️ **El merge salió en conflicto en `scripts/canario_visual.mjs` y se resolvió por
+        UNIÓN, no eligiendo un lado.** Los dos lados le habían agregado campos distintos al
+        MISMO objeto `datos`: `main` el chequeo de desvío (`medida` / `motivoNoMedida` /
+        `respuestasFallidas`) y la rama la lista de `capturas` por viewport. `--ours` o
+        `--theirs` habrían borrado media herramienta **en silencio**, y el canario habría
+        seguido corriendo en verde, ciego de un ojo.
+
+      **El diagnóstico original, que es la mejor explicación de POR QUÉ pasaba:**
+      **SIGUE VIVO en `rubros`, y el 2026-09-03 07:58 UTC `onia-cola` midió POR QUÉ. No es
       timing ni rasterizador: `fullPage` destruye las secciones movidas por scroll.**
       Reproducido en vivo con el instrumento exacto del canario (1440×900, sin `channel`, scroll
       300/800 ms). **El sitio está sano; miente la captura** — probado con las dos tomas de la
@@ -1754,6 +1786,40 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         uno gasta vueltas de este carril persiguiendo fantasmas. **Verificado que el sitio no
         tiene la culpa en los tres.**
 
+### Del carril `web-venta` — corrida del 2026-09-03 10:45 UTC (las dos pantallas, instrumento ya corregido)
+
+- [x] 🟠 **La home cambiaba de voseo a tuteo DENTRO de la misma oración — CERRADO
+      (`95500f82`), con gate.** La tarjeta "De noche" decía *"**Bajás** la persiana … para que
+      lo **apruebes**"*. No era estilo: el sitio conjuga ese verbo en voseo en cinco lugares
+      (`aprobás`). **Barrido a toda la superficie**, no sólo donde saltó — el mismo `apruebes`
+      estaba en los TÉRMINOS (pegado a un `vos`: *"para que vos las apruebes"*) y en
+      `content/requisitos.ts`, que se renderiza en la home y en `/chatbot`.
+      - **Gate nuevo `(sitio)/voz.test.ts`**, que corre en `prebuild` (el comando real del
+        deploy). Caza la **clase**, no el literal: 25 formas de tuteo inequívocas sobre todo
+        archivo de cliente **descubierto del disco**. Lista deliberadamente conservadora —
+        quedan fuera las formas que tuteo y voseo comparten (`tengas`, `estás`, `te`, `tu`) y
+        `prueba`, que es sustantivo del sitio. Un gate que grita por algo correcto se apaga.
+      - **Verificado en ROJO antes**, por el motivo correcto. Y ese rojo destapó un defecto del
+        propio gate: apuntaba a `page.tsx:122` para algo que estaba en la **215**, porque al
+        sacar comentarios corría la cuenta de líneas. Ahora se blanquean conservando los saltos.
+      - **Gates:** typecheck exit 0 · 157 tests (132 + 25) · build exit 0.
+
+- [x] 🟢 **`/empezar` está sana, y muere el fantasma del titular cortado.** Miradas las 10
+      capturas (1440 y 390) con el instrumento arreglado —scroll real por viewports,
+      `scroll-behavior:auto` inyectado, y espera a que el scroll **llegue** en vez de un
+      `setTimeout`—. El titular *"Creá tu cuenta y usalo de verdad 14 días."* sale **entero**:
+      lo de la vuelta pasada era el scroll suave, no el sitio. Y aparece el **cuarto** miembro
+      de la familia de falsos positivos: un revisor visual reportó *"Al dia"* sin tilde en la
+      home y **el string no existe en la fuente** (`grep "Al dia"` → cero). El `grep` sirvió
+      para lo único que sirve: **descartar**.
+
+- [x] 🟠 **Bloqueo del pie REVERIFICADO y vigente (tablero `t_68671bc3`) — no re-medirlo.**
+      74 px de franja clara bajo el pie negro a 390 px, cero a 1440. **Descartadas dos causas
+      falsas antes de creerle a la foto:** no es el widget de Chatwoot (ocultarlo no mueve el
+      alto, 3689 → 3689) y no es artefacto (`culpables: []`, ningún elemento vive ahí abajo).
+      Arreglo `f0248601` en `main`, gate `cierre.test.ts` puesto, decisión ya cotizada en el
+      radar. **Del lado del código no queda nada: falta sólo el deploy, que es de Sergio.**
+
 - [ ] 🟢 **Las otras cinco pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
       Miradas una por una: `contacto` (322 KB/104 ms, formulario y CTAs completos),
       `register` (705 KB/153 ms, asistente de 2 pasos con 5 rubros, íconos legibles),
@@ -1763,6 +1829,394 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       `panel-chatbot` (702 KB/228 ms, redirige a `/login` sin sesión: queda "no medida", no "OK",
       como corresponde). **Ninguna baseline se tocó esta vuelta** — pisar la de las cinco páginas
       afectadas taparía el ítem del widget caído, igual que ayer con `chatbot-landing`.
+
+### Del carril `web-venta` — corrida del 2026-09-03 11:50 UTC (el CHECKLIST DE PRE-ENTREGA, corrido por primera vez)
+
+- [x] 🟠 **`onia.com.bo/favicon.ico` devolvía 404 — ARREGLADO EN CÓDIGO, con gate. Falta el
+      deploy, que es el mismo de `t_68671bc3`.** No devolvía un icono roto: devolvía la
+      **página de error entera, 29 KB de HTML**, a quien pidió una imagen de 3 KB.
+      - **Cómo apareció:** `web-factory/docs/CHECKLIST_PRE_ENTREGA.md` tenía **17 puntos
+        abiertos y CERO ejecutados**. Corridos los 17 contra producción (las 16 URLs del
+        sitemap), **16 puntos pasan** — canonical en las 16, títulos y descripciones únicos
+        sin un solo duplicado, `<html lang="es">`, un `<h1>` por página, cero contenido
+        mixto, 404 propio ("Página no encontrada — Onia"), y las 21 imágenes del sitio con
+        `alt` **y** `width`/`height`. El único fallo binario era éste.
+      - **Por qué nadie lo veía, medido con el instrumento correcto:** el sitio declara
+        `<link rel="icon" href="/icon.svg">` y `apple-icon.png`, y los dos dan 200. Con eso,
+        **Chromium NO pide `/favicon.ico`** — abierta la home con Playwright, dispara
+        exactamente dos peticiones de icono y ninguna es ésa. El que paga es todo cliente que
+        lo pide a pelo sin leer el `<head>`: buscadores, lectores de feeds, gestores de
+        marcadores, navegadores viejos. Un `curl` lo encuentra en un segundo; un navegador no
+        lo encuentra nunca. **Por eso el checklist existe y por eso había que EJECUTARLO.**
+      - **El arreglo, el mínimo posible:** el ICO bueno ya estaba en el repo
+        (`public/brand/v2/favicon.ico`, 3 tamaños, publicado en `/brand/v2/favicon.ico` — o
+        sea, prueba viva de que `public/` se sirve desde la raíz en ESTE deploy). Copiado a
+        `public/favicon.ico`. **Deliberadamente no se usó la convención de metadata de Next**
+        (`app/favicon.ico`): esa agrega un `<link>` propio y podía cambiar qué icono elige un
+        navegador. Verificado que **el `<head>` queda byte a byte idéntico** al de producción:
+        el arreglo es puramente aditivo y sólo llena la ruta que antes daba 404.
+      - **Verificado MIRANDO, contra un servidor de producción real** (`next start` sobre el
+        build, no `dev`): `/favicon.ico` → **200, `image/x-icon`, 3.083 b, byte a byte igual**
+        al del repo; `/icon.svg` y `/apple-icon.png` siguen en 200. El icono **abierto y
+        mirado** a 16/32/128 px: es la marca Onia (cuadrado verde, "on" negro) y se lee a
+        16 px. Y las dos pantallas de venta recapturadas a 390 px sin una sola respuesta 4xx.
+      - **Gate nuevo `(sitio)/icono.test.ts`**, en `prebuild` (el comando real del deploy).
+        Caza la **clase**, no el archivo de ayer: los **tres** iconos que el sitio publica,
+        cada uno con su firma de formato leída del disco (header ICONDIR para el ICO, `<svg`,
+        `\x89PNG`) — así no pasa en verde un PNG renombrado a `.ico`, ni el día que alguien
+        mueva `icon.svg`. Acepta las dos raíces (`public/` y `app/`) porque las dos terminan
+        en la misma URL y el gate no tiene por qué opinar sobre cuál se usa.
+      - **Verificado en ROJO antes**, por el motivo correcto: falló **sólo** el caso
+        `/favicon.ico está en disco`, con los otros 8 en verde.
+      - **Gates:** typecheck exit 0 · build exit 0 (con `prebuild` = `tsc --noEmit && vitest run`).
+      - ⚠️ **No está en producción**: `onia.com.bo` la sirve el contenedor `onia-landing` y
+        publicar es de Sergio. Este arreglo es el **cuarto** que se acumula esperando el mismo
+        deploy de `t_68671bc3`.
+
+- [x] 🟢 **`/terminos` y `/privacidad` son las dos únicas rutas sin `og:url` — ARREGLADO Y CON
+      GATE el 2026-09-03 por `web-venta`.** (Tenían las otras nueve etiquetas Open Graph, imagen
+      incluida; las 14 restantes tenían las diez.)
+      - **Confirmado vivo en producción antes de tocar nada**, contra el contenedor que sirve el
+        dominio: `curl -s https://onia.com.bo/terminos | grep -o 'property="og:[a-z:]*"' | sort -u`
+        → nueve etiquetas, sin `og:url`; la home y `/precios` traen las diez.
+      - **La causa:** ninguna de las dos declaraba `openGraph`, así que heredaban el del layout
+        raíz — y `og:url` es la única etiqueta que **no se puede heredar**, porque cambia en cada
+        página. Por eso el hueco pasó desapercibido: la tarjeta se veía casi bien.
+      - **El arreglo:** `openGraph` propio en `src/app/terminos/page.tsx` y
+        `src/app/privacidad/page.tsx`, con `url` igual a su `canonical`.
+      - **Verificado sobre el HTML que EMITE el build, no sobre el fuente** (`next start` en
+        :3987 + `curl`): las dos ahora sirven las diez etiquetas, con
+        `og:url = https://onia.com.bo/terminos` y `…/privacidad`, absolutas. Barrido de **las 16
+        rutas del sitemap**: las 16 con `og:url` correcta. Las dos páginas además **abiertas y
+        MIRADAS** renderizadas a 1440×900 (`/tmp/wv-terminos.png`): siguen sanas.
+      - **Y ahora tiene gate — `web-factory/apps/onia-platform/src/app/compartir.test.ts`**, que
+        corre en `prebuild` (`tsc --noEmit && vitest run`), el comando real del deploy.
+        **Verificado en ROJO antes**, por el motivo correcto: fallaron **sólo** `/terminos` y
+        `/privacidad`, con las otras 14 rutas y el ancla en verde.
+        El corte del gate es el **sitemap**, no la carpeta ni el `noindex`, y las dos
+        alternativas obvias estaban mal: por carpeta se pierde `/terminos`, `/privacidad` y
+        `/servicios/consultoria` (viven fuera de `(sitio)`), y por `noindex` se pierde
+        `/terminos`, que declara `index: false` y **es una de las dos rotas** — compartir e
+        indexar son cosas distintas. Una ruta nueva queda cubierta con sólo agregarla al
+        sitemap, que es lo que ese archivo ya obliga a hacer.
+      - **Gates:** typecheck exit 0 · `vitest run` 183 verdes en 8 archivos · build exit 0.
+      - ⚠️ **No está en producción**: `onia.com.bo` la sirve el contenedor `onia-landing` y
+        publicar es de Sergio. Este arreglo es el **quinto** que se acumula esperando el mismo
+        deploy de `t_68671bc3`.
+      - **Encontrado de paso, NO arreglado** (es otro ítem, no lo abro en la misma vuelta):
+        `/terminos` está en el `sitemap.xml` **y** declara `robots: { index: false }`. El sitemap
+        dice "indexá esto" y la etiqueta dice lo contrario. Repro: `curl -s
+        https://onia.com.bo/terminos | grep -o 'name="robots"[^>]*'` → `content="noindex"`, y
+        `curl -s https://onia.com.bo/sitemap.xml | grep terminos` → la lista. `/privacidad` no
+        tiene el problema (es indexable a propósito, con su motivo escrito).
+        **Zona:** `web-factory/apps/onia-platform/src/app/{sitemap.ts,terminos/page.tsx}`.
+        → **CERRADO en la vuelta siguiente**, abajo.
+
+### Del carril `web-venta` — corrida del 2026-09-03 15:48 UTC (el ítem que la vuelta anterior dejó anotado)
+
+- [x] 🟢 **El sitemap pedía indexar `/terminos` y la propia página lo prohibía — ARREGLADO Y CON
+      GATE.** El sitio se desmentía a sí mismo en la única superficie que lee un buscador.
+      - **Confirmado vivo en producción antes de tocar nada**, contra el contenedor que sirve el
+        dominio (no `main`, no Vercel): `curl -s https://onia.com.bo/terminos | grep -o
+        'name="robots"[^>]*'` → `content="noindex"`, y `curl -s https://onia.com.bo/sitemap.xml`
+        lista `<loc>https://onia.com.bo/terminos</loc>`. No era fantasma.
+      - **Por qué importa y no es cosmético:** un sitemap no enumera contenidos, **pide
+        indexación**. Search Console reporta el choque como error (*"Submitted URL marked
+        'noindex'"*) y gasta rastreo en una página que nosotros mismos excluimos.
+      - **Qué lado cede, y por qué NO el otro:** se saca del sitemap, **no** se le quita el
+        `noindex`. El `noindex` es el lado deliberado — los Términos son un borrador pendiente de
+        revisión por abogado, y el propio archivo ya dejaba escrito *"esta página no la querés en
+        Google, pero sí se manda por WhatsApp"*. Quitarlo habría publicado un borrador legal al
+        buscador: eso es una decisión de Sergio, no de un arreglo. `/privacidad` se queda en el
+        sitemap porque su indexabilidad también está escrita y motivada (el rastreador de Meta
+        valida esa URL al publicar la app del chatbot).
+      - **La regla ya existía en el código y nadie la medía:** `v1/layout.tsx:11` dice
+        *"robots.ts y fuera del sitemap"*, y `/patrones` y `/v1` la cumplen. `/terminos` era la
+        **única** de las 25 páginas del disco que la violaba (barridas las 6 declaraciones de
+        `robots` que hay en la app).
+      - **Gate nuevo `src/app/indexar.test.ts`**, en `prebuild` (`tsc --noEmit && vitest run`, el
+        comando real del deploy). Caza la **clase**: para cada ruta del sitemap exige que exista
+        su `page.tsx` (si no, el sitemap publica un 404), que `robots.ts` no la deshabilite, y que
+        no declare `noindex` — **en las dos formas que acepta Next** (`{ index: false }` y
+        `robots: "noindex"`), porque un gate que sólo entiende la que se usó hoy pasa en verde el
+        día que alguien escribe la otra.
+      - **Verificado en ROJO antes**, por el motivo correcto: falló **sólo** `/terminos`, con los
+        otros 16 casos en verde.
+      - ⚠️ **El arreglo abría un agujero de gate y por eso la vuelta no termina ahí.**
+        `compartir.test.ts` (el gate de `og:url` de ayer) tomaba su lista de rutas **del
+        sitemap** — así que al sacar `/terminos` de ahí, la página habría quedado publicada,
+        compartible y **sin gate, sin que nada se pusiera en rojo**. Un criterio de cobertura que
+        se encoge solo cuando cambia una política de indexación **falla ABIERTO**. Corregido: la
+        lista ahora es **el disco menos el `disallow` de `robots.ts`** —la declaración que el
+        propio sitio ya hace de qué no publica—, así una página nueva nace cubierta y hay que
+        excluirla a mano, a la vista, para que deje de estarlo. **Medido: los casos de
+        `compartir` siguen siendo 16 y `/terminos` sigue entre ellos.**
+      - Los dos gates compartían el mismo parser de metadata; se extrajo a `src/app/rutas.ts` en
+        vez de copiarlo, que era garantizar que en un mes midieran cosas distintas.
+      - **Verificado sobre el HTML que EMITE el build, no sobre el fuente** (`next start` sobre el
+        build de producción, no `dev`): `sitemap.xml` pasa de 16 a **15 URLs**, sin `/terminos` y
+        con `/privacidad` intacta; `/terminos` sigue **200**, con sus **diez** etiquetas OG,
+        `og:url` y `canonical` correctas y su `noindex`. Y **abierta y MIRADA** renderizada a
+        1440×900 y 390×844 (`/tmp/wv-terminos-{escritorio,telefono}-0.png`): título, índice y
+        cuerpo enteros, sin recortes. Los únicos errores de consola son el 429 del widget de
+        Chatwoot, ya medido como falso positivo de la IP del VPS.
+      - **Gates:** typecheck exit 0 · `vitest run` **199 verdes** en 9 archivos · build exit 0.
+      - ⚠️ **No está en producción**: `onia.com.bo` la sirve el contenedor `onia-landing` y
+        publicar es de Sergio. Este arreglo es el **sexto** que se acumula esperando el mismo
+        deploy de `t_68671bc3`.
+
+- [x] 🟢 ~~**Encontrado de paso, NO arreglado**: la `<meta name="description">` de `/terminos`
+      dice *"(borrador, pendiente de revisión por abogado)"*.~~ **ARREGLADO 2026-09-03 ~16:55 UTC
+      (`web-venta`), y era peor de lo que decía el ítem: no sólo era obra, era FALSO.**
+      - **Lo que el ítem no sabía:** el documento se declara `status: "vigente"` en su propio
+        frontmatter (`src/content/legal/terminos.md`). O sea, la página llamaba "borrador" a un
+        texto que el sitio publica como vigente, y por eso tampoco muestra ningún cartel de
+        borrador. *(El ítem decía que el cuerpo estaba limpio porque sus "borradores" son los que
+        propone la IA. La conclusión era correcta, el motivo no: el cuerpo SÍ tiene un aviso de
+        borrador —`legal-page.tsx:48`— pero está condicionado al frontmatter y hoy no se dibuja.)*
+      - **Por qué sobrevivió, que es lo que vale:** el aviso visible estaba **hardcodeado**; se
+        arregló ahí para que respetara el frontmatter —una política publicada como "borrador" no
+        sirve para dar de alta la app en Meta—, el frontmatter pasó a `vigente`, el cartel
+        desapareció de la pantalla… y la `description` siguió repitiendo la frase vieja en el
+        `<head>`. **Un barrido que se verifica MIRANDO la página no alcanza para la metadata**,
+        que es la parte de la superficie de cliente que no se ve mirando.
+      - **Y contagió a un tercero:** `indexar.test.ts` justificaba el `noindex` de `/terminos`
+        con *"los Términos son un borrador pendiente de revisión por abogado"*. Premisa vencida
+        dentro de la justificación de un gate: se lee como vigente y decide por la próxima sesión.
+        Corregida; **el `noindex` no se tocó** (sigue en pie por su otro motivo, el escrito en el
+        propio archivo).
+      - **Gate nuevo, y es la parte reutilizable:** `src/app/obra.test.ts` — ninguna página
+        publicada declara obra en su metadata (8 frases: "muy pronto", "próximamente", "en
+        construcción", "beta", "en desarrollo", "estamos trabajando", "pendiente de revisión",
+        "borrador de trabajo"). Es la regla de Sergio del 2026-08-20 vuelta comando.
+        **Los sujetos salen del DISCO menos el `disallow` de `robots.ts`**, no de una lista de
+        inclusión: una página nueva nace cubierta. Y **NO prohíbe "borrador" a secas ni "todavía
+        no"** a propósito —el primero es una capacidad real del producto (`/agentes`) y el segundo
+        es honestidad aprobada sobre los límites (`/comparativa`)—; una lista que grita de más
+        termina borrada. Trae ancla propia: si alguien vacía las frases, el gate se pone en rojo.
+      - **Verificado en ROJO primero** por el motivo correcto (1 fallo, `/terminos`,
+        `pendiente de revisi[oó]n`) y con las otras 16 páginas en verde: cero falsos positivos en
+        toda la superficie pública.
+      - **Gates:** typecheck exit 0 · `vitest run` **216 verdes** en 10 archivos (eran 199 en 9) ·
+        build exit 0.
+      - **MIRADO renderizado sobre el build real** (standalone en `:3987`, no `main` ni Vercel) a
+        1440×900 y 390×844 — `/root/wv-terminos-{escritorio,telefono}.png`: título, línea de
+        versión, índice y cuerpo enteros, **sin cartel de borrador**, `robots: noindex` intacto,
+        cero errores de JS. Y medido sobre el HTML servido: **cero coincidencias de obra en toda
+        la página**, no sólo en la `description`.
+      - ⚠️ **No está en producción**: `onia.com.bo` la sirve el contenedor `onia-landing` y
+        publicar es de Sergio. Es el **séptimo** arreglo esperando el mismo deploy de
+        `t_68671bc3`.
+
+### Del carril `web-venta` — corrida del 2026-09-03 17:48 UTC (a dónde LLEGA cada botón que sale del sitio)
+
+- [x] 🔴 **Los dos botones de `/contacto` mandaban al lead a un calendario que ya no existe, y
+      caían en un formulario de alta — ARREGLADO EN CÓDIGO, con gate.** Es el defecto más caro
+      que encontró este carril: la página cuyo trabajo entero es que alguien consiga **hablar
+      con una persona** tenía sus dos únicos CTA muertos, en silencio.
+      - **Cómo apareció, y por qué nadie lo había visto:** el punto 15 del checklist de
+        pre-entrega ("cero enlaces internos rotos") sólo mira los `href` **internos**. Los
+        enlaces que SALEN del sitio —los que llevan al lead al final del embudo— no los mira
+        nadie. Extraídos a mano los de las 16 URLs del sitemap, aparecieron dos hacia
+        `cal.onia.com.bo`.
+      - **Medido, no supuesto:** `curl -s -o /dev/null -w '%{http_code} %{redirect_url}'
+        https://cal.onia.com.bo/onia/demo-onia` → **302 → `https://onia.com.bo/empezar`**. Con
+        `-L` los dos enlaces devuelven **200 y exactamente 41.474 bytes** — el mismo tamaño para
+        `demo-onia`, `consulta-inicial` y un slug **inventado**. Ninguna herramienta los ve
+        rotos. El lead que hacía clic en «Agendar la demo» aterrizaba en el asistente de alta.
+      - **La página se contradecía a sí misma en su último clic.** Su bajada dice, textual: *"No
+        hay formulario que caiga en un buzón. Elegís vos el día y la hora **en nuestra agenda**"*
+        — y los dos botones entregaban exactamente un formulario.
+      - **Por qué está muerto y no vuelve:** no hay contenedor de Cal.com en el VPS
+        (`docker ps -a | grep -i cal` → vacío), y el 2026-09-02 22:55 La Paz **Sergio decidió lo
+        contrario**: ventanas fijas para el bot en vez de revivir Cal.com (tablero
+        `t_af8f44ad`, cerrada). O sea que el sitio llevaba días apuntando a la opción
+        descartada. El comentario del código decía *"Verificado 2026-07-30: los dos enlaces
+        responden 200 en público"* — cierto entonces, y sin significado hoy: un 200 sobrevive a
+        la muerte del servicio que lo daba.
+      - **El arreglo, el mínimo posible y sin rediseñar nada:** las dos citas salen ahora por el
+        **mismo WhatsApp que ya atiende toda la web** (`waLink`, el número único de `site.ts`),
+        cada una diciendo cuál eligió el que escribe ("la consulta comercial de 20 minutos" /
+        "la demo de 45 minutos con mi caso"), que es donde el bot propone los dos horarios
+        concretos del día. **Layout, tarjetas y etiquetas de los botones intactos**; sólo
+        cambian los `href` y las tres frases que prometían un calendario (bajada, `description`
+        y el comentario del archivo). `og:description` no se tocó: seguía siendo cierta.
+      - **Verificado MIRANDO**, contra un servidor de producción real (`next start` sobre el
+        build, no `dev`), a **1440 y a 390**: la página se ve igual que en producción, los dos
+        botones apuntan a `wa.me/59175414930` con su texto, y los dos destinos responden
+        **200**. Y el `<head>` mirado aparte —la metadata no se ve en una captura—: cero
+        coincidencias de `cal.onia` en todo el HTML servido.
+      - **Gate nuevo `(sitio)/enlaces.test.ts`**, en `prebuild` (el comando real del deploy).
+        Caza la **clase**: todo host absoluto de la superficie de venta tiene que estar
+        declarado con su motivo, y **ningún subdominio nuestro que no publiquemos** —el caso
+        exacto de `cal.`, que resuelve a nuestra IP y contesta 200 tras redirigir—. La lista de
+        archivos se **deriva del disco** (`(sitio)/**` más los módulos de `@/lib` y `@/content`
+        que esas páginas importan, un salto que hacía falta: los enlaces al SIN viven en
+        `lib/siat.ts`, no en una página), así una página nueva nace cubierta.
+      - **Verificado en ROJO antes**, por el motivo correcto: fallaban los dos casos de host
+        con `cal.onia.com.bo`, y el caso "mira una superficie de verdad" en verde.
+      - **Gates:** typecheck exit 0 · build exit 0 (con `prebuild` = `tsc --noEmit && vitest run`).
+      - **Barrido a toda la superficie**, no sólo donde saltó: `cal.onia.com.bo` no queda en
+        ningún archivo del repo, y el enlace de la home *"O agendá una demo con horario →"*
+        apunta a `/contacto`, que ahora sí termina en una conversación.
+      - ⚠️ **No está en producción**: `onia.com.bo` la sirve el contenedor `onia-landing` y
+        publicar es de Sergio. Es el **octavo** arreglo esperando el mismo deploy de
+        `t_68671bc3` — y el primero que le cuesta leads mientras espera.
+
+### Del carril `web-venta` — corrida del 2026-09-03 18:48 UTC (de dónde saca su número cada precio)
+
+- [x] 🟠 **El sitio tenía CUATRO copias tipeadas a mano de los precios de los planes —
+      ARREGLADO, con gate.** Coincidían con la tabla por suerte, no por construcción: el día
+      que Sergio cambia un plan, cambia `PLANES` y las cuatro frases siguen anunciando el
+      precio viejo. Es la regla que abre `CLAUDE.md`, y el desastre que la originó (cuatro
+      precios vivos del mismo chatbot) empezó exactamente así.
+      - **Medido antes de tocar nada, y el veredicto fue "no hay defecto vivo":** los cuatro
+        literales (320 · 750 · 1.500 · 89 · 199) **coinciden hoy** con `PLANES`, y `PLANES`
+        coincide a su vez con `DEFAULT_PLAN_AMOUNTS` del producto
+        (`/root/loops/onia-platform/lib/subscription-plans.ts`: basic 320/89/3200 ·
+        professional 750/199/7500 · clinic 1500/15000 · enterprise 2900/29000). **No se
+        arregló un precio: se arregló que un precio pueda desincronizarse en silencio.**
+      - **Quiénes eran, encontrados barriendo el disco (no una lista):** la `description` de
+        `/precios`, el chip del hero de `/v1`, nuestra propia fila de la comparativa
+        (`lib/proof.ts`) y la letra chica del semanal (`lib/pricing.ts`, dos copias del mismo
+        número **dentro del archivo que lo define**). Las cuatro ahora se arman con `bs()`
+        desde `PLANES`.
+      - **Y una de ellas era METADATA**, que es la parte de la superficie de cliente que **no
+        se ve mirando**: toda captura da verde sobre ese defecto. Es la misma trampa que se
+        pagó hoy a las 12:55 con la `description` de `/terminos`.
+      - **Gate nuevo `(sitio)/precios.test.ts`**, en `prebuild` (`tsc --noEmit && vitest run`,
+        el comando real del deploy). Caza la **clase**: ningún archivo de la superficie de
+        venta puede escribir como literal un monto que declare `PLANES`/`GRUPO`. Sujetos
+        derivados del **disco**, no de una lista de inclusión — un archivo nuevo nace cubierto.
+      - ⚠️ **El gate deliberadamente NO mira los add-ons, y eso lo midió el propio barrido:**
+        `Bs 390` es el chatbot **y** el plan «Cuidado Web Crecimiento» de `content/webs.ts`,
+        que es correcto y no tiene nada que ver. Un gate por número suelto habría gritado por
+        código sano en su primera corrida — y un gate que grita por algo correcto se apaga.
+      - **Verificado en ROJO antes**, por el motivo correcto: reintroducido el chip del hero,
+        falló **un solo** caso, con archivo y línea exactos (`hero.tsx:10`) y los dos anclas
+        en verde. El ancla no escribe ningún número esperado: hacerlo habría sido la quinta
+        copia a mano, dentro del gate que las prohíbe.
+      - **Es un refactor, no un cambio de copy, y se probó como tal:** el HTML servido por el
+        build nuevo es **byte a byte idéntico al de producción** en las cuatro superficies
+        (`description` de `/precios`, `/` y `/comparativa`; la fila «Bs 320 – 1.500 / mes»; la
+        frase del semanal; el chip «Desde Bs 320/mes» de `/v1`).
+      - **MIRADO renderizado** sobre el build de producción real (`next start`, no `dev`):
+        `/precios` a 1440 y 390 con la grilla entera — 320 / 750 / 1.500, anuales
+        3.200 / 7.500 / 15.000, semanales 89 / 199.
+        ⚠️ La primera captura salió **en blanco** y no era el sitio: el servidor local servía
+        un chunk 404 (`3413-…js`). Es el **cuarto** falso positivo de instrumento de esta
+        familia; se confirmó mirando el 4xx antes de creerle a la foto, y con el servidor
+        sano la página mide 6.016 px en vez de 844.
+      - **Gates:** typecheck exit 0 · `vitest run` **222 verdes** en 12 archivos · build exit 0.
+      - ⚠️ **No está en producción**: `onia.com.bo` la sirve el contenedor `onia-landing` y
+        publicar es de Sergio. Es el **noveno** arreglo esperando el mismo deploy de
+        `t_68671bc3`.
+
+- [x] 🟢 **El formulario de captura de `/guia-facturacion` entrega de verdad — medido de punta
+      a punta, no por su pantalla.** Es el único `<form>` de la superficie de venta y su
+      pantalla de éxito («Listo. La hoja es tuya.») se muestra **pase lo que pase**: el cliente
+      traga todos los errores y el endpoint responde 204 incluso cuando no reenvía nada. O sea
+      que el primer paso **no puede fallar a la vista**, que es justo la firma del bug que mató
+      al bot dos veces.
+      - **Probado el segundo paso, que es el que se pierde:** POST real a
+        `https://onia.com.bo/api/agenda-intake` → la fila **apareció** en
+        `onia_center.leads` (`source=gate-web-venta`), y la red interna
+        `onia-landing → onia-center:3012` devolvió `{"ok":true}`. Las dos filas de prueba se
+        **borraron** (`delete … where public_contact like '%example.invalid'` → 0 quedan).
+      - **Cero leads perdidos:** el histórico de `onia_center.leads` tiene sólo
+        `prospector-osm` (94) y `bot:onia-demo-bot` (26). **Nadie llenó nunca ese formulario**,
+        así que no hay nada que rescatar. No es un ítem: es una medición que faltaba.
+      - **El plazo de la guía sigue vigente** (30-09-2026), o sea que la página no está vieja.
+
+### Del carril `web-venta` — corrida del 2026-09-03 19:48 UTC (quién enlaza a quién)
+
+- [x] 🟠 **Dos servicios que Onia COBRA sólo se podían alcanzar entrando por la política de
+      privacidad — ARREGLADO, con gate.** `/servicios/marketing-ia` y `/servicios/consultoria`
+      están publicadas y el sitemap las pide indexar, pero desde la superficie de venta entera
+      —portada, `/precios`, `/empezar`, `/rubros`, `/chatbot`, `/agentes`, `/facturacion`,
+      `/comparativa`, `/contacto`, `/nosotros`— no había **un solo enlace**.
+      - **Medido, no supuesto:** bajadas las 16 páginas que sirve `onia.com.bo` y contados los
+        enlaces entrantes en el HTML servido. Todas las demás tienen **16**; estas dos tienen
+        **4**, y las cuatro son `/privacidad`, `/terminos` y ellas dos entre sí.
+      - **La causa:** las dos siguen en `app/servicios/` —el árbol viejo, con el `SiteFooter`
+        archivado, el mismo cromo que `/v1`, que es `noindex` justamente por viejo—. Por eso
+        los únicos enlaces vivían en un pie que **ninguna pantalla de venta usa**.
+      - **Es el bug de `/nosotros` (2026-08-23) sin terminar de barrer.** Aquella vez se
+        rescató UNA página metiéndola en `NAV_DECIDIR` y ahí quedó, sin mirar a las hermanas
+        que estaban en el mismo cromo muerto. Es exactamente lo que `CLAUDE.md` llama arreglar
+        el síntoma donde saltó y dejar vivos a los que llaman a lo mismo.
+      - **Verificado que enlazarlas es correcto ANTES de enlazarlas:** las dos páginas se
+        leyeron enteras. Cero obra ("muy pronto", "beta"), cero prueba social fabricada —
+        marketing-ia dice de frente *"no tenemos un muro de logos ni casos de éxito… antes que
+        inventarlos, preferimos no tenerlos todavía"*—, y consultoría está en el catálogo de
+        venta como servicio que se cobra (`ONIA_CATALOGO_DE_VENTA.md:147`).
+      - **El arreglo:** apartado `Servicios` (Webs · Marketing IA · Consultoría) en el mapa
+        único del sitio (`(sitio)/nav.ts`), que leen el pie y el menú de teléfono. `webs` va
+        con las otras dos aunque ya era alcanzable: una lista partida en dos lugares es la que
+        se desincroniza. **No es un rediseño** — el pie archivado ya tenía esa misma columna.
+      - **Gate nuevo `app/alcance.test.ts`**, en `prebuild` (el comando real del deploy): toda
+        página publicada tiene que estar enlazada desde `app/(sitio)/`. Sujetos derivados del
+        **disco** (`PAGINAS_PUBLICAS`, reusada de `rutas.ts` en vez de recalcularla), así una
+        página nueva nace cubierta y sacarla exige prohibirla en `robots.ts`, que se ve.
+        ⚠️ **Y exige que el enlace salga del árbol VIVO, no de cualquier página** — ésa es la
+        trampa que dejó el defecto suelto: preguntar "¿la enlaza alguien?" da verde, porque
+        `/privacidad` la enlazaba… con el pie muerto.
+      - **Verificado en ROJO antes**, por el motivo correcto: sacadas las dos entradas, falla
+        **exactamente** en esas dos rutas, nombrando archivo y ruta.
+      - **MIRADO renderizado** sobre el build de producción (`next start`, escuchando 4xx antes
+        de creerle a la foto, y con `scroll-behavior:auto` inyectado): pie a 1440 y 390 con las
+        cuatro columnas enteras y ningún enlace desbordado, y el menú de teléfono abierto con
+        el apartado nuevo. **Segundo turno probado:** clic real en los tres enlaces → 200 y el
+        `<h1>` correcto en cada destino. El pie pasa a 4 columnas recién a 900px (entre 700 y
+        900 van 2×2: a 700 con cuatro columnas "Marketing IA" partía en dos renglones).
+      - **Gates:** typecheck exit 0 · `vitest run` **239 verdes** en 13 archivos · build exit 0.
+      - ⚠️ **No está en producción todavía** — y acá se corrige de paso una premisa que este
+        archivo venía arrastrando. **`t_68671bc3` SÍ se desplegó**: el build que sirve
+        `onia.com.bo` es de **hoy 18:10 UTC**
+        (`ls -l /opt/onia-landing/runtime-next/apps/onia-platform/.next/BUILD_ID`), no del
+        02-sep, y lleva los cuatro arreglos del carril anteriores a esa hora —verificado
+        mirando el resultado, no el commit: `/favicon.ico` devuelve **3.083 bytes** de icono
+        (era 29 KB de HTML de error) y la `description` de `/terminos` ya no dice "borrador"—.
+        Lo que falta **no es el deploy: es el merge**.
+
+- [ ] 🔴 **Tres arreglos del carril están commiteados hace horas y NO llegan al cliente porque
+      `claude/web-venta` no se mergeó a `main`.** No es "esperando a Sergio": el integrador
+      (`onia-cola`) mergea, y el deploy ya demostró hoy que corre solo. Medido con
+      `git merge-base --is-ancestor <sha> origin/main`:
+      - `ea150d179` (17:58) — **el que más cuesta**: los dos CTA de `/contacto` agendan contra
+        `cal.onia.com.bo`, un Cal.com muerto. **Sigue vivo en producción ahora mismo**:
+        `curl -s https://onia.com.bo/contacto | grep cal.onia.com.bo` → dos aciertos.
+      - `088a6d235` (19:03) — el gate que impide que los precios se desincronicen.
+      - `1fbf9dc2a` (20:02) — este ítem.
+
+      **Por qué se anota como ítem y no como comentario:** los cuatro arreglos que SÍ llegaron
+      pasaron por main antes de las 18:10. Estos tres entraron después y quedaron detrás de una
+      rama sin mergear, así que un arreglo verificado, gateado y pusheado sigue valiendo **cero**
+      para el lead que abre `/contacto` hoy. Construido ≠ terminado, y el eslabón que falta no
+      es de este carril.
+
+- [x] 🟢 **Checklist de pre-entrega, puntos 5 y 11–16: corridos contra producción, todos
+      verdes.** `<html lang="es">` en las 16 · exactamente **una** `<h1>` por página en las 16 ·
+      canonical propio en las 16 · cero contenido mixto `http://` · las 25 `<img>` con `width`,
+      `height` y `alt` real (son fotos de contexto, no capturas del sistema: cumplen la regla) ·
+      los 19 enlaces internos y assets responden 200.
+
+- [ ] 🟢 **`/guia-facturacion` la enlaza UNA sola página (`/facturacion`) — no lo toqué, y el
+      motivo importa.** Salió del mismo conteo. No es el mismo defecto que los servicios: está
+      enlazada desde el árbol VIVO, así que un lead sí puede llegar. Parece deliberado (es el
+      imán de la página de facturación). Queda anotado por si el dueño del contenido lo quiere
+      también en el pie; el gate ya la cubre y hoy pasa.
+
+- [ ] 🟢 **Cloudflare ofusca el correo de contacto en `/privacidad` y `/terminos`, y para un
+      rastreador sin JS el contacto legal dice `[email protected]`.** Medido: el HTML servido
+      trae `<a href="/cdn-cgi/l/email-protection">` en 7 lugares de 4 páginas. **Mirado
+      renderizado: para un humano NO hay defecto** — el decodificador de Cloudflare corre y la
+      pantalla muestra `business@onia.com.bo` con su `mailto:` bien puesto. El residuo es que
+      `/privacidad` es indexable **a propósito porque el rastreador de Meta valida esa URL al
+      publicar la app del chatbot**, y ese rastreador no ejecuta JS: ve el marcador. Y la
+      ofuscación no protege nada igual — el correo viaja en claro en el payload RSC de las 16
+      páginas. **Se apaga en el panel de Cloudflare (Scrape Shield → Email Address
+      Obfuscation), que no es código ni es mi zona:** es de Sergio.
 
 ### Del canario visual — corrida del 2026-09-03 ~03:41 UTC (diez pantallas)
 
@@ -1860,6 +2314,152 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       (3.500 KB/928 ms, formulario Chatwoot propio, no está caído), `panel-chatbot`
       (699 KB/114 ms, redirige a `/login` sin sesión: "no medida", no "OK"). Ninguna
       baseline tocada.
+
+- [x] 🟠 **ARREGLADO el 2026-09-03 por `onia-cola`: los 7 falsos positivos son CERO, y eran
+      TRES clases, no dos.** `node scripts/verificar_cola.js hermes-content/docs/COLA.md` pasó
+      de **10** errores a **3**, y los 3 que quedan son el gate funcionando: 1 `duplicado` real
+      (los ítems de las líneas 1757 y 1857 son la misma nota de dos corridas del canario) y los
+      2 `sin-evidencia` que este ítem ya daba por legítimos. **Ni un `fantasma`.**
+      - **Clase A — nombre suelto AMBIGUO** (`nombreSueltoAmbiguo`): `existeComoSufijo` se
+        niega **a propósito** a resolver un nombre sin barra, y después el gate lo reportaba
+        como *"ese archivo NO existe"*. Acusaba de inexistente algo que había decidido no
+        buscar. Ahora se ignora — ni evidencia ni error — **sólo desde DOS coincidencias**,
+        que es donde el gate deja de poder decidir. Con una sola no hay ambigüedad y la regla
+        vieja sigue mandando: *"sin barra no hay resolución por sufijo"* tiene su propio caso
+        en el self-check y **este ítem no la reabrió**.
+      - **Clase B — especificador de módulo** (`esEspecificadorDeModulo`): `@/lib/pricing` es
+        un alias de TypeScript (lo resuelve `tsconfig`, no el disco); `next/link` y
+        `packs/js/sdk.js` son un paquete de npm y el SDK de Chatwoot que sirve **otro host**.
+      - 🔴 **Clase C — la que este ítem NO había visto, y era la peor: el rango de líneas.**
+        El limpiador entendía `archivo:141` y `archivo:141:5` pero **no** `archivo:141-166`,
+        que es como se cita un BLOQUE. El rango quedaba pegado al nombre y el archivo salía
+        fantasma **existiendo**. Medido: `scripts/mirar-venta.mjs:141-166` se reportaba como
+        inexistente con el archivo vivo en
+        `web-factory/apps/onia-platform/scripts/mirar-venta.mjs`. Las otras dos clases hacen
+        ruido; **ésta esconde trabajo real detrás de una cita bien escrita.**
+      - ⚠️ **Y robots.txt no era ninguna de las tres: la cita estaba mal.** (Va sin backticks
+        por lo que avisa el párrafo de más abajo: entre backticks se vuelve a extraer como
+        ruta y este mismo renglón sumaría el error que describe — pasó al escribirlo.) Este ítem lo
+        había puesto en la clase A "nombre suelto", pero medido da **cero** archivos con ese
+        nombre en los dos repos — en el repo es `robots.ts`, y el `.txt` es lo que Next
+        **sirve**. Se corrigió la cita a `/robots.txt` (una URL, que el gate ya ignoraba). La
+        clasificación heredada no se sostuvo al contarla: `page.tsx` tiene 155 archivos con
+        ese nombre y `globals.css` 6, pero robots.txt tenía 0, igual que un fantasma de
+        verdad.
+      - ✅ **El self-check ya lo corre `npm test`** (`test:cola-selfcheck` en `package.json`):
+        pasó de **75 casos que nadie ejecutaba** a **86 que corren en cada gate de `main`**.
+      - **Lo que queda, y NO es de este carril:** el `duplicado` de 1757/1857 es una nota de
+        "no encontré defecto" escrita dos veces por `canario-visual` en dos corridas. Cerrarla
+        o borrarla es de ese carril; `onia-cola` no toca los registros de otro.
+
+      **El diagnóstico original, que sigue siendo la mejor explicación de POR QUÉ importaba:**
+      `node scripts/verificar_cola.js hermes-content/docs/COLA.md` daba **13** errores; con el
+      arreglo de hoy (prefijo del repo hermano) da **10**, de los cuales 2 son `sin-evidencia`
+      legítimos. Los 7 `fantasma` que sobran NO son items rotos: son formas que el extractor
+      toma por rutas de repo y no lo son. **Un gate que sale rojo de fábrica se saltea, y ahí
+      deja de proteger** — es la misma lección del vigía que grita mal.
+      ⚠️ Los seis literales de abajo van **sin backticks a propósito**: citarlos entre backticks
+      los vuelve a extraer como rutas y este mismo ítem sumaba 6 errores nuevos al gate que
+      viene a describir. Se comprobó en vivo antes de escribirlo así.
+      - **Clase A — nombre de archivo suelto, sin barra:** robots.txt (línea 781),
+        page.tsx (961), globals.css (1682). `existeEnAlgunRepo` los rechaza **a propósito**
+        (`scripts/verificar_cola.js:275`: sin barra no se resuelve por sufijo, porque un
+        page.tsx suelto matchearía cientos). El defecto es que algo deliberadamente irresoluble
+        se reporte como ERROR en vez de ignorarse: el gate se acusa a sí mismo.
+      - **Clase B — especificador de módulo, no ruta:** @/lib/pricing (961), next/link
+        (1554), packs/js/sdk.js (1554). Son un alias de TypeScript, un paquete de npm y el SDK
+        de Chatwoot servido por otro host. Ninguno es un archivo de este árbol y ninguno debería
+        buscarse en disco.
+      - **Repro en 30 segundos:** `node scripts/verificar_cola.js hermes-content/docs/COLA.md`
+        y leer las líneas `ERROR fantasma`. Cada una nombra el literal que no resolvió.
+      - ⚠️ **Y un hallazgo aparte, más barato de arreglar que de explicar:** el validador tiene
+        un self-check de **75 casos** (`node scripts/verificar_cola.js --self-check`) que
+        **`npm test` no corre** — no está en `package.json`. Un gate con pruebas que nadie
+        ejecuta se rompe sin que nadie se entere.
+      - **Zona:** `scripts/verificar_cola.js`, de este carril (`onia-cola`). No entraba en la
+        vuelta de hoy: se arregló la clase del repo hermano, que era la que ensuciaba las rutas
+        del producto, y se dejó medido el resto en vez de empezar lo que no se puede terminar.
+### Del canario visual — corrida del 2026-09-03 ~06:42 UTC (diez pantallas, sin ítems nuevos)
+
+- [x] 🟢 **Diez pantallas abiertas y MIRADAS. Sin disparo mecánico en ninguna, sin defecto
+      nuevo a la vista.** `home` (2.360 KB/316 ms), `precios` (2.110 KB/210 ms, widget de
+      Chatwoot SÍ visible, tarjeta de WhatsApp Bs 390/mes completa), `empezar` (2.104 KB/139 ms),
+      `rubros` (2.527 KB/143 ms), `chatbot-landing` (2.107 KB/184 ms, widget visible, precio Bs
+      390/mes correcto), `contacto` (322 KB/231 ms), `register` (702 KB/124 ms, asistente de 2
+      pasos, 5 rubros con íconos legibles), `login-plataforma` (696 KB/96 ms, "Pedí tu acceso"
+      presente, íconos legibles), `login-chat` (3.499 KB/1.221 ms, formulario Chatwoot propio,
+      no está caído), `panel-chatbot` (702 KB/135 ms, redirige a `/login` sin sesión: "no
+      medida", no "OK"). Ninguna baseline tocada.
+  - **La banda vacía de `home` y `rubros` en la captura full-page NO es el bug ya cerrado
+    (scroll de espera corto).** Tiene otra causa, más simple: ambas pantallas usan un
+    conmutador `position: sticky` (`switcher.tsx`, el "runway" de rubros que también vive en
+    home) que se pinea mientras vos scrolleás. Un `fullPage` screenshot no repite el elemento
+    pineado en cada tramo del scroll: lo captura UNA vez, en su lugar natural, y el resto del
+    contenedor alto (~5 rubros × alto de paso) queda en blanco en la imagen — aunque el DOM
+    tiene todo el contenido (confirmado con `visto.texto`, que trae los 5 rubros completos más
+    abajo, después de la banda). Coincide con la nota ya escrita en este mismo archivo sobre
+    "el pin del scrollytelling... eso SÍ es esperado". **No es un ítem: es una limitación
+    conocida del instrumento (captura full-page + `position:sticky`), no del sitio.**
+  - **El 429 del widget: corrí la sonda oficial ANTES de escribir nada** (regla del
+    CLAUDE.md tras el falso positivo del 2026-09-02 y el falso "OJO" mal interpretado antes
+    de eso). Esta vez:
+    ```
+    == 2. ¿A nombre de QUÉ IP está el contador del throttle? ==
+       187.77.16.63       10 cargas (el límite es 5/hora)
+    == 3. ¿Quién pidió /widget en las últimas 6 h? ==
+       187.77.16.63       261 peticiones
+       192.223.122.70     1 peticiones
+       190.180.28.134     1 peticiones
+    VEREDICTO: AUTOINDUCIDO. 261 de 263 (99%) son del propio VPS.
+    ```
+    **El veredicto cambia de corrida a corrida** (la vuelta anterior, 03:41 UTC, dio "OJO: 2
+    IPs ajenas"; ésta da AUTOINDUCIDO) porque la ventana del throttle es de 1 h y depende de
+    qué tráfico cayó en esa hora puntual — no cierra ni reabre el ítem 🔴 de arriba por sí
+    sola, sólo agrega un dato más a su serie. **El ítem 🔴 del widget caído queda como
+    estaba** (abierto, sin dueño), con esta lectura sumada a su historial.
+  - ⚠️ **Nota operativa propia, no un hallazgo del sitio:** después de la corrida oficial
+    reejecuté `home` sola 3 veces para investigar por qué el peso variaba (2.360 KB vs los
+    2.310 KB de la baseline vieja) — eso agotó el cupo de 5 cargas/hora del widget en
+    `onia.com.bo` y las 3 reejecuciones sí vieron el 429 (581 KB, sin widget). **El
+    `home.json`/`home.png` que quedan en `.canario-out/` después de esta vuelta son de esas
+    reejecuciones, no de la corrida oficial** — reflejan un estado autoinducido por mí, no el
+    estado real del sitio. La cifra correcta de esta vuelta es la de la corrida oficial (2.360
+    KB, sin error de consola), citada arriba. Lección para la próxima: no reejecutar una
+    pantalla sola para "confirmar" peso — el propio acto de medir de nuevo quema el cupo del
+    widget y ensucia la evidencia.
+  - **Aparte, sin ser ítem:** el copy del hero de `home` cambió respecto a la baseline
+    versionada ("Tu negocio no pierde citas ni cobros..." / CTA "Pedí tu acceso" → "Cerrás
+    vos. El negocio no." / CTA "Creá tu cuenta"), y es consistente con `empezar` y `register`
+    (los tres ya dicen "Creá tu cuenta" y el asistente de 2 pasos existe y funciona visualmente).
+    Parece un cambio de copy intencional y coherente en toda la superficie, no una promesa
+    rota — lo dejo anotado porque es la clase de cosa que la regla de "una promesa que cambia
+    se barre en TODA la superficie" pide vigilar, pero sin confirmar si `/register` ya crea
+    cuentas de verdad no corresponde declararlo bug ni arreglo. No se tocó la baseline.
+
+- [ ] 🟡 **`onia.com.bo/chatbot` — el header sticky deja pasar el texto de atrás y se vuelve
+      ilegible al llegar al final de la página.** Canario visual, 2026-09-03. El `<header>`
+      del sitio tiene fondo con **88% de opacidad** (`color(srgb .976 .984 .980 / 0.88)`) y
+      `backdrop-filter: blur(10px)` — no es opaco de verdad. Cuando el scroll llega a la
+      sección verde oscura de precio ("Bs 390/mes, sin instalación."), el título blanco en
+      negrita queda posicionado justo detrás del header y **se ve fantasma, superpuesto al
+      nav** ("Rubros · Precios · Comparativa..."), volviendo confusos los dos.
+      Evidencia: `hermes-content/docs/historial/canario-visual/2026-09-03-chatbot-ghost-header.png`
+      (capturada con espera de 2.500 ms — descarta que sea una animación a mitad de camino).
+      Reproducir: abrir `https://onia.com.bo/chatbot`, scrollear al final, mirar el header.
+      Estilo computado verificado con Playwright: `backgroundColor: color(srgb 0.976471
+      0.984314 0.980392 / 0.88)`, `backdropFilter: blur(10px)`, `opacity: 1`.
+      Probé en `/precios` y `/empezar` con el mismo scroll al fondo: ahí no se ve, porque no
+      hay texto blanco en negrita justo bajo el header en ese punto — el defecto es del CSS
+      del header (opacidad no total), no de una sola página; sólo se nota donde el contraste
+      es alto. Sin dueño derivado — el header vive en el layout global del sitio, no en un
+      componente de `/chatbot`.
+      ⚠️ **Nota sobre el propio instrumento**: esto casi se reportó mal. La primera pasada de
+      esta vuelta mostraba el mismo fantasma en CASI TODAS las pantallas (home, rubros,
+      precios) con la espera vieja de 350 ms — resultó ser la herramienta fotografiando una
+      animación `whileInView` a mitad de camino (con 900-1500 ms de espera, esas desaparecían).
+      Se subió el piso de espera de la herramienta (`scripts/canario_visual.mjs`, 350→900ms,
+      con self-check verde) ANTES de escribir este ítem, y sólo quedó **éste**, que persiste
+      incluso a 2.500 ms — por eso es real y no un artefacto de captura.
 
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 
@@ -2133,6 +2733,43 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       que verificar**, no sólo construir.
 
 ## Después
+
+- [x] 🟠 **La "guarda de las guardas" fallaba ABIERTO: había TRES suites de test en disco que no
+      corría nadie, con `npm test` en verde — ARREGLADO el 2026-09-03 por `onia-cola`, escalón 3
+      (recorrer el frente propio).** No salió de la cola: salió de tropezarme con el agujero
+      mientras mergeaba.
+      - **Lo que estaba pasando, contado en vivo:** `scripts/docs-hygiene.test.mjs` (18 casos),
+        `scripts/video-scenes.test.mjs` (1) y `scripts/vigia_sin_respuesta.test.mjs` (15) estaban
+        en el repo, **verdes**, y ningún corredor los invocaba. **34 afirmaciones invisibles.**
+        Verificado con `grep` sobre `.json`/`.yml`/`.sh`/`.mjs`: las únicas menciones son los
+        archivos de implementación nombrándose a sí mismos, nunca al `.test.mjs`.
+      - **Por qué `scripts/guards-cableados.test.mjs` no podía verlo, y es el punto del ítem:**
+        preguntaba *"¿todo `test:*` **declarado** está cableado a `npm test`?"*. Su lista de
+        sujetos salía de `package.json` — **una lista de inclusión**, así que el día que un
+        archivo existe en disco sin declararse, no tiene gate y nada se pone en rojo. Es el mismo
+        modo de falla que `web-venta` midió hoy con `sitemap.ts`, en otro archivo.
+      - **Cómo se cuela, medido esta misma vuelta:** al mergear `claude/chatbots-platform-review-0d1d09`,
+        `package.json` salió **en conflicto** porque dos carriles le habían agregado un gate cada
+        uno a la misma cadena `test`. Resolver eligiendo un lado —lo natural con el reloj en
+        contra— borra el `test:*` del otro lado **junto con su declaración**, mientras el
+        `.test.mjs` entra igual al árbol por su propio hunk sin conflicto. Sin huérfano
+        declarado, la guarda vieja pasa. Se resolvió por **unión** (21 gates), no eligiendo.
+      - **El arreglo:** dos tests nuevos en `scripts/guards-cableados.test.mjs` que sacan los
+        sujetos del **DISCO** (`readdirSync` de `scripts/`) menos un `EXCLUIDOS` explícito, hoy
+        vacío a propósito. Así un test nuevo **nace cubierto** y hay que excluirlo a mano, a la
+        vista, con su motivo escrito. Los tres huérfanos se **cablearon**, no se excluyeron.
+      - **Test primero, en ROJO por el motivo correcto:** falló nombrando exactamente los tres
+        (`docs-hygiene.test.mjs, video-scenes.test.mjs, vigia_sin_respuesta.test.mjs`) **con las
+        dos guardas viejas en verde al lado** — que es la prueba de que eran ciegas a esto.
+      - **Los dos recíprocos, probados en vivo, no razonados:** un `.test.mjs` nuevo en `scripts/`
+        sale en rojo solo (fixture creado y borrado); y una entrada de `EXCLUIDOS` que apunte a
+        un archivo inexistente **también** sale en rojo, para que una exclusión vencida no pueda
+        tapar la siguiente.
+      - **Alcance, dicho para que no se lea como más de lo que es:** cubre **sólo `scripts/`**,
+        la carpeta cuya cadena `test` vive en este `package.json`. Los otros ~250 `*.test.*` del
+        repo (`.claude/skills/`, `web-factory/` con vitest, `onia-core/`, `video-factory/`,
+        `hermes-content/deploy/vps-ops/bot/`) tienen su propio corredor y **no** los cubre.
+      - **Medido:** `npm test` **exit 0** con las tres suites nuevas adentro — de 21 a 24 gates.
 
 - [x] 🟡 **El mismo gate seguía ladrando en falso por una CUARTA clase de ruido — ARREGLADO el
       2026-09-03 por `onia-cola`, auditando los `[x]` (escalón 2).** Corriendo

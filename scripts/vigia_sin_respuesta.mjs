@@ -59,7 +59,61 @@ export const INBOXES_BOT = [4, 5];
 const ENTRANTE = 0;
 const SALIENTE = 1;
 
+/** El guion del propio bot: de ahi sale la frase con la que promete un humano, no de aca. */
+export const CONFIG_DEL_BOT =
+  process.env.ONIA_BOT_CONFIG || new URL('../hermes-content/deploy/vps-ops/bot/config.mjs', import.meta.url).pathname;
+
+/**
+ * La frase con la que el bot PROMETE que una persona va a escribir, sacada de `M5` del guion
+ * (`config.mjs`) y no escrita aca — mismo motivo que en `demo_agendada_real.mjs`: un literal
+ * pegado en este archivo seguiria buscando un texto que ya nadie manda el dia que alguien
+ * reescriba M5, y el vigia se quedaria ciego sin que nadie lo tocara.
+ *
+ * De las lineas de M5 se queda con **la mas larga**: la primera ("Eso lo tiene que ver …") es
+ * corta y generica, y buscar por ella marcaria como handoff cualquier mensaje parecido.
+ * Se corta en el primer `{{` porque lo que sigue cambia en cada conversacion.
+ *
+ * @param {string} textoConfig  el contenido de `config.mjs`
+ * @returns {string|null} el prefijo literal de la promesa, o null si el guion no la trae
+ */
+export function frasePromesaHandoff(textoConfig) {
+  const bloque = /M5:\s*\[([\s\S]*?)\]/.exec(String(textoConfig || ''));
+  if (!bloque) return null;
+  const candidatos = [...bloque[1].matchAll(/"((?:[^"\\]|\\.)*)"/g)]
+    .map((m) => m[1].split('{{')[0].replace(/\*/g, '').replace(/[\s(]+$/, '').trim())
+    .filter((l) => l.length >= 20)
+    .sort((a, b) => b.length - a.length);
+  return candidatos[0] || null;
+}
+
+/** El texto tal como se compara: sin negritas, que el guion pone y Chatwoot guarda distinto. */
+const sinAdornos = (t) => String(t ?? '').replace(/\*/g, '');
+
 const ESTADO_POR_DEFECTO = '/root/loops/estado/vigia-sin-respuesta.json';
+
+/**
+ * Los mensajes publicos de los inboxes del bot, por conversacion y en orden.
+ *
+ * Orden estable: por fecha, y a igual fecha por id — dos mensajes pueden compartir segundo.
+ * `message_type = 2` (actividad del sistema) y las notas privadas quedan afuera para las dos
+ * miradas: ni tapan a un entrante ni cuentan como que un humano aparecio.
+ */
+function agruparPorConversacion(filas) {
+  const porConversacion = new Map();
+  for (const fila of Array.isArray(filas) ? filas : []) {
+    if (!fila || fila.private === true) continue;
+    if (!INBOXES_BOT.includes(Number(fila.inboxId))) continue;
+    const tipo = Number(fila.messageType);
+    if (tipo !== ENTRANTE && tipo !== SALIENTE) continue;
+    const lista = porConversacion.get(fila.conversationId) || [];
+    lista.push(fila);
+    porConversacion.set(fila.conversationId, lista);
+  }
+  for (const lista of porConversacion.values()) {
+    lista.sort((a, b) => a.createdAtMs - b.createdAtMs || a.messageId - b.messageId);
+  }
+  return porConversacion;
+}
 
 /**
  * De todas las filas de mensajes, quien quedo esperando.
@@ -74,21 +128,10 @@ const ESTADO_POR_DEFECTO = '/root/loops/estado/vigia-sin-respuesta.json';
  * distintas y un dia se contradicen.
  */
 export function seleccionarColgados(filas, { ahoraMs, umbralMs = UMBRAL_MS } = {}) {
-  const porConversacion = new Map();
-  for (const fila of Array.isArray(filas) ? filas : []) {
-    if (!fila || fila.private === true) continue;
-    if (!INBOXES_BOT.includes(Number(fila.inboxId))) continue;
-    const tipo = Number(fila.messageType);
-    if (tipo !== ENTRANTE && tipo !== SALIENTE) continue;
-    const lista = porConversacion.get(fila.conversationId) || [];
-    lista.push(fila);
-    porConversacion.set(fila.conversationId, lista);
-  }
+  const porConversacion = agruparPorConversacion(filas);
 
   const colgados = [];
   for (const lista of porConversacion.values()) {
-    // Orden estable: por fecha, y a igual fecha por id — dos mensajes pueden compartir segundo.
-    lista.sort((a, b) => a.createdAtMs - b.createdAtMs || a.messageId - b.messageId);
     const ultimo = lista[lista.length - 1];
     if (Number(ultimo.messageType) !== ENTRANTE) continue; // ya le contestaron
     if (ahoraMs - ultimo.createdAtMs < umbralMs) continue;
@@ -96,6 +139,59 @@ export function seleccionarColgados(filas, { ahoraMs, umbralMs = UMBRAL_MS } = {
     colgados.push({ ...ultimo, esperaMin: Math.round((ahoraMs - ultimo.createdAtMs) / 60000) });
   }
   return colgados.sort((a, b) => a.esperaMin - b.esperaMin);
+}
+
+/**
+ * Quien espera a un humano que el bot le PROMETIO y nunca llego.
+ *
+ * Pura y sin I/O. Es el agujero de `seleccionarColgados`, medido el 2026-09-03: esa funcion
+ * descarta toda conversacion cuyo ultimo mensaje sea saliente con un `// ya le contestaron`
+ * que en un handoff es MENTIRA — el ultimo mensaje es el del bot diciendo *"ya le pase tu
+ * consulta, te escribe el"*, y la persona que hizo bien en esperar se vuelve invisible. El
+ * vigia recien la veia si volvia a insistir; si se cansaba y no escribia mas, nadie se
+ * enteraba nunca.
+ *
+ * Como se decide que "no llego el humano", y por que asi: el bot es **el sender de la propia
+ * promesa**, no un id escrito aca. Cualquier saliente posterior de OTRO sender es una persona
+ * y cierra el caso. Derivarlo del mensaje evita el hardcodeo del agente (hoy `Onia Bot`, id 3)
+ * y hace que el criterio siga siendo cierto si mañana el bot cambia de token.
+ *
+ * Un entrante posterior lo saca de aca a proposito: ese caso ya es del vigia de arriba, y dos
+ * avisos por la misma conversacion es como se le deja de creer a un vigia.
+ *
+ * @param {object[]} filas
+ * @param {{ahoraMs:number, umbralMs?:number, frase:string|null}} opciones  `frase` sale de
+ *   `frasePromesaHandoff()`; sin ella no se mira nada — pero el resto del vigia sigue vivo.
+ */
+export function seleccionarEsperandoHumano(filas, { ahoraMs, umbralMs = UMBRAL_MS, frase } = {}) {
+  const buscada = sinAdornos(frase).trim();
+  if (buscada.length < 20) return [];
+
+  const esperando = [];
+  for (const lista of agruparPorConversacion(filas).values()) {
+    const iPromesa = lista.findLastIndex(
+      (m) => Number(m.messageType) === SALIENTE && sinAdornos(m.content).includes(buscada),
+    );
+    if (iPromesa < 0) continue;
+
+    const promesa = lista[iPromesa];
+    const posteriores = lista.slice(iPromesa + 1);
+    if (posteriores.some((m) => Number(m.messageType) === ENTRANTE)) continue; // es del vigia de arriba
+    if (posteriores.some((m) => Number(m.senderId) !== Number(promesa.senderId))) continue; // llego una persona
+    if (ahoraMs - promesa.createdAtMs < umbralMs) continue;
+    if (esNuestra({ contacto: promesa.contacto, telefono: promesa.telefono })) continue;
+
+    // Lo que se muestra es lo ULTIMO QUE DIJO LA PERSONA, no el texto del bot: Sergio necesita
+    // saber a que le tiene que contestar, y su propia promesa no se lo dice.
+    const suyo = lista.slice(0, iPromesa).findLast((m) => Number(m.messageType) === ENTRANTE);
+    esperando.push({
+      ...promesa,
+      content: suyo?.content || promesa.content,
+      esperandoHumano: true,
+      esperaMin: Math.round((ahoraMs - promesa.createdAtMs) / 60000),
+    });
+  }
+  return esperando.sort((a, b) => a.esperaMin - b.esperaMin);
 }
 
 /**
@@ -129,15 +225,31 @@ function espera(min) {
   return `${Math.round(min / (60 * 24))} d`;
 }
 
-/** El aviso: cuantos son, quien, hace cuanto y por donde entro. */
+/**
+ * El aviso: cuantos son, quien, hace cuanto y por donde entro.
+ *
+ * Los dos casos van SEPARADOS porque piden cosas distintas de Sergio: al que nadie contesto hay
+ * que contestarle, y al que espera un humano el bot YA le prometio que le escriben. Sumarlos
+ * bajo el mismo titulo ("escribieron y nadie contesto") diria algo falso del segundo grupo, y un
+ * vigia que grita mal no molesta: inutiliza.
+ */
 export function armarAviso(colgados) {
-  const n = (colgados || []).length;
-  const lineas = (colgados || []).map((c) => {
+  const linea = (c) => {
     const canal = Number(c.inboxId) === 5 ? 'WhatsApp' : 'web';
-    const derivado = String(c.botStage || '') === 'handoff_humano' ? ' · derivado a humano' : '';
+    const derivado = !c.esperandoHumano && String(c.botStage || '') === 'handoff_humano' ? ' · derivado a humano' : '';
     return `conv ${c.conversationId} (${canal}${derivado}) — ${espera(c.esperaMin)} esperando — ${escapar(c.contacto || 'sin nombre')}: ${escapar(String(c.content || '').slice(0, 70))}`;
-  });
-  return `🔴 <b>${n} desconocido(s) escribieron y nadie contesto</b>\n<pre>${lineas.join('\n')}</pre>`;
+  };
+
+  const sinRespuesta = (colgados || []).filter((c) => !c.esperandoHumano);
+  const esperanHumano = (colgados || []).filter((c) => c.esperandoHumano);
+  const bloques = [];
+  if (sinRespuesta.length) {
+    bloques.push(`🔴 <b>${sinRespuesta.length} desconocido(s) escribieron y nadie contesto</b>\n<pre>${sinRespuesta.map(linea).join('\n')}</pre>`);
+  }
+  if (esperanHumano.length) {
+    bloques.push(`🔴 <b>${esperanHumano.length} espera(n) que le escribas vos — el bot ya se lo prometio</b>\n<pre>${esperanHumano.map(linea).join('\n')}</pre>`);
+  }
+  return bloques.join('\n');
 }
 
 /**
@@ -145,15 +257,17 @@ export function armarAviso(colgados) {
  * del contacto — que es lo unico con lo que se distingue un desconocido de la sonda.
  * Va por `docker exec psql` porque la base de Chatwoot no esta expuesta al host.
  */
-async function leerFilasDeChatwoot() {
+export async function leerFilasDeChatwoot() {
   const contenedor = process.env.ONIA_CHATWOOT_DB_CONTAINER
     || (await run('sh', ['-c', "docker ps --format '{{.Names}}' | grep chatwoot-db | head -1"])).stdout.trim();
   if (!contenedor) throw new Error('no encontre el contenedor de la base de Chatwoot');
 
+  // `sender_id` es lo que distingue al bot de una persona sin hardcodear ningun agente: el bot
+  // es quien firmo la promesa, y cualquier otro sender posterior es un humano de verdad.
   const sql = `select m.conversation_id, m.id, m.message_type, extract(epoch from m.created_at)*1000,
       coalesce(m.private,false), c.inbox_id,
       replace(coalesce(ct.name,''), E'\\t', ' '), coalesce(ct.phone_number,''),
-      replace(coalesce(m.content,''), E'\\t', ' ')
+      replace(replace(coalesce(m.content,''), E'\\t', ' '), E'\\n', ' '), coalesce(m.sender_id,0)
     from messages m
     join conversations c on c.id = m.conversation_id
     left join contacts ct on ct.id = c.contact_id
@@ -167,7 +281,7 @@ async function leerFilasDeChatwoot() {
   return stdout
     .split('\n')
     .map((l) => l.split('\t'))
-    .filter((c) => c.length >= 9)
+    .filter((c) => c.length >= 10)
     .map((c) => ({
       conversationId: Number(c[0]),
       messageId: Number(c[1]),
@@ -178,6 +292,7 @@ async function leerFilasDeChatwoot() {
       contacto: c[6],
       telefono: c[7],
       content: c[8],
+      senderId: Number(c[9]),
     }));
 }
 
@@ -219,9 +334,17 @@ export async function correrVigia(opciones = {}, deps = {}) {
   const avisar = deps.avisar || (async (texto) => { await run('/root/bin/onia-tg.sh', [texto]); });
 
   const filas = await leerFilas();
-  const colgados = await (deps.enriquecer || enriquecerConEstadoDelBot)(
-    seleccionarColgados(filas, { ahoraMs, umbralMs: opciones.umbralMs }),
-  );
+  // Si el guion no se puede leer, el vigia sigue mirando a los que nadie contesto: perder una
+  // mitad no puede apagar la otra. Lo que grita cuando M5 cambia es el caso del `npm test`.
+  let frase = null;
+  try {
+    frase = frasePromesaHandoff(readFileSync(deps.configDelBot || CONFIG_DEL_BOT, 'utf8'));
+  } catch { /* sin guion legible no se miran los handoff */ }
+
+  const colgados = await (deps.enriquecer || enriquecerConEstadoDelBot)([
+    ...seleccionarColgados(filas, { ahoraMs, umbralMs: opciones.umbralMs }),
+    ...seleccionarEsperandoHumano(filas, { ahoraMs, umbralMs: opciones.umbralMs, frase }),
+  ]);
   const estadoPrevio = leerEstado(rutaEstado);
   const nuevos = nuevosParaAvisar(colgados, estadoPrevio);
 
@@ -247,9 +370,11 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     .then(({ colgados, nuevos }) => {
       for (const c of colgados) {
         const canal = Number(c.inboxId) === 5 ? 'WhatsApp' : 'web';
-        console.log(`conv ${c.conversationId} (${canal}) — ${espera(c.esperaMin)} esperando — ${c.contacto || 'sin nombre'}: ${String(c.content || '').slice(0, 60)}`);
+        const que = c.esperandoHumano ? 'esperando que le escriba una persona' : 'esperando respuesta';
+        console.log(`conv ${c.conversationId} (${canal}) — ${espera(c.esperaMin)} ${que} — ${c.contacto || 'sin nombre'}: ${String(c.content || '').slice(0, 60)}`);
       }
-      console.log(`${colgados.length} colgado(s) · ${nuevos.length} sin avisar${argv.includes('--emit') ? '' : ' (SECO — agregar --emit)'}`);
+      const conHumano = colgados.filter((c) => c.esperandoHumano).length;
+      console.log(`${colgados.length} colgado(s) — ${colgados.length - conHumano} sin respuesta · ${conHumano} esperando a un humano prometido · ${nuevos.length} sin avisar${argv.includes('--emit') ? '' : ' (SECO — agregar --emit)'}`);
       process.exit(0);
     })
     .catch((error) => {

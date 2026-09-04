@@ -1,9 +1,13 @@
 import { PressableCta, Reveal } from "@/motion";
+import { PLANES, bs } from "@/lib/pricing";
 import { Modules, Row, Shot } from "./shot";
 import { ParallaxSoft } from "./parallax";
 import styles from "./landing.module.css";
 
-const CHIPS = ["Sin tarjeta", "Migramos tus datos", "Desde Bs 320/mes"] as const;
+// El "desde" sale del plan más barato de PLANES, no se escribe: es el primer
+// número que ve un lead en la home. Gate: `(sitio)/precios.test.ts`.
+const DESDE = Math.min(...PLANES.map((p) => p.mensual));
+const CHIPS = ["Sin tarjeta", "Migramos tus datos", `Desde Bs ${bs(DESDE)}/mes`] as const;
 
 const MODULOS_HERO = [
   { label: "Gestión", on: true },

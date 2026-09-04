@@ -1110,6 +1110,22 @@ El **element es otra cosa** y sólo existe dentro del `@` del navegador.
 element. Se usa el asset id de una pieza buena y reciente. Los ids están en los `LEEME.md` de
 cada carpeta — por eso se anotan.
 
+#### 🔴 Son TRES registros distintos, no dos (medido 2026-09-03, E9)
+
+El mismo UUID falla con **dos errores diferentes** según la ranura, y esa diferencia es el mapa:
+
+| Ranura | Qué registro lee | Con `58bbd635…` (Element) devuelve |
+|---|---|---|
+| `--image-references` | uploads / job ids | `Media input not found` |
+| `--custom-reference-id` (sólo Soul v2) | **Soul refs** — `higgsfield soul-id list` | `Character not found` |
+| el `@` del navegador | **Elements** | ✅ es el único que lo lee |
+
+**El ancla buena vive en el tercer registro y ningún parámetro del CLI la alcanza.** Por eso la
+receta por CLI usa foto-como-referencia y no hay forma de mejorarla cambiando el flag.
+
+⚠️ **Un job rechazado por referencia inválida NO cobra** (saldo intacto tras el `Character not
+found`). Probar un UUID en una ranura dudosa es gratis: hacerlo **antes** de gastar.
+
 ⚠️ **Y hay una diferencia de calidad que conviene medir con más piezas:** la cara sale un poco
 más plana que con el element entrenado, y en `B08` el pelo quedó recogido aunque el prompt pedía
 suelto. El element manda mejor la identidad; la referencia por foto manda bien pero no igual.
@@ -1378,3 +1394,37 @@ tanto imagen como video por CLI hasta que resetea.
 (escalera de agotamiento, regla 0). Si aparece, la vuelta se cierra con la tarea de 0 créditos
 (un `CREATIVO.md` que falte, o auditar una pieza vieja) y se anota. El `generate cost` sí sigue
 respondiendo gratis aunque el `create` esté bloqueado — medir no cuenta contra el cupo.
+
+### ⚠️ 2026-09-03 — hay un SEGUNDO bloqueo, distinto: la sesión del CLI expira
+
+`higgsfield account status` (y cualquier `generate`) devolvió `Error: Session expired. Hint: Run:
+hf auth login`. **No es el cupo diario** — es la sesión de auth del CLI que caducó. La diferencia
+importa para la regla 0:
+
+| Bloqueo | Qué lo cura | Se reintenta al día siguiente? |
+|---|---|---|
+| `grace_daily_limit_reached` | esperar al reset diario | **sí** — otra fecha, se reintenta |
+| `Session expired` (auth) | `hf auth login` **interactivo** | **no** por sí solo — necesita un login humano |
+
+🔴 En una sesión de loop **no interactiva** el `hf auth login` no se puede correr (abre flujo OAuth),
+y el balance por MCP (`mcp__…higgsfield__balance`) pide un permiso que la sesión headless no puede
+conceder. O sea: con la sesión expirada, **generar y hasta medir el saldo quedan bloqueados de raíz**
+hasta que un turno interactivo re-loguee. Igual que el cupo diario: se anota, se hace la tarea de 0
+créditos y se cierra la vuelta. No re-medir dentro del mismo turno.
+
+## 18. ✅ El vaso PARA LLEVAR salva la casilla 9 en un retrato (E7-rooftop, 2026-09-03)
+
+`E2-B-rooftop` es un **retrato** (mira al lente, un vaso para llevar en la mano, la otra en la
+baranda) — la misma familia que hotel y coworking, que preocupaban por la casilla 9 (sin las dos
+manos sobre un objeto, animan a b-roll sutil que NO resuelve una acción). El hallazgo: **si hay un
+vaso en la mano, el gesto de resolución existe gratis** — «levanta el vaso, da un sorbo, lo baja».
+`seedance1_5` lo ejecuta limpio y **cierra sobre la cara plenamente visible** al bajar el vaso, que
+es exactamente lo que pide la casilla 9. Salió a la primera, 4,8 cr medidos, identidad intacta en
+los 6 frames.
+
+**La regla:** un retrato con un objeto-en-mano (vaso, taza, celular bajado) anima MEJOR que uno de
+manos vacías — el objeto da el arco «subir → usar → bajar» que devuelve la cara al cuadro. El
+prompt que funcionó: `She slowly raises the to-go coffee cup toward her lips for a small sip, then
+lowers it slightly, blinks softly and keeps her gaze toward the lens.` (misma estructura que el
+mechón del hotel §17, pero con resolución real en vez de b-roll puro). Orden de preferencia para
+animar un retrato: **objeto-en-mano que se usa (rooftop) > mechón/peso (hotel) > sólo parpadeo.**

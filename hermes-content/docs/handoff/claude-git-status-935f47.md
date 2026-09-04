@@ -1,11 +1,195 @@
 # Handoff — carril `claude/git-status-935f47` (plataforma · infra · integración)
 
 > Formato: `hermes-content/docs/handoff/README.md`. Se sobrescribe; es el estado ACTUAL.
-> Última escritura: **2026-08-31 ~23:40 La Paz** (03:40 UTC del 1-sep).
+> Última escritura: **2026-09-04 ~02:50 La Paz** (06:50 UTC).
 >
 > ⚠️ Las horas de este archivo van en **La Paz**, no UTC. Sergio corrigió el 31-ago:
 > *"arregla tus horas, aqui somos america/la paz"*. El VPS y los logs son UTC-4 respecto de
 > lo que él lee, y entre las 20:00 y las 24:00 **cambia el día**.
+
+---
+
+## 0. Estado al 2026-09-03 — lo vigente (lo de abajo es historia y sigue valiendo como lección)
+
+**Objetivo del día:** Sergio opera solo por Telegram con la PC apagada, y el sistema pasa de
+"terminar" a "llegar" (reel de @eriktaveras: *"no es terminar el SaaS, es llegar antes"*).
+Definición de hecho: base probada + leads contestados + decisiones en UNA hoja `ok/no`.
+
+**En producción, verificado mirando:**
+- `app.onia.com.bo` corre master `38a0c8a` desde las 15:44 (migración WhatsApp + META en `app.env`,
+  contenedor recreado; el viejo quedó como `onia-platform-prev-20260903-194404`).
+- `onia.com.bo/contacto` ya no manda a `cal.onia.com.bo` (muerto): main `1c26cc337`, `DEPLOY_OK`,
+  `grep -c cal.onia.com.bo` = 0, CTA → WhatsApp.
+- Cuenta de Sergio `sergio@onia.com.bo` (org `clinica-sergio-p2ljs`) creada por el flujo real y
+  refutada por un segundo agente: agenda usable. Clave SOLO en `/root/.config/onia/sergio-cuenta.env`.
+- Hermes en `gpt-5-mini`; memoria compartida con 64 entradas (4 de hoy); 15 loops en el VPS.
+  Los 6 loops con >60 % de vueltas vacías bajaron de cadencia (crontab respaldado en `/root/backups/crontab-*.bak`).
+- Contenido: 195 commits en GitHub (`claude/carril-contenido` = `c859167b`) sin `b3.mp4`
+  (156 MB; respaldo en el bundle y en `C:/dev/proyectos/_respaldo-contenido/`). El worktree
+  Windows quedó en ese HEAD con `reset --soft`: sus 5 láminas modificadas siguen sin commitear.
+- `CLAUDE.md` §3: el sistema es la oferta, el bot add-on, cero autobombo, vender como Lety/Dapta
+  (`62a74a56`). Runbook landing: `.commit` queda en el stage publicado (`0ea6dfe1`).
+
+**A medias, y dónde:**
+- Tarjeta Embedded Signup `t_6bf938b7`: código en `claude/chatbots-platform-review-0d1d09`
+  (`14f1ab7`, gates verdes), SIN merge, deploy ni captura — se le anotó lo que falta.
+- D2 aviso por Telegram `t_b18ca430`: construido apagado (`7d13e4a0f`); falta flag + merge + deploy
+  del bot + prueba con captura.
+- Lucía: cron de video pausado y push de `claude/lucia-vps` (8 commits varados) en manos de un
+  subagente (`t_d2a99e3b`); reactivar el cron es plata → espera `video sí/no`.
+- Tareas de base creadas hoy para los loops: `t_6f5b8f52` bandeja lee 4 y 5 · `t_72ddeedb`
+  "Saltar por ahora" mata la agenda · `t_ef571e36` D1/D4 · `t_8ba6bb4e` agentes 0 acciones ·
+  `t_9f4baa34` corte de mediodía · `t_1b78de19` un recordatorio real · `t_0651707c` precios en
+  el bot · `t_3a60bfef` Onia interna fuera del rubro dental · `t_3dbed2c4` web como Lety/Dapta.
+
+**Archivos tocados hoy:** `CLAUDE.md`; `hermes-content/deploy/onia-landing/build-and-stage.sh`;
+`hermes-content/docs/research/whatsapp-chatwoot-embedded-signup.md` (movido de la raíz);
+memoria local (`feedback-objetivo-es-llegar-no-terminar`, `onia-vende-el-sistema-no-el-bot`,
+`cuenta-sergio-en-el-sistema`, + 2 ampliadas). VPS: crontab; `/root/.hermes/memories`;
+`/root/qa-audit/sergio/*` (capturas); `/root/onia-leads-borradores.md`.
+
+**Intentos fallidos / trampas de hoy (no repetir):**
+- `hermes kanban edit --priority` no existe (`edit` exige `--result`): la prioridad va al crear.
+- El Bash tool corta a los 120 s: `gemini-see-video.mjs` necesita `timeout` ≥ 300 s.
+- `[ -d .git ]` falla en un worktree (`.git` es archivo): usar `git -C … rev-parse`.
+- El `pre-push` de `.githooks` bloquea push a main salvo `ONIA_LOOP_ID=onia-cola`; un `| tail`
+  enmascaró el rc y el swap corrió antes del push (quedó consistente, pero el orden es build → push → swap).
+- chatbot-cola comentó "HECHO Y PUSHEADO" sin deploy ni captura, y el runner contó la vuelta
+  "sin commit" porque mide el worktree de onia-hermes, no el de onia-platform. Se dice, no se
+  arregla: maquinaria congelada hasta el 10-sep salvo loop muerto.
+- El verificador refutó 8 puntos de los 7 borradores a leads (recordatorios jamás enviados en prod,
+  CSV solo en plan Completo, cita cancelada cuenta como cita, fechas UTC vs La Paz, "sesiones"
+  no existe): **material de cliente nunca sale sin refutador**.
+
+**Depende de Sergio (ya está en su Telegram, 4 mensajes):** mandar los 7 mensajes con su voz y
+marcar "contactado" en `/admin/solicitudes`; contestar la hoja `ok/no` (`t_7282a714`, `t_a9ff7367`,
+`t_3b261fb7` + cuenta, `t_8919077e`, `t_92c0755d`, `t_4f09995c`, `video sí/no`, Meta App Review);
+cambiar su contraseña; credenciales BCP; Punto de Venta 1 en el SIN (límite 04/11/2026).
+
+**Próximos pasos de la sesión de control:** (1) reporte del subagente de Lucía; (2) cuando un
+loop bloquee `needs_input` con captura, el vigía se la manda; (3) deploy del bot cuando
+`t_b18ca430` comente `DEPLOY BOT PEDIDO <sha>`; (4) build + swap de `app.onia.com.bo` cuando
+`t_6bf938b7`/`t_72ddeedb` lleguen a master (runbook en `onia-platform-oferta-en-prod`);
+(5) nada de maquinaria de loops hasta el 10-sep.
+
+---
+
+## 0a. Madrugada del 4-sep — lote 4 (base SaaS) y un login roto por 2 h
+
+**Lo que se publicó:** lote 3b `858752a` (fechas en La Paz, redirects de rutas viejas, CTA del login
+según el alta, borrador de /setup, cabeceras cerradas, limiters con `cf-connecting-ip`, bug inbox→org)
+y lote 4a `70b6ed3` (login server-side con lockout + auditoría, 2FA TOTP con códigos de respaldo y
+gate aal2, política de 2FA para admins con 14 días de gracia, claves de API + `/api/v1` +
+`/settings/api`, cuota del chatbot 500/mes con `cuota` en `published`, fechas-solo al mediodía local,
+realtime con backoff). Tres migraciones aplicadas a mano en prod y registradas en `_prisma_migrations`:
+`mfa_recovery_codes`, `organization_api_keys`, `chatbot_uso_mensual`. Suite: **2.797 verdes**.
+
+**🔴 El error propio de la noche.** Al integrar el login server-side lo apunté a Kong por la red
+interna (`SUPABASE_INTERNAL_URL`). `@supabase/ssr` deriva el nombre de la cookie **del host** al que
+habla: escribía `sb-kong-auth-token` y el sitio lee `sb-app-auth-token`. Resultado: `POST
+/api/auth/login` → 200 `{ok, next:/dashboard}` y **nadie quedaba logueado** (04:00-06:04 UTC, de
+madrugada, sin clientes). Detección: probar la ruta protegida CON la cookie, no el 200 del login.
+Reversión sin build: comentar la variable en `app.env` + `recreate-container.sh --si-estoy-seguro`.
+Arreglo definitivo en `master d956cb9` (`cookieOptions.name` derivado de la URL pública + test);
+la variable sigue DESACTIVADA hasta desplegarlo. Detalle: memoria `login-cookie-nombre-por-host`.
+
+**Medido en producción tras el arreglo:** login 200 con cookie correcta, `/dashboard` y `/api/me` 200
+como ADMIN; `audit_logs` con LOGIN_FAILED 5, LOGIN_LOCKED 1, LOGIN_OK 2 (el lockout funciona);
+`published?inboxId=7` devuelve `cuota {agotada:false, usadas:0, limite:500}`; cero basura de pruebas
+en la org de Sergio. Rate limit del login en Traefik (`rl-auth-token`) vivo desde el 3-sep 22:50.
+
+**SIAT:** sectores 17 y 24 emiten 908 contra el piloto; la corrida de volumen terminó con 125/125 en
+los tres combos de las etapas IV, VII y XI (275 × 907 y 125 × 905, sin rechazos). El % oficial se lee
+en `fman` con el login de Sergio. Sigue bloqueado el **Punto de Venta 1**.
+
+**Cuota de Claude (dato duro):** con 5-8 agentes de la sesión de control, los loops perdieron vueltas
+(chatbot-cola 2, onia-cola 2, web-venta 3, recorrido-cliente 1; marca `RAZON: vuelta PERDIDA por
+limite` en sus logs). Regla: máximo 2-3 agentes pesados en paralelo si se quiere que los loops corran.
+Decisión de plata pendiente de Sergio: segunda suscripción o clave de API para los loops.
+
+**En curso al cerrar este bloque:** verificación de 2FA punta a punta con cuenta QA (capturas a
+Telegram), `feat/settings-seguridad` (pestaña Seguridad), corte honesto del bot por cuota (motor
+`/opt/onia/bot`, relanzar), y `feat/canal-meta` (Instagram/Messenger, detrás de App Review de Meta).
+**Tareas de infra abiertas:** `t_9d970ada` (ufw solo Cloudflare + límite en signup/recover/otp) y
+`t_106595a4` (levantar Supabase Realtime: Kong da 503, no existe el contenedor).
+
+---
+
+**Cierre del lote 4 (02:00-02:50 La Paz).** `master eae8795` vivo (BUILD_ID `2LdAuSubezKUq_xpaAb4o`):
+pestaña **Seguridad** en Configuración (accesos, bloqueos, sesiones con cierre remoto) y el fix de la
+cookie. Con el fix se REACTIVÓ `SUPABASE_INTERNAL_URL` y el login quedó sano (POST 200, cookie
+`sb-app-auth-token`, `/dashboard` y `/api/me` 200): el login ya no sale por Cloudflare ni comparte el
+bucket de Traefik. El deploy corrió con `/root/deploy-eae8795.sh`, que verifica sesión y **revierte
+solo** — patrón a reusar para cambios de env riesgosos.
+
+**Verificado MIRANDO (capturas a Telegram):** 2FA punta a punta con cuenta QA (QR, TOTP, 8 códigos de
+respaldo, `/login/2fa`, cookie aal1 → 307 en `/dashboard`, `/profile` y `/api/me`, código de respaldo
+deja `mfa_factors` en 0), banner de 14 días de gracia (hoy dice 13), claves de API (crear → `GET
+/api/v1/patients` 200 con envelope → revocar → 401), y el recibo con la fecha correcta (`paidAt`
+guardado 16:00 UTC = mediodía La Paz). Latencias: login 255 ms, `/dashboard` 3,0 s, `/settings/api` 2,3 s.
+
+**Hueco encontrado y cerrado: la cuota no contaba.** La plataforma cuenta en su webhook y exige el
+header `X-Chatwoot-Secret`, pero Chatwoot solo tiene un webhook (al motor) y no manda headers. Ahora
+el motor reenvía el payload crudo a la plataforma (`uso-plataforma.mjs`, commit `ab196b9b`), después
+del dedup y solo para entrantes reales (un saliente reenviado se le duplicaría al cliente por
+WhatsApp). Probado en vivo: conv 55 → 1, segundo mensaje de la misma → sigue 1, conv 56 → 2;
+`published?inboxId=7` → `usadas:2`. El corte honesto del bot ya estaba vivo (`1f30e53b`).
+
+**Correcciones a supuestos:** el add-on NO se gatea por `organizations.whatsappAddon` (está en `f` en
+todas) sino por el entitlement `addon.whatsapp`. Disco del VPS: 87 % → 78 % borrando builds y runtimes
+viejos (receta en la memoria de deploy).
+
+**Abierto:** `t_59b4761d` (cambios de chatbot-cola en el motor sin desplegar: un restart los publica a
+medias), `t_5c358c3e` (barridos proactivos ignoran la cuota agotada), `t_9d970ada` (ufw solo Cloudflare
++ límite en signup/recover/otp), `t_106595a4` (Supabase Realtime no existe: Kong da 503),
+`feat/canal-meta` (Instagram/Messenger, bloqueado por App Review de Meta).
+
+## 0b. Noche del 3-sep — el panel se reorganiza (lotes 1-3 vivos, lote 4 en curso)
+
+Sergio, 16:52: *"organizá las pestañas y que estén completas… barra lateral como Hostinger… 100 %
+funcional, latencia, vida real, instalable"*; 17:05: *"hazlo de una vez"*; 22:45: *"Meta y APIs para
+chatbots, 2FA, firewall, lo del reel de Django, manos a la obra"*. Tarea de la sesión de control (no
+de los loops), integrada en `feat/panel-pestanas-completas` → `master` → un build por lote.
+
+**En producción (app.onia.com.bo), verificado MIRANDO con la cuenta de Sergio:**
+- Lote 1 `1f0b221` (17:42): "Agendar Cita" muestra el error del server y no ofrece horas pasadas
+  (`availability` marca `available:false`); todo pago daba 500 por `"$transaction" in db` en Prisma 7
+  (`lib/fiscal/invoice-status.ts:96`) → arreglado con test real + log/Sentry en los catch; tarjeta
+  "Tu WhatsApp" (merge de `claude/chatbots-platform-review-0d1d09`).
+- Lote 2 `b84811d` (18:21): `/setup` real de 4 pasos (sin `{v.negocio}`, no pisa `oniaCoreOnboarding`,
+  el intake lee canales con persona fija); barra lateral agrupada (4 fijos + Operación/Dinero/
+  Automatización/Sistema, 7 visibles, `w-64`+`md:ml-64`+`md:left-64` juntos, localStorage
+  `onia.sidebar.grupos`); `/operations` y `/accounting` borrados.
+- Lote 3 `146cd54` (22:44): factura con ítem manual, recibo por pago (`/print/receipt/[paymentId]`),
+  "Nota de venta" sin CUF y sin logo de Onia, QR de cobro por archivo (bucket `payment-proofs`, GET
+  propio que redirige a URL firmada), "Gastos" en Dinero, libro de compras (RCV) visible y exportable,
+  `/api/fiscal/iva-summary`, IVA a pagar = 13 % ventas − Σ `ivaAmount` de compras. Verificación
+  visual en curso.
+- Infra: rate limit del login en Traefik (`rl-auth-token`, 22:50); runner de loops con "TU ULTIMA
+  VUELTA" + `LECCION:` automática + `RAZON: vuelta PERDIDA por limite`; 15 prompts con `OBJETIVO
+  (medible)`; recorrido-cliente cierra 9/9 con cita real; SIAT sectores 17 y 24 emiten 908 en piloto.
+
+**Defectos vistos en la verificación de lotes 1+2 → rama `fix/post-verificacion-lotes12` (en curso):**
+borrador de `/setup` no persiste (LS `step` se pisa al montar), `/operations`/`/accounting` 404 en vez
+de redirect, dashboard con fecha en UTC, login con "Pedí tu acceso" (alta abierta), copy "queda armado".
+
+**Lote 4 en curso (ramas):** `feat/seguridad-base` (cabeceras, limiters unificados con `cf-connecting-ip`,
+bug inbox→org del bot), `feat/login-lockout-2fa` (login server-side + lockout + TOTP con códigos de
+respaldo + gate aal2 + política admins 14 días). Después: `feat/api-keys` (`/api/v1`, `/settings/api`),
+`feat/chatbot-cuota` (500/mes del add-on + corte honesto en `/opt/onia/bot/run-turn.mjs`),
+`feat/canal-meta` (Instagram/Messenger detrás de `META_PAGES_PUBLIC`). Plan completo con archivos y
+verificación: memoria `onia-panel-diagnostico-y-plan` + `feedback-panel-pestanas-completas-estilo-hostinger`.
+
+**Trampas de esta noche:** la cuota de Claude es UNA para loops y sesión (5 agentes murieron a las
+22:00 UTC; lección: al retomar, medir builds y basura `zz-qa`/`AGENTE-VERIF` antes de relanzar);
+`vitest run` reescribe snapshots con CRLF → `git checkout -- .` antes de mergear; el swap no recrea el
+contenedor (mirar `BUILD_ID`, no `docker inspect Created`); `profiles.themePreference` pisa la cookie
+del tema; el numerador de facturas consume números en pruebas; `onia-manual-routes.yaml` es JSON;
+`nohup … &` dentro de `ssh` cuelga sin `< /dev/null`.
+
+**Depende de Sergio:** hoja `ok/no` de las 17:00; `video sí/no`; Meta (producto Messenger, App Review
+de páginas/IG, cuenta tester); Cloudflare rate limiting + Bot Fight Mode; PdV 1 en el SIN; activar su
+2FA recién cuando esté probada con QA; segunda suscripción/API key para los loops (plata).
 
 ---
 

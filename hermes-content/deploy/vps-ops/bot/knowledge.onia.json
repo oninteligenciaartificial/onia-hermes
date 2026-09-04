@@ -20,6 +20,13 @@
 
   "faq": [
     {
+      "id": "precios",
+      "title": "Planes y precios",
+      "body": "Te los paso derecho, son públicos: el sistema arranca en Bs 320 al mes con el plan Básico, Bs 750 el Profesional y Bs 1.500 el Completo. El chatbot de WhatsApp va aparte, Bs 390 al mes.\n\nCuál te sirve depende de cuántos son y de qué módulos actives, así que la lista completa y al día está en onia.com.bo/precios. Si querés, {{humano}} te lo muestra funcionando con TUS números en una demo.",
+      "status": "publicado",
+      "tags": ["precio", "planes", "cuanto"]
+    },
+    {
       "id": "siat",
       "title": "Facturación en línea / SIAT",
       "body": "Sobre facturación en línea te contesto sólo lo que es público: desde el 30 de septiembre es obligatoria y el Servicio de Impuestos tiene un portal gratuito para emitir. Lo que hace {{producto}} es que los datos ya estén cargados para no tipear dos veces. Lo que te conviene a vos según tu NIT y tu volumen lo ve {{humano}} en la demo.",

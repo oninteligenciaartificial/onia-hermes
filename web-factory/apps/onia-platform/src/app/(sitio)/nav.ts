@@ -44,6 +44,32 @@ export const NAV_DECIDIR: readonly NavItem[] = [
 ];
 
 /**
+ * Servicios: lo que Onia hace ADEMÁS del sistema, cada uno con su página.
+ *
+ * Entran acá el 2026-09-03, y es exactamente el bug de `/nosotros` de más
+ * arriba sin terminar de barrer. `/servicios/marketing-ia` y
+ * `/servicios/consultoria` siguen viviendo en el árbol viejo (`app/servicios/`,
+ * con el `SiteFooter` archivado, el mismo cromo que `/v1`), así que ningún nav
+ * del sitio v3 las nombraba. Medido sobre las 16 páginas servidas por
+ * `onia.com.bo`: las enlazaban **4**, y las cuatro eran `/privacidad`,
+ * `/terminos` y ellas dos entre sí. Desde la superficie de venta entera —la
+ * portada, `/precios`, `/empezar`, `/rubros`, `/chatbot`, `/agentes`,
+ * `/facturacion`, `/comparativa`, `/contacto`, `/nosotros`— no había **un solo
+ * enlace**: para llegar a dos servicios que se cobran había que pasar por la
+ * política de privacidad. Y el sitemap las pedía indexar igual, o sea que el
+ * sitio se contradecía a sí mismo otra vez.
+ *
+ * `/servicios/webs` ya era alcanzable (la linkean seis páginas por su cuerpo),
+ * pero va con las otras dos: el apartado es el mismo y una lista partida en dos
+ * lugares es la que se desincroniza. Lo mide `alcance.test.ts`.
+ */
+export const NAV_SERVICIOS: readonly NavItem[] = [
+  { href: "/servicios/webs", label: "Webs" },
+  { href: "/servicios/marketing-ia", label: "Marketing IA" },
+  { href: "/servicios/consultoria", label: "Consultoría" },
+];
+
+/**
  * Header de escritorio: cinco. No entran los ocho — a 940px el header se
  * desborda y el CTA se cae de la fila (medido). Agentes y Chatbot viven en el
  * pie, en el menú de teléfono y linkeados desde la portada.
