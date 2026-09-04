@@ -43,7 +43,7 @@ Cada fila fue consultada con los parámetros exactos de producción (9:16 vertic
 
 | Acción | Modelo + params | **Costo verificado** | Nota |
 |---|---|---|---|
-| **Imagen de Lucía (Soul)** | `soul_2` + `soul_id 36305a9b` · 9:16 · quality `2k` | **0,12 cr** | Método canónico de la cara. El más barato con diferencia. |
+| **Imagen de Lucía (Soul)** | `text2image_soul_v2` + `soul_id 36305a9b` · 9:16 · quality `2k` | **0,12 cr** | Método canónico de la cara. El más barato con diferencia. |
 | Imagen expresión fuerte / realismo máx. | `nano_banana_pro` · 9:16 · `1k` o `2k` | **2,00 cr** | Mismo precio en 1k y 2k (verificado). Ver §6, decisión pendiente. |
 | **B-roll 5s — mejor precio** | `kling2_6` · 9:16 · 5s · **`sound: false`** | **5,00 cr** | 🔻 **Hallazgo: 33% más barato que lo presupuestado.** |
 | B-roll 5s con audio nativo | `kling2_6` · 9:16 · 5s · `sound: true` | 10,00 cr | Inútil acá: la voz va aparte (VO de Lucía). **Apagar el audio siempre.** |
@@ -95,7 +95,7 @@ on-screen UI, no phone screens visible.
 
 | # | ID | Modelo | Encuadre | Costo |
 |---|---|---|---|---|
-| **D1-01** | portada carrusel | `soul_2` + `36305a9b` · 9:16 · 2k | Medio cuerpo (cintura arriba), centrada, **espacio vacío en el tercio superior** para el texto grande | 0,12 cr |
+| **D1-01** | portada carrusel | `text2image_soul_v2` + `36305a9b` · 9:16 · 2k | Medio cuerpo (cintura arriba), centrada, **espacio vacío en el tercio superior** para el texto grande | 0,12 cr |
 
 **Prompt (inglés):**
 ```
@@ -107,7 +107,7 @@ knit top. Composition leaves generous empty wall space in the upper third of the
 ```
 **Por qué así:** el hook lleva texto grande arriba ("Soy Lucía. No existo. Y vengo a venderte
 algo real."); si la cabeza ocupa el tercio superior, el texto la tapa. Sonrisa cerrada suave =
-zona segura de `soul_2` (las expresiones fuertes son las que meten arrugas).
+zona segura de `text2image_soul_v2` (las expresiones fuertes son las que meten arrugas).
 
 ---
 
@@ -118,8 +118,8 @@ del SIN es gratis). Vestuario: **clean girl / oficina en casa**.
 
 | # | Asset | Modelo | Encuadre | Costo |
 |---|---|---|---|---|
-| **A-01** | Still hook — escritorio | `soul_2` + `36305a9b` · 9:16 · 2k | Medio cuerpo sentada, escritorio, ¾ hacia cámara, expresión seria-cercana | 0,12 cr |
-| **A-02** | Still "hablando" — **ancla de dientes** | `soul_2` + `36305a9b` · 9:16 · 2k | Pecho arriba (chest-up), frontal, **sonrisa ABIERTA con dientes visibles** | 0,12 cr |
+| **A-01** | Still hook — escritorio | `text2image_soul_v2` + `36305a9b` · 9:16 · 2k | Medio cuerpo sentada, escritorio, ¾ hacia cámara, expresión seria-cercana | 0,12 cr |
+| **A-02** | Still "hablando" — **ancla de dientes** | `text2image_soul_v2` + `36305a9b` · 9:16 · 2k | Pecho arriba (chest-up), frontal, **sonrisa ABIERTA con dientes visibles** | 0,12 cr |
 | **A-03** | B-roll 5s (desde A-01) | `kling2_6` · 9:16 · 5s · `sound:false` | Movimiento sutil: asiente y mira a cámara | 5,00 cr |
 | **A-04** | B-roll 5s (desde A-01 o toma nueva) | `kling2_6` · 9:16 · 5s · `sound:false` | Manos marcando una fecha en calendario de pared / agenda | 5,00 cr |
 | **A-05** | Voz VO — guion completo día 3 | `seed_audio` element `8de5db95` | ~30s español boliviano | 3,50 cr |
@@ -171,8 +171,8 @@ loungewear**, ambiente hogareño o café.
 
 | # | Asset | Modelo | Encuadre | Costo |
 |---|---|---|---|---|
-| **B-01** | Still hook — ambiente cálido | `soul_2` + `36305a9b` · 9:16 · 2k | ¾ perfil, sentada en café/living, luz de ventana lateral | 0,12 cr |
-| **B-02** | Still "hablando" — **ancla de dientes** | `soul_2` + `36305a9b` · 9:16 · 2k | Medio cuerpo de pie, frontal, **sonrisa abierta con dientes**, fondo distinto a A-02 | 0,12 cr |
+| **B-01** | Still hook — ambiente cálido | `text2image_soul_v2` + `36305a9b` · 9:16 · 2k | ¾ perfil, sentada en café/living, luz de ventana lateral | 0,12 cr |
+| **B-02** | Still "hablando" — **ancla de dientes** | `text2image_soul_v2` + `36305a9b` · 9:16 · 2k | Medio cuerpo de pie, frontal, **sonrisa abierta con dientes**, fondo distinto a A-02 | 0,12 cr |
 | **B-03** | B-roll 5s (desde B-01) | `kling2_6` · 9:16 · 5s · `sound:false` | Ella toma la taza, sonríe, mira a cámara | 5,00 cr |
 | **B-04** | B-roll 5s (desde B-02) | `kling2_6` · 9:16 · 5s · `sound:false` | Camina hacia cámara y se detiene, gesto natural con la mano | 5,00 cr |
 | **B-05** | Voz VO — guion completo día 7 | `seed_audio` element `8de5db95` | ~30s español boliviano | 3,50 cr |
@@ -323,13 +323,13 @@ still fallado es económicamente irrelevante; regenerar un clip no.
 | 3 | **Ojos** | Marrones almendrados, catchlight nítido | Ojos apagados = look AI |
 | 4 | **Labios** | Llenos naturales, sin relleno artificial | — |
 | 5 | **Pelo** | Castaño oscuro ondulado, raya al medio, largo medio | Cambia de largo entre tomas |
-| 6 | **⚠️ FRENTE** | **Lisa, cero arrugas** | **Artefacto conocido de `soul_2`** — Sergio lo detectó; se dispara con expresiones fuertes (cejas levantadas) |
+| 6 | **⚠️ FRENTE** | **Lisa, cero arrugas** | **Artefacto conocido de `text2image_soul_v2`** — Sergio lo detectó; se dispara con expresiones fuertes (cejas levantadas) |
 | 7 | **⚠️ DIENTES** (solo stills ancla A-02 / B-02) | Sonrisa **abierta**, dientes superiores visibles y nítidos | Boca cerrada → el lipsync inventa dientes distintos en cada frame |
 
 ### Reglas duras que acompañan al gate
 
 1. **Nunca encadenar generado sobre generado para identidad.** El `start_image` de todo video sale
-   de un still `soul_2` aprobado — jamás de un frame extraído de otro video.
+   de un still `text2image_soul_v2` aprobado — jamás de un frame extraído de otro video.
 2. **Elegir por ID exacto, nunca por nombre** en la librería de Higgsfield: `36305a9b-af24-4390-959b-885082dddd5d`.
    Hay assets contaminados vivos en la cuenta (Element `44622145` es **otra persona** — nunca usar).
 3. **Si un still falla el QA, se descarta y se regenera el still.** Prohibido "arreglarlo" en el
@@ -354,7 +354,7 @@ Hay que resolver esto **antes** de generar, y es la única decisión técnica re
 
 | Fuente | Fecha | Qué dice |
 |---|---|---|
-| `AVATAR-CONSISTENCY-SCHEME.md` v3 + regla del carril H | 2026-07-06 | La cara de Lucía **solo** con `soul_2` + Soul `36305a9b` + texto. **0,12 cr.** |
+| `AVATAR-CONSISTENCY-SCHEME.md` v3 + regla del carril H | 2026-07-06 | La cara de Lucía **solo** con `text2image_soul_v2` + Soul `36305a9b` + texto. **0,12 cr.** |
 | `lucia-onia-identity-bible.md` §"Estándar de realismo" + `LUCIA_CONTENT_SYSTEM.md` §4b | **2026-07-09 (posterior)** | Sergio reportó que las fotos "se veían muy AI". Fix elegido por él: `nano_banana_pro` + ancla `ced20cc2` (frame **real**) + prompt de realismo + 2k. **2 cr.** |
 
 Este documento sigue la **regla dura del carril (Soul `36305a9b`)** en todos los prompts de arriba,
@@ -365,10 +365,10 @@ feedback de Sergio.
 
 | Opción | 5 imágenes (día 1 + A + B) | Delta |
 |---|---|---|
-| Todo `soul_2` (regla del carril) | 5 × 0,12 = **0,60 cr** | — |
+| Todo `text2image_soul_v2` (regla del carril) | 5 × 0,12 = **0,60 cr** | — |
 | Todo `nano_banana_pro` + ancla real (estándar de realismo) | 5 × 2,00 = **10,00 cr** | **+9,40 cr ≈ +Bs 4,3** |
 
-**Recomendación — híbrido, y es la opción sensata:** generar la ronda con `soul_2` (0,60 cr),
+**Recomendación — híbrido, y es la opción sensata:** generar la ronda con `text2image_soul_v2` (0,60 cr),
 pasarla por el QA de la §5 y mostrarla a Sergio. **Si alguna lee "muy AI" o sale con frente
 arrugada, regenerar solo esa con `nano_banana_pro` + `ced20cc2` (2 cr).** El techo absoluto del
 plan B completo es 10 cr — Bs 4,3. Discutir esto en abstracto cuesta más que probarlo.
@@ -380,7 +380,7 @@ plan B completo es 10 cr — Bs 4,3. Discutir esto en abstracto cuesta más que 
 | # | Decisión | Opciones | Recomendación |
 |---|---|---|---|
 | 1 | **Escenario de producción** | (a) mínimo ≈49,5 cr · (b) estándar con lipsync ≈114,5 cr | **(b)** — +Bs 30 por las 2 piezas, con gate de QA que corta el gasto antes del video |
-| 2 | **Método de imagen** (§6) | `soul_2` 0,12 cr · `nano_banana_pro`+ancla real 2 cr · híbrido | **Híbrido**: `soul_2` primero, upgrade solo lo que falle el QA |
+| 2 | **Método de imagen** (§6) | `text2image_soul_v2` 0,12 cr · `nano_banana_pro`+ancla real 2 cr · híbrido | **Híbrido**: `text2image_soul_v2` primero, upgrade solo lo que falle el QA |
 | 3 | **Marketing Studio premium** (52,5 cr) | sí / no | **No** — genera voz propia y rompe la consistencia de voz |
 | 4 | **¿Aprobar Tanda A y B juntas, o A primero?** | juntas / A y decidir B con los datos de semana 1 | **A primero** — el plan ya marca la Tanda B como recortable si las piezas de captura convierten igual |
 | 5 | **Fecha de arranque** | propuesta del plan: lun 28-jul (día 1) → Tanda A mié 30-jul → Tanda B mar 05-ago | confirmar |

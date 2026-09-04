@@ -89,7 +89,7 @@ Entregable: `hermes-content/docs/ONIA_LEAD_MAGNET_GUIA_UNA_PAGINA_PRD.md` (154 l
   SIN — 6 pasos"*. Descartadas: guía-de-PRDs (mercado equivocado), tips por rubro (sin
   urgencia), "qué exige el SIN" (ya está gratis en `/facturacion`; un magnet que repite una
   página pública no vale un correo). La elegida responde la pregunta que aparece DESPUÉS,
-  sirve a los 3 rubros, y sale del checklist que ya hicimos con nuestro propio NIT.
+  sirve a los 5 rubros vendibles, y sale del checklist que ya hicimos con nuestro propio NIT.
 - **Contenido real escrito**, no un índice: 7 bloques, los 6 pasos de la Oficina Virtual,
   los 5 datos a tener a mano, cierre honesto. El texto fiscal se LEE de
   `web-factory/apps/onia-platform/src/lib/siat.ts`, no se copia.

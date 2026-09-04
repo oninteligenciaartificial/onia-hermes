@@ -42,6 +42,7 @@ import { parseChatwootWebhook, runChatwootTurn } from "./chatwoot-adapter.mjs";
 import { authenticateChatwootRequest, DEFAULT_TOLERANCE_SECONDS } from "./webhook-security.mjs";
 import { shouldProcessMessage, releaseMessage } from "./message-dedup.mjs";
 import { buildBotTurnEvent, fireN8nBotTurnEvent, getN8nEventConfig } from "./n8n-event.mjs";
+import { construirAviso, dispararAvisoTelegram, getAvisoTelegramConfig } from "./aviso-telegram.mjs";
 import { knowledgeHealth } from "./knowledge.mjs";
 import { createStore } from "./persistence.mjs";
 import { handlePreviewRequest } from "./preview-route.mjs";
@@ -218,6 +219,112 @@ export function matchWebhookPath(url) {
 }
 
 // ---------------------------------------------------------------------------
+// LA TRAZA — una línea por webhook, y el MOTIVO cuando el bot no contestó.
+//
+// POR QUÉ EXISTE. Medido el 2026-09-02: `/tmp/onia-bot-webhook.log` tenía 2,5 MB de
+// "escuchando en :3020" y NI UNA línea por mensaje. Con esa ceguera, el bug de "contesta una
+// vez y se calla" sobrevivió UNA SEMANA con cinco personas reales del otro lado; nadie podía
+// decir POR QUÉ se callaba, así que se adivinó. Este archivo ya recibía un `log`, pero sólo lo
+// llamaba en dos errores raros (socket muerto y n8n): el camino que importa no escribía nunca.
+// Un log que existe y no se llama es peor que no tenerlo, porque aparenta diagnóstico.
+//
+// LO QUE HACE FALTA VER, y por qué estas ramas y no un dump del cuerpo: los tres silencios
+// devuelven 200 con cuerpos casi iguales, así que a ojo los tres se leen como éxito.
+//   · `MUDO`         el turno corrió y no produjo NADA. Es el bug de la semana.
+//   · `NO_ENTREGADO` produjo respuesta y Chatwoot la rechazó. Cuatro días reales en agosto:
+//                    el bot calculaba respuestas que nadie recibía, con /health en verde.
+//   · `ignorado`     el parser lo descartó (saliente, nota privada, evento ajeno).
+// Distinguirlas es todo el valor: mandan a mirar archivos distintos.
+//
+// PRIVACIDAD. Acá sí viaja el texto del prospecto, acotado a `MAX_ENTRADA`. Es deliberado y no
+// contradice a `n8n-event.mjs`, que lo redacta: ese evento SALE del sistema, éste es un archivo
+// local del contenedor. Sin la entrada, la línea dice que el bot se calló y no permite
+// reproducirlo, que es justo lo que costó la semana.
+// ---------------------------------------------------------------------------
+
+/** Tope del texto del prospecto en la traza: alcanza para reproducir, no para volcar la charla. */
+export const MAX_ENTRADA = 120;
+
+/** Una línea de log NUNCA puede traer saltos: rompen el `grep` y el `tail -f` que la van a leer. */
+function unaSolaLinea(texto, max = MAX_ENTRADA) {
+  const plano = String(texto ?? "").replace(/[\r\n\t]+/g, " ").trim();
+  return plano.length > max ? `${plano.slice(0, max)}…` : plano;
+}
+
+/**
+ * Traza -> línea de texto. Función PURA: se testea sin servidor, sin red y sin motor.
+ * @param {object} traza { conversacion, mensaje, entrada, estado, cuerpo }
+ */
+export function formatearTraza(traza = {}) {
+  const cuerpo = traza.cuerpo || {};
+  const enviados = Array.isArray(cuerpo.sent) ? cuerpo.sent : [];
+  const publicados = enviados.filter((reply) => reply?.posted).length;
+  const avisos = Array.isArray(cuerpo.warnings) ? cuerpo.warnings : [];
+
+  let rama;
+  let motivo;
+  if (Number(traza.estado) >= 400) {
+    // Auth, ruta o método. Es LA rama que hay que ver cuando "los webhooks no llegan".
+    rama = "rechazado";
+    motivo = cuerpo.reason;
+  } else if (cuerpo.skipped) {
+    rama = "ignorado";
+    motivo = cuerpo.reason;
+  } else if (cuerpo.deduped || cuerpo.duplicate) {
+    rama = "repetido";
+    motivo = cuerpo.reason || "mensaje_ya_procesado";
+  } else if (cuerpo.error) {
+    rama = "ERROR";
+    motivo = cuerpo.reason;
+  } else if (enviados.length === 0) {
+    rama = "MUDO";
+    // El primer aviso del motor explica el silencio mejor que cualquier texto nuestro. Si no
+    // hay, la etapa lo dice: `handoff_humano` es una barrera y significa "no habla nunca más".
+    motivo =
+      avisos[0] ||
+      (cuerpo.stageAfter === "handoff_humano"
+        ? "etapa handoff_humano: el bot ya no vuelve a hablar en esta conversacion"
+        : "el motor no produjo respuesta");
+  } else if (publicados === 0) {
+    rama = "NO_ENTREGADO";
+    motivo = avisos[0] || enviados[0]?.reason || "chatwoot no acepto la respuesta";
+  } else {
+    rama = "respondio";
+  }
+
+  const campos = [
+    `[onia-webhook] ${traza.iso || new Date().toISOString()}`,
+    `conv=${traza.conversacion || "?"}`,
+    `msg=${traza.mensaje || "?"}`,
+    `estado=${traza.estado ?? "?"}`,
+    `rama=${rama}`,
+  ];
+  if (cuerpo.stageBefore || cuerpo.stageAfter) {
+    campos.push(`etapa=${cuerpo.stageBefore || "?"}->${cuerpo.stageAfter || "?"}`);
+  }
+  // Publicados/producidos, no un total: `0/1` es el bot mudo hacia afuera con la boca sana.
+  if (enviados.length > 0 || rama === "MUDO") campos.push(`enviados=${publicados}/${enviados.length}`);
+  if (motivo) campos.push(`motivo=${unaSolaLinea(motivo, 140)}`);
+  if (traza.entrada) campos.push(`entrada="${unaSolaLinea(traza.entrada)}"`);
+  return campos.join(" ");
+}
+
+/**
+ * Datos mínimos para la traza cuando `parseChatwootWebhook` los descartó.
+ * Un `skip` devuelve `{skip, reason}` SIN `meta`, y una traza sin conversación no sirve para
+ * nada: hay que poder decir CUÁL charla se ignoró, no sólo que se ignoró alguna.
+ */
+function datosDelPayload(payload) {
+  if (!payload || typeof payload !== "object") return {};
+  const conversacion = payload.conversation?.id ?? payload.conversation?.display_id ?? payload.display_id;
+  return {
+    conversacion: conversacion == null ? undefined : String(conversacion),
+    mensaje: payload.id == null ? undefined : String(payload.id),
+    entrada: typeof payload.content === "string" ? payload.content : undefined,
+  };
+}
+
+// ---------------------------------------------------------------------------
 // El manejador — PURO respecto del socket (recibe strings, devuelve un objeto).
 // Así se testea el pipeline entero sin levantar un servidor ni abrir un puerto.
 // ---------------------------------------------------------------------------
@@ -225,10 +332,25 @@ export function matchWebhookPath(url) {
 /**
  * @param {object} request { rawBody, headers, method, url }
  * @param {object} [deps]  { config, runChatwootTurn, shouldProcessMessage, nowMs, nowIso, ... }
- * @returns {Promise<{status:number, body:object, n8nEvent?:object}>}
+ * @returns {Promise<{status:number, body:object, n8nEvent?:object, traza:object}>}
  *          `n8nEvent` presente = el llamador debe dispararlo DESPUÉS de responder.
+ *          `traza` SIEMPRE presente: es lo que el servidor loguea.
+ *
+ * La traza se arma acá afuera, envolviendo al pipeline, y no en cada `return` de adentro. Es a
+ * propósito: hay NUEVE salidas y la propiedad que importa —"todo webhook deja una línea"— se
+ * rompe sola en cuanto alguien agregue la décima y se olvide. Envolviendo, no hay forma de
+ * salir sin traza.
  */
 export async function handleChatwootWebhook(request = {}, deps = {}) {
+  const datos = {};
+  const out = await procesarWebhook(request, deps, datos);
+  return {
+    ...out,
+    traza: { ...datos, estado: out.status, cuerpo: out.body, iso: deps.nowIso },
+  };
+}
+
+async function procesarWebhook(request, deps, datos) {
   const config = deps.config || getServerConfig();
   const method = String(request.method || "POST").toUpperCase();
 
@@ -264,9 +386,17 @@ export async function handleChatwootWebhook(request = {}, deps = {}) {
     return { status: 400, body: { ok: false, reason: "json_invalido" } };
   }
 
+  // Ya hay JSON: la traza puede nombrar la conversación aunque el parseo de abajo lo descarte.
+  Object.assign(datos, datosDelPayload(payload));
+
   // 4. Parseo del canal. Saliente / nota privada / evento ajeno se cortan acá: es LA regla de oro
   // (si no, la respuesta del bot dispara su propio webhook y se contesta a sí mismo en loop).
   const parsed = parseChatwootWebhook(payload);
+  // El parseo sabe MÁS que el payload crudo (resuelve el texto real de un audio, de un botón o
+  // de una conversación recién creada): pisa lo anterior, pero sólo con lo que trae.
+  if (parsed.meta?.conversationId) datos.conversacion = String(parsed.meta.conversationId);
+  if (parsed.meta?.messageId) datos.mensaje = String(parsed.meta.messageId);
+  if (parsed.turn?.text) datos.entrada = parsed.turn.text;
   if (parsed.skip) {
     // Ojo: NO se consume el dedup en un skip. Marcar como "visto" un mensaje que nunca se
     // procesó haría que una reentrega legítima se descarte.
@@ -325,7 +455,17 @@ export async function handleChatwootWebhook(request = {}, deps = {}) {
     nowIso: deps.nowIso,
   });
 
-  return { status: 200, body: result, n8nEvent };
+  // El aviso a Sergio viaja SEPARADO del evento de n8n a propósito. Hasta hoy era un campo
+  // (`notifyCount`) adentro de ese evento, así que apagar n8n —que es analítica— apagaba también
+  // lo único del evento que NO es analítica: que hay una persona esperando que le contesten.
+  // Dos cosas distintas no pueden compartir un interruptor.
+  const avisoTelegram = construirAviso({
+    notify: result?.notify,
+    conversationId: result?.conversationId,
+    stageAfter: result?.stageAfter,
+  });
+
+  return { status: 200, body: result, n8nEvent, avisoTelegram };
 }
 
 // ---------------------------------------------------------------------------
@@ -394,6 +534,7 @@ function writeJson(res, status, payload) {
 export function createWebhookServer(deps = {}) {
   const config = deps.config || getServerConfig();
   const n8nConfig = deps.n8nConfig || getN8nEventConfig();
+  const avisoConfig = deps.avisoConfig || getAvisoTelegramConfig();
   const handle = typeof deps.handle === "function" ? deps.handle : handleChatwootWebhook;
   const fireEvent = typeof deps.fireEvent === "function" ? deps.fireEvent : fireN8nBotTurnEvent;
   const log = typeof deps.log === "function" ? deps.log : (line) => process.stdout.write(`${line}\n`);
@@ -488,6 +629,17 @@ export function createWebhookServer(deps = {}) {
       };
     }
 
+    // LA LÍNEA. Va ANTES de escribir la respuesta a propósito: si el socket ya está muerto, el
+    // `writeJson` de abajo falla y sin esto el webhook no dejaría rastro justo en el caso raro.
+    // Envuelto porque un log que tira mataría el turno — al revés de para qué existe.
+    if (outcome.traza) {
+      try {
+        log(formatearTraza(outcome.traza));
+      } catch {
+        /* nunca romper el turno por no poder loguearlo */
+      }
+    }
+
     // Escribir también puede fallar (el cliente cortó la conexión y el socket ya está muerto).
     // Esto va FUERA del try de arriba a propósito, así que necesita el suyo: en un handler
     // `async` una excepción acá es un unhandled rejection, y eso mata el proceso de Node — o sea
@@ -508,6 +660,20 @@ export function createWebhookServer(deps = {}) {
         });
       } catch (error) {
         log(`[n8n] no se pudo disparar el evento: ${String(error?.message || error)}`);
+      }
+    }
+
+    // El aviso a Sergio. Fire-and-forget igual que el de arriba, pero con su propio interruptor:
+    // esto NO es analítica, es alguien esperando. Deja línea siempre —enviado o no— porque el
+    // modo de falla de este carril es justamente el aviso que no sale y nadie lo nota.
+    if (outcome.avisoTelegram) {
+      try {
+        dispararAvisoTelegram(outcome.avisoTelegram, avisoConfig, deps, (result) => {
+          const motivos = outcome.avisoTelegram.motivos.join(",");
+          log(`[aviso] ${result?.status} (${motivos}): ${result?.reason}`);
+        });
+      } catch (error) {
+        log(`[aviso] no se pudo disparar: ${String(error?.message || error)}`);
       }
     }
   });

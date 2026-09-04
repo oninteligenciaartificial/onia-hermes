@@ -67,6 +67,13 @@ Todos cierran con lámina CTA → comunidad.
    están medidos en ningún lado**, así que la cifra no se escribe (regla del carril: toda
    cifra con fuente o no se escribe). El tema es el mismo
 5. **"16 años, 0 empleados: las 6 herramientas que son mi equipo"** (S3 — espejo del video de 5.4K)
+   ✅ 02-sep, 8 láminas en `carousels/out/carrusel-equipo-no-cobra/` + caption listo en
+   `docs/cola/PARA-PUBLICAR-CARRUSEL-EQUIPO.md`.
+   ⚠️ Salió sin el **"0 empleados"**: no hay fuente para esa cifra en el carril y es una
+   afirmación sobre la empresa que el loop no puede verificar. Se usó el nombre de la serie
+   ya validada — *"Mi equipo no cobra"* — que habla de las herramientas, no de una nómina.
+   Mismo criterio que con los "30 segundos" del ítem 4. Si Sergio confirma el dato, vuelve
+   con una línea de cambio en el generador
 6. **"Antes de pagarle a una agencia, mirá esto"** (S4 — espejo del video B)
 
 ## 3 · Contenido de marca personal — el mes

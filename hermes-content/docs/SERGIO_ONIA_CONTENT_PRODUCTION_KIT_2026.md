@@ -190,7 +190,7 @@ Avatar operativo actual creado en Higgsfield con el paquete de fotos del
 ```text
 Soul ID: 1238064e-1295-4cbf-9a41-861d4106e0e8
 Nombre: Sergio ONIA 20260604 All Black
-Tipo: soul_2
+Tipo: text2image_soul_v2
 Estado: completed
 ```
 

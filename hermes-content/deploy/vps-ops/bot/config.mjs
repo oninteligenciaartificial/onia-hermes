@@ -237,6 +237,16 @@ export const SCRIPT = Object.freeze({
     "Ya le pasé tu consulta con todo lo que me contaste. Te escribe él desde este mismo número, en horario de oficina ({{horario_frase}}). Si es urgente, decime \"urgente\" y lo marco.",
   ].join("\n"),
 
+  // M5_ACUSE — el mensaje que llega DESPUES de haber derivado, mientras el humano todavia no
+  // aparecio. No reabre la conversacion ni promete nada nuevo: solo confirma que lo que escribio
+  // llego. Nace de medir, el 2026-09-03, que tras cada M5 el mensaje siguiente del prospecto se
+  // comia un silencio total — la persona ve "entregado" y nunca una respuesta.
+  M5_ACUSE: [
+    "Te leo, y esto también se lo paso a {{humano}} — sigo siendo el bot, así que no te lo contesto yo para no inventarte nada.",
+    "",
+    "Ya está todo en su bandeja. Te responde desde acá mismo en horario de oficina ({{horario_frase}}).",
+  ].join("\n"),
+
   // M8_SOPORTE — SEGUNDO CAMINO: el que escribe YA es cliente (o dice que ya tiene el sistema, o
   // que algo no le anda, o pregunta como configurarlo). Ofrecerle la demo COMERCIAL a alguien que
   // pide ayuda es el peor error posible del bot: le dice "comprame" a quien ya compro. Este texto
@@ -295,6 +305,12 @@ export const SCRIPT = Object.freeze({
   // (precio / SIAT / archivo) vuelve al embudo sin saltear la calificacion.
   PENDING_CALIFICACION: "Volviendo a lo nuestro: me falta {{dato_faltante}} — ¿me lo pasás?",
   PENDING_HORARIO: "¿Te reservo **{{slot_a}}** o **{{slot_b}}**?",
+  // PENDING_HORARIO_SIN_HORARIOS — la misma re-pregunta cuando `slots` sigue en "pendiente de
+  // definir". PENDING_HORARIO pide elegir entre {{slot_a}} y {{slot_b}}, y sin horarios reales eso
+  // salio a produccion como "¿Te reservo HORARIO A (pendiente de definir) o HORARIO B (pendiente de
+  // definir)?" — y, via el LLM, como "¿horario A o horario B?". Se pide lo unico accionable sin
+  // agenda (el contacto) y la hora la coordina el humano.
+  PENDING_HORARIO_SIN_HORARIOS: "{{humano}} te coordina el horario personalmente. ¿A qué número o correo te escribe?",
   PENDING_AGENDADA: "Igual ya quedamos para **{{dia_hora_elegida}}**.",
 
   // -------------------------------------------------------------------------
@@ -633,11 +649,43 @@ export function slotsPending(config = DEFAULT_CONFIG) {
   return (config.slots || []).some((slot) => slot && slot.pending === true);
 }
 
-/** Reemplaza {{clave}} por su valor. Corre SIEMPRE DESPUES del guardrail (spec §3.1). */
+/**
+ * ¿Lo que viene ANTES de este marcador abre una oracion nueva?
+ *
+ * Abre oracion si no hay nada antes, o si lo anterior termina en `.`, `!`, `?` o salto de linea.
+ * Los dos puntos NO abren oracion en castellano ("Anotado: agenda y cobros"), y por eso se
+ * excluyen a mano: es la unica diferencia entre esta regla y un capitalizado a lo bruto.
+ */
+function abreOracion(anterior) {
+  const previo = anterior.replace(/[ \t]+$/, "");
+  return previo === "" || /[.!?\n]$/.test(previo);
+}
+
+/**
+ * Reemplaza {{clave}} por su valor. Corre SIEMPRE DESPUES del guardrail (spec §3.1).
+ *
+ * Capitaliza el valor cuando cae a empezar oracion. Nace de un defecto que salio a produccion y
+ * lo vio el cliente del cliente (conversacion 51, 2026-09-03), textual:
+ *
+ *     _(Estoy respondiendo automatico fuera de horario de oficina. la encargada te confirma
+ *     en la mañana.)_
+ *
+ * El humano de Onia es un nombre propio (`Sergio`) y por eso nunca se noto; el conocimiento de
+ * un cliente trae un CARGO en minuscula, y hay cuatro plantillas donde `{{humano}}` abre frase.
+ * La regla mira el offset y no la clave a proposito: atarla a `humano` dejaria el mismo bug vivo
+ * en la proxima plantilla que alguien escriba. Solo toca la primera letra si es minuscula, asi
+ * que un nombre propio, una viñeta o un `**negrita**` pasan intactos.
+ */
 export function renderTemplate(text, vars = {}) {
-  return String(text ?? "").replace(/\{\{\s*([a-z0-9_]+)\s*\}\}/gi, (match, key) => {
+  const plantilla = String(text ?? "");
+  return plantilla.replace(/\{\{\s*([a-z0-9_]+)\s*\}\}/gi, (match, key, offset) => {
     const value = vars[key];
-    return value === undefined || value === null ? match : String(value);
+    if (value === undefined || value === null) return match;
+    const rendered = String(value);
+    if (!abreOracion(plantilla.slice(0, offset))) return rendered;
+    const inicial = rendered.charAt(0);
+    if (inicial !== inicial.toLowerCase() || inicial === inicial.toUpperCase()) return rendered;
+    return inicial.toUpperCase() + rendered.slice(1);
   });
 }
 

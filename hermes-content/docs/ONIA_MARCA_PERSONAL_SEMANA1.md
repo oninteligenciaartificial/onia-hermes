@@ -208,9 +208,14 @@ pegás el **sticker de encuesta de IG** sobre la zona punteada, con estas opcion
 | 04 guardián del VPS | 1 vez al día · cada hora · **cada 10 minutos** · nunca | el cron real está en la imagen (`*/10 * * * * claude-guardia.sh`); remata mostrando un aviso de Telegram de verdad |
 | 05 quién escribe esto | 1 · 2 · **4** · ninguna, lo hago yo | meta-contenido: la historia la escribió el loop del servidor. 4×/día es el cron real de este carril (`56 9,13,17,21` UTC) |
 | 06 el empleado que no duerme | Bs 3.500 · Bs 1.200 · Bs 400 · **Bs 0** | la pregunta es por el SUELDO (el servidor sí cuesta) — remata con "no cobra sueldo, cobra electricidad" |
+| 07 por qué contesta cualquier cosa | más inteligencia · la versión de pago · **tu lista de precios y horarios** · un programador | remate: *"No es el modelo, es la info. Pegale tu lista de precios, horarios y stock y contesta igual que vos — eso es TODO lo que le falta."* Sin cifras: no hay ninguna que sostener |
 
 **Las cifras de 04 y 05 salen de `crontab -l` del VPS, contado en vivo el 02-sep**, no de
 memoria. Si el horario del loop cambia, la historia 05 miente: re-contar antes de publicarla.
+
+**La 07 llena el hueco del set (03-sep):** 4 de las 6 primeras eran *"así trabajo"*
+(build-in-public) y sólo 2 hablaban al dueño de negocio. Ésta ataca la creencia de que
+hace falta *"una IA más potente"* y deja el paso concreto para hoy en el remate.
 
 ⚠️ **CTA en historias — adaptación explícita, no deriva.** El CTA estándar del carril es
 *"Comentá COMUNIDAD y te paso el enlace para unirte"*, pero **en historias no hay
@@ -218,12 +223,24 @@ comentarios**. El remate de cada una usa la misma promesa por el canal que sí e
 *"Respondé COMUNIDAD a esta historia y te paso el enlace para unirte"*. Los carruseles y
 posts de feed siguen llevando el CTA exacto.
 
-**Banda segura (02-sep):** las 6 historias se rehicieron para que nada caiga bajo la
+**Banda segura (02-sep):** las historias se rehicieron para que nada caiga bajo la
 interfaz de IG. Antes el handle quedaba **tachado por la barra "Enviar mensaje"** y ~40 %
 de la zona de encuesta caía debajo de la UI — o sea, el sticker se pegaba parcialmente
 tapado. Gate del formato: `scripts/marca-personal/chequear-banda-segura-historias.py`
 (arma `CHEQUEO-banda-segura.png` con la interfaz simulada encima; **mirarla** antes de dar
 una historia por lista — el peso del PNG no detecta esto).
+
+⚠️ **El gate hay que CORRERLO sobre cada carpeta de historias, no una sola vez (03-sep).**
+El arreglo del 02-sep se aplicó donde saltó el defecto y no al FORMATO: el kit del día 1
+(`carousels/out/curso-dia1/`) nació casi nueve horas después y **no lo traía** — sus 5
+historias tenían el handle debajo de la barra de "Enviar mensaje" y la zona de encuesta
+metida en la franja tapada. Es el kit que Sergio aprobó, o sea el que estaba más cerca de
+publicarse. Corregido en `generar-curso-dia1.py` y las 5 regeneradas.
+**Se corre así:** `python3 scripts/marca-personal/chequear-banda-segura-historias.py <carpeta>`.
+
+**Tipografía de marca (03-sep):** las 7 historias-quiz pasaron a Archivo 450/650 con eje
+`wdth` 96 y capas collage — antes la pregunta iba en black 900 condensed 62, los dos pesos
+que Sergio rechazó. Veredicto y variantes: `carousels/out/experimento-historia-tipografia/`.
 
 ## Historias — 2 secuencias (plantilla hook→mito→revelación→CTA)
 

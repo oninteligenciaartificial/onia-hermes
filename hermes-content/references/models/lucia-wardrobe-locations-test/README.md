@@ -1,6 +1,6 @@
 # Lucia — verificacion guardarropa x lugares (2026-07-06)
 
-Prueba barata (soul_2, 0.12cr c/u = 0.24cr total) combinando el guardarropa y lugares
+Prueba barata (text2image_soul_v2, 0.12cr c/u = 0.24cr total) combinando el guardarropa y lugares
 curados de Pinterest (ver `lucia-onia-identity-bible.md`) con looks NUEVOS que no se
 habian probado antes.
 

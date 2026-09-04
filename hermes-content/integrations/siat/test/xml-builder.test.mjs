@@ -5,11 +5,13 @@
  * Run: node --test hermes-content/integrations/siat/test/xml-builder.test.mjs
  */
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { describe, it } from "node:test";
 
 import {
   CABECERA_FIELDS,
   DETALLE_FIELDS,
+  DOC_SECTOR_SCHEMAS,
   ROOT_ELEMENTS,
   buildCabeceraXml,
   buildDetalleXml,
@@ -128,7 +130,7 @@ describe("buildInvoiceXml", () => {
   });
 
   it("lanza si no hay ningun detalle", () => {
-    assert.throws(() => buildInvoiceXml({ cabecera, detalle: [] }), /al menos un/);
+    assert.throws(() => buildInvoiceXml({ cabecera, detalle: [] }), /al menos 1/);
   });
 });
 
@@ -144,5 +146,103 @@ describe("xmlEscape y sha256Hex", () => {
   it("la huella del XML es deterministica", () => {
     const xml = buildInvoiceXml({ cabecera, detalle: [detalle] });
     assert.equal(sha256Hex(xml), sha256Hex(xml));
+  });
+});
+
+// ------------------- los campos salen del XSD oficial (xsd/) -------------------
+//
+// El piloto valida contra el XSD (cvc-elt.1.a del 2026-08-27 fue por la raiz
+// equivocada del sector 17). En vez de confiar en listas tipeadas a mano, se
+// leen los XSD descargados del SIN y se cotejan nombre, ORDEN y nillable.
+
+function leerXsd(nombre) {
+  return readFileSync(new URL(`../xsd/${nombre}.xsd`, import.meta.url), "utf8");
+}
+
+/** Campos {name, nillable} de un bloque (cabecera | detalle) del XSD, en orden. */
+function camposXsd(nombre, bloque) {
+  const xsd = leerXsd(nombre);
+  const start = xsd.indexOf(`<xs:element name="${bloque}"`);
+  assert.ok(start >= 0, `${nombre}: sin bloque ${bloque}`);
+  const end = bloque === "cabecera" ? xsd.indexOf('<xs:element name="detalle"') : xsd.length;
+  const body = xsd.slice(start, end).replace(/^[^\n]*\n/, ""); // salta la linea del propio bloque
+  return [...body.matchAll(/<xs:element\s+name="(\w+)"([^>]*)>/g)].map((m) => ({
+    name: m[1],
+    nillable: /nillable="true"/.test(m[2]),
+  }));
+}
+
+const spec = (fields) => fields.map((f) => ({ name: f.name, nillable: f.nillable === true }));
+
+describe("los campos y la raiz de cada sector salen del XSD oficial", () => {
+  const casos = [
+    [1, "facturaComputarizadaCompraVenta", "facturaElectronicaCompraVenta"],
+    [17, "facturaComputarizadaHospitalClinica", "facturaElectronicaHospitalClinica"],
+    [24, "notaComputarizadaCreditoDebito", "notaElectronicaCreditoDebito"],
+  ];
+  for (const [sector, computarizada, electronica] of casos) {
+    const schema = DOC_SECTOR_SCHEMAS[sector];
+
+    it(`sector ${sector}: cabecera y detalle en el orden y nillables del XSD (ambas modalidades)`, () => {
+      for (const xsd of [computarizada, electronica]) {
+        assert.deepEqual(spec(schema.cabecera), camposXsd(xsd, "cabecera"), `${xsd} cabecera`);
+        assert.deepEqual(spec(schema.detalle), camposXsd(xsd, "detalle"), `${xsd} detalle`);
+      }
+    });
+
+    it(`sector ${sector}: el elemento raiz es el que declara cada XSD`, () => {
+      assert.ok(leerXsd(computarizada).includes(`<xs:element name="${schema.roots.computarizada_en_linea}">`));
+      assert.ok(leerXsd(electronica).includes(`<xs:element name="${schema.roots.electronica_en_linea}">`));
+    });
+
+    it(`sector ${sector}: el minimo de detalles es el minOccurs del XSD`, () => {
+      const m = /<xs:element name="detalle" minOccurs="(\d+)"/.exec(leerXsd(computarizada));
+      assert.equal(schema.minDetalle, Number(m[1]));
+    });
+  }
+
+  it("el sector 17 sale con la raiz de hospital y los campos del medico, sin numeroSerie", () => {
+    const xml = buildInvoiceXml({
+      cabecera: { ...cabecera, codigoDocumentoSector: 17 },
+      detalle: [{ ...detalle, nroQuirofanoSalaOperaciones: 1, nombreApellidoMedico: "DR PRUEBA", nitDocumentoMedico: 99001 }],
+    });
+    assert.ok(xml.includes("<facturaComputarizadaHospitalClinica "));
+    assert.ok(xml.endsWith("</facturaComputarizadaHospitalClinica>"));
+    assert.ok(xml.includes('<modalidadServicio xsi:nil="true"/>'));
+    assert.ok(xml.includes("<descripcion>Servicio de software &amp; soporte</descripcion><especialidad xsi:nil=\"true\"/>"));
+    assert.ok(xml.includes("<nitDocumentoMedico>99001</nitDocumentoMedico><nroMatriculaMedico"));
+    assert.ok(!xml.includes("numeroSerie"));
+  });
+
+  it("el sector 17 exige quirofano y medico: sin ellos lanza", () => {
+    assert.throws(
+      () => buildInvoiceXml({ cabecera: { ...cabecera, codigoDocumentoSector: 17 }, detalle: [detalle] }),
+      /nroQuirofanoSalaOperaciones/,
+    );
+  });
+
+  it("el sector 24 usa la raiz de nota fiscal y exige 2 detalles", () => {
+    const nota = {
+      ...cabecera,
+      numeroNotaCreditoDebito: 7,
+      numeroAutorizacionCuf: "CUFORIG",
+      fechaEmisionFactura: "2026-07-20T10:00:00.000",
+      montoTotalOriginal: 116,
+      montoTotalDevuelto: 116,
+      montoEfectivoCreditoDebito: 15.08,
+      codigoDocumentoSector: 24,
+    };
+    const linea = (t) => ({ ...detalle, codigoDetalleTransaccion: t });
+    assert.throws(() => buildInvoiceXml({ cabecera: nota, detalle: [linea(1)] }), /al menos 2/);
+    const xml = buildInvoiceXml({ cabecera: nota, detalle: [linea(1), linea(2)] });
+    assert.ok(xml.includes("<notaFiscalComputarizadaCreditoDebito "));
+    assert.ok(xml.includes("<numeroAutorizacionCuf>CUFORIG</numeroAutorizacionCuf><fechaEmisionFactura>"));
+    assert.ok(!xml.includes("codigoMetodoPago"), "la nota no lleva pago");
+    assert.ok(xml.includes("<codigoDetalleTransaccion>1</codigoDetalleTransaccion></detalle><detalle>"));
+    assert.ok(xml.includes("<codigoDocumentoSector>24</codigoDocumentoSector></cabecera>"));
+  });
+
+  it("un sector sin esquema lanza en vez de mandar la raiz de compra-venta", () => {
+    assert.throws(() => buildInvoiceXml({ cabecera: { ...cabecera, codigoDocumentoSector: 35 }, detalle: [detalle] }), /sin esquema/);
   });
 });

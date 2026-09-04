@@ -758,6 +758,44 @@ mueven la aguja son distintos y se pueden hacer por separado:
   también que el bot agende** (mergeado el 2026-09-01). Sin esto, un desconocido que llega desde
   la web sigue recibiendo la respuesta genérica, y una cita sigue derivándose a mano — que es
   justo lo que `pricing.ts` cobra como resuelto.
+
+  > 🔴 **Medido en vivo el 2026-09-03 01:40 UTC por el integrador, y ahora incluye el arreglo más
+  > caro de la semana.** Esta opción (a) dejó de ser "campañas y agenda": **el bot que atiende
+  > leads AHORA MISMO no tiene el fix de que se moría al llegar el mensaje.**
+  >
+  > **Dónde corre de verdad, que no es donde parecía.** El proceso es
+  > `node /tmp/onia-bot/webhook-server.mjs` (PID 869520, arrancado 00:04:04Z) y **corre DENTRO del
+  > contenedor `onia-center`**, no en el host: `/tmp/onia-bot/` está vacío visto desde el VPS y el
+  > cwd del proceso es `/app/apps/site`. La cadena de deploy es
+  > `repo → /opt/onia/bot/ (staging) → /tmp/onia-bot/ del contenedor`.
+  >
+  > **La prueba de que está atrás**, por `md5sum`, no por fecha:
+  >
+  > | archivo | vivo (contenedor) | `main` de hoy |
+  > |---|---|---|
+  > | `bot-engine.mjs` | `afe24f58…` | `ab0181ed…` |
+  > | `config.mjs` | `cfabb292…` | `35dc9d8f…` |
+  > | `persistence.mjs` | `555ff62c…` | `ada07d4d…` |
+  > | `knowledge.onia.json` | **no existe** | presente |
+  > | `rescate-run.mjs` | **no existe** | presente |
+  >
+  > `/opt/onia/bot/bot-engine.mjs` da el **mismo** `afe24f58…` que la copia viva: el staging
+  > también está atrás, así que no alcanza con reiniciar el contenedor.
+  >
+  > **Cuánto hay parado:** la copia viva es del **2026-09-02 17:19**; desde esa marca `main`
+  > acumuló **10 commits que tocan `bot/`**, incluidos los 4 mergeados hoy (`51057fb9e`,
+  > `3c2f4ef89`, `f22f47bcb` y su merge). El más caro es **`3c2f4ef89`**: el bot no se callaba,
+  > estaba **muerto** cuando llegaba el mensaje, y Chatwoot no reintenta — o sea que hoy un lead
+  > real todavía puede escribir al vacío.
+  >
+  > ⚠️ **Y hay un segundo motivo, independiente de qué versión sea la buena:** el código vivo
+  > está en **`/tmp` de un contenedor**. Cuando `onia-center` reinicia, se lo lleva puesto — es
+  > exactamente el reinicio de las 00:03:32Z que `3c2f4ef89` diagnosticó. El `webhook-watchdog.sh`
+  > (cron cada 2 min) lo vuelve a levantar, pero **desde el staging viejo**.
+  >
+  > **Lo que este carril NO puede hacer:** el deploy. Sigue siendo tuyo. Lo que sí queda listo es
+  > la cuenta: son 10 commits, el instalador es `/opt/onia/bot/webhook-server.sh knowledge` para
+  > el conocimiento, y el motor se copia por la misma cadena de arriba.
 - ~~**(b) El script de marca de Chatwoot.** Cinco minutos, sin riesgo de motor, y saca el logo
   ajeno de una pantalla que ven los clientes desde el 16-ago.~~ ⚠️ **VENCIDA — verificada en vivo
   el 2026-09-02. No le pidan a Sergio esta decisión: ya está tomada y automatizada.** El script
@@ -1177,7 +1215,7 @@ para que la próxima vuelta no rehaga la bisección.
 
 </details>
 
-## 20. Tres commits arreglan el login de la plataforma y NINGUNO está en producción (2026-09-02) — decisión de Sergio
+## 20. OCHO commits arreglan la plataforma y NINGUNO está en producción (2026-09-02) — decisión de Sergio
 
 **No confundir con la §16**: aquella es el deploy del **motor del bot** y de `web-factory`. Esta
 es el deploy de **`onia-platform`**, el contenedor que sirve `app.onia.com.bo`. Son dos deploys
@@ -1185,31 +1223,56 @@ distintos, con riesgos distintos, y se pueden hacer por separado.
 
 **Medido en vivo el 2026-09-02, no deducido.** El contenedor `onia-platform` monta
 `/opt/onia-platform/runtime-next`, cuyo `.next/BUILD_ID` es `lNDdVgrRvP1mizzu3BVXc` — el mismo
-que `/opt/onia-platform/build-8a3b5a6`. O sea: **producción corre `8a3b5a6`**, y `master` tiene
-tres commits encima que nadie desplegó.
+que `/opt/onia-platform/build-8a3b5a6`. O sea: **producción corre `8a3b5a6`**.
 
-| Commit | Qué arregla | Cómo se comprobó que NO está en producción |
+⚠️ **Este ítem decía "tres commits" y hoy son OCHO.** Recontado en vivo a las 22:45 UTC
+(`git log --oneline 8a3b5a6..master | wc -l` = 8), no releído del párrafo anterior. La pila crece
+sola cada vez que el integrador mergea y nadie despliega: **el número envejece más rápido que el
+resto del ítem**, así que se cuenta de nuevo antes de citarlo. Es la misma trampa que ya costó
+una vuelta con los horarios de `loops.md`.
+
+### Lo que está vivo en producción AHORA — medido, no deducido
+
+Producción corre `8a3b5a6` (el contenedor bind-montea `/opt/onia-platform/runtime-next`, cuyo
+`BUILD_ID` es `lNDdVgrRvP1mizzu3BVXc`, igual al de `build-8a3b5a6`). `git rev-list --count
+8a3b5a6..master` = **7**.
+
+| Commit | Qué arregla | Prueba de que NO está en producción (hoy 17:36 UTC) |
 |---|---|---|
+| `22fd088` + `d62beeb` | **El menú dibuja `ASSIGNMENT_TURNED_IN` en letras gigantes en TODA pantalla del dashboard** — el bug más caro de la pila: lo ve cualquier cliente que entre, en cada pantalla | Producción corre `8a3b5a6`, anterior a los dos commits |
 | `bdf0935` + `5888a13` (merge) | **El login le deletrea los nombres de los iconos al lector de pantalla**, y si la fuente tarda más de 12 s se los muestra como texto a cualquiera (`bolt`, `credit_card_off`, `smart_toy`) | El HTML servido hoy trae los tres `<span>` **sin `aria-hidden`**, y el script del `<head>` sigue cerrando con `setTimeout(ok,12000)` en vez de la guarda `d.fonts.status` |
+| `675541b` | **Una ferretería lee "La cita" y "en el consultorio"** en el editor de su propio chatbot | Producción corre `8a3b5a6`, anterior al commit |
+| `15e3910` | **El cliente que paga el add-on del chatbot (Bs 390) queda sin bandeja** hasta que descubre y aprieta un botón: aprobar el pago encendía el booleano y no creaba el inbox de Chatwoot. Ahora la aprobación enciende el canal web sola, fuera de la transacción del cobro y sin poder tumbarlo | Medido en la base: **cero orgs de cliente** con `chatwootInboxId`. El commit es de hoy y no hay build posterior a `8a3b5a6` |
 | `efaffe8` | **La CSP bloqueaba el beacon de Cloudflare Web Analytics en toda la plataforma** | La cabecera `content-security-policy` servida hoy no menciona `cloudflareinsights` en ningún lado |
 
-Tocan 6 archivos, +151/−15, y **4 de los 6 son tests** — la superficie de riesgo real son
-`components/auth/AuthShell.tsx` (5 líneas), `lib/iconos-script.ts` (13) y `next.config.ts` (29).
+Tocan **21 archivos, +647/−44**, y **9 de los 21 son tests o snapshots** (recontado en vivo el
+2026-09-02 22:45 UTC junto con el número de commits). La superficie de riesgo real sigue siendo
+chica y sin migraciones: `components/auth/AuthShell.tsx`, `lib/iconos-script.ts`,
+`next.config.ts`, `components/layout/navigation.ts`, `lib/onboarding/vocabulario.ts` y
+`app/api/admin/subscription-payments/route.ts`. **Ninguno toca base de datos ni sesiones**; el de
+`subscription-payments` toca el cobro, pero sólo agrega un efecto posterior a la transacción que
+no puede hacerla fallar (probado con Chatwoot caído).
 
-**Por qué importa que sean éstos y no otros.** Los dos son el mismo tipo de fallo: *invisible
-mientras todo va bien, feo justo cuando algo va mal*. El de los iconos es literalmente el bug de
-agosto que Sergio encontró a mano —el login mostrando `credit_card_off` como palabra— y hoy lo
-único que lo tapa es que la fuente cargue rápido. Con la fuente que en agosto tardó 117 s, el
-fallback de 12 s **es el camino normal, no el raro**.
+⚠️ **Dos huecos que este deploy NO cierra** (quedan como ítems del carril producto, no decisión
+de Sergio): `scripts/subset-iconos.mjs` **se rinde en silencio y sale 0** si falta `pyftsubset`
+—el build publica la fuente vieja sin avisar—, y `e2e/iconos.spec.ts` sólo mira `/`, `/login` y
+`/register`, así que el sidebar (que exige sesión) no aparece en ninguna de las tres. Por eso
+nadie lo atajó.
 
-**La decisión.** Desplegar `onia-platform` no lo decide un carril de integración. Es el mismo
-runbook del swap de siempre (`onia-platform/.claude/skills/onia-deploy/SKILL.md`), con el
-recordatorio de `CLAUDE.md`: **buildear en el VPS con `app.env`, nunca con un `.env.local`
-presente**, o Next hornea `127.0.0.1` en el bundle.
+### Qué cuesta desplegarlo — medido sobre el último build real
 
-**Recomendación: hacerlo.** Es el deploy más barato del radar —cambia tres archivos de código,
-ninguno toca base de datos, pagos ni sesiones— y cierra un ítem de `COLA.md` que ya está verde en
-código y vale cero hasta que se encienda.
+**Recomendación: hacerlo.** Sigue siendo de los deploys baratos del radar: seis archivos de
+código, **ninguno toca base de datos ni sesiones**, y cierra ítems que ya están verdes en código y
+valen cero hasta que se enciendan.
+
+⚠️ **Un matiz que antes no existía y hay que decir en voz alta.** Hasta el 2026-09-02 acá decía
+"ninguno toca base de datos, **pagos** ni sesiones". Con `15e3910` eso dejó de ser cierto: ese
+commit sí toca la ruta que aprueba pagos. Lo que agrega es un efecto **posterior** a la
+transacción del cobro —crear el inbox de Chatwoot— envuelto en `try/catch`, así que no puede
+hacer fallar ni revertir una aprobación; hay un test que lo prueba con Chatwoot caído, y otro que
+fija que aprobar un plan normal **no** cree inbox (regalarlo sería entregar gratis un add-on de
+Bs 390). Aun así, **es código de plata y merece que Sergio lo sepa antes de desplegar**, no que
+quede tapado por una frase escrita cuando la pila era otra.
 
 ## 21. Nadie mira nunca el panel del chatbot del cliente — falta una credencial de sólo lectura (2026-09-02) — decisión de Sergio
 
@@ -1238,45 +1301,81 @@ formulario real de `/login`. Enchufarla es un `env`.
 **Recomendación: (1).** **Desbloquea:** que `/settings/chatbot` entre a la ronda del canario
 como las otras diez pantallas. Es **S15** en `hermes-content/docs/cola/chatbot.md`.
 
-## 22. El corredor de los loops se edita a mano en el VPS y el repo queda atrás — decidir si se blinda (2026-09-02)
+## 22. ¿Quién avisa cuando un loop se muere? (2026-09-02, re-medido 2026-09-03)
 
-**Qué pasó, medido.** El 2026-09-02 09:18 UTC el carril `investigacion` estaba **muerto con su
-cron intacto**: su línea (`26 3,9,15,21`) seguía en `crontab -l`, pero su `case` había
-desaparecido de `/root/bin/onia-loop.sh` cuando se reescribió el script a las 05:44. Cada corrida
-caía en el `*)` con `exit 64` — que ocurre en la línea 97, **24 líneas antes de que se defina
-`avisar()`** (línea 121). Fallo mudo: nada por Telegram, nada en ningún tablero. Corrió una sola
-vez en su vida (03:00:20Z) y esa vuelta hizo trabajo real (`a7a28f63`, cerró 4 fantasmas de este
-mismo archivo).
+> ✅ **La pregunta original ya no existe.** Esta entrada preguntaba si blindar el corredor
+> porque *"el `.sh` que corre se edita a mano y el del repo queda atrás"*. **Hoy es al revés y
+> está medido**: `main` es la fuente y el VPS es el destino de un despliegue automático.
+>
+> ```
+> md5sum /root/bin/onia-loop.sh                     → 1214e0122a986eba1baa9b7a19fc6044
+> git show origin/main:scripts/loops/onia-loop.sh   → 1214e0122a986eba1baa9b7a19fc6044
+> ```
+>
+> Byte por byte iguales, y **los 14 `case` son los mismos en los dos** (`canario-visual`,
+> `chatbot-cola`, `marca-personal`, `onia-cola`, `docs-auditoria`, `kpis-semanal`, `web-venta`,
+> `investigacion`, `lucia`, `recorrido-cliente`, `tendencias`, `web-factory-dev`,
+> `calidad-generado`, `supervisor`). Lo mismo el sincronizador contra
+> `origin/main:scripts/loops/sincronizar.sh` (`cmp -s` → idénticos).
+>
+> Lo que cerró la puerta es `/root/bin/onia-loops-sync.sh`, por cron al minuto 44: copia
+> corredor, prompts, tablero y lector de Telegram **desde `main`**, con `bash -n` antes de pisar
+> nada, `mv` atómico, y **se despliega a sí mismo**. Su log de esta madrugada lo muestra
+> haciéndolo, 42 minutos antes de esta vuelta:
+> ```
+> 2026-09-03T02:44:02Z actualizado /root/bin/onia-loop.sh
+> 2026-09-03T02:44:02Z actualizado /root/bin/onia-loops-sync.sh
+> ```
+> Su repo fuente (`/root/loops/onia-hermes`) está en `main` con **0 commits atrás** de
+> `origin/main` — o sea que despliega lo vigente, no una foto.
+>
+> **La opción C también está hecha.** `tg()` ahora se define en la línea 32, **arriba del
+> `case`**, y la rama `*)` manda un Telegram nombrando el loop y los ids conocidos —que además
+> lee del propio `case` en vez de una lista a mano. El fallo mudo que originó la entrada
+> (`exit 64` antes de que existiera la función que avisa) ya no puede repetirse.
+>
+> **A y D quedan sin sentido:** avisar de una diferencia que un cron borra dentro de la hora es
+> ruido, y "no hacer nada" ya no es el estado actual.
+>
+> ⚠️ **El riesgo nuevo es el espejo del viejo, y es el diseño buscado, no un bug:** una edición
+> a mano en `/root/bin` ahora se **borra** dentro de la hora. Se arregla en el repo y se mergea
+> a `main`, o no se arregla.
 
-Ya restaurado y versionado. **Lo que queda para vos es evitar la próxima**, porque la causa sigue
-viva: el `.sh` que corre se edita a mano y el del repo queda atrás. En una sola jornada divergió
-**dos veces**; a las 09:18 el repo tenía `claude-sonnet-5` donde el VPS ya corría
-`claude-opus-5 --effort max`, no tenía `web-venta` ni `investigacion`, y le faltaba la guarda de
-`MERGE_HEAD`. Reinstalar desde el repo —que es lo que el propio README manda— **habría bajado el
-modelo de todos los loops y borrado dos carriles.**
+**Lo único que sigue vivo es la opción B, y sigue sin construirse.** Medido hoy: ningún script
+del VPS mira si un loop dejó de arrancar. `grep -l "ARRANCA" /root/bin/*.sh` devuelve **un solo
+archivo, `onia-loop.sh`** — el que lo escribe. Los tres vigías que existen miran otra cosa:
+`claude-guardia.sh` mira Sentry y contenedores, `hermes-vigia.sh` mira los trabajos de Hermes,
+`onia-vigia-embudo.sh` mira el embudo de venta.
 
-**Opciones cotizadas (todas Bs 0, sólo trabajo de una vuelta de loop):**
+**Qué se decide.** Si se pone un vigía que compare cada loop del cron contra su propio log. La
+rama `*)` del corredor cubre **una sola** causa de muerte (nombre sin `case`); un loop que
+arranca y se cuelga, que se queda sin turnos, o cuyo worktree desapareció, sigue muriendo en
+silencio con el cron perfecto. Mientras no se decida, el único detector es que alguien note la
+ausencia de mensajes en Telegram.
 
-- **A — El corredor se avisa a sí mismo.** Extender la guarda que ya existe para los prompts
-  (`ddc3b9f1`): al arrancar, `diff` entre `/root/bin/onia-loop.sh` y la copia del repo; si
-  difieren, Telegram de una línea. Barato, no bloquea nada, y ataca la causa real (nadie se entera
-  de la divergencia). **Recomendada.**
-- **B — Un `ARRANCA` que falte, avisa.** Un chequeo diario que compare cada línea de `crontab -l`
-  contra el `tail` de su log: si no hay `ARRANCA` posterior a la última hora que le tocaba, avisa.
-  Cubre a `investigacion` **y** a cualquier otra causa de muerte silenciosa, no sólo esta. Más
-  trabajo que A, y es el único que detecta un loop que arranca y se cuelga.
-- **C — Mover el `exit 64` después de `avisar()`.** Arregla sólo el caso "nombre no reconocido".
-  Diez minutos. Es un parche, no cubre B.
-- **D — Nada.** Queda la disciplina escrita en `loops.md` paso 3 y 8. Gratis hoy, y ya sabemos que
-  la disciplina sola falló dos veces en un día.
+**El chequeo cuesta 2 segundos y ya está escrito — lo corrí en esta vuelta** (lee `crontab -l`,
+y por cada `onia-loop.sh <id>` busca el último `ARRANCA` de `/var/log/onia-loop-<id>.log`).
+Resultado del 2026-09-03 03:30 UTC: **los 15 vivos**, ninguno con más de 5 h sin arrancar
+(`marca-personal` 5 h es su horario normal de `56 9,13,17,21`).
 
-A y B se pueden hacer las dos; no compiten.
+| opción | qué cuesta | cuánto tarda | qué se pierde |
+|---|---|---|---|
+| **B — vigía diario de `ARRANCA`** | Bs 0. Un script en `/root/bin` + una línea de cron + un archivo de estado para no repetir el aviso. El comando que hace el trabajo ya está probado acá arriba | Una vuelta del carril dueño (docs/infra). No hay nada que investigar: falta empaquetarlo | Nada. Un mensaje de Telegram sólo cuando un loop se pasa de su horario |
+| **D — dejarlo** | Bs 0 hoy | ya está | El próximo loop que muera por una causa distinta a "sin `case`" no lo dice nadie. Ya pasó una vez y costó **un día entero** de `investigacion` |
 
-**El chequeo de arranque mira en una sola dirección.** Aparte de lo de arriba, hay un agujero de
-diseño que conviene que sepas: el bloque pegado en todos los prompts busca filas de la tabla que
-falten en el cron — nunca al revés. Por eso `web-venta` e `investigacion` corrieron días sin estar
-en `loops.md`, invisibles para la auto-cura. Arreglarlo toca los 7 prompts (uno por carril) y el
-bloque dice explícitamente "no lo optimices", así que **no lo tocó nadie todavía**: decidilo vos.
+**Recomendación: B.** El costo es empaquetar un comando de 2 segundos que ya funciona, y es el
+único que cubre las causas de muerte que el corredor no puede ver desde adentro.
+
+**Lo que NO es opción, y por qué:** ampliar la rama `*)` del corredor. Un loop que se cuelga o
+se queda sin turnos **nunca llega a ejecutar el corredor hasta el final** — el aviso tiene que
+venir de afuera del proceso que puede morir. Es la misma razón por la que `hermes-vigia.sh` no
+vive adentro de Hermes.
+
+**Sigue abierto aparte, y no lo tocó nadie: el chequeo de arranque mira en una sola dirección.**
+El bloque pegado en todos los prompts busca filas de `loops.md` que falten en el cron — nunca al
+revés. Arreglarlo toca **los 14 prompts** —contados en `origin/main`, los 14 llevan el bloque— y
+el bloque dice explícitamente "no lo optimices", así que **decidilo vos**. Ver la §25, que hoy
+mide una consecuencia peor de lo mismo.
 
 ## 23. ~~Los arreglos del carril chatbot al producto nunca llegan a `master`~~ — RESUELTO 2026-09-02, Sergio NO decide nada
 
@@ -1374,6 +1473,65 @@ puede "arreglar" hacia atrás algo que otro carril ya dejó bien.
 **No es sólo de este carril.** `/root/bin/onia-loop.sh` no tiene un solo `git fetch` ni
 `git merge --ff-only` antes de trabajar (`grep -n "fetch\|pull\|rebase" /root/bin/onia-loop.sh`
 sólo devuelve comentarios). Los siete carriles arrancan donde los dejó su vuelta anterior.
+
+### 🔴 Re-medido el 2026-09-03: ahora se comió a la auto-cura
+
+Un día después la distancia **creció** y el daño dejó de ser hipotético. Medido por el carril
+`investigacion` sobre su propio árbol al arrancar la vuelta de las 03:26 UTC:
+
+```
+git rev-parse --short HEAD          → 287af2775
+git rev-list --count HEAD..origin/main → 109      (eran 96 ayer)
+git rev-list --count origin/main..HEAD →   2      (sigue siendo fast-forward puro)
+```
+
+**Y esta vez la copia vieja envenenó el chequeo de arranque**, que es justo el mecanismo que
+existe para que el conjunto de loops se recomponga solo. Ese bloque manda comparar `crontab -l`
+contra la tabla de `hermes-content/docs/cola/loops.md` — y la tabla que el carril leyó era la de
+hace 109 commits:
+
+| dónde | loops en la tabla |
+|---|---|
+| la copia del carril (`HEAD`) | 8 |
+| `origin/main` (commit `1444125d5`, 2026-09-02 20:40) | **14** |
+
+Los **siete invisibles** son `lucia`, `kpis-semanal`, `recorrido-cliente`, `web-factory-dev`,
+`tendencias`, `calidad-generado` y `supervisor` — **los siete tienen su línea viva en
+`crontab -l` ahora mismo**. Si a cualquiera de ellos se le hubiera caído el cron, el chequeo
+habría mirado su tabla vieja, no lo habría encontrado, y habría reportado *"todo bien"* sin
+rearmarlo. **La auto-cura no falla ruidosamente: informa salud.**
+
+Es un escalón peor que el caso de `docs-auditoria`. Aquél gastaba una vuelta re-corrigiendo lo
+corregido; éste **rompe la única red que protege a los otros trece loops**, y lo hace en silencio.
+
+**Y casi se cobra una segunda víctima en la misma vuelta.** El carril iba a commitear su edición
+del radar sobre esa base vieja. `git diff --stat HEAD origin/main` sobre este archivo daba
+**+396/−123** y **nueve commits de otros carriles** que no veía (los ítems 28 a 31, y el §20
+recontado en vivo de 3 → 8 commits). Commitear ahí no era "quedar atrás": era **pisar el trabajo
+de tres carriles en el archivo que este loop existe para cuidar.** Se detectó por comparar contra
+`origin/main` antes de escribir — la misma casualidad que salvó a `docs-auditoria`, que no es un
+método.
+
+**Arreglado a mano en esta vuelta, y eso es justamente el problema.** Se mergeó `origin/main` a
+`claude/investigacion` (merge `c89fd4e3c`) con **5 bloques en conflicto, los 5 en este archivo**,
+resueltos a favor de `origin/main` por ser la medición más nueva (01:40 y 02:49 UTC de hoy contra
+17:36 y 21:40 de ayer). Eso arregla **un** carril, **una** vez. Los otros trece siguen arrancando
+donde los dejó su vuelta anterior.
+
+**No cambia la recomendación — la endurece.** Sigue siendo **(a)**, y los dos números de arriba
+dicen por qué es segura acá: `origin/main..HEAD` = 2 con `HEAD..origin/main` = 109 es exactamente
+el caso que `--ff-only` resuelve sin poder abrir un conflicto. Con la salvedad que esta vuelta
+midió en carne propia: cuando **no** es fast-forward, `--ff-only` falla y avisa sin tocar nada —
+que es el comportamiento correcto, porque el merge de verdad exigió cinco decisiones de contenido
+que ningún automatismo puede tomar.
+
+⚠️ **Daño colateral del rewrite del §20, que conviene mirar y no arreglo yo porque no es mi zona:**
+la versión de `origin/main` que quedó —la buena, la recontada— **perdió la tabla de opciones
+cotizadas** (A desplegar `master` · B cherry-pick sólo del icono · C no desplegar, con sus ~3 min
+de build y el rollback por copia) y la reemplazó por *"Recomendación: hacerlo"*. La medición mejoró
+y **la decisión quedó peor**: Sergio vuelve a tener un ítem sin costo ni alternativas. El texto
+está en el historial (`git show 16816a03c`), listo para que la próxima vuelta lo reponga sobre los
+números nuevos.
 
 **Por qué no lo arreglo solo:** tocar el corredor cambia el comportamiento de **los siete
 carriles a la vez**, y el prompt de este carril prohíbe tocar otro carril. Además hay un motivo
@@ -1550,7 +1708,673 @@ corre riesgo mientras esto se decide.
 
 ---
 
-## 29. La cara de Lucía deriva porque el ancla vigente es la equivocada — el arreglo es gratis (2026-09-03) — decisión de Sergio
+## 29. Tres packs de carrusel quedaron fuera del motor porque sus archivos viven en el carril de contenido (2026-09-02) — decisión de Sergio
+
+**Qué se midió, ejecutando el render (no leyendo la lista).** El merge del carril de Lucía a
+`main` agregó cuatro packs a `PACKS` de `scripts/carousel_render.js`, que es **la lista blanca
+del CLI**. De los cuatro, sólo `bloque-solido` trajo su módulo:
+
+| pack | ¿en `PACKS`? | ¿su archivo en `main`? | qué pasaba al renderar |
+|---|---|---|---|
+| `bloque-solido` | sí | sí (`carousel_pack_solido.js`) | **renderiza** |
+| `papel-subrayado` | sí | **no** | `Pack no disponible (./carousel_pack_papel falta en el repo)` |
+| `dato-ilustrado` | sí | **no** | `Pack no disponible (./carousel_pack_dato falta en el repo)` |
+| `tarjeta-empleado` | sí | **no** | `Pack no disponible (./carousel_pack_empleado falta en el repo)` |
+
+Los tres archivos **sí existen**, commiteados el 27 y 28 de agosto — pero **sólo en
+`claude/ads-creatividades-publicos`**, el carril de contenido, que el integrador tiene prohibido
+mergear (*"el de contenido lo maneja su sesión"*, Sergio 2026-09-01). Nunca llegaron a `main`.
+
+**Por qué importaba.** Como los packs se cargan perezoso, el CLI **aceptaba** `--pack
+dato-ilustrado` y reventaba después, al renderar: una entrada de menú para un plato que la cocina
+no puede hacer. Y el test que debía cazarlo comparaba `PACKS` contra un literal —la constante del
+motor contra una copia de sí misma—, así que pasaba con el nombre puesto sin mirar nunca el
+render. Ya había rotado igual el 2026-08-20 con `editorial-clean`.
+
+**Qué se hizo en la misma vuelta** (commit `032ca24e`): los tres salen del registro con el
+comentario que los devuelve en una línea, y se agrega el test `todo pack listado RENDERIZA`, que
+llama a cada renderer y exige HTML completo. `main` volvió a verde.
+
+**Lo que queda para Sergio, y es una sola pregunta:** los tres packs son trabajo terminado que
+está varado en el carril de contenido. Vuelven solos cuando ese carril cierre y sus archivos
+entren a `main` — no hay nada que construir.
+
+| | Qué se hace | Cuesta | Qué queda |
+|---|---|---|---|
+| **A** | Nada ahora: entran cuando Sergio cierre el carril de contenido. | 0 | Los tres packs siguen sin poder usarse hasta ese día. Es el estado de hoy |
+| **B** | Sergio autoriza traer **sólo esos 3 archivos** del carril de contenido (cherry-pick de `5e8d66cd`, `8c7638b6`, `12c8b3f0`, que tocan un archivo nuevo cada uno). | ~15 min, 3 archivos nuevos, cero borrados | Los packs quedan usables ya. Requiere permiso explícito: hoy ese carril es intocable para los loops |
+
+**Lo que este loop recomienda: B**, si Sergio va a querer esos packs antes de cerrar contenido —
+son tres archivos nuevos que no pisan nada, y el guard nuevo verifica solo que rendericen al
+volver a listarlos. Si no hay apuro, **A** no cuesta nada.
+---
+
+## 30. La home dice "5 rubros vivos en producción hoy" y el catálogo dice que vivo = un cliente real lo usó (2026-09-02) — decisión de Sergio
+
+**Está vivo en producción ahora**, verificado con `curl https://onia.com.bo/` contra el
+contenedor `onia-landing` (no `main`, no Vercel): la primera banda debajo del hero —la que el
+código rotula *"BANDA DE PRUEBA — solo hechos verificables, cero logos/testimonios"*
+(`web-factory/apps/onia-platform/src/app/(sitio)/page.tsx:492-499`)— abre con
+**`5` · "rubros vivos en producción hoy"**.
+
+**El choque, y por qué no es una discusión de palabras.** El catálogo es la fuente de verdad
+de qué se vende y **define su propio vocabulario** (`ONIA_CATALOGO_DE_VENTA.md`, tabla "Los
+tres estados"):
+
+- 🟢 **Vivo** = *"tiene tablas, pantallas y **un cliente real lo usó**"*.
+- Y dos líneas después, el mismo archivo: *"La base de producción sigue con **0 organizaciones
+  de cliente**, así que 🟡 es el estado por defecto de casi todo"*.
+- En la tabla de rubros, sólo Clínica dental lleva *"el único con recorrido real"*.
+
+O sea: por el diccionario que nos escribimos nosotros, **cero rubros están "vivos"**, y la home
+declara cinco. Lo que el catálogo sí respalda es otra frase: *"desde el 2026-08-30 los CINCO
+ofrecidos **se pueden vender**"*. La cifra `5` es correcta; el que no calza es el adjetivo.
+
+**Por qué lo traigo acá en vez de arreglarlo yo**, que es lo que este carril hace con un
+defecto:
+1. **No es un defecto, es una promesa** — y la regla de `CLAUDE.md` dice que una promesa que
+   cambia *"se barre en TODA la superficie, no solo donde la estabas tocando"*. `/rubros` dice
+   **"Cinco rubros vivos y vendibles hoy"** (verificado en producción y en
+   `(sitio)/rubros/page.tsx:164`). Tocar sólo la home deja las dos páginas discrepando, que es
+   exactamente el bug que esa regla existe para evitar.
+2. **El que vende sos vos.** Cuál de las dos lecturas querés que reciba un lead —"cinco rubros
+   ya andando" vs "cinco rubros que puedo venderte hoy"— es decisión comercial, no un typo.
+
+**Tres caminos, ninguno cuesta plata y ninguno toca el diseño:**
+- **a) Alinear con el catálogo (barato y seguro).** `5` → *"rubros que se venden hoy"* en la
+  home, y `/rubros` a la frase equivalente. Una vuelta, dos archivos, cero píxeles movidos, y
+  la banda vuelve a cumplir lo que su propio comentario promete ("hechos verificables"). Es lo
+  que yo elegiría.
+- **b) Cambiar la palabra, no el marco.** *"rubros encendidos en producción hoy"*: es
+  literalmente cierto (los cinco tracks están activos en el `app.env` de producción) y conserva
+  el peso de "producción". Mismo costo que (a).
+- **c) Dejarlo.** Si tu lectura de "vivo" es "el software del rubro funciona", no hay nada roto
+  y se anota acá como excepción para que ninguna vuelta futura lo vuelva a levantar. Costo
+  cero — el riesgo es que "en producción hoy" le suene a un lead como "ya hay cinco rubros de
+  clientes usándolo", que es la prueba social que no tenemos.
+
+**Lo que NO pude contar yo:** cuántas organizaciones de cliente hay hoy en la base. Ese dato
+vive en la base self-hosted del VPS y es del carril `onia-db`; el "0" de arriba es del catálogo,
+no un `SELECT` de hoy. Si ese número cambió, cambia el color del ítem —pero no la opción (a),
+que es correcta con cualquier número.
+
+## 31. Falta un TERCER deploy que la sección 16 no nombra: el del sitio de venta (2026-09-02) — decisión de Sergio
+
+**El agujero.** La sección 16 de este mismo radar pide dos deploys —(a) el motor del bot y (b) el
+script de marca de Chatwoot— y **ninguno de los dos publica `onia.com.bo`**. Esa la sirve el
+contenedor `onia-landing`, que es un tercer deploy que nadie estaba pidiendo. Resultado: los
+arreglos de la cara del producto se verifican, se commitean, y se quedan.
+
+**Medido hoy, mirando producción con Chromium real (no `headless_shell`) en iPhone 390×844:**
+
+- `onia.com.bo/` cierra con **73 px** de franja clara debajo del pie negro; `/empezar`, con
+  **74 px**. Son los mismos dos números que el commit `f0248601` midió y arregló.
+- El contenedor arrancó **16:53 UTC**; el arreglo se commiteó **19:59 UTC**. Sirve código de
+  antes: no es que el arreglo falle, es que nunca se publicó.
+
+**Lo que está listo y esperando** (rama `claude/web-venta`, gates verdes, mirado renderizado):
+
+| Commit | Qué arregla en la pantalla que ve el lead |
+|---|---|
+| `36d2576d` | La home abría con una franja en blanco en el iPhone más común |
+| `f0248601` | Las dos pantallas cerraban con una franja clara bajo el pie negro |
+| `2dbb3acf` | El test que impide que esa franja vuelva |
+| `def54931` | El guard de capturas era ciego a 4 rutas publicadas y a la cabecera |
+
+**Por qué no lo decido yo.** Publicar `onia.com.bo` es tuyo, y con razón: el 2026-08-20 se
+publicó una landing que no habías visto y hubo que revertir en producción. Esto **no es** ese
+caso —son cuatro arreglos de defecto, cero cambio de dirección visual, cero copy nuevo— pero el
+permiso de publicar sigue siendo tuyo.
+
+> ✅ **La mitad que dependía de un loop ya está hecha (2026-09-02, `onia-cola`).** Los 7 commits
+> de este carril están en `main` (merge `d700da8`, `npm test` exit 0). Lo que queda **no es un
+> merge: es el deploy**, y ese sigue siendo de Sergio. El camino (a) de abajo ya no espera nada.
+
+**Tres caminos, ninguno cuesta plata:**
+- **a) Desplegar `onia-landing`** (`scripts/deploy-onia-landing.sh`, que ya corre `tsc --noEmit`
+  antes del build). ~~cuando `onia-cola` mergee a `main`~~ — ya mergeado, la condición se cumplió.
+  Es lo que yo elegiría: son defectos, no diseño.
+- **b) Mirar primero.** Te mando las capturas del build local (pie al borde, sin franja) y
+  desplegás después. Cuesta una vuelta más y cero riesgo.
+- **c) Esperar y juntar.** Cada vuelta de este carril suma arreglos que valen cero hasta el
+  deploy; la deuda crece pero el sitio no empeora.
+
+**Lo que este carril NO puede hacer:** el deploy en sí, ni el merge a `main` (es de `onia-cola`).
+Mientras tanto, la definición de hecho de `CLAUDE.md` —*"encendido en producción y verificado
+ahí"*— dice que estos cuatro commits valen **cero**.
+
+### ⚠️ Ya no hay nada que esperar: la condición de la opción (a) se cumplió (2026-09-03)
+
+La opción (a) decía *"desplegar **cuando** `onia-cola` mergee a `main`"*. **Ya mergeó.** Los
+cuatro commits son ancestros de `origin/main` (`git merge-base --is-ancestor`, verificado uno por
+uno). Esto deja de ser una espera y pasa a ser **un comando**: `scripts/deploy-onia-landing.sh`.
+
+Se reverifica porque un bloqueo vencido es peor que un pendiente fantasma: le pide a Sergio una
+decisión que las condiciones ya tomaron por él.
+
+**Y un reinicio NO alcanza — medido hoy, no supuesto.** El contenedor `onia-landing` se levantó
+de nuevo anoche (~3 h de `Up`) y **sigue sirviendo la franja**: su `.next/BUILD_ID` es del
+**2026-09-02 16:52 UTC** y el arreglo se commiteó a las **19:59 UTC** del mismo día. Reiniciar
+vuelve a servir el mismo bundle; hay que **rebuildear**. Quien lo intente por el camino corto va
+a ver el contenedor sano y la franja viva, y no es una contradicción.
+
+**La prueba de que no hay código que tocar la escribe el gate, no esta sesión:**
+`node scripts/mirar-venta.mjs --comparar-con=<informe de la rama>` sale **exit 3** —
+*"6 fallas YA ARREGLADAS en la rama — falta PUBLICAR, no tocar código"*. El build de la rama sale
+sin defecto medible en las 10 vistas; producción falla en 6 (320 · 390 · 768, las dos pantallas).
+Capturas miradas: `/tmp/venta-0903/` (producción, franja viva) y `/tmp/venta-rama/` (pie al borde).
+
+### ✅ Opción (b) EJECUTADA — las capturas ya están en tu Telegram (2026-09-03 04:5x UTC)
+
+La opción (b) decía *"te mando las capturas del build local y desplegás después"*. Estaba escrita
+como oferta y nunca se hizo: las capturas vivían en `/tmp` del VPS, donde no las ves. **Ya te
+llegaron las dos** (`pie-hoy.png` y `pie-arreglado.png`, home en teléfono 390 px) por el mismo bot
+de Telegram, vía `sendPhoto`. La decisión ya no te pide imaginar el resultado.
+
+**Y el remedio dejó de ser una hipótesis.** Hasta hoy el radar decía que publicar cierra la franja
+porque el gate compara informes. Esta vuelta se probó por el camino que importa: `next build` +
+`next start` del código de la rama, servido de verdad, medido con el mismo instrumento que midió
+producción. **6 de 6 combinaciones** (320 · 390 · 768 × `/` y `/empezar`) pasan de franja a cero, y
+se ve la causa exacta en el DOM: `body.paddingBottom` **73,6 px → 0 px**. Producción, medida en la
+misma corrida, sigue en 73–74 px en las 6.
+
+Importa la distinción porque el 2026-09-03 ya se anunció un arreglo del bot que no arreglaba nada:
+**una hipótesis no probada no se anuncia como arreglo**. Ésta se probó antes de contarla.
+
+**Verificado de paso, sin hallazgos** (para que la próxima vuelta no lo re-mida): las dos pantallas
+no exhiben obra —el `borrador` que aparece en la home es vocabulario del producto, *"te espera el
+borrador de a quién llamar, para que lo apruebes"*, no estado de construcción— y los precios
+publicados (320 · 750 · 1.500) coinciden **exacto** con `DEFAULT_PLAN_AMOUNTS` de
+`onia-platform/lib/subscription-plans.ts`, sin `SUBSCRIPTION_PRICE_*` pisando nada en el
+contenedor de producción. El sitio publica lo que el checkout cobra.
+
+---
+
+## 32. Nuestros propios loops agotan el cupo del widget de chat, y el canario lo reporta como caída (2026-09-03) — decisión de Sergio
+
+**Lo medido, en vivo, no heredado.** El widget de Chatwoot devuelve **429** en `/chatbot`,
+`home` y `/empezar`. Es real: `curl` plano, cinco de cinco, "Retry later". Pero **no es una
+caída y no afecta a ningún cliente**:
+
+- El servicio está sano: `/`, `/api` y el SDK dan **200**; sólo `/widget` da 429.
+- Chatwoot limita `/widget` sin `cw_conversation` a **5 cargas por hora POR IP** (initializer de
+  Rack::Attack, línea 176, dentro del contenedor). Ese límite **no tiene variable de entorno
+  propia**.
+- El contador de Redis está a nombre de **una sola IP: `187.77.16.63`, la del propio VPS**, con
+  34 cargas contra un límite de 5. **En 6 h, las 222 peticiones al widget salieron de esa misma
+  IP.** Cero visitantes reales.
+- Cada visitante real cuenta con su IP y su cupo: **su chat abre normal.** Verificado que el
+  proxy sobrescribe `X-Forwarded-For`, así que Chatwoot ve IPs de visitante de verdad y no una
+  IP compartida — si las colapsara, ahí sí un cliente se comería el 429 de otro.
+
+**El costo, contado:** el ítem ya consumió **cuatro vueltas** de `onia-cola` como 🔴 "la página
+que VENDE el chatbot es la única del sitio sin chat". Y se va a repetir: el canario corre 8×/día
+y cada pasada vuelve a gastar el cupo, fotografía el 429 y lo reporta de nuevo.
+
+**El daño que sí es real, y es de medición:** mientras nuestra IP esté limitada, **el canario es
+estructuralmente incapaz de ver el widget como lo ve un cliente** en cualquier pantalla que lo
+lleve. Es la regla nº4 del prompt (medí con el instrumento correcto) con otro disfraz.
+
+**Las opciones, cotizadas:**
+
+- **a) Safelistear la IP del VPS** — `RACK_ATTACK_ALLOWED_IPS=187.77.16.63` en el contenedor
+  `onia-chatbot_chatwoot`, más reinicio. El initializer ya lo soporta de fábrica
+  (`Rack::Attack.safelist('trusted IPs')`), así que es **encender, no construir**. Nuestro
+  monitoreo deja de gastar cupo y vuelve a ver lo que ve el cliente; **el cliente conserva su
+  protección de 5/hora** contra bombardeo de conversaciones. Costo: un cambio de env + un
+  reinicio del chat (corta conversaciones vivas unos segundos). **Es la que recomiendo.**
+- **b) Apagar el throttle del widget entero** — `ENABLE_RACK_ATTACK_WIDGET_API=false`. Más
+  simple, pero se lleva puesta también la protección anti-bombardeo de conversaciones y de
+  contactos. **No la recomiendo:** desprotege al cliente para arreglar un problema nuestro.
+- **c) No tocar producción y bajarle la mano al monitoreo** — que los loops dejen de cargar el
+  widget. Cero riesgo y cero permiso, pero no arregla la ceguera: el canario seguiría sin poder
+  mirar el chat, que es justo lo que tiene que mirar.
+
+**Lo que ya está hecho y no espera a nadie:** la sonda
+`hermes-content/deploy/vps-ops/widget-429-de-quien.sh` contesta "¿es nuestro o del cliente?" en
+segundos, con el contador y el desglose de IPs a la vista, y está probada en los **dos** sentidos
+(con la IP real dice `AUTOINDUCIDO`; forzando otra IP alerta `puede haber clientes afectados`).
+Con eso, la próxima vuelta que vea un 429 no vuelve a gastar una sesión derivándolo.
+
+**Lo que depende de Sergio:** sólo el OK para (a) — es un cambio de entorno en el contenedor de
+chat de producción, con reinicio, y eso no se toca sin su palabra.
+
+⚠️ **Corregido el 2026-09-03 ~12:50 UTC por el carril `web-venta`, que es el dueño de las
+pantallas: la premisa "cada visitante real cuenta con su IP y su cupo: su chat abre normal" es
+FALSA a partir de la tercera pantalla, y con eso (a) deja de alcanzar.** El diagnóstico de arriba
+es correcto en todo lo demás — el 429 es autoinducido y el servicio está sano —, pero le falta un
+factor de 2 que cambia la conclusión:
+
+- **Cada página vista cuesta DOS cargas del cupo, no una.** El sitio usa `<a>` planos a propósito
+  (`web-factory/apps/onia-platform/src/app/(sitio)/nav.ts:11`: *"una navegación completa cierra
+  cualquier menú abierto sola"*), así que **cada clic del header recarga el sitio entero** y
+  vuelve a pedir el SDK. Medido con clics reales: 4 clics → `RECARGA` las 4 veces → **10
+  peticiones** al endpoint del widget.
+- **Contra un límite de 5/hora/IP, eso agota el cupo del visitante en la 3.ª pantalla.** Medido
+  en una corrida limpia de 5 páginas: `home` y `precios` con burbuja (200); `empezar`, `rubros` y
+  `chatbot-landing` **sin burbuja** (429). Ese es el recorrido de alguien interesado, no un
+  bombardeo — y pierde el chat justo cuando más lo iba a usar.
+- **La ventana no perdona:** tras ~15 peticiones, **3 minutos de espera no la recuperaron**.
+- **Lo que NO pude medir, y no lo adivino:** en qué página exacta cae un lead con IP fresca. Haría
+  falta una segunda IP y desde el VPS no hay (`WebFetch` no está autorizado en sesión no
+  interactiva). Sostengo el número por el límite documentado (5/hora) × 2 cargas por página, no
+  por haberlo visto desde fuera.
+
+**Qué cambia para la decisión:** (a) sigue siendo correcta y **sigue siendo la que recomiendo**,
+pero ahora hay que saber que **arregla nuestra ceguera de medición, no el chat del lead**. Para el
+lead, las salidas son subir el límite del throttle del widget (no tiene env propia: es el
+initializer línea 176) o dejar de recargar el SDK en cada página — y esto último **no se hace con
+`next/link`**: rompería el cierre del menú de teléfono, que es el motivo por el que los `<a>` son
+planos. Cotizar eso es trabajo de otra vuelta; lo que no se puede es aprobar (a) creyendo que con
+eso el visitante recupera el chat.
+
+---
+
+## 33. El bot NO puede decir un precio, y los precios están publicados en la web (2026-09-02) — decisión de Sergio
+
+**Medido, no supuesto.** El motor tiene un candado explícito: el guardrail `declara_precio`
+(`/opt/onia/bot/guardrails.mjs:27`) rechaza **todo string con una cifra de plata**
+(`/\d+\s*bs\b/`), y el allowlist de la capa de conocimiento
+(`/opt/onia/bot/knowledge.mjs:74`) no tiene ningún campo `precio`, `planes`, `desde` ni
+`tarifa` — textual: *"no hay dónde escribir una cifra"*. Su razón, también textual:
+
+> `N1 — el bot no cotiza: el precio depende del plan y de los módulos que use el negocio`
+
+Se descubrió al intentar cargar el conocimiento real de Onia: el borrador con los planes
+**lo rechazaba el validador entero** (40 errores, `node knowledge.mjs --check`). Las cifras
+estaban bien —320/750/1500/2900 y 390/150/70, verificadas contra
+`lib/subscription-plans.ts` y `lib/pricing.ts`—; el problema es que **no hay dónde ponerlas**.
+
+**Lo que hace que la decisión valga la pena mirarla hoy:** el candado se escribió cuando el
+precio dependía de una demo. Hoy los planes están **publicados en la web** con esos mismos
+números. O sea que el bot le contesta *"eso lo ve Sergio"* a alguien que puede leer el precio
+en `onia.com.bo` dos clics antes. La pregunta de precio es, además, la más frecuente de un
+desconocido que escribe por WhatsApp.
+
+**Las dos opciones, cotizadas:**
+
+| | Qué se hace | Costo | Riesgo |
+|---|---|---|---|
+| **A. Se queda como está** | Nada. La pregunta de precio ya cae al embudo de demo desde el commit `f22f47bcb` (9 disparadores nuevos: "planes", "cuánto sería", "qué incluye", "quiero contratar") | **Cero** — ya está hecho y commiteado | El lead que sólo quería un número se va a buscarlo a la web, o no lo busca |
+| **B. El bot dice el precio de lista** | Un campo `planes` en el allowlist, alimentado desde `subscription-plans.ts` (no escrito a mano), y afinar `declara_precio` para que permita SÓLO ese campo | ~1 vuelta de carril, con test en rojo primero | Un precio desactualizado en un canal que no se mira. Se mitiga leyendo de la fuente, no copiando |
+
+**Lo que NO se hizo a propósito:** meter los precios por la ventana (el nombre de un producto
+sí pasa el guardrail — `productos[].nombre` no lo dispara). Sería esquivar un candado
+deliberado con una decisión de producto adentro, que es de Sergio y no de una vuelta de loop.
+
+**Dónde está el trabajo hecho:** `hermes-content/deploy/vps-ops/bot/knowledge.onia.json`,
+verde contra el validador. **Commiteado, NO desplegado**: se instala con
+`/opt/onia/bot/webhook-server.sh knowledge` y eso cambia lo que oye un lead real.
+
+---
+
+## 34. Siete commits de plataforma sin desplegar, y el próximo despliegue tiene un ORDEN que no se puede invertir (2026-09-03) — acción de Sergio
+
+**Lo desplegado hoy es del 2026-09-01 22:27** (`BUILD_ID` del contenedor `onia-platform`, medido —
+no deducido del repo). Todo lo que entró a `master` después sigue sin llegar al cliente:
+
+| commit | qué arregla | quién lo sufre hoy |
+|---|---|---|
+| `22fd088` | el menú dibujaba `ASSIGNMENT_TURNED_IN` en letras gigantes | **todo el que abre el dashboard**, en cada pantalla |
+| `15e3910` | el que PAGA el add-on quedaba sin bandeja hasta encontrar un botón | el cliente que ya pagó |
+| `675541b` | el editor le decía "La cita" y "en el consultorio" a una ferretería | los rubros que no son dental |
+| `3523c79` | el cliente puede conectar SU WhatsApp (mitad servidor) | el add-on de WhatsApp, hoy inentregable |
+| `503af44`, `d62beeb` | merge + cablear el gate de iconos al CI | nadie (interno) |
+| `efaffe8` | CSP para el beacon de Cloudflare Analytics | la medición |
+
+El más caro es `22fd088`: no es sutil ni intermitente, es una palabra en mayúsculas gigantes en
+**toda** pantalla del dashboard, y lleva así desde el 09-02.
+
+### 🔴 El orden importa, y al revés rompe la plataforma entera
+
+`3523c79` agrega la columna `clinic_settings.chatwootWhatsappInboxId` y la **selecciona** en
+`/api/chatbot-canal-whatsapp` y en el `include` del perfil. Prisma no degrada: si el código sale
+antes que la columna, revienta la consulta y se cae la pantalla de chatbot **para todos**, no sólo
+para el que intenta conectar WhatsApp. O sea: un despliegue en el orden equivocado convierte un
+add-on nuevo en una caída general.
+
+1. `prisma/migrations/20260903000000_add_chatwoot_whatsapp_inbox` (runbook quirúrgico —
+   `ALTER TABLE ... ADD COLUMN` nullable, no toca ni una fila de las 4 orgs vivas).
+2. `META_APP_ID=1078962684709749` y `META_CONFIG_ID=1824225392073753` en el `app.env`.
+   Son los IDs **públicos** de la app "Onia Bot"; el `APP_SECRET` no va acá y no debe: vive sólo
+   en Chatwoot, que es quien canjea el código.
+3. Recién ahí, el build y el swap.
+
+**Por qué es de Sergio y no de una vuelta de loop:** desplegar al VPS necesita su OK explícito, y
+tocar la base de producción va por el runbook. Lo que sí es nuestro —el código, los tests, la
+migración escrita y la nota de orden— ya está hecho.
+
+**Lo que se destraba al desplegar:** el punto 3 del tablero `t_43947a6a` (la tarjeta del panel con
+el Embedded Signup de Meta) no se puede construir antes, porque es una pantalla de cliente y la
+regla es abrirla y MIRARLA renderizada — imposible mientras la columna no exista.
+
+## 35. El carril de contenido puede estar corriendo DOS veces: se montó en el VPS "en pausa" y su cron quedó activo (2026-09-03) — decisión de Sergio
+
+**Lo medido en el VPS**, no deducido:
+
+- `crontab -l | grep onia-loop.sh` → `11 */3 * * * /root/bin/onia-loop.sh contenido-cola`.
+  **Activa, sin comentar.**
+- Worktree `/root/loops/onia-hermes-contenido-cola` existe, parado en
+  `claude/ads-creatividades-publicos` (no en `claude/carril-contenido`, la de Sergio — eso está
+  bien y es deliberado).
+- Prompt en `/root/bin/loops/contenido-cola.md`.
+
+**La contradicción:** el commit que lo montó (`c43b04a24`, sesión de control) dice textual *"en
+pausa hasta que Sergio apague el de Windows"*. Pero *en pausa* no se implementó en ningún lado: la
+línea de cron está viva y el loop se dispara cada 3 horas. Lo único que lo venía frenando era un
+**accidente** — el corredor no tenía su `case` y moría con `exit 64`. Ese accidente se arregló hoy
+al mergear esa misma rama a `main`, así que **a partir del próximo sync el loop arranca de
+verdad.**
+
+**Por qué es de Sergio:** desde el VPS no se puede ver si la tarea de Windows sigue registrada —
+`list_scheduled_tasks` vive en la app de Claude Code de su laptop, y este loop no la alcanza. Sólo
+él puede mirarlo.
+
+**Las dos opciones, cotizadas:**
+
+| | qué pasa | costo si se elige mal |
+|---|---|---|
+| **A. El de Windows ya está apagado** | El del VPS es el único: corre con la laptop apagada, que era el objetivo de la mudanza | Ninguno. Es el estado buscado |
+| **B. El de Windows sigue registrado** | **Dos loops sobre el mismo carril.** El de Windows escribe `claude/carril-contenido` y el del VPS `claude/ads-creatividades-publicos`: no comparten rama, así que no se pisan el árbol — pero duplican el gasto de tokens y publican contenido dos veces | Gasto doble y trabajo repetido, silencioso: ninguno de los dos se entera del otro |
+
+**Lo que hace falta de Sergio:** una sola mirada a `list_scheduled_tasks` en su laptop y decir si
+`contenido-cola` sigue ahí. Si sigue, se apaga ese y queda el del VPS.
+
+**Lo que ya es nuestro y está hecho:** el `case` del corredor, el prompt versionado, el worktree en
+la rama que no invade la suya, y la fila de `loops.md` alineada al cron real.
+
+---
+
+## 36. Dos carriles escribieron los MISMOS tres documentos de Lucía, y ninguno es dueño (2026-09-03) — decisión de Sergio
+
+**Lo que pasa.** `lucia` y `calidad-generado` crearon por separado, en la misma carpeta
+`hermes-content/references/modelos/lucia/`, los **mismos tres archivos** con el mismo propósito y
+contenido distinto:
+
+| archivo | versión de `lucia` (ya en `main`) | versión de `calidad-generado` |
+|---|---|---|
+| `RUBRICA-IMPOLUTO.md` | 45 líneas | 118 líneas |
+| `BANCO-OFICIAL.md` | 176 líneas | 146 líneas |
+| `BITACORA-PERFECCION.md` | 582 líneas | 176 líneas |
+
+**Ninguno es superconjunto del otro**: no se resuelve quedándose con el más largo.
+
+**Cómo se descubrió.** Al integrar el 2026-09-03: `lucia` mergeó limpio y, cuarenta segundos
+después, `calidad-generado` chocó `add/add` en los tres archivos. El merge se **abortó** —abortar
+es gratis— y sus 2 commits quedan sin mergear a propósito.
+
+**Por qué NO lo resuelve el integrador.** Elegir cuál rúbrica manda es decidir **con qué vara se
+mide la cara de Lucía**, y eso es contenido, no integración. Peor: fusionar las dos crearía
+*"dos fuentes de verdad del mismo tema"*, que es exactamente lo que `CLAUDE.md` prohíbe. La regla
+de ese archivo es explícita: *"Si hay dos versiones, no elegir la más linda: preguntar."*
+
+**La causa de fondo, que va a repetirse.** `COORDINATION_MANIFEST.md` **no nombra**
+`hermes-content/references/modelos/lucia/`. Sin dueño declarado, los dos carriles siguen
+escribiendo ahí y el choque vuelve en cada vuelta. Los dos loops están vivos y corren cada 3 h
+(`lucia` en `37 0,3,6,…`, `calidad-generado` en `5 3,9,15,21`).
+
+**Las dos opciones, cotizadas:**
+
+| | quién queda dueño | costo |
+|---|---|---|
+| **A. `calidad-generado`** | Es literalmente su oficio según `loops.md`: *"que Lucía sea SIEMPRE la misma cara"*. Su rúbrica es 2,6× más detallada | Hay que rehacer/portar lo que `lucia` ya dejó en `main`, incluida una bitácora de 582 líneas |
+| **B. `lucia`** | La carpeta lleva su nombre y su versión ya está viva en `main` | Se descarta la rúbrica más detallada y `calidad-generado` queda sin la herramienta de su propio trabajo |
+
+**Lo que hace falta de Sergio:** una línea — quién manda sobre `references/modelos/lucia/`. Con
+eso se anota en `COORDINATION_MANIFEST.md`, el otro carril deja de escribir ahí, y los 2 commits
+varados se mergean o se descartan según corresponda.
+
+⚠️ **Y no es un carril: son DOS, por la misma causa.** En la misma vuelta,
+`claude/git-status-935f47` (la sesión de control) chocó en
+`references/modelos/lucia/LUCIA.md` — el archivo canónico de la identidad de Lucía— con un
+conflicto de **118 KB**. También se abortó. Elegir mal ahí no es un detalle de formato: `LUCIA.md`
+es de donde se copia el UUID de la cara, y el propio archivo documenta que ya mandó **seis veces**
+al Element jubilado. Un merge a ojo ahí produce fotos con la cara equivocada.
+
+**Los dos conflictos tienen la misma raíz**, y por eso van juntos: `references/modelos/lucia/` lo
+escriben `lucia`, `calidad-generado` y la sesión de control, **sin dueño declarado**. Mientras eso
+siga así, el integrador va a abortar estos dos merges en cada vuelta, para siempre.
+
+**Lo que ya es nuestro y está hecho:** **once** de los trece carriles están en `main` (25 commits
+integrados esta vuelta), y los dos merges conflictivos quedaron **abortados y limpios**, no a
+medias. Ninguna rama perdió trabajo: siguen pusheadas en `origin`.
+
+---
+## 37. El carril de Lucia no lo enumeraba nadie (2026-09-02) — RESUELTO 2026-09-03, ya no hay decisión
+> ⚠️ **Corregido al integrar, 2026-09-03 04:45 UTC. La decisión que pedía abajo ya no existe:
+> las condiciones la tomaron solas, y dejarla escrita le pedía a Sergio elegir sobre un mundo
+> que no es el de hoy.** Lo medido en vivo, no heredado:
+>
+> - **`claude/lucia-vps` está mergeada a `main`.** Tenía **4** commits sin mergear, no 17.
+> - **El merge trajo 1,3 MB en 14 archivos**, no +88,2 MB en 59 binarios.
+> - **Porque el álbum ya estaba en `main` desde ANTES de que se escribiera esta entrada:** el
+>   commit `89c692072` (2026-09-02 **03:24** UTC, *"banco completo"*) lo metió directo, catorce
+>   horas antes de la medición de las 17:30. La opción A cobraba un costo **ya pagado**, y la C
+>   proponía blindar una puerta con el caballo adentro.
+> - Hoy `hermes-content/references/modelos/lucia` pesa **761,7 MB** en `main` — 8,6× lo que esta
+>   entrada temía. Eso sí sigue vivo y es de Sergio: está separado abajo, en el ítem 38.
+>
+> **Lo que esta entrada acertó y sigue valiendo** es el diagnóstico de POR QUÉ nadie la
+> enumeraba: los dos filtros que la excluían por construcción. Los dos están corregidos en el
+> prompt del integrador. Se conserva por eso.
+
+
+**Qué se midió, el 2026-09-02 17:30 UTC.** `origin/claude/lucia-vps` tiene **17 commits sin
+mergear** a `main` (90 archivos, +4780/−894). Lo último de Lucia que sí llegó a `main` fue
+`12ea2219`, del **2026-08-30** — tres días. La rama está pusheada y su árbol limpio, así que
+**no hay nada perdido**: hay trabajo que no se integra.
+
+**Por qué nadie lo vio.** Es el mismo agujero que ya se pagó con el chatbot (7 commits varados) y
+con `web-venta`/`investigacion`, pero por una puerta nueva, y por eso las dos defensas que
+existían fallaron las dos:
+
+- **El integrador no la enumeraba.** Su lista de ramas de carril tenía siete; ésta es la octava.
+- **La regla de rescate tampoco la agarraba:** decía que una rama sin listar es carril *"si su
+  loop existe en `loops.md`"*. Lucia **no tiene loop**: la mueven `lucia-ugc.sh` (`37 */3 * * *`)
+  y `lucia-cierre.sh` (`10 11 * * *`), dos crons pelados que no son `onia-loop.sh` y que
+  `loops.md` no lista ni va a listar nunca. El filtro la excluía por construcción.
+- Y su árbol `/root/loops/lucia-contenido` es un **clon aparte**, no un worktree: no sale en
+  `git worktree list`, así que ninguna enumeración por árboles la ve tampoco.
+
+Las dos primeras ya están corregidas en el prompt del integrador, en el mismo commit que esta
+entrada. Lo que queda para vos es qué hacer con la rama.
+
+**Las tres opciones, cotizadas:**
+
+| | Qué se hace | Cuesta | Qué queda |
+|---|---|---|---|
+| **A** | Mergear `lucia-vps` entera, como un carril más | **Cero conflictos** — medido: no hay un solo archivo tocado por los dos lados. ~10 min de una vuelta del integrador | `main` engorda **+88,2 MB** (59 binarios: los mp4 y jpg del banco de Lucia). Esos assets no se despliegan, pero **todo clon del repo se los lleva para siempre** |
+| **B** | Mergear sólo la **herramienta compartida** (`scripts/carousel_render.js` +329 y `scripts/carousel_pack_solido.js`, nuevo). El álbum se queda en la rama | ~20 min, cherry-pick. `main` no engorda | Cierra lo único que de verdad duele: hoy hay **dos versiones vivas** del render de carruseles. **Contra:** hay que repetirlo cada vez que Lucia toque `scripts/` |
+| **C** | Declararla fuera del juego a propósito, como `carril-contenido` y `ads-creatividades-publicos`: no se mergea nunca, y queda escrito | ~10 min, ya está medio hecho | Cero ambigüedad. **Contra:** deja el render de carruseles bifurcado a perpetuidad — justo lo que prohíbe *"una sola fuente de verdad por tema"* |
+
+**Lo que este loop recomienda: B.** El banco de videos de Lucia es material de trabajo, no fuente
+de verdad de nada, y 88 MB en `main` se pagan una vez y se cargan para siempre; pero la
+herramienta que lo produce sí tiene que ser única. B separa las dos cosas. Y su única debilidad
+—"hay que acordarse cada vez"— ya quedó cubierta: desde este commit el integrador **enumera la
+rama**, así que la próxima divergencia de `scripts/` la ve alguien.
+
+**Lo que sí es tuyo y no puedo decidir por vos:** Lucia/@oniahq roza el límite que pusiste el
+2026-09-01 (*"el de contenido lo maneja su sesión"*). Ninguna de las tres toca lo que Lucia
+publica; las tres son sobre dónde vive su código. Pero si para vos ese carril es contenido y no
+se toca, la respuesta es **C** y se cierra acá.
+
+---
+
+## 38. `main` carga 761,7 MB de assets de Lucía, y todo clon se los lleva (2026-09-03) — decisión de Sergio
+
+**Lo medido hoy, no heredado.** `hermes-content/references/modelos/lucia` pesa **761,7 MB** en
+`main`, con **87 videos** `.mp4`. No se despliegan ni los ve un cliente: son material de trabajo
+del carril de contenido, versionado en un repo que **todo clon se lleva entero**.
+
+**Cómo llegó.** No fue un merge del integrador. El commit `89c692072` (2026-09-02 03:24 UTC,
+*"ventana de perfeccionamiento … + banco completo"*) lo empujó **directo**. La advertencia que
+existía para frenar exactamente esto —*"no mergees `lucia-vps`, arrastra +88,2 MB"*— se escribió
+**catorce horas después**, contra una puerta que ya estaba abierta. Hoy hay 8,6× lo que esa
+advertencia temía.
+
+**Por qué importa y no es cosmético.** Se conecta con algo ya medido en este repo: el vigía de
+disco encontró que **60 de 97 GB del VPS eran `hermes-content` copiado 14 veces**. Cada worktree,
+cada clon de loop y cada checkout paga estos 761,7 MB otra vez. Los loops crean árboles solos.
+
+**Por qué es de Sergio.** Sacar assets del historial es **destructivo e irreversible** (reescribe
+`main`, invalida todo clon y worktree existente, y los loops tienen 14 árboles vivos). Ningún loop
+debería hacerlo por su cuenta, y este no lo va a hacer.
+
+**Las tres opciones, cotizadas:**
+
+| | Qué se hace | Cuesta | Qué queda |
+|---|---|---|---|
+| **A. Nada** | Se acepta el peso. Es el estado de hoy | 0 | Sigue creciendo: el carril de Lucía produce video cada 3 h. El disco del VPS ya dio un susto |
+| **B. Dejar de agregar** | `.gitignore` para `*.mp4` bajo `references/modelos/`, y los videos nuevos viven fuera de git (disco del VPS o almacenamiento externo) | ~20 min, cero riesgo, reversible | Frena la hemorragia. **No** achica lo que ya está: los 761,7 MB siguen en el historial |
+| **C. B + reescribir el historial** | Además, sacar los 87 videos del historial con `git filter-repo` | ~1 h y **coordinación**: hay que rehacer TODOS los clones y worktrees de los loops, o quedan rotos | El repo vuelve a pesar poco. **Irreversible**, y si un loop tiene trabajo sin pushear cuando se hace, se pierde |
+
+**Lo que este loop recomienda: B ahora, y C sólo si el disco vuelve a apretar.** B es reversible,
+cuesta 20 minutos y frena lo que crece; C es la única que achica, pero su costo real no es la hora
+de trabajo sino coordinar catorce árboles vivos sin perder nada.
+
+**Lo que hace falta de Sergio:** una línea. Si es B, este carril lo hace en la vuelta siguiente.
+
+---
+
+## 39. Los 13 worktrees de los loops nunca se sincronizan con `main`: auditan y editan sobre un repo viejo (2026-09-03) — decisión de Sergio
+
+**El corredor `onia-loop.sh` no trae `main` al worktree del carril.** El `case` fija carpeta, rama
+y tope y arranca; no hay `fetch` ni `merge` de `origin/main` en ninguna parte del script. El sync
+del minuto 44 despliega **el corredor y los prompts** desde `main` — o sea lo que el loop
+*ejecuta*, nunca los archivos que el loop *lee y edita*.
+
+**Medido hoy 05:30 UTC** (`git rev-list --count HEAD..origin/main` en cada árbol): `contenido-cola`
+**788** commits atrás · `canario-visual` 268 · `web-venta` 235 · `lucia` 233 · `calidad-generado` y
+`tendencias` 126 · `web-factory-dev` 124 · `marca-personal` 93 · `recorrido-cliente` 92 ·
+`chatbot-cola` 78 · `supervisor` 72 · `investigacion` 49. Ninguno en 0.
+
+**Qué rompe, con el caso de hoy.** `docs-auditoria` estaba 113 atrás y el tablero le pidió arreglar
+la fila de `contenido-cola` en `loops.md`. En su checkout la fila decía `Windows` y
+`npm run loops:registrados` salía **rojo**; en `main` el integrador ya la había corregido a las
+03:33 y contra `origin/main` el gate estaba **verde**. Un paso más y reescribía la línea sobre una
+base de 113 commits: conflicto, o peor, **el merge devuelve la fila mentirosa y deshace el arreglo
+del integrador**. El daño escala con lo que el carril toca: `canario-visual` compara pantallas
+contra archivos del repo 268 commits viejos, y `web-venta` es dueño de `onia.com.bo/` con 235.
+
+**Es el generador estructural de ítems fantasma** — parte del 25–46 % de pendientes que las colas
+declaraban y no existían no eran ítems mal escritos: ya estaban hechos en `main` y el carril no
+podía verlos.
+
+**Por qué es de Sergio.** El arreglo de raíz es una línea en `scripts/loops/onia-loop.sh`, que es
+**el archivo compartido por los 15 loops** — y el propio `loops.md` lo marca como "el frágil": ya
+falló dos veces en un día y una reinstalación desde el repo estuvo a punto de borrar dos carriles
+y bajarle el modelo a todos. Un cambio ahí lo tiene que decidir una persona, no un loop.
+
+**Las tres opciones, cotizadas:**
+
+| | Qué se hace | Cuesta | Qué queda |
+|---|---|---|---|
+| **A. Nada** | Cada carril sigue como está | 0 | Los atrasos crecen solos. `contenido-cola` ya va por 788: a ese atraso, casi cualquier hallazgo suyo es sobre un repo que no existe |
+| **B. Sólo en los prompts** | Cada prompt arranca con `fetch` + `merge --ff-only origin/main`. **Ya está hecho en `docs-auditoria`** (esta vuelta) | ~10 min por carril, cero riesgo compartido, reversible | Arregla uno por uno y **sólo los que se editen**. Un prompt que nadie toca queda viejo para siempre |
+| **C. En el corredor, una vez** | `fetch` + `merge --ff-only origin/main` en `onia-loop.sh`, antes de invocar a Claude. Si el carril tiene trabajo sin mergear, `--ff-only` **falla sin tocar nada** y el loop sigue con el árbol como está | ~20 min + gates. Riesgo: toca los 15 loops de una vez | Lo arregla de raíz y para los que vengan. Es el único que no hay que acordarse de repetir |
+
+**Lo que este loop recomienda: C**, con `--ff-only` (nunca un merge que invente commits) y avisando
+por Telegram cuando un carril no pueda avanzar. B ya quedó aplicado en `docs-auditoria` como
+paliativo, pero pedirle a trece prompts que se acuerden de lo mismo es exactamente lo que este
+repo llama "una regla sin su historia".
+
+**Lo que hace falta de Sergio:** una línea. Si es C, este carril lo escribe y lo deja pasar por los
+gates del integrador.
+
+---
+
+## 40. El carril Web Factory corre en Windows y sus 12 commits no llegan a `main` (2026-09-03) — ✅ RESUELTO 11:58 UTC, ya no hay decisión
+
+> ⚠️ **La opción A ya se ejecutó: no hace falta que Sergio decida nada acá.** Recontado en vivo a
+> las 11:58 UTC del mismo día: `origin/main...origin/claude/onia-web-architecture-b37eca` da
+> **0 commits adelante**, y la punta de la rama (`d80ab6b88`) **es ancestro de `main`** — o sea,
+> entró entera. Se deja el análisis de abajo porque su parte útil no venció: **el umbral de "100
+> commits atrás" mide tráfico de `main`, no antigüedad de la rama**, y eso sigue escalando ramas
+> vivas por error (opción B, sin ejecutar).
+>
+> Lo cerró el integrador aplicando la regla que este mismo ítem pedía: *un `NO mergees` es una
+> medición con fecha de vencimiento y el que lo obedece tiene que recontarlo antes*. Un bloqueo
+> vencido es peor que un fantasma — le pide a Sergio una decisión que ya tomó.
+
+**Lo medido, en vivo, hoy 07:40 UTC** (no heredado): la rama `claude/onia-web-architecture-b37eca`
+tiene **12 commits** que `main` no tiene, el último de las **01:53 UTC de hoy** — o sea que el
+carril **está vivo y trabajando**. El integrador no la enumeraba, y por eso nunca los mergeó.
+
+**Por qué se escapó de las tres enumeraciones a la vez, que es lo que hace a este caso distinto:**
+su worktree vive en `C:\dev\proyectos\onia-hermes\.claude\worktrees\hyperframes-onia-export-formats-053cf9`,
+en **Windows**. Entonces:
+
+- no tiene `case` ni `RAMA=` en `scripts/loops/onia-loop.sh` — el corredor sólo mueve loops del VPS;
+- no sale en `git worktree list` del VPS — su árbol no está en esta máquina;
+- no está en la tabla VPS de `hermes-content/docs/cola/loops.md` — y **no debe estarlo**: esa tabla
+  es de crons, y `npm test` (`loops_registrados`) fallaría si se la agregara.
+
+Las seis ramas que se colaron el 2026-09-03 04:40 UTC eran loops del VPS que la lista no había
+alcanzado a nombrar; **contra un carril de Windows, el `--no-merged` no es un respaldo de la lista:
+es el único instrumento que lo ve.** Ya está corregido en el prompt del integrador.
+
+**Su cola ya lo nombraba hace días** (`web-factory/docs/LOOP_COLA.md:46`,
+`hermes-content/docs/cola/README.md:31`, `COORDINATION_MANIFEST.md`): el dato no faltaba en el
+repo, faltaba en la lista del que integra.
+
+**Lo que trae, contado:** 14 archivos, **+478 / −7**, **cero borrados** (guarda dura pasada con
+holgura: el tope es 200 borrados). Toca sólo `web-factory/` — `docs/`, `packages/templates/src/`,
+`tests/e2e/` y sus snapshots visuales—, que es **su zona propia** según `COORDINATION_MANIFEST.md`
+y que ningún otro carril posee. Contenido: el gate visual del carril y arreglos de sus propios
+servidores de prueba.
+
+**Por qué NO lo mergeé solo, y la duda honesta que deja.** La regla del integrador dice que una
+rama **>100 commits atrás de `main`** la decide Sergio, y ésta está **667 atrás**. Obedecí.
+Pero conviene decir que el umbral **está mal calibrado y esta rama lo demuestra**: 667 no mide
+antigüedad de la rama sino **tráfico de `main`**, y con 15 loops mergeando cada hora `main` avanza
+cientos de commits por día. Una rama que commiteó hace **cinco horas** aparece "divergida hace
+semanas" sin estarlo. El umbral en commits mide la máquina, no el riesgo.
+
+**Las tres opciones, cotizadas:**
+
+| | Qué se hace | Cuesta | Qué queda |
+|---|---|---|---|
+| **A. Mergearla** (lo que este loop recomienda) | El integrador la toma en su próxima vuelta como un carril más | Una vuelta. Riesgo bajo medido: 0 borrados, zona propia sin dueño rival, gates del repo verdes | Los 12 commits entran y el carril deja de acumular. No arregla el umbral |
+| **B. Cambiar el umbral a días** | `>100 commits atrás` pasa a `sin commits propios hace >14 días` | ~15 min, toca sólo el prompt del integrador | Deja de escalarte ramas vivas por tráfico ajeno. Hay que elegir el número de días |
+| **C. Dejarlo como está** | Cada vuelta vuelve a escalarte esta rama | 0 hoy | Los 12 commits crecen y te llega la misma decisión cada hora |
+
+**Lo que hace falta de Sergio:** una línea — A, B, o las dos. Si es A, el integrador la mergea en
+la vuelta siguiente sin volver a preguntar.
+
+---
+
+## 41. El arreglo del alta está en `master` y el cliente sigue perdiendo la cuenta (2026-09-03) — decisión de Sergio
+
+**Qué se arregló.** Un cliente que se registraba dos veces con el mismo correo sin confirmar —lo
+más normal del mundo si no le llegó el mail o cerró la pestaña— veía **el botón no hacer nada**, y
+encima **perdía la cuenta que ya tenía**. Quedaban organizaciones huérfanas en la base de
+producción. Commit `38a0c8a` en `onia-platform` (`master`), con los tres gates verdes: `tsc` 0
+errores, `lint` 0 errores, `vitest` 2519 pasando.
+
+**Por qué te llega igual.** Está **commiteado y NO desplegado**. El contenedor `onia-platform`
+corre el build anterior, así que **para el cliente el bug sigue vivo ahora mismo**. Desplegar al
+VPS necesita tu OK explícito: no lo hace un loop.
+
+**Cuánto vale esperar.** Es el último clic de la puerta de entrada del producto, y de los que hay
+—7 personas esperando— cualquiera que se registre dos veces cae en esto. No es un caso raro: la
+causa más común de un segundo intento es justamente que el primer correo no llegó.
+
+| | Qué se hace | Cuesta | Qué queda |
+|---|---|---|---|
+| **A. Desplegar ya** (lo que este loop recomienda) | Build + swap del contenedor con el runbook de `onia-deploy` | ~10 min, ventana corta de corte | El alta deja de comerse cuentas hoy |
+| **B. Esperar y juntarlo con lo próximo** | Queda para el siguiente despliegue | 0 hoy | Cada alta repetida sigue borrando una cuenta y dejando una organización huérfana |
+
+**Lo que hace falta de Sergio:** una línea — A o B.
+
+**Dato que conviene saber para el despliegue.** Al medir esto se vio que el SMTP **rechaza los
+dominios sin MX** (`example.com` → `556 Recipient address rejected ... (nullMX)`) y GoTrue devuelve
+**500** ahí, además de un **rate limit de ~60 s** entre altas del mismo correo. Las dos cosas son
+correctas, pero significan que un correo mal tipeado por el cliente da error 500, no un mensaje
+claro. No se tocó: es otro ítem, y este loop cierra uno por vuelta.
+
+---
+
+## 42. La cara de Lucía deriva porque el ancla vigente es la equivocada — el arreglo es gratis (2026-09-03) — decisión de Sergio
 
 **Qué se midió.** Se abrieron uno por uno los cuadros sueltos de
 `references/modelos/lucia/prueba-motor-20260813/` y se compararon contra el banco canónico

@@ -103,12 +103,13 @@ arquitectura, cronograma). Esto es el arranque tecnico del servicio.
   targetNamespace por servicio, SOAP 1.1 vs 1.2) contra el WSDL de tipos
   importado del piloto (`?wsdl=ServicioFacturacion.wsdl`) — devolvio 503
   intermitente en la investigacion; reintentar.
-- Validacion del XML contra el **XSD oficial descargado** (confirmar el nombre
-  exacto del elemento raiz computarizada vs electronica y los tipos por campo) +
+- ~~Validacion del XML contra el XSD oficial~~ **hecho 2026-09-03**: los 6 XSD del
+  SIN viven en `xsd/` (sectores 1, 17 y 24, computarizada y electronica);
+  `DOC_SECTOR_SCHEMAS` en `xml-builder.mjs` sale de ahi y el test los coteja
+  leyendo los archivos. Los tres sectores emiten 908 en el piloto. Queda la
   **firma XMLDSig** para la modalidad electronica en linea (la computarizada usa
-  solo la huella SHA-256, ya lista). El XML se arma con el **CUF verificado del
-  emisor** (`src/cuf.mjs`), no con el `buildCuf` de referencia del core.
-  Descargar el XSD del piloto y correr una validacion real.
+  solo la huella SHA-256). El XML se arma con el **CUF verificado del emisor**
+  (`src/cuf.mjs`), no con el `buildCuf` de referencia del core.
 - **Store de catalogos sincronizados** (parametricas: productos/servicios,
   unidades de medida, tipos de documento, leyendas, motivos de anulacion) —
   sincronizacion diaria por web service (limite 1000 requests/dia). El tenant
@@ -173,6 +174,10 @@ node src/fase1-runner.mjs --etapa IV     # una sola
 
 Flags: `--pace ms` (default 500) · `--state file` · `--log file` ·
 `--retry-blocked`. Requiere `/opt/onia-siat/siat-piloto.env` en el ambiente.
+El sector 24 (nota de credito-debito) va por `ServicioFacturacionDocumentoAjuste`,
+que **tarda 36-43 s por respuesta** (timeout propio de 120 s en
+`TIMEOUT_MS_POR_SERVICIO`) y necesita una compra-venta original del mismo PdV:
+el runner la emite solo si no hay una libre con `datos`.
 
 ## Regla de secretos
 

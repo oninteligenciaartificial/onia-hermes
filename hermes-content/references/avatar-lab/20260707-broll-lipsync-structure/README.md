@@ -40,7 +40,7 @@ contra el listado completo, no aparece en ningun tipo) — esa parte era correct
 
 **Aclaracion de Sergio (2026-07-07) sobre su investigacion:**
 - Para escenas de bikini/swimwear: algunos modelos rechazan el contenido aunque no
-  muestre nada explicito. Su investigacion dice que **Seedance 4** y **`soul_2`**
+  muestre nada explicito. Su investigacion dice que **Seedance 4** y **`text2image_soul_v2`**
   (el que ya usamos de default) son los que mejor generan ese tipo de escena sin
   bloquear. Anotado para cuando haga falta contenido de ese tipo — no se probo todavia.
 - Para lipsync: **HeyGen da el mejor resultado en su investigacion, pero no esta en
@@ -106,7 +106,7 @@ sorpresa genuina, cejas subiendo, gran sonrisa.
 
 **Resultado: forehead liso en las 12 muestras revisadas, incluso en el frame de ojos
 bien abiertos** (el caso mas exigente) — sin el artefacto de arrugas que si aparece con
-`soul_2`/Kling en expresiones fuertes. Dientes consistentes en todos los frames con
+`text2image_soul_v2`/Kling en expresiones fuertes. Dientes consistentes en todos los frames con
 sonrisa. Costo 6cr, mas barato que Kling (10cr) y no necesita el paso extra de generar
 primero una imagen con `nano_banana_pro` — anima directo desde el still de partida.
 

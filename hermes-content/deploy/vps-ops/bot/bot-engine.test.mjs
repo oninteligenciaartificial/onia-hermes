@@ -712,9 +712,51 @@ test("recepcionista: en handoff, el click EXACTO de un botón contesta la FAQ si
   assert.equal(click.state.botStage, "handoff_humano", "no sale del handoff: el humano sigue a cargo");
   assert.deepEqual(click.turns[0].sideEffects, [], "solo lectura: cero efectos nuevos");
 
-  const libre = run(["y entonces? me contestan?"], { config: CONFIG_FERRETERIA, state });
+  // El PRIMER texto libre tras el handoff ahora se acusa (ver el test de abajo); del SEGUNDO en
+  // adelante sí es silencio. Se encadenan los dos turnos para llegar a ese segundo.
+  const acuse = run(["y entonces? me contestan?"], { config: CONFIG_FERRETERIA, state });
+  const libre = run(["hola?"], { config: CONFIG_FERRETERIA, state: acuse.state });
   assert.equal(libre.turns[0].replies.length, 0, "texto libre en handoff: silencio, como siempre");
   assert.deepEqual(libre.turns[0].notes, ["silencio:handoff_en_curso"]);
+});
+
+test("handoff sin humano: el PRIMER mensaje que llega despues de derivar se ACUSA, no se tira al vacio", () => {
+  // POR QUE ESTE TEST. Medido en produccion el 2026-09-03 sobre la conversacion 49 (inbox 4, el
+  // del widget de la web): Chatwoot ENTREGO el mensaje 287 y el bot lo proceso 4,08 s — o sea
+  // que no estaba caido, corrio el turno entero y no produjo NADA. La correlacion es perfecta
+  // en las 8 corridas horarias de la sonda: cada vez que el bot contesto M5 ("eso lo tiene que
+  // ver Sergio"), el mensaje SIGUIENTE del prospecto se comio un silencio total.
+  //
+  // `handoff_humano` NO significa que un humano haya llegado: significa que el BOT decidio
+  // derivar. El candado legitimo es `humanTookOver`, que se enciende cuando un humano CONTESTA
+  // de verdad. Confundirlos deja a la persona escribiendole a la nada — y el test de arriba
+  // exigia justamente ese silencio, asi que el bug estaba blindado por su propia suite.
+  // Modo VENTA a proposito: es el de los inboxes 4 y 5, por donde entra todo desconocido, y el
+  // que se midio roto. El recepcionista tiene su propio modulo y su propia rama.
+  const { state: derivado } = run(["DEMO", "quiero que me atienda una persona de verdad"]);
+  const state = derivado.botStage === "handoff_humano" ? derivado : { ...derivado, botStage: "handoff_humano", handoffAckAt: null };
+  assert.equal(state.humanTookOver, false, "nadie contesto todavia: el handoff es una decision del bot");
+
+  const primero = run(["ahi te mando la direccion, es Equipetrol"], { state });
+  assert.equal(primero.turns[0].replies.length, 1, "el primer mensaje tras derivar NO puede quedar sin respuesta");
+  assert.equal(primero.state.botStage, "handoff_humano", "acusar recibo no saca la conversacion del handoff");
+  assert.deepEqual(primero.turns[0].sideEffects, [], "solo acuse: no se re-dispara el aviso ni la cola de revision");
+
+  // Y UNA sola vez: acusar cada mensaje convertiria el acuse en spam.
+  const segundo = run(["hola? sigue ahi?"], { state: primero.state });
+  assert.equal(segundo.turns[0].replies.length, 0, "del segundo en adelante sí es silencio");
+  assert.deepEqual(segundo.turns[0].notes, ["silencio:handoff_en_curso"]);
+});
+
+test("handoff CON humano a cargo: silencio desde el primer mensaje — el acuse no puede pisar a Sergio", () => {
+  // La otra mitad de la regla. Si un humano YA contesto, hablar encima es peor que callarse: el
+  // prospecto ve al bot interrumpiendo a la persona con la que ya esta hablando.
+  const { state: derivado } = run(["DEMO", "quiero que me atienda una persona de verdad"]);
+  const conHumano = { ...derivado, botStage: "handoff_humano", handoffAckAt: null, humanTookOver: true };
+
+  const turno = run(["gracias!"], { state: conHumano });
+  assert.equal(turno.turns[0].replies.length, 0, "con humano a cargo, ni siquiera el acuse");
+  assert.deepEqual(turno.turns[0].notes, ["silencio:humano_a_cargo"]);
 });
 
 test("venta: el funnel de Onia NO lleva botones — M0 sale plano como siempre", () => {
@@ -901,4 +943,84 @@ test("applyKnowledge lleva las campañas al modo venta (sin ellas el motor no la
   assert.deepEqual(validateKnowledge(doc).errors, [], "el documento es publicable");
   const aplicado = applyKnowledge(CONFIG, doc);
   assert.deepEqual(aplicado.campanas, doc.campanas, "las campañas viajan a la config de venta");
+});
+
+// ---------------------------------------------------------------------------
+// "¿EL SISTEMA HACE X?" — la pregunta mas comun de una preventa, y la unica que
+// el router no sabia leer.
+//
+// Medido en produccion el 2026-09-03, conversacion 49 del widget (inbox 4), mensajes 339-340.
+// El prospecto, ya en `esperando_horario`, escribio:
+//
+//   339 (entrante) "Antes de elegir horario, ¿el sistema manda recordatorios por WhatsApp
+//                   a los pacientes?"
+//   340 (saliente) "¿Querés que te reserve para el viernes 4 de septiembre a las 14:00 o
+//                   para el sábado 5 a las 9:00? Contame qué día te queda mejor."
+//
+// La pregunta desaparecio. No hubo "no se", ni "lo ve Sergio": el bot la piso con la oferta de
+// horario. Y no es que el motor se haya caido — la traza dice `rama: "respondio"`, o sea que
+// para el sistema ese turno salio BIEN.
+//
+// La causa: `RE_PRODUCTO_DETALLE` era una lista blanca de SUSTANTIVOS tecnicos ("se integra con",
+// "rayos x", "api", "offline"...). No cubria la forma en que la gente pregunta de verdad, que es
+// SUJETO + VERBO: "¿el sistema manda...?", "¿la plataforma guarda...?", "¿Onia sirve para...?".
+// Al no matchear ninguna intencion, caia en `offScriptResult`, cuya tarea al LLM es —textual—
+// "reformular la pregunta pendiente del embudo, sin dar datos nuevos", con `forbidden:
+// ["features", ...]`. O sea: el off-guion esta DISEÑADO para no contestar, y hace lo que debe.
+// El agujero estaba un paso antes, en el router que nunca lo mando a handoff.
+//
+// El mensaje 341 de esa misma conversacion ("¿el sistema guarda la historia clínica?") SI salio
+// bien — pero por casualidad: traia la palabra "clinica" y lo salvo `isClinicalOrLegal`. Dos
+// preguntas del mismo tipo, una contestada y otra tragada, decidido por una palabra que no tiene
+// nada que ver con lo que se preguntaba.
+//
+// El arreglo NO es que el bot conteste: es que falle del lado seguro, que es el que ya eligio
+// `isProductDetail` ("el bot NO adivina, va a handoff"). Inventar capacidades seria peor.
+// ---------------------------------------------------------------------------
+
+test("PREGUNTA DE PRODUCTO en la rama de horarios: no se la traga la oferta de slots", () => {
+  const { state, turns } = run([
+    "DEMO",
+    "Antes de elegir horario, ¿el sistema manda recordatorios por WhatsApp a los pacientes?",
+  ]);
+  assert.equal(state.botStage, "handoff_humano", "una pregunta de producto va a un humano, no al embudo");
+  assert.ok(
+    turns[1].notes.includes("handoff:detalle_tecnico_de_producto"),
+    `motivo esperado; salio ${JSON.stringify(turns[1].notes)}`,
+  );
+  assert.ok(
+    !/te reserve|que dia te queda mejor|elegi/i.test(textOf(turns[1])),
+    "y sobre todo: NO le vuelve a ofrecer los horarios como si no hubiera preguntado nada",
+  );
+});
+
+test("PREGUNTA DE PRODUCTO: las formas naturales, no solo el sustantivo tecnico", () => {
+  for (const pregunta of [
+    "¿el sistema manda recordatorios a los pacientes?",
+    "¿la plataforma guarda la historia de cada cliente?",
+    "¿Onia sirve para una veterinaria?",
+    "¿el software controla el inventario?",
+    "¿el sistema permite varias sucursales?",
+  ]) {
+    const { state } = run(["DEMO", pregunta]);
+    assert.equal(state.botStage, "handoff_humano", `no derivo: ${pregunta}`);
+  }
+
+  // Y la frontera, que se midio en vez de suponerla: "¿el software emite facturas?" tambien
+  // matchea esta regla, pero NO llega hasta aca — `isSiatQuestion` la agarra antes y tiene su
+  // propia respuesta (M_SIAT_BODY). Facturacion es de la rama SIAT, no de "no se, preguntale a
+  // Sergio": mandarla a handoff seria hacer PEOR una pregunta que hoy se contesta bien.
+  const factura = run(["DEMO", "¿el software emite facturas?"]);
+  assert.equal(factura.state.botStage, "esperando_horario", "la de facturas sigue en el embudo");
+  assert.ok(factura.turns[1].notes.includes("pregunta_siat"), "y la contesta la rama SIAT");
+});
+
+test("PREGUNTA DE PRODUCTO no se come lo que ya tenia dueño: soporte, precio y calificacion", () => {
+  // El orden del router es la baranda: lo especifico se juzga ANTES. Si esto se rompe, un
+  // cliente con un problema termina en la rama de venta y un "cuanto sale" deja de contestarse.
+  assert.equal(run(["DEMO", "ya soy cliente y el sistema no me anda"]).state.botStage, "handoff_humano");
+  assert.deepEqual(keysOf(run(["DEMO", "ya soy cliente y el sistema no me anda"]).turns[1]), ["M8_SOPORTE"]);
+  assert.equal(run(["DEMO", "ya tengo un sistema"]).state.botStage, "esperando_horario", "la objecion de venta sigue en el embudo");
+  const precio = run(["DEMO", "¿cuanto sale el sistema al mes?"]);
+  assert.ok(!precio.turns[1].notes.includes("handoff:detalle_tecnico_de_producto"), "precio tiene su propia rama");
 });

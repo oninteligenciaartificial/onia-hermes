@@ -1,0 +1,12 @@
+{
+  "id": "sergio_prompts",
+  "title": "Sergio - Prompts y call to action (carousel)",
+  "slides": [
+    {"file":"01_rooftop.jpg","caption":"Quiero que tu negocio deje de perder tiempo. 3 prompts rapidos."},
+    {"file":"02_profile.jpg","caption":"Prompt 1: mensaje de cobro - 2 versiones (formal/casual)."},
+    {"file":"03_app_login.png","caption":"Prompt 2: flujo de 3 mensajes por WhatsApp para confirmar cita."}
+  ],
+  "caption_full":"Te dejo prompts listos para automatizar cobros y confirmaciones. Comenta 'COMUNIDAD' si queres el playbook completo.",
+  "format":"1080x1350",
+  "path":"/root/loops/onia-hermes/out/carousels/sergio_prompts"
+}

@@ -72,7 +72,7 @@ Ese es el hallazgo del lote, y ninguna ficha podía verlo sola.
 > vieja (*"generación paga = permiso caso por caso"*, todo en la misma bolsa). `main` la separó en
 > dos (commit `f794ac6c`): **video generado** sigue requiriendo permiso explícito caso por caso,
 > cotizado con `get_cost:true`; **imagen en lote chico es gasto trivial y ya está validado**
-> (`soul_2` a 2k ≈ 0,12 créditos; un lote de 6 fotos cuesta menos de 1 crédito de un pool de
+> (`text2image_soul_v2` a 2k ≈ 0,12 créditos; un lote de 6 fotos cuesta menos de 1 crédito de un pool de
 > ~2.100), basta con registrar el lote.
 
 Con la regla vigente, el mapa real queda así:

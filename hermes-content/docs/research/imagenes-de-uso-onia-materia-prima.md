@@ -333,10 +333,10 @@ Fuente de correlación: cada rubro ya tiene SU pantalla real cableada en el conm
 > "**Gasto:** generación paga (Higgsfield, ElevenLabs) = **permiso explícito caso por caso**. Por defecto gratis (Speaches, HyperFrames)."
 
 **Cita (memoria `gasto-plataformas-validar-primero.md`):**
-> "**Prohibido usar plataformas externas sin permiso explícito** en cada caso: Higgsfield, fal.ai, OpenAI images… **Tener el MCP conectado NO es permiso.**" + "**Solo modelos baratos por defecto**… nano_banana a 1k antes que soul_2 a 2k".
+> "**Prohibido usar plataformas externas sin permiso explícito** en cada caso: Higgsfield, fal.ai, OpenAI images… **Tener el MCP conectado NO es permiso.**" + "**Solo modelos baratos por defecto**… nano_banana a 1k antes que text2image_soul_v2 a 2k".
 
 **Cita (memoria `higgsfield-estado-cuenta-2026-08.md`):**
-> "imagen soul_2 quality 2k = **0,12 créditos**… El gasto dejó de ser el cuello para imágenes; **videos cotizarlos con `get_cost:true` antes de generar**… Regla de gasto por caso sigue viva para VIDEO y volúmenes grandes; **imágenes de lote chico quedaron validadas como gasto trivial**."
+> "imagen text2image_soul_v2 quality 2k = **0,12 créditos**… El gasto dejó de ser el cuello para imágenes; **videos cotizarlos con `get_cost:true` antes de generar**… Regla de gasto por caso sigue viva para VIDEO y volúmenes grandes; **imágenes de lote chico quedaron validadas como gasto trivial**."
 
 **Cita (memoria `arthur-opera-modelos-higgsfield-ads.md`):** "Higgsfield: Imágenes **LIBRES** (0,12 cr c/u sobre ~2.990…). **Registrar cada lote**" / "De Sergio: **OK previo para VIDEO**, cotizado con `get_cost`".
 

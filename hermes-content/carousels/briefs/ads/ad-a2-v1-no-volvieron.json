@@ -2,7 +2,13 @@
   "title": "A2 v1 — el paciente que no volvio",
   "caption": "Ad estatico. Angulo A2 del ADS_PATTERN_BANK.",
   "slides": [
-    { "number": 1, "role": "cover", "headline": "¿Cuántos pacientes *no volvieron* este mes?", "body": "Esa lista no existe en tu clínica. Existe en la cabeza de tu recepcionista." }
+    {
+      "number": 1,
+      "role": "cover",
+      "headline": "¿Cuántos pacientes *no volvieron* este mes?",
+      "body": "Esa lista no existe en tu clínica. Existe en la cabeza de tu recepcionista.",
+      "kicker": "Retención"
+    }
   ],
   "cta": "Reservá una demo"
 }

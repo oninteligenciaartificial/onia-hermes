@@ -61,6 +61,18 @@
   padding-block: clamp(2.5rem, 1rem + 7vw, 6rem);
   overflow: hidden;
 }
+/* El aire de arriba del hero era SOLO función del ancho (7vw → 96px a 1440), o
+   sea que gastaba su máximo justo en la laptop ancha y BAJA, que es donde menos
+   sobra. Medido el 2026-09-03 sobre el build de producción: a 1440x800 el CTA
+   caía 42px por debajo del pliegue.
+   El min() lo vuelve consciente del alto: por encima de 900px de viewport el
+   valor sigue siendo el de siempre (49rem = 784px de contenido + nav), y recién
+   por debajo cede aire hasta un piso de 2.25rem. Sólo se toca el padding de
+   ARRIBA porque el de abajo cae después del CTA y no mueve el pliegue.
+   A 1440x900, 1440x1080, 390x844 y 768x1024 el valor calculado no cambia. */
+.hero {
+  padding-top: min(clamp(2.5rem, 1rem + 7vw, 6rem), max(2.25rem, 100svh - 49rem));
+}
 .hero-inner {
   display: grid;
   grid-template-columns: 1fr;

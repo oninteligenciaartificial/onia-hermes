@@ -78,6 +78,34 @@ npm run carousel:render -- --brief hermes-content/carousels/briefs/onia-xxx.json
 
 Briefs se guardan en `briefs/`, slides en `out/<account>-<slug>-<stamp>/`.
 
+## Correr en el VPS headless (Linux, como root) — 2026-09-02
+
+El render usa Chromium headless. En el VPS estaba **roto de dos maneras** y no rendía ningún
+pack (se descubrió al hacer D01). Ya arreglado en `scripts/carousel_render.js`; queda anotado
+para no volver a pisarlo:
+
+1. **Packs ausentes rompían TODO.** `carousel_render.js` hacía `require()` eager de cuatro
+   módulos de pack (`_empleado`, `_dato`, `_papel`, `_solido`), pero **sólo `carousel_pack_solido.js`
+   está commiteado** — los otros tres nunca existieron en git. El require eager tiraba
+   `MODULE_NOT_FOUND` al cargar el script, aun pidiendo `bloque-solido`. **Fix:** los tres
+   ausentes se cargan **perezoso** (`lazyPack`), así sólo fallan si se los selecciona. `bloque-solido`
+   rinde normal.
+2. **Chromium como root necesita `--no-sandbox`.** Sin ese flag el navegador no arranca y el
+   screenshot nunca se escribe (el CLI devolvía `Command failed` sin PNG). **Fix:** el flag ya va
+   en la invocación. El Chromium de Playwright del VPS
+   (`/root/.cache/ms-playwright/chromium-1223/chrome-linux64/chrome`) se **autodescubre**; si no,
+   se pisa con `CAROUSEL_BROWSER=<ruta>`.
+
+Comando exacto que rinde en el VPS (verificado en D01, 1080×1350, 90 KB, mirado):
+```bash
+node scripts/carousel_render.js \
+  --brief hermes-content/carousels/briefs/ads/ad-a4-ocho-de-la-noche.json \
+  --pack bloque-solido --account onia \
+  --out hermes-content/carousels/out/D01-ad-a4-8pm
+```
+⚠️ Los `npm run carousel:*` de abajo son de la PC de Sergio (PowerShell). En el VPS se llama
+`node scripts/carousel_render.js` directo.
+
 ## Packs visuales (`--pack`)
 
 | Pack | Look | Uso |
