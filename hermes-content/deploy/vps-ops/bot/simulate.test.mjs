@@ -61,11 +61,14 @@ test("a la pregunta de precio contesta con los montos PUBLICOS, no con 'te lo pa
 
 test("sin el documento (o roto) NO inventa: se queda con el codigo y AVISA", () => {
   const avisos = [];
-  const config = buildConfig({}, { path: "/no/existe/knowledge.onia.json", warn: (linea) => avisos.push(linea) });
+  // `env: {}` para no depender de si QUIEN corre el test tiene ONIA_BOT_SLOTS: sin fijarlo, este
+  // caso pasaba o fallaba segun el entorno. Y se filtra por tema en vez de contar el total, que
+  // desde que hay dos cosas sobre las que avisar (documento y horarios) ya no mide este defecto.
+  const config = buildConfig({}, { path: "/no/existe/knowledge.onia.json", env: {}, warn: (linea) => avisos.push(linea) });
 
   assert.equal(config, DEFAULT_CONFIG, "sin documento valido tiene que degradar al guion del codigo, sin mezclar");
-  assert.equal(avisos.length, 1, "un instrumento que no puede medir lo dice; callarselo es el modo de falla caro");
-  assert.match(avisos[0], /conocimiento/i);
+  const delDocumento = avisos.filter((linea) => /conocimiento/i.test(linea));
+  assert.equal(delDocumento.length, 1, "un instrumento que no puede medir lo dice; callarselo es el modo de falla caro");
 });
 
 test("--sin-conocimiento sirve el guion pelado del codigo, para poder comparar los dos", () => {
@@ -93,4 +96,59 @@ test("el bot de un CLIENTE no hereda el conocimiento de Onia: contestaria NUESTR
     "se filtro el conocimiento de Onia al bot de un cliente",
   );
   assert.equal(cliente.identity.productName, "Ferretería El Tornillo");
+});
+
+// ---------------------------------------------------------------------------
+// LOS HORARIOS — la otra mitad de "el simulador corre con el artefacto de produccion"
+//
+// La cabecera de este archivo ya fija esa regla para el DOCUMENTO publicado. Los horarios
+// quedaron afuera, y fallan en las DOS direcciones (medido el 2026-09-04):
+//
+//  1. FALSO ROJO. `--slots` con el formato REAL — el de ONIA_BOT_SLOTS, "etiqueta@ISO" — usaba la
+//     cadena entera como etiqueta visible, asi que el guion mostraba «sábado 5 de septiembre,
+//     09:00@2026-09-05T13:00:00Z». Copiando los slots de produccion para reproducir su guion,
+//     el simulador pinta la tripa interna en la cara del cliente y parece el bug mas famoso del
+//     proyecto (el login con los nombres de los iconos). Produccion estaba SANA: el mensaje 448
+//     de la conversacion 49 dice «**A)** viernes 4 de septiembre, 14:00», sin timestamp.
+//
+//  2. FALSO VERDE, y es el peor. Sin `--slots` el simulador cae SIEMPRE en la rama
+//     `M0_SIN_HORARIOS`, y produccion tiene ONIA_BOT_SLOTS cargado (lo repone un cron diario).
+//     O sea que el "3/3 en el simulador" que este carril reporta cada vuelta certificaba un
+//     guion que ningun prospecto ve. Es la trampa de las variantes HERMANAS otra vez.
+//
+// El parser correcto ya existia y estaba exportado (`parseSlotsSpec`, followup-run.mjs:83):
+// simulate.mjs era el unico que lo reimplementaba, y lo reimplementaba mal.
+
+test("--slots con el formato REAL de produccion no filtra el ISO al guion que ve el cliente", () => {
+  const config = buildConfig({ slots: "sábado 5 de septiembre, 09:00@2026-09-05T13:00:00Z|lunes 7 de septiembre, 14:00@2026-09-07T18:00:00Z" });
+
+  assert.equal(config.slots[0].label, "sábado 5 de septiembre, 09:00");
+  assert.equal(config.slots[0].startAt, "2026-09-05T13:00:00Z", "el ISO no se tira: es lo que reserva la demo");
+  assert.equal(config.slots[1].label, "lunes 7 de septiembre, 14:00");
+
+  // Y sobre todo: que no se vea. El guion es la superficie que lee un desconocido.
+  const texto = preguntar(config, "hola, quiero información");
+  assert.doesNotMatch(texto, /@?\d{4}-\d{2}-\d{2}T/, "el timestamp interno se esta mostrando al prospecto");
+  assert.match(texto, /sábado 5 de septiembre, 09:00/);
+});
+
+test("sin --slots toma ONIA_BOT_SLOTS del entorno, que es de donde los lee produccion", () => {
+  const env = { ONIA_BOT_SLOTS: "sábado 5 de septiembre, 09:00@2026-09-05T13:00:00Z|lunes 7 de septiembre, 14:00@2026-09-07T18:00:00Z" };
+  const config = buildConfig({}, { env });
+
+  assert.equal(config.slots[0].label, "sábado 5 de septiembre, 09:00");
+  assert.doesNotMatch(
+    preguntar(config, "hola, quiero información"),
+    /no tengo horarios libres/i,
+    "el simulador sirve la rama SIN_HORARIOS mientras produccion ofrece dos: mide el guion equivocado",
+  );
+});
+
+test("sin horarios por ningun lado NO se lo calla: dice que esa NO es la rama de produccion", () => {
+  const avisos = [];
+  buildConfig({}, { env: {}, warn: (linea) => avisos.push(linea) });
+
+  const deHorarios = avisos.filter((linea) => /horario/i.test(linea));
+  assert.equal(deHorarios.length, 1, "un instrumento que mide otra rama que produccion tiene que decirlo");
+  assert.match(deHorarios[0], /ONIA_BOT_SLOTS/, "el aviso nombra el dato que falta, para poder repararlo");
 });

@@ -25,6 +25,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
@@ -80,6 +81,78 @@ test("el aviso a Sergio: el flag y las credenciales llegan al proceso", () => {
   for (const v of ["ONIA_BOT_TG_AVISO", "TG_BOT_TOKEN", "TG_CHAT_ID"]) {
     assert.ok(pasadas.has(v), `el lanzador no pasa ${v}: el aviso a Sergio no se puede encender`);
   }
+});
+
+/**
+ * Con que valor arranca el bot una variable cuando el operador no configuro NADA.
+ *
+ * Se EVALUA la linea real del lanzador en un `sh` con el entorno vacio, en vez de leerla como
+ * texto: asi el test mide el comportamiento y sigue valiendo si el default se escribe con una
+ * variable intermedia (que es justo lo que pasa hoy con `TG_AVISO`). Un test que casa un patron
+ * de texto se pone verde/rojo por como esta ESCRITA la linea, no por lo que hace.
+ */
+export function defectoEfectivo(lanzador, asignacion) {
+  const m = lanzador.match(new RegExp(`^\\s*(${asignacion}=.*)$`, "m"));
+  assert.ok(m, `no encontre la asignacion ${asignacion}= en webhook-server.sh`);
+  return execFileSync("/bin/sh", ["-c", `${m[1]}; printf %s "$${asignacion}"`], {
+    env: {},
+    encoding: "utf8",
+  });
+}
+
+test("el aviso a Sergio viene ENCENDIDO de fabrica", () => {
+  // POR QUE ESTE TEST EXISTE, y por que no alcanza con el de arriba.
+  //
+  // Que el lanzador PASE la variable no la enciende: la pasa con un valor por defecto. Y el
+  // unico lugar donde podria estar en `true` es `/opt/onia/bot/webhook.env`, que NO esta en git
+  // y que ningun deploy toca. Medido el 2026-09-04: `grep -c ONIA_BOT_TG_AVISO
+  // /opt/onia/bot/webhook.env` = 0. O sea que con el default en `false` la cadena entera queda
+  // asi: se despliega el lanzador arreglado, el bot arranca, y el log sigue diciendo
+  // "aviso por Telegram apagado" para siempre, sin que nada se ponga rojo.
+  //
+  // Sergio ya decidio que si (tablero t_b18ca430, opcion (c): "aviso por Telegram sin
+  // calendario YA"). Una decision tomada no puede quedar dependiendo de que alguien se acuerde
+  // de editar a mano un archivo fuera de git — eso es como este aviso lleva un dia en cero
+  // con el codigo escrito, probado y corriendo en produccion.
+  //
+  // Apagarlo sigue siendo posible y es una linea en `webhook.env`, que gana por el `:-`.
+  const lanzador = leer("webhook-server.sh");
+  const defecto = defectoEfectivo(lanzador, "TG_AVISO");
+  assert.equal(
+    defecto,
+    "true",
+    `el lanzador arranca el bot con el aviso en "${defecto}". Como /opt/onia/bot/webhook.env ` +
+      `no define la variable y no esta en git, desplegar NO enciende el aviso: los handoff y las ` +
+      `demos agendadas se siguen perdiendo en silencio.`,
+  );
+
+  // Y que el valor calculado sea el que REALMENTE viaja al proceso. Sin esto, alguien podria
+  // dejar `TG_AVISO` en true y seguir pasandole otra cosa al `docker exec`.
+  assert.match(
+    lanzador,
+    /^\s*-e\s+ONIA_BOT_TG_AVISO="\$TG_AVISO"/m,
+    "el `-e ONIA_BOT_TG_AVISO` no usa el valor de TG_AVISO: el default calculado no llega al bot",
+  );
+});
+
+test("la guarda de credenciales mira el MISMO default que se le pasa al bot", () => {
+  // El bug que casi entra con el cambio de default: la guarda evaluaba `${ONIA_BOT_TG_AVISO:-}`
+  // (vacio) mientras el `docker exec` recibia `true`. Resultado: con el operador sin configurar
+  // nada —el caso normal— el aviso quedaba ENCENDIDO y la advertencia de "falta el token" MUDA,
+  // que es la combinacion exacta que este archivo existe para impedir.
+  // Se barre el CODIGO, no los comentarios: el comentario de al lado cita el patron malo para
+  // explicar por que existe esta guarda, y un barrido literal lo pondria rojo — obligando a
+  // borrar la bitacora del bug para que el test pase.
+  const codigo = leer("webhook-server.sh")
+    .split("\n")
+    .filter((l) => !/^\s*#/.test(l))
+    .join("\n");
+  assert.doesNotMatch(
+    codigo,
+    /\$\{ONIA_BOT_TG_AVISO:-\}/,
+    "la guarda usa `${ONIA_BOT_TG_AVISO:-}` (default vacio) en vez de TG_AVISO: se calla justo " +
+      "cuando el aviso esta encendido y falta la credencial",
+  );
 });
 
 test("una exencion sin motivo escrito no vale", () => {

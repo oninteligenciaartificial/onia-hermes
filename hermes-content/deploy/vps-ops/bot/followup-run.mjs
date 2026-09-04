@@ -45,7 +45,7 @@
 
 import { pathToFileURL } from "node:url";
 
-import { DEFAULT_CONFIG, createBotConfig, renderTemplate, slotsPending } from "./config.mjs";
+import { DEFAULT_CONFIG, createBotConfig, parseSlotsSpec, renderTemplate, slotsPending } from "./config.mjs";
 import { cuotaAgotada, withKnowledge } from "./knowledge.mjs";
 import { buildFollowUp, followUpDue } from "./bot-engine.mjs";
 import { activeSlots, slotLabel } from "./reply-builder.mjs";
@@ -79,23 +79,12 @@ export function parseArgs(argv = []) {
   return args;
 }
 
-/** "jue 15:00@2026-07-30T19:00:00Z|vie 10:00@2026-07-31T14:00:00Z" -> slots del config. */
-export function parseSlotsSpec(raw) {
-  const text = String(raw || "").trim();
-  if (!text) return null;
-  return text
-    .split("|")
-    .slice(0, 2)
-    .map((part, index) => {
-      const [label, startAt] = part.split("@").map((piece) => (piece || "").trim());
-      return {
-        key: index === 0 ? "A" : "B",
-        label: label || `opción ${index === 0 ? "A" : "B"}`,
-        startAt: startAt || null,
-        pending: false,
-      };
-    });
-}
+/**
+ * "jue 15:00@2026-07-30T19:00:00Z|vie 10:00@2026-07-31T14:00:00Z" -> slots del config.
+ * Se re-exporta el canonico de config.mjs: el parseo estaba copiado en tres modulos y la copia
+ * de simulate.mjs filtraba el ISO al guion del cliente.
+ */
+export { parseSlotsSpec };
 
 /**
  * Config del barrido: DEFAULT_CONFIG + slots + dryRun + los HECHOS editables (knowledge.json).

@@ -15,9 +15,14 @@
 #   2. VUELTA MUERTA. Una vuelta cortada por el limite de uso de Claude dura 2-3 s y no
 #      escribe nada. El 2026-09-03 murieron 15 asi. Un muerto no es un desobediente:
 #      mandar a arreglarlo gasta una vuelta en un loop sano.
-#   3. MEDICION EN NEGRITA. `**OBJETIVO:** ...` no empieza con `OBJETIVO:`. Dos de los
-#      quince la escriben asi. Por eso el grep va DESPUES de limpiar el markdown, igual
-#      que hace el corredor desde a546a058a.
+#   3. MEDICION ADORNADA CON MARKDOWN. `**OBJETIVO:**` y `` `OBJETIVO:` `` no empiezan
+#      con `OBJETIVO:`. Por eso el grep va DESPUES de limpiar el prefijo, igual que hace
+#      el corredor desde a546a058a.
+#      ⚠️ Y la limpieza NO enumera adornos: esa lista (`[*_#> -]`) fallo DOS veces —la
+#      negrita el 03-sep, el backtick el 04-sep, que acuso a `investigacion` de
+#      desobediente en la vuelta en que midio bien con RAZON y LECCION. Una lista de
+#      inclusion falla callada con el primer caracter que nadie previo. Se limpia todo
+#      lo no alfanumerico, y `loops_avance.test.sh` lo fija en las dos direcciones.
 #   4. TODAVIA NO VIO LA INSTRUCCION. Un loop de cadencia diaria cuya ultima vuelta es
 #      anterior al despliegue del prompt que pide la linea no la pudo haber escrito.
 #
@@ -36,8 +41,14 @@ DESDE="2026-09-03T21:19"
 
 MIDEN=""; EN_CURSO=""; MUERTAS=""; SIN_VER=""; SIN_MEDIR=""; SIN_LOG=""
 
-for id in $(crontab -l 2>/dev/null | grep -oE 'onia-loop\.sh [a-z-]+' | awk '{print $2}' | sort -u); do
-  L=/var/log/onia-loop-$id.log
+# Por defecto mide los loops REALES del crontab contra sus logs reales. Las dos variables
+# existen para que `loops_avance.test.sh` pueda darle logs sinteticos: sin eso este
+# instrumento no se puede probar, y es justo el que ya mintio dos veces.
+LOGDIR="${ONIA_LOGDIR:-/var/log}"
+LOOPS="${ONIA_LOOPS:-$(crontab -l 2>/dev/null | grep -oE 'onia-loop\.sh [a-z-]+' | awk '{print $2}' | sort -u)}"
+
+for id in $LOOPS; do
+  L=$LOGDIR/onia-loop-$id.log
   # Un log ausente en un loop registrado es un loop MUERTO con cara de vivo: el crontab
   # lo declara sano y nada avisa. Es la peor falla, asi que tiene categoria propia.
   [ -s "$L" ] || { SIN_LOG="$SIN_LOG $id"; continue; }
@@ -50,7 +61,9 @@ for id in $(crontab -l 2>/dev/null | grep -oE 'onia-loop\.sh [a-z-]+' | awk '{pr
   echo "$BLOQUE" | grep -q "===== TERMINA" || { EN_CURSO="$EN_CURSO $id"; continue; }
   echo "$BLOQUE" | grep -q "session limit"  && { MUERTAS="$MUERTAS $id";  continue; }
 
-  if echo "$BLOQUE" | sed -E 's/^[0-9T:Z-]+Z //; s/^[*_#> -]*//' | grep -q "^OBJETIVO:"; then
+  # Se limpia TODO lo que no sea alfanumerico, no una lista de adornos de markdown.
+  # La lista `[*_#> -]` ya dejo pasar dos: la negrita y el backtick (ver el punto 3).
+  if echo "$BLOQUE" | sed -E 's/^[0-9T:Z-]+Z //; s/^[^[:alnum:]]*//' | grep -q "^OBJETIVO:"; then
     MIDEN="$MIDEN $id"
   elif [[ "$FECHA" < "$DESDE" ]]; then
     SIN_VER="$SIN_VER $id($FECHA)"

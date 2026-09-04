@@ -10,6 +10,7 @@ import {
 } from "@/lib/proof";
 import { Block, Btn, Kicker } from "../ui";
 import { CTA_ALTA } from "../alta";
+import { EMPEZAR_URL } from "../nav";
 import s from "../sitio.module.css";
 
 /**
@@ -156,7 +157,7 @@ export default function Comparativa() {
             Comparalo con tu propio negocio adentro.
           </h2>
           <div className={s.actions}>
-            <Btn href="/empezar">{CTA_ALTA}</Btn>
+            <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
             <Btn href="/precios" variant="line">
               Ver precios
             </Btn>

@@ -11,6 +11,7 @@ import {
   FRASE_RAMA_ABIERTA,
   FRASE_RAMA_CERRADA,
 } from "./alta";
+import { EMPEZAR_URL, REGISTRO_URL } from "./nav";
 
 /**
  * El guard que ata el CTA a su destino.
@@ -151,6 +152,65 @@ describe("el CTA del alta y su destino no se pueden separar", () => {
     }
 
     expect(aMano, "etiquetas escritas a mano en un enlace al alta").toEqual([]);
+  });
+
+  /**
+   * El agujero que este bloque tapa: los dos guards de arriba miran la
+   * ETIQUETA, y los dos daban verde mientras el botón no creaba ninguna cuenta.
+   *
+   * Medido el 2026-09-04 sobre el HTML que sirve onia.com.bo: los **nueve**
+   * botones de la portada —«Creá tu cuenta» ×4, «Empezar» ×2, «Empezar con el
+   * Básico/Pro/Full»— apuntaban a `/empezar`, que es OTRA página de venta y
+   * cuyo único botón vuelve a decir «Creá tu cuenta», esta vez sí hacia
+   * `app.onia.com.bo/register`. O sea: la etiqueta era correcta, la promesa era
+   * correcta, el destino existía y respondía 200 — y el alta estaba a TRES
+   * clics. Es el patrón que ya nos costó una semana en el bot: el primer paso
+   * anda, el sistema muere en el segundo, y el test sólo mira el primero.
+   *
+   * `/empezar` no se baja: sigue publicada, sigue en el sitemap y sigue
+   * enlazada desde `NAV_DECIDIR` (pie y menú de teléfono), porque su URL
+   * circula en firmas y anuncios y `/prueba-gratis` le redirige con 308. Lo que
+   * cambia es que deja de estar EN EL CAMINO: el botón que dice que crea la
+   * cuenta va a donde se crea la cuenta.
+   *
+   * Y el paso 1 de `/empezar` era, textual, «Elegí tu rubro… el rubro lo elegís
+   * en el primer paso del registro»: la página intermedia describía la pantalla
+   * que venía después. Mirado renderizado, `/register` abre con «¿Qué tipo de
+   * negocio tenés?» y los cinco rubros. Era el mismo paso, contado dos veces.
+   */
+  it("el botón que dice que crea la cuenta va donde se crea la cuenta", () => {
+    // El destino compartido: una ruta del propio sitio de venta es, por
+    // definición, una pantalla intermedia — el alta vive en otro contenedor.
+    expect(
+      EMPEZAR_URL.startsWith("/"),
+      `EMPEZAR_URL es ${EMPEZAR_URL}: una ruta del sitio de venta, no el alta`,
+    ).toBe(false);
+    expect(EMPEZAR_URL).toBe(REGISTRO_URL);
+
+    // Y el que se escribe a mano, que es como se vuelve a colar: dos páginas
+    // (`/comparativa` y `/facturacion`) tipeaban `href="/empezar"` en vez de
+    // leer la constante, así que arreglar el destino en un solo lugar las
+    // dejaba atrás — exactamente el bug que `nav.ts` dice evitar.
+    const enElCamino: string[] = [];
+
+    for (const { nombre, codigo } of ARCHIVOS) {
+      if (VOZ_PROPIA.test(nombre)) continue;
+      for (const m of codigo.matchAll(HREF_ALTA)) {
+        if (!m[0].includes('"')) continue; // href={CONSTANTE}: lo cubre el check de arriba
+        const ventana = codigo.slice(
+          m.index + m[0].length,
+          m.index + m[0].length + VENTANA_ETIQUETA,
+        );
+        if (!/CTA_ALTA|ctaAltaPlan/.test(ventana)) continue;
+        const linea = codigo.slice(0, m.index).split("\n").length;
+        enElCamino.push(`${nombre}:${linea} → ${m[0]}`);
+      }
+    }
+
+    expect(
+      enElCamino,
+      "botones del alta que mandan a una página de venta en vez de al registro",
+    ).toEqual([]);
   });
 
   it("el vocabulario de la rama apagada no sobrevive en ninguna superficie", () => {
