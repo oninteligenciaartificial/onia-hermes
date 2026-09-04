@@ -30,11 +30,24 @@ es la que se banea, y es la que usamos para vender.
 | Receta | Formato | Fuente |
 |---|---|---|
 | [`carrusel-indice-en-portada.md`](carrusel-indice-en-portada.md) | Carrusel IG 4:5 | @josecarlosttb, post `Db6VZKVlNp9` |
+| [`gancho-ad-nombrar-la-herramienta-vieja.md`](gancho-ad-nombrar-la-herramienta-vieja.md) | Texto de ad Meta, del **producto** | Biblioteca de Anuncios de Meta — 30 anuncios activos del rubro |
+
+## La fuente que sí se puede leer sin cuenta
+
+**La Biblioteca de Anuncios de Meta es pública y se lee entera desde el VPS** (verificado el
+2026-09-03). Es la única fuente encontrada hasta hoy que muestra piezas del rubro que alguien
+**está pagando ahora mismo**, con anunciante, texto completo, fecha de alta y estado activo.
+Comando exacto y URLs: dentro de la receta de gancho.
+
+Lo que **no** trae: impresiones, clics, CTR ni gasto (Meta sólo los publica para anuncios
+políticos). Por eso ninguna receta de acá lleva números de rendimiento.
 
 ## Huecos abiertos
 
-- **No hay ninguna receta de gancho para ads del PRODUCTO.** El radar de tendencias existente
-  cubre sólo la marca personal de Sergio.
-- **No hay ninguna receta de reel** (primeros 3 segundos, ritmo de cortes, cierre).
-- **Ninguna receta tiene métricas de resultado.** Instagram y TikTok las esconden sin sesión;
-  todo lo de acá describe estructura, no rendimiento.
+- **No hay ninguna receta de reel** (primeros 3 segundos, ritmo de cortes, cierre). Las
+  redes esconden las métricas sin sesión y loguearse está prohibido; falta encontrar una vía
+  pública que muestre la pieza en video, no sólo su texto.
+- **Ninguna receta describe la pieza VISUAL de un ad**, sólo el texto. La Biblioteca muestra
+  el video/imagen, pero eso todavía no se miró.
+- **Ninguna receta tiene métricas de resultado**, y con las fuentes públicas de hoy no las va
+  a tener. Lo más cercano que existe es *cuánto tiempo lleva un anuncio pagándose*.

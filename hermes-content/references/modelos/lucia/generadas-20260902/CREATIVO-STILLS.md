@@ -99,7 +99,7 @@ No es que salga más barato. Es que dejás de elegir entre atender a tu
 cliente y tener con qué mostrarte.
 ```
 
-**CTA:** `Comentá ONIA y te paso cómo tener contenido profesional sin frenar tu día.`
+**CTA:** `Comentá SISTEMA y te paso cómo tener contenido profesional sin frenar tu día.`
 
 ---
 

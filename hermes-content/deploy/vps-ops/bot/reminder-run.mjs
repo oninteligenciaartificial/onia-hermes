@@ -43,7 +43,7 @@
 import { pathToFileURL } from "node:url";
 
 import { DEFAULT_CONFIG, createBotConfig, renderTemplate } from "./config.mjs";
-import { withKnowledge } from "./knowledge.mjs";
+import { cuotaAgotada, withKnowledge } from "./knowledge.mjs";
 import { createStore, stateFromRow } from "./persistence.mjs";
 import { whatsappTemplate } from "./chatwoot-adapter.mjs";
 import { meetingLink } from "./calcom-booking.mjs";
@@ -213,6 +213,11 @@ function deliveryStatusFor(state, config) {
  * @returns {{skip: string}|{link: string, outOfWindow: boolean}}
  */
 export function planReminder(state, nowIso, config, linkFor, env) {
+  // La cuota primero, y ANTES de reserveReminder: aca la reserva ES el insert, asi que escribirla
+  // deja la demo marcada como ya recordada para siempre. Con la cuota agotada tampoco sale el
+  // recordatorio de una demo ya agendada: ese mensaje lo cobra Meta igual que cualquier otro.
+  if (cuotaAgotada(config)) return { skip: "cuota_agotada" };
+
   const reason = skipReason(state, nowIso, config);
   if (reason) return { skip: reason };
 
