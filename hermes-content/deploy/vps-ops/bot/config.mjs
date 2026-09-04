@@ -20,6 +20,33 @@ export const DEMO_SLOTS = Object.freeze([
   Object.freeze({ key: "B", label: "HORARIO B (pendiente de definir)", startAt: null, pending: true }),
 ]);
 
+/**
+ * El formato con el que los horarios entran al bot: `etiqueta@ISO`, separados por `|`.
+ *   ONIA_BOT_SLOTS="sábado 5 de septiembre, 09:00@2026-09-05T13:00:00Z|lunes 7, 14:00@..."
+ *
+ * La etiqueta es lo UNICO que ve el prospecto; el ISO es la tripa con la que se reserva. Vive
+ * aca —en el modulo hoja— porque cada copia de este parseo es una superficie donde el ISO se
+ * puede escapar al guion: `simulate.mjs` tenia la suya, no partia por `@`, y mostraba
+ * «09:00@2026-09-05T13:00:00Z» en la cara del cliente (medido el 2026-09-04, ver
+ * simulate.test.mjs). Produccion estaba sana; el instrumento con el que se la mide, no.
+ */
+export function parseSlotsSpec(raw) {
+  const text = String(raw || "").trim();
+  if (!text) return null;
+  return text
+    .split("|")
+    .slice(0, 2)
+    .map((part, index) => {
+      const [label, startAt] = part.split("@").map((piece) => (piece || "").trim());
+      return {
+        key: index === 0 ? "A" : "B",
+        label: label || `opción ${index === 0 ? "A" : "B"}`,
+        startAt: startAt || null,
+        pending: false,
+      };
+    });
+}
+
 // ---------------------------------------------------------------------------
 // Duracion y modalidad de la demo — UNA sola fuente para el guion Y para la reserva
 // ---------------------------------------------------------------------------
