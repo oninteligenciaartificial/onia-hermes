@@ -181,7 +181,11 @@ shim() { # shim <nombre> <comando remoto>
 #   · y onia-aprender.sh recibe TEXTO LIBRE escrito por un modelo. Un hecho con
 #     \$(...) o comillas invertidas se habria EJECUTADO como comando en el VPS de
 #     produccion. Eso es ejecucion remota de codigo, no un problema de formato.
-exec ssh -i "$LLAVE" -o StrictHostKeyChecking=accept-new -o ConnectTimeout=20 -o BatchMode=yes "$VPS" "$cmd \$(printf '%q ' "\$@")"
+# Y se reenvia ONIA_LOOP_ID: `ssh` NO lleva variables de entorno. Sin esto todo
+# hecho que este nodo deje en la memoria compartida aterriza firmado como
+# "desconocido" —lo hace `aprender.sh` con su ${ONIA_LOOP_ID:-...}— y el
+# supervisor, que cuenta por carril, no puede atribuir nada. Medido el 2026-09-04.
+exec ssh -i "$LLAVE" -o StrictHostKeyChecking=accept-new -o ConnectTimeout=20 -o BatchMode=yes "$VPS" "ONIA_LOOP_ID=\$(printf '%q' "\${ONIA_LOOP_ID:-}") $cmd \$(printf '%q ' "\$@")"
 SHIM
   bash -n "$BIN/$n.nuevo" || { rm -f "$BIN/$n.nuevo"; morir "shim $n salio con sintaxis rota"; }
   chmod 755 "$BIN/$n.nuevo"; mv -f "$BIN/$n.nuevo" "$BIN/$n"   # mv es atomico: no se pisa un shim en uso

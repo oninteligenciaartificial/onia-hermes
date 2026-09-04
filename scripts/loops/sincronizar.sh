@@ -96,6 +96,30 @@ fi
 
 poner() {  # poner <origen> <destino>
   local origen="$1" destino="$2" tmp="$2.nuevo.$$"
+
+  # 🔴 UN SHIM DEL NODO DE CASA NO SE PISA. En el VPS estos helpers son locales;
+  # en la PC de casa son shims que salen por SSH, y eso NO es un rodeo: es lo que
+  # mantiene UNA sola fuente de verdad. El tablero es un SQLite con cerrojo que
+  # vive en el VPS, y MEMORY.md lo escribe UN solo consolidador, alla.
+  #
+  # Medido el 2026-09-04 montando el nodo: el paso 4 del instalador dejaba los 4
+  # shims en /root/bin y el paso 5 —este script— los pisaba con los scripts reales.
+  # Consecuencias, las dos silenciosas:
+  #   · onia-aprender.sh escribia en la bandeja LOCAL de la PC. El loop
+  #     web-factory-dev ya habia dejado 2 hechos ahi que nunca iban a llegar a
+  #     MEMORY.md. Un nodo que aprende hacia un pozo y no se queja.
+  #   · onia-consolidar-memoria.sh quedaba local, o sea un SEGUNDO escritor de
+  #     MEMORY.md — exactamente lo que el diseno prohibe por construccion, y que
+  #     el 2026-09-03 ya metio una entrada vacia con el cerrojo funcionando bien.
+  #
+  # Reordenar los pasos del instalador no alcanzaba: este script corre por cron
+  # cada hora (`44 * * * *`) y los volveria a pisar. La guarda va aca.
+  # En el VPS no hay shims, asi que esto no hace nada alla.
+  if grep -q 'Generado por instalar-homelab.sh' "$destino" 2>/dev/null; then
+    log "conservado (shim del nodo de casa, no se pisa): $destino"
+    return 0
+  fi
+
   cmp -s "$origen" "$destino" 2>/dev/null && return 0
   cp -- "$origen" "$tmp" || { log "FALLO copiando $destino"; return 1; }
   # Un corredor roto NO reemplaza a uno que anda.
