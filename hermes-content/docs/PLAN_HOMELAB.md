@@ -8,6 +8,39 @@ El script que ejecuta este plan es [`scripts/loops/instalar-homelab.sh`](../../s
 
 ---
 
+
+## La máquina real de Sergio (medida el 2026-09-04, no estimada)
+
+| | Su PC | El VPS |
+|---|---|---|
+| Procesador | Intel i5-12400F, **6 núcleos / 12 hilos** | 4 núcleos |
+| Memoria | **16 GB** | 15 GB |
+| Disco libre | **~1,1 TB** (1,35 TB, 251 GB usados) | 54 GB |
+| Sistema | Windows 11 Pro 25H2 | Ubuntu |
+| Gráfica | GeForce GT 730 4 GB | — |
+
+**No es una PC vieja: es más máquina que el servidor de producción.** Supera con holgura el mínimo
+del plan (8 GB y 120 GB). Con eso caben los 5 loops mudados y sobra para más.
+
+**La gráfica no sirve para modelos locales** y no cambia nada: una GT 730 es de 2014, sin núcleos
+tensoriales; la conclusión de descartar modelos locales sigue igual, ahora por GPU además de CPU.
+
+### Windows no se borra: Linux va adentro
+
+El plan original pedía Ubuntu nativo porque los loops en Windows fallaron por el **Programador de
+tareas**, no por Windows en sí. Corriendo Linux *dentro* de la máquina ese problema no existe, y
+Sergio conserva su equipo tal como lo usa. Dos caminos, en orden de recomendación:
+
+1. **Máquina virtual con Hyper-V** (ya viene en Windows 11 **Pro**): Ubuntu Server 24.04 con 8 GB y
+   200 GB, arranque automático con Windows. Es lo más parecido al VPS: `cron` y `systemd` normales,
+   aislada, y se apaga o se mueve sin tocar el resto. **Recomendada.**
+2. **WSL2 con systemd** (`wsl --install -d Ubuntu`, luego `systemd=true` en `/etc/wsl.conf`): más
+   rápido de montar y comparte disco con Windows, pero depende de que la sesión de Windows esté
+   activa y su ciclo de vida es menos predecible para tareas de 24 h.
+
+En cualquiera de los dos, el instalador `scripts/loops/instalar-homelab.sh` corre igual: replica las
+rutas del VPS y no distingue si está en metal, en VM o en WSL.
+
 ## 0. Lo primero, porque cambia la decisión: qué arregla esto y qué NO
 
 Medido hoy en el VPS:
