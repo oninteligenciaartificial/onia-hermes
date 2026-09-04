@@ -896,11 +896,24 @@ const PASOS = [
         };
       }
 
-      // 🔴 El motivo REAL del rechazo lo dice la API, NO la pantalla. Medido el 2026-09-03: el
-      // login rebotaba con `error_code: email_not_confirmed` (cuenta sana, correo sin confirmar)
-      // y este paso reportaba `la pantalla dice: "error"` — porque barría `p, span` y se quedaba
-      // con la primera palabra que matcheara. Un diagnóstico así manda a revisar el login, que
-      // no tiene nada roto. Se escucha /token, que trae el código exacto.
+      // 🔴 Este paso ya acusó DOS veces al producto de algo que el producto sí hace.
+      //
+      // Primero reportaba `la pantalla dice: "error"`, porque barría `p, span` y se quedaba con
+      // la primera palabra que matcheara. Se cambió a escuchar /token, que trae el código exacto.
+      //
+      // Y el 2026-09-04 eso tampoco alcanzó: firmó «rebotó en /login — SIN MENSAJE VISIBLE» sobre
+      // una pantalla con un cartel rojo que dice, entero, "Tu cuenta está creada, pero falta
+      // verificar tu correo" (captura paso-04-entrar.png). Las dos sondas fallaron a la vez y por
+      // motivos distintos: el login de la app entra por el SERVIDOR de Next —el 400 de Supabase
+      // salió de 172.19.0.10, una IP interna—, así que la respuesta /token NUNCA pasa por el
+      // navegador y `page.on('response')` no la puede ver; y el cartel no trae ninguna de las
+      // clases que se buscaban. Un instrumento que se queda mudo miente en la dirección más cara:
+      // "sin mensaje visible" manda a arreglar un login que está impecable.
+      //
+      // Por eso ahora hay una tercera sonda que no depende de adivinar clases CSS ni de que el
+      // error viaje por el navegador: se guarda el texto de la pantalla ANTES de apretar y se
+      // compara con el de después. Lo que apareció y no estaba es, por definición, lo que el
+      // producto te contestó. Es lo que hace un humano: mirar.
       let errorApi = '';
       const oirToken = async (resp) => {
         if (!/\/token\b/.test(resp.url()) || resp.status() < 400) return;
@@ -909,20 +922,36 @@ const PASOS = [
       };
       page.on('response', oirToken);
 
+      /** El texto visible, en líneas limpias. Sirve para el antes y para el después. */
+      const lineasVisibles = () => page.evaluate(() => (document.body.innerText || '')
+        .split('\n').map((l) => l.replace(/\s+/g, ' ').trim()).filter(Boolean));
+
       const intentar = async (llave) => {
         errorApi = '';
         await ir(page, `${APP}/login`);
         await page.fill('input[type=email], input[name=email]', llave.user).catch(() => {});
         await page.fill('input[type=password], input[name=password]', llave.pass).catch(() => {});
+        const antes = await lineasVisibles().catch(() => []);
         await page.click('button[type=submit]').catch(() => {});
         await page.waitForTimeout(6000);
         if (!/\/login\b/.test(page.url())) return { entro: true };
-        const motivo = await page.evaluate(() => {
-          const t = [...document.querySelectorAll('[role=alert], .error, .text-red-500, .text-destructive')]
-            .map((el) => (el.innerText || '').trim())
-            .filter((x) => x && x.length < 200);
+
+        // 1) Los contenedores que un formulario accesible usa para gritar un error.
+        let motivo = await page.evaluate(() => {
+          const t = [...document.querySelectorAll('[role=alert], [aria-live], .error, .text-red-500, .text-destructive')]
+            .map((el) => (el.innerText || '').replace(/\s+/g, ' ').trim())
+            .filter((x) => x && x.length < 300);
           return t[0] || '';
-        });
+        }).catch(() => '');
+
+        // 2) Si no hay ninguno: lo que apareció después de apretar. Se descartan las líneas que
+        // ya estaban (el formulario entero) y las de un solo dato —el correo que acabo de
+        // teclear reaparece— para no confundir un eco con un mensaje.
+        if (!motivo) {
+          const despues = await lineasVisibles().catch(() => []);
+          const previas = new Set(antes);
+          motivo = despues.find((l) => !previas.has(l) && l.length > 15 && l.length < 300 && /\s/.test(l)) || '';
+        }
         return { entro: false, motivo, codigo: errorApi };
       };
 
@@ -934,9 +963,14 @@ const PASOS = [
         // lo acepta). El cliente hace clic en ese enlace; el instrumento no tiene buzón, así que
         // abre el MISMO enlace que se le mandó — mismo navegador, misma sesión, igual que el
         // cliente. No se toca `email_confirmed_at` a mano: eso sería fingir el paso que se mide.
-        // El código viaja en dos formas según por dónde salga (`error_code` o el texto `msg`):
-        // se aceptan las dos. Buscar sólo la de guiones bajos dejó el paso muerto una corrida.
-        const sinConfirmar = /email[_ ]not[_ ]confirmed|correo[^"]*no[^"]*confirm/i.test(`${r.codigo || ''} ${r.motivo || ''}`);
+        // El código viaja en TRES formas según por dónde salga —`error_code` de la API, el texto
+        // `msg`, o el cartel en castellano que pinta la app— y se aceptan las tres. Buscar sólo
+        // la de guiones bajos dejó el paso muerto una corrida; y el 2026-09-04, con el login
+        // resuelto en el servidor, la única forma que llegó fue la tercera: "Tu cuenta está
+        // creada, pero falta VERIFICAR tu correo". El patrón pedía "confirm" y no matcheaba
+        // "verificar", así que el paso ni intentó la confirmación que ya sabía hacer.
+        const sinConfirmar = /email[_ ]not[_ ]confirmed|(?:confirm|verific)[^"]{0,40}(?:tu |el |the )?(?:correo|cuenta|email)|correo[^"]*(?:no|sin)[^"]*(?:confirm|verific)/i
+          .test(`${r.codigo || ''} ${r.motivo || ''}`);
         if (!r.entro && sinConfirmar && llave.user === QA.email) {
           const enlace = await confirmarComoElCliente(page, llave.user);
           ctx.confirmoCorreo = enlace;
