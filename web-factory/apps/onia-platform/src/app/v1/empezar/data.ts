@@ -8,6 +8,7 @@ import { waLink } from "@/lib/site";
 import type { Equipo, Precio, Rubro, Tiene } from "./recommend";
 import { precioStack } from "@/content/chatbot-precios";
 import { precioWebDesde } from "@/content/webs";
+import { bs, GRUPO, plan, type Plan } from "@/lib/pricing";
 
 export interface RubroOption {
   id: Rubro;
@@ -90,14 +91,34 @@ export const TIENE_OPTIONS: readonly {
 ] as const;
 
 /**
+ * La segunda línea del precio, según lo que el plan tenga de verdad.
+ *
+ * El "este plan no se cobra semanal" del Full no es una frase fija: es
+ * `semanal === null` en la tabla. Escrito a mano, el día que Sergio le ponga
+ * semanal al Full el sitio seguiría negándolo.
+ */
+function ciclos(p: Plan): string {
+  const anual = `anual Bs ${bs(p.anual)} (pagás 10 meses)`;
+  return p.semanal === null
+    ? `${anual[0].toUpperCase()}${anual.slice(1)}; este plan no se cobra semanal.`
+    : `Semanal Bs ${bs(p.semanal)} o ${anual}.`;
+}
+
+/**
  * Línea de precio por plan. Los precios van VISIBLES (decisión 2026-07-30):
  * son los mismos publicados en /#precios y salen de lib/pricing.ts.
+ *
+ * ⚠️ Este comentario decía "salen de lib/pricing.ts" mientras las nueve cifras
+ * de acá abajo estaban TIPEADAS A MANO (hasta el 2026-09-04). Coincidían con la
+ * tabla por suerte, no por construcción: el día que cambiara un plan, cambiaba
+ * la tabla y estas frases seguían anunciando el precio viejo — el mismo camino
+ * por el que el precio de la web, veinte líneas más abajo, pasó doce días a
+ * menos de la mitad. Ahora se interpolan. Guarda: `app/(sitio)/precios.test.ts`.
  */
 export const PRECIO_COPY: Record<Precio, string> = {
-  pro: "Bs 750/mes — 5 usuarios y hasta 1.500 fichas. Semanal Bs 199 o anual Bs 7.500 (pagás 10 meses).",
-  full: "Bs 1.500/mes — usuarios y fichas sin límite. Anual Bs 15.000 (pagás 10 meses); este plan no se cobra semanal.",
-  "a-medida":
-    "Grupo / Empresarial: Bs 2.900/mes (anual Bs 29.000) más implementación desde Bs 3.500. No se compra en línea — se cotiza con tu caso.",
+  pro: `Bs ${bs(plan("pro").mensual)}/mes — 5 usuarios y hasta 1.500 fichas. ${ciclos(plan("pro"))}`,
+  full: `Bs ${bs(plan("full").mensual)}/mes — usuarios y fichas sin límite. ${ciclos(plan("full"))}`,
+  "a-medida": `${GRUPO.nombre}: Bs ${bs(GRUPO.mensual)}/mes (anual Bs ${bs(GRUPO.anual)}) más implementación desde Bs ${bs(GRUPO.implementacionDesde)}. No se compra en línea — se cotiza con tu caso.`,
 };
 
 export const PLAN_INCLUYE: readonly string[] = [
@@ -107,8 +128,7 @@ export const PLAN_INCLUYE: readonly string[] = [
   "Agente IA que reprograma — con tu aprobación",
 ] as const;
 
-export const NOTA_DOWNSELL =
-  "Si te queda grande, hay un plan de entrada de Bs 320/mes (2 usuarios, hasta 300 fichas) que ordena la agenda y las fichas — los agentes de IA no vienen ahí.";
+export const NOTA_DOWNSELL = `Si te queda grande, hay un plan de entrada de Bs ${bs(plan("basico").mensual)}/mes (2 usuarios, hasta 300 fichas) que ordena la agenda y las fichas — los agentes de IA no vienen ahí.`;
 
 export const NOTA_CUADERNO =
   "El cuaderno se jubila: agenda digital con recordatorios, sin pasar nada en limpio.";
