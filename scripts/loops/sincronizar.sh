@@ -200,6 +200,11 @@ poner "$FUENTE/extraer-fallos.sh"      "$DESTINO_BIN/onia-extraer-fallos.sh"
 # Los vigias y el renovador de horarios, por la misma razon: existian solo en
 # /root/bin y una reinstalacion desde el repo los borraba sin avisar.
 poner "$FUENTE/vigia-disco.sh"             "$DESTINO_BIN/onia-vigia-disco.sh"
+# El vigia de los loops que corren FUERA del VPS. Corre en el VPS a proposito: el
+# aviso de la PC de casa sale por un shim SSH a esta maquina, asi que la PC no
+# puede avisar de su propia muerte (PLAN_HOMELAB.md §6). Sin lista de loops
+# mudados no hace nada, asi que es seguro tenerlo desplegado desde antes.
+poner "$FUENTE/vigia-loops-remotos.sh"     "$DESTINO_BIN/onia-vigia-loops-remotos.sh"
 poner "$FUENTE/aligerar-worktrees.sh"      "$DESTINO_BIN/onia-aligerar-worktrees.sh"
 poner "$FUENTE/respaldar-memoria-hermes.sh" "$DESTINO_BIN/onia-respaldar-memoria.sh"
 poner "$FUENTE/renovar-slots-bot.py"       "$DESTINO_BIN/onia-renovar-slots.py"

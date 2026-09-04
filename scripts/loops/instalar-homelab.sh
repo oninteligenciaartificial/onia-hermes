@@ -222,7 +222,13 @@ paso "6/7 · cron"
 MARCA="# --- onia loops homelab (instalar-homelab.sh) ---"
 FIN="# --- fin onia loops homelab ---"
 if [ "$SOLO_PRUEBA" = 0 ]; then
-  BLOQUE="$MARCA"$'\n'"*/15 * * * * $BIN/onia-memoria-bajar.sh >/dev/null 2>&1"$'\n'"44 * * * * ONIA_LOOPS_REPO=$CLON ONIA_LOOPS_BIN=$BIN ONIA_TG=$BIN/onia-tg.sh $CLON/scripts/loops/sincronizar.sh >/var/log/onia-loops-sync.log 2>&1"
+  # Los logs SUBEN al VPS. No es telemetria de lujo: es lo unico que le da de
+  # comer al vigia que corre alla (onia-vigia-loops-remotos.sh). Si esta linea no
+  # esta, ese vigia ve silencio permanente y avisa que no llegan los registros —
+  # que es la verdad, pero inutil como alarma. Cada 10 min, y si el VPS no
+  # contesta se pierde esta subida y la siguiente lo alcanza (rsync manda el
+  # archivo entero, no un delta que se pueda desincronizar).
+  BLOQUE="$MARCA"$'\n'"*/10 * * * * rsync -q -e 'ssh -i $LLAVE -o StrictHostKeyChecking=accept-new -o BatchMode=yes -o ConnectTimeout=20' /var/log/onia-loop-*.log $VPS:/var/log/ >/dev/null 2>&1"$'\n'"*/15 * * * * $BIN/onia-memoria-bajar.sh >/dev/null 2>&1"$'\n'"44 * * * * ONIA_LOOPS_REPO=$CLON ONIA_LOOPS_BIN=$BIN ONIA_TG=$BIN/onia-tg.sh $CLON/scripts/loops/sincronizar.sh >/var/log/onia-loops-sync.log 2>&1"
   for id in $ASIGNADOS; do
     CRON=$(echo "$CATALOGO" | awk -v i="$id" '$1==i{$1="";$2="";sub(/^ +/,"");print}')
     BLOQUE="$BLOQUE"$'\n'"$CRON $BIN/onia-loop.sh $id"
