@@ -125,7 +125,15 @@ ok "clon en $CLON"
 for id in $ASIGNADOS; do
   RAMA=$(echo "$CATALOGO" | awk -v i="$id" '$1==i{print $2}')
   [ -n "$RAMA" ] || morir "'$id' no esta en el catalogo de este script. Ids validos: $(echo "$CATALOGO" | awk '{printf "%s ", $1}')"
-  WT="$BASE/onia-hermes-$id"
+  # 🔴 El nombre del worktree lo manda el CORREDOR, no este script. No siempre
+  # coincide con el id: `web-factory-dev` vive en `onia-hermes-webfactory` y
+  # `calidad-generado` en `onia-hermes-calidad`. Tener esa tabla escrita en DOS
+  # archivos es exactamente como se desincronizan — medido el 2026-09-04 en el
+  # nodo de casa: el instalador creo `onia-hermes-web-factory-dev`, el corredor
+  # busco `onia-hermes-webfactory`, y la primera vuelta murio con "no existe el
+  # worktree" y su cron INTACTO. Se LEE de onia-loop.sh, que es el que ejecuta.
+  WT=$(awk -v id="$id" '$0 ~ ("^[[:space:]]*" id "[)]") {f=1} f && /WT=\/root\/loops/ {sub(/^[[:space:]]*WT=/,""); print $1; exit}' "$(dirname "$0")/onia-loop.sh" 2>/dev/null)
+  [ -n "$WT" ] || morir "no encontre 'WT=' para '$id' en $(dirname "$0")/onia-loop.sh — el corredor no conoce ese carril."
   if [ "$SOLO_PRUEBA" = 0 ] && [ ! -e "$WT/.git" ]; then
     git -C "$CLON" worktree add "$WT" "$RAMA" 2>/dev/null \
       || git -C "$CLON" worktree add -b "$RAMA" "$WT" "origin/$RAMA" 2>/dev/null \
@@ -163,7 +171,17 @@ shim() { # shim <nombre> <comando remoto>
   cat > "$BIN/$n.nuevo" <<SHIM
 #!/usr/bin/env bash
 # Generado por instalar-homelab.sh — este nodo delega en el VPS a proposito.
-exec ssh -i "$LLAVE" -o StrictHostKeyChecking=accept-new -o ConnectTimeout=20 -o BatchMode=yes "$VPS" $cmd "\$@"
+#
+# 🔴 Los argumentos se CITAN con printf %q para el shell remoto, y no es cosmetico.
+# ssh NO manda un vector de argumentos: concatena todo en UNA cadena que el shell
+# del VPS vuelve a partir. Sin citar:
+#   · un mensaje con <b>, (), ; o comillas muere alla con "syntax error" —
+#     medido el 2026-09-04: el aviso del propio instalador fallaba por sus
+#     <code> y sus "(5 loop(s))", y era el unico rojo de la prueba de humo;
+#   · y onia-aprender.sh recibe TEXTO LIBRE escrito por un modelo. Un hecho con
+#     \$(...) o comillas invertidas se habria EJECUTADO como comando en el VPS de
+#     produccion. Eso es ejecucion remota de codigo, no un problema de formato.
+exec ssh -i "$LLAVE" -o StrictHostKeyChecking=accept-new -o ConnectTimeout=20 -o BatchMode=yes "$VPS" "$cmd \$(printf '%q ' "\$@")"
 SHIM
   bash -n "$BIN/$n.nuevo" || { rm -f "$BIN/$n.nuevo"; morir "shim $n salio con sintaxis rota"; }
   chmod 755 "$BIN/$n.nuevo"; mv -f "$BIN/$n.nuevo" "$BIN/$n"   # mv es atomico: no se pisa un shim en uso
