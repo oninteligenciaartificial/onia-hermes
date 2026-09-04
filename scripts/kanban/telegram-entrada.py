@@ -46,6 +46,7 @@ reintenta en la corrida siguiente en vez de perder el mensaje.
 """
 import json
 import os
+import shutil
 import subprocess
 import urllib.error  # explicito: lo arrastra urllib.request, pero el 409 se atrapa por nombre
 import urllib.parse
@@ -102,6 +103,36 @@ def kanban(*args):
     return (p.stdout or "") + (p.stderr or "")
 
 
+def publicar(tid):
+    """Publica la pieza de la tarea, si la tarea trae una.
+
+    POR QUE. Hasta el 2026-09-04 `ok <id>` corria `kanban unblock` y NADA mas: la
+    tarea quedaba desbloqueada y la pieza se quedaba en el disco. Los loops
+    incluso habian aprendido a pedirle a Sergio que publicara a mano desde el
+    telefono. Resultado medido: 1.196 imagenes en 3 dias, 0 publicadas.
+
+    Devuelve (estado, detalle) con estado en publicado | no-publicable | fallo.
+    'no-publicable' es lo NORMAL: la mayoria de las tareas del tablero no son
+    piezas, y para esas el mensaje de siempre esta bien.
+    """
+    ruta = os.environ.get("ONIA_PUBLICADOR", "/root/bin/onia-publicar-aprobado.mjs")
+    if not os.path.exists(ruta):
+        return ("fallo", "no existe el publicador " + ruta + " (lo despliega onia-loops-sync.sh)")
+    node = shutil.which("node") or "/usr/bin/node"
+    try:
+        p = subprocess.run(
+            [node, ruta, tid], capture_output=True, text=True, timeout=360,
+            env=dict(os.environ, HOME="/root"),
+        )
+    except Exception as e:  # noqa: BLE001 - un fallo al publicar se CUENTA, no se traga
+        return ("fallo", "no pude correr el publicador: " + str(e))
+    if p.returncode == 2:
+        return ("no-publicable", "")
+    if p.returncode != 0:
+        return ("fallo", (p.stderr or p.stdout or "sin detalle").strip())
+    return ("publicado", (p.stdout or "").strip())
+
+
 def escapar(s):
     return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
@@ -134,7 +165,17 @@ def manejar(texto):
         # nadie lo va a volver a mirar.
         if "cannot" in salida.lower():
             return "⚠️ <b>" + escapar(tid) + "</b> NO se desbloqueo\n<pre>" + escapar(salida.strip()[:800]) + "</pre>"
-        return "✅ <b>" + escapar(tid) + "</b> desbloqueada\n<pre>" + escapar(salida.strip()[:1200]) + "</pre>"
+
+        # Desbloquear no es publicar. Si la tarea trae una pieza, sale AHORA.
+        estado, detalle = publicar(tid)
+        base = "✅ <b>" + escapar(tid) + "</b> desbloqueada"
+        if estado == "publicado":
+            return base + " y <b>PUBLICADA</b>\n<pre>" + escapar(detalle[:800]) + "</pre>"
+        if estado == "fallo":
+            # Un fallo al publicar NO se calla: sin esto Sergio ve el tilde verde
+            # y da por publicada una pieza que nunca salio -- peor que no avisar.
+            return (base + ", pero <b>NO se publico</b>\n<pre>" + escapar(detalle[:900]) + "</pre>")
+        return base + "\n<pre>" + escapar(salida.strip()[:1200]) + "</pre>"
 
     if bajo.startswith("no "):
         tid = id_tarea(texto)
