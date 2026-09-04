@@ -8,44 +8,26 @@ Instrumento: `scripts/recorrido_cliente.mjs`.
 
 ## Abierto
 
-### 0. Volver a correr DENTAL cuando la agenda esté arreglada (tarea `t_2f5a96b6`)
+### 1. Falta UN rubro de los cinco: importadora / distribuidora
 
-El paso 7 (agendar) existe desde el 2026-09-04 y salió **rojo**: un negocio nuevo no puede
-agendar porque el desplegable "Profesional" está vacío — detalle y causa raíz en
-[`../recorrido/ULTIMO_RECORRIDO.md`](../recorrido/ULTIMO_RECORRIDO.md). **No es trabajo de este
-carril arreglarlo** (el producto es de `onia-cola`); lo que queda acá es volver a medir cuando
-esté, porque hasta entonces **la cita nunca se agendó y el paso 8 mide sobre una agenda vacía**:
+Cerrados dental, comercio, estética y **servicios profesionales** (abajo), queda sólo:
 
-    node scripts/recorrido_cliente.mjs --escribir
-    docker exec supabase-db psql -U postgres -d postgres -tAc "select count(*) from appointments where notes like 'zz-qa-%'"
+    RECORRIDO_RUBRO='Importadora / distribuidora' \
+      RECORRIDO_OUT=$PWD/hermes-content/docs/recorrido/capturas/importadora \
+      node scripts/recorrido_cliente.mjs --escribir
 
-Verde es: `citaAgendada: true` en `resumen.json` y esa cuenta en **1** justo después de correr
-(y en **0** al cerrar la vuelta, ya borrada).
+⚠️ **`RECORRIDO_OUT` va siempre en un rubro que no sea dental.** Sin él las capturas se pisan con
+las de dental — y hasta el 2026-09-04 la ruta del `resumen.json` estaba escrita a mano, así que
+la evidencia de comercio y estética apuntaba a los PNG de dental (17 de 17, todas existentes).
 
-### 1. Volver a correr IMPORTADORA para medir su paso 7 de verdad
+Lo que hay que mirar: si `pantallaDelDato()` acierta. El mapa de `PORRUBRO` tiene patrones para
+los cinco, pero sólo tres se ejercitaron. Si ninguno matchea, el paso 6 sale rojo con el menú
+completo en el detalle — **y ese rojo puede ser mío, no del producto**: le pasó a servicios
+profesionales, cuyo dato se carga en `/comercio` («Servicios»). Antes de reportar un paso 6 rojo,
+comparar el menú contra `SERVICIOS_NAV_ITEMS`/`GESTIOS_NAV_ITEMS` en
+`/root/loops/onia-platform/lib/platform/vertical-pack.ts`: ahí se ve si la pantalla existe.
 
-En la corrida del 2026-09-03 19:14 el paso 7 salió `no-medido` porque el instrumento pedía
-`/billing`, que ese rubro **no tiene**. Ya está arreglado (ahora busca **Créditos** en el menú),
-pero el paso 7 de importadora **nunca se midió**: hasta que se corra, ese rubro está en 7 de 8.
-
-    RECORRIDO_RUBRO='Importadora / distribuidora' node scripts/recorrido_cliente.mjs --escribir
-
-Lo que hay que ver: que el paso 7 llegue a `/comercio/fiados` ("Créditos") y que la pantalla se
-vea. ⚠️ Este rubro deja fila en `onia_commerce_products` **y** en
-`onia_commerce_product_variants`.
-
-### 2. Faltan DOS rubros de los cinco que ofrece el alta
-
-Cerrados comercio y **estética y spa** (abajo), queda: **importadora/distribuidora** (parcial:
-7 de 8, ver el ítem 0) y **servicios profesionales**. Se corren igual, cambiando la variable:
-
-    RECORRIDO_RUBRO='Servicios profesionales' node scripts/recorrido_cliente.mjs --escribir
-
-El instrumento ya no está atado a dental: descubre la pantalla del dato y la del cobro **del
-menú** que el producto le muestra a ese rubro. Lo que hay que mirar en cada uno es si
-`pantallaDelDato()` acierta — el mapa de `PORRUBRO` tiene patrones para los cinco, pero sólo dos
-se ejercitaron. Si ninguno matchea, el paso 6 sale rojo con el menú completo en el detalle, que
-es el dato que sirve para decidir si falta la pantalla o falta el mapa.
+⚠️ Este rubro deja fila en `onia_commerce_products` **y** en `onia_commerce_product_variants`.
 
 ⚠️ **Y hay que limpiar según el rubro.** Comercio deja fila en `onia_commerce_products` **y** en
 `onia_commerce_product_variants`; dental en `patients`. Un borrado escrito para un rubro deja
@@ -66,6 +48,21 @@ hay que reportar. Ojo con los precios: los que muestre la pantalla se **comparan
 una licencia para corregir nada.
 
 ## Cerrado
+
+- **DENTAL vuelve a cerrar 9 de 9 con la agenda arreglada** — verificado el 2026-09-04 13:09 La
+  Paz (`node scripts/recorrido_cliente.mjs --escribir`). El desplegable "Profesional" ya no está
+  vacío: la cita `2026-09-07 09:00` entró con **201** (`id cmtmz4d57000m01rwgfxezgt1`) y se VIO
+  en `/appointments`. Cerraba el ítem que esperaba la tarea `t_2f5a96b6`, que ya está `done`.
+
+- **El recorrido entero en SERVICIOS PROFESIONALES, el cuarto rubro** — corrido el 2026-09-04
+  13:25 La Paz. Llega a **6 de 9** y corta en el paso 7: el formulario de la cita exige
+  **"Cliente \*"** y ese desplegable tiene **CERO opciones**, porque ese pack no tiene ninguna
+  pantalla donde crear un cliente (`SERVICIOS_NAV_ITEMS`, `lib/platform/vertical-pack.ts`) —
+  mientras su tarjeta de venta promete «Agenda, citas, cobros y contabilidad». **Reportado a
+  `onia-cola` en el tablero: `t_2b03ea3d`, prioridad 1.** Detalle y captura en
+  [`../recorrido/ULTIMO_RECORRIDO.md`](../recorrido/ULTIMO_RECORRIDO.md).
+  En el camino se cazaron **dos falsos rojos del propio instrumento** (el mapa del paso 6 y la
+  ruta de las capturas), los dos con gate propio en `scripts/recorrido_cliente.test.mjs`.
 
 - **El veredicto cantaba "RECORRIDO COMPLETO" sobre un paso que nunca midió** — cerrado el
   2026-09-03 (`17aaec727`). En importadora el paso 7 salió `no-medido` y el 8 verde; como el
