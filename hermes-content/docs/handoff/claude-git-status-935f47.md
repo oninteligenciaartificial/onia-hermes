@@ -38,11 +38,37 @@ Verificado en vivo: login 200 · panel 200 · configuración 200 · «Administra
    🔴 **Espera el «ok panel» de Sergio.** Se le mandaron 4 capturas y aviso por Telegram. Es una
    pantalla viva: no se reemplaza sin que él vea la pieza (lección cara del 20-ago).
    Medido: 9 interactivos y 103 palabras en la primera pantalla del celular; 21 → 9 consultas.
-2. **Port del panel de COMERCIO a tres renglones** — orquestado con un workflow de 5 fases.
-   ⚠️ **Al escribir esto seguía en vuelo y con CERO commits.** Si murió con la sesión, ese
-   trabajo se perdió entero y hay que relanzarlo: el guion quedó guardado en
-   `~/.claude/projects/.../workflows/scripts/portar-comercio-tres-renglones-wf_c19be55b-a26.js`
-   y se puede reanudar con `Workflow({scriptPath, resumeFromRunId: "wf_c19be55b-a26"})`.
+2. **Port del panel de COMERCIO a tres renglones** — ✅ **TERMINADO**, en la MISMA rama
+   `feat/panel-tres-renglones`, pusheado. 25 agentes, 0 errores. HEAD `98b7c97`.
+   `comercio-hoy.tsx` 549 → 177 líneas; lógica pura nueva en `lib/comercio/panel-hoy.ts` (248) con
+   sus tests. **17 consultas en ~6 tandas encadenadas → 12 en UNA.** Suite **2963**.
+   «Tu día» = los tickets del día con «Ahora» al FINAL (el mostrador no tiene futuro agendado) y la
+   ventana móvil son las 4 ÚLTIMAS, no las 4 próximas.
+   Borrado: `Barcode.tsx` y `protagonistaDelPanel` (+ sus 4 tests). **NO borrado a propósito**:
+   `Sparkline.tsx` y los 6 helpers de `lib/comercio/hoy.ts` (22 tests) — huérfanos por efecto del
+   port, con destino en `/reports`.
+
+   **Tres defectos de plata que el rediseño destapó** (ninguno era el objetivo):
+   - 🔴 **Una venta fiada ANULADA seguía contando como deuda ENTERA** (`3d2efb5`). Dos circuitos
+     escriben la misma columna de texto libre: `anularVenta` pone `"anulado"` y el contrato del core
+     pone `"cancelled"`; el lector filtraba solo el segundo. Como anular también marca los pagos y
+     esos sí se descartaban, el saldo quedaba igual al total. Se veía en **tres** superficies: panel
+     de comercio, `/comercio/fiados` y el balance de comprobación fiscal.
+   - 🔴 **El panel DENTAL afirmaba cosas de un día que solo había leído a medias** (`98b7c97`).
+     `take: 30` sobre las citas: con 4 profesionales se pasa, y «Ahora» se iba al final diciendo que
+     el día terminó. **Esto iba a salir en el panel que espera el OK de Sergio Urcullo.**
+   - El resumen del mostrador contaba solo los 50 tickets traídos y se **contradecía con «Entró
+     hoy»** en la misma pantalla. Ahora el total sale de un `groupBy` del día entero, y el
+     parámetro es **obligatorio** para que no se pueda olvidar en silencio.
+   - Menor: «Dr(a).» se colaba en cada fila de una estética. El título profesional pasó a ser campo
+     del vocabulario, solo en dental y veterinaria.
+
+   **Medido en el celular con datos: 9 interactivos (igual que dental) y 142 palabras.** El tope era
+   120: **no cumple**, por la tercera tarjeta de atención («corte de caja», que dental no tiene).
+   Queda como deuda declarada, no como éxito.
+
+   El guion del workflow quedó en
+   `~/.claude/projects/.../workflows/scripts/portar-comercio-tres-renglones-wf_c19be55b-a26.js`.
 3. **`fix/venta-honesta`** (`onia-hermes`, pusheada, **sin mergear**). Saca la promesa de factura
    del SIN de diez lugares y baja el bot a add-on. **Bloquea escribirle a los leads.**
 4. **Recorrido del dueño nuevo en producción** — ✅ **terminado, y es lo más caro del día.**
@@ -104,7 +130,15 @@ Verificado en vivo: login 200 · panel 200 · configuración 200 · «Administra
    renglones, capturas miradas, gates verdes.
 2. Con el «ok»: mergear el panel y desplegar con el runbook de siempre. *Listo* = panel nuevo vivo
    y mirado en producción.
-3. `importadora-hoy.tsx` (192 líneas) — el único rubro que quedaría sin portar.
+3. `importadora-hoy.tsx` (192 líneas) — el único rubro sin portar, y **arrastra el mismo defecto de
+   `DEFAULT_TZ` fijo** (`importadora-hoy.tsx:42`) que el port de comercio corrigió.
+3-bis. `app/api/comercio/caja/route.ts:46,86` escribe la clave del corte con `DEFAULT_TZ`: hoy
+   coincide porque el default de la columna es America/La_Paz, y se rompe el día que una
+   organización configure otra zona. Queda marcado en el componente.
+3-ter. **Servicios profesionales entra a este panel** y su día son reuniones, no ventas. Hoy ve su
+   corrida de caja con el vocabulario correcto; un «día de agenda» sería feature nueva.
+3-quater. ~63 de los 85 selectores `.dv2-*` de `dashboard-v2.css` quedaron sin consumidor. El
+   archivo sigue vivo por `page.tsx` e `importadora-hoy.tsx`: es poda pendiente, no se hizo acá.
 4. Cobros y contabilidad (pasos 3 y 4 del orden de la 1.0).
 5. **Código muerto pendiente de decisión**: `Sparkline` queda huérfano al portar comercio, y varios
    helpers de `lib/comercio/hoy.ts` tienen lógica testeada que `/reports` podría querer. NO se
