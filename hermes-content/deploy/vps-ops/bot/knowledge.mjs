@@ -479,6 +479,8 @@ const EMPTY = Object.freeze({
   source: "code", // "db" | "file" | "code". "db" = la fila publicada POR ORG (paso b), delante del archivo.
   // Solo lo trae la fuente "db": el slug de la agenda publica de esa org. null = sin agenda.
   orgSlug: null,
+  // Solo la fuente "db": { agotada, usadas, limite } de la cuota mensual. null = no se sabe = atender.
+  cuota: null,
   version: null,
   updatedBy: null,
   loadedAt: null,
@@ -633,10 +635,20 @@ async function fetchOrgKnowledge(key, options = {}) {
     // la org de verdad puede recibir reservas (add-on / plan). Que falte no es un error: es una
     // org sin agenda, y el bot vuelve a derivar la cita a un humano (recepcionista.mjs).
     const orgSlug = typeof body?.orgSlug === "string" ? body.orgSlug.trim() : "";
-    return { data: body.data, orgSlug: orgSlug || null, error: null };
+    return { data: body.data, orgSlug: orgSlug || null, cuota: cuotaDe(body?.cuota), error: null };
   } catch (error) {
     return { data: null, error: `no se pudo leer la db: ${String(error?.message || error).slice(0, 160)}` };
   }
+}
+
+/**
+ * La CUOTA MENSUAL de la org, tal como la manda /published (lote 4, 2026-09-03):
+ * `{ agotada, usadas, limite }`. null = el producto no pudo leerla (o no la manda todavia) y
+ * entonces el bot SIGUE ATENDIENDO (fail-open): cortar por un dato que no existe es callar.
+ */
+function cuotaDe(raw) {
+  if (!raw || typeof raw !== "object" || typeof raw.agotada !== "boolean") return null;
+  return { agotada: raw.agotada, usadas: Number(raw.usadas) || 0, limite: Number(raw.limite) || 0 };
 }
 
 /** Igual que nextCache: un fetch fallido CONSERVA la ultima copia buena de esa org. */
@@ -646,6 +658,7 @@ function nextOrgCache(prev, result, organizationId, nowMs) {
       data: result.data,
       source: "db",
       orgSlug: result.orgSlug || null,
+      cuota: result.cuota || null,
       version: typeof result.data.version === "string" ? result.data.version : null,
       updatedBy: typeof result.data.updatedBy === "string" ? result.data.updatedBy : null,
       loadedAt: new Date(nowMs).toISOString(),
@@ -868,9 +881,11 @@ export function applyKnowledge(base = DEFAULT_CONFIG, data = null, options = {})
  * dentro de `data` a proposito: no es un hecho editable por el dueño, es la identidad de su org
  * en el producto — el allowlist de esta capa no tiene (ni debe tener) un campo para escribirlo.
  */
-export function asRecepcionista(config, data, orgSlug = null) {
+export function asRecepcionista(config, data, orgSlug = null, cuota = null) {
   const slug = typeof orgSlug === "string" && orgSlug.trim() ? orgSlug.trim() : null;
-  const base = createBotConfig({ modo: "recepcionista", conocimiento: data, orgSlug: slug }, config);
+  // `cuota` viaja igual que orgSlug: dato de la org en el producto, no un hecho editable.
+  // Con `agotada:true` el motor contesta el texto fijo y deriva (bot-engine.mjs, barrera 1b).
+  const base = createBotConfig({ modo: "recepcionista", conocimiento: data, orgSlug: slug, cuota: cuotaDe(cuota) }, config);
   // Sin humanName del cliente, el fallback heredado era "Sergio" (el humano del
   // funnel de VENTA de Onia): un negocio ajeno decia "Sergio te confirma" delante
   // de su cliente final (visto en prod, 2026-08-29). Neutro: "el equipo" — M7 dice
@@ -892,7 +907,7 @@ export function withKnowledge(config = DEFAULT_CONFIG, options = {}) {
     const state = getKnowledge(options);
     if (!state.data) return config;
     const applied = applyKnowledge(config, state.data, options);
-    return state.source === "db" ? asRecepcionista(applied, state.data, state.orgSlug) : applied;
+    return state.source === "db" ? asRecepcionista(applied, state.data, state.orgSlug, state.cuota) : applied;
   } catch {
     return config;
   }

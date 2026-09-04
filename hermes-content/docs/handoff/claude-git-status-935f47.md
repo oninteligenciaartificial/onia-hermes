@@ -1,7 +1,7 @@
 # Handoff — carril `claude/git-status-935f47` (plataforma · infra · integración)
 
 > Formato: `hermes-content/docs/handoff/README.md`. Se sobrescribe; es el estado ACTUAL.
-> Última escritura: **2026-09-03 ~23:10 La Paz** (03:10 UTC del 4-sep).
+> Última escritura: **2026-09-04 ~02:25 La Paz** (06:25 UTC).
 >
 > ⚠️ Las horas de este archivo van en **La Paz**, no UTC. Sergio corrigió el 31-ago:
 > *"arregla tus horas, aqui somos america/la paz"*. El VPS y los logs son UTC-4 respecto de
@@ -71,6 +71,47 @@ loop bloquee `needs_input` con captura, el vigía se la manda; (3) deploy del bo
 `t_b18ca430` comente `DEPLOY BOT PEDIDO <sha>`; (4) build + swap de `app.onia.com.bo` cuando
 `t_6bf938b7`/`t_72ddeedb` lleguen a master (runbook en `onia-platform-oferta-en-prod`);
 (5) nada de maquinaria de loops hasta el 10-sep.
+
+---
+
+## 0a. Madrugada del 4-sep — lote 4 (base SaaS) y un login roto por 2 h
+
+**Lo que se publicó:** lote 3b `858752a` (fechas en La Paz, redirects de rutas viejas, CTA del login
+según el alta, borrador de /setup, cabeceras cerradas, limiters con `cf-connecting-ip`, bug inbox→org)
+y lote 4a `70b6ed3` (login server-side con lockout + auditoría, 2FA TOTP con códigos de respaldo y
+gate aal2, política de 2FA para admins con 14 días de gracia, claves de API + `/api/v1` +
+`/settings/api`, cuota del chatbot 500/mes con `cuota` en `published`, fechas-solo al mediodía local,
+realtime con backoff). Tres migraciones aplicadas a mano en prod y registradas en `_prisma_migrations`:
+`mfa_recovery_codes`, `organization_api_keys`, `chatbot_uso_mensual`. Suite: **2.797 verdes**.
+
+**🔴 El error propio de la noche.** Al integrar el login server-side lo apunté a Kong por la red
+interna (`SUPABASE_INTERNAL_URL`). `@supabase/ssr` deriva el nombre de la cookie **del host** al que
+habla: escribía `sb-kong-auth-token` y el sitio lee `sb-app-auth-token`. Resultado: `POST
+/api/auth/login` → 200 `{ok, next:/dashboard}` y **nadie quedaba logueado** (04:00-06:04 UTC, de
+madrugada, sin clientes). Detección: probar la ruta protegida CON la cookie, no el 200 del login.
+Reversión sin build: comentar la variable en `app.env` + `recreate-container.sh --si-estoy-seguro`.
+Arreglo definitivo en `master d956cb9` (`cookieOptions.name` derivado de la URL pública + test);
+la variable sigue DESACTIVADA hasta desplegarlo. Detalle: memoria `login-cookie-nombre-por-host`.
+
+**Medido en producción tras el arreglo:** login 200 con cookie correcta, `/dashboard` y `/api/me` 200
+como ADMIN; `audit_logs` con LOGIN_FAILED 5, LOGIN_LOCKED 1, LOGIN_OK 2 (el lockout funciona);
+`published?inboxId=7` devuelve `cuota {agotada:false, usadas:0, limite:500}`; cero basura de pruebas
+en la org de Sergio. Rate limit del login en Traefik (`rl-auth-token`) vivo desde el 3-sep 22:50.
+
+**SIAT:** sectores 17 y 24 emiten 908 contra el piloto; la corrida de volumen terminó con 125/125 en
+los tres combos de las etapas IV, VII y XI (275 × 907 y 125 × 905, sin rechazos). El % oficial se lee
+en `fman` con el login de Sergio. Sigue bloqueado el **Punto de Venta 1**.
+
+**Cuota de Claude (dato duro):** con 5-8 agentes de la sesión de control, los loops perdieron vueltas
+(chatbot-cola 2, onia-cola 2, web-venta 3, recorrido-cliente 1; marca `RAZON: vuelta PERDIDA por
+limite` en sus logs). Regla: máximo 2-3 agentes pesados en paralelo si se quiere que los loops corran.
+Decisión de plata pendiente de Sergio: segunda suscripción o clave de API para los loops.
+
+**En curso al cerrar este bloque:** verificación de 2FA punta a punta con cuenta QA (capturas a
+Telegram), `feat/settings-seguridad` (pestaña Seguridad), corte honesto del bot por cuota (motor
+`/opt/onia/bot`, relanzar), y `feat/canal-meta` (Instagram/Messenger, detrás de App Review de Meta).
+**Tareas de infra abiertas:** `t_9d970ada` (ufw solo Cloudflare + límite en signup/recover/otp) y
+`t_106595a4` (levantar Supabase Realtime: Kong da 503, no existe el contenedor).
 
 ---
 
