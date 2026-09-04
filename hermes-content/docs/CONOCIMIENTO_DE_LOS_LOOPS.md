@@ -1,0 +1,154 @@
+# Lo que aprendieron los loops
+
+Destilado de la memoria compartida del VPS (`/root/.hermes/memories/MEMORY.md`, 425 entradas escritas por los 15 carriles entre el 02 y el 04-sep-2026), más lo que se midió en vivo al escribirlo.
+
+> **Cómo leerlo.** Ordenado por **cuánto cuesta no saberlo**. Lo que ya está en `CLAUDE.md` (verificar es mirar, construido ≠ terminado, precios en dos archivos, un solo producto, la venta no exhibe obra, horas en La Paz) **no se repite acá**.
+>
+> **Archivo vivo: se EDITA.** Si algo resulta falso, se corrige en su línea con la medición de hoy; no se agrega una entrada nueva debajo. Un aprendizaje vencido cuesta más que ninguno: manda a arreglar lo sano.
+>
+> Verificado en vivo el **2026-09-04** salvo donde diga otra cosa. Donde hace falta una credencial se nombra **la variable**, nunca su valor.
+
+---
+
+## 1. El estado de la máquina hoy (lo primero que se lee mal)
+
+- **Corren 7 de los 15 loops.** Los otros 8 dicen `# PAUSADO 2026-09-04 (foco: vender; cuota escasa)`. Un carril que parece muerto puede estar pausado a propósito, y "revivirlo" revierte una decisión de Sergio. → `crontab -l | grep onia-loop.sh` (activos: chatbot-cola, onia-cola, web-venta, kpis-semanal, lucia, recorrido-cliente, supervisor).
+- **La cuota de Claude es COMPARTIDA** entre los 15 loops y la sesión de control. Una vuelta muerta por `session limit` dura 2-3 s y sale exit 1: **no es un loop roto**, no se le abre tarea ni se le toca el prompt. → 25 vueltas así en 9 carriles: `grep -c "session limit" /var/log/onia-loop-*.log`.
+- **Reparto de modelo por carril** (04-sep): los que escriben producto o mergean a main (chatbot-cola, onia-cola, web-venta, web-factory-dev) en opus; los que miden, publican o redactan, en sonnet. Antes 13 de 15 en opus y 3 carriles horarios se llevaban el 58 % de la cuota.
+- **Dónde vive todo:** runner `/root/bin/onia-loop.sh <id>`, prompt `/root/bin/loops/<id>.md`, log `/var/log/onia-loop-<id>.log`, despliegue horario `44 * * * * /root/bin/onia-loops-sync.sh`.
+- **La memoria se escribe por bandeja, nunca directo:** `onia-aprender.sh "<hecho>"` deja un archivo en `memories/inbox/` y un consolidador con cerrojo (lo invocan `onia-loop.sh` y el sync, **no un cron propio**) lo mete en `MEMORY.md`. Quince procesos haciendo `>> MEMORY.md` es como se corrompe una memoria. Tope 120 entradas → avisa por Telegram.
+- **Disco al 79 %** (152G/193G). El aligerador (`onia-aligerar-worktrees.sh`, cron `51 */4`) tiene una lista `NO_TOCAR` a propósito: el integrador y los carriles que leen `hermes-content/references` quedan sin sparse-checkout. Esos worktrees gordos **no** son una automatización a medio andar.
+
+## 2. Nada se publica solo — las tres medidas del deploy
+
+- **`onia.com.bo` NO se despliega solo.** Cero líneas de deploy en `crontab -l`, cero en `/etc/cron.d`, sin timer de systemd. El `BUILD_ID` cambia igual de a ratos porque son **deploys a mano de otra sesión**, y eso es justo lo que hace creer que hay automatismo. → `stat -c '%y' /opt/onia-landing/runtime-next/apps/onia-platform/.next/BUILD_ID` (hoy 04-sep 10:04 UTC).
+- **Para saber si tu código está VIVO hacen falta TRES medidas**, y la tercera casi nadie la hace:
+  1. **mergeado** → `git merge-base --is-ancestor <sha> origin/master`
+  2. **construido** → casar `docker exec onia-platform cat /app/.next/BUILD_ID` contra cada `/opt/onia-platform/build-*/.next/standalone/.next/BUILD_ID`, para saber qué sha corre (hoy `57tbV1jwo06_yy-wdSSh3` → `build-3606c46`)
+  3. **vivo** → `docker exec onia-platform grep -rl <símbolo> /app/.next/server`
+- **`STAGED_OK` en el log del build no es un deploy: el swap es un paso aparte.** Hubo un build íntegro y cerrado con 8 commits detrás mientras producción servía el anterior.
+- **Un pedido de deploy heredado puede RETROCEDER producción**: una tarea bloqueada pedía publicar un build anterior al vivo, y obedecerla apagaba un fix ya publicado.
+- **Y un artefacto *staged* envejece aunque su sha siga siendo ancestro de `main`**: las tres medidas dan OK y el comando publica código viejo igual. Se grepea el arreglo **dentro** del staged: `grep -rl '<texto viejo>' /opt/onia-landing/runtime-next.new-<ts>` debe dar 0.
+- **`docker inspect --format '{{.Created}}'` NO mide un deploy**: el swap reinicia, no recrea, así que `Created` se aleja del último commit para siempre. Dio "17 commits atrás" sobre cero pendientes, y ese falso positivo abre pedidos de deploy inventados que a Sergio le llegan igual que los reales.
+- **`/opt/onia-platform/build-<sha>` depende SÓLO del sha**: dos procesos que despliegan el mismo commit se pisan sin avisar. Mirar `ps -eo pid,args | grep -F build-and-stage` antes de buildear.
+- **Un deploy por copia con lista blanca REVIERTE en silencio lo que sólo existe en producción** (casi borra el contador de cuota del bot, dos archivos nunca commiteados): mirar la dirección INVERSA del diff. Y el `md5` por archivo **no ve un símbolo que se MOVIÓ** entre archivos: los dos md5 quedan "explicados" y el runtime rompe.
+
+## 3. Lo que traba el merge de los 15 carriles
+
+- **Un gate rojo en la cadena `npm test` de la raíz bloquea el merge de TODOS** (31 gates encadenados con `&&`; el integrador la corre entera antes de tocar `main`). Puede venir de algo ajeno a vos — o, peor y más raro de ver, **ser tuyo en un archivo que no podés tocar**: `campanas-web.test.mjs` cruza los literales `waLink(...)` de la web contra el JSON de campañas de otro carril, así que cambiar el texto de un botón de WhatsApp pone roja la cadena entera.
+- **Un gate cruzado entre dos carriles miente en las DOS direcciones** según qué mitad le falte al worktree. Se escaló "main está ROJO" con main verde hacía 5 h. Antes de escalar: `git merge origin/main`, volver a medir, y confirmar con `git diff --stat origin/main HEAD` vacío.
+- **Dos carriles que agregan cada uno un gate a la línea `test` de `package.json` chocan siempre ahí: se resuelve por UNIÓN, jamás con `--ours`/`--theirs`.** Elegir un lado borra la declaración del otro mientras su `.test.mjs` entra igual por su propio hunk, así que no queda huérfano y nadie lo nota.
+- **El trabajo en riesgo se cuenta con `git log HEAD --not --remotes=origin`, no con `git log @{u}..HEAD`.** El instrumento viejo dijo 34 commits en peligro cuando eran 2, y con ese número se escribió un plan de rescate por `reset --hard` que tiraba 33 para recuperar 1.
+- **Una rama puede quedar imposibilitada de pushear para siempre** si su remota se reescribe debajo (rebase del integrador): push `non-fast-forward`, el carril sigue commiteando y entregando a nadie. → `git push --dry-run`, `git rev-list --left-right --count origin/<rama>...HEAD`.
+- **Un `chore: auto-sync` que commitea BORRADOS deja la rama imposible de mergear y no se nota por meses**: gates verdes, push exit 0, cero huérfanos, y el integrador no puede tomarla porque el merge llega como "borra N archivos de otro carril". Un commit con 1437 borrados y **cero altas** dejó 160 commits fuera de `main` desde el 24-ago. Firma: `git log --diff-filter=D origin/main..HEAD` + `git show --stat <sha> | tail -1`. Se arregla restaurando desde el punto de divergencia (`git checkout $(git merge-base HEAD origin/main) -- <rutas>`), **no** desde `main`.
+- **Un conflicto add/add, o uno por CRLF→LF, marca el archivo ENTERO** y empuja a "elegir un lado", que borra contenido. Diagnóstico en 10 s: `git show :1:<archivo> | file -` (1=base, 2=ours, 3=theirs). Ya pasó que "theirs" era "ours + 212 líneas", y que tres archivos homónimos eran dos documentos distintos que había que **fusionar**.
+- **Al chocar sobre un doc, el desempate no es de quién es el hunk sino cuál se puede MEDIR.** Resolver "a favor de casa" institucionalizó una vez el bug que el carril existía para cazar.
+- **Medir el objetivo leyendo el propio worktree mide un fósil**: un chequeo cantó "meta cumplida" con el árbol 310 commits atrás. `git merge origin/main --no-edit` ANTES de medir (`git rev-list --count HEAD..origin/main`).
+
+## 4. El tablero: cómo se le pide algo a Sergio sin que se pierda
+
+- **La opción en el MEDIO parte los posicionales.** Andan `block <id> "motivo" --kind needs_input` y `block --kind needs_input <id> "motivo"`; muere con `unrecognized arguments` la del medio (`block <id> --kind needs_input "motivo"`) y la tarea queda en `ready`, o sea que Sergio no se entera. Mismo patrón en `promote <id> "motivo" --force`.
+- **`exit=0` de `block` NO prueba que quedó bloqueada.** El contador de reincidencias no se reinicia con el `unblock`; al llegar a 2 dispara `block_loop_detected`, devuelve 0 igual, no bloquea, y hasta puede promover la tarea y lanzarle un agente encima. **Mirar el `status` después de cada block**; si el contador está quemado, tarea nueva, que nace limpia.
+- **`promote --force` sobre una tarea con padre insatisfecho no destraba nada aunque diga que sí**: tres `show` confirman `ready` y segundos después un reconciliador la devuelve a `todo`. La única vía es destrabar al padre.
+- **Una tarea bloqueada CONGELA su evidencia.** El cuerpo no se vuelve a medir nunca: una pedía entrar por navegador porque "Higgsfield no genera nada" con la cuenta generando hacía horas; otra llevaba 15 h pidiendo un merge y un deploy ya hechos. **Recontar el número que justifica el bloqueo cuesta 30 segundos.**
+- **Un ítem bloqueado en Sergio congela a sus hermanos que no dependen de él**, porque la cola se lee como una fila; la dependencia real está en los DATOS de la pieza. Y manda la asimetría de esfuerzo: pedir lo caro primero a quien no contesta deja parado también lo barato.
+- **Antes de convertir una objeción en decisión de gasto, agotar las salidas de 0 créditos.** Una lámina figuró 21 h como "cambiar la foto son 2 créditos" y se resolvió gratis con desenfoque de máscara degradada sobre la foto fuente.
+- **Qué se le pregunta a Sergio** (04-sep): plata, marca (publicar con su cara o la de Lucía) y contactar personas, en una hoja con `ok <id>` / `no <id>`. Lo técnico lo decide la sesión de control y queda escrito en la tarea.
+
+## 5. Cómo miente un gate — la familia que más vueltas costó
+
+### 5.1 Falla ABIERTO: verde sobre algo roto. Es el que nadie investiga.
+
+- **Sacar los sujetos de una lista de inclusión** (sitemap, catálogo, array de rutas): el día que un elemento sale de esa lista por otro motivo, deja de tener gate y nada se pone rojo. Derivar del **disco** con exclusiones nombradas, así un sujeto nuevo nace cubierto.
+- **…y derivar del disco tampoco alcanza si las RAÍCES son carpetas escritas a mano**: es la misma lista un nivel arriba. Un árbol entero (`app/v1/**`, 17 montos tipeados) quedó sin vigilancia.
+- **Buscar un literal en un solo orden o una sola forma.** `Bs 320` no ve `1.500 Bs/mes`; y en UI el dato y su unidad viven en nodos separados (`<span>1.500</span><span>Bs / mes</span>`), así que el número a mano queda desnudo sin la marca al lado que lo delate. **Se prueba inyectando el defecto en su forma REAL de producción, no en la cómoda.**
+- **Un gate de PRESUPUESTO (peso, tiempo, cantidad) se satisface BORRANDO la función que pesa.** Va apareado con uno que mida que la función sigue VIVA: un `import()` dinámico que falla al bajar es un fallo MUDO — la página se ve entera y la animación no corre.
+- **La sonda periódica del propio carril apaga a su gate**: un blanqueo de estado ponía en null la única fila que podía dar rojo. El gate lee el lado **append-only**, no el estado mutable que otro proceso del mismo carril pisa.
+- **Un veredicto multipaso que mira "el último paso verde" borra el agujero del medio**: se cantó "recorrido completo" sobre una pantalla de cobro que nunca se vio. "Completo" exige que NINGÚN paso quede fuera de OK, y el agujero tapado por un verde posterior se enumera aparte.
+- **En un worktree con sparse-checkout, `ls`/`grep` sobre `hermes-content/references` dicen "no existe" y no prueban nada** (está en el objeto git: `git show <rama>:<ruta>`). Peor: un `grep -rL PATRON dir/*.md` ahí sale vacío = verde = "todos cumplen".
+- **`git log -- <ruta>` corrido DESDE esa carpeta devuelve CERO** (el pathspec es relativo al CWD): un gate de deploy firmó "AL DÍA" con 6 arreglos varados. Se ancla con `:/<ruta>` y se prueba en las dos direcciones — si está mal, las dos dan 0 y parece coherente.
+- **Un objetivo escrito como lista de palabras prohibidas no puede ver una promesa.** Los 4 números de web-venta estaban en meta y el pie de las 52 páginas ofrecía "Facturación SIAT" con **cero** variables `SIAT_*` en el contenedor (verificado hoy: `docker exec onia-platform env | grep -c SIAT` → 0). Todo objetivo por literales necesita un chequeo que cruce **lo que la pantalla OFRECE contra lo que producción tiene encendido**.
+- **Un contador que busca un formato literal falla en la dirección simétrica**: reporta como pendiente lo ya hecho, el número no baja y se lee como diagnóstico en vez de síntoma (decía 22, eran 8). Probar el instrumento contra un caso que **ya cumple**.
+
+### 5.2 Falla CERRADO: rojo sobre algo sano. Manda a arreglar lo que funciona.
+
+- **Los iconos Material Symbols son ligaduras:** `innerText` devuelve el NOMBRE (`credit_card_off`) con el glifo perfecto en pantalla. Como el bug más famoso del proyecto es justo ése, **todo gate que lea texto lo re-descubre en falso y reabre un bug cerrado.** Sólo se resuelve mirando el PNG.
+- **Playwright, cuatro falsos positivos de la misma familia:** el rasterizador; `fullPage` (congela un fotograma que VARÍA entre corridas); `scroll-behavior:smooth`, que ANIMA en vez de saltar y saca la foto a mitad de camino (se apaga con `addStyleTag` y se espera con `waitForFunction`); y un chunk de `/_next/static` en 404 con `next start` local, que deja la página en blanco con el HTML llegando byte a byte. Escuchar `page.on('response', r => r.status()>=400)` ANTES de creerle a una captura.
+- **`getBoundingClientRect` aprueba lo RECORTADO** (declara la geometría aunque el contenedor recorte el dibujo) **e ignora `vector-effect=non-scaling-stroke`** (0x0 sobre un disco visible). Lo que mide lo pintado es `document.elementFromPoint`, pero sólo ve la ventana: `scrollIntoView` antes, o lo que quedó bajo el pliegue mide 0.
+- **El nodo que anima suele estar 2+ niveles arriba** del que mirás: leer opacity/transform en el elemento o su padre lo da por asentado estando invisible (un botón verde sólido se leyó como el color del papel de atrás). Recorrer la cadena de ancestros hasta `body`.
+- **`getByRole('dialog').first()` devuelve el MENÚ LATERAL, no el modal.** Se elige por el botón que envía: `.filter({has: locator('button[type=submit]')})`.
+- **El login de `app.onia.com.bo` se resuelve en el SERVIDOR de Next**, así que `page.on('response')` nunca ve el error y leerlo por clases CSS (`[role=alert]`, `.text-red-500`) tampoco: las dos sondas fallan a la vez y el gate firma "sin mensaje visible" sobre una pantalla que dice el motivo entero. Va el **diff del texto visible antes/después de apretar**.
+- **`supabase-js` realtime bajo Node 20 no conecta y falla MUDO** (no hay `WebSocket` global; llega en Node 21): `subscribe()` no dispara ni un estado y el veredicto sale "el servidor no entrega nada". Se arregla con `createClient(url, key, {realtime:{transport: WS}})`. El VPS corre **Node v20.20.2**. Aparte: `POST /realtime/v1/api/broadcast` devuelve 202 aunque no haya un solo suscriptor — suscribirse primero, publicar después.
+- **`pgrep -f <nombre>` se encuentra a SÍ MISMO** y dice "está corriendo" sobre un script ni siquiera desplegado. Va `ps -eo pid,args | grep -F <nombre> | grep -v grep`, descartando el PID propio.
+- **Un proceso vivo no se busca en el crontab**: "cero listeners de Telegram" salió de un `crontab -l | grep`, y el consumidor era el gateway de Hermes, un daemon. Se pregunta por el socket (`ss -tnp`). Casi se cablea un cron que rompía el único camino por el que Sergio contesta.
+- **`Date.parse` devuelve NaN con la fecha que imprime psql** (`2026-09-03 15:09:34+00`: el offset de dos dígitos necesita `+00:00`). Toda comparación contra NaN da false, así que un corte por fecha se vuelve código muerto que parece vivo.
+- **Leer Postgres por `docker exec psql -tAF<tab>` y partir por `\n` se rompe con contenido multilínea**: la fila se parte, el filtro por cantidad de columnas la descarta EN SILENCIO y el script concluye lo contrario. Se aplana en el SQL con `replace(coalesce(m.content,''), E'\n', ' ')`.
+- **Los logs de los loops llevan markdown**, así que un grep anclado en `^PALABRA:` pierde líneas en silencio (dos carriles escriben `**OBJETIVO:**`, otro con backticks) y el supervisor acusa de desobediente a un loop que midió bien. Va `sed -E 's/^[^[:alnum:]]*//'` — limpiar **todo lo no alfanumérico**, no enumerar adornos, porque cada adorno nuevo evade el grep.
+- **`curl` 000 sobre un HTTPS de tercero casi nunca es enlace muerto**: lo normal es que el server mande sólo la hoja del certificado y curl no pueda armar la cadena, mientras el navegador la baja por AIA. → `openssl s_client -connect HOST:443 -servername HOST`. Va como aviso, no como rojo: tratarlo como rojo hace borrar enlaces sanos.
+- **`ffmpeg` con `select='gt(scene,N)',showinfo` escribe a nivel INFO**: con `-v error` devuelve CERO cortes para TODOS los videos, que se lee igual que "este video no tiene cortes". Sin bajar el nivel, los mismos 6 dieron 0, 1, 4, 13, 15 y 18.
+- **Enumerar los refs de un remoto para concluir "la rama no está" es un falso negativo fácil y caro** (de ahí salió una alarma de "165 commits sin respaldo"). Se pregunta por el ref exacto: `git ls-remote --heads origin refs/heads/<rama>`. Un grep sirve para descartar, nunca para confirmar — y **enumerar tampoco**.
+- **Un gate que prohíbe un literal da rojo sobre las BITÁCORAS que narran ese mismo error**, y obedecerlo obliga a reescribir el registro de lo que pasó. Se separa por CONTEXTO (es pieza lo que se publica; el resto es prosa y sale como aviso), no con una lista de archivos exentos.
+- **Un gate `.mjs` sin la guarda `import.meta.url === pathToFileURL(process.argv[1]).href` corre su medición al ser IMPORTADO** (dos `docker exec` contra producción y un `process.exit()` que mató al importador). El test de esa guarda va en un proceso HIJO: en el propio, el módulo ya está cacheado y pasa en falso.
+- **Un gate que enumera con `git ls-files` y después LEE del disco explota (ENOENT)** en un worktree al que le faltan archivos versionados, y el fallo parece causado por tu cambio. Se arregla con `git restore <ruta>`, **nunca** commiteando los borrados: eso los saca del árbol para todos.
+
+### 5.3 Y el error de fondo, que vale para los dos lados
+
+- **Un defecto encontrado en PRODUCCIÓN tiene dos causas que se arreglan en lugares opuestos** — el código está mal, o producción corre un build viejo — y si el gate no las distingue, la vuelta siguiente vuelve a "arreglar" un archivo ya arreglado. Se resuelve preguntando si el valor ofensor existe en el árbol de fuentes de la rama. (Ojo: `includes('790')` da verdadero dentro de `7900` e **invierte** el diagnóstico; van límites de dígito.)
+- **Un harness que arma su propia config diverge de producción en silencio**, y aunque cargue el artefacto que se instala, **la variable que ELIGE la rama del guion puede entrar por otro camino**. Hay que listar toda entrada que elija rama y hacerla entrar como entra en producción.
+- **Arreglar la instancia sin subir el arreglo a la PLANTILLA de la que nace deja el defecto reapareciendo para siempre**, y el backlog se ve sano porque avanza. Es la dirección contraria a la ya sabida ("un arreglo de formato no viaja al generador hermano"): ésa es entre hermanos, ésta es hacia el padre, y es la que hace que no termine nunca.
+- **Mover un bloque de markdown con un script lo borra en silencio si el ancla no existe**, y el contador con el que verificás baja exactamente lo esperado, confirmando el borrado como éxito. Verificar por PRESENCIA del texto movido (`git show HEAD:<archivo> | grep -c`), nunca por número de ítems.
+- **Un comentario que explica por qué algo NO se puede hacer es una hipótesis con fecha, no un hecho.** Un comentario en el adaptador del bot extendió al VPS entero una limitación que es sólo de los NODOS de n8n, y por eso el aviso de handoff viajó semanas hacia un canal apagado sin que nadie intentara el camino directo.
+
+## 6. Chatbot y Chatwoot
+
+- **Inboxes vivos** (verificado hoy): **4 = Onia Web**, **5 = Onia WhatsApp**. El **7 = "ZZ QA Clinica Chatbot" es el banco de pruebas: sus conversaciones NO son leads.** Contar handoffs sin filtrar `inbox_id` infla el daño — un pedido de deploy afirmó "dos personas reales esperando" sobre dos sondas.
+- **Chatwoot auto-resuelve TODA conversación a los ~35 s** (`accounts.auto_resolve_duration` en NULL y esta versión lo trata como 0; verificado hoy). Consecuencia doble: un lead que pidió un humano desaparece del filtro Open, y en el bot el evento `resolved` disparaba `clearHumanTakeover` y **borraba el handoff que nadie había atendido**. Lección general: **un evento que puede venir de un humano o de un barrendero automático no se trata igual — hay que exigir la huella del humano.**
+- **"Contestó" NO es "agendó".** El turno en que el prospecto elige horario devolvió "Listo, agendado" con `calendar_event_id=NULL`, sin reserva y sin avisar a nadie, **con los tres gates del carril en verde porque todos miden que SALGA un mensaje**. Todo gate de embudo mira el ESTADO que el motor escribió de sí mismo. El dinero se pierde en el segundo turno.
+- **Un guion con variantes HERMANAS esconde un barrido a medias** (`M0` / `M0_SIN_HORARIOS`): el simulador caía por defecto en la sana y producción servía la rota. Todo test de guion recorre las dos.
+- **El estado real de un flag se lee del LOG del proceso vivo, no del `.env`**: el bot descartaba avisos con `skipped (…): apagado (ONIA_BOT_TG_AVISO)` — desplegado, corriendo y perdiendo avisos reales, cosa que ningún grep del env muestra.
+- **Un lanzador con `docker exec -d` y lista blanca de `-e VAR=` descarta en silencio toda variable nueva**: ponerla en el `.env` y en la plantilla no la hace llegar, y no falla. El estado real se lee del entorno del PROCESO: `docker exec <cont> sh -c "tr '\0' '\n' < /proc/<pid>/environ"`.
+- **Una decisión ya tomada cuyo interruptor vive fuera de git queda apagada para siempre**: el deploy no toca ese archivo, manda el default y nada se pone rojo. **Si la decisión ya está tomada, el default va en ON y apagarlo es la línea manual.** Al invertir un default, toda otra lectura de esa variable con su propio default se desincroniza en silencio.
+- **En una caché hay que separar contenido de INTERRUPTORES.** Heredar un flag de corte cuando el fetch falla invierte el riesgo: con `cuota.agotada=true` guardado, un deploy o un 404 dejaba al bot contestando "este mes ya atendimos el máximo" para siempre. Las decisiones vuelven a null.
+- **Un corte de seguridad puesto sólo en el punto de envío llega tarde** si el que llama ya quemó una reserva de un solo uso. Van los dos cortes: uno antes de la reserva y otro en el envío.
+- **El prefijo `zz-qa-` lo usan DOS carriles en la base de producción**, así que un `DELETE … LIKE 'zz-qa-%'` borra el dato de prueba del otro. Acotar el borrado a una forma propia de la corrida y contar lo ajeno aparte.
+
+## 7. Imagen, video y canales
+
+- **Higgsfield va por CLI** (`/usr/bin/higgsfield`, verificado hoy), **nunca por MCP** — el MCP no cotiza antes. El subcomando real es **`generate create <job_type>`**: `generate image` NO existe. `generate cost <job_type>` cotiza gratis y coincide exacto con el cobro.
+- **Los nombres de modelo COLISIONAN**: el `job_type` `nano_banana_flash` se muestra en su propia tabla como "Nano Banana 2", y por eso se paga un modelo y llega otro. **El `job_type` sale siempre de `model list`**, nunca de memoria ni de un doc. `text2image_soul_v2` es el barato (0,12 cr); `soul_2` **no existe**. Un job rechazado por referencia inválida **no cobra**: probar el UUID dudoso antes de gastar sale gratis.
+- **La palabra clave `COMUNIDAD` NO está cableada**: la cuenta de Lucía sólo responde `SISTEMA` y `HUMO`, así que quien la comente sale con `palabra=null` y no recibe nada sin dejar registro. **Una palabra muerta es peor que ninguna, porque la pieza PARECE que captura.** Se verifica contra el workflow n8n **activo** (hay 4 copias homónimas y 3 apagadas: filtrar por `active=1`).
+- **Ningún carril puede leer Instagram por Graph API hoy.** `META_LONG_LIVED_TOKEN` venció el 17-ago-2026; `META_SYSTEM_USER_TOKEN` no vence pero sus scopes son de ads/business, **sin `instagram_basic`**, así que `media_count` responde "missing permissions". Y la API web da 401 desde la IP del VPS para las dos cuentas: **es la IP, no la cuenta.** *(Un token válido no es un token con permisos. Los valores viven en `/root/.hermes/.env`; acá van sólo los nombres.)*
+- **Un defecto de imagen se busca en la foto FUENTE, nunca en la lámina compuesta**: el velo y el texto empastan los detalles, inventan fallas y tapan las reales. Y **contar dedos no da el mismo número según quién mire** (dos carriles contaron 6 y 5 sobre la misma foto): en disputa, la salida es sacar la foto del lugar más caro — cuesta 0 créditos — no pagar por reemplazarla.
+- **Una historia de Instagram no se verifica mirando el MP4 en el escritorio**: la app tapa ~250 px arriba y ~250 abajo sobre 1920, y como los overlays llevan start/end, un frame del medio no prueba nada sobre el último segundo.
+- **`sendDocument` de Telegram con un mp4 puede devolver `result.video` en vez de `result.document`**, archivo por archivo. Un chequeo que lea `result.document.file_size` fijo lee `undefined`, lo llama "llegó cortado" y aborta un envío sano.
+- **Contar apariciones de una palabra en el HTML de Next NO mide prominencia**: cada string sale en title, og, twitter y el payload RSC, con multiplicador NO uniforme (un h1 salió 12 veces y otro término 3, dando "empate"). Para comparar dos términos se leen title/description/og y el h1.
+
+## 8. Superficie de venta: los defectos que ningún grep vio
+
+- **Lo que se pinta del lado del CLIENTE tras una interacción no está en el HTML servido.** El cotizador de `/v1/empezar` publicó un precio de web por debajo de la mitad del vigente **doce días** porque el bloque sólo aparece tras responder 4 clics: `curl` + `grep` daban limpio. Todo barrido de precio o texto prohibido navega de verdad (Playwright) o lee el **archivo fuente del copy**.
+- **El `<head>` es superficie de cliente que no se ve mirando.** Una meta description siguió anunciando "(borrador, pendiente de revisión por abogado)" después de que el cartel desapareciera de la pantalla; y la variante OpenGraph — la que se ve al compartir por WhatsApp — conservó precios a mano cuando la description ya leía la tabla. Todo guard de copy necesita su gemelo sobre title/description/og.
+- **Un CTA puede tener la etiqueta correcta y el DESTINO mal**: los 9 botones de alta de la portada apuntaban a otra página de venta (3 clics para crear una cuenta) con los 4 tests en verde, porque el test ataba la etiqueta al flag y aceptaba dos hrefs. Se verifica **clickeando el sitio buildeado y leyendo `page.url()`**. *(Estado hoy: `ONIA_ALTA_AUTOMATICA=abierta`.)*
+- **Un enlace a un subdominio propio que ya no se sirve NO da 404**: resuelve a la IP del VPS y devuelve 302, así que `curl -L` da 200 y ningún instrumento lo ve roto (los dos CTA de `/contacto` agendaban contra un Cal.com muerto). Se detecta comparando el tamaño de un slug real contra uno inventado, o mirando `%{redirect_url}` sin `-L`.
+- **`web-factory/apps/onia-platform` no tenía `vitest.config.ts`**, así que el alias `@/` no resolvía y un árbol ENTERO no podía tener gate — por eso esa pantalla escondió dos defectos largos.
+- **Una feature puede verse MUERTA en QA por el trial vencido de la org, no por su código**: el cron devuelve `skippedReason: agents_runtime_disabled` sin una sola query y la tabla queda en 0. Mirar `organizations.trialEnd/planEnd` y leer el `skippedReason` antes de culpar al motor.
+
+## 9. Vencido — circula y hoy es falso
+
+| Lo que dice | Estado real (medido) |
+|---|---|
+| "El sitio de venta YA se despliega solo" (03-sep 16:04) | **FALSO.** Cero cron/timer de deploy; los cambios de `BUILD_ID` son deploys a mano. |
+| "`$env` no anda" aplicado al bot o al VPS | **FALSO.** La limitación es de los **nodos de n8n**. `TELEGRAM_BOT_TOKEN` lo lee cualquier proceso del VPS. |
+| "`block <id> "motivo" --kind needs_input` falla" | **VENCIDO.** Se arregló `onia-tablero.sh`; la rota es la de la **opción en el medio**. |
+| "Limpiar los logs con `sed -E 's/^[*_#> -]*//'`" | **INSUFICIENTE.** Es lista de inclusión; ya dejó pasar negrita y backtick. Va `'s/^[^[:alnum:]]*//'`. |
+| "Credenciales de Instagram ya en `.env`" (t_ad2df41f) | **FALSO.** Un token vencido y otro sin `instagram_basic`. |
+| "Las conversaciones 53 y 55 son personas reales esperando" | **FALSO.** Son sondas del inbox 7 (banco de pruebas). |
+| `SOUL.md`: "siete loops de Claude Code" | **DESACTUALIZADO.** Son 15 carriles: hoy 7 activos y 8 pausados. |
+| "canario-visual / docs-auditoría / investigación están muertos" | **FALSO.** Están **pausados** (04-sep) o con cadencia bajada; sus corridas caen en el cron nuevo. |
+
+## 10. Método — lo que los loops aprendieron sobre trabajar
+
+- **Un dato heredado no se ejecuta sin contarlo de nuevo**, y eso incluye repetir una conclusión propia anterior. Recontar cuesta 30 segundos y ya destrabó objetivos enteros.
+- **Todo instrumento se prueba en las DOS direcciones**: contra un caso que ya cumple y contra uno que no. Si el instrumento está mal, los dos dan lo mismo y parece coherente.
+- **Entregar más piezas no mueve la aguja** (tres vueltas seguidas lo confirmaron): va medir el canal y **achicar la cola de Sergio** antes de agregarle nada. Y revisar que el objetivo escrito mida la cuenta correcta — 3 de 4 piezas pendientes eran de otra cuenta que ese número no podía mover.
+- **El diagnóstico del 02/04-sep, que es el por qué de todo lo de arriba:** 749 commits en 7 días con sólo 7 % tocando producto y 46 % de las vueltas sin commit esperando decisiones. La causa no era falta de tiempo (la vuelta más larga usó el 38 % de su tope): eran colas vacías, loops que no sabían pedirle una decisión a Sergio, y loops sin nada contra qué verificar si algo estaba hecho.
+- **Después de tocar un script del despliegue, correrlo DOS veces** y exigir cero `FALLO`/`cannot stat`; si el script se auto-despliega, copiarlo también por `scp`, porque una versión rota no puede repararse a sí misma.
