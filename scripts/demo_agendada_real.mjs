@@ -57,6 +57,13 @@
 
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
+import { pathToFileURL } from 'node:url';
+
+// ⚠️ Se IMPORTA, no se copia. "Quienes somos nosotros" (el celular de Sergio, los contactos de
+// prueba) ya esta decidido y probado en `objetivo_visible.mjs`, y CLAUDE.md pide una sola fuente
+// de verdad por tema: dos listas de lo mismo divergen el dia que alguien agrega un numero a una.
+// Ese modulo no dispara nada al importarlo — su `main` esta detras de la guarda de `argv[1]`.
+import { esNuestra } from './objetivo_visible.mjs';
 
 /** La base del MOTOR del bot, que NO es la de Chatwoot: `onia_center.bot_conversations`. */
 const ESTADO_DB = process.env.ONIA_BOT_ESTADO_DB || 'supabase-db';
@@ -119,14 +126,31 @@ export function juzgar(promesas, reservas) {
   }
 
   const detalle = huecas
-    .map((p) => `conv ${p.conversationId} ("${String(p.texto || '').replace(/\*/g, '').trim()}")`)
+    .map(
+      (p) =>
+        `conv ${p.conversationId} «${String(p.contacto || '').trim() || 'sin nombre'}» ` +
+        `("${String(p.texto || '').replace(/\*/g, '').trim()}")`,
+    )
     .join(' · ');
+
+  // QUIEN esta del otro lado. Un rojo de la sonda de QA y un rojo de un lead real valen distinto
+  // para el que lo lee, y hasta hoy se leian igual: el gate cerraba SIEMPRE con "alguien va a
+  // llegar a una reunion vacia", frase que el 2026-09-03 era falsa (la unica hueca era la sonda).
+  // Un vigia que grita mal no molesta: INUTILIZA, y a este ya se le habia dejado de creer una vez.
+  //
+  // ⚠️ Se informa, NO se filtra: el codigo es 1 en los dos casos. Sacar a la sonda de los sujetos
+  // devolveria el gate a fallar abierto — el bug que la vuelta anterior cerro.
+  const humanas = huecas.filter((p) => !esNuestra(p));
+  const cierre = humanas.length
+    ? 'El bot lo dijo y no hay reserva ni aviso a Sergio. ' +
+      'Del otro lado hay alguien que va a llegar a una reunion vacia.'
+    : 'El bot lo dijo y no hay reserva ni aviso a Sergio. Hoy son TODAS de la sonda QA de este ' +
+      'carril, asi que no hay nadie plantado — pero el motor prometio exactamente lo mismo que le ' +
+      'prometeria a un lead, y por eso sigue en rojo.';
+
   return {
     codigo: 1,
-    texto:
-      `${huecas.length} de ${promesas.length} DEMO(S) PROMETIDAS QUE NO EXISTEN: ${detalle}. ` +
-      'El bot lo dijo y no hay reserva ni aviso a Sergio. ' +
-      'Del otro lado hay alguien que va a llegar a una reunion vacia.',
+    texto: `${huecas.length} de ${promesas.length} DEMO(S) PROMETIDAS QUE NO EXISTEN: ${detalle}. ${cierre}`,
   };
 }
 
@@ -137,17 +161,23 @@ export function juzgar(promesas, reservas) {
  */
 export function leerPromesas(frase, exec = ejecutarSqlChatwoot) {
   if (!frase) throw new Error('no encontre la promesa de reserva (M2) en el guion del bot');
+  // El contacto va ANTES del texto libre a proposito: `-tA` separa con `|` y no escapa nada, asi
+  // que un `|` dentro del mensaje del bot correria las columnas y le atribuiria la promesa a otro.
+  // Con el texto ultimo, lo que sobre se vuelve a pegar y ningun campo se contamina.
   const crudo = exec(
-    `select conversation_id, created_at, replace(left(content, 120), '\n', ' ') from messages ` +
-      `where message_type = 1 and content like '%${frase.replace(/'/g, "''")}%' order by created_at;`,
+    `select m.conversation_id, m.created_at, coalesce(ct.name, ''), coalesce(ct.phone_number, ''), ` +
+      `replace(left(m.content, 120), '\n', ' ') ` +
+      `from messages m join conversations c on c.id = m.conversation_id ` +
+      `left join contacts ct on ct.id = c.contact_id ` +
+      `where m.message_type = 1 and m.content like '%${frase.replace(/'/g, "''")}%' order by m.created_at;`,
   );
   return String(crudo)
     .split('\n')
     .map((l) => l.trim())
     .filter(Boolean)
     .map((linea) => {
-      const [conversationId, creado, texto] = linea.split('|');
-      return { conversationId: Number(conversationId), creado, texto };
+      const [conversationId, creado, contacto, telefono, ...resto] = linea.split('|');
+      return { conversationId: Number(conversationId), creado, contacto, telefono, texto: resto.join('|') };
     });
 }
 
@@ -232,10 +262,23 @@ function selfCheck() {
   afirmar('sin mapa de reservas sale 2', juzgar([], null).codigo === 2);
 
   // El parseo de los mensajes, con el separador de psql `-tA`.
-  const proms = leerPromesas('Listo, agendado:', () => '49|2026-09-04 18:00:00+00|Listo, agendado: **viernes 4**.\n9|2026-09-05 13:00:00+00|Listo, agendado: **sabado 5**.\n');
+  const proms = leerPromesas(
+    'Listo, agendado:',
+    () =>
+      '49|2026-09-04 18:00:00+00|Sonda QA carril chatbot||Listo, agendado: **viernes 4**.\n' +
+      '9|2026-09-05 13:00:00+00|Mario Hassen|+59173021804|Listo, agendado: **sabado 5**.\n',
+  );
   afirmar('parsea las dos promesas', proms.length === 2);
   afirmar('la primera es la conv 49', proms[0].conversationId === 49);
   afirmar('conserva el texto prometido', proms[1].texto.includes('sabado 5'));
+  afirmar('lee el nombre del contacto', proms[0].contacto === 'Sonda QA carril chatbot');
+  afirmar('lee el telefono del contacto', proms[1].telefono === '+59173021804');
+  afirmar('un contacto sin nombre queda vacio, no undefined', proms[1].contacto === 'Mario Hassen' && proms[0].telefono === '');
+  // `-tA` no escapa NADA: un `|` dentro del mensaje partiria la fila y le colgaria la promesa a
+  // otro contacto. Por eso el texto es la ULTIMA columna y lo que sobra se vuelve a pegar.
+  const conBarra = leerPromesas('Listo, agendado:', () => '5|2026-09-06 12:00:00+00|Ana|+591700|Listo, agendado: **lunes** | confirmo con Sergio\n');
+  afirmar('un `|` en el mensaje no corre las columnas', conBarra[0].contacto === 'Ana');
+  afirmar('un `|` en el mensaje no se pierde del texto', conBarra[0].texto === 'Listo, agendado: **lunes** | confirmo con Sergio');
   afirmar('sin frase no consulta nada', (() => { try { leerPromesas(null, () => ''); return false; } catch { return true; } })());
 
   // El parseo del mapa de reservas.
@@ -294,6 +337,62 @@ function selfCheck() {
   afirmar('la frase sale de M2 del guion', frasePromesa('  M2: [\n    "Listo, agendado: **{{dia_hora_elegida}}**.",\n') === 'Listo, agendado:');
   afirmar('un guion sin M2 no se inventa una frase', frasePromesa('M7: ["otra cosa"]') === null);
 
+  // ── QUIEN esta del otro lado: un rojo de QA y un rojo de un lead no se leen igual ──────────
+  //
+  // El gate salia siempre con la misma frase final —"Del otro lado hay alguien que va a llegar a
+  // una reunion vacia"— y el 2026-09-03 esa frase era FALSA: la unica promesa hueca era la conv
+  // 49, o sea `Sonda QA carril chatbot`, el instrumento de este mismo carril. Nadie humano iba a
+  // ninguna reunion. Un vigia que grita mal no molesta: INUTILIZA — es exactamente como se dejo
+  // de creerle al vigia del embudo, que reportaba como incidente activo lo de seis dias antes.
+  //
+  // ⚠️ Se INFORMA, no se filtra. El codigo de salida es 1 en los dos casos: excluir a la sonda de
+  // los sujetos devolveria el gate a fallar ABIERTO, que es el bug que la vuelta anterior cerro.
+  // Lo unico que cambia es la frase, que es lo que decide si Sergio deja todo y actua.
+  const sonda = { conversationId: 49, texto: 'Listo, agendado: **viernes 4**.', contacto: 'Sonda QA carril chatbot' };
+  const lead = { conversationId: 51, texto: 'Listo, agendado: **sabado 5**.', contacto: 'Mario Hassen', telefono: '+59173021804' };
+
+  const soloQa = juzgar([sonda], { 'chatwoot:49': '' });
+  afirmar('la hueca de QA sigue siendo rojo', soloQa.codigo === 1);
+  afirmar('nombra al contacto de la promesa hueca', soloQa.texto.includes('Sonda QA carril chatbot'));
+  afirmar('no inventa un humano esperando cuando es la sonda', !/reunion vacia/i.test(soloQa.texto));
+  afirmar('dice que el motor hizo lo incorrecto igual', /sonda|QA/i.test(soloQa.texto));
+
+  const soloLead = juzgar([lead], { 'chatwoot:51': '' });
+  afirmar('la hueca de un desconocido es rojo', soloLead.codigo === 1);
+  afirmar('nombra al desconocido', soloLead.texto.includes('Mario Hassen'));
+  afirmar('con un desconocido SI avisa de la reunion vacia', /reunion vacia/i.test(soloLead.texto));
+
+  // Una sola persona real entre diez de QA tiene que gritar igual de fuerte.
+  const mezclada = juzgar([sonda, lead], { 'chatwoot:49': '', 'chatwoot:51': '' });
+  afirmar('una real entre varias de QA grita igual', /reunion vacia/i.test(mezclada.texto));
+  afirmar('la mezcla nombra a los dos', mezclada.texto.includes('Sonda QA') && mezclada.texto.includes('Mario Hassen'));
+
+  // ⚠️ El sesgo elegido, y va al reves que en `objetivo_visible.mjs` a proposito: alli "parece
+  // nuestro" pone el gate MAS rojo; aca bajaria el volumen. Por eso un contacto que no se pudo
+  // leer se trata como PERSONA REAL: desconocido = se grita. Equivocarse gritando se investiga
+  // en un minuto; equivocarse callando deja a alguien plantado en una reunion que no existe.
+  const anonima = juzgar([{ conversationId: 7, texto: 'Listo, agendado: **lunes**.' }], { 'chatwoot:7': '' });
+  afirmar('sin nombre de contacto se lee como persona real', /reunion vacia/i.test(anonima.texto));
+  afirmar('sin nombre lo dice en vez de inventar uno', /sin nombre/i.test(anonima.texto));
+
+  // El telefono de Sergio tambien somos nosotros: el predicado es el MISMO que usa el otro gate.
+  const sergio = juzgar([{ conversationId: 11, texto: 'Listo, agendado: **martes**.', contacto: 'Sergio', telefono: '+591 716-54992' }], {});
+  afirmar('el telefono de Sergio no cuenta como lead esperando', !/reunion vacia/i.test(sergio.texto));
+
+  // ── Importar este modulo NO puede tocar produccion ─────────────────────────────────────────
+  //
+  // Sin la guarda de `argv[1]`, cargar el archivo corria el gate entero (dos `docker exec`) y
+  // llamaba a `process.exit()`, matando al proceso que importaba antes de su primera linea.
+  // Se prueba en un hijo porque en este proceso el modulo ya esta cargado y cacheado.
+  {
+    const hijo = execFileSync(
+      process.execPath,
+      ['-e', `import(${JSON.stringify(import.meta.url)}).then(() => console.log('IMPORTADO'))`],
+      { encoding: 'utf8', timeout: 60_000 },
+    );
+    afirmar('importar el modulo no dispara la medicion contra produccion', hijo.includes('IMPORTADO'));
+  }
+
   const fallados = casos.filter((c) => !c.ok);
   for (const c of fallados) console.error(`FALLO: ${c.nombre}`);
   console.log(`${casos.length - fallados.length}/${casos.length} casos`);
@@ -302,16 +401,23 @@ function selfCheck() {
 
 // ---------------------------------------------------------------------------
 
-if (process.argv.includes('--self-check')) {
-  process.exit(selfCheck());
-}
+// ⚠️ Solo mide en VIVO si se lo invoca como programa. Sin esta guarda, un `import` de `juzgar`
+// —para probar el veredicto con datos reales, o desde otro gate— dispara dos `docker exec`
+// contra produccion y un `process.exit()` como efecto de CARGAR el modulo: el proceso que
+// importa se muere antes de correr su propia linea. Medido el 2026-09-03 intentando justamente
+// eso. `objetivo_visible.mjs` ya tenia la guarda y este archivo la copio sin ella.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  if (process.argv.includes('--self-check')) {
+    process.exit(selfCheck());
+  }
 
-let veredicto;
-try {
-  const frase = frasePromesa(readFileSync(CONFIG_DEL_BOT, 'utf8'));
-  veredicto = juzgar(leerPromesas(frase), leerReservas());
-} catch (e) {
-  veredicto = { codigo: 2, texto: `NO SE PUDO MEDIR — ${e.message}` };
+  let veredicto;
+  try {
+    const frase = frasePromesa(readFileSync(CONFIG_DEL_BOT, 'utf8'));
+    veredicto = juzgar(leerPromesas(frase), leerReservas());
+  } catch (e) {
+    veredicto = { codigo: 2, texto: `NO SE PUDO MEDIR — ${e.message}` };
+  }
+  console.log(veredicto.texto);
+  process.exit(veredicto.codigo);
 }
-console.log(veredicto.texto);
-process.exit(veredicto.codigo);

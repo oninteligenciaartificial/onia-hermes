@@ -51,6 +51,17 @@ dirección**: el chequeo de arranque busca filas de la tabla que falten en el cr
 una línea de cron que falte en la tabla. Es el sentido que deja al loop invisible: existe, corre,
 gasta, y la auto-cura no lo rearma nunca porque no sabe que existe.
 
+⚠️ **Corregido 2026-09-03 (21:2x La Paz) — cinco horarios de la tabla habían quedado viejos.**
+`canario-visual`, `marca-personal`, `docs-auditoria`, `investigacion` y `supervisor` corrían con
+una cadencia MÁS BAJA que la escrita: la sesión de control la bajó ese mismo día (junto con
+`kpis-semanal`) y la tabla no se enteró. Se alinean **al cron**, por la regla de más abajo: cuando
+el cron y la tabla difieren, gana el cron.
+
+No es cosmético — `test:loops-registrados` estaba **en rojo**, y ese gate está en la cadena de
+`npm test`, o sea que **ningún carril podía mergear**: el integrador corre la cadena entera antes
+de tocar `main`. Una desalineación de documentación bloqueó a los quince. Lo encontró
+`chatbot-cola` al correr sus propios gates, no una auditoría.
+
 ## Deben existir y estar activos
 
 **Desde el 2026-09-01 el conjunto vive en DOS lugares**, y la columna *dónde corre* es la que
