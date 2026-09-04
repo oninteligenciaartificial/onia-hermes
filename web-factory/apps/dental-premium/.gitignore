@@ -11,3 +11,9 @@ yarn.lock
 
 # Artefacto incremental de tsc: se regenera en cada typecheck y solo ensucia el diff.
 tsconfig.tsbuildinfo
+
+# Capturas que escribe `npm run gate:contraste`. Se REGENERAN en cada corrida y
+# pesan 1,2 MB: versionarlas sería 1,2 MB de binario nuevo por vuelta del loop.
+# La evidencia que sobrevive son los NÚMEROS del gate, que van en el commit y en
+# la cola; la foto se vuelve a sacar en un comando cuando hace falta mirarla.
+capturas/

@@ -247,12 +247,186 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       no hay nadie colgado. Por eso esta vuelta **no mandó alarma a Sergio** — un aviso de "alguien
       va a una reunión vacía" que no tiene a nadie del otro lado es exactamente cómo se dejó de
       creerle al vigía del embudo.
-      **Próximo paso, chico y acotado:** que la salida del gate diga **quién** es la conversación
-      (nombre del contacto), para que un rojo de QA y un rojo de un lead real no se lean igual.
-      **NO se resuelve excluyendo a la sonda**: una lista de exclusión devuelve el gate a fallar
-      abierto, que es el bug que esta vuelta acaba de cerrar. Se informa, no se filtra.
+      ✅ **HECHO el 2026-09-03 (vuelta siguiente): el gate ya dice QUIÉN está del otro lado.** Era
+      el próximo paso anotado acá, y hacía falta porque la frase de cierre era **falsa**: salía
+      siempre *"Del otro lado hay alguien que va a llegar a una reunión vacía"*, y la única promesa
+      hueca era `Sonda QA carril chatbot`, el instrumento de este mismo carril. Nadie iba a ninguna
+      reunión. **Un vigía que grita mal no molesta: INUTILIZA** — es exactamente como se dejó de
+      creerle al vigía del embudo, y este gate iba camino a lo mismo en su segundo día de vida.
+      **Se informa, NO se filtra, y el código de salida lo prueba: 1 en los dos casos.** Excluir a
+      la sonda de los sujetos devolvería el gate a fallar abierto, que es el bug de la vuelta
+      anterior. Lo único que cambia es la frase — que es lo que decide si Sergio deja todo y actúa.
+      **Los dos veredictos, medidos con identidades REALES de la base y no con fixtures:**
+      · hoy → `1 de 1 … conv 49 «Sonda QA carril chatbot» … Hoy son TODAS de la sonda QA de este
+      carril, así que no hay nadie plantado — pero el motor prometió exactamente lo mismo que le
+      prometería a un lead, y por eso sigue en rojo.`
+      · con los dos desconocidos de verdad de la bandeja (`F` +59173232758 y `mariohassen`
+      +59173021804, tal como salen del join a `contacts`) → `2 de 2 … conv 35 «F» · conv 37
+      «mariohassen» … Del otro lado hay alguien que va a llegar a una reunión vacía.`
+      **El predicado de "quiénes somos nosotros" se IMPORTA de `scripts/objetivo_visible.mjs`, no se
+      copia** (`esNuestra`, con el celular de Sergio y los nombres de QA): dos listas del mismo
+      tema divergen el día que alguien agrega un número a una sola, y `CLAUDE.md` pide una fuente
+      por tema.
+      ⚠️ **El sesgo va al REVÉS que en el otro gate, a propósito.** En `scripts/objetivo_visible.mjs` "parece
+      nuestro" pone el gate más rojo; acá bajaría el volumen. Por eso **un contacto que no se pudo
+      leer se trata como persona real** y grita: equivocarse gritando se investiga en un minuto,
+      equivocarse callando deja a alguien plantado.
+      **Rojo primero, por el motivo correcto:** los 7 casos nuevos fallaron por lo que tenían que
+      fallar (`nombra al contacto de la promesa hueca`, `no inventa un humano esperando cuando es
+      la sonda`, …). **38 → 44 casos**, verde, y `npm test` entero en verde.
+      🔎 **Y un defecto encontrado al EJECUTARLO, no al leerlo: `demo_agendada_real.mjs` no tenía
+      la guarda de `argv[1]`.** Importar el módulo para probar `juzgar` con datos reales disparaba
+      **dos `docker exec` contra producción y un `process.exit()`** como efecto de cargarlo: el
+      proceso que importaba se moría antes de su primera línea. `scripts/objetivo_visible.mjs` ya tenía la
+      guarda y este archivo la había copiado sin ella. Arreglado y **pinchado con un caso que corre
+      en un proceso hijo** (en este el módulo ya está cacheado y el test pasaría en falso).
+      **Reproducción en 30 s:** `npm run demo:agendada` → exit 1 nombrando al contacto.
 
-- [ ] 🔴 **Un lead pregunta "¿el sistema hace X?" y el bot le contesta con la oferta de horarios,
+- [ ] 🔴 **El bot promete "ya le pasé tu consulta a Sergio, te escribe él" y NADIE se lo pasa:
+      el aviso del handoff viaja hasta un canal apagado.** Encontrado el 2026-09-03 18:10 UTC
+      cerrando el ítem de abajo, mirando el frente *"lo que promete"* — no por la cola.
+      **La medición, en producción:** conversación 49, mensaje 389 (recién derivada por el arreglo
+      de abajo). Texto literal del bot: *"Eso lo tiene que ver Sergio, no yo… **Ya le pasé tu
+      consulta con todo lo que me contaste. Te escribe él desde este mismo número**, en horario de
+      oficina"*. Nadie recibió nada.
+      **La cadena entera, seguida archivo por archivo hasta el final — y el final no existe:**
+      `hermes-content/deploy/vps-ops/bot/bot-engine.mjs:319` emite el efecto `notify_sergio` ·
+      `hermes-content/deploy/vps-ops/bot/chatwoot-adapter.mjs:756-762` lo propaga hacia arriba (con
+      un comentario que dice, textual, que antes *"ESTE archivo lo tiraba"*) ·
+      `hermes-content/deploy/vps-ops/bot/n8n-event.mjs:161-165` lo mete en el evento del turno como
+      `notifyCount` / `notifyReasons`, marcados ahí mismo como *"lo único de este evento que NO es
+      analítica"* ·
+      y ese evento sale por n8n, que en `/opt/onia/bot/webhook.env` está **`ONIA_N8N_ENABLED=false`
+      con `ONIA_N8N_EVENT_URL` vacío** (medido hoy, no leído de un doc). Cuatro archivos que se
+      pasan la posta con cuidado hacia una puerta tapiada.
+      ⚠️ **No está perdido, está mudo — y la diferencia importa para elegir el arreglo.** El lead
+      SÍ queda en `onia_center.review_queue`
+      (`hermes-content/deploy/vps-ops/bot/persistence.mjs:731`) y la conversación se ve en
+      `/inbox`. O sea que el dato existe: lo que falta es que algo golpee la puerta. Por eso esto
+      **no es** "se pierde el lead", es "Sergio se entera sólo si abre el panel" — que es
+      exactamente lo que el comentario del adapter dice que quería evitar.
+      ✅ **El vigía del colgado ya NO lo tapa — arreglado el 2026-09-03, ítem de abajo.** Decía
+      acá que `scripts/vigia_sin_respuesta.mjs:93` descarta toda conversación cuyo último mensaje
+      sea saliente (`// ya le contestaron`), y que en un handoff ese último mensaje es el del bot,
+      así que **mientras el prospecto no insista, nada lo ve**. Eso era cierto hasta hoy: ahora
+      `seleccionarEsperandoHumano()` mira ese caso aparte. **Lo que sigue faltando es el aviso en
+      el momento**, que es la decisión de Sergio de acá abajo — la red nueva avisa a los 30 min,
+      no al instante.
+      📈 **Y esto se volvió MÁS frecuente hoy, por el arreglo de abajo.** Hasta las 18:04 una
+      pregunta de producto se la tragaba el off-guion; ahora va a handoff, que es lo correcto —
+      pero suma un motivo más a un aviso que no sale. Los motivos que ya caían acá:
+      `soporte_cliente`, `consulta_clinica_o_legal`, `queja_o_desconfianza`,
+      `pidio_hablar_con_humano`, `ningun_horario_le_sirve`.
+      🔴 **DEPENDE DE SERGIO — y es la MISMA decisión que ya está preguntada, no una nueva:**
+      tablero `t_b18ca430`, opciones (a) Telegram directo reusando el `TG_BOT_TOKEN` que el
+      watchdog ya usa · (b) n8n · (c) las dos. **No volver a preguntarlo.** Lo único que cambió es
+      el tamaño: esa tarea está redactada como "la demo agendada", y el canal muerto se lleva
+      puesto **todo handoff**, que es bastante más que las demos. Anotado como comentario en esa
+      tarea el 2026-09-03, para que la decisión se tome sabiendo el alcance real.
+      **Reproducción en 30 s:** `grep -E '^ONIA_N8N_(ENABLED|EVENT_URL)' /opt/onia/bot/webhook.env`
+      → `false` y vacío. Ése es el corte, y conviene decir dónde NO está para que nadie lo busque
+      dos veces: `hermes-content/deploy/vps-ops/bot/webhook-server.mjs` no nombra `notify` ni una
+      vez (`grep -c` → 0) y **eso no es el bug** — le pasa el `result` entero a
+      `buildBotTurnEvent` (línea 450), así que el aviso sube bien. Muere en el envío, no en el
+      armado.
+      ✅ **CONSTRUIDO HASTA EL BORDE el 2026-09-03 20:20 UTC — falta el deploy, no la decisión.**
+      La opción (a) del tablero está escrita, probada y apagada: `hermes-content/deploy/vps-ops/bot/aviso-telegram.mjs` +
+      su test (18 casos), cableado en `hermes-content/deploy/vps-ops/bot/webhook-server.mjs`. Encenderla es
+      `ONIA_BOT_TG_AVISO=true`; si Sergio elige (b) n8n, el flag se queda en `false` y no cambia
+      nada. **No se decidió por él: se le sacó el trabajo de encima para que su respuesta sea un
+      "sí" y no un proyecto.**
+      🔎 **La justificación del canal muerto era FALSA, y por eso esto se pudo escribir sin
+      pedir nada.** `hermes-content/deploy/vps-ops/bot/chatwoot-adapter.mjs:761` dice que el aviso va por n8n *"porque ahí vive la
+      credencial de Telegram (el plan VPS no soporta `$env` en los nodos, así que el token no
+      puede vivir acá)"*. Lo de n8n es cierto; **la conclusión no**: el límite es de los NODOS de
+      n8n, no del bot. El bot es un proceso de Node en el mismo VPS y el token ya está en dos
+      archivos que otros procesos leen hace meses — `/root/.hermes/.env` (`TELEGRAM_BOT_TOKEN`,
+      lo usa `/root/bin/onia-tg.sh`) y `/root/.config/onia/backup.env` (`TG_BOT_TOKEN`/`TG_CHAT_ID`, lo usa
+      `/opt/onia/bot/webhook-watchdog.sh` **cada 2 minutos por cron**). No faltaba ninguna credencial: faltaba
+      el código. Un comentario que explica por qué algo no se puede hacer es una hipótesis, y
+      esta llevaba semanas sin que nadie la midiera.
+      **Dos cosas distintas ya no comparten interruptor**, que es el bug de fondo y sobrevive a
+      cualquiera de las tres opciones: el aviso viajaba como un campo (`notifyCount`) DENTRO del
+      evento de n8n, así que apagar la analítica apagaba también lo único de ese evento que no es
+      analítica. Ahora sale por su propio camino y deja línea en el log **salga o no** — el modo
+      de falla de este carril es justamente el aviso que no sale y nadie lo nota.
+      **Rojo primero, por el motivo correcto** (pinchando el módulo a propósito y restaurándolo):
+      sin el escape de HTML el `<script>` de un prospecto sale crudo, y sin mirar el `ok:false`
+      un 200 de Telegram que descartó el mensaje se lee como enviado — los dos falsos verdes que
+      harían que el aviso muera igual que ahora, pero con mejor cara. **772 casos verdes** en
+      `node --test` (754 → 772).
+      🔴 **NO DESPLEGADO** — `hermes-content/deploy/vps-ops/bot/espejo-check.mjs` lo dice:
+      el archivo nuevo falta en el VPS y `hermes-content/deploy/vps-ops/bot/webhook-server.mjs` difiere. El deploy es de `onia-cola`. Y sigue pendiente la decisión de
+      Sergio (`t_b18ca430`), que ahora es sólo encender un flag.
+
+- [x] 🔴 **El que ESPERA a un humano prometido era invisible para todo el sistema: el único vigía
+      que mira la bandeja lo descartaba con un `// ya le contestaron` que en un handoff es
+      mentira.** Encontrado el 2026-09-03 19:00 UTC recorriendo el frente del ítem de arriba, con
+      `npm test` entero en verde y el vigía corriendo cada 2 h **sin poder ver este caso**.
+      **La medición, en producción y no en un test:** el bot deriva y le dice a la persona
+      *"Ya le pasé tu consulta con todo lo que me contaste. Te escribe él desde este mismo
+      número"*. Ese es el último mensaje de la conversación, y es **saliente**. El vigía
+      (`scripts/vigia_sin_respuesta.mjs`) descarta toda conversación cuyo último mensaje sea
+      saliente, así que la persona que hizo bien en esperar desaparecía de la única red que mira
+      la bandeja. Sólo reaparecía si **volvía a insistir** — o sea que el vigía veía al impaciente
+      y perdía al que confió. Y el que confía es el que se va sin decir nada.
+      ⚠️ **Por qué ningún gate lo veía, y no es el mismo motivo que arriba:** el gate
+      `demo:agendada` mira las promesas de reserva (M2) y el vigía mira a los que nadie contestó.
+      El handoff (M5) caía **entre los dos**: para el gate no es una demo, y para el vigía "ya le
+      contestaron" porque técnicamente salió un mensaje. Dos redes correctas con un agujero justo
+      en el medio, que es donde el bot manda a todo lead con una pregunta que no sabe responder —
+      y hoy son seis motivos, uno más desde el arreglo de las 18:04.
+      **Lo que se hizo:** `seleccionarEsperandoHumano()` en el mismo archivo (no un script nuevo:
+      dos definiciones de "nadie lo atendió" en el mismo carril envejecen en direcciones
+      distintas). Mira el lado **append-only** —los mensajes de Chatwoot, que no se reescriben— y
+      no el `bot_stage` del motor, que la sonda del propio carril blanquea cada hora: es la
+      lección que este carril ya pagó con `scripts/demo_agendada_real.mjs`.
+      **Cómo decide que el humano no llegó, sin hardcodear a nadie:** el bot es **el sender de la
+      propia promesa**, y cualquier saliente posterior de OTRO sender es una persona y cierra el
+      caso. Derivarlo del mensaje —en vez de escribir `sender_id = 3` acá— mantiene el criterio
+      cierto el día que el bot cambie de token. Que el bot siga hablando (el `M5_ACUSE`) **no**
+      cuenta como que llegó el humano: si tapara el aviso, el acuse de recibo sería el mejor
+      escondite del embudo. Y un entrante posterior lo saca de esta lista a propósito — ese caso
+      ya es del vigía de arriba, y dos avisos por la misma conversación es como se le deja de
+      creer a un vigía.
+      **La frase se saca de `M5` del guion del propio bot**
+      (`hermes-content/deploy/vps-ops/bot/config.mjs:233-237`) y **no se
+      hardcodea**: pegada acá, el día que alguien reescriba M5 el vigía quedaría ciego en silencio
+      buscando un texto que ya nadie manda. De las tres líneas de M5 se queda con la **más larga**
+      —la primera, *"Eso lo tiene que ver…"*, es corta y marcaría cualquier cosa— y hay un guardia
+      contra el guion REAL en disco, porque los otros casos usan texto inyectado y pasarían igual
+      con `config.mjs` ausente.
+      **Y el aviso separa los dos grupos**, no los suma: al que nadie contestó hay que
+      contestarle, y al que espera un humano el bot **ya le prometió** que le escriben. Bajo el
+      título viejo (*"escribieron y nadie contesto"*) el segundo grupo sería falso, y un vigía que
+      grita mal no molesta: inutiliza. El aviso muestra **lo último que dijo la persona**, no el
+      texto del bot: Sergio necesita saber a qué contestar, y su propia promesa no se lo dice.
+      **Rojo primero, por el motivo correcto:** `SyntaxError: does not provide an export named
+      'CONFIG_DEL_BOT'`. **15 → 28 casos**, verde, y `npm test` entero en verde (exit 0).
+      ✅ **Verificado contra PRODUCCIÓN, no contra el test, y con los dos controles que importan.**
+      Sobre las 191 filas reales de Chatwoot: la frase sacada del guion aparece **en 5 mensajes
+      reales** del bot (o sea que el texto que busca es el que el bot manda de verdad). Hoy en
+      vivo da **0 esperando humano**, y eso es correcto: las 5 promesas son de la conv 49, que es
+      `Sonda QA carril chatbot` — no hay ninguna persona plantada ahora mismo. Para probar que la
+      red **engancha** y no que está rota, se cortaron las filas reales justo después de la
+      promesa (msg 389) —que es literalmente "la persona no volvió a escribir"—: sale **conv 49,
+      66 min esperando, sender de la promesa = 3**, mostrando la consulta real de la persona
+      (*"Antes de elegir horario, ¿el sistema manda recordatorios por WhatsApp…"*). Y los dos
+      controles sobre esas mismas filas: con un saliente del **SuperAdmin (sender 2)** después →
+      **0**, con uno más del **bot (sender 3)** → **1**.
+      🔎 **Un defecto de arrastre encontrado al medir, no al leer:** la consulta traía el contenido
+      con sus saltos de línea, y el parseo corta por `\n`. Un mensaje multilínea —M5 lo es— se
+      partía en filas de menos de 9 columnas que el `.filter()` tiraba **en silencio**: el saliente
+      desaparecía y su conversación podía contarse como colgada. Ahora el `\n` se aplana en el SQL.
+      🔴 **NO ESTÁ ENCENDIDO — y esto no es una formalidad.** El cron
+      (`39 */2 * * * /root/bin/onia-vigia-sin-respuesta.sh`) elige el script de una lista y toma
+      **el primero que existe**: `/root/loops/onia-hermes/scripts/vigia_sin_respuesta.mjs`, o sea
+      el clon de `main`. Medido: ahí `grep -c seleccionarEsperandoHumano` → **0**. Hasta que
+      `onia-cola` mergee esta rama, el que corre cada 2 h es el vigía viejo, ciego a este caso.
+      **Reproducción en 30 s:** `node scripts/vigia_sin_respuesta.mjs` → la última línea dice
+      cuántos hay de cada tipo (`N sin respuesta · M esperando a un humano prometido`).
+
+- [x] 🔴 **Un lead pregunta "¿el sistema hace X?" y el bot le contesta con la oferta de horarios,
       como si no hubiera preguntado nada.** Encontrado el 2026-09-03 recorriendo el frente
       (escalón 3), no por la cola: los dos gates del carril estaban en VERDE.
       **La medición, en producción y no en un test:** conversación 49 del widget (inbox 4),
@@ -285,10 +459,34 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       también matchea la regla nueva, pero **no llega**: `isSiatQuestion` la agarra antes y tiene
       su propia respuesta. Mandarla a handoff habría EMPEORADO una pregunta que hoy se contesta
       bien. Queda pinchado con su propio assert.
-      🔴 **FALTA PARA CERRARLO — commiteado, NO desplegado.** `/opt/onia/bot` no es un checkout
-      de git: hasta que alguien copie ese `intents.mjs` ahí, **el bot vivo sigue tragándose la
-      pregunta**. Es el mismo deploy que ya esperan otros dos arreglos (tablero `t_8f88919e`,
-      bloqueado). No marcar `[x]` hasta verificarlo contra producción con la sonda.
+      ✅ **CERRADO el 2026-09-03 18:07 UTC — desplegado y VERIFICADO en producción, que era la
+      única condición que este ítem se había puesto para marcarse.** El deploy que faltaba se hizo
+      a las 18:04 (tablero `t_8f88919e`, hoy `done`), y esta vuelta lo comprobó en vez de creerle a
+      la fecha.
+      **Que el código nuevo esté CORRIENDO no se dedujo del `cp`: el proceso vive en otro lado.**
+      `/opt/onia/bot` es el origen del rsync, pero el webhook corre **dentro del contenedor
+      `onia-center`** sobre `/tmp/onia-bot/`, con `docker exec -d`. Medido en el árbol que ejecuta:
+      `docker exec onia-center grep -c RE_PRODUCTO_HACE /tmp/onia-bot/intents.mjs` → **2**, y
+      `ps -eo pid,lstart,args` da el reinicio a las **18:04:12**, o sea *después* de la copia —
+      Node cachea los módulos, así que sin ese reinicio el archivo nuevo no habría entrado igual.
+      Copiar no es desplegar y desplegar no es reiniciar: los tres se midieron por separado.
+      **La prueba de verdad, con la sonda y el turno exacto del bug** (`ONIA_SONDA_GUION` con los
+      tres mensajes, conversación 49, mensajes 388-389):
+      persona → *"Antes de elegir horario, ¿el sistema manda recordatorios por WhatsApp a los
+      pacientes?"* · bot → *"**Eso lo tiene que ver Sergio, no yo — soy un bot y no quiero
+      inventarte una respuesta.** Ya le pasé tu consulta con todo lo que me contaste."*
+      Antes ese mismo texto devolvía la oferta de horarios. Y el motor lo confirma de su lado:
+      `onia_center.bot_conversations` para `chatwoot:49` quedó en **`stage=handoff_humano`**, no en
+      `esperando_horario` — que es exactamente el assert que los dos tests nuevos habían puesto en
+      rojo. **Leído el contenido del mensaje, no contado**: "contestó" no habría probado nada acá,
+      porque el bug consistía justamente en contestar otra cosa.
+      **Reproducción en 30 s:** `ONIA_SONDA_GUION='Hola, quiero informacion sobre el sistema|Tengo
+      una clinica dental en Santa Cruz, somos 4 personas|Antes de elegir horario, ¿el sistema manda
+      recordatorios por WhatsApp a los pacientes?' node scripts/sonda_widget.mjs`, y mirar el último
+      saliente de la conversación.
+      🔎 **Lo que este ítem NO arregla y descubrió al cerrarse:** la promesa *"ya le pasé tu
+      consulta"* hoy no la cumple nadie. Es el ítem nuevo de acá abajo — no una duda sobre este
+      arreglo, que hace lo correcto: derivar en vez de tragarse la pregunta.
 
 - [x] 🔴 **El cron del rescate corre la copia VIEJA a propósito, así que un arreglo del carril
       no llega a producción hasta que alguien mergea — y mientras tanto nada lo dice.**

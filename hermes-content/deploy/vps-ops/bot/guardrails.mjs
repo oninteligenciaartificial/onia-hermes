@@ -9,6 +9,8 @@
 // Ademas: todo va envuelto en try/catch — el guardrail NUNCA puede romper el webhook.
 // Spec: hermes-content/docs/ONIA_CHATBOT_PROPIO_SPEC_20260725.md §3.1
 
+import { MARCADORES_DE_OFERTA, soloPreciosPublicos } from "./precios-publicos.mjs";
+
 /**
  * Texto seguro (equivalente al SAFE_REPLY de BE). Conserva los {{ }} a proposito: la
  * sustitucion de variables ocurre DESPUES del guardrail, si no una hora puede parecer una cifra.
@@ -22,16 +24,62 @@ export const SAFE_REPLY =
  * Desviacion consciente respecto de la tabla de la spec: en `promete_feature` uso `radiograf\w*`
  * en vez de `radiograf` — con `\b` al final, "radiografia" nunca matchearia (la 'i' es \w).
  */
+/**
+ * N1. Hasta el 2026-09-03 este regex estaba AL REVES y nadie lo habia mirado de frente: su unico
+ * patron con cifra exigia <numero><moneda> ("320 Bs") y nunca veia <moneda><numero> ("Bs 320") —
+ * la forma que usa el propio pricing.ts ("Bs 390/mes"), o sea la unica que un texto real trae.
+ * Medido: dejaba pasar "Bs 999 por mes, oferta especial" y rechazaba "cuesta poco".
+ *
+ * Hay DOS modos, y la diferencia es quien escribio el texto:
+ *
+ *   ESTRICTO (por defecto) — texto que IMPROVISA el LLM. Ninguna cifra de plata, ni siquiera una
+ *   real: el contexto del LLM no lleva numeros por contrato (bot-engine.mjs, `forbidden`), asi que
+ *   si aparece uno es una alucinacion, valga o no. Este modo quedo MAS cerrado que antes, porque
+ *   ahora tambien ve "Bs 320".
+ *
+ *   PRECIOS PUBLICOS (`opciones.preciosPublicos`) — solo para la FAQ `precios` de
+ *   knowledge.onia.json: texto curado, versionado y atado a los dos .ts por
+ *   precios-publicos.test.mjs. Es la unica puerta que abrio Sergio (decision 2026-09-03), y se
+ *   abre sobre el texto que un humano revisa, nunca sobre el que un modelo inventa.
+ *
+ * Orden deliberado:
+ *   1. sin ninguna cifra   -> deciden los patrones de frase de siempre;
+ *   2. modo estricto       -> cualquier monto viola;
+ *   3. cifra fuera del allowlist -> viola;
+ *   4. marcador de oferta  -> viola, aunque la cifra sea real (un monto bueno no regala nada);
+ *   5. resto               -> NO viola: son los precios publicos, la excepcion autorizada.
+ *
+ * Los marcadores de oferta se miran SOLO cuando hay una cifra, y no es una comodidad: esta regla
+ * habla de PLATA, asi que sin monto no hay nada que descontar. Mirarlos siempre daba un falso
+ * positivo caro — la FAQ del SIAT dice que "el SIN tiene un portal gratis", que es un portal del
+ * Estado y no un descuento nuestro, y con eso se caia la publicacion del conocimiento entero.
+ *
+ * LIMITE CONOCIDO, documentado en vez de fingido: el allowlist valida el MONTO, no a que producto
+ * se lo pega. "el chatbot cuesta Bs 320" es una cifra real mal asignada y pasa en modo abierto.
+ * Lo cubre que ese modo solo alcanza a un texto que se revisa y se versiona.
+ */
+function evaluaDeclaraPrecio(norm, patterns, opciones = {}) {
+  const { montos, intrusos } = soloPreciosPublicos(norm);
+  if (montos.length === 0) return patterns.some((pattern) => pattern.test(norm));
+  if (!opciones.preciosPublicos) return true;
+  if (intrusos.length > 0) return true;
+  return MARCADORES_DE_OFERTA.some((pattern) => pattern.test(norm));
+}
+
 export const GUARDRAIL_RULES = Object.freeze([
   Object.freeze({
     code: "declara_precio",
-    reason: "N1 — el bot no cotiza: el precio depende del plan y de los módulos que use el negocio",
+    reason:
+      "N1 — el bot solo dice los precios PUBLICOS de subscription-plans.ts y pricing.ts: " +
+      "ni una cifra inventada, ni un descuento",
     patterns: Object.freeze([
       /\d+(?:[.,]\d+)?\s*(bs\b|bolivianos?\b|\$us\b|usd\b|dolares?\b)/,
       /\bcuesta\b|\bsale\b\s*(en|a|por)?\s*\d/,
       /\bprecio\s*(es|:|=|de|final|mensual)\b/,
       /\bdesde\s+bs\b/,
     ]),
+    // Con cifra manda `evalua`; sin cifra, los `patterns` de arriba. Ver el comentario del metodo.
+    evalua: evaluaDeclaraPrecio,
   }),
   Object.freeze({
     code: "promete_siat",
@@ -89,12 +137,22 @@ export function normalize(text) {
     .replace(/[̀-ͯ]/g, "");
 }
 
-/** Devuelve los codigos violados. No modifica nada. */
-export function checkGuardrails(text) {
+/**
+ * Devuelve los codigos violados. No modifica nada.
+ * @param {object} [opciones] `preciosPublicos: true` habilita el allowlist de montos — se usa SOLO
+ *   para la FAQ `precios` (texto curado). Por defecto va el modo estricto, que es el del LLM.
+ */
+export function checkGuardrails(text, opciones = {}) {
   const norm = normalize(text);
   const violations = [];
   for (const rule of GUARDRAIL_RULES) {
-    if (rule.patterns.some((pattern) => pattern.test(norm))) violations.push(rule.code);
+    // Una regla puede traer su propia decision (hoy solo `declara_precio`, que necesita mirar el
+    // allowlist y no solo hacer match). Sin `evalua`, sigue siendo "cualquier patron alcanza".
+    const viola =
+      typeof rule.evalua === "function"
+        ? rule.evalua(norm, rule.patterns, opciones)
+        : rule.patterns.some((pattern) => pattern.test(norm));
+    if (viola) violations.push(rule.code);
   }
   return violations;
 }
