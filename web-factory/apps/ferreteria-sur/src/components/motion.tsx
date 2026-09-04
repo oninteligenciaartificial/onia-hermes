@@ -20,19 +20,35 @@ export function Reveal({
   delay = 0,
   y = 24,
   className,
+  alMontar = false,
 }: {
   children: ReactNode;
   delay?: number;
   y?: number;
   className?: string;
+  /**
+   * Anima al MONTAR en vez de al entrar en viewport. Obligatorio en el hero.
+   *
+   * `whileInView` con `margin: 0 0 -12%` exige que el bloque esté un 12% por
+   * encima del borde inferior para dispararse. En una laptop de 800-900px de
+   * alto el CTA del hero nace POR DEBAJO de esa línea, así que nunca entra
+   * "en viewport": se quedaba en `opacity:0` hasta que el visitante scrolleara.
+   * Medido el 2026-09-03 en el bundle de producción: a 1440x900 el botón que
+   * convierte estaba dentro del pliegue (bottom 842 < 900) y aun así NO se
+   * veía. Un bloque que ya está sobre el pliegue no puede depender de un
+   * scroll que nunca va a pasar.
+   */
+  alMontar?: boolean;
 }) {
   const reduce = useReducedMotion();
+  const entrada = { opacity: 1, y: 0 };
   return (
     <motion.div
       className={className}
       initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "0px 0px -12% 0px" }}
+      {...(alMontar
+        ? { animate: entrada }
+        : { whileInView: entrada, viewport: { once: true, margin: "0px 0px -12% 0px" } })}
       transition={{ duration: reduce ? 0 : 0.8, delay: reduce ? 0 : delay, ease: EASE }}
     >
       {children}
