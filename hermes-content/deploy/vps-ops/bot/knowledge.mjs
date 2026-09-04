@@ -663,7 +663,17 @@ export function cuotaAgotada(config) {
   return config?.cuota?.agotada === true;
 }
 
-/** Igual que nextCache: un fetch fallido CONSERVA la ultima copia buena de esa org. */
+/**
+ * Igual que nextCache: un fetch fallido CONSERVA la ultima copia buena de esa org.
+ *
+ * PERO NO LA CUOTA (2026-09-04). El conocimiento es CONTENIDO y envejece bien: una FAQ vieja
+ * sigue sirviendo. `cuota` no es contenido, es un INTERRUPTOR DE CORTE, y heredarlo invierte el
+ * riesgo: con `agotada:true` guardado, cualquier tramo sin producto (un deploy de onia-platform,
+ * un 404 porque el dueño apago y prendio el add-on, la red) deja al bot contestando "cupo lleno"
+ * a TODOS los que le escriban a ese cliente — y el 1 del mes que viene, con el cupo ya renovado,
+ * la unica forma de soltarlo seria reiniciar el proceso. Sin dato fresco vuelve a `null`, que es
+ * lo que `cuotaDe` ya define para un dato ausente o malformado: no se sabe = se atiende.
+ */
 function nextOrgCache(prev, result, organizationId, nowMs) {
   if (result.data) {
     return Object.freeze({
@@ -682,6 +692,7 @@ function nextOrgCache(prev, result, organizationId, nowMs) {
   const base = prev || EMPTY;
   return Object.freeze({
     ...base,
+    cuota: null, // el corte NO se hereda de una lectura que fallo (ver el comentario de arriba)
     source: base.data ? base.source : "code",
     checkedAt: nowMs,
     path: `db:${organizationId}`,
