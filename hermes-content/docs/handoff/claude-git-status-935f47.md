@@ -9,7 +9,99 @@
 
 ---
 
-## 0. Estado al 2026-09-04 ~08:30 La Paz — PUBLICAR dejó de fallar (y por qué casi sale peor)
+## 0. CIERRE DE CORRIDA — 2026-09-04 ~15:00 La Paz
+
+> **Esta sección manda sobre §1-§10 de más abajo**, que son historia del mismo carril.
+> Horas en La Paz (UTC−4). Escrita porque Sergio pidió cerrar y abrir sesión nueva.
+
+### Objetivo de la corrida
+Dejar la 1.0 usable: cerrar Configuración, rediseñar el panel de inicio, y sacar de la venta lo
+que no es cierto. **Hecho** = desplegado y verificado MIRANDO la pantalla, o en rama con las
+capturas mandadas a Sergio.
+
+### Qué quedó EN PRODUCCIÓN
+**Un solo despliegue, `3606c46`, 18:12 UTC (14:12 La Paz), gates 5/5, 0 errores en 3 min.**
+Tres defectos, y **dos eran de todo el sistema, no de la pantalla donde saltaron**:
+
+| Defecto | Causa real | Alcance |
+|---|---|---|
+| No se podía abrir «Configuración avanzada» | `GuiaInicio` vivía en `Header.tsx` → se montaba en TODA pantalla y su `fixed inset-0` se comía el clic | todas las pantallas |
+| El botón flotante tapaba «Guardar» | `pb-32` en `LayoutShell` contra un FAB de 96-152 px | todo el celular |
+| El rol decía «Administra» | literal en `vocabulario.ts`, 4 rubros + `ROL_DE_RESPALDO` | perfil, equipo y alta |
+
+Verificado en vivo: login 200 · panel 200 · configuración 200 · «Administrador» leído en pantalla.
+14 tests nuevos, cada uno comprobado fallando al revertir el arreglo. Suite 2913.
+
+### Qué quedó a medias, y dónde
+1. **`feat/panel-tres-renglones`** (`onia-platform`, worktree `.claude/worktrees/v1-panel`, HEAD
+   `110a15c`, **pusheado**). El panel dental en tres renglones, construido y verificado.
+   🔴 **Espera el «ok panel» de Sergio.** Se le mandaron 4 capturas y aviso por Telegram. Es una
+   pantalla viva: no se reemplaza sin que él vea la pieza (lección cara del 20-ago).
+   Medido: 9 interactivos y 103 palabras en la primera pantalla del celular; 21 → 9 consultas.
+2. **Port del panel de COMERCIO a tres renglones** — orquestado con un workflow de 5 fases.
+   ⚠️ **Al escribir esto seguía en vuelo y con CERO commits.** Si murió con la sesión, ese
+   trabajo se perdió entero y hay que relanzarlo: el guion quedó guardado en
+   `~/.claude/projects/.../workflows/scripts/portar-comercio-tres-renglones-wf_c19be55b-a26.js`
+   y se puede reanudar con `Workflow({scriptPath, resumeFromRunId: "wf_c19be55b-a26"})`.
+3. **`fix/venta-honesta`** (`onia-hermes`, pusheada, **sin mergear**). Saca la promesa de factura
+   del SIN de diez lugares y baja el bot a add-on. **Bloquea escribirle a los leads.**
+4. **Recorrido del dueño nuevo en producción** (registro → cliente → cita → cobro → contabilidad):
+   agente en vuelo al cerrar. Sin resultado registrado.
+
+### Archivos que importan para retomar
+- `app/(dashboard)/dashboard/panel-hoy.tsx` — presentación pura, sin Prisma ni Date. Es el contrato
+  para portar cualquier rubro: `PanelHoyDatos`, `FilaAtencion`, `FilaCita`, `AccionPanel`.
+- `app/dev/dashboard/page.tsx` — **el banco de pruebas**. Sin esto no hay forma de MIRAR el panel
+  sin base ni sesión. Cualquier rubro nuevo agrega su estado acá.
+- `lib/onboarding/guia-apertura.ts` (`laGuiaSeAbreSola`) — decide dónde saluda la guía.
+- `lib/plan-limits.ts` — **los topes por plan viven acá, no en `subscription-plans.ts`**.
+- `app/(dashboard)/dashboard/comercio-hoy.tsx` — 549 líneas, 11 consultas, sin portar.
+
+### Intentos fallidos — lo que NO hay que repetir
+- **`setsid` no existe en este Git Bash.** Un servidor lanzado con `setsid nohup …` no arranca y
+  el error no aparece hasta que el `curl` da 000. Usar el modo background de la herramienta.
+- **Un script de Playwright en `/tmp` no encuentra `playwright`**: ESM resuelve desde el archivo,
+  no desde el `cwd`. Escribirlo DENTRO del worktree.
+- **El dev server del banco muere sin variables de entorno**: el proxy revienta con *"Your
+  project's URL and Key are required"* y TODA ruta da 500. Hace falta un `.env.local` temporal con
+  valores falsos — y **borrarlo**, porque un build de producción hornea `127.0.0.1` en el bundle.
+- 🔴 **Una captura `fullPage` MIENTE sobre los elementos `position: fixed`**: los dibuja donde no
+  se ven. Me hizo creer que la barra «Agendar cita» tapaba la plata. Para juzgar si algo tapa algo:
+  capturar el **viewport** arriba y abajo, y medir con `getBoundingClientRect`.
+- **«Fuente única» sin decir CUÁL manda al archivo equivocado.** El doc de alcance mandaba a leer
+  los topes de `subscription-plans.ts`, que solo tiene montos, y por eso el plan Básico figuraba
+  con los topes del plan GRATIS (1 usuario · 30 clientes en vez de 2 · 300). Corregido en
+  `a10cd543`. Son TRES archivos: montos, topes y add-ons.
+- **Un subagente escribió por error en el checkout principal** en vez de su worktree. Lo detectó y
+  restauró; verificado limpio. La ruta explícita en el prompt no alcanza: hay que verificarlo.
+
+### Qué depende de Sergio
+1. 🔴 **«ok panel»** — sin eso el panel de tres renglones no se publica.
+2. Mergear y desplegar `fix/venta-honesta`, o decir que no. **Hasta entonces no se le escribe a
+   ningún lead**, porque el material promete factura del SIN y no la emitimos.
+3. Los 7 mensajes a leads · conectar su WhatsApp (1 clic) · credenciales del BCP · Punto de Venta 1
+   en el SIN · elegir molde de texto A o B para @oniahq.
+4. Decisión: bajar «Facturación» del menú principal (hoy es tracción antes del 1-oct).
+
+### Próximos pasos, en orden
+1. **Confirmar si el port de comercio sobrevivió.** `git -C <worktree v1-panel> log` — si no hay
+   commits nuevos sobre `110a15c`, relanzar el workflow guardado. *Listo* = comercio en tres
+   renglones, capturas miradas, gates verdes.
+2. Con el «ok»: mergear el panel y desplegar con el runbook de siempre. *Listo* = panel nuevo vivo
+   y mirado en producción.
+3. `importadora-hoy.tsx` (192 líneas) — el único rubro que quedaría sin portar.
+4. Cobros y contabilidad (pasos 3 y 4 del orden de la 1.0).
+5. **Código muerto pendiente de decisión**: `Sparkline` queda huérfano al portar comercio, y varios
+   helpers de `lib/comercio/hoy.ts` tienen lógica testeada que `/reports` podría querer. NO se
+   borran en el mismo carril que un rediseño.
+
+### 12 tests que fallan en Windows, y no son nuestros
+Fallan idénticos en `origin/main` puro por una ruta `C:\C:\…`. Consecuencia real: **el gate que
+protege los precios recorre 0 archivos en esta máquina**, o sea que hoy no protege nada acá.
+
+---
+
+## 0-mañana. Estado al 2026-09-04 ~08:30 La Paz — PUBLICAR dejó de fallar (y por qué casi sale peor)
 
 **Objetivo:** que publicar deje de fallar; camino de publicación probado punta a punta, sin sacar
 nada con la cara de Lucía ni de la marca sin el OK de Sergio.
