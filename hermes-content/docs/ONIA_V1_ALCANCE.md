@@ -69,14 +69,15 @@ pregunta, y se responde con la verdad: **todavía no**.
 
 ## Precios: cómo escalan
 
-Fuente única: `onia-platform/lib/subscription-plans.ts` (planes) y `lib/pricing.ts` (add-ons).
-Ningún documento ni página define precios: los **lee** de ahí.
+Fuente única, y son TRES archivos distintos, cada uno sobre lo suyo:
+`onia-platform/lib/subscription-plans.ts` (los montos), `lib/plan-limits.ts` (**los topes**) y
+`lib/pricing.ts` (add-ons). Ningún documento ni página define nada de esto: lo **lee** de ahí.
 
 | Plan | Mes | Semana | Año | Tope |
 |---|---:|---:|---:|---|
-| Básico | Bs 320 | Bs 89 | Bs 3.200 | 1 usuario · 30 clientes |
+| Básico | Bs 320 | Bs 89 | Bs 3.200 | 2 usuarios · 300 clientes |
 | **Profesional** | **Bs 750** | Bs 199 | Bs 7.500 | 5 usuarios · 1.500 clientes |
-| Completo | Bs 1.500 | — | Bs 15.000 | sin tope de usuarios |
+| Completo | Bs 1.500 | — | Bs 15.000 | sin tope de usuarios ni de clientes |
 | Empresa | Bs 2.900 | — | Bs 29.000 | se cotiza, no se compra en la web |
 
 **El precio escala por tres ejes, no por antojo:** cuánta gente usa el sistema (usuarios), cuánto
