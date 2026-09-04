@@ -43,6 +43,7 @@ import { authenticateChatwootRequest, DEFAULT_TOLERANCE_SECONDS } from "./webhoo
 import { shouldProcessMessage, releaseMessage } from "./message-dedup.mjs";
 import { buildBotTurnEvent, fireN8nBotTurnEvent, getN8nEventConfig } from "./n8n-event.mjs";
 import { construirAviso, dispararAvisoTelegram, getAvisoTelegramConfig } from "./aviso-telegram.mjs";
+import { esEntranteReal, dispararUsoPlataforma, getUsoConfig } from "./uso-plataforma.mjs";
 import { knowledgeHealth } from "./knowledge.mjs";
 import { createStore } from "./persistence.mjs";
 import { handlePreviewRequest } from "./preview-route.mjs";
@@ -414,6 +415,14 @@ async function procesarWebhook(request, deps, datos) {
     };
   }
 
+  // 5b. EL CONTADOR DE LA CUOTA. La plataforma cuenta las conversaciones del add-on en su propio
+  // `POST /api/webhooks/chatwoot`, pero ese handler exige el header `X-Chatwoot-Secret` y
+  // Chatwoot no manda headers personalizados: por eso el aviso sale del motor, que sí puede.
+  // Va DESPUÉS del dedup a propósito (un reintento de Chatwoot no tiene que volver a contar) y
+  // viaja en el `outcome` para que el servidor lo dispare recién con la respuesta ya escrita.
+  // `rawBody` TAL CUAL: las reglas de conteo viven en la plataforma y en un solo lado.
+  const usoPlataforma = esEntranteReal(payload) ? rawBody : null;
+
   // 6. El turno. Fail-open: cualquier excepción inesperada tiene que terminar en 200, no en 500.
   const runFn = typeof deps.runChatwootTurn === "function" ? deps.runChatwootTurn : runChatwootTurn;
   let result;
@@ -435,6 +444,8 @@ async function procesarWebhook(request, deps, datos) {
     releaseFn(dedupKey);
     return {
       status: 200,
+      // El turno murió, pero el mensaje entró: la conversación se cuenta igual.
+      usoPlataforma,
       body: {
         ok: false,
         skipped: false,
@@ -465,7 +476,7 @@ async function procesarWebhook(request, deps, datos) {
     stageAfter: result?.stageAfter,
   });
 
-  return { status: 200, body: result, n8nEvent, avisoTelegram };
+  return { status: 200, body: result, n8nEvent, avisoTelegram, usoPlataforma };
 }
 
 // ---------------------------------------------------------------------------
@@ -535,6 +546,7 @@ export function createWebhookServer(deps = {}) {
   const config = deps.config || getServerConfig();
   const n8nConfig = deps.n8nConfig || getN8nEventConfig();
   const avisoConfig = deps.avisoConfig || getAvisoTelegramConfig();
+  const usoConfig = deps.usoConfig || getUsoConfig();
   const handle = typeof deps.handle === "function" ? deps.handle : handleChatwootWebhook;
   const fireEvent = typeof deps.fireEvent === "function" ? deps.fireEvent : fireN8nBotTurnEvent;
   const log = typeof deps.log === "function" ? deps.log : (line) => process.stdout.write(`${line}\n`);
@@ -674,6 +686,20 @@ export function createWebhookServer(deps = {}) {
         });
       } catch (error) {
         log(`[aviso] no se pudo disparar: ${String(error?.message || error)}`);
+      }
+    }
+
+    // El contador de la cuota. Fire-and-forget igual que los dos de arriba y con su propio fetch
+    // (`deps.fetchUso`): compartir el de n8n haría que apuntar uno mueva al otro. Sólo se loguea
+    // cuando NO se contó — un `sent` por mensaje sería ruido; el silencio por falta de
+    // configuración se dice UNA vez (`repetido`), porque lo que no se cuenta no se factura.
+    if (outcome.usoPlataforma) {
+      try {
+        dispararUsoPlataforma(outcome.usoPlataforma, usoConfig, { fetch: deps.fetchUso }, (result) => {
+          if (result?.ok === false && result?.repetido !== true) log(`[uso] ${result.reason}`);
+        });
+      } catch (error) {
+        log(`[uso] no se pudo disparar: ${String(error?.message || error)}`);
       }
     }
   });
