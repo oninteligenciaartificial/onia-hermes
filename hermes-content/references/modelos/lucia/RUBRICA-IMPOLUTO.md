@@ -3,16 +3,17 @@
 > Escrita el **2026-09-02** para la ventana de perfeccionamiento de 2 h.
 > Sergio: *«prueba absolutamente todo hasta que tus generaciones sean impolutas»*.
 >
-> «Impoluto» no es una opinión: es **10 casillas que se marcan MIRANDO la pieza**. Una pieza con
-> las 10 se publica sin retoque. Una pieza con 9 se anota y se regenera cambiando UNA variable.
+> «Impoluto» no es una opinión: es **11 casillas que se marcan MIRANDO la pieza**. Una pieza con
+> las 11 se publica sin retoque. Una pieza con 10 se anota y se regenera cambiando UNA variable.
 >
 > ⚠️ **Este encabezado decía «9» hasta el 2026-09-03**: se agregó la casilla 10 y sólo se editó la
 > tabla. El conteo y el «una pieza con 8» quedaron viejos mientras el bloque de puntaje de abajo
 > ya decía `10/10` — el mismo documento se contradecía. Una rúbrica que no sabe cuántas casillas
 > tiene se aplica de memoria, y de memoria se aplican **las 9 de siempre**: justo la casilla nueva
-> es la que se saltea.
+> es la que se saltea. **Por eso, al agregar la 11 (2026-09-04) se tocaron los CUATRO lugares que
+> llevan la cuenta**: este encabezado, el título de la tabla, el bloque de puntaje y el Bloque 4.
 
-## Las 10 casillas
+## Las 11 casillas
 
 | # | Casilla | Cómo se verifica | Por qué mata la pieza si falla |
 |---|---|---|---|
@@ -26,14 +27,14 @@
 | 8 | **Colores true-to-life** | ¿Los verdes son verdes de Santa Cruz o verdes de filtro? | El teal-and-orange marca la pieza como IA de 2023 |
 | 9 | **La cara aguanta el clip entero** | Video: 4 frames (inicio, ⅓, ⅔, final). La cara está en los 4 | El defecto de `V04`: se da vuelta en el segundo 5 y pierde la cara |
 | 10 | **El copy no afirma nada que no exista** | Leer CADA línea de texto preguntando «¿esto es verdad hoy?». Cazar sobre todo el plural que infla: *equipo, nuestros clientes, cientos de, ya confían* | Es la única casilla que no se ve mirando la imagen — y la que puede publicar una mentira sobre la empresa en una pieza 9/9 |
-| 11 | **El copy PIDE algo, y la palabra exacta** | Leer la **última** lámina: ¿pide una acción concreta y nombrable? La pieza de Lucía cierra pidiendo comentar **COMUNIDAD** | Una pieza que no pide nada gasta la atención que costó ganar. Y un «comentá» sin la palabra clave no se puede automatizar: nadie recibe el enlace |
+| 11 | **La pieza pide UNA acción, con una palabra que el sistema RESPONDE hoy** | Leer la **última** lámina (o el último segundo) y el caption: ¿piden una palabra? ¿Es el único pedido? Y la mitad que nadie mira: **¿esa palabra está cableada y activa para la cuenta de Lucía?** Se mide en el workflow, no de memoria — comando abajo | Sin palabra, el que comenta «me encantó» no entra a ningún lado. Con una palabra **no cableada** es peor: el lead hace exactamente lo que le pediste, no recibe nada, y el fallo es MUDO — nadie se entera de que se perdió |
 
 ## Cómo se puntúa
 
 ```
 IMPOLUTA  11/11  -> va al calendario, se anota en el LEEME
 CASI      10/11  -> se anota QUE casilla fallo y se regenera cambiando UNA variable
-ROTA      <10/11 -> se anota el defecto y NO se regenera igual: se cambia la receta
+ROTA     <10/11  -> se anota el defecto y NO se regenera igual: se cambia la receta
 ```
 
 ## 🔴 Por qué existe la casilla 10 (2026-09-03)
@@ -81,33 +82,64 @@ no son las piezas: es **saber qué variable del prompt causa cada defecto**.
 
 ## 🔴 Por qué existe la casilla 11 (2026-09-04)
 
-La casilla 10 nació de que **la rúbrica sólo miraba píxeles** y aprobaba una pieza que mentía. Pero
-la 10 sólo pregunta si el copy **afirma** algo falso. Nadie preguntaba si el copy **sirve para
-algo** — y la misma pieza fijada volvió a pasar entera con el agujero.
+Mismo carrusel, tercera pasada. Después de la casilla 10 el L2 quedaba **10/10** —cara fiel,
+1080×1350, manos, luz, poros, colores, y cada línea verdadera— y **ninguna de sus 7 láminas decía
+`COMUNIDAD`**. La 6 pedía comentar sin palabra («decime en los comentarios qué te gustaría ver
+acá») y la 7 cerraba mandando a `@oniahq`.
 
-Las **7 láminas** del carrusel fijado (L2 «¿Quién es Lucía?») leídas una por una en el brief:
-**ninguna dice COMUNIDAD**. El cierre —`slide-07`, la última cosa que lee todo el que entra al
-perfil, y la pieza que queda arriba para siempre— dice:
+**Por qué eso vacía la pieza.** La palabra clave es el único mecanismo que convierte un comentario
+en un contacto: sin ella, el que comenta «me encantó» no recibe nada y no entra a ningún lado. Y
+esta es la pieza **FIJADA** arriba del perfil, la que ve todo el que entra: si no captura, no
+captura nadie. La preferencia de Sergio es fija y ya estaba escrita en el propio carril
+(`generadas-20260828/CREATIVO.md`: *«Comentá COMUNIDAD y te muestro cómo se hace el de tu local»*)
+— la pieza más importante de la cuenta era la que no la aplicaba.
 
-> «Seguime para ver hasta dónde llega. Y si tenés un negocio y querés lo que hay detrás de mí,
-> está todo en @oniahq.»
+**Lo que enseña, y es distinto de la casilla 10:** las diez primeras casillas preguntan *«¿está
+bien hecho?»*. Ninguna pregunta *«¿sirve para algo?»*. Una pieza puede ser impecable y verdadera y
+aun así no llevar a nadie a ningún lado — **el defecto no está en lo que dice, sino en lo que no
+pide**, y eso no se ve mirando ni leyendo: sólo se ve preguntando qué pasa después de que alguien
+la mira. Corregido a 0 créditos (láminas 6 y 7 re-rendeadas, las otras 5 byte-idénticas).
 
-Pide un seguimiento y nombra otra cuenta. **No pide la palabra.** Y la lámina 6 llega aún más
-cerca y falla igual: «Decime en los comentarios qué te gustaría ver acá» — pide comentar, pero
-**sin keyword**, así que el comentario no dispara nada y nadie recibe el enlace de la comunidad.
+### ⚠️ La casilla 11 nació mal escrita, y se corrigió el mismo día (2026-09-04)
 
-Sergio lo dejó fijado como preferencia permanente: los contenidos de Lucía llevan **siempre** un
-CTA tipo **COMUNIDAD**, para que la gente comente esa palabra y se le pueda mandar el enlace. El
-propio carril ya lo tenía escrito en `generadas-20260828/CREATIVO.md`: *«Comentá COMUNIDAD y te
-muestro cómo se hace el de tu local»*. Existía la convención; **no existía la casilla**, así que
-la pieza más cara del perfil salió sin ella y ninguna auditoría la marcó.
+Se escribió como *«¿dice `COMUNIDAD`?»* — la palabra que Sergio pidió como CTA fijo. Aplicada así,
+mandó a poner `COMUNIDAD` en la pieza **fijada del perfil**… y `COMUNIDAD` **no está cableada**.
 
-**Lo que enseña, y es el escalón siguiente de la casilla 10:** una rúbrica que sólo caza mentiras
-aprueba una pieza **honesta e inútil**. Hay que verificar las dos mitades del copy — que no
-afirme lo que no existe (10) **y** que pida lo que la pieza tiene que conseguir (11).
+Medido en el workflow que corre (n8n, `ONIA - Comentario IG -> DM (Private Reply)`, id
+`1jS4jwmNmvcQpqqH`, el único de sus **4 copias** que está activo): la cuenta `lucia` tiene
+exactamente **dos** palabras, `SISTEMA` y `HUMO`. El código hace
+`for (const p of Object.keys(cfg.palabras)) if (texto.includes(p))` — quien comenta `COMUNIDAD`
+sale con `palabra = null`, `accionable = false`, motivo `sin_palabra_clave`, y **no recibe nada**.
+Ni siquiera entra en `palabraAjena`, que al menos avisa para no perder el lead.
 
-⚠️ Se marca sobre la **última** lámina, que es justo donde la regla «se mira lo último, no lo
-primero» ya mandaba mirar. La casilla 11 la vuelve puntaje en vez de costumbre.
+**Por qué importa más que el defecto que arregla:** una pieza sin palabra no captura, y se nota.
+Una pieza con palabra muerta **parece** que captura: el lead hace exactamente lo que le pediste,
+no recibe nada, y no queda registro. Es un fallo mudo, y lo introduje yo al aplicar la casilla
+nueva sin verificar el mecanismo — el mismo error que la casilla 10 existe para cazar, una capa
+más abajo: no basta con que el copy sea verdad, tiene que ser verdad **el circuito** que promete.
+
+**Cómo se verifica antes de escribir una palabra en una pieza** (lectura, no toca n8n):
+
+```sh
+N=$(docker ps --format '{{.Names}}' | grep -m1 n8n)
+docker cp "$N":/home/node/.n8n/database.sqlite /tmp/n8n-ro.sqlite
+python3 -c "
+import sqlite3,re
+t=sqlite3.connect('/tmp/n8n-ro.sqlite').execute(
+  \"select nodes from workflow_entity where name like '%Comentario IG%' and active=1\").fetchone()[0]
+i=t.find(\"cuenta: 'lucia'\"); print(t[i:i+900])"
+```
+
+⚠️ **Filtrá por `active=1`**: hay 4 copias del mismo workflow con el mismo nombre y 3 están
+apagadas. Leer la equivocada da la lista de palabras de otro mes.
+
+**Regla:** la palabra de una pieza sale del workflow activo, nunca de la preferencia escrita en un
+doc. Si Sergio quiere `COMUNIDAD` y no está cableada, la pieza **no la pide todavía**: primero se
+cablea, después se promete.
+
+**Y ojo con el doble pedido:** la 6 ya pedía comentar. Agregar la palabra en la 7 sin sacar el
+pedido vago de la 6 deja **dos** llamados distintos, y dos llamados son ninguno. La casilla se
+marca cuando hay **uno solo** y lleva la palabra.
 
 ## La regla del experimento
 
@@ -150,18 +182,18 @@ Variables conocidas hasta hoy:
 | 8 · Colores true-to-life | 4.5 Naturalidad |
 | 9 · La cara aguanta el clip | *sin equivalente — se mira como dice la Parte I* |
 | 10 · El copy no afirma nada falso | **Bloque 4 entero** (4.1–4.4) |
-| 11 · El copy pide algo, con la palabra | 4.6 CTA |
+| 11 · La pieza pide UNA acción, con palabra viva | 4.6 |
 
 🔴 **Dos checks de la Parte II no tienen casilla en la Parte I, y valen puntaje igual:**
 
 - **1.0 · la tira del lote completo.** Es el único check que mira el LOTE y no la pieza: seis
   piezas que pasan de a una pueden ser dos caras distintas juntas (P7 de la bitácora). Si la tira
-  falla, **el lote no se publica aunque todas saquen 10/10**.
+  falla, **el lote no se publica aunque todas saquen 11/11**.
 - **2.2 · la herramienta tiene que ser mecánicamente posible.** La casilla 4 cuenta dedos; no mira
   el objeto que la mano sostiene. Ahí murió `G06-peluqueria.jpg`, dado por "verificado mirándolo".
 
 **Mientras no estén numeradas como casillas, se marcan como bloqueantes**: cualquier ✗ en 1.0 o
-2.2 es ROTA, sin importar el puntaje de las 10.
+2.2 es ROTA, sin importar el puntaje de las 11.
 
 **Para qué existe:** que Onia no publique una pieza mala, y que Lucía sea siempre la misma cara.
 Una pieza **pasa o no pasa**. No hay "casi".
@@ -289,18 +321,7 @@ de pieza.
 | 4.3 | No se exhibe obra | Sin "muy pronto", "beta", "en construcción" |
 | 4.4 | Vocabulario | Nada de "tus pacientes" en pieza genérica: son 7 rubros |
 | 4.5 | Naturalidad | Colores reales, sin look de filtro; velocidad real |
-| 4.6 | **CTA** | La **última** lámina pide una acción con la palabra exacta: `COMUNIDAD` |
-
-**4.6 se mide sobre el brief, no sobre el render**, porque el defecto entra por ahí y así se lee
-de una:
-
-```sh
-python3 -c "import json,sys; d=json.load(open(sys.argv[1])); \
-  s=d['slides'][-1]; print(s.get('headline','')); print(s.get('body',''))" <brief>.json | grep -c COMUNIDAD
-```
-
-`0` = la pieza no pide nada ⇒ casilla 11 ✗. Ojo: **un «comentá» sin la palabra clave cuenta como
-0** — es la trampa que dejó pasar la lámina 6 del carrusel fijado.
+| 4.6 | **La acción está pedida, con una palabra VIVA** | El cierre (última lámina / último segundo) y el caption piden UNA palabra, **ningún otro** «comentá» compite sin palabra, y la palabra **está cableada para la cuenta de Lucía** (hoy: `SISTEMA` y `HUMO`; `COMUNIDAD` NO). Se lee el cierre, no el brief entero |
 
 ---
 

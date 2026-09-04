@@ -185,3 +185,26 @@ export function precioWeb(stack: WebStack): string {
     ? "Se cotiza con tu catálogo"
     : `Bs ${stack.precio.toLocaleString("es-BO")} · pago único`;
 }
+
+/**
+ * El piso del catálogo: lo que cuesta el stack más barato que tiene precio.
+ *
+ * Existe para que ninguna pantalla escriba ese número a mano. Cuando la
+ * portada, `/precios` o el wizard dicen "desde Bs X por la web", X sale de
+ * acá y se mueve solo el día que cambie el catálogo.
+ *
+ * Nace de un barrido incompleto: el 2026-08-23 Sergio ratificó la línea
+ * `2.000 / 4.500 / desde 7.500` y este archivo se movió con él, pero el copy
+ * del wizard `/v1/empezar` se quedó anunciando el "desde Bs 790" de la oferta
+ * de arranque vencida el 31-jul-2026 — menos de la mitad. Duró doce días
+ * porque ese texto se pinta del lado del cliente, DESPUÉS de responder el
+ * cuestionario: ni un `curl` de la página ni un `grep` del HTML lo veían.
+ * Lo vigila `app/v1/empezar/precio-web.test.ts`.
+ */
+export function precioWebDesde(): number {
+  const conPrecio = WEB_STACKS.map((w) => w.precio).filter(
+    (p): p is number => p !== null,
+  );
+
+  return Math.min(...conPrecio);
+}

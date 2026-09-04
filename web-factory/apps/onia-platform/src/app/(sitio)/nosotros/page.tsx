@@ -145,8 +145,8 @@ export default function Nosotros() {
             El sistema corre en producción.
           </h2>
           <p className={s.body} style={{ maxWidth: "48em" }}>
-            Seis rubros disponibles — clínicas dentales, comercios,
-            importadoras, estéticas, veterinarias y servicios profesionales — y
+            Cinco rubros disponibles — clínicas dentales, comercios,
+            importadoras, estéticas y servicios profesionales — y
             nuestro emisor de facturación está registrado ante el SIN con las
             pruebas técnicas de la Fase 1 completadas. Lo probás tal como está
             hoy: 14 días con el sistema completo, sin tarjeta y sin contrato de

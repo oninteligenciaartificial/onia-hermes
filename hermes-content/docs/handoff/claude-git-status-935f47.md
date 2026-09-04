@@ -1,7 +1,7 @@
 # Handoff — carril `claude/git-status-935f47` (plataforma · infra · integración)
 
 > Formato: `hermes-content/docs/handoff/README.md`. Se sobrescribe; es el estado ACTUAL.
-> Última escritura: **2026-09-03 ~23:10 La Paz** (03:10 UTC del 4-sep).
+> Última escritura: **2026-09-04 ~02:50 La Paz** (06:50 UTC).
 >
 > ⚠️ Las horas de este archivo van en **La Paz**, no UTC. Sergio corrigió el 31-ago:
 > *"arregla tus horas, aqui somos america/la paz"*. El VPS y los logs son UTC-4 respecto de
@@ -73,6 +73,76 @@ loop bloquee `needs_input` con captura, el vigía se la manda; (3) deploy del bo
 (5) nada de maquinaria de loops hasta el 10-sep.
 
 ---
+
+## 0a. Madrugada del 4-sep — lote 4 (base SaaS) y un login roto por 2 h
+
+**Lo que se publicó:** lote 3b `858752a` (fechas en La Paz, redirects de rutas viejas, CTA del login
+según el alta, borrador de /setup, cabeceras cerradas, limiters con `cf-connecting-ip`, bug inbox→org)
+y lote 4a `70b6ed3` (login server-side con lockout + auditoría, 2FA TOTP con códigos de respaldo y
+gate aal2, política de 2FA para admins con 14 días de gracia, claves de API + `/api/v1` +
+`/settings/api`, cuota del chatbot 500/mes con `cuota` en `published`, fechas-solo al mediodía local,
+realtime con backoff). Tres migraciones aplicadas a mano en prod y registradas en `_prisma_migrations`:
+`mfa_recovery_codes`, `organization_api_keys`, `chatbot_uso_mensual`. Suite: **2.797 verdes**.
+
+**🔴 El error propio de la noche.** Al integrar el login server-side lo apunté a Kong por la red
+interna (`SUPABASE_INTERNAL_URL`). `@supabase/ssr` deriva el nombre de la cookie **del host** al que
+habla: escribía `sb-kong-auth-token` y el sitio lee `sb-app-auth-token`. Resultado: `POST
+/api/auth/login` → 200 `{ok, next:/dashboard}` y **nadie quedaba logueado** (04:00-06:04 UTC, de
+madrugada, sin clientes). Detección: probar la ruta protegida CON la cookie, no el 200 del login.
+Reversión sin build: comentar la variable en `app.env` + `recreate-container.sh --si-estoy-seguro`.
+Arreglo definitivo en `master d956cb9` (`cookieOptions.name` derivado de la URL pública + test);
+la variable sigue DESACTIVADA hasta desplegarlo. Detalle: memoria `login-cookie-nombre-por-host`.
+
+**Medido en producción tras el arreglo:** login 200 con cookie correcta, `/dashboard` y `/api/me` 200
+como ADMIN; `audit_logs` con LOGIN_FAILED 5, LOGIN_LOCKED 1, LOGIN_OK 2 (el lockout funciona);
+`published?inboxId=7` devuelve `cuota {agotada:false, usadas:0, limite:500}`; cero basura de pruebas
+en la org de Sergio. Rate limit del login en Traefik (`rl-auth-token`) vivo desde el 3-sep 22:50.
+
+**SIAT:** sectores 17 y 24 emiten 908 contra el piloto; la corrida de volumen terminó con 125/125 en
+los tres combos de las etapas IV, VII y XI (275 × 907 y 125 × 905, sin rechazos). El % oficial se lee
+en `fman` con el login de Sergio. Sigue bloqueado el **Punto de Venta 1**.
+
+**Cuota de Claude (dato duro):** con 5-8 agentes de la sesión de control, los loops perdieron vueltas
+(chatbot-cola 2, onia-cola 2, web-venta 3, recorrido-cliente 1; marca `RAZON: vuelta PERDIDA por
+limite` en sus logs). Regla: máximo 2-3 agentes pesados en paralelo si se quiere que los loops corran.
+Decisión de plata pendiente de Sergio: segunda suscripción o clave de API para los loops.
+
+**En curso al cerrar este bloque:** verificación de 2FA punta a punta con cuenta QA (capturas a
+Telegram), `feat/settings-seguridad` (pestaña Seguridad), corte honesto del bot por cuota (motor
+`/opt/onia/bot`, relanzar), y `feat/canal-meta` (Instagram/Messenger, detrás de App Review de Meta).
+**Tareas de infra abiertas:** `t_9d970ada` (ufw solo Cloudflare + límite en signup/recover/otp) y
+`t_106595a4` (levantar Supabase Realtime: Kong da 503, no existe el contenedor).
+
+---
+
+**Cierre del lote 4 (02:00-02:50 La Paz).** `master eae8795` vivo (BUILD_ID `2LdAuSubezKUq_xpaAb4o`):
+pestaña **Seguridad** en Configuración (accesos, bloqueos, sesiones con cierre remoto) y el fix de la
+cookie. Con el fix se REACTIVÓ `SUPABASE_INTERNAL_URL` y el login quedó sano (POST 200, cookie
+`sb-app-auth-token`, `/dashboard` y `/api/me` 200): el login ya no sale por Cloudflare ni comparte el
+bucket de Traefik. El deploy corrió con `/root/deploy-eae8795.sh`, que verifica sesión y **revierte
+solo** — patrón a reusar para cambios de env riesgosos.
+
+**Verificado MIRANDO (capturas a Telegram):** 2FA punta a punta con cuenta QA (QR, TOTP, 8 códigos de
+respaldo, `/login/2fa`, cookie aal1 → 307 en `/dashboard`, `/profile` y `/api/me`, código de respaldo
+deja `mfa_factors` en 0), banner de 14 días de gracia (hoy dice 13), claves de API (crear → `GET
+/api/v1/patients` 200 con envelope → revocar → 401), y el recibo con la fecha correcta (`paidAt`
+guardado 16:00 UTC = mediodía La Paz). Latencias: login 255 ms, `/dashboard` 3,0 s, `/settings/api` 2,3 s.
+
+**Hueco encontrado y cerrado: la cuota no contaba.** La plataforma cuenta en su webhook y exige el
+header `X-Chatwoot-Secret`, pero Chatwoot solo tiene un webhook (al motor) y no manda headers. Ahora
+el motor reenvía el payload crudo a la plataforma (`uso-plataforma.mjs`, commit `ab196b9b`), después
+del dedup y solo para entrantes reales (un saliente reenviado se le duplicaría al cliente por
+WhatsApp). Probado en vivo: conv 55 → 1, segundo mensaje de la misma → sigue 1, conv 56 → 2;
+`published?inboxId=7` → `usadas:2`. El corte honesto del bot ya estaba vivo (`1f30e53b`).
+
+**Correcciones a supuestos:** el add-on NO se gatea por `organizations.whatsappAddon` (está en `f` en
+todas) sino por el entitlement `addon.whatsapp`. Disco del VPS: 87 % → 78 % borrando builds y runtimes
+viejos (receta en la memoria de deploy).
+
+**Abierto:** `t_59b4761d` (cambios de chatbot-cola en el motor sin desplegar: un restart los publica a
+medias), `t_5c358c3e` (barridos proactivos ignoran la cuota agotada), `t_9d970ada` (ufw solo Cloudflare
++ límite en signup/recover/otp), `t_106595a4` (Supabase Realtime no existe: Kong da 503),
+`feat/canal-meta` (Instagram/Messenger, bloqueado por App Review de Meta).
 
 ## 0b. Noche del 3-sep — el panel se reorganiza (lotes 1-3 vivos, lote 4 en curso)
 

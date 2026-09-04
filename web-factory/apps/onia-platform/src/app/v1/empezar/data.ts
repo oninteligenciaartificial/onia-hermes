@@ -7,6 +7,7 @@
 import { waLink } from "@/lib/site";
 import type { Equipo, Precio, Rubro, Tiene } from "./recommend";
 import { precioStack } from "@/content/chatbot-precios";
+import { precioWebDesde } from "@/content/webs";
 
 export interface RubroOption {
   id: Rubro;
@@ -118,7 +119,12 @@ export const NOTA_FACTURACION =
 export const FALTA_COPY: Record<"web" | "chatbot", { nombre: string; copy: string }> = {
   web: {
     nombre: "Página web",
-    copy: "Tu presencia online conectada al sistema: lo que publicás y lo que agendás viven en el mismo lugar. Desde Bs 790, pago único.",
+    // El precio NO se escribe acá: sale de content/webs.ts, la fuente. Este
+    // texto anunció "desde Bs 790" durante doce días después de que Sergio
+    // ratificara la línea 2.000/4.500/7.500 (2026-08-23) — menos de la mitad,
+    // y en la pantalla que ve el que todavía no tiene web. Guarda:
+    // precio-web.test.ts.
+    copy: `Tu presencia online conectada al sistema: lo que publicás y lo que agendás viven en el mismo lugar. Desde Bs ${precioWebDesde().toLocaleString("es-BO")}, pago único.`,
   },
   chatbot: {
     nombre: "Chatbot de WhatsApp",
