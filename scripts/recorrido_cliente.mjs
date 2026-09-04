@@ -1370,7 +1370,45 @@ const PASOS = [
       const despues = await mirar(page, 'paso-07c-cita-enviada.png');
 
       if (!red.post) {
-        return cerrar({ estado: 'roto', detalle: `apreté "Agendar Cita" y no salió ningún POST a /api/appointments en 20 s${modalAbierto ? '; el formulario sigue abierto' : ''}`, elegido, fecha, ...despues });
+        // 🔴 "No salió el POST" no le sirve a nadie: no distingue un producto roto de un
+        // instrumento que no llenó un campo. Se lo preguntamos al NAVEGADOR, que es quien frenó
+        // el envío — su validación nativa sabe qué campo es inválido y por qué. Y en un select
+        // se cuenta cuántas opciones OFRECE: cero opciones no es "no elegí", es que el producto
+        // no tiene con qué llenarlo. Medido el 2026-09-04 en Servicios profesionales, que exige
+        // "Seleccionar cliente" y no tiene ninguna pantalla donde crear un cliente.
+        const frenan = await dlg.evaluate((raiz) => {
+          const campos = [...raiz.querySelectorAll('input, select, textarea')];
+          return campos
+            .filter((c) => typeof c.checkValidity === 'function' && !c.checkValidity())
+            .map((c) => {
+              const etiqueta = (
+                c.labels?.[0]?.innerText ||
+                c.getAttribute('aria-label') ||
+                c.name ||
+                c.id ||
+                c.tagName
+              ).replace(/\s+/g, ' ').trim();
+              const opciones =
+                c.tagName === 'SELECT'
+                  ? [...c.options].filter((o) => o.value !== '' && !o.disabled).length
+                  : null;
+              return { etiqueta, motivo: c.validationMessage, opciones };
+            });
+        }).catch(() => []);
+
+        const porque = frenan.length
+          ? `; el navegador frenó el envío en: ${frenan
+              .map((f) => `"${f.etiqueta}" (${f.motivo}${f.opciones !== null ? `, ${f.opciones} opción(es) para elegir` : ''})`)
+              .join(' · ')}`
+          : '';
+        return cerrar({
+          estado: 'roto',
+          detalle: `apreté "Agendar Cita" y no salió ningún POST a /api/appointments en 20 s${modalAbierto ? '; el formulario sigue abierto' : ''}${porque}`,
+          camposQueFrenan: frenan,
+          elegido,
+          fecha,
+          ...despues,
+        });
       }
       if (red.post.status !== 201) {
         return cerrar({
