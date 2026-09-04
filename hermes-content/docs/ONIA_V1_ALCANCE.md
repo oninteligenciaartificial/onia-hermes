@@ -32,7 +32,8 @@ desde el celular. **Todo esto ya está vivo y verificado en producción.**
 | Contabilidad: libro de compras, resumen de IVA para el contador | ✅ vivo |
 | Chatbot del sitio web con cuota de 500 conversaciones | ✅ vivo (add-on) |
 | Entrar seguro: bloqueo por intentos, verificación en dos pasos | ✅ vivo |
-| Panel con lo del día | ⚠️ funciona, pero se rediseña (ver 1.0-b) |
+| Panel con lo del día | ⚠️ funciona; el rediseño está construido y espera el OK de Sergio |
+| Configuración en una página, con «Configuración avanzada» | ✅ vivo (4-sep) |
 
 ### Lo que falta para poder cobrar, y es corto
 
@@ -40,8 +41,13 @@ desde el celular. **Todo esto ya está vivo y verificado en producción.**
    *En corrección (`t_db9acebf`).* **Bloquea escribirle a los leads.**
 2. **El dueño conecta su WhatsApp.** Meta ya aprobó los permisos; el botón está vivo. Falta que
    Sergio lo pruebe una vez para poder mostrarlo. *1 clic suyo.*
-3. **Panel de inicio en tres renglones** y **Configuración de 7 pestañas a una página**. Es lo que
-   separa "lo probé y me perdí" de "lo entendí solo". *Diseño aprobado pendiente.*
+3. **Panel de inicio en tres renglones.** Es lo que separa "lo probé y me perdí" de "lo entendí
+   solo". *Construido y verificado en la rama `feat/panel-tres-renglones`; **espera el sí de
+   Sergio** antes de reemplazar la pantalla viva (capturas enviadas el 4-sep).*
+   Las 7 pestañas de Configuración ya se colapsaron a una página: **desplegado y verificado el
+   4-sep**, junto con tres defectos que salieron al mirarlo (la guía de primeros pasos se abría
+   encima de cualquier pantalla y comía los clics; el botón flotante tapaba el borde de los
+   botones en todo el celular; el rol decía «Administra»).
 4. **Cobrar el plan sin fricción.** Hoy: transferencia + comprobante + aprobación a mano. Funciona,
    pero cada paso pierde gente. *El QR del BCP está construido y espera credenciales de Sergio.*
 
@@ -88,11 +94,15 @@ nos obliga a mejorar. **No se promete una función concreta ni una fecha**: se p
 
 Cerrado y sin desvíos. Cada paso se despliega y se verifica antes del siguiente.
 
-1. Panel de inicio en tres renglones, con el primer día resuelto.
-2. Configuración: de 7 pestañas a una página con «Configuración avanzada».
+1. ~~Configuración: de 7 pestañas a una página con «Configuración avanzada».~~ **Hecho, vivo el 4-sep.**
+2. Panel de inicio en tres renglones, con el primer día resuelto. **Construido; espera el OK.**
 3. Cobros: cliente, catálogo y total pegado al botón.
 4. Contabilidad: arriba, cuánto pagar y hasta cuándo.
 5. Velocidad: el panel abre en menos de 1,5 s.
+
+> El orden cambió respecto de lo escrito el 4-sep a la mañana: Configuración se cerró primero
+> porque los tres defectos que bloqueaban su uso salieron al MIRARLA, y arreglarlos ahí arregló
+> dos problemas que eran de todo el sistema, no de esa pantalla.
 
 ---
 
