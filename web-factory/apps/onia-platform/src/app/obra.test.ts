@@ -37,9 +37,25 @@ import { PAGINAS_PUBLICAS, metadataDe } from "./rutas";
  *    persigue es el borrador *de la propia página*, no el que el sistema
  *    produce: por eso el patrón es `pendiente de revisión` / `borrador de
  *    trabajo`, no la palabra suelta.
- *  - **"todavía no"** es honestidad aprobada sobre los límites, no obra:
- *    `/comparativa` dice "lo que Onia todavía no hace" y `pricing.ts` avisa que
- *    la factura fiscal no sale de Onia. Prohibir eso sería fabricar.
+ *  - **enumerar el alcance de un servicio** —`/servicios/webs` dice "qué lleva
+ *    cada una, qué no lleva"— es delimitar lo que se compra, no anunciar un
+ *    hueco. Por eso no hay patrón de `no incluye` / `no lleva`.
+ *
+ * ⚠️ **"todavía no" SÍ está prohibido acá, y hasta el 2026-09-03 no lo estuvo.**
+ * El comentario que lo eximía decía que era "honestidad aprobada sobre los
+ * límites", y confundía dos superficies distintas:
+ *  - El **cuerpo** de `/comparativa` enumera lo que Onia no hace, y así se
+ *    queda: la página existe para comparar de frente, y taparlo ahí sería
+ *    fabricar. Este gate no lee el cuerpo.
+ *  - La **`description`** no es el cuerpo. Es el anzuelo: los ~155 caracteres
+ *    que decide el buscador mostrar, y lo único que un lead lee ANTES de entrar.
+ *    La que estuvo viva terminaba en *"Y lo que Onia todavía no hace."*, así que
+ *    el sitio se anunciaba a sí mismo por su carencia en el único renglón que
+ *    tiene para conseguir el clic — y encima con "todavía", que promete el hueco
+ *    para más adelante: obra en una palabra. No se ve abriendo la página; se ve
+ *    en Google.
+ * Honestidad y publicidad negativa no son lo mismo: la primera vive en la
+ * página, la segunda no vive en ningún lado.
  */
 
 /** Frases que le dicen al cliente "esto no está listo". */
@@ -55,6 +71,10 @@ const OBRA: { patron: RegExp; porque: string }[] = [
     porque: "el documento se publica o no se publica; a medio revisar no se anuncia",
   },
   { patron: /borrador de trabajo/i, porque: "el borrador propio de la página, no el del producto" },
+  {
+    patron: /\btodav[ií]a no\b/i,
+    porque: "anunciar la carencia en el renglón que busca el clic, y 'todavía' promete el hueco",
+  },
 ];
 
 /**
@@ -79,6 +99,19 @@ describe("ninguna página publicada exhibe obra en su metadata", () => {
       OBRA.filter((f) => f.patron.test(vivo)).map((f) => f.patron.source),
       "el gate dejó de reconocer el defecto que lo hizo nacer",
     ).toContain("pendiente de revisi[oó]n");
+
+    // El segundo caso vivo: la `description` de `/comparativa` hasta el
+    // 2026-09-03. Éste no lo dejó pasar un patrón roto sino un comentario que
+    // lo declaraba aceptable, así que el ancla tiene que nombrarlo aparte.
+    const anzuelo =
+      "Precios y capacidades publicados por el Portal del SIN, los facturadores " +
+      "bolivianos y el software dental de la región, con fecha de consulta. Y lo " +
+      "que Onia todavía no hace.";
+    expect(
+      OBRA.filter((f) => f.patron.test(anzuelo)).map((f) => f.patron.source),
+      "el gate volvió a permitir que el sitio se anuncie por lo que le falta",
+    ).toContain("\\btodav[ií]a no\\b");
+
     expect(OBRA.length, "la lista de frases de obra se vació").toBeGreaterThan(5);
   });
 
