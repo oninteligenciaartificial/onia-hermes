@@ -54,11 +54,31 @@ pantalla se MIRÓ en producción con la sesión de esa org: `/inbox` lista a **m
 doctores). Ninguno de los dos es QA, ni el probador, ni Sergio. La prueba está en el ítem 1
 de "Cerrado". Contestarles es **S7**, y vende Sergio.
 
-🔴 **La otra mitad NO está, y el 2026-08-31 se dio por cerrada de más.** Recontado hoy en la
-base de producción: los desconocidos son **nueve conversaciones**, y **cinco entraron por el
-widget de la web (inbox 4)** — las convs 34, 36, 38, 40 y 45. **El inbox 4 sigue sin org**, así
-que ninguna de las cinco se puede abrir desde el producto, incluidas las **dos más nuevas**
-(29-ago y 01-sep). Es el ítem 3 de "Ahora" y el bloqueo **S14**.
+✅ **La otra mitad se cerró el 2026-09-04: el inbox 4 ya cuelga de la org.** Durante días el
+widget de la web (inbox 4) no tuvo dueño, así que sus desconocidos no se podían abrir desde el
+producto. Hoy se aplicó `scripts/migrar_inboxes_onia.mjs --aplicar --deploy-hecho b5e23d4`,
+después de comprobar que el código que lee las **dos** columnas ya corre en producción (BUILD_ID
+`mIi3zy_CtrcMhV8tRV2LF` = `/opt/onia-platform/build-b5e23d4`). El orden importa en un solo
+sentido, y por eso el script se niega a correr sin ese sha.
+
+| `Onia (interna)` | antes | ahora |
+|---|---|---|
+| `chatwootInboxId` (web) | 5 | **4** |
+| `chatwootWhatsappInboxId` | NULL | **5** |
+
+Respaldo previo: `/root/backups-chatbot/clinic_settings-20260904-0806.csv`. `ZZ QA Clinica
+Chatbot` sigue en 7, intacta.
+
+**La prueba no es un `grep`:** `npm run inbox:tenencia` pasó de ROJO a **exit 0** — *"TENENCIA OK
+— `Onia (interna)` tiene el 4 (web) y el 5 (WhatsApp), sin colisiones"*. Lo que destrabó, contado
+en Chatwoot: inbox 4 con **cinco desconocidos reales** (convs 34, 36, 38, 40, 48) e inbox 5 con
+**F** (35, la clínica de 4 doctores) y **mariohassen** (37) — los dos grupos bajo la misma org.
+
+⚠️ **Falta la captura, y es lo único que falta.** `/inbox` renderizado no se pudo mirar: la única
+cuenta de `Onia (interna)` es `superadmin@onia.com.bo` (medido en `public.profiles`) y su clave no
+está en ningún env del VPS. **No se rotó a propósito** — es la cuenta admin de Sergio en
+producción. Se destraba con esa clave, o con el OK para dar de alta un ADMIN de QA en esa org
+(da vista a leads reales, por eso no se hizo solo). Detalle en la tarea `t_6f5b8f52`.
 
 🔴 **Y apareció algo peor que la visibilidad, que nadie había medido: el bot contesta UNA vez
 y se calla para siempre.** En modo venta —el de los inboxes 4 y 5, que es por donde entra todo
