@@ -634,3 +634,32 @@ en el HTML de `/widget?website_token=` (`authToken = '...'`) y viaja como header
 (`docker exec -i ... psql` con heredoc), no por `-c`. `deploy-bot.sh` en /opt/onia/bot apunta
 REPO_DIR a si mismo (no hay clon git del repo en el VPS: /root/hermes es una copia vieja sin
 git): el deploy real sigue siendo scp + backup + `webhook-server.sh restart`.
+
+### 2026-09-04 06:20 UTC — RECUENTO independiente de todo lo de arriba (segunda pasada)
+
+La sesion que hizo el cambio murio por limite de uso justo despues de commitear, asi que una
+segunda pasada lo VOLVIO A CONTAR en vez de creerle al parrafo de arriba (regla: un dato
+heredado no se ejecuta sin contarlo de nuevo). Medido, no supuesto:
+
+- **La fila de prueba NO quedo**: `SELECT count(*) FROM public.chatbot_uso_mensual` = **0 filas**
+  (era lo unico que, de quedar, cortaba de verdad al primer cliente). `/published?inboxId=7`
+  vuelve a dar `{agotada:false, usadas:0, limite:500}`; inbox 5 sigue en `null` (fail-open).
+- **Lo desplegado ES lo commiteado**: md5 identico repo == `/opt/onia/bot` en los 4 archivos
+  (`bot-engine 789298db`, `config 393b3a7b`, `knowledge b2e9048c`, `cuota-agotada.test bf7dd6c1`),
+  y el proceso VIVO corre ese codigo (`/proc/<pid>/root/tmp/onia-bot`, snapshot 03:38, arranque
+  03:42:56; el bot corre en su namespace, por eso `/tmp/onia-bot` no se ve desde el host).
+  `node --check` OK en los tres, `webhook-server.sh status` -> `ok:true`, db 24 ms.
+  `node --test cuota-agotada.test.mjs` -> **5/5 verde**.
+- **El E2E dejo rastro y el rastro cuadra** (`onia_center.bot_messages`, conv 53): dos salientes
+  `R_CUOTA_AGOTADA` con **`reply_source=script`** — prueba dura de que NO se llamo al modelo —,
+  la 1a `nuevo->handoff_humano` y la 2a `handoff_humano->handoff_humano`. En `review_queue` hay
+  **UNA sola** fila `chatwoot:53` (`pending`, 03:41:45) pese a los dos mensajes: la idempotencia
+  del escalado esta verificada por dato, no por lectura del codigo. Conv 54 (post-restore) volvio
+  a `M0R`.
+- **Que significa "escala" hoy, con precision**: `review_queue` pending + `bot_stage=handoff_humano`
+  + el push de la plataforma. En Chatwoot la conv 53 quedo `status=0` (open) y `assignee_id=3`
+  (Onia Bot) — el motor NO reasigna ni cambia estado en Chatwoot, y eso vale para TODOS sus
+  handoffs, no es algo de este cambio. Ademas `ONIA_BOT_TG_AVISO` **no existe en `webhook.env`**,
+  asi que el ping a Telegram sale `skipped`. O sea: el corte y la derivacion estan vivos, pero
+  hoy a la persona la avisa la cola/el push, no un mensaje. Si se quiere ping real, es encender
+  ese flag (decision de Sergio, no de este paso).
