@@ -182,6 +182,7 @@ Variables conocidas hasta hoy:
 | 8 · Colores true-to-life | 4.5 Naturalidad |
 | 9 · La cara aguanta el clip | *sin equivalente — se mira como dice la Parte I* |
 | 10 · El copy no afirma nada falso | **Bloque 4 entero** (4.1–4.4) |
+| 11 · La pieza pide UNA acción, con palabra viva | 4.6 |
 
 🔴 **Dos checks de la Parte II no tienen casilla en la Parte I, y valen puntaje igual:**
 
@@ -265,12 +266,31 @@ cada pieza mirada sola pase.
 
 | # | Check | Pasa si |
 |---|---|---|
-| 2.1 | **Manos** | 5 dedos, proporción y articulación creíbles, sin dedos fundidos ni "manopla" |
+| 2.1 | **Manos** | 5 dedos **contados** (ver 2.1a), proporción y articulación creíbles, sin dedos fundidos ni "manopla" |
 | 2.2 | **Herramienta que se sostiene** | **Mecánicamente posible**: un objeto con dos partes tiene las dos, el pivote es coherente, y la mano lo agarra por donde se agarra |
 | 2.3 | Contacto | Lo que se toca se deforma como corresponde; nada flota ni atraviesa |
 | 2.4 | Simetría | Aros, mangas, cuellos y hombros coinciden entre lados |
 | 2.5 | Fondo | Sin objetos derretidos, personas a medias ni geometría imposible |
 | 2.6 | Reflejos | En espejo: el texto va invertido y la escena es consistente con el punto de vista |
+
+### 2.1a · Los dedos se CUENTAN, y sobre la foto fuente
+
+**Recortar la mano no es contar los dedos.** Un recorte de mano entera se lee como "una mano" y
+deja la casilla sentida como cumplida; lo que 2.1 pide es un **número**.
+
+1. **Sobre la foto FUENTE, nunca sobre la lámina compuesta.** El velo y el texto de la lámina
+   empastan las manos e inventan fallas que no existen.
+2. Recortar la **columna de dedos sola**, estirarla y realzar bordes:
+   ```sh
+   ffmpeg -i fuente.jpg -vf "crop=W:H:X:Y,scale=700:-1,eq=contrast=1.9:brightness=-0.06:saturation=0.3,unsharp=7:7:2.2" /tmp/dedos.png
+   ```
+3. **Contar pliegues, no bultos: N pliegues ⇒ N+1 dedos.** Y buscar el pulgar aparte — si está
+   del otro lado del objeto, suma.
+
+> **Nació de `generadas-20260902/E2-B-rooftop.jpg`**, seis dedos, elegida como **portada del
+> carrusel fijado del perfil**. Su lote tenía los recortes de mano ya hechos y commiteados
+> (`_E2-B-HAND-crop.jpg`) y aun así el LEEME la canonizó como *"la mejor rooftop"* y a su hermana
+> como *"la prueba 9/9"*. **Se miró la mano; no se contaron los dedos.** Detalle en P10.
 
 > **2.2 nació de `G06-peluqueria.jpg`**, donde la tijera tiene una sola argolla, blades sin
 > pivote coherente, y la mano de abajo con los dedos fundidos sin entrar en la argolla. La
