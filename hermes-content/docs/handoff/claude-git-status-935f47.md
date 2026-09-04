@@ -1,7 +1,7 @@
 # Handoff — carril `claude/git-status-935f47` (plataforma · infra · integración)
 
 > Formato: `hermes-content/docs/handoff/README.md`. Se sobrescribe; es el estado ACTUAL.
-> Última escritura: **2026-09-04 ~02:25 La Paz** (06:25 UTC).
+> Última escritura: **2026-09-04 ~02:50 La Paz** (06:50 UTC).
 >
 > ⚠️ Las horas de este archivo van en **La Paz**, no UTC. Sergio corrigió el 31-ago:
 > *"arregla tus horas, aqui somos america/la paz"*. El VPS y los logs son UTC-4 respecto de
@@ -114,6 +114,35 @@ Telegram), `feat/settings-seguridad` (pestaña Seguridad), corte honesto del bot
 `t_106595a4` (levantar Supabase Realtime: Kong da 503, no existe el contenedor).
 
 ---
+
+**Cierre del lote 4 (02:00-02:50 La Paz).** `master eae8795` vivo (BUILD_ID `2LdAuSubezKUq_xpaAb4o`):
+pestaña **Seguridad** en Configuración (accesos, bloqueos, sesiones con cierre remoto) y el fix de la
+cookie. Con el fix se REACTIVÓ `SUPABASE_INTERNAL_URL` y el login quedó sano (POST 200, cookie
+`sb-app-auth-token`, `/dashboard` y `/api/me` 200): el login ya no sale por Cloudflare ni comparte el
+bucket de Traefik. El deploy corrió con `/root/deploy-eae8795.sh`, que verifica sesión y **revierte
+solo** — patrón a reusar para cambios de env riesgosos.
+
+**Verificado MIRANDO (capturas a Telegram):** 2FA punta a punta con cuenta QA (QR, TOTP, 8 códigos de
+respaldo, `/login/2fa`, cookie aal1 → 307 en `/dashboard`, `/profile` y `/api/me`, código de respaldo
+deja `mfa_factors` en 0), banner de 14 días de gracia (hoy dice 13), claves de API (crear → `GET
+/api/v1/patients` 200 con envelope → revocar → 401), y el recibo con la fecha correcta (`paidAt`
+guardado 16:00 UTC = mediodía La Paz). Latencias: login 255 ms, `/dashboard` 3,0 s, `/settings/api` 2,3 s.
+
+**Hueco encontrado y cerrado: la cuota no contaba.** La plataforma cuenta en su webhook y exige el
+header `X-Chatwoot-Secret`, pero Chatwoot solo tiene un webhook (al motor) y no manda headers. Ahora
+el motor reenvía el payload crudo a la plataforma (`uso-plataforma.mjs`, commit `ab196b9b`), después
+del dedup y solo para entrantes reales (un saliente reenviado se le duplicaría al cliente por
+WhatsApp). Probado en vivo: conv 55 → 1, segundo mensaje de la misma → sigue 1, conv 56 → 2;
+`published?inboxId=7` → `usadas:2`. El corte honesto del bot ya estaba vivo (`1f30e53b`).
+
+**Correcciones a supuestos:** el add-on NO se gatea por `organizations.whatsappAddon` (está en `f` en
+todas) sino por el entitlement `addon.whatsapp`. Disco del VPS: 87 % → 78 % borrando builds y runtimes
+viejos (receta en la memoria de deploy).
+
+**Abierto:** `t_59b4761d` (cambios de chatbot-cola en el motor sin desplegar: un restart los publica a
+medias), `t_5c358c3e` (barridos proactivos ignoran la cuota agotada), `t_9d970ada` (ufw solo Cloudflare
++ límite en signup/recover/otp), `t_106595a4` (Supabase Realtime no existe: Kong da 503),
+`feat/canal-meta` (Instagram/Messenger, bloqueado por App Review de Meta).
 
 ## 0b. Noche del 3-sep — el panel se reorganiza (lotes 1-3 vivos, lote 4 en curso)
 
