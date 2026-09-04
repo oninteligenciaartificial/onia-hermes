@@ -1,6 +1,28 @@
 import { clientTokenCss } from "@onia/tokens";
 import { renderFontLinks } from "./font-links";
 
+/** Radio del punto final del sparkline del KPI, en unidades del viewBox.
+ *
+ *  El piso de W4 son 8px RENDERIZADOS, y ese SVG se dibuja con `meet` dentro de
+ *  una caja con `aspect-ratio`, asi que se achica con la tarjeta: medido, la
+ *  escala va de 0,675 (390px) a 0,839 (1440px). Con `r="3"` el punto medIa
+ *  4,05px y 5,03px — bajo el piso en las dos. Con 6 mide 8,1px y 10,1px.
+ *
+ *  Se resolvio con un radio en unidades del viewBox y NO con un trazo
+ *  `non-scaling-stroke` de 8px, que era lo primero que parecia correcto: al no
+ *  escalar, el disco no le entra al padding y el SVG lo RECORTA contra su borde.
+ *  Medido: quedaba pintado 3x3px a 390 — peor que el defecto que venia a
+ *  arreglar — y un gate que mira el grosor declarado lo da por "8px" igual. En
+ *  unidades del viewBox la holgura se achica junto con el punto, asi que vale
+ *  para CUALQUIER ancho de tarjeta. Por eso `pad` no puede ser menor que esto.
+ *
+ *  Un arreglo paralelo (4e69ba800) llego a 4.8 midiendo SOLO a 1440 y anotando
+ *  que 0,839 era "el peor caso, en mobile la tarjeta es mas ancha". Es al reves:
+ *  a 390 la escala cae a 0,675 y ese 4.8 rendiriza 6,48px, bajo el piso. Si
+ *  volves a dimensionar esto, media la escala CHICA — la premisa comoda ya
+ *  dejo pasar el defecto una vez. */
+const MARCADOR_KPI_R = 6;
+
 export type DashboardKpi = {
   label: string;
   value: string;
@@ -790,7 +812,7 @@ function renderLineChart(chart: DashboardChart): string {
           (point, index) =>
             `<circle cx="${xFor(index, count).toFixed(1)}" cy="${yFor(point.value).toFixed(
               1,
-            )}" r="4" fill="${color}"><title>${escapeHtml(entry.name)} - ${escapeHtml(point.label)}: ${
+            )}" r="4" fill="${color}" data-wf-marker><title>${escapeHtml(entry.name)} - ${escapeHtml(point.label)}: ${
               point.value
             }</title></circle>`,
         )
@@ -957,7 +979,7 @@ function renderSparkline(chart: DashboardChart): string {
   const area = `${xFor(0).toFixed(1)},${height - pad} ${line} ${xFor(count - 1).toFixed(1)},${height - pad}`;
   const last = points[count - 1];
   const dot = last
-    ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last.value).toFixed(1)}" r="4" fill="var(--wf-series-1)"></circle>`
+    ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last.value).toFixed(1)}" r="4" fill="var(--wf-series-1)" data-wf-marker></circle>`
     : "";
 
   // `preserveAspectRatio="none"` estiraba el viewBox al ancho de la tarjeta y con
@@ -978,17 +1000,10 @@ function renderKpiSpark(values: number[], label: string): string {
   const range = max - min || 1;
   const width = 320;
   const height = 44;
-  // Piso de 8px de DIAMETRO RENDERIZADO que fija `dataviz`. Aca no alcanza con
-  // copiar el r=4 del chart grande: ese SVG se dibuja a escala ~1,02 (327px de
-  // caja para 320 de viewBox) y el del KPI vive dentro de la tarjeta angosta,
-  // que a 1440 mide 268px => escala 0,839, la mas chica del panel. Medido en el
-  // navegador: r=3 daba 5,03px y r=4 daria 6,71px, los dos bajo el piso; r=4.8
-  // da 8,05px. En mobile la tarjeta es mas ancha, o sea que 0,839 es el peor
-  // caso y sizear contra el lo cubre en todos los anchos.
-  const dotR = 4.8;
-  // El pad tiene que cubrir el radio del punto: con pad 4 el circulo se recorta
-  // contra el borde del viewBox cuando el ultimo valor es el maximo de la serie.
-  const pad = dotR;
+  // El padding reserva el lugar del punto final: si fuera menor que su radio, el
+  // disco se saldria del viewBox y el SVG lo recortaria contra el borde (el
+  // ultimo punto cae justo en `width - pad`, y si es el maximo, en `y = pad`).
+  const pad = MARCADOR_KPI_R;
   const count = values.length;
 
   const xFor = (index: number): number =>
@@ -1000,7 +1015,7 @@ function renderKpiSpark(values: number[], label: string): string {
   const area = `${xFor(0).toFixed(1)},${height - pad} ${line} ${xFor(count - 1).toFixed(1)},${height - pad}`;
   const last = count ? values[count - 1] : undefined;
   const dot = last !== undefined
-    ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last).toFixed(1)}" r="${dotR}" fill="currentColor"></circle>`
+    ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last).toFixed(1)}" r="${MARCADOR_KPI_R}" fill="currentColor" data-wf-marker></circle>`
     : "";
 
   // Mismo defecto que W2 arreglo en el sparkline grande, que aca habia quedado:
