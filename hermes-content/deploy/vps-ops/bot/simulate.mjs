@@ -26,6 +26,7 @@
 // Spec: hermes-content/docs/ONIA_CHATBOT_PROPIO_SPEC_20260725.md §6 (via A).
 
 import readline from "node:readline";
+import { readFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { createBotConfig, DEFAULT_CONFIG, parseSlotsSpec } from "./config.mjs";
 import { createState, step, markHumanTakeover, buildFollowUp, LLM_PENDING } from "./bot-engine.mjs";
@@ -210,22 +211,59 @@ export function cargarConocimientoPublicado(deps = {}) {
   return { data: null, aviso: `⚠️ sin conocimiento publicado (${path}: ${motivo}) — esto NO es lo que contesta produccion` };
 }
 
+/** El archivo de entorno que el bot vivo carga de verdad. NO es una copia: es el que se instala. */
+export const WEBHOOK_ENV_DESPLEGADO = "/opt/onia/bot/webhook.env";
+
+/**
+ * Lee UNA variable del `webhook.env` desplegado. Sin dependencias: es `CLAVE=valor` por linea,
+ * con el valor entrecomillado (asi lo escribe el lanzador). Las comillas se sacan o se filtran
+ * al guion que ve el prospecto.
+ */
+function leerDelEnvDesplegado(path, clave, deps = {}) {
+  const read = deps.readFileSync || readFileSync;
+  let texto;
+  try {
+    texto = read(path, "utf8");
+  } catch {
+    return null;
+  }
+  for (const linea of String(texto).split("\n")) {
+    const limpia = linea.trim();
+    if (!limpia || limpia.startsWith("#") || !limpia.startsWith(`${clave}=`)) continue;
+    const crudo = limpia.slice(clave.length + 1).trim();
+    const sinComillas = crudo.replace(/^(["'])([\s\S]*)\1$/, "$2");
+    return sinComillas.trim() || null;
+  }
+  return null;
+}
+
 /**
  * Los horarios con los que produccion esta contestando AHORA, por el mismo camino que el bot vivo:
- * `--slots` si lo pasaron a mano, si no `ONIA_BOT_SLOTS` del entorno (run-turn.mjs hace lo mismo).
+ * `--slots` a mano · si no `ONIA_BOT_SLOTS` del entorno · si no el `webhook.env` DESPLEGADO, que es
+ * de donde produccion la saca (el lanzador la pasa con `docker exec -e`). Ese orden es el que
+ * resuelve produccion: lo que ya esta en el entorno gana, porque es lo ultimo que se aplica.
  *
- * Sin esto el simulador caia SIEMPRE en la rama `M0_SIN_HORARIOS` mientras produccion tenia dos
- * horarios cargados — o sea que el "3/3" que este carril reporta cada vuelta certificaba un guion
- * que ningun prospecto ve. Cuando no hay horarios por ningun lado NO se lo calla: lo dice, igual
- * que con el documento publicado.
+ * Sin el ultimo escalon el simulador caia en la rama `M0_SIN_HORARIOS` mientras produccion tenia
+ * DOS horarios cargados — o sea que el "3/3" que este carril reporta cada vuelta certificaba un
+ * guion que ningun prospecto ve. Medido el 2026-09-04: `webhook.env` y el proceso vivo tenian los
+ * dos slots, y el simulador corrido como lo manda el prompt del carril seguia sirviendo la otra
+ * rama. La vuelta anterior habia agregado el AVISO y el aviso salio impreso dos veces sin que
+ * nadie cambiara de rama: avisar no alcanza cuando el que lee es el mismo que ya confio.
+ *
+ * Es el mismo eslabon que `knowledge.onia.json`, un escalon mas arriba: ahi el instrumento cargaba
+ * otra CONFIG que produccion; aca cargaba bien la config y erraba la entrada que ELIGE LA RAMA.
+ * Cuando no hay horarios por ningun lado NO se lo calla: lo dice, igual que con el documento.
  */
 export function cargarSlotsPublicados(args = {}, deps = {}) {
   const env = deps.env || process.env;
-  const raw = String(args.slots || env.ONIA_BOT_SLOTS || "").trim();
+  const envFile = deps.envFile || WEBHOOK_ENV_DESPLEGADO;
+  const raw =
+    String(args.slots || env.ONIA_BOT_SLOTS || "").trim() ||
+    String(leerDelEnvDesplegado(envFile, "ONIA_BOT_SLOTS", deps) || "").trim();
   if (!raw) {
     return {
       slots: null,
-      aviso: "⚠️ sin horarios (ni --slots ni ONIA_BOT_SLOTS) — si produccion los tiene cargados, esta es OTRA rama del guion",
+      aviso: `⚠️ sin horarios (ni --slots, ni ONIA_BOT_SLOTS, ni ${envFile}) — si produccion los tiene cargados, esta es OTRA rama del guion`,
     };
   }
   return { slots: parseSlotsSpec(raw), aviso: null };
