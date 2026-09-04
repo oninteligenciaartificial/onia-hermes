@@ -17,7 +17,6 @@ const NAV = [
   { href: "/agentes", label: "Agentes" },
   { href: "/chatbot", label: "Chatbot" },
   { href: "/precios", label: "Precios" },
-  { href: "/nosotros", label: "Nosotros" },
 ] as const;
 
 /**

@@ -36,9 +36,7 @@ export const NAV_PRODUCTO: readonly NavItem[] = [
  * no Producto.
  */
 export const NAV_DECIDIR: readonly NavItem[] = [
-  { href: "/comparativa", label: "Comparativa" },
   { href: "/facturacion", label: "Facturación" },
-  { href: "/nosotros", label: "Nosotros" },
   { href: "/contacto", label: "Contacto" },
   { href: "/empezar", label: "Empezar" },
 ];
@@ -77,7 +75,6 @@ export const NAV_SERVICIOS: readonly NavItem[] = [
 export const NAV_HEADER: readonly NavItem[] = [
   { href: "/rubros", label: "Rubros" },
   { href: "/precios", label: "Precios" },
-  { href: "/comparativa", label: "Comparativa" },
   { href: "/facturacion", label: "Facturación" },
   { href: "/contacto", label: "Contacto" },
 ];
