@@ -53,6 +53,12 @@ const RE_PRECIO = new RegExp(
     "\\bpresupuesto\\b",
     "\\bcobran\\b|\\bcobras\\b",
     "\\bque (?:precio|costo)\\b",
+    // "¿que planes tienen?" es la misma pregunta que "¿cuanto cuesta?" y hasta el 2026-09-03 caia
+    // en el LLM, que contesta el texto seguro: el prospecto preguntaba por plata y se iba sin una
+    // cifra. Va ACOTADO a proposito — "plan" suelto se traga "mi plan es abrir otra sucursal".
+    "\\b(?:que|cuales|cuantos)\\s+planes\\b",
+    "\\bplanes?\\s+(?:tienen|hay|manejan|ofrecen|tenes|tienes)\\b",
+    "\\blista de precios\\b",
   ].join("|"),
 );
 
@@ -109,6 +115,35 @@ const RE_PRACTICA_PROPIA = new RegExp(
 
 const RE_PRODUCTO_DETALLE = /\bse conecta con\b|\bse integra con\b|\bcompatible con\b|\brayos x\b|\bradiograf\w+|\bimpresora\b|\bfirma digital\b|\bapi\b|\bexportar\b|\bmigrar (?:mis|los) datos\b|\bcelular\b|\btelefono\b|\btablet\b|\bcomputadora\b|\bandroid\b|\biphone\b|\bwindows\b|\bsin internet\b|\boffline\b|\ben la nube\b|\b(?:dan|tienen|ofrecen|brindan|incluye|incluyen) (?:soporte|capacitacion|garantia)\b/;
 
+// La MISMA pregunta, dicha como la dice la gente: SUJETO + VERBO DE CAPACIDAD.
+//
+// `RE_PRODUCTO_DETALLE` es una lista blanca de SUSTANTIVOS ("rayos x", "api", "offline"): cubre
+// al que ya sabe que quiere preguntar por una integracion. No cubria "¿el sistema manda
+// recordatorios?", que es la forma mas comun de una preventa y la que escribio un lead de verdad.
+//
+// Medido en produccion el 2026-09-03, conversacion 49 del widget, mensajes 339-340: la pregunta
+// no matcheo ninguna intencion, cayo en `offScriptResult` —cuya tarea al LLM es "reformular la
+// pregunta pendiente del embudo, sin dar datos nuevos", con `features` en `forbidden`— y el
+// prospecto recibio de vuelta la oferta de horarios, como si no hubiera preguntado nada. La traza
+// del turno decia `rama: "respondio"`: para el sistema eso salio bien.
+//
+// Se resuelve por SUJETO + VERBO y no por el verbo suelto, porque el verbo solo es de cualquiera:
+// "mando el comprobante", "tengo 4 personas" y "hago protesis" son del prospecto hablando de SI
+// MISMO. Exigir que el sujeto sea el producto es lo que separa "¿el sistema factura?" de "yo
+// facturo". Los 3 huecos opcionales dejan pasar "el sistema tambien me guarda...".
+//
+// Lo que NO se toca a proposito: el ORDEN del router. `isSupportRequest`, `isPriceQuestion`,
+// `isSiatQuestion` y `isClinicalOrLegal` se juzgan ANTES (bot-engine.mjs ~550-560), asi que "ya
+// soy cliente y el sistema no me anda" sigue siendo soporte y "¿cuanto sale el sistema?" sigue
+// siendo precio. Esta regla solo recoge lo que hoy no recoge nadie.
+const RE_PRODUCTO_HACE = new RegExp(
+  "\\b(?:el sistema|la plataforma|el software|el programa|la app|la aplicacion|el modulo|onia)\\b" +
+    "(?:\\s+\\S+){0,3}?\\s+" +
+    "(?:manda|envia|permite|guarda|registra|controla|maneja|emite|genera|sirve|hace|incluye|" +
+    "tiene|soporta|funciona|avisa|recuerda|integra|conecta|exporta|importa|calcula|agenda|" +
+    "acepta|muestra|imprime|notifica|separa|lleva|saca|cobra|factura)\\b",
+);
+
 // "¿que hacen?" / "¿que es Onia?" — la pregunta mas basica del embudo, y hasta hoy no tenia
 // respuesta propia: caia en el LLM o en un handoff. Se contesta con el CATALOGO (M_QUE_ES_ONIA),
 // que es dato editable, asi un producto nuevo no tarda un deploy en existir para el bot.
@@ -131,6 +166,66 @@ const RE_QUE_ES_ONIA = new RegExp(
 /** Pregunto QUE vendemos. Se contesta con el catalogo, no con un humano ni con el LLM. */
 export function asksWhatWeDo(norm) {
   return RE_QUE_ES_ONIA.test(norm);
+}
+
+// ---------------------------------------------------------------------------
+// MODO RECEPCIONISTA (el bot de un CLIENTE de Onia). Solo lo consulta
+// recepcionista.mjs: el funnel de venta no pasa por aca.
+// ---------------------------------------------------------------------------
+
+// Saludo pelado ("hola", "buenas"). Anclado al ARRANQUE del mensaje: "hola, cuanto cuesta?"
+// trae una pregunta y la pregunta gana (el router del modo recepcionista consulta esto ultimo).
+const RE_SALUDO = /^\s*(?:hola+|holis?|buenas+|buen dia|buenos dias|buenas tardes|buenas noches|hey|que tal|saludos)\b/;
+
+// "¿que dias atienden?" / "¿a que hora abren?" — el horario de atencion del NEGOCIO.
+const RE_HORARIO_ATENCION = /\bque dias?\b|\bhorarios? de atencion\b|\bque horarios?\b|\ben que horarios?\b|\bhasta que hora\b|\bdesde que hora\b|\ba que hora (?:abren|cierran|atienden)\b|\bcuando (?:atienden|abren|cierran)\b|\bestan abiert\w+\b|\babren\b|\bcierran\b|\batienden\b/;
+
+// "¿cuanto dura la cita?" / "¿es presencial?" — la logistica de la cita, no un pedido.
+// Se consulta ANTES que el interes: "como es la cita" pregunta, no reserva.
+const RE_CITA_INFO = /\bcuanto (?:dura|tiempo)\b|\bcomo es la (?:cita|consulta|atencion|reunion)\b|\bes presencial\b|\bes virtual\b|\bpor videollamada\b|\bmodalidad\b/;
+
+// Interes de compra o de cita ("quiero comprar 100 tornillos", "agendame").
+//
+// POR QUE SON DOS MITADES (2026-08-31): vendemos el chatbot como "contesta, califica, AGENDA"
+// (pricing.ts) y el motor derivaba a un humano TODA intencion de cita. Para que el bot agende de
+// verdad — mandando el link de la agenda publica de su org, que ya crea citas reales — hay que
+// separar lo que se resuelve solo (una cita) de lo que no (un pedido: cantidad, stock y precio
+// los confirma una persona). Juntos en un regex, un "quiero comprar 100 tornillos y agendar"
+// perderia el handoff del pedido a cambio de un link.
+const RE_CITA_PEDIR = /\bagend\w+\b|\breserv\w+\b|\bcita\b|\bturno\b/;
+const RE_COMPRA_PEDIDO = /\bcompr\w+\b|\bpedido\b|\bpedir\b|\bencarg\w+\b|\bnecesito \d+\b|\bquiero \d+\b/;
+// El interes de siempre = la union de las dos mitades + "me interesa" (que no dice cual de las
+// dos es, y por eso sigue escalando). Se compone en vez de repetirse para que no puedan
+// desincronizarse: agregar una palabra a una mitad la agrega tambien aca.
+const RE_INTERES_PEDIDO = new RegExp(`${RE_CITA_PEDIR.source}|${RE_COMPRA_PEDIDO.source}|\\bme interesa\\b`);
+
+/** Saludo sin pregunta: el modo recepcionista contesta con su menu (M0R). */
+export function isGreeting(norm) {
+  return RE_SALUDO.test(norm);
+}
+
+/** Pregunta por el horario de atencion del negocio. */
+export function asksSchedule(norm) {
+  return RE_HORARIO_ATENCION.test(norm);
+}
+
+/** Pregunta como es la cita (duracion / modalidad), sin pedirla todavia. */
+export function asksBookingInfo(norm) {
+  return RE_CITA_INFO.test(norm);
+}
+
+/** Quiere comprar / pedir / agendar: se toma el pedido y lo confirma un humano. */
+export function wantsToOrder(norm) {
+  return RE_INTERES_PEDIDO.test(norm);
+}
+
+/**
+ * Quiere UNA CITA y nada mas: la UNICA intencion que el bot puede cerrar solo, mandandole el link
+ * de la agenda publica de su org. La compra queda excluida a proposito: "quiero comprar 100
+ * tornillos y agendar" es un pedido, y un pedido lo confirma una persona (ver recepcionista.mjs).
+ */
+export function wantsToBook(norm) {
+  return RE_CITA_PEDIR.test(norm) && !RE_COMPRA_PEDIDO.test(norm);
 }
 
 // ---------------------------------------------------------------------------
@@ -237,7 +332,7 @@ export function isSupportRequest(norm) {
 
 /** Pregunta tecnica de producto: el bot NO adivina, va a handoff (spec §2.3). */
 export function isProductDetail(norm) {
-  return RE_PRODUCTO_DETALLE.test(norm);
+  return RE_PRODUCTO_DETALLE.test(norm) || RE_PRODUCTO_HACE.test(norm);
 }
 
 /** Pidio explicitamente un humano: handoff, sin intentar contestarlo el bot (N3). */

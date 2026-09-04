@@ -315,7 +315,7 @@ Regla:
 
 | Modelo | Id | Cuando |
 |---|---|---|
-| Soul 2.0 | `soul_2` (+`soul_id`) | **modelos IA, UGC, retrato** — 0,12 cr a 2k |
+| Soul 2.0 | `text2image_soul_v2` (+`soul_id`) | **modelos IA, UGC, retrato** — 0,12 cr a 2k |
 | Nano Banana Pro / 2 | `nano_banana_pro` / `nano_banana_2` | 4K, texto legible y diagramas, mockups |
 | GPT Image 2 | `gpt_image_2` | tipografia y edicion precisa, 4K |
 | Marketing Studio Image / DTC Ads | `marketing_studio_image` / `ms_image` | ads estaticos; `ms_image` exige `style_id` y acepta brand kit |
@@ -476,11 +476,11 @@ Consecuencia de producto: el modulo vive en `onia-center` y reusa lo que ya exis
 |---|---|---|---|
 | **Demo de venta** (gratis, arma la reunion) | 1 pieza vertical con SU producto/local | `ugc-saas-flow` desde la URL del cliente | 1 video, cotizar con `get_cost` |
 | **Pack de piezas** (add-on de propuesta) | N videos + estaticos al mes, aprobados en el panel | `ugc-flow` / `marketing_studio_video` + `ms_image` con brand kit | ~0,12 cr/imagen + video por pieza |
-| **Modelo IA de la marca** (ticket alto) | Soul propio del cliente + banco mensual de piezas con esa cara | `show_characters(train)` + `soul_2` + receta visual | entreno ~10 min · 0,12 cr/imagen |
+| **Modelo IA de la marca** (ticket alto) | Soul propio del cliente + banco mensual de piezas con esa cara | `show_characters(train)` + `text2image_soul_v2` + receta visual | entreno ~10 min · 0,12 cr/imagen |
 | **Estudio gestionado** (recurrente, el que importa) | todo lo anterior + calendario + publicacion + reporte de leads atribuidos | pipeline completo + `virality_predictor` antes de publicar | presupuesto de creditos por cliente |
 
 **Precios: NO se inventan aca.** Salen del generador de propuestas (add-on "videos IA") y de
-`ONIA_CATALOGO_MAESTRO_IDEAS_20260726.md` §3.6-3.7. Este doc define el producto; el precio
+`ONIA_CATALOGO_DE_IDEAS.md` §3.6-3.7. Este doc define el producto; el precio
 vive en su fuente. Ver tambien `HIGGSFIELD_CLIENT_SALES_PLAYBOOK.md` §2 (escalera de ofertas).
 
 ### Por que el margen es real

@@ -16,10 +16,13 @@
  *    recurringInvoicesEnabled desde professional · inventoryIncluded en todos)
  *  - contabilidad y RRHH ..... lib/plan-limits.ts:416-435 (basico desde Basico,
  *    completa desde Profesional — montan sobre los mismos umbrales de reportes)
- *  - add-ons ................. lib/pricing.ts (chatbot 300+200 / 1.500+550 /
- *    desde 3.500+900 · agenda publica 150 · usuario extra 70 (max 3 en Basico) ·
- *    inventario avanzado 180 · instancia privada desde 4.500+900 · Grupo
- *    implementacion desde 3.500)
+ *  - add-ons ................. lib/pricing.ts (agenda publica 150 · usuario
+ *    extra 70 (max 3 en Basico) · instancia privada desde 4.500+900 · Grupo
+ *    implementacion desde 3.500). El CHATBOT no vive aca: su precio sale de
+ *    content/chatbot-precios.ts, que es su fuente unica
+ *    (2026-08-21: Bs 390/mes sin instalacion; antes este archivo publicaba
+ *    "desde 300+200" y chatbot-precios.ts "1.500+1.490" — dos precios vivos
+ *    del mismo add-on).
  *  - prueba gratis ........... lib/subscription/plan-state.ts (14 dias sin
  *    tarjeta, corriendo con plan `professional`; al vencer queda en solo
  *    lectura, no se borra nada)
@@ -36,6 +39,9 @@
  * digitales como salto de plan (no estan gateados por plan), y la pasarela de
  * cobro (`gatewayEnabled: false` en los cinco planes).
  */
+
+import { precioAddonChatbot } from "@/content/chatbot-precios";
+import { WEB_STACKS } from "@/content/webs";
 
 export type PlanId = "basico" | "pro" | "full";
 
@@ -77,7 +83,7 @@ export const PLANES: readonly Plan[] = [
       "Hasta 300 fichas de clientes o pacientes cargadas",
       "200 recordatorios por email al mes",
       "Agenda, fichas, caja y cobros en un solo lugar",
-      "Inventario simple con aviso de stock mínimo",
+      "Inventario con existencias, costo, proveedor y aviso de stock mínimo",
       "Reporte básico y contabilidad básica de compras y ventas",
       "Lista de empleados",
       "Exportás tus datos en CSV cuando quieras",
@@ -162,19 +168,71 @@ export function bs(n: number): string {
   return n.toLocaleString("es-BO");
 }
 
-/* ---------- add-ons con precio en el codigo ---------- */
+/* ---------- lo que se suma sobre la suscripcion ----------
+ *
+ * ⚠️ VUELVE "Web del negocio" (2026-08-22). El 2026-08-21 la habia sacado de
+ * esta lista por ser pago unico y trabajo de agencia, no software recurrente.
+ * Sergio lo revirtio mirando la portada: "solo veo 3 precios, hay que mostrar
+ * todo lo que ofrecemos". Una tabla prolija que esconde lo que si vendemos
+ * cuesta mas que una tabla mezclada. Entra con el precio de content/webs.ts
+ * (el stack mas barato) y diciendo en la misma celda que es pago unico, no
+ * suscripcion — que era la objecion real, y se resuelve con la etiqueta.
+ *
+ * `href` existe para que la pantalla no adivine a que fila le toca link:
+ * /precios preguntaba `addon.nombre.includes("Chatbot")`, y ese sniff se
+ * rompia con renombrar la fila.
+ *
+ * Grupo / Empresarial con su implementacion NO es un add-on y por eso no esta
+ * en esta lista: vive arriba, en GRUPO, y es un proyecto cotizado.
+ */
+
+/**
+ * El "desde" de la web sale de la fuente (content/webs.ts), no a mano: hoy es
+ * la Landing de Captacion. Si manana el catalogo cambia, esta celda cambia
+ * sola en lugar de quedar mintiendo.
+ *
+ * 🔴 OJO, PRECIO EN DISPUTA — NO se resuelve desde esta pantalla. El mismo
+ * 2026-08-22, hermes-content/docs/ONIA_WEB_COMO_SE_VENDE.md §8 dejo asentado
+ * que la linea 790/1.500/2.900 era una oferta de ARRANQUE "valida hasta
+ * 2026-07-31", que vencio sin sucesor, y que TODAS las propuestas reales del
+ * repo cotizan la linea premium (2.000/4.500). Son dos precios vivos del mismo
+ * servicio: exactamente lo que la regla de fuente unica existe para evitar.
+ *
+ * Se publica 790 y no otro numero por UNA razon: es el que /servicios/webs ya
+ * muestra en produccion hoy. Que la portada diga lo mismo mantiene el sitio
+ * coherente consigo mismo; elegir 2.000 desde aca seria tomar la decision de
+ * precio que ese doc §8.4 reserva EXPLICITAMENTE para Sergio. Cuando Sergio
+ * ratifique una sola linea, se corrige en content/webs.ts y las dos pantallas
+ * se mueven juntas — no se toca este archivo.
+ */
+const WEB_DESDE = Math.min(
+  ...WEB_STACKS.map((w) => w.precio).filter((p): p is number => p !== null),
+);
 
 export interface AddOn {
   nombre: string;
   copy: string;
   precio: string;
+  /** Apartado que cuenta el add-on entero. Sin href, la fila no linkea. */
+  href?: string;
 }
 
+/**
+ * ⛔ NO VOLVER A PONER "Inventario avanzado" ACA (Sergio, 2026-08-27: "no se
+ * cobra"). Compras, proveedores, vencimientos por lote y aviso de stock bajo NO
+ * estan gateados por ningun archivo del producto — `addon.inventory_advanced` se
+ * calcula en entitlements.ts y no lo lee nadie. Cobrarlo era ponerle precio a lo
+ * que el cliente ya tiene encendido: se cae en la primera pregunta del que ya lo
+ * usa. El inventario ahora se cuenta donde corresponde, en el `incluye` del
+ * Basico (y por herencia en Pro y Full). Guarda:
+ * scripts/venta-honestidad.test.mjs. Detalle: ONIA_CATALOGO_DE_VENTA.md §5.
+ */
 export const ADDONS: readonly AddOn[] = [
   {
     nombre: "Chatbot de WhatsApp",
-    copy: "Tres niveles, desde recordatorios con reglas fijas hasta un bot con IA que responde, califica y agenda. Se suma a cualquier plan.",
-    precio: "Desde Bs 300 de instalación + Bs 200/mes",
+    copy: "Contesta al instante a cualquier hora con la información real de tu negocio, y pasa a una persona lo que necesite decisión. Se suma a cualquier plan.",
+    precio: precioAddonChatbot(),
+    href: "/chatbot",
   },
   {
     nombre: "Reservas online",
@@ -187,14 +245,10 @@ export const ADDONS: readonly AddOn[] = [
     precio: "Bs 70/mes por usuario",
   },
   {
-    nombre: "Inventario avanzado",
-    copy: "Compras, proveedores, vencimientos y alertas avanzadas, por encima del inventario simple que ya viene incluido.",
-    precio: "Desde Bs 180/mes",
-  },
-  {
     nombre: "Web del negocio",
-    copy: "Tu presencia online, construida por nosotros. Landing de captación, web profesional o web a medida.",
-    precio: "Desde Bs 790, pago único",
+    copy: "Tu sitio hecho por nosotros y publicado en tu dominio, con el botón de WhatsApp ya cableado. Es un proyecto que se cotiza y se paga una vez, no una suscripción más.",
+    precio: `Desde Bs ${bs(WEB_DESDE)} · pago único`,
+    href: "/servicios/webs",
   },
 ] as const;
 
@@ -217,12 +271,7 @@ export const NO_INCLUYE: readonly Excluido[] = [
   {
     que: "Los mensajes que WhatsApp te cobra",
     detalle:
-      "Si contratás el chatbot, Meta cobra por cada mensaje que TU negocio le manda primero al cliente. Se factura aparte, al costo de Meta más 20%.",
-  },
-  {
-    que: "Cobro con tarjeta desde el sistema",
-    detalle:
-      "Todavía no existe: hoy Onia deja la venta y el cobro registrados, pero la pasarela no está encendida en ningún plan. No la cobramos.",
+      "Si contratás el chatbot, Meta cobra por cada mensaje que TU negocio le manda primero al cliente. Eso lo pagás directo a Meta, en tu propia cuenta: no lo facturamos nosotros ni le sumamos nada encima.",
   },
   {
     que: "Pauta publicitaria",
@@ -234,7 +283,13 @@ export const NO_INCLUYE: readonly Excluido[] = [
 
 export const CONDICIONES: readonly string[] = [
   "Pagás semanal, mensual o anual. El anual cobra 10 meses: dos van de regalo.",
-  "El semanal existe en Básico (Bs 89) y en Pro (Bs 199). Full se cobra mensual o anual.",
+  // Armado de PLANES: esta frase nombraba los dos semanales a mano, al lado de
+  // la tabla que los define. Dos copias del mismo número en el mismo archivo.
+  `El semanal existe en ${PLANES.filter((p) => p.semanal !== null)
+    .map((p) => `${p.nombre} (Bs ${bs(p.semanal as number)})`)
+    .join(" y en ")}. ${PLANES.filter((p) => p.semanal === null)
+    .map((p) => p.nombre)
+    .join(" y ")} se cobra mensual o anual.`,
   "14 días de prueba sin tarjeta, con el Pro completo. Al vencer, la cuenta queda en solo lectura — nada se borra.",
   "En los tres planes de arriba no cobramos implementación ni migración: el checkout cobra solo el plan. Grupo / Empresarial sí lleva implementación acompañada y se cotiza aparte.",
   "Tus datos son tuyos: los exportás en CSV desde el plan más chico.",

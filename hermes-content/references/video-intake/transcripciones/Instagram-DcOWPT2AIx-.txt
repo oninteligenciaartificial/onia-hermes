@@ -13,3 +13,5 @@
 [22] Enterprise, wanna export your own data?
 [25] Enterprise, do not show the enterprise price.
 [27] Leave it at let's talk, follow for more.
+
+Nota fija: Whisper degrada términos técnicos (SIDANZ=Seedance, Hitsfield=Higgsfield, viesel=VSL); ningún término técnico se cita sin contrastar con la imagen.

@@ -1,0 +1,55 @@
+{
+  "cookies": [
+    {
+      "name": "user.id",
+      "value": "eyJfcmFpbHMiOnsibWVzc2FnZSI6Ik1nPT0iLCJleHAiOm51bGwsInB1ciI6ImNvb2tpZS51c2VyLmlkIn19--ba6f8b4839eec16d041fd0b08951bd6002f2519a",
+      "domain": "onia-chatbot-chatwoot.hqdqgh.easypanel.host",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "user.expires_at",
+      "value": "eyJfcmFpbHMiOnsibWVzc2FnZSI6IklqSXdNall0TURndE1qTlVNVFE2TXpJNk1qTXVOREUyV2lJPSIsImV4cCI6bnVsbCwicHVyIjoiY29va2llLnVzZXIuZXhwaXJlc19hdCJ9fQ%3D%3D--9de9fdd0d267d7ae4afe607e2e5bbdd4ec0ac5ca",
+      "domain": "onia-chatbot-chatwoot.hqdqgh.easypanel.host",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "cw_d_session_info",
+      "value": "{%22access-token%22:%22O73xIeyt_In3pfp3cFcQ6w%22%2C%22authorization%22:%22Bearer%20eyJhY2Nlc3MtdG9rZW4iOiJPNzN4SWV5dF9JbjNwZnAzY0ZjUTZ3IiwidG9rZW4tdHlwZSI6IkJlYXJlciIsImNsaWVudCI6IkRMaUhESy1rbk83aXdab0oyYTE4LXciLCJleHBpcnkiOiIxNzkyNzY0MTQzIiwidWlkIjoib25pbnRlbGlnZW5jaWFhcnRpZmljaWFsQGdtYWlsLmNvbSJ9%22%2C%22cache-control%22:%22max-age=0%2C%20private%2C%20must-revalidate%22%2C%22client%22:%22DLiHDK-knO7iwZoJ2a18-w%22%2C%22content-length%22:%22854%22%2C%22content-type%22:%22application/json%3B%20charset=utf-8%22%2C%22date%22:%22Sun%2C%2023%20Aug%202026%2014:02:23%20GMT%22%2C%22etag%22:%22W/%5C%22845497159ff1dcfdb57aa0d5d2959ca0%5C%22%22%2C%22expiry%22:%221792764143%22%2C%22referrer-policy%22:%22strict-origin-when-cross-origin%22%2C%22token-type%22:%22Bearer%22%2C%22uid%22:%22oninteligenciaartificial@gmail.com%22%2C%22x-content-type-options%22:%22nosniff%22%2C%22x-download-options%22:%22noopen%22%2C%22x-frame-options%22:%22SAMEORIGIN%22%2C%22x-permitted-cross-domain-policies%22:%22none%22%2C%22x-request-id%22:%22859760b0-8af5-4133-b704-e840be9c02a5%22%2C%22x-runtime%22:%220.158884%22%2C%22x-xss-protection%22:%220%22}",
+      "domain": "onia-chatbot-chatwoot.hqdqgh.easypanel.host",
+      "path": "/",
+      "expires": 1792677743,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_chatwoot_session",
+      "value": "JrEKgmqly6O9wT5D1pEnB6sN4bWIPKTJtYnjjy%2FiPnk%2BcY6D3e66RV%2FmB8WJzGauGi93%2B7cN3eMwpT%2FpGTqDRRq369heyCWtvc25cItDqHshLZ8bZ4iTFg%2BRcY4dRfbUUI9WZBrsjYYq0TG527XHVIoHgsMoM2xEIhucXFxWoANvg1BntJ1%2FxQmEsWEBH5VzRkfUenjfnMF5lRfcg1Kq1FGGcY0Q5z6cJdylRqAxgD7ZrQ4V%2B2ksvIs1naJ0mHQ9Xv4NVERLQcYMZqdetUG0YA%2FkDyVEm%2Bv3Hxm4CSXgdpcSp5Br7wcFhqkh5TVZOF1eaBh1j6fjm37ju3Y8iOOhe5R0%2Fodfd89m1sISeutNn6ZEZjZG%2Futu%2F8LnOWZwpqkq3u1WXN8GUMAP--b1zntoXpESctt9Rq--T25%2FPnGTdBbiJv2jKciLIw%3D%3D",
+      "domain": "onia-chatbot-chatwoot.hqdqgh.easypanel.host",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://onia-chatbot-chatwoot.hqdqgh.easypanel.host",
+      "localStorage": [
+        {
+          "name": "cw-idb-names",
+          "value": "[\"cw-store-2\"]"
+        }
+      ]
+    }
+  ]
+}

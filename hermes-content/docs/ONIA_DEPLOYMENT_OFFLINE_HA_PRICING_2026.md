@@ -181,7 +181,7 @@ El doc base pide "definir precio de licencia + instalación + soporte anual" y l
 
 | Componente | Qué cubre | Rango propuesto [VERIFICAR — S1] | Supuesto |
 |---|---|---|---|
-| Licencia anual | derecho de uso del ERP on-prem + updates del año | ~12–18 meses del plan SaaS equivalente | ancla: plan top DentalGest 1990 Bs/mes ≈ 23.880 Bs/año; on-prem debe recuperar el margen recurrente que se pierde al no hostear |
+| Licencia anual | derecho de uso del ERP on-prem + updates del año | ~12–18 meses del plan SaaS equivalente | ancla: plan top **Empresa Bs 2.900/mes ≈ 34.800 Bs/año** (Completo Bs 1.500 ≈ 18.000/año), leídos de `subscription-plans.ts`; on-prem debe recuperar el margen recurrente que se pierde al no hostear |
 | Instalación (one-time) | pre-check, install, integración, capacitación, handoff | fijo por complejidad (chico vs con integraciones tipo TR4) | cobra el trabajo real de campo, no los píxeles |
 | Soporte anual | actualizaciones por túnel, incidentes, verificación de backups | % de la licencia (ej. 15–25%/año) | recurrente que reemplaza el margen del SaaS |
 
@@ -437,8 +437,8 @@ tier Supabase/Vercel al firmar]`):
 
 | Tier | Planes (Bs/mes) | Objetivo uptime | Downtime tolerado | Qué prometemos | Qué NO prometemos |
 |---|---|---|---|---|---|
-| **Estándar** | 320-890 | **99.5 %** (best-effort) | ~3,6 h/mes | Monitoreo 24/7, backup diario, restauración ante pérdida de datos | Crédito/penalización; failover multi-nodo |
-| **Pro / Grupo Clínico** | 1500-1990 | **99.9 %** (best-effort) | ~44 min/mes | Lo anterior + off-site backup + prioridad de atención | SLA contractual con penalización (hasta subir a Supabase Enterprise) |
+| **Estándar** — Básico y Profesional | 320–750 | **99.5 %** (best-effort) | ~3,6 h/mes | Monitoreo 24/7, backup diario, restauración ante pérdida de datos | Crédito/penalización; failover multi-nodo |
+| **Pro** — Completo y Empresa | 1.500–2.900 | **99.9 %** (best-effort) | ~44 min/mes | Lo anterior + off-site backup + prioridad de atención | SLA contractual con penalización (hasta subir a Supabase Enterprise) |
 | **VPS gestionado (Modelo B) / On-prem (Modelo C)** | según contrato | **SLA de respuesta**, no de uptime | — | Tiempo de respuesta a incidente (ej. < 4 h hábiles), backup gestionado | Uptime de la app: la infra es del cliente; su internet/hardware manda |
 
 Nota comercial: en Bolivia muchas PyMEs **no tienen internet estable** — el uptime
@@ -496,14 +496,27 @@ Los planes están ratificados en **Bs**. La conversión a USD usa el **tipo ofic
 
 **Precio (lo que ya está ratificado, DentalGest):**
 
-| Plan | Bs/mes lista | Bs/mes lanzamiento (12m) | ≈ USD lanzamiento |
-|---|---:|---:|---:|
-| Básico / Ordenado | 390 | 320 | ~46 |
-| Profesional ⭐ | 890 | 750 | ~108 |
-| Clínica / Empresa | 1.990 | 1.500 | ~216 |
-| Grupo Clínico | 3.900 | 2.900 | ~417 |
+| Plan (`PLAN_LABELS`) | Bs/mes | Bs semanal | Anual (total) | ≈ USD/mes |
+|---|---:|---:|---:|---:|
+| Básico (`basic`) | **320** | 89 | 3.200 | ~28 |
+| Profesional (`professional`) ⭐ | **750** | 199 | 7.500 | ~65 |
+| Completo (`clinic`) | **1.500** | — | 15.000 | ~130 |
+| Empresa (`enterprise`) | **2.900** | — | 29.000 | ~252 |
 
-Anual = **2 meses gratis (10x)**. Onboarding único: **290 / 690 / 1.490 Bs** según alcance. GestiOS corre paralelo (350–1.250 Bs/mes). El código valida el pago = precio de **lanzamiento**; la "lista" es solo ancla en propuesta.
+Anual = **2 meses gratis (10x)**. Empresa suma **implementación desde Bs 3.500**. El semanal
+existe solo en Básico y Profesional, con prima (~20% y ~15%): es la puerta para negocios de
+caja diaria. USD referencial a Bs 11,50.
+
+⚠️ **Corregido 2026-08-27.** Acá había una tabla de DOS precios —"lista" 390/890/1.990/3.900 y
+"lanzamiento" 320/750/1.500/2.900— con la nota *"el código valida el pago = precio de
+lanzamiento; la lista es solo ancla en propuesta"*. **Esa columna "lista" no existe en ninguna
+parte del código:** `DEFAULT_PLAN_AMOUNTS` tiene UN precio por plan y ciclo, y es el de esta
+tabla. Un ancla que nadie puede validar es una cifra inventada esperando salir en una
+propuesta — y de ahí salieron los 390/890/1.990 que todavía viven en el generador de
+propuestas. También se corrigieron los nombres (`Ordenado`, `Clínica`, `Grupo Clínico` →
+`PLAN_LABELS`) y el USD, calculado a Bs ~6,96 de antes de la devaluación.
+**Onboarding: cotizado por alcance** (`pricing.ts`), no 290/690/1.490.
+**`GestiOS` no es un producto**: es un rubro de Onia Platform y sus repos son legado.
 
 **Costo ONIA — la clave es que la infra es por PRODUCTO, no por organización:**
 
@@ -576,7 +589,7 @@ Supuesto: **empresa mediana (≈10–30 usuarios) que exige que los datos no sal
 
 | Modelo | A quién | Setup (one-time) | Recurrente | Costo infra ONIA | Margen ONIA | Cuándo venderlo |
 |---|---|---:|---:|---:|---|---|
-| **A — SaaS cloud** | Clínica/pyme que quiere empezar ya | Bs 290–1.490 (onboarding) | Bs 320–2.900/mes (+ add-ons SIAT/agentes/WhatsApp) | ~US$25–45/mes por **producto** (repartido entre orgs) | Muy alto >20 orgs (>95% infra); bajo con 1–3 orgs; costo real = soporte humano | Default. Máxima velocidad de venta; el gancho es la web/onboarding barato → mensual |
+| **A — SaaS cloud** | Clínica/pyme que quiere empezar ya | **Bs 0** (no hay setup obligatorio; el onboarding se cotiza por alcance) | Bs 320–2.900/mes (+ add-ons SIAT/agentes/WhatsApp) | ~US$25–45/mes por **producto** (repartido entre orgs) | Muy alto >20 orgs (>95% infra); bajo con 1–3 orgs; costo real = soporte humano | Default. Máxima velocidad de venta; el gancho es la web/onboarding barato → mensual |
 | **B — VPS gestionado** | Empresa mediana que quiere su infra + WhatsApp/n8n propios, sin operar | Bs 3.500–7.000 | Bs 700–1.400/mes (gestión) | **0** (VPS lo paga el cliente, ~US$15–30/mes) | ~90%+ sobre gestión (solo tiempo de operador) | Control + canales propios; integrar ERP local en misma red (TR4/BE) |
 | **C — On-premise** | Empresa que exige datos adentro | Bs 10.500–28.000 (instalación) | Licencia Bs 14.000–42.000/año **o** perpetua Bs 42.000–105.000 + 18–20% mant.; soporte Bs 8.400–25.000/año | **0** (server del cliente) | Alto por contrato; ciclo de venta largo, instalación intensiva en horas | "Los datos no salen de mi empresa"; premium justificado por IA + SIAT + soberanía |
 
@@ -619,7 +632,7 @@ Lo que los subagentes marcaron como pendiente de tu decision o de un dato a veri
 - **[ha]** SLA on-prem/VPS gestionado: definir el tiempo de respuesta a incidente que prometemos (propuesta < 4 h hábiles) ya que ahí no controlamos el uptime de la infra del cliente.
 - **[pricing]** Tipo de cambio a usar en propuestas: oficial ~6,96 Bs/USD u otro por la brecha con el paralelo 2026. Afecta toda conversion Bs<->USD y el costo real en dolares de la infra cloud. [VERIFICAR con Sergio]
 - **[pricing]** Precio del add-on SIAT (facturacion electronica): propuesto Bs 990-1.900 setup + 150-350/mes por NIT/sucursal — no esta en catalogo. Bloqueo S2 (NIT SIAT). Confirmar montos y si se cobra por sucursal.
-- **[pricing]** Precio del tier/add-on Agentes 24/7 (modulo agents): propuesto Bs 550-1.200 por carril o bundle 1.500-2.500/mes — sin cerrar. Definir si es tier premium sobre Clinica/Grupo Clinico o add-on por carril, y como se alinea con la linea ONIA Empresarial en USD.
+- ✅ **[pricing] Agentes 24/7 (modulo agents): CERRADO, y no se cobra aparte.** Van **incluidos desde Profesional** (`PLAN_LIMITS.agentsIncluded`), no como tier ni como add-on por carril. Los rangos que proponía este doc (Bs 550-1.200 por carril, bundle 1.500-2.500/mes) nunca existieron en el codigo. Y su **costo de API es CERO**: los tres agentes redactan con plantillas, no llaman a ningun modelo (`ONIA_AGENTES_COSTO_API.md` §2.1) — o sea que si algun dia se les pone precio, no hay piso de costo variable que respetar.
 - **[pricing]** Costo mensual vigente del VPS para Modelo B (Hostinger KVM 4 u otro proveedor): usado rango ~US$12-30/mes segun termino. Confirmar plan y precio 2026.
 - **[pricing]** Modelo C: cerrar rangos de licencia (anual vs perpetua+mantenimiento), instalacion y soporte para empresa mediana; hoy son propuesta con supuesto 10-30 usuarios. Falta tambien el punto 2 pendiente del deployment doc: 'definir precio de licencia + instalacion + soporte anual'.
 - **[pricing]** Comparacion con ERPs locales bolivianos (Softland/SAP B1/sistemas locales): no se citaron cifras para no fabricar. Si se quiere usar el argumento de precio en ventas, conseguir referencias reales de licencia/usuario e implementacion.

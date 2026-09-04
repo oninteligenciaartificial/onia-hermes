@@ -42,7 +42,7 @@ sigue siendo el ground-truth real para QA, no se descarta).
   gancho en el contenido. Posicionamiento: hibrido lifestyle + meta-AI ([[LUCIA_CONTENT_PLAN]],
   [[LUCIA_BENCHMARK_ARIA_CRUZ_20260709]]). Ops de cuenta: `ONIA_AI_INFLUENCERS_ACCOUNT_OPS_2026.md`.
   (Sergio puede ajustar 2do nombre/apellido materno; el resto de la identidad esta lockeado.)
-- **Higgsfield Soul (USAR ESTE):** `36305a9b-af24-4390-959b-885082dddd5d` ("LUCIA-REAL-v2-clean", `soul_2`). Gen ~0.12cr/img.
+- **Higgsfield Soul (USAR ESTE):** `36305a9b-af24-4390-959b-885082dddd5d` ("LUCIA-REAL-v2-clean", `text2image_soul_v2`). Gen ~0.12cr/img.
 - **Entrenada desde:** 18 frames reales verificados, TODOS del mismo video (`hf_20260615_013651_d60afdd2...`, tubo verde SVR): `hermes-content/references/models/pecas-clean-v2/`. Frames REALES, no generados.
 - **Soul `9a0d6953-...` = ELIMINADO de Higgsfield (2026-07-06).** Estaba contaminado: 1 de sus 8 frames de entrenamiento (`pecas-B-02.png`) era de OTRA MUJER (video B resulto ser una persona distinta). Esto probablemente causo la perdida de consistencia reportada por Sergio. Borrado por UI a pedido explicito de Sergio. Ver `AVATAR-CONSISTENCY-SCHEME.md`.
 - **Soul `2fc03fc6-...` = ELIMINADO de Higgsfield (2026-07-06).** Era una cara distinta (m2-05, generada por error). Borrado por UI a pedido explicito de Sergio.
@@ -128,7 +128,7 @@ Marketing Studio; el ground-truth de QA sigue siendo el video real.
   (sin cura/antiedad/antes-despues). Lenguaje de cuidado, no medico.
 
 ## Produccion — ver [[AVATAR-CONSISTENCY-SCHEME]] (4 niveles, leer antes de generar)
-- **Nivel 1 (0.12cr, DEFAULT):** `soul_2` + soul_id `36305a9b-af24-4390-959b-885082dddd5d` + prompt de texto.
+- **Nivel 1 (0.12cr, DEFAULT):** `text2image_soul_v2` + soul_id `36305a9b-af24-4390-959b-885082dddd5d` + prompt de texto.
 - **Nivel 2 (42-75cr, UGC con producto real):** Marketing Studio, avatar custom creado
   desde una foto Nivel 1 (nunca desde Elements). **VALIDADO 2026-07-06** con ISDIN
   Fusion Water SPF 50 (`ms-lucia-isdin-480p-12s.mp4`, 42cr): identidad estable,
@@ -154,12 +154,12 @@ Marketing Studio; el ground-truth de QA sigue siendo el video real.
     casa, mañana, algo cotidiano — no clinico/laboratorio) y reforzar "forehead liso,
     sin arrugas" en el prompt para evitar que reaparezca el artefacto.
   - **Update 2026-07-07 — Identity Kit definitivo.** El fix de texto no alcanza en
-    expresiones fuertes (cejas muy levantadas: sorpresa, risa grande) — `soul_2` sigue
+    expresiones fuertes (cejas muy levantadas: sorpresa, risa grande) — `text2image_soul_v2` sigue
     generando arrugas no naturales ahi. Fix: `nano_banana_pro` + Reference Element
     `ced20cc2-3388-4d98-92ee-b0fcd961aa62` (ancla real, sola, sin combinar con
     outfit/lugar), 2cr/img. Kit completo de 6 imagenes (neutral, sonrisa suave, sonrisa
     completa, 3/4, perfil, sorpresa) verificado sin arrugas en ningun caso, en
-    `lucia-identity-kit-20260707/`. **Regla: `soul_2` sigue de default para expresiones
+    `lucia-identity-kit-20260707/`. **Regla: `text2image_soul_v2` sigue de default para expresiones
     calmas (barato); `nano_banana_pro`+ancla real para expresiones fuertes.**
 - **Nivel 3 (15cr/10s, talking sin producto):** still Nivel 1 -> `wan2_7` + audio.
   Verificado estable con Lucia.
@@ -194,5 +194,5 @@ de duplicar cuentas.
 ## Orden de trabajo (2026-07-06, pedido de Sergio)
 1. ✅ Cara real lockeada (Soul `36305a9b-af24-4390-959b-885082dddd5d`, 18 frames verificados de un solo video), entrenado y verificado.
 2. ✅ Guardarropa + lugares definidos (esta seccion).
-3. ✅ Pruebas BARATAS (soul_2, 0.12cr) — 2/2 generaciones verificadas (retrato neutro + bano/producto vs texto), identidad fiel al frame real (pecas, cejas, ojos, labios), sin deformacion. Souls viejos (`9a0d6953`, `2fc03fc6`) eliminados de Higgsfield.
+3. ✅ Pruebas BARATAS (text2image_soul_v2, 0.12cr) — 2/2 generaciones verificadas (retrato neutro + bano/producto vs texto), identidad fiel al frame real (pecas, cejas, ojos, labios), sin deformacion. Souls viejos (`9a0d6953`, `2fc03fc6`) eliminados de Higgsfield.
 4. Recien despues: mas trabajo de video/lipsync ("caras" es la fase cara, se hace al final).

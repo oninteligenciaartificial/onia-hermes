@@ -211,12 +211,14 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* la barra de accion fija del movil no debe tapar el final de la pagina */
-@media (max-width: 899px) {
-  body {
-    padding-bottom: calc(4.6rem + env(safe-area-inset-bottom, 0px));
-  }
-}
+/* Aca vivia un `padding-bottom: 4.6rem` en movil que reservaba lugar para una
+   barra de accion fija. Esa barra ya no existe —medido en vivo: el unico
+   elemento sticky/fixed del sitio es el header, y no hay un solo
+   `position: fixed` en el CSS—, asi que el hueco quedaba huerfano y pintaba
+   una franja de 73px del fondo CLARO debajo del pie NEGRO, en todas las
+   paginas del sitio en telefono. El area segura del telefono ahora la absorbe
+   el propio pie (`.footer` de sitio.module.css), para que ese espacio salga
+   del color del pie y no del fondo. */
 
 h1,
 h2,

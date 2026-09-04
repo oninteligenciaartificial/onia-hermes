@@ -5,3 +5,5 @@
 [11.2] Menos cabos y pedidos, muchos más organizados.
 [13.2] Quieres conocer todo lo que puedes hacer con esta aplicación,
 [15.7] visita nuestra web y descubrí más.
+
+Nota fija: Whisper degrada términos técnicos (SIDANZ=Seedance, Hitsfield=Higgsfield, viesel=VSL); ningún término técnico se cita sin contrastar con la imagen.

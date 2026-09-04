@@ -1,0 +1,2408 @@
+{
+  "url": "http://localhost:4519/",
+  "slug": "bolivian-electric",
+  "medidoEl": "2026-08-20T18:40:08.972Z",
+  "vistas": {
+    "movil": {
+      "viewport": "390x844",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 14003,
+        "alturaPantallas": 16.6,
+        "anchoBody": 390,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 13
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "",
+          "altoPx": 14003,
+          "altoPantallas": 16.6,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Materiales eléctricos de alta, media y baja tensión.",
+          "cta": "(591-3) 348-7575",
+          "imagenes": 129
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "min-h-screen bg-white text-navy-900",
+          "altoPx": 14003,
+          "altoPantallas": 16.6,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "Materiales eléctricos de alta, media y baja tensión.",
+          "cta": "(591-3) 348-7575",
+          "imagenes": 129
+        },
+        {
+          "orden": 2,
+          "etiqueta": "section",
+          "clase": "relative flex min-h-[92vh] w-full flex-col overflow-hidden bg-navy-950",
+          "altoPx": 800,
+          "altoPantallas": 0.9,
+          "fondo": "rgb(10, 17, 38)",
+          "titular": "Materiales eléctricos de alta, media y baja tensión.",
+          "cta": "Buscá materiales, marcas o equipos…Busca",
+          "imagenes": 3
+        },
+        {
+          "orden": 3,
+          "etiqueta": "section",
+          "clase": "section relative bg-[#f4f5f7]",
+          "altoPx": 1865,
+          "altoPantallas": 2.2,
+          "fondo": "rgb(244, 245, 247)",
+          "titular": "Equipos destacados",
+          "cta": "Todos",
+          "imagenes": 18
+        },
+        {
+          "orden": 4,
+          "etiqueta": "section",
+          "clase": "section bg-white",
+          "altoPx": 1190,
+          "altoPantallas": 1.4,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "Todo lo eléctrico en un solo lugar",
+          "cta": "Ver catálogo completo",
+          "imagenes": 1
+        },
+        {
+          "orden": 5,
+          "etiqueta": "section",
+          "clase": "section section--wide bg-white",
+          "altoPx": 972,
+          "altoPantallas": 1.2,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "Comprar es simple",
+          "cta": "",
+          "imagenes": 3
+        },
+        {
+          "orden": 6,
+          "etiqueta": "section",
+          "clase": "section on-dark relative bg-navy-950 text-white",
+          "altoPx": 1647,
+          "altoPantallas": 2,
+          "fondo": "rgb(10, 17, 38)",
+          "titular": "La ventaja de comprar en Bolivian Electric",
+          "cta": "Cotizá tu proyecto",
+          "imagenes": 7
+        },
+        {
+          "orden": 7,
+          "etiqueta": "section",
+          "clase": "section on-dark relative overflow-hidden bg-navy-950 text-white",
+          "altoPx": 1044,
+          "altoPantallas": 1.2,
+          "fondo": "rgb(10, 17, 38)",
+          "titular": "Más que un proveedor de materiales",
+          "cta": "Ver equipos en alquiler",
+          "imagenes": 6
+        },
+        {
+          "orden": 8,
+          "etiqueta": "section",
+          "clase": "section section--tight border-y border-hairline bg-white",
+          "altoPx": 308,
+          "altoPantallas": 0.4,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "Marcas que representamos",
+          "cta": "",
+          "imagenes": 40
+        },
+        {
+          "orden": 9,
+          "etiqueta": "section",
+          "clase": "section bg-[#f4f5f7]",
+          "altoPx": 1324,
+          "altoPantallas": 1.6,
+          "fondo": "rgb(244, 245, 247)",
+          "titular": "Bolivian Electric",
+          "cta": "(591-3) 348-7575",
+          "imagenes": 2
+        },
+        {
+          "orden": 10,
+          "etiqueta": "section",
+          "clase": "section bg-white",
+          "altoPx": 1356,
+          "altoPantallas": 1.6,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "Estamos cerca tuyo",
+          "cta": "Casa MatrizSanta CruzLunes a viernes · 8",
+          "imagenes": 11
+        },
+        {
+          "orden": 11,
+          "etiqueta": "section",
+          "clase": "section section--wide bg-white",
+          "altoPx": 1554,
+          "altoPantallas": 1.8,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "Soporte y recursos",
+          "cta": "Preguntas frecuentesResolvé las dudas má",
+          "imagenes": 11
+        },
+        {
+          "orden": 12,
+          "etiqueta": "section",
+          "clase": "section on-dark relative overflow-hidden bg-navy-950 text-white",
+          "altoPx": 928,
+          "altoPantallas": 1.1,
+          "fondo": "rgb(10, 17, 38)",
+          "titular": "Pedí tu cotización y te respondemos hoy.",
+          "cta": "(591-3) 348-7575",
+          "imagenes": 5
+        }
+      ],
+      "encabezados": {
+        "total": 43,
+        "h1": 1,
+        "saltos": 1,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "Materiales eléctricos de alta, media y baja tensión."
+          },
+          {
+            "nivel": 2,
+            "texto": "Equipos destacados"
+          },
+          {
+            "nivel": 3,
+            "texto": "Torre de Iluminación GENERAC VT8JM-1350"
+          },
+          {
+            "nivel": 3,
+            "texto": "Torre de Iluminación GENERAC MT1"
+          },
+          {
+            "nivel": 3,
+            "texto": "Cámara Termográfica FLIR E50"
+          },
+          {
+            "nivel": 3,
+            "texto": "Pinza Amperimétrica Fluke 378 FC"
+          },
+          {
+            "nivel": 3,
+            "texto": "Comprobador de Aislamiento Fluke 1550C FC 5 kV"
+          },
+          {
+            "nivel": 3,
+            "texto": "Analizador de Red EPCOS PFC MC7000-3"
+          },
+          {
+            "nivel": 3,
+            "texto": "Kit Puesta a Tierra Fluke 1625-2 GEO"
+          },
+          {
+            "nivel": 3,
+            "texto": "Kit Multímetro Fluke 289 + FlukeView"
+          },
+          {
+            "nivel": 3,
+            "texto": "¿No encontrás un equipo específico?"
+          },
+          {
+            "nivel": 2,
+            "texto": "Todo lo eléctrico en un solo lugar"
+          },
+          {
+            "nivel": 2,
+            "texto": "Comprar es simple"
+          },
+          {
+            "nivel": 3,
+            "texto": "Encontrá tu producto"
+          },
+          {
+            "nivel": 3,
+            "texto": "Armá tu lista y cotizá"
+          },
+          {
+            "nivel": 3,
+            "texto": "Recibí y coordinamos"
+          },
+          {
+            "nivel": 2,
+            "texto": "La ventaja de comprar en Bolivian Electric"
+          },
+          {
+            "nivel": 3,
+            "texto": "Importación directa"
+          },
+          {
+            "nivel": 3,
+            "texto": "Alta, media y baja tensión"
+          },
+          {
+            "nivel": 3,
+            "texto": "Venta y alquiler de equipos"
+          },
+          {
+            "nivel": 3,
+            "texto": "Marcas certificadas"
+          },
+          {
+            "nivel": 3,
+            "texto": "Soporte técnico en obra"
+          },
+          {
+            "nivel": 3,
+            "texto": "Envíos a todo Bolivia"
+          },
+          {
+            "nivel": 2,
+            "texto": "Más que un proveedor de materiales"
+          },
+          {
+            "nivel": 3,
+            "texto": "Alquiler de equipos"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "13px / lh 1.50 / ls normal / w 400",
+            "veces": 36
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 500",
+            "veces": 16
+          },
+          {
+            "valor": "16px / lh 1.25 / ls -0.16px / w 500",
+            "veces": 15
+          },
+          {
+            "valor": "32px / lh 0.98 / ls -0.256px / w 500",
+            "veces": 9
+          },
+          {
+            "valor": "15px / lh 1.65 / ls normal / w 400",
+            "veces": 9
+          },
+          {
+            "valor": "10px / lh 1.50 / ls 1px / w 700",
+            "veces": 8
+          },
+          {
+            "valor": "14px / lh 1.38 / ls normal / w 700",
+            "veces": 8
+          },
+          {
+            "valor": "10px / lh 1.50 / ls 1.2px / w 600",
+            "veces": 8
+          },
+          {
+            "valor": "12px / lh 1.33 / ls 0.48px / w 700",
+            "veces": 8
+          },
+          {
+            "valor": "24px / lh 1.00 / ls -0.096px / w 500",
+            "veces": 8
+          },
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 400",
+            "veces": 8
+          },
+          {
+            "valor": "18px / lh 1.56 / ls -0.18px / w 500",
+            "veces": 7
+          },
+          {
+            "valor": "16px / lh 1.50 / ls -0.16px / w 500",
+            "veces": 7
+          },
+          {
+            "valor": "13px / lh 1.50 / ls 0.78px / w 600",
+            "veces": 6
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 400",
+            "veces": 6
+          },
+          {
+            "valor": "14px / lh 1.60 / ls normal / w 400",
+            "veces": 6
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Inter",
+            "veces": 236
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(14, 24, 56)",
+            "veces": 56
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 30
+          },
+          {
+            "valor": "rgb(115, 115, 115)",
+            "veces": 26
+          },
+          {
+            "valor": "rgba(14, 24, 56, 0.72)",
+            "veces": 20
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.7)",
+            "veces": 16
+          },
+          {
+            "valor": "rgb(163, 163, 163)",
+            "veces": 15
+          },
+          {
+            "valor": "rgb(10, 17, 38)",
+            "veces": 14
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.9)",
+            "veces": 13
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(245, 183, 29)",
+            "veces": 61
+          },
+          {
+            "valor": "rgb(10, 17, 38)",
+            "veces": 24
+          },
+          {
+            "valor": "rgb(245, 245, 245)",
+            "veces": 23
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 19
+          },
+          {
+            "valor": "rgb(244, 245, 247)",
+            "veces": 3
+          },
+          {
+            "valor": "rgb(226, 232, 240)",
+            "veces": 3
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.15)",
+            "veces": 3
+          },
+          {
+            "valor": "rgba(14, 24, 56, 0.6)",
+            "veces": 3
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "8px",
+            "veces": 61
+          },
+          {
+            "valor": "12px",
+            "veces": 39
+          },
+          {
+            "valor": "24px",
+            "veces": 37
+          },
+          {
+            "valor": "16px",
+            "veces": 34
+          },
+          {
+            "valor": "6px",
+            "veces": 31
+          },
+          {
+            "valor": "4px",
+            "veces": 28
+          },
+          {
+            "valor": "28.16px",
+            "veces": 24
+          },
+          {
+            "valor": "20px",
+            "veces": 16
+          },
+          {
+            "valor": "10px",
+            "veces": 16
+          },
+          {
+            "valor": "14.72px",
+            "veces": 15
+          },
+          {
+            "valor": "3.84px 20.48px",
+            "veces": 15
+          },
+          {
+            "valor": "2px",
+            "veces": 12
+          },
+          {
+            "valor": "14.08px",
+            "veces": 12
+          },
+          {
+            "valor": "21.76px",
+            "veces": 10
+          },
+          {
+            "valor": "14px",
+            "veces": 10
+          },
+          {
+            "valor": "15.4px",
+            "veces": 9
+          }
+        ],
+        "radios": [],
+        "radiosDistintos": 0,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 1
+          }
+        ],
+        "sombrasDistintas": 1,
+        "zIndex": [
+          {
+            "valor": "10",
+            "veces": 2
+          },
+          {
+            "valor": "50",
+            "veces": 2
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic",
+            "veces": 90
+          },
+          {
+            "valor": "color 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s cubic-b",
+            "veces": 40
+          },
+          {
+            "valor": "transform 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 19
+          },
+          {
+            "valor": "width 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 15
+          },
+          {
+            "valor": "transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 13
+          },
+          {
+            "valor": "color 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s cubic-b",
+            "veces": 8
+          },
+          {
+            "valor": "transform 0.2s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 8
+          },
+          {
+            "valor": "box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), background-color 0",
+            "veces": 7
+          },
+          {
+            "valor": "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 5
+          }
+        ],
+        "transicionesDistintas": 9,
+        "hojasLeidas": 2,
+        "unidades": {
+          "em": 130,
+          "rem": 233,
+          "px": 134,
+          "clamp": 4,
+          "vw": 5
+        },
+        "keyframesDeclarados": 2,
+        "transitionAll": 0,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 1024,
+            "veces": 2
+          },
+          {
+            "px": 1280,
+            "veces": 2
+          },
+          {
+            "px": 640,
+            "veces": 1
+          },
+          {
+            "px": 768,
+            "veces": 1
+          },
+          {
+            "px": 1440,
+            "veces": 1
+          },
+          {
+            "px": 1920,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "header",
+            "clase": "sticky top-0 z-50",
+            "posicion": "sticky",
+            "alto": 105,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "a",
+            "clase": "group fixed bottom-5 right-5 z-50 inline-flex items-center g",
+            "posicion": "fixed",
+            "alto": 48,
+            "top": "776px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "",
+                "requerido": true
+              },
+              {
+                "tipo": "select-one",
+                "nombre": "",
+                "requerido": false
+              },
+              {
+                "tipo": "textarea",
+                "nombre": "",
+                "requerido": true
+              }
+            ],
+            "boton": "Enviar por WhatsApp"
+          }
+        ],
+        "dialogos": 0,
+        "ctasDistintos": 68,
+        "ctasTop": [
+          {
+            "texto": "Ver detalle",
+            "veces": 8
+          },
+          {
+            "texto": "Agregar",
+            "veces": 8
+          },
+          {
+            "texto": "Medición",
+            "veces": 7
+          },
+          {
+            "texto": "(591-3) 348-7575",
+            "veces": 5
+          },
+          {
+            "texto": "Iluminación",
+            "veces": 3
+          },
+          {
+            "texto": "ruddy@bolivianelectric.com.bo",
+            "veces": 2
+          },
+          {
+            "texto": "Acceso clientes",
+            "veces": 1
+          },
+          {
+            "texto": "Empresa",
+            "veces": 1
+          },
+          {
+            "texto": "Marcas",
+            "veces": 1
+          },
+          {
+            "texto": "Líneas de productos",
+            "veces": 1
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 52,
+        "sinAlt": 0,
+        "altVacio": 0,
+        "sinDimensiones": 51,
+        "lazy": 49,
+        "conSrcset": 0,
+        "interactivos": 145,
+        "objetivosMenores44px": 45,
+        "idioma": "es",
+        "landmarks": {
+          "header": 1,
+          "nav": 1,
+          "main": 1,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(14, 24, 56)",
+            "fondo": "rgb(245, 183, 29)",
+            "ratio": 9.68
+          },
+          {
+            "texto": "rgb(14, 24, 56)",
+            "fondo": "rgb(10, 17, 38)",
+            "ratio": 1.08
+          },
+          {
+            "texto": "rgb(14, 24, 56)",
+            "fondo": "rgb(245, 245, 245)",
+            "ratio": 15.97
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(245, 183, 29)",
+            "ratio": 1.8
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(10, 17, 38)",
+            "ratio": 18.73
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(245, 245, 245)",
+            "ratio": 1.09
+          },
+          {
+            "texto": "rgb(115, 115, 115)",
+            "fondo": "rgb(245, 183, 29)",
+            "ratio": 2.64
+          },
+          {
+            "texto": "rgb(115, 115, 115)",
+            "fondo": "rgb(10, 17, 38)",
+            "ratio": 3.95
+          },
+          {
+            "texto": "rgb(115, 115, 115)",
+            "fondo": "rgb(245, 245, 245)",
+            "ratio": 4.35
+          },
+          {
+            "texto": "rgba(14, 24, 56, 0.72)",
+            "fondo": "rgb(245, 183, 29)",
+            "ratio": 5.32
+          },
+          {
+            "texto": "rgba(14, 24, 56, 0.72)",
+            "fondo": "rgb(10, 17, 38)",
+            "ratio": 1.05
+          },
+          {
+            "texto": "rgba(14, 24, 56, 0.72)",
+            "fondo": "rgb(245, 245, 245)",
+            "ratio": 6.78
+          }
+        ],
+        "fondosTranslucidosOmitidos": 7
+      },
+      "rendimiento": {
+        "pesoTotalKb": 1214.9,
+        "porTipoKb": {
+          "document": 1.2,
+          "stylesheet": 52.8,
+          "script": 432.4,
+          "image": 655.5,
+          "fetch": 25.9,
+          "font": 47.1
+        },
+        "pedidos": {
+          "document": 1,
+          "stylesheet": 2,
+          "script": 1,
+          "image": 10,
+          "fetch": 1,
+          "font": 1
+        },
+        "hostsDistintos": 3,
+        "terceros": [
+          {
+            "host": "fonts.googleapis.com",
+            "pedidos": 1
+          },
+          {
+            "host": "fonts.gstatic.com",
+            "pedidos": 1
+          }
+        ],
+        "fuentesCargadas": [
+          "Inter 400 normal",
+          "Inter 500 normal",
+          "Inter 600 normal",
+          "Inter 700 normal",
+          "Inter 800 normal",
+          "Inter 900 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Bolivian Electric — Materiales Eléctricos Industriales",
+        "descripcion": "Importadora líder de materiales eléctricos industriales en Bolivia. Alta, media y baja tensión, stock inmediato, marcas certificadas y asesoría técnica. Santa Cruz, Cochabamba y La Paz.",
+        "canonical": null,
+        "og": 0,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "tablet": {
+      "viewport": "768x1024",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 11922,
+        "alturaPantallas": 11.6,
+        "anchoBody": 768,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 13
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "",
+          "altoPx": 11922,
+          "altoPantallas": 11.6,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Materiales eléctricos de alta, media y baja tensión.",
+          "cta": "(591-3) 348-7575",
+          "imagenes": 129
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "min-h-screen bg-white text-navy-900",
+          "altoPx": 11922,
+          "altoPantallas": 11.6,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "Materiales eléctricos de alta, media y baja tensión.",
+          "cta": "(591-3) 348-7575",
+          "imagenes": 129
+        },
+        {
+          "orden": 2,
+          "etiqueta": "section",
+          "clase": "relative flex min-h-[92vh] w-full flex-col overflow-hidden bg-navy-950",
+          "altoPx": 602,
+          "altoPantallas": 0.6,
+          "fondo": "rgb(10, 17, 38)",
+          "titular": "Materiales eléctricos de alta, media y baja tensión.",
+          "cta": "Buscá materiales, marcas o equipos…Busca",
+          "imagenes": 3
+        },
+        {
+          "orden": 3,
+          "etiqueta": "section",
+          "clase": "section relative bg-[#f4f5f7]",
+          "altoPx": 2595,
+          "altoPantallas": 2.5,
+          "fondo": "rgb(244, 245, 247)",
+          "titular": "Equipos destacados",
+          "cta": "Todos",
+          "imagenes": 18
+        },
+        {
+          "orden": 4,
+          "etiqueta": "section",
+          "clase": "section bg-white",
+          "altoPx": 1172,
+          "altoPantallas": 1.1,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "Todo lo eléctrico en un solo lugar",
+          "cta": "Ver catálogo completo",
+          "imagenes": 1
+        },
+        {
+          "orden": 5,
+          "etiqueta": "section",
+          "clase": "section section--wide bg-white",
+          "altoPx": 581,
+          "altoPantallas": 0.6,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "Comprar es simple",
+          "cta": "",
+          "imagenes": 3
+        },
+        {
+          "orden": 6,
+          "etiqueta": "section",
+          "clase": "section on-dark relative bg-navy-950 text-white",
+          "altoPx": 1110,
+          "altoPantallas": 1.1,
+          "fondo": "rgb(10, 17, 38)",
+          "titular": "La ventaja de comprar en Bolivian Electric",
+          "cta": "Cotizá tu proyecto",
+          "imagenes": 7
+        },
+        {
+          "orden": 7,
+          "etiqueta": "section",
+          "clase": "section on-dark relative overflow-hidden bg-navy-950 text-white",
+          "altoPx": 609,
+          "altoPantallas": 0.6,
+          "fondo": "rgb(10, 17, 38)",
+          "titular": "Más que un proveedor de materiales",
+          "cta": "Ver equipos en alquiler",
+          "imagenes": 6
+        },
+        {
+          "orden": 8,
+          "etiqueta": "section",
+          "clase": "section section--tight border-y border-hairline bg-white",
+          "altoPx": 270,
+          "altoPantallas": 0.3,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "Marcas que representamos",
+          "cta": "",
+          "imagenes": 40
+        },
+        {
+          "orden": 9,
+          "etiqueta": "section",
+          "clase": "section bg-[#f4f5f7]",
+          "altoPx": 1366,
+          "altoPantallas": 1.3,
+          "fondo": "rgb(244, 245, 247)",
+          "titular": "Bolivian Electric",
+          "cta": "(591-3) 348-7575",
+          "imagenes": 2
+        },
+        {
+          "orden": 10,
+          "etiqueta": "section",
+          "clase": "section bg-white",
+          "altoPx": 971,
+          "altoPantallas": 0.9,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "Estamos cerca tuyo",
+          "cta": "Casa MatrizSanta CruzLunes a viernes · 8",
+          "imagenes": 11
+        },
+        {
+          "orden": 11,
+          "etiqueta": "section",
+          "clase": "section section--wide bg-white",
+          "altoPx": 1169,
+          "altoPantallas": 1.1,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "Soporte y recursos",
+          "cta": "Preguntas frecuentesResolvé las dudas má",
+          "imagenes": 11
+        },
+        {
+          "orden": 12,
+          "etiqueta": "section",
+          "clase": "section on-dark relative overflow-hidden bg-navy-950 text-white",
+          "altoPx": 819,
+          "altoPantallas": 0.8,
+          "fondo": "rgb(10, 17, 38)",
+          "titular": "Pedí tu cotización y te respondemos hoy.",
+          "cta": "(591-3) 348-7575",
+          "imagenes": 5
+        }
+      ],
+      "encabezados": {
+        "total": 43,
+        "h1": 1,
+        "saltos": 1,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "Materiales eléctricos de alta, media y baja tensión."
+          },
+          {
+            "nivel": 2,
+            "texto": "Equipos destacados"
+          },
+          {
+            "nivel": 3,
+            "texto": "Torre de Iluminación GENERAC VT8JM-1350"
+          },
+          {
+            "nivel": 3,
+            "texto": "Torre de Iluminación GENERAC MT1"
+          },
+          {
+            "nivel": 3,
+            "texto": "Cámara Termográfica FLIR E50"
+          },
+          {
+            "nivel": 3,
+            "texto": "Pinza Amperimétrica Fluke 378 FC"
+          },
+          {
+            "nivel": 3,
+            "texto": "Comprobador de Aislamiento Fluke 1550C FC 5 kV"
+          },
+          {
+            "nivel": 3,
+            "texto": "Analizador de Red EPCOS PFC MC7000-3"
+          },
+          {
+            "nivel": 3,
+            "texto": "Kit Puesta a Tierra Fluke 1625-2 GEO"
+          },
+          {
+            "nivel": 3,
+            "texto": "Kit Multímetro Fluke 289 + FlukeView"
+          },
+          {
+            "nivel": 3,
+            "texto": "¿No encontrás un equipo específico?"
+          },
+          {
+            "nivel": 2,
+            "texto": "Todo lo eléctrico en un solo lugar"
+          },
+          {
+            "nivel": 2,
+            "texto": "Comprar es simple"
+          },
+          {
+            "nivel": 3,
+            "texto": "Encontrá tu producto"
+          },
+          {
+            "nivel": 3,
+            "texto": "Armá tu lista y cotizá"
+          },
+          {
+            "nivel": 3,
+            "texto": "Recibí y coordinamos"
+          },
+          {
+            "nivel": 2,
+            "texto": "La ventaja de comprar en Bolivian Electric"
+          },
+          {
+            "nivel": 3,
+            "texto": "Importación directa"
+          },
+          {
+            "nivel": 3,
+            "texto": "Alta, media y baja tensión"
+          },
+          {
+            "nivel": 3,
+            "texto": "Venta y alquiler de equipos"
+          },
+          {
+            "nivel": 3,
+            "texto": "Marcas certificadas"
+          },
+          {
+            "nivel": 3,
+            "texto": "Soporte técnico en obra"
+          },
+          {
+            "nivel": 3,
+            "texto": "Envíos a todo Bolivia"
+          },
+          {
+            "nivel": 2,
+            "texto": "Más que un proveedor de materiales"
+          },
+          {
+            "nivel": 3,
+            "texto": "Alquiler de equipos"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "13px / lh 1.50 / ls normal / w 400",
+            "veces": 36
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 500",
+            "veces": 16
+          },
+          {
+            "valor": "17px / lh 1.25 / ls -0.17472px / w 500",
+            "veces": 15
+          },
+          {
+            "valor": "41px / lh 0.98 / ls -0.331776px / w 500",
+            "veces": 9
+          },
+          {
+            "valor": "15px / lh 1.65 / ls normal / w 400",
+            "veces": 9
+          },
+          {
+            "valor": "10px / lh 1.50 / ls 1px / w 700",
+            "veces": 8
+          },
+          {
+            "valor": "14px / lh 1.38 / ls normal / w 700",
+            "veces": 8
+          },
+          {
+            "valor": "10px / lh 1.50 / ls 1.2px / w 600",
+            "veces": 8
+          },
+          {
+            "valor": "12px / lh 1.33 / ls 0.48px / w 700",
+            "veces": 8
+          },
+          {
+            "valor": "29px / lh 1.00 / ls -0.11648px / w 500",
+            "veces": 8
+          },
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 400",
+            "veces": 8
+          },
+          {
+            "valor": "16px / lh 1.50 / ls -0.16px / w 500",
+            "veces": 7
+          },
+          {
+            "valor": "13px / lh 1.50 / ls 0.78px / w 600",
+            "veces": 6
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 400",
+            "veces": 6
+          },
+          {
+            "valor": "18px / lh 1.56 / ls -0.18px / w 500",
+            "veces": 6
+          },
+          {
+            "valor": "14px / lh 1.60 / ls normal / w 400",
+            "veces": 6
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Inter",
+            "veces": 236
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(14, 24, 56)",
+            "veces": 56
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 30
+          },
+          {
+            "valor": "rgb(115, 115, 115)",
+            "veces": 26
+          },
+          {
+            "valor": "rgba(14, 24, 56, 0.72)",
+            "veces": 20
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.7)",
+            "veces": 16
+          },
+          {
+            "valor": "rgb(163, 163, 163)",
+            "veces": 15
+          },
+          {
+            "valor": "rgb(10, 17, 38)",
+            "veces": 14
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.9)",
+            "veces": 13
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(245, 183, 29)",
+            "veces": 61
+          },
+          {
+            "valor": "rgb(10, 17, 38)",
+            "veces": 24
+          },
+          {
+            "valor": "rgb(245, 245, 245)",
+            "veces": 23
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 19
+          },
+          {
+            "valor": "rgb(244, 245, 247)",
+            "veces": 3
+          },
+          {
+            "valor": "rgb(226, 232, 240)",
+            "veces": 3
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.15)",
+            "veces": 3
+          },
+          {
+            "valor": "rgba(14, 24, 56, 0.6)",
+            "veces": 3
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "8px",
+            "veces": 61
+          },
+          {
+            "valor": "24px",
+            "veces": 44
+          },
+          {
+            "valor": "12px",
+            "veces": 37
+          },
+          {
+            "valor": "6px",
+            "veces": 31
+          },
+          {
+            "valor": "20px",
+            "veces": 28
+          },
+          {
+            "valor": "4px",
+            "veces": 28
+          },
+          {
+            "valor": "28.16px",
+            "veces": 22
+          },
+          {
+            "valor": "16px",
+            "veces": 17
+          },
+          {
+            "valor": "10px",
+            "veces": 16
+          },
+          {
+            "valor": "14.72px",
+            "veces": 15
+          },
+          {
+            "valor": "3.84px 20.48px",
+            "veces": 15
+          },
+          {
+            "valor": "2px",
+            "veces": 12
+          },
+          {
+            "valor": "14.08px",
+            "veces": 12
+          },
+          {
+            "valor": "21.76px",
+            "veces": 10
+          },
+          {
+            "valor": "14px",
+            "veces": 10
+          },
+          {
+            "valor": "15.4px",
+            "veces": 9
+          }
+        ],
+        "radios": [],
+        "radiosDistintos": 0,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 1
+          }
+        ],
+        "sombrasDistintas": 1,
+        "zIndex": [
+          {
+            "valor": "10",
+            "veces": 2
+          },
+          {
+            "valor": "50",
+            "veces": 2
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic",
+            "veces": 90
+          },
+          {
+            "valor": "color 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s cubic-b",
+            "veces": 40
+          },
+          {
+            "valor": "transform 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 19
+          },
+          {
+            "valor": "width 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 15
+          },
+          {
+            "valor": "transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 13
+          },
+          {
+            "valor": "color 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s cubic-b",
+            "veces": 8
+          },
+          {
+            "valor": "transform 0.2s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 8
+          },
+          {
+            "valor": "box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), background-color 0",
+            "veces": 7
+          },
+          {
+            "valor": "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 5
+          }
+        ],
+        "transicionesDistintas": 9,
+        "hojasLeidas": 2,
+        "unidades": {
+          "em": 130,
+          "rem": 233,
+          "px": 134,
+          "clamp": 4,
+          "vw": 5
+        },
+        "keyframesDeclarados": 2,
+        "transitionAll": 0,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 1024,
+            "veces": 2
+          },
+          {
+            "px": 1280,
+            "veces": 2
+          },
+          {
+            "px": 640,
+            "veces": 1
+          },
+          {
+            "px": 768,
+            "veces": 1
+          },
+          {
+            "px": 1440,
+            "veces": 1
+          },
+          {
+            "px": 1920,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "header",
+            "clase": "sticky top-0 z-50",
+            "posicion": "sticky",
+            "alto": 105,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "a",
+            "clase": "group fixed bottom-5 right-5 z-50 inline-flex items-center g",
+            "posicion": "fixed",
+            "alto": 48,
+            "top": "948px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "",
+                "requerido": true
+              },
+              {
+                "tipo": "select-one",
+                "nombre": "",
+                "requerido": false
+              },
+              {
+                "tipo": "textarea",
+                "nombre": "",
+                "requerido": true
+              }
+            ],
+            "boton": "Enviar por WhatsApp"
+          }
+        ],
+        "dialogos": 0,
+        "ctasDistintos": 68,
+        "ctasTop": [
+          {
+            "texto": "Ver detalle",
+            "veces": 8
+          },
+          {
+            "texto": "Agregar",
+            "veces": 8
+          },
+          {
+            "texto": "Medición",
+            "veces": 7
+          },
+          {
+            "texto": "(591-3) 348-7575",
+            "veces": 5
+          },
+          {
+            "texto": "Iluminación",
+            "veces": 3
+          },
+          {
+            "texto": "ruddy@bolivianelectric.com.bo",
+            "veces": 2
+          },
+          {
+            "texto": "Acceso clientes",
+            "veces": 1
+          },
+          {
+            "texto": "Empresa",
+            "veces": 1
+          },
+          {
+            "texto": "Marcas",
+            "veces": 1
+          },
+          {
+            "texto": "Líneas de productos",
+            "veces": 1
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 52,
+        "sinAlt": 0,
+        "altVacio": 0,
+        "sinDimensiones": 51,
+        "lazy": 49,
+        "conSrcset": 0,
+        "interactivos": 145,
+        "objetivosMenores44px": 55,
+        "idioma": "es",
+        "landmarks": {
+          "header": 1,
+          "nav": 1,
+          "main": 1,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(14, 24, 56)",
+            "fondo": "rgb(245, 183, 29)",
+            "ratio": 9.68
+          },
+          {
+            "texto": "rgb(14, 24, 56)",
+            "fondo": "rgb(10, 17, 38)",
+            "ratio": 1.08
+          },
+          {
+            "texto": "rgb(14, 24, 56)",
+            "fondo": "rgb(245, 245, 245)",
+            "ratio": 15.97
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(245, 183, 29)",
+            "ratio": 1.8
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(10, 17, 38)",
+            "ratio": 18.73
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(245, 245, 245)",
+            "ratio": 1.09
+          },
+          {
+            "texto": "rgb(115, 115, 115)",
+            "fondo": "rgb(245, 183, 29)",
+            "ratio": 2.64
+          },
+          {
+            "texto": "rgb(115, 115, 115)",
+            "fondo": "rgb(10, 17, 38)",
+            "ratio": 3.95
+          },
+          {
+            "texto": "rgb(115, 115, 115)",
+            "fondo": "rgb(245, 245, 245)",
+            "ratio": 4.35
+          },
+          {
+            "texto": "rgba(14, 24, 56, 0.72)",
+            "fondo": "rgb(245, 183, 29)",
+            "ratio": 5.32
+          },
+          {
+            "texto": "rgba(14, 24, 56, 0.72)",
+            "fondo": "rgb(10, 17, 38)",
+            "ratio": 1.05
+          },
+          {
+            "texto": "rgba(14, 24, 56, 0.72)",
+            "fondo": "rgb(245, 245, 245)",
+            "ratio": 6.78
+          }
+        ],
+        "fondosTranslucidosOmitidos": 7
+      },
+      "rendimiento": {
+        "pesoTotalKb": 1214.9,
+        "porTipoKb": {
+          "document": 1.2,
+          "stylesheet": 52.8,
+          "script": 432.4,
+          "image": 655.5,
+          "fetch": 25.9,
+          "font": 47.1
+        },
+        "pedidos": {
+          "document": 1,
+          "stylesheet": 2,
+          "script": 1,
+          "image": 10,
+          "fetch": 1,
+          "font": 1
+        },
+        "hostsDistintos": 3,
+        "terceros": [
+          {
+            "host": "fonts.googleapis.com",
+            "pedidos": 1
+          },
+          {
+            "host": "fonts.gstatic.com",
+            "pedidos": 1
+          }
+        ],
+        "fuentesCargadas": [
+          "Inter 400 normal",
+          "Inter 500 normal",
+          "Inter 600 normal",
+          "Inter 700 normal",
+          "Inter 800 normal",
+          "Inter 900 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Bolivian Electric — Materiales Eléctricos Industriales",
+        "descripcion": "Importadora líder de materiales eléctricos industriales en Bolivia. Alta, media y baja tensión, stock inmediato, marcas certificadas y asesoría técnica. Santa Cruz, Cochabamba y La Paz.",
+        "canonical": null,
+        "og": 0,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "escritorio": {
+      "viewport": "1440x900",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 9598,
+        "alturaPantallas": 10.7,
+        "anchoBody": 1440,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 13
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "",
+          "altoPx": 9598,
+          "altoPantallas": 10.7,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Materiales eléctricos de alta, media y baja tensión.",
+          "cta": "(591-3) 348-7575",
+          "imagenes": 129
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "min-h-screen bg-white text-navy-900",
+          "altoPx": 9598,
+          "altoPantallas": 10.7,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "Materiales eléctricos de alta, media y baja tensión.",
+          "cta": "(591-3) 348-7575",
+          "imagenes": 129
+        },
+        {
+          "orden": 2,
+          "etiqueta": "section",
+          "clase": "relative flex min-h-[92vh] w-full flex-col overflow-hidden bg-navy-950",
+          "altoPx": 600,
+          "altoPantallas": 0.7,
+          "fondo": "rgb(10, 17, 38)",
+          "titular": "Materiales eléctricos de alta, media y baja tensión.",
+          "cta": "Buscá materiales, marcas o equipos…Busca",
+          "imagenes": 3
+        },
+        {
+          "orden": 3,
+          "etiqueta": "section",
+          "clase": "section relative bg-[#f4f5f7]",
+          "altoPx": 1545,
+          "altoPantallas": 1.7,
+          "fondo": "rgb(244, 245, 247)",
+          "titular": "Equipos destacados",
+          "cta": "Todos",
+          "imagenes": 18
+        },
+        {
+          "orden": 4,
+          "etiqueta": "section",
+          "clase": "section bg-white",
+          "altoPx": 1292,
+          "altoPantallas": 1.4,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "Todo lo eléctrico en un solo lugar",
+          "cta": "Ver catálogo completo",
+          "imagenes": 1
+        },
+        {
+          "orden": 5,
+          "etiqueta": "section",
+          "clase": "section section--wide bg-white",
+          "altoPx": 604,
+          "altoPantallas": 0.7,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "Comprar es simple",
+          "cta": "",
+          "imagenes": 3
+        },
+        {
+          "orden": 6,
+          "etiqueta": "section",
+          "clase": "section on-dark relative bg-navy-950 text-white",
+          "altoPx": 819,
+          "altoPantallas": 0.9,
+          "fondo": "rgb(10, 17, 38)",
+          "titular": "La ventaja de comprar en Bolivian Electric",
+          "cta": "Cotizá tu proyecto",
+          "imagenes": 7
+        },
+        {
+          "orden": 7,
+          "etiqueta": "section",
+          "clase": "section on-dark relative overflow-hidden bg-navy-950 text-white",
+          "altoPx": 708,
+          "altoPantallas": 0.8,
+          "fondo": "rgb(10, 17, 38)",
+          "titular": "Más que un proveedor de materiales",
+          "cta": "Ver equipos en alquiler",
+          "imagenes": 6
+        },
+        {
+          "orden": 8,
+          "etiqueta": "section",
+          "clase": "section section--tight border-y border-hairline bg-white",
+          "altoPx": 310,
+          "altoPantallas": 0.3,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "Marcas que representamos",
+          "cta": "",
+          "imagenes": 40
+        },
+        {
+          "orden": 9,
+          "etiqueta": "section",
+          "clase": "section bg-[#f4f5f7]",
+          "altoPx": 857,
+          "altoPantallas": 1,
+          "fondo": "rgb(244, 245, 247)",
+          "titular": "Bolivian Electric",
+          "cta": "(591-3) 348-7575",
+          "imagenes": 2
+        },
+        {
+          "orden": 10,
+          "etiqueta": "section",
+          "clase": "section bg-white",
+          "altoPx": 728,
+          "altoPantallas": 0.8,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "Estamos cerca tuyo",
+          "cta": "Casa MatrizSanta CruzLunes a viernes · 8",
+          "imagenes": 11
+        },
+        {
+          "orden": 11,
+          "etiqueta": "section",
+          "clase": "section section--wide bg-white",
+          "altoPx": 1101,
+          "altoPantallas": 1.2,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "Soporte y recursos",
+          "cta": "Preguntas frecuentesResolvé las dudas má",
+          "imagenes": 11
+        },
+        {
+          "orden": 12,
+          "etiqueta": "section",
+          "clase": "section on-dark relative overflow-hidden bg-navy-950 text-white",
+          "altoPx": 544,
+          "altoPantallas": 0.6,
+          "fondo": "rgb(10, 17, 38)",
+          "titular": "Pedí tu cotización y te respondemos hoy.",
+          "cta": "(591-3) 348-7575",
+          "imagenes": 5
+        }
+      ],
+      "encabezados": {
+        "total": 43,
+        "h1": 1,
+        "saltos": 1,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "Materiales eléctricos de alta, media y baja tensión."
+          },
+          {
+            "nivel": 2,
+            "texto": "Equipos destacados"
+          },
+          {
+            "nivel": 3,
+            "texto": "Torre de Iluminación GENERAC VT8JM-1350"
+          },
+          {
+            "nivel": 3,
+            "texto": "Torre de Iluminación GENERAC MT1"
+          },
+          {
+            "nivel": 3,
+            "texto": "Cámara Termográfica FLIR E50"
+          },
+          {
+            "nivel": 3,
+            "texto": "Pinza Amperimétrica Fluke 378 FC"
+          },
+          {
+            "nivel": 3,
+            "texto": "Comprobador de Aislamiento Fluke 1550C FC 5 kV"
+          },
+          {
+            "nivel": 3,
+            "texto": "Analizador de Red EPCOS PFC MC7000-3"
+          },
+          {
+            "nivel": 3,
+            "texto": "Kit Puesta a Tierra Fluke 1625-2 GEO"
+          },
+          {
+            "nivel": 3,
+            "texto": "Kit Multímetro Fluke 289 + FlukeView"
+          },
+          {
+            "nivel": 3,
+            "texto": "¿No encontrás un equipo específico?"
+          },
+          {
+            "nivel": 2,
+            "texto": "Todo lo eléctrico en un solo lugar"
+          },
+          {
+            "nivel": 2,
+            "texto": "Comprar es simple"
+          },
+          {
+            "nivel": 3,
+            "texto": "Encontrá tu producto"
+          },
+          {
+            "nivel": 3,
+            "texto": "Armá tu lista y cotizá"
+          },
+          {
+            "nivel": 3,
+            "texto": "Recibí y coordinamos"
+          },
+          {
+            "nivel": 2,
+            "texto": "La ventaja de comprar en Bolivian Electric"
+          },
+          {
+            "nivel": 3,
+            "texto": "Importación directa"
+          },
+          {
+            "nivel": 3,
+            "texto": "Alta, media y baja tensión"
+          },
+          {
+            "nivel": 3,
+            "texto": "Venta y alquiler de equipos"
+          },
+          {
+            "nivel": 3,
+            "texto": "Marcas certificadas"
+          },
+          {
+            "nivel": 3,
+            "texto": "Soporte técnico en obra"
+          },
+          {
+            "nivel": 3,
+            "texto": "Envíos a todo Bolivia"
+          },
+          {
+            "nivel": 2,
+            "texto": "Más que un proveedor de materiales"
+          },
+          {
+            "nivel": 3,
+            "texto": "Alquiler de equipos"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "13px / lh 1.50 / ls normal / w 400",
+            "veces": 36
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 500",
+            "veces": 16
+          },
+          {
+            "valor": "20px / lh 1.25 / ls -0.2016px / w 500",
+            "veces": 15
+          },
+          {
+            "valor": "15px / lh 1.65 / ls normal / w 400",
+            "veces": 10
+          },
+          {
+            "valor": "56px / lh 0.98 / ls -0.448px / w 500",
+            "veces": 9
+          },
+          {
+            "valor": "10px / lh 1.50 / ls 1px / w 700",
+            "veces": 8
+          },
+          {
+            "valor": "14px / lh 1.38 / ls normal / w 700",
+            "veces": 8
+          },
+          {
+            "valor": "10px / lh 1.50 / ls 1.2px / w 600",
+            "veces": 8
+          },
+          {
+            "valor": "12px / lh 1.33 / ls 0.48px / w 700",
+            "veces": 8
+          },
+          {
+            "valor": "36px / lh 1.00 / ls -0.144px / w 500",
+            "veces": 8
+          },
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 400",
+            "veces": 8
+          },
+          {
+            "valor": "16px / lh 1.50 / ls -0.16px / w 500",
+            "veces": 7
+          },
+          {
+            "valor": "13px / lh 1.50 / ls 0.78px / w 600",
+            "veces": 6
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 400",
+            "veces": 6
+          },
+          {
+            "valor": "18px / lh 1.56 / ls -0.18px / w 500",
+            "veces": 6
+          },
+          {
+            "valor": "14px / lh 1.60 / ls normal / w 400",
+            "veces": 6
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Inter",
+            "veces": 236
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(14, 24, 56)",
+            "veces": 56
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 30
+          },
+          {
+            "valor": "rgb(115, 115, 115)",
+            "veces": 26
+          },
+          {
+            "valor": "rgba(14, 24, 56, 0.72)",
+            "veces": 20
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.7)",
+            "veces": 16
+          },
+          {
+            "valor": "rgb(163, 163, 163)",
+            "veces": 15
+          },
+          {
+            "valor": "rgb(10, 17, 38)",
+            "veces": 14
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.9)",
+            "veces": 13
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(245, 183, 29)",
+            "veces": 61
+          },
+          {
+            "valor": "rgb(10, 17, 38)",
+            "veces": 24
+          },
+          {
+            "valor": "rgb(245, 245, 245)",
+            "veces": 23
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 19
+          },
+          {
+            "valor": "rgb(244, 245, 247)",
+            "veces": 3
+          },
+          {
+            "valor": "rgb(226, 232, 240)",
+            "veces": 3
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.15)",
+            "veces": 3
+          },
+          {
+            "valor": "rgba(14, 24, 56, 0.6)",
+            "veces": 3
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "8px",
+            "veces": 61
+          },
+          {
+            "valor": "24px",
+            "veces": 48
+          },
+          {
+            "valor": "12px",
+            "veces": 37
+          },
+          {
+            "valor": "6px",
+            "veces": 31
+          },
+          {
+            "valor": "20px",
+            "veces": 28
+          },
+          {
+            "valor": "4px",
+            "veces": 28
+          },
+          {
+            "valor": "33px",
+            "veces": 22
+          },
+          {
+            "valor": "16px",
+            "veces": 17
+          },
+          {
+            "valor": "10px",
+            "veces": 16
+          },
+          {
+            "valor": "16.5px",
+            "veces": 15
+          },
+          {
+            "valor": "17.25px",
+            "veces": 15
+          },
+          {
+            "valor": "4.5px 24px",
+            "veces": 15
+          },
+          {
+            "valor": "2px",
+            "veces": 12
+          },
+          {
+            "valor": "25.5px",
+            "veces": 10
+          },
+          {
+            "valor": "14px",
+            "veces": 10
+          },
+          {
+            "valor": "15.4px",
+            "veces": 9
+          }
+        ],
+        "radios": [],
+        "radiosDistintos": 0,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 1
+          }
+        ],
+        "sombrasDistintas": 1,
+        "zIndex": [
+          {
+            "valor": "10",
+            "veces": 2
+          },
+          {
+            "valor": "50",
+            "veces": 2
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic",
+            "veces": 90
+          },
+          {
+            "valor": "color 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s cubic-b",
+            "veces": 40
+          },
+          {
+            "valor": "transform 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 19
+          },
+          {
+            "valor": "width 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 15
+          },
+          {
+            "valor": "transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 13
+          },
+          {
+            "valor": "color 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s cubic-b",
+            "veces": 8
+          },
+          {
+            "valor": "transform 0.2s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 8
+          },
+          {
+            "valor": "box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), background-color 0",
+            "veces": 7
+          },
+          {
+            "valor": "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 5
+          }
+        ],
+        "transicionesDistintas": 9,
+        "hojasLeidas": 2,
+        "unidades": {
+          "em": 130,
+          "rem": 233,
+          "px": 134,
+          "clamp": 4,
+          "vw": 5
+        },
+        "keyframesDeclarados": 2,
+        "transitionAll": 0,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 1024,
+            "veces": 2
+          },
+          {
+            "px": 1280,
+            "veces": 2
+          },
+          {
+            "px": 640,
+            "veces": 1
+          },
+          {
+            "px": 768,
+            "veces": 1
+          },
+          {
+            "px": 1440,
+            "veces": 1
+          },
+          {
+            "px": 1920,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "muestras": [
+          {
+            "y": 0,
+            "conTransform": 69,
+            "navFija": true
+          },
+          {
+            "y": 2175,
+            "conTransform": 31,
+            "navFija": true
+          },
+          {
+            "y": 4349,
+            "conTransform": 21,
+            "navFija": true
+          },
+          {
+            "y": 6524,
+            "conTransform": 21,
+            "navFija": true
+          },
+          {
+            "y": 8698,
+            "conTransform": 21,
+            "navFija": true
+          }
+        ],
+        "hayMovimientoLigadoAlScroll": true,
+        "posicionesDistintas": 5,
+        "pegados": [
+          {
+            "etiqueta": "header",
+            "clase": "sticky top-0 z-50",
+            "posicion": "sticky",
+            "alto": 105,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "a",
+            "clase": "group fixed bottom-5 right-5 z-50 inline-flex items-center g",
+            "posicion": "fixed",
+            "alto": 48,
+            "top": "824px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "",
+                "requerido": true
+              },
+              {
+                "tipo": "select-one",
+                "nombre": "",
+                "requerido": false
+              },
+              {
+                "tipo": "textarea",
+                "nombre": "",
+                "requerido": true
+              }
+            ],
+            "boton": "Enviar por WhatsApp"
+          }
+        ],
+        "dialogos": 0,
+        "ctasDistintos": 68,
+        "ctasTop": [
+          {
+            "texto": "Ver detalle",
+            "veces": 8
+          },
+          {
+            "texto": "Agregar",
+            "veces": 8
+          },
+          {
+            "texto": "Medición",
+            "veces": 7
+          },
+          {
+            "texto": "(591-3) 348-7575",
+            "veces": 5
+          },
+          {
+            "texto": "Iluminación",
+            "veces": 3
+          },
+          {
+            "texto": "ruddy@bolivianelectric.com.bo",
+            "veces": 2
+          },
+          {
+            "texto": "Acceso clientes",
+            "veces": 1
+          },
+          {
+            "texto": "Empresa",
+            "veces": 1
+          },
+          {
+            "texto": "Marcas",
+            "veces": 1
+          },
+          {
+            "texto": "Líneas de productos",
+            "veces": 1
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 52,
+        "sinAlt": 0,
+        "altVacio": 0,
+        "sinDimensiones": 51,
+        "lazy": 49,
+        "conSrcset": 0,
+        "interactivos": 145,
+        "objetivosMenores44px": 60,
+        "idioma": "es",
+        "landmarks": {
+          "header": 1,
+          "nav": 1,
+          "main": 1,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(14, 24, 56)",
+            "fondo": "rgb(245, 183, 29)",
+            "ratio": 9.68
+          },
+          {
+            "texto": "rgb(14, 24, 56)",
+            "fondo": "rgb(10, 17, 38)",
+            "ratio": 1.08
+          },
+          {
+            "texto": "rgb(14, 24, 56)",
+            "fondo": "rgb(245, 245, 245)",
+            "ratio": 15.97
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(245, 183, 29)",
+            "ratio": 1.8
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(10, 17, 38)",
+            "ratio": 18.73
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(245, 245, 245)",
+            "ratio": 1.09
+          },
+          {
+            "texto": "rgb(115, 115, 115)",
+            "fondo": "rgb(245, 183, 29)",
+            "ratio": 2.64
+          },
+          {
+            "texto": "rgb(115, 115, 115)",
+            "fondo": "rgb(10, 17, 38)",
+            "ratio": 3.95
+          },
+          {
+            "texto": "rgb(115, 115, 115)",
+            "fondo": "rgb(245, 245, 245)",
+            "ratio": 4.35
+          },
+          {
+            "texto": "rgba(14, 24, 56, 0.72)",
+            "fondo": "rgb(245, 183, 29)",
+            "ratio": 5.32
+          },
+          {
+            "texto": "rgba(14, 24, 56, 0.72)",
+            "fondo": "rgb(10, 17, 38)",
+            "ratio": 1.05
+          },
+          {
+            "texto": "rgba(14, 24, 56, 0.72)",
+            "fondo": "rgb(245, 245, 245)",
+            "ratio": 6.78
+          }
+        ],
+        "fondosTranslucidosOmitidos": 7
+      },
+      "rendimiento": {
+        "pesoTotalKb": 1537.1,
+        "porTipoKb": {
+          "document": 1.2,
+          "stylesheet": 52.8,
+          "script": 432.4,
+          "image": 977.7,
+          "fetch": 25.9,
+          "font": 47.1
+        },
+        "pedidos": {
+          "document": 2,
+          "stylesheet": 4,
+          "script": 2,
+          "image": 50,
+          "fetch": 2,
+          "font": 2
+        },
+        "hostsDistintos": 3,
+        "terceros": [
+          {
+            "host": "fonts.googleapis.com",
+            "pedidos": 1
+          },
+          {
+            "host": "fonts.gstatic.com",
+            "pedidos": 1
+          }
+        ],
+        "fuentesCargadas": [
+          "Inter 400 normal",
+          "Inter 500 normal",
+          "Inter 600 normal",
+          "Inter 700 normal",
+          "Inter 800 normal",
+          "Inter 900 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Bolivian Electric — Materiales Eléctricos Industriales",
+        "descripcion": "Importadora líder de materiales eléctricos industriales en Bolivia. Alta, media y baja tensión, stock inmediato, marcas certificadas y asesoría técnica. Santa Cruz, Cochabamba y La Paz.",
+        "canonical": null,
+        "og": 0,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    }
+  },
+  "noSePudoMedir": [],
+  "reducedMotion": {
+    "conAnimacion": 0,
+    "conTransicion": 205
+  },
+  "requiereOjoHumano": [
+    "Intencion de diseno: por que eligieron ESTA direccion visual y no otra.",
+    "Calidad del copy: si la promesa es creible y si los numeros estan respaldados.",
+    "Contenido detras de login, muro de cookies o interaccion (paso 2 de un popup, estados de error).",
+    "Si el movimiento AYUDA a entender o solo decora: eso se juzga mirando, no midiendo."
+  ]
+}

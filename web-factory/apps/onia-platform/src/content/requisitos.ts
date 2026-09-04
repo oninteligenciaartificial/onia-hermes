@@ -12,10 +12,10 @@
  *    pierde el historial de forma permanente), plantillas (revisión de hasta
  *    24 h) y pricing (la ventana de servicio de 24 h que abre el cliente es
  *    gratis; fuera de ella se cobra por plantilla entregada).
- *  - Cupo de 200 mensajes/mes y markup del 20% sobre Meta: código del producto
- *    (`lib/pricing.ts` → WHATSAPP_ADDON.meta.operationalMonthlyLimit y
- *    markupPct; `lib/plan-limits.ts` → WHATSAPP_ADDON_MONTHLY_LIMIT, que corta
- *    el envío al llegar al tope).
+ *  - ⚠️ 2026-08-21: se sacaron de acá el cupo de 200 mensajes salientes y el
+ *    markup del 20% sobre Meta. El markup se cae por decisión de Sergio (el
+ *    cliente le paga a Meta DIRECTO, en su propia cuenta), y el cupo no se
+ *    promete porque no está verificado que exista el contador que lo corte.
  *  - Web: lo que el generador exige de verdad (web-factory/data/schema.ts —
  *    servicios con título y descripción obligatorios; productos con nombre,
  *    categoría, precio y descripción obligatorios; data/intake-schema.ts →
@@ -69,14 +69,13 @@ export const REQUISITOS_CHATBOT: Requisitos = {
       ],
     },
     {
-      titulo: "Lo que se paga aparte (no lo cobramos nosotros)",
+      titulo: "Lo que le pagás a Meta (no lo cobramos nosotros)",
       intro:
-        "Meta cobra por cada mensaje que TU negocio le manda primero al cliente: un recordatorio, un aviso, una promoción.",
+        "Meta cobra por cada mensaje que TU negocio le manda primero al cliente: un aviso, una promoción. Ese cobro va directo entre vos y Meta.",
       items: [
         "Cuando el cliente te escribe a vos, responder es gratis durante las 24 horas siguientes (es regla de Meta). Toda la atención del bot entra ahí: no te cuesta.",
-        "Lo que tu negocio inicia se factura aparte de la mensualidad, al costo que cobra Meta más 20%.",
-        "Los mensajes promocionales cuestan bastante más que un recordatorio. No se mandan sin tu autorización expresa y te avisamos el costo antes.",
-        "El servicio envía hasta 200 mensajes salientes por mes. Al llegar a 200 el bot deja de enviar hasta el mes siguiente: se frena, no te llega una factura sorpresa.",
+        "Lo que tu negocio inicia lo pagás vos, en tu propia cuenta de Meta: no pasa por nuestra factura y no le sumamos nada encima.",
+        "Los mensajes promocionales cuestan bastante más. No se mandan sin tu autorización expresa y te avisamos el costo antes.",
       ],
     },
     {
@@ -89,7 +88,7 @@ export const REQUISITOS_CHATBOT: Requisitos = {
     },
   ],
   aceptacion:
-    "Leí y entiendo los requisitos: pongo el número dedicado y la información de mi negocio, y los mensajes que Meta cobra van aparte de mi mensualidad.",
+    "Leí y entiendo los requisitos: pongo el número dedicado y la información de mi negocio, y los mensajes que Meta cobra los pago yo, directo a Meta.",
 };
 
 export const REQUISITOS_WEB: Requisitos = {
@@ -115,7 +114,7 @@ export const REQUISITOS_WEB: Requisitos = {
         "Redacción y ordenamiento de tus textos, íconos y optimización de tus fotos para que la web cargue rápido.",
         "Versión clara y versión oscura, accesibilidad verificada y velocidad verificada.",
         "SEO básico: título, descripción y la imagen que aparece cuando compartís el link.",
-        "Un preview para que lo apruebes desde el celular antes de publicar, y la publicación.",
+        "Un preview para que lo aprobés desde el celular antes de publicar, y la publicación.",
       ],
     },
     {

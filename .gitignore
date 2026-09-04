@@ -29,6 +29,7 @@ build/
 # `node scripts/hyperframes/render.mjs --comp Scoreboard`. Son 155 dias: si se
 # suben, el repo se llena de artefactos reconstruibles.
 .hermes/video-lab/overlay/
+.hermes/video-intake/
 
 # OS
 .DS_Store
@@ -46,3 +47,8 @@ onia-hermes-collab/
 # Web Factory: credenciales/estado de deploy por cliente (NUNCA al repo)
 *.deploy.json
 n8n-mcp-server/node_modules/
+.tmp/
+test-results/
+
+# salida de trabajo del canario visual (las baselines si se versionan)
+.canario-out/

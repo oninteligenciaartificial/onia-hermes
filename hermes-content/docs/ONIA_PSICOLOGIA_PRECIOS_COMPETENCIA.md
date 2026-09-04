@@ -245,10 +245,9 @@ Esto no es opinión ni doc: es lo que el checkout valida.
 Anual = 10x el mensual (2 meses gratis, **~17% de descuento**). Semanal con prima (~20%
 Básico, ~15% Pro) porque la flexibilidad se paga.
 
-**Add-ons — `onia-platform/lib/pricing.ts`:** chatbot WhatsApp Bs. 1.500 instalación +
-Bs. 1.490/mes + Meta (500 conversaciones incluidas); agenda pública Bs. 150/mes (incluida
-en Pro y Completo); usuario extra Bs. 70/mes (máx. 3 en Básico); inventario avanzado
-Bs. 180/mes; self-hosted desde Bs. 4.500 + Bs. 900/mes; Empresa desde Bs. 2.900 +
+**Add-ons — `onia-platform/lib/pricing.ts`:** chatbot WhatsApp **Bs 390/mes o Bs 3.900/año,
+sin cargo inicial** (500 conversaciones incluidas; el consumo de Meta lo paga el cliente en
+su propia cuenta); agenda pública Bs. 150/mes (incluida en Pro y Completo); usuario extra Bs. 70/mes (máx. 3 en Básico); self-hosted desde Bs. 4.500 + Bs. 900/mes; Empresa desde Bs. 2.900 +
 implementación desde Bs. 3.500.
 
 **Techos — `onia-platform/lib/plan-limits.ts`:** free 30 clientes / 1 usuario / 0 emails;
@@ -305,7 +304,28 @@ Básico 300 / 2 / 200; Profesional 1.500 / 5 / 800; Completo y Empresa ilimitado
 5. **El señuelo de capacidad idéntica** (Lovable Pro $25 / Business $50, mismos créditos).
    `lib/subscription/plan-display.ts` ya lo prohíbe por escrito: *"no se distinguen por
    volumen sino por el salto"*, y exige que cada bullet sea cierto contra el código que
-   corre hoy. En esto ya estamos por encima de Lovable. No aflojar.
+   corre hoy.
+
+   🔴 **Corregido 2026-08-24: lo estamos haciendo.** Acá decía "en esto ya estamos por
+   encima de Lovable" y es falso. `PLAN_LIMITS` le da a **Completo (Bs 1.500) y Empresa
+   (Bs 2.900) límites IDÉNTICOS**: los dos con clientes, usuarios y correos ilimitados y
+   todas las funciones encendidas. **Bs 1.400 de diferencia sin una sola diferencia
+   funcional en el código.** Es exactamente el señuelo de Lovable, con peor relación.
+
+   Y lo que Empresa promete para justificarse —*"multi-sucursal, contabilidad avanzada,
+   instancia privada"*, de su `activationMessage`— se sostiene a medias: la contabilidad es
+   transversal y la tienen todos los planes, y la instancia privada es el add-on self-hosted
+   que se cobra aparte.
+
+   ⚠️ **Corregido 2026-08-25:** acá decía **multi-sucursal NO EXISTE** (*branchId da cero
+   coincidencias*). El grep era cierto y la conclusión falsa — `OniaCommerceWarehouse` ya
+   existía con el stock indexado por depósito. **Varios depósitos + traspaso interno están
+   VIVOS en producción desde el 2026-08-25**; lo que no existe es la **sucursal FISCAL ante el
+   SIN**. Detalle en `ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md` §4.2.
+
+   **Empresa se vende por sus depósitos, nunca por sucursales ante Impuestos.** Mientras tanto sirve
+   como ancla visible (§4.2.3) — mostrarlo hace que Bs 1.500 se lea barato — pero
+   mostrarlo NO es lo mismo que venderlo.
 6. **Cobrar en dólares.** Los siete comparables cotizan en USD (Wix incluso advierte
    *"Prices and currency vary by location"*). Con el boliviano devaluado, un precio atado
    al dólar **subió 63%** sin entregar nada nuevo. Cobrar en Bs es una ventaja competitiva
@@ -324,15 +344,21 @@ Nueve hallazgos. Los cuatro primeros son los que romperían una venta.
    Es exactamente el problema de los cuatro precios vivos, en versión chica.
 2. 🔴 **`ADMIN_ADDON_INFO` sigue publicando la escalera de 3 niveles retirada.**
    `label: "Chatbot WhatsApp (3 niveles)"`, `price: "N1 Bs. 200 · N2 Bs. 550 · N3 Bs. 900 /mes"`
-   — precios que el **encabezado del mismo archivo** declara reemplazados por Bs. 1.490. Un
-   superadmin lee 200/550/900 mientras el checkout cobra 1.490.
-3. 🔴 **Contradicción interna sobre Meta.** `WHATSAPP_ADDON.meta.markupPct: 20` con el
-   comentario *"Meta pass-through al costo + 20%"*, contra el `fullLabel` que le promete al
-   cliente *"el excedente de Meta va al costo"* y el `dashboardSummary` que dice *"Meta se
-   cobra por consumo"*. O se cobra +20% y se dice, o es a costo y se borra `markupPct`.
-   **Lety.ai vende literalmente "no hidden markup on tokens or WhatsApp" y "0% markup" como
-   su tesis central**: si Onia cobra 20% y dice que no, ese es el flanco más fácil de
-   atacar que tenemos.
+   — precios retirados. ⚠️ **Corregido 2026-08-24:** el add-on son **Bs 390/mes sin cargo
+   inicial** (`WHATSAPP_ADDON`), no los Bs 1.490 que decía este doc — esa cifra vivía en 24
+   archivos y ninguno era la fuente. Un superadmin lee 200/550/900 mientras el checkout cobra 390.
+3. ✅ **RESUELTO — verificado 2026-08-24.** Acá decía que había una contradicción interna:
+   `markupPct: 20` en el código contra un `fullLabel` que promete el costo sin recargo.
+   **Ya no existe.** `grep markupPct` da cero coincidencias, y el comentario de
+   `lib/pricing.ts:45` dice literal *"las paga él en su cuenta. Por eso no hay markup"*.
+   Se resolvió en el commit `f9873ae`, llamado *"el chatbot pasa a Bs 390/mes sin
+   instalación, y salimos de la cadena de pago de Meta"* — la misma decisión que fijó los
+   Bs 390. Este doc describía el estado anterior a ese commit.
+
+   **Y eso convierte la debilidad en argumento.** Lety.ai vende *"0% markup"* como su tesis
+   central; nosotros ya estamos ahí y además cobramos en bolivianos. Decirlo así en la
+   página de precios: *"los mensajes te los cobra Meta directo en tu cuenta — nosotros no
+   ponemos un peso encima."*
 4. 🔴 **El plan `free` es un muro, no una demo.** 30 clientes, 1 usuario, 0 emails, sin
    agenda, sin reportes, sin agentes. **Ninguno de los siete comparables limita el gratis
    por volumen de datos del negocio** — limitan publicación y marca (§2.5). Un dentista con
@@ -349,7 +375,7 @@ Nueve hallazgos. Los cuatro primeros son los que romperían una venta.
    da 14 días de prueba sin tarjeta, Wix 14 de devolución, Shopify amortigua con $1/mes
    durante 3 meses. Nuestro trial de 14 días está bien; el corte al día siguiente, no.
 8. 🟡 **`PLAN_COMPARISON_ADDON_ROWS.whatsapp.label`** todavía dice *"(add-on, 3 niveles)"*
-   con el valor correcto (1.490) al lado. Etiqueta vieja, número nuevo.
+   con el valor al lado. ⚠️ El valor correcto es **Bs 390**, no 1.490 (corregido 2026-08-24).
 9. 🟡 **Nada en el producto nombra el descuento anual.** El 17% (10x = 2 meses gratis) vive
    como comentario en `subscription-plans.ts` y no aparece como argumento de venta.
 

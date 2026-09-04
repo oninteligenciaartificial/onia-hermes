@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="es-BO">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F9FBFA">
+<title>Cotizador de importación · pieza de práctica</title>
+<style>
+/* ============================================================
+   Tokens de la casa (ONIA_BRAND_2026) — verde profundo + papel
+   Ritmo: TODO el espaciado en em, colgado de UN font-size por
+   breakpoint. Cero clamp. (ley Fanvue, ANATOMIA_DE_UNA_WEB)
+   ============================================================ */
+:root{
+  --papel:#F9FBFA;
+  --blanco:#FFFFFF;
+  --ink:#141A17;
+  --ink-soft:#424A46;
+  --ink-faint:#69716D;
+  --line:#E3E8E5;
+  --verde-50:#EDF7F2;
+  --verde-100:#D8EFE4;
+  --verde-600:#027650;
+  --verde-700:#016141;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"Cascadia Mono","Segoe UI Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+@media (min-width:768px){html{font-size:17px}}
+body{
+  font-family:var(--sans);
+  background:var(--papel);
+  color:var(--ink);
+  line-height:1.5;
+  -webkit-tap-highlight-color:transparent;
+}
+button,label,input{touch-action:manipulation}
+:focus-visible{outline:2px solid var(--verde-600);outline-offset:2px;border-radius:2px}
+
+/* ---------- layout ---------- */
+.wrap{max-width:64em;margin:0 auto;padding:0 1.25em 7em}
+@media (min-width:768px){
+  .wrap{padding:0 2em 4em}
+  .grid{display:grid;grid-template-columns:1fr 22em;gap:3em;align-items:start}
+}
+
+/* ---------- cabecera ---------- */
+header{padding:2em 0 2.5em}
+@media (min-width:768px){header{padding:3.5em 0 3em}}
+.marca{
+  display:flex;align-items:baseline;gap:.75em;
+  border-bottom:1px solid var(--line);padding-bottom:1em;margin-bottom:2.5em;
+}
+.marca strong{font-weight:650;letter-spacing:-.01em}
+.marca .demo{
+  font-family:var(--mono);font-size:.7em;color:var(--ink-faint);
+  border:1px solid var(--line);padding:.25em .7em;border-radius:2em;
+}
+h1{
+  font-size:2.1em;line-height:1;font-weight:700;
+  letter-spacing:-.02em;text-wrap:balance;max-width:12em;
+}
+@media (min-width:768px){h1{font-size:2.8em}}
+.baja{margin-top:.9em;color:var(--ink-soft);max-width:34em}
+.baja b{color:var(--verde-700);font-weight:600}
+
+/* ---------- pasos ---------- */
+fieldset{border:0;padding:0;margin:0 0 3em}
+fieldset:last-of-type{margin-bottom:0}
+legend{
+  display:flex;align-items:baseline;gap:.7em;
+  font-weight:650;font-size:1.15em;letter-spacing:-.01em;
+  margin-bottom:1em;width:100%;
+}
+legend .n{
+  font-family:var(--mono);font-size:.75em;font-weight:400;
+  color:var(--ink-faint);
+}
+fieldset[aria-disabled="true"]{opacity:.45}
+fieldset[aria-disabled="true"] label{cursor:not-allowed}
+
+/* opción de carga: fila de documento, nada de tarjetas */
+.opcion{position:relative;border-top:1px solid var(--line)}
+.opcion:last-child{border-bottom:1px solid var(--line)}
+.opcion input{position:absolute;opacity:0;pointer-events:none}
+.opcion label{
+  display:grid;grid-template-columns:1fr auto;column-gap:1em;
+  padding:1.1em .75em;cursor:pointer;
+  transition:background-color .15s ease-out;
+}
+@media (hover:hover){
+  .opcion label:hover{background:var(--blanco)}
+}
+.opcion label:active{background:var(--verde-50)}
+.opcion .nom{grid-column:1;grid-row:1;font-weight:600}
+.opcion .via{grid-column:1;grid-row:2;color:var(--ink-faint);font-size:.85em;margin-top:.15em}
+.opcion .tarifa{
+  grid-column:2;grid-row:1/3;
+  font-family:var(--mono);font-variant-numeric:tabular-nums;
+  color:var(--ink-soft);font-size:.9em;align-self:center;
+}
+.opcion input:checked + label{background:var(--verde-50)}
+.opcion input:checked + label .nom::before{
+  content:"";display:inline-block;width:.5em;height:.5em;border-radius:50%;
+  background:var(--verde-600);margin-right:.6em;vertical-align:.08em;
+}
+.opcion input:focus-visible + label{outline:2px solid var(--verde-600);outline-offset:-2px}
+
+/* la interacción: el elegido se despliega ahí mismo (sin animar layout) */
+.detalle{display:none;padding:0 .75em 1.2em;background:var(--verde-50)}
+.opcion input:checked ~ .detalle{display:block}
+.detalle dl{
+  display:grid;grid-template-columns:auto 1fr;gap:.35em 1.2em;
+  font-size:.85em;border-top:1px dashed var(--line);padding-top:.9em;
+  animation:aparecer .2s ease-out;
+}
+.detalle dt{color:var(--ink-faint)}
+.detalle dd{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--ink)}
+@keyframes aparecer{from{opacity:0}to{opacity:1}}
+
+/* paso 2: pesos, un clic */
+.pesos{display:grid;grid-template-columns:repeat(2,1fr);gap:.75em}
+@media (min-width:768px){.pesos{grid-template-columns:repeat(4,1fr)}}
+.peso{position:relative}
+.peso input{position:absolute;opacity:0;pointer-events:none}
+.peso label{
+  display:block;text-align:center;padding:.9em .5em .8em;cursor:pointer;
+  border:1px solid var(--line);border-radius:.35em;background:var(--blanco);
+  transition:border-color .15s ease-out,background-color .15s ease-out;
+}
+@media (hover:hover){.peso label:hover{border-color:var(--ink-faint)}}
+.peso label .kg{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:500;font-size:1.05em}
+.peso label .uso{display:block;font-size:.75em;color:var(--ink-faint);margin-top:.2em}
+.peso input:checked + label{border-color:var(--verde-600);background:var(--verde-50)}
+.peso input:checked + label .kg{color:var(--verde-700)}
+.peso input:focus-visible + label{outline:2px solid var(--verde-600);outline-offset:2px}
+
+/* ---------- recibo ---------- */
+.recibo{
+  background:var(--blanco);border:1px solid var(--line);
+  box-shadow:0 1px 2px rgba(20,26,23,.05),0 8px 24px -12px rgba(20,26,23,.12);
+  margin-top:3em;
+  /* borde dentado de recibo */
+  --diente:.55em;
+  padding:1.6em 1.4em calc(1.6em + var(--diente));
+  -webkit-mask:
+    linear-gradient(#000 0 0) 0 0/100% calc(100% - var(--diente)) no-repeat,
+    radial-gradient(circle at 50% 0,#0000 68%,#000 71%) 50% 100%/1.1em var(--diente) repeat-x;
+  mask:
+    linear-gradient(#000 0 0) 0 0/100% calc(100% - var(--diente)) no-repeat,
+    radial-gradient(circle at 50% 0,#0000 68%,#000 71%) 50% 100%/1.1em var(--diente) repeat-x;
+}
+@media (min-width:768px){.recibo{margin-top:0;position:sticky;top:2em}}
+.recibo h2{font-size:1em;font-weight:650;letter-spacing:-.01em}
+.recibo .ref{font-family:var(--mono);font-size:.72em;color:var(--ink-faint);margin-top:.2em}
+.lineas{margin-top:1.4em;border-top:1px solid var(--line)}
+.linea{
+  display:flex;justify-content:space-between;gap:1em;
+  padding:.7em 0;border-bottom:1px solid var(--line);font-size:.9em;
+}
+.linea .c{color:var(--ink-soft)}
+.linea .v{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.linea.total{border-bottom:0;padding-top:1em;align-items:baseline}
+.linea.total .c{color:var(--ink);font-weight:650;font-size:1.05em}
+.linea.total .v{font-size:1.7em;font-weight:500;letter-spacing:-.01em;line-height:1}
+.entrega{font-size:.82em;color:var(--ink-faint);margin-top:.3em}
+.recibo .vacio{color:var(--ink-faint);font-size:.9em;padding:1.4em 0 .6em}
+
+.cta{
+  display:block;width:100%;margin-top:1.4em;
+  background:var(--verde-600);color:#fff;border:0;border-radius:.4em;
+  font:inherit;font-weight:650;font-size:1em;padding:1em;cursor:pointer;
+  transition:background-color .15s ease-out;
+}
+@media (hover:hover){.cta:hover{background:var(--verde-700)}}
+.cta:active{background:var(--verde-700)}
+.cta:disabled{background:var(--line);color:var(--ink-faint);cursor:not-allowed}
+.cta .v{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:500}
+.confianza{
+  margin-top:.9em;font-size:.78em;color:var(--ink-faint);text-align:center;
+}
+.aviso{
+  margin-top:.9em;font-size:.82em;color:var(--verde-700);text-align:center;min-height:1.5em;
+}
+
+/* ---------- barra móvil ---------- */
+.barra{
+  position:fixed;inset:auto 0 0 0;z-index:10;
+  background:var(--blanco);border-top:1px solid var(--line);
+  padding:.8em 1.25em calc(.8em + env(safe-area-inset-bottom));
+  display:flex;align-items:center;justify-content:space-between;gap:1em;
+  transform:translateY(110%);
+  transition:transform .2s ease-out;
+}
+.barra[data-visible="true"]{transform:translateY(0)}
+@media (min-width:768px){.barra{display:none}}
+.barra .t{font-size:.78em;color:var(--ink-faint)}
+.barra .v{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:500;font-size:1.25em;line-height:1}
+.barra a{
+  background:var(--verde-600);color:#fff;text-decoration:none;font-weight:650;
+  padding:.75em 1.2em;border-radius:.4em;white-space:nowrap;
+  transition:background-color .15s ease-out;
+}
+.barra a:active{background:var(--verde-700)}
+
+footer{margin-top:4em;border-top:1px solid var(--line);padding-top:1.2em;
+  font-size:.78em;color:var(--ink-faint)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none;animation:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="marca">
+    <strong>Cotizador de importación</strong>
+    <span class="demo">datos de ejemplo</span>
+  </p>
+  <h1>¿Cuánto te cuesta traerlo?</h1>
+  <p class="baja">Dos elecciones y tenés el número. <b>Sin formularios, sin registro:</b> elegís la carga, elegís el peso y pedís la cotización por WhatsApp.</p>
+</header>
+
+<div class="grid">
+<main>
+
+  <fieldset id="paso1">
+    <legend><span class="n">01</span> Qué traés</legend>
+
+    <div class="opcion">
+      <input type="radio" name="carga" id="c-elec" value="elec">
+      <label for="c-elec">
+        <span class="nom">Electrónica de consumo</span>
+        <span class="tarifa">Bs 38/kg</span>
+        <span class="via">Aéreo · 8–12 días</span>
+      </label>
+      <div class="detalle"><dl>
+        <dt>Vía</dt><dd>Aérea, consolidado</dd>
+        <dt>Tarifa flete</dt><dd>Bs 38 por kg (ejemplo)</dd>
+        <dt>Tránsito</dt><dd>8–12 días</dd>
+        <dt>Incluye</dt><dd>Consolidación en origen</dd>
+      </dl></div>
+    </div>
+
+    <div class="opcion">
+      <input type="radio" name="carga" id="c-rep" value="rep">
+      <label for="c-rep">
+        <span class="nom">Repuestos automotrices</span>
+        <span class="tarifa">Bs 21/kg</span>
+        <span class="via">Marítimo · 35–45 días</span>
+      </label>
+      <div class="detalle"><dl>
+        <dt>Vía</dt><dd>Marítima, consolidado</dd>
+        <dt>Tarifa flete</dt><dd>Bs 21 por kg (ejemplo)</dd>
+        <dt>Tránsito</dt><dd>35–45 días</dd>
+        <dt>Incluye</dt><dd>Consolidación en origen</dd>
+      </dl></div>
+    </div>
+
+    <div class="opcion">
+      <input type="radio" name="carga" id="c-tex" value="tex">
+      <label for="c-tex">
+        <span class="nom">Textiles y calzado</span>
+        <span class="tarifa">Bs 17/kg</span>
+        <span class="via">Marítimo · 35–45 días</span>
+      </label>
+      <div class="detalle"><dl>
+        <dt>Vía</dt><dd>Marítima, consolidado</dd>
+        <dt>Tarifa flete</dt><dd>Bs 17 por kg (ejemplo)</dd>
+        <dt>Tránsito</dt><dd>35–45 días</dd>
+        <dt>Incluye</dt><dd>Consolidación en origen</dd>
+      </dl></div>
+    </div>
+
+    <div class="opcion">
+      <input type="radio" name="carga" id="c-her" value="her">
+      <label for="c-her">
+        <span class="nom">Herramientas eléctricas</span>
+        <span class="tarifa">Bs 24/kg</span>
+        <span class="via">Marítimo · 35–45 días</span>
+      </label>
+      <div class="detalle"><dl>
+        <dt>Vía</dt><dd>Marítima, consolidado</dd>
+        <dt>Tarifa flete</dt><dd>Bs 24 por kg (ejemplo)</dd>
+        <dt>Tránsito</dt><dd>35–45 días</dd>
+        <dt>Incluye</dt><dd>Consolidación en origen</dd>
+      </dl></div>
+    </div>
+  </fieldset>
+
+  <fieldset id="paso2" aria-disabled="true">
+    <legend><span class="n">02</span> Cuánto pesa</legend>
+    <div class="pesos">
+      <div class="peso">
+        <input type="radio" name="peso" id="p-25" value="25" disabled>
+        <label for="p-25"><span class="kg">25&nbsp;kg</span><span class="uso">caja / muestra</span></label>
+      </div>
+      <div class="peso">
+        <input type="radio" name="peso" id="p-100" value="100" disabled>
+        <label for="p-100"><span class="kg">100&nbsp;kg</span><span class="uso">carga chica</span></label>
+      </div>
+      <div class="peso">
+        <input type="radio" name="peso" id="p-250" value="250" disabled>
+        <label for="p-250"><span class="kg">250&nbsp;kg</span><span class="uso">media paleta</span></label>
+      </div>
+      <div class="peso">
+        <input type="radio" name="peso" id="p-500" value="500" disabled>
+        <label for="p-500"><span class="kg">500&nbsp;kg</span><span class="uso">paleta completa</span></label>
+      </div>
+    </div>
+  </fieldset>
+
+</main>
+
+<aside class="recibo" id="recibo" aria-label="Tu cotización" style="scroll-margin-top:1em">
+  <h2>Tu cotización</h2>
+  <p class="ref">COT-EJEMPLO-0001</p>
+
+  <p class="vacio" id="vacio">Elegí la carga y el peso: los números aparecen acá.</p>
+
+  <div class="lineas" id="lineas" hidden aria-live="polite">
+    <p class="linea"><span class="c" id="l-flete-c">Flete internacional</span><span class="v" id="l-flete"></span></p>
+    <p class="linea"><span class="c">Seguro de carga (3%)</span><span class="v" id="l-seguro"></span></p>
+    <p class="linea"><span class="c">Despacho aduanero</span><span class="v" id="l-despacho"></span></p>
+    <p class="linea total"><span class="c">Total estimado</span><span class="v" id="l-total"></span></p>
+    <p class="entrega" id="l-entrega"></p>
+  </div>
+
+  <button class="cta" id="cta" disabled>Pedir esta cotización</button>
+  <p class="confianza">Sin registro · Respuesta por WhatsApp · Precios de ejemplo</p>
+  <p class="aviso" id="aviso" aria-live="polite"></p>
+</aside>
+</div>
+
+<footer>
+  <p>Pieza de práctica de diseño. Toda tarifa, plazo y monto es un ejemplo, no una oferta.</p>
+</footer>
+</div>
+
+<div class="barra" id="barra" data-visible="false">
+  <div>
+    <p class="t">Total estimado</p>
+    <p class="v" id="b-total">—</p>
+  </div>
+  <a href="#recibo" id="b-ver">Ver cotización</a>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var CARGAS={
+    elec:{nombre:"Electrónica de consumo",kg:38,entrega:"Llega en 8–12 días (vía aérea)."},
+    rep:{nombre:"Repuestos automotrices",kg:21,entrega:"Llega en 35–45 días (vía marítima)."},
+    tex:{nombre:"Textiles y calzado",kg:17,entrega:"Llega en 35–45 días (vía marítima)."},
+    her:{nombre:"Herramientas eléctricas",kg:24,entrega:"Llega en 35–45 días (vía marítima)."}
+  };
+  var DESPACHO=350, SEGURO=0.03;
+  var fmt=new Intl.NumberFormat("es-BO",{maximumFractionDigits:0});
+  var bs=function(n){return "Bs "+fmt.format(Math.round(n))};
+
+  var $=function(id){return document.getElementById(id)};
+  var carga=null, peso=null;
+
+  function calc(){
+    if(!carga||!peso) return null;
+    var flete=CARGAS[carga].kg*peso;
+    var seguro=flete*SEGURO;
+    return {flete:flete,seguro:seguro,total:flete+seguro+DESPACHO};
+  }
+
+  function pintar(){
+    var r=calc();
+    if(!r){return}
+    $("vacio").hidden=true;
+    $("lineas").hidden=false;
+    $("l-flete-c").textContent="Flete internacional ("+fmt.format(peso)+" kg × Bs "+CARGAS[carga].kg+")";
+    $("l-flete").textContent=bs(r.flete);
+    $("l-seguro").textContent=bs(r.seguro);
+    $("l-despacho").textContent=bs(DESPACHO);
+    $("l-total").textContent=bs(r.total);
+    $("l-entrega").textContent=CARGAS[carga].entrega;
+    var cta=$("cta");
+    cta.disabled=false;
+    cta.innerHTML='Pedir esta cotización · <span class="v">'+bs(r.total)+"</span>";
+    $("b-total").textContent=bs(r.total);
+    listo=true;
+    barraVisible();
+  }
+
+  /* la barra móvil solo aparece si hay total Y el recibo no está en pantalla
+     (mecánica Stripe: el resumen colapsado desaparece cuando ves el completo) */
+  var listo=false, reciboEnPantalla=false;
+  function barraVisible(){
+    $("barra").setAttribute("data-visible",String(listo&&!reciboEnPantalla));
+  }
+  new IntersectionObserver(function(entries){
+    reciboEnPantalla=entries[0].isIntersecting;
+    barraVisible();
+  },{threshold:.25}).observe($("recibo"));
+
+  document.querySelectorAll('input[name="carga"]').forEach(function(el){
+    el.addEventListener("change",function(){
+      carga=el.value;
+      var p2=$("paso2");
+      p2.removeAttribute("aria-disabled");
+      p2.querySelectorAll("input").forEach(function(i){i.disabled=false});
+      pintar();
+    });
+  });
+  document.querySelectorAll('input[name="peso"]').forEach(function(el){
+    el.addEventListener("change",function(){peso=Number(el.value);pintar()});
+  });
+  $("cta").addEventListener("click",function(){
+    $("aviso").textContent="Pieza de práctica: acá se abriría WhatsApp con este detalle.";
+  });
+})();
+</script>
+</body>
+</html>

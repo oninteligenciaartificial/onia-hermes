@@ -1,6 +1,6 @@
 ---
 name: onia-contabilidad-bolivia
-description: Invocar para cualquier tema fiscal o contable de Bolivia — facturación electrónica SIAT, IVA/IT/IUE/RC-IVA, IUE-BE por servicios del exterior, RNDs/DS, la postura fiscal PROPIA de ONIA, o al construir features contables/de facturación en los ERPs (DentaGest/GestiOS/ProveeGest/Ganadero) para clientes bolivianos. Todo acomodado a Bolivia, específico y vigente, con fuentes citadas.
+description: Invocar para cualquier tema fiscal o contable de Bolivia — facturación electrónica SIAT, IVA/IT/IUE/RC-IVA, IUE-BE por servicios del exterior, RNDs/DS, la postura fiscal PROPIA de ONIA, o al construir features contables/de facturación en los ERPs (los packs por rubro de Onia Platform) para clientes bolivianos. Todo acomodado a Bolivia, específico y vigente, con fuentes citadas.
 ---
 
 # ONIA — Contaduría boliviana (propia + features ERP)

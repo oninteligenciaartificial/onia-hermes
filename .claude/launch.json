@@ -4,9 +4,25 @@
     {
       "name": "ui-patterns",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["--yes", "serve", "hermes-content/references/ui-patterns"],
+      "runtimeArgs": [
+        "--yes",
+        "serve",
+        "hermes-content/references/ui-patterns"
+      ],
       "autoPort": true,
       "port": 4321
+    },
+    {
+      "name": "onia-web",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--dir",
+        "web-factory/apps/onia-platform",
+        "dev",
+        "--port",
+        "3320"
+      ],
+      "port": 3320
     }
   ],
   "autoVerify": false

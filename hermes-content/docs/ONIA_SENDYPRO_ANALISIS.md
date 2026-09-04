@@ -143,6 +143,14 @@ formulario, sin "contáctanos".
 | **WhatsApp API** | **$19 USD/mes** | hasta **150 chats/día** | API oficial de Meta, IA por texto, audios con IA, flujos/CRM/campañas ilimitados, "bonus" WhatsApp Business por QR |
 | **WhatsApp API ∞** ← *Más Popular* | **$39 USD/mes** | **chats ilimitados** | lo mismo + soporte prioritario + onboarding |
 
+> **En bolivianos, al cambio oficial del 2026-08-24** (11,50 Bs/USD, verificado en
+> `bo.dolarapi.com`): su entrada son **Bs 218,50/mes** y su plan ilimitado **Bs 448,50/mes**.
+> Contra nuestros **Bs 390/mes** (`pricing.ts`, `WHATSAPP_ADDON`), su entrada es **44% más
+> barata** y su plan completo apenas 15% más caro.
+> **Nunca competir contra su plan de $19.** La comparación honesta es contra el de $39, y
+> ahí el argumento no es el precio: es que el suyo se paga por Yape, Plin o Binance —
+> métodos peruanos que un cliente boliviano no tiene cómo usar.
+
 Su propio FAQ: *"El plan de $19 permite hasta 150 chats por día con la API oficial. El de
 $39 es ilimitado. Lo demás (IA, audios, flujos, CRM) es idéntico."* Y: *"La IA y los audios
 realistas están totalmente incluidos. Sin pagar extra. Sin pagar por mensaje."*
@@ -174,19 +182,29 @@ Precios de Onia leídos del código el 2026-08-20 —
 |---|---|---|
 | Entrada | **$19/mes** (todo el producto) | **Bs. 320/mes** plan Básico (o Bs. 89/semana) |
 | Tope publicado | **$39/mes** | Bs. 2.900/mes plan Empresa |
-| Chatbot de WhatsApp con IA | **incluido en los dos planes** | **add-on**: Bs. 1.500 instalación + **Bs. 1.490/mes** + Meta, con 500 conversaciones/mes incluidas |
+| Chatbot de WhatsApp con IA | **incluido en los dos planes** | **add-on**: **Bs 390/mes** o Bs 3.900/año, **sin cargo inicial**, con 500 conversaciones/mes incluidas. Los mensajes se los cobra Meta al cliente en SU cuenta |
 
 Convertido con el tipo de cambio que usan nuestros propios docs (**USD 1 ≈ Bs. 11,37**,
 `a verificar` — viene de la nota de devaluación 2026, no de una fuente primaria de hoy):
 **$39 ≈ Bs. 443/mes**.
 
-**El dato que importa:** un comerciante de Santa Cruz que googlea "chatbot de WhatsApp con
-IA" puede comparar **Bs. ~443/mes por todo** contra **Bs. 1.490/mes + Bs. 1.500 de
-instalación por nuestro add-on solo**. Esa brecha es real y hay que poder explicarla, no
-esconderla. Nuestra propia justificación ya está escrita en `pricing.ts`: los Bs. 1.490 no
-compran mensajes, compran **soporte humano** (el comentario del código dice que a Bs. 550
-bastaban 5,5 h de soporte para perder plata). SendyPro, en cambio, no promete soporte
-humano de implementación: promete "onboarding" en el plan de $39 y un **Aula Virtual**.
+⚠️ **Recalculado el 2026-08-27, y el veredicto de este párrafo se dio vuelta.** Acá decía
+que el comerciante comparaba **Bs ~443/mes por todo** contra **Bs 1.490/mes + Bs 1.500 de
+instalación** de nuestro add-on solo — una brecha de casi 4× en contra. Ese precio murió el
+2026-08-21: hoy `pricing.ts` dice **Bs 390/mes sin cargo inicial**.
+
+**El dato que importa hoy:** contra su plan completo ($39 ≈ **Bs 443**) nuestro chatbot sale
+**Bs 390 — un 12% más barato**, y sin los Bs 1.500 de entrada que antes mataban la
+conversación. **La brecha de precio contra su plan top desapareció.** La que queda es contra
+su plan de entrada de $19 (**Bs 218,50**), que es 44% más barato que el nuestro y **contra el
+que no hay que competir** (§4.1): su techo de 150 chats/día es otro producto.
+
+Lo que NO cambió es la justificación, y ahora aprieta más: los Bs 390 no compran mensajes,
+compran **soporte humano**, y a Bs 100/h el add-on aguanta **~3,9 h de soporte al mes** antes
+de perder plata (con el abono viejo eran ~15 h — cuenta rehecha en
+`ONIA_AGENTES_COSTO_API.md` §6). SendyPro, en cambio, no promete soporte humano de
+implementación: promete "onboarding" en el plan de $39 y un **Aula Virtual**. **Ese es el
+argumento, y es más frágil que antes: si el cliente llama seguido, lo perdemos.**
 
 ---
 
@@ -211,7 +229,7 @@ humano de implementación: promete "onboarding" en el plan de $39 y un **Aula Vi
 | **Agenda / citas / inventario / facturación** | **no existen** | 14 módulos con pantalla y tablas (`ONIA_CATALOGO_DE_VENTA.md` §4) | **Onia** |
 | **Fiscal Bolivia (SIAT, IVA/IT/IUE)** | ni lo menciona | es una capacidad del core y una skill entera | **Onia** |
 | **Rubros / vocabulario por industria** | uno solo, implícito: e-commerce COD peruano | 7 rubros declarados, 5 contratables, vocabulario por rubro | **Onia** |
-| **Precio y forma de entrar** | $19–$39, sin tarjeta, en minutos | Bs. 320–2.900 + add-on de Bs. 1.490 con instalación | **SendyPro**, sin discusión |
+| **Precio y forma de entrar** | $19–$39, sin tarjeta, en minutos | Bs 320–2.900 + add-on de Bs 390 sin cargo inicial | **SendyPro** — pero ya no por el precio: por la fricción. El add-on dejó de tener costo de entrada; lo que falta es que alguien lo pueda contratar solo, en minutos y sin activación manual |
 | **Chats/día como única métrica** | sí, simple de entender y de vender | límites por pacientes/usuarios/emails que el cliente descubre **cuando le rebotan** | **SendyPro** |
 | **OCR de comprobantes de pago** | producto vivo, multi-banco | no existe | **SendyPro** |
 | **Grupos / comunidades / difusiones masivas** | módulo completo | no existe (ni debería, sin oficializar) | SendyPro, con asterisco |
@@ -238,15 +256,22 @@ Dónde se separa, en concreto:
 2. **Cliente distinto.** Ellos venden al vendedor de e-commerce contraentrega de Lima.
    Nosotros al dueño de negocio **formal** de Santa Cruz, que tiene NIT y va a tener que
    facturar en línea. Un dentista no compra una bandeja de WhatsApp: compra una agenda.
-3. **Precio incomparable a propósito.** Su $39 no incluye implementación ni soporte humano
-   de puesta en marcha. Nuestros Bs. 1.490 sí, y el código explica por qué.
+3. **Precio ya comparable — y eso cambia el argumento.** Su $39 (≈ Bs 443) no incluye
+   implementación ni soporte humano de puesta en marcha. Nuestros **Bs 390** sí, y salen
+   más baratos. Hasta el 2026-08-21 este punto decía "incomparable a propósito" y era
+   cierto a Bs 1.490 + Bs 1.500 de instalación; hoy competimos de frente contra su plan
+   top y ganamos en precio. **El riesgo se movió al otro lado:** a Bs 390 el soporte
+   humano que nos diferencia es también lo que puede volver al cliente no rentable
+   (~3,9 h/mes es el techo).
 
 **Dónde Sergio tiene toda la razón, y es lo importante:** SendyPro es **la prueba viva más
 cercana** de que este producto se vende en LATAM **self-serve, sin vendedor, sin tarjeta,
 por menos de $40/mes**, y de que la IA que contesta con audios es un gancho que la gente
-paga. Nosotros hoy tenemos cero clientes pagando y un add-on que exige Bs. 1.500 de entrada
-antes de que nadie vea nada funcionando. Ellos ya resolvieron el "primer minuto"; nosotros
-todavía no lo vendimos ni una vez.
+paga. Nosotros hoy tenemos cero clientes pagando y, aunque el add-on **ya no exige ningún
+pago de entrada** (se eliminó la instalación el 2026-08-21), sigue sin poder contratarse
+solo: hace falta que un humano lo active. Ellos ya resolvieron el "primer minuto";
+nosotros todavía no lo vendimos ni una vez. **La barrera dejó de ser plata y pasó a ser
+fricción** — que es más barata de arreglar, y por eso vale arreglarla.
 
 **Y es una amenaza concreta:** su lista de monedas ya incluye **BOB**. Nada les impide
 aparecer en Bolivia mañana.

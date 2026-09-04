@@ -23,6 +23,14 @@
  * accesibilidad y performance (tests/e2e/a11y.spec.ts, perf.spec.ts) y el
  * checkout por WhatsApp/email de la tienda. Lo que no está construido está en
  * "no incluye": panel de edición, sitio en dos idiomas, blog y pasarela.
+ *
+ * PRECIOS RATIFICADOS 2026-08-23 por Sergio: 2.000 / 4.500 / desde 7.500.
+ * Antes decían 790/1.500/2.900, que era una **oferta de arranque vencida el
+ * 31-jul-2026** y que nadie estaba cobrando: las propuestas reales (AW
+ * Climatización, Lia Albertengo, BENCH) cotizan las tres la línea premium
+ * 2.000/4.500/desde 7.500. El catálogo decía una cosa y la boca otra; a Bs 1.500
+ * una Web Profesional quedaba por debajo del piso de valor-día propio.
+ * Fuente y tabla comparativa: hermes-content/docs/ONIA_WEB_COMO_SE_VENDE.md §8.
  */
 
 export type WebStackId = "landing" | "profesional" | "pro" | "tienda";
@@ -46,7 +54,7 @@ export const WEB_STACKS: readonly WebStack[] = [
   {
     id: "landing",
     nombre: "Landing de Captación",
-    precio: 790,
+    precio: 2000,
     paraQuien:
       "El que no tiene nada todavía, o el que va a hacer pauta y necesita un solo lugar donde caer.",
     resuelve:
@@ -76,7 +84,7 @@ export const WEB_STACKS: readonly WebStack[] = [
   {
     id: "profesional",
     nombre: "Web Profesional",
-    precio: 1500,
+    precio: 4500,
     paraQuien:
       "El negocio que ya opera y necesita que la web le explique todo y le filtre las consultas.",
     resuelve:
@@ -104,7 +112,7 @@ export const WEB_STACKS: readonly WebStack[] = [
   {
     id: "pro",
     nombre: "Web Pro Onia",
-    precio: 2900,
+    precio: 7500,
     paraQuien:
       "El que compite por imagen y no puede parecerse a nadie, o el que va a invertir en pauta y quiere seguirle el rastro a los contactos.",
     resuelve:

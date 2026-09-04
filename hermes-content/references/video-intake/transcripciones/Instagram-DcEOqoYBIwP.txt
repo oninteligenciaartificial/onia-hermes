@@ -1,0 +1,16 @@
+[0] Sure, let's order some pizza for the team.
+[9] Hi, can you speak English please?
+[11] Of course! Tony's Pizza, what would you like today?
+[14] What do you guys want?
+[15] I'll have a medium pepperoni.
+[19] Can everyone speak one by one please?
+[22] Don't worry, I've got it all down.
+[23] One medium pepperoni, one medium margarita, medium Hawaiian and a veggie supreme without dairy.
+[30] Can you change the medium pepperoni to large and add the five-step coax?
+[36] Done, under what name?
+[38] Shi Jia.
+[39] Is that Shi Jia like S-H-I-J-I-A or S-H-I-J-A?
+[44] The first one.
+[46] Perfect Shi Jia, give me a second while I'm placing your order.
+[48] Done, your pizzas will be delivered in 15 minutes.
+[52] Pretty cool, right?

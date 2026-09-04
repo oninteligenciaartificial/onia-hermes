@@ -13,7 +13,7 @@
 > **aprobar y apretar enviar**.
 >
 > Fuentes usadas: `hermes-content/docs/ONIA_ENFOQUE_20260727.md`,
-> `ONIA_CATALOGO_MAESTRO_IDEAS_20260726.md`, `ONIA_ESTADO_Y_RUMBO_20260726.md`,
+> `ONIA_CATALOGO_DE_IDEAS.md`, `ONIA_ESTADO_Y_RUMBO_20260726.md`,
 > `sales-kit/01..05`, `ONIA_LEADS_PRIORITY_2026.md`,
 > `references/prospectos-clinicas-bolivia-2026.csv`, `CRM_PROSPECTING.md`,
 > `BCP_PASARELA_CREDENCIALES_INTERNO.md`.

@@ -25,3 +25,5 @@
 [102.8] I can't believe this is actually working
 [105.2] They're here. I gotta start shipping them out
 [109.0] What's your next product that you'll never sell come to the kitchen in an hour?
+
+Nota fija: Whisper degrada términos técnicos (SIDANZ=Seedance, Hitsfield=Higgsfield, viesel=VSL); ningún término técnico se cita sin contrastar con la imagen.

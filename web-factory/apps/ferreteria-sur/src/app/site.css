@@ -1,0 +1,196 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   FERRETERÍA SUR — capa de sitio.
+
+   Acá vive SOLO el armazón: nav, hero, franja, cabecera de sección, cierre y
+   footer. Las secciones de contenido (categorías, mostrador, cómo comprar,
+   horarios, pedido, FAQ) las escribe el agente de relleno, DEBAJO de la marca
+   que dejo al final del archivo, usando los tokens de globals.css.
+
+   Regla del sistema visual: la retícula manda. Nada flota; todo se apoya en una
+   línea. Los filetes son de --bw-strong en lo que estructura y de --bw en lo
+   que solo separa.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Nav: barra utilitaria, no un header de agencia ───────────────────────── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: var(--bw-strong) solid var(--ink);
+}
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  min-height: 62px;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-3);
+  font-family: var(--ff-display);
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-1);
+  background: var(--orange);
+  color: var(--on-orange);
+  border: var(--bw-strong) solid var(--ink);
+  font-size: 0.8rem;
+}
+.nav-meta { display: none; }
+@media (min-width: 900px) {
+  .nav-meta { display: inline-flex; gap: var(--s-5); }
+}
+
+/* ── Hero: split asimétrico. Titular a la izquierda pegado a la retícula,
+      ficha de datos a la derecha. Nada centrado, ningún degradado. ───────── */
+.hero {
+  position: relative;
+  border-bottom: var(--bw-strong) solid var(--ink);
+  padding-block: clamp(2.5rem, 1rem + 7vw, 6rem);
+  overflow: hidden;
+}
+/* El aire de arriba del hero era SOLO función del ancho (7vw → 96px a 1440), o
+   sea que gastaba su máximo justo en la laptop ancha y BAJA, que es donde menos
+   sobra. Medido el 2026-09-03 sobre el build de producción: a 1440x800 el CTA
+   caía 42px por debajo del pliegue.
+   El min() lo vuelve consciente del alto: por encima de 900px de viewport el
+   valor sigue siendo el de siempre (49rem = 784px de contenido + nav), y recién
+   por debajo cede aire hasta un piso de 2.25rem. Sólo se toca el padding de
+   ARRIBA porque el de abajo cae después del CTA y no mueve el pliegue.
+   A 1440x900, 1440x1080, 390x844 y 768x1024 el valor calculado no cambia. */
+.hero {
+  padding-top: min(clamp(2.5rem, 1rem + 7vw, 6rem), max(2.25rem, 100svh - 49rem));
+}
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-6);
+  align-items: end;
+}
+@media (min-width: 980px) {
+  .hero-inner { grid-template-columns: minmax(0, 1.55fr) minmax(280px, 0.85fr); gap: var(--s-8); }
+}
+.hero-title {
+  font-size: var(--t-mega);
+  max-width: 14ch;
+}
+.hero-title em { font-style: normal; color: var(--orange); }
+.hero-lede {
+  margin-top: var(--s-5);
+  max-width: 48ch;
+  font-size: var(--t-lede);
+  color: var(--ink-soft);
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  margin-top: var(--s-6);
+}
+
+/* Ficha del hero: el bloque de datos duros, en mono, apoyado en la retícula. */
+.spec {
+  border: var(--bw-strong) solid var(--ink);
+  border-radius: var(--r-1);
+  background: var(--panel);
+  box-shadow: 6px 6px 0 var(--line-strong);
+}
+.spec-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-4);
+  padding: var(--s-3) var(--s-4);
+  border-bottom: var(--bw) solid var(--line);
+  font-family: var(--ff-code);
+  font-size: var(--t-small);
+}
+.spec-row:last-child { border-bottom: 0; }
+.spec-row dt { color: var(--ink-soft); text-transform: uppercase; font-size: var(--t-micro); letter-spacing: var(--track-micro); }
+.spec-row dd { margin: 0; text-align: right; }
+
+/* ── Franja: cinta de capacidades. El desplazamiento lo pone el agente de
+      relleno con transform, y se apaga con prefers-reduced-motion. ───────── */
+.franja {
+  background: var(--orange);
+  color: var(--on-orange);
+  border-bottom: var(--bw-strong) solid var(--ink);
+  overflow: hidden;
+}
+.franja-track {
+  display: flex;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: center;
+  padding: var(--s-3) 0;
+  white-space: nowrap;
+}
+.franja-item {
+  font-family: var(--ff-code);
+  font-size: var(--t-micro);
+  font-weight: 500;
+  letter-spacing: var(--track-micro);
+  text-transform: uppercase;
+}
+
+/* ── Sección y cabecera ───────────────────────────────────────────────────── */
+.section { padding-block: var(--space-section); border-bottom: var(--bw) solid var(--line); }
+.section--dim { background: var(--paper-dim); }
+.section--steel { border-bottom-color: transparent; }
+
+.sec-head { display: grid; gap: var(--s-3); margin-bottom: var(--s-7); }
+@media (min-width: 900px) {
+  .sec-head { grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr); align-items: end; gap: var(--s-6); }
+}
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-3);
+  font-family: var(--ff-code);
+  font-size: var(--t-micro);
+  font-weight: 500;
+  letter-spacing: var(--track-micro);
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.kicker::before { content: ""; width: 28px; height: 3px; background: var(--orange); }
+.h2 { font-size: var(--t-h2); max-width: 18ch; }
+.sec-note { color: var(--ink-soft); max-width: 46ch; }
+
+/* ── Cierre y footer ─────────────────────────────────────────────────────── */
+.closer { padding-block: var(--space-section); }
+.closer-h { font-size: clamp(2rem, 1rem + 4.5vw, 4.5rem); max-width: 16ch; }
+.footer { padding-block: var(--s-8) var(--s-6); }
+.footer-in { display: grid; gap: var(--s-6); }
+@media (min-width: 900px) {
+  .footer-in { grid-template-columns: 1.3fr 1fr 1fr; gap: var(--s-7); }
+}
+.footer-brand { font-family: var(--ff-display); font-size: 1.6rem; text-transform: uppercase; }
+.footer-col { display: flex; flex-direction: column; gap: var(--s-2); font-size: var(--t-small); }
+.footer-col a { text-decoration: none; border-bottom: var(--bw-strong) solid var(--orange); width: fit-content; }
+.footer-legal {
+  margin-top: var(--s-7);
+  padding-top: var(--s-4);
+  border-top: var(--bw) solid var(--line);
+  font-family: var(--ff-code);
+  font-size: var(--t-micro);
+  color: var(--ink-soft);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ▼▼▼ DESDE ACÁ ESCRIBE EL AGENTE DE SECCIONES ▼▼▼
+   Categorías · Mostrador · Cómo comprar · Horarios y ubicación · Pedido · FAQ.
+   Usar los tokens de globals.css; nada de hex sueltos. Animar solo transform y
+   opacity. Todo lo que sea grid debe apoyarse en filete visible: la retícula es
+   la marca de este sitio.
+   ═══════════════════════════════════════════════════════════════════════════ */

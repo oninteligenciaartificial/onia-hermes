@@ -1,0 +1,2976 @@
+{
+  "url": "https://www.fresha.com/for-business",
+  "slug": "fresha-for-business",
+  "medidoEl": "2026-08-20T23:40:46.323Z",
+  "vistas": {
+    "movil": {
+      "viewport": "390x844",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 13914,
+        "alturaPantallas": 16.5,
+        "anchoBody": 390,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 19
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "snap-y snap-mandatory bg-background text-foreground",
+          "altoPx": 13914,
+          "altoPantallas": 16.5,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "The #1 software for Salons and Spas",
+          "cta": "Fresha",
+          "imagenes": 327
+        },
+        {
+          "orden": 1,
+          "etiqueta": "main",
+          "clase": "overflow-x-hidden",
+          "altoPx": 12610,
+          "altoPantallas": 14.9,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "The #1 software for Salons and Spas",
+          "cta": "Get started now",
+          "imagenes": 314
+        },
+        {
+          "orden": 2,
+          "etiqueta": "h1",
+          "clase": "mx-auto max-w-[1028px] text-pretty px-8 pb-4 pt-32 text-center text-[4",
+          "altoPx": 288,
+          "altoPantallas": 0.3,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 3,
+          "etiqueta": "div",
+          "clase": "relative",
+          "altoPx": 544,
+          "altoPantallas": 0.6,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 28
+        },
+        {
+          "orden": 4,
+          "etiqueta": "div",
+          "clase": "relative overflow-x-hidden px-5 py-16 tablet:p-16 laptop:p-24 desktop:",
+          "altoPx": 1758,
+          "altoPantallas": 2.1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "One platform, infinite possibilities",
+          "cta": "Get started now",
+          "imagenes": 31
+        },
+        {
+          "orden": 5,
+          "etiqueta": "div",
+          "clase": "relative overflow-x-hidden px-5 py-16 tablet:p-16 laptop:p-24 desktop:",
+          "altoPx": 820,
+          "altoPantallas": 1,
+          "fondo": "rgb(231, 232, 255)",
+          "titular": "Everything you need to run your businesses",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 6,
+          "etiqueta": "div",
+          "clase": "relative overflow-x-hidden px-5 py-16 tablet:p-16 laptop:p-24 desktop:",
+          "altoPx": 1054,
+          "altoPantallas": 1.2,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "All-in-one software to run your business",
+          "cta": "",
+          "imagenes": 5
+        },
+        {
+          "orden": 7,
+          "etiqueta": "div",
+          "clase": "relative overflow-x-hidden px-5 py-16 tablet:p-16 laptop:p-24 desktop:",
+          "altoPx": 956,
+          "altoPantallas": 1.1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "The most popular marketplace to grow your business",
+          "cta": "",
+          "imagenes": 5
+        },
+        {
+          "orden": 8,
+          "etiqueta": "div",
+          "clase": "pb-16 laptop:pb-24",
+          "altoPx": 998,
+          "altoPantallas": 1.2,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Top-rated by the industry",
+          "cta": "Play video",
+          "imagenes": 110
+        },
+        {
+          "orden": 9,
+          "etiqueta": "div",
+          "clase": "pb-[64px] tablet:pb-[96px]",
+          "altoPx": 658,
+          "altoPantallas": 0.8,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Boss your business",
+          "cta": "Previous",
+          "imagenes": 2
+        },
+        {
+          "orden": 10,
+          "etiqueta": "div",
+          "clase": "relative overflow-x-hidden px-5 py-16 tablet:p-16 laptop:p-24 desktop:",
+          "altoPx": 1024,
+          "altoPantallas": 1.2,
+          "fondo": "rgb(245, 245, 245)",
+          "titular": "Committed to your success",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 11,
+          "etiqueta": "div",
+          "clase": "relative overflow-x-hidden px-5 py-16 tablet:p-16 laptop:p-24 desktop:",
+          "altoPx": 716,
+          "altoPantallas": 0.8,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "You are never alone, award winning customer support 24/7",
+          "cta": "Help CenterExplore and learn with our he",
+          "imagenes": 2
+        },
+        {
+          "orden": 12,
+          "etiqueta": "div",
+          "clase": "relative overflow-x-hidden px-5 py-16 tablet:p-16 laptop:p-24 desktop:",
+          "altoPx": 1000,
+          "altoPantallas": 1.2,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Frequently asked questions",
+          "cta": "What makes Fresha the leading platform f",
+          "imagenes": 8
+        },
+        {
+          "orden": 13,
+          "etiqueta": "div",
+          "clase": "py-20 laptop:pb-28 laptop:pt-32 bg-transparent",
+          "altoPx": 608,
+          "altoPantallas": 0.7,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "A platform suitable for all",
+          "cta": "Hair SalonHair Salon-0",
+          "imagenes": 112
+        },
+        {
+          "orden": 14,
+          "etiqueta": "div",
+          "clase": "relative items-end bg-cover text-accent-foreground",
+          "altoPx": 472,
+          "altoPantallas": 0.6,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "What are you waiting for?",
+          "cta": "Get started now",
+          "imagenes": 2
+        },
+        {
+          "orden": 15,
+          "etiqueta": "div",
+          "clase": "relative overflow-x-hidden px-5 py-16 tablet:p-16 laptop:p-24 desktop:",
+          "altoPx": 1514,
+          "altoPantallas": 1.8,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "Download our mobile apps",
+          "cta": "",
+          "imagenes": 8
+        },
+        {
+          "orden": 16,
+          "etiqueta": "footer",
+          "clase": "Footer_self__ymrRa bg-primary text-primary-foreground",
+          "altoPx": 1304,
+          "altoPantallas": 1.5,
+          "fondo": "rgb(20, 20, 20)",
+          "titular": "",
+          "cta": "Get the app",
+          "imagenes": 8
+        },
+        {
+          "orden": 17,
+          "etiqueta": "div",
+          "clase": "go2933276541 go2369186930",
+          "altoPx": 844,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 18,
+          "etiqueta": "div",
+          "clase": "go1632949049",
+          "altoPx": 852,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0.7)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        }
+      ],
+      "encabezados": {
+        "total": 66,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "The #1 software for Salons and Spas"
+          },
+          {
+            "nivel": 2,
+            "texto": "Simple, flexible and powerful booking software for your business."
+          },
+          {
+            "nivel": 2,
+            "texto": "One platform, infinite possibilities"
+          },
+          {
+            "nivel": 2,
+            "texto": "Everything you need to run your businesses"
+          },
+          {
+            "nivel": 3,
+            "texto": "Manage"
+          },
+          {
+            "nivel": 3,
+            "texto": "Grow"
+          },
+          {
+            "nivel": 3,
+            "texto": "Get paid"
+          },
+          {
+            "nivel": 2,
+            "texto": "All-in-one software to run your business"
+          },
+          {
+            "nivel": 2,
+            "texto": "The most popular marketplace to grow your business"
+          },
+          {
+            "nivel": 2,
+            "texto": "Top-rated by the industry"
+          },
+          {
+            "nivel": 3,
+            "texto": "Fresha is so easy to manage my team"
+          },
+          {
+            "nivel": 3,
+            "texto": "My client love it"
+          },
+          {
+            "nivel": 3,
+            "texto": "Powerful Scheduling"
+          },
+          {
+            "nivel": 3,
+            "texto": "Smart Salon Software"
+          },
+          {
+            "nivel": 3,
+            "texto": "Booking Made Easy"
+          },
+          {
+            "nivel": 3,
+            "texto": "Simplify Salon Scheduling"
+          },
+          {
+            "nivel": 3,
+            "texto": "Easy Payments, Bookings"
+          },
+          {
+            "nivel": 3,
+            "texto": "Effortless Salon Management"
+          },
+          {
+            "nivel": 3,
+            "texto": "Best salon software"
+          },
+          {
+            "nivel": 3,
+            "texto": "Boost sales"
+          },
+          {
+            "nivel": 3,
+            "texto": "Smart Analytics"
+          },
+          {
+            "nivel": 3,
+            "texto": "Ultimate Salon Solution"
+          },
+          {
+            "nivel": 3,
+            "texto": "Amazing software"
+          },
+          {
+            "nivel": 3,
+            "texto": "Recommend to all"
+          },
+          {
+            "nivel": 3,
+            "texto": "Online Salon Software"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 218
+          },
+          {
+            "valor": "17px / lh 1.41 / ls normal / w 600",
+            "veces": 86
+          },
+          {
+            "valor": "15px / lh 1.40 / ls normal / w 600",
+            "veces": 56
+          },
+          {
+            "valor": "15px / lh 1.33 / ls normal / w 400",
+            "veces": 49
+          },
+          {
+            "valor": "17px / lh 1.41 / ls normal / w 400",
+            "veces": 38
+          },
+          {
+            "valor": "24px / lh 1.33 / ls normal / w 600",
+            "veces": 31
+          },
+          {
+            "valor": "20px / lh 1.40 / ls normal / w 600",
+            "veces": 23
+          },
+          {
+            "valor": "17px / lh 1.41 / ls normal / w 500",
+            "veces": 21
+          },
+          {
+            "valor": "32px / lh 1.25 / ls normal / w 700",
+            "veces": 12
+          },
+          {
+            "valor": "17px / lh 1.41 / ls normal / w 700",
+            "veces": 12
+          },
+          {
+            "valor": "16px / lh 1.38 / ls normal / w 400",
+            "veces": 10
+          },
+          {
+            "valor": "15px / lh 1.33 / ls normal / w 500",
+            "veces": 8
+          },
+          {
+            "valor": "64px / lh 1.00 / ls normal / w 700",
+            "veces": 7
+          },
+          {
+            "valor": "10px / lh 1.40 / ls normal / w 600",
+            "veces": 4
+          },
+          {
+            "valor": "24px / lh 1.17 / ls normal / w 700",
+            "veces": 4
+          },
+          {
+            "valor": "40px / lh 1.20 / ls normal / w 700",
+            "veces": 2
+          }
+        ],
+        "familias": [
+          {
+            "valor": "RoobertPRO",
+            "veces": 598
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(20, 20, 20)",
+            "veces": 418
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 116
+          },
+          {
+            "valor": "rgb(118, 118, 118)",
+            "veces": 32
+          },
+          {
+            "valor": "rgb(105, 80, 243)",
+            "veces": 23
+          },
+          {
+            "valor": "rgb(0, 0, 0)",
+            "veces": 3
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0)",
+            "veces": 2
+          },
+          {
+            "valor": "rgb(115, 115, 115)",
+            "veces": 2
+          },
+          {
+            "valor": "rgb(172, 172, 172)",
+            "veces": 1
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 77
+          },
+          {
+            "valor": "rgb(249, 249, 249)",
+            "veces": 28
+          },
+          {
+            "valor": "rgb(20, 20, 20)",
+            "veces": 9
+          },
+          {
+            "valor": "rgb(242, 242, 242)",
+            "veces": 8
+          },
+          {
+            "valor": "rgb(245, 245, 245)",
+            "veces": 3
+          },
+          {
+            "valor": "rgba(241, 241, 241, 0.4)",
+            "veces": 2
+          },
+          {
+            "valor": "rgba(249, 235, 255, 0.35)",
+            "veces": 2
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.8)",
+            "veces": 1
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "8px",
+            "veces": 307
+          },
+          {
+            "valor": "12px",
+            "veces": 181
+          },
+          {
+            "valor": "16px",
+            "veces": 62
+          },
+          {
+            "valor": "-1px",
+            "veces": 62
+          },
+          {
+            "valor": "32px",
+            "veces": 54
+          },
+          {
+            "valor": "24px",
+            "veces": 35
+          },
+          {
+            "valor": "4px",
+            "veces": 33
+          },
+          {
+            "valor": "20px",
+            "veces": 23
+          },
+          {
+            "valor": "40px",
+            "veces": 11
+          },
+          {
+            "valor": "64px",
+            "veces": 11
+          },
+          {
+            "valor": "-4px",
+            "veces": 8
+          },
+          {
+            "valor": "2px",
+            "veces": 4
+          },
+          {
+            "valor": "6px",
+            "veces": 4
+          },
+          {
+            "valor": "44px",
+            "veces": 2
+          },
+          {
+            "valor": "128px",
+            "veces": 1
+          },
+          {
+            "valor": "48px",
+            "veces": 1
+          }
+        ],
+        "radios": [
+          {
+            "valor": "9999px",
+            "veces": 94
+          },
+          {
+            "valor": "8px",
+            "veces": 82
+          },
+          {
+            "valor": "12px",
+            "veces": 36
+          },
+          {
+            "valor": "18px",
+            "veces": 28
+          },
+          {
+            "valor": "16px",
+            "veces": 6
+          },
+          {
+            "valor": "24px",
+            "veces": 4
+          },
+          {
+            "valor": "14px",
+            "veces": 4
+          },
+          {
+            "valor": "5.45px",
+            "veces": 2
+          }
+        ],
+        "radiosDistintos": 8,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 12
+          }
+        ],
+        "sombrasDistintas": 1,
+        "zIndex": [
+          {
+            "valor": "10",
+            "veces": 71
+          },
+          {
+            "valor": "2",
+            "veces": 5
+          },
+          {
+            "valor": "9989",
+            "veces": 4
+          },
+          {
+            "valor": "50",
+            "veces": 3
+          },
+          {
+            "valor": "9998",
+            "veces": 1
+          },
+          {
+            "valor": "9999",
+            "veces": 1
+          },
+          {
+            "valor": "-1",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 68
+          },
+          {
+            "valor": "opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 68
+          },
+          {
+            "valor": "box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 56
+          },
+          {
+            "valor": "transform 0.2s cubic-bezier(0, 0.55, 0.45, 1)",
+            "veces": 19
+          },
+          {
+            "valor": "background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 17
+          },
+          {
+            "valor": "box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 12
+          },
+          {
+            "valor": "0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 9
+          },
+          {
+            "valor": "0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 8
+          },
+          {
+            "valor": "color 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s cubic-b",
+            "veces": 4
+          },
+          {
+            "valor": "transform 0.1s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 4
+          },
+          {
+            "valor": "color 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s cubic-b",
+            "veces": 2
+          },
+          {
+            "valor": "color 0.2s cubic-bezier(0, 0.55, 0.45, 1), background-color 0.2s cubic",
+            "veces": 2
+          }
+        ],
+        "transicionesDistintas": 15,
+        "hojasLeidas": 6,
+        "unidades": {
+          "em": 18,
+          "rem": 708,
+          "px": 2473,
+          "clamp": 0,
+          "vw": 120
+        },
+        "keyframesDeclarados": 11,
+        "transitionAll": 0,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 1024,
+            "veces": 7
+          },
+          {
+            "px": 768,
+            "veces": 5
+          },
+          {
+            "px": 1440,
+            "veces": 5
+          },
+          {
+            "px": 512,
+            "veces": 3
+          },
+          {
+            "px": 2000,
+            "veces": 3
+          },
+          {
+            "px": 0,
+            "veces": 2
+          },
+          {
+            "px": 1280,
+            "veces": 2
+          },
+          {
+            "px": 500,
+            "veces": 1
+          },
+          {
+            "px": 600,
+            "veces": 1
+          },
+          {
+            "px": 800,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "header",
+            "clase": "fixed top-0 z-50 w-full transition-all duration-300 ease-in-",
+            "posicion": "fixed",
+            "alto": 72,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2933276541 go2369186930",
+            "posicion": "fixed",
+            "alto": 844,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2933276541 go1348078617",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "844px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go613305155",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go471583506",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go3921366393",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "844px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go3967842156",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "844px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 86,
+        "ctasTop": [
+          {
+            "texto": "See more",
+            "veces": 16
+          },
+          {
+            "texto": "Hair SalonHair Salon-0",
+            "veces": 4
+          },
+          {
+            "texto": "Hair Salon-0",
+            "veces": 4
+          },
+          {
+            "texto": "Nail SalonNail Salon-1",
+            "veces": 4
+          },
+          {
+            "texto": "Nail Salon-1",
+            "veces": 4
+          },
+          {
+            "texto": "BarbersBarbers-2",
+            "veces": 4
+          },
+          {
+            "texto": "Barbers-2",
+            "veces": 4
+          },
+          {
+            "texto": "Waxing SalonWaxing Salon-3",
+            "veces": 4
+          },
+          {
+            "texto": "Waxing Salon-3",
+            "veces": 4
+          },
+          {
+            "texto": "MedspaMedspa-4",
+            "veces": 4
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 87,
+        "sinAlt": 0,
+        "altVacio": 1,
+        "sinDimensiones": 15,
+        "lazy": 82,
+        "conSrcset": 30,
+        "interactivos": 224,
+        "objetivosMenores44px": 117,
+        "idioma": "en-US",
+        "landmarks": {
+          "header": 1,
+          "nav": 1,
+          "main": 1,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(20, 20, 20)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 18.42
+          },
+          {
+            "texto": "rgb(20, 20, 20)",
+            "fondo": "rgb(249, 249, 249)",
+            "ratio": 17.5
+          },
+          {
+            "texto": "rgb(20, 20, 20)",
+            "fondo": "rgb(20, 20, 20)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(249, 249, 249)",
+            "ratio": 1.05
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(20, 20, 20)",
+            "ratio": 18.42
+          },
+          {
+            "texto": "rgb(118, 118, 118)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 4.54
+          },
+          {
+            "texto": "rgb(118, 118, 118)",
+            "fondo": "rgb(249, 249, 249)",
+            "ratio": 4.31
+          },
+          {
+            "texto": "rgb(118, 118, 118)",
+            "fondo": "rgb(20, 20, 20)",
+            "ratio": 4.06
+          },
+          {
+            "texto": "rgb(105, 80, 243)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 5.2
+          },
+          {
+            "texto": "rgb(105, 80, 243)",
+            "fondo": "rgb(249, 249, 249)",
+            "ratio": 4.93
+          },
+          {
+            "texto": "rgb(105, 80, 243)",
+            "fondo": "rgb(20, 20, 20)",
+            "ratio": 3.55
+          }
+        ],
+        "fondosTranslucidosOmitidos": 4
+      },
+      "rendimiento": {
+        "pesoTotalKb": 8603,
+        "porTipoKb": {
+          "document": 917.7,
+          "stylesheet": 204.3,
+          "font": 160.8,
+          "image": 365.1,
+          "script": 6213.4,
+          "media": 741.4,
+          "fetch": 0.1,
+          "xhr": 0.2
+        },
+        "pedidos": {
+          "document": 1,
+          "stylesheet": 6,
+          "font": 4,
+          "image": 29,
+          "script": 68,
+          "media": 2,
+          "fetch": 6,
+          "xhr": 1
+        },
+        "hostsDistintos": 17,
+        "terceros": [
+          {
+            "host": "images.fresha.com",
+            "pedidos": 23
+          },
+          {
+            "host": "huehue.fresha.com",
+            "pedidos": 9
+          },
+          {
+            "host": "connect.facebook.net",
+            "pedidos": 4
+          },
+          {
+            "host": "bat.bing.com",
+            "pedidos": 3
+          },
+          {
+            "host": "unleash-proxy.fresha.com",
+            "pedidos": 2
+          },
+          {
+            "host": "analytics.google.com",
+            "pedidos": 1
+          },
+          {
+            "host": "js.hs-scripts.com",
+            "pedidos": 1
+          },
+          {
+            "host": "js.hsadspixel.net",
+            "pedidos": 1
+          }
+        ],
+        "fuentesCargadas": [
+          "Tartuffo 400 normal",
+          "Tartuffo 500 normal",
+          "Tartuffo 700 normal",
+          "RoobertPRO 600 normal",
+          "RoobertPRO 400 normal",
+          "RoobertPRO 500 normal",
+          "RoobertPRO 700 normal",
+          "Changa 200 800 normal",
+          "AktivGroteskVF 100 900 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Fresha | Top Salon Software | Salon Management Software | Best Salon Booking Software | Spa Software | Salon Scheduling ",
+        "descripcion": "Best salon software, top salon software, salon pos, spa software, scheduling software, beauty salons with advanced appointment scheduling, Online Booking, appointment reminders, client CRM, POS, produ",
+        "canonical": "https://www.fresha.com/for-business",
+        "og": 11,
+        "datosEstructurados": 1
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "tablet": {
+      "viewport": "768x1024",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 11895,
+        "alturaPantallas": 11.6,
+        "anchoBody": 768,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 18
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "snap-y snap-mandatory bg-background text-foreground",
+          "altoPx": 11895,
+          "altoPantallas": 11.6,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "The #1 software for Salons and Spas",
+          "cta": "Fresha",
+          "imagenes": 327
+        },
+        {
+          "orden": 1,
+          "etiqueta": "main",
+          "clase": "overflow-x-hidden",
+          "altoPx": 11143,
+          "altoPantallas": 10.9,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "The #1 software for Salons and Spas",
+          "cta": "Get started now",
+          "imagenes": 314
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "relative",
+          "altoPx": 824,
+          "altoPantallas": 0.8,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 28
+        },
+        {
+          "orden": 3,
+          "etiqueta": "div",
+          "clase": "relative overflow-x-hidden px-5 py-16 tablet:p-16 laptop:p-24 desktop:",
+          "altoPx": 1488,
+          "altoPantallas": 1.5,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "One platform, infinite possibilities",
+          "cta": "Get started now",
+          "imagenes": 31
+        },
+        {
+          "orden": 4,
+          "etiqueta": "div",
+          "clase": "relative overflow-x-hidden px-5 py-16 tablet:p-16 laptop:p-24 desktop:",
+          "altoPx": 564,
+          "altoPantallas": 0.6,
+          "fondo": "rgb(231, 232, 255)",
+          "titular": "Everything you need to run your businesses",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 5,
+          "etiqueta": "div",
+          "clase": "relative overflow-x-hidden px-5 py-16 tablet:p-16 laptop:p-24 desktop:",
+          "altoPx": 1211,
+          "altoPantallas": 1.2,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "All-in-one software to run your business",
+          "cta": "",
+          "imagenes": 5
+        },
+        {
+          "orden": 6,
+          "etiqueta": "div",
+          "clase": "relative overflow-x-hidden px-5 py-16 tablet:p-16 laptop:p-24 desktop:",
+          "altoPx": 1174,
+          "altoPantallas": 1.1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "The most popular marketplace to grow your business",
+          "cta": "",
+          "imagenes": 5
+        },
+        {
+          "orden": 7,
+          "etiqueta": "div",
+          "clase": "pb-16 laptop:pb-24",
+          "altoPx": 862,
+          "altoPantallas": 0.8,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Top-rated by the industry",
+          "cta": "Play video",
+          "imagenes": 110
+        },
+        {
+          "orden": 8,
+          "etiqueta": "div",
+          "clase": "pb-[64px] tablet:pb-[96px]",
+          "altoPx": 666,
+          "altoPantallas": 0.7,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Boss your business",
+          "cta": "Previous",
+          "imagenes": 2
+        },
+        {
+          "orden": 9,
+          "etiqueta": "div",
+          "clase": "relative overflow-x-hidden px-5 py-16 tablet:p-16 laptop:p-24 desktop:",
+          "altoPx": 596,
+          "altoPantallas": 0.6,
+          "fondo": "rgb(245, 245, 245)",
+          "titular": "Committed to your success",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 10,
+          "etiqueta": "div",
+          "clase": "relative overflow-x-hidden px-5 py-16 tablet:p-16 laptop:p-24 desktop:",
+          "altoPx": 660,
+          "altoPantallas": 0.6,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "You are never alone, award winning customer support 24/7",
+          "cta": "Help CenterExplore and learn with our he",
+          "imagenes": 2
+        },
+        {
+          "orden": 11,
+          "etiqueta": "div",
+          "clase": "relative overflow-x-hidden px-5 py-16 tablet:p-16 laptop:p-24 desktop:",
+          "altoPx": 856,
+          "altoPantallas": 0.8,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Frequently asked questions",
+          "cta": "What makes Fresha the leading platform f",
+          "imagenes": 8
+        },
+        {
+          "orden": 12,
+          "etiqueta": "div",
+          "clase": "py-20 laptop:pb-28 laptop:pt-32 bg-transparent",
+          "altoPx": 568,
+          "altoPantallas": 0.6,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "A platform suitable for all",
+          "cta": "Hair SalonHair Salon-0",
+          "imagenes": 112
+        },
+        {
+          "orden": 13,
+          "etiqueta": "div",
+          "clase": "relative items-end bg-cover text-accent-foreground",
+          "altoPx": 288,
+          "altoPantallas": 0.3,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "What are you waiting for?",
+          "cta": "Get started now",
+          "imagenes": 2
+        },
+        {
+          "orden": 14,
+          "etiqueta": "div",
+          "clase": "relative overflow-x-hidden px-5 py-16 tablet:p-16 laptop:p-24 desktop:",
+          "altoPx": 1086,
+          "altoPantallas": 1.1,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "Download our mobile apps",
+          "cta": "",
+          "imagenes": 8
+        },
+        {
+          "orden": 15,
+          "etiqueta": "footer",
+          "clase": "Footer_self__ymrRa bg-primary text-primary-foreground",
+          "altoPx": 752,
+          "altoPantallas": 0.7,
+          "fondo": "rgb(20, 20, 20)",
+          "titular": "",
+          "cta": "Get the app",
+          "imagenes": 8
+        },
+        {
+          "orden": 16,
+          "etiqueta": "div",
+          "clase": "go2933276541 go2369186930",
+          "altoPx": 1024,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 17,
+          "etiqueta": "div",
+          "clase": "go1632949049",
+          "altoPx": 1034,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0.7)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        }
+      ],
+      "encabezados": {
+        "total": 66,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "The #1 software for Salons and Spas"
+          },
+          {
+            "nivel": 2,
+            "texto": "Simple, flexible and powerful booking software for your business."
+          },
+          {
+            "nivel": 2,
+            "texto": "One platform, infinite possibilities"
+          },
+          {
+            "nivel": 2,
+            "texto": "Everything you need to run your businesses"
+          },
+          {
+            "nivel": 3,
+            "texto": "Manage"
+          },
+          {
+            "nivel": 3,
+            "texto": "Grow"
+          },
+          {
+            "nivel": 3,
+            "texto": "Get paid"
+          },
+          {
+            "nivel": 2,
+            "texto": "All-in-one software to run your business"
+          },
+          {
+            "nivel": 2,
+            "texto": "The most popular marketplace to grow your business"
+          },
+          {
+            "nivel": 2,
+            "texto": "Top-rated by the industry"
+          },
+          {
+            "nivel": 3,
+            "texto": "Fresha is so easy to manage my team"
+          },
+          {
+            "nivel": 3,
+            "texto": "My client love it"
+          },
+          {
+            "nivel": 3,
+            "texto": "Powerful Scheduling"
+          },
+          {
+            "nivel": 3,
+            "texto": "Smart Salon Software"
+          },
+          {
+            "nivel": 3,
+            "texto": "Booking Made Easy"
+          },
+          {
+            "nivel": 3,
+            "texto": "Simplify Salon Scheduling"
+          },
+          {
+            "nivel": 3,
+            "texto": "Easy Payments, Bookings"
+          },
+          {
+            "nivel": 3,
+            "texto": "Effortless Salon Management"
+          },
+          {
+            "nivel": 3,
+            "texto": "Best salon software"
+          },
+          {
+            "nivel": 3,
+            "texto": "Boost sales"
+          },
+          {
+            "nivel": 3,
+            "texto": "Smart Analytics"
+          },
+          {
+            "nivel": 3,
+            "texto": "Ultimate Salon Solution"
+          },
+          {
+            "nivel": 3,
+            "texto": "Amazing software"
+          },
+          {
+            "nivel": 3,
+            "texto": "Recommend to all"
+          },
+          {
+            "nivel": 3,
+            "texto": "Online Salon Software"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 218
+          },
+          {
+            "valor": "17px / lh 1.41 / ls normal / w 600",
+            "veces": 86
+          },
+          {
+            "valor": "15px / lh 1.40 / ls normal / w 600",
+            "veces": 56
+          },
+          {
+            "valor": "15px / lh 1.33 / ls normal / w 400",
+            "veces": 49
+          },
+          {
+            "valor": "17px / lh 1.41 / ls normal / w 400",
+            "veces": 38
+          },
+          {
+            "valor": "24px / lh 1.33 / ls normal / w 600",
+            "veces": 33
+          },
+          {
+            "valor": "20px / lh 1.40 / ls normal / w 600",
+            "veces": 23
+          },
+          {
+            "valor": "17px / lh 1.41 / ls normal / w 500",
+            "veces": 21
+          },
+          {
+            "valor": "17px / lh 1.41 / ls normal / w 700",
+            "veces": 12
+          },
+          {
+            "valor": "32px / lh 1.25 / ls normal / w 700",
+            "veces": 11
+          },
+          {
+            "valor": "16px / lh 1.38 / ls normal / w 400",
+            "veces": 10
+          },
+          {
+            "valor": "15px / lh 1.33 / ls normal / w 500",
+            "veces": 8
+          },
+          {
+            "valor": "64px / lh 1.00 / ls normal / w 700",
+            "veces": 7
+          },
+          {
+            "valor": "14px / lh 1.36 / ls normal / w 600",
+            "veces": 4
+          },
+          {
+            "valor": "32px / lh 1.19 / ls normal / w 700",
+            "veces": 4
+          },
+          {
+            "valor": "40px / lh 1.20 / ls normal / w 700",
+            "veces": 2
+          }
+        ],
+        "familias": [
+          {
+            "valor": "RoobertPRO",
+            "veces": 598
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(20, 20, 20)",
+            "veces": 418
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 116
+          },
+          {
+            "valor": "rgb(118, 118, 118)",
+            "veces": 32
+          },
+          {
+            "valor": "rgb(105, 80, 243)",
+            "veces": 23
+          },
+          {
+            "valor": "rgb(0, 0, 0)",
+            "veces": 3
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0)",
+            "veces": 2
+          },
+          {
+            "valor": "rgb(115, 115, 115)",
+            "veces": 2
+          },
+          {
+            "valor": "rgb(172, 172, 172)",
+            "veces": 1
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 77
+          },
+          {
+            "valor": "rgb(249, 249, 249)",
+            "veces": 28
+          },
+          {
+            "valor": "rgb(20, 20, 20)",
+            "veces": 9
+          },
+          {
+            "valor": "rgb(242, 242, 242)",
+            "veces": 8
+          },
+          {
+            "valor": "rgb(245, 245, 245)",
+            "veces": 3
+          },
+          {
+            "valor": "rgba(241, 241, 241, 0.4)",
+            "veces": 2
+          },
+          {
+            "valor": "rgba(249, 235, 255, 0.35)",
+            "veces": 2
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.8)",
+            "veces": 1
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "8px",
+            "veces": 323
+          },
+          {
+            "valor": "12px",
+            "veces": 180
+          },
+          {
+            "valor": "-1px",
+            "veces": 62
+          },
+          {
+            "valor": "32px",
+            "veces": 59
+          },
+          {
+            "valor": "24px",
+            "veces": 47
+          },
+          {
+            "valor": "16px",
+            "veces": 38
+          },
+          {
+            "valor": "64px",
+            "veces": 30
+          },
+          {
+            "valor": "4px",
+            "veces": 17
+          },
+          {
+            "valor": "20px",
+            "veces": 16
+          },
+          {
+            "valor": "40px",
+            "veces": 8
+          },
+          {
+            "valor": "-4px",
+            "veces": 8
+          },
+          {
+            "valor": "6px",
+            "veces": 4
+          },
+          {
+            "valor": "10px",
+            "veces": 4
+          },
+          {
+            "valor": "2px",
+            "veces": 4
+          },
+          {
+            "valor": "44px",
+            "veces": 2
+          },
+          {
+            "valor": "128px",
+            "veces": 1
+          }
+        ],
+        "radios": [
+          {
+            "valor": "9999px",
+            "veces": 94
+          },
+          {
+            "valor": "8px",
+            "veces": 82
+          },
+          {
+            "valor": "12px",
+            "veces": 32
+          },
+          {
+            "valor": "18px",
+            "veces": 26
+          },
+          {
+            "valor": "20px",
+            "veces": 6
+          },
+          {
+            "valor": "24px",
+            "veces": 4
+          },
+          {
+            "valor": "28px",
+            "veces": 4
+          },
+          {
+            "valor": "26px",
+            "veces": 2
+          },
+          {
+            "valor": "16px",
+            "veces": 2
+          },
+          {
+            "valor": "14px",
+            "veces": 2
+          }
+        ],
+        "radiosDistintos": 11,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 12
+          }
+        ],
+        "sombrasDistintas": 1,
+        "zIndex": [
+          {
+            "valor": "10",
+            "veces": 71
+          },
+          {
+            "valor": "2",
+            "veces": 5
+          },
+          {
+            "valor": "9989",
+            "veces": 4
+          },
+          {
+            "valor": "50",
+            "veces": 3
+          },
+          {
+            "valor": "9998",
+            "veces": 1
+          },
+          {
+            "valor": "9999",
+            "veces": 1
+          },
+          {
+            "valor": "-1",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 68
+          },
+          {
+            "valor": "opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 68
+          },
+          {
+            "valor": "box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 56
+          },
+          {
+            "valor": "transform 0.2s cubic-bezier(0, 0.55, 0.45, 1)",
+            "veces": 19
+          },
+          {
+            "valor": "background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 17
+          },
+          {
+            "valor": "box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 12
+          },
+          {
+            "valor": "0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 9
+          },
+          {
+            "valor": "0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 8
+          },
+          {
+            "valor": "color 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s cubic-b",
+            "veces": 4
+          },
+          {
+            "valor": "transform 0.1s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 4
+          },
+          {
+            "valor": "color 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s cubic-b",
+            "veces": 2
+          },
+          {
+            "valor": "color 0.2s cubic-bezier(0, 0.55, 0.45, 1), background-color 0.2s cubic",
+            "veces": 2
+          }
+        ],
+        "transicionesDistintas": 15,
+        "hojasLeidas": 6,
+        "unidades": {
+          "em": 18,
+          "rem": 708,
+          "px": 2473,
+          "clamp": 0,
+          "vw": 120
+        },
+        "keyframesDeclarados": 11,
+        "transitionAll": 0,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 1024,
+            "veces": 7
+          },
+          {
+            "px": 768,
+            "veces": 5
+          },
+          {
+            "px": 1440,
+            "veces": 5
+          },
+          {
+            "px": 512,
+            "veces": 3
+          },
+          {
+            "px": 2000,
+            "veces": 3
+          },
+          {
+            "px": 0,
+            "veces": 2
+          },
+          {
+            "px": 1280,
+            "veces": 2
+          },
+          {
+            "px": 500,
+            "veces": 1
+          },
+          {
+            "px": 600,
+            "veces": 1
+          },
+          {
+            "px": 800,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "header",
+            "clase": "fixed top-0 z-50 w-full transition-all duration-300 ease-in-",
+            "posicion": "fixed",
+            "alto": 72,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2933276541 go2369186930",
+            "posicion": "fixed",
+            "alto": 1024,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2933276541 go1348078617",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "1024px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go613305155",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go471583506",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go3921366393",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "1024px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go3967842156",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "1024px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 86,
+        "ctasTop": [
+          {
+            "texto": "See more",
+            "veces": 16
+          },
+          {
+            "texto": "Hair SalonHair Salon-0",
+            "veces": 4
+          },
+          {
+            "texto": "Hair Salon-0",
+            "veces": 4
+          },
+          {
+            "texto": "Nail SalonNail Salon-1",
+            "veces": 4
+          },
+          {
+            "texto": "Nail Salon-1",
+            "veces": 4
+          },
+          {
+            "texto": "BarbersBarbers-2",
+            "veces": 4
+          },
+          {
+            "texto": "Barbers-2",
+            "veces": 4
+          },
+          {
+            "texto": "Waxing SalonWaxing Salon-3",
+            "veces": 4
+          },
+          {
+            "texto": "Waxing Salon-3",
+            "veces": 4
+          },
+          {
+            "texto": "MedspaMedspa-4",
+            "veces": 4
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 87,
+        "sinAlt": 0,
+        "altVacio": 1,
+        "sinDimensiones": 15,
+        "lazy": 82,
+        "conSrcset": 30,
+        "interactivos": 224,
+        "objetivosMenores44px": 116,
+        "idioma": "en-US",
+        "landmarks": {
+          "header": 1,
+          "nav": 1,
+          "main": 1,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(20, 20, 20)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 18.42
+          },
+          {
+            "texto": "rgb(20, 20, 20)",
+            "fondo": "rgb(249, 249, 249)",
+            "ratio": 17.5
+          },
+          {
+            "texto": "rgb(20, 20, 20)",
+            "fondo": "rgb(20, 20, 20)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(249, 249, 249)",
+            "ratio": 1.05
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(20, 20, 20)",
+            "ratio": 18.42
+          },
+          {
+            "texto": "rgb(118, 118, 118)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 4.54
+          },
+          {
+            "texto": "rgb(118, 118, 118)",
+            "fondo": "rgb(249, 249, 249)",
+            "ratio": 4.31
+          },
+          {
+            "texto": "rgb(118, 118, 118)",
+            "fondo": "rgb(20, 20, 20)",
+            "ratio": 4.06
+          },
+          {
+            "texto": "rgb(105, 80, 243)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 5.2
+          },
+          {
+            "texto": "rgb(105, 80, 243)",
+            "fondo": "rgb(249, 249, 249)",
+            "ratio": 4.93
+          },
+          {
+            "texto": "rgb(105, 80, 243)",
+            "fondo": "rgb(20, 20, 20)",
+            "ratio": 3.55
+          }
+        ],
+        "fondosTranslucidosOmitidos": 4
+      },
+      "rendimiento": {
+        "pesoTotalKb": 8087.6,
+        "porTipoKb": {
+          "document": 917.7,
+          "stylesheet": 204.3,
+          "font": 160.8,
+          "image": 379.4,
+          "script": 5683.8,
+          "media": 741.4,
+          "fetch": 0.1,
+          "xhr": 0.2
+        },
+        "pedidos": {
+          "document": 1,
+          "stylesheet": 6,
+          "font": 4,
+          "image": 29,
+          "script": 68,
+          "media": 2,
+          "fetch": 6,
+          "xhr": 1
+        },
+        "hostsDistintos": 17,
+        "terceros": [
+          {
+            "host": "images.fresha.com",
+            "pedidos": 23
+          },
+          {
+            "host": "huehue.fresha.com",
+            "pedidos": 9
+          },
+          {
+            "host": "connect.facebook.net",
+            "pedidos": 4
+          },
+          {
+            "host": "bat.bing.com",
+            "pedidos": 3
+          },
+          {
+            "host": "unleash-proxy.fresha.com",
+            "pedidos": 2
+          },
+          {
+            "host": "analytics.google.com",
+            "pedidos": 1
+          },
+          {
+            "host": "js.hs-scripts.com",
+            "pedidos": 1
+          },
+          {
+            "host": "js.hsadspixel.net",
+            "pedidos": 1
+          }
+        ],
+        "fuentesCargadas": [
+          "Tartuffo 400 normal",
+          "Tartuffo 500 normal",
+          "Tartuffo 700 normal",
+          "RoobertPRO 600 normal",
+          "RoobertPRO 400 normal",
+          "RoobertPRO 500 normal",
+          "RoobertPRO 700 normal",
+          "Changa 200 800 normal",
+          "AktivGroteskVF 100 900 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Fresha | Top Salon Software | Salon Management Software | Best Salon Booking Software | Spa Software | Salon Scheduling ",
+        "descripcion": "Best salon software, top salon software, salon pos, spa software, scheduling software, beauty salons with advanced appointment scheduling, Online Booking, appointment reminders, client CRM, POS, produ",
+        "canonical": "https://www.fresha.com/for-business",
+        "og": 11,
+        "datosEstructurados": 1
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "escritorio": {
+      "viewport": "1440x900",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 12834,
+        "alturaPantallas": 14.3,
+        "anchoBody": 1440,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 18
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "snap-y snap-mandatory bg-background text-foreground",
+          "altoPx": 12834,
+          "altoPantallas": 14.3,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "The #1 software for Salons and Spas",
+          "cta": "Fresha",
+          "imagenes": 327
+        },
+        {
+          "orden": 1,
+          "etiqueta": "main",
+          "clase": "overflow-x-hidden",
+          "altoPx": 12194,
+          "altoPantallas": 13.5,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "The #1 software for Salons and Spas",
+          "cta": "Get started now",
+          "imagenes": 314
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "relative",
+          "altoPx": 1139,
+          "altoPantallas": 1.3,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 28
+        },
+        {
+          "orden": 3,
+          "etiqueta": "div",
+          "clase": "relative overflow-x-hidden px-5 py-16 tablet:p-16 laptop:p-24 desktop:",
+          "altoPx": 2351,
+          "altoPantallas": 2.6,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "One platform, infinite possibilities",
+          "cta": "Get started now",
+          "imagenes": 31
+        },
+        {
+          "orden": 4,
+          "etiqueta": "div",
+          "clase": "relative overflow-x-hidden px-5 py-16 tablet:p-16 laptop:p-24 desktop:",
+          "altoPx": 532,
+          "altoPantallas": 0.6,
+          "fondo": "rgb(231, 232, 255)",
+          "titular": "Everything you need to run your businesses",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 5,
+          "etiqueta": "div",
+          "clase": "relative overflow-x-hidden px-5 py-16 tablet:p-16 laptop:p-24 desktop:",
+          "altoPx": 875,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "All-in-one software to run your business",
+          "cta": "",
+          "imagenes": 5
+        },
+        {
+          "orden": 6,
+          "etiqueta": "div",
+          "clase": "relative overflow-x-hidden px-5 py-16 tablet:p-16 laptop:p-24 desktop:",
+          "altoPx": 875,
+          "altoPantallas": 1,
+          "fondo": "rgb(249, 249, 249)",
+          "titular": "The most popular marketplace to grow your business",
+          "cta": "",
+          "imagenes": 5
+        },
+        {
+          "orden": 7,
+          "etiqueta": "div",
+          "clase": "pb-16 laptop:pb-24",
+          "altoPx": 1002,
+          "altoPantallas": 1.1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Top-rated by the industry",
+          "cta": "Play video",
+          "imagenes": 110
+        },
+        {
+          "orden": 8,
+          "etiqueta": "div",
+          "clase": "pb-[64px] tablet:pb-[96px]",
+          "altoPx": 882,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Boss your business",
+          "cta": "Previous",
+          "imagenes": 2
+        },
+        {
+          "orden": 9,
+          "etiqueta": "div",
+          "clase": "relative overflow-x-hidden px-5 py-16 tablet:p-16 laptop:p-24 desktop:",
+          "altoPx": 612,
+          "altoPantallas": 0.7,
+          "fondo": "rgb(245, 245, 245)",
+          "titular": "Committed to your success",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 10,
+          "etiqueta": "div",
+          "clase": "relative overflow-x-hidden px-5 py-16 tablet:p-16 laptop:p-24 desktop:",
+          "altoPx": 606,
+          "altoPantallas": 0.7,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "You are never alone, award winning customer support 24/7",
+          "cta": "Help CenterExplore and learn with our he",
+          "imagenes": 2
+        },
+        {
+          "orden": 11,
+          "etiqueta": "div",
+          "clase": "relative overflow-x-hidden px-5 py-16 tablet:p-16 laptop:p-24 desktop:",
+          "altoPx": 1084,
+          "altoPantallas": 1.2,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Frequently asked questions",
+          "cta": "What makes Fresha the leading platform f",
+          "imagenes": 8
+        },
+        {
+          "orden": 12,
+          "etiqueta": "div",
+          "clase": "py-20 laptop:pb-28 laptop:pt-32 bg-transparent",
+          "altoPx": 768,
+          "altoPantallas": 0.9,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "A platform suitable for all",
+          "cta": "Hair SalonHair Salon-0",
+          "imagenes": 112
+        },
+        {
+          "orden": 13,
+          "etiqueta": "div",
+          "clase": "relative items-end bg-cover text-accent-foreground",
+          "altoPx": 410,
+          "altoPantallas": 0.5,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "What are you waiting for?",
+          "cta": "Get started now",
+          "imagenes": 2
+        },
+        {
+          "orden": 14,
+          "etiqueta": "div",
+          "clase": "relative overflow-x-hidden px-5 py-16 tablet:p-16 laptop:p-24 desktop:",
+          "altoPx": 795,
+          "altoPantallas": 0.9,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "Download our mobile apps",
+          "cta": "",
+          "imagenes": 8
+        },
+        {
+          "orden": 15,
+          "etiqueta": "footer",
+          "clase": "Footer_self__ymrRa bg-primary text-primary-foreground",
+          "altoPx": 568,
+          "altoPantallas": 0.6,
+          "fondo": "rgb(20, 20, 20)",
+          "titular": "",
+          "cta": "Get the app",
+          "imagenes": 8
+        },
+        {
+          "orden": 16,
+          "etiqueta": "div",
+          "clase": "go2933276541 go2369186930",
+          "altoPx": 900,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 17,
+          "etiqueta": "div",
+          "clase": "go1632949049",
+          "altoPx": 909,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0.7)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        }
+      ],
+      "encabezados": {
+        "total": 66,
+        "h1": 1,
+        "saltos": 0,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "The #1 software for Salons and Spas"
+          },
+          {
+            "nivel": 2,
+            "texto": "Simple, flexible and powerful booking software for your business."
+          },
+          {
+            "nivel": 2,
+            "texto": "One platform, infinite possibilities"
+          },
+          {
+            "nivel": 2,
+            "texto": "Everything you need to run your businesses"
+          },
+          {
+            "nivel": 3,
+            "texto": "Manage"
+          },
+          {
+            "nivel": 3,
+            "texto": "Grow"
+          },
+          {
+            "nivel": 3,
+            "texto": "Get paid"
+          },
+          {
+            "nivel": 2,
+            "texto": "All-in-one software to run your business"
+          },
+          {
+            "nivel": 2,
+            "texto": "The most popular marketplace to grow your business"
+          },
+          {
+            "nivel": 2,
+            "texto": "Top-rated by the industry"
+          },
+          {
+            "nivel": 3,
+            "texto": "Fresha is so easy to manage my team"
+          },
+          {
+            "nivel": 3,
+            "texto": "My client love it"
+          },
+          {
+            "nivel": 3,
+            "texto": "Powerful Scheduling"
+          },
+          {
+            "nivel": 3,
+            "texto": "Smart Salon Software"
+          },
+          {
+            "nivel": 3,
+            "texto": "Booking Made Easy"
+          },
+          {
+            "nivel": 3,
+            "texto": "Simplify Salon Scheduling"
+          },
+          {
+            "nivel": 3,
+            "texto": "Easy Payments, Bookings"
+          },
+          {
+            "nivel": 3,
+            "texto": "Effortless Salon Management"
+          },
+          {
+            "nivel": 3,
+            "texto": "Best salon software"
+          },
+          {
+            "nivel": 3,
+            "texto": "Boost sales"
+          },
+          {
+            "nivel": 3,
+            "texto": "Smart Analytics"
+          },
+          {
+            "nivel": 3,
+            "texto": "Ultimate Salon Solution"
+          },
+          {
+            "nivel": 3,
+            "texto": "Amazing software"
+          },
+          {
+            "nivel": 3,
+            "texto": "Recommend to all"
+          },
+          {
+            "nivel": 3,
+            "texto": "Online Salon Software"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 218
+          },
+          {
+            "valor": "20px / lh 1.40 / ls normal / w 600",
+            "veces": 87
+          },
+          {
+            "valor": "17px / lh 1.41 / ls normal / w 600",
+            "veces": 78
+          },
+          {
+            "valor": "15px / lh 1.33 / ls normal / w 400",
+            "veces": 49
+          },
+          {
+            "valor": "24px / lh 1.33 / ls normal / w 600",
+            "veces": 33
+          },
+          {
+            "valor": "17px / lh 1.41 / ls normal / w 400",
+            "veces": 32
+          },
+          {
+            "valor": "17px / lh 1.41 / ls normal / w 500",
+            "veces": 21
+          },
+          {
+            "valor": "28px / lh 1.29 / ls normal / w 700",
+            "veces": 12
+          },
+          {
+            "valor": "16px / lh 1.38 / ls normal / w 400",
+            "veces": 10
+          },
+          {
+            "valor": "48px / lh 1.08 / ls normal / w 700",
+            "veces": 9
+          },
+          {
+            "valor": "20px / lh 1.40 / ls normal / w 400",
+            "veces": 8
+          },
+          {
+            "valor": "64px / lh 1.00 / ls normal / w 700",
+            "veces": 7
+          },
+          {
+            "valor": "48px / lh 1.13 / ls normal / w 700",
+            "veces": 6
+          },
+          {
+            "valor": "15px / lh 1.33 / ls normal / w 500",
+            "veces": 4
+          },
+          {
+            "valor": "14px / lh 1.36 / ls normal / w 600",
+            "veces": 4
+          },
+          {
+            "valor": "20px / lh 1.40 / ls normal / w 500",
+            "veces": 4
+          }
+        ],
+        "familias": [
+          {
+            "valor": "RoobertPRO",
+            "veces": 598
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(20, 20, 20)",
+            "veces": 418
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 116
+          },
+          {
+            "valor": "rgb(118, 118, 118)",
+            "veces": 32
+          },
+          {
+            "valor": "rgb(105, 80, 243)",
+            "veces": 23
+          },
+          {
+            "valor": "rgb(0, 0, 0)",
+            "veces": 3
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0)",
+            "veces": 2
+          },
+          {
+            "valor": "rgb(115, 115, 115)",
+            "veces": 2
+          },
+          {
+            "valor": "rgb(172, 172, 172)",
+            "veces": 1
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 77
+          },
+          {
+            "valor": "rgb(249, 249, 249)",
+            "veces": 29
+          },
+          {
+            "valor": "rgb(20, 20, 20)",
+            "veces": 9
+          },
+          {
+            "valor": "rgb(242, 242, 242)",
+            "veces": 8
+          },
+          {
+            "valor": "rgb(245, 245, 245)",
+            "veces": 3
+          },
+          {
+            "valor": "rgba(241, 241, 241, 0.4)",
+            "veces": 2
+          },
+          {
+            "valor": "rgba(249, 235, 255, 0.35)",
+            "veces": 2
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.8)",
+            "veces": 1
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "8px",
+            "veces": 331
+          },
+          {
+            "valor": "16px",
+            "veces": 131
+          },
+          {
+            "valor": "32px",
+            "veces": 84
+          },
+          {
+            "valor": "-1px",
+            "veces": 62
+          },
+          {
+            "valor": "12px",
+            "veces": 60
+          },
+          {
+            "valor": "24px",
+            "veces": 25
+          },
+          {
+            "valor": "120px",
+            "veces": 24
+          },
+          {
+            "valor": "20px",
+            "veces": 15
+          },
+          {
+            "valor": "48px",
+            "veces": 15
+          },
+          {
+            "valor": "4px",
+            "veces": 13
+          },
+          {
+            "valor": "40px",
+            "veces": 9
+          },
+          {
+            "valor": "-4px",
+            "veces": 8
+          },
+          {
+            "valor": "10px",
+            "veces": 4
+          },
+          {
+            "valor": "2px",
+            "veces": 4
+          },
+          {
+            "valor": "128px",
+            "veces": 4
+          },
+          {
+            "valor": "80px",
+            "veces": 3
+          }
+        ],
+        "radios": [
+          {
+            "valor": "9999px",
+            "veces": 94
+          },
+          {
+            "valor": "8px",
+            "veces": 82
+          },
+          {
+            "valor": "12px",
+            "veces": 32
+          },
+          {
+            "valor": "18px",
+            "veces": 26
+          },
+          {
+            "valor": "20px",
+            "veces": 6
+          },
+          {
+            "valor": "24px",
+            "veces": 4
+          },
+          {
+            "valor": "28px",
+            "veces": 4
+          },
+          {
+            "valor": "26px",
+            "veces": 2
+          },
+          {
+            "valor": "16px",
+            "veces": 2
+          },
+          {
+            "valor": "14px",
+            "veces": 2
+          }
+        ],
+        "radiosDistintos": 11,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 12
+          }
+        ],
+        "sombrasDistintas": 1,
+        "zIndex": [
+          {
+            "valor": "10",
+            "veces": 71
+          },
+          {
+            "valor": "2",
+            "veces": 5
+          },
+          {
+            "valor": "9989",
+            "veces": 4
+          },
+          {
+            "valor": "50",
+            "veces": 3
+          },
+          {
+            "valor": "9998",
+            "veces": 1
+          },
+          {
+            "valor": "9999",
+            "veces": 1
+          },
+          {
+            "valor": "-1",
+            "veces": 1
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 68
+          },
+          {
+            "valor": "opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 68
+          },
+          {
+            "valor": "box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 56
+          },
+          {
+            "valor": "transform 0.2s cubic-bezier(0, 0.55, 0.45, 1)",
+            "veces": 19
+          },
+          {
+            "valor": "background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 17
+          },
+          {
+            "valor": "box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 12
+          },
+          {
+            "valor": "0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 9
+          },
+          {
+            "valor": "0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 8
+          },
+          {
+            "valor": "color 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s cubic-b",
+            "veces": 4
+          },
+          {
+            "valor": "transform 0.1s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 4
+          },
+          {
+            "valor": "color 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s cubic-b",
+            "veces": 2
+          },
+          {
+            "valor": "color 0.2s cubic-bezier(0, 0.55, 0.45, 1), background-color 0.2s cubic",
+            "veces": 2
+          }
+        ],
+        "transicionesDistintas": 15,
+        "hojasLeidas": 15,
+        "unidades": {
+          "em": 40,
+          "rem": 708,
+          "px": 2803,
+          "clamp": 0,
+          "vw": 120
+        },
+        "keyframesDeclarados": 12,
+        "transitionAll": 0,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 1024,
+            "veces": 29
+          },
+          {
+            "px": 768,
+            "veces": 21
+          },
+          {
+            "px": 1440,
+            "veces": 19
+          },
+          {
+            "px": 512,
+            "veces": 17
+          },
+          {
+            "px": 2000,
+            "veces": 3
+          },
+          {
+            "px": 0,
+            "veces": 2
+          },
+          {
+            "px": 1280,
+            "veces": 2
+          },
+          {
+            "px": 500,
+            "veces": 1
+          },
+          {
+            "px": 600,
+            "veces": 1
+          },
+          {
+            "px": 800,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "muestras": [
+          {
+            "y": 0,
+            "conTransform": 36,
+            "navFija": true
+          },
+          {
+            "y": 2984,
+            "conTransform": 36,
+            "navFija": true
+          },
+          {
+            "y": 5963,
+            "conTransform": 36,
+            "navFija": true
+          },
+          {
+            "y": 8944,
+            "conTransform": 32,
+            "navFija": true
+          },
+          {
+            "y": 11925,
+            "conTransform": 27,
+            "navFija": true
+          }
+        ],
+        "hayMovimientoLigadoAlScroll": true,
+        "posicionesDistintas": 4,
+        "pegados": [
+          {
+            "etiqueta": "header",
+            "clase": "fixed top-0 z-50 w-full transition-all duration-300 ease-in-",
+            "posicion": "sticky",
+            "alto": 72,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2933276541 go2369186930",
+            "posicion": "fixed",
+            "alto": 900,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2933276541 go1348078617",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "900px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go613305155",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go471583506",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go3921366393",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "900px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "go2417249464 go3967842156",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "900px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 86,
+        "ctasTop": [
+          {
+            "texto": "See more",
+            "veces": 16
+          },
+          {
+            "texto": "Hair SalonHair Salon-0",
+            "veces": 4
+          },
+          {
+            "texto": "Hair Salon-0",
+            "veces": 4
+          },
+          {
+            "texto": "Nail SalonNail Salon-1",
+            "veces": 4
+          },
+          {
+            "texto": "Nail Salon-1",
+            "veces": 4
+          },
+          {
+            "texto": "BarbersBarbers-2",
+            "veces": 4
+          },
+          {
+            "texto": "Barbers-2",
+            "veces": 4
+          },
+          {
+            "texto": "Waxing SalonWaxing Salon-3",
+            "veces": 4
+          },
+          {
+            "texto": "Waxing Salon-3",
+            "veces": 4
+          },
+          {
+            "texto": "MedspaMedspa-4",
+            "veces": 4
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 87,
+        "sinAlt": 0,
+        "altVacio": 1,
+        "sinDimensiones": 15,
+        "lazy": 82,
+        "conSrcset": 30,
+        "interactivos": 224,
+        "objetivosMenores44px": 114,
+        "idioma": "en-US",
+        "landmarks": {
+          "header": 1,
+          "nav": 1,
+          "main": 1,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(20, 20, 20)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 18.42
+          },
+          {
+            "texto": "rgb(20, 20, 20)",
+            "fondo": "rgb(249, 249, 249)",
+            "ratio": 17.5
+          },
+          {
+            "texto": "rgb(20, 20, 20)",
+            "fondo": "rgb(20, 20, 20)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(249, 249, 249)",
+            "ratio": 1.05
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(20, 20, 20)",
+            "ratio": 18.42
+          },
+          {
+            "texto": "rgb(118, 118, 118)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 4.54
+          },
+          {
+            "texto": "rgb(118, 118, 118)",
+            "fondo": "rgb(249, 249, 249)",
+            "ratio": 4.31
+          },
+          {
+            "texto": "rgb(118, 118, 118)",
+            "fondo": "rgb(20, 20, 20)",
+            "ratio": 4.06
+          },
+          {
+            "texto": "rgb(105, 80, 243)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 5.2
+          },
+          {
+            "texto": "rgb(105, 80, 243)",
+            "fondo": "rgb(249, 249, 249)",
+            "ratio": 4.93
+          },
+          {
+            "texto": "rgb(105, 80, 243)",
+            "fondo": "rgb(20, 20, 20)",
+            "ratio": 3.55
+          }
+        ],
+        "fondosTranslucidosOmitidos": 4
+      },
+      "rendimiento": {
+        "pesoTotalKb": 9027.3,
+        "porTipoKb": {
+          "document": 917.7,
+          "font": 160.8,
+          "stylesheet": 447.9,
+          "image": 743.8,
+          "script": 6015.4,
+          "media": 741.4,
+          "fetch": 0.1,
+          "xhr": 0.2
+        },
+        "pedidos": {
+          "document": 2,
+          "font": 8,
+          "stylesheet": 37,
+          "image": 101,
+          "script": 154,
+          "media": 2,
+          "fetch": 38,
+          "xhr": 2,
+          "other": 2
+        },
+        "hostsDistintos": 17,
+        "terceros": [
+          {
+            "host": "images.fresha.com",
+            "pedidos": 30
+          },
+          {
+            "host": "huehue.fresha.com",
+            "pedidos": 9
+          },
+          {
+            "host": "connect.facebook.net",
+            "pedidos": 4
+          },
+          {
+            "host": "bat.bing.com",
+            "pedidos": 3
+          },
+          {
+            "host": "unleash-proxy.fresha.com",
+            "pedidos": 2
+          },
+          {
+            "host": "analytics.google.com",
+            "pedidos": 1
+          },
+          {
+            "host": "js.hs-scripts.com",
+            "pedidos": 1
+          },
+          {
+            "host": "js.hsadspixel.net",
+            "pedidos": 1
+          }
+        ],
+        "fuentesCargadas": [
+          "Tartuffo 400 normal",
+          "Tartuffo 500 normal",
+          "Tartuffo 700 normal",
+          "RoobertPRO 600 normal",
+          "RoobertPRO 400 normal",
+          "RoobertPRO 500 normal",
+          "RoobertPRO 700 normal",
+          "Changa 200 800 normal",
+          "AktivGroteskVF 100 900 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Fresha | Top Salon Software | Salon Management Software | Best Salon Booking Software | Spa Software | Salon Scheduling ",
+        "descripcion": "Best salon software, top salon software, salon pos, spa software, scheduling software, beauty salons with advanced appointment scheduling, Online Booking, appointment reminders, client CRM, POS, produ",
+        "canonical": "https://www.fresha.com/for-business",
+        "og": 11,
+        "datosEstructurados": 1
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    }
+  },
+  "noSePudoMedir": [],
+  "reducedMotion": {
+    "conAnimacion": 2,
+    "conTransicion": 202
+  },
+  "requiereOjoHumano": [
+    "Intencion de diseno: por que eligieron ESTA direccion visual y no otra.",
+    "Calidad del copy: si la promesa es creible y si los numeros estan respaldados.",
+    "Contenido detras de login, muro de cookies o interaccion (paso 2 de un popup, estados de error).",
+    "Si el movimiento AYUDA a entender o solo decora: eso se juzga mirando, no midiendo."
+  ]
+}

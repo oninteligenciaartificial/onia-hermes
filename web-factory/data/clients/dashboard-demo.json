@@ -1,23 +1,23 @@
 {
-  "nombre": "ONIA Ops Demo",
+  "nombre": "Clinica Vida",
   "slug": "dashboard-demo",
-  "tagline": "Panel operativo de ejemplo para la fabrica",
-  "descripcion": "Dashboard demo interno con KPIs, graficos y tabla operativa. Datos de ejemplo, reemplazar por metricas reales aprobadas.",
-  "logo": "ON",
+  "tagline": "Panel operativo de una clinica dental",
+  "descripcion": "Panel de la duenia de la clinica: que pasa hoy, que plata esta en juego y que propone el asistente.",
+  "logo": "CV",
   "logoIcon": "",
   "logoWide": "",
   "heroVideo": "",
   "heroPoster": "",
   "colores": {
-    "primary": "#4f46e5",
-    "secondary": "#0f172a",
-    "accent": "#22c55e",
-    "bg": "#f8fafc",
-    "fg": "#0f172a"
+    "primary": "#0d6b5c",
+    "secondary": "#0b3b32",
+    "accent": "#0d6b5c",
+    "bg": "#f6f2ea",
+    "fg": "#172420"
   },
   "tipografia": {
-    "heading": "Onest",
-    "body": "Onest"
+    "heading": "Bricolage Grotesque",
+    "body": "DM Sans"
   },
   "contacto": {
     "email": "",
@@ -70,254 +70,385 @@
     "ogImage": ""
   },
   "dashboard": {
-    "title": "Panel operativo",
-    "subtitle": "Resumen de actividad - datos de ejemplo",
+    "title": "Hoy en la clinica",
+    "subtitle": "Lunes 30 de agosto - actualizado hace 4 minutos",
     "nav": [
-      "Resumen",
-      "Ventas",
-      "Clientes",
-      "Reportes",
+      "Hoy",
+      "Agenda",
+      "Pacientes",
+      "Cobros",
+      "Tratamientos",
       "Ajustes"
     ],
     "filters": [
-      "7 dias",
-      "30 dias",
-      "90 dias"
+      "Hoy",
+      "Esta semana",
+      "Este mes"
     ],
     "kpis": [
       {
-        "label": "Ingresos",
-        "value": "Bs. 48.2k",
-        "delta": "12.4%",
-        "trend": "up",
-        "context": "vs periodo anterior"
-      },
-      {
-        "label": "Clientes nuevos",
-        "value": "184",
-        "delta": "8.1%",
-        "trend": "up",
-        "context": "vs periodo anterior"
-      },
-      {
-        "label": "Ticket promedio",
-        "value": "Bs. 262",
-        "delta": "1.9%",
-        "trend": "down",
-        "context": "vs periodo anterior"
-      },
-      {
-        "label": "Tasa de cierre",
-        "value": "34%",
-        "delta": "0.0%",
+        "label": "Citas de hoy",
+        "value": "9",
+        "delta": "2 sin confirmar",
         "trend": "flat",
-        "context": "estable"
+        "context": "7 confirmadas - 2 esperan respuesta",
+        "variant": "accent",
+        "spark": [
+          6,
+          8,
+          7,
+          9,
+          8,
+          11,
+          9,
+          10,
+          8,
+          9
+        ]
+      },
+      {
+        "label": "Por cobrar",
+        "value": "Bs 12.480",
+        "delta": "3 vencidos",
+        "trend": "down",
+        "context": "Bs 4.260 llevan mas de 30 dias",
+        "spark": [
+          9200,
+          9800,
+          10400,
+          11100,
+          10800,
+          11900,
+          12100,
+          12480
+        ]
+      },
+      {
+        "label": "Horas libres esta semana",
+        "value": "11 h",
+        "delta": "14%",
+        "trend": "down",
+        "context": "Sillon sin usar - unos Bs 3.300",
+        "spark": [
+          16,
+          15,
+          14,
+          13,
+          14,
+          12,
+          12,
+          11
+        ]
+      },
+      {
+        "label": "Pacientes sin volver",
+        "value": "42",
+        "delta": "+6",
+        "trend": "up",
+        "context": "Sin cita hace mas de 6 meses",
+        "spark": [
+          30,
+          32,
+          33,
+          35,
+          36,
+          39,
+          40,
+          42
+        ]
       }
     ],
+    "agente": {
+      "titulo": "Tu asistente",
+      "resumen": "Reviso agenda, cobros y pacientes hace 4 minutos. Nada se envia sin que lo apruebes.",
+      "acciones": [
+        {
+          "titulo": "Confirmar las 2 citas de manana",
+          "detalle": "Manda el recordatorio otra vez y ofrece reprogramar si no pueden.",
+          "evidencia": "no respondieron el recordatorio automatico de ayer a las 18:00",
+          "impacto": "Bs 1.840",
+          "urgencia": "alta",
+          "canal": "WhatsApp"
+        },
+        {
+          "titulo": "Cobrar 3 saldos vencidos",
+          "detalle": "Mensaje amable con el detalle del tratamiento y el link de pago.",
+          "evidencia": "vencidos hace mas de 30 dias, sin contacto desde el alta",
+          "impacto": "Bs 4.260",
+          "urgencia": "alta",
+          "canal": "WhatsApp"
+        },
+        {
+          "titulo": "Invitar a 14 pacientes que no vuelven",
+          "detalle": "Ofrece control de limpieza con los horarios que hoy estan vacios.",
+          "evidencia": "ultimo control hace mas de 8 meses y ninguno tiene cita futura",
+          "impacto": "Bs 9.100",
+          "urgencia": "media",
+          "canal": "WhatsApp"
+        },
+        {
+          "titulo": "Llenar el hueco del jueves 15:00",
+          "detalle": "Avisa a los 3 que pidieron ese horario y quedaron en lista.",
+          "evidencia": "3 pedidos para ese turno esta semana, el sillon quedo libre por una baja",
+          "impacto": "Bs 900",
+          "urgencia": "media",
+          "canal": "WhatsApp"
+        }
+      ]
+    },
+    "notas": {
+      "titulo": "Notas del equipo",
+      "items": [
+        {
+          "ancla": "Paciente - Marta Rios",
+          "texto": "Prefiere turnos antes de las 10. Avisar siempre un dia antes, no el mismo dia.",
+          "meta": "hoy 09:12 - Recepcion"
+        },
+        {
+          "ancla": "Proveedor - DentalSur",
+          "texto": "Cotizacion de resinas vence el viernes. Comparar con el precio de julio antes de pedir.",
+          "meta": "ayer 17:40 - Dra. Paz"
+        },
+        {
+          "ancla": "",
+          "texto": "Revisar la lista de precios de ortodoncia antes de fin de mes.",
+          "meta": "vie 26 - Dra. Paz"
+        }
+      ]
+    },
     "charts": [
       {
-        "title": "Ingresos por mes",
-        "unit": "Bs. (miles)",
+        "title": "Agenda de hoy confirmada",
+        "unit": "9 citas",
+        "type": "radial",
+        "points": [
+          {
+            "label": "Confirmadas",
+            "value": 7
+          },
+          {
+            "label": "Sin confirmar",
+            "value": 2
+          }
+        ]
+      },
+      {
+        "title": "Ocupacion del sillon",
+        "unit": "% de la agenda",
         "type": "bar",
         "points": [
           {
-            "label": "Ene",
-            "value": 32
-          },
-          {
-            "label": "Feb",
-            "value": 38
+            "label": "Lun",
+            "value": 82
           },
           {
             "label": "Mar",
-            "value": 30
+            "value": 74
           },
           {
-            "label": "Abr",
-            "value": 41
+            "label": "Mie",
+            "value": 91
           },
           {
-            "label": "May",
+            "label": "Jue",
+            "value": 63
+          },
+          {
+            "label": "Vie",
+            "value": 78
+          },
+          {
+            "label": "Sab",
             "value": 45
-          },
-          {
-            "label": "Jun",
-            "value": 48
           }
         ],
         "series": []
       },
       {
-        "title": "Ingresos vs meta",
-        "unit": "Bs. (miles)",
+        "title": "Cobrado vs facturado",
+        "unit": "Bs (miles)",
         "type": "line",
         "points": [],
         "series": [
           {
-            "name": "Real",
+            "name": "Facturado",
             "points": [
               {
-                "label": "Ene",
-                "value": 32
+                "label": "S1",
+                "value": 18
               },
               {
-                "label": "Feb",
-                "value": 38
+                "label": "S2",
+                "value": 21
               },
               {
-                "label": "Mar",
-                "value": 30
+                "label": "S3",
+                "value": 17
               },
               {
-                "label": "Abr",
-                "value": 41
+                "label": "S4",
+                "value": 24
               },
               {
-                "label": "May",
-                "value": 45
+                "label": "S5",
+                "value": 22
               },
               {
-                "label": "Jun",
-                "value": 48
+                "label": "S6",
+                "value": 26
               }
             ]
           },
           {
-            "name": "Meta",
+            "name": "Cobrado",
             "points": [
               {
-                "label": "Ene",
-                "value": 35
+                "label": "S1",
+                "value": 16
               },
               {
-                "label": "Feb",
-                "value": 36
+                "label": "S2",
+                "value": 17
               },
               {
-                "label": "Mar",
-                "value": 38
+                "label": "S3",
+                "value": 15
               },
               {
-                "label": "Abr",
-                "value": 40
+                "label": "S4",
+                "value": 18
               },
               {
-                "label": "May",
-                "value": 43
+                "label": "S5",
+                "value": 19
               },
               {
-                "label": "Jun",
-                "value": 46
+                "label": "S6",
+                "value": 20
               }
             ]
           }
         ]
       },
       {
-        "title": "Ventas por categoria",
-        "unit": "% del total",
+        "title": "Tratamientos del mes",
+        "unit": "tratamientos",
         "type": "donut",
         "points": [
           {
-            "label": "Serum",
-            "value": 42
-          },
-          {
-            "label": "Protector",
-            "value": 28
-          },
-          {
             "label": "Limpieza",
-            "value": 18
+            "value": 38
+          },
+          {
+            "label": "Restauracion",
+            "value": 27
+          },
+          {
+            "label": "Ortodoncia",
+            "value": 21
           },
           {
             "label": "Otros",
-            "value": 12
+            "value": 14
           }
         ],
         "series": []
       },
       {
-        "title": "Tendencia de ingresos (14d)",
-        "unit": "Bs.",
+        "title": "Pacientes nuevos (12 semanas)",
+        "unit": "por semana",
         "type": "sparkline",
         "points": [
           {
-            "label": "1",
-            "value": 210
+            "label": "S1",
+            "value": 4
           },
           {
-            "label": "2",
-            "value": 240
+            "label": "S2",
+            "value": 6
           },
           {
-            "label": "3",
-            "value": 228
+            "label": "S3",
+            "value": 5
           },
           {
-            "label": "4",
-            "value": 265
+            "label": "S4",
+            "value": 7
           },
           {
-            "label": "5",
-            "value": 250
+            "label": "S5",
+            "value": 6
           },
           {
-            "label": "6",
-            "value": 288
+            "label": "S6",
+            "value": 9
           },
           {
-            "label": "7",
-            "value": 302
+            "label": "S7",
+            "value": 8
           },
           {
-            "label": "8",
-            "value": 296
+            "label": "S8",
+            "value": 7
           },
           {
-            "label": "9",
-            "value": 320
+            "label": "S9",
+            "value": 10
           },
           {
-            "label": "10",
-            "value": 340
+            "label": "S10",
+            "value": 9
+          },
+          {
+            "label": "S11",
+            "value": 11
+          },
+          {
+            "label": "S12",
+            "value": 12
           }
         ],
         "series": []
       }
     ],
     "table": {
-      "title": "Ultimos pedidos",
+      "title": "Proximas citas",
       "columns": [
-        "Pedido",
-        "Cliente",
-        "Monto",
+        "Hora",
+        "Paciente",
+        "Tratamiento",
         "Estado"
       ],
       "rows": [
         [
-          "#1042",
-          "Comercial Andina",
-          "Bs. 1.240",
-          "Pagado"
+          "09:00",
+          "Marta Rios",
+          "Control de limpieza",
+          "Confirmada"
         ],
         [
-          "#1041",
-          "Ferreteria Sur",
-          "Bs. 860",
-          "Pendiente"
+          "10:30",
+          "Julio Vega",
+          "Restauracion",
+          "Confirmada"
         ],
         [
-          "#1040",
-          "Distribuidora Lux",
-          "Bs. 2.310",
-          "Pagado"
+          "11:15",
+          "Ana Melgar",
+          "Ortodoncia - ajuste",
+          "Sin confirmar"
         ],
         [
-          "#1039",
-          "Clinica Vida",
-          "Bs. 540",
-          "Enviado"
+          "15:00",
+          "-",
+          "Turno libre",
+          "Disponible"
+        ],
+        [
+          "16:00",
+          "Luis Chavez",
+          "Extraccion",
+          "Sin confirmar"
         ]
       ]
     }

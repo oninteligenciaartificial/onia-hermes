@@ -104,7 +104,7 @@ implementada y testeada pero huérfana (módulo equivocado, sin asiento, sin per
 - **Rama `onia-colaboradores-sin-inversion-d69b19`:** 48 commits adelante, 78 atrás de `main`.
   Divergida. Trae el Estudio de Contenido (fases 0-3) y es prerrequisito para tocar el panel.
 - **Canales de YouTube** (Onia Automatiza · Ciencia de tu Cuerpo), **Lucía**, contenido
-  generativo: parqueados con gatillo en `ONIA_CATALOGO_MAESTRO_IDEAS_20260726.md`.
+  generativo: parqueados con gatillo en `ONIA_CATALOGO_DE_IDEAS.md`.
 - **Higgsfield / generación paga:** en pausa por gasto.
 
 ## 7. Bloqueos que solo dependen de Sergio

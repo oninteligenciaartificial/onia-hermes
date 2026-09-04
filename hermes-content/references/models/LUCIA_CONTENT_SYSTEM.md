@@ -56,8 +56,8 @@ producto (Nuvia). Regla 80/20: ~80% organico/personaje, ~20% producto.
 
 | Necesito | Herramienta | Nota |
 |---|---|---|
-| Foto calma/sonrisa suave | `soul_2` + soul_id `36305a9b` (0.12cr) | barato, OK para expresiones calmas |
-| Foto expresion fuerte (cejas arriba, sorpresa, risa grande) | `nano_banana_pro` + Element `902eeebb` (2cr) | `soul_2` mete arrugas de forehead aca |
+| Foto calma/sonrisa suave | `text2image_soul_v2` + soul_id `36305a9b` (0.12cr) | barato, OK para expresiones calmas |
+| Foto expresion fuerte (cejas arriba, sorpresa, risa grande) | `nano_banana_pro` + Element `902eeebb` (2cr) | `text2image_soul_v2` mete arrugas de forehead aca |
 | **Contenido original (feed, variedad)** | `nano_banana_pro` + SOLO `902eeebb` (cara) + outfit/lugar/accion EN TEXTO (2cr) | escena nueva cada vez, identidad lockeada. SIEMPRE "no brand logos". Ver `lucia-content-bank-20260709/` |
 | Match EXACTO de producto/lugar real | `nano_banana_pro` + `902eeebb` + Element del producto/lugar (2cr) | SOLO cuando el objeto tiene que verse identico (producto cliente). Combinar outfit+lugar Elements copia las fotos 1:1 (no usar para variedad) |
 | B-roll movimiento simple | `kling2_6` (10cr) | cinematico |

@@ -10,6 +10,10 @@ const PORT = 4319;
 // overlapping each other. See tests/e2e/{perf,a11y}.spec.ts (mode: "serial").
 const MEASUREMENT_SPECS = /(perf|a11y)\.spec\.ts$/;
 
+// El gate visual fija su propio viewport (1440 y 375) y corre una sola vez: en
+// el proyecto mobile capturaria lo mismo con otro device y duplicaria baselines.
+const DESKTOP_ONLY_SPECS = /visual\.spec\.ts$/;
+
 /**
  * E2E for the static previews produced by the factory (out/<slug>). This is the
  * client-facing artifact, so smoke-testing it guards the real deliverable
@@ -26,7 +30,16 @@ export default defineConfig({
   // Cap concurrency so the serialized measurement projects don't run at the same
   // time as each other (and starve the LCP/axe measurements). Functional specs
   // still parallelize across these workers.
-  workers: process.env.CI ? 4 : 3,
+  //
+  // Local baja de 3 a 2 el 2026-09-01. Con 3 la corrida dejaba 3 rojos y 2 flaky
+  // que NO eran regresiones: los tres morian con "Target page, context or browser
+  // has been closed", o sea el navegador se caia, no fallaba una asercion. Es el
+  // mismo cuadro que tiraba `pnpm test` el mismo dia (ver vitest.config.ts): la
+  // maquina tiene 12 nucleos pero ~3,3 GB libres, y los loops corren en paralelo.
+  // Medido: 1 worker → 49 verdes, 0 rojos · 2 workers → 103 verdes, 0 rojos en
+  // 1,2 min (con 3 tardaba 1,3 min). El paralelismo perdido no cuesta nada y el
+  // gate deja de mentir. Un gate que da rojo por contencion se termina ignorando.
+  workers: process.env.CI ? 4 : 2,
   reporter: process.env.CI ? "line" : "list",
   globalSetup: "./tests/e2e/global-setup.ts",
   use: {
@@ -42,7 +55,7 @@ export default defineConfig({
     },
     {
       name: "mobile",
-      testIgnore: MEASUREMENT_SPECS,
+      testIgnore: [MEASUREMENT_SPECS, DESKTOP_ONLY_SPECS],
       use: { ...devices["Pixel 7"] },
     },
     // Measurement specs: serialized (fullyParallel: false) so timing-sensitive

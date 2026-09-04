@@ -1,0 +1,96 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   FORMULARIO DE PEDIDO.
+
+   LeadForm.tsx declara las clases que espera (.lead-form .lead-grid .lead-field
+   .lead-wide .lead-ok .lead-error .lead-note) y ninguna hoja las definía: el
+   formulario salía con los controles crudos del navegador dentro de un panel
+   que sí está diseñado. Se escribe acá, al lado del componente que lo usa, para
+   no tocar los CSS que estaban en manos de otro agente.
+
+   Sistema: campo = caja recta con filete de 2px y sombra sólida desplazada, la
+   misma mecánica que .btn. El foco NO cambia de color por transición (solo se
+   anima transform y opacity): la sombra salta, como un interruptor.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.lead-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
+  /* El caret, la flecha del select y la barra del textarea las dibuja el
+     navegador: sin esto se quedan en claro sobre el panel oscuro. */
+  color-scheme: light dark;
+}
+
+.lead-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-4);
+}
+@media (min-width: 620px) {
+  .lead-grid { grid-template-columns: 1fr 1fr; }
+}
+.lead-wide { grid-column: 1 / -1; }
+
+.lead-field { display: flex; flex-direction: column; gap: var(--s-2); }
+.lead-field > span {
+  font-family: var(--ff-code);
+  font-size: var(--t-micro);
+  font-weight: 500;
+  letter-spacing: var(--track-micro);
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.lead-field :is(input, select, textarea) {
+  width: 100%;
+  min-height: 46px;
+  padding: var(--s-3) var(--s-4);
+  border: var(--bw-strong) solid var(--line-strong);
+  border-radius: var(--r-1);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--ff-text);
+  font-size: var(--t-body);
+  box-shadow: 3px 3px 0 transparent;
+}
+.lead-field :is(input, select, textarea):hover { box-shadow: 3px 3px 0 var(--line); }
+.lead-field :is(input, select, textarea):focus { box-shadow: 3px 3px 0 var(--orange); }
+.lead-field :is(input, textarea)::placeholder { color: var(--ink-soft); opacity: 1; }
+
+/* La lista es lo que se escribe de verdad: mono, alta y redimensionable. */
+.lead-field textarea {
+  min-height: 132px;
+  resize: vertical;
+  font-family: var(--ff-code);
+  font-size: var(--t-small);
+  line-height: 1.55;
+}
+
+.lead-form .btn { align-self: flex-start; }
+.lead-form .btn[disabled] { cursor: progress; }
+
+/* Recibido: filete naranja al costado, como el sello del pedido tomado. */
+.lead-ok {
+  padding: var(--s-5);
+  border: var(--bw-strong) solid var(--ink);
+  border-left-width: 6px;
+  border-left-color: var(--orange);
+  border-radius: var(--r-1);
+  background: var(--paper);
+}
+
+/* El error se dice en el color de seguridad, con tinta encima (5,7:1). */
+.lead-error {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  padding: var(--s-3) var(--s-4);
+  border: var(--bw-strong) solid var(--ink);
+  border-radius: var(--r-1);
+  background: var(--orange);
+  color: var(--on-orange);
+  font-size: var(--t-small);
+}
+.lead-error a { font-weight: 600; text-underline-offset: 3px; }
+
+.lead-note { font-size: var(--t-small); color: var(--ink-soft); }

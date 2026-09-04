@@ -35,6 +35,38 @@ const nextConfig: NextConfig = {
    * las dependencias que viven en la raiz.
    */
   outputFileTracingRoot: monorepoRoot,
+
+  /**
+   * URLs de la v1 que dejaron de existir el 2026-08-21 al publicar la v3.
+   *
+   * Las tres circulan: /prueba-gratis es el destino de firmas de correo y de
+   * los CTA de las paginas viejas, /modulos/dental estaba en el sitemap desde
+   * hace meses, y /funciones/facturacion-electronica-siat es la que capta la
+   * busqueda del plazo del SIN. Un 404 en cualquiera de las tres es plata
+   * perdida y autoridad tirada.
+   *
+   * `permanent: true` = 308: el buscador traslada la senal a la URL nueva y el
+   * navegador cachea. Solo se usa donde el destino cubre la MISMA intencion.
+   *
+   * Ninguna choca con una pagina real: los archivos de esas rutas viven ahora
+   * bajo /v1/... y siguen sirviendose desde ahi (noindex).
+   */
+  async redirects() {
+    return [
+      { source: "/prueba-gratis", destination: "/empezar", permanent: true },
+      { source: "/modulos/dental", destination: "/rubros", permanent: true },
+      { source: "/modulos", destination: "/rubros", permanent: true },
+      {
+        source: "/funciones/facturacion-electronica-siat",
+        destination: "/facturacion",
+        permanent: true,
+      },
+      // El preview interno del rediseno: se anuncio por interno y quedo en
+      // historiales. Ahora ES el sitio.
+      { source: "/preview", destination: "/", permanent: true },
+      { source: "/preview/:ruta*", destination: "/:ruta*", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

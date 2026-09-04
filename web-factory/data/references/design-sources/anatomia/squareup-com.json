@@ -1,0 +1,2795 @@
+{
+  "url": "https://squareup.com",
+  "slug": "squareup-com",
+  "medidoEl": "2026-08-20T21:59:14.290Z",
+  "vistas": {
+    "movil": {
+      "viewport": "390x844",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 11892,
+        "alturaPantallas": 14.1,
+        "anchoBody": 390,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 3
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "main",
+          "clase": "",
+          "altoPx": 10959,
+          "altoPantallas": 13,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Local legend or global icon. Make it big on your block.",
+          "cta": "Get started",
+          "imagenes": 123
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "BasePage",
+          "altoPx": 10959,
+          "altoPantallas": 13,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Local legend or global icon. Make it big on your block.",
+          "cta": "Get started",
+          "imagenes": 123
+        },
+        {
+          "orden": 2,
+          "etiqueta": "footer",
+          "clase": "FooterComponent svelte-m7dnm8",
+          "altoPx": 933,
+          "altoPantallas": 1.1,
+          "fondo": "rgb(0, 0, 0)",
+          "titular": "",
+          "cta": "Products",
+          "imagenes": 4
+        }
+      ],
+      "encabezados": {
+        "total": 27,
+        "h1": 1,
+        "saltos": 1,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "Local legend or global icon. Make it big on your block."
+          },
+          {
+            "nivel": 2,
+            "texto": "Whatever your flavor of business, build and grow on your terms."
+          },
+          {
+            "nivel": 2,
+            "texto": "Smooth checkout, every time"
+          },
+          {
+            "nivel": 2,
+            "texto": "See your whole business click into place"
+          },
+          {
+            "nivel": 2,
+            "texto": "See your whole business click into place"
+          },
+          {
+            "nivel": 2,
+            "texto": "Keep your business growing"
+          },
+          {
+            "nivel": 2,
+            "texto": "Make smart decisions, fast"
+          },
+          {
+            "nivel": 2,
+            "texto": "Run your entire business with one plan"
+          },
+          {
+            "nivel": 2,
+            "texto": "Square Free"
+          },
+          {
+            "nivel": 2,
+            "texto": "Square Plus"
+          },
+          {
+            "nivel": 2,
+            "texto": "Square Premium"
+          },
+          {
+            "nivel": 2,
+            "texto": "Make your next move"
+          },
+          {
+            "nivel": 2,
+            "texto": "Get the latest updates from Square"
+          },
+          {
+            "nivel": 2,
+            "texto": "Nice to meet you."
+          },
+          {
+            "nivel": 6,
+            "texto": "Products"
+          },
+          {
+            "nivel": 6,
+            "texto": "Products"
+          },
+          {
+            "nivel": 6,
+            "texto": "Business Types"
+          },
+          {
+            "nivel": 6,
+            "texto": "Business Types"
+          },
+          {
+            "nivel": 6,
+            "texto": "Resources"
+          },
+          {
+            "nivel": 6,
+            "texto": "Resources"
+          },
+          {
+            "nivel": 6,
+            "texto": "Contact"
+          },
+          {
+            "nivel": 6,
+            "texto": "Contact"
+          },
+          {
+            "nivel": 6,
+            "texto": "Square"
+          },
+          {
+            "nivel": 6,
+            "texto": "Square"
+          },
+          {
+            "nivel": 4,
+            "texto": ""
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 500",
+            "veces": 327
+          },
+          {
+            "valor": "14px / lh 1.50 / ls normal / w 500",
+            "veces": 58
+          },
+          {
+            "valor": "14px / lh 1.50 / ls 0.14px / w 400",
+            "veces": 46
+          },
+          {
+            "valor": "32px / lh 1.13 / ls -0.64px / w 400",
+            "veces": 44
+          },
+          {
+            "valor": "12px / lh 1.50 / ls 0.12px / w 500",
+            "veces": 41
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 38
+          },
+          {
+            "valor": "20px / lh 1.30 / ls normal / w 500",
+            "veces": 25
+          },
+          {
+            "valor": "12px / lh 1.00 / ls normal / w 500",
+            "veces": 20
+          },
+          {
+            "valor": "12px / lh 1.50 / ls 1.2px / w 500",
+            "veces": 15
+          },
+          {
+            "valor": "56px / lh 1.00 / ls -2.24px / w 400",
+            "veces": 11
+          },
+          {
+            "valor": "44px / lh 1.00 / ls -1.32px / w 500",
+            "veces": 11
+          },
+          {
+            "valor": "12px / lh 1.50 / ls 0.24px / w 400",
+            "veces": 9
+          },
+          {
+            "valor": "18px / lh 1.20 / ls -0.18px / w 500",
+            "veces": 7
+          },
+          {
+            "valor": "12px / lh 1.00 / ls normal / w 400",
+            "veces": 4
+          },
+          {
+            "valor": "48px / lh 1.00 / ls -1.92px / w 400",
+            "veces": 4
+          },
+          {
+            "valor": "20px / lh 1.20 / ls -0.2px / w 500",
+            "veces": 3
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Cash Sans",
+            "veces": 401
+          },
+          {
+            "valor": "Square Sans Text VF",
+            "veces": 195
+          },
+          {
+            "valor": "Exact Block",
+            "veces": 62
+          },
+          {
+            "valor": "Cash Sans Mono",
+            "veces": 15
+          },
+          {
+            "valor": "Square Sans Display VF",
+            "veces": 5
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(0, 0, 0)",
+            "veces": 379
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 210
+          },
+          {
+            "valor": "rgb(136, 136, 136)",
+            "veces": 34
+          },
+          {
+            "valor": "rgb(112, 112, 112)",
+            "veces": 24
+          },
+          {
+            "valor": "rgb(187, 187, 187)",
+            "veces": 13
+          },
+          {
+            "valor": "rgb(0, 106, 255)",
+            "veces": 7
+          },
+          {
+            "valor": "rgb(153, 153, 153)",
+            "veces": 7
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0)",
+            "veces": 2
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 21
+          },
+          {
+            "valor": "rgb(0, 0, 0)",
+            "veces": 20
+          },
+          {
+            "valor": "rgb(247, 246, 245)",
+            "veces": 5
+          },
+          {
+            "valor": "rgb(0, 106, 255)",
+            "veces": 4
+          },
+          {
+            "valor": "rgba(149, 149, 149, 0.5)",
+            "veces": 4
+          },
+          {
+            "valor": "rgb(11, 182, 52)",
+            "veces": 2
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.25)",
+            "veces": 1
+          },
+          {
+            "valor": "rgb(31, 31, 31)",
+            "veces": 1
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "2px",
+            "veces": 428
+          },
+          {
+            "valor": "10px",
+            "veces": 424
+          },
+          {
+            "valor": "3px",
+            "veces": 229
+          },
+          {
+            "valor": "20px",
+            "veces": 202
+          },
+          {
+            "valor": "12px",
+            "veces": 47
+          },
+          {
+            "valor": "15px",
+            "veces": 46
+          },
+          {
+            "valor": "30px",
+            "veces": 39
+          },
+          {
+            "valor": "5px",
+            "veces": 26
+          },
+          {
+            "valor": "60px",
+            "veces": 17
+          },
+          {
+            "valor": "32px",
+            "veces": 16
+          },
+          {
+            "valor": "16px",
+            "veces": 15
+          },
+          {
+            "valor": "80px",
+            "veces": 11
+          },
+          {
+            "valor": "4px",
+            "veces": 10
+          },
+          {
+            "valor": "-30px",
+            "veces": 10
+          },
+          {
+            "valor": "18px",
+            "veces": 8
+          },
+          {
+            "valor": "auto",
+            "veces": 5
+          }
+        ],
+        "radios": [
+          {
+            "valor": "6px",
+            "veces": 214
+          },
+          {
+            "valor": "4px",
+            "veces": 42
+          },
+          {
+            "valor": "10px",
+            "veces": 30
+          },
+          {
+            "valor": "50px",
+            "veces": 20
+          },
+          {
+            "valor": "3px",
+            "veces": 14
+          },
+          {
+            "valor": "20px",
+            "veces": 13
+          },
+          {
+            "valor": "100%",
+            "veces": 8
+          },
+          {
+            "valor": "10000px",
+            "veces": 7
+          },
+          {
+            "valor": "5px",
+            "veces": 5
+          },
+          {
+            "valor": "15984px",
+            "veces": 4
+          }
+        ],
+        "radiosDistintos": 12,
+        "sombras": [
+          {
+            "valor": "rgb(112, 112, 112) 0px 0px 0px 1px inset",
+            "veces": 7
+          },
+          {
+            "valor": "rgb(112, 112, 112) 0px 0px 0px 1px",
+            "veces": 3
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.16) 0px 4px 20px 0px",
+            "veces": 2
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.16) 0px 4px 32px 0px",
+            "veces": 1
+          }
+        ],
+        "sombrasDistintas": 4,
+        "zIndex": [
+          {
+            "valor": "1",
+            "veces": 50
+          },
+          {
+            "valor": "0",
+            "veces": 12
+          },
+          {
+            "valor": "8",
+            "veces": 8
+          },
+          {
+            "valor": "5",
+            "veces": 5
+          },
+          {
+            "valor": "6",
+            "veces": 4
+          },
+          {
+            "valor": "1000",
+            "veces": 4
+          },
+          {
+            "valor": "-1",
+            "veces": 4
+          },
+          {
+            "valor": "4",
+            "veces": 3
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "background-color 0.15s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 34
+          },
+          {
+            "valor": "transform 0.15s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 25
+          },
+          {
+            "valor": "opacity 0.25s",
+            "veces": 21
+          },
+          {
+            "valor": "background-size 0.3s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 17
+          },
+          {
+            "valor": "opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 14
+          },
+          {
+            "valor": "opacity 0.6s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 10
+          },
+          {
+            "valor": "opacity 0.4s cubic-bezier(0.4, 0, 0.6, 1)",
+            "veces": 10
+          },
+          {
+            "valor": "opacity 0.15s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 10
+          },
+          {
+            "valor": "color 0.1s linear 0.275s",
+            "veces": 9
+          },
+          {
+            "valor": "opacity 0.4s cubic-bezier(0.4, 0, 1, 1), visibility 0.4s cubic-bezier(",
+            "veces": 9
+          },
+          {
+            "valor": "0.6s cubic-bezier(0, 0, 0.2, 1) -0.4s",
+            "veces": 8
+          },
+          {
+            "valor": "opacity 0.3s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 8
+          }
+        ],
+        "transicionesDistintas": 50,
+        "hojasLeidas": 6,
+        "unidades": {
+          "em": 8,
+          "rem": 4,
+          "px": 408,
+          "clamp": 0,
+          "vw": 0
+        },
+        "keyframesDeclarados": 2,
+        "transitionAll": 6,
+        "tieneReducedMotion": false,
+        "breakpointsPx": [
+          {
+            "px": 640,
+            "veces": 4
+          },
+          {
+            "px": 740,
+            "veces": 2
+          },
+          {
+            "px": 1024,
+            "veces": 2
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "mobile-global-nav-cta-button-container svelte-rrwz9",
+            "posicion": "fixed",
+            "alto": 72,
+            "top": "772px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "cta-subnav-container svelte-1lguc4e hiddenUntilScrolled useT",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "cta-button-container svelte-1ll27mu disableLeftCtaIcon subna",
+            "posicion": "fixed",
+            "alto": 72,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "hero-wrapper svelte-14vhzde",
+            "posicion": "sticky",
+            "alto": 844,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "HomePageV3AudienceMoment__wrapper svelte-m4qava",
+            "posicion": "sticky",
+            "alto": 716,
+            "top": "92px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "chat-widget-container svelte-1i6h8q8",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "ModalPartial svelte-1npysfh",
+            "posicion": "fixed",
+            "alto": 844,
+            "top": "422px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "modal-scroll svelte-1npysfh",
+            "posicion": "fixed",
+            "alto": 844,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "ModalPartial svelte-1npysfh",
+            "posicion": "fixed",
+            "alto": 844,
+            "top": "422px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "modal-scroll svelte-1npysfh",
+            "posicion": "fixed",
+            "alto": 844,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "flashBanner svelte-ftg0ns",
+            "posicion": "fixed",
+            "alto": 40,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "flashBanner svelte-ftg0ns",
+            "posicion": "fixed",
+            "alto": 40,
+            "top": "0px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [
+          {
+            "accion": "/us/en/search",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "query",
+                "requerido": false
+              }
+            ],
+            "boton": ""
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "Email",
+                "requerido": true
+              }
+            ],
+            "boton": "Submit"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "FirstName",
+                "requerido": true
+              },
+              {
+                "tipo": "text",
+                "nombre": "LastName",
+                "requerido": true
+              },
+              {
+                "tipo": "tel",
+                "nombre": "",
+                "requerido": true
+              },
+              {
+                "tipo": "text",
+                "nombre": "Company",
+                "requerido": true
+              },
+              {
+                "tipo": "checkbox",
+                "nombre": "Email_Opt_Out__c",
+                "requerido": true
+              }
+            ],
+            "boton": ""
+          }
+        ],
+        "dialogos": 0,
+        "ctasDistintos": 199,
+        "ctasTop": [
+          {
+            "texto": "Learn more",
+            "veces": 15
+          },
+          {
+            "texto": "Overview",
+            "veces": 8
+          },
+          {
+            "texto": "Switch to Square",
+            "veces": 8
+          },
+          {
+            "texto": "Take payments",
+            "veces": 8
+          },
+          {
+            "texto": "Manage your cash flow",
+            "veces": 8
+          },
+          {
+            "texto": "Keep customers coming back",
+            "veces": 6
+          },
+          {
+            "texto": "Schedule and pay your team",
+            "veces": 6
+          },
+          {
+            "texto": "Get started",
+            "veces": 6
+          },
+          {
+            "texto": "Hardware",
+            "veces": 5
+          },
+          {
+            "texto": "Add revenue streams",
+            "veces": 4
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 115,
+        "sinAlt": 0,
+        "altVacio": 105,
+        "sinDimensiones": 60,
+        "lazy": 67,
+        "conSrcset": 0,
+        "interactivos": 473,
+        "objetivosMenores44px": 107,
+        "idioma": "en-US",
+        "landmarks": {
+          "header": 5,
+          "nav": 6,
+          "main": 1,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 21
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "rgb(0, 0, 0)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "rgb(247, 246, 245)",
+            "ratio": 19.46
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(0, 0, 0)",
+            "ratio": 21
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(247, 246, 245)",
+            "ratio": 1.08
+          },
+          {
+            "texto": "rgb(136, 136, 136)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 3.54
+          },
+          {
+            "texto": "rgb(136, 136, 136)",
+            "fondo": "rgb(0, 0, 0)",
+            "ratio": 5.92
+          },
+          {
+            "texto": "rgb(136, 136, 136)",
+            "fondo": "rgb(247, 246, 245)",
+            "ratio": 3.28
+          },
+          {
+            "texto": "rgb(112, 112, 112)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 4.95
+          },
+          {
+            "texto": "rgb(112, 112, 112)",
+            "fondo": "rgb(0, 0, 0)",
+            "ratio": 4.24
+          },
+          {
+            "texto": "rgb(112, 112, 112)",
+            "fondo": "rgb(247, 246, 245)",
+            "ratio": 4.59
+          }
+        ],
+        "fondosTranslucidosOmitidos": 2
+      },
+      "rendimiento": {
+        "pesoTotalKb": 33142.1,
+        "porTipoKb": {
+          "document": 3872.9,
+          "font": 458,
+          "script": 7421.8,
+          "image": 7230,
+          "stylesheet": 66.3,
+          "media": 9150.3,
+          "fetch": 4941.8,
+          "xhr": 1.1,
+          "ping": 0
+        },
+        "pedidos": {
+          "document": 10,
+          "font": 12,
+          "script": 297,
+          "image": 249,
+          "stylesheet": 6,
+          "media": 4,
+          "fetch": 110,
+          "xhr": 20,
+          "ping": 2
+        },
+        "hostsDistintos": 44,
+        "terceros": [
+          {
+            "host": "pw-renderer-production-c.squarecdn.com",
+            "pedidos": 254
+          },
+          {
+            "host": "images.ctfassets.net",
+            "pedidos": 64
+          },
+          {
+            "host": "browser-intake-datadoghq.com",
+            "pedidos": 32
+          },
+          {
+            "host": "www.google.com",
+            "pedidos": 28
+          },
+          {
+            "host": "assets.ctfassets.net",
+            "pedidos": 20
+          },
+          {
+            "host": "www.googletagmanager.com",
+            "pedidos": 12
+          },
+          {
+            "host": "bat.bing.com",
+            "pedidos": 8
+          },
+          {
+            "host": "www.google.com.bo",
+            "pedidos": 8
+          }
+        ],
+        "fuentesCargadas": [
+          "Square Sans Text 400 normal",
+          "Square Sans Text 400 italic",
+          "Square Sans Text 500 normal",
+          "Square Sans Text 500 italic",
+          "Square Sans Text 600 normal",
+          "Square Sans Text 600 italic",
+          "Square Sans Text 700 normal",
+          "Square Sans Text 700 italic",
+          "Square Sans Text VF 400 700 normal",
+          "Square Sans Text VF 400 700 italic",
+          "Square Sans Mono 400 normal",
+          "Square Sans Mono 500 normal",
+          "Square Sans Mono 600 normal",
+          "Square Sans Mono 700 normal",
+          "Square Sans Mono VF 400 700 normal",
+          "Square Sans Display 400 normal",
+          "Square Sans Display 500 normal",
+          "Square Sans Display 700 normal",
+          "Square Sans Display VF 400 700 normal",
+          "Cash Sans Mono 300 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Power your entire business | Square",
+        "descripcion": "Sell anywhere. Diversify revenue streams. Streamline operations. Manage your staff. Get paid faster. Sign up for Square today.",
+        "canonical": "https://squareup.com/us/en",
+        "og": 7,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "tablet": {
+      "viewport": "768x1024",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 13491,
+        "alturaPantallas": 13.2,
+        "anchoBody": 768,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 3
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "main",
+          "clase": "",
+          "altoPx": 11899,
+          "altoPantallas": 11.6,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Local legend or global icon. Make it big on your block.",
+          "cta": "Get started",
+          "imagenes": 123
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "BasePage",
+          "altoPx": 11899,
+          "altoPantallas": 11.6,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Local legend or global icon. Make it big on your block.",
+          "cta": "Get started",
+          "imagenes": 123
+        },
+        {
+          "orden": 2,
+          "etiqueta": "footer",
+          "clase": "FooterComponent svelte-m7dnm8",
+          "altoPx": 1592,
+          "altoPantallas": 1.6,
+          "fondo": "rgb(0, 0, 0)",
+          "titular": "",
+          "cta": "Products",
+          "imagenes": 4
+        }
+      ],
+      "encabezados": {
+        "total": 27,
+        "h1": 1,
+        "saltos": 1,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "Local legend or global icon. Make it big on your block."
+          },
+          {
+            "nivel": 2,
+            "texto": "Whatever your flavor of business, build and grow on your terms."
+          },
+          {
+            "nivel": 2,
+            "texto": "Smooth checkout, every time"
+          },
+          {
+            "nivel": 2,
+            "texto": "See your whole business click into place"
+          },
+          {
+            "nivel": 2,
+            "texto": "See your whole business click into place"
+          },
+          {
+            "nivel": 2,
+            "texto": "Keep your business growing"
+          },
+          {
+            "nivel": 2,
+            "texto": "Make smart decisions, fast"
+          },
+          {
+            "nivel": 2,
+            "texto": "Run your entire business with one plan"
+          },
+          {
+            "nivel": 2,
+            "texto": "Square Free"
+          },
+          {
+            "nivel": 2,
+            "texto": "Square Plus"
+          },
+          {
+            "nivel": 2,
+            "texto": "Square Premium"
+          },
+          {
+            "nivel": 2,
+            "texto": "Make your next move"
+          },
+          {
+            "nivel": 2,
+            "texto": "Get the latest updates from Square"
+          },
+          {
+            "nivel": 2,
+            "texto": "Nice to meet you."
+          },
+          {
+            "nivel": 6,
+            "texto": "Products"
+          },
+          {
+            "nivel": 6,
+            "texto": "Products"
+          },
+          {
+            "nivel": 6,
+            "texto": "Business Types"
+          },
+          {
+            "nivel": 6,
+            "texto": "Business Types"
+          },
+          {
+            "nivel": 6,
+            "texto": "Resources"
+          },
+          {
+            "nivel": 6,
+            "texto": "Resources"
+          },
+          {
+            "nivel": 6,
+            "texto": "Contact"
+          },
+          {
+            "nivel": 6,
+            "texto": "Contact"
+          },
+          {
+            "nivel": 6,
+            "texto": "Square"
+          },
+          {
+            "nivel": 6,
+            "texto": "Square"
+          },
+          {
+            "nivel": 4,
+            "texto": ""
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 500",
+            "veces": 327
+          },
+          {
+            "valor": "14px / lh 1.50 / ls normal / w 500",
+            "veces": 58
+          },
+          {
+            "valor": "14px / lh 1.50 / ls 0.14px / w 400",
+            "veces": 46
+          },
+          {
+            "valor": "32px / lh 1.13 / ls -0.64px / w 400",
+            "veces": 44
+          },
+          {
+            "valor": "12px / lh 1.50 / ls 0.12px / w 500",
+            "veces": 41
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 38
+          },
+          {
+            "valor": "20px / lh 1.30 / ls normal / w 500",
+            "veces": 25
+          },
+          {
+            "valor": "12px / lh 1.00 / ls normal / w 500",
+            "veces": 20
+          },
+          {
+            "valor": "12px / lh 1.50 / ls 1.2px / w 500",
+            "veces": 15
+          },
+          {
+            "valor": "56px / lh 1.00 / ls -2.24px / w 400",
+            "veces": 11
+          },
+          {
+            "valor": "44px / lh 1.00 / ls -1.32px / w 500",
+            "veces": 11
+          },
+          {
+            "valor": "12px / lh 1.50 / ls 0.24px / w 400",
+            "veces": 9
+          },
+          {
+            "valor": "18px / lh 1.20 / ls -0.18px / w 500",
+            "veces": 7
+          },
+          {
+            "valor": "12px / lh 1.00 / ls normal / w 400",
+            "veces": 4
+          },
+          {
+            "valor": "48px / lh 1.00 / ls -1.92px / w 400",
+            "veces": 4
+          },
+          {
+            "valor": "20px / lh 1.20 / ls -0.2px / w 500",
+            "veces": 3
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Cash Sans",
+            "veces": 401
+          },
+          {
+            "valor": "Square Sans Text VF",
+            "veces": 195
+          },
+          {
+            "valor": "Exact Block",
+            "veces": 62
+          },
+          {
+            "valor": "Cash Sans Mono",
+            "veces": 15
+          },
+          {
+            "valor": "Square Sans Display VF",
+            "veces": 5
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(0, 0, 0)",
+            "veces": 379
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 210
+          },
+          {
+            "valor": "rgb(136, 136, 136)",
+            "veces": 34
+          },
+          {
+            "valor": "rgb(112, 112, 112)",
+            "veces": 24
+          },
+          {
+            "valor": "rgb(187, 187, 187)",
+            "veces": 13
+          },
+          {
+            "valor": "rgb(0, 106, 255)",
+            "veces": 7
+          },
+          {
+            "valor": "rgb(153, 153, 153)",
+            "veces": 7
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0)",
+            "veces": 2
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 21
+          },
+          {
+            "valor": "rgb(0, 0, 0)",
+            "veces": 20
+          },
+          {
+            "valor": "rgb(247, 246, 245)",
+            "veces": 5
+          },
+          {
+            "valor": "rgb(0, 106, 255)",
+            "veces": 4
+          },
+          {
+            "valor": "rgba(149, 149, 149, 0.5)",
+            "veces": 4
+          },
+          {
+            "valor": "rgb(11, 182, 52)",
+            "veces": 2
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.25)",
+            "veces": 1
+          },
+          {
+            "valor": "rgb(31, 31, 31)",
+            "veces": 1
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "2px",
+            "veces": 428
+          },
+          {
+            "valor": "10px",
+            "veces": 424
+          },
+          {
+            "valor": "3px",
+            "veces": 229
+          },
+          {
+            "valor": "20px",
+            "veces": 214
+          },
+          {
+            "valor": "12px",
+            "veces": 47
+          },
+          {
+            "valor": "30px",
+            "veces": 36
+          },
+          {
+            "valor": "15px",
+            "veces": 34
+          },
+          {
+            "valor": "5px",
+            "veces": 26
+          },
+          {
+            "valor": "32px",
+            "veces": 16
+          },
+          {
+            "valor": "60px",
+            "veces": 16
+          },
+          {
+            "valor": "16px",
+            "veces": 15
+          },
+          {
+            "valor": "80px",
+            "veces": 14
+          },
+          {
+            "valor": "4px",
+            "veces": 10
+          },
+          {
+            "valor": "-30px",
+            "veces": 10
+          },
+          {
+            "valor": "18px",
+            "veces": 8
+          },
+          {
+            "valor": "40px",
+            "veces": 7
+          }
+        ],
+        "radios": [
+          {
+            "valor": "6px",
+            "veces": 214
+          },
+          {
+            "valor": "4px",
+            "veces": 42
+          },
+          {
+            "valor": "10px",
+            "veces": 30
+          },
+          {
+            "valor": "50px",
+            "veces": 20
+          },
+          {
+            "valor": "3px",
+            "veces": 14
+          },
+          {
+            "valor": "20px",
+            "veces": 13
+          },
+          {
+            "valor": "100%",
+            "veces": 8
+          },
+          {
+            "valor": "10000px",
+            "veces": 7
+          },
+          {
+            "valor": "5px",
+            "veces": 6
+          },
+          {
+            "valor": "15984px",
+            "veces": 4
+          }
+        ],
+        "radiosDistintos": 12,
+        "sombras": [
+          {
+            "valor": "rgb(112, 112, 112) 0px 0px 0px 1px inset",
+            "veces": 7
+          },
+          {
+            "valor": "rgb(112, 112, 112) 0px 0px 0px 1px",
+            "veces": 3
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.16) 0px 4px 20px 0px",
+            "veces": 2
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.16) 0px 4px 32px 0px",
+            "veces": 1
+          }
+        ],
+        "sombrasDistintas": 4,
+        "zIndex": [
+          {
+            "valor": "1",
+            "veces": 50
+          },
+          {
+            "valor": "0",
+            "veces": 12
+          },
+          {
+            "valor": "8",
+            "veces": 8
+          },
+          {
+            "valor": "5",
+            "veces": 5
+          },
+          {
+            "valor": "6",
+            "veces": 4
+          },
+          {
+            "valor": "1000",
+            "veces": 4
+          },
+          {
+            "valor": "-1",
+            "veces": 4
+          },
+          {
+            "valor": "4",
+            "veces": 3
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "background-color 0.15s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 34
+          },
+          {
+            "valor": "transform 0.15s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 25
+          },
+          {
+            "valor": "opacity 0.25s",
+            "veces": 21
+          },
+          {
+            "valor": "background-size 0.3s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 17
+          },
+          {
+            "valor": "opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 14
+          },
+          {
+            "valor": "opacity 0.6s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 10
+          },
+          {
+            "valor": "opacity 0.4s cubic-bezier(0.4, 0, 0.6, 1)",
+            "veces": 10
+          },
+          {
+            "valor": "opacity 0.15s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 10
+          },
+          {
+            "valor": "color 0.1s linear 0.275s",
+            "veces": 9
+          },
+          {
+            "valor": "opacity 0.4s cubic-bezier(0.4, 0, 1, 1), visibility 0.4s cubic-bezier(",
+            "veces": 9
+          },
+          {
+            "valor": "0.6s cubic-bezier(0, 0, 0.2, 1) -0.4s",
+            "veces": 8
+          },
+          {
+            "valor": "opacity 0.3s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 8
+          }
+        ],
+        "transicionesDistintas": 50,
+        "hojasLeidas": 6,
+        "unidades": {
+          "em": 8,
+          "rem": 4,
+          "px": 408,
+          "clamp": 0,
+          "vw": 0
+        },
+        "keyframesDeclarados": 2,
+        "transitionAll": 6,
+        "tieneReducedMotion": false,
+        "breakpointsPx": [
+          {
+            "px": 640,
+            "veces": 4
+          },
+          {
+            "px": 740,
+            "veces": 2
+          },
+          {
+            "px": 1024,
+            "veces": 2
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "mobile-global-nav-cta-button-container svelte-rrwz9",
+            "posicion": "fixed",
+            "alto": 72,
+            "top": "952px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "cta-subnav-container svelte-1lguc4e hiddenUntilScrolled useT",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "cta-button-container svelte-1ll27mu disableLeftCtaIcon subna",
+            "posicion": "fixed",
+            "alto": 72,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "hero-wrapper svelte-14vhzde",
+            "posicion": "sticky",
+            "alto": 1024,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "HomePageV3AudienceMoment__wrapper svelte-m4qava",
+            "posicion": "sticky",
+            "alto": 824,
+            "top": "92px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "chat-widget-container svelte-1i6h8q8",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "ModalPartial svelte-1npysfh",
+            "posicion": "fixed",
+            "alto": 1024,
+            "top": "512px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "modal-scroll svelte-1npysfh",
+            "posicion": "fixed",
+            "alto": 1024,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "ModalPartial svelte-1npysfh",
+            "posicion": "fixed",
+            "alto": 1024,
+            "top": "512px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "modal-scroll svelte-1npysfh",
+            "posicion": "fixed",
+            "alto": 1024,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "flashBanner svelte-ftg0ns",
+            "posicion": "fixed",
+            "alto": 40,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "flashBanner svelte-ftg0ns",
+            "posicion": "fixed",
+            "alto": 40,
+            "top": "0px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [
+          {
+            "accion": "/us/en/search",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "query",
+                "requerido": false
+              }
+            ],
+            "boton": ""
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "Email",
+                "requerido": true
+              }
+            ],
+            "boton": "Submit"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "FirstName",
+                "requerido": true
+              },
+              {
+                "tipo": "text",
+                "nombre": "LastName",
+                "requerido": true
+              },
+              {
+                "tipo": "tel",
+                "nombre": "",
+                "requerido": true
+              },
+              {
+                "tipo": "text",
+                "nombre": "Company",
+                "requerido": true
+              },
+              {
+                "tipo": "checkbox",
+                "nombre": "Email_Opt_Out__c",
+                "requerido": true
+              }
+            ],
+            "boton": ""
+          }
+        ],
+        "dialogos": 0,
+        "ctasDistintos": 199,
+        "ctasTop": [
+          {
+            "texto": "Learn more",
+            "veces": 15
+          },
+          {
+            "texto": "Overview",
+            "veces": 8
+          },
+          {
+            "texto": "Switch to Square",
+            "veces": 8
+          },
+          {
+            "texto": "Take payments",
+            "veces": 8
+          },
+          {
+            "texto": "Manage your cash flow",
+            "veces": 8
+          },
+          {
+            "texto": "Keep customers coming back",
+            "veces": 6
+          },
+          {
+            "texto": "Schedule and pay your team",
+            "veces": 6
+          },
+          {
+            "texto": "Get started",
+            "veces": 6
+          },
+          {
+            "texto": "Hardware",
+            "veces": 5
+          },
+          {
+            "texto": "Add revenue streams",
+            "veces": 4
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 115,
+        "sinAlt": 0,
+        "altVacio": 105,
+        "sinDimensiones": 60,
+        "lazy": 67,
+        "conSrcset": 0,
+        "interactivos": 473,
+        "objetivosMenores44px": 104,
+        "idioma": "en-US",
+        "landmarks": {
+          "header": 5,
+          "nav": 6,
+          "main": 1,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 21
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "rgb(0, 0, 0)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "rgb(247, 246, 245)",
+            "ratio": 19.46
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(0, 0, 0)",
+            "ratio": 21
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(247, 246, 245)",
+            "ratio": 1.08
+          },
+          {
+            "texto": "rgb(136, 136, 136)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 3.54
+          },
+          {
+            "texto": "rgb(136, 136, 136)",
+            "fondo": "rgb(0, 0, 0)",
+            "ratio": 5.92
+          },
+          {
+            "texto": "rgb(136, 136, 136)",
+            "fondo": "rgb(247, 246, 245)",
+            "ratio": 3.28
+          },
+          {
+            "texto": "rgb(112, 112, 112)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 4.95
+          },
+          {
+            "texto": "rgb(112, 112, 112)",
+            "fondo": "rgb(0, 0, 0)",
+            "ratio": 4.24
+          },
+          {
+            "texto": "rgb(112, 112, 112)",
+            "fondo": "rgb(247, 246, 245)",
+            "ratio": 4.59
+          }
+        ],
+        "fondosTranslucidosOmitidos": 2
+      },
+      "rendimiento": {
+        "pesoTotalKb": 32718.1,
+        "porTipoKb": {
+          "document": 3872.7,
+          "font": 458,
+          "image": 7235.7,
+          "script": 6992.3,
+          "stylesheet": 66.3,
+          "media": 9150.3,
+          "fetch": 4942,
+          "xhr": 1,
+          "ping": 0
+        },
+        "pedidos": {
+          "document": 10,
+          "font": 12,
+          "image": 249,
+          "script": 298,
+          "stylesheet": 6,
+          "media": 4,
+          "fetch": 114,
+          "xhr": 17,
+          "ping": 2
+        },
+        "hostsDistintos": 44,
+        "terceros": [
+          {
+            "host": "pw-renderer-production-c.squarecdn.com",
+            "pedidos": 254
+          },
+          {
+            "host": "images.ctfassets.net",
+            "pedidos": 64
+          },
+          {
+            "host": "browser-intake-datadoghq.com",
+            "pedidos": 32
+          },
+          {
+            "host": "www.google.com",
+            "pedidos": 28
+          },
+          {
+            "host": "assets.ctfassets.net",
+            "pedidos": 20
+          },
+          {
+            "host": "www.googletagmanager.com",
+            "pedidos": 12
+          },
+          {
+            "host": "bat.bing.com",
+            "pedidos": 8
+          },
+          {
+            "host": "www.google.com.bo",
+            "pedidos": 8
+          }
+        ],
+        "fuentesCargadas": [
+          "Square Sans Text 400 normal",
+          "Square Sans Text 400 italic",
+          "Square Sans Text 500 normal",
+          "Square Sans Text 500 italic",
+          "Square Sans Text 600 normal",
+          "Square Sans Text 600 italic",
+          "Square Sans Text 700 normal",
+          "Square Sans Text 700 italic",
+          "Square Sans Text VF 400 700 normal",
+          "Square Sans Text VF 400 700 italic",
+          "Square Sans Mono 400 normal",
+          "Square Sans Mono 500 normal",
+          "Square Sans Mono 600 normal",
+          "Square Sans Mono 700 normal",
+          "Square Sans Mono VF 400 700 normal",
+          "Square Sans Display 400 normal",
+          "Square Sans Display 500 normal",
+          "Square Sans Display 700 normal",
+          "Square Sans Display VF 400 700 normal",
+          "Cash Sans Mono 300 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Power your entire business | Square",
+        "descripcion": "Sell anywhere. Diversify revenue streams. Streamline operations. Manage your staff. Get paid faster. Sign up for Square today.",
+        "canonical": "https://squareup.com/us/en",
+        "og": 7,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "escritorio": {
+      "viewport": "1440x900",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 9444,
+        "alturaPantallas": 10.5,
+        "anchoBody": 1440,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 3
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "main",
+          "clase": "",
+          "altoPx": 8280,
+          "altoPantallas": 9.2,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Local legend or global icon. Make it big on your block.",
+          "cta": "Get started",
+          "imagenes": 133
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "BasePage",
+          "altoPx": 8280,
+          "altoPantallas": 9.2,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Local legend or global icon. Make it big on your block.",
+          "cta": "Get started",
+          "imagenes": 133
+        },
+        {
+          "orden": 2,
+          "etiqueta": "footer",
+          "clase": "FooterComponent svelte-m7dnm8",
+          "altoPx": 1164,
+          "altoPantallas": 1.3,
+          "fondo": "rgb(0, 0, 0)",
+          "titular": "",
+          "cta": "Products",
+          "imagenes": 4
+        }
+      ],
+      "encabezados": {
+        "total": 27,
+        "h1": 1,
+        "saltos": 1,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "Local legend or global icon. Make it big on your block."
+          },
+          {
+            "nivel": 2,
+            "texto": "Whatever your flavor of business, build and grow on your terms."
+          },
+          {
+            "nivel": 2,
+            "texto": "Smooth checkout, every time"
+          },
+          {
+            "nivel": 2,
+            "texto": "See your whole business click into place"
+          },
+          {
+            "nivel": 2,
+            "texto": "See your whole business click into place"
+          },
+          {
+            "nivel": 2,
+            "texto": "Keep your business growing"
+          },
+          {
+            "nivel": 2,
+            "texto": "Make smart decisions, fast"
+          },
+          {
+            "nivel": 2,
+            "texto": "Run your entire business with one plan"
+          },
+          {
+            "nivel": 2,
+            "texto": "Square Free"
+          },
+          {
+            "nivel": 2,
+            "texto": "Square Plus"
+          },
+          {
+            "nivel": 2,
+            "texto": "Square Premium"
+          },
+          {
+            "nivel": 2,
+            "texto": "Make your next move"
+          },
+          {
+            "nivel": 2,
+            "texto": "Get the latest updates from Square"
+          },
+          {
+            "nivel": 2,
+            "texto": "Nice to meet you."
+          },
+          {
+            "nivel": 6,
+            "texto": "Products"
+          },
+          {
+            "nivel": 6,
+            "texto": "Products"
+          },
+          {
+            "nivel": 6,
+            "texto": "Business Types"
+          },
+          {
+            "nivel": 6,
+            "texto": "Business Types"
+          },
+          {
+            "nivel": 6,
+            "texto": "Resources"
+          },
+          {
+            "nivel": 6,
+            "texto": "Resources"
+          },
+          {
+            "nivel": 6,
+            "texto": "Contact"
+          },
+          {
+            "nivel": 6,
+            "texto": "Contact"
+          },
+          {
+            "nivel": 6,
+            "texto": "Square"
+          },
+          {
+            "nivel": 6,
+            "texto": "Square"
+          },
+          {
+            "nivel": 4,
+            "texto": ""
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "18px / lh 1.50 / ls normal / w 500",
+            "veces": 238
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 500",
+            "veces": 79
+          },
+          {
+            "valor": "14px / lh 1.50 / ls normal / w 500",
+            "veces": 58
+          },
+          {
+            "valor": "14px / lh 1.50 / ls 0.14px / w 400",
+            "veces": 46
+          },
+          {
+            "valor": "40px / lh 1.13 / ls -0.8px / w 400",
+            "veces": 44
+          },
+          {
+            "valor": "14px / lh 1.50 / ls 0.14px / w 500",
+            "veces": 41
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 38
+          },
+          {
+            "valor": "28px / lh 1.30 / ls normal / w 500",
+            "veces": 25
+          },
+          {
+            "valor": "12px / lh 1.00 / ls normal / w 500",
+            "veces": 20
+          },
+          {
+            "valor": "14px / lh 1.50 / ls 1.4px / w 500",
+            "veces": 15
+          },
+          {
+            "valor": "16px / lh 1.75 / ls normal / w 500",
+            "veces": 13
+          },
+          {
+            "valor": "81px / lh 1.00 / ls -2.916px / w 400",
+            "veces": 11
+          },
+          {
+            "valor": "56px / lh 1.00 / ls -1.68px / w 500",
+            "veces": 11
+          },
+          {
+            "valor": "14px / lh 1.50 / ls 0.28px / w 400",
+            "veces": 9
+          },
+          {
+            "valor": "20px / lh 1.20 / ls -0.2px / w 500",
+            "veces": 7
+          },
+          {
+            "valor": "12px / lh 1.00 / ls normal / w 400",
+            "veces": 4
+          }
+        ],
+        "familias": [
+          {
+            "valor": "Cash Sans",
+            "veces": 401
+          },
+          {
+            "valor": "Square Sans Text VF",
+            "veces": 194
+          },
+          {
+            "valor": "Exact Block",
+            "veces": 62
+          },
+          {
+            "valor": "Cash Sans Mono",
+            "veces": 15
+          },
+          {
+            "valor": "Square Sans Display VF",
+            "veces": 6
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(0, 0, 0)",
+            "veces": 381
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 208
+          },
+          {
+            "valor": "rgb(136, 136, 136)",
+            "veces": 34
+          },
+          {
+            "valor": "rgb(112, 112, 112)",
+            "veces": 24
+          },
+          {
+            "valor": "rgb(187, 187, 187)",
+            "veces": 13
+          },
+          {
+            "valor": "rgb(0, 106, 255)",
+            "veces": 7
+          },
+          {
+            "valor": "rgb(153, 153, 153)",
+            "veces": 7
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0)",
+            "veces": 2
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 21
+          },
+          {
+            "valor": "rgb(0, 0, 0)",
+            "veces": 20
+          },
+          {
+            "valor": "rgb(247, 246, 245)",
+            "veces": 5
+          },
+          {
+            "valor": "rgb(0, 106, 255)",
+            "veces": 4
+          },
+          {
+            "valor": "rgba(149, 149, 149, 0.5)",
+            "veces": 4
+          },
+          {
+            "valor": "rgb(11, 182, 52)",
+            "veces": 2
+          },
+          {
+            "valor": "rgba(242, 242, 242, 0.8)",
+            "veces": 1
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.25)",
+            "veces": 1
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "2px",
+            "veces": 428
+          },
+          {
+            "valor": "10px",
+            "veces": 393
+          },
+          {
+            "valor": "20px",
+            "veces": 243
+          },
+          {
+            "valor": "3px",
+            "veces": 229
+          },
+          {
+            "valor": "12px",
+            "veces": 47
+          },
+          {
+            "valor": "40px",
+            "veces": 36
+          },
+          {
+            "valor": "15px",
+            "veces": 34
+          },
+          {
+            "valor": "5px",
+            "veces": 26
+          },
+          {
+            "valor": "60px",
+            "veces": 23
+          },
+          {
+            "valor": "32px",
+            "veces": 16
+          },
+          {
+            "valor": "16px",
+            "veces": 15
+          },
+          {
+            "valor": "30px",
+            "veces": 12
+          },
+          {
+            "valor": "4px",
+            "veces": 10
+          },
+          {
+            "valor": "80px",
+            "veces": 10
+          },
+          {
+            "valor": "-20px",
+            "veces": 10
+          },
+          {
+            "valor": "18px",
+            "veces": 8
+          }
+        ],
+        "radios": [
+          {
+            "valor": "6px",
+            "veces": 228
+          },
+          {
+            "valor": "4px",
+            "veces": 42
+          },
+          {
+            "valor": "10px",
+            "veces": 27
+          },
+          {
+            "valor": "50px",
+            "veces": 20
+          },
+          {
+            "valor": "20px",
+            "veces": 13
+          },
+          {
+            "valor": "5px",
+            "veces": 8
+          },
+          {
+            "valor": "100%",
+            "veces": 8
+          },
+          {
+            "valor": "10000px",
+            "veces": 7
+          },
+          {
+            "valor": "17982px",
+            "veces": 4
+          },
+          {
+            "valor": "16px",
+            "veces": 1
+          }
+        ],
+        "radiosDistintos": 11,
+        "sombras": [
+          {
+            "valor": "rgb(112, 112, 112) 0px 0px 0px 1px inset",
+            "veces": 7
+          },
+          {
+            "valor": "rgb(112, 112, 112) 0px 0px 0px 1px",
+            "veces": 3
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.16) 0px 4px 20px 0px",
+            "veces": 2
+          },
+          {
+            "valor": "rgba(0, 0, 0, 0.16) 0px 4px 32px 0px",
+            "veces": 1
+          }
+        ],
+        "sombrasDistintas": 4,
+        "zIndex": [
+          {
+            "valor": "1",
+            "veces": 50
+          },
+          {
+            "valor": "0",
+            "veces": 13
+          },
+          {
+            "valor": "8",
+            "veces": 8
+          },
+          {
+            "valor": "5",
+            "veces": 5
+          },
+          {
+            "valor": "6",
+            "veces": 4
+          },
+          {
+            "valor": "1000",
+            "veces": 4
+          },
+          {
+            "valor": "-1",
+            "veces": 4
+          },
+          {
+            "valor": "4",
+            "veces": 3
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "background-color 0.15s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 34
+          },
+          {
+            "valor": "transform 0.15s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 25
+          },
+          {
+            "valor": "opacity 0.25s",
+            "veces": 21
+          },
+          {
+            "valor": "background-size 0.3s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 17
+          },
+          {
+            "valor": "opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 14
+          },
+          {
+            "valor": "opacity 0.6s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 10
+          },
+          {
+            "valor": "0.6s cubic-bezier(0, 0, 0.2, 1) -0.4s",
+            "veces": 10
+          },
+          {
+            "valor": "opacity 0.4s cubic-bezier(0.4, 0, 0.6, 1)",
+            "veces": 10
+          },
+          {
+            "valor": "opacity 0.15s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 10
+          },
+          {
+            "valor": "color 0.1s linear 0.275s",
+            "veces": 9
+          },
+          {
+            "valor": "opacity 0.4s cubic-bezier(0.4, 0, 1, 1), visibility 0.4s cubic-bezier(",
+            "veces": 9
+          },
+          {
+            "valor": "opacity 0.3s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 8
+          }
+        ],
+        "transicionesDistintas": 49,
+        "hojasLeidas": 6,
+        "unidades": {
+          "em": 8,
+          "rem": 4,
+          "px": 408,
+          "clamp": 0,
+          "vw": 0
+        },
+        "keyframesDeclarados": 2,
+        "transitionAll": 6,
+        "tieneReducedMotion": false,
+        "breakpointsPx": [
+          {
+            "px": 640,
+            "veces": 4
+          },
+          {
+            "px": 740,
+            "veces": 2
+          },
+          {
+            "px": 1024,
+            "veces": 2
+          }
+        ]
+      },
+      "scroll": {
+        "muestras": [
+          {
+            "y": 0,
+            "conTransform": 0,
+            "navFija": false
+          },
+          {
+            "y": 2136,
+            "conTransform": 0,
+            "navFija": false
+          },
+          {
+            "y": 4345,
+            "conTransform": 0,
+            "navFija": false
+          },
+          {
+            "y": 6408,
+            "conTransform": 0,
+            "navFija": false
+          },
+          {
+            "y": 8544,
+            "conTransform": 0,
+            "navFija": false
+          }
+        ],
+        "hayMovimientoLigadoAlScroll": false,
+        "posicionesDistintas": 1,
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "Scrim svelte-1ryqd2h",
+            "posicion": "fixed",
+            "alto": 900,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "mobile-global-nav-cta-button-container svelte-rrwz9",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "auto"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "cta-subnav-container svelte-1lguc4e hiddenUntilScrolled useT",
+            "posicion": "fixed",
+            "alto": 72,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "cta-button-container svelte-1ll27mu disableLeftCtaIcon subna",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "auto"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "hero-wrapper svelte-14vhzde",
+            "posicion": "sticky",
+            "alto": 956,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "HomePageV3AudienceMoment__wrapper svelte-m4qava",
+            "posicion": "sticky",
+            "alto": 540,
+            "top": "20px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "chat-widget-container svelte-1i6h8q8",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "ModalPartial svelte-1npysfh",
+            "posicion": "fixed",
+            "alto": 900,
+            "top": "450px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "modal-scroll svelte-1npysfh",
+            "posicion": "fixed",
+            "alto": 900,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "ModalPartial svelte-1npysfh",
+            "posicion": "fixed",
+            "alto": 900,
+            "top": "450px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "modal-scroll svelte-1npysfh",
+            "posicion": "fixed",
+            "alto": 900,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "flashBanner svelte-ftg0ns",
+            "posicion": "fixed",
+            "alto": 40,
+            "top": "0px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [
+          {
+            "accion": "/us/en/search",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "query",
+                "requerido": false
+              }
+            ],
+            "boton": ""
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "Email",
+                "requerido": true
+              }
+            ],
+            "boton": "Submit"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "FirstName",
+                "requerido": true
+              },
+              {
+                "tipo": "text",
+                "nombre": "LastName",
+                "requerido": true
+              },
+              {
+                "tipo": "tel",
+                "nombre": "",
+                "requerido": true
+              },
+              {
+                "tipo": "text",
+                "nombre": "Company",
+                "requerido": true
+              },
+              {
+                "tipo": "checkbox",
+                "nombre": "Email_Opt_Out__c",
+                "requerido": true
+              }
+            ],
+            "boton": ""
+          }
+        ],
+        "dialogos": 0,
+        "ctasDistintos": 199,
+        "ctasTop": [
+          {
+            "texto": "Learn more",
+            "veces": 15
+          },
+          {
+            "texto": "Overview",
+            "veces": 8
+          },
+          {
+            "texto": "Switch to Square",
+            "veces": 8
+          },
+          {
+            "texto": "Take payments",
+            "veces": 8
+          },
+          {
+            "texto": "Manage your cash flow",
+            "veces": 8
+          },
+          {
+            "texto": "Keep customers coming back",
+            "veces": 6
+          },
+          {
+            "texto": "Schedule and pay your team",
+            "veces": 6
+          },
+          {
+            "texto": "Get started",
+            "veces": 6
+          },
+          {
+            "texto": "Hardware",
+            "veces": 5
+          },
+          {
+            "texto": "Add revenue streams",
+            "veces": 4
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 125,
+        "sinAlt": 0,
+        "altVacio": 115,
+        "sinDimensiones": 70,
+        "lazy": 67,
+        "conSrcset": 0,
+        "interactivos": 473,
+        "objetivosMenores44px": 102,
+        "idioma": "en-US",
+        "landmarks": {
+          "header": 5,
+          "nav": 6,
+          "main": 1,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 21
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "rgb(0, 0, 0)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(0, 0, 0)",
+            "fondo": "rgb(247, 246, 245)",
+            "ratio": 19.46
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(0, 0, 0)",
+            "ratio": 21
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(247, 246, 245)",
+            "ratio": 1.08
+          },
+          {
+            "texto": "rgb(136, 136, 136)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 3.54
+          },
+          {
+            "texto": "rgb(136, 136, 136)",
+            "fondo": "rgb(0, 0, 0)",
+            "ratio": 5.92
+          },
+          {
+            "texto": "rgb(136, 136, 136)",
+            "fondo": "rgb(247, 246, 245)",
+            "ratio": 3.28
+          },
+          {
+            "texto": "rgb(112, 112, 112)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 4.95
+          },
+          {
+            "texto": "rgb(112, 112, 112)",
+            "fondo": "rgb(0, 0, 0)",
+            "ratio": 4.24
+          },
+          {
+            "texto": "rgb(112, 112, 112)",
+            "fondo": "rgb(247, 246, 245)",
+            "ratio": 4.59
+          }
+        ],
+        "fondosTranslucidosOmitidos": 3
+      },
+      "rendimiento": {
+        "pesoTotalKb": 42675,
+        "porTipoKb": {
+          "document": 3874.9,
+          "font": 616.7,
+          "script": 9515.8,
+          "image": 10757.7,
+          "stylesheet": 66.3,
+          "media": 12898.6,
+          "fetch": 4943.4,
+          "xhr": 1.7,
+          "ping": 0
+        },
+        "pedidos": {
+          "document": 16,
+          "font": 21,
+          "script": 463,
+          "image": 446,
+          "stylesheet": 9,
+          "media": 8,
+          "fetch": 202,
+          "xhr": 38,
+          "ping": 5
+        },
+        "hostsDistintos": 44,
+        "terceros": [
+          {
+            "host": "pw-renderer-production-c.squarecdn.com",
+            "pedidos": 254
+          },
+          {
+            "host": "images.ctfassets.net",
+            "pedidos": 102
+          },
+          {
+            "host": "browser-intake-datadoghq.com",
+            "pedidos": 71
+          },
+          {
+            "host": "www.google.com",
+            "pedidos": 56
+          },
+          {
+            "host": "www.googletagmanager.com",
+            "pedidos": 25
+          },
+          {
+            "host": "assets.ctfassets.net",
+            "pedidos": 20
+          },
+          {
+            "host": "bat.bing.com",
+            "pedidos": 14
+          },
+          {
+            "host": "www.google.com.bo",
+            "pedidos": 14
+          }
+        ],
+        "fuentesCargadas": [
+          "Square Sans Text 400 normal",
+          "Square Sans Text 400 italic",
+          "Square Sans Text 500 normal",
+          "Square Sans Text 500 italic",
+          "Square Sans Text 600 normal",
+          "Square Sans Text 600 italic",
+          "Square Sans Text 700 normal",
+          "Square Sans Text 700 italic",
+          "Square Sans Text VF 400 700 normal",
+          "Square Sans Text VF 400 700 italic",
+          "Square Sans Mono 400 normal",
+          "Square Sans Mono 500 normal",
+          "Square Sans Mono 600 normal",
+          "Square Sans Mono 700 normal",
+          "Square Sans Mono VF 400 700 normal",
+          "Square Sans Display 400 normal",
+          "Square Sans Display 500 normal",
+          "Square Sans Display 700 normal",
+          "Square Sans Display VF 400 700 normal",
+          "Cash Sans Mono 300 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Power your entire business | Square",
+        "descripcion": "Sell anywhere. Diversify revenue streams. Streamline operations. Manage your staff. Get paid faster. Sign up for Square today.",
+        "canonical": "https://squareup.com/us/en",
+        "og": 7,
+        "datosEstructurados": 0
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    }
+  },
+  "noSePudoMedir": [],
+  "reducedMotion": {
+    "conAnimacion": 171,
+    "conTransicion": 58
+  },
+  "requiereOjoHumano": [
+    "Intencion de diseno: por que eligieron ESTA direccion visual y no otra.",
+    "Calidad del copy: si la promesa es creible y si los numeros estan respaldados.",
+    "Contenido detras de login, muro de cookies o interaccion (paso 2 de un popup, estados de error).",
+    "Si el movimiento AYUDA a entender o solo decora: eso se juzga mirando, no midiendo."
+  ]
+}

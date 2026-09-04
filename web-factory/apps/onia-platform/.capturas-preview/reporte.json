@@ -1,0 +1,527 @@
+{
+  "overflow": [],
+  "contraste": [
+    {
+      "route": "/preview",
+      "width": 390,
+      "bad": [
+        {
+          "texto": ".",
+          "cls": "",
+          "px": 22,
+          "ratio": 1.94,
+          "min": 3,
+          "fg": "rgb(0, 210, 106)",
+          "bg": "rgb(249,251,250)"
+        }
+      ]
+    },
+    {
+      "route": "/preview/empezar",
+      "width": 390,
+      "bad": [
+        {
+          "texto": ".",
+          "cls": "",
+          "px": 22,
+          "ratio": 1.94,
+          "min": 3,
+          "fg": "rgb(0, 210, 106)",
+          "bg": "rgb(249,251,250)"
+        }
+      ]
+    },
+    {
+      "route": "/preview/comparativa",
+      "width": 390,
+      "bad": [
+        {
+          "texto": ".",
+          "cls": "",
+          "px": 22,
+          "ratio": 1.94,
+          "min": 3,
+          "fg": "rgb(0, 210, 106)",
+          "bg": "rgb(249,251,250)"
+        }
+      ]
+    },
+    {
+      "route": "/preview/facturacion",
+      "width": 390,
+      "bad": [
+        {
+          "texto": ".",
+          "cls": "",
+          "px": 22,
+          "ratio": 1.94,
+          "min": 3,
+          "fg": "rgb(0, 210, 106)",
+          "bg": "rgb(249,251,250)"
+        }
+      ]
+    },
+    {
+      "route": "/preview/contacto",
+      "width": 390,
+      "bad": [
+        {
+          "texto": ".",
+          "cls": "",
+          "px": 22,
+          "ratio": 1.94,
+          "min": 3,
+          "fg": "rgb(0, 210, 106)",
+          "bg": "rgb(249,251,250)"
+        }
+      ]
+    },
+    {
+      "route": "/preview",
+      "width": 768,
+      "bad": [
+        {
+          "texto": ".",
+          "cls": "",
+          "px": 22,
+          "ratio": 1.94,
+          "min": 3,
+          "fg": "rgb(0, 210, 106)",
+          "bg": "rgb(249,251,250)"
+        },
+        {
+          "texto": "Dental",
+          "cls": "preview_pillRow__sZrW1",
+          "px": 12,
+          "ratio": 1.09,
+          "min": 4.5,
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(243,245,244)"
+        },
+        {
+          "texto": "Comercio",
+          "cls": "preview_pillRow__sZrW1",
+          "px": 12,
+          "ratio": 1.09,
+          "min": 4.5,
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(243,245,244)"
+        },
+        {
+          "texto": "Importadora",
+          "cls": "preview_pillRow__sZrW1",
+          "px": 12,
+          "ratio": 1.09,
+          "min": 4.5,
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(243,245,244)"
+        },
+        {
+          "texto": "Estética",
+          "cls": "preview_pillRow__sZrW1",
+          "px": 12,
+          "ratio": 1.09,
+          "min": 4.5,
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(243,245,244)"
+        },
+        {
+          "texto": "Veterinaria",
+          "cls": "preview_pillRow__sZrW1",
+          "px": 12,
+          "ratio": 1.09,
+          "min": 4.5,
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(243,245,244)"
+        },
+        {
+          "texto": "Servicios",
+          "cls": "preview_pillRow__sZrW1",
+          "px": 12,
+          "ratio": 1.09,
+          "min": 4.5,
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(243,245,244)"
+        }
+      ]
+    },
+    {
+      "route": "/preview/empezar",
+      "width": 768,
+      "bad": [
+        {
+          "texto": ".",
+          "cls": "",
+          "px": 22,
+          "ratio": 1.94,
+          "min": 3,
+          "fg": "rgb(0, 210, 106)",
+          "bg": "rgb(249,251,250)"
+        }
+      ]
+    },
+    {
+      "route": "/preview/comparativa",
+      "width": 768,
+      "bad": [
+        {
+          "texto": ".",
+          "cls": "",
+          "px": 22,
+          "ratio": 1.94,
+          "min": 3,
+          "fg": "rgb(0, 210, 106)",
+          "bg": "rgb(249,251,250)"
+        }
+      ]
+    },
+    {
+      "route": "/preview/facturacion",
+      "width": 768,
+      "bad": [
+        {
+          "texto": ".",
+          "cls": "",
+          "px": 22,
+          "ratio": 1.94,
+          "min": 3,
+          "fg": "rgb(0, 210, 106)",
+          "bg": "rgb(249,251,250)"
+        }
+      ]
+    },
+    {
+      "route": "/preview/contacto",
+      "width": 768,
+      "bad": [
+        {
+          "texto": ".",
+          "cls": "",
+          "px": 22,
+          "ratio": 1.94,
+          "min": 3,
+          "fg": "rgb(0, 210, 106)",
+          "bg": "rgb(249,251,250)"
+        }
+      ]
+    },
+    {
+      "route": "/preview",
+      "width": 1440,
+      "bad": [
+        {
+          "texto": ".",
+          "cls": "",
+          "px": 22,
+          "ratio": 1.94,
+          "min": 3,
+          "fg": "rgb(0, 210, 106)",
+          "bg": "rgb(249,251,250)"
+        },
+        {
+          "texto": "Dental",
+          "cls": "preview_pillRow__sZrW1",
+          "px": 12,
+          "ratio": 1.09,
+          "min": 4.5,
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(243,245,244)"
+        },
+        {
+          "texto": "Comercio",
+          "cls": "preview_pillRow__sZrW1",
+          "px": 12,
+          "ratio": 1.09,
+          "min": 4.5,
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(243,245,244)"
+        },
+        {
+          "texto": "Importadora",
+          "cls": "preview_pillRow__sZrW1",
+          "px": 12,
+          "ratio": 1.09,
+          "min": 4.5,
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(243,245,244)"
+        },
+        {
+          "texto": "Estética",
+          "cls": "preview_pillRow__sZrW1",
+          "px": 12,
+          "ratio": 1.09,
+          "min": 4.5,
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(243,245,244)"
+        },
+        {
+          "texto": "Veterinaria",
+          "cls": "preview_pillRow__sZrW1",
+          "px": 12,
+          "ratio": 1.09,
+          "min": 4.5,
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(243,245,244)"
+        },
+        {
+          "texto": "Servicios",
+          "cls": "preview_pillRow__sZrW1",
+          "px": 12,
+          "ratio": 1.09,
+          "min": 4.5,
+          "fg": "rgb(255, 255, 255)",
+          "bg": "rgb(243,245,244)"
+        }
+      ]
+    },
+    {
+      "route": "/preview/empezar",
+      "width": 1440,
+      "bad": [
+        {
+          "texto": ".",
+          "cls": "",
+          "px": 22,
+          "ratio": 1.94,
+          "min": 3,
+          "fg": "rgb(0, 210, 106)",
+          "bg": "rgb(249,251,250)"
+        }
+      ]
+    },
+    {
+      "route": "/preview/comparativa",
+      "width": 1440,
+      "bad": [
+        {
+          "texto": ".",
+          "cls": "",
+          "px": 22,
+          "ratio": 1.94,
+          "min": 3,
+          "fg": "rgb(0, 210, 106)",
+          "bg": "rgb(249,251,250)"
+        }
+      ]
+    },
+    {
+      "route": "/preview/facturacion",
+      "width": 1440,
+      "bad": [
+        {
+          "texto": ".",
+          "cls": "",
+          "px": 22,
+          "ratio": 1.94,
+          "min": 3,
+          "fg": "rgb(0, 210, 106)",
+          "bg": "rgb(249,251,250)"
+        }
+      ]
+    },
+    {
+      "route": "/preview/contacto",
+      "width": 1440,
+      "bad": [
+        {
+          "texto": ".",
+          "cls": "",
+          "px": 22,
+          "ratio": 1.94,
+          "min": 3,
+          "fg": "rgb(0, 210, 106)",
+          "bg": "rgb(249,251,250)"
+        }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "route": "/preview",
+      "robots": "noindex, nofollow",
+      "title": "Onia — preview del rediseño",
+      "anclas": 44
+    },
+    {
+      "route": "/preview/empezar",
+      "robots": "noindex, nofollow",
+      "title": "Empezá — preview del rediseño",
+      "anclas": 36
+    },
+    {
+      "route": "/preview/comparativa",
+      "robots": "noindex, nofollow",
+      "title": "Comparativa — preview del rediseño",
+      "anclas": 34
+    },
+    {
+      "route": "/preview/facturacion",
+      "robots": "noindex, nofollow",
+      "title": "Facturación SIAT — preview del rediseño",
+      "anclas": 33
+    },
+    {
+      "route": "/preview/contacto",
+      "robots": "noindex, nofollow",
+      "title": "Contacto — preview del rediseño",
+      "anclas": 36
+    },
+    {
+      "route": "/preview/rubros",
+      "robots": "noindex, nofollow",
+      "title": "Onia — preview del rediseño",
+      "anclas": 32
+    },
+    {
+      "route": "/preview/precios",
+      "robots": "noindex, nofollow",
+      "title": "Onia — preview del rediseño",
+      "anclas": 37
+    },
+    {
+      "route": "/preview/agentes",
+      "robots": "noindex, nofollow",
+      "title": "Onia — preview del rediseño",
+      "anclas": 34
+    },
+    {
+      "route": "/preview/chatbot",
+      "robots": "noindex, nofollow",
+      "title": "Onia — preview del rediseño",
+      "anclas": 34
+    }
+  ],
+  "notas": [],
+  "menu": {
+    "burgerVisible": true,
+    "dialogAbierto": true,
+    "focoInicial": "Cerrar",
+    "tabsFueraDelDialogo": 1,
+    "anillodeFoco": "solid 2px rgb(1, 97, 65)",
+    "escapeCierra": true,
+    "navegaA": "/preview/comparativa"
+  },
+  "reducedMotion": {
+    "a[class*='btn']": {
+      "transition": "0s / none",
+      "animation": "0s"
+    },
+    "[class*='word']": {
+      "transition": "0s / all",
+      "animation": "0s"
+    },
+    "[class*='navLink']": {
+      "transition": "0s / none",
+      "animation": "0s"
+    },
+    "[class*='burger']": {
+      "transition": "0s / none",
+      "animation": "0s"
+    },
+    "[class*='link_']": {
+      "transition": "0s / none",
+      "animation": "0s"
+    },
+    "roll": {
+      "transform": "none",
+      "transition": "0s"
+    },
+    "textoAMedioCamino": [
+      " op=0",
+      " op=0",
+      " op=0",
+      " op=0",
+      " op=0"
+    ]
+  },
+  "destinos": [
+    {
+      "href": "/preview",
+      "desde": "/preview",
+      "status": 200
+    },
+    {
+      "href": "/preview/rubros",
+      "desde": "/preview",
+      "status": 200
+    },
+    {
+      "href": "/preview/precios",
+      "desde": "/preview",
+      "status": 200
+    },
+    {
+      "href": "/preview/comparativa",
+      "desde": "/preview",
+      "status": 200
+    },
+    {
+      "href": "/preview/facturacion",
+      "desde": "/preview",
+      "status": 200
+    },
+    {
+      "href": "/preview/contacto",
+      "desde": "/preview",
+      "status": 200
+    },
+    {
+      "href": "https://app.onia.com.bo/login",
+      "desde": "/preview",
+      "status": 200
+    },
+    {
+      "href": "/preview/empezar",
+      "desde": "/preview",
+      "status": 200
+    },
+    {
+      "href": "/preview/agentes",
+      "desde": "/preview",
+      "status": 200
+    },
+    {
+      "href": "/preview/chatbot",
+      "desde": "/preview",
+      "status": 200
+    },
+    {
+      "href": "/privacidad",
+      "desde": "/preview",
+      "status": 200
+    },
+    {
+      "href": "/terminos",
+      "desde": "/preview",
+      "status": 200
+    },
+    {
+      "href": "https://wa.me/59175414930?text=Hola%2C%20vengo%20de%20la%20web%20de%20Onia.%20Quiero%20saber%20si%20me%20sirve%20para%20mi%20negocio.",
+      "desde": "/preview",
+      "status": 200
+    },
+    {
+      "href": "https://app.onia.com.bo/register",
+      "desde": "/preview/empezar",
+      "status": 200
+    },
+    {
+      "href": "https://cal.onia.com.bo/onia/consulta-inicial",
+      "desde": "/preview/contacto",
+      "status": 200
+    },
+    {
+      "href": "https://cal.onia.com.bo/onia/demo-onia",
+      "desde": "/preview/contacto",
+      "status": 200
+    }
+  ],
+  "ctaHeaderLlegaA": "/preview/empezar",
+  "entrarLlegaA": "https://app.onia.com.bo/login",
+  "paginaViejaSiat": {
+    "status": 200,
+    "tieneFAQ": true,
+    "tienePortalGratis": true,
+    "tieneJsonLd": true
+  }
+}

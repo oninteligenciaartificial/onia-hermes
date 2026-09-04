@@ -34,7 +34,21 @@ export function slotLabel(slots, key) {
 }
 
 export function activeSlots(state, config) {
+  // El fallback a `config.slots` con `slotsOffered` vacio es DELIBERADO y esta documentado en
+  // followUpTemplate: el texto libre y la plantilla paga tienen que mirar los mismos horarios, asi
+  // que una conversacion que nacio sin horarios igual usa los del config si despues se definen.
+  // No se toca para tapar el placeholder — eso se resuelve en `hayHorarioReal`, que mira el flag
+  // `pending`, que es la señal de verdad. Cambiarlo aca movia una ruta de plantillas PAGAS.
   return state.slotsOffered && state.slotsOffered.length ? state.slotsOffered : config.slots;
+}
+
+/**
+ * ¿Hay algun horario de VERDAD para ofrecer? Un slot `pending` es un placeholder, no una opcion.
+ * Cubre los dos caminos por los que la conversacion se queda sin horarios: `slotsOffered: []`
+ * (welcomeResult no ofrecio ninguno) y `config.slots` todavia en "pendiente de definir".
+ */
+function hayHorarioReal(state, config) {
+  return (activeSlots(state, config) || []).some((slot) => slot && !slot.pending);
 }
 
 function catalogo(config) {
@@ -90,7 +104,11 @@ export function varsFor(state, config, extra = {}) {
     bot: config.identity.botName,
     demo_duracion: demo.duracionFrase,
     demo_modalidad: demo.modalidad,
-    horario_frase: horario.frase || DEFAULT_CONFIG.businessHours.frase,
+    // El dueno suele escribir su horario como oracion completa ("Atendemos de lunes...").
+    // Las plantillas que consumen {{horario_frase}} ya ponen el verbo o el contexto
+    // ("Atendemos {{...}}", "en horario de oficina ({{...}})"): sin este strip salia
+    // "Atendemos Atendemos de lunes..." — visto en produccion (conv 39, 2026-08-29).
+    horario_frase: (horario.frase || DEFAULT_CONFIG.businessHours.frase).replace(/^\s*atendemos\s+/i, ""),
     slot_a: slotLabel(slots, "A"),
     slot_b: slotLabel(slots, "B"),
     // Un solo bloque: modulos + servicios. Ver serviceList sobre por que no son dos variables.
@@ -180,7 +198,14 @@ export function pendingBranch(state, config) {
 /** La pregunta pendiente del estado actual: con esto una respuesta off-guion vuelve al embudo. */
 export function pendingAsk(state, config) {
   // Antes de reservar lo unico pendiente es elegir horario: los datos ya no se piden aca.
-  if (ESPERA_HORARIO_STAGES.includes(state.botStage)) return say("PENDING_HORARIO", state, config).text;
+  // SIN HORARIOS REALES NO SE PIDE ELEGIR. Este es el punto por el que el placeholder salio a
+  // produccion, y tapa DOS salidas de una sola vez: bot-engine.mjs pega este texto al final de la
+  // respuesta determinista y ademas se lo pasa al LLM como `pendingQuestion` — de ahi salieron las
+  // parafrasis "horario A o horario B" (conv 49, 2026-09-03). Si la re-pregunta no plantea una
+  // eleccion, no hay literal que filtrar ni nada que el modelo pueda parafrasear.
+  if (ESPERA_HORARIO_STAGES.includes(state.botStage)) {
+    return say(hayHorarioReal(state, config) ? "PENDING_HORARIO" : "PENDING_HORARIO_SIN_HORARIOS", state, config).text;
+  }
   if (state.botStage === "demo_agendada") {
     const missing = missingFields(state.qualification, config);
     if (missing.length > 0) {

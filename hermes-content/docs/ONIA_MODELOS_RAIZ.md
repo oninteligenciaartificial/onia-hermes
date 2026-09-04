@@ -67,7 +67,7 @@ Mara  · Soul JUBILADO            b8f5c353-…  (pelirroja — NO USAR)
 
 ## 4. Las 4 reglas de producción que costaron caro aprender
 
-1. **Primer plano de cara → `nano_banana_2` + Element (~2 cr). Cuerpo y escena → `soul_2` (0,12 cr).**
+1. **Primer plano de cara → `nano_banana_2` + Element (~2 cr). Cuerpo y escena → `text2image_soul_v2` (0,12 cr).**
    El Soul se rompe en plano cerrado: inventa la zona media y sale cara de IA. Se generaron
    11 avatares malos antes de descubrirlo.
 2. **Antes de generar, revisar `references/models/`.** Ya existen photoshoot aprobado de 9

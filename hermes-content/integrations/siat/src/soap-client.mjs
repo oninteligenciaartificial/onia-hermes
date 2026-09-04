@@ -61,6 +61,12 @@ export const SIAT_SERVICES = {
   FACTURACION_SINCRONIZACION: "FacturacionSincronizacion",
   FACTURACION_COMPRA_VENTA: "ServicioFacturacionCompraVenta",
   FACTURACION_COMPUTARIZADA: "ServicioFacturacionComputarizada",
+  // Notas de credito-debito (documento sector 24). Sus operaciones NO se llaman
+  // igual que las de factura: recepcionDocumentoAjuste / anulacionDocumentoAjuste
+  // / reversionAnulacionDocumentoAjuste (WSDL del piloto, leido 2026-08-27).
+  FACTURACION_DOCUMENTO_AJUSTE: "ServicioFacturacionDocumentoAjuste",
+  // Modalidad electronica en linea (etapa VIII, requiere firma digital).
+  FACTURACION_ELECTRONICA: "ServicioFacturacionElectronica",
   FACTURACION_OPERACIONES: "FacturacionOperaciones",
 };
 
@@ -90,6 +96,22 @@ export const MODALITY_CODES = {
 // exacto]). `fields` = campos EN ORDEN segun la doc oficial ([VERIFICAR orden
 // exacto contra el XSD]; optional:true no se emite si viene vacio). `verified`
 // refleja si los CAMPOS estan confirmados campo por campo contra doc oficial.
+// base solicitudRecepcion (orden del XSD, alfabetico JAXB): la comparten todas
+// las operaciones de recepcion/anulacion/reversion, de factura y de ajuste.
+const RECEPCION_BASE_FIELDS = [
+  { name: "codigoAmbiente" },
+  { name: "codigoDocumentoSector" },
+  { name: "codigoEmision" },
+  { name: "codigoModalidad" },
+  { name: "codigoPuntoVenta", optional: true }, // minOccurs=0; 0 si no aplica
+  { name: "codigoSistema" },
+  { name: "codigoSucursal" },
+  { name: "cufd" },
+  { name: "cuis" },
+  { name: "nit" },
+  { name: "tipoFacturaDocumento" },
+];
+
 export const SOAP_OPERATIONS = {
   // Health-check de disponibilidad del servicio (existe en los 3 servicios v2).
   // VERIFICADO EN VIVO 2026-08-06: el XSD define sequence VACIA sin wrapper, y el
@@ -209,6 +231,33 @@ export const SOAP_OPERATIONS = {
       { name: "tipoFacturaDocumento" },
       { name: "cuf" }, // CUF de la factura anulada a revertir
     ],
+    verified: true,
+  },
+  // ---- Documento de AJUSTE (nota de credito-debito, sector 24) ----
+  // Mismos DTO que la factura (solicitudRecepcionFactura / solicitudAnulacion /
+  // solicitudReversionAnulacion) pero en ServicioFacturacionDocumentoAjuste, con
+  // operaciones y wrappers propios. VERIFICADO 2026-09-03 contra el WSDL del
+  // piloto (ServicioFacturacionDocumentoAjuste?wsdl=ServicioFacturacion.wsdl).
+  // Mandar la nota a recepcionFactura da SIN 995 "SERVICIO NO DISPONIBLE".
+  recepcionDocumentoAjuste: {
+    service: "FACTURACION_DOCUMENTO_AJUSTE",
+    operation: "recepcionDocumentoAjuste",
+    requestElement: "SolicitudServicioRecepcionDocumentoAjuste",
+    fields: [...RECEPCION_BASE_FIELDS, { name: "archivo" }, { name: "fechaEnvio" }, { name: "hashArchivo" }],
+    verified: true,
+  },
+  anulacionDocumentoAjuste: {
+    service: "FACTURACION_DOCUMENTO_AJUSTE",
+    operation: "anulacionDocumentoAjuste",
+    requestElement: "SolicitudServicioAnulacionDocumentoAjuste",
+    fields: [...RECEPCION_BASE_FIELDS, { name: "codigoMotivo" }, { name: "cuf" }],
+    verified: true,
+  },
+  reversionAnulacionDocumentoAjuste: {
+    service: "FACTURACION_DOCUMENTO_AJUSTE",
+    operation: "reversionAnulacionDocumentoAjuste",
+    requestElement: "SolicitudServicioReversionAnulacionDocumentoAjuste",
+    fields: [...RECEPCION_BASE_FIELDS, { name: "cuf" }],
     verified: true,
   },
 };
@@ -398,6 +447,21 @@ export function buildAnulacionFacturaRequest(params = {}, options = {}) {
 /** reversionAnulacionFactura: reversion de una anulacion (cuf; por unica vez). */
 export function buildReversionAnulacionFacturaRequest(params = {}, options = {}) {
   return buildFromOperation("reversionAnulacionFactura", params, options);
+}
+
+/** recepcionDocumentoAjuste: recepcion de una nota de credito-debito (sector 24). */
+export function buildRecepcionDocumentoAjusteRequest(params = {}, options = {}) {
+  return buildFromOperation("recepcionDocumentoAjuste", params, options);
+}
+
+/** anulacionDocumentoAjuste: anulacion de una nota de credito-debito (codigoMotivo + cuf). */
+export function buildAnulacionDocumentoAjusteRequest(params = {}, options = {}) {
+  return buildFromOperation("anulacionDocumentoAjuste", params, options);
+}
+
+/** reversionAnulacionDocumentoAjuste: reversion de la anulacion de una nota (cuf). */
+export function buildReversionAnulacionDocumentoAjusteRequest(params = {}, options = {}) {
+  return buildFromOperation("reversionAnulacionDocumentoAjuste", params, options);
 }
 
 // ----------------------------- parser de respuesta --------------------------

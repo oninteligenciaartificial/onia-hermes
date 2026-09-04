@@ -2,7 +2,7 @@
 /* Tests for the carousel render engine. Run: node scripts/carousel_render.test.js */
 const assert = require('node:assert');
 const {
-  papelSubrayadoHtml, datoIlustradoHtml, tarjetaEmpleadoHtml, roleFor, slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml, emph, assertSlidesDistintas, ACCOUNTS, BRANDS, PACKS, FORMATS, setFormat } = require('./carousel_render');
+  papelSubrayadoHtml, datoIlustradoHtml, tarjetaEmpleadoHtml, bloqueSolidoHtml, roleFor, slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml, emph, assertSlidesDistintas, ACCOUNTS, BRANDS, PACKS, FORMATS, setFormat } = require('./carousel_render');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
@@ -78,9 +78,42 @@ test('packs list includes all packs (incl. editorial-clean, bloque-solido)', () 
   // ⚠ Volvio a pasar con `bloque-solido`, y esta vez costo mas: la suite estaba roja
   // por esto el 2026-09-02, y como assert corta la corrida, NINGUN test posterior se
   // ejecutaba. No es un test desactualizado: es la suite entera apagada sin avisar.
+  //
+  // Esta comparacion sola no alcanza: es un changelog, no un guard. El que guarda de
+  // verdad es el test de abajo.
   assert.deepStrictEqual(PACKS, ['typographic', 'dark-product', 'dark-neon', 'editorial-photo',
     'editorial-clean', 'bright-retail', 'papel-subrayado', 'dato-ilustrado', 'tarjeta-empleado',
     'bloque-solido']);
+});
+test('todo pack listado RENDERIZA (no solo figura en la lista)', () => {
+  // El guard que faltaba. La comparacion de arriba mira el PRIMER paso —que el nombre
+  // este— y no ve el sistema morir en el SEGUNDO: el 2026-09-02 entraron a PACKS
+  // `papel-subrayado`, `dato-ilustrado` y `tarjeta-empleado` sin sus modulos, que vivian
+  // solo en `claude/ads-creatividades-publicos`. La lista quedaba coherente consigo misma
+  // y el CLI aceptaba `--pack dato-ilustrado` para reventar recien al renderar: "Pack no
+  // disponible". Los packs se cargan PEREZOSO, asi que solo llamarlos lo destapa —
+  // importar el motor no basta.
+  //
+  // Los 3 modulos entraron con el merge del carril de contenido (2026-09-04), asi que
+  // ahora este test los renderiza de verdad en vez de documentar su ausencia.
+  const RENDER = {
+    'typographic': (s, i, n, a) => slideHtml(s, i, n, a, ''),
+    'dark-product': darkProductHtml,
+    'dark-neon': darkNeonHtml,
+    'editorial-photo': editorialPhotoHtml,
+    'editorial-clean': editorialCleanHtml,
+    'bright-retail': brightRetailHtml,
+    'papel-subrayado': papelSubrayadoHtml,
+    'dato-ilustrado': datoIlustradoHtml,
+    'tarjeta-empleado': tarjetaEmpleadoHtml,
+    'bloque-solido': bloqueSolidoHtml,
+  };
+  for (const pack of PACKS) {
+    const fn = RENDER[pack];
+    assert.ok(fn, `${pack} esta en PACKS pero este test no sabe renderizarlo: agregalo a RENDER`);
+    const html = fn({ role: 'cover', headline: 'H', body: 'b', pill: 'P' }, 0, 5, 'onia', {});
+    assert.ok(html && html.includes('</html>'), `${pack} no devolvio HTML completo`);
+  }
 });
 test('nuvia account + brand kit configured', () => {
   assert.strictEqual(ACCOUNTS.nuvia.handle, '@nuvia.bo');
@@ -116,8 +149,14 @@ test('editorial-photo without bg still renders (ink fallback)', () => {
 test('dark-product cover renders pills, footer, green keyword — y YA NO la curva', () => {
   const html = darkProductHtml({ role: 'cover', pill: 'Automatización', headline: 'Invertí en *captar*', body: 'x' }, 0, 5, 'onia', {});
   assert.ok(html.includes('class="pills"'));
-  // Sergio la mando sacar el 2026-08-27: cruzaba por detras del texto y a la opacidad
-  // que hacia falta para no leerse como tachado, ya no aportaba nada.
+  // Aca exigia `class="curve"`. La curva de continuacion la mando sacar Sergio el
+  // 2026-08-27 ("cambia ese fondo con las lineas por detras"): cruzaba por detras del
+  // texto y se leia como tachado. El motor la borro y esta assertion quedo pidiendo un
+  // adorno que el dueno del producto rechazo — un test que defiende lo que ya se decidio
+  // tirar frena el merge sin proteger nada.
+  //
+  // Pero no alcanza con BORRAR la assertion: asi el test deja de mirar la curva y nada
+  // impide que vuelva. Se da vuelta — ahora exige que NO este.
   assert.ok(!html.slice(html.indexOf('<body>')).includes('class="curve"'), 'sin curva de fondo');
   assert.ok(html.includes('<span class="g">captar</span>'));
   assert.ok(html.includes('Automatización'));
@@ -127,6 +166,12 @@ test('dark-product save slide shows FRAMEWORK guardá tag', () => {
   assert.ok(html.includes('FRAMEWORK'));
   assert.ok(html.includes('Guardá esto'));
 });
+// Aca vivia `curve: first slide exit-only, middle has both, last entry-only`, que contaba
+// los <path> de la curva de continuacion segun la posicion de la lamina. Se borro junto con
+// la curva: Sergio la mando sacar el 2026-08-27 ("cambia ese fondo con las lineas por
+// detras") porque cruzaba por detras del texto y se leia como un tachado. `continuationCurve()`
+// ya no existe en el motor, asi que el test media un elemento ausente y devolvia 0 paths.
+// Si la curva revive, vuelve del historial junto con esta prueba.
 test('dark-product object slot rendered when provided', () => {
   const html = darkProductHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', { object: '/tmp/panel.png' });
   assert.ok(html.includes('class="object"'));
@@ -153,10 +198,13 @@ test('typographic square y story cambian el lienzo', () => {
   assert.ok(slideHtml({ headline: 'H', body: '' }, 0, 3, 'onia', '').includes('width:1080px; height:1920px'));
   setFormat('feed');   // dejarlo como estaba: setFormat muta estado del modulo
 });
-test('dark-product story: el lienzo escala con --format', () => {
-  // Antes este test verificaba tambien el viewBox de la curva de fondo, que se borro
-  // el 2026-08-27. Lo que sigue importando es que el lienzo cambie con el formato:
-  // ese bug ya estuvo vivo meses sin que nadie lo viera.
+// Estos dos tests exigian el viewBox y los <path> de la curva de continuacion, borrada por
+// pedido de Sergio el 2026-08-27 (ver arriba). Lo que median de VERDAD —que el lienzo de
+// dark-product escale con el formato— sigue vivo y se conserva aca; lo que se cayo con la
+// curva era el `viewBox="0 0 1080 1920"` y el `M -60 853` de su SVG, que ya no se dibuja.
+// Ese bug del lienzo ya estuvo vivo meses sin que nadie lo viera, asi que el que queda mide
+// las DOS puntas: story arriba, y feed abajo en la misma corrida.
+test('dark-product story: el lienzo escala con el formato', () => {
   setFormat('story');
   const html = darkProductHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', {});
   assert.ok(html.includes('width:1080px; height:1920px'), 'story = 1080x1920');
@@ -164,7 +212,10 @@ test('dark-product story: el lienzo escala con --format', () => {
   const feed = darkProductHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', {});
   assert.ok(feed.includes('width:1080px; height:1350px'), 'feed = 1080x1350');
 });
-
+test('dark-product sin formato conserva el lienzo feed historico', () => {
+  const html = darkProductHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', {});
+  assert.ok(html.includes('width:1080px; height:1350px'));
+});
 test('dark-neon y editorial-photo respetan el formato', () => {
   setFormat('square');
   const dn = darkNeonHtml({ role: 'point', headline: 'H' }, 1, 3, 'onia', {});

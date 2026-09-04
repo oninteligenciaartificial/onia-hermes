@@ -1,17 +1,25 @@
 /*
  * RUNNER de la FASE 1 de homologacion SIAT (pruebas minimas, ambiente PILOTO).
  *
- * Orquesta las etapas oficiales de la modalidad COMPUTARIZADA contra el piloto:
- *   I    CUIS x2                       (FacturacionCodigos.cuis)
- *   II   sincronizacion x50 por caso   (FacturacionSincronizacion.*)
- *   III  CUFD x100                     (FacturacionCodigos.cufd)
- *   IV   emision individual x500       (recepcionFactura)
- *   V    eventos significativos x5/caso (FacturacionOperaciones.registroEventoSignificativo)
- *   VI   paquetes de contingencia x10  (recepcionPaqueteFactura + validacion)
- *   VII  anulacion x250                (anulacionFactura)
- *   IX   emision masiva x10            (recepcionMasivaFactura + validacion)
- *   XI   reversion de anulacion x98    (reversionAnulacionFactura)
- * (VIII firma digital y X: NO aplican a computarizada.)
+ * Orquesta las etapas oficiales de la modalidad COMPUTARIZADA contra el piloto.
+ * Los totales son los del "Listado de Etapas" del portal (leidos 2026-08-27),
+ * y CADA etapa se repite sobre su eje de casos (ver STAGE_PLAN / EMISION_CASES):
+ *
+ *   I    CUIS                 2   = 1 x 2 PdV        (FacturacionCodigos.cuis)
+ *   II   sincronizacion    1800   = 18 ops x 50 x 2 PdV
+ *   III  CUFD               200   = 100 x 2 PdV      (FacturacionCodigos.cufd)
+ *   IV   emision individual 750   = 125 x 6 combos   (recepcionFactura)
+ *   V    eventos signif.     70   = 7 motivos x 5 x 2 PdV
+ *   VI   paquetes           560   = 280 x 2 PdV      (recepcionPaquete + validacion)
+ *   VII  anulacion          750   = 125 x 6 combos   (anulacionFactura)
+ *   IX   emision masiva     160   = 80 x 2 PdV       (recepcionMasiva + validacion)
+ *   XI   reversion          750   = 125 x 6 combos   (reversionAnulacionFactura)
+ * (VIII firma digital: 690, SOLO modalidad electronica -> necesita certificado
+ *  AGETIC, este runner no la corre. X = masiva IEHD: no aplica a nuestro perfil.)
+ *
+ * POR QUE LOS CASOS IMPORTAN: el SIN cuenta COBERTURA, no volumen. La corrida
+ * del 6-ago mando 750 emisiones y el portal contabilizo 125, porque las 750
+ * eran el mismo combo. Ver el comentario de EMISION_CASES.
  *
  * Uso (VPS, con /opt/onia-siat/siat-piloto.env cargado en el ambiente):
  *   node src/fase1-runner.mjs                  # todas las etapas en orden
@@ -43,7 +51,7 @@ import { gzipSync } from "node:zlib";
 
 import { buildCuf } from "./cuf.mjs";
 import { buildInvoiceXml } from "./xml-builder.mjs";
-import { buildInvoicePayload } from "./invoice-payload.mjs";
+import { buildInvoicePayload, round2 } from "./invoice-payload.mjs";
 import { assembleEmission, toSinDateString } from "./emission.mjs";
 import {
   SOAP_OPERATIONS,
@@ -53,6 +61,9 @@ import {
   buildCuisRequest,
   buildRecepcionFacturaRequest,
   buildReversionAnulacionFacturaRequest,
+  buildRecepcionDocumentoAjusteRequest,
+  buildAnulacionDocumentoAjusteRequest,
+  buildReversionAnulacionDocumentoAjusteRequest,
   soapEndpoint,
 } from "./soap-client.mjs";
 import { postSoap, classifyResponse } from "./soap-transport.mjs";
@@ -64,10 +75,108 @@ export const PILOT = {
   codigoAmbiente: 2,
   codigoModalidad: 2, // computarizada en linea
   codigoSucursal: 0,
-  codigoPuntoVenta: 0,
-  codigoDocumentoSector: 1, // factura compra-venta
-  tipoFacturaDocumento: 1,
 };
+
+// ---------------------- matriz de casos que exige el SIN --------------------
+//
+// LECCION CARA (2026-08-27): el SIN no cuenta VOLUMEN, cuenta COBERTURA. La
+// corrida del 6-ago mando 750 emisiones en la etapa IV y el portal contabilizo
+// 125 — porque las 750 eran la MISMA combinacion repetida. El "Listado de
+// Pruebas" de la etapa IV (Seguimiento de Sistemas -> etapa -> boton entrar)
+// muestra 6 casos de 125 c/u, y solo el nuestro estaba al 100%:
+//
+//   caso  codigoPuntoVenta  tipoFacturaDocumento  codigoDocumentoSector
+//     1          1                   1                   1   (compra-venta)
+//     2          0                   1                   1   <- el unico corrido
+//     3          1                   1                  17   (hospitales/clinicas)
+//     4          0                   1                  17
+//     5          1                   3                  24   (nota credito-debito)
+//     6          0                   3                  24
+//
+// Los tres documentos sector son EXACTAMENTE los de la solicitud 9473. El eje
+// que faltaba es el PUNTO DE VENTA: CUIS y CUFD se piden por sucursal+PdV, y
+// por eso las etapas I/II/III/V quedaron clavadas en 50% (hicimos solo el PdV 0).
+
+/** Puntos de venta que el SIN exige cubrir (verificado en el Listado de Pruebas). */
+export const PUNTOS_VENTA = [0, 1];
+
+/**
+ * Documentos sector de la solicitud 9473 con su tipo de factura.
+ * 24 (nota credito-debito) es documento de AJUSTE -> tipoFacturaDocumento 3.
+ */
+export const DOC_SECTOR_CASES = [
+  { codigoDocumentoSector: 1, tipoFacturaDocumento: 1 }, // FACTURA COMPRA-VENTA
+  { codigoDocumentoSector: 17, tipoFacturaDocumento: 1 }, // FACTURA DE HOSPITALES/CLINICAS
+  { codigoDocumentoSector: 24, tipoFacturaDocumento: 3 }, // NOTA DE CREDITO-DEBITO
+];
+
+/** Las 6 combinaciones de emision (PdV x documento sector). */
+export const EMISION_CASES = DOC_SECTOR_CASES.flatMap((ds) =>
+  PUNTOS_VENTA.map((pv) => ({ codigoPuntoVenta: pv, ...ds })),
+);
+
+/** Id estable de un combo, usado como caseId del checkpoint y en el log. */
+export function comboId(combo) {
+  return `pv${combo.codigoPuntoVenta}-ds${combo.codigoDocumentoSector}-tf${combo.tipoFacturaDocumento}`;
+}
+
+/** Combo por defecto (el unico que corrio el 6-ago): PdV 0, compra-venta. */
+export const DEFAULT_COMBO = EMISION_CASES[0];
+
+/**
+ * CADA DOCUMENTO SECTOR TIENE SU PROPIO SERVICIO SOAP. Mandarlos todos a
+ * ServicioFacturacionCompraVenta devuelve SIN 995 "SERVICIO NO DISPONIBLE:
+ * Para la modalidad 2 y/o sector N" — verificado en vivo 2026-08-27 con los
+ * sectores 17 y 24. Los nombres salen del PDF de la solicitud 9473 y se
+ * confirmaron pidiendo el ?wsdl de cada uno en el piloto.
+ */
+export const SERVICIO_POR_DOC_SECTOR = {
+  1: "FACTURACION_COMPRA_VENTA", // ServicioFacturacionCompraVenta
+  17: "FACTURACION_COMPUTARIZADA", // ServicioFacturacionComputarizada
+  24: "FACTURACION_DOCUMENTO_AJUSTE", // ServicioFacturacionDocumentoAjuste
+};
+
+/** Documento de AJUSTE: va por ServicioFacturacionDocumentoAjuste (OPS_AJUSTE). */
+export const DOC_SECTOR_AJUSTE = 24;
+
+// Builders de recepcion/anulacion/reversion por documento sector. El de ajuste
+// NO comparte los nombres de operacion con los de factura; los wrappers estan
+// verificados contra el WSDL del piloto en soap-client (2026-09-03).
+const OPS_FACTURA = {
+  recepcion: { op: "recepcionFactura", build: buildRecepcionFacturaRequest },
+  anulacion: { op: "anulacionFactura", build: buildAnulacionFacturaRequest },
+  reversion: { op: "reversionAnulacionFactura", build: buildReversionAnulacionFacturaRequest },
+};
+const OPS_AJUSTE = {
+  recepcion: { op: "recepcionDocumentoAjuste", build: buildRecepcionDocumentoAjusteRequest },
+  anulacion: { op: "anulacionDocumentoAjuste", build: buildAnulacionDocumentoAjusteRequest },
+  reversion: { op: "reversionAnulacionDocumentoAjuste", build: buildReversionAnulacionDocumentoAjusteRequest },
+};
+
+/**
+ * Timeout HTTP por servicio. El de documento de ajuste tarda 36-43 s en
+ * responder CUALQUIER recepcion (medido 2026-09-04 en el piloto, hasta con un
+ * archivo basura que rechaza con 920): con el default de 30 s del transporte
+ * los 3 reintentos morian en "network" sin que el SIN llegara a contestar.
+ */
+export const TIMEOUT_MS_POR_SERVICIO = { FACTURACION_DOCUMENTO_AJUSTE: 120_000 };
+
+/** Timeout a usar para un servicio (undefined = el default del transporte). */
+export function timeoutFor(serviceKey) {
+  return TIMEOUT_MS_POR_SERVICIO[serviceKey];
+}
+
+/**
+ * Sectores cuyo servicio SOAP todavia no tiene operaciones mapeadas. VACIO desde
+ * 2026-09-03 (el 24 ya va por OPS_AJUSTE); el mecanismo queda para el proximo
+ * sector que se sume: se marca explicito en vez de fallar con un 995 opaco.
+ */
+export const DOC_SECTOR_SIN_SOPORTE = new Set();
+
+/** Los combos que HOY se pueden emitir de verdad (sector 24 queda afuera). */
+export const EMISION_CASES_SOPORTADOS = EMISION_CASES.filter(
+  (c) => !DOC_SECTOR_SIN_SOPORTE.has(c.codigoDocumentoSector),
+);
 
 // NIT de prueba del piloto para el receptor (convencion de homologacion).
 export const NIT_PRUEBA_RECEPTOR = "99001";
@@ -215,17 +324,55 @@ export const SYNC_CASES = [
   ["sincronizarParametricaUnidadMedida", "unidadesMedida"],
 ];
 
-// Volumenes oficiales de fase 1 (computarizada).
+// Volumenes oficiales de fase 1, POR CASO (no totales). El total sale de
+// multiplicar por los casos que el SIN pide en cada etapa — ver STAGE_PLAN.
+//
+// Los totales estan tomados del "Listado de Etapas" del portal (2026-08-27):
+//   I 2 · II 1800 · III 200 · IV 750 · V 70 · VI 560 · VII 750 · IX 160 · XI 750
 export const STAGE_TARGETS = {
+  I: 1, // por PdV            -> 2
+  II: 50, // por sync x PdV     -> 18 * 50 * 2 = 1800
+  III: 100, // por PdV            -> 200
+  IV: 125, // por combo          -> 125 * 6 = 750
+  V: 5, // por motivo x PdV   -> 7 * 5 * 2 = 70
+  VI: 280, // por PdV            -> 560   [VERIFICAR el desglose en el portal]
+  VII: 125, // por combo          -> 750
+  IX: 80, // por PdV            -> 160   [VERIFICAR el desglose en el portal]
+  XI: 125, // por combo          -> 750
+};
+
+/**
+ * Sobre que eje se repite cada etapa. "combo" = las 6 de EMISION_CASES;
+ * "pv" = una corrida por punto de venta; "sync-pv"/"motivo-pv" agregan su
+ * propio sub-caso ademas del PdV.
+ *
+ * II, III y V solo confirmados como x PdV por la aritmetica (900*2=1800,
+ * 100*2=200, 7*5*2=70). VI y IX quedan [VERIFICAR]: el total del portal se
+ * divide limpio por 2 PdV pero no abrimos su Listado de Pruebas todavia.
+ */
+export const STAGE_PLAN = {
+  I: "pv",
+  II: "sync-pv",
+  III: "pv",
+  IV: "combo",
+  V: "motivo-pv",
+  VI: "pv",
+  VII: "combo",
+  IX: "pv",
+  XI: "combo",
+};
+
+/** Total que espera el SIN por etapa (para el reporte de avance). */
+export const STAGE_TOTALS = {
   I: 2,
-  II: 50, // por caso (SYNC_CASES)
-  III: 100,
-  IV: 500,
-  V: 5, // por caso (motivo de evento del catalogo)
-  VI: 10,
-  VII: 250,
-  IX: 10,
-  XI: 98,
+  II: 1800,
+  III: 200,
+  IV: 750,
+  V: 70,
+  VI: 560,
+  VII: 750,
+  IX: 160,
+  XI: 750,
 };
 
 export const STAGE_ORDER = ["I", "II", "III", "IV", "V", "VI", "VII", "IX", "XI"];
@@ -394,6 +541,19 @@ export const CUFD_VIGENCIA_MS = 24 * 60 * 60 * 1000;
  * CUFD en etapa III); para estados viejos sin ese campo se deriva de
  * fechaVigencia - 24h (la pared del SIN parseada como epoch corrido).
  */
+/**
+ * true si el CUFD ya no sirve para emitir. El SIN devuelve "CUFD FUERA DE
+ * TOLERANCIA" con uno vencido, y el estado del runner sobrevive dias entre
+ * corridas: el del 6-ago seguia guardado el 27. Se chequea ANTES de emitir.
+ */
+export function cufdVencido(cufd, ahoraMs) {
+  if (!cufd?.codigo || !cufd?.codigoControl) {
+    return true;
+  }
+  const desde = cufdVigenteDesde(cufd);
+  return desde == null || ahoraMs - desde >= CUFD_VIGENCIA_MS;
+}
+
 export function cufdVigenteDesde(cufd) {
   if (!cufd) {
     return null;
@@ -471,7 +631,7 @@ export function formatSinLocal(shiftedMs) {
  * Montos chicos variados por indice. Receptor: NIT 99001 (4 de cada 5) o CI de
  * consumidor final (1 de cada 5).
  */
-export function buildTestInvoice({ catalogs, nit, index }) {
+export function buildTestInvoice({ catalogs, nit, index, codigoPuntoVenta = 0, codigoDocumentoSector = 1 }) {
   const productos = catalogs?.productos ?? [];
   if (productos.length === 0) {
     throw new Error("catalogo de productos homologados vacio: sincronizar etapa II antes de emitir");
@@ -503,14 +663,24 @@ export function buildTestInvoice({ catalogs, nit, index }) {
   const precio = 10 + (index % 90) + (index % 2 === 0 ? 0.5 : 0);
   const cantidad = 1 + (index % 3);
 
+  // Sector 17: el XSD exige quirofano + medico en CADA linea. Valores de prueba
+  // dentro de los rangos del XSD; el NIT del medico es el NIT de pruebas del SIN.
+  const medico =
+    codigoDocumentoSector === 17
+      ? { nroQuirofanoSalaOperaciones: 1, nombreApellidoMedico: "MEDICO DE PRUEBAS", nitDocumentoMedico: NIT_PRUEBA_RECEPTOR }
+      : {};
+
   const payload = buildInvoicePayload({
     emisor: {
       nit,
       sucursalCodigo: PILOT.codigoSucursal,
-      puntoVentaCodigo: PILOT.codigoPuntoVenta,
+      puntoVentaCodigo: codigoPuntoVenta,
       actividadEconomica: actividad,
     },
     receptor,
+    // Sin esto el CUF y la <cabecera> salian con sector 1 aunque el request
+    // dijera 17: el piloto rechazaba el XML por la raiz (cvc-elt.1.a).
+    documento: { tipoDocumentoSector: codigoDocumentoSector },
     items: [
       {
         actividadEconomica: actividad,
@@ -520,6 +690,7 @@ export function buildTestInvoice({ catalogs, nit, index }) {
         cantidad,
         unidadMedida: unidad?.codigoClasificador ?? 58,
         precioUnitario: precio,
+        ...medico,
       },
     ],
   });
@@ -537,19 +708,43 @@ export function emptyState() {
     startedAt: null,
     sinOffsetMs: 0,
     hashMode: "xml", // "xml" | "gzip": sobre que bytes se calcula hashArchivo
-    cuis: null,
-    cufd: null, // { codigo, codigoControl, fechaVigencia, obtenidoEn } vigente
+    // CUIS y CUFD son POR sucursal+punto de venta: un mapa, no un valor suelto.
+    cuisByPv: {}, // pv -> codigo CUIS
+    cufdByPv: {}, // pv -> { codigo, codigoControl, fechaVigencia, obtenidoEn }
     ultimoEventoFin: null, // fin (timeline SIN) del ultimo evento registrado ok
     numeroFactura: null,
     catalogs: {},
-    invoices: [], // { numero, cuf, codigoRecepcion, estado, anulada, revertida }
+    invoices: [], // { numero, cuf, codigoRecepcion, estado, anulada, revertida, combo }
     etapas: {}, // id -> { done, target, attempts, blockedCases: {}, cases: {} }
   };
 }
 
+/**
+ * Migra un checkpoint viejo (cuis/cufd sueltos = solo PdV 0) al mapa por punto
+ * de venta. Sin esto, retomar el estado del 6-ago perderia el CUIS ya obtenido
+ * y volveria a pedirlo. Puro sobre una copia; no muta la entrada.
+ */
+export function migrateState(raw) {
+  const state = { ...emptyState(), ...raw };
+  const pvLegado = String(DEFAULT_COMBO.codigoPuntoVenta);
+  if (raw?.cuis && !state.cuisByPv[pvLegado]) {
+    state.cuisByPv = { ...state.cuisByPv, [pvLegado]: raw.cuis };
+  }
+  if (raw?.cufd && !state.cufdByPv[pvLegado]) {
+    state.cufdByPv = { ...state.cufdByPv, [pvLegado]: raw.cufd };
+  }
+  // Las facturas viejas son todas del combo por defecto (era el unico).
+  state.invoices = (state.invoices ?? []).map((f) =>
+    f.combo ? f : { ...f, combo: comboId(DEFAULT_COMBO) },
+  );
+  delete state.cuis;
+  delete state.cufd;
+  return state;
+}
+
 function loadState(file) {
   if (existsSync(file)) {
-    return { ...emptyState(), ...JSON.parse(readFileSync(file, "utf8")) };
+    return migrateState(JSON.parse(readFileSync(file, "utf8")));
   }
   return emptyState();
 }
@@ -594,6 +789,9 @@ class Runner {
     this.logFile = logFile;
     this.pace = pace;
     this.state = loadState(stateFile);
+    // Combo (PdV + documento sector + tipo de factura) que se esta corriendo.
+    // Las etapas lo cambian con withCombo(); todo lo demas lo LEE de aca.
+    this.combo = { ...DEFAULT_COMBO };
     if (!this.state.startedAt) {
       this.state.startedAt = new Date().toISOString();
     }
@@ -601,6 +799,61 @@ class Runner {
       // Correlativo unico por corrida (evita chocar con pruebas previas del dia).
       this.state.numeroFactura = Math.floor(Date.now() / 1000) % 1_000_000_000;
     }
+  }
+
+  /** Corre `fn` con el combo dado y restaura el anterior pase lo que pase. */
+  async withCombo(combo, fn) {
+    const previo = this.combo;
+    this.combo = { ...DEFAULT_COMBO, ...combo };
+    try {
+      return await fn();
+    } finally {
+      this.combo = previo;
+    }
+  }
+
+  /** Punto de venta del combo actual, como clave del estado. */
+  get pvKey() {
+    return String(this.combo.codigoPuntoVenta);
+  }
+
+  /** Servicio SOAP que corresponde al documento sector del combo actual. */
+  get servicio() {
+    const key = SERVICIO_POR_DOC_SECTOR[this.combo.codigoDocumentoSector];
+    if (!key) {
+      throw new Error(
+        `sin servicio SOAP mapeado para el documento sector ${this.combo.codigoDocumentoSector}`,
+      );
+    }
+    if (DOC_SECTOR_SIN_SOPORTE.has(this.combo.codigoDocumentoSector)) {
+      throw new Error(
+        `documento sector ${this.combo.codigoDocumentoSector} usa ${key}, cuyas operaciones ` +
+          "son recepcionDocumentoAjuste/anulacionDocumentoAjuste/reversionAnulacionDocumentoAjuste " +
+          "y todavia no estan mapeadas en soap-client",
+      );
+    }
+    return key;
+  }
+
+  /** Builders y nombres de operacion (recepcion/anulacion/reversion) del sector actual. */
+  get ops() {
+    return this.combo.codigoDocumentoSector === DOC_SECTOR_AJUSTE ? OPS_AJUSTE : OPS_FACTURA;
+  }
+
+  get cuis() {
+    return this.state.cuisByPv[this.pvKey] ?? null;
+  }
+
+  set cuis(codigo) {
+    this.state.cuisByPv[this.pvKey] = codigo;
+  }
+
+  get cufd() {
+    return this.state.cufdByPv[this.pvKey] ?? null;
+  }
+
+  set cufd(value) {
+    this.state.cufdByPv[this.pvKey] = value;
   }
 
   log(entry) {
@@ -640,7 +893,7 @@ class Runner {
       codigoAmbiente: PILOT.codigoAmbiente,
       codigoSistema: this.codigoSistema,
       codigoSucursal: PILOT.codigoSucursal,
-      codigoPuntoVenta: PILOT.codigoPuntoVenta,
+      codigoPuntoVenta: this.combo.codigoPuntoVenta,
       nit: this.nit,
     };
   }
@@ -648,12 +901,12 @@ class Runner {
   recepcionBase(codigoEmision = 1) {
     return {
       ...this.baseParams(),
-      codigoDocumentoSector: PILOT.codigoDocumentoSector,
+      codigoDocumentoSector: this.combo.codigoDocumentoSector,
       codigoEmision,
       codigoModalidad: PILOT.codigoModalidad,
-      cufd: this.state.cufd?.codigo,
-      cuis: this.state.cuis,
-      tipoFacturaDocumento: PILOT.tipoFacturaDocumento,
+      cufd: this.cufd?.codigo,
+      cuis: this.cuis,
+      tipoFacturaDocumento: this.combo.tipoFacturaDocumento,
     };
   }
 
@@ -668,6 +921,7 @@ class Runner {
       envelope,
       token: this.token,
       fetchImpl: globalThis.fetch,
+      timeoutMs: timeoutFor(serviceKey),
     });
     const parsed = result.parsed ?? {};
     this.log({
@@ -709,7 +963,32 @@ class Runner {
     while (doneOf() < target && attempts < maxAttempts) {
       attempts += 1;
       etapa.attempts += 1;
-      const result = await fn(doneOf());
+      // Un prerequisito faltante (p.ej. sin CUFD para ese punto de venta)
+      // LANZA antes de tocar la red. Sin este catch se lleva puesta la etapa
+      // entera y los otros casos ni se intentan — que es justo lo que paso al
+      // correr la etapa IV con el PdV 1 inexistente (SIN 933).
+      let result;
+      try {
+        result = await fn(doneOf());
+      } catch (err) {
+        if (err instanceof StopError) throw err;
+        // Un prerequisito faltante es DETERMINISTA (no hay servicio mapeado, no
+        // hay CUFD para ese PdV): reintentarlo 3 veces es quemar tiempo. Se
+        // bloquea el caso en el acto, con el motivo escrito en el checkpoint,
+        // y la etapa sigue con los demas casos.
+        const mensaje = { codigo: "PRE", descripcion: err.message };
+        if (caseId) {
+          etapa.blockedCases[caseId] = { key: "prerequisito", mensaje };
+          this.log({ etapa: etapaId, case: caseId, blocked: "prerequisito", detalle: err.message });
+          this.checkpoint();
+          return;
+        }
+        result = {
+          ok: false,
+          error: "prerequisito",
+          parsed: { transaccion: false, mensajes: [mensaje] },
+        };
+      }
       const key = errorKey(result);
       streak = updateStreak(streak, key);
       if (key == null) {
@@ -733,20 +1012,37 @@ class Runner {
 
   // --------------------------- etapas ---------------------------------------
 
+  /** CUIS es POR sucursal+PdV: una corrida por punto de venta (total = 2). */
   async etapaI(target = STAGE_TARGETS.I) {
-    await this.loop("I", target, async () => {
-      const envelope = buildCuisRequest({ ...this.baseParams(), codigoModalidad: PILOT.codigoModalidad });
-      const raw = await this.post("FACTURACION_CODIGOS", envelope, { etapa: "I", op: "cuis" });
-      const result = normalizeCuisResult(raw); // SIN 980 devuelve el CUIS vigente: cuenta
-      if (result.ok && result.parsed?.codigo) {
-        this.state.cuis = result.parsed.codigo;
-      }
-      return result;
-    });
+    for (const pv of PUNTOS_VENTA) {
+      await this.withCombo({ codigoPuntoVenta: pv }, () =>
+        this.loop(
+          "I",
+          target,
+          async () => {
+            const envelope = buildCuisRequest({
+              ...this.baseParams(),
+              codigoModalidad: PILOT.codigoModalidad,
+            });
+            const raw = await this.post("FACTURACION_CODIGOS", envelope, {
+              etapa: "I",
+              op: "cuis",
+              pv,
+            });
+            const result = normalizeCuisResult(raw); // SIN 980 devuelve el vigente: cuenta
+            if (result.ok && result.parsed?.codigo) {
+              this.cuis = result.parsed.codigo;
+            }
+            return result;
+          },
+          { caseId: `pv${pv}` },
+        ),
+      );
+    }
   }
 
   async syncOnce(op, catalogKey) {
-    const envelope = buildRunnerEnvelope(op, { ...this.baseParams(), cuis: this.state.cuis });
+    const envelope = buildRunnerEnvelope(op, { ...this.baseParams(), cuis: this.cuis });
     const result = await this.post("FACTURACION_SINCRONIZACION", envelope, { etapa: "II", op });
     if (result.ok) {
       if (catalogKey === "fechaHora") {
@@ -762,9 +1058,16 @@ class Runner {
     return result;
   }
 
+  /** Sync por catalogo Y por PdV (18 ops x 50 x 2 PdV = 1800). */
   async etapaII(target = STAGE_TARGETS.II, { cases = SYNC_CASES } = {}) {
-    for (const [op, catalogKey] of cases) {
-      await this.loop("II", target, () => this.syncOnce(op, catalogKey), { caseId: op });
+    for (const pv of PUNTOS_VENTA) {
+      await this.withCombo({ codigoPuntoVenta: pv }, async () => {
+        for (const [op, catalogKey] of cases) {
+          await this.loop("II", target, () => this.syncOnce(op, catalogKey), {
+            caseId: `${op}-pv${pv}`,
+          });
+        }
+      });
     }
   }
 
@@ -778,26 +1081,78 @@ class Runner {
     }
   }
 
-  async etapaIII(target = STAGE_TARGETS.III) {
-    await this.loop("III", target, async () => {
-      const envelope = buildCufdRequest({
-        ...this.baseParams(),
-        codigoModalidad: PILOT.codigoModalidad,
-        cuis: this.state.cuis,
-      });
-      const result = await this.post("FACTURACION_CODIGOS", envelope, { etapa: "III", op: "cufd" });
-      if (result.ok && result.parsed?.codigo) {
-        this.state.cufd = {
-          codigo: result.parsed.codigo,
-          codigoControl: result.parsed.codigoControl,
-          fechaVigencia: result.parsed.fechaVigencia,
-          // Timeline SIN: eventWindow lo usa para no fechar eventos antes de
-          // que este CUFD exista (SIN 984).
-          obtenidoEn: Date.now() + (this.state.sinOffsetMs ?? 0),
-        };
-      }
-      return result;
+  /**
+   * Garantiza un CUFD vigente para el punto de venta actual. NO cuenta para la
+   * etapa III: es infraestructura de la corrida, no una prueba. Sin esto, una
+   * corrida al dia siguiente emite con el CUFD de ayer y el SIN la rechaza
+   * entera con "CUFD FUERA DE TOLERANCIA".
+   */
+  async ensureCufd() {
+    const ahora = Date.now() + (this.state.sinOffsetMs ?? 0);
+    if (!cufdVencido(this.cufd, ahora)) {
+      return this.cufd;
+    }
+    if (!this.cuis) {
+      throw new Error(`sin CUIS para el punto de venta ${this.pvKey}: correr la etapa I antes`);
+    }
+    const envelope = buildCufdRequest({
+      ...this.baseParams(),
+      codigoModalidad: PILOT.codigoModalidad,
+      cuis: this.cuis,
     });
+    const result = await this.post("FACTURACION_CODIGOS", envelope, {
+      etapa: "infra",
+      op: "cufd_refresh",
+      pv: this.combo.codigoPuntoVenta,
+    });
+    if (!result.ok || !result.parsed?.codigo) {
+      const msg = (result.parsed?.mensajes ?? [])[0]?.descripcion ?? result.error ?? "sin detalle";
+      throw new Error(`no se pudo renovar el CUFD del punto de venta ${this.pvKey}: ${msg}`);
+    }
+    this.cufd = {
+      codigo: result.parsed.codigo,
+      codigoControl: result.parsed.codigoControl,
+      fechaVigencia: result.parsed.fechaVigencia,
+      obtenidoEn: Date.now() + (this.state.sinOffsetMs ?? 0),
+    };
+    this.checkpoint();
+    return this.cufd;
+  }
+
+  /** CUFD tambien es por sucursal+PdV: una corrida por punto de venta. */
+  async etapaIII(target = STAGE_TARGETS.III) {
+    for (const pv of PUNTOS_VENTA) {
+      await this.withCombo({ codigoPuntoVenta: pv }, () =>
+        this.loop(
+          "III",
+          target,
+          async () => {
+            const envelope = buildCufdRequest({
+              ...this.baseParams(),
+              codigoModalidad: PILOT.codigoModalidad,
+              cuis: this.cuis,
+            });
+            const result = await this.post("FACTURACION_CODIGOS", envelope, {
+              etapa: "III",
+              op: "cufd",
+              pv,
+            });
+            if (result.ok && result.parsed?.codigo) {
+              this.cufd = {
+                codigo: result.parsed.codigo,
+                codigoControl: result.parsed.codigoControl,
+                fechaVigencia: result.parsed.fechaVigencia,
+                // Timeline SIN: eventWindow lo usa para no fechar eventos antes
+                // de que este CUFD exista (SIN 984).
+                obtenidoEn: Date.now() + (this.state.sinOffsetMs ?? 0),
+              };
+            }
+            return result;
+          },
+          { caseId: `pv${pv}` },
+        ),
+      );
+    }
   }
 
   buildEmisionMaterial(index, { fechaEmision } = {}) {
@@ -805,27 +1160,134 @@ class Runner {
       catalogs: this.state.catalogs,
       nit: this.nit,
       index,
+      codigoPuntoVenta: this.combo.codigoPuntoVenta,
+      codigoDocumentoSector: this.combo.codigoDocumentoSector,
     });
     const numeroFactura = ++this.state.numeroFactura;
+    const fecha = fechaEmision ?? this.sinNow();
     const material = assembleEmission({
       payload,
       tenant: { emisor: { nit: this.nit, codigoSistema: this.codigoSistema, ...EMISOR_PRUEBA } },
-      cufd: this.state.cufd,
-      cuis: this.state.cuis,
+      cufd: this.cufd,
+      cuis: this.cuis,
       numeroFactura,
-      fechaEmision: fechaEmision ?? this.sinNow(),
+      fechaEmision: fecha,
       environment: PILOT.environment,
       leyenda,
       codigoMetodoPago,
       usuario: "onia",
     });
-    return { material, numeroFactura };
+    // `datos` es lo que una nota de ajuste (sector 24) necesita de su factura
+    // original: sin esto las facturas viejas del estado no sirven de original.
+    const datos = { fechaEmision: fecha, receptor: payload.receptor, items: payload.items, montoTotal: payload.montoTotal, leyenda };
+    return { material, numeroFactura, datos };
   }
 
-  /** Reconstruye el request de recepcion con el hash del modo vigente. */
+  /**
+   * Factura original para una nota de ajuste: una compra-venta validada del
+   * MISMO PdV, con `datos` y todavia sin nota. Si no hay, emite una (el SIN la
+   * cuenta en el caso pv-ds1-tf1, que topea en 125: no molesta).
+   */
+  async originalParaNota() {
+    const comboOriginal = { codigoPuntoVenta: this.combo.codigoPuntoVenta, ...DOC_SECTOR_CASES[0] };
+    const libre = (f) =>
+      f.combo === comboId(comboOriginal) && !f.anulada && !f.ajustada && f.datos && (f.estado === 908 || f.estado === 901);
+    if (!this.state.invoices.some(libre)) {
+      const result = await this.withCombo(comboOriginal, () => this.emitOne(this.state.invoices.length));
+      if (!result.ok) {
+        const msg = (result.parsed?.mensajes ?? [])[0]?.descripcion ?? result.error ?? "sin detalle";
+        throw new Error(`sin factura original para la nota de ajuste (fallo la compra-venta previa): ${msg}`);
+      }
+    }
+    const original = this.state.invoices.find(libre);
+    if (!original) {
+      throw new Error("sin factura original validada (908/901) para la nota de ajuste");
+    }
+    return original;
+  }
+
+  /**
+   * Nota de credito-debito (sector 24) que devuelve ENTERA una factura original.
+   * Reglas del SIN (validaciones documento sector 24): montoTotalOriginal =
+   * sum(subTotal con codigoDetalleTransaccion 1) = la factura original;
+   * montoTotalDevuelto = sum(subTotal con 2) - montoDescuentoCreditoDebito;
+   * montoEfectivoCreditoDebito = montoTotalDevuelto x 0.13. El XSD exige minimo 2
+   * lineas: las originales (1) y las devueltas (2). Numeracion propia
+   * (numeroNotaCreditoDebito) y CUF con tipoFactura 3 / sector 24.
+   */
+  buildNotaMaterial(original) {
+    const d = original.datos;
+    const fecha = this.sinNow();
+    const numero = ++this.state.numeroFactura;
+    const cuf = buildCuf(
+      {
+        nit: this.nit,
+        fechaHora: fecha.replace(/[-T:.]/g, ""),
+        sucursal: PILOT.codigoSucursal,
+        modalidad: PILOT.codigoModalidad,
+        tipoEmision: 1,
+        tipoFactura: this.combo.tipoFacturaDocumento,
+        tipoDocumentoSector: this.combo.codigoDocumentoSector,
+        numeroFactura: numero,
+        puntoVenta: this.combo.codigoPuntoVenta,
+      },
+      this.cufd.codigoControl,
+    );
+    const linea = (item, codigoDetalleTransaccion) => ({
+      actividadEconomica: item.actividadEconomica,
+      codigoProductoSin: item.codigoProductoSin,
+      codigoProducto: item.codigoProducto,
+      descripcion: item.descripcion,
+      cantidad: item.cantidad,
+      unidadMedida: item.unidadMedida,
+      precioUnitario: item.precioUnitario,
+      subTotal: item.subtotal,
+      codigoDetalleTransaccion,
+    });
+    const cabecera = {
+      nitEmisor: this.nit,
+      razonSocialEmisor: EMISOR_PRUEBA.razonSocial,
+      municipio: EMISOR_PRUEBA.municipio,
+      telefono: EMISOR_PRUEBA.telefono,
+      numeroNotaCreditoDebito: numero,
+      cuf,
+      cufd: this.cufd.codigo,
+      codigoSucursal: PILOT.codigoSucursal,
+      direccion: EMISOR_PRUEBA.direccion,
+      codigoPuntoVenta: this.combo.codigoPuntoVenta,
+      fechaEmision: fecha,
+      nombreRazonSocial: d.receptor.razonSocial,
+      codigoTipoDocumentoIdentidad: d.receptor.tipoDocumentoIdentidad,
+      numeroDocumento: d.receptor.numeroDocumento,
+      codigoCliente: d.receptor.numeroDocumento,
+      numeroFactura: original.numero,
+      numeroAutorizacionCuf: original.cuf,
+      fechaEmisionFactura: d.fechaEmision,
+      montoTotalOriginal: d.montoTotal,
+      montoTotalDevuelto: d.montoTotal,
+      montoEfectivoCreditoDebito: round2(d.montoTotal * 0.13),
+      leyenda: d.leyenda,
+      usuario: "onia",
+      codigoDocumentoSector: this.combo.codigoDocumentoSector,
+    };
+    const detalle = [...d.items.map((i) => linea(i, 1)), ...d.items.map((i) => linea(i, 2))];
+    const xml = buildInvoiceXml({ cabecera, detalle });
+    const archivo = gzipSync(Buffer.from(xml, "utf8")).toString("base64");
+    return { material: { cuf, xml, archivo }, numeroFactura: numero, original };
+  }
+
+  /** Material del combo actual: factura (sectores 1 y 17) o nota de ajuste (24). */
+  async buildMaterialFor(index) {
+    if (this.combo.codigoDocumentoSector === DOC_SECTOR_AJUSTE) {
+      return this.buildNotaMaterial(await this.originalParaNota());
+    }
+    return this.buildEmisionMaterial(index);
+  }
+
+  /** Reconstruye el request de recepcion (del sector actual) con el hash del modo vigente. */
   recepcionRequestFor(material) {
     const gzipBuffer = Buffer.from(material.archivo, "base64");
-    return buildRecepcionFacturaRequest({
+    return this.ops.recepcion.build({
       ...this.recepcionBase(1),
       archivo: material.archivo,
       fechaEnvio: this.sinNow(),
@@ -834,10 +1296,11 @@ class Runner {
   }
 
   async emitOne(index) {
-    const { material, numeroFactura } = this.buildEmisionMaterial(index);
-    const result = await this.post("FACTURACION_COMPRA_VENTA", this.recepcionRequestFor(material), {
+    await this.ensureCufd();
+    const { material, numeroFactura, datos, original } = await this.buildMaterialFor(index);
+    const result = await this.post(this.servicio, this.recepcionRequestFor(material), {
       etapa: "IV",
-      op: "recepcionFactura",
+      op: this.ops.recepcion.op,
       numeroFactura,
     });
     // Autocalibracion del hash: si el SIN observa el hash en modo "xml", probar
@@ -859,20 +1322,32 @@ class Runner {
         estado: result.parsed.codigoEstado ?? null,
         anulada: false,
         revertida: false,
+        // Sin esto, la anulacion (VII) y la reversion (XI) tomarian una factura
+        // de OTRO combo y el caso del SIN nunca cerraria.
+        combo: comboId(this.combo),
+        ...(datos ? { datos } : {}),
       });
+      if (original) {
+        original.ajustada = true; // una nota por factura original
+      }
     }
     return result;
   }
 
+  /** Emision individual: 125 por cada una de las 6 combinaciones -> 750. */
   async etapaIV(target = STAGE_TARGETS.IV) {
-    await this.loop("IV", target, (done) => this.emitOne(done));
+    for (const combo of EMISION_CASES) {
+      await this.withCombo(combo, () =>
+        this.loop("IV", target, (done) => this.emitOne(done), { caseId: comboId(combo) }),
+      );
+    }
   }
 
   /** Ventana de evento valida para el CUFD ACTUAL (el que va como cufdEvento). */
   eventWindowNow() {
     return eventWindow({
       nowSinMs: Date.now() + (this.state.sinOffsetMs ?? 0),
-      cufdDesdeMs: cufdVigenteDesde(this.state.cufd),
+      cufdDesdeMs: cufdVigenteDesde(this.cufd),
       minInicioMs: this.state.ultimoEventoFin ?? null,
     });
   }
@@ -901,9 +1376,9 @@ class Runner {
     const envelope = buildRunnerEnvelope("registroEventoSignificativo", {
       ...this.baseParams(),
       codigoMotivoEvento: motivo.codigoClasificador,
-      cufd: this.state.cufd?.codigo,
-      cufdEvento: this.state.cufd?.codigo,
-      cuis: this.state.cuis,
+      cufd: this.cufd?.codigo,
+      cufdEvento: this.cufd?.codigo,
+      cuis: this.cuis,
       descripcion: motivo.descripcion ?? `Evento ${motivo.codigoClasificador}`,
       fechaHoraInicioEvento: formatSinLocal(win.inicioMs),
       fechaHoraFinEvento: formatSinLocal(win.finMs),
@@ -925,9 +1400,13 @@ class Runner {
     if (motivos.length === 0) {
       throw new Error("catalogo de eventos significativos vacio: correr etapa II antes");
     }
-    for (const motivo of motivos) {
-      await this.loop("V", target, () => this.registrarEvento(motivo), {
-        caseId: `motivo-${motivo.codigoClasificador}`,
+    for (const pv of PUNTOS_VENTA) {
+      await this.withCombo({ codigoPuntoVenta: pv }, async () => {
+        for (const motivo of motivos) {
+          await this.loop("V", target, () => this.registrarEvento(motivo), {
+            caseId: `motivo-${motivo.codigoClasificador}-pv${pv}`,
+          });
+        }
       });
     }
   }
@@ -940,6 +1419,7 @@ class Runner {
         catalogs: this.state.catalogs,
         nit: this.nit,
         index: baseIndex + i,
+        codigoPuntoVenta: this.combo.codigoPuntoVenta,
       });
       const numeroFactura = ++this.state.numeroFactura;
       const fecha17 = fechaIso ?? this.sinNow();
@@ -950,12 +1430,12 @@ class Runner {
           sucursal: PILOT.codigoSucursal,
           modalidad: PILOT.codigoModalidad,
           tipoEmision,
-          tipoFactura: PILOT.tipoFacturaDocumento,
-          tipoDocumentoSector: PILOT.codigoDocumentoSector,
+          tipoFactura: this.combo.tipoFacturaDocumento,
+          tipoDocumentoSector: this.combo.codigoDocumentoSector,
           numeroFactura,
-          puntoVenta: PILOT.codigoPuntoVenta,
+          puntoVenta: this.combo.codigoPuntoVenta,
         },
-        this.state.cufd.codigoControl,
+        this.cufd.codigoControl,
       );
       const cabecera = {
         nitEmisor: this.nit,
@@ -963,10 +1443,10 @@ class Runner {
         municipio: EMISOR_PRUEBA.municipio,
         numeroFactura,
         cuf,
-        cufd: this.state.cufd.codigo,
+        cufd: this.cufd.codigo,
         codigoSucursal: PILOT.codigoSucursal,
         direccion: EMISOR_PRUEBA.direccion,
-        codigoPuntoVenta: PILOT.codigoPuntoVenta,
+        codigoPuntoVenta: this.combo.codigoPuntoVenta,
         fechaEmision: fecha17,
         nombreRazonSocial: payload.receptor.razonSocial,
         codigoTipoDocumentoIdentidad: payload.receptor.tipoDocumentoIdentidad,
@@ -980,7 +1460,7 @@ class Runner {
         montoTotalMoneda: payload.montoTotal,
         leyenda,
         usuario: "onia",
-        codigoDocumentoSector: PILOT.codigoDocumentoSector,
+        codigoDocumentoSector: this.combo.codigoDocumentoSector,
       };
       const detalle = payload.items.map((item) => ({
         actividadEconomica: item.actividadEconomica,
@@ -1008,68 +1488,86 @@ class Runner {
     if (!motivo) {
       throw new Error("sin evento de conectividad (1-4) en el catalogo para paquetes sin CAFC");
     }
-    await this.loop("VI", target, async (done) => {
-      // SIN 984: evento y paquete comparten el MISMO CUFD vigente, y tanto la
-      // ventana del evento como las fechas de las facturas offline deben caer
-      // dentro de la vigencia de ese CUFD. eventWindowNow ya recorta la ventana;
-      // el lote se fecha en el punto medio (siempre dentro).
-      const win = this.eventWindowNow();
-      const evento = await this.registrarEvento(motivo, { ...win, etapa: "VI" });
-      const codigoEvento =
-        tagText(evento.body, "codigoRecepcionEventoSignificativo") ?? null;
-      if (!codigoEvento) {
-        return evento; // sin evento no hay paquete: cuenta como error de la racha
-      }
-      const lote = this.buildLote(2, {
-        tipoEmision: 2,
-        baseIndex: done * 2,
-        fechaIso: formatSinLocal(win.inicioMs + Math.floor((win.finMs - win.inicioMs) / 2)),
-      });
-      const envelope = buildRunnerEnvelope("recepcionPaqueteFactura", {
-        ...this.recepcionBase(2),
-        archivo: lote.archivo,
-        fechaEnvio: this.sinNow(),
-        hashArchivo: lote.hashArchivo,
-        cantidadFacturas: lote.cantidad,
-        codigoEvento,
-      });
-      const result = await this.post("FACTURACION_COMPRA_VENTA", envelope, {
-        etapa: "VI",
-        op: "recepcionPaqueteFactura",
-      });
-      if (result.ok && result.parsed?.codigoRecepcion) {
-        await sleep(2000);
-        const val = buildRunnerEnvelope("validacionRecepcionPaqueteFactura", {
-          ...this.recepcionBase(2),
-          codigoRecepcion: result.parsed.codigoRecepcion,
-        });
-        await this.post("FACTURACION_COMPRA_VENTA", val, {
-          etapa: "VI",
-          op: "validacionRecepcionPaqueteFactura",
-        });
-      }
-      return result;
-    });
+    for (const pv of PUNTOS_VENTA) {
+      await this.withCombo({ codigoPuntoVenta: pv }, () =>
+        this.loop(
+          "VI",
+          target,
+          async (done) => {
+            // SIN 984: evento y paquete comparten el MISMO CUFD vigente, y tanto la
+            // ventana del evento como las fechas de las facturas offline deben caer
+            // dentro de la vigencia de ese CUFD. eventWindowNow ya recorta la ventana;
+            // el lote se fecha en el punto medio (siempre dentro).
+            const win = this.eventWindowNow();
+            const evento = await this.registrarEvento(motivo, { ...win, etapa: "VI" });
+            const codigoEvento =
+              tagText(evento.body, "codigoRecepcionEventoSignificativo") ?? null;
+            if (!codigoEvento) {
+              return evento; // sin evento no hay paquete: cuenta como error de la racha
+            }
+            const lote = this.buildLote(2, {
+              tipoEmision: 2,
+              baseIndex: done * 2,
+              fechaIso: formatSinLocal(
+                win.inicioMs + Math.floor((win.finMs - win.inicioMs) / 2),
+              ),
+            });
+            const envelope = buildRunnerEnvelope("recepcionPaqueteFactura", {
+              ...this.recepcionBase(2),
+              archivo: lote.archivo,
+              fechaEnvio: this.sinNow(),
+              hashArchivo: lote.hashArchivo,
+              cantidadFacturas: lote.cantidad,
+              codigoEvento,
+            });
+            const result = await this.post(this.servicio, envelope, {
+              etapa: "VI",
+              op: "recepcionPaqueteFactura",
+              pv,
+            });
+            if (result.ok && result.parsed?.codigoRecepcion) {
+              await sleep(2000);
+              const val = buildRunnerEnvelope("validacionRecepcionPaqueteFactura", {
+                ...this.recepcionBase(2),
+                codigoRecepcion: result.parsed.codigoRecepcion,
+              });
+              await this.post(this.servicio, val, {
+                etapa: "VI",
+                op: "validacionRecepcionPaqueteFactura",
+              });
+            }
+            return result;
+          },
+          { caseId: `pv${pv}` },
+        ),
+      );
+    }
   }
 
   async anularOne() {
+    await this.ensureCufd();
     // Preferir validadas (908); las 901 (pendientes) suelen validar en segundos
-    // en el piloto, asi que valen como fallback.
+    // en el piloto, asi que valen como fallback. SIEMPRE del combo actual: la
+    // anulacion viaja con su codigoDocumentoSector/PdV y el SIN cuenta por caso.
+    const delCombo = (f) => f.combo === comboId(this.combo);
     const factura =
-      this.state.invoices.find((f) => !f.anulada && f.estado === 908) ??
-      this.state.invoices.find((f) => !f.anulada && f.estado === 901);
+      this.state.invoices.find((f) => delCombo(f) && !f.anulada && f.estado === 908) ??
+      this.state.invoices.find((f) => delCombo(f) && !f.anulada && f.estado === 901);
     if (!factura) {
-      throw new Error("etapa VII sin facturas validadas disponibles para anular");
+      throw new Error(
+        `etapa VII sin facturas validadas del combo ${comboId(this.combo)} para anular ` +
+          "(correr la etapa IV de ese combo primero)",
+      );
     }
     const motivo = (this.state.catalogs.motivosAnulacion ?? [])[0];
-    const envelope = buildAnulacionFacturaRequest({
+    const envelope = this.ops.anulacion.build({
       ...this.recepcionBase(1),
       codigoMotivo: motivo?.codigoClasificador ?? 1,
       cuf: factura.cuf,
     });
-    const result = await this.post("FACTURACION_COMPRA_VENTA", envelope, {
+    const result = await this.post(this.servicio, envelope, {
       etapa: "VII",
-      op: "anulacionFactura",
+      op: this.ops.anulacion.op,
       numeroFactura: factura.numero,
     });
     if (result.ok && result.parsed?.transaccion === true) {
@@ -1078,53 +1576,74 @@ class Runner {
     return result;
   }
 
+  /** Anulacion: 125 por combo -> 750. Cada anulacion usa una factura del MISMO combo. */
   async etapaVII(target = STAGE_TARGETS.VII) {
-    await this.loop("VII", target, () => this.anularOne());
+    for (const combo of EMISION_CASES) {
+      await this.withCombo(combo, () =>
+        this.loop("VII", target, () => this.anularOne(), { caseId: comboId(combo) }),
+      );
+    }
   }
 
   async etapaIX(target = STAGE_TARGETS.IX) {
     // SIN 916 (verificado en vivo 2026-08-06): la masiva exige tipo de emision
     // 3 (MASIVA) tanto en el request como en el CUF de las facturas del lote.
-    await this.loop("IX", target, async (done) => {
-      const lote = this.buildLote(2, { tipoEmision: 3, baseIndex: 1000 + done * 2 });
-      const envelope = buildRunnerEnvelope("recepcionMasivaFactura", {
-        ...this.recepcionBase(3),
-        archivo: lote.archivo,
-        fechaEnvio: this.sinNow(),
-        hashArchivo: lote.hashArchivo,
-        cantidadFacturas: lote.cantidad,
-      });
-      const result = await this.post("FACTURACION_COMPRA_VENTA", envelope, {
-        etapa: "IX",
-        op: "recepcionMasivaFactura",
-      });
-      if (result.ok && result.parsed?.codigoRecepcion) {
-        await sleep(2000);
-        const val = buildRunnerEnvelope("validacionRecepcionMasivaFactura", {
-          ...this.recepcionBase(3),
-          codigoRecepcion: result.parsed.codigoRecepcion,
-        });
-        await this.post("FACTURACION_COMPRA_VENTA", val, {
-          etapa: "IX",
-          op: "validacionRecepcionMasivaFactura",
-        });
-      }
-      return result;
-    });
+    for (const pv of PUNTOS_VENTA) {
+      await this.withCombo({ codigoPuntoVenta: pv }, () =>
+        this.loop(
+          "IX",
+          target,
+          async (done) => {
+            const lote = this.buildLote(2, { tipoEmision: 3, baseIndex: 1000 + done * 2 });
+            const envelope = buildRunnerEnvelope("recepcionMasivaFactura", {
+              ...this.recepcionBase(3),
+              archivo: lote.archivo,
+              fechaEnvio: this.sinNow(),
+              hashArchivo: lote.hashArchivo,
+              cantidadFacturas: lote.cantidad,
+            });
+            const result = await this.post(this.servicio, envelope, {
+              etapa: "IX",
+              op: "recepcionMasivaFactura",
+              pv,
+            });
+            if (result.ok && result.parsed?.codigoRecepcion) {
+              await sleep(2000);
+              const val = buildRunnerEnvelope("validacionRecepcionMasivaFactura", {
+                ...this.recepcionBase(3),
+                codigoRecepcion: result.parsed.codigoRecepcion,
+              });
+              await this.post(this.servicio, val, {
+                etapa: "IX",
+                op: "validacionRecepcionMasivaFactura",
+              });
+            }
+            return result;
+          },
+          { caseId: `pv${pv}` },
+        ),
+      );
+    }
   }
 
   async revertirOne() {
-    const factura = this.state.invoices.find((f) => f.anulada && !f.revertida);
+    await this.ensureCufd();
+    const factura = this.state.invoices.find(
+      (f) => f.combo === comboId(this.combo) && f.anulada && !f.revertida,
+    );
     if (!factura) {
-      throw new Error("etapa XI sin facturas anuladas disponibles para revertir");
+      throw new Error(
+        `etapa XI sin facturas anuladas del combo ${comboId(this.combo)} para revertir ` +
+          "(correr la etapa VII de ese combo primero)",
+      );
     }
-    const envelope = buildReversionAnulacionFacturaRequest({
+    const envelope = this.ops.reversion.build({
       ...this.recepcionBase(1),
       cuf: factura.cuf,
     });
-    const result = await this.post("FACTURACION_COMPRA_VENTA", envelope, {
+    const result = await this.post(this.servicio, envelope, {
       etapa: "XI",
-      op: "reversionAnulacionFactura",
+      op: this.ops.reversion.op,
       numeroFactura: factura.numero,
     });
     if (result.ok && result.parsed?.transaccion === true) {
@@ -1133,13 +1652,23 @@ class Runner {
     return result;
   }
 
+  /** Reversion: 125 por combo -> 750. Revierte anulaciones del MISMO combo. */
   async etapaXI(target = STAGE_TARGETS.XI) {
-    await this.loop("XI", target, () => this.revertirOne());
+    for (const combo of EMISION_CASES) {
+      await this.withCombo(combo, () =>
+        this.loop("XI", target, () => this.revertirOne(), { caseId: comboId(combo) }),
+      );
+    }
   }
 
-  /** Gate minimo: 2 CUIS, sync esencial, 1 CUFD, 1 emision, 1 anulacion, 1 reversion. */
+  /**
+   * Gate minimo: 1 CUIS y 1 CUFD por punto de venta, sync esencial, y 1 emision
+   * + anulacion + reversion POR COMBO. Con 6 combos son 6 de cada una: es el
+   * humo que prueba que los 3 documentos sector y los 2 PdV responden ANTES de
+   * quemar 4.000 operaciones. Si un combo esta mal, revienta aca y no a la hora.
+   */
   async gate() {
-    await this.etapaI(2);
+    await this.etapaI(1);
     await this.syncEssentials();
     this.checkpoint();
     await this.etapaIII(1);
@@ -1167,16 +1696,35 @@ class Runner {
     await map[id](count);
   }
 
+  /**
+   * Avance por etapa CONTRA EL TOTAL DEL SIN, para poder cotejar contra el
+   * "Listado de Etapas" del portal sin hacer cuentas a mano. `done` de las
+   * etapas por-caso no se incrementa (los contadores viven en `cases`), asi
+   * que el avance real se suma de ahi.
+   */
   summary() {
-    const rows = Object.entries(this.state.etapas).map(([id, e]) => ({
-      etapa: id,
-      done: e.done,
-      target: e.target,
-      attempts: e.attempts,
-      cases: e.cases,
-      blocked: e.blockedCases,
-    }));
-    return { hashMode: this.state.hashMode, cuis: this.state.cuis, etapas: rows };
+    const rows = Object.entries(this.state.etapas).map(([id, e]) => {
+      const porCasos = Object.values(e.cases ?? {}).reduce((a, b) => a + b, 0);
+      const hechas = porCasos > 0 ? porCasos : e.done;
+      const total = STAGE_TOTALS[id] ?? null;
+      return {
+        etapa: id,
+        hechas,
+        totalSin: total,
+        avance: total ? `${Math.floor((hechas / total) * 100)}%` : null,
+        porCaso: e.cases,
+        attempts: e.attempts,
+        blocked: e.blockedCases,
+      };
+    });
+    const hechas = rows.reduce((a, r) => a + r.hechas, 0);
+    const total = Object.values(STAGE_TOTALS).reduce((a, b) => a + b, 0);
+    return {
+      hashMode: this.state.hashMode,
+      cuisPorPv: this.state.cuisByPv,
+      general: `${hechas}/${total} (${Math.floor((hechas / total) * 100)}%)`,
+      etapas: rows,
+    };
   }
 }
 

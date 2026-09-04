@@ -57,7 +57,20 @@ export const DEFAULT_KNOWLEDGE_FILE = fileURLToPath(new URL("./knowledge.json", 
  * Un `faq[].id` que no este aca RECHAZA el archivo: una FAQ sin consumidor es una edicion que no
  * hace nada, o sea el fallo silencioso que esta capa existe para evitar.
  */
-export const FAQ_TEMPLATE = Object.freeze({ siat: "M_SIAT_BODY" });
+export const FAQ_TEMPLATE = Object.freeze({
+  siat: "M_SIAT_BODY",
+  // "precios": la respuesta a "¿cuanto cuesta?" en modo VENTA (inbox 4 web y 5 WhatsApp).
+  // M4_BODY es la plantilla que ya sirve `isPriceQuestion` en bot-engine.mjs, asi que esto NO
+  // inventa una rama nueva: cambia el TEXTO de una respuesta que el embudo ya daba.
+  // Decision de Sergio via sesion de control (2026-09-03, t_0651707c): el bot dice los precios
+  // publicos. Es la unica FAQ que puede traer cifras, y solo las de precios-publicos.mjs.
+  precios: "M4_BODY",
+  // "negocio": la FAQ editable del dueño (decision Sergio 2026-08-28). NO pisa un mensaje del
+  // guion: el recepcionista la consume como LISTA (varias FAQs, cada una con sus tags como
+  // disparadores) y la sirve via la plantilla R_FAQ_NEGOCIO. Control de calidad: guardrails
+  // sobre cada texto + checkFaqNegocio (sin disparador se rechaza) + vigencia.
+  negocio: "R_FAQ_NEGOCIO",
+});
 
 // ---------------------------------------------------------------------------
 // Allowlist estricto (el candado estructural)
@@ -109,10 +122,43 @@ const SHAPE = Object.freeze({
       modalidad: { kind: "text", max: 140 },
     },
   },
+  // Insistencia (v6.6, decision Sergio 2026-08-30: ENCENDIDA por defecto): si el
+  // cliente deja de responder, el asistente insiste UNA vez pasadas `horas`.
+  // La ausencia del campo = encendida con 2 horas (el default vive en quien lo lee,
+  // no aca — un doc viejo sin el campo no debe fallar la validacion).
+  seguimiento: {
+    kind: "object",
+    fields: {
+      activo: { kind: "bool" },
+      horas: { kind: "int", min: 1, max: 48 },
+    },
+  },
+
+  // Frases de campaña (2026-08-31, gap Sendy): la frase EXACTA que un link
+  // wa.me?text= o un anuncio precarga, y la respuesta del dueño para ese embudo.
+  // Ambos son kind text: los guardrails los vigilan como a todo dato del doc.
+  campanas: {
+    kind: "array",
+    maxItems: 10,
+    item: {
+      kind: "object",
+      fields: {
+        frase: { kind: "text", max: 200, required: true },
+        respuesta: { kind: "text", max: 500, required: true },
+        // Opt-in: la frase es un PREFIJO y el mensaje puede seguir (link con el texto abierto,
+        // ej. "...Mi negocio es: " en /v1/empezar). Sin el campo, el match es del mensaje entero.
+        prefijo: { kind: "bool" },
+      },
+    },
+  },
 
   faq: {
     kind: "array",
     maxItems: 20,
+    // La FAQ `precios` es la UNICA que puede traer cifras de plata, y aun asi solo las que estan
+    // en precios-publicos.mjs (atadas a los dos .ts por precios-publicos.test.mjs). Cualquier otra
+    // FAQ sigue en modo estricto: una cifra ahi rechaza el archivo entero, como siempre.
+    opcionesPorItem: (item) => (item?.id === "precios" ? { preciosPublicos: true } : {}),
     item: {
       kind: "object",
       fields: {
@@ -186,14 +232,14 @@ function isPlainObject(value) {
 }
 
 /** El guardrail que vigila al LLM vigila tambien a los datos (diseño §4, candado 2). */
-function checkText(value, path, errors) {
-  const violations = checkGuardrails(value);
+function checkText(value, path, errors, opciones = {}) {
+  const violations = checkGuardrails(value, opciones);
   for (const code of violations) {
     errors.push(`${path}: ${code} — ${guardrailReason(code)}`);
   }
 }
 
-function checkField(value, shape, path, errors) {
+function checkField(value, shape, path, errors, opciones = {}) {
   switch (shape.kind) {
     case "const":
       if (value !== shape.value) errors.push(`${path}: tiene que ser exactamente "${shape.value}"`);
@@ -203,7 +249,7 @@ function checkField(value, shape, path, errors) {
       if (typeof value !== "string") return void errors.push(`${path}: tiene que ser texto`);
       if (!value.trim()) return void errors.push(`${path}: no puede estar vacio`);
       if (value.length > shape.max) return void errors.push(`${path}: pasa de ${shape.max} caracteres`);
-      checkText(value, path, errors);
+      checkText(value, path, errors, opciones);
       return;
 
     case "enum":
@@ -226,6 +272,10 @@ function checkField(value, shape, path, errors) {
       if (value < shape.min || value > shape.max) errors.push(`${path}: fuera de rango (${shape.min}-${shape.max})`);
       return;
 
+    case "bool":
+      if (typeof value !== "boolean") errors.push(`${path}: tiene que ser true o false`);
+      return;
+
     case "date":
       if (value === null) {
         if (!shape.nullable) errors.push(`${path}: no puede ser null`);
@@ -245,18 +295,28 @@ function checkField(value, shape, path, errors) {
     case "textArray":
       if (!Array.isArray(value)) return void errors.push(`${path}: tiene que ser una lista`);
       if (value.length > shape.maxItems) return void errors.push(`${path}: mas de ${shape.maxItems} items`);
-      value.forEach((item, index) => checkField(item, { kind: "text", max: shape.max }, `${path}[${index}]`, errors));
+      value.forEach((item, index) => checkField(item, { kind: "text", max: shape.max }, `${path}[${index}]`, errors, opciones));
       return;
 
     case "array":
       if (!Array.isArray(value)) return void errors.push(`${path}: tiene que ser una lista`);
       if (value.length > shape.maxItems) return void errors.push(`${path}: mas de ${shape.maxItems} items`);
-      value.forEach((item, index) => checkField(item, shape.item, `${path}[${index}]`, errors));
+      // `opcionesPorItem` deja que un item elija con que reglas se lo valida segun su propio
+      // contenido — hoy solo la FAQ `precios`, que es la unica autorizada a traer cifras.
+      value.forEach((item, index) =>
+        checkField(
+          item,
+          shape.item,
+          `${path}[${index}]`,
+          errors,
+          typeof shape.opcionesPorItem === "function" ? shape.opcionesPorItem(item) : opciones,
+        ),
+      );
       return;
 
     case "object":
       if (!isPlainObject(value)) return void errors.push(`${path}: tiene que ser un objeto`);
-      checkObject(value, shape.fields, path, errors);
+      checkObject(value, shape.fields, path, errors, opciones);
       return;
 
     default:
@@ -264,7 +324,7 @@ function checkField(value, shape, path, errors) {
   }
 }
 
-function checkObject(value, fields, path, errors) {
+function checkObject(value, fields, path, errors, opciones = {}) {
   for (const [key, raw] of Object.entries(value)) {
     const shape = fields[key];
     // EL candado estructural: una clave que el esquema no declara rechaza el archivo entero.
@@ -273,7 +333,7 @@ function checkObject(value, fields, path, errors) {
       continue;
     }
     if (raw === undefined) continue;
-    checkField(raw, shape, `${path ? `${path}.` : ""}${key}`, errors);
+    checkField(raw, shape, `${path ? `${path}.` : ""}${key}`, errors, opciones);
   }
   for (const [key, shape] of Object.entries(fields)) {
     if (shape.required && value[key] === undefined) errors.push(`${path ? `${path}.` : ""}${key}: falta y es obligatorio`);
@@ -349,6 +409,22 @@ function checkRubros(rubros, errors) {
  * @returns {{ok: boolean, errors: string[]}} `ok:false` = el archivo se descarta ENTERO.
  * Nunca tira: un JSON con un getter hostil no puede tumbar el bot.
  */
+/** La FAQ del negocio SIN palabras disparadoras nunca se va a servir: se rechaza al publicar,
+ *  con el motivo claro, en vez de aceptar una edicion que no hace nada (fallo silencioso). */
+function checkFaqNegocio(faq, errors) {
+  if (!Array.isArray(faq)) return;
+  faq.forEach((item, index) => {
+    if (!item || item.id !== "negocio") return;
+    const tags = Array.isArray(item.tags) ? item.tags : [];
+    const utiles = tags.filter((tag) => normalize(tag).trim().length >= MIN_LEXICON_WORD);
+    if (!utiles.length) {
+      errors.push(
+        `faq[${index}]: la FAQ del negocio necesita al menos una palabra disparadora de ${MIN_LEXICON_WORD}+ letras en tags — sin eso el bot nunca la usa`,
+      );
+    }
+  });
+}
+
 export function validateKnowledge(data) {
   const errors = [];
   try {
@@ -357,6 +433,7 @@ export function validateKnowledge(data) {
     checkDemo(data.demo, errors);
     checkProductos(data.productos, errors);
     checkRubros(data.rubrosExtra, errors);
+    checkFaqNegocio(data.faq, errors);
   } catch (error) {
     errors.push(`no se pudo validar: ${String(error?.message || error).slice(0, 160)}`);
   }
@@ -399,7 +476,11 @@ export function readKnowledgeFile(path, deps = {}) {
 
 const EMPTY = Object.freeze({
   data: null,
-  source: "code", // "file" | "code". El paso (b) del diseño agrega "db" adelante del archivo.
+  source: "code", // "db" | "file" | "code". "db" = la fila publicada POR ORG (paso b), delante del archivo.
+  // Solo lo trae la fuente "db": el slug de la agenda publica de esa org. null = sin agenda.
+  orgSlug: null,
+  // Solo la fuente "db": { agotada, usadas, limite } de la cuota mensual. null = no se sabe = atender.
+  cuota: null,
   version: null,
   updatedBy: null,
   loadedAt: null,
@@ -480,14 +561,201 @@ function scheduleRefresh(path, nowMs, options = {}) {
     });
 }
 
+// ---------------------------------------------------------------------------
+// Fuente "db" (paso b): la fila publicada POR ORGANIZACION, via HTTP al producto
+// ---------------------------------------------------------------------------
+// El motor NO toca la base del producto: el producto expone la fila publicada en
+// GET /api/chatbot-knowledge/published (Bearer BOT_KNOWLEDGE_SECRET) y aca solo
+// se consume. Mismo contrato que el archivo: TTL, degradacion a archivo/codigo,
+// y el MISMO validador — un documento que el archivo rechazaria, la db tampoco entra.
+
+const DB_TIMEOUT_MS = 5000;
+const ORG_CACHE = new Map(); // clave (org o "inbox:<id>") -> mismo shape que CACHE, con source "db"
+const orgRefreshing = new Set();
+
+/**
+ * La clave de cache de la copia db. `organizationId` explicito manda (/preview);
+ * sin el, el inbox de Chatwoot que trajo la conversacion keyea como "inbox:<id>"
+ * y ES EL PRODUCTO quien lo resuelve a una org (clinic_settings.chatwootInboxId)
+ * — el motor no conoce el mapeo y no lo duplica.
+ */
+function cacheKeyOf(options = {}) {
+  const org = String(options.organizationId || "").trim();
+  if (org) return org;
+  const inbox = String(options.inboxId ?? "").trim();
+  return inbox ? `inbox:${inbox}` : "";
+}
+
+/** La query que entiende GET /published segun la clave: org directa o inbox a resolver. */
+function publishedQuery(key) {
+  return key.startsWith("inbox:")
+    ? `inboxId=${encodeURIComponent(key.slice("inbox:".length))}`
+    : `organizationId=${encodeURIComponent(key)}`;
+}
+
+/** Para los tests: olvida todas las copias por organizacion. */
+export function resetOrgKnowledgeCache() {
+  ORG_CACHE.clear();
+  orgRefreshing.clear();
+}
+
+function dbConfig(options = {}) {
+  return {
+    url: String(options.dbUrl ?? process.env.ONIA_BOT_KNOWLEDGE_URL ?? "").trim(),
+    secret: String(options.dbSecret ?? process.env.BOT_KNOWLEDGE_SECRET ?? "").trim(),
+    timeoutMs: Number.isFinite(options.dbTimeoutMs) ? options.dbTimeoutMs : DB_TIMEOUT_MS,
+    fetch: options.fetch || globalThis.fetch,
+  };
+}
+
+/** Sin URL o sin secreto la fuente esta APAGADA y eso NO es un error: es el estado de hoy. */
+async function fetchOrgKnowledge(key, options = {}) {
+  const { url, secret, timeoutMs, fetch: doFetch } = dbConfig(options);
+  if (!url || !secret || typeof doFetch !== "function") return { data: null, error: null, missing: true };
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    let res;
+    try {
+      res = await doFetch(`${url}?${publishedQuery(key)}`, {
+        headers: { authorization: `Bearer ${secret}` },
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timer);
+    }
+    if (res.status === 404) return { data: null, error: null, missing: true }; // org sin fila publicada
+    if (!res.ok) return { data: null, error: `la db contesto HTTP ${res.status}` };
+    const body = await res.json();
+    const verdict = validateKnowledge(body?.data);
+    if (!verdict.ok) {
+      return { data: null, error: `RECHAZADO (${verdict.errors.length}): ${verdict.errors.join(" · ")}`.slice(0, 600) };
+    }
+    // `orgSlug` es la agenda publica de esa org (`/book/<slug>`), y el producto lo manda SOLO si
+    // la org de verdad puede recibir reservas (add-on / plan). Que falte no es un error: es una
+    // org sin agenda, y el bot vuelve a derivar la cita a un humano (recepcionista.mjs).
+    const orgSlug = typeof body?.orgSlug === "string" ? body.orgSlug.trim() : "";
+    return { data: body.data, orgSlug: orgSlug || null, cuota: cuotaDe(body?.cuota), error: null };
+  } catch (error) {
+    return { data: null, error: `no se pudo leer la db: ${String(error?.message || error).slice(0, 160)}` };
+  }
+}
+
+/**
+ * La CUOTA MENSUAL de la org, tal como la manda /published (lote 4, 2026-09-03):
+ * `{ agotada, usadas, limite }`. null = el producto no pudo leerla (o no la manda todavia) y
+ * entonces el bot SIGUE ATENDIENDO (fail-open): cortar por un dato que no existe es callar.
+ */
+function cuotaDe(raw) {
+  if (!raw || typeof raw !== "object" || typeof raw.agotada !== "boolean") return null;
+  return { agotada: raw.agotada, usadas: Number(raw.usadas) || 0, limite: Number(raw.limite) || 0 };
+}
+
+/** Igual que nextCache: un fetch fallido CONSERVA la ultima copia buena de esa org. */
+function nextOrgCache(prev, result, organizationId, nowMs) {
+  if (result.data) {
+    return Object.freeze({
+      data: result.data,
+      source: "db",
+      orgSlug: result.orgSlug || null,
+      cuota: result.cuota || null,
+      version: typeof result.data.version === "string" ? result.data.version : null,
+      updatedBy: typeof result.data.updatedBy === "string" ? result.data.updatedBy : null,
+      loadedAt: new Date(nowMs).toISOString(),
+      checkedAt: nowMs,
+      path: `db:${organizationId}`,
+      error: null,
+    });
+  }
+  const base = prev || EMPTY;
+  return Object.freeze({
+    ...base,
+    source: base.data ? base.source : "code",
+    checkedAt: nowMs,
+    path: `db:${organizationId}`,
+    error: result.missing ? null : result.error || base.error,
+  });
+}
+
+function scheduleOrgRefresh(key, nowMs, options = {}) {
+  if (orgRefreshing.has(key)) return;
+  orgRefreshing.add(key);
+  Promise.resolve()
+    .then(() => fetchOrgKnowledge(key, options))
+    .then((result) => {
+      ORG_CACHE.set(key, nextOrgCache(ORG_CACHE.get(key), result, key, nowMs));
+    })
+    .catch(() => {})
+    .finally(() => {
+      orgRefreshing.delete(key);
+    });
+}
+
+/**
+ * La fila publicada de UNA organizacion, ESPERANDO la red si hace falta.
+ * La usa /preview (que no esta en el camino del mensaje). El camino del turno
+ * usa getKnowledge(), que jamas espera red. Degradacion: sin datos de la db
+ * (fuente apagada, 404, HTTP roto, documento invalido) cae al archivo/codigo.
+ */
+export async function getOrgKnowledge(organizationId, options = {}) {
+  try {
+    // Acepta la org directa (asi la llama /preview) o, sin ella, la clave que salga de
+    // options (organizationId u inboxId) — misma clave que usa el camino sincronico.
+    const key = String(organizationId || "").trim() || cacheKeyOf(options);
+    if (!key) return getKnowledge(options);
+    const nowMs = Number.isFinite(options.nowMs) ? options.nowMs : Date.now();
+    const prev = ORG_CACHE.get(key);
+    if (!prev || prev.checkedAt === null || nowMs - prev.checkedAt >= ttlMs(options)) {
+      ORG_CACHE.set(key, nextOrgCache(prev, await fetchOrgKnowledge(key, options), key, nowMs));
+    }
+    const state = ORG_CACHE.get(key);
+    return state.data ? state : getKnowledge(options);
+  } catch {
+    return getKnowledge(options);
+  }
+}
+
+/**
+ * Como getKnowledge(), pero si esa org/inbox NUNCA se consulto en este proceso, espera UNA
+ * lectura de red (acotada por el timeout de la db, 5 s max) antes de contestar.
+ *
+ * POR QUE EXISTE: con la cache fria, el camino 100% sincronico serviria el archivo/codigo de
+ * Onia — o sea que el PRIMER mensaje del cliente de una ferreteria saldria con la cara de Onia,
+ * que es exactamente lo que la resolucion por inbox existe para evitar. Despues de ese primer
+ * intento (bueno O fallido: la entrada queda en cache igual) esto ES getKnowledge: sincronico,
+ * copia vieja + refresh en background. Una espera acotada por inbox por proceso, nada mas.
+ */
+export async function ensureKnowledge(options = {}) {
+  try {
+    const key = cacheKeyOf(options);
+    if (key && !ORG_CACHE.has(key)) return await getOrgKnowledge(key, options);
+    return getKnowledge(options);
+  } catch {
+    return getKnowledge(options);
+  }
+}
+
 /**
  * El conocimiento vigente. SINCRONICO y tolerante: nunca tira y nunca espera red.
+ *   - con `options.organizationId` (o `options.inboxId`) y copia db en cache: la copia
+ *     de ESA org (vencido el TTL se sirve la vieja y se refresca aparte);
+ *   - sin copia db (o sin organizationId/inboxId): el archivo local de siempre;
  *   - primera vez (o cambio de ruta): lectura sincronica del archivo local (arranque);
  *   - TTL vigente: devuelve el cache;
  *   - TTL vencido: DEVUELVE LA COPIA VIEJA YA y dispara la relectura aparte.
  */
 export function getKnowledge(options = {}) {
   try {
+    const orgKey = cacheKeyOf(options);
+    if (orgKey) {
+      const orgNow = Number.isFinite(options.nowMs) ? options.nowMs : Date.now();
+      const org = ORG_CACHE.get(orgKey);
+      if (!org || org.checkedAt === null || orgNow - org.checkedAt >= ttlMs(options)) {
+        scheduleOrgRefresh(orgKey, orgNow, options);
+      }
+      if (org?.data) return org;
+      // sin copia db todavia: sigue el camino del archivo/codigo de siempre
+    }
     const path = knowledgePath(options);
     const nowMs = Number.isFinite(options.nowMs) ? options.nowMs : Date.now();
     if (CACHE.path !== path) {
@@ -527,7 +795,7 @@ export function knowledgeHealth(options = {}) {
 // ---------------------------------------------------------------------------
 
 /** Una FAQ vencida NO se sirve: el bot afirmando algo que ya no es cierto es el peor daño. */
-function faqVigente(item, nowIso) {
+export function faqVigente(item, nowIso) {
   if (item.status !== "publicado") return false;
   if (!item.vigenteHasta) return true;
   const raw = String(item.vigenteHasta);
@@ -573,6 +841,14 @@ export function applyKnowledge(base = DEFAULT_CONFIG, data = null, options = {})
   // dos archivos.
   if (Array.isArray(data.rubrosExtra) && data.rubrosExtra.length) overrides.rubrosExtra = data.rubrosExtra;
 
+  // Las campañas viajan a la config de LOS DOS modos, no solo del recepcionista. El consumidor
+  // principal de `campanas` son los links wa.me?text= de onia.com.bo, que apuntan al numero de
+  // Onia — y ese numero corre en modo VENTA. Hasta hoy `campanaExacta` solo se leia desde
+  // `config.conocimiento`, que unicamente existe en el recepcionista: las cuatro frases que la
+  // web manda de verdad no podian matchear nunca. `campanaExacta(config, norm)` lee `.campanas`,
+  // asi que la misma funcion sirve a los dos (el recepcionista le pasa `config.conocimiento`).
+  if (Array.isArray(data.campanas) && data.campanas.length) overrides.campanas = data.campanas;
+
   const extraDemo = data.triggersExtra?.demo;
   if (Array.isArray(extraDemo) && extraDemo.length) {
     // UNION con el codigo: agregar es libre, quitar es imposible (diseño §4, candado 4).
@@ -582,6 +858,9 @@ export function applyKnowledge(base = DEFAULT_CONFIG, data = null, options = {})
 
   const script = {};
   for (const item of Array.isArray(data.faq) ? data.faq : []) {
+    // "negocio" NO pisa el guion: son N entradas y las consume el recepcionista como lista
+    // (recepcionista.mjs, faqNegocioVigente). Pisar script[R_FAQ_NEGOCIO] dejaria solo la ultima.
+    if (item?.id === "negocio") continue;
     const templateKey = FAQ_TEMPLATE[item?.id];
     if (templateKey && faqVigente(item, nowIso)) script[templateKey] = item.body;
   }
@@ -591,13 +870,44 @@ export function applyKnowledge(base = DEFAULT_CONFIG, data = null, options = {})
 }
 
 /**
+ * MODO RECEPCIONISTA: la config del bot de un CLIENTE de Onia. Se activa SOLO cuando el
+ * conocimiento vino de la fila publicada de una org (fuente "db" con org/inbox resuelto) —
+ * nunca por el archivo local ni por el codigo, que son la cara de Onia. `conocimiento` viaja
+ * entero (el documento validado "onia.bot.knowledge/1") para que el motor renderice SOLO
+ * hechos de la org y pueda ser honesto cuando un campo falta. Ver recepcionista.mjs.
+ *
+ * `orgSlug` (opcional) es la agenda publica de esa org: con el, el bot AGENDA de verdad mandando
+ * `/book/<slug>`; sin el, la cita se deriva a un humano como siempre. Va por parametro y no
+ * dentro de `data` a proposito: no es un hecho editable por el dueño, es la identidad de su org
+ * en el producto — el allowlist de esta capa no tiene (ni debe tener) un campo para escribirlo.
+ */
+export function asRecepcionista(config, data, orgSlug = null, cuota = null) {
+  const slug = typeof orgSlug === "string" && orgSlug.trim() ? orgSlug.trim() : null;
+  // `cuota` viaja igual que orgSlug: dato de la org en el producto, no un hecho editable.
+  // Con `agotada:true` el motor contesta el texto fijo y deriva (bot-engine.mjs, barrera 1b).
+  const base = createBotConfig({ modo: "recepcionista", conocimiento: data, orgSlug: slug, cuota: cuotaDe(cuota) }, config);
+  // Sin humanName del cliente, el fallback heredado era "Sergio" (el humano del
+  // funnel de VENTA de Onia): un negocio ajeno decia "Sergio te confirma" delante
+  // de su cliente final (visto en prod, 2026-08-29). Neutro: "el equipo" — M7 dice
+  // "el equipo te confirma" y el boton queda "Hablar con el equipo".
+  const humanoDelCliente = String(data?.identity?.humanName || "").trim();
+  if (!humanoDelCliente) {
+    return { ...base, identity: { ...base.identity, humanName: "el equipo" } };
+  }
+  return base;
+}
+
+/**
  * La config del turno con los hechos editables aplicados. Es LO UNICO que llaman run-turn.mjs y
  * followup-run.mjs. Sin archivo (el estado de hoy) devuelve la misma config que recibio.
+ * Con fuente "db" (org cliente) ademas enciende el modo recepcionista.
  */
 export function withKnowledge(config = DEFAULT_CONFIG, options = {}) {
   try {
     const state = getKnowledge(options);
-    return state.data ? applyKnowledge(config, state.data, options) : config;
+    if (!state.data) return config;
+    const applied = applyKnowledge(config, state.data, options);
+    return state.source === "db" ? asRecepcionista(applied, state.data, state.orgSlug, state.cuota) : applied;
   } catch {
     return config;
   }

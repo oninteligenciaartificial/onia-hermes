@@ -1,0 +1,16 @@
+{
+  "nombre": "panel-chatbot",
+  "url": "https://app.onia.com.bo/settings/chatbot",
+  "cola": "hermes-content/docs/cola/chatbot.md",
+  "duenio": "chatbot-cola",
+  "medida": false,
+  "motivoNoMedida": "faltan ONIA_CANARIO_USER / ONIA_CANARIO_PASS (credencial de sólo lectura, la da Sergio)",
+  "status": null,
+  "fallo": null,
+  "bytes": 0,
+  "msMirable": 0,
+  "msTotal": 0,
+  "erroresConsola": [],
+  "visto": null,
+  "NOTA": "ESTO NO ES UNA BASELINE: es el registro de que la pantalla nunca se midio. Hasta el 2026-09-02 este archivo guardaba los numeros del LOGIN (773831 bytes, 973 ms) bajo el nombre del panel, porque sin sesion /settings/chatbot redirige a /login. Con eso el canario imprimia 'sin disparo mecanico (comparada)': daba por buena una pantalla que nunca vio, comparandola contra otra. Los numeros van en 0 A PROPOSITO — asi, si algun dia se leyera igual, no puede producir una desviacion fantasma (juzgar() solo compara cuando base.bytes > 0). La baseline de verdad se crea la primera vuelta que el canario ENTRE con credenciales, y una baseline nueva no es una verificacion."
+}

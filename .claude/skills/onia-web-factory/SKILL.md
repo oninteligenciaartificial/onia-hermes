@@ -6,7 +6,9 @@ description: Invocar al construir o rediseñar cualquier superficie web en onia-
 # ONIA — Web Factory (construir webs anti-template)
 
 Aplica a carriles A (onia-center) y B (landings/sitios cliente). Objetivo: que el output
-NO salga genérico. Subagente para delegar: `web-factory-builder`.
+NO salga genérico. ⚠️ El subagente `web-factory-builder` fue RETIRADO el 2026-08-18
+(cápsula congelada en `.claude/agents/_retirados/`): el trabajo lo hace la sesión con esta
+skill, no ese agente.
 
 ## Lo primero: la web de cliente NO se escribe a mano
 
@@ -58,8 +60,22 @@ pnpm factory:smoke                            # test + regenerar los 8 demos
 ```
 
 Templates válidos (`data/schema.ts` → `WEB_FACTORY_TEMPLATES`):
-`landing` · `store` · `dashboard` · `landing-focus` · `landing-clinic`.
+`landing` · `store` · `dashboard` · `landing-focus` · `landing-clinic` ·
+`landing-realestate` · `landing-logistics`.
 El de más calidad hoy es `landing-clinic` (dental-demo); `landing` es el más genérico.
+
+⚠️ Trampas aprendidas construyendo el cliente de prueba (2026-08-28):
+- **El intake SÍ mapea `trustProofs→credenciales`, `heroImage→imagenSecundaria` (si hay
+  heroPoster distinto), `content.proceso` y `content.faqs`** desde el fix de esta fecha.
+  Antes esos campos se tiraban en silencio y el template clinic salía sin feature, sin
+  proceso y sin FAQ — la página quedaba a la mitad y parecía culpa del template.
+- **Capturas fullPage mienten dos veces**: las imágenes `loading="lazy"` fuera del primer
+  viewport no cargan (pase de scroll antes de capturar) y las animaciones scroll-driven
+  (`animation-timeline: view()`) quedan congeladas a 0% fabricando huecos (capturar con
+  `reducedMotion: "reduce"`; el template tiene corto-circuito).
+- **El CSS del clinic pide `font-weight: 820`**: cargar la tipografía como rango variable
+  `wght@300..900` (un `<link>` por familia), no como escalera estática 400-700 — si no,
+  el hero cae al fallback del sistema y la receta de marca no existe en pantalla.
 
 `--dry-run` de `factory:build` imprime los **pending inputs** (logo, asset de hero, canal
 de conversión, dominio): ese listado es el checklist que se le pide al cliente, no se inventa.
@@ -181,3 +197,30 @@ Reprocharle a un prospecto lo que tenemos roto es un bumerán. Estado 2026-08-13
 - `packages/templates/src/store.ts` (~3.4k líneas) viola la regla de <800. No escribir otro
   template monolítico: un rubro nuevo sale de bloques, no de un archivo nuevo de 3.000 líneas.
 - `apps/onia-platform/**` es la landing en producción: carril aparte, no tocar de paso.
+
+## Fotos generadas por IA en una superficie de venta
+
+Decisión, dirección fotográfica, shot list y gate completos →
+**`hermes-content/docs/ONIA_WEB_IMAGENES_DE_CONTEXTO.md`**. Acá sólo lo que hace tropezar:
+
+- **La interfaz NUNCA la dibuja la IA.** La captura es real; la IA genera **contexto y uso**
+  (personas en su negocio). Una UI generada es *fabricar producto* y está prohibido. En la foto
+  el dispositivo va **boca abajo, cerrado o girado hacia la palma**.
+- **⚠️ En un modelo sin `negative_prompt`, la lista de "evitar" INVOCA lo que nombra.** `text2image_soul_v2`
+  sólo acepta `quality` y `soul_id`: todo lo demás cae en el MISMO campo de texto. Un lote de 6
+  con sección `Avoid: dashboards, blue neon, candlestick charts, man in a suit pointing at a
+  whiteboard` devolvió exactamente eso — pantallas de datos azules, un gráfico de velas y el
+  señor de traje señalando la pizarra. **6/6 rechazadas.** El prompt se escribe **100%
+  afirmativo**: lo que no querés que aparezca no se nombra, se reemplaza por su opuesto descrito
+  como hecho físico (`a closed laptop rests shut on the box`, no `no readable screen`).
+- **Si el prompt describe ropa, el modelo le pone marca.** Ya pasó tres veces: logo de Nike,
+  gorra de NY, y un uniforme bordado **"BOLVIA"** (marca inventada con falta de ortografía).
+  Mirar pecho, gorra y taza de cada imagen antes de aprobar.
+- **Un asset generado que no pasó el gate no se deja tirado en `public/`.** Los
+  `public/fotos/*.webp` viejos (sonrisa a cámara, bata blanca, grade teal-naranja) sobrevivieron
+  meses ahí y la sesión siguiente casi los cablea creyéndolos material bueno. Si no se pueden
+  borrar porque algo los referencia, **queda escrito en el doc del tema por qué no sirven**.
+- **Una imagen se juzga MONTADA al tamaño real** en que se va a ver, no abierta a pantalla
+  completa. Un recorte nítido a 1434 px puede ser ilegible en una tarjeta de 290 px.
+- **Gasto:** imagen en lote chico = trivial y ya validado (~0,12 cr por imagen 2k). **Video =
+  permiso explícito de Sergio con `get_cost` por delante.** Registrar cada lote.

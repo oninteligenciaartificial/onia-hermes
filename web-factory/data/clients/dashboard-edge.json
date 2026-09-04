@@ -1,0 +1,903 @@
+{
+  "nombre": "Panel Borde",
+  "slug": "dashboard-edge",
+  "tagline": "Fixture de casos borde del panel",
+  "descripcion": "Panel de prueba con los datos que rompen: negativos, ceros, series largas y secciones en cargando, error y vacio.",
+  "logo": "PB",
+  "colores": {
+    "primary": "#0d6b5c",
+    "secondary": "#155e75",
+    "accent": "#f59e0b",
+    "bg": "#f6f2ea",
+    "fg": "#161c22"
+  },
+  "tipografia": {
+    "heading": "Bricolage Grotesque",
+    "body": "DM Sans"
+  },
+  "contacto": {
+    "email": "",
+    "tel": "",
+    "whatsapp": "",
+    "direccion": ""
+  },
+  "servicios": [
+    {
+      "titulo": "Casos borde",
+      "desc": "Los datos que los demos lindos nunca traen y que igual llegan en produccion.",
+      "icono": "search"
+    },
+    {
+      "titulo": "Estados",
+      "desc": "Cargando, error y vacio dibujados al mismo tiempo en la misma fila.",
+      "icono": "layout"
+    },
+    {
+      "titulo": "Series largas",
+      "desc": "90 puntos para que el recorte y el eje se vean, no se supongan.",
+      "icono": "shield"
+    }
+  ],
+  "cta": {
+    "texto": "Ver panel",
+    "url": "#"
+  },
+  "seo": {
+    "title": "Panel Borde - fixture de casos borde",
+    "description": "Fixture del panel con negativos, ceros, series de 90 puntos y las secciones en cargando, error y vacio."
+  },
+  "dashboard": {
+    "title": "Panel de casos borde",
+    "subtitle": "Cada tarjeta trae el dato que rompe: negativo, cero, serie larga o seccion sin dato.",
+    "nav": [
+      "Resumen",
+      "Series",
+      "Estados"
+    ],
+    "filters": [
+      "30 dias",
+      "90 dias"
+    ],
+    "kpis": [
+      {
+        "label": "Resultado del mes",
+        "value": "-Bs 1.850",
+        "delta": "cayo 22%",
+        "trend": "down",
+        "context": "el negativo tiene que bajar del cero, no aplastarse contra el piso",
+        "variant": "accent",
+        "spark": [
+          400,
+          120,
+          -80,
+          -300,
+          -520,
+          -1850
+        ]
+      },
+      {
+        "label": "Cobros de hoy",
+        "value": "0",
+        "delta": "sin movimiento",
+        "trend": "flat",
+        "context": "el cero es un dato, no un vacio",
+        "spark": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "label": "Dias medidos",
+        "value": "90",
+        "delta": "serie completa",
+        "trend": "up",
+        "context": "90 puntos: si el ancho tiene piso, las ultimas barras se salen del viewBox",
+        "spark": [
+          12,
+          30,
+          48,
+          61,
+          74,
+          90
+        ]
+      },
+      {
+        "label": "Margen del trimestre",
+        "value": "Bs 340",
+        "delta": "tope 350",
+        "trend": "up",
+        "context": "el eje tiene que cerrar en 350, no inflarse a 500"
+      }
+    ],
+    "charts": [
+      {
+        "title": "Resultado por mes",
+        "unit": "Bs",
+        "type": "bar",
+        "points": [
+          {
+            "label": "Ene",
+            "value": 900
+          },
+          {
+            "label": "Feb",
+            "value": -300
+          },
+          {
+            "label": "Mar",
+            "value": 0
+          },
+          {
+            "label": "Abr",
+            "value": 340
+          },
+          {
+            "label": "May",
+            "value": -120
+          },
+          {
+            "label": "Jun",
+            "value": 610
+          }
+        ]
+      },
+      {
+        "title": "Caja diaria (90 dias)",
+        "unit": "Bs",
+        "type": "bar",
+        "points": [
+          {
+            "label": "d1",
+            "value": 40
+          },
+          {
+            "label": "d2",
+            "value": 47
+          },
+          {
+            "label": "d3",
+            "value": 54
+          },
+          {
+            "label": "d4",
+            "value": 61
+          },
+          {
+            "label": "d5",
+            "value": 68
+          },
+          {
+            "label": "d6",
+            "value": 60
+          },
+          {
+            "label": "d7",
+            "value": 66
+          },
+          {
+            "label": "d8",
+            "value": 71
+          },
+          {
+            "label": "d9",
+            "value": 76
+          },
+          {
+            "label": "d10",
+            "value": 81
+          },
+          {
+            "label": "d11",
+            "value": 70
+          },
+          {
+            "label": "d12",
+            "value": 73
+          },
+          {
+            "label": "d13",
+            "value": 76
+          },
+          {
+            "label": "d14",
+            "value": 78
+          },
+          {
+            "label": "d15",
+            "value": 79
+          },
+          {
+            "label": "d16",
+            "value": 65
+          },
+          {
+            "label": "d17",
+            "value": 66
+          },
+          {
+            "label": "d18",
+            "value": 66
+          },
+          {
+            "label": "d19",
+            "value": 65
+          },
+          {
+            "label": "d20",
+            "value": 64
+          },
+          {
+            "label": "d21",
+            "value": 48
+          },
+          {
+            "label": "d22",
+            "value": 47
+          },
+          {
+            "label": "d23",
+            "value": 46
+          },
+          {
+            "label": "d24",
+            "value": 45
+          },
+          {
+            "label": "d25",
+            "value": 44
+          },
+          {
+            "label": "d26",
+            "value": 27
+          },
+          {
+            "label": "d27",
+            "value": 27
+          },
+          {
+            "label": "d28",
+            "value": 26
+          },
+          {
+            "label": "d29",
+            "value": 26
+          },
+          {
+            "label": "d30",
+            "value": 27
+          },
+          {
+            "label": "d31",
+            "value": 13
+          },
+          {
+            "label": "d32",
+            "value": 14
+          },
+          {
+            "label": "d33",
+            "value": 16
+          },
+          {
+            "label": "d34",
+            "value": 19
+          },
+          {
+            "label": "d35",
+            "value": 22
+          },
+          {
+            "label": "d36",
+            "value": 11
+          },
+          {
+            "label": "d37",
+            "value": 16
+          },
+          {
+            "label": "d38",
+            "value": 21
+          },
+          {
+            "label": "d39",
+            "value": 26
+          },
+          {
+            "label": "d40",
+            "value": 32
+          },
+          {
+            "label": "d41",
+            "value": 24
+          },
+          {
+            "label": "d42",
+            "value": 31
+          },
+          {
+            "label": "d43",
+            "value": 38
+          },
+          {
+            "label": "d44",
+            "value": 45
+          },
+          {
+            "label": "d45",
+            "value": 52
+          },
+          {
+            "label": "d46",
+            "value": 44
+          },
+          {
+            "label": "d47",
+            "value": 52
+          },
+          {
+            "label": "d48",
+            "value": 59
+          },
+          {
+            "label": "d49",
+            "value": 65
+          },
+          {
+            "label": "d50",
+            "value": 72
+          },
+          {
+            "label": "d51",
+            "value": 63
+          },
+          {
+            "label": "d52",
+            "value": 68
+          },
+          {
+            "label": "d53",
+            "value": 73
+          },
+          {
+            "label": "d54",
+            "value": 78
+          },
+          {
+            "label": "d55",
+            "value": 82
+          },
+          {
+            "label": "d56",
+            "value": 70
+          },
+          {
+            "label": "d57",
+            "value": 73
+          },
+          {
+            "label": "d58",
+            "value": 75
+          },
+          {
+            "label": "d59",
+            "value": 76
+          },
+          {
+            "label": "d60",
+            "value": 77
+          },
+          {
+            "label": "d61",
+            "value": 63
+          },
+          {
+            "label": "d62",
+            "value": 63
+          },
+          {
+            "label": "d63",
+            "value": 62
+          },
+          {
+            "label": "d64",
+            "value": 61
+          },
+          {
+            "label": "d65",
+            "value": 60
+          },
+          {
+            "label": "d66",
+            "value": 44
+          },
+          {
+            "label": "d67",
+            "value": 43
+          },
+          {
+            "label": "d68",
+            "value": 42
+          },
+          {
+            "label": "d69",
+            "value": 40
+          },
+          {
+            "label": "d70",
+            "value": 39
+          },
+          {
+            "label": "d71",
+            "value": 24
+          },
+          {
+            "label": "d72",
+            "value": 23
+          },
+          {
+            "label": "d73",
+            "value": 23
+          },
+          {
+            "label": "d74",
+            "value": 24
+          },
+          {
+            "label": "d75",
+            "value": 25
+          },
+          {
+            "label": "d76",
+            "value": 11
+          },
+          {
+            "label": "d77",
+            "value": 13
+          },
+          {
+            "label": "d78",
+            "value": 16
+          },
+          {
+            "label": "d79",
+            "value": 19
+          },
+          {
+            "label": "d80",
+            "value": 23
+          },
+          {
+            "label": "d81",
+            "value": 13
+          },
+          {
+            "label": "d82",
+            "value": 18
+          },
+          {
+            "label": "d83",
+            "value": 23
+          },
+          {
+            "label": "d84",
+            "value": 29
+          },
+          {
+            "label": "d85",
+            "value": 36
+          },
+          {
+            "label": "d86",
+            "value": 28
+          },
+          {
+            "label": "d87",
+            "value": 35
+          },
+          {
+            "label": "d88",
+            "value": 42
+          },
+          {
+            "label": "d89",
+            "value": 49
+          },
+          {
+            "label": "d90",
+            "value": 56
+          }
+        ]
+      },
+      {
+        "title": "Flujo contra el cero",
+        "unit": "Bs",
+        "type": "line",
+        "points": [
+          {
+            "label": "Ene",
+            "value": 50
+          },
+          {
+            "label": "Feb",
+            "value": -50
+          },
+          {
+            "label": "Mar",
+            "value": 0
+          },
+          {
+            "label": "Abr",
+            "value": 120
+          },
+          {
+            "label": "May",
+            "value": -30
+          },
+          {
+            "label": "Jun",
+            "value": 80
+          }
+        ]
+      },
+      {
+        "title": "Avance del cierre",
+        "unit": "% del tope",
+        "type": "radial",
+        "points": [
+          {
+            "label": "Cerrado",
+            "value": 0
+          },
+          {
+            "label": "Pendiente",
+            "value": 12
+          }
+        ]
+      },
+      {
+        "title": "Saldo de caja (60 dias)",
+        "unit": "Bs",
+        "type": "sparkline",
+        "points": [
+          {
+            "label": "d1",
+            "value": 200
+          },
+          {
+            "label": "d2",
+            "value": 212
+          },
+          {
+            "label": "d3",
+            "value": 224
+          },
+          {
+            "label": "d4",
+            "value": 236
+          },
+          {
+            "label": "d5",
+            "value": 248
+          },
+          {
+            "label": "d6",
+            "value": 260
+          },
+          {
+            "label": "d7",
+            "value": 272
+          },
+          {
+            "label": "d8",
+            "value": 158
+          },
+          {
+            "label": "d9",
+            "value": 170
+          },
+          {
+            "label": "d10",
+            "value": 182
+          },
+          {
+            "label": "d11",
+            "value": 194
+          },
+          {
+            "label": "d12",
+            "value": 206
+          },
+          {
+            "label": "d13",
+            "value": 218
+          },
+          {
+            "label": "d14",
+            "value": 230
+          },
+          {
+            "label": "d15",
+            "value": 116
+          },
+          {
+            "label": "d16",
+            "value": 128
+          },
+          {
+            "label": "d17",
+            "value": 140
+          },
+          {
+            "label": "d18",
+            "value": 152
+          },
+          {
+            "label": "d19",
+            "value": 164
+          },
+          {
+            "label": "d20",
+            "value": 176
+          },
+          {
+            "label": "d21",
+            "value": 188
+          },
+          {
+            "label": "d22",
+            "value": 74
+          },
+          {
+            "label": "d23",
+            "value": 86
+          },
+          {
+            "label": "d24",
+            "value": 98
+          },
+          {
+            "label": "d25",
+            "value": 110
+          },
+          {
+            "label": "d26",
+            "value": 122
+          },
+          {
+            "label": "d27",
+            "value": 134
+          },
+          {
+            "label": "d28",
+            "value": 146
+          },
+          {
+            "label": "d29",
+            "value": 32
+          },
+          {
+            "label": "d30",
+            "value": 44
+          },
+          {
+            "label": "d31",
+            "value": 56
+          },
+          {
+            "label": "d32",
+            "value": 68
+          },
+          {
+            "label": "d33",
+            "value": 80
+          },
+          {
+            "label": "d34",
+            "value": 92
+          },
+          {
+            "label": "d35",
+            "value": 104
+          },
+          {
+            "label": "d36",
+            "value": -10
+          },
+          {
+            "label": "d37",
+            "value": 2
+          },
+          {
+            "label": "d38",
+            "value": 14
+          },
+          {
+            "label": "d39",
+            "value": 26
+          },
+          {
+            "label": "d40",
+            "value": 38
+          },
+          {
+            "label": "d41",
+            "value": 50
+          },
+          {
+            "label": "d42",
+            "value": 62
+          },
+          {
+            "label": "d43",
+            "value": -52
+          },
+          {
+            "label": "d44",
+            "value": -40
+          },
+          {
+            "label": "d45",
+            "value": -28
+          },
+          {
+            "label": "d46",
+            "value": -16
+          },
+          {
+            "label": "d47",
+            "value": -4
+          },
+          {
+            "label": "d48",
+            "value": 8
+          },
+          {
+            "label": "d49",
+            "value": 20
+          },
+          {
+            "label": "d50",
+            "value": -94
+          },
+          {
+            "label": "d51",
+            "value": -82
+          },
+          {
+            "label": "d52",
+            "value": -70
+          },
+          {
+            "label": "d53",
+            "value": -58
+          },
+          {
+            "label": "d54",
+            "value": -46
+          },
+          {
+            "label": "d55",
+            "value": -34
+          },
+          {
+            "label": "d56",
+            "value": -22
+          },
+          {
+            "label": "d57",
+            "value": -136
+          },
+          {
+            "label": "d58",
+            "value": -124
+          },
+          {
+            "label": "d59",
+            "value": -112
+          },
+          {
+            "label": "d60",
+            "value": -100
+          }
+        ]
+      },
+      {
+        "title": "Ingresos por canal",
+        "unit": "Bs",
+        "type": "donut",
+        "estado": "cargando",
+        "points": [
+          {
+            "label": "Mostrador",
+            "value": 40
+          },
+          {
+            "label": "WhatsApp",
+            "value": 35
+          },
+          {
+            "label": "Web",
+            "value": 25
+          }
+        ]
+      },
+      {
+        "title": "Conversion semanal",
+        "unit": "%",
+        "type": "sparkline",
+        "estado": "error",
+        "points": [
+          {
+            "label": "S1",
+            "value": 12
+          },
+          {
+            "label": "S2",
+            "value": 18
+          }
+        ]
+      },
+      {
+        "title": "Reservas sin dato",
+        "unit": "reservas",
+        "type": "bar",
+        "points": []
+      }
+    ],
+    "table": {
+      "title": "Movimientos del mes",
+      "columns": [
+        "Fecha",
+        "Concepto",
+        "Monto",
+        "Estado"
+      ],
+      "rows": [
+        [
+          "02/08",
+          "Cobro mostrador",
+          "Bs 1.240",
+          "Conciliado"
+        ],
+        [
+          "07/08",
+          "Devolucion",
+          "-Bs 300",
+          "Conciliado"
+        ],
+        [
+          "11/08",
+          "Ajuste de caja",
+          "Bs 0",
+          "Pendiente"
+        ],
+        [
+          "19/08",
+          "Compra de insumos",
+          "-Bs 1.850",
+          "Pendiente"
+        ],
+        [
+          "28/08",
+          "Cobro transferencia",
+          "Bs 610",
+          "Conciliado"
+        ]
+      ]
+    },
+    "agente": {
+      "titulo": "Tu asistente",
+      "resumen": "Reviso los movimientos del mes hace 10 minutos.",
+      "estado": "cargando",
+      "acciones": []
+    },
+    "notas": {
+      "titulo": "Notas",
+      "items": []
+    }
+  }
+}

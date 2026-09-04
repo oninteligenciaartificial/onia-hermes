@@ -5,9 +5,82 @@ This file prevents duplicate work while two Codex/Hermes sessions run at the sam
 
 Use this as the source of truth before creating new files, skills, docs, or scripts.
 
-## Modelo de carriles (2026-07-05) — AUTORIDAD ACTUAL
+## ⚠️ Carriles VIVOS (2026-08-23) — AUTORIDAD ACTUAL
 
-Reemplaza el split Session A / Session B de abajo (histórico, se conserva por
+**Esto reemplaza al modelo de 2026-07-05 de más abajo**, que se conserva por referencia. Ese
+modelo era del **30-jul**, nombraba carriles A-H con nombres de sesiones que ya no existen, y
+**no nombraba ninguna de las 8 ramas realmente vivas**. Un manifiesto que no nombra los
+carriles vivos no previene nada — de hecho hoy no previno nada (ver los tres choques abajo).
+
+### Las 8 ramas con worktree abierto
+
+| Rama | Worktree | Dueño de archivos | Puerto |
+|---|---|---|---|
+| `claude/ads-creatividades-publicos` | `onia-hermes/` (checkout principal) | contenido/ads. **Entró a Chatwoot** y paró — ver `docs/handoff/chatbot.md` | — |
+| *(subagente)* **chatbot / infra** | worktree temporal | VPS + Chatwoot. **Tiene el turno de infra** | — |
+| *(subagente)* **producto → marca** | worktree temporal de `onia-platform` | repo `onia-platform`: capa de tokens, logotipo, íconos, formateador de moneda | 3340 |
+| *(subagente)* **add-ons** | `.claude/worktrees/skills-setup-config-8d4674` | `(sitio)/page.tsx` · `(sitio)/precios/page.tsx` · `sitio.module.css` | 3330 |
+| `claude/git-status-935f47` | `.claude/worktrees/skills-setup-config-8d4674` | `web-factory/apps/onia-platform/**` + `hermes-content/docs/**` | **3320** |
+| `claude/pending-tasks-review-fb0694` | `.claude/worktrees/amazing-bassi-44c97d` | 🔴 **SIN DECLARAR** | — |
+| `claude/onia-payment-structure-aecab8` | `.claude/worktrees/bolivia-product-import-6ae97c` | 🔴 **SIN DECLARAR** | — |
+| `claude/quizzical-leavitt-0c8543` | `.claude/worktrees/confident-dirac-a1b422` | 🔴 **SIN DECLARAR** | — |
+| `claude/onia-web-architecture-b37eca` | `.claude/worktrees/hyperframes-onia-export-formats-053cf9` | **web de cliente de prueba** — `web-factory/data/**` · `web-factory/packages/{blocks,templates,tokens}/**` · `web-factory/generate/**` · `web-factory/out/dental-amanecer/**` · `web-factory/tests/**` · `web-factory/FACTORY.md` · `web-factory/docs/CONEXION_WEB_SISTEMA_API.md` · `.claude/skills/onia-web-factory/**`. NO toca `web-factory/apps/**` ni `hermes-content/docs/**` | 4319 |
+| `claude/analizar-reels-videos-67f762` | `.claude/worktrees/laughing-heyrovsky-0b48a0` | 🔴 **SIN DECLARAR** | — |
+| `claude/bolivia-product-import-6ae97c` | `.claude/worktrees/video-editor-improvements-428ade` | 🔴 **SIN DECLARAR** | — |
+
+⚠️ **Seis de ocho no declaran qué archivos poseen.** No se rellenó a ojo: un dueño inventado en
+un manifiesto de coordinación es peor que un hueco, porque se le cree. **Cada carril declara lo
+suyo al abrirse**, y su nombre de worktree debería coincidir con su rama (hoy tres no coinciden:
+`bolivia-product-import-6ae97c` aloja a `onia-payment-structure`, y `video-editor-improvements`
+aloja a `bolivia-product-import`).
+
+⚠️ **8 worktrees abiertos a la vez es la regla de "nada a medias" rota a nivel flota**
+(`CLAUDE.md` §2). Cerrar antes de abrir.
+
+### Las 3 reglas nuevas — salen de los 3 choques del 2026-08-23
+
+Ese día, cuatro subagentes trabajaron sobre **un mismo worktree**. Ninguno de los tres choques
+fue de git ni de propiedad de archivos: **el reparto de archivos funcionó y aun así se
+rompieron entre ellos.**
+
+1. **Un carril = un puerto = un `.next`.**
+   Había **seis** `next dev` vivos, cinco del mismo worktree (3287, 3288, 3289, 3301, 3311),
+   pisándose los manifests de `.next` → 404 y 500 intermitentes y
+   `__webpack_modules__[moduleId] is not a function`, que **parecen bugs del cambio y no lo
+   son**. Un agente borró `.next/` a mitad de la verificación de otro y le tiró el server.
+   El puerto se asigna al abrir el carril, va en la tabla de arriba y en
+   `.claude/launch.json`, y **se apaga el server al cerrar**.
+
+2. **Prohibido `git add -A` en un worktree compartido.**
+   Un agente lo corrió y stageó **12 archivos que no había tocado**, justo los prohibidos de su
+   carril. Los deshizo a tiempo. Si commitea, se lleva puesto trabajo ajeno — y el hook de
+   auto-sync commitea al cerrar. **Rutas explícitas, siempre.**
+
+3. **Infra tiene TURNO, no dueño permanente.**
+   VPS, Chatwoot, n8n y la base: **uno por vez**, y quien entra lo dice acá. El deploy de la
+   landing, el del producto y el carril del chatbot pelean el mismo turno.
+
+**La lección de fondo: un worktree aísla ARCHIVOS. No aísla `.next`, ni puertos, ni
+`node_modules`, ni la base, ni el VPS, ni Chatwoot, ni n8n.** Este manifiesto repartía archivos
+— y los archivos no eran el problema.
+
+### Dónde vive el contexto entre carriles
+
+| Artefacto | Qué guarda |
+|---|---|
+| `hermes-content/docs/handoff/<carril>.md` | los 7 campos al cerrar, incluidos **intentos fallidos** |
+| `hermes-content/docs/<TEMA>.md` **sin fecha** | fuente de verdad por tema |
+| `CLAUDE.md` + skills + memoria | las reglas, cada una con la historia que la originó |
+
+Circuito: se cierra escribiendo el handoff → la sesión siguiente **lo lee antes de tocar nada**
+→ no re-descubre. Funcionó el 2026-08-23: un parte pedía investigar una "regresión" del bot y
+la memoria ya decía que no lo era. Esa lectura ahorró una investigación entera.
+
+---
+
+## Modelo de carriles (2026-07-05) — HISTÓRICO, superado por la sección de arriba
+
+Reemplazó al split Session A / Session B de abajo (histórico, se conserva por
 referencia). Fuente única de asignación de trabajo y prompts de arranque:
 `hermes-content/docs/ONIA_PROXIMA_SESION_PLAN_20260705.md`, sección
 "Ejecución en paralelo — sesiones y carriles".
@@ -571,8 +644,24 @@ npm run setup:assets
 - Verify secrets by presence or length, never by printing full values.
 
 ## Parallel work protocol
-Before editing:
-1. Check this manifest.
-2. Check whether a canonical file already exists.
-3. If work belongs to the other session, create only a note or proposal, not duplicate implementation.
-4. If a new file is needed, add it to this manifest in the appropriate ownership section.
+
+**Al ABRIR un carril:**
+1. Declarar la rama, el worktree y **qué archivos posee** en la tabla de "Carriles VIVOS".
+2. Pedir puerto si va a levantar un dev server, y anotarlo ahí.
+3. Si toca infra (VPS / Chatwoot / n8n / la base), **verificar que el turno esté libre** y decirlo.
+4. Leer `hermes-content/docs/handoff/<carril>.md` si existe. No re-descubrir lo ya escrito.
+
+**Antes de EDITAR:**
+1. Mirar este manifiesto.
+2. Ver si ya existe un archivo canónico del tema (casi siempre existe: hay ~200 docs).
+3. Si el trabajo es de otro carril, dejar una nota o propuesta — **nunca** una implementación duplicada.
+4. Si hace falta un archivo nuevo, agregarlo acá en su sección de propiedad.
+
+**Al CERRAR un carril:**
+1. Gates: `tsc --noEmit`, tests, code-reviewer.
+2. `git add` con **rutas explícitas** — nunca `-A` (ver regla 2).
+3. Apagar el dev server y liberar el puerto.
+4. **Escribir el handoff** en `hermes-content/docs/handoff/<carril>.md`, con los intentos
+   fallidos de verdad — es el campo que nadie escribe y el que evita repetir el callejón.
+5. Rebase → merge a `main`. Nunca dejar un merge con conflictos abierto al soltar el turno:
+   el hook Stop corre el auto-sync y puede convertir marcadores `<<<<<<<` en un "resuelto".

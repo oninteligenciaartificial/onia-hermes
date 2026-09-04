@@ -1,0 +1,197 @@
+<!doctype html>
+<!--
+  paletas-lujo — las 5 paletas aplicadas con sus ROLES, no como swatches sueltos.
+  Fuente: https://www.instagram.com/p/DbvmsWlDKo6/ (hex RECUPERADOS de pantalla).
+  Cada tarjeta usa los tokens de tokens.css tal como los usaría una web de cliente:
+  fondo, superficie, texto, acento y texto-sobre-acento. Los ratios anotados son
+  los medidos con la fórmula WCAG (ver README.md).
+-->
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paletas de lujo — roles y contraste</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  :root { --page: #101012; --page-ink: #e8e6e3; --page-muted: #9a9793; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 40px 24px 72px;
+    background: var(--page); color: var(--page-ink);
+    font: 16px/1.55 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  header { max-width: 940px; margin: 0 auto 40px; }
+  h1 { font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.4rem); margin: 0 0 .4em; letter-spacing: -.02em; }
+  header p { margin: 0; color: var(--page-muted); max-width: 62ch; }
+  header code { color: var(--page-ink); }
+  .grid { max-width: 940px; margin: 0 auto; display: grid; gap: 40px; }
+
+  /* La tarjeta ES la paleta: adopta sus tokens y se pinta con ellos. */
+  .paleta {
+    background: var(--bg); color: var(--ink);
+    border-radius: 14px; overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  .paleta h2 {
+    margin: 0; padding: 22px 26px 0;
+    font-size: 1.15rem; letter-spacing: -.01em;
+  }
+  .paleta .nota { padding: 4px 26px 20px; margin: 0; font-size: .82rem; opacity: .72; }
+
+  /* Superficie: se separa del fondo por hairline, que en Racing/Earth es lo único
+     que la despega (1,36:1 y 1,10:1). */
+  .superficie {
+    background: var(--surface); border-top: 1px solid var(--line);
+    padding: 22px 26px; display: grid; gap: 16px;
+  }
+  .superficie p { margin: 0; font-size: .9rem; }
+
+  .acciones { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .btn {
+    background: var(--accent); color: var(--on-accent);
+    border: 0; border-radius: 8px; padding: 10px 18px;
+    font: inherit; font-size: .9rem; font-weight: 600; cursor: pointer;
+  }
+  .btn-2 { background: var(--accent-2, var(--accent)); color: var(--on-accent-2, var(--on-accent)); }
+  .chip {
+    border: 1.5px solid var(--accent); border-radius: 999px;
+    padding: 7px 15px; font-size: .82rem; font-weight: 600;
+  }
+
+  /* Fila de muestras: cada una declara su rol y su hex. */
+  .roles { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 0; }
+  .rol { padding: 14px 16px 16px; border-top: 1px solid var(--line); }
+  .rol + .rol { border-left: 1px solid var(--line); }
+  .muestra { height: 34px; border-radius: 6px; border: 1px solid var(--line); margin-bottom: 9px; }
+  .rol b { display: block; font-size: .78rem; letter-spacing: .04em; text-transform: uppercase; }
+  .rol span { font-size: .74rem; opacity: .68; font-variant-numeric: tabular-nums; }
+
+  .aviso {
+    margin: 0; padding: 13px 26px; font-size: .8rem;
+    border-top: 1px solid var(--line);
+    background: color-mix(in srgb, var(--ink) 7%, transparent);
+  }
+  .aviso b { letter-spacing: .02em; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Cinco paletas de lujo — con rol y contraste medido</h1>
+  <p>
+    Hex <b>recuperados</b> de pantalla, no muestreados. Cada tarjeta se pinta con sus propios
+    tokens (<code>--bg</code>, <code>--surface</code>, <code>--ink</code>, <code>--accent</code>,
+    <code>--on-accent</code>) para ver el rol en uso y no un swatch suelto. Los ratios son WCAG
+    calculados; el detalle y las combinaciones que fallan están en el README.
+  </p>
+</header>
+
+<div class="grid">
+
+  <section class="paleta paleta-racing">
+    <h2>1 · Racing</h2>
+    <p class="nota">Un solo acento saturado. Cumple la regla del corpus.</p>
+    <div class="superficie">
+      <p>Texto sobre superficie — Alabaster Grey sobre Black Cherry, 10,15:1.</p>
+      <div class="acciones">
+        <button class="btn">Reservar turno</button>
+        <span class="chip">Etiqueta</span>
+      </div>
+    </div>
+    <div class="roles">
+      <div class="rol"><div class="muestra" style="background:#1a0706"></div><b>fondo</b><span>#1A0706</span></div>
+      <div class="rol"><div class="muestra" style="background:#55100d"></div><b>superficie</b><span>#55100D · 1,36:1</span></div>
+      <div class="rol"><div class="muestra" style="background:#d9d9d9"></div><b>texto</b><span>#D9D9D9 · 13,81:1</span></div>
+      <div class="rol"><div class="muestra" style="background:#dd0200"></div><b>acento</b><span>#DD0200 · 3,79:1</span></div>
+    </div>
+    <p class="aviso"><b>OJO:</b> el rojo NO pasa AA como texto (3,79:1 sobre el fondo, 2,78:1 sobre la
+      superficie). Va como relleno. El hairline es obligatorio: la superficie no se despega sola.</p>
+  </section>
+
+  <section class="paleta paleta-gold-slate">
+    <h2>2 · Gold &amp; Slate</h2>
+    <p class="nota">Dos saturados — excepción a la regla, pero se sostiene: están a 1,81:1 entre sí.</p>
+    <div class="superficie">
+      <p>Superficie derivada (mezcla de dos recuperados) — texto a 5,14:1.</p>
+      <div class="acciones">
+        <button class="btn">Cotizar importación</button>
+        <button class="btn btn-2">Secundario</button>
+      </div>
+    </div>
+    <div class="roles">
+      <div class="rol"><div class="muestra" style="background:#112532"></div><b>fondo</b><span>#112532</span></div>
+      <div class="rol"><div class="muestra" style="background:#1d323f"></div><b>superficie</b><span>derivada #1D323F</span></div>
+      <div class="rol"><div class="muestra" style="background:#88a5b7"></div><b>texto</b><span>#88A5B7 · 6,08:1</span></div>
+      <div class="rol"><div class="muestra" style="background:#f4b044"></div><b>acento</b><span>#F4B044 · 8,35:1</span></div>
+      <div class="rol"><div class="muestra" style="background:#e0680e"></div><b>acento 2</b><span>#E0680E · 4,61:1</span></div>
+    </div>
+    <p class="aviso"><b>OJO:</b> encima del oro y del naranja el texto va OSCURO. Blanco sobre oro da
+      1,89:1 y blanco sobre naranja 3,41:1: los dos fallan.</p>
+  </section>
+
+  <section class="paleta paleta-rosewood">
+    <h2>3 · Rosewood</h2>
+    <p class="nota">La única cuyo acento pasa AA como texto sobre las dos superficies. La más sólida.</p>
+    <div class="superficie">
+      <p>Texto sobre superficie — 9,36:1. <b style="color:var(--accent)">Y el acento también es
+        legible como texto: 5,37:1.</b></p>
+      <div class="acciones">
+        <button class="btn">Pedir cita</button>
+        <span class="chip">Etiqueta</span>
+      </div>
+    </div>
+    <div class="roles">
+      <div class="rol"><div class="muestra" style="background:#f1ece6"></div><b>fondo</b><span>#F1ECE6</span></div>
+      <div class="rol"><div class="muestra" style="background:#ddd5cd"></div><b>superficie</b><span>#DDD5CD · 1,24:1</span></div>
+      <div class="rol"><div class="muestra" style="background:#2e2e2e"></div><b>texto</b><span>#2E2E2E · 11,56:1</span></div>
+      <div class="rol"><div class="muestra" style="background:#7d4047"></div><b>acento</b><span>#7D4047 · 6,63:1 AA</span></div>
+    </div>
+    <p class="aviso"><b>Sin trampas.</b> Un acento, pasa AA en todos lados, texto de sobra. Es la que
+      hay que usar primero en una web de cliente.</p>
+  </section>
+
+  <section class="paleta paleta-terracotta">
+    <h2>4 · Terracotta</h2>
+    <p class="nota">Dos acentos gemelos (1,14:1 entre sí) y ninguno pasa AA. La trampa del lote.</p>
+    <div class="superficie">
+      <p>El texto principal sí resuelve: 8,18:1 sobre la superficie derivada.</p>
+      <div class="acciones">
+        <button class="btn">Ver catálogo</button>
+        <button class="btn btn-2">Secundario</button>
+      </div>
+    </div>
+    <div class="roles">
+      <div class="rol"><div class="muestra" style="background:#f0e6d8"></div><b>fondo</b><span>#F0E6D8</span></div>
+      <div class="rol"><div class="muestra" style="background:#e6d9cb"></div><b>superficie</b><span>derivada #E6D9CB</span></div>
+      <div class="rol"><div class="muestra" style="background:#5a2e25"></div><b>texto</b><span>#5A2E25 · 9,19:1</span></div>
+      <div class="rol"><div class="muestra" style="background:#b5543a"></div><b>acento</b><span>#B5543A · 3,96:1</span></div>
+      <div class="rol"><div class="muestra" style="background:#6f7f5f"></div><b>acento 2</b><span>#6F7F5F · 3,49:1</span></div>
+    </div>
+    <p class="aviso"><b>NO usar tal cual.</b> Los dos acentos fallan como texto (3,96 y 3,49 sobre el
+      fondo) y compiten entre sí sin que gane ninguno. Se ve bien en swatch, se cae en pantalla.</p>
+  </section>
+
+  <section class="paleta paleta-earth">
+    <h2>5 · Earth</h2>
+    <p class="nota">Un solo acento saturado — cumple la regla, pero es la más restrictiva.</p>
+    <div class="superficie">
+      <p>Fondo medio, no claro. Texto a 4,89:1 sobre la superficie derivada.</p>
+      <div class="acciones">
+        <button class="btn">Ver hacienda</button>
+        <span class="chip">Etiqueta</span>
+      </div>
+    </div>
+    <div class="roles">
+      <div class="rol"><div class="muestra" style="background:#c29b72"></div><b>fondo</b><span>#C29B72</span></div>
+      <div class="rol"><div class="muestra" style="background:#b7946c"></div><b>superficie</b><span>derivada #B7946C</span></div>
+      <div class="rol"><div class="muestra" style="background:#2b2d31"></div><b>texto</b><span>#2B2D31 · 5,40:1</span></div>
+      <div class="rol"><div class="muestra" style="background:#8d321f"></div><b>acento</b><span>#8D321F · 3,15:1</span></div>
+      <div class="rol"><div class="muestra" style="background:#3a4027"></div><b>texto 2</b><span>#3A4027 · 4,23:1</span></div>
+    </div>
+    <p class="aviso"><b>OJO:</b> el mapeo oscuro está descartado — con el charcoal de fondo el acento
+      da 1,71:1 y desaparece. Los tres oscuros entre sí van de 1,28 a 1,71:1: indistinguibles.</p>
+  </section>
+
+</div>
+</body>
+</html>

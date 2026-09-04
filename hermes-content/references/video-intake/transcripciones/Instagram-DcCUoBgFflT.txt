@@ -9,3 +9,5 @@
 [29.5] No instalas nada, te doy la clave y ya lo estás usando.
 [32.5] Y te enseño a conectarlo a las apps donde ya trabajas.
 [35.3] Comenta COEN y te doy el acceso.
+
+Nota fija: Whisper degrada términos técnicos (SIDANZ=Seedance, Hitsfield=Higgsfield, viesel=VSL); ningún término técnico se cita sin contrastar con la imagen.

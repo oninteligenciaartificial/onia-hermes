@@ -55,6 +55,8 @@ const BROWSER_CANDIDATES = [
   '/usr/bin/google-chrome',
   '/usr/bin/chromium',
   '/usr/bin/chromium-browser',
+  // Chromium de Playwright en el VPS (el único navegador instalado acá, 2026-09-02).
+  '/root/.cache/ms-playwright/chromium-1223/chrome-linux64/chrome',
 ].filter(Boolean);
 
 const ACCOUNTS = {
@@ -126,6 +128,16 @@ function findBrowser() {
 const esc = (s) => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
+// PACKS es la lista blanca del CLI (valida `--pack` mas abajo): estar aca es PROMETER que
+// ese pack renderiza. Por eso solo entra el pack cuyo archivo esta EN ESTE REPO.
+//
+// `papel-subrayado`, `dato-ilustrado` y `tarjeta-empleado` estuvieron FUERA de esta lista
+// desde el 2026-09-02: sus modulos (`carousel_pack_papel/dato/empleado.js`) vivian solo en
+// `claude/ads-creatividades-publicos`, y ese carril no se podia mergear porque arrastraba el
+// borrado de web-factory entero. Listados sin sus archivos, el CLI los aceptaba y reventaba
+// DESPUES, al renderar: una entrada de menu para un plato que la cocina no puede hacer.
+// Arreglado el borrado, los tres modulos entran con este merge y vuelven a la lista — el
+// test `todo pack listado RENDERIZA` es el que comprueba que no vuelva a haber menu sin plato.
 const PACKS = ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'editorial-clean', 'bright-retail', 'papel-subrayado', 'dato-ilustrado', 'tarjeta-empleado', 'bloque-solido'];
 
 // Los 3 formatos que pide Instagram. Hasta el 2026-08-15 el render estaba fijo en 4:5 y
@@ -1133,21 +1145,28 @@ function nuviaRibbon(idx, total, stripes, onAccent) {
 // cinco criticas de Sergio del 2026-08-27 a los carruseles anteriores.
 // Pack de la marca personal de Sergio: las herramientas como empleados contratados.
 // Portado de la referencia que el mismo eligio (@iampascio, 2026-08-27).
-const tarjetaEmpleadoHtml = require('./carousel_pack_empleado').crear({
-  esc, emph, roleFor, ACCOUNTS, BRAND, getFmt: () => FMT,
-});
+// Config compartida por todos los packs externos.
+const PACK_CFG = { esc, emph, roleFor, ACCOUNTS, BRAND, getFmt: () => FMT };
 
-const datoIlustradoHtml = require('./carousel_pack_dato').crear({
-  esc, emph, roleFor, ACCOUNTS, BRAND, getFmt: () => FMT,
-});
+// Los packs externos se cargan PEREZOSO. Nace de cuando empleado/dato/papel no estaban en el
+// repo: un require eager acá rompía el script entero — incluso al pedir bloque-solido, que sí
+// existe. Ya entraron con el merge del carril de contenido, pero la carga perezosa se queda:
+// convierte "el script no arranca" en "falla sólo el pack que pediste, y con un mensaje claro".
+function lazyPack(modPath) {
+  let fn = null;
+  return function (...a) {
+    if (!fn) {
+      try { fn = require(modPath).crear(PACK_CFG); }
+      catch (e) { throw new Error('Pack no disponible (' + modPath + ' falta en el repo): ' + e.message); }
+    }
+    return fn(...a);
+  };
+}
 
-const papelSubrayadoHtml = require('./carousel_pack_papel').crear({
-  esc, emph, roleFor, ACCOUNTS, BRAND, getFmt: () => FMT,
-});
-
-const bloqueSolidoHtml = require('./carousel_pack_solido').crear({
-  esc, emph, roleFor, ACCOUNTS, BRAND, getFmt: () => FMT,
-});
+const tarjetaEmpleadoHtml = lazyPack('./carousel_pack_empleado');
+const datoIlustradoHtml = lazyPack('./carousel_pack_dato');
+const papelSubrayadoHtml = lazyPack('./carousel_pack_papel');
+const bloqueSolidoHtml = require('./carousel_pack_solido').crear(PACK_CFG);
 
 function brightRetailHtml(slide, idx, total, account, args) {
   const role = roleFor(slide, idx, total);
@@ -1279,6 +1298,9 @@ function render(args) {
     const png = path.resolve(args.out, `slide-${String(idx + 1).padStart(2, '0')}.png`);
     execFileSync(browser, [
       '--headless=new',
+      // El VPS corre como root: sin --no-sandbox Chromium se niega a arrancar y el
+      // screenshot nunca se escribe (verificado 2026-09-02).
+      '--no-sandbox',
       '--disable-gpu',
       '--hide-scrollbars',
       '--allow-file-access-from-files',
@@ -1340,7 +1362,7 @@ if (require.main === module) {
 
 module.exports = {
   slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml,
-  papelSubrayadoHtml, datoIlustradoHtml, tarjetaEmpleadoHtml,
+  papelSubrayadoHtml, datoIlustradoHtml, tarjetaEmpleadoHtml, bloqueSolidoHtml,
   emph, roleFor, assertSlidesDistintas, ACCOUNTS, BRANDS, PACKS, FORMATS,
   setFormat: (name) => { if (!FORMATS[name]) throw new Error('Unknown format: ' + name); FMT = FORMATS[name]; },
 };

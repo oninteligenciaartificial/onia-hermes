@@ -4,6 +4,12 @@ Fuente principal: `hermes-content/references/prospectos-clinicas-bolivia-2026.cs
 
 Estado: cartera inicial investigada. No contactar sin aprobacion explicita.
 
+> ⚠️ **Los nombres de plan de este doc se corrigieron el 2026-08-27.** Decían `DentalGest
+> Basico / Profesional / Clinica`; hoy los planes se llaman **Básico · Profesional · Completo ·
+> Empresa** (`PLAN_LABELS` en `onia-platform/lib/pricing.ts`) y Onia vende 7 rubros, no solo
+> clínicas. Los precios y las comisiones se leen de
+> `onia-platform/lib/subscription-plans.ts`, no de acá.
+
 ## Resumen
 
 - Total leads dentales: 50.
@@ -17,9 +23,9 @@ Estado: cartera inicial investigada. No contactar sin aprobacion explicita.
 
 | Venta sugerida | Premio vendedor |
 |---|---:|
-| DentalGest Basico | Bs. 112 |
-| DentalGest Profesional | Bs. 262,50 |
-| DentalGest Clinica | Bs. 525 |
+| Plan Básico | Bs. 112 |
+| Plan Profesional | Bs. 262,50 |
+| Plan Completo | Bs. 525 |
 | Landing | Bs. 79 |
 | Web Profesional | Bs. 180 |
 | Web Pro Onia | Bs. 348 |
@@ -31,21 +37,21 @@ Estado: cartera inicial investigada. No contactar sin aprobacion explicita.
 
 | # | Lead | Ciudad | Senal | Dolor probable | Oferta inicial | Upsell | Premio probable |
 |---:|---|---|---|---|---|---|---:|
-| 1 | CRO - Clinica de Rehabilitacion Odontologica | Santa Cruz | Web, varias sedes y varios telefonos | Multi-sede necesita trazabilidad por sucursal | DentalGest Clinica | Web/landing + reportes | Bs. 525 + upsell |
-| 2 | Odontoking Clinica Dental | Santa Cruz | Web y marca clara | Puede mejorar embudo y seguimiento | DentalGest Profesional | Web optimizada + CRM | Bs. 262,50 + upsell |
-| 3 | Odontolaser | Santa Cruz | Web, Facebook y tratamientos tecnologicos | Tratamientos especializados requieren seguimiento | DentalGest Profesional | Diagnostico + Plan | Bs. 262,50 + Bs. 69 |
-| 4 | Paz Dental | Santa Cruz | Web, Facebook, zona Equipetrol | Alto valor por paciente | DentalGest Profesional | Landing de tratamientos | Bs. 262,50 + upsell |
-| 5 | Estetic Dent Santa Cruz | Santa Cruz | Web estetica y autoridad profesional | Embudos por tratamiento estetico | DentalGest Profesional | Web Pro Onia | Bs. 262,50 + Bs. 348 |
-| 6 | CEO Clinica de Odontologia Especializada | Santa Cruz | Web y especialidad | Ortodoncia/odontopediatria con consultas repetitivas | DentalGest Profesional | Web + contenido educativo manual | Bs. 262,50 + upsell |
-| 7 | Clinica Dental Cortez | La Paz | Web y email publico | Captacion web y seguimiento de citas | DentalGest Profesional | Landing | Bs. 262,50 + Bs. 79 |
-| 8 | Clinica Dental Love | La Paz | Marca clara y email con dominio | Integrar redes, agenda y seguimiento | DentalGest Profesional | Diagnostico + Plan | Bs. 262,50 + Bs. 69 |
-| 9 | ASISTA - Clinica Dental | Santa Cruz | Facebook y contacto publico, sin web clara | Leads dispersos por redes | DentalGest Basico | Landing | Bs. 112 + Bs. 79 |
-| 10 | Bio Odontologia | Santa Cruz | Perfil social como canal principal | Agenda y consultas por redes sin CRM | DentalGest Basico | n8n simple interno | Bs. 112 + Bs. 79 |
-| 11 | Consultorio Dental Dr. Rodrigo Garcia | La Paz | Web en Blogspot | Presencia digital mejorable | Landing | DentalGest Basico | Bs. 79 + Bs. 112 |
-| 12 | Clinica Dental DuoDent | Santa Cruz | Canal social visible sin web | Mensajes de redes sin sistema | DentalGest Basico | Auditoria Express | Bs. 112 + Bs. 25 |
-| 13 | Clinica Dental Jauregui | Santa Cruz | Facebook/email y horario amplio | Citas o presupuestos olvidados | DentalGest Basico | Recordatorios internos | Bs. 112 |
-| 14 | Merdel Clinica Odontologica | Santa Cruz | Facebook y email publico | Consultas sociales sin seguimiento | DentalGest Basico | Agenda asistida | Bs. 112 |
-| 15 | Odontologia Morales | Santa Cruz | Perfil social como canal principal | Gestion manual de consultas | DentalGest Basico | Landing | Bs. 112 + Bs. 79 |
+| 1 | CRO - Clinica de Rehabilitacion Odontologica | Santa Cruz | Web, varias sedes y varios telefonos | Multi-sede necesita trazabilidad por sucursal | Plan Completo | Web/landing + reportes | Bs. 525 + upsell |
+| 2 | Odontoking Clinica Dental | Santa Cruz | Web y marca clara | Puede mejorar embudo y seguimiento | Plan Profesional | Web optimizada + CRM | Bs. 262,50 + upsell |
+| 3 | Odontolaser | Santa Cruz | Web, Facebook y tratamientos tecnologicos | Tratamientos especializados requieren seguimiento | Plan Profesional | Diagnostico + Plan | Bs. 262,50 + Bs. 69 |
+| 4 | Paz Dental | Santa Cruz | Web, Facebook, zona Equipetrol | Alto valor por paciente | Plan Profesional | Landing de tratamientos | Bs. 262,50 + upsell |
+| 5 | Estetic Dent Santa Cruz | Santa Cruz | Web estetica y autoridad profesional | Embudos por tratamiento estetico | Plan Profesional | Web Pro Onia | Bs. 262,50 + Bs. 348 |
+| 6 | CEO Clinica de Odontologia Especializada | Santa Cruz | Web y especialidad | Ortodoncia/odontopediatria con consultas repetitivas | Plan Profesional | Web + contenido educativo manual | Bs. 262,50 + upsell |
+| 7 | Clinica Dental Cortez | La Paz | Web y email publico | Captacion web y seguimiento de citas | Plan Profesional | Landing | Bs. 262,50 + Bs. 79 |
+| 8 | Clinica Dental Love | La Paz | Marca clara y email con dominio | Integrar redes, agenda y seguimiento | Plan Profesional | Diagnostico + Plan | Bs. 262,50 + Bs. 69 |
+| 9 | ASISTA - Clinica Dental | Santa Cruz | Facebook y contacto publico, sin web clara | Leads dispersos por redes | Plan Básico | Landing | Bs. 112 + Bs. 79 |
+| 10 | Bio Odontologia | Santa Cruz | Perfil social como canal principal | Agenda y consultas por redes sin CRM | Plan Básico | n8n simple interno | Bs. 112 + Bs. 79 |
+| 11 | Consultorio Dental Dr. Rodrigo Garcia | La Paz | Web en Blogspot | Presencia digital mejorable | Landing | Plan Básico | Bs. 79 + Bs. 112 |
+| 12 | Clinica Dental DuoDent | Santa Cruz | Canal social visible sin web | Mensajes de redes sin sistema | Plan Básico | Auditoria Express | Bs. 112 + Bs. 25 |
+| 13 | Clinica Dental Jauregui | Santa Cruz | Facebook/email y horario amplio | Citas o presupuestos olvidados | Plan Básico | Recordatorios internos | Bs. 112 |
+| 14 | Merdel Clinica Odontologica | Santa Cruz | Facebook y email publico | Consultas sociales sin seguimiento | Plan Básico | Agenda asistida | Bs. 112 |
+| 15 | Odontologia Morales | Santa Cruz | Perfil social como canal principal | Gestion manual de consultas | Plan Básico | Landing | Bs. 112 + Bs. 79 |
 
 ## Mensajes listos para aprobacion
 

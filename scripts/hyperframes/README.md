@@ -109,12 +109,45 @@ la geometría y renderiza. La fuente de verdad es el `index.html`.
 
 ---
 
-## Relación con `scripts/remotion/`
+## Motor de la casa: HyperFrames — decisión CERRADA, no se reabre
 
-`scripts/remotion/` **sigue en pie a propósito**, como baseline de comparación.
-No se dio de baja todavía. El detalle del porte, las desviaciones deliberadas y
-los números de SSIM contra esa baseline están en
-[`TRANSLATION_NOTES.md`](TRANSLATION_NOTES.md).
+**El default es HyperFrames. `scripts/remotion/` es baseline histórico**, no una
+alternativa a elegir por sesión. No es preferencia: se midió y se decidió.
+
+- **Cuándo:** A/B real del **2026-07-30** — la MISMA pieza, el MISMO crudo, el MISMO plan de
+  tiempos; lo único que cambiaba era quién renderiza los apoyos. Se portaron las 5
+  composiciones y se verificó SSIM T1–T4.
+- **Qué dijo la medición:** salidas visualmente equivalentes. HyperFrames arranca sin paso
+  de bundle y sus secuencias PNG pesan la mitad; Remotion cobra ~30 s de bundle la primera
+  vez y después renderiza cada apoyo en 4–5 s.
+- **Dónde están los números:** [`TRANSLATION_NOTES.md`](TRANSLATION_NOTES.md) y
+  `hermes-content/docs/historial/ONIA_EDITOR_VIDEO_REMOTION_VS_HYPERFRAMES_20260730.md`.
+- **Ese doc vive en `historial/` ⇒ tiene fecha ⇒ NO es fuente de verdad.** La fuente de
+  verdad del motor es ESTE archivo. Si una sesión va a reabrir la elección de motor, la
+  respuesta está acá: ya está cerrada.
+
+### El dato que el A/B de julio no tenía: la licencia
+
+| Motor | Licencia | Qué implica |
+|---|---|---|
+| **HyperFrames** (`hyperframes` en npm · `heygen-com/hyperframes`) | **Apache-2.0** — campo `license` del paquete publicado, v0.8.6, verificado 2026-08-21 en el registry de npm | Uso comercial libre, sin umbral de tamaño ni de ingresos. Cero plata, cero decisión pendiente |
+| **Remotion** (`remotion-dev/remotion`) | Licencia propia. Es gratis para individuos, organizaciones sin fines de lucro y **empresas con fines de lucro de hasta 3 empleados**; desde el 4º hace falta **Company License paga**. **No hay umbral de ingresos**: el corte es solo por cabezas. Verificado 2026-08-21 en el `LICENSE.md` del repo y en la FAQ oficial | Umbral que nos puede tocar. La FAQ aclara además que si se suma otro estudio, freelancers o una consultora a **operar Remotion en el mismo proyecto**, sus cabezas **se suman a las nuestras** para el umbral de 4 |
+
+Fuentes (verificadas 2026-08-21):
+<https://github.com/remotion-dev/remotion/blob/main/LICENSE.md> ·
+<https://www.remotion.dev/docs/license/faq> · <https://www.remotion.pro/license> ·
+<https://registry.npmjs.org/hyperframes/latest>
+
+**⚠️ Sin verificar y decide Sergio:** cuántas cabezas cuenta OniaAgency para Remotion
+(titular, Sergio, colaboradores comerciales, Arthur — y cualquier freelance que llegara a
+operar Remotion en la misma pieza). Con 4 o más, Remotion **ya sería pago**. Por eso no se
+apoya producción nueva en Remotion sin que Sergio lo decida: ahí hay plata de por medio.
+HyperFrames no tiene esa pregunta.
+
+**Consecuencia práctica:** el motor gratis-pase-lo-que-pase es HyperFrames, y además ya
+ganó por medición. `scripts/remotion/` **sigue en pie a propósito** como baseline de
+comparación y para iterar el MISMO apoyo muchas veces en una sesión (el bundle se reusa) o
+usar los sliders de Remotion Studio. No se da de baja; tampoco se elige.
 
 ---
 

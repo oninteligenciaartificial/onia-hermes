@@ -455,7 +455,7 @@
         "mensual": "—"
       },
       {
-        "nombre": "Chatbot WhatsApp con IA — agenda y responde pacientes solo (el botón de chat ya viene incluido en la web)",
+        "nombre": "Chatbot WhatsApp con IA — responde, califica y deriva la consulta (el botón de chat ya viene incluido en la web)",
         "setup": "1,900",
         "mensual": "150"
       },
@@ -473,8 +473,8 @@
     "accent": "#0aa3d6",
     "heroGrad": "linear-gradient(135deg,#06121a 0%,#0a2230 55%,#0aa3d6 160%)",
     "titulo": "AW Climatización — Web profesional + Chatbot IA para captar clientes",
-    "subtitulo": "Una web a la altura del representante oficial Hisense en Bolivia, más un asistente IA en WhatsApp que responde y agenda solo — para que ninguna consulta de instalación o mantenimiento se enfríe.",
-    "problema": "AW Climatización Group SRL instala y mantiene aire acondicionado y es <b>representante oficial Hisense en Bolivia</b> — pero hoy esa autoridad no se ve online y las consultas llegan sueltas por llamada o WhatsApp manual. Montamos una <b>web profesional</b> que da confianza y aparece en Google, y un <b>chatbot con IA</b> que atiende 24/7, califica y agenda — sobre todo en temporada de calor cuando la demanda explota.",
+    "subtitulo": "Una web a la altura del representante oficial Hisense en Bolivia, más un asistente IA en WhatsApp que responde y deriva la visita ya calificada — para que ninguna consulta de instalación o mantenimiento se enfríe.",
+    "problema": "AW Climatización Group SRL instala y mantiene aire acondicionado y es <b>representante oficial Hisense en Bolivia</b> — pero hoy esa autoridad no se ve online y las consultas llegan sueltas por llamada o WhatsApp manual. Montamos una <b>web profesional</b> que da confianza y aparece en Google, y un <b>chatbot con IA</b> que atiende 24/7, califica y deriva la visita lista — sobre todo en temporada de calor cuando la demanda explota.",
     "incluye": [
       {
         "tag": "Autoridad",
@@ -494,7 +494,7 @@
         "items": [
           "Responde solo dudas de instalación, mantenimiento y precios",
           "Califica al cliente (equipo, ambiente, zona) antes de pasar al técnico",
-          "Agenda visitas y deriva el caso listo al equipo de AW",
+          "Deriva el caso listo al equipo de AW, con los datos de la visita",
           "Atiende fuera de horario y en picos de calor sin perder consultas"
         ]
       }
@@ -513,8 +513,8 @@
         "detalle": "Cargamos catálogo Hisense, servicios y respuestas reales de AW para que responda con precisión."
       },
       {
-        "titulo": "Calificación + agenda",
-        "detalle": "El bot pregunta ambiente, equipo y zona, califica y agenda o deriva la visita técnica."
+        "titulo": "Calificación + derivación",
+        "detalle": "El bot pregunta ambiente, equipo y zona, califica y deriva la visita técnica ya lista."
       }
     ],
     "valor": [
@@ -532,7 +532,7 @@
       },
       {
         "titulo": "Respuesta inmediata = más cierres",
-        "detalle": "El cliente que escribe a la 1am por un aire que no enfría recibe respuesta al instante y agenda visita."
+        "detalle": "El cliente que escribe a la 1am por un aire que no enfría recibe respuesta al instante y queda derivado a tu técnico."
       }
     ],
     "plazoEntrega": "3 a 4 semanas",
@@ -553,16 +553,16 @@
       },
       {
         "nombre": "Automatización",
-        "incluye": "Lo anterior + agenda de visitas + seguimiento y reportes + acompañamiento mensual",
-        "resultado": "Motor que capta, agenda y da seguimiento sin trabajo manual.",
+        "incluye": "Lo anterior + seguimiento de consultas + reportes + acompañamiento mensual",
+        "resultado": "Motor que capta, califica y deriva, con seguimiento y reportes cada mes.",
         "precio": "desde 9,900",
         "recomendado": false
       }
     ],
-    "notaPaquetes": "Diferencia clave: <b>Presencia</b> = web seria online · <b>Captación</b> = web + chatbot IA que responde y califica · <b>Automatización</b> = además agenda y da seguimiento solo. Recomendado: <b>Captación</b>. Pago sugerido: 50% anticipo, 50% contra entrega. El dominio y hosting quedan a nombre de AW.",
+    "notaPaquetes": "Diferencia clave: <b>Presencia</b> = web seria online · <b>Captación</b> = web + chatbot IA que responde y califica · <b>Automatización</b> = además seguimiento, reportes y acompañamiento mensual. Recomendado: <b>Captación</b>. Pago sugerido: 50% anticipo, 50% contra entrega. El dominio y hosting quedan a nombre de AW.",
     "addons": [
       {
-        "nombre": "Chatbot WhatsApp con IA — responde, califica y agenda solo (el botón de chat ya viene incluido en la web)",
+        "nombre": "Chatbot WhatsApp con IA — responde, califica y deriva la visita (el botón de chat ya viene incluido en la web)",
         "setup": "1,900",
         "mensual": "150"
       },
@@ -696,9 +696,9 @@
     "nombre": "AW Climatización Group SRL",
     "accent": "#0aa3d6",
     "heroGrad": "linear-gradient(135deg,#06121a 0%,#0a2230 55%,#0aa3d6 160%)",
-    "titulo": "AW Climatización — Chatbot IA en WhatsApp que responde y agenda solo",
-    "subtitulo": "Un asistente con IA que atiende las consultas de aire acondicionado 24/7, las califica y agenda la visita técnica — sin que tu equipo conteste cada mensaje a mano.",
-    "problema": "En temporada de calor las consultas de AW explotan y se mezclan: precios, tipos de equipo Hisense, mantenimiento, garantías. Atender cada una a mano quema horas y se pierden clientes que escriben fuera de horario. Montamos un <b>chatbot con IA en WhatsApp</b> que responde al instante, califica al cliente (equipo, ambiente, zona) y agenda o deriva la visita ya lista — 24/7.",
+    "titulo": "AW Climatización — Chatbot IA en WhatsApp que responde y deriva la visita ya calificada",
+    "subtitulo": "Un asistente con IA que atiende las consultas de aire acondicionado 24/7, las califica y deriva la visita técnica ya lista — sin que tu equipo conteste cada mensaje a mano.",
+    "problema": "En temporada de calor las consultas de AW explotan y se mezclan: precios, tipos de equipo Hisense, mantenimiento, garantías. Atender cada una a mano quema horas y se pierden clientes que escriben fuera de horario. Montamos un <b>chatbot con IA en WhatsApp</b> que responde al instante, califica al cliente (equipo, ambiente, zona) y deriva la visita ya lista a tu técnico — 24/7.",
     "incluye": [
       {
         "tag": "Atención 24/7",
@@ -707,7 +707,7 @@
         "items": [
           "Responde solo dudas de instalación, mantenimiento y precios",
           "Califica al cliente (equipo, ambiente, zona) antes de pasar al técnico",
-          "Agenda visitas y deriva el caso listo al equipo de AW",
+          "Deriva el caso listo al equipo de AW, con los datos de la visita",
           "Atiende fuera de horario y en picos de calor sin perder consultas"
         ]
       },
@@ -733,8 +733,8 @@
         "detalle": "Cargamos catálogo Hisense, servicios y respuestas reales de AW para que responda con precisión."
       },
       {
-        "titulo": "Calificación + agenda",
-        "detalle": "El bot pregunta ambiente, equipo y zona, califica y agenda o deriva la visita técnica."
+        "titulo": "Calificación + derivación",
+        "detalle": "El bot pregunta ambiente, equipo y zona, califica y deriva la visita técnica ya lista."
       },
       {
         "titulo": "Conexión y reportes",
@@ -752,7 +752,7 @@
       },
       {
         "titulo": "Respuesta inmediata = más cierres",
-        "detalle": "El cliente que escribe a la 1am por un aire que no enfría recibe respuesta al instante y agenda visita."
+        "detalle": "El cliente que escribe a la 1am por un aire que no enfría recibe respuesta al instante y queda derivado a tu técnico."
       },
       {
         "titulo": "Sabés qué te piden",
@@ -776,14 +776,14 @@
         "recomendado": true
       },
       {
-        "nombre": "Bot + Agenda",
-        "incluye": "Lo anterior + agenda de visitas + reportes de tipos de consulta",
-        "resultado": "Capta, califica y agenda la visita técnica sin trabajo manual.",
+        "nombre": "Bot + Reportes",
+        "incluye": "Lo anterior + reportes de tipos de consulta y volumen de entrada",
+        "resultado": "Sabés qué te piden y cuánto entra, para decidir dónde poner técnicos.",
         "precio": "desde 4,800",
         "recomendado": false
       }
     ],
-    "notaPaquetes": "Diferencia clave: <b>Básico</b> = responde solo · <b>Calificador</b> = filtra y deriva ya calificado · <b>Agenda</b> = además agenda la visita. Recomendado: <b>Calificador</b>. Incluye setup; la operación mensual del bot va aparte (ver add-ons). El número de WhatsApp queda a nombre de AW.",
+    "notaPaquetes": "Diferencia clave: <b>Básico</b> = responde solo · <b>Calificador</b> = filtra y deriva ya calificado · <b>Reportes</b> = además el panel de qué te piden y cuánto. Recomendado: <b>Calificador</b>. Incluye setup; la operación mensual del bot va aparte (ver add-ons). El número de WhatsApp queda a nombre de AW.",
     "addons": [
       {
         "nombre": "Operación y mejora mensual del chatbot",
@@ -897,11 +897,11 @@
     },
     "paquetes": [
       {
-        "nombre": "Ordenado",
+        "nombre": "Básico",
         "incluye": "Panel del dueño + pendientes con responsable + agenda, pacientes e historial + 3 usuarios + soporte por correo",
         "resultado": "Sabés qué pasa en tu clínica cada día.",
         "limite": "las consultas se registran a mano (sin intake automático), sin Contador Pack ni inventario.",
-        "precio": "390/mes (anual 3.900)",
+        "precio": "320/mes (anual 3.200)",
         "recomendado": false
       },
       {
@@ -909,15 +909,15 @@
         "incluye": "Lo anterior + canales registrados → intake automático + roles finos + comentarios y consentimientos + Contador Pack INCLUIDO + inventario básico + 8 usuarios + soporte WhatsApp",
         "resultado": "Ningún paciente se escapa: cada consulta entra y se sigue sola.",
         "limite": "una sola sucursal, sin aprobaciones con SLA ni bot WhatsApp; SIAT va como add-on (+190/mes).",
-        "precio": "890/mes (anual 8.900)",
+        "precio": "750/mes (anual 7.500)",
         "recomendado": true
       },
       {
-        "nombre": "Empresa",
+        "nombre": "Completo",
         "incluye": "Lo anterior + aprobaciones con SLA + hasta 3 sucursales + 20 usuarios + soporte prioritario + bot WhatsApp incluido (se activa con la verificación de Meta) + inventario detallado con lotes y kardex (se libera en Q3-2026 sin costo extra) + facturación SIAT incluida (al certificar Onia ante el SIN)",
         "resultado": "Controlás sin estar encima: aprobaciones, sucursales y WhatsApp automatizados.",
         "limite": "hasta 3 sucursales (adicional Bs 490/mes c/u); bot, inventario detallado y SIAT entran según su fecha de liberación indicada.",
-        "precio": "1.990/mes (anual 19.900)",
+        "precio": "1.500/mes (anual 15.000)",
         "recomendado": false
       },
       {
@@ -929,7 +929,7 @@
         "recomendado": false
       }
     ],
-    "notaPaquetes": "Diferencia clave: <b>Ordenado</b> = tu clínica ordenada y visible · <b>Profesional</b> = ningún paciente se escapa (capta y sigue solo) · <b>Empresa</b> = automatizar el control (aprobaciones, WhatsApp, sucursales) · <b>Empresarial E1</b> = Onia lo opera por vos con infraestructura dedicada. Recomendado: <b>Profesional</b>. Implementación única (carga guiada + wizard + capacitación): Bs 490 / 1.490 / 3.900 según plan. Anual = 10 meses (2 gratis). Precios por sucursal. <b>Precio de lanzamiento:</b> cerrando antes del 31-jul-2026 mantenés la lista anterior (320 / 750 / 1.500) congelada 12 meses.",
+    "notaPaquetes": "Diferencia clave: <b>Básico</b> = tu clínica ordenada y visible · <b>Profesional</b> = ningún paciente se escapa (capta y sigue solo) · <b>Completo</b> = automatizar el control (aprobaciones, WhatsApp, sucursales) · <b>Empresarial E1</b> = Onia lo opera por vos con infraestructura dedicada. Recomendado: <b>Profesional</b>. Implementación única (carga guiada + wizard + capacitación): Bs 490 / 1.490 / 3.900 según plan. Anual = 10 meses (2 gratis). Precios por sucursal. <b>Precio de lanzamiento vigente:</b> 320 / 750 / 1.500, congelado 12 meses desde la firma (ratificado 2026-07-09 en <code>subscription-plans.ts</code>, que es lo que valida el cobro).",
     "addons": [
       {
         "nombre": "Facturación SIAT en línea (para plan Profesional; en Empresa va incluida)",

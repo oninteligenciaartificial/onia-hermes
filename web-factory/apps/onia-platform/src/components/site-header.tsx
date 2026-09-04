@@ -1,12 +1,20 @@
 import { BrandLogo } from "@/components/brand-logo";
 import { APP_URL } from "@/lib/site";
+import { CTA_ALTA } from "@/app/(sitio)/alta";
 import styles from "./site-header.module.css";
 
-/* hrefs absolutos ("/#...") para que la nav tambien funcione desde
-   /comparativa y las paginas legales. */
+/*
+ * Cromo LEGADO. Desde el 2026-08-21 la venta corre bajo el layout de
+ * src/app/(sitio); este header sobrevive solo en las paginas que no se
+ * rediseñaron: /nosotros, /servicios/*, los legales y el 404.
+ *
+ * Sus destinos SI se actualizaron a las rutas de la v3. Antes apuntaba a
+ * "/#como" y "/#modulos" — dos anclas de la portada vieja que en la nueva no
+ * existen: el visitante hacia clic y caia arriba de todo sin entender por que.
+ */
 const NAV = [
-  { href: "/#como", label: "Cómo funciona" },
-  { href: "/#modulos", label: "Módulos" },
+  { href: "/rubros", label: "Rubros" },
+  { href: "/agentes", label: "Agentes" },
   { href: "/chatbot", label: "Chatbot" },
   { href: "/precios", label: "Precios" },
   { href: "/nosotros", label: "Nosotros" },
@@ -47,7 +55,7 @@ export function SiteHeader() {
           href={`${APP_URL}/register`}
           className={`${styles.btn} ${styles.primary}`}
         >
-          Probar gratis
+          {CTA_ALTA}
         </a>
       </div>
     </header>

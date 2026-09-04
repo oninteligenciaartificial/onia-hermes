@@ -76,7 +76,7 @@ entra a todos los modelos de video.
 |---|---|
 | `nano_banana_2` | el que usamos hoy — es el **baseline**, sin él no hay contra qué comparar |
 | `nano_banana_2_lite` | versión barata del mismo, acepta `image_references` |
-| `soul_2` | el único declarado **para UGC y personajes** |
+| `text2image_soul_v2` | el único declarado **para UGC y personajes** |
 | `gpt_image_2` `quality=low` | otro proveedor, el escalón barato |
 | `z_image` | el más barato del catálogo. **Sin referencia de imagen** — se espera que falle E1, y sirve documentarlo |
 
@@ -180,7 +180,7 @@ saldo antes y después, que es la única medición que no miente.
 | Qué | Realidad |
 |---|---|
 | `medias: [{value, role}]` | el servidor lo traduce a `reference_images` al guardarlo. Se manda como `medias`, se lee como otra cosa |
-| Los ids del catálogo **no son** los del backend | `nano_banana_2` → `nano_banana_flash` · `soul_2` → `text2image_soul_v2`. Al leer un job viejo hay que saber esta traducción o parece otro modelo |
+| Los ids del catálogo **no son** los del backend | `nano_banana_2` → `nano_banana_flash` · `text2image_soul_v2` → `text2image_soul_v2`. Al leer un job viejo hay que saber esta traducción o parece otro modelo |
 
 ### ⚠️ Los arreglos sí se rompen en el canal — pero solo en algunos campos
 
@@ -195,7 +195,7 @@ uno y se consulta el estado con `show_generations`, que sí funciona.
 
 ## 7-bis. RESULTADOS FASE A — imagen (medido 2026-08-17)
 
-**Costo real de las 5: 3,77 créditos** — `soul_2` cobró sus 0,12 aunque el job no volvió.
+**Costo real de las 5: 3,77 créditos** — `text2image_soul_v2` cobró sus 0,12 aunque el job no volvió.
 Total de la sesión con los sondeos: **5,04 cr de 300.**
 
 | Modelo | E1 identidad | E2 deform. | E3 piel | E4 formato | Resolución | Veredicto |
@@ -204,7 +204,7 @@ Total de la sesión con los sondeos: **5,04 cr de 300.**
 | `nano_banana_2_lite` | ⚠️ buena, **pelo aclarado** | ✅ | ✅ | ✅ | 768×1376 | sirve de respaldo |
 | `gpt_image_2` low | ⚠️ **cara más ancha**, pelo aclarado | ✅ | ✅ | ✅ | 752×1344 | descartado para primer plano |
 | `z_image` | ❌ **es otra persona** | ✅ | ✅ | ✅ | 1152×2048 | ❌ para Lucía · ✅ para b-roll sin cara conocida |
-| `soul_2` | — | — | — | — | — | el job no volvió; se reintenta |
+| `text2image_soul_v2` | — | — | — | — | — | el job no volvió; se reintenta |
 
 ### Lo que enseña, y no estaba en ningún lado
 
@@ -274,7 +274,7 @@ un selfie real de un retrato.
 
 ### 8.4 El de-slop: Soul hace la piel cerosa, y hay receta
 
-El workflow lo marca **obligatorio** después de generar con `soul_2`: la identidad la sostiene,
+El workflow lo marca **obligatorio** después de generar con `text2image_soul_v2`: la identidad la sostiene,
 pero la piel sale de cera. Se arregla con un segundo paso que **cambia solo la microtextura**
 —poros, vello fino, ruido de sensor— y prohíbe explícitamente reencuadrar o tocar la cara.
 

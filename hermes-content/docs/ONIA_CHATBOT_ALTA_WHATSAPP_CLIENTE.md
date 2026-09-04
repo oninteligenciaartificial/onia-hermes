@@ -30,10 +30,20 @@
 > ni el research de coexistencia (`ONIA_MODELO_MULTICLIENTE_CHATBOT_20260802`,
 > hoy solo en historia de git — commit `456c2bc8`). Este doc COMPARA las rutas
 > y DECIDE la secuencia. Investigación externa: 2026-08-17.
+> **Estado de los trámites de Meta re-verificado el 2026-08-28** mirando el panel logueado:
+> App Review **aprobado** Y **Access Verification ✅ VERIFICADA** ("Tu negocio se verificó
+> como proveedor de tecnología", 0 acciones requeridas). **No queda NINGÚN trámite de Meta
+> abierto** — el deadline del 20-oct dejó de existir. Lo que falta es solo nuestro:
+> Configuration ID + dominio JS SDK + 3 env vars + prueba con +591. Tabla en §1.
 >
-> Precio que esto entrega: **Chatbot WhatsApp con IA — Bs 1.500 inst. +
-> Bs 1.490/mes + Meta por consumo** (manda `onia-platform/lib/pricing.ts`,
-> `WHATSAPP_ADDON`; aquí no se inventa ningún número nuevo).
+> Precio que esto entrega: **Chatbot WhatsApp con IA — Bs 390/mes o Bs 3.900/año,
+> sin cargo inicial** (manda `onia-platform/lib/pricing.ts`, `WHATSAPP_ADDON`; aquí no
+> se inventa ningún número nuevo). Los mensajes los cobra Meta en la cuenta del cliente.
+>
+> ⚠️ **Corregido 2026-08-27.** Decía `Bs 1.500 inst. + Bs 1.490/mes`. Se eliminó el cobro
+> de instalación el 2026-08-21: un pago de entrada de Bs 2.990 para PROBAR un chatbot
+> frenaba la venta. Todo lo que en este doc se justificaba "con la instalación" ahora se
+> justifica con la mensualidad — por eso se reescribió §4 entera, no solo el número.
 
 ---
 
@@ -47,11 +57,13 @@ developers.facebook.com y developers.chatwoot.com:
 
 | Requisito | ¿De quién? | Estado |
 |---|---|---|
-| Ser **Tech Provider** (auto-servicio, no hay que ser BSP ni entrar a un programa de partners) | Nuestro, UNA vez | En curso |
-| Business Verification de la agencia | Nuestro | ✅ aprobada 31-jul-2026 |
-| App con caso de uso WhatsApp en live mode | Nuestro | ✅ "Onia Bot" (1078962684709749) |
-| App Review: **2 videos** (enviar mensaje desde la app; crear plantilla) para Advanced Access a `whatsapp_business_messaging` + `whatsapp_business_management` | Nuestro | ✅ **PRESENTADO Y EN CURSO** al 2026-08-17 (visto por Sergio en el panel de Meta: `whatsapp_business_messaging` + `whatsapp_business_management` + `public_profile`; plazo típico ~20 días) |
-| Access Verification (formulario) | Nuestro | Pendiente, ~5 días |
+| Ser **Tech Provider** (auto-servicio, no hay que ser BSP ni entrar a un programa de partners) | Nuestro, UNA vez | ✅ **COMPLETO** (2026-08-28): verificación de negocio + App Review + Access Verification, los tres cerrados |
+| Business Verification de la agencia | Nuestro | ✅ aprobada 31-jul-2026 · re-verificado 2026-08-21: OniaAgency (1451773736711697), `verification_status: verified` |
+| App con caso de uso WhatsApp en live mode | Nuestro | ✅ "Onia Bot" (1078962684709749), publicada, **0 acciones requeridas** (2026-08-21) |
+| App Review: **2 videos** (enviar mensaje desde la app; crear plantilla) para Advanced Access a `whatsapp_business_messaging` + `whatsapp_business_management` | Nuestro | ✅ **APROBADO el 2026-08-21 09:59 GMT-4** — `whatsapp_business_messaging`, `whatsapp_business_management` y `public_profile`, los tres en **acceso avanzado** (`live`) |
+| **Access Verification (formulario)** | Nuestro | ✅ **VERIFICADA — mirada en el panel el 2026-08-28**: "Tu negocio se verificó como proveedor de tecnología". El aviso del 20-oct desapareció; 0 acciones requeridas |
+| Configuración "Inicio de sesión con Facebook para empresas" (de ahí sale el `WHATSAPP_CONFIGURATION_ID`) | Nuestro | ✅ **CREADA el 2026-08-28**: "Onia Embedded Signup", ID 1824225392073753, token que no caduca; SDK + dominio chat.onia.com.bo autorizados; 3 InstallationConfigs cargadas server-side. Falta SOLO la prueba del popup con un +591 (Sergio) |
+| Las 3 env vars en Chatwoot + dominio del JS SDK autorizado | Nuestro | 🔴 `WHATSAPP_APP_ID`, `WHATSAPP_APP_SECRET` y `WHATSAPP_CONFIGURATION_ID` están **VACÍAS** (2026-08-21) |
 | Embedded Signup **v4** (v2 se deprecia el **15-oct-2026** — nunca implementar v2) | Nuestro | Pendiente (lo trae Chatwoot, ver abajo) |
 | Business Verification **del cliente** | Del cliente | **NO necesaria para arrancar**: sin verificar puede iniciar conversaciones a 250 clientes únicos/24 h y responder SIN límite lo que le escriban. Verificarse solo le hace falta para escalar difusiones y para el display name oficial / check verde |
 
@@ -71,6 +83,12 @@ número: automáticos. **La ruta es "encender en nuestro Chatwoot", no
 construir.** Riesgo conocido self-hosted: reportes de popup que no abre
 (exige HTTPS válido y cookies de terceros) — la prueba real con un número
 +591 es parte del encendido, no un opcional.
+
+**⚠️ Hostname sin resolver (2026-08-21):** el mismo Chatwoot responde por **dos**
+hostnames — `chat.onia.com.bo` y el de Easypanel (que es el que tiene apuntado el
+webhook). El JS SDK del Embedded Signup exige el dominio autorizado en la app de Meta y
+**autorizar uno solo puede no alcanzar**. Antes de darlo por hecho hay que abrir el panel
+y **mirar desde cuál hostname se sirve el popup**.
 
 **Tiempos:** trabajo nuestro restante ~1 día + espera de Meta 1–7 días.
 Hasta completar los 3 gates: techo de **10 clientes nuevos por semana**
@@ -166,8 +184,9 @@ ni resuelve Meta: su WhatsApp también termina en un BSP de terceros.**
 **Lectura:** todos resuelven el alta con el MISMO Embedded Signup que
 nosotros vamos a encender gratis en Chatwoot. Pagar €49/número/mes o un 20%
 de markup por mensaje sería duplicar costo para tercerizar un trámite que ya
-tenemos a medio hacer (business verification aprobada). **Veredicto: solo
-plan B si App Review se empantana semanas Y hay un cliente grande esperando
+tenemos casi terminado (business verification y App Review aprobados; falta
+la Access Verification). **Veredicto: solo plan B si la Access Verification
+se empantana semanas Y hay un cliente grande esperando
 — y con permiso de gasto explícito (regla: nada pago sin aprobación).**
 
 ---
@@ -248,7 +267,7 @@ Meta/BSPs.]
 |---|---|---|---|---|---|---|
 | **R1 Embedded Signup (Chatwoot)** | Una vez: ~1 día trámite + prueba. Por cliente: **~5 min** | Popup ~15 min con su Facebook | Cero (Meta la paga el cliente) | Mismo día (tras encendido; hoy: +1–7 días de trámite) | Popup self-hosted puede fallar (probar); techo 10 altas/semana sin gates | ✗ |
 | **R2 Video tutorial pagado** | Grabar 1 vez | ALTÍSIMA: alta manual nivel developer | El cliente paga por trabarse | Días–semanas, si llega | Abandono + soporte + culpa nuestra | ✗ |
-| **R3 Done-for-you (cuenta del cliente)** | ~1–1,5 h + videollamada | 30 min de llamada, cero técnica | Cubierto por la instalación Bs 1.500 | 1–3 días (esperas Meta) | Esperas de verificación; depende de que el dueño del Facebook aparezca | ✗ |
+| **R3 Done-for-you (cuenta del cliente)** | ~1–1,5 h + videollamada | 30 min de llamada, cero técnica | Cubierto por la mensualidad (no hay cargo inicial) | 1–3 días (esperas Meta) | Esperas de verificación; depende de que el dueño del Facebook aparezca | ✗ |
 | **R3b Done-for-you (nuestra WABA)** | ~1 h | Cero | Factura Meta cae en NUESTRA tarjeta | 1 día | Techos duros: solo 1–3 pilotos | ✗ |
 | **R4 BSP (360dialog/Twilio/Wati)** | ~½ día integrar | Popup similar a R1 | €49/mes/número o ~20% markup/mensaje — recurrente | 1–7 días | Dependencia + costo recurrente por cliente; requiere permiso de gasto | ✗ |
 | **Canal B1: widget Chatwoot** | **~30 min por cliente** (+ 1 día de prueba una vez) | Pegar un snippet en su web (o lo pegamos nosotros) | Cero | **Mismo día** | Marca "Chatwoot" al pie; agent bot en Website sin verificar | ✅ |
@@ -259,18 +278,21 @@ Meta/BSPs.]
 
 ## 4. Qué cobramos en cada una
 
-Regla marco: el add-on ya está preciado (**Bs 1.500 instalación +
-Bs 1.490/mes + Meta por consumo**, `pricing.ts`). Ninguna ruta crea un
-precio nuevo sin decisión de Sergio.
+Regla marco: el add-on ya está preciado (**Bs 390/mes o Bs 3.900/año, sin cargo
+inicial**, `pricing.ts`). Ninguna ruta crea un precio nuevo sin decisión de Sergio.
+
+Sin instalación, el alta de Meta ya no tiene un cobro propio detrás: **es costo
+nuestro de onboarding**. Por eso la ruta barata en horas (R1, ~5 min) dejó de ser
+"margen sobre la instalación" y pasó a ser lo único que hace rentable el alta.
 
 | Ruta/canal | Qué se cobra |
 |---|---|
-| R1 Embedded Signup | Nada extra: el alta es parte de la instalación Bs 1.500 (y nos cuesta 5 min — margen puro sobre la instalación) |
+| R1 Embedded Signup | Nada extra: el alta va incluida en el add-on y nos cuesta ~5 min. Es la única ruta cuyo costo de alta se recupera en el primer mes |
 | R2 Video | **No se vende.** El video-guía del popup va incluido como material de onboarding |
-| R3 Done-for-you | Incluido en la instalación Bs 1.500 — es exactamente lo que esa instalación justifica hoy. **Excepción cotizable aparte:** rescate de cuentas Meta heredadas rotas (Business Manager perdido, verificación trabada, número secuestrado en otra WABA) = servicio técnico a medida, como ya contempla el pricing ("lo que no entre en el estándar se cotiza a medida") |
+| R3 Done-for-you | Incluido, sin cargo aparte — pero cuesta ~1–1,5 h nuestras y ya no hay instalación que las pague: son ~3 meses del add-on. Empujar a R1 siempre que se pueda. **Excepción cotizable aparte:** rescate de cuentas Meta heredadas rotas (Business Manager perdido, verificación trabada, número secuestrado en otra WABA) = servicio técnico a medida, como ya contempla el pricing ("lo que no entre en el estándar se cotiza a medida") |
 | R4 BSP | Si algún día se usa: el fee del BSP se traslada al cliente como **costo de terceros excluido** (regla dura de propuestas #5) — nunca absorberlo en el precio |
 | Canal widget (B1/C) | Mismo add-on: es el MISMO bot por otro canal. El botón wa.me sigue incluido gratis; lo cobrado es el bot con IA, salga por donde salga. Si Sergio quiere un escalón "solo widget web" más barato como puerta de entrada, es una decisión de pricing NUEVA → pendiente suyo, no de este doc |
-| Mensualidad Bs 1.490 | Cubre motor + bandeja + soporte del canal. El "+ Meta por consumo" queda en la WABA del cliente con SU tarjeta (crítico antes del 1-oct-2026, cuando Meta cobra la ventana de 24 h) |
+| Mensualidad Bs 390 | Cubre motor + bandeja + soporte del canal. El "+ Meta por consumo" queda en la WABA del cliente con SU tarjeta (crítico antes del 1-oct-2026, cuando Meta cobra la ventana de 24 h) |
 
 ---
 
@@ -370,6 +392,14 @@ pricing; fechar cada afirmación al citarla. El checkpoint del 1-sep-2026
 
 ## 6. Recomendación (alta + canal, en secuencia)
 
+**Lo que se le puede prometer a un cliente HOY:** el bot atendiendo su WhatsApp con el
+alta hecha por nosotros (R3 / §1.2). Nuestra WABA está viva: **+591 75414930**, calidad
+**GREEN**, tier **250**, `can_send_message: AVAILABLE` (verificado 2026-08-21). **No** se
+promete todavía el botón de auto-conexión, ni la WABA propia del cliente, ni coexistencia:
+faltan el Configuration ID y las env vars (la Access Verification ya está ✅). Lo que no está
+encendido no se nombra — nada de "muy pronto". Tabla completa en
+`ONIA_CHATBOT_LINEA_DE_ENTREGA.md` §0.1.
+
 **Hoy (esta semana, con 0–3 clientes):**
 1. **Canal: encender B1** — crear un inbox Website en Chatwoot, colgarle el
    agent bot y MIRAR una conversación completa (verificación real, no grep).
@@ -377,14 +407,15 @@ pricing; fechar cada afirmación al citarla. El checkpoint del 1-sep-2026
 2. **Alta WhatsApp: R3 done-for-you** en la cuenta del cliente (partner
    access, runbook ya escrito). Nuestra WABA solo si es piloto y firma
    consentimiento.
-3. **En paralelo, destrabar R1**: App Review **ya presentado y en curso**
-   (2026-08-17, ~20 días típicos) → seguirlo en el panel y responder rápido
-   si Meta pide cambios → Access Verification → Configuration ID → 3 env
-   vars → **probar el popup con un +591 real** (la prueba de coexistencia de
-   20 min incluida — nunca prometer coexistencia a un boliviano sin haberla
-   pasado).
+3. **En paralelo, destrabar R1**: App Review ✅ **APROBADO el 2026-08-21** y
+   **Access Verification ✅ VERIFICADA (mirada en el panel el 2026-08-28)** —
+   Meta ya no debe nada. Queda lo nuestro: Configuration ID (hoy no existe
+   ninguna configuración) → dominio del JS SDK (resolver antes cuál de los dos
+   hostnames sirve el popup) → 3 env vars (hoy vacías) → **probar el popup con
+   un +591 real** (la prueba de coexistencia de 20 min incluida — nunca
+   prometer coexistencia a un boliviano sin haberla pasado).
 
-**Cuando el botón funcione (estimado 2–6 semanas, casi todo espera de Meta):**
+**Cuando el botón funcione (Meta ya no debe NADA: queda ~1 día nuestro):**
 4. **R1 Embedded Signup pasa a ser el camino estándar** y R3 queda como
    "asistencia guiada" en videollamada para el cliente no técnico (mismo
    popup, nosotros mirando). El costo de alta por cliente cae a minutos.
@@ -402,9 +433,9 @@ altas nuevas bajo nuestra WABA más allá de 3 pilotos.
 
 ## 7. Qué depende de Sergio
 
-1. **App Review: presentado y en curso (2026-08-17)** — vigilar el panel de
-   Meta y responder si piden cambios; al aprobarse, seguir con **Access
-   Verification**. Sigue siendo EL bloqueante de la Ruta 1.
+1. **App Review: ✅ APROBADO (2026-08-21)** y **Access Verification: ✅
+   VERIFICADA (2026-08-28, mirada en el panel)** — de Meta no depende nada más.
+   Lo que queda de la Ruta 1 es nuestro (~1 día) + la prueba con tu número (punto 2).
 2. **Un número +591 real de prueba** para el test de Embedded Signup +
    coexistencia (20 min, con la app WhatsApp Business instalada).
 3. **Decisión de pricing**: ¿existe un escalón "solo widget web" más barato
@@ -421,6 +452,10 @@ altas nuevas bajo nuestra WABA más allá de 3 pilotos.
 
 ## 8. Sin verificar
 
+- **Desde cuál de los dos hostnames del Chatwoot se sirve el popup** del Embedded
+  Signup (`chat.onia.com.bo` vs. el de Easypanel, que es el del webhook). Define
+  qué dominio se autoriza en el JS SDK de la app; autorizar uno solo puede no
+  alcanzar.
 - Que el Embedded Signup funcione en NUESTRO Chatwoot self-hosted concreto
   (reportes de popup que no abre en self-hosted; la prueba con número real
   es parte del encendido).

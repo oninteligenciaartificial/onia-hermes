@@ -20,6 +20,7 @@ import {
 } from "./config.mjs";
 import { enforceGuardrails, normalize, SAFE_REPLY } from "./guardrails.mjs";
 import * as intents from "./intents.mjs";
+import { campanaExacta, recepcionistaStep } from "./recepcionista.mjs";
 // COMO se escribe cada respuesta vive en reply-builder.mjs; aca queda QUE rama se toma.
 import {
   ESPERA_HORARIO_STAGES,
@@ -81,8 +82,13 @@ export function createState(input = {}) {
     calendarEventId: input.calendarEventId || null,
     leadKey: input.leadKey || null,
     ownerRoleKey: input.ownerRoleKey || "sergio",
+    inboxId: input.inboxId || null,
     humanTookOver: Boolean(input.humanTookOver),
     humanTookOverAt: input.humanTookOverAt || null,
+    // Cuando se ACUSO el primer inbound posterior a un handoff. `handoff_humano` no significa
+    // que un humano haya llegado, solo que el bot derivo; sin esta marca la persona escribe al
+    // vacio. Se persiste en `bot_conversations.raw`, no en columna: no hace falta DDL.
+    handoffAckAt: input.handoffAckAt || null,
     optInAt: input.optInAt || null,
     optInSource: input.optInSource || null,
     optOutAt: input.optOutAt || null,
@@ -105,6 +111,20 @@ export function createState(input = {}) {
  */
 export function markHumanTakeover(state, atIso = null) {
   return { ...state, humanTookOver: true, humanTookOverAt: atIso || state.humanTookOverAt };
+}
+
+/**
+ * El DESARME del takeover (bandeja nativa 2026-08-29): resolver la conversacion
+ * se la devuelve al bot. Tambien resetea el handoff del recepcionista — ambos
+ * candados significan "humano a cargo", y resolver significa "termine".
+ */
+export function clearHumanTakeover(state) {
+  return {
+    ...state,
+    humanTookOver: false,
+    humanTookOverAt: null,
+    botStage: state.botStage === "handoff_humano" ? "nuevo" : state.botStage,
+  };
 }
 
 /** Fila lista para onia_center.bot_conversations. */
@@ -138,6 +158,7 @@ export function toConversationRow(state) {
       outboundSeq: state.outboundSeq,
       scheduledLabel: state.scheduledLabel,
       branchAsked: state.branchAsked,
+      handoffAckAt: state.handoffAckAt,
     },
   };
 }
@@ -156,6 +177,8 @@ function readIncoming(incoming) {
     text,
     norm: normalize(text),
     hasText: text.trim().length > 0,
+    imageDescription: typeof raw.imageDescription === "string" ? raw.imageDescription : "",
+    imageReceipt: raw.imageReceipt && typeof raw.imageReceipt === "object" ? raw.imageReceipt : null,
     externalMessageId: raw.externalMessageId || null,
     receivedAt: raw.receivedAt || null,
     author: raw.author || "contact",
@@ -237,6 +260,9 @@ function finalize(ctx, next, replies, effects = [], notes = []) {
       stageBefore: prev.botStage,
       stageAfter: next.botStage,
       ...(reply.pending ? { pending: true, llmRequest: reply.llmRequest, fallbackText: reply.fallbackText } : {}),
+      // Botones (Chatwoot input_select): viajan pegados a la respuesta hasta el adapter. El
+      // texto plano sigue siendo la base — un canal sin interactivos simplemente los ignora.
+      ...(reply.options ? { options: reply.options } : {}),
     };
   });
 
@@ -269,13 +295,15 @@ function finalize(ctx, next, replies, effects = [], notes = []) {
 // ---------------------------------------------------------------------------
 
 /**
- * @param {string} [bodyKey]  el mensaje con el que se anuncia el handoff. Por defecto M5 ("eso lo
- *   ve un humano"); el camino de SOPORTE usa el suyo porque decirle "eso lo ve Sergio en la demo"
- *   a un cliente que pide ayuda es contestarle con el guion de venta.
+ * @param {string|{key:string, options?:Array}} [bodyKey]  el mensaje con el que se anuncia el
+ *   handoff. Por defecto M5 ("eso lo ve un humano"); el camino de SOPORTE usa el suyo porque
+ *   decirle "eso lo ve Sergio en la demo" a un cliente que pide ayuda es contestarle con el
+ *   guion de venta. Como objeto `{key, options}` permite colgarle botones al anuncio (R_DERIVA
+ *   del recepcionista) sin duplicar los efectos de esta funcion.
  */
 function handoffResult(ctx, base, reason, leadingReplies = [], bodyKey = "M5") {
   const { config, prev, msg } = ctx;
-  const next = { ...base, botStage: "handoff_humano" };
+  const next = { ...base, botStage: "handoff_humano", handoffAckAt: null };
   const summary = summarize(next, msg, reason, config);
   const effects = [
     stageEffect(prev, next, reason),
@@ -291,7 +319,9 @@ function handoffResult(ctx, base, reason, leadingReplies = [], bodyKey = "M5") {
     { type: "notify_sergio", payload: { kind: "handoff", reason, conversationKey: next.conversationKey, text: summary } },
     auditEffect(prev, next, reason),
   ];
-  return finalize(ctx, next, [...leadingReplies, say(bodyKey, next, config)], effects, [`handoff:${reason}`]);
+  const spec = typeof bodyKey === "string" ? { key: bodyKey } : bodyKey;
+  const body = { ...say(spec.key, next, config, spec.vars || {}), ...(spec.options ? { options: spec.options } : {}) };
+  return finalize(ctx, next, [...leadingReplies, body], effects, [`handoff:${reason}`]);
 }
 
 /**
@@ -311,7 +341,20 @@ function welcomeResult(ctx, base, { reason = "disparador_demo", notes = ["bienve
   const sinHorarios = slotsPending(config);
   const next = {
     ...base,
-    botStage: sinHorarios ? "handoff_humano" : "esperando_horario",
+    // SIN HORARIOS NO ES SILENCIO. Antes esto era `handoff_humano`, y `handoff_humano`
+    // significa que el bot NO vuelve a hablar nunca (barrera 1 de step()). Como los slots de
+    // config.mjs siguen en "pendiente de definir", CADA conversacion caia ahi: el bot saludaba
+    // y se callaba en el segundo mensaje. Medido el 2026-09-02 sobre las 13 conversaciones
+    // desde el 24-ago: en el inbox de QA sostuvo 5 mensajes por 5 respuestas; a las personas
+    // reales les contesto como maximo UNA vez, SIEMPRE. Cinco escribieron, cuatro sin respuesta.
+    // Ahora entra igual a `esperando_horario`, que es la rama VIVA del guion (handleHorario):
+    // sigue calificando —lo unico que puede hacer sin agenda— y el humano coordina la hora en
+    // paralelo; los dos efectos de abajo (review_queue + notify_sergio) se mantienen intactos.
+    // OJO: no sirve `esperando_calificacion`. Ese es el guion VIEJO y su rama del switch
+    // reenvia la bienvenida ("migracion_guion_nuevo"), asi que el bot queda saludando en bucle
+    // a cada mensaje — probado antes de elegir esta. `slotsOffered` ya queda [] mas abajo, asi
+    // que handleHorario no puede leer una eleccion de horario que no se ofrecio.
+    botStage: "esperando_horario",
     slotsOffered: sinHorarios ? [] : config.slots.map((slot) => ({ ...slot })),
     optInAt: base.optInAt || msg.receivedAt,
     optInSource: base.optInSource || "inbound_demo",
@@ -376,8 +419,12 @@ function descartadoResult(ctx, base) {
   return finalize(ctx, next, [say("M1c", next, config)], effects, ["descartado"]);
 }
 
-/** Respuesta off-guion (precio / SIAT / archivo): cuerpo fijo + la pregunta pendiente del embudo. */
-function composeWithFunnel(ctx, base, bodyKey, reason) {
+/**
+ * Respuesta off-guion (precio / SIAT / archivo / campaña): cuerpo fijo + la pregunta pendiente
+ * del embudo. `vars` existe para R_CAMPANA, que es la unica plantilla de este camino cuyo texto
+ * no esta en el guion: lo trae el documento publicado ({{respuesta_campana}}).
+ */
+function composeWithFunnel(ctx, base, bodyKey, reason, vars = {}) {
   const { config } = ctx;
 
   // En 'nuevo' el disclosure manda (D2, sin excepción): primero M0 —que ya trae los horarios—,
@@ -386,12 +433,12 @@ function composeWithFunnel(ctx, base, bodyKey, reason) {
     return welcomeResult(ctx, base, {
       reason: `${reason}_en_bienvenida`,
       notes: [reason],
-      after: [say(bodyKey, base, config)],
+      after: [say(bodyKey, base, config, vars)],
     });
   }
 
   const ask = pendingAsk(base, config);
-  const body = say(bodyKey, base, config);
+  const body = say(bodyKey, base, config, vars);
   const text = ask ? `${body.text}\n\n${ask}` : body.text;
   return finalize(ctx, base, [{ ...body, text }], [], [reason]);
 }
@@ -415,6 +462,26 @@ export function step(state, incoming, options = {}) {
 
   // --- Barrera 1: un humano tomo la conversacion. El bot NO habla. Falla hacia el SILENCIO.
   if (state.humanTookOver) return finalize(ctx, base, [], [], ["silencio:humano_a_cargo"]);
+
+  // --- Barrera 1b: CUOTA MENSUAL AGOTADA (la manda /published; null = seguir atendiendo).
+  // Hasta hoy el bot se CALLABA al agotarse: el cliente del cliente escribia y nadie contestaba.
+  // Ahora: texto fijo SIEMPRE (nunca LLM) y el handoff de siempre (review_queue + notify)
+  // UNA sola vez por conversacion — en handoff_humano ya no se repiten los efectos.
+  // Opt-out previo sigue mandando: a quien dijo basta no se le escribe ni para avisarle esto.
+  if (config.cuota?.agotada === true && !state.optOutAt) {
+    if (state.botStage === "handoff_humano") {
+      return finalize(ctx, base, [say("R_CUOTA_AGOTADA", base, config)], [], ["cuota_agotada:ya_derivada"]);
+    }
+    return handoffResult(ctx, base, "cuota_agotada", [], "R_CUOTA_AGOTADA");
+  }
+
+  // --- MODO RECEPCIONISTA: el bot de un CLIENTE de Onia (conocimiento con fuente "db").
+  // Va ANTES de la barrera de opt-out porque la reapertura por "DEMO" es del funnel de venta;
+  // el recepcionista maneja su propio opt-out (silencio, sin reapertura). Todo el guion de
+  // leads de abajo queda EXCLUSIVO del modo venta. Ver recepcionista.mjs.
+  if (config.modo === "recepcionista") {
+    return recepcionistaStep(ctx, base, { finalize, handoffResult, say });
+  }
 
   // --- Barrera 2: opt-out previo. Solo el disparador DEMO puede reabrir (lo dice M6).
   // El opt-out le gana SIEMPRE al disparador: "ya no me mandes mas info" trae la palabra "info"
@@ -477,6 +544,15 @@ export function step(state, incoming, options = {}) {
     );
   }
 
+  // FRASE DE CAMPAÑA — el que clickeo un wa.me?text= de onia.com.bo. La frase ES el mensaje
+  // entero, asi que es la señal mas especifica que puede llegar: gana a los intents difusos de
+  // abajo, que son por palabra suelta. Va DETRAS de la bienvenida (composeWithFunnel), no en
+  // lugar de ella: M0 es lo que declara al bot como bot (D2), ofrece los horarios y —lo que mas
+  // importa— es la linea que dispara `lead_upsert`. Contestar solo la campaña, como hace el
+  // recepcionista, aca cambiaria un lead por un texto enlatado.
+  const campana = campanaExacta(config, msg.norm);
+  if (campana) return composeWithFunnel(ctx, withData, "R_CAMPANA", "campana", { respuesta_campana: campana.respuesta });
+
   if (intents.isComplaint(msg.norm)) return handoffResult(ctx, withData, "queja_o_desconfianza");
 
   // SEGUNDO CAMINO — el que escribe ya es cliente / necesita ayuda con el sistema. No es venta:
@@ -529,9 +605,25 @@ export function step(state, incoming, options = {}) {
         : handoffResult(ctx, base, "escribio_tras_descarte");
     case "demo_realizada":
       return handoffResult(ctx, base, "escribio_tras_la_demo");
-    case "handoff_humano":
-      // Ya esta en manos de Sergio: se registra el inbound y el bot no vuelve a hablar.
-      return finalize(ctx, base, [], [], ["silencio:handoff_en_curso"]);
+    case "handoff_humano": {
+      // DERIVAR NO ES QUE ALGUIEN HAYA LLEGADO. Aca decia "ya esta en manos de Sergio" y callaba
+      // para siempre, pero `handoff_humano` lo prende el BOT al decidir derivar: nadie contesto
+      // todavia. El candado legitimo es `humanTookOver` (mas arriba en step()), que se prende
+      // cuando un humano ESCRIBE de verdad.
+      //
+      // Medido en produccion el 2026-09-03, conversacion 49 (widget de la web): Chatwoot entrego
+      // el mensaje 287 y el bot lo proceso 4,08 s — corrio el turno entero y no produjo NADA. En
+      // las 8 corridas horarias de la sonda la correlacion es perfecta: cada M5 ("eso lo tiene
+      // que ver Sergio") dejaba mudo al mensaje siguiente. Del otro lado hay una persona que ve
+      // su mensaje entregado y ninguna respuesta, nunca.
+      //
+      // UNA sola vez: acusar cada mensaje seria spam, y encima taparia a Sergio cuando entre.
+      if (base.handoffAckAt) return finalize(ctx, base, [], [], ["silencio:handoff_en_curso"]);
+      const acusado = { ...base, handoffAckAt: msg.receivedAt || new Date().toISOString() };
+      // Cero efectos: el aviso a Sergio y la cola de revision ya salieron con el handoff. Este
+      // turno es solo decirle a la persona que su mensaje llego.
+      return finalize(ctx, acusado, [say("M5_ACUSE", acusado, config)], [], ["handoff:acuse_de_recibo"]);
+    }
     default:
       return handoffResult(ctx, base, "estado_desconocido");
   }
@@ -557,7 +649,11 @@ function handleHorario(ctx, base) {
     // Contesto contando su negocio en vez de elegir: se le acusa recibo y se le vuelven a poner
     // los dos horarios. El dato queda guardado, asi que M2 despues no se lo vuelve a pedir.
     if (Object.keys(ctx.found || {}).length > 0) {
-      const reply = say("M0b", base, config, { datos_que_si_dio: joinEs(capturedLabels(base.qualification, config)) });
+      // Sin horarios reales, M0b vuelve a ofrecer "**A)** HORARIO A (pendiente de definir)":
+      // el prospecto no puede elegir NADA y la charla se estanca repitiendo la misma frase.
+      // Medido el 2026-09-02: mensajes 2 y 3 salian identicos. Con slots pendientes se acusa
+      // el dato y se pide el contacto, que es lo unico accionable sin agenda.
+      const reply = say(slotsPending(config) ? "M0b_SIN_HORARIOS" : "M0b", base, config, { datos_que_si_dio: joinEs(capturedLabels(base.qualification, config)) });
       // El dato tambien va al CRM, no solo a la conversacion. Sin esto, quien contaba su negocio en
       // vez de elegir horario y despues se callaba quedaba en el CRM como "sin definir" y sin
       // ciudad: el rubro y el tamano vivian en `bot_conversations` y nadie los veia en el panel.

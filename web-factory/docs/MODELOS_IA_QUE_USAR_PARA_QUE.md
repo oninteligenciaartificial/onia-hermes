@@ -152,7 +152,7 @@ casi 4×.
 | `nano_banana_2_lite` | 1,00 | 768×1376 | respaldo. ⚠️ **aclara el pelo** |
 | `gpt_image_2` low | 0,50 | 752×1344 | ⚠️ **ensancha la cara.** No para primer plano |
 | **`z_image`** | **0,15** | 1152×2048 | 🏆 **el default sin cara.** Ambientes, objetos, gente anónima |
-| `soul_2` | 0,12 | — | **sin veredicto**: el job cobró y nunca devolvió resultado. Higgsfield advierte que su piel sale cerosa y trae receta de de-slop |
+| `text2image_soul_v2` | 0,12 | — | **sin veredicto**: el job cobró y nunca devolvió resultado. Higgsfield advierte que su piel sale cerosa y trae receta de de-slop |
 
 ## 8. Cómo se llama a la API (la firma que funciona)
 

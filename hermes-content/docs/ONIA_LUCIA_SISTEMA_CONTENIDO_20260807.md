@@ -153,7 +153,7 @@ Se construye, con estas reglas — que salen de los datos, no de precaución:
 | Necesito | Herramienta | Costo |
 |---|---|---|
 | **Primer plano de cara** | `nano_banana_2` + Element `902eeebb-…` (cara aprobada) | ~2 cr |
-| Cuerpo entero, escena, lifestyle | `soul_2` + `36305a9b-…` | 0,12 cr |
+| Cuerpo entero, escena, lifestyle | `text2image_soul_v2` + `36305a9b-…` | 0,12 cr |
 | Texto quemado y carruseles | HyperFrames | 0 |
 | Video | cotizar con `get_cost` **y OK de Sergio** | — |
 

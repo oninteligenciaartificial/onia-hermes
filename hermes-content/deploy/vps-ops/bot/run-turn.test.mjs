@@ -19,8 +19,15 @@ import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
 
 import { DEFAULT_CONFIG, slotsPending } from "./config.mjs";
-import { resetKnowledgeCache } from "./knowledge.mjs";
+import { resetKnowledgeCache, resetOrgKnowledgeCache } from "./knowledge.mjs";
 import { buildConfig, resolveConfig } from "./run-turn.mjs";
+// Namespace a proposito: si el export desaparece queremos que ROMPA ESTE TEST por su
+// nombre, no que se caiga el modulo entero (que es justo el fallo silencioso que cubre).
+import * as runTurnModule from "./run-turn.mjs";
+
+test.afterEach(() => {
+  resetOrgKnowledgeCache();
+});
 
 const T0 = "2026-07-27T14:05:00Z";
 
@@ -94,6 +101,47 @@ test("resolveConfig: preserva el dry_run explicito del turno aunque Cal.com trai
   assert.deepEqual(config.slots, LIVE_SLOTS);
 });
 
+test("resolveConfig: el inbox del turno resuelve el conocimiento de ESE cliente desde el PRIMER mensaje", async () => {
+  // El fetch falso contesta como GET /published del producto cuando le preguntan por inbox.
+  const fetchDb = async (url) => {
+    assert.match(url, /inboxId=6/, "el motor pregunta por inbox; la org la resuelve el producto");
+    return {
+      ok: true,
+      status: 200,
+      json: async () => ({
+        organizationId: "org_ferreteria",
+        data: {
+          schema: "onia.bot.knowledge/1",
+          version: "qa.1",
+          updatedBy: "test",
+          identity: { productName: "ZZ QA Ferreteria Tornillo" },
+        },
+        version: 1,
+        updatedBy: "test",
+      }),
+    };
+  };
+  const getAvailableSlots = async () => ({ slots: LIVE_SLOTS, source: "calcom", warnings: [] });
+  const config = await resolveConfig(
+    { received_at: T0, inbox_id: "6" },
+    { getAvailableSlots, knowledge: { dbUrl: "http://producto/published", dbSecret: "s3cr3t", fetch: fetchDb } },
+  );
+  assert.equal(config.identity.productName, "ZZ QA Ferreteria Tornillo", "la cara del cliente sale en el turno 1, no en el 2");
+  // CAMBIO 2026-08-17 (modo recepcionista): un inbox de cliente ya NO consulta Cal.com — el
+  // recepcionista no agenda demos de Onia. Antes este assert exigia LIVE_SLOTS.
+  assert.equal(config.modo, "recepcionista", "org cliente = el bot del negocio");
+  assert.deepEqual(config.slots, DEFAULT_CONFIG.slots, "sin demo de Onia no se pide disponibilidad");
+
+  resetOrgKnowledgeCache();
+  // Sin mapeo (404 del producto): el mismo turno degrada al conocimiento de Onia, sin tirar.
+  const fetch404 = async () => ({ ok: false, status: 404, json: async () => ({}) });
+  const sinMapeo = await resolveConfig(
+    { received_at: T0, inbox_id: "99" },
+    { getAvailableSlots, knowledge: { dbUrl: "http://producto/published", dbSecret: "s3cr3t", fetch: fetch404 } },
+  );
+  assert.notEqual(sinMapeo.identity.productName, "ZZ QA Ferreteria Tornillo");
+});
+
 // ---------------------------------------------------------------------------
 // PARIDAD local / VPS — la grieta que hacia valer un verde que no valia
 // ---------------------------------------------------------------------------
@@ -123,4 +171,23 @@ test("PARIDAD: con knowledge.json el transporte no cambia, pero el objeto SI (po
     delete process.env.ONIA_BOT_KNOWLEDGE_FILE;
     resetKnowledgeCache();
   }
+});
+
+// ---------------------------------------------------------------------------
+// GUARDIA DE ESPEJO: el prompt del LLM tiene que seguir EXPORTADO.
+//
+// Por que existe. En d334d776 el espejo del repo se sincronizo con el VPS y esa
+// version tenia el prompt inlineado dentro de askLiteLLM. Al desaparecer el export,
+// evals/evals.test.mjs dejo de IMPORTAR — no fallo un caso: fallo el modulo entero,
+// y sus 12 evals dejaron de correr. Como node --test lo reporta como UN test roto
+// entre 634 verdes, tres vueltas seguidas reportaron "634/634 verde" sin verlo.
+//
+// Este test es barato y ruidoso: si alguien vuelve a inlinear el prompt, ROMPE ACA,
+// con el motivo escrito, en vez de apagar los evals en silencio.
+// ---------------------------------------------------------------------------
+test("el prompt del LLM sigue exportado — si se inlinea, los evals dejan de correr en silencio", () => {
+  const prompt = runTurnModule.LLM_SYSTEM_PROMPT;
+  assert.equal(typeof prompt, "string", "evals/evals.test.mjs lo importa: sin el export no carga ESE modulo y sus 12 evals no corren");
+  assert.ok(prompt.length > 0, "vacio tampoco sirve: los evals miden tokens sobre este texto");
+  assert.match(prompt, /PROHIBIDO: dar precios/, "es el prompt con los guardrails, no cualquier string");
 });

@@ -100,6 +100,8 @@ export function stateFromRow(row) {
     // tienen columna (qualifyAsks, outboundSeq, scheduledLabel), asi que no hace falta un DDL en
     // produccion para dejar de guardar el id de conversacion como telefono del CRM.
     publicContact: raw.publicContact || null,
+    handoffAckAt: raw.handoffAckAt || null,
+    inboxId: raw.inboxId || null,
     displayName: row.display_name,
     botStage: STAGES.includes(row.bot_stage) ? row.bot_stage : "nuevo",
     pieceKey: row.piece_key,
@@ -385,6 +387,7 @@ export function createStore(options = {}) {
         outboundSeq: state.outboundSeq || 0,
         scheduledLabel: state.scheduledLabel || null,
         publicContact: state.publicContact || null,
+        inboxId: state.inboxId || null,
       },
     };
     const rows = await rest("saveConversation", `bot_conversations?conversation_key=${eq(state.conversationKey)}`, {
@@ -550,6 +553,33 @@ export function createStore(options = {}) {
       `limit=${Number(limit) || 50}`,
     ].join("&");
     return rest("sweepFollowUpCandidates", `bot_conversations?${filter}`);
+  }
+
+  /**
+   * Barrido de INSISTENCIA del recepcionista (v6.6, Sergio 2026-08-30: encendida por
+   * defecto). Candidatas: conversaciones de bots de CLIENTE (stage "nuevo" — el
+   * recepcionista vive ahi), donde el bot hablo ultimo y el contacto calla hace >= 1 h
+   * y < 24 h (ventana de Meta: fuera no hay plantilla del recepcionista, no se manda).
+   * El refinamiento por org (doc.seguimiento activo/horas) lo hace el runner, que
+   * igual necesita leer el doc. Reusa followup_step + reserveFollowUp como CAS.
+   */
+  async function sweepInsistenciaCandidates(nowIso, limit = 50) {
+    const now = Date.parse(nowIso);
+    if (!Number.isFinite(now)) return warn("sweepInsistenciaCandidates", `nowIso invalido: ${nowIso}`);
+    const from = new Date(now - 24 * 3600000).toISOString();
+    const to = new Date(now - 1 * 3600000).toISOString();
+    const filter = [
+      "followup_step=eq.0",
+      "human_took_over=is.false",
+      "opt_out_at=is.null",
+      "bot_stage=eq.nuevo",
+      "last_outbound_at=not.is.null",
+      `last_inbound_at=gte.${from}`,
+      `last_inbound_at=lte.${to}`,
+      "order=last_inbound_at.asc",
+      `limit=${Number(limit) || 50}`,
+    ].join("&");
+    return rest("sweepInsistenciaCandidates", `bot_conversations?${filter}`);
   }
 
   /**
@@ -790,6 +820,7 @@ export function createStore(options = {}) {
     listOutboundMessages,
     reserveFollowUp,
     sweepFollowUpCandidates,
+    sweepInsistenciaCandidates,
     sweepDemoReminders,
     sweepDemosTerminadas,
     reserveDemoDone,

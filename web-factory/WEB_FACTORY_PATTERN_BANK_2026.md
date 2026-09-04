@@ -494,6 +494,26 @@ Los 5 patrones consagrados — todo dashboard nuevo de Onia parte de acá:
 Referencia viva: hermes-content/references/ui-patterns/panel-claro-premium/index-v4.html
 (+v5 sustractiva). Detalle crudo por galería: docs/DESIGN_LEARNED_2026.md §5b.
 
+> ⚠️ **ALCANCE (acotado 2026-08-30) — y una contradicción abierta que decide Sergio.**
+>
+> Estos 5 patrones son **dirección elegida por Sergio el 17-ago** y NO se reabren por
+> iniciativa propia. Pero el barrido del 29-ago sobre **26 dashboards reales** (Grafana,
+> shadcn, Tremor, Tabler, Flowbite, Horizon, Ant Pro) encontró lo contrario en el punto 5:
+> el patrón que más se repite es **KPI = número grande + chip de tendencia + sparkline
+> DENTRO de la tarjeta**, más una **celda KPI hero de acento sólido** que ancla la fila
+> (`data/references/design-sources/2026-08-29-dashboards-aprendidos.md:11-16`). El punto 5
+> de acá pide justo lo opuesto: celdas de pelo, sin caja.
+>
+> **Reconciliación mientras tanto:** "libro mayor editorial" gobierna el **panel propio de
+> Onia**; el **template de cliente** (`packages/templates/src/dashboard.ts`) sigue
+> `docs/DASHBOARD_PATTERN_BANK_2026.md`, que es el que está anclado al código línea por
+> línea y ya implementa sparkline-en-KPI y celda hero.
+>
+> **Lo que falta decidir:** Sergio pidió el 30-ago llevar el dashboard de **Onia Platform**
+> al nivel de las referencias — o sea, exactamente la superficie donde las dos direcciones
+> chocan. Esa elección es suya, no se resuelve editando este doc. Queda planteada, no
+> zanjada.
+
 
 
 Design read: status at a glance, dense but legible, action over decoration.
@@ -648,6 +668,7 @@ Best for: engineering, clinics, B2B service, high-ticket local services.
 | Education/event | Clear, energetic, schedule-led | 5 | 4 |
 | SaaS/AI | Product proof, structured, interactive | 5 | 5 |
 | Legal/finance | Conservative, high contrast, credible | 5 | 2 |
+| Performance (gym/auto/importadora tech) | Dark-performance: condensada MAYUSCULA gigante, negro + UN acento quemado, bento de metricas-instrumento (medido en Axion 2026-08-29) | 6 | 5 |
 
 ## Current Trends Worth Using Carefully
 
@@ -670,3 +691,26 @@ Best for: engineering, clinics, B2B service, high-ticket local services.
 - [ ] Motion has reduced-motion fallback.
 - [ ] LCP, INP and CLS targets are considered before large video/image choices.
 - [ ] Client risks are visible: payment, WhatsApp, legal claims, credentials, stock, delivery or approvals.
+
+## Salud premium — patrones medidos (2026-08-29)
+
+Fuente: despiece computado de One Medical + Parsley Health, ficha completa en
+`data/references/design-sources/2026-08-29-salud-premium.md`. Confirmado en DOS
+referentes independientes; aplicado ya al template clinic (pesos) y a la demo
+dental-amanecer (acento miel).
+
+- **Serif de display LIVIANA (300–500) a tamano grande** + sans geometrica de
+  cuerpo. La negrita 700+ mata la direccion premium del rubro persona-salud.
+- **Acento tierra desaturado (miel/caramelo #bf7e3d–#ffc776)**, nunca coral/rojo
+  saturado. Verde profundo o petroleo como superficie Y como CTA pill.
+- **Cifra-editorial**: un numero enorme en serif como seccion propia. SOLO con
+  dato real del cliente (regla de la casa: sin dato verificable, la seccion no
+  existe — no se inventa).
+- **Quote unica centrada en banda de color suave** (menta/crema), no carrusel de
+  testimonios.
+- **Retrato con recorte organico (circulo/arco) sobre banda plana** — humaniza
+  sin stock ni caras generadas.
+- **Tabla comparativa con columna propia destacada** al final del scroll, antes
+  del FAQ (Parsley) — misma mecanica que la /comparativa de Onia.
+- Ritmo de superficies planas claro/oscuro como profundidad (ya era regla; las
+  dos referencias lo confirman).

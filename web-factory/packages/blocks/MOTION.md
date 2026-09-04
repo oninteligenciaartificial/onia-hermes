@@ -34,7 +34,6 @@ Then any block opts into motion by adding a class. That's it.
 | `wf-stagger` (on a parent) | children cascade in | in view |
 | `wf-type-slam` (+ `wf-onload`) | headline slams in | on load |
 | `wf-parallax` + `data-wf-parallax="0.2"` | media moves slower than scroll | scroll-linked |
-| `wf-hover-lift` | card lifts + shadow on hover | hover |
 | `wf-sticky` | sticky nav (+ `wf-scrolled` state) | scroll-linked |
 | `data-wf-scrub` (on a tall track) + `wf-frame` / `wf-step` children | el scroll avanza la escena por etapas (sticky + scrub, patrón P3) | scroll-linked |
 | `wf-count` + `data-wf-count="4200"` | la métrica cuenta hasta su valor real | in view |
@@ -74,7 +73,7 @@ stagger in`) becomes:
   <p>…</p><div class="cta">…</div>
 </div>
 <figure class="wf-clip-reveal wf-onload"><img class="wf-zoom" …></figure>
-…later sections use wf-reveal / wf-stagger / wf-parallax / wf-hover-lift…
+…later sections use wf-reveal / wf-stagger / wf-parallax…
 ```
 
 `MOTION_PRIMITIVES` in `src/motion.ts` is the machine-readable version of this

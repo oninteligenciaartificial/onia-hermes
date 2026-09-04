@@ -67,6 +67,31 @@ Instrucciones de proyecto. Override sobre defaults.
   no tiene fecha.
 - Antes de escribir una cifra o una capacidad en material de cliente, **buscar si ya
   existe en otro lado**. Si hay dos versiones, no elegir la más linda: preguntar.
+- **Una promesa que cambia se barre en TODA la superficie, no solo donde la estabas
+  tocando.** Cuando cambia lo que el producto entrega, `grep` de la promesa vieja en todo
+  el material de cliente ANTES de dar el cambio por hecho.
+
+  > Nace del 2026-08-23: `/register` dejó de crear cuentas y el arreglo se hizo en
+  > `/empezar` ("Pedí tu acceso"). La home nunca se enteró: quedaron **cuatro botones y
+  > una FAQ** prometiendo "Probá 14 días gratis · te registrás y usás el sistema". El lead
+  > hace clic esperando entrar y encuentra un formulario de solicitud — la fricción más
+  > cara del sitio, en el último clic, y encima contradice el copy honesto de al lado.
+  > Arreglar el síntoma donde saltó y no los hermanos que llaman a lo mismo deja el bug vivo.
+
+  ⚠️ **Eso es HISTORIA, no el estado de hoy — corregido 2026-09-03.** El alta se volvió a
+  **ABRIR** el 29-ago y este párrafo siguió leyéndose como presente durante cinco días. Hoy
+  `app.onia.com.bo/register` **crea la cuenta solo**: asistente de dos pasos (elegís rubro →
+  nombre, correo, contraseña, nombre del negocio) y botón "Crear mi cuenta — 14 días gratis";
+  `/empezar` no tiene ni un `<form>` y sus CTA dicen "Creá tu cuenta". Medido en vivo, no de
+  memoria: `docker exec onia-platform env | grep ALTA` → `ONIA_ALTA_AUTOMATICA=abierta`, y las
+  dos pantallas abiertas y MIRADAS renderizadas.
+  >
+  > **La regla de arriba sigue intacta; lo que falló fue su ejemplo.** Una promesa que cambia se
+  > barre en toda la superficie — y el barrido tiene que alcanzar también a **las reglas que la
+  > citan**, porque un ejemplo congelado en pasado se lee como presente y manda al revés: hace
+  > creer que la puerta está cerrada cuando está abierta. El estado vigente del alta se verifica
+  > con el comando de arriba y con `web-factory/apps/onia-platform/src/app/(sitio)/alta.ts`
+  > (que es un ESPEJO del producto, no la fuente).
 
 ## Verificar es MIRAR, no suponer (REGLA)
 
@@ -82,6 +107,11 @@ Instrucciones de proyecto. Override sobre defaults.
 - **Medir peso y tiempo real**, no solo que responda. Un 200 lento es un fallo con cara
   de éxito (la fuente de iconos pesaba 3,9 MB y tardaba 117 s).
 - Un `grep` sirve para **descartar**, nunca para **confirmar** que algo se ve bien.
+- **Un dato heredado no se ejecuta sin CONTARLO de nuevo.** El 2026-08-20 mi propio
+  veredicto decía "de 136 workflows de n8n quedan 2" y "las 3 orgs son de QA": contados
+  en vivo, 44 workflows estaban ACTIVOS (borrarlos apagaba producción) y una de las orgs
+  tenía el único SUPERADMIN. Repetir una conclusión propia anterior también es repetir
+  sin verificar.
 - **El login NO prueba la base**: entra por Supabase Auth vía HTTPS, no por Prisma.
 
 ## Nada a medias — cerrar antes de abrir (REGLA)
@@ -94,13 +124,14 @@ Instrucciones de proyecto. Override sobre defaults.
   llama son trabajo con valor **cero**.
 - **Prohibido reportar como hecho lo que está detrás de un flag apagado.**
 - **Antes de abrir un frente nuevo se cierra el anterior**, o se anota con su estado exacto.
-- **Al cerrar la sesión, escribir el HANDOFF** en
-  `hermes-content/docs/handoffs/<rama-saneada>.md` — un archivo por carril, así dos ramas
-  abiertas no se pisan. Seis campos, plantilla y decisión en el `README.md` de esa carpeta:
-  objetivo · **estado** (qué quedó EN PRODUCCIÓN y qué a medias, con el dónde) · archivos y
-  cambios · **intentos fallidos** (el que más vale: evita repetir el callejón) · próximos
-  pasos · qué depende de Sergio. Se commitea: el estado tiene que viajar con el repo, no
-  quedarse en `~/.claude/session-data/` de una máquina.
+- **Al cerrar la sesión, escribir el HANDOFF del carril** en
+  `hermes-content/docs/handoff/<carril>.md` — plantilla y decisiones en el README de esa
+  carpeta. Siete campos: objetivo · qué quedó **en producción** · qué quedó a medias y dónde ·
+  archivos · **intentos fallidos** · qué depende de Sergio · próximos pasos.
+  Un archivo por carril, así dos worktrees abiertos no chocan al mergear.
+  ⚠️ **No alcanza con confiar en la compactación**: el resumen es fiel pero no ELIGE — devuelve
+  cada error y cada método descartado con el mismo peso que el estado actual. El campo de
+  **intentos fallidos** es el que casi nadie escribe y el que evita repetir el callejón.
 
 ---
 
@@ -116,6 +147,50 @@ Instrucciones de proyecto. Override sobre defaults.
   detalle en la skill `onia-frontend`).
 - ⚠️ `Gestios` y `Ganaderos-Os` existen como repos pero son **legado**: no se les agrega
   nada sin decidir si se archivan o se absorben.
+- **El SISTEMA es la oferta; el chatbot es un add-on.** Sergio, 2026-09-03: *"el sistema no
+  ofrece directamente el bot, ofrece solo el sistema… hay inconsistencias en la web, datos que
+  no son importantes, habla de nuestras competencias… la referencia es Lety y Dapta, mirá cómo
+  venden"*. La web y todo material de venta hablan del sistema de gestión por rubro; el bot
+  aparece como add-on (`pricing.ts`), nunca como el titular. **Cero autobombo**: nada sobre
+  nosotros, nuestras competencias, nuestro equipo o datos que no le importan al dueño de un
+  negocio. Cómo se vende se mide contra `lety.ai` y `dapta.ai` de HOY (titular, clics hasta
+  empezar, un precio claro, beneficio antes que característica), no de memoria.
+
+## La venta nunca exhibe obra (REGLA)
+
+> Sergio, 2026-08-20: *"no entiendo por qué dices si es que estamos construyendo algo que
+> aún no está listo… hace escapar a los clientes porque hacen creer que el sistema no
+> funciona. Como regla nunca hagas eso."* La banda de Módulos de la landing tenía CINCO
+> "muy pronto" en la pantalla de venta.
+
+- En toda superficie que ve un cliente está PROHIBIDO comunicar estado de obra: "muy
+  pronto", "en construcción", "beta", "próximamente", banners de borrador, listas de lo
+  que falta. Un solo cartel contamina la percepción del producto entero.
+- Lo que no está listo **no se nombra**. La demanda futura se captura sin admitir:
+  "¿Otro rubro? Escribinos".
+- Convive con "no fabricar": ni prometer lo inexistente NI exhibir lo incompleto — se
+  habla solo de lo vivo. Docs internos y política de privacidad siguen siendo honestos
+  sobre límites; la VENTA no.
+
+## No hay equipo de ventas (REGLA)
+
+> Sergio, 2026-08-27: *"ya no crees nada sobre vendedores, por el momento no tenemos
+> equipo de ventas"*.
+
+- **El que vende es Sergio.** No hay vendedora, ni colaboradores comerciales, ni nadie
+  externo vendiendo Onia.
+- **PROHIBIDO escribir material dirigido a un vendedor**: onboarding de vendedores,
+  tablas de comisión, decks de reclutamiento, CRM de fuerza de ventas, runbooks de acceso
+  para terceros. **Primero existe la persona, después el documento.** Al revés se llenó
+  media carpeta de material para un puesto que nunca se ocupó — y peor: manda a cada
+  sesión nueva a mantenerlo.
+- **Material sobre CÓMO vender sí sirve** (guion de demo, objeciones, scripts, one-pager):
+  lo usa Sergio. Vive en `hermes-content/sales-kit/`, con su README fijando el estado.
+- Lo que asumía un vendedor tercero se archivó en `hermes-content/docs/historial/`. Las
+  comisiones de `ONIA_WEB_COMO_SE_VENDE.md` quedan **suspendidas**, no borradas.
+- ⚠️ Queda una **superficie huérfana viva**: `/vendedores/cotizador` y `/vendedores/webs`
+  en `web-factory`. Son rutas publicadas para un puesto vacío. Bajarlas es decisión de
+  Sergio.
 
 ## ONIA Core (REGLA)
 
@@ -161,6 +236,23 @@ Instrucciones de proyecto. Override sobre defaults.
 - **Auto-sync activado**: al terminar, commitear y pushear sin que lo pidan (hook `Stop`
   → `node scripts/git-autosync.js`).
 - Respeta `.gitignore`: nunca sube `.env`, claves ni `node_modules`. Assets y outputs sí.
+- ⚠️ **Un merge con conflictos NUNCA se deja abierto al cerrar un turno.** El hook Stop
+  corre el autosync, y `add -A` + commit convirtió 17 archivos CON marcadores `<<<<<<<`
+  en un "resuelto" que hizo fast-forward a main (2026-08-20; el CI lo contuvo). El
+  autosync ya tiene la guarda (se niega con MERGE_HEAD/paths unmerged), pero la regla es
+  del que mergea: resolver ANTES de soltar el turno, y verificar cero marcadores con grep.
+- ⚠️ **El hook Stop puede publicar el estado A MEDIAS de un subagente.** El autosync corre
+  cuando un subagente termina su turno, no cuando el trabajo está terminado. El 2026-08-23
+  se llevó **217 líneas de CSS a `origin/main` antes de que existiera el markup que las
+  usa** (`e4e7fa2a`), a mitad de una sesión que todavía tenía dos archivos por escribir.
+  No rompió nada **por casualidad**: eran clases CSS sin usar, que no pueden romper un
+  build. Al revés — markup que importa un archivo que aún no se commiteó — rompe `main`,
+  que alimenta el deploy del VPS y el de Vercel.
+
+  **La regla:** un subagente que trabaja en varios archivos deja el árbol en un estado que
+  **compile solo** cada vez que suelta el turno, o no suelta el turno. Si un archivo nuevo
+  importa otro archivo nuevo, van los DOS o ninguno — y eso ahora aplica también a "los dos
+  todavía no están escritos". El orquestador verifica `git log origin/main` al cerrar.
 - ⚠️ **Nunca buildear producción con un `.env.local` presente**: Next hornea los
   `NEXT_PUBLIC_*` en el bundle y publica `127.0.0.1`. Buildear en el VPS con `app.env`,
   y verificar el bundle antes del swap.
@@ -174,6 +266,11 @@ Instrucciones de proyecto. Override sobre defaults.
 - **Decidir y actuar.** Verificación fuerte solo para lo que toca producción, plata o
   `main`. Lo reversible y de bajo riesgo: hacerlo y seguir.
 - **No re-hacer lo aprobado.** Diseño o plan ya aprobado se porta fiel, no se reabre.
+- **Una superficie viva no se reemplaza sin que Sergio VEA la pieza terminada.** El
+  2026-08-20 interpreté "ya te di todo lo que quería" como OK para publicar la landing
+  v2: la rechazó entera al verla ("Nada se te escapa no vende nada") y hubo que revertir
+  en producción. Un rediseño se muestra renderizado y se espera el OK explícito sobre
+  ESA pieza; construir y publicar son dos permisos distintos.
 
 ## Dónde va cada cosa (REGLA)
 
@@ -182,6 +279,7 @@ Nada suelto en la raíz.
 | Qué | Dónde |
 |---|---|
 | Doc de proceso o decisión | `hermes-content/docs/` (sin fecha si es fuente de verdad) |
+| **Estado al cerrar un carril** | `hermes-content/docs/handoff/<carril>.md` (uno por carril, sin fecha) |
 | Foto de un día | `hermes-content/docs/historial/` |
 | Investigación | `hermes-content/docs/research/` |
 | Competencia guardada | `hermes-content/research/competencia/` |
@@ -219,8 +317,22 @@ Si no sabés dónde va, **preguntá** antes de inventar carpeta.
 
 - **REGLA DE ORO: la tabla de cortes + preview 360p SIEMPRE se muestran a Sergio ANTES
   de aplicar el corte.** Nunca cortar a ciegas.
-- **Gasto:** generación paga (Higgsfield, ElevenLabs) = permiso explícito caso por caso.
-  Por defecto gratis (Speaches, HyperFrames).
+- **Gasto — imagen y video NO son el mismo permiso:**
+  - **VIDEO generado (Higgsfield, ElevenLabs, fal.ai): permiso explícito caso por caso**,
+    cotizado con `get_cost:true` ANTES de generar. Por defecto gratis (Speaches, HyperFrames).
+  - **IMAGEN en lote chico: gasto trivial, ya validado.** `text2image_soul_v2` a 2k son ~0,12 créditos;
+    un lote de 6 fotos cuesta menos de 1 crédito de un pool de ~2.100. Se genera y se
+    **registra el lote** (prompts, modelo, costo). Sigue haciendo falta permiso para un
+    volumen grande o para dar de alta una plataforma nueva.
+
+  ⚠️ **Corregido 2026-08-23.** Acá decía "generación paga = permiso caso por caso" a secas,
+  metiendo imagen y video en la misma bolsa. Con eso, una sesión que ya tenía el pedido
+  ("las capturas hazlas con higgsfield") se frenaba a pedir permiso por 0,7 créditos. El
+  permiso caro es el del video; el de imagen chica ya estaba dado y la regla no lo decía.
 - Cómo se ve un video, se transcribe, se corta, se subtitula y se rinde →
   **skills `ver-videos` y `editor-videos`** (HyperFrames vive en `.agents/skills/`:
   revisarlo ANTES de codear video).
+- **Sacar el PROMPT de una imagen o un video de referencia → skill `sacar-prompt`.**
+  Distingue **recuperar** (está en pantalla: se lee) de **reconstruir** (se escribe uno
+  parecido, y se dice que lo es). Regla de entrada: **si el video habla es UGC, si
+  impresiona es cine** — se elige la plantilla antes de escribir.

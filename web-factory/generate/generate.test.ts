@@ -276,7 +276,8 @@ describe("generateSite", () => {
     expect(html).toContain("wf-kpi-delta--up");
     expect(html).toContain('<svg class="wf-chart"');
     expect(html).toContain("<polyline");
-    expect(html).toContain("<rect");
+    // Las barras pasaron de <rect rx> a <path>: el radio va solo en la punta libre.
+    expect(html).toMatch(/<path d="M[\d.]+,[\d.]+ v-/);
     expect(html).toContain("Ultimos pedidos");
     expect(html).toContain("#1042");
     expect(html).toContain("data-dash-filter");

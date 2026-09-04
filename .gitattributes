@@ -1,0 +1,17 @@
+# Todo lo de scripts/ termina corriendo en el VPS (Linux). Con CRLF, bash falla
+# con "bad interpreter: /usr/bin/env bash^M" y el loop no arranca nunca; y un .mjs
+# escrito desde Windows llega a main como un archivo "entero cambiado" que choca
+# con su propia version en main (pasó el 2026-09-01 con scripts/canario_visual.mjs:
+# 207 lineas de conflicto que eran SOLO finales de linea).
+scripts/** text=auto eol=lf
+
+# Lo mismo, pero en los DOCS — y aca ya mordio dos veces. El 2026-09-03 el merge de
+# la sesion de control aborto con LUCIA.md "entero en conflicto": 1023 lineas contra
+# 842, cuando la rama solo renombraba un id de modelo en 5 lugares. La causa no era
+# de contenido ni de dueno: main tenia el archivo 100% en CRLF (1023/1023 lineas con
+# CR, escrito desde Windows por 89c692072) y LF es la norma del repo — 8 de 1793 .md
+# eran CRLF, los 8 de la misma carpeta. Con todas las lineas "cambiadas", cualquier
+# edicion de una linea choca contra el archivo completo y el integrador no puede
+# mergear ese carril NUNCA. La regla de scripts/** llego el 2026-09-01 y dejo los
+# docs afuera; esto cierra el mismo agujero en la otra carpeta.
+*.md text=auto eol=lf

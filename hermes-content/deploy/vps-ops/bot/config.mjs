@@ -73,7 +73,7 @@ export const SCRIPT = Object.freeze({
   // prospecto esta viendo funcionar es exactamente lo que se le vende. No pide un solo dato: la
   // unica pregunta del mensaje es la que cierra la reunion.
   M0: [
-    "¡Hola! Soy el asistente automático de Onia. Sí, un bot 🙂",
+    "¡Hola! Soy el asistente automático de Onia. Sí, un bot.",
     "",
     "Y esto que estás viendo es justo lo que vendemos: un asistente que atiende tu WhatsApp 24/7 — responde, califica y agenda solo, sin que vos toques el teléfono.",
     "",
@@ -89,6 +89,17 @@ export const SCRIPT = Object.freeze({
   // recibo (para que no repita lo que ya dijo) y se le vuelven a poner los dos horarios sobre la
   // mesa. Mandarlo a la rama LLM por un mensaje que se entendio perfecto gasta una respuesta y,
   // al segundo, un handoff — en alguien que esta colaborando.
+  // M0b_SIN_HORARIOS — el mismo acuse que M0b, pero cuando `slots` sigue en "pendiente de
+  // definir". M0b re-ofrece **A)** y **B)**, y sin horarios reales eso sale literal como
+  // "HORARIO A (pendiente de definir)": el prospecto no puede elegir nada y la charla se
+  // estanca repitiendo la misma frase. Aca se acusa el dato, se avanza pidiendo lo unico
+  // accionable (el contacto) y la hora la coordina Sergio.
+  M0b_SIN_HORARIOS: [
+    "Perfecto, anotado {{datos_que_si_dio}} — el resto lo vemos en la demo.",
+    "",
+    "{{humano}} te coordina el horario personalmente, así que no te hago elegir nada acá. ¿A qué número o correo te escribe?",
+  ].join("\n"),
+
   M0b: [
     "Perfecto, anotado {{datos_que_si_dio}} — el resto lo vemos en la demo.",
     "",
@@ -226,6 +237,16 @@ export const SCRIPT = Object.freeze({
     "Ya le pasé tu consulta con todo lo que me contaste. Te escribe él desde este mismo número, en horario de oficina ({{horario_frase}}). Si es urgente, decime \"urgente\" y lo marco.",
   ].join("\n"),
 
+  // M5_ACUSE — el mensaje que llega DESPUES de haber derivado, mientras el humano todavia no
+  // aparecio. No reabre la conversacion ni promete nada nuevo: solo confirma que lo que escribio
+  // llego. Nace de medir, el 2026-09-03, que tras cada M5 el mensaje siguiente del prospecto se
+  // comia un silencio total — la persona ve "entregado" y nunca una respuesta.
+  M5_ACUSE: [
+    "Te leo, y esto también se lo paso a {{humano}} — sigo siendo el bot, así que no te lo contesto yo para no inventarte nada.",
+    "",
+    "Ya está todo en su bandeja. Te responde desde acá mismo en horario de oficina ({{horario_frase}}).",
+  ].join("\n"),
+
   // M8_SOPORTE — SEGUNDO CAMINO: el que escribe YA es cliente (o dice que ya tiene el sistema, o
   // que algo no le anda, o pregunta como configurarlo). Ofrecerle la demo COMERCIAL a alguien que
   // pide ayuda es el peor error posible del bot: le dice "comprame" a quien ya compro. Este texto
@@ -284,7 +305,102 @@ export const SCRIPT = Object.freeze({
   // (precio / SIAT / archivo) vuelve al embudo sin saltear la calificacion.
   PENDING_CALIFICACION: "Volviendo a lo nuestro: me falta {{dato_faltante}} — ¿me lo pasás?",
   PENDING_HORARIO: "¿Te reservo **{{slot_a}}** o **{{slot_b}}**?",
+  // PENDING_HORARIO_SIN_HORARIOS — la misma re-pregunta cuando `slots` sigue en "pendiente de
+  // definir". PENDING_HORARIO pide elegir entre {{slot_a}} y {{slot_b}}, y sin horarios reales eso
+  // salio a produccion como "¿Te reservo HORARIO A (pendiente de definir) o HORARIO B (pendiente de
+  // definir)?" — y, via el LLM, como "¿horario A o horario B?". Se pide lo unico accionable sin
+  // agenda (el contacto) y la hora la coordina el humano.
+  PENDING_HORARIO_SIN_HORARIOS: "{{humano}} te coordina el horario personalmente. ¿A qué número o correo te escribe?",
   PENDING_AGENDADA: "Igual ya quedamos para **{{dia_hora_elegida}}**.",
+
+  // -------------------------------------------------------------------------
+  // MODO RECEPCIONISTA — el bot de un CLIENTE de Onia (config.modo === "recepcionista").
+  // Se activa SOLO cuando el conocimiento vino de la fila publicada de una org (fuente "db"):
+  // el bot se presenta como el asistente DEL NEGOCIO y atiende como recepcionista. El funnel de
+  // venta (DEMO, calificacion, M4) es EXCLUSIVO del modo venta y no aparece aca. {{producto}} y
+  // {{humano}} salen del knowledge de la org, no de Onia. Ver recepcionista.mjs.
+  // -------------------------------------------------------------------------
+
+  // M0R — saludo. Se declara bot (D2) y ofrece lo unico que sabe hacer: horarios, servicios,
+  // tomar un pedido. No promete agendar solo: lo confirma el humano del negocio.
+  M0R: [
+    "¡Hola! Soy el asistente de {{producto}}.",
+    "",
+    "Te puedo contar nuestros horarios y qué ofrecemos, o tomar tu pedido para que te lo confirme {{humano}}.",
+    "",
+    "¿En qué te ayudo?",
+  ].join("\n"),
+
+  // M0R_INTRO — cuando el PRIMER mensaje ya trae una pregunta concreta: se contesta la pregunta,
+  // pero el bot igual se presenta como el asistente del negocio (D2, sin excepcion).
+  M0R_INTRO: "¡Hola! Soy el asistente de {{producto}}.",
+
+  R_HORARIO: "Atendemos {{horario_frase}}. ¿Te ayudo con algo más?",
+
+  // La FAQ editable del dueño: el cuerpo YA paso el guardrail al publicarse (todo-o-nada);
+  // la plantilla solo lo sirve. Ver knowledge.mjs FAQ_TEMPLATE.negocio y recepcionista.mjs.
+  R_FAQ_NEGOCIO: "{{faq_respuesta}}",
+  // La respuesta de una campaña es TEXTO DEL DUEÑO (validado por guardrails al publicar).
+  R_CAMPANA: "{{respuesta_campana}}",
+
+  // {{catalogo_cliente}} lo arma recepcionista.mjs desde `conocimiento.productos` (el catalogo
+  // publicado de la org). NO pasa por MODULOS_LISTOS: ese candado protege promesas de software
+  // de Onia; el catalogo de un cliente son hechos suyos ya validados por el guardrail.
+  R_SERVICIOS: [
+    "Esto es lo que ofrecemos:",
+    "",
+    "{{catalogo_cliente}}",
+    "",
+    "Si querés algo de esto, decime y te lo confirma {{humano}}.",
+  ].join("\n"),
+
+  R_CITA: "La cita dura {{demo_duracion}} y es por {{demo_modalidad}}. Si querés una, decime y te la coordina {{humano}}.",
+
+  // R_AGENDA — el bot AGENDA: manda el link de la agenda publica de ESA org, que ya crea la cita
+  // de verdad. {{link_reserva}} lo compone recepcionista.mjs desde el slug y solo sale si el slug
+  // pasa el validador (sin slug este mensaje NO existe y se deriva por R_INTERES, como antes).
+  // "te la confirma" no es adorno: la cita nace en estado PENDIENTE y la confirma el negocio —
+  // decir "queda confirmada" seria prometer algo que la agenda no hace.
+  R_AGENDA: [
+    "¡Dale! Reservá tu cita acá 👉 {{link_reserva}}",
+    "",
+    "Elegís el día y la hora que te queden bien, y {{humano}} te la confirma por este mismo chat.",
+  ].join("\n"),
+
+  // R_INTERES — pedido (y cita en una org SIN agenda publica): se ESCALA, el bot no vende solo.
+  // La promesa "ya le paso tu pedido" es verdad: este mensaje solo sale junto con el handoff
+  // real (review_queue + aviso). La cita con agenda encendida NO pasa por aca: sale por R_AGENDA.
+  R_INTERES: [
+    "¡Buenísimo! Ya le paso tu pedido a {{humano}} — te confirma por este mismo chat.",
+    "",
+    "Si querés, dejame tu nombre y algún detalle más mientras tanto.",
+  ].join("\n"),
+
+  // R_PRECIO — JAMAS una cifra: el precio lo confirma el humano del negocio.
+  R_PRECIO: "Los precios te los confirma {{humano}} directamente — ya le pasé tu consulta y te responde por este mismo chat.",
+
+  // R_DERIVA — todo lo que el recepcionista no sabe contestar va a un humano. "Ya le pasé tu
+  // mensaje" solo se dice junto al handoff real (misma regla de honestidad que R_INTERES).
+  R_DERIVA: "Eso te lo confirma {{humano}} — ya le pasé tu mensaje y te responde por este mismo chat.",
+
+  // R_NO_DATO — el knowledge de la org NO trae ese campo: respuesta honesta + handoff. El bot
+  // nunca rellena con los datos de Onia (el horario de Onia no es el del negocio).
+  R_NO_DATO: "Eso no lo tengo acá para confirmártelo — te lo confirma {{humano}} por este mismo chat.",
+
+  R_ATTACH: "Recibí tu archivo. Se lo paso a {{humano}}, que te confirma por acá.",
+  // R_CUOTA_AGOTADA — la org agoto sus conversaciones automaticas del mes (lo dice /published).
+  // Texto FIJO y honesto, cero LLM; {{producto}} es el nombre del negocio en modo recepcionista.
+  R_CUOTA_AGOTADA: "Este mes ya atendimos el máximo de conversaciones automáticas de {{producto}}. Te responde una persona en breve.",
+  // Insistencia v6.6 (1 sola vez, suave, dentro de la ventana de 24 h — texto libre gratis):
+  R_SEGUIMIENTO: "¡Hola! ¿Seguís por ahí? Si te quedó alguna duda, {{humano}} te la contesta por acá. Y si preferís que no te escribamos, decínos \"no gracias\" y listo.",
+  // Vision (v5): cuando la foto se pudo describir SIN violar guardrails. La descripcion
+  // viene del LLM ya filtrada; si violaba una regla se descarto y sale R_ATTACH pelado.
+  // Comprobante de pago: acusar recibo SIN confirmar jamas — confirma el humano.
+  R_COMPROBANTE: "Recibí tu comprobante{{monto_frase}}. Se lo paso a {{humano}} para confirmarlo — apenas lo revise te avisamos por acá.",
+  R_ATTACH_VISTO: "Recibí tu foto ({{descripcion_foto}}). Se la paso a {{humano}}, que te confirma por acá.",
+
+  // M6R — opt-out en modo recepcionista. Sin "escribí DEMO": eso es del funnel de venta.
+  M6R: "Listo, no te escribo más por acá. ¡Gracias!",
 });
 
 // ---------------------------------------------------------------------------
@@ -536,11 +652,43 @@ export function slotsPending(config = DEFAULT_CONFIG) {
   return (config.slots || []).some((slot) => slot && slot.pending === true);
 }
 
-/** Reemplaza {{clave}} por su valor. Corre SIEMPRE DESPUES del guardrail (spec §3.1). */
+/**
+ * ¿Lo que viene ANTES de este marcador abre una oracion nueva?
+ *
+ * Abre oracion si no hay nada antes, o si lo anterior termina en `.`, `!`, `?` o salto de linea.
+ * Los dos puntos NO abren oracion en castellano ("Anotado: agenda y cobros"), y por eso se
+ * excluyen a mano: es la unica diferencia entre esta regla y un capitalizado a lo bruto.
+ */
+function abreOracion(anterior) {
+  const previo = anterior.replace(/[ \t]+$/, "");
+  return previo === "" || /[.!?\n]$/.test(previo);
+}
+
+/**
+ * Reemplaza {{clave}} por su valor. Corre SIEMPRE DESPUES del guardrail (spec §3.1).
+ *
+ * Capitaliza el valor cuando cae a empezar oracion. Nace de un defecto que salio a produccion y
+ * lo vio el cliente del cliente (conversacion 51, 2026-09-03), textual:
+ *
+ *     _(Estoy respondiendo automatico fuera de horario de oficina. la encargada te confirma
+ *     en la mañana.)_
+ *
+ * El humano de Onia es un nombre propio (`Sergio`) y por eso nunca se noto; el conocimiento de
+ * un cliente trae un CARGO en minuscula, y hay cuatro plantillas donde `{{humano}}` abre frase.
+ * La regla mira el offset y no la clave a proposito: atarla a `humano` dejaria el mismo bug vivo
+ * en la proxima plantilla que alguien escriba. Solo toca la primera letra si es minuscula, asi
+ * que un nombre propio, una viñeta o un `**negrita**` pasan intactos.
+ */
 export function renderTemplate(text, vars = {}) {
-  return String(text ?? "").replace(/\{\{\s*([a-z0-9_]+)\s*\}\}/gi, (match, key) => {
+  const plantilla = String(text ?? "");
+  return plantilla.replace(/\{\{\s*([a-z0-9_]+)\s*\}\}/gi, (match, key, offset) => {
     const value = vars[key];
-    return value === undefined || value === null ? match : String(value);
+    if (value === undefined || value === null) return match;
+    const rendered = String(value);
+    if (!abreOracion(plantilla.slice(0, offset))) return rendered;
+    const inicial = rendered.charAt(0);
+    if (inicial !== inicial.toLowerCase() || inicial === inicial.toUpperCase()) return rendered;
+    return inicial.toUpperCase() + rendered.slice(1);
   });
 }
 

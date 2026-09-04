@@ -68,7 +68,7 @@
 
 **Por qué este orden:** los días 1-2 arrancan casi gratis y validan que el formato captura+voz retiene; la primera generación con costo (Tanda A, día 3) llega cuando ya hay 2 piezas publicadas midiendo respuesta. Si las piezas de captura convierten igual, la Tanda B es recortable.
 
-**Convenciones de producción:** **Soul** = imagen de Lucía (`soul_2` 0,12 cr/tiro para tomas calmas, o `nano_banana_pro`+Element `902eeebb` 2 cr para expresión fuerte — único método para su cara) · **kling** = clip b-roll `kling 2.5 turbo` 7,5-10 cr/clip 5s (o `minimax_hailuo` 6 cr si no pide look cinemático) · **Voz** = voz Lucía `8de5db95` vía `seed_audio` 2-4 cr (SIEMPRE la misma voz, consistencia) · **Captura** = screen-record de DentalGest en ambiente demo · **Remotion** = `scripts/content-engine`, 0 cr · ensamble siempre ffmpeg, 0 cr. Recraft/`z_image` solo para explorar estilo SIN identidad.
+**Convenciones de producción:** **Soul** = imagen de Lucía (`text2image_soul_v2` 0,12 cr/tiro para tomas calmas, o `nano_banana_pro`+Element `902eeebb` 2 cr para expresión fuerte — único método para su cara) · **kling** = clip b-roll `kling 2.5 turbo` 7,5-10 cr/clip 5s (o `minimax_hailuo` 6 cr si no pide look cinemático) · **Voz** = voz Lucía `8de5db95` vía `seed_audio` 2-4 cr (SIEMPRE la misma voz, consistencia) · **Captura** = screen-record de DentalGest en ambiente demo · **Remotion** = `scripts/content-engine`, 0 cr · ensamble siempre ffmpeg, 0 cr. Recraft/`z_image` solo para explorar estilo SIN identidad.
 
 ---
 

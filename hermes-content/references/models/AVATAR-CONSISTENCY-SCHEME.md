@@ -40,7 +40,7 @@ de angulos/expresiones (sosteniendo producto, aplicandolo, sonriendo, neutral). 
 el Soul a usar de ahora en mas para Lucia — el viejo `9a0d6953` queda superado (no
 compatible con esta correccion).
 
-**✅ Verificado (2026-07-06):** 2 generaciones de prueba con `soul_2` + este soul_id
+**✅ Verificado (2026-07-06):** 2 generaciones de prueba con `text2image_soul_v2` + este soul_id
 (retrato neutro + bano/producto via texto, 0.12cr c/u) comparadas visualmente contra
 `pecas-clean-v2/lucia-clean-01.png` (frame real) — misma cara, pecas, cejas, ojos, labios,
 sin deformacion ni deriva. El Soul limpio queda confirmado funcional.
@@ -70,7 +70,7 @@ Existen dos mecanismos de identidad con consistencia muy distinta:
 
 | Mecanismo | Que es | Consistencia |
 |---|---|---|
-| **Soul** (`soul_2` + soul_id) | Modelo ENTRENADO con 8+ fotos/frames de la persona | Alta — probado repetidas veces con prompts de texto |
+| **Soul** (`text2image_soul_v2` + soul_id) | Modelo ENTRENADO con 8+ fotos/frames de la persona | Alta — probado repetidas veces con prompts de texto |
 | **Reference Element** (`nano_banana_2` + 1 imagen suelta) | Una sola foto como "sugerencia" de parecido | Baja — el modelo reparte fidelidad entre cara+outfit+lugar a la vez, la cara es la que mas cede |
 | **Marketing Studio (avatar custom)** | Sistema dedicado de Higgsfield para UGC: avatar + producto real + guion + lipsync | Alta — probado con Mara+ISDIN real: identidad reconocible, producto real en mano con etiqueta legible, sin la deriva de Elements |
 
@@ -82,10 +82,10 @@ o sostenga nada especifico.
 
 ## Los 3 niveles (usar en este orden de preferencia)
 
-### Nivel 1 — Soul + texto (`soul_2`) — 0.12cr — DEFAULT
+### Nivel 1 — Soul + texto (`text2image_soul_v2`) — 0.12cr — DEFAULT
 Para: fotos estaticas, contenido generico de feed, escenas donde el producto/outfit se
 puede describir bien en palabras (no necesita ser un objeto real fotografiado).
-Como: `soul_2` + soul_id + prompt de texto (wardrobe/lugar de la bible). Alta consistencia,
+Como: `text2image_soul_v2` + soul_id + prompt de texto (wardrobe/lugar de la bible). Alta consistencia,
 validado repetidas veces.
 
 **⚠️ Pitfall conocido — arrugas de forehead que no estan en la referencia real** (hallado
@@ -99,20 +99,20 @@ no solo pecas/cejas/ojos.
 
 **Update 2026-07-07 — el fix de prompt NO alcanza con cejas levantadas (expresiones
 fuertes: sorpresa, risa grande, shock).** Sergio detecto que en expresiones con cejas
-arriba las arrugas seguian apareciendo con `soul_2`, y no se veian como arrugas
+arriba las arrugas seguian apareciendo con `text2image_soul_v2`, y no se veian como arrugas
 naturales de la expresion — se veian como artefacto del modelo. Se confirmo con un
 test A/B: mismo tipo de expresion (sorpresa, cejas levantadas), mismo `soul_id`, dos
 modelos distintos:
-- `soul_2` + texto -> forehead con lineas no naturales (visible en `emotion-surprised.png`).
+- `text2image_soul_v2` + texto -> forehead con lineas no naturales (visible en `emotion-surprised.png`).
 - `nano_banana_pro`/`nano_banana_2` + Reference Element `ced20cc2-...` (ancla de cara
   REAL, sin combinar con otros elements de outfit/lugar) + mismo prompt de expresion ->
   forehead LISO, sin artefacto, con la misma expresion de sorpresa/cejas levantadas.
-  Costo: 2cr (vs 0.12cr de soul_2 — ~16x mas caro por imagen).
+  Costo: 2cr (vs 0.12cr de text2image_soul_v2 — ~16x mas caro por imagen).
 
 **Regla resultante:** para expresiones fuertes/cejas muy levantadas (sorpresa, shock,
 risa grande), usar `nano_banana_pro` + el Element de ancla de cara real del personaje
 (solo ese Element, no combinar con outfit/lugar para no diluir fidelidad) en vez de
-`soul_2`. Para expresiones calmas/neutras/sonrisa suave, `soul_2` sigue siendo el
+`text2image_soul_v2`. Para expresiones calmas/neutras/sonrisa suave, `text2image_soul_v2` sigue siendo el
 default (mas barato, ya validado). Verificar esta regla en Mara y modelos futuros — por
 ahora solo confirmada en Lucia.
 
@@ -151,7 +151,7 @@ efectivamente se la ve hablando a camara.
 
 ### Nota sobre contenido de bikini/swimwear (investigacion de Sergio, no probado aun)
 Algunos modelos rechazan escenas de bikini/swimwear aunque no muestren nada explicito.
-Segun su investigacion, `soul_2` (ya default) y Seedance 4 son los que mejor generan
+Segun su investigacion, `text2image_soul_v2` (ya default) y Seedance 4 son los que mejor generan
 ese tipo de escena sin bloquear. Anotado para cuando haga falta, sin validar todavia.
 
 ### Nivel 3 — wan2_7 (still Soul + audio) — 15cr/10s — TALKING SIN MARKETING STUDIO
@@ -230,7 +230,7 @@ mueble/ambiente exacto de fondo). Reglas obligatorias si se usa:
 | Accion | Costo real | Nota |
 |---|---|---|
 | Entrenar un Soul (`show_characters` train) | **25cr** ⚠️ | Antes documentado como "sin cargo" — ERA INCORRECTO. Se gastaron 50cr entrenando 2 Souls esta sesion (25cr de eso en la cara equivocada archivada). Pensarlo antes de entrenar un Soul nuevo. |
-| Generar con Soul (`soul_2` + texto) | 0.12cr/img | Nivel 1, el barato real |
+| Generar con Soul (`text2image_soul_v2` + texto) | 0.12cr/img | Nivel 1, el barato real |
 | z_image (explorar estilo, sin identidad) | 0.15cr/img | Solo para elegir cara/estilo, no fija identidad |
 | nano_banana_2 + Elements (combo cara+outfit+lugar) | 2cr/img | Nivel 4 |
 | bytedance_image_upscale | 2cr/img | Escalar frame real sin generar |
@@ -250,7 +250,7 @@ ni como ancla, ni como fuente de un avatar custom de Marketing Studio.
 
 ## Como se logran los mejores resultados (resumen ejecutable)
 
-1. **Default siempre Nivel 1** (`soul_2` + soul_id correcto de la tabla + texto). Es lo
+1. **Default siempre Nivel 1** (`text2image_soul_v2` + soul_id correcto de la tabla + texto). Es lo
    mas barato y lo mas consistente — usar para el 90%+ del contenido.
 2. **Nunca elegir Soul/Element por nombre** — copiar el ID de la tabla de arriba, siempre.
 3. **Antes de aprobar cualquier imagen/video, comparar contra la referencia QA** (frames

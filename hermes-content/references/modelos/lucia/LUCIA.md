@@ -1,5 +1,32 @@
 # LUCÍA — archivo único
 
+> ## 🔴 LA CARA — el único dato que hay que copiar
+>
+> **Element canónico: `lucia-skin-v1` · `58bbd635-9b90-4bd2-b08a-1cd4915bd563`**
+> Se escribe `@lucia` en la web y autocompleta. Motor **Nano Banana Pro**, 2K.
+> Construido el 28-ago con **7 ángulos** (no con una foto).
+>
+> **⚠️ Corregido el 2026-08-31.** Este mismo archivo mandaba en SEIS líneas al Element
+> **jubilado** `452d8375` — incluida la plantilla de prompt del §6, que es de donde se copia.
+> `BANCO-OFICIAL.md:51` y `TECNICA-HIGGSFIELD.md:271` lo declaran jubilado desde el 28-ago
+> («una sola foto, inventaba el perfil») y nadie actualizó acá. Ya está arreglado.
+>
+> **⚠️ Y el UUID bueno venía con la descripción del viejo.** El commit `52768edb` reemplazó el
+> UUID dejando intactos el nombre y el texto anteriores, así que cuatro archivos describen
+> `58bbd635` como «`lucia-ancla-2026-08`, selfie de espejo, una foto» — que es exactamente el
+> defecto que el trabajo del 28-ago vino a arreglar.
+>
+> **En el picker hay CUATRO Lucías y tres Modelo 2.** `LUCIA-SINTETICA-v3` es un **Soul**
+> (prohibido); los tres `modelo2-ancla-*` son de **Modelo 2**, otra modelo, en pausa; los dos
+> `ZZ-TEST` son basura que **no se puede borrar** (no hay pantalla de gestión de Elements ni
+> `delete` por MCP). **Elegir por ID, nunca por nombre.**
+>
+> **Marketing Studio es un SEGUNDO sistema de identidad**, aparte de los Elements. Ahí el avatar
+> vigente es **`Lucia ONIA v4 FINAL` · `a1e334f3-5316-4132-b454-ddd9dcc06943`**. Ojo:
+> `avatar-lab/20260706-marketing-studio-test/VERDICTO.md:20` todavía dice «USAR ESTE» de un
+> avatar **superado el 7-jul** — ese doc nunca se actualizó.
+
+
 > 📌 **¿Solo venís a elegir una foto? Andá a [`BANCO-OFICIAL.md`](BANCO-OFICIAL.md).**
 > Este archivo tiene 50 KB y el dato de qué banco se usa estaba perdido en la línea 90: el
 > 28-ago se produjeron dos carruseles con fotos descartadas justamente por eso. `BANCO-OFICIAL.md`
@@ -86,7 +113,7 @@ en ese orden.
 
 | Pos. | Element ID | Nombre | Qué es | Veredicto |
 |---|---|---|---|---|
-| **1** | `58bbd635-9b90-4bd2-b08a-1cd4915bd563` | `lucia-ancla-2026-08` | Selfie de espejo, argolla de oro. Generada | ✅ **Ganó la prueba del 13-ago: 1er y 2do puesto** de 5 |
+| **1** | `58bbd635-9b90-4bd2-b08a-1cd4915bd563` | `lucia-skin-v1` | **7 ángulos** (28-ago). ⚠️ Antes decía `lucia-ancla-2026-08` / «selfie de espejo»: era la descripción VIEJA pegada al UUID NUEVO. Ver de espejo, argolla de oro. Generada | ✅ **Ganó la prueba del 13-ago: 1er y 2do puesto** de 5 |
 | **2** | `902eeebb-89e9-4477-8426-c555b20f7ecc` | `lucia-surgical-anchor` | Photoshoot fondo blanco, sonrisa | ✅ La aprobaste el 7-jul. Salió 3ra |
 | **3** | `ced20cc2-3388-4d98-92ee-b0fcd961aa62` | `lucia-face-real-anchor` | Frame REAL del video, escalado 2K | ✅ **Verdad de terreno para QA.** No generar con ella |
 | 4 | `d5e323ef-4d0e-41bf-863e-ec30aede20ae` | `LUCIA-REAL-v2-clean` | Otro frame del MISMO video | ⛔ **FUERA** |
@@ -108,7 +135,7 @@ estaba usando como tal. **Son tres roles separados y ninguno reemplaza al otro:*
 | Rol | Qué es | Dónde vive |
 |---|---|---|
 | **RASGOS** — qué cara es | Photoshoot de **10 ángulos** sobre fondo blanco: frontal neutro, media sonrisa, sonrisa completa, 2 perfiles, 2 tres cuartos, detalle de nariz, detalle de oreja, cuerpo entero | `STACK-rasgos-10-angulos.jpg` · fuente en `references/models/lucia-surgical-shoot-20260707/` |
-| **ANCLA** — con qué se genera | El Element que va en el prompt | `452d8375` (ganó la prueba del 13-ago) |
+| **ANCLA** — con qué se genera | El Element que va en el prompt | `58bbd635-9b90-4bd2-b08a-1cd4915bd563` (ganó la prueba del 13-ago) |
 | **RESPALDO** | Si el ancla falla en un encuadre | `902eeebb` (sale del shot 03 de ese mismo stack) |
 
 **El stack NO se usa para generar.** Se usa para responder "¿es ella?" cuando se aprueba una
@@ -191,16 +218,43 @@ noche no aporta a eso y el gym compite con mil cuentas de fitness.
 
 Sergio pidió: *"que Lucía sea más fancy, que sea más lujosa"*.
 
-> **El lujo va en la ROPA y en el GROOMING. El lugar sigue siendo de otro.**
-> Mismo mercado, misma parada, misma ventanilla de trámites, misma luz fea. Lo que cambia es
-> que ahora es la mujer mejor vestida del cuadro.
+> **El lujo va en la ROPA y en el GROOMING. El lugar es donde trabaja un emprendedor.**
+> Y eso es mucho más que el barrio: consultorio, oficina, mall, showroom, distribuidora,
+> mercado, tienda. Lo que cambia es que ahora es la mujer mejor vestida del cuadro.
+
+### ⚠️ Corregido el 2026-08-31 — la primera versión de esta sección se equivocó
+
+Ayer esto decía **«el lugar sigue siendo de otro: mismo mercado, misma parada, misma luz fea»**,
+y restringía a Lucía al barrio. Sergio lo corrigió hoy, con la razón:
+
+> *"también va a oficinas, malls, consultorios, a todos lados, ya que se supone que es cualquier
+> tipo de emprendedor y también es una influencer"*
+
+**Los dos motivos son estructurales y ninguno estaba contemplado:**
+
+1. **Onia le vende a cuatro rubros abiertos**, no a tiendas de barrio. Si Lucía sólo pisa el
+   mercado y la parada del micro, le habla a uno solo de los cuatro y deja afuera al dentista,
+   al importador y al profesional independiente — y el dentista es justamente **el único rubro
+   con recorrido real** (`ONIA_CATALOGO_DE_VENTA.md:47`).
+2. **Es una influencer**, no una documentalista. Una cuenta que sólo muestra barrio no junta
+   seguidores ni atrae acuerdos de marca, que es la mitad B del objetivo decidido el 30-ago.
+
+El barrio **no se va**: pasa de ser *el* lugar a ser *uno* de los lugares.
+
+⚠️ **Y no confundir con la objeción del 15-ago.** Los 5 Elements de lugar de §10 (baño de mármol,
+bar de terciopelo, vereda arbolada…) se apagaron porque **NO son Santa Cruz**, no porque fueran
+lindos. Esa objeción sigue viva y es otra cosa: un lugar caro está permitido **si existe acá**.
+Equipetrol sí, Ventura Mall sí, un consultorio real sí; un lobby de mármol genérico de banco de
+imágenes, no.
 
 ### ⚠️ Esto DEROGA una regla escrita — leer antes de producir
 
 `ONIA_LUCIA_DIRECCION_ESTETICA_20260811.md` §2 dice literal: *"Aspiracional pero alcanzable:
-**nada de lujo**"*. **Queda derogado para la PERSONA.** Sigue vigente para el LUGAR, y sigue
-vigente la receta del 28-ago de restar hasta que se vea normal — aplicada al lugar y a la luz,
-no a ella.
+**nada de lujo**"*. **Queda derogado**, y desde el 31-ago también para el lugar.
+
+Lo que NO se deroga es la distinción de abajo: sigue prohibido el lujo de **gasto**. Una oficina
+linda no es lo mismo que un auto caro. La receta del 28-ago de restar hasta que se vea normal
+sigue vigente como antídoto contra la foto de catálogo — no como obligación de fealdad.
 
 Sin esta derogación escrita la próxima sesión produce con la regla vieja. Es exactamente cómo
 salieron L08 y L09 contra un banco ya descartado.
@@ -215,6 +269,27 @@ salieron L08 y L09 contra un banco ya descartado.
 
 Con el PIB proyectado en −3,6%, filas de combustible y diésel a 18 Bs, el lujo de gasto lee
 **burla** al mismo dueño de negocio que queremos como cliente. El de textura, no.
+
+### Los lugares — uno por rubro, más los de influencer
+
+Salen de los rubros que Onia **de verdad vende** (`hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md`),
+no de una lista linda. Cada pieza elige de acá:
+
+| Mundo | Lugares | Por qué |
+|---|---|---|
+| **Clínica dental** 🟢 | recepción de consultorio, sala de espera, mostrador de turnos | El único rubro con recorrido real. Es el que más piezas debería tener |
+| **Comercio / tienda** 🟡 | tienda de barrio, local de galería, mostrador, **mall** | Del barrio al Ventura: el comerciante formal también es cliente |
+| **Importadora / distribuidora** 🟡 | depósito, mostrador con mezanine de vidrio, showroom | El mundo del comprador de mayor ticket |
+| **Servicios profesionales** 🟡 | oficina, escritorio, coworking, sala de reunión | El rubro cuyo asistente ya le habla al cliente |
+| **De todos** | oficina de trámites, banco, parada de micro, fila | La fricción que comparten los cuatro. Es el pilar B más barato |
+| **Influencer** | café de especialidad, calle de Equipetrol, mall, feria/Expocruz | La mitad B del objetivo: seguidores y acuerdos de marca |
+
+⛔ **Ganadería no se produce**: el catálogo la marca cerrada porque el pack promete un modo
+offline que no existe. Una pieza de campo vendería algo que no podemos entregar.
+
+**La regla que reemplaza a «el lugar queda»:** el lugar tiene que ser **el lugar de trabajo de
+alguien**, y ese alguien tiene que poder ser cliente de Onia. Un lugar donde nadie trabaja
+(un rooftop, una pileta, un lobby de hotel) es de los que Sergio llama «sin sentido».
 
 ### Dos looks, no seis
 
@@ -244,8 +319,11 @@ entero. Nada de ondas producidas ni pelo planchado: eso lee foto de campaña.
 
 ### Lo que NO se toca
 
-- **La luz sigue siendo defecto**, no belleza: tubo fluorescente plano, mediodía nublado, foco
-  desnudo, exposición despareja. Prohibida la hora dorada y el contraluz que dibuja el pelo.
+- **La luz es la REAL de ese lugar**, nunca una luz de belleza. Corregido el 31-ago: antes decía
+  «tubo fluorescente plano, foco desnudo», que es la luz del barrio y quedó sin sentido al abrir
+  los lugares — un consultorio bueno tiene luz buena, y forzarle un tubo feo lo vuelve falso.
+  El principio nunca fue *luz fea*: es **no maquillar con luz**. Sigue prohibida la hora dorada,
+  el contraluz que dibuja el pelo, el halo y el viento.
 - **Cero grade de color.** Nada de Kodak Portra ni halation — es el camino que ya falló el
   21-ago con otro nombre. El bloque 10 sigue apagado.
 - **Cero primer plano y cero low angle.** El plano medio nuevo es 50 mm contra pared lisa.
@@ -269,7 +347,11 @@ entero. Nada de ondas producidas ni pelo planchado: eso lee foto de campaña.
 ### Por qué sigue siendo la misma persona
 
 Cara del mismo Element `@lucia-skin-v1`. Mismo corte, color y largo de pelo. Mismas argollas y
-cadenita. Mismo terracota en cuadro. Misma luz fea. **Mismo lugar.** Mismo jean crudo recto.
+cadenita. Mismo terracota en cuadro. Mismo jean crudo recto. Cero maquillaje y pecas contables.
+
+⚠️ Al abrirse los lugares (31-ago), la continuidad **ya no se apoya en el lugar ni en la luz** —
+dos de los seis anclajes que tenía. Los que quedan cargan más peso, así que se vuelven menos
+negociables, no más: si además se le cambia el pelo o se le tapan las pecas, deja de ser ella.
 De todo lo que define a un personaje en una foto, cambia **una prenda de arriba y la
 terminación**. Es la misma mujer el día que se lavó el pelo y se puso la camisa buena.
 
@@ -454,7 +536,7 @@ generada, que es **la luz demasiado perfecta y la óptica demasiado limpia.**
 | 11 | Cierre | `Shot on iPhone, natural light, slight film grain, no beauty filter, no smoothing. Not a 3D render, not AI-looking, not plastic, not doll-like, not airbrushed. No brand logos, no text, no watermark.` |
 
 ⚠️ El bloque 11 lleva **negaciones**: funcionan en la vía `nano_banana_2` + Element. Con
-`soul_2` producen lo que nombran — ahí se corta después de *"no smoothing"*.
+`text2image_soul_v2` producen lo que nombran — ahí se corta después de *"no smoothing"*.
 
 **Cámara — 4 colas:**
 
@@ -527,7 +609,7 @@ se deforma un rostro generado.
 ### El método del carrusel confirma el nuestro, no lo cambia
 
 El carrusel fija primero el **canon** (retrato frontal, fondo liso) y recién después deriva
-las variaciones. Es exactamente el esquema que Lucía ya tiene: ancla `452d8375` para generar
+las variaciones. Es exactamente el esquema que Lucía ya tiene: ancla `58bbd635-9b90-4bd2-b08a-1cd4915bd563` para generar
 (§2) + stack de 10 ángulos como vara (§8). **Nada de este lote reemplaza al ancla: el único
 método verificado de consistencia de cara sigue siendo ancla + molde §6 + QA §8.** Los
 encuadres son colas de cámara, no un método nuevo.
@@ -753,7 +835,7 @@ el prompt.)
 Los nombres en MAYÚSCULAS ENTRE CORCHETES ordenan la lectura del modelo. Molde de Lucía:
 
 ```
-[IDENTIDAD]              <<<452d8375-...>>> + "this exact woman", rasgos sagrados
+[IDENTIDAD]              <<<58bbd635-9b90-4bd2-b08a-1cd4915bd563>>> + "this exact woman", rasgos sagrados
 [CÁMARA]                 equipo REAL nombrado (ver palanca 1)
 [ESCENA]                 lugar, luz, vestuario, hora del día
 [COLOR RULE]             natural true-to-life colors, no grading, no filter, accurate WB
@@ -883,14 +965,14 @@ funciona"* — buscar referencias espectaculares es lo que hace que el UGC se ve
 | `LUCIA-REAL-v2-clean` | `36305a9b-af24-4390-959b-885082dddd5d` | ⛔ **NO USAR.** Dos motivos: sale con la **piel roja** e **ignora el atuendo pedido** (§2), y fue entrenado con frames de **una persona real sin permiso documentado** |
 | **`LUCIA-SINTETICA-v3`** | `e6d8703c-ea48-4d37-9e66-afae59ebe84a` | 🟡 **RESPALDO, no principal** — ver veredicto abajo. Entrenado con 6 imágenes 100% GENERADAS desde el ancla: rooftop, oficina, café, gimnasio, playa y selfie UGC. Identidad sintética pura — sin deuda de consentimiento |
 
-⚠️ Un Soul solo corre en `soul_2` y `soul_cinema_studio`. Para nano_banana / gpt_image /
+⚠️ Un Soul solo corre en `text2image_soul_v2` y `soul_cinema_studio`. Para nano_banana / gpt_image /
 kling / seedance sigue siendo el **Element ancla** el que manda.
 
 ## Elements de cara
 
 | Element | id | Uso |
 |---|---|---|
-| `lucia-ancla-2026-08` | `452d8375-…` | ✅ **VIGENTE** — el que va en `<<<UUID>>>` en todo prompt |
+| `lucia-ancla-2026-08` | ``58bbd635-9b90-4bd2-b08a-1cd4915bd563`` | ✅ **VIGENTE** — el que va en `<<<UUID>>>` en todo prompt |
 | `lucia-surgical-anchor` | `902eeebb-…` | respaldo aprobado |
 | `ced20cc2` · `d5e323ef` · `de586dbb` · `fdf4b740` | — | ⛔ FUERA (frames de persona real / inconsistentes) |
 
@@ -915,17 +997,17 @@ b-roll actual y no tiene turnaround propio.
 
 ## Cómo se combinan (regla que no cambia)
 
-- **Primer plano / cara reconocible** → Element ancla `452d8375` + `nano_banana_2`, fondo simple.
+- **Primer plano / cara reconocible** → Element ancla `58bbd635-9b90-4bd2-b08a-1cd4915bd563` + `nano_banana_2`, fondo simple.
 - **Variedad de escena** → ancla + descripción de escena EN TEXTO. Nunca combinar cara +
   outfit-Element + lugar-Element en la misma pieza de feed: se promedian y la cara deriva.
-- **Soul nuevo** → solo con `soul_2`, y se valida contra el ancla antes de darlo por bueno.
+- **Soul nuevo** → solo con `text2image_soul_v2`, y se valida contra el ancla antes de darlo por bueno.
 
 ### Veredicto del Soul v3 — probado contra el ancla el 22-ago (no ganó)
 
 Misma escena, mismo prompt, dos vías. Resultado mirado, no supuesto
 (`prueba-soul-v3/A-soul-v3.png` vs `B-ancla-actual.png`):
 
-| | Soul v3 (`soul_2`) | **Ancla `452d8375` (`nano_banana_2`)** |
+| | Soul v3 (`text2image_soul_v2`) | **Ancla `58bbd635-9b90-4bd2-b08a-1cd4915bd563` (`nano_banana_2`)** |
 |---|---|---|
 | Mirada a cámara (pedida en el prompt) | ❌ mira de costado | ✅ obedece |
 | Pecas (rasgo sagrado) | tenues | ✅ marcadas |
@@ -935,7 +1017,7 @@ Misma escena, mismo prompt, dos vías. Resultado mirado, no supuesto
 **Conclusión: el ANCLA sigue siendo la vía principal.** El Soul v3 mejora al viejo
 (`36305a9b`: adiós piel roja y adiós deuda de consentimiento) pero **no le gana al Element**
 en fidelidad ni en obediencia al prompt. Queda como respaldo para cuando algo exija
-`soul_2` sí o sí.
+`text2image_soul_v2` sí o sí.
 
 Esto confirma el patrón que el archivo ya tenía escrito: **la identidad se sostiene en LA
 REFERENCIA, no en el entrenamiento.** Un Soul promedia; un Element se copia.

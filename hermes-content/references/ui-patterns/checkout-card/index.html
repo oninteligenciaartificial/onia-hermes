@@ -431,11 +431,15 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    /* transition: none, NO 0.01ms: 0.01ms deja las propiedades discretas
+       (el flip de la tarjeta, un overlay) a medio camino — ya nos paso.
+       Ver README y los otros patrones de esta carpeta. */
     .cc__slot, .cc__card, .cc__face, .cc__form, .cc__orden,
     .cc__estado, .cc__halo, .cc__pagar, .cc__reiniciar {
-      transition-duration: 0.01ms !important;
+      transition: none !important;
     }
-    .cc__spinner { animation-duration: 2.4s; }
+    /* el spinner es movimiento puro: bajo reduced-motion no gira. */
+    .cc__spinner { animation: none !important; }
   }
 </style>
 

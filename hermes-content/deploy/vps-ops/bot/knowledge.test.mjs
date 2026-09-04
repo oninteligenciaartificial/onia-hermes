@@ -24,14 +24,19 @@ import {
   KNOWLEDGE_SCHEMA,
   applyKnowledge,
   checkCli,
+  ensureKnowledge,
   getKnowledge,
+  getOrgKnowledge,
   knowledgeHealth,
   parseKnowledge,
   readKnowledgeFile,
   resetKnowledgeCache,
+  resetOrgKnowledgeCache,
   validateKnowledge,
   withKnowledge,
 } from "./knowledge.mjs";
+import { handlePreviewRequest } from "./preview-route.mjs";
+import { activeSlots, pendingAsk } from "./reply-builder.mjs";
 import { step, createState } from "./bot-engine.mjs";
 import { normalize } from "./guardrails.mjs";
 import { findIndustry, industryLabel } from "./intents.mjs";
@@ -87,7 +92,10 @@ function conArchivo(contenido, run) {
   return salida;
 }
 
-test.afterEach(() => resetKnowledgeCache());
+test.afterEach(() => {
+  resetKnowledgeCache();
+  resetOrgKnowledgeCache();
+});
 
 // ---------------------------------------------------------------------------
 // 1. DEGRADACION — el bot no se cae ni queda mudo
@@ -477,11 +485,101 @@ test("sin horarios reales el bot NO inventa ni muestra el placeholder: saluda y 
   assert.match(texto, /coordina uno personalmente/, "se le dice la verdad: el horario lo pone un humano");
   assert.match(texto, /a qué se dedica tu negocio/, "y no se pierde la calificacion");
 
-  assert.equal(result.nextState.botStage, "handoff_humano", "queda a cargo de un humano, no esperando una eleccion imposible");
+  // ESTA LINEA EXIGIA `handoff_humano` Y ERA EL BLINDAJE DEL BUG. Verificaba que el mensaje fuera
+  // correcto y nunca que la conversacion pudiera seguir. Derivar a un humano es correcto —los dos
+  // efectos de abajo lo hacen— pero `handoff_humano` ademas MATA al bot: es la barrera que
+  // devuelve cero respuestas para siempre (barrera 1 de step()). Como los slots nunca se
+  // definieron, TODA conversacion caia ahi: el bot saludaba y no volvia a hablar. Cinco personas
+  // escribieron entre el 24 y el 29 de agosto; a cuatro no les contesto nadie. El test quedaba
+  // verde igual. `esperando_horario` deriva IGUAL y sigue calificando; lo prueba el test de
+  // abajo, que es el que mira el segundo turno.
+  assert.equal(result.nextState.botStage, "esperando_horario", "deriva al humano SIN quedarse mudo: handoff_humano no responde nunca mas");
   assert.ok(result.notes.includes("sin_horarios_que_ofrecer"));
   const tipos = result.sideEffects.map((effect) => effect.type);
   assert.ok(tipos.includes("lead_upsert"), "el lead nace igual: el prospecto no se pierde");
   assert.ok(tipos.includes("notify_sergio"), "y Sergio se entera de que tiene que proponer hora");
+});
+
+// EL SEGUNDO TURNO ES EL QUE PAGA. El test de arriba miraba el mensaje de bienvenida, y por eso
+// estuvo VERDE toda la semana en que el bot saludaba y se callaba: `handoff_humano` es la barrera
+// que hace que step() devuelva CERO respuestas para siempre (bot-engine.mjs, case "handoff_humano").
+// Como los slots de config.mjs siguen en "pendiente de definir", CADA conversacion caia ahi.
+// Medido el 2026-09-02 en la base de produccion: de las conversaciones de personas reales desde el
+// 24-ago, ninguna recibio jamas una SEGUNDA respuesta. Un test que solo mira el primer mensaje no
+// ve un sistema que muere en el segundo.
+test("sin horarios el bot sigue vivo en el SEGUNDO mensaje: contesta al que cuenta su negocio", () => {
+  const bienvenida = step(createState({ channel: "sim", contactRef: "t" }), { text: "DEMO", receivedAt: T0 }, { config: DEFAULT_CONFIG });
+  assert.equal(bienvenida.replies.length, 1, "saluda");
+
+  const segundo = step(
+    bienvenida.nextState,
+    { text: "Tengo una clinica dental en Santa Cruz, somos 4 personas", receivedAt: "2026-07-27T14:06:00Z" },
+    { config: DEFAULT_CONFIG },
+  );
+
+  assert.ok(segundo.replies.length > 0, "el bot NO puede quedarse mudo en el segundo mensaje");
+  const texto = segundo.replies.map((reply) => reply.text).join("\n");
+  assert.ok(!/pendiente de definir/i.test(texto), "el placeholder NUNCA puede llegarle al prospecto");
+  assert.ok(!texto.includes("{{"), "ninguna variable sin resolver");
+  assert.match(texto, /odontolog/i, "acusa recibo del dato que dio, no lo vuelve a preguntar");
+  assert.ok(!segundo.notes.includes("silencio:handoff_en_curso"), "el silencio del handoff es exactamente el bug");
+
+  // TERCER turno: un bot que contesta una vez mas y se apaga tampoco sirve. El silencio se podia
+  // haber corrido un turno en vez de arreglarse, y solo un tercer mensaje lo distingue.
+  const tercero = step(
+    segundo.nextState,
+    { text: "atendemos de 9 a 19", receivedAt: "2026-07-27T14:12:00Z" },
+    { config: DEFAULT_CONFIG },
+  );
+  assert.ok(tercero.replies.length >= 1, "y sigue contestando, no se agota en un turno");
+  // ESTA LINEA FALTABA Y ES POR LO QUE EL PLACEHOLDER LLEGO A PRODUCCION. El tercer turno YA
+  // estaba cubierto, pero solo por "¿habla?" — nunca por "¿que dice?". Los dos turnos de arriba
+  // si miran el texto; este no, y el agujero quedo justo donde el guion cae a `pendingAsk`.
+  const textoTercero = tercero.replies.map((reply) => reply.text).join("\n");
+  assert.ok(!/pendiente de definir/i.test(textoTercero), "el placeholder NUNCA puede llegarle al prospecto");
+});
+
+// ---------------------------------------------------------------------------
+// 5.ter LA RE-PREGUNTA — el agujero por donde el placeholder SI salio a produccion
+// ---------------------------------------------------------------------------
+// Medido el 2026-09-03 en la base de produccion (conv 49, mensajes de 21:09 y 23:03 UTC): el bot
+// le dijo a una conversacion "¿En que horario te viene mejor que te reserve, horario A o horario
+// B?" y "en la opcion A o en la B". Ninguno de los dos es el literal, asi que las guardas de
+// arriba —que buscan "pendiente de definir"— los dejaron pasar enteros.
+//
+// El camino es este: `welcomeResult` marca `slotsOffered: []` (no se ofrecio NINGUN horario), pero
+// `activeSlots` cae a `config.slots` cuando el array esta vacio — un fallback DELIBERADO, que
+// followUpTemplate documenta y necesita — asi que `pendingAsk` recibia los placeholders de
+// config.mjs y renderizaba PENDING_HORARIO: "¿Te reservo **{{slot_a}}** o **{{slot_b}}**?".
+//
+// Y `pendingAsk` no se dice solo: bot-engine.mjs lo pega al final de la respuesta determinista
+// (linea ~440) Y se lo pasa al LLM como `pendingQuestion` (linea ~786). Eso ultimo es lo que
+// produjo la PARAFRASIS: el modelo recibio los dos labels y los reescribio como "horario A o B".
+// Por eso el arreglo va en `pendingAsk` y no en la plantilla: es el unico punto que tapa las dos.
+// Y la señal es el flag `pending` de cada slot, no el array vacio: cubre los dos caminos sin
+// mover `activeSlots`, que comparte una ruta de plantillas PAGAS.
+test("sin horarios la RE-PREGUNTA no ofrece elegir: ni el literal ni una parafrasis", () => {
+  // El estado EXACTO al que welcomeResult manda a toda conversacion sin horarios definidos.
+  const state = { botStage: "esperando_horario", slotsOffered: [], qualification: {} };
+
+  // El fallback sigue vivo a proposito: lo que NO puede pasar es que esos placeholders se digan.
+  assert.ok(
+    activeSlots(state, DEFAULT_CONFIG).every((slot) => slot.pending),
+    "sin horarios definidos, todo lo que activeSlots devuelve es placeholder",
+  );
+
+  const ask = pendingAsk(state, DEFAULT_CONFIG);
+  assert.ok(ask, "sigue habiendo una pregunta pendiente: el embudo no se apaga");
+  assert.ok(!/pendiente de definir/i.test(ask), "el placeholder NUNCA puede llegarle al prospecto");
+  assert.ok(!ask.includes("{{"), "ninguna variable sin resolver");
+  // La parafrasis del LLM nace de que el texto le OFRECE elegir entre dos cosas sin nombre. Si la
+  // re-pregunta no plantea una eleccion, no hay nada que parafrasear.
+  assert.ok(!/\bhorario a\b|\bopci[oó]n a\b|\bA\)/i.test(ask), "no puede ofrecer 'horario A' / 'opcion A': para el prospecto no significa nada");
+  assert.match(ask, /coordina/i, "dice la verdad: la hora la pone un humano");
+
+  // Con horarios REALES la re-pregunta de siempre no cambia.
+  const conReales = { ...state, slotsOffered: conHorarios(DEFAULT_CONFIG).slots };
+  assert.match(pendingAsk(conReales, DEFAULT_CONFIG), /jueves 15:00/, "con horarios reales se sigue ofreciendo elegir");
 });
 
 test("con horarios reales el guion normal no cambia ni una coma", () => {
@@ -697,4 +795,257 @@ test("renderTemplate sigue siendo el ultimo paso: los {{ }} del conocimiento se 
   );
   assert.match(config.script.M_SIAT_BODY, /\{\{humano\}\}/, "el texto guardado conserva la variable");
   assert.match(renderTemplate(config.script.M_SIAT_BODY, { humano: "Sergio" }), /Sergio en la demo/);
+});
+
+// ---------------------------------------------------------------------------
+// FUENTE "DB" (paso b): la fila publicada POR ORGANIZACION, via HTTP al producto
+// ---------------------------------------------------------------------------
+// Lo que se prueba es el mismo contrato que el archivo, pero con red en el medio:
+// nunca tira, degrada a archivo/codigo, valida TODO O NADA, y el fetch roto no
+// borra la ultima copia buena de la org.
+
+const ORG = "org_ferreteria";
+
+/**
+ * Un fetch falso que contesta como el endpoint /published del producto.
+ * `orgSlug` es la agenda publica de esa org: el producto lo manda SOLO si la org de verdad
+ * puede recibir reservas, y sin el el bot deriva la cita a un humano (fail-closed).
+ */
+function fetchFalso(doc, { status = 200, fallar = false, orgSlug = undefined } = {}) {
+  const fn = async (url, init) => {
+    fn.calls.push({ url, init });
+    if (fallar) throw new Error("red caida");
+    return {
+      ok: status >= 200 && status < 300,
+      status,
+      json: async () => ({ data: doc, version: 1, updatedBy: "test", ...(orgSlug === undefined ? {} : { orgSlug }) }),
+    };
+  };
+  fn.calls = [];
+  return fn;
+}
+
+const DB_OPTS = { dbUrl: "http://producto/api/chatbot-knowledge/published", dbSecret: "s3cr3t" };
+
+test("db: la fila publicada de la org se aplica, source dice 'db' y el Bearer viaja", async () => {
+  const doc = valido({ identity: { productName: "ZZ QA Ferreteria Tornillo" } });
+  const fetch = fetchFalso(doc);
+  const state = await getOrgKnowledge(ORG, { ...DB_OPTS, fetch });
+  assert.equal(state.source, "db");
+  assert.match(fetch.calls[0].url, /organizationId=org_ferreteria/);
+  assert.equal(fetch.calls[0].init.headers.authorization, "Bearer s3cr3t");
+  const config = applyKnowledge(createBotConfig(), state.data);
+  assert.equal(config.identity.productName, "ZZ QA Ferreteria Tornillo");
+});
+
+test("db: dentro del TTL NO se vuelve a pedir (la red no esta en el camino de la respuesta)", async () => {
+  const fetch = fetchFalso(valido());
+  await getOrgKnowledge(ORG, { ...DB_OPTS, fetch, nowMs: NOW_MS });
+  await getOrgKnowledge(ORG, { ...DB_OPTS, fetch, nowMs: NOW_MS + 1000 });
+  assert.equal(fetch.calls.length, 1);
+});
+
+test("db: sin URL o sin secreto la fuente esta APAGADA y se sigue con el archivo/codigo", async () => {
+  const state = await getOrgKnowledge(ORG, { fetch: fetchFalso(valido()), dbUrl: "", dbSecret: "" });
+  assert.equal(state.source, "code");
+  assert.equal(state.error, null, "apagado no es un error que gritar");
+});
+
+test("db: red caida, HTTP roto o 404 degradan a codigo SIN tirar", async () => {
+  for (const opts of [
+    { fetch: fetchFalso(null, { fallar: true }) },
+    { fetch: fetchFalso(null, { status: 500 }) },
+    { fetch: fetchFalso(null, { status: 404 }) },
+  ]) {
+    resetOrgKnowledgeCache();
+    const state = await getOrgKnowledge(ORG, { ...DB_OPTS, ...opts });
+    assert.equal(state.data, null);
+    assert.equal(state.source, "code");
+  }
+});
+
+test("db: un documento con precio se rechaza ENTERO — el mismo candado que el archivo", async () => {
+  const doc = valido({ productos: [{ key: "dental", nombre: "Dental", queResuelve: "todo por 390 Bs" }] });
+  const state = await getOrgKnowledge(ORG, { ...DB_OPTS, fetch: fetchFalso(doc) });
+  assert.equal(state.data, null, "ni un campo del documento entra");
+});
+
+test("db: un fetch roto CONSERVA la ultima copia buena de la org (no la borra)", async () => {
+  const bueno = fetchFalso(valido({ identity: { productName: "Ferreteria" } }));
+  await getOrgKnowledge(ORG, { ...DB_OPTS, fetch: bueno, nowMs: NOW_MS });
+  const state = await getOrgKnowledge(ORG, {
+    ...DB_OPTS,
+    fetch: fetchFalso(null, { fallar: true }),
+    nowMs: NOW_MS + DEFAULT_TTL_MS + 1,
+  });
+  assert.equal(state.source, "db");
+  assert.equal(state.data.identity.productName, "Ferreteria");
+});
+
+// --- keying por INBOX: la conversacion real trae inbox, no organizationId ---
+
+test("db: keying por inbox — el fetch va con ?inboxId= y el producto resuelve la org", async () => {
+  const doc = valido({ identity: { productName: "ZZ QA Ferreteria Tornillo" } });
+  const fetch = fetchFalso(doc);
+  const state = await ensureKnowledge({ ...DB_OPTS, fetch, inboxId: "6" });
+  assert.equal(state.source, "db");
+  assert.match(fetch.calls[0].url, /inboxId=6/);
+  assert.doesNotMatch(fetch.calls[0].url, /organizationId=/, "el motor NO conoce la org: la resuelve el producto");
+  // y la copia queda cacheada para el camino SINCRONICO del turno:
+  const sync = getKnowledge({ ...DB_OPTS, fetch, inboxId: "6", nowMs: NOW_MS });
+  assert.equal(sync.source, "db");
+  assert.equal(sync.data.identity.productName, "ZZ QA Ferreteria Tornillo");
+});
+
+test("db: organizationId explicito le gana al inbox (misma regla que el endpoint)", async () => {
+  const fetch = fetchFalso(valido());
+  await ensureKnowledge({ ...DB_OPTS, fetch, organizationId: ORG, inboxId: "6" });
+  assert.match(fetch.calls[0].url, /organizationId=org_ferreteria/);
+  assert.doesNotMatch(fetch.calls[0].url, /inboxId=/);
+});
+
+test("db: ensureKnowledge espera la red SOLO con la cache fria; despues es getKnowledge", async () => {
+  const fetch = fetchFalso(valido({ identity: { productName: "Ferreteria" } }));
+  // 1a vez (fria): espera UNA lectura y ya sirve la copia db — el primer mensaje del
+  // cliente no puede salir con la cara de Onia.
+  const primera = await ensureKnowledge({ ...DB_OPTS, fetch, inboxId: "6", nowMs: NOW_MS });
+  assert.equal(primera.source, "db");
+  assert.equal(fetch.calls.length, 1);
+  // 2a vez (caliente, TTL vencido): NO espera — sirve la copia vieja ya y refresca aparte.
+  const segunda = await ensureKnowledge({ ...DB_OPTS, fetch, inboxId: "6", nowMs: NOW_MS + DEFAULT_TTL_MS + 1 });
+  assert.equal(segunda.data.identity.productName, "Ferreteria", "la copia vieja sale YA");
+});
+
+test("db: inbox sin org (404) degrada a archivo/codigo y NO vuelve a esperar red en el turno siguiente", async () => {
+  const fetch = fetchFalso(null, { status: 404 });
+  // `path` inexistente a proposito: en el VPS SI existe knowledge.json al lado y la degradacion
+  // seria a "file" — lo que se prueba aca es que la fuente db no aporta nada, no que archivo haya.
+  const opts = { ...DB_OPTS, fetch, inboxId: "99", path: "/no/existe/knowledge.json" };
+  const state = await ensureKnowledge({ ...opts, nowMs: NOW_MS });
+  assert.equal(state.source, "code", "inbox que no es de ningun cliente = bot de Onia, como siempre");
+  assert.equal(state.error ?? null, null, "404 no es un error que gritar");
+  await ensureKnowledge({ ...opts, nowMs: NOW_MS + 1000 });
+  assert.equal(fetch.calls.length, 1, "el intento fallido tambien deja huella: una sola espera por proceso");
+});
+
+test("db: getKnowledge (sincronico) sirve la copia db ya cacheada sin esperar red", async () => {
+  await getOrgKnowledge(ORG, { ...DB_OPTS, fetch: fetchFalso(valido({ identity: { productName: "Ferreteria" } })), nowMs: NOW_MS });
+  const state = getKnowledge({ organizationId: ORG, nowMs: NOW_MS + 1000 });
+  assert.equal(state.source, "db");
+  // y sin copia todavia, cae al archivo/codigo de siempre (jamas espera):
+  resetOrgKnowledgeCache();
+  assert.equal(getKnowledge({ organizationId: "org_sin_cache", dbUrl: "", dbSecret: "" }).source, "code");
+});
+
+test("db: withKnowledge con fuente db enciende el MODO RECEPCIONISTA — y solo con fuente db", async () => {
+  const doc = valido({ identity: { productName: "ZZ QA Ferreteria Tornillo", humanName: "Marta" } });
+  await getOrgKnowledge("org_modo_recep", { ...DB_OPTS, fetch: fetchFalso(doc), nowMs: NOW_MS });
+  const config = withKnowledge(DEFAULT_CONFIG, { organizationId: "org_modo_recep", nowMs: NOW_MS + 1000 });
+  assert.equal(config.modo, "recepcionista", "org cliente = el bot del negocio, no el funnel de Onia");
+  assert.equal(config.conocimiento.identity.productName, "ZZ QA Ferreteria Tornillo");
+  // ... y el turno entero ya contesta como recepcionista, no con el pitch de venta:
+  const result = step(createState(), { text: "hola", receivedAt: T0 }, { config });
+  assert.equal(result.replies[0].templateKey, "M0R");
+  assert.doesNotMatch(result.replies[0].text, /plataforma por módulos/i);
+
+  // Fuente archivo/codigo (la cara de Onia): NADA de modo — el funnel de venta sigue intacto.
+  resetOrgKnowledgeCache();
+  resetKnowledgeCache();
+  const deOnia = withKnowledge(DEFAULT_CONFIG, { path: "/no/existe/knowledge.json" });
+  assert.equal(deOnia.modo, undefined);
+});
+
+// El CABLE entero, de punta a punta: /published manda `orgSlug` -> la cache lo guarda ->
+// withKnowledge lo baja a la config -> el turno contesta con el link de reserva de ESA org.
+// Sin este test, el dia que el producto deje de mandar el campo (o alguien lo renombre) el bot
+// vuelve a derivar TODA cita y nadie se entera: exactamente el fallo silencioso que esta capa
+// existe para evitar.
+test("db: con orgSlug el bot AGENDA (manda el link de la org); sin orgSlug deriva a un humano", async () => {
+  const doc = valido({ identity: { productName: "ZZ QA Ferreteria Tornillo", humanName: "Marta" } });
+
+  resetOrgKnowledgeCache();
+  await getOrgKnowledge("org_con_agenda", {
+    ...DB_OPTS,
+    fetch: fetchFalso(doc, { orgSlug: "zz-qa-ferreteria-ab123" }),
+    nowMs: NOW_MS,
+  });
+  const conAgenda = withKnowledge(DEFAULT_CONFIG, { organizationId: "org_con_agenda", nowMs: NOW_MS + 1000 });
+  assert.equal(conAgenda.orgSlug, "zz-qa-ferreteria-ab123", "el slug baja del endpoint a la config");
+  const reserva = step(createState(), { text: "quiero agendar una cita", receivedAt: T0 }, { config: conAgenda });
+  assert.equal(reserva.replies.at(-1).templateKey, "R_AGENDA");
+  assert.match(reserva.replies.at(-1).text, /https:\/\/app\.onia\.com\.bo\/book\/zz-qa-ferreteria-ab123/);
+
+  // Sin el campo (org sin agenda publica, o producto viejo): el handoff de siempre.
+  resetOrgKnowledgeCache();
+  await getOrgKnowledge("org_sin_agenda", { ...DB_OPTS, fetch: fetchFalso(doc), nowMs: NOW_MS });
+  const sinAgenda = withKnowledge(DEFAULT_CONFIG, { organizationId: "org_sin_agenda", nowMs: NOW_MS + 1000 });
+  assert.equal(sinAgenda.orgSlug, null);
+  const derivado = step(createState(), { text: "quiero agendar una cita", receivedAt: T0 }, { config: sinAgenda });
+  assert.equal(derivado.replies.at(-1).templateKey, "R_INTERES");
+  assert.doesNotMatch(derivado.replies.at(-1).text, /app\.onia\.com\.bo/);
+});
+
+test("preview: con organizationId el turno corre contra el conocimiento de ESA org", async () => {
+  process.env.ONIA_BOT_PREVIEW_SECRET = "prev";
+  try {
+    // Cache caliente de la org (como quedaria tras el primer turno real):
+    const doc = valido({
+      identity: { productName: "ZZ QA Ferreteria Tornillo" },
+      productos: [{ key: "tornillos", tipo: "servicio", nombre: "tornillos al por mayor" }],
+    });
+    await getOrgKnowledge(ORG, { ...DB_OPTS, fetch: fetchFalso(doc), nowMs: Date.now() });
+
+    const out = await handlePreviewRequest({
+      rawBody: JSON.stringify({ message: "y que hacen exactamente?", organizationId: ORG }),
+      headers: { authorization: "Bearer prev" },
+    });
+    assert.equal(out.status, 200);
+    assert.equal(out.body.conocimiento.fuente, "db");
+    const texto = out.body.respuestas.map((r) => r.texto).join("\n");
+    assert.match(texto, /tornillos al por mayor/);
+  } finally {
+    delete process.env.ONIA_BOT_PREVIEW_SECRET;
+  }
+});
+
+test("preview: el BORRADOR corre en modo RECEPCIONISTA — lo que el cliente final vera, con botones", async () => {
+  // Decision Sergio 2026-08-18: el probador del editor muestra el bot del NEGOCIO
+  // (M0R + pastillas), nunca el funnel de venta de Onia con el nombre cambiado.
+  process.env.ONIA_BOT_PREVIEW_SECRET = "prev";
+  try {
+    const doc = valido({
+      identity: { productName: "ZZ QA Ferreteria Tornillo", humanName: "Marta" },
+      empresa: { horario: { frase: "lun-vie, 9:00-18:00" } },
+    });
+    const out = await handlePreviewRequest({
+      rawBody: JSON.stringify({ message: "hola", knowledge: doc }),
+      headers: { authorization: "Bearer prev" },
+    });
+    assert.equal(out.status, 200);
+    assert.equal(out.body.conocimiento.fuente, "borrador");
+    assert.equal(out.body.respuestas[0].plantilla, "M0R", "borrador => recepcionista, no M0 de venta");
+    assert.match(out.body.respuestas[0].texto, /Soy el asistente de ZZ QA Ferreteria Tornillo/);
+    assert.doesNotMatch(out.body.respuestas[0].texto, /plataforma por módulos/i);
+    // Los botones input_select llegan como TITULOS para que el chat del editor los pinte.
+    assert.deepEqual(out.body.respuestas[0].opciones, ["Horarios", "Servicios", "Hablar con Marta"]);
+
+    // El click de una pastilla ("Horarios") contesta con el dato del borrador:
+    const horario = await handlePreviewRequest({
+      rawBody: JSON.stringify({ message: "Horarios", knowledge: doc }),
+      headers: { authorization: "Bearer prev" },
+    });
+    assert.equal(horario.status, 200);
+    assert.match(horario.body.respuestas.map((r) => r.texto).join("\n"), /lun-vie, 9:00-18:00/);
+  } finally {
+    delete process.env.ONIA_BOT_PREVIEW_SECRET;
+  }
+});
+
+test("seguimiento (v6.6): activo bool + horas 1-48; tipos malos rechazan entero", () => {
+  const ok = validateKnowledge({ schema: "onia.bot.knowledge/1", seguimiento: { activo: true, horas: 2 } });
+  assert.equal(ok.ok, true);
+  const mal = validateKnowledge({ schema: "onia.bot.knowledge/1", seguimiento: { activo: "si" } });
+  assert.equal(mal.ok, false);
+  const rango = validateKnowledge({ schema: "onia.bot.knowledge/1", seguimiento: { activo: true, horas: 99 } });
+  assert.equal(rango.ok, false);
 });

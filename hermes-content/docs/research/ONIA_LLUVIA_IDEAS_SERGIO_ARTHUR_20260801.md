@@ -6,7 +6,7 @@
 
 > Sergio: 15 ideas en bruto, "esto es tanto para mí y Arthur, analízalo y documéntalo".
 > Este doc las analiza UNA por una contra el filtro vigente y deja veredicto + gatillo.
-> No reemplaza el catálogo maestro (`ONIA_CATALOGO_MAESTRO_IDEAS_20260726.md`) — lo
+> No reemplaza el catálogo maestro (`ONIA_CATALOGO_DE_IDEAS.md`) — lo
 > extiende: las ideas que ya estaban ahí se citan, las 6 nuevas quedan documentadas acá.
 
 ---
@@ -277,7 +277,7 @@ lateral y no cuenta como carril de Onia (plan de Arthur §5, "lo que NO hace est
 
 ---
 
-Relacionado: `ONIA_CATALOGO_MAESTRO_IDEAS_20260726.md` (índice maestro de ideas — las 6
+Relacionado: `ONIA_CATALOGO_DE_IDEAS.md` (índice maestro de ideas — las 6
 nuevas de esta lluvia pueden absorberse ahí en la próxima actualización) ·
 `ONIA_ARTHUR_CARRIL_CONTENIDO_Y_PAGO_20260801.md` (carril y pago de Arthur) ·
 `ONIA_ENFOQUE_20260727.md` (a quién le vendemos) ·

@@ -16,6 +16,24 @@
 import readline from "node:readline";
 import { createBotConfig, DEFAULT_CONFIG } from "./config.mjs";
 import { createState, step, markHumanTakeover, buildFollowUp, LLM_PENDING } from "./bot-engine.mjs";
+import { applyKnowledge, asRecepcionista } from "./knowledge.mjs";
+
+// Knowledge de UNA org cliente (fila "db" publicada) para el guion recepcionista. Es el mismo
+// shape "onia.bot.knowledge/1" que publica el editor del producto.
+const CONOCIMIENTO_FERRETERIA = {
+  schema: "onia.bot.knowledge/1",
+  version: "sim-recepcionista",
+  identity: {
+    productName: "Ferretería El Tornillo",
+    humanName: "doña Marta",
+    botName: "el asistente de Ferretería El Tornillo",
+  },
+  empresa: { horario: { dias: [1, 2, 3, 4, 5, 6], desde: 8, hasta: 19, frase: "lun-sab, 8:00-19:00" } },
+  productos: [
+    { key: "tornilleria", tipo: "servicio", nombre: "tornillería al por mayor y menor" },
+    { key: "herramientas", tipo: "servicio", nombre: "herramientas eléctricas y manuales" },
+  ],
+};
 
 // ---------------------------------------------------------------------------
 // Los 10 guiones de prueba (spec §8, fase 1 + rama por rubro y soporte)
@@ -116,6 +134,21 @@ const SCRIPTS = {
       { text: "ya soy cliente y el sistema no me anda, como configuro los recordatorios?" },
     ],
   },
+  "recepcionista-ferreteria": {
+    title: "MODO RECEPCIONISTA — el bot de un CLIENTE: saludo del negocio, FAQ del knowledge, pedido -> humano",
+    startAt: "2026-07-27T14:05:00Z",
+    conocimiento: CONOCIMIENTO_FERRETERIA,
+    turns: [
+      { text: "hola" }, // M0R con el menu de BOTONES (input_select: Horarios/Servicios/humano)
+      // Click del boton: en el canal real llega como message_updated con submitted_values y el
+      // adapter lo convierte en un turno con el TITULO como texto — que es esto mismo.
+      { text: "Horarios" },
+      { text: "que venden?" },
+      { text: "quiero comprar 100 tornillos" }, // escala: lo confirma doña Marta
+      { text: "cuanto cuestan?" }, // handoff en curso: el bot ya no habla encima del humano
+      { text: "Servicios" }, // click de boton EN handoff: la FAQ exacta si se contesta (solo lectura)
+    ],
+  },
 };
 
 // ---------------------------------------------------------------------------
@@ -165,8 +198,13 @@ function indent(text) {
     .join("\n");
 }
 
-function runScript(name, config) {
+function runScript(name, baseConfig) {
   const script = SCRIPTS[name];
+  // Guion de una org cliente: se corre con SU knowledge y el modo recepcionista encendido,
+  // igual que cuando la fila publicada llega por la fuente "db".
+  const config = script.conocimiento
+    ? asRecepcionista(applyKnowledge(baseConfig, script.conocimiento), script.conocimiento)
+    : baseConfig;
   const events = [];
   let state = createState({ channel: "sim", contactRef: `sim-${name}`, pieceKey: "lucia-d03-reel-siat", sourceCampaign: "lucia-dentalgest-jul2026" });
   let clock = script.startAt;
@@ -215,6 +253,7 @@ function printScript(run) {
       } else {
         console.log(indent(reply.text));
       }
+      if (reply.options) console.log(indent(`[botones] ${reply.options.map((option) => option.title).join(" · ")}`));
     }
     if (event.sideEffects.length) console.log(`    [efectos] ${event.sideEffects.join(", ")}`);
     if (event.notes.length) console.log(`    [notas] ${event.notes.join(", ")}`);

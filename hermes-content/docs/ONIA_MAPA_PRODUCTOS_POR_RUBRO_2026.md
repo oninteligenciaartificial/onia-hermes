@@ -109,44 +109,55 @@ Ya tienen pack de vocabulario en el contrato (roadmap, sin producto todavía):
 
 Fuente: `hermes-content/references/video-intake/2026-08-16-comandas-competidores.md`
 (DougMenu AR + panel BR — lo que un local de comida considera NORMAL en 2026).
-Verificado contra el código de `onia-platform` (lib/comercio, prisma, app) y el
-registro público en producción.
+**Re-verificado 2026-08-20** contra `origin/master` de `onia-platform` (commit
+`b822c1d`, worktree de solo-lectura) y producción MIRADA renderizada (Playwright +
+Chromium headless contra `app.onia.com.bo/register`, captura leída). Método por fila:
+**[C]** = código leído en esta pasada · **[P]** = producción mirada renderizada.
+Las pantallas del módulo comercio exigen sesión: van con [C]; no existe doc de
+verificación con fecha que las haya mirado renderizadas en prod (dicho explícito).
 
 **El hallazgo primero:** el pack gastronomía **NO está encendido**. No es track
-soportado en la plataforma (`SUPPORTED_VERTICAL_TRACK_IDS`, 7 tracks, gastronomía
-ausente) y en el registro público de `app.onia.com.bo` aparece como chip "Pronto"
-(verificado en el HTML servido). Un restaurante hoy no puede ni registrarse: la
-comparación de features es contra el módulo comercio (POS mostrador), que es lo
-que un pack gastronomía reusaría.
+soportado en la plataforma (`lib/platform/types.ts:17` — 7 tracks, gastronomía
+ausente) [C] y en el registro público aparece como chip "MUY PRONTO" (mirado
+renderizado 2026-08-20: 5 cards activas + 4 chips) [P]. Un restaurante hoy no puede
+ni registrarse: la comparación es contra el módulo comercio (POS mostrador, track
+`gestios-general`), que es lo que un pack gastronomía reusaría. El pack SÍ existe
+en el contrato del core (`contract.json` → `gestios-gastronomia-pack`:
+`pedido_cocina`, `delivery_pendiente`, `reservar_mesa`, áreas cocina/salón/caja,
+KPI "tiempo promedio de preparación cocina-entrega") [C] — encender el track es
+datos + presentación, no core nuevo.
 
 | # | Feature | Estado hoy en onia-platform | Clase |
 |---|---|---|---|
-| 1 | Tablero por estados arrastrable, en vivo | ❌ No existe. La venta de mostrador nace `entregado` (lib/comercio/ventas.ts); `/pending` es cola core de aprobaciones, no tablero de pedidos | (ii) construir la UI — los datos ya están (`OniaCommerceOrder.status` + work_items) |
-| 2 | Ticket con cliente + teléfono + dirección + mapa | ❌ Order→partner trae teléfono (contact); dirección de ENTREGA por pedido y mapa no existen | (ii) construir dirección por pedido; mapa = link a Google Maps, no embed (no mueve la venta, agrega peso) |
-| 3 | Método de pago en la tarjeta | 🟡 El dato EXISTE por venta (EFECTIVO/QR/TARJETA/TRANSFERENCIA/FIADO); falta la tarjeta que lo muestre | (i) se enciende gratis al construir #1 |
-| 4 | Impresión térmica de comanda | ❌ Solo print de navegador A4 (`app/print/invoice`, `/prescription`); nada ESC/POS 58/80 mm ni Bluetooth | (ii) construir |
-| 5 | Estados hasta ENTREGADO con reloj | ❌ `status` existe como campo string; sin máquina de estados ni timestamp por transición | (ii) construir — misma pieza que #1 (una sola máquina de estados) |
-| 6 | Métricas del día al pie | ✅ EXISTEN: `lib/comercio/hoy.ts` (hoy vs mismo día semana pasada, ventas/hora, top vendidos, stock crítico) + caja por método | (i) ya está — solo ubicarlas al pie del tablero |
-| 7 | Editor de menú con stock y toggle visible | 🟡 CRUD de productos + stock + `active` (=visible) existen; el modelo NO tiene campo de foto | (i) 90% encendido; foto de producto = construir chico |
-| 8 | Canal salón vs delivery | ❌ No existe | (ii) construir — un campo `channel` en la orden + filtro (barato) |
-| 9 | Suscripción con niveles | ✅ EXISTE: basic/professional/clinic/enterprise + entitlements + add-ons | ya está |
+| 1 | Tablero por estados arrastrable, en vivo | ❌ No existe UI de tablero (los únicos "drag" son drop de archivos en importadores). La venta de mostrador nace `entregado` (`lib/comercio/ventas.ts:150`); `/pending` es cola core de aprobaciones, no tablero de pedidos [C] | (b) construir la UI — los datos ya están (`OniaCommerceOrder.status` + `work_items`) |
+| 2 | Ticket con cliente + teléfono + dirección + mapa | ❌ El teléfono del cliente vive en `metadata` JSON (fiados: `cliente.telefono`, `lib/comercio/fiados.ts:58-134`; `OniaCoreBusinessPartner` no tiene campo phone — "telefono/email en metadata"). `OniaCommerceOrder` NO tiene dirección ni teléfono ni canal (modelo leído entero, `prisma/schema.prisma:1429`). Cero libs de mapas [C] | (b) construir dirección por pedido; mapa = link a Google Maps, no embed (no mueve la venta, agrega peso) |
+| 3 | Método de pago en la tarjeta | 🟡 El dato EXISTE por venta (EFECTIVO/QR/TARJETA/TRANSFERENCIA/FIADO, `VentaForm.tsx:14-21`) y la caja muestra el total del día por método; falta la tarjeta de pedido que lo muestre [C] | (a) se enciende gratis al construir #1 |
+| 4 | Impresión térmica de comanda | ❌ Solo print de navegador A4 (`app/print/invoice`, `/prescription`); nada ESC/POS 58/80 mm ni Bluetooth (grep térmica/escpos/bluetooth: cero hits en producto) [C] | (b) construir |
+| 5 | Estados hasta ENTREGADO con reloj | ❌ para comandas, PERO corrección al 2026-08-16: ya HAY máquina de estados en el core (`lib/onia-core/modules/commerce-logic.ts`: draft→confirmed→fulfilled\|cancelled, inmutable, timestamp por transición) — cableada SOLO a importadora. ⚠️ Trampa: comercio escribe `"entregado"`/`"confirmado"` (español, directo) y la máquina usa inglés — dos vocabularios en la MISMA columna `status`. Unificar antes de construir el tablero [C] | (b) extender estados (preparación/listo/en reparto) + cablear a comercio — ya no es de cero |
+| 6 | Métricas del día al pie | ✅ EXISTEN: `lib/comercio/hoy.ts` (hoy vs mismo día semana pasada, ventas/hora, top vendidos, stock crítico), cableado en el dashboard (`dashboard/page.tsx:115` → `ComercioHoy`) + caja por método [C]; no miradas renderizadas en prod (exigen sesión) | (a) ya está — solo ubicarlas al pie del tablero |
+| 7 | Editor de menú con stock y toggle visible | 🟡 corrección al 2026-08-16: NO hay CRUD — la API de productos es solo GET/POST + import + search (sin PATCH/DELETE, sin ruta `[id]`): el campo `active` (=visible) existe en el schema pero NINGUNA UI ni API puede togglearlo. Stock sí (kardex, lotes, inventario valorado). Sin campo de foto [C] | (a) el modelo ya cubre; (b) el editor (editar + toggle + foto) hay que construirlo |
+| 8 | Canal salón vs delivery | ❌ No existe en el producto (la orden no tiene `channel`; "mostrador" es solo naming de la venta rápida). El pack del core ya trae el vocabulario (áreas salón/cocina, `delivery_pendiente`) [C] | (b) un campo `channel` en la orden + filtro (barato) |
+| 9 | Suscripción con niveles | ✅ EXISTE: basic/professional/clinic/enterprise (`lib/subscription-plans.ts`) + entitlements + add-ons [C]; el registro promete "14 días gratis, sin tarjeta" mirado renderizado [P] | ya está |
 
-Ninguna de las 9 cae en "(iii) no la queremos" — solo el **mapa embebido** de #2 se
+Ninguna de las 9 cae en "(c) no la queremos" — solo el **mapa embebido** de #2 se
 degrada a link (misma utilidad, cero peso).
 
-**Orden de construcción para una demo de 20 s a un dueño de local** (solo las (ii)):
+**Orden de construcción para una demo de 20 s a un dueño de local** (solo las (b)):
 
-1. **Tablero de estados en vivo** (features 1+5 juntas — una sola máquina de estados
-   hasta `entregado` con reloj). Los dos videos competidores SON esto: 17 s de
+1. **Tablero de estados en vivo** (features 1+5 juntas — extender la máquina de
+   `commerce-logic.ts` hasta `entregado` con reloj y unificar el vocabulario de
+   `status`, no escribir una nueva). Los dos videos competidores SON esto: 17 s de
    arrastrar tarjetas es la demo entera.
 2. **Tarjeta de pedido completa** (features 2+3: cliente, teléfono, dirección, ítems,
    total, método de pago). Es lo que se ve DENTRO del tablero.
-3. **Impresión térmica** (feature 4). Discrepancia declarada con la hipótesis
-   "impresora y métricas primero": las métricas YA existen (mitad de la hipótesis
-   es moot), y la impresora es invisible en una demo de pantalla de 20 s — es la
-   pregunta #1 del CIERRE ("¿imprime comandas?"), no del gancho. Va tercera en
-   construcción, primera en el checklist de venta.
-4. **Canal salón vs delivery** (feature 8).
+3. **Impresión térmica** (feature 4). Discrepancia declarada con la hipótesis de la
+   ficha ("impresora y métricas son lo que el dueño pide primero"): las métricas YA
+   existen (mitad de la hipótesis es moot), y la impresora es invisible en una demo
+   de pantalla de 20 s — es la pregunta #1 del CIERRE ("¿imprime comandas?"), no del
+   gancho. Va tercera en construcción, primera en el checklist de venta.
+4. **Editor de menú usable** (feature 7: editar producto + toggle visible + foto —
+   hoy el catálogo es de solo alta).
+5. **Canal salón vs delivery** (feature 8).
 
 **Para no perder el foco:** el foso nuestro es la facturación fiscal boliviana al
 1-oct-2026 — DougMenu y el panel BR no se la darán nunca a un local de Bolivia.

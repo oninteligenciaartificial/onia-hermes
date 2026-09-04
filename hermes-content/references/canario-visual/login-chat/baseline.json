@@ -1,0 +1,20 @@
+{
+  "nombre": "login-chat",
+  "url": "https://chat.onia.com.bo/app/login",
+  "cola": "hermes-content/docs/cola/chatbot.md",
+  "duenio": "chatbot-cola",
+  "status": 200,
+  "fallo": null,
+  "bytes": 3583426,
+  "msMirable": 913,
+  "msTotal": 1462,
+  "erroresConsola": [],
+  "visto": {
+    "titulo": "Onia",
+    "urlFinal": "https://chat.onia.com.bo/app/login",
+    "texto": "Iniciar sesión en Onia E-mail Contraseña ¿Olvidaste tu contraseña? Iniciar sesión"
+  },
+  "baseline": "comparada",
+  "motivos": [],
+  "NOTA": "Corregida el 2026-09-02. Antes decia bytes=12953799 y msMirable=2437, y esos numeros MATABAN el gate: con derivaPeso 1.4 la alarma de peso solo saltaba arriba de 18,1 MB, o sea nunca. Los 12,9 MB eran los bytes SIN COMPRIMIR de estos mismos assets (sumados uno por uno con Accept-Encoding: identity: 12.973.552 bytes, 0,15 % del valor viejo); por el cable viajan 3,58 MB gzip. Medido tres veces seguidas con el propio canario: 3499 KB clavado y 808-913 ms. El 92 % del peso comprimido es UN chunk de Chatwoot, vite/assets/DashboardIcon-*.js (11,25 MB crudo / 3,14 MB gzip), que se sirve con max-age=31556952 y nombre hasheado: la segunda visita del mismo navegador baja 10 KB en 237 ms (0,2 % de la primera). Es el precio de Chatwoot y se paga una sola vez por navegador, en el login del MOTOR, que ningun cliente abre. Si una vuelta futura vuelve a leer ~12,9 MB, NO es esta pantalla engordando: es que los assets llegaron sin comprimir, y eso si es un item."
+}

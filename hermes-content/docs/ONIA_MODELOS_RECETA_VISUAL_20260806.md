@@ -94,7 +94,7 @@ Estructura invariable: `[apertura] + [bloque de identidad] + [atuendo] + [escena
 | **R3 · UGC / frame de reel** | lo que parece grabado con celular | `A casual candid snapshot taken by a friend standing close to her in <lugar cotidiano>, mid-sentence talking, available window light only, slightly imperfect handheld framing, everyday vertical phone photo` | **L14, M14 — las mejores del lote** |
 | **R4 · Beauty / producto** | Mara vendiendo | `Extreme close-up, her head and shoulders fill the whole frame; background is a smooth <color> wall completely out of focus. 85mm f/2, high-end skincare campaign photography` | M13 |
 
-Parámetros fijos: `model: soul_2` · `quality: 2k` · `use_unlim: false` ·
+Parámetros fijos: `model: text2image_soul_v2` · `quality: 2k` · `use_unlim: false` ·
 `aspect_ratio`: `3:4` feed · `9:16` reel/story · `1:1` avatar. Costo medido: **0,12 cr/imagen**.
 
 **Nunca** meter en el prompt: negaciones de cualquier tipo · `app`/`interfaz`/`story`/`pantalla` ·
@@ -142,7 +142,7 @@ motores de imagen de la cuenta**:
 | Motor | Parámetros que expone |
 |---|---|
 | `nano_banana_2` · `nano_banana_pro` | `resolution` |
-| `soul_2` · `soul_cinematic` | `quality`, `soul_id` |
+| `text2image_soul_v2` · `soul_cinematic` | `quality`, `soul_id` |
 | `gpt_image_2` | `resolution`, `quality` |
 | `cinematic_studio_2_5` · `marketing_studio_image` | `resolution` |
 | `ms_image` | `style_id` (obligatorio), `brand_kit_id`, `resolution`, `quality`, `batch_size`, `product_ids` |
@@ -216,7 +216,7 @@ nota a un metro. Los 8 prompts fuente la aplican sin excepción.
 
 > **Ninguno está generado.** Es texto listo para que Sergio apruebe. Costos medidos en
 > `web-factory/docs/MODELOS_IA_QUE_USAR_PARA_QUE.md`: `nano_banana_2` 2.00 cr · `gpt_image_2` low
-> 0.50 cr · `z_image` 0.15 cr · `soul_2` 0.12 cr.
+> 0.50 cr · `z_image` 0.15 cr · `text2image_soul_v2` 0.12 cr.
 
 ### 3.1 — Catálogo de producto · Nuvia (proyecto propio, catálogo real)
 
@@ -295,3 +295,135 @@ campaña va en HyperFrames encima.
 - [ ] ¿El `Negative prompt:` está **dentro** del prompt? (no hay campo aparte — §0)
 - [ ] ¿Ningún texto legible depende de la generación? (va en HyperFrames)
 - [ ] ¿Elegí el motor por si hace falta reconocer una cara, no por costumbre?
+
+---
+
+# RECETA INTERIORES — Nano Banana con referencia (4 transformaciones)
+
+> Agregado 2026-08-20. Sale del carrusel DcEYP7tjsIA (7 láminas leídas con visión + caption,
+> nivel VERIFICADO), ficha en `references/video-intake/analisis/2026-08-20-items.json` y
+> síntesis en `references/video-intake/2026-08-20-sintesis-lote-13.md`. Rubros objetivo:
+> inmobiliaria, estudio de arquitectura, mueblería. El insumo es siempre algo que el cliente
+> **YA tiene** (plano, captura 3D, fotos de sus piezas).
+
+## 0. 🔴 Catálogo re-verificado 2026-08-20 (models_explore, esta sesión, gratis)
+
+| Modelo | Rol de medias | Resolución | Nota |
+|---|---|---|---|
+| `nano_banana` (Google) | `image_references`, sin tope declarado | — | budget, image-to-image |
+| `nano_banana_pro` (Google) | `image_references`, sin tope declarado | 1k/2k/4k (default 2k) | calidad máxima |
+| `nano_banana_2` (Google) | `image_references`, sin tope declarado | 1k/2k/4k (default 1k) | el caballo de trabajo, 2.00 cr |
+| `nano_banana_2_lite` | `image_references` | solo 1k | param `thinking` MINIMAL/HIGH |
+| `nano_banana_2_shots` | `image_references` | — | existe, sin descripción publicada |
+| `seedream_v5_pro` (Bytedance) | `image_references` | 1k/1.5k/2k | **`is_inpaint: true`** = alternativa para el swap editando SOBRE la referencia |
+
+- `unlim.available: false` para nuestro caller → **cada generación gasta créditos**. Permiso
+  de Sergio caso por caso (regla gasto-plataformas-validar-primero).
+- ⚠️ Trampa del MCP: `models_explore` con `action:search` y query "nano banana" devuelve
+  **vacío**. Verificar siempre con `action:list, type:image` y leer la lista completa.
+
+## 1. Los 4 mecanismos — REGLAS (esto es el conocimiento, los prompts son ejemplos)
+
+1. **El catálogo va como UNA imagen-collage.** N piezas recortadas sobre fondo blanco,
+   montadas en una sola imagen. Nunca N referencias sueltas: el collage es lo que vuelve
+   direccionable al catálogo entero con un solo índice.
+2. **El prompt direcciona por índice ("image 1", "image 2") → el ORDEN DE CARGA de las
+   referencias es parte del prompt.** Cambiar el orden de subida rompe el prompt aunque el
+   texto sea idéntico.
+3. **Se ENCADENA: la salida de un paso es la image 1 del siguiente.** Así se conservan
+   arquitectura, paneles, cuadros y cielorraso mientras cambia todo el mobiliario. La
+   consistencia la sostiene **LA REFERENCIA, no el texto ni el seed**.
+4. **Texto corto, sin jerga fotográfica.** Ni lente, ni f-stop, ni esquema de luz. El estilo
+   se delega en un **nombre propio** que el modelo ya conoce: "the AD magazine photography
+   version" (AD = Architectural Digest). Se nombra la referencia cultural, no se la describe.
+
+### La tensión a propósito con la plantilla de 8 bloques (G6, arriba en este mismo doc)
+
+Son **dos regímenes distintos y no se mezclan**:
+
+| | GENERAR desde cero | EDITAR sobre referencia |
+|---|---|---|
+| Prompt | 8 bloques largos + lista de objetos + palanca de suciedad + `Negative prompt:` | una frase corta que direcciona por índice |
+| Qué manda | el texto (no hay imagen de partida) | la referencia (el texto solo dice QUÉ cambiar) |
+| Receta | PLANTILLA DE FOTO FOTORREALISTA (§ G6) | esta |
+
+Selector: **¿hay imagen de partida que debe conservarse? → EDITAR (frase corta). ¿No hay
+imagen? → GENERAR (8 bloques).** Meterle los 8 bloques a un edit es re-describir lo que la
+referencia ya dice y darle al modelo permiso de inventar; darle una frase corta a una
+generación desde cero es pedir genérico.
+
+## 2. Las 4 transformaciones, con los prompts literales de las láminas
+
+### 2.1 — Clay/viewport 3D → foto "AD magazine" (lámina 02→03)
+
+- **Insumo:** captura del viewport 3D en clay/wireframe (SketchUp/Revit/Blender, mallas
+  visibles, materiales planos) como image 1.
+- **Prompt literal** (la lámina lo muestra envuelto en un objeto JSON con clave `"prompt"` —
+  sugiere API/AI Studio; el envoltorio es empaque, la frase es el prompt):
+
+```
+show me the AD magazine photography version of image 1.
+```
+
+- **Salida:** foto fotorrealista del MISMO encuadre. Es la image 1 del paso 2.2.
+
+### 2.2 — Swap total de mobiliario contra moodboard (lámina 04)
+
+- **Insumos:** image 1 = foto del ambiente (real del cliente, o la salida de 2.1);
+  image 2 = collage-moodboard de piezas recortadas sobre fondo blanco (regla 1).
+- **Prompt literal:**
+
+```
+in image 1, swap all furniture with the furniture shown in image 2
+```
+
+- **Salida:** misma arquitectura, mobiliario íntegramente reemplazado. Alternativa si el
+  swap tironea la arquitectura: `seedream_v5_pro` con `is_inpaint: true`.
+
+### 2.3 — Moodboard de productos → escena amueblada (lámina 05)
+
+- **Insumo:** SOLO el collage de productos como image 1; el ambiente se describe en texto.
+- **Prompt literal:**
+
+```
+In a minimalist dark wooden living room, add all products and furniture shown on image 1. Add also other objects to make the space feels alive.
+```
+
+- **Salida:** escena completa amueblada con las piezas del collage.
+
+### 2.4 — Plano 2D → render cenital doll-house (lámina 06) ⚠️ prompt fuente ROTO
+
+- **Insumo:** planta 2D de línea como image 1.
+- ⚠️ **La lámina 06 repite el prompt de la 05 (copy-paste de plantilla): el prompt exhibido
+  NO produce el resultado exhibido.** Y justo esta es la receta comercialmente más valiosa.
+  El nuestro, escrito con las reglas 2 y 4, **NO PROBADO** (probarlo requiere permiso de
+  gasto):
+
+```
+turn the floor plan in image 1 into a photorealistic top-down dollhouse render of the same apartment, fully furnished, warm minimalist style
+```
+
+- Es la que hay que probar PRIMERO cuando haya permiso: es la que vende (inmobiliaria) y la
+  única sin prompt fuente confiable.
+
+## 3. La oferta (SIN precio — lo decide Sergio)
+
+| Rubro | El cliente entrega (lo que YA tiene) | Nosotros devolvemos | Pasadas |
+|---|---|---|---|
+| Inmobiliaria | plano 2D por unidad (PDF/JPG) | render cenital dollhouse amueblado por unidad + opcional 1 vista a nivel de ojo | 1-2 por unidad |
+| Estudio de arquitectura | captura del viewport 3D (clay, sin materiales) | foto fotorrealista "revista" por vista + variante con otro mobiliario (cadena 2.1→2.2) | 1 por vista, 2 si hay restyle |
+| Mueblería | fotos de sus piezas + una foto del ambiente (suyo o del cliente final) | el MISMO ambiente con SUS muebles puestos, listo para catálogo/redes | 1 por ambiente (el collage lo armamos nosotros, gratis, es montaje local) |
+
+- El collage-moodboard lo armamos nosotros sin generación (montaje HTML/local): es insumo,
+  no gasto.
+- Cada pasada gasta créditos (`unlim.available: false`, §0; costo de referencia
+  `nano_banana_2` 2.00 cr en `web-factory/docs/MODELOS_IA_QUE_USAR_PARA_QUE.md`). Volumen
+  del piloto y precio: Sergio.
+
+## 4. Lo que la fuente promete y NO muestra (no vender esto)
+
+- "add people to an empty room" y "clean up a photo": prometidos en el caption, **cero
+  láminas**. No están en esta receta.
+- "the best AI model right now": opinión sin comparativa. No repetir como dato.
+- De 10 prompts prometidos, en láminas hay 4 y uno está mal pegado: la cuenta honesta es
+  **3 recetas limpias + 1 reconstruida por nosotros**.

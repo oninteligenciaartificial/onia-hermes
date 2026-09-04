@@ -5,3 +5,5 @@
 [15] detectamos la posición del scroll para saber qué frame es el que tenemos que cargar.
 [19] Y así queda esta animación tan espectacular.
 [22] Y si te gustan estos tutoriales, deja tu like.
+
+Nota fija: Whisper degrada términos técnicos (SIDANZ=Seedance, Hitsfield=Higgsfield, viesel=VSL); ningún término técnico se cita sin contrastar con la imagen.

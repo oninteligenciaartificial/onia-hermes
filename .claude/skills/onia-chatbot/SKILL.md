@@ -20,6 +20,11 @@ lo extiende para este carril.
 | Persistencia | Supabase self-hosted, schema `onia_center` (`bot_conversations`, `bot_messages`) |
 | Canal | Chatwoot self-hosted en el VPS → WhatsApp Cloud API |
 | Relay del producto | repo `onia-platform`, `app/api/webhooks/chatwoot` — **es un relay, NO un segundo motor** |
+| **Bandeja nativa** (el dueño lee/contesta) | `onia-platform`: `app/(dashboard)/inbox/` + `lib/chatbot/bandeja*.ts` + `/api/bandeja*` — tenencia dura por `clinic_settings.chatwootInboxId` |
+| **Editor conversacional** (edita el bot en castellano) | motor: `editor-sugerir.mjs` (POST `/editor-sugerir`, LiteLLM + validateKnowledge) · platform: `/api/chatbot-knowledge/sugerir` + diff en español (`lib/chatbot/editor-conversacional.ts`) |
+| **Guion en pasos** ("Así atiende tu asistente") | `onia-platform`: componente junto al probador en `/settings/chatbot` |
+| **Visión** (el bot VE fotos) | motor: `vision.mjs` (descarga SSRF-safe + LiteLLM detail low) → `R_ATTACH_VISTO`; guardrails filtran la descripción |
+| **Candado bot-humano** (takeover + desarme) | motor: `takeoverTurn` (arma al contestar un humano) + `conversation_status_changed=resolved` → `clearHumanTakeover` (resolver = devolver al bot) |
 
 **Fuentes de verdad — leer ANTES de construir, no después:**
 `ONIA_ESTADO_CHATBOT_Y_VOZ_20260816.md` (qué está encendido hoy) ·
@@ -72,7 +77,16 @@ Regla del repo: nada que parezca template por defecto — ver `web-factory-disen
 **Antes de crear una pantalla nueva, mirar si ya tiene casa.** Verificado 2026-08-16:
 `app/(dashboard)/communications/page.tsx` (230 líneas) es **diagnóstico de envíos**, no un
 editor; `app/(dashboard)/admin/organizations/[id]/WhatsAppOrgConfig.tsx` (263 líneas) ya
-configura WhatsApp por organización. El editor de conocimiento NO existe todavía.
+configura WhatsApp por organización. ⚠️ **Corregido 2026-08-24.** Acá decía que el editor de conocimiento NO existía.
+**Está EN PRODUCCIÓN**: pantalla, tabla y probador vivos. Una sesión que lea la versión
+vieja lo construye por segunda vez.
+⚠️ **Corregido 2026-08-28.** Acá decía "lo único que falta es que el bot de WhatsApp lea la
+fila" — **falso desde el 17/18-ago**: el motor lee la fila por organización (fuente "db") y
+resuelve la org por INBOX (`clinic_settings.chatwootInboxId`), con modo recepcionista vivo y
+verificado por widget + curl sintético. Lo que falta es MENOS: verificar el mismo circuito
+con un canal WhatsApp real de un cliente (mismo adapter). El circuito completo por cliente
+(editor → publicar → su bot contesta en su canal) EXISTE; desde el 28-ago el editor además
+abre PRE-ARMADO con la plantilla del rubro (`lib/chatbot/plantillas.ts`).
 
 ### API que consuma la plataforma
 `api-design` · `backend-patterns` — y `onia-backend` del propio repo, que manda.
@@ -85,7 +99,13 @@ cada 2 min. No es systemd. Los barridos son cron del VPS, no n8n.
 ### Automatización con n8n (solo si el trabajo es de n8n)
 `n8n-mcp-tools-expert` (cargar SIEMPRE antes de tocar n8n) · `n8n-workflow-patterns` ·
 `n8n-node-configuration` · `n8n-validation-expert` · `n8n-code-javascript`.
-Plan VPS: **`$env` NO existe**; secretos por credencial de n8n.
+⚠️ **Corregido 2026-08-24.** Acá decía "`$env` NO existe" y es FALSO desde la
+verificación en vivo del 2026-08-22: `N8N_BLOCK_ENV_ACCESS_IN_NODE=false` y las variables
+están cargadas en el contenedor — **9 workflows usan `$env`, 7 activos y funcionando**.
+Ese consejo viejo produjo 7 workflows con claves de API escritas en el JSON, y una (Resend)
+terminó publicada en GitHub al commitear un export.
+**Orden de preferencia para un secreto: credencial de n8n > `$env` > nada.**
+🔴 NUNCA hardcodear un secreto en un nodo.
 
 ### Investigar antes de decidir
 `deep-research` (con fuentes citadas) · `documentation-lookup` (Context7, para API de Meta) ·

@@ -1,0 +1,2459 @@
+/*
+ * PREVIEW (v3) — rediseño de la landing con la MECÁNICA de Fanvue sobre los
+ * tokens de marca de Onia (globals.css). Ruta de preview, noindex, NO toca `/`.
+ *
+ * Qué se copia de Fanvue (medido en data/references/design-sources/anatomia/
+ * fanvue-com.md + SINTESIS.md) y qué NO:
+ *
+ *  · BLOQUES GRANDES Y PLANOS, CERO SOMBRAS. La profundidad sale de color,
+ *    solape y escala — nunca de una sombra (Fanvue: 0 sombras). Acá no hay una
+ *    sola `box-shadow`.
+ *  · RITMO ANCLADO A `em`. Un único `font-size` por breakpoint en `.page`
+ *    reescala tipografía y espaciado en proporción. Cero `clamp()` disperso
+ *    (Fanvue ancla a 1428 `em`; la síntesis A8 confirma: ancla única, clamp
+ *    marginal).
+ *  · UN SOLO SISTEMA DE RADIOS (Fanvue tenía 14 = caos): --r-block y --r-pill.
+ *  · DISPLAY APRETADO: peso 500-600, line-height ≤1, tracking negativo leve.
+ *  · EL VERDE VA EN FORMAS Y BLOQUES, jamás texto blanco sobre verde (ese par
+ *    de Fanvue da 1.48:1). Texto claro solo sobre tinta/verde-900 (>10:1);
+ *    texto oscuro (tinta) sobre el verde señal (>9:1).
+ *  · NO se copia el peso: Fanvue pesa 29 MB. Acá, cero imágenes y CSS chico.
+ *
+ * Movimiento: entrada in-view con <Reveal> (motion.dev, reducedMotion="user"),
+ * hover de color 0.15s. Cero parallax, cero scroll-scrub salvo el conmutador de
+ * rubros (umbral discreto, medido). reduced-motion = `transition: none`, nunca
+ * 0.01ms.
+ */
+
+/* ---------------------------------------------------------------------- */
+/* Ancla del ritmo — UN font-size por breakpoint reescala todo (em)        */
+/* ---------------------------------------------------------------------- */
+
+.page {
+  /* el número que reescala la página entera */
+  font-size: 16px;
+
+  /* UN solo sistema de radios */
+  --r-block: 1.4rem;
+  --r-pill: 999px;
+
+  /* superficies planas de marca (globals.css) */
+  --paper: var(--bg);
+  --ink-block: var(--tinta); /* #12100e */
+  --green-deep: var(--verde-900); /* #013925 */
+  --green-mid: var(--verde-700);
+  --signal: var(--senal); /* #00d26a */
+
+  /* El SANGRADO: lo que sobra a cada lado del `.inner` hasta el borde de la
+     ventana. Con esto un bloque que vive dentro del `.inner` puede escaparse
+     por la derecha sin recalcular el ancho de la columna (lo usa el día del
+     hero). Va en `vw` porque tiene que medir la VENTANA, no al padre. */
+  --bleed: calc((100vw - min(74rem, 100vw - 2.4rem)) / 2);
+
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 450;
+  font-stretch: 100%;
+  /* clip (no hidden): recorta el sangrado sin crear scroll container ni
+     romper el position:sticky del conmutador de rubros */
+  overflow-x: clip;
+}
+
+@media (min-width: 768px) {
+  .page {
+    font-size: 17px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .page {
+    font-size: 18px;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Bloques planos — la profundidad es el CAMBIO DE TONO entre bloques       */
+/* ---------------------------------------------------------------------- */
+
+.block {
+  /* aire de sección en em: media pantalla de respiro que reescala */
+  padding-block: 6.5em;
+  /* el color se declara por variante; nunca hay sombra */
+}
+
+.block:first-child {
+  padding-top: 8em;
+}
+
+.inner {
+  width: min(74rem, 100% - 2.4rem);
+  margin-inline: auto;
+}
+
+/* columna de lectura, pegada al borde del inner */
+.measure {
+  max-width: 34em;
+}
+.measureWide {
+  max-width: 46em;
+}
+
+/* variantes de superficie — cada una fija su par texto/fondo accesible */
+.paper {
+  background: var(--paper);
+  color: var(--ink);
+}
+.paperDim {
+  background: var(--bg-deep);
+  color: var(--ink);
+}
+.ink {
+  background: var(--ink-block);
+  color: #edf1ef;
+}
+.green {
+  background: var(--green-deep);
+  color: #eafaf1;
+}
+.signalBlock {
+  /* verde señal como BLOQUE, con texto OSCURO (tinta): >9:1. Nunca blanco. */
+  background: var(--signal);
+  color: var(--tinta);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Tipografía — todo en em, escala anclada al font-size de .page           */
+/* ---------------------------------------------------------------------- */
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.8em;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  margin: 0 0 1.4em;
+}
+
+.kicker::before {
+  content: "";
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background: var(--signal);
+  flex: none;
+}
+
+/* el kicker sobre bloques oscuros: el punto sigue verde, el texto aclara */
+.ink .kicker,
+.green .kicker {
+  color: color-mix(in srgb, currentColor 72%, transparent);
+}
+.signalBlock .kicker {
+  color: color-mix(in srgb, var(--tinta) 78%, transparent);
+}
+.signalBlock .kicker::before {
+  background: var(--tinta);
+}
+
+/* DISPLAY — el gesto grande. line-height ≤1, tracking leve, peso 550. */
+.display {
+  font-family: var(--font-display), sans-serif;
+  font-size: 3.1em;
+  font-weight: 550;
+  font-stretch: 100%;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  text-wrap: balance;
+  margin: 0;
+  max-width: 15ch;
+}
+
+@media (min-width: 768px) {
+  .display {
+    font-size: 3.9em;
+    line-height: 0.9;
+  }
+}
+
+@media (min-width: 1280px) {
+  .display {
+    font-size: 4.6em;
+    line-height: 0.86;
+    letter-spacing: -0.025em;
+  }
+}
+
+/* palabra destacada dentro del display: color, no una 5ta fuente */
+.display em {
+  font-style: normal;
+  color: var(--accent-ink);
+}
+.ink .display em,
+.green .display em {
+  color: var(--verde-300);
+}
+.signalBlock .display em {
+  color: #fff;
+}
+
+/* título de sección: un escalón abajo del display */
+.h2 {
+  font-family: var(--font-display), sans-serif;
+  font-size: 2.1em;
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  text-wrap: balance;
+  margin: 0;
+  max-width: 18ch;
+}
+@media (min-width: 768px) {
+  .h2 {
+    font-size: 2.5em;
+    line-height: 0.95;
+  }
+}
+
+.h3 {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.3em;
+  font-weight: 550;
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+  margin: 0;
+}
+
+.lead {
+  color: color-mix(in srgb, currentColor 78%, transparent);
+  font-size: 1.15em;
+  line-height: 1.45;
+  margin: 1.3em 0 0;
+  max-width: 30em;
+  text-wrap: pretty;
+}
+
+.body {
+  color: color-mix(in srgb, currentColor 80%, transparent);
+  font-size: 1em;
+  line-height: 1.55;
+  margin: 0.6em 0 0;
+  max-width: 42em;
+  text-wrap: pretty;
+}
+
+.note {
+  color: color-mix(in srgb, currentColor 62%, transparent);
+  font-size: 0.9em;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 60ch;
+  text-wrap: pretty;
+}
+
+.mono {
+  font-family: var(--font-mono), monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Botones y links — un CTA primario, repetido idéntico                    */
+/* ---------------------------------------------------------------------- */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7em;
+  margin-top: 2em;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  min-height: 44px;
+  padding: 0.8em 1.5em;
+  border-radius: var(--r-pill);
+  border: 1.5px solid transparent;
+  font-weight: 600;
+  font-size: 1em;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  /* CTA de la casa: verde señal sobre tinta (9,2:1) */
+  background: var(--signal);
+  color: var(--tinta);
+  transition: background-color 0.15s var(--ease), transform 0.15s var(--ease);
+}
+.btn:hover {
+  background: #00be5f;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+
+/* sobre un bloque de verde señal el botón invierte: tinta sólida */
+.signalBlock .btn {
+  background: var(--tinta);
+  color: #fff;
+}
+.signalBlock .btn:hover {
+  background: #000;
+}
+
+.btnLine {
+  background: transparent;
+  border-color: color-mix(in srgb, currentColor 30%, transparent);
+  color: inherit;
+}
+.btnLine:hover {
+  background: color-mix(in srgb, currentColor 8%, transparent);
+  border-color: currentColor;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  color: var(--accent-ink);
+  text-decoration: none;
+  font-weight: 600;
+  transition: gap 0.15s var(--ease), color 0.15s var(--ease);
+}
+.link:hover {
+  gap: 0.6em;
+}
+.ink .link,
+.green .link {
+  color: var(--verde-300);
+}
+.ink .link:hover,
+.green .link:hover {
+  color: #fff;
+}
+/* sobre el verde senal el link va en TINTA. Con --accent-ink daba 3,74:1
+   (medido con Playwright a 390/768/1440); en tinta pasa de 9:1. */
+.signalBlock .link {
+  color: var(--tinta);
+}
+.signalBlock .link:hover {
+  color: #000;
+}
+
+/* ---------------------------------------------------------------------- */
+/* PANEL DIBUJADO — el resultado del cliente, no la captura del sistema     */
+/*                                                                         */
+/* Sergio, 2026-09-01, textual: "no coloques capturas literales del         */
+/* sistema, se ve mal, coloca cosas referenciales". Acá vivía una ranura de */
+/* forma+color que terminó cableada con capturas reales del producto        */
+/* (.shapeShot, muerto). Se fueron con ella los dos rectángulos             */
+/* decorativos, las barras y la etiqueta: eran composición de la ranura     */
+/* VACÍA y con el panel adentro no queda nada que decorar.                 */
+/*                                                                         */
+/* Mismo invariante que el hero aprobado ese día: todo son divs con color.  */
+/* Cero <img>, cero <svg>, cero sombra — la profundidad es la tarjeta clara */
+/* apoyada sobre el mat de color del bloque (solape + escala).             */
+/*                                                                         */
+/* ⚠️ La tarjeta NO sigue el tema. El mat (--signal / --ink-block /         */
+/* --green-deep) son colores FIJOS: atada a --surface/--ink la tarjeta se   */
+/* volvería #141A18 el día que se encienda data-theme="dark" y desaparece   */
+/* sobre el mat de tinta. Por eso dos tokens propios: blanco y --tinta, que */
+/* es el único de la paleta que no se redefine en oscuro.                  */
+/* ---------------------------------------------------------------------- */
+
+.shape {
+  position: relative;
+  width: 100%;
+  /* ratio fijo: reserva el alto de la columna antes de pintar (cero CLS).
+     Era una variable con los cinco llamadores pasándole el mismo 4/3. */
+  aspect-ratio: 4 / 3;
+  border-radius: var(--r-block);
+  overflow: hidden;
+  background: var(--green-deep);
+  display: grid;
+  padding: 7%;
+  /* El panel escala con el ANCHO de su columna (~351px en teléfono, ~560px
+     en escritorio) y no con el font-size de la página: anclado a `em` como el
+     resto del archivo, el mock quedaba 1,4x más grande en teléfono contra su
+     propio bloque. Es la única excepción al ritmo en `em`, y es por eso. */
+  container-type: inline-size;
+}
+/* En telefono el ratio se suelta y el mat crece con el panel. El 4/3 estaba
+   para RESERVAR el alto de una foto que ya no existe (el panel se dibuja, no
+   carga nada: no hay CLS que evitar), y con la columna angosta el texto llega
+   a su piso de legibilidad —11,5px— antes que el mat: cuatro filas no entraban
+   y el remate quedaba cortado por 28px (medido a 375). En escritorio el ratio
+   se queda: ahi es la forma de la columna, no un problema de alto. */
+@media (max-width: 767px) {
+  .shape {
+    aspect-ratio: auto;
+  }
+}
+.shapeInk {
+  background: var(--ink-block);
+}
+.shapePaper {
+  background: var(--bg-deep);
+  border: 1px solid var(--line-soft);
+}
+.shapeSignal {
+  background: var(--signal);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8em;
+  overflow: hidden;
+  padding: 1.1em 1.15em;
+  border-radius: calc(var(--r-block) * 0.7);
+  background: var(--panel-paper);
+  color: var(--panel-ink);
+  /* ⚠️ Los dos tokens viven ACÁ y no en .shape: el panel también se dibuja
+     dentro del conmutador de rubros, donde el mat es la ranura del rodillo y
+     el color lo pone el rubro. Atados al mat, ese panel salía sin color. */
+  --panel-paper: #fff;
+  --panel-ink: var(--tinta);
+  /* El piso NO es decorativo: a 0.6rem la fila de un pendiente caía a 8px en
+     teléfono y el panel dejaba de LEERSE, que es lo único que tiene que hacer.
+     El techo subió de 0.95rem: con el mat en 4/3 y una lista de tres filas
+     sobraban 88-116px de hueco muerto sobre el remate (medido a 1440), y el
+     panel leía a medio llenar.
+
+     ⚠️ El piso subió otra vez, de 0.72rem, y esta es la corrección importante:
+     la vez anterior se subió la BASE y no los hijos, que es donde el texto vive
+     de verdad. Con base 11,5px (lo que da 0.72rem en los tres teléfonos
+     medidos, 320/375/414) los múltiplos caían así: el sello a 0.72em = 8,3px,
+     la pastilla a 0.74em = 8,5px, la hora a 0.76em = 8,8px. O sea que el panel
+     seguía sin LEERSE en la única pantalla donde importa —la del lead que llega
+     de Instagram—, que es exactamente el defecto que el piso existía para
+     evitar. Con 0.88rem el hijo más chico queda en 10,1px. En escritorio no
+     cambia nada: ahí manda el techo. */
+  font-size: clamp(0.88rem, 3.6cqw, 1.2rem);
+  line-height: 1.35;
+  text-align: left;
+}
+
+/* ---- cabecera ---- */
+.panelHead {
+  display: flex;
+  align-items: center;
+  gap: 0.55em;
+  padding-bottom: 0.7em;
+  border-bottom: 1px solid color-mix(in srgb, var(--panel-ink) 10%, transparent);
+}
+.panelMark {
+  flex: none;
+  width: 0.55em;
+  height: 0.55em;
+  border-radius: var(--r-pill);
+  background: var(--verde-500);
+}
+.panelTitle {
+  min-width: 0;
+  font-weight: 600;
+  font-size: 0.92em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* La hora dice CUÁNDO pasó, que es medio argumento: el panel de agentes sin
+   "03:12 · cerrado" muestra qué hace el sistema, no que lo hizo de noche. */
+.panelStamp {
+  flex: none;
+  margin-left: auto;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72em;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--panel-ink) 58%, transparent);
+}
+
+/* ---- filas de pendientes (panel "agentes") ---- */
+/* El cuerpo TOMA el alto que sobra y lo reparte entre sus filas. Antes flotaba
+   centrado (margin auto) y el sobrante se juntaba todo en un hueco muerto
+   entre la última fila y el remate — 88-116px a 1440. El mat tiene ratio fijo
+   y la lista es corta: el aire va entre las filas, no al final. */
+.panelRows,
+.panelChat,
+.panelBars {
+  flex: 1 1 auto;
+  justify-content: space-evenly;
+}
+/* grid: el eje que sobra es el de bloque, y ahí manda align-content */
+.panelGrid {
+  flex: 1 1 auto;
+  align-content: space-evenly;
+}
+.panelRows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  padding: 0;
+  list-style: none;
+}
+.panelRow {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.5em 0.55em;
+  border-radius: calc(var(--r-block) * 0.45);
+  background: color-mix(in srgb, var(--verde-500) 8%, transparent);
+}
+.panelSq {
+  flex: none;
+  width: 0.72em;
+  height: 0.72em;
+  border-radius: calc(var(--r-block) * 0.14);
+  background: var(--verde-500);
+}
+.panelTxt {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 0.86em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Hora de la cita (panel dental). Mono y apagada: es el ancla de la fila, no
+   el dato que se lee primero. */
+.panelHora {
+  flex: none;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.76em;
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--panel-ink) 62%, transparent);
+}
+
+/* Pastilla de acción: el verde va en la FORMA y el texto en verde OSCURO.
+   Blanco sobre verde señal mide 1,48:1; verde-800 sobre verde-100 mide 9,4:1. */
+.panelAct {
+  flex: none;
+  padding: 0.28em 0.7em;
+  border-radius: var(--r-pill);
+  background: var(--verde-100);
+  color: var(--verde-800);
+  font-size: 0.74em;
+  font-weight: 600;
+}
+/* Estado ya resuelto (Confirmada, Enviada, Armado). Va apagada para que el
+   verde quede reservado a lo único que espera a la persona: con tres pastillas
+   verdes iguales el ojo no sabe dónde caer. Gris al 62% sobre blanco = 6,3:1. */
+.panelActSoft {
+  background: color-mix(in srgb, var(--panel-ink) 6%, transparent);
+  color: color-mix(in srgb, var(--panel-ink) 68%, transparent);
+}
+
+/* ---- caja del día por método de pago (panel "comercio") ---- */
+/* La barra es una FORMA, no una cifra: el argumento es que el día ya viene
+   cortado por método de pago. Un monto adentro de una interfaz creíble se lee
+   como plata real de un cliente, y no hay uno solo pagando todavía. */
+.panelBars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+}
+.panelBarRow {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+}
+.panelBarLbl {
+  flex: none;
+  width: 5.4em;
+  font-size: 0.84em;
+}
+.panelBarTrack {
+  flex: 1 1 auto;
+  height: 0.6em;
+  border-radius: var(--r-pill);
+  background: color-mix(in srgb, var(--panel-ink) 7%, transparent);
+}
+.panelBarFill {
+  display: block;
+  height: 100%;
+  border-radius: var(--r-pill);
+  background: var(--verde-500);
+}
+
+/* ---- sesiones del paquete (panel "estética") ---- */
+.panelDots {
+  flex: none;
+  display: flex;
+  gap: 0.25em;
+}
+.panelDot {
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: var(--r-pill);
+  background: color-mix(in srgb, var(--panel-ink) 15%, transparent);
+}
+.panelDotOn {
+  background: var(--verde-500);
+}
+
+/* ---- conversación (panel "chat") ---- */
+.panelChat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+.panelMsg {
+  max-width: 84%;
+  padding: 0.5em 0.7em;
+  border-radius: calc(var(--r-block) * 0.45);
+  font-size: 0.84em;
+}
+.panelIn {
+  align-self: flex-start;
+  border-bottom-left-radius: calc(var(--r-block) * 0.14);
+  background: color-mix(in srgb, var(--panel-ink) 7%, transparent);
+}
+.panelOut {
+  align-self: flex-end;
+  border-bottom-right-radius: calc(var(--r-block) * 0.14);
+  background: var(--verde-100);
+  color: var(--verde-900);
+}
+
+/* ---- módulos encendidos (panel "cuenta") ---- */
+/* Los seis van encendidos SIEMPRE. Un llenado progresivo sería una barra de
+   progreso, y eso es exhibir obra en la pantalla de venta. */
+.panelGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45em;
+}
+.panelPill {
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+  min-width: 0;
+  padding: 0.42em 0.7em;
+  border-radius: var(--r-pill);
+  background: var(--verde-50);
+  color: var(--verde-800);
+  font-size: 0.78em;
+  font-weight: 500;
+}
+.panelPillTxt {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* En teléfono el texto del panel ENVUELVE en vez de cortarse.
+   `text-overflow: ellipsis` protege el layout de un string largo, pero acá el
+   layout ya no necesita protección: debajo de 768px el mat suelta su
+   `aspect-ratio` y el panel crece con su contenido. Lo único que hacía el
+   ellipsis era comerse el final de la frase.
+   Medido a 320px —iPhone SE y los Android chicos, que siguen existiendo— con
+   el piso tipográfico nuevo se cortaban SEIS textos a la vez ("WhatsApp del
+   negocio" perdía 48px, o sea media frase) en la home, /agentes y /chatbot.
+   Bajar el piso para que entren los devolvía a 8px, que es el defecto que el
+   piso vino a arreglar: entre cortar la frase y partirla en dos líneas, se
+   parte. Además vuelve el panel inmune a la métrica de la fuente: si Archivo
+   no carga y entra la de sistema, esto envuelve en vez de truncar. */
+@media (max-width: 767px) {
+  .panelTitle,
+  .panelTxt,
+  .panelBarLbl,
+  .panelPillTxt {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+  /* la etiqueta de la barra deja de ser una columna fija: envuelta, 5.4em la
+     dejaban con una palabra por línea */
+  .panelBarLbl {
+    width: auto;
+    max-width: 45%;
+  }
+}
+
+/* ---- el remate ---- */
+/* Va con peso y a tamaño pleno a propósito: es lo SEGUNDO que se lee del
+   panel, no el pie de foto. En gris chico el gráfico se quedaba sin frase. */
+.panelFoot {
+  /* sin `margin: auto` arriba: el que empuja ahora es el cuerpo, que crece y
+     reparte el sobrante entre sus filas en vez de acumularlo acá */
+  margin: 0;
+  font-size: 1.05em;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--panel-ink);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Layout dos columnas (bloque de resultado / hero)                        */
+/* ---------------------------------------------------------------------- */
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3em;
+  align-items: center;
+}
+@media (min-width: 900px) {
+  .split {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: 4em;
+  }
+  .splitFlip > :first-child {
+    order: 2;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════ */
+/* HERO — "el resultado". La pieza que Sergio aprobó el 2026-09-01          */
+/* ("esta bien el hero… pero esta bien usa ese"), portada desde             */
+/* hermes-content/references/ui-patterns/hero-onia/resultado/index.html.    */
+/*                                                                         */
+/* LA IDEA: el día del negocio, dibujado. Empieza a las 09:00 — como lo     */
+/* piensa el dueño, no como lo piensa un reloj. Nueve horas de tinta: las   */
+/* que atiende él. Quince de verde señal: las que atiende Onia. El verde se */
+/* escapa por el borde derecho porque esas horas no terminan.               */
+/*                                                                         */
+/* CERO capturas, cero imagen, cero SVG, cero sombra — Sergio, 2026-09-01:  */
+/* "no coloques capturas literales del sistema, se ve mal, coloca cosas     */
+/* referenciales". Todo son divs con color y alto. Ese invariante lo        */
+/* verifica `hero.test.ts`.                                                 */
+/* ══════════════════════════════════════════════════════════════════════ */
+
+/* En teléfono el hero recupera el aire que le come el header.
+   `.block:first-child` abre con 8em, que en escritorio es el respiro de la
+   marca — pero en un teléfono son 128px de blanco DEBAJO de un header sticky
+   de 60px, y con eso la línea del asistente ("El asistente es la puerta…")
+   caía abajo del pliegue en los tres teléfonos medidos. La pieza aprobada
+   abría con 2.6em justamente por esto. Solo el hero: los otros ocho bloques
+   y las otras ocho páginas conservan su ritmo.
+   `.block.heroBlock` y no `.heroBlock` a secas: `.block:first-child` pesa
+   (0,2,0) y una clase sola perdía. */
+@media (max-width: 700px) {
+  .block.heroBlock {
+    padding-top: 2.6em;
+  }
+}
+
+/* Las dos columnas del hero son TEXTO, no texto+captura: arrancan alineadas
+   arriba (los bloques de resultado sí van centrados, porque al lado tienen
+   una imagen) y la del titular pesa más. */
+.heroTop {
+  align-items: start;
+}
+/* .lead abre con 1.3em porque en los demás bloques cuelga de un h2. Acá es
+   lo primero de su columna: con el margen puesto, la columna derecha
+   arrancaba más abajo que el titular y las dos dejaban de leerse como una. */
+.heroTop .lead {
+  margin-top: 0;
+}
+/* La frase que define QUÉ ES Onia va a tinta plena; el resto del lead queda al
+   78% como en toda la página. Scoped al hero y no a `.lead b` a secas: sobre
+   los bloques de tinta y verde hondo el lead es texto CLARO, y ahí un
+   `color: var(--ink)` convertiría la negrita en texto negro sobre negro. */
+.heroTop .lead b {
+  font-weight: 600;
+  color: var(--ink);
+}
+@media (min-width: 900px) {
+  .heroTop {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  }
+}
+
+/* El costo de no hacer nada. Va pegado al botón porque es lo que convierte
+   "entiendo el producto" en "esto me pasa a mí". La hairline reusa --line
+   (la misma del kicker): un segundo tiempo, cero elemento visual nuevo. */
+.cost {
+  color: color-mix(in srgb, currentColor 78%, transparent);
+  font-size: 1em;
+  line-height: 1.5;
+  margin: 1.3em 0 0;
+  padding-top: 1.1em;
+  border-top: 1px solid var(--line);
+  max-width: 32em;
+  text-wrap: pretty;
+}
+.cost b {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* Donde estaba el precio. Acá vivía "Desde Bs 320 al mes" (plan `basic`):
+   cierto como número y falso como promesa, porque las 15 horas que dibuja el
+   bloque verde las hace el asistente —add-on de Bs 390— más la agenda
+   pública. El piso real de la escena es Bs 860, así que el 320 no compraba lo
+   que la imagen de al lado muestra. El precio completo vive en /precios.
+
+   La línea que lo reemplaza NOMBRA al asistente (hasta acá aparecía dentro
+   del bloque verde sin presentación) y lo pone en su lugar: es la puerta, no
+   el sistema. Usa los dos únicos recursos de destaque que la pieza ya tiene —
+   color para la palabra (igual que `.display em`) y tinta en negrita para lo
+   que se compra (igual que `.lead b`). */
+.puerta {
+  color: color-mix(in srgb, currentColor 78%, transparent);
+  font-size: 0.95em;
+  line-height: 1.5;
+  margin: 1.3em 0 0;
+  max-width: 30em;
+  text-wrap: pretty;
+}
+.puerta em {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--accent-ink);
+}
+.puerta b {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ---------------------------------------------------------------------- */
+/* EL DÍA — UNA sola rejilla de 24                                          */
+/*                                                                         */
+/* La primera fila son las 24 marcas de hora; la segunda, los dos bloques   */
+/* de color plano, que abarcan 9 y 15 columnas de ESA MISMA rejilla. El     */
+/* corte de las 18:00 cae exacto en los dos porque es la misma línea, no    */
+/* dos que coinciden. El 9 y el 15 los pone el TSX (HORAS_VOS/HORAS_ONIA)   */
+/* en `--span`: la proporción sale de un solo lugar.                        */
+/* ---------------------------------------------------------------------- */
+.day {
+  margin-top: 3.4em;
+  /* se escapa por la derecha: el único gesto de profundidad de la pieza —
+     nunca una sombra. Lo recorta el `overflow-x: clip` de .page. */
+  margin-right: calc(0px - var(--bleed));
+  display: grid;
+  grid-template-columns: repeat(24, minmax(0, 1fr));
+  gap: 0.34em 0.22em;
+  align-items: stretch;
+}
+/* `display: contents` deja las marcas como hijas directas de la rejilla
+   (alineación estructural) sin perder el aria-hidden del envoltorio. */
+.ruler {
+  display: contents;
+}
+.tick {
+  height: 1.15em;
+  border-radius: calc(var(--r-block) * 0.28);
+  background: var(--ink-block);
+}
+.tickOn {
+  background: var(--signal);
+}
+
+.slab {
+  grid-column: span var(--span);
+  border-radius: var(--r-block);
+  padding: 1.4em 1.5em 1.3em;
+  min-height: 9.5em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.slabVos {
+  background: var(--ink-block);
+  color: #edf1ef; /* 16,66:1 */
+}
+.slabOnia {
+  background: var(--signal);
+  color: var(--tinta); /* 9,43:1 — jamás blanco sobre verde */
+}
+
+.hrs {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1.4em;
+}
+/* El secundario del rótulo sólo cabe en una línea cuando el bloque verde
+   pasa de ~940px. Debajo partía "18:00 → / 09:00" y encima "TODOS LOS /
+   DÍAS": dos rótulos rotos por decir algo que la lista de abajo ya dice. */
+.hrs span:last-child:not(:first-child) {
+  display: none;
+}
+@media (min-width: 940px) {
+  .hrs span:last-child:not(:first-child) {
+    display: block;
+    text-align: right;
+  }
+}
+/* Cero hex inventados: el sistema no declara un "secundario sobre bloque
+   oscuro", así que se reusa --line (~12:1 sobre tinta) en vez de fabricar un
+   gris nuevo. Sobre señal el secundario es --green-deep (8,7:1). */
+.slabVos .hrs {
+  color: var(--line);
+}
+.slabOnia .hrs {
+  color: var(--green-deep);
+}
+
+/* La escala ES el argumento: el número grande es el de las horas que hoy
+   nadie cubre. Ninguno alcanza al display, para no partir la pantalla en dos
+   titulares. */
+.amount {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 550;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  margin: 0.6em 0 0;
+}
+.slabVos .amount {
+  font-size: 2.1em;
+}
+.slabOnia .amount {
+  font-size: 3.2em;
+}
+.who {
+  font-size: 1em;
+  line-height: 1.35;
+  font-weight: 500;
+  margin: 0.5em 0 0;
+  max-width: 26ch;
+}
+
+/* Las tres cosas que de verdad pasan en esas 15 horas. Van DENTRO del verde
+   porque son el contenido de esas horas: sin ellas el bloque era un campo de
+   color esperando algo. */
+.moments {
+  list-style: none;
+  margin: 0.8em 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5em;
+  max-width: 40em;
+}
+.moments li {
+  font-size: 0.95em;
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+/* "Vos los aprobás" corrige la promesa falsa (los agentes NO mandan solos:
+   dejan el borrador en la cola y lo aprueba una persona). No se puede partir
+   en dos líneas; 16 caracteres entran a cualquier ancho, así que el nowrap
+   es seguro y no puede desbordar. */
+.cierre {
+  white-space: nowrap;
+}
+.moments b {
+  font-family: var(--font-mono), monospace;
+  font-weight: 500;
+  font-size: 0.8em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--green-deep); /* 8,7:1 sobre señal */
+}
+
+/* ---------------------------------------------------------------------- */
+/* LA BANDA — lo único que la pieza DIBUJA                                  */
+/*                                                                         */
+/* Sergio, 2026-09-01: "talvez algo mas visual dentro de los cuadros que    */
+/* muestren como el duerme o mas abajo mientras genera ingresos".           */
+/*                                                                         */
+/* Una sola forma. Dos actores, una lane cada uno, a los dos lados del      */
+/* corte de las 18:00 — y las cuatro alineadas, así que se leen de corrido  */
+/* como una banda que cruza la pieza:                                       */
+/*                                                                         */
+/*   negro · VOS  → 9 marcas paradas ....  ATENDÉS  ┐ la línea de VOS       */
+/*   verde · VOS  → 15 aplastadas .......  DORMÍS   ┘ MUERE a las 18:00     */
+/*   negro · ONIA → 9 marcas paradas ....  CON VOS  ┐ la de ONIA cruza      */
+/*   verde · ONIA → 15 paradas ..........  POR VOS  ┘ las 24 SIN CORTE      */
+/*                                                                         */
+/* Ahí está el argumento entero, dibujado: una línea se apaga, la otra no.  */
+/* Y la de ONIA está de pie también en el bloque negro porque es cierto —   */
+/* el sistema no se enciende a las 18:00, ya estaba trabajando con él.      */
+/*                                                                         */
+/* ONIA siempre va del color CONTRARIO al de su bloque (señal sobre tinta,  */
+/* tinta sobre señal): es el que no es dueño de ese bloque, y así la banda   */
+/* se sigue con el ojo aunque el fondo cambie.                              */
+/*                                                                         */
+/* Congelado FUNCIONA: con reduced-motion o en una captura las marcas ya    */
+/* están paradas y aplastadas — la historia entera está en el primer        */
+/* fotograma. La animación sólo agrega "está pasando ahora".                */
+/*                                                                         */
+/* Las marcas NO son un gráfico de nada: son las horas (9 y 15), las mismas */
+/* que cuenta la regla de arriba. Acá es donde otros ponen su facturación   */
+/* con un contador que sube; nosotros no podemos: cero clientes pagando ⇒   */
+/* cualquier cifra adentro sería fabricada.                                 */
+/* ---------------------------------------------------------------------- */
+.band {
+  display: grid;
+  gap: 0.5em;
+  margin: 0.9em 0 0;
+}
+.lane {
+  /* "ONIA" mide ~2,1em: 2,6 alcanza y le devuelve ancho al track */
+  grid-template-columns: 2.6em 1fr auto;
+  display: grid;
+  align-items: center;
+  gap: 0 0.8em;
+}
+/* mismo tratamiento que .hrs: mono, versalita, tracking. Cero recurso nuevo. */
+.laneQ,
+.laneS {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.laneS {
+  text-align: right;
+}
+.slabVos .laneQ,
+.slabVos .laneS {
+  color: var(--line); /* ~12:1 sobre tinta */
+}
+.slabOnia .laneQ,
+.slabOnia .laneS {
+  color: var(--green-deep); /* 8,7:1 sobre señal */
+}
+
+.track {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.18em;
+  height: 1.5em;
+}
+.track span {
+  flex: 1;
+  border-radius: calc(var(--r-block) * 0.14);
+}
+
+/* VOS de día: lleno, y QUIETO a propósito — él no es una máquina. */
+.laneVos .track span {
+  height: 100%;
+  background: #edf1ef; /* 16,66:1 */
+}
+/* VOS de noche: la MISMA marca, aplastada. Queda una línea muerta. */
+.laneDuerme .track span {
+  height: 0.18em;
+  background: var(--green-deep);
+}
+/* ONIA: de pie a las 24 horas, a los dos lados del corte. La onda la recorre
+   de izquierda a derecha una vez cada 5s — es el TIEMPO pasando, no un dato
+   subiendo (un dato subiendo sería una cifra inventada). El escalonado sale
+   de `--i`, que pone el TSX: 15 reglas nth-child para decir lo mismo. */
+.laneOnia .track span {
+  height: 100%;
+  transform-origin: bottom;
+  animation: onda 5s var(--ease) infinite;
+  animation-delay: calc(var(--i, 0) * 0.17s);
+}
+.slabVos .laneOnia .track span {
+  background: var(--signal); /* 9,43:1 sobre tinta */
+}
+.slabOnia .laneOnia .track span {
+  background: var(--ink-block); /* 9,43:1 sobre señal */
+}
+@keyframes onda {
+  0%,
+  62%,
+  100% {
+    transform: scaleY(0.6);
+  }
+  10% {
+    transform: scaleY(1);
+  }
+}
+
+/* 768–1279: el bloque negro son 9/24 de un ancho chico, y los dos rótulos
+   que flanquean el track le comen casi todo. Sin esto su marca cae a 6px
+   contra los 14px del verde, y se pierde justo lo que hace funcionar la
+   banda: que sea LA MISMA marca en dos estados. Achicar el rótulo la devuelve
+   a ~9px. Arriba de 1280 no hace falta: ahí miden 28 y 30. */
+@media (min-width: 768px) and (max-width: 1279px) {
+  .lane {
+    grid-template-columns: 2.3em 1fr auto;
+    gap: 0 0.5em;
+  }
+  .laneQ,
+  .laneS {
+    font-size: 0.62em;
+    letter-spacing: 0.08em;
+  }
+}
+
+@media (min-width: 768px) {
+  .slab {
+    min-height: 12em;
+    padding: 1.7em 1.9em 1.6em;
+  }
+  /* el bloque que se escapa por el borde recupera su margen derecho: la
+     etiqueta cae en el espejo exacto del margen del titular */
+  .slabOnia {
+    padding-right: calc(1.9em + var(--bleed));
+  }
+  .slabVos .amount {
+    font-size: 2.4em;
+  }
+  .slabOnia .amount {
+    font-size: 3.4em;
+  }
+  /* la hora en columna propia: la lista se lee como un horario, no como tres
+     frases sueltas */
+  .moments li {
+    display: grid;
+    grid-template-columns: 5.4em 1fr;
+    gap: 0 0.6em;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* MÓVIL: el día GIRA, no se apila.                                         */
+/*                                                                         */
+/* La misma rejilla de 24 pasa de 24 columnas a 24 FILAS; la regla se para  */
+/* en vertical al costado y los bloques abarcan 9 y 15 filas de esa misma   */
+/* rejilla. La proporción 9:15 sigue siendo espacial y exacta, y la regla    */
+/* sigue explicándola — que es lo que se perdía apilando los bloques        */
+/* sueltos. Acá mira el 70% del lead que llega por Instagram.                */
+/* ---------------------------------------------------------------------- */
+@media (max-width: 700px) {
+  /* escaparse por la derecha con 1,2rem de margen se lee como error, no como
+     gesto: en teléfono el día se queda dentro del `.inner`. */
+  .day {
+    margin-top: 2.6em;
+    margin-right: 0;
+    grid-template-columns: 1.5em minmax(0, 1fr);
+    grid-template-rows: repeat(24, minmax(0, 1fr));
+    grid-auto-flow: column;
+    gap: 0.16em 0.7em;
+  }
+  .tick {
+    height: auto; /* la marca la estira la fila */
+    border-radius: calc(var(--r-block) * 0.14);
+  }
+  /* Sin min-height, y a propósito: las 24 filas son `1fr`, así que el alto lo
+     pide el bloque que más necesita —el verde, con sus tres momentos— y el
+     negro sale de la proporción 9:15 sin negociar. Con un alto decretado el
+     negro quedaba con más de un cuarto de aire adentro. */
+  .slab {
+    grid-column: auto;
+    grid-row: span var(--span);
+    min-height: 0;
+    padding: 1.15em 1.2em;
+  }
+  .slabVos .amount {
+    font-size: 2.2em;
+  }
+  .slabOnia .amount {
+    font-size: 2.9em;
+  }
+  .moments li {
+    font-size: 0.88em;
+  }
+  .moments b {
+    margin-inline-end: 0.2em; /* sin columna propia, la hora necesita su aire */
+  }
+  /* la banda encoge, no desaparece: es lo que Sergio pidió VER, y el 70% del
+     lead mira acá. Las 15 marcas siguen siendo 15. */
+  .lane {
+    grid-template-columns: 2.4em 1fr auto;
+    gap: 0 0.6em;
+  }
+  .laneQ,
+  .laneS {
+    font-size: 0.66em;
+    letter-spacing: 0.1em;
+  }
+  .track {
+    height: 1em;
+    gap: 0.13em;
+  }
+  .band {
+    gap: 0.34em;
+    margin-top: 0.7em;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Banda de prueba — solo hechos verificables, sin logos ni testimonios    */
+/* ---------------------------------------------------------------------- */
+
+.trust {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+  border-radius: var(--r-block);
+  overflow: hidden;
+}
+@media (min-width: 768px) {
+  .trust {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+.trustCell {
+  padding: 1.6em 1.4em;
+  border-top: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+  border-left: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+}
+.trustCell:nth-child(-n + 2) {
+  border-top: 0;
+}
+@media (min-width: 768px) {
+  .trustCell {
+    border-top: 0;
+  }
+  .trustCell:first-child {
+    border-left: 0;
+  }
+}
+.trustNum {
+  font-family: var(--font-display), sans-serif;
+  font-size: 2em;
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.trustLabel {
+  color: color-mix(in srgb, currentColor 65%, transparent);
+  font-size: 0.9em;
+  line-height: 1.4;
+  margin-top: 0.5em;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Bloques de resultado — grilla de celdas planas con hairline             */
+/* ---------------------------------------------------------------------- */
+
+.cells {
+  display: grid;
+  gap: 0;
+  margin-top: 3em;
+  border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+}
+.cell {
+  padding: 1.6em 0;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.4em;
+}
+@media (min-width: 700px) {
+  .cell {
+    grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+    gap: 1em 3em;
+    align-items: start;
+  }
+}
+.cell p {
+  margin: 0;
+  color: color-mix(in srgb, currentColor 78%, transparent);
+  font-size: 1em;
+  line-height: 1.5;
+  max-width: 52ch;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Precios — tarjetas planas (borde, cero sombra); Pro = bloque de tinta   */
+/* ---------------------------------------------------------------------- */
+
+.plans {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1em;
+  margin-top: 3em;
+  align-items: stretch;
+}
+@media (min-width: 900px) {
+  .plans {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.plan {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  padding: 1.8em;
+  border-radius: var(--r-block);
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+}
+.planStar {
+  background: var(--ink-block);
+  color: #edf1ef;
+  border-color: var(--ink-block);
+}
+.planStep {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72em;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  /* 55% daba 3,93:1 a 11,5px (medido con Playwright a 390 y 1440): por debajo
+     del 4,5:1 que exige el texto chico. A 62% pasa a 4,95:1 y el escalon sigue
+     leyendose como secundario. */
+  color: color-mix(in srgb, currentColor 62%, transparent);
+}
+.planName {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.7em;
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin: 0.2em 0 0;
+}
+.planPrice {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3em;
+  margin-top: 0.5em;
+}
+.planNum {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 400;
+  font-size: 3.4em;
+  letter-spacing: -0.035em;
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
+}
+.planUnit {
+  color: color-mix(in srgb, currentColor 60%, transparent);
+  font-size: 0.9em;
+}
+.planResult {
+  color: color-mix(in srgb, currentColor 78%, transparent);
+  font-size: 0.98em;
+  line-height: 1.5;
+  margin: 0.6em 0 0;
+}
+.planList {
+  list-style: none;
+  margin: 1em 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5em;
+  color: color-mix(in srgb, currentColor 82%, transparent);
+  font-size: 0.95em;
+}
+.planList li {
+  display: grid;
+  grid-template-columns: 1.1em 1fr;
+  gap: 0.4em;
+  line-height: 1.4;
+}
+.planList li::before {
+  content: "";
+  width: 0.4em;
+  height: 0.4em;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: 0.55em;
+}
+.planStar .planList li::before {
+  background: var(--signal);
+}
+.planFoot {
+  margin-top: auto;
+  padding-top: 1.4em;
+}
+.planFoot .btn {
+  width: 100%;
+}
+
+/* fila de datos (add-ons, no incluye, condiciones) */
+.rows {
+  display: grid;
+  gap: 0;
+  margin-top: 2.4em;
+  border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+}
+.row {
+  padding: 1.3em 0;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.3em 2em;
+}
+/*
+ * Las columnas se definen en .rows y cada fila las HEREDA con subgrid. Antes
+ * cada .row era su propia grilla: la columna del precio es `auto`, asi que se
+ * medía fila por fila y el arranque de la columna del medio bailaba hasta 45px
+ * entre filas (visto renderizado a 1440). Con subgrid la columna del precio se
+ * mide una vez contra la fila más larga y las tres columnas quedan a plomo.
+ */
+@media (min-width: 700px) {
+  .rows {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) auto;
+    column-gap: 2em;
+  }
+  .row {
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    align-items: baseline;
+  }
+}
+.rowName {
+  font-weight: 600;
+}
+.rowText {
+  color: color-mix(in srgb, currentColor 72%, transparent);
+  font-size: 0.95em;
+  line-height: 1.5;
+  margin: 0;
+}
+.rowPrice {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.9em;
+  white-space: nowrap;
+  color: color-mix(in srgb, currentColor 85%, transparent);
+}
+@media (min-width: 700px) {
+  .rowPrice {
+    text-align: right;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* FAQ — <details> nativo, cero JS, no esconde contenido                   */
+/* ---------------------------------------------------------------------- */
+
+.faq {
+  display: grid;
+  gap: 0;
+  margin-top: 3em;
+  border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+}
+.faqItem {
+  border-bottom: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+}
+.faqQ {
+  cursor: pointer;
+  list-style: none;
+  padding: 1.2em 2em 1.2em 0;
+  position: relative;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.15em;
+  font-weight: 550;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+.faqQ::-webkit-details-marker {
+  display: none;
+}
+.faqQ::after {
+  content: "+";
+  position: absolute;
+  right: 0;
+  top: 1.1em;
+  font-weight: 400;
+  font-size: 1.2em;
+  color: var(--accent-ink);
+  transition: transform 0.15s var(--ease);
+}
+.faqItem[open] .faqQ::after {
+  transform: rotate(45deg);
+}
+.faqA {
+  margin: 0;
+  padding: 0 2em 1.4em 0;
+  color: color-mix(in srgb, currentColor 78%, transparent);
+  font-size: 1em;
+  line-height: 1.55;
+  max-width: 62ch;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Header / footer del preview — chrome slim, CTA siempre visible           */
+/* ---------------------------------------------------------------------- */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line-soft);
+}
+.headerInner {
+  width: min(74rem, 100% - 2.4rem);
+  margin-inline: auto;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.wordmark {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 600;
+  font-size: 1.4rem;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  text-decoration: none;
+}
+.wordmark b {
+  color: var(--signal);
+}
+.nav {
+  display: none;
+  gap: 1.4rem;
+  margin-left: auto;
+  font-size: 0.95rem;
+}
+/* 940px y no 860: con cinco apartados + Entrar + CTA, a 860 la fila se
+   desborda y el boton se cae (medido). Debajo manda la hamburguesa. */
+@media (min-width: 940px) {
+  .nav {
+    display: flex;
+    align-items: center;
+  }
+}
+.navLink {
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition: color 0.15s var(--ease);
+}
+.navLink:hover {
+  color: var(--ink);
+}
+
+.headerCta {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+@media (min-width: 940px) {
+  .headerCta {
+    margin-left: 1.4rem;
+  }
+}
+
+/* "Entrar" solo en escritorio: en telefono vive dentro del menu */
+.headerLogin {
+  display: none;
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: color 0.15s var(--ease);
+}
+.headerLogin:hover {
+  color: var(--ink);
+}
+@media (min-width: 940px) {
+  .headerLogin {
+    display: inline-flex;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Menu de telefono — boton plano + <dialog> modal                          */
+/* ---------------------------------------------------------------------- */
+
+.burger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--r-pill);
+  border: 1.5px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.15s var(--ease);
+}
+.burger:hover {
+  background: var(--bg-deep);
+}
+@media (min-width: 940px) {
+  .burger {
+    display: none;
+  }
+}
+.burgerBars {
+  display: grid;
+  gap: 3px;
+  width: 15px;
+}
+.burgerBars > span {
+  display: block;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+/* La hoja. Bloque plano a pantalla completa, cero sombra. El navegador pone
+   el foco atrapado, el Escape y el fondo inerte — por eso es <dialog>. */
+.sheet {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--paper);
+  color: var(--ink);
+}
+.sheet::backdrop {
+  background: color-mix(in srgb, #12100e 55%, transparent);
+}
+.sheetInner {
+  width: min(74rem, 100% - 2.4rem);
+  margin-inline: auto;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-block: 0.65rem 2.4rem;
+}
+.sheetTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 60px;
+}
+.sheetClose {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.5rem 1rem;
+  border-radius: var(--r-pill);
+  border: 1.5px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s var(--ease);
+}
+.sheetClose:hover {
+  background: var(--bg-deep);
+}
+.sheetNav {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.2rem;
+}
+.sheetGroup {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 1.6rem 0 0.3rem;
+}
+.sheetGroup:first-child {
+  margin-top: 0;
+}
+.sheetLink {
+  display: block;
+  padding: 0.7rem 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.5rem;
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line-soft);
+  transition: color 0.15s var(--ease);
+}
+.sheetLink:hover {
+  color: var(--accent-ink);
+}
+.sheetFoot {
+  margin-top: auto;
+  padding-top: 2rem;
+  display: grid;
+  gap: 0.7rem;
+}
+.sheetLegal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+}
+.sheetLegal a {
+  color: var(--ink-faint);
+  text-decoration: underline;
+}
+
+/* foco visible en TODO el preview, una sola regla (el <dialog> tambien
+   cuelga de .page aunque se pinte en el top layer) */
+.page a:focus-visible,
+.page button:focus-visible,
+.page summary:focus-visible {
+  outline: 2px solid var(--accent-ink);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Pie — mapa completo del sitio (en telefono era el UNICO acceso)          */
+/* ---------------------------------------------------------------------- */
+
+.footer {
+  background: var(--ink-block);
+  color: color-mix(in srgb, #edf1ef 78%, transparent);
+  padding-block: 3.5em 2.4em;
+  /* El area segura del telefono (la barra de gestos del iPhone) la absorbe el
+     PIE y no el body: asi ese margen queda del negro del pie. Puesto en el
+     body pintaba del fondo claro y se leia como una franja rota debajo del
+     pie. Va despues de `padding-block` a proposito: lo pisa. */
+  padding-bottom: calc(2.4em + env(safe-area-inset-bottom, 0px));
+  font-size: 0.95rem;
+}
+.footerInner {
+  width: min(74rem, 100% - 2.4rem);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.4rem;
+}
+/* Dos apartados a 700px y los cuatro recien a 900: con Servicios adentro, tres
+   navs mas la marca a 700px dejan columnas de ~9rem y "Marketing IA" parte en
+   dos renglones. Entre 700 y 900 van 2x2. */
+@media (min-width: 700px) {
+  .footerInner {
+    grid-template-columns: 1fr 1fr;
+    gap: 2.4rem 3rem;
+  }
+}
+@media (min-width: 900px) {
+  .footerInner {
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 3rem;
+  }
+}
+.footerBrand {
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+}
+.footerTag {
+  margin: 0;
+  max-width: 24ch;
+}
+.footer a {
+  color: #edf1ef;
+  text-decoration: none;
+}
+.footer a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+.footerNav {
+  display: grid;
+  gap: 0.65rem;
+  align-content: start;
+  justify-items: start;
+}
+.footerGroup {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, #edf1ef 70%, transparent);
+  margin: 0 0 0.2rem;
+}
+.footerLegal {
+  width: min(74rem, 100% - 2.4rem);
+  margin: 2.4rem auto 0;
+  padding-top: 1.4rem;
+  border-top: 1px solid color-mix(in srgb, #edf1ef 20%, transparent);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.4rem;
+  font-size: 0.9rem;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Comparativa — una fila plana por contendiente. Nada de tabla ancha: a    */
+/* 390px una tabla de cinco columnas desborda si o si.                      */
+/* ---------------------------------------------------------------------- */
+
+.cmp {
+  display: grid;
+  gap: 0;
+  margin-top: 3em;
+  border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+}
+.cmpRow {
+  padding: 1.9em 0;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.2em;
+}
+@media (min-width: 800px) {
+  .cmpRow {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+    gap: 1em 3em;
+  }
+}
+/* la fila de Onia cambia de TONO, que es como este sistema hace profundidad */
+.cmpOnia {
+  background: var(--ink-block);
+  color: #edf1ef;
+  border-bottom: 0;
+  border-radius: var(--r-block);
+  padding: 1.9em 1.6em;
+  margin-top: 0.8em;
+}
+.cmpEjemplos {
+  margin: 0.5em 0 0;
+  color: color-mix(in srgb, currentColor 72%, transparent);
+  font-size: 0.9em;
+  line-height: 1.45;
+}
+.cmpPrecio {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.6em;
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin: 0.7em 0 0;
+}
+.cmpVeredicto {
+  margin: 0;
+  color: color-mix(in srgb, currentColor 85%, transparent);
+  font-size: 1em;
+  line-height: 1.55;
+  max-width: 52ch;
+}
+.ejes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin: 1em 0 0;
+  padding: 0;
+  list-style: none;
+}
+.eje {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45em;
+  padding: 0.4em 0.8em;
+  border-radius: var(--r-pill);
+  border: 1px solid color-mix(in srgb, currentColor 26%, transparent);
+  font-size: 0.85em;
+  line-height: 1.3;
+  color: color-mix(in srgb, currentColor 85%, transparent);
+}
+.ejeMark {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.85em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+}
+.cmpOnia .ejeMark {
+  color: var(--verde-300);
+}
+.ejeOff .ejeMark {
+  color: color-mix(in srgb, currentColor 70%, transparent);
+}
+
+/* dos tarjetas en vez de tres (contacto) */
+@media (min-width: 900px) {
+  .plansTwo {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* eyebrow de preview (interno, no venta) */
+.previewFlag {
+  background: var(--verde-900);
+  color: #eafaf1;
+  text-align: center;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.5em 1rem;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Conmutador de RUBROS — mecánica MEDIDA de Fanvue, portada del bloque     */
+/* vanilla (packages/blocks/src/sticky-niche-switcher.ts) y de la versión   */
+/* React verificada (components/landing-v2/rubros.tsx). El JS solo escribe   */
+/* --niche-i; el CSS deriva el rodillo y la opacidad de las palabras. Cero   */
+/* GSAP: conmutador DISCRETO por umbral.                                     */
+/*                                                                          */
+/* El rodillo lleva el PANEL DIBUJADO de cada rubro, no una captura: cada    */
+/* ranura es el MISMO mat de color de <Shape> (tarjeta clara sobre color,    */
+/* cero sombra) y adentro va el panel del rubro. Hasta el 2026-09-01 llevó   */
+/* cinco .webp del producto, con el recorte horneado en el archivo —el texto */
+/* salía cortado a mitad de palabra— y con sombra propia.                    */
+/* ---------------------------------------------------------------------- */
+
+.runway {
+  --niche-i: 0;
+  --niche-step: 720px; /* scroll por rubro */
+  /* Alto de UNA ranura del rodillo — el paso exacto del traslado. El ancho
+     sale de acá por el ratio 4/3 del mat, el mismo de <Shape> en todo el
+     sitio. Era 560 de alto por 0.853 de ancho: vertical, porque adentro iba
+     una captura de teléfono. Un panel dibujado es una lista, y en vertical
+     dejaba media tarjeta vacía. */
+  --niche-slot: 430px;
+  --niche-stage: 500px; /* alto del pegado */
+  --niche-dur: 0.5s;
+  --niche-ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  height: calc(var(--niche-step) * var(--niche-run));
+  margin-top: 2.4em;
+}
+.marks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+/* cada banda mide UN rubro de alto, no 1px: un centinela puntual se saltea
+   entre dos frames y el índice queda clavado (bug medido en el vanilla) */
+.mark {
+  position: absolute;
+  left: 0;
+  width: 1px;
+  height: var(--niche-step);
+}
+.stage {
+  position: sticky;
+  top: max(calc(var(--header-h) + 16px), calc((100vh - var(--niche-stage)) / 2));
+  min-height: var(--niche-stage);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 3em;
+}
+.stageMid {
+  text-align: center;
+}
+.words {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.29em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.word {
+  display: block;
+  font-family: var(--font-display), sans-serif;
+  font-size: 2em;
+  font-weight: 550;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-decoration: none;
+  opacity: 0.25;
+  transition: opacity var(--niche-dur) var(--niche-ease);
+}
+/* Fluida y no 3em fijos: la palabra mas larga (Importadora) medida a 48px
+   ocupa ~278px, y entre 768 y 1000 la columna que le queda al lado de la
+   tarjeta es menor — se cortaba contra el borde del inner. */
+@media (min-width: 768px) {
+  .word {
+    font-size: min(3em, 5vw);
+  }
+}
+.word[aria-current="true"] {
+  opacity: 1;
+}
+.word:hover {
+  opacity: 0.7;
+}
+.word[aria-current="true"]:hover {
+  opacity: 1;
+}
+.word:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 6px;
+  border-radius: 6px;
+  opacity: 1;
+}
+/* la tarjeta ES la ventana: overflow hidden + una tira que se traslada un
+   slot exacto por rubro (rodillo medido, no cross-fade).
+   Sin borde, sin fondo y SIN SOMBRA: cada ranura es un mat de color entero, se
+   recorta sola contra el papel de la sección y la profundidad la da el color.
+   El borde y la sombra existían para que la captura casi blanca no se fundiera
+   con el fondo — y contradecían el lenguaje aprobado (cero sombras). */
+.card {
+  position: relative;
+  width: calc(var(--niche-slot) * 4 / 3);
+  height: var(--niche-slot);
+  border-radius: var(--r-block);
+  overflow: hidden;
+}
+.roll {
+  display: flex;
+  flex-direction: column;
+  transform: translateY(calc(var(--niche-i) * var(--niche-slot) * -1));
+  transition: transform var(--niche-dur) var(--niche-ease);
+}
+/* Cada ranura es el mat del rubro: color de fondo (lo pone el JSX con el token
+   del rubro) y el panel dibujado apoyado encima. Misma composición que .shape,
+   y por eso el mismo container-type: el panel escala con el ANCHO de la ranura
+   y no con el font-size de la página. */
+.slot {
+  position: relative;
+  width: 100%;
+  height: var(--niche-slot);
+  display: grid;
+  padding: 6%;
+  overflow: hidden;
+  container-type: inline-size;
+}
+
+@media (max-width: 1023px) {
+  .runway {
+    --niche-slot: 320px;
+    --niche-stage: 400px;
+  }
+}
+
+/* apilado: en teléfono la tarjeta no entra al lado; mismo apilado sirve para
+   reduced-motion. Las bandas se apagan, el índice vuelve a 0 solo. */
+@media (max-width: 767px), (prefers-reduced-motion: reduce) {
+  .runway {
+    height: auto;
+  }
+  .marks {
+    display: none;
+  }
+  .stage {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    gap: 2em;
+  }
+  /* palabras PRIMERO: la afirmación antes que la prueba */
+  .stageMid {
+    order: -1;
+  }
+  .word {
+    opacity: 1;
+  }
+  /* El tope NO es para el teléfono (ahí manda el 100%): este apilado también
+     es el de reduced-motion, y en un escritorio de 1440 sin el tope los cinco
+     paneles salían de 1184px de ancho, con el mock más grande que el texto de
+     la sección. */
+  .card {
+    width: min(100%, 30rem);
+    height: auto;
+    margin-inline: auto;
+    overflow: visible;
+  }
+  .roll {
+    transform: none;
+  }
+  /* Cada panel dice su propio rubro en el sello de la cabecera ("Dental",
+     "Comercio"...), así que acá NO va ninguna etiqueta encima: la que había se
+     apoyaba sobre las filas del panel y tapaba una. */
+  .slot {
+    height: auto;
+    aspect-ratio: auto;
+    margin-bottom: 14px;
+    border-radius: var(--r-block);
+  }
+}
+
+/* transition: none — NUNCA 0.01ms (con 0.01ms las propiedades discretas
+   siguen animando y el estado queda a medio camino, invisible pero vivo) */
+@media (prefers-reduced-motion: reduce) {
+  .word,
+  .roll,
+  .btn,
+  .link,
+  .navLink,
+  .headerLogin,
+  .burger,
+  .sheetClose,
+  .sheetLink,
+  .faqQ::after,
+  /* la onda del hero: congelada la banda sigue contando la historia entera
+     —marcas paradas contra marcas aplastadas—, así que apagarla no cuesta
+     nada. Es el mismo cuadro que sale en una captura de pantalla. */
+  .laneOnia .track span {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Fotos de CONTEXTO — la persona en su negocio, NUNCA pantalla de producto */
+/*                                                                         */
+/* La interfaz NO se fotografía: se dibuja, y eso vive en .shape / .panel.  */
+/* Estas fotos muestran el MOMENTO, no el sistema; ninguna tiene pantalla  */
+/* legible. Reglas, shot list y gate de aprobación:                        */
+/* hermes-content/docs/ONIA_WEB_IMAGENES_DE_CONTEXTO.md                    */
+/*                                                                         */
+/* El envoltorio declara aspect-ratio (cero CLS) y pinta el verde profundo */
+/* debajo: es lo que se ve mientras carga, y evita el destello blanco —    */
+/* misma decisión que el mat de cada rubro en el conmutador. La hairline  */
+/* porque las fotos vienen con los blancos frenados a ~96% y sin ella el   */
+/* borde se funde con el papel #F9FBFA. Cero sombra, como todo el archivo. */
+/* ---------------------------------------------------------------------- */
+
+.foto {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--foto-ratio, 4 / 3);
+  border-radius: var(--r-block);
+  border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+  overflow: hidden;
+  background: var(--green-deep);
+}
+
+.fotoImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---- Portada · banda "un día con Onia": tres momentos en fila --------- */
+
+.scenes {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.6em;
+  margin-top: 3.2em;
+}
+@media (min-width: 860px) {
+  .scenes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2em;
+  }
+}
+
+/* el momento del día: mismo registro tipográfico que el kicker, un escalón
+   abajo — es una marca de tiempo, no un segundo título de sección */
+.sceneHora {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.78em;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  margin: 1.4em 0 0.5em;
+}
+
+.sceneTexto {
+  margin: 0;
+  color: color-mix(in srgb, currentColor 82%, transparent);
+  font-size: 1em;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* ---- /rubros · la foto del rubro entra como tercera columna ----------- */
+/* Modificador que se APLICA junto a .cell (no la redefine): la celda pasa
+   de dos columnas a tres y centra, porque con la foto la fila deja de ser
+   un renglón de texto y pasa a tener altura propia. */
+
+.cellFoto {
+  gap: 1.2em;
+  padding: 2em 0;
+}
+@media (min-width: 700px) {
+  .cellFoto {
+    /* la columna del nombre se aprieta a propósito: con la foto la fila gana
+       altura, y el gutter ancho que heredaba de .cell (0.7fr) dejaba un vacío
+       de ~220px entre el nombre y el texto que se leía como un error */
+    grid-template-columns: minmax(0, 0.32fr) minmax(0, 1.05fr) minmax(0, 0.8fr);
+    gap: 1em 2.4em;
+    align-items: center;
+  }
+}
+
+.cellTexto {
+  display: grid;
+  gap: 0.45em;
+}
+
+/* el RESULTADO manda sobre la lista de features: dos clases le ganan a la
+   regla `.cell p` que apaga el texto al 78% */
+.cellTexto .rubroResultado {
+  color: inherit;
+  font-size: 1.06em;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Add-ons — el mostrador                                                  */
+/*                                                                         */
+/* Sergio, 2026-08-23: "dale más importancia a los add-ons, que se vean    */
+/* más, mirá cómo ofrecen las startups". Hasta hoy los add-ons eran filas  */
+/* de `.rows`: nombre en 600, copy al 72 % y el precio en mono 0.9em al    */
+/* 85 %, alineado a la derecha. Eso no es una oferta, es la letra chica de */
+/* un contrato — y ahí adentro vive el margen.                             */
+/*                                                                         */
+/* Lo que hacen las startups que venden bien no es agrandar la tabla: es   */
+/* ASIMETRÍA. Un add-on estrella con superficie propia (Intercom con Fin,  */
+/* Notion con AI) y el resto como carta de precios legible. Acá:           */
+/*                                                                         */
+/*   · `.offerStar` — panel de verde-900 DENTRO del bloque de tinta. La    */
+/*     profundidad es tono sobre tono y solape de superficie, nunca una    */
+/*     sombra (misma ley que el resto del archivo: cero `box-shadow`).     */
+/*   · `.offerList` — los demás, con el precio en verde señal y el        */
+/*     resultado en tipografía de lectura, no de nota al pie.              */
+/*                                                                         */
+/* LA REGLA QUE MANTIENE AL PLAN COMO LA COMPRA PRINCIPAL: en toda esta    */
+/* sección no hay un solo `.btn`. Botón = plan; link de texto = add-on. Y  */
+/* `.offerNum` es 3.2em contra los 3.4em de `.planNum`: el número del      */
+/* add-on se ve, pero nunca le gana al del plan.                          */
+/* ---------------------------------------------------------------------- */
+
+.offerStar {
+  margin-top: 3em;
+  padding: 1.8em;
+  border-radius: var(--r-block);
+  background: var(--green-deep);
+  color: #eafaf1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.6em;
+}
+@media (min-width: 860px) {
+  .offerStar {
+    /* asimétrica a propósito: el argumento pesa más que el número, pero el
+       número tiene columna propia y no queda de apéndice al final de un
+       párrafo (que es exactamente lo que hacía `.rowPrice`). */
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: 3.2em;
+    padding: 2.8em 3em;
+    align-items: start;
+  }
+}
+
+/* el nombre del add-on es un RESULTADO, no una función: sale de
+   content/chatbot-precios.ts → `nombre` ("No pierdo al que escribe"), que es
+   como lo diría el dueño del negocio. Un escalón por debajo del `.h2` de la
+   sección (2.1/2.5em): el add-on es producto, no es el título. */
+.offerName {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.7em;
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+  margin: 0.35em 0 0;
+  max-width: 15ch;
+  text-wrap: balance;
+}
+@media (min-width: 860px) {
+  .offerName {
+    /* 1.95em y no 2.1em: contra el `.h2` de la sección (2.5em) el salto queda
+       en 1,28x — por encima del 1,25 que este sitio usa como mínimo entre
+       escalones. A 2.1em el salto caía a 1,19x y el nombre del add-on y el
+       título de la sección se leían como el mismo nivel. */
+    font-size: 1.95em;
+  }
+}
+
+/* El link del panel va en verde SEÑAL y no en el verde-300 que heredaría de
+   `.ink .link`. NO es por contraste: medidos con Playwright sobre el verde-900
+   del panel, verde-300 da 7,79:1 y señal 6,46:1 — gana el verde-300. Los dos
+   pasan AA de sobra, así que la decisión la toma el ROL: señal es el color de
+   lo accionable en todo el sitio (el `.btn`, el punto del kicker), y este link
+   es lo único accionable del bloque. Pintarlo del verde de texto lo escondería
+   justo donde el add-on tiene que poder abrirse. */
+.offerStar .link {
+  color: var(--signal);
+}
+.offerStar .link:hover {
+  color: #fff;
+}
+
+/* columna del precio. El filete de 1px es REGLA DE COLUMNA (separa dos
+   columnas de igual jerarquía), no una barra de acento pegada al costado de
+   una tarjeta. */
+.offerRail {
+  border-top: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+  padding-top: 1.5em;
+}
+@media (min-width: 860px) {
+  .offerRail {
+    border-top: 0;
+    border-left: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+    padding-top: 0;
+    padding-left: 3em;
+  }
+}
+
+.offerPrice {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3em;
+  flex-wrap: wrap;
+}
+.offerNum {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 400;
+  font-size: 3.2em;
+  letter-spacing: -0.035em;
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
+}
+.offerUnit {
+  color: color-mix(in srgb, currentColor 74%, transparent);
+  font-size: 0.95em;
+}
+.offerNote {
+  margin: 0.8em 0 0;
+  color: color-mix(in srgb, currentColor 80%, transparent);
+  font-size: 0.95em;
+  line-height: 1.45;
+  max-width: 26em;
+}
+
+/* EL ANCLAJE. Un precio suelto es un costo; anclado a algo que el comprador
+   ya paga, es una comparación. La fuente legal se muestra en pantalla — un
+   anclaje sin fuente es una cifra inventada. */
+.offerAnchor {
+  margin: 1.3em 0 0;
+  padding-top: 1.3em;
+  border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  font-size: 0.95em;
+  line-height: 1.5;
+  color: color-mix(in srgb, currentColor 82%, transparent);
+  max-width: 30em;
+  text-wrap: pretty;
+}
+.offerAnchor b {
+  color: var(--signal);
+  font-weight: 600;
+}
+
+/* ---- los otros add-ons: carta de precios, no nota al pie -------------- */
+
+.offerListLabel {
+  margin: 3.4em 0 0;
+}
+
+.offerList {
+  display: grid;
+  gap: 0;
+  margin-top: 1.2em;
+  border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+}
+@media (min-width: 760px) {
+  .offerList {
+    /* dos columnas y no cuatro: cuatro celdas iguales en fila es la grilla de
+       tarjetas que este archivo evita en todas partes. En dos columnas cada
+       entrada conserva ancho de lectura y el bloque no se vuelve un menú. */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 3.5em;
+  }
+  /* El filete vive en la CELDA, no en la fila: con una cantidad IMPAR de
+     entradas la última fila deja la celda derecha vacía y la regla horizontal
+     queda CORTADA a mitad de ancho. Pasó al retirar "Inventario avanzado"
+     (2026-08-27): la lista bajó de 4 (2x2, cerraba) a 3 y el bloque quedó con
+     media línea colgando, en la portada y en /precios.
+     Se arregla por la PARIDAD y no por el número 3: la última entrada toma la
+     fila entera cuando sobra, y su filete vuelve a llegar de punta a punta.
+     Sirve para 3, 5 o 7 — y con un número par ni se aplica. */
+  .offerItem:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+  /* ...pero solo se estira el FILETE. El encabezado se queda del ancho de una
+     columna (la mitad menos medio `column-gap`) para que el precio caiga en la
+     misma x que los de la columna izquierda de arriba. Sin esto, el precio de
+     la última fila se iría al borde derecho y la carta perdería su columna de
+     precios, que es lo único que la hace leerse como carta. */
+  .offerItem:last-child:nth-child(odd) .offerItemHead {
+    max-width: calc(50% - 1.75em);
+  }
+}
+.offerItem {
+  padding: 1.5em 0;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+}
+.offerItemHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.35em 1.2em;
+}
+.offerItemName {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.2em;
+  font-weight: 550;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  margin: 0;
+}
+/* el link se lleva la tipografía del nombre en vez de volverse un `.link`
+   verde suelto: el add-on que tiene apartado propio se abre desde su NOMBRE,
+   que es donde el ojo ya está. */
+.offerItemName a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--signal) 55%, transparent);
+  transition: color 0.15s var(--ease), border-color 0.15s var(--ease);
+}
+.offerItemName a:hover {
+  color: var(--signal);
+  border-bottom-color: var(--signal);
+}
+/* el precio deja de ser mono 0.9em al 85 % alineado a la derecha: pasa a
+   verde señal, a tamaño de lectura y en la MISMA línea de base que el
+   nombre. Es lo primero que se ve de cada entrada después del nombre. */
+.offerItemPrice {
+  font-family: var(--font-mono), monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.98em;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  color: var(--signal);
+}
+.offerItemText {
+  margin: 0.6em 0 0;
+  color: color-mix(in srgb, currentColor 80%, transparent);
+  font-size: 0.96em;
+  line-height: 1.5;
+  max-width: 46ch;
+  text-wrap: pretty;
+}
+
+/* cierre de la sección: Grupo y el link al detalle, separados por aire y no
+   por otro filete — el bloque ya tiene suficientes reglas horizontales. */
+.offerFoot {
+  margin-top: 2.6em;
+}
+
+/* El "+" que marca el precio como ADITIVO: se SUMA al plan, no lo reemplaza.
+   Robado literal de Shopify, que merchandisea su único add-on como `+$89/mo`
+   (shopify.com/pricing, banda "But wait, there's more"). Cuesta un
+   pseudo-elemento y le ahorra al lector la única objeción real de un add-on:
+   "¿esto reemplaza mi plan o se le suma?". En el número grande va elevado y
+   al 70 % para que no compita con la cifra; en la carta va a color pleno
+   porque ahí el precio ES el elemento que tiene que verse. */
+.offerNum::before {
+  content: "+";
+  font-size: 0.42em;
+  vertical-align: 0.95em;
+  margin-right: 0.1em;
+  color: color-mix(in srgb, currentColor 70%, transparent);
+}
+.offerItemPrice::before {
+  content: "+";
+  margin-right: 0.2em;
+  font-weight: 400;
+}

@@ -1,0 +1,13 @@
+node_modules/
+.next/
+
+# Esta app vive DENTRO del workspace pnpm de web-factory (pnpm-workspace.yaml: apps/*).
+# Un package-lock.json acá no lo lee nadie y encima invita a correr `npm install`, que es
+# lo que dejó a onia.com.bo nueve dias sin publicarse: el deploy muere en
+# `pnpm install --frozen-lockfile` cuando pnpm-lock.yaml no conoce las deps de esta app.
+# Se instala SIEMPRE desde web-factory/ con pnpm. Ver README.
+package-lock.json
+yarn.lock
+
+# Artefacto incremental de tsc: se regenera en cada typecheck y solo ensucia el diff.
+tsconfig.tsbuildinfo

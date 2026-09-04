@@ -1,4 +1,24 @@
 Loop del carril **CONTENIDO** de ONIA (Lucía, @oniahq, marca personal de Sergio). Arrancás sin
+
+## OBJETIVO (medible)
+
+**El feed de @oniahq está vivo: se publican las piezas que YA existen.** **Meta:** ≥ 1 pieza por
+día lista y en el tablero como `needs_input` con su ruta para que Sergio la publique; el contador
+de publicadas de `contenido.md` sube; **cero producción nueva mientras haya 0 publicadas**.
+
+## CÓMO SE MIDE al arrancar
+
+```
+cd /root/loops/onia-hermes-contenido-cola
+grep -cE "^- \[x\].*publicad" hermes-content/docs/cola/contenido.md; grep -ciE "publicad[oa]" hermes-content/docs/cola/contenido.md    # publicadas según la cola
+timeout 60 chromium --headless --no-sandbox --dump-dom "https://www.instagram.com/oniahq/" 2>/dev/null | grep -oE '"edge_owner_to_timeline_media":\{"count":[0-9]+|content="[0-9]+ Posts' | head -1   # posts reales; si IG bloquea, se escribe "no medido", NUNCA "0"
+/root/bin/onia-tablero.sh list | grep -iE "publicar|post|reel|carrusel|historia" | head        # piezas esperando que Sergio publique
+find hermes-content -newermt "$(date -u -d '-7 days' '+%F %T')" -name '*.png' | grep -ciE "carousel|carrusel|reel|post"   # ¿se produjo en vez de publicar? (debe ser 0 mientras el feed esté en 0)
+```
+
+La línea `OBJETIVO:` es `publicadas N (feed real M | no medido) · esperando que Sergio publique
+K · producidas esta semana J`.
+
 memoria: todo está en los archivos.
 
 # DÓNDE ESTÁS CORRIENDO — leelo antes que nada
@@ -95,72 +115,27 @@ de la tabla "Apagados a propósito"** de `loops.md`.
 PARÁ y avisá por `onia-tg.sh`. `git status --short` — si hay cambios ajenos sin commitear, NO
 toques nada: auditá y reportá.
 
-## Las ramas de contenido, y por qué no se pisan
+## Las TRES ramas de contenido, y por qué no se pisan
 
-Medido el 2026-09-03 enumerando las **74** ramas de `git ls-remote --heads origin`:
+Medido el 2026-09-02. Son tres líneas vivas y **cada una tiene dueño**:
 
 | Rama | Dueño | Qué es |
 |---|---|---|
 | `claude/ads-creatividades-publicos` | **vos** | esta cola |
+| `claude/carril-contenido` | **Sergio, en su propia sesión** | 195 commits suyos |
 | `claude/lucia-vps` | el loop `lucia` del VPS | producción de Lucía |
-| ~~`claude/carril-contenido`~~ | — | **ya no existe en `origin`** (medido 03-sep 03:44 UTC) |
 
-⚠️ **`claude/carril-contenido` desapareció, y eso cambia el arranque de esta vuelta.** El 02-sep
-figuraba como la rama de Sergio con 195 commits suyos. El 03-sep **no está entre las 74 ramas del
-remoto**, no tiene worktree en `git worktree list`, y `.git/logs/refs/remotes/origin/claude/` —que
-tiene las otras 17— no la registra. No es que no se haya hecho `fetch`: no existe.
-
-**Lo que NO está medido y no hay que suponer:** si se mergeó a `main` antes de borrarse o si se
-perdió trabajo. Desde el VPS no se puede ver (no hay `gh` instalado). Es una mirada de Sergio, y
-está anotada en el radar.
-
-🔴 **Si vuelve a aparecer, sigue valiendo: NUNCA escribas ni commitees en su worktree.** Esa rama
-la maneja Sergio y su árbol suele tener trabajo suyo sin commitear. Si tu lado quedó con algo que
-a él le sirve, va por `onia-tg.sh`, no por commit.
+🔴 **NUNCA escribas ni commitees en el worktree de `claude/carril-contenido`.** Esa rama la maneja
+Sergio y su árbol suele tener trabajo suyo sin commitear. Si tu lado quedó con algo que a él le
+sirve, va por `onia-tg.sh`, no por commit.
 
 ## Trabajar
 
-Antes de leer la cola. **Copiá el bloque entero: el `if` es el arreglo, no un adorno.**
+Antes de leer la cola:
 
     cd /root/loops/onia-hermes-contenido-cola
-    git fetch origin --quiet
-    OTRA=origin/claude/carril-contenido
-    RUTA=hermes-content/docs/cola/contenido.md
-    rm -f /tmp/cola_b.md
-    if ! git rev-parse --verify --quiet "$OTRA" >/dev/null; then
-        echo "RAMA AUSENTE: $OTRA no existe en origin -> nada que reconciliar. Seguí."
-    elif ! git cat-file -e "$OTRA:$RUTA" 2>/dev/null; then
-        echo "RAMA PRESENTE pero SIN la cola ($RUTA) -> nada que reconciliar. Seguí."
-    else
-        git show "$OTRA:$RUTA" > /tmp/cola_b.md
-        diff -u "$RUTA" /tmp/cola_b.md && echo "COLA IDENTICA -> nada que reconciliar. Seguí."
-    fi
-
-**Las tres preguntas van en ese orden y ninguna rama del `if` es muda.** ¿Existe la rama? ¿existe
-la cola DENTRO de esa rama? ¿difiere? Recién la tercera justifica reconciliar.
-
-🔴 **Primero preguntá si la rama EXISTE, después si el archivo difiere.** Sin el `if`, cuando la
-rama no está, `git show` falla con exit 128 **escribiendo el error a stderr** mientras el `>` ya
-dejó `/tmp/cola_b.md` en **0 bytes** — y el `diff` siguiente reporta **153 líneas borradas y 1
-agregada**, o sea *"la otra rama vació la cola entera"*. Es la señal de reconciliar más fuerte que
-existe, y es **falsa**. Medido así el 03-sep 03:44 UTC, ejecutando el comando viejo textual.
-
-Y el párrafo de abajo es el que la vuelve peligrosa: le dice a la vuelta que ante un diff traiga
-los archivos con `git checkout $OTRA -- <rutas>` — contra un ref que no existe. La vuelta se va
-entera en perseguir un fantasma, que es exactamente lo que este gate ya hizo cuatro de cinco veces.
-
-**Es el mismo defecto de sentido, por tercera vez en este carril:** `carousel_render.js` preguntaba
-*"¿apareció un archivo?"* en vez de *"¿apareció EL archivo?"*; `verificar_recompensas.js`
-preguntaba *"¿respondió 200 y es un pdf?"* en vez de *"¿es EL pdf?"*. Un gate que contesta con
-seguridad la pregunta equivocada es peor que uno en rojo. **Cuando midas contra algo de afuera,
-la primera pregunta es siempre si ese algo está.**
-
-**Y el `elif` no estaba en la primera versión de este arreglo: lo encontró el control negativo.**
-Al probar el bloque contra una rama que SÍ existe (`origin/main`) apareció que `main` **no tiene**
-`hermes-content/docs/cola/contenido.md` —la cola vive sólo en esta rama—, así que `git show` volvía
-a fallar con exit 128 y el caso pasaba **mudo**. El arreglo de dos preguntas todavía tenía la
-tercera abierta. Por eso el control negativo no es burocracia: **si sólo probás el caso que ya
-sabés que falla, tu arreglo te va a dar la razón.**
+    git show origin/claude/carril-contenido:hermes-content/docs/cola/contenido.md > /tmp/cola_b.md
+    diff -u hermes-content/docs/cola/contenido.md /tmp/cola_b.md
 
 **Compará el ARCHIVO, no las ramas.** `git rev-list --left-right --count` entre las dos ramas
 SIEMPRE da un número distinto de cero y va a seguir dándolo: son carriles vivos con cientos de
@@ -168,12 +143,9 @@ commits propios que no tienen nada que ver con la cola. Medido el 02-sep: 149/18
 y la cola difiriendo en UN párrafo. Ese contador mandó cuatro de las últimas cinco vueltas a
 "reconciliar" y se comió el carril.
 
-**Si el bloque dijo `RAMA AUSENTE`, saltá este párrafo entero** y andá a leer la cola: sin rama no
-hay diff, sin diff no hay reconciliación, y no hay nada que traer.
-
 **La reconciliación es DIRECCIONAL, y sólo entra hacia acá.** Si el diff muestra que la otra rama
 tiene una afirmación MEDIDA más nueva que la tuya, traela con sus archivos
-(`git checkout "$OTRA" -- <rutas>`), commiteá y pusheá: ese es tu ítem.
+(`git checkout origin/claude/carril-contenido -- <rutas>`), commiteá y pusheá: ese es tu ítem.
 Si el único que tiene lo más nuevo sos vos, **la cola de este lado ya es la buena**: no hay nada
 que reconciliar, seguí con tu vuelta normal.
 
@@ -257,3 +229,137 @@ más convincente, no más cierta.
 
 ---
 
+
+
+## 🔴 LEER LO REAL Y AVANZAR EL OBJETIVO — ni docs, ni re-verificar, ni esperar
+
+> **Nace del 2026-09-03.** Sergio: *"¿qué hacían los loops? arreglá todo: que siempre lean lo
+> REAL y que tengan OBJETIVO los loops… estuvieron sin trabajar y solo gastando."*
+>
+> Medido ese día por seis agentes sobre **215 vueltas**: el **46 %** terminó sin commit —
+> re-verificando cosas bloqueadas en Sergio o escribiendo docs—, el **22 %** de los commits
+> fue maquinaria (`scripts/loops`, kanban, prompts) y no producto, y el recorrido de cliente
+> *"miraba y frenaba"*: **nunca envió un formulario**, por eso nadie vio que agendar una cita
+> no funciona. Un loop que lee docs en vez de producción trabaja sobre una hipótesis; uno sin
+> objetivo medible no puede saber si avanzó, así que reporta que sí.
+
+### 1. Al arrancar, medís tu OBJETIVO contra la REALIDAD — antes de leer docs o memoria
+
+Corré los comandos de tu sección **«CÓMO SE MIDE al arrancar»** (arriba de todo) y escribí
+**UNA línea**, al principio de tu salida, justo después de la línea para Sergio:
+
+    OBJETIVO: <medida actual> / <meta> — <fecha hora La Paz>      (TZ=America/La_Paz date '+%F %H:%M')
+
+- **Docs, handoffs, `COLA.md`, el tablero y la memoria son HIPÓTESIS.** La realidad es
+  producción: `app.onia.com.bo`, `onia.com.bo`, el VPS (contenedores, crons, logs), la base
+  `supabase-db` y `origin/main` / `origin/master`. Si un doc y la medición discrepan, **gana la
+  medición** y el doc se corrige de paso, en su propio archivo.
+- **La salida final es lo único que queda en el log.** El corredor te pega arriba tu última
+  vuelta (líneas `OBJETIVO:` / `RAZÓN:` / `LECCIÓN:`). Si la medida no se movió desde entonces,
+  **esta vuelta cambia de método**, no lo repite.
+
+### 2. Trabajás en la brecha más grande de TU objetivo, y lo roto se arregla en la MISMA vuelta
+
+- Elegís lo que **más acerque la medida a la meta**. No lo más fácil, no lo primero de la cola.
+- **Roto en tu carril → lo arreglás ahora:** rama propia, test que falla en ROJO primero por el
+  motivo correcto, arreglo, gates verdes, commit con el porqué, push. Si hace falta desplegar,
+  pedilo **comentando en la tarea de deploy que ya existe** (una sola, no una por commit):
+
+      /root/bin/onia-tablero.sh comment <id> "DEPLOY PEDIDO <sha> — <qué arregla, en una línea>"
+
+- **Roto en OTRO carril → tarea en el tablero para su dueño**, con la reproducción exacta y la
+  captura, **en esta vuelta**, y seguís con lo tuyo. Al dueño le toca arreglarlo en la suya.
+- **Abrir una tarea y ESPERAR sólo vale para tres cosas:** **plata** (gasto, créditos, compras,
+  altas de plataforma), **marca** (publicar con la cara o la voz de Sergio o de Lucía, un
+  rediseño que un cliente ve) y **contactar personas** (prospectos, clientes, terceros). Todo lo
+  demás **se hace**, no se pregunta. Y cuando sí se pregunta, es UNA decisión concreta con las
+  opciones ya cotizadas —él audita, no investiga—, y **primero `list`**: repetirle una decisión
+  que ya tomó es peor que no preguntar.
+
+      T=/root/bin/onia-tablero.sh
+      ID=$($T create "Pregunta corta y concreta" --body "Qué necesito decidido, las opciones que ya miré y qué cambia según cada una. Archivo: <ruta>" --priority 1 --json | python3 -c 'import sys,json;print(json.load(sys.stdin)["id"])')
+      $T block "$ID" "Espera decisión de Sergio" --kind needs_input
+
+  ⚠️ **El motivo va ANTES de `--kind`** y **mirá el código de salida**. Medido el 2026-09-03:
+  `block ID --kind needs_input "motivo"` muere con `unrecognized arguments` y la tarea queda
+  `ready` — no bloquea nada y la pregunta nunca le llega. Sergio contesta `ok <id>` y vuelve
+  a `ready` sola.
+
+### 3. Bloqueado en Sergio: NO se toca, NO se re-verifica, se salta
+
+Un ítem que espera su decisión ya está medido: su última línea dice qué falta. Volver a
+medirlo cada vuelta es el 46 % de arriba. **Se salta y se toma la siguiente brecha.** Sólo se
+vuelve a mirar cuando el tablero lo devuelve a `ready`.
+
+### 4. PROHIBIDO cerrar la vuelta con
+
+- **Un doc nuevo.** Lo que aprendiste va al archivo que ya existe, o al commit.
+- **Una re-verificación** de algo ya medido en tu última vuelta o bloqueado en Sergio.
+- **Un cambio a la maquinaria de loops** (`scripts/loops`, `scripts/kanban`, los prompts) —
+  salvo un loop **muerto** (sin `case`, sin cron, sin log). Un prompt mejorado no es producto.
+- **Un "hecho" sin prueba.** Prueba es: captura abierta y LEÍDA, un `SELECT` con su salida, un
+  `curl` con código y tiempo, un test que estaba en rojo y ahora está en verde. Un 200 y un
+  `grep` no son verificación; un `grep` sirve para **descartar**, nunca para **confirmar**.
+  Y antes de decir hecho, los frentes que casi nadie mira: **¿anda en el segundo turno / el
+  segundo paso?**, **¿está encendido en PRODUCCIÓN o commiteado detrás de un flag?**, **¿lo
+  que promete la pantalla sigue siendo verdad después de tu cambio?**
+
+### 5. Al terminar
+
+Al final de tu salida, las mismas líneas que el corredor le va a mostrar a tu próxima vuelta:
+
+    OBJETIVO: <medida nueva> / <meta> — <fecha hora La Paz>
+    <qué cambió: sha, tarea, archivo — y la evidencia>
+    RAZÓN: <si NO avanzó: la razón exacta, una línea — no "seguí investigando">
+    LECCIÓN: <si es la segunda vuelta seguida sin avance: qué método se descarta y cuál va>
+
+**Dos vueltas seguidas sin avance = cambiar de método, no repetirlo.** Una vuelta sin commit
+es un resultado honesto si trae su `RAZÓN:`; una vuelta con commit y la medida igual que ayer
+es la que hay que evitar.
+
+## 🧠 MEMORIA COMPARTIDA — la leés al arrancar, le escribís al cerrar
+
+> **Nace del 2026-09-03.** Sergio: *"que los loops usen la memoria de hermes también, pero
+> haz que funcione… que hermes siempre aprenda sobre mí y cómo hacemos las cosas mientras más
+> trabajemos."* Hasta hoy cada carril arrancaba "sin memoria", y volvía a descubrir por su
+> cuenta que `onia.com.bo` no es Vercel, que `soul_2` no existe, que Sergio quiere las horas en
+> La Paz. Quince carriles pagando el mismo error quince veces.
+
+**Arriba de este prompt ya tenés la memoria del sistema**: lo que Onia sabe (`MEMORY.md`) y lo
+que sabe de Sergio (`USER.md`). El corredor la pega antes de tu carril, en cada vuelta. Es
+**contexto, no cola**: no te da tareas, te evita repetir errores.
+
+### Al cerrar la vuelta: si aprendiste algo que le sirve a OTRO carril, dejalo
+
+**Lo normal es NO anotar nada.** Una vuelta común no aprende nada que quince carriles necesiten
+saber. Si anotás una cosa por vuelta, a 140 vueltas por día la memoria se llena en 17 horas y
+deja de servir. Anotá **sólo** cuando el hecho cumpla las tres: le sirve a otro carril, no está
+ya arriba, y lo mediste (no lo supusiste).
+
+    /root/bin/onia-aprender.sh "<un hecho, 1-3 frases, con el qué, el POR QUÉ importa, y DÓNDE se ve>"
+
+Qué va: una trampa del sistema que costó una vuelta, un dato de un doc que resultó falso, una
+preferencia o corrección de Sergio (textual, con fecha), un comando que NO es como parece, un
+límite real de una herramienta. **Siempre con la ruta, el comando o la fecha** que lo hace
+verificable: *"el bot muere en el segundo turno"* no alcanza; *"el bot muere en el segundo
+turno — medido 4 de 16 mensajes el 2026-09-02, ver bot-engine.mjs:338"* sí.
+
+Qué NO va: tu log, lo que ya está en la memoria que leíste arriba, opiniones ("creo que el bot
+anda mal"), nada que sea solo de tu carril, y **nada sobre tu propio corredor o tu propio
+prompt** — eso va al radar, no a la memoria. Y **al cerrar**, no a mitad de vuelta: un hecho a
+medio medir es una opinión con fecha.
+
+**Un hecho por llamada.** El script rechaza menos de 40 caracteres (una frase suelta no es un
+hecho) y más de 1.200 (eso es un log). Cada entrada queda firmada con tu carril y la fecha:
+en un mes alguien tiene que poder saber si sigue vigente.
+
+**No escribe en `MEMORY.md` directo**: deja tu entrada en una bandeja y un consolidador con
+cerrojo la integra, descartando lo repetido. Quince carriles escribiendo el mismo archivo a la
+vez es como se corrompe una memoria, y una memoria corrupta parece que anda.
+
+### Lo que NO va acá: las reglas de la casa
+
+La memoria compartida se **compacta** cuando crece (se midió: Hermes resumió 21 entradas a 11
+y tiró cinco reglas). Por eso las reglas que no se pueden perder viven en `SOUL.md` de Hermes y
+en `CLAUDE.md` del repo, no en la memoria. Si lo que aprendiste es una **regla** ("nunca X
+porque Y"), además de anotarlo, decilo por `onia-tg.sh`: una regla nueva la decide Sergio.

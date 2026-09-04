@@ -180,6 +180,6 @@ Sin decir "inteligencia artificial" y sin decir "plataforma" en la primera frase
 
 ---
 
-Relacionado: `ONIA_CATALOGO_MAESTRO_IDEAS_20260726.md` (todo lo parqueado y su gatillo) ·
+Relacionado: `ONIA_CATALOGO_DE_IDEAS.md` (todo lo parqueado y su gatillo) ·
 `ONIA_MARCA_ESTRATEGIA_20260727.md` (cómo se comunica) ·
 `ONIA_MARCA_REGISTRO_RIESGO_20260727.md` (marca y registro).

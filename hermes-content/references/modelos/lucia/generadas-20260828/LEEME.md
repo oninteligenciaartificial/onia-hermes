@@ -57,3 +57,70 @@ piezas donde Lucía tiene que parecer una persona y no una modelo.
   Higgsfield (`hf_<fecha>_<hora>_<uuid>.png`). Sin eso hay que buscarla en un grid que no carga.
 - Ninguna de estas está en la lista blanca de `scripts/lucia_banco.json` todavía —
   `generadas-20260828/` sí está, así que el gate ya las acepta.
+
+
+---
+
+## ✅ V07 — el PRIMER video vertical, y lo produjo el carril del VPS solo
+
+`V07-peluqueria-seedance.mp4` · **720×1280 = 9:16 exacto** · 4,04 s · 97 frames · **con pista de
+audio aac** · modelo `seedance1_5` · **4,8 créditos**.
+
+**Lo generó el loop del VPS sin intervención**, en su primera corrida, animando `G06-peluqueria`
+— que era justo la imagen pendiente. Verificado con `_V07-TIRA.jpg`: la mano sostiene el mechón,
+la tijera avanza entre frames, y **la cara aguanta los cuatro** sin inventar habla ni perderse.
+
+### Dos diferencias con Kling que cambian el flujo
+
+| | Kling 3.0 (V01-V06) | **Seedance 1.5 (V07)** |
+|---|---|---|
+| Formato | 828×1108 (~3:4) | **720×1280 (9:16)** |
+| Audio | sin pista | **con pista aac** |
+| Costo | 6,25–8,75 cr | **4,8 cr** |
+| Vertical desde imagen 3:4 | no | **sí** |
+
+🔴 **Seedance da vertical aunque la imagen fuente sea 3:4.** Kling heredaba el aspecto del frame;
+Seedance no. Eso significa que **las 16 imágenes viejas del banco, todas 3:4, se pueden animar en
+9:16 sin regenerarlas.** No hace falta rehacer el banco.
+
+**Seedance 1.5 pasa a ser el modelo de video por defecto**: más barato, vertical nativo y con
+audio. Kling queda para cuando haga falta otra cosa.
+
+---
+
+# Asset ids ganados por el carril del VPS (2026-09-02)
+
+> Rescatados tras un scp que pisó el archivo. **Sin el asset id no se re-anima una imagen sin volver a pagarla.**
+
+
+## G06 — peluquería (pilar B, no nombra a Onia)
+
+Escena: peluquería de barrio en Santa Cruz, compuesta **desde el espejo** (mirarse al espejo y
+mirar al lente son la misma cosa acá, así es más honesto). Acción a medias clarísima: la mano de
+la peluquera sostiene el mechón mojado y la tijera abierta sobre las puntas. Verificada mirándola:
+pecas, tono parejo, argolla dorada, cadenita fina, lunares del cuello y el pecho.
+
+| | |
+|---|---|
+| **Imagen** | `G06-peluqueria.jpg` |
+| **Modelo imagen** | `nano_banana_pro`, 9:16, 2k |
+| **Asset id de la imagen subida** (para `--start-image` / `--image-references`) | `c478ade2-adaa-43cf-819b-465d734f4d69` |
+
+### Video (animación — 2026-09-02)
+
+| | |
+|---|---|
+| **Archivo** | `G06-peluqueria-video-seedance.mp4` |
+| **Modelo** | `seedance1_5` · **4,8 cr** (costo medido antes de generar, confirmado) |
+| **Params** | 9:16 · duración 4s · 720p · `generate_audio=true` · seed `664848` |
+| **start_image** | `c478ade2-adaa-43cf-819b-465d734f4d69` (la G06 subida) |
+| **job_id** | `ae1aedd0-f2d7-4fb8-a96a-2d5ecbc4f3c0` |
+| **Salida** | 720×1280, 4,05 s, ~5,3 MB |
+| **Verificación** | MIRADO — 4 frames extraídos (0,1 / 1,3 / 2,6 / 3,9 s). Movimiento sutil y continuo: la tijera avanza y cierra sobre el mechón, el ventilador de pared gira, la mano de la peluquera termina y sale de cuadro. La cara se mantiene idéntica cuadro a cuadro (pecas, cadenita, lunares, cejas). Colores true-to-life, ningún cartel legible. |
+
+**Prompt de animación** (para reproducir/afinar):
+> Handheld iPhone shot in a small neighbourhood hair salon, filmed toward the mirror. The
+> hairdresser's scissors slowly close and snip the held lock of wet hair; a few cut strands drift
+> down. The woman blinks and her head shifts a fraction, eyes calm, not posing. The wall fan behind
+> rotates slowly. Subtle natural handheld micro-movement, real uneven fluorescent light. NATURAL
+> TRUE-TO-LIFE COLORS.

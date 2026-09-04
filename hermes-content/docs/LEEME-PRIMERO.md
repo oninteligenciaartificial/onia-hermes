@@ -1,56 +1,121 @@
 # Empezá acá
 
-> Hay 163 documentos en esta carpeta. **Casi ninguno hace falta para decidir hoy.**
-> Esta hoja dice cuáles sí. Si estás perdido, leé estos y ninguno más.
+> **390 documentos.** Casi ninguno hace falta para decidir hoy. Esta hoja dice cuáles sí.
+> Si estás perdido, leé los de acá y ninguno más.
+>
+> **Un tema = un archivo sin fecha.** Si un doc tiene `YYYYMMDD` en el nombre, es la foto de
+> un día: es historia, no fuente. Cuando un doc con fecha contradice a uno sin fecha, **gana
+> el que no tiene fecha.**
+
+Reescrito el **2026-08-27**. La versión anterior decía "163 documentos" (hay 390) y **5 de
+sus 6 punteros iban a `historial/`**: quien empezaba por acá aterrizaba en historia y
+reconstruía lo que ya estaba escrito. Por eso esta hoja se EDITA, no se reemplaza.
 
 ---
 
-## El objetivo de ahora
+## 0. Los precios NO viven en ningún documento
 
-**Onia Platform.** Fecha ancla: **miércoles 5 de agosto de 2026** — reunión con el BCP.
-Todo lo demás está parqueado a propósito.
+Se leen del código del producto (`C:\dev\proyectos\onia-platform`). Es la regla que más se
+rompió: llegamos a tener **cuatro precios vivos del mismo chatbot al mismo tiempo**, y un
+one-pager que citaba la fuente correcta mientras escribía otro número.
 
-## Los 6 documentos que mandan
+| Qué | Dónde manda |
+|---|---|
+| **Planes de suscripción** | `onia-platform/lib/subscription-plans.ts` → `DEFAULT_PLAN_AMOUNTS`. **Es lo que valida el cobro:** si un doc dice otro monto, el pago se rechaza |
+| **Add-ons** y los nombres visibles de los planes | `onia-platform/lib/pricing.ts` (`PLAN_LABELS`) |
+| **Para vender** (precio + función, cruzado contra el código) | **`ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md`** |
 
-| # | Doc | Responde |
-|---|---|---|
-| 1 | **`ONIA_ENFOQUE_20260727.md`** | **A quién le vendemos y a quién no.** Si algo contradice a este doc, gana este doc |
-| 2 | `ONIA_PLATFORM_ESTRUCTURA_20260730.md` | Qué está construido, qué no, y el plan al miércoles |
-| 3 | `ONIA_PARQUEADO_20260730.md` | Todo lo congelado, con dónde quedó cada cosa |
-| 4 | `ONIA_BCP_REUNION_20260805.md` | Qué preguntarle al banco. 53 marcas `[PREGUNTAR AL BANCO]` |
-| 5 | `ONIA_KIT_VENTA_DENTAL_20260727.md` | Mensajes, guion de demo y objeciones. **Ojo: corregir lo del SIAT antes de usar** |
-| 6 | `ONIA_CATALOGO_MAESTRO_IDEAS_20260726.md` | Todas las ideas y su estado (viva / parqueada con gatillo / descartada) |
+Hoy: **Básico Bs 320 · Profesional Bs 750 · Completo Bs 1.500 · Empresa Bs 2.900** (anual =
+10 meses) · **chatbot de WhatsApp Bs 390/mes, sin cargo inicial**. Si leés otra cosa en
+cualquier lado, el otro lado está roto.
 
-## Las tres cosas que hay que tener siempre presentes
+🔴 **Excepción, y hay que respetarla:** **webs, consultoría y automatización NO llevan lista
+de precios.** Se cotizan caso por caso (decisión del 2026-08-24, `ONIA_WEB_COMO_SE_VENDE.md`).
+`pricing.ts` **no cubre** esa línea: "corregir" un precio de web contra ese archivo es
+romper, no ordenar.
 
-1. **Onia es UNA plataforma con módulos por rubro.** DentalGest **no** es un producto hermano:
-   es el **pack dental**. GestiOS, Ganadero y ProveeGest tampoco son productos — son rubros.
-   Sus repos ya se archivaron. *(Todo doc viejo que los trate como marcas separadas está
-   desactualizado en el encuadre comercial, aunque su contenido técnico pueda servir.)*
+⚠️ `ONIA_PRICING_2026.md` se autodeclaraba canónico y **quedó degradado**. Sirve por sus
+reglas comerciales; no por sus cifras.
 
-2. **El código del producto vive en `C:\dev\proyectos\onia-platform`** (repo `onia-platform`,
-   antes `Dental-Gest`). Este repo, `onia-hermes`, es **el cerebro**: docs, memoria, core,
-   propuestas y la landing de marketing. Están separados **por acceso**, no por desorden.
+---
 
-3. **Cero clientes pagando.** Ningún material —web, propuesta, demo— puede sugerir lo contrario.
+## 1. Los que mandan — venta y producto
 
-## Dos cosas abiertas que cuestan plata
+| Doc | Responde |
+|---|---|
+| **`ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md`** | La tabla única: cada plan y add-on con su precio, su función y su **estado real** |
+| `ONIA_CATALOGO_DE_VENTA.md` | Qué existe por rubro: vivo / construido sin probar / futuro |
+| `ONIA_PLAN_DESARROLLO_Y_VENTA.md` | Qué se construye, en qué orden, y por qué ese orden lo dicta la venta |
+| `ONIA_PLAN_DE_VERSIONES.md` | Qué se vende ya y qué entra por parche |
+| `ONIA_PENDIENTES_PARA_LANZAR.md` | Qué está a medias y en qué orden se mata |
+| `ONIA_PUEDO_VENDER_HOY.md` | Estado verificado: qué se puede prometer sin mentir |
+| `ONIA_WEB_COMO_SE_VENDE.md` | La línea de webs — y por qué no tiene lista de precios |
 
-- **`onia-core/logic/fx.logic.mjs:31`** — `officialRate()` cae en silencio al tipo de cambio
-  **6,96** si no le inyectan el TCO. Con el oficial en **11,89**, factura **41,5% subvaluada
-  sin avisar**. Detalle: `ONIA_TIPOS_DE_CAMBIO_BOLIVIA_20260730.md`.
-- **La contraseña de la base de producción quedó commiteada** en `.claude/settings.json`
-  (1 y 31 de mayo) del repo del producto. Es privado, pero **hay que rotarla**.
+## 2. Los que mandan — plata, fiscal y legal
 
-## Dónde está el resto
+| Doc | Responde |
+|---|---|
+| `ONIA_FECHAS_CRITICAS_PLAN.md` | Las fechas que corren solas (Meta 1-oct, SIAT, runway) |
+| `ONIA_FACTURACION_ESTADO_REAL.md` | Facturación: qué emite de verdad y qué es mock |
+| `ONIA_LEGAL_BOLIVIA_ESTADO.md` | Estado legal: SEPREC, NIT, marca |
+| `ONIA_AGENTES_COSTO_API.md` | Cuánto cuesta de API cada agente y chatbot, y dónde está el margen real |
+| `ONIA_PSICOLOGIA_PRECIOS_COMPETENCIA.md` | Qué hace la competencia con sus precios y qué copiamos |
 
-- **`historial/`** — lo que fue verdad y ya no se consulta. No se borró nada; está ahí.
+## 3. Los que mandan — infra, chatbot y skills
+
+| Doc | Responde |
+|---|---|
+| `ONIA_INFRA_LIMPIEZA_Y_ORDEN.md` | VPS y base: qué está encendido y qué hay que limpiar |
+| `ONIA_CHATBOT_LINEA_DE_ENTREGA.md` | De contrato firmado a bot vivo, con tiempos |
+| `ONIA_CHATBOT_ALTA_WHATSAPP_CLIENTE.md` | Las rutas de alta en Meta, comparadas y decididas |
+| `ONIA_AGENTES_IA_DISENO_FUNCIONAL.md` | Cómo están diseñados los agentes 24/7 |
+| `ONIA_WEB_FACTORY_Y_PRODUCTO_UI.md` | Qué comparten Web Factory y el producto, y qué falta |
+| `ONIA_SKILLS_STACK_Y_SUBAGENTES.md` | Qué skill y qué subagente usar para cada carril |
+
+## 4. El estado de cada carril, al día
+
+**`handoff/<carril>.md`** — un archivo por carril, sin fecha, sobrescrito al cerrar. Siete
+campos, y el que más sirve es **intentos fallidos**: es lo que evita repetir el callejón.
+La plantilla está en `handoff/README.md`. **Es la única carpeta 100% en regla — copiá ese
+modelo.**
+
+## 5. Lo que hay que tener siempre presente
+
+1. **Onia es UNA plataforma con módulos por rubro.** `DentalGest`, `GestiOS`, `Ganadero OS`
+   y `ProveeGest` **no son productos ni marcas**: son nombres viejos de packs. Al cliente se
+   le nombra el rubro ("módulo dental"). Todo doc que los trate como marcas separadas está
+   desactualizado en lo comercial, aunque su contenido técnico sirva.
+2. **El código del producto vive en `C:\dev\proyectos\onia-platform`.** Este repo,
+   `onia-hermes`, es **el cerebro**: docs, memoria, core, propuestas y la landing. Están
+   separados **por acceso**, no por desorden.
+3. **Cero clientes pagando.** Ningún material —web, propuesta, demo— puede sugerir lo
+   contrario: prohibido inventar testimonios, logos o porcentajes.
+4. **La venta nunca exhibe obra.** Nada de "muy pronto", "en construcción" ni "beta" en una
+   superficie que ve un cliente. Lo que no está listo **no se nombra**.
+5. **Verificar es MIRAR.** Un HTTP 200 y un `grep` no son verificación. Un `grep` sirve para
+   **descartar**, nunca para **confirmar**.
+
+## 6. Abierto y cuesta plata
+
+- 🟡 **La contraseña de la base de producción quedó commiteada** en el `.claude/settings.json`
+  del repo del producto (mayo). El repo es privado, pero **hay que rotarla**.
+  ⚠️ Dato heredado de la versión anterior de esta hoja: **contarlo de nuevo antes de actuar**,
+  no repetirlo.
+- ✅ **Cerrado:** `onia-core/logic/fx.logic.mjs` ya **no** cae en silencio a un tipo de cambio
+  de 6,96 — `officialRate()` lanza si no le llega un TCO válido. Facturaba ~41% subvaluada
+  sin avisar.
+
+## 7. Dónde está el resto
+
+- **`historial/`** — lo que fue verdad y ya no se consulta. No se borró nada.
 - **`research/`** — investigación de fondo.
+- **`handoff/`** — el estado al cerrar cada carril.
 - **`../sales-kit/`** — material comercial listo para usar.
-- **`../propuestas/`** — el generador de propuestas. Nunca escribir HTML de propuesta a mano.
+- **`../propuestas/`** — el generador. **Nunca escribir HTML de propuesta a mano.**
 
-## Regla para no volver a llenar esto de ruido
+## 8. Regla para no volver a llenar esto de ruido
 
-**Un doc nuevo se crea solo si alguien lo va a leer para decidir algo.** Si es un reporte de
-algo ya ejecutado, va directo a `historial/`. Si reemplaza a otro, se anota el reemplazo en
-la primera línea del viejo y se archiva — no se dejan los dos vivos diciendo cosas distintas.
+**Un doc nuevo se crea solo si alguien lo va a leer para decidir algo.** Si es el reporte de
+algo ya ejecutado, va directo a `historial/`. Si reemplaza a otro, **se edita el que ya
+existe** — no se crea uno nuevo con la fecha de hoy y se dejan los dos vivos diciendo cosas
+distintas. Eso es exactamente lo que produjo los cuatro precios.

@@ -1,0 +1,2706 @@
+{
+  "url": "https://sales.vagaro.com",
+  "slug": "vagaro-pro",
+  "medidoEl": "2026-08-20T23:45:36.888Z",
+  "vistas": {
+    "movil": {
+      "viewport": "390x844",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 10640,
+        "alturaPantallas": 12.6,
+        "anchoBody": 390,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 8
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "osano-cm-window__dialog osano-cm-dialog osano-cm-dialog--position_bott",
+          "altoPx": 212,
+          "altoPantallas": 0.3,
+          "fondo": "rgb(235, 235, 235)",
+          "titular": "",
+          "cta": "Close this dialog",
+          "imagenes": 1
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "osano-cm-window__info-dialog osano-cm-info-dialog osano-cm-info-dialog",
+          "altoPx": 844,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0.45)",
+          "titular": "",
+          "cta": "Close Cookie Preferences",
+          "imagenes": 1
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "main-content bg-white dark:bg-darkpaper",
+          "altoPx": 7992,
+          "altoPantallas": 9.5,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "The #1 software & appfor beauty, wellness, and fitness",
+          "cta": "Start Free Trial",
+          "imagenes": 30
+        },
+        {
+          "orden": 3,
+          "etiqueta": "div",
+          "clase": "page-content-blur-target",
+          "altoPx": 7992,
+          "altoPantallas": 9.5,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "The #1 software & appfor beauty, wellness, and fitness",
+          "cta": "Start Free Trial",
+          "imagenes": 30
+        },
+        {
+          "orden": 4,
+          "etiqueta": "div",
+          "clase": "h-full w-full px-8 pt-16 pb-8 md:min-h-350 md:pt-24",
+          "altoPx": 2520,
+          "altoPantallas": 3,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 15
+        },
+        {
+          "orden": 5,
+          "etiqueta": "footer",
+          "clase": "rounded-3xl bg-footer-gray",
+          "altoPx": 2328,
+          "altoPantallas": 2.8,
+          "fondo": "rgb(30, 30, 30)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 14
+        },
+        {
+          "orden": 6,
+          "etiqueta": "div",
+          "clase": "go2933276541 go2369186930",
+          "altoPx": 844,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 7,
+          "etiqueta": "div",
+          "clase": "go1632949049",
+          "altoPx": 852,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0.7)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        }
+      ],
+      "encabezados": {
+        "total": 19,
+        "h1": 1,
+        "saltos": 1,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "The #1 software & appfor beauty, wellness, and fitness"
+          },
+          {
+            "nivel": 2,
+            "texto": "Built for everyone, from solopreneurs to enterprise."
+          },
+          {
+            "nivel": 2,
+            "texto": "What's your industry?"
+          },
+          {
+            "nivel": 3,
+            "texto": "Beauty"
+          },
+          {
+            "nivel": 3,
+            "texto": "Wellness"
+          },
+          {
+            "nivel": 3,
+            "texto": "Fitness"
+          },
+          {
+            "nivel": 2,
+            "texto": "What's your industry?"
+          },
+          {
+            "nivel": 3,
+            "texto": "Beauty"
+          },
+          {
+            "nivel": 3,
+            "texto": "Wellness"
+          },
+          {
+            "nivel": 3,
+            "texto": "Fitness"
+          },
+          {
+            "nivel": 2,
+            "texto": "FAQ"
+          },
+          {
+            "nivel": 4,
+            "texto": "For businesses"
+          },
+          {
+            "nivel": 4,
+            "texto": "For customers"
+          },
+          {
+            "nivel": 3,
+            "texto": "Find Businesses"
+          },
+          {
+            "nivel": 3,
+            "texto": "Business Software"
+          },
+          {
+            "nivel": 3,
+            "texto": "Business Features"
+          },
+          {
+            "nivel": 3,
+            "texto": "Business Products"
+          },
+          {
+            "nivel": 3,
+            "texto": "Company"
+          },
+          {
+            "nivel": 3,
+            "texto": "Resources"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 86
+          },
+          {
+            "valor": "18px / lh 1.56 / ls normal / w 400",
+            "veces": 34
+          },
+          {
+            "valor": "12px / lh 1.33 / ls normal / w 400",
+            "veces": 29
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 600",
+            "veces": 19
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 600",
+            "veces": 16
+          },
+          {
+            "valor": "15px / lh 1.00 / ls normal / w 600",
+            "veces": 9
+          },
+          {
+            "valor": "20px / lh 1.40 / ls normal / w 600",
+            "veces": 9
+          },
+          {
+            "valor": "16px / lh 1.00 / ls normal / w 400",
+            "veces": 4
+          },
+          {
+            "valor": "30px / lh 1.20 / ls normal / w 700",
+            "veces": 4
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 400",
+            "veces": 4
+          },
+          {
+            "valor": "36px / lh 1.11 / ls normal / w 700",
+            "veces": 3
+          },
+          {
+            "valor": "48px / lh 1.33 / ls normal / w 700",
+            "veces": 3
+          },
+          {
+            "valor": "16px / lh normal / ls normal / w 400",
+            "veces": 2
+          },
+          {
+            "valor": "16px / lh 1.25 / ls normal / w 400",
+            "veces": 2
+          },
+          {
+            "valor": "30px / lh 1.50 / ls normal / w 700",
+            "veces": 2
+          },
+          {
+            "valor": "18px / lh 1.50 / ls normal / w 700",
+            "veces": 2
+          }
+        ],
+        "familias": [
+          {
+            "valor": "figtree",
+            "veces": 235
+          },
+          {
+            "valor": "Helvetica",
+            "veces": 8
+          },
+          {
+            "valor": "instrumentSerif",
+            "veces": 6
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 90
+          },
+          {
+            "valor": "rgb(51, 51, 51)",
+            "veces": 65
+          },
+          {
+            "valor": "lab(35.6337 -1.58697 -10.8425)",
+            "veces": 25
+          },
+          {
+            "valor": "oklab(0.999994 0.0000455677 0.0000200868 / 0.8)",
+            "veces": 23
+          },
+          {
+            "valor": "oklab(0.999994 0.0000455678 0.0000200868 / 0.9)",
+            "veces": 23
+          },
+          {
+            "valor": "rgb(38, 99, 156)",
+            "veces": 9
+          },
+          {
+            "valor": "oklab(0.32109 0.0000146329 0.0000064075 / 0.8)",
+            "veces": 5
+          },
+          {
+            "valor": "rgb(204, 71, 68)",
+            "veces": 2
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgba(255, 255, 255, 0.08)",
+            "veces": 40
+          },
+          {
+            "valor": "rgb(204, 71, 68)",
+            "veces": 10
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 8
+          },
+          {
+            "valor": "oklab(0 0 0 / 0.2)",
+            "veces": 4
+          },
+          {
+            "valor": "rgb(51, 51, 51)",
+            "veces": 3
+          },
+          {
+            "valor": "rgb(235, 235, 235)",
+            "veces": 2
+          },
+          {
+            "valor": "rgb(248, 248, 248)",
+            "veces": 2
+          },
+          {
+            "valor": "oklab(0 0 0 / 0.4)",
+            "veces": 2
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "8px",
+            "veces": 66
+          },
+          {
+            "valor": "16px",
+            "veces": 43
+          },
+          {
+            "valor": "24px",
+            "veces": 42
+          },
+          {
+            "valor": "12px",
+            "veces": 20
+          },
+          {
+            "valor": "20px",
+            "veces": 13
+          },
+          {
+            "valor": "14px",
+            "veces": 12
+          },
+          {
+            "valor": "32px",
+            "veces": 11
+          },
+          {
+            "valor": "-1px",
+            "veces": 9
+          },
+          {
+            "valor": "4px",
+            "veces": 9
+          },
+          {
+            "valor": "2px",
+            "veces": 7
+          },
+          {
+            "valor": "64px",
+            "veces": 7
+          },
+          {
+            "valor": "6px",
+            "veces": 6
+          },
+          {
+            "valor": "12px 8px",
+            "veces": 3
+          },
+          {
+            "valor": "10px",
+            "veces": 2
+          },
+          {
+            "valor": "30px",
+            "veces": 1
+          },
+          {
+            "valor": "-6px",
+            "veces": 1
+          }
+        ],
+        "radios": [
+          {
+            "valor": "3.35544e+07px",
+            "veces": 88
+          },
+          {
+            "valor": "16px",
+            "veces": 11
+          },
+          {
+            "valor": "4px",
+            "veces": 10
+          },
+          {
+            "valor": "50%",
+            "veces": 3
+          },
+          {
+            "valor": "6px",
+            "veces": 3
+          },
+          {
+            "valor": "21px",
+            "veces": 3
+          },
+          {
+            "valor": "24px",
+            "veces": 2
+          }
+        ],
+        "radiosDistintos": 7,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 11
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.2) 0px 1px 1px 0px inset, rgba(255, 25",
+            "veces": 10
+          },
+          {
+            "valor": "rgb(204, 204, 204) 0px 0px 2px 2px",
+            "veces": 1
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.4) 0px 1px 2px 0px inset, rgba(0, 0, 0",
+            "veces": 1
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.3) 2px 2px 4px 0px inset, rgba(255, 25",
+            "veces": 1
+          }
+        ],
+        "sombrasDistintas": 5,
+        "zIndex": [
+          {
+            "valor": "10",
+            "veces": 45
+          },
+          {
+            "valor": "1",
+            "veces": 4
+          },
+          {
+            "valor": "9989",
+            "veces": 4
+          },
+          {
+            "valor": "2",
+            "veces": 3
+          },
+          {
+            "valor": "50",
+            "veces": 3
+          },
+          {
+            "valor": "9998",
+            "veces": 2
+          },
+          {
+            "valor": "99999",
+            "veces": 2
+          },
+          {
+            "valor": "2147483638",
+            "veces": 2
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 41
+          },
+          {
+            "valor": "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), translate 0.3s cubic-bezi",
+            "veces": 9
+          },
+          {
+            "valor": "color 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s cubic-b",
+            "veces": 4
+          },
+          {
+            "valor": "opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 4
+          },
+          {
+            "valor": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1) 0.15s, background-color 0.15s",
+            "veces": 3
+          },
+          {
+            "valor": "0.3s cubic-bezier(0.2, 0.9, 0.3, 1.5)",
+            "veces": 3
+          },
+          {
+            "valor": "0.5s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 3
+          },
+          {
+            "valor": "transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), translate 0.5s cubic-bezi",
+            "veces": 3
+          },
+          {
+            "valor": "0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 3
+          },
+          {
+            "valor": "transform 0.2s ease-out, color 0.2s ease-out, background-color 0.2s ea",
+            "veces": 2
+          },
+          {
+            "valor": "transform 0.4s",
+            "veces": 2
+          },
+          {
+            "valor": "box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 2
+          }
+        ],
+        "transicionesDistintas": 21,
+        "hojasLeidas": 19,
+        "unidades": {
+          "em": 183,
+          "rem": 290,
+          "px": 1856,
+          "clamp": 0,
+          "vw": 24
+        },
+        "keyframesDeclarados": 32,
+        "transitionAll": 10,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 768,
+            "veces": 21
+          },
+          {
+            "px": 1024,
+            "veces": 16
+          },
+          {
+            "px": 640,
+            "veces": 8
+          },
+          {
+            "px": 1536,
+            "veces": 8
+          },
+          {
+            "px": 1280,
+            "veces": 7
+          },
+          {
+            "px": 480,
+            "veces": 6
+          },
+          {
+            "px": 2499,
+            "veces": 6
+          },
+          {
+            "px": 2048,
+            "veces": 5
+          },
+          {
+            "px": 481,
+            "veces": 4
+          },
+          {
+            "px": 600,
+            "veces": 3
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "osano-cm-window__dialog osano-cm-dialog osano-cm-dialog--pos",
+            "posicion": "fixed",
+            "alto": 212,
+            "top": "632px"
+          },
+          {
+            "etiqueta": "button",
+            "clase": "osano-cm-window__widget osano-cm-widget osano-cm-widget--pos",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "auto"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "osano-cm-window__info-dialog osano-cm-info-dialog osano-cm-i",
+            "posicion": "fixed",
+            "alto": 844,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "osano-cm-info-dialog__info osano-cm-info osano-cm-info--posi",
+            "posicion": "fixed",
+            "alto": 844,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "osano-cm-info__info-dialog-header osano-cm-info-dialog-heade",
+            "posicion": "sticky",
+            "alto": 52,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "p",
+            "clase": "osano-cm-info-dialog-header__header osano-cm-header",
+            "posicion": "sticky",
+            "alto": 48,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "fixed top-0 right-0 left-0 z-50 bg-white select-none dark:bg",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "header",
+            "clase": "sticky top-0 z-[9998] bg-background transition-shadow durati",
+            "posicion": "sticky",
+            "alto": 64,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "fixed top-15 right-0 left-0 z-40 transition-all duration-300",
+            "posicion": "fixed",
+            "alto": 87,
+            "top": "60px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "hidden lg:flex sticky top-0 bg-background items-center z-50 ",
+            "posicion": "sticky",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "sticky",
+            "posicion": "sticky",
+            "alto": 563,
+            "top": "90px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "sticky",
+            "posicion": "sticky",
+            "alto": 507,
+            "top": "102px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 116,
+        "ctasTop": [
+          {
+            "texto": "Start Free Trial",
+            "veces": 4
+          },
+          {
+            "texto": "Beauty",
+            "veces": 4
+          },
+          {
+            "texto": "Salon",
+            "veces": 4
+          },
+          {
+            "texto": "Barber",
+            "veces": 4
+          },
+          {
+            "texto": "Booth Renter",
+            "veces": 3
+          },
+          {
+            "texto": "Nail",
+            "veces": 3
+          },
+          {
+            "texto": "Tanning",
+            "veces": 3
+          },
+          {
+            "texto": "Spa",
+            "veces": 3
+          },
+          {
+            "texto": "Privacy Policy",
+            "veces": 2
+          },
+          {
+            "texto": "Sign Up",
+            "veces": 2
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 25,
+        "sinAlt": 0,
+        "altVacio": 1,
+        "sinDimensiones": 22,
+        "lazy": 8,
+        "conSrcset": 9,
+        "interactivos": 162,
+        "objetivosMenores44px": 79,
+        "idioma": "en",
+        "landmarks": {
+          "header": 1,
+          "nav": 3,
+          "main": 0,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(204, 71, 68)",
+            "ratio": 4.61
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(51, 51, 51)",
+            "ratio": 12.63
+          },
+          {
+            "texto": "rgb(51, 51, 51)",
+            "fondo": "rgb(204, 71, 68)",
+            "ratio": 2.74
+          },
+          {
+            "texto": "rgb(51, 51, 51)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 12.63
+          },
+          {
+            "texto": "rgb(51, 51, 51)",
+            "fondo": "rgb(51, 51, 51)",
+            "ratio": 1
+          },
+          {
+            "texto": "lab(35.6337 -1.58697 -10.8425)",
+            "fondo": "rgb(204, 71, 68)",
+            "ratio": 1.64
+          },
+          {
+            "texto": "lab(35.6337 -1.58697 -10.8425)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 7.56
+          },
+          {
+            "texto": "lab(35.6337 -1.58697 -10.8425)",
+            "fondo": "rgb(51, 51, 51)",
+            "ratio": 1.67
+          },
+          {
+            "texto": "oklab(0.999994 0.0000455677 0.0000200868 / 0.8)",
+            "fondo": "rgb(204, 71, 68)",
+            "ratio": 3.5
+          },
+          {
+            "texto": "oklab(0.999994 0.0000455677 0.0000200868 / 0.8)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "oklab(0.999994 0.0000455677 0.0000200868 / 0.8)",
+            "fondo": "rgb(51, 51, 51)",
+            "ratio": 8.69
+          }
+        ],
+        "fondosTranslucidosOmitidos": 5
+      },
+      "rendimiento": {
+        "pesoTotalKb": 5409.3,
+        "porTipoKb": {
+          "document": 362.5,
+          "font": 108.2,
+          "stylesheet": 65.2,
+          "image": 549,
+          "script": 3301.8,
+          "fetch": 0.1,
+          "xhr": 1021.8,
+          "texttrack": 0.8,
+          "ping": 0
+        },
+        "pedidos": {
+          "document": 4,
+          "font": 4,
+          "stylesheet": 19,
+          "image": 35,
+          "script": 145,
+          "fetch": 20,
+          "xhr": 12,
+          "texttrack": 1,
+          "ping": 4
+        },
+        "hostsDistintos": 47,
+        "terceros": [
+          {
+            "host": "www.vagaro.com",
+            "pedidos": 95
+          },
+          {
+            "host": "us-west-2.graphassets.com",
+            "pedidos": 13
+          },
+          {
+            "host": "www.google.com",
+            "pedidos": 7
+          },
+          {
+            "host": "analytics.tiktok.com",
+            "pedidos": 6
+          },
+          {
+            "host": "px.ads.linkedin.com",
+            "pedidos": 5
+          },
+          {
+            "host": "image.mux.com",
+            "pedidos": 3
+          },
+          {
+            "host": "bat.bing.com",
+            "pedidos": 3
+          },
+          {
+            "host": "www.google.com.bo",
+            "pedidos": 3
+          }
+        ],
+        "fuentesCargadas": [
+          "figtree 300 900 normal",
+          "figtree 300 900 italic",
+          "figtree Fallback normal normal",
+          "instrumentSerif 400 normal",
+          "instrumentSerif 400 italic",
+          "instrumentSerif Fallback normal normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Vagaro Pro - Salon, Spa, & Fitness Business Software",
+        "descripcion": "Vagaro Pro for Business is the salon, spa, and fitness software that is affordable, intuitive, secure and reliable.",
+        "canonical": "https://www.vagaro.com/pro",
+        "og": 7,
+        "datosEstructurados": 3
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "tablet": {
+      "viewport": "768x1024",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 11435,
+        "alturaPantallas": 11.2,
+        "anchoBody": 768,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 7
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "osano-cm-window__info-dialog osano-cm-info-dialog osano-cm-info-dialog",
+          "altoPx": 1024,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0.45)",
+          "titular": "",
+          "cta": "Close Cookie Preferences",
+          "imagenes": 1
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "main-content bg-white dark:bg-darkpaper",
+          "altoPx": 9546,
+          "altoPantallas": 9.3,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "The #1 software & appfor beauty, wellness, and fitness",
+          "cta": "Start Free Trial",
+          "imagenes": 30
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "page-content-blur-target",
+          "altoPx": 9546,
+          "altoPantallas": 9.3,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "The #1 software & appfor beauty, wellness, and fitness",
+          "cta": "Start Free Trial",
+          "imagenes": 30
+        },
+        {
+          "orden": 3,
+          "etiqueta": "div",
+          "clase": "h-full w-full px-8 pt-16 pb-8 md:min-h-350 md:pt-24",
+          "altoPx": 1761,
+          "altoPantallas": 1.7,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 15
+        },
+        {
+          "orden": 4,
+          "etiqueta": "footer",
+          "clase": "rounded-3xl bg-footer-gray",
+          "altoPx": 1537,
+          "altoPantallas": 1.5,
+          "fondo": "rgb(30, 30, 30)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 14
+        },
+        {
+          "orden": 5,
+          "etiqueta": "div",
+          "clase": "go2933276541 go2369186930",
+          "altoPx": 1024,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 6,
+          "etiqueta": "div",
+          "clase": "go1632949049",
+          "altoPx": 1034,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0.7)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        }
+      ],
+      "encabezados": {
+        "total": 19,
+        "h1": 1,
+        "saltos": 1,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "The #1 software & appfor beauty, wellness, and fitness"
+          },
+          {
+            "nivel": 2,
+            "texto": "Built for everyone, from solopreneurs to enterprise."
+          },
+          {
+            "nivel": 2,
+            "texto": "What's your industry?"
+          },
+          {
+            "nivel": 3,
+            "texto": "Beauty"
+          },
+          {
+            "nivel": 3,
+            "texto": "Wellness"
+          },
+          {
+            "nivel": 3,
+            "texto": "Fitness"
+          },
+          {
+            "nivel": 2,
+            "texto": "What's your industry?"
+          },
+          {
+            "nivel": 3,
+            "texto": "Beauty"
+          },
+          {
+            "nivel": 3,
+            "texto": "Wellness"
+          },
+          {
+            "nivel": 3,
+            "texto": "Fitness"
+          },
+          {
+            "nivel": 2,
+            "texto": "FAQ"
+          },
+          {
+            "nivel": 4,
+            "texto": "For businesses"
+          },
+          {
+            "nivel": 4,
+            "texto": "For customers"
+          },
+          {
+            "nivel": 3,
+            "texto": "Find Businesses"
+          },
+          {
+            "nivel": 3,
+            "texto": "Business Software"
+          },
+          {
+            "nivel": 3,
+            "texto": "Business Features"
+          },
+          {
+            "nivel": 3,
+            "texto": "Business Products"
+          },
+          {
+            "nivel": 3,
+            "texto": "Company"
+          },
+          {
+            "nivel": 3,
+            "texto": "Resources"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 85
+          },
+          {
+            "valor": "18px / lh 1.56 / ls normal / w 400",
+            "veces": 35
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 400",
+            "veces": 33
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 600",
+            "veces": 19
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 600",
+            "veces": 12
+          },
+          {
+            "valor": "15px / lh 1.00 / ls normal / w 600",
+            "veces": 9
+          },
+          {
+            "valor": "20px / lh 1.40 / ls normal / w 600",
+            "veces": 9
+          },
+          {
+            "valor": "14px / lh 1.71 / ls normal / w 600",
+            "veces": 6
+          },
+          {
+            "valor": "16px / lh 1.00 / ls normal / w 400",
+            "veces": 4
+          },
+          {
+            "valor": "60px / lh 1.00 / ls normal / w 700",
+            "veces": 4
+          },
+          {
+            "valor": "36px / lh 1.11 / ls normal / w 700",
+            "veces": 3
+          },
+          {
+            "valor": "48px / lh 1.33 / ls normal / w 700",
+            "veces": 3
+          },
+          {
+            "valor": "16px / lh normal / ls normal / w 400",
+            "veces": 2
+          },
+          {
+            "valor": "16px / lh 1.25 / ls normal / w 400",
+            "veces": 2
+          },
+          {
+            "valor": "30px / lh 1.50 / ls normal / w 700",
+            "veces": 2
+          },
+          {
+            "valor": "20px / lh 1.50 / ls normal / w 700",
+            "veces": 2
+          }
+        ],
+        "familias": [
+          {
+            "valor": "figtree",
+            "veces": 235
+          },
+          {
+            "valor": "Helvetica",
+            "veces": 8
+          },
+          {
+            "valor": "instrumentSerif",
+            "veces": 6
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 90
+          },
+          {
+            "valor": "rgb(51, 51, 51)",
+            "veces": 65
+          },
+          {
+            "valor": "lab(35.6337 -1.58697 -10.8425)",
+            "veces": 25
+          },
+          {
+            "valor": "oklab(0.999994 0.0000455677 0.0000200868 / 0.8)",
+            "veces": 23
+          },
+          {
+            "valor": "oklab(0.999994 0.0000455678 0.0000200868 / 0.9)",
+            "veces": 23
+          },
+          {
+            "valor": "rgb(38, 99, 156)",
+            "veces": 9
+          },
+          {
+            "valor": "oklab(0.32109 0.0000146329 0.0000064075 / 0.8)",
+            "veces": 5
+          },
+          {
+            "valor": "rgb(204, 71, 68)",
+            "veces": 2
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgba(255, 255, 255, 0.08)",
+            "veces": 40
+          },
+          {
+            "valor": "rgb(204, 71, 68)",
+            "veces": 10
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 8
+          },
+          {
+            "valor": "oklab(0 0 0 / 0.2)",
+            "veces": 4
+          },
+          {
+            "valor": "rgb(51, 51, 51)",
+            "veces": 3
+          },
+          {
+            "valor": "rgb(235, 235, 235)",
+            "veces": 2
+          },
+          {
+            "valor": "rgb(248, 248, 248)",
+            "veces": 2
+          },
+          {
+            "valor": "oklab(0 0 0 / 0.4)",
+            "veces": 2
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "8px",
+            "veces": 60
+          },
+          {
+            "valor": "24px",
+            "veces": 45
+          },
+          {
+            "valor": "16px",
+            "veces": 43
+          },
+          {
+            "valor": "12px",
+            "veces": 15
+          },
+          {
+            "valor": "14px",
+            "veces": 14
+          },
+          {
+            "valor": "20px",
+            "veces": 13
+          },
+          {
+            "valor": "4px",
+            "veces": 11
+          },
+          {
+            "valor": "-1px",
+            "veces": 9
+          },
+          {
+            "valor": "32px",
+            "veces": 8
+          },
+          {
+            "valor": "64px",
+            "veces": 7
+          },
+          {
+            "valor": "6px",
+            "veces": 6
+          },
+          {
+            "valor": "2px",
+            "veces": 5
+          },
+          {
+            "valor": "12px 8px",
+            "veces": 3
+          },
+          {
+            "valor": "48px",
+            "veces": 2
+          },
+          {
+            "valor": "10px",
+            "veces": 2
+          },
+          {
+            "valor": "30px",
+            "veces": 1
+          }
+        ],
+        "radios": [
+          {
+            "valor": "3.35544e+07px",
+            "veces": 88
+          },
+          {
+            "valor": "4px",
+            "veces": 10
+          },
+          {
+            "valor": "16px",
+            "veces": 8
+          },
+          {
+            "valor": "50%",
+            "veces": 3
+          },
+          {
+            "valor": "6px",
+            "veces": 3
+          },
+          {
+            "valor": "19.471px",
+            "veces": 3
+          },
+          {
+            "valor": "21px",
+            "veces": 3
+          },
+          {
+            "valor": "24px",
+            "veces": 2
+          }
+        ],
+        "radiosDistintos": 8,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 11
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.2) 0px 1px 1px 0px inset, rgba(255, 25",
+            "veces": 10
+          },
+          {
+            "valor": "rgb(204, 204, 204) 0px 0px 2px 2px",
+            "veces": 1
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.4) 0px 1px 2px 0px inset, rgba(0, 0, 0",
+            "veces": 1
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.3) 2px 2px 4px 0px inset, rgba(255, 25",
+            "veces": 1
+          }
+        ],
+        "sombrasDistintas": 5,
+        "zIndex": [
+          {
+            "valor": "10",
+            "veces": 45
+          },
+          {
+            "valor": "1",
+            "veces": 4
+          },
+          {
+            "valor": "9989",
+            "veces": 4
+          },
+          {
+            "valor": "2",
+            "veces": 3
+          },
+          {
+            "valor": "50",
+            "veces": 3
+          },
+          {
+            "valor": "9998",
+            "veces": 2
+          },
+          {
+            "valor": "99999",
+            "veces": 2
+          },
+          {
+            "valor": "2147483638",
+            "veces": 2
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 41
+          },
+          {
+            "valor": "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), translate 0.3s cubic-bezi",
+            "veces": 9
+          },
+          {
+            "valor": "color 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s cubic-b",
+            "veces": 4
+          },
+          {
+            "valor": "opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 4
+          },
+          {
+            "valor": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1) 0.15s, background-color 0.15s",
+            "veces": 3
+          },
+          {
+            "valor": "0.3s cubic-bezier(0.2, 0.9, 0.3, 1.5)",
+            "veces": 3
+          },
+          {
+            "valor": "0.5s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 3
+          },
+          {
+            "valor": "transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), translate 0.5s cubic-bezi",
+            "veces": 3
+          },
+          {
+            "valor": "0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 3
+          },
+          {
+            "valor": "transform 0.2s ease-out, color 0.2s ease-out, background-color 0.2s ea",
+            "veces": 2
+          },
+          {
+            "valor": "transform 0.4s",
+            "veces": 2
+          },
+          {
+            "valor": "box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 2
+          }
+        ],
+        "transicionesDistintas": 21,
+        "hojasLeidas": 19,
+        "unidades": {
+          "em": 183,
+          "rem": 290,
+          "px": 1856,
+          "clamp": 0,
+          "vw": 24
+        },
+        "keyframesDeclarados": 32,
+        "transitionAll": 10,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 768,
+            "veces": 21
+          },
+          {
+            "px": 1024,
+            "veces": 16
+          },
+          {
+            "px": 640,
+            "veces": 8
+          },
+          {
+            "px": 1536,
+            "veces": 8
+          },
+          {
+            "px": 1280,
+            "veces": 7
+          },
+          {
+            "px": 480,
+            "veces": 6
+          },
+          {
+            "px": 2499,
+            "veces": 6
+          },
+          {
+            "px": 2048,
+            "veces": 5
+          },
+          {
+            "px": 481,
+            "veces": 4
+          },
+          {
+            "px": 600,
+            "veces": 3
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "osano-cm-window__dialog osano-cm-dialog osano-cm-dialog--pos",
+            "posicion": "fixed",
+            "alto": 132,
+            "top": "892px"
+          },
+          {
+            "etiqueta": "button",
+            "clase": "osano-cm-window__widget osano-cm-widget osano-cm-widget--pos",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "auto"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "osano-cm-window__info-dialog osano-cm-info-dialog osano-cm-i",
+            "posicion": "fixed",
+            "alto": 1024,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "osano-cm-info-dialog__info osano-cm-info osano-cm-info--posi",
+            "posicion": "fixed",
+            "alto": 1024,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "osano-cm-info__info-dialog-header osano-cm-info-dialog-heade",
+            "posicion": "sticky",
+            "alto": 52,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "p",
+            "clase": "osano-cm-info-dialog-header__header osano-cm-header",
+            "posicion": "sticky",
+            "alto": 48,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "fixed top-0 right-0 left-0 z-50 bg-white select-none dark:bg",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "header",
+            "clase": "sticky top-0 z-[9998] bg-background transition-shadow durati",
+            "posicion": "sticky",
+            "alto": 64,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "fixed top-15 right-0 left-0 z-40 transition-all duration-300",
+            "posicion": "fixed",
+            "alto": 87,
+            "top": "60px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "hidden lg:flex sticky top-0 bg-background items-center z-50 ",
+            "posicion": "sticky",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "sticky",
+            "posicion": "sticky",
+            "alto": 846,
+            "top": "90px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "sticky",
+            "posicion": "sticky",
+            "alto": 790,
+            "top": "102px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 116,
+        "ctasTop": [
+          {
+            "texto": "Start Free Trial",
+            "veces": 4
+          },
+          {
+            "texto": "Beauty",
+            "veces": 4
+          },
+          {
+            "texto": "Salon",
+            "veces": 4
+          },
+          {
+            "texto": "Barber",
+            "veces": 4
+          },
+          {
+            "texto": "Booth Renter",
+            "veces": 3
+          },
+          {
+            "texto": "Nail",
+            "veces": 3
+          },
+          {
+            "texto": "Tanning",
+            "veces": 3
+          },
+          {
+            "texto": "Spa",
+            "veces": 3
+          },
+          {
+            "texto": "Privacy Policy",
+            "veces": 2
+          },
+          {
+            "texto": "Sign Up",
+            "veces": 2
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 25,
+        "sinAlt": 0,
+        "altVacio": 1,
+        "sinDimensiones": 22,
+        "lazy": 8,
+        "conSrcset": 9,
+        "interactivos": 162,
+        "objetivosMenores44px": 89,
+        "idioma": "en",
+        "landmarks": {
+          "header": 1,
+          "nav": 3,
+          "main": 0,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(204, 71, 68)",
+            "ratio": 4.61
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(51, 51, 51)",
+            "ratio": 12.63
+          },
+          {
+            "texto": "rgb(51, 51, 51)",
+            "fondo": "rgb(204, 71, 68)",
+            "ratio": 2.74
+          },
+          {
+            "texto": "rgb(51, 51, 51)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 12.63
+          },
+          {
+            "texto": "rgb(51, 51, 51)",
+            "fondo": "rgb(51, 51, 51)",
+            "ratio": 1
+          },
+          {
+            "texto": "lab(35.6337 -1.58697 -10.8425)",
+            "fondo": "rgb(204, 71, 68)",
+            "ratio": 1.64
+          },
+          {
+            "texto": "lab(35.6337 -1.58697 -10.8425)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 7.56
+          },
+          {
+            "texto": "lab(35.6337 -1.58697 -10.8425)",
+            "fondo": "rgb(51, 51, 51)",
+            "ratio": 1.67
+          },
+          {
+            "texto": "oklab(0.999994 0.0000455677 0.0000200868 / 0.8)",
+            "fondo": "rgb(204, 71, 68)",
+            "ratio": 3.5
+          },
+          {
+            "texto": "oklab(0.999994 0.0000455677 0.0000200868 / 0.8)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "oklab(0.999994 0.0000455677 0.0000200868 / 0.8)",
+            "fondo": "rgb(51, 51, 51)",
+            "ratio": 8.69
+          }
+        ],
+        "fondosTranslucidosOmitidos": 5
+      },
+      "rendimiento": {
+        "pesoTotalKb": 5142.2,
+        "porTipoKb": {
+          "document": 362.5,
+          "stylesheet": 65.2,
+          "font": 108.2,
+          "image": 641.8,
+          "script": 2882.3,
+          "fetch": 59.7,
+          "texttrack": 0.8,
+          "xhr": 1021.8,
+          "ping": 0
+        },
+        "pedidos": {
+          "document": 4,
+          "stylesheet": 19,
+          "font": 4,
+          "image": 34,
+          "script": 144,
+          "fetch": 19,
+          "texttrack": 1,
+          "xhr": 13,
+          "ping": 4
+        },
+        "hostsDistintos": 47,
+        "terceros": [
+          {
+            "host": "www.vagaro.com",
+            "pedidos": 93
+          },
+          {
+            "host": "us-west-2.graphassets.com",
+            "pedidos": 12
+          },
+          {
+            "host": "www.google.com",
+            "pedidos": 7
+          },
+          {
+            "host": "analytics.tiktok.com",
+            "pedidos": 6
+          },
+          {
+            "host": "px.ads.linkedin.com",
+            "pedidos": 5
+          },
+          {
+            "host": "image.mux.com",
+            "pedidos": 3
+          },
+          {
+            "host": "bat.bing.com",
+            "pedidos": 3
+          },
+          {
+            "host": "ct.pinterest.com",
+            "pedidos": 3
+          }
+        ],
+        "fuentesCargadas": [
+          "figtree 300 900 normal",
+          "figtree 300 900 italic",
+          "figtree Fallback normal normal",
+          "instrumentSerif 400 normal",
+          "instrumentSerif 400 italic",
+          "instrumentSerif Fallback normal normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Vagaro Pro - Salon, Spa, & Fitness Business Software",
+        "descripcion": "Vagaro Pro for Business is the salon, spa, and fitness software that is affordable, intuitive, secure and reliable.",
+        "canonical": "https://www.vagaro.com/pro",
+        "og": 7,
+        "datosEstructurados": 3
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    },
+    "escritorio": {
+      "viewport": "1440x900",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 10132,
+        "alturaPantallas": 11.3,
+        "anchoBody": 1440,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 7
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "osano-cm-window__info-dialog osano-cm-info-dialog osano-cm-info-dialog",
+          "altoPx": 900,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0.45)",
+          "titular": "",
+          "cta": "Close Cookie Preferences",
+          "imagenes": 1
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "main-content bg-white dark:bg-darkpaper",
+          "altoPx": 8548,
+          "altoPantallas": 9.5,
+          "fondo": "rgb(255, 255, 255)",
+          "titular": "The #1 software & appfor beauty, wellness, and fitness",
+          "cta": "Start Free Trial",
+          "imagenes": 30
+        },
+        {
+          "orden": 2,
+          "etiqueta": "div",
+          "clase": "page-content-blur-target",
+          "altoPx": 8548,
+          "altoPantallas": 9.5,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "The #1 software & appfor beauty, wellness, and fitness",
+          "cta": "Start Free Trial",
+          "imagenes": 30
+        },
+        {
+          "orden": 3,
+          "etiqueta": "div",
+          "clase": "h-full w-full px-8 pt-16 pb-8 md:min-h-350 md:pt-24",
+          "altoPx": 1400,
+          "altoPantallas": 1.6,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 15
+        },
+        {
+          "orden": 4,
+          "etiqueta": "footer",
+          "clase": "rounded-3xl bg-footer-gray",
+          "altoPx": 1085,
+          "altoPantallas": 1.2,
+          "fondo": "rgb(30, 30, 30)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 14
+        },
+        {
+          "orden": 5,
+          "etiqueta": "div",
+          "clase": "go2933276541 go2369186930",
+          "altoPx": 900,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        },
+        {
+          "orden": 6,
+          "etiqueta": "div",
+          "clase": "go1632949049",
+          "altoPx": 909,
+          "altoPantallas": 1,
+          "fondo": "rgba(0, 0, 0, 0.7)",
+          "titular": "",
+          "cta": "",
+          "imagenes": 0
+        }
+      ],
+      "encabezados": {
+        "total": 19,
+        "h1": 1,
+        "saltos": 1,
+        "lista": [
+          {
+            "nivel": 1,
+            "texto": "The #1 software & appfor beauty, wellness, and fitness"
+          },
+          {
+            "nivel": 2,
+            "texto": "Built for everyone, from solopreneurs to enterprise."
+          },
+          {
+            "nivel": 2,
+            "texto": "What's your industry?"
+          },
+          {
+            "nivel": 3,
+            "texto": "Beauty"
+          },
+          {
+            "nivel": 3,
+            "texto": "Wellness"
+          },
+          {
+            "nivel": 3,
+            "texto": "Fitness"
+          },
+          {
+            "nivel": 2,
+            "texto": "What's your industry?"
+          },
+          {
+            "nivel": 3,
+            "texto": "Beauty"
+          },
+          {
+            "nivel": 3,
+            "texto": "Wellness"
+          },
+          {
+            "nivel": 3,
+            "texto": "Fitness"
+          },
+          {
+            "nivel": 2,
+            "texto": "FAQ"
+          },
+          {
+            "nivel": 4,
+            "texto": "For businesses"
+          },
+          {
+            "nivel": 4,
+            "texto": "For customers"
+          },
+          {
+            "nivel": 3,
+            "texto": "Find Businesses"
+          },
+          {
+            "nivel": 3,
+            "texto": "Business Software"
+          },
+          {
+            "nivel": 3,
+            "texto": "Business Features"
+          },
+          {
+            "nivel": 3,
+            "texto": "Business Products"
+          },
+          {
+            "nivel": 3,
+            "texto": "Company"
+          },
+          {
+            "nivel": 3,
+            "texto": "Resources"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 85
+          },
+          {
+            "valor": "18px / lh 1.56 / ls normal / w 400",
+            "veces": 35
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 400",
+            "veces": 33
+          },
+          {
+            "valor": "14px / lh 1.43 / ls normal / w 600",
+            "veces": 19
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 600",
+            "veces": 12
+          },
+          {
+            "valor": "15px / lh 1.00 / ls normal / w 600",
+            "veces": 9
+          },
+          {
+            "valor": "20px / lh 1.40 / ls normal / w 600",
+            "veces": 9
+          },
+          {
+            "valor": "14px / lh 1.71 / ls normal / w 600",
+            "veces": 6
+          },
+          {
+            "valor": "16px / lh 1.00 / ls normal / w 400",
+            "veces": 4
+          },
+          {
+            "valor": "60px / lh 1.00 / ls normal / w 700",
+            "veces": 4
+          },
+          {
+            "valor": "36px / lh 1.11 / ls normal / w 700",
+            "veces": 3
+          },
+          {
+            "valor": "48px / lh 1.33 / ls normal / w 700",
+            "veces": 3
+          },
+          {
+            "valor": "16px / lh normal / ls normal / w 400",
+            "veces": 2
+          },
+          {
+            "valor": "16px / lh 1.25 / ls normal / w 400",
+            "veces": 2
+          },
+          {
+            "valor": "30px / lh 1.50 / ls normal / w 700",
+            "veces": 2
+          },
+          {
+            "valor": "20px / lh 1.50 / ls normal / w 700",
+            "veces": 2
+          }
+        ],
+        "familias": [
+          {
+            "valor": "figtree",
+            "veces": 235
+          },
+          {
+            "valor": "Helvetica",
+            "veces": 8
+          },
+          {
+            "valor": "instrumentSerif",
+            "veces": 6
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 90
+          },
+          {
+            "valor": "rgb(51, 51, 51)",
+            "veces": 65
+          },
+          {
+            "valor": "lab(35.6337 -1.58697 -10.8425)",
+            "veces": 25
+          },
+          {
+            "valor": "oklab(0.999994 0.0000455677 0.0000200868 / 0.8)",
+            "veces": 23
+          },
+          {
+            "valor": "oklab(0.999994 0.0000455678 0.0000200868 / 0.9)",
+            "veces": 23
+          },
+          {
+            "valor": "rgb(38, 99, 156)",
+            "veces": 9
+          },
+          {
+            "valor": "oklab(0.32109 0.0000146329 0.0000064075 / 0.8)",
+            "veces": 5
+          },
+          {
+            "valor": "rgb(204, 71, 68)",
+            "veces": 2
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgba(255, 255, 255, 0.08)",
+            "veces": 40
+          },
+          {
+            "valor": "rgb(204, 71, 68)",
+            "veces": 10
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 8
+          },
+          {
+            "valor": "oklab(0 0 0 / 0.2)",
+            "veces": 4
+          },
+          {
+            "valor": "rgb(51, 51, 51)",
+            "veces": 3
+          },
+          {
+            "valor": "rgb(235, 235, 235)",
+            "veces": 2
+          },
+          {
+            "valor": "rgb(248, 248, 248)",
+            "veces": 2
+          },
+          {
+            "valor": "oklab(0 0 0 / 0.4)",
+            "veces": 2
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "8px",
+            "veces": 59
+          },
+          {
+            "valor": "16px",
+            "veces": 43
+          },
+          {
+            "valor": "24px",
+            "veces": 41
+          },
+          {
+            "valor": "32px",
+            "veces": 15
+          },
+          {
+            "valor": "14px",
+            "veces": 14
+          },
+          {
+            "valor": "12px",
+            "veces": 13
+          },
+          {
+            "valor": "20px",
+            "veces": 13
+          },
+          {
+            "valor": "4px",
+            "veces": 11
+          },
+          {
+            "valor": "-1px",
+            "veces": 9
+          },
+          {
+            "valor": "6px",
+            "veces": 6
+          },
+          {
+            "valor": "2px",
+            "veces": 5
+          },
+          {
+            "valor": "64px",
+            "veces": 5
+          },
+          {
+            "valor": "12px 8px",
+            "veces": 3
+          },
+          {
+            "valor": "10px",
+            "veces": 2
+          },
+          {
+            "valor": "80px",
+            "veces": 2
+          },
+          {
+            "valor": "112px",
+            "veces": 2
+          }
+        ],
+        "radios": [
+          {
+            "valor": "3.35544e+07px",
+            "veces": 88
+          },
+          {
+            "valor": "4px",
+            "veces": 10
+          },
+          {
+            "valor": "16px",
+            "veces": 8
+          },
+          {
+            "valor": "50%",
+            "veces": 3
+          },
+          {
+            "valor": "6px",
+            "veces": 3
+          },
+          {
+            "valor": "19.471px",
+            "veces": 3
+          },
+          {
+            "valor": "21px",
+            "veces": 3
+          },
+          {
+            "valor": "24px",
+            "veces": 2
+          }
+        ],
+        "radiosDistintos": 8,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+            "veces": 11
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.2) 0px 1px 1px 0px inset, rgba(255, 25",
+            "veces": 10
+          },
+          {
+            "valor": "rgb(204, 204, 204) 0px 0px 2px 2px",
+            "veces": 1
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.4) 0px 1px 2px 0px inset, rgba(0, 0, 0",
+            "veces": 1
+          },
+          {
+            "valor": "rgba(255, 255, 255, 0.3) 2px 2px 4px 0px inset, rgba(255, 25",
+            "veces": 1
+          }
+        ],
+        "sombrasDistintas": 5,
+        "zIndex": [
+          {
+            "valor": "10",
+            "veces": 45
+          },
+          {
+            "valor": "1",
+            "veces": 4
+          },
+          {
+            "valor": "9989",
+            "veces": 4
+          },
+          {
+            "valor": "2",
+            "veces": 3
+          },
+          {
+            "valor": "50",
+            "veces": 3
+          },
+          {
+            "valor": "9998",
+            "veces": 2
+          },
+          {
+            "valor": "99999",
+            "veces": 2
+          },
+          {
+            "valor": "2147483638",
+            "veces": 2
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 41
+          },
+          {
+            "valor": "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), translate 0.3s cubic-bezi",
+            "veces": 9
+          },
+          {
+            "valor": "color 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s cubic-b",
+            "veces": 4
+          },
+          {
+            "valor": "opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 4
+          },
+          {
+            "valor": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1) 0.15s, background-color 0.15s",
+            "veces": 3
+          },
+          {
+            "valor": "0.3s cubic-bezier(0.2, 0.9, 0.3, 1.5)",
+            "veces": 3
+          },
+          {
+            "valor": "0.5s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 3
+          },
+          {
+            "valor": "transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), translate 0.5s cubic-bezi",
+            "veces": 3
+          },
+          {
+            "valor": "0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 3
+          },
+          {
+            "valor": "transform 0.2s ease-out, color 0.2s ease-out, background-color 0.2s ea",
+            "veces": 2
+          },
+          {
+            "valor": "transform 0.4s",
+            "veces": 2
+          },
+          {
+            "valor": "box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 2
+          }
+        ],
+        "transicionesDistintas": 21,
+        "hojasLeidas": 19,
+        "unidades": {
+          "em": 183,
+          "rem": 290,
+          "px": 1856,
+          "clamp": 0,
+          "vw": 24
+        },
+        "keyframesDeclarados": 32,
+        "transitionAll": 10,
+        "tieneReducedMotion": true,
+        "breakpointsPx": [
+          {
+            "px": 768,
+            "veces": 21
+          },
+          {
+            "px": 1024,
+            "veces": 16
+          },
+          {
+            "px": 640,
+            "veces": 8
+          },
+          {
+            "px": 1536,
+            "veces": 8
+          },
+          {
+            "px": 1280,
+            "veces": 7
+          },
+          {
+            "px": 480,
+            "veces": 6
+          },
+          {
+            "px": 2499,
+            "veces": 6
+          },
+          {
+            "px": 2048,
+            "veces": 5
+          },
+          {
+            "px": 481,
+            "veces": 4
+          },
+          {
+            "px": 600,
+            "veces": 3
+          }
+        ]
+      },
+      "scroll": {
+        "muestras": [
+          {
+            "y": 0,
+            "conTransform": 15,
+            "navFija": true
+          },
+          {
+            "y": 2338,
+            "conTransform": 22,
+            "navFija": true
+          },
+          {
+            "y": 4616,
+            "conTransform": 21,
+            "navFija": true
+          },
+          {
+            "y": 10420,
+            "conTransform": 15,
+            "navFija": true
+          },
+          {
+            "y": 14588,
+            "conTransform": 12,
+            "navFija": true
+          }
+        ],
+        "hayMovimientoLigadoAlScroll": true,
+        "posicionesDistintas": 5,
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "osano-cm-window__dialog osano-cm-dialog osano-cm-dialog--pos",
+            "posicion": "fixed",
+            "alto": 92,
+            "top": "808px"
+          },
+          {
+            "etiqueta": "button",
+            "clase": "osano-cm-window__widget osano-cm-widget osano-cm-widget--pos",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "auto"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "osano-cm-window__info-dialog osano-cm-info-dialog osano-cm-i",
+            "posicion": "fixed",
+            "alto": 900,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "osano-cm-info-dialog__info osano-cm-info osano-cm-info--posi",
+            "posicion": "fixed",
+            "alto": 900,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "osano-cm-info__info-dialog-header osano-cm-info-dialog-heade",
+            "posicion": "sticky",
+            "alto": 52,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "p",
+            "clase": "osano-cm-info-dialog-header__header osano-cm-header",
+            "posicion": "sticky",
+            "alto": 48,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "fixed top-0 right-0 left-0 z-50 bg-white select-none dark:bg",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "header",
+            "clase": "sticky top-0 z-[9998] bg-background transition-shadow durati",
+            "posicion": "sticky",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "fixed top-15 right-0 left-0 z-40 transition-all duration-300",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "60px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "hidden lg:flex sticky top-0 bg-background items-center z-50 ",
+            "posicion": "sticky",
+            "alto": 120,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "sticky",
+            "posicion": "sticky",
+            "alto": 0,
+            "top": "90px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "sticky",
+            "posicion": "sticky",
+            "alto": 0,
+            "top": "102px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [],
+        "dialogos": 0,
+        "ctasDistintos": 116,
+        "ctasTop": [
+          {
+            "texto": "Start Free Trial",
+            "veces": 4
+          },
+          {
+            "texto": "Beauty",
+            "veces": 4
+          },
+          {
+            "texto": "Salon",
+            "veces": 4
+          },
+          {
+            "texto": "Barber",
+            "veces": 4
+          },
+          {
+            "texto": "Booth Renter",
+            "veces": 3
+          },
+          {
+            "texto": "Nail",
+            "veces": 3
+          },
+          {
+            "texto": "Tanning",
+            "veces": 3
+          },
+          {
+            "texto": "Spa",
+            "veces": 3
+          },
+          {
+            "texto": "Privacy Policy",
+            "veces": 2
+          },
+          {
+            "texto": "Sign Up",
+            "veces": 2
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 25,
+        "sinAlt": 0,
+        "altVacio": 1,
+        "sinDimensiones": 22,
+        "lazy": 8,
+        "conSrcset": 9,
+        "interactivos": 162,
+        "objetivosMenores44px": 108,
+        "idioma": "en",
+        "landmarks": {
+          "header": 1,
+          "nav": 3,
+          "main": 0,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(204, 71, 68)",
+            "ratio": 4.61
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(51, 51, 51)",
+            "ratio": 12.63
+          },
+          {
+            "texto": "rgb(51, 51, 51)",
+            "fondo": "rgb(204, 71, 68)",
+            "ratio": 2.74
+          },
+          {
+            "texto": "rgb(51, 51, 51)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 12.63
+          },
+          {
+            "texto": "rgb(51, 51, 51)",
+            "fondo": "rgb(51, 51, 51)",
+            "ratio": 1
+          },
+          {
+            "texto": "lab(35.6337 -1.58697 -10.8425)",
+            "fondo": "rgb(204, 71, 68)",
+            "ratio": 1.64
+          },
+          {
+            "texto": "lab(35.6337 -1.58697 -10.8425)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 7.56
+          },
+          {
+            "texto": "lab(35.6337 -1.58697 -10.8425)",
+            "fondo": "rgb(51, 51, 51)",
+            "ratio": 1.67
+          },
+          {
+            "texto": "oklab(0.999994 0.0000455677 0.0000200868 / 0.8)",
+            "fondo": "rgb(204, 71, 68)",
+            "ratio": 3.5
+          },
+          {
+            "texto": "oklab(0.999994 0.0000455677 0.0000200868 / 0.8)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "oklab(0.999994 0.0000455677 0.0000200868 / 0.8)",
+            "fondo": "rgb(51, 51, 51)",
+            "ratio": 8.69
+          }
+        ],
+        "fondosTranslucidosOmitidos": 5
+      },
+      "rendimiento": {
+        "pesoTotalKb": 10944,
+        "porTipoKb": {
+          "document": 362.5,
+          "stylesheet": 65.2,
+          "font": 108.2,
+          "image": 4783.4,
+          "script": 3508.1,
+          "fetch": 1,
+          "xhr": 2113.4,
+          "texttrack": 2.2,
+          "ping": 0
+        },
+        "pedidos": {
+          "document": 8,
+          "stylesheet": 38,
+          "font": 8,
+          "image": 96,
+          "script": 294,
+          "fetch": 65,
+          "xhr": 26,
+          "texttrack": 4,
+          "ping": 4
+        },
+        "hostsDistintos": 48,
+        "terceros": [
+          {
+            "host": "www.vagaro.com",
+            "pedidos": 119
+          },
+          {
+            "host": "us-west-2.graphassets.com",
+            "pedidos": 47
+          },
+          {
+            "host": "www.google.com",
+            "pedidos": 7
+          },
+          {
+            "host": "analytics.tiktok.com",
+            "pedidos": 6
+          },
+          {
+            "host": "px.ads.linkedin.com",
+            "pedidos": 5
+          },
+          {
+            "host": "image.mux.com",
+            "pedidos": 4
+          },
+          {
+            "host": "chunk-oci-us-ashburn-1-vop1.fastly.mux.com",
+            "pedidos": 3
+          },
+          {
+            "host": "bat.bing.com",
+            "pedidos": 3
+          }
+        ],
+        "fuentesCargadas": [
+          "figtree 300 900 normal",
+          "figtree 300 900 italic",
+          "figtree Fallback normal normal",
+          "instrumentSerif 400 normal",
+          "instrumentSerif 400 italic",
+          "instrumentSerif Fallback normal normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Vagaro Pro - Salon, Spa, & Fitness Business Software",
+        "descripcion": "Vagaro Pro for Business is the salon, spa, and fitness software that is affordable, intuitive, secure and reliable.",
+        "canonical": "https://www.vagaro.com/pro",
+        "og": 7,
+        "datosEstructurados": 3
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": false,
+        "framer": false
+      }
+    }
+  },
+  "noSePudoMedir": [],
+  "reducedMotion": {
+    "conAnimacion": 12,
+    "conTransicion": 88
+  },
+  "requiereOjoHumano": [
+    "Intencion de diseno: por que eligieron ESTA direccion visual y no otra.",
+    "Calidad del copy: si la promesa es creible y si los numeros estan respaldados.",
+    "Contenido detras de login, muro de cookies o interaccion (paso 2 de un popup, estados de error).",
+    "Si el movimiento AYUDA a entender o solo decora: eso se juzga mirando, no midiendo."
+  ]
+}

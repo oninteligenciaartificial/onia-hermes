@@ -27,12 +27,28 @@ brain dentro de la factory.
 
 ## Stack
 
-- Next.js 15 (App Router) + TypeScript
-- Tailwind CSS v4
-- shadcn/ui
-- pnpm (workspaces)
-- zod (validación de datos de empresa)
-- commander (CLI de generación)
+> Decidido 2026-08-29 con Sergio: el stack de CREACIÓN de webs es de **dos
+> niveles**, y elegir el nivel es parte de la frontera comercial (¿web o
+> sistema?). TypeScript en todo; "Java" no existe en este stack (era JavaScript).
+
+**Nivel 1 — Sitios de cliente (Landing / Web Profesional): HTML+CSS estático
+generado.** Sale de `packages/{tokens,blocks,templates}` + `generate/` (TS +
+zod + commander). Cero framework en runtime: peso mínimo, CWV perfectos,
+hosting trivial, y el e2e lo audita entero. **Es el default: una landing de
+cliente NUNCA arranca como app Next.**
+
+**Nivel 2 — Superficies con estado (Web Pro Onia con carrito, panel, portal):
+Next.js 15 (App Router) + React 19 + TypeScript.** Es lo que ya corre en
+`apps/site` (panel), `apps/onia-platform` (landing propia) y los storefronts
+Nuvia. Base de componentes aprobada: shadcn/ui; motion: motion.dev (la lib ya
+usada en `src/motion`); Tailwind CSS v4 donde la app ya lo trae.
+
+Herramientas transversales: pnpm (workspaces) · zod (validación de datos de
+empresa) · Playwright (gates) · Google Fonts por rango variable (un link por
+familia). Diseño-lado-fuente: la lista curada
+`data/references/design-sources/user-reference-urls.json` (Stitch para explorar
+direcciones, Haikei para SVG generativo propio, Rotato para mockups de
+dispositivo con capturas REALES).
 
 ---
 
@@ -46,7 +62,7 @@ web-factory/
 ├── packages/
 │   ├── tokens/                # design tokens (CSS vars) por cliente
 │   ├── blocks/                # bloques tokenizados (hero, pricing, footer...)
-│   └── templates/             # composiciones completas (landing, agencia, ecommerce)
+│   └── templates/             # composiciones completas (7: landing · store · dashboard · landing-focus · landing-clinic · landing-realestate · landing-logistics)
 ├── harvester/
 │   ├── registry/              # wrapper sobre `npx shadcn add <url>`
 │   ├── blocks-html/           # fetch + cheerio de bloques Tailwind
@@ -63,11 +79,23 @@ web-factory/
 
 ## Flujo de uso
 
-1. Elegir una plantilla de `packages/templates/`.
-2. Crear/editar `data/clients/<slug>.json` con los datos de la empresa.
-3. Ejecutar `pnpm generate <slug>`.
-4. El sitio sale en `out/<slug>/` con los colores, copy y logo del cliente inyectados
-   vía design tokens.
+> Actualizado 2026-08-29: el flujo real arranca en el INTAKE, no editando el
+> perfil a mano. Editar `data/clients/<slug>.json` directo sigue funcionando,
+> pero saltea la validación y los "pending inputs" — y así se pierden campos.
+
+1. Intake: el formulario del panel (`/onia-center/web-factory`) descarga el
+   JSON, o se llena `data/intakes/client-intake.template.json`. Cuestionario al
+   cliente: `INTAKE_CLIENTE.md` (secciones 1-7; la 8 la guía ONIA).
+2. `pnpm factory:build --input data/intakes/<archivo>.intake.json --dry-run`
+   → valida y lista los **pending inputs**: ese listado es el checklist que se
+   le pide al cliente, no se inventa.
+3. `pnpm factory:build <slug|--input …> -t <template> --force` → perfil
+   (`data/clients/<slug>.json`) + receta de diseño (`.design.json/.md`) + sitio
+   en `out/<slug>/` (pasos sueltos: `client:new` · `design:auto` · `generate`).
+4. Ver: `node scripts/serve-out.mjs 4319` → `http://localhost:4319/<slug>/`.
+5. Gates: `pnpm test` · `pnpm e2e` (axe WCAG 2.2 AA + CWV) ·
+   `pnpm images:check <slug>` · checklist de 17 puntos de abajo, sobre el sitio
+   SERVIDO · mirar las capturas (un 200 y un grep no son verificación).
 
 Los bloques y templates **nunca hardcodean color**: leen los tokens en `packages/tokens`,
 que se generan desde el JSON del cliente.

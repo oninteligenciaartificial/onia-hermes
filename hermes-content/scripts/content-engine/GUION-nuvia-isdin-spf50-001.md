@@ -32,7 +32,7 @@ Mara UGC: calido, cercano, creible, espanol latino natural, sin energia de infom
 (Voz IA generada aparte; requiere aprobacion para publicar.)
 
 ## Prompts visuales (Higgsfield, modelo barato)
-Tomas de Mara con `soul_2` + soul_id `b8f5c353-...` (~0.12cr c/u), 9:16:
+Tomas de Mara con `text2image_soul_v2` + soul_id `b8f5c353-...` (~0.12cr c/u), 9:16:
 1. hook: selfie UGC bano/tocador, luz manana, expresion cercana.
 2. problem: Mara mira crema pesada con leve rechazo, mismo set.
 3. product: Mara sostiene un frasco de protector cerca del rostro (neutro/sin marca; el

@@ -531,3 +531,187 @@ IA que ya corre por cron cada 2 h. Si no aporta algo que el radar no cubra, se d
 
 ---
 
+---
+
+> **Agregado 2026-08-22, segunda tanda.** Sale de
+> [DbT8hWPsyjN](https://www.instagram.com/reels/DbT8hWPsyjN/) ·
+> [ficha](../2026-08-22-handoff-context-rot.md).
+> **Hacelo primero:** cierra la regla de CLAUDE.md linea 102, que lleva semanas sin
+> artefacto. No choca con nada de esta sesion.
+
+## N1 · El estándar `HANDOFF.md` — la regla que nunca se volvió archivo
+
+```text
+Sesion: pendiente (metodo). git branch --show-current primero.
+
+Contexto: un reel ensena a cerrar la sesion de Claude Code escribiendo un handoff.md con 5
+campos fijos, en vez de confiar en /compact. Ficha con el analisis y las verificaciones:
+hermes-content/references/video-intake/2026-08-22-handoff-context-rot.md
+
+LOS 5 CAMPOS, literales de la pantalla del video:
+  1) Objetivo
+  2) Estado en que termino
+  3) Archivos y cambios
+  4) Intentos fallidos        <- el que casi nadie escribe y el que mas vale
+  5) Proximos pasos
+
+POR QUE ESTO NO ES UNA IDEA NUEVA SINO UNA DEUDA NUESTRA:
+CLAUDE.md linea 102 YA dice "Al cerrar la sesion, dejar el estado escrito: que quedo en
+produccion, que quedo a medias y donde, y que depende de Sergio". Esa regla existe hace
+semanas y NUNCA se convirtio en un archivo con plantilla. El video aporta exactamente la
+plantilla que le falta.
+
+LO QUE YA ESTA INSTALADO (verificado leyendo los archivos, confirmalo vos igual):
+  - ~/.claude/commands/save-session.md  y  resume-session.md   -> escriben en ~/.claude/session-data/
+  - ~/.claude/skills/context-save/      y  context-restore/    -> escriben en ~/.gstack/sessions/
+Las CUATRO escriben FUERA del repo. Ese es el problema: el estado no se commitea, no viaja,
+no lo ve otra maquina y no lo ve otro carril. El aporte del video es que el archivo vive EN EL
+REPO.
+Y `grep -i handoff` en onia-hermes hoy solo devuelve las skills de video (handoff de
+movimiento entre escenas, otro sentido). No existe handoff de sesion.
+
+Tarea:
+1. VERIFICA VOS PRIMERO las 4 herramientas de arriba. Si alguna ya escribe dentro del repo,
+   el analisis se equivoco: decilo y pará. Si confirmas que todas escriben afuera, seguí.
+2. Decidi UNA sola cosa y escribila: reusamos save-session cambiandole el destino, o creamos
+   HANDOFF.md propio. NO construyas un quinto mecanismo al lado de los cuatro que ya hay —
+   ese es el error mas caro del preambulo y ya lo cometimos con otros temas.
+3. Define el formato uniendo los 5 campos del video con los 3 de CLAUDE.md linea 102. No son
+   incompatibles: los de CLAUDE.md son mas especificos de ONIA (que quedo EN PRODUCCION, que
+   depende de Sergio) y los del video son mas completos sobre el trabajo (intentos fallidos).
+   El resultado tiene que ser UNA lista, no dos pegadas.
+4. RESOLVE EL CHOQUE DE CARRILES, que el video no tiene porque el es una persona sola: aca
+   trabajamos con un worktree por carril y varios a la vez. Un HANDOFF.md en la raiz de cada
+   worktree choca al mergear a main. Decidi donde vive para que dos carriles abiertos no se
+   pisen, y respetá "nada suelto en la raiz" de la tabla de CLAUDE.md seccion 4.
+5. Escribi el HANDOFF de ESTA tarea usando el formato que definiste. Si el formato no sirve
+   para su propio cierre, esta mal.
+6. Actualiza CLAUDE.md linea 102 para que apunte al artefacto, en vez de pedir "el estado
+   escrito" en abstracto. Editá esa regla; no agregues una regla nueva abajo.
+
+EVIDENCIA PROPIA QUE VALE MAS QUE EL VIDEO: la sesion de analisis de reels se compacto hoy.
+El resumen que volvio traia el historial entero — cada error, cada correccion, cada metodo
+descartado — con el mismo peso que el estado actual. Fiel y larguisimo. La diferencia con un
+handoff no es el tamano: es que alguien ELIGE que importa. Un resumen no elige.
+
+OJO CON LA AFIRMACION DEL VIDEO: el audio dice que /compact "arrastra toda la conversacion
+vieja". Eso es FALSO — la compactacion resume y reemplaza. El caption del mismo post lo dice
+bien: "comprime la basura, no la saca". No repitas la version del audio en ningun doc nuestro.
+
+LISTO = un HANDOFF escrito con el formato nuevo, en la ubicacion decidida, que no choca entre
+carriles; CLAUDE.md linea 102 apuntando a el; y la decision escrita de si reusa save-session o
+no. Sin un quinto mecanismo huerfano.
+```
+
+## R10 · GitReverse: convierte un repositorio en el prompt que lo habría creado
+
+- **Ficha:** [GitReverse: convierte un repositorio en el prompt que lo habría creado](../2026-08-28-gitreverse-de-repo-a-prompt.md)
+- **Qué falta:** Nada para probarlo: la web es pública.
+
+```text
+Objetivo único: probar GitReverse en un caso real nuestro y decidir si entra al stack o se descarta.
+
+De dónde sale: ficha `gitreverse-de-repo-a-prompt` (IG DbtcMKxttvh). La herramienta (gitreverse.com) toma una URL de GitHub y devuelve el prompt que habría producido ese repositorio, escrito como brief en primera persona.
+
+Para qué serviría acá: el carril evalúa herramientas ajenas todo el tiempo, y esto acorta "leer un repo entero" a "leer su brief".
+
+Pasos:
+
+1) Probarlo con DOS repos donde podamos juzgar la respuesta:
+   - uno que ya conozcamos bien, para ver si el brief que devuelve se parece a lo que el proyecto realmente es
+   - uno que estemos evaluando de verdad — por ejemplo el de OpenReply, del lote anterior, que es candidato a comparar contra nuestro circuito comentario->DM
+
+2) Juzgar con un criterio y no con impresión: ¿el brief te ahorra leer el repo, o te da una versión bonita que igual tenés que verificar? Si hay que verificar todo, no ahorra nada.
+
+3) LA TRAMPA, que el reel no menciona y hay que dejar escrita: el prompt que devuelve es una HIPÓTESIS PLAUSIBLE, no el prompt real. Nadie sabe si ese proyecto se hizo así. Es exactamente la distinción que la skill sacar-prompt ya define entre RECUPERAR (está escrito, se lee) y RECONSTRUIR (se infiere, y se dice que se infirió). Si adoptamos la herramienta, su salida se rotula siempre como reconstruida.
+
+4) Veredicto de una línea: entra al stack / no entra, con el motivo. Si no entra, decirlo y cerrar — no dejarlo en "a evaluar" para siempre.
+
+LISTO = las dos pruebas hechas con su salida guardada, el juicio sobre si ahorra trabajo real, la advertencia de reconstruido-no-recuperado escrita, y un veredicto de una línea.
+```
+
+
+## S01 · Graphify: el mapa del repo que sobrevive a la sesión
+
+- **Ficha:** [Graphify](../2026-08-28-graphify-memoria-permanente-del-agente.md)
+- **Qué falta:** nada para evaluarlo. Falta comparar contra la skill `understand-anything` que ya tenemos.
+
+```text
+Objetivo único: decidir si Graphify entra al stack — pero PRIMERO verificar si ya tenemos lo mismo.
+
+POR QUÉ ESTO IMPORTA HOY, con el caso medido: el 2026-08-28 Sergio cortó un lote a mitad
+preguntando por qué se gastaban tantos tokens. La mitad de esa respuesta eran las imágenes, y ya
+se arregló (640px, ver 2026-08-23-costo-del-analisis.md). La otra mitad es esto: cada sesión de
+este repo vuelve a descubrir dónde están las cosas.
+
+El carrusel de origen pone la cuenta: un agente que arranca de cero gasta ~46.740 tokens sólo en
+redescubrir un proyecto — grep 3.240, y siete archivos leídos enteros entre 1.900 y 11.200 cada
+uno. Y lo tira todo al cerrar.
+
+PASO 0, Y ES EL QUE MÁS IMPORTA — NO EMPEZAR INSTALANDO:
+
+En el stack ya hay una skill llamada `understand-anything` que construye grafos de conocimiento
+de un codebase. Antes de sumar una herramienta nueva:
+
+  a) Leer qué hace exactamente esa skill: qué extrae, dónde deja la salida, si se actualiza sola.
+  b) Contestar sin adornos: ¿resuelve el mismo problema que Graphify?
+  c) Si lo resuelve, la tarea deja de ser "instalar Graphify" y pasa a ser "por qué no la usamos".
+
+Esto no es burocracia. En esta misma sesión pasó DOS veces que algo "nuevo" ya existía: el
+estándar de handoff que reinventé cuando main ya lo tenía, y la GEMINI_API_KEY que la memoria
+daba por faltante y estaba puesta. La regla del proyecto es mirar antes de construir.
+
+SI Y SÓLO SI `understand-anything` no cubre el caso, seguir:
+
+1) Instalar y correr, con los comandos transcritos del carrusel:
+
+     uv tool install "graphifyy[office,mcp]"        # ojo: el paquete es graphifyy con DOS 'y'
+     graphify install --project                      # --project lo deja dentro del repo
+
+   Verificar el nombre del paquete antes de correrlo. Si no existe o cambió, decirlo y parar: el
+   dato viene de una captura de pantalla, no de haberlo instalado.
+
+2) CREAR .graphifyignore ANTES de construir el grafo. El propio autor lo marca como el paso
+   crítico y explica por qué: Graphify NO lee tu .gitignore, son archivos distintos. Sin este
+   archivo parsea node_modules entero y el grafo sale 95% dependencias de terceros. Empezar por:
+
+     node_modules/
+     dist/
+     build/
+     .next/
+     coverage/
+     *.min.js
+     package-lock.json
+     pnpm-lock.yaml
+
+   Y agregarle lo específico de ESTE repo, que es grande y tiene varios proyectos adentro:
+   .hermes/, scratchpad, los assets de video, los backups de n8n.
+
+3) Construir el grafo DESDE EL ASISTENTE, no desde la terminal:
+
+     /graphify .
+
+   La diferencia es de plata y el carrusel la explica: desde el asistente la extracción se
+   despacha como subagentes de la suscripción; desde la terminal exige una API key de pago.
+
+4) Leer GRAPH_REPORT.md primero — según el autor trae "god nodes, comunidades, conexiones que no
+   sabías que tenías". Para este repo eso es interesante de verdad: onia-hermes tiene el cerebro,
+   el core, web-factory y la orquestación conviviendo.
+
+5) Instalar el hook: `graphify hook install`. El autor avisa que no es opcional, y tiene razón:
+   un grafo desactualizado es peor que ninguno, porque el agente confía en él y cita líneas que
+   ya no existen.
+
+6) MEDIR, que es lo único que decide. Correr una tarea típica del carril DOS veces — una sin
+   grafo y otra con grafo — y comparar tokens de entrada. Si no baja de forma clara, no entra.
+   Sin ese número esto es fe, no ingeniería.
+
+LO QUE NO SE PUEDE DAR POR CIERTO:
+  - los 46.740 tokens son un ejemplo del autor, no una medición publicada. El orden de magnitud
+    es creíble; el número no se cita como dato.
+  - el caption promete "7 pasos", la portada dice "5" y el carrusel muestra 01-05. Son cinco.
+
+LISTO = un documento con (a) el veredicto sobre si `understand-anything` ya lo cubre, y (b) si no
+lo cubre, la medición de tokens de la misma tarea con y sin grafo, y una decisión de una línea:
+entra al stack / no entra, con el motivo.
+```

@@ -219,3 +219,78 @@ prompts: [PROMPTS_LOTE_2026-08-20.md](PROMPTS_LOTE_2026-08-20.md) (J1–J4)
 | [DbQVVldE9ty](https://www.instagram.com/p/DbQVVldE9ty/) campaña transparente | IA | MEJORA | dirección de arte, sin prompts |
 | [DcLw-KHkcfU](https://www.instagram.com/p/DcLw-KHkcfU/) modelos IA | MARKETING | MEJORA | el mismo pitch ya fichado |
 | [DcPf2NwCaDK](https://www.instagram.com/p/DcPf2NwCaDK/) 5 empleados IA | MARKETING | MEJORA | molde de carrusel; usa foto de personaje de TV |
+
+| [DcPXfcCvYFO](https://www.instagram.com/reel/DcPXfcCvYFO/) lista sobre b-roll | MARKETING | **SIRVE YA** | [molde R1](2026-08-20-lista-sobre-broll.md) — costo cero; el registro NO se copia |
+| [DbtRIfTojBt](https://www.instagram.com/reel/DbtRIfTojBt/) lista sobre b-roll | MARKETING | **SIRVE YA** | mismo molde, segundo ejemplo |
+
+➡️ **Nuevo:** [BANCO_DE_REPLICABLES.md](BANCO_DE_REPLICABLES.md) — la cola de producción.
+
+## 2026-08-21-20260605-mara-beauty-serum-controversial-hook-veo-lite-v1-final
+
+- local:20260605-mara-beauty-serum-controversial-hook-veo-lite-v1-final.mp4 · 8 s
+- [Lectura + verbatim](transcripciones/2026-08-21-20260605-mara-beauty-serum-controversial-hook-veo-lite-v1-final.md)
+- Resumen: El video es un anuncio de cuidado facial que cuestiona las rutinas complejas de belleza. Muestra a una mujer pelirroja aplicando un producto en serum y luciendo una piel luminosa. El mensaje central propone simplificar el cuidado de la piel con menos pasos para lograr mejores resultados ("Barrier Glow").
+- **Veredicto: PENDIENTE**
+
+---
+
+# 2026-08-21 — la fuente: el chat con `mrsatiras__`
+
+Ficha: [2026-08-21-chat-mrsatiras-fuente.md](2026-08-21-chat-mrsatiras-fuente.md)
+
+Se entró al IG de Sergio. **Guardados vacío**: todo lo que le interesa está en ese chat.
+Las cuentas que le mandan (`luxry.ai`, `bluuu.ai`, `prompts.ig`) **gatean el prompt** — solo
+queda la imagen, que es lo que `sacar-prompt` convierte.
+
+| Item | Qué es | Estado |
+|---|---|---|
+| [DcI9w9GEnZH](https://www.instagram.com/p/DcI9w9GEnZH/) `bluuu.ai` | **9 escenas "CAUGHT LIVING" tuneadas para Higgsfield Soul 2.0** — el motor de Lucía | 12 láminas bajadas · prompts a reconstruir |
+| [DcLiEpCGJne](https://www.instagram.com/p/DcLiEpCGJne/) `luxry.ai` | escenas de restaurante desde un solo prompt; **muestra el prompt sobre la imagen** | 9 láminas bajadas |
+| [DcPTX07yAOA](https://www.instagram.com/p/DcPTX07yAOA/) `prompts.ig` | video 35 s | bajado, sin analizar |
+
+## Lote 2026-08-21 — 9 items · 5 SIRVE YA · 4 con prompt en pantalla
+
+Prompts: [PROMPTS_LOTE_2026-08-21.md](PROMPTS_LOTE_2026-08-21.md) (L1–L3)
+
+| Item | Tipo | Veredicto | Qué dejó |
+|---|---|---|---|
+| [DcQvRrGM-wm](https://www.instagram.com/p/DcQvRrGM-wm/) avatar "Carla" de cero | IA | **SIRVE YA** | **el esqueleto de 6 bloques + los 10 chips + Pinterest como director de fotografía** (L1) |
+| [DcI9w9GEnZH](https://www.instagram.com/p/DcI9w9GEnZH/) CAUGHT LIVING | IA | **SIRVE YA** | 9 escenas de vida cotidiana tuneadas para Soul 2.0 (L2) |
+| [DcLiEpCGJne](https://www.instagram.com/p/DcLiEpCGJne/) luxry.ai | IA | **SIRVE YA** | prompt en pantalla + 7 escenas de cena |
+| [DcPTX07yAOA](https://www.instagram.com/p/DcPTX07yAOA/) UGC de producto | IA | **SIRVE YA** | receta de UGC sintético con producto real |
+| [DcQiDM_o06I](https://www.instagram.com/p/DcQiDM_o06I/) reel-portafolio mudo | MARKETING | **SIRVE YA** | 12 s, sin voz: gancho POV + tres piezas |
+| [DcJe7nLpuOA](https://www.instagram.com/p/DcJe7nLpuOA/) QR dinámico | SAAS | MEJORA | módulo recurrente que **no existe en el core** (L3) |
+| [DcRJIrdDs7m](https://www.instagram.com/p/DcRJIrdDs7m/) `fx` de Vercel Labs | SAAS | MEJORA | agente de código, binario de 6,39 MiB |
+| [DZI1Fg8J_RE](https://www.instagram.com/p/DZI1Fg8J_RE/) live commerce TikTok Shop | SAAS | MEJORA | operación de live shop brasilera |
+| [DcLqjb6slaV](https://www.instagram.com/p/DcLqjb6slaV/) "iba a contratar a alguien" | MARKETING | MEJORA | talking-head caminando |
+
+## Lote 2026-08-22 — 14 items · **9 SIRVE YA**, el mejor rendimiento del corpus
+
+Prompts: [PROMPTS_LOTE_2026-08-22.md](PROMPTS_LOTE_2026-08-22.md) (M1–M5)
+
+| Item | Tipo | Veredicto | Qué dejó |
+|---|---|---|---|
+| [DcMX7O8i6CZ](https://www.instagram.com/p/DcMX7O8i6CZ/) film de producto | IA | **SIRVE YA** | **prompt CINE literal con 7 bloques con nombre + sobrecobertura + regla de texto** (M1) |
+| [DZGa5cbJT3n](https://www.instagram.com/p/DZGa5cbJT3n/) edición por prompt | IA | **SIRVE YA** | `video_edit` sobre metraje real; **el corte se esconde en un whip pan** (M2) |
+| [DcNIJtpltiI](https://www.instagram.com/p/DcNIJtpltiI/) carrusel que vende | MARKETING | **SIRVE YA** | molde A/B "ABURRE vs VENDE" (M3) |
+| [DYIRUT2Mwwj](https://www.instagram.com/p/DYIRUT2Mwwj/) 5 footers | WEB | **SIRVE YA** | 3 de 5 son CSS sobre el bloque que ya existe (M4) |
+| [DcS3tJno9ZT](https://www.instagram.com/p/DcS3tJno9ZT/) escalera de correos | MARKETING | **SIRVE YA** | el molde 0→10 **por segunda vez**: es formato reusable (M5) |
+| [DcRu-G4gpvu](https://www.instagram.com/p/DcRu-G4gpvu/) PunchPass NFC | SAAS | **SIRVE YA** | fidelización con sello por NFC; el molde sí, el módulo no existe |
+| [Db-nd-CEtP3](https://www.instagram.com/p/Db-nd-CEtP3/) retratos GPT Image 2 | IA | **SIRVE YA** | 6 retratos, prompts reconstruidos |
+| [DbYd82HE7sV](https://www.instagram.com/p/DbYd82HE7sV/) campaña de silla | IA | **SIRVE YA** | 8 tomas editoriales de producto |
+| [DcJbwUSSuPf](https://www.instagram.com/p/DcJbwUSSuPf/) terror doméstico | IA | **SIRVE YA** | 4 planos, 19 s, mudo |
+| [DcLNV1dOO8U](https://www.instagram.com/p/DcLNV1dOO8U/) caso de 6 pasos | MARKETING | MEJORA | minería de demanda por subtítulos de YouTube |
+| [DcVxcj5M-BQ](https://www.instagram.com/p/DcVxcj5M-BQ/) spec ad Nike | IA | MEJORA | abre mostrando que es IA |
+| [DcEOqoYBIwP](https://www.instagram.com/p/DcEOqoYBIwP/) agente de voz | MARKETING | MEJORA | demo de Fish Audio |
+| [DcUSkXRiJKD](https://www.instagram.com/p/DcUSkXRiJKD/) 10 nichos aburridos | MARKETING | MEJORA | servicios de campo |
+| [Da1OHOlIHhF](https://www.instagram.com/p/Da1OHOlIHhF/) gancho POV | MARKETING | MEJORA | 2 s a sangre + pieza ajena |
+
+## Segunda tanda del 2026-08-22 — 1 item suelto
+
+| Item | Carril | Veredicto | Qué deja |
+|---|---|---|---|
+| [DbT8hWPsyjN](https://www.instagram.com/reels/DbT8hWPsyjN/) handoff.md · [@juanaia_](https://www.instagram.com/juanaia_/) | MÉTODO | **SIRVE YA** | **los 5 campos del handoff de sesión** (N1) + el kit de sobreimpresión: terminal falsa persistente, chip de glosario, subtítulos en dos registros (N2) + el molde de 6 actos con el acto 2 largo (N3). [Ficha](2026-08-22-handoff-context-rot.md) |
+
+**Primer item del corpus que no toca un producto: toca cómo trabajamos.** Y el hallazgo
+incómodo es nuestro, no del video — CLAUDE.md línea 102 pide "dejar el estado escrito" desde
+hace semanas y nunca se convirtió en un archivo con plantilla.

@@ -28,8 +28,13 @@ nombre del archivo (`tanda-20260821/`). No son estimaciones de catálogo:
 
 ## Identidad — verificado hoy
 
-- Ancla vigente: **`58bbd635-9b90-4bd2-b08a-1cd4915bd563`** (`lucia-ancla-2026-08`), `status: completed`.
+- Ancla vigente: **`58bbd635-9b90-4bd2-b08a-1cd4915bd563`** (`lucia-skin-v1`, 7 fotos).
 - Se inyecta escribiendo **`<<<58bbd635-9b90-4bd2-b08a-1cd4915bd563>>>`** dentro del prompt.
+- ⛔ **`452d8375-…` (`lucia-ancla-2026-08`) NO se usa.** Corregido el 2026-09-03: esta línea decía
+  que era «el ancla vigente» y estaba mandando a dispararla. `BANCO-OFICIAL.md` la había jubilado
+  (1 sola foto, inventaba el perfil) y el carril `calidad-generado` midió por qué: es la que
+  sostiene la **Familia B**, la cara que derivó del canon (P5 de `BITACORA-PERFECCION.md`).
+  **Este documento dirige una generación, así que la contradicción se disparaba de verdad.**
 - El Soul `LUCIA-SINTETICA-v3` **NO se usa**: probado A/B, no le gana al Element (queda de respaldo).
 
 ## Las cuatro llamadas

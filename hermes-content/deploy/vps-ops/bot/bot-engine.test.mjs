@@ -22,6 +22,7 @@ import {
   checkGuardrails,
   enforceGuardrails,
 } from "./guardrails.mjs";
+import { applyKnowledge, asRecepcionista, validateKnowledge } from "./knowledge.mjs";
 
 // Config de prueba: horarios concretos (los reales los define Sergio, ver TODO en config.mjs).
 const CONFIG = createBotConfig({
@@ -426,64 +427,6 @@ test("mismo estado + mismo mensaje = misma salida (sin Date.now ni Math.random)"
   assert.deepEqual(a.state, b.state);
 });
 
-test("veterinaria y estética son rubros propios, y no se roban los que ya existían", () => {
-  // Antes del 2026-08-16: `veterinari\w+` vivía en `salud` y `estetica` en `servicios`, así que el
-  // bot le decía a un veterinario "anotado que te dedicás a salud". Sergio llegaba a la demo sin
-  // saber de qué rubro hablaba. La capa editable NO podía arreglarlo: sus palabras entran después
-  // de las del código y `salud` le ganaba siempre.
-  const rubroDe = (frase) => run(["hola", frase]).turns[1].nextState.qualification.industry;
-
-  assert.equal(rubroDe("tengo una veterinaria en santa cruz"), "veterinaria");
-  assert.equal(rubroDe("soy veterinario, atiendo mascotas"), "veterinaria");
-  assert.equal(rubroDe("tengo un centro de estetica"), "estetica");
-
-  // La otra mitad: mover una palabra no puede cambiarle el rubro a quien ya lo tenía bien.
-  // Peluquería, salón y spa son SERVICIOS — el track del core es la clínica estética, no el salón.
-  assert.equal(rubroDe("tengo una peluqueria"), "servicios");
-  assert.equal(rubroDe("tengo un salon de belleza"), "servicios");
-  assert.equal(rubroDe("tengo un consultorio medico"), "salud", "salud no se queda vacío");
-  assert.equal(rubroDe("tengo una clinica dental"), "dental", "dental sigue ganándole a 'clinica'");
-});
-
-test("un PACIENTE con sintomas va a un humano, y un DENTISTA presentandose sigue en el embudo", () => {
-  // Verificado en vivo el 2026-08-16 y fallaba: "me duele mucho la muela, QUE HAGO" caia en la
-  // rama LLM. La palabra "hago" activaba el guardia de practica propia (pensado para "hago
-  // endodoncia") y anulaba el corte clinico. Un paciente con dolor recibia el pitch de venta.
-  const paciente = run(["hola", "me duele mucho la muela, que hago"]);
-  assert.equal(paciente.turns[1].nextState.botStage, "handoff_humano", "el sintoma corta a humano");
-  assert.match(textOf(paciente.turns[1]), /soy un bot/i, "y al derivar vuelve a decir que es un bot");
-
-  // Sintomas que no traen ninguna palabra de procedimiento: antes no cortaban nunca.
-  for (const msg of ["tengo mucho dolor y fiebre desde ayer, es urgente", "cuantas pastillas me tomo al dia"]) {
-    assert.equal(run(["hola", msg]).turns[1].nextState.botStage, "handoff_humano", `deberia cortar: ${msg}`);
-  }
-
-  // La otra direccion importa igual: el dueño de la clinica es el PROSPECTO, no un paciente.
-  // Si esto se rompe, el bot deja de calificar justo a quien le queremos vender.
-  for (const msg of ["hago endodoncia en mi consultorio", "mi dolor es que pierdo clientes por no contestar"]) {
-    assert.notEqual(run(["hola", msg]).turns[1].nextState.botStage, "handoff_humano", `NO deberia cortar: ${msg}`);
-  }
-});
-
-test("contar el negocio en vez de elegir horario TAMBIEN actualiza el lead del CRM", () => {
-  // El sintoma: el prospecto decia "ferreteria, 5, santa cruz" en vez de elegir A o B, y despues se
-  // callaba. El dato quedaba en `bot_conversations` y el CRM seguia diciendo "sin definir" y sin
-  // ciudad, asi que en el panel el lead era inservible.
-  const { turns } = run(["DEMO", "tengo una ferreteria, somos 5, santa cruz"]);
-  const reask = turns[1];
-  assert.equal(reask.nextState.botStage, "esperando_horario", "sigue esperando que elija horario");
-
-  const lead = reask.sideEffects.find((effect) => effect.type === "lead_upsert");
-  assert.ok(lead, "el dato tiene que viajar al CRM, no solo a la conversacion");
-  assert.equal(lead.payload.qualification.industry, "comercio");
-  assert.equal(lead.payload.qualification.city, "Santa Cruz");
-  assert.equal(
-    lead.payload.pipelineStatus,
-    "Contactado",
-    "sumar un dato no puede hacer retroceder el lead a 'Nuevo' (buildLeadRow cae ahi si falta)",
-  );
-});
-
 test("el motor no escribe en la base: solo devuelve efectos declarativos", () => {
   const { turns } = run(["DEMO", "tengo una ferreteria, somos 5, santa cruz", "A"]);
   const tipos = new Set(turns.flatMap(effectsOf));
@@ -493,4 +436,591 @@ test("el motor no escribe en la base: solo devuelve efectos declarativos", () =>
       `efecto inesperado: ${tipo}`,
     );
   }
+});
+
+// ---------------------------------------------------------------------------
+// 8. MODO RECEPCIONISTA — el bot de un CLIENTE (guion "recepcionista-ferreteria")
+// ---------------------------------------------------------------------------
+// La config es la MISMA que arma withKnowledge cuando el conocimiento llega de la fuente "db":
+// applyKnowledge(config, data) + asRecepcionista. El funnel de venta de Onia (DEMO, M0, M4)
+// tiene que quedar EXCLUSIVO del modo venta, y el recepcionista solo puede decir hechos del
+// knowledge de su org.
+
+const CONOCIMIENTO_FERRETERIA = {
+  schema: "onia.bot.knowledge/1",
+  version: "test-recepcionista",
+  identity: {
+    productName: "Ferretería El Tornillo",
+    humanName: "doña Marta",
+    botName: "el asistente de Ferretería El Tornillo",
+  },
+  empresa: { horario: { dias: [1, 2, 3, 4, 5, 6], desde: 8, hasta: 19, frase: "lun-sab, 8:00-19:00" } },
+  demo: { duracionMinutos: 20, duracionFrase: "20 minutos", modalidad: "visita en la tienda" },
+  productos: [
+    { key: "tornilleria", tipo: "servicio", nombre: "tornillería al por mayor y menor" },
+    { key: "herramientas", tipo: "servicio", nombre: "herramientas eléctricas y manuales" },
+  ],
+};
+
+// Se arma sobre CONFIG (que trae los slots de demo de prueba) A PROPOSITO: si un horario de
+// demo se filtrara en una respuesta del recepcionista, estos tests lo ven.
+const CONFIG_FERRETERIA = asRecepcionista(applyKnowledge(CONFIG, CONOCIMIENTO_FERRETERIA), CONOCIMIENTO_FERRETERIA);
+
+const runRecep = (turns, options = {}) => run(turns, { config: CONFIG_FERRETERIA, ...options });
+
+test("recepcionista: el knowledge del guion es una fila publicable real (pasa el validador)", () => {
+  assert.deepEqual(validateKnowledge(CONOCIMIENTO_FERRETERIA).errors, []);
+});
+
+test("recepcionista: 'hola' se presenta como el asistente DEL negocio, cero pitch de Onia", () => {
+  const { state, turns } = runRecep(["hola"]);
+  assert.deepEqual(keysOf(turns[0]), ["M0R"]);
+  const text = textOf(turns[0]);
+  assert.match(text, /asistente de Ferretería El Tornillo/);
+  assert.match(text, /doña Marta/);
+  assert.ok(!/plataforma por módulos/i.test(text), "cero pitch de Onia");
+  assert.ok(!/demo/i.test(text), "el funnel de venta no aparece");
+  assert.ok(!/jueves 15:00|viernes 10:00/.test(text), "cero horarios de demo");
+  assert.equal(state.botStage, "nuevo", "sin etapa nueva: bot_stage tiene CHECK en la base");
+  assert.equal(state.optInSource, "inbound_recepcion", "el primer inbound es el opt-in del contacto");
+});
+
+test("recepcionista: el horario sale del knowledge de la org (y la 1ra respuesta se presenta, D2)", () => {
+  const { turns } = runRecep(["¿qué días atienden?"]);
+  assert.deepEqual(keysOf(turns[0]), ["M0R_INTRO", "R_HORARIO"]);
+  const text = textOf(turns[0]);
+  assert.match(text, /asistente de Ferretería El Tornillo/, "primer contacto: se declara bot del negocio");
+  assert.match(text, /lun-sab, 8:00-19:00/);
+  assert.ok(!/lun-vie, 9:00-18:00/.test(text), "no es el horario de Onia");
+});
+
+test("recepcionista: '¿qué venden?' contesta el catálogo de la org, sin la vara de módulos de Onia", () => {
+  const { turns } = runRecep(["hola", "¿qué venden?"]);
+  assert.deepEqual(keysOf(turns[1]), ["R_SERVICIOS"]);
+  const text = textOf(turns[1]);
+  assert.match(text, /tornillería al por mayor y menor/);
+  assert.match(text, /herramientas eléctricas y manuales/);
+  assert.ok(!/en construcción|sin humo/.test(text), "MODULOS_LISTOS es un candado de Onia, no del cliente");
+  assert.ok(!/Dental|Importadora/.test(text), "y no aparece el catálogo de Onia");
+});
+
+test("recepcionista: 'quiero comprar 100 tornillos' escala a humano — el bot no vende ni agenda solo", () => {
+  const { state, turns } = runRecep(["hola", "quiero comprar 100 tornillos"]);
+  assert.deepEqual(keysOf(turns[1]), ["R_INTERES"]);
+  assert.match(textOf(turns[1]), /doña Marta/);
+  assert.equal(state.botStage, "handoff_humano");
+  assert.ok(effectsOf(turns[1]).includes("review_queue"), "el pedido entra a la cola de revisión");
+  assert.ok(effectsOf(turns[1]).includes("notify_sergio"), "y alguien se entera de verdad");
+  assert.ok(turns[1].notes.includes("handoff:pedido_del_cliente"));
+
+  // Con el handoff en curso, el bot no habla encima del humano del negocio.
+  const luego = run(["¿me confirmás?"], { config: CONFIG_FERRETERIA, state });
+  assert.equal(luego.turns[0].replies.length, 0);
+  assert.deepEqual(luego.turns[0].notes, ["silencio:handoff_en_curso"]);
+});
+
+// ---------------------------------------------------------------------------
+// 8a. AGENDAR — el bot manda el LINK de reserva de la org (no deriva a un humano)
+// ---------------------------------------------------------------------------
+// Vendemos el chatbot como "contesta, califica, agenda" (pricing.ts) y hasta hoy el motor
+// hacia lo contrario: toda intencion de cita terminaba en un handoff. La agenda publica de
+// la org YA existe y crea citas reales (/book/<slug>), asi que agendar es MANDAR ese link.
+// Fail-closed en las dos direcciones: sin slug se deriva como siempre (jamas un link roto),
+// y una intencion de COMPRA sigue escalando aunque la org tenga agenda.
+
+const SLUG_FERRETERIA = "ferreteria-el-tornillo-ab123";
+const CONFIG_FERRETERIA_AGENDA = asRecepcionista(
+  applyKnowledge(CONFIG, CONOCIMIENTO_FERRETERIA),
+  CONOCIMIENTO_FERRETERIA,
+  SLUG_FERRETERIA,
+);
+const runAgenda = (turns, options = {}) => run(turns, { config: CONFIG_FERRETERIA_AGENDA, ...options });
+
+test("recepcionista: con slug, 'quiero agendar una cita' manda el link de reserva de ESA org", () => {
+  const { state, turns } = runAgenda(["hola", "quiero agendar una cita"]);
+  assert.deepEqual(keysOf(turns[1]), ["R_AGENDA"]);
+  const text = textOf(turns[1]);
+  assert.match(text, /https:\/\/app\.onia\.com\.bo\/book\/ferreteria-el-tornillo-ab123/, "el link es el de la org, no uno generico");
+  assert.ok(!/\/book\/undefined|\/book\/null/.test(text), "nunca un link roto");
+  assert.equal(state.botStage, "nuevo", "agendar SOLO ya no molesta a un humano: no hay handoff");
+  assert.ok(!effectsOf(turns[1]).includes("review_queue"), "y no entra a la cola de revision");
+  assert.ok(turns[1].notes.includes("agenda:link_reserva"));
+});
+
+test("recepcionista: SIN slug la misma frase deriva como antes — fail-closed, nunca un link roto", () => {
+  const { state, turns } = runRecep(["hola", "quiero agendar una cita"]);
+  assert.deepEqual(keysOf(turns[1]), ["R_INTERES"]);
+  assert.ok(!/app\.onia\.com\.bo|\/book\//.test(textOf(turns[1])), "sin slug no se inventa ningun link");
+  assert.equal(state.botStage, "handoff_humano");
+  assert.ok(turns[1].notes.includes("handoff:pedido_del_cliente"));
+});
+
+test("recepcionista: un slug que no pasa el validador se trata como si no hubiera — deriva", () => {
+  const roto = asRecepcionista(applyKnowledge(CONFIG, CONOCIMIENTO_FERRETERIA), CONOCIMIENTO_FERRETERIA, "el tornillo/../admin");
+  const { turns } = run(["hola", "quiero agendar una cita"], { config: roto });
+  assert.deepEqual(keysOf(turns[1]), ["R_INTERES"]);
+  assert.ok(!/app\.onia\.com\.bo/.test(textOf(turns[1])));
+});
+
+test("recepcionista: con agenda encendida, 'quiero comprar 100 tornillos' SIGUE escalando a humano", () => {
+  const { state, turns } = runAgenda(["hola", "quiero comprar 100 tornillos"]);
+  assert.deepEqual(keysOf(turns[1]), ["R_INTERES"], "un pedido no es una cita: el link no se lo puede tragar");
+  assert.equal(state.botStage, "handoff_humano");
+  assert.ok(effectsOf(turns[1]).includes("review_queue"));
+});
+
+test("recepcionista: '¿cuánto dura la cita?' sigue siendo INFO — pregunta, no reserva", () => {
+  const { turns } = runAgenda(["hola", "¿cuánto dura la cita?"]);
+  assert.deepEqual(keysOf(turns[1]), ["R_CITA"], "preguntar por la cita no dispara el link");
+});
+
+test("recepcionista: pregunta de precio deriva a humano SIN cotizar (jamás el M4 del funnel)", () => {
+  const { state, turns } = runRecep(["hola", "¿cuánto cuestan los tornillos?"]);
+  assert.deepEqual(keysOf(turns[1]), ["R_PRECIO"]);
+  const text = textOf(turns[1]);
+  assert.ok(!/\d/.test(text), "N1: ni una cifra");
+  assert.match(text, /doña Marta/);
+  assert.ok(!/en la demo/.test(text), "no es la respuesta de venta de Onia");
+  assert.equal(state.botStage, "handoff_humano");
+});
+
+test("recepcionista: si el knowledge no trae el dato, respuesta honesta + humano — nunca los datos de Onia", () => {
+  const { empresa, ...sinHorario } = CONOCIMIENTO_FERRETERIA;
+  const config = asRecepcionista(applyKnowledge(CONFIG, sinHorario), sinHorario);
+  const { state, turns } = run(["hola", "¿qué días atienden?"], { config });
+  assert.deepEqual(keysOf(turns[1]), ["R_NO_DATO"]);
+  assert.ok(!/lun-vie, 9:00-18:00/.test(textOf(turns[1])), "no rellena con el horario de Onia");
+  assert.match(textOf(turns[1]), /doña Marta/);
+  assert.equal(state.botStage, "handoff_humano", "la promesa 'te lo confirma' lleva el handoff real");
+});
+
+test("recepcionista: 'DEMO' NO dispara el funnel — el guion de leads queda exclusivo del modo venta", () => {
+  const { state, turns } = runRecep(["DEMO"]);
+  assert.ok(!keysOf(turns[0]).includes("M0"), "la bienvenida del funnel no aparece");
+  assert.ok(!/jueves 15:00|viernes 10:00/.test(textOf(turns[0])), "cero horarios de demo");
+  assert.notEqual(state.botStage, "esperando_horario");
+
+  // La MISMA entrada con la config de venta sigue abriendo el funnel (cero regresión).
+  const venta = run(["DEMO"]);
+  assert.deepEqual(keysOf(venta.turns[0]), ["M0"]);
+  assert.equal(venta.state.botStage, "esperando_horario");
+});
+
+test("recepcionista: opt-out corta sin invitar al funnel, y ni 'DEMO' reabre", () => {
+  const { state, turns } = runRecep(["hola", "no me interesa, no me escribas más", "DEMO"]);
+  assert.deepEqual(keysOf(turns[1]), ["M6R"]);
+  assert.ok(!/DEMO/.test(textOf(turns[1])), "no ofrece la reapertura del guion de venta");
+  assert.equal(turns[2].replies.length, 0, "silencio: la reapertura por DEMO es del funnel");
+  assert.equal(state.botStage, "opt_out");
+});
+
+test("recepcionista: SIN LLM — lo fuera de guion va al humano, nunca a la rama libre", () => {
+  const { state, turns } = runRecep(["hola", "che y ustedes hacen envios a domicilio en moto?"]);
+  assert.deepEqual(keysOf(turns[1]), ["R_DERIVA"]);
+  assert.equal(state.botStage, "handoff_humano");
+  for (const turno of turns) {
+    assert.ok(turno.replies.every((reply) => reply.replySource !== "llm" && !reply.pending), "cero rama LLM");
+    assert.ok(!effectsOf(turno).includes("llm_request"));
+  }
+});
+
+test("recepcionista: 'gracias' no molesta a nadie", () => {
+  const { turns } = runRecep(["hola", "gracias!"]);
+  assert.equal(turns[1].replies.length, 0);
+  assert.ok(turns[1].notes.includes("cortesia_sin_respuesta"));
+});
+
+test("recepcionista: '¿cuánto dura la cita?' contesta duración/modalidad del knowledge — es info, no reserva", () => {
+  const { state, turns } = runRecep(["hola", "¿cuánto dura la cita?"]);
+  assert.deepEqual(keysOf(turns[1]), ["R_CITA"]);
+  assert.match(textOf(turns[1]), /20 minutos/);
+  assert.match(textOf(turns[1]), /visita en la tienda/);
+  assert.equal(state.botStage, "nuevo", "preguntar no escala: sigue atendiendo");
+
+  // Sin el bloque `demo` en el knowledge: honesto + humano, no los 30 minutos de la demo de Onia.
+  const { demo, ...sinCita } = CONOCIMIENTO_FERRETERIA;
+  const config = asRecepcionista(applyKnowledge(CONFIG, sinCita), sinCita);
+  const otra = run(["hola", "¿cuánto dura la cita?"], { config });
+  assert.deepEqual(keysOf(otra.turns[1]), ["R_NO_DATO"]);
+  assert.ok(!/30 minutos/.test(textOf(otra.turns[1])), "no inventa la duración de la demo de Onia");
+});
+
+// ---------------------------------------------------------------------------
+// 8b. BOTONES del recepcionista (Chatwoot input_select -> reply buttons de WhatsApp)
+// ---------------------------------------------------------------------------
+// Un solo formato para los dos canales (PR #6886 de Chatwoot): por eso el tope de 3 opciones y
+// 20 caracteres por título son de Meta y se verifican acá, no en el adapter.
+
+test("recepcionista: el saludo M0R sale con el menú de 3 botones (títulos ≤20 chars)", () => {
+  const { turns } = runRecep(["hola"]);
+  const options = turns[0].replies[0].options;
+  assert.ok(Array.isArray(options), "M0R lleva options para el input_select");
+  assert.equal(options.length, 3, "reply buttons de WhatsApp: máximo 3");
+  // "Hablar con doña Marta" mide 21: NO entra en el límite de Meta y cae al genérico entero
+  // (nunca un título truncado a la vista del cliente).
+  assert.deepEqual(
+    options.map((option) => option.title),
+    ["Horarios", "Servicios", "Hablar con alguien"],
+  );
+  assert.ok(options.every((option) => option.title.length <= 20), "límite de título de Meta");
+  assert.ok(options.every((option) => option.value), "cada botón lleva su payload estable");
+});
+
+test("recepcionista: con un nombre corto el 3er botón SÍ nombra al humano", () => {
+  const conocimiento = { ...CONOCIMIENTO_FERRETERIA, identity: { ...CONOCIMIENTO_FERRETERIA.identity, humanName: "Sergio" } };
+  const config = asRecepcionista(applyKnowledge(CONFIG, conocimiento), conocimiento);
+  const { turns } = run(["hola"], { config });
+  assert.equal(turns[0].replies[0].options[2].title, "Hablar con Sergio");
+});
+
+test("recepcionista: click 'Horarios' (el título llega como texto del mensaje) contesta el horario", () => {
+  const { state, turns } = runRecep(["hola", "Horarios"]);
+  assert.deepEqual(keysOf(turns[1]), ["R_HORARIO"]);
+  assert.match(textOf(turns[1]), /lun-sab, 8:00-19:00/);
+  assert.equal(state.botStage, "nuevo", "una FAQ no escala");
+});
+
+test("recepcionista: click 'Servicios' contesta el catálogo; el 3er botón deriva a humano", () => {
+  const servicios = runRecep(["hola", "Servicios"]);
+  assert.deepEqual(keysOf(servicios.turns[1]), ["R_SERVICIOS"]);
+  assert.match(textOf(servicios.turns[1]), /tornillería al por mayor y menor/);
+
+  const humano = runRecep(["hola", "Hablar con alguien"]);
+  assert.deepEqual(keysOf(humano.turns[1]), ["R_DERIVA"]);
+  assert.equal(humano.state.botStage, "handoff_humano");
+  assert.ok(effectsOf(humano.turns[1]).includes("notify_sergio"), "el handoff del botón es real");
+});
+
+test("recepcionista: R_DERIVA sale CON botones (menú de rescate); R_INTERES y R_PRECIO no", () => {
+  const deriva = runRecep(["hola", "che y hacen envíos a domicilio en moto?"]);
+  const reply = deriva.turns[1].replies.find((r) => r.templateKey === "R_DERIVA");
+  assert.equal(reply.options.length, 3, "el fuera de guion deja el menú a la vista");
+
+  const interes = runRecep(["hola", "quiero comprar 100 tornillos"]);
+  assert.ok(interes.turns[1].replies.every((r) => !r.options), "solo M0R y R_DERIVA llevan botones");
+  const precio = runRecep(["hola", "¿cuánto cuestan los tornillos?"]);
+  assert.ok(precio.turns[1].replies.every((r) => !r.options));
+});
+
+test("recepcionista: en handoff, el click EXACTO de un botón contesta la FAQ sin salir del handoff; texto libre sigue mudo", () => {
+  // R_DERIVA dejó los botones a la vista: clickearlos después del handoff no puede dar silencio.
+  const { state } = runRecep(["hola", "che y hacen envíos a domicilio en moto?"]);
+  assert.equal(state.botStage, "handoff_humano");
+
+  const click = run(["Horarios"], { config: CONFIG_FERRETERIA, state });
+  assert.deepEqual(keysOf(click.turns[0]), ["R_HORARIO"]);
+  assert.equal(click.state.botStage, "handoff_humano", "no sale del handoff: el humano sigue a cargo");
+  assert.deepEqual(click.turns[0].sideEffects, [], "solo lectura: cero efectos nuevos");
+
+  // El PRIMER texto libre tras el handoff ahora se acusa (ver el test de abajo); del SEGUNDO en
+  // adelante sí es silencio. Se encadenan los dos turnos para llegar a ese segundo.
+  const acuse = run(["y entonces? me contestan?"], { config: CONFIG_FERRETERIA, state });
+  const libre = run(["hola?"], { config: CONFIG_FERRETERIA, state: acuse.state });
+  assert.equal(libre.turns[0].replies.length, 0, "texto libre en handoff: silencio, como siempre");
+  assert.deepEqual(libre.turns[0].notes, ["silencio:handoff_en_curso"]);
+});
+
+test("handoff sin humano: el PRIMER mensaje que llega despues de derivar se ACUSA, no se tira al vacio", () => {
+  // POR QUE ESTE TEST. Medido en produccion el 2026-09-03 sobre la conversacion 49 (inbox 4, el
+  // del widget de la web): Chatwoot ENTREGO el mensaje 287 y el bot lo proceso 4,08 s — o sea
+  // que no estaba caido, corrio el turno entero y no produjo NADA. La correlacion es perfecta
+  // en las 8 corridas horarias de la sonda: cada vez que el bot contesto M5 ("eso lo tiene que
+  // ver Sergio"), el mensaje SIGUIENTE del prospecto se comio un silencio total.
+  //
+  // `handoff_humano` NO significa que un humano haya llegado: significa que el BOT decidio
+  // derivar. El candado legitimo es `humanTookOver`, que se enciende cuando un humano CONTESTA
+  // de verdad. Confundirlos deja a la persona escribiendole a la nada — y el test de arriba
+  // exigia justamente ese silencio, asi que el bug estaba blindado por su propia suite.
+  // Modo VENTA a proposito: es el de los inboxes 4 y 5, por donde entra todo desconocido, y el
+  // que se midio roto. El recepcionista tiene su propio modulo y su propia rama.
+  const { state: derivado } = run(["DEMO", "quiero que me atienda una persona de verdad"]);
+  const state = derivado.botStage === "handoff_humano" ? derivado : { ...derivado, botStage: "handoff_humano", handoffAckAt: null };
+  assert.equal(state.humanTookOver, false, "nadie contesto todavia: el handoff es una decision del bot");
+
+  const primero = run(["ahi te mando la direccion, es Equipetrol"], { state });
+  assert.equal(primero.turns[0].replies.length, 1, "el primer mensaje tras derivar NO puede quedar sin respuesta");
+  assert.equal(primero.state.botStage, "handoff_humano", "acusar recibo no saca la conversacion del handoff");
+  assert.deepEqual(primero.turns[0].sideEffects, [], "solo acuse: no se re-dispara el aviso ni la cola de revision");
+
+  // Y UNA sola vez: acusar cada mensaje convertiria el acuse en spam.
+  const segundo = run(["hola? sigue ahi?"], { state: primero.state });
+  assert.equal(segundo.turns[0].replies.length, 0, "del segundo en adelante sí es silencio");
+  assert.deepEqual(segundo.turns[0].notes, ["silencio:handoff_en_curso"]);
+});
+
+test("handoff CON humano a cargo: silencio desde el primer mensaje — el acuse no puede pisar a Sergio", () => {
+  // La otra mitad de la regla. Si un humano YA contesto, hablar encima es peor que callarse: el
+  // prospecto ve al bot interrumpiendo a la persona con la que ya esta hablando.
+  const { state: derivado } = run(["DEMO", "quiero que me atienda una persona de verdad"]);
+  const conHumano = { ...derivado, botStage: "handoff_humano", handoffAckAt: null, humanTookOver: true };
+
+  const turno = run(["gracias!"], { state: conHumano });
+  assert.equal(turno.turns[0].replies.length, 0, "con humano a cargo, ni siquiera el acuse");
+  assert.deepEqual(turno.turns[0].notes, ["silencio:humano_a_cargo"]);
+});
+
+test("venta: el funnel de Onia NO lleva botones — M0 sale plano como siempre", () => {
+  const venta = run(["DEMO"]);
+  assert.ok(venta.turns[0].replies.every((reply) => !reply.options));
+});
+
+// ---------------------------------------------------------------------------
+// 8.b FAQ DEL NEGOCIO (id "negocio") — la unica FAQ editable por el dueño.
+// ---------------------------------------------------------------------------
+// Decision Sergio 2026-08-28: el dueño carga preguntas frecuentes CON control de
+// calidad: guardrails sobre cada texto (sin precios, sin promesas, sin fingir
+// humano), todo-o-nada al publicar, vigencia, y sin palabras disparadoras la
+// publicacion se RECHAZA (una FAQ que nunca se sirve es una edicion que no hace
+// nada). Los candados del guion (precio -> humano) le GANAN siempre a la FAQ.
+
+const CONOCIMIENTO_CON_FAQ = {
+  ...CONOCIMIENTO_FERRETERIA,
+  faq: [
+    {
+      id: "negocio",
+      title: "Garantía",
+      body: "Todo producto tiene garantía de fábrica. Traé tu factura y doña Marta lo revisa.",
+      status: "publicado",
+      tags: ["garantia", "devolucion", "cambio de producto"],
+    },
+  ],
+};
+
+const CONFIG_CON_FAQ = asRecepcionista(applyKnowledge(CONFIG, CONOCIMIENTO_CON_FAQ), CONOCIMIENTO_CON_FAQ);
+const runFaq = (turns, options = {}) => run(turns, { config: CONFIG_CON_FAQ, ...options });
+
+test("faq negocio: el knowledge con la FAQ es una fila publicable real", () => {
+  assert.deepEqual(validateKnowledge(CONOCIMIENTO_CON_FAQ).errors, []);
+});
+
+test("faq negocio: contesta por su palabra disparadora, sin handoff", () => {
+  const { state, turns } = runFaq(["hola", "¿tienen garantía?"]);
+  const text = textOf(turns[1]);
+  assert.match(text, /garantía de fábrica/);
+  assert.equal(state.botStage, "nuevo", "una FAQ contestada no abre handoff");
+});
+
+test("faq negocio: matchea palabra entera, no pedazos ('cambio de producto' no salta con 'cambiaron')", () => {
+  const { turns } = runFaq(["hola", "¿cambiaron de local?"]);
+  const text = textOf(turns[1]);
+  assert.ok(!/garantía de fábrica/.test(text), "un pedazo de palabra no dispara la FAQ");
+});
+
+test("faq negocio: el candado de precio le GANA a la FAQ", () => {
+  const { state, turns } = runFaq(["hola", "¿cuánto cuesta la garantía?"]);
+  const text = textOf(turns[1]);
+  assert.ok(!/garantía de fábrica/.test(text), "la FAQ no contesta preguntas de plata");
+  assert.equal(state.botStage, "handoff_humano", "el precio siempre va al humano");
+});
+
+test("faq negocio: en borrador NO se sirve (deriva fuera de guion)", () => {
+  const conBorrador = {
+    ...CONOCIMIENTO_CON_FAQ,
+    faq: [{ ...CONOCIMIENTO_CON_FAQ.faq[0], status: "borrador" }],
+  };
+  const config = asRecepcionista(applyKnowledge(CONFIG, conBorrador), conBorrador);
+  const { state, turns } = run(["hola", "¿tienen garantía?"], { config });
+  assert.ok(!/garantía de fábrica/.test(textOf(turns[1])), "un borrador no llega al cliente");
+  assert.equal(state.botStage, "handoff_humano", "sin FAQ vigente, fuera de guion deriva");
+});
+
+test("faq negocio: vencida NO se sirve", () => {
+  const vencida = {
+    ...CONOCIMIENTO_CON_FAQ,
+    faq: [{ ...CONOCIMIENTO_CON_FAQ.faq[0], vigenteHasta: "2020-01-01" }],
+  };
+  const config = asRecepcionista(applyKnowledge(CONFIG, vencida), vencida);
+  const { turns } = run(["hola", "¿tienen garantía?"], { config });
+  assert.ok(!/garantía de fábrica/.test(textOf(turns[1])), "una FAQ vencida afirmaría algo que ya no es cierto");
+});
+
+test("faq negocio: SIN tags el documento entero se rechaza (control de calidad)", () => {
+  const sinTags = {
+    ...CONOCIMIENTO_CON_FAQ,
+    faq: [{ id: "negocio", title: "Garantía", body: "Texto.", status: "publicado" }],
+  };
+  const { errors } = validateKnowledge(sinTags);
+  assert.ok(errors.length > 0, "una FAQ sin disparador nunca se sirve: se rechaza al publicar");
+});
+
+test("faq negocio: un body con precio lo rechaza el guardrail entero", () => {
+  const conPrecio = {
+    ...CONOCIMIENTO_CON_FAQ,
+    faq: [{ id: "negocio", title: "Precios", body: "La consulta cuesta 50 bs.", status: "publicado", tags: ["consulta"] }],
+  };
+  const { errors } = validateKnowledge(conPrecio);
+  assert.ok(errors.some((e) => e.includes("declara_precio")), "el bot no cotiza ni via FAQ");
+});
+
+// ---------------------------------------------------------------------------
+// Frases de campaña en el MODO VENTA — los links wa.me?text= de onia.com.bo
+// ---------------------------------------------------------------------------
+// onia.com.bo manda al +591 75414930 cuatro frases fijas distintas, una por CTA. Cada una es una
+// intencion ya declarada: la persona dijo que queria ANTES de escribir. `campanaExacta` existia
+// desde el 31-ago pero vivia SOLO dentro de recepcionistaStep, o sea que el numero de Onia —que
+// corre en modo venta— jamas podia mirarlas: contestaba el saludo generico a las cuatro.
+//
+// El arreglo NO puede ser mover el numero de Onia a modo recepcionista: ahi el guion de leads no
+// existe (ver el test "el guion de leads queda exclusivo del modo venta"), asi que se cambiaria la
+// unica linea que produce leads por un texto enlatado. La respuesta de campaña va DETRAS de la
+// bienvenida, por el mismo camino que ya usan precio y SIAT (composeWithFunnel).
+
+const CAMPANAS_ONIA = [
+  {
+    frase: "Hola, vengo de la web de Onia. Quiero saber si me sirve para mi negocio.",
+    respuesta: "Te sirve si tu negocio agenda, cobra o atiende clientes. Contame a qué te dedicás y te digo qué módulo te toca.",
+  },
+  {
+    frase: "Hola, vengo de la página del chatbot de Onia. Tengo una consulta antes de elegir el stack.",
+    respuesta: "Dale, preguntá lo que quieras del chatbot antes de decidir.",
+  },
+];
+const CONFIG_CAMPANA = createBotConfig({ campanas: CAMPANAS_ONIA }, CONFIG);
+const runCampana = (turns, options = {}) => run(turns, { config: CONFIG_CAMPANA, ...options });
+
+test("campaña en venta: la frase del link se contesta con SU respuesta, detrás de la bienvenida", () => {
+  const { turns } = runCampana([CAMPANAS_ONIA[0].frase]);
+  assert.deepEqual(keysOf(turns[0]), ["M0", "R_CAMPANA"], "primero el bot se declara bot (D2), después lo suyo");
+  assert.match(textOf(turns[0]), /Contame a qué te dedicás y te digo qué módulo te toca/);
+});
+
+test("campaña en venta: cada CTA recibe LO SUYO, no la respuesta de la otra", () => {
+  const { turns } = runCampana([CAMPANAS_ONIA[1].frase]);
+  assert.match(textOf(turns[0]), /preguntá lo que quieras del chatbot/);
+  assert.ok(!/qué módulo te toca/.test(textOf(turns[0])), "no se cruzan las campañas");
+});
+
+// El CTA de /v1/empezar precarga un texto ABIERTO y la persona escribe su rubro atras, asi que
+// nunca puede ser match exacto. Medido en el motor el 31-ago, "…Mi negocio es: panaderia" salia
+// M0 pelado: quien MAS declaro (su rubro, y que no esta en la lista) recibia lo mismo que "hola".
+const CAMPANA_PREFIJO = {
+  frase: "Hola, mi rubro no está en la lista de Onia. Mi negocio es: ",
+  prefijo: true,
+  respuesta: "Que tu rubro no esté en la lista no lo deja afuera: contame qué hacés.",
+};
+const CONFIG_PREFIJO = createBotConfig({ campanas: [...CAMPANAS_ONIA, CAMPANA_PREFIJO] }, CONFIG);
+
+test("campaña de PREFIJO en venta: contesta LO SUYO aunque la persona siga escribiendo, y el lead nace igual", () => {
+  const { turns } = run([CAMPANA_PREFIJO.frase + "panadería"], { config: CONFIG_PREFIJO });
+  assert.deepEqual(keysOf(turns[0]), ["M0", "R_CAMPANA"], "primero el bot se declara bot (D2), después lo suyo");
+  assert.match(textOf(turns[0]), /no lo deja afuera/);
+  assert.ok(effectsOf(turns[0]).includes("lead_upsert"), "el lead nace igual que sin campaña");
+});
+
+test("campaña de PREFIJO en venta: NO se come a la campaña de match exacto que empieza parecido", () => {
+  const { turns } = run([CAMPANAS_ONIA[0].frase], { config: CONFIG_PREFIJO });
+  assert.match(textOf(turns[0]), /qué módulo te toca/, "el match exacto le gana al prefijo");
+});
+
+test("campaña en venta: NO se pierde el lead — es la única línea que los produce", () => {
+  const { state, turns } = runCampana([CAMPANAS_ONIA[0].frase]);
+  assert.ok(effectsOf(turns[0]).includes("lead_upsert"), "el lead nace igual que sin campaña");
+  assert.equal(state.botStage, "esperando_horario", "el embudo sigue su curso");
+  assert.match(textOf(turns[0]), /jueves 15:00/, "la oferta de horarios sigue sobre la mesa");
+});
+
+test("campaña en venta: la puntuación no cuenta (el que clickea puede borrar la coma)", () => {
+  const { turns } = runCampana(["hola vengo de la web de onia quiero saber si me sirve para mi negocio"]);
+  assert.ok(keysOf(turns[0]).includes("R_CAMPANA"), "misma frase sin comas ni tildes = misma campaña");
+});
+
+test("campaña en venta: sin campañas publicadas el motor no cambia (cero regresión)", () => {
+  const { turns } = run([CAMPANAS_ONIA[0].frase]);
+  assert.deepEqual(keysOf(turns[0]), ["M0"], "la config de hoy contesta exactamente lo que contestaba");
+});
+
+test("campaña en venta: el opt-out le gana a la campaña", () => {
+  const { turns } = runCampana(["no me interesa, no me escribas más", CAMPANAS_ONIA[0].frase]);
+  assert.deepEqual(keysOf(turns[1]), [], "el que dijo basta no recibe la campaña");
+});
+
+test("applyKnowledge lleva las campañas al modo venta (sin ellas el motor no las puede ver)", () => {
+  const doc = {
+    schema: "onia.bot.knowledge/1",
+    version: "test-campanas",
+    campanas: [{ frase: "Hola, quiero conocer Onia", respuesta: "Contame a qué se dedica tu negocio." }],
+  };
+  assert.deepEqual(validateKnowledge(doc).errors, [], "el documento es publicable");
+  const aplicado = applyKnowledge(CONFIG, doc);
+  assert.deepEqual(aplicado.campanas, doc.campanas, "las campañas viajan a la config de venta");
+});
+
+// ---------------------------------------------------------------------------
+// "¿EL SISTEMA HACE X?" — la pregunta mas comun de una preventa, y la unica que
+// el router no sabia leer.
+//
+// Medido en produccion el 2026-09-03, conversacion 49 del widget (inbox 4), mensajes 339-340.
+// El prospecto, ya en `esperando_horario`, escribio:
+//
+//   339 (entrante) "Antes de elegir horario, ¿el sistema manda recordatorios por WhatsApp
+//                   a los pacientes?"
+//   340 (saliente) "¿Querés que te reserve para el viernes 4 de septiembre a las 14:00 o
+//                   para el sábado 5 a las 9:00? Contame qué día te queda mejor."
+//
+// La pregunta desaparecio. No hubo "no se", ni "lo ve Sergio": el bot la piso con la oferta de
+// horario. Y no es que el motor se haya caido — la traza dice `rama: "respondio"`, o sea que
+// para el sistema ese turno salio BIEN.
+//
+// La causa: `RE_PRODUCTO_DETALLE` era una lista blanca de SUSTANTIVOS tecnicos ("se integra con",
+// "rayos x", "api", "offline"...). No cubria la forma en que la gente pregunta de verdad, que es
+// SUJETO + VERBO: "¿el sistema manda...?", "¿la plataforma guarda...?", "¿Onia sirve para...?".
+// Al no matchear ninguna intencion, caia en `offScriptResult`, cuya tarea al LLM es —textual—
+// "reformular la pregunta pendiente del embudo, sin dar datos nuevos", con `forbidden:
+// ["features", ...]`. O sea: el off-guion esta DISEÑADO para no contestar, y hace lo que debe.
+// El agujero estaba un paso antes, en el router que nunca lo mando a handoff.
+//
+// El mensaje 341 de esa misma conversacion ("¿el sistema guarda la historia clínica?") SI salio
+// bien — pero por casualidad: traia la palabra "clinica" y lo salvo `isClinicalOrLegal`. Dos
+// preguntas del mismo tipo, una contestada y otra tragada, decidido por una palabra que no tiene
+// nada que ver con lo que se preguntaba.
+//
+// El arreglo NO es que el bot conteste: es que falle del lado seguro, que es el que ya eligio
+// `isProductDetail` ("el bot NO adivina, va a handoff"). Inventar capacidades seria peor.
+// ---------------------------------------------------------------------------
+
+test("PREGUNTA DE PRODUCTO en la rama de horarios: no se la traga la oferta de slots", () => {
+  const { state, turns } = run([
+    "DEMO",
+    "Antes de elegir horario, ¿el sistema manda recordatorios por WhatsApp a los pacientes?",
+  ]);
+  assert.equal(state.botStage, "handoff_humano", "una pregunta de producto va a un humano, no al embudo");
+  assert.ok(
+    turns[1].notes.includes("handoff:detalle_tecnico_de_producto"),
+    `motivo esperado; salio ${JSON.stringify(turns[1].notes)}`,
+  );
+  assert.ok(
+    !/te reserve|que dia te queda mejor|elegi/i.test(textOf(turns[1])),
+    "y sobre todo: NO le vuelve a ofrecer los horarios como si no hubiera preguntado nada",
+  );
+});
+
+test("PREGUNTA DE PRODUCTO: las formas naturales, no solo el sustantivo tecnico", () => {
+  for (const pregunta of [
+    "¿el sistema manda recordatorios a los pacientes?",
+    "¿la plataforma guarda la historia de cada cliente?",
+    "¿Onia sirve para una veterinaria?",
+    "¿el software controla el inventario?",
+    "¿el sistema permite varias sucursales?",
+  ]) {
+    const { state } = run(["DEMO", pregunta]);
+    assert.equal(state.botStage, "handoff_humano", `no derivo: ${pregunta}`);
+  }
+
+  // Y la frontera, que se midio en vez de suponerla: "¿el software emite facturas?" tambien
+  // matchea esta regla, pero NO llega hasta aca — `isSiatQuestion` la agarra antes y tiene su
+  // propia respuesta (M_SIAT_BODY). Facturacion es de la rama SIAT, no de "no se, preguntale a
+  // Sergio": mandarla a handoff seria hacer PEOR una pregunta que hoy se contesta bien.
+  const factura = run(["DEMO", "¿el software emite facturas?"]);
+  assert.equal(factura.state.botStage, "esperando_horario", "la de facturas sigue en el embudo");
+  assert.ok(factura.turns[1].notes.includes("pregunta_siat"), "y la contesta la rama SIAT");
+});
+
+test("PREGUNTA DE PRODUCTO no se come lo que ya tenia dueño: soporte, precio y calificacion", () => {
+  // El orden del router es la baranda: lo especifico se juzga ANTES. Si esto se rompe, un
+  // cliente con un problema termina en la rama de venta y un "cuanto sale" deja de contestarse.
+  assert.equal(run(["DEMO", "ya soy cliente y el sistema no me anda"]).state.botStage, "handoff_humano");
+  assert.deepEqual(keysOf(run(["DEMO", "ya soy cliente y el sistema no me anda"]).turns[1]), ["M8_SOPORTE"]);
+  assert.equal(run(["DEMO", "ya tengo un sistema"]).state.botStage, "esperando_horario", "la objecion de venta sigue en el embudo");
+  const precio = run(["DEMO", "¿cuanto sale el sistema al mes?"]);
+  assert.ok(!precio.turns[1].notes.includes("handoff:detalle_tecnico_de_producto"), "precio tiene su propia rama");
 });

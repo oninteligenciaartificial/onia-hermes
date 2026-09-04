@@ -16,3 +16,5 @@
 [39.2] Le proporciona a tu asistente del código la versión más reciente de las librerías,
 [42.9] dependencias y herramientas que usan los desarrolladores de alto nivel.
 [46.0] Si quieres probar todos estos plugins, comenta ya y te los paso.
+
+Nota fija: Whisper degrada términos técnicos (SIDANZ=Seedance, Hitsfield=Higgsfield, viesel=VSL); ningún término técnico se cita sin contrastar con la imagen.

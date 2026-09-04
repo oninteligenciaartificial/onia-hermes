@@ -1,0 +1,2990 @@
+{
+  "url": "https://www.kommo.com/es/",
+  "slug": "kommo-com-es",
+  "medidoEl": "2026-08-20T21:59:42.681Z",
+  "vistas": {
+    "movil": {
+      "viewport": "390x844",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 8464,
+        "alturaPantallas": 10,
+        "anchoBody": 390,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 2
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "",
+          "altoPx": 8383,
+          "altoPantallas": 9.9,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Inicia sesión",
+          "cta": "",
+          "imagenes": 306
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "page",
+          "altoPx": 8303,
+          "altoPantallas": 9.8,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Potencia tus chats, evita todo el caos",
+          "cta": "Gratis por 14 días",
+          "imagenes": 211
+        }
+      ],
+      "encabezados": {
+        "total": 55,
+        "h1": 1,
+        "saltos": 7,
+        "lista": [
+          {
+            "nivel": 2,
+            "texto": "Inicia sesión"
+          },
+          {
+            "nivel": 2,
+            "texto": "Olvidé mi contraseña"
+          },
+          {
+            "nivel": 2,
+            "texto": "Revisa tu e-mail"
+          },
+          {
+            "nivel": 2,
+            "texto": "Crea una nueva contraseña"
+          },
+          {
+            "nivel": 2,
+            "texto": "¡Muy bien hecho!"
+          },
+          {
+            "nivel": 2,
+            "texto": "Verificación en 2 pasos"
+          },
+          {
+            "nivel": 2,
+            "texto": "Inicia prueba de 14 días"
+          },
+          {
+            "nivel": 2,
+            "texto": "Crea tu cuenta"
+          },
+          {
+            "nivel": 2,
+            "texto": "Inicia prueba de 14 días"
+          },
+          {
+            "nivel": 5,
+            "texto": "Producto"
+          },
+          {
+            "nivel": 6,
+            "texto": "Principales funciones"
+          },
+          {
+            "nivel": 6,
+            "texto": "Ventas conversacionales"
+          },
+          {
+            "nivel": 6,
+            "texto": "Kommo al natural"
+          },
+          {
+            "nivel": 6,
+            "texto": "IA eficiente"
+          },
+          {
+            "nivel": 5,
+            "texto": "Recursos"
+          },
+          {
+            "nivel": 6,
+            "texto": "Conoce Kommo"
+          },
+          {
+            "nivel": 6,
+            "texto": "Herramientas gratuitas"
+          },
+          {
+            "nivel": 6,
+            "texto": "Contáctanos"
+          },
+          {
+            "nivel": 6,
+            "texto": "Artículos tops"
+          },
+          {
+            "nivel": 4,
+            "texto": "Producto"
+          },
+          {
+            "nivel": 4,
+            "texto": "Recursos"
+          },
+          {
+            "nivel": 1,
+            "texto": "Potencia tus chats, evita todo el caos"
+          },
+          {
+            "nivel": 6,
+            "texto": "Respaldado por empresas en expansión en más de 100 países"
+          },
+          {
+            "nivel": 2,
+            "texto": "Gestiónalo desde un solo lugar"
+          },
+          {
+            "nivel": 3,
+            "texto": "Impulsa ventas con IA"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "16px / lh 1.20 / ls normal / w 500",
+            "veces": 69
+          },
+          {
+            "valor": "12px / lh 1.40 / ls normal / w 400",
+            "veces": 61
+          },
+          {
+            "valor": "12px / lh 1.20 / ls normal / w 500",
+            "veces": 54
+          },
+          {
+            "valor": "16px / lh 1.60 / ls normal / w 400",
+            "veces": 41
+          },
+          {
+            "valor": "16px / lh 1.20 / ls normal / w 700",
+            "veces": 35
+          },
+          {
+            "valor": "12px / lh 1.50 / ls normal / w 500",
+            "veces": 29
+          },
+          {
+            "valor": "12px / lh 1.60 / ls normal / w 500",
+            "veces": 27
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 26
+          },
+          {
+            "valor": "16px / lh 0.90 / ls normal / w 400",
+            "veces": 26
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 500",
+            "veces": 25
+          },
+          {
+            "valor": "16px / lh 0.90 / ls normal / w 500",
+            "veces": 23
+          },
+          {
+            "valor": "20px / lh 1.20 / ls normal / w 700",
+            "veces": 20
+          },
+          {
+            "valor": "16px / lh 1.00 / ls normal / w 400",
+            "veces": 14
+          },
+          {
+            "valor": "22px / lh 1.20 / ls normal / w 700",
+            "veces": 12
+          },
+          {
+            "valor": "26px / lh 1.20 / ls normal / w 500",
+            "veces": 11
+          },
+          {
+            "valor": "24px / lh 1.20 / ls normal / w 400",
+            "veces": 10
+          }
+        ],
+        "familias": [
+          {
+            "valor": "EuclidCircularA",
+            "veces": 525
+          },
+          {
+            "valor": "Roboto",
+            "veces": 5
+          },
+          {
+            "valor": "Arial",
+            "veces": 2
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(14, 1, 66)",
+            "veces": 402
+          },
+          {
+            "valor": "rgb(134, 128, 160)",
+            "veces": 48
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 43
+          },
+          {
+            "valor": "rgb(95, 67, 208)",
+            "veces": 10
+          },
+          {
+            "valor": "rgb(75, 52, 168)",
+            "veces": 9
+          },
+          {
+            "valor": "rgb(0, 0, 0)",
+            "veces": 8
+          },
+          {
+            "valor": "rgb(162, 148, 218)",
+            "veces": 7
+          },
+          {
+            "valor": "rgb(37, 19, 93)",
+            "veces": 2
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 55
+          },
+          {
+            "valor": "rgb(14, 1, 66)",
+            "veces": 31
+          },
+          {
+            "valor": "rgb(243, 239, 255)",
+            "veces": 21
+          },
+          {
+            "valor": "rgb(214, 218, 255)",
+            "veces": 16
+          },
+          {
+            "valor": "rgb(249, 247, 255)",
+            "veces": 6
+          },
+          {
+            "valor": "rgb(224, 253, 191)",
+            "veces": 6
+          },
+          {
+            "valor": "rgb(229, 224, 255)",
+            "veces": 4
+          },
+          {
+            "valor": "rgb(172, 172, 250)",
+            "veces": 3
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "auto",
+            "veces": 213
+          },
+          {
+            "valor": "16px",
+            "veces": 207
+          },
+          {
+            "valor": "24px",
+            "veces": 165
+          },
+          {
+            "valor": "12px",
+            "veces": 151
+          },
+          {
+            "valor": "4px",
+            "veces": 87
+          },
+          {
+            "valor": "8px",
+            "veces": 64
+          },
+          {
+            "valor": "10px",
+            "veces": 54
+          },
+          {
+            "valor": "32px",
+            "veces": 39
+          },
+          {
+            "valor": "40px",
+            "veces": 23
+          },
+          {
+            "valor": "20px",
+            "veces": 19
+          },
+          {
+            "valor": "3.008px",
+            "veces": 11
+          },
+          {
+            "valor": "1.008px",
+            "veces": 8
+          },
+          {
+            "valor": "22px",
+            "veces": 6
+          },
+          {
+            "valor": "72px",
+            "veces": 5
+          },
+          {
+            "valor": "-16px",
+            "veces": 5
+          },
+          {
+            "valor": "2px",
+            "veces": 5
+          }
+        ],
+        "radios": [
+          {
+            "valor": "9999px",
+            "veces": 456
+          },
+          {
+            "valor": "20px",
+            "veces": 45
+          },
+          {
+            "valor": "4px",
+            "veces": 37
+          },
+          {
+            "valor": "10px",
+            "veces": 27
+          },
+          {
+            "valor": "8px",
+            "veces": 18
+          },
+          {
+            "valor": "3px",
+            "veces": 4
+          },
+          {
+            "valor": "50%",
+            "veces": 3
+          },
+          {
+            "valor": "24px",
+            "veces": 2
+          },
+          {
+            "valor": "20px 20px 0px 0px",
+            "veces": 2
+          },
+          {
+            "valor": "30px",
+            "veces": 1
+          }
+        ],
+        "radiosDistintos": 11,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0.082) 0px 0px 1px 0px, rgba(0, 0, 0, 0.17) 0p",
+            "veces": 2
+          }
+        ],
+        "sombrasDistintas": 1,
+        "zIndex": [
+          {
+            "valor": "10",
+            "veces": 83
+          },
+          {
+            "valor": "1",
+            "veces": 14
+          },
+          {
+            "valor": "20",
+            "veces": 10
+          },
+          {
+            "valor": "50",
+            "veces": 10
+          },
+          {
+            "valor": "40",
+            "veces": 9
+          },
+          {
+            "valor": "30",
+            "veces": 5
+          },
+          {
+            "valor": "0",
+            "veces": 2
+          },
+          {
+            "valor": "-10",
+            "veces": 2
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 69
+          },
+          {
+            "valor": "color 0.075s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.075s cub",
+            "veces": 20
+          },
+          {
+            "valor": "0.3s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 11
+          },
+          {
+            "valor": "opacity 0.8s",
+            "veces": 10
+          },
+          {
+            "valor": "transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 10
+          },
+          {
+            "valor": "transform 0.3s cubic-bezier(0.35, 0, 0.25, 1)",
+            "veces": 8
+          },
+          {
+            "valor": "color 0.2s",
+            "veces": 5
+          },
+          {
+            "valor": "background-color 0.2s, color 0.2s, transform 0.2s",
+            "veces": 5
+          },
+          {
+            "valor": "transform 0.2s",
+            "veces": 5
+          },
+          {
+            "valor": "color 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s cubic-b",
+            "veces": 4
+          },
+          {
+            "valor": "transform 0.35s cubic-bezier(0, 0, 0.16, 0.96), opacity 0.35s cubic-be",
+            "veces": 1
+          },
+          {
+            "valor": "max-width 0.3s, padding-right 0.3s",
+            "veces": 1
+          }
+        ],
+        "transicionesDistintas": 17,
+        "hojasLeidas": 12,
+        "unidades": {
+          "em": 4,
+          "rem": 1162,
+          "px": 326,
+          "clamp": 2,
+          "vw": 9
+        },
+        "keyframesDeclarados": 20,
+        "transitionAll": 3,
+        "tieneReducedMotion": false,
+        "breakpointsPx": [
+          {
+            "px": 768,
+            "veces": 19
+          },
+          {
+            "px": 1200,
+            "veces": 17
+          },
+          {
+            "px": 1440,
+            "veces": 10
+          },
+          {
+            "px": 1024,
+            "veces": 3
+          },
+          {
+            "px": 767,
+            "veces": 2
+          },
+          {
+            "px": 1920,
+            "veces": 2
+          },
+          {
+            "px": 321,
+            "veces": 1
+          },
+          {
+            "px": 450,
+            "veces": 1
+          },
+          {
+            "px": 451,
+            "veces": 1
+          },
+          {
+            "px": 500,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "js-modal hidden fixed inset-0 z-40 js-sign-in bg-white",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "fixed top-80 inset-0 flex flex-col px-16 pt-24 pb-24 md:pt-1",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "80px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "js-modal hidden fixed inset-0 z-40 js-forgot flex flex-col b",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "fixed top-80 inset-0 flex overflow-y-auto custom-scrollbar",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "80px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "js-modal hidden fixed inset-0 z-40 js-change-password bg-whi",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "fixed top-80 inset-0 flex overflow-y-auto custom-scrollbar",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "80px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "js-modal hidden fixed inset-0 z-40 js-mfa-auth bg-white",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "fixed top-80 inset-0 flex flex-col overflow-y-auto custom-sc",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "80px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "js-modal hidden fixed inset-0 z-40 js-sign-up bg-white",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "fixed top-80 inset-0 flex px-16 pt-24 pb-24 md:pt-100 lg:pt-",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "80px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "js-modal hidden fixed inset-0 z-40 js-create-account bg-whit",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "fixed top-80 inset-0 flex overflow-y-auto custom-scrollbar",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "80px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "email",
+                "requerido": false
+              },
+              {
+                "tipo": "password",
+                "nombre": "password",
+                "requerido": false
+              }
+            ],
+            "boton": "Ver Ocultar"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "email",
+                "requerido": false
+              }
+            ],
+            "boton": "Pedir cambio de contraseña"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "password",
+                "nombre": "password",
+                "requerido": false
+              },
+              {
+                "tipo": "password",
+                "nombre": "passwordRepeat",
+                "requerido": false
+              }
+            ],
+            "boton": "Ver Ocultar"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "tel",
+                "nombre": "",
+                "requerido": false
+              },
+              {
+                "tipo": "tel",
+                "nombre": "",
+                "requerido": false
+              },
+              {
+                "tipo": "tel",
+                "nombre": "",
+                "requerido": false
+              },
+              {
+                "tipo": "tel",
+                "nombre": "",
+                "requerido": false
+              },
+              {
+                "tipo": "tel",
+                "nombre": "",
+                "requerido": false
+              },
+              {
+                "tipo": "tel",
+                "nombre": "",
+                "requerido": false
+              }
+            ],
+            "boton": "Confirmar"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "email",
+                "requerido": false
+              }
+            ],
+            "boton": "Crear cuenta"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "email",
+                "requerido": false
+              },
+              {
+                "tipo": "text",
+                "nombre": "name",
+                "requerido": false
+              },
+              {
+                "tipo": "password",
+                "nombre": "password",
+                "requerido": false
+              }
+            ],
+            "boton": "Ver Ocultar"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "account",
+                "requerido": false
+              },
+              {
+                "tipo": "text",
+                "nombre": "subdomain",
+                "requerido": false
+              }
+            ],
+            "boton": "Crear cuenta"
+          }
+        ],
+        "dialogos": 0,
+        "ctasDistintos": 136,
+        "ctasTop": [
+          {
+            "texto": "Conoce más",
+            "veces": 11
+          },
+          {
+            "texto": "Iniciar sesión",
+            "veces": 8
+          },
+          {
+            "texto": "Crear cuenta",
+            "veces": 7
+          },
+          {
+            "texto": "Español (Latinoamérica)",
+            "veces": 7
+          },
+          {
+            "texto": "English",
+            "veces": 5
+          },
+          {
+            "texto": "Português (BR)",
+            "veces": 5
+          },
+          {
+            "texto": "Bahasa Indonesia (ID)",
+            "veces": 5
+          },
+          {
+            "texto": "Turkish (TR)",
+            "veces": 5
+          },
+          {
+            "texto": "Habla con ventas",
+            "veces": 5
+          },
+          {
+            "texto": "Ver Ocultar",
+            "veces": 4
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 127,
+        "sinAlt": 10,
+        "altVacio": 55,
+        "sinDimensiones": 40,
+        "lazy": 1,
+        "conSrcset": 0,
+        "interactivos": 330,
+        "objetivosMenores44px": 71,
+        "idioma": "es",
+        "landmarks": {
+          "header": 7,
+          "nav": 8,
+          "main": 0,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(14, 1, 66)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 19.06
+          },
+          {
+            "texto": "rgb(14, 1, 66)",
+            "fondo": "rgb(14, 1, 66)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(14, 1, 66)",
+            "fondo": "rgb(243, 239, 255)",
+            "ratio": 16.88
+          },
+          {
+            "texto": "rgb(134, 128, 160)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 3.74
+          },
+          {
+            "texto": "rgb(134, 128, 160)",
+            "fondo": "rgb(14, 1, 66)",
+            "ratio": 5.09
+          },
+          {
+            "texto": "rgb(134, 128, 160)",
+            "fondo": "rgb(243, 239, 255)",
+            "ratio": 3.32
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(14, 1, 66)",
+            "ratio": 19.06
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(243, 239, 255)",
+            "ratio": 1.13
+          },
+          {
+            "texto": "rgb(95, 67, 208)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 6.56
+          },
+          {
+            "texto": "rgb(95, 67, 208)",
+            "fondo": "rgb(14, 1, 66)",
+            "ratio": 2.9
+          },
+          {
+            "texto": "rgb(95, 67, 208)",
+            "fondo": "rgb(243, 239, 255)",
+            "ratio": 5.81
+          }
+        ],
+        "fondosTranslucidosOmitidos": 1
+      },
+      "rendimiento": {
+        "pesoTotalKb": 17328.6,
+        "porTipoKb": {
+          "document": 594,
+          "stylesheet": 146.8,
+          "font": 226.1,
+          "script": 4881.6,
+          "image": 1.6,
+          "media": 11478.3,
+          "xhr": 0,
+          "ping": 0,
+          "fetch": 0
+        },
+        "pedidos": {
+          "document": 5,
+          "stylesheet": 14,
+          "font": 6,
+          "script": 62,
+          "image": 54,
+          "media": 14,
+          "xhr": 19,
+          "ping": 8,
+          "fetch": 7
+        },
+        "hostsDistintos": 28,
+        "terceros": [
+          {
+            "host": "pcfcdn.kommo.com",
+            "pedidos": 102
+          },
+          {
+            "host": "gso.kommo.com",
+            "pedidos": 20
+          },
+          {
+            "host": "analytics.tiktok.com",
+            "pedidos": 10
+          },
+          {
+            "host": "bat.bing.com",
+            "pedidos": 7
+          },
+          {
+            "host": "px.ads.linkedin.com",
+            "pedidos": 5
+          },
+          {
+            "host": "piper.amocrm.com",
+            "pedidos": 4
+          },
+          {
+            "host": "www.google.com",
+            "pedidos": 4
+          },
+          {
+            "host": "static.cloudflareinsights.com",
+            "pedidos": 3
+          }
+        ],
+        "fuentesCargadas": [
+          "swiper-icons 400 normal",
+          "EuclidCircularA 300 normal",
+          "EuclidCircularA 300 italic",
+          "EuclidCircularA 400 normal",
+          "EuclidCircularA 400 italic",
+          "EuclidCircularA 500 normal",
+          "EuclidCircularA 500 italic",
+          "EuclidCircularA 600 normal",
+          "EuclidCircularA 600 italic",
+          "EuclidCircularA 700 normal",
+          "EuclidCircularA 700 italic",
+          "EuclidCircularA__fallback normal normal",
+          "Roboto 400 normal",
+          "Roboto 500 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Kommo: CRM con IA para ventas y automatización de mensajes.",
+        "descripcion": "CRM con IA para ventas por mensajería. Automatiza conversaciones en WhatsApp, Instagram, TikTok y más. Usado por miles de empresas en todo el mundo.",
+        "canonical": "https://www.kommo.com/es/",
+        "og": 5,
+        "datosEstructurados": 1
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": true,
+        "framer": false
+      }
+    },
+    "tablet": {
+      "viewport": "768x1024",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 9108,
+        "alturaPantallas": 8.9,
+        "anchoBody": 768,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 2
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "",
+          "altoPx": 9027,
+          "altoPantallas": 8.8,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Inicia sesión",
+          "cta": "",
+          "imagenes": 307
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "page",
+          "altoPx": 8947,
+          "altoPantallas": 8.7,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Potencia tus chats, evita todo el caos",
+          "cta": "Gratis por 14 días",
+          "imagenes": 212
+        }
+      ],
+      "encabezados": {
+        "total": 55,
+        "h1": 1,
+        "saltos": 7,
+        "lista": [
+          {
+            "nivel": 2,
+            "texto": "Inicia sesión"
+          },
+          {
+            "nivel": 2,
+            "texto": "Olvidé mi contraseña"
+          },
+          {
+            "nivel": 2,
+            "texto": "Revisa tu e-mail"
+          },
+          {
+            "nivel": 2,
+            "texto": "Crea una nueva contraseña"
+          },
+          {
+            "nivel": 2,
+            "texto": "¡Muy bien hecho!"
+          },
+          {
+            "nivel": 2,
+            "texto": "Verificación en 2 pasos"
+          },
+          {
+            "nivel": 2,
+            "texto": "Inicia prueba de 14 días"
+          },
+          {
+            "nivel": 2,
+            "texto": "Crea tu cuenta"
+          },
+          {
+            "nivel": 2,
+            "texto": "Inicia prueba de 14 días"
+          },
+          {
+            "nivel": 5,
+            "texto": "Producto"
+          },
+          {
+            "nivel": 6,
+            "texto": "Principales funciones"
+          },
+          {
+            "nivel": 6,
+            "texto": "Ventas conversacionales"
+          },
+          {
+            "nivel": 6,
+            "texto": "Kommo al natural"
+          },
+          {
+            "nivel": 6,
+            "texto": "IA eficiente"
+          },
+          {
+            "nivel": 5,
+            "texto": "Recursos"
+          },
+          {
+            "nivel": 6,
+            "texto": "Conoce Kommo"
+          },
+          {
+            "nivel": 6,
+            "texto": "Herramientas gratuitas"
+          },
+          {
+            "nivel": 6,
+            "texto": "Contáctanos"
+          },
+          {
+            "nivel": 6,
+            "texto": "Artículos tops"
+          },
+          {
+            "nivel": 4,
+            "texto": "Producto"
+          },
+          {
+            "nivel": 4,
+            "texto": "Recursos"
+          },
+          {
+            "nivel": 1,
+            "texto": "Potencia tus chats, evita todo el caos"
+          },
+          {
+            "nivel": 6,
+            "texto": "Respaldado por empresas en expansión en más de 100 países"
+          },
+          {
+            "nivel": 2,
+            "texto": "Gestiónalo desde un solo lugar"
+          },
+          {
+            "nivel": 3,
+            "texto": "Impulsa ventas con IA"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "12px / lh 1.20 / ls normal / w 500",
+            "veces": 54
+          },
+          {
+            "valor": "12px / lh 1.40 / ls normal / w 400",
+            "veces": 54
+          },
+          {
+            "valor": "16px / lh 1.60 / ls normal / w 400",
+            "veces": 48
+          },
+          {
+            "valor": "16px / lh 1.20 / ls normal / w 500",
+            "veces": 36
+          },
+          {
+            "valor": "12px / lh 1.20 / ls normal / w 400",
+            "veces": 33
+          },
+          {
+            "valor": "16px / lh 1.20 / ls normal / w 700",
+            "veces": 32
+          },
+          {
+            "valor": "12px / lh 1.50 / ls normal / w 500",
+            "veces": 29
+          },
+          {
+            "valor": "12px / lh 1.60 / ls normal / w 500",
+            "veces": 27
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 26
+          },
+          {
+            "valor": "16px / lh 0.90 / ls normal / w 400",
+            "veces": 26
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 500",
+            "veces": 25
+          },
+          {
+            "valor": "16px / lh 0.90 / ls normal / w 500",
+            "veces": 23
+          },
+          {
+            "valor": "22px / lh 1.20 / ls normal / w 700",
+            "veces": 20
+          },
+          {
+            "valor": "16px / lh 1.00 / ls normal / w 400",
+            "veces": 14
+          },
+          {
+            "valor": "24px / lh 1.20 / ls normal / w 700",
+            "veces": 12
+          },
+          {
+            "valor": "32px / lh 1.30 / ls normal / w 500",
+            "veces": 11
+          }
+        ],
+        "familias": [
+          {
+            "valor": "EuclidCircularA",
+            "veces": 525
+          },
+          {
+            "valor": "Roboto",
+            "veces": 5
+          },
+          {
+            "valor": "Arial",
+            "veces": 2
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(14, 1, 66)",
+            "veces": 402
+          },
+          {
+            "valor": "rgb(134, 128, 160)",
+            "veces": 48
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 43
+          },
+          {
+            "valor": "rgb(95, 67, 208)",
+            "veces": 10
+          },
+          {
+            "valor": "rgb(75, 52, 168)",
+            "veces": 9
+          },
+          {
+            "valor": "rgb(0, 0, 0)",
+            "veces": 8
+          },
+          {
+            "valor": "rgb(162, 148, 218)",
+            "veces": 7
+          },
+          {
+            "valor": "rgb(37, 19, 93)",
+            "veces": 2
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 55
+          },
+          {
+            "valor": "rgb(14, 1, 66)",
+            "veces": 30
+          },
+          {
+            "valor": "rgb(243, 239, 255)",
+            "veces": 19
+          },
+          {
+            "valor": "rgb(214, 218, 255)",
+            "veces": 16
+          },
+          {
+            "valor": "rgb(249, 247, 255)",
+            "veces": 6
+          },
+          {
+            "valor": "rgb(224, 253, 191)",
+            "veces": 6
+          },
+          {
+            "valor": "rgb(229, 224, 255)",
+            "veces": 4
+          },
+          {
+            "valor": "rgb(172, 172, 250)",
+            "veces": 3
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "16px",
+            "veces": 239
+          },
+          {
+            "valor": "auto",
+            "veces": 215
+          },
+          {
+            "valor": "12px",
+            "veces": 133
+          },
+          {
+            "valor": "24px",
+            "veces": 92
+          },
+          {
+            "valor": "4px",
+            "veces": 87
+          },
+          {
+            "valor": "32px",
+            "veces": 86
+          },
+          {
+            "valor": "8px",
+            "veces": 63
+          },
+          {
+            "valor": "40px",
+            "veces": 39
+          },
+          {
+            "valor": "20px",
+            "veces": 24
+          },
+          {
+            "valor": "64px",
+            "veces": 14
+          },
+          {
+            "valor": "10px",
+            "veces": 14
+          },
+          {
+            "valor": "1.008px",
+            "veces": 8
+          },
+          {
+            "valor": "3.008px",
+            "veces": 7
+          },
+          {
+            "valor": "100px",
+            "veces": 6
+          },
+          {
+            "valor": "-16px",
+            "veces": 5
+          },
+          {
+            "valor": "60px",
+            "veces": 5
+          }
+        ],
+        "radios": [
+          {
+            "valor": "9999px",
+            "veces": 456
+          },
+          {
+            "valor": "20px",
+            "veces": 45
+          },
+          {
+            "valor": "4px",
+            "veces": 33
+          },
+          {
+            "valor": "10px",
+            "veces": 27
+          },
+          {
+            "valor": "8px",
+            "veces": 18
+          },
+          {
+            "valor": "3px",
+            "veces": 4
+          },
+          {
+            "valor": "50%",
+            "veces": 3
+          },
+          {
+            "valor": "32px",
+            "veces": 2
+          },
+          {
+            "valor": "20px 20px 0px 0px",
+            "veces": 2
+          },
+          {
+            "valor": "30px",
+            "veces": 1
+          }
+        ],
+        "radiosDistintos": 11,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0.082) 0px 0px 1px 0px, rgba(0, 0, 0, 0.17) 0p",
+            "veces": 2
+          }
+        ],
+        "sombrasDistintas": 1,
+        "zIndex": [
+          {
+            "valor": "10",
+            "veces": 84
+          },
+          {
+            "valor": "1",
+            "veces": 14
+          },
+          {
+            "valor": "50",
+            "veces": 11
+          },
+          {
+            "valor": "20",
+            "veces": 10
+          },
+          {
+            "valor": "40",
+            "veces": 9
+          },
+          {
+            "valor": "30",
+            "veces": 5
+          },
+          {
+            "valor": "0",
+            "veces": 2
+          },
+          {
+            "valor": "-10",
+            "veces": 2
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 70
+          },
+          {
+            "valor": "color 0.075s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.075s cub",
+            "veces": 20
+          },
+          {
+            "valor": "0.3s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 11
+          },
+          {
+            "valor": "opacity 0.8s",
+            "veces": 10
+          },
+          {
+            "valor": "transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 10
+          },
+          {
+            "valor": "transform 0.3s cubic-bezier(0.35, 0, 0.25, 1)",
+            "veces": 8
+          },
+          {
+            "valor": "color 0.2s",
+            "veces": 5
+          },
+          {
+            "valor": "background-color 0.2s, color 0.2s, transform 0.2s",
+            "veces": 5
+          },
+          {
+            "valor": "transform 0.2s",
+            "veces": 5
+          },
+          {
+            "valor": "color 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s cubic-b",
+            "veces": 4
+          },
+          {
+            "valor": "transform 0.35s cubic-bezier(0, 0, 0.16, 0.96), opacity 0.35s cubic-be",
+            "veces": 1
+          },
+          {
+            "valor": "max-width 0.3s, padding-right 0.3s",
+            "veces": 1
+          }
+        ],
+        "transicionesDistintas": 16,
+        "hojasLeidas": 12,
+        "unidades": {
+          "em": 4,
+          "rem": 1162,
+          "px": 326,
+          "clamp": 2,
+          "vw": 9
+        },
+        "keyframesDeclarados": 20,
+        "transitionAll": 3,
+        "tieneReducedMotion": false,
+        "breakpointsPx": [
+          {
+            "px": 768,
+            "veces": 19
+          },
+          {
+            "px": 1200,
+            "veces": 17
+          },
+          {
+            "px": 1440,
+            "veces": 10
+          },
+          {
+            "px": 1024,
+            "veces": 3
+          },
+          {
+            "px": 767,
+            "veces": 2
+          },
+          {
+            "px": 1920,
+            "veces": 2
+          },
+          {
+            "px": 321,
+            "veces": 1
+          },
+          {
+            "px": 450,
+            "veces": 1
+          },
+          {
+            "px": 451,
+            "veces": 1
+          },
+          {
+            "px": 500,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "js-modal hidden fixed inset-0 z-40 js-sign-in bg-white",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "fixed top-80 inset-0 flex flex-col px-16 pt-24 pb-24 md:pt-1",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "80px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "js-modal hidden fixed inset-0 z-40 js-forgot flex flex-col b",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "fixed top-80 inset-0 flex overflow-y-auto custom-scrollbar",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "80px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "js-modal hidden fixed inset-0 z-40 js-change-password bg-whi",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "fixed top-80 inset-0 flex overflow-y-auto custom-scrollbar",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "80px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "js-modal hidden fixed inset-0 z-40 js-mfa-auth bg-white",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "fixed top-80 inset-0 flex flex-col overflow-y-auto custom-sc",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "80px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "js-modal hidden fixed inset-0 z-40 js-sign-up bg-white",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "fixed top-80 inset-0 flex px-16 pt-24 pb-24 md:pt-100 lg:pt-",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "80px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "js-modal hidden fixed inset-0 z-40 js-create-account bg-whit",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "fixed top-80 inset-0 flex overflow-y-auto custom-scrollbar",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "80px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "email",
+                "requerido": false
+              },
+              {
+                "tipo": "password",
+                "nombre": "password",
+                "requerido": false
+              }
+            ],
+            "boton": "Ver Ocultar"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "email",
+                "requerido": false
+              }
+            ],
+            "boton": "Pedir cambio de contraseña"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "password",
+                "nombre": "password",
+                "requerido": false
+              },
+              {
+                "tipo": "password",
+                "nombre": "passwordRepeat",
+                "requerido": false
+              }
+            ],
+            "boton": "Ver Ocultar"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "tel",
+                "nombre": "",
+                "requerido": false
+              },
+              {
+                "tipo": "tel",
+                "nombre": "",
+                "requerido": false
+              },
+              {
+                "tipo": "tel",
+                "nombre": "",
+                "requerido": false
+              },
+              {
+                "tipo": "tel",
+                "nombre": "",
+                "requerido": false
+              },
+              {
+                "tipo": "tel",
+                "nombre": "",
+                "requerido": false
+              },
+              {
+                "tipo": "tel",
+                "nombre": "",
+                "requerido": false
+              }
+            ],
+            "boton": "Confirmar"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "email",
+                "requerido": false
+              }
+            ],
+            "boton": "Crear cuenta"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "email",
+                "requerido": false
+              },
+              {
+                "tipo": "text",
+                "nombre": "name",
+                "requerido": false
+              },
+              {
+                "tipo": "password",
+                "nombre": "password",
+                "requerido": false
+              }
+            ],
+            "boton": "Ver Ocultar"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "account",
+                "requerido": false
+              },
+              {
+                "tipo": "text",
+                "nombre": "subdomain",
+                "requerido": false
+              }
+            ],
+            "boton": "Crear cuenta"
+          }
+        ],
+        "dialogos": 0,
+        "ctasDistintos": 136,
+        "ctasTop": [
+          {
+            "texto": "Conoce más",
+            "veces": 11
+          },
+          {
+            "texto": "Iniciar sesión",
+            "veces": 8
+          },
+          {
+            "texto": "Crear cuenta",
+            "veces": 7
+          },
+          {
+            "texto": "Español (Latinoamérica)",
+            "veces": 7
+          },
+          {
+            "texto": "English",
+            "veces": 5
+          },
+          {
+            "texto": "Português (BR)",
+            "veces": 5
+          },
+          {
+            "texto": "Bahasa Indonesia (ID)",
+            "veces": 5
+          },
+          {
+            "texto": "Turkish (TR)",
+            "veces": 5
+          },
+          {
+            "texto": "Habla con ventas",
+            "veces": 5
+          },
+          {
+            "texto": "Ver Ocultar",
+            "veces": 4
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 127,
+        "sinAlt": 10,
+        "altVacio": 55,
+        "sinDimensiones": 40,
+        "lazy": 1,
+        "conSrcset": 0,
+        "interactivos": 330,
+        "objetivosMenores44px": 72,
+        "idioma": "es",
+        "landmarks": {
+          "header": 7,
+          "nav": 8,
+          "main": 0,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(14, 1, 66)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 19.06
+          },
+          {
+            "texto": "rgb(14, 1, 66)",
+            "fondo": "rgb(14, 1, 66)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(14, 1, 66)",
+            "fondo": "rgb(243, 239, 255)",
+            "ratio": 16.88
+          },
+          {
+            "texto": "rgb(134, 128, 160)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 3.74
+          },
+          {
+            "texto": "rgb(134, 128, 160)",
+            "fondo": "rgb(14, 1, 66)",
+            "ratio": 5.09
+          },
+          {
+            "texto": "rgb(134, 128, 160)",
+            "fondo": "rgb(243, 239, 255)",
+            "ratio": 3.32
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(14, 1, 66)",
+            "ratio": 19.06
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(243, 239, 255)",
+            "ratio": 1.13
+          },
+          {
+            "texto": "rgb(95, 67, 208)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 6.56
+          },
+          {
+            "texto": "rgb(95, 67, 208)",
+            "fondo": "rgb(14, 1, 66)",
+            "ratio": 2.9
+          },
+          {
+            "texto": "rgb(95, 67, 208)",
+            "fondo": "rgb(243, 239, 255)",
+            "ratio": 5.81
+          }
+        ],
+        "fondosTranslucidosOmitidos": 1
+      },
+      "rendimiento": {
+        "pesoTotalKb": 19745.5,
+        "porTipoKb": {
+          "document": 594,
+          "stylesheet": 146.8,
+          "font": 226.1,
+          "script": 4881.6,
+          "image": 0.8,
+          "media": 13896,
+          "xhr": 0,
+          "fetch": 0,
+          "ping": 0
+        },
+        "pedidos": {
+          "document": 5,
+          "stylesheet": 14,
+          "font": 6,
+          "script": 62,
+          "image": 62,
+          "media": 15,
+          "xhr": 22,
+          "fetch": 9,
+          "ping": 10
+        },
+        "hostsDistintos": 28,
+        "terceros": [
+          {
+            "host": "pcfcdn.kommo.com",
+            "pedidos": 108
+          },
+          {
+            "host": "gso.kommo.com",
+            "pedidos": 20
+          },
+          {
+            "host": "analytics.tiktok.com",
+            "pedidos": 12
+          },
+          {
+            "host": "bat.bing.com",
+            "pedidos": 7
+          },
+          {
+            "host": "f.clarity.ms",
+            "pedidos": 6
+          },
+          {
+            "host": "gtmanalytics.kommo.com",
+            "pedidos": 5
+          },
+          {
+            "host": "px.ads.linkedin.com",
+            "pedidos": 5
+          },
+          {
+            "host": "piper.amocrm.com",
+            "pedidos": 4
+          }
+        ],
+        "fuentesCargadas": [
+          "swiper-icons 400 normal",
+          "EuclidCircularA 300 normal",
+          "EuclidCircularA 300 italic",
+          "EuclidCircularA 400 normal",
+          "EuclidCircularA 400 italic",
+          "EuclidCircularA 500 normal",
+          "EuclidCircularA 500 italic",
+          "EuclidCircularA 600 normal",
+          "EuclidCircularA 600 italic",
+          "EuclidCircularA 700 normal",
+          "EuclidCircularA 700 italic",
+          "EuclidCircularA__fallback normal normal",
+          "Roboto 400 normal",
+          "Roboto 500 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Kommo: CRM con IA para ventas y automatización de mensajes.",
+        "descripcion": "CRM con IA para ventas por mensajería. Automatiza conversaciones en WhatsApp, Instagram, TikTok y más. Usado por miles de empresas en todo el mundo.",
+        "canonical": "https://www.kommo.com/es/",
+        "og": 5,
+        "datosEstructurados": 1
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": true,
+        "framer": false
+      }
+    },
+    "escritorio": {
+      "viewport": "1440x900",
+      "arquitecturaPagina": {
+        "alturaTotalPx": 7854,
+        "alturaPantallas": 8.7,
+        "anchoBody": 1440,
+        "desbordeHorizontal": false,
+        "seccionesDetectadas": 2
+      },
+      "secciones": [
+        {
+          "orden": 0,
+          "etiqueta": "div",
+          "clase": "",
+          "altoPx": 7814,
+          "altoPantallas": 8.7,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Inicia sesión",
+          "cta": "",
+          "imagenes": 307
+        },
+        {
+          "orden": 1,
+          "etiqueta": "div",
+          "clase": "page",
+          "altoPx": 7734,
+          "altoPantallas": 8.6,
+          "fondo": "rgba(0, 0, 0, 0)",
+          "titular": "Potencia tus chats, evita todo el caos",
+          "cta": "Gratis por 14 días",
+          "imagenes": 212
+        }
+      ],
+      "encabezados": {
+        "total": 55,
+        "h1": 1,
+        "saltos": 7,
+        "lista": [
+          {
+            "nivel": 2,
+            "texto": "Inicia sesión"
+          },
+          {
+            "nivel": 2,
+            "texto": "Olvidé mi contraseña"
+          },
+          {
+            "nivel": 2,
+            "texto": "Revisa tu e-mail"
+          },
+          {
+            "nivel": 2,
+            "texto": "Crea una nueva contraseña"
+          },
+          {
+            "nivel": 2,
+            "texto": "¡Muy bien hecho!"
+          },
+          {
+            "nivel": 2,
+            "texto": "Verificación en 2 pasos"
+          },
+          {
+            "nivel": 2,
+            "texto": "Inicia prueba de 14 días"
+          },
+          {
+            "nivel": 2,
+            "texto": "Crea tu cuenta"
+          },
+          {
+            "nivel": 2,
+            "texto": "Inicia prueba de 14 días"
+          },
+          {
+            "nivel": 5,
+            "texto": "Producto"
+          },
+          {
+            "nivel": 6,
+            "texto": "Principales funciones"
+          },
+          {
+            "nivel": 6,
+            "texto": "Ventas conversacionales"
+          },
+          {
+            "nivel": 6,
+            "texto": "Kommo al natural"
+          },
+          {
+            "nivel": 6,
+            "texto": "IA eficiente"
+          },
+          {
+            "nivel": 5,
+            "texto": "Recursos"
+          },
+          {
+            "nivel": 6,
+            "texto": "Conoce Kommo"
+          },
+          {
+            "nivel": 6,
+            "texto": "Herramientas gratuitas"
+          },
+          {
+            "nivel": 6,
+            "texto": "Contáctanos"
+          },
+          {
+            "nivel": 6,
+            "texto": "Artículos tops"
+          },
+          {
+            "nivel": 4,
+            "texto": "Producto"
+          },
+          {
+            "nivel": 4,
+            "texto": "Recursos"
+          },
+          {
+            "nivel": 1,
+            "texto": "Potencia tus chats, evita todo el caos"
+          },
+          {
+            "nivel": 6,
+            "texto": "Respaldado por empresas en expansión en más de 100 países"
+          },
+          {
+            "nivel": 2,
+            "texto": "Gestiónalo desde un solo lugar"
+          },
+          {
+            "nivel": 3,
+            "texto": "Impulsa ventas con IA"
+          }
+        ]
+      },
+      "tokens": {
+        "escalaTipografica": [
+          {
+            "valor": "12px / lh 1.20 / ls normal / w 500",
+            "veces": 54
+          },
+          {
+            "valor": "12px / lh 1.40 / ls normal / w 400",
+            "veces": 54
+          },
+          {
+            "valor": "16px / lh 1.60 / ls normal / w 400",
+            "veces": 49
+          },
+          {
+            "valor": "16px / lh 1.20 / ls normal / w 500",
+            "veces": 36
+          },
+          {
+            "valor": "16px / lh 1.20 / ls normal / w 700",
+            "veces": 35
+          },
+          {
+            "valor": "16px / lh 1.20 / ls normal / w 400",
+            "veces": 33
+          },
+          {
+            "valor": "12px / lh 1.50 / ls normal / w 500",
+            "veces": 29
+          },
+          {
+            "valor": "12px / lh 1.60 / ls normal / w 500",
+            "veces": 27
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 400",
+            "veces": 26
+          },
+          {
+            "valor": "16px / lh 0.90 / ls normal / w 400",
+            "veces": 26
+          },
+          {
+            "valor": "16px / lh 1.50 / ls normal / w 500",
+            "veces": 25
+          },
+          {
+            "valor": "16px / lh 0.90 / ls normal / w 500",
+            "veces": 24
+          },
+          {
+            "valor": "24px / lh 1.20 / ls normal / w 700",
+            "veces": 22
+          },
+          {
+            "valor": "16px / lh 1.00 / ls normal / w 400",
+            "veces": 14
+          },
+          {
+            "valor": "32px / lh 1.20 / ls normal / w 700",
+            "veces": 14
+          },
+          {
+            "valor": "48px / lh 1.30 / ls normal / w 500",
+            "veces": 11
+          }
+        ],
+        "familias": [
+          {
+            "valor": "EuclidCircularA",
+            "veces": 525
+          },
+          {
+            "valor": "Roboto",
+            "veces": 5
+          },
+          {
+            "valor": "Arial",
+            "veces": 2
+          }
+        ],
+        "coloresTexto": [
+          {
+            "valor": "rgb(14, 1, 66)",
+            "veces": 402
+          },
+          {
+            "valor": "rgb(134, 128, 160)",
+            "veces": 48
+          },
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 43
+          },
+          {
+            "valor": "rgb(95, 67, 208)",
+            "veces": 10
+          },
+          {
+            "valor": "rgb(75, 52, 168)",
+            "veces": 9
+          },
+          {
+            "valor": "rgb(0, 0, 0)",
+            "veces": 8
+          },
+          {
+            "valor": "rgb(162, 148, 218)",
+            "veces": 7
+          },
+          {
+            "valor": "rgb(37, 19, 93)",
+            "veces": 2
+          }
+        ],
+        "fondos": [
+          {
+            "valor": "rgb(255, 255, 255)",
+            "veces": 55
+          },
+          {
+            "valor": "rgb(14, 1, 66)",
+            "veces": 30
+          },
+          {
+            "valor": "rgb(243, 239, 255)",
+            "veces": 19
+          },
+          {
+            "valor": "rgb(214, 218, 255)",
+            "veces": 16
+          },
+          {
+            "valor": "rgb(249, 247, 255)",
+            "veces": 6
+          },
+          {
+            "valor": "rgb(224, 253, 191)",
+            "veces": 6
+          },
+          {
+            "valor": "rgb(229, 224, 255)",
+            "veces": 4
+          },
+          {
+            "valor": "rgb(172, 172, 250)",
+            "veces": 3
+          }
+        ],
+        "escalaEspaciado": [
+          {
+            "valor": "16px",
+            "veces": 221
+          },
+          {
+            "valor": "auto",
+            "veces": 213
+          },
+          {
+            "valor": "24px",
+            "veces": 104
+          },
+          {
+            "valor": "12px",
+            "veces": 102
+          },
+          {
+            "valor": "8px",
+            "veces": 77
+          },
+          {
+            "valor": "4px",
+            "veces": 61
+          },
+          {
+            "valor": "32px",
+            "veces": 53
+          },
+          {
+            "valor": "40px",
+            "veces": 34
+          },
+          {
+            "valor": "56px",
+            "veces": 24
+          },
+          {
+            "valor": "20px",
+            "veces": 24
+          },
+          {
+            "valor": "22px",
+            "veces": 23
+          },
+          {
+            "valor": "10px",
+            "veces": 15
+          },
+          {
+            "valor": "96px",
+            "veces": 13
+          },
+          {
+            "valor": "1.008px",
+            "veces": 8
+          },
+          {
+            "valor": "3.008px",
+            "veces": 7
+          },
+          {
+            "valor": "-16px",
+            "veces": 6
+          }
+        ],
+        "radios": [
+          {
+            "valor": "9999px",
+            "veces": 456
+          },
+          {
+            "valor": "20px",
+            "veces": 45
+          },
+          {
+            "valor": "4px",
+            "veces": 33
+          },
+          {
+            "valor": "10px",
+            "veces": 27
+          },
+          {
+            "valor": "8px",
+            "veces": 18
+          },
+          {
+            "valor": "3px",
+            "veces": 4
+          },
+          {
+            "valor": "50%",
+            "veces": 3
+          },
+          {
+            "valor": "32px",
+            "veces": 2
+          },
+          {
+            "valor": "20px 20px 0px 0px",
+            "veces": 2
+          },
+          {
+            "valor": "30px",
+            "veces": 1
+          }
+        ],
+        "radiosDistintos": 11,
+        "sombras": [
+          {
+            "valor": "rgba(0, 0, 0, 0.082) 0px 0px 1px 0px, rgba(0, 0, 0, 0.17) 0p",
+            "veces": 2
+          }
+        ],
+        "sombrasDistintas": 1,
+        "zIndex": [
+          {
+            "valor": "10",
+            "veces": 84
+          },
+          {
+            "valor": "1",
+            "veces": 14
+          },
+          {
+            "valor": "50",
+            "veces": 11
+          },
+          {
+            "valor": "20",
+            "veces": 10
+          },
+          {
+            "valor": "40",
+            "veces": 9
+          },
+          {
+            "valor": "30",
+            "veces": 5
+          },
+          {
+            "valor": "0",
+            "veces": 2
+          },
+          {
+            "valor": "-10",
+            "veces": 2
+          }
+        ]
+      },
+      "movimiento": {
+        "transiciones": [
+          {
+            "valor": "opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 70
+          },
+          {
+            "valor": "color 0.075s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.075s cub",
+            "veces": 20
+          },
+          {
+            "valor": "0.3s cubic-bezier(0, 0, 0.2, 1)",
+            "veces": 11
+          },
+          {
+            "valor": "opacity 0.8s",
+            "veces": 10
+          },
+          {
+            "valor": "transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+            "veces": 10
+          },
+          {
+            "valor": "transform 0.3s cubic-bezier(0.35, 0, 0.25, 1)",
+            "veces": 8
+          },
+          {
+            "valor": "color 0.2s",
+            "veces": 5
+          },
+          {
+            "valor": "background-color 0.2s, color 0.2s, transform 0.2s",
+            "veces": 5
+          },
+          {
+            "valor": "transform 0.2s",
+            "veces": 5
+          },
+          {
+            "valor": "color 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s cubic-b",
+            "veces": 4
+          },
+          {
+            "valor": "opacity 0.2s cubic-bezier(0, 0, 0.16, 0.96) 0.2s, transform 0.4s cubic",
+            "veces": 2
+          },
+          {
+            "valor": "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+            "veces": 2
+          }
+        ],
+        "transicionesDistintas": 18,
+        "hojasLeidas": 12,
+        "unidades": {
+          "em": 4,
+          "rem": 1162,
+          "px": 326,
+          "clamp": 2,
+          "vw": 9
+        },
+        "keyframesDeclarados": 20,
+        "transitionAll": 3,
+        "tieneReducedMotion": false,
+        "breakpointsPx": [
+          {
+            "px": 768,
+            "veces": 19
+          },
+          {
+            "px": 1200,
+            "veces": 17
+          },
+          {
+            "px": 1440,
+            "veces": 10
+          },
+          {
+            "px": 1024,
+            "veces": 3
+          },
+          {
+            "px": 767,
+            "veces": 2
+          },
+          {
+            "px": 1920,
+            "veces": 2
+          },
+          {
+            "px": 321,
+            "veces": 1
+          },
+          {
+            "px": 450,
+            "veces": 1
+          },
+          {
+            "px": 451,
+            "veces": 1
+          },
+          {
+            "px": 500,
+            "veces": 1
+          }
+        ]
+      },
+      "scroll": {
+        "muestras": [
+          {
+            "y": 0,
+            "conTransform": 0,
+            "navFija": false
+          },
+          {
+            "y": 1743,
+            "conTransform": 0,
+            "navFija": false
+          },
+          {
+            "y": 3477,
+            "conTransform": 0,
+            "navFija": false
+          },
+          {
+            "y": 5216,
+            "conTransform": 0,
+            "navFija": false
+          },
+          {
+            "y": 6954,
+            "conTransform": 0,
+            "navFija": false
+          }
+        ],
+        "hayMovimientoLigadoAlScroll": false,
+        "posicionesDistintas": 1,
+        "pegados": [
+          {
+            "etiqueta": "div",
+            "clase": "js-modal hidden fixed inset-0 z-40 js-sign-in bg-white",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "fixed top-80 inset-0 flex flex-col px-16 pt-24 pb-24 md:pt-1",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "80px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "js-modal hidden fixed inset-0 z-40 js-forgot flex flex-col b",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "fixed top-80 inset-0 flex overflow-y-auto custom-scrollbar",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "80px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "js-modal hidden fixed inset-0 z-40 js-change-password bg-whi",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "fixed top-80 inset-0 flex overflow-y-auto custom-scrollbar",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "80px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "js-modal hidden fixed inset-0 z-40 js-mfa-auth bg-white",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "fixed top-80 inset-0 flex flex-col overflow-y-auto custom-sc",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "80px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "js-modal hidden fixed inset-0 z-40 js-sign-up bg-white",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "fixed top-80 inset-0 flex px-16 pt-24 pb-24 md:pt-100 lg:pt-",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "80px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "js-modal hidden fixed inset-0 z-40 js-create-account bg-whit",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "0px"
+          },
+          {
+            "etiqueta": "div",
+            "clase": "fixed top-80 inset-0 flex overflow-y-auto custom-scrollbar",
+            "posicion": "fixed",
+            "alto": 0,
+            "top": "80px"
+          }
+        ]
+      },
+      "conversion": {
+        "formularios": [
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "email",
+                "requerido": false
+              },
+              {
+                "tipo": "password",
+                "nombre": "password",
+                "requerido": false
+              }
+            ],
+            "boton": "Ver Ocultar"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "email",
+                "requerido": false
+              }
+            ],
+            "boton": "Pedir cambio de contraseña"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "password",
+                "nombre": "password",
+                "requerido": false
+              },
+              {
+                "tipo": "password",
+                "nombre": "passwordRepeat",
+                "requerido": false
+              }
+            ],
+            "boton": "Ver Ocultar"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "tel",
+                "nombre": "",
+                "requerido": false
+              },
+              {
+                "tipo": "tel",
+                "nombre": "",
+                "requerido": false
+              },
+              {
+                "tipo": "tel",
+                "nombre": "",
+                "requerido": false
+              },
+              {
+                "tipo": "tel",
+                "nombre": "",
+                "requerido": false
+              },
+              {
+                "tipo": "tel",
+                "nombre": "",
+                "requerido": false
+              },
+              {
+                "tipo": "tel",
+                "nombre": "",
+                "requerido": false
+              }
+            ],
+            "boton": "Confirmar"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "email",
+                "requerido": false
+              }
+            ],
+            "boton": "Crear cuenta"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "email",
+                "requerido": false
+              },
+              {
+                "tipo": "text",
+                "nombre": "name",
+                "requerido": false
+              },
+              {
+                "tipo": "password",
+                "nombre": "password",
+                "requerido": false
+              }
+            ],
+            "boton": "Ver Ocultar"
+          },
+          {
+            "accion": "",
+            "campos": [
+              {
+                "tipo": "text",
+                "nombre": "account",
+                "requerido": false
+              },
+              {
+                "tipo": "text",
+                "nombre": "subdomain",
+                "requerido": false
+              }
+            ],
+            "boton": "Crear cuenta"
+          }
+        ],
+        "dialogos": 0,
+        "ctasDistintos": 136,
+        "ctasTop": [
+          {
+            "texto": "Conoce más",
+            "veces": 11
+          },
+          {
+            "texto": "Iniciar sesión",
+            "veces": 8
+          },
+          {
+            "texto": "Crear cuenta",
+            "veces": 7
+          },
+          {
+            "texto": "Español (Latinoamérica)",
+            "veces": 7
+          },
+          {
+            "texto": "English",
+            "veces": 5
+          },
+          {
+            "texto": "Português (BR)",
+            "veces": 5
+          },
+          {
+            "texto": "Bahasa Indonesia (ID)",
+            "veces": 5
+          },
+          {
+            "texto": "Turkish (TR)",
+            "veces": 5
+          },
+          {
+            "texto": "Habla con ventas",
+            "veces": 5
+          },
+          {
+            "texto": "Ver Ocultar",
+            "veces": 4
+          }
+        ]
+      },
+      "accesibilidad": {
+        "imagenes": 127,
+        "sinAlt": 10,
+        "altVacio": 55,
+        "sinDimensiones": 40,
+        "lazy": 1,
+        "conSrcset": 0,
+        "interactivos": 330,
+        "objetivosMenores44px": 80,
+        "idioma": "es",
+        "landmarks": {
+          "header": 7,
+          "nav": 8,
+          "main": 0,
+          "footer": 1
+        },
+        "contrastes": [
+          {
+            "texto": "rgb(14, 1, 66)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 19.06
+          },
+          {
+            "texto": "rgb(14, 1, 66)",
+            "fondo": "rgb(14, 1, 66)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(14, 1, 66)",
+            "fondo": "rgb(243, 239, 255)",
+            "ratio": 16.88
+          },
+          {
+            "texto": "rgb(134, 128, 160)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 3.74
+          },
+          {
+            "texto": "rgb(134, 128, 160)",
+            "fondo": "rgb(14, 1, 66)",
+            "ratio": 5.09
+          },
+          {
+            "texto": "rgb(134, 128, 160)",
+            "fondo": "rgb(243, 239, 255)",
+            "ratio": 3.32
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 1
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(14, 1, 66)",
+            "ratio": 19.06
+          },
+          {
+            "texto": "rgb(255, 255, 255)",
+            "fondo": "rgb(243, 239, 255)",
+            "ratio": 1.13
+          },
+          {
+            "texto": "rgb(95, 67, 208)",
+            "fondo": "rgb(255, 255, 255)",
+            "ratio": 6.56
+          },
+          {
+            "texto": "rgb(95, 67, 208)",
+            "fondo": "rgb(14, 1, 66)",
+            "ratio": 2.9
+          },
+          {
+            "texto": "rgb(95, 67, 208)",
+            "fondo": "rgb(243, 239, 255)",
+            "ratio": 5.81
+          }
+        ],
+        "fondosTranslucidosOmitidos": 1
+      },
+      "rendimiento": {
+        "pesoTotalKb": 20996.4,
+        "porTipoKb": {
+          "document": 594,
+          "stylesheet": 146.8,
+          "font": 226.1,
+          "script": 4881.7,
+          "image": 0.8,
+          "media": 15146.9,
+          "xhr": 0,
+          "fetch": 0,
+          "ping": 0
+        },
+        "pedidos": {
+          "document": 10,
+          "stylesheet": 28,
+          "font": 12,
+          "script": 123,
+          "image": 149,
+          "media": 32,
+          "xhr": 38,
+          "fetch": 20,
+          "ping": 14
+        },
+        "hostsDistintos": 28,
+        "terceros": [
+          {
+            "host": "pcfcdn.kommo.com",
+            "pedidos": 134
+          },
+          {
+            "host": "gso.kommo.com",
+            "pedidos": 20
+          },
+          {
+            "host": "analytics.tiktok.com",
+            "pedidos": 12
+          },
+          {
+            "host": "gtmanalytics.kommo.com",
+            "pedidos": 10
+          },
+          {
+            "host": "bat.bing.com",
+            "pedidos": 7
+          },
+          {
+            "host": "n.clarity.ms",
+            "pedidos": 7
+          },
+          {
+            "host": "px.ads.linkedin.com",
+            "pedidos": 5
+          },
+          {
+            "host": "piper.amocrm.com",
+            "pedidos": 4
+          }
+        ],
+        "fuentesCargadas": [
+          "swiper-icons 400 normal",
+          "EuclidCircularA 300 normal",
+          "EuclidCircularA 300 italic",
+          "EuclidCircularA 400 normal",
+          "EuclidCircularA 400 italic",
+          "EuclidCircularA 500 normal",
+          "EuclidCircularA 500 italic",
+          "EuclidCircularA 600 normal",
+          "EuclidCircularA 600 italic",
+          "EuclidCircularA 700 normal",
+          "EuclidCircularA 700 italic",
+          "EuclidCircularA__fallback normal normal",
+          "Roboto 400 normal",
+          "Roboto 500 normal"
+        ]
+      },
+      "seo": {
+        "titulo": "Kommo: CRM con IA para ventas y automatización de mensajes.",
+        "descripcion": "CRM con IA para ventas por mensajería. Automatiza conversaciones en WhatsApp, Instagram, TikTok y más. Usado por miles de empresas en todo el mundo.",
+        "canonical": "https://www.kommo.com/es/",
+        "og": 5,
+        "datosEstructurados": 1
+      },
+      "tecnologia": {
+        "next": false,
+        "webflow": false,
+        "react": false,
+        "gsap": false,
+        "swiper": true,
+        "framer": false
+      }
+    }
+  },
+  "noSePudoMedir": [],
+  "reducedMotion": {
+    "conAnimacion": 114,
+    "conTransicion": 99
+  },
+  "requiereOjoHumano": [
+    "Intencion de diseno: por que eligieron ESTA direccion visual y no otra.",
+    "Calidad del copy: si la promesa es creible y si los numeros estan respaldados.",
+    "Contenido detras de login, muro de cookies o interaccion (paso 2 de un popup, estados de error).",
+    "Si el movimiento AYUDA a entender o solo decora: eso se juzga mirando, no midiendo."
+  ]
+}
