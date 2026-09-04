@@ -336,13 +336,33 @@ todavía no le tocó.
 Es el mismo agujero que ya se pagó con `contenido-cola`: *"se apagaba con la laptop, nada lo
 reponía y nada avisaba — el modo de falla más silencioso que tiene el sistema"*.
 
-**Se tapa desde el VPS, no desde casa**, y es una sola cosa: un cron en el VPS que revise la
-marca de tiempo del último `ARRANCA` de cada loop mudado y avise si pasó más de dos cadencias.
-El VPS ya tiene el patrón hecho (`hermes-vigia.sh`, `vigia-disco.sh`).
+**Se tapa desde el VPS, no desde casa** — y ya está tapado.
 
-> **Pendiente, no hecho.** No se construyó en esta sesión — el objetivo era el plan y el
-> instalador. **No mudar el paso 10 (apagar los loops en el VPS) hasta que este vigía exista**,
-> o se está cambiando un problema de CPU por un problema de silencio.
+✅ **Hecho el 2026-09-04: [`scripts/loops/vigia-loops-remotos.sh`](../../scripts/loops/vigia-loops-remotos.sh)**,
+desplegado en el VPS como `/root/bin/onia-vigia-loops-remotos.sh` y en cron `4,34 * * * *`.
+Mide el último `ARRANCA` de cada loop mudado y avisa si pasaron más de **dos cadencias**.
+
+- **La lista es explícita**, en `/root/.config/onia/loops-remotos.txt` (`<id> <cadencia-en-minutos>`).
+  Sin archivo o con todo comentado —que es como quedó hoy— **no hace nada y sale 0**. Se
+  descomenta la línea de cada loop el día que sale del crontab del VPS, en el paso 10.
+- **La cadencia que se escribe ahí es el HUECO MÁS GRANDE entre dos corridas, no el promedio.**
+  `marca-personal` corre 13:59 y 21:59: su hueco grande son 16 h, no 8. Poner el promedio hace
+  que el vigía grite todas las noches, y una alarma que grita sin razón se apaga sola en la
+  cabeza del que la lee.
+- **Distingue el apagón del loop caído**, que es la mitad del valor: si están callados **todos
+  a la vez** manda **un** mensaje ("la PC no da señales"); si es **uno solo** mientras los otros
+  llegan, dice que ese loop está callado y que la PC está viva. Un aviso por episodio, y uno de
+  recuperado cuando vuelve — el patrón de `vigia-disco.sh`.
+
+### 🔴 Lo que este vigía NO puede ver, y por eso no lo dice
+
+Los logs de un loop mudado llegan al VPS **por rsync desde la PC de casa** (línea de cron que
+pone el instalador, cada 10 min). Si ese rsync se corta pero el loop sigue corriendo bien, desde
+el VPS se ve **exactamente igual** que un loop muerto: silencio. **No se puede distinguir.**
+
+Por eso los avisos dicen *"no llegan sus registros"* y nunca *"está caído"*: la única lectura
+honesta de un silencio es que no hay noticias. El que lo reciba tiene que mirar la PC — el vigía
+acota el problema a esa máquina, no lo diagnostica.
 
 ### Los otros
 
@@ -369,5 +389,7 @@ El VPS ya tiene el patrón hecho (`hermes-vigia.sh`, `vigia-disco.sh`).
   escribe por SSH.
 - 🔴 **Esto arregla el disco (85 % usado, 72 GB de loops) y los picos de CPU. NO arregla la
   cuota de Claude** — esa es de la cuenta, no de la máquina.
-- 🔴 **Falta el vigía en el VPS que avise si la PC de casa se calla.** Sin eso, no apagar los
-  loops mudados del `crontab` del VPS.
+- ✅ **El vigía que avisa si la PC de casa se calla ya existe** y corre en el VPS cada 30 min
+  (§6). Está en silencio hasta que se le declare el primer loop mudado, así que el paso 10 ya
+  no está bloqueado — pero se descomenta la línea del loop en la lista **en el mismo momento**
+  en que se lo saca del `crontab` del VPS, no después.

@@ -91,7 +91,11 @@ fi
 # Caso 1b — volvio a aparecer alguna senal despues de un apagon.
 if [ -f "$APAGON" ] && [ -n "$VIVOS" ]; then
   rm -f "$APAGON"
-  "$TG" "🟢 <b>La PC de casa volvio</b> — llegan registros de:<code>$(echo $VIVOS | sed 's/ /<\/code>, <code>/g')</code>." >/dev/null 2>&1 || true
+  "$TG" "🟢 <b>La PC de casa volvio</b> — llegan registros de: <code>$(echo $VIVOS | sed 's/ /<\/code>, <code>/g')</code>." >/dev/null 2>&1 || true
+  # Este mensaje YA nombra los que volvieron: si ademas se dispara el "recuperado"
+  # de mas abajo por cada uno, un apagon de cinco loops manda seis mensajes que
+  # dicen lo mismo. Se limpian sus marcas aca y el bloque de abajo los saltea.
+  for id in $VIVOS; do rm -f "$ESTADO/$id"; done
 fi
 
 # Caso 2 — uno solo callado: ese loop. Un aviso por episodio, no uno por vuelta
