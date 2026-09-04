@@ -12,16 +12,57 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
-## Medido el 2026-09-04 10:30 La Paz — **TRES rubros de los cinco que se venden, los tres enteros**
+## Medido el 2026-09-04 13:25 La Paz — **CUATRO rubros de los cinco; tres enteros y uno ROTO**
 
 | Rubro | Resultado | Dónde está la prueba |
 |---|---|---|
 | Clínica dental | **9 de 9** | `capturas/` |
 | Comercio / tienda | **8 de 8** (el paso 7 no le corresponde) | `capturas/comercio/` |
 | Estética y spa | **9 de 9** | `capturas/estetica/` |
+| **Servicios profesionales** | **6 de 9 — ROTO en el paso 7** | `capturas/servicios/` |
 
-Los tres con `--escribir`, los tres con `completo: true`, y **cero filas de este carril** en la base
-al cerrar. Faltan por recorrer *Importadora / distribuidora* y *Servicios profesionales*.
+Los cuatro con `--escribir` y **cero filas de este carril** en la base al cerrar. Falta por
+recorrer *Importadora / distribuidora*.
+
+> ⚠️ La única fila `zz-qa-` que queda en producción es **ajena** (`zz-qa-recall-demo-1`, fixture
+> del agente Recall de otro carril). Aparece en `resumen.json` como `zzQaAjenas` y **no se toca**:
+> el chequeo de cierre «`count(*) LIKE 'zz-qa-%'` = 0» hoy da **1** y eso NO es basura mía.
+
+### Servicios profesionales: promete agendar y no puede agendar nunca
+
+Es el hallazgo de la vuelta, y es de los caros: **la venta promete lo que el producto no entrega.**
+
+- La tarjeta del rubro en `/register` promete, textual: **«Agenda, citas, cobros y contabilidad»**.
+- El menú tiene *Citas* y *Agenda de hoy*, y la **primera** acción rápida del botón `+` es
+  **«Nueva cita»**. El producto vende agendar como lo primero que hace ese rubro.
+- El formulario de la cita exige **«Cliente \*»** y ese desplegable tiene **CERO opciones**.
+  No es que no se eligió: **no hay nada para elegir.**
+- Causa, leída en la fuente y no supuesta: `SERVICIOS_NAV_ITEMS` (`lib/platform/vertical-pack.ts`)
+  **no tiene ninguna entrada de clientes**. Dental sí (`/patients` → «Pacientes»). En ese pack no
+  existe la pantalla donde crear el cliente que la cita pide — aunque el vocabulario del rubro sí
+  define `clientes` y el buscador de arriba dice **«Buscar clientes…»**.
+
+Prueba: `capturas/servicios/paso-07c-cita-enviada.png` — el desplegable vacío con el globo de
+validación del navegador, y todo el resto del formulario lleno. Reportado en el tablero como
+`t_2b03ea3d` (prioridad 1) al carril `onia-cola`: **este carril mide, no toca el producto.**
+
+### Dos falsos rojos MÍOS que se cazaron en el camino
+
+Los dos son del instrumento, no del producto, y los dos habrían acusado a un producto sano:
+
+1. **El paso 6 daba ROJO en servicios profesionales** («el menú no ofrece ninguna pantalla donde
+   cargar un dato») porque mi mapa buscaba sólo *cliente*/*paciente*. Ese pack carga su dato en
+   `/comercio`, que ahí se llama **«Servicios»** — igual que comercio lo carga en «Catálogo». El
+   patrón de clientes quedó primero, así que el día que aparezca esa pantalla, gana ella.
+2. **La evidencia de cada rubro apuntaba a las capturas de DENTAL.** La ruta del `resumen.json`
+   estaba escrita a mano; las capturas se guardaban en la carpeta del rubro y se reportaban en la
+   de dental, **donde vive un PNG con el mismo nombre**. Medido: **17 de 17** rutas de comercio y
+   estética apuntaban al archivo equivocado, **y las 17 existían**. Un chequeo de «¿existe la
+   captura?» daba verde sobre las 17. Este carril entrega una sola cosa —la prueba de dónde se
+   rompe— y la estaba entregando de otro rubro.
+
+Gates del instrumento: `scripts/recorrido_cliente.test.mjs` (6 casos, verificados en rojo
+inyectando el defecto real antes de arreglarlo).
 
 ### Por qué comercio cierra en 8 y eso NO es un agujero
 
