@@ -1219,3 +1219,56 @@ cuadro), y `E2-B` bajó a la lámina 3. Siguen siendo 7 fotos distintas para 7 l
 duplicó nada.
 
 Detalle, comandos y tabla del intercambio: `posts-20260807/L2/LEEME.md`.
+
+---
+
+## P12 — 2026-09-04 07:5x UTC · Arreglar donde saltó no barre a los hermanos
+
+**Gasto: 0 créditos. Saldo 1932,14 antes y después** (`higgsfield account status`, las dos puntas
+de la vuelta). Cero generación: toda la vuelta fue texto y medición.
+
+**La pregunta:** ¿quedó alguna otra pieza pidiendo una palabra que el sistema no responde?
+
+**Sí: cinco.** La vuelta anterior arregló la lámina fijada (`COMUNIDAD` → `HUMO`) y la casilla 11
+de la rúbrica quedó bien escrita. Las dos cosas eran ciertas y las dos miraban **la pieza donde
+saltó el defecto**. Barriendo el árbol entero aparecieron cinco CTA más, en guiones listos para
+publicar, pidiendo `ONIA` (×4) y `COMUNIDAD` (×1):
+
+| Archivo | Pedía | Dice ahora |
+|---|---|---|
+| `generadas-20260828/CREATIVO.md:108` | `ONIA` | `SISTEMA` |
+| `generadas-20260828/CREATIVO.md:208` | `COMUNIDAD` | `SISTEMA` |
+| `generadas-20260901/CREATIVO.md:93` | `ONIA` | `SISTEMA` |
+| `generadas-20260902/CREATIVO.md:105` | `ONIA` | `SISTEMA` |
+| `generadas-20260902/CREATIVO-STILLS.md:102` | `ONIA` | `SISTEMA` |
+
+Los cinco prometen «te paso cómo se ve» — que es literalmente lo que responde el DM de `SISTEMA`
+(«te muestro cómo se ve todo junto: acá agendás 20 minutos… el mapa de tu negocio»). El
+reemplazo no cambió la promesa, sólo la hizo cumplible.
+
+⚠️ **`ONIA` engaña al grep.** Buscando palabras clave en el workflow, `ONIA` aparece — pero es el
+**nombre** del workflow (`ONIA - Comentario IG -> DM`) y la marca, no una palabra cableada. Se ve
+sólo abriendo el objeto `palabras: {…}` de la cuenta. Un grep sirve para descartar, nunca para
+confirmar, y acá el grep decía que sí.
+
+**Lo que enseña, y es la lección de la vuelta:** verificar a mano antes de escribir una palabra
+—que es lo que la casilla 11 mandaba a hacer— sólo cuida **la pieza que estás tocando**. Por
+construcción no puede encontrar los hermanos: nadie los está tocando. Un defecto que nace de una
+preferencia escrita (*«el CTA fijo es COMUNIDAD»*) no aparece una vez, aparece en todo lo que se
+escribió creyendo esa preferencia. **La reparación tiene que ser un barrido, y el barrido tiene
+que quedar automatizado o se vuelve a acumular.**
+
+**El gate:** `scripts/palabras-cableadas.py` (exit 0 = verde). Sujetos del **disco**, palabras del
+**n8n activo** — ninguna lista escrita a mano, así que una pieza nueva nace cubierta y un cambio
+de cableado se detecta solo. Sin poder leer n8n sale **rojo**: no aprueba por no haber podido
+mirar. Probado en las dos direcciones: reintroducir `COMUNIDAD` en un brief → exit 1 señalando
+archivo y línea; restaurar → exit 0.
+
+**Lo que NO se tocó, a propósito:** las menciones de `COMUNIDAD` en `L2/LEEME.md:225-226` y en la
+casilla 11 de la rúbrica. Son bitácora: *narran* el error, no lo piden. Reescribirlas sería
+falsificar el registro de lo que pasó. El gate las reporta como **aviso** en vez de rojo — pero
+las reporta, porque un gate que se calla sobre lo que no supo clasificar es como falla abierto.
+
+**Sigue pendiente y no es mío:** `COMUNIDAD` es el CTA que Sergio quiere fijo y necesita el enlace
+del grupo para cablearse (`t_ce495931`, bloqueada en él). Hasta que exista, ninguna pieza la pide:
+primero se cablea, después se promete.
