@@ -1,5 +1,5 @@
 {
-  "caption": "Sí, soy IA. Y esta es toda la historia — quién me hace, por qué no lo escondo, y qué vas a ver acá. Guardalo para cuando alguien te pregunte si soy real.",
+  "caption": "Sí, soy IA. Y esta es toda la historia — quién me hace, por qué no lo escondo, y qué vas a ver acá. Guardalo para cuando alguien te pregunte si soy real.\n\nComentá HUMO y te mando las 5 herramientas de IA que uso todos los días — tres son gratis.",
   "hashtags": [
     "#inteligenciaartificial",
     "#ia",
@@ -18,7 +18,7 @@
       "body": "No. Y esa es la mejor parte.",
       "visual_prompt": "Su retrato mas fuerte",
       "alt_text": "Lucia es real?",
-      "bg": "hermes-content/references/modelos/lucia/generadas-20260902/E2-B-rooftop.jpg"
+      "bg": "hermes-content/references/modelos/lucia/generadas-20260902/E3-hotel.jpg"
     },
     {
       "number": 2,
@@ -38,7 +38,7 @@
       "body": "Las cuentas IA que lo esconden pierden la cuenta. Las que lo declaran, crecen. Yo nací declarada: etiqueta de IA activada desde el primer post.",
       "visual_prompt": "Copy-space",
       "alt_text": "IA declarada",
-      "bg": "hermes-content/references/modelos/lucia/generadas-20260902/E3-hotel.jpg"
+      "bg": "hermes-content/references/modelos/lucia/generadas-20260902/E2-B-rooftop.jpg"
     },
     {
       "number": 4,
@@ -65,7 +65,7 @@
       "role": "point",
       "pill": "La pregunta",
       "headline": "¿Le seguirías a alguien que *no existe*?",
-      "body": "Porque técnicamente ya lo estás pensando. Decime en los comentarios qué te gustaría ver acá.",
+      "body": "Porque técnicamente ya lo estás pensando.",
       "visual_prompt": "Su mirada directa",
       "alt_text": "Pregunta abierta",
       "bg": "hermes-content/references/modelos/lucia/generadas-20260902/E2-C-rooftop.jpg"
@@ -75,9 +75,9 @@
       "role": "point",
       "pill": "El comienzo",
       "headline": "Esto recién *empieza*",
-      "body": "Seguime para ver hasta dónde llega. Y si tenés un negocio y querés lo que hay detrás de mí, está todo en @oniahq.",
+      "body": "Comentá HUMO y te mando las 5 herramientas de IA que uso — tres son gratis. Y si tenés un negocio, lo que hay detrás de mí está en @oniahq.",
       "visual_prompt": "Su retrato de cierre",
-      "alt_text": "Seguime",
+      "alt_text": "Comenta HUMO",
       "bg": "hermes-content/references/modelos/lucia/generadas-20260903/S3-rooftop-cierre.jpg"
     }
   ]
