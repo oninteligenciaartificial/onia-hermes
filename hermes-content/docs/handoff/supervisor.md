@@ -102,6 +102,54 @@ Nada desplegado — este carril no despliega.
 la sesión de control y quedan escritas en la tarea: a Sergio sólo se le piden plata, marca y
 contactar personas. Por eso quedó `ready`, **no** `needs_input`.
 
+## El circuito de auto-conocimiento — PERMANENTE, no es de una vuelta
+
+> Sergio, 2026-09-04: *"revisá el apartado de auto knowledge para aprender qué fallas y seguir
+> mejorando… recordá no perdernos y seguir mejorando de los errores, mirá tus loops"*.
+>
+> Antes de esto el supervisor **reportaba** qué loop no avanza, pero nadie comparaba una vuelta
+> con la anterior: el mismo fallo se pagaba todos los días y nunca se convertía en regla.
+
+**Quién aprende:** el loop `supervisor`, en su vuelta (cron `29 2,8,14,20` UTC). Nadie más. Ni
+Sergio ni la sesión de control leen logs para esto.
+
+**Cómo, en cuatro pasos:**
+
+1. `/root/bin/onia-extraer-fallos.sh` — sin modelo, sin red, ~0,1 s. Lee los 15 logs de
+   `/var/log/onia-loop-*.log` (24 h) y el tablero, y emite **un JSON**: por loop `vueltas`,
+   `sin_commit` y `perdidas_por_limite`; los mensajes de error agrupados **por firma**
+   (normaliza rutas, SHAs, relojes y números antes de contar); y las tareas con
+   `block_recurrences >= 2`. **Umbral: 2** — una vez es mala suerte, dos es un patrón.
+2. Por cada patrón nuevo, **una sola** salida: lección (`onia-aprender.sh`), corrección del
+   prompt del loop culpable (`scripts/loops/prompts/<id>.md`, una línea con el porqué), o **UNA**
+   tarea bloqueada si exige una decisión de Sergio.
+3. `onia-consolidar-memoria.sh` funde la bandeja en `MEMORY.md` **con cerrojo y dedup**: escribir
+   dos veces la misma lección deja una sola entrada.
+4. El corredor (`onia-loop.sh`) inyecta `MEMORY.md` arriba del prompt de los 15 loops en cada
+   vuelta. Ahí se cierra: lo que un carril aprende, los otros catorce lo leen sin repetir el error.
+
+**Cómo se verifica** (probado de punta a punta el 2026-09-04):
+
+```
+/root/bin/onia-extraer-fallos.sh --autotest                     # el extractor se prueba solo
+grep -c '^§$' /root/.hermes/memories/MEMORY.md                  # entradas antes
+ONIA_LOOP_ID=supervisor /root/bin/onia-aprender.sh "<hecho>"    # deja en la bandeja
+/root/bin/onia-consolidar-memoria.sh                            # "N agregado(s), M repetido(s)"
+grep -c '<frase de la lección>' /root/.hermes/memories/MEMORY.md # tiene que dar 1, nunca 2
+```
+
+**Qué NO hace este circuito**, y es a propósito:
+
+- **No cambia código de producto.** Sólo lecciones, prompts de loops y tareas.
+- **No decide por Sergio.** Un patrón que exige plata, marca o contactar personas se convierte en
+  UNA tarea bloqueada, no en un arreglo.
+- **No cuenta `perdidas_por_limite` como falla de nadie.** Son vueltas muertas por el cupo
+  compartido de Claude (25 de 128 en las 24 h del 2026-09-04, sobre 9 carriles). Diagnosticarlas
+  como carril seco manda a arreglar loops sanos.
+- **No toca el corredor ni el sincronizador.** El extractor se despliega solo por
+  `sincronizar.sh` (cron `:44`) a `/root/bin/onia-extraer-fallos.sh`; la fuente es
+  `scripts/loops/extraer-fallos.sh` y se edita **ahí**, nunca a mano en el VPS.
+
 ## Próximos pasos
 
 1. **Auditar `web-factory-dev`.** Es el próximo de los nunca mirados.
