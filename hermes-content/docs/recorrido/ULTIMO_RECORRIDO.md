@@ -12,7 +12,7 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
-## Medido el 2026-09-04 13:25 La Paz — **CUATRO rubros de los cinco; tres enteros y uno ROTO**
+## Medido el 2026-09-04 16:11 La Paz — **los CINCO rubros recorridos; cuatro enteros y uno ROTO**
 
 | Rubro | Resultado | Dónde está la prueba |
 |---|---|---|
@@ -20,9 +20,22 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 | Comercio / tienda | **8 de 8** (el paso 7 no le corresponde) | `capturas/comercio/` |
 | Estética y spa | **9 de 9** | `capturas/estetica/` |
 | **Servicios profesionales** | **6 de 9 — ROTO en el paso 7** | `capturas/servicios/` |
+| Importadora / distribuidora | **9 de 9** (el paso 7 no le corresponde) | `capturas/importadora/` |
 
-Los cuatro con `--escribir` y **cero filas de este carril** en la base al cerrar. Falta por
-recorrer *Importadora / distribuidora*.
+Los cinco con `--escribir` y **cero filas de este carril** en la base al cerrar.
+
+### Importadora / distribuidora: entera, sin agujeros
+
+Misma forma que comercio: la tarjeta de `/register` no promete agenda («Catálogo, cotizaciones
+B2B y costeo de importación»), así que el paso 7 sale `no-aplica` y no cuenta como agujero.
+Alta con confirmación de correo, onboarding en 6 pantallas, dato cargado y encontrado de vuelta
+en el storefront `/comercio`, pantalla de cobro (`/comercio/fiados`) vista y frenada ahí a
+propósito.
+
+Un detalle sin gravedad, anotado para no perderlo: el dato cargado (`...-paciente`) queda visible
+en el storefront pero **no aparece en los widgets de `/dashboard`** — no es un agujero del
+recorrido (el dato SÍ persiste y SÍ se ve en su pantalla propia), pero si otro carril audita el
+panel de importadora, esta es la pista.
 
 > ⚠️ La única fila `zz-qa-` que queda en producción es **ajena** (`zz-qa-recall-demo-1`, fixture
 > del agente Recall de otro carril). Aparece en `resumen.json` como `zzQaAjenas` y **no se toca**:
