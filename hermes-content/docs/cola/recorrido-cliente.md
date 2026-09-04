@@ -8,7 +8,21 @@ Instrumento: `scripts/recorrido_cliente.mjs`.
 
 ## Abierto
 
-### 0. Volver a correr IMPORTADORA para medir su paso 7 de verdad
+### 0. Volver a correr DENTAL cuando la agenda esté arreglada (tarea `t_2f5a96b6`)
+
+El paso 7 (agendar) existe desde el 2026-09-04 y salió **rojo**: un negocio nuevo no puede
+agendar porque el desplegable "Profesional" está vacío — detalle y causa raíz en
+[`../recorrido/ULTIMO_RECORRIDO.md`](../recorrido/ULTIMO_RECORRIDO.md). **No es trabajo de este
+carril arreglarlo** (el producto es de `onia-cola`); lo que queda acá es volver a medir cuando
+esté, porque hasta entonces **la cita nunca se agendó y el paso 8 mide sobre una agenda vacía**:
+
+    node scripts/recorrido_cliente.mjs --escribir
+    docker exec supabase-db psql -U postgres -d postgres -tAc "select count(*) from appointments where notes like 'zz-qa-%'"
+
+Verde es: `citaAgendada: true` en `resumen.json` y esa cuenta en **1** justo después de correr
+(y en **0** al cerrar la vuelta, ya borrada).
+
+### 1. Volver a correr IMPORTADORA para medir su paso 7 de verdad
 
 En la corrida del 2026-09-03 19:14 el paso 7 salió `no-medido` porque el instrumento pedía
 `/billing`, que ese rubro **no tiene**. Ya está arreglado (ahora busca **Créditos** en el menú),
@@ -20,7 +34,7 @@ Lo que hay que ver: que el paso 7 llegue a `/comercio/fiados` ("Créditos") y qu
 vea. ⚠️ Este rubro deja fila en `onia_commerce_products` **y** en
 `onia_commerce_product_variants`.
 
-### 1. Faltan DOS rubros de los cinco que ofrece el alta
+### 2. Faltan DOS rubros de los cinco que ofrece el alta
 
 Cerrados comercio y **estética y spa** (abajo), queda: **importadora/distribuidora** (parcial:
 7 de 8, ver el ítem 0) y **servicios profesionales**. Se corren igual, cambiando la variable:
@@ -37,9 +51,9 @@ es el dato que sirve para decidir si falta la pantalla o falta el mapa.
 `onia_commerce_product_variants`; dental en `patients`. Un borrado escrito para un rubro deja
 basura del otro.
 
-### 2. El paso 7 mira el cobro vacío: nunca hubo una factura que cobrar
+### 3. El paso 8 mira el cobro vacío: nunca hubo una factura que cobrar
 
-`/billing` se ve entera (`../recorrido/capturas/paso-07-cobro.png`) y dice *"0 facturas ·
+`/billing` se ve entera (`../recorrido/capturas/paso-08b-cobro.png`) y dice *"0 facturas ·
 Cobrado Bs 0,00"*. Es una pantalla de cobro **sin nada que cobrar**: el botón "Nueva Factura"
 existe y se ve, pero el recorrido nunca comprueba que el cobro **funcione** — sólo que la
 pantalla abra.
@@ -81,7 +95,7 @@ una licencia para corregir nada.
   `/patients` y `/billing`, y `llegar()` daba OK porque sólo comparaba la URL. Ahora
   `despejar()` cierra el overlay con el botón del propio producto ("Cerrar por ahora") y
   `queTapa()` mide lo que quede cubriendo ≥50 %; `llegar()` exige URL correcta **y** pantalla
-  visible. Prueba: `../recorrido/capturas/paso-07-cobro.png`, que por primera vez muestra
+  visible. Prueba: `../recorrido/capturas/paso-08b-cobro.png`, que por primera vez muestra
   Facturación y no el modal.
 - **El paso 6 no CARGABA ningún dato** — cerrado el 2026-09-03. Ahora crea el paciente
   `zz-qa-<fecha>-paciente` por el camino que ofrece la pantalla (`<a href="/patients/new">`) y
