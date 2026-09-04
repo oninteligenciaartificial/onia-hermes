@@ -702,8 +702,8 @@ describe("cobertura de casos end-to-end (el bug que costo la corrida del 6-ago)"
         obtenidoEn: Date.now(),
       };
     }
-    r.post = async (_service, _envelope, meta) => {
-      r.vistos.push({ etapa: meta.etapa, combo: comboId(r.combo) });
+    r.post = async (service, envelope, meta) => {
+      r.vistos.push({ etapa: meta.etapa, combo: comboId(r.combo), service, op: meta.op, envelope });
       return {
         ok: true,
         parsed: { transaccion: true, codigoEstado: 908, codigoRecepcion: "R1" },
@@ -712,22 +712,88 @@ describe("cobertura de casos end-to-end (el bug que costo la corrida del 6-ago)"
     return r;
   }
 
-  it("la etapa IV recorre TODOS los combos emitibles, no 750 veces el mismo", async () => {
+  /** XML que viajo en <archivo> de un envelope de recepcion (base64 del gzip). */
+  function xmlEnviado(envelope) {
+    const b64 = /<archivo>([^<]+)<\/archivo>/.exec(envelope)[1];
+    return gunzipSync(Buffer.from(b64, "base64")).toString("utf8");
+  }
+
+  it("la etapa IV recorre TODOS los combos, no 750 veces el mismo", async () => {
     const r = runnerEspia();
     await r.etapaIV(1); // 1 emision por combo
     const combos = r.vistos.filter((v) => v.etapa === "IV").map((v) => v.combo);
-    assert.deepEqual(new Set(combos), new Set(EMISION_CASES_SOPORTADOS.map(comboId)));
-    assert.equal(combos.length, 4);
+    assert.deepEqual(new Set(combos), new Set(EMISION_CASES.map(comboId)));
+    assert.equal(combos.length, 6);
   });
 
-  it("los combos del sector 24 se bloquean con el motivo, no en silencio", async () => {
+  it("el sector 17 emite con la raiz de hospital/clinica y los campos del medico", async () => {
     const r = runnerEspia();
     await r.etapaIV(1);
-    const bloqueados = Object.keys(r.state.etapas.IV.blockedCases);
-    assert.deepEqual(new Set(bloqueados), new Set(["pv0-ds24-tf3", "pv1-ds24-tf3"]));
-    for (const b of Object.values(r.state.etapas.IV.blockedCases)) {
-      assert.match(b.mensaje.descripcion, /recepcionDocumentoAjuste/);
-    }
+    const v = r.vistos.find((x) => x.etapa === "IV" && x.combo === "pv0-ds17-tf1");
+    assert.equal(v.service, "FACTURACION_COMPUTARIZADA");
+    assert.equal(v.op, "recepcionFactura");
+    assert.ok(v.envelope.includes("<codigoDocumentoSector>17</codigoDocumentoSector>"));
+    const xml = xmlEnviado(v.envelope);
+    assert.ok(xml.includes("<facturaComputarizadaHospitalClinica "), "raiz del sector 17");
+    assert.ok(xml.includes("<codigoDocumentoSector>17</codigoDocumentoSector></cabecera>"));
+    assert.ok(xml.includes("<nroQuirofanoSalaOperaciones>1</nroQuirofanoSalaOperaciones>"));
+    assert.ok(xml.includes("<nitDocumentoMedico>99001</nitDocumentoMedico>"));
+  });
+
+  it("el sector 24 emite una nota de ajuste por su servicio, contra una factura del mismo PdV", async () => {
+    const r = runnerEspia();
+    await r.etapaIV(1);
+    const v = r.vistos.find((x) => x.etapa === "IV" && x.combo === "pv0-ds24-tf3");
+    assert.equal(v.service, "FACTURACION_DOCUMENTO_AJUSTE");
+    assert.equal(v.op, "recepcionDocumentoAjuste");
+    assert.ok(v.envelope.includes("<siat:recepcionDocumentoAjuste><SolicitudServicioRecepcionDocumentoAjuste>"));
+    assert.ok(v.envelope.includes("<codigoDocumentoSector>24</codigoDocumentoSector>"));
+    assert.ok(v.envelope.includes("<tipoFacturaDocumento>3</tipoFacturaDocumento>"));
+    const xml = xmlEnviado(v.envelope);
+    assert.ok(xml.includes("<notaFiscalComputarizadaCreditoDebito "), "raiz de nota fiscal");
+    const original = r.state.invoices.find((f) => f.combo === "pv0-ds1-tf1");
+    assert.equal(original.ajustada, true, "la original queda marcada");
+    assert.ok(xml.includes(`<numeroAutorizacionCuf>${original.cuf}</numeroAutorizacionCuf>`));
+    assert.ok(xml.includes(`<numeroFactura>${original.numero}</numeroFactura>`));
+    assert.ok(xml.includes(`<fechaEmisionFactura>${original.datos.fechaEmision}</fechaEmisionFactura>`));
+    // Reglas del SIN: original = devuelto = montoTotal; efectivo = 13%.
+    const total = original.datos.montoTotal;
+    assert.ok(xml.includes(`<montoTotalOriginal>${total}</montoTotalOriginal><montoTotalDevuelto>${total}</montoTotalDevuelto>`));
+    assert.ok(xml.includes(`<montoEfectivoCreditoDebito>${Math.round(total * 13) / 100}</montoEfectivoCreditoDebito>`));
+    assert.equal((xml.match(/<codigoDetalleTransaccion>1</g) ?? []).length, 1);
+    assert.equal((xml.match(/<codigoDetalleTransaccion>2</g) ?? []).length, 1);
+  });
+
+  it("si el PdV no tiene una compra-venta con datos, la nota emite una primero", async () => {
+    const r = runnerEspia();
+    // Una factura vieja del estado (sin `datos`) NO sirve de original.
+    r.state.invoices.push({ numero: 1, cuf: "VIEJA", estado: 908, anulada: false, revertida: false, combo: "pv0-ds1-tf1" });
+    await r.withCombo(EMISION_CASES[4], () => r.emitOne(0)); // pv0-ds24-tf3
+    assert.deepEqual(
+      r.vistos.map((v) => [v.combo, v.op]),
+      [["pv0-ds1-tf1", "recepcionFactura"], ["pv0-ds24-tf3", "recepcionDocumentoAjuste"]],
+    );
+    assert.equal(r.state.invoices.length, 3);
+    assert.equal(r.state.invoices[0].ajustada, undefined, "la vieja no se toca");
+    assert.equal(r.state.invoices[1].ajustada, true);
+  });
+
+  it("una original ya ajustada no se reutiliza: cada nota emite su propia compra-venta", async () => {
+    const r = runnerEspia();
+    await r.withCombo(EMISION_CASES[4], () => r.emitOne(0));
+    await r.withCombo(EMISION_CASES[4], () => r.emitOne(1));
+    assert.equal(r.state.invoices.filter((f) => f.combo === "pv0-ds1-tf1").length, 2);
+    assert.equal(r.state.invoices.filter((f) => f.combo === "pv0-ds24-tf3").length, 2);
+  });
+
+  it("anular y revertir una nota usan las operaciones de ajuste", async () => {
+    const r = runnerEspia();
+    await r.etapaIV(1);
+    await r.etapaVII(1);
+    await r.etapaXI(1);
+    const ops = r.vistos.filter((v) => v.combo === "pv0-ds24-tf3").map((v) => v.op);
+    assert.deepEqual(ops, ["recepcionDocumentoAjuste", "anulacionDocumentoAjuste", "reversionAnulacionDocumentoAjuste"]);
+    assert.ok(r.vistos.filter((v) => v.combo === "pv0-ds24-tf3").every((v) => v.service === "FACTURACION_DOCUMENTO_AJUSTE"));
   });
 
   it("cada emision queda etiquetada con su combo", async () => {
@@ -748,7 +814,7 @@ describe("cobertura de casos end-to-end (el bug que costo la corrida del 6-ago)"
       // La anulada de cada combo tiene que ser la emitida bajo ese combo.
       assert.ok(EMISION_CASES.map(comboId).includes(emitidaEn));
     }
-    assert.equal(r.state.invoices.filter((f) => f.anulada).length, 4);
+    assert.equal(r.state.invoices.filter((f) => f.anulada).length, 6);
   });
 
   it("la reversion tambien respeta el combo", async () => {
@@ -756,7 +822,7 @@ describe("cobertura de casos end-to-end (el bug que costo la corrida del 6-ago)"
     await r.etapaIV(1);
     await r.etapaVII(1);
     await r.etapaXI(1);
-    assert.equal(r.state.invoices.filter((f) => f.revertida).length, 4);
+    assert.equal(r.state.invoices.filter((f) => f.revertida).length, 6);
   });
 
   it("anular sin haber emitido en ese combo falla claro, no toma la de otro", async () => {
@@ -852,14 +918,20 @@ describe("cada documento sector tiene su propio servicio SOAP (SIN 995)", () => 
     });
   });
 
-  it("compra-venta y salud resuelven servicio; el 24 explica por que no", () => {
+  it("cada sector resuelve su servicio; el 24 ademas cambia de operaciones", () => {
     const r = Object.create(Runner.prototype);
     r.combo = { codigoPuntoVenta: 0, codigoDocumentoSector: 1, tipoFacturaDocumento: 1 };
     assert.equal(r.servicio, "FACTURACION_COMPRA_VENTA");
+    assert.equal(r.ops.recepcion.op, "recepcionFactura");
     r.combo = { codigoPuntoVenta: 0, codigoDocumentoSector: 17, tipoFacturaDocumento: 1 };
     assert.equal(r.servicio, "FACTURACION_COMPUTARIZADA");
+    assert.equal(r.ops.recepcion.op, "recepcionFactura");
     r.combo = { codigoPuntoVenta: 0, codigoDocumentoSector: 24, tipoFacturaDocumento: 3 };
-    assert.throws(() => r.servicio, /recepcionDocumentoAjuste/);
+    assert.equal(r.servicio, "FACTURACION_DOCUMENTO_AJUSTE");
+    assert.deepEqual(
+      [r.ops.recepcion.op, r.ops.anulacion.op, r.ops.reversion.op],
+      ["recepcionDocumentoAjuste", "anulacionDocumentoAjuste", "reversionAnulacionDocumentoAjuste"],
+    );
   });
 
   it("un sector sin mapear no se manda al servicio equivocado", () => {
@@ -868,9 +940,27 @@ describe("cada documento sector tiene su propio servicio SOAP (SIN 995)", () => 
     assert.throws(() => r.servicio, /sin servicio SOAP mapeado/);
   });
 
-  it("EMISION_CASES_SOPORTADOS deja afuera exactamente al sector 24", () => {
-    assert.equal(EMISION_CASES_SOPORTADOS.length, 4);
-    assert.ok(EMISION_CASES_SOPORTADOS.every((c) => !DOC_SECTOR_SIN_SOPORTE.has(c.codigoDocumentoSector)));
+  it("ya no queda ningun sector sin soporte: los 6 combos se emiten", () => {
+    assert.equal(DOC_SECTOR_SIN_SOPORTE.size, 0);
+    assert.equal(EMISION_CASES_SOPORTADOS.length, 6);
+  });
+
+  it("buildTestInvoice del sector 17 lleva quirofano y medico en la linea y el sector en el documento", () => {
+    const catalogs = {
+      productos: [{ codigoProducto: 1, codigoActividad: "620100", descripcionProducto: "Consulta" }],
+      leyendas: [],
+      unidadesMedida: [{ codigoClasificador: 58 }],
+      metodosPago: [{ codigoClasificador: 1 }],
+      tiposDocIdentidad: [{ codigoClasificador: 5, descripcion: "NIT" }],
+    };
+    const salud = buildTestInvoice({ catalogs, nit: "5371375010", index: 0, codigoDocumentoSector: 17 });
+    assert.equal(salud.payload.documento.tipoDocumentoSector, 17);
+    assert.equal(salud.payload.items[0].nroQuirofanoSalaOperaciones, 1);
+    assert.equal(salud.payload.items[0].nombreApellidoMedico, "MEDICO DE PRUEBAS");
+    assert.equal(salud.payload.items[0].nitDocumentoMedico, "99001");
+    const venta = buildTestInvoice({ catalogs, nit: "5371375010", index: 0 });
+    assert.equal(venta.payload.documento.tipoDocumentoSector, 1);
+    assert.equal(venta.payload.items[0].nroQuirofanoSalaOperaciones, undefined);
   });
 });
 

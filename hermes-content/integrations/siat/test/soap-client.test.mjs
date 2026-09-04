@@ -28,6 +28,9 @@ import {
   parseSoapResponse,
   soapEndpoint,
   soapWsdlUrl,
+  buildRecepcionDocumentoAjusteRequest,
+  buildAnulacionDocumentoAjusteRequest,
+  buildReversionAnulacionDocumentoAjusteRequest,
 } from "../src/soap-client.mjs";
 
 // Orden de aparicion de una lista de subcadenas dentro del XML (para asserts de orden).
@@ -459,5 +462,59 @@ describe("parseSoapResponse: expone el VALOR del CUIS/CUFD (smoke test real 2026
     assert.equal(r.codigo, null);
     assert.equal(r.codigoControl, null);
     assert.equal(r.fechaVigencia, null);
+  });
+});
+
+describe("documento de ajuste (sector 24): operaciones y wrappers del WSDL del piloto", () => {
+  const base = {
+    codigoAmbiente: 2,
+    codigoDocumentoSector: 24,
+    codigoEmision: 1,
+    codigoModalidad: 2,
+    codigoPuntoVenta: 0,
+    codigoSistema: "SIS",
+    codigoSucursal: 0,
+    cufd: "CUFD",
+    cuis: "CUIS",
+    nit: "5371375010",
+    tipoFacturaDocumento: 3,
+  };
+
+  it("las 3 operaciones van por ServicioFacturacionDocumentoAjuste, verified", () => {
+    for (const key of ["recepcionDocumentoAjuste", "anulacionDocumentoAjuste", "reversionAnulacionDocumentoAjuste"]) {
+      assert.equal(SOAP_OPERATIONS[key].service, "FACTURACION_DOCUMENTO_AJUSTE");
+      assert.equal(SOAP_OPERATIONS[key].operation, key);
+      assert.equal(SOAP_OPERATIONS[key].verified, true);
+    }
+    assert.equal(SIAT_SERVICES.FACTURACION_DOCUMENTO_AJUSTE, "ServicioFacturacionDocumentoAjuste");
+  });
+
+  it("mismo DTO que la factura, distinto wrapper (leido del WSDL 2026-09-03)", () => {
+    const nombres = (op) => SOAP_OPERATIONS[op].fields.map((f) => f.name);
+    assert.deepEqual(nombres("recepcionDocumentoAjuste"), nombres("recepcionFactura"));
+    assert.deepEqual(nombres("anulacionDocumentoAjuste"), nombres("anulacionFactura"));
+    assert.deepEqual(nombres("reversionAnulacionDocumentoAjuste"), nombres("reversionAnulacionFactura"));
+    assert.equal(SOAP_OPERATIONS.recepcionDocumentoAjuste.requestElement, "SolicitudServicioRecepcionDocumentoAjuste");
+    assert.equal(SOAP_OPERATIONS.anulacionDocumentoAjuste.requestElement, "SolicitudServicioAnulacionDocumentoAjuste");
+    assert.equal(
+      SOAP_OPERATIONS.reversionAnulacionDocumentoAjuste.requestElement,
+      "SolicitudServicioReversionAnulacionDocumentoAjuste",
+    );
+  });
+
+  it("los envelopes llevan la operacion y el wrapper de ajuste", () => {
+    const rec = buildRecepcionDocumentoAjusteRequest({ ...base, archivo: "QUJD", fechaEnvio: "2026-09-03T10:00:00.000", hashArchivo: "ab" });
+    assert.ok(rec.includes("<siat:recepcionDocumentoAjuste><SolicitudServicioRecepcionDocumentoAjuste><codigoAmbiente>2</codigoAmbiente>"));
+    assert.ok(rec.includes("<tipoFacturaDocumento>3</tipoFacturaDocumento><archivo>QUJD</archivo>"));
+    const anu = buildAnulacionDocumentoAjusteRequest({ ...base, codigoMotivo: 1, cuf: "CUF" });
+    assert.ok(anu.includes("<siat:anulacionDocumentoAjuste><SolicitudServicioAnulacionDocumentoAjuste>"));
+    assert.ok(anu.includes("<codigoMotivo>1</codigoMotivo><cuf>CUF</cuf></SolicitudServicioAnulacionDocumentoAjuste>"));
+    const rev = buildReversionAnulacionDocumentoAjusteRequest({ ...base, cuf: "CUF" });
+    assert.ok(rev.includes("<siat:reversionAnulacionDocumentoAjuste><SolicitudServicioReversionAnulacionDocumentoAjuste>"));
+    assert.ok(rev.endsWith("<cuf>CUF</cuf></SolicitudServicioReversionAnulacionDocumentoAjuste></siat:reversionAnulacionDocumentoAjuste></soapenv:Body></soapenv:Envelope>"));
+  });
+
+  it("sin cuf la anulacion de ajuste lanza igual que la de factura", () => {
+    assert.throws(() => buildAnulacionDocumentoAjusteRequest({ ...base, codigoMotivo: 1 }), /"cuf"/);
   });
 });
