@@ -3,7 +3,7 @@
 Audita a los otros loops: que ninguno cobre por trabajo que no sirve. Rama `claude/supervisor`.
 No mergea a `main` (eso es de `onia-cola`) y no arregla carriles ajenos: deja la tarea en el tablero.
 
-**Última vuelta: 2026-09-04 14:29 UTC** (10:29 La Paz — la franja del reporte diario a Sergio).
+**Última vuelta: 2026-09-04 18:29 UTC** (14:29 La Paz — la franja del reporte diario a Sergio).
 
 ---
 
@@ -12,6 +12,28 @@ No mergea a `main` (eso es de `onia-cola`) y no arregla carriles ajenos: deja la
 Medir el avance de los 15 loops, mandar el reporte diario, y auditar el carril menos mirado.
 
 **Hecho =** decir si el trabajo de un carril sirve o no, con evidencia **medida**, no leída.
+
+## Vuelta 2026-09-04 18:29 UTC: el horario del reporte diario volvió a apuntar a una vuelta muerta
+
+El cron de `supervisor` se bajó otra vez el mismo día, de `29 2,8,14,20` (4/día) a `29 6,18`
+(2/día). El prompt seguía condicionando el reporte diario a «14:29 UTC (10:29 La Paz)» — la misma
+vuelta que YA se había corregido una vez por el mismo motivo (antes decía «12:29 UTC»). Con la
+nueva cadencia esa hora no existe: el reporte habría vuelto a callarse sin avisar. Corregido a
+`18:29 UTC (14:29 La Paz)`, la única de las dos vueltas que quedan que cae en horario de Sergio
+(la otra es `2:29 La Paz`). Esta misma vuelta ES esa franja, así que el reporte salió con el
+mensaje corregido — ver commit de esta vuelta y `scripts/loops/prompts/supervisor.md`.
+
+Además: se resolvió un conflicto de merge con `origin/main` en `package.json` (dos carriles
+agregaron cada uno un gate a la cadena `test`, la misma trampa ya documentada en la memoria
+compartida) — resuelto por unión, ambos eslabones quedaron.
+
+- `recorrido-cliente` cortó su última vuelta a los 212s con "Esperando a que avance el
+  recorrido..." y sin línea `OBJETIVO:` (no está muerta por cupo, commiteó capturas). Primera vez,
+  no es patrón — tarea `t_36ef26c2` para su dueño con la reproducción exacta.
+- 0 tareas `needs_input` pendientes al momento del reporte.
+- `patrones_error` de hoy son los 3 ya conocidos (cupo compartido de Claude). `tablero_rebloqueadas`
+  trae `t_43947a6a` (ya con veredicto en el handoff anterior) y `t_54ff72b5`, que sigue con
+  comentarios activos de `carril-web-venta` — no está congelada, no amerita lección nueva.
 
 ## Veredicto: el que no servía era MI PROPIO INSTRUMENTO
 
@@ -42,6 +64,19 @@ a **sí**— y al abrir los commits hay **código de producto real**, no comenta
 que copia `.next/static` dentro del standalone (sin eso el árbol servía HTML sin CSS), y un hero
 que escalaba sólo con el ancho y dejaba el botón que convierte **14 px bajo el pliegue a
 1366x768**. Ninguna de las seis señales de basura.
+
+## Veredicto: `marca-personal` SIRVE
+
+Siguiente de la lista de nunca auditados. Su último commit real (`7cb293c79`, antes de que la
+sesión de control lo pausara hoy por foco-vender) no fue una migración más de generador: al ir a
+migrar el 4º de 12, encontró que la FICHA de `statement-3d-minimal` —el archivo que copia CADA
+pieza nueva del patrón— seguía mandando `Archivo 900 / wdth 62`, los dos ejes que Sergio rechazó
+el 02-sep. Arregló la plantilla, no sólo la instancia (la trampa opuesta ya está en la memoria
+compartida: "arreglar instancias sin subir el arreglo a la plantilla deja el defecto
+reapareciendo para siempre"). Además encontró y midió tres defectos reales que no movían el peso
+del PNG y habrían sido publicables: un "3 COSAS" sobre un lienzo con 4 iconos, un sticker que
+cortaba "CONTRATAR" en los dos bordes (medido 186px de texto en un círculo de 166px, no a ojo), y
+una cinta adhesiva tapada detrás de un bloque verde. Ninguna de las seis señales de basura.
 
 ## Qué quedó en producción
 
@@ -152,24 +187,20 @@ grep -c '<frase de la lección>' /root/.hermes/memories/MEMORY.md # tiene que da
 
 ## Próximos pasos
 
-1. **Auditar `marca-personal`.** Es el próximo de los nunca mirados.
+1. **Auditar `canario-visual` o `investigacion`.** `marca-personal` quedó auditado esta vuelta
+   (SIRVE, ver arriba).
    **Ya auditados:** `web-venta`, `chatbot`, `lucia`, `onia-cola`, `recorrido-cliente`,
-   `calidad-generado`, `tendencias`, `docs-auditoria`, `web-factory-dev`.
-   **Nunca auditados:** `marca-personal`, `canario-visual`, `investigacion`.
-2. **`kpis-semanal` sigue sin correr**: 0 vueltas en 24 h y su última es del 2026-09-03 12:31,
-   anterior al despliegue del prompt. `loops_avance.sh` lo clasifica en *"aún no vio el prompt"*,
-   que es un descarte legítimo **pero se vuelve una excusa permanente si nadie lo mira**: un loop
-   de cadencia larga puede esconderse ahí para siempre. Listo = saber si su cron dispara.
-   Relacionado con el punto 4, que lleva cinco handoffs abierto.
-3. ~~`loops.md` quedó atrás del `crontab` en 5 loops.~~ **CERRADO el 2026-09-04**: lo arregló otro
-   carril. `node scripts/loops_registrados.mjs` → *"15 y 15, la tabla y el crontab coinciden en id
-   y horario, en las dos direcciones"*, exit 0. Con eso se cae también el filo que traía —que un
-   loop restaurara la cadencia alta que Sergio bajó el 03-sep obedeciendo la tabla vieja—: hoy la
-   tabla dice lo mismo que el cron. **Se arrastró dos handoffs sin re-medir**, y medirlo costó 3
-   segundos: un pendiente heredado se recuenta antes de volver a escribirlo.
-4. Sigue abierto de cinco handoffs atrás: la rama de `kpis-semanal`
-   (`claude/marca-personal-loop`) no figura en `loops.md`. Listo = saber si debe estar.
-5. **Observación sin daño probado** (no re-medida): la enumeración `--no-merged` del integrador
+   `calidad-generado`, `tendencias`, `docs-auditoria`, `web-factory-dev`, `marca-personal`.
+   **Nunca auditados:** `canario-visual`, `investigacion`. Los dos están hoy `PAUSADO` en cron
+   (foco vender), así que se audita su ÚLTIMA vuelta real antes de la pausa, no una vuelta nueva.
+2. ~~`kpis-semanal` sigue sin correr~~. **CERRADO**: su cron es semanal (`7 13 * * 1`, lunes) y hoy
+   es viernes — no está escondido en el descarte "aún no vio el prompt", simplemente no le tocó
+   correr todavía. Se vuelve a mirar el próximo lunes después de las 13:07 UTC.
+3. Sigue abierto de handoffs atrás: la rama de `kpis-semanal` es `claude/marca-personal-loop`,
+   la MISMA que usa `marca-personal` a propósito (mismo worktree, corridas a distinta hora — está
+   documentado en `onia-loop.sh:100-109`). No es un agujero de `loops.md`: la tabla de esa columna
+   no lista ramas compartidas por diseño. Cerrado sin acción.
+4. **Observación sin daño probado** (no re-medida): la enumeración `--no-merged` del integrador
    devuelve ~30 ramas y sólo 6 están vivas. No abrir tarea hasta poder demostrar el daño.
 
 ---
