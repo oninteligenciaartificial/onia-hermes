@@ -12,7 +12,78 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## Medido el 2026-09-04 07:30 UTC — rubro DENTAL: **los 9 pasos, de punta a punta**
+
+**Un negocio nuevo hace el camino entero.** Es la primera vez que alguien puede afirmarlo con
+pruebas: `resumen.json` → `llegoHasta 9 / 9`, `completo: true`, `agujeros: []`, `corte: null`.
+
+Cuenta `zz-qa-2026-09-04-0717@onia.com.bo` creada desde `onia.com.bo`, correo confirmado con el
+enlace del mail, alta completa (rubro → negocio → horarios lun-vie 09-13 y 15-19 → equipo con el
+rol **Profesional** → listo), paciente cargado y encontrado de vuelta en la lista, **cita agendada
+el lunes 7-sep 09:00 (POST `/api/appointments` → 201, id `cmtmmj13d001601rwl6g31e42`) y VISTA en el
+calendario**, pantalla de cobro a la vista y frenado ahí a propósito.
+
+Prueba que se mira, no que se supone: `capturas/paso-07d-cita-en-agenda.png` — el bloque
+`9:00 zz-qa-…` en el día 7 del calendario.
+
+**Todo lo escrito se borró en la misma corrida.** Verificado por fuera del script, que no puede ser
+juez de su propia limpieza: `appointments`, `organizations` y `auth.users` con `zz-qa-%` → **0, 0, 0**,
+y la cita `cmtmmj13d001601rwl6g31e42` ya no existe.
+
+### 🟠 Lo que este carril acusó y era MENTIRA: el paso 4 y el desplegable de profesional
+
+Dos veredictos rojos de la vuelta anterior eran del instrumento, no del producto. Los dos acusaban
+a pantallas que funcionan bien, y uno llegó al tablero con prioridad 1 (`t_2f5a96b6`, ya cerrada
+con la prueba).
+
+**1. «Rebotó en /login — sin mensaje visible».** La captura del mismo paso muestra un cartel rojo
+enorme: *"Tu cuenta está creada, pero falta verificar tu correo. Revisá tu bandeja y volvé a
+iniciar sesión."* Y la pantalla anterior ya lo había dicho entero: *"Verificá tu correo — Tu cuenta
+ya fue creada."* **El producto avisa bien en las dos pantallas.** El ciego era el recorrido, y
+fallaron sus dos sondas a la vez por motivos distintos:
+
+- `page.on('response')` sobre `/token` **no puede ver nada**: el login de la app se resuelve en el
+  **servidor** de Next. El `400 email_not_confirmed` de Supabase salió de `172.19.0.10`, una IP
+  interna — esa respuesta nunca pasa por el navegador.
+- el cartel no trae ninguna de las clases CSS que se buscaban (`[role=alert]`, `.text-red-500`…).
+
+Y como el motivo llegaba vacío, el patrón `sinConfirmar` no matcheaba y el paso **ni intentó** la
+confirmación por enlace que ya sabía hacer. Arreglado con una tercera sonda que no depende de
+adivinar clases ni de que el error viaje por el navegador: *lo que apareció en pantalla después de
+apretar y no estaba antes es lo que el producto te contestó*. Y el patrón ahora reconoce
+`verificar`, no sólo `confirm`, que era la única forma en que el mensaje llegaba.
+
+**2. «El desplegable de profesional está siempre vacío».** Hoy se llena y la cita entra. La
+diferencia está en el alta: la versión que midió aquello llenaba la pantalla *"¿Quién más trabaja
+con vos?"* escribiendo en todos los campos de texto, **sin elegir el rol**; la de `main` aprieta el
+botón **Profesional** antes de terminar, y con el rol elegido `/api/team` crea los
+`doctor_schedules` que llenan el desplegable.
+
+⚠️ **Queda una pregunta abierta, y es legítima:** si el dueño aprieta *"Saltar por ahora"* en la
+pantalla de equipo, **nadie comprobó** que pueda agendar después. La causa raíz que se describe
+abajo —el alta guarda los horarios en `clinicSettings.oniaCoreOnboarding` y nunca escribe
+`doctor_schedules`— puede seguir siendo cierta **para ese camino**. Es el próximo escalón del carril.
+
+**La lección, que vale más que los dos arreglos:** esa causa raíz estaba *"verificada en el código"*,
+con archivo y línea, y era una explicación plausible construida sobre una medición hecha con un
+instrumento defectuoso. Más evidencia la hacía más convincente, no más cierta.
+
+### ⚠️ El mismo carril corría en DOS árboles y el instrumento se bifurcó
+
+`main` tenía `9e21a15e7` (carga horarios, elige el rol, mide el POST y **borra lo suyo** con
+`limpiarProduccion`) y la rama tenía una versión paralela más pobre del mismo trabajo, con
+`contarCitasQA` como única verificación y **sin borrado automático** — cada vuelta dejaba basura
+`zz-qa-` en producción para que alguien la borrara a mano. Resuelto convergiendo con `main`:
+verificar por `201`+id y volver a VER la cita en la agenda recargada es más fuerte que contar filas.
+
+---
+
 ## Medido el 2026-09-04 01:24 UTC — rubro DENTAL, con el paso que faltaba: AGENDAR
+
+> ⚠️ **Corregido el 2026-09-04 07:30, arriba.** Los dos rojos de esta sección eran del instrumento:
+> el producto avisa que falta verificar el correo, y el desplegable de profesional se llena cuando
+> el alta elige el rol. Se deja el texto porque la causa raíz que describe sigue abierta para el
+> camino "Saltar por ahora", y porque muestra cómo se construye una acusación falsa bien documentada.
 
 El recorrido nunca había enviado una cita. Por eso el carril no vio lo que sigue.
 
