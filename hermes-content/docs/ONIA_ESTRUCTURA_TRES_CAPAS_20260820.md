@@ -84,7 +84,7 @@ declararse supremo:
 | Tema | La "biblia estética" (11-ago) | `LUCIA.md` (15-ago) — **manda** |
 |---|---|---|
 | Grano | *"la tanda anterior fue en la dirección equivocada… pulido y cálido, impecables, no crudas"* | pide **grano, exposición despareja, aberración cromática, foco blando** y lo llama lo que más mueve la aguja |
-| Negaciones | *"Cero negaciones. Escribir 'sin logos' produce logos"* | usa negaciones y aclara que **funcionan** por la vía `nano_banana_2` + Element; fallan solo con `soul_2` |
+| Negaciones | *"Cero negaciones. Escribir 'sin logos' produce logos"* | usa negaciones y aclara que **funcionan** por la vía `nano_banana_2` + Element; fallan solo con `text2image_soul_v2` |
 | Vestuario | 3 atuendos A/B/C | los 3 fijados con Element ID |
 
 **La biblia estética sigue sirviendo** para props ancla, reglas de luz, composición, el benchmark

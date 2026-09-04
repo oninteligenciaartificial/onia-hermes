@@ -2,9 +2,21 @@
 """Dia 1 — post de feed (presentacion VISUAL de la comunidad, mockup de chat)
 + 4 historias de validacion del curso. TIPOGRAFIA REAL de la landing viva
 (layout.tsx onia-platform): Archivo cuerpo 450, titulos 600-650, wordmark
-560/wdth 96 — SIN black 900, SIN condensed. Geist Mono micro-etiquetas."""
+560/wdth 96 — SIN black 900, SIN condensed. Geist Mono micro-etiquetas.
+
+BANDA SEGURA 9:16 (agregada el 03-sep). Este generador nacio CASI NUEVE HORAS
+DESPUES del experimento que fijo la banda segura (commit 8ec3c4f14 el 02-sep 10:05
+UTC; este, d51ce3545, a las 18:54) y no la traia: sus 5 historias
+ponian el handle DEBAJO de la barra "Enviar mensaje" de IG y empujaban la zona de
+encuesta dentro de la franja que tapa la interfaz. El arreglo del 02-sep se habia
+aplicado donde salto el defecto (generar-historia-quiz.py) y no donde pertenece —
+al FORMATO. Se ve corriendo: chequear-banda-segura-historias.py <carpeta>.
+Solo aplica a las piezas de 1920 de alto; el post de feed 1080x1350 no tiene esa UI."""
 import subprocess, tempfile, shutil, sys
 from pathlib import Path
+
+SAFE_TOP = round(1920 * 0.12)      # 230 — UI de arriba (perfil + barras de progreso)
+SAFE_BOT = round(1920 * 0.22)      # 422 — UI de abajo (barra "Enviar mensaje")
 
 OUT = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(__file__).parent / "curso-dia1"
 ICONOS = (Path(sys.argv[2]) if len(sys.argv) > 2 else Path(__file__).parent / "iconos").resolve().as_uri()
@@ -71,9 +83,9 @@ FEED = f"""<div class="lienzo" style="width:1080px;height:1350px;justify-content
   <div class="handle">@sergiourcullo</div>
 </div>"""
 
-H1 = f"""<div class="lienzo" style="width:1080px;height:1920px;justify-content:center;gap:44px;padding:120px 90px">
+H1 = f"""<div class="lienzo" style="width:1080px;height:1920px;justify-content:center;gap:44px">
   <div class="pill">HOY ARRANCA</div>
-  <div class="sticker" style="top:220px;right:36px;width:160px;height:160px;font-size:30px">día<br>UNO</div>
+  <div class="sticker" style="top:292px;right:36px;width:160px;height:160px;font-size:30px">día<br>UNO</div>
   <div class="wordmark" style="font-size:112px">Onia<br>Community</div>
   <div class="chat" style="width:100%">
     <div class="cinta" style="top:-22px;left:60px;transform:rotate(-7deg)"></div>
@@ -85,7 +97,7 @@ H1 = f"""<div class="lienzo" style="width:1080px;height:1920px;justify-content:c
   <div class="handle">@sergiourcullo</div>
 </div>"""
 
-H2 = f"""<div class="lienzo" style="width:1080px;height:1920px;justify-content:center;gap:52px;padding:150px 90px">
+H2 = f"""<div class="lienzo" style="width:1080px;height:1920px;justify-content:center;gap:52px">
   <div class="pill">LO QUE VIENE</div>
   <div class="sticker" style="top:330px;right:90px;transform:rotate(12deg);font-size:29px">CON<br>VOS</div>
   <div class="cinta" style="top:520px;left:70px;transform:rotate(-9deg)"></div>
@@ -96,9 +108,9 @@ H2 = f"""<div class="lienzo" style="width:1080px;height:1920px;justify-content:c
   <div class="handle">@sergiourcullo</div>
 </div>"""
 
-H3 = f"""<div class="lienzo" style="width:1080px;height:1920px;gap:50px;padding:140px 90px 120px">
+H3 = f"""<div class="lienzo" style="width:1080px;height:1920px;gap:50px">
   <div class="titulo" style="font-size:86px">¿Qué querés que<br>enseñe primero?</div>
-  <div class="sticker" style="top:96px;right:44px;width:150px;height:150px;font-size:27px;transform:rotate(10deg)">tu voto<br>manda</div>
+  <div class="sticker" style="top:292px;right:44px;width:150px;height:150px;font-size:27px;transform:rotate(10deg)">tu voto<br>manda</div>
   <div class="card" style="position:relative">
     <div class="cinta" style="top:-26px;left:80px;transform:rotate(-6deg)"></div>
     <img class="icono-flot" src="{ICONOS}/money_bag.png" style="width:120px;bottom:-46px;right:-38px;transform:rotate(10deg)">
@@ -111,7 +123,7 @@ H3 = f"""<div class="lienzo" style="width:1080px;height:1920px;gap:50px;padding:
   <div class="handle">@sergiourcullo</div>
 </div>"""
 
-H4 = f"""<div class="lienzo" style="width:1080px;height:1920px;gap:54px;padding:150px 90px 120px">
+H4 = f"""<div class="lienzo" style="width:1080px;height:1920px;gap:54px">
   <div class="titulo" style="font-size:92px">¿Qué te gustaría<br>aprender sí o sí?</div>
   <div class="sub">decímelo con tus palabras —<br>lo leo TODO y con eso armo el contenido</div>
   <div class="zona" style="position:relative"><span>CAJA DE PREGUNTAS ACÁ</span>
@@ -121,7 +133,7 @@ H4 = f"""<div class="lienzo" style="width:1080px;height:1920px;gap:54px;padding:
   <div class="handle">@sergiourcullo</div>
 </div>"""
 
-H5 = f"""<div class="lienzo" style="width:1080px;height:1920px;justify-content:center;gap:56px;padding:150px 90px">
+H5 = f"""<div class="lienzo" style="width:1080px;height:1920px;justify-content:center;gap:56px">
   <div class="sticker" style="top:320px;right:70px;transform:rotate(12deg)">100%<br>GRATIS</div>
   <img class="icono-flot" src="{ICONOS}/rocket.png" style="width:150px;top:300px;left:52px;transform:rotate(-12deg)">
   <div class="titulo" style="font-size:96px">Entrá gratis.<br>Somos los primeros.</div>
@@ -140,6 +152,9 @@ def main():
     tmp = Path(tempfile.mkdtemp(prefix="curso-"))
     for nombre, cuerpo, w, h in PIEZAS:
         css = BASE_CSS + f"html,body{{width:{w}px;height:{h}px}}"
+        if h == 1920:
+            css += (f".lienzo{{padding:{SAFE_TOP + 40}px 90px {SAFE_BOT + 74}px}}"
+                    f".handle{{bottom:{SAFE_BOT + 12}px}}")
         html = f"<!doctype html><html><head><meta charset='utf-8'><style>{css}</style></head><body>{cuerpo}</body></html>"
         f = tmp / f"{nombre}.html"
         f.write_text(html, encoding="utf-8")

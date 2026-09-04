@@ -69,13 +69,21 @@ export const DEMO = Object.freeze({
 // ---------------------------------------------------------------------------
 export const SCRIPT = Object.freeze({
   // M0 — bienvenida + disclosure + que es Onia + los 2 horarios, todo en el primer mensaje.
-  // El disclosure de bot va en la PRIMERA linea (D2) y ademas es el argumento de venta: lo que el
-  // prospecto esta viendo funcionar es exactamente lo que se le vende. No pide un solo dato: la
-  // unica pregunta del mensaje es la que cierra la reunion.
+  // El disclosure de bot va en la PRIMERA linea (D2). No pide un solo dato: la unica pregunta del
+  // mensaje es la que cierra la reunion.
+  //
+  // OJO AL REESCRIBIR (2026-09-04, tarea t_d3f02b65): aca decia "esto que estas viendo es justo lo
+  // que vendemos: un asistente que atiende tu WhatsApp 24/7", y el comentario lo defendia como el
+  // argumento de venta. Es exactamente lo que Sergio prohibio el 2026-09-03: "el sistema no ofrece
+  // directamente el bot, ofrece solo el sistema". El chatbot es un add-on de pricing.ts — se cobra
+  // aparte y se nombra cuando preguntan el precio (M4_BODY), nunca de titular en la bienvenida.
+  // El disclosure se queda porque D2 no se negocia; lo que se fue es venderlo como la oferta.
+  // Lo cuida `oferta-sistema.test.mjs`, que mira ESTA plantilla y su hermana M0_SIN_HORARIOS: el
+  // bug nacio de corregir una sola de las dos.
   M0: [
     "¡Hola! Soy el asistente automático de Onia. Sí, un bot.",
     "",
-    "Y esto que estás viendo es justo lo que vendemos: un asistente que atiende tu WhatsApp 24/7 — responde, califica y agenda solo, sin que vos toques el teléfono.",
+    "{{producto}} es una plataforma por módulos para que tu negocio trabaje adentro: agenda, cobros y clientes en un solo lugar.",
     "",
     "Te muestro cómo quedaría en TU negocio en {{demo_duracion}} por {{demo_modalidad}}. Tengo estos dos horarios:",
     "",
@@ -237,6 +245,16 @@ export const SCRIPT = Object.freeze({
     "Ya le pasé tu consulta con todo lo que me contaste. Te escribe él desde este mismo número, en horario de oficina ({{horario_frase}}). Si es urgente, decime \"urgente\" y lo marco.",
   ].join("\n"),
 
+  // M5_ACUSE — el mensaje que llega DESPUES de haber derivado, mientras el humano todavia no
+  // aparecio. No reabre la conversacion ni promete nada nuevo: solo confirma que lo que escribio
+  // llego. Nace de medir, el 2026-09-03, que tras cada M5 el mensaje siguiente del prospecto se
+  // comia un silencio total — la persona ve "entregado" y nunca una respuesta.
+  M5_ACUSE: [
+    "Te leo, y esto también se lo paso a {{humano}} — sigo siendo el bot, así que no te lo contesto yo para no inventarte nada.",
+    "",
+    "Ya está todo en su bandeja. Te responde desde acá mismo en horario de oficina ({{horario_frase}}).",
+  ].join("\n"),
+
   // M8_SOPORTE — SEGUNDO CAMINO: el que escribe YA es cliente (o dice que ya tiene el sistema, o
   // que algo no le anda, o pregunta como configurarlo). Ofrecerle la demo COMERCIAL a alguien que
   // pide ayuda es el peor error posible del bot: le dice "comprame" a quien ya compro. Este texto
@@ -295,6 +313,12 @@ export const SCRIPT = Object.freeze({
   // (precio / SIAT / archivo) vuelve al embudo sin saltear la calificacion.
   PENDING_CALIFICACION: "Volviendo a lo nuestro: me falta {{dato_faltante}} — ¿me lo pasás?",
   PENDING_HORARIO: "¿Te reservo **{{slot_a}}** o **{{slot_b}}**?",
+  // PENDING_HORARIO_SIN_HORARIOS — la misma re-pregunta cuando `slots` sigue en "pendiente de
+  // definir". PENDING_HORARIO pide elegir entre {{slot_a}} y {{slot_b}}, y sin horarios reales eso
+  // salio a produccion como "¿Te reservo HORARIO A (pendiente de definir) o HORARIO B (pendiente de
+  // definir)?" — y, via el LLM, como "¿horario A o horario B?". Se pide lo unico accionable sin
+  // agenda (el contacto) y la hora la coordina el humano.
+  PENDING_HORARIO_SIN_HORARIOS: "{{humano}} te coordina el horario personalmente. ¿A qué número o correo te escribe?",
   PENDING_AGENDADA: "Igual ya quedamos para **{{dia_hora_elegida}}**.",
 
   // -------------------------------------------------------------------------
@@ -372,6 +396,9 @@ export const SCRIPT = Object.freeze({
   R_NO_DATO: "Eso no lo tengo acá para confirmártelo — te lo confirma {{humano}} por este mismo chat.",
 
   R_ATTACH: "Recibí tu archivo. Se lo paso a {{humano}}, que te confirma por acá.",
+  // R_CUOTA_AGOTADA — la org agoto sus conversaciones automaticas del mes (lo dice /published).
+  // Texto FIJO y honesto, cero LLM; {{producto}} es el nombre del negocio en modo recepcionista.
+  R_CUOTA_AGOTADA: "Este mes ya atendimos el máximo de conversaciones automáticas de {{producto}}. Te responde una persona en breve.",
   // Insistencia v6.6 (1 sola vez, suave, dentro de la ventana de 24 h — texto libre gratis):
   R_SEGUIMIENTO: "¡Hola! ¿Seguís por ahí? Si te quedó alguna duda, {{humano}} te la contesta por acá. Y si preferís que no te escribamos, decínos \"no gracias\" y listo.",
   // Vision (v5): cuando la foto se pudo describir SIN violar guardrails. La descripcion
@@ -633,11 +660,43 @@ export function slotsPending(config = DEFAULT_CONFIG) {
   return (config.slots || []).some((slot) => slot && slot.pending === true);
 }
 
-/** Reemplaza {{clave}} por su valor. Corre SIEMPRE DESPUES del guardrail (spec §3.1). */
+/**
+ * ¿Lo que viene ANTES de este marcador abre una oracion nueva?
+ *
+ * Abre oracion si no hay nada antes, o si lo anterior termina en `.`, `!`, `?` o salto de linea.
+ * Los dos puntos NO abren oracion en castellano ("Anotado: agenda y cobros"), y por eso se
+ * excluyen a mano: es la unica diferencia entre esta regla y un capitalizado a lo bruto.
+ */
+function abreOracion(anterior) {
+  const previo = anterior.replace(/[ \t]+$/, "");
+  return previo === "" || /[.!?\n]$/.test(previo);
+}
+
+/**
+ * Reemplaza {{clave}} por su valor. Corre SIEMPRE DESPUES del guardrail (spec §3.1).
+ *
+ * Capitaliza el valor cuando cae a empezar oracion. Nace de un defecto que salio a produccion y
+ * lo vio el cliente del cliente (conversacion 51, 2026-09-03), textual:
+ *
+ *     _(Estoy respondiendo automatico fuera de horario de oficina. la encargada te confirma
+ *     en la mañana.)_
+ *
+ * El humano de Onia es un nombre propio (`Sergio`) y por eso nunca se noto; el conocimiento de
+ * un cliente trae un CARGO en minuscula, y hay cuatro plantillas donde `{{humano}}` abre frase.
+ * La regla mira el offset y no la clave a proposito: atarla a `humano` dejaria el mismo bug vivo
+ * en la proxima plantilla que alguien escriba. Solo toca la primera letra si es minuscula, asi
+ * que un nombre propio, una viñeta o un `**negrita**` pasan intactos.
+ */
 export function renderTemplate(text, vars = {}) {
-  return String(text ?? "").replace(/\{\{\s*([a-z0-9_]+)\s*\}\}/gi, (match, key) => {
+  const plantilla = String(text ?? "");
+  return plantilla.replace(/\{\{\s*([a-z0-9_]+)\s*\}\}/gi, (match, key, offset) => {
     const value = vars[key];
-    return value === undefined || value === null ? match : String(value);
+    if (value === undefined || value === null) return match;
+    const rendered = String(value);
+    if (!abreOracion(plantilla.slice(0, offset))) return rendered;
+    const inicial = rendered.charAt(0);
+    if (inicial !== inicial.toLowerCase() || inicial === inicial.toUpperCase()) return rendered;
+    return inicial.toUpperCase() + rendered.slice(1);
   });
 }
 

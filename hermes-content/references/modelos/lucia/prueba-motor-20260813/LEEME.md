@@ -2,7 +2,7 @@
 
 > **Por qué esta prueba.** Dos docs vigentes se contradicen:
 > `ONIA_MODELOS_RAIZ.md` §4 (10-ago) manda **`nano_banana_2` + Element para primer plano** y
-> `soul_2` para cuerpo/escena. `HIGGSFIELD_AD_SPEC_RECETA_20260812.md` (12-ago) reafirma lo
+> `text2image_soul_v2` para cuerpo/escena. `HIGGSFIELD_AD_SPEC_RECETA_20260812.md` (12-ago) reafirma lo
 > contrario: *"Soul + texto es el ÚNICO método para una cara consistente, Reference Elements
 > sirve solo para objeto o prenda, nunca para la cara"*. Alguien tenía que medirlo.
 >
@@ -17,8 +17,8 @@ el cerrado.
 
 | | Motor | Ancla | Plano | Costo |
 |---|---|---|---|---|
-| **A** | `soul_2` 2k | Soul `36305a9b` | medio | 0,12 |
-| **B** | `soul_2` 2k | Soul `36305a9b` | primer plano | 0,12 |
+| **A** | `text2image_soul_v2` 2k | Soul `36305a9b` | medio | 0,12 |
+| **B** | `text2image_soul_v2` 2k | Soul `36305a9b` | primer plano | 0,12 |
 | **C** | Nano Banana 1k | Element `452d8375` (ancla) | primer plano | 1,50 |
 | **D** | Nano Banana 1k | Element `452d8375` (ancla) | medio | 1,50 |
 | **E** | Nano Banana 1k | Element `902eeebb` (surgical) | primer plano | 1,50 |

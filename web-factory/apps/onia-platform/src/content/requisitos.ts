@@ -114,7 +114,7 @@ export const REQUISITOS_WEB: Requisitos = {
         "Redacción y ordenamiento de tus textos, íconos y optimización de tus fotos para que la web cargue rápido.",
         "Versión clara y versión oscura, accesibilidad verificada y velocidad verificada.",
         "SEO básico: título, descripción y la imagen que aparece cuando compartís el link.",
-        "Un preview para que lo apruebes desde el celular antes de publicar, y la publicación.",
+        "Un preview para que lo aprobés desde el celular antes de publicar, y la publicación.",
       ],
     },
     {

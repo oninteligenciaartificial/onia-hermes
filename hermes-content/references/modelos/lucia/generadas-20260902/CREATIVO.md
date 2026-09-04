@@ -1,13 +1,18 @@
-# Creativos de anuncio — los videos de café de la receta fancy (E4 · E6)
+# Creativos de anuncio — los videos fancy del banco 02-sep (café E4·E6 · hotel E5 · rooftop E7)
 
 > Escrito el 2026-09-02. La ventana FANCY (§12–17 de la técnica) dejó tres videos de café en esta
 > carpeta y **ninguno tenía creativo**: gancho, caption ni CTA. Estaban mirados y verificados
 > —son la prueba 9/9 de la receta— pero listos para mirar, no para publicar.
 > Sigue la misma forma que `../generadas-20260828/CREATIVO.md` y `../generadas-20260901/CREATIVO.md`.
+>
+> **Ampliado el 2026-09-03:** el 03-sep se animaron dos escenas nuevas —`E5-hotel-seedance.mp4` y
+> `E7-rooftop-seedance.mp4`, ambas 🎯 publicables— y **tampoco tenían creativo**. Se miraron frame a
+> frame (`_E5-hotel-frames.jpg`, `_E7-rooftop-frames.jpg`) y se les escribió el suyo al final de este
+> archivo. Misma regla de siempre: **las cifras van vacías a propósito** (§ abajo).
 
 ## 🔴 Lo que hay que saber antes de usar cualquiera
 
-Los tres animan **la misma escena** (`E3-cafe.png`, café de especialidad, acción a medias con las
+Los tres animan **la misma escena** (`E3-cafe.jpg`, café de especialidad, acción a medias con las
 dos manos en la taza). Cambian el modelo y la duración. **Formatos verificados con `ffprobe`:**
 
 | Video | Formato real | Audio | Dur. | Modelo | Sirve para |
@@ -114,5 +119,95 @@ Un sistema no atiende por vos. Registra lo que vos ya no alcanzás a anotar.
 > ✅ **Resuelto el 2026-09-02:** ya existe [`LEEME.md`](LEEME.md) con el asset id de cada imagen
 > E2–E3. **Corrección:** los `job_id` de los videos E4/E6 **NO** estaban en los `_E*.log` — esos
 > logs son sólo de imágenes (URL del PNG). Verificado: no hay `job_id` de video guardado en la
-> carpeta. No bloquea re-animar (`--start-image` acepta la ruta local de `E3-cafe.png`), sólo se
+> carpeta. No bloquea re-animar (`--start-image` acepta la ruta local de `E3-cafe.jpg`), sólo se
 > pierde recuperar ese render exacto. Detalle en el `LEEME.md`.
+
+---
+
+# Los videos de hotel y rooftop (agregados 2026-09-03)
+
+Dos escenas **distintas** al café: `E5` anima `E3-hotel.jpg` (hall de hotel), `E7` anima
+`E2-B-rooftop.jpg` (terraza al atardecer). No son la misma escena entre sí ni con el café — cada una
+lleva su propio ángulo para no ser tres desgloses calcados. Ambas son 720×1280 = 9:16 exacto, aac,
+4,0 s, seedance1_5 · 4,8 cr. Igual que el café: **son la capa de imagen, encima va el gancho quemado
+en los primeros 2 s** y **las cifras del desglose van vacías hasta traer una fuente real** (§ «Antes
+de subir»).
+
+## E5 hotel — 4 s 🎯 (el hall de hotel)
+
+`E5-hotel-seedance.mp4` · 720×1280 (9:16 exacto) · 4,0 s · aac · seedance1_5 · 4,8 cr.
+
+Mirado en `_E5-hotel-frames.jpg`: Lucía de pie en un hall de hotel con boiserie de madera, lámparas
+cálidas y ventanal al jardín; **se acomoda un mechón** (acción a medias real), parpadea suave y
+cierra mirando al lente con la cara plenamente visible (casilla 9). Es la cara «hospitalidad cara»
+del banco — un lobby que parece de catálogo de hotel boutique. El ángulo es la **coordinación**: lo
+caro de este tipo de contenido no es una pieza, es que todo coincida el mismo día.
+
+**Gancho (0–2 s, quemado en pantalla):**
+> **Este lobby parece de un hotel de catálogo. Nadie lo montó para la foto.**
+
+**Caption:**
+```
+Un negocio que quiere verse así en redes contrata una producción:
+
+  · modelo por media jornada           → Bs …
+  · fotógrafo / camarógrafo            → Bs …
+  · locación y ambientación del set     → Bs …
+
+Y la partida que nadie factura: coordinar que todo coincida un mismo día —
+la modelo, la luz del ventanal, el lugar vacío y ordenado.
+
+No es que salga más barato. Es que deja de depender de que todo coincida
+el día del rodaje.
+```
+
+**CTA:** `Escribime ONIA y te muestro cómo se ve el contenido de tu negocio sin depender de un día de rodaje.`
+
+---
+
+## E7 rooftop — 4 s 🎯 (la terraza al atardecer)
+
+`E7-rooftop-seedance.mp4` · 720×1280 (9:16 exacto) · 4,0 s · aac · seedance1_5 · 4,8 cr.
+
+Mirado en `_E7-rooftop-frames.jpg`: rooftop de Santa Cruz al atardecer, baranda de vidrio, edificios
+detrás en golden hour. **Levanta el vaso para llevar, da un sorbo y lo baja** —acción a medias que
+SÍ se resuelve, mejor que un retrato— parpadeo suave, cierra sobre la cara plenamente visible
+(casilla 9). Es la cara más aspiracional/lifestyle del banco: parece la foto de campaña de una marca
+de bebidas. El ángulo es el **momento imposible de agendar**: el dorado dura media hora y no vuelve.
+
+**Gancho (0–2 s, quemado en pantalla):**
+> **Esto parece la campaña de una marca de café. No hubo campaña.**
+
+**Caption:**
+```
+Cuatro segundos en una terraza al atardecer. Nadie los filmó.
+
+Lo que costaría filmarlos de verdad:
+  · modelo por media jornada            → Bs …
+  · alquiler de la terraza + permiso     → Bs …
+  · fotógrafo y una hora de golden hour  → Bs …
+
+Y la partida que nadie factura: que el cielo, la luz y la modelo coincidan
+en la única media hora que dura ese dorado.
+
+No es que salga más barato. Es que deja de depender de que el día salga
+perfecto.
+```
+
+**CTA:** `Escribime ONIA y te muestro cómo se ve tu marca sin esperar el día perfecto para grabar.`
+
+---
+
+## Antes de subir el hotel o el rooftop
+
+Mismos cuatro pasos que el café, sin excepción:
+
+1. **Traer las cifras reales** del desglose de una fuente (lo que Sergio sepa de un cliente, un aviso
+   de empleo, una cotización de productora). **Sin fuente, se sacan las líneas de plata** y queda
+   sólo el argumento — inventar sueldos bolivianos hunde la pieza ante el primer dueño que la lea.
+2. **Quemar el gancho** en los primeros 2 s con el editor. Un clip de 4 s sin texto es b-roll bonito
+   y nada más.
+3. **Formato:** ambos ya son 720×1280 = 9:16 exacto — van a Reels/Stories sin re-encuadrar ni barras.
+   Para feed 4:5 se recorta a 1080×1350.
+4. **Registrar la palabra del CTA** (`ONIA`) en `scripts/recompensas.json` y en el mapa de n8n **de
+   la cuenta que publica** — el que publica es el que recibe el comentario (incidente RANKING).

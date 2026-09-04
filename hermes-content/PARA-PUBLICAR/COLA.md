@@ -83,15 +83,35 @@ Siguiente lugar: **veterinaria de barrio**. Mismas reglas que D02.
 
 ---
 
-## 🟢 Las 3 de HOY (2026-09-02) — en orden
+## 🟢 Las 3 de HOY (2026-09-03) — en orden
 
-Ordenadas por lo que más mueve el número. **Lo viejo listo gana a lo recién hecho**, y se
-**alterna cuenta** (ayer cerró @oniahq con D01 → hoy abre Lucía).
+> Nada se publicó todavía: el feed sigue en **1**. Las 3 listas siguen paradas → siguen siendo la
+> prioridad. Ordenadas por lo que más mueve el número. **Lo viejo listo gana a lo recién hecho**,
+> y se **alterna cuenta** (abre Lucía).
 
 1. **D14 · Lucía · REEL peluquería** — el **día 1 del calendario**, listo y verificado desde el
    28-ago, parado más de una semana. Es lo único que mueve el número de verdad. `D14-.../CAPTION.txt`.
-2. **D01 · @oniahq · feed «8 de la noche»** — listo desde ayer, cierra ventas. `D01-.../CAPTION.txt`.
+2. **D01 · @oniahq · feed «8 de la noche»** — listo, cierra ventas. `D01-.../CAPTION.txt`.
 3. **D13 · Lucía · feed café fancy** — foto lista, informa sobre IA. `D13-.../CAPTION.txt`.
+
+---
+
+## 🆕 Producido el 03-sep (NO listo todavía — no entra a los 3 de hoy)
+
+Dos videos animados nuevos, ambos 🎯 verificados (720×1280 = 9:16 exacto, aac, 4,0 s, seedance1_5):
+
+- **E5 · hotel** — `references/modelos/lucia/generadas-20260902/E5-hotel-seedance.mp4`
+- **E7 · rooftop** — `references/modelos/lucia/generadas-20260902/E7-rooftop-seedance.mp4`
+
+Tienen gancho, caption y CTA escritos en `generadas-20260902/CREATIVO.md`. **Pero no son
+publicables de un toque**, por su propio creativo:
+1. **Falta quemar el gancho** en los primeros 2 s (sin ese texto son b-roll y nada más) → es
+   trabajo del editor de video, otro carril, no de este loop.
+2. **El caption tiene las cifras vacías** (`Bs …`) a propósito: hay que traer un número de fuente
+   real o sacar las líneas de plata. Depende de Sergio.
+
+Cuando estén terminados pasan a la cola con carpeta `PARA-PUBLICAR/`, caption y CTA (`ONIA`).
+Mientras tanto: **producidos, no listos.**
 
 ---
 

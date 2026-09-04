@@ -8,11 +8,11 @@ caro, y que tipo de contenido sirve para cuenta propia vs Nuvia/cliente.
 
 | Archivo | Nivel | Costo | Que muestra |
 |---|---|---|---|
-| `lifestyle-bedroom.png` | 1 (soul_2) | 0.12cr | Generico, sin marca. Cuenta propia. |
-| `lifestyle-kitchen.png` | 1 (soul_2) | 0.12cr | Generico, taza sin marca. Cuenta propia. |
-| `lifestyle-street.png` | 1 (soul_2) | 0.12cr | Generico, full-body calle. Cuenta propia. |
-| `lifestyle-bathroom-product.png` | 1 (soul_2) | 0.12cr | Producto en mano PERO marca inventada ("ROXIA") — Nivel 1 no puede traer marca real. |
-| `lucia-teeth-anchor-still.png` | 1 (soul_2) | 0.12cr | Ancla de sonrisa abierta con dientes visibles — fix del problema de dientes (ver abajo). |
+| `lifestyle-bedroom.png` | 1 (text2image_soul_v2) | 0.12cr | Generico, sin marca. Cuenta propia. |
+| `lifestyle-kitchen.png` | 1 (text2image_soul_v2) | 0.12cr | Generico, taza sin marca. Cuenta propia. |
+| `lifestyle-street.png` | 1 (text2image_soul_v2) | 0.12cr | Generico, full-body calle. Cuenta propia. |
+| `lifestyle-bathroom-product.png` | 1 (text2image_soul_v2) | 0.12cr | Producto en mano PERO marca inventada ("ROXIA") — Nivel 1 no puede traer marca real. |
+| `lucia-teeth-anchor-still.png` | 1 (text2image_soul_v2) | 0.12cr | Ancla de sonrisa abierta con dientes visibles — fix del problema de dientes (ver abajo). |
 | `lucia-lifestyle-talking-es-v2-teeth-fix.mp4` | 3 (wan2_7 + seed_audio) | 15cr | Hablando en **espanol**, lipsync natural, forehead liso Y **dientes consistentes** en los 10s. Version corregida (v1 con boca cerrada como start_image se borro — dientes inconsistentes, ver fix abajo). |
 
 ## Patron confirmado

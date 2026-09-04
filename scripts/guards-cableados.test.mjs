@@ -13,7 +13,7 @@
 
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
@@ -47,5 +47,95 @@ test("`npm test` no invoca scripts que no existen", () => {
     inexistentes,
     [],
     `el script \`test\` invoca scripts inexistentes: ${inexistentes.join(", ")}`,
+  );
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// La MISMA guarda, pero sacando los sujetos del DISCO en vez de package.json.
+//
+// Las dos de arriba preguntan "¿todo `test:*` DECLARADO esta cableado?", asi que
+// su lista de sujetos sale de una lista de inclusion — y por eso fallan ABIERTO:
+// el dia que un archivo de test existe en disco y nadie lo declara, no tiene
+// gate y nada se pone en rojo.
+//
+// Medido el 2026-09-03 por `onia-cola`: `scripts/docs-hygiene.test.mjs` (18
+// casos), `scripts/video-scenes.test.mjs` (1) y `scripts/vigia_sin_respuesta.test.mjs`
+// (15) estaban en disco, verdes, y **no los corria nadie** — 34 afirmaciones
+// invisibles con las dos guardas de arriba en verde.
+//
+// Como se colo, y por que la de arriba no podia verlo: al mergear el carril
+// chatbot ese mismo dia, `package.json` salio en CONFLICTO porque dos carriles
+// le habian agregado un gate cada uno a la misma cadena `test`. Resolverlo
+// eligiendo un lado —lo natural con el reloj en contra— borra el `test:*` del
+// otro lado JUNTO con su declaracion, mientras el archivo .test.mjs entra igual
+// al arbol por su propio hunk sin conflicto. Sin huerfano declarado, la guarda
+// de arriba pasa. La cadena `test` es una lista a mano y ese choque se repite
+// cada vez que dos carriles agregan un gate.
+//
+// Derivar del disco invierte la carga: un test nuevo en `scripts/` NACE cubierto
+// y hay que excluirlo a mano, a la vista, con su motivo escrito.
+//
+// ⚠️ ALCANCE, dicho para que no se lea como mas de lo que es: **solo `scripts/`**,
+// que es la carpeta cuya cadena `test` vive en este package.json. Los otros ~250
+// `*.test.*` del repo (`.claude/skills/`, `web-factory/` con vitest, `onia-core/`,
+// `video-factory/`, `hermes-content/deploy/vps-ops/bot/`) tienen su propio
+// corredor y no los cubre esta guarda.
+
+/** Archivos de test de `scripts/` que a proposito NO corre `npm test`, con su motivo. */
+const EXCLUIDOS = new Map([
+  // Vacio a proposito: los tres huerfanos del 2026-09-03 se CABLEARON, no se
+  // excluyeron. Una entrada aca es una decision, no un atajo — y la de abajo
+  // exige que el archivo exista, asi que una exclusion vencida sale en rojo.
+]);
+
+/** Rutas `scripts/...` que toca la cadena `test`, resolviendo los `npm run` en cascada. */
+function rutasQueCorreNpmTest() {
+  const vistos = new Set();
+  const pendientes = ["test"];
+  const rutas = new Set();
+
+  while (pendientes.length > 0) {
+    const nombre = pendientes.pop();
+    if (vistos.has(nombre)) continue;
+    vistos.add(nombre);
+
+    const cmd = scripts[nombre];
+    if (typeof cmd !== "string") continue;
+
+    for (const m of cmd.matchAll(/scripts\/[\w./-]+/g)) rutas.add(m[0]);
+    for (const m of cmd.matchAll(/npm run ([\w:-]+)/g)) pendientes.push(m[1]);
+  }
+  return rutas;
+}
+
+const ES_TEST = /\.test\.(mjs|js|ts)$/;
+
+test("todo archivo de test de `scripts/` lo corre `npm test`", () => {
+  const enDisco = readdirSync(join(raiz, "scripts")).filter((f) => ES_TEST.test(f));
+  assert.ok(enDisco.length > 0, "no hay ni un *.test.* en scripts/ — la guarda perdio sentido");
+
+  const corridos = rutasQueCorreNpmTest();
+  const huerfanos = enDisco
+    .filter((f) => !corridos.has(`scripts/${f}`))
+    .filter((f) => !EXCLUIDOS.has(f))
+    .sort();
+
+  assert.deepEqual(
+    huerfanos,
+    [],
+    `estos tests estan en scripts/ y NO los corre \`npm test\`: ${huerfanos.join(", ")}.\n` +
+      "Cablealos al script `test` de package.json, borralos, o agregalos a EXCLUIDOS con su motivo.",
+  );
+});
+
+test("una exclusion vencida no puede tapar nada: el archivo excluido tiene que existir", () => {
+  const enDisco = new Set(readdirSync(join(raiz, "scripts")).filter((f) => ES_TEST.test(f)));
+  const vencidas = [...EXCLUIDOS.keys()].filter((f) => !enDisco.has(f)).sort();
+
+  assert.deepEqual(
+    vencidas,
+    [],
+    `EXCLUIDOS nombra archivos que ya no existen: ${vencidas.join(", ")}.\n` +
+      "Sacalos: una exclusion que no apunta a nada solo sirve para esconder la proxima.",
   );
 });

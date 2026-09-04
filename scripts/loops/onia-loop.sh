@@ -132,6 +132,25 @@ case "$NOMBRE" in
     TOPE=2400
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
+  contenido-cola)
+    # Carril CONTENIDO (Lucia, @oniahq, marca personal). Vivia en la app de Claude
+    # Code de la laptop de Sergio y se mudo al VPS el 2026-09-02, con su OK.
+    #
+    # POR QUE: midiendo si el sistema aguanta sin la PC aparecio que este era uno
+    # de los DOS unicos loops que morian al apagarla — y el VPS tenia PROHIBIDO
+    # rearmarlo, porque la tabla de loops.md lo marcaba como `Windows` y el bloque
+    # de auto-cura dice textual que a esos no se los toca. O sea: se apagaba con la
+    # laptop, nada lo reponia y nada avisaba. El modo de falla mas silencioso que
+    # tiene el sistema.
+    #
+    # Trabaja sobre `claude/ads-creatividades-publicos`, NO sobre
+    # `claude/carril-contenido` — esa es la rama que Sergio maneja en su propia
+    # sesion y su prompt tiene prohibido escribir ahi.
+    WT=/root/loops/onia-hermes-contenido-cola
+    RAMA=claude/ads-creatividades-publicos
+    TOPE=2700
+    TOOLS=Read,Write,Edit,Grep,Glob,Bash
+    ;;
   lucia)
     # Carril Lucia / modelos (Higgsfield). Era una sesion de Windows: se mudo al
     # VPS el 2026-09-02 para que corra con la laptop apagada.
@@ -257,7 +276,20 @@ cd "$WT" || { avisar "no se pudo entrar a $WT"; exit 2; }
 # prompt viejo sigue trabajando; uno que no arranca, no.
 FUENTE=/root/loops/onia-hermes/scripts/loops/prompts/$NOMBRE.md
 if [ -f "$FUENTE" ] && ! diff -q --strip-trailing-cr "$FUENTE" "$PROMPT" >/dev/null 2>&1; then
-  avisar "el prompt desplegado (<code>$PROMPT</code>) difiere del versionado en main: puede estar corriendo una version vieja"
+  # 🔴 Solo es "version vieja" si main sabe algo que el desplegado NO. Al reves
+  # —el desplegado tiene una capacidad que main todavia no mergeo— el que va
+  # atras es main, y avisar "puede estar corriendo una version vieja" es FALSO.
+  # Medido el 2026-09-03: 15 prompts con el bloque de memoria compartida
+  # desplegados a mano, main una hora atras, y cada loop mando un rojo a Sergio
+  # en su primera vuelta. Sergio: "apaga los fallos falsos". La marca es la misma
+  # que usa el sincronizador para negarse a degradar: si el sync no lo pisaria,
+  # el runner no tiene por que gritar.
+  MARCA_PROMPT="MEMORIA COMPARTIDA — la leés al arrancar"
+  if grep -q "$MARCA_PROMPT" "$PROMPT" 2>/dev/null && ! grep -q "$MARCA_PROMPT" "$FUENTE" 2>/dev/null; then
+    log "prompt mas nuevo que main (main aun sin '$MARCA_PROMPT'): no es drift, se espera al integrador"
+  else
+    avisar "el prompt desplegado (<code>$PROMPT</code>) difiere del versionado en main: puede estar corriendo una version vieja"
+  fi
 fi
 
 # ── la vuelta ----------------------------------------------------------------
@@ -276,20 +308,104 @@ log "===== ARRANCA $NOMBRE — rama $RAMA — HEAD $ANTES — tope ${TOPE}s ====
 # Modelo y esfuerzo: decision de Sergio el 2026-09-02 — "cambialos todos a opus 5
 # en max, pero quiero que terminen de una vez". Antes era claude-sonnet-5 sin
 # --effort. Cuesta mas por vuelta; el rendimiento por vuelta es lo que se compra.
+# ── memoria compartida: el loop arranca sabiendo lo que el sistema ya sabe ----
+# Sergio, 2026-09-03: "que los loops usen la memoria de hermes tambien". Hasta
+# aca cada loop arrancaba "sin memoria: todo esta en los archivos" — y volvia a
+# descubrir por su cuenta que onia.com.bo no es Vercel, que soul_2 no existe, o
+# que Sergio quiere las horas en La Paz. Ahora el prompt que entra a claude es
+# MEMORIA + PROMPT: lo que Hermes sabe de Onia (MEMORY.md), lo que aprendio de
+# Sergio (USER.md), y recien despues las instrucciones del carril. Pesa ~2.000
+# tokens: nada, contra una vuelta de 120 turnos que repite un error ya conocido.
+# Se arma en un temporal para no tocar $PROMPT, que es lo que la guarda de
+# arriba compara contra main.
+MEMORIA_DIR=/root/.hermes/memories
+PROMPT_FINAL=$(mktemp /tmp/onia-prompt-$NOMBRE-XXXXXX.md)
+# El temporal se borra tambien si el corredor mismo muere (reboot, OOM, kill -9):
+# el `rm -f` de abajo solo corre si el script llega vivo hasta ahi. /tmp aca es
+# disco, no tmpfs — un sobrante sobrevive reinicios.
+trap 'rm -f "$PROMPT_FINAL"' EXIT
+{
+  if [ -s "$MEMORIA_DIR/MEMORY.md" ] || [ -s "$MEMORIA_DIR/USER.md" ]; then
+    echo "# MEMORIA COMPARTIDA DEL SISTEMA — es contexto, no es tu cola"
+    echo
+    echo "Lo que Onia ya aprendio, a veces caro. Leelo antes de trabajar y NO lo vuelvas a"
+    echo "descubrir. Si algo de aca contradice un doc del repo, medi cual esta vigente y"
+    echo "avisá. Al cerrar la vuelta, lo que aprendiste que le sirva a otro carril va con"
+    echo "\`/root/bin/onia-aprender.sh \"<hecho>\"\` (ver tu bloque de memoria compartida)."
+    echo
+    if [ -s "$MEMORIA_DIR/MEMORY.md" ]; then
+      echo "## Lo que el sistema sabe de Onia"; echo
+      cat "$MEMORIA_DIR/MEMORY.md"; echo
+    fi
+    if [ -s "$MEMORIA_DIR/USER.md" ]; then
+      echo "## Lo que el sistema sabe de Sergio"; echo
+      cat "$MEMORIA_DIR/USER.md"; echo
+    fi
+    echo; echo "---"; echo; echo "# TU CARRIL"; echo
+  fi
+  # Sergio, 2026-09-03: "¿no se supone que aprenden de si mismos y solucionan sus
+  # errores?". No: un modelo no cambia al correr; "aprende" solo por lo que le
+  # entra en contexto. Hasta aca cada vuelta arrancaba sin ver la anterior, y
+  # repetia el mismo callejon (46 % de vueltas sin commit, medido hoy). Ahora ve
+  # su ULTIMA vuelta: OBJETIVO/RAZON/LECCION que dejo escritas y como termino.
+  # Es la penultima ARRANCA del log (la ultima es la de ahora, ya escrita arriba).
+  PREV_INI=$(grep -n "===== ARRANCA $NOMBRE" "$LOG" 2>/dev/null | tail -2 | head -1 | cut -d: -f1)
+  PREV_FIN=$(grep -n "===== ARRANCA $NOMBRE" "$LOG" 2>/dev/null | tail -1 | cut -d: -f1)
+  if [ -n "$PREV_INI" ] && [ -n "$PREV_FIN" ] && [ "$PREV_INI" != "$PREV_FIN" ]; then
+    echo "# TU ULTIMA VUELTA (lo que vos mismo dejaste escrito; si fallo, cambia el metodo)"; echo
+    sed -n "${PREV_INI},${PREV_FIN}p" "$LOG"       | sed -E 's/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:]+Z //'       | grep -E "^(OBJETIVO|RAZ[OÓ]N|LECCI[OÓ]N):|===== (ARRANCA|TERMINA) "       | tail -12
+    echo; echo "---"; echo
+  fi
+  cat "$PROMPT"
+} > "$PROMPT_FINAL"
+# `grep -c` imprime "0" Y sale con 1 en un archivo vacio: con `|| echo 0` salian DOS
+# ceros en lineas distintas, y la segunda —sin timestamp— pasaba el filtro del
+# reporte a Telegram como si fuera "el informe" de la vuelta.
+HECHOS=$(grep -c '^§$' "$MEMORIA_DIR/MEMORY.md" 2>/dev/null || true)
+log "memoria inyectada: $(wc -c < "$PROMPT_FINAL") bytes de prompt (${HECHOS:-0} hechos de MEMORY.md)"
+
 timeout "$TOPE" claude -p --model "$MODELO" --effort "$ESFUERZO" --max-turns "$TURNOS" \
-  --allowedTools "$TOOLS" < "$PROMPT" >> "$LOG" 2>&1
+  --allowedTools "$TOOLS" < "$PROMPT_FINAL" >> "$LOG" 2>&1
 RC=$?
+rm -f "$PROMPT_FINAL"
+
+# Lo que este loop aprendio en la vuelta entra a la memoria compartida ahora, no
+# "en algun momento": el consolidador es idempotente y con cerrojo, asi que es
+# seguro llamarlo desde 15 loops. Si no hay nada en la bandeja, no hace nada.
+# Sergio, 2026-09-03 22:40 La Paz: "¿los loops están trabajando?". Dos vueltas (contenido-cola,
+# tendencias) murieron con "You've hit your session limit" y el log las contaba como
+# "vuelta valida": los loops corren con la MISMA suscripcion de Claude que la sesion de
+# control, asi que se pisan la cuota. Queda escrito como RAZON en el log: la proxima vuelta
+# lo ve en TU ULTIMA VUELTA y el supervisor lo cuenta como perdida, no como trabajo.
+CUR_INI=$(grep -n "===== ARRANCA $NOMBRE" "$LOG" 2>/dev/null | tail -1 | cut -d: -f1)
+if tail -n +"${CUR_INI:-1}" "$LOG" 2>/dev/null | grep -q "hit your session limit"; then
+  log "RAZON: vuelta PERDIDA por limite de uso de Claude (cuota compartida con la sesion de control); no es un fallo del loop"
+fi
+
+# Lo que el loop escribio como `LECCION: ...` en ESTA vuelta va solo a la memoria
+# compartida: asi la leccion no depende de que el loop se acuerde de llamar a
+# onia-aprender.sh. Tope 5 por vuelta; el consolidador deduplica.
+CUR_INI=$(grep -n "===== ARRANCA $NOMBRE" "$LOG" 2>/dev/null | tail -1 | cut -d: -f1)
+tail -n +"${CUR_INI:-1}" "$LOG" 2>/dev/null   | sed -E 's/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:]+Z //; s/^[*_#> -]*//'   | grep -E "^LECCI[OÓ]N: ." | cut -c1-600 | head -5   | while IFS= read -r LEC; do /root/bin/onia-aprender.sh "[$NOMBRE] ${LEC#LECCI*N: }" >/dev/null 2>&1 || true; done
+/root/bin/onia-consolidar-memoria.sh >> "$LOG" 2>&1 || true
 
 T=$(( $(date +%s) - T0 ))
 DESPUES=$(git rev-parse --short HEAD)
 if [ "$ANTES" = "$DESPUES" ]; then
   HECHO="sin commit (vuelta valida si lo dijo)"
 else
-  HECHO="commiteo $ANTES..$DESPUES — $(git log --oneline "$ANTES..$DESPUES" | wc -l) commit(s)"
+  HECHO="commiteo $ANTES..$DESPUES — $(git rev-list --count --first-parent "$ANTES..$DESPUES") commit(s)"
 fi
-SINPUSH=$(git log --oneline "@{u}..HEAD" 2>/dev/null | wc -l)
+# Cuantos commits quedaron sin publicar. OJO con el instrumento: `@{u}..HEAD`
+# cuenta contra la rama propia, asi que incluye TODO lo que entro por un merge de
+# main y ya esta publicado en origin — laburo que no corre ningun riesgo. El
+# 2026-09-03 docs-auditoria avisaba "34 commits SIN pushear" y los huerfanos
+# reales eran DOS: los otros 32 ya vivian en origin/main. Un aviso inflado 17x se
+# deja de leer, que es el modo de falla del vigia que ya conocemos.
+# Lo que de verdad se puede PERDER es lo que no esta en ningun ref del remoto.
+HUERFANOS=$(git -C "$WT" log --oneline HEAD --not --remotes=origin 2>/dev/null | wc -l)
 
-log "===== TERMINA $NOMBRE — ${T}s — exit $RC — $HECHO — sin pushear: $SINPUSH ====="
+log "===== TERMINA $NOMBRE — ${T}s — exit $RC — $HECHO — sin publicar en ningun remoto: $HUERFANOS ====="
 
 # 124 = lo corto el timeout. Es un fallo: la vuelta quedo a medias.
 if [ "$RC" = 124 ]; then
@@ -301,8 +417,18 @@ elif [ "$RC" != 0 ]; then
   else
     avisar "claude salio con codigo $RC"
   fi
-elif [ "$SINPUSH" != 0 ]; then
-  avisar "quedaron $SINPUSH commit(s) SIN pushear en $RAMA"
+elif [ "$HUERFANOS" != 0 ]; then
+  # Por que no se pudo pushear importa mas que cuantos quedaron: si la rama
+  # remota fue reescrita debajo del carril (divergencia), TODOS los push futuros
+  # se rechazan por non-fast-forward y el loop sigue commiteando al vacio vuelta
+  # tras vuelta. Nombrarlo es la diferencia entre un arreglo de 2 minutos y un
+  # carril que produce para nadie durante horas.
+  if git -C "$WT" rev-parse --verify -q "origin/${RAMA#origin/}" >/dev/null 2>&1 &&
+     ! git -C "$WT" merge-base --is-ancestor "origin/${RAMA#origin/}" HEAD 2>/dev/null; then
+    avisar "$RAMA DIVERGIO de su remota (la reescribieron debajo): el push viene rechazado y hay $HUERFANOS commit(s) en ningun lado. Se arregla en <code>$WT</code> con <code>git merge origin/${RAMA#origin/}</code> y push"
+  else
+    avisar "quedaron $HUERFANOS commit(s) SIN pushear en $RAMA"
+  fi
 fi
 
 # ── un merge abierto NO se deja pasar en silencio ----------------------------
@@ -325,15 +451,26 @@ fi
 # Se manda la PRIMERA linea util que escribio el agente — la regla de todos los
 # prompts es empezar con una linea en castellano llano para Sergio, asi que esa
 # es exactamente la que sirve. REPORTE A SERGIO.
-LINEA=$(sed -n "/===== ARRANCA $NOMBRE/,\$p" "$LOG" 2>/dev/null \
+#
+# Desde la ULTIMA vuelta, no la primera: `sed -n "/ARRANCA/,$p"` arranca en la
+# PRIMERA coincidencia del archivo, y el log acumula TODAS las vueltas del dia.
+# Resultado medido el 2026-09-02, con los mensajes en la mano de Sergio:
+# "✅ canario-visual · 252s · 1 commit(s)" venia acompanado de "Not logged in ·
+# Please run /login", y onia-cola reportaba un "Reached max turns" fechado a las
+# 02:38 — lineas de vueltas viejas presentadas como el informe de esta. El loop
+# habia trabajado bien; el reporte decia otra cosa. Un informe que miente es peor
+# que no tener informe, porque Sergio actua sobre el.
+INICIO=$(grep -n "===== ARRANCA $NOMBRE" "$LOG" 2>/dev/null | tail -1 | cut -d: -f1)
+LINEA=$(tail -n +"${INICIO:-1}" "$LOG" 2>/dev/null \
   | grep -vE "^[0-9]{4}-[0-9]{2}-[0-9]{2}T|^\s*$|^={3,}" \
   | sed 's/^[*_#> -]*//' \
   | grep -vE "^(Detalle|Resumen|Vuelta|##)" \
+  | grep -vE "^(Not logged in|Please run|Error: Reached max turns|Execution error|API Error|Credit balance)" \
   | head -1 | cut -c1-450)
 
 if [ -n "$LINEA" ]; then
   ESTADO="✅"; [ "$RC" != 0 ] && ESTADO="⚠️"
-  COMMITS=""; [ "$ANTES" != "$DESPUES" ] && COMMITS=" · $(git log --oneline "$ANTES..$DESPUES" | wc -l) commit(s)"
+  COMMITS=""; [ "$ANTES" != "$DESPUES" ] && COMMITS=" · $(git rev-list --count --first-parent "$ANTES..$DESPUES") commit(s)"
   tg "$ESTADO <b>$NOMBRE</b> · ${T}s${COMMITS}
 $LINEA"
 else

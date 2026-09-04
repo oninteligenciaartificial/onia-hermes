@@ -102,7 +102,7 @@ usa el `element`, ElevenLabs usa el suyo. El `voice not found` que quedó regist
 
 | Cosa | Costo |
 |---|---|
-| imagen `soul_2` 2k | **0,12 cr** — gasto trivial, los 3 insumos salen por ~0,36 cr |
+| imagen `text2image_soul_v2` 2k | **0,12 cr** — gasto trivial, los 3 insumos salen por ~0,36 cr |
 | narración de un reel (ElevenLabs) | ~2,4 cr |
 | **video `seedance_2_0`** | **SIN MEDIR** |
 

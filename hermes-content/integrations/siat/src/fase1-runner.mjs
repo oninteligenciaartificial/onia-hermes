@@ -51,7 +51,7 @@ import { gzipSync } from "node:zlib";
 
 import { buildCuf } from "./cuf.mjs";
 import { buildInvoiceXml } from "./xml-builder.mjs";
-import { buildInvoicePayload } from "./invoice-payload.mjs";
+import { buildInvoicePayload, round2 } from "./invoice-payload.mjs";
 import { assembleEmission, toSinDateString } from "./emission.mjs";
 import {
   SOAP_OPERATIONS,
@@ -61,6 +61,9 @@ import {
   buildCuisRequest,
   buildRecepcionFacturaRequest,
   buildReversionAnulacionFacturaRequest,
+  buildRecepcionDocumentoAjusteRequest,
+  buildAnulacionDocumentoAjusteRequest,
+  buildReversionAnulacionDocumentoAjusteRequest,
   soapEndpoint,
 } from "./soap-client.mjs";
 import { postSoap, classifyResponse } from "./soap-transport.mjs";
@@ -133,13 +136,42 @@ export const SERVICIO_POR_DOC_SECTOR = {
   24: "FACTURACION_DOCUMENTO_AJUSTE", // ServicioFacturacionDocumentoAjuste
 };
 
+/** Documento de AJUSTE: va por ServicioFacturacionDocumentoAjuste (OPS_AJUSTE). */
+export const DOC_SECTOR_AJUSTE = 24;
+
+// Builders de recepcion/anulacion/reversion por documento sector. El de ajuste
+// NO comparte los nombres de operacion con los de factura; los wrappers estan
+// verificados contra el WSDL del piloto en soap-client (2026-09-03).
+const OPS_FACTURA = {
+  recepcion: { op: "recepcionFactura", build: buildRecepcionFacturaRequest },
+  anulacion: { op: "anulacionFactura", build: buildAnulacionFacturaRequest },
+  reversion: { op: "reversionAnulacionFactura", build: buildReversionAnulacionFacturaRequest },
+};
+const OPS_AJUSTE = {
+  recepcion: { op: "recepcionDocumentoAjuste", build: buildRecepcionDocumentoAjusteRequest },
+  anulacion: { op: "anulacionDocumentoAjuste", build: buildAnulacionDocumentoAjusteRequest },
+  reversion: { op: "reversionAnulacionDocumentoAjuste", build: buildReversionAnulacionDocumentoAjusteRequest },
+};
+
 /**
- * El servicio de documento de ajuste NO comparte los nombres de operacion con
- * los de factura (recepcionDocumentoAjuste, anulacionDocumentoAjuste,
- * reversionAnulacionDocumentoAjuste). Hasta mapear esos requests, el sector 24
- * no se puede emitir: se marca explicito en vez de fallar con un 995 opaco.
+ * Timeout HTTP por servicio. El de documento de ajuste tarda 36-43 s en
+ * responder CUALQUIER recepcion (medido 2026-09-04 en el piloto, hasta con un
+ * archivo basura que rechaza con 920): con el default de 30 s del transporte
+ * los 3 reintentos morian en "network" sin que el SIN llegara a contestar.
  */
-export const DOC_SECTOR_SIN_SOPORTE = new Set([24]);
+export const TIMEOUT_MS_POR_SERVICIO = { FACTURACION_DOCUMENTO_AJUSTE: 120_000 };
+
+/** Timeout a usar para un servicio (undefined = el default del transporte). */
+export function timeoutFor(serviceKey) {
+  return TIMEOUT_MS_POR_SERVICIO[serviceKey];
+}
+
+/**
+ * Sectores cuyo servicio SOAP todavia no tiene operaciones mapeadas. VACIO desde
+ * 2026-09-03 (el 24 ya va por OPS_AJUSTE); el mecanismo queda para el proximo
+ * sector que se sume: se marca explicito en vez de fallar con un 995 opaco.
+ */
+export const DOC_SECTOR_SIN_SOPORTE = new Set();
 
 /** Los combos que HOY se pueden emitir de verdad (sector 24 queda afuera). */
 export const EMISION_CASES_SOPORTADOS = EMISION_CASES.filter(
@@ -599,7 +631,7 @@ export function formatSinLocal(shiftedMs) {
  * Montos chicos variados por indice. Receptor: NIT 99001 (4 de cada 5) o CI de
  * consumidor final (1 de cada 5).
  */
-export function buildTestInvoice({ catalogs, nit, index, codigoPuntoVenta = 0 }) {
+export function buildTestInvoice({ catalogs, nit, index, codigoPuntoVenta = 0, codigoDocumentoSector = 1 }) {
   const productos = catalogs?.productos ?? [];
   if (productos.length === 0) {
     throw new Error("catalogo de productos homologados vacio: sincronizar etapa II antes de emitir");
@@ -631,6 +663,13 @@ export function buildTestInvoice({ catalogs, nit, index, codigoPuntoVenta = 0 })
   const precio = 10 + (index % 90) + (index % 2 === 0 ? 0.5 : 0);
   const cantidad = 1 + (index % 3);
 
+  // Sector 17: el XSD exige quirofano + medico en CADA linea. Valores de prueba
+  // dentro de los rangos del XSD; el NIT del medico es el NIT de pruebas del SIN.
+  const medico =
+    codigoDocumentoSector === 17
+      ? { nroQuirofanoSalaOperaciones: 1, nombreApellidoMedico: "MEDICO DE PRUEBAS", nitDocumentoMedico: NIT_PRUEBA_RECEPTOR }
+      : {};
+
   const payload = buildInvoicePayload({
     emisor: {
       nit,
@@ -639,6 +678,9 @@ export function buildTestInvoice({ catalogs, nit, index, codigoPuntoVenta = 0 })
       actividadEconomica: actividad,
     },
     receptor,
+    // Sin esto el CUF y la <cabecera> salian con sector 1 aunque el request
+    // dijera 17: el piloto rechazaba el XML por la raiz (cvc-elt.1.a).
+    documento: { tipoDocumentoSector: codigoDocumentoSector },
     items: [
       {
         actividadEconomica: actividad,
@@ -648,6 +690,7 @@ export function buildTestInvoice({ catalogs, nit, index, codigoPuntoVenta = 0 })
         cantidad,
         unidadMedida: unidad?.codigoClasificador ?? 58,
         precioUnitario: precio,
+        ...medico,
       },
     ],
   });
@@ -792,6 +835,11 @@ class Runner {
     return key;
   }
 
+  /** Builders y nombres de operacion (recepcion/anulacion/reversion) del sector actual. */
+  get ops() {
+    return this.combo.codigoDocumentoSector === DOC_SECTOR_AJUSTE ? OPS_AJUSTE : OPS_FACTURA;
+  }
+
   get cuis() {
     return this.state.cuisByPv[this.pvKey] ?? null;
   }
@@ -873,6 +921,7 @@ class Runner {
       envelope,
       token: this.token,
       fetchImpl: globalThis.fetch,
+      timeoutMs: timeoutFor(serviceKey),
     });
     const parsed = result.parsed ?? {};
     this.log({
@@ -1112,27 +1161,133 @@ class Runner {
       nit: this.nit,
       index,
       codigoPuntoVenta: this.combo.codigoPuntoVenta,
+      codigoDocumentoSector: this.combo.codigoDocumentoSector,
     });
     const numeroFactura = ++this.state.numeroFactura;
+    const fecha = fechaEmision ?? this.sinNow();
     const material = assembleEmission({
       payload,
       tenant: { emisor: { nit: this.nit, codigoSistema: this.codigoSistema, ...EMISOR_PRUEBA } },
       cufd: this.cufd,
       cuis: this.cuis,
       numeroFactura,
-      fechaEmision: fechaEmision ?? this.sinNow(),
+      fechaEmision: fecha,
       environment: PILOT.environment,
       leyenda,
       codigoMetodoPago,
       usuario: "onia",
     });
-    return { material, numeroFactura };
+    // `datos` es lo que una nota de ajuste (sector 24) necesita de su factura
+    // original: sin esto las facturas viejas del estado no sirven de original.
+    const datos = { fechaEmision: fecha, receptor: payload.receptor, items: payload.items, montoTotal: payload.montoTotal, leyenda };
+    return { material, numeroFactura, datos };
   }
 
-  /** Reconstruye el request de recepcion con el hash del modo vigente. */
+  /**
+   * Factura original para una nota de ajuste: una compra-venta validada del
+   * MISMO PdV, con `datos` y todavia sin nota. Si no hay, emite una (el SIN la
+   * cuenta en el caso pv-ds1-tf1, que topea en 125: no molesta).
+   */
+  async originalParaNota() {
+    const comboOriginal = { codigoPuntoVenta: this.combo.codigoPuntoVenta, ...DOC_SECTOR_CASES[0] };
+    const libre = (f) =>
+      f.combo === comboId(comboOriginal) && !f.anulada && !f.ajustada && f.datos && (f.estado === 908 || f.estado === 901);
+    if (!this.state.invoices.some(libre)) {
+      const result = await this.withCombo(comboOriginal, () => this.emitOne(this.state.invoices.length));
+      if (!result.ok) {
+        const msg = (result.parsed?.mensajes ?? [])[0]?.descripcion ?? result.error ?? "sin detalle";
+        throw new Error(`sin factura original para la nota de ajuste (fallo la compra-venta previa): ${msg}`);
+      }
+    }
+    const original = this.state.invoices.find(libre);
+    if (!original) {
+      throw new Error("sin factura original validada (908/901) para la nota de ajuste");
+    }
+    return original;
+  }
+
+  /**
+   * Nota de credito-debito (sector 24) que devuelve ENTERA una factura original.
+   * Reglas del SIN (validaciones documento sector 24): montoTotalOriginal =
+   * sum(subTotal con codigoDetalleTransaccion 1) = la factura original;
+   * montoTotalDevuelto = sum(subTotal con 2) - montoDescuentoCreditoDebito;
+   * montoEfectivoCreditoDebito = montoTotalDevuelto x 0.13. El XSD exige minimo 2
+   * lineas: las originales (1) y las devueltas (2). Numeracion propia
+   * (numeroNotaCreditoDebito) y CUF con tipoFactura 3 / sector 24.
+   */
+  buildNotaMaterial(original) {
+    const d = original.datos;
+    const fecha = this.sinNow();
+    const numero = ++this.state.numeroFactura;
+    const cuf = buildCuf(
+      {
+        nit: this.nit,
+        fechaHora: fecha.replace(/[-T:.]/g, ""),
+        sucursal: PILOT.codigoSucursal,
+        modalidad: PILOT.codigoModalidad,
+        tipoEmision: 1,
+        tipoFactura: this.combo.tipoFacturaDocumento,
+        tipoDocumentoSector: this.combo.codigoDocumentoSector,
+        numeroFactura: numero,
+        puntoVenta: this.combo.codigoPuntoVenta,
+      },
+      this.cufd.codigoControl,
+    );
+    const linea = (item, codigoDetalleTransaccion) => ({
+      actividadEconomica: item.actividadEconomica,
+      codigoProductoSin: item.codigoProductoSin,
+      codigoProducto: item.codigoProducto,
+      descripcion: item.descripcion,
+      cantidad: item.cantidad,
+      unidadMedida: item.unidadMedida,
+      precioUnitario: item.precioUnitario,
+      subTotal: item.subtotal,
+      codigoDetalleTransaccion,
+    });
+    const cabecera = {
+      nitEmisor: this.nit,
+      razonSocialEmisor: EMISOR_PRUEBA.razonSocial,
+      municipio: EMISOR_PRUEBA.municipio,
+      telefono: EMISOR_PRUEBA.telefono,
+      numeroNotaCreditoDebito: numero,
+      cuf,
+      cufd: this.cufd.codigo,
+      codigoSucursal: PILOT.codigoSucursal,
+      direccion: EMISOR_PRUEBA.direccion,
+      codigoPuntoVenta: this.combo.codigoPuntoVenta,
+      fechaEmision: fecha,
+      nombreRazonSocial: d.receptor.razonSocial,
+      codigoTipoDocumentoIdentidad: d.receptor.tipoDocumentoIdentidad,
+      numeroDocumento: d.receptor.numeroDocumento,
+      codigoCliente: d.receptor.numeroDocumento,
+      numeroFactura: original.numero,
+      numeroAutorizacionCuf: original.cuf,
+      fechaEmisionFactura: d.fechaEmision,
+      montoTotalOriginal: d.montoTotal,
+      montoTotalDevuelto: d.montoTotal,
+      montoEfectivoCreditoDebito: round2(d.montoTotal * 0.13),
+      leyenda: d.leyenda,
+      usuario: "onia",
+      codigoDocumentoSector: this.combo.codigoDocumentoSector,
+    };
+    const detalle = [...d.items.map((i) => linea(i, 1)), ...d.items.map((i) => linea(i, 2))];
+    const xml = buildInvoiceXml({ cabecera, detalle });
+    const archivo = gzipSync(Buffer.from(xml, "utf8")).toString("base64");
+    return { material: { cuf, xml, archivo }, numeroFactura: numero, original };
+  }
+
+  /** Material del combo actual: factura (sectores 1 y 17) o nota de ajuste (24). */
+  async buildMaterialFor(index) {
+    if (this.combo.codigoDocumentoSector === DOC_SECTOR_AJUSTE) {
+      return this.buildNotaMaterial(await this.originalParaNota());
+    }
+    return this.buildEmisionMaterial(index);
+  }
+
+  /** Reconstruye el request de recepcion (del sector actual) con el hash del modo vigente. */
   recepcionRequestFor(material) {
     const gzipBuffer = Buffer.from(material.archivo, "base64");
-    return buildRecepcionFacturaRequest({
+    return this.ops.recepcion.build({
       ...this.recepcionBase(1),
       archivo: material.archivo,
       fechaEnvio: this.sinNow(),
@@ -1142,10 +1297,10 @@ class Runner {
 
   async emitOne(index) {
     await this.ensureCufd();
-    const { material, numeroFactura } = this.buildEmisionMaterial(index);
+    const { material, numeroFactura, datos, original } = await this.buildMaterialFor(index);
     const result = await this.post(this.servicio, this.recepcionRequestFor(material), {
       etapa: "IV",
-      op: "recepcionFactura",
+      op: this.ops.recepcion.op,
       numeroFactura,
     });
     // Autocalibracion del hash: si el SIN observa el hash en modo "xml", probar
@@ -1170,7 +1325,11 @@ class Runner {
         // Sin esto, la anulacion (VII) y la reversion (XI) tomarian una factura
         // de OTRO combo y el caso del SIN nunca cerraria.
         combo: comboId(this.combo),
+        ...(datos ? { datos } : {}),
       });
+      if (original) {
+        original.ajustada = true; // una nota por factura original
+      }
     }
     return result;
   }
@@ -1401,14 +1560,14 @@ class Runner {
       );
     }
     const motivo = (this.state.catalogs.motivosAnulacion ?? [])[0];
-    const envelope = buildAnulacionFacturaRequest({
+    const envelope = this.ops.anulacion.build({
       ...this.recepcionBase(1),
       codigoMotivo: motivo?.codigoClasificador ?? 1,
       cuf: factura.cuf,
     });
     const result = await this.post(this.servicio, envelope, {
       etapa: "VII",
-      op: "anulacionFactura",
+      op: this.ops.anulacion.op,
       numeroFactura: factura.numero,
     });
     if (result.ok && result.parsed?.transaccion === true) {
@@ -1478,13 +1637,13 @@ class Runner {
           "(correr la etapa VII de ese combo primero)",
       );
     }
-    const envelope = buildReversionAnulacionFacturaRequest({
+    const envelope = this.ops.reversion.build({
       ...this.recepcionBase(1),
       cuf: factura.cuf,
     });
     const result = await this.post(this.servicio, envelope, {
       etapa: "XI",
-      op: "reversionAnulacionFactura",
+      op: this.ops.reversion.op,
       numeroFactura: factura.numero,
     });
     if (result.ok && result.parsed?.transaccion === true) {

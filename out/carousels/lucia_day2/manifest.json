@@ -1,0 +1,17 @@
+{
+  "id": "lucia_day2",
+  "title": "Lucia - Dia 2 - Presentacion (carrusel)",
+  "slides": [
+    {"file": "01.jpg", "caption": "¿Le seguirías a alguien que no existe? - Hook"},
+    {"file": "02.jpg", "caption": "Por qué Lucía es un experimento de marca personal"},
+    {"file": "03.jpg", "caption": "Ideas de contenido que podés usar"},
+    {"file": "04.jpg", "caption": "Pruebas reales con IA: lo que funciona y lo que falla"},
+    {"file": "05.jpg", "caption": "Cómo pensamos la comunicación: ritmo y color"},
+    {"file": "06.jpg", "caption": "Estrategia: repetir, medir, ajustar"},
+    {"file": "07.jpg", "caption": "CTA: Comenta 'COMUNIDAD' para recibir el enlace"}
+  ],
+  "caption_full": "Esta cara no existe. Lucía es un personaje creado con IA para mostrarte cómo construir marca personal y contenido que funcione.\n\nComenta 'COMUNIDAD' si querés que te mande el enlace para aprender IA aplicada a tu negocio.",
+  "format": "1080x1350",
+  "notes": "Usar siempre el CTA COMUNIDAD en la ultima lamina. Fotos extraidas del banco oficial.",
+  "path": "/root/loops/onia-hermes/out/carousels/lucia_day2"
+}
