@@ -301,6 +301,17 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       guarda y este archivo la había copiado sin ella. Arreglado y **pinchado con un caso que corre
       en un proceso hijo** (en este el módulo ya está cacheado y el test pasaría en falso).
       **Reproducción en 30 s:** `npm run demo:agendada` → exit 1 nombrando al contacto.
+      ✅ **CAMBIÓ el 2026-09-04: el gate mide `exit 0`, y no porque se lo aflojara.** La
+      reproducción de arriba ya NO da 1 — dice *"SIN DEMOS HUECAS NUEVAS: desde que existe el aviso
+      a Sergio, toda promesa tuvo su reserva o su aviso"*, y trata la conv 49 como historia anterior
+      al canal, que es lo que evita que un vigía grite por algo que ya no se puede rescatar.
+      **Lo que lo destrabó es la decisión D2 (`t_b18ca430`), que ya se tomó:** aviso por Telegram
+      **sin** calendario. Medido en el proceso vivo, no leído: `ONIA_BOT_TG_AVISO=true` en el
+      entorno del webhook (`/proc/<pid>/environ`) y una línea real de hoy —
+      `[aviso] sent conv=57 (pidio_humano_recepcion): aviso enviado`. El envío mira
+      `respuesta.ok` **y** `cuerpo.ok === false`, así que "sent" es acuse de Telegram, no
+      fire-and-forget. **Cal.com sigue muerto y eso ya no bloquea nada**: la promesa se cumple
+      avisando, no reservando.
 
 - [ ] 🔴 **El bot promete "ya le pasé tu consulta a Sergio, te escribe él" y NADIE se lo pasa:
       el aviso del handoff viaja hasta un canal apagado.** Encontrado el 2026-09-03 18:10 UTC
