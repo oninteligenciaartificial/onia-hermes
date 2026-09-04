@@ -15,9 +15,19 @@ condición estaba escrita contra la cadencia vieja y sobrevivió a la baja de ca
 la única que cae en la mañana de Sergio**. Si la cadencia vuelve a cambiar, esta línea se cambia
 con ella: una condición que nombra una hora inexistente no falla — **calla**, que es peor.
 
+## OBJETIVO 2 (medible): cero patrones de fallo repetidos sin lección escrita
+
+**Reportar que un loop no avanza no es aprender.** Hasta el 2026-09-04 nadie comparaba una vuelta
+con la anterior: el mismo fallo se pagaba todos los días y nunca se convertía en regla. **Meta:**
+`patrones_error` + `tablero_rebloqueadas` de `onia-extraer-fallos.sh` **= 0 sin una lección
+escrita** que diga cómo evitarlos.
+
+Un **patrón** es algo que se repite **2 o más veces** — una vez es mala suerte, dos es un patrón.
+
 ## CÓMO SE MIDE al arrancar
 
 ```
+/root/bin/onia-extraer-fallos.sh            # los fallos que SE REPITEN (24 h, sin modelo, 0,1 s)
 scripts/loops_avance.sh                    # quién no midió — y los cuatro descartes, ya aplicados
 git -C /root/loops/onia-hermes fetch --quiet; for b in $(git -C /root/loops/onia-hermes branch -r --list 'origin/claude/*' --no-merged origin/main); do echo "$b $(git -C /root/loops/onia-hermes log -1 --format=%cr $b)"; done   # ¿el trabajo LLEGA a main o se vara?
 /root/bin/onia-tablero.sh list | grep -c needs_input                                      # decisiones esperando a Sergio: muchas = los loops preguntan de más
@@ -259,6 +269,14 @@ cada uno: una tarea en el tablero para su dueño con las dos líneas que lo prue
 día, en la vuelta de las 14:29 UTC (10:29 La Paz), un solo `onia-tg.sh`** con la lista de loops
 sin avance y el porqué de cada uno — no uno por vuelta, no uno por loop.
 
+**Ese mismo mensaje cierra con UNA línea más, y sólo una:**
+
+    Aprendido hoy: <N> lecciones · <M> prompts corregidos · <K> decisiones tuyas
+
+Los números salen de lo que hiciste en la sección de auto-conocimiento. **Sin lista, sin
+detalle**: es el pulso de que el sistema aprende solo, no un informe. Si los tres son 0, la línea
+va igual — "no hubo fallos repetidos" es la mejor noticia del día y merece verse.
+
 Después elegí **uno** por vuelta: **el que menos se haya auditado**. Y para saber cuál, hay UN solo
 lugar — la sección *"Próximos pasos"* de tu handoff, que mantiene la lista curada de **ya
 auditados** y **nunca auditados**:
@@ -323,6 +341,35 @@ palabras** — "trabajó mucho" no le sirve a nadie.
 ⚠️ **Duro pero justo.** Una vuelta sin commit porque el carril está bloqueado en Sergio **no es
 basura: es honestidad.** Marcarla como falla le enseña a los loops a commitear por commitear —
 justo lo que querés evitar.
+
+## 🧠 AUTO-CONOCIMIENTO: convertir un fallo repetido en una lección
+
+Sergio, 2026-09-04: *"revisá el apartado de auto knowledge para aprender qué fallas y seguir
+mejorando… recordá no perdernos y seguir mejorando de los errores, mirá tus loops"*.
+
+`/root/bin/onia-extraer-fallos.sh` te da el JSON de lo que se repitió en 24 h. **Por cada patrón
+NUEVO** (no está ya en la memoria que tenés pegada arriba), exactamente UNA de estas tres salidas
+— y sólo una:
+
+1. **Lección** → `/root/bin/onia-aprender.sh "<qué falló · por qué pasa · CÓMO EVITARLO>"`.
+   Las tres partes o no la escribas. *"25 de 128 vueltas murieron por el cupo compartido de
+   Claude; una vuelta cuya última línea diga `RAZON: vuelta PERDIDA por limite` NO es un loop
+   caído y no se le abre tarea"* sirve. *"Hubo errores de API"* no sirve: no le dice a nadie qué
+   hacer distinto.
+2. **Prompt** → si el patrón es de UN loop y se arregla con una instrucción, editá
+   `scripts/loops/prompts/<id>.md`: **una línea, con el porqué**, y commiteala. Es la única
+   excepción viva a la regla de «no tocar la maquinaria»: un prompt que produce el mismo error
+   todos los días **es** el fallo.
+3. **Decisión de Sergio** → **UNA** tarea bloqueada (`--kind needs_input`, el motivo ANTES de
+   `--kind`), no diez. Y `list` primero: repetirle algo que ya decidió es peor que no preguntar.
+
+**PROHIBIDO:** lecciones vagas sin el "cómo evitarlo"; reescribir una lección que ya está en la
+memoria de arriba (el consolidador la descarta igual, pero insistir gasta la vuelta); tocar el
+corredor (`onia-loop.sh`), el sincronizador ni el extractor por tu cuenta — eso va al radar.
+
+⚠️ **`perdidas_por_limite` no es un fallo de nadie.** El extractor las separa a propósito: son
+vueltas que murieron por el cupo compartido de Claude. Contarlas como carril seco manda a
+arreglar loops sanos, que es justo lo que este carril existe para no hacer.
 
 ## Si la vuelta no encuentra nada
 
