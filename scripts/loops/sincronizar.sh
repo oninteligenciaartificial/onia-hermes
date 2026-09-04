@@ -27,13 +27,36 @@ set -uo pipefail
 
 REPO=${ONIA_LOOPS_REPO:-/root/loops/onia-hermes}
 DESTINO_BIN=${ONIA_LOOPS_BIN:-/root/bin}
-FUENTE="$FUENTE/scripts/loops"
 CAMBIOS=0
 # Indirecto para poder PROBAR este script sin mandarle un Telegram falso a Sergio.
 # Una guarda que no se puede ejercitar es una guarda que nadie sabe si anda.
 TG=${ONIA_TG:-/root/bin/onia-tg.sh}
 
 log() { printf '%s %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$*"; }
+
+# 🔴 De donde se copia NO depende del checkout. El 2026-09-04 este clon quedo en
+# 'feature/menu-limpio-t_54ff72b5' (un carril lo dejo ahi) y el sincronizador
+# desplego los prompts DE ESA RAMA a los 15 loops: el supervisor nuevo no llego y
+# los loops podrian haber corrido con prompts a medias de otro carril. Ahora el
+# contenido sale SIEMPRE de origin/main, se materializa en un directorio temporal
+# y de ahi se copia; si el fetch fallo y no hay origin/main, se cae al arbol y se
+# avisa, en vez de publicar una rama de trabajo en silencio.
+RAIZ="$REPO"
+TMPMAIN=""
+if git -C "$REPO" rev-parse --verify -q origin/main >/dev/null 2>&1; then
+  TMPMAIN=$(mktemp -d /tmp/onia-sync-main-XXXXXX) || TMPMAIN=""
+  if [ -n "$TMPMAIN" ] && git -C "$REPO" archive origin/main | tar -x -C "$TMPMAIN" 2>/dev/null; then
+    RAIZ="$TMPMAIN"
+    trap 'rm -rf "$TMPMAIN"' EXIT
+    log "fuente: origin/main ($(git -C "$REPO" rev-parse --short origin/main))"
+  else
+    [ -n "$TMPMAIN" ] && rm -rf "$TMPMAIN"; TMPMAIN=""
+    log "aviso: no pude materializar origin/main — copio del arbol de $REPO ($RAMA)"
+  fi
+else
+  log "aviso: no hay origin/main — copio del arbol de $REPO ($RAMA)"
+fi
+FUENTE="$RAIZ/scripts/loops"
 
 [ -d "$FUENTE/prompts" ] || { log "FALLO: no existe $FUENTE/prompts"; exit 2; }
 
@@ -47,28 +70,6 @@ else
   log "aviso: $REPO esta en '$RAMA', no en main"
 fi
 
-# 🔴 De donde se copia NO depende del checkout. El 2026-09-04 este clon quedo en
-# 'feature/menu-limpio-t_54ff72b5' (un carril lo dejo ahi) y el sincronizador
-# desplego los prompts DE ESA RAMA a los 15 loops: el supervisor nuevo no llego y
-# los loops podrian haber corrido con prompts a medias de otro carril. Ahora el
-# contenido sale SIEMPRE de origin/main, se materializa en un directorio temporal
-# y de ahi se copia; si el fetch fallo y no hay origin/main, se cae al arbol y se
-# avisa, en vez de publicar una rama de trabajo en silencio.
-FUENTE="$REPO"
-TMPMAIN=""
-if git -C "$REPO" rev-parse --verify -q origin/main >/dev/null 2>&1; then
-  TMPMAIN=$(mktemp -d /tmp/onia-sync-main-XXXXXX) || TMPMAIN=""
-  if [ -n "$TMPMAIN" ] && git -C "$REPO" archive origin/main | tar -x -C "$TMPMAIN" 2>/dev/null; then
-    FUENTE="$TMPMAIN"
-    trap 'rm -rf "$TMPMAIN"' EXIT
-    log "fuente: origin/main ($(git -C "$REPO" rev-parse --short origin/main))"
-  else
-    [ -n "$TMPMAIN" ] && rm -rf "$TMPMAIN"; TMPMAIN=""
-    log "aviso: no pude materializar origin/main — copio del arbol de $REPO ($RAMA)"
-  fi
-else
-  log "aviso: no hay origin/main — copio del arbol de $REPO ($RAMA)"
-fi
 
 poner() {  # poner <origen> <destino>
   local origen="$1" destino="$2" tmp="$2.nuevo.$$"
