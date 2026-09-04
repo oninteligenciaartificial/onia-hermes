@@ -8,7 +8,24 @@
 
 ## El objetivo, uno solo
 
-**Tres negocios pagando el plan Profesional antes del 30 de septiembre de 2026.**
+**Terminar la plataforma en una versión 1.0 USABLE, con precios y decisiones que escalen** — y que
+eso se traduzca en **tres negocios pagando el plan Profesional antes del 30 de septiembre de 2026.**
+
+> ⚠️ **Aclarado por Sergio Urcullo el 4-sep-2026**, corrigiéndome: *"ese no es el único objetivo,
+> es terminar la plataforma a una versión 1.0 usable, pero pensando precios y decisiones para
+> escalar"*. Yo había reducido la sesión siguiente a un solo defecto (el rubro Servicios). **Un
+> defecto es un paso, no el objetivo.** Arreglar defectos de a uno sin la 1.0 delante es cómo se
+> abren diez frentes y no se cierra ninguno.
+
+**Usable** quiere decir: un dueño boliviano que nunca usó un sistema **se registra solo y llega a
+cobrar sin que nadie lo ayude**, en el rubro que eligió. No "las pantallas existen": que el camino
+completo se pueda hacer solo.
+
+**Que escale** quiere decir dos cosas, y las dos se deciden ANTES de vender, no después:
+- **El precio sube porque el negocio choca con un tope**, no porque le subamos el precio. Los ejes
+  son cuánta gente lo usa, cuánto volumen maneja y qué add-ons suma (ver más abajo).
+- **Un rubro nuevo se ENCIENDE, no se escribe.** Si sumar el sexto rubro pide reescribir pantallas,
+  no escala: eso es deuda que se paga con cada cliente nuevo.
 
 Se mide así, sin interpretación: filas en `organizations` con plan `professional` y un pago
 registrado y aprobado, de negocios que no son de Sergio ni de su familia.
@@ -116,9 +133,10 @@ nos obliga a mejorar. **No se promete una función concreta ni una fecha**: se p
 
 ---
 
-## El orden de trabajo (1.0-b, después de vender)
+## El orden de trabajo hasta la 1.0 usable
 
-Cerrado y sin desvíos. Cada paso se despliega y se verifica antes del siguiente.
+Cerrado y sin desvíos. Cada paso se despliega y se verifica MIRÁNDOLO antes de pasar al siguiente.
+**Ninguno de estos es "el objetivo": el objetivo es la 1.0 usable, y estos son sus pasos.**
 
 1. ~~Configuración: de 7 pestañas a una página con «Configuración avanzada».~~ **Hecho, vivo el 4-sep.**
 2. Panel de inicio en tres renglones, con el primer día resuelto. **Construido; espera el OK.**
