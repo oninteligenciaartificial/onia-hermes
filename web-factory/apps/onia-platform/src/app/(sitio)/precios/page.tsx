@@ -76,8 +76,12 @@ export const metadata: Metadata = {
     type: "website",
     locale: "es_BO",
     title: "Precios de Onia — en bolivianos, publicados",
-    description:
-      "Básico 320 · Pro 750 · Full 1.500 Bs/mes. 14 días gratis sin tarjeta, sin permanencia.",
+    // Escribía "Básico 320 · Pro 750 · Full 1.500 Bs/mes" a mano hasta el
+    // 2026-09-04: el gate de al lado no lo veía porque pone el "Bs" DESPUÉS del
+    // número y el patrón sólo buscaba "Bs 320". La `description` de arriba ya
+    // se había atado a la tabla y su hermana de OpenGraph —la que se ve al
+    // compartir el enlace— quedó con los tres precios congelados.
+    description: `${PLANES.map((p) => `${p.nombre} ${bs(p.mensual)}`).join(" · ")} Bs/mes. 14 días gratis sin tarjeta, sin permanencia.`,
     url: "/precios",
   },
 };

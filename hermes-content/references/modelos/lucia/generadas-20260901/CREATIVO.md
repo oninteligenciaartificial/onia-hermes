@@ -90,7 +90,7 @@ una bolsa de tornillos.
 Un sistema no atiende por vos. Registra lo que vos ya no alcanzás a anotar.
 ```
 
-**CTA:** `Comentá ONIA y te paso cómo se ve tu stock sin cuaderno.`
+**CTA:** `Comentá SISTEMA y te paso cómo se ve tu stock sin cuaderno.`
 
 ---
 

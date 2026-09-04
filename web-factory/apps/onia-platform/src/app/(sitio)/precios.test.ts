@@ -25,6 +25,20 @@ import path from "node:path";
  * vista. (Ya se pagó el precio de lo contrario: `compartir.test.ts` sacaba sus
  * rutas del sitemap y falló ABIERTO el día que una página salió del sitemap.)
  *
+ * ⚠️ **Y esa regla se aplicaba a los archivos pero NO a los directorios**, que
+ * es donde volvió a fallar abierto (2026-09-04). Las raíces eran cuatro
+ * carpetas escritas a mano —`app/(sitio)`, `content`, `lib`,
+ * `components/landing-v1`— o sea una lista de inclusión un nivel más arriba:
+ * el árbol `app/v1/**` quedaba entero sin vigilancia. Ahí vivían **17** montos
+ * de plan tipeados a mano, en cuatro rutas que producción sirve con 200
+ * (`/v1`, `/v1/precios`, `/v1/modulos/dental`, `/v1/empezar`), y el gate pasaba
+ * en verde. Nueve estaban en `app/v1/empezar/data.ts`, el MISMO archivo donde
+ * el precio de la web se quedó doce días a menos de la mitad — veinte líneas
+ * más arriba del copy que ya se había atado a su fuente, bajo un comentario que
+ * afirmaba que esos números "salen de lib/pricing.ts" cuando estaban tipeados.
+ * Por eso ahora el recorrido arranca de `src/` entero: una carpeta nueva nace
+ * cubierta, igual que un archivo nuevo.
+ *
  * QUÉ NO CAZA, DELIBERADAMENTE. Sólo los montos de PLANES y GRUPO. Los add-ons
  * quedan fuera porque sus números COLISIONAN con otros productos: `Bs 390` es
  * el chatbot **y** el plan «Cuidado Web Crecimiento» de `content/webs.ts`, que
@@ -34,9 +48,6 @@ import path from "node:path";
 
 const AQUI = path.dirname(new URL(import.meta.url).pathname);
 const SRC = path.resolve(AQUI, "..", "..");
-
-/** Superficie que ve un lead: las páginas del sitio y lo que ellas importan. */
-const RAICES = ["app/(sitio)", "content", "lib", "components/landing-v1"];
 
 /**
  * Exclusiones, cada una con su motivo. Vacía a propósito: si mañana hace falta
@@ -95,13 +106,16 @@ function tipeadosAMano(): Hallazgo[] {
   const exentos = new Set(EXENTOS.map((e) => e.archivo));
   const hallazgos: Hallazgo[] = [];
 
-  for (const raiz of RAICES) {
-    for (const abs of archivosDe(path.join(SRC, raiz))) {
-      const rel = path.relative(SRC, abs);
-      if (exentos.has(rel)) continue;
-      const src = sinComentarios(fs.readFileSync(abs, "utf8"));
-      // "Bs 320", "Bs 1.500", "Bs 3.200" — con o sin separador de miles.
-      const re = /Bs\s*([0-9][0-9.]*)/g;
+  for (const abs of archivosDe(SRC)) {
+    const rel = path.relative(SRC, abs);
+    if (exentos.has(rel)) continue;
+    const src = sinComentarios(fs.readFileSync(abs, "utf8"));
+    // Las DOS formas de escribirlo. "Bs 320" es la común; "1.500 Bs/mes" es la
+    // que se le escapó al gate hasta el 2026-09-04 y por la que la descripción
+    // de OpenGraph de /precios —la que se ve al compartir el enlace— quedó con
+    // los tres montos congelados mientras su hermana de al lado ya leía la
+    // tabla. Un gate que sólo entiende un orden de palabras cuida medio tema.
+    for (const re of [/Bs\s*([0-9][0-9.]*)/g, /([0-9][0-9.]*)\s*Bs\b/g]) {
       let m: RegExpExecArray | null;
       while ((m = re.exec(src)) !== null) {
         const valor = Number(m[1].replace(/\./g, ""));
@@ -155,7 +169,24 @@ describe("los precios de plan no se escriben a mano", () => {
 
   /** Que el archivo recorra superficie de verdad, no un directorio vacío. */
   it("mira archivos de verdad", () => {
-    const total = RAICES.reduce((n, r) => n + archivosDe(path.join(SRC, r)).length, 0);
-    expect(total).toBeGreaterThan(20);
+    expect(archivosDe(SRC).length).toBeGreaterThan(20);
+  });
+
+  /**
+   * Ancla contra la regresión exacta del 2026-09-04: el recorrido llega a
+   * `app/v1`, que estuvo entero fuera de vigilancia con 17 montos a mano.
+   * Sin este caso, volver a poner una lista de carpetas dejaría el gate en
+   * verde midiendo menos superficie de la que dice cuidar.
+   */
+  it("cubre todo el árbol, no una lista de carpetas elegidas", () => {
+    const vistos = archivosDe(SRC).map((f) => path.relative(SRC, f));
+    for (const rama of ["app/(sitio)/", "app/v1/", "content/", "lib/"]) {
+      expect(
+        vistos.some((f) => f.startsWith(rama)),
+        `El recorrido no llega a "${rama}". Los sujetos se derivan de \`src/\` ` +
+          `entero justamente para que una carpeta nueva nazca cubierta: si hace ` +
+          `falta dejar algo afuera, va en EXENTOS con su motivo, a la vista.`,
+      ).toBe(true);
+    }
   });
 });

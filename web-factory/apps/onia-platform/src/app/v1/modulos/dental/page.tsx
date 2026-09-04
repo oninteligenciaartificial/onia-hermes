@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { PressableCta, Reveal, SplitTextReveal, StaggerGrid, StaggerItem } from "@/motion";
 import { APP_URL, WA_URL_LANDING } from "@/lib/site";
+import { bs, plan } from "@/lib/pricing";
 
 const SITE_URL = "https://onia.com.bo";
 const REGISTRO_URL = `${APP_URL}/register`;
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(`${SITE_URL}/`),
   title: "Software para clínicas dentales en Bolivia — Onia Platform",
   description:
-    "Agenda, ficha del paciente con odontograma, recordatorios automáticos, caja, contabilidad con IVA/IT y agentes con IA que recuperan pacientes. Desde Bs 320/mes, 14 días gratis.",
+    `Agenda, ficha del paciente con odontograma, recordatorios automáticos, caja, contabilidad con IVA/IT y agentes con IA que recuperan pacientes. Desde Bs ${bs(plan("basico").mensual)}/mes, 14 días gratis.`,
   alternates: { canonical: "/modulos/dental" },
   openGraph: {
     type: "website",
@@ -65,7 +66,7 @@ const MODULOS = [
 const FAQ_DENTAL = [
   {
     q: "¿Sirve para un consultorio de un solo profesional?",
-    a: "Sí — el plan Básico (Bs 320/mes) está pensado exactamente para eso: agenda, pacientes y cobros ordenados, hasta 300 pacientes activos.",
+    a: `Sí — el plan ${plan("basico").nombre} (Bs ${bs(plan("basico").mensual)}/mes) está pensado exactamente para eso: agenda, pacientes y cobros ordenados, hasta 300 pacientes activos.`,
   },
   {
     q: "¿Puedo migrar mis pacientes desde Excel?",

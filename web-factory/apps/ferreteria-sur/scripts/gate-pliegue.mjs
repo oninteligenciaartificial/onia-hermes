@@ -28,9 +28,17 @@ const PORT = Number(process.env.PORT_GATE || 4352);
 
 // Alturas de laptop y de teléfono reales. 1440x900 va aunque la geometría le
 // sobre: es la que atrapó el bug de opacidad.
+//
+// 1366x768 y 1280x720 se agregaron el 2026-09-04: son las dos laptops más
+// comunes, y son ANCHAS Y BAJAS. Ese es justo el par que el titular no miraba
+// — su `clamp` escala con `vw`, así que les daba la tipografía MÁS grande en
+// las pantallas con MENOS alto. Medido antes del arreglo: el CTA caía 14px
+// bajo el pliegue a 1366x768 y 59px a 1280x720, con el padding ya en su piso.
 const VIEWPORTS = [
   [1440, 800],
   [1440, 900],
+  [1366, 768],
+  [1280, 720],
   [390, 844],
 ];
 
