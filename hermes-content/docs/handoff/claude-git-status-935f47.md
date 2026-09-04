@@ -45,8 +45,20 @@ Verificado en vivo: login 200 · panel 200 · configuración 200 · «Administra
    y se puede reanudar con `Workflow({scriptPath, resumeFromRunId: "wf_c19be55b-a26"})`.
 3. **`fix/venta-honesta`** (`onia-hermes`, pusheada, **sin mergear**). Saca la promesa de factura
    del SIN de diez lugares y baja el bot a add-on. **Bloquea escribirle a los leads.**
-4. **Recorrido del dueño nuevo en producción** (registro → cliente → cita → cobro → contabilidad):
-   agente en vuelo al cerrar. Sin resultado registrado.
+4. **Recorrido del dueño nuevo en producción** — ✅ **terminado, y es lo más caro del día.**
+   Con cuenta nueva de rubro **Servicios**, cada pantalla mirada: **un dueño solo NO puede hacer
+   lo que su propia alta le promete.** No hay pantalla de clientes (única puerta: Caja → Fiado,
+   6 clics, y ese cliente no aparece en la cita); la cita abre con **0 opciones** y frena con un
+   globo del navegador **en inglés**; **no hay recibo** (`/print/invoice` cuelga de `/billing`,
+   que el rubro no tiene); cobrar un servicio exige **inventar stock** (422) y el **SKU es
+   obligatorio sin estar marcado**. Y `/register` le promete textual «Agenda, citas, cobros y
+   contabilidad» — `lib/platform/vertical-pack.ts:361` no tiene entrada de clientes y el modal
+   lee `/api/patients`.
+   **Sí funciona solo:** registrarse (el correo sale) → cargar un servicio → cobrar en efectivo →
+   verlo en Contabilidad con IVA 13 % e IT 3 % y CSV. Fechas propias en La Paz; ningún icono como
+   texto. Limpieza verificada: 0 filas `zz-qa-%`; quedan las 5 orgs reales intactas.
+   ⚠️ **El instrumento miente:** `scripts/recorrido_cliente.mjs` canta «paso 3 ROTO» sobre un
+   flujo sano — saca la foto mientras el botón dice «Creando cuenta…». Falso rojo suyo.
 
 ### Archivos que importan para retomar
 - `app/(dashboard)/dashboard/panel-hoy.tsx` — presentación pura, sin Prisma ni Date. Es el contrato
@@ -84,6 +96,9 @@ Verificado en vivo: login 200 · panel 200 · configuración 200 · «Administra
 4. Decisión: bajar «Facturación» del menú principal (hoy es tracción antes del 1-oct).
 
 ### Próximos pasos, en orden
+0. 🔴 **Servicios y comercio: o entregan lo que el alta promete, o el alta deja de prometerlo.**
+   Es lo primero, antes que el panel y antes que escribirle a nadie. *Listo* = el recorrido
+   completo se puede hacer solo en el rubro, o la tarjeta de `/register` dice la verdad.
 1. **Confirmar si el port de comercio sobrevivió.** `git -C <worktree v1-panel> log` — si no hay
    commits nuevos sobre `110a15c`, relanzar el workflow guardado. *Listo* = comercio en tres
    renglones, capturas miradas, gates verdes.
