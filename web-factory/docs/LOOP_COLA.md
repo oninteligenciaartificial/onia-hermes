@@ -138,7 +138,7 @@ Las tres formas de fantasma que ya aparecieron acá:
       **Hecho cuando**: Sergio ve las dos versiones del botón lado a lado y elige, o se decide
       dejarlo como está y el aviso del gate se convierte en excepción declarada con su motivo.
 
-- [ ] **La ferretería pesa 192 kB de First Load contra un presupuesto de 150.**
+- [x] **La ferretería pesa 192 kB de First Load contra un presupuesto de 150.**
       También anotado por A3 al cerrar y nunca convertido en línea. Es el sitio de un negocio
       en Bolivia: lo abre un cliente con datos móviles.
       **Evidencia**: `web-factory/apps/ferreteria-sur/package.json` carga `motion` y `gsap`
@@ -152,6 +152,29 @@ Las tres formas de fantasma que ya aparecieron acá:
       (`motion` + `gsap`) y el mismo consumidor único, así que el arreglo es el mismo dos veces
       y este ítem cubre las dos apps. El piso compartido son 102 kB, o sea que lo propio de cada
       página son 90 kB (ferretería) y 85 kB (dental): el recorte tiene que salir de ahí.
+      ✅ **CERRADO el 2026-09-03. Ferretería 192 → 148 kB, dental 187 → 143 kB.**
+      La causa era una sola y la misma en las dos, y **no era `motion`**: `gsap` +
+      `ScrollTrigger` importados **estáticamente** arriba del módulo, cuando su único uso vive
+      dentro de un `useEffect` que corre después de montar y que con reduced-motion no corre
+      nunca. Pasaron a `import()` dinámico (`ferreteria-sur/src/components/secciones.tsx`
+      → `HeroFondo`, `dental-premium/src/components/HeroScene.tsx`), con guarda de desmontaje
+      para no registrar el trigger sobre un nodo que ya no existe. **La animación no se tocó.**
+      **Evidencia** — `npm run gate:peso` en cada app:
+      `✓ / — First Load JS 148 kB / 150 kB` y `✓ / — First Load JS 143 kB / 150 kB`.
+      Miradas renderizadas a 1440x900 y 390x844, hero y después de scrollear, cero recursos
+      caídos. El resto de los gates que ya existían siguen verdes (pliegue en las dos,
+      contraste en la dental con sus 3 avisos de siempre, que son el ítem del ghost).
+      ⚠️ **El gate del peso solo NO alcanzaba, y por eso hay dos.** Habría dado el mismo verde
+      si en vez de mover GSAP lo hubiera **borrado**, o si el chunk dinámico fallara al bajar
+      —fallo mudo: la página se ve entera y el fondo se queda quieto—. Va con
+      `npm run gate:parallax`, que mide que las capas **se movieron de verdad** tras el scroll
+      y que con reduced-motion **no** se mueven. Falsificado bloqueando los chunks reales de
+      GSAP (`608.*`, `e809d3ec.*`): el de peso quedó VERDE y el de parallax se puso ROJO.
+      Los dos quedan cableados en el `npm run gates` de cada app.
+      📌 **Queda con poco aire: 148/150 en la ferretería.** Cualquier dependencia nueva en el
+      bundle inicial la vuelve a pasar — la diferencia es que ahora el gate lo dice en vez de
+      que se descubra medio año después. El siguiente recorte, si hace falta, sale de
+      `motion/react` (`LazyMotion` + `m` en lugar de `motion`), que es lo que queda arriba.
 
 - [ ] **La primitiva de hover-lift existe, está documentada, y no la usa ni un bloque.**
       T34 se cerró como fantasma con esta frase adentro: *"lo que SÍ falta y no es esto:
