@@ -423,6 +423,36 @@ const SHAS_SIN_REPO_A_PROPOSITO = new Map([
   ['e46e9ee', 'idem 6edfab6'],
 ]);
 
+// Un sha256 de ARCHIVO no es un commit, y por FORMA son indistinguibles: los dos son hex.
+// Esta cola compara el PDF que sirve onia.com.bo contra el del repo y cita los digest
+// recortados a 12 — `ca8d30d02976` es el sha256 del PDF de HUMO (comprobado con `sha256sum`),
+// no un commit. El gate lo marcaba como commit fantasma en CADA corrida: quedaba ROJO DE
+// FABRICA con 6 errores, que es el anti-patron que este mismo archivo documenta tres veces
+// (un rojo permanente se deja de mirar, y tapa los fantasmas de verdad — el 04-sep llego a
+// esconder una ruta rota real, el `handoffs/` que era `handoff/`).
+//
+// Se resuelve por CONTEXTO, no agregando constantes a la lista de arriba: se toman los tokens
+// que el PROPIO documento etiqueta como sha256 y se eximen en todo el archivo. Asi el dia que
+// se compare otro PDF, su digest nace exento y nadie vuelve a tocar el gate — una lista de
+// magias habria que ampliarla en cada comparacion, y el gate volveria a rojo cada vez.
+//
+// Se exime documento-wide y no solo en la linea que dice "sha256" porque el mismo digest se
+// cita despues sin repetir la palabra (la cola lo hace en la linea 96 y en la 100).
+// Limite conocido y aceptado: un commit REALMENTE fantasma citado en una linea que ademas
+// hable de sha256 pasaria colado. Es angosto, y el riesgo al reves —el gate rojo para siempre—
+// ya se cobro una ruta rota.
+const DIGEST_HEX = /\b[0-9a-f]{7,40}\b/g;
+function digestsDeArchivo(texto) {
+  const fuera = new Set();
+  for (const linea of String(texto).split('\n')) {
+    if (!/sha ?256/i.test(linea)) continue;
+    for (const t of linea.match(DIGEST_HEX) || []) {
+      if (/[0-9]/.test(t) && /[a-f]/.test(t)) fuera.add(t);
+    }
+  }
+  return fuera;
+}
+
 // Los repos donde puede vivir un sha citado. Mismo paseo por los padres que `existeEnAlgunRepo`:
 // la cola de producto cita commits de `onia-platform` y se escribe en `onia-hermes`.
 function reposGit(baseDir) {
@@ -566,6 +596,11 @@ function revisarCola(texto, baseDir = process.cwd(), resolverShas = null) {
     return { problemas, items };
   }
 
+  // Los digest de archivo que el documento etiqueta como sha256: no son commits y no se les
+  // pregunta a git. Se calcula sobre el texto ENTERO, no sobre "## Ahora", porque la etiqueta
+  // y la cita del mismo digest suelen vivir en items distintos.
+  const digestsArchivo = digestsDeArchivo(texto);
+
   // Todos los shas de la seccion, en UNA sola pasada de git. Se resuelven antes del bucle para
   // no pagar un proceso por item.
   const shasPorItem = items.map((it) => evidenciaDe(it.texto).shas);
@@ -617,7 +652,7 @@ function revisarCola(texto, baseDir = process.cwd(), resolverShas = null) {
 
     // La otra mitad: el commit citado como prueba de que el trabajo llego tiene que EXISTIR.
     for (const sha of shasPorItem[i]) {
-      if (shasVivos.has(sha) || SHAS_SIN_REPO_A_PROPOSITO.has(sha)) continue;
+      if (shasVivos.has(sha) || SHAS_SIN_REPO_A_PROPOSITO.has(sha) || digestsArchivo.has(sha)) continue;
       problemas.push({
         regla: 'sha-fantasma', linea: it.linea,
         msg: `"${it.texto.slice(0, 50)}" cita el commit ${sha} y no existe en ningun repo: o esta mal escrito, o es el sha local de una rama que se squasheo (cita el del merge)`,
@@ -1106,6 +1141,26 @@ function selfCheck() {
   // empieza a resolver, la excusa vencio.
   r = revisarCola(conSha('6edfab6'), tmp, gitFalso(['6edfab6']));
   ok(r.problemas.some((p) => p.regla === 'excepcion-sha-vencida'), 'una excepcion de sha que ya resuelve se marca');
+
+  // Un sha256 de ARCHIVO no es un commit. La cola compara el PDF servido contra el del repo;
+  // sin esto el gate salia rojo de fabrica sobre `ca8d30d02976`, que es el digest del PDF.
+  r = revisarCola(
+    '## Ahora\n- [ ] Medido por sha256 · `existe.png` · el repo tiene `ca8d30d02976`\n',
+    tmp, gitFalso([]));
+  ok(!r.problemas.some((p) => p.regla === 'sha-fantasma'), 'un digest etiquetado sha256 no se marca');
+
+  // Y se exime en TODO el documento: el mismo digest se vuelve a citar mas abajo sin repetir
+  // la palabra "sha256". Si la exencion fuera por linea, esta segunda cita saldria roja.
+  r = revisarCola(
+    '## Ahora\n- [ ] Medido por sha256 · `existe.png` · repo `ca8d30d02976`\n'
+    + '- [ ] La web sigue sirviendo el viejo · `existe.png` · `ca8d30d02976`\n',
+    tmp, gitFalso([]));
+  ok(!r.problemas.some((p) => p.regla === 'sha-fantasma'), 'el digest se exime en todo el documento, no solo en su linea');
+
+  // Control negativo, el que impide que esto se coma los fantasmas de verdad: SIN la etiqueta
+  // sha256 en el documento, el mismo token sigue siendo un commit y sigue saliendo rojo.
+  r = revisarCola(conSha('ca8d30d02976'), tmp, gitFalso([]));
+  ok(r.problemas.some((p) => p.regla === 'sha-fantasma'), 'sin la etiqueta sha256, el mismo token sigue marcandose');
 
   // Una palabra hexadecimal NO es un commit. Sin pedir un digito, `defaced` y `facade` entran
   // como sha y el gate inventa fantasmas sobre prosa.

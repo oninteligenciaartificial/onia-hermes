@@ -57,7 +57,7 @@
       "activa": false,
       "publicado": true,
       "_verificado": "2026-08-28: 200, 56.400 bytes",
-      "_falta": "cargar la palabra FACTURA en el mapa de @oniahq. El recurso ya esta vivo; falta solo el circuito."
+      "_falta": "NADA que cargar hoy, y es al reves de lo que decia. Este campo pedia 'cargar la palabra FACTURA en el mapa de @oniahq' y sostuvo un item abierto en la cola de contenido sin que nadie cruzara la palabra contra las piezas. Medido el 2026-09-04 barriendo el CTA de todas (briefs de Lucia + hermes-content/carousels/): FACTURA aparece como llamada a comentar en CERO piezas — sus dos unicas apariciones (lucia-p3-tres-sistemas, lucia-p2-martes-10) son la palabra comun dentro del caption ('la factura en otro lado', 'el sistema factura solo'). Cablearla seria encender un circuito que nadie dispara. Se carga el dia que una pieza pida comentarla de verdad, y recien ahi — la regla es que la palabra no se escribe en una pieza antes de estar cableada, no al reves."
     },
     "STACK": {
       "promete": "la lista con los links y lo que cuesta cada uno",
