@@ -32,6 +32,8 @@ const PORT = Number(process.env.PORT_GATE || 4354);
 const VIEWPORTS = [
   [1440, 800],
   [1440, 900],
+  [1366, 768],
+  [1280, 720],
   [390, 844],
 ];
 

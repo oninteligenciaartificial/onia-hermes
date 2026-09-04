@@ -105,7 +105,7 @@ Las tres formas de fantasma que ya aparecieron acá:
 > **Cada ítem trae su evidencia re-verificada el 2026-09-01** — y cinco de los siete
 > estaban escritos DENTRO de ítems ya cerrados, donde ningún loop los iba a ver.
 
-- [ ] **El CTA del hero de la ferretería tampoco entra a 1366×768: le faltan 14 px.**
+- [x] **El CTA del hero de la ferretería tampoco entra a 1366×768: le faltan 14 px.**
       Sale de cerrar A10 (abajo): con el arreglo del pliegue, 1440×800 pasó a sobrar 18 px y
       1366×768 quedó a **−14 px**. No estaba en el criterio de A10 (que pedía 1440×800,
       1440×900 y 390×844) y se mide aparte para no dar por cerrado algo que no lo está.
@@ -122,21 +122,43 @@ Las tres formas de fantasma que ya aparecieron acá:
       titular en TODAS las pantallas, y eso es de los que Sergio mira renderizado antes.
       **Hecho cuando**: `npm run gate:pliegue` pasa con 1366×768 agregado a `VIEWPORTS`, y la
       captura del titular nuevo a 1440 mirada y aprobada.
-
-- [ ] **El contorno del ghost sobre papel claro mide 1,27:1 y el piso de un control es 3.**
-      Lo encontró el gate de contraste nuevo al medir TODOS los `.btn` de la página, no sólo el
-      del hero. **No es el mismo defecto que el del hero y por eso no se arregló con él**: acá el
-      texto se lee perfecto (14,74:1, tinta oscura sobre papel), lo que casi no se ve es la
-      píldora que lo rodea — el botón se identifica igual por su texto.
-      **Evidencia** (2026-09-03, bundle de producción, las tres pantallas): «Pedir presupuesto»
-      de `.closer` da `borde 1.27:1 (piso 3) sobre #f8f5ef`. Sale impreso como aviso en cada
-      corrida de `npm run gate:contraste` — no está escondido.
-      **Por qué NO lo cerré solo**: subir el borde de `--line` (tinta al 12 %) hasta 3:1 exige
-      llevarlo a ~55 % de tinta, y eso **cambia cómo se ve el botón en toda la superficie clara**.
-      Es un cambio visible de dirección, no un arreglo de defecto — y un rediseño se muestra
-      renderizado y espera el OK sobre ESA pieza (2026-08-20).
-      **Hecho cuando**: Sergio ve las dos versiones del botón lado a lado y elige, o se decide
-      dejarlo como está y el aviso del gate se convierte en excepción declarada con su motivo.
+      ✅ **CERRADO el 2026-09-04 — y NO hubo que decidir tipografía: no era el tope, era que
+      el titular no miraba el alto.** El ítem daba por única salida bajar `--t-mega`, que sí
+      habría cambiado todas las pantallas. La causa real es la misma que el propio archivo ya
+      tenía escrita ocho líneas más arriba para el *padding* (`site.css:64-72`): **escalaba
+      sólo con el ancho** (`6.2vw`), así que gastaba su máximo de 6rem justo en la laptop
+      **ancha y baja**. El arreglo del 2026-09-03 corrigió el padding y **no viajó al
+      titular**, que arrastraba idéntico defecto.
+      **El arreglo** (`ferreteria-sur/src/app/site.css`, `.hero-title`):
+      `font-size: min(var(--t-mega), 11svh)`. El `min()` sólo puede **restar**, y recién por
+      debajo de ~873 px de viewport — **a 1440×900, la pantalla con la que se afinó el tope de
+      6rem, el titular sigue midiendo 451 px con `font-size: 96px`, idéntico al byte**, y
+      390×844 tampoco se mueve. Por eso no es un cambio de dirección visual y no necesitó OK.
+      **Evidencia** — el gate en ROJO primero, por el motivo correcto:
+      `✗ 1366x768: cae 14px BAJO el pliegue` · `✗ 1280x720: cae 59px BAJO el pliegue · algo lo
+      tapa: no es clickeable` (×2, con y sin reduced-motion). Después: **10/10 verdes**,
+      1366×768 sobran 40 px y 1280×720 sobran 166 px.
+      ⚠️ **1280×720 no estaba en la cola y estaba PEOR**: 59 px abajo y el botón **ni siquiera
+      era alcanzable**. Salió porque el gate se amplió a las dos laptops comunes en vez de sólo
+      a la que decía el ítem. Las dos quedan en `VIEWPORTS` **de las dos apps** — la dental ya
+      pasaba ambas (su hero es otro), pero ahora está **cubierta**, que es lo que faltaba.
+      **Mirado renderizado** a 1366×768, 1440×900 y 1280×720, sin recursos caídos: el titular
+      re-fluye a 3 líneas en 1280×720 con el resaltado naranja de «ARREGLAR» intacto.
+      🔧 **De paso, y porque bloqueaba verificar lo anterior: `npm run gates` no podía correr
+      entero en NINGUNA de las dos apps.** `gate:peso` corre un `next build` para leer el First
+      Load, ese build rehace `.next/standalone` en limpio, y `next build` **no copia**
+      `.next/static` ni `public/` ahí dentro (paso manual conocido de Next). Así que el
+      `gate:pliegue` siguiente moría con *"Falta .next/static"* — la cadena que protege la app
+      **fallaba en el medio, y con cara de defecto del sitio en vez de del arnés**.
+      Va `scripts/completar-standalone.mjs` en las dos apps, enganchado como **`postbuild`** (para
+      que valga por cualquier camino) y detrás de `gate:peso` (que llama `npx next build`
+      directo y por eso se saltea los hooks de npm). `deploy-web-cliente.sh` ya hacía esta copia
+      al publicar (líneas 65-66), así que **el deploy nunca estuvo roto por esto**: lo que estaba
+      roto era la verificación local, y de yapa `npm run build` ahora deja el standalone
+      servible solo.
+      **Evidencia**: `npm run gates` **exit 0 de punta a punta en las dos**, por primera vez —
+      ferretería `First Load 148 kB/150` + pliegue 10/10 + parallax vivo; dental + contraste con
+      sus 3 avisos de siempre (son el ítem del ghost de acá abajo, que sigue sin tocarse).
 
 - [x] **La ferretería pesa 192 kB de First Load contra un presupuesto de 150.**
       También anotado por A3 al cerrar y nunca convertido en línea. Es el sitio de un negocio
@@ -303,6 +325,26 @@ Las tres formas de fantasma que ya aparecieron acá:
       plataforma, que sigue siendo otro carril: se propone y se coordina, no se toca desde acá.
 
 ---
+
+- [ ] **El contorno del ghost sobre papel claro mide 1,27:1 y el piso de un control es 3.**
+      Lo encontró el gate de contraste nuevo al medir TODOS los `.btn` de la página, no sólo el
+      del hero. **No es el mismo defecto que el del hero y por eso no se arregló con él**: acá el
+      texto se lee perfecto (14,74:1, tinta oscura sobre papel), lo que casi no se ve es la
+      píldora que lo rodea — el botón se identifica igual por su texto.
+      **Evidencia** (2026-09-03, bundle de producción, las tres pantallas): «Pedir presupuesto»
+      de `.closer` da `borde 1.27:1 (piso 3) sobre #f8f5ef`. Sale impreso como aviso en cada
+      corrida de `npm run gate:contraste` — no está escondido.
+      **Por qué NO lo cerré solo**: subir el borde de `--line` (tinta al 12 %) hasta 3:1 exige
+      llevarlo a ~55 % de tinta, y eso **cambia cómo se ve el botón en toda la superficie clara**.
+      Es un cambio visible de dirección, no un arreglo de defecto — y un rediseño se muestra
+      renderizado y espera el OK sobre ESA pieza (2026-08-20).
+      **Hecho cuando**: Sergio ve las dos versiones del botón lado a lado y elige, o se decide
+      dejarlo como está y el aviso del gate se convierte en excepción declarada con su motivo.
+      📌 **Movido a Bloqueado el 2026-09-04.** No es un ítem trabajable: su propio "hecho
+      cuando" pide que Sergio elija entre dos versiones del botón. Estaba en `## Ahora`, así
+      que cada vuelta lo volvía a medir y a descartar — el desperdicio que la regla del
+      2026-09-03 prohíbe. Sigue saliendo como **aviso** (no rojo) en cada `gate:contraste` de
+      la dental, así que no se pierde de vista. **Nada que hacer hasta que él decida.**
 
 ## Cerrado — carril A (build)
 

@@ -6,10 +6,11 @@
     "dev": "next dev",
     "prebuild": "tsc --noEmit",
     "build": "next build",
+    "postbuild": "node scripts/completar-standalone.mjs",
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "gate:pliegue": "node scripts/gate-pliegue.mjs",
-    "gate:peso": "node scripts/gate-peso.mjs",
+    "gate:peso": "node scripts/gate-peso.mjs && node scripts/completar-standalone.mjs",
     "gate:parallax": "node scripts/gate-parallax.mjs",
     "gates": "npm run typecheck && npm run gate:peso && npm run gate:pliegue && npm run gate:parallax"
   },
