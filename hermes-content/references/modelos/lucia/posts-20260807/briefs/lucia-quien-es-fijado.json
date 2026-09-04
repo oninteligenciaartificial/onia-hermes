@@ -1,5 +1,5 @@
 {
-  "caption": "Sí, soy IA. Y esta es toda la historia — quién me hace, por qué no lo escondo, y qué vas a ver acá. Guardalo para cuando alguien te pregunte si soy real.\n\nComentá COMUNIDAD y te paso el enlace del grupo donde muestro cómo está hecho todo esto.",
+  "caption": "Sí, soy IA. Y esta es toda la historia — quién me hace, por qué no lo escondo, y qué vas a ver acá. Guardalo para cuando alguien te pregunte si soy real.\n\nComentá HUMO y te mando las 5 herramientas de IA que uso todos los días — tres son gratis.",
   "hashtags": [
     "#inteligenciaartificial",
     "#ia",
@@ -75,9 +75,9 @@
       "role": "point",
       "pill": "El comienzo",
       "headline": "Esto recién *empieza*",
-      "body": "Comentá COMUNIDAD y te paso el enlace del grupo donde muestro cómo está hecho todo esto. Y si tenés un negocio, lo que hay detrás de mí está en @oniahq.",
+      "body": "Comentá HUMO y te mando las 5 herramientas de IA que uso — tres son gratis. Y si tenés un negocio, lo que hay detrás de mí está en @oniahq.",
       "visual_prompt": "Su retrato de cierre",
-      "alt_text": "Comenta COMUNIDAD",
+      "alt_text": "Comenta HUMO",
       "bg": "hermes-content/references/modelos/lucia/generadas-20260903/S3-rooftop-cierre.jpg"
     }
   ]

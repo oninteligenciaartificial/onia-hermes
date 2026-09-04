@@ -241,3 +241,30 @@ tapada** que antes por la cuarta línea, así que la casilla 4 no empeora.
 **Lo que deja como regla:** `RUBRICA-IMPOLUTO.md` pasa a tener **11 casillas** — la 11 pregunta
 *«¿la pieza pide UNA acción, y es la palabra clave?»*. Las diez primeras preguntan si está bien
 hecho; ninguna preguntaba si sirve para algo.
+
+---
+
+## 2026-09-04 05:30 UTC — la palabra que puse hace 2 h no existía (0 créditos)
+
+La entrada de arriba dejó la lámina 7 pidiendo `COMUNIDAD`. **Esa palabra no está cableada.**
+Medido en el workflow activo de n8n (`Comentario IG -> DM`, id `1jS4jwmNmvcQpqqH`): la cuenta
+`lucia` sólo responde `SISTEMA` y `HUMO`. Quien comentara `COMUNIDAD` habría caído en
+`sin_palabra_clave` y **no habría recibido nada** — en la pieza fijada del perfil, que es la que
+más comentarios recibe.
+
+**Corregido a `HUMO`**, que entrega un recurso real: el PDF de las 5 herramientas de IA
+(`https://onia.com.bo/recursos/5-herramientas-ia-bolivia.pdf` — verificado en vivo: **200,
+306.319 B**). Encaja con el cierre «esto recién empieza»: la pieza cuenta quién es Lucía y el
+lector se va con algo en la mano.
+
+| Lámina | Decía (03:39) | Dice ahora (05:30) |
+|---|---|---|
+| 7 (body) | «Comentá **COMUNIDAD** y te paso el enlace del grupo donde muestro cómo está hecho todo esto.» | «Comentá **HUMO** y te mando las 5 herramientas de IA que uso — tres son gratis.» |
+| caption | idem COMUNIDAD | «Comentá **HUMO** y te mando las 5 herramientas de IA que uso todos los días — tres son gratis.» |
+
+**Sexta confirmación de que el render es determinista:** de las 7, sólo cambió `slide-07.jpg`.
+
+**Lo que deja:** `COMUNIDAD` sigue siendo lo que Sergio quiere, y para eso hay que cablearla —
+necesita el enlace del grupo (sólo lo tiene él) y una edición del workflow, que es de otro carril.
+Queda pedido en el tablero. La casilla 11 de la rúbrica se corrigió: no pregunta si la pieza dice
+una palabra, pregunta si esa palabra **responde hoy**, con el comando para medirlo.
