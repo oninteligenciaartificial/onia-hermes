@@ -26,13 +26,14 @@
 | 8 | **Colores true-to-life** | ¿Los verdes son verdes de Santa Cruz o verdes de filtro? | El teal-and-orange marca la pieza como IA de 2023 |
 | 9 | **La cara aguanta el clip entero** | Video: 4 frames (inicio, ⅓, ⅔, final). La cara está en los 4 | El defecto de `V04`: se da vuelta en el segundo 5 y pierde la cara |
 | 10 | **El copy no afirma nada que no exista** | Leer CADA línea de texto preguntando «¿esto es verdad hoy?». Cazar sobre todo el plural que infla: *equipo, nuestros clientes, cientos de, ya confían* | Es la única casilla que no se ve mirando la imagen — y la que puede publicar una mentira sobre la empresa en una pieza 9/9 |
+| 11 | **El copy PIDE algo, y la palabra exacta** | Leer la **última** lámina: ¿pide una acción concreta y nombrable? La pieza de Lucía cierra pidiendo comentar **COMUNIDAD** | Una pieza que no pide nada gasta la atención que costó ganar. Y un «comentá» sin la palabra clave no se puede automatizar: nadie recibe el enlace |
 
 ## Cómo se puntúa
 
 ```
-IMPOLUTA  10/10  -> va al calendario, se anota en el LEEME
-CASI       9/10  -> se anota QUE casilla fallo y se regenera cambiando UNA variable
-ROTA      <9/10  -> se anota el defecto y NO se regenera igual: se cambia la receta
+IMPOLUTA  11/11  -> va al calendario, se anota en el LEEME
+CASI      10/11  -> se anota QUE casilla fallo y se regenera cambiando UNA variable
+ROTA      <10/11 -> se anota el defecto y NO se regenera igual: se cambia la receta
 ```
 
 ## 🔴 Por qué existe la casilla 10 (2026-09-03)
@@ -78,6 +79,36 @@ párrafo de abajo. Al corregir una lámina se re-lee **entera**, no la línea qu
 🔴 **Una casilla fallada se anota SIEMPRE**, aunque la pieza se descarte. El valor de la ventana
 no son las piezas: es **saber qué variable del prompt causa cada defecto**.
 
+## 🔴 Por qué existe la casilla 11 (2026-09-04)
+
+La casilla 10 nació de que **la rúbrica sólo miraba píxeles** y aprobaba una pieza que mentía. Pero
+la 10 sólo pregunta si el copy **afirma** algo falso. Nadie preguntaba si el copy **sirve para
+algo** — y la misma pieza fijada volvió a pasar entera con el agujero.
+
+Las **7 láminas** del carrusel fijado (L2 «¿Quién es Lucía?») leídas una por una en el brief:
+**ninguna dice COMUNIDAD**. El cierre —`slide-07`, la última cosa que lee todo el que entra al
+perfil, y la pieza que queda arriba para siempre— dice:
+
+> «Seguime para ver hasta dónde llega. Y si tenés un negocio y querés lo que hay detrás de mí,
+> está todo en @oniahq.»
+
+Pide un seguimiento y nombra otra cuenta. **No pide la palabra.** Y la lámina 6 llega aún más
+cerca y falla igual: «Decime en los comentarios qué te gustaría ver acá» — pide comentar, pero
+**sin keyword**, así que el comentario no dispara nada y nadie recibe el enlace de la comunidad.
+
+Sergio lo dejó fijado como preferencia permanente: los contenidos de Lucía llevan **siempre** un
+CTA tipo **COMUNIDAD**, para que la gente comente esa palabra y se le pueda mandar el enlace. El
+propio carril ya lo tenía escrito en `generadas-20260828/CREATIVO.md`: *«Comentá COMUNIDAD y te
+muestro cómo se hace el de tu local»*. Existía la convención; **no existía la casilla**, así que
+la pieza más cara del perfil salió sin ella y ninguna auditoría la marcó.
+
+**Lo que enseña, y es el escalón siguiente de la casilla 10:** una rúbrica que sólo caza mentiras
+aprueba una pieza **honesta e inútil**. Hay que verificar las dos mitades del copy — que no
+afirme lo que no existe (10) **y** que pida lo que la pieza tiene que conseguir (11).
+
+⚠️ Se marca sobre la **última** lámina, que es justo donde la regla «se mira lo último, no lo
+primero» ya mandaba mirar. La casilla 11 la vuelve puntaje en vez de costumbre.
+
 ## La regla del experimento
 
 **Una variante cambia UNA variable.** Si se cambian dos y mejora, no se sabe cuál fue.
@@ -119,6 +150,7 @@ Variables conocidas hasta hoy:
 | 8 · Colores true-to-life | 4.5 Naturalidad |
 | 9 · La cara aguanta el clip | *sin equivalente — se mira como dice la Parte I* |
 | 10 · El copy no afirma nada falso | **Bloque 4 entero** (4.1–4.4) |
+| 11 · El copy pide algo, con la palabra | 4.6 CTA |
 
 🔴 **Dos checks de la Parte II no tienen casilla en la Parte I, y valen puntaje igual:**
 
@@ -257,6 +289,18 @@ de pieza.
 | 4.3 | No se exhibe obra | Sin "muy pronto", "beta", "en construcción" |
 | 4.4 | Vocabulario | Nada de "tus pacientes" en pieza genérica: son 7 rubros |
 | 4.5 | Naturalidad | Colores reales, sin look de filtro; velocidad real |
+| 4.6 | **CTA** | La **última** lámina pide una acción con la palabra exacta: `COMUNIDAD` |
+
+**4.6 se mide sobre el brief, no sobre el render**, porque el defecto entra por ahí y así se lee
+de una:
+
+```sh
+python3 -c "import json,sys; d=json.load(open(sys.argv[1])); \
+  s=d['slides'][-1]; print(s.get('headline','')); print(s.get('body',''))" <brief>.json | grep -c COMUNIDAD
+```
+
+`0` = la pieza no pide nada ⇒ casilla 11 ✗. Ojo: **un «comentá» sin la palabra clave cuenta como
+0** — es la trampa que dejó pasar la lámina 6 del carrusel fijado.
 
 ---
 

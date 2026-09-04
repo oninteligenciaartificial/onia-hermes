@@ -1255,3 +1255,87 @@ Soul v2 no son "lo mismo más barato": son otro trabajo. Un carril que elige por
 
 Cotizado antes con `generate cost` (2 credits) y el cobro coincidió **exacto**:
 saldo 1934,14 → 1932,14.
+
+---
+
+# P11 · La foto pasa y la pieza no: el cierre del carrusel fijado no pide nada — 2026-09-04, 0 cr
+
+Auditoría independiente del lote **`generadas-20260903`** (el más nuevo) por el carril
+`calidad-generado`. **0 créditos: no se generó nada, se miró.**
+
+## Veredicto del lote — 2 piezas, 2 veredictos
+
+| Pieza | Veredicto | Motivo |
+|---|---|---|
+| `S1-rooftop-soulv2.jpg` | ⛔ **NO PASA** (confirmado, ya estaba en §E9) | Perdió las pecas (rasgo sagrado #1) y copió la escena de la referencia. Se conserva como contraejemplo |
+| `S3-rooftop-cierre.jpg` | ✅ **PASA como foto** — pero ver abajo | Identidad, encuadre, texto y manos ✓. La **pieza compuesta** que sale de ella falla la casilla 11 |
+
+## La mano de S3, recontada aparte — y a favor del carril que la generó
+
+S3 se generó con `--image-references generadas-20260902/E2-B-rooftop.jpg`, **la foto que este
+carril y `lucia` disputaron por seis dedos**. Su casilla de manos la escribió el mismo carril que
+la generó, así que se recontó desde cero con el método de `RUBRICA-IMPOLUTO.md` §2.1a, sobre la
+**foto fuente** y no sobre la lámina:
+
+```sh
+ffmpeg -i generadas-20260903/S3-rooftop-cierre.jpg \
+  -vf "crop=250:235:358:1820,scale=1000:-1,eq=contrast=1.9:brightness=-0.06:saturation=0.3,unsharp=7:7:2.2" \
+  /tmp/s3-dedos.png
+```
+
+**Cuenta: 5.** Índice extendido a lo largo de la baranda, tres dedos colgando por debajo del
+vidrio, y el pulgar —el único con uña visible— cayendo desde el lado de la muñeca. La casilla 4
+**se confirma**: el veredicto del carril que la generó era correcto.
+
+> Se deja anotado que se recontó y **dio lo mismo**. Un carril de calidad que sólo escribe cuando
+> encuentra algo enseña a desconfiar de él cuando calla. La disputa de E2-B no se reabre: esa foto
+> ya salió del lugar caro y cerrar dos veces la misma discusión no es medir.
+
+## 🔴 El hallazgo: la pieza que se entrega no pide nada
+
+La foto pasa. **La lámina que sale de ella, no.** `slide-07.jpg` es el cierre del carrusel
+**fijado** del perfil — lo último que lee todo el que entra, en la pieza que queda arriba para
+siempre — y su copy es:
+
+> «Seguime para ver hasta dónde llega. Y si tenés un negocio y querés lo que hay detrás de mí,
+> está todo en @oniahq.»
+
+Leídas **las 7 láminas** en el brief: **ninguna dice COMUNIDAD**. La 6 llega a un centímetro y
+falla igual — «Decime en los comentarios qué te gustaría ver acá» pide comentar **sin la palabra
+clave**, así que el comentario no dispara nada y nadie recibe el enlace de la comunidad.
+
+```sh
+python3 -c "import json,sys; d=json.load(open(sys.argv[1])); s=d['slides'][-1]; \
+  print(s.get('headline','')); print(s.get('body',''))" \
+  posts-20260807/briefs/lucia-quien-es-fijado.json | grep -c COMUNIDAD
+# -> 0
+```
+
+La convención ya existía en el propio carril (`generadas-20260828/CREATIVO.md`, 3 menciones:
+*«Comentá COMUNIDAD y te muestro cómo se hace el de tu local»*). **Existía la costumbre y no
+existía la casilla**, así que la pieza más cara del perfil salió sin ella y pasó todas las
+auditorías anteriores.
+
+Arreglado en la rúbrica como **casilla 11** (`RUBRICA-IMPOLUTO.md`), con su método en 4.6. El
+arreglo del brief es del carril dueño de la carpeta, no de éste: queda pedido en el tablero.
+
+## Lo que enseña — es el escalón siguiente de la casilla 10
+
+La casilla 10 nació de que la rúbrica sólo miraba píxeles y aprobaba una pieza que **mentía**.
+Pero sólo pregunta si el copy afirma algo falso. **Una rúbrica que sólo caza mentiras aprueba una
+pieza honesta e inútil.** Las dos mitades del copy se verifican por separado: que no afirme lo
+que no existe (10) **y** que pida lo que la pieza tiene que conseguir (11).
+
+## 🔴 Y por qué esto no se vio antes: el instrumento medía un fósil
+
+El chequeo de arranque de este carril mide el lote más nuevo con `ls generadas-* | tail -1`
+**sobre su propio worktree**. El worktree estaba **310 commits detrás de `origin/main`**, así que
+devolvía `generadas-20260828` con **1 imagen** y 2 veredictos: *objetivo cumplido*. En `main`
+había **5 lotes y ~23 imágenes publicables**, incluido el lote más nuevo entero.
+
+**La medida daba verde porque no veía el trabajo, no porque estuviera hecho.** Se arregla
+mergeando `origin/main` **antes** de medir — no cambiando el comando:
+
+```sh
+git merge origin/main --no-edit && ls -d .../generadas-* | sort | tail -1
+```
