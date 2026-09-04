@@ -117,13 +117,24 @@ export function markHumanTakeover(state, atIso = null) {
  * El DESARME del takeover (bandeja nativa 2026-08-29): resolver la conversacion
  * se la devuelve al bot. Tambien resetea el handoff del recepcionista — ambos
  * candados significan "humano a cargo", y resolver significa "termine".
+ *
+ * ⚠️ "Termine" solo vale si alguien EMPEZO. Medido el 2026-09-04: la conversacion 57
+ * pidio un humano a las 14:38:10 (aviso a Sergio enviado) y 35 s despues Chatwoot la
+ * auto-resolvio sola — "marked resolved by system due to 0 minutes of inactivity" —,
+ * lo que disparaba este desarme y dejaba `chatwoot:57 | nuevo | human_took_over=f`.
+ * El handoff se borraba sin que nadie lo atendiera, y el lead que volvia recibia el
+ * saludo de cero en vez del acuse. Le paso a 8 conversaciones desde el 29-ago.
+ * Por eso el stage solo se libera cuando un humano REALMENTE escribio: si nadie lo
+ * hizo, el que resuelve es el barrendero de Chatwoot, no Sergio.
  */
 export function clearHumanTakeover(state) {
+  const loAtendioUnHumano = state.humanTookOver === true;
   return {
     ...state,
     humanTookOver: false,
     humanTookOverAt: null,
-    botStage: state.botStage === "handoff_humano" ? "nuevo" : state.botStage,
+    botStage:
+      state.botStage === "handoff_humano" && loAtendioUnHumano ? "nuevo" : state.botStage,
   };
 }
 
