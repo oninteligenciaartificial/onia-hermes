@@ -8,18 +8,24 @@ Contrato y estado del inventario: [`references/tendencias/README.md`](../../refe
 
 ## Ahora
 
-1. **Receta de gancho para ads del PRODUCTO.** Es el hueco declarado del carril: el radar
-   existente cubre sólo la marca personal de Sergio. Falta encontrar una fuente pública que
-   muestre ads reales del rubro (software de gestión / IA para pymes) sin loguearse.
+1. **Mirar la PIEZA VISUAL de los ads del rubro, no sólo su texto.** La Biblioteca de Anuncios
+   muestra el video/imagen de cada anuncio y eso todavía no se miró: la receta de gancho cubre
+   el copy y nada más. Empezar por los 6 anuncios ya identificados (los `Library ID` están en
+   la receta) — de ahí sale el punto 2.
 2. **Receta de reel**: primeros 3 segundos, cada cuántos segundos cambia el plano, y el cierre.
-   Bloqueado por lo mismo que el punto de arriba — ver *Lo que no se puede medir*.
+   **Ya no está bloqueado por falta de fuente**: los ads en video de la Biblioteca son piezas
+   del rubro que alguien está pagando hoy. Falta resolver cómo verlas (`--dump-dom` da la ficha
+   y el reproductor, todavía no se sacó el archivo de video ni se lo miró cuadro a cuadro).
 
-## Lo que no se puede medir desde acá — probado el 2026-09-02
+## Lo que se puede y no se puede medir desde acá
 
 Para que la próxima vuelta no vuelva a investigarlo desde cero:
 
 | Vía | Resultado |
 |---|---|
+| **Biblioteca de Anuncios de Meta**, chromium `--dump-dom` | ✅ **La mejor fuente que tiene el carril** (probado 2026-09-03). Pública, sin cuenta, sin login. Da texto completo del anuncio, anunciante, **fecha de alta**, estado activo y si tiene varias versiones. Comando y URLs exactas: [`gancho-ad-nombrar-la-herramienta-vieja.md`](../../references/tendencias/gancho-ad-nombrar-la-herramienta-vieja.md) |
+| Permalink de un anuncio suelto (`ads/library/?id=<Library ID>`) | ✅ Resuelve público y devuelve la ficha sola. Sirve para citar una pieza concreta y auditarla |
+| Impresiones / clics / CTR / gasto de un anuncio comercial | ❌ Meta **sólo los publica para anuncios políticos**. Lo más cercano que existe es cuánto tiempo lleva el anuncio activo — es indicio de gasto sostenido, **no** una métrica de rendimiento |
 | `curl` al embed de IG (`/p/<id>/embed/captioned/`) | **200 pero inútil**: es un shell de JS, cero datos server-side |
 | Chromium headless `--dump-dom` sobre ese mismo embed | ✅ **Funciona** — devuelve el caption completo y confirma `GraphSidecar` (es carrusel) |
 | Conteo de láminas, likes, comentarios, guardados | ❌ El embed logueado-fuera **no expone ninguna métrica**. Loguearse está prohibido |
@@ -36,6 +42,12 @@ que sí existe es el de Playwright:
 
 - ✅ **2026-09-02** — Creada `references/tendencias/` con su README (el contrato de qué es una
   receta) y la primera receta completa con fuente: `carrusel-indice-en-portada.md`.
+- ✅ **2026-09-03** — ~~Receta de gancho para ads del PRODUCTO~~. Cerrado el hueco declarado del
+  carril con `gancho-ad-nombrar-la-herramienta-vieja.md`. Lo que lo destrabó fue encontrar la
+  fuente: **la Biblioteca de Anuncios de Meta se lee entera sin cuenta**. Muestra los anuncios
+  que los competidores del rubro están pagando **ahora**, con su texto completo y su fecha de
+  alta. Leídos 89 anuncios activos en 4 búsquedas (BO y AR), 30 del rubro de Onia; 16 de esos 30
+  abren nombrando la herramienta vieja (Excel, papel, planillas sueltas) antes que el producto.
 
 ## Visto fuera de mi zona — anotado, NO tocado
 
