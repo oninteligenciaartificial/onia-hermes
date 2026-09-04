@@ -119,13 +119,24 @@ export function markHumanTakeover(state, atIso = null) {
  * candados significan "humano a cargo", y resolver significa "termine".
  *
  * ⚠️ "Termine" solo vale si alguien EMPEZO. Medido el 2026-09-04: la conversacion 57
- * pidio un humano a las 14:38:10 (aviso a Sergio enviado) y 35 s despues Chatwoot la
- * auto-resolvio sola — "marked resolved by system due to 0 minutes of inactivity" —,
- * lo que disparaba este desarme y dejaba `chatwoot:57 | nuevo | human_took_over=f`.
- * El handoff se borraba sin que nadie lo atendiera, y el lead que volvia recibia el
- * saludo de cero en vez del acuse. Le paso a 8 conversaciones desde el 29-ago.
- * Por eso el stage solo se libera cuando un humano REALMENTE escribio: si nadie lo
- * hizo, el que resuelve es el barrendero de Chatwoot, no Sergio.
+ * pidio un humano a las 14:38:10 (aviso a Sergio enviado) y 35 s despues quedo resuelta
+ * con el cartel "marked resolved by system due to 0 minutes of inactivity", lo que
+ * disparaba este desarme y dejaba `chatwoot:57 | nuevo | human_took_over=f`. El handoff
+ * se borraba sin que nadie lo atendiera, y el lead que volvia recibia el saludo de cero
+ * en vez del acuse. Le paso a 8 conversaciones desde el 29-ago.
+ *
+ * ⚠️ Ese cartel NO acusa a Chatwoot, y creerle cuesta media vuelta (paso el 2026-09-04).
+ * El barrendero por inactividad esta APAGADO: `accounts.settings` es `{}`, y sin
+ * `auto_resolve_after` los scopes `resolvable_all` / `resolvable_not_waiting`
+ * (conversation.rb:83,88) devuelven `none` — cero automation_rules, cero agent_bots,
+ * cero env. "by system ... 0 minutes" es solo la ETIQUETA que Chatwoot le pone a toda
+ * resolucion sin `Current.user` ni `Current.contact`, y el 0 sale de
+ * `auto_resolve_after || 0` (activity_message_handler.rb:76). Quien resolvia era NUESTRA
+ * sonda: scripts/sonda_widget.mjs:519 corre `Conversation.find(N).resolved!` por
+ * `rails runner` a proposito, para ejercitar este mismo desarme.
+ * Por eso configurar `auto_resolve_after` para "arreglarlo" ENCIENDE un barrendero que
+ * hoy no corre. Lo correcto es lo de abajo: el stage solo se libera cuando un humano
+ * REALMENTE escribio.
  */
 export function clearHumanTakeover(state) {
   const loAtendioUnHumano = state.humanTookOver === true;
