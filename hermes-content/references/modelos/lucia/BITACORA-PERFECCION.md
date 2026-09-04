@@ -1176,3 +1176,46 @@ Soul v2 no son "lo mismo más barato": son otro trabajo. Un carril que elige por
 
 Cotizado antes con `generate cost` (2 credits) y el cobro coincidió **exacto**:
 saldo 1934,14 → 1932,14.
+
+---
+
+# Vuelta 2026-09-03 21:40-21:50 UTC — la portada fijada, y un techo que no es el saldo
+
+## Gasto: **0 créditos**. Saldo 1932,14 antes y después.
+
+| Intento | Modelo | Cotizado | Cobrado | Qué pasó |
+|---|---|---:|---:|---|
+| Foto de reemplazo para la lámina 3 | `nano_banana_pro` 2k 9:16 | 2,00 | **0** | rechazado: `grace_daily_limit_reached` |
+
+**El rechazo por cupo diario NO cobra** — verificado en las dos puntas: `account status` da
+1932,14 antes y después, y `account transactions` no suma una línea (la última sigue siendo la
+de las 18:40). Es el mismo comportamiento ya medido para el rechazo por referencia inválida:
+**probar algo dudoso es gratis; lo que cuesta es que salga bien.**
+
+⚠️ Y el cupo diario **no es el saldo**: se agotó con **1932 créditos en la cuenta**. `generate
+cost` siguió respondiendo gratis con el `create` bloqueado, así que medir nunca cuenta contra el
+cupo. Ya estaba anotado en `TECNICA-HIGGSFIELD.md` §«límite DIARIO» — se confirma, y se respeta
+la regla: **no se reintenta en la misma vuelta**, la vuelta se cierra con la tarea de 0 créditos.
+
+## La pregunta de la vuelta: ¿la mano de la portada tiene seis dedos?
+
+**Respuesta medida: no — tiene cinco.** Pero la portada se cambió igual, y esa es la parte que
+importa.
+
+`carril-calidad` frenó el lote con «4 pliegues = 5 crestas + pulgar = 6». Recontado acá sobre la
+foto **fuente** (nunca sobre la lámina, que empasta con el velo y el texto) con cuatro
+instrumentos independientes — zoom 4x, 5x, 8x y `edgedetect` sobre la columna de dedos — los
+cuatro dan **3 pliegues = 4 crestas + pulgar = 5**. La discrepancia es de exactamente un pliegue:
+el contorno del canto de la mano por debajo del meñique se lee como una cresta más.
+
+**Lo que no se puede defender, y decide:** el dorso **no tiene ni un nudillo**, y dos auditorías
+independientes contaron distinto mirando la misma foto. Una mano que se discute no va en la
+lámina **fijada arriba del perfil**.
+
+**Regla que sale de acá:** cuando dos carriles cuentan distinto sobre la misma foto, no se gana
+la discusión — **se saca la foto del lugar más caro**. El desempate cuesta más que el
+intercambio, y el intercambio salió **0 créditos**: portada ← `E3-hotel.jpg` (sin manos en
+cuadro), y `E2-B` bajó a la lámina 3. Siguen siendo 7 fotos distintas para 7 láminas: no se
+duplicó nada.
+
+Detalle, comandos y tabla del intercambio: `posts-20260807/L2/LEEME.md`.

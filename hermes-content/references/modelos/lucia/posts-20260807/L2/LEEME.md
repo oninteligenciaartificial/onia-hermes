@@ -164,3 +164,107 @@ git ls-files <ruta>          # tiene que devolver la ruta
 ```
 
 Verificado para estas 7 el 2026-09-03: ninguna ignorada, las 7 versionadas.
+
+---
+
+## 2026-09-03 21:47 UTC — la mano en disputa sale de la PORTADA (0 créditos)
+
+`carril-calidad` frenó el lote: la portada (`slide-01`) se apoyaba en `E2-B-rooftop.jpg` y
+contó **seis dedos** en la mano que sostiene el vaso (4 pliegues = 5 crestas + pulgar).
+
+**Recontado acá sobre la foto FUENTE, no sobre la lámina** (regla del velo+texto), con cuatro
+instrumentos: zoom 4x y 5x de la columna de dedos, zoom 8x del tercio superior, y `edgedetect`
+sobre la columna completa. **Los cuatro dan 3 pliegues = 4 crestas + el pulgar = 5 dedos.**
+
+```sh
+SRC=../../generadas-20260902/E2-B-rooftop.jpg
+ffmpeg -y -i "$SRC" -vf "crop=320:660:1180:1450,scale=iw*3:ih*3,format=gray,edgedetect=low=0.06:high=0.18,negate" /tmp/edges.jpg
+```
+
+**No se resuelve la discrepancia a favor de nadie, y no hace falta**: lo que sí es indiscutible
+y se ve en todos los recortes es que **el dorso no tiene ni un nudillo**, y que dos auditorías
+independientes contaron distinto. Una mano que se discute no va en la lámina FIJADA arriba del
+perfil, que es la más mirada de la cuenta.
+
+**Lo que se hizo, sin gastar:**
+
+| Lámina | Antes | Ahora | Por qué |
+|---|---|---|---|
+| 1 · portada | `E2-B-rooftop.jpg` | **`E3-hotel.jpg`** | «la más limpia», cara muy fiel al ancla, **sin manos en cuadro** y con el tercio inferior tranquilo, que es lo que el layout necesita para el texto |
+| 3 · «No lo escondo» | `E3-hotel.jpg` | **`E2-B-rooftop.jpg`** | la mano discutida queda en una lámina interior, no en la portada |
+
+**No se duplicó ninguna foto**: siguen siendo 7 fotos distintas para 7 láminas. Es un
+intercambio, no un reemplazo — justo lo que evita repetir el defecto que se arregló en la
+lámina 7 el mismo día.
+
+De regalo arregla algo que nadie había anotado: antes la portada y la lámina 2 eran **dos tomas
+de la misma escena de rooftop** (B y A), una atrás de la otra. Ahora la portada abre en interior
+y el rooftop empieza en la 2.
+
+⚠️ **Por qué NO se reemplazó `E2-B` del todo:** requiere generar una foto nueva (2 cr,
+`nano_banana_pro`, cotizado). Se intentó y el CLI devolvió
+`grace_daily_limit_reached` — **cupo diario agotado, no error de prompt**. El rechazo **no
+cobra**: saldo 1932,14 antes y después. Queda como decisión de Sergio en `t_a9ff7367`.
+
+**Determinismo verificado:** al re-renderizar, las cinco láminas que no se tocaron salieron
+**byte a byte idénticas** (02, 04, 05, 06, 07); sólo cambiaron 01 y 03.
+
+---
+
+## 2026-09-04 03:39 UTC — la pieza fijada no pedía nada (0 créditos)
+
+El carrusel sacaba **10/10** en la rúbrica y **ninguna de las 7 láminas decía `COMUNIDAD`**. La 6
+pedía comentar sin palabra clave («decime en los comentarios qué te gustaría ver acá») y la 7
+cerraba mandando a `@oniahq`. Sin palabra no hay a quién mandarle el enlace del grupo: el que
+comenta «me encantó» no entra a ningún lado. Y ésta es la pieza que ve **todo el que entra al
+perfil**.
+
+| Lámina | Decía | Dice ahora |
+|---|---|---|
+| 6 (body) | «Porque técnicamente ya lo estás pensando. **Decime en los comentarios qué te gustaría ver acá.**» | «Porque técnicamente ya lo estás pensando.» |
+| 7 (body) | «**Seguime para ver hasta dónde llega.** Y si tenés un negocio y querés lo que hay detrás de mí, está todo en @oniahq.» | «**Comentá COMUNIDAD y te paso el enlace del grupo donde muestro cómo está hecho todo esto.** Y si tenés un negocio, lo que hay detrás de mí está en @oniahq.» |
+| caption | — | + «Comentá COMUNIDAD y te paso el enlace del grupo donde muestro cómo está hecho todo esto.» |
+
+⚠️ **Por qué se VACIÓ la 6 en vez de ponerle la palabra ahí:** dos pedidos de comentario distintos
+en la misma pieza son ninguno. La 6 se queda con la pregunta (que es su golpe) y **el único
+llamado a la acción vive en el cierre**, que es la lámina donde la gente actúa. Se comprobó
+mirando: la 6 quedó con titular de 3 líneas + una sola línea de cuerpo, más limpia que antes.
+
+**Verificado MIRANDO las dos a resolución completa**, más un recorte 2× del bloque de texto de la
+7: las 4 líneas del cuerpo entran sin desbordar, `COMUNIDAD` se lee sobre el cielo y sobre la
+manga clara, y queda aire hasta el pie `@lucia.antelo.oficial`. La mano de la 7 queda **más
+tapada** que antes por la cuarta línea, así que la casilla 4 no empeora.
+
+**Quinta confirmación de que el render es determinista:** de las 7, sólo cambiaron `slide-06.jpg`
+(1283f26e→7b614313) y `slide-07.jpg` (cb2db82d→55414430). Las otras cinco, md5 idéntico.
+
+**Lo que deja como regla:** `RUBRICA-IMPOLUTO.md` pasa a tener **11 casillas** — la 11 pregunta
+*«¿la pieza pide UNA acción, y es la palabra clave?»*. Las diez primeras preguntan si está bien
+hecho; ninguna preguntaba si sirve para algo.
+
+---
+
+## 2026-09-04 05:30 UTC — la palabra que puse hace 2 h no existía (0 créditos)
+
+La entrada de arriba dejó la lámina 7 pidiendo `COMUNIDAD`. **Esa palabra no está cableada.**
+Medido en el workflow activo de n8n (`Comentario IG -> DM`, id `1jS4jwmNmvcQpqqH`): la cuenta
+`lucia` sólo responde `SISTEMA` y `HUMO`. Quien comentara `COMUNIDAD` habría caído en
+`sin_palabra_clave` y **no habría recibido nada** — en la pieza fijada del perfil, que es la que
+más comentarios recibe.
+
+**Corregido a `HUMO`**, que entrega un recurso real: el PDF de las 5 herramientas de IA
+(`https://onia.com.bo/recursos/5-herramientas-ia-bolivia.pdf` — verificado en vivo: **200,
+306.319 B**). Encaja con el cierre «esto recién empieza»: la pieza cuenta quién es Lucía y el
+lector se va con algo en la mano.
+
+| Lámina | Decía (03:39) | Dice ahora (05:30) |
+|---|---|---|
+| 7 (body) | «Comentá **COMUNIDAD** y te paso el enlace del grupo donde muestro cómo está hecho todo esto.» | «Comentá **HUMO** y te mando las 5 herramientas de IA que uso — tres son gratis.» |
+| caption | idem COMUNIDAD | «Comentá **HUMO** y te mando las 5 herramientas de IA que uso todos los días — tres son gratis.» |
+
+**Sexta confirmación de que el render es determinista:** de las 7, sólo cambió `slide-07.jpg`.
+
+**Lo que deja:** `COMUNIDAD` sigue siendo lo que Sergio quiere, y para eso hay que cablearla —
+necesita el enlace del grupo (sólo lo tiene él) y una edición del workflow, que es de otro carril.
+Queda pedido en el tablero. La casilla 11 de la rúbrica se corrigió: no pregunta si la pieza dice
+una palabra, pregunta si esa palabra **responde hoy**, con el comando para medirlo.
