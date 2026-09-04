@@ -26,6 +26,7 @@ import {
   EMISION_CASES_SOPORTADOS,
   SERVICIO_POR_DOC_SECTOR,
   DOC_SECTOR_SIN_SOPORTE,
+  timeoutFor,
   DEFAULT_COMBO,
   comboId,
   migrateState,
@@ -938,6 +939,12 @@ describe("cada documento sector tiene su propio servicio SOAP (SIN 995)", () => 
     const r = Object.create(Runner.prototype);
     r.combo = { codigoPuntoVenta: 0, codigoDocumentoSector: 99, tipoFacturaDocumento: 1 };
     assert.throws(() => r.servicio, /sin servicio SOAP mapeado/);
+  });
+
+  it("el servicio de ajuste espera mas: tarda 36-43 s en contestar (medido en el piloto)", () => {
+    assert.ok(timeoutFor("FACTURACION_DOCUMENTO_AJUSTE") >= 60_000);
+    assert.equal(timeoutFor("FACTURACION_COMPRA_VENTA"), undefined);
+    assert.equal(timeoutFor("FACTURACION_COMPUTARIZADA"), undefined);
   });
 
   it("ya no queda ningun sector sin soporte: los 6 combos se emiten", () => {

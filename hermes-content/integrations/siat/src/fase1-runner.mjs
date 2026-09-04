@@ -154,6 +154,19 @@ const OPS_AJUSTE = {
 };
 
 /**
+ * Timeout HTTP por servicio. El de documento de ajuste tarda 36-43 s en
+ * responder CUALQUIER recepcion (medido 2026-09-04 en el piloto, hasta con un
+ * archivo basura que rechaza con 920): con el default de 30 s del transporte
+ * los 3 reintentos morian en "network" sin que el SIN llegara a contestar.
+ */
+export const TIMEOUT_MS_POR_SERVICIO = { FACTURACION_DOCUMENTO_AJUSTE: 120_000 };
+
+/** Timeout a usar para un servicio (undefined = el default del transporte). */
+export function timeoutFor(serviceKey) {
+  return TIMEOUT_MS_POR_SERVICIO[serviceKey];
+}
+
+/**
  * Sectores cuyo servicio SOAP todavia no tiene operaciones mapeadas. VACIO desde
  * 2026-09-03 (el 24 ya va por OPS_AJUSTE); el mecanismo queda para el proximo
  * sector que se sume: se marca explicito en vez de fallar con un 995 opaco.
@@ -908,6 +921,7 @@ class Runner {
       envelope,
       token: this.token,
       fetchImpl: globalThis.fetch,
+      timeoutMs: timeoutFor(serviceKey),
     });
     const parsed = result.parsed ?? {};
     this.log({
