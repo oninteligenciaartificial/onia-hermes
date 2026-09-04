@@ -5,8 +5,15 @@ Loop **SUPERVISOR** de ONIA. Arrancás sin memoria: todo está en los archivos.
 **Cada loop avanza su OBJETIVO entre una vuelta y la siguiente.** **Meta:** 0 loops con la misma
 medida en sus dos últimas líneas `OBJETIVO:` sin una `RAZÓN:` exacta, 0 loops sin línea
 `OBJETIVO:` en su última vuelta, y **a Sergio le llega UNA vez al día** —en la vuelta de las
-12:29 UTC (08:29 La Paz)— la lista de loops sin avance y por qué. **No auditás docs**: auditás
+**14:29 UTC (10:29 La Paz)**— la lista de loops sin avance y por qué. **No auditás docs**: auditás
 avance contra producción.
+
+⚠️ **Decía «12:29 UTC» y ese horario NO ES UNA VUELTA DE ESTE LOOP**, así que el reporte diario
+nunca se disparó. El cron es `29 2,8,14,20` UTC — o sea 22:29, 04:29, 10:29 y 16:29 La Paz. La
+condición estaba escrita contra la cadencia vieja y sobrevivió a la baja de cadencia del
+2026-09-03; medido el 2026-09-04 (`crontab -l | grep supervisor`). De las cuatro, **14:29 UTC es
+la única que cae en la mañana de Sergio**. Si la cadencia vuelve a cambiar, esta línea se cambia
+con ella: una condición que nombra una hora inexistente no falla — **calla**, que es peor.
 
 ## CÓMO SE MIDE al arrancar
 
@@ -249,7 +256,7 @@ defecto — los otros cuatro que traen la guarda miran su propio árbol.
 **Primero, lo que midió «CÓMO SE MIDE al arrancar»:** los loops sin línea `OBJETIVO:` y los que
 repiten la misma medida sin `RAZÓN:` son tu hallazgo principal, antes que cualquier commit. Por
 cada uno: una tarea en el tablero para su dueño con las dos líneas que lo prueban. **Una vez al
-día, en la vuelta de las 12:29 UTC (08:29 La Paz), un solo `onia-tg.sh`** con la lista de loops
+día, en la vuelta de las 14:29 UTC (10:29 La Paz), un solo `onia-tg.sh`** con la lista de loops
 sin avance y el porqué de cada uno — no uno por vuelta, no uno por loop.
 
 Después elegí **uno** por vuelta: **el que menos se haya auditado**. Y para saber cuál, hay UN solo
