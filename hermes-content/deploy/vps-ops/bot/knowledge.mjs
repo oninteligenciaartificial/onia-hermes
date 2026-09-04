@@ -651,6 +651,18 @@ function cuotaDe(raw) {
   return { agotada: raw.agotada, usadas: Number(raw.usadas) || 0, limite: Number(raw.limite) || 0 };
 }
 
+/**
+ * LA MISMA PREGUNTA PARA TODOS: ¿esta org agoto su cuota del mes?
+ *
+ * `true` = nadie le escribe. Ni el motor cuando el cliente del cliente pregunta (barrera 1b de
+ * bot-engine.mjs), ni los BARRIDOS proactivos, que hasta el 2026-09-04 seguian mandando por su
+ * cuenta: un negocio cortado por cuota igual gastaba mensajes salientes que Meta cobra, sin que
+ * nadie los pidiera. `null`/ausente = no se sabe = se atiende, igual que el motor (fail-open).
+ */
+export function cuotaAgotada(config) {
+  return config?.cuota?.agotada === true;
+}
+
 /** Igual que nextCache: un fetch fallido CONSERVA la ultima copia buena de esa org. */
 function nextOrgCache(prev, result, organizationId, nowMs) {
   if (result.data) {

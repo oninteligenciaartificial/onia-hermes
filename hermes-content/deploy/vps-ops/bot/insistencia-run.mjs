@@ -75,6 +75,16 @@ export async function runInsistenciaSweep(options = {}, deps = {}) {
       continue;
     }
 
+    // LA CUOTA VIAJA EN EL DOC DE LA ORG, no en el config del cron: este es el unico barrido
+    // multi-org, asi que mirar `config.cuota` leeria la cuota de otro negocio — o de ninguno.
+    // Se corta antes del CAS por el mismo motivo que los otros dos: la reserva es de un solo uso.
+    const cuota = estado.cuota;
+    if (cuota?.agotada === true) {
+      result.skipped.push({ key, reason: "cuota_agotada" });
+      store.warnings.push(`insistencia ${key}: cuota mensual agotada (${cuota.usadas}/${cuota.limite}) — no se insiste`);
+      continue;
+    }
+
     const politica = politicaDeSeguimiento(estado.data);
     if (!politica.activo) {
       result.skipped.push({ key, reason: "apagada_por_el_dueno" });
@@ -102,7 +112,9 @@ export async function runInsistenciaSweep(options = {}, deps = {}) {
     }
 
     const state = { channel: row.channel, contactRef: row.contact_ref };
-    const envio = await deliver(state, texto, config, deps);
+    // La cuota de ESTA org viaja al config del envio: asi la barrera de `deliver()` tambien
+    // protege a este barrido, que es el unico cuyo config de arranque no sabe de que org habla.
+    const envio = await deliver(state, texto, cuota ? { ...config, cuota } : config, deps);
     await store.insertOutbound(
       [{ templateKey: "R_SEGUIMIENTO", text: texto, messageKey: insistenciaMessageKey(key) }],
       { conversationKey: key, channel: row.channel, contactRef: row.contact_ref, outboundSeq: (row?.raw?.outboundSeq || 0) + 1 },
