@@ -29,12 +29,29 @@
  */
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, relative, sep } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { execFileSync } from 'node:child_process';
 
 const RAIZ = process.cwd();
 const OUT = process.env.RECORRIDO_OUT || join(RAIZ, 'hermes-content', 'docs', 'recorrido', 'capturas');
 const ESCRIBIR = process.argv.includes('--escribir');
+
+/**
+ * La ruta con la que se REPORTA una captura en `resumen.json`, relativa a la raíz del repo.
+ *
+ * 🔴 Acá estaba escrita a mano la carpeta de DENTAL. Con `RECORRIDO_OUT` apuntando a otro rubro
+ * la captura se GUARDABA en la carpeta del rubro y el informe la REPORTABA en la de dental —
+ * donde vive un PNG con el mismo nombre. Así que la ruta de la evidencia resolvía, se abría, y
+ * mostraba la pantalla de OTRO rubro: medido el 2026-09-04, 17 de 17 rutas de los dos rubros ya
+ * corridos (comercio y estética) apuntaban al archivo equivocado, y las 17 existían.
+ *
+ * Por eso no alcanza con chequear que el archivo exista: una prueba que abre y miente es peor
+ * que una que falta, porque nadie la vuelve a mirar. La ruta se DERIVA de dónde se guardó.
+ */
+export function rutaRelativa(out, archivo, raiz = RAIZ) {
+  return join(relative(raiz, out) || '.', archivo).split(sep).join('/');
+}
 
 const LANDING = 'https://onia.com.bo';
 const APP = 'https://app.onia.com.bo';
@@ -140,7 +157,7 @@ async function mirar(page, archivo) {
 
   const ruta = join(OUT, archivo);
   await page.screenshot({ path: ruta, fullPage: true });
-  return { captura: `hermes-content/docs/recorrido/capturas/${archivo}`, dom };
+  return { captura: rutaRelativa(OUT, archivo), dom };
 }
 
 /**
@@ -1674,7 +1691,12 @@ async function main() {
   process.exit(0);
 }
 
-main().catch((e) => {
-  console.error('el recorrido no pudo arrancar:', e.message);
-  process.exit(1);
-});
+// 🔴 El guard NO es decoración: sin él, importar este archivo para probar una función pura
+// LANZA el recorrido entero contra producción (crea cuenta, paciente y cita) y después mata al
+// proceso que lo importó con su `process.exit(0)`. Ya le pasó a otro carril con un gate suyo.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main().catch((e) => {
+    console.error('el recorrido no pudo arrancar:', e.message);
+    process.exit(1);
+  });
+}
