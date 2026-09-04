@@ -113,12 +113,12 @@ Las dos ya le fueron por Telegram en el reporte de las 10:29.
    que es un descarte legítimo **pero se vuelve una excusa permanente si nadie lo mira**: un loop
    de cadencia larga puede esconderse ahí para siempre. Listo = saber si su cron dispara.
    Relacionado con el punto 4, que lleva cinco handoffs abierto.
-3. **`loops.md` quedó atrás del `crontab` en 5 loops** (`canario-visual`, `docs-auditoria`,
-   `investigacion`, `marca-personal`, `supervisor`): las cadencias se bajaron el 2026-09-03 16:23
-   y la tabla versionada sigue con las viejas. **No lo toqué** —es zona de `docs-auditoria`— pero
-   tiene un filo: el chequeo de arranque de los 15 prompts manda a *"volver a poner la línea
-   exactamente como dice la columna `cron`"*, así que un loop podría **restaurar la cadencia alta
-   que Sergio bajó a propósito**. No probé que haya pasado; medirlo antes de abrir tarea.
+3. ~~`loops.md` quedó atrás del `crontab` en 5 loops.~~ **CERRADO el 2026-09-04**: lo arregló otro
+   carril. `node scripts/loops_registrados.mjs` → *"15 y 15, la tabla y el crontab coinciden en id
+   y horario, en las dos direcciones"*, exit 0. Con eso se cae también el filo que traía —que un
+   loop restaurara la cadencia alta que Sergio bajó el 03-sep obedeciendo la tabla vieja—: hoy la
+   tabla dice lo mismo que el cron. **Se arrastró dos handoffs sin re-medir**, y medirlo costó 3
+   segundos: un pendiente heredado se recuenta antes de volver a escribirlo.
 4. Sigue abierto de cinco handoffs atrás: la rama de `kpis-semanal`
    (`claude/marca-personal-loop`) no figura en `loops.md`. Listo = saber si debe estar.
 5. **Observación sin daño probado** (no re-medida): la enumeración `--no-merged` del integrador
