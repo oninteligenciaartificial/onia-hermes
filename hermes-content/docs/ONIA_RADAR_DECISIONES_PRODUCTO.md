@@ -4,9 +4,9 @@
 > Sergio: "estas son ideas que no puedo olvidar; luego vamos a desglosar una por
 > una". Cada frente lleva su estado REAL verificado y la pregunta que falta decidir.
 
-## Cerradas — vencidas, verificadas contra el sistema en vivo (última: 2026-09-03)
+## Cerradas — vencidas, verificadas contra el sistema en vivo (última: 2026-09-04)
 
-Estas **siete** (A–G) dejaron de necesitar una decisión de Sergio: el propio sistema (u otra
+Estas **diez** (A–J) dejaron de necesitar una decisión de Sergio: el propio sistema (u otra
 sesión) ya las resolvió. Se cierran acá con la medición, no se borran del historial de
 "Para decidir" — ese punto queda con una nota que apunta para acá.
 
@@ -175,6 +175,60 @@ les sacaría los archivos que su trabajo necesita. La cuenta daba "6 rotos" y la
 era "6 exentos a propósito". **Contar no es diagnosticar: el número era cierto y la conclusión,
 falsa.**
 
+---
+
+### ⚠️ Un tercer modo de cerrar, y es el que más le costó a Sergio: **nunca fue una decisión**
+
+**Los puntos §1 a §7 no son decisiones: son un PARTE DE ESTADO del 2026-08-18.** Tres se titulan
+literalmente *"— estado"*. Ninguno le pregunta nada a Sergio. Pero están numerados `## N.` igual
+que las decisiones de verdad, así que **cualquiera que cuente el radar reporta siete pendientes
+que no existen** — 17 días seguidos.
+
+**Y el contador de este loop estaba roto en la otra dirección**, lo que hacía imposible verlo:
+mide "cotizada" buscando el literal `| opción |` en el encabezado de la tabla. Las secciones que
+cotizan con `| | Qué se hace | Cuesta | Qué queda |` —que son casi todas, incluidas §35, §38,
+§39, §41 y §42, que tienen tabla de costos **y** recomendación— salían **SIN COTIZAR para
+siempre**. Medido hoy: el comando viejo decía **22 sin cotizar**; contando por *"¿tiene tabla de
+costos Y recomendación?"* son **8**, y de esas 8, siete son este parte de estado.
+
+> **La lección, que es la de siempre acá:** el instrumento que te da un número grande y estable
+> es sospechoso. Un objetivo que nunca llega a 0 casi nunca es un backlog que no baja — es un
+> contador que no sabe leer lo que ya está hecho.
+
+**H. §3 Bots de llamadas — no hay decisión, y se verificó que sigue sin haberla.** El punto
+declara *"diseño listo, CERO construcción… queda para cuando haya clientes pagando el chat"*.
+Verificado **contra el motor que corre**, no contra el repo:
+`docker exec onia-center sh -c "grep -ril 'calling\|voice_call\|twilio\|call_webhook' /tmp/onia-bot/*.mjs"`
+→ **vacío**. Cero construcción, tal como dice. Con 0 clientes pagando el chat, la condición que
+el propio punto se puso para reabrirse **no se cumplió**. No hay nada que decidir: hay que
+esperar. La arquitectura y la regla F1 (separar llamadas de mensajes ANTES de encender nada)
+quedan en `ONIA_VOZ_WHATSAPP_ARQUITECTURA_20260802.md`, que existe y no se toca.
+
+**I. §5 Requisitos del chatbot — se cerró solo, y lo dice en su propio texto.** El punto ya fue
+corregido el 2026-09-02: de las cuatro capacidades "a investigar", **tres están vivas en
+producción** (botones/listas, recibir imágenes, enviar imágenes) y la cuarta —el carrito— el
+propio punto la manda a la **§27**, que está cotizada con tabla y recomendación. O sea: la única
+pregunta viva de la §5 **ya está preguntada en otro lado**. Es el mismo caso de la §20/§34 —
+duplicada, no vencida—, y le cuesta a Sergio exactamente lo mismo que una fantasma.
+Queda **un solo dato sin medir**, y no es una decisión sino un dato: si Bolivia está habilitada
+para el catálogo nativo de WhatsApp. Se mira en `business.facebook.com` → Commerce Manager con
+la cuenta de Meta de Onia; ningún loop se loguea a servicios, así que sigue esperando a Sergio
+**como dato**, no como decisión.
+
+**J. §7 ¿Factura de verdad? — la auditoría NO está "en curso": terminó hace 17 días.** El punto
+dice *"auditoría corriendo… sale en `ONIA_FACTURACION_ESTADO_REAL.md` con una respuesta clara
+para la venta"*. Ese archivo existe, está commiteado **el mismo 2026-08-18**
+(`git log -1 --format=%ad -- hermes-content/docs/ONIA_FACTURACION_ESTADO_REAL.md` → `2026-08-18`)
+y tiene la respuesta como título de sección propia:
+
+> **`## ¿Se le puede decir a un cliente "Onia te factura"?`**
+> **`# NO — pero SÍ "Onia te cobra, te lleva la cuenta y te deja lista la declaración"`**
+
+Eso es exactamente el *"SÍ/NO/con qué asterisco"* que el radar seguía esperando. **El radar
+estuvo 17 días pidiendo una respuesta que ya estaba escrita el mismo día que se pidió.** Lo que
+el doc sí deja abierto son cosas del producto (la emisión SIAT apagada y con un mock debajo), y
+eso es trabajo del carril dueño, no una decisión de Sergio en el radar.
+
 ## 1. ¿Chatwoot o plataforma de chat PROPIA hecha por Onia?
 
 **La regla de Sergio**: "tiene que ser hecho por nosotros — usar otra plataforma no
@@ -202,7 +256,10 @@ CURSO, ~20 días) + prueba de coexistencia con +591. Hasta qué punto es self-se
 popup conecta número y el formulario A-D arma el bot; lo único no-self-service que
 queda es la plantilla utility para fríos y el alta del inbox (automatizable después).
 
-## 2. Páginas web — estado
+## 2. ~~Páginas web~~ — PARTE DE ESTADO, no hay decisión (2026-09-04)
+
+> Sus tres pendientes (portar v5 al producto · portafolio publicado · pipeline intake→web) son
+> **trabajo del carril `web-factory-dev`**, no decisiones de Sergio. No se cuentan acá.
 
 **Avanzado, es el frente más maduro:** Web Factory con 22 bloques + templates
 (dashboard canon v4/v5 elegido, landing-realestate generada desde learned model),
@@ -211,7 +268,7 @@ pattern banks + DESIGN_LEARNED (15 fuentes + galerías), checklist de pre-entreg
 **Falta:** portar v5 al producto (espera OK) · portafolio publicado (3 videos listos
 sin publicar) · pipeline intake→web a escala con clientes reales.
 
-## 3. Bots de LLAMADAS — estado
+## 3. ~~Bots de LLAMADAS~~ — PARTE DE ESTADO, no hay decisión — CERRADO 2026-09-04, ver **H** arriba
 
 - Arquitectura YA escrita: `ONIA_VOZ_WHATSAPP_ARQUITECTURA_20260802.md` (1.058
   líneas). Bolivia NO está excluida de la Calling API de Meta (verificado 15-ago).
@@ -223,7 +280,14 @@ sin publicar) · pipeline intake→web a escala con clientes reales.
   voz como próximo paso por esfuerzo/retorno — la arquitectura queda para cuando
   haya clientes pagando el chat.
 
-## 4. Landing con precios — estado
+## 4. ~~Landing con precios~~ — PARTE DE ESTADO, no hay decisión (2026-09-04)
+
+> **El "checkpoint 1-sep para la tarifa exacta" que este punto dejaba abierto ya pasó y el precio
+> está ratificado.** Verificado en la fuente única, no en un doc:
+> `lib/pricing.ts:3` → *"PRECIO VIGENTE (ratificado 2026-08-21): Bs 390/mes, Bs 3.900/año"*,
+> y `entryMonthly: 390` / `annualTotal: 3900` en las líneas 28-30. Coincide con lo que este punto
+> decía, así que no hay nada que ratificar. El resto (hero nuevo · portar precios del catálogo)
+> es trabajo del carril `web-venta`.
 
 - Landing viva en onia.com.bo (139 kB, deployada; /comparativa arriba).
 - Precios: `onia-platform/lib/pricing.ts` ÚNICA fuente (regla dura). Chatbot:
@@ -243,7 +307,7 @@ sin publicar) · pipeline intake→web a escala con clientes reales.
 4. Llamadas: recién con clientes de chat pagando (F1 primero, siempre).
 
 
-## 5. Requisitos de Sergio para el chatbot del cliente (2026-08-18)
+## 5. ~~Requisitos de Sergio para el chatbot del cliente (2026-08-18)~~ — 3 de 4 vivas en producción, la 4ª es la §27 — CERRADO 2026-09-04, ver **I** arriba
 
 1. **Self-service TOTAL**: el cliente configura TODO desde su panel — sin tocarnos
    la puerta. Simple por diseño (el formulario A-D es la base; lo que no sea
@@ -283,7 +347,38 @@ habilitada para catálogo de WhatsApp Business, y se mira en `business.facebook.
 Commerce Manager, con la cuenta de Meta de Onia. Este loop no se loguea a servicios.
 
 
-## 6. Webs CONECTADAS al sistema (2026-08-18) — tarea abierta
+## 6. La prueba de "web conectada al sistema" lleva 17 días parada porque el laboratorio está en un disco que ningún loop alcanza (2026-08-18, medido 2026-09-04) — decisión de Sergio
+
+**Qué se decide.** Sergio pidió el 18-ago: *"quiero que toques cómo podemos conectar páginas webs
+a los sistemas; hacé la prueba con Bolivian Electric"*. **La tarea nunca arrancó, y ahora se sabe
+por qué:** el laboratorio que él eligió vive en `C:\dev\clientes\Bolivian Electric` — su laptop.
+Los 15 loops se mudaron al VPS, así que **ninguno puede abrir ese repo**. Medido hoy:
+`find /root/loops -iname "*bolivian*"` → **vacío**. No es un pendiente mal escrito ni falta de
+tiempo: está pedido contra un disco que el que tiene que ejecutarlo no ve.
+
+Mientras no se decida, queda bloqueado el argumento de venta *"tu web alimenta el sistema"* —
+terreno que el propio doc marca como no ocupado ni por Forges ni por las agencias.
+
+**Lo que sí está vivo y no hay que rehacer:** el circuito 1 (formulario → lead) ya tiene
+precedente en producción — `https://forms.onia.com.bo/alta` responde **HTTP 200 en 0,086 s**
+(medido hoy) y escribe en `onia_center.leads`. Los 4 circuitos están en
+`ONIA_WEB_CONECTADA_AL_SISTEMA.md`.
+
+| opción | qué cuesta | cuánto tarda | qué se pierde |
+|---|---|---|---|
+| **A. Sergio sube Bolivian Electric a un remoto que el VPS lea** (el mismo GitHub donde ya vive `onia-hermes`) | **0 Bs.** Su tiempo: un `git push`, minutos | La prueba arranca la vuelta siguiente | Nada. Es el cliente que él eligió y el que da el caso real |
+| **B. Cambiar el laboratorio a una app que el VPS ya tiene** (`ferreteria-sur` o `dental-premium`, en `web-factory/apps/`) | **0 Bs, 0 de su tiempo** | Arranca hoy | Es una web de demo, no de un cliente real: la prueba no demuestra el circuito con datos de verdad |
+| **C. Nada** | 0 | — | Lo que viene pasando: 17 días quieto, y sigue apareciendo como pendiente en cada conteo del radar |
+
+**Recomendación: A**, porque el valor de la prueba está justamente en que sea un cliente real —
+con B se prueba la cañería pero no se puede vender el resultado. Y cuesta un `git push`.
+
+**Lo que NO es opción, y por qué:** que un loop "se conecte igual" a la laptop. El VPS no ve ese
+disco y ningún loop se loguea a nada; pedirlo otra vez sin mover el repo repite los 17 días.
+
+---
+
+### El texto original del 18-ago, que sigue siendo la fuente de la tarea
 
 Sergio: "quiero que toques cómo podemos conectar páginas webs a los sistemas; hacé la
 prueba con Bolivian Electric". Doc con los 4 circuitos y el plan de prueba:
@@ -292,7 +387,7 @@ precedente vivo (forms.onia.com.bo/alta → onia_center.leads); Bolivian Electri
 HOY desconectado del sistema (verificado) y es el laboratorio ideal. Vender "web que
 alimenta el sistema" es terreno que ni Forges ni las agencias ocupan.
 
-## 7. ¿Factura de verdad? (2026-08-18) — auditoría en curso
+## 7. ~~¿Factura de verdad? (2026-08-18)~~ — la auditoría terminó el mismo día — CERRADO 2026-09-04, ver **J** arriba
 
 Sergio pidió verificar si el sistema factura realmente. Auditoría corriendo que separa
 tres cosas que no son lo mismo: factura interna del negocio (documento de cobro) ·
