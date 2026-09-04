@@ -1,0 +1,201 @@
+/* ==========================================================================
+   Onia Center — capa de diseño del panel (registro PRODUCTO).
+   Porta FIEL el mockup aprobado de la vista "Hoy": neutrales grafito tintados,
+   segunda capa (--surface-2) para nav/paneles, acento esmeralda para acción y
+   "vivo", ámbar (--gate) SOLO para "necesita tu OK", más semánticos.
+
+   Integración limpia: todo se scopea a `.onia-panel` (la raíz del AppShell). Ahí
+   remapeamos los tokens shadcn que ya usan los componentes (--background, --card,
+   --border, --primary, etc.) a los valores del mockup, y agregamos los tokens
+   nuevos (--surface-2, --line-soft, --faint, washes, --gate). Así los utilitarios
+   Tailwind existentes adoptan la paleta sin reescribir cada componente, y NO
+   tocamos el :root global del que dependen las landings.
+
+   Tema: el mockup define claro + oscuro con prefers-color-scheme; lo reproducimos
+   igual. El panel es su propia superficie de producto y sigue el sistema del SO.
+   ========================================================================== */
+
+.onia-panel {
+  color-scheme: light;
+
+  /* Tokens shadcn remapeados a los valores del mockup (los usan los componentes) */
+  --background: oklch(0.982 0.004 230); /* mockup --bg: página */
+  --foreground: oklch(0.28 0.02 250); /* --ink: texto principal */
+  --card: oklch(1 0 0); /* --surface: paneles/tarjetas */
+  --card-foreground: oklch(0.28 0.02 250);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.28 0.02 250);
+  --primary: oklch(0.56 0.115 162); /* --accent: acción / vivo (esmeralda) */
+  --primary-foreground: oklch(0.985 0.006 162);
+  --secondary: oklch(0.968 0.005 235); /* --surface-2: segunda capa */
+  --secondary-foreground: oklch(0.28 0.02 250);
+  --muted: oklch(0.968 0.005 235); /* = surface-2 para hover/chips */
+  --muted-foreground: oklch(0.52 0.016 250); /* --muted: texto secundario */
+  --accent: oklch(0.968 0.005 235); /* hover shadcn neutro (no decorativo) */
+  --accent-foreground: oklch(0.28 0.02 250);
+  --destructive: oklch(0.53 0.19 25);
+  --border: oklch(0.912 0.006 235); /* --line */
+  --input: oklch(0.912 0.006 235);
+  --ring: oklch(0.56 0.115 162);
+  --radius: 0.75rem; /* mockup --r: 12px en paneles; escala el resto (md/sm) */
+
+  /* Tokens nuevos del mockup (superficie 2, hairlines, acento y compuertas) */
+  --surface-2: oklch(0.968 0.005 235);
+  --line-soft: oklch(0.945 0.005 235);
+  --faint: oklch(0.66 0.012 250);
+  --accent-strong: oklch(0.5 0.12 162);
+  --accent-wash: oklch(0.955 0.03 162);
+  --gate: oklch(0.62 0.12 74); /* ámbar: SOLO "necesita tu aprobación" */
+  --gate-wash: oklch(0.96 0.045 78);
+  --gate-strong: oklch(0.5 0.12 74); /* ámbar fuerte: texto/acento de compuerta */
+  --gate-line: oklch(0.86 0.06 82); /* hairline ámbar: borde del rail de aprobación */
+  --info: oklch(0.55 0.11 245);
+  --info-wash: oklch(0.955 0.03 245);
+
+  --panel-shadow-sm: 0 1px 2px oklch(0.4 0.03 250 / 0.05);
+  --panel-shadow:
+    0 1px 2px oklch(0.4 0.03 250 / 0.05),
+    0 12px 28px -18px oklch(0.35 0.04 250 / 0.22);
+  /* Elevación cálida del rail de aprobación (el "corazón" del Estudio): el ámbar
+     de compuerta lo separa del resto sin recurrir a otro color de alerta. */
+  --panel-shadow-gate:
+    0 1px 2px oklch(0.5 0.09 74 / 0.1),
+    0 14px 30px -18px oklch(0.55 0.1 74 / 0.18);
+
+  /* Escala de tonos semánticos (la consumen Badge, KPIs, timeline, etc.):
+     verde -> esmeralda del acento, amarillo -> ámbar de compuerta, azul -> info. */
+  --center-tone-green: oklch(0.5 0.12 162);
+  --center-tone-green-bg: oklch(0.955 0.03 162);
+  --center-tone-yellow: oklch(0.56 0.13 74);
+  --center-tone-yellow-bg: oklch(0.96 0.045 78);
+  --center-tone-red: oklch(0.53 0.19 25);
+  --center-tone-red-bg: oklch(0.95 0.04 25);
+  --center-tone-blue: oklch(0.5 0.11 245);
+  --center-tone-blue-bg: oklch(0.955 0.03 245);
+
+  background: var(--background);
+  color: var(--foreground);
+}
+
+@media (prefers-color-scheme: dark) {
+  .onia-panel {
+    color-scheme: dark;
+
+    --background: oklch(0.19 0.012 250);
+    --foreground: oklch(0.94 0.008 250);
+    --card: oklch(0.225 0.014 250);
+    --card-foreground: oklch(0.94 0.008 250);
+    --popover: oklch(0.225 0.014 250);
+    --popover-foreground: oklch(0.94 0.008 250);
+    --primary: oklch(0.68 0.12 162);
+    --primary-foreground: oklch(0.16 0.02 162);
+    --secondary: oklch(0.255 0.015 250);
+    --secondary-foreground: oklch(0.94 0.008 250);
+    --muted: oklch(0.255 0.015 250);
+    --muted-foreground: oklch(0.72 0.014 250);
+    --accent: oklch(0.255 0.015 250);
+    --accent-foreground: oklch(0.94 0.008 250);
+    --destructive: oklch(0.62 0.17 25);
+    --border: oklch(0.32 0.016 250);
+    --input: oklch(0.32 0.016 250);
+    --ring: oklch(0.68 0.12 162);
+
+    --surface-2: oklch(0.255 0.015 250);
+    --line-soft: oklch(0.285 0.015 250);
+    --faint: oklch(0.58 0.014 250);
+    --accent-strong: oklch(0.74 0.12 162);
+    --accent-wash: oklch(0.32 0.05 162);
+    --gate: oklch(0.75 0.12 78);
+    --gate-wash: oklch(0.33 0.06 78);
+    --gate-strong: oklch(0.8 0.11 82);
+    --gate-line: oklch(0.42 0.07 80);
+    --info: oklch(0.66 0.1 245);
+    --info-wash: oklch(0.32 0.04 245);
+
+    --panel-shadow-sm: 0 1px 2px oklch(0 0 0 / 0.3);
+    --panel-shadow:
+      0 1px 2px oklch(0 0 0 / 0.3),
+      0 14px 30px -18px oklch(0 0 0 / 0.55);
+    --panel-shadow-gate:
+      0 1px 2px oklch(0 0 0 / 0.3),
+      0 16px 34px -18px oklch(0.6 0.1 74 / 0.2);
+
+    --center-tone-green: oklch(0.78 0.13 162);
+    --center-tone-green-bg: oklch(0.32 0.05 162);
+    --center-tone-yellow: oklch(0.8 0.12 80);
+    --center-tone-yellow-bg: oklch(0.33 0.06 78);
+    --center-tone-red: oklch(0.72 0.16 25);
+    --center-tone-red-bg: oklch(0.32 0.07 25);
+    --center-tone-blue: oklch(0.72 0.1 245);
+    --center-tone-blue-bg: oklch(0.32 0.04 245);
+  }
+}
+
+/* Chips de tono: rótulo + fondo lavado. Los consumen Badge y los contadores. */
+.onia-center-tone-green {
+  color: var(--center-tone-green);
+  background: var(--center-tone-green-bg);
+}
+
+.onia-center-tone-yellow {
+  color: var(--center-tone-yellow);
+  background: var(--center-tone-yellow-bg);
+}
+
+.onia-center-tone-red {
+  color: var(--center-tone-red);
+  background: var(--center-tone-red-bg);
+}
+
+.onia-center-tone-blue {
+  color: var(--center-tone-blue);
+  background: var(--center-tone-blue-bg);
+}
+
+.onia-center-tone-neutral {
+  color: var(--muted-foreground);
+  background: var(--muted);
+}
+
+/* Elevación de panel (mockup --shadow-sm). Aditiva: la usan las tarjetas de Hoy. */
+.onia-center-elevated {
+  box-shadow: var(--panel-shadow-sm);
+}
+
+/* Franja de KPIs: rejilla hairline (celdas separadas por 1px sobre --line-soft),
+   6 columnas en desktop y colapso a 3 / 2. El nº de columnas llega por --kpi-cols. */
+.onia-kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(var(--kpi-cols, 6), minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  background: var(--line-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--panel-shadow-sm);
+}
+
+@media (max-width: 940px) {
+  .onia-kpi-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .onia-kpi-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Bloque del timeline de la Agenda: transición + hover sutil de estado. */
+.onia-center-tl-block {
+  transition:
+    filter 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+@media (hover: hover) {
+  .onia-center-tl-block:hover {
+    filter: saturate(1.05) brightness(0.99);
+  }
+}

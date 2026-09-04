@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200" role="img" aria-label="Espacio reservado para video de producto Nuvia">
+  <rect width="1200" height="1200" rx="120" fill="#F7F5EF"/>
+  <rect x="250" y="318" width="700" height="500" rx="76" fill="#FFFFFF" stroke="#D8E1DF" stroke-width="4"/>
+  <path d="M548 487v162l146-81-146-81Z" fill="#00A7A0"/>
+  <text x="600" y="920" fill="#0F2D52" fill-opacity=".62" font-family="Arial, sans-serif" font-size="28" font-weight="700" text-anchor="middle">video de producto pendiente</text>
+</svg>
