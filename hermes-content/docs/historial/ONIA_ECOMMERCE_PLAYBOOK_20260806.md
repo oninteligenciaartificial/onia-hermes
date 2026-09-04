@@ -1,5 +1,12 @@
 # Playbook de e-commerce de Onia
 
+> ⚠️ **Movido a `historial/` el 2026-09-04. Esto es la INVESTIGACION, no la fuente de verdad.**
+> La fuente del tema es **`ONIA_ECOMMERCE_Y_DROPSHIPPING.md`** (sin fecha), que recoge la
+> decision de la §8 de acá y la ordena junto a las otras variantes.
+> Vivia en `docs/` con fecha en el nombre y **cero documentos lo citaban** — o sea que la
+> decision operativa del tema estaba guardada donde no se busca. Se lee acá el detalle
+> tramo por tramo; **manda el archivo sin fecha**.
+
 Fecha: 2026-08-06 · Autor: sesion de estrategia (4 investigaciones + critica adversarial)
 Estado: propuesta de decision. Seccion 8 toma posicion.
 
