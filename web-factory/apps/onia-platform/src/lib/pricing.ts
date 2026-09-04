@@ -41,7 +41,7 @@
  */
 
 import { precioAddonChatbot } from "@/content/chatbot-precios";
-import { WEB_STACKS } from "@/content/webs";
+import { precioWebDesde } from "@/content/webs";
 
 export type PlanId = "basico" | "pro" | "full";
 
@@ -191,23 +191,23 @@ export function bs(n: number): string {
  * la Landing de Captacion. Si manana el catalogo cambia, esta celda cambia
  * sola en lugar de quedar mintiendo.
  *
- * 🔴 OJO, PRECIO EN DISPUTA — NO se resuelve desde esta pantalla. El mismo
- * 2026-08-22, hermes-content/docs/ONIA_WEB_COMO_SE_VENDE.md §8 dejo asentado
- * que la linea 790/1.500/2.900 era una oferta de ARRANQUE "valida hasta
- * 2026-07-31", que vencio sin sucesor, y que TODAS las propuestas reales del
- * repo cotizan la linea premium (2.000/4.500). Son dos precios vivos del mismo
- * servicio: exactamente lo que la regla de fuente unica existe para evitar.
+ * ✅ LA DISPUTA SE CERRO — corregido 2026-09-04. Hasta hoy este comentario
+ * decia "🔴 PRECIO EN DISPUTA" y que "se publica 790", y las dos cosas eran
+ * falsas desde el 2026-08-23: ese dia Sergio ratifico la linea
+ * 2.000/4.500/desde 7.500, content/webs.ts se movio con el, y produccion
+ * publica 2.000 (medido en /servicios/webs y en la portada). La linea
+ * 790/1.500/2.900 era una oferta de ARRANQUE vencida el 31-jul-2026.
  *
- * Se publica 790 y no otro numero por UNA razon: es el que /servicios/webs ya
- * muestra en produccion hoy. Que la portada diga lo mismo mantiene el sitio
- * coherente consigo mismo; elegir 2.000 desde aca seria tomar la decision de
- * precio que ese doc §8.4 reserva EXPLICITAMENTE para Sergio. Cuando Sergio
- * ratifique una sola linea, se corrige en content/webs.ts y las dos pantallas
- * se mueven juntas — no se toca este archivo.
+ * Se corrige porque un cartel rojo vencido no es ruido: este es el archivo que
+ * toda sesion abre para tocar precios, y decia que el numero vivo estaba en
+ * disputa y que la pantalla mostraba la mitad de lo que muestra. La proxima
+ * sesion que lo leyera como presente tenia todo para "arreglar" el 2.000 de
+ * vuelta a 790 — revertir un precio ratificado, a menos de la mitad.
+ *
+ * La regla de arriba no cambia: el numero no se elige desde este archivo. Si
+ * la linea vuelve a moverse se edita content/webs.ts y las pantallas siguen.
  */
-const WEB_DESDE = Math.min(
-  ...WEB_STACKS.map((w) => w.precio).filter((p): p is number => p !== null),
-);
+const WEB_DESDE = precioWebDesde();
 
 export interface AddOn {
   nombre: string;
