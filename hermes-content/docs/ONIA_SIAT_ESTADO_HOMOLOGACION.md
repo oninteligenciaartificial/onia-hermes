@@ -11,8 +11,10 @@
 ## 1. Qué está pasando, en una línea
 
 El sistema **Onia Platform v1.00** está registrado ante el SIN como **Proveedor**, en
-estado **INICIADO**, con **24,8% de la Fase 1** hecho y un límite de pruebas que vence
-el **04/11/2026**. El NIT no bloquea nada: está limpio.
+estado **INICIADO**, con **24,8% de la Fase 1** hecho (última lectura del portal,
+2026-08-27) y un límite de pruebas que vence el **04/11/2026**. El NIT no bloquea nada:
+está limpio. **Desde el 2026-09-03 los tres documentos sector emiten, anulan y revierten
+contra el piloto** (§7); lo que sigue trabado es el **Punto de Venta 1**, que lo crea Sergio.
 
 ---
 
@@ -207,10 +209,13 @@ que anular sin haber emitido en ese combo falle claro en vez de tomar la factura
 node src/fase1-runner.mjs --etapa gate     # humo: 1 por combo, primero esto
 node src/fase1-runner.mjs                  # todas las etapas en orden
 node src/fase1-runner.mjs --etapa IV       # una sola etapa
+/opt/onia-siat/run-fase1-volumen.sh        # (VPS) IV -> VII -> XI con los targets del SIN
 ```
 
 Con `/opt/onia-siat/siat-piloto.env` cargado en el ambiente. El estado vive en
 `fase1-state.json` (checkpoint/resume) y el log por operación en `fase1-log.ndjson`.
+La copia del VPS se despliega con `tar` por ssh desde el repo (no hay rsync en Windows):
+`tar -cf - src test xsd package.json | ssh root@VPS "cd /opt/onia-siat/emisor && tar xf -"`.
 
 ### Lo que reveló correrlo (2026-08-27)
 
@@ -221,8 +226,8 @@ valor del cambio: antes un fallo mataba la etapa entera y no se sabía de cuál 
 |---|---|---|
 | `pv0-ds1-tf1` | — | **funciona** (125/125, el único que el SIN ya contaba) |
 | `pv1-*` (3 combos) | **`933 · EL PUNTO DE VENTA ES INEXISTENTE O INVALIDO`** | bloqueado: **falta crear el PdV 1** |
-| `pv0-ds17-tf1` | `995 · SERVICIO NO DISPONIBLE` → resuelto → `EL PARAMETRO ARCHIVO ES INVALIDO … cvc-elt.1.a` | falta el XML del sector |
-| `pv0-ds24-tf3` | `995 · SERVICIO NO DISPONIBLE` → resuelto → operaciones sin mapear | falta el servicio de ajuste |
+| `pv0-ds17-tf1` | `995 · SERVICIO NO DISPONIBLE` → resuelto → `EL PARAMETRO ARCHIVO ES INVALIDO … cvc-elt.1.a` | **resuelto 2026-09-03** (ver abajo) |
+| `pv0-ds24-tf3` | `995 · SERVICIO NO DISPONIBLE` → resuelto → operaciones sin mapear | **resuelto 2026-09-03** (ver abajo) |
 
 **Tres hallazgos que no se sabían:**
 
@@ -249,13 +254,55 @@ valor del cambio: antes un fallo mataba la etapa entera y no se sabía de cuál 
    emitir/anular/revertir, sin contarlo como prueba de la etapa III. **Verificado en vivo:
    `cufd_refresh → ok=true`.**
 
+### Lo que reveló correrlo (2026-09-03, noche)
+
+Los dos combos que faltaban del PdV 0 **emiten, anulan y revierten** contra el piloto.
+Evidencia: `fase1-log.ndjson` del 2026-09-04T02:38Z al 02:46Z.
+
+| Combo | IV | VII | XI |
+|---|---|---|---|
+| `pv0-ds17-tf1` | `recepcionFactura` → **908 VALIDADA** | `anulacionFactura` → 905 | `reversionAnulacionFactura` → 907 |
+| `pv0-ds24-tf3` | `recepcionDocumentoAjuste` → **908 VALIDADA** | `anulacionDocumentoAjuste` → 905 | `reversionAnulacionDocumentoAjuste` → 907 |
+
+Qué hizo falta, y de dónde salió cada cosa:
+
+1. **Los XSD oficiales, en el repo** (`integrations/siat/xsd/`, 6 archivos, ver. 23/08/2021).
+   El sector 17 usa la raíz `facturaComputarizadaHospitalClinica`: cabecera de compra-venta +
+   `modalidadServicio`, y en cada línea del detalle **quirófano y médico obligatorios**
+   (`nroQuirofanoSalaOperaciones`, `nombreApellidoMedico`, `nitDocumentoMedico`) sin
+   `numeroSerie`/`numeroImei`. El sector 24 usa `notaFiscalComputarizadaCreditoDebito`: sin
+   pago ni moneda; identifica la factura original (`numeroFactura`, `numeroAutorizacionCuf` =
+   su CUF, `fechaEmisionFactura`) y exige **mínimo 2 líneas** de detalle: las de la factura
+   original (`codigoDetalleTransaccion` 1) y las devueltas (2). Reglas del SIN
+   (`…/validaciones-documentos-sector/validaciones`): `montoTotalOriginal = Σ subTotal(1)`,
+   `montoTotalDevuelto = Σ subTotal(2) − montoDescuentoCreditoDebito`,
+   `montoEfectivoCreditoDebito = montoTotalDevuelto × 0,13`.
+   El test del repo **lee los XSD** y coteja campos, orden, nillables, raíz y `minOccurs`;
+   además los tres XML validaron con `lxml` contra su XSD.
+2. **El servicio de ajuste tiene wrappers propios** (WSDL del piloto,
+   `?wsdl=ServicioFacturacion.wsdl`): `SolicitudServicioRecepcionDocumentoAjuste`,
+   `SolicitudServicioAnulacionDocumentoAjuste`, `SolicitudServicioReversionAnulacionDocumentoAjuste`.
+   Mismo DTO base que la factura.
+3. **El servicio de ajuste tarda 36-43 s en responder**, hasta a un archivo basura (vuelve
+   con `920` a los 42,8 s). Con el timeout default de 30 s los 3 reintentos morían en
+   `network` y parecía que el SIN colgaba. `TIMEOUT_MS_POR_SERVICIO` lo sube a 120 s solo para
+   ese servicio.
+4. **La nota necesita una compra-venta original del mismo PdV** con fecha, receptor e items
+   guardados. Las 500 facturas viejas del estado no los tienen: el runner emite una nueva
+   cuando hace falta y marca la original como `ajustada` (una nota por factura).
+
+**Corrida de volumen lanzada** (IV → VII → XI, 125 por combo) con
+`/opt/onia-siat/run-fase1-volumen.sh`. A los 3 minutos `pv0-ds17-tf1` ya estaba en 125/125
+en la etapa IV. Si completa, suma hasta **777 casos** (≈ +13 puntos: de 24,8 % a ~38 %). El
+marcador del portal hay que leerlo después (login de Sergio).
+
 ### Lo que falta para desbloquear cada combo
 
 | Combo | Qué falta | Quién |
 |---|---|---|
-| `pv1-*` (3) | Crear el **Punto de Venta 1** en SIAT | **Sergio** |
-| `pv0-ds17-tf1` | El XML del sector 17. `ROOT_ELEMENTS` en `xml-builder.mjs` solo tiene `facturaComputarizadaCompraVenta`; el SIN rechaza con `cvc-elt.1.a` (elemento no declarado). Hace falta el root element y los campos del XSD de hospitales/clínicas | dev |
-| `pv0-ds24-tf3` | Mapear el servicio de documento de ajuste: operaciones nuevas + su XML | dev |
+| `pv1-*` (3) | Crear el **Punto de Venta 1** en SIAT. El código ya los recorre; hoy cada uno bloquea con `sin CUIS para el punto de venta 1` | **Sergio** |
+| `pv0-ds17-tf1` | Nada: emite/anula/revierte (2026-09-03). Falta que la corrida de volumen cierre VII y XI en 125 | corriendo |
+| `pv0-ds24-tf3` | Nada: emite/anula/revierte (2026-09-03). Falta que la corrida de volumen llegue a 125 (~1,5 h a 36 s por nota) | corriendo |
 
 ---
 
