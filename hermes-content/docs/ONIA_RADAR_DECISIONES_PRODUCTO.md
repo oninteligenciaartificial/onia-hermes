@@ -2146,17 +2146,30 @@ verde contra el validador. **Commiteado, NO desplegado**: se instala con
 
 ---
 
-## 34. NUEVE commits de plataforma sin desplegar, y el próximo despliegue tiene un ORDEN que no se puede invertir (2026-09-03) — acción de Sergio
+## 34. NUEVE commits de plataforma sin desplegar, y el próximo despliegue tiene un ORDEN que no se puede invertir (2026-09-03) — ✅ RESUELTO 2026-09-04 03:45 UTC, ya no hay decisión
 
-> ✅ **Ésta es la ÚNICA sección del radar que pide el deploy de `onia-platform`.** La §20 pedía lo
-> mismo y quedó fusionada acá el 2026-09-03. Antes había dos secciones, tres números distintos y
-> ninguno correcto.
+> ✅ **Los 9 commits YA ESTÁN DESPLEGADOS y la migración YA está aplicada. Esta sección no pide
+> nada.** Recontado en vivo el 2026-09-04 03:45 UTC, no releído: los nueve
+> (`22fd088`, `15e3910`, `675541b`, `3523c79`, `503af44`, `d62beeb`, `efaffe8`, `bdf0935`,
+> `5888a13`) son ancestros del build que corre —`git merge-base --is-ancestor <sha> 858752a`
+> devuelve 0 en los nueve— y la columna que exigía el orden existe:
+> `select count(*) from information_schema.columns where column_name='chatwootWhatsappInboxId'`
+> → **1**. Producción pasó por tres swaps desde entonces (`1f0b221` → `b84811d` → `858752a`).
 >
-> **Recontado en vivo el 2026-09-03 05:30 UTC** — `git rev-list --count 8a3b5a6..origin/master`
-> = **9**, no siete. Este número envejece más rápido que el resto del ítem: **se cuenta de nuevo
-> antes de citarlo, nunca se relee del párrafo anterior.**
+> **Por qué se cierra y no se actualiza el número:** el ítem estaba anclado a `8a3b5a6`, que dejó
+> de ser lo desplegado hace días. Reescribirle la cifra lo dejaba pidiendo el mismo deploy por
+> cuarta vez con un cuarto número. **Un bloqueo vencido es peor que un fantasma: le pide a Sergio
+> una decisión que ya tomó.**
+>
+> 🔴 **El deploy pendiente de HOY vive en el tablero, no acá: `t_ad4ff5b2`** — 21 commits,
+> `70b6ed3` ya buildeado y montado (`BUILD_ID HV_nkT9A09xv6XzBeNjVC`), falta el swap. El más caro
+> es la reescritura del login con bloqueo por intentos y 2FA. **Un solo lugar pide el deploy, y es
+> el tablero** — que es donde Sergio contesta `ok <id>`.
 
-**Lo desplegado hoy es `8a3b5a6`**, verificado por `BUILD_ID` y no por fecha: tanto
+**Lo que sigue es la HISTORIA de ese despliegue, ya ejecutado. No es un pedido.**
+
+**Lo desplegado ENTONCES (2026-09-03) era `8a3b5a6`** —hoy corre `858752a`—, verificado por
+`BUILD_ID` y no por fecha: tanto
 `/opt/onia-platform/runtime-next/.next/BUILD_ID` como `/opt/onia-platform/build-8a3b5a6/.next/BUILD_ID`
 dan `lNDdVgrRvP1mizzu3BVXc`. (El contenedor arrancó de nuevo el 2026-09-03 00:03:32 UTC, pero
 **reiniciar no es desplegar**: monta el mismo `runtime-next`.) Todo lo que entró a `master`
