@@ -3,125 +3,125 @@
 Audita a los otros loops: que ninguno cobre por trabajo que no sirve. Rama `claude/supervisor`.
 No mergea a `main` (eso es de `onia-cola`) y no arregla carriles ajenos: deja la tarea en el tablero.
 
-**Última vuelta: 2026-09-03 20:29 UTC.**
+**Última vuelta: 2026-09-04 14:29 UTC** (10:29 La Paz — la franja del reporte diario a Sergio).
 
 ---
 
 ## Objetivo de la vuelta
 
-Auditar a fondo el carril **menos mirado**. Esta vez **el handoff sí eligió**: entré por
-*"Próximos pasos"* (la corrección de prompt de la vuelta anterior funcionó) y me tocó
-**`docs-auditoria`** — nunca auditado, y el más parecido a mí: su trabajo es que lo escrito sea
-cierto.
+Medir el avance de los 15 loops, mandar el reporte diario, y auditar el carril menos mirado.
 
 **Hecho =** decir si el trabajo de un carril sirve o no, con evidencia **medida**, no leída.
 
-## Veredicto: `docs-auditoria` SIRVE — pero hace 7 h no puede entregar nada
+## Veredicto: el que no servía era MI PROPIO INSTRUMENTO
 
-Las dos mitades importan y son independientes:
+`loops_avance.sh` marcó a **`investigacion`** como `DESOBEDIENTE` en la vuelta de las 09:26 UTC —
+la misma en la que ese loop midió bien, bajó su número de 20 a 14 con un criterio honesto y dejó
+escritas su `RAZÓN:` y su `LECCIÓN:`.
 
-**Su trabajo es bueno.** Spot-check de su commit `68540a6cb`: afirmaba que
-`ONIA_CATALOGO_DE_VENTA.md` decía *"se venden 3"* rubros y son **5**. Verificado contra el
-producto, no contra su prosa:
+La causa: la limpieza del prefijo markdown era una **lista de inclusión** de caracteres,
+`[*_#> -]`. `investigacion` escribió su medición entre backticks —`` `OBJETIVO: abiertas 25 …` ``—
+y el backtick no estaba en la lista, así que el `grep -q "^OBJETIVO:"` no la vio.
 
-    git -C /root/loops/onia-platform show origin/master:lib/platform/rubros-activos.ts | grep -cE "^\s+\{"   # → 5
+**Es la segunda vez que la misma lista deja pasar un adorno.** La negrita (`**OBJETIVO:**`) rompió
+igual el 2026-09-03. Agregar el backtick habría dejado la tercera esperando, así que la lista se
+fue entera: se limpia todo lo que no sea alfanumérico (`s/^[^[:alnum:]]*//`).
 
-Cita las tres fuentes (`rubros-activos.ts` = 5, `SUPPORTED_VERTICAL_TRACK_IDS` = 7,
-`contract.json` = 11 tracks) y explica **por qué importaba**: el barrido del 30-ago arregló la
-prosa y la tabla y se olvidó de la línea de resumen, que es la que se lee cuando se busca el
-número — le sacaba dos rubros a la venta. Es exactamente su definición de hecho, y la última
-vuelta (17:24) además **retiró un bloqueo vencido** y **corrigió una evidencia muerta** en el
-tablero, dejando bloqueado lo que no era su decisión. Nada de las seis señales de basura.
+El falso positivo va en la **dirección cara**: la única salida de un "desobediente" es una tarea a
+su dueño, o sea gastarle la vuelta a un carril sano. Este loop existe justamente para no hacer eso.
 
-**Y no llega a nadie.** `git push` de `claude/docs-auditoria` viene **rechazado por
-non-fast-forward** desde la vuelta de las 13:24 UTC:
+⚠️ **La memoria compartida seguía recomendando la regex rota** (entrada del 04-sep 04:39, que
+manda a limpiar con `sed -E 's/^[*_#> -]*//'`). Corregida con `onia-aprender.sh` en esta vuelta:
+la trampa no era el markdown, era **enumerar** los adornos.
 
-    cd /root/loops/onia-hermes-docs && git push --dry-run origin claude/docs-auditoria
-    # ! [rejected]  claude/docs-auditoria -> claude/docs-auditoria (non-fast-forward)
+## Veredicto: `web-factory-dev` SIRVE
 
-La rama remota **se reescribió debajo suyo**: `origin/…` (`68540a6cb`) no es ancestro del HEAD
-local (`6c81192b4`), y la prueba de la reescritura es que el commit local `6716983f5` y el remoto
-`68540a6cb` tienen **contenido idéntico y sha distinto** (`diff` de los dos `show` → vacío).
-Divergencia: `git rev-list --left-right --count origin/claude/docs-auditoria...HEAD` → `1 34`.
-
-**Se perdió 1 commit, no 34.** `6c81192b4` (34 líneas en
-`hermes-content/references/modelos/lucia/BITACORA-PERFECCION.md`) **no existe en ninguna rama
-publicada** — buscado con `git grep` del texto del arreglo sobre las 40 refs de `origin`: cero.
-Los otros 33 ya están publicados por otras ramas (32) o son el duplicado de contenido (1).
-
-**Barrido a los 17 worktrees del VPS: `docs-auditoria` es el único atrapado.** (`onia-hermes`
-está 12 detrás de `main`, que es fast-forward, no divergencia.)
-
-## La alerta grita 34 cuando el daño es 1
-
-`/root/bin/onia-loop.sh:371` cuenta con `git log @{u}..HEAD`, que **incluye todo lo ya publicado
-por otras ramas**. El número honesto es `git log HEAD --not --remotes=origin`:
-
-| lo que cuenta | resultado |
-|---|---|
-| `@{u}..HEAD` — lo que grita el aviso | **34** |
-| `HEAD --not --remotes=origin` — huérfanos reales | **2** |
-| trabajo genuino perdido (el otro es duplicado) | **1** |
-
-Es el modo de falla del vigía que ya nos costó caro: **un aviso inflado 34× se deja de leer**, y
-éste va a repetirse cada 4 h para siempre porque la divergencia no se cura sola.
-**No toqué el corredor**: la maquinaria de loops está congelada 7 días por decisión del 2026-09-03
-16:23, y esto no es un loop muerto sino uno mudo. Queda escrito en la tarea.
+Primer carril de la lista de nunca auditados. Su medición se mueve sola entre vueltas —ítems
+abiertos **6 → 5 → 3**, First Load **192 → 148 kB**, y *"publicable con un comando"* pasó de **no**
+a **sí**— y al abrir los commits hay **código de producto real**, no comentarios: un `postbuild`
+que copia `.next/static` dentro del standalone (sin eso el árbol servía HTML sin CSS), y un hero
+que escalaba sólo con el ancho y dejaba el botón que convierte **14 px bajo el pliegue a
+1366x768**. Ninguna de las seis señales de basura.
 
 ## Qué quedó en producción
 
-Nada desplegado — este carril no despliega.
+- **`loops_avance.sh` arreglado y con gate** — commit `e27537cc2`. Rojo antes por el motivo
+  correcto (2 de 7, los dos casos con backtick), verde después (7/7). Contra los logs reales,
+  *sin medir* pasó de **1 de 15 a 0 de 15**.
+- **`scripts/loops_avance.test.sh`**, cableado a la cadena `npm test` como `test:loops-avance`
+  (30 eslabones). Fija las tres formas reales —plana, negrita, backtick— **y la dirección
+  contraria**: un loop que no midió sigue saliendo desobediente, y mencionar la palabra en una
+  frase no cuenta como medir. Sin ese segundo lado, un gate que sólo afloja diría "todos miden"
+  para siempre.
+- **Reporte diario enviado** (10:29 La Paz), con la línea de pulso: 1 lección · 0 prompts · 1
+  decisión suya.
 
-- **`t_655483f6`** (prioridad 1, `ready`) para el integrador: la divergencia, el commit exacto
-  que se perdió, y la recuperación **ya probada limpia** — la base del commit y la de `origin`
-  son el mismo archivo de 582 líneas (`cmp -s`), así que el cherry-pick aplica sin conflicto.
-- Aviso a Sergio por Telegram, una línea, en castellano llano.
+## Qué quedó a medias y dónde
+
+**Dos preguntas para Sergio quedaron en `status=todo` con `kind=needs_input`: nunca le llegaron.**
+Es el fallo que mide el OBJETIVO 2 (`tablero_rebloqueadas`), y las dos tenían la evidencia
+**congelada**. Recontadas en vivo, dejé el resultado como comentario en cada una (no las reclamé,
+no son de mi zona):
+
+- **`t_43947a6a`** (2 días trabada) — **vencida**. Pide autorizar un deploy "para que se construya
+  la tarjeta de conexión WhatsApp", y la tarjeta **ya está viva**:
+  `docker exec onia-platform grep -rl chatwootWhatsappInboxId /app/.next/server` → 3 chunks, en el
+  build que corre (`mIi3zy_CtrcMhV8tRV2LF` = `build-b5e23d4`). No hay nada que autorizar: falta
+  mirarla renderizada y cerrar. Su padre `t_e476aaf9` sigue `blocked`, así que `promote --force`
+  no la destraba.
+- **`t_54ff72b5`** (18 h trabada) — **1 de sus 3 decisiones ya no hace falta**. (A) el hero **ya
+  está arreglado**: el `h1` es "Cerrás vos. El negocio no.", el `title` dice "Software de gestión
+  Bolivia" y la `description` arranca por el sistema, con el asistente detrás. (B) y (C) **siguen
+  vivos**: 4 CTA "Creá tu cuenta" van a `/empezar` en vez del registro, y `/comparativa` sigue en
+  el nav. Reducida a B y C, es la decisión que fue en el reporte de hoy.
 
 ## Archivos
 
-- `hermes-content/docs/handoff/supervisor.md` (este)
-- Tarea `t_655483f6` en el tablero (no es archivo del repo)
+- `scripts/loops_avance.sh` — el instrumento (arreglado, y ahora testeable vía `ONIA_LOGDIR` /
+  `ONIA_LOOPS`).
+- `scripts/loops_avance.test.sh` — su gate.
+- `package.json` — eslabón `test:loops-avance`.
 
 ## Intentos fallidos — lo que NO era
 
-1. **"El corredor sale exit 0 y por eso nadie se entera."** **Refutado.** Era la hipótesis
-   atractiva —calca el caso `lucia-ugc.sh` de la memoria compartida— y es **falsa acá**:
-   `onia-loop.sh:385` sí llama a `avisar` cuando `SINPUSH != 0`, y el aviso salió las dos veces.
-   El defecto real no es el silencio sino **el número**. Reportarlo como "falla muda" habría
-   mandado a alguien a arreglar un mecanismo que funciona.
-2. **"Se perdieron 34 commits."** Lo que dice el log del corredor, y es el número que casi
-   escribo. 32 ya estaban publicados por otras ramas y 1 es duplicado de contenido.
-3. **"`docs-auditoria` está seco o inventa."** No: sus dos últimas vueltas produjeron un arreglo
-   real sobre una fuente de verdad y una limpieza de evidencia vencida en el tablero, y la del
-   17:24 **reportó honestamente "sin commit"** y confesó que su `merge --ff-only` había fallado.
-   Una vuelta sin commit por rama trabada es honestidad, no basura.
+- **`investigacion` no era un loop desobediente.** Era mi grep. Si esta vuelta le hubiera abierto
+  la tarea que "correspondía", le habría gastado una vuelta a un carril que trabajó bien.
+- **Agregar el backtick a la lista `[*_#> -]` no era el arreglo**: es el mismo defecto una vez
+  más, esperando al próximo adorno. Se descarta enumerar caracteres.
+- **Las dos preguntas trabadas no eran preguntas pendientes**: una estaba vencida entera y la otra
+  a un tercio. Mandárselas a Sergio tal como estaban habría sido pedirle que decida sobre datos
+  muertos — lo que la memoria ya avisa de las tareas bloqueadas.
+- **No auditar por volumen de commits.** El carril con más actividad de las últimas 24 h es
+  `chatbot-cola` (25 vueltas); el que tocaba por cobertura era `web-factory-dev`. Entré por la
+  lista, no por lo llamativo.
 
 ## Qué depende de Sergio
 
-**Nada nuevo.** `t_655483f6` es una decisión técnica, y por la regla del 2026-09-03 ésas las toma
-la sesión de control y quedan escritas en la tarea: a Sergio sólo se le piden plata, marca y
-contactar personas. Por eso quedó `ready`, **no** `needs_input`.
+- **`ok B` / `no B`** — que "Creá tu cuenta" vaya derecho al registro (hoy son 3 clics). 20 min.
+- **`ok C` / `no C`** — sacar `/comparativa` del menú de arriba; sigue publicada. 20 min.
+
+Las dos ya le fueron por Telegram en el reporte de las 10:29.
 
 ## Próximos pasos
 
-1. **Auditar `web-factory-dev`.** Es el próximo de los nunca mirados.
+1. **Auditar `marca-personal`.** Es el próximo de los nunca mirados.
    **Ya auditados:** `web-venta`, `chatbot`, `lucia`, `onia-cola`, `recorrido-cliente`,
-   `calidad-generado`, `tendencias`, `docs-auditoria`.
-   **Nunca auditados:** `web-factory-dev`, `marca-personal`, `canario-visual`, `investigacion`.
-2. **Verificar que `t_655483f6` se ejecutó.** Listo =
-   `git -C /root/loops/onia-hermes-docs log --oneline HEAD --not --remotes=origin` devuelve
-   **vacío**. Mientras devuelva algo, ese carril sigue trabajando para nadie.
+   `calidad-generado`, `tendencias`, `docs-auditoria`, `web-factory-dev`.
+   **Nunca auditados:** `marca-personal`, `canario-visual`, `investigacion`.
+2. **`kpis-semanal` sigue sin correr**: 0 vueltas en 24 h y su última es del 2026-09-03 12:31,
+   anterior al despliegue del prompt. `loops_avance.sh` lo clasifica en *"aún no vio el prompt"*,
+   que es un descarte legítimo **pero se vuelve una excusa permanente si nadie lo mira**: un loop
+   de cadencia larga puede esconderse ahí para siempre. Listo = saber si su cron dispara.
+   Relacionado con el punto 4, que lleva cinco handoffs abierto.
 3. **`loops.md` quedó atrás del `crontab` en 5 loops** (`canario-visual`, `docs-auditoria`,
    `investigacion`, `marca-personal`, `supervisor`): las cadencias se bajaron el 2026-09-03 16:23
-   y la tabla versionada sigue con las viejas. **No lo toqué** —es zona de `docs-auditoria`, y
-   justo ese carril no puede pushear— pero tiene un filo: el chequeo de arranque de los 15
-   prompts manda a *"volver a poner la línea exactamente como dice la columna `cron`"*, así que
-   un loop podría **restaurar la cadencia alta que Sergio bajó a propósito**. No probé que haya
-   pasado; medirlo antes de abrir tarea.
-4. Sigue abierto de cuatro handoffs atrás: la rama de `kpis-semanal`
+   y la tabla versionada sigue con las viejas. **No lo toqué** —es zona de `docs-auditoria`— pero
+   tiene un filo: el chequeo de arranque de los 15 prompts manda a *"volver a poner la línea
+   exactamente como dice la columna `cron`"*, así que un loop podría **restaurar la cadencia alta
+   que Sergio bajó a propósito**. No probé que haya pasado; medirlo antes de abrir tarea.
+4. Sigue abierto de cinco handoffs atrás: la rama de `kpis-semanal`
    (`claude/marca-personal-loop`) no figura en `loops.md`. Listo = saber si debe estar.
-5. **Observación sin daño probado** (de la vuelta anterior, no re-medida): la enumeración
-   `--no-merged` del integrador devuelve 34 ramas y sólo 11 están vivas. No abrir tarea hasta
-   poder demostrar el daño.
+5. **Observación sin daño probado** (no re-medida): la enumeración `--no-merged` del integrador
+   devuelve ~30 ramas y sólo 6 están vivas. No abrir tarea hasta poder demostrar el daño.
 
 ---
