@@ -506,6 +506,17 @@ function dejarComoExtrano(conversacionId) {
  * "termine" (`clearHumanTakeover`). Va por Rails a proposito: asi se ejecuta el camino real
  * —Chatwoot emite `conversation_status_changed`, el adapter lo traduce— y cada vuelta verifica
  * de paso que ese desarme sigue vivo. Escribir la base a mano lo daria por bueno sin probarlo.
+ *
+ * ⚠️ ESTA linea es la que deja el rastro "Conversation was marked resolved by system due to
+ * 0 minutes of inactivity" en el historial. `rails runner` no tiene `Current.user` ni
+ * `Current.contact`, y Chatwoot firma "by system" toda resolucion sin ellos; el "0 minutes"
+ * sale de `auto_resolve_after || 0`, que es 0 porque el barrendero por inactividad esta
+ * APAGADO (`accounts.settings` = `{}`, y sin el los scopes `resolvable_*` devuelven `none`).
+ * O sea: el cartel parece un auto-resolve de Chatwoot y lo escribimos nosotros. Ya costo
+ * media vuelta de este carril el 2026-09-04 y una entrada equivocada en la memoria
+ * compartida. Si aparece en una conversacion, mirar primero si el contacto es una sonda
+ * ("Sonda QA...") antes de tocar la configuracion de Chatwoot: configurar
+ * `auto_resolve_after` para "arreglarlo" ENCIENDE un barrendero que hoy no corre.
  */
 function desarmar(conversacionId) {
   const app = contenedor(APP, ['sidekiq', '-db', 'redis']);
