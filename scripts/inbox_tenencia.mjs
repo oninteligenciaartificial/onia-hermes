@@ -57,8 +57,23 @@ import { pathToFileURL } from 'node:url';
 /** La org cuya bandeja ES el objetivo del carril. */
 export const ORG = 'Onia (interna)';
 
-/** El inbox de WhatsApp del +591 75414930, el que S8 dejo cerrado. */
-export const INBOX = 5;
+/**
+ * Los DOS inboxes que la org tiene que tener, y en que columna va cada uno.
+ *
+ * ⚠️ CORREGIDO EL 2026-09-03, y el error anterior es el que este gate existe para evitar.
+ * Hasta hoy aca decia `INBOX = 5` a secas y el gate se ponia VERDE con `Onia (interna)` →
+ * inbox 5. Verde estaba mal: el 5 es WhatsApp, y el inbox 4 —"Onia Web", el widget de
+ * onia.com.bo— tenia ONCE conversaciones, CINCO de personas reales (una dejo su correo), sin
+ * dueño y por lo tanto invisibles en `/inbox`. O sea que el gate no solo no vio el agujero:
+ * declaraba correcto el estado que lo causaba, y su self-check exigia como BUG el valor 4,
+ * que es justo el que hay que tener. Un gate que afirma el invariante equivocado es peor que
+ * ninguno, porque el proximo que mire va a confiar en el.
+ *
+ * La causa de fondo era asumir "una org = un inbox". Desde el commit 3523c79 de onia-platform
+ * son dos columnas y dos canales.
+ */
+export const INBOX_WEB = 4;
+export const INBOX_WHATSAPP = 5;
 
 /**
  * La consulta. Va por STDIN y no por `-c` a proposito: `"chatwootInboxId"` necesita comillas
@@ -67,7 +82,7 @@ export const INBOX = 5;
  * rompen solos. `ssh` reenvia stdin al comando remoto, asi que el SQL nunca toca un shell.
  */
 export const SQL =
-  'select o.name, cs."chatwootInboxId", cs.id ' +
+  'select o.name, cs."chatwootInboxId", cs.id, cs."chatwootWhatsappInboxId" ' +
   'from public.organizations o ' +
   'left join public.clinic_settings cs on cs."organizationId" = o.id ' +
   'order by o.id;';
@@ -88,8 +103,11 @@ export function parsearFilas(texto) {
     .map((linea) => {
       const partes = linea.split('|');
       const nombre = partes[0];
-      const inbox = partes[1] === undefined || partes[1] === '' ? null : Number(partes[1]);
-      return { nombre, inbox: Number.isFinite(inbox) ? inbox : null, id: partes[2] || '' };
+      const num = (v) => {
+        const n = v === undefined || v === '' ? null : Number(v);
+        return Number.isFinite(n) ? n : null;
+      };
+      return { nombre, inbox: num(partes[1]), id: partes[2] || '', whatsapp: num(partes[3]) };
     });
 }
 
@@ -116,8 +134,12 @@ export function escritaPorFuera(id) {
 export function colisiones(filas) {
   const porInbox = new Map();
   for (const f of filas) {
-    if (f.inbox === null) continue;
-    porInbox.set(f.inbox, [...(porInbox.get(f.inbox) || []), f.nombre]);
+    // Las DOS columnas: un inbox reclamado por la columna web de una org y por la de WhatsApp
+    // de otra es la misma colision, y hasta hoy no se miraba. Se cuenta una vez por org.
+    for (const id of [...new Set([f.inbox, f.whatsapp])]) {
+      if (id === null) continue;
+      porInbox.set(id, [...(porInbox.get(id) || []), f.nombre]);
+    }
   }
   return [...porInbox.entries()]
     .filter(([, orgs]) => orgs.length > 1)
@@ -154,13 +176,28 @@ export function juzgar(filas) {
       codigo: 1,
       mensaje:
         `TENENCIA PERDIDA — la org \`${ORG}\` no aparece entre las ${filas.length} de la base ` +
-        `(${filas.map((f) => f.nombre).join(', ')}). Sin ella no hay quien sea dueño del inbox ` +
-        `${INBOX}, asi que \`/inbox\` no puede mostrar los leads de WhatsApp (S7).`,
+        `(${filas.map((f) => f.nombre).join(', ')}). Sin ella nadie es dueño de los inboxes ` +
+        `${INBOX_WEB} (web) ni ${INBOX_WHATSAPP} (WhatsApp), asi que \`/inbox\` no muestra nada.`,
     };
   }
 
-  if (fila.inbox !== INBOX) {
-    const tiene = fila.inbox === null ? 'ninguno' : `el ${fila.inbox}`;
+  // Los DOS canales, evaluados por separado: el bug del 2026-09-03 fue exactamente tener uno
+  // bien y el otro huerfano, y un veredicto de un solo inbox no puede ni nombrarlo.
+  const faltan = [];
+  if (fila.inbox !== INBOX_WEB) {
+    faltan.push(
+      `el WEB deberia ser ${INBOX_WEB} y es ${fila.inbox === null ? 'NULL' : fila.inbox}` +
+        ' — las conversaciones del widget de onia.com.bo no se ven en `/inbox`',
+    );
+  }
+  if (fila.whatsapp !== INBOX_WHATSAPP) {
+    faltan.push(
+      `el de WHATSAPP deberia ser ${INBOX_WHATSAPP} y es ${fila.whatsapp === null ? 'NULL' : fila.whatsapp}` +
+        ' — los leads de WhatsApp no se ven, y la escalacion a humano aterriza en la bandeja equivocada',
+    );
+  }
+
+  if (faltan.length) {
     const pista = escritaPorFuera(fila.id)
       ? ` La fila tiene id \`${fila.id}\` — formato UUID, no el \`cuid()\` que genera la app: ` +
         'se escribio POR FUERA. Es la misma huella del 1-sep 02:02, no un click en la UI.'
@@ -169,8 +206,9 @@ export function juzgar(filas) {
     return {
       codigo: 1,
       mensaje:
-        `TENENCIA MOVIDA — \`${ORG}\` deberia tener el inbox ${INBOX} y tiene ${tiene}. ` +
-        `\`/inbox\` dejo de mostrar los leads de WhatsApp que S7 da por visibles.${pista}`,
+        `TENENCIA INCOMPLETA — en \`${ORG}\`, ${faltan.join('; y ')}.${pista}` +
+        ' Se arregla con `node scripts/migrar_inboxes_onia.mjs`, DESPUES de desplegar el codigo' +
+        ' que lee las dos columnas.',
     };
   }
 
@@ -180,7 +218,7 @@ export function juzgar(filas) {
   return {
     codigo: 0,
     mensaje:
-      `TENENCIA OK — \`${ORG}\` tiene el inbox ${INBOX}, sin colisiones` +
+      `TENENCIA OK — \`${ORG}\` tiene el ${INBOX_WEB} (web) y el ${INBOX_WHATSAPP} (WhatsApp), sin colisiones` +
       `${otras.length ? ` (y ${otras.join(', ')})` : ''}. El objetivo del carril sigue visible en \`/inbox\`.`,
   };
 }
@@ -220,55 +258,64 @@ if (process.argv.includes('--self-check')) {
   let casos = 0;
   const afirmar = (cond, que) => { casos++; if (!cond) { console.error('FALLO:', que); process.exitCode = 1; } };
 
-  // Bytes REALES de `docker exec supabase-db psql …` el 2026-09-02, con la tenencia restaurada.
-  const hoy =
-    'Onia (interna)|5|ab6e629f-f798-4a7f-87df-12ec1c7fac0b\n' +
-    'ZZ QA Clinica Chatbot|7|cmsvyguwn000401riyckoiyhs\n' +
-    'ZZ QA Ferreteria Tornillo||cmsw0e759000401rim5gwx0rx\n' +
-    'Bolivian electricidad||cmthllqlp000801kh5d4cqmxy\n';
+  // El estado DESTINO: los dos canales en su columna. Cuarta columna = chatwootWhatsappInboxId.
+  const bien =
+    'Onia (interna)|4|ab6e629f-f798-4a7f-87df-12ec1c7fac0b|5\n' +
+    'ZZ QA Clinica Chatbot|7|cmsvyguwn000401riyckoiyhs|\n' +
+    'ZZ QA Ferreteria Tornillo|||\n' +
+    'Bolivian electricidad|||\n';
 
-  afirmar(parsearFilas(hoy).length === 4, 'lee las cuatro orgs de la base de hoy');
-  afirmar(parsearFilas(hoy)[0].inbox === 5, 'saca el inbox de `Onia (interna)`');
-  afirmar(parsearFilas(hoy)[2].inbox === null, 'un inbox NULL se lee como null, no como 0');
-  afirmar(parsearFilas(hoy)[0].nombre === ORG, 'el nombre con parentesis y espacio sobrevive al split');
-  afirmar(juzgar(parsearFilas(hoy)).codigo === 0, 'con la tenencia de hoy sale 0');
+  afirmar(parsearFilas(bien).length === 4, 'lee las cuatro orgs');
+  afirmar(parsearFilas(bien)[0].inbox === 4, 'saca el inbox web');
+  afirmar(parsearFilas(bien)[0].whatsapp === 5, 'y el de WhatsApp de la cuarta columna');
+  afirmar(parsearFilas(bien)[1].whatsapp === null, 'una org sin WhatsApp se lee como null, no 0');
+  afirmar(parsearFilas(bien)[0].nombre === ORG, 'el nombre con parentesis y espacio sobrevive al split');
+  afirmar(juzgar(parsearFilas(bien)).codigo === 0, 'con los dos canales en su lugar sale 0');
 
-  // EL CASO QUE JUSTIFICA EL SCRIPT: el estado real del 1-sep, cuando la fila se re-creo por
-  // fuera de la app apuntando al inbox 4 y `/inbox` dejo de mostrar a mariohassen y a F.
-  const revertido = hoy.replace('Onia (interna)|5|', 'Onia (interna)|4|');
-  afirmar(juzgar(parsearFilas(revertido)).codigo === 1, 'el reverte del 1-sep sale 1');
-  afirmar(juzgar(parsearFilas(revertido)).mensaje.includes('tiene el 4'), 'y dice que inbox tiene de verdad');
-  afirmar(juzgar(parsearFilas(revertido)).mensaje.includes('POR FUERA'), 'y da la pista forense del id UUID');
+  // EL CASO QUE JUSTIFICA LA CORRECCION DE HOY: bytes REALES del 2026-09-03. El gate viejo
+  // daba VERDE con esto, y era el estado en que cinco desconocidos eran invisibles.
+  const real0903 = 'Onia (interna)|5|ab6e629f-f798-4a7f-87df-12ec1c7fac0b|\n';
+  afirmar(juzgar(parsearFilas(real0903)).codigo === 1, 'el estado real del 3-sep sale ROJO (antes salia verde)');
+  afirmar(juzgar(parsearFilas(real0903)).mensaje.includes('WEB'), 'y nombra el canal web como el que falta');
+  afirmar(juzgar(parsearFilas(real0903)).mensaje.includes('onia.com.bo'), 'y dice que se pierde: el widget');
+  afirmar(juzgar(parsearFilas(real0903)).mensaje.includes('migrar_inboxes_onia'), 'y con que se arregla');
 
-  // La distincion que evita el gate-siempre-rojo: hoy la fila BUENA tambien tiene id UUID.
+  // Un canal bien y el otro no sigue siendo rojo: media tenencia no es tenencia.
+  const soloWeb = 'Onia (interna)|4|ab6e629f-f798-4a7f-87df-12ec1c7fac0b|\n';
+  afirmar(juzgar(parsearFilas(soloWeb)).codigo === 1, 'con el web bien y WhatsApp NULL sigue rojo');
+  afirmar(juzgar(parsearFilas(soloWeb)).mensaje.includes('WHATSAPP'), 'y nombra al que falta, no al que esta bien');
+  afirmar(!juzgar(parsearFilas(soloWeb)).mensaje.includes('el WEB deberia'), 'y NO acusa al canal que esta bien');
+
+  // La distincion que evita el gate-siempre-rojo: la fila buena tambien tiene id UUID.
   afirmar(escritaPorFuera('ab6e629f-f798-4a7f-87df-12ec1c7fac0b'), 'reconoce el UUID de la fila real');
   afirmar(!escritaPorFuera('cmsvyguwn000401riyckoiyhs'), 'y no confunde un cuid() con un UUID');
-  afirmar(juzgar(parsearFilas(hoy)).codigo === 0, 'el id UUID con la tenencia correcta NO pone el gate en rojo');
-
-  // Una fila escrita por la app se lee distinto: la pista cambia, el veredicto no.
-  const porLaApp = hoy.replace('|5|ab6e629f-f798-4a7f-87df-12ec1c7fac0b', '|4|cmsvyguwn000401riyckoiyhx');
-  afirmar(juzgar(parsearFilas(porLaApp)).mensaje.includes('la escribio la app'), 'un cuid apunta al PATCH de superadmin');
+  afirmar(juzgar(parsearFilas(bien)).codigo === 0, 'el id UUID con la tenencia correcta NO pone el gate en rojo');
+  afirmar(juzgar(parsearFilas(real0903)).mensaje.includes('POR FUERA'), 'la pista forense sigue saliendo');
 
   // Segundo invariante: la base NO tiene `@unique`, asi que la colision es escribible.
-  const choque = hoy.replace('ZZ QA Clinica Chatbot|7|', 'ZZ QA Clinica Chatbot|5|');
+  const choque = bien.replace('ZZ QA Clinica Chatbot|7|', 'ZZ QA Clinica Chatbot|4|');
   afirmar(colisiones(parsearFilas(choque)).length === 1, 'detecta dos orgs sobre el mismo inbox');
   afirmar(juzgar(parsearFilas(choque)).codigo === 1, 'una colision sale 1');
-  afirmar(juzgar(parsearFilas(choque)).mensaje.includes('inbox 5'), 'y nombra el inbox en disputa');
-  afirmar(colisiones(parsearFilas(hoy)).length === 0, 'sin colisiones no inventa ninguna');
-  // Los NULL no colisionan entre si: dos orgs sin inbox es el estado normal.
-  afirmar(colisiones(parsearFilas(hoy)).length === 0, 'dos orgs con inbox NULL no cuentan como colision');
+  afirmar(juzgar(parsearFilas(choque)).mensaje.includes('inbox 4'), 'y nombra el inbox en disputa');
+
+  // LA COLISION QUE EL GATE VIEJO NO PODIA VER: cruzada entre columnas distintas.
+  const cruzada = bien.replace('ZZ QA Clinica Chatbot|7|cmsvyguwn000401riyckoiyhs|', 'ZZ QA Clinica Chatbot|7|cmsvyguwn000401riyckoiyhs|5');
+  afirmar(colisiones(parsearFilas(cruzada)).length === 1, 'el WhatsApp de una org chocando con el de otra tambien es colision');
+  afirmar(colisiones(parsearFilas(bien)).length === 0, 'sin colisiones no inventa ninguna');
+  // Una org cuyas dos columnas apuntan al mismo inbox NO choca consigo misma.
+  afirmar(colisiones(parsearFilas('Org Una|9|abc|9\n')).length === 0, 'una org no colisiona con si misma');
 
   // La org desaparecida es un hallazgo, no un "no medido": la consulta si respondio.
-  const sinOrg = parsearFilas(hoy).filter((f) => f.nombre !== ORG);
+  const sinOrg = parsearFilas(bien).filter((f) => f.nombre !== ORG);
   afirmar(juzgar(sinOrg).codigo === 1, 'si la org no esta, sale 1');
-  afirmar(juzgar(sinOrg).mensaje.includes('S7'), 'y explica que se rompe');
+  afirmar(juzgar(sinOrg).mensaje.includes('TENENCIA PERDIDA'), 'y lo dice como perdida, no como movida');
 
   // Fallo conservador: no medir no es estar bien.
   afirmar(juzgar([]).codigo === 2, 'una consulta vacia se lee como NO MEDIDO');
   afirmar(juzgar([]).mensaje.includes('supabase-db'), 'y recuerda cual es la base de produccion');
 
   // Una org sin fila de `clinic_settings` no rompe el parseo.
-  afirmar(parsearFilas('Org Nueva||\n')[0].inbox === null, 'una org sin clinic_settings se lee sin inbox');
+  afirmar(parsearFilas('Org Nueva|||\n')[0].inbox === null, 'una org sin clinic_settings se lee sin inbox');
 
   if (!process.exitCode) console.log(`self-check: ok — ${casos} casos`);
   process.exit(process.exitCode || 0);

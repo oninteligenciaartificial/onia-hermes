@@ -42,6 +42,7 @@ import { parseChatwootWebhook, runChatwootTurn } from "./chatwoot-adapter.mjs";
 import { authenticateChatwootRequest, DEFAULT_TOLERANCE_SECONDS } from "./webhook-security.mjs";
 import { shouldProcessMessage, releaseMessage } from "./message-dedup.mjs";
 import { buildBotTurnEvent, fireN8nBotTurnEvent, getN8nEventConfig } from "./n8n-event.mjs";
+import { construirAviso, dispararAvisoTelegram, getAvisoTelegramConfig } from "./aviso-telegram.mjs";
 import { knowledgeHealth } from "./knowledge.mjs";
 import { createStore } from "./persistence.mjs";
 import { handlePreviewRequest } from "./preview-route.mjs";
@@ -454,7 +455,17 @@ async function procesarWebhook(request, deps, datos) {
     nowIso: deps.nowIso,
   });
 
-  return { status: 200, body: result, n8nEvent };
+  // El aviso a Sergio viaja SEPARADO del evento de n8n a propósito. Hasta hoy era un campo
+  // (`notifyCount`) adentro de ese evento, así que apagar n8n —que es analítica— apagaba también
+  // lo único del evento que NO es analítica: que hay una persona esperando que le contesten.
+  // Dos cosas distintas no pueden compartir un interruptor.
+  const avisoTelegram = construirAviso({
+    notify: result?.notify,
+    conversationId: result?.conversationId,
+    stageAfter: result?.stageAfter,
+  });
+
+  return { status: 200, body: result, n8nEvent, avisoTelegram };
 }
 
 // ---------------------------------------------------------------------------
@@ -523,6 +534,7 @@ function writeJson(res, status, payload) {
 export function createWebhookServer(deps = {}) {
   const config = deps.config || getServerConfig();
   const n8nConfig = deps.n8nConfig || getN8nEventConfig();
+  const avisoConfig = deps.avisoConfig || getAvisoTelegramConfig();
   const handle = typeof deps.handle === "function" ? deps.handle : handleChatwootWebhook;
   const fireEvent = typeof deps.fireEvent === "function" ? deps.fireEvent : fireN8nBotTurnEvent;
   const log = typeof deps.log === "function" ? deps.log : (line) => process.stdout.write(`${line}\n`);
@@ -648,6 +660,20 @@ export function createWebhookServer(deps = {}) {
         });
       } catch (error) {
         log(`[n8n] no se pudo disparar el evento: ${String(error?.message || error)}`);
+      }
+    }
+
+    // El aviso a Sergio. Fire-and-forget igual que el de arriba, pero con su propio interruptor:
+    // esto NO es analítica, es alguien esperando. Deja línea siempre —enviado o no— porque el
+    // modo de falla de este carril es justamente el aviso que no sale y nadie lo nota.
+    if (outcome.avisoTelegram) {
+      try {
+        dispararAvisoTelegram(outcome.avisoTelegram, avisoConfig, deps, (result) => {
+          const motivos = outcome.avisoTelegram.motivos.join(",");
+          log(`[aviso] ${result?.status} (${motivos}): ${result?.reason}`);
+        });
+      } catch (error) {
+        log(`[aviso] no se pudo disparar: ${String(error?.message || error)}`);
       }
     }
   });
