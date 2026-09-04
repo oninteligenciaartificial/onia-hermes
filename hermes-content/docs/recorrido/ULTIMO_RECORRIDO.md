@@ -12,6 +12,61 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## Medido el 2026-09-04 01:24 UTC — rubro DENTAL, con el paso que faltaba: AGENDAR
+
+El recorrido nunca había enviado una cita. Por eso el carril no vio lo que sigue.
+
+### 🔴 Un negocio nuevo no puede agendar NI UNA cita (paso 7, roto)
+
+Cuenta creada hoy, alta completa **sin saltear nada** —horarios cargados y una persona cargada en
+"¿Quién más trabaja con vos?"—. En `/appointments`, el modal **Agendar Cita** muestra
+`Profesional *` con una sola opción vacía y el botón **apagado**: no hay forma de agendar, y la
+pantalla no dice qué falta. Para el paciente ofrece "+ Nuevo paciente"; para el profesional, nada.
+
+Captura: `capturas/paso-07b-cita-formulario.png` — el paciente elegido, el profesional vacío.
+
+**Causa raíz, leída en el código y confirmada en la base:** el desplegable se llena desde
+`/api/doctor-schedules` (`appointments/page.tsx:152-159`), o sea de la tabla `doctor_schedules`.
+El alta guarda los horarios en el JSON `clinicSettings.oniaCoreOnboarding`
+(`lib/onboarding/aplicar.ts:236`) y **nunca escribe en `doctor_schedules`**. En cambio `/api/team`
+sí crea horarios al dar de alta a alguien (`api/team/route.ts:108-109`): el producto sabe hacerlo
+por un camino y no lo hace por el otro. Medido en la org de prueba: `profiles` = 2 (ADMIN dueño +
+DOCTOR cargado en el alta), `doctor_schedules` = **0** para los dos.
+
+El producto promete esto DOS veces durante el alta —"La agenda no va a aceptar citas fuera de este
+horario" y **"Con al menos una persona cargada ya podés agendar"**— y las dos son falsas hoy.
+Reportado al dueño del producto: tarea **`t_2f5a96b6`**, prioridad 1.
+
+### 🟠 Y el primer veredicto de ese paso fue una acusación FALSA mía
+
+La primera corrida dijo *"el formulario no ofrece a quién citar"* **sobre un modal que listaba al
+paciente**. La pantalla tiene **dos** `role=dialog` y `getByRole('dialog').first()` agarra el
+**menú lateral** (0 selects), no el modal (3 selects). Medido con un diagnóstico aparte antes de
+reportar nada; el diálogo ahora se elige por el botón que **envía**, igual que `acotarFormulario`.
+
+**Es la tercera acusación falsa de este carril, y las tres tienen la misma forma:** el instrumento
+mira el pedazo de pantalla equivocado y le echa la culpa al producto. Lo único que las frenó las
+tres veces fue **abrir la captura antes de escribir el informe**.
+
+### Lo que cambió en el instrumento
+
+- **Paso 7 nuevo: agenda.** Elige paciente y profesional, prueba hasta 7 días buscando un horario
+  libre (elegir uno solo y encontrarlo cerrado reportaría "no se puede agendar" sobre un producto
+  sano), escribe la marca `zz-qa-` en las notas y envía. Verifica **doble**: cuenta la fila en
+  `appointments` *y* vuelve a la agenda a buscarla en pantalla. Una sola de las dos ya mintió antes
+  (el bot decía "Listo, agendado" con la reserva en NULL).
+- **El alta ya no saltea horarios ni equipo.** Los salteaba "como alguien apurado", y ese salto era
+  justo el que dejaba sin medir la agenda. Si el producto no deja avanzar, saltea y lo dice en la traza.
+- **El cobro pasó al paso 8**, junto con el panel: los dos últimos son miradas, ninguno envía nada.
+- **Estado `no-aplica`**, para el rubro que no vende agenda (comercio, importadora): no cuenta como
+  agujero, pero se imprime siempre con el menú con el que se dedujo, para poder discutirlo.
+
+**Producción:** 9 filas `zz-qa-` de las dos corridas impresas antes de borrar y borradas por
+prefijo en una transacción. Recuento posterior: **0**. Lo real intacto (5 orgs · 2 pacientes ·
+3 solicitudes).
+
+---
+
 ## Medido el 2026-09-03 19:14 UTC — rubros ESTÉTICA e IMPORTADORA
 
 ### 🟢 Estética y spa: los 8 pasos, tercer rubro entero

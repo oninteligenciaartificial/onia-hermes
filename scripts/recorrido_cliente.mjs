@@ -21,7 +21,11 @@
  * que es lo único que hace el borrado seguro después (un DELETE sin `zz-qa-` en el WHERE está
  * prohibido).
  *
- * 🔴 NUNCA se completa un pago. El paso 7 llega a la pantalla de cobro, la MIRA y FRENA.
+ * 🔴 NUNCA se completa un pago. El paso 8 llega a la pantalla de cobro, la MIRA y FRENA.
+ *
+ * Lo que SÍ se envía, porque es lo que el cliente paga: el alta (paso 3), el dato del rubro
+ * (paso 6) y la CITA (paso 7). Un recorrido que sólo abre pantallas no vio nunca que agendar
+ * no funcionaba — así se pasó una semana con el camino roto y ocho pasos en verde.
  */
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -58,7 +62,36 @@ const QA = {
   // El dato del rubro que carga el paso 6. Va con prefijo como todo lo demás: es una fila más
   // en la base de PRODUCCIÓN y hay que poder borrarla sin dudar de cuál es.
   paciente: `zz-qa-${SELLO}-paciente`,
+  // La marca de la cita del paso 7. Va en las NOTAS porque es el único campo libre del
+  // formulario de cita: el motivo es un desplegable cerrado (catálogo de tratamientos) y ahí no
+  // entra un prefijo. Sin esta marca la fila sería indistinguible de una cita real y ya no se
+  // podría borrar — por eso, si el formulario no tuviera dónde escribirla, el paso NO envía.
+  cita: `zz-qa-${SELLO}-cita`,
+  // La persona que el alta carga en "¿Quién más trabaja con vos?". Sin ella no hay a quién
+  // asignarle una cita: el producto avisa que "con al menos una persona cargada ya podés
+  // agendar". Es una fila más en producción, con su prefijo, y se borra igual que el resto.
+  equipo: `zz-qa-${SELLO}-profesional`,
+  equipoEmail: `zz-qa-${SELLO}-pro@onia.com.bo`,
 };
+
+/**
+ * Cuántas citas zz-qa- hay en la base de producción. Es un SELECT: no escribe nada.
+ *
+ * POR QUÉ EXISTE, y no alcanza con mirar la pantalla: el bot de Onia contestaba "Listo,
+ * agendado" con `calendar_event_id` en NULL — el mensaje decía una cosa y el motor había
+ * escrito otra. Un paso que sólo lee lo que la pantalla dice hereda esa mentira. Acá se
+ * pregunta por el ESTADO que el producto escribió de sí mismo, y se compara con lo que muestra.
+ */
+function contarCitasQA() {
+  try {
+    return Number(execFileSync('docker', [
+      'exec', '-i', 'supabase-db', 'psql', '-U', 'postgres', '-d', 'postgres', '-tAc',
+      `SELECT count(*) FROM appointments WHERE notes LIKE 'zz-qa-%' OR reason LIKE 'zz-qa-%'`,
+    ], { encoding: 'utf8', timeout: 20_000 }).trim());
+  } catch {
+    return null; // no se pudo leer: se dice, no se supone
+  }
+}
 
 /**
  * Credenciales de una cuenta YA EXISTENTE. Son el ÚLTIMO recurso, no el primero: con
@@ -484,6 +517,17 @@ async function completarOnboarding(page) {
     await page.waitForTimeout(1800);
     return comoSeLlama;
   };
+  // Avanza de verdad, y sólo saltea si el producto no deja avanzar. Un "Saltar por ahora"
+  // automático es cómodo para el script y deja sin medir todo lo que hay del otro lado.
+  const seguirOSaltar = async (comoSeLlama) => {
+    const seguir = page.getByRole('button', { name: /^(continuar|siguiente|finalizar|terminar|guardar)/i }).first();
+    if ((await seguir.count().catch(() => 0)) && !(await seguir.isDisabled().catch(() => true))) {
+      await seguir.click({ timeout: 10_000 });
+      await page.waitForTimeout(1800);
+      return comoSeLlama;
+    }
+    return `${await apretar(/saltar por ahora/i, 'Saltar por ahora')} — no se pudo ${comoSeLlama}`;
+  };
 
   // Tope de vueltas: el asistente tiene 6 pantallas; 12 deja margen para un reintento y corta
   // en seco si el producto entra en un bucle. Un instrumento colgado no reporta nada.
@@ -510,13 +554,33 @@ async function completarOnboarding(page) {
           await page.waitForTimeout(500);
         }
         traza.push({ pantalla: 'negocio', vio: donde.h1, apreto: await apretar(/^continuar/i, 'Continuar') });
-      } else if (donde.cual === 'asistente-2' || donde.cual === 'asistente-3') {
-        // Horarios y servicios son opcionales para el producto: se saltan igual que los saltaría
-        // alguien apurado. Es el camino MÍNIMO hasta tener cuenta usable, que es lo que se mide.
-        traza.push({ pantalla: donde.cual, vio: donde.h1, apreto: await apretar(/saltar por ahora/i, 'Saltar por ahora') });
+      } else if (donde.cual === 'asistente-2') {
+        // 🔴 HORARIOS. Antes se saltaba ("el camino mínimo"), y ese salto es justo el que rompe
+        // lo que este recorrido vino a medir: el producto avisa en su propia bajada que "la
+        // agenda no va a aceptar citas fuera de este horario". Se ACEPTA lo que el producto trae
+        // precargado, que es lo que hace un dueño que va a usar la agenda; si el botón de seguir
+        // está apagado (editor vacío), recién ahí se saltea, y queda en la traza.
+        traza.push({ pantalla: 'horarios', vio: donde.h1, apreto: await seguirOSaltar('aceptar los horarios que trae') });
+      } else if (donde.cual === 'asistente-3') {
+        // Servicios/catálogo se saltea a propósito: no toca la agenda y cargarlo dejaría filas
+        // zz-qa- extra en producción que después hay que borrar. Menos basura, misma medición.
+        traza.push({ pantalla: 'servicios', vio: donde.h1, apreto: await apretar(/saltar por ahora/i, 'Saltar por ahora') });
       } else if (donde.cual === 'asistente-4') {
-        // El último salto es el que CIERRA el alta (manda el POST sin miembro de equipo).
-        traza.push({ pantalla: 'equipo', vio: donde.h1, apreto: await apretar(/saltar por ahora/i, 'Saltar por ahora (cierra el alta)') });
+        // 🔴 EQUIPO, y es el paso que decide si el producto sirve para algo. El propio producto
+        // lo dice en su bajada: "Con al menos una persona cargada ya podés agendar" — o sea que
+        // saltarlo deja la agenda MUERTA. Medido el 2026-09-04: con el alta mínima, el
+        // desplegable "Profesional" del formulario de cita queda vacío y el botón "Agendar Cita"
+        // apagado, sin explicar qué falta. Este paso ahora CARGA a una persona, porque un
+        // negocio que va a agendar la carga; que saltarlo rompa la agenda en silencio es un
+        // hallazgo para el dueño del producto, no la forma correcta de medir el camino.
+        const campos = page.locator('input[type=text], input[type=email], input:not([type])');
+        const cuantos = await campos.count().catch(() => 0);
+        for (let i = 0; i < cuantos; i++) {
+          const tipo = await campos.nth(i).getAttribute('type').catch(() => '');
+          await campos.nth(i).fill(tipo === 'email' ? QA.equipoEmail : QA.equipo).catch(() => {});
+        }
+        await page.waitForTimeout(600);
+        traza.push({ pantalla: 'equipo', vio: donde.h1, apreto: await seguirOSaltar(`cargar a "${QA.equipo}" y cerrar el alta`) });
         await page.waitForTimeout(4000);
       } else {
         traza.push({ pantalla: 'desconocida', vio: donde.h1 || '(sin título)', apreto: '—' });
@@ -1085,12 +1149,218 @@ const PASOS = [
 
   {
     n: 7,
-    nombre: 'cobro',
-    // 🔴 Se MIRA y se FRENA. No se escanea un QR, no se confirma una transferencia, no se
-    // mete una tarjeta. Que el botón exista y se vea es todo lo que hay que reportar.
-    que: 'Llegar a la pantalla de cobro y MIRARLA. Frenar ahí',
+    nombre: 'agenda',
+    que: 'Agendar una cita zz-qa- y VERLA en la agenda',
     requiereSesion: true,
+    /**
+     * 🔴 ESTE PASO NO EXISTÍA, y es el que explica por qué el carril no servía. El recorrido
+     * "miraba y frenaba": abría pantallas y nunca enviaba nada. Por eso nadie se enteró de que
+     * agendar no funcionaba — el 2026-09-03 el bot devolvió "Listo, agendado" con la reserva en
+     * NULL, y este recorrido, que existe justo para ver eso, no tenía nada que decir.
+     *
+     * Agendar es el acto por el que el cliente PAGA en cuatro de los cinco rubros. Abrir la
+     * agenda no prueba que agende, igual que abrir /patients no probaba que guardara.
+     */
     async correr(page, ctx) {
+      const menu = ctx.menu?.length ? ctx.menu : await descubrirMenu(page);
+      // La ruta manda sobre el texto: en servicios profesionales el menú trae DOS entradas
+      // —"Agenda de hoy" (/agenda, sólo mira) y "Citas" (/appointments, la que agenda)— y
+      // elegir por la palabra "agenda" entra a la de lectura, donde no hay nada que enviar.
+      const entrada = menu.find((m) => m.ruta === '/appointments')
+        || menu.find((m) => /citas?|turnos?|reservas?/i.test(m.texto))
+        || menu.find((m) => /agenda/i.test(m.texto));
+      if (!entrada) {
+        // NO es un fallo: el pack de comercio e importadora no vende agenda (`vertical-pack.ts`).
+        // Se dice con el menú entero al lado, que es lo que permite auditar la afirmación.
+        return {
+          estado: 'no-aplica',
+          detalle: `el pack de "${ctx.rubroElegido || 'este rubro'}" no trae agenda: no hay ninguna en su menú. Ofrece: ${menu.map((m) => m.texto).join(' · ') || '(el menú está vacío)'}`,
+          menu,
+        };
+      }
+      ctx.pantallaAgenda = entrada;
+
+      const v = await llegar(page, entrada.ruta, 'paso-07-agenda.png');
+      if (v.status >= 400) return { estado: 'roto', detalle: `la agenda (${entrada.texto}, ${entrada.ruta}) devolvió ${v.status}`, ...v };
+      if (!v.llego) return { estado: 'no-medido', detalle: motivoNoLlego(v, ctx, `la agenda (${entrada.texto})`), ...v };
+      if (!ESCRIBIR) return { estado: 'no-medido', detalle: `la agenda "${entrada.texto}" está a la vista en ${page.url()}, pero sin --escribir no se agenda ninguna cita`, ...v };
+
+      // Se entra por el botón que ofrece la pantalla, no por una URL a mano.
+      const abrir = page.getByRole('button', { name: /agendar|nueva cita|nuevo turno|nueva reserva/i }).first();
+      if (!(await abrir.count().catch(() => 0))) {
+        const botones = await page.evaluate(() => [...document.querySelectorAll('button')]
+          .filter((b) => b.offsetParent !== null)
+          .map((b) => (b.innerText || '').replace(/\s+/g, ' ').trim()).filter(Boolean).slice(0, 12));
+        return { estado: 'roto', detalle: `la agenda "${entrada.texto}" (${entrada.ruta}) no ofrece ningún botón para agendar. Los botones a la vista: ${botones.join(' · ') || '(ninguno)'}`, botones, ...v };
+      }
+      await abrir.click({ timeout: 10_000 }).catch(() => {});
+      await page.waitForTimeout(1500);
+
+      // El formulario de cita es un diálogo declarado (`AccessibleDialog`, role=dialog). Se acota
+      // ahí y no a la página: detrás del modal siguen visibles el buscador de la agenda y el
+      // mismo botón "Agendar cita" de la lista, y llenar/apretar afuera manda un alta vacía —
+      // que es exactamente el falso rojo que ya firmó este script contra el alta de comercio.
+      //
+      // 🔴 Y `getByRole('dialog').first()` NO es el modal: la pantalla tiene DOS role=dialog y el
+      // primero es el MENÚ LATERAL (medido el 2026-09-04: dialog 0 = "…-negocio SISTEMA DE
+      // GESTIÓN dashboard…", 0 selects; dialog 1 = "Agendar Cita", 3 selects). Con el primero,
+      // este paso leyó cero desplegables y firmó "el formulario no ofrece a quién citar" contra
+      // un modal que listaba al paciente — la tercera acusación falsa del carril, y la más
+      // barata de evitar. El diálogo se elige por el botón que ENVÍA, igual que `acotarFormulario`.
+      const raiz = page.getByRole('dialog').filter({ has: page.locator('button[type=submit]') }).first();
+      if (!(await raiz.count().catch(() => 0))) {
+        const vista = await mirar(page, 'paso-07b-cita-formulario.png');
+        return { estado: 'roto', detalle: `se apretó "agendar" en ${entrada.texto} y no se abrió ningún formulario de cita, en ${page.url()}`, ...vista };
+      }
+
+      // Los desplegables se identifican por lo que OFRECEN, no por su posición: el orden cambia
+      // solo (cuando el que agenda es el propio profesional, su campo no es un select sino un
+      // texto fijo, y todos los índices se corren uno).
+      const selects = await raiz.locator('select').evaluateAll((els) => els.map((el, i) => ({
+        i,
+        opciones: [...el.options].map((o) => ({ v: o.value, t: (o.text || '').replace(/\s+/g, ' ').trim() })),
+      })));
+      const iCliente = selects.findIndex((s) => s.opciones.some((o) => o.v && /zz-qa-/.test(o.t)));
+      if (iCliente < 0) {
+        const vista = await mirar(page, 'paso-07b-cita-formulario.png');
+        return {
+          estado: 'roto',
+          detalle: `el formulario de cita no ofrece a quién citar: ningún desplegable lista el dato "${ctx.datoCargado || QA.paciente}" que el paso 6 dio por guardado. Opciones del primero: ${(selects[0]?.opciones || []).map((o) => o.t).join(' · ') || '(ninguna)'}`,
+          selects,
+          ...vista,
+        };
+      }
+      await raiz.locator('select').nth(iCliente).selectOption({ label: (selects[iCliente].opciones.find((o) => /zz-qa-/.test(o.t))).t }).catch(() => {});
+
+      // El profesional: el otro desplegable que pide elegir. Si no hay ninguno con opciones
+      // reales, un negocio nuevo NO PUEDE agendar, y eso sí es un hallazgo de primera.
+      const iPro = selects.findIndex((s, i) => i !== iCliente && /^seleccionar/i.test(s.opciones[0]?.t || ''));
+      if (iPro >= 0) {
+        const conValor = selects[iPro].opciones.filter((o) => o.v);
+        if (!conValor.length) {
+          const vista = await mirar(page, 'paso-07b-cita-formulario.png');
+          return { estado: 'roto', detalle: `el formulario de cita no ofrece ningún profesional a quien asignarla: el desplegable sólo tiene "${selects[iPro].opciones[0]?.t}". Un negocio recién creado no puede agendar`, selects, ...vista };
+        }
+        await raiz.locator('select').nth(iPro).selectOption(conValor[0].v).catch(() => {});
+        await page.waitForTimeout(800);
+      }
+
+      // La fecha y la hora: las horas las decide el producto según el horario del profesional,
+      // así que se prueban días hasta 7 antes de acusarlo. Elegir uno solo y encontrarlo cerrado
+      // (un domingo, un feriado) reportaría "no se puede agendar" sobre un producto sano.
+      const campoFecha = raiz.locator('input[type=date]').first();
+      if (!(await campoFecha.count().catch(() => 0))) {
+        const vista = await mirar(page, 'paso-07b-cita-formulario.png');
+        return { estado: 'roto', detalle: `el formulario de cita no tiene campo de fecha, en ${page.url()}`, selects, ...vista };
+      }
+      const HORA = /^\d{1,2}:\d{2}$/;
+      let elegido = null;
+      const probados = [];
+      for (let d = 1; d <= 7 && !elegido; d++) {
+        const dia = new Date(Date.now() + d * 86_400_000).toISOString().slice(0, 10);
+        await campoFecha.fill(dia).catch(() => {});
+        await page.waitForTimeout(2500); // la disponibilidad la trae una API, no está en el DOM
+        const horas = raiz.getByRole('button', { name: HORA });
+        const cuantas = await horas.count().catch(() => 0);
+        if (cuantas > 0) { elegido = { dia, cuantas }; break; }
+        const dice = ((await raiz.innerText().catch(() => '')).match(/no hay horarios[^.\n]*|no trabaja este día[^.\n]*/i) || [])[0] || 'ninguna hora ofrecida';
+        probados.push(`${dia}: ${dice}`);
+      }
+      if (!elegido) {
+        const vista = await mirar(page, 'paso-07b-cita-formulario.png');
+        return { estado: 'roto', detalle: `el producto no ofrece ni un horario para agendar en los próximos 7 días — ${probados.join(' · ')}`, probados, selects, ...vista };
+      }
+      await raiz.getByRole('button', { name: HORA }).first().click({ timeout: 10_000 }).catch(() => {});
+
+      // La marca zz-qa- va en las notas. Sin ella la fila no se puede borrar, así que sin campo
+      // libre NO se envía: dejar una cita anónima en producción es peor que no medir el paso.
+      const notas = raiz.locator('textarea').first();
+      if (!(await notas.count().catch(() => 0))) {
+        const vista = await mirar(page, 'paso-07b-cita-formulario.png');
+        return { estado: 'no-medido', detalle: `el formulario de cita no tiene ningún campo libre donde escribir la marca zz-qa-: no se envió, porque una cita sin marcar no se puede borrar después`, ...vista };
+      }
+      await notas.fill(QA.cita).catch(() => {});
+
+      const enviar = raiz.locator('button[type=submit]').first();
+      if (!(await enviar.count().catch(() => 0))) {
+        const vista = await mirar(page, 'paso-07b-cita-formulario.png');
+        return { estado: 'roto', detalle: `el formulario de cita no tiene botón de envío, en ${page.url()}`, ...vista };
+      }
+      const antes = contarCitasQA();
+      await enviar.click({ timeout: 10_000 }).catch(() => {});
+      await page.waitForLoadState('networkidle', { timeout: TIMEOUT }).catch(() => {});
+      await page.waitForTimeout(3000);
+      // Si el envío falló, el formulario sigue abierto CON el error adentro: ésa es la foto que
+      // sirve. Cerrarlo antes de mirar deja una captura que no sabe explicar qué pasó.
+      const enviada = await mirar(page, 'paso-07b-cita-formulario.png');
+
+      // Doble verificación, y las dos hacen falta: la BASE dice si el producto la guardó, la
+      // PANTALLA dice si el cliente puede verla. Una sola de las dos ya mintió antes.
+      const despues = contarCitasQA();
+      ctx.citaCargada = despues !== null && antes !== null && despues > antes ? QA.cita : null;
+      const vuelta = await llegar(page, entrada.ruta, 'paso-07c-cita-en-la-agenda.png');
+      const aQuien = ctx.datoCargado || QA.paciente;
+      const enPantalla = await page.evaluate((n) => (document.body.innerText || '').includes(n), aQuien);
+
+      if (despues === null) {
+        return { estado: 'no-medido', detalle: `no se pudo leer la base para saber si la cita entró; en pantalla la agenda ${enPantalla ? 'SÍ' : 'no'} muestra a "${aQuien}"`, capturaEnvio: enviada.captura, ...vuelta };
+      }
+      if (despues <= antes) {
+        return {
+          estado: 'roto',
+          detalle: `se completó el formulario y se apretó enviar, y NO quedó ninguna cita: appointments sigue con ${despues} fila(s) zz-qa- (${elegido.dia}, ${elegido.cuantas} horas ofrecidas). El producto no la guardó`,
+          citasQA: despues,
+          capturaEnvio: enviada.captura,
+          ...vuelta,
+        };
+      }
+      if (!enPantalla) {
+        return {
+          estado: 'roto',
+          detalle: `la cita ENTRÓ en la base (${despues} fila zz-qa- en appointments) pero la agenda de ${page.url()} no muestra a "${aQuien}": el cliente no puede verla`,
+          citasQA: despues,
+          capturaEnvio: enviada.captura,
+          ...vuelta,
+        };
+      }
+      return {
+        estado: 'ok',
+        detalle: `cita agendada para "${aQuien}" el ${elegido.dia} (de ${elegido.cuantas} horas ofrecidas), guardada en la base y visible en ${entrada.texto} (${page.url()})`,
+        citasQA: despues,
+        capturaEnvio: enviada.captura,
+        ...vuelta,
+      };
+    },
+  },
+
+  {
+    n: 8,
+    nombre: 'panel-y-cobro',
+    que: 'Ver el dato del paso 6 en el panel, y MIRAR la pantalla de cobro. Frenar ahí',
+    requiereSesion: true,
+    /**
+     * Dos miradas en un paso, porque son las dos últimas del camino y ninguna envía nada.
+     * El panel pregunta si el dato del paso 6 aparece; el cobro se MIRA y se FRENA: no se
+     * escanea un QR, no se confirma una transferencia, no se mete una tarjeta. Que el botón
+     * exista y se vea es todo lo que hay que reportar.
+     */
+    async correr(page, ctx) {
+      // ── Primero el panel: ¿aparece acá el dato que el paso 6 dio por guardado? ──────────
+      // Mientras el paso 6 no cargaba nada, este paso no tenía nada que buscar y reportaba OK
+      // por abrir el panel: verde sobre el vacío.
+      const p = await llegar(page, '/dashboard', 'paso-08-bandeja.png');
+      if (p.status >= 400) return { estado: 'roto', detalle: `el panel devolvió ${p.status}`, ...p };
+      if (!p.llego) return { estado: 'no-medido', detalle: motivoNoLlego(p, ctx, 'el panel'), ...p };
+      const enElPanel = ctx.datoCargado
+        ? await page.evaluate((n) => (document.body.innerText || '').includes(n), ctx.datoCargado)
+        : null;
+      const dicePanel = !ctx.datoCargado
+        ? `el panel abrió en ${page.url()}, pero el paso 6 no dejó ningún dato que buscar`
+        : enElPanel
+          ? `el panel muestra el dato "${ctx.datoCargado}" del paso 6`
+          : `el panel NO lista el dato "${ctx.datoCargado}" — sí quedó guardado y visible en ${ctx.pantallaDato?.texto || 'su lista'} (paso 6): no es un fallo, es lo que el panel muestra`;
+
+      // ── Y después el cobro: se MIRA y se FRENA ─────────────────────────────────────────
       // 🔴 Acá estaba `/billing` fijo, que es el cobro del rubro DENTAL. Un comercio no tiene
       // esa ruta: su cobro se llama "Caja" (`/comercio/caja`). Pedir /billing con una cuenta de
       // comercio rebota al panel, y el paso reportaba "no se llegó a la pantalla de cobro" como
@@ -1114,39 +1384,15 @@ const PASOS = [
       let cobro = null;
       for (const p of COBRO) { cobro = menu.find((m) => p.test(m.texto)); if (cobro) break; }
       const ruta = cobro?.ruta || '/billing';
-      const v = await llegar(page, ruta, 'paso-07-cobro.png');
+      const v = await llegar(page, ruta, 'paso-08b-cobro.png');
       const comoSeLlama = `la pantalla de cobro (${cobro?.texto?.replace(/^\S+\s/, '') || 'Facturación'})`;
-      if (v.status >= 400) return { estado: 'roto', detalle: `${comoSeLlama} devolvió ${v.status} en ${ruta}`, menuCobro: cobro || null, ...v };
-      if (!v.llego) return { estado: 'no-medido', detalle: motivoNoLlego(v, ctx, comoSeLlama), menuCobro: cobro || null, ...v };
-      return { estado: 'ok', detalle: `${comoSeLlama} a la vista en ${page.url()} — FRENADO acá a propósito`, menuCobro: cobro || null, ...v };
-    },
-  },
-
-  {
-    n: 8,
-    nombre: 'bandeja',
-    que: 'Abrir la bandeja / el panel y ver si el dato del paso 6 aparece',
-    requiereSesion: true,
-    /**
-     * Este paso pregunta si el dato del paso 6 APARECE. Mientras el paso 6 no cargaba nada, no
-     * tenía nada que buscar y reportaba OK por abrir el panel: verde sobre el vacío.
-     */
-    async correr(page, ctx) {
-      const v = await llegar(page, '/dashboard', 'paso-08-bandeja.png');
-      if (v.status >= 400) return { estado: 'roto', detalle: `el panel devolvió ${v.status}`, ...v };
-      if (!v.llego) return { estado: 'no-medido', detalle: motivoNoLlego(v, ctx, 'el panel'), ...v };
-      if (!ctx.datoCargado) {
-        return { estado: 'no-medido', detalle: `el panel abrió en ${page.url()}, pero el paso 6 no dejó ningún dato que buscar`, ...v };
-      }
-      const enElPanel = await page.evaluate((n) => (document.body.innerText || '').includes(n), ctx.datoCargado);
-      return {
-        estado: 'ok',
-        detalle: enElPanel
-          ? `panel en ${page.url()}: el dato "${ctx.datoCargado}" del paso 6 aparece acá`
-          : `panel en ${page.url()}: el dato "${ctx.datoCargado}" NO figura en el panel — sí quedó guardado y visible en ${ctx.pantallaDato?.texto || 'su lista'} (paso 6). El panel no lista ${(ctx.pantallaDato?.texto || 'esos datos').toLowerCase()}: no es un fallo, es lo que muestra`,
-        datoEnElPanel: enElPanel,
-        ...v,
-      };
+      const base = { menuCobro: cobro || null, datoEnElPanel: enElPanel, capturaPanel: p.captura, ...v };
+      if (v.status >= 400) return { estado: 'roto', detalle: `${dicePanel}. Y ${comoSeLlama} devolvió ${v.status} en ${ruta}`, ...base };
+      if (!v.llego) return { estado: 'no-medido', detalle: `${dicePanel}. Pero ${motivoNoLlego(v, ctx, comoSeLlama)}`, ...base };
+      // Que el panel no liste el dato NO es un fallo (el panel resume, no lista todo); que el
+      // paso 6 no haya dejado nada que buscar SÍ deja este paso sin medir de verdad.
+      if (!ctx.datoCargado) return { estado: 'no-medido', detalle: `${dicePanel}. ${comoSeLlama} a la vista en ${page.url()} — FRENADO acá a propósito`, ...base };
+      return { estado: 'ok', detalle: `${dicePanel}. Y ${comoSeLlama} a la vista en ${page.url()} — FRENADO acá a propósito`, ...base };
     },
   },
 ];
@@ -1176,15 +1422,22 @@ async function main() {
       r = { n: paso.n, nombre: paso.nombre, que: paso.que, estado: 'roto', detalle: `explotó: ${e.message}` };
     }
     resultados.push(r);
-    const marca = r.estado === 'ok' ? '✔' : r.estado === 'roto' ? '✖' : '·';
+    const marca = r.estado === 'ok' ? '✔' : r.estado === 'roto' ? '✖' : r.estado === 'no-aplica' ? '–' : '·';
     console.log(`  ${marca}  ${etiqueta}: ${r.estado.toUpperCase()} — ${r.detalle}`);
     if (r.estado === 'ok') ultimoOk = paso.n;
   }
 
+  // Un paso NO-APLICA no es un agujero ni un corte: es el producto diciendo que a este rubro no
+  // le vende esa pantalla (comercio e importadora no tienen agenda, `vertical-pack.ts`). Se
+  // cuenta aparte y se nombra siempre — un "no aplica" mal deducido taparía un fallo real, así
+  // que su detalle trae el menú entero con el que se dedujo, para poder discutirlo.
+  const aplica = (r) => r.estado !== 'no-aplica';
+  const noAplican = resultados.filter((r) => !aplica(r));
+
   // El corte es el primero que frenó el AVANCE, no el primero que no salió OK. Con el paso 3
   // salteado a propósito (sin --escribir) y el 4 en verde, "corte en el paso 3" mandaba a mirar
   // donde no había nada roto.
-  corte = resultados.find((r) => r.estado !== 'ok' && r.n > ultimoOk) || null;
+  corte = resultados.find((r) => r.estado !== 'ok' && aplica(r) && r.n > ultimoOk) || null;
 
   // 🔴 NACE DEL FALSO VERDE DEL 2026-09-03 EN IMPORTADORA, y es una recaída del mismo que este
   // script ya tuvo: `ultimoOk` guarda el ÚLTIMO paso que salió bien, NO hasta dónde se llegó de
@@ -1199,7 +1452,7 @@ async function main() {
   // este carril de no servir para nada: reportar en verde el camino que el cliente no puede hacer.
   // Por eso "completo" ahora exige que NO haya ni un paso fuera de OK, y los agujeros se enumeran
   // todos, estén donde estén.
-  const agujeros = resultados.filter((r) => r.estado !== 'ok');
+  const agujeros = resultados.filter((r) => r.estado !== 'ok' && aplica(r));
   // Hasta dónde llegó DE CORRIDA: el primer agujero corta, haya verdes después o no.
   const seguidos = agujeros.length ? agujeros[0].n - 1 : PASOS.length;
   // Los TAPADOS son los agujeros que tienen un paso VERDE después: los únicos que el veredicto
@@ -1220,6 +1473,10 @@ async function main() {
     ultimoOkSuelto: ultimoOk,
     completo: agujeros.length === 0,
     deCuantos: PASOS.length,
+    // La medida del OBJETIVO del carril, arriba de todo y en una sola palabra: sin cita
+    // agendada de verdad, el recorrido no probó el acto por el que el cliente paga.
+    citaAgendada: !!ctx.citaCargada,
+    noAplican: noAplican.map((a) => ({ paso: a.n, nombre: a.nombre, detalle: a.detalle })),
     corte: corte ? { paso: corte.n, nombre: corte.nombre, estado: corte.estado, detalle: corte.detalle } : null,
     agujeros: agujeros.map((a) => ({ paso: a.n, nombre: a.nombre, estado: a.estado, detalle: a.detalle })),
     datosQA: ESCRIBIR ? QA : null,
@@ -1228,8 +1485,11 @@ async function main() {
   writeFileSync(join(OUT, 'resumen.json'), JSON.stringify(resumen, null, 2));
 
   console.log('');
+  // El "no aplica" se canta ANTES del veredicto: un completo que se apoya en pasos salteados
+  // tiene que decir cuáles salteó en la misma línea en que se declara completo.
+  for (const a of noAplican) console.log(`NO APLICA a este rubro el paso ${a.n} (${a.nombre}) — ${a.detalle}`);
   if (!agujeros.length) {
-    console.log(`RECORRIDO COMPLETO: los ${PASOS.length} pasos. Eso es la noticia.`);
+    console.log(`RECORRIDO COMPLETO: ${PASOS.length - noAplican.length} de ${PASOS.length} pasos${noAplican.length ? ` (${noAplican.length} no aplica(n) a este rubro)` : ''}. Eso es la noticia.`);
   } else {
     console.log(`LLEGÓ HASTA EL PASO ${seguidos} de ${PASOS.length} de corrida.`);
     if (corte) console.log(`CORTE en el paso ${corte.n} (${corte.nombre}) — ${corte.estado}: ${corte.detalle}`);
@@ -1246,6 +1506,7 @@ async function main() {
   if (ESCRIBIR) {
     const creado = [`cuenta ${QA.email}`, `organización ${QA.negocio}`];
     if (ctx.datoCargado) creado.push(`paciente ${ctx.datoCargado}`);
+    if (ctx.citaCargada) creado.push(`cita ${ctx.citaCargada} (appointments.notes)`);
     console.log(`\n⚠️  Se escribió en producción: ${creado.join(' · ')}. HAY QUE BORRARLO EN ESTA MISMA VUELTA.`);
   }
 
