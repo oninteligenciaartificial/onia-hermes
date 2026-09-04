@@ -21,14 +21,35 @@ Si hay 3, la versión 1.1 la decide lo que pidan esos tres, no nosotros.
 ## Qué ES la versión 1.0
 
 Un negocio de Bolivia se registra solo, carga a sus clientes, agenda, cobra, y el dueño ve su día
-desde el celular. **Todo esto ya está vivo y verificado en producción.**
+desde el celular.
+
+⚠️ **Corregido el 4-sep-2026, y es lo más caro que apareció.** Acá decía *"todo esto ya está vivo y
+verificado en producción"*. Es **falso para servicios y comercio**, que son 2 de los rubros que
+vendemos. Se midió haciendo el recorrido entero contra producción con una cuenta nueva de rubro
+Servicios, mirando cada pantalla renderizada:
+
+- **No hay pantalla de clientes.** La única puerta es Caja → método Fiado, 6 clics, y ese cliente
+  aparece en «Por cobrar» pero **no** en el selector de la cita.
+- **La cita es imposible.** «Seleccionar cliente» abre con **cero opciones** y frena con un globo
+  del navegador **en inglés**.
+- **No hay recibo.** La única acción de una venta es «Anular»; `/print/invoice` cuelga de
+  `/billing`, que este rubro no tiene.
+- **Cobrar un servicio exige inventar stock** (422 «Stock insuficiente: disponible 0»), y el SKU es
+  obligatorio sin estar marcado como tal.
+
+Y la propia tarjeta de `/register` le promete a ese rubro, textual, **«Agenda, citas, cobros y
+contabilidad»**. Es una promesa falsa en el último clic antes de crear la cuenta.
+
+**Lo que un dueño de servicios SÍ puede hacer solo hoy:** registrarse → cargar un servicio →
+cobrarlo en efectivo → verlo en Contabilidad con IVA e IT calculados. Eso es el trial que vive:
+**cobra, pero no agenda ni entrega comprobante.**
 
 | Pieza | Estado |
 |---|---|
 | Registro solo, con 14 días de prueba | ✅ vivo |
-| Agenda y citas (crear, ver el día, agenda pública) | ✅ vivo |
-| Clientes o pacientes con su ficha | ✅ vivo |
-| Cobros: factura interna, pago, recibo imprimible | ✅ vivo |
+| Agenda y citas (crear, ver el día, agenda pública) | ✅ en los rubros clínicos · 🔴 **inalcanzable en servicios y comercio** |
+| Clientes o pacientes con su ficha | ✅ en los rubros clínicos · 🔴 **no existe la pantalla en servicios y comercio** |
+| Cobros: factura interna, pago, recibo imprimible | ✅ cobro vivo en todos · 🔴 **sin recibo imprimible fuera de los clínicos** |
 | Contabilidad: libro de compras, resumen de IVA para el contador | ✅ vivo |
 | Chatbot del sitio web con cuota de 500 conversaciones | ✅ vivo (add-on) |
 | Entrar seguro: bloqueo por intentos, verificación en dos pasos | ✅ vivo |
@@ -37,6 +58,10 @@ desde el celular. **Todo esto ya está vivo y verificado en producción.**
 
 ### Lo que falta para poder cobrar, y es corto
 
+0. 🔴 **Que el rubro entregue lo que su propia alta promete.** Antes que cualquier otra cosa: o
+   servicios y comercio tienen dónde cargar un cliente y agendar, o la tarjeta de `/register` deja
+   de prometerlo. Vender una agenda que no existe es la forma más cara de perder al primer cliente
+   que pague. *Sin arreglar (medido el 4-sep).*
 1. **Material de venta honesto.** La web y el guion prometen factura del SIN, que está apagada.
    *En corrección (`t_db9acebf`).* **Bloquea escribirle a los leads.**
 2. **El dueño conecta su WhatsApp.** Meta ya aprobó los permisos; el botón está vivo. Falta que
