@@ -34,6 +34,26 @@ export interface SiatBloque {
  * El argumento, en tres pasos y en ESTE orden: primero la opción gratuita
  * (honestidad legal tributaria), después qué resuelve un sistema, y recién
  * al final dónde está Onia.
+ *
+ * ⚠️ **Corregido el 2026-09-04.** Los bloques 2 y 3 y dos respuestas del FAQ
+ * decían, en presente, que «la factura sale de la MISMA venta» y que el sistema
+ * «ya completó las pruebas técnicas de la Fase 1», con solo «las etapas
+ * formales del trámite (inspección del SIN)» pendientes. Las dos cosas son
+ * falsas, y la segunda es la cara: el marcador del portal del SIN, leído el
+ * 2026-08-27 y transcrito en
+ * `hermes-content/docs/ONIA_SIAT_ESTADO_HOMOLOGACION.md` §4, dice **1.424 de
+ * 5.732 casos (24,8%)**, **Porcentaje General 0%** —ninguna etapa cerrada— y la
+ * etapa VIII (firma digital, 690 casos) en **cero**, esperando un certificado
+ * de AGETIC. Además falta el Punto de Venta 1, que lo crea Sergio.
+ *
+ * Un lead que lee «solo falta la inspección» calcula semanas y compra
+ * ESPERANDO facturar. Es la mentira más cara del sitio, porque la descubre
+ * justo cuando ya pagó — y porque la clínica es el cliente que más factura.
+ *
+ * La regla al editar esto: **no se publica un porcentaje ni una fecha.** El
+ * porcentaje exhibe obra (CLAUDE.md §«La venta nunca exhibe obra») y la fecha
+ * no la tenemos. Se dice el estado —en trámite, sin fecha— y se dice qué hace
+ * Onia HOY, que sí es cierto y sí es útil.
  */
 export const SIAT_BLOQUES: readonly SiatBloque[] = [
   {
@@ -44,12 +64,12 @@ export const SIAT_BLOQUES: readonly SiatBloque[] = [
   {
     titulo: "Lo que un sistema resuelve no es la obligación: es el re-tipeo.",
     texto:
-      "El costo real del portal gratuito es tu tiempo: cada venta se tipea dos veces — una en tu cuaderno o caja, otra en el portal. Con un sistema de gestión conectado, la factura sale de la MISMA venta que ya registraste al cobrar, y tu registro de compras y ventas (RCV), el IVA y el calendario de vencimientos se arman solos. Ese es el trabajo que Onia hace — el cumplimiento ya era tuyo gratis.",
+      "El costo real del portal gratuito es tu tiempo: cada venta se tipea dos veces — una en tu cuaderno o caja, otra en el portal. Onia te saca la mitad de ese trabajo hoy: la venta queda cerrada con cliente, monto y detalle, y tu registro de compras y ventas (RCV), el IVA y el calendario de vencimientos se arman solos. Al portal del SIN entrás con los números ya hechos, no a rearmarlos.",
   },
   {
     titulo: "Dónde está Onia en este camino (dicho de frente)",
     texto:
-      "Nuestro sistema está registrado ante el SIN como proveedor de facturación y ya completó las pruebas técnicas de la Fase 1 en el ambiente de pruebas oficial: emisión individual y masiva, anulaciones, reversiones y operación sin internet. Quedan las etapas formales del trámite (inspección del SIN). Mientras la homologación concluye, Onia registra y ordena cada venta, arma tu contabilidad, y emitís por el portal gratuito — sin re-tipear tus números, porque el sistema te los da listos.",
+      "Onia todavía NO emite factura con valor fiscal. Nuestro sistema está registrado ante el SIN como proveedor y el trámite de homologación está en curso, sin fecha de aprobación: no la sabemos y no te la vamos a inventar. Lo que Onia hace hoy es lo de arriba — deja la venta cerrada y la contabilidad armada — y vos emitís por el Portal Web del SIN, gratis y legal. Si tu decisión de compra depende de facturar desde el sistema, comprá cuando esté, no ahora.",
   },
 ] as const;
 
@@ -65,7 +85,7 @@ export const SIAT_FAQ: readonly SiatFaq[] = [
   },
   {
     q: "¿Puedo cumplir gratis?",
-    a: "Sí. El SIN ofrece el Portal Web en Línea gratuito, donde emitís factura por factura tipeando los datos a mano. Cumple la norma al 100%. Lo que un sistema como Onia agrega no es el cumplimiento: es no re-tipear — la factura sale sola de tu venta, con tu caja y tu contabilidad conectadas.",
+    a: "Sí. El SIN ofrece el Portal Web en Línea gratuito, donde emitís factura por factura tipeando los datos a mano. Cumple la norma al 100%. Lo que un sistema como Onia agrega no es el cumplimiento: es llegar al portal con los datos ya hechos — la venta cerrada, la caja y la contabilidad armadas — en vez de rearmarlos de memoria.",
   },
   {
     q: "¿Qué pasa si no migro antes del 1 de octubre de 2026?",
@@ -77,7 +97,7 @@ export const SIAT_FAQ: readonly SiatFaq[] = [
   },
   {
     q: "¿Y Onia ya puede emitir facturas en línea?",
-    a: "Estamos en trámite: nuestro sistema está registrado ante el SIN como proveedor y ya completó las pruebas técnicas de emisión, anulación y contingencia en el ambiente de pruebas del SIN (Fase 1). Faltan las etapas formales de inspección. Mientras tanto, con Onia tu venta queda registrada y lista, y emitís por el portal gratuito del SIN — te avisamos apenas la homologación concluya.",
+    a: "No. Estamos registrados ante el SIN como proveedor y el trámite de homologación está en curso, pero no tenemos fecha de aprobación y no te la vamos a inventar. Hoy, con Onia, tu venta queda registrada y tu contabilidad armada, y emitís por el Portal Web gratuito del SIN. No cobramos nada por la factura fiscal ni la incluimos en ningún plan: no se paga lo que todavía no anda.",
   },
 ] as const;
 

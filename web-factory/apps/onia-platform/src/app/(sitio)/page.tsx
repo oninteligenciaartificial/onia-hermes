@@ -251,8 +251,14 @@ const JSON_LD = {
       operatingSystem: "Web",
       url: `${SITE_URL}/`,
       publisher: { "@id": `${SITE_URL}/#org` },
+      // Lo que se enumera acá es lo que Google muestra como QUÉ HACE el
+      // producto, y no lleva la corrección al lado. Decía "…cobros,
+      // facturación y agentes": en Bolivia y a un mes del 1-oct, "facturación"
+      // se lee como la factura del SIN, que Onia todavía no emite
+      // (lib/pricing.ts → la nota fiscal, y lib/siat.ts). Se enumera lo mismo
+      // que promete el hero, ni una capacidad más.
       description:
-        "Sistema de gestión con IA para negocios en Bolivia: agenda, clientes, cobros, facturación y agentes con aprobación humana.",
+        "Sistema de gestión con IA para negocios en Bolivia: agenda, fichas de clientes, caja, cobros e inventario, con agentes que esperan tu aprobación.",
       offers: PLANES.map((plan) => ({
         "@type": "Offer",
         name: plan.nombre,
@@ -451,7 +457,18 @@ export default function Portada() {
         </Reveal>
       </Block>
 
-      {/* 3 · HECHO FUERTE — el hueco de mercado, sourced (proof.ts) */}
+      {/* 3 · HECHO FUERTE — el hueco de mercado, sourced (proof.ts)
+
+          ⚠️ El párrafo de abajo NO se acorta. El titular del bloque nombra la
+          factura SIAT (es un dato de MERCADO, verificado y de terceros), y
+          debajo hablaba Onia: "Onia unifica la gestión y los agentes". Callarse
+          la factura justo ahí no era neutral — era la implicatura más cara del
+          sitio. El lead lee "nadie cruza agenda + ficha + factura SIAT",
+          después "Onia unifica…", y concluye lo único que puede concluir: que
+          el que cruza los tres somos nosotros. Ningún grep encuentra esta
+          mentira, porque no hay una frase falsa: la falsedad está en el
+          silencio entre dos frases ciertas. La corrección cuesta una oración y
+          es la misma que ya dice la fila de Onia en /comparativa. */}
       <Block surface="green" labelledBy="hecho">
         <Reveal>
           <Kicker>El hueco</Kicker>
@@ -460,7 +477,9 @@ export default function Portada() {
           </p>
           <p className={s.body} style={{ fontSize: "1.15em" }}>
             Onia unifica la gestión y los agentes con IA en un solo sistema,
-            hecho para Bolivia.
+            hecho para Bolivia. La factura fiscal todavía no: nuestro emisor
+            sigue en trámite ante el SIN, y hasta que salga la emitís gratis en
+            el portal del SIN con los números que Onia ya te dejó hechos.
           </p>
           <p className={s.note} style={{ marginTop: "1.6em" }}>
             Comparación de precios y capacidades publicadas por la competencia,

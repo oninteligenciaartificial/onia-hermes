@@ -133,6 +133,23 @@ export const HUECO =
  *
  * Es un ledger de producto, no de la empresa: acá van funciones que faltan, no
  * "somos nuevos" ni "no tenemos clientes".
+ *
+ * ⚠️ **Corregido el 2026-09-04.** La tercera línea decía «Comercio y servicios
+ * no tienen pantallas propias… el pack del rubro **se está construyendo**», y
+ * era doblemente mala:
+ *
+ *  a) **Exhibía obra** —"se está construyendo" es literalmente la frase
+ *     prohibida por CLAUDE.md §«La venta nunca exhibe obra»—, y encima en la
+ *     sección cuyo trabajo es dar confianza.
+ *  b) **Era falsa, y en contra nuestra.** `ONIA_CATALOGO_DE_VENTA.md` §2:
+ *     comercio (`gestios-general`) se vende con catálogo, inventario, caja y
+ *     fiados, y servicios profesionales se destrabó el 2026-08-30. Los CINCO
+ *     rubros del alta se venden. El ledger le sacaba dos rubros a la venta y la
+ *     misma portada dice, tres bloques más arriba, «5 rubros vivos en
+ *     producción hoy»: el sitio se desmentía solo.
+ *
+ * Un ledger de honestidad que miente EN CONTRA tuya no es honesto, es
+ * desactualizado. La línea nueva es un límite real y permanente del producto.
  */
 export interface Pendiente {
   que: string;
@@ -151,8 +168,8 @@ export const TODAVIA_NO: readonly Pendiente[] = [
       "Onia vive en la nube. Si te quedás sin ninguna conexión, en ese rato no trabajás — igual que con el Portal del SIN. Lo que sí: seguís desde el celular con datos y no perdés nada.",
   },
   {
-    que: "Comercio y servicios no tienen pantallas propias.",
+    que: "No somos tu contador.",
     detalle:
-      "La base común da de alta la cuenta, pero el pack del rubro se está construyendo. Por eso no tienen precio publicado: no le ponemos tarifa a lo que no podemos entregar.",
+      "Onia arma tu registro de compras y ventas, el IVA del mes y el calendario de vencimientos, y te lo entrega listo para presentar. Quien lo presenta y responde por él sigue siendo tu contador: el sistema le ahorra el trabajo, no lo reemplaza.",
   },
 ] as const;
