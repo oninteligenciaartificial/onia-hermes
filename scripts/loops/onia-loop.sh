@@ -293,7 +293,25 @@ fi
 
 # ── barandas verificadas ANTES de gastar una sesion --------------------------
 [ -f "$PROMPT" ]      || { avisar "falta el prompt $PROMPT"; exit 2; }
-[ -d "$WT/.git" ] || [ -f "$WT/.git" ] || { avisar "no existe el worktree $WT"; exit 2; }
+# Un worktree que falta ya no detiene el carril: se rehace. Nace del 2026-09-04,
+# cuando el disco del VPS estaba al 85 % con 72 GB en /root/loops y borrar un
+# worktree de un carril pausado significaba dejarlo muerto hasta que alguien lo
+# recreara a mano. El repo base es el mismo del que salen todos; la rama ya la
+# fija el `case` de arriba. Si tampoco se puede rehacer, ahi si se avisa y se sale.
+if [ ! -d "$WT/.git" ] && [ ! -f "$WT/.git" ]; then
+  BASE_REPO=${ONIA_LOOPS_REPO:-/root/loops/onia-hermes}
+  log "no existe el worktree $WT — lo rehago desde $BASE_REPO en la rama $RAMA"
+  rm -rf "$WT"
+  if git -C "$BASE_REPO" fetch origin --quiet 2>/dev/null &&
+     { git -C "$BASE_REPO" worktree add "$WT" "$RAMA" >/dev/null 2>&1 ||
+       git -C "$BASE_REPO" worktree add -b "$RAMA" "$WT" "origin/$RAMA" >/dev/null 2>&1 ||
+       git -C "$BASE_REPO" worktree add -b "$RAMA" "$WT" origin/main >/dev/null 2>&1; }; then
+    log "worktree rehecho en $WT ($RAMA)"
+  else
+    avisar "no existe el worktree $WT y no pude rehacerlo desde $BASE_REPO"
+    exit 2
+  fi
+fi
 ACTUAL=$(git -C "$WT" branch --show-current 2>/dev/null || echo '?')
 [ "$ACTUAL" = "$RAMA" ] || { avisar "el worktree $WT esta en '$ACTUAL' y se esperaba '$RAMA'"; exit 2; }
 cd "$WT" || { avisar "no se pudo entrar a $WT"; exit 2; }
