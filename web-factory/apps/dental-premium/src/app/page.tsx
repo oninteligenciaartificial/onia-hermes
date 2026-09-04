@@ -21,17 +21,20 @@ export default function Page() {
       <HeroScene>
         <div className="hero-media" aria-hidden />
         <div className="hero-scrim" aria-hidden />
+        {/* El hero va con alMontar: es lo único que ya está sobre el pliegue, así
+            que su entrada no puede colgar de un scroll que no va a pasar. Ver el
+            porqué medido en components/motion.tsx. */}
         <div className="wrap hero-content">
-          <Reveal>
+          <Reveal alMontar>
             <p className="eyebrow">{clinic.direccion} · Atención con turno</p>
           </Reveal>
-          <Reveal delay={0.08}>
+          <Reveal alMontar delay={0.08}>
             <h1 className="hero-title">Tu próxima visita al dentista no tiene por qué <em>doler</em>.</h1>
           </Reveal>
-          <Reveal delay={0.16}>
+          <Reveal alMontar delay={0.16}>
             <p className="hero-lede">{clinic.lede}</p>
           </Reveal>
-          <Reveal delay={0.24}>
+          <Reveal alMontar delay={0.24}>
             <div className="actions">
               <a className="btn btn--solid" href={CITA} target="_blank" rel="noreferrer">Agendar por WhatsApp</a>
               <a className="btn btn--ghost" href="#servicios">Ver tratamientos</a>
