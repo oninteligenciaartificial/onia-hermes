@@ -32,11 +32,18 @@ import { buildConfig } from "./simulate.mjs";
 
 const T0 = "2026-07-27T14:05:00Z"; // lunes 10:05 en La Paz: dentro de horario
 
+// La rama SIN horarios hay que PEDIRLA, y por eso se fija el ambiente entero: desde que
+// `buildConfig` cae al `webhook.env` desplegado (2026-09-04), en el VPS —que tiene dos horarios
+// cargados— `buildConfig({})` devuelve M0 y este archivo medía dos veces la MISMA hermana,
+// dejando sin cubrir justo la variante que motivó el test. Lo cazó el `assert.equal(key, ...)`
+// de abajo: un test que además verifica QUÉ rama midió es lo que evita ese verde falso.
+const SIN_AMBIENTE = { env: {}, envFile: "/no/existe/webhook.env" };
+
 /** El saludo tal como sale al cliente, con el conocimiento publicado aplicado. */
 function saludar({ conHorarios }) {
   const config = conHorarios
-    ? buildConfig({ slots: "viernes 4 de septiembre, 14:00|sábado 5 de septiembre, 09:00" })
-    : buildConfig({});
+    ? buildConfig({ slots: "viernes 4 de septiembre, 14:00|sábado 5 de septiembre, 09:00" }, SIN_AMBIENTE)
+    : buildConfig({}, SIN_AMBIENTE);
   const result = step(
     createState({ channel: "sim", contactRef: "desconocido" }),
     { text: "Hola, quiero informacion sobre el sistema", receivedAt: T0 },
@@ -98,7 +105,7 @@ for (const { nombre, conHorarios } of BIENVENIDAS) {
 // es ponerlo de titular en la bienvenida. Sin este caso, el arreglo correcto seria "que el bot
 // nunca hable del chatbot", que es otra forma de romper la oferta.
 test("el add-on de chatbot se sigue pudiendo nombrar cuando preguntan el precio", () => {
-  const config = buildConfig({ slots: "viernes 4 de septiembre, 14:00|sábado 5 de septiembre, 09:00" });
+  const config = buildConfig({ slots: "viernes 4 de septiembre, 14:00|sábado 5 de septiembre, 09:00" }, SIN_AMBIENTE);
   let state = createState({ channel: "sim", contactRef: "desconocido" });
   const primero = step(state, { text: "Hola", receivedAt: T0 }, { config });
   const segundo = step(
