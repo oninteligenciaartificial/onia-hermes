@@ -59,6 +59,12 @@ export const DEFAULT_KNOWLEDGE_FILE = fileURLToPath(new URL("./knowledge.json", 
  */
 export const FAQ_TEMPLATE = Object.freeze({
   siat: "M_SIAT_BODY",
+  // "precios": la respuesta a "¿cuanto cuesta?" en modo VENTA (inbox 4 web y 5 WhatsApp).
+  // M4_BODY es la plantilla que ya sirve `isPriceQuestion` en bot-engine.mjs, asi que esto NO
+  // inventa una rama nueva: cambia el TEXTO de una respuesta que el embudo ya daba.
+  // Decision de Sergio via sesion de control (2026-09-03, t_0651707c): el bot dice los precios
+  // publicos. Es la unica FAQ que puede traer cifras, y solo las de precios-publicos.mjs.
+  precios: "M4_BODY",
   // "negocio": la FAQ editable del dueño (decision Sergio 2026-08-28). NO pisa un mensaje del
   // guion: el recepcionista la consume como LISTA (varias FAQs, cada una con sus tags como
   // disparadores) y la sirve via la plantilla R_FAQ_NEGOCIO. Control de calidad: guardrails
@@ -149,6 +155,10 @@ const SHAPE = Object.freeze({
   faq: {
     kind: "array",
     maxItems: 20,
+    // La FAQ `precios` es la UNICA que puede traer cifras de plata, y aun asi solo las que estan
+    // en precios-publicos.mjs (atadas a los dos .ts por precios-publicos.test.mjs). Cualquier otra
+    // FAQ sigue en modo estricto: una cifra ahi rechaza el archivo entero, como siempre.
+    opcionesPorItem: (item) => (item?.id === "precios" ? { preciosPublicos: true } : {}),
     item: {
       kind: "object",
       fields: {
@@ -222,14 +232,14 @@ function isPlainObject(value) {
 }
 
 /** El guardrail que vigila al LLM vigila tambien a los datos (diseño §4, candado 2). */
-function checkText(value, path, errors) {
-  const violations = checkGuardrails(value);
+function checkText(value, path, errors, opciones = {}) {
+  const violations = checkGuardrails(value, opciones);
   for (const code of violations) {
     errors.push(`${path}: ${code} — ${guardrailReason(code)}`);
   }
 }
 
-function checkField(value, shape, path, errors) {
+function checkField(value, shape, path, errors, opciones = {}) {
   switch (shape.kind) {
     case "const":
       if (value !== shape.value) errors.push(`${path}: tiene que ser exactamente "${shape.value}"`);
@@ -239,7 +249,7 @@ function checkField(value, shape, path, errors) {
       if (typeof value !== "string") return void errors.push(`${path}: tiene que ser texto`);
       if (!value.trim()) return void errors.push(`${path}: no puede estar vacio`);
       if (value.length > shape.max) return void errors.push(`${path}: pasa de ${shape.max} caracteres`);
-      checkText(value, path, errors);
+      checkText(value, path, errors, opciones);
       return;
 
     case "enum":
@@ -285,18 +295,28 @@ function checkField(value, shape, path, errors) {
     case "textArray":
       if (!Array.isArray(value)) return void errors.push(`${path}: tiene que ser una lista`);
       if (value.length > shape.maxItems) return void errors.push(`${path}: mas de ${shape.maxItems} items`);
-      value.forEach((item, index) => checkField(item, { kind: "text", max: shape.max }, `${path}[${index}]`, errors));
+      value.forEach((item, index) => checkField(item, { kind: "text", max: shape.max }, `${path}[${index}]`, errors, opciones));
       return;
 
     case "array":
       if (!Array.isArray(value)) return void errors.push(`${path}: tiene que ser una lista`);
       if (value.length > shape.maxItems) return void errors.push(`${path}: mas de ${shape.maxItems} items`);
-      value.forEach((item, index) => checkField(item, shape.item, `${path}[${index}]`, errors));
+      // `opcionesPorItem` deja que un item elija con que reglas se lo valida segun su propio
+      // contenido — hoy solo la FAQ `precios`, que es la unica autorizada a traer cifras.
+      value.forEach((item, index) =>
+        checkField(
+          item,
+          shape.item,
+          `${path}[${index}]`,
+          errors,
+          typeof shape.opcionesPorItem === "function" ? shape.opcionesPorItem(item) : opciones,
+        ),
+      );
       return;
 
     case "object":
       if (!isPlainObject(value)) return void errors.push(`${path}: tiene que ser un objeto`);
-      checkObject(value, shape.fields, path, errors);
+      checkObject(value, shape.fields, path, errors, opciones);
       return;
 
     default:
@@ -304,7 +324,7 @@ function checkField(value, shape, path, errors) {
   }
 }
 
-function checkObject(value, fields, path, errors) {
+function checkObject(value, fields, path, errors, opciones = {}) {
   for (const [key, raw] of Object.entries(value)) {
     const shape = fields[key];
     // EL candado estructural: una clave que el esquema no declara rechaza el archivo entero.
@@ -313,7 +333,7 @@ function checkObject(value, fields, path, errors) {
       continue;
     }
     if (raw === undefined) continue;
-    checkField(raw, shape, `${path ? `${path}.` : ""}${key}`, errors);
+    checkField(raw, shape, `${path ? `${path}.` : ""}${key}`, errors, opciones);
   }
   for (const [key, shape] of Object.entries(fields)) {
     if (shape.required && value[key] === undefined) errors.push(`${path ? `${path}.` : ""}${key}: falta y es obligatorio`);
