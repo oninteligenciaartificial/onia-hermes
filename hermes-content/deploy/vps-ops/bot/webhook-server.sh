@@ -146,8 +146,12 @@ MK="$(docker exec onia_selfhosted-litellm-1 printenv LITELLM_MASTER_KEY 2>/dev/n
 # son los que `webhook-watchdog.sh` —el script de al lado, por cron cada 2 minutos— ya lee de
 # `/root/.config/onia/backup.env`. Leerlos de ahi es lo mismo que hacemos arriba con la clave de
 # LiteLLM y el token de Chatwoot: el secreto vive donde ya vivia y nadie lo copia a mano.
-# Lo que manda es `ONIA_BOT_TG_AVISO`: si esta en `false` o vacio, esto no cambia nada.
-# `webhook.env` gana si define los suyos — por eso el `:-` y no una asignacion a secas.
+# Lo que manda es `ONIA_BOT_TG_AVISO`, y viene ENCENDIDO de fabrica. Sergio ya decidio que si
+# (tablero `t_b18ca430`, opcion (c)); dejarlo en `false` significaba que encenderlo dependia de
+# editar a mano `/opt/onia/bot/webhook.env`, que no esta en git y que ningun deploy toca — o sea
+# que el arreglo se desplegaba y el log seguia diciendo "apagado". Apagarlo es una linea en
+# `webhook.env`, que gana por el `:-`.
+TG_AVISO="${ONIA_BOT_TG_AVISO:-true}"
 TG_ENV_FILE="${ONIA_TG_ENV_FILE:-/root/.config/onia/backup.env}"
 if [ -f "$TG_ENV_FILE" ]; then
   TG_BOT_TOKEN="${TG_BOT_TOKEN:-$(sed -n 's/^TG_BOT_TOKEN=//p' "$TG_ENV_FILE" | tr -d '\"'\''' | tr -d ' \t\r\n' || true)}"
@@ -155,7 +159,10 @@ if [ -f "$TG_ENV_FILE" ]; then
 fi
 # Encendido sin credencial no se calla: `aviso-telegram.mjs` devuelve `failed` con nombre propio.
 # Avisarlo tambien aca ahorra el viaje al log para el caso mas probable (encender sin el archivo).
-if [ "$(printf '%s' "${ONIA_BOT_TG_AVISO:-}" | tr '[:upper:]' '[:lower:]')" = "true" ] \
+# Ojo con el default: este chequeo tiene que mirar el MISMO valor que se le pasa al `docker exec`.
+# Con `${ONIA_BOT_TG_AVISO:-}` (vacio) el aviso quedaba encendido y esta guarda muda — el caso
+# que mas importa, porque es el del operador que no configuro nada.
+if [ "$(printf '%s' "$TG_AVISO" | tr '[:upper:]' '[:lower:]')" = "true" ] \
    && { [ -z "${TG_BOT_TOKEN:-}" ] || [ -z "${TG_CHAT_ID:-}" ]; }; then
   echo "AVISO: ONIA_BOT_TG_AVISO=true pero falta TG_BOT_TOKEN o TG_CHAT_ID ($TG_ENV_FILE)." >&2
   echo "       El aviso a Sergio va a salir 'failed' en el log, no 'sent'." >&2
@@ -186,7 +193,7 @@ docker exec -d \
   -e ONIA_N8N_EVENT_URL="${ONIA_N8N_EVENT_URL:-}" \
   -e ONIA_N8N_EVENT_SECRET="${ONIA_N8N_EVENT_SECRET:-}" \
   -e ONIA_BOT_PREVIEW_SECRET="${ONIA_BOT_PREVIEW_SECRET:-}" \
-  -e ONIA_BOT_TG_AVISO="${ONIA_BOT_TG_AVISO:-false}" \
+  -e ONIA_BOT_TG_AVISO="$TG_AVISO" \
   -e TG_BOT_TOKEN="${TG_BOT_TOKEN:-}" \
   -e TG_CHAT_ID="${TG_CHAT_ID:-}" \
   -e ONIA_BOT_KNOWLEDGE_URL="${ONIA_BOT_KNOWLEDGE_URL:-http://onia-platform:3000/api/chatbot-knowledge/published}" \

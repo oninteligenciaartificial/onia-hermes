@@ -15,8 +15,12 @@ import assert from "node:assert/strict";
 import { DEFAULT_CONFIG } from "./config.mjs";
 import { createState, step } from "./bot-engine.mjs";
 import {
-  applyKnowledge, asRecepcionista, getOrgKnowledge, resetOrgKnowledgeCache, withKnowledge,
+  applyKnowledge, asRecepcionista, cuotaAgotada, DEFAULT_TTL_MS, getOrgKnowledge,
+  resetOrgKnowledgeCache, withKnowledge,
 } from "./knowledge.mjs";
+
+/** Reloj fijo: la cache tiene TTL y el test necesita cruzarlo sin Date.now(). */
+const NOW_MS = Date.parse("2026-09-04T15:00:00Z");
 
 test.afterEach(() => resetOrgKnowledgeCache());
 
@@ -109,3 +113,34 @@ test("db: la cuota de /published llega a la config del turno; sin cuota o malfor
   resetOrgKnowledgeCache();
   assert.equal((await getOrgKnowledge(ORG, { ...DB_OPTS, fetch: fetchFalso({ agotada: "true" }) })).cuota, null);
 });
+
+// --- LA CUOTA NO SE HEREDA DE UNA LECTURA QUE FALLO (2026-09-04) ---
+//
+// `nextOrgCache` conserva la ultima copia buena cuando el fetch falla, y eso es correcto para el
+// CONOCIMIENTO: una FAQ vieja sirve. Pero arrastraba tambien `cuota`, que no es contenido: es un
+// INTERRUPTOR DE CORTE. Con `agotada:true` guardado, cualquier tramo sin producto (deploy de
+// onia-platform, 404 porque el dueño apago y prendio el add-on, red caida) deja al bot cortando a
+// TODOS los que escriban a ese cliente — y el 1 del mes que viene, cuando el cupo ya se renovo, la
+// unica forma de soltarlo es reiniciar el proceso. Callar a un cliente que paga es mas caro que
+// unos mensajes de mas: sin dato fresco, `cuota` vuelve a null, que este mismo archivo define como
+// "no se sabe = se atiende".
+const fetchRoto = () => { throw new Error("red caida"); };
+const fetch404 = async () => ({ ok: false, status: 404, json: async () => ({ error: "Sin conocimiento publicado" }) });
+
+for (const [comoFalla, fetch] of [["la red se cae", fetchRoto], ["el producto contesta 404", fetch404]]) {
+  test(`db: con la cuota agotada guardada y ${comoFalla}, el bot SIGUE atendiendo (la cuota no se hereda)`, async () => {
+    const agotada = { ...DB_OPTS, fetch: fetchFalso({ agotada: true, usadas: 500, limite: 500 }) };
+    assert.equal((await getOrgKnowledge(ORG, { ...agotada, nowMs: NOW_MS })).cuota.agotada, true);
+
+    const state = await getOrgKnowledge(ORG, { ...DB_OPTS, fetch, nowMs: NOW_MS + DEFAULT_TTL_MS + 1 });
+    assert.equal(state.data.identity.productName, "Clínica Sonrisa", "el conocimiento SI se conserva");
+    assert.equal(state.cuota, null, "el interruptor de corte NO se hereda de una lectura que fallo");
+
+    const config = withKnowledge(DEFAULT_CONFIG, {
+      organizationId: ORG, ...DB_OPTS, fetch, nowMs: NOW_MS + DEFAULT_TTL_MS + 1,
+    });
+    assert.equal(cuotaAgotada(config), false, "sin dato fresco no se corta: null = no se sabe = atender");
+    const salida = turno(config, nuevo(), "hola, quiero una limpieza dental");
+    assert.doesNotMatch(salida.replies[0].text, TEXTO, "no le puede decir 'cupo lleno' a quien escribe");
+  });
+}
