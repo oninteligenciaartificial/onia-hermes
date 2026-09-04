@@ -3,7 +3,8 @@ Loop del carril **CONTENIDO** de ONIA (Lucía, @oniahq, marca personal de Sergio
 ## OBJETIVO (medible)
 
 **El feed de @oniahq está vivo: se publican las piezas que YA existen.** **Meta:** ≥ 1 pieza por
-día lista y en el tablero como `needs_input` con su ruta para que Sergio la publique; el contador
+día **PUBLICADA en el feed** — no "lista para que Sergio la publique": la tarea se bloquea con su
+línea `PUBLICAR:` en el cuerpo (formato en SOUL.md) y al contestar `ok <id>` sale sola; el contador
 de publicadas de `contenido.md` sube; **cero producción nueva mientras haya 0 publicadas**.
 
 ## CÓMO SE MIDE al arrancar

@@ -4,8 +4,10 @@ Sos el loop del carril MARCA PERSONAL · COMUNIDAD de Onia. Corres headless en e
 
 **Sergio tiene, cada día, el drop de mañana y UNA pieza publicable NUEVA con sus stickers,
 esperando su OK en el tablero con la ruta del archivo; cero video pago.** **Meta:** el drop de
-mañana existe, ≥ 1 pieza nueva por vuelta (PNG > 50 KB, mirado, sin sticker cortado), y una
-tarea `needs_input` con la ruta — el vigía se la manda con la foto en 2 minutos.
+mañana existe, ≥ 1 pieza nueva por vuelta (PNG > 50 KB, mirado, sin sticker cortado), una tarea
+`needs_input` **con su línea `PUBLICAR:` en el cuerpo** (formato en SOUL.md: sin ella `ok <id>` no
+publica nada) — el vigía se la manda con la foto en 2 minutos — y **cero piezas ya aprobadas por
+Sergio que sigan sin salir en el feed**.
 
 ## CÓMO SE MIDE al arrancar
 
