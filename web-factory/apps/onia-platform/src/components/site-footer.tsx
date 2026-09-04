@@ -27,7 +27,6 @@ const GRUPOS: readonly {
       { href: "/rubros", label: "Rubros" },
       { href: "/agentes", label: "Agentes" },
       { href: "/comparativa", label: "Comparación" },
-      { href: "/facturacion", label: "Facturación SIAT" },
     ],
   },
   {
@@ -44,6 +43,10 @@ const GRUPOS: readonly {
     links: [
       { href: "/contacto", label: "Contacto" },
       { href: "/nosotros", label: "Nosotros" },
+      // La norma del 1 de octubre de 2026 es una GUÍA, no una función que
+      // vendamos: el emisor fiscal está en trámite ante el SIN. Vivió en
+      // "Producto" hasta el 2026-09-04, donde se leía como capacidad incluida.
+      { href: "/facturacion", label: "Guía: facturar en línea" },
       { href: "/terminos", label: "Términos" },
       { href: "/privacidad", label: "Privacidad" },
     ],

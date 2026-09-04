@@ -60,9 +60,17 @@ export function buildWaText(
     );
   }
 
+  // Rama sin plan. HOY está dormida —los cinco rubros de la unión `Rubro`
+  // tienen plan—, y por eso el texto que tenía se pudo pudrir sin que nadie lo
+  // viera: decía "(todavía en construcción)" y "Anótenme para que me avisen
+  // cuando esté", o sea obra a la vista puesta en boca del lead, al final del
+  // embudo y en el único texto que sale de su teléfono. El día que alguien
+  // sume un rubro sin plan, eso se despierta solo. Se dice lo mismo que ya dice
+  // la pantalla de esta misma rama (`NOTA_PROXIMAMENTE`): el motor ya corre y
+  // el caso se arma con el cliente. La demanda futura se captura sin admitir.
   return (
-    `${cabecera} (todavía en construcción). ${equipoTxt} Hoy tengo: ${hoy}. ` +
-    "Anótenme para que me avisen cuando esté." +
+    `${cabecera}. ${equipoTxt} Hoy tengo: ${hoy}. ` +
+    "Quiero que armemos mi caso y me pasen la propuesta." +
     (tiene.includes("web") && url
       ? ` Mi web: ${url} — quiero el análisis gratis.`
       : "")

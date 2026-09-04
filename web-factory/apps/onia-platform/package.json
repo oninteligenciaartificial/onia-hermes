@@ -7,10 +7,10 @@
   },
   "scripts": {
     "dev": "next dev",
-    "prebuild": "tsc --noEmit && vitest run",
+    "prebuild": "tsc --noEmit && node scripts/test-con-dependencias.mjs",
     "build": "next build",
     "start": "next start",
-    "test": "vitest run",
+    "test": "node scripts/test-con-dependencias.mjs",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
