@@ -28,14 +28,14 @@
 | 7 | **Aprobación → WhatsApp saliendo** (grabación) | Click en aprobar en /pending → el mensaje llegando al celular demo. El momento "wow" completo | MP4 ≤30s | Guion §4 · WhatsApp |
 | 8 | **Chat de WhatsApp del paciente** (foto de celular o screenshot) | El mensaje de reprogramación recibido, con los horarios propuestos | PNG vertical (celular) | Guion §4 · scripts WhatsApp |
 | 9 | **Panel del dueño** | Pendientes del día con responsable — "tu clínica en 30 segundos cada mañana" | PNG 1920×1080 | Guion §4 · one-pager |
-| 10 | **Cierre de atención → factura** | El flujo atención→factura; si el emisor SIAT aún no está homologado, capturar la venta lista para facturar SIN simular una factura SIAT real (honestidad: no mostrar como vivo lo que está en homologación) | PNG 1920×1080 | Guion §5 |
+| 10 | **Cierre de atención → cobro → recibo** | Registrar el pago y que salga el recibo. **Nunca** una factura del SIN: el emisor no está homologado y simularla es la mentira que el guion prohíbe | PNG 1920×1080 | Guion §5 |
 | 11 | **Roles** (vista de recepcionista) | La misma clínica vista como recepción: agenda sí, historia clínica no | PNG 1920×1080 | Guion §3 · objeción 6 |
-| 12 | **Recorrido completo** (grabación) | Agenda → ficha → /pending → aprobar → factura, corrido, sin audio | MP4 ≤90s | Respaldo si falla internet en la demo · post-demo por WhatsApp |
+| 12 | **Recorrido completo** (grabación) | Agenda → ficha → /pending → aprobar → cobro, corrido, sin audio | MP4 ≤90s | Respaldo si falla internet en la demo · post-demo por WhatsApp |
 
 ## Reglas de las capturas
 
 - **Nada ficticio presentado como real**: las capturas muestran el sistema demo, no "clientes actuales". Si se comparten por WhatsApp, jamás decir que es una clínica cliente.
-- **SIAT honesto**: mientras la homologación esté en trámite, ninguna captura debe simular una factura SIAT emitida como si ya estuviera vivo (captura #10).
+- **SIAT honesto**: **ninguna captura muestra una factura del SIN emitida**, ni real ni simulada, mientras el emisor no esté homologado. Tampoco vale una pantalla que se le parezca: si el dentista la ve, ya se la prometimos (captura #10).
 - **Sin datos internos**: ni URLs internas de ONIA, ni nombres de herramientas propias, ni paneles de administración nuestros.
 - Guardarlas en `hermes-content/sales-kit/capturas/` con el número de esta lista (`01-agenda.png`, `07-aprobar-whatsapp.mp4`, …).
 - Al terminar: reemplazar los `[PENDIENTE: captura]` de `02-GUION-DEMO.md` por la referencia al archivo.

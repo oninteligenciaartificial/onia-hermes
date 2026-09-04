@@ -32,6 +32,28 @@ equipo, y como toda foto **no es fuente de verdad**.
   o cifras de resultados.
 - **No exhibir obra**: nada de "muy pronto", "beta" ni "en construcción" en algo
   que ve un cliente.
+- 🔴 **La factura fiscal NO se ofrece.** Onia todavía no emite factura con valor
+  fiscal: el trámite ante el SIN está en curso y **sin fecha**
+  (`hermes-content/docs/ONIA_SIAT_ESTADO_HOMOLOGACION.md` es la fuente). No se
+  nombra en ningún mensaje de arranque, no va en ninguna tabla de planes, no se
+  cobra y **no se da una fecha aunque la pidan**. Si el prospecto pregunta, la
+  respuesta entera está en `01-ONE-PAGER-OFERTA.md` §«La factura del SIN».
+
+  > Nace del 2026-09-04: los cinco archivos de esta carpeta decían «factura SIAT
+  > incluida en los 3 planes, sin costo aparte» —el one-pager lo ponía con ✅ en
+  > la tabla de precios y el guion mandaba a mostrarlo en pantalla—. Es la
+  > mentira más cara que teníamos: el cliente que más factura es la clínica, y
+  > la descubre justo después de pagar. `ONIA_V1_ALCANCE.md` la marcaba como
+  > bloqueante para escribirle a los leads.
+- **Se vende el SISTEMA; el asistente es un add-on.** El titular es la gestión
+  del negocio (agenda, fichas, caja, cobros, contabilidad). El asistente de
+  WhatsApp es una línea de add-ons, nunca el encabezado.
+- **Cero autobombo.** Nada sobre nosotros, el equipo, la tecnología ni "somos
+  chicos pero". La objeción se contesta con lo que el sistema hace por SU
+  negocio, o con los 14 días de prueba para que lo vea solo.
+- **Un solo producto: Onia.** `DentalGest` no es una marca ni un producto — al
+  cliente se le nombra su rubro ("el módulo dental"). Los cinco archivos lo
+  usaban como nombre comercial hasta el 2026-09-04.
 
 ## Lo que NO hay que volver a crear
 
