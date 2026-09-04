@@ -223,8 +223,8 @@ poner "$FUENTE/hf-login-finish.sh"         "$DESTINO_BIN/hf-login-finish.sh"
 # 2026-09-03, a mitad de un deploy). `poner` hace bash -n y chmod 755 en cada
 # copia: un runbook que no se puede ejecutar no vuelve a pasar en silencio.
 if [ -d /opt/onia-landing/_deploy ]; then
-  poner "$FUENTE/hermes-content/deploy/onia-landing/build-and-stage.sh"  /opt/onia-landing/_deploy/build-and-stage.sh
-  poner "$FUENTE/hermes-content/deploy/onia-landing/swap-and-verify.sh"  /opt/onia-landing/_deploy/swap-and-verify.sh
+  poner "$RAIZ/hermes-content/deploy/onia-landing/build-and-stage.sh"  /opt/onia-landing/_deploy/build-and-stage.sh
+  poner "$RAIZ/hermes-content/deploy/onia-landing/swap-and-verify.sh"  /opt/onia-landing/_deploy/swap-and-verify.sh
 fi
 
 # El runbook de deploy de la PLATAFORMA (app.onia.com.bo). Mismo agujero que la
@@ -235,8 +235,8 @@ fi
 # llegar al cliente. deploy-gates-swap.sh NO se sincroniza: sigue siendo el
 # unico paso que pide OK de Sergio, y se edita en el VPS a proposito.
 if [ -d /opt/onia-platform ]; then
-  poner "$FUENTE/hermes-content/deploy/onia-platform/build-and-stage.sh"    /opt/onia-platform/build-and-stage.sh
-  poner "$FUENTE/hermes-content/deploy/onia-platform/recreate-container.sh" /opt/onia-platform/recreate-container.sh
+  poner "$RAIZ/hermes-content/deploy/onia-platform/build-and-stage.sh"    /opt/onia-platform/build-and-stage.sh
+  poner "$RAIZ/hermes-content/deploy/onia-platform/recreate-container.sh" /opt/onia-platform/recreate-container.sh
 fi
 
 mkdir -p "$DESTINO_BIN/loops"
