@@ -69,6 +69,37 @@ export function comparar(doc, cron) {
   return problemas;
 }
 
+// Un worktree de carril lee SU copia de la tabla, que puede estar atrás de main.
+// Con esa copia vieja el veredicto se invierte: el gate señala "horario distinto" y el
+// consejo de siempre ("editá la tabla o el crontab") manda a tocar el crontab — que es
+// como el 2026-09-04 se revirtió sola una baja de cadencia ya decidida (23 vueltas/día
+// de más, 5 loops). Si la tabla local no es la de origin/main, el veredicto no se toca.
+export function consejoDeArreglo({ tablaDesincronizada }) {
+  if (tablaDesincronizada) {
+    return [
+      `\nOJO: tu copia de ${DOC} NO es la de origin/main — estás midiendo contra una tabla vieja.`,
+      'NO toques el crontab con este veredicto: así se revirtió sola, el 2026-09-04, una baja',
+      'de cadencia ya decidida (5 loops, 23 vueltas/día de más).',
+      'Primero: `git merge origin/main` y volvé a medir.',
+    ];
+  }
+  return [
+    `\nArreglo: editá la tabla de ${DOC} o la línea del crontab, la que esté mal.`,
+    'Antes de "rearmar" una línea, listá el cron ENTERO (`crontab -l | grep onia-loop.sh`):',
+    'un `head` corta la lista y rearmar algo ya registrado lo DUPLICA.',
+  ];
+}
+
+// Falla cerrado: si no hay git o no hay ref de origin/main, no inventa una desincronía.
+function tablaDesincronizadaConMain() {
+  try {
+    const enMain = execFileSync('git', ['show', `origin/main:${DOC}`], { encoding: 'utf8' });
+    return enMain !== readFileSync(DOC, 'utf8');
+  } catch {
+    return false;
+  }
+}
+
 // --- self-check -------------------------------------------------------------
 
 function selfCheck() {
@@ -96,7 +127,8 @@ function selfCheck() {
   const d = loopsDelDoc(doc);
   const c = loopsDelCron(cron);
   const fallos = [];
-  const esperar = (cond, que) => { if (!cond) fallos.push(que); else console.log(`  ok - ${que}`); };
+  let totalCasos = 0;
+  const esperar = (cond, que) => { totalCasos++; if (!cond) fallos.push(que); else console.log(`  ok - ${que}`); };
 
   esperar(d.size === 2, 'la tabla aporta solo las filas **VPS** (Windows afuera)');
   esperar(!d.has('web-factory-salud'), 'la tabla de apagados NO cuenta como registro vigente');
@@ -112,12 +144,21 @@ function selfCheck() {
   esperar(comparar(new Map([['a', '1 * * * *']]), new Map([['a', '1 * * * *']])).length === 0,
     'no inventa problemas cuando coinciden');
 
+  const viejo = consejoDeArreglo({ tablaDesincronizada: true }).join('\n');
+  const sano = consejoDeArreglo({ tablaDesincronizada: false }).join('\n');
+  esperar(/origin\/main/.test(viejo) && /git merge origin\/main/.test(viejo),
+    'tabla atrasada: el consejo manda a MERGEAR main antes de nada');
+  esperar(!/la que esté mal/.test(viejo),
+    'tabla atrasada: NO repite el consejo ambiguo que hace tocar el crontab');
+  esperar(/la que esté mal/.test(sano),
+    'tabla al dia: el consejo de siempre queda igual');
+
   if (fallos.length) {
     console.error('\nself-check ROJO:');
     for (const f of fallos) console.error(`  not ok - ${f}`);
     process.exit(1);
   }
-  console.log(`\nself-check verde (${9 - fallos.length}/9)`);
+  console.log(`\nself-check verde (${totalCasos - fallos.length}/${totalCasos})`);
 }
 
 // --- medicion real ----------------------------------------------------------
@@ -143,9 +184,9 @@ function medir() {
   }
   console.error('\nDIFERENCIAS:');
   for (const p of problemas) console.error(`  - ${p}`);
-  console.error(`\nArreglo: editá la tabla de ${DOC} o la línea del crontab, la que esté mal.`);
-  console.error('Antes de "rearmar" una línea, listá el cron ENTERO (`crontab -l | grep onia-loop.sh`):');
-  console.error('un `head` corta la lista y rearmar algo ya registrado lo DUPLICA.');
+  for (const linea of consejoDeArreglo({ tablaDesincronizada: tablaDesincronizadaConMain() })) {
+    console.error(linea);
+  }
   process.exit(1);
 }
 

@@ -1,7 +1,7 @@
 # Handoff — carril `claude/git-status-935f47` (plataforma · infra · integración)
 
 > Formato: `hermes-content/docs/handoff/README.md`. Se sobrescribe; es el estado ACTUAL.
-> Última escritura: **2026-09-03 ~17:15 La Paz** (21:15 UTC).
+> Última escritura: **2026-09-03 ~23:10 La Paz** (03:10 UTC del 4-sep).
 >
 > ⚠️ Las horas de este archivo van en **La Paz**, no UTC. Sergio corrigió el 31-ago:
 > *"arregla tus horas, aqui somos america/la paz"*. El VPS y los logs son UTC-4 respecto de
@@ -71,6 +71,55 @@ loop bloquee `needs_input` con captura, el vigía se la manda; (3) deploy del bo
 `t_b18ca430` comente `DEPLOY BOT PEDIDO <sha>`; (4) build + swap de `app.onia.com.bo` cuando
 `t_6bf938b7`/`t_72ddeedb` lleguen a master (runbook en `onia-platform-oferta-en-prod`);
 (5) nada de maquinaria de loops hasta el 10-sep.
+
+---
+
+## 0b. Noche del 3-sep — el panel se reorganiza (lotes 1-3 vivos, lote 4 en curso)
+
+Sergio, 16:52: *"organizá las pestañas y que estén completas… barra lateral como Hostinger… 100 %
+funcional, latencia, vida real, instalable"*; 17:05: *"hazlo de una vez"*; 22:45: *"Meta y APIs para
+chatbots, 2FA, firewall, lo del reel de Django, manos a la obra"*. Tarea de la sesión de control (no
+de los loops), integrada en `feat/panel-pestanas-completas` → `master` → un build por lote.
+
+**En producción (app.onia.com.bo), verificado MIRANDO con la cuenta de Sergio:**
+- Lote 1 `1f0b221` (17:42): "Agendar Cita" muestra el error del server y no ofrece horas pasadas
+  (`availability` marca `available:false`); todo pago daba 500 por `"$transaction" in db` en Prisma 7
+  (`lib/fiscal/invoice-status.ts:96`) → arreglado con test real + log/Sentry en los catch; tarjeta
+  "Tu WhatsApp" (merge de `claude/chatbots-platform-review-0d1d09`).
+- Lote 2 `b84811d` (18:21): `/setup` real de 4 pasos (sin `{v.negocio}`, no pisa `oniaCoreOnboarding`,
+  el intake lee canales con persona fija); barra lateral agrupada (4 fijos + Operación/Dinero/
+  Automatización/Sistema, 7 visibles, `w-64`+`md:ml-64`+`md:left-64` juntos, localStorage
+  `onia.sidebar.grupos`); `/operations` y `/accounting` borrados.
+- Lote 3 `146cd54` (22:44): factura con ítem manual, recibo por pago (`/print/receipt/[paymentId]`),
+  "Nota de venta" sin CUF y sin logo de Onia, QR de cobro por archivo (bucket `payment-proofs`, GET
+  propio que redirige a URL firmada), "Gastos" en Dinero, libro de compras (RCV) visible y exportable,
+  `/api/fiscal/iva-summary`, IVA a pagar = 13 % ventas − Σ `ivaAmount` de compras. Verificación
+  visual en curso.
+- Infra: rate limit del login en Traefik (`rl-auth-token`, 22:50); runner de loops con "TU ULTIMA
+  VUELTA" + `LECCION:` automática + `RAZON: vuelta PERDIDA por limite`; 15 prompts con `OBJETIVO
+  (medible)`; recorrido-cliente cierra 9/9 con cita real; SIAT sectores 17 y 24 emiten 908 en piloto.
+
+**Defectos vistos en la verificación de lotes 1+2 → rama `fix/post-verificacion-lotes12` (en curso):**
+borrador de `/setup` no persiste (LS `step` se pisa al montar), `/operations`/`/accounting` 404 en vez
+de redirect, dashboard con fecha en UTC, login con "Pedí tu acceso" (alta abierta), copy "queda armado".
+
+**Lote 4 en curso (ramas):** `feat/seguridad-base` (cabeceras, limiters unificados con `cf-connecting-ip`,
+bug inbox→org del bot), `feat/login-lockout-2fa` (login server-side + lockout + TOTP con códigos de
+respaldo + gate aal2 + política admins 14 días). Después: `feat/api-keys` (`/api/v1`, `/settings/api`),
+`feat/chatbot-cuota` (500/mes del add-on + corte honesto en `/opt/onia/bot/run-turn.mjs`),
+`feat/canal-meta` (Instagram/Messenger detrás de `META_PAGES_PUBLIC`). Plan completo con archivos y
+verificación: memoria `onia-panel-diagnostico-y-plan` + `feedback-panel-pestanas-completas-estilo-hostinger`.
+
+**Trampas de esta noche:** la cuota de Claude es UNA para loops y sesión (5 agentes murieron a las
+22:00 UTC; lección: al retomar, medir builds y basura `zz-qa`/`AGENTE-VERIF` antes de relanzar);
+`vitest run` reescribe snapshots con CRLF → `git checkout -- .` antes de mergear; el swap no recrea el
+contenedor (mirar `BUILD_ID`, no `docker inspect Created`); `profiles.themePreference` pisa la cookie
+del tema; el numerador de facturas consume números en pruebas; `onia-manual-routes.yaml` es JSON;
+`nohup … &` dentro de `ssh` cuelga sin `< /dev/null`.
+
+**Depende de Sergio:** hoja `ok/no` de las 17:00; `video sí/no`; Meta (producto Messenger, App Review
+de páginas/IG, cuenta tester); Cloudflare rate limiting + Bot Fight Mode; PdV 1 en el SIN; activar su
+2FA recién cuando esté probada con QA; segunda suscripción/API key para los loops (plata).
 
 ---
 

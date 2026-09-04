@@ -388,6 +388,9 @@ export const SCRIPT = Object.freeze({
   R_NO_DATO: "Eso no lo tengo acá para confirmártelo — te lo confirma {{humano}} por este mismo chat.",
 
   R_ATTACH: "Recibí tu archivo. Se lo paso a {{humano}}, que te confirma por acá.",
+  // R_CUOTA_AGOTADA — la org agoto sus conversaciones automaticas del mes (lo dice /published).
+  // Texto FIJO y honesto, cero LLM; {{producto}} es el nombre del negocio en modo recepcionista.
+  R_CUOTA_AGOTADA: "Este mes ya atendimos el máximo de conversaciones automáticas de {{producto}}. Te responde una persona en breve.",
   // Insistencia v6.6 (1 sola vez, suave, dentro de la ventana de 24 h — texto libre gratis):
   R_SEGUIMIENTO: "¡Hola! ¿Seguís por ahí? Si te quedó alguna duda, {{humano}} te la contesta por acá. Y si preferís que no te escribamos, decínos \"no gracias\" y listo.",
   // Vision (v5): cuando la foto se pudo describir SIN violar guardrails. La descripcion

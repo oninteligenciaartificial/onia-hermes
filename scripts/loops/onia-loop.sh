@@ -372,6 +372,16 @@ rm -f "$PROMPT_FINAL"
 # Lo que este loop aprendio en la vuelta entra a la memoria compartida ahora, no
 # "en algun momento": el consolidador es idempotente y con cerrojo, asi que es
 # seguro llamarlo desde 15 loops. Si no hay nada en la bandeja, no hace nada.
+# Sergio, 2026-09-03 22:40 La Paz: "¿los loops están trabajando?". Dos vueltas (contenido-cola,
+# tendencias) murieron con "You've hit your session limit" y el log las contaba como
+# "vuelta valida": los loops corren con la MISMA suscripcion de Claude que la sesion de
+# control, asi que se pisan la cuota. Queda escrito como RAZON en el log: la proxima vuelta
+# lo ve en TU ULTIMA VUELTA y el supervisor lo cuenta como perdida, no como trabajo.
+CUR_INI=$(grep -n "===== ARRANCA $NOMBRE" "$LOG" 2>/dev/null | tail -1 | cut -d: -f1)
+if tail -n +"${CUR_INI:-1}" "$LOG" 2>/dev/null | grep -q "hit your session limit"; then
+  log "RAZON: vuelta PERDIDA por limite de uso de Claude (cuota compartida con la sesion de control); no es un fallo del loop"
+fi
+
 # Lo que el loop escribio como `LECCION: ...` en ESTA vuelta va solo a la memoria
 # compartida: asi la leccion no depende de que el loop se acuerde de llamar a
 # onia-aprender.sh. Tope 5 por vuelta; el consolidador deduplica.
