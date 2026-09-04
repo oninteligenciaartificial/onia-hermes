@@ -208,3 +208,36 @@ cobra**: saldo 1932,14 antes y después. Queda como decisión de Sergio en `t_a9
 
 **Determinismo verificado:** al re-renderizar, las cinco láminas que no se tocaron salieron
 **byte a byte idénticas** (02, 04, 05, 06, 07); sólo cambiaron 01 y 03.
+
+---
+
+## 2026-09-04 03:39 UTC — la pieza fijada no pedía nada (0 créditos)
+
+El carrusel sacaba **10/10** en la rúbrica y **ninguna de las 7 láminas decía `COMUNIDAD`**. La 6
+pedía comentar sin palabra clave («decime en los comentarios qué te gustaría ver acá») y la 7
+cerraba mandando a `@oniahq`. Sin palabra no hay a quién mandarle el enlace del grupo: el que
+comenta «me encantó» no entra a ningún lado. Y ésta es la pieza que ve **todo el que entra al
+perfil**.
+
+| Lámina | Decía | Dice ahora |
+|---|---|---|
+| 6 (body) | «Porque técnicamente ya lo estás pensando. **Decime en los comentarios qué te gustaría ver acá.**» | «Porque técnicamente ya lo estás pensando.» |
+| 7 (body) | «**Seguime para ver hasta dónde llega.** Y si tenés un negocio y querés lo que hay detrás de mí, está todo en @oniahq.» | «**Comentá COMUNIDAD y te paso el enlace del grupo donde muestro cómo está hecho todo esto.** Y si tenés un negocio, lo que hay detrás de mí está en @oniahq.» |
+| caption | — | + «Comentá COMUNIDAD y te paso el enlace del grupo donde muestro cómo está hecho todo esto.» |
+
+⚠️ **Por qué se VACIÓ la 6 en vez de ponerle la palabra ahí:** dos pedidos de comentario distintos
+en la misma pieza son ninguno. La 6 se queda con la pregunta (que es su golpe) y **el único
+llamado a la acción vive en el cierre**, que es la lámina donde la gente actúa. Se comprobó
+mirando: la 6 quedó con titular de 3 líneas + una sola línea de cuerpo, más limpia que antes.
+
+**Verificado MIRANDO las dos a resolución completa**, más un recorte 2× del bloque de texto de la
+7: las 4 líneas del cuerpo entran sin desbordar, `COMUNIDAD` se lee sobre el cielo y sobre la
+manga clara, y queda aire hasta el pie `@lucia.antelo.oficial`. La mano de la 7 queda **más
+tapada** que antes por la cuarta línea, así que la casilla 4 no empeora.
+
+**Quinta confirmación de que el render es determinista:** de las 7, sólo cambiaron `slide-06.jpg`
+(1283f26e→7b614313) y `slide-07.jpg` (cb2db82d→55414430). Las otras cinco, md5 idéntico.
+
+**Lo que deja como regla:** `RUBRICA-IMPOLUTO.md` pasa a tener **11 casillas** — la 11 pregunta
+*«¿la pieza pide UNA acción, y es la palabra clave?»*. Las diez primeras preguntan si está bien
+hecho; ninguna preguntaba si sirve para algo.
