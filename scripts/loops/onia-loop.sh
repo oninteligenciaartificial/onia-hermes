@@ -349,11 +349,19 @@ trap 'rm -f "$PROMPT_FINAL"' EXIT
   # repetia el mismo callejon (46 % de vueltas sin commit, medido hoy). Ahora ve
   # su ULTIMA vuelta: OBJETIVO/RAZON/LECCION que dejo escritas y como termino.
   # Es la penultima ARRANCA del log (la ultima es la de ahora, ya escrita arriba).
+  #
+  # El `s/^[*_#> -]*//` del sed NO es adorno: los loops escriben markdown, y sin el la linea
+  # `**OBJETIVO:** ...` no pasaba el grep. Medido el 2026-09-04 (t_0314b1bb): contenido-cola
+  # avanzo de "publicadas 1" a "publicadas 2" y el corredor le mostro la vieja como si fuera la
+  # ultima, asi que se leia a si mismo estancado — y la regla del sistema le ordena cambiar un
+  # metodo que estaba funcionando. Es la misma limpieza que ya hacia la linea de mas abajo que
+  # manda las LECCION: a la memoria; la asimetria entre las dos ERA el defecto.
+  # Blindado por scripts/ultima-vuelta-visible.test.mjs (`npm run test:ultima-vuelta`).
   PREV_INI=$(grep -n "===== ARRANCA $NOMBRE" "$LOG" 2>/dev/null | tail -2 | head -1 | cut -d: -f1)
   PREV_FIN=$(grep -n "===== ARRANCA $NOMBRE" "$LOG" 2>/dev/null | tail -1 | cut -d: -f1)
   if [ -n "$PREV_INI" ] && [ -n "$PREV_FIN" ] && [ "$PREV_INI" != "$PREV_FIN" ]; then
     echo "# TU ULTIMA VUELTA (lo que vos mismo dejaste escrito; si fallo, cambia el metodo)"; echo
-    sed -n "${PREV_INI},${PREV_FIN}p" "$LOG"       | sed -E 's/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:]+Z //'       | grep -E "^(OBJETIVO|RAZ[OÓ]N|LECCI[OÓ]N):|===== (ARRANCA|TERMINA) "       | tail -12
+    sed -n "${PREV_INI},${PREV_FIN}p" "$LOG"       | sed -E 's/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:]+Z //; s/^[*_#> -]*//'       | grep -E "^(OBJETIVO|RAZ[OÓ]N|LECCI[OÓ]N):|===== (ARRANCA|TERMINA) "       | tail -12
     echo; echo "---"; echo
   fi
   cat "$PROMPT"
