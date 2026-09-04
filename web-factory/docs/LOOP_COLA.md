@@ -94,6 +94,12 @@ Las tres formas de fantasma que ya aparecieron acá:
 3. `pnpm typecheck:packages` verde; rojo en zona → arreglar mínimo y commitear.
 4. **`pnpm install --frozen-lockfile` desde `web-factory/`.** Si falla, el deploy de
    `onia.com.bo` está roto aunque nada de su app lo esté — ver el primer ítem de `## Ahora`.
+   ⚠️ **Corregido el 2026-09-04: `pnpm` NO estaba instalado en el VPS**, así que los pasos 3, 4
+   y 6 de este runbook —los tres que empiezan con `pnpm`— eran **inejecutables** en la máquina
+   donde corre el loop, y por eso nadie vio que `web-factory` se había quedado **sin un solo
+   `node_modules`**. Se resolvió con `corepack enable`, que dejó el shim en `/usr/bin/pnpm`
+   con la versión que fija `packageManager` (10.33.3), verificado en entorno limpio. Si algún
+   día vuelve a faltar: `corepack enable` desde `web-factory/`, no `npm i -g pnpm`.
 5. Node zombies de tests viejos → matar. Cerrar con la prueba (200, hash, exit 0).
 6. `pnpm --filter @onia/templates gate:marcadores` — mide en Chromium los 108 puntos de dato
    de los dos paneles (claro/oscuro × 1440/390) contra el piso de 8 px de W4. Hoy da **rojo en
@@ -202,7 +208,43 @@ Las tres formas de fantasma que ya aparecieron acá:
       que se descubra medio año después. El siguiente recorte, si hace falta, sale de
       `motion/react` (`LazyMotion` + `m` en lugar de `motion`), que es lo que queda arriba.
 
-- [ ] **La primitiva de hover-lift existe, está documentada, y no la usa ni un bloque.**
+- [x] **Los gates de las dos webs de cliente NO PODÍAN CORRER en el VPS, y el fallo salía con
+      cara de "la web del cliente está rota".**
+      Medido el 2026-09-04 al arrancar la vuelta: `npm run typecheck` daba **ROJO en las dos
+      apps** con el código intacto. La causa era `sh: 1: tsc: not found` — `web-factory` no
+      tenía **un solo `node_modules`** (ni en este worktree ni en el clon principal, con 915 GB
+      libres, así que no era el disco). Ese rojo es la dirección **cara** del error: manda a
+      arreglar código sano. Y la trampa gemela es peor porque sale VERDE — `npx tsc --noEmit`
+      sin `node_modules` baja otro paquete llamado `tsc` y **sale con éxito**.
+      **Por qué nadie lo vio**: los pasos 3, 4 y 6 del runbook de salud de acá arriba empiezan
+      con `pnpm`… y **`pnpm` no estaba instalado en el VPS** (`command -v pnpm` vacío). Los tres
+      pasos que debían detectar esto eran inejecutables en la máquina donde corre el loop.
+      **Lo reparado, en orden, cada uno verificado**: `corepack enable` deja el shim en
+      `/usr/bin/pnpm` con la versión de `packageManager` (10.33.3, probado en entorno limpio) ·
+      `pnpm install --frozen-lockfile` (28,4 s, las dos apps son workspaces y se instalaron) ·
+      `playwright install chromium` (faltaba el navegador entero) · `playwright install-deps
+      chromium` (el binario estaba y **no arrancaba**: `libnspr4.so: cannot open shared object
+      file`).
+      **El arreglo que evita que vuelva a mentir**: `scripts/preflight.mjs` en las dos apps,
+      enganchado a `typecheck`, `prebuild` y `gates`. Separa **"no hay instrumento"** de **"el
+      código está roto"**: nombra qué falta, imprime el comando que lo repara *en esta máquina*
+      (detecta si `pnpm` está en el PATH y si no dice `corepack pnpm`) y sale con **3** — ni 0
+      ni 1. Falsificado en rojo escondiendo `node_modules/.bin/tsc`: `✗ INSTRUMENTO AUSENTE …
+      falta node_modules/.bin/tsc`, exit 3, y verde otra vez al restaurarlo.
+      ⚠️ **El navegador se prueba LANZÁNDOLO, y esa distinción no es cosmética**: la primera
+      versión miraba `existsSync(chromium.executablePath())` y daba **VERDE** — porque
+      `executablePath()` devuelve `chromium-1228/chrome-linux64/chrome` mientras los gates
+      lanzan el **`chromium_headless_shell-1228`**, que era justo el que faltaba. Habría sido el
+      mismo falso verde que este preflight existe para eliminar. Y aun con los dos binarios en
+      disco, sin `libnspr4.so` no abría: **un archivo presente no es un navegador que abre.**
+      **Evidencia final, con el instrumento ya en pie** — las dos apps de punta a punta:
+      typecheck OK · **peso: dental 143 kB y ferretería 148 kB contra 150** · pliegue **10/10
+      verde en las dos** (dental sobra 61-75 px, ferretería 40-258 px) · parallax vivo y quieto
+      bajo reduced-motion en las dos · contraste verde con sus 3 avisos de siempre (el ítem del
+      ghost). **Mirado renderizado**: `capturas/hero-1440x800.png`, hero entero, titular en 3
+      líneas y los dos CTA dentro del pliegue.
+
+- [x] **La primitiva de hover-lift existe, está documentada, y no la usa ni un bloque.**
       T34 se cerró como fantasma con esta frase adentro: *"lo que SÍ falta y no es esto:
       ningún bloque la usa — cablearla a las cards es otra tarea, anotada"*. Nunca fue línea.
       Una primitiva que ninguna card usa es una promesa de la galería que el cliente no ve.
@@ -214,6 +256,23 @@ Las tres formas de fantasma que ya aparecieron acá:
       **Hecho cuando**: las cards de al menos un bloque real la llevan, con su test de que la
       clase sigue puesta, y **mirado** el hover en la galería en claro y oscuro + con
       reduced-motion forzado, comprobando que ahí no se levanta.
+      ✅ **CERRADO el 2026-09-04 — FANTASMA: la primitiva ya no existe, y su "hecho cuando" era
+      hoy la acción equivocada.** El ítem se escribió con la evidencia de `motion.ts:53`, pero
+      **A8 la borró el 2026-09-01** — el mismo día en que se re-verificó esta cola, así que
+      quedó pidiendo cablear algo que ya no está. Hoy `grep -rn wf-hover-lift` sobre
+      `packages/` y `apps/` devuelve **cero definiciones**: sólo tres comentarios que narran el
+      borrado (`packages/blocks/src/motion.ts:27`, `packages/templates/src/clinic-css.test.ts:6`
+      y `:12`).
+      **Y cablearla habría sido un error medido, no una mejora**: A7 midió que su CSS sólo
+      viajaba en `logistics`/`realestate` —que no dibujan tarjetas— y que la página que sí las
+      dibuja (`clinic`) ya se levanta sola con su propia puerta de reduced-motion, así que la
+      clase habría quedado **inerte sobre una tarjeta que ya se movía**. Su sombra
+      `rgba(10,17,38,.35)` era además ciega al tema.
+      **Lo único que la primitiva aportaba y a la tarjeta le faltaba —la puerta de
+      reduced-motion— no se perdió**: lo guarda `clinic-css.test.ts`, que además tiene un gate
+      que atrapa **cualquier `:hover` nuevo con `translate/scale/rotate`** sin su
+      neutralización. O sea que la promesa que este ítem quería (que el hover no se mueva
+      cuando el visitante pidió no ver movimiento) está **mejor** cubierta que con la clase.
 
 - [ ] **El punto final del spark del KPI mide 5,03 px y el piso que fijó W4 es 8.**
       A6 lo dejó anotado dentro de su propio `[x]`: *"sigue en `r=3` y, con la escala de 0,839,
