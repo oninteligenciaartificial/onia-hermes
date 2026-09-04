@@ -16,7 +16,18 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { join } from 'node:path';
 
-import { rutaRelativa } from './recorrido_cliente.mjs';
+import { rutaRelativa, pantallaDelDato } from './recorrido_cliente.mjs';
+
+/** El menú REAL que el producto le muestra a "Servicios profesionales" (medido 2026-09-04). */
+const MENU_SERVICIOS = [
+  { texto: 'forum Conversaciones', ruta: '/inbox' },
+  { texto: 'calendar_today Agenda de hoy', ruta: '/agenda' },
+  { texto: 'event Citas', ruta: '/appointments' },
+  { texto: 'work Servicios', ruta: '/comercio' },
+  { texto: 'point_of_sale Caja', ruta: '/comercio/caja' },
+  { texto: 'credit_score Por cobrar', ruta: '/comercio/fiados' },
+  { texto: 'account_balance Contabilidad', ruta: '/contabilidad' },
+];
 
 const RAIZ = '/repo';
 const BASE = join(RAIZ, 'hermes-content', 'docs', 'recorrido', 'capturas');
@@ -49,6 +60,22 @@ test('dos rubros distintos NUNCA reportan la misma ruta para el mismo paso', () 
   const a = rutaRelativa(join(BASE, 'comercio'), 'paso-07-cita.png', RAIZ);
   const b = rutaRelativa(join(BASE, 'estetica'), 'paso-07-cita.png', RAIZ);
   assert.notEqual(a, b, 'si coinciden, un rubro está pisando la evidencia del otro en el informe');
+});
+
+test('en "Servicios profesionales" el dato se carga en Servicios, no se declara al producto roto', () => {
+  const destino = pantallaDelDato(MENU_SERVICIOS, 'Servicios profesionales');
+
+  // Antes daba null → paso 6 ROJO: "el menú no ofrece ninguna pantalla donde cargar un dato".
+  // El producto estaba sano: su catálogo se llama "Servicios" y su FAB ofrece "Nuevo servicio".
+  assert.ok(destino, 'sin destino el paso 6 acusa al producto de un hueco que no tiene');
+  assert.equal(destino.ruta, '/comercio');
+});
+
+test('si el rubro SÍ tiene pantalla de clientes, esa gana sobre el catálogo', () => {
+  // El día que el producto agregue Clientes a este pack, el recorrido tiene que ir ahí:
+  // el patrón de servicios es la caída, no la preferencia.
+  const conClientes = [{ texto: 'group Clientes', ruta: '/clients' }, ...MENU_SERVICIOS];
+  assert.equal(pantallaDelDato(conClientes, 'Servicios profesionales').ruta, '/clients');
 });
 
 test('importar el instrumento NO dispara el recorrido contra producción', () => {

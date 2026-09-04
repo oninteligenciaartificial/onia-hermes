@@ -359,13 +359,20 @@ async function descubrirMenu(page) {
  * o "Clientes" donde una clínica dice "Pacientes". Si ninguna coincide, el paso sale rojo con
  * el menú completo — que es el dato que sirve para decidir si falta la pantalla o falta el mapa.
  */
-function pantallaDelDato(menu, rubro) {
+export function pantallaDelDato(menu, rubro) {
   const PORRUBRO = {
     'Clínica dental': [/paciente/i],
     'Comercio / tienda': [/producto|cat[áa]logo|art[íi]culo/i, /cliente/i],
     'Importadora / distribuidora': [/producto|cat[áa]logo|art[íi]culo/i, /cliente/i],
     'Estética y spa': [/client[ae]/i, /paciente/i],
-    'Servicios profesionales': [/client[ae]/i, /paciente/i],
+    // 🔴 Este rubro NO tiene pantalla de clientes, y NO es un fallo del producto: medido el
+    // 2026-09-04 en el menú vivo y confirmado en su fuente (`SERVICIOS_NAV_ITEMS`,
+    // lib/platform/vertical-pack.ts), su catálogo `/comercio` se llama "Servicios" y el FAB del
+    // propio producto ofrece "Nuevo servicio". Con el mapa viejo (sólo cliente/paciente) el
+    // paso 6 salía ROJO acusando al producto de no tener dónde cargar un dato del negocio: el
+    // falso rojo que este carril existe para NO producir. El patrón de clientes queda PRIMERO
+    // igual, así que el día que esa pantalla aparezca, gana ella.
+    'Servicios profesionales': [/client[ae]/i, /paciente/i, /servicio/i],
   };
   // El genérico va SIEMPRE al final: si el mapa del rubro falla, todavía se puede cargar algo,
   // pero el detalle va a decir por cuál pantalla se entró y eso queda a la vista en el informe.
