@@ -9,7 +9,117 @@
 
 ---
 
-## 0. Estado al 2026-09-03 — lo vigente (lo de abajo es historia y sigue valiendo como lección)
+## 0. Estado al 2026-09-04 ~08:30 La Paz — PUBLICAR dejó de fallar (y por qué casi sale peor)
+
+**Objetivo:** que publicar deje de fallar; camino de publicación probado punta a punta, sin sacar
+nada con la cara de Lucía ni de la marca sin el OK de Sergio.
+
+### Qué estaba roto de verdad
+
+**No era Higgsfield y no era "Postiz caído".** Postiz respondía perfecto; el diagnóstico previo
+lo midió contra el puerto equivocado (`127.0.0.1:5000` es el puerto INTERNO del contenedor; el
+host mapea **4007**). Lo que estaba muerto era el **backend** de Postiz:
+
+- Postiz v2.23 **no arranca sin Temporal**: revienta en `TemporalRegister.onModuleInit`
+  (`Name resolution failed for target dns:temporal:7233`) y nunca hace `listen(3000)`. `/api` daba
+  502 y por eso el MCP de Postiz devolvía 502.
+- **Nadie lo notó durante ~3 semanas** porque el healthcheck del contenedor solo mira
+  `localhost:5000` (el frontend): es **CIEGO al backend**, así que Postiz figuraba `healthy`
+  mientras su API estaba muerta. El contenedor `temporal` no existía (cero imágenes bajadas):
+  se levantó alguna vez con `--no-deps` y quedó así desde que la imagen se actualizó el 14-ago.
+
+### En producción, verificado mirando
+
+- `temporal` + `temporal-postgresql` + `temporal-elasticsearch` levantados y `healthy`; backend de
+  Postiz escuchando en 3000, `GET /api/` → **200**, pm2 con los 3 procesos y **0 reinicios**.
+  Redes del contenedor intactas (`easypanel`, `postiz-network`, `temporal-network`).
+- **Las 3 cuentas de Instagram están conectadas y sanas**: `@oniahq`
+  (`cmsw091nx0001lq9c8kr6dsg8`), `sergio_urcullo` (`cmt39kug00022lq9cnw5z12wb`), Lucía
+  (`cmt1sv4eh001alq9cl3y6q7es`). Tokens válidos hasta **13/17/18-oct-2026**, ninguna `refreshNeeded`.
+- **El token contra Meta funciona de verdad**: `/public/v1/analytics/<integration>` devolvió
+  métricas reales de IG. No es un 200 de cortesía, es la Graph API contestando.
+- Circuito `ok <id>` → publicar **cableado y probado punta a punta en seco**: tarea con línea
+  `PUBLICAR:` → parseo → validación → subida de la lámina → POST a la API → post creado
+  (`postId cmtmxajfi...`), borrado después. Caso negativo (tarea sin línea) sale con código 2.
+
+### 🔴 Lo que hice mal y hay que saber: restaurar Temporal DISPARÓ el backlog
+
+El volumen `temporal-postgres-data` **sobrevivió**: al volver Temporal, los workflows viejos
+reanudaron y **publicaron 5 posts vencidos en @oniahq entre 12:03 y 12:15 UTC** (fechas 24, 26,
+28, 31-ago y 2-sep) sin OK fresco. Los detecté a los ~10 min, **paré el orchestrator**, y desarmé
+el resto:
+
+- Todos los `post_*` workflows vivos → **terminados**.
+- Los **57 posts** que quedaban en cola → pasados a **DRAFT** (contenido intacto, se re-programan
+  desde la UI). Estado final: `PUBLISHED 14 · DRAFT 57 · QUEUE 0`, cero workflows corriendo.
+- Orchestrator reactivado y verificado 2,5 min: **no publicó nada**.
+
+**La lección:** levantar un motor de scheduling dormido no es un acto neutro — reanuda todo lo que
+tenía pendiente. Antes de encender Temporal/colas, hay que mirar QUÉ hay en cola y desarmar lo
+vencido PRIMERO. `pm2 stop orchestrator` no alcanza como red de seguridad: no sobrevive a un
+`docker restart`.
+
+### Por qué se generaron 1.196 imágenes y no se publicó ninguna
+
+Dos causas, y las dos había que arreglar:
+
+1. **La API estaba muerta** (arriba).
+2. **`ok <id>` no publicaba.** Corría `kanban unblock` y **nada más**. Peor: los loops habían
+   aprendido a pedirle a Sergio que subiera los archivos A MANO desde el teléfono
+   (t_7282a714: *"descargalas en orden, guardalas en la galería y subilas"*). El circuito entero
+   terminaba en una tarea manual que no ocurre nunca.
+3. Los **objetivos de los loops medían PRODUCCIÓN**: `lucia` y `marca-personal` pedían "≥ 1 tarea
+   `needs_input` nueva por vuelta", y `contenido-cola` pedía la pieza "para que Sergio la
+   publique". Un loop que cobra por dejar una tarea bloqueada deja tareas bloqueadas.
+
+### Archivos
+
+- `scripts/kanban/publicar-aprobado.mjs` **(nuevo)** — publica la pieza de una tarea aprobada.
+  Lee una línea `PUBLICAR: cuenta=<oniahq|sergio|lucia> imagenes=<ruta> texto=<brief.json>` del
+  cuerpo. **La línea es DATO, no comando**: lista blanca de cuentas, rutas absolutas sin `..`,
+  validación en disco, e invocación con `execFile` (sin shell). Trae `--autotest`.
+  Códigos: 0 publicó · 2 la tarea no era una pieza · 1 falló.
+- `scripts/postiz_schedule.mjs` — `--now` (publica ya) y `--draft` (crea sin publicar: es la única
+  forma de probar esto, no hay cuenta de prueba).
+- `scripts/kanban/telegram-entrada.py` — al desbloquear, publica; si falla, **manda el error**.
+- `scripts/loops/sincronizar.sh` — despliega los dos `.mjs` a `/root/bin`.
+- `scripts/loops/prompts/{lucia,contenido-cola,marca-personal}.md` — objetivo pasado de producción
+  a **publicación** + exigen la línea `PUBLICAR:`.
+- **VPS:** `/root/.hermes/SOUL.md` (bloque nuevo: `ok <id>` corre el publicador; backup
+  `.bak-20260904-publicar`) · `/opt/postiz/postiz-docker-compose/docker-compose.override.yaml`
+  (comentario de por qué Temporal y ES no son opcionales; backup `.bak-20260904-temporal`) ·
+  `/root/.postiz-api-key` (600) · `/root/bin/onia-{publicar-aprobado,postiz-schedule}.mjs`.
+
+### Intentos fallidos (para no repetirlos)
+
+- **Temporal sin Elasticsearch NO se puede.** Lo probé para no meter otra JVM en un VPS que
+  Hostinger ya estranguló: con visibilidad SQL, Temporal admite **máximo 3 search attributes de
+  tipo Text** y `auto-setup` ya los ocupa, así que el `addSearchAttributes` de Postiz
+  (`organizationId` + `postId`) muere con *"cannot have more than 3 search attribute of type
+  Text"*. Con ES no hay tope. Queda escrito en el override: **no lo "optimices" sacando ES**.
+- **`pm2 restart` deja procesos huérfanos**: el orchestrator quedó en crash-loop con
+  `EADDRINUSE :::3002`. Se arregla con `docker restart postiz` (que **sí** conserva las redes,
+  a diferencia de `docker compose up -d postiz`, que desconecta `easypanel` — trampa ya conocida).
+- El `psql -c` con `$$` dentro de `ssh` + heredoc **sin comillas** se come los `$$` (bash los
+  expande al PID). Heredoc con `'EOF'` citado.
+
+### Qué depende de Sergio
+
+1. **Aprobar el primer post real por el circuito nuevo.** Nada salió con su cara ni con la marca
+   por decisión mía; el camino está probado en seco pero **el último paso (publicar de verdad)
+   nunca se ejerció**, porque no hay cuenta de prueba.
+2. **Los 57 borradores**: decidir cuáles se re-programan y cuáles se tiran. Están intactos.
+3. **Los 5 posts que salieron solos hoy en @oniahq** — si alguno no debía salir, borrarlo.
+
+### Próximos pasos
+
+- Que Sergio apruebe una pieza y verificar el `ok <id>` real (es el único tramo sin ejercer).
+- Arreglar el healthcheck ciego de Postiz para que un backend muerto se vea (tarea en el tablero).
+- Los loops ya miden publicación: mirar en 2 vueltas si el número sube.
+
+---
+
+## 0-bis. Estado al 2026-09-03 — historia (sigue valiendo como lección)
 
 **Objetivo del día:** Sergio opera solo por Telegram con la PC apagada, y el sistema pasa de
 "terminar" a "llegar" (reel de @eriktaveras: *"no es terminar el SaaS, es llegar antes"*).

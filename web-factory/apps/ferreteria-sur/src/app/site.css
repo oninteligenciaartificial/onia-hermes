@@ -82,8 +82,17 @@
 @media (min-width: 980px) {
   .hero-inner { grid-template-columns: minmax(0, 1.55fr) minmax(280px, 0.85fr); gap: var(--s-8); }
 }
+/* El titular arrastraba el MISMO defecto que el padding de acá arriba, y el
+   arreglo del 2026-09-03 no lo alcanzó: --t-mega también escala sólo con el
+   ancho (6.2vw), así que topaba en sus 6rem justo en la laptop ancha y BAJA.
+   Medido el 2026-09-04 sobre el build de producción: 451px de titular (5
+   líneas de 90,24) dejaban el CTA 14px bajo el pliegue a 1366x768 y 59px a
+   1280x720 — ahí ni siquiera era clickeable — con el padding ya en su piso.
+   El min() lo vuelve consciente del alto. Sólo puede RESTAR, y recién por
+   debajo de ~873px de viewport: a 1440x900 —la pantalla con la que se afinó
+   el tope de 6rem— y a 390x844 el valor calculado NO cambia. */
 .hero-title {
-  font-size: var(--t-mega);
+  font-size: min(var(--t-mega), 11svh);
   max-width: 14ch;
 }
 .hero-title em { font-style: normal; color: var(--orange); }

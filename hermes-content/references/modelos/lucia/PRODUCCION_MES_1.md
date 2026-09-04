@@ -162,11 +162,18 @@ Se corrigieron **dos** errores en esa sola línea, y el segundo esconde al prime
    ("originales pesados, quedan locales; los JPG q3 son los assets usables"). Copiar la ruta
    del render y pegarla en un doc produce una cita a un archivo que **git nunca va a tener**.
 
-🔴 **Y ninguna de las dos carpetas está en `main`.** Verificado el 2026-09-03:
-`origin/main` tiene **0** láminas de Lucía; las **70** viven sólo en
-`origin/claude/ads-creatividades-publicos`, que va **151 commits adelante de main**. Desde un
-clon limpio —o desde el VPS, que es donde corre este loop— L6 **no se puede abrir**. Integrar
-esa rama es de `onia-cola`, no de este carril: anotado en el tablero, no se toca desde acá.
+✅ **RESUELTO — ya está en `main`.** Acá decía «ninguna de las dos carpetas está en `main`;
+`origin/main` tiene **0** láminas de Lucía», y era cierto cuando se escribió. **Recontado el
+2026-09-03 21:40 UTC: `origin/main` tiene 133 láminas**, y este carril quedó al día por
+fast-forward limpio (`HEAD` era ancestro de `main`, 373 commits atrás). L6 **se abre desde un
+clon limpio**. Se mide con:
+
+```sh
+git ls-tree -r origin/main --name-only | grep -icE "modelos/lucia/.*\.(jpg|png|jpeg)$"   # → 133
+```
+
+⚠️ La tarea `t_61685a5a` («el feed existe pero main no tiene ni una lámina») nace de esta misma
+línea y quedó **vencida**: se cierra con este recuento, no se vuelve a investigar.
 - ⚠️ **`--account lucia`**, no `onia`: con `onia` el pie sale `@oniahq` en una pieza de Lucía.
 - CTA: **SISTEMA** → entrega "mapa del negocio (vía @oniahq)", que está 🟢 vivo.
 - Las 5 señales nombran DOLOR, no prometen función: nada de factura electrónica, multi-sede,

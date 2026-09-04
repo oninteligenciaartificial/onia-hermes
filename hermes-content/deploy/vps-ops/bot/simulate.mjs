@@ -6,7 +6,7 @@
 //   node simulate.mjs --script 1-feliz             un guion
 //   node simulate.mjs --list                       lista los guiones
 //   node simulate.mjs                              modo interactivo (escribis vos, corta con /salir)
-//   node simulate.mjs --all --slots "jueves 15:00|viernes 10:00"   con horarios de prueba
+//   node simulate.mjs --all --slots "jueves 15:00@2026-07-30T19:00:00Z|viernes 10:00@..."  horarios a mano
 //   node simulate.mjs --all --json                 salida maquina (para diffs / CI)
 //   node simulate.mjs --sin-conocimiento           el guion PELADO del codigo (sin el documento)
 //
@@ -15,13 +15,19 @@
 // simulador contestaba «el número exacto te lo pasa Sergio» mientras el bot vivo daba los precios
 // publicos — ver simulate.test.mjs.
 //
-// Los horarios por defecto son el PLACEHOLDER de config.mjs: Sergio todavia no definio los 2
-// bloques semanales. Con --slots se pasan horarios de prueba para ver el guion completo.
+// Los HORARIOS salen de `ONIA_BOT_SLOTS`, el mismo lugar del que los lee el bot vivo, con el
+// formato `etiqueta@ISO` (la etiqueta es lo unico que ve el prospecto). Si no hay ninguno se cae
+// al placeholder de config.mjs Y SE AVISA: produccion tiene dos cargados —los repone un cron
+// diario—, asi que el guion sin horarios es una rama que ningun lead ve. Para reproducir lo que
+// contesta produccion ahora mismo:
+//
+//   export ONIA_BOT_SLOTS=$(docker exec onia-center sh -c "tr '\0' '\n' < /proc/<pid>/environ" \
+//     | sed -n 's/^ONIA_BOT_SLOTS=//p')
 // Spec: hermes-content/docs/ONIA_CHATBOT_PROPIO_SPEC_20260725.md §6 (via A).
 
 import readline from "node:readline";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { createBotConfig, DEFAULT_CONFIG } from "./config.mjs";
+import { createBotConfig, DEFAULT_CONFIG, parseSlotsSpec } from "./config.mjs";
 import { createState, step, markHumanTakeover, buildFollowUp, LLM_PENDING } from "./bot-engine.mjs";
 import { applyKnowledge, asRecepcionista, readKnowledgeFile } from "./knowledge.mjs";
 
@@ -204,17 +210,32 @@ export function cargarConocimientoPublicado(deps = {}) {
   return { data: null, aviso: `⚠️ sin conocimiento publicado (${path}: ${motivo}) — esto NO es lo que contesta produccion` };
 }
 
+/**
+ * Los horarios con los que produccion esta contestando AHORA, por el mismo camino que el bot vivo:
+ * `--slots` si lo pasaron a mano, si no `ONIA_BOT_SLOTS` del entorno (run-turn.mjs hace lo mismo).
+ *
+ * Sin esto el simulador caia SIEMPRE en la rama `M0_SIN_HORARIOS` mientras produccion tenia dos
+ * horarios cargados — o sea que el "3/3" que este carril reporta cada vuelta certificaba un guion
+ * que ningun prospecto ve. Cuando no hay horarios por ningun lado NO se lo calla: lo dice, igual
+ * que con el documento publicado.
+ */
+export function cargarSlotsPublicados(args = {}, deps = {}) {
+  const env = deps.env || process.env;
+  const raw = String(args.slots || env.ONIA_BOT_SLOTS || "").trim();
+  if (!raw) {
+    return {
+      slots: null,
+      aviso: "⚠️ sin horarios (ni --slots ni ONIA_BOT_SLOTS) — si produccion los tiene cargados, esta es OTRA rama del guion",
+    };
+  }
+  return { slots: parseSlotsSpec(raw), aviso: null };
+}
+
 export function buildConfig(args = {}, deps = {}) {
   let base = DEFAULT_CONFIG;
-  if (args.slots) {
-    const [labelA, labelB] = String(args.slots).split("|").map((part) => part.trim());
-    base = createBotConfig({
-      slots: [
-        { key: "A", label: labelA || "opción A", startAt: null, pending: false },
-        { key: "B", label: labelB || "opción B", startAt: null, pending: false },
-      ],
-    });
-  }
+  const { slots, aviso: avisoSlots } = cargarSlotsPublicados(args, deps);
+  if (avisoSlots) (deps.warn || console.error)(avisoSlots);
+  if (slots) base = createBotConfig({ slots });
   if (args.sinConocimiento) return base;
 
   const { data, aviso } = cargarConocimientoPublicado(deps);

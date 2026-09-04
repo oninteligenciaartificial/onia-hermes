@@ -68,6 +68,34 @@ export interface Plan {
   cuando: string;
 }
 
+/**
+ * Los dos add-ons recurrentes que se cobran acá, cada uno con su monto UNA sola
+ * vez. El chatbot no está en esta lista porque tiene su propia fuente
+ * (`content/chatbot-precios.ts`), y de ahí sale la forma: el número vive como
+ * número y las pantallas lo interpolan.
+ *
+ * Nacen de un defecto medido el 2026-09-04, servido con 200 en producción: los
+ * dos montos estaban escritos **dos veces cada uno** y sin ninguna constante
+ * detrás —`Bs 70` en el `incluye` del Básico y en su fila de `ADDONS`, `Bs 150`
+ * en el `sinEsto` del Básico y en la suya—, y las dos copias de cada uno se
+ * renderizan en la MISMA página (`/` y `/precios`). El día que Sergio mueva el
+ * precio, quien edite la fila que se llama `precio` —la obvia— deja la otra
+ * anunciando el número viejo tres tarjetas más arriba, que es exactamente cómo
+ * llegó a haber cuatro precios vivos del mismo chatbot. Lo vigila
+ * `app/(sitio)/precios-addons.test.ts`.
+ */
+export const AGENDA_ADDON = {
+  nombre: "Reservas online",
+  mensualAddon: 150,
+} as const;
+
+export const USUARIO_EXTRA_ADDON = {
+  nombre: "Usuario adicional",
+  mensualAddon: 70,
+  /** Cuántos se pueden sumar en Básico antes de que convenga subir a Pro. */
+  maxEnBasico: 3,
+} as const;
+
 export const PLANES: readonly Plan[] = [
   {
     id: "basico",
@@ -79,7 +107,7 @@ export const PLANES: readonly Plan[] = [
     semanal: 89,
     anual: 3200,
     incluye: [
-      "2 usuarios (podés sumar hasta 3 más a Bs 70/mes cada uno)",
+      `2 usuarios (podés sumar hasta ${USUARIO_EXTRA_ADDON.maxEnBasico} más a Bs ${bs(USUARIO_EXTRA_ADDON.mensualAddon)}/mes cada uno)`,
       "Hasta 300 fichas de clientes o pacientes cargadas",
       "200 recordatorios por email al mes",
       "Agenda, fichas, caja y cobros en un solo lugar",
@@ -90,7 +118,7 @@ export const PLANES: readonly Plan[] = [
     ],
     sinEsto: [
       "Agentes de IA (vienen desde Pro)",
-      "Reservas online — se agrega como add-on a Bs 150/mes",
+      `Reservas online — se agrega como add-on a Bs ${bs(AGENDA_ADDON.mensualAddon)}/mes`,
       "Reportes completos y facturas recurrentes",
     ],
     cuando: "Negocio de 1 o 2 personas que hoy trabaja con cuaderno o Excel.",
@@ -168,6 +196,37 @@ export function bs(n: number): string {
   return n.toLocaleString("es-BO");
 }
 
+/**
+ * El semanal más barato que existe HOY, para el copy que dice "semanal desde".
+ *
+ * No todos los planes tienen semanal (`Full` no se cobra así), y el día que
+ * cambie cuál lo tiene, un número escrito a mano queda anunciando un ciclo que
+ * ya no se vende. Devuelve `null` si ningún plan tiene semanal: el copy que lo
+ * use debe omitir la frase, nunca decir "Bs 0".
+ */
+export function semanalDesde(): number | null {
+  const vivos = PLANES.map((p) => p.semanal).filter((n): n is number => n !== null);
+  return vivos.length === 0 ? null : Math.min(...vivos);
+}
+
+/**
+ * Un plan por su id, para que el copy interpole en vez de tipear la cifra.
+ *
+ * Existe desde el 2026-09-04, cuando se encontraron 17 montos de plan escritos
+ * a mano en `app/v1/**` — cuatro rutas vivas que el gate de precios no miraba.
+ * Sin un acceso cómodo, cada página resolvía el `find` por su cuenta o, más
+ * probable, escribía el número: el camino fácil tiene que ser el correcto.
+ */
+export function plan(id: PlanId): Plan {
+  const encontrado = PLANES.find((p) => p.id === id);
+  // Fail-closed: un copy que cae de pie acá anunciaría un precio inventado.
+  // Mejor que el build caiga nombrando el id que no está en la tabla.
+  if (!encontrado) {
+    throw new Error(`No existe el plan "${id}" en PLANES (lib/pricing.ts).`);
+  }
+  return encontrado;
+}
+
 /* ---------- lo que se suma sobre la suscripcion ----------
  *
  * ⚠️ VUELVE "Web del negocio" (2026-08-22). El 2026-08-21 la habia sacado de
@@ -235,14 +294,14 @@ export const ADDONS: readonly AddOn[] = [
     href: "/chatbot",
   },
   {
-    nombre: "Reservas online",
+    nombre: AGENDA_ADDON.nombre,
     copy: "Link público para que te pidan cita sin llamadas ni mensajes. Ya viene incluida en Pro y en Full.",
-    precio: "Bs 150/mes en Básico",
+    precio: `Bs ${bs(AGENDA_ADDON.mensualAddon)}/mes en Básico`,
   },
   {
-    nombre: "Usuario adicional",
-    copy: "Una persona más en el sistema. En Básico se pueden sumar hasta 3.",
-    precio: "Bs 70/mes por usuario",
+    nombre: USUARIO_EXTRA_ADDON.nombre,
+    copy: `Una persona más en el sistema. En Básico se pueden sumar hasta ${USUARIO_EXTRA_ADDON.maxEnBasico}.`,
+    precio: `Bs ${bs(USUARIO_EXTRA_ADDON.mensualAddon)}/mes por usuario`,
   },
   {
     nombre: "Web del negocio",

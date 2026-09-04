@@ -106,6 +106,13 @@ export function construirAviso({ notify, conversationId, stageAfter } = {}) {
   return {
     texto: `🔔 <b>Bot Onia</b> — ${ref}${etapa}\n\n${recortado}`,
     motivos,
+    // La conversacion viaja tambien FUERA del texto, y no es duplicar: el texto es lo que Sergio
+    // lee cuando el aviso SALE, y esto es lo unico que queda cuando NO sale. El que lo manda
+    // loguea el resultado desde un callback asincrono, sin el turno a mano; sin este campo la
+    // linea de un aviso perdido no dice a quien habia que atender (medido en produccion el
+    // 2026-09-04: `[aviso] skipped (cuota_agotada): ...` y nada mas). Cruzarlo por proximidad
+    // con la linea `conv=` del webhook miente en cuanto entran dos mensajes a la vez.
+    conversationId: conversationId ?? null,
   };
 }
 

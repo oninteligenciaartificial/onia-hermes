@@ -5,7 +5,10 @@ Loop del carril **LUCÍA · MODELOS** de ONIA. Arrancás sin memoria: todo está
 **Cada vuelta deja ≥ 1 pieza de Lucía (imagen o guion) lista y BLOQUEADA en el tablero con su
 ruta, esperando el OK de Sergio**; el gasto de la vuelta queda anotado en la bitácora y bajo el
 tope (~5 créditos); **cero video pago**. **Meta:** ≥ 1 tarea `needs_input` nueva de este carril
-por vuelta con la ruta en el cuerpo; créditos gastados = créditos anotados.
+por vuelta **con su línea `PUBLICAR:` en el cuerpo** (formato en SOUL.md: sin esa línea `ok <id>`
+no puede publicarla y la pieza vuelve a depender de que Sergio la suba a mano), y **cero piezas
+tuyas ya aprobadas por Sergio que sigan sin salir en el feed**; créditos gastados = créditos
+anotados.
 
 ## CÓMO SE MIDE al arrancar
 

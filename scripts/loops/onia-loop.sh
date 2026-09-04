@@ -133,6 +133,11 @@ case "$NOMBRE" in
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
   contenido-cola)
+    # Ahorro 2026-09-04: Sergio pidió enfocar la cuota en lo vendible. Este carril no
+    # escribe código de producto (mide, publica o redacta), así que no necesita el
+    # modelo más caro: 13 de 15 loops corrían en opus/max y 3 se llevaban el 58 %%.
+    MODELO=claude-sonnet-5
+    ESFUERZO=medium
     # Carril CONTENIDO (Lucia, @oniahq, marca personal). Vivia en la app de Claude
     # Code de la laptop de Sergio y se mudo al VPS el 2026-09-02, con su OK.
     #
@@ -152,6 +157,11 @@ case "$NOMBRE" in
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
   lucia)
+    # Ahorro 2026-09-04: Sergio pidió enfocar la cuota en lo vendible. Este carril no
+    # escribe código de producto (mide, publica o redacta), así que no necesita el
+    # modelo más caro: 13 de 15 loops corrían en opus/max y 3 se llevaban el 58 %%.
+    MODELO=claude-sonnet-5
+    ESFUERZO=medium
     # Carril Lucia / modelos (Higgsfield). Era una sesion de Windows: se mudo al
     # VPS el 2026-09-02 para que corra con la laptop apagada.
     # 🔴 Es el UNICO carril que puede quemar plata solo. Su prompt le prohibe
@@ -162,6 +172,11 @@ case "$NOMBRE" in
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
   recorrido-cliente)
+    # Ahorro 2026-09-04: Sergio pidió enfocar la cuota en lo vendible. Este carril no
+    # escribe código de producto (mide, publica o redacta), así que no necesita el
+    # modelo más caro: 13 de 15 loops corrían en opus/max y 3 se llevaban el 58 %%.
+    MODELO=claude-sonnet-5
+    ESFUERZO=medium
     # Recorre el producto de punta a punta como un cliente real: home -> alta ->
     # rubro -> cargar un dato -> pantalla de cobro -> bandeja. El canario mira
     # pantallas SUELTAS; este mira el CAMINO, que es donde se pierde la plata.
@@ -173,6 +188,11 @@ case "$NOMBRE" in
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
   tendencias)
+    # Ahorro 2026-09-04: Sergio pidió enfocar la cuota en lo vendible. Este carril no
+    # escribe código de producto (mide, publica o redacta), así que no necesita el
+    # modelo más caro: 13 de 15 loops corrían en opus/max y 3 se llevaban el 58 %%.
+    MODELO=claude-sonnet-5
+    ESFUERZO=medium
     # Investiga que funciona AHORA (formatos, ganchos, estructura de carrusel) y
     # lo convierte en recetas EJECUTABLES para los carriles de contenido. El
     # radar viejo era solo de la marca personal; para producto y ads no habia
@@ -193,6 +213,11 @@ case "$NOMBRE" in
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
   calidad-generado)
+    # Ahorro 2026-09-04: Sergio pidió enfocar la cuota en lo vendible. Este carril no
+    # escribe código de producto (mide, publica o redacta), así que no necesita el
+    # modelo más caro: 13 de 15 loops corrían en opus/max y 3 se llevaban el 58 %%.
+    MODELO=claude-sonnet-5
+    ESFUERZO=medium
     # Juzga lo que Higgsfield genera y cuida que Lucia sea SIEMPRE la misma cara.
     # No genera nada: abre las piezas del ultimo lote, las mira contra la rubrica,
     # y escribe en la bitacora POR QUE salio bien la que salio bien — eso es lo
@@ -204,6 +229,11 @@ case "$NOMBRE" in
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
   supervisor)
+    # Ahorro 2026-09-04: Sergio pidió enfocar la cuota en lo vendible. Este carril no
+    # escribe código de producto (mide, publica o redacta), así que no necesita el
+    # modelo más caro: 13 de 15 loops corrían en opus/max y 3 se llevaban el 58 %%.
+    MODELO=claude-sonnet-5
+    ESFUERZO=medium
     # Audita a los OTROS loops: abre sus commits y dice si el trabajo sirve.
     # Ninguno se mira a si mismo, y un loop que produce basura no falla — commitea,
     # reporta bien, y se ve igual que uno que sirve. Contar commits mide actividad;
@@ -263,7 +293,25 @@ fi
 
 # ── barandas verificadas ANTES de gastar una sesion --------------------------
 [ -f "$PROMPT" ]      || { avisar "falta el prompt $PROMPT"; exit 2; }
-[ -d "$WT/.git" ] || [ -f "$WT/.git" ] || { avisar "no existe el worktree $WT"; exit 2; }
+# Un worktree que falta ya no detiene el carril: se rehace. Nace del 2026-09-04,
+# cuando el disco del VPS estaba al 85 % con 72 GB en /root/loops y borrar un
+# worktree de un carril pausado significaba dejarlo muerto hasta que alguien lo
+# recreara a mano. El repo base es el mismo del que salen todos; la rama ya la
+# fija el `case` de arriba. Si tampoco se puede rehacer, ahi si se avisa y se sale.
+if [ ! -d "$WT/.git" ] && [ ! -f "$WT/.git" ]; then
+  BASE_REPO=${ONIA_LOOPS_REPO:-/root/loops/onia-hermes}
+  log "no existe el worktree $WT — lo rehago desde $BASE_REPO en la rama $RAMA"
+  rm -rf "$WT"
+  if git -C "$BASE_REPO" fetch origin --quiet 2>/dev/null &&
+     { git -C "$BASE_REPO" worktree add "$WT" "$RAMA" >/dev/null 2>&1 ||
+       git -C "$BASE_REPO" worktree add -b "$RAMA" "$WT" "origin/$RAMA" >/dev/null 2>&1 ||
+       git -C "$BASE_REPO" worktree add -b "$RAMA" "$WT" origin/main >/dev/null 2>&1; }; then
+    log "worktree rehecho en $WT ($RAMA)"
+  else
+    avisar "no existe el worktree $WT y no pude rehacerlo desde $BASE_REPO"
+    exit 2
+  fi
+fi
 ACTUAL=$(git -C "$WT" branch --show-current 2>/dev/null || echo '?')
 [ "$ACTUAL" = "$RAMA" ] || { avisar "el worktree $WT esta en '$ACTUAL' y se esperaba '$RAMA'"; exit 2; }
 cd "$WT" || { avisar "no se pudo entrar a $WT"; exit 2; }
