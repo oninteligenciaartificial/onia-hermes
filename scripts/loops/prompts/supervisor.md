@@ -11,14 +11,22 @@ avance contra producción.
 ## CÓMO SE MIDE al arrancar
 
 ```
-for id in $(crontab -l | grep -oE 'onia-loop\.sh [a-z-]+' | awk '{print $2}' | sort -u); do L=/var/log/onia-loop-$id.log; echo "== $id  ($(grep -c '===== ARRANCA' $L 2>/dev/null) vueltas, última $(grep '===== ARRANCA' $L 2>/dev/null | tail -1 | cut -c1-16))"; grep -hE "^([0-9T:Z-]+ )?(OBJETIVO|RAZ[OÓ]N|LECCI[OÓ]N):" $L 2>/dev/null | tail -4; done
+scripts/loops_avance.sh                    # quién no midió — y los cuatro descartes, ya aplicados
 git -C /root/loops/onia-hermes fetch --quiet; for b in $(git -C /root/loops/onia-hermes branch -r --list 'origin/claude/*' --no-merged origin/main); do echo "$b $(git -C /root/loops/onia-hermes log -1 --format=%cr $b)"; done   # ¿el trabajo LLEGA a main o se vara?
 /root/bin/onia-tablero.sh list | grep -c needs_input                                      # decisiones esperando a Sergio: muchas = los loops preguntan de más
 ```
 
-Sin línea `OBJETIVO:` en su última vuelta = un loop que **no midió** (hallazgo). Misma medida
-dos vueltas seguidas sin `RAZÓN:` = un loop que **repite** (hallazgo). La línea `OBJETIVO:` tuya
-es `loops sin avance N de 15: <ids> · sin medir M · varados en main K`.
+Misma medida dos vueltas seguidas sin `RAZÓN:` = un loop que **repite** (hallazgo). La línea
+`OBJETIVO:` tuya es `loops sin avance N de 15: <ids> · sin medir M · varados en main K`.
+
+⚠️ **Acá había un `for` con un `grep '^OBJETIVO:'` y mintió las dos vueltas en que se usó.**
+De 15 loops sacaba ~8 "desobedientes" y **ninguno lo era**, porque un loop sin esa línea casi
+nunca desobedeció: puede estar **corriendo ahora** (la línea se escribe al final — el 04-sep se
+acusó a sí mismo mientras medía), puede haber **muerto por el cupo** de Claude a los 3 segundos,
+puede haberla escrito **en negrita**, o puede que su última vuelta sea **anterior al día en que
+se pidió la línea**. `loops_avance.sh` aplica los cuatro descartes y explica cada uno; su código
+de salida ya es el veredicto. **No vuelvas al `for`**: el trabajo de este carril es no mandar a
+arreglar loops sanos, y ese comando hacía exactamente eso.
 
 # DÓNDE ESTÁS CORRIENDO — leelo antes que nada
 
