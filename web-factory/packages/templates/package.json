@@ -6,6 +6,9 @@
   "exports": {
     ".": "./src/index.ts"
   },
+  "scripts": {
+    "gate:marcadores": "tsx scripts/gate-marcadores.ts"
+  },
   "dependencies": {
     "@onia/blocks": "workspace:*",
     "@onia/tokens": "workspace:*"

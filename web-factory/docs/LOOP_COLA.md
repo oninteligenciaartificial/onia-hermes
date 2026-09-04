@@ -95,6 +95,10 @@ Las tres formas de fantasma que ya aparecieron acá:
 4. **`pnpm install --frozen-lockfile` desde `web-factory/`.** Si falla, el deploy de
    `onia.com.bo` está roto aunque nada de su app lo esté — ver el primer ítem de `## Ahora`.
 5. Node zombies de tests viejos → matar. Cerrar con la prueba (200, hash, exit 0).
+6. `pnpm --filter @onia/templates gate:marcadores` — mide en Chromium los 108 puntos de dato
+   de los dos paneles (claro/oscuro × 1440/390) contra el piso de 8 px de W4. Hoy da **rojo en
+   2 de 108** a propósito: es el ítem del punto del KPI en `## Ahora`, con su causa medida. Si
+   se pone rojo en OTRO caso, eso sí es nuevo.
 
 ---
 
@@ -215,11 +219,39 @@ Las tres formas de fantasma que ya aparecieron acá:
       A6 lo dejó anotado dentro de su propio `[x]`: *"sigue en `r=3` y, con la escala de 0,839,
       mide 5,03px renderizados — bajo el piso de 8px"*. Es el único marcador del panel que
       quedó fuera de la regla que el propio carril se puso en W4.
-      **Evidencia**: `web-factory/packages/templates/src/dashboard.ts:993` sigue emitiendo
-      `r="3"` en el círculo del último punto.
       **Hecho cuando**: medido en el navegador el diámetro RENDERIZADO (no el atributo) en
       `dashboard-demo` y `dashboard-edge` × claro/oscuro × 1440/390, ≥8 px en todas, con el
       test que **cae** al volver a 3 verificado en rojo antes de darlo por bueno.
+
+      🔧 **2026-09-04 — ya hay gate, y el punto pasó de 4,05-5,03 px a 8,10-10,07 px en 6 de
+      los 8 casos. Queda UNO, y ese no se cierra sin una decisión de diseño.**
+      **El gate**: `pnpm --filter @onia/templates gate:marcadores`
+      (`packages/templates/scripts/gate-marcadores.ts`). Genera los dos paneles con el MISMO
+      `generateSite` que usa la fábrica —no un HTML armado a mano— y mide los 108 marcadores de
+      la matriz completa. Falsificado en rojo volviendo a `r="3"` (reproduce **5,03 px exacto**,
+      el número que decía esta línea, así que el instrumento coincide con el de A6) y con el
+      piso subido a 12 (`exit 1`).
+      ⚠️ **Mide PÍXELES PINTADOS, no el bounding box**, y eso no es un detalle de estilo: el box
+      declara la geometría aunque el SVG **recorte** el dibujo. El primer intento —un trazo
+      `non-scaling-stroke` de 8 px, que da 8 px en cualquier escala— medía **8,00 px verdes**
+      mientras en pantalla quedaba un **gajo de 3×3 px**, peor que el defecto original. Se
+      descartó por eso. Un gate de tamaño que mire geometría declarada aprueba recortes.
+      **Lo que queda, medido**: con `r=6` + `pad=6` el punto le entra al viewBox, pero el
+      sparkline **sangra hasta el borde de la tarjeta** (`width: calc(100% + 36px)`,
+      `margin: 4px -18px -16px`) y la tarjeta tiene `border-radius: 12px` con
+      `overflow: hidden`. Cuando el último valor es el **mínimo** de la serie, el punto cae en
+      la **esquina redondeada de abajo a la derecha** y la curva se lo come: pinta **5,00 px**
+      contra 8,10 declarados. Pasa en `dashboard-edge` a 390 (claro y oscuro). A 1440 no, y en
+      `dashboard-demo` tampoco: ahí el último valor es el máximo y la esquina de arriba queda
+      lejos, porque el spark está pegado al fondo de la tarjeta y no al techo.
+      **Por qué no lo cierro solo**: sacarlo de la esquina pide ~22 de 320 unidades de padding
+      (11 px de pantalla a escala 0,675), o sea **renunciar al sangrado de borde a borde** que
+      pide la ficha del patrón (banco: Stakent 23902428). Eso es cambiar cómo se ve la tarjeta,
+      no arreglar un defecto, y un cambio visual se muestra renderizado antes de aplicarlo.
+      **Las dos salidas, para decidir**: (a) el spark deja de sangrar a la derecha
+      (`width: calc(100% + 18px)`) y el punto entra entero, al precio de romper la simetría del
+      sangrado; (b) el punto se dibuja por encima del recorte —sacar el spark del `overflow` de
+      la tarjeta— que conserva el diseño pero toca la anatomía de la card.
 
 - [ ] **Carril B — portfolio sigue sin ancla (N=1), el último rubro que se receta por analogía.**
       B1 y B2 cerraron los seis rubros que tenían, y las dos terminan con la misma frase
