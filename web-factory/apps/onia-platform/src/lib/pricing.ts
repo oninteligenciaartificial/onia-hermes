@@ -168,6 +168,37 @@ export function bs(n: number): string {
   return n.toLocaleString("es-BO");
 }
 
+/**
+ * El semanal más barato que existe HOY, para el copy que dice "semanal desde".
+ *
+ * No todos los planes tienen semanal (`Full` no se cobra así), y el día que
+ * cambie cuál lo tiene, un número escrito a mano queda anunciando un ciclo que
+ * ya no se vende. Devuelve `null` si ningún plan tiene semanal: el copy que lo
+ * use debe omitir la frase, nunca decir "Bs 0".
+ */
+export function semanalDesde(): number | null {
+  const vivos = PLANES.map((p) => p.semanal).filter((n): n is number => n !== null);
+  return vivos.length === 0 ? null : Math.min(...vivos);
+}
+
+/**
+ * Un plan por su id, para que el copy interpole en vez de tipear la cifra.
+ *
+ * Existe desde el 2026-09-04, cuando se encontraron 17 montos de plan escritos
+ * a mano en `app/v1/**` — cuatro rutas vivas que el gate de precios no miraba.
+ * Sin un acceso cómodo, cada página resolvía el `find` por su cuenta o, más
+ * probable, escribía el número: el camino fácil tiene que ser el correcto.
+ */
+export function plan(id: PlanId): Plan {
+  const encontrado = PLANES.find((p) => p.id === id);
+  // Fail-closed: un copy que cae de pie acá anunciaría un precio inventado.
+  // Mejor que el build caiga nombrando el id que no está en la tabla.
+  if (!encontrado) {
+    throw new Error(`No existe el plan "${id}" en PLANES (lib/pricing.ts).`);
+  }
+  return encontrado;
+}
+
 /* ---------- lo que se suma sobre la suscripcion ----------
  *
  * ⚠️ VUELVE "Web del negocio" (2026-08-22). El 2026-08-21 la habia sacado de
