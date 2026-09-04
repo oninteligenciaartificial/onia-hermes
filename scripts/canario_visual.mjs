@@ -1,17 +1,26 @@
 #!/usr/bin/env node
 /**
- * Canario visual — abre las pantallas que ve un cliente, las MIRA (captura full-page)
+ * Canario visual — abre las pantallas que ve un cliente, las MIRA (capturas por viewport)
  * y mide peso real y tiempo real.
  *
  * Un 200 no es verificación: el login de producción mostró durante días los NOMBRES de
  * los iconos como texto, "verificado" con HTTP 200 y grep. Por eso acá se captura y se
  * pesa. La captura la mira un humano (o el agente); el script solo la produce.
  *
+ * ⚠️ NUNCA `page.screenshot({ fullPage: true })` en este sitio. Medido 2026-09-03: fullPage
+ * agranda el viewport al alto entero de la página, y con eso el header (`position: sticky;
+ * top: 0`) del layout de `(sitio)` renderiza en blanco — la home aparece SIN nav, sin que
+ * el sitio esté roto. La misma home con captura por viewport (scroll real) muestra el header
+ * intacto. Es la misma familia de bug que ya rompió `/rubros` (ver memoria
+ * `captura-fullpage-miente.md`). Por eso acá se capturan viewports en pasos de scroll real,
+ * nunca la página entera de una.
+ *
  * Uso:
  *   node scripts/canario_visual.mjs                 # todas las pantallas
  *   node scripts/canario_visual.mjs login-plataforma
  *
- * Escribe <out>/<pantalla>.png y <out>/<pantalla>.json (peso, ms, y qué se ve).
+ * Escribe <out>/<pantalla>-00.png, -01.png... (una por viewport de scroll) y
+ * <out>/<pantalla>.json (peso, ms, y qué se ve).
  */
 import { chromium } from 'playwright';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -182,10 +191,36 @@ function juzgar(datos, baseInyectada) {
     motivos.push(`tiempo ×${(datos.msMirable / base.msMirable).toFixed(1)} vs baseline (${base.msMirable} → ${datos.msMirable} ms)`);
   }
   const erroresViejos = new Set(base.erroresConsola || []);
-  const nuevos = (datos.erroresConsola || []).filter((e) => !erroresViejos.has(e));
+  const nuevos = (datos.erroresConsola || []).filter((e) => !erroresViejos.has(e) && !esHuellaPropia(e, datos));
   if (nuevos.length) motivos.push(`error de consola nuevo: ${nuevos[0]}`);
 
-  return { motivos, baseline: 'comparada' };
+  return { motivos, baseline: 'comparada', huellaPropia: huellasDe(datos) };
+}
+
+/** El endpoint exacto que el canario se rate-limita a sí mismo. Deliberadamente estrecho. */
+const RE_WIDGET_CHATWOOT = /^https:\/\/onia-chatbot-chatwoot\.[^/]+\/widget\b/;
+
+/** Las respuestas de esta pasada que son huella nuestra y no un defecto del producto. */
+function huellasDe(datos) {
+  return (datos.respuestasFallidas || [])
+    .filter((r) => r.status === 429 && RE_WIDGET_CHATWOOT.test(r.url))
+    .map((r) => `429 de ${r.url.slice(0, 60)}… — cupo propio (5/h por IP), no una caída`);
+}
+
+/**
+ * ¿Este error de consola lo causó el propio canario? Sólo para UN caso, medido y probado:
+ * el 429 de `/widget` de Chatwoot, que es el cupo de Rack::Attack consumido por nuestra
+ * propia IP al abrir diez pantallas seguidas (diagnóstico completo en COLA.md, 00:55 UTC).
+ *
+ * Fail-CLOSED a propósito, y las cuatro guardas del `--self-check` lo fijan: se silencia
+ * sólo si vimos la respuesta que lo explica Y **todos** los 429 de la pasada son del widget.
+ * Un 429 ajeno, un 500 del widget, o un 429 sin respuesta que lo explique siguen siendo ítem.
+ * Una excepción que silencia de más es peor que el fantasma que vino a matar.
+ */
+function esHuellaPropia(texto, datos) {
+  if (!/status of 429/.test(texto)) return false;
+  const cuatro29 = (datos.respuestasFallidas || []).filter((r) => r.status === 429);
+  return cuatro29.length > 0 && cuatro29.every((r) => RE_WIDGET_CHATWOOT.test(r.url));
 }
 
 /**
@@ -236,7 +271,13 @@ async function medir(browser, { nombre, url, cola, duenio, requiereSesion }) {
   // llevaba 4 días arriba): la baseline decía 2310 KB y tres corridas seguidas dieron
   // 582, 509 y 500 KB. Un umbral de peso sobre ese número habría disparado al azar — el
   // canario existe justamente para no reportar verde con cara de éxito.
+  // Las respuestas 4xx/5xx se guardan CON SU URL. El texto que la consola imprime por un
+  // recurso caído es genérico ("...status of 429 ()") y no dice de qué endpoint vino: sin
+  // esta lista no hay forma de distinguir el 429 que nos hacemos nosotros del que sería una
+  // caída real. Es el dato que le faltaba a `juzgar` para no gritar un fantasma por vuelta.
+  const respuestasFallidas = [];
   page.on('response', (r) => {
+    if (r.status() >= 400) respuestasFallidas.push({ url: r.url().slice(0, 200), status: r.status() });
     pesajes.push(
       r.request().sizes()
         .then((s) => { bytes += (s.responseBodySize || 0) + (s.responseHeadersSize || 0); })
@@ -259,24 +300,49 @@ async function medir(browser, { nombre, url, cola, duenio, requiereSesion }) {
   try { await page.waitForLoadState('networkidle', { timeout: 15_000 }); } catch { /* sigue */ }
   const msTotal = Date.now() - t0;
 
-  // Recorrer la página entera antes de capturar. Sin esto, todo lo que aparece al
-  // scrollear (IntersectionObserver, opacity:0) sale como bloques de color VACÍOS y la
-  // captura miente en la dirección peor: parece rota una página que está sana.
-  // 120ms/400ms medían apagados: la tarjeta de add-on de WhatsApp en /precios (animación
-  // "whileInView" con delay) quedaba en blanco con esos tiempos y aparecía completa con
-  // 300ms/800ms — verificado a mano el 2026-09-03. No es el sitio, es el instrumento.
-  await page.evaluate(async () => {
-    const paso = window.innerHeight * 0.8;
-    for (let y = 0; y < document.body.scrollHeight; y += paso) {
-      window.scrollTo(0, y);
-      await new Promise((r) => setTimeout(r, 300));
-    }
-    window.scrollTo(0, 0);
-    await new Promise((r) => setTimeout(r, 800));
-  });
+  // Capturar por VIEWPORT real, nunca `fullPage`. Dos motivos medidos, no supuestos:
+  //
+  // 1) Lo que aparece al scrollear (IntersectionObserver, opacity:0) sale como bloques de
+  //    color VACÍOS si no se scrollea antes — la captura miente en la dirección peor: parece
+  //    rota una página que está sana. 120ms/400ms medían apagados: la tarjeta de add-on de
+  //    WhatsApp en /precios (animación "whileInView" con delay) quedaba en blanco con esos
+  //    tiempos y aparecía completa con 300ms/800ms — verificado a mano el 2026-09-03.
+  // 2) `fullPage: true` agranda el viewport al alto entero del documento para capturar de una
+  //    sola vez, y con eso todo lo que es `position: sticky` dentro de esa página queda mal
+  //    (el header del sitio, el switcher de /rubros) porque ya no hay scroll real que sostenga
+  //    su posición. Medido 2026-09-03: la home sin cambios captura CON header por viewport y
+  //    SIN header por fullPage.
+  //
+  // `scroll-behavior: auto` mata el scroll suave del sitio (si no, una captura a mitad de
+  // animación fotografía la página en tránsito), y se espera a que `scrollY` LLEGUE de verdad,
+  // no a que pase un timeout — ver memoria `captura-fullpage-miente.md`.
+  await page.addStyleTag({ content: 'html{scroll-behavior:auto !important}' }).catch(() => {});
+  await page.waitForTimeout(300);
 
-  const png = join(OUT, `${nombre}.png`);
-  await page.screenshot({ path: png, fullPage: true });
+  const alto = await page.evaluate(() => document.documentElement.scrollHeight);
+  const paso = Math.round(900 * 0.85);
+  const capturas = [];
+  for (let y = 0, i = 0; y < alto && i < 24; y += paso, i++) {
+    await page.evaluate((t) => window.scrollTo(0, t), y);
+    await page.waitForFunction(
+      (t) => Math.abs(window.scrollY - t) < 3
+        || Math.abs(window.scrollY - (document.documentElement.scrollHeight - window.innerHeight)) < 3,
+      y,
+      { timeout: 5000 },
+    ).catch(() => {});
+    // 350ms no alcanzaba: dejaba fotografiado el fade-in "whileInView" a mitad de camino, y el
+    // texto de la sección siguiente quedaba semitransparente y montado sobre el header sticky —
+    // parece un bug de superposición del sitio y es la propia herramienta fotografiando en
+    // tránsito. Verificado a mano el 2026-09-03 en /chatbot, /home y /rubros: con 1500ms el
+    // fantasma desaparece; 900ms es el piso que ya usa el resto del sitio para esta misma
+    // animación (ver comentario de arriba, "300ms/800ms medían apagados").
+    await page.waitForTimeout(900);
+    const f = join(OUT, `${nombre}-${String(i).padStart(2, '0')}.png`);
+    await page.screenshot({ path: f });
+    capturas.push(f);
+    if (y + paso >= alto) break;
+  }
+  await page.evaluate(() => window.scrollTo(0, 0));
 
   const visto = {
     titulo: await page.title().catch(() => null),
@@ -299,9 +365,17 @@ async function medir(browser, { nombre, url, cola, duenio, requiereSesion }) {
   const medida = fallo ? null : llegoALaPantalla(url, visto.urlFinal);
   if (medida === false && !motivoNoMedida) motivoNoMedida = `desviada a ${visto.urlFinal}`;
 
-  const datos = { nombre, url, cola, duenio, status, fallo, bytes, msMirable, msTotal, medida, motivoNoMedida, erroresConsola: errores.slice(0, 10), visto };
+  // ⚠️ Esta línea salió en conflicto al mergear `claude/canario-visual` (2026-09-03): los dos
+  // lados le agregaron campos DISTINTOS al mismo objeto — `main` el chequeo de desvío
+  // (`medida`/`motivoNoMedida`/`respuestasFallidas`), la rama la lista de capturas por
+  // viewport. Se resuelve por UNIÓN. Elegir un lado borraba media herramienta sin dejar
+  // rastro, y el canario habría seguido corriendo en verde, ciego de un ojo.
+  const datos = { nombre, url, cola, duenio, status, fallo, bytes, msMirable, msTotal, medida, motivoNoMedida, erroresConsola: errores.slice(0, 10), respuestasFallidas: respuestasFallidas.slice(0, 20), visto, capturas: capturas.map((f) => f.split('/').pop()) };
   const veredicto = juzgar(datos);
   datos.baseline = veredicto.baseline;
+  // Lo que se silencia queda ESCRITO, no escondido: un filtro invisible se vuelve mentira el
+  // día que silencia de más, y nadie lo revisa porque no deja rastro.
+  if (veredicto.huellaPropia?.length) datos.huellaPropia = veredicto.huellaPropia;
   // `motivos` son las razones MECÁNICAS por las que esto ya es un ítem. Vacío NO significa
   // "OK": significa "nada que la máquina pueda ver". El ojo sigue siendo obligatorio — el
   // diff no ve un icono que dice "credit_card_off" ni un botón que promete algo falso.
@@ -345,6 +419,42 @@ if (filtro.includes('--self-check')) {
   afirmar(motivosDe({ msMirable: 9_000 }).some((m) => m.includes('techo de tiempo')), '9 s cruza el techo absoluto');
   afirmar(motivosDe({ erroresConsola: ['viejo', 'nuevo'] }).some((m) => m.includes('consola')), 'un error de consola nuevo es un item');
   afirmar(motivosDe({ erroresConsola: ['viejo'] }).length === 0, 'un error que YA estaba en la baseline no se repite como item');
+
+  // --- El 429 del widget de Chatwoot es la huella del PROPIO canario, no una caída ---
+  // Chatwoot limita /widget a 5 cargas por hora POR IP (Rack::Attack, dentro del contenedor
+  // onia-chatbot_chatwoot). El canario abre diez pantallas seguidas desde una sola IP: de la
+  // sexta en adelante se come su propio 429. Medido el 2026-09-03 09:38 UTC: curl frio 200,
+  // home/precios/empezar 200 con la burbuja visible (64x64), rubros y chatbot 429 — el corte
+  // cae EXACTO en la quinta carga. Un visitante real cuenta con su IP y su cupo.
+  // Sin esta excepcion el canario escribia un 🔴 falso por vuelta, y ya costo cuatro.
+  const TXT_429 = 'Failed to load resource: the server responded with a status of 429 ()';
+  const URL_WIDGET = 'https://onia-chatbot-chatwoot.hqdqgh.easypanel.host/widget?website_token=9k5i7xnAgCbSse1EZwVChZLw';
+  const AJENO = 'https://app.onia.com.bo/api/algo';
+  afirmar(
+    motivosDe({ erroresConsola: ['viejo', TXT_429], respuestasFallidas: [{ url: URL_WIDGET, status: 429 }] }).length === 0,
+    'el 429 del widget de Chatwoot NO es un item: es la huella del propio canario',
+  );
+  // Las cuatro de abajo son el precio de la de arriba: una excepcion que silencia de mas es
+  // peor que el fantasma que vino a matar, porque tapa la caida del dia que sea real.
+  afirmar(
+    motivosDe({ erroresConsola: ['viejo', TXT_429], respuestasFallidas: [{ url: AJENO, status: 429 }] }).some((m) => m.includes('consola')),
+    'un 429 de OTRO endpoint SI es un item',
+  );
+  afirmar(
+    motivosDe({ erroresConsola: ['viejo', TXT_429], respuestasFallidas: [{ url: URL_WIDGET, status: 429 }, { url: AJENO, status: 429 }] }).some((m) => m.includes('consola')),
+    'el 429 del widget NO tapa un 429 ajeno en la misma pantalla',
+  );
+  afirmar(
+    motivosDe({ erroresConsola: ['viejo', TXT_429], respuestasFallidas: [] }).some((m) => m.includes('consola')),
+    'un 429 sin respuesta que lo explique SI es un item: no se silencia a ciegas',
+  );
+  afirmar(
+    motivosDe({
+      erroresConsola: ['viejo', 'Failed to load resource: the server responded with a status of 500 ()'],
+      respuestasFallidas: [{ url: URL_WIDGET, status: 500 }],
+    }).some((m) => m.includes('consola')),
+    'el widget CAIDO de verdad (500) SI es un item: la excepcion es solo para el 429',
+  );
   afirmar(motivosDe({ status: 500 }).some((m) => m.includes('status')), 'un 500 es un item');
   afirmar(motivosDe({ fallo: 'timeout' }).some((m) => m.includes('no abrió')), 'una pantalla que no abre es un item');
   // El caso que originó el carril: 3,9 MB y 117 s con status 200.

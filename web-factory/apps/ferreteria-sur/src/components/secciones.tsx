@@ -2,8 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ferreteria, waLink } from "@/data/ferreteria";
 import { Reveal } from "@/components/motion";
 import { LeadForm } from "@/components/LeadForm";
@@ -40,15 +38,36 @@ const REGLA = Array.from({ length: 13 }, (_, i) => 40 + i * 30);
 export function HeroFondo() {
   const root = useRef<HTMLDivElement | null>(null);
 
+  // GSAP entra por import() DINÁMICO, no estático. Esta es la web de una
+  // ferretería de barrio: la abre un cliente con datos móviles. Importado
+  // arriba, `gsap` + `ScrollTrigger` viajaban en el bundle inicial de la home
+  // (192 kB contra un presupuesto de 150) para una animación que ni siquiera
+  // corre hasta después de montar, y que con reduced-motion no corre nunca.
+  // Así el parallax sigue vivo — sólo llega en su propio chunk, después de que
+  // la página ya se ve.
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    gsap.registerPlugin(ScrollTrigger);
-    const ctx = gsap.context(() => {
-      const scroll = { trigger: root.current, start: "top top", end: "bottom top", scrub: 0.6 };
-      gsap.to(".hero-grid", { yPercent: 10, ease: "none", scrollTrigger: scroll });
-      gsap.to(".hero-art", { yPercent: -22, ease: "none", scrollTrigger: scroll });
-    }, root);
-    return () => ctx.revert();
+    let ctx: { revert: () => void } | undefined;
+    let cancelado = false;
+    void (async () => {
+      const [{ gsap }, { ScrollTrigger }] = await Promise.all([
+        import("gsap"),
+        import("gsap/ScrollTrigger"),
+      ]);
+      // El componente pudo desmontarse mientras bajaba el chunk: sin esta
+      // guarda el trigger queda registrado sobre un nodo que ya no existe.
+      if (cancelado) return;
+      gsap.registerPlugin(ScrollTrigger);
+      ctx = gsap.context(() => {
+        const scroll = { trigger: root.current, start: "top top", end: "bottom top", scrub: 0.6 };
+        gsap.to(".hero-grid", { yPercent: 10, ease: "none", scrollTrigger: scroll });
+        gsap.to(".hero-art", { yPercent: -22, ease: "none", scrollTrigger: scroll });
+      }, root);
+    })();
+    return () => {
+      cancelado = true;
+      ctx?.revert();
+    };
   }, []);
 
   return (

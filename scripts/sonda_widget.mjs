@@ -92,10 +92,30 @@ const ESTADO_DB = process.env.ONIA_BOT_ESTADO_DB || 'supabase-db';
 const NOMBRE_SONDA = 'Sonda QA carril chatbot';
 
 /** Los dos mensajes del chequeo, tal cual los fija el prompt del loop. */
-export const MENSAJES = [
+export const GUION_POR_DEFECTO = Object.freeze([
   'Hola, quiero informacion sobre el sistema',
   'Tengo una clinica dental en Santa Cruz, somos 4 personas',
-];
+]);
+
+/**
+ * El guion, con una COSTURA para medir un turno que el guion fijo no cubre.
+ *
+ * Nace del 2026-09-03: el gate declaraba el carril cumplido con DOS turnos, y el turno que vale
+ * plata es el TERCERO — el prospecto elige uno de los dos horarios. Sin costura no habia forma de
+ * llegar hasta ahi sin editar este archivo, o sea sin medir el mismo artefacto que corre cada hora.
+ * Mismo patron que `ONIA_RESCATE_CANDIDATOS` en el rescate: seam por env, default = produccion.
+ *
+ * El default NO cambia: sin `ONIA_SONDA_GUION`, la sonda manda exactamente los dos del prompt.
+ */
+export function leerGuion(crudo, porDefecto = GUION_POR_DEFECTO) {
+  const partes = String(crudo ?? '')
+    .split('|')
+    .map((s) => s.trim())
+    .filter(Boolean);
+  return partes.length > 0 ? partes : [...porDefecto];
+}
+
+export const MENSAJES = leerGuion(process.env.ONIA_SONDA_GUION);
 
 /** Chatwoot: 0 entrante · 1 saliente (respuesta de verdad) · 2 actividad · 3 enlatado del pre-chat. */
 export const ENTRANTE = 0;
@@ -705,6 +725,23 @@ function selfCheck() {
   const casos = [];
   const caso = (nombre, fn) => casos.push([nombre, fn]);
   const m = (message_type, created_at, content) => ({ message_type, created_at, content });
+
+  // La costura del guion. Lo que se afirma NO es que se pueda cambiar el guion: es que el
+  // default siga siendo EXACTAMENTE el del prompt del loop. Una costura que corre el default
+  // convierte el gate horario en otra medicion sin que nadie se entere.
+  caso('sin la variable, el guion es el del prompt', () => {
+    assert.deepStrictEqual(leerGuion(undefined), [...GUION_POR_DEFECTO]);
+    assert.deepStrictEqual(leerGuion(''), [...GUION_POR_DEFECTO]);
+    assert.deepStrictEqual(leerGuion('   |  | '), [...GUION_POR_DEFECTO]);
+  });
+  caso('la costura parte por | y limpia los bordes', () => {
+    assert.deepStrictEqual(leerGuion(' uno | dos |tres '), ['uno', 'dos', 'tres']);
+  });
+  caso('el guion por defecto es inmutable', () => {
+    const copia = leerGuion(undefined);
+    copia.push('cuarto mensaje');
+    assert.strictEqual(GUION_POR_DEFECTO.length, 2, 'mutar lo devuelto no puede tocar el default');
+  });
 
   // Los dos primeros son filas REALES de produccion del 2026-09-02: la conversacion 47 es el bug
   // (murio en el segundo mensaje) y la 48 es la misma prueba despues del arreglo de las 17:19.

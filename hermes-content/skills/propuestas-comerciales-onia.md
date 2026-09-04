@@ -112,7 +112,7 @@ social +34%, CTA claro convierte lectura en respuesta):
   NUNCA screenshots falsos de producto. **REGLA (2026-07-05): generar imágenes
   en plataformas externas (Higgsfield, fal.ai, etc.) requiere permiso previo de
   Sergio en cada caso; validar la idea antes de ejecutar; con permiso, usar el
-  modelo más barato (nano_banana 1k, no soul_2 2k).**
+  modelo más barato (nano_banana 1k, no text2image_soul_v2 2k).**
 - `casos[]` — prueba social SOLO con casos reales; vacío hasta tener el caso
   fundador (Bolivian Electric).
 - `comparativa` — tabla vs. statu quo (ej. TR4 vs ONIA) ANTES del pricing.

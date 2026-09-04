@@ -1,0 +1,223 @@
+<title>Onia Panel Hoy</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap">
+<style>
+  :root {
+    --papel: #F9FBFA;
+    --papel-2: #F3F5F4;
+    --papel-3: #EAEDEB;
+    --blanco: #FFFFFF;
+    --tinta: #141A17;
+    --tinta-2: #424A46;
+    --tinta-3: #69716D;
+    --linea: #D4D9D6;
+    --linea-suave: #E2E5E3;
+    --verde: #027650;
+    --verde-fuerte: #013925;
+    --verde-forma: #00D26A;
+    --verde-suave: #D5F4E3;
+    --verde-tenue: #EDFBF3;
+    --ambar: oklch(52% 0.11 75);
+    --ambar-suave: oklch(95% 0.045 85);
+    --rojo: #ba1a1a;
+    --rojo-suave: #ffdad6;
+    --barra-pasada: #C9CFCC;
+    --radio: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --papel: #121614; --papel-2: #181D1A; --papel-3: #222926; --blanco: #1B211E;
+      --tinta: #E6EBE8; --tinta-2: #B9C1BD; --tinta-3: #7F8985;
+      --linea: #333B37; --linea-suave: #283029;
+      --verde: #4DBD8C; --verde-fuerte: #9BE3C3; --verde-suave: #16382A; --verde-tenue: #14271F;
+      --ambar: oklch(80% 0.12 80); --ambar-suave: oklch(30% 0.05 80);
+      --rojo: #FF8A80; --rojo-suave: #4A1A18; --barra-pasada: #3A423E;
+    }
+  }
+  :root[data-theme="dark"] {
+    --papel: #121614; --papel-2: #181D1A; --papel-3: #222926; --blanco: #1B211E;
+    --tinta: #E6EBE8; --tinta-2: #B9C1BD; --tinta-3: #7F8985;
+    --linea: #333B37; --linea-suave: #283029;
+    --verde: #4DBD8C; --verde-fuerte: #9BE3C3; --verde-suave: #16382A; --verde-tenue: #14271F;
+    --ambar: oklch(80% 0.12 80); --ambar-suave: oklch(30% 0.05 80);
+    --rojo: #FF8A80; --rojo-suave: #4A1A18; --barra-pasada: #3A423E;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--papel); color: var(--tinta);
+    font-family: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 15px; line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--verde); outline-offset: 2px; border-radius: 6px; }
+
+  /* barra superior del producto: mínima */
+  .top {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 32px; border-bottom: 1px solid var(--linea-suave); background: var(--papel);
+  }
+  .marca { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px; }
+  .tile { width: 26px; height: 26px; border-radius: 7px; background: var(--verde-forma); display: grid; place-items: center; }
+  .tile span { width: 10px; height: 10px; border-radius: 50%; background: #12100E; display: block; }
+  .org { color: var(--tinta-3); font-weight: 500; }
+  .org::before { content: "·"; margin: 0 8px; }
+  .nav { display: flex; gap: 22px; font-size: 14px; color: var(--tinta-3); font-weight: 500; }
+  .nav a[aria-current] { color: var(--tinta); font-weight: 600; }
+  .avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--verde-suave); color: var(--verde-fuerte); display: grid; place-items: center; font-size: 12px; font-weight: 700; }
+
+  main { max-width: 1080px; margin: 0 auto; padding: 36px 32px 56px; }
+
+  /* cabecera: saludo + la frase que resume el día */
+  .saludo { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .saludo h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; margin: 0; text-wrap: balance; }
+  .fecha { color: var(--tinta-3); font-size: 14px; margin: 0 0 4px; }
+  .resumen { margin: 14px 0 0; font-size: 17px; max-width: 62ch; color: var(--tinta-2); }
+  .resumen b { color: var(--tinta); font-weight: 600; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 16px; border-radius: 999px; font-size: 14px; font-weight: 600; border: 1px solid var(--linea); background: var(--blanco); color: var(--tinta); cursor: pointer; }
+  .btn:hover { background: var(--papel-2); }
+  .btn.solido { background: var(--tinta); color: var(--papel); border-color: var(--tinta); }
+  .btn.solido:hover { background: var(--tinta-2); }
+  .btn.chico { height: 30px; padding: 0 12px; font-size: 13px; }
+
+  /* las tres preguntas */
+  .grid { display: grid; grid-template-columns: 1.55fr 1fr; gap: 20px 40px; margin-top: 36px; }
+  .col { display: flex; flex-direction: column; gap: 36px; }
+  h2 { font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--tinta-3); margin: 0 0 12px; }
+  .cab { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .cab p { margin: 0 0 12px; font-size: 14px; color: var(--tinta-3); }
+
+  /* agenda: lista sin cajas, la hora manda */
+  .agenda { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--linea-suave); }
+  .agenda li { display: grid; grid-template-columns: 56px 1fr auto; gap: 16px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--linea-suave); }
+  .agenda .hora { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 15px; }
+  .agenda .quien { font-weight: 600; }
+  .agenda .que { color: var(--tinta-3); font-size: 13.5px; }
+  .agenda li.hecha .quien, .agenda li.hecha .hora { color: var(--tinta-3); font-weight: 500; }
+  .agenda li.hecha .quien { text-decoration: line-through; text-decoration-color: var(--linea); }
+  .agenda li.ahora .hora { color: var(--verde); }
+  .agenda li.ahora { position: relative; }
+  .agenda li.ahora::before { content: ""; position: absolute; left: -18px; top: 50%; width: 8px; height: 8px; border-radius: 50%; background: var(--verde-forma); transform: translateY(-50%); }
+  .estado { font-size: 13px; color: var(--tinta-3); }
+  .pill { display: inline-flex; align-items: center; height: 28px; padding: 0 12px; border-radius: 999px; font-size: 13px; font-weight: 600; background: var(--ambar-suave); color: var(--ambar); cursor: pointer; border: 0; font-family: inherit; }
+  .pill:hover { filter: brightness(0.96); }
+
+  /* plata: una cifra, siete barras, una línea */
+  .cifra { font-size: 40px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; margin: 0; }
+  .cifra small { font-size: 18px; font-weight: 600; color: var(--tinta-3); letter-spacing: 0; margin-right: 4px; }
+  .detalle { margin: 8px 0 0; color: var(--tinta-3); font-size: 14px; }
+  .barras { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; align-items: end; height: 64px; margin-top: 18px; }
+  .barras div { position: relative; background: var(--barra-pasada); border-radius: 3px 3px 0 0; min-height: 3px; }
+  .barras div.hoy { background: var(--verde-forma); }
+  .barras div::after { content: attr(data-dia); position: absolute; top: 100%; left: 0; right: 0; margin-top: 6px; text-align: center; font-size: 11px; color: var(--tinta-3); font-weight: 500; }
+  .barras div.hoy::after { color: var(--verde); font-weight: 700; }
+  .porcobrar { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--linea-suave); display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .porcobrar .n { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .porcobrar .l { color: var(--tinta-3); font-size: 14px; }
+  .aviso { color: var(--ambar); font-weight: 600; font-size: 13.5px; }
+
+  /* decidir: cada ítem es una acción, no una tarjeta */
+  .decidir { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .decidir li { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; padding: 14px 16px; border-radius: var(--radio); background: var(--blanco); border: 1px solid var(--linea-suave); }
+  .decidir .t { font-weight: 600; margin: 0; }
+  .decidir .m { margin: 3px 0 0; font-size: 13.5px; color: var(--tinta-3); }
+  .decidir .tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--verde); margin-bottom: 4px; }
+  .decidir .tag.rojo { color: var(--rojo); }
+  .decidir .tag.ambar { color: var(--ambar); }
+  .acciones { display: flex; gap: 6px; }
+
+  .pie { margin-top: 44px; padding-top: 16px; border-top: 1px solid var(--linea-suave); color: var(--tinta-3); font-size: 14px; display: flex; gap: 20px; flex-wrap: wrap; }
+  .pie b { color: var(--tinta); font-weight: 600; }
+
+  @media (max-width: 860px) {
+    .top { padding: 12px 18px; } .nav { display: none; }
+    main { padding: 24px 18px 48px; }
+    .grid { grid-template-columns: 1fr; gap: 32px; }
+    .agenda li.ahora::before { left: -12px; }
+    .cifra { font-size: 34px; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .btn, .pill { transition: background 150ms ease-out, filter 150ms ease-out; }
+  }
+</style>
+
+<header class="top">
+  <div class="marca"><span class="tile"><span></span></span>Onia<span class="org">Clínica Sonrisa</span></div>
+  <nav class="nav" aria-label="Secciones">
+    <a href="#" aria-current="page">Hoy</a><a href="#">Agenda</a><a href="#">Pacientes</a><a href="#">Cobros</a><a href="#">Mensajes</a><a href="#">Más</a>
+  </nav>
+  <div class="avatar" aria-label="Sergio">SP</div>
+</header>
+
+<main>
+  <div class="saludo">
+    <div>
+      <p class="fecha">Jueves 3 de septiembre · 09:40</p>
+      <h1>Buenos días, Sergio</h1>
+    </div>
+    <div style="display:flex;gap:8px">
+      <a class="btn" href="#">Nueva cita</a>
+      <a class="btn solido" href="#">Cobrar</a>
+    </div>
+  </div>
+  <p class="resumen">Hoy tenés <b>8 citas</b>, 3 sin confirmar. Entraron <b>Bs 1.240</b> y hay <b>3 cosas</b> que esperan tu decisión.</p>
+
+  <div class="grid">
+    <section class="col" aria-labelledby="h-hoy">
+      <div>
+        <div class="cab"><h2 id="h-hoy">Qué tengo hoy</h2><p>8 citas · termina 18:30</p></div>
+        <ol class="agenda">
+          <li class="hecha"><span class="hora">08:00</span><span><span class="quien">Marcela Rojas</span><br><span class="que">Limpieza · Dra. Paz</span></span><span class="estado">Atendida</span></li>
+          <li class="hecha"><span class="hora">08:45</span><span><span class="quien">Luis Mamani</span><br><span class="que">Control de brackets · Dr. Vera</span></span><span class="estado">Atendida</span></li>
+          <li class="ahora"><span class="hora">09:30</span><span><span class="quien">Ana Quispe</span><br><span class="que">Endodoncia, sesión 2 · Dra. Paz</span></span><span class="estado">En consulta</span></li>
+          <li><span class="hora">10:30</span><span><span class="quien">Jorge Choque</span><br><span class="que">Extracción · Dr. Vera</span></span><span class="estado">Confirmada</span></li>
+          <li><span class="hora">11:15</span><span><span class="quien">Daniela Flores</span><br><span class="que">Primera visita · Dra. Paz</span></span><button class="pill">Confirmar</button></li>
+          <li><span class="hora">14:00</span><span><span class="quien">Rodrigo Apaza</span><br><span class="que">Blanqueamiento · Dr. Vera</span></span><span class="estado">Confirmada</span></li>
+          <li><span class="hora">15:30</span><span><span class="quien">Carla Villca</span><br><span class="que">Control · Dra. Paz</span></span><button class="pill">Confirmar</button></li>
+          <li><span class="hora">17:00</span><span><span class="quien">Pedro Condori</span><br><span class="que">Implante, valoración · Dr. Vera</span></span><button class="pill">Confirmar</button></li>
+        </ol>
+      </div>
+    </section>
+
+    <div class="col">
+      <section aria-labelledby="h-plata">
+        <div class="cab"><h2 id="h-plata">Cuánta plata</h2><p>Últimos 7 días</p></div>
+        <p class="cifra"><small>Bs</small>1.240</p>
+        <p class="detalle">Cobrado hoy · 4 pagos, el último a las 09:12</p>
+        <div class="barras" role="img" aria-label="Cobros diarios de los últimos 7 días, hoy Bs 1.240">
+          <div data-dia="V" style="height:58%"></div>
+          <div data-dia="S" style="height:34%"></div>
+          <div data-dia="D" style="height:4%"></div>
+          <div data-dia="L" style="height:72%"></div>
+          <div data-dia="M" style="height:64%"></div>
+          <div data-dia="M" style="height:90%"></div>
+          <div data-dia="Hoy" class="hoy" style="height:40%"></div>
+        </div>
+        <div class="porcobrar">
+          <div><div class="n">Bs 3.860</div><div class="l">por cobrar · 5 facturas</div></div>
+          <span class="aviso">2 vencidas</span>
+        </div>
+      </section>
+
+      <section aria-labelledby="h-decidir">
+        <div class="cab"><h2 id="h-decidir">Qué me toca decidir</h2><p>3</p></div>
+        <ul class="decidir">
+          <li>
+            <div><span class="tag">Asistente</span><p class="t">Recordatorio para Ana Quispe</p><p class="m">Mensaje listo para su cita de mañana. No se envía hasta que lo apruebes.</p></div>
+            <div class="acciones"><a class="btn chico" href="#">Ver</a><a class="btn chico solido" href="#">Aprobar</a></div>
+          </li>
+          <li>
+            <div><span class="tag rojo">Vencida</span><p class="t">Factura 1042 · Bs 890</p><p class="m">Jorge Choque, vencida hace 6 días.</p></div>
+            <div class="acciones"><a class="btn chico" href="#">Recordar</a></div>
+          </li>
+          <li>
+            <div><span class="tag ambar">Stock</span><p class="t">Guantes talla M</p><p class="m">Quedan 2 cajas, alcanza para 3 días.</p></div>
+            <div class="acciones"><a class="btn chico" href="#">Pedir</a></div>
+          </li>
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <p class="pie"><span>Mañana <b>6 citas</b></span><span>Este mes <b>14 pacientes nuevos</b></span><span>Faltas del mes <b>2</b></span></p>
+</main>

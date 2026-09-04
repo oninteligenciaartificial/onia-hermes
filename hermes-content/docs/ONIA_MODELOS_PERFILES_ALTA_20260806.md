@@ -152,7 +152,7 @@ adentro del sistema.
 >
 > ### 🔑 La regla que resolvió el "se ve muy IA"
 >
-> Generé **11 avatares con `soul_2`** y todos salían con cara de IA: piel manchada de rojo,
+> Generé **11 avatares con `text2image_soul_v2`** y todos salían con cara de IA: piel manchada de rojo,
 > nariz difusa, dientes con artefactos, cara ensanchada. **El Soul se rompe en primer plano
 > cerrado** — está entrenado con encuadres más abiertos, y a esa distancia inventa la zona
 > media de la cara.
@@ -163,7 +163,7 @@ adentro del sistema.
 >
 > ```
 > Para PRIMER PLANO de cara:  nano_banana_2 + <<<902eeebb-…>>>   (~2 cr/img)
-> Para cuerpo entero y escena: soul_2 + soul_id 36305a9b-…      (0,12 cr/img)
+> Para cuerpo entero y escena: text2image_soul_v2 + soul_id 36305a9b-…      (0,12 cr/img)
 > ```
 >
 > Con el Element la piel sale limpia, las pecas son pecas y no manchas, y los dientes salen

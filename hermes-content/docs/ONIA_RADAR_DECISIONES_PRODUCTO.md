@@ -4,11 +4,21 @@
 > Sergio: "estas son ideas que no puedo olvidar; luego vamos a desglosar una por
 > una". Cada frente lleva su estado REAL verificado y la pregunta que falta decidir.
 
-## Cerradas — vencidas, verificadas contra el sistema en vivo (2026-09-02)
+## Cerradas — vencidas, verificadas contra el sistema en vivo (última: 2026-09-03)
 
-Estas cuatro dejaron de necesitar una decisión de Sergio: el propio sistema (u otra
+Estas **siete** (A–G) dejaron de necesitar una decisión de Sergio: el propio sistema (u otra
 sesión) ya las resolvió. Se cierran acá con la medición, no se borran del historial de
 "Para decidir" — ese punto queda con una nota que apunta para acá.
+
+> **Cómo se cierra una.** No alcanza con que "parezca hecha": se vuelve a medir **con el mismo
+> instrumento que la denunció** y tiene que dar lo inverso. Si el punto acusó con `md5sum`, se
+> cierra con `md5sum`; si acusó con un `grep` dentro del contenedor, se cierra con ese `grep`.
+> Un instrumento distinto puede estar dando la razón por otro motivo — ya pasó con el canario.
+
+> ⚠️ **Y hay un segundo modo de cerrar, que no es "venció" sino "estaba dos veces":** la §20 y la
+> §34 le pedían a Sergio el MISMO deploy con tres números distintos. Eso no se cuenta acá porque
+> no venció nada — se fusionó en la §34 y la §20 quedó tachada. Una decisión duplicada le cuesta
+> a Sergio lo mismo que una fantasma.
 
 **A. ¿Publicamos `onia.com.bo`?** Ya está publicado. `/opt/onia-landing/runtime-next`
 se desplegó el **2026-09-01 21:42 UTC** (`stat` del directorio), con `BUILD_ID`
@@ -70,6 +80,100 @@ Medido hoy, `node hermes-content/deploy/vps-ops/bot/espejo-check.mjs` sale **DES
 `espejo-check.mjs`, `espejo-check.test.mjs`, `intents.mjs`, `knowledge.mjs`,
 `knowledge.test.mjs`, `preview-route.mjs`, `recepcionista.mjs`, `recepcionista.test.mjs`) y
 **falta** `evals-contrato.test.mjs`. El rezago del motor no se achica solo.
+
+> ⚠️ **Ese párrafo caducó el 2026-09-03 a las 01:58 UTC: el deploy del motor SÍ se hizo.**
+> Ver **F**, acá abajo.
+
+**F. §16(a) — "el motor del bot no está desplegado". Ya lo está.** El punto pedía el deploy del
+motor al VPS y lo justificaba con el arreglo más caro de la semana: `3c2f4ef89`, *"el bot no se
+callaba, estaba **muerto** cuando llegaba el mensaje"*. **Ese arreglo está vivo.** Medido con el
+mismo instrumento que el punto usó para denunciarlo —`md5sum`, no fechas— y da lo inverso:
+
+| archivo | vivo (contenedor `onia-center`) | `origin/main` (`5f7ba430e`) | |
+|---|---|---|---|
+| `bot-engine.mjs` | `ab0181ed…` | `ab0181ed…` | ✅ igual (antes vivo era `afe24f58…`) |
+| `persistence.mjs` | `ada07d4d…` | `ada07d4d…` | ✅ igual |
+| `knowledge.mjs` | `02f0db8e…` | `02f0db8e…` | ✅ igual |
+| `recepcionista.mjs` | `dcd753d8…` | `dcd753d8…` | ✅ igual |
+| `intents.mjs` | `a463089c…` | `a463089c…` | ✅ igual |
+| `rescate-run.mjs` | presente | presente | ✅ ya no falta |
+
+El `.stamp` de `/tmp/onia-bot/` es del **2026-09-03 01:58**, y `/var/log/onia-bot-watchdog.log`
+cierra con `[2026-09-03T00:04:01+00:00] OK: webhook de vuelta arriba`. **Las campañas, el CTA de
+`/v1/empezar` y que el bot mande el link de la agenda ya están encendidos**, y un lead que
+escriba hoy ya no le habla a un proceso muerto.
+
+**Lo que queda NO es una decisión de Sergio, y es diez veces más chico.** Barrido completo de los
+77 archivos que `main` publica al bot contra los 75 vivos: **9 difieren, y sólo 3 son código que
+corre**.
+
+```
+docker exec onia-center sh -c 'cd /tmp/onia-bot && md5sum *.mjs *.sh *.json' | sort -k2
+# contra: git archive origin/main hermes-content/deploy/vps-ops/bot
+config.mjs              main=6869c705  vivo=35dc9d8f   <- codigo vivo
+reply-builder.mjs       main=8c336a82  vivo=b2ff1fa9   <- codigo vivo
+rescate-run.mjs         main=1c5add2e  vivo=e3a4e5e8   <- codigo vivo
+knowledge.onia.json     main=cfc36ae9  vivo=AUSENTE    <- dato
+knowledge.example.json  main=cca04ff1  vivo=dac450d3   <- dato de ejemplo
+deploy-bot.sh           main=23d35ddc  vivo=AUSENTE    <- el instalador mismo
+config.test.mjs · knowledge.test.mjs · rescate-run.test.mjs      <- tests, no corren en prod
+```
+
+**Y ya tiene dueño y herramienta**: `hermes-content/deploy/vps-ops/bot/deploy-bot.sh` se escribió
+hoy justo para esto (copia por lista blanca, nunca `rsync --delete`, para no pisar
+`knowledge.json` ni `webhook.env`, que no están en git). Es el ítem `t_8f88919e` del tablero —
+que lo llama *"los dos arreglos"* y **son nueve archivos**, seis más de los que la tarjeta dice.
+
+⚠️ **Lo que quedó afuera no es cosmético: `config.mjs` y `reply-builder.mjs` arreglan un defecto
+que el cliente del cliente YA VIO hoy** (conversación 51), textual: *"fuera de horario de
+oficina. **l**a encargada te confirma"* — el cargo en minúscula a mitad de frase. Y `config.mjs`
+trae `PENDING_HORARIO_SIN_HORARIOS`, que evita el *"¿Te reservo HORARIO A (pendiente de definir)
+o HORARIO B (pendiente de definir)?"* que ya salió a producción. O sea: **el deploy grande se
+hizo, y el que falta es el que arregla lo que se está leyendo en una conversación real.**
+
+**G. §8 — "Disco C: al 100%, frena TODOS los gates". Ya no frena nada: los gates se mudaron
+de máquina.** El punto pedía tres permisos de limpieza (borrar 7 copias de un zip, el mp4 del
+temporal, `codex-runtimes`) porque con `C:` lleno *"`tsc`, `vitest` y `lint` no pueden escribir
+sus temporales y fallan sin poder correr"*. Esa cadena se cortó sola: **los 15 loops corren hoy
+en el VPS, no en Windows.** Medido el 2026-09-03:
+
+```
+crontab -l | grep "onia-loop.sh\|lucia-ugc"     # 16 líneas: los 15 de loops.md, todos en el VPS
+ls -l /var/log/onia-loop-contenido-cola.log     # 15:14 de HOY — y es la ÚNICA fila que
+                                                # loops.md todavía llama "Windows"
+git -C /root/loops/onia-hermes log origin/main --since=2026-09-01 | wc -l   # 401 commits
+```
+
+Cuatrocientos un commits entraron a `main` desde la mudanza, con `node v20.20.2` en el VPS: los
+gates que el punto daba por bloqueados vienen corriendo hace días **en otro disco**.
+
+⚠️ **Cómo se cerró, porque no fue con el mismo instrumento y hay que decirlo.** La regla de arriba
+pide re-medir con el instrumento que denunció. Acá es **imposible**: el punto acusó con un `df`
+sobre `C:`, y desde el VPS no se ve esa máquina. **No sé cuánto espacio tiene hoy el disco de
+Sergio, y no lo estoy afirmando.** Lo que se midió es otra cosa —que ninguna de las tres cosas
+que el punto decía que se rompían ocurre ya en esa máquina— y eso alcanza para cerrar, porque
+**la premisa no era "el disco está lleno" sino "por eso el carril producto no pasa sus gates"**.
+La segunda es falsa hoy, se mida como se mida.
+
+**Lo que queda para Sergio ya no es una decisión, es un minuto opcional.** Los 7,4 GB de las
+7 copias del zip y el mp4 siguen ahí hasta que él los borre, pero **no bloquean ningún carril**:
+si nunca los toca, no pasa nada. Se saca de "para decidir" y no vuelve.
+
+**Y el riesgo no desapareció: cambió de dirección, y allá ya está atendido.** El mismo modo de
+falla —un worktree nuevo se lleva otra copia entera de `hermes-content`— vive ahora en el VPS,
+donde Docker comparte disco con `onia.com.bo`, la base y n8n. Medido hoy: **80% de uso, 41 GB
+libres**, `/root/loops` = 70 GB en 18 worktrees. Tiene dueño y automatización desde el 2026-09-02
+(`/root/bin/onia-aligerar-worktrees.sh`, cron `51 */4`, `git sparse-checkout`).
+
+⚠️ **Y acá casi escribo un hallazgo falso, que es la parte que vale.** Conté 7 de 13 worktrees con
+`sparse-checkout` aplicado y los 6 sin aplicar eran justo los más gordos (~5,5 GB c/u) — parecía
+la automatización a medio andar, el clásico "construido ≠ terminado". **Leí el script antes de
+escribirlo y era al revés**: esos 6 (`calidad`, `canario`, `lucia`, `marca-personal`,
+`tendencias`, `contenido-cola`, más el integrador) están en una lista `NO_TOCAR` explícita, con
+el motivo al lado — **son los carriles que SÍ miran `hermes-content/references`**, y aligerarlos
+les sacaría los archivos que su trabajo necesita. La cuenta daba "6 rotos" y la respuesta correcta
+era "6 exentos a propósito". **Contar no es diagnosticar: el número era cierto y la conclusión,
+falsa.**
 
 ## 1. ¿Chatwoot o plataforma de chat PROPIA hecha por Onia?
 
@@ -196,7 +300,13 @@ factura FISCAL SIAT (bloqueada por NIT, a confirmar) · cobro de Onia a sus clie
 (hoy comprobante manual). Sale en `ONIA_FACTURACION_ESTADO_REAL.md` con una respuesta
 clara para la venta: se puede decir "Onia te factura" SÍ/NO/con qué asterisco.
 
-## 8. Disco C: al 100% — frena TODOS los gates (2026-08-31)
+## 8. ~~Disco C: al 100% — frena TODOS los gates~~ — CERRADO 2026-09-03, ver **G** arriba
+
+> **Ya no hay decisión.** Los 15 loops corren en el VPS desde el 2026-09-01: los gates que este
+> punto daba por bloqueados llevan **401 commits** a `main` corriendo en otro disco. Borrar los
+> 7,4 GB del temporal sigue siendo cosa de Sergio, pero **no bloquea ningún carril**. La medición
+> completa —y el falso hallazgo que casi escribo sobre el disco del VPS— están en la entrada
+> **G** de *Cerradas*. Lo de abajo queda como historia del 2026-08-31.
 
 **Encontrado en vivo:** `C:` tenía **0 bytes libres**. No es una molestia de fondo: con el disco
 lleno `tsc`, `vitest` y `lint` no pueden escribir sus temporales y **fallan sin poder correr**, y
@@ -754,7 +864,9 @@ los gates). **Los tres gates pasaron sobre `main` ya mergeada**: `tsc --noEmit` 
 **La decisión que queda.** Desplegar no lo decide un carril de integración. Los dos deploys que
 mueven la aguja son distintos y se pueden hacer por separado:
 
-- **(a) El motor del bot al VPS.** Enciende las campañas, el CTA de `/v1/empezar` **y ahora
+- ~~**(a) El motor del bot al VPS.**~~ ⚠️ **VENCIDA — el deploy se hizo. Medido en vivo el
+  2026-09-03 05:30 UTC, cuatro horas después de la nota de abajo. No le pidan a Sergio esta
+  decisión.** Ver **F** en *Cerradas*. Enciende las campañas, el CTA de `/v1/empezar` **y ahora
   también que el bot agende** (mergeado el 2026-09-01). Sin esto, un desconocido que llega desde
   la web sigue recibiendo la respuesta genérica, y una cita sigue derivándose a mano — que es
   justo lo que `pricing.ts` cobra como resuelto.
@@ -1215,7 +1327,29 @@ para que la próxima vuelta no rehaga la bisección.
 
 </details>
 
-## 20. OCHO commits arreglan la plataforma y NINGUNO está en producción (2026-09-02) — decisión de Sergio
+## 20. ~~OCHO commits arreglan la plataforma y NINGUNO está en producción~~ (2026-09-02) — FUSIONADA en la §34 el 2026-09-03, Sergio decide UNA vez
+
+> 🔴 **Esta sección y la §34 le pedían a Sergio LA MISMA decisión —desplegar `onia-platform`—
+> desde la misma base (`8a3b5a6`), con tres números distintos y ninguno correcto.** §20 dice
+> "OCHO" en el título y `= 7` cuatro párrafos más abajo (se contradice sola); §34 dice "Siete".
+> **Contado en vivo el 2026-09-03 05:30 UTC: son NUEVE.**
+>
+> ```
+> cat /opt/onia-platform/runtime-next/.next/BUILD_ID   →  lNDdVgrRvP1mizzu3BVXc
+> cat /opt/onia-platform/build-8a3b5a6/.next/BUILD_ID  →  lNDdVgrRvP1mizzu3BVXc   (producción = 8a3b5a6)
+> git rev-list --count 8a3b5a6..origin/master          →  9
+> git diff --shortstat 8a3b5a6 origin/master           →  29 files changed, 1162 insertions(+), 45 deletions(-)
+> ```
+>
+> **Manda la §34**, porque trae lo único que hace peligroso este deploy y §20 no menciona: el
+> **orden** (migración → env vars → build+swap). Al revés, `3523c79` selecciona una columna que
+> no existe y Prisma tumba la pantalla de chatbot para todos.
+>
+> **Lo que se mudó a la §34 antes de cerrar esto**, porque sólo vivía acá: el matiz de que
+> `15e3910` **toca código de plata**, y los dos huecos que el deploy NO cierra.
+>
+> Se deja tachada y no borrada porque la tabla de abajo sigue siendo la mejor explicación de
+> **qué sufre el cliente** con cada commit. Para el número, la cuenta y el orden: §34.
 
 **No confundir con la §16**: aquella es el deploy del **motor del bot** y de `web-factory`. Esta
 es el deploy de **`onia-platform`**, el contenedor que sirve `app.onia.com.bo`. Son dos deploys
@@ -1398,14 +1532,18 @@ mide una consecuencia peor de lo mismo.
 > — *"4 commit(s) declarado(s), los 4 llegan a origin/master"*. Es la clase de prueba que esta
 > entrada pedía: una que discrimina en vez de gritar a todo.
 >
-> ⚠️ **Lo que NO cambia: esto era el escalón `rama → master`. La §20 sigue abierta.** Los tres
+> ⚠️ **Lo que NO cambia: esto era el escalón `rama → master`. El deploy sigue abierto.** Los tres
 > arreglos ahora existen en `master` y **el cliente todavía no los ve**: falta el deploy, que
 > decide Sergio. Cerrar ésta no destraba aquélla — la hace posible.
 
-**Es un escalón ANTES de la §20, no la misma cosa.** La §20 mide `master` → producción: tres
-commits que están en `master` y nadie desplegó. Ésta mide **rama de carril → `master`**: dos
-commits que ni siquiera llegaron a la rama de la que se buildea. Si mañana se aprueba el deploy
-de la §20, el swap buildea `master` y **estos dos siguen sin estar**.
+**Es un escalón ANTES del deploy, no la misma cosa.** El deploy mide `master` → producción.
+Ésta mide **rama de carril → `master`**: dos commits que ni siquiera llegaron a la rama de la
+que se buildea. Si mañana se aprueba el deploy, el swap buildea `master` y **estos dos siguen
+sin estar**.
+
+> 🔁 **Actualizado 2026-09-03:** acá decía "la §20" y "tres commits". La §20 se fusionó en la
+> **§34** (única sección del deploy de plataforma) y la cuenta viva es **9**, no 3. Se saca el
+> número de esta sección a propósito: **el que cita una cuenta que no mide, la envejece.**
 
 **Medido el 2026-09-02, no deducido** (`git merge-base --is-ancestor` en el clon del VPS):
 
@@ -2008,10 +2146,35 @@ verde contra el validador. **Commiteado, NO desplegado**: se instala con
 
 ---
 
-## 34. Siete commits de plataforma sin desplegar, y el próximo despliegue tiene un ORDEN que no se puede invertir (2026-09-03) — acción de Sergio
+## 34. NUEVE commits de plataforma sin desplegar, y el próximo despliegue tiene un ORDEN que no se puede invertir (2026-09-03) — ✅ RESUELTO 2026-09-04 03:45 UTC, ya no hay decisión
 
-**Lo desplegado hoy es del 2026-09-01 22:27** (`BUILD_ID` del contenedor `onia-platform`, medido —
-no deducido del repo). Todo lo que entró a `master` después sigue sin llegar al cliente:
+> ✅ **Los 9 commits YA ESTÁN DESPLEGADOS y la migración YA está aplicada. Esta sección no pide
+> nada.** Recontado en vivo el 2026-09-04 03:45 UTC, no releído: los nueve
+> (`22fd088`, `15e3910`, `675541b`, `3523c79`, `503af44`, `d62beeb`, `efaffe8`, `bdf0935`,
+> `5888a13`) son ancestros del build que corre —`git merge-base --is-ancestor <sha> 858752a`
+> devuelve 0 en los nueve— y la columna que exigía el orden existe:
+> `select count(*) from information_schema.columns where column_name='chatwootWhatsappInboxId'`
+> → **1**. Producción pasó por tres swaps desde entonces (`1f0b221` → `b84811d` → `858752a`).
+>
+> **Por qué se cierra y no se actualiza el número:** el ítem estaba anclado a `8a3b5a6`, que dejó
+> de ser lo desplegado hace días. Reescribirle la cifra lo dejaba pidiendo el mismo deploy por
+> cuarta vez con un cuarto número. **Un bloqueo vencido es peor que un fantasma: le pide a Sergio
+> una decisión que ya tomó.**
+>
+> 🔴 **El deploy pendiente de HOY vive en el tablero, no acá: `t_ad4ff5b2`** — 21 commits,
+> `70b6ed3` ya buildeado y montado (`BUILD_ID HV_nkT9A09xv6XzBeNjVC`), falta el swap. El más caro
+> es la reescritura del login con bloqueo por intentos y 2FA. **Un solo lugar pide el deploy, y es
+> el tablero** — que es donde Sergio contesta `ok <id>`.
+
+**Lo que sigue es la HISTORIA de ese despliegue, ya ejecutado. No es un pedido.**
+
+**Lo desplegado ENTONCES (2026-09-03) era `8a3b5a6`** —hoy corre `858752a`—, verificado por
+`BUILD_ID` y no por fecha: tanto
+`/opt/onia-platform/runtime-next/.next/BUILD_ID` como `/opt/onia-platform/build-8a3b5a6/.next/BUILD_ID`
+dan `lNDdVgrRvP1mizzu3BVXc`. (El contenedor arrancó de nuevo el 2026-09-03 00:03:32 UTC, pero
+**reiniciar no es desplegar**: monta el mismo `runtime-next`.) Todo lo que entró a `master`
+después sigue sin llegar al cliente — **29 archivos, +1162/−45**, de los cuales 9 son tests o
+snapshots:
 
 | commit | qué arregla | quién lo sufre hoy |
 |---|---|---|
@@ -2021,6 +2184,9 @@ no deducido del repo). Todo lo que entró a `master` después sigue sin llegar a
 | `3523c79` | el cliente puede conectar SU WhatsApp (mitad servidor) | el add-on de WhatsApp, hoy inentregable |
 | `503af44`, `d62beeb` | merge + cablear el gate de iconos al CI | nadie (interno) |
 | `efaffe8` | CSP para el beacon de Cloudflare Analytics | la medición |
+| `bdf0935` + `5888a13` | **el login le deletrea los nombres de los iconos al lector de pantalla**, y si la fuente tarda más de 12 s se los muestra como texto (`bolt`, `credit_card_off`) | quien entra con lector de pantalla, y cualquiera con red lenta |
+
+*(las dos últimas filas venían de la §20 y faltaban acá: son los dos commits que completan los 9.)*
 
 El más caro es `22fd088`: no es sutil ni intermitente, es una palabra en mayúsculas gigantes en
 **toda** pantalla del dashboard, y lleva así desde el 09-02.
@@ -2047,6 +2213,21 @@ migración escrita y la nota de orden— ya está hecho.
 **Lo que se destraba al desplegar:** el punto 3 del tablero `t_43947a6a` (la tarjeta del panel con
 el Embedded Signup de Meta) no se puede construir antes, porque es una pantalla de cliente y la
 regla es abrirla y MIRARLA renderizada — imposible mientras la columna no exista.
+
+### Lo que Sergio tiene que saber antes de decir que sí (venía de la §20)
+
+⚠️ **`15e3910` es código de plata.** El resto de la pila no toca base, pagos ni sesiones; ése sí
+toca `app/api/admin/subscription-payments/route.ts`, la ruta que aprueba pagos. Lo que agrega es
+un efecto **posterior** a la transacción del cobro —crear el inbox de Chatwoot— envuelto en
+`try/catch`: no puede hacer fallar ni revertir una aprobación. Hay un test que lo prueba con
+Chatwoot caído, y otro que fija que aprobar un plan normal **no** cree inbox (regalarlo sería
+entregar gratis un add-on de Bs 390). Aun así merece decirse en voz alta, no quedar tapado.
+
+⚠️ **Dos huecos que este deploy NO cierra** (ítems del carril producto, no decisión de Sergio):
+`scripts/subset-iconos.mjs` **se rinde en silencio y sale 0** si falta `pyftsubset` —el build
+publica la fuente vieja sin avisar—, y `e2e/iconos.spec.ts` sólo mira `/`, `/login` y `/register`,
+así que el sidebar (que exige sesión) no aparece en ninguna de las tres. **Por eso nadie atajó el
+`ASSIGNMENT_TURNED_IN` gigante**: el gate que debía verlo no abre ninguna pantalla con sesión.
 
 ## 35. El carril de contenido puede estar corriendo DOS veces: se montó en el VPS "en pausa" y su cron quedó activo (2026-09-03) — decisión de Sergio
 
@@ -2283,7 +2464,18 @@ gates del integrador.
 
 ---
 
-## 40. El carril Web Factory corre en Windows y sus 12 commits no llegan a `main` (2026-09-03) — decisión de Sergio
+## 40. El carril Web Factory corre en Windows y sus 12 commits no llegan a `main` (2026-09-03) — ✅ RESUELTO 11:58 UTC, ya no hay decisión
+
+> ⚠️ **La opción A ya se ejecutó: no hace falta que Sergio decida nada acá.** Recontado en vivo a
+> las 11:58 UTC del mismo día: `origin/main...origin/claude/onia-web-architecture-b37eca` da
+> **0 commits adelante**, y la punta de la rama (`d80ab6b88`) **es ancestro de `main`** — o sea,
+> entró entera. Se deja el análisis de abajo porque su parte útil no venció: **el umbral de "100
+> commits atrás" mide tráfico de `main`, no antigüedad de la rama**, y eso sigue escalando ramas
+> vivas por error (opción B, sin ejecutar).
+>
+> Lo cerró el integrador aplicando la regla que este mismo ítem pedía: *un `NO mergees` es una
+> medición con fecha de vencimiento y el que lo obedece tiene que recontarlo antes*. Un bloqueo
+> vencido es peor que un fantasma — le pide a Sergio una decisión que ya tomó.
 
 **Lo medido, en vivo, hoy 07:40 UTC** (no heredado): la rama `claude/onia-web-architecture-b37eca`
 tiene **12 commits** que `main` no tiene, el último de las **01:53 UTC de hoy** — o sea que el
@@ -2329,3 +2521,82 @@ semanas" sin estarlo. El umbral en commits mide la máquina, no el riesgo.
 
 **Lo que hace falta de Sergio:** una línea — A, B, o las dos. Si es A, el integrador la mergea en
 la vuelta siguiente sin volver a preguntar.
+
+---
+
+## 41. El arreglo del alta está en `master` y el cliente sigue perdiendo la cuenta (2026-09-03) — decisión de Sergio
+
+**Qué se arregló.** Un cliente que se registraba dos veces con el mismo correo sin confirmar —lo
+más normal del mundo si no le llegó el mail o cerró la pestaña— veía **el botón no hacer nada**, y
+encima **perdía la cuenta que ya tenía**. Quedaban organizaciones huérfanas en la base de
+producción. Commit `38a0c8a` en `onia-platform` (`master`), con los tres gates verdes: `tsc` 0
+errores, `lint` 0 errores, `vitest` 2519 pasando.
+
+**Por qué te llega igual.** Está **commiteado y NO desplegado**. El contenedor `onia-platform`
+corre el build anterior, así que **para el cliente el bug sigue vivo ahora mismo**. Desplegar al
+VPS necesita tu OK explícito: no lo hace un loop.
+
+**Cuánto vale esperar.** Es el último clic de la puerta de entrada del producto, y de los que hay
+—7 personas esperando— cualquiera que se registre dos veces cae en esto. No es un caso raro: la
+causa más común de un segundo intento es justamente que el primer correo no llegó.
+
+| | Qué se hace | Cuesta | Qué queda |
+|---|---|---|---|
+| **A. Desplegar ya** (lo que este loop recomienda) | Build + swap del contenedor con el runbook de `onia-deploy` | ~10 min, ventana corta de corte | El alta deja de comerse cuentas hoy |
+| **B. Esperar y juntarlo con lo próximo** | Queda para el siguiente despliegue | 0 hoy | Cada alta repetida sigue borrando una cuenta y dejando una organización huérfana |
+
+**Lo que hace falta de Sergio:** una línea — A o B.
+
+**Dato que conviene saber para el despliegue.** Al medir esto se vio que el SMTP **rechaza los
+dominios sin MX** (`example.com` → `556 Recipient address rejected ... (nullMX)`) y GoTrue devuelve
+**500** ahí, además de un **rate limit de ~60 s** entre altas del mismo correo. Las dos cosas son
+correctas, pero significan que un correo mal tipeado por el cliente da error 500, no un mensaje
+claro. No se tocó: es otro ítem, y este loop cierra uno por vuelta.
+
+---
+
+## 42. La cara de Lucía deriva porque el ancla vigente es la equivocada — el arreglo es gratis (2026-09-03) — decisión de Sergio
+
+**Qué se midió.** Se abrieron uno por uno los cuadros sueltos de
+`references/modelos/lucia/prueba-motor-20260813/` y se compararon contra el banco canónico
+(`INVENTARIO-caras.jpg`). Evidencia en
+`hermes-content/docs/research/calidad-generado/evidencia-anclas-20260903/`.
+
+**El test del 13/08 se reportó como un A/B de dos métodos y en realidad tiene TRES brazos:**
+
+| Fuente | Cara que sostiene | Micro-detalle |
+|---|---|---|
+| Soul `36305a9b…` (`LUCIA-REAL-v2-clean`) | Familia A | ✗ pastosa, piel manchada de rojo |
+| Element **`452d8375…`** (`lucia-ancla-2026-08`) ← **la vigente** | **la que deriva** | ✓ |
+| Element `902eeebb…` (`lucia-surgical-anchor`) | **la del banco** | ✓ **la mejor de las tres** |
+
+**Por qué importa.** `ORDEN-DE-DISPARO-L3-L4-L7-L8.md` fijó `452d8375…` como ancla vigente el
+23/08. Con esa se generó `G06-peluqueria.jpg` el 28/08, cuya cara no es la del banco. **La deriva
+no es azar del modelo ni culpa del método: es un UUID mal elegido.** Se eligió bien la familia
+(Element) y mal el miembro, porque la pregunta binaria *"¿Soul o Element?"* metía a los dos
+Elements en la misma bolsa.
+
+**Lo que hay que romper, y por eso decide Sergio: dos papeles se contradicen.**
+
+- `ONIA_MODELOS_RAIZ.md` — **sin fecha, así que manda por la regla de `CLAUDE.md`** — rotula
+  `452d8375…` como *"Element (PRIMER PLANO)"* y `902eeebb…` como *"Element (photoshoot)"*.
+- `ONIA_MODELOS_PERFILES_ALTA_20260806.md` prescribe lo inverso y con motivo: `nano_banana_2 +
+  <<<902eeebb…>>>` **para primer plano**, porque es el ancla que resolvió el *"se ve muy IA"*
+  después de 11 avatares malos.
+
+**Los píxeles le dan la razón al segundo; la regla de precedencia, al primero.** Este loop no
+rompe ese empate solo.
+
+**Las opciones, cotizadas en créditos:**
+
+| | Qué se hace | Cuesta | Qué queda |
+|---|---|---|---|
+| **A — recomendada** | Cambiar el ancla vigente a `902eeebb…` en `ORDEN-DE-DISPARO`, y corregir `ONIA_MODELOS_RAIZ.md` para que su rótulo coincida. Después, **una** imagen de confirmación con el prompt de G06. | **0 cr** el cambio · **2 cr** la confirmación | La cara vuelve al banco **y** se gana nitidez. Cierra la contradicción de los dos papeles |
+| **B** | Sólo cambiar el UUID, sin confirmar con una imagen. | **0 cr** | Gratis, pero queda como hipótesis: la próxima pieza es la prueba, y si falla se descubre con la pieza ya hecha |
+| **C** | No tocar nada y seguir con `452d8375…`. | 0 cr | La cara sigue corriéndose pieza a pieza. Hoy hay **0 piezas publicadas**, así que el costo de arreglarlo nunca va a ser más bajo que ahora |
+
+**Lo que este loop recomienda: A.** Es la única que además deja los dos documentos diciendo lo
+mismo, que es la causa por la que cada sesión nueva venía eligiendo mal.
+
+⚠️ **Nada de esto lo ejecuta el loop de calidad**: `ORDEN-DE-DISPARO` y `ONIA_MODELOS_RAIZ.md`
+están fuera de su zona, y los 2 cr de la confirmación son permiso de gasto de Sergio.

@@ -1,0 +1,2 @@
+Prompt para calendario y batch (short4):
+"Crear un plan de batch de contenidos: 3 Reels por semana, cada Reel con 3 variaciones. Output: lista de tareas y prompts por Reel."

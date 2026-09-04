@@ -155,7 +155,7 @@ badges. She shrugs, half-smile to lens: "Eso lo puede hacer un sistema solo. Te 
 **Gates antes de generar esta pieza (no son opcionales):**
 
 - **La cara de Lucía sale de Soul, no de una descripción de texto.** Se genera el still con
-  `soul_2` + su `soul_id` y ese still entra como `image_references`. Nada de este lote reemplaza
+  `text2image_soul_v2` + su `soul_id` y ese still entra como `image_references`. Nada de este lote reemplaza
   Soul+texto — ver la sección final.
 - **Etiqueta de IA obligatoria** en el post. "Es IA" no se esconde.
 - **Cero claim.** El CTA cerrado en "te muestro cómo": sin plazos, sin cifras, sin resultado
@@ -282,7 +282,7 @@ comercio real.
 
 | Insumo | Origen | Estado |
 |---|---|---|
-| **reference A** — still 9:16 de la dueña, mismo delantal | `soul_2` + `soul_id`. Candidata que **ya existe**: **Mara BO v2** `6c94bbf0-bc71-4fe1-841e-f366bdb00b6e` (boliviana mestiza, 27). Bloque de identidad congelado en `ONIA_MODELOS_RECETA_VISUAL_20260806.md` §2; stills previos en `hermes-content/references/modelos/mara-bo/perfil-20260806/` | ⚠️ **Decide Sergio.** El mostrador de ferretería **no está** en sus escenarios permitidos (*"interiores minimalistas luminosos… nunca exteriores caóticos"*) y el delantal no está en sus 3 atuendos. O se le suman escenario y atuendo a ese doc, o se entrena un Soul propio de la dueña (**25 cr**, permiso explícito) |
+| **reference A** — still 9:16 de la dueña, mismo delantal | `text2image_soul_v2` + `soul_id`. Candidata que **ya existe**: **Mara BO v2** `6c94bbf0-bc71-4fe1-841e-f366bdb00b6e` (boliviana mestiza, 27). Bloque de identidad congelado en `ONIA_MODELOS_RECETA_VISUAL_20260806.md` §2; stills previos en `hermes-content/references/modelos/mara-bo/perfil-20260806/` | ⚠️ **Decide Sergio.** El mostrador de ferretería **no está** en sus escenarios permitidos (*"interiores minimalistas luminosos… nunca exteriores caóticos"*) y el delantal no está en sus 3 atuendos. O se le suman escenario y atuendo a ese doc, o se entrena un Soul propio de la dueña (**25 cr**, permiso explícito) |
 | **reference B** — mostrador de ferretería de barrio en Santa Cruz | **No existe en el repo.** Verificado: no hay ninguna imagen de ferretería/comercio en `hermes-content/references/` | ⚠️ **Hay que conseguirla.** (a) **Sergio** saca 3 fotos de un mostrador real — encuadre genérico y con permiso: si el local se reconoce, insinúa una relación comercial que no existe; (b) generarla (costo aparte + permiso). **Si no se consigue, se corre sin reference B** y queda como ancla de texto: el punto frágil es la cara, no el lugar |
 | Copy de overlays y CTA | `ONIA_KIT_VENTA_POR_RUBRO_20260815.md` §1, PLACA 2 | Listo, ya escrito |
 | Producto, monto, deuda de 25 días, "doña Carmen" | `onia-platform/lib/comercio/demo-seed.ts` | Listo. Es **demo-tenant nuestro**, no un cliente |
@@ -298,7 +298,7 @@ Es el único que hace **15 s con `image_references` + audio nativo** (verificado
 | **Prototipo** (el que se corre primero) | 480p, 15 s | **~15 cr** |
 | Publicable | 720p, 15 s | ~52,5 cr |
 | Premium | 1080p, 15 s | ~135 cr |
-| Aparte — still de reference A | `soul_2`, 3 imágenes | 0,36 cr |
+| Aparte — still de reference A | `text2image_soul_v2`, 3 imágenes | 0,36 cr |
 | Solo si Sergio elige Soul propio | entrenar Soul | **25 cr** |
 
 > ⚠️ **`seedance_2_5` no tiene precio medido.** Los tres números de arriba son la equivalencia
@@ -366,7 +366,7 @@ antes de tirar el job.
 | **CINE** — 10 s, una toma | `seedance_2_5` t2v, o `cinematic_studio_3_0` con `generate_audio: false` | **10 cr** | 35 cr | 90 cr |
 | **UGC** — 15 s, 3 cortes | `seedance_2_5` en `omni_reference` (el único que hace 15 s con refs + audio) | **15 cr** | 52,5 cr | 135 cr |
 
-Aparte y despreciable: el still de cara con `soul_2` (0,36 cr por 3 imágenes en la medición del
+Aparte y despreciable: el still de cara con `text2image_soul_v2` (0,36 cr por 3 imágenes en la medición del
 12-ago). **`seedance_2_5` y `cinematic_studio_3_0` no están en la tabla medida** — los números
 de arriba son el equivalente en la familia `seedance_2_0`: sirven para dimensionar, **no para
 autorizar**. Antes de generar, `get_cost` con la config exacta.
@@ -439,7 +439,7 @@ Fuente: `../references/video-intake/2026-08-18-sintesis-lote-17.md`, hallazgo 6.
 
 **Consecuencia práctica para la Plantilla B:** el ancla de personaje mantiene ropa, encuadre y
 tono entre cortes, pero **la cara sigue siendo el punto frágil**. Por eso el ejemplo de Lucía
-entra con un still de `soul_2` como referencia, y por eso la pieza CINE de `@oniahq` se diseñó
+entra con un still de `text2image_soul_v2` como referencia, y por eso la pieza CINE de `@oniahq` se diseñó
 **sin ninguna cara en cuadro**.
 
 ---

@@ -17,6 +17,8 @@
   --honey: #c98a3b;
   --line: color-mix(in srgb, var(--ink) 12%, transparent);
   --on-green: #f3faf6;
+  --on-green-soft: color-mix(in srgb, var(--on-green) 78%, transparent);
+  --on-green-line: color-mix(in srgb, var(--on-green) 45%, transparent);
 
   --font-display: var(--font-fraunces), "Georgia", serif;
   --font-body: var(--font-dmsans), system-ui, sans-serif;
@@ -25,6 +27,22 @@
   --r-block: 1.5rem;
   --r-pill: 999px;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Superficie OSCURA. No pinta nada: REBINDEA los tokens de tinta, así todo lo
+   que use var(--ink) / var(--line) —hoy `.btn--ghost`, mañana cualquier bloque
+   que se mueva acá— se sigue leyendo sin tener que acordarse de este caso.
+   Mismo criterio que `.on-steel` en ferreteria-sur.
+
+   Nace del 2026-09-03: el hero es la única superficie oscura de la app y
+   `.btn--ghost` heredaba ahí la tinta de superficie CLARA (#172420) sobre el
+   verde profundo. Daba 1,00:1 de texto y 1,01:1 de borde — el segundo botón del
+   hero existía, ocupaba su lugar y era invisible. El gate del pliegue lo daba
+   por bueno porque medía geometría y opacidad, no color. */
+.on-green {
+  --ink: var(--on-green);
+  --ink-soft: var(--on-green-soft);
+  --line: var(--on-green-line);
 }
 
 * { box-sizing: border-box; }

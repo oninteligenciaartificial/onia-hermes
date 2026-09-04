@@ -579,3 +579,175 @@ wa.me?text= en Instagram bio, sin esperar ads) → difusiones (ultima, post plan
 - GAP SENDY RESTANTE: solo difusiones masivas (necesita plantillas Meta aprobadas por
   org + costo por mensaje post 1-oct — especificar cuando haya un cliente que las pida).
   A/B, kanban, gamificacion: descartados con razon en el teardown.
+## 2026-09-03 (noche) — CUOTA AGOTADA: el bot deja de CALLAR (lote 4, paso 13) ✅ EN PROD
+
+Contrato (platform 1995661/70b6ed3, deployado hoy, BUILD_ID HV_nkT9A09xv6XzBeNjVC):
+`GET /api/chatbot-knowledge/published?inboxId=N` trae `cuota: {agotada, usadas, limite} | null`
+(limite 500 con el add-on activo, 0 sin add-on; `null` = no se pudo leer = seguir atendiendo).
+
+Motor (commit en este repo, deployado a /opt/onia/bot con backup `backups/cuota-20260904-0338/`
++ `*.bak-20260904-0338`; restart por `webhook-server.sh restart`, health ok):
+- `knowledge.mjs`: `cuotaDe(body.cuota)` (solo vale si `agotada` es boolean) -> cache por org
+  (`ORG_CACHE[].cuota`, TTL 5 min como el resto) -> `asRecepcionista(config, data, orgSlug, cuota)`
+  -> `config.cuota`. Un fetch fallido CONSERVA la ultima cuota buena (misma regla que la copia).
+- `bot-engine.mjs` step(), barrera 1b (despues de "humano a cargo", antes del recepcionista):
+  `config.cuota?.agotada === true` => `R_CUOTA_AGOTADA` SIEMPRE (nunca LLM) y el handoff de siempre
+  (`review_queue` + `notify_sergio` reason `cuota_agotada`, `bot_stage=handoff_humano`) UNA sola
+  vez por conversacion; en handoff_humano repite el texto sin efectos nuevos. Opt-out previo y
+  humano a cargo siguen ganando (silencio).
+- `config.mjs`: `R_CUOTA_AGOTADA: "Este mes ya atendimos el máximo de conversaciones automáticas
+  de {{producto}}. Te responde una persona en breve."` ({{producto}} = nombre del negocio en modo
+  recepcionista). Fuera de horario, finalize() le APENDEA M7 como a toda respuesta (visto en prod).
+- `cuota-agotada.test.mjs` (5 tests): agotada / no agotada / null-ausente-malformada / humano y
+  opt-out ganan / cable /published -> cache -> config. Suite motor verde (precios-publicos.test.mjs
+  necesita `ONIA_PLATFORM_DIR=<clon de onia-platform>` fuera del VPS: sin eso fallan 2 por entorno).
+
+E2E EN PROD (org QA `ZZ QA Clinica Chatbot`, inbox 7, fila publicada con productName "ZZ QA
+Ferreteria Tornillo"): INSERT en `public.chatbot_uso_mensual` (org cmsvyguui000001ril9vhxbn2,
+mes 2026-09, conversaciones 500) -> `/published` dio `{agotada:true,usadas:500,limite:500}` ->
+restart del webhook (cache fria) -> widget REAL via `/root/qa-audit/widget-turno.sh nuevo "hola,
+quiero una limpieza dental"` (nuevo: script que crea contacto+conversacion por el authToken del
+widget y postea por `/api/v1/widget/messages`; `mismo` sigue la conversacion): conversacion
+Chatwoot 53, msg 426 = "Este mes ya atendimos el máximo de conversaciones automáticas de ZZ QA
+Ferreteria Tornillo. Te responde una persona en breve." + sufijo M7; 2do mensaje ("y cuanto
+cuesta?") = mismo texto, log `handoff_humano->handoff_humano`, cero LLM. Base:
+`onia_center.bot_conversations chatwoot:53 bot_stage=handoff_humano`, 2 filas `bot_messages`
+`R_CUOTA_AGOTADA|sent`. Chatwoot: conv 53 status open, assignee "Onia Bot" (id 3) — el motor NO
+cambia estado/assignee en Chatwoot: la marca de "humano" es `bot_stage=handoff_humano` +
+review_queue + el push "te escribieron" de la plataforma; el aviso Telegram salio como
+`[aviso] skipped (cuota_agotada): ONIA_BOT_TG_AVISO apagado` (config previa, no de este cambio).
+Restaurado: fila QA borrada (antes NO existia fila para 2026-09), `/published` volvio a
+`agotada:false`, restart, y un turno nuevo (conv 54) volvio a contestar M0R normal.
+
+Quedan (no de este paso): (a) `preview-route.mjs` (el probador del panel) arma la config SIN cuota
+a proposito — el dueño puede seguir probando su bot con el cupo agotado; (b) los barridos
+proactivos (followup/insistencia/rescate) usan withKnowledge y con `agotada:true` sus salientes
+NO se frenan (el corte es solo del turno entrante); (c) conversaciones QA 52/53/54 del widget
+quedaron en Chatwoot (basura QA inofensiva, misma limpieza de siempre); (d) `usadas` daba 0 pese
+a las conversaciones nuevas: el contador de la plataforma (`registrarMensajeEntrante`) es del
+carril de la plataforma, verificarlo alli.
+
+Intentos fallidos (no repetir): `POST /api/v1/widget/contacts?website_token=` NO existe (404
+HTML) y `GET /widget` NO deja cookie `cw_conversation`: el authToken del widget viene INCRUSTADO
+en el HTML de `/widget?website_token=` (`authToken = '...'`) y viaja como header `X-Auth-Token`.
+`$$` dentro de un `ssh '...'` lo expande el shell remoto (PID): los literales SQL van por stdin
+(`docker exec -i ... psql` con heredoc), no por `-c`. `deploy-bot.sh` en /opt/onia/bot apunta
+REPO_DIR a si mismo (no hay clon git del repo en el VPS: /root/hermes es una copia vieja sin
+git): el deploy real sigue siendo scp + backup + `webhook-server.sh restart`.
+
+### 2026-09-04 06:20 UTC — RECUENTO independiente de todo lo de arriba (segunda pasada)
+
+La sesion que hizo el cambio murio por limite de uso justo despues de commitear, asi que una
+segunda pasada lo VOLVIO A CONTAR en vez de creerle al parrafo de arriba (regla: un dato
+heredado no se ejecuta sin contarlo de nuevo). Medido, no supuesto:
+
+- **La fila de prueba NO quedo**: `SELECT count(*) FROM public.chatbot_uso_mensual` = **0 filas**
+  (era lo unico que, de quedar, cortaba de verdad al primer cliente). `/published?inboxId=7`
+  vuelve a dar `{agotada:false, usadas:0, limite:500}`; inbox 5 sigue en `null` (fail-open).
+- **Lo desplegado ES lo commiteado**: md5 identico repo == `/opt/onia/bot` en los 4 archivos
+  (`bot-engine 789298db`, `config 393b3a7b`, `knowledge b2e9048c`, `cuota-agotada.test bf7dd6c1`),
+  y el proceso VIVO corre ese codigo (`/proc/<pid>/root/tmp/onia-bot`, snapshot 03:38, arranque
+  03:42:56; el bot corre en su namespace, por eso `/tmp/onia-bot` no se ve desde el host).
+  `node --check` OK en los tres, `webhook-server.sh status` -> `ok:true`, db 24 ms.
+  `node --test cuota-agotada.test.mjs` -> **5/5 verde**.
+- **El E2E dejo rastro y el rastro cuadra** (`onia_center.bot_messages`, conv 53): dos salientes
+  `R_CUOTA_AGOTADA` con **`reply_source=script`** — prueba dura de que NO se llamo al modelo —,
+  la 1a `nuevo->handoff_humano` y la 2a `handoff_humano->handoff_humano`. En `review_queue` hay
+  **UNA sola** fila `chatwoot:53` (`pending`, 03:41:45) pese a los dos mensajes: la idempotencia
+  del escalado esta verificada por dato, no por lectura del codigo. Conv 54 (post-restore) volvio
+  a `M0R`.
+- **Que significa "escala" hoy, con precision**: `review_queue` pending + `bot_stage=handoff_humano`
+  + el push de la plataforma. En Chatwoot la conv 53 quedo `status=0` (open) y `assignee_id=3`
+  (Onia Bot) — el motor NO reasigna ni cambia estado en Chatwoot, y eso vale para TODOS sus
+  handoffs, no es algo de este cambio. Ademas `ONIA_BOT_TG_AVISO` **no existe en `webhook.env`**,
+  asi que el ping a Telegram sale `skipped`. O sea: el corte y la derivacion estan vivos, pero
+  hoy a la persona la avisa la cola/el push, no un mensaje. Si se quiere ping real, es encender
+  ese flag (decision de Sergio, no de este paso).
+
+## 2026-09-04 — EL CONTADOR DE LA CUOTA SUBE DE VERDAD (cerraba el hueco de ayer) ✅ EN PROD
+
+Ayer (arriba, punto (d)) quedo anotado que `usadas` daba 0 pese a conversaciones nuevas. Ese era
+el hueco: la cuota estaba **construida y apagada**. Hoy se cerro.
+
+### El circuito completo — quien cuenta y quien corta
+
+1. **Chatwoot** manda `message_created` a UN solo webhook: el MOTOR
+   (`http://onia-center:3020/webhook/chatwoot/<hash>`, tabla `webhooks`, cuenta 2).
+2. **El motor** (`webhook-server.mjs`) atiende el turno y, con la respuesta HTTP YA ESCRITA,
+   reenvia el cuerpo CRUDO a `POST {ONIA_PLATFORM_URL}/api/webhooks/chatwoot` con el header
+   `X-Chatwoot-Secret` (`uso-plataforma.mjs`). Fire-and-forget, 2 s de tope, sin reintentos.
+3. **La plataforma** (`lib/chatbot/cupo.ts` → `registrarMensajeEntrante`) resuelve inbox → org y
+   suma en `public.chatbot_uso_mensual`: `mensajesEntrantes` siempre, y `conversaciones` **solo si
+   el id de conversacion no estaba en el set `conversacionIds`** del mes. Avisa al dueño al 80 %.
+4. **El corte** lo hace el motor, no la plataforma: `/published?inboxId=N` devuelve
+   `cuota:{agotada,usadas,limite}` y `bot-engine.mjs` (barrera 1b) responde `R_CUOTA_AGOTADA` y
+   deriva a una persona. O sea: **la plataforma CUENTA, el motor CORTA.**
+
+**POR QUE el aviso lo manda el motor y no Chatwoot.** El handler de la plataforma EXIGE
+`X-Chatwoot-Secret` (`app/api/webhooks/chatwoot/route.ts`) y **Chatwoot no manda headers
+personalizados**: agregarle un segundo webhook apuntando a la plataforma da 401 siempre. El motor
+si puede mandar el header. Bonus: `notificarMensajeEntrante` (el push "te escribieron") colgaba
+del MISMO handler, asi que tambien estaba muerto y revivio con esto.
+
+**La compuerta es estricta y es la parte peligrosa.** `esEntranteReal()` es copia exacta de la
+condicion de la plataforma (`message_created` + `message_type === "incoming"` + no privado + ids
+de conversacion e inbox). Si un SALIENTE llegara a la plataforma, esta lo tomaria por un mensaje
+del agente y lo **relayearia a WhatsApp**: el cliente lo recibiria DOS VECES. Tiene test propio.
+El reenvio va DESPUES del dedup, asi que un reintento de Chatwoot no vuelve a contar.
+
+Variables nuevas en `/opt/onia/bot/webhook.env` (fuera de git, backup `webhook.env.bak-20260904-0636`):
+`ONIA_PLATFORM_URL=https://app.onia.com.bo` y `CHATWOOT_WEBHOOK_SECRET` = **el mismo valor** que
+`/opt/onia-platform/app.env` (copiado server-side, nunca impreso; verificado que el contenedor
+`onia-platform` vivo usa ese mismo valor, no solo el archivo). Si difieren: 401 y no cuenta nada.
+Sin alguna de las dos no se manda nada y el log lo dice UNA vez (`[uso] falta ...`).
+
+### E2E EN PROD (medido, no supuesto)
+
+| | filas `chatbot_uso_mensual` | `/published?inboxId=7` |
+|---|---|---|
+| ANTES | **0** | `{agotada:false, usadas:0, limite:500}` |
+| DESPUES | 1 fila org QA `cmsvyguui000001ril9vhxbn2` mes 2026-09: `conversaciones=2`, `mensajesEntrantes=3`, `conversacionIds={55,56}` | `{agotada:false, usadas:2, limite:500}` |
+
+Turnos reales por el widget (`/root/qa-audit/widget-turno.sh`, inbox 7):
+conv **55** `nuevo` → fila creada con `conversaciones=1`; conv 55 `mismo` (2º mensaje) →
+`mensajesEntrantes` 1→2 y `conversaciones` **sigue en 1** (idempotencia probada POR DATO);
+conv **56** `nuevo` → `conversaciones` 1→2. Cero lineas `[uso]` en el log = ningun POST fallido.
+Los salientes del bot quedaron `rama=ignorado motivo=mensaje_no_entrante:outgoing` y no viajaron.
+
+**Estado en que quedo el contador:** la fila QA se DEJO como esta (`conversaciones=2`). No se
+inflo con inserts a mano: son dos conversaciones reales del widget QA de hoy, en la org de QA
+(`ZZ QA Clinica Chatbot`), no de un cliente. Ninguna org de cliente tiene fila.
+
+Deploy: `scp` + backups `*.bak-20260904-0636` de `webhook-server.mjs|.sh`, `webhook.env.example` y
+`webhook.env`; `node --check` verde en el host y **dentro del contenedor**; restart por
+`webhook-server.sh restart` (health `ok:true`, db 95 ms). `webhook-server.sh` gano las dos lineas
+`-e` nuevas — sin eso las variables estan en el archivo y NO llegan al proceso.
+Tests: `uso-plataforma.test.mjs` 8/8 (local y en el contenedor), `webhook-server.test.mjs` 31/31.
+
+### Intentos fallidos / trampas pagadas (no repetir)
+
+- **`docker exec <c> node --check /dev/stdin < archivo.mjs` MIENTE**: dio OK para los tres
+  archivos sin evaluar nada util (stdin no se trata como modulo). El check que vale es sobre el
+  ARCHIVO, y despues del restart (que es cuando `/tmp/onia-bot` se re-sincroniza).
+- **El repo NO tiene copia del contador**: `registrarMensajeEntrante`/`cupo.ts` viven en el
+  worktree `onia-platform/.claude/worktrees/panel-pestanas`, no en el checkout principal. Buscar
+  el handler en `onia-platform/app/api/webhooks/chatwoot/route.ts` a secas hace creer que la
+  plataforma NO cuenta. Lo que manda es lo DESPLEGADO.
+- **Se dudo de si el payload real trae `conversation.inbox_id`** (el adapter lo llama "respaldo").
+  Se resolvio LEYENDO el codigo vivo de Chatwoot en su contenedor
+  (`app/presenters/conversations/event_data_presenter.rb` → `push_data` incluye `inbox_id`, y
+  `id` es el `display_id`), no adivinando. Confirmado despues por el dato: la fila salio.
+- **Comillas en `ssh '...'`**: un heredoc o comillas anidadas adentro del comando remoto rompe con
+  `unexpected EOF`. Lo que funciona: `ssh ... 'bash -s' < script.sh` desde un archivo local.
+- Se midio que la plataforma es alcanzable desde `onia-center` por LOS DOS caminos
+  (`http://onia-platform:3000` interno y `https://app.onia.com.bo` publico, ambos 401 con secreto
+  invalido = ruta viva). Se dejo el publico porque asi se pidio; si Cloudflare llegara a
+  estorbar, el interno es el reemplazo directo y ya esta probado.
+
+### Queda abierto (no de este paso)
+
+- Los barridos proactivos (followup/insistencia/rescate) siguen sin frenarse con `agotada:true`
+  (el corte es solo del turno entrante) y `preview-route.mjs` sigue sin cuota a proposito.
+- Una conversacion que cruza de mes se cuenta en los dos meses (el set es por mes) — decidido y
+  documentado en `cupo.ts`, no es un bug nuevo.
+- Conversaciones QA 55/56 quedaron en Chatwoot (misma basura QA inofensiva de siempre).

@@ -147,6 +147,14 @@ Instrucciones de proyecto. Override sobre defaults.
   detalle en la skill `onia-frontend`).
 - ⚠️ `Gestios` y `Ganaderos-Os` existen como repos pero son **legado**: no se les agrega
   nada sin decidir si se archivan o se absorben.
+- **El SISTEMA es la oferta; el chatbot es un add-on.** Sergio, 2026-09-03: *"el sistema no
+  ofrece directamente el bot, ofrece solo el sistema… hay inconsistencias en la web, datos que
+  no son importantes, habla de nuestras competencias… la referencia es Lety y Dapta, mirá cómo
+  venden"*. La web y todo material de venta hablan del sistema de gestión por rubro; el bot
+  aparece como add-on (`pricing.ts`), nunca como el titular. **Cero autobombo**: nada sobre
+  nosotros, nuestras competencias, nuestro equipo o datos que no le importan al dueño de un
+  negocio. Cómo se vende se mide contra `lety.ai` y `dapta.ai` de HOY (titular, clics hasta
+  empezar, un precio claro, beneficio antes que característica), no de memoria.
 
 ## La venta nunca exhibe obra (REGLA)
 
@@ -312,7 +320,7 @@ Si no sabés dónde va, **preguntá** antes de inventar carpeta.
 - **Gasto — imagen y video NO son el mismo permiso:**
   - **VIDEO generado (Higgsfield, ElevenLabs, fal.ai): permiso explícito caso por caso**,
     cotizado con `get_cost:true` ANTES de generar. Por defecto gratis (Speaches, HyperFrames).
-  - **IMAGEN en lote chico: gasto trivial, ya validado.** `soul_2` a 2k son ~0,12 créditos;
+  - **IMAGEN en lote chico: gasto trivial, ya validado.** `text2image_soul_v2` a 2k son ~0,12 créditos;
     un lote de 6 fotos cuesta menos de 1 crédito de un pool de ~2.100. Se genera y se
     **registra el lote** (prompts, modelo, costo). Sigue haciendo falta permiso para un
     volumen grande o para dar de alta una plataforma nueva.

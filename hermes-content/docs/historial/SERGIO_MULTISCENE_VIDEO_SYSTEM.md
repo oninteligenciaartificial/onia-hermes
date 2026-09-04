@@ -63,7 +63,7 @@ Clave: **solo HOOK y CTA usan lip-sync** (caro, requiere audio exacto por clip).
 
 **RECHAZADA — nunca usar:** `690332c1`.
 
-**Para escenas nuevas:** generar imagen fresca con Soul v2 (`model: soul_2`, `soul_id: bce5feb0`) variando prompt de escenografía (ej. "señalando whiteboard con diagrama de flujo", "viendo móvil con notificaciones WhatsApp", "frente a monitor con dashboard de métricas").
+**Para escenas nuevas:** generar imagen fresca con Soul v2 (`model: text2image_soul_v2`, `soul_id: bce5feb0`) variando prompt de escenografía (ej. "señalando whiteboard con diagrama de flujo", "viendo móvil con notificaciones WhatsApp", "frente a monitor con dashboard de métricas").
 
 ---
 
@@ -100,7 +100,7 @@ PASO 2 — VOZ (ElevenLabs, VPS)
   curl /v1/text-to-speech/oU0W7i6gMHa6o2pnQ6cf con voice_settings óptimos.
 
 PASO 3 — IMÁGENES DE ESCENA (Higgsfield Soul v2, MCP)
-  Reusar job ids del banco (sección 2) o generar nuevas escenas con soul_2.
+  Reusar job ids del banco (sección 2) o generar nuevas escenas con text2image_soul_v2.
 
 PASO 4 — CLIPS DE VIDEO (Higgsfield MCP)
   - Tomas lip-sync: subir audio (media_upload→PUT→media_confirm) → wan2_7 (start_image+audio).

@@ -811,7 +811,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       a propósito más ancho que el guard). Las 14 rutas de venta traen `og:image` **y**
       `twitter:card: summary_large_image`.
       ⚠️ **Aparecen 7 rutas SIN `og:image` — `/patrones` y las seis `/v1/*` — y NO son un defecto.**
-      `robots.txt` las declara `Disallow: /patrones` y `Disallow: /v1`, y ninguna está en el
+      `/robots.txt` las declara `Disallow: /patrones` y `Disallow: /v1`, y ninguna está en el
       sitemap: son superficies internas, no linkeadas desde el sitio. Es exactamente el mismo
       patrón que causó el bug real de ayer (`opengraph-image` no baja a segmentos anidados: `/v1`
       la tiene, sus hijas no), y por eso engaña — pero acá el guard tiene razón en ignorarlas,
@@ -1552,10 +1552,57 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 ### Del canario visual — corrida del 2026-09-03 00:43 UTC (diez pantallas)
 
 - [x] 🔴 ~~**El widget de chat de Chatwoot sigue caído (429), y hoy la corrida oficial lo vio en
-      LAS CINCO pantallas de `onia.com.bo`, no solo en `/chatbot`.**~~ **RECLASIFICADO el
-      2026-09-03 ~12:48 UTC por `web-venta`, que ES el dueño: el widget NO está caído. Es un
-      rate-limit por IP, y el diagnóstico "lleva 8 horas caído" era el instrumento midiéndose a
-      sí mismo.** Detalle abajo, después de la evidencia original.
+      LAS CINCO pantallas de `onia.com.bo`, no solo en `/chatbot`.**~~
+      **FANTASMA — el widget NUNCA estuvo caído. Refutado y ARREGLADO EN EL INSTRUMENTO el
+      2026-09-03 09:38–10:00 UTC por `onia-cola`.** Este ítem se escribió a las 00:43, **doce
+      minutos antes** de que el ítem de las 00:55 (más abajo en este mismo archivo) diagnosticara
+      la causa: Chatwoot limita `/widget` a **5 cargas por hora por IP** y el canario abre diez
+      pantallas seguidas desde una sola IP. El titular "sigue caído" nació de una medición que ya
+      estaba explicada.
+      - **Medido de nuevo, y esta vez el instrumento se puede refutar solo:** `curl` frío al
+        endpoint → **HTTP 200, 7.683 bytes, 76 ms** (el ítem afirmaba que un curl frío daba 429).
+        Después, cinco pantallas en secuencia con Playwright a 1440×900: `home`, `precios` y
+        `empezar` cargaron el widget con la **burbuja visible y medida en el DOM**
+        (`.woot-widget-bubble`, 64×64, `visibility: visible`, `opacity: 1`); `rubros` y `chatbot`
+        dieron 429. El corte cae **exactamente** en la quinta carga — que es el límite
+        documentado. Si el límite no fuera 5, la frontera no habría caído ahí: por eso esta
+        medición prueba la causa en vez de sólo acompañarla.
+      - **La caída de peso del 75 % que el ítem citaba como agravante es la MISMA huella:** lo
+        que falta en esas páginas es el bundle del widget que el 429 no dejó bajar. Es
+        consecuencia del rate-limit propio, no evidencia independiente. Dos síntomas del mismo
+        hecho leídos como dos pruebas es cómo un fantasma se vuelve convincente.
+      - **ARREGLADO donde estaba roto de verdad — el canario, no el producto**
+        (`scripts/canario_visual.mjs`): ahora guarda las respuestas 4xx/5xx **con su URL**
+        (`respuestasFallidas`), porque el texto que la consola imprime es genérico
+        (`...status of 429 ()`) y no dice de qué endpoint vino — sin esa URL no había forma de
+        distinguir nuestra huella de una caída real. `esHuellaPropia()` descarta ese error
+        **sólo** si todos los 429 de la pasada son de `/widget` de Chatwoot, y lo descartado se
+        escribe en el JSON (`huellaPropia`), no se esconde.
+      - **Fail-closed, fijado por cuatro tests que serían el precio de equivocarse:** un 429 de
+        otro endpoint, un 429 del widget junto a uno ajeno, un 429 sin respuesta que lo explique
+        y un **500 del widget** siguen siendo ítem. Una excepción que silencia de más es peor que
+        el fantasma que vino a matar. Los cinco tests se escribieron **en rojo primero** y falló
+        sólo el que debía. `--self-check`: **74 casos verdes**.
+      - **Verificado end-to-end contra el sitio real**, no sólo con datos inyectados:
+        `CANARIO_OUT=/tmp/canario-prueba node scripts/canario_visual.mjs rubros` → la página
+        recibió el 429 de verdad, quedó registrado con su URL, **`motivos: []`** (antes levantaba
+        este 🔴) y `huellaPropia` explica qué se silenció y por qué.
+      - **Costo evitado:** este fantasma ya se había llevado cuatro vueltas y volvía a nacer cada
+        3 h con la corrida del canario. Lo que sigue abierto y es de Sergio no cambia: safelistear
+        la IP del VPS (`RACK_ATTACK_ALLOWED_IPS`) para que el canario mida el widget de verdad en
+        vez de saltearlo — cotizado en
+        `hermes-content/docs/ONIA_RADAR_DECISIONES_PRODUCTO.md`.
+      - **`web-venta`, que ES el dueño de la superficie, llegó a la MISMA conclusión por su
+        cuenta a las ~12:48 UTC, sin haber visto esta refutación** (su detalle está más abajo,
+        en el bloque «CIERRE del carril `web-venta`»). Dos carriles midiendo por separado y
+        cayendo en el mismo veredicto es la confirmación más barata que hay — pero también
+        significa que **el fantasma se investigó dos veces**: el arreglo del instrumento ya
+        estaba hecho a las 10:00 y no había llegado a `main` cuando `web-venta` arrancó.
+        Su medición **no es redundante**: fijó el umbral con clics reales (cada página del
+        sitio cuesta **2** peticiones porque los `<a>` son planos a propósito) y refutó que
+        `next/link` fuera el arreglo.
+      ~~**Detalle original de la medición del 2026-09-03 00:43 UTC, conservado porque la
+      refutación se lee contra él:**~~
       - **Evidencia de la corrida oficial única** (`node scripts/canario_visual.mjs`, primer
         comando de la vuelta, cero requests previos al sitio): `home`, `precios`, `empezar`,
         `rubros` y `chatbot-landing` — las cinco — dispararon `ITEM` por
@@ -1632,7 +1679,39 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         mirar `.woot-widget-bubble` en cada una. Las dos primeras la tienen; las otras tres no.
       - **Cero líneas de código tocadas: no había nada roto en el sitio.**
 
-- [ ] 🟠 **SIGUE VIVO en `rubros`, y el 2026-09-03 07:58 UTC `onia-cola` midió POR QUÉ. No es
+- [x] 🟠 **CERRADO el 2026-09-03 17:38 UTC por `onia-cola`, mergeando el arreglo que el carril
+      `canario-visual` ya tenía escrito y varado en su rama** (`ddd48bfae` fullPage +
+      `6bd2ec177` scroll suave → `main` en `ea86a894a`). **No lo construí de nuevo a propósito:
+      ya existía, y escribirlo otra vez en `main` habría chocado add/add contra el mismo archivo
+      de su dueño.** El instrumento quedó como pedía este ítem: captura **por viewport**,
+      `html{scroll-behavior:auto !important}` inyectado antes de scrollear, y
+      `waitForFunction(scrollY≈y)` en vez de un `setTimeout` optimista.
+      - **Verificado MIRANDO las dos fotos, no con un grep** — mismo instante, misma franja de
+        `https://onia.com.bo/rubros` a 1440×900, `document.body.scrollHeight` = **8.332 px**
+        (idéntico a la medición de las 07:58) y `scrollY` real = 850, o sea el scroll **llegó**:
+        - **viejo (`fullPage: true`)** → la tarjeta cortada por arriba y una banda blanca vacía
+          ocupando dos tercios del cuadro. La firma exacta que este ítem perseguía.
+        - **nuevo (por viewport)** → la tarjeta **entera** *"Hoy en la agenda / Dental — 09:00
+          Ortodoncia · 10:30 Limpieza · 11:15 Control / Cada paciente con su hora, su
+          tratamiento y su teléfono"*, más la lista de rubros (Dental activo, Comercio ·
+          Importadora · Estética · Servicios en gris) y la burbuja de Chatwoot visible.
+      - **Un detalle que vale anotar porque contradice a medias la medición vieja:** hoy el
+        fotograma congelado por `fullPage` era **Dental**, no *"Caja del día / Efectivo"*
+        (Comercio) como el 07:58. El rubro en que se congela **varía entre corridas**; lo que no
+        varía es el defecto. Un ítem que hubiera exigido ver *"Caja del día"* para darse por
+        reproducido se habría declarado fantasma hoy.
+      - **El repro quedó como script, no como párrafo:** `scripts/verificar_canario_rubros.mjs`
+        saca las dos fotos a `/tmp/verificar-canario/` en 30 segundos. No es un gate y no está
+        en `npm test`: es para volver a MIRAR, que es lo único que decide esto.
+      - ⚠️ **El merge salió en conflicto en `scripts/canario_visual.mjs` y se resolvió por
+        UNIÓN, no eligiendo un lado.** Los dos lados le habían agregado campos distintos al
+        MISMO objeto `datos`: `main` el chequeo de desvío (`medida` / `motivoNoMedida` /
+        `respuestasFallidas`) y la rama la lista de `capturas` por viewport. `--ours` o
+        `--theirs` habrían borrado media herramienta **en silencio**, y el canario habría
+        seguido corriendo en verde, ciego de un ojo.
+
+      **El diagnóstico original, que es la mejor explicación de POR QUÉ pasaba:**
+      **SIGUE VIVO en `rubros`, y el 2026-09-03 07:58 UTC `onia-cola` midió POR QUÉ. No es
       timing ni rasterizador: `fullPage` destruye las secciones movidas por scroll.**
       Reproducido en vivo con el instrumento exacto del canario (1440×900, sin `channel`, scroll
       300/800 ms). **El sitio está sano; miente la captura** — probado con las dos tomas de la
@@ -2236,6 +2315,152 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       (699 KB/114 ms, redirige a `/login` sin sesión: "no medida", no "OK"). Ninguna
       baseline tocada.
 
+- [x] 🟠 **ARREGLADO el 2026-09-03 por `onia-cola`: los 7 falsos positivos son CERO, y eran
+      TRES clases, no dos.** `node scripts/verificar_cola.js hermes-content/docs/COLA.md` pasó
+      de **10** errores a **3**, y los 3 que quedan son el gate funcionando: 1 `duplicado` real
+      (los ítems de las líneas 1757 y 1857 son la misma nota de dos corridas del canario) y los
+      2 `sin-evidencia` que este ítem ya daba por legítimos. **Ni un `fantasma`.**
+      - **Clase A — nombre suelto AMBIGUO** (`nombreSueltoAmbiguo`): `existeComoSufijo` se
+        niega **a propósito** a resolver un nombre sin barra, y después el gate lo reportaba
+        como *"ese archivo NO existe"*. Acusaba de inexistente algo que había decidido no
+        buscar. Ahora se ignora — ni evidencia ni error — **sólo desde DOS coincidencias**,
+        que es donde el gate deja de poder decidir. Con una sola no hay ambigüedad y la regla
+        vieja sigue mandando: *"sin barra no hay resolución por sufijo"* tiene su propio caso
+        en el self-check y **este ítem no la reabrió**.
+      - **Clase B — especificador de módulo** (`esEspecificadorDeModulo`): `@/lib/pricing` es
+        un alias de TypeScript (lo resuelve `tsconfig`, no el disco); `next/link` y
+        `packs/js/sdk.js` son un paquete de npm y el SDK de Chatwoot que sirve **otro host**.
+      - 🔴 **Clase C — la que este ítem NO había visto, y era la peor: el rango de líneas.**
+        El limpiador entendía `archivo:141` y `archivo:141:5` pero **no** `archivo:141-166`,
+        que es como se cita un BLOQUE. El rango quedaba pegado al nombre y el archivo salía
+        fantasma **existiendo**. Medido: `scripts/mirar-venta.mjs:141-166` se reportaba como
+        inexistente con el archivo vivo en
+        `web-factory/apps/onia-platform/scripts/mirar-venta.mjs`. Las otras dos clases hacen
+        ruido; **ésta esconde trabajo real detrás de una cita bien escrita.**
+      - ⚠️ **Y robots.txt no era ninguna de las tres: la cita estaba mal.** (Va sin backticks
+        por lo que avisa el párrafo de más abajo: entre backticks se vuelve a extraer como
+        ruta y este mismo renglón sumaría el error que describe — pasó al escribirlo.) Este ítem lo
+        había puesto en la clase A "nombre suelto", pero medido da **cero** archivos con ese
+        nombre en los dos repos — en el repo es `robots.ts`, y el `.txt` es lo que Next
+        **sirve**. Se corrigió la cita a `/robots.txt` (una URL, que el gate ya ignoraba). La
+        clasificación heredada no se sostuvo al contarla: `page.tsx` tiene 155 archivos con
+        ese nombre y `globals.css` 6, pero robots.txt tenía 0, igual que un fantasma de
+        verdad.
+      - ✅ **El self-check ya lo corre `npm test`** (`test:cola-selfcheck` en `package.json`):
+        pasó de **75 casos que nadie ejecutaba** a **86 que corren en cada gate de `main`**.
+      - **Lo que queda, y NO es de este carril:** el `duplicado` de 1757/1857 es una nota de
+        "no encontré defecto" escrita dos veces por `canario-visual` en dos corridas. Cerrarla
+        o borrarla es de ese carril; `onia-cola` no toca los registros de otro.
+
+      **El diagnóstico original, que sigue siendo la mejor explicación de POR QUÉ importaba:**
+      `node scripts/verificar_cola.js hermes-content/docs/COLA.md` daba **13** errores; con el
+      arreglo de hoy (prefijo del repo hermano) da **10**, de los cuales 2 son `sin-evidencia`
+      legítimos. Los 7 `fantasma` que sobran NO son items rotos: son formas que el extractor
+      toma por rutas de repo y no lo son. **Un gate que sale rojo de fábrica se saltea, y ahí
+      deja de proteger** — es la misma lección del vigía que grita mal.
+      ⚠️ Los seis literales de abajo van **sin backticks a propósito**: citarlos entre backticks
+      los vuelve a extraer como rutas y este mismo ítem sumaba 6 errores nuevos al gate que
+      viene a describir. Se comprobó en vivo antes de escribirlo así.
+      - **Clase A — nombre de archivo suelto, sin barra:** robots.txt (línea 781),
+        page.tsx (961), globals.css (1682). `existeEnAlgunRepo` los rechaza **a propósito**
+        (`scripts/verificar_cola.js:275`: sin barra no se resuelve por sufijo, porque un
+        page.tsx suelto matchearía cientos). El defecto es que algo deliberadamente irresoluble
+        se reporte como ERROR en vez de ignorarse: el gate se acusa a sí mismo.
+      - **Clase B — especificador de módulo, no ruta:** @/lib/pricing (961), next/link
+        (1554), packs/js/sdk.js (1554). Son un alias de TypeScript, un paquete de npm y el SDK
+        de Chatwoot servido por otro host. Ninguno es un archivo de este árbol y ninguno debería
+        buscarse en disco.
+      - **Repro en 30 segundos:** `node scripts/verificar_cola.js hermes-content/docs/COLA.md`
+        y leer las líneas `ERROR fantasma`. Cada una nombra el literal que no resolvió.
+      - ⚠️ **Y un hallazgo aparte, más barato de arreglar que de explicar:** el validador tiene
+        un self-check de **75 casos** (`node scripts/verificar_cola.js --self-check`) que
+        **`npm test` no corre** — no está en `package.json`. Un gate con pruebas que nadie
+        ejecuta se rompe sin que nadie se entere.
+      - **Zona:** `scripts/verificar_cola.js`, de este carril (`onia-cola`). No entraba en la
+        vuelta de hoy: se arregló la clase del repo hermano, que era la que ensuciaba las rutas
+        del producto, y se dejó medido el resto en vez de empezar lo que no se puede terminar.
+### Del canario visual — corrida del 2026-09-03 ~06:42 UTC (diez pantallas, sin ítems nuevos)
+
+- [x] 🟢 **Diez pantallas abiertas y MIRADAS. Sin disparo mecánico en ninguna, sin defecto
+      nuevo a la vista.** `home` (2.360 KB/316 ms), `precios` (2.110 KB/210 ms, widget de
+      Chatwoot SÍ visible, tarjeta de WhatsApp Bs 390/mes completa), `empezar` (2.104 KB/139 ms),
+      `rubros` (2.527 KB/143 ms), `chatbot-landing` (2.107 KB/184 ms, widget visible, precio Bs
+      390/mes correcto), `contacto` (322 KB/231 ms), `register` (702 KB/124 ms, asistente de 2
+      pasos, 5 rubros con íconos legibles), `login-plataforma` (696 KB/96 ms, "Pedí tu acceso"
+      presente, íconos legibles), `login-chat` (3.499 KB/1.221 ms, formulario Chatwoot propio,
+      no está caído), `panel-chatbot` (702 KB/135 ms, redirige a `/login` sin sesión: "no
+      medida", no "OK"). Ninguna baseline tocada.
+  - **La banda vacía de `home` y `rubros` en la captura full-page NO es el bug ya cerrado
+    (scroll de espera corto).** Tiene otra causa, más simple: ambas pantallas usan un
+    conmutador `position: sticky` (`switcher.tsx`, el "runway" de rubros que también vive en
+    home) que se pinea mientras vos scrolleás. Un `fullPage` screenshot no repite el elemento
+    pineado en cada tramo del scroll: lo captura UNA vez, en su lugar natural, y el resto del
+    contenedor alto (~5 rubros × alto de paso) queda en blanco en la imagen — aunque el DOM
+    tiene todo el contenido (confirmado con `visto.texto`, que trae los 5 rubros completos más
+    abajo, después de la banda). Coincide con la nota ya escrita en este mismo archivo sobre
+    "el pin del scrollytelling... eso SÍ es esperado". **No es un ítem: es una limitación
+    conocida del instrumento (captura full-page + `position:sticky`), no del sitio.**
+  - **El 429 del widget: corrí la sonda oficial ANTES de escribir nada** (regla del
+    CLAUDE.md tras el falso positivo del 2026-09-02 y el falso "OJO" mal interpretado antes
+    de eso). Esta vez:
+    ```
+    == 2. ¿A nombre de QUÉ IP está el contador del throttle? ==
+       187.77.16.63       10 cargas (el límite es 5/hora)
+    == 3. ¿Quién pidió /widget en las últimas 6 h? ==
+       187.77.16.63       261 peticiones
+       192.223.122.70     1 peticiones
+       190.180.28.134     1 peticiones
+    VEREDICTO: AUTOINDUCIDO. 261 de 263 (99%) son del propio VPS.
+    ```
+    **El veredicto cambia de corrida a corrida** (la vuelta anterior, 03:41 UTC, dio "OJO: 2
+    IPs ajenas"; ésta da AUTOINDUCIDO) porque la ventana del throttle es de 1 h y depende de
+    qué tráfico cayó en esa hora puntual — no cierra ni reabre el ítem 🔴 de arriba por sí
+    sola, sólo agrega un dato más a su serie. **El ítem 🔴 del widget caído queda como
+    estaba** (abierto, sin dueño), con esta lectura sumada a su historial.
+  - ⚠️ **Nota operativa propia, no un hallazgo del sitio:** después de la corrida oficial
+    reejecuté `home` sola 3 veces para investigar por qué el peso variaba (2.360 KB vs los
+    2.310 KB de la baseline vieja) — eso agotó el cupo de 5 cargas/hora del widget en
+    `onia.com.bo` y las 3 reejecuciones sí vieron el 429 (581 KB, sin widget). **El
+    `home.json`/`home.png` que quedan en `.canario-out/` después de esta vuelta son de esas
+    reejecuciones, no de la corrida oficial** — reflejan un estado autoinducido por mí, no el
+    estado real del sitio. La cifra correcta de esta vuelta es la de la corrida oficial (2.360
+    KB, sin error de consola), citada arriba. Lección para la próxima: no reejecutar una
+    pantalla sola para "confirmar" peso — el propio acto de medir de nuevo quema el cupo del
+    widget y ensucia la evidencia.
+  - **Aparte, sin ser ítem:** el copy del hero de `home` cambió respecto a la baseline
+    versionada ("Tu negocio no pierde citas ni cobros..." / CTA "Pedí tu acceso" → "Cerrás
+    vos. El negocio no." / CTA "Creá tu cuenta"), y es consistente con `empezar` y `register`
+    (los tres ya dicen "Creá tu cuenta" y el asistente de 2 pasos existe y funciona visualmente).
+    Parece un cambio de copy intencional y coherente en toda la superficie, no una promesa
+    rota — lo dejo anotado porque es la clase de cosa que la regla de "una promesa que cambia
+    se barre en TODA la superficie" pide vigilar, pero sin confirmar si `/register` ya crea
+    cuentas de verdad no corresponde declararlo bug ni arreglo. No se tocó la baseline.
+
+- [ ] 🟡 **`onia.com.bo/chatbot` — el header sticky deja pasar el texto de atrás y se vuelve
+      ilegible al llegar al final de la página.** Canario visual, 2026-09-03. El `<header>`
+      del sitio tiene fondo con **88% de opacidad** (`color(srgb .976 .984 .980 / 0.88)`) y
+      `backdrop-filter: blur(10px)` — no es opaco de verdad. Cuando el scroll llega a la
+      sección verde oscura de precio ("Bs 390/mes, sin instalación."), el título blanco en
+      negrita queda posicionado justo detrás del header y **se ve fantasma, superpuesto al
+      nav** ("Rubros · Precios · Comparativa..."), volviendo confusos los dos.
+      Evidencia: `hermes-content/docs/historial/canario-visual/2026-09-03-chatbot-ghost-header.png`
+      (capturada con espera de 2.500 ms — descarta que sea una animación a mitad de camino).
+      Reproducir: abrir `https://onia.com.bo/chatbot`, scrollear al final, mirar el header.
+      Estilo computado verificado con Playwright: `backgroundColor: color(srgb 0.976471
+      0.984314 0.980392 / 0.88)`, `backdropFilter: blur(10px)`, `opacity: 1`.
+      Probé en `/precios` y `/empezar` con el mismo scroll al fondo: ahí no se ve, porque no
+      hay texto blanco en negrita justo bajo el header en ese punto — el defecto es del CSS
+      del header (opacidad no total), no de una sola página; sólo se nota donde el contraste
+      es alto. Sin dueño derivado — el header vive en el layout global del sitio, no en un
+      componente de `/chatbot`.
+      ⚠️ **Nota sobre el propio instrumento**: esto casi se reportó mal. La primera pasada de
+      esta vuelta mostraba el mismo fantasma en CASI TODAS las pantallas (home, rubros,
+      precios) con la espera vieja de 350 ms — resultó ser la herramienta fotografiando una
+      animación `whileInView` a mitad de camino (con 900-1500 ms de espera, esas desaparecían).
+      Se subió el piso de espera de la herramienta (`scripts/canario_visual.mjs`, 350→900ms,
+      con self-check verde) ANTES de escribir este ítem, y sólo quedó **éste**, que persiste
+      incluso a 2.500 ms — por eso es real y no un artefacto de captura.
+
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 
 - **F1 · Sumar `/patients` al nav de servicios profesionales.** Lo intenté, escribí el test,
@@ -2508,6 +2733,63 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       que verificar**, no sólo construir.
 
 ## Después
+
+- [x] 🟠 **La "guarda de las guardas" fallaba ABIERTO: había TRES suites de test en disco que no
+      corría nadie, con `npm test` en verde — ARREGLADO el 2026-09-03 por `onia-cola`, escalón 3
+      (recorrer el frente propio).** No salió de la cola: salió de tropezarme con el agujero
+      mientras mergeaba.
+      - **Lo que estaba pasando, contado en vivo:** `scripts/docs-hygiene.test.mjs` (18 casos),
+        `scripts/video-scenes.test.mjs` (1) y `scripts/vigia_sin_respuesta.test.mjs` (15) estaban
+        en el repo, **verdes**, y ningún corredor los invocaba. **34 afirmaciones invisibles.**
+        Verificado con `grep` sobre `.json`/`.yml`/`.sh`/`.mjs`: las únicas menciones son los
+        archivos de implementación nombrándose a sí mismos, nunca al `.test.mjs`.
+      - **Por qué `scripts/guards-cableados.test.mjs` no podía verlo, y es el punto del ítem:**
+        preguntaba *"¿todo `test:*` **declarado** está cableado a `npm test`?"*. Su lista de
+        sujetos salía de `package.json` — **una lista de inclusión**, así que el día que un
+        archivo existe en disco sin declararse, no tiene gate y nada se pone en rojo. Es el mismo
+        modo de falla que `web-venta` midió hoy con `sitemap.ts`, en otro archivo.
+      - **Cómo se cuela, medido esta misma vuelta:** al mergear `claude/chatbots-platform-review-0d1d09`,
+        `package.json` salió **en conflicto** porque dos carriles le habían agregado un gate cada
+        uno a la misma cadena `test`. Resolver eligiendo un lado —lo natural con el reloj en
+        contra— borra el `test:*` del otro lado **junto con su declaración**, mientras el
+        `.test.mjs` entra igual al árbol por su propio hunk sin conflicto. Sin huérfano
+        declarado, la guarda vieja pasa. Se resolvió por **unión** (21 gates), no eligiendo.
+      - **El arreglo:** dos tests nuevos en `scripts/guards-cableados.test.mjs` que sacan los
+        sujetos del **DISCO** (`readdirSync` de `scripts/`) menos un `EXCLUIDOS` explícito, hoy
+        vacío a propósito. Así un test nuevo **nace cubierto** y hay que excluirlo a mano, a la
+        vista, con su motivo escrito. Los tres huérfanos se **cablearon**, no se excluyeron.
+      - **Test primero, en ROJO por el motivo correcto:** falló nombrando exactamente los tres
+        (`docs-hygiene.test.mjs, video-scenes.test.mjs, vigia_sin_respuesta.test.mjs`) **con las
+        dos guardas viejas en verde al lado** — que es la prueba de que eran ciegas a esto.
+      - **Los dos recíprocos, probados en vivo, no razonados:** un `.test.mjs` nuevo en `scripts/`
+        sale en rojo solo (fixture creado y borrado); y una entrada de `EXCLUIDOS` que apunte a
+        un archivo inexistente **también** sale en rojo, para que una exclusión vencida no pueda
+        tapar la siguiente.
+      - **Alcance, dicho para que no se lea como más de lo que es:** cubre **sólo `scripts/`**,
+        la carpeta cuya cadena `test` vive en este `package.json`. Los otros ~250 `*.test.*` del
+        repo (`.claude/skills/`, `web-factory/` con vitest, `onia-core/`, `video-factory/`,
+        `hermes-content/deploy/vps-ops/bot/`) tienen su propio corredor y **no** los cubre.
+      - **Medido:** `npm test` **exit 0** con las tres suites nuevas adentro — de 21 a 24 gates.
+
+- [x] 🟡 **El mismo gate seguía ladrando en falso por una CUARTA clase de ruido — ARREGLADO el
+      2026-09-03 por `onia-cola`, auditando los `[x]` (escalón 2).** Corriendo
+      `node scripts/verificar_cola.js hermes-content/docs/COLA.md` salían **10 errores**, y **2
+      eran del detector, no de la cola**: los ítems de las líneas 1538 y 1675 citan las cinco
+      capturas de una corrida con la **expansión de llaves** de shell
+      (`.../2026-09-03-{home,precios,empezar,rubros,chatbot-landing}.png`) y el gate buscaba en
+      disco el literal **con las llaves adentro**. Verificado antes de tocar nada: los cinco
+      archivos **existen** en `hermes-content/docs/historial/canario-visual/`.
+      Es el mismo caso que el glob `*` que la carve-out (1) ya contemplaba —una notación que
+      denota un conjunto— con otra sintaxis. **Su recíproco:** se piden las **dos** llaves, así
+      que una ruta con una llave suelta se sigue verificando (`carpeta/no-existe{.png` sale
+      fantasma igual).
+      **Test primero, en rojo por el motivo correcto**: `una expansion de llaves no es una ruta`
+      falló con `AssertionError` antes del arreglo. Después: self-check **73 casos** verde y el
+      gate de `COLA.md` bajó de **10 a 8** errores — los 8 que quedan son de la cola, no del
+      detector (un duplicado real 1607/1707, dos 🟢 sin ruta, y rutas del **otro repo**
+      `onia-platform/lib/*.ts`, que este verificador no resuelve).
+      **Por qué importa:** un gate que grita en falso se termina salteando, que es el motivo
+      escrito de las otras carve-outs — y este gate es obligatorio en el prompt de dos loops.
 
 - [x] 🟡 **El gate de la cola (`scripts/verificar_cola.js`) ladraba 4 "fantasmas" que no lo son
       — ARREGLADO el 2026-09-02, y eran TRES defectos distintos, no uno.** El diagnóstico
