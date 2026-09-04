@@ -161,6 +161,10 @@ poner "$REPO/scripts/kanban/telegram-entrada.py" "$DESTINO_BIN/onia-tg-entrada.p
 # existe en /root/bin y los 15 loops fallan mudos en la primera linea.
 poner "$FUENTE/aprender.sh"            "$DESTINO_BIN/onia-aprender.sh"
 poner "$FUENTE/consolidar-memoria.sh"  "$DESTINO_BIN/onia-consolidar-memoria.sh"
+# El extractor de patrones de fallo: la otra mitad del circuito de aprendizaje.
+# `aprender.sh` sabe ESCRIBIR una leccion; sin esto, nadie sabe QUE leccion hace
+# falta, porque nadie compara una vuelta con la anterior. Lo corre el supervisor.
+poner "$FUENTE/extraer-fallos.sh"      "$DESTINO_BIN/onia-extraer-fallos.sh"
 # Los vigias y el renovador de horarios, por la misma razon: existian solo en
 # /root/bin y una reinstalacion desde el repo los borraba sin avisar.
 poner "$FUENTE/vigia-disco.sh"             "$DESTINO_BIN/onia-vigia-disco.sh"
