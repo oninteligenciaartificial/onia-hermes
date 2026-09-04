@@ -11,6 +11,7 @@ import {
   ZONA,
   diagnosticar,
   evaluarStaged,
+  llegaAlCliente,
 } from "./deploy-vivo.mjs";
 
 /**
@@ -233,5 +234,137 @@ describe("deploy-vivo: qué build hay armado para publicar", () => {
 describe("deploy-vivo: la zona que vigila", () => {
   it("vigila la app completa, no una lista de subcarpetas", () => {
     expect(ZONA).toBe("web-factory/apps/onia-platform");
+  });
+});
+
+/**
+ * Qué cuenta como «arreglo que el cliente no ve» — y por qué NO es «todo commit
+ * de la zona».
+ *
+ * EL SUCESO, medido el 2026-09-04 20:48 La Paz. El gate decía «8 arreglos
+ * varados» y, peor, «NO publicar el build que hay armado: es anterior a 2
+ * arreglos». Esos dos commits eran `scripts/deploy-vivo.mjs` y su test —el
+ * propio instrumento— y un script del repo no viaja en el bundle de Next: el
+ * navegador de un lead no puede verlo ni antes ni después de publicar. O sea
+ * que el gate invalidaba un build que SÍ traía los cuatro arreglos reales, y
+ * mandaba a rearmarlo desde cero.
+ *
+ * El costo no es cosmético y ya está medido: la tarea de deploy envejeció TRES
+ * veces el mismo día. Cada vuelta de este carril commitea alguna herramienta,
+ * eso marca el staged como viejo, se rearma, y la carpeta nueva borra la que
+ * la tarea nombraba. El pedido no podía estabilizarse nunca, y cuatro arreglos
+ * de la primera pantalla llevaban el día entero sin llegar a nadie.
+ *
+ * Es la familia inversa a la que este carril ya cazó cuatro veces: no falla
+ * ABIERTO (aprobar lo roto) sino CERRADO, y por eso nadie lo audita — un número
+ * alto y estable se lee como diagnóstico, no como síntoma. La corrección
+ * mantiene el sesgo seguro: se SHIPPEA por defecto, y sólo una lista corta y
+ * nombrada de cosas que Next nunca empaqueta queda afuera.
+ */
+describe("deploy-vivo: qué archivos llegan de verdad al cliente", () => {
+  const enZona = (p: string) => `${ZONA}/${p}`;
+
+  it("un commit que sólo toca herramientas del carril NO es un arreglo varado", () => {
+    const r = diagnosticar({
+      buildIdMtimeMs: 1_000 * 1000,
+      commits: [
+        {
+          sha: "4f6e3aad8",
+          ct: 2_000,
+          subject: "fix: el pedido de deploy nombraba una carpeta borrada",
+          archivos: [
+            enZona("scripts/deploy-vivo.mjs"),
+            enZona("scripts/deploy-vivo.test.ts"),
+          ],
+        },
+      ],
+      homeStatus: 200,
+    });
+
+    expect(r.codigo).toBe(AL_DIA);
+    expect(r.varados).toHaveLength(0);
+  });
+
+  it("un commit que toca una pantalla SÍ es un arreglo varado", () => {
+    const r = diagnosticar({
+      buildIdMtimeMs: 1_000 * 1000,
+      commits: [
+        {
+          sha: "7816fc783",
+          ct: 2_000,
+          subject: "feat: la primera pantalla vendía el add-on",
+          archivos: [enZona("src/app/(sitio)/page.tsx")],
+        },
+      ],
+      homeStatus: 200,
+    });
+
+    expect(r.codigo).toBe(ARREGLOS_VARADOS);
+    expect(r.varados).toHaveLength(1);
+  });
+
+  /**
+   * El caso mixto es el que decide el diseño: basta UN archivo que viaje para
+   * que el commit cuente. Exigir que TODOS viajen sería la puerta por la que se
+   * cuela un arreglo real escondido detrás de un test — el fallo abierto.
+   */
+  it("basta un solo archivo que viaje para que el commit cuente", () => {
+    const r = diagnosticar({
+      buildIdMtimeMs: 1_000 * 1000,
+      commits: [
+        {
+          sha: "77de88173",
+          ct: 2_000,
+          subject: "fix: el asistente decía «todavía en construcción»",
+          archivos: [
+            enZona("src/app/v1/empezar/whatsapp.test.ts"),
+            enZona("src/app/v1/empezar/whatsapp.ts"),
+            enZona("vitest.config.ts"),
+          ],
+        },
+      ],
+      homeStatus: 200,
+    });
+
+    expect(r.codigo).toBe(ARREGLOS_VARADOS);
+  });
+
+  describe("llegaAlCliente: se shippea por defecto", () => {
+    it("deja afuera sólo lo que Next nunca empaqueta", () => {
+      expect(llegaAlCliente([enZona("scripts/mirar-venta.mjs")])).toBe(false);
+      expect(llegaAlCliente([enZona("src/app/(sitio)/precios.test.ts")])).toBe(false);
+      expect(llegaAlCliente([enZona("src/lib/__tests__/x.ts")])).toBe(false);
+      expect(llegaAlCliente([enZona("vitest.config.ts")])).toBe(false);
+    });
+
+    it("cuenta el código, los estilos y los estáticos", () => {
+      expect(llegaAlCliente([enZona("src/components/site-footer.tsx")])).toBe(true);
+      expect(llegaAlCliente([enZona("src/app/(sitio)/sitio.module.css")])).toBe(true);
+      expect(llegaAlCliente([enZona("public/favicon.ico")])).toBe(true);
+      expect(llegaAlCliente([enZona("next.config.mjs")])).toBe(true);
+    });
+
+    /**
+     * `package.json` queda del lado que viaja a propósito, aunque el commit que
+     * motivó todo esto sólo le agregara un script de test: ahí también se
+     * declaran las dependencias, y una subida de versión sí cambia el bundle.
+     * Ante la duda, el sesgo va hacia «hay que rearmar», nunca hacia «publicá
+     * ese build viejo».
+     */
+    it("ante la duda cuenta como que viaja", () => {
+      expect(llegaAlCliente([enZona("package.json")])).toBe(true);
+      expect(llegaAlCliente([enZona("un-archivo-que-nadie-previo.xyz")])).toBe(true);
+    });
+
+    /**
+     * Un commit sin lista de archivos es ausencia de dato, no prueba de que no
+     * viaje: si `git log --name-only` deja de contestar, el gate tiene que
+     * seguir pidiendo el deploy. Es la misma regla que separa `[]` de `null` en
+     * el resto de este archivo.
+     */
+    it("sin lista de archivos NO se descarta el commit", () => {
+      expect(llegaAlCliente(undefined)).toBe(true);
+      expect(llegaAlCliente([])).toBe(true);
+    });
   });
 });
