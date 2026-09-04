@@ -18,7 +18,9 @@
 
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync } from "node:fs";
+import { readFileSync, readdirSync, mkdtempSync, writeFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { campanaExacta } from "./recepcionista.mjs";
 import { normalize } from "./guardrails.mjs";
@@ -48,13 +50,41 @@ function fuentesWeb(dir) {
   return out;
 }
 
-/** Los literales que la web precarga en un link de WhatsApp. */
-function frasesDeLaWeb() {
+/**
+ * Lo que hay que hacer cuando el arbol no trae el lado de la web. No es un fallo del gate ni de la
+ * web: es que este worktree no puede EMITIR un veredicto, y decir "verde" seria peor que callarse.
+ */
+const ARBOL_INCOMPLETO =
+  "este worktree no tiene el lado de la WEB del cruce, asi que el veredicto no vale: " +
+  "corré `git merge origin/main` y volvé a medir. (Este gate cruza web-factory —carril web-venta— " +
+  "contra hermes-content —carril chatbot—: un árbol con un lado nuevo y el otro viejo da un " +
+  "veredicto falso sin que nada esté roto.)";
+
+/**
+ * Los literales que la web precarga en un link de WhatsApp.
+ * Se planta si el arbol no trae la web: un Set vacio haria pasar el cruce en VERDE, aprobando
+ * cualquier campaña que falte. Ver el bloque "El veredicto de este gate depende del ARBOL".
+ */
+function frasesDeLaWeb(dir = WEB_SRC) {
+  let fuentes;
+  try {
+    fuentes = fuentesWeb(dir);
+  } catch (err) {
+    if (err?.code === "ENOENT") throw new Error(`${dir} no existe — ${ARBOL_INCOMPLETO}`);
+    throw err;
+  }
+  if (fuentes.length === 0) throw new Error(`${dir} no tiene ni un .ts/.tsx — ${ARBOL_INCOMPLETO}`);
+
   const re = /wa(?:Servicios)?Link\(\s*"([^"]*)"/g;
   const encontradas = new Set();
-  for (const file of fuentesWeb(WEB_SRC)) {
+  for (const file of fuentes) {
     const src = readFileSync(file, "utf8");
     for (const m of src.matchAll(re)) encontradas.add(m[1]);
+  }
+  if (encontradas.size === 0) {
+    throw new Error(
+      `${fuentes.length} archivo(s) de web y ningun link de WhatsApp — ${ARBOL_INCOMPLETO}`,
+    );
   }
   return encontradas;
 }
@@ -75,14 +105,24 @@ test("cada frase que la web manda tiene su campaña — o un motivo escrito de p
     sinCubrir,
     [],
     "la web manda estas frases y nadie las contesta con su respuesta propia: agregalas a " +
-      "hermes-content/docs/chatbot/campanas-onia.knowledge.json o declaralas en NO_MATCHEABLES",
+      "hermes-content/docs/chatbot/campanas-onia.knowledge.json o declaralas en NO_MATCHEABLES.\n" +
+      "ANTES DE ESCALAR ESTE ROJO: `git merge origin/main` y volvé a correrlo. Este cruce toma la " +
+      "web de un carril y el documento de otro, asi que un worktree con el JSON viejo da este " +
+      "mismo error con main VERDE — ya paso el 2026-09-03 (t_86264535, escalado como 'main roto " +
+      "traba a los 15 carriles' sobre una cadena que estaba en verde hacia 5 horas).",
   );
 });
 
 test("ninguna campaña quedo huerfana: si la web dejo de mandar la frase, la campaña sobra", () => {
   const deLaWeb = frasesDeLaWeb();
   const huerfanas = campanas.map((c) => c.frase).filter((f) => !deLaWeb.has(f));
-  assert.deepEqual(huerfanas, [], "estas campañas ya no las dispara nadie: la web cambio el texto o borro el enlace");
+  assert.deepEqual(
+    huerfanas,
+    [],
+    "estas campañas ya no las dispara nadie: la web cambio el texto o borro el enlace.\n" +
+      "ANTES DE ESCALAR ESTE ROJO: `git merge origin/main` — con el lado de la web viejo, una " +
+      "campaña recien agregada se ve igual que una huerfana.",
+  );
 });
 
 test("el motor matchea cada frase — tal cual, y tambien sin la puntuacion que el cliente puede borrar", () => {
@@ -150,4 +190,72 @@ test("SIN `prefijo` el match sigue siendo del mensaje ENTERO — una campaña no
 test("PREFIJO no matchea a medias: un mensaje que solo comparte el arranque cae al flujo normal", () => {
   assert.equal(campanaExacta(doc, normalize("Hola, mi rubro")), null);
   assert.equal(campanaExacta(doc, normalize("Hola, mi rubro no está en la lista")), null);
+});
+
+// ---------------------------------------------------------------------------
+// El veredicto de este gate depende del ARBOL, no solo del codigo
+// ---------------------------------------------------------------------------
+// Este test cruza dos archivos que viven en CARRILES DISTINTOS: los literales estan en
+// web-factory (carril web-venta) y las campañas en hermes-content (carril chatbot). Un worktree
+// que tiene un lado nuevo y el otro viejo no esta roto — esta desactualizado — pero el cruce no
+// puede distinguir una cosa de la otra, y da un veredicto FALSO en las DOS direcciones:
+//
+//   · sin el lado de la WEB  -> no ve los literales nuevos -> `sinCubrir` vacio -> VERDE mentiroso.
+//   · sin el lado del DOC    -> no ve las campañas nuevas   -> `sinCubrir` lleno  -> ROJO mentiroso.
+//
+// Las dos ya pasaron el 2026-09-03, con horas de diferencia y sobre el MISMO commit: este carril
+// midio verde sin tener site.ts, y web-venta midio rojo sin tener el JSON — y ese rojo se escalo
+// como "main esta roto y traba el merge de los 15 carriles" (t_86264535) cuando main estaba verde.
+//
+// El falso ROJO se paga leyendo el mensaje del assert, que ahora manda mergear antes de escalar.
+// El falso VERDE no avisa solo: nadie investiga un gate que pasa. Por eso se planta acá.
+
+/** Un árbol de mentira, para probar la guarda sin depender del worktree real. */
+function arbolDeMentira(archivos) {
+  const dir = mkdtempSync(join(tmpdir(), "campanas-web-"));
+  for (const [nombre, contenido] of Object.entries(archivos)) {
+    writeFileSync(join(dir, nombre), contenido);
+  }
+  return `${dir}/`;
+}
+
+test("GUARDA: sin el lado de la web el gate se planta, en vez de aprobar en verde", () => {
+  const vacio = arbolDeMentira({ "leeme.md": "un worktree sin el checkout de la web" });
+  try {
+    assert.throws(
+      () => frasesDeLaWeb(vacio),
+      /worktree|árbol|arbol/i,
+      "un árbol sin los .tsx de la web tiene que ser un ERROR: si devuelve un Set vacio, " +
+        "el cruce aprueba cualquier campaña que falte y el gate miente en verde",
+    );
+  } finally {
+    rmSync(vacio, { recursive: true, force: true });
+  }
+});
+
+test("GUARDA: con los .tsx pero sin ningun link de WhatsApp, tambien se planta", () => {
+  // El caso del sparse-checkout o del worktree a medio traer: los archivos estan, los CTA no.
+  const sinLinks = arbolDeMentira({ "pagina.tsx": "export const Hola = () => <p>sin CTA</p>;" });
+  try {
+    assert.throws(
+      () => frasesDeLaWeb(sinLinks),
+      /worktree|árbol|arbol/i,
+      "la web sin NI UN waLink no es un estado real mientras el documento tenga campañas: " +
+        "es un árbol incompleto, y aprobarlo en verde deja pasar campañas huérfanas",
+    );
+  } finally {
+    rmSync(sinLinks, { recursive: true, force: true });
+  }
+});
+
+test("GUARDA: si el directorio de la web ni existe, el motivo se lee (no un ENOENT pelado)", () => {
+  assert.throws(
+    () => frasesDeLaWeb("/tmp/onia-no-existe-este-arbol-jamas/"),
+    /worktree|árbol|arbol/i,
+    "un ENOENT crudo se lee como un bug del test; tiene que decir que falta el checkout de la web",
+  );
+});
+
+test("GUARDA: sobre el árbol real no se planta — la guarda no puede volverse el gate", () => {
+  assert.ok(frasesDeLaWeb().size > 0, "el worktree real trae la web: la guarda no debe dispararse");
 });

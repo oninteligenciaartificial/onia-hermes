@@ -8,15 +8,34 @@
 //   node simulate.mjs                              modo interactivo (escribis vos, corta con /salir)
 //   node simulate.mjs --all --slots "jueves 15:00|viernes 10:00"   con horarios de prueba
 //   node simulate.mjs --all --json                 salida maquina (para diffs / CI)
+//   node simulate.mjs --sin-conocimiento           el guion PELADO del codigo (sin el documento)
+//
+// POR DEFECTO corre con `knowledge.onia.json`, el documento publicado que produccion carga para
+// los inboxes de venta (4 web, 5 WhatsApp): lo que ves aca es lo que oye un lead. Sin eso el
+// simulador contestaba «el número exacto te lo pasa Sergio» mientras el bot vivo daba los precios
+// publicos — ver simulate.test.mjs.
 //
 // Los horarios por defecto son el PLACEHOLDER de config.mjs: Sergio todavia no definio los 2
 // bloques semanales. Con --slots se pasan horarios de prueba para ver el guion completo.
 // Spec: hermes-content/docs/ONIA_CHATBOT_PROPIO_SPEC_20260725.md §6 (via A).
 
 import readline from "node:readline";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { createBotConfig, DEFAULT_CONFIG } from "./config.mjs";
 import { createState, step, markHumanTakeover, buildFollowUp, LLM_PENDING } from "./bot-engine.mjs";
-import { applyKnowledge, asRecepcionista } from "./knowledge.mjs";
+import { applyKnowledge, asRecepcionista, readKnowledgeFile } from "./knowledge.mjs";
+
+/**
+ * El documento PUBLICADO del bot de venta de Onia — el mismo `knowledge.onia.json` que se instala
+ * con `webhook-server.sh knowledge` y que produccion carga para los inboxes 4 (web) y 5 (WhatsApp).
+ *
+ * Nace del 2026-09-04: el simulador armaba la config con `DEFAULT_CONFIG` pelado, sin documento, y
+ * por eso a "¿cuánto cuesta el sistema?" contestaba «el número exacto te lo pasa Sergio en la demo»
+ * mientras el bot vivo, a la misma hora, contestaba los precios publicos (conversacion 49 de
+ * Chatwoot, mensaje 418). El instrumento con el que se mide el carril daba ROJO sobre algo que en
+ * produccion estaba VERDE — y un rojo falso manda a la vuelta siguiente a reabrir un bug cerrado.
+ */
+export const CONOCIMIENTO_PUBLICADO = fileURLToPath(new URL("./knowledge.onia.json", import.meta.url));
 
 // Knowledge de UNA org cliente (fila "db" publicada) para el guion recepcionista. Es el mismo
 // shape "onia.bot.knowledge/1" que publica el editor del producto.
@@ -165,19 +184,45 @@ function parseArgs(argv) {
     else if (arg === "--script") args.script = argv[++index];
     else if (arg === "--slots") args.slots = argv[++index];
     else if (arg === "--contact") args.contact = argv[++index];
+    // Escotilla para comparar los dos guiones: con el documento publicado (lo que oye un lead) y
+    // sin el (lo que trae el codigo). El DEFAULT es con documento, o sea produccion.
+    else if (arg === "--sin-conocimiento") args.sinConocimiento = true;
   }
   return args;
 }
 
-function buildConfig(args) {
-  if (!args.slots) return DEFAULT_CONFIG;
-  const [labelA, labelB] = String(args.slots).split("|").map((part) => part.trim());
-  return createBotConfig({
-    slots: [
-      { key: "A", label: labelA || "opción A", startAt: null, pending: false },
-      { key: "B", label: labelB || "opción B", startAt: null, pending: false },
-    ],
-  });
+/**
+ * Lee el documento publicado con la MISMA validacion que produccion (`parseKnowledge`: todo o
+ * nada). Devuelve `{ data, aviso }`: si `aviso` no es null, el simulador se queda con el guion del
+ * codigo — igual que el bot vivo — y lo dice en voz alta.
+ */
+export function cargarConocimientoPublicado(deps = {}) {
+  const path = deps.path || CONOCIMIENTO_PUBLICADO;
+  const { data, error, missing } = readKnowledgeFile(path, deps);
+  if (data) return { data, aviso: null };
+  const motivo = missing ? "no existe" : error || "no se pudo leer";
+  return { data: null, aviso: `⚠️ sin conocimiento publicado (${path}: ${motivo}) — esto NO es lo que contesta produccion` };
+}
+
+export function buildConfig(args = {}, deps = {}) {
+  let base = DEFAULT_CONFIG;
+  if (args.slots) {
+    const [labelA, labelB] = String(args.slots).split("|").map((part) => part.trim());
+    base = createBotConfig({
+      slots: [
+        { key: "A", label: labelA || "opción A", startAt: null, pending: false },
+        { key: "B", label: labelB || "opción B", startAt: null, pending: false },
+      ],
+    });
+  }
+  if (args.sinConocimiento) return base;
+
+  const { data, aviso } = cargarConocimientoPublicado(deps);
+  if (!data) {
+    (deps.warn || console.error)(aviso);
+    return base;
+  }
+  return applyKnowledge(base, data);
 }
 
 function plusMinutes(iso, minutes) {
@@ -198,13 +243,25 @@ function indent(text) {
     .join("\n");
 }
 
-function runScript(name, baseConfig) {
+/**
+ * La config con la que corre cada guion.
+ *
+ * - Guiones de ONIA: la config de venta, o sea con el documento publicado (`buildConfig`).
+ * - Guion de una org CLIENTE: SU knowledge y el modo recepcionista, igual que cuando la fila
+ *   publicada llega por la fuente "db".
+ */
+export function configParaGuion(name, config, configPelado = config) {
   const script = SCRIPTS[name];
-  // Guion de una org cliente: se corre con SU knowledge y el modo recepcionista encendido,
-  // igual que cuando la fila publicada llega por la fuente "db".
-  const config = script.conocimiento
-    ? asRecepcionista(applyKnowledge(baseConfig, script.conocimiento), script.conocimiento)
-    : baseConfig;
+  if (!script?.conocimiento) return config;
+  // Sobre `configPelado`, NO sobre la de Onia: el conocimiento de una org no BORRA lo que ya
+  // estuviera cargado, lo pisa campo por campo. Armado encima del nuestro, la ferreteria se
+  // quedaba con nuestro M4_BODY ("Bs 320 … onia.com.bo/precios") esperando la rama de precio.
+  return asRecepcionista(applyKnowledge(configPelado, script.conocimiento), script.conocimiento);
+}
+
+function runScript(name, baseConfig, basePelada) {
+  const script = SCRIPTS[name];
+  const config = configParaGuion(name, baseConfig, basePelada);
   const events = [];
   let state = createState({ channel: "sim", contactRef: `sim-${name}`, pieceKey: "lucia-d03-reel-siat", sourceCampaign: "lucia-dentalgest-jul2026" });
   let clock = script.startAt;
@@ -301,22 +358,30 @@ async function interactive(config, contactRef) {
   rl.close();
 }
 
-const args = parseArgs(process.argv.slice(2));
-const config = buildConfig(args);
+// Guarda de import: sin esto, `import ... from "./simulate.mjs"` en un test arrancaba el modo
+// interactivo y se colgaba leyendo stdin (la misma trampa que ya costo una vuelta en
+// scripts/demo_agendada_real.mjs el 2026-09-03).
+const ejecutadoDirecto = Boolean(process.argv[1]) && import.meta.url === pathToFileURL(process.argv[1]).href;
 
-if (args.list) {
-  for (const [name, script] of Object.entries(SCRIPTS)) console.log(`${name.padEnd(18)} ${script.title}`);
-} else if (args.all || args.script) {
-  const names = args.all ? Object.keys(SCRIPTS) : [args.script];
-  const runs = names.map((name) => {
-    if (!SCRIPTS[name]) {
-      console.error(`guion desconocido: ${name}. Probá --list`);
-      process.exit(1);
-    }
-    return runScript(name, config);
-  });
-  if (args.json) console.log(JSON.stringify(runs, null, 2));
-  else runs.forEach(printScript);
-} else {
-  await interactive(config, args.contact);
+if (ejecutadoDirecto) {
+  const args = parseArgs(process.argv.slice(2));
+  const config = buildConfig(args);
+  const configPelado = buildConfig({ ...args, sinConocimiento: true });
+
+  if (args.list) {
+    for (const [name, script] of Object.entries(SCRIPTS)) console.log(`${name.padEnd(18)} ${script.title}`);
+  } else if (args.all || args.script) {
+    const names = args.all ? Object.keys(SCRIPTS) : [args.script];
+    const runs = names.map((name) => {
+      if (!SCRIPTS[name]) {
+        console.error(`guion desconocido: ${name}. Probá --list`);
+        process.exit(1);
+      }
+      return runScript(name, config, configPelado);
+    });
+    if (args.json) console.log(JSON.stringify(runs, null, 2));
+    else runs.forEach(printScript);
+  } else {
+    await interactive(config, args.contact);
+  }
 }
