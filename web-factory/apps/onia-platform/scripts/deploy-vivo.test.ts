@@ -4,8 +4,13 @@ import {
   AL_DIA,
   ARREGLOS_VARADOS,
   NO_PUDE_MEDIR,
+  STAGED_CUBRE,
+  STAGED_MARCA,
+  STAGED_NINGUNO,
+  STAGED_VIEJO,
   ZONA,
   diagnosticar,
+  evaluarStaged,
 } from "./deploy-vivo.mjs";
 
 /**
@@ -123,6 +128,99 @@ describe("deploy-vivo: el diagnóstico", () => {
       homeStatus: 200,
     });
     expect(r.codigo).toBe(AL_DIA);
+  });
+});
+
+/**
+ * El build ya armado: decir CUÁL publicar, y callarse cuando no sirve.
+ *
+ * Nace de un fallo medido tres veces el mismo día (2026-09-04) sobre la MISMA
+ * tarea de deploy, que es la única superficie por donde estos arreglos llegan
+ * al cliente:
+ *
+ *   12:40 — se pidió publicar un staged que traía viva la etiqueta «Facturación
+ *           SIAT» que el commit siguiente ya había sacado. Se habría publicado
+ *           el hero nuevo Y de paso una promesa falsa.
+ *   16:41 — se corrigió con el comando bueno, verificado adentro.
+ *   20:55 — esa carpeta ya no existía (la borró el build siguiente), así que la
+ *           tarea le pedía a Sergio un comando que sólo podía darle un error.
+ *
+ * Los tres son el mismo defecto: la ruta se COPIA de una medición anterior en
+ * vez de derivarse. Un comando que ya no corre no se ve distinto de una
+ * decisión pendiente — nadie revisa si la carpeta sigue viva— y el arreglo no
+ * llega al cliente ningún día.
+ */
+describe("deploy-vivo: qué build hay armado para publicar", () => {
+  const seg = (s: number) => s;
+  const ms = (s: number) => s * 1000;
+  const commit = (ct: number, subject = "fix: algo") => ({
+    sha: `sha${ct}`,
+    ct,
+    subject,
+  });
+  const staged = (ctSegundos: number) => ({
+    ruta: `/opt/onia-landing/runtime-next.new-${ctSegundos}`,
+    buildId: `build-${ctSegundos}`,
+    mtimeMs: ms(ctSegundos),
+  });
+
+  it("ofrece el build armado cuando es posterior a todos los arreglos", () => {
+    const r = evaluarStaged({
+      staged: staged(5_000),
+      varados: [commit(seg(1_000)), commit(seg(2_000))],
+    });
+
+    expect(r.estado).toBe(STAGED_CUBRE);
+    expect(r.faltan).toHaveLength(0);
+  });
+
+  /**
+   * El caso de las 12:40. El staged es más nuevo que el build VIVO —así que
+   * parece publicable— pero más viejo que el último arreglo. Publicarlo deja
+   * ese arreglo afuera y encima cierra el pedido: nadie vuelve a mirar.
+   */
+  it("NO ofrece un build anterior a algún arreglo, y nombra el que quedaría afuera", () => {
+    const r = evaluarStaged({
+      staged: staged(3_000),
+      varados: [commit(seg(1_000)), commit(seg(9_000), "fix: el pie vendía la factura SIAT")],
+    });
+
+    expect(r.estado).toBe(STAGED_VIEJO);
+    expect(r.estado).not.toBe(STAGED_CUBRE);
+    expect(r.faltan).toHaveLength(1);
+    expect(r.faltan[0].subject).toContain("SIAT");
+  });
+
+  /**
+   * El caso de las 20:55: la carpeta se borró. Sin build utilizable la salida
+   * tiene que mandar a ARMARLO, nunca imprimir una ruta igual — un comando que
+   * el swap rechaza con `ERR: bad STAGE path` se lee como deploy pedido.
+   */
+  it("sin ningún build armado NO inventa una ruta", () => {
+    const r = evaluarStaged({ staged: null, varados: [commit(seg(1_000))] });
+
+    expect(r.estado).toBe(STAGED_NINGUNO);
+    expect(r.faltan).toHaveLength(1);
+  });
+
+  /**
+   * El empate, igual que en `diagnosticar`: `next build` escribe el BUILD_ID al
+   * TERMINAR, así que un commit del mismo segundo ya entró al build. Tratarlo
+   * como faltante mandaría a rearmar un build que ya sirve.
+   */
+  it("un arreglo del mismo segundo que el build armado ya está adentro", () => {
+    const r = evaluarStaged({ staged: staged(5_000), varados: [commit(seg(5_000))] });
+
+    expect(r.estado).toBe(STAGED_CUBRE);
+  });
+
+  /**
+   * Se comprueba lo MISMO que comprueba `swap-and-verify.sh` para aceptar una
+   * ruta. Si este marcador se despega del script, el gate vuelve a ofrecer
+   * rutas que el swap rechaza, que es el fallo de las 20:55 con otra cara.
+   */
+  it("valida el mismo archivo que exige el swap", () => {
+    expect(STAGED_MARCA).toBe("apps/onia-platform/server.js");
   });
 });
 

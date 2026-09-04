@@ -47,7 +47,8 @@
  *   node scripts/deploy-vivo.mjs --json
  */
 import { spawnSync } from "node:child_process";
-import { statSync } from "node:fs";
+import { readFileSync, readdirSync, statSync } from "node:fs";
+import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 
 /** El sitio vivo ya sirve todo lo que `main` tiene de esta zona. */
@@ -69,6 +70,28 @@ export const ZONA = "web-factory/apps/onia-platform";
 /** El BUILD_ID del runtime que sirve onia.com.bo (contenedor onia-landing, no Vercel). */
 export const BUILD_ID_VIVO =
   "/opt/onia-landing/runtime-next/apps/onia-platform/.next/BUILD_ID";
+
+/** Donde el runbook de la casa deja los builds ya armados, sin tocar producción. */
+export const STAGED_DIR = "/opt/onia-landing";
+export const STAGED_PREFIX = "runtime-next.new-";
+
+/**
+ * El archivo que `swap-and-verify.sh` exige para aceptar una ruta: si no está,
+ * corta con `ERR: bad STAGE path` y exit 1 sin tocar producción.
+ *
+ * Se comprueba lo MISMO que comprueba el script, a propósito. Ofrecer una ruta
+ * que el swap va a rechazar no es un error inofensivo: el pedido queda escrito
+ * en la tarea que mira Sergio, él corre el comando, ve un error y el deploy no
+ * pasa. Es un fallo que se disfraza de pedido atendido.
+ */
+export const STAGED_MARCA = "apps/onia-platform/server.js";
+
+/** Hay un build armado que ya contiene todos los arreglos varados. */
+export const STAGED_CUBRE = "CUBRE";
+/** Hay un build armado, pero es ANTERIOR a algún arreglo: publicarlo lo dejaría afuera. */
+export const STAGED_VIEJO = "VIEJO";
+/** No hay ningún build armado utilizable: hay que correr build-and-stage.sh. */
+export const STAGED_NINGUNO = "NINGUNO";
 
 /**
  * El diagnóstico, puro: recibe lo medido y decide. Separado de la medición para
@@ -111,6 +134,90 @@ export function diagnosticar({ buildIdMtimeMs, commits, homeStatus }) {
         varados,
         motivo: `${varados.length} arreglo(s) en main que el cliente no ve`,
       };
+}
+
+/**
+ * ¿El build ya armado en disco sirve para publicar lo que está varado?
+ *
+ * POR QUÉ EXISTE. Hasta hoy este script decía «6 arreglos varados» y mandaba a
+ * buscar la ruta a mano (`ls -dt …runtime-next.new-*`). Ese paso manual falló
+ * TRES veces el 2026-09-04 sobre la misma tarea de deploy: a las 12:40 el
+ * staged traía viva la etiqueta «Facturación SIAT» que el commit siguiente ya
+ * había sacado; a las 16:38 se escribió el comando bueno y para las 20:55 esa
+ * carpeta ya no existía —borrada por el build siguiente—, así que la tarea le
+ * pedía a Sergio un comando que sólo podía darle un error. Un pedido de deploy
+ * que no se puede ejecutar se lee igual que uno pendiente de decisión: nadie
+ * mira si la ruta sigue viva, y el arreglo no llega al cliente ningún día.
+ *
+ * La ruta se DERIVA cada vez que corre el gate, nunca se copia. Es la misma
+ * lección que este carril ya pagó con las capturas por variante: una ruta
+ * escrita a mano sigue resolviendo mucho después de que dejó de ser cierta.
+ *
+ * Puro: recibe lo medido y decide, para poder probar las tres ramas sin
+ * depender de qué haya en `/opt` hoy.
+ *
+ * @param {{staged: {ruta:string, buildId:string|null, mtimeMs:number}|null,
+ *          varados: Array<{sha:string, ct:number, subject:string}>}} m
+ */
+export function evaluarStaged({ staged, varados }) {
+  if (!staged) {
+    return {
+      estado: STAGED_NINGUNO,
+      faltan: varados,
+      motivo: "no hay ningún build armado en disco que el swap acepte",
+    };
+  }
+
+  // Mismo criterio que `diagnosticar`: `next build` escribe el BUILD_ID al
+  // TERMINAR, así que un commit del mismo segundo ya entró.
+  const faltan = varados.filter((c) => c.ct * 1000 > staged.mtimeMs);
+
+  return faltan.length === 0
+    ? {
+        estado: STAGED_CUBRE,
+        faltan,
+        motivo: `el build armado contiene los ${varados.length} arreglo(s)`,
+      }
+    : {
+        estado: STAGED_VIEJO,
+        faltan,
+        motivo: `el build armado es anterior a ${faltan.length} arreglo(s): publicarlo los dejaría afuera`,
+      };
+}
+
+/**
+ * El build armado más reciente que `swap-and-verify.sh` aceptaría, o `null`.
+ *
+ * Se descartan los que no tienen `server.js` en vez de elegir el más nuevo a
+ * ciegas: un build interrumpido deja el directorio a medias y el swap lo
+ * rechaza. La fecha sale del BUILD_ID —igual que la del runtime vivo— y no del
+ * nombre del directorio: el nombre lo pone quien lo creó y puede mentir.
+ */
+export function stagedDisponible(dir = STAGED_DIR) {
+  let entradas;
+  try {
+    entradas = readdirSync(dir).filter((n) => n.startsWith(STAGED_PREFIX));
+  } catch {
+    return null;
+  }
+
+  const candidatos = [];
+  for (const nombre of entradas) {
+    const ruta = join(dir, nombre);
+    try {
+      statSync(join(ruta, STAGED_MARCA));
+      const buildIdPath = join(ruta, "apps/onia-platform/.next/BUILD_ID");
+      candidatos.push({
+        ruta,
+        mtimeMs: statSync(buildIdPath).mtimeMs,
+        buildId: readFileSync(buildIdPath, "utf8").trim(),
+      });
+    } catch {
+      // Incompleto o ilegible: el swap lo rechazaría, así que no se ofrece.
+    }
+  }
+
+  return candidatos.sort((a, b) => b.mtimeMs - a.mtimeMs)[0] ?? null;
 }
 
 /** mtime del BUILD_ID vivo, en ms. `null` si no se puede leer. */
@@ -194,12 +301,29 @@ function main() {
     console.error(`ARREGLOS VARADOS — onia.com.bo sirve el build del ${cuando}.`);
     console.error(`${r.varados.length} commit(s) de ${ZONA} en main que el cliente NO ve:\n`);
     for (const c of r.varados) console.error(`  ${c.sha}  ${c.subject}`);
+    const staged = stagedDisponible();
+    const s = evaluarStaged({ staged, varados: r.varados });
     console.error(
       "\nPublicar onia.com.bo lo decide Sergio. El pedido va COMENTADO en la tarea de deploy" +
-        "\nque ya existe (una sola, no una por commit), con la ruta del staged verificada" +
-        "\nADENTRO —el artefacto envejece aunque el sha siga siendo ancestro de main—:" +
-        "\n  ls -dt /opt/onia-landing/runtime-next.new-*",
+        "\nque ya existe (una sola, no una por commit).\n",
     );
+
+    if (s.estado === STAGED_CUBRE) {
+      console.error(`Build ya armado que SÍ los trae (${s.motivo}):\n`);
+      console.error(`  bash /opt/onia-landing/_deploy/swap-and-verify.sh ${staged.ruta}`);
+      console.error(`  BUILD_ID staged ${staged.buildId} — el vivo es otro (${cuando})`);
+      console.error(
+        "\nLa ruta se derivó recién, no se copió de otra vuelta: los staged se borran" +
+          "\nunos a otros y un comando pegado ayer apunta a una carpeta que ya no existe.",
+      );
+    } else if (s.estado === STAGED_VIEJO) {
+      console.error(`NO publicar el build que hay armado — ${s.motivo}:\n`);
+      for (const c of s.faltan) console.error(`  queda afuera  ${c.sha}  ${c.subject}`);
+      console.error("\nHay que rearmarlo desde main:  bash /opt/onia-landing/_deploy/build-and-stage.sh");
+    } else {
+      console.error(`${s.motivo}. Hay que armarlo desde main antes de pedir el swap:`);
+      console.error("  bash /opt/onia-landing/_deploy/build-and-stage.sh");
+    }
   } else {
     console.error(`NO PUDE MEDIR — ${r.motivo}`);
   }
