@@ -73,6 +73,28 @@ function montosDePlan(): number[] {
   return [...n];
 }
 
+/**
+ * Un monto de plan renderizado como TEXTO JSX suelto: `>1.500<`.
+ *
+ * Es la firma de la forma partida (`<span>320</span><span>Bs / mes</span>`), y
+ * se queda en el texto entre etiquetas a propósito: un número interpolado
+ * —`>{bs(plan.mensual)}<`, que es lo correcto— trae una llave en el medio y no
+ * matchea. Sólo cae el literal, que es el defecto.
+ *
+ * No genera falsos positivos porque el conjunto de sujetos es cerrado: sólo
+ * dispara si el número coincide con un monto que la tabla YA define. Un `01`
+ * de paso, un año o un contador no están en `montosDePlan()`.
+ *
+ * Es una fábrica y no una constante: un `RegExp` con `/g` guarda `lastIndex`
+ * entre llamadas, y compartir esa instancia entre archivos haría que el gate
+ * empiece a leer cada archivo desde donde terminó el anterior — o sea, se
+ * saltearía hallazgos en silencio, que es como esta familia de gates falla
+ * abierto.
+ */
+function textoJsxDesnudo(): RegExp {
+  return />\s*([0-9][0-9.]*)\s*</g;
+}
+
 function archivosDe(dir: string): string[] {
   if (!fs.existsSync(dir)) return [];
   const out: string[] = [];
@@ -110,12 +132,26 @@ function tipeadosAMano(): Hallazgo[] {
     const rel = path.relative(SRC, abs);
     if (exentos.has(rel)) continue;
     const src = sinComentarios(fs.readFileSync(abs, "utf8"));
-    // Las DOS formas de escribirlo. "Bs 320" es la común; "1.500 Bs/mes" es la
+    // Las TRES formas de escribirlo. "Bs 320" es la común; "1.500 Bs/mes" es la
     // que se le escapó al gate hasta el 2026-09-04 y por la que la descripción
     // de OpenGraph de /precios —la que se ve al compartir el enlace— quedó con
     // los tres montos congelados mientras su hermana de al lado ya leía la
     // tabla. Un gate que sólo entiende un orden de palabras cuida medio tema.
-    for (const re of [/Bs\s*([0-9][0-9.]*)/g, /([0-9][0-9.]*)\s*Bs\b/g]) {
+    //
+    // ⚠️ Y las dos primeras exigen que "Bs" esté PEGADO al número, así que las
+    // dos juntas seguían siendo ciegas a la forma en que el sitio escribe su
+    // precio más grande: el monto y la unidad en NODOS SEPARADOS —
+    // `<span>{bs(plan.mensual)}</span><span>Bs / mes</span>` (page.tsx:697,
+    // el bloque `.planPrice` de la home y de /precios). Ahí el literal a mano
+    // queda desnudo, sin ningún "Bs" al lado que lo delate. Medido el
+    // 2026-09-04 inyectando el defecto exacto —`<span>1.500</span>` en el
+    // bloque de precio de la portada, la primera pantalla que ve un lead—:
+    // este archivo pasó con sus 4 casos en VERDE. La tercera forma lo caza.
+    for (const re of [
+      /Bs\s*([0-9][0-9.]*)/g,
+      /([0-9][0-9.]*)\s*Bs\b/g,
+      textoJsxDesnudo(),
+    ]) {
       let m: RegExpExecArray | null;
       while ((m = re.exec(src)) !== null) {
         const valor = Number(m[1].replace(/\./g, ""));
@@ -165,6 +201,37 @@ describe("los precios de plan no se escriben a mano", () => {
     expect(/Bs\s*([0-9][0-9.]*)/.exec(falso)?.[1]).toBe(String(real));
     // Y que sinComentarios de verdad ciega lo comentado (si no, falsos positivos).
     expect(falso).not.toContain("999999");
+  });
+
+  /**
+   * Ancla contra la regresión exacta del 2026-09-04: el precio partido en dos
+   * nodos. Con sólo los dos patrones que exigen "Bs" pegado al número, este
+   * archivo pasaba con TODOS sus casos en verde mientras la portada tipeaba a
+   * mano el monto del plan — se midió inyectando el defecto en `page.tsx:697`.
+   *
+   * El caso prueba las dos direcciones, que es lo que hace que sirva: que la
+   * forma partida a mano CAE, y que la interpolada —la correcta, la que el
+   * sitio usa hoy— NO cae. Sin la segunda mitad, el arreglo obvio para poner
+   * el gate en verde sería dejar de leer el bloque de precio entero.
+   */
+  it("caza el precio partido en dos nodos, y no confunde el interpolado", () => {
+    const real = montosDePlan()[0];
+    const aMano = `<span className={s.planNum}>${real}</span><span>Bs / mes</span>`;
+    const interpolado = `<span className={s.planNum}>{bs(plan.mensual)}</span>`;
+
+    const cae = [...aMano.matchAll(textoJsxDesnudo())].map((m) => m[1]);
+    expect(
+      cae,
+      `El monto ${real} escrito como texto JSX suelto tiene que caer: es la ` +
+        `forma en que el sitio escribe su precio más visible, y la que los ` +
+        `patrones con "Bs" pegado no ven.`,
+    ).toContain(String(real));
+
+    expect(
+      [...interpolado.matchAll(textoJsxDesnudo())],
+      `Un precio interpolado desde PLANES es lo CORRECTO y no puede dar ` +
+        `hallazgo: un gate que grita por lo correcto se termina apagando.`,
+    ).toEqual([]);
   });
 
   /** Que el archivo recorra superficie de verdad, no un directorio vacío. */
