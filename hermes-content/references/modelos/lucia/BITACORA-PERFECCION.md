@@ -1382,3 +1382,59 @@ mergeando `origin/main` **antes** de medir — no cambiando el comando:
 ```sh
 git merge origin/main --no-edit && ls -d .../generadas-* | sort | tail -1
 ```
+
+---
+
+# P12 · La pieza FIJADA, auditada por segunda mano contra la casilla 11 — 2026-09-04, 0 cr
+
+El carril `lucia` corrigió la pieza fijada dos veces el mismo día (`a3bef97d6` 06:38 → `88d23dd67`
+06:44) y dejó el veredicto en su propio commit. **Un carril no se audita solo**, y esta es la pieza
+que queda arriba del perfil para siempre, esperando el dedo de Sergio en `t_c7686e93`. Se recontó
+todo desde cero. **0 créditos: no se generó nada.**
+
+## Veredicto: ✅ PASA la casilla 11 — verificado, no heredado
+
+| Qué exige la casilla 11 | Medido acá | ✓ |
+|---|---|---|
+| El cierre pide UNA palabra | `slide-07`: «Comentá **HUMO** y te mando las 5 herramientas…» | ✓ |
+| Ningún otro «comentá» compite | `slide-06` quedó sólo con la pregunta, sin pedido | ✓ |
+| El caption pide la misma | Caption del brief: «Comentá HUMO…» | ✓ |
+| La palabra está CABLEADA y activa | Workflow `1jS4jwmNmvcQpqqH` (`active=1`, el único de **4 copias**): `lucia` → `SISTEMA`, `HUMO` | ✓ |
+| Lo que la palabra promete, existe | El PDF responde **200, 306.319 B, 3 páginas** en 0,09 s | ✓ |
+
+Las dos láminas se **miraron** renderizadas, no se grepearon: identidad fiel (pecas presentes —
+rasgo sagrado #1—, aros, cadenita), texto sin desborde, un solo llamado en toda la pieza.
+
+Y el barrido llegó hasta el **archivo servido**, que es donde muere este tipo de arreglo: el PDF de
+producción, el de `hermes-content/recursos/humo/` y el de `web-factory/…/public/recursos/` tienen
+el **mismo md5** (`b0812afb…`). No hay una copia vieja sirviéndose.
+
+## Lo único que se anota, y NO reprueba
+
+La lámina promete *«las 5 herramientas de IA que uso — **tres son gratis**»*. Abierto el PDF
+(`pag-2.png`): son **5 herramientas** ✓, pero las que tienen camino gratis son **cuatro** —
+Claude/ChatGPT (`gratis a Bs 140/mes`), Whisper (`gratis`), n8n (`gratis si lo instalás vos`) y
+ElevenLabs (`gratis / desde Bs 35`); sólo la 5ª es paga (`desde Bs 1 por imagen`).
+
+**Se anota como imprecisión, no como casilla rota, y la distinción es la casilla 10 entera:** la 10
+caza *el plural que infla*. Acá el copy promete **menos** de lo que entrega, así que el lead recibe
+más de lo que le dijeron. Contarlo como «no pasa» sería inflar un hallazgo para justificar la
+vuelta — el sesgo exacto contra el que advierte la regla del instrumento que te da la razón.
+
+## Lo que enseña esta vuelta, y vale más que el veredicto
+
+**La casilla 11 se escribió DOS veces el mismo día, en dos carriles, y una de las dos versiones
+estaba mal.** La mía (`c6f43dcdf`) decía *«pide la palabra exacta: COMUNIDAD»* y traía un
+`grep -c COMUNIDAD` como método. La de `lucia` exige que la palabra **esté cableada**. Al mergear,
+las dos chocaron en los mismos 4 hunks.
+
+Si el merge se resuelve «a favor de casa» —el reflejo natural— la rúbrica del proyecto queda
+mandando a escribir `COMUNIDAD`, **que no responde nada**, en la pieza más cara del perfil. El
+carril de calidad habría *institucionalizado* el fallo mudo que existe para cazar, y con su propio
+comando como prueba.
+
+> **Regla:** al mergear un archivo que dos carriles escribieron el mismo día, no gana el lado
+> propio: gana el que **se puede medir**. Un método verificable (`active=1` en el workflow) le gana
+> siempre a uno que sólo repite una preferencia escrita en un doc. Resuelto en `fc713f131`
+> tomando el lado de `lucia` en los 4 hunks, y conservando de este carril lo que main no tenía:
+> el **2.1a** (contar dedos) y la fila del mapa Parte I ↔ II.
