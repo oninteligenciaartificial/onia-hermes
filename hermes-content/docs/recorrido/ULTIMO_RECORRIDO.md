@@ -12,10 +12,65 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
-## Medido el 2026-09-04 07:30 UTC — rubro DENTAL: **los 9 pasos, de punta a punta**
+## Medido el 2026-09-04 10:30 La Paz — **TRES rubros de los cinco que se venden, los tres enteros**
 
-**Un negocio nuevo hace el camino entero.** Es la primera vez que alguien puede afirmarlo con
-pruebas: `resumen.json` → `llegoHasta 9 / 9`, `completo: true`, `agujeros: []`, `corte: null`.
+| Rubro | Resultado | Dónde está la prueba |
+|---|---|---|
+| Clínica dental | **9 de 9** | `capturas/` |
+| Comercio / tienda | **8 de 8** (el paso 7 no le corresponde) | `capturas/comercio/` |
+| Estética y spa | **9 de 9** | `capturas/estetica/` |
+
+Los tres con `--escribir`, los tres con `completo: true`, y **cero filas de este carril** en la base
+al cerrar. Faltan por recorrer *Importadora / distribuidora* y *Servicios profesionales*.
+
+### Por qué comercio cierra en 8 y eso NO es un agujero
+
+Una tienda no tiene citas: su menú ofrece Catálogo, Inventario y Caja, y está bien que sea así.
+Hasta hoy el paso 7 salía `no-medido` y contaba como agujero, así que comercio daba **6 de 9** —
+un rojo permanente contra un producto sano, y **2 de los 5 rubros que se venden quedaban
+imposibilitados de completar el recorrido para siempre**.
+
+El escape fácil («si no hay agenda, no aplica») era peor: el día que dental *pierda* su agenda,
+saldría verde. Así que quién debe tener agenda no lo decide una tabla escrita a mano —se vence—,
+lo decide **la promesa de venta del propio rubro**, leída de su tarjeta en `/register`:
+
+| Tarjeta viva en `/register` | ¿Promete agenda? | Paso 7 |
+|---|---|---|
+| Clínica dental — «Pacientes, **citas**, tratamientos y cobros» | sí | obligatorio |
+| Estética y spa — «**Agenda**, clientas, tratamientos y caja» | sí | obligatorio |
+| Servicios profesionales — «**Agenda**, **citas**, cobros y contabilidad» | sí | obligatorio |
+| Comercio / tienda — «Catálogo, inventario, caja y clientes» | no | `no-aplica` |
+| Importadora — «Catálogo, cotizaciones B2B y costeo de importación» | no | `no-aplica` |
+
+- promete y no está → **ROJO**, y del caro: la venta ofrece lo que el producto no entrega.
+- no promete y no está → `no-aplica`, y se **nombra** en el veredicto (no desaparece).
+- no promete y sí está → se mide igual: probar de más nunca miente.
+- no se pudo leer la tarjeta → **se exige la agenda**. Este paso falla cerrado.
+
+Estética es la prueba de que el gate no se rindió: promete «Agenda», la tiene, y la cita entró
+(POST 201, id `cmtmt5zjv003j01rw6koicr3k`) y se vio en el calendario.
+
+### 🔴 El prefijo `zz-qa-` dejó de ser de este carril
+
+Apareció en producción la cita **`zz-qa-recall-demo-1`** («zz-qa- control anual (dato de prueba,
+agente Recall)», creada 2026-09-04 08:37 UTC en la organización `ZZ QA Clinica Chatbot`): un dato
+de prueba que **otro carril** sembró para su agente.
+
+Mi limpieza borraba por `LIKE 'zz-qa-%'` a secas. **Zafó de casualidad**: el fixture ajeno puso el
+texto en `reason` y yo borraba por `notes`. El día que uno use `notes`, un `DELETE FROM appointments
+WHERE notes LIKE 'zz-qa-%'` se lo lleva puesto, sin aviso y sin forma de saber que existió.
+
+Arreglado: el borrado va por la **forma** `zz-qa-AAAA-MM-DD-HHMM…`, que es la que llevan mis filas
+—y cubre también a los huérfanos de una corrida mía que se haya caído a la mitad—. Lo que lleva el
+prefijo y no tiene esa forma se **cuenta, se informa y jamás se toca** (`zzQaAjenas` en el resumen).
+
+Verificado en vivo, no supuesto: corrida completa de dental → `0` filas mías y la fila ajena
+**sigue existiendo** después de la limpieza.
+
+⚠️ **Ojo con el chequeo de cierre `count(*) … LIKE 'zz-qa-%' = 0`**: hoy da 1 y eso **no es basura
+sin limpiar**. Lo que hay que exigir en 0 es lo que tiene mi forma.
+
+### La corrida de dental, en detalle
 
 Cuenta `zz-qa-2026-09-04-0717@onia.com.bo` creada desde `onia.com.bo`, correo confirmado con el
 enlace del mail, alta completa (rubro → negocio → horarios lun-vie 09-13 y 15-19 → equipo con el

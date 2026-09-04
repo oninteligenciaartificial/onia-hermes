@@ -723,6 +723,19 @@ const PASOS = [
             ...vista,
           };
         }
+        // La tarjeta del rubro es su PROMESA DE VENTA, y es el único juez honesto de si el paso 7
+        // (agendar) le corresponde a este rubro. "Clínica dental — Pacientes, citas, tratamientos
+        // y cobros" y "Estética y spa — Agenda, clientas..." prometen agenda; "Comercio / tienda —
+        // Catálogo, inventario, caja y clientes" no la nombra. Se LEE de la pantalla y no de una
+        // tabla mía a propósito: una tabla escrita a mano se vence, y este carril terminaría
+        // exigiéndole citas a una tienda para siempre (o peor: dejando de exigírselas a la clínica).
+        // El crudo se guarda aparte porque el matcheo va contra él: limpiarlo podría comerse justo
+        // la palabra que decide, y eso haría fallar ABIERTO al paso 7.
+        ctx.rubroPromesaCruda = (await tarjeta.innerText().catch(() => '')).replace(/\s+/g, ' ').trim();
+        ctx.rubroPromesa = ctx.rubroPromesaCruda
+          .replace(/\s*Empezar aqu[íi]\s*arrow_forward\s*$/i, '')
+          .trim();
+
         await tarjeta.click({ timeout: 10_000 }).catch(() => {});
         await page.waitForTimeout(2500);
 
@@ -1042,7 +1055,7 @@ const PASOS = [
       }
       return {
         estado: 'ok',
-        detalle: `onboarding COMPLETADO en ${traza.length} pantallas (${traza.map((t) => t.pantalla).join(' → ')})${cerro ? '' : ' — el asistente no mostró el cierre, pero el gate se levantó igual'}; /dashboard ya no rebota${ESCRIBIR ? `; horarios ${horariosCargados ? 'cargados' : 'NO cargados'}, ${agendas} fila(s) de agenda` : ''}`,
+        detalle: `onboarding COMPLETADO en ${traza.length} pantallas (${traza.map((t) => t.pantalla).join(' → ')})${cerro ? '' : ' — el asistente no mostró el cierre, pero el gate se levantó igual'}; /dashboard ya no rebota${ESCRIBIR ? `; horarios ${horariosCargados ? 'cargados' : 'NO cargados'}, ${agendas === -1 ? 'la agenda no se pudo leer (este rubro puede no tenerla)' : `${agendas} fila(s) de agenda`}` : ''}`,
         traza, horariosCargados, profesionalCargado, agendas,
         capturaAsistente: despues.captura,
         ...prueba,
@@ -1213,7 +1226,38 @@ const PASOS = [
       const menu = ctx.menu?.length ? ctx.menu : await descubrirMenu(page);
       let agenda = null;
       for (const p of [/\bcitas?\b/i, /agenda/i, /turnos?/i]) { agenda = menu.find((m) => p.test(m.texto)); if (agenda) break; }
-      if (!agenda) return { estado: 'no-medido', detalle: `el menú de "${ctx.rubroElegido || 'este rubro'}" no ofrece agenda ni citas: ${menu.map((m) => m.texto).join(' · ')}` };
+      // 🔴 UN RUBRO SIN AGENDA NO ES UN PRODUCTO ROTO, Y CONFUNDIRLOS ROMPE ESTE CARRIL EN LAS DOS
+      // DIRECCIONES. Medido el 2026-09-04: comercio salió 6/9 con el paso 7 en `no-medido` porque
+      // una tienda no tiene citas — su menú ofrece Catálogo, Inventario y Caja, y está BIEN que sea
+      // así. Contarlo como agujero deja a 2 de los 5 rubros que se venden hoy imposibilitados de
+      // completar el recorrido para siempre, y manda a "arreglar" algo que no está roto.
+      //
+      // Pero el escape fácil —"si no hay agenda, no aplica"— es exactamente cómo este gate se
+      // rendiría de gratis: el día que dental PIERDA su agenda saldría verde, que es el falso verde
+      // que este carril existe para cazar. Así que quién debe tenerla no lo decide una tabla mía:
+      // lo decide la PROMESA DE VENTA del propio rubro, leída de su tarjeta en /register.
+      //   promete y no está  → ROJO, y del caro: la venta ofrece lo que el producto no entrega.
+      //   no promete y no está → no-aplica: el producto es coherente con lo que vendió.
+      //   no promete y SÍ está → se mide igual (abajo): probar de más nunca miente.
+      // Y si la promesa no se pudo leer, se EXIGE la agenda: este paso falla CERRADO.
+      const promesa = ctx.rubroPromesa || '';
+      const prometeAgenda = !ctx.rubroPromesaCruda || /\bagenda\b|\bcitas?\b|\bturnos?\b/i.test(ctx.rubroPromesaCruda);
+      if (!agenda) {
+        const queOfrece = menu.map((m) => m.texto).join(' · ');
+        const quien = ctx.rubroElegido || 'este rubro';
+        if (prometeAgenda) {
+          return {
+            estado: 'roto',
+            detalle: `/register le PROMETE agenda a "${quien}" (${promesa || 'no se pudo leer su tarjeta: se exige agenda'}) y el menú del producto NO ofrece ninguna: ${queOfrece}`,
+            promesa, prometeAgenda,
+          };
+        }
+        return {
+          estado: 'no-aplica',
+          detalle: `"${quien}" no vende agenda —su tarjeta de /register ofrece "${promesa}"— y el producto es coherente: su menú tampoco la tiene. No hay nada que agendar acá: ${queOfrece}`,
+          promesa, prometeAgenda,
+        };
+      }
 
       const v = await llegar(page, agenda.ruta, 'paso-07-cita.png');
       if (v.status >= 400) return { estado: 'roto', detalle: `la agenda (${agenda.ruta}) devolvió ${v.status}`, ...v };
@@ -1425,49 +1469,70 @@ function limpiarProduccion() {
   const psql = (q) => execFileSync('docker', [
     'exec', '-i', 'supabase-db', 'psql', '-U', 'postgres', '-d', 'postgres', '-v', 'ON_ERROR_STOP=1', '-tAc', q,
   ], { encoding: 'utf8', timeout: 90_000 }).trim();
+  // 🔴 EL PREFIJO `zz-qa-` DEJÓ DE SER MÍO, Y MI LIMPIEZA BORRABA POR EL PREFIJO SUELTO.
+  // Medido el 2026-09-04: apareció en producción la cita `zz-qa-recall-demo-1` — "zz-qa- control
+  // anual (dato de prueba, agente Recall)", creada a las 08:37 UTC DENTRO de una organización
+  // real— que otro carril sembró para probar su agente. Zafó de casualidad: puso el texto en
+  // `reason` y yo borraba por `notes`. El día que un fixture ajeno use `notes`, un `DELETE FROM
+  // appointments WHERE notes LIKE 'zz-qa-%'` se lo lleva puesto, sin aviso y sin forma de saber
+  // que existió. Mi propia regla dice "lo que CREASTE lo borrás", no "todo lo que lleve el prefijo".
+  //
+  // Mis filas llevan siempre la forma fecha-hora (`zz-qa-2026-09-04-1022-paciente`), así que el
+  // borrado va por esa FORMA. No por `QA.nombre` a secas: eso dejaría enterrados para siempre a
+  // los huérfanos de una corrida mía anterior que se cayó a la mitad, que son justo los que hay
+  // que barrer. Lo que lleva el prefijo y NO tiene mi forma se CUENTA y se informa, jamás se toca.
+  const MIO = '^zz-qa-[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{4}';
   const CUENTAS = {
-    citas: `SELECT count(*) FROM appointments WHERE notes LIKE 'zz-qa-%'`,
-    pacientes: `SELECT count(*) FROM patients WHERE name LIKE 'zz-qa-%'`,
-    perfiles: `SELECT count(*) FROM profiles WHERE email LIKE 'zz-qa-%' OR name LIKE 'zz-qa-%'`,
-    organizaciones: `SELECT count(*) FROM organizations WHERE name LIKE 'zz-qa-%'`,
-    usuarios: `SELECT count(*) FROM auth.users WHERE email LIKE 'zz-qa-%'`,
+    citas: `SELECT count(*) FROM appointments WHERE coalesce(notes,'') ~ '${MIO}' OR coalesce(reason,'') ~ '${MIO}'`,
+    pacientes: `SELECT count(*) FROM patients WHERE name ~ '${MIO}'`,
+    perfiles: `SELECT count(*) FROM profiles WHERE email ~ '${MIO}' OR name ~ '${MIO}'`,
+    organizaciones: `SELECT count(*) FROM organizations WHERE name ~ '${MIO}'`,
+    usuarios: `SELECT count(*) FROM auth.users WHERE email ~ '${MIO}'`,
   };
+  // Lo ajeno con el mismo prefijo: se informa para que quede a la vista de su dueño y para que
+  // nadie lea el `count(*) LIKE 'zz-qa-%'` de afuera como basura mía sin limpiar.
+  const AJENAS = `SELECT 'appointments '||id||' '||coalesce(nullif(notes,''), reason) FROM appointments
+      WHERE (notes LIKE 'zz-qa-%' OR reason LIKE 'zz-qa-%') AND coalesce(notes,'') !~ '${MIO}' AND coalesce(reason,'') !~ '${MIO}'
+    UNION ALL SELECT 'organizations '||id||' '||name FROM organizations WHERE name LIKE 'zz-qa-%' AND name !~ '${MIO}'
+    UNION ALL SELECT 'auth.users '||id||' '||email FROM auth.users WHERE email LIKE 'zz-qa-%' AND email !~ '${MIO}'`;
   const contar = () => Object.fromEntries(Object.entries(CUENTAS).map(([k, q]) => [k, Number(psql(q))]));
   try {
     const antes = {
       cuentas: contar(),
-      filas: psql(`SELECT 'appointments '||id||' '||notes FROM appointments WHERE notes LIKE 'zz-qa-%'
-        UNION ALL SELECT 'patients '||id||' '||name FROM patients WHERE name LIKE 'zz-qa-%'
-        UNION ALL SELECT 'organizations '||id||' '||name FROM organizations WHERE name LIKE 'zz-qa-%'
-        UNION ALL SELECT 'auth.users '||id||' '||email FROM auth.users WHERE email LIKE 'zz-qa-%'`).split('\n').filter(Boolean),
+      filas: psql(`SELECT 'appointments '||id||' '||coalesce(nullif(notes,''), reason) FROM appointments WHERE coalesce(notes,'') ~ '${MIO}' OR coalesce(reason,'') ~ '${MIO}'
+        UNION ALL SELECT 'patients '||id||' '||name FROM patients WHERE name ~ '${MIO}'
+        UNION ALL SELECT 'organizations '||id||' '||name FROM organizations WHERE name ~ '${MIO}'
+        UNION ALL SELECT 'auth.users '||id||' '||email FROM auth.users WHERE email ~ '${MIO}'`).split('\n').filter(Boolean),
+      ajenas: psql(AJENAS).split('\n').filter(Boolean),
     };
     psql(`BEGIN;
-      DELETE FROM notifications WHERE "appointmentId" IN (SELECT id FROM appointments WHERE notes LIKE 'zz-qa-%');
-      DELETE FROM appointments WHERE notes LIKE 'zz-qa-%';
+      DELETE FROM notifications WHERE "appointmentId" IN (SELECT id FROM appointments WHERE coalesce(notes,'') ~ '${MIO}' OR coalesce(reason,'') ~ '${MIO}');
+      DELETE FROM appointments WHERE coalesce(notes,'') ~ '${MIO}' OR coalesce(reason,'') ~ '${MIO}';
       DO $$
       DECLARE org record; t record; pasada int; trabadas int;
       BEGIN
-        FOR org IN SELECT id FROM organizations WHERE name LIKE 'zz-qa-%' LOOP
+        FOR org IN SELECT id FROM organizations WHERE name ~ '${MIO}' LOOP
           FOR pasada IN 1..6 LOOP
             trabadas := 0;
             FOR t IN SELECT table_name FROM information_schema.columns
                      WHERE table_schema = 'public' AND column_name = 'organizationId' AND table_name <> 'organizations' LOOP
               BEGIN
-                EXECUTE format('DELETE FROM %I WHERE "organizationId" IN (SELECT id FROM organizations WHERE id = %L AND name LIKE ''zz-qa-%%'')', t.table_name, org.id);
+                EXECUTE format('DELETE FROM %I WHERE "organizationId" IN (SELECT id FROM organizations WHERE id = %L AND name ~ %L)', t.table_name, org.id, '${MIO}');
               EXCEPTION WHEN foreign_key_violation THEN trabadas := trabadas + 1;
               END;
             END LOOP;
             EXIT WHEN trabadas = 0;
           END LOOP;
-          DELETE FROM organizations WHERE id = org.id AND name LIKE 'zz-qa-%';
+          DELETE FROM organizations WHERE id = org.id AND name ~ '${MIO}';
         END LOOP;
       END $$;
-      DELETE FROM auth.identities WHERE email LIKE 'zz-qa-%';
-      DELETE FROM auth.users WHERE email LIKE 'zz-qa-%';
+      DELETE FROM auth.identities WHERE email ~ '${MIO}';
+      DELETE FROM auth.users WHERE email ~ '${MIO}';
       COMMIT;`);
     const despues = contar();
     const restantes = Object.values(despues).reduce((a, b) => a + b, 0);
-    return { ok: restantes === 0, antes, despues, restantes };
+    const ajenas = psql(AJENAS).split('\n').filter(Boolean);
+    return { ok: restantes === 0, antes, despues, restantes, ajenas };
   } catch (e) {
     return { ok: false, error: e.message.split('\n').slice(0, 3).join(' ').slice(0, 300) };
   }
@@ -1508,7 +1573,7 @@ async function main() {
   // El corte es el primero que frenó el AVANCE, no el primero que no salió OK. Con el paso 3
   // salteado a propósito (sin --escribir) y el 4 en verde, "corte en el paso 3" mandaba a mirar
   // donde no había nada roto.
-  corte = resultados.find((r) => r.estado !== 'ok' && r.n > ultimoOk) || null;
+  corte = resultados.find((r) => r.estado !== 'ok' && r.estado !== 'no-aplica' && r.n > ultimoOk) || null;
 
   // 🔴 NACE DEL FALSO VERDE DEL 2026-09-03 EN IMPORTADORA, y es una recaída del mismo que este
   // script ya tuvo: `ultimoOk` guarda el ÚLTIMO paso que salió bien, NO hasta dónde se llegó de
@@ -1523,7 +1588,11 @@ async function main() {
   // este carril de no servir para nada: reportar en verde el camino que el cliente no puede hacer.
   // Por eso "completo" ahora exige que NO haya ni un paso fuera de OK, y los agujeros se enumeran
   // todos, estén donde estén.
-  const agujeros = resultados.filter((r) => r.estado !== 'ok');
+  // `no-aplica` NO es un agujero: es un paso que este rubro no vende (ver paso 7). Se lo saca de
+  // la cuenta, pero se lo ENUMERA aparte y se lo nombra en el veredicto: un paso que desaparece
+  // en silencio es la otra forma de mentir, y ya pasó en este mismo script.
+  const noAplican = resultados.filter((r) => r.estado === 'no-aplica');
+  const agujeros = resultados.filter((r) => r.estado !== 'ok' && r.estado !== 'no-aplica');
   // Hasta dónde llegó DE CORRIDA: el primer agujero corta, haya verdes después o no.
   const seguidos = agujeros.length ? agujeros[0].n - 1 : PASOS.length;
   // Los TAPADOS son los agujeros que tienen un paso VERDE después: los únicos que el veredicto
@@ -1539,9 +1608,18 @@ async function main() {
 
   const resumen = {
     cuando: new Date().toISOString(),
+    // 🔴 El veredicto tiene que NOMBRAR A SU SUJETO. Un resumen.json que dice "completo: true,
+    // 9 de 9" sin decir de qué rubro es ilegible en cuanto existe más de uno: la corrida de
+    // comercio pisaba el resultado de dental y nadie podía saber cuál se había medido.
+    rubro: ctx.rubroElegido || process.env.RECORRIDO_RUBRO || 'Clínica dental',
+    rubroPromesa: ctx.rubroPromesa || null,
     escribio: ESCRIBIR,
     borrado,
     zzQaRestantes: borrado ? (borrado.restantes ?? null) : 0,
+    // Filas con el prefijo `zz-qa-` que NO son de este carril. Van al resumen para que el
+    // `count(*) LIKE 'zz-qa-%'` de afuera no se lea como basura mía sin limpiar — y para que su
+    // dueño las vea. Nunca se borran acá.
+    zzQaAjenas: borrado?.ajenas ?? [],
     // `llegoHasta` es de CORRIDA: el primer agujero lo corta. `ultimoOkSuelto` queda al lado
     // sólo para que se vea la diferencia cuando hay un hueco en el medio — era el número que
     // hacía cantar completo a un recorrido incompleto.
@@ -1551,6 +1629,7 @@ async function main() {
     deCuantos: PASOS.length,
     corte: corte ? { paso: corte.n, nombre: corte.nombre, estado: corte.estado, detalle: corte.detalle } : null,
     agujeros: agujeros.map((a) => ({ paso: a.n, nombre: a.nombre, estado: a.estado, detalle: a.detalle })),
+    noAplican: noAplican.map((a) => ({ paso: a.n, nombre: a.nombre, detalle: a.detalle })),
     datosQA: ESCRIBIR ? QA : null,
     pasos: resultados,
   };
@@ -1558,9 +1637,12 @@ async function main() {
 
   console.log('');
   if (!agujeros.length) {
-    console.log(`RECORRIDO COMPLETO: los ${PASOS.length} pasos. Eso es la noticia.`);
+    const salvo = noAplican.length
+      ? ` — salvo el paso ${noAplican.map((a) => a.n).join(' y ')}, que este rubro no vende (${noAplican.map((a) => a.nombre).join(', ')})`
+      : '';
+    console.log(`RECORRIDO COMPLETO en "${resumen.rubro}": los ${PASOS.length - noAplican.length} pasos que le corresponden${salvo}. Eso es la noticia.`);
   } else {
-    console.log(`LLEGÓ HASTA EL PASO ${seguidos} de ${PASOS.length} de corrida.`);
+    console.log(`LLEGÓ HASTA EL PASO ${seguidos} de ${PASOS.length} de corrida, en "${resumen.rubro}".`);
     if (corte) console.log(`CORTE en el paso ${corte.n} (${corte.nombre}) — ${corte.estado}: ${corte.detalle}`);
     // El agujero TAPADO por un verde posterior es el que nadie mira, y es el que hizo cantar
     // completo a un recorrido incompleto. Se nombra aunque el corte esté en otro lado.
@@ -1576,8 +1658,11 @@ async function main() {
     const creado = [`cuenta ${QA.email}`, `organización ${QA.negocio}`];
     if (ctx.datoCargado) creado.push(`paciente ${ctx.datoCargado}`);
     if (ctx.citaCreada) creado.push(`cita ${ctx.citaCreada.fecha} ${ctx.citaCreada.hora} (notas ${ctx.citaCreada.notas})`);
+    const ajenas = borrado?.ajenas?.length
+      ? `\n   ⓘ  Hay ${borrado.ajenas.length} fila(s) con prefijo zz-qa- que NO son de este carril y NO se tocaron: ${borrado.ajenas.join(' | ')}`
+      : '';
     if (borrado?.ok) {
-      console.log(`\n🧹 Se escribió en producción (${creado.join(' · ')}) y se BORRÓ en esta misma corrida: quedan 0 filas zz-qa-.`);
+      console.log(`\n🧹 Se escribió en producción (${creado.join(' · ')}) y se BORRÓ en esta misma corrida: quedan 0 filas mías.${ajenas}`);
     } else {
       const que = borrado?.error ? `FALLÓ: ${borrado.error}` : `dejó ${borrado?.restantes} fila(s) zz-qa-: ${JSON.stringify(borrado?.despues)}`;
       console.log(`\n⚠️  Se escribió en producción: ${creado.join(' · ')}. El borrado ${que}. HAY QUE BORRARLO A MANO EN ESTA MISMA VUELTA.`);
