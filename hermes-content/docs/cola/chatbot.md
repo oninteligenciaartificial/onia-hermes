@@ -354,8 +354,25 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       documentada nace cubierta. Rojo antes por los 3 nombres, verde ahora; 818/818 en `node --test`.
       **Sigue COMMITEADO y NO DESPLEGADO** — `/opt/onia/bot` corre el lanzador viejo. Deploy pedido
       en el tablero `t_59b4761d` con el diff ya verificado en las dos direcciones (cero líneas
-      exclusivas de producción: copiar no borra nada). Después del deploy, encenderlo **sí** es una
-      sola línea.
+      exclusivas de producción: copiar no borra nada).
+      ⚠️ **"Después del deploy, encenderlo es una sola línea" también era una trampa — corregido el
+      2026-09-04 (`ba478c34b`).** Esa línea había que escribirla en `/opt/onia/bot/webhook.env`, que
+      **no está en git y que ningún deploy toca** (medido: `grep -c ONIA_BOT_TG_AVISO
+      /opt/onia/bot/webhook.env` → **0**). Con el flag en `false` por defecto, desplegar el lanzador
+      arreglado **no encendía nada**: el bot arrancaba, el log seguía diciendo `apagado`, y nada se
+      ponía rojo. Es el mismo bug una capa más arriba — dos veces seguidas el "último centímetro"
+      resultó ser el que nadie mira. Sergio ya había decidido que sí (`t_b18ca430`, opción (c)), así
+      que **una decisión tomada no puede depender de que alguien recuerde editar a mano un archivo
+      fuera de git**: ahora el aviso **viene encendido de fábrica** y el token sale solo de
+      `/root/.config/onia/backup.env`. Apagarlo es la línea en `/opt/onia/bot/webhook.env`, que gana
+      por el `:-`. De paso se tapó el
+      bug que el cambio de default metía: la guarda de credenciales miraba `${ONIA_BOT_TG_AVISO:-}`
+      (vacío) mientras el `docker exec` recibía `true`, así que con el operador sin configurar nada
+      —el caso normal— el aviso quedaba encendido y la advertencia **muda**; las dos leen ahora el
+      mismo `TG_AVISO`. Y `hermes-content/deploy/vps-ops/bot/webhook.env.example` decía `=false`, así
+      que regenerar el env volvía a apagarlo en silencio. Verificado en los tres casos (sin nada
+      configurado advierte; apagado a mano no advierte; con el archivo real de tokens toma token y
+      chat sin advertir, que es el caso de producción) y 834/834 en `node --test`.
       🔎 **La justificación del canal muerto era FALSA, y por eso esto se pudo escribir sin
       pedir nada.** `hermes-content/deploy/vps-ops/bot/chatwoot-adapter.mjs:761` dice que el aviso va por n8n *"porque ahí vive la
       credencial de Telegram (el plan VPS no soporta `$env` en los nodos, así que el token no
