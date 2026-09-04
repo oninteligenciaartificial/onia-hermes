@@ -39,12 +39,24 @@ que lo mantiene vivo sin nadie (ver *Qué quedó a medias*).
 | `crontab` de root | 5 loops + subida de logs (10 min) + memoria (15 min) + sync (44) |
 | Prueba de humo | ✅ **12 de 12 en verde** |
 
-**Verificado en vivo, no supuesto:**
-- `web-venta` **disparó solo desde `cron`** a las `22:52:01Z` — su horario exacto
-  (`52 * * * *`). Arrancó, inyectó los 157 hechos de `MEMORY.md` y entró a trabajar.
-- `web-factory-dev` corrió a mano a las `22:53:48Z` con el mismo resultado.
+**Verificado en vivo, no supuesto — dos vueltas COMPLETAS, no un arranque:**
 
-**En el repo:** dos commits en la rama del carril (ver *Archivos*). **Todavía no
+```
+22:52:01Z  web-venta ARRANCA (disparado SOLO por cron, su horario exacto 52 * * * *)
+22:53:48Z  web-factory-dev ARRANCA (a mano)
+23:05:26Z  TERMINA web-factory-dev — 698s — exit 0 — 1 commit — subido
+23:08:36Z  TERMINA web-venta      — 995s — exit 0 — 39 commits — subido
+```
+
+Los dos inyectaron los 157 hechos de `MEMORY.md`, trabajaron, commitearon y
+pushearon a su rama. `git rev-list origin/<rama>..HEAD` → **0 en ambos**: nada quedó
+sin subir.
+
+**Circuito de memoria verificado de punta a punta:** un hecho escrito desde este
+nodo aterriza en la bandeja del VPS **firmado `nodo-casa`**, y la bandeja local
+queda en 0.
+
+**En el repo:** cuatro commits en la rama del carril (ver *Archivos*). **Todavía no
 mergeados a `main`.**
 
 **En el VPS: NADA se cambió**, salvo agregar una línea a `/root/.ssh/authorized_keys`
@@ -106,8 +118,34 @@ Power On*) es lo que hace que la PC vuelva sola tras un corte de luz.
 
 | Commit | Qué arregla |
 |---|---|
-| `8f401fda` | `scripts/loops/sincronizar.sh` — `$RAMA` sin asignar mataba el camino de rescate; `git archive` metía 5,4 GB en `/tmp` cada vuelta |
-| `f8a03858` | `scripts/loops/instalar-homelab.sh` — inyección de comandos en los 4 shims; el nombre del worktree se inventaba en vez de leerse del corredor |
+| `8f401fda` | `sincronizar.sh` — `$RAMA` sin asignar mataba el camino de rescate; `git archive` metía 5,4 GB en `/tmp` cada vuelta |
+| `f8a03858` | `instalar-homelab.sh` — inyección de comandos en los 4 shims; el nombre del worktree se inventaba en vez de leerse del corredor |
+| `4524946d` | Este handoff, `homelab-wsl-arranque.ps1` y la serie de TikTok |
+| `f95a1770` | **`sincronizar.sh` pisaba los shims cada hora** — el nodo aprendía hacia un pozo, y quedaba un segundo escritor de `MEMORY.md`; y el shim no reenviaba `ONIA_LOOP_ID`, así que todo hecho se firmaba `desconocido` |
+
+### ⚠️ El quinto bug merece leerse: era el más silencioso de todos
+
+El instalador dejaba los 4 shims en `/root/bin` (paso 4) y `sincronizar.sh` los
+**pisaba** con los scripts reales (paso 5) — y no sólo al instalar: ese script corre
+por cron **cada hora** (`44 * * * *`), así que reordenar los pasos no alcanzaba.
+
+Se descubrió por accidente, al anotar los hechos aprendidos de esta sesión: decían
+`anotado en la bandeja` y la bandeja del VPS estaba vacía. **Los 5 hechos, más 2 que
+el loop `web-factory-dev` ya había dejado mientras corría, estaban en la bandeja
+LOCAL** — y un consolidador local los había fundido en un `MEMORY.md` de la PC que
+la bajada de memoria pisa cada 15 minutos. Aprender hacia un pozo, sin una sola
+señal de error.
+
+Peor: `onia-consolidar-memoria.sh` local convertía este nodo en un **segundo escritor
+de `MEMORY.md`**, que el diseño prohíbe *por construcción* y no por disciplina.
+
+`onia-tablero.sh` también se pisaba y **tapaba el problema**: el tablero real detecta
+que no hay CLI de Hermes local y sale por SSH solo, así que pasaba la prueba de humo
+como si todo estuviera bien.
+
+Los 7 hechos huérfanos se rescataron a la bandeja del VPS **tal cual** (el archivo
+trae quién y cuándo; reenviarlos por `aprender.sh` les habría puesto la fecha de hoy
+y el autor equivocado). Quedan archivados en `/root/.hermes/memories/rescatados/`.
 
 **Los dos archivos están parcheados a mano en el clon de la PC** (`/root/loops/onia-hermes`),
 con los originales guardados en `/root/sincronizar.sh.origen-main` y
