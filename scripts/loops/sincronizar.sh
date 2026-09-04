@@ -161,7 +161,7 @@ poner "$FUENTE/sincronizar.sh" "$DESTINO_BIN/onia-loops-sync.sh"
 # el arbol de abajo a un loop en curso), asi que una herramienta compartida NO puede
 # vivir en una rama — llega solo a quien casualmente este actualizado. Va a /root/bin
 # junto a onia-tg.sh, que es exactamente el mismo caso y por eso nunca fallo.
-poner "$FUENTE/scripts/kanban/tablero.sh" "$DESTINO_BIN/onia-tablero.sh"
+poner "$RAIZ/scripts/kanban/tablero.sh" "$DESTINO_BIN/onia-tablero.sh"
 
 # El lector de Telegram de RESPALDO, por la misma razon que el tablero: es una
 # herramienta del VPS, no un archivo de carril.
@@ -178,15 +178,15 @@ poner "$FUENTE/scripts/kanban/tablero.sh" "$DESTINO_BIN/onia-tablero.sh"
 # arreglarlo — Telegram entrega cada mensaje una sola vez, al que lo pida
 # primero. El script ya se niega solo si el gateway está vivo; esto es para que
 # nadie llegue hasta ahí. Lo cubre `npm run test:telegram-un-consumidor`.
-poner "$FUENTE/scripts/kanban/telegram-entrada.py" "$DESTINO_BIN/onia-tg-entrada.py"
+poner "$RAIZ/scripts/kanban/telegram-entrada.py" "$DESTINO_BIN/onia-tg-entrada.py"
 
 # El publicador que corre cuando Sergio contesta `ok <id>`, y el cliente de Postiz
 # que usa. Van a /root/bin por la MISMA razon que el tablero: los llama el lector
 # de Telegram, que no vive en ningun worktree y por lo tanto no tiene el repo al
 # lado. Sin estos dos, `ok <id>` vuelve a ser solo un `unblock` y la pieza se
 # queda en el disco — que es exactamente el bug que se arreglo el 2026-09-04.
-poner "$FUENTE/scripts/kanban/publicar-aprobado.mjs" "$DESTINO_BIN/onia-publicar-aprobado.mjs"
-poner "$FUENTE/scripts/postiz_schedule.mjs"          "$DESTINO_BIN/onia-postiz-schedule.mjs"
+poner "$RAIZ/scripts/kanban/publicar-aprobado.mjs" "$DESTINO_BIN/onia-publicar-aprobado.mjs"
+poner "$RAIZ/scripts/postiz_schedule.mjs"          "$DESTINO_BIN/onia-postiz-schedule.mjs"
 
 # La memoria compartida: el corredor la inyecta y los loops le escriben por estos
 # dos. Si no se despliegan solos, el corredor de main llama a un script que no
