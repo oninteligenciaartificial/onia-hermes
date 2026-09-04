@@ -11,10 +11,18 @@ commits verdes en `main`/`master` sin desplegar que no tengan un pedido de deplo
 
 ```
 for r in "/root/loops/onia-hermes origin/main" "/root/loops/onia-platform origin/master"; do set -- $r; git -C $1 fetch --quiet --prune; for b in $(git -C $1 branch -r --list 'origin/claude/*' --no-merged $2 | grep -vE 'carril-contenido|ads-creatividades-publicos|onia-core-adoption-sprint5'); do echo "$1 $b: $(git -C $1 rev-list --count $2..$b) commits, último $(git -C $1 log -1 --format=%cr $b)"; done; done
-docker inspect onia-platform --format '{{.Created}}'; git -C /root/loops/onia-platform log -1 --format='%ci %h %s' origin/master                       # plataforma: contenedor más viejo que el último commit = sin desplegar
+V=$(docker exec onia-platform cat /app/.next/BUILD_ID); for d in /opt/onia-platform/build-*/; do [ "$(cat $d/.next/standalone/.next/BUILD_ID 2>/dev/null)" = "$V" ] && echo "plataforma CORRE $(basename $d)"; done; git -C /root/loops/onia-platform log -1 --format='%ci %h %s' origin/master   # sin desplegar = los commits POSTERIORES al sha que corre
 stat -c '%y' /opt/onia-landing/runtime-next/apps/onia-platform/.next/BUILD_ID; git -C /root/loops/onia-hermes log -1 --format='%ci %h' origin/main -- web-factory/apps/onia-platform   # landing: ídem
 /root/bin/onia-tablero.sh list | grep -iE "deploy|publicar"                                                                                      # ¿ya hay pedido? se comenta ahí, no se abre otro
 ```
+
+⚠️ **`docker inspect --format '{{.Created}}'` NO mide si la plataforma está desplegada, y hasta el
+2026-09-04 esta sección mandaba usarlo.** El swap reemplaza el runtime y **reinicia** el contenedor:
+no lo recrea, así que `Created` queda anclado al día que se levantó. Medido esa tarde: `Created`
+06:27 UTC contra un último commit de las 18:08 — por esa regla, "17 commits sin desplegar"; casando
+el `BUILD_ID` vivo contra los `build-*` del disco, corría `build-3606c46`, que **es** el HEAD de
+`master`. Cero. Un instrumento que inventa trabajo urgente hace abrir pedidos de deploy que no
+existen, y a Sergio le llegan igual que los de verdad.
 
 La línea `OBJETIVO:` es `ramas varadas N (la más vieja: X h) · commits sin desplegar: plataforma
 A, landing B · pedido de deploy: <id>`. Las ramas de contenido y la de `onia-core-adoption` NO
