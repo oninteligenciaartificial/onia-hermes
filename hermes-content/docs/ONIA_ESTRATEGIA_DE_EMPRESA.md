@@ -44,7 +44,11 @@
     vendibilidad está SIN DEMOSTRAR —no refutada—, y la escalabilidad es distinta a la de ellos:
     Lety escala más rápido, Onia es mucho más difícil de abandonar.** El add-on está 10-60×
     por debajo del precio internacional, que es dato de techo para v2.0, no acción de hoy.
-11. **Una idea que pasa el test no es una idea urgente** (§14). El test dice si MERECE
+11. **¿Se puede llegar a ser como Lety o Dapta? Sí — y es la meta equivocada** (§13.6). En
+    margen y producto Onia ya está a su nivel; la distancia entera es **una transacción: la
+    primera venta cobrada**. Ellos compiten donde el cliente se va en una tarde; Onia tiene un
+    foso —SIAT, rubros, Bolivia— que a ellos no les conviene cruzar.
+12. **Una idea que pasa el test no es una idea urgente** (§14). El test dice si MERECE
     construirse; la etapa dice CUÁNDO. La cola de ideas buenas vive en §14 — hoy con una
     entrada: la tarjeta de fidelidad en Wallet, que pasa las tres.
 
@@ -507,6 +511,84 @@ más.
 sub-monetizado fuera de Bolivia**. Es un dato de techo de mercado a considerar en **v2.0**
 (§12), no una acción de hoy. Anotado para no perderlo — y **no se abre como frente** (regla de
 `CLAUDE.md`).
+
+---
+
+### 13.6 "¿Podemos llegar a ser como todos ellos?"
+
+> Sergio Urcullo, 2026-09-05, después de leer la comparación de arriba.
+
+**Sí — y la pregunta está mal formulada. No podés ser Lety; podés ser algo que Lety no puede
+ser en Bolivia, y esa es una posición mejor.**
+
+#### Dónde Onia YA está a su nivel
+
+Esto no es aspiracional: es lo medido en §8 y §2.
+
+| | Referentes | Onia |
+|---|---|---|
+| Margen bruto | benchmark de industria ≥75% | **94–99,8%** |
+| Qué instala en el cliente | capa conversacional | **ERP por rubro + conversación** |
+| Costo de servir | sube con el uso | **Bs 461/mes fijo** |
+| Sociedad registrada | sí | **sí** — OniaAgency, SEPREC 5371375010 |
+| Demanda entrante sin marketing | — | **7 en dos semanas** |
+
+Lety se fundó en 2024 y relanzó en nov-2024: **tiene unos dos años.** Onia tiene cinco rubros
+vivos, chatbot en producción, agentes por crontab y 21 capacidades en el core. **La distancia
+de PRODUCTO no se mide en años**, y en márgenes Onia está por encima del estándar.
+
+#### Dónde está la distancia real
+
+| | Referentes | Onia |
+|---|---|---|
+| Clientes pagando | sí | **0** |
+| Líneas de negocio | **una** | nueve (§3) |
+| Veces que salieron a vender | todos los días | **nunca** |
+
+**Eso es todo.** No es capital, no es equipo, no es tecnología.
+
+> **La distancia entre Onia y "una empresa real" se mide en UNA transacción: la primera venta
+> cobrada.** Es el único umbral que ellos cruzaron y Onia no. Todo lo demás ya está.
+
+#### Por qué "como ellos" es la meta equivocada
+
+**Juegan un juego que a Onia no le conviene.** Compiten en el mercado global de capa
+conversacional: enorme, con cientos de competidores, y donde **el cliente se cambia en una
+tarde** (§13.4). Por eso corren — su ventaja se evapora sola, y sostener esa carrera exige
+capital, velocidad y un mercado gigante.
+
+Y dos señales que conviene leer antes de copiarlos:
+
+- **Lety nació vendiendo directo (2024) y relanzó como plataforma para agencias (nov-2024).**
+  El pivot es un hecho verificado; *el motivo es inferencia nuestra* — la lectura razonable es
+  que vender directo resultó más difícil de lo esperado, pero **no lo declaran y no hay que
+  afirmarlo como si lo hicieran**.
+- **Dapta cobra por créditos y no publica lo que cuesta una llamada o un mensaje.** Un precio
+  que el cliente no puede calcular antes de comprar es fricción, no sofisticación.
+
+**No son perfectos: son empresas con tracción.** Confundir "tienen tracción" con "hacen todo
+bien" es lo que lleva a copiar lo cosmético.
+
+#### Qué copiarles y qué no
+
+| Copiar | No copiar |
+|---|---|
+| **Que venden todos los días** — es lo único que hacen y Onia no | **Su velocidad.** Lo que hace a Onia lenta de vender es lo que la hace difícil de dejar; renunciar a eso es tirar la única ventaja defendible |
+| **Que venden UNA cosa** — ninguno tiene nueve líneas | **Su mercado.** El de Onia tiene lo que ellos nunca van a construir |
+| **Claridad de precio** — publican su modelo | |
+
+#### El foso que ya está cavado
+
+**SIAT, las RNDs bolivianas, el vocabulario por rubro, las clínicas de Santa Cruz.** A un
+competidor global no le sirve la escala para construir eso. Es un foso que ellos no pueden
+cruzar y que Onia ya tiene — y es la razón por la que "más chico" no significa "peor".
+
+Y el techo de ese negocio no es chico: **40 clientes a plan completo son del orden de
+Bs 45.000/mes con ~97% de margen** (§8.3), con una persona hasta el límite del §9. Eso es una
+empresa real por cualquier definición, **y no requiere que nadie dé plata ni permiso**.
+
+**Lo único que separa el hoy de eso es que alguien pague.** Y hay tres personas que levantaron
+la mano (§2).
 
 ---
 
