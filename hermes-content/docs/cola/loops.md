@@ -136,10 +136,31 @@ manda. Un loop se compara **sólo contra el registro de su propia máquina**:
 
 | id | dónde corre | cron | para qué sirve |
 |---|---|---|---|
-| `chatbot-cola` | **VPS** | `3 */2 * * *` (UTC) | **Carril `plataforma-v1` desde el 2026-09-05** (el id no se renombró: cambiarlo tocaría cron, worktrees, logs y gate sin ganar nada). Dos colas en orden: `cola/chatbot.md` mientras le queden 🔴, después `cola/plataforma-v1.md`. **Es el único loop que escribe en el repo `onia-platform`** |
-| `onia-cola` | **VPS** | `33 */2 * * *` (UTC) | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
+| `chatbot-cola` | **VPS** | `3 * * * *` (UTC) | **Carril `plataforma-v1` desde el 2026-09-05** (el id no se renombró: cambiarlo tocaría cron, worktrees, logs y gate sin ganar nada). Dos colas en orden: `cola/chatbot.md` mientras le queden 🔴, después `cola/plataforma-v1.md`. **Es el único loop que escribe en el repo `onia-platform`** |
+| `onia-cola` | **VPS** | `33 * * * *` (UTC) | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
 | `web-venta` | **VPS** | `48 */2 * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
 | `recorrido-cliente` | **VPS** | `9 1,4,7,10,13,16,19,22 * * *` (UTC) | Recorre el camino del cliente de punta a punta (rama `claude/recorrido-cliente`) y dice **en qué paso exacto se rompe**, con la captura como prueba |
+
+⚡ **Cadencia subida a cada hora el 2026-09-05 para `chatbot-cola` y `onia-cola`** (eran
+`*/2`), por pedido de Sergio Urcullo y con el margen medido antes de tocar:
+
+- **Duración real**, últimas 12 vueltas: mediana ~650 s los dos, máximo 1109 s. Tope 3000 s.
+  Con cadencia horaria (3600 s) sigue habiendo **más de 40 min de colchón** sobre el peor caso,
+  y el `flock -n` cubre el resto: una vuelta que se estire deja la siguiente `SALTEADA`, no
+  pisada. Ya pasó 3 veces sin daño.
+- **Cuota**: los golpes de `session limit` están **todos** entre el 2026-09-03 22:09 y el
+  2026-09-04 05:33 — la ventana en que corrían 15 loops en el VPS **más** el nodo de casa en
+  paralelo. **Cero desde entonces.** Pasar de ~44 a ~68 vueltas/día queda muy por debajo.
+- **Por qué solo estos dos y no los cuatro:** son el cuello de la v1.0. `onia-cola` es el
+  único camino a `main` (y por lo tanto al cliente) y `chatbot-cola` el único que escribe en
+  `onia-platform`. `web-venta` y `recorrido-cliente` no entregan más por correr más seguido.
+
+🔴 **Y el orden de este cambio no es libre.** `loops_registrados.mjs` compara **id Y
+horario**, y hace `process.exit(1)`: con el cron en horario y la tabla en `*/2` el gate queda
+rojo, la cadena de `npm test` falla y **ningún carril mergea** — incluido el integrador, que
+es el único que podría arreglar la tabla. Es un candado sobre sí mismo. Por eso **la tabla va
+primero a `main`, y el `crontab` recién después**, en un hueco entre corridas. Al revés ya se
+revirtió sola una baja de cadencia el 2026-09-04 (5 loops, 23 vueltas/día de más).
 
 ⚠️ **Corregido 2026-09-03 21:10 UTC — cinco cadencias BAJADAS a propósito, y la tabla seguía con
 las viejas.** `canario-visual`, `marca-personal`, `docs-auditoria`, `investigacion` y `supervisor`
