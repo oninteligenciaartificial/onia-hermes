@@ -19,6 +19,14 @@ cumplen, respetando las 24 h de anticipacion, y los escribe en webhook.env. Corr
 por cron todos los dias: los horarios nunca quedan en el pasado y Sergio no tiene
 que acordarse de nada.
 
+⚠️ La anticipacion se mide cuando el prospecto LEE el horario, no cuando se
+calcula. El valor se escribe una vez al dia y se sirve las 24 h siguientes, asi
+que el margen se gasta solo mientras esta publicado: con `ahora + 24 h` el
+primero del dia recibia 24 h de aviso y el ultimo, CERO. Medido el 2026-09-05 a
+las 04:03 — el bot vivo ofrecia "sábado 5 de septiembre, 09:00", a 4 h 57 min. Por
+eso el calculo suma tambien VIGENCIA_H: lo que se garantiza es el PEOR momento de
+la ventana, no el mejor.
+
 Es la solucion sin Cal.com. Cuando Cal.com este cargado con estas mismas ventanas,
 `resolveConfig()` lo prefiere solo (consulta Cal.com cuando NO hay ONIA_BOT_SLOTS),
 y este script se apaga borrando su linea de cron.
@@ -35,6 +43,7 @@ import sys
 ENV_FILE = os.environ.get("ONIA_WEBHOOK_ENV_FILE", "/opt/onia/bot/webhook.env")
 TZ_LAPAZ = dt.timezone(dt.timedelta(hours=-4))
 ANTICIPACION_H = 24          # "que se agenden un dia antes"
+VIGENCIA_H = 24              # cuanto se SIRVE lo que se escribe: el periodo del cron
 CUANTOS = 2                  # el guion ofrece exactamente A y B
 
 # dia de la semana (lunes=0 ... domingo=6) -> lista de (hora_inicio, hora_fin)
@@ -59,7 +68,10 @@ def proximos_slots(ahora_lapaz, cuantos=CUANTOS):
     Dias distintos a proposito: ofrecerle a alguien "hoy 14:00 o hoy 14:30" no es
     darle una opcion, es darle la misma. Dos dias separados es una eleccion real.
     """
-    desde = ahora_lapaz + dt.timedelta(hours=ANTICIPACION_H)
+    # ANTICIPACION + VIGENCIA, no solo ANTICIPACION: estos horarios se sirven las
+    # VIGENCIA_H siguientes sin volver a calcularse, asi que el margen tiene que
+    # alcanzar hasta el ULTIMO prospecto que los lea, no solo el primero.
+    desde = ahora_lapaz + dt.timedelta(hours=ANTICIPACION_H + VIGENCIA_H)
     slots, dias_usados = [], set()
     dia = desde.date()
     for _ in range(21):  # tres semanas de margen: suficiente para cualquier feriado

@@ -30,19 +30,43 @@ export const DEMO_SLOTS = Object.freeze([
  * «09:00@2026-09-05T13:00:00Z» en la cara del cliente (medido el 2026-09-04, ver
  * simulate.test.mjs). Produccion estaba sana; el instrumento con el que se la mide, no.
  */
-export function parseSlotsSpec(raw) {
+
+/**
+ * Aviso minimo que Sergio pidio para una demo (2026-09-02): "que las reuniones se
+ * agenden un dia antes para tener el espacio y tiempo para cancelar".
+ */
+export const ANTICIPACION_MINIMA_MS = 24 * 60 * 60 * 1000;
+
+export function parseSlotsSpec(raw, { now = Date.now() } = {}) {
   const text = String(raw || "").trim();
   if (!text) return null;
+  // El horario se juzga cuando se va a OFRECER, no cuando se genero. Estos valores
+  // los escribe un cron diario (scripts/loops/renovar-slots-bot.py) y se sirven las
+  // 24 h siguientes, asi que el aviso se gasta solo mientras estan publicados; si
+  // ademas el cron no corre, lo que queda en webhook.env envejece hasta el pasado.
+  // Medido el 2026-09-05 04:03 La Paz: el bot vivo ofrecia "sábado 5, 09:00", a
+  // 4 h 57 min. El generador ya reserva margen para toda su vigencia; esto es el
+  // corte que sobrevive a que ese generador no haya corrido.
+  const limite = (now instanceof Date ? now.getTime() : Number(now)) + ANTICIPACION_MINIMA_MS;
   return text
     .split("|")
     .slice(0, 2)
     .map((part, index) => {
       const [label, startAt] = part.split("@").map((piece) => (piece || "").trim());
+      const iso = startAt || null;
+      // Sin ISO no se puede verificar NI reservar, pero eso ya era asi antes de este
+      // corte y lo decide el que arma la cadena: no se toca aca. Con ISO manda el
+      // reloj, y un ISO ilegible cuenta como no sostenible: la comparacion contra
+      // NaN da false sola, y esa es la direccion segura (antes callarse que prometer).
+      const sostenible = iso === null || Date.parse(iso) >= limite;
       return {
         key: index === 0 ? "A" : "B",
         label: label || `opción ${index === 0 ? "A" : "B"}`,
-        startAt: startAt || null,
-        pending: false,
+        startAt: iso,
+        // `pending` y no un descarte: es el estado que el motor ya sabe contar
+        // (slotsPending -> M0_SIN_HORARIOS) y que detectSlotChoice ya ignora. Un
+        // horario que no se puede sostener es, para el guion, uno sin definir.
+        pending: !sostenible,
       };
     });
 }
