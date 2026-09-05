@@ -15,8 +15,68 @@ loops de carril que hoy corren en el VPS, para liberar disco allá (estaba al 85
 **Definición de "hecho":** los 5 loops instalados, con `cron` propio, prueba de humo
 verde, y **una vuelta verificada mirando el log** — no un `crontab` escrito.
 
-**Estado: cumplido a medias.** El nodo está instalado, verde y corriendo. Le falta lo
-que lo mantiene vivo sin nadie (ver *Qué quedó a medias*).
+**Estado: el nodo está instalado, probado y PAUSADO.** Funciona — corrió 9 vueltas
+solas, todas `exit 0`. Pero al medir el VPS para responder una pregunta de Sergio
+(*"¿no se puede solo VPS? tiene que trabajar sin mí"*) apareció que **la premisa del
+proyecto no se sostiene con los números de hoy**. Ver la sección siguiente.
+
+---
+
+## ⚠️ LO PRIMERO QUE HAY QUE LEER: la premisa cambió
+
+`PLAN_HOMELAB.md` justifica este nodo con *"sacar 9 worktrees libera ~40 GB"*.
+**Medido el 2026-09-05 en el VPS:**
+
+| | Medido |
+|---|---|
+| Disco del VPS | **158 GB de 193 · 36 GB libres · 82 %** |
+| `/root/loops` completo | **55 GB** — o sea que **103 GB están en otro lado** |
+| Los 5 carriles mudados, allá | **~18 GB**, no 40 |
+| `/var` (Docker vive ahí) | **53 GB** — 25,9 GB de imágenes + 8,5 GB de volúmenes |
+| **Volúmenes de Docker reclamables HOY** | **7,9 GB (92 %)** — nadie los limpió nunca |
+| `/opt` (despliegues) | **42 GB**, sin auditar |
+
+**El disco no es principalmente los loops.** Y hay ~8 GB de basura reclamable sin
+tocar, más 42 GB en `/opt` que nadie miró.
+
+### Y lo que más pesa: el nodo NO ahorra cuota
+
+La cuota de Claude es **por cuenta, no por máquina**. Los mismos carriles corren
+igual acá o allá. Mientras no se dé el paso 10, corren en las **dos**:
+
+- El VPS registró **6 × `You've hit your session limit`** el 2026-09-04.
+- Este nodo gastó **8.715 s (2 h 25 min)** de sesión esa noche haciendo trabajo
+  **duplicado**.
+
+> **Servía para disco. No sirve para cuota. Y para confiabilidad, resta** — una PC de
+> casa depende de la luz, del internet y (en WSL) de la sesión de Windows abierta.
+
+### Por eso los 5 loops están PAUSADOS
+
+`crontab` con las 5 líneas comentadas y marcadas `# PAUSADO 2026-09-05`. Respaldo
+íntegro en `/root/crontab.antes-de-pausar.txt`. **Se revierte con un comando.**
+Las 3 tareas de mantenimiento (subida de logs, bajada de memoria, `sincronizar.sh`)
+siguen activas: son baratas y mantienen el nodo al día y listo para encenderse.
+
+### La decisión que espera a Sergio
+
+**(a) Estación de trabajo bajo demanda** — recomendada. Sin cron, sin horarios, sin
+tarea de Windows: **Windows deja de importar**. Se usa para builds pesados, pruebas
+con navegador y experimentos, donde sus 12 núcleos contra los 4 del VPS sí valen. Si
+se apaga no se rompe nada porque nadie depende de ella.
+
+**(b) Insistir con los loops acá** — entonces hay que sacar Windows del camino con
+Hyper-V (arranca con la máquina, sin necesidad de iniciar sesión) o formatear a
+Ubuntu. **Ninguna de las dos elimina la dependencia de la casa.**
+
+**Si se elige (a), el disco del VPS se arregla limpiando, no mudando:**
+1. `docker volume prune` → **7,9 GB** hoy mismo
+2. Auditar `/opt` (42 GB) — probablemente builds viejos
+3. El arreglo de `/tmp` **ya está en `main`**: 5,4 GB/hora que deja de escribirse
+4. Si aún falta: `hermes worktree` sobre los carriles muertos
+
+**Nada del trabajo se tira.** Los 7 bugs encontrados eran del sistema, no del nodo, y
+tres ya están en `main` — el VPS los gana igual.
 
 ---
 
@@ -158,6 +218,36 @@ Power On*) es lo que hace que la PC vuelva sola tras un corte de luz.
 | `bb0854f4` | El instalador **clona el producto** en sólo lectura (4 de 5 loops leen precios de ahí); y **`--prueba` ya puede salir verde** |
 | `066d4b88` | `PLAN_HOMELAB.md` se contradecía a sí mismo sobre WSL y mandaba a formatear |
 | `4f89b191` | 🔴 **Los horarios estaban corridos 4 horas** — ver abajo |
+| `68f011e1` | Handoff con las 3 h de operación autónoma |
+| `c0ff4049` | Faltaba `ffmpeg` y `tendencias` gastó una vuelta descubriéndolo |
+| *(sin push aún)* | 🔴 **La subida de logs le borraba al VPS sus propios registros** — ver abajo |
+
+> ✅ **El integrador ya trabajó solo:** `onia-cola` mergeó a `main` los cinco
+> primeros commits (`8f401fda`, `f8a03858`, `4524946d`, `f95a1770`, `bf71c58e`) sin
+> que nadie se lo pidiera. **El VPS ya tiene el arreglo de los 5,4 GB/hora y el de
+> la inyección de comandos.** Los demás esperan la próxima pasada.
+
+### 🔴 El séptimo bug: le estábamos borrando los logs al VPS
+
+El cron del nodo hacía `rsync /var/log/onia-loop-*.log VPS:/var/log/` — **con el
+mismo nombre de archivo**. Mientras dura la transición, el VPS escribe su propio
+`onia-loop-<id>.log` y esta subida **se lo pisaba entero cada 10 minutos**.
+
+Medido: el log de `web-venta` en el VPS tenía sólo corridas de los `:52` (el cron de
+esta PC). **Ni una sola de los `:48`, que es el cron del propio VPS.** Y el loop
+`supervisor` audita leyendo justo esos archivos — estaba juzgando esos 5 carriles con
+las vueltas de otra máquina. **No hay copias rotadas: lo borrado no vuelve.**
+
+Se descubrió de casualidad, contando vueltas por loop para responder *"¿cómo está el
+uso de cuota?"*: aparecían corridas de esta PC en los conteos del VPS.
+
+**Arreglado:** van a `/var/log/homelab/`. Y no le quita nada al vigía, porque hoy no
+lee nada — su lista (`/root/.config/onia/loops-remotos.txt`) tiene **todas las líneas
+comentadas**, con esta nota del propio proyecto al lado: *"se descomenta el día que
+el loop sale del crontab del VPS, NO antes: mientras corre acá, su log se actualiza
+solo"*. El día del paso 10 alcanza con arrancar el vigía con
+`ONIA_LOG_DIR=/var/log/homelab` — variable que ese script **ya tiene**. Cero cambios
+de código del lado del VPS.
 
 ### 🔴 El sexto bug: cuatro horas de corrimiento, y nada lo avisaba
 
@@ -288,8 +378,10 @@ y no rompe nada.
 
 ## Qué depende de Sergio
 
-1. **Aplicar el arranque automático de WSL** (bloqueante, ver arriba). Se hace juntos.
-   *Es lo único que separa este nodo de estar terminado.*
+1. 🔴 **DECIDIR EL ROL DE ESTA PC** — estación bajo demanda (recomendado) o loops con
+   Hyper-V. Ver *"La premisa cambió"* arriba. **Todo lo demás depende de esto**, y
+   mientras no se decida los loops están pausados y no gastan nada.
+   *(El arranque automático de WSL sólo hace falta si se elige la opción (b).)*
 2. ~~Confirmar el nombre del repo del producto~~ → **hecho**: se verificó en vez de
    preguntarlo, y quedó clonado.
 3. **Mergear los siete commits a `main`.** Tocan `sincronizar.sh`, que corre en el VPS
