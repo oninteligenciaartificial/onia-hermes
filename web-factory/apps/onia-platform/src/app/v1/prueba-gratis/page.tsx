@@ -32,7 +32,6 @@ const RUBROS = [
   "Comercio / tienda",
   "Importadora",
   "Estética y spa",
-  "Veterinaria",
   "Servicios profesionales",
 ] as const;
 

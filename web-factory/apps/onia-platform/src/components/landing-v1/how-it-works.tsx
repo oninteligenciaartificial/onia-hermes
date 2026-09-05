@@ -32,7 +32,7 @@ export function HowItWorks() {
             </span>
             <h3>Elegí tu rubro.</h3>
             <p>
-              Dental, comercio, importadora, estética, veterinaria o servicios
+              Dental, comercio, importadora, estética o servicios
               profesionales. Onia se arma para el tuyo.
             </p>
           </Reveal>
