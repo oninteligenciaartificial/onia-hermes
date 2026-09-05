@@ -1638,6 +1638,34 @@ archivos.**
 
 ## Cerrado — no rehacer
 
+- [x] **Las CUATRO cifras del carril daban en meta con el bot vivo sin el corte de anticipación:
+      ninguna mira el proceso que corre.** Cerrado el 2026-09-05. Archivos:
+      `hermes-content/deploy/vps-ops/bot/anticipacion-viva.mjs` (nuevo), `package.json`.
+      **Cómo apareció:** midiendo el objetivo al arrancar. Simulador 3/3, widget 2/2, avisos
+      circuito ok y rubros 5/5 — las cuatro verdes — mientras
+      `docker exec onia-center grep -c ANTICIPACION_MINIMA_MS /tmp/onia-bot/config.mjs` daba **0**
+      contra **2** en la rama. Las tres primeras cifras miran si SALE un mensaje; la de rubros mira
+      el **árbol**. Ninguna mira lo que el proceso vivo tiene cargado.
+      **Lo que el gate separa, y es el punto:** los **horarios de hoy** del **corte que los
+      protege**. A las 14:06 La Paz producción ofrecía 47,9 h y 71,9 h de aviso — sanos, pero por el
+      cron de las 10:23 UTC, no por el corte. Sin el corte desplegado, el día que ese cron no corra
+      el valor envejece hasta el pasado y vuelve el defecto del 04:03 (una demo a 4 h 57 min).
+      Por eso **horarios ok + corte ausente NO es verde**: es el mismo modo de falla que ya costó
+      una vuelta en `avisos-vivo.mjs` (circuito aparte de eventos).
+      **Prueba:** el `--self-check` cazó un bug propio antes de que saliera — leía `slot.sostenible`
+      y el campo real es `pending` (invertido, `config.mjs:66`), así que marcaba **CORTO** a los dos
+      horarios de 47,9 h y 71,9 h: un rojo con el texto de un defecto real sobre horarios sanos,
+      que habría mandado a "arreglar" lo que ya estaba bien. Corregido, 6/6 casos en verde probados
+      en las dos direcciones, guarda de import verificada en proceso hijo. Cableado a la cadena
+      `npm test` **sólo el `--self-check`** (el modo vivo necesita docker: en la cadena sería el
+      rojo falso que traba el merge de los 15 carriles). Los 8 gates posteriores a `test:sitio-venta`
+      corridos uno por uno, los 8 en verde.
+      🔴 **Commiteado, NO desplegado — y el gate da 1 a propósito hasta que se despliegue.** El
+      diagnóstico va con el lugar del arreglo: *"el código ya está arreglado en la rama, FALTA
+      DESPLEGAR"*, para no repetir la vuelta en que este carril "arregló" un archivo que ya estaba
+      bien. Pedido consolidado en la tarea de deploy del bot que ya existe, **t_7340fb5b**, junto
+      con los rubros: es el mismo `deploy-bot.sh` y los mismos dos archivos.
+
 - [x] **El bot decía "no tengo horarios libres" y dos turnos después ofrecía el que acababa de
       descartar.** Cerrado el 2026-09-05, en la misma vuelta en que se encontró. Commit
       `d6a699205`. Archivos: `hermes-content/deploy/vps-ops/bot/reply-builder.mjs`,

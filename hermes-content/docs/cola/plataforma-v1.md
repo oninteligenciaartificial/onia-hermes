@@ -77,18 +77,51 @@ y sin operar. Acá se opera, con verificación por ítem.
       Evidencia: `hermes-content/docs/cola/plataforma-v1.md` (este archivo) y el runbook
       `onia-platform/.claude/skills/onia-deploy/SKILL.md`. Pedidos: `onia-tablero.sh show t_8ac57b3f`.
 
-- [ ] 🔴 **Gate 1 sobre el propio §8: su ítem 1 se contradice con la tabla de rubros del mismo
-      archivo.** §8 dice *"terminar el arreglo de servicios profesionales (`/patients` en su nav)
-      — es lo único que separa a ese rubro de ser vendible"*, y la tabla de §2 dice del mismo
-      rubro *"✅ sí — arreglado y verificado el 2026-08-30"*. **Uno de los dos miente y hay que
-      contarlo de nuevo**, no elegir el que convenga: abrir el nav de
-      `gestios-servicios-profesionales`, mirar si `/patients` está, y corregir el que esté mal.
-      Este carril arrastra la peor tasa medida del sistema — 46% de pendientes fantasma — así que
-      esto va primero.
+- [x] 🔴 **Gate 1 sobre el propio §8: se contradecía con la tabla de §2 — contado de nuevo el
+      2026-09-05 y corregido. Mentía §8.** `/patients` **no debe** estar en el nav de
+      `gestios-servicios-profesionales`, y no por olvido: la ficha (la ficha por id,
+      `medical-alerts`, `records`, `treatments`, `import`) es de los packs **clínicos**, así que
+      abrir el segmento le daría a un estudio contable una ficha clínica con sus APIs en **403**.
+      El agujero real —que ese rubro no pudiera crear el cliente de su cita— ya estaba tapado:
+      alta en línea en el modal de cita contra `/api/patients`, que sí es suya.
 
-      Fuente que se contradice: `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` (§2 contra §8).
-      El vocabulario por rubro que decide qué dice ese nav vive en `lib/onboarding/vocabulario.ts`
-      del repo `onia-platform` — ubicarlo con `grep`, no asumir la ruta.
+      **Se midió haciendo el cambio, no razonándolo:** agregar la entrada al nav puso en rojo dos
+      gates que ya defendían esa decisión — `lib/platform/api-route-registry.test.ts` (nombra las
+      cinco rutas que darían 403) y `app/(dashboard)/appointments/page.test.ts` (*"la precondición
+      del arreglo sigue en pie"*). Revertido; suite verde (294 tests de `lib/platform` +
+      `appointments`). Corregido en `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` §8 ítem 1.
+
+      ⚠️ **Lección para este carril, que arrastra 46% de pendientes fantasma:** el pendiente no era
+      fantasma *ni* real — era **al revés de como estaba escrito**. Un ítem que manda a "terminar"
+      algo puede estar pidiendo deshacer una decisión ya tomada, y el repo la tenía escrita como
+      test. Antes de "terminar" lo que un doc pide, correr los gates del cambio: si algo se pone
+      rojo, el doc es el que está viejo.
+
+- [ ] 🔴 **El panel invita a una pantalla que el propio gate rebota, en un rubro que se vende.**
+      Encontrado el 2026-09-05 midiendo el ítem de arriba — no estaba en ninguna cola.
+      En `gestios-servicios-profesionales` el panel arma la tarjeta *"Completar contacto —
+      N cliente(s) de hoy tienen contacto incompleto"* con `href: "/patients"`
+      en el panel del dueño (`dashboard`), **sin mirar el rubro**, y usa el vocabulario
+      del rubro (`v.cliente`) así que se lee perfecta. El gate manda `/patients` de vuelta a
+      `/dashboard`: el dueño hace clic y aterriza donde ya estaba, sin explicación. Lo mismo con
+      el mapa `workItemHref` — `Patient` y `PatientTreatment` apuntan a `/patients`, líneas 346-347.
+
+      **No se arregla abriendo el segmento** — eso es justo lo que el ítem de arriba midió que
+      rompe dos gates. Se arregla **filtrando las tarjetas por `allowedSegmentsForPack`** antes de
+      renderizarlas: una tarjeta cuyo destino el pack no puede visitar no se muestra. Conviene que
+      el guard sea general (toda tarjeta del panel, no sólo ésta), porque el mismo patrón se repite
+      en `workItemHref` y en la pantalla `/operations`.
+
+      Archivos: el gate vive en `lib/platform/route-access.ts` y el pack en
+      `lib/platform/vertical-pack.ts` (repo `onia-platform`); las tarjetas se arman en el panel
+      del dueño, `page.tsx` del segmento `dashboard`.
+
+      **Reproducción en 30 s, sin navegador:**
+      `cd /root/loops/onia-platform-chatbot && node -e "..."` → o más simple, el gate que falta:
+      hoy `resolveRouteAccess("/patients", VERTICAL_PACKS["gestios-servicios-profesionales"], …)`
+      devuelve `{allowed:false, redirectTo:"/dashboard"}` mientras el panel sigue
+      emitiendo ese `href`. Test sugerido: ninguna `PriorityItem` puede apuntar a un segmento
+      fuera de `allowedSegmentsForPack` del pack del tenant.
 
 - [ ] 🔴 **Add-ons sin consumidor: o los consume algo, o salen del catálogo.**
       `addon.inventory_advanced`, `addon.chatbot` y `addon.web`. El catálogo ya midió que

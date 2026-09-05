@@ -277,8 +277,23 @@ Esto es lo que evita vender algo que después no se entrega.
 
 No es una lista de deseos, es el trabajo pendiente, en orden:
 
-1. **Terminar el arreglo de servicios profesionales** (`/patients` en su nav) — es lo
-   único que separa a ese rubro de ser vendible.
+1. ~~**Terminar el arreglo de servicios profesionales** (`/patients` en su nav) — es lo
+   único que separa a ese rubro de ser vendible.~~ **FALSO, contado de nuevo el 2026-09-05.**
+   Este ítem se contradecía con la tabla de §2 (*"✅ sí — arreglado y verificado el
+   2026-08-30"*) y **el que mentía era éste**: `/patients` **no debe** entrar a la nav de
+   ese rubro, y no es un olvido sino una decisión escrita en el repo. La ficha
+   —la ficha por id, sus alertas médicas, su historia clínica, sus tratamientos y la importación— es de los packs
+   **clínicos**; abrir el segmento le daría a un estudio contable una ficha clínica cuyas
+   APIs le responden **403**. El agujero real —que ese rubro no pudiera crear un cliente
+   para su cita— ya se tapó donde estaba: **alta en línea dentro del propio modal de cita**,
+   contra la colección `/api/patients`, que sí es suya.
+   **Medido, no leído:** agregar la entrada al nav pone en **rojo** dos gates que ya
+   defendían esa decisión — `lib/platform/api-route-registry.test.ts` (nombra las cinco
+   rutas que darían 403) y `app/(dashboard)/appointments/page.test.ts` (*"la precondición
+   del arreglo sigue en pie"*). Se probó haciendo el cambio y revirtiéndolo.
+   ⚠️ **Lo que sí quedó abierto es otra cosa, y está en la cola de v1.0:** el panel invita a
+   entrar a esa pantalla bloqueada — la tarjeta *"Completar contacto"* apunta a `/patients`
+   sin mirar el rubro, así que rebota al panel.
 2. **Cerrar la revisión de los add-ons sin consumidor** (`addon.inventory_advanced`,
    `addon.chatbot`, `addon.web`): o los consume algo, o salen del catálogo.
 3. **Decidir qué hacer con `/requerimientos`:** enlazarla desde el nav, o dejar de

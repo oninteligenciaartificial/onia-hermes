@@ -711,22 +711,40 @@ test("'¿que hacen?' se contesta con el catalogo (no con un humano) y el embudo 
   const { texto, notes } = respuestaCatalogo(DEFAULT_CONFIG);
   assert.ok(notes.includes("pregunta_que_hacemos"), "tiene su propia rama, no cae en el LLM ni en handoff");
   assert.match(texto, /Dental/, "nombra lo que SI esta armado");
-  assert.match(texto, /en construcción, sin humo/, "y dice la misma verdad que la web publica");
+  // Hasta el 2026-09-05 esta linea exigia "en construcción, sin humo" — "la misma verdad que la
+  // web publica". Las dos mitades quedaron falsas: la web no dice eso en ninguna pantalla, y la
+  // regla de Sergio del 2026-08-20 prohibe estado de obra en toda superficie que ve un cliente.
+  // Lo que no esta listo ya no se nombra, asi que lo que se exige ahora es el silencio.
+  assert.ok(!/en construcci[oó]n|sin humo/.test(texto), "no se le muestra obra a un prospecto");
   assert.match(texto, /me falta/, "contestar no puede costar la calificacion: el embudo sigue");
   assert.ok(!texto.includes("{{"), "ninguna variable puede quedar sin resolver a la vista del prospecto");
 });
 
-test("un producto NUEVO aparece con solo editar el JSON — sin desplegar", () => {
-  assert.ok(!respuestaCatalogo(DEFAULT_CONFIG).texto.includes("Veterinaria"), "hoy el bot no lo conoce");
-  const config = applyKnowledge(DEFAULT_CONFIG, valido({ productos: CATALOGO_NUEVO }));
-  assert.match(respuestaCatalogo(config).texto, /Veterinaria/);
+test("un SERVICIO nuevo aparece con solo editar el JSON — sin desplegar", () => {
+  // Esta prueba pedia lo mismo con un MODULO (Veterinaria) y dejo de ser cierto el 2026-09-05:
+  // un modulo sumado por edicion ya no se nombra, porque las tres reglas juntas no dejan otra
+  // salida — no se puede declarar armado (es promesa comercial, va por codigo) y tampoco se lo
+  // puede anunciar como obra (regla de Sergio 2026-08-20). El valor que el test protege sigue
+  // vivo donde de verdad estaba: los SERVICIOS, que son trabajo que Onia ya entrega, entran el
+  // mismo dia y sin deploy.
+  const nuevo = Object.freeze({ key: "fotos", tipo: "servicio", nombre: "fotos de producto con IA" });
+  assert.ok(!respuestaCatalogo(DEFAULT_CONFIG).texto.includes("fotos de producto"), "hoy no lo conoce");
+  const config = applyKnowledge(DEFAULT_CONFIG, valido({ productos: [...CATALOGO_NUEVO, nuevo] }));
+  const { texto } = respuestaCatalogo(config);
+  assert.match(texto, /fotos de producto con IA/, "el servicio nuevo se ofrece sin desplegar");
+  assert.ok(!/Veterinaria/.test(texto), "y el modulo de la misma edicion sigue sin nombrarse");
 });
 
 test("CANDADO: el archivo puede sumar un producto pero NUNCA declararlo terminado", () => {
   const config = applyKnowledge(DEFAULT_CONFIG, valido({ productos: CATALOGO_NUEVO }));
   const { texto } = respuestaCatalogo(config);
   assert.match(texto, /• \*Dental\*/, "el que SI esta armado se nombra como tal");
-  assert.match(texto, /Veterinaria: en construcción/, "el nuevo entra siempre como en construccion");
+  // El candado se ENDURECIO el 2026-09-05: antes el modulo editado entraba como "en
+  // construcción", que lo declaraba no-terminado pero igual lo NOMBRABA — y nombrar obra es lo
+  // que la regla de Sergio prohibe. Ahora directamente no aparece. Sigue siendo el mismo
+  // invariante (una edicion no puede declarar armado un modulo) y ademas no exhibe obra.
+  assert.ok(!/Veterinaria/.test(texto), "un modulo sumado por edicion no se nombra: no esta armado");
+  assert.ok(!/en construcci[oó]n/.test(texto), "y no se lo anuncia como obra");
 
   // Y no hay ni donde intentarlo: el esquema no tiene el campo.
   for (const intento of [{ listo: true }, { moduloListo: true }, { estado: "listo" }, { precio: 390 }]) {

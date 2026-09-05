@@ -34,7 +34,7 @@
     "test:dentalgest-bridge": "node scripts/hermes_command_dentalgest.test.js",
     "test:venta-honestidad": "node --test scripts/venta-honestidad.test.mjs",
     "test:propuestas": "node hermes-content/propuestas/generador/generar-propuestas.test.js",
-    "test": "npm run validate:onia-core && npm run test:guards-cableados && npm run test:deploy-alcanzable && npm run test:bloqueos-vencidos && npm run test:s11-desplegado && npm run test:canario-mirable && npm run test:inbox-tenencia && npm run test:objetivo-visible && npm run test:sonda-widget && npm run test:veredicto-widget && npm run test:demo-agendada && npm run test:bot && npm run test:precios-bot && npm run test:oferta-bot && npm run test:marca-chatwoot && npm run test:campanas-vivas && npm run test:venta-honestidad && npm run test:propuestas && npm run test:carousel && npm run test:dentalgest-bridge && npm run test:loops-registrados && npm run test:loops-avance && npm run test:ultima-vuelta && npm run test:cola-selfcheck && npm run test:rescate-envoltorio && npm run test:docs-hygiene && npm run test:video-scenes && npm run test:vigia-sin-respuesta && npm run test:telegram-un-consumidor && npm run test:migrar-inboxes && npm run test:sitio-venta && npm run test:recorrido-instrumento && npm run test:addon-canal && npm run test:deploy-plataforma && npm run test:postiz-healthcheck && npm run test:deploy-simulacro",
+    "test": "npm run validate:onia-core && npm run test:guards-cableados && npm run test:deploy-alcanzable && npm run test:bloqueos-vencidos && npm run test:s11-desplegado && npm run test:canario-mirable && npm run test:inbox-tenencia && npm run test:objetivo-visible && npm run test:sonda-widget && npm run test:veredicto-widget && npm run test:demo-agendada && npm run test:bot && npm run test:precios-bot && npm run test:oferta-bot && npm run test:marca-chatwoot && npm run test:campanas-vivas && npm run test:venta-honestidad && npm run test:propuestas && npm run test:carousel && npm run test:dentalgest-bridge && npm run test:loops-registrados && npm run test:loops-avance && npm run test:ultima-vuelta && npm run test:cola-selfcheck && npm run test:rescate-envoltorio && npm run test:docs-hygiene && npm run test:video-scenes && npm run test:vigia-sin-respuesta && npm run test:telegram-un-consumidor && npm run test:migrar-inboxes && npm run test:sitio-venta && npm run test:recorrido-instrumento && npm run test:addon-canal && npm run test:deploy-plataforma && npm run test:postiz-healthcheck && npm run test:deploy-simulacro && npm run test:rubros-vendibles && npm run test:rubros-instrumento && npm run test:anticipacion-instrumento",
     "health:propuestas": "node -e \"require('http').get('http://127.0.0.1:3031/health',r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>console.log(d))}).on('error',e=>{console.error('Offline:',e.message);process.exitCode=1})\"",
     "mara:prompt-matrix": "node scripts/mara_prompt_matrix.js --limit 12 --routes comfy_ltx23 --run-name pond-smoke-001",
     "mara:comfyui:queue": "node scripts/mara_comfyui_queue.js --workflow C:\\Users\\PC\\Downloads\\video_ltx2_3_i2v.json --mapping hermes-content\\references\\ai-ecommerce-model\\comfyui\\video_ltx2_3_i2v.mapping.json",
@@ -87,6 +87,11 @@
     "deploy:plataforma-vivo": "node hermes-content/deploy/onia-platform/deploy-vivo.mjs",
     "test:deploy-plataforma": "node --test hermes-content/deploy/onia-platform/deploy-vivo.test.mjs",
     "test:postiz-healthcheck": "node --test hermes-content/deploy/postiz/healthcheck.test.mjs",
-    "test:deploy-simulacro": "bash scripts/kanban/desplegar-en-segundo-plano.sh --autotest"
+    "test:deploy-simulacro": "bash scripts/kanban/desplegar-en-segundo-plano.sh --autotest",
+    "test:rubros-vendibles": "node --test hermes-content/deploy/vps-ops/bot/rubros-vendibles.test.mjs",
+    "test:rubros-instrumento": "node hermes-content/deploy/vps-ops/bot/rubros-vivos.mjs --self-check",
+    "test:anticipacion-instrumento": "node hermes-content/deploy/vps-ops/bot/anticipacion-viva.mjs --self-check",
+    "anticipacion:viva": "node hermes-content/deploy/vps-ops/bot/anticipacion-viva.mjs",
+    "rubros:vivos": "node hermes-content/deploy/vps-ops/bot/rubros-vivos.mjs"
   }
 }
