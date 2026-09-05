@@ -106,6 +106,31 @@ ok "SSH al VPS y helpers presentes"
 MS=$( { TIMEFORMAT=%R; time "${SSH[@]}" true; } 2>&1 | tail -1 )
 ok "ida y vuelta SSH: ${MS}s  (>1.5s hace lento cada tablero/aprender; ver 'Riesgos' en el plan)"
 
+# 🔴 LA ZONA HORARIA TIENE QUE SER LA MISMA QUE LA DEL VPS, y esto se verifica aca
+# porque es lo unico que hace que las lineas de cron del CATALOGO signifiquen lo
+# mismo en las dos maquinas. `cron` interpreta los horarios en la hora LOCAL, y el
+# de Ubuntu NO soporta `CRON_TZ` (verificado: 0 apariciones en /usr/sbin/cron).
+#
+# Medido el 2026-09-04 en el nodo de casa: WSL heredo `America/Caracas` (-04) de
+# Windows mientras el VPS corre en `Etc/UTC`, y TODOS los horarios por hora
+# quedaron corridos CUATRO HORAS. No se noto por `web-venta` —corre cada hora y le
+# da igual— pero `tendencias` no disparo a su hora y nadie se entero: no hay error,
+# no hay log, no hay aviso. Un loop que no arranca no genera ninguna senal.
+#
+# Y rompe dos cosas de diseno a la vez: el DESFASE deliberado contra el VPS para no
+# pisarse la cuota de Claude, y los colchones que algunos carriles calculan a mano
+# (marca-personal dice "corre 21:00 UTC asi el drop de las 19:00 esta listo con 2 h
+# de colchon" — corrido 4 h, el drop se prepara DESPUES de necesitarse).
+TZ_VPS=$("${SSH[@]}" 'date +%z' 2>/dev/null)
+TZ_AQUI=$(date +%z)
+if [ -n "$TZ_VPS" ] && [ "$TZ_VPS" != "$TZ_AQUI" ]; then
+  morir "la zona horaria NO coincide con la del VPS: aca $TZ_AQUI, alla $TZ_VPS.
+  Los horarios del cron se interpretan en hora LOCAL y quedarian corridos $(( (${TZ_AQUI%??} - ${TZ_VPS%??}) )) hora(s),
+  en silencio: un loop que no arranca no genera ninguna senal.
+  Arreglo (el VPS corre en UTC):  sudo timedatectl set-timezone UTC && sudo systemctl restart cron"
+fi
+ok "zona horaria igual a la del VPS ($TZ_AQUI) — los horarios del catalogo significan lo mismo en las dos"
+
 if [ "$SOLO_PRUEBA" = 1 ]; then paso "solo prueba: no instalo nada"; fi
 
 # ── 3. Clon y worktrees ──────────────────────────────────────────────────────
