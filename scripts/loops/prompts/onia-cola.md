@@ -303,6 +303,25 @@ Ramas de carril activas en **`onia-hermes`** (base `origin/main`):
   dos enumeraciones que este prompt manda hacer son ciegas a él por construcción. Se lo encuentra
   sólo con el `--no-merged` de más abajo. **NO lo confundas con `claude/web-factory-dev`**, que es
   otro carril, del VPS, sobre la misma carpeta.
+- `claude/onia-dev-node-setup-22a170` — carril **nodo de casa** (homelab): mueve loops a la PC de
+  Sergio bajo WSL. ⚠️ **Segundo carril que corre fuera del VPS**, así que —igual que
+  `onia-web-architecture-b37eca`— no tiene `RAMA=` en el corredor ni línea propia en `crontab -l`,
+  y sólo lo encuentra el `--no-merged`. **Lo que toca NO es sólo la PC de casa:**
+  `scripts/loops/sincronizar.sh` **ES** el `/root/bin/onia-loops-sync.sh` que despliega los prompts
+  de los 15 loops del VPS (se copia a sí mismo con otro nombre, línea 150) — por eso un `grep
+  sincronizar` del crontab da vacío y hace creer que el cambio no toca producción. Antes de
+  mergearlo: `bash -n` sobre los dos scripts, y verificar que las rutas de `RUTAS_SYNC` cubran
+  todos los `poner "$RAIZ/…"`. Es un script que **se autodespliega**: una versión rota no se puede
+  reparar a sí misma.
+
+⚠️ **Y una SEXTA repetición el 2026-09-05 00:33 UTC: `claude/onia-dev-node-setup-22a170`, con 5
+commits de hacía 82 minutos.** Traía dos arreglos que afectaban al VPS entero, no a la PC de casa:
+el sincronizador calculaba `RAMA` *después* de los avisos que la usan, así que con `set -u` el
+camino de rescate —el que existe justamente para degradar con gracia— moría con `unbound variable`
+y se llevaba puesto el despliegue de los 15 prompts; y archivaba el repo **entero** (5,4 GB en
+`/tmp` por vuelta, horaria) para copiar 4 subárboles de 4,2 MB. Integrado en `0ef57d488` y
+verificado en vivo: el sincronizador corrió, se autoactualizó desde `main` y `/tmp` no se movió.
+**La lección es la de siempre y ya van seis: la lista se atrasa, el `--no-merged` no.**
 
 ⚠️ **Y una séptima el 2026-09-03 07:40 UTC: `claude/onia-web-architecture-b37eca`, con 12
 commits.** Es la primera que se cuela por un agujero **distinto** al de las seis de abajo: aquéllas
