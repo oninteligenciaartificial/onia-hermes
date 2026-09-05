@@ -98,17 +98,29 @@ describe("ninguna página servida enumera lo que al producto le falta", () => {
    * para explicar por qué se sacó. Un gate que se dispara con la bitácora del
    * arreglo obliga a borrar el registro de lo que pasó, y termina borrado él.
    */
-  const ANUNCIA_EL_LEDGER = /lo que (?:onia )?(?:todav[ií]a |a[uú]n )?no (?:lo )?hace(?:mos)?\b/i;
+  const ANUNCIA_EL_LEDGER =
+    /lo que (?:\S+ ){0,3}?(?:todav[ií]a |a[uú]n )?no (?:lo )?hace(?:mos)?\b/i;
 
-  it("el patrón reconoce la frase que estuvo viva y perdona la fiscal", () => {
+  it("el patrón reconoce las tres frases que estuvieron vivas y perdona la fiscal", () => {
     // Sin este ancla, un patrón roto deja el `it.each` de abajo en verde sobre
-    // cualquier cosa. Los dos casos son texto REAL de producción.
-    expect(
-      ANUNCIA_EL_LEDGER.test(
-        "con los precios públicos de cada uno y lo que todavía no hacemos, dicho de frente",
-      ),
-      "el gate dejó de reconocer el anuncio del ledger que lo hizo nacer",
-    ).toBe(true);
+    // cualquier cosa. Los cuatro casos son texto REAL de producción.
+    //
+    // Las tres primeras son la MISMA promesa escrita de tres formas, y por eso
+    // el sujeto del medio es un comodín: la primera versión del patrón sólo
+    // contemplaba «lo que Onia todavía no hace» y «lo que todavía no hacemos»,
+    // y dejaba pasar la de /nosotros —«lo que el SISTEMA todavía no hace»—, que
+    // estaba viva al lado. Un gate que cubre dos de las tres formas de escribir
+    // la misma frase es medio barrido, que es el defecto que vino a cerrar.
+    for (const vivo of [
+      "con los precios públicos de cada uno y lo que todavía no hacemos, dicho de frente",
+      "con fecha de consulta. Y lo que Onia todavía no hace.",
+      "lo que el sistema todavía no hace está escrito en la página de comparación",
+    ]) {
+      expect(
+        ANUNCIA_EL_LEDGER.test(vivo),
+        `el gate dejó de reconocer una frase que estuvo viva: «${vivo}»`,
+      ).toBe(true);
+    }
     expect(
       ANUNCIA_EL_LEDGER.test(
         "nuestro emisor está en trámite de homologación ante el SIN y todavía no emite " +

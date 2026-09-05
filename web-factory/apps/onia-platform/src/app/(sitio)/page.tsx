@@ -7,6 +7,8 @@ import {
   precioStack,
   precioAnual,
   fmtBs,
+  SALARIO_MINIMO,
+  pctDelSalarioMinimo,
 } from "@/content/chatbot-precios";
 import { HUECO_PARTIDO, FECHA_CONSULTA } from "@/lib/proof";
 import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
@@ -110,16 +112,15 @@ const ADDONS_RESTO = ADDONS.filter((addon) => addon.href !== "/chatbot");
  * `CHATBOT_PLAN.mensual` en vez de escribirse "12": si mañana cambia el precio
  * en la fuente única, la frase se mueve sola en lugar de quedar mintiendo.
  *
- * ⚠️ DUPLICADO CONOCIDO. Esta misma constante vive en
- * (sitio)/chatbot/page.tsx:78 y en (sitio)/precios/page.tsx. Le corresponde
- * estar UNA vez, en content/chatbot-precios.ts, al lado del precio del que es
- * referencia — pero ese archivo está fuera de este carril. Anotado en el
- * reporte: mover la constante allá y que las tres pantallas la importen.
+ * ⚠️ DUPLICADO RESUELTO el 2026-09-04. Esta constante estaba tipeada acá, en
+ * (sitio)/chatbot/page.tsx y en (sitio)/precios/page.tsx, y lo que sostuvo las
+ * tres copias fue el comentario que había en este mismo lugar: decía que le
+ * correspondía estar en content/chatbot-precios.ts *"pero ese archivo está
+ * fuera de este carril"*. Era falso —`src/content/` es esta misma app— y la
+ * frase congeló el arreglo por leerse como medida. Hoy sale de la fuente, y la
+ * invariante se ejecuta en vez de leerse: (sitio)/salario-minimo.test.ts.
  */
-const SALARIO_MINIMO_2026 = 3300;
-const PCT_SALARIO = Math.round(
-  (CHATBOT_PLAN.mensual / SALARIO_MINIMO_2026) * 100,
-);
+const PCT_SALARIO = pctDelSalarioMinimo();
 
 /**
  * FAQ de la portada — respuestas con los números TRAÍDOS de las fuentes.
@@ -802,9 +803,14 @@ export default function Portada() {
                 Sin instalación. O {precioAnual(CHATBOT_PLAN)}.
               </p>
               <p className={s.offerAnchor}>
-                Es el <b>{PCT_SALARIO} % del salario mínimo nacional 2026</b>{" "}
-                (Bs {fmtBs(SALARIO_MINIMO_2026)}, según el DS 5516), sin
-                aguinaldo ni domingos, por algo que atiende las 24 horas.
+                Es el{" "}
+                <b>
+                  {PCT_SALARIO} % del salario mínimo nacional{" "}
+                  {SALARIO_MINIMO.anio}
+                </b>{" "}
+                (Bs {fmtBs(SALARIO_MINIMO.monto)}, según el{" "}
+                {SALARIO_MINIMO.norma}), sin aguinaldo ni domingos, por algo que
+                atiende las 24 horas.
               </p>
             </div>
           </div>
