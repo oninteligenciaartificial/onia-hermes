@@ -51,6 +51,17 @@ dirección**: el chequeo de arranque busca filas de la tabla que falten en el cr
 una línea de cron que falte en la tabla. Es el sentido que deja al loop invisible: existe, corre,
 gasta, y la auto-cura no lo rearma nunca porque no sabe que existe.
 
+⚠️ **Corregido 2026-09-03 (21:2x La Paz) — cinco horarios de la tabla habían quedado viejos.**
+`canario-visual`, `marca-personal`, `docs-auditoria`, `investigacion` y `supervisor` corrían con
+una cadencia MÁS BAJA que la escrita: la sesión de control la bajó ese mismo día (junto con
+`kpis-semanal`) y la tabla no se enteró. Se alinean **al cron**, por la regla de más abajo: cuando
+el cron y la tabla difieren, gana el cron.
+
+No es cosmético — `test:loops-registrados` estaba **en rojo**, y ese gate está en la cadena de
+`npm test`, o sea que **ningún carril podía mergear**: el integrador corre la cadena entera antes
+de tocar `main`. Una desalineación de documentación bloqueó a los quince. Lo encontró
+`chatbot-cola` al correr sus propios gates, no una auditoría.
+
 ## Deben existir y estar activos
 
 **Desde el 2026-09-01 el conjunto vive en DOS lugares**, y la columna *dónde corre* es la que
@@ -64,16 +75,75 @@ manda. Un loop se compara **sólo contra el registro de su propia máquina**:
 
 | id | dónde corre | cron | para qué sirve |
 |---|---|---|---|
-| `chatbot-cola` | **VPS** | `3 * * * *` (UTC) | Carril chatbot: su cola hasta que un desconocido escriba y se vea en la bandeja |
-| `docs-auditoria` | **VPS** | `18 1,5,9,13,17,21 * * *` (UTC) | Carril docs/infra (rama `claude/docs-auditoria`): que lo escrito sea cierto — docs falsos, trabajo pisado, ítems fantasma |
-| `onia-cola` | **VPS** | `33 * * * *` (UTC) | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
-| `canario-visual` | **VPS** | `41 4,10,16,22 * * *` (UTC) | Abre y MIRA las pantallas de cliente; cada diferencia se vuelve ítem de cola del carril dueño |
-| `investigacion` | **VPS** | `26 3,9,15,21 * * *` (UTC) | **Cotiza** las decisiones abiertas del radar para que Sergio decida en tanda, una vez, sobre un archivo (rama `claude/investigacion`) |
+| `chatbot-cola` | **VPS** | `3 */2 * * *` (UTC) | Carril chatbot: su cola hasta que un desconocido escriba y se vea en la bandeja |
+| `onia-cola` | **VPS** | `33 */2 * * *` (UTC) | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
 | `web-venta` | **VPS** | `48 */2 * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
-| `lucia` | **VPS** | `37 5,11,17,23 * * *` (UTC) | Carril modelos/Higgsfield (rama `claude/lucia-vps`): guiones, briefs y prompts LISTOS. **No dispara nada pago** |
-| `marca-personal` | **VPS** | `56 9,13,17,21 * * *` (UTC) | Carril marca personal de Sergio: el drop del día siguiente y una pieza de producción |
+| `lucia` | **VPS** | `37 9,21 * * *` (UTC) | Carril modelos/Higgsfield (rama `claude/lucia-vps`): guiones, briefs y prompts LISTOS. **No dispara nada pago** |
 | `kpis-semanal` | **VPS** | `7 13 * * 1` (UTC) | Tablero KPIs del lunes del carril marca personal; pide a Sergio los numeros que solo el ve |
-| `contenido-cola` | Windows | `31 */3 * * *` | Carril contenido: publicar lo que YA existe hasta que el feed esté vivo. **Lo maneja Sergio en su propia sesión — ningún loop lo toca** |
+| `recorrido-cliente` | **VPS** | `9 1,4,7,10,13,16,19,22 * * *` (UTC) | Recorre el camino del cliente de punta a punta (rama `claude/recorrido-cliente`) y dice **en qué paso exacto se rompe**, con la captura como prueba |
+| `supervisor` | **VPS** | `29 6,18 * * *` (UTC) | **Audita a los otros loops**: que ninguno cobre por trabajo que no sirve (rama `claude/supervisor`). No mergea a `main` — deja lo que encuentra en el tablero |
+
+⚠️ **Corregido 2026-09-03 21:10 UTC — cinco cadencias BAJADAS a propósito, y la tabla seguía con
+las viejas.** `canario-visual`, `marca-personal`, `docs-auditoria`, `investigacion` y `supervisor`
+corren hoy menos veces por día que lo que decía esta tabla. **No es un cron a medio registrar: es
+una decisión de la sesión de control del 2026-09-03**, tomada después de medir que de 749 commits
+en 7 días sólo el 7% tocaba producto y que el 46% de las vueltas no commiteaba nada porque estaban
+esperando decisiones. Auditar más seguido no producía más: producía más auditoría.
+
+**Por eso, si el gate vuelve a marcar diferencia en estas cinco, el que está mal es el que las
+SUBA de nuevo.** La tabla se alineó al `crontab`, no al revés. Y esa diferencia tenía a `main` en
+rojo: el gate `loops_registrados` compara cron contra esta tabla, así que una tabla vieja rompe
+`npm test` para todos los carriles, no sólo para el que cambió el horario.
+
+⚠️ **Y volvió a pasar el 2026-09-04, más grande: la misma causa, trece filas.** La sesión de
+control **pausó ocho loops y cambió cinco horarios** ese día (foco: vender, cuota escasa) y esta
+tabla no se enteró, así que `npm test` quedó en rojo y **ningún carril podía mergear** — el
+integrador corre la cadena entera antes de tocar `main`. Cuatro de las cinco de arriba
+(`canario-visual`, `marca-personal`, `docs-auditoria`, `investigacion`) hoy no están bajadas sino
+**pausadas**, y viven en su propia sección de *NO rearmar*; `supervisor` sigue activo con otro
+horario (`29 6,18`). Corregido alineando al cron, otra vez.
+
+**La lección que ya no es opinión, porque va tres veces:** cambiar la cadencia de un loop **no
+termina en el `crontab`**. Mientras esta tabla no se actualice en el MISMO acto, la decisión deja
+`main` en rojo para los quince carriles y —si el loop quedó comentado en vez de borrado— la
+auto-cura lo revive y la revierte sola. El cron y esta tabla son **un solo cambio**, no dos.
+
+⚠️ **Corregido 2026-09-03 03:33 UTC — `contenido-cola` decía `Windows` y hacía tres días que
+corría en el VPS.** Es la última fila que quedaba desalineada, y su desalineación **rompía el
+gate `npm test` de `main`** (`loops_registrados`: *"corre en cron y NO está en la tabla"*). Se
+alinea al cron —`11 */3`, no `31 */3`— por la regla de más abajo: cuando el cron y la tabla
+difieren, gana el cron.
+
+Y no era sólo la fila. **El loop llevaba días muriendo en cada corrida**: tenía cron activo,
+worktree y log, pero `/root/bin/onia-loop.sh` lo rechazaba con `uso: …` y `exit 64` porque su
+`case` sólo existía hand-editado en el VPS y `onia-loops-sync.sh` lo pisó con la versión de
+`main`, que no lo tenía. Es **el peligro que este mismo archivo documentaba, cumplido**: el `case`
+vivía en la rama de la sesión de control (`c43b04a24`) sin llegar a `main`, y el sync copia desde
+`main`. Destrabado al mergear esa rama el 2026-09-03.
+
+⚠️ **Y esto NO es un caso del "falla mudo antes de `avisar()`"** que se describe más abajo —
+conviene no confundirlos, porque la primera versión de esta misma nota lo dio por hecho copiando
+la explicación de al lado **sin medirla**. Verificado en el corredor que corre hoy: `tg()` se
+define en la **línea 31** y el caso por defecto grita en la **202**, así que el fallo **sí manda
+Telegram** en cada corrida. Lo que no deja rastro es el **log**: `tg()` redirige su salida a
+`/dev/null`, de modo que en `/var/log/onia-loop-contenido-cola.log` sólo se ve el `uso: …` pelado.
+El agujero de la línea 97/121 era el corredor **viejo**; citarlo acá habría sido diagnosticar por
+memoria contra un archivo que ya cambió.
+
+⚠️ **Corregido 2026-09-02 20:40 UTC — la tabla tenía 10 filas y el cron 14.** Faltaban
+`recorrido-cliente`, `web-factory-dev`, `tendencias`, `calidad-generado` y `supervisor`: los cinco
+con línea de cron, prompt en disco y `case` en el corredor, **corriendo y gastando desde hacía
+horas**, invisibles para este archivo. Y tres de las filas que sí estaban mentían el horario:
+`canario-visual` corría `41 0,3,6,9,12,15,18,21` (no `41 4,10,16,22`), `lucia`
+`37 0,3,6,9,12,15,18,21` (no `37 5,11,17,23`) y `web-venta` `48 * * * *` (no `48 */2`). Es el
+mismo agujero de sentido único que este archivo ya describe, a mayor escala.
+
+⚠️ **Y la trampa que casi lo empeora: `crontab -l | head -50` corta la lista.** El integrador
+arrancó esa vuelta con ese comando y concluyó que `lucia` y `kpis-semanal` **no tenían cron** —
+los dos están en las líneas 60 y 62 de un crontab de 68. Estuvo a un paso de "rearmar" dos líneas
+que ya existían, o sea de **duplicarlas**: dos corridas simultáneas del mismo loop sobre el mismo
+worktree. **El chequeo de arranque se hace con `crontab -l | grep onia-loop.sh`, nunca con un
+`head`**: la lista crece, y un truncado silencioso convierte la auto-cura en el daño.
 
 ⚠️ **Corregido 2026-09-02.** `marca-personal` corría en `crontab -l` del VPS y no estaba en esta
 tabla — verificado en vivo el mismo día. `scripts/loops/onia-loop.sh` en el repo tampoco tenía su
@@ -207,8 +277,13 @@ las dos habría quedado con el push rechazado. Ya tiene rama propia (`claude/doc
 **Un carril, una rama** — la regla estaba escrita en `CLAUDE.md` y se rompió igual, porque crear
 un worktree apuntando a una rama que ya tiene dueño **no avisa nada**.
 
-**`contenido-cola` se queda en Windows a propósito**, y esto sí es una decisión, no una omisión:
-Sergio, 2026-09-01 — *"no toques el de contenido, el de contenido lo maneja su sesión"*.
+⚠️ **Acá decía que `contenido-cola` "se queda en Windows a propósito", y desde el 2026-09-02 es
+falso: corre en el VPS.** Lo que sigue vigente es la mitad que importa — Sergio, 2026-09-01:
+*"no toques el de contenido, el de contenido lo maneja su sesión"*. Esa frase protege la **rama**
+`claude/carril-contenido`, no la máquina: el loop del VPS trabaja sobre
+`claude/ads-creatividades-publicos` justamente para no pisarla. **Se mudó porque quedarse en
+Windows era el modo de falla más silencioso que tenía el sistema**: moría al apagar la laptop, y
+el bloque de auto-cura del VPS tenía *prohibido* rearmarlo por estar marcado `Windows`.
 
 ### 🔴 El sistema integraba y auditaba, y no construía nada
 
@@ -238,6 +313,33 @@ las 09:18 UTC del 2026-09-02 eran **seis** en el VPS. **No lo actualices más ac
 párrafos de esta sección son historia del día de la mudanza, y un número suelto en prosa es
 justamente lo que se pudre. El conteo vigente es la tabla de arriba, y se cuenta con `crontab -l`.
 
+## Pausados el 2026-09-04 (foco: vender; cuota escasa) — NO rearmar
+
+Su línea **sigue en `crontab -l`, comentada**, con el motivo escrito al principio
+(`# PAUSADO 2026-09-04 (foco: vender; cuota escasa) — …`). Descomentarla es revivirlos: es una
+decisión de la sesión de control, no un cron a medio registrar.
+
+⚠️ **Por eso salieron de la tabla de activos, y no es cosmético.** El *"Chequeo de arranque"* que
+llevan pegado los quince prompts dice: *"para cada loop de esa tabla que diga `VPS` y no tenga su
+línea en `crontab -l` (o la tenga comentada con `#`), volvé a ponerla"*. Mientras estas ocho
+figuraran como activas, **el primer loop que arrancara las rearmaba** y la pausa se revertía sola
+—exactamente el modo de falla que ya se midió el 2026-09-04— sin que nadie lo decidiera. La
+auto-cura es correcta; lo que no puede es curar hacia una tabla que miente.
+
+| id | cron que tenía | por qué se pausó |
+|---|---|---|
+| `canario-visual` | `41 6,18 * * *` | Foco en vender. Mide y audita; no produce venta. |
+| `marca-personal` | `56 13,21 * * *` | Ídem — su pieza del día no mueve la aguja mientras la cola de Sergio esté llena. |
+| `docs-auditoria` | `18 5,17 * * *` | Ídem — auditar más seguido producía más auditoría, no más producto. |
+| `investigacion` | `26 9 * * *` | Ídem — cotiza decisiones; la cola de decisiones ya está por encima de lo que Sergio contesta. |
+| `tendencias` | `51 11,23 * * *` | Ídem — recetas de contenido con un canal que hoy no publica. |
+| `web-factory-dev` | `21 2,8,14,20 * * *` | Webs de cliente: no hay cliente esperando una web hoy. |
+| `calidad-generado` | `5 3,9,15,21 * * *` | Juzga piezas; sin publicación en curso no tiene qué juzgar. |
+| `contenido-cola` | `11 */3 * * *` | La aguja no se movió en 3 vueltas: el cuello es el canal y la cola de Sergio, no la cantidad de piezas. |
+
+**Los que siguen corriendo son siete**, y son los que tocan producto o lo integran: `chatbot-cola`,
+`onia-cola`, `web-venta`, `lucia`, `recorrido-cliente`, `supervisor` y `kpis-semanal`.
+
 ## Apagados a propósito el 2026-08-31 — NO rearmar
 
 Sus `SKILL.md` **siguen en disco** por si Sergio los quiere de vuelta. Un loop que los encuentre
@@ -247,7 +349,7 @@ deshabilitados **los deja así**: están acá con su motivo medido, no son una f
 |---|---|---|
 | `web-factory-salud` | `21 * * * *` | **7 de 8 corridas fueron no-ops y no dejó rastro en el repo en 48 h.** Sus 4 chequeos son los mismos que `web-factory-dev-loop` ya corre 3× más seguido, y los absorbió. |
 | `cerrar-y-revisar-web-factory` | `17 7 * * *` | Corrió **una vez**, no tocó el repo, y competía por el mismo plato con un hermano 288× más rápido, en el mismo árbol y la misma rama. |
-| `web-factory-dev-loop` | `45 * * * *` (Windows) | **Se quedó sin combustible.** Medido el 2026-09-02 en `web-factory/docs/LOOP_COLA.md`: `CARRIL A` y `CARRIL B` con **cero** ítems sin marcar, 27 hechos, y los 2 que quedan sin marcar están en *"Bloqueadas (esperan a Sergio)"* — que **no es cola**. La primera regla de armar un loop es *"¿este carril tiene una cola con ítems reales?"*; sin eso, un loop no se planta: **inventa trabajo**. No se migró al VPS a propósito. **Para revivirlo hace falta rellenar `CARRIL A`, no rearmar el cron.** |
+| `web-factory-dev-loop` | `45 * * * *` (Windows) | **Se quedó sin combustible.** Medido el 2026-09-02 en `web-factory/docs/LOOP_COLA.md`: `CARRIL A` y `CARRIL B` con **cero** ítems sin marcar, 27 hechos, y los 2 que quedan sin marcar están en *"Bloqueadas (esperan a Sergio)"* — que **no es cola**. La primera regla de armar un loop es *"¿este carril tiene una cola con ítems reales?"*; sin eso, un loop no se planta: **inventa trabajo**. No se migró al VPS a propósito. **Para revivirlo hace falta rellenar `CARRIL A`, no rearmar el cron.** ⚠️ **REVIVIÓ el 2026-09-02** como `web-factory-dev` en el VPS (`21 2,8,14,20`, commit `0c48cf72`): se cumplió la condición que esta misma fila exigía — `CARRIL A` volvió a tener 7 ítems reales. **Está en la tabla de activos de arriba; esta fila es historia, no una orden de apagarlo.** |
 
 ## La auto-cura, y lo que no alcanza
 
@@ -256,12 +358,93 @@ Cada loop activo, **antes de trabajar**, lista el registro **de su propia máqui
 rearma la que falte **de su columna**. El bloque está pegado idéntico en todos: mientras quede
 **UN** loop registrado por máquina, ese lado se recompone solo.
 
+**Esa comparación es un comando, no una lectura** (desde el 2026-09-02, en el VPS):
+
+```
+npm run loops:registrados
+```
+
+Compara `crontab -l` contra la tabla de arriba **en las dos direcciones** —filas sin cron **y**
+líneas de cron sin fila— y también los horarios. Sale `1` con la lista de diferencias y verde si
+coinciden. Va dentro de `npm test`, así que el integrador no puede mergear con la tabla mintiendo.
+Nace de que el chequeo pegado en los prompts sólo miraba en un sentido: buscaba filas que
+faltaran en el cron, y por eso **nunca podía ver** los cinco loops que corrían sin figurar acá.
+Un archivo que se compara a ojo divergió tres veces en un solo día.
+
+✅ **Y cazó una divergencia a los tres minutos de existir.** Recién commiteado, la medición marcó
+`supervisor: cron=[29 */2 * * *] doc=[29 2,8,14,20 * * *]`: el `mtime` del crontab era de **26
+segundos antes** — el propio loop `supervisor`, corriendo en paralelo, se había subido la
+frecuencia de 4 a 12 vueltas por día mientras esta vuelta escribía la tabla. A ojo eso se
+descubría dentro de días, o nunca. **Cuando el cron y la tabla difieren, gana el cron**: es lo que
+efectivamente corre y gasta; la tabla se alinea a él.
+
+⚠️ **No listes el cron con `head`.** Ese mismo día el integrador arrancó con
+`crontab -l | head -50`, la lista tenía 68 líneas, y concluyó que `lucia` y `kpis-semanal` no
+estaban registrados: estaban, en las líneas 60 y 62. "Rearmar" una línea que ya existe la
+**duplica**, y dos corridas simultáneas del mismo loop comparten worktree y rama. Siempre
+`crontab -l | grep onia-loop.sh`, o directamente el comando de arriba.
+
 **Lo que esto NO puede curar** —y cómo se nota y se rearma a mano— está en el
 [`README.md`](README.md), sección *"3. El registro del horario se pierde"*. En una línea: si se
 pierden **todos** a la vez, o la máquina está apagada, no queda nadie adentro para notarlo.
 
-Y hay un agujero por diseño: **ningún lado vigila al otro.** Si se cae el crontab del VPS,
-`contenido-cola` no se entera; si se desregistra `contenido-cola`, los del VPS tampoco.
+### 🔴 El cron está sano y el loop igual trabaja sobre un repo viejo
+
+**El corredor nunca sincroniza el worktree del carril con `main`.** El `case` fija carpeta, rama
+y tope, hace `checkout` de la rama y arranca — no hay `fetch` ni `merge` de `origin/main` en
+ninguna parte (`grep -nE 'rebase|merge|pull|origin/main' /root/bin/onia-loop.sh`: ni una línea
+que lo haga). El sync del minuto 44 **despliega los prompts y el corredor desde `main`, no los
+worktrees**: actualiza lo que el loop ejecuta, nunca los archivos que el loop lee y edita.
+
+Medido el 2026-09-03 05:30 UTC, `git rev-list --count HEAD..origin/main` en cada árbol:
+
+| carril | atrás de `main` |
+|---|---|
+| `contenido-cola` | **788** |
+| `canario-visual` | 268 |
+| `web-venta` | 235 |
+| `lucia` | 233 |
+| `calidad-generado` · `tendencias` | 126 |
+| `web-factory-dev` | 124 |
+| `marca-personal` | 93 |
+| `recorrido-cliente` | 92 |
+| `chatbot-cola` | 78 |
+| `supervisor` | 72 |
+| `investigacion` | 49 |
+
+**No es deuda cosmética: fabrica hallazgos falsos y puede revertir arreglos ajenos.** Esta misma
+vuelta, `docs-auditoria` estaba 113 commits atrás y la tarea `t_77b6c270` del tablero le pedía
+arreglar la fila de `contenido-cola` de este archivo. En su checkout la fila decía `Windows` y
+`npm run loops:registrados` salía **rojo** — pero en `main` el integrador ya la había corregido a
+las 03:33, y contra `origin/main` el gate estaba **verde**. Un paso más y habría reescrito la
+línea 81 sobre una base de 113 commits: en el mejor caso conflicto, en el peor **el merge
+devuelve la fila mentirosa** y deshace el arreglo del integrador.
+
+El daño escala con el atraso y con lo que el carril toca: `canario-visual` MIRA pantallas y las
+compara contra archivos del repo —268 commits atrás puede reportar un defecto ya arreglado—, y
+`web-venta` es dueño de `onia.com.bo/` con 235 de atraso.
+
+**Es el generador estructural de ítems fantasma**, y encaja con el 25–46 % de pendientes que las
+colas declaraban y no existían: no todos eran items mal escritos, algunos ya estaban hechos en
+`main` y el carril no podía verlo.
+
+**Mientras el corredor no lo haga, cada loop se sincroniza solo al arrancar**, antes de medir
+nada:
+
+```
+git -C <su-worktree> fetch origin --quiet && git -C <su-worktree> merge --ff-only origin/main
+```
+
+`--ff-only` es la parte importante: si el carril tiene trabajo propio sin mergear, **falla sin
+tocar nada** en vez de inventar un merge. Ya está en el prompt de `docs-auditoria`; arreglarlo de
+raíz en el corredor toca los 15 loops a la vez, así que está cotizado en el radar y espera a
+Sergio.
+
+⚠️ **Acá decía que hay "un agujero por diseño: ningún lado vigila al otro", con `contenido-cola`
+como el vigía del lado Windows. Desde el 2026-09-02 ya no hay dos lados: se mudó al VPS y
+Windows quedó en CERO loops.** El agujero de "ningún lado vigila al otro" desapareció con el
+segundo lado; el que queda es el de siempre, y es peor porque ahora **todo** cuelga de él: si se
+cae el crontab del VPS, no queda nadie afuera para notarlo.
 
 ⚠️ **Acá decía que "todo fallo sale por Telegram" del lado del VPS. Es falso, y su excepción es
 exactamente la que dejó muerto a `investigacion` seis horas.** El corredor define `avisar()` en la
@@ -270,11 +453,11 @@ línea 121 falla mudo** — medido el 2026-09-02 corriendo
 `/root/bin/onia-loop.sh nombre-que-no-existe`: imprime el uso, sale 64, no manda nada. Lo que sí
 avisa es lo que falla *después* de esa línea, como mucho uno cada 6 h por loop.
 
-⚠️ Desde el 2026-09-02 el desbalance es fuerte: **casi todos los loops en el VPS y uno solo en
-Windows** (el conteo exacto, en la tabla de arriba).
-La auto-cura del lado de Windows cuelga de ese único loop — si `contenido-cola` se desregistra,
-**no queda nadie de ese lado para rearmarlo**, y los del VPS no lo ven ni lo tocan a propósito.
-Lo nota una persona: cero commits del carril de contenido en varios días.
+⚠️ **Desde el 2026-09-02 no hay desbalance: hay UN solo lado.** Los 15 loops corren en el VPS y
+Windows quedó vacío. Eso **borra** el riesgo que decía acá (que la auto-cura de Windows colgara de
+un único loop irreemplazable) y a cambio concentra todo en el crontab del VPS: la redundancia del
+bloque de arranque —pegado idéntico en cada prompt— pasa a ser la **única** red que queda. Por eso
+no se optimiza sacándolo de los demás.
 
 ## Cómo se agrega o se saca un loop del VPS
 

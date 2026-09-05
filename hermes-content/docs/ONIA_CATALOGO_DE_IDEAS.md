@@ -50,6 +50,7 @@ compatible con dejar la cola de v1.0 por la mitad.
 | Idea que recordabas | Dónde está | Estado |
 |---|---|---|
 | Importación de productos | §4.2–4.3 | 🟡 bloqueada por riel de pago, no por tecnología |
+| E-commerce propio / dropshipping | §4.1–4.7 → [`ONIA_ECOMMERCE_Y_DROPSHIPPING.md`](ONIA_ECOMMERCE_Y_DROPSHIPPING.md) | 🟡 anotado como proyecto futuro (2026-09-04). Lo internacional está 🔴 sin riel; lo realista es contra pedido con proveedor local |
 | Home labs para empresas | §5.1 | 🟡 ahorro interno sí; venderlo = prohibido por ahora |
 | Agencia de marketing | §3.5–3.7 | 🟡 "NUNCA agencia-para-terceros antes de validar la plataforma" |
 | Canal de YouTube | §6.1–6.3 | 🟡 2 canales planificados en pausa + 2 archivados |
@@ -112,13 +113,20 @@ compatible con dejar la cola de v1.0 por la mitad.
 
 ## 4. Comercio físico e importación
 
+> 📌 **El tema entero (e-commerce y dropshipping) tiene fuente única desde el 2026-09-04:
+> [`ONIA_ECOMMERCE_Y_DROPSHIPPING.md`](ONIA_ECOMMERCE_Y_DROPSHIPPING.md).** Ahí están las
+> cinco variantes ordenadas por realismo, el dato del riel de pago que las decide a todas, y
+> los cuatro datos que faltan. Esta tabla es el índice; el porqué vive allá.
+
 | # | Idea | Estado | Nota |
 |---|---|---|---|
-| 4.1 | **Nuvia** (skincare B2C, 315 productos) | 🟡 congelada a demo/dogfood | Solo si Arthur la opera con margen >40% sin horas de Sergio |
+| 4.1 | **Nuvia** (skincare B2C, 315 productos) | 🟡 congelada a demo/dogfood | Solo si Arthur la opera con margen >40% sin horas de Sergio. = V2 del doc del tema, con 4 condiciones de despertar |
 | 4.2 | **Importación de productos ganadores** | 🟡 | Bloqueo real = riel de pago (tarjeta ~USD 100/día) → LLC o gestor, decisión de Sergio |
 | 4.3 | **Copiloto de sourcing** (radar productos + RFQ, gate humano) | 🟡 specado v1 | NUNCA comprador autónomo |
 | 4.4 | **Tienda tipo Nuvia como línea propia** | 🔴 | Plegada como template e-commerce de Web Factory |
 | 4.5 | **Live selling IA / TikTok Shop** | 🔴 en Bolivia | TikTok Shop no opera acá |
+| 4.6 | **Dropshipping internacional** (AliExpress/CJ → Bolivia) | 🔴 **descartado CON gatillo** (anotado 2026-09-04, pedido de Sergio) | Sin riel: la tarjeta para pagarle al proveedor está capada, entrega de 30-60 días, aduana por pedido chico y cero operador de contraentrega. Reabre solo si se levanta el cap **o** aparece socio que ya importa y despacha |
+| 4.7 | **Dropship contra pedido con proveedor LOCAL** | 🟡 **la más realista de las físicas** (anotado 2026-09-04) | Vender primero, comprar en Bs después. Esquiva el riel entero. Le faltan 2 cosas, ninguna es código: factura de proveedor que pruebe margen, y alguien que atienda y entregue que no sea Sergio. En categoría **no regulada** también cae el registro sanitario |
 
 ## 5. Infraestructura / hardware como negocio
 

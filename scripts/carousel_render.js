@@ -35,6 +35,15 @@ function assetUrl(p) {
   return fs.existsSync(abs) ? `file://${abs.replace(/\\/g, '/')}` : '';
 }
 
+// Chip de dato ({{...}}), comun a todos los packs. Estaba definido solo en dos de
+// siete, asi que un {{Bs 285}} en un brief de dark-product salia como texto pelado:
+// el brief lo pedia y el pack lo ignoraba sin avisar (visto en O04 y O06).
+const DATO_CSS = `
+.dato { background:var(--onia-green); color:var(--onia-ink); font-weight:700;
+  font-size:.92em; padding:.05em .3em; border-radius:.2em; white-space:nowrap; }
+.slide.cta .dato { background:var(--onia-ink); color:var(--onia-green); }
+`;
+
 // Chrome va PRIMERO: Edge headless en esta maquina genera PNGs de 0 bytes sin
 // error (verificado 2026-08-20, con y sin sandbox). CAROUSEL_BROWSER lo pisa todo.
 const BROWSER_CANDIDATES = [
@@ -45,6 +54,8 @@ const BROWSER_CANDIDATES = [
   '/usr/bin/google-chrome',
   '/usr/bin/chromium',
   '/usr/bin/chromium-browser',
+  // Chromium de Playwright en el VPS (el único navegador instalado acá, 2026-09-02).
+  '/root/.cache/ms-playwright/chromium-1223/chrome-linux64/chrome',
 ].filter(Boolean);
 
 const ACCOUNTS = {
@@ -56,12 +67,42 @@ const ACCOUNTS = {
   // cualquier pieza suya salia firmada con un handle inventado.
   sergio: { handle: '@sergio_urcullo', name: 'Sergio Urcullo', personal: true },
   nuvia: { handle: '@nuvia.bo', name: 'Nuvia', personal: false },
+  // Lucia va en el VERDE de Onia. Sergio, 2026-08-28: "usa color verde siempre".
+  // Deroga el §1-quater de LUCIA.md, que prohibia el verde en sus piezas y por el que
+  // se habian pasado a terracota ese mismo dia. Sin `accent` propio hereda el tema.
   lucia: { handle: '@lucia.antelo.oficial', name: 'Lucía Antelo', personal: true },
 };
+
+/**
+ * El acento que le toca a una pieza: manda el flag si vino, y si no el color propio de
+ * la cuenta. Sin ninguno de los dos, el verde de Onia que ya trae el tema.
+ */
+function acentoDe(args, account) {
+  if (args && args.accent) return args.accent;
+  const acc = ACCOUNTS[account];
+  return (acc && acc.accent) || '';
+}
 
 // Brand kits para packs no-Onia. Cada marca define superficie, tinta, acentos
 // y logo. El pack bright-retail los consume.
 const BRANDS = {
+  // Kit de Onia para bright-retail. Existe porque el pack caia a `BRANDS.nuvia`
+  // por defecto y firmaba las piezas de @oniahq con el logo, la paleta arcoiris
+  // y el tagline "EVERYTHING FOR EVERYONE" de OTRA marca (visto 2026-08-24).
+  // La paleta es verde escalonado a proposito: el arcoiris de Nuvia es de tienda,
+  // y Onia vende sistemas.
+  onia: {
+    name: 'Onia',
+    handle: '@oniahq',
+    tagline: 'SISTEMAS PARA NEGOCIOS BOLIVIANOS',
+    bg: '#FBFAF6',
+    surface2: '#FFFFFF',
+    ink: '#0A0F0D',
+    muted: '#5A6B63',
+    accents: ['#10C26B', '#0B8F4F', '#0A0F0D', '#10C26B'],
+    stripes: ['#0A0F0D', '#10C26B', '#0B8F4F', '#D6F5E5', '#10C26B'],
+    logo: path.join(BRAND, 'onia-logomark.svg'),
+  },
   nuvia: {
     name: 'Nuvia',
     handle: '@nuvia.bo',
@@ -86,7 +127,17 @@ function findBrowser() {
 const esc = (s) => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-const PACKS = ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'editorial-clean', 'bright-retail'];
+// PACKS es la lista blanca del CLI (valida `--pack` mas abajo): estar aca es PROMETER que
+// ese pack renderiza. Por eso solo entra el pack cuyo archivo esta EN ESTE REPO.
+//
+// `papel-subrayado`, `dato-ilustrado` y `tarjeta-empleado` entraron aca el 2026-09-02 SIN
+// sus modulos: `carousel_pack_papel/dato/empleado.js` se commitearon solo en
+// `claude/ads-creatividades-publicos` —el carril de contenido, que el integrador tiene
+// prohibido mergear— y nunca llegaron a main. Listados igual, el CLI los aceptaba y
+// reventaba DESPUES, al renderar ("Pack no disponible"): una entrada de menu para un plato
+// que la cocina no puede hacer. Vuelven en una linea (aca + su `const` de abajo) cuando ese
+// carril cierre y sus archivos entren — el test `todo pack listado RENDERIZA` lo comprueba.
+const PACKS = ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'editorial-clean', 'bright-retail', 'bloque-solido'];
 
 // Los 3 formatos que pide Instagram. Hasta el 2026-08-15 el render estaba fijo en 4:5 y
 // no se podian hacer ni cuadrados ni historias (gap del prompt A3).
@@ -181,7 +232,10 @@ function pill(role, idx, total, account) {
 
 // Puntos DENTRO de la imagen: el lector ve cuantas slides son y se compromete.
 // Un "03 / 08" en texto no produce ese efecto; los puntos si.
+// Con UNA sola lamina no hay nada que indicar: un punto solo promete un carrusel
+// que no existe. Descubierto el 01-sep en los 3 creativos de ads.
 function dots(idx, total) {
+  if (total <= 1) return '';
   const d = Array.from({ length: total }, (_, i) =>
     `<i class="${i === idx ? 'on' : ''}"></i>`).join('');
   return `<div class="dots">${d}</div>`;
@@ -264,8 +318,19 @@ function logoFooter(account) {
   </div>`;
 }
 
+// Medido el 01-sep sobre los 8 creativos de ads: los titulares de 40-43 caracteres
+// rinden bien; a partir de 46 el titular se parte en cinco lineas y se come la pieza.
+// El renderer NO achica la tipografia, asi que el limite es del texto, no del CSS.
+const TITULAR_MAX = 44;
+
 function slideHtml(slide, idx, total, account, bg) {
   const role = roleFor(slide, idx, total);
+  if (slide.headline) {
+    const limpio = String(slide.headline).replace(/\*/g, '');
+    if (limpio.length > TITULAR_MAX) {
+      console.warn(`[aviso] titular de ${limpio.length} caracteres (max ${TITULAR_MAX}): "${limpio}" — se va a desbordar`);
+    }
+  }
   const last = idx === total - 1;
   const acc = ACCOUNTS[account];
   // El fondo se puede fijar POR SLIDE (`slide.bg`) y no solo global (`--bg`).
@@ -288,9 +353,14 @@ function slideHtml(slide, idx, total, account, bg) {
   if (role === 'cover') {
     inner = `
       ${bgLayer}
-      <div class="topline">${pill(role, idx, total, account)}<span class="swipe">SWIPE →</span></div>
+      <div class="topline">${pill(role, idx, total, account)}${last ? '' : '<span class="swipe">SWIPE →</span>'}</div>
       <h1 class="hook">${emph(slide.headline)}</h1>
       ${slide.body ? `<p class="coverline">${emph(slide.body)}</p>` : ''}
+      ${/* Con UNA sola lamina no hay slide de cierre que lleve el CTA, y un anuncio
+            pagado sin llamada a la accion no vende: el que lo ve no sabe que hacer.
+            Descubierto el 01-sep mirando los 3 creativos de ads, que traian
+            "cta" en el brief y nunca lo dibujaban. */''}
+      ${last && slide.cta ? `<div class="ctabtn">${esc(slide.cta)}</div>` : ''}
       ${dots(idx, total)}
       ${logoFooter(account)}`;
   } else if (role === 'cta') {
@@ -485,43 +555,115 @@ function emph(s) {
 // Continuation curve: a green stroke that bleeds off the right edge on
 // non-last slides (and enters from the left on non-first), giving the
 // Solaris-style panorama / swipe cue. Alternates arc direction by parity.
-function continuationCurve(idx, total) {
-  const last = idx === total - 1;
-  const first = idx === 0;
-  const down = idx % 2 === 0;
-  // Curve stays in the UPPER band (y 300-640), the floating-object zone, and
-  // never dips into the headline/body area at the bottom — so it reads as a
-  // continuous panorama behind the 3D object without crossing the text.
-  // enter from left (unless first), exit right (unless last)
-  // Las Y estan escritas en el lienzo FEED (1350 de alto) y se escalan al formato
-  // activo. Sin esto la curva quedaba clavada en y=600 tanto en feed (44% de la
-  // altura) como en story (31%): el viewBox escalaba y la curva no, asi que en story
-  // la panoramica aparecia descolocada respecto del objeto y del texto.
-  // Roto desde que existe --format; no se veia porque el test que lo cazaba llevaba
-  // meses rojo por otras assertions viejas (arreglado 2026-08-23).
-  const sy = (y) => Math.round(y * FMT.h / FORMATS.feed.h);
-  const P = (...ys) => ys.map(sy);
-  const [y300, y560, y600, y340, y320] = P(300, 560, 600, 340, 320);
-  const enter = first ? '' : (down
-    ? `M -60 ${y300} C 220 ${y300} 260 ${y560} 540 ${y560}`
-    : `M -60 ${y600} C 220 ${y600} 260 ${y340} 540 ${y340}`);
-  const exit = last ? '' : (down
-    ? `M 540 ${y560} C 860 ${y560} 940 ${y320} 1140 ${y320}`
-    : `M 540 ${y340} C 860 ${y340} 940 ${y600} 1140 ${y600}`);
-  const paths = [enter, exit].filter(Boolean)
-    .map((d) => `<path d="${d}" />`).join('');
-  return `<svg class="curve" viewBox="0 0 ${FMT.w} ${FMT.h}" xmlns="http://www.w3.org/2000/svg">${paths}</svg>`;
-}
+// La curva de continuacion se borro el 2026-08-27. Sergio: "cambia ese fondo con las
+// lineas por detras". Cruzaba por detras del cuerpo de texto; para que no se leyera como
+// un tachado hubo que bajarle la opacidad de .95 a .42, y a esa opacidad ya no aportaba
+// nada. Un adorno que hay que apagar para que no moleste no es un adorno: es ruido.
+// Estaba en `continuationCurve()` — recuperable del historial si alguna vez se revive.
 
 // Pack: dark-product (Solaris-style). Black canvas, pills, continuation curve,
 // condensed title with *green* keyword, optional 3D object, callout body.
+// ---------------------------------------------------------------------------
+// Capa de anotacion sobre la captura.
+//
+// Nace del 2026-08-25: de 28 laminas publicadas, UNA sola tenia una imagen que
+// probaba lo que decia su texto. El problema no era elegir mal la captura: era
+// mostrar la pantalla entera y esperar que el lector encuentre solo el dato del
+// que habla la frase. Una captura sin anotar no explica: decora.
+//
+// Se declara en el brief, en % del ancho/alto de la imagen (0-100), asi las
+// coordenadas no dependen del tamano al que termine dibujada:
+//
+//   marks: [
+//     { type:'box',   x:10, y:44, w:70, h:12 },
+//     { type:'spot',  x:58, y:36, w:22, h:9, label:'1 propuesta esperando' },
+//     { type:'badge', x:31, y:64, n:2 }
+//   ]
+//
+// `spot` oscurece TODO menos su recuadro: es la mas fuerte y por eso va sola.
+function annotate(marks) {
+  if (!Array.isArray(marks) || !marks.length) return { capa: '', pie: '' };
+  const num = (v, d = 0) => (Number.isFinite(Number(v)) ? Number(v) : d);
+  const spots = marks.filter((m) => m.type === 'spot');
+
+  // Mascara: el rect blanco deja pasar, el negro tapa. `fill-opacity` en vez de
+  // rgba(): SVG no acepta rgba() en el atributo fill de forma confiable, y por eso
+  // el primer spotlight se dibujaba sin oscurecer nada.
+  const mascara = spots.length ? `<mask id="mk">
+      <rect x="0" y="0" width="100" height="100" fill="#fff"/>
+      ${spots.map((m) => `<rect x="${num(m.x)}" y="${num(m.y)}" width="${num(m.w, 10)}" height="${num(m.h, 10)}" rx="1.2" fill="#000"/>`).join('')}
+    </mask>
+    <rect x="0" y="0" width="100" height="100" fill="#060A08" fill-opacity=".72" mask="url(#mk)"/>` : '';
+
+  // Solo los RECUADROS van en el SVG: son los unicos que tienen que deformarse
+  // junto con la imagen. Un circulo aca saldria elipse (preserveAspectRatio="none").
+  const cajas = marks.filter((m) => m.type === 'box' || m.type === 'spot').map((m) =>
+    `<rect x="${num(m.x)}" y="${num(m.y)}" width="${num(m.w, 10)}" height="${num(m.h, 10)}"
+      rx="1.2" fill="none" stroke="var(--onia-green)" stroke-width="0.6"
+      vector-effect="non-scaling-stroke"/>`).join('');
+
+  const capaSvg = (mascara || cajas)
+    ? `<svg class="marks" viewBox="0 0 100 100" preserveAspectRatio="none"
+        xmlns="http://www.w3.org/2000/svg">${mascara}${cajas}</svg>` : '';
+
+  // Los badges van en HTML, no en SVG: tienen que quedar redondos pase lo que pase.
+  const badges = marks.filter((m) => m.type === 'badge').map((m) =>
+    `<span class="mk-badge" style="left:${num(m.x)}%;top:${num(m.y)}%">${esc(String(num(m.n, 1)))}</span>`
+  ).join('');
+
+  // 🔴 La etiqueta va DEBAJO de la imagen, nunca encima.
+  // Se intento ponerla flotando sobre la captura y tapaba justo el dato que estaba
+  // señalando: los recortes utiles son chatos (170 px de alto) y adentro no hay
+  // ningun "afuera" al que mandarla. Como pie no tapa nada y ademas se lee mejor.
+  const conLabel = marks.filter((m) => m.label);
+  const pie = conLabel.length
+    ? `<div class="mk-pie">${conLabel.map((m, i) =>
+        `<span>${m.type === 'badge' ? `<b>${esc(String(num(m.n, i + 1)))}</b>` : '<i>↑</i>'} ${esc(m.label)}</span>`
+      ).join('')}</div>`
+    : '';
+
+  return { capa: capaSvg + badges, pie };
+}
+
+// CSS de la capa. Se inyecta en los packs que dibujan `object`.
+const MARKS_CSS = `
+.shot { position:relative; display:block; }
+.shot .marks { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+.mk-badge { position:absolute; transform:translate(-50%,-50%); width:46px; height:46px;
+  border-radius:50%; background:var(--onia-green); color:var(--onia-ink);
+  font:800 26px/46px 'Archivo', sans-serif; text-align:center;
+  box-shadow:0 0 0 5px rgba(6,10,8,.55); }
+.mk-pie { display:flex; flex-wrap:wrap; gap:10px 26px; margin:18px 0 0;
+  font-size:24px; line-height:1.25; color:var(--onia-green); font-weight:600; }
+.mk-pie span { display:flex; align-items:center; gap:9px; }
+.mk-pie b { display:inline-block; width:30px; height:30px; border-radius:50%;
+  background:var(--onia-green); color:var(--onia-ink); font:800 18px/30px 'Archivo', sans-serif;
+  text-align:center; }
+.mk-pie i { font-style:normal; opacity:.85; }
+`;
+
 function darkProductHtml(slide, idx, total, account, args) {
   const role = roleFor(slide, idx, total);
   const last = idx === total - 1;
   const acc = ACCOUNTS[account];
   const tokens = fs.readFileSync(path.join(BRAND, 'tokens.css'), 'utf8');
-  const object = args && args.object
-    ? `<img class="object" src="file://${String(args.object).replace(/\\/g, '/')}" alt="">`
+  // Objeto por-lamina, con el global de --object como respaldo. Sin esto la MISMA
+  // captura se repetia en las 7 laminas y el mockup dejaba de ser prueba para ser
+  // relleno (visto en O04, 2026-08-24).
+  const objSrc = (slide.object ? path.resolve(slide.object) : '') || (args && args.object);
+  // `bleed` manda la imagen a todo el ancho del lienzo. Existe porque el slot fijo
+  // de 620px dejaba el panel de 2160px a escala 0,26: la UI quedaba en ~8 px sobre un
+  // piso de legibilidad de 28. La portada que promete "te lo muestro con la pantalla"
+  // mostraba una mancha.
+  const bleed = slide.object_fit === 'bleed';
+  const anot = annotate(slide.marks);
+  const object = objSrc
+    ? `<figure class="shot${bleed ? ' bleed' : ''}">
+      <img class="object" src="file://${String(objSrc).replace(/\\/g, '/')}" alt="">
+      ${anot.capa}
+      </figure>
+      ${anot.pie}
+      `
     : '';
 
   // On save slides the savetag already labels "FRAMEWORK", so drop the top pill
@@ -532,6 +674,12 @@ function darkProductHtml(slide, idx, total, account, args) {
 
   const callout = slide.callout
     ? `<div class="callout">${emph(slide.callout)}</div>` : '';
+
+  // La lamina "Con Onia Platform". Nace en `dato-ilustrado` pero el arco aprobado la
+  // exige en toda pieza de @oniahq: sin ella la pieza es un problema sin dueño.
+  const solucion = Array.isArray(slide.solucion) && slide.solucion.length
+    ? `<ul class="solucion">${slide.solucion.map((x) => `<li>${emph(x)}</li>`).join('')}</ul>`
+    : '';
 
   let block;
   if (role === 'save') {
@@ -545,12 +693,13 @@ function darkProductHtml(slide, idx, total, account, args) {
     block = `<h2 class="dp-h">${emph(slide.headline)}</h2>
       ${slide.body ? `<p class="dp-body">${emph(slide.body)}</p>` : ''}`;
   }
+  block += solucion;
 
   return `<!doctype html><html><head><meta charset="utf-8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;800;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
-${tokens}
+${tokens}${DATO_CSS}
 * { margin:0; padding:0; box-sizing:border-box; }
 html,body { width:${FMT.w}px; height:${FMT.h}px; }
 ${safeAreaCss()}
@@ -563,7 +712,7 @@ ${safeAreaCss()}
 .slide.cta .g { color:var(--onia-ink); -webkit-text-stroke:0; background:var(--onia-ink); color:var(--onia-green); padding:0 .12em; }
 
 .curve { position:absolute; inset:0; width:${FMT.w}px; height:${FMT.h}px; z-index:0; pointer-events:none; }
-.curve path { fill:none; stroke:var(--onia-green); stroke-width:16; stroke-linecap:round; opacity:.95; }
+.curve path { fill:none; stroke:var(--onia-green); stroke-width:16; stroke-linecap:round; opacity:.42; }
 .slide.cta .curve path { stroke:var(--onia-ink); opacity:.5; }
 .slide > *:not(.curve) { position:relative; z-index:2; }
 
@@ -577,12 +726,36 @@ ${safeAreaCss()}
   letter-spacing:2px; color:var(--onia-green); }
 .slide.cta .pageno { color:var(--onia-ink); }
 
+${DATO_CSS}
 .object { display:block; max-width:620px; max-height:420px; margin:24px auto;
   object-fit:contain; filter:drop-shadow(0 30px 60px rgba(0,0,0,.5)); }
+${MARKS_CSS}
+/* A sangre: la imagen manda y el texto se le pega abajo. El slot de 620px dejaba una
+   captura de 2160px a escala 0,26 — una mancha donde tenia que haber una prueba. */
+.shot.bleed { margin:0 calc(var(--pad) * -1); width:calc(100% + var(--pad) * 2); }
+.shot.bleed .object { max-width:none; max-height:620px; width:100%; margin:0;
+  object-fit:cover; border-radius:0; filter:none; }
 
 .dp-h { font-family:'Archivo'; font-weight:900; font-size:88px; line-height:.98;
   letter-spacing:-2px; text-transform:uppercase; margin-top:auto; }
+/* Con imagen, el titular NO se va al piso: se pega a la prueba de la que habla. El
+   El margin-top:auto de arriba abria una banda muerta de hasta 520px entre la frase y
+   su evidencia — split-attention de manual. Sin imagen sigue bajando, que ahi si
+   funciona. */
+.slide.has-shot .dp-h { margin-top:36px; }
+.slide.has-shot .dp-body { margin-bottom:auto; }
 .dp-h.cta { font-size:80px; }
+/* La lista de "Con Onia Platform". Mismo lenguaje que en dato-ilustrado: la marca de
+   verificacion en verde es la unica parte de la pieza que habla del producto. */
+.solucion{list-style:none;margin-top:26px;display:flex;flex-direction:column;gap:18px}
+.solucion li{position:relative;padding-left:48px;font-family:'Inter';font-weight:600;
+  font-size:32px;line-height:1.3;color:#fff;max-width:26ch}
+.solucion li::before{content:"";position:absolute;left:0;top:.32em;width:24px;height:13px;
+  border-left:4px solid var(--onia-green);border-bottom:4px solid var(--onia-green);
+  transform:rotate(-45deg)}
+.slide.cta .solucion li{color:var(--onia-ink)}
+.slide.cta .solucion li::before{border-color:var(--onia-ink)}
+
 .dp-body { font-family:'Inter'; font-weight:600; font-size:36px; line-height:1.38;
   margin-top:28px; max-width:880px; color:var(--onia-muted-dark); }
 .slide.cta .dp-body { color:var(--onia-ink); opacity:.85; }
@@ -600,8 +773,8 @@ ${safeAreaCss()}
 .footer .mark circle[stroke="var(--ink)"] { stroke:var(--onia-white); }
 .slide.cta .footer .handle { color:var(--onia-ink); }
 </style></head>
-<body><div class="slide ${role}">
-  ${continuationCurve(idx, total)}
+<body><div class="slide ${role}${object ? ' has-shot' : ''}">
+  <!-- sin curva de fondo: ver el comentario de continuationCurve() -->
   ${pills}
   ${object}
   ${block}
@@ -624,8 +797,23 @@ function darkNeonHtml(slide, idx, total, account, args) {
   const role = roleFor(slide, idx, total);
   const acc = ACCOUNTS[account];
   const tokens = fs.readFileSync(path.join(BRAND, 'tokens.css'), 'utf8');
-  const object = args && args.object
-    ? `<img class="object" src="file://${String(args.object).replace(/\\/g, '/')}" alt="">`
+  // Objeto por-lamina, con el global de --object como respaldo. Sin esto la MISMA
+  // captura se repetia en las 7 laminas y el mockup dejaba de ser prueba para ser
+  // relleno (visto en O04, 2026-08-24).
+  const objSrc = (slide.object ? path.resolve(slide.object) : '') || (args && args.object);
+  // `bleed` manda la imagen a todo el ancho del lienzo. Existe porque el slot fijo
+  // de 620px dejaba el panel de 2160px a escala 0,26: la UI quedaba en ~8 px sobre un
+  // piso de legibilidad de 28. La portada que promete "te lo muestro con la pantalla"
+  // mostraba una mancha.
+  const bleed = slide.object_fit === 'bleed';
+  const anot = annotate(slide.marks);
+  const object = objSrc
+    ? `<figure class="shot${bleed ? ' bleed' : ''}">
+      <img class="object" src="file://${String(objSrc).replace(/\\/g, '/')}" alt="">
+      ${anot.capa}
+      </figure>
+      ${anot.pie}
+      `
     : '';
 
   const pills = (slide.pill && role !== 'save') ? `<div class="pills">
@@ -647,7 +835,7 @@ function darkNeonHtml(slide, idx, total, account, args) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;800;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
-${tokens}
+${tokens}${DATO_CSS}
 * { margin:0; padding:0; box-sizing:border-box; }
 html,body { width:${FMT.w}px; height:${FMT.h}px; }
 ${safeAreaCss()}
@@ -689,7 +877,7 @@ ${safeAreaCss()}
 .footer .mark { width:60px; height:60px; }
 .footer .handle { font-family:'Archivo'; font-weight:600; font-size:30px; opacity:.75; }
 </style></head>
-<body><div class="slide ${role}">
+<body><div class="slide ${role}${object ? ' has-shot' : ''}">
   <div class="grid"></div><div class="glow"></div><div class="halftone"></div>
   ${pills}
   ${object}
@@ -717,8 +905,14 @@ function editorialPhotoHtml(slide, idx, total, account, args) {
   const tokens = fs.readFileSync(path.join(BRAND, 'tokens.css'), 'utf8');
   const rawBg = slide.bg || (args && args.bg) || '';
   const bg = rawBg ? path.resolve(rawBg).replace(/\\/g, '/') : '';
+  // La foto de fondo puede ser una CAPTURA DEL PRODUCTO, y entonces se puede anotar.
+  // Este pack no tiene slot de objeto flotante -es foto a sangre con texto encima-, y
+  // por eso O01 y O02 salieron con 14 laminas hablando de un sistema que no se ve:
+  // sus fotos eran ambiente decorativo. Anotando el fondo, la misma lamina pasa de
+  // decorada a demostrada, sin tocar el layout.
+  const anot = annotate(slide.marks);
   const photo = bg
-    ? `<div class="photo" style="background-image:url('file://${bg}')"></div>`
+    ? `<div class="photo" style="background-image:url('file://${bg}')">${anot.capa}</div>`
     : '';
 
   const headTag = role === 'cover' ? 'h1' : 'h2';
@@ -726,14 +920,14 @@ function editorialPhotoHtml(slide, idx, total, account, args) {
     ? `<div class="topbar"><span class="captop">${esc(slide.pill)}</span></div>` : '';
   const body = slide.body ? `<p class="ed-body">${emph(slide.body)}</p>` : '';
   // Acento propio de la cuenta (una modelo no lleva el verde de la marca Onia).
-  const accentVar = (args && args.accent)
-    ? `:root, .slide { --onia-green: ${args.accent}; }` : '';
+  const accentVar = acentoDe(args, account)
+    ? `:root, .slide { --onia-green: ${acentoDe(args, account)}; }` : '';
 
   return `<!doctype html><html><head><meta charset="utf-8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Fraunces:ital,wght@1,500;1,600&family=Inter:wght@500;600&display=swap" rel="stylesheet">
 <style>
-${tokens}
+${tokens}${DATO_CSS}
 ${accentVar}
 * { margin:0; padding:0; box-sizing:border-box; }
 html,body { width:${FMT.w}px; height:${FMT.h}px; }
@@ -742,6 +936,8 @@ ${safeAreaCss()}
   padding:var(--pad); display:flex; flex-direction:column; justify-content:flex-end;
   background:var(--onia-ink); color:var(--onia-white); font-family:'Inter','Segoe UI',system-ui,Arial,sans-serif,'Segoe UI',system-ui,Arial,sans-serif; }
 .photo { position:absolute; inset:0; background-size:cover; background-position:center; z-index:0; }
+${MARKS_CSS}
+.photo .marks { position:absolute; inset:0; width:100%; height:100%; }
 .scrim { position:absolute; inset:0; z-index:1;
   background:linear-gradient(180deg, rgba(10,15,13,.15) 0%, rgba(10,15,13,.55) 55%, rgba(10,15,13,.92) 100%); }
 .grain { position:absolute; inset:0; z-index:2; opacity:.10; mix-blend-mode:overlay; }
@@ -761,6 +957,11 @@ ${safeAreaCss()}
 .ed-body { font-family:'Inter','Segoe UI',system-ui,Arial,sans-serif; font-weight:500; font-size:38px; line-height:1.4;
   margin-top:28px; max-width:880px; color:rgba(255,255,255,.85); }
 .ed-body .g { ${EMPH[EMPH_STYLE]} }
+/* CTA de pieza de UNA lamina: sin slide de cierre, la portada la lleva. */
+.ed-cta { display:inline-block; align-self:flex-start; margin-top:28px;
+  background:var(--onia-green); color:var(--onia-ink);
+  font-family:'Archivo','Arial Black',Arial,sans-serif; font-weight:800;
+  font-size:34px; letter-spacing:.4px; padding:18px 30px; border-radius:999px; }
 .swipe { align-self:flex-start; margin-top:28px; font-family:'Archivo','Arial Black',Arial,sans-serif; font-weight:800;
   font-size:26px; letter-spacing:3px; text-transform:uppercase; color:var(--onia-green); }
 
@@ -772,12 +973,13 @@ ${safeAreaCss()}
   padding:26px 46px; border-radius:100px; box-shadow:0 18px 48px rgba(0,0,0,.45); }
 </style></head>
 <body><div class="slide ${role}">
-  ${photo}<div class="scrim"></div>
+  ${photo}<div class="scrim"></div>${anot.pie}
   <svg class="grain" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2"/></filter><rect width="300" height="300" filter="url(#n)"/></svg>
   ${pill}
   <${headTag} class="ed-h">${emph(slide.headline)}</${headTag}>
   ${body}
   ${role === 'cta' ? ctaButton(triggerWord(slide)) : ''}
+  ${role !== 'cta' && last && slide.cta ? `<div class="ed-cta">${esc(slide.cta)}</div>` : ''}
   ${last ? '' : '<div class="swipe">Deslizá →</div>'}
   <div class="footer">
     <svg class="mark" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
@@ -807,8 +1009,8 @@ function editorialCleanHtml(slide, idx, total, account, args) {
   const photo = bg
     ? `<div class="photo" style="background-image:url('file://${bg}')"></div>`
     : '';
-  const accentVar = (args && args.accent)
-    ? `:root, .slide { --onia-green: ${args.accent}; }` : '';
+  const accentVar = acentoDe(args, account)
+    ? `:root, .slide { --onia-green: ${acentoDe(args, account)}; }` : '';
 
   if (role === 'cta' && !triggerWord(slide)) {
     throw new Error(`editorial-clean: la slide CTA no pide ninguna palabra (regla: siempre se pide comentar). Slide: ${slide.headline}`);
@@ -936,6 +1138,35 @@ function nuviaRibbon(idx, total, stripes, onAccent) {
 
 // Pack: bright-retail (Nuvia-style). Marca clara/multicolor, amigable, con
 // ribbon continuo, composición anclada y slot de producto por slide.
+// Pack de mnemotecnia, portado de la ficha Q04. Vive en su propio archivo porque
+// este ya pasa las 1200 lineas. Recibe los helpers en vez de duplicarlos.
+// Pack del dato ilustrado: imagen a sangre + tipografia contrastante. Nace de las
+// cinco criticas de Sergio del 2026-08-27 a los carruseles anteriores.
+// Pack de la marca personal de Sergio: las herramientas como empleados contratados.
+// Portado de la referencia que el mismo eligio (@iampascio, 2026-08-27).
+// Config compartida por todos los packs externos.
+const PACK_CFG = { esc, emph, roleFor, ACCOUNTS, BRAND, getFmt: () => FMT };
+
+// Los packs externos se cargan PEREZOSO: si el archivo del pack no está en el repo
+// (empleado/dato/papel nunca se commitearon), un require eager acá rompía el script
+// entero — incluso al pedir bloque-solido, que sí existe. Ahora sólo falla si se
+// selecciona ese pack, y con un mensaje claro.
+function lazyPack(modPath) {
+  let fn = null;
+  return function (...a) {
+    if (!fn) {
+      try { fn = require(modPath).crear(PACK_CFG); }
+      catch (e) { throw new Error('Pack no disponible (' + modPath + ' falta en el repo): ' + e.message); }
+    }
+    return fn(...a);
+  };
+}
+
+const tarjetaEmpleadoHtml = lazyPack('./carousel_pack_empleado');
+const datoIlustradoHtml = lazyPack('./carousel_pack_dato');
+const papelSubrayadoHtml = lazyPack('./carousel_pack_papel');
+const bloqueSolidoHtml = require('./carousel_pack_solido').crear(PACK_CFG);
+
 function brightRetailHtml(slide, idx, total, account, args) {
   const role = roleFor(slide, idx, total);
   const last = idx === total - 1;
@@ -964,7 +1195,7 @@ function brightRetailHtml(slide, idx, total, account, args) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet">
 <style>
-${tokens}
+${tokens}${DATO_CSS}
 * { margin:0; padding:0; box-sizing:border-box; }
 html,body { width:${FMT.w}px; height:${FMT.h}px; }
 ${safeAreaCss()}
@@ -1033,8 +1264,10 @@ ${last ? '' : `.cue{position:absolute;right:46px;bottom:300px;z-index:3;font-siz
 function render(args) {
   const brief = JSON.parse(fs.readFileSync(args.brief, 'utf8'));
   const slides = (brief.slides || []).map((sl) => (
-    // El brief trae `comment_trigger` a nivel raiz; el render lo necesita por slide.
-    { ...sl, comment_trigger: sl.comment_trigger || brief.comment_trigger || '' }));
+    // El brief trae `comment_trigger` y `cta` a nivel raiz; el render los necesita por slide.
+    { ...sl,
+      comment_trigger: sl.comment_trigger || brief.comment_trigger || '',
+      cta: sl.cta || brief.cta || '' }));
   if (!slides.length) throw new Error('brief has no slides');
   // La serie es del CARRUSEL, no de la slide: el brief es su lugar natural. La bandera
   // de linea de comando sigue funcionando y gana, para poder probar sin editar el brief.
@@ -1054,12 +1287,19 @@ function render(args) {
     else if (args.pack === 'editorial-photo') html = editorialPhotoHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'editorial-clean') html = editorialCleanHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'bright-retail') html = brightRetailHtml(slide, idx, slides.length, args.account, args);
+    else if (args.pack === 'papel-subrayado') html = papelSubrayadoHtml(slide, idx, slides.length, args.account, args);
+    else if (args.pack === 'dato-ilustrado') html = datoIlustradoHtml(slide, idx, slides.length, args.account, args);
+    else if (args.pack === 'tarjeta-empleado') html = tarjetaEmpleadoHtml(slide, idx, slides.length, args.account, args);
+    else if (args.pack === 'bloque-solido') html = bloqueSolidoHtml(slide, idx, slides.length, args.account, args);
     else html = slideHtml(slide, idx, slides.length, args.account, args.bg);
     const htmlPath = path.join(tmp, `slide-${idx + 1}.html`);
     fs.writeFileSync(htmlPath, html, 'utf8');
     const png = path.resolve(args.out, `slide-${String(idx + 1).padStart(2, '0')}.png`);
     execFileSync(browser, [
       '--headless=new',
+      // El VPS corre como root: sin --no-sandbox Chromium se niega a arrancar y el
+      // screenshot nunca se escribe (verificado 2026-09-02).
+      '--no-sandbox',
       '--disable-gpu',
       '--hide-scrollbars',
       '--allow-file-access-from-files',
@@ -1099,6 +1339,7 @@ if (require.main === module) {
 
 module.exports = {
   slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, editorialCleanHtml, brightRetailHtml,
+  papelSubrayadoHtml, datoIlustradoHtml, tarjetaEmpleadoHtml, bloqueSolidoHtml,
   emph, roleFor, ACCOUNTS, BRANDS, PACKS, FORMATS,
   setFormat: (name) => { if (!FORMATS[name]) throw new Error('Unknown format: ' + name); FMT = FORMATS[name]; },
 };

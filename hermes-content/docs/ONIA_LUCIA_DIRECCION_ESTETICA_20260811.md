@@ -114,7 +114,7 @@ Calm, tidy, aspirational everyday scene. Natural and beautiful, like a lifestyle
 **Reglas del prompt, aprendidas a los golpes:**
 1. **Cero negaciones.** Escribir *"sin logos"* produce logos. Solo afirmaciones.
 2. **"Santa Cruz" sola arrastra a California.** Siempre *"Santa Cruz de la Sierra, Bolivia"*.
-3. **Primer plano de cara → Element + `nano_banana_2`.** Cuerpo y escena → `soul_2`.
+3. **Primer plano de cara → Element + `nano_banana_2`.** Cuerpo y escena → `text2image_soul_v2`.
 4. **"Aesthetic" se pide con OBJETOS y LUZ, no con la palabra.** Nombrar el lino, la cerámica,
    la MacBook y la luz de ventana funciona; escribir "aesthetic" no hace nada.
 

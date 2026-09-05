@@ -901,7 +901,7 @@ aplican**) · roles: `start_image` `end_image` `image_references` `video_referen
 
 **Dos restricciones que hacen fallar el primer intento:**
 1. **Un `soul_id` NO se pasa a `seedance_2_0`.** El Soul sólo corre en `text2image_soul_v2`
-   (`soul_2`) y `soul_cinema_studio`. A Seedance entra **el PNG que produjo el Soul**.
+   (`text2image_soul_v2`) y `soul_cinema_studio`. A Seedance entra **el PNG que produjo el Soul**.
 2. **Escenas ≠ generaciones.** El tope de 15 s es de la GENERACIÓN, no del plano: dentro de una
    generación entran 4-6 escenas con timestamps. **Un comercial de 20 s son 2 generaciones, no 7.**
 
@@ -910,7 +910,7 @@ escritos. Costura A→B: `ffmpeg -sseof -0.1 -i genA.mp4 -frames:v 1 lastframe.p
 como `start_image` de B. Marco, cierre de marca y tarjeta de crédito: **HyperFrames, nunca
 generados**.
 
-**Insumos:** avatar = `generate_image` con `soul_2` + soul de Lucía (~0,12 cr) · escenario =
+**Insumos:** avatar = `generate_image` con `text2image_soul_v2` + soul de Lucía (~0,12 cr) · escenario =
 `soul_location` o **foto real del local del cliente** · producto = **FOTO REAL del cliente, del
 celular** (generarlo con IA es inventar el producto que se vende).
 

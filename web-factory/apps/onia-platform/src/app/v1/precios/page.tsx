@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { bs, plan, semanalDesde } from "@/lib/pricing";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Pricing } from "@/components/landing-v1/pricing";
@@ -7,18 +8,28 @@ import { Reveal } from "@/motion";
 
 const SITE_URL = "https://onia.com.bo";
 
+/**
+ * La `description` es superficie de cliente que NO se ve mirando la pantalla:
+ * es el único renglón que tiene el sitio para ganarse el clic en Google. Hasta
+ * el 2026-09-04 tipeaba los tres precios a mano, así que un cambio de plan la
+ * dejaba anunciando el precio viejo en el buscador sin que ninguna captura lo
+ * delatara. Guarda: `app/(sitio)/precios.test.ts`.
+ */
+const SEMANAL = semanalDesde();
+const DESDE_SEMANAL = SEMANAL === null ? "" : ` (o semanal desde Bs ${bs(SEMANAL)})`;
+
 export const metadata: Metadata = {
   metadataBase: new URL(`${SITE_URL}/`),
   title: "Precios de Onia Platform — planes en bolivianos, publicados",
   description:
-    "Básico Bs 320, Pro Bs 750 y Full Bs 1.500 al mes (o semanal desde Bs 89). Sin tarjeta para probar, sin contratos de permanencia y con la letra chica publicada. 14 días gratis.",
+    `${plan("basico").nombre} Bs ${bs(plan("basico").mensual)}, ${plan("pro").nombre} Bs ${bs(plan("pro").mensual)} y ${plan("full").nombre} Bs ${bs(plan("full").mensual)} al mes${DESDE_SEMANAL}. Sin tarjeta para probar, sin contratos de permanencia y con la letra chica publicada. 14 días gratis.`,
   alternates: { canonical: "/precios" },
   openGraph: {
     type: "website",
     locale: "es_BO",
     title: "Precios de Onia Platform — en bolivianos, publicados",
     description:
-      "Básico 320 · Pro 750 · Full 1.500 Bs/mes. 14 días gratis sin tarjeta, sin permanencia.",
+      `${plan("basico").nombre} ${bs(plan("basico").mensual)} · ${plan("pro").nombre} ${bs(plan("pro").mensual)} · ${plan("full").nombre} ${bs(plan("full").mensual)} Bs/mes. 14 días gratis sin tarjeta, sin permanencia.`,
     url: "/precios",
   },
 };

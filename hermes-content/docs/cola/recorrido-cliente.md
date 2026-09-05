@@ -1,0 +1,154 @@
+# Cola — carril recorrido de cliente
+
+Estado del carril: [`../recorrido/ULTIMO_RECORRIDO.md`](../recorrido/ULTIMO_RECORRIDO.md).
+Instrumento: `scripts/recorrido_cliente.mjs`.
+
+> Antes de trabajar un ítem de acá, **reproducilo en vivo**. Medido en este repo: entre el 25 %
+> y el 46 % de lo que las colas declaraban pendiente ya no existía.
+
+## Abierto
+
+### 1. Falta UN rubro de los cinco: importadora / distribuidora
+
+Cerrados dental, comercio, estética y **servicios profesionales** (abajo), queda sólo:
+
+    RECORRIDO_RUBRO='Importadora / distribuidora' \
+      RECORRIDO_OUT=$PWD/hermes-content/docs/recorrido/capturas/importadora \
+      node scripts/recorrido_cliente.mjs --escribir
+
+⚠️ **`RECORRIDO_OUT` va siempre en un rubro que no sea dental.** Sin él las capturas se pisan con
+las de dental — y hasta el 2026-09-04 la ruta del `resumen.json` estaba escrita a mano, así que
+la evidencia de comercio y estética apuntaba a los PNG de dental (17 de 17, todas existentes).
+
+Lo que hay que mirar: si `pantallaDelDato()` acierta. El mapa de `PORRUBRO` tiene patrones para
+los cinco, pero sólo tres se ejercitaron. Si ninguno matchea, el paso 6 sale rojo con el menú
+completo en el detalle — **y ese rojo puede ser mío, no del producto**: le pasó a servicios
+profesionales, cuyo dato se carga en `/comercio` («Servicios»). Antes de reportar un paso 6 rojo,
+comparar el menú contra `SERVICIOS_NAV_ITEMS`/`GESTIOS_NAV_ITEMS` en
+`/root/loops/onia-platform/lib/platform/vertical-pack.ts`: ahí se ve si la pantalla existe.
+
+⚠️ Este rubro deja fila en `onia_commerce_products` **y** en `onia_commerce_product_variants`.
+
+⚠️ **Y hay que limpiar según el rubro.** Comercio deja fila en `onia_commerce_products` **y** en
+`onia_commerce_product_variants`; dental en `patients`. Un borrado escrito para un rubro deja
+basura del otro.
+
+### 3. El paso 8 mira el cobro vacío: nunca hubo una factura que cobrar
+
+`/billing` se ve entera (`../recorrido/capturas/paso-08b-cobro.png`) y dice *"0 facturas ·
+Cobrado Bs 0,00"*. Es una pantalla de cobro **sin nada que cobrar**: el botón "Nueva Factura"
+existe y se ve, pero el recorrido nunca comprueba que el cobro **funcione** — sólo que la
+pantalla abra.
+
+El escalón siguiente es crear una factura `zz-qa-` para el paciente `zz-qa-` del paso 6 y llegar
+hasta la pantalla que pide la plata. **Y ahí se FRENA**: nunca se completa un pago, no se escanea
+un QR, no se confirma una transferencia. Que el botón exista y la pantalla se vea es todo lo que
+hay que reportar. Ojo con los precios: los que muestre la pantalla se **comparan** contra
+`onia-platform/lib/subscription-plans.ts` y `lib/pricing.ts`; una diferencia es un hallazgo, no
+una licencia para corregir nada.
+
+## Cerrado
+
+- **DENTAL vuelve a cerrar 9 de 9 con la agenda arreglada** — verificado el 2026-09-04 13:09 La
+  Paz (`node scripts/recorrido_cliente.mjs --escribir`). El desplegable "Profesional" ya no está
+  vacío: la cita `2026-09-07 09:00` entró con **201** (`id cmtmz4d57000m01rwgfxezgt1`) y se VIO
+  en `/appointments`. Cerraba el ítem que esperaba la tarea `t_2f5a96b6`, que ya está `done`.
+
+- **El recorrido entero en SERVICIOS PROFESIONALES, el cuarto rubro** — corrido el 2026-09-04
+  13:25 La Paz. Llega a **6 de 9** y corta en el paso 7: el formulario de la cita exige
+  **"Cliente \*"** y ese desplegable tiene **CERO opciones**, porque ese pack no tiene ninguna
+  pantalla donde crear un cliente (`SERVICIOS_NAV_ITEMS`, `lib/platform/vertical-pack.ts`) —
+  mientras su tarjeta de venta promete «Agenda, citas, cobros y contabilidad». **Reportado a
+  `onia-cola` en el tablero: `t_2b03ea3d`, prioridad 1.** Detalle y captura en
+  [`../recorrido/ULTIMO_RECORRIDO.md`](../recorrido/ULTIMO_RECORRIDO.md).
+  En el camino se cazaron **dos falsos rojos del propio instrumento** (el mapa del paso 6 y la
+  ruta de las capturas), los dos con gate propio en `scripts/recorrido_cliente.test.mjs`.
+
+- **El veredicto cantaba "RECORRIDO COMPLETO" sobre un paso que nunca midió** — cerrado el
+  2026-09-03 (`17aaec727`). En importadora el paso 7 salió `no-medido` y el 8 verde; como el
+  veredicto miraba `ultimoOk` (el **último** paso verde, no hasta dónde se llegó de corrida),
+  valía 8 y el script imprimió "RECORRIDO COMPLETO: los 8 pasos", con `corte: null` en el
+  `resumen.json`: el agujero desaparecía hasta del JSON. Ahora "completo" exige que no haya ni un
+  paso fuera de OK, y el agujero **tapado por un verde posterior** se enumera aparte. Rojo antes /
+  verde después, con los datos reales de esa corrida, en `../recorrido/ULTIMO_RECORRIDO.md`.
+
+- **El recorrido entero en ESTÉTICA Y SPA, el tercer rubro** — cerrado el 2026-09-03 19:09 UTC,
+  8 de 8 (`RECORRIDO_RUBRO='Estética y spa' node scripts/recorrido_cliente.mjs --escribir`).
+  Vocabulario del rubro correcto de punta a punta ("Clientas", "Buscar clientas…", botón
+  "Clienta"), dato cargado y encontrado de vuelta, y el panel **contó la clienta nueva**: pasó de
+  "0 clienta(s) nuevas este mes" a "1" entre `paso-06-menu.png` y `paso-08-bandeja.png`. Nada del
+  producto se rompió.
+
+- **El recorrido entero en COMERCIO, el segundo rubro** — cerrado el 2026-09-03 16:14 UTC, 8 de 8
+  (`RECORRIDO_RUBRO='Comercio / tienda' node scripts/recorrido_cliente.mjs --escribir`). Producto
+  cargado en Catálogo, encontrado de vuelta en la lista y visible en el panel; capturas miradas
+  una por una. En el camino se cazó un **falso rojo del propio instrumento**: `despejar()` cerraba
+  el modal de alta —su botón de cancelar se llama «Cerrar», igual que el del tour— y el relleno
+  terminaba escribiendo en el buscador de la lista, así que el informe acusaba al producto de no
+  tener botón de guardar teniéndolo. Detalle y evidencia en `../recorrido/ULTIMO_RECORRIDO.md`.
+
+- **Los pasos 6, 7 y 8 cantaban "pantalla a la vista" sobre una pantalla TAPADA** — cerrado el
+  2026-09-03. El modal "Primeros pasos" (`fixed inset-0 z-[60]`, el 100 % del viewport) cubría
+  `/patients` y `/billing`, y `llegar()` daba OK porque sólo comparaba la URL. Ahora
+  `despejar()` cierra el overlay con el botón del propio producto ("Cerrar por ahora") y
+  `queTapa()` mide lo que quede cubriendo ≥50 %; `llegar()` exige URL correcta **y** pantalla
+  visible. Prueba: `../recorrido/capturas/paso-08b-cobro.png`, que por primera vez muestra
+  Facturación y no el modal.
+- **El paso 6 no CARGABA ningún dato** — cerrado el 2026-09-03. Ahora crea el paciente
+  `zz-qa-<fecha>-paciente` por el camino que ofrece la pantalla (`<a href="/patients/new">`) y
+  **vuelve a la lista a buscarlo**. La lista dice "1 paciente". Prueba:
+  `../recorrido/capturas/paso-06c-dato-en-la-lista.png`. Con eso el paso 8 tiene por primera vez
+  algo que buscar: reporta que el paciente **no** figura en `/dashboard` y que eso no es un fallo
+  (el panel no lista pacientes), pero cortaría en rojo si no apareciera en ninguna de las dos.
+- **Completar el onboarding para medir los pasos 6, 7 y 8** — hecho el 2026-09-03. El instrumento
+  ya camina el asistente entero (pregunta → negocio → horarios → servicios → equipo → listo) y el
+  **recorrido llegó a los 8 pasos por primera vez**. La verificación no es haber apretado los
+  botones: es que `/dashboard` deje de rebotar, y en la base `onboardingCompletedAt` quedó con
+  hora. `/patients`, `/billing` y `/dashboard` fueron vistas renderizadas por primera vez.
+- **Crear una cuenta `zz-qa-` de verdad y ver hasta dónde llega** — hecho el 2026-09-03. El alta
+  **funciona entera**: crea `auth.users` + `organizations` + `profiles` (ADMIN) + entitlement
+  `module.agents` en trial por 14 días, y **manda el correo de confirmación de verdad**
+  (`status=sent (250 2.0.0 Ok)` en el log de `onia-mail`, con DKIM). Las filas se borraron en la
+  misma vuelta; producción volvió a 4 orgs / 6 perfiles. Detalle en `ULTIMO_RECORRIDO.md`.
+- **El falso verde del instrumento** — el script cantaba `RECORRIDO COMPLETO: los 8 pasos` porque
+  los pasos 5-8 se daban por buenos con un 200, sin mirar que el producto redirigía las cuatro
+  rutas al onboarding. Arreglado con `llegar()`, que compara la URL de llegada con la pedida.
+
+## Reportado a otro carril
+
+- **La documentación miente sobre el alta** — `CLAUDE.md` y los prompts de loop dan por cerrado
+  el alta ("`/register` dejó de crear cuentas, `/empezar` es un formulario de «Pedí tu
+  acceso»"). Medido el 2026-09-02: `/empezar` tiene **0 campos** y `/register` es un asistente
+  vivo de 2 pasos que crea cuentas. Prueba: `../recorrido/capturas/paso-03-pedir-acceso.png`.
+  Reproducción: `node scripts/recorrido_cliente.mjs` y mirar el paso 2 del `resumen.json`.
+  → carril docs/auditoría. Anotado en el tablero.
+
+## Procedimiento vigente para correr el recorrido entero
+
+Es **UNA sola corrida**:
+
+    node scripts/recorrido_cliente.mjs --escribir     # los 8 pasos de punta a punta
+
+⚠️ **Acá decía "son DOS corridas, y no se puede evitar"**, y mandaba a correr a mano un
+`update auth.users set email_confirmed_at=now()`. Las dos cosas son falsas desde que el
+instrumento tiene `confirmarComoElCliente()`: lee el `confirmation_token` con un **SELECT**
+acotado a `zz-qa-` y **abre el enlace real del mail en el mismo navegador**, igual que el
+cliente. Escribir `email_confirmed_at` a mano sería fingir justo el paso que se está midiendo —y
+dejaría de avisar el día que el correo no salga—, así que **no se hace**. Un procedimiento
+vencido que manda a escribir en `auth.users` es de los peores docs que puede tener este carril.
+
+⚠️ **Todo esto escribe en la base de PRODUCCIÓN** (`supabase-db` del VPS, schema `public`).
+Reglas que no se negocian:
+
+- Todo con prefijo `zz-qa-` (el script ya lo hace, incluido el paciente del paso 6).
+- **Se borra en la MISMA vuelta**, imprimiendo la fila ANTES de borrarla.
+- **Ningún `DELETE` sin `zz-qa-` en el `WHERE`.** Nunca por rango ni por fecha. En
+  `access_requests` viven 3 solicitudes reales, y en `patients` hay 1 paciente que **no es
+  nuestro**: jamás se toca una fila sin el prefijo.
+- **`docker exec` va con `-i`.** Sin `-i` el heredoc nunca llega a psql: **no borra nada y no
+  da error**, el comando parece exitoso. Contar las filas después de borrar.
+- **Jamás se completa un pago.** Paso 7: se mira la pantalla de cobro, se captura y se FRENA.
+
+Un recorrido entero crea **seis** filas y las seis hay que deshacerlas (medido el 2026-09-03):
+`auth.users`, `auth.identities`, `organizations`, `profiles`, `organization_entitlements` y
+`patients`. El script las enumera al terminar.

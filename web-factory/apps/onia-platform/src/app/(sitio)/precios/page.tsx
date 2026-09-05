@@ -54,17 +54,34 @@ const PCT_SALARIO = Math.round(
   (CHATBOT_PLAN.mensual / SALARIO_MINIMO_2026) * 100,
 );
 
+/**
+ * La `description` se ARMA con PLANES, no se escribe. Es la superficie que no
+ * se ve mirando la pantalla: si un precio cambia y esta frase queda a mano,
+ * el buscador y la tarjeta compartida siguen anunciando el precio viejo y
+ * ninguna captura lo delata. Gate: `(sitio)/precios.test.ts`.
+ */
+const DESC_PLANES = PLANES.map((p) => `${p.nombre} Bs ${bs(p.mensual)}`)
+  // "a, b y c" — la misma prosa que ya publica el sitio; esto es un refactor,
+  // no un cambio de copy: el HTML servido tiene que salir byte a byte igual.
+  .reduce((acc, cur, i, arr) => (i === 0 ? cur : `${acc}${i === arr.length - 1 ? " y " : ", "}${cur}`), "");
+const DESC_SEMANAL = bs(
+  Math.min(...PLANES.map((p) => p.semanal).filter((s): s is number => s !== null)),
+);
+
 export const metadata: Metadata = {
   title: "Precios de Onia — planes en bolivianos, publicados",
-  description:
-    "Básico Bs 320, Pro Bs 750 y Full Bs 1.500 al mes (o semanal desde Bs 89). Sin tarjeta para probar, sin contratos de permanencia y con la letra chica publicada. 14 días gratis.",
+  description: `${DESC_PLANES} al mes (o semanal desde Bs ${DESC_SEMANAL}). Sin tarjeta para probar, sin contratos de permanencia y con la letra chica publicada. 14 días gratis.`,
   alternates: { canonical: "/precios" },
   openGraph: {
     type: "website",
     locale: "es_BO",
     title: "Precios de Onia — en bolivianos, publicados",
-    description:
-      "Básico 320 · Pro 750 · Full 1.500 Bs/mes. 14 días gratis sin tarjeta, sin permanencia.",
+    // Escribía "Básico 320 · Pro 750 · Full 1.500 Bs/mes" a mano hasta el
+    // 2026-09-04: el gate de al lado no lo veía porque pone el "Bs" DESPUÉS del
+    // número y el patrón sólo buscaba "Bs 320". La `description` de arriba ya
+    // se había atado a la tabla y su hermana de OpenGraph —la que se ve al
+    // compartir el enlace— quedó con los tres precios congelados.
+    description: `${PLANES.map((p) => `${p.nombre} ${bs(p.mensual)}`).join(" · ")} Bs/mes. 14 días gratis sin tarjeta, sin permanencia.`,
     url: "/precios",
   },
 };

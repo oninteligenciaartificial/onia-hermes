@@ -27,10 +27,36 @@ set -uo pipefail
 
 REPO=${ONIA_LOOPS_REPO:-/root/loops/onia-hermes}
 DESTINO_BIN=${ONIA_LOOPS_BIN:-/root/bin}
-FUENTE="$REPO/scripts/loops"
 CAMBIOS=0
+# Indirecto para poder PROBAR este script sin mandarle un Telegram falso a Sergio.
+# Una guarda que no se puede ejercitar es una guarda que nadie sabe si anda.
+TG=${ONIA_TG:-/root/bin/onia-tg.sh}
 
 log() { printf '%s %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$*"; }
+
+# 🔴 De donde se copia NO depende del checkout. El 2026-09-04 este clon quedo en
+# 'feature/menu-limpio-t_54ff72b5' (un carril lo dejo ahi) y el sincronizador
+# desplego los prompts DE ESA RAMA a los 15 loops: el supervisor nuevo no llego y
+# los loops podrian haber corrido con prompts a medias de otro carril. Ahora el
+# contenido sale SIEMPRE de origin/main, se materializa en un directorio temporal
+# y de ahi se copia; si el fetch fallo y no hay origin/main, se cae al arbol y se
+# avisa, en vez de publicar una rama de trabajo en silencio.
+RAIZ="$REPO"
+TMPMAIN=""
+if git -C "$REPO" rev-parse --verify -q origin/main >/dev/null 2>&1; then
+  TMPMAIN=$(mktemp -d /tmp/onia-sync-main-XXXXXX) || TMPMAIN=""
+  if [ -n "$TMPMAIN" ] && git -C "$REPO" archive origin/main | tar -x -C "$TMPMAIN" 2>/dev/null; then
+    RAIZ="$TMPMAIN"
+    trap 'rm -rf "$TMPMAIN"' EXIT
+    log "fuente: origin/main ($(git -C "$REPO" rev-parse --short origin/main))"
+  else
+    [ -n "$TMPMAIN" ] && rm -rf "$TMPMAIN"; TMPMAIN=""
+    log "aviso: no pude materializar origin/main — copio del arbol de $REPO ($RAMA)"
+  fi
+else
+  log "aviso: no hay origin/main — copio del arbol de $REPO ($RAMA)"
+fi
+FUENTE="$RAIZ/scripts/loops"
 
 [ -d "$FUENTE/prompts" ] || { log "FALLO: no existe $FUENTE/prompts"; exit 2; }
 
@@ -41,8 +67,9 @@ RAMA=$(git -C "$REPO" branch --show-current 2>/dev/null)
 if [ "$RAMA" = "main" ]; then
   git -C "$REPO" merge --ff-only origin/main --quiet 2>/dev/null || log "aviso: main no avanzo por ff (el integrador tiene trabajo local)"
 else
-  log "aviso: $REPO esta en '$RAMA', no en main — sincronizo igual desde el arbol tal cual esta"
+  log "aviso: $REPO esta en '$RAMA', no en main"
 fi
+
 
 poner() {  # poner <origen> <destino>
   local origen="$1" destino="$2" tmp="$2.nuevo.$$"
@@ -59,7 +86,59 @@ poner() {  # poner <origen> <destino>
   CAMBIOS=$((CAMBIOS + 1))
 }
 
-poner "$FUENTE/onia-loop.sh" "$DESTINO_BIN/onia-loop.sh"
+# 🔴 DOS GUARDAS contra que `main` DEGRADE el corredor. Son dos casos distintos,
+# medidos en dias distintos, y hacen falta las dos:
+#
+# GUARDA 1 — main NO puede apagar un loop que el cron sigue llamando.
+# Nace del 2026-09-02 20:32 UTC, medido por el loop supervisor. Este script copia
+# el corredor DESDE main, siempre, en una direccion sola. Ese dia main estaba CINCO
+# commits atras (los `case` de supervisor, web-factory-dev, recorrido-cliente,
+# tendencias y calidad-generado vivian solo en `claude/git-status-935f47`, sin
+# mergear) mientras los cinco ya tenian linea de cron, prompt en disco y worktree
+# vivo. La corrida de las :44 los habria borrado del corredor sin decir una palabra,
+# y cada uno habria muerto en el `*)` con exit 64.
+# El criterio NO es "main nunca puede sacar un case" — retirar un loop tiene que
+# seguir siendo posible. Es: **si el cron lo sigue llamando, sacarle el case lo mata**.
+# Un loop retirado de verdad se saca primero del crontab; entonces pasa sola.
+#
+# GUARDA 2 — main NO puede quitarle una CAPACIDAD al corredor desplegado.
+# Nace del 2026-09-03: el runner con la inyeccion de memoria compartida se
+# desplego a mano al VPS a las 11:5x y main todavia no lo tenia. La corrida de las
+# 12:44 lo habria pisado con la version vieja y los 15 loops habrian vuelto a
+# arrancar sin memoria, sin alerta. "Sincronizar desde main" es correcto cuando
+# main va ADELANTE; cuando va atras, es borrar trabajo. La marca se elige por
+# capacidad, no por fecha: si el desplegado sabe algo que el de main no, se espera.
+ids_case() { grep -oE '^  [a-z0-9-]+\)' "$1" 2>/dev/null | tr -d ' )' | sort -u; }
+
+PERDIDOS=""
+if [ -f "$DESTINO_BIN/onia-loop.sh" ] && [ -f "$FUENTE/onia-loop.sh" ]; then
+  while read -r id; do
+    [ -n "$id" ] || continue
+    if crontab -l 2>/dev/null | grep -qE "onia-loop\.sh +${id}([[:space:]]|\$)"; then
+      PERDIDOS="$PERDIDOS $id"
+    fi
+  done < <(comm -13 <(ids_case "$FUENTE/onia-loop.sh") <(ids_case "$DESTINO_BIN/onia-loop.sh"))
+fi
+
+MARCA_RUNNER="memoria inyectada"
+DEGRADA=0
+if grep -q "$MARCA_RUNNER" "$DESTINO_BIN/onia-loop.sh" 2>/dev/null \
+   && ! grep -q "$MARCA_RUNNER" "$FUENTE/onia-loop.sh" 2>/dev/null; then
+  DEGRADA=1
+fi
+
+if [ -n "$PERDIDOS" ]; then
+  log "RECHAZADO: el corredor de main no conoce a$PERDIDOS, y el cron los sigue llamando — dejo el desplegado"
+  "$TG" "🔴 <b>Sync de loops frenado</b>: el corredor de <code>main</code> no conoce a <code>$(echo "$PERDIDOS" | sed 's/^ //; s/ /<\/code>, <code>/g')</code>, pero el cron los llama igual. Los habria matado con exit 64. Falta mergear su rama a main; mientras tanto dejo el corredor que anda." >/dev/null 2>&1 || true
+elif [ "$DEGRADA" = 1 ]; then
+  log "RECHAZADO onia-loop.sh: main esta ATRAS del VPS (le falta '$MARCA_RUNNER') — se espera al integrador"
+  if [ ! -f /var/lib/onia-sync-degradacion.avisado ] || [ $(( $(date +%s) - $(stat -c %Y /var/lib/onia-sync-degradacion.avisado) )) -gt 21600 ]; then
+    "$TG" "⚠️ <b>Sync</b>: <code>main</code> tiene un corredor MAS VIEJO que el desplegado (sin memoria compartida). No lo pisé. Falta que el integrador mergee la rama que lo trae." >/dev/null 2>&1 || true
+    touch /var/lib/onia-sync-degradacion.avisado
+  fi
+else
+  poner "$FUENTE/onia-loop.sh" "$DESTINO_BIN/onia-loop.sh"
+fi
 
 # El sincronizador se despliega A SI MISMO. Sin esta linea es el unico archivo del
 # sistema que hay que copiar a mano, y por lo tanto el unico cuyas mejoras nunca se
@@ -82,13 +161,108 @@ poner "$FUENTE/sincronizar.sh" "$DESTINO_BIN/onia-loops-sync.sh"
 # el arbol de abajo a un loop en curso), asi que una herramienta compartida NO puede
 # vivir en una rama — llega solo a quien casualmente este actualizado. Va a /root/bin
 # junto a onia-tg.sh, que es exactamente el mismo caso y por eso nunca fallo.
-poner "$REPO/scripts/kanban/tablero.sh" "$DESTINO_BIN/onia-tablero.sh"
+poner "$RAIZ/scripts/kanban/tablero.sh" "$DESTINO_BIN/onia-tablero.sh"
+
+# El lector de Telegram de RESPALDO, por la misma razon que el tablero: es una
+# herramienta del VPS, no un archivo de carril.
+#
+# ⚠️ Acá decía que es "el unico camino de ENTRADA de Sergio", y es FALSO —
+# corregido el 2026-09-03. El camino de entrada vivo es el gateway de Hermes
+# (`hermes_cli.main gateway run`), que pollea ese mismo bot: verificado con
+# `ss -tnp | grep 149.154` (socket abierto, PID del gateway) y con dos actos
+# suyos, la tarea t_13eaa0ae nacida de un mensaje de Sergio y t_04baed70
+# desbloqueada con su veredicto a las 18:42:55.
+#
+# La frase importa porque manda al revés: leerla lleva a programar el script
+# "para que por fin ande", y eso le PARTE el circuito a Sergio en vez de
+# arreglarlo — Telegram entrega cada mensaje una sola vez, al que lo pida
+# primero. El script ya se niega solo si el gateway está vivo; esto es para que
+# nadie llegue hasta ahí. Lo cubre `npm run test:telegram-un-consumidor`.
+poner "$RAIZ/scripts/kanban/telegram-entrada.py" "$DESTINO_BIN/onia-tg-entrada.py"
+
+# El publicador que corre cuando Sergio contesta `ok <id>`, y el cliente de Postiz
+# que usa. Van a /root/bin por la MISMA razon que el tablero: los llama el lector
+# de Telegram, que no vive en ningun worktree y por lo tanto no tiene el repo al
+# lado. Sin estos dos, `ok <id>` vuelve a ser solo un `unblock` y la pieza se
+# queda en el disco — que es exactamente el bug que se arreglo el 2026-09-04.
+poner "$RAIZ/scripts/kanban/publicar-aprobado.mjs" "$DESTINO_BIN/onia-publicar-aprobado.mjs"
+poner "$RAIZ/scripts/postiz_schedule.mjs"          "$DESTINO_BIN/onia-postiz-schedule.mjs"
+
+# La memoria compartida: el corredor la inyecta y los loops le escriben por estos
+# dos. Si no se despliegan solos, el corredor de main llama a un script que no
+# existe en /root/bin y los 15 loops fallan mudos en la primera linea.
+poner "$FUENTE/aprender.sh"            "$DESTINO_BIN/onia-aprender.sh"
+poner "$FUENTE/consolidar-memoria.sh"  "$DESTINO_BIN/onia-consolidar-memoria.sh"
+# El extractor de patrones de fallo: la otra mitad del circuito de aprendizaje.
+# `aprender.sh` sabe ESCRIBIR una leccion; sin esto, nadie sabe QUE leccion hace
+# falta, porque nadie compara una vuelta con la anterior. Lo corre el supervisor.
+poner "$FUENTE/extraer-fallos.sh"      "$DESTINO_BIN/onia-extraer-fallos.sh"
+# Los vigias y el renovador de horarios, por la misma razon: existian solo en
+# /root/bin y una reinstalacion desde el repo los borraba sin avisar.
+poner "$FUENTE/vigia-disco.sh"             "$DESTINO_BIN/onia-vigia-disco.sh"
+# El vigia de los loops que corren FUERA del VPS. Corre en el VPS a proposito: el
+# aviso de la PC de casa sale por un shim SSH a esta maquina, asi que la PC no
+# puede avisar de su propia muerte (PLAN_HOMELAB.md §6). Sin lista de loops
+# mudados no hace nada, asi que es seguro tenerlo desplegado desde antes.
+poner "$FUENTE/vigia-loops-remotos.sh"     "$DESTINO_BIN/onia-vigia-loops-remotos.sh"
+poner "$FUENTE/aligerar-worktrees.sh"      "$DESTINO_BIN/onia-aligerar-worktrees.sh"
+poner "$FUENTE/respaldar-memoria-hermes.sh" "$DESTINO_BIN/onia-respaldar-memoria.sh"
+poner "$FUENTE/renovar-slots-bot.py"       "$DESTINO_BIN/onia-renovar-slots.py"
+poner "$FUENTE/hermes-vigia.sh"            "$DESTINO_BIN/hermes-vigia.sh"
+# El vigia de aprobaciones: cada pregunta de un loop le llega a Sergio al instante,
+# con la foto. Es la mitad del circuito "el loop pregunta -> Sergio contesta ok"
+# que faltaba del lado de Sergio (2026-09-03).
+poner "$FUENTE/vigia-aprobaciones.sh"      "$DESTINO_BIN/onia-vigia-aprobaciones.sh"
+# Renovar la sesion OAuth de Higgsfield desde un VPS sin navegador (2026-09-03:
+# el servidor la revoco sin que venciera; el CLI solo sabe abrir un navegador).
+# Reinicio del gateway de Hermes con SUS comandos (gateway stop / run), nunca
+# pkill: el 2026-09-03 pkill dejaba vivo al supervisor de Hermes, que relanzaba
+# al hijo -> "Gateway (re)started 6 times in 120s", dos instancias peleando.
+poner "$FUENTE/hermes-gateway-restart.sh"  "$DESTINO_BIN/hermes-gateway-restart.sh"
+poner "$FUENTE/hf-login-start.sh"          "$DESTINO_BIN/hf-login-start.sh"
+poner "$FUENTE/hf-login-finish.sh"         "$DESTINO_BIN/hf-login-finish.sh"
+
+# El runbook de deploy de la LANDING (onia.com.bo). Vivia solo en
+# /opt/onia-landing/_deploy: build-and-stage.sh sin versionar, y
+# swap-and-verify.sh con el bit de ejecucion perdido ("Permission denied" el
+# 2026-09-03, a mitad de un deploy). `poner` hace bash -n y chmod 755 en cada
+# copia: un runbook que no se puede ejecutar no vuelve a pasar en silencio.
+if [ -d /opt/onia-landing/_deploy ]; then
+  poner "$RAIZ/hermes-content/deploy/onia-landing/build-and-stage.sh"  /opt/onia-landing/_deploy/build-and-stage.sh
+  poner "$RAIZ/hermes-content/deploy/onia-landing/swap-and-verify.sh"  /opt/onia-landing/_deploy/swap-and-verify.sh
+fi
+
+# El runbook de deploy de la PLATAFORMA (app.onia.com.bo). Mismo agujero que la
+# landing, en la mitad de al lado: deploy-gates-swap.sh estaba scripteado y el
+# BUILD no. Habia un build-<sha>.sh suelto por deploy (copias identicas salvo el
+# sha) y el deploy del 2026-09-03 se hizo entero a mano, sin dejar script. Un
+# paso a mano en el medio de la cadena es por que un commit verde pasa dias sin
+# llegar al cliente. deploy-gates-swap.sh NO se sincroniza: sigue siendo el
+# unico paso que pide OK de Sergio, y se edita en el VPS a proposito.
+if [ -d /opt/onia-platform ]; then
+  poner "$RAIZ/hermes-content/deploy/onia-platform/build-and-stage.sh"    /opt/onia-platform/build-and-stage.sh
+  poner "$RAIZ/hermes-content/deploy/onia-platform/recreate-container.sh" /opt/onia-platform/recreate-container.sh
+fi
 
 mkdir -p "$DESTINO_BIN/loops"
+# La misma guarda que el corredor, para los prompts. Medido el 2026-09-03 a las
+# 12:04: la guarda de arriba salvo onia-loop.sh, y en la MISMA corrida el sync
+# piso los 15 prompts con la version de main, que no tenia el bloque de memoria
+# compartida — los loops seguian recibiendo la memoria (la inyecta el runner)
+# pero perdieron las instrucciones de como ESCRIBIRLE. Un prompt desplegado que
+# sabe algo que el de main no sabe, no se reemplaza.
+MARCA_PROMPT="MEMORIA COMPARTIDA — la leés al arrancar"
+RECHAZADOS_PROMPT=0
 for f in "$FUENTE"/prompts/*.md; do
   [ -f "$f" ] || continue
-  poner "$f" "$DESTINO_BIN/loops/$(basename "$f")"
+  dest="$DESTINO_BIN/loops/$(basename "$f")"
+  if grep -q "$MARCA_PROMPT" "$dest" 2>/dev/null && ! grep -q "$MARCA_PROMPT" "$f" 2>/dev/null; then
+    RECHAZADOS_PROMPT=$((RECHAZADOS_PROMPT + 1))
+    continue
+  fi
+  poner "$f" "$dest"
 done
+[ "$RECHAZADOS_PROMPT" -gt 0 ] && log "RECHAZADOS $RECHAZADOS_PROMPT prompt(s): main esta ATRAS del VPS (sin '$MARCA_PROMPT') — se espera al integrador"
 
 # Un prompt que quedo en /root/bin/loops y ya no existe en el repo es un loop
 # borrado a medias: el corredor lo seguiria encontrando. Se avisa, no se borra
@@ -101,6 +275,6 @@ done
 
 if [ "$CAMBIOS" -gt 0 ]; then
   log "sincronizados $CAMBIOS archivo(s) desde main"
-  /root/bin/onia-tg.sh "🔄 <b>Loops</b>: $CAMBIOS archivo(s) desplegados desde <code>main</code> en el VPS" >/dev/null 2>&1 || true
+  "$TG" "🔄 <b>Loops</b>: $CAMBIOS archivo(s) desplegados desde <code>main</code> en el VPS" >/dev/null 2>&1 || true
 fi
 exit 0

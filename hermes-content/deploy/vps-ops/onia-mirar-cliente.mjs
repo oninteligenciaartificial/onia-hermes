@@ -48,22 +48,41 @@ const SUPERFICIES = process.env.MIRAR_SUPERFICIES
       // textoEsperado: copia que un deploy roto o revertido se lleva puesta.
       // minIconos: medido en vivo el 2026-08-22 (login 5, register 3, web 0);
       // el piso en 1 delata que la banda de iconos desaparecio entera.
+      //
+      // ⚠️ EL ANCLA NO PUEDE DEPENDER DE UNA DECISION DE NEGOCIO — corregido 2026-09-03.
+      // Este monitor estuvo CINCO DIAS clavado en rojo (estado roto:true desde el
+      // 2026-08-29T21:30Z) por dos anclas viejas, no por una falla real:
+      //   - register esperaba "Pedí tu acceso", texto que se quito A PROPOSITO cuando el
+      //     alta se reabrio el 29-ago (ONIA_ALTA_AUTOMATICA=abierta). La pantalla estaba
+      //     y esta sana: asistente de 2 pasos que crea la cuenta.
+      //   - web esperaba "Tu negocio no pierde", titular de una version anterior de la
+      //     landing. El de hoy es "Cerrás vos. / El negocio no.".
+      // El dano no es el ruido: el estado es UN booleano. Con el monitor ya en rojo, una
+      // rotura NUEVA y real no cambia el estado y por lo tanto NO avisa. Una alarma
+      // clavada en rojo dejo de ser una alarma.
+      // Por eso las anclas de ahora son INDEPENDIENTES del estado del alta y del titular
+      // de campana: texto del layout de auth (que no cambia al abrir/cerrar el alta) y
+      // secciones estructurales de la home. Las tres verificadas en vivo el 2026-09-03
+      // con document.body.innerText ANTES de escribirlas aca.
+      // OJO al elegir una nueva: "Cerrás vos. El negocio no." NO matchea, porque el h1 va
+      // partido en dos lineas y innerText mete un \n en el medio. Probar el ancla contra
+      // la pagina antes de commitearla, o el monitor queda rojo por un motivo nuevo.
       {
         nombre: "app/login",
         url: "https://app.onia.com.bo/login",
-        textoEsperado: ["Hola de nuevo", "Iniciar sesión"],
+        textoEsperado: ["Tu negocio completo", "Hola de nuevo"],
         minIconos: 1,
       },
       {
         nombre: "app/register",
         url: "https://app.onia.com.bo/register",
-        textoEsperado: ["Pedí tu acceso"],
+        textoEsperado: ["Tu negocio completo"],
         minIconos: 1,
       },
       {
         nombre: "web",
         url: "https://onia.com.bo/",
-        textoEsperado: ["Tu negocio no pierde"],
+        textoEsperado: ["Cerrás vos.", "Trabajan de noche"],
         minIconos: 0,
       },
     ];

@@ -181,10 +181,15 @@ function assembleCabecera({ input, payload, tenant, cuf, cufdCodigo, fechaEmisio
   return { ...base, ...(input.cabecera ?? {}) };
 }
 
-/** Mapea los items del payload normalizado a los 11 campos del <detalle> del XSD. */
+/**
+ * Mapea los items del payload normalizado a los campos del <detalle> del XSD.
+ * Los campos propios de un documento sector (p.ej. quirofano/medico del 17)
+ * pasan tal cual desde el item: el builder solo renderiza los del esquema.
+ */
 function assembleDetalle(payload) {
   const items = payload?.items ?? [];
   return items.map((item) => ({
+    ...item,
     actividadEconomica: item.actividadEconomica ?? payload?.emisor?.actividadEconomica ?? null,
     codigoProductoSin: item.codigoProductoSin ?? null,
     codigoProducto: item.codigoProducto ?? item.codigoInterno ?? null,

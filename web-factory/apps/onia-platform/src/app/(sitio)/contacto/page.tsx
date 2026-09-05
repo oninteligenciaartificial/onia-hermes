@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Reveal } from "@/motion";
-import { CAL_DEMO_URL, CAL_CONSULTA_URL, WA_URL_LANDING } from "@/lib/site";
+import { AGENDA_DEMO_URL, AGENDA_CONSULTA_URL, WA_URL_LANDING } from "@/lib/site";
 import { EMPEZAR_URL } from "../nav";
 import { CTA_ALTA } from "../alta";
 import { Block, Btn, Kicker } from "../ui";
@@ -10,10 +10,15 @@ import s from "../sitio.module.css";
  * /contacto — hasta acá, el que no se registra sin hablar con alguien
  * solo tenía WhatsApp.
  *
- * Los dos eventos son la agenda PROPIA (Cal.com self-hosted en el VPS, cuenta
- * `onia`), declarados en lib/site.ts. Verificados en vivo antes de linkearlos:
- * los dos responden 200 en público (2026-08-21). No se inventa teléfono fijo,
- * dirección ni correo: lo que existe es lo que se publica.
+ * Las dos citas salen por el WhatsApp que atiende la web, declaradas en
+ * lib/site.ts, cada una diciendo cuál eligió el que escribe. No se inventa
+ * teléfono fijo, dirección ni correo: lo que existe es lo que se publica.
+ *
+ * ⚠️ Antes apuntaban a un Cal.com self-hosted que dejó de existir. El host
+ * seguía resolviendo y devolvía 302 a /empezar, así que los dos botones daban
+ * 200 y mandaban al lead a un formulario de alta — en la página que promete,
+ * dos párrafos más arriba, que acá no hay formularios. Ver lib/site.ts y el
+ * gate `(sitio)/enlaces.test.ts`.
  *
  * El orden es el del embudo, no el del ego: primero los 20 minutos del que
  * todavía no sabe si le sirve, después los 45 del que ya vio precios.
@@ -22,7 +27,7 @@ import s from "../sitio.module.css";
 export const metadata: Metadata = {
   title: "Hablemos — agendá una demo de Onia | Bolivia",
   description:
-    "Elegí el horario en nuestra agenda: 20 minutos de consulta comercial para saber si Onia te sirve, o 45 minutos de demo con tu caso adelante. También podés escribirnos por WhatsApp.",
+    "Elegí el horario por WhatsApp: 20 minutos de consulta comercial para saber si Onia te sirve, o 45 minutos de demo con tu caso adelante. Del otro lado hay alguien que conoce el sistema.",
   alternates: { canonical: "/contacto" },
   openGraph: {
     type: "website",
@@ -43,7 +48,7 @@ const CITAS = [
     resultado:
       "Nos contás qué negocio tenés y te decimos, de frente, si Onia te sirve o no. Si no te sirve, te lo decimos ahí.",
     para: "Para el que todavía no sabe si esto es para su rubro.",
-    href: CAL_CONSULTA_URL,
+    href: AGENDA_CONSULTA_URL,
     cta: "Agendar 20 minutos",
     destacado: false,
   },
@@ -55,7 +60,7 @@ const CITAS = [
     resultado:
       "Recorremos el sistema con tu caso adelante: tu agenda, tus cobros, tus agentes. Salís sabiendo qué se enciende primero.",
     para: "Para el que ya vio los precios y quiere verlo funcionando.",
-    href: CAL_DEMO_URL,
+    href: AGENDA_DEMO_URL,
     cta: "Agendar la demo",
     destacado: true,
   },
@@ -72,7 +77,7 @@ export default function Contacto() {
           </h1>
           <p className={s.lead}>
             No hay formulario que caiga en un buzón. Elegís vos el día y la
-            hora en nuestra agenda, y del otro lado hay alguien que conoce el
+            hora por WhatsApp, y del otro lado hay alguien que conoce el
             sistema.
           </p>
         </Reveal>

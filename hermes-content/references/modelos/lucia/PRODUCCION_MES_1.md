@@ -7,8 +7,11 @@
 
 ## Reglas que aplican a TODAS (de LUCIA.md §9, §11, §12, §13)
 
-- Identidad: ancla `452d8375-fb67-4df7-9ae0-8f1b257aa51f`, **fondo simple cuando la cara
-  tiene que ser reconocible**; escenario cargado solo si la cara no es el punto.
+- Identidad: ancla `58bbd635-9b90-4bd2-b08a-1cd4915bd563` (`lucia-skin-v1`), **fondo simple cuando
+  la cara tiene que ser reconocible**; escenario cargado solo si la cara no es el punto.
+  ⛔ Corregido el 2026-09-03: acá decía `452d8375-…`, que `BANCO-OFICIAL.md` ya tenía **jubilada** y
+  que es la causa medida de la deriva de la cara. Este es el plan del mes: cada pieza se habría
+  generado con el ancla equivocada. La reconciliación de los tres UUID está en `BANCO-OFICIAL.md`.
 - Color: `natural true-to-life colors, no color grading, no filter look, accurate white balance`.
 - Movimiento: `natural real-time speed, no slow motion` — sin adverbios de lentitud.
 - `[TEXT RULE — MANDATORY] No legible text anywhere in frame.`
@@ -19,16 +22,44 @@
 
 ---
 
-## L1 · Reel de lanzamiento "No soy real" — ✅ RENDERIZADO, espera OK
+## L1 · Reel de lanzamiento "No soy real" — ✅ RENDERIZADO 2026-08-23 (v7), en el tablero desde 2026-09-04
 
-22 s · 4 beats · voz Marcela · b-roll (rooftop → café → gimnasio → laptop → playa).
-Preview: `reel-lanzamiento-20260822/renders/preview-v4-verde-360.mp4`.
+22 s · 4 beats · voz Marcela · b-roll (rooftop → café → gimnasio → **rooftop cierre**, no playa —
+el clip de playa perdía las pecas y se reemplazó a 0 créditos el 23-ago, ver `TABLA-DE-CORTES.md`).
+Entrega: `reel-lanzamiento-20260822/final/lucia-lanzamiento-v7.mp4`.
+Preview: `reel-lanzamiento-20260822/renders/preview-v7-360.mp4`.
 CTA: seguir (sin palabra — es presentación). **Es la pieza que abre todo.**
 
-## L2 · Carrusel fijado "¿Quién es Lucía?" — brief listo, falta render
+⚠️ **Corregido 2026-09-04.** Esta sección decía "espera OK" desde el 23-ago y nunca se creó la
+tarea del tablero pidiéndolo — 12 días listo y Sergio nunca lo vio. Tarea: `t_aa4c5c10`.
 
-7 slides, pack `editorial-clean`, fotos aprobadas del banco.
-Brief: `posts-20260807/briefs/lucia-quien-es-fijado.json`. CTA: pregunta abierta + seguir.
+## L2 · Carrusel fijado "¿Quién es Lucía?" — ✅ RENDERIZADO 2026-09-03, espera OK
+
+7 slides, pack `editorial-clean`, **2 créditos** (6 fotos del banco `generadas-20260902/` + la
+foto de cierre `generadas-20260903/S3-rooftop-cierre.jpg`, generada el 03-sep para que la lámina 7
+dejara de repetir la portada — bitácora § E10).
+
+- Brief: `posts-20260807/briefs/lucia-quien-es-fijado.json`
+- Render bueno: **`posts-20260807/L2/slide-01..07.jpg`** — las 7 medidas en `1080×1350`
+- Detalle, comando reproducible y chequeo de rúbrica: `posts-20260807/L2/LEEME.md`
+- CTA: pregunta abierta + seguir. Se fija al perfil.
+- ⚠️ **Segunda corrección de copy el 2026-09-03** (láminas 1, 4 y 5, 0 créditos): el arreglo del
+  «equipo» había buscado la palabra y quedaron los **verbos en plural** («si pueden sostenerme»,
+  «cómo me hacen») diciendo lo mismo, más un «la pregunta que todos hacen» en la portada de un
+  perfil con 0 posts. Detalle en el LEEME; la regla, en `RUBRICA-IMPOLUTO.md` (casilla 10 se
+  aplica por lámina, no por string). **Quedan 2 decisiones de Sergio en `t_5af29849`.**
+
+⚠️ **Corregido 2026-09-03 — el brief apuntaba a 6 fotos que no existen en ninguna rama.** Citaba
+`tanda-20260821/*.png`; contado en vivo, esa carpeta tiene **0 imágenes** en disco, **0** en
+`origin/main` y **0** en `origin/claude/ads-creatividades-publicos`: sólo `.mp4` y `.mp3`. No
+estaban "en otra rama" — **nunca entraron a git**, porque eran PNG y `*.png` está ignorado en todo
+`references/modelos/`. Repuntado al banco commiteado del 2026-09-02 y **rendeado en el VPS**, que
+es la prueba de que ahora se puede reconstruir desde un clon limpio.
+
+🔴 **El brief de L6 tiene el MISMO defecto y sigue sin arreglar**: sus 7 `bg` también apuntan a
+`tanda-20260821/*.png` inexistentes. No se tocó a propósito — L6 ya tiene su render bueno (verde,
+en la rama de ads) y repuntarlo cambiaría la pieza que Sergio va a aprobar. Queda anotado: si
+alguna vez hay que **re-rendear** L6, primero hay que repuntar sus fondos.
 
 ---
 
@@ -118,8 +149,36 @@ terminando en plata. Si no nombra el dolor exacto, no sale.
 `tanda-20260821/`; el render es local con `scripts/carousel_render.js`. No hizo falta generar.
 
 - Brief: `posts-20260807/briefs/lucia-l6-cinco-senales.json`
-- Render: `posts-20260807/render-l6/slide-01..07.png` + `_CONTACTO-L6.png` (hoja de contactos)
+- Render bueno: **`posts-20260807/L6/slide-01..07.jpg`** + `_HOJA-DE-CONTACTO.jpg`
 - Comando: `node scripts/carousel_render.js --brief <brief> --out <dir> --account lucia --pack editorial-clean --format feed`
+
+⚠️ **Corregido 2026-09-03 — esta línea mandaba a publicar la versión DESCARTADA.** Decía
+`render-l6/slide-01..07.png`, y esa carpeta lleva adentro un `_NO-SUBIR.md` que dice, textual:
+*"⛔ NO SUBIR — esta versión quedó superada… Subí `L6/` en su lugar"*. Es el lote de acento
+**mostaza**, reemplazado el 28-ago cuando el feed se unificó al **verde Onia**. Una sesión que
+siguiera este plan al pie de la letra publicaba el carrusel del color equivocado — el plan era
+la única fuente que no se había enterado del cambio de color.
+
+Se corrigieron **dos** errores en esa sola línea, y el segundo esconde al primero:
+
+1. **Carpeta equivocada** (`render-l6/` descartada → `L6/` buena).
+2. **Extensión equivocada** (`.png` → `.jpg`). Las láminas se rendean en PNG pero al repo
+   entran convertidas: `references/modelos/.gitignore` ignora `*.png` en todo el árbol
+   ("originales pesados, quedan locales; los JPG q3 son los assets usables"). Copiar la ruta
+   del render y pegarla en un doc produce una cita a un archivo que **git nunca va a tener**.
+
+✅ **RESUELTO — ya está en `main`.** Acá decía «ninguna de las dos carpetas está en `main`;
+`origin/main` tiene **0** láminas de Lucía», y era cierto cuando se escribió. **Recontado el
+2026-09-03 21:40 UTC: `origin/main` tiene 133 láminas**, y este carril quedó al día por
+fast-forward limpio (`HEAD` era ancestro de `main`, 373 commits atrás). L6 **se abre desde un
+clon limpio**. Se mide con:
+
+```sh
+git ls-tree -r origin/main --name-only | grep -icE "modelos/lucia/.*\.(jpg|png|jpeg)$"   # → 133
+```
+
+⚠️ La tarea `t_61685a5a` («el feed existe pero main no tiene ni una lámina») nace de esta misma
+línea y quedó **vencida**: se cierra con este recuento, no se vuelve a investigar.
 - ⚠️ **`--account lucia`**, no `onia`: con `onia` el pie sale `@oniahq` en una pieza de Lucía.
 - CTA: **SISTEMA** → entrega "mapa del negocio (vía @oniahq)", que está 🟢 vivo.
 - Las 5 señales nombran DOLOR, no prometen función: nada de factura electrónica, multi-sede,

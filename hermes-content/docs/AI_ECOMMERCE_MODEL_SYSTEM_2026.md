@@ -1,5 +1,11 @@
 # AI Ecommerce Model System 2026
 
+> ⚠️ **El nombre engana: esto NO es la estrategia de e-commerce de Onia.** Es como se
+> PRODUCEN los creativos (la modelo IA Mara Vale). Que se vende, que no, y cual variante
+> de e-commerce es realista vive en **`ONIA_ECOMMERCE_Y_DROPSHIPPING.md`** (sin fecha,
+> fuente unica del tema desde el 2026-09-04). Aclarado porque el titulo mandaba a las
+> sesiones a buscar aca una decision que nunca estuvo aca.
+
 Sistema operativo para crear una modelo IA profesional, original y reutilizable
 para ecommerce, ads, UGC, catalogos, landings y contenido social.
 

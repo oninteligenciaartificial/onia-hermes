@@ -6,17 +6,43 @@
 //   node simulate.mjs --script 1-feliz             un guion
 //   node simulate.mjs --list                       lista los guiones
 //   node simulate.mjs                              modo interactivo (escribis vos, corta con /salir)
-//   node simulate.mjs --all --slots "jueves 15:00|viernes 10:00"   con horarios de prueba
+//   node simulate.mjs --all --slots "jueves 15:00@2026-07-30T19:00:00Z|viernes 10:00@..."  horarios a mano
 //   node simulate.mjs --all --json                 salida maquina (para diffs / CI)
+//   node simulate.mjs --sin-conocimiento           el guion PELADO del codigo (sin el documento)
 //
-// Los horarios por defecto son el PLACEHOLDER de config.mjs: Sergio todavia no definio los 2
-// bloques semanales. Con --slots se pasan horarios de prueba para ver el guion completo.
+// POR DEFECTO corre con `knowledge.onia.json`, el documento publicado que produccion carga para
+// los inboxes de venta (4 web, 5 WhatsApp): lo que ves aca es lo que oye un lead. Sin eso el
+// simulador contestaba «el número exacto te lo pasa Sergio» mientras el bot vivo daba los precios
+// publicos — ver simulate.test.mjs.
+//
+// Los HORARIOS salen de `ONIA_BOT_SLOTS`, el mismo lugar del que los lee el bot vivo, con el
+// formato `etiqueta@ISO` (la etiqueta es lo unico que ve el prospecto). Si no hay ninguno se cae
+// al placeholder de config.mjs Y SE AVISA: produccion tiene dos cargados —los repone un cron
+// diario—, asi que el guion sin horarios es una rama que ningun lead ve. Para reproducir lo que
+// contesta produccion ahora mismo:
+//
+//   export ONIA_BOT_SLOTS=$(docker exec onia-center sh -c "tr '\0' '\n' < /proc/<pid>/environ" \
+//     | sed -n 's/^ONIA_BOT_SLOTS=//p')
 // Spec: hermes-content/docs/ONIA_CHATBOT_PROPIO_SPEC_20260725.md §6 (via A).
 
 import readline from "node:readline";
-import { createBotConfig, DEFAULT_CONFIG } from "./config.mjs";
+import { readFileSync } from "node:fs";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import { createBotConfig, DEFAULT_CONFIG, parseSlotsSpec } from "./config.mjs";
 import { createState, step, markHumanTakeover, buildFollowUp, LLM_PENDING } from "./bot-engine.mjs";
-import { applyKnowledge, asRecepcionista } from "./knowledge.mjs";
+import { applyKnowledge, asRecepcionista, readKnowledgeFile } from "./knowledge.mjs";
+
+/**
+ * El documento PUBLICADO del bot de venta de Onia — el mismo `knowledge.onia.json` que se instala
+ * con `webhook-server.sh knowledge` y que produccion carga para los inboxes 4 (web) y 5 (WhatsApp).
+ *
+ * Nace del 2026-09-04: el simulador armaba la config con `DEFAULT_CONFIG` pelado, sin documento, y
+ * por eso a "¿cuánto cuesta el sistema?" contestaba «el número exacto te lo pasa Sergio en la demo»
+ * mientras el bot vivo, a la misma hora, contestaba los precios publicos (conversacion 49 de
+ * Chatwoot, mensaje 418). El instrumento con el que se mide el carril daba ROJO sobre algo que en
+ * produccion estaba VERDE — y un rojo falso manda a la vuelta siguiente a reabrir un bug cerrado.
+ */
+export const CONOCIMIENTO_PUBLICADO = fileURLToPath(new URL("./knowledge.onia.json", import.meta.url));
 
 // Knowledge de UNA org cliente (fila "db" publicada) para el guion recepcionista. Es el mismo
 // shape "onia.bot.knowledge/1" que publica el editor del producto.
@@ -165,19 +191,97 @@ function parseArgs(argv) {
     else if (arg === "--script") args.script = argv[++index];
     else if (arg === "--slots") args.slots = argv[++index];
     else if (arg === "--contact") args.contact = argv[++index];
+    // Escotilla para comparar los dos guiones: con el documento publicado (lo que oye un lead) y
+    // sin el (lo que trae el codigo). El DEFAULT es con documento, o sea produccion.
+    else if (arg === "--sin-conocimiento") args.sinConocimiento = true;
   }
   return args;
 }
 
-function buildConfig(args) {
-  if (!args.slots) return DEFAULT_CONFIG;
-  const [labelA, labelB] = String(args.slots).split("|").map((part) => part.trim());
-  return createBotConfig({
-    slots: [
-      { key: "A", label: labelA || "opción A", startAt: null, pending: false },
-      { key: "B", label: labelB || "opción B", startAt: null, pending: false },
-    ],
-  });
+/**
+ * Lee el documento publicado con la MISMA validacion que produccion (`parseKnowledge`: todo o
+ * nada). Devuelve `{ data, aviso }`: si `aviso` no es null, el simulador se queda con el guion del
+ * codigo — igual que el bot vivo — y lo dice en voz alta.
+ */
+export function cargarConocimientoPublicado(deps = {}) {
+  const path = deps.path || CONOCIMIENTO_PUBLICADO;
+  const { data, error, missing } = readKnowledgeFile(path, deps);
+  if (data) return { data, aviso: null };
+  const motivo = missing ? "no existe" : error || "no se pudo leer";
+  return { data: null, aviso: `⚠️ sin conocimiento publicado (${path}: ${motivo}) — esto NO es lo que contesta produccion` };
+}
+
+/** El archivo de entorno que el bot vivo carga de verdad. NO es una copia: es el que se instala. */
+export const WEBHOOK_ENV_DESPLEGADO = "/opt/onia/bot/webhook.env";
+
+/**
+ * Lee UNA variable del `webhook.env` desplegado. Sin dependencias: es `CLAVE=valor` por linea,
+ * con el valor entrecomillado (asi lo escribe el lanzador). Las comillas se sacan o se filtran
+ * al guion que ve el prospecto.
+ */
+function leerDelEnvDesplegado(path, clave, deps = {}) {
+  const read = deps.readFileSync || readFileSync;
+  let texto;
+  try {
+    texto = read(path, "utf8");
+  } catch {
+    return null;
+  }
+  for (const linea of String(texto).split("\n")) {
+    const limpia = linea.trim();
+    if (!limpia || limpia.startsWith("#") || !limpia.startsWith(`${clave}=`)) continue;
+    const crudo = limpia.slice(clave.length + 1).trim();
+    const sinComillas = crudo.replace(/^(["'])([\s\S]*)\1$/, "$2");
+    return sinComillas.trim() || null;
+  }
+  return null;
+}
+
+/**
+ * Los horarios con los que produccion esta contestando AHORA, por el mismo camino que el bot vivo:
+ * `--slots` a mano · si no `ONIA_BOT_SLOTS` del entorno · si no el `webhook.env` DESPLEGADO, que es
+ * de donde produccion la saca (el lanzador la pasa con `docker exec -e`). Ese orden es el que
+ * resuelve produccion: lo que ya esta en el entorno gana, porque es lo ultimo que se aplica.
+ *
+ * Sin el ultimo escalon el simulador caia en la rama `M0_SIN_HORARIOS` mientras produccion tenia
+ * DOS horarios cargados — o sea que el "3/3" que este carril reporta cada vuelta certificaba un
+ * guion que ningun prospecto ve. Medido el 2026-09-04: `webhook.env` y el proceso vivo tenian los
+ * dos slots, y el simulador corrido como lo manda el prompt del carril seguia sirviendo la otra
+ * rama. La vuelta anterior habia agregado el AVISO y el aviso salio impreso dos veces sin que
+ * nadie cambiara de rama: avisar no alcanza cuando el que lee es el mismo que ya confio.
+ *
+ * Es el mismo eslabon que `knowledge.onia.json`, un escalon mas arriba: ahi el instrumento cargaba
+ * otra CONFIG que produccion; aca cargaba bien la config y erraba la entrada que ELIGE LA RAMA.
+ * Cuando no hay horarios por ningun lado NO se lo calla: lo dice, igual que con el documento.
+ */
+export function cargarSlotsPublicados(args = {}, deps = {}) {
+  const env = deps.env || process.env;
+  const envFile = deps.envFile || WEBHOOK_ENV_DESPLEGADO;
+  const raw =
+    String(args.slots || env.ONIA_BOT_SLOTS || "").trim() ||
+    String(leerDelEnvDesplegado(envFile, "ONIA_BOT_SLOTS", deps) || "").trim();
+  if (!raw) {
+    return {
+      slots: null,
+      aviso: `⚠️ sin horarios (ni --slots, ni ONIA_BOT_SLOTS, ni ${envFile}) — si produccion los tiene cargados, esta es OTRA rama del guion`,
+    };
+  }
+  return { slots: parseSlotsSpec(raw), aviso: null };
+}
+
+export function buildConfig(args = {}, deps = {}) {
+  let base = DEFAULT_CONFIG;
+  const { slots, aviso: avisoSlots } = cargarSlotsPublicados(args, deps);
+  if (avisoSlots) (deps.warn || console.error)(avisoSlots);
+  if (slots) base = createBotConfig({ slots });
+  if (args.sinConocimiento) return base;
+
+  const { data, aviso } = cargarConocimientoPublicado(deps);
+  if (!data) {
+    (deps.warn || console.error)(aviso);
+    return base;
+  }
+  return applyKnowledge(base, data);
 }
 
 function plusMinutes(iso, minutes) {
@@ -198,13 +302,25 @@ function indent(text) {
     .join("\n");
 }
 
-function runScript(name, baseConfig) {
+/**
+ * La config con la que corre cada guion.
+ *
+ * - Guiones de ONIA: la config de venta, o sea con el documento publicado (`buildConfig`).
+ * - Guion de una org CLIENTE: SU knowledge y el modo recepcionista, igual que cuando la fila
+ *   publicada llega por la fuente "db".
+ */
+export function configParaGuion(name, config, configPelado = config) {
   const script = SCRIPTS[name];
-  // Guion de una org cliente: se corre con SU knowledge y el modo recepcionista encendido,
-  // igual que cuando la fila publicada llega por la fuente "db".
-  const config = script.conocimiento
-    ? asRecepcionista(applyKnowledge(baseConfig, script.conocimiento), script.conocimiento)
-    : baseConfig;
+  if (!script?.conocimiento) return config;
+  // Sobre `configPelado`, NO sobre la de Onia: el conocimiento de una org no BORRA lo que ya
+  // estuviera cargado, lo pisa campo por campo. Armado encima del nuestro, la ferreteria se
+  // quedaba con nuestro M4_BODY ("Bs 320 … onia.com.bo/precios") esperando la rama de precio.
+  return asRecepcionista(applyKnowledge(configPelado, script.conocimiento), script.conocimiento);
+}
+
+function runScript(name, baseConfig, basePelada) {
+  const script = SCRIPTS[name];
+  const config = configParaGuion(name, baseConfig, basePelada);
   const events = [];
   let state = createState({ channel: "sim", contactRef: `sim-${name}`, pieceKey: "lucia-d03-reel-siat", sourceCampaign: "lucia-dentalgest-jul2026" });
   let clock = script.startAt;
@@ -301,22 +417,30 @@ async function interactive(config, contactRef) {
   rl.close();
 }
 
-const args = parseArgs(process.argv.slice(2));
-const config = buildConfig(args);
+// Guarda de import: sin esto, `import ... from "./simulate.mjs"` en un test arrancaba el modo
+// interactivo y se colgaba leyendo stdin (la misma trampa que ya costo una vuelta en
+// scripts/demo_agendada_real.mjs el 2026-09-03).
+const ejecutadoDirecto = Boolean(process.argv[1]) && import.meta.url === pathToFileURL(process.argv[1]).href;
 
-if (args.list) {
-  for (const [name, script] of Object.entries(SCRIPTS)) console.log(`${name.padEnd(18)} ${script.title}`);
-} else if (args.all || args.script) {
-  const names = args.all ? Object.keys(SCRIPTS) : [args.script];
-  const runs = names.map((name) => {
-    if (!SCRIPTS[name]) {
-      console.error(`guion desconocido: ${name}. Probá --list`);
-      process.exit(1);
-    }
-    return runScript(name, config);
-  });
-  if (args.json) console.log(JSON.stringify(runs, null, 2));
-  else runs.forEach(printScript);
-} else {
-  await interactive(config, args.contact);
+if (ejecutadoDirecto) {
+  const args = parseArgs(process.argv.slice(2));
+  const config = buildConfig(args);
+  const configPelado = buildConfig({ ...args, sinConocimiento: true });
+
+  if (args.list) {
+    for (const [name, script] of Object.entries(SCRIPTS)) console.log(`${name.padEnd(18)} ${script.title}`);
+  } else if (args.all || args.script) {
+    const names = args.all ? Object.keys(SCRIPTS) : [args.script];
+    const runs = names.map((name) => {
+      if (!SCRIPTS[name]) {
+        console.error(`guion desconocido: ${name}. Probá --list`);
+        process.exit(1);
+      }
+      return runScript(name, config, configPelado);
+    });
+    if (args.json) console.log(JSON.stringify(runs, null, 2));
+    else runs.forEach(printScript);
+  } else {
+    await interactive(config, args.contact);
+  }
 }

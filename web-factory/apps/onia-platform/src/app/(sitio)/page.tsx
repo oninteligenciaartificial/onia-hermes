@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import { Reveal } from "@/motion";
-import { PLANES, ADDONS, GRUPO, PRUEBA, bs } from "@/lib/pricing";
+import { PLANES, ADDONS, GRUPO, PRUEBA, bs, plan } from "@/lib/pricing";
 import {
   CHATBOT_PLAN,
   precioStack,
@@ -55,18 +55,20 @@ import s from "./sitio.module.css";
  * Google habría seguido prometiendo la frase anterior. Una promesa que cambia
  * se barre en TODA la superficie, y el snippet es la primera.
  *
- * También se va el "Desde Bs 320" de las dos descripciones, por la misma razón
- * por la que se fue del hero: la escena que promete la página —el negocio
- * atendiendo de noche— la hace el asistente (add-on) más la agenda pública
- * sobre el plan, no el plan de Bs 320 solo. El precio completo, con lo que cada
- * nivel trae y lo que no, vive en /precios, que es donde se compra.
+ * El 2026-09-04 se barrieron los cuatro otra vez, y por el mismo motivo con el
+ * signo cambiado: el hero dejó de vender al asistente, así que el snippet no
+ * puede seguir prometiendo "el que pregunta a las once". Lo que se ofrece es el
+ * sistema, y el precio de entrada vuelve a las descripciones porque ahora sí es
+ * el precio de lo que la página promete — interpolado de `lib/pricing.ts`,
+ * nunca tipeado: una descripción con la cifra a mano es la forma más fácil de
+ * publicar un precio que ya no se cobra, y no la ve ninguna captura.
  */
-const TITULO = "Onia · Cerrás vos, el negocio no | Software de gestión Bolivia";
-const DESCRIPCION =
-  "Onia es el sistema con el que llevás tu negocio en Bolivia: agenda, clientes, cobros e inventario, con un asistente que contesta fuera de horario y agentes que dejan el borrador listo para tu aprobación. 14 días gratis, sin tarjeta.";
-const OG_TITULO = "Cerrás vos. El negocio no. — Onia, Bolivia";
-const OG_DESCRIPCION =
-  "Un negocio abre 9 horas. Las otras 15 hoy no las atiende nadie: el que pregunta a las once espera hasta mañana, si espera. Onia contesta, agenda y deja los avisos escritos para que vos los aprobés. 14 días gratis, sin tarjeta.";
+const DESDE_MES = `Bs ${bs(plan("basico").mensual)}`;
+const TITULO =
+  "Onia · Todo el negocio en una pantalla | Software de gestión Bolivia";
+const DESCRIPCION = `Onia es el sistema con el que llevás tu negocio en Bolivia: agenda, fichas de clientes, caja, cobros e inventario en un solo lugar, ya armado para tu rubro. Desde ${DESDE_MES} al mes. ${PRUEBA.dias} días gratis, sin tarjeta.`;
+const OG_TITULO = "Todo el negocio, en una pantalla. — Onia, Bolivia";
+const OG_DESCRIPCION = `La agenda en un cuaderno, los clientes en el teléfono y las cuentas en una planilla: nada se cruza, y lo que no se cruza se pierde. Onia junta agenda, clientes, caja, cobros e inventario en un solo sistema, armado para tu rubro. Desde ${DESDE_MES} al mes, ${PRUEBA.dias} días gratis y sin tarjeta.`;
 
 export const metadata: Metadata = {
   title: TITULO,
@@ -212,7 +214,7 @@ const DIA = [
     id: "estetica",
     momento: "De noche",
     texto:
-      "Bajás la persiana y el paquete que quedó por la mitad no se pierde: a la mañana te espera el borrador de a quién llamar, para que lo apruebes.",
+      "Bajás la persiana y el paquete que quedó por la mitad no se pierde: a la mañana te espera el borrador de a quién llamar, para que lo aprobés.",
     alt: "Dueña de un centro de estética junto a la camilla vacía con papel nuevo puesto, con el celular en la mano.",
   },
 ] as const;
@@ -349,42 +351,54 @@ export default function Portada() {
   return (
     <>
       <JsonLd data={JSON_LD} />
-      {/* 1 · HERO — "el resultado": el día del negocio, DIBUJADO.
+      {/* 1 · HERO — la OFERTA: el sistema de gestión, y qué cuesta.
 
-          Aprobado por Sergio el 2026-09-01 sobre la pieza suelta de
-          hermes-content/references/ui-patterns/hero-onia/resultado/. De tres
-          direcciones ganó ésta; el titular no se toca.
+          El esqueleto (dos columnas de TEXTO, cero captura) es el que Sergio
+          aprobó el 2026-09-01. Lo que cambió el 2026-09-04 es QUÉ vende, y por
+          qué: el hero anterior vendía el add-on.
 
-          Lo que sale y por qué:
-           · la CAPTURA del panel. Sergio, 2026-09-01: "no coloques capturas
-             literales del sistema, se ve mal, coloca cosas referenciales". El
-             hero no lleva ni una imagen — el día se dibuja con divs y color.
-           · "Ver precios" como segundo botón. La escena que dibuja el hero la
-             hace el asistente (add-on) sobre el plan: mandar a la tabla de
-             precios desde acá es prometer un número que no compra esta imagen.
-             /precios sigue en el header, en el pie y en la sección 8.
-           · la nota de "14 días gratis · sin tarjeta". No se pierde: es la
-             banda de prueba que viene JUSTO abajo, y la primera pregunta de la
-             FAQ. Repetirla acá le sacaba aire al argumento del día. */}
+          Kicker "Un negocio abre 9 horas", la banda del día partida en 9/15 —la
+          pieza más grande de la primera pantalla— y el cierre "El asistente es
+          la puerta": las tres cosas son la escena del ASISTENTE (Bs 390, add-on
+          de lib/pricing.ts). El sistema, que es lo que se vende, quedaba de
+          relleno y sin precio. Sergio, 2026-09-03, textual: "el sistema no
+          ofrece directamente el bot, ofrece solo el sistema… la referencia es
+          Lety y Dapta, mirá cómo venden". CLAUDE.md §3 lo fija como regla.
+
+          Entonces:
+           · el titular es el sistema y el beneficio (todo junto en un lugar),
+             no la hora a la que contesta el bot;
+           · el precio de entrada sube a la primera pantalla, INTERPOLADO de
+             lib/pricing.ts. Antes no podía estar —la escena del bot no la
+             compra el plan de Bs 320— y con el hero nuevo sí: lo que promete
+             esta pantalla es exactamente lo que trae el plan;
+           · la banda del día baja a la sección 6, al lado del add-on que la
+             hace. No se pierde el argumento: deja de ser el titular.
+
+          Lo que NO cambió: cero imagen (Sergio, 2026-09-01: "no coloques
+          capturas literales del sistema… coloca cosas referenciales") y cero
+          prueba social — no hay clientes pagando. Lo vigila `hero.test.ts`. */}
       <Block surface="paper" className={s.heroBlock}>
         <Reveal>
           <div className={`${s.split} ${s.heroTop}`}>
             <div>
-              <Kicker>Un negocio abre 9 horas</Kicker>
+              <Kicker>Un solo sistema para todo el negocio</Kicker>
               <h1 className={s.display}>
-                Cerrás vos.
+                Todo el negocio,
                 <br />
-                El negocio <em>no</em>.
+                en <em>una</em> pantalla.
               </h1>
             </div>
             <div>
               <p className={s.lead}>
-                <b>Onia es el sistema con el que llevás el negocio.</b> Y no
-                cierra cuando cerrás vos.
+                <b>Onia es el sistema con el que llevás tu negocio.</b> Agenda,
+                fichas de clientes, caja, cobros e inventario en un solo lugar,
+                y ya armado para tu rubro el día que entrás.
               </p>
               <p className={s.cost}>
-                Fuera de horario hoy no contesta nadie.{" "}
-                <b>El que pregunta espera hasta mañana.</b> Si espera.
+                Hoy la agenda está en un cuaderno, los clientes en el teléfono y
+                las cuentas en una planilla. <b>Nada se cruza</b>, y lo que no
+                se cruza se pierde.
               </p>
               <div className={s.actions}>
                 {/* El verbo tiene que ser el del destino, y el destino cambia:
@@ -396,9 +410,12 @@ export default function Portada() {
                   Escribinos por WhatsApp
                 </Btn>
               </div>
-              <p className={s.puerta}>
-                <em>El asistente</em> es la puerta. Adentro está el sistema:{" "}
-                <b>agenda, clientes, cobros e inventario</b>.
+              {/* El número sale de la fuente, jamás tipeado: es el mismo que
+                  cobra el checkout. Lo vigilan `precios.test.ts` (prohíbe el
+                  literal) y `hero.test.ts` (exige que acá esté). */}
+              <p className={s.desde}>
+                Desde <b>Bs {bs(plan("basico").mensual)} al mes</b>.{" "}
+                <em>{PRUEBA.dias} días gratis</em>, sin tarjeta.
               </p>
             </div>
           </div>
@@ -406,7 +423,151 @@ export default function Portada() {
 
         {/* pendiente: prueba real (cero clientes pagando ⇒ ni logos ni
             testimonios; los hechos verificables van en la banda de abajo) */}
+      </Block>
 
+      {/* 2 · BANDA DE PRUEBA — solo hechos verificables, cero logos/testimonios */}
+      <Block surface="paperDim">
+        <Reveal>
+          <div className={s.trust}>
+            <div className={s.trustCell}>
+              <div className={s.trustNum}>5</div>
+              <p className={s.trustLabel}>rubros vivos en producción hoy</p>
+            </div>
+            <div className={s.trustCell}>
+              <div className={s.trustNum}>24/7</div>
+              <p className={s.trustLabel}>
+                agentes que trabajan y esperan tu aprobación
+              </p>
+            </div>
+            <div className={s.trustCell}>
+              <div className={s.trustNum}>{PRUEBA.dias} días</div>
+              <p className={s.trustLabel}>de prueba, sin tarjeta</p>
+            </div>
+            <div className={s.trustCell}>
+              <div className={s.trustNum}>CSV</div>
+              <p className={s.trustLabel}>tus datos salen cuando quieras</p>
+            </div>
+          </div>
+        </Reveal>
+      </Block>
+
+      {/* 3 · HECHO FUERTE — el hueco de mercado, sourced (proof.ts) */}
+      <Block surface="green" labelledBy="hecho">
+        <Reveal>
+          <Kicker>El hueco</Kicker>
+          <p id="hecho" className={s.h2} style={{ maxWidth: "22ch" }}>
+            {HUECO}
+          </p>
+          <p className={s.body} style={{ fontSize: "1.15em" }}>
+            Onia unifica la gestión y los agentes con IA en un solo sistema,
+            hecho para Bolivia.
+          </p>
+          <p className={s.note} style={{ marginTop: "1.6em" }}>
+            Comparación de precios y capacidades publicadas por la competencia,
+            consultadas el {FECHA_CONSULTA}.
+          </p>
+          <div className={s.actions}>
+            <a className={s.link} href="/comparativa">
+              Ver la comparación, con nombres y precios →
+            </a>
+          </div>
+        </Reveal>
+      </Block>
+
+      {/* 4 · UN DÍA CON ONIA — el manifiesto deja de estar suspendido: la
+          frase que dice QUÉ ES queda arriba, y debajo van tres momentos del
+          día que muestran QUÉ PASA. Fotos de contexto (ver DIA, arriba); la
+          interfaz se DIBUJA y vive en los otros bloques. */}
+      <Block surface="paper" labelledBy="que-es">
+        <Reveal>
+          <Kicker>Un día con Onia</Kicker>
+          <p id="que-es" className={s.h2} style={{ maxWidth: "24ch" }}>
+            Onia es un solo sistema de gestión con IA: agenda, clientes, cobros
+            y contabilidad, con agentes que esperan tu aprobación.
+          </p>
+        </Reveal>
+        <Reveal delay={0.08}>
+          <div className={s.scenes}>
+            {DIA.map((escena) => (
+              <div key={escena.id}>
+                <div className={s.foto}>
+                  {/* eslint-disable-next-line @next/next/no-img-element -- standalone sin sharp: next/image no optimiza en el VPS */}
+                  <img
+                    src={`/contexto/${escena.id}.webp`}
+                    alt={escena.alt}
+                    width={FOTO_DIA.w}
+                    height={FOTO_DIA.h}
+                    loading="lazy"
+                    decoding="async"
+                    className={s.fotoImg}
+                  />
+                </div>
+                <p className={s.sceneHora}>{escena.momento}</p>
+                <p className={s.sceneTexto}>{escena.texto}</p>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+      </Block>
+
+      {/* 5 · AGENTES — bloque de resultado (ancla oscura) → apartado */}
+      <Block surface="ink" labelledBy="agentes">
+        <div className={s.split}>
+          <Reveal>
+            <div>
+              <Kicker>Agentes con IA</Kicker>
+              <h2 id="agentes" className={s.h2}>
+                Trabajan de noche. No <em>deciden</em> solos.
+              </h2>
+              <p className={s.body}>
+                Revisan tus datos con el negocio cerrado y dejan un borrador
+                esperando: a quién llamar, a quién cobrarle. A la mañana aprobás
+                lo que sirve y se manda. La decisión sigue siendo tuya.
+              </p>
+              <div className={s.actions}>
+                <a className={s.link} href="/agentes">
+                  Ver cómo funcionan los agentes →
+                </a>
+              </div>
+            </div>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <Shape tone="signal" panel="agentes" />
+          </Reveal>
+        </div>
+      </Block>
+
+      {/* 6 · CHATBOT — bloque de resultado → apartado */}
+      <Block surface="paper" labelledBy="chatbot">
+        <div className={`${s.split} ${s.splitFlip}`}>
+          <Reveal>
+            <div>
+              <Kicker>Chatbot de WhatsApp</Kicker>
+              <h2 id="chatbot" className={s.h2}>
+                El que escribe a las once ya tiene respuesta.
+              </h2>
+              <p className={s.body}>
+                Contesta al instante con la información real que vos publicaste.
+                No inventa ni cotiza por su cuenta: lo que no sabe te lo pasa
+                con la conversación entera. Se suma a cualquier plan.
+              </p>
+              <div className={s.actions}>
+                <a className={s.link} href="/chatbot">
+                  Ver el chatbot y sus requisitos →
+                </a>
+              </div>
+            </div>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <Shape tone="green" panel="chat" />
+          </Reveal>
+        </div>
+
+        {/* EL DÍA — las 9 horas que atendés vos y las 15 que no atiende nadie.
+
+            Vivía en el hero y era la pieza más grande de la primera pantalla:
+            con eso la portada vendía el add-on. Acá abajo hace lo que le toca —
+            es el argumento del asistente, al lado del asistente. */}
         <Reveal delay={0.08} className={s.day}>
           <div className={s.ruler} aria-hidden="true">
             {Array.from({ length: HORAS_VOS + HORAS_ONIA }, (_, i) => (
@@ -489,144 +650,6 @@ export default function Portada() {
         </Reveal>
       </Block>
 
-      {/* 2 · BANDA DE PRUEBA — solo hechos verificables, cero logos/testimonios */}
-      <Block surface="paperDim">
-        <Reveal>
-          <div className={s.trust}>
-            <div className={s.trustCell}>
-              <div className={s.trustNum}>5</div>
-              <p className={s.trustLabel}>rubros vivos en producción hoy</p>
-            </div>
-            <div className={s.trustCell}>
-              <div className={s.trustNum}>24/7</div>
-              <p className={s.trustLabel}>agentes que trabajan y esperan tu aprobación</p>
-            </div>
-            <div className={s.trustCell}>
-              <div className={s.trustNum}>{PRUEBA.dias} días</div>
-              <p className={s.trustLabel}>de prueba, sin tarjeta</p>
-            </div>
-            <div className={s.trustCell}>
-              <div className={s.trustNum}>CSV</div>
-              <p className={s.trustLabel}>tus datos salen cuando quieras</p>
-            </div>
-          </div>
-        </Reveal>
-      </Block>
-
-      {/* 3 · HECHO FUERTE — el hueco de mercado, sourced (proof.ts) */}
-      <Block surface="green" labelledBy="hecho">
-        <Reveal>
-          <Kicker>El hueco</Kicker>
-          <p id="hecho" className={s.h2} style={{ maxWidth: "22ch" }}>
-            {HUECO}
-          </p>
-          <p className={s.body} style={{ fontSize: "1.15em" }}>
-            Onia unifica la gestión y los agentes con IA en un solo sistema,
-            hecho para Bolivia.
-          </p>
-          <p className={s.note} style={{ marginTop: "1.6em" }}>
-            Comparación de precios y capacidades publicadas por la competencia,
-            consultadas el {FECHA_CONSULTA}.
-          </p>
-          <div className={s.actions}>
-            <a className={s.link} href="/comparativa">
-              Ver la comparación, con nombres y precios →
-            </a>
-          </div>
-        </Reveal>
-      </Block>
-
-      {/* 4 · UN DÍA CON ONIA — el manifiesto deja de estar suspendido: la
-          frase que dice QUÉ ES queda arriba, y debajo van tres momentos del
-          día que muestran QUÉ PASA. Fotos de contexto (ver DIA, arriba); la
-          interfaz se DIBUJA y vive en los otros bloques. */}
-      <Block surface="paper" labelledBy="que-es">
-        <Reveal>
-          <Kicker>Un día con Onia</Kicker>
-          <p id="que-es" className={s.h2} style={{ maxWidth: "24ch" }}>
-            Onia es un solo sistema de gestión con IA: agenda, clientes, cobros y
-            contabilidad, con agentes que esperan tu aprobación.
-          </p>
-        </Reveal>
-        <Reveal delay={0.08}>
-          <div className={s.scenes}>
-            {DIA.map((escena) => (
-              <div key={escena.id}>
-                <div className={s.foto}>
-                  {/* eslint-disable-next-line @next/next/no-img-element -- standalone sin sharp: next/image no optimiza en el VPS */}
-                  <img
-                    src={`/contexto/${escena.id}.webp`}
-                    alt={escena.alt}
-                    width={FOTO_DIA.w}
-                    height={FOTO_DIA.h}
-                    loading="lazy"
-                    decoding="async"
-                    className={s.fotoImg}
-                  />
-                </div>
-                <p className={s.sceneHora}>{escena.momento}</p>
-                <p className={s.sceneTexto}>{escena.texto}</p>
-              </div>
-            ))}
-          </div>
-        </Reveal>
-      </Block>
-
-      {/* 5 · AGENTES — bloque de resultado (ancla oscura) → apartado */}
-      <Block surface="ink" labelledBy="agentes">
-        <div className={s.split}>
-          <Reveal>
-            <div>
-              <Kicker>Agentes con IA</Kicker>
-              <h2 id="agentes" className={s.h2}>
-                Trabajan de noche. No <em>deciden</em> solos.
-              </h2>
-              <p className={s.body}>
-                Revisan tus datos con el negocio cerrado y dejan un borrador
-                esperando: a quién llamar, a quién cobrarle. A la mañana aprobás
-                lo que sirve y se manda. La decisión sigue siendo tuya.
-              </p>
-              <div className={s.actions}>
-                <a className={s.link} href="/agentes">
-                  Ver cómo funcionan los agentes →
-                </a>
-              </div>
-            </div>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <Shape tone="signal" panel="agentes" />
-          </Reveal>
-        </div>
-      </Block>
-
-      {/* 6 · CHATBOT — bloque de resultado → apartado */}
-      <Block surface="paper" labelledBy="chatbot">
-        <div className={`${s.split} ${s.splitFlip}`}>
-          <Reveal>
-            <div>
-              <Kicker>Chatbot de WhatsApp</Kicker>
-              <h2 id="chatbot" className={s.h2}>
-                El que escribe a las once ya tiene respuesta.
-              </h2>
-              <p className={s.body}>
-                Contesta al instante con la información real que vos
-                publicaste. No inventa ni cotiza por su cuenta: lo que no sabe
-                te lo pasa con la conversación entera. Se suma a cualquier
-                plan.
-              </p>
-              <div className={s.actions}>
-                <a className={s.link} href="/chatbot">
-                  Ver el chatbot y sus requisitos →
-                </a>
-              </div>
-            </div>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <Shape tone="green" panel="chat" />
-          </Reveal>
-        </div>
-      </Block>
-
       {/* 7 · SWITCHER DE RUBROS — la sección estrella */}
       <Block surface="paper" labelledBy="rubros">
         <Reveal>
@@ -696,7 +719,11 @@ export default function Portada() {
                     tamaño, no apagar el texto hasta que no se lea. */}
                 <ul
                   className={s.planList}
-                  style={{ marginTop: "0.35em", fontSize: "0.86em", opacity: 0.85 }}
+                  style={{
+                    marginTop: "0.35em",
+                    fontSize: "0.86em",
+                    opacity: 0.85,
+                  }}
                 >
                   {plan.sinEsto.map((item) => (
                     <li key={item}>{item}</li>

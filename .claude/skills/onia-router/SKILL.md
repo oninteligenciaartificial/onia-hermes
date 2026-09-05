@@ -66,7 +66,7 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 - **Autonomía máxima:** MCP → CLI/API → skill → script → recién ahí preguntar.
 - **Gasto de plataformas externas — imagen y video NO son el mismo permiso** (corregido 2026-08-23):
   **VIDEO generado** (Higgsfield, ElevenLabs, fal.ai) = permiso explícito caso por caso, cotizado
-  con `get_cost:true` ANTES. **IMAGEN en lote chico** = gasto trivial ya validado (`soul_2` a 2k son
+  con `get_cost:true` ANTES. **IMAGEN en lote chico** = gasto trivial ya validado (`text2image_soul_v2` a 2k son
   ~0,12 créditos); se genera y se registra el lote. Permiso sigue haciendo falta para volumen grande
   o para dar de alta una plataforma nueva.
 - **Bolivia:** todo desarrollo acomodado a Bolivia con contaduría boliviana específica y vigente;

@@ -18,7 +18,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
@@ -291,4 +291,66 @@ test("el espejo REAL es coherente consigo mismo: copiarlo entero nunca deja un s
   const espejo = fileURLToPath(new URL(".", import.meta.url));
   const repo = fuentesLocales(espejo);
   assert.deepEqual(acoplesDeCopia(repo, {}, Object.keys(repo)), []);
+});
+
+// --- El agujero que tenian los 21 casos de arriba, medido el 2026-09-04 -----------------------
+//
+// Todos prueban las FUNCIONES de comparacion con datos sinteticos, y el unico que dice mirar
+// "el espejo REAL" (el de aca arriba) compara el repo contra `{}`: o sea, contra si mismo.
+// NINGUNO leia `/opt/onia/bot`. Con este archivo entero en verde, `uso-plataforma.mjs` (130
+// lineas) y `uso-plataforma.test.mjs` (242) vivieron SOLO en el VPS, sin commitear nunca, y el
+// `webhook-server.mjs` de produccion era superset del espejo en 27 lineas — el disparo del
+// contador de la cuota mensual del add-on. Se descubrio de casualidad, desplegando otra cosa:
+// `deploy-bot.sh` copia espejo -> VPS por lista blanca, asi que el deploy iba a BORRAR el
+// contador sin romper nada visible. Codigo sin versionar en un VPS existe en un solo lugar.
+//
+// POR QUE SOLO SE MIRA LA DIRECCION VPS -> REPO, y no la simetrica: que el repo tenga algo que
+// el VPS todavia no, es el estado NORMAL de cualquier arreglo commiteado y no desplegado. Un
+// gate rojo aca vive en la cadena `npm test` de la raiz, que traba el merge de los 15 carriles:
+// ponerlo rojo por trabajo pendiente de deploy seria un freno permanente. La direccion contraria
+// -algo vivo en el VPS que no esta en git- no tiene ningun caso legitimo salvo los exentos, y es
+// la unica que pierde codigo para siempre.
+//
+// Y los SUJETOS se derivan del DISCO del VPS menos una lista de exclusiones, no de una lista de
+// inclusion: asi un archivo nuevo nace cubierto y hay que excluirlo a mano, a la vista. Al reves
+// el gate falla ABIERTO — que es exactamente como nacio este agujero.
+
+/** Lo que vive en /opt/onia/bot a proposito y NO va al repo. Cada exencion, con su motivo. */
+const EXENTOS_DEL_VPS = new Set([
+  "knowledge.json", // el conocimiento cargado en vivo; lo edita Sergio, no el repo
+  "webhook.env", // secretos
+]);
+
+/** Mismos patrones que la lista blanca de `deploy-bot.sh`: lo que el deploy copia y pisa. */
+const PATRONES_DEPLOY = [/\.mjs$/, /\.sh$/, /^knowledge\.example\.json$/, /^knowledge\.onia\.json$/, /^plantillas-humo\.json$/];
+
+test("todo archivo VIVO en /opt/onia/bot que el deploy pisaria esta versionado en el espejo", () => {
+  const DIR_VPS = "/opt/onia/bot";
+  const espejo = fileURLToPath(new URL(".", import.meta.url));
+
+  if (!existsSync(DIR_VPS)) {
+    // No se salta en silencio: un gate que no midio nada tiene que DECIRLO, si no se lee como
+    // verde. En el VPS -donde corren los 15 loops- la ruta es absoluta y siempre existe.
+    console.log(`      (sin medir: no existe ${DIR_VPS} en este host — este gate solo corre en el VPS)`);
+    return;
+  }
+
+  const enElVps = readdirSync(DIR_VPS, { withFileTypes: true })
+    .filter((d) => d.isFile())
+    .map((d) => d.name)
+    .filter((n) => PATRONES_DEPLOY.some((p) => p.test(n)))
+    .filter((n) => !EXENTOS_DEL_VPS.has(n));
+
+  assert.ok(
+    enElVps.length > 10,
+    `solo vi ${enElVps.length} archivos en ${DIR_VPS}: el filtro se rompio y el gate falla ABIERTO`,
+  );
+
+  const sinVersionar = enElVps.filter((n) => !existsSync(path.join(espejo, n)));
+  assert.deepEqual(
+    sinVersionar,
+    [],
+    `viven SOLO en ${DIR_VPS} y se perderian con el proximo deploy: ${sinVersionar.join(", ")}. ` +
+      `Rescatalos al espejo con cp -p, o agregalos a EXENTOS_DEL_VPS con su motivo.`,
+  );
 });

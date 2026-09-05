@@ -29,6 +29,8 @@
  * cambia en el doc fuente, se cambia aca y no al reves.
  */
 
+import { PLANES, bs } from "@/lib/pricing";
+
 /** Fecha en que se consultaron todos los precios de la comparacion. */
 export const FECHA_CONSULTA = "30 de julio de 2026";
 
@@ -103,7 +105,12 @@ export const CONTENDIENTES: readonly Contendiente[] = [
     id: "onia",
     quien: "Onia",
     ejemplos: "una plataforma, el rubro dental andando hoy",
-    precio: "Bs 320 – 1.500 / mes",
+    // Nuestra propia fila de la comparativa: el rango sale de PLANES. Escrito a
+    // mano quedaba viejo el día que cambia un plan, justo en la tabla que un
+    // lead usa para compararnos con la competencia.
+    precio: `Bs ${bs(Math.min(...PLANES.map((p) => p.mensual)))} – ${bs(
+      Math.max(...PLANES.map((p) => p.mensual)),
+    )} / mes`,
     precioNota: "precio de lanzamiento, publicado más abajo",
     estados: { gestion: "si", siat: "tramite", agentes: "si" },
     veredicto:
@@ -120,12 +127,26 @@ export const HUECO =
   "No existe un solo software vendido en Bolivia que cruce agenda + ficha del cliente + factura SIAT.";
 
 /**
- * El ledger de honestidad. Cada linea es una cosa DEL PRODUCTO que HOY no
- * funciona, dicha por nosotros primero. Verificado contra
- * ONIA_PLATFORM_ESTRUCTURA_20260730 §3.
+ * El ledger de honestidad, INTERNO: cada linea es una cosa DEL PRODUCTO que
+ * HOY no funciona. Verificado contra ONIA_PLATFORM_ESTRUCTURA_20260730 §3.
  *
  * Es un ledger de producto, no de la empresa: acá van funciones que faltan, no
  * "somos nuevos" ni "no tenemos clientes".
+ *
+ * 🔴 **NO SE RENDERIZA EN NINGUNA PANTALLA.** Es una lista de lo que falta, y
+ * eso está prohibido en toda superficie que el sitio sirva (Sergio,
+ * 2026-08-20). Vivió en la comparativa hasta el 2026-09-04 y sobrevivió cinco
+ * días en la copia de `/v1`, que responde 200: ahí anunciaba que "el pack del
+ * rubro se está construyendo". Queda acá porque el dato es cierto y lo usan los
+ * docs internos, no porque se pueda publicar.
+ *
+ * Lo que SÍ se le dice al que compra vive donde le sirve: la factura fiscal en
+ * `/facturacion`, en el bloque fiscal de `/precios` y en el `veredicto` de la
+ * fila de Onia de acá arriba. Eso no es enumerar huecos: es la advertencia que
+ * evita que alguien compre creyendo que factura.
+ *
+ * Lo sostiene `app/obra-en-el-cuerpo.test.ts`, que mide el grafo de imports —
+ * así que importarlo desde una página pone el gate en ROJO nombrando la cadena.
  */
 export interface Pendiente {
   que: string;

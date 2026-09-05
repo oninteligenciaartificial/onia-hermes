@@ -59,6 +59,12 @@ export const DEFAULT_KNOWLEDGE_FILE = fileURLToPath(new URL("./knowledge.json", 
  */
 export const FAQ_TEMPLATE = Object.freeze({
   siat: "M_SIAT_BODY",
+  // "precios": la respuesta a "¿cuanto cuesta?" en modo VENTA (inbox 4 web y 5 WhatsApp).
+  // M4_BODY es la plantilla que ya sirve `isPriceQuestion` en bot-engine.mjs, asi que esto NO
+  // inventa una rama nueva: cambia el TEXTO de una respuesta que el embudo ya daba.
+  // Decision de Sergio via sesion de control (2026-09-03, t_0651707c): el bot dice los precios
+  // publicos. Es la unica FAQ que puede traer cifras, y solo las de precios-publicos.mjs.
+  precios: "M4_BODY",
   // "negocio": la FAQ editable del dueño (decision Sergio 2026-08-28). NO pisa un mensaje del
   // guion: el recepcionista la consume como LISTA (varias FAQs, cada una con sus tags como
   // disparadores) y la sirve via la plantilla R_FAQ_NEGOCIO. Control de calidad: guardrails
@@ -149,6 +155,10 @@ const SHAPE = Object.freeze({
   faq: {
     kind: "array",
     maxItems: 20,
+    // La FAQ `precios` es la UNICA que puede traer cifras de plata, y aun asi solo las que estan
+    // en precios-publicos.mjs (atadas a los dos .ts por precios-publicos.test.mjs). Cualquier otra
+    // FAQ sigue en modo estricto: una cifra ahi rechaza el archivo entero, como siempre.
+    opcionesPorItem: (item) => (item?.id === "precios" ? { preciosPublicos: true } : {}),
     item: {
       kind: "object",
       fields: {
@@ -222,14 +232,14 @@ function isPlainObject(value) {
 }
 
 /** El guardrail que vigila al LLM vigila tambien a los datos (diseño §4, candado 2). */
-function checkText(value, path, errors) {
-  const violations = checkGuardrails(value);
+function checkText(value, path, errors, opciones = {}) {
+  const violations = checkGuardrails(value, opciones);
   for (const code of violations) {
     errors.push(`${path}: ${code} — ${guardrailReason(code)}`);
   }
 }
 
-function checkField(value, shape, path, errors) {
+function checkField(value, shape, path, errors, opciones = {}) {
   switch (shape.kind) {
     case "const":
       if (value !== shape.value) errors.push(`${path}: tiene que ser exactamente "${shape.value}"`);
@@ -239,7 +249,7 @@ function checkField(value, shape, path, errors) {
       if (typeof value !== "string") return void errors.push(`${path}: tiene que ser texto`);
       if (!value.trim()) return void errors.push(`${path}: no puede estar vacio`);
       if (value.length > shape.max) return void errors.push(`${path}: pasa de ${shape.max} caracteres`);
-      checkText(value, path, errors);
+      checkText(value, path, errors, opciones);
       return;
 
     case "enum":
@@ -285,18 +295,28 @@ function checkField(value, shape, path, errors) {
     case "textArray":
       if (!Array.isArray(value)) return void errors.push(`${path}: tiene que ser una lista`);
       if (value.length > shape.maxItems) return void errors.push(`${path}: mas de ${shape.maxItems} items`);
-      value.forEach((item, index) => checkField(item, { kind: "text", max: shape.max }, `${path}[${index}]`, errors));
+      value.forEach((item, index) => checkField(item, { kind: "text", max: shape.max }, `${path}[${index}]`, errors, opciones));
       return;
 
     case "array":
       if (!Array.isArray(value)) return void errors.push(`${path}: tiene que ser una lista`);
       if (value.length > shape.maxItems) return void errors.push(`${path}: mas de ${shape.maxItems} items`);
-      value.forEach((item, index) => checkField(item, shape.item, `${path}[${index}]`, errors));
+      // `opcionesPorItem` deja que un item elija con que reglas se lo valida segun su propio
+      // contenido — hoy solo la FAQ `precios`, que es la unica autorizada a traer cifras.
+      value.forEach((item, index) =>
+        checkField(
+          item,
+          shape.item,
+          `${path}[${index}]`,
+          errors,
+          typeof shape.opcionesPorItem === "function" ? shape.opcionesPorItem(item) : opciones,
+        ),
+      );
       return;
 
     case "object":
       if (!isPlainObject(value)) return void errors.push(`${path}: tiene que ser un objeto`);
-      checkObject(value, shape.fields, path, errors);
+      checkObject(value, shape.fields, path, errors, opciones);
       return;
 
     default:
@@ -304,7 +324,7 @@ function checkField(value, shape, path, errors) {
   }
 }
 
-function checkObject(value, fields, path, errors) {
+function checkObject(value, fields, path, errors, opciones = {}) {
   for (const [key, raw] of Object.entries(value)) {
     const shape = fields[key];
     // EL candado estructural: una clave que el esquema no declara rechaza el archivo entero.
@@ -313,7 +333,7 @@ function checkObject(value, fields, path, errors) {
       continue;
     }
     if (raw === undefined) continue;
-    checkField(raw, shape, `${path ? `${path}.` : ""}${key}`, errors);
+    checkField(raw, shape, `${path ? `${path}.` : ""}${key}`, errors, opciones);
   }
   for (const [key, shape] of Object.entries(fields)) {
     if (shape.required && value[key] === undefined) errors.push(`${path ? `${path}.` : ""}${key}: falta y es obligatorio`);
@@ -459,6 +479,8 @@ const EMPTY = Object.freeze({
   source: "code", // "db" | "file" | "code". "db" = la fila publicada POR ORG (paso b), delante del archivo.
   // Solo lo trae la fuente "db": el slug de la agenda publica de esa org. null = sin agenda.
   orgSlug: null,
+  // Solo la fuente "db": { agotada, usadas, limite } de la cuota mensual. null = no se sabe = atender.
+  cuota: null,
   version: null,
   updatedBy: null,
   loadedAt: null,
@@ -613,19 +635,52 @@ async function fetchOrgKnowledge(key, options = {}) {
     // la org de verdad puede recibir reservas (add-on / plan). Que falte no es un error: es una
     // org sin agenda, y el bot vuelve a derivar la cita a un humano (recepcionista.mjs).
     const orgSlug = typeof body?.orgSlug === "string" ? body.orgSlug.trim() : "";
-    return { data: body.data, orgSlug: orgSlug || null, error: null };
+    return { data: body.data, orgSlug: orgSlug || null, cuota: cuotaDe(body?.cuota), error: null };
   } catch (error) {
     return { data: null, error: `no se pudo leer la db: ${String(error?.message || error).slice(0, 160)}` };
   }
 }
 
-/** Igual que nextCache: un fetch fallido CONSERVA la ultima copia buena de esa org. */
+/**
+ * La CUOTA MENSUAL de la org, tal como la manda /published (lote 4, 2026-09-03):
+ * `{ agotada, usadas, limite }`. null = el producto no pudo leerla (o no la manda todavia) y
+ * entonces el bot SIGUE ATENDIENDO (fail-open): cortar por un dato que no existe es callar.
+ */
+function cuotaDe(raw) {
+  if (!raw || typeof raw !== "object" || typeof raw.agotada !== "boolean") return null;
+  return { agotada: raw.agotada, usadas: Number(raw.usadas) || 0, limite: Number(raw.limite) || 0 };
+}
+
+/**
+ * LA MISMA PREGUNTA PARA TODOS: ¿esta org agoto su cuota del mes?
+ *
+ * `true` = nadie le escribe. Ni el motor cuando el cliente del cliente pregunta (barrera 1b de
+ * bot-engine.mjs), ni los BARRIDOS proactivos, que hasta el 2026-09-04 seguian mandando por su
+ * cuenta: un negocio cortado por cuota igual gastaba mensajes salientes que Meta cobra, sin que
+ * nadie los pidiera. `null`/ausente = no se sabe = se atiende, igual que el motor (fail-open).
+ */
+export function cuotaAgotada(config) {
+  return config?.cuota?.agotada === true;
+}
+
+/**
+ * Igual que nextCache: un fetch fallido CONSERVA la ultima copia buena de esa org.
+ *
+ * PERO NO LA CUOTA (2026-09-04). El conocimiento es CONTENIDO y envejece bien: una FAQ vieja
+ * sigue sirviendo. `cuota` no es contenido, es un INTERRUPTOR DE CORTE, y heredarlo invierte el
+ * riesgo: con `agotada:true` guardado, cualquier tramo sin producto (un deploy de onia-platform,
+ * un 404 porque el dueño apago y prendio el add-on, la red) deja al bot contestando "cupo lleno"
+ * a TODOS los que le escriban a ese cliente — y el 1 del mes que viene, con el cupo ya renovado,
+ * la unica forma de soltarlo seria reiniciar el proceso. Sin dato fresco vuelve a `null`, que es
+ * lo que `cuotaDe` ya define para un dato ausente o malformado: no se sabe = se atiende.
+ */
 function nextOrgCache(prev, result, organizationId, nowMs) {
   if (result.data) {
     return Object.freeze({
       data: result.data,
       source: "db",
       orgSlug: result.orgSlug || null,
+      cuota: result.cuota || null,
       version: typeof result.data.version === "string" ? result.data.version : null,
       updatedBy: typeof result.data.updatedBy === "string" ? result.data.updatedBy : null,
       loadedAt: new Date(nowMs).toISOString(),
@@ -637,6 +692,7 @@ function nextOrgCache(prev, result, organizationId, nowMs) {
   const base = prev || EMPTY;
   return Object.freeze({
     ...base,
+    cuota: null, // el corte NO se hereda de una lectura que fallo (ver el comentario de arriba)
     source: base.data ? base.source : "code",
     checkedAt: nowMs,
     path: `db:${organizationId}`,
@@ -848,9 +904,11 @@ export function applyKnowledge(base = DEFAULT_CONFIG, data = null, options = {})
  * dentro de `data` a proposito: no es un hecho editable por el dueño, es la identidad de su org
  * en el producto — el allowlist de esta capa no tiene (ni debe tener) un campo para escribirlo.
  */
-export function asRecepcionista(config, data, orgSlug = null) {
+export function asRecepcionista(config, data, orgSlug = null, cuota = null) {
   const slug = typeof orgSlug === "string" && orgSlug.trim() ? orgSlug.trim() : null;
-  const base = createBotConfig({ modo: "recepcionista", conocimiento: data, orgSlug: slug }, config);
+  // `cuota` viaja igual que orgSlug: dato de la org en el producto, no un hecho editable.
+  // Con `agotada:true` el motor contesta el texto fijo y deriva (bot-engine.mjs, barrera 1b).
+  const base = createBotConfig({ modo: "recepcionista", conocimiento: data, orgSlug: slug, cuota: cuotaDe(cuota) }, config);
   // Sin humanName del cliente, el fallback heredado era "Sergio" (el humano del
   // funnel de VENTA de Onia): un negocio ajeno decia "Sergio te confirma" delante
   // de su cliente final (visto en prod, 2026-08-29). Neutro: "el equipo" — M7 dice
@@ -872,7 +930,7 @@ export function withKnowledge(config = DEFAULT_CONFIG, options = {}) {
     const state = getKnowledge(options);
     if (!state.data) return config;
     const applied = applyKnowledge(config, state.data, options);
-    return state.source === "db" ? asRecepcionista(applied, state.data, state.orgSlug) : applied;
+    return state.source === "db" ? asRecepcionista(applied, state.data, state.orgSlug, state.cuota) : applied;
   } catch {
     return config;
   }

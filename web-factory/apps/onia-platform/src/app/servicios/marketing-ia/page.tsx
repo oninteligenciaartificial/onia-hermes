@@ -5,6 +5,7 @@ import { PressableCta, Reveal, SplitTextReveal, StaggerGrid, StaggerItem } from 
 import { waServiciosLink } from "@/lib/site";
 import { PRUEBA } from "@/lib/pricing";
 import { CTA_ALTA } from "../../(sitio)/alta";
+import { EMPEZAR_URL } from "../../(sitio)/nav";
 
 const SITE_URL = "https://onia.com.bo";
 
@@ -178,7 +179,7 @@ export default function MarketingIaPage() {
                   Pedir propuesta por WhatsApp
                 </a>
               </PressableCta>
-              <a className="btn btn-ghost" href="/empezar">
+              <a className="btn btn-ghost" href={EMPEZAR_URL}>
                 {CTA_ALTA} — {PRUEBA.dias} días gratis
               </a>
             </Reveal>

@@ -206,7 +206,7 @@ Decisión, dirección fotográfica, shot list y gate completos →
 - **La interfaz NUNCA la dibuja la IA.** La captura es real; la IA genera **contexto y uso**
   (personas en su negocio). Una UI generada es *fabricar producto* y está prohibido. En la foto
   el dispositivo va **boca abajo, cerrado o girado hacia la palma**.
-- **⚠️ En un modelo sin `negative_prompt`, la lista de "evitar" INVOCA lo que nombra.** `soul_2`
+- **⚠️ En un modelo sin `negative_prompt`, la lista de "evitar" INVOCA lo que nombra.** `text2image_soul_v2`
   sólo acepta `quality` y `soul_id`: todo lo demás cae en el MISMO campo de texto. Un lote de 6
   con sección `Avoid: dashboards, blue neon, candlestick charts, man in a suit pointing at a
   whiteboard` devolvió exactamente eso — pantallas de datos azules, un gráfico de velas y el

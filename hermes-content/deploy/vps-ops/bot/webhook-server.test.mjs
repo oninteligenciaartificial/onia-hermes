@@ -24,6 +24,7 @@ import { once } from "node:events";
 import {
   checkDatabaseHealth,
   createWebhookServer,
+  formatearTraza,
   getHealthStatus,
   getServerConfig,
   handleChatwootWebhook,
@@ -573,4 +574,239 @@ test("REGRESION: la config del TRANSPORTE no baja al motor (si baja, el bot no l
     "el motor NO puede recibir la config del transporte: con ella cree que no tiene qualification y el turno explota",
   );
   assert.equal(depsQueRecibioElMotor.nowMs, NOW_MS, "el resto de los inyectables si tienen que seguir pasando");
+});
+
+// ---------------------------------------------------------------------------
+// LA TRAZA: una linea por webhook, con el motivo del silencio
+//
+// POR QUE EXISTE. El 2026-09-02 se midio que `/tmp/onia-bot-webhook.log` tenia SOLO lineas de
+// arranque: 2,5 MB de "escuchando en :3020" y NI UNA por mensaje. Con eso, el bug de "contesta
+// una vez y se calla" sobrevivio UNA SEMANA con cinco personas reales del otro lado — nadie
+// podia decir por que se callaba porque el bot no decia nada de si mismo.
+//
+// `createWebhookServer` ya recibia un `log`, pero solo lo llamaba en dos errores raros (socket
+// muerto y n8n). El camino que importa —el webhook— no escribia nunca. Un log que existe y no
+// se llama es peor que no tenerlo: parece que hay diagnostico.
+//
+// Las tres ramas MUDAS son el objetivo del ejercicio, y las tres devuelven 200 con el cuerpo
+// casi igual: `MUDO` (el motor no produjo respuesta), `NO_ENTREGADO` (la produjo y Chatwoot la
+// rechazo — cuatro dias reales en agosto) e `ignorado`. Sin nombrarlas, las tres se leen como
+// exito.
+// ---------------------------------------------------------------------------
+
+test("TRAZA: el motor proceso el mensaje y NO produjo respuesta -> rama MUDO con su motivo", () => {
+  const linea = formatearTraza({
+    conversacion: "77",
+    mensaje: "4242",
+    entrada: "Tengo una clinica dental en Santa Cruz, somos 4 personas",
+    estado: 200,
+    cuerpo: {
+      ok: true,
+      skipped: false,
+      duplicate: false,
+      stageBefore: "handoff_humano",
+      stageAfter: "handoff_humano",
+      sent: [],
+      warnings: [],
+    },
+  });
+
+  assert.match(linea, /rama=MUDO/, "un turno sin respuesta tiene que gritar MUDO, no parecerse a un exito");
+  assert.match(linea, /conv=77/);
+  assert.match(linea, /clinica dental/, "sin la entrada no se puede reproducir el caso");
+  assert.match(linea, /handoff_humano/, "la etapa ES el motivo: en handoff_humano el bot no vuelve a hablar");
+});
+
+test("TRAZA: el motor respondio y Chatwoot lo RECHAZO -> NO_ENTREGADO, no 'respondio'", () => {
+  // Modo de falla real: en agosto el bot paso CUATRO DIAS calculando respuestas que Chatwoot
+  // nunca recibio. `sent` tiene texto, `posted` es false. Si esto se loguea como "respondio",
+  // el log miente exactamente igual que el silencio.
+  const linea = formatearTraza({
+    conversacion: "77",
+    mensaje: "4242",
+    entrada: "hola",
+    estado: 200,
+    cuerpo: { ok: true, sent: [{ text: "Hola!", posted: false }], warnings: ["chatwoot 502"] },
+  });
+
+  assert.match(linea, /rama=NO_ENTREGADO/);
+  assert.doesNotMatch(linea, /rama=respondio/);
+  assert.match(linea, /enviados=0\/1/, "hay que ver publicados/producidos, no solo un total");
+  assert.match(linea, /chatwoot 502/, "el warning del motor es el motivo y tiene que viajar");
+});
+
+test("TRAZA: camino feliz -> respondio, con las etapas y el conteo", () => {
+  const linea = formatearTraza({
+    conversacion: "77",
+    mensaje: "4242",
+    entrada: "DEMO",
+    estado: 200,
+    cuerpo: {
+      ok: true,
+      stageBefore: "nuevo",
+      stageAfter: "esperando_horario",
+      sent: [{ text: "Hola", posted: true }],
+      warnings: [],
+    },
+  });
+
+  assert.match(linea, /rama=respondio/);
+  assert.match(linea, /enviados=1\/1/);
+  assert.match(linea, /nuevo->esperando_horario/, "la transicion de etapa es lo que explica el turno siguiente");
+});
+
+test("TRAZA: skip, dedup y error tienen cada uno su rama y su motivo", () => {
+  const ignorado = formatearTraza({
+    conversacion: "77",
+    estado: 200,
+    cuerpo: { ok: true, skipped: true, reason: "mensaje_no_entrante:outgoing" },
+  });
+  assert.match(ignorado, /rama=ignorado/);
+  assert.match(ignorado, /motivo=mensaje_no_entrante:outgoing/);
+
+  const repetido = formatearTraza({
+    conversacion: "77",
+    estado: 200,
+    cuerpo: { ok: true, deduped: true, duplicate: true, reason: "mensaje_ya_procesado", sent: [] },
+  });
+  assert.match(repetido, /rama=repetido/);
+
+  const roto = formatearTraza({
+    conversacion: "77",
+    estado: 200,
+    cuerpo: { ok: false, error: "error_interno", reason: "reading 'fields'", sent: [] },
+  });
+  assert.match(roto, /rama=ERROR/);
+  assert.match(roto, /reading 'fields'/);
+
+  const rechazado = formatearTraza({ estado: 401, cuerpo: { ok: false, reason: "firma_invalida" } });
+  assert.match(rechazado, /rama=rechazado/);
+  assert.match(rechazado, /motivo=firma_invalida/);
+  assert.match(rechazado, /estado=401/);
+});
+
+test("TRAZA: la entrada va en UNA linea y acotada (un log multilinea no se puede grepear)", () => {
+  const linea = formatearTraza({
+    conversacion: "77",
+    entrada: `primera\nsegunda\r\ntercera ${"x".repeat(400)}`,
+    estado: 200,
+    cuerpo: { ok: true, sent: [{ text: "a", posted: true }], warnings: [] },
+  });
+
+  assert.equal(linea.includes("\n"), false, "una traza multilinea rompe el grep y el tail");
+  assert.ok(linea.length < 400, `la linea no puede crecer sin tope (mide ${linea.length})`);
+  assert.match(linea, /primera/);
+});
+
+test("handleChatwootWebhook devuelve traza en TODAS las ramas, con conversacion y entrada", async () => {
+  const body = mensajeEntrante({ content: "Tengo una ferreteria" });
+  const feliz = await handleChatwootWebhook(pedido(body, sign(body)), {
+    config: CONFIG,
+    runChatwootTurn: motorMock({ sent: [] }),
+    nowMs: NOW_MS,
+  });
+  assert.ok(feliz.traza, "sin traza el servidor no tiene que loguear");
+  assert.equal(feliz.traza.conversacion, "77");
+  assert.equal(feliz.traza.entrada, "Tengo una ferreteria");
+
+  const saliente = mensajeEntrante({ message_type: "outgoing" });
+  const skip = await handleChatwootWebhook(pedido(saliente, sign(saliente)), {
+    config: CONFIG,
+    runChatwootTurn: motorMock(),
+    nowMs: NOW_MS,
+  });
+  assert.ok(skip.traza, "un skip TAMBIEN se loguea: es la rama que mas se confunde con exito");
+  assert.equal(skip.traza.conversacion, "77", "el skip conoce la conversacion y tiene que decirla");
+
+  const noAuth = await handleChatwootWebhook(pedido(body, {}), { config: CONFIG, nowMs: NOW_MS });
+  assert.ok(noAuth.traza, "un rechazo de auth es justo lo que hay que ver cuando 'no llegan' los webhooks");
+  assert.equal(noAuth.traza.estado, 401);
+});
+
+test("HTTP REAL: cada webhook deja UNA linea en el log (era CERO y costo una semana)", async () => {
+  const lineas = [];
+  const server = createWebhookServer({
+    config: CONFIG,
+    runChatwootTurn: motorMock({ sent: [], stageBefore: "handoff_humano", stageAfter: "handoff_humano" }),
+    nowMs: NOW_MS,
+    n8nConfig: { enabled: false },
+    fireEvent: () => {},
+    log: (linea) => lineas.push(linea),
+  });
+  server.listen(0);
+  await once(server, "listening");
+  const { port } = server.address();
+
+  try {
+    const body = mensajeEntrante({ content: "quiero informacion" });
+    const res = await fetch(`http://127.0.0.1:${port}${WEBHOOK_PATH}`, {
+      method: "POST",
+      headers: { "content-type": "application/json", ...sign(body) },
+      body,
+    });
+    assert.equal(res.status, 200);
+    await res.json();
+
+    const delWebhook = lineas.filter((l) => l.includes("conv="));
+    assert.equal(delWebhook.length, 1, `un webhook = una linea; salieron ${delWebhook.length}: ${JSON.stringify(lineas)}`);
+    assert.match(delWebhook[0], /rama=MUDO/, "el turno mudo tiene que verse en el log, no solo en el cuerpo HTTP");
+    assert.match(delWebhook[0], /quiero informacion/);
+  } finally {
+    server.close();
+    await once(server, "close");
+  }
+});
+
+test("HTTP REAL: el aviso que NO sale dice DE QUIEN era (sin eso no se puede recuperar)", async () => {
+  // Medido en produccion el 2026-09-04: con el flag apagado el log dejaba exactamente esto
+  //     [aviso] skipped (cuota_agotada): aviso por Telegram apagado (ONIA_BOT_TG_AVISO)
+  // y no hay forma de saber a quien habia que atender. La linea del webhook de al lado si trae
+  // `conv=`, pero son dos callbacks asincronos distintos: con dos mensajes a la vez el `[aviso]`
+  // se intercala con la linea de OTRA conversacion y el cruce por proximidad miente.
+  //
+  // El propio aviso-telegram.mjs ya dice "un aviso que no dice a quien contestarle no sirve" y
+  // aplica esa regla al mensaje que le llega a Sergio. Falta aplicarla a la linea que queda
+  // cuando el aviso NO llega, que es el unico caso en que hace falta.
+  const lineas = [];
+  const server = createWebhookServer({
+    config: CONFIG,
+    runChatwootTurn: motorMock({
+      stageBefore: "nuevo",
+      stageAfter: "handoff_humano",
+      notify: [{ kind: "handoff", reason: "cuota_agotada", text: "quiero una limpieza dental" }],
+    }),
+    nowMs: NOW_MS,
+    n8nConfig: { enabled: false },
+    fireEvent: () => {},
+    avisoConfig: { enabled: false }, // el estado REAL de produccion hoy
+    log: (linea) => lineas.push(linea),
+  });
+  server.listen(0);
+  await once(server, "listening");
+  const { port } = server.address();
+
+  try {
+    const body = mensajeEntrante({ content: "hola, quiero una limpieza dental" });
+    const res = await fetch(`http://127.0.0.1:${port}${WEBHOOK_PATH}`, {
+      method: "POST",
+      headers: { "content-type": "application/json", ...sign(body) },
+      body,
+    });
+    assert.equal(res.status, 200);
+    await res.json();
+
+    // El aviso es fire-and-forget: su callback corre despues de la respuesta HTTP.
+    for (let i = 0; i < 50 && !lineas.some((l) => l.includes("[aviso]")); i += 1) {
+      await new Promise((r) => setTimeout(r, 10));
+    }
+
+    const delAviso = lineas.filter((l) => l.includes("[aviso]"));
+    assert.equal(delAviso.length, 1, `el aviso deja UNA linea; salieron ${delAviso.length}: ${JSON.stringify(lineas)}`);
+    assert.match(delAviso[0], /skipped/, "apagado tiene que verse como skipped, no como exito");
+    assert.match(delAviso[0], /conv=77/, "sin la conversacion el aviso perdido NO se puede recuperar");
+    assert.match(delAviso[0], /cuota_agotada/, "el motivo tambien: dice por que el bot derivo");
+  } finally {
+    server.close();
+    await once(server, "close");
+  }
 });

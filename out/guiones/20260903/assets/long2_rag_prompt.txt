@@ -1,0 +1,4 @@
+Prompt para RAG y playbook comunitario (long2):
+"Escribe un playbook de 8 pasos para convertir comentarios y UGC en insights semanales. Output: checklist y comandos para exportar a markdown."
+
+Guardar en: /root/loops/onia-hermes/out/guiones/20260903/assets/long2_rag_prompt.txt

@@ -15,7 +15,7 @@ photo pack. This is not approved for publication or client-facing delivery.
 
 - Current Soul ID: `1238064e-1295-4cbf-9a41-861d4106e0e8`
 - Name: `Sergio ONIA 20260604 All Black`
-- Type: `soul_2`
+- Type: `text2image_soul_v2`
 - Status: `completed`
 - Legacy Soul ID: `05cebe09-5672-4d50-90b2-d92c680957f7`
 

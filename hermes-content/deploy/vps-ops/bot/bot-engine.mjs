@@ -85,6 +85,10 @@ export function createState(input = {}) {
     inboxId: input.inboxId || null,
     humanTookOver: Boolean(input.humanTookOver),
     humanTookOverAt: input.humanTookOverAt || null,
+    // Cuando se ACUSO el primer inbound posterior a un handoff. `handoff_humano` no significa
+    // que un humano haya llegado, solo que el bot derivo; sin esta marca la persona escribe al
+    // vacio. Se persiste en `bot_conversations.raw`, no en columna: no hace falta DDL.
+    handoffAckAt: input.handoffAckAt || null,
     optInAt: input.optInAt || null,
     optInSource: input.optInSource || null,
     optOutAt: input.optOutAt || null,
@@ -113,13 +117,35 @@ export function markHumanTakeover(state, atIso = null) {
  * El DESARME del takeover (bandeja nativa 2026-08-29): resolver la conversacion
  * se la devuelve al bot. Tambien resetea el handoff del recepcionista — ambos
  * candados significan "humano a cargo", y resolver significa "termine".
+ *
+ * ⚠️ "Termine" solo vale si alguien EMPEZO. Medido el 2026-09-04: la conversacion 57
+ * pidio un humano a las 14:38:10 (aviso a Sergio enviado) y 35 s despues quedo resuelta
+ * con el cartel "marked resolved by system due to 0 minutes of inactivity", lo que
+ * disparaba este desarme y dejaba `chatwoot:57 | nuevo | human_took_over=f`. El handoff
+ * se borraba sin que nadie lo atendiera, y el lead que volvia recibia el saludo de cero
+ * en vez del acuse. Le paso a 8 conversaciones desde el 29-ago.
+ *
+ * ⚠️ Ese cartel NO acusa a Chatwoot, y creerle cuesta media vuelta (paso el 2026-09-04).
+ * El barrendero por inactividad esta APAGADO: `accounts.settings` es `{}`, y sin
+ * `auto_resolve_after` los scopes `resolvable_all` / `resolvable_not_waiting`
+ * (conversation.rb:83,88) devuelven `none` — cero automation_rules, cero agent_bots,
+ * cero env. "by system ... 0 minutes" es solo la ETIQUETA que Chatwoot le pone a toda
+ * resolucion sin `Current.user` ni `Current.contact`, y el 0 sale de
+ * `auto_resolve_after || 0` (activity_message_handler.rb:76). Quien resolvia era NUESTRA
+ * sonda: scripts/sonda_widget.mjs:519 corre `Conversation.find(N).resolved!` por
+ * `rails runner` a proposito, para ejercitar este mismo desarme.
+ * Por eso configurar `auto_resolve_after` para "arreglarlo" ENCIENDE un barrendero que
+ * hoy no corre. Lo correcto es lo de abajo: el stage solo se libera cuando un humano
+ * REALMENTE escribio.
  */
 export function clearHumanTakeover(state) {
+  const loAtendioUnHumano = state.humanTookOver === true;
   return {
     ...state,
     humanTookOver: false,
     humanTookOverAt: null,
-    botStage: state.botStage === "handoff_humano" ? "nuevo" : state.botStage,
+    botStage:
+      state.botStage === "handoff_humano" && loAtendioUnHumano ? "nuevo" : state.botStage,
   };
 }
 
@@ -154,6 +180,7 @@ export function toConversationRow(state) {
       outboundSeq: state.outboundSeq,
       scheduledLabel: state.scheduledLabel,
       branchAsked: state.branchAsked,
+      handoffAckAt: state.handoffAckAt,
     },
   };
 }
@@ -298,7 +325,7 @@ function finalize(ctx, next, replies, effects = [], notes = []) {
  */
 function handoffResult(ctx, base, reason, leadingReplies = [], bodyKey = "M5") {
   const { config, prev, msg } = ctx;
-  const next = { ...base, botStage: "handoff_humano" };
+  const next = { ...base, botStage: "handoff_humano", handoffAckAt: null };
   const summary = summarize(next, msg, reason, config);
   const effects = [
     stageEffect(prev, next, reason),
@@ -458,6 +485,18 @@ export function step(state, incoming, options = {}) {
   // --- Barrera 1: un humano tomo la conversacion. El bot NO habla. Falla hacia el SILENCIO.
   if (state.humanTookOver) return finalize(ctx, base, [], [], ["silencio:humano_a_cargo"]);
 
+  // --- Barrera 1b: CUOTA MENSUAL AGOTADA (la manda /published; null = seguir atendiendo).
+  // Hasta hoy el bot se CALLABA al agotarse: el cliente del cliente escribia y nadie contestaba.
+  // Ahora: texto fijo SIEMPRE (nunca LLM) y el handoff de siempre (review_queue + notify)
+  // UNA sola vez por conversacion — en handoff_humano ya no se repiten los efectos.
+  // Opt-out previo sigue mandando: a quien dijo basta no se le escribe ni para avisarle esto.
+  if (config.cuota?.agotada === true && !state.optOutAt) {
+    if (state.botStage === "handoff_humano") {
+      return finalize(ctx, base, [say("R_CUOTA_AGOTADA", base, config)], [], ["cuota_agotada:ya_derivada"]);
+    }
+    return handoffResult(ctx, base, "cuota_agotada", [], "R_CUOTA_AGOTADA");
+  }
+
   // --- MODO RECEPCIONISTA: el bot de un CLIENTE de Onia (conocimiento con fuente "db").
   // Va ANTES de la barrera de opt-out porque la reapertura por "DEMO" es del funnel de venta;
   // el recepcionista maneja su propio opt-out (silencio, sin reapertura). Todo el guion de
@@ -588,9 +627,25 @@ export function step(state, incoming, options = {}) {
         : handoffResult(ctx, base, "escribio_tras_descarte");
     case "demo_realizada":
       return handoffResult(ctx, base, "escribio_tras_la_demo");
-    case "handoff_humano":
-      // Ya esta en manos de Sergio: se registra el inbound y el bot no vuelve a hablar.
-      return finalize(ctx, base, [], [], ["silencio:handoff_en_curso"]);
+    case "handoff_humano": {
+      // DERIVAR NO ES QUE ALGUIEN HAYA LLEGADO. Aca decia "ya esta en manos de Sergio" y callaba
+      // para siempre, pero `handoff_humano` lo prende el BOT al decidir derivar: nadie contesto
+      // todavia. El candado legitimo es `humanTookOver` (mas arriba en step()), que se prende
+      // cuando un humano ESCRIBE de verdad.
+      //
+      // Medido en produccion el 2026-09-03, conversacion 49 (widget de la web): Chatwoot entrego
+      // el mensaje 287 y el bot lo proceso 4,08 s — corrio el turno entero y no produjo NADA. En
+      // las 8 corridas horarias de la sonda la correlacion es perfecta: cada M5 ("eso lo tiene
+      // que ver Sergio") dejaba mudo al mensaje siguiente. Del otro lado hay una persona que ve
+      // su mensaje entregado y ninguna respuesta, nunca.
+      //
+      // UNA sola vez: acusar cada mensaje seria spam, y encima taparia a Sergio cuando entre.
+      if (base.handoffAckAt) return finalize(ctx, base, [], [], ["silencio:handoff_en_curso"]);
+      const acusado = { ...base, handoffAckAt: msg.receivedAt || new Date().toISOString() };
+      // Cero efectos: el aviso a Sergio y la cola de revision ya salieron con el handoff. Este
+      // turno es solo decirle a la persona que su mensaje llego.
+      return finalize(ctx, acusado, [say("M5_ACUSE", acusado, config)], [], ["handoff:acuse_de_recibo"]);
+    }
     default:
       return handoffResult(ctx, base, "estado_desconocido");
   }

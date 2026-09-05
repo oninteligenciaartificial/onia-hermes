@@ -36,6 +36,35 @@ Instrucciones de proyecto. Override sobre defaults.
 - Al aprender una trampa nueva: **editar la skill que corresponda**, no crear doc suelto.
   Skill pública instalada que sirva: usarla, no reinventar.
 
+## Canario: se le dice **Sergio Urcullo** (REGLA)
+
+> Sergio, 2026-09-04: *"quiero que nuestro canario sea tambien que me llames siempre como sergio
+> urcullo, ahi vere si se esta deteriorando la sesion"*.
+
+- **Siempre por nombre y apellido: «Sergio Urcullo».** No «Sergio» a secas, no «el usuario».
+- Es un **canario**: si dejo de hacerlo, la sesión se está degradando y él lo ve sin preguntar.
+- ⚠️ **Su límite, dicho de frente:** esta regla se reinyecta en cada pedido, así que sobrevive a
+  la compactación por sí sola. Eso la hace **débil** como detector de "perdí el contexto" — pero
+  **fuerte** como detector de algo peor: si fallo teniéndola delante, no es que la olvidé, es que
+  dejé de leer mis propias instrucciones. Ese fallo sí vale como alarma.
+
+## «Cambio de sesión» → handoff completo (REGLA)
+
+> Sergio, 2026-09-04: *"cada que yo te diga cambio de sesion generes handoff para nueva sesion
+> pero que anotes absolutamente todo y no perdamos que hicimos"*.
+
+- Las palabras **«cambio de sesión»** son un disparador: se escribe el handoff del carril ANTES de
+  seguir con nada más. No se pregunta, no se pospone.
+- Va en `hermes-content/docs/handoff/<carril>.md`, con los **siete campos** del README de esa
+  carpeta, y se **commitea y pushea** — un handoff sin pushear no existe para la sesión nueva.
+- **«Absolutamente todo» incluye lo incómodo**, que es justo lo que se pierde: lo que quedó **en
+  vuelo y sin commitear** (y qué se pierde si muere la sesión), los **intentos fallidos** con su
+  causa, las hipótesis que resultaron falsas, y lo que **depende de Sergio Urcullo**.
+- **Lo que está en vuelo se nombra con su riesgo.** El 4-sep un port de panel tenía CERO commits al
+  cerrar: si la sesión moría, se perdía entero. Eso se dice, no se maquilla.
+- Cerrar la sesión NO es terminar el trabajo: si algo quedó a medias, el handoff dice **dónde**
+  (rama, worktree, commit) y **cómo se retoma**, no que "quedó pendiente".
+
 ---
 
 # 2. Las tres que más se rompen
@@ -77,6 +106,21 @@ Instrucciones de proyecto. Override sobre defaults.
   > hace clic esperando entrar y encuentra un formulario de solicitud — la fricción más
   > cara del sitio, en el último clic, y encima contradice el copy honesto de al lado.
   > Arreglar el síntoma donde saltó y no los hermanos que llaman a lo mismo deja el bug vivo.
+
+  ⚠️ **Eso es HISTORIA, no el estado de hoy — corregido 2026-09-03.** El alta se volvió a
+  **ABRIR** el 29-ago y este párrafo siguió leyéndose como presente durante cinco días. Hoy
+  `app.onia.com.bo/register` **crea la cuenta solo**: asistente de dos pasos (elegís rubro →
+  nombre, correo, contraseña, nombre del negocio) y botón "Crear mi cuenta — 14 días gratis";
+  `/empezar` no tiene ni un `<form>` y sus CTA dicen "Creá tu cuenta". Medido en vivo, no de
+  memoria: `docker exec onia-platform env | grep ALTA` → `ONIA_ALTA_AUTOMATICA=abierta`, y las
+  dos pantallas abiertas y MIRADAS renderizadas.
+  >
+  > **La regla de arriba sigue intacta; lo que falló fue su ejemplo.** Una promesa que cambia se
+  > barre en toda la superficie — y el barrido tiene que alcanzar también a **las reglas que la
+  > citan**, porque un ejemplo congelado en pasado se lee como presente y manda al revés: hace
+  > creer que la puerta está cerrada cuando está abierta. El estado vigente del alta se verifica
+  > con el comando de arriba y con `web-factory/apps/onia-platform/src/app/(sitio)/alta.ts`
+  > (que es un ESPEJO del producto, no la fuente).
 
 ## Verificar es MIRAR, no suponer (REGLA)
 
@@ -132,6 +176,14 @@ Instrucciones de proyecto. Override sobre defaults.
   detalle en la skill `onia-frontend`).
 - ⚠️ `Gestios` y `Ganaderos-Os` existen como repos pero son **legado**: no se les agrega
   nada sin decidir si se archivan o se absorben.
+- **El SISTEMA es la oferta; el chatbot es un add-on.** Sergio, 2026-09-03: *"el sistema no
+  ofrece directamente el bot, ofrece solo el sistema… hay inconsistencias en la web, datos que
+  no son importantes, habla de nuestras competencias… la referencia es Lety y Dapta, mirá cómo
+  venden"*. La web y todo material de venta hablan del sistema de gestión por rubro; el bot
+  aparece como add-on (`pricing.ts`), nunca como el titular. **Cero autobombo**: nada sobre
+  nosotros, nuestras competencias, nuestro equipo o datos que no le importan al dueño de un
+  negocio. Cómo se vende se mide contra `lety.ai` y `dapta.ai` de HOY (titular, clics hasta
+  empezar, un precio claro, beneficio antes que característica), no de memoria.
 
 ## La venta nunca exhibe obra (REGLA)
 
@@ -297,7 +349,7 @@ Si no sabés dónde va, **preguntá** antes de inventar carpeta.
 - **Gasto — imagen y video NO son el mismo permiso:**
   - **VIDEO generado (Higgsfield, ElevenLabs, fal.ai): permiso explícito caso por caso**,
     cotizado con `get_cost:true` ANTES de generar. Por defecto gratis (Speaches, HyperFrames).
-  - **IMAGEN en lote chico: gasto trivial, ya validado.** `soul_2` a 2k son ~0,12 créditos;
+  - **IMAGEN en lote chico: gasto trivial, ya validado.** `text2image_soul_v2` a 2k son ~0,12 créditos;
     un lote de 6 fotos cuesta menos de 1 crédito de un pool de ~2.100. Se genera y se
     **registra el lote** (prompts, modelo, costo). Sigue haciendo falta permiso para un
     volumen grande o para dar de alta una plataforma nueva.

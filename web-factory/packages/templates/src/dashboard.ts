@@ -14,7 +14,13 @@ import { renderFontLinks } from "./font-links";
  *  Medido: quedaba pintado 3x3px a 390 — peor que el defecto que venia a
  *  arreglar — y un gate que mira el grosor declarado lo da por "8px" igual. En
  *  unidades del viewBox la holgura se achica junto con el punto, asi que vale
- *  para CUALQUIER ancho de tarjeta. Por eso `pad` no puede ser menor que esto. */
+ *  para CUALQUIER ancho de tarjeta. Por eso `pad` no puede ser menor que esto.
+ *
+ *  Un arreglo paralelo (4e69ba800) llego a 4.8 midiendo SOLO a 1440 y anotando
+ *  que 0,839 era "el peor caso, en mobile la tarjeta es mas ancha". Es al reves:
+ *  a 390 la escala cae a 0,675 y ese 4.8 rendiriza 6,48px, bajo el piso. Si
+ *  volves a dimensionar esto, media la escala CHICA — la premisa comoda ya
+ *  dejo pasar el defecto una vez. */
 const MARCADOR_KPI_R = 6;
 
 /** Holgura EXTRA del punto final, en unidades del viewBox, contra la esquina

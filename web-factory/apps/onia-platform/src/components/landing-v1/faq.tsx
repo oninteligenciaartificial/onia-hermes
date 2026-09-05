@@ -37,7 +37,7 @@ export const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "¿Sirve para mi rubro?",
-    a: "Seis rubros: clínicas dentales, comercios, importadoras, estéticas, veterinarias y servicios profesionales. Si tu negocio es otro, escribinos y lo vemos con vos.",
+    a: "Cinco rubros: clínicas dentales, comercios, importadoras, estéticas y servicios profesionales. Si tu negocio es otro, escribinos y lo vemos con vos.",
   },
   {
     q: "¿Cuánto tarda dejarlo andando?",

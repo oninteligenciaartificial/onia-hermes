@@ -45,8 +45,8 @@
 
 import { pathToFileURL } from "node:url";
 
-import { DEFAULT_CONFIG, createBotConfig, renderTemplate, slotsPending } from "./config.mjs";
-import { withKnowledge } from "./knowledge.mjs";
+import { DEFAULT_CONFIG, createBotConfig, parseSlotsSpec, renderTemplate, slotsPending } from "./config.mjs";
+import { cuotaAgotada, withKnowledge } from "./knowledge.mjs";
 import { buildFollowUp, followUpDue } from "./bot-engine.mjs";
 import { activeSlots, slotLabel } from "./reply-builder.mjs";
 import { createStore, stateFromRow } from "./persistence.mjs";
@@ -79,23 +79,12 @@ export function parseArgs(argv = []) {
   return args;
 }
 
-/** "jue 15:00@2026-07-30T19:00:00Z|vie 10:00@2026-07-31T14:00:00Z" -> slots del config. */
-export function parseSlotsSpec(raw) {
-  const text = String(raw || "").trim();
-  if (!text) return null;
-  return text
-    .split("|")
-    .slice(0, 2)
-    .map((part, index) => {
-      const [label, startAt] = part.split("@").map((piece) => (piece || "").trim());
-      return {
-        key: index === 0 ? "A" : "B",
-        label: label || `opción ${index === 0 ? "A" : "B"}`,
-        startAt: startAt || null,
-        pending: false,
-      };
-    });
-}
+/**
+ * "jue 15:00@2026-07-30T19:00:00Z|vie 10:00@2026-07-31T14:00:00Z" -> slots del config.
+ * Se re-exporta el canonico de config.mjs: el parseo estaba copiado en tres modulos y la copia
+ * de simulate.mjs filtraba el ISO al guion del cliente.
+ */
+export { parseSlotsSpec };
 
 /**
  * Config del barrido: DEFAULT_CONFIG + slots + dryRun + los HECHOS editables (knowledge.json).
@@ -228,6 +217,12 @@ export function followUpMessageKey(conversationKey, step) {
 export async function deliver(state, text, config, deps = {}, templateParams = null) {
   if (state.channel === "sim") return { status: "simulated", warning: null };
   if (config.dryRun) return { status: "skipped", warning: null };
+  // ULTIMA BARRERA DE LA CUOTA, y la unica que un barrido NUEVO hereda sin acordarse: por aca
+  // salen los tres. Cada barrido ademas corta antes, para no quemar su reserva — pero si alguno
+  // se olvida, el mensaje igual no sale. `skipped` no esta en ESTADOS_COBRABLES: no se factura.
+  if (cuotaAgotada(config)) {
+    return { status: "skipped", warning: "cuota mensual agotada: no se manda nada" };
+  }
   if (state.channel !== "chatwoot") {
     return { status: "failed", warning: `canal ${state.channel}: sin envio automatico` };
   }
@@ -291,6 +286,17 @@ export async function runFollowUpSweep(options = {}, deps = {}) {
     store.warnings.push("followup: los 2 horarios de demo siguen sin definir — no se manda M3");
   }
 
+  // CUOTA AGOTADA: se corta ANTES del CAS, igual que los horarios sin definir y por el mismo
+  // motivo — la reserva es de un solo uso. Quemarla aca perderia el follow-up tambien el mes que
+  // viene, cuando la cuota se renueve y la conversacion ya figure como atendida.
+  const sinCupo = rows.length > 0 && cuotaAgotada(config);
+  if (sinCupo) {
+    result.notes.push("cuota_agotada");
+    store.warnings.push(
+      `followup: cuota mensual agotada (${config.cuota?.usadas ?? "?"}/${config.cuota?.limite ?? "?"}) — no se manda M3`,
+    );
+  }
+
   for (const row of rows) {
     const state = stateFromRow(row);
     const key = state?.conversationKey || row?.conversation_key || null;
@@ -298,6 +304,10 @@ export async function runFollowUpSweep(options = {}, deps = {}) {
     const reason = skipReason(state, nowIso, config);
     if (reason) {
       result.skipped.push({ conversationKey: key, reason });
+      continue;
+    }
+    if (sinCupo) {
+      result.skipped.push({ conversationKey: key, reason: "cuota_agotada" });
       continue;
     }
     if (blocked) {

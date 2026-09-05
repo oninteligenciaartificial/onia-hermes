@@ -71,33 +71,32 @@ export function waServiciosLink(text: string): string {
 }
 
 /**
- * Agenda propia (Cal.com self-hosted en el VPS, cuenta `onia`).
- * Verificado 2026-07-30: los dos enlaces responden 200 en publico.
+ * Las dos citas que ofrece `/contacto`, por el MISMO WhatsApp que atiende al
+ * resto de la web. Cada una entra diciendo cuál eligio, para que del otro lado
+ * no haya que preguntarlo.
  *
- * - `demo`: "Demo / diagnostico - solucion ONIA", 45 min. Es el CTA principal:
- *   quien ya vio precios y quiere ver el sistema.
- * - `consulta`: "Consulta comercial - proyecto nuevo", 20 min. Para el que
- *   todavia no sabe si le sirve y no le vamos a pedir 45 minutos de entrada.
+ * - `demo`: 45 min. Es el CTA principal: quien ya vio precios y quiere ver el
+ *   sistema.
+ * - `consulta`: 20 min. Para el que todavia no sabe si le sirve y no le vamos
+ *   a pedir 45 minutos de entrada.
  *
- * Los otros dos tipos de evento del calendario (auditoria-pagada,
- * reunion-proyecto) estan ocultos a proposito: no son de captacion.
+ * ⚠️ Hasta el 2026-09-03 los dos botones apuntaban a `cal.onia.com.bo`, un
+ * Cal.com self-hosted con un comentario que decia "verificado 2026-07-30: los
+ * dos enlaces responden 200". Ese Cal.com ya no existe —no hay contenedor en
+ * el VPS y el 2026-09-02 Sergio eligio los horarios fijos del bot en vez de
+ * revivirlo—, pero el host seguia resolviendo a nuestra IP y devolvia **302 a
+ * /empezar**: `curl -L` daba 200 y el lead que queria conversar aterrizaba en
+ * un formulario de alta. El 200 era cierto y no significaba nada.
+ *
+ * Quien atiende estos mensajes es el chatbot, que propone los dos horarios
+ * concretos del dia (ventanas que fijo Sergio, renovadas por cron). Si algun
+ * dia vuelve a haber calendario propio, se cambia aca y las dos pantallas lo
+ * siguen solas.
  */
-const CAL_BASE = process.env.NEXT_PUBLIC_CAL_BASE ?? "https://cal.onia.com.bo/onia";
+export const AGENDA_CONSULTA_URL = waLink(
+  "Hola, vengo de la web de Onia. Quiero agendar la consulta comercial de 20 minutos.",
+);
 
-export const CAL_DEMO_URL = `${CAL_BASE}/demo-onia`;
-export const CAL_CONSULTA_URL = `${CAL_BASE}/consulta-inicial`;
-
-/**
- * Enlace de agenda con los datos ya cargados, para que la persona no
- * los vuelva a tipear tras haberlos escrito en el formulario.
- */
-export function calLink(
-  url: string,
-  data?: { name?: string; notes?: string }
-): string {
-  const params = new URLSearchParams();
-  if (data?.name) params.set("name", data.name);
-  if (data?.notes) params.set("notes", data.notes);
-  const qs = params.toString();
-  return qs ? `${url}?${qs}` : url;
-}
+export const AGENDA_DEMO_URL = waLink(
+  "Hola, vengo de la web de Onia. Quiero agendar la demo de 45 minutos con mi caso.",
+);
