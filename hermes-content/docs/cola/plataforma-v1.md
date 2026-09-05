@@ -133,15 +133,47 @@ y sin operar. Acá se opera, con verificación por ítem.
       alguna vez aparece uno, la forma correcta es filtrar por `allowedSegmentsForPack` en el
       armado, no caso por caso.
 
-- [ ] 🔴 **Add-ons sin consumidor: o los consume algo, o salen del catálogo.**
-      `addon.inventory_advanced`, `addon.chatbot` y `addon.web`. El catálogo ya midió que
-      `addon.chatbot` **está muerta y la que trabaja es otra** (revisado 2026-08-30 y 2026-08-31:
-      sólo aparece en tests). Un add-on que se cobra y no habilita nada es una promesa rota
-      cobrada — el peor defecto posible con un cliente nuevo.
+- [x] 🔴 **Add-ons sin consumidor. Medido el 2026-09-05: nada se cobra sin habilitar — pero la
+      pantalla que ENTREGA lo cobrado dejaba otorgar las claves muertas. Arreglado ahí.**
 
-      Medición previa en `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` §5. Los montos y las
-      claves de add-on son fuente única en `lib/pricing.ts` (`onia-platform`): ahí se comprueba
-      qué clave cobra y con `grep` en `app/` quién la lee. Si nadie la lee, no habilita nada.
+      **La mitad «promesa rota cobrada» es FANTASMA, y se midió clave por clave** contra
+      `lib/pricing.ts` (fuente única), sobre un árbol con cero commits de atraso respecto de
+      `origin/master` — la lección de la vuelta anterior, aplicada antes de juzgar:
+
+      | clave | ¿se cobra? | ¿habilita? |
+      |---|---|---|
+      | `addon.inventory_advanced` | **no** — dejó de cobrarse el 2026-08-27, la fila de comparación dice «Incluido» en los tres planes | — |
+      | `addon.web` | **no** — no aparece en `pricing.ts` | — |
+      | `addon.chatbot` | **no** — lo que se cobra es `WHATSAPP_ADDON` (Bs 390), cuya `key` comercial es `"chatbot"` pero cuya feature key es `addon.whatsapp` | sí, vía `addon.whatsapp` |
+      | `addon.extra_seats` | sí (Bs 70) | **sí**, por columna: `plan-limits.ts:230` suma `org.extraUserSeats` |
+
+      **Lo que sí estaba roto y nadie había medido: el botón.** `/admin/organizations/[id]/capacidades`
+      mostraba el badge «Sin efecto todavía» **y al lado un botón "Otorgar" habilitado**. Sergio
+      Urcullo vende el «Chatbot con IA», entra a entregarlo y encuentra dos claves parecidas:
+      `addon.chatbot` —el nombre del producto que acaba de cobrar— y `addon.whatsapp`, que es la
+      que trabaja. Apretar la primera escribía la fila y la pantalla contestaba **«Activa ·
+      otorgada a mano»** con el cliente sin chatbot. **Entre un cartel que avisa y un botón que
+      invita, gana el botón.**
+
+      **Arreglado:** una capacidad sin efecto ya no se puede otorgar (12 claves), y **revocar
+      sigue permitido** para no dejar atrapada una fila otorgada antes del cambio. La condición
+      deriva de `CON_EFECTO_REAL` —ya guardado en las dos direcciones por
+      `capacidades-con-efecto.test.ts`—, así que el día que alguien cablee `addon.web` su botón
+      se habilita solo: no hay una segunda lista que mantener.
+
+      ⚠️ **El caso que YA cumple cazó un bug en el propio test.** La primera versión buscaba la
+      subcadena `disabled`, que aparece en las clases de Tailwind (`disabled:opacity-50`): los 12
+      casos pasaban **en verde sin tocar la pantalla**. Lo delató el caso inverso («una capacidad
+      con efecto sigue siendo otorgable»), que falló. Se pregunta por el atributo ` disabled=""`.
+
+      Evidencia: `CapacidadesOrg.tsx` + `CapacidadesOrg.render.test.ts` (21 casos, rojo probado:
+      12 fallan sin el arreglo). Gates en `/root/loops/onia-platform-chatbot`: `tsc` 0 errores de
+      fuente, **3034 tests**, `eslint` 0 errores. Producción medida antes de tocar: cero filas de
+      las tres claves (`select "featureKey", count(*) from organization_entitlements group by 1`
+      → sólo `addon.whatsapp` 4 y `module.agents` 6), así que el cambio no atrapa ningún dato.
+
+      **NO DESPLEGADO** — commiteado en `claude/chatbots-platform-review-0d1d09`; llega al cliente
+      con el pedido de deploy de `plataforma` que ya existe.
 
 - [ ] 🟡 **`/requerimientos` es una pantalla huérfana: existe, tiene su portal, y no la enlaza
       ningún nav.** Decidir y ejecutar: se enlaza, o deja de contarse como módulo en el catálogo.
