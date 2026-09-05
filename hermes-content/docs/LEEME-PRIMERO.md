@@ -43,6 +43,7 @@ reglas comerciales; no por sus cifras.
 
 | Doc | Responde |
 |---|---|
+| **`ONIA_ESTRATEGIA_DE_EMPRESA.md`** | **Por qué NO hace falta financiación ni equipo de desarrollo**, y las 4 etapas de freelancer a empresa. Ordena a los de abajo: si una tarea no sirve a la etapa vigente, se anota y no se hace |
 | **`ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md`** | La tabla única: cada plan y add-on con su precio, su función y su **estado real** |
 | `ONIA_CATALOGO_DE_VENTA.md` | Qué existe por rubro: vivo / construido sin probar / futuro |
 | `ONIA_PLAN_DESARROLLO_Y_VENTA.md` | Qué se construye, en qué orden, y por qué ese orden lo dicta la venta |

@@ -74,17 +74,32 @@ const esServicio = (producto) => producto.tipo === "servicio";
  * Los MODULOS de la plataforma, listos para leerse en WhatsApp.
  * La lista es dato editable (config.productos), pero el "ya está armado" lo decide
  * `MODULOS_LISTOS`, congelado en codigo: por eso una edicion puede sumar un modulo pero NO puede
- * declararlo terminado. Lo que no esta listo se agrupa en UNA linea con la misma frase que usa la
- * web ("sin humo") — decirlo tres veces seguidas suena a excusa y es exactamente la misma verdad.
+ * declararlo terminado.
+ *
+ * Lo que no esta listo NO SE NOMBRA. Hasta el 2026-09-05 se agrupaba en una linea final
+ * ("• Servicios: en construcción, sin humo"), justificada en que era "la misma frase que usa la
+ * web". Las dos mitades de eso quedaron falsas: la web no dice ni "sin humo" ni "en construcción"
+ * en ninguna de sus pantallas, y la regla de Sergio del 2026-08-20 prohibe comunicar estado de
+ * obra en TODA superficie que ve un cliente — el bot es la mas directa que hay, y un solo cartel
+ * contamina la percepcion del producto entero. La demanda de lo que falta se captura sin
+ * admitirlo, que es lo que ya hace el cierre de la plantilla ("cuál te sirve lo ve Sergio").
+ *
+ * El candado se aplica SIEMPRE acá, y eso es deliberado: esta lista es el funnel de venta de
+ * ONIA. El catalogo de un cliente no pasa por esta funcion — sale por `catalogoCliente()` en
+ * recepcionista.mjs, sin candado, porque son hechos suyos. Un primer intento de distinguirlos
+ * comparando la identidad del array abria justo el agujero que el CANDADO existe para tapar: al
+ * editar `productos` en el knowledge, el array dejaba de ser el default y la edicion se saltaba
+ * la vara entera, pudiendo declarar armado un modulo que no lo esta.
+ *
+ * Lo que la capa editable SI puede sumar sin desplegar son los SERVICIOS (ver serviceList): esos
+ * no son software a medio construir. Un MODULO nuevo necesita entrar a MODULOS_LISTOS, que es
+ * codigo, con el modulo construido delante — encenderlo es una promesa comercial.
  */
 function productList(config) {
-  const modulos = catalogo(config).filter((producto) => !esServicio(producto));
-  const lineas = modulos
-    .filter((producto) => MODULOS_LISTOS.has(producto.key))
-    .map((producto) => `• *${producto.nombre}*${producto.queResuelve ? ` — ${producto.queResuelve}` : ""}.`);
-  const enCamino = modulos.filter((producto) => !MODULOS_LISTOS.has(producto.key));
-  if (enCamino.length) lineas.push(`• ${joinEs(enCamino.map((producto) => producto.nombre))}: en construcción, sin humo.`);
-  return lineas.join("\n");
+  return catalogo(config)
+    .filter((producto) => !esServicio(producto) && MODULOS_LISTOS.has(producto.key))
+    .map((producto) => `• *${producto.nombre}*${producto.queResuelve ? ` — ${producto.queResuelve}` : ""}.`)
+    .join("\n");
 }
 
 /**

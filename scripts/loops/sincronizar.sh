@@ -245,6 +245,11 @@ poner "$RAIZ/scripts/kanban/telegram-entrada.py" "$DESTINO_BIN/onia-tg-entrada.p
 # queda en el disco — que es exactamente el bug que se arreglo el 2026-09-04.
 poner "$RAIZ/scripts/kanban/publicar-aprobado.mjs" "$DESTINO_BIN/onia-publicar-aprobado.mjs"
 poner "$RAIZ/scripts/postiz_schedule.mjs"          "$DESTINO_BIN/onia-postiz-schedule.mjs"
+# El brazo del `ok <id>` cuando la tarea es un DEPLOY y no una pieza. Sin el,
+# `ok` sobre un pedido de publicar el sitio desbloquea la tarea y no despliega
+# nada: el mismo bug del 2026-09-04, un escalon mas abajo. Medido el 2026-09-05
+# sobre t_4cd13524 (codigo 2, "no era una pieza"), con 30 arreglos esperando.
+poner "$RAIZ/scripts/kanban/desplegar-en-segundo-plano.sh" "$DESTINO_BIN/onia-desplegar-fondo.sh"
 
 # La memoria compartida: el corredor la inyecta y los loops le escriben por estos
 # dos. Si no se despliegan solos, el corredor de main llama a un script que no
@@ -300,6 +305,19 @@ fi
 if [ -d /opt/onia-platform ]; then
   poner "$RAIZ/hermes-content/deploy/onia-platform/build-and-stage.sh"    /opt/onia-platform/build-and-stage.sh
   poner "$RAIZ/hermes-content/deploy/onia-platform/recreate-container.sh" /opt/onia-platform/recreate-container.sh
+fi
+
+# El publicador del BOT, el tercer destino que Sergio aprueba con `ok <id>`.
+# Hasta el 2026-09-05 el bot no estaba en la lista blanca de
+# publicar-aprobado.mjs: el `ok` devolvia "destino desconocido" y no desplegaba
+# nada, con DOS tareas `ready` pidiendo el mismo swap sobre un bot que le decia
+# "en construccion" a 2 de los 5 rubros que se venden. A diferencia de
+# /opt/onia-landing/_deploy y /opt/onia-platform, este directorio NO existia:
+# hay que crearlo, o el `poner` falla y el circuito queda cableado a una ruta
+# que no esta — que es justo el fallo mudo que este envoltorio viene a cerrar.
+if [ -d /opt/onia/bot ]; then
+  mkdir -p /opt/onia/bot/_deploy
+  poner "$RAIZ/hermes-content/deploy/vps-ops/bot/publicar.sh" /opt/onia/bot/_deploy/publicar.sh
 fi
 
 mkdir -p "$DESTINO_BIN/loops"

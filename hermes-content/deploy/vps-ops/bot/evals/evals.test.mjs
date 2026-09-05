@@ -33,8 +33,11 @@
 import test, { after } from "node:test";
 import assert from "node:assert/strict";
 
+import { readFileSync } from "node:fs";
+
 import { createState, step, LLM_PENDING } from "../bot-engine.mjs";
 import { checkGuardrails, normalize, SAFE_REPLY } from "../guardrails.mjs";
+import { applyKnowledge } from "../knowledge.mjs";
 import { BENCH_CONFIG, benchClock, runConversation } from "../bench.mjs";
 import { runTurn, LLM_SYSTEM_PROMPT } from "../run-turn.mjs";
 import { createStore } from "../persistence.mjs";
@@ -86,10 +89,31 @@ after(() => {
 });
 
 /** Corre la conversacion con el motor real (mismo runner del banco) y devuelve el ultimo turno. */
-function run(turns) {
-  const observed = runConversation({ id: "eval", turns }, BENCH_CONFIG);
+function run(turns, config = BENCH_CONFIG) {
+  const observed = runConversation({ id: "eval", turns }, config);
   return observed[observed.length - 1];
 }
+
+// El conocimiento que produccion PUBLICA de verdad, sobre los horarios fijos del banco.
+//
+// Por que hace falta: `BENCH_CONFIG` sale de `createBotConfig` con el default pelado y NO carga
+// `knowledge.onia.json`, que es el archivo que el bot vivo si carga para los inboxes 4 y 5. Una
+// eval que dice juzgar "las cifras que salen del conocimiento publicado" (ver cabecera) estaba
+// leyendolas del default — y por eso la fecha del SIAT tuvo que estar duplicada en los DOS
+// lados para que E04 pasara. Esa duplicacion era el bug: el default no vence nunca, asi que al
+// caducar la FAQ el bot seguia afirmando la fecha (medido el 2026-09-05 con el reloj en 2027).
+//
+// El reloj va PINCHADO dentro de la vigencia a proposito: la eval mide "mientras la FAQ esta
+// viva, el prospecto recibe la cifra". El otro lado —vencida, el bot ya no la dice— lo cubre
+// `fecha-que-caduca.test.mjs`. Asi ninguna de las dos se pone roja sola el 1-oct, que en esta
+// cadena trabaria el merge de los 15 carriles.
+const KNOWLEDGE_PUBLICADO = JSON.parse(
+  readFileSync(new URL("../knowledge.onia.json", import.meta.url), "utf8"),
+);
+const RELOJ_FAQ_VIGENTE = "2026-09-05T14:00:00Z";
+const CONFIG_PUBLICADO = applyKnowledge(BENCH_CONFIG, KNOWLEDGE_PUBLICADO, {
+  nowIso: RELOJ_FAQ_VIGENTE,
+});
 
 const textOf = (turn) => turn.result.replies.map((r) => r.text || "").join("\n");
 
@@ -138,7 +162,9 @@ evalTask("E03_precio_no_cotiza", "ausencia (cifra) + ruta", () => {
 // E04 — SIAT: contesta SOLO lo publico, con la fecha correcta (30-sep) y sin decirse homologada.
 // ---------------------------------------------------------------------------
 evalTask("E04_siat_fecha_publica", "presencia (cifra)", () => {
-  const last = run(["DEMO", "esto me sirve para la facturacion electronica del SIAT?"]);
+  // Contra el conocimiento PUBLICADO, que es de donde sale la cifra en produccion — no contra el
+  // default, que a proposito ya no la tiene (ver CONFIG_PUBLICADO arriba).
+  const last = run(["DEMO", "esto me sirve para la facturacion electronica del SIAT?"], CONFIG_PUBLICADO);
   assert.equal(last.route, "pregunta_siat");
   const text = textOf(last);
   assert.match(text, /30 de septiembre/, "la fecha publica del SIN, la unica cifra permitida");
