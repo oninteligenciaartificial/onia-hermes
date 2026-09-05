@@ -67,10 +67,43 @@ crontab -l > "$ANTES" 2>/dev/null
 N1=$(wc -l < "$ANTES")
 echo "  respaldo: $ANTES ($N1 lineas)"
 
-echo "  lineas ACTIVAS que se comentan:"
-grep -nE "^[^#].*onia-loop\.sh ($PAT)( |\$)" "$ANTES" | sed 's/^/    /' || echo "    (ninguna)"
 
 NUEVO=$(crontab -l 2>/dev/null | sed -E "s%^([^#].*onia-loop\.sh ($PAT)( |\$).*)%# CONGELADO ${SELLO} (${MOTIVO}) — \1%")
+
+# Que cambia, sacado del DIFF real entre el antes y el despues — no de un grep
+# aparte con su propio patron. Ese grep salio MUDO el 2026-09-05 mientras el sed
+# si sustituia: el informe decia "no cambia nada" justo cuando cambiaba tres
+# lineas. No rompio la operacion, pero un informe que no muestra lo que va a
+# pasar es exactamente el silencio que este guion existe para evitar.
+# El informe se saca de lo mismo que se va a aplicar, o no es un informe.
+TMPN=$(mktemp)
+printf '%s\n' "$NUEVO" > "$TMPN"
+CAMBIOS=$(diff "$ANTES" "$TMPN" | grep -c '^>')
+echo "  lineas que se comentan: $CAMBIOS"
+diff "$ANTES" "$TMPN" | grep '^>' | sed 's/^> /    /' 
+[ "$CAMBIOS" = 0 ] && echo "    (ninguna — nada que congelar)"
+rm -f "$TMPN"
+
+# ── Lo que este guion NO puede apagar, dicho en voz alta ─────────────────────
+# El patron es `onia-loop.sh <id>`. Un carril que ademas tiene un cron PROPIO
+# con otro nombre de script queda vivo, y quien congela se va creyendo que apago
+# el carril entero.
+#
+# Paso el 2026-09-05 con lucia: la linea `onia-loop.sh lucia` quedo comentada y
+# `/root/bin/lucia-cierre.sh` siguio disparando todos los dias a las 11:10,
+# corriendo `claude -p --max-turns 60`. Su cabecera dice "Cero creditos" y es
+# FALSO — gasta cuota, que es justo el recurso por el que se congela. No fue un
+# descuido de quien lo corrio: la herramienta no podia verlo y tampoco lo decia.
+SUELTAS=$(printf '%s
+' "$NUEVO" | grep -E "^[^#]" | grep -iE "($PAT)" | grep -vE "onia-loop\.sh ")
+if [ -n "$SUELTAS" ]; then
+  echo
+  echo "  !! SIGUEN VIVAS otras lineas de cron que nombran estos carriles y que"
+  echo "     este guion NO comenta (no tienen la forma 'onia-loop.sh <id>'):"
+  printf '%s
+' "$SUELTAS" | sed 's/^/       /'
+  echo "     Miralas a mano: congelar el loop NO apaga el carril entero."
+fi
 
 if [ "$SECO" = 1 ]; then
   echo "  --- como quedaria ---"

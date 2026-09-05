@@ -73,9 +73,16 @@ const IMAGEN = /\.(png|jpe?g)$/i;
 // queda en `ready` y ningun loop la ejecuta, porque desplegar es decision suya.
 // Resultado: 30 arreglos de la landing y 5 de la plataforma sin llegar al
 // cliente, con el pedido escrito, el aviso entregado y el comando listo.
+// El BOT entro el 2026-09-05, y su ausencia era el mismo agujero un escalon mas
+// abajo: se cablearon landing y plataforma, y la tercera cosa que Sergio aprueba
+// por Telegram quedo afuera. Ese dia habia DOS tareas `ready` pidiendo el mismo
+// swap sobre un bot que le decia "en construccion" a 2 de los 5 rubros que se
+// venden. Los tres publicadores comparten la propiedad que los hace no caducar:
+// no reciben argumentos y derivan que desplegar al ejecutarse.
 const DESTINOS = {
   landing: '/opt/onia-landing/_deploy/publicar.sh',
   plataforma: '/opt/onia-platform/_deploy/publicar.sh',
+  bot: '/opt/onia/bot/_deploy/publicar.sh',
 };
 
 // El deploy corre en SEGUNDO PLANO a proposito. Un build de Next tarda minutos y
@@ -188,6 +195,18 @@ function autotest() {
     try { parsearDespliegue(t); } catch (e) { ok(String(e.message).includes(frag), `esperaba "${frag}", dio "${e.message}"`); return; }
     throw new Error(`AUTOTEST: "${t}" tenia que fallar por ${frag}`);
   };
+  // EL BOT. Es el tercer destino que Sergio aprueba por Telegram, y hasta el
+// 2026-09-05 no estaba en la lista blanca: `ok <id>` sobre un pedido de deploy
+// del bot devolvia "destino desconocido" y NO desplegaba nada. Ese dia habia
+// DOS tareas `ready` pidiendo el mismo swap (t_7340fb5b, t_43e4b9ec) sobre un
+// bot que le decia "en construccion" a 2 de los 5 rubros que se venden — el
+// 40% de los prospectos — y que ofrecia demos para dentro de 4 h contra la
+// regla de "un dia antes". La propia t_7340fb5b lo dejo escrito: "el bot NO
+// esta en la lista blanca, asi que un `ok <id>` sobre esta tarea no despliega
+// nada". Es el mismo agujero de PIEZA/DEPLOY un escalon mas abajo: se cableo
+// la instancia landing/plataforma y se dejo afuera la hermana.
+  ok(parsearDespliegue('DESPLEGAR: bot').destino === 'bot', 'el bot tiene que ser un destino valido');
+  ok(parsearDespliegue('DESPLEGAR: bot').script === DESTINOS.bot, 'no resolvio la ruta del publicador del bot');
   caeD('DESPLEGAR: produccion', 'destino desconocido');
   // Igual que arriba: el cuerpo lo escribe un LLM. Una ruta o un comando en vez
   // de un nombre muere en la lista blanca, no se ejecuta.

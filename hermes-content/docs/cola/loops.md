@@ -43,6 +43,26 @@ por **artefactos, nunca por hostname ni IP** — *una IP se mueve, un hostname s
 > que corra en la máquina vieja ve *"fila mía sin línea en cron"* y **la vuelve a instalar** —
 > y quedan las dos máquinas corriendo el mismo loop sobre la misma rama. Y como nunca borra, la
 > línea vieja **no se va sola**: hay que sacarla a mano.
+>
+> 🔴 **Corregido 2026-09-05: «la tabla primero» NO alcanza, y sola deja `main` en rojo.**
+> Ese orden se escribió mirando sólo el *Chequeo de arranque*, que efectivamente rearma. Pero
+> desde el mismo 2026-09-05 `scripts/loops_registrados.mjs` compara **en las dos direcciones**
+> (su propia salida lo dice: *«coinciden en id y horario, en las dos direcciones»*). Entonces:
+>
+> | si hacés… | pasa esto |
+> |---|---|
+> | tabla a `main` primero, cron después | la máquina vieja tiene una línea de cron que ya no está en su tabla → **gate en rojo** → el integrador corre la cadena entera antes de tocar `main`, así que **los quince carriles dejan de mergear** |
+> | cron primero, tabla después | el *Chequeo de arranque* ve «fila mía sin línea» y **la rearma** |
+>
+> **Las dos cosas van JUNTAS**, en la misma ventana: se saca la línea del cron viejo y se
+> pushea la tabla movida casi en el mismo minuto, eligiendo un hueco entre corridas. Con las
+> dos aplicadas la máquina vieja queda sin fila y sin línea — las dos direcciones de acuerdo,
+> **verde**. Nadie lo había pisado porque **no se mudó ningún loop desde que el gate es
+> bidireccional**: las dos reglas nacieron el mismo día y nunca se cruzaron.
+>
+> El gate **no falla** donde no puede medir: si no reconoce la máquina (`/root/.onia-nodo` o el
+> CLI de Hermes) o no hay `crontab -l`, sale sin error a propósito. Así que este choque sólo
+> aparece en el VPS y en el nodo, no en Windows.
 
 🔄 **Desde el 2026-09-02 el VPS se despliega solo.** `/root/bin/onia-loops-sync.sh` corre cada
 hora al minuto 44 —once minutos después del integrador— y copia el corredor y los prompts
@@ -116,10 +136,31 @@ manda. Un loop se compara **sólo contra el registro de su propia máquina**:
 
 | id | dónde corre | cron | para qué sirve |
 |---|---|---|---|
-| `chatbot-cola` | **VPS** | `3 */2 * * *` (UTC) | **Carril `plataforma-v1` desde el 2026-09-05** (el id no se renombró: cambiarlo tocaría cron, worktrees, logs y gate sin ganar nada). Dos colas en orden: `cola/chatbot.md` mientras le queden 🔴, después `cola/plataforma-v1.md`. **Es el único loop que escribe en el repo `onia-platform`** |
-| `onia-cola` | **VPS** | `33 */2 * * *` (UTC) | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
+| `chatbot-cola` | **VPS** | `3 * * * *` (UTC) | **Carril `plataforma-v1` desde el 2026-09-05** (el id no se renombró: cambiarlo tocaría cron, worktrees, logs y gate sin ganar nada). Dos colas en orden: `cola/chatbot.md` mientras le queden 🔴, después `cola/plataforma-v1.md`. **Es el único loop que escribe en el repo `onia-platform`** |
+| `onia-cola` | **VPS** | `33 * * * *` (UTC) | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
 | `web-venta` | **VPS** | `48 */2 * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
 | `recorrido-cliente` | **VPS** | `9 1,4,7,10,13,16,19,22 * * *` (UTC) | Recorre el camino del cliente de punta a punta (rama `claude/recorrido-cliente`) y dice **en qué paso exacto se rompe**, con la captura como prueba |
+
+⚡ **Cadencia subida a cada hora el 2026-09-05 para `chatbot-cola` y `onia-cola`** (eran
+`*/2`), por pedido de Sergio Urcullo y con el margen medido antes de tocar:
+
+- **Duración real**, últimas 12 vueltas: mediana ~650 s los dos, máximo 1109 s. Tope 3000 s.
+  Con cadencia horaria (3600 s) sigue habiendo **más de 40 min de colchón** sobre el peor caso,
+  y el `flock -n` cubre el resto: una vuelta que se estire deja la siguiente `SALTEADA`, no
+  pisada. Ya pasó 3 veces sin daño.
+- **Cuota**: los golpes de `session limit` están **todos** entre el 2026-09-03 22:09 y el
+  2026-09-04 05:33 — la ventana en que corrían 15 loops en el VPS **más** el nodo de casa en
+  paralelo. **Cero desde entonces.** Pasar de ~44 a ~68 vueltas/día queda muy por debajo.
+- **Por qué solo estos dos y no los cuatro:** son el cuello de la v1.0. `onia-cola` es el
+  único camino a `main` (y por lo tanto al cliente) y `chatbot-cola` el único que escribe en
+  `onia-platform`. `web-venta` y `recorrido-cliente` no entregan más por correr más seguido.
+
+🔴 **Y el orden de este cambio no es libre.** `loops_registrados.mjs` compara **id Y
+horario**, y hace `process.exit(1)`: con el cron en horario y la tabla en `*/2` el gate queda
+rojo, la cadena de `npm test` falla y **ningún carril mergea** — incluido el integrador, que
+es el único que podría arreglar la tabla. Es un candado sobre sí mismo. Por eso **la tabla va
+primero a `main`, y el `crontab` recién después**, en un hueco entre corridas. Al revés ya se
+revirtió sola una baja de cadencia el 2026-09-04 (5 loops, 23 vueltas/día de más).
 
 ⚠️ **Corregido 2026-09-03 21:10 UTC — cinco cadencias BAJADAS a propósito, y la tabla seguía con
 las viejas.** `canario-visual`, `marca-personal`, `docs-auditoria`, `investigacion` y `supervisor`
