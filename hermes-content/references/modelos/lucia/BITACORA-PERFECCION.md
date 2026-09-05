@@ -1524,3 +1524,21 @@ había que tocarla. Ampliar evitó trabajo, además de evitar el error.
 
 Detalle técnico del arreglo (máscara degradada, comando exacto, por qué no sirvió recortar ni
 cambiar de foto): `posts-20260807/L2/LEEME.md`, sección «El equipo del fondo salió de la lámina 4».
+
+## P13 · text2image_soul_v2 con UNA sola foto canon como referencia no sostiene la cara ni la escena — 2026-09-05
+
+**Intento:** para reponer los 3 fondos que le faltan a L6 (noche/celular, trabajando, estudiando,
+las 7 fuentes de `tanda-20260821/` están ausentes en las 8 worktrees del VPS, ver comentario en
+`t_0d811317`), generé con `text2image_soul_v2 --image-references canon/04-cafe-celular.jpg`
+(0,12 cr, `generadas-20260905/L6-S1-noche-celular.png`).
+
+**Resultado: rechazada.** No es de noche, no hay luz de pantalla — salió un restaurante de día.
+Y la cara no pasa la rúbrica: ojos verdosos (debe ser marrón almendrado), pecas casi invisibles,
+cara más ovalada que la del canon. `text2image_soul_v2` con **una sola** foto de referencia (el
+máximo que admite `image_references`, ver `higgsfield model get text2image_soul_v2`) no alcanza
+para sostener identidad + escena nueva a la vez — el Element-ancla `lucia-skin-v1` que sí funciona
+(`BANCO-OFICIAL.md`) usa **7 fotos** vía `nano_banana_2`/`nano_banana_pro` (2 cr), no una sola vía
+Soul V2. **No probar de nuevo esta combinación** (modelo barato + 1 referencia) para escenas que
+se alejan del encuadre de la foto de referencia; para las 3 fuentes que faltan, el camino real es
+nano_banana_pro con las 7 `canon/*.jpg` como `--image-references` (14 cr para 3 imágenes = fuera
+del tope de esta vuelta, cotizar aparte).
