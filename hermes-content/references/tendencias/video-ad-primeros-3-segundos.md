@@ -149,6 +149,30 @@ resolución y tiempo exacto de cada corte. De 4 de ellos se extrajeron y **se mi
 fotogramas de los primeros 3,6 s. **5 de los 6 son verticales 360×640**; el único horizontal
 (`1717660799501244`, 640×360) es de un rubro distinto (gestión documental / auditorías).
 
+## ⚠️ Intento de cerrar el hueco del CIERRE (2026-09-04, tarde) — bloqueado por herramienta, no por la fuente
+
+Se intentó mirar el cierre de los 3 videos de arriba, re-descargándolos por la misma vía (chromium
+headless a la ficha del ID, `grep` del `.mp4` del DOM, `curl` con el link decodificado). **Los tres
+se re-descargaron bien** (438 KB, 2,3 MB, 519 KB — mp4/h264 válidos, cabecera `ftypisom` correcta).
+
+**Lo que falló es el ffmpeg de esta máquina, no la fuente.** Esta vuelta corrió en **nodo-casa**
+(WSL, `DESKTOP-0GGGNMF`, IP `172.21.7.124`), **no en el VPS** que este prompt asume. El único
+`ffmpeg` que hay ahí es el que trae Playwright
+(`~/.cache/ms-playwright/ffmpeg-1011/ffmpeg-linux`), y es un build `--disable-everything` armado
+sólo para grabar pantalla en WebM: sólo trae decoder `mjpeg` y encoder `libvpx`, **cero soporte
+h264/mp4**. Con él, `ffmpeg -i <archivo>.mp4` da `Invalid data found when processing input` sobre
+un archivo perfectamente válido — un error que se lee como "el archivo está corrupto" y es al
+revés. No hay ningún otro `ffmpeg` en el disco (`apt` lo tiene disponible pero instalarlo está
+prohibido para este carril: "no instalás nada nuevo").
+
+**Para retomar el cierre/CTA**: correr este mismo procedimiento (descarga + `ffmpeg -filter:v
+scene,showinfo`) **desde el VPS** (`187.77.16.63`), que sí tenía un ffmpeg completo cuando se
+midieron los primeros 3,6 s de estos mismos 6 videos (memoria compartida, `tendencias`,
+2026-09-04 07:58). Antes de asumirlo, verificar con `ffmpeg -version 2>&1 | grep -o
+'enable-decoder=h264'` — no repetir la suposición sin contarla de nuevo.
+
+---
+
 **Qué NO se pudo ver, y por eso no está escrito acá:**
 
 - **Ni un número de rendimiento.** Meta no publica impresiones, clics, CTR ni gasto de los
