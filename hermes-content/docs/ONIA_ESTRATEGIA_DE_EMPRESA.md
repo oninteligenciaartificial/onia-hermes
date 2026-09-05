@@ -8,7 +8,7 @@
 >
 > **Todo lo medible de acá se midió contra el repo y la base de producción el 2026-09-05.**
 > No hereda conclusiones: cada cifra lleva de dónde sale. Si una quedó vieja, se recuenta
-> con los comandos de §15 y **se corrige este archivo**.
+> con los comandos de §17 y **se corrige este archivo**.
 >
 > ⛔ **No es fuente de precios.** Los precios se leen de `onia-platform/lib/subscription-plans.ts`
 > (`DEFAULT_PLAN_AMOUNTS`) y `lib/pricing.ts`. Acá aparecen **fórmulas**, y el número es
@@ -40,6 +40,13 @@
    preguntas** que separa el add-on que apalanca del negocio nuevo disfrazado (§10). El chatbot
    pasa las tres; la web, el influencer y el contenido fallan.
 9. **La v1.0 no es una lista de features: es un cliente que paga el SEGUNDO mes** (§11).
+10. **Contra los referentes (§13): el margen supera el benchmark de la industria (≥75%), la
+    vendibilidad está SIN DEMOSTRAR —no refutada—, y la escalabilidad es distinta a la de ellos:
+    Lety escala más rápido, Onia es mucho más difícil de abandonar.** El add-on está 10-60×
+    por debajo del precio internacional, que es dato de techo para v2.0, no acción de hoy.
+11. **Una idea que pasa el test no es una idea urgente** (§14). El test dice si MERECE
+    construirse; la etapa dice CUÁNDO. La cola de ideas buenas vive en §14 — hoy con una
+    entrada: la tarjeta de fidelidad en Wallet, que pasa las tres.
 
 ---
 
@@ -363,7 +370,7 @@ tres. Es el ejemplo de qué buscar en el siguiente.
 
 ## 11. Qué es la v1.0 — un criterio de corte, no una lista de features
 
-El problema de "terminar el producto" (§14) es que **una lista de features no tiene fondo**:
+El problema de "terminar el producto" (§16) es que **una lista de features no tiene fondo**:
 siempre se puede agregar una más, y sin cliente real nadie dice cuál falta.
 
 **La v1.0 no se define por lo que el producto hace. Se define por lo que un cliente logra solo:**
@@ -420,7 +427,128 @@ mide y es la que define el techo.** Empezar a anotarla es más barato que cualqu
 
 ---
 
-## 13. Restricción de firma (planificación, no juicio)
+## 13. Contra los referentes — Lety, Dapta y los benchmarks de la industria
+
+> Sergio Urcullo, 2026-09-05: *"mirá a Lety, mirá a Dapta. Esos sí son empresas reales.
+> Decime qué tan rentable es el producto, qué tan vendible, qué tan escalable"*.
+
+**Leído el 2026-09-05.** `lety.ai` y `dapta.ai` están **bloqueados por el proxy de egress** de
+la sesión, así que los precios salen de búsqueda web sobre sus propias páginas, no de la
+landing renderizada. **Eso NO cumple la regla de "verificar es MIRAR"** — al reabrir esto desde
+una máquina sin bloqueo, abrir las dos landings y corregir acá lo que haga falta.
+
+### 13.1 Qué venden y a cuánto
+
+| | **Lety.ai** | **Dapta.ai** | **Onia** |
+|---|---|---|---|
+| Qué es | capa conversacional white-label | agentes de voz y texto + workflows | **ERP por rubro + capa conversacional** |
+| A quién le vende | **agencias** (B2B2B) — el negocio final nunca ve a Lety | negocios directo | negocios directo |
+| Precio | fee plano a la agencia (Standard hasta 10 clientes / Unlimited) | Free · **US$99** Pro · **US$499** Scale · **US$1.499** Prime, por créditos | planes + add-ons (`DEFAULT_PLAN_AMOUNTS`, `pricing.ts`) |
+| Lo que el negocio final paga | **US$300–2.000/mes por chatbot** (lo cobra la agencia) | US$99+ | **el chatbot son ~US$33/mes** |
+| Gestiona el negocio | ❌ sólo atiende conversaciones | ❌ | ✅ agenda, inventario, caja, facturación |
+
+### 13.2 Rentable: sí, por encima del benchmark de la industria
+
+| Métrica | Benchmark SaaS 2026 | Onia | |
+|---|---|---|---|
+| Margen bruto | **≥75%** es el objetivo | **94–99,8%** | ✅ muy por encima |
+| Costo de servir | sube con el uso | **Bs ~461/mes fijo** | ✅ |
+
+Y una ventaja que **no es accidente**: la industria reporta que *el gasto en infraestructura de
+IA está comprimiendo los márgenes de SaaS en 2026*. A Onia no la comprime, por dos decisiones
+ya tomadas: los agentes **no llaman a ningún modelo** (redactan con plantillas) y **el
+transporte de Meta lo paga el cliente** desde el 2026-08-21. Esa combinación es la razón
+estructural del 99,8%, y conviene no romperla sin darse cuenta.
+
+### 13.3 Vendible: dato faltante, no dato malo — y hay señal
+
+**No hay una sola venta perdida por precio ni por producto, porque nunca se intentó vender.**
+La vendibilidad está sin demostrar; eso es distinto de estar refutada.
+
+Lo que sí hay es **señal de demanda medida**: **7 personas llegaron solas en ~2 semanas**, sin
+campaña, sin equipo comercial y sin haberle escrito a nadie (§2). Tres se registraron por su
+cuenta. Para un producto sin marketing, inbound espontáneo es la señal más barata y más honesta
+que existe — y **se está desperdiciando entera**.
+
+### 13.4 Escalable: Lety escala más; Onia es más defendible
+
+Ésta es la diferencia estructural, y hay que entenderla antes de copiarle nada a nadie:
+
+| | Lety / Dapta | Onia |
+|---|---|---|
+| Qué instala en el cliente | una capa de conversación | **el sistema donde vive su negocio** |
+| Costo de cambiarse a otro | **una tarde** | **altísimo** — sus pacientes, su inventario y su caja están adentro |
+| Velocidad de venta | rápida | lenta |
+| Costo de soporte | bajo | **alto** (§9) |
+| Cómo compiten | features e integraciones (600+ MCP, 1.000+ tools) | **el dato del negocio** |
+
+**Lety es más escalable. Onia es más difícil de abandonar.** Son ventajas distintas y no se
+pueden tener las dos: lo que hace a Onia lenta de vender es exactamente lo que la hace difícil
+de dejar. Copiarle a Lety la velocidad significaría renunciar a la defensa.
+
+⚠️ **El riesgo competitivo real no es Lety-la-empresa** (relevado el 2026-08-06,
+`historial/ONIA_COMPETENCIA_LETY_AI_20260806.md`): Lety no compite por los clientes de Onia,
+compite por su **rol**. El riesgo es **el revendedor local que arma un competidor con Lety en
+un día** y sale a venderle a las mismas clínicas. Contra ése, la defensa no es el chatbot —
+es el ERP, que él no tiene.
+
+### 13.5 El hallazgo incómodo: el add-on está 10× a 60× por debajo del precio internacional
+
+Las agencias de Lety le cobran al negocio final **US$300–2.000/mes por un chatbot**. El add-on
+de Onia son **~US$33/mes** — y encima el de Onia **está conectado al sistema de gestión**, que
+el de ellos no.
+
+**Eso NO significa subir el precio en Bolivia.** El mercado local tiene su propio techo y está
+relevado (`ONIA_PRECIOS_COMPETENCIA_Y_DECISION.md`): la competencia boliviana cobra entre
+Bs 85 y Bs 720. Un precio correcto para Bolivia es correcto aunque en Miami valga diez veces
+más.
+
+**Lo que sí significa, y es lo que importa:** el producto **no está sub-construido, está
+sub-monetizado fuera de Bolivia**. Es un dato de techo de mercado a considerar en **v2.0**
+(§12), no una acción de hoy. Anotado para no perderlo — y **no se abre como frente** (regla de
+`CLAUDE.md`).
+
+---
+
+## 14. La cola de ideas que PASAN el test — y por qué eso no las hace urgentes
+
+Este documento no existe para frenar ideas. Existe para que las buenas no se pierdan **y no se
+construyan antes de tiempo**. Las dos cosas a la vez.
+
+> **El test (§10) dice si algo MERECE construirse. La etapa (§7, §12) dice CUÁNDO.**
+> Son dos filtros distintos y hay que pasar los dos. Una idea que pasa el test y falla la etapa
+> **no es un "no": es un "sí, y va anotada acá con su fecha"**.
+
+### Tarjeta de fidelidad virtual (Wallet) — 🟢 PASA LAS TRES
+
+> Sergio Urcullo, 2026-09-05, observado en un peluquero real: *"tienen una tarjeta de sellos
+> para canjear recompensas, pero yo esa tarjeta ya la perdí. Podemos hacer esas mismas
+> tarjetas, pero virtuales, conectadas con Apple Wallet"*.
+
+| Pregunta del test | Respuesta | |
+|---|---|---|
+| ¿Se le vende al MISMO cliente que ya paga? | peluquería, dental, comercio **son rubros de Onia** | ✅ |
+| ¿Deja de tener sentido sin el núcleo? | **sí, y es su mejor argumento**: la tarjeta **se sella sola** porque el sistema ya sabe que el cliente vino o compró. Sin el sistema, alguien marca a mano — que es justo el problema | ✅ |
+| ¿Se entrega sin horas por cliente? | es configuración (logo, cuántos sellos, qué premio). El certificado de Apple Developer (~US$99/año) es **uno para Onia**, no uno por cliente | ✅ |
+
+**Es el mejor candidato a add-on que apareció hasta hoy** — mejor que la web, el influencer y
+el contenido, que fallan el test (§10). Y sirve de ejemplo de qué buscar: nació de mirar un
+negocio real y ver un problema que **el sistema ya tiene los datos para resolver**.
+
+⚠️ **Una corrección de mercado, no de la idea: en Bolivia el que manda es Google Wallet, no
+Apple.** Android domina los mercados emergentes de la región (~70-73% global, más en
+emergentes; el dato puntual de Bolivia no se pudo confirmar — verificarlo en
+`gs.statcounter.com/os-market-share/mobile/bolivia` antes de construir). **Hacerlo
+Apple-primero sería construir para la minoría de los clientes de los clientes.** El orden
+correcto es Google Wallet primero, Apple después — y el formato `.pkpass` de Apple exige el
+certificado pago, mientras que el de Google no.
+
+**Cuándo:** v1.3 (§12), *después* de los 5 clientes y *después* de bajar las horas de soporte.
+Con cero clientes, un add-on excelente y uno malo valen exactamente lo mismo: **cero**.
+
+---
+
+## 15. Restricción de firma (planificación, no juicio)
 
 `ONIA_LEGAL_BOLIVIA_ESTADO.md` registra que la titular es **Leslie Mercado Moreno** y que
 Sergio Urcullo no firma. Es una restricción operativa real y ya resuelta en la estructura,
@@ -433,7 +561,7 @@ pero define qué rutas están abiertas **hoy**:
 
 ---
 
-## 14. Qué contradice este documento (declarado, no escondido)
+## 16. Qué contradice este documento (declarado, no escondido)
 
 **La decisión vigente de Sergio Urcullo del 2026-08-31** (`COLA.md`,
 `ONIA_DEFINICION_DE_TERMINADO.md`): *"dedicate a terminar el producto y recién escribimos"*,
@@ -461,7 +589,7 @@ cuenta delante. Cuando se resuelva, **se edita esta sección** y se alinea `COLA
 
 ---
 
-## 15. Cómo se re-verifica todo esto
+## 17. Cómo se re-verifica todo esto
 
 ```bash
 # Clientes pagando y orgs reales (base de producción)
@@ -480,7 +608,7 @@ git worktree list | wc -l          # worktrees abiertos: >2 es señal de dispers
 
 ---
 
-## 16. Documentos relacionados
+## 18. Documentos relacionados
 
 **`ONIA_AGENTES_COSTO_API.md`** (la fuente de los márgenes de §8 y del techo de §9) · `ONIA_DEFINICION_DE_TERMINADO.md` (el objetivo vigente) · `ONIA_LEADS_ESPERANDO.md` (las 7
 personas) · `ONIA_PUEDO_VENDER_HOY.md` (qué se puede prometer) · `ONIA_LEGAL_BOLIVIA_ESTADO.md`
