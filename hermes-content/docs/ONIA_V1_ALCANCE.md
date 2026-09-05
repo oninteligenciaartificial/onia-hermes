@@ -56,19 +56,28 @@ Lo que se arregló, y lo que se aprendió, en `handoff/onia-v1-servicios.md`:
 - **La cita NO era imposible**: eso ya lo había arreglado el deploy `3606c46` (14:12 del 4-sep);
   la medición de este doc se hizo ANTES de ese swap. Dato vencido, corregido acá.
 
-🔴 **COMERCIO sigue roto igual.** Su tarjeta de `/register` promete «Catálogo, inventario, caja y
-**clientes**» y no tiene pantalla de clientes. **No es copiar y pegar lo de servicios**: su gente
-vive en `OniaCoreBusinessPartner` (los fiados), no en `Patient`.
+⚠️ **COMERCIO: escrito y en `master` el 5-sep, TODAVÍA SIN DESPLEGAR.** La pantalla de clientes
+existe (`app/(dashboard)/comercio/clientes/`), lee `OniaCoreBusinessPartner` como correspondía —no
+`Patient`— y está en la nav del pack (`vertical-pack.ts:282`). **No cuenta como hecho hasta el
+deploy y hasta MIRARLA en producción con una cuenta nueva.**
 
-🔴 **Sin recibo imprimible, en los dos.** `/print/receipt` lee la tabla `Payment` del pack dental;
-comercio usa `OniaCommercePayment`. Es una ruta nueva, no un permiso.
+⚠️ **Recibo imprimible: escrito y en `master` el 5-sep, sin desplegar.** Ruta nueva
+`/print/recibo-venta/[paymentId]` sobre `OniaCommercePayment`, enlazada desde la caja al cerrar la
+venta (`VentaForm.tsx:334`). Misma advertencia: sin deploy no existe.
+
+🔴 **Hueco anotado (5-sep): la IMPORTADORA no llega a Clientes.** `proveegest-electrico` es el
+único pack de la familia comercio cuya nav no incluye `/comercio/clientes` — usa
+`ELECTRICO_NAV_ITEMS`, que tiene Catálogo, Inventario y Créditos pero no Clientes. La pantalla
+funcionaría tal cual. Su alta NO promete «clientes» explícitamente (a diferencia de la tarjeta de
+comercio), así que no es promesa rota: es un rubro que vende a crédito a clientes que no puede
+listar. Una línea en la nav.
 
 | Pieza | Estado |
 |---|---|
 | Registro solo, con 14 días de prueba | ✅ vivo |
 | Agenda y citas (crear, ver el día, agenda pública) | ✅ clínicos y **servicios** · 🔴 comercio no agenda (y no debería) |
-| Clientes o pacientes con su ficha | ✅ clínicos y **servicios (4-sep)** · 🔴 **no existe la pantalla en comercio** |
-| Cobros: factura interna, pago, recibo imprimible | ✅ cobro vivo en todos (**servicios, desde el 4-sep**) · 🔴 **sin recibo imprimible fuera de los clínicos** |
+| Clientes o pacientes con su ficha | ✅ clínicos y **servicios (4-sep)** · ⚠️ **comercio: en `master` el 5-sep, sin desplegar** · 🔴 importadora no la tiene en el menú |
+| Cobros: factura interna, pago, recibo imprimible | ✅ cobro vivo en todos · ⚠️ **recibo de comercio en `master` el 5-sep, sin desplegar** |
 | Contabilidad: libro de compras, resumen de IVA para el contador | ✅ vivo |
 | Chatbot del sitio web con cuota de 500 conversaciones | ✅ vivo (add-on) |
 | Entrar seguro: bloqueo por intentos, verificación en dos pasos | ✅ vivo |
@@ -79,7 +88,7 @@ comercio usa `OniaCommercePayment`. Es una ruta nueva, no un permiso.
 
 0. **Que el rubro entregue lo que su propia alta promete.**
    ✅ **SERVICIOS: hecho y desplegado el 4-sep**, verificado contra producción con cuenta nueva.
-   🔴 **COMERCIO: falta.** Promete «clientes» y no tiene la pantalla. Es el primer paso pendiente.
+   ⚠️ **COMERCIO: escrito y mergeado a `master` el 5-sep. Falta desplegarlo y mirarlo.**
 1. **Material de venta honesto.** La web y el guion prometen factura del SIN, que está apagada.
    *En corrección (`t_db9acebf`).* **Bloquea escribirle a los leads.**
 2. **El dueño conecta su WhatsApp.** Meta ya aprobó los permisos; el botón está vivo. Falta que
@@ -128,6 +137,20 @@ volumen maneja (clientes), y qué agrega (add-ons: asistente Bs 390, agenda púb
 Bs 70). Un negocio que crece sube de plan porque **choca con un tope**, no porque le subimos el
 precio.
 
+**Estado al 5-sep (sesión de usuarios y pricing).** Los montos no se tocaron; lo que se arregló es
+que el mismo número no se contara de tres formas. `basicMaxSeats` cuenta EXTRAS y se leía como
+total, así que Básico se vendía con 5 personas, el sistema las dejaba crear y el panel avisaba
+«llegaste al máximo» en la 4ta. Además el tope se mostraba y **nadie lo aplicaba al otorgar**.
+Hoy `maxAsientosExtra()` es el único lugar que dice cuántos asientos vende cada plan, y lo leen la
+API de admin (valida), el panel de admin (input) y la barra de uso del cliente.
+
+**Cuatro decisiones de precio siguen esperando a Sergio Urcullo** y ninguna necesita más
+investigación — la medición está en `handoff/onia-v1-panel-ui.md` §6: la recarga de Bs 190 (sin
+ancla: ningún competidor vende recargas), el eje del cargo de Bs 70 (ningún competidor local cobra
+por cabeza), el chatbot a Bs 390 contra Xmart (Bs 177 QR / Bs 296 Meta API), y la **gracia del
+contrato pago, que hoy es de CERO días** sobre un rail de cobro que exige una acción manual cada
+mes.
+
 **La promesa que sostiene vender temprano:** *todo lo que agreguemos a tu plan durante el primer
 año entra sin costo extra.* Cuesta cero hoy, hace que el que compra ahora gane por comprar antes, y
 nos obliga a mejorar. **No se promete una función concreta ni una fecha**: se promete el plan.
@@ -141,10 +164,15 @@ Cerrado y sin desvíos. Cada paso se despliega y se verifica MIRÁNDOLO antes de
 
 1. ~~Configuración: de 7 pestañas a una página con «Configuración avanzada».~~ **Hecho, vivo el 4-sep.**
 2. ~~Que el rubro SERVICIOS entregue lo que promete su alta.~~ **Hecho, vivo el 4-sep.**
-3. **Que el rubro COMERCIO entregue lo que promete su alta** — le falta la pantalla de clientes.
-   *Listo = el recorrido se hace solo, o la tarjeta de `/register` deja de prometerlo.*
-4. Panel de inicio en tres renglones, con el primer día resuelto. **Construido; espera el OK.**
-5. Cobros: cliente, catálogo y total pegado al botón. Acá entra el **recibo imprimible**.
+3. ~~Que el rubro COMERCIO entregue lo que promete su alta.~~ **Escrito y en `master` el 5-sep;
+   falta el deploy.** *Listo = el recorrido se hace solo EN PRODUCCIÓN, mirado con cuenta nueva.*
+4. ~~Panel de inicio en tres renglones.~~ **CANCELADO.** Sergio Urcullo descartó
+   `feat/panel-tres-renglones` **y** el mockup minimal de `claude/onia-minimal-dashboard-369bc4`:
+   el panel es el que ya está vivo. Lo que sí se hizo y está en `master` es el rediseño sobre ESE
+   panel — saludo por hora de la organización, lienzo, franja de estado con plan y vencimiento, y
+   la barra del asistente. Este punto ya no espera ningún OK.
+5. Cobros: cliente, catálogo y total pegado al botón. **El recibo imprimible ya está en `master`**;
+   falta el resto del paso.
 6. Contabilidad: arriba, cuánto pagar y hasta cuándo.
 7. Velocidad: el panel abre en menos de 1,5 s.
 
