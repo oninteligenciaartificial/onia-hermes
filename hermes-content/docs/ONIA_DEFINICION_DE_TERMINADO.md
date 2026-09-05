@@ -99,16 +99,18 @@ la base de Chatwoot del VPS, no de memoria:
 | inbox | canal | conversaciones | org vinculada |
 |---|---|---|---|
 | 3 · ONIA Demo | API | 8 | **ninguna — huérfano** |
-| 4 · Onia Web | widget | **7** | **ninguna — huérfano** |
-| 5 · Onia WhatsApp | WhatsApp | 3 | `onia-interna` ✅ |
+| 4 · Onia Web | widget | **7** | `onia-interna` ✅ *(era huérfano; vinculado el 2026-09-04)* |
+| 5 · Onia WhatsApp | WhatsApp | 3 | `onia-interna` ✅ *(hoy en `chatwootWhatsappInboxId`)* |
 | 7 · ZZ QA Clinica | widget | 6 | `zz-qa-clinica-chatbot-9k651` |
 
 **Inbox 5 dejó de ser huérfano**: alguien lo vinculó a `onia-interna`. O sea que **el PATCH ya
 se usó una vez y funcionó** — lo que este punto pedía como "lo mínimo que lo logra" ya ocurrió.
 
 **Lo que queda, y es más chico de lo que decía el párrafo de arriba:**
-1. **Inbox 4 sigue huérfano con 7 conversaciones adentro** — el widget de `onia.com.bo`. Ahí
-   están los leads del sitio, y son los que nadie puede leer desde el panel.
+1. ~~**Inbox 4 sigue huérfano con 7 conversaciones adentro**~~ — **CERRADO Y MIRADO el
+   2026-09-04.** La migración (`scripts/migrar_inboxes_onia.mjs --aplicar`) dejó
+   `onia-interna` con `chatwootInboxId=4` (web) y `chatwootWhatsappInboxId=5` (WhatsApp),
+   y la bandeja lista **los dos canales juntos**, ordenados entre sí.
 2. **Ninguna org de CLIENTE tiene inbox propio.** `onia-interna` es la nuestra: prueba el
    mecanismo, no el caso de un cliente. Terminado sigue siendo **un cliente**, no nosotros.
 
@@ -117,13 +119,31 @@ se usó una vez y funcionó** — lo que este punto pedía como "lo mínimo que 
     docker exec supabase-db psql -U postgres -d postgres -tAc \
       'select o.slug, cs."chatwootInboxId" from clinic_settings cs join organizations o on o.id=cs."organizationId" where cs."chatwootInboxId" is not null;'
 
-**Terminado =** un mensaje enviado al número del cliente aparece en su bandeja, **mirado con
-captura**. Con el formulario ya vivo, el camino es: `/admin/organizations/<id>` → vincular la
-org al inbox → abrir `/inbox` y MIRAR.
+**Pero la consulta NO es la prueba: la prueba es la pantalla.** Se abre y se MIRA con
 
-**Carril:** chatbot. Es el ítem 2 de su cola. **Pero el paso que queda es de un minuto y es
-una escritura en producción**, así que lo decide Sergio o el dueño del carril — este loop no
-escribe en la base de producción.
+    node scripts/mirar_bandeja_dueno.mjs --scroll 800 --salida /root/bandeja-dos-canales.png
+
+Eso entra a `/inbox` de producción con la sesión del dueño de la org y deja la captura.
+**Mirada el 2026-09-04 20:4x La Paz**, en una sola pantalla y alternadas por fecha:
+`mariohassen` (28-ago, **WhatsApp**, conv 37), `icy-lake-546` (27-ago, **Web**, conv 36, la
+que dejó el correo `Saguilera@ds-santacruz.bo`), `F` (25-ago, **WhatsApp**, conv 35, la
+clínica de 4 doctores) y `delicate-glitter-674` (24-ago, **Web**, conv 34). Ninguno es QA ni
+el probador. Los `inbox_id` se confirmaron en la base de Chatwoot: 34 y 36 → inbox 4;
+35 y 37 → inbox 5.
+
+⚠️ **Cómo se mira sin romper nada.** La única cuenta de `onia-interna` es
+`superadmin@onia.com.bo` y su clave no está en ningún env del VPS — eso tuvo este punto
+parado un día con el rótulo "no se puede capturar". **Rotarla sigue estando prohibido** (es
+la cuenta de Sergio en producción). El script no la toca: pide un magiclink de un solo uso al
+admin API y lo canjea con el mismo `@supabase/ssr` que lee el servidor de Next. El bloqueo
+era de método, no de credencial.
+
+**Terminado =** un mensaje enviado al número del **cliente** aparece en **su** bandeja,
+mirado con captura. Con el formulario ya vivo, el camino es: `/admin/organizations/<id>` →
+vincular la org al inbox → abrir `/inbox` y MIRAR.
+
+**Carril:** chatbot. Lo que queda es el punto 2 —**una org de cliente**—, y eso no es una
+escritura de un minuto: es el primer cliente.
 
 ### ✅ 2. Vendemos que el bot agenda, y el bot no agenda — CERRADO **Y DESPLEGADO** (código 2026-08-31, producción verificada 2026-09-02)
 
@@ -309,14 +329,20 @@ fantasma, el 4 ya estaba construido). El **punto 2 cerró en producción**: el d
 faltaba entró el 2026-09-01 y se verificó en el contenedor vivo el 2026-09-02 — la frase falsa
 pasó de 5 chunks a **cero** y la honesta de cero a **21**.
 
-**Queda UNO: el punto 1, del carril chatbot** — el inbox 4 sigue huérfano con 7 conversaciones
-adentro, y ninguna org de CLIENTE tiene inbox propio. Recontado en vivo el 2026-09-02 18:38 UTC
-con la consulta que este mismo doc deja escrita: las únicas dos orgs vinculadas siguen siendo
-`zz-qa-clinica-chatbot-9k651` → 7 y `onia-interna` → 5, las dos nuestras.
+**Queda UNO: el punto 1, del carril chatbot — y ya sólo por su segunda mitad.** La primera
+(*el inbox 4 huérfano*) **cerró el 2026-09-04**: la migración lo vinculó a `onia-interna` y
+`/inbox` se abrió con la sesión del dueño y se MIRÓ — los leads de la web y los de WhatsApp
+salen en la misma lista, alternados por fecha. La captura se rehace con
+`node scripts/mirar_bandeja_dueno.mjs --scroll 800`.
 
-⚠️ **Eso mueve la puerta de los siete leads: ya no faltan dos puntos, falta uno.** No se les
-escribe todavía —el punto 1 sigue abierto—, pero conviene saber que lo que falta es **un solo
-paso de un minuto en producción**, no dos frentes.
+⚠️ **Lo que falta ya no es un paso de un minuto: es el primer CLIENTE.** `onia-interna` es
+nuestra propia org, así que prueba el mecanismo y no el caso real. Terminado sigue siendo un
+mensaje al número de un cliente apareciendo en la bandeja de ESE cliente. No hay ninguna
+escritura en producción pendiente para lograrlo — hay que vender.
+
+✅ **Y los leads que esperaban ya se pueden leer desde el panel**, que era la puerta que este
+punto trababa: `F` (la clínica de 4 doctores), `mariohassen`, `icy-lake-546` y los demás están
+abiertos en `/inbox`. Contestarles es de Sergio, no del loop.
 
 Que dos de cuatro se cierren verificando en vez de desarrollando no es suerte: los puntos se
 redactaron describiendo el repo de ese día, y el repo siguió. Por eso el Gate 1 —*¿ya está
