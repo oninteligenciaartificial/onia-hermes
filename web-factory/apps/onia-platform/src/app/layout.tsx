@@ -38,8 +38,18 @@ const geistMono = Geist_Mono({
 });
 
 const SITE_TITLE = "Onia — El sistema con IA que maneja tu negocio completo";
+/**
+ * La descripción que hereda toda ruta sin metadata propia — hoy `/patrones` y
+ * la página 404, que es la que ve el lead que abre un link viejo.
+ *
+ * ⚠️ Enumeraba «facturación SIAT» entre los módulos que se encienden, y el
+ * emisor está en trámite ante el SIN (`proof.ts` → siat: "tramite"). Es la
+ * misma promesa que salió del pie (198cca363) y del cuerpo de la portada
+ * (5423e2f50): acá sobrevivió cinco días porque el `<head>` no sale en
+ * ninguna captura. Vuelve cuando la homologación concluya.
+ */
 const SITE_DESCRIPTION =
-  "Elegís tu rubro, te entregamos el sistema configurado y encendés módulos cuando los necesités: gestión, agentes con IA que esperan tu aprobación, chatbot de WhatsApp, facturación SIAT. Hecho en Bolivia.";
+  "Elegís tu rubro, te entregamos el sistema configurado y encendés módulos cuando los necesités: agenda, clientes, caja e inventario, agentes con IA que esperan tu aprobación y chatbot de WhatsApp. Hecho en Bolivia.";
 
 export const metadata: Metadata = {
   /*
