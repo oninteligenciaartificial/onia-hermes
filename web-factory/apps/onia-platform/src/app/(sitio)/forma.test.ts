@@ -143,6 +143,68 @@ describe("la superficie de venta dibuja, no fotografía el sistema", () => {
  * incluida, que es justo el link que se le pasa a un lead para que se registre.
  * Un `curl` a la home daba verde y tapaba las once.
  */
+/**
+ * Ninguna PÁGINA declara su tarjeta social como archivo: la tarjeta se dibuja.
+ *
+ * ⚠️ Cuarto agujero del mismo guard, medido el 2026-09-05, y el más caro de
+ * los cuatro. Los dos bloques de arriba dejaban a `/v1` afuera por motivos
+ * distintos y los dos motivos eran falsos:
+ *   · el walk lo excluye como "archivo de la web vieja, es noindex" — pero
+ *     `noindex` manda sobre buscadores, NO apaga la pantalla: producción sirve
+ *     `/v1` con 200 y el fetcher de WhatsApp le lee el `og:image` igual; y
+ *   · el bloque de tarjetas saca sus sujetos del SITEMAP, donde `/v1` no está,
+ *     así que fallaba abierto por partida doble.
+ * Entre los dos, `/v1/page.tsx` publicó `/og/onia-rubros.jpg` —la captura con
+ * «MUY PRONTO» impreso adentro que la home se sacó el 2026-09-02— durante tres
+ * días más, en la única superficie que se ve ANTES de abrir el sitio. Y ningún
+ * barrido de texto podía verla: la palabra prohibida estaba dentro de un JPG.
+ *
+ * Este bloque mira `src/app` entero, sin exención: el cuerpo archivado de la
+ * v1 sigue conservado en `components/landing-v1/` (que el walk de arriba sí
+ * exime), pero una PÁGINA no declara imágenes.
+ */
+describe("ninguna página declara una captura como tarjeta social", () => {
+  const APP_ENTERA = dirname(AQUI);
+
+  function paginas(dir: string): string[] {
+    return readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+      const ruta = join(dir, e.name);
+      if (e.isDirectory()) return paginas(ruta);
+      return /^(page|layout)\.tsx$/.test(e.name) ? [ruta] : [];
+    });
+  }
+
+  const encontradas = paginas(APP_ENTERA);
+
+  it("encuentra las páginas y los layouts", () => {
+    // Ancla: sin esto el it.each de abajo recorre una lista vacía y firma
+    // verde. Hoy son más de 25 entre `(sitio)`, `/servicios`, `/v1` y legales.
+    expect(encontradas.length).toBeGreaterThan(20);
+  });
+
+  it.each(encontradas.map((f) => [f.slice(APP_ENTERA.length + 1), f]))(
+    "%s no declara ninguna imagen",
+    (_rotulo, archivo) => {
+      const declaradas = [
+        ...soloCodigo(readFileSync(archivo as string, "utf8")).matchAll(RUTA_IMAGEN),
+      ]
+        .map((m) => m[0].slice(1))
+        // Las fotos referenciales que Sergio sí pidió (`/contexto/`, `/fotos/`)
+        // se declaran igual que siempre: la misma lista del guard de arriba,
+        // para que no haya dos versiones de "qué imagen se puede servir".
+        .filter((ruta) => !PERMITIDAS.some((ok) => ruta.includes(ok)));
+
+      expect(
+        declaradas,
+        "una página que nombra un archivo de imagen lo está sirviendo como " +
+          "tarjeta o como prueba. La tarjeta la dibuja `opengraph-image.tsx` " +
+          "del mismo segmento (ver `tarjeta-social.tsx`), y las fotos " +
+          "referenciales van en un componente, no en la metadata.",
+      ).toEqual([]);
+    },
+  );
+});
+
 describe("cada ruta del sitio se comparte con su tarjeta social", () => {
   const APP = dirname(AQUI);
 

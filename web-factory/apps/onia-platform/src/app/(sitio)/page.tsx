@@ -252,8 +252,13 @@ const JSON_LD = {
       operatingSystem: "Web",
       url: `${SITE_URL}/`,
       publisher: { "@id": `${SITE_URL}/#org` },
+      // ⚠️ La factura NO se enumera acá: el emisor está en trámite ante el SIN
+      // (`proof.ts` → siat: "tramite"). Esta cadena es la descripción del
+      // producto que lee Google, así que nombrarla entre los módulos la vende
+      // igual que el pie (198cca363) y que el cuerpo de esta misma página
+      // (5423e2f50). Cuando la homologación concluya, vuelve — con evidencia.
       description:
-        "Sistema de gestión con IA para negocios en Bolivia: agenda, clientes, cobros, facturación y agentes con aprobación humana.",
+        "Sistema de gestión con IA para negocios en Bolivia: agenda, clientes, cobros, inventario y agentes con aprobación humana.",
       offers: PLANES.map((plan) => ({
         "@type": "Offer",
         name: plan.nombre,
