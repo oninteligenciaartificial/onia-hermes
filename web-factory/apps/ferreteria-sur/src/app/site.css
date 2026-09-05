@@ -61,6 +61,18 @@
   padding-block: clamp(2.5rem, 1rem + 7vw, 6rem);
   overflow: hidden;
 }
+/* El aire de arriba del hero era SOLO función del ancho (7vw → 96px a 1440), o
+   sea que gastaba su máximo justo en la laptop ancha y BAJA, que es donde menos
+   sobra. Medido el 2026-09-03 sobre el build de producción: a 1440x800 el CTA
+   caía 42px por debajo del pliegue.
+   El min() lo vuelve consciente del alto: por encima de 900px de viewport el
+   valor sigue siendo el de siempre (49rem = 784px de contenido + nav), y recién
+   por debajo cede aire hasta un piso de 2.25rem. Sólo se toca el padding de
+   ARRIBA porque el de abajo cae después del CTA y no mueve el pliegue.
+   A 1440x900, 1440x1080, 390x844 y 768x1024 el valor calculado no cambia. */
+.hero {
+  padding-top: min(clamp(2.5rem, 1rem + 7vw, 6rem), max(2.25rem, 100svh - 49rem));
+}
 .hero-inner {
   display: grid;
   grid-template-columns: 1fr;
@@ -70,8 +82,17 @@
 @media (min-width: 980px) {
   .hero-inner { grid-template-columns: minmax(0, 1.55fr) minmax(280px, 0.85fr); gap: var(--s-8); }
 }
+/* El titular arrastraba el MISMO defecto que el padding de acá arriba, y el
+   arreglo del 2026-09-03 no lo alcanzó: --t-mega también escala sólo con el
+   ancho (6.2vw), así que topaba en sus 6rem justo en la laptop ancha y BAJA.
+   Medido el 2026-09-04 sobre el build de producción: 451px de titular (5
+   líneas de 90,24) dejaban el CTA 14px bajo el pliegue a 1366x768 y 59px a
+   1280x720 — ahí ni siquiera era clickeable — con el padding ya en su piso.
+   El min() lo vuelve consciente del alto. Sólo puede RESTAR, y recién por
+   debajo de ~873px de viewport: a 1440x900 —la pantalla con la que se afinó
+   el tope de 6rem— y a 390x844 el valor calculado NO cambia. */
 .hero-title {
-  font-size: var(--t-mega);
+  font-size: min(var(--t-mega), 11svh);
   max-width: 14ch;
 }
 .hero-title em { font-style: normal; color: var(--orange); }

@@ -22,15 +22,22 @@
 
 ---
 
-## L1 · Reel de lanzamiento "No soy real" — ✅ RENDERIZADO, espera OK
+## L1 · Reel de lanzamiento "No soy real" — ✅ RENDERIZADO 2026-08-23 (v7), en el tablero desde 2026-09-04
 
-22 s · 4 beats · voz Marcela · b-roll (rooftop → café → gimnasio → laptop → playa).
-Preview: `reel-lanzamiento-20260822/renders/preview-v4-verde-360.mp4`.
+22 s · 4 beats · voz Marcela · b-roll (rooftop → café → gimnasio → **rooftop cierre**, no playa —
+el clip de playa perdía las pecas y se reemplazó a 0 créditos el 23-ago, ver `TABLA-DE-CORTES.md`).
+Entrega: `reel-lanzamiento-20260822/final/lucia-lanzamiento-v7.mp4`.
+Preview: `reel-lanzamiento-20260822/renders/preview-v7-360.mp4`.
 CTA: seguir (sin palabra — es presentación). **Es la pieza que abre todo.**
+
+⚠️ **Corregido 2026-09-04.** Esta sección decía "espera OK" desde el 23-ago y nunca se creó la
+tarea del tablero pidiéndolo — 12 días listo y Sergio nunca lo vio. Tarea: `t_aa4c5c10`.
 
 ## L2 · Carrusel fijado "¿Quién es Lucía?" — ✅ RENDERIZADO 2026-09-03, espera OK
 
-7 slides, pack `editorial-clean`, **0 créditos** (fotos del banco `generadas-20260902/`).
+7 slides, pack `editorial-clean`, **2 créditos** (6 fotos del banco `generadas-20260902/` + la
+foto de cierre `generadas-20260903/S3-rooftop-cierre.jpg`, generada el 03-sep para que la lámina 7
+dejara de repetir la portada — bitácora § E10).
 
 - Brief: `posts-20260807/briefs/lucia-quien-es-fijado.json`
 - Render bueno: **`posts-20260807/L2/slide-01..07.jpg`** — las 7 medidas en `1080×1350`
@@ -160,11 +167,18 @@ Se corrigieron **dos** errores en esa sola línea, y el segundo esconde al prime
    ("originales pesados, quedan locales; los JPG q3 son los assets usables"). Copiar la ruta
    del render y pegarla en un doc produce una cita a un archivo que **git nunca va a tener**.
 
-🔴 **Y ninguna de las dos carpetas está en `main`.** Verificado el 2026-09-03:
-`origin/main` tiene **0** láminas de Lucía; las **70** viven sólo en
-`origin/claude/ads-creatividades-publicos`, que va **151 commits adelante de main**. Desde un
-clon limpio —o desde el VPS, que es donde corre este loop— L6 **no se puede abrir**. Integrar
-esa rama es de `onia-cola`, no de este carril: anotado en el tablero, no se toca desde acá.
+✅ **RESUELTO — ya está en `main`.** Acá decía «ninguna de las dos carpetas está en `main`;
+`origin/main` tiene **0** láminas de Lucía», y era cierto cuando se escribió. **Recontado el
+2026-09-03 21:40 UTC: `origin/main` tiene 133 láminas**, y este carril quedó al día por
+fast-forward limpio (`HEAD` era ancestro de `main`, 373 commits atrás). L6 **se abre desde un
+clon limpio**. Se mide con:
+
+```sh
+git ls-tree -r origin/main --name-only | grep -icE "modelos/lucia/.*\.(jpg|png|jpeg)$"   # → 133
+```
+
+⚠️ La tarea `t_61685a5a` («el feed existe pero main no tiene ni una lámina») nace de esta misma
+línea y quedó **vencida**: se cierra con este recuento, no se vuelve a investigar.
 - ⚠️ **`--account lucia`**, no `onia`: con `onia` el pie sale `@oniahq` en una pieza de Lucía.
 - CTA: **SISTEMA** → entrega "mapa del negocio (vía @oniahq)", que está 🟢 vivo.
 - Las 5 señales nombran DOLOR, no prometen función: nada de factura electrónica, multi-sede,

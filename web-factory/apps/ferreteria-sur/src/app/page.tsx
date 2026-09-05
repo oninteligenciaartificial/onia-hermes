@@ -55,19 +55,22 @@ export default function Page() {
       <section className="hero">
         <HeroFondo />
         <div className="wrap hero-inner">
+          {/* El hero va con alMontar: es lo único que ya está sobre el pliegue,
+              así que su entrada no puede colgar de un scroll que no va a pasar.
+              Ver el porqué medido en components/motion.tsx. */}
           <div>
-            <Reveal>
+            <Reveal alMontar>
               <p className="kicker">{ferreteria.direccion} · {ferreteria.zona}</p>
             </Reveal>
-            <Reveal delay={0.06}>
+            <Reveal alMontar delay={0.06}>
               <h1 className="hero-title">
                 Si lo usás para <em>arreglar</em> algo, acá está
               </h1>
             </Reveal>
-            <Reveal delay={0.14}>
+            <Reveal alMontar delay={0.14}>
               <p className="hero-lede">{ferreteria.lede}</p>
             </Reveal>
-            <Reveal delay={0.2}>
+            <Reveal alMontar delay={0.2}>
               <div className="actions">
                 <a className="btn btn--solid" href={LISTA} target="_blank" rel="noreferrer">
                   Pasar mi lista
@@ -79,7 +82,7 @@ export default function Page() {
 
           {/* Ficha de datos duros. El estado abierto/cerrado en vivo va en la
               sección "Dónde y cuándo", calculado en hora de Bolivia. */}
-          <Reveal delay={0.28}>
+          <Reveal alMontar delay={0.28}>
             <dl className="spec">
               {ferreteria.horarios.map((h) => (
                 <div className="spec-row" key={h.dias}>

@@ -51,6 +51,17 @@ dirección**: el chequeo de arranque busca filas de la tabla que falten en el cr
 una línea de cron que falte en la tabla. Es el sentido que deja al loop invisible: existe, corre,
 gasta, y la auto-cura no lo rearma nunca porque no sabe que existe.
 
+⚠️ **Corregido 2026-09-03 (21:2x La Paz) — cinco horarios de la tabla habían quedado viejos.**
+`canario-visual`, `marca-personal`, `docs-auditoria`, `investigacion` y `supervisor` corrían con
+una cadencia MÁS BAJA que la escrita: la sesión de control la bajó ese mismo día (junto con
+`kpis-semanal`) y la tabla no se enteró. Se alinean **al cron**, por la regla de más abajo: cuando
+el cron y la tabla difieren, gana el cron.
+
+No es cosmético — `test:loops-registrados` estaba **en rojo**, y ese gate está en la cadena de
+`npm test`, o sea que **ningún carril podía mergear**: el integrador corre la cadena entera antes
+de tocar `main`. Una desalineación de documentación bloqueó a los quince. Lo encontró
+`chatbot-cola` al correr sus propios gates, no una auditoría.
+
 ## Deben existir y estar activos
 
 **Desde el 2026-09-01 el conjunto vive en DOS lugares**, y la columna *dónde corre* es la que
@@ -64,21 +75,13 @@ manda. Un loop se compara **sólo contra el registro de su propia máquina**:
 
 | id | dónde corre | cron | para qué sirve |
 |---|---|---|---|
-| `chatbot-cola` | **VPS** | `3 * * * *` (UTC) | Carril chatbot: su cola hasta que un desconocido escriba y se vea en la bandeja |
-| `docs-auditoria` | **VPS** | `18 5,17 * * *` (UTC) | Carril docs/infra (rama `claude/docs-auditoria`): que lo escrito sea cierto — docs falsos, trabajo pisado, ítems fantasma |
-| `onia-cola` | **VPS** | `33 * * * *` (UTC) | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
-| `canario-visual` | **VPS** | `41 6,18 * * *` (UTC) | Abre y MIRA las pantallas de cliente; cada diferencia se vuelve ítem de cola del carril dueño |
-| `investigacion` | **VPS** | `26 9 * * *` (UTC) | **Cotiza** las decisiones abiertas del radar para que Sergio decida en tanda, una vez, sobre un archivo (rama `claude/investigacion`) |
-| `web-venta` | **VPS** | `48 * * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
-| `lucia` | **VPS** | `37 0,3,6,9,12,15,18,21 * * *` (UTC) | Carril modelos/Higgsfield (rama `claude/lucia-vps`): guiones, briefs y prompts LISTOS. **No dispara nada pago** |
-| `marca-personal` | **VPS** | `56 13,21 * * *` (UTC) | Carril marca personal de Sergio: el drop del día siguiente y una pieza de producción |
+| `chatbot-cola` | **VPS** | `3 */2 * * *` (UTC) | Carril chatbot: su cola hasta que un desconocido escriba y se vea en la bandeja |
+| `onia-cola` | **VPS** | `33 */2 * * *` (UTC) | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
+| `web-venta` | **VPS** | `48 */2 * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
+| `lucia` | **VPS** | `37 9,21 * * *` (UTC) | Carril modelos/Higgsfield (rama `claude/lucia-vps`): guiones, briefs y prompts LISTOS. **No dispara nada pago** |
 | `kpis-semanal` | **VPS** | `7 13 * * 1` (UTC) | Tablero KPIs del lunes del carril marca personal; pide a Sergio los numeros que solo el ve |
 | `recorrido-cliente` | **VPS** | `9 1,4,7,10,13,16,19,22 * * *` (UTC) | Recorre el camino del cliente de punta a punta (rama `claude/recorrido-cliente`) y dice **en qué paso exacto se rompe**, con la captura como prueba |
-| `web-factory-dev` | **VPS** | `21 2,8,14,20 * * *` (UTC) | Webs de cliente terminadas Y publicables con un comando (rama `claude/web-factory-dev`; cola en `web-factory/docs/LOOP_COLA.md`) |
-| `tendencias` | **VPS** | `51 11,23 * * *` (UTC) | Convierte lo que funciona AHORA en el rubro en recetas accionables de contenido, cada una con su fuente pública (rama `claude/tendencias`) |
-| `calidad-generado` | **VPS** | `5 3,9,15,21 * * *` (UTC) | Que Onia no publique una pieza mala y que Lucía sea SIEMPRE la misma cara (rama `claude/calidad-generado`) |
-| `supervisor` | **VPS** | `29 2,8,14,20 * * *` (UTC) | **Audita a los otros loops**: que ninguno cobre por trabajo que no sirve (rama `claude/supervisor`). No mergea a `main` — deja lo que encuentra en el tablero |
-| `contenido-cola` | **VPS** | `11 */3 * * *` (UTC) | Carril contenido: publicar lo que YA existe hasta que el feed esté vivo. Trabaja sobre `claude/ads-creatividades-publicos`; **`claude/carril-contenido` sigue siendo de Sergio y ningún loop la toca** |
+| `supervisor` | **VPS** | `29 6,18 * * *` (UTC) | **Audita a los otros loops**: que ninguno cobre por trabajo que no sirve (rama `claude/supervisor`). No mergea a `main` — deja lo que encuentra en el tablero |
 
 ⚠️ **Corregido 2026-09-03 21:10 UTC — cinco cadencias BAJADAS a propósito, y la tabla seguía con
 las viejas.** `canario-visual`, `marca-personal`, `docs-auditoria`, `investigacion` y `supervisor`
@@ -91,6 +94,19 @@ esperando decisiones. Auditar más seguido no producía más: producía más aud
 SUBA de nuevo.** La tabla se alineó al `crontab`, no al revés. Y esa diferencia tenía a `main` en
 rojo: el gate `loops_registrados` compara cron contra esta tabla, así que una tabla vieja rompe
 `npm test` para todos los carriles, no sólo para el que cambió el horario.
+
+⚠️ **Y volvió a pasar el 2026-09-04, más grande: la misma causa, trece filas.** La sesión de
+control **pausó ocho loops y cambió cinco horarios** ese día (foco: vender, cuota escasa) y esta
+tabla no se enteró, así que `npm test` quedó en rojo y **ningún carril podía mergear** — el
+integrador corre la cadena entera antes de tocar `main`. Cuatro de las cinco de arriba
+(`canario-visual`, `marca-personal`, `docs-auditoria`, `investigacion`) hoy no están bajadas sino
+**pausadas**, y viven en su propia sección de *NO rearmar*; `supervisor` sigue activo con otro
+horario (`29 6,18`). Corregido alineando al cron, otra vez.
+
+**La lección que ya no es opinión, porque va tres veces:** cambiar la cadencia de un loop **no
+termina en el `crontab`**. Mientras esta tabla no se actualice en el MISMO acto, la decisión deja
+`main` en rojo para los quince carriles y —si el loop quedó comentado en vez de borrado— la
+auto-cura lo revive y la revierte sola. El cron y esta tabla son **un solo cambio**, no dos.
 
 ⚠️ **Corregido 2026-09-03 03:33 UTC — `contenido-cola` decía `Windows` y hacía tres días que
 corría en el VPS.** Es la última fila que quedaba desalineada, y su desalineación **rompía el
@@ -296,6 +312,33 @@ Dos cambios:
 las 09:18 UTC del 2026-09-02 eran **seis** en el VPS. **No lo actualices más acá:** los títulos y
 párrafos de esta sección son historia del día de la mudanza, y un número suelto en prosa es
 justamente lo que se pudre. El conteo vigente es la tabla de arriba, y se cuenta con `crontab -l`.
+
+## Pausados el 2026-09-04 (foco: vender; cuota escasa) — NO rearmar
+
+Su línea **sigue en `crontab -l`, comentada**, con el motivo escrito al principio
+(`# PAUSADO 2026-09-04 (foco: vender; cuota escasa) — …`). Descomentarla es revivirlos: es una
+decisión de la sesión de control, no un cron a medio registrar.
+
+⚠️ **Por eso salieron de la tabla de activos, y no es cosmético.** El *"Chequeo de arranque"* que
+llevan pegado los quince prompts dice: *"para cada loop de esa tabla que diga `VPS` y no tenga su
+línea en `crontab -l` (o la tenga comentada con `#`), volvé a ponerla"*. Mientras estas ocho
+figuraran como activas, **el primer loop que arrancara las rearmaba** y la pausa se revertía sola
+—exactamente el modo de falla que ya se midió el 2026-09-04— sin que nadie lo decidiera. La
+auto-cura es correcta; lo que no puede es curar hacia una tabla que miente.
+
+| id | cron que tenía | por qué se pausó |
+|---|---|---|
+| `canario-visual` | `41 6,18 * * *` | Foco en vender. Mide y audita; no produce venta. |
+| `marca-personal` | `56 13,21 * * *` | Ídem — su pieza del día no mueve la aguja mientras la cola de Sergio esté llena. |
+| `docs-auditoria` | `18 5,17 * * *` | Ídem — auditar más seguido producía más auditoría, no más producto. |
+| `investigacion` | `26 9 * * *` | Ídem — cotiza decisiones; la cola de decisiones ya está por encima de lo que Sergio contesta. |
+| `tendencias` | `51 11,23 * * *` | Ídem — recetas de contenido con un canal que hoy no publica. |
+| `web-factory-dev` | `21 2,8,14,20 * * *` | Webs de cliente: no hay cliente esperando una web hoy. |
+| `calidad-generado` | `5 3,9,15,21 * * *` | Juzga piezas; sin publicación en curso no tiene qué juzgar. |
+| `contenido-cola` | `11 */3 * * *` | La aguja no se movió en 3 vueltas: el cuello es el canal y la cola de Sergio, no la cantidad de piezas. |
+
+**Los que siguen corriendo son siete**, y son los que tocan producto o lo integran: `chatbot-cola`,
+`onia-cola`, `web-venta`, `lucia`, `recorrido-cliente`, `supervisor` y `kpis-semanal`.
 
 ## Apagados a propósito el 2026-08-31 — NO rearmar
 

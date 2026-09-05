@@ -10,6 +10,7 @@ import {
 } from "@/lib/proof";
 import { Block, Btn, Kicker } from "../ui";
 import { CTA_ALTA } from "../alta";
+import { EMPEZAR_URL } from "../nav";
 import s from "../sitio.module.css";
 
 /**
@@ -29,12 +30,18 @@ import s from "../sitio.module.css";
  * fiscal de /precios — y la tercera anuncia obra en curso, que
  * en una superficie de venta está prohibida. El veredicto de la fila de Onia
  * ya dice de frente lo del trámite.
+ *
+ * ⚠️ Y la `description` tardó en enterarse. Hasta el 2026-09-03 cerraba con
+ * *"Y lo que Onia todavía no hace."*: prometía en el buscador el ledger que
+ * esta página decidió no mostrar, así que era obra a la vista Y era falsa. El
+ * cuerpo se arregló y el `<head>` quedó repitiendo la frase vieja — el mismo
+ * camino que /terminos. Lo cubre ahora `obra.test.ts`.
  */
 
 export const metadata: Metadata = {
   title: "Onia comparada con los sistemas que se venden en Bolivia",
   description:
-    "Precios y capacidades publicados por el Portal del SIN, los facturadores bolivianos y el software dental de la región, con fecha de consulta. Y lo que Onia todavía no hace.",
+    "Qué cobra y qué resuelve cada sistema que se vende en Bolivia: Portal del SIN, facturadores y software dental de la región. Con precio público y fecha de consulta.",
   alternates: { canonical: "/comparativa" },
   openGraph: {
     type: "website",
@@ -150,7 +157,7 @@ export default function Comparativa() {
             Comparalo con tu propio negocio adentro.
           </h2>
           <div className={s.actions}>
-            <Btn href="/empezar">{CTA_ALTA}</Btn>
+            <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
             <Btn href="/precios" variant="line">
               Ver precios
             </Btn>

@@ -56,7 +56,10 @@ Las tres formas de fantasma que ya aparecieron acá:
    runbook de salud de abajo manda a levantar. El carril tenía prohibido tocar su propia obra.
 4. **UNA tarea por vuelta**, la primera no-bloqueada del carril que toque. Gates
    antes de commit: `pnpm typecheck:packages` (+ `pnpm test` si tocás packages;
-   `tsc --noEmit` en `apps/dental-premium` si la tocás) + **mirar renderizado**
+   **`npm run gates` dentro de `apps/dental-premium` si la tocás** — encadena
+   typecheck + pliegue + contraste; el `tsc --noEmit` suelto que decía acá **no
+   miraba ni un color**, y por eso el segundo botón del hero pasó todos los
+   gates siendo invisible, ver A11) + **mirar renderizado**
    + **`pnpm e2e` si cambiaste UN SOLO PIXEL de lo que se dibuja** (y si el cambio
    de geometría era el objetivo, `--update-snapshots` y **mirar la baseline nueva**
    antes de commitearla: una baseline se refresca MIRÁNDOLA, nunca a ciegas).
@@ -92,6 +95,10 @@ Las tres formas de fantasma que ya aparecieron acá:
 4. **`pnpm install --frozen-lockfile` desde `web-factory/`.** Si falla, el deploy de
    `onia.com.bo` está roto aunque nada de su app lo esté — ver el primer ítem de `## Ahora`.
 5. Node zombies de tests viejos → matar. Cerrar con la prueba (200, hash, exit 0).
+6. `pnpm --filter @onia/templates gate:marcadores` — mide en Chromium los 108 puntos de dato
+   de los dos paneles (claro/oscuro × 1440/390) contra el piso de 8 px de W4. Hoy da **rojo en
+   2 de 108** a propósito: es el ítem del punto del KPI en `## Ahora`, con su causa medida. Si
+   se pone rojo en OTRO caso, eso sí es nuevo.
 
    ⚠️ **El chequeo 4 nunca se había corrido de verdad, y tenía presa** (2026-09-02).
    La máquina cargaba **24 `node.exe` / 1.328 MB**. Dos eran del carril muerto
@@ -117,23 +124,62 @@ Las tres formas de fantasma que ya aparecieron acá:
 > **Cada ítem trae su evidencia re-verificada el 2026-09-01** — y cinco de los siete
 > estaban escritos DENTRO de ítems ya cerrados, donde ningún loop los iba a ver.
 
-- [ ] **El CTA del hero de la ferretería queda FUERA del pliegue a 1440×800.**
-      Lo dejó anotado A3 al cerrar ("entra por 82px a 1440×900 y queda fuera a 1440×800") y
-      nunca fue línea de cola, así que ningún loop lo iba a tomar. Es el botón que convierte,
-      en la altura de pantalla más común de una laptop.
-      **Evidencia**: el hero no declara alto propio —
-      `$ grep -rnE "100vh|100svh" web-factory/apps/ferreteria-sur/src` devuelve 0 — así que el
-      pliegue sale del padding acumulado en
-      `web-factory/apps/ferreteria-sur/src/app/sections.css:15`.
-      **Hecho cuando**: medido en el navegador a 1440×800, 1440×900 y 390×844, el CTA queda
-      **entero dentro del primer viewport en los tres**, con la captura mirada.
-      ✅ **Re-verificado el 2026-09-03 y sigue vivo**, ahora contra el bundle de producción
-      (runtime standalone levantado con `node server.js`, no `next dev`): en la captura a
-      **1440×900** el primer viewport termina en el párrafo y la tarjeta de horarios, y el CTA
-      del hero **ya no entra** — o sea que el margen de 82 px que midió A3 a esa misma altura se
-      consumió. A 1440×800 está peor. El único botón visible arriba es el del header.
+- [x] **El CTA del hero de la ferretería tampoco entra a 1366×768: le faltan 14 px.**
+      Sale de cerrar A10 (abajo): con el arreglo del pliegue, 1440×800 pasó a sobrar 18 px y
+      1366×768 quedó a **−14 px**. No estaba en el criterio de A10 (que pedía 1440×800,
+      1440×900 y 390×844) y se mide aparte para no dar por cerrado algo que no lo está.
+      **Evidencia** (medida el 2026-09-03 sobre el bundle de producción): `ctaBottom=782`
+      contra un pliegue de 768. El padding de arriba ya está en su piso (`2.25rem` = 36 px),
+      así que **de padding no sale más**: los 14 px tienen que salir del titular, que mide
+      **451 px** (5 líneas de 90,24 px) porque `--t-mega` topa en `6rem` y la columna del grid
+      es de 754 px.
+      ⚠️ **No es un arreglo suelto, es una decisión de tipografía**: el tope de `6rem` está
+      puesto a propósito y con su medición escrita en
+      `web-factory/apps/ferreteria-sur/src/app/globals.css:56` (*"con el tope en 8.5rem el
+      titular medía 767px … Tope en 6rem: el hero entra completo en 900px de viewport"*). O sea
+      que el token ya se afinó una vez para 900, no para 768. Bajarlo cambia cómo se ve el
+      titular en TODAS las pantallas, y eso es de los que Sergio mira renderizado antes.
+      **Hecho cuando**: `npm run gate:pliegue` pasa con 1366×768 agregado a `VIEWPORTS`, y la
+      captura del titular nuevo a 1440 mirada y aprobada.
+      ✅ **CERRADO el 2026-09-04 — y NO hubo que decidir tipografía: no era el tope, era que
+      el titular no miraba el alto.** El ítem daba por única salida bajar `--t-mega`, que sí
+      habría cambiado todas las pantallas. La causa real es la misma que el propio archivo ya
+      tenía escrita ocho líneas más arriba para el *padding* (`site.css:64-72`): **escalaba
+      sólo con el ancho** (`6.2vw`), así que gastaba su máximo de 6rem justo en la laptop
+      **ancha y baja**. El arreglo del 2026-09-03 corrigió el padding y **no viajó al
+      titular**, que arrastraba idéntico defecto.
+      **El arreglo** (`ferreteria-sur/src/app/site.css`, `.hero-title`):
+      `font-size: min(var(--t-mega), 11svh)`. El `min()` sólo puede **restar**, y recién por
+      debajo de ~873 px de viewport — **a 1440×900, la pantalla con la que se afinó el tope de
+      6rem, el titular sigue midiendo 451 px con `font-size: 96px`, idéntico al byte**, y
+      390×844 tampoco se mueve. Por eso no es un cambio de dirección visual y no necesitó OK.
+      **Evidencia** — el gate en ROJO primero, por el motivo correcto:
+      `✗ 1366x768: cae 14px BAJO el pliegue` · `✗ 1280x720: cae 59px BAJO el pliegue · algo lo
+      tapa: no es clickeable` (×2, con y sin reduced-motion). Después: **10/10 verdes**,
+      1366×768 sobran 40 px y 1280×720 sobran 166 px.
+      ⚠️ **1280×720 no estaba en la cola y estaba PEOR**: 59 px abajo y el botón **ni siquiera
+      era alcanzable**. Salió porque el gate se amplió a las dos laptops comunes en vez de sólo
+      a la que decía el ítem. Las dos quedan en `VIEWPORTS` **de las dos apps** — la dental ya
+      pasaba ambas (su hero es otro), pero ahora está **cubierta**, que es lo que faltaba.
+      **Mirado renderizado** a 1366×768, 1440×900 y 1280×720, sin recursos caídos: el titular
+      re-fluye a 3 líneas en 1280×720 con el resaltado naranja de «ARREGLAR» intacto.
+      🔧 **De paso, y porque bloqueaba verificar lo anterior: `npm run gates` no podía correr
+      entero en NINGUNA de las dos apps.** `gate:peso` corre un `next build` para leer el First
+      Load, ese build rehace `.next/standalone` en limpio, y `next build` **no copia**
+      `.next/static` ni `public/` ahí dentro (paso manual conocido de Next). Así que el
+      `gate:pliegue` siguiente moría con *"Falta .next/static"* — la cadena que protege la app
+      **fallaba en el medio, y con cara de defecto del sitio en vez de del arnés**.
+      Va `scripts/completar-standalone.mjs` en las dos apps, enganchado como **`postbuild`** (para
+      que valga por cualquier camino) y detrás de `gate:peso` (que llama `npx next build`
+      directo y por eso se saltea los hooks de npm). `deploy-web-cliente.sh` ya hacía esta copia
+      al publicar (líneas 65-66), así que **el deploy nunca estuvo roto por esto**: lo que estaba
+      roto era la verificación local, y de yapa `npm run build` ahora deja el standalone
+      servible solo.
+      **Evidencia**: `npm run gates` **exit 0 de punta a punta en las dos**, por primera vez —
+      ferretería `First Load 148 kB/150` + pliegue 10/10 + parallax vivo; dental + contraste con
+      sus 3 avisos de siempre (son el ítem del ghost de acá abajo, que sigue sin tocarse).
 
-- [ ] **La ferretería pesa 192 kB de First Load contra un presupuesto de 150.**
+- [x] **La ferretería pesa 192 kB de First Load contra un presupuesto de 150.**
       También anotado por A3 al cerrar y nunca convertido en línea. Es el sitio de un negocio
       en Bolivia: lo abre un cliente con datos móviles.
       **Evidencia**: `web-factory/apps/ferreteria-sur/package.json` carga `motion` y `gsap`
@@ -147,6 +193,29 @@ Las tres formas de fantasma que ya aparecieron acá:
       (`motion` + `gsap`) y el mismo consumidor único, así que el arreglo es el mismo dos veces
       y este ítem cubre las dos apps. El piso compartido son 102 kB, o sea que lo propio de cada
       página son 90 kB (ferretería) y 85 kB (dental): el recorte tiene que salir de ahí.
+      ✅ **CERRADO el 2026-09-03. Ferretería 192 → 148 kB, dental 187 → 143 kB.**
+      La causa era una sola y la misma en las dos, y **no era `motion`**: `gsap` +
+      `ScrollTrigger` importados **estáticamente** arriba del módulo, cuando su único uso vive
+      dentro de un `useEffect` que corre después de montar y que con reduced-motion no corre
+      nunca. Pasaron a `import()` dinámico (`ferreteria-sur/src/components/secciones.tsx`
+      → `HeroFondo`, `dental-premium/src/components/HeroScene.tsx`), con guarda de desmontaje
+      para no registrar el trigger sobre un nodo que ya no existe. **La animación no se tocó.**
+      **Evidencia** — `npm run gate:peso` en cada app:
+      `✓ / — First Load JS 148 kB / 150 kB` y `✓ / — First Load JS 143 kB / 150 kB`.
+      Miradas renderizadas a 1440x900 y 390x844, hero y después de scrollear, cero recursos
+      caídos. El resto de los gates que ya existían siguen verdes (pliegue en las dos,
+      contraste en la dental con sus 3 avisos de siempre, que son el ítem del ghost).
+      ⚠️ **El gate del peso solo NO alcanzaba, y por eso hay dos.** Habría dado el mismo verde
+      si en vez de mover GSAP lo hubiera **borrado**, o si el chunk dinámico fallara al bajar
+      —fallo mudo: la página se ve entera y el fondo se queda quieto—. Va con
+      `npm run gate:parallax`, que mide que las capas **se movieron de verdad** tras el scroll
+      y que con reduced-motion **no** se mueven. Falsificado bloqueando los chunks reales de
+      GSAP (`608.*`, `e809d3ec.*`): el de peso quedó VERDE y el de parallax se puso ROJO.
+      Los dos quedan cableados en el `npm run gates` de cada app.
+      📌 **Queda con poco aire: 148/150 en la ferretería.** Cualquier dependencia nueva en el
+      bundle inicial la vuelve a pasar — la diferencia es que ahora el gate lo dice en vez de
+      que se descubra medio año después. El siguiente recorte, si hace falta, sale de
+      `motion/react` (`LazyMotion` + `m` en lugar de `motion`), que es lo que queda arriba.
 
 - [ ] **La primitiva de hover-lift existe, está documentada, y no la usa ni un bloque.**
       T34 se cerró como fantasma con esta frase adentro: *"lo que SÍ falta y no es esto:
@@ -165,11 +234,39 @@ Las tres formas de fantasma que ya aparecieron acá:
       A6 lo dejó anotado dentro de su propio `[x]`: *"sigue en `r=3` y, con la escala de 0,839,
       mide 5,03px renderizados — bajo el piso de 8px"*. Es el único marcador del panel que
       quedó fuera de la regla que el propio carril se puso en W4.
-      **Evidencia**: `web-factory/packages/templates/src/dashboard.ts:993` sigue emitiendo
-      `r="3"` en el círculo del último punto.
       **Hecho cuando**: medido en el navegador el diámetro RENDERIZADO (no el atributo) en
       `dashboard-demo` y `dashboard-edge` × claro/oscuro × 1440/390, ≥8 px en todas, con el
       test que **cae** al volver a 3 verificado en rojo antes de darlo por bueno.
+
+      🔧 **2026-09-04 — ya hay gate, y el punto pasó de 4,05-5,03 px a 8,10-10,07 px en 6 de
+      los 8 casos. Queda UNO, y ese no se cierra sin una decisión de diseño.**
+      **El gate**: `pnpm --filter @onia/templates gate:marcadores`
+      (`packages/templates/scripts/gate-marcadores.ts`). Genera los dos paneles con el MISMO
+      `generateSite` que usa la fábrica —no un HTML armado a mano— y mide los 108 marcadores de
+      la matriz completa. Falsificado en rojo volviendo a `r="3"` (reproduce **5,03 px exacto**,
+      el número que decía esta línea, así que el instrumento coincide con el de A6) y con el
+      piso subido a 12 (`exit 1`).
+      ⚠️ **Mide PÍXELES PINTADOS, no el bounding box**, y eso no es un detalle de estilo: el box
+      declara la geometría aunque el SVG **recorte** el dibujo. El primer intento —un trazo
+      `non-scaling-stroke` de 8 px, que da 8 px en cualquier escala— medía **8,00 px verdes**
+      mientras en pantalla quedaba un **gajo de 3×3 px**, peor que el defecto original. Se
+      descartó por eso. Un gate de tamaño que mire geometría declarada aprueba recortes.
+      **Lo que queda, medido**: con `r=6` + `pad=6` el punto le entra al viewBox, pero el
+      sparkline **sangra hasta el borde de la tarjeta** (`width: calc(100% + 36px)`,
+      `margin: 4px -18px -16px`) y la tarjeta tiene `border-radius: 12px` con
+      `overflow: hidden`. Cuando el último valor es el **mínimo** de la serie, el punto cae en
+      la **esquina redondeada de abajo a la derecha** y la curva se lo come: pinta **5,00 px**
+      contra 8,10 declarados. Pasa en `dashboard-edge` a 390 (claro y oscuro). A 1440 no, y en
+      `dashboard-demo` tampoco: ahí el último valor es el máximo y la esquina de arriba queda
+      lejos, porque el spark está pegado al fondo de la tarjeta y no al techo.
+      **Por qué no lo cierro solo**: sacarlo de la esquina pide ~22 de 320 unidades de padding
+      (11 px de pantalla a escala 0,675), o sea **renunciar al sangrado de borde a borde** que
+      pide la ficha del patrón (banco: Stakent 23902428). Eso es cambiar cómo se ve la tarjeta,
+      no arreglar un defecto, y un cambio visual se muestra renderizado antes de aplicarlo.
+      **Las dos salidas, para decidir**: (a) el spark deja de sangrar a la derecha
+      (`width: calc(100% + 18px)`) y el punto entra entero, al precio de romper la simetría del
+      sangrado; (b) el punto se dibuja por encima del recorte —sacar el spark del `overflow` de
+      la tarjeta— que conserva el diseño pero toca la anatomía de la card.
 
 - [ ] **Carril B — portfolio sigue sin ancla (N=1), el último rubro que se receta por analogía.**
       B1 y B2 cerraron los seis rubros que tenían, y las dos terminan con la misma frase
@@ -308,7 +405,131 @@ Las tres formas de fantasma que ya aparecieron acá:
 
 ---
 
+- [ ] **El contorno del ghost sobre papel claro mide 1,27:1 y el piso de un control es 3.**
+      Lo encontró el gate de contraste nuevo al medir TODOS los `.btn` de la página, no sólo el
+      del hero. **No es el mismo defecto que el del hero y por eso no se arregló con él**: acá el
+      texto se lee perfecto (14,74:1, tinta oscura sobre papel), lo que casi no se ve es la
+      píldora que lo rodea — el botón se identifica igual por su texto.
+      **Evidencia** (2026-09-03, bundle de producción, las tres pantallas): «Pedir presupuesto»
+      de `.closer` da `borde 1.27:1 (piso 3) sobre #f8f5ef`. Sale impreso como aviso en cada
+      corrida de `npm run gate:contraste` — no está escondido.
+      **Por qué NO lo cerré solo**: subir el borde de `--line` (tinta al 12 %) hasta 3:1 exige
+      llevarlo a ~55 % de tinta, y eso **cambia cómo se ve el botón en toda la superficie clara**.
+      Es un cambio visible de dirección, no un arreglo de defecto — y un rediseño se muestra
+      renderizado y espera el OK sobre ESA pieza (2026-08-20).
+      **Hecho cuando**: Sergio ve las dos versiones del botón lado a lado y elige, o se decide
+      dejarlo como está y el aviso del gate se convierte en excepción declarada con su motivo.
+      📌 **Movido a Bloqueado el 2026-09-04.** No es un ítem trabajable: su propio "hecho
+      cuando" pide que Sergio elija entre dos versiones del botón. Estaba en `## Ahora`, así
+      que cada vuelta lo volvía a medir y a descartar — el desperdicio que la regla del
+      2026-09-03 prohíbe. Sigue saliendo como **aviso** (no rojo) en cada `gate:contraste` de
+      la dental, así que no se pierde de vista. **Nada que hacer hasta que él decida.**
+
 ## Cerrado — carril A (build)
+
+- [x] **A11 · El segundo botón del hero de la dental ya se lee: pasó de 1,00:1 a 15,16:1**
+      (2026-09-03).
+      Era el color, no la animación: `.btn--ghost` heredaba en el hero los tokens de superficie
+      CLARA (`--ink` #172420, `--line` = tinta al 12 %) y el hero es la única superficie oscura
+      de la app. Sobre el verde profundo daba **1,00:1 de texto y 1,01:1 de borde** — el botón
+      ocupaba su lugar y era invisible. El gate del pliegue lo daba por bueno porque mide
+      geometría y opacidad, **no color**.
+      **Qué se hizo**: clase `.on-green` que REBINDEA `--ink`/`--ink-soft`/`--line` sobre
+      superficie oscura (`globals.css`), aplicada al hero en `components/HeroScene.tsx`. Mismo
+      criterio que `.on-steel` en ferreteria-sur. No se tocó la regla genérica `.btn--ghost`, así
+      que la superficie clara queda igual.
+      **Medido** (bundle de producción, `npm run gate:contraste`):
+
+      | pantalla | antes texto | después texto | antes borde | después borde |
+      |---|---|---|---|---|
+      | 1440×800 | 1,00:1 | **15,16:1** | 1,01:1 | **4,15:1** |
+      | 1440×900 | 1,01:1 | **15,32:1** | 1,01:1 | **4,16:1** |
+      | 390×844 | 1,01:1 | **15,15:1** | 1,01:1 | **4,16:1** |
+
+      **Mirado** renderizado a 1440×800 y 390×844: los dos botones del hero legibles, el ghost
+      con su píldora visible al lado del sólido. `npm run gates` verde (typecheck + pliegue +
+      contraste).
+      **Gate nuevo, y por qué así**: `scripts/gate-contraste.mjs` saca sus sujetos del **DOM**
+      (mide todos los `.btn` que la página renderice), no de una lista escrita a mano — un gate
+      con lista de inclusión falla ABIERTO el día que aparece un botón nuevo. Y samplea el fondo
+      del **PNG de la captura** en vez de deducirlo del CSS, porque detrás del ghost del hero no
+      hay un color sino tres degradados y un scrim.
+      **Tres falsos positivos del instrumento** antes de creerle una sola medición — los tres del
+      mismo tipo (fotografiar un fotograma que el visitante nunca ve):
+      · el `Reveal` envuelve a sus hijos en un `motion.div`, así que el nodo animado es el
+        **abuelo** del botón; mirar `parentElement` leía `.actions`, que nunca se anima, y daba
+        por asentado un botón todavía en `opacity:0`. Un botón verde sólido salía medido como
+        `#eaede6` — el papel de atrás — y el gate acusaba al sitio.
+      · `scroll-behavior: smooth` hace que scrollear ANIME: la captura sale a mitad del viaje.
+        Se apaga con `addStyleTag` antes de mover nada.
+      · `scrollIntoViewIfNeeded` deja la última sección pegada al borde inferior, por debajo del
+        `margin: -12%` que dispara `whileInView` — el reveal no arrancaba y sólo fallaba a
+        1440×900. Se scrollea al **centro**.
+      **Barrido a la app hermana**: las dos comparten `motion.tsx` por copia y ya habían
+      compartido el bug de A10, así que se midió ferreteria-sur con el mismo gate
+      (`BASE_URL=… node scripts/gate-contraste.mjs`): **sus 7 botones pasan** (ghost del hero
+      14,90:1). El defecto era sólo de la dental — su `.on-steel` ya cubría el caso.
+      **Queda abierto y a la vista**: el contorno del ghost sobre papel claro (1,27:1). Es ítem
+      propio en "Ahora" y el gate lo imprime como aviso en cada corrida.
+
+- [x] **A10 · El CTA del hero de la ferretería ya entra en el pliegue — y estaba roto de DOS
+      maneras, no de una** (2026-09-03).
+      El ítem pedía geometría: "queda fuera del pliegue a 1440×800". Midiéndolo sobre el bundle
+      de producción aparecieron **dos fallas distintas**, y la segunda era la peor:
+      1. **Geometría** — a 1440×800 el CTA caía **66 px por debajo** del pliegue (`ctaBottom=866`,
+         viewport 800).
+      2. **Visibilidad** — a **1440×900 el CTA estaba DENTRO del pliegue (`bottom` 842 < 900) y
+         aun así no se veía**: `opacity: 0`, `transform: translateY(24px)`. Su `Reveal` usa
+         `whileInView` con `viewport={{ margin: "0px 0px -12% 0px" }}`, que exige estar un 12 %
+         por encima del borde inferior para disparar. El CTA nace por debajo de esa línea, así
+         que **nunca entraba "en viewport" y se quedaba invisible hasta que el visitante
+         scrolleara**. Un bloque que ya está sobre el pliegue no puede depender de un scroll que
+         no va a pasar.
+      Eso explica la contradicción del re-chequeo anterior, que a 1440×900 no veía el botón
+      aunque la cuenta diera que entraba: entraba, pero era invisible.
+      **Qué se hizo** (dos cambios, uno por falla):
+      · `components/motion.tsx`: `Reveal` acepta `alMontar`, que cambia `whileInView` por
+        `animate`. Los cinco `Reveal` del hero de `app/page.tsx` lo llevan. La animación sigue
+        viva (misma curva, mismos delays) y ahora **siempre termina visible**.
+      · `app/site.css`: el `padding-top` del hero era función SÓLO del ancho (`7vw` → 96 px a
+        1440), o sea que gastaba su máximo justo en la laptop ancha y BAJA. Ahora es
+        `min(clamp(2.5rem, 1rem + 7vw, 6rem), max(2.25rem, 100svh - 49rem))`: por encima de
+        900 px de alto **el valor calculado no cambia**, y sólo por debajo cede aire. Se toca
+        únicamente el padding de ARRIBA, porque el de abajo cae después del CTA y no mueve el
+        pliegue.
+      **Medido en el navegador, no supuesto** — `ctaBottom` contra el pliegue, `opacity`,
+      `transform` y hit-test con `elementFromPoint` (que el botón sea de verdad clickeable),
+      × `prefers-reduced-motion` en sus dos valores:
+      | viewport | antes | después |
+      |---|---|---|
+      | 1440×800 | −66 px, `opacity 0`, no clickeable | **+18 px, visible, clickeable** |
+      | 1440×900 | dentro, pero `opacity 0` | **+58 px, visible, clickeable** |
+      | 390×844 | ok | **+258 px** (sin cambios: `padTop` 43,3 px antes y después) |
+      1440×1080 y 768×1024 quedan idénticos al estado anterior. **Capturas miradas** a las tres
+      medidas del criterio: los dos botones ("Pasar mi lista" / "Ver qué hay") entran enteros.
+      **El gate que faltaba**: ningún gate del repo miraba esta app —`playwright.config.ts`
+      apunta a `out/<slug>` y `playwright.next.config.ts` a `apps/site`—, así que las dos fallas
+      podían volver sin que nada avisara. Queda `apps/ferreteria-sur/scripts/gate-pliegue.mjs`
+      (`npm run gate:pliegue`), que mide las **dos** cosas: geometría y visibilidad real.
+      **Verificado en ROJO antes**: corrido contra el código sin el arreglo (`git stash` + build)
+      falla 4 de 6 mediciones y las nombra por separado — a 1440×900 falla **sólo por
+      `opacity=0`**, que es exactamente el caso que un gate de pura geometría habría dado por
+      bueno. Con el arreglo, 6/6 verde.
+      **Gates**: `tsc --noEmit` de la app verde · `next build` exit 0 · `pnpm typecheck:packages`
+      verde.
+      **Y se barrió el hermano, no sólo donde saltó** (`CLAUDE.md`: *"una promesa que cambia se
+      barre en TODA la superficie"*). `dental-premium` tiene el MISMO `Reveal` por copia, así que
+      se midió en vez de suponer: su CTA estaba **dentro del pliegue en las tres medidas y aun
+      así invisible** a 1440×800 (`bottom` 757, `opacity 0`) y 1440×900 (`bottom` 849,
+      `opacity 0`). Ahí la geometría nunca estuvo mal — **sólo la visibilidad** —, que es
+      justamente por lo que el ítem original, escrito como "queda fuera del pliegue", jamás iba
+      a encontrarlo en esta app. Mismo arreglo de `alMontar` + su propio `gate:pliegue`: 6/6
+      verde, captura mirada.
+      **Lo que NO cierra**: a **1366×768** siguen faltando 14 px en la ferretería; queda como
+      línea propia en `## Ahora` porque el único lever que queda es el tamaño del titular, y eso
+      es decisión visual de Sergio, no un arreglo. Y mirar la captura de la dental destapó un
+      defecto que el bug de opacidad escondía —su segundo botón es ilegible sobre el verde—,
+      también anotado arriba con su medición.
 
 - [x] **A9 · Las dos webs de cliente ya se publican con un comando — y el standalone con el que
       se iba a publicar estaba ROTO** (2026-09-03).

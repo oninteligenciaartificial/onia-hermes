@@ -1,0 +1,4 @@
+Prompt para short3 (image-to-video B-roll):
+"Anima esta foto [ruta local] con paneo lento y aumento sutil de 1.05x en 8s. Mantener paleta neutra, agregar ligero bokeh en fondo. Formato 9:16, export H.264 1080x1920."
+
+Guardar en repo: /root/loops/onia-hermes/out/guiones/20260903/assets/short3_prompt.txt

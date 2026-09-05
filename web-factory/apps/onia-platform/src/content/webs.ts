@@ -50,6 +50,51 @@ export interface WebStack {
   readonly destacado?: boolean;
 }
 
+export interface CuidadoWeb {
+  readonly nombre: string;
+  readonly mensual: number;
+  readonly que: string;
+}
+
+/**
+ * Cuidado Web. Las definiciones son las que ya están escritas
+ * (ONIA_VENDOR_MANUAL_2026.md:185-187). El detalle de cuántos cambios entran
+ * por mes NO está escrito en ningún lado, así que no se publica un número:
+ * el alcance se fija por escrito en tu propuesta antes de arrancar.
+ *
+ * Va ARRIBA de `WEB_STACKS` a propósito: cada stack nombra su plan de cuidado y
+ * lo interpola de acá, así que la tabla tiene que existir antes. Hasta el
+ * 2026-09-04 estaba ochenta líneas más abajo y los stacks escribían los montos
+ * a mano —`Bs 190`, `Bs 390` tres veces y `Bs 690` dos—, con estos mismos tres
+ * números como número acá al lado. Nadie medía que coincidieran.
+ */
+export const CUIDADO_WEB: readonly CuidadoWeb[] = [
+  { nombre: "Básico", mensual: 190, que: "Mantenimiento simple: tu sitio en línea y al día." },
+  { nombre: "Crecimiento", mensual: 390, que: "Cambios ligeros y una revisión mensual." },
+  { nombre: "Pro", mensual: 690, que: "Soporte más activo y mejoras pequeñas cada mes." },
+] as const;
+
+/**
+ * "Cuidado Web Básico Bs 190/mes o Crecimiento Bs 390/mes" — una sola forma de
+ * nombrar los planes de cuidado, con el monto leído de `CUIDADO_WEB`.
+ *
+ * Falla fuerte si le pasan un nombre que no existe en la tabla: un plan mal
+ * escrito tiene que romper el build, no publicar "Cuidado Web undefined".
+ */
+export function cuidadoWeb(...nombres: readonly string[]): string {
+  const partes = nombres.map((nombre) => {
+    const plan = CUIDADO_WEB.find((c) => c.nombre === nombre);
+    if (!plan) {
+      throw new Error(
+        `Cuidado Web "${nombre}" no existe en CUIDADO_WEB (hay: ${CUIDADO_WEB.map((c) => c.nombre).join(", ")}).`,
+      );
+    }
+    return `${plan.nombre} Bs ${plan.mensual.toLocaleString("es-BO")}/mes`;
+  });
+
+  return `Cuidado Web ${partes.join(" o ")}`;
+}
+
 export const WEB_STACKS: readonly WebStack[] = [
   {
     id: "landing",
@@ -79,7 +124,7 @@ export const WEB_STACKS: readonly WebStack[] = [
       "WhatsApp y/o email, dirección y horarios",
       "Fotos propias en archivo original",
     ],
-    mensual: "Cuidado Web Básico — Bs 190/mes",
+    mensual: cuidadoWeb("Básico"),
   },
   {
     id: "profesional",
@@ -106,7 +151,7 @@ export const WEB_STACKS: readonly WebStack[] = [
       "5 preguntas que te hacen tus clientes de verdad",
       "Tus pruebas: números, logros o clientes con los que trabajaste (si no hay, no se inventan)",
     ],
-    mensual: "Cuidado Web Básico Bs 190/mes o Crecimiento Bs 390/mes",
+    mensual: cuidadoWeb("Básico", "Crecimiento"),
     destacado: true,
   },
   {
@@ -133,7 +178,7 @@ export const WEB_STACKS: readonly WebStack[] = [
       "Tu material real: brochure, fotos, precios, casos",
       "Una persona que aprueba, una sola",
     ],
-    mensual: "Cuidado Web Crecimiento Bs 390/mes o Pro Bs 690/mes",
+    mensual: cuidadoWeb("Crecimiento", "Pro"),
   },
   {
     id: "tienda",
@@ -158,30 +203,35 @@ export const WEB_STACKS: readonly WebStack[] = [
       "Una foto por producto",
       "Tus métodos de pago y tus políticas de envío y devolución",
     ],
-    mensual: "Cuidado Web Crecimiento Bs 390/mes o Pro Bs 690/mes",
+    mensual: cuidadoWeb("Crecimiento", "Pro"),
   },
-] as const;
-
-export interface CuidadoWeb {
-  readonly nombre: string;
-  readonly mensual: number;
-  readonly que: string;
-}
-
-/**
- * Cuidado Web. Las definiciones son las que ya están escritas
- * (ONIA_VENDOR_MANUAL_2026.md:185-187). El detalle de cuántos cambios entran
- * por mes NO está escrito en ningún lado, así que no se publica un número:
- * el alcance se fija por escrito en tu propuesta antes de arrancar.
- */
-export const CUIDADO_WEB: readonly CuidadoWeb[] = [
-  { nombre: "Básico", mensual: 190, que: "Mantenimiento simple: tu sitio en línea y al día." },
-  { nombre: "Crecimiento", mensual: 390, que: "Cambios ligeros y una revisión mensual." },
-  { nombre: "Pro", mensual: 690, que: "Soporte más activo y mejoras pequeñas cada mes." },
 ] as const;
 
 export function precioWeb(stack: WebStack): string {
   return stack.precio === null
     ? "Se cotiza con tu catálogo"
     : `Bs ${stack.precio.toLocaleString("es-BO")} · pago único`;
+}
+
+/**
+ * El piso del catálogo: lo que cuesta el stack más barato que tiene precio.
+ *
+ * Existe para que ninguna pantalla escriba ese número a mano. Cuando la
+ * portada, `/precios` o el wizard dicen "desde Bs X por la web", X sale de
+ * acá y se mueve solo el día que cambie el catálogo.
+ *
+ * Nace de un barrido incompleto: el 2026-08-23 Sergio ratificó la línea
+ * `2.000 / 4.500 / desde 7.500` y este archivo se movió con él, pero el copy
+ * del wizard `/v1/empezar` se quedó anunciando el "desde Bs 790" de la oferta
+ * de arranque vencida el 31-jul-2026 — menos de la mitad. Duró doce días
+ * porque ese texto se pinta del lado del cliente, DESPUÉS de responder el
+ * cuestionario: ni un `curl` de la página ni un `grep` del HTML lo veían.
+ * Lo vigila `app/v1/empezar/precio-web.test.ts`.
+ */
+export function precioWebDesde(): number {
+  const conPrecio = WEB_STACKS.map((w) => w.precio).filter(
+    (p): p is number => p !== null,
+  );
+
+  return Math.min(...conPrecio);
 }

@@ -20,9 +20,17 @@ el único comentario del post de referencia es exactamente esa pregunta).
 | Íconos | render 3D estilo clay/glass "app icon inflado", sombra RICA abajo (`drop-shadow(0 30px 45px rgba(0,0,0,.25))`, ganadora del experimento 02-sep), vista frontal, ~23% del ancho c/u |
 | Layout | grid 2 arriba + 2 abajo, texto centrado al medio; márgenes generosos (~12% laterales) |
 | Label de ícono | Geist Mono mayúscula gris `#8E8E8E` ~24px, letter-spacing .08em (ganadora del experimento 02-sep, ver abajo) |
-| Claim central | Archivo wght 900 wdth 62, word-spacing .09em, negra ~130px (tipografía de marca — reemplaza a Inter, ver ONIA_MARCA_SISTEMA) |
-| Subclaim | Archivo semibold gris `#8E8E8E` ~56px |
+| Claim central | **contexto** gris `#8E8E8E` Archivo **450** ~50px, y debajo el **remate** Archivo **650** eje `wdth` **96** ~132px, `letter-spacing:-.035em`, con la palabra clave sobre highlight verde `#00C661` |
+| Collage | **obligatorio** (regla "stickers siempre"): sticker circular negro rotado con 2-4 palabras en verde, cinta apoyada SOBRE el bloque verde, 1 ícono Fluent flotando |
 | Fondo | `#F6F4F1` plano, SIN grano (probado y descartado, ver abajo) |
+| Coherencia | el número del remate **es** la cantidad de íconos del lienzo. Si se agrega o saca un objeto, cambia el remate |
+
+⚠️ **Corregido 2026-09-04.** Estas dos filas decían *claim Archivo **900** `wdth` **62*** + subclaim
+semibold — **los dos ejes que Sergio rechazó el 02-sep**, y sin una sola capa de collage. La ficha
+del patrón es lo que copia cada pieza nueva, así que mandaba a nacer fuera del sistema de marca:
+es el mismo agujero que en los generadores encontró P25 (12 de 13 en la tipografía rechazada), un
+nivel más arriba. Medido con el experimento A/B/C2 de esa fecha
+(`scripts/marca-personal/experimento-statement-tipografia.py`).
 
 ## Cómo lo producimos
 
@@ -72,6 +80,9 @@ el único comentario del post de referencia es exactamente esa pregunta).
   `scripts/marca-personal/generar-statement-16anos.py`
 - "Bs 0 en sueldos" / "mi equipo son 4 cosas" → [Claude Code · n8n · Higgsfield · laptop]
   (n8n e Higgsfield sin ícono propio en el set — pendiente si se quiere esta variante)
-- "Atender clientes 24/7 solo requiere 3 cosas" → [WhatsApp · Claude · n8n] (dueños de negocio,
-  n8n sin ícono propio en el set — pendiente)
+- ✅ "Atender clientes 24/7 · solo son 4 cosas" → [WhatsApp · Claude · agenda · recordatorio] —
+  producida 2026-09-04 en `carousels/out/statement-atender-24-7.png`, generador
+  `scripts/marca-personal/generar-statement-atender.py`. Estaba pendiente por el ícono de n8n; se
+  resolvió con los 4 objetos que **sí** tienen ícono, que además describen mejor el circuito real
+  (contestar · pensar · agendar · recordar). Primera pieza del patrón con la receta de marca.
 - Portadas de los carruseles del mes usan este mismo esqueleto.

@@ -20,6 +20,33 @@ export const DEMO_SLOTS = Object.freeze([
   Object.freeze({ key: "B", label: "HORARIO B (pendiente de definir)", startAt: null, pending: true }),
 ]);
 
+/**
+ * El formato con el que los horarios entran al bot: `etiqueta@ISO`, separados por `|`.
+ *   ONIA_BOT_SLOTS="sábado 5 de septiembre, 09:00@2026-09-05T13:00:00Z|lunes 7, 14:00@..."
+ *
+ * La etiqueta es lo UNICO que ve el prospecto; el ISO es la tripa con la que se reserva. Vive
+ * aca —en el modulo hoja— porque cada copia de este parseo es una superficie donde el ISO se
+ * puede escapar al guion: `simulate.mjs` tenia la suya, no partia por `@`, y mostraba
+ * «09:00@2026-09-05T13:00:00Z» en la cara del cliente (medido el 2026-09-04, ver
+ * simulate.test.mjs). Produccion estaba sana; el instrumento con el que se la mide, no.
+ */
+export function parseSlotsSpec(raw) {
+  const text = String(raw || "").trim();
+  if (!text) return null;
+  return text
+    .split("|")
+    .slice(0, 2)
+    .map((part, index) => {
+      const [label, startAt] = part.split("@").map((piece) => (piece || "").trim());
+      return {
+        key: index === 0 ? "A" : "B",
+        label: label || `opción ${index === 0 ? "A" : "B"}`,
+        startAt: startAt || null,
+        pending: false,
+      };
+    });
+}
+
 // ---------------------------------------------------------------------------
 // Duracion y modalidad de la demo — UNA sola fuente para el guion Y para la reserva
 // ---------------------------------------------------------------------------
@@ -69,13 +96,21 @@ export const DEMO = Object.freeze({
 // ---------------------------------------------------------------------------
 export const SCRIPT = Object.freeze({
   // M0 — bienvenida + disclosure + que es Onia + los 2 horarios, todo en el primer mensaje.
-  // El disclosure de bot va en la PRIMERA linea (D2) y ademas es el argumento de venta: lo que el
-  // prospecto esta viendo funcionar es exactamente lo que se le vende. No pide un solo dato: la
-  // unica pregunta del mensaje es la que cierra la reunion.
+  // El disclosure de bot va en la PRIMERA linea (D2). No pide un solo dato: la unica pregunta del
+  // mensaje es la que cierra la reunion.
+  //
+  // OJO AL REESCRIBIR (2026-09-04, tarea t_d3f02b65): aca decia "esto que estas viendo es justo lo
+  // que vendemos: un asistente que atiende tu WhatsApp 24/7", y el comentario lo defendia como el
+  // argumento de venta. Es exactamente lo que Sergio prohibio el 2026-09-03: "el sistema no ofrece
+  // directamente el bot, ofrece solo el sistema". El chatbot es un add-on de pricing.ts — se cobra
+  // aparte y se nombra cuando preguntan el precio (M4_BODY), nunca de titular en la bienvenida.
+  // El disclosure se queda porque D2 no se negocia; lo que se fue es venderlo como la oferta.
+  // Lo cuida `oferta-sistema.test.mjs`, que mira ESTA plantilla y su hermana M0_SIN_HORARIOS: el
+  // bug nacio de corregir una sola de las dos.
   M0: [
     "¡Hola! Soy el asistente automático de Onia. Sí, un bot.",
     "",
-    "Y esto que estás viendo es justo lo que vendemos: un asistente que atiende tu WhatsApp 24/7 — responde, califica y agenda solo, sin que vos toques el teléfono.",
+    "{{producto}} es una plataforma por módulos para que tu negocio trabaje adentro: agenda, cobros y clientes en un solo lugar.",
     "",
     "Te muestro cómo quedaría en TU negocio en {{demo_duracion}} por {{demo_modalidad}}. Tengo estos dos horarios:",
     "",
@@ -388,6 +423,9 @@ export const SCRIPT = Object.freeze({
   R_NO_DATO: "Eso no lo tengo acá para confirmártelo — te lo confirma {{humano}} por este mismo chat.",
 
   R_ATTACH: "Recibí tu archivo. Se lo paso a {{humano}}, que te confirma por acá.",
+  // R_CUOTA_AGOTADA — la org agoto sus conversaciones automaticas del mes (lo dice /published).
+  // Texto FIJO y honesto, cero LLM; {{producto}} es el nombre del negocio en modo recepcionista.
+  R_CUOTA_AGOTADA: "Este mes ya atendimos el máximo de conversaciones automáticas de {{producto}}. Te responde una persona en breve.",
   // Insistencia v6.6 (1 sola vez, suave, dentro de la ventana de 24 h — texto libre gratis):
   R_SEGUIMIENTO: "¡Hola! ¿Seguís por ahí? Si te quedó alguna duda, {{humano}} te la contesta por acá. Y si preferís que no te escribamos, decínos \"no gracias\" y listo.",
   // Vision (v5): cuando la foto se pudo describir SIN violar guardrails. La descripcion

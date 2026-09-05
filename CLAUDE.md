@@ -36,6 +36,35 @@ Instrucciones de proyecto. Override sobre defaults.
 - Al aprender una trampa nueva: **editar la skill que corresponda**, no crear doc suelto.
   Skill pública instalada que sirva: usarla, no reinventar.
 
+## Canario: se le dice **Sergio Urcullo** (REGLA)
+
+> Sergio, 2026-09-04: *"quiero que nuestro canario sea tambien que me llames siempre como sergio
+> urcullo, ahi vere si se esta deteriorando la sesion"*.
+
+- **Siempre por nombre y apellido: «Sergio Urcullo».** No «Sergio» a secas, no «el usuario».
+- Es un **canario**: si dejo de hacerlo, la sesión se está degradando y él lo ve sin preguntar.
+- ⚠️ **Su límite, dicho de frente:** esta regla se reinyecta en cada pedido, así que sobrevive a
+  la compactación por sí sola. Eso la hace **débil** como detector de "perdí el contexto" — pero
+  **fuerte** como detector de algo peor: si fallo teniéndola delante, no es que la olvidé, es que
+  dejé de leer mis propias instrucciones. Ese fallo sí vale como alarma.
+
+## «Cambio de sesión» → handoff completo (REGLA)
+
+> Sergio, 2026-09-04: *"cada que yo te diga cambio de sesion generes handoff para nueva sesion
+> pero que anotes absolutamente todo y no perdamos que hicimos"*.
+
+- Las palabras **«cambio de sesión»** son un disparador: se escribe el handoff del carril ANTES de
+  seguir con nada más. No se pregunta, no se pospone.
+- Va en `hermes-content/docs/handoff/<carril>.md`, con los **siete campos** del README de esa
+  carpeta, y se **commitea y pushea** — un handoff sin pushear no existe para la sesión nueva.
+- **«Absolutamente todo» incluye lo incómodo**, que es justo lo que se pierde: lo que quedó **en
+  vuelo y sin commitear** (y qué se pierde si muere la sesión), los **intentos fallidos** con su
+  causa, las hipótesis que resultaron falsas, y lo que **depende de Sergio Urcullo**.
+- **Lo que está en vuelo se nombra con su riesgo.** El 4-sep un port de panel tenía CERO commits al
+  cerrar: si la sesión moría, se perdía entero. Eso se dice, no se maquilla.
+- Cerrar la sesión NO es terminar el trabajo: si algo quedó a medias, el handoff dice **dónde**
+  (rama, worktree, commit) y **cómo se retoma**, no que "quedó pendiente".
+
 ---
 
 # 2. Las tres que más se rompen

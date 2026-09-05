@@ -57,3 +57,35 @@ Regenerar V04 habría **borrado la evidencia** de una regla. Es el mismo error q
 `G01-cafe-pizarra-texto`, que inventa texto a propósito: **una imperfección deliberada leída como
 defecto.** Por eso el marcador de "hay que rehacerla" tiene que ser distinto del de "ojo con
 esto".
+
+
+## 🔍 Auditoría de `B05` y `C01` contra el brief §6 (2026-09-03, mirada)
+
+Vuelta con **generación bloqueada por auth** (`higgsfield account status` → *Session expired*;
+`hf auth login` no se puede correr en sesión no interactiva — bloqueo duro, distinto del
+`grace_daily_limit` que resetea por día, y ya logueado esta fecha, no se re-mide). Sin poder
+generar, trabajo de cero créditos: llevar estas dos al **mismo formato de tabla §6** que ya tienen
+las piezas del banco 02-sep, mirándolas a resolución completa (los `.jpg`) en vez de confiar en la
+prosa de arriba. **Los dos veredictos se confirman al verlas.**
+
+| Eje del brief §6 | `B05` micro (interior) | `C01` terraza torre |
+|---|---|---|
+| Cara fiel al ancla | ✅ pecas marcadas en nariz/pómulos, cejas gruesas, ojos marrones, aro de oro + cadenita fina. Es Lucía | ❌ **la cara se fue** — pómulos y mandíbula más angulosos y flacos que el ancla, arquetipo de modelo de pasarela. Es el defecto que documenta el `fashion campaign` |
+| Piel real (poros/pecas/asimetría) | ✅ pecas y textura muy marcadas, brillo real de mediodía, cero alisado | ✅ pecas y poros presentes, piel real bajo sol duro |
+| **Pelo suelto** | ✅ **suelto**, raya al medio, ondas sobre los hombros | ❌ **recogido** tirante hacia atrás (sólo vuelan unos mechones). Falla §6 |
+| **Acción a medias** | ✅ **las dos manos sobre el celular** + tote en el regazo — el patrón que mejor anima. Ojo: mira hacia abajo (riesgo casilla 9 si se anima) | ❌ **retrato/pose** — brazos a los lados, sin manos sobre un objeto |
+| Luz real / fancy | ✅ sol duro de ventana, interior de micro real | ✅ sol de mediodía, torre de vidrio y skyline — el registro «cine» sí salió |
+| **Sin carteles legibles** | ❌ **cartel de tarifas frontal y legible** a la derecha: `FARE`, `CARHEDA BIT. 20`, `LUCIVINA PER 1,50`, `CARTFOLUREX 50`, `BOLIVADA DEL 3.00` — todo inventado, y en inglés dentro de un micro boliviano. + 2 carteles con texto roto al fondo izquierda | ✅ skyline y vidrio, ningún cartel/pantalla |
+
+**Veredicto (confirmado mirándolas):**
+- **`B05` — el único bloqueo es la cartelería inventada.** Todo lo demás pasa: identidad fiel, piel
+  top, pelo suelto, acción a medias con las dos manos (el patrón animable). Es la **más lista para
+  regenerar** cuando vuelva el auth, y llena el hueco «adentro de un micro» que el banco sólo cubre
+  hoy con `V04-parada` (contraejemplo). Sigue en `🔧 REGENERAR` con la línea de arriba
+  (`Any signage, price lists or screens are out of focus and unreadable…`). Bajo riesgo: un solo eje
+  a corregir. ⚠️ Si se anima, cuidar la casilla 9 — mira hacia abajo al celular; el prompt debe
+  levantarle la mirada al final.
+- **`C01` — se queda como contraejemplo, NO regenerar.** Falla **tres** ejes (identidad, pelo
+  recogido, sin acción a medias): es la evidencia viva de que `fashion campaign` / `campaign look`
+  arrastran al arquetipo de pasarela y el arquetipo le gana al element. Borrarla borra la regla —
+  mismo criterio que `V04` y `G01`. Como imagen fija tampoco sirve (la cara no es Lucía).

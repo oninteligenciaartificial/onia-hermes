@@ -1,7 +1,7 @@
 # Handoff — carril `claude/git-status-935f47` (plataforma · infra · integración)
 
 > Formato: `hermes-content/docs/handoff/README.md`. Se sobrescribe; es el estado ACTUAL.
-> Última escritura: **2026-09-03 ~17:15 La Paz** (21:15 UTC).
+> Última escritura: **2026-09-04 ~02:50 La Paz** (06:50 UTC).
 >
 > ⚠️ Las horas de este archivo van en **La Paz**, no UTC. Sergio corrigió el 31-ago:
 > *"arregla tus horas, aqui somos america/la paz"*. El VPS y los logs son UTC-4 respecto de
@@ -9,7 +9,258 @@
 
 ---
 
-## 0. Estado al 2026-09-03 — lo vigente (lo de abajo es historia y sigue valiendo como lección)
+## 0. CIERRE DE CORRIDA — 2026-09-04 ~15:00 La Paz
+
+> **Esta sección manda sobre §1-§10 de más abajo**, que son historia del mismo carril.
+> Horas en La Paz (UTC−4). Escrita porque Sergio pidió cerrar y abrir sesión nueva.
+
+### Objetivo de la corrida
+Dejar la 1.0 usable: cerrar Configuración, rediseñar el panel de inicio, y sacar de la venta lo
+que no es cierto. **Hecho** = desplegado y verificado MIRANDO la pantalla, o en rama con las
+capturas mandadas a Sergio.
+
+### Qué quedó EN PRODUCCIÓN
+**Un solo despliegue, `3606c46`, 18:12 UTC (14:12 La Paz), gates 5/5, 0 errores en 3 min.**
+Tres defectos, y **dos eran de todo el sistema, no de la pantalla donde saltaron**:
+
+| Defecto | Causa real | Alcance |
+|---|---|---|
+| No se podía abrir «Configuración avanzada» | `GuiaInicio` vivía en `Header.tsx` → se montaba en TODA pantalla y su `fixed inset-0` se comía el clic | todas las pantallas |
+| El botón flotante tapaba «Guardar» | `pb-32` en `LayoutShell` contra un FAB de 96-152 px | todo el celular |
+| El rol decía «Administra» | literal en `vocabulario.ts`, 4 rubros + `ROL_DE_RESPALDO` | perfil, equipo y alta |
+
+Verificado en vivo: login 200 · panel 200 · configuración 200 · «Administrador» leído en pantalla.
+14 tests nuevos, cada uno comprobado fallando al revertir el arreglo. Suite 2913.
+
+### Qué quedó a medias, y dónde
+1. **`feat/panel-tres-renglones`** (`onia-platform`, worktree `.claude/worktrees/v1-panel`, HEAD
+   `110a15c`, **pusheado**). El panel dental en tres renglones, construido y verificado.
+   🔴 **Espera el «ok panel» de Sergio.** Se le mandaron 4 capturas y aviso por Telegram. Es una
+   pantalla viva: no se reemplaza sin que él vea la pieza (lección cara del 20-ago).
+   Medido: 9 interactivos y 103 palabras en la primera pantalla del celular; 21 → 9 consultas.
+2. **Port del panel de COMERCIO a tres renglones** — ✅ **TERMINADO**, en la MISMA rama
+   `feat/panel-tres-renglones`, pusheado. 25 agentes, 0 errores. HEAD `98b7c97`.
+   `comercio-hoy.tsx` 549 → 177 líneas; lógica pura nueva en `lib/comercio/panel-hoy.ts` (248) con
+   sus tests. **17 consultas en ~6 tandas encadenadas → 12 en UNA.** Suite **2963**.
+   «Tu día» = los tickets del día con «Ahora» al FINAL (el mostrador no tiene futuro agendado) y la
+   ventana móvil son las 4 ÚLTIMAS, no las 4 próximas.
+   Borrado: `Barcode.tsx` y `protagonistaDelPanel` (+ sus 4 tests). **NO borrado a propósito**:
+   `Sparkline.tsx` y los 6 helpers de `lib/comercio/hoy.ts` (22 tests) — huérfanos por efecto del
+   port, con destino en `/reports`.
+
+   **Tres defectos de plata que el rediseño destapó** (ninguno era el objetivo):
+   - 🔴 **Una venta fiada ANULADA seguía contando como deuda ENTERA** (`3d2efb5`). Dos circuitos
+     escriben la misma columna de texto libre: `anularVenta` pone `"anulado"` y el contrato del core
+     pone `"cancelled"`; el lector filtraba solo el segundo. Como anular también marca los pagos y
+     esos sí se descartaban, el saldo quedaba igual al total. Se veía en **tres** superficies: panel
+     de comercio, `/comercio/fiados` y el balance de comprobación fiscal.
+   - 🔴 **El panel DENTAL afirmaba cosas de un día que solo había leído a medias** (`98b7c97`).
+     `take: 30` sobre las citas: con 4 profesionales se pasa, y «Ahora» se iba al final diciendo que
+     el día terminó. **Esto iba a salir en el panel que espera el OK de Sergio Urcullo.**
+   - El resumen del mostrador contaba solo los 50 tickets traídos y se **contradecía con «Entró
+     hoy»** en la misma pantalla. Ahora el total sale de un `groupBy` del día entero, y el
+     parámetro es **obligatorio** para que no se pueda olvidar en silencio.
+   - Menor: «Dr(a).» se colaba en cada fila de una estética. El título profesional pasó a ser campo
+     del vocabulario, solo en dental y veterinaria.
+
+   **Medido en el celular con datos: 9 interactivos (igual que dental) y 142 palabras.** El tope era
+   120: **no cumple**, por la tercera tarjeta de atención («corte de caja», que dental no tiene).
+   Queda como deuda declarada, no como éxito.
+
+   El guion del workflow quedó en
+   `~/.claude/projects/.../workflows/scripts/portar-comercio-tres-renglones-wf_c19be55b-a26.js`.
+3. **`fix/venta-honesta`** (`onia-hermes`, pusheada, **sin mergear**). Saca la promesa de factura
+   del SIN de diez lugares y baja el bot a add-on. **Bloquea escribirle a los leads.**
+4. **Recorrido del dueño nuevo en producción** — ✅ **terminado, y es lo más caro del día.**
+   Con cuenta nueva de rubro **Servicios**, cada pantalla mirada: **un dueño solo NO puede hacer
+   lo que su propia alta le promete.** No hay pantalla de clientes (única puerta: Caja → Fiado,
+   6 clics, y ese cliente no aparece en la cita); la cita abre con **0 opciones** y frena con un
+   globo del navegador **en inglés**; **no hay recibo** (`/print/invoice` cuelga de `/billing`,
+   que el rubro no tiene); cobrar un servicio exige **inventar stock** (422) y el **SKU es
+   obligatorio sin estar marcado**. Y `/register` le promete textual «Agenda, citas, cobros y
+   contabilidad» — `lib/platform/vertical-pack.ts:361` no tiene entrada de clientes y el modal
+   lee `/api/patients`.
+   **Sí funciona solo:** registrarse (el correo sale) → cargar un servicio → cobrar en efectivo →
+   verlo en Contabilidad con IVA 13 % e IT 3 % y CSV. Fechas propias en La Paz; ningún icono como
+   texto. Limpieza verificada: 0 filas `zz-qa-%`; quedan las 5 orgs reales intactas.
+   ⚠️ **El instrumento miente:** `scripts/recorrido_cliente.mjs` canta «paso 3 ROTO» sobre un
+   flujo sano — saca la foto mientras el botón dice «Creando cuenta…». Falso rojo suyo.
+
+### Archivos que importan para retomar
+- `app/(dashboard)/dashboard/panel-hoy.tsx` — presentación pura, sin Prisma ni Date. Es el contrato
+  para portar cualquier rubro: `PanelHoyDatos`, `FilaAtencion`, `FilaCita`, `AccionPanel`.
+- `app/dev/dashboard/page.tsx` — **el banco de pruebas**. Sin esto no hay forma de MIRAR el panel
+  sin base ni sesión. Cualquier rubro nuevo agrega su estado acá.
+- `lib/onboarding/guia-apertura.ts` (`laGuiaSeAbreSola`) — decide dónde saluda la guía.
+- `lib/plan-limits.ts` — **los topes por plan viven acá, no en `subscription-plans.ts`**.
+- `app/(dashboard)/dashboard/comercio-hoy.tsx` — 549 líneas, 11 consultas, sin portar.
+
+### Intentos fallidos — lo que NO hay que repetir
+- **`setsid` no existe en este Git Bash.** Un servidor lanzado con `setsid nohup …` no arranca y
+  el error no aparece hasta que el `curl` da 000. Usar el modo background de la herramienta.
+- **Un script de Playwright en `/tmp` no encuentra `playwright`**: ESM resuelve desde el archivo,
+  no desde el `cwd`. Escribirlo DENTRO del worktree.
+- **El dev server del banco muere sin variables de entorno**: el proxy revienta con *"Your
+  project's URL and Key are required"* y TODA ruta da 500. Hace falta un `.env.local` temporal con
+  valores falsos — y **borrarlo**, porque un build de producción hornea `127.0.0.1` en el bundle.
+- 🔴 **Una captura `fullPage` MIENTE sobre los elementos `position: fixed`**: los dibuja donde no
+  se ven. Me hizo creer que la barra «Agendar cita» tapaba la plata. Para juzgar si algo tapa algo:
+  capturar el **viewport** arriba y abajo, y medir con `getBoundingClientRect`.
+- **«Fuente única» sin decir CUÁL manda al archivo equivocado.** El doc de alcance mandaba a leer
+  los topes de `subscription-plans.ts`, que solo tiene montos, y por eso el plan Básico figuraba
+  con los topes del plan GRATIS (1 usuario · 30 clientes en vez de 2 · 300). Corregido en
+  `a10cd543`. Son TRES archivos: montos, topes y add-ons.
+- **Un subagente escribió por error en el checkout principal** en vez de su worktree. Lo detectó y
+  restauró; verificado limpio. La ruta explícita en el prompt no alcanza: hay que verificarlo.
+
+### Qué depende de Sergio
+1. 🔴 **«ok panel»** — sin eso el panel de tres renglones no se publica.
+2. Mergear y desplegar `fix/venta-honesta`, o decir que no. **Hasta entonces no se le escribe a
+   ningún lead**, porque el material promete factura del SIN y no la emitimos.
+3. Los 7 mensajes a leads · conectar su WhatsApp (1 clic) · credenciales del BCP · Punto de Venta 1
+   en el SIN · elegir molde de texto A o B para @oniahq.
+4. Decisión: bajar «Facturación» del menú principal (hoy es tracción antes del 1-oct).
+
+### Próximos pasos, en orden
+0. 🔴 **Servicios y comercio: o entregan lo que el alta promete, o el alta deja de prometerlo.**
+   Es lo primero, antes que el panel y antes que escribirle a nadie. *Listo* = el recorrido
+   completo se puede hacer solo en el rubro, o la tarjeta de `/register` dice la verdad.
+1. **Confirmar si el port de comercio sobrevivió.** `git -C <worktree v1-panel> log` — si no hay
+   commits nuevos sobre `110a15c`, relanzar el workflow guardado. *Listo* = comercio en tres
+   renglones, capturas miradas, gates verdes.
+2. Con el «ok»: mergear el panel y desplegar con el runbook de siempre. *Listo* = panel nuevo vivo
+   y mirado en producción.
+3. `importadora-hoy.tsx` (192 líneas) — el único rubro sin portar, y **arrastra el mismo defecto de
+   `DEFAULT_TZ` fijo** (`importadora-hoy.tsx:42`) que el port de comercio corrigió.
+3-bis. `app/api/comercio/caja/route.ts:46,86` escribe la clave del corte con `DEFAULT_TZ`: hoy
+   coincide porque el default de la columna es America/La_Paz, y se rompe el día que una
+   organización configure otra zona. Queda marcado en el componente.
+3-ter. **Servicios profesionales entra a este panel** y su día son reuniones, no ventas. Hoy ve su
+   corrida de caja con el vocabulario correcto; un «día de agenda» sería feature nueva.
+3-quater. ~63 de los 85 selectores `.dv2-*` de `dashboard-v2.css` quedaron sin consumidor. El
+   archivo sigue vivo por `page.tsx` e `importadora-hoy.tsx`: es poda pendiente, no se hizo acá.
+4. Cobros y contabilidad (pasos 3 y 4 del orden de la 1.0).
+5. **Código muerto pendiente de decisión**: `Sparkline` queda huérfano al portar comercio, y varios
+   helpers de `lib/comercio/hoy.ts` tienen lógica testeada que `/reports` podría querer. NO se
+   borran en el mismo carril que un rediseño.
+
+### 12 tests que fallan en Windows, y no son nuestros
+Fallan idénticos en `origin/main` puro por una ruta `C:\C:\…`. Consecuencia real: **el gate que
+protege los precios recorre 0 archivos en esta máquina**, o sea que hoy no protege nada acá.
+
+---
+
+## 0-mañana. Estado al 2026-09-04 ~08:30 La Paz — PUBLICAR dejó de fallar (y por qué casi sale peor)
+
+**Objetivo:** que publicar deje de fallar; camino de publicación probado punta a punta, sin sacar
+nada con la cara de Lucía ni de la marca sin el OK de Sergio.
+
+### Qué estaba roto de verdad
+
+**No era Higgsfield y no era "Postiz caído".** Postiz respondía perfecto; el diagnóstico previo
+lo midió contra el puerto equivocado (`127.0.0.1:5000` es el puerto INTERNO del contenedor; el
+host mapea **4007**). Lo que estaba muerto era el **backend** de Postiz:
+
+- Postiz v2.23 **no arranca sin Temporal**: revienta en `TemporalRegister.onModuleInit`
+  (`Name resolution failed for target dns:temporal:7233`) y nunca hace `listen(3000)`. `/api` daba
+  502 y por eso el MCP de Postiz devolvía 502.
+- **Nadie lo notó durante ~3 semanas** porque el healthcheck del contenedor solo mira
+  `localhost:5000` (el frontend): es **CIEGO al backend**, así que Postiz figuraba `healthy`
+  mientras su API estaba muerta. El contenedor `temporal` no existía (cero imágenes bajadas):
+  se levantó alguna vez con `--no-deps` y quedó así desde que la imagen se actualizó el 14-ago.
+
+### En producción, verificado mirando
+
+- `temporal` + `temporal-postgresql` + `temporal-elasticsearch` levantados y `healthy`; backend de
+  Postiz escuchando en 3000, `GET /api/` → **200**, pm2 con los 3 procesos y **0 reinicios**.
+  Redes del contenedor intactas (`easypanel`, `postiz-network`, `temporal-network`).
+- **Las 3 cuentas de Instagram están conectadas y sanas**: `@oniahq`
+  (`cmsw091nx0001lq9c8kr6dsg8`), `sergio_urcullo` (`cmt39kug00022lq9cnw5z12wb`), Lucía
+  (`cmt1sv4eh001alq9cl3y6q7es`). Tokens válidos hasta **13/17/18-oct-2026**, ninguna `refreshNeeded`.
+- **El token contra Meta funciona de verdad**: `/public/v1/analytics/<integration>` devolvió
+  métricas reales de IG. No es un 200 de cortesía, es la Graph API contestando.
+- Circuito `ok <id>` → publicar **cableado y probado punta a punta en seco**: tarea con línea
+  `PUBLICAR:` → parseo → validación → subida de la lámina → POST a la API → post creado
+  (`postId cmtmxajfi...`), borrado después. Caso negativo (tarea sin línea) sale con código 2.
+
+### 🔴 Lo que hice mal y hay que saber: restaurar Temporal DISPARÓ el backlog
+
+El volumen `temporal-postgres-data` **sobrevivió**: al volver Temporal, los workflows viejos
+reanudaron y **publicaron 5 posts vencidos en @oniahq entre 12:03 y 12:15 UTC** (fechas 24, 26,
+28, 31-ago y 2-sep) sin OK fresco. Los detecté a los ~10 min, **paré el orchestrator**, y desarmé
+el resto:
+
+- Todos los `post_*` workflows vivos → **terminados**.
+- Los **57 posts** que quedaban en cola → pasados a **DRAFT** (contenido intacto, se re-programan
+  desde la UI). Estado final: `PUBLISHED 14 · DRAFT 57 · QUEUE 0`, cero workflows corriendo.
+- Orchestrator reactivado y verificado 2,5 min: **no publicó nada**.
+
+**La lección:** levantar un motor de scheduling dormido no es un acto neutro — reanuda todo lo que
+tenía pendiente. Antes de encender Temporal/colas, hay que mirar QUÉ hay en cola y desarmar lo
+vencido PRIMERO. `pm2 stop orchestrator` no alcanza como red de seguridad: no sobrevive a un
+`docker restart`.
+
+### Por qué se generaron 1.196 imágenes y no se publicó ninguna
+
+Dos causas, y las dos había que arreglar:
+
+1. **La API estaba muerta** (arriba).
+2. **`ok <id>` no publicaba.** Corría `kanban unblock` y **nada más**. Peor: los loops habían
+   aprendido a pedirle a Sergio que subiera los archivos A MANO desde el teléfono
+   (t_7282a714: *"descargalas en orden, guardalas en la galería y subilas"*). El circuito entero
+   terminaba en una tarea manual que no ocurre nunca.
+3. Los **objetivos de los loops medían PRODUCCIÓN**: `lucia` y `marca-personal` pedían "≥ 1 tarea
+   `needs_input` nueva por vuelta", y `contenido-cola` pedía la pieza "para que Sergio la
+   publique". Un loop que cobra por dejar una tarea bloqueada deja tareas bloqueadas.
+
+### Archivos
+
+- `scripts/kanban/publicar-aprobado.mjs` **(nuevo)** — publica la pieza de una tarea aprobada.
+  Lee una línea `PUBLICAR: cuenta=<oniahq|sergio|lucia> imagenes=<ruta> texto=<brief.json>` del
+  cuerpo. **La línea es DATO, no comando**: lista blanca de cuentas, rutas absolutas sin `..`,
+  validación en disco, e invocación con `execFile` (sin shell). Trae `--autotest`.
+  Códigos: 0 publicó · 2 la tarea no era una pieza · 1 falló.
+- `scripts/postiz_schedule.mjs` — `--now` (publica ya) y `--draft` (crea sin publicar: es la única
+  forma de probar esto, no hay cuenta de prueba).
+- `scripts/kanban/telegram-entrada.py` — al desbloquear, publica; si falla, **manda el error**.
+- `scripts/loops/sincronizar.sh` — despliega los dos `.mjs` a `/root/bin`.
+- `scripts/loops/prompts/{lucia,contenido-cola,marca-personal}.md` — objetivo pasado de producción
+  a **publicación** + exigen la línea `PUBLICAR:`.
+- **VPS:** `/root/.hermes/SOUL.md` (bloque nuevo: `ok <id>` corre el publicador; backup
+  `.bak-20260904-publicar`) · `/opt/postiz/postiz-docker-compose/docker-compose.override.yaml`
+  (comentario de por qué Temporal y ES no son opcionales; backup `.bak-20260904-temporal`) ·
+  `/root/.postiz-api-key` (600) · `/root/bin/onia-{publicar-aprobado,postiz-schedule}.mjs`.
+
+### Intentos fallidos (para no repetirlos)
+
+- **Temporal sin Elasticsearch NO se puede.** Lo probé para no meter otra JVM en un VPS que
+  Hostinger ya estranguló: con visibilidad SQL, Temporal admite **máximo 3 search attributes de
+  tipo Text** y `auto-setup` ya los ocupa, así que el `addSearchAttributes` de Postiz
+  (`organizationId` + `postId`) muere con *"cannot have more than 3 search attribute of type
+  Text"*. Con ES no hay tope. Queda escrito en el override: **no lo "optimices" sacando ES**.
+- **`pm2 restart` deja procesos huérfanos**: el orchestrator quedó en crash-loop con
+  `EADDRINUSE :::3002`. Se arregla con `docker restart postiz` (que **sí** conserva las redes,
+  a diferencia de `docker compose up -d postiz`, que desconecta `easypanel` — trampa ya conocida).
+- El `psql -c` con `$$` dentro de `ssh` + heredoc **sin comillas** se come los `$$` (bash los
+  expande al PID). Heredoc con `'EOF'` citado.
+
+### Qué depende de Sergio
+
+1. **Aprobar el primer post real por el circuito nuevo.** Nada salió con su cara ni con la marca
+   por decisión mía; el camino está probado en seco pero **el último paso (publicar de verdad)
+   nunca se ejerció**, porque no hay cuenta de prueba.
+2. **Los 57 borradores**: decidir cuáles se re-programan y cuáles se tiran. Están intactos.
+3. **Los 5 posts que salieron solos hoy en @oniahq** — si alguno no debía salir, borrarlo.
+
+### Próximos pasos
+
+- Que Sergio apruebe una pieza y verificar el `ok <id>` real (es el único tramo sin ejercer).
+- Arreglar el healthcheck ciego de Postiz para que un backend muerto se vea (tarea en el tablero).
+- Los loops ya miden publicación: mirar en 2 vueltas si el número sube.
+
+---
+
+## 0-bis. Estado al 2026-09-03 — historia (sigue valiendo como lección)
 
 **Objetivo del día:** Sergio opera solo por Telegram con la PC apagada, y el sistema pasa de
 "terminar" a "llegar" (reel de @eriktaveras: *"no es terminar el SaaS, es llegar antes"*).
@@ -71,6 +322,125 @@ loop bloquee `needs_input` con captura, el vigía se la manda; (3) deploy del bo
 `t_b18ca430` comente `DEPLOY BOT PEDIDO <sha>`; (4) build + swap de `app.onia.com.bo` cuando
 `t_6bf938b7`/`t_72ddeedb` lleguen a master (runbook en `onia-platform-oferta-en-prod`);
 (5) nada de maquinaria de loops hasta el 10-sep.
+
+---
+
+## 0a. Madrugada del 4-sep — lote 4 (base SaaS) y un login roto por 2 h
+
+**Lo que se publicó:** lote 3b `858752a` (fechas en La Paz, redirects de rutas viejas, CTA del login
+según el alta, borrador de /setup, cabeceras cerradas, limiters con `cf-connecting-ip`, bug inbox→org)
+y lote 4a `70b6ed3` (login server-side con lockout + auditoría, 2FA TOTP con códigos de respaldo y
+gate aal2, política de 2FA para admins con 14 días de gracia, claves de API + `/api/v1` +
+`/settings/api`, cuota del chatbot 500/mes con `cuota` en `published`, fechas-solo al mediodía local,
+realtime con backoff). Tres migraciones aplicadas a mano en prod y registradas en `_prisma_migrations`:
+`mfa_recovery_codes`, `organization_api_keys`, `chatbot_uso_mensual`. Suite: **2.797 verdes**.
+
+**🔴 El error propio de la noche.** Al integrar el login server-side lo apunté a Kong por la red
+interna (`SUPABASE_INTERNAL_URL`). `@supabase/ssr` deriva el nombre de la cookie **del host** al que
+habla: escribía `sb-kong-auth-token` y el sitio lee `sb-app-auth-token`. Resultado: `POST
+/api/auth/login` → 200 `{ok, next:/dashboard}` y **nadie quedaba logueado** (04:00-06:04 UTC, de
+madrugada, sin clientes). Detección: probar la ruta protegida CON la cookie, no el 200 del login.
+Reversión sin build: comentar la variable en `app.env` + `recreate-container.sh --si-estoy-seguro`.
+Arreglo definitivo en `master d956cb9` (`cookieOptions.name` derivado de la URL pública + test);
+la variable sigue DESACTIVADA hasta desplegarlo. Detalle: memoria `login-cookie-nombre-por-host`.
+
+**Medido en producción tras el arreglo:** login 200 con cookie correcta, `/dashboard` y `/api/me` 200
+como ADMIN; `audit_logs` con LOGIN_FAILED 5, LOGIN_LOCKED 1, LOGIN_OK 2 (el lockout funciona);
+`published?inboxId=7` devuelve `cuota {agotada:false, usadas:0, limite:500}`; cero basura de pruebas
+en la org de Sergio. Rate limit del login en Traefik (`rl-auth-token`) vivo desde el 3-sep 22:50.
+
+**SIAT:** sectores 17 y 24 emiten 908 contra el piloto; la corrida de volumen terminó con 125/125 en
+los tres combos de las etapas IV, VII y XI (275 × 907 y 125 × 905, sin rechazos). El % oficial se lee
+en `fman` con el login de Sergio. Sigue bloqueado el **Punto de Venta 1**.
+
+**Cuota de Claude (dato duro):** con 5-8 agentes de la sesión de control, los loops perdieron vueltas
+(chatbot-cola 2, onia-cola 2, web-venta 3, recorrido-cliente 1; marca `RAZON: vuelta PERDIDA por
+limite` en sus logs). Regla: máximo 2-3 agentes pesados en paralelo si se quiere que los loops corran.
+Decisión de plata pendiente de Sergio: segunda suscripción o clave de API para los loops.
+
+**En curso al cerrar este bloque:** verificación de 2FA punta a punta con cuenta QA (capturas a
+Telegram), `feat/settings-seguridad` (pestaña Seguridad), corte honesto del bot por cuota (motor
+`/opt/onia/bot`, relanzar), y `feat/canal-meta` (Instagram/Messenger, detrás de App Review de Meta).
+**Tareas de infra abiertas:** `t_9d970ada` (ufw solo Cloudflare + límite en signup/recover/otp) y
+`t_106595a4` (levantar Supabase Realtime: Kong da 503, no existe el contenedor).
+
+---
+
+**Cierre del lote 4 (02:00-02:50 La Paz).** `master eae8795` vivo (BUILD_ID `2LdAuSubezKUq_xpaAb4o`):
+pestaña **Seguridad** en Configuración (accesos, bloqueos, sesiones con cierre remoto) y el fix de la
+cookie. Con el fix se REACTIVÓ `SUPABASE_INTERNAL_URL` y el login quedó sano (POST 200, cookie
+`sb-app-auth-token`, `/dashboard` y `/api/me` 200): el login ya no sale por Cloudflare ni comparte el
+bucket de Traefik. El deploy corrió con `/root/deploy-eae8795.sh`, que verifica sesión y **revierte
+solo** — patrón a reusar para cambios de env riesgosos.
+
+**Verificado MIRANDO (capturas a Telegram):** 2FA punta a punta con cuenta QA (QR, TOTP, 8 códigos de
+respaldo, `/login/2fa`, cookie aal1 → 307 en `/dashboard`, `/profile` y `/api/me`, código de respaldo
+deja `mfa_factors` en 0), banner de 14 días de gracia (hoy dice 13), claves de API (crear → `GET
+/api/v1/patients` 200 con envelope → revocar → 401), y el recibo con la fecha correcta (`paidAt`
+guardado 16:00 UTC = mediodía La Paz). Latencias: login 255 ms, `/dashboard` 3,0 s, `/settings/api` 2,3 s.
+
+**Hueco encontrado y cerrado: la cuota no contaba.** La plataforma cuenta en su webhook y exige el
+header `X-Chatwoot-Secret`, pero Chatwoot solo tiene un webhook (al motor) y no manda headers. Ahora
+el motor reenvía el payload crudo a la plataforma (`uso-plataforma.mjs`, commit `ab196b9b`), después
+del dedup y solo para entrantes reales (un saliente reenviado se le duplicaría al cliente por
+WhatsApp). Probado en vivo: conv 55 → 1, segundo mensaje de la misma → sigue 1, conv 56 → 2;
+`published?inboxId=7` → `usadas:2`. El corte honesto del bot ya estaba vivo (`1f30e53b`).
+
+**Correcciones a supuestos:** el add-on NO se gatea por `organizations.whatsappAddon` (está en `f` en
+todas) sino por el entitlement `addon.whatsapp`. Disco del VPS: 87 % → 78 % borrando builds y runtimes
+viejos (receta en la memoria de deploy).
+
+**Abierto:** `t_59b4761d` (cambios de chatbot-cola en el motor sin desplegar: un restart los publica a
+medias), `t_5c358c3e` (barridos proactivos ignoran la cuota agotada), `t_9d970ada` (ufw solo Cloudflare
++ límite en signup/recover/otp), `t_106595a4` (Supabase Realtime no existe: Kong da 503),
+`feat/canal-meta` (Instagram/Messenger, bloqueado por App Review de Meta).
+
+## 0b. Noche del 3-sep — el panel se reorganiza (lotes 1-3 vivos, lote 4 en curso)
+
+Sergio, 16:52: *"organizá las pestañas y que estén completas… barra lateral como Hostinger… 100 %
+funcional, latencia, vida real, instalable"*; 17:05: *"hazlo de una vez"*; 22:45: *"Meta y APIs para
+chatbots, 2FA, firewall, lo del reel de Django, manos a la obra"*. Tarea de la sesión de control (no
+de los loops), integrada en `feat/panel-pestanas-completas` → `master` → un build por lote.
+
+**En producción (app.onia.com.bo), verificado MIRANDO con la cuenta de Sergio:**
+- Lote 1 `1f0b221` (17:42): "Agendar Cita" muestra el error del server y no ofrece horas pasadas
+  (`availability` marca `available:false`); todo pago daba 500 por `"$transaction" in db` en Prisma 7
+  (`lib/fiscal/invoice-status.ts:96`) → arreglado con test real + log/Sentry en los catch; tarjeta
+  "Tu WhatsApp" (merge de `claude/chatbots-platform-review-0d1d09`).
+- Lote 2 `b84811d` (18:21): `/setup` real de 4 pasos (sin `{v.negocio}`, no pisa `oniaCoreOnboarding`,
+  el intake lee canales con persona fija); barra lateral agrupada (4 fijos + Operación/Dinero/
+  Automatización/Sistema, 7 visibles, `w-64`+`md:ml-64`+`md:left-64` juntos, localStorage
+  `onia.sidebar.grupos`); `/operations` y `/accounting` borrados.
+- Lote 3 `146cd54` (22:44): factura con ítem manual, recibo por pago (`/print/receipt/[paymentId]`),
+  "Nota de venta" sin CUF y sin logo de Onia, QR de cobro por archivo (bucket `payment-proofs`, GET
+  propio que redirige a URL firmada), "Gastos" en Dinero, libro de compras (RCV) visible y exportable,
+  `/api/fiscal/iva-summary`, IVA a pagar = 13 % ventas − Σ `ivaAmount` de compras. Verificación
+  visual en curso.
+- Infra: rate limit del login en Traefik (`rl-auth-token`, 22:50); runner de loops con "TU ULTIMA
+  VUELTA" + `LECCION:` automática + `RAZON: vuelta PERDIDA por limite`; 15 prompts con `OBJETIVO
+  (medible)`; recorrido-cliente cierra 9/9 con cita real; SIAT sectores 17 y 24 emiten 908 en piloto.
+
+**Defectos vistos en la verificación de lotes 1+2 → rama `fix/post-verificacion-lotes12` (en curso):**
+borrador de `/setup` no persiste (LS `step` se pisa al montar), `/operations`/`/accounting` 404 en vez
+de redirect, dashboard con fecha en UTC, login con "Pedí tu acceso" (alta abierta), copy "queda armado".
+
+**Lote 4 en curso (ramas):** `feat/seguridad-base` (cabeceras, limiters unificados con `cf-connecting-ip`,
+bug inbox→org del bot), `feat/login-lockout-2fa` (login server-side + lockout + TOTP con códigos de
+respaldo + gate aal2 + política admins 14 días). Después: `feat/api-keys` (`/api/v1`, `/settings/api`),
+`feat/chatbot-cuota` (500/mes del add-on + corte honesto en `/opt/onia/bot/run-turn.mjs`),
+`feat/canal-meta` (Instagram/Messenger detrás de `META_PAGES_PUBLIC`). Plan completo con archivos y
+verificación: memoria `onia-panel-diagnostico-y-plan` + `feedback-panel-pestanas-completas-estilo-hostinger`.
+
+**Trampas de esta noche:** la cuota de Claude es UNA para loops y sesión (5 agentes murieron a las
+22:00 UTC; lección: al retomar, medir builds y basura `zz-qa`/`AGENTE-VERIF` antes de relanzar);
+`vitest run` reescribe snapshots con CRLF → `git checkout -- .` antes de mergear; el swap no recrea el
+contenedor (mirar `BUILD_ID`, no `docker inspect Created`); `profiles.themePreference` pisa la cookie
+del tema; el numerador de facturas consume números en pruebas; `onia-manual-routes.yaml` es JSON;
+`nohup … &` dentro de `ssh` cuelga sin `< /dev/null`.
+
+**Depende de Sergio:** hoja `ok/no` de las 17:00; `video sí/no`; Meta (producto Messenger, App Review
+de páginas/IG, cuenta tester); Cloudflare rate limiting + Bot Fight Mode; PdV 1 en el SIN; activar su
+2FA recién cuando esté probada con QA; segunda suscripción/API key para los loops (plata).
 
 ---
 

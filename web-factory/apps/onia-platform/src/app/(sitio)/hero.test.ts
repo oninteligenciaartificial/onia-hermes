@@ -32,12 +32,28 @@ function seccionHero(src: string): string {
   return src.slice(desde, hasta);
 }
 
+/**
+ * La sección SIN sus comentarios: lo que un lead ve, no lo que la próxima
+ * sesión lee.
+ *
+ * Existe porque el guard de abajo prohíbe nombrar al asistente en el hero, y
+ * el comentario que explica POR QUÉ salió lo nombra cinco veces. Sin esto, el
+ * gate obliga a borrar la historia del defecto para pasar en verde — la misma
+ * trampa que el barrido de palabras clave de Lucía encontró el 2026-09-04: un
+ * gate que no separa la pieza de la prosa hace reescribir la bitácora.
+ */
+function copyHero(src: string): string {
+  return seccionHero(src)
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, " ")
+    .replace(/\/\*[\s\S]*?\*\//g, " ");
+}
+
 describe("el hero de la portada se DIBUJA, no se captura", () => {
   it("encuentra la sección del hero", () => {
     const hero = seccionHero(PORTADA);
     expect(hero.length).toBeGreaterThan(500);
-    // el titular aprobado: si esto no está, el ancla apunta a otra cosa
-    expect(hero).toContain("El negocio <em>no</em>");
+    // el titular vigente: si esto no está, el ancla apunta a otra cosa
+    expect(hero).toContain("en <em>una</em> pantalla");
   });
 
   it.each([
@@ -51,6 +67,82 @@ describe("el hero de la portada se DIBUJA, no se captura", () => {
     expect(seccionHero(PORTADA), `el hero volvió a usar ${que}`).not.toMatch(
       patron,
     );
+  });
+
+  /**
+   * La OFERTA es el sistema de gestión; el asistente es un add-on de
+   * `lib/pricing.ts` y NUNCA el titular (CLAUDE.md §3, Sergio 2026-09-03:
+   * "el sistema no ofrece directamente el bot, ofrece solo el sistema").
+   *
+   * El hero anterior lo desobedecía entero y nadie lo veía: kicker "Un negocio
+   * abre 9 horas", el gráfico grande era el día partido en 9/15 —la escena que
+   * hace el asistente, no el plan— y cerraba con "El asistente es la puerta".
+   * El add-on de Bs 390 era el argumento y el sistema de Bs 320 el relleno.
+   *
+   * Se mira la PRIMERA PANTALLA, no la página: el asistente sigue teniendo su
+   * sección propia más abajo (6 · CHATBOT), que es donde le toca vender.
+   */
+  it("el titular vende el SISTEMA, no el asistente", () => {
+    const copy = copyHero(PORTADA);
+    // el ancla, ya sin comentarios: si esto falla, el filtro se comió el JSX
+    expect(copy).toContain("en <em>una</em> pantalla");
+    expect(copy, "el hero volvió a titular con el add-on").not.toMatch(
+      /asistente|chatbot|\bbot\b|recepcionista/i,
+    );
+  });
+
+  /**
+   * El <head> dice lo mismo que el hero, y por eso se vigila igual.
+   *
+   * No es simetría de estilo: el título de la pestaña, el snippet de Google y
+   * la tarjeta que se ve al compartir el link por WhatsApp son superficie de
+   * cliente que NINGUNA captura mira (medido el 2026-09-03 en /terminos: el
+   * cartel de borrador se sacó de la pantalla y la meta description lo siguió
+   * anunciando). Probando este mismo guard se inyectó "El asistente contesta"
+   * en `OG_TITULO` creyendo que iba al h1, y los doce tests pasaron en verde
+   * con el bot de titular en lo primero que ve un lead por WhatsApp.
+   */
+  it("la pestaña, el buscador y el link compartido tampoco titulan con el add-on", () => {
+    // sin comentarios, por lo mismo que `copyHero`: el JSDoc de `ADDONS_RESTO`
+    // cae dentro del tramo y nombra al chatbot cuatro veces
+    const head = PORTADA.slice(
+      PORTADA.indexOf("const DESDE_MES"),
+      PORTADA.indexOf("const ADDONS_RESTO"),
+    ).replace(/\/\*[\s\S]*?\*\//g, " ");
+    expect(head.length).toBeGreaterThan(300);
+    expect(head).toContain("Todo el negocio");
+    expect(head, "el <head> volvió a vender el asistente").not.toMatch(
+      /asistente|chatbot|\bbot\b|recepcionista/i,
+    );
+    // y el precio también acá sale de la fuente, no tipeado
+    expect(head).toMatch(/plan\("basico"\)\.mensual/);
+  });
+
+  /**
+   * El precio de entrada está en la primera pantalla y sale de la FUENTE.
+   *
+   * Es la mitad que faltaba del punto anterior: sacar al bot del titular sin
+   * poner qué se compra deja un hero que no vende nada. Lety y Dapta, miradas
+   * el 2026-09-03, ponen las dos un precio o un "empezá gratis" arriba.
+   *
+   * Interpolado, nunca tipeado: `precios.test.ts` prohíbe el literal en toda
+   * la app, y acá se exige además que el hero SÍ traiga el número.
+   */
+  it("el hero publica el precio de entrada, leído de lib/pricing", () => {
+    const hero = seccionHero(PORTADA);
+    expect(hero).toMatch(/plan\("basico"\)\.mensual/);
+    expect(hero).toMatch(/PRUEBA\.dias/);
+  });
+
+  /**
+   * La banda del día (9 h / 15 h) es el argumento del ASISTENTE, así que vive
+   * en su sección y no en la portada de la oferta. Si vuelve al hero, vuelve
+   * el problema entero: es la pieza más grande de la primera pantalla.
+   */
+  it("la banda del día ya no está en el hero", () => {
+    expect(seccionHero(PORTADA)).not.toMatch(/className=\{s\.day\}/);
+    // pero sigue viva en la página, con el add-on que la explica
+    expect(PORTADA).toMatch(/className=\{s\.day\}/);
   });
 
   it("las 9 horas y las 15 suman el día entero", () => {

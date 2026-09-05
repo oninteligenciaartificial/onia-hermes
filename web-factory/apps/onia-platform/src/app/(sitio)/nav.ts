@@ -82,18 +82,35 @@ export const NAV_HEADER: readonly NavItem[] = [
   { href: "/contacto", label: "Contacto" },
 ];
 
-/**
- * La pantalla de arranque vive DENTRO del sitio: no se sale a otro cromo.
- *
- * El DESTINO se cambia acá; la ETIQUETA del botón vive en `./alta` — porque no
- * depende de la ruta sino de lo que /register haga ese día. Ningún archivo del
- * sitio escribe ese verbo a mano: `alta.test.ts` lo verifica.
- */
-export const EMPEZAR_URL = "/empezar";
-
 /** Volver al sistema. El registro y el login son del producto, no del sitio. */
 export const LOGIN_URL = `${APP_URL}/login`;
 export const REGISTRO_URL = `${APP_URL}/register`;
+
+/**
+ * Dónde manda el botón del alta: al REGISTRO, en un clic.
+ *
+ * Hasta el 2026-09-04 esto valía `"/empezar"` y el comentario defendía la
+ * decisión: «la pantalla de arranque vive DENTRO del sitio, no se sale a otro
+ * cromo». Medido sobre el HTML servido, eso costaba **tres clics** para crear
+ * una cuenta: los nueve botones de la portada iban a `/empezar`, una segunda
+ * página de venta cuyo único botón vuelve a decir «Creá tu cuenta» y recién ahí
+ * salta a `app.onia.com.bo/register`. El paso que `/empezar` describía —«elegí
+ * tu rubro»— es literalmente la primera pantalla del registro, así que el lead
+ * leía dos veces lo mismo antes de poder escribir su correo.
+ *
+ * La referencia de cómo se vende (Sergio, 2026-09-03: lety.ai y dapta.ai de
+ * HOY) arranca en uno: Dapta va de la portada al registro en **1 clic**, Lety
+ * llega a la caja en 2.
+ *
+ * `/empezar` NO se baja —sigue publicada, en el sitemap y enlazada desde
+ * `NAV_DECIDIR`, porque su URL circula en firmas y `/prueba-gratis` le redirige
+ * con 308—: sale del CAMINO, no del sitio.
+ *
+ * La ETIQUETA del botón vive en `./alta` — no depende de la ruta sino de lo que
+ * /register haga ese día. Ningún archivo del sitio escribe ese verbo a mano ni
+ * su destino: `alta.test.ts` verifica las dos mitades.
+ */
+export const EMPEZAR_URL = REGISTRO_URL;
 
 /** Legales: existen una sola vez en el producto. Se linkean, no se copian. */
 export const NAV_LEGAL: readonly NavItem[] = [

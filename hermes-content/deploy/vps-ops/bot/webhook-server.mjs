@@ -42,6 +42,8 @@ import { parseChatwootWebhook, runChatwootTurn } from "./chatwoot-adapter.mjs";
 import { authenticateChatwootRequest, DEFAULT_TOLERANCE_SECONDS } from "./webhook-security.mjs";
 import { shouldProcessMessage, releaseMessage } from "./message-dedup.mjs";
 import { buildBotTurnEvent, fireN8nBotTurnEvent, getN8nEventConfig } from "./n8n-event.mjs";
+import { construirAviso, dispararAvisoTelegram, getAvisoTelegramConfig } from "./aviso-telegram.mjs";
+import { esEntranteReal, dispararUsoPlataforma, getUsoConfig } from "./uso-plataforma.mjs";
 import { knowledgeHealth } from "./knowledge.mjs";
 import { createStore } from "./persistence.mjs";
 import { handlePreviewRequest } from "./preview-route.mjs";
@@ -413,6 +415,14 @@ async function procesarWebhook(request, deps, datos) {
     };
   }
 
+  // 5b. EL CONTADOR DE LA CUOTA. La plataforma cuenta las conversaciones del add-on en su propio
+  // `POST /api/webhooks/chatwoot`, pero ese handler exige el header `X-Chatwoot-Secret` y
+  // Chatwoot no manda headers personalizados: por eso el aviso sale del motor, que sí puede.
+  // Va DESPUÉS del dedup a propósito (un reintento de Chatwoot no tiene que volver a contar) y
+  // viaja en el `outcome` para que el servidor lo dispare recién con la respuesta ya escrita.
+  // `rawBody` TAL CUAL: las reglas de conteo viven en la plataforma y en un solo lado.
+  const usoPlataforma = esEntranteReal(payload) ? rawBody : null;
+
   // 6. El turno. Fail-open: cualquier excepción inesperada tiene que terminar en 200, no en 500.
   const runFn = typeof deps.runChatwootTurn === "function" ? deps.runChatwootTurn : runChatwootTurn;
   let result;
@@ -434,6 +444,8 @@ async function procesarWebhook(request, deps, datos) {
     releaseFn(dedupKey);
     return {
       status: 200,
+      // El turno murió, pero el mensaje entró: la conversación se cuenta igual.
+      usoPlataforma,
       body: {
         ok: false,
         skipped: false,
@@ -454,7 +466,17 @@ async function procesarWebhook(request, deps, datos) {
     nowIso: deps.nowIso,
   });
 
-  return { status: 200, body: result, n8nEvent };
+  // El aviso a Sergio viaja SEPARADO del evento de n8n a propósito. Hasta hoy era un campo
+  // (`notifyCount`) adentro de ese evento, así que apagar n8n —que es analítica— apagaba también
+  // lo único del evento que NO es analítica: que hay una persona esperando que le contesten.
+  // Dos cosas distintas no pueden compartir un interruptor.
+  const avisoTelegram = construirAviso({
+    notify: result?.notify,
+    conversationId: result?.conversationId,
+    stageAfter: result?.stageAfter,
+  });
+
+  return { status: 200, body: result, n8nEvent, avisoTelegram, usoPlataforma };
 }
 
 // ---------------------------------------------------------------------------
@@ -523,6 +545,8 @@ function writeJson(res, status, payload) {
 export function createWebhookServer(deps = {}) {
   const config = deps.config || getServerConfig();
   const n8nConfig = deps.n8nConfig || getN8nEventConfig();
+  const avisoConfig = deps.avisoConfig || getAvisoTelegramConfig();
+  const usoConfig = deps.usoConfig || getUsoConfig();
   const handle = typeof deps.handle === "function" ? deps.handle : handleChatwootWebhook;
   const fireEvent = typeof deps.fireEvent === "function" ? deps.fireEvent : fireN8nBotTurnEvent;
   const log = typeof deps.log === "function" ? deps.log : (line) => process.stdout.write(`${line}\n`);
@@ -648,6 +672,38 @@ export function createWebhookServer(deps = {}) {
         });
       } catch (error) {
         log(`[n8n] no se pudo disparar el evento: ${String(error?.message || error)}`);
+      }
+    }
+
+    // El aviso a Sergio. Fire-and-forget igual que el de arriba, pero con su propio interruptor:
+    // esto NO es analítica, es alguien esperando. Deja línea siempre —enviado o no— porque el
+    // modo de falla de este carril es justamente el aviso que no sale y nadie lo nota.
+    if (outcome.avisoTelegram) {
+      try {
+        dispararAvisoTelegram(outcome.avisoTelegram, avisoConfig, deps, (result) => {
+          const motivos = outcome.avisoTelegram.motivos.join(",");
+          // `conv=` va SIEMPRE, y sobre todo cuando el aviso no salió: esa línea es lo único que
+          // queda de una persona a la que el bot le prometió que Sergio le escribe. Sin el número
+          // no se puede ir a buscarla después.
+          const conv = outcome.avisoTelegram.conversationId ?? "?";
+          log(`[aviso] ${result?.status} conv=${conv} (${motivos}): ${result?.reason}`);
+        });
+      } catch (error) {
+        log(`[aviso] no se pudo disparar: ${String(error?.message || error)}`);
+      }
+    }
+
+    // El contador de la cuota. Fire-and-forget igual que los dos de arriba y con su propio fetch
+    // (`deps.fetchUso`): compartir el de n8n haría que apuntar uno mueva al otro. Sólo se loguea
+    // cuando NO se contó — un `sent` por mensaje sería ruido; el silencio por falta de
+    // configuración se dice UNA vez (`repetido`), porque lo que no se cuenta no se factura.
+    if (outcome.usoPlataforma) {
+      try {
+        dispararUsoPlataforma(outcome.usoPlataforma, usoConfig, { fetch: deps.fetchUso }, (result) => {
+          if (result?.ok === false && result?.repetido !== true) log(`[uso] ${result.reason}`);
+        });
+      } catch (error) {
+        log(`[uso] no se pudo disparar: ${String(error?.message || error)}`);
       }
     }
   });

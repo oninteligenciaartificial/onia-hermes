@@ -53,6 +53,12 @@ const RE_PRECIO = new RegExp(
     "\\bpresupuesto\\b",
     "\\bcobran\\b|\\bcobras\\b",
     "\\bque (?:precio|costo)\\b",
+    // "¿que planes tienen?" es la misma pregunta que "¿cuanto cuesta?" y hasta el 2026-09-03 caia
+    // en el LLM, que contesta el texto seguro: el prospecto preguntaba por plata y se iba sin una
+    // cifra. Va ACOTADO a proposito — "plan" suelto se traga "mi plan es abrir otra sucursal".
+    "\\b(?:que|cuales|cuantos)\\s+planes\\b",
+    "\\bplanes?\\s+(?:tienen|hay|manejan|ofrecen|tenes|tienes)\\b",
+    "\\blista de precios\\b",
   ].join("|"),
 );
 

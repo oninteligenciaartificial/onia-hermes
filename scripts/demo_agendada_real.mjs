@@ -57,12 +57,25 @@
 
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
+import { pathToFileURL } from 'node:url';
+
+// ⚠️ Se IMPORTA, no se copia. "Quienes somos nosotros" (el celular de Sergio, los contactos de
+// prueba) ya esta decidido y probado en `objetivo_visible.mjs`, y CLAUDE.md pide una sola fuente
+// de verdad por tema: dos listas de lo mismo divergen el dia que alguien agrega un numero a una.
+// Ese modulo no dispara nada al importarlo — su `main` esta detras de la guarda de `argv[1]`.
+import { esNuestra } from './objetivo_visible.mjs';
 
 /** La base del MOTOR del bot, que NO es la de Chatwoot: `onia_center.bot_conversations`. */
 const ESTADO_DB = process.env.ONIA_BOT_ESTADO_DB || 'supabase-db';
 
 /** La base de CHATWOOT, donde viven los mensajes que el bot mando de verdad. */
 const CHATWOOT_DB = process.env.ONIA_CHATWOOT_DB_CONTAINER || 'onia-chatbot_chatwoot-db';
+
+/** El contenedor donde CORRE el webhook del bot (no es donde vive el repo: `/opt` es el origen). */
+const BOT_CONTENEDOR = process.env.ONIA_BOT_CONTENEDOR || 'onia-center';
+
+/** El log del webhook. Se abre con `>>`, asi que sobrevive a los reinicios del proceso. */
+const BOT_LOG = process.env.ONIA_BOT_LOG || '/tmp/onia-bot-webhook.log';
 
 /** El guion del bot: de ahi sale la frase de la promesa, para no hardcodearla. */
 const CONFIG_DEL_BOT =
@@ -82,6 +95,24 @@ const CONFIG_DEL_BOT =
  * @param {string} textoConfig  el contenido de `config.mjs`
  * @returns {string|null} el prefijo literal de la promesa, o null si el guion no la tiene
  */
+/**
+ * Un instante en milisegundos, tolerando el formato que devuelve Postgres.
+ *
+ * ⚠️ Existe por una trampa medida el 2026-09-04: `psql` imprime `2026-09-03 15:09:34+00` y
+ * `Date.parse` devuelve **NaN** con ese offset de dos digitos (necesita `+00:00` o `Z`). Sin
+ * esto, toda comparacion de fechas de este gate era `NaN < corte` = false, o sea que ninguna
+ * promesa podia clasificarse nunca como historica. Fallaba del lado seguro —rojo de mas, no de
+ * menos— y por eso no se veia: el veredicto seguia pareciendo razonable.
+ *
+ * @param {string} valor  `2026-09-03 15:09:34+00`, ISO, o cualquier cosa parseable
+ * @returns {number} milisegundos, o NaN si no se pudo leer
+ */
+export function instante(valor) {
+  const crudo = String(valor || '').trim().replace(' ', 'T');
+  // `+00` / `-04` → `+00:00` / `-04:00`. Los que ya traen minutos o `Z` no se tocan.
+  return Date.parse(crudo.replace(/([+-]\d{2})$/, '$1:00'));
+}
+
 export function frasePromesa(textoConfig) {
   const m2 = /M2:\s*\[\s*"([^"]*)"/.exec(String(textoConfig || ''));
   if (!m2) return null;
@@ -98,10 +129,26 @@ export function frasePromesa(textoConfig) {
  * cada hora sobre la misma conversacion que mide. Un gate cuya evidencia puede desaparecer sola
  * no es un gate: es un permiso. Ahora la lista sale de `messages` de Chatwoot, que es append-only.
  *
+ * ⚠️ "Le llego a Sergio" tiene DOS caminos, y el gate mide los dos porque Sergio eligio uno de
+ * ellos a proposito. En t_b18ca430 decidio la opcion (a) —aviso por Telegram, SIN calendario— y
+ * dejo Cal.com para cuando moleste anotar a mano. O sea que `calendar_event_id` va a quedar NULL
+ * POR DISENO: exigir la reserva como unica prueba deja este gate rojo para siempre contra un
+ * mecanismo que se descarto. Una promesa esta cumplida si tiene reserva **o** si salio su aviso.
+ *
+ * ⚠️ Y se mira la FECHA del fallo, no solo su existencia. Los sujetos salen de `messages`, que es
+ * append-only: eso cerro un gate que fallaba abierto, pero abrio el defecto simetrico — una
+ * promesa hueca de hace seis dias no se puede desdecir, asi que el veredicto quedaba ROJO PARA
+ * SIEMPRE por algo que ya no esta pasando. Es como se dejo de creer al vigia del embudo, que
+ * reportaba como incidente activo errores de seis dias antes. Lo viejo se NOMBRA igual (callarlo
+ * seria volver a fallar abierto), pero no enrojece: el corte es si el canal de aviso ya existia
+ * cuando se hizo la promesa.
+ *
  * @param {Array<{conversationId:number, texto:string, creado:string}>} promesas  lo que el bot dijo
  * @param {Record<string,string>} reservas  conversation_key → calendar_event_id del motor
+ * @param {Record<number,boolean>} avisos   conversationId → salio el aviso a Sergio
+ * @param {string|null} avisoDesde          desde cuando existe el canal de aviso; null = no hay
  */
-export function juzgar(promesas, reservas) {
+export function juzgar(promesas, reservas, avisos = {}, avisoDesde = null) {
   if (!Array.isArray(promesas) || !reservas || typeof reservas !== 'object') {
     return { codigo: 2, texto: 'NO SE PUDO MEDIR — la consulta no devolvio lo que se esperaba' };
   }
@@ -111,22 +158,78 @@ export function juzgar(promesas, reservas) {
     return { codigo: 0, texto: 'SIN DEMOS AGENDADAS — nadie llego todavia al turno de elegir horario. Nada que verificar, y tampoco nada que festejar.' };
   }
 
-  // Sin reserva a nombre de esa conversacion, la promesa esta hueca. Que la fila no exista pesa
-  // igual que que exista vacia: en los dos casos no hay nada reservado y alguien fue invitado.
-  const huecas = promesas.filter((p) => !String(reservas[`chatwoot:${p.conversationId}`] || '').trim());
+  // Sin reserva NI aviso a nombre de esa conversacion, la promesa esta hueca. Que la fila no
+  // exista pesa igual que que exista vacia: en los dos casos no hay nada reservado y alguien fue
+  // invitado. El aviso cuenta como cumplimiento porque es el canal que Sergio eligio (opcion a).
+  const reservada = (p) => Boolean(String(reservas[`chatwoot:${p.conversationId}`] || '').trim());
+  const avisada = (p) => Boolean(avisos && avisos[p.conversationId]);
+  const huecas = promesas.filter((p) => !reservada(p) && !avisada(p));
   if (huecas.length === 0) {
-    return { codigo: 0, texto: `LAS ${promesas.length} DEMOS PROMETIDAS EXISTEN — todas tienen su reserva.` };
+    return {
+      codigo: 0,
+      texto: `LAS ${promesas.length} DEMOS PROMETIDAS LLEGARON A SERGIO — cada una tiene su reserva o su aviso.`,
+    };
   }
 
-  const detalle = huecas
-    .map((p) => `conv ${p.conversationId} ("${String(p.texto || '').replace(/\*/g, '').trim()}")`)
-    .join(' · ');
+  const describir = (p) =>
+    `conv ${p.conversationId} «${String(p.contacto || '').trim() || 'sin nombre'}» ` +
+    `("${String(p.texto || '').replace(/\*/g, '').trim()}")`;
+
+  // ── La fecha del fallo ──────────────────────────────────────────────────────────────────────
+  // Sin canal de aviso no se puede declarar nada "historico": ese es el PEOR estado posible, no
+  // uno tolerable — significa que ninguna demo puede llegar a Sergio por ningun camino. Ahi todas
+  // las huecas cuentan como activas y se dice por que.
+  const corte = avisoDesde ? instante(avisoDesde) : NaN;
+  const esHistorica = (p) =>
+    Number.isFinite(corte) && Number.isFinite(instante(p.creado)) && instante(p.creado) < corte;
+
+  const activas = huecas.filter((p) => !esHistorica(p));
+  const historicas = huecas.filter(esHistorica);
+
+  // Lo viejo se nombra SIEMPRE, salga verde o rojo: un gate que se calla sobre lo que decidio no
+  // contar es el mismo fallo abierto que este archivo vino a cerrar, con mejor presentacion.
+  const colaHistorica = historicas.length
+    ? ` No cuento como incidente activo ${historicas.length} promesa(s) anteriores al canal de aviso ` +
+      `(${historicas.map(describir).join(' · ')}): es historia, ya no se puede rescatar y repetirla ` +
+      `como alarma es como se deja de creer a un vigia.`
+    : '';
+
+  if (activas.length === 0) {
+    return {
+      codigo: 0,
+      texto:
+        `SIN DEMOS HUECAS NUEVAS — desde que existe el aviso a Sergio, toda promesa tuvo su ` +
+        `reserva o su aviso.${colaHistorica}`,
+    };
+  }
+
+  const detalle = activas.map(describir).join(' · ');
+
+  // QUIEN esta del otro lado. Un rojo de la sonda de QA y un rojo de un lead real valen distinto
+  // para el que lo lee, y hasta hoy se leian igual: el gate cerraba SIEMPRE con "alguien va a
+  // llegar a una reunion vacia", frase que el 2026-09-03 era falsa (la unica hueca era la sonda).
+  // Un vigia que grita mal no molesta: INUTILIZA, y a este ya se le habia dejado de creer una vez.
+  //
+  // ⚠️ Se informa, NO se filtra: el codigo es 1 en los dos casos. Sacar a la sonda de los sujetos
+  // devolveria el gate a fallar abierto — el bug que la vuelta anterior cerro.
+  const humanas = activas.filter((p) => !esNuestra(p));
+  const cierre = humanas.length
+    ? 'El bot lo dijo y no hay reserva ni aviso a Sergio. ' +
+      'Del otro lado hay alguien que va a llegar a una reunion vacia.'
+    : 'El bot lo dijo y no hay reserva ni aviso a Sergio. Hoy son TODAS de la sonda QA de este ' +
+      'carril, asi que no hay nadie plantado — pero el motor prometio exactamente lo mismo que le ' +
+      'prometeria a un lead, y por eso sigue en rojo.';
+
+  // Que NO haya canal es una causa distinta de que el canal haya fallado, y se arreglan en
+  // lugares opuestos: una se arregla encendiendo el aviso, la otra mirando por que no salio.
+  const sinCanal = avisoDesde
+    ? ''
+    : ' Y no hay NINGUN canal de aviso activo: ni calendario ni Telegram, asi que hoy ninguna ' +
+      'demo puede llegar a Sergio por ningun camino.';
+
   return {
     codigo: 1,
-    texto:
-      `${huecas.length} de ${promesas.length} DEMO(S) PROMETIDAS QUE NO EXISTEN: ${detalle}. ` +
-      'El bot lo dijo y no hay reserva ni aviso a Sergio. ' +
-      'Del otro lado hay alguien que va a llegar a una reunion vacia.',
+    texto: `${activas.length} de ${promesas.length} DEMO(S) PROMETIDAS QUE NO EXISTEN: ${detalle}. ${cierre}${sinCanal}${colaHistorica}`,
   };
 }
 
@@ -137,17 +240,23 @@ export function juzgar(promesas, reservas) {
  */
 export function leerPromesas(frase, exec = ejecutarSqlChatwoot) {
   if (!frase) throw new Error('no encontre la promesa de reserva (M2) en el guion del bot');
+  // El contacto va ANTES del texto libre a proposito: `-tA` separa con `|` y no escapa nada, asi
+  // que un `|` dentro del mensaje del bot correria las columnas y le atribuiria la promesa a otro.
+  // Con el texto ultimo, lo que sobre se vuelve a pegar y ningun campo se contamina.
   const crudo = exec(
-    `select conversation_id, created_at, replace(left(content, 120), '\n', ' ') from messages ` +
-      `where message_type = 1 and content like '%${frase.replace(/'/g, "''")}%' order by created_at;`,
+    `select m.conversation_id, m.created_at, coalesce(ct.name, ''), coalesce(ct.phone_number, ''), ` +
+      `replace(left(m.content, 120), '\n', ' ') ` +
+      `from messages m join conversations c on c.id = m.conversation_id ` +
+      `left join contacts ct on ct.id = c.contact_id ` +
+      `where m.message_type = 1 and m.content like '%${frase.replace(/'/g, "''")}%' order by m.created_at;`,
   );
   return String(crudo)
     .split('\n')
     .map((l) => l.trim())
     .filter(Boolean)
     .map((linea) => {
-      const [conversationId, creado, texto] = linea.split('|');
-      return { conversationId: Number(conversationId), creado, texto };
+      const [conversationId, creado, contacto, telefono, ...resto] = linea.split('|');
+      return { conversationId: Number(conversationId), creado, contacto, telefono, texto: resto.join('|') };
     });
 }
 
@@ -191,6 +300,48 @@ function ejecutarSqlMotor(sql) {
   });
 }
 
+/**
+ * Los avisos a Sergio que SALIERON, leidos del log del webhook.
+ *
+ * ⚠️ Las lineas `[aviso]` NO llevan fecha propia: la sacan de la linea `[onia-webhook]` que las
+ * precede, que es el turno que las produjo. Por eso se recorre el log en orden y se arrastra la
+ * ultima fecha vista, en vez de intentar parsear cada linea sola.
+ *
+ * `desde` es la fecha del primer aviso que se ENVIO de verdad, y no la del primer `[aviso]` de
+ * cualquier tipo, a proposito: las primeras lineas del log son `skipped ... apagado
+ * (ONIA_BOT_TG_AVISO)`, que prueban que el codigo corria pero el canal estaba CERRADO. Tomar
+ * esas como "desde aca hay canal" excusaria como historicas promesas que de verdad no le
+ * llegaron a nadie. Si nunca salio ninguno, `desde` es null y el gate no excusa nada.
+ *
+ * @param {string[]} lineas  el log, en orden
+ * @returns {{avisos: Record<number, boolean>, desde: string|null}}
+ */
+export function leerAvisos(lineas) {
+  const avisos = {};
+  let ultimaFecha = null;
+  let desde = null;
+  for (const linea of Array.isArray(lineas) ? lineas : []) {
+    const fecha = /(\d{4}-\d{2}-\d{2}T[\d:.]+Z)/.exec(linea);
+    if (fecha) ultimaFecha = fecha[1];
+    if (!String(linea).startsWith('[aviso]')) continue;
+    if (!/\bsent\b/.test(linea)) continue;
+    if (!desde) desde = ultimaFecha;
+    const conv = /conv=(\d+)/.exec(linea);
+    if (conv) avisos[Number(conv[1])] = true;
+  }
+  return { avisos, desde };
+}
+
+/** El log del webhook vivo. Solo lectura: `grep` dentro del contenedor, no toca nada. */
+function leerLogDelBot() {
+  const crudo = execFileSync(
+    'docker',
+    ['exec', BOT_CONTENEDOR, 'sh', '-c', `grep -E '^\\[aviso\\]|^\\[onia-webhook\\]' ${BOT_LOG} 2>/dev/null || true`],
+    { encoding: 'utf8', timeout: 30_000, maxBuffer: 32 * 1024 * 1024 },
+  );
+  return String(crudo).split('\n');
+}
+
 function ejecutarSqlChatwoot(sql) {
   return execFileSync('docker', ['exec', '-i', contenedor(CHATWOOT_DB), 'psql', '-U', 'postgres', '-d', 'onia-chatbot', '-tAc', sql], {
     encoding: 'utf8',
@@ -232,10 +383,23 @@ function selfCheck() {
   afirmar('sin mapa de reservas sale 2', juzgar([], null).codigo === 2);
 
   // El parseo de los mensajes, con el separador de psql `-tA`.
-  const proms = leerPromesas('Listo, agendado:', () => '49|2026-09-04 18:00:00+00|Listo, agendado: **viernes 4**.\n9|2026-09-05 13:00:00+00|Listo, agendado: **sabado 5**.\n');
+  const proms = leerPromesas(
+    'Listo, agendado:',
+    () =>
+      '49|2026-09-04 18:00:00+00|Sonda QA carril chatbot||Listo, agendado: **viernes 4**.\n' +
+      '9|2026-09-05 13:00:00+00|Mario Hassen|+59173021804|Listo, agendado: **sabado 5**.\n',
+  );
   afirmar('parsea las dos promesas', proms.length === 2);
   afirmar('la primera es la conv 49', proms[0].conversationId === 49);
   afirmar('conserva el texto prometido', proms[1].texto.includes('sabado 5'));
+  afirmar('lee el nombre del contacto', proms[0].contacto === 'Sonda QA carril chatbot');
+  afirmar('lee el telefono del contacto', proms[1].telefono === '+59173021804');
+  afirmar('un contacto sin nombre queda vacio, no undefined', proms[1].contacto === 'Mario Hassen' && proms[0].telefono === '');
+  // `-tA` no escapa NADA: un `|` dentro del mensaje partiria la fila y le colgaria la promesa a
+  // otro contacto. Por eso el texto es la ULTIMA columna y lo que sobra se vuelve a pegar.
+  const conBarra = leerPromesas('Listo, agendado:', () => '5|2026-09-06 12:00:00+00|Ana|+591700|Listo, agendado: **lunes** | confirmo con Sergio\n');
+  afirmar('un `|` en el mensaje no corre las columnas', conBarra[0].contacto === 'Ana');
+  afirmar('un `|` en el mensaje no se pierde del texto', conBarra[0].texto === 'Listo, agendado: **lunes** | confirmo con Sergio');
   afirmar('sin frase no consulta nada', (() => { try { leerPromesas(null, () => ''); return false; } catch { return true; } })());
 
   // El parseo del mapa de reservas.
@@ -294,6 +458,148 @@ function selfCheck() {
   afirmar('la frase sale de M2 del guion', frasePromesa('  M2: [\n    "Listo, agendado: **{{dia_hora_elegida}}**.",\n') === 'Listo, agendado:');
   afirmar('un guion sin M2 no se inventa una frase', frasePromesa('M7: ["otra cosa"]') === null);
 
+  // ── QUIEN esta del otro lado: un rojo de QA y un rojo de un lead no se leen igual ──────────
+  //
+  // El gate salia siempre con la misma frase final —"Del otro lado hay alguien que va a llegar a
+  // una reunion vacia"— y el 2026-09-03 esa frase era FALSA: la unica promesa hueca era la conv
+  // 49, o sea `Sonda QA carril chatbot`, el instrumento de este mismo carril. Nadie humano iba a
+  // ninguna reunion. Un vigia que grita mal no molesta: INUTILIZA — es exactamente como se dejo
+  // de creerle al vigia del embudo, que reportaba como incidente activo lo de seis dias antes.
+  //
+  // ⚠️ Se INFORMA, no se filtra. El codigo de salida es 1 en los dos casos: excluir a la sonda de
+  // los sujetos devolveria el gate a fallar ABIERTO, que es el bug que la vuelta anterior cerro.
+  // Lo unico que cambia es la frase, que es lo que decide si Sergio deja todo y actua.
+  const sonda = { conversationId: 49, texto: 'Listo, agendado: **viernes 4**.', contacto: 'Sonda QA carril chatbot' };
+  const lead = { conversationId: 51, texto: 'Listo, agendado: **sabado 5**.', contacto: 'Mario Hassen', telefono: '+59173021804' };
+
+  const soloQa = juzgar([sonda], { 'chatwoot:49': '' });
+  afirmar('la hueca de QA sigue siendo rojo', soloQa.codigo === 1);
+  afirmar('nombra al contacto de la promesa hueca', soloQa.texto.includes('Sonda QA carril chatbot'));
+  afirmar('no inventa un humano esperando cuando es la sonda', !/reunion vacia/i.test(soloQa.texto));
+  afirmar('dice que el motor hizo lo incorrecto igual', /sonda|QA/i.test(soloQa.texto));
+
+  const soloLead = juzgar([lead], { 'chatwoot:51': '' });
+  afirmar('la hueca de un desconocido es rojo', soloLead.codigo === 1);
+  afirmar('nombra al desconocido', soloLead.texto.includes('Mario Hassen'));
+  afirmar('con un desconocido SI avisa de la reunion vacia', /reunion vacia/i.test(soloLead.texto));
+
+  // Una sola persona real entre diez de QA tiene que gritar igual de fuerte.
+  const mezclada = juzgar([sonda, lead], { 'chatwoot:49': '', 'chatwoot:51': '' });
+  afirmar('una real entre varias de QA grita igual', /reunion vacia/i.test(mezclada.texto));
+  afirmar('la mezcla nombra a los dos', mezclada.texto.includes('Sonda QA') && mezclada.texto.includes('Mario Hassen'));
+
+  // ⚠️ El sesgo elegido, y va al reves que en `objetivo_visible.mjs` a proposito: alli "parece
+  // nuestro" pone el gate MAS rojo; aca bajaria el volumen. Por eso un contacto que no se pudo
+  // leer se trata como PERSONA REAL: desconocido = se grita. Equivocarse gritando se investiga
+  // en un minuto; equivocarse callando deja a alguien plantado en una reunion que no existe.
+  const anonima = juzgar([{ conversationId: 7, texto: 'Listo, agendado: **lunes**.' }], { 'chatwoot:7': '' });
+  afirmar('sin nombre de contacto se lee como persona real', /reunion vacia/i.test(anonima.texto));
+  afirmar('sin nombre lo dice en vez de inventar uno', /sin nombre/i.test(anonima.texto));
+
+  // El telefono de Sergio tambien somos nosotros: el predicado es el MISMO que usa el otro gate.
+  const sergio = juzgar([{ conversationId: 11, texto: 'Listo, agendado: **martes**.', contacto: 'Sergio', telefono: '+591 716-54992' }], {});
+  afirmar('el telefono de Sergio no cuenta como lead esperando', !/reunion vacia/i.test(sergio.texto));
+
+  // ── Importar este modulo NO puede tocar produccion ─────────────────────────────────────────
+  //
+  // Sin la guarda de `argv[1]`, cargar el archivo corria el gate entero (dos `docker exec`) y
+  // llamaba a `process.exit()`, matando al proceso que importaba antes de su primera linea.
+  // Se prueba en un hijo porque en este proceso el modulo ya esta cargado y cacheado.
+  {
+    const hijo = execFileSync(
+      process.execPath,
+      ['-e', `import(${JSON.stringify(import.meta.url)}).then(() => console.log('IMPORTADO'))`],
+      { encoding: 'utf8', timeout: 60_000 },
+    );
+    afirmar('importar el modulo no dispara la medicion contra produccion', hijo.includes('IMPORTADO'));
+  }
+
+  // ── El aviso a Sergio: el gate lo AFIRMABA sin medirlo nunca ───────────────────────────────
+  //
+  // Medido el 2026-09-04: el cierre del veredicto decia "no hay reserva ni aviso a Sergio" en
+  // TODOS los casos, y este archivo no leia el aviso por ningun lado. Cuando se escribio era
+  // cierto por accidente (`ONIA_N8N_ENABLED=false`, no habia canal). Ya no: `aviso-telegram.mjs`
+  // esta desplegado, `ONIA_BOT_TG_AVISO=true` en el proceso vivo, y el log tiene
+  // `[aviso] sent conv=57`. Un gate que asegura como hecho algo que no mide miente en la
+  // direccion cara: manda a arreglar un canal que YA funciona.
+  //
+  // Y hay una decision de por medio que el gate no habia incorporado: Sergio eligio la opcion
+  // (a) —aviso por Telegram, SIN calendario— y dejo Cal.com para despues (t_b18ca430). O sea que
+  // `calendar_event_id` va a ser NULL POR DISENO. Exigir la reserva como unica prueba deja al
+  // gate rojo para siempre contra un mecanismo que se descarto a proposito.
+  const conAviso = juzgar([promesa], { 'chatwoot:49': '' }, { 49: true }, '2026-09-01T00:00:00Z');
+  afirmar('una promesa avisada por Telegram NO es una promesa hueca', conAviso.codigo === 0);
+  afirmar('el verde por aviso lo dice explicito', /aviso/i.test(conAviso.texto));
+
+  const sinNada = juzgar([promesa], { 'chatwoot:49': '' }, {}, '2026-09-01T00:00:00Z');
+  afirmar('sin reserva Y sin aviso sigue siendo rojo', sinNada.codigo === 1);
+
+  // ── La FECHA del fallo, no solo su existencia ──────────────────────────────────────────────
+  //
+  // Los sujetos salen de `messages`, que es append-only — eso arreglo un gate que fallaba
+  // abierto, pero introdujo el defecto simetrico: una promesa hueca de hace seis dias NO se
+  // puede desdecir, asi que el gate queda ROJO PARA SIEMPRE por algo que ya no esta pasando.
+  // Es exactamente como se dejo de creer al vigia del embudo, que reportaba como incidente
+  // activo errores de hasta seis dias antes: un vigia que grita mal no molesta, INUTILIZA.
+  //
+  // La linea no es arbitraria: una promesa hecha ANTES de que existiera el canal de aviso no
+  // prueba nada sobre el sistema de hoy. Una hecha DESPUES, sin reserva y sin aviso, si.
+  const vieja = { conversationId: 49, texto: 'Listo, agendado: **viernes 4**.', creado: '2026-09-03 15:09:34+00', contacto: 'Sonda QA carril chatbot' };
+  const historica = juzgar([vieja], { 'chatwoot:49': '' }, {}, '2026-09-04T14:36:00Z');
+  afirmar('una promesa anterior al canal de aviso no es un incidente activo', historica.codigo === 0);
+  afirmar('pero NO se la silencia: se la nombra igual', /49/.test(historica.texto));
+  afirmar('y dice que es historia, no que este todo bien', /histori|antes de/i.test(historica.texto));
+
+  const nueva = { conversationId: 60, texto: 'Listo, agendado: **lunes 7**.', creado: '2026-09-04T16:00:00+00', contacto: 'Mario Hassen' };
+  const activa = juzgar([nueva], { 'chatwoot:60': '' }, {}, '2026-09-04T14:36:00Z');
+  afirmar('una promesa posterior al canal, sin aviso, es rojo', activa.codigo === 1);
+  afirmar('la activa avisa de la reunion vacia', /reunion vacia/i.test(activa.texto));
+
+  // ⚠️ El caso que NO puede fallar abierto: si no hay NINGUN canal (ni calendario ni aviso),
+  // no alcanza con declarar todo "historico" y salir verde — ese es el peor estado posible,
+  // porque significa que ninguna demo puede llegar a Sergio por ningun camino.
+  const sinCanal = juzgar([vieja], { 'chatwoot:49': '' }, {}, null);
+  afirmar('sin canal de aviso alguno el gate NO se pone verde', sinCanal.codigo === 1);
+  afirmar('y dice que el problema es que no hay canal', /canal/i.test(sinCanal.texto));
+
+  // ── Leer el aviso del log, que es de donde sale la evidencia de verdad ─────────────────────
+  //
+  // Las lineas reales del 2026-09-04, con su forma exacta: el `[aviso]` va SIN fecha propia y
+  // hereda la del turno que lo produjo. Pegar aca lineas inventadas dejaria el parser probado
+  // contra un formato que el bot no escribe.
+  const log = [
+    '[onia-webhook] 2026-09-04T06:38:24.196Z conv=55 msg=438 estado=200 rama=respondio etapa=nuevo->handoff_humano enviados=1/1',
+    '[aviso] skipped (pregunta_precio_recepcion): aviso por Telegram apagado (ONIA_BOT_TG_AVISO)',
+    '[onia-webhook] 2026-09-04T14:38:10.922Z conv=57 msg=458 estado=200 rama=respondio etapa=nuevo->handoff_humano enviados=2/2',
+    '[aviso] sent conv=57 (pidio_humano_recepcion): aviso enviado',
+  ];
+  const leido = leerAvisos(log);
+  afirmar('el aviso enviado queda registrado por conversacion', leido.avisos[57] === true);
+  afirmar('un aviso SALTEADO no cuenta como enviado', leido.avisos[55] !== true);
+  afirmar('el aviso hereda la fecha de su turno', leido.desde === '2026-09-04T14:38:10.922Z');
+
+  // ⚠️ El caso que decide si el gate excusa de mas: mientras el canal estuvo APAGADO, sus lineas
+  // dicen `skipped ... apagado`. Si esas contaran como "desde aca hay canal", toda promesa
+  // posterior al primer skipped quedaria excusada como historica sin que nadie la avisara nunca.
+  const soloApagado = leerAvisos([
+    '[onia-webhook] 2026-09-03T10:00:00.000Z conv=49 estado=200',
+    '[aviso] skipped (cuota_agotada): aviso por Telegram apagado (ONIA_BOT_TG_AVISO)',
+  ]);
+  afirmar('con el canal apagado no hay fecha de canal', soloApagado.desde === null);
+  afirmar('y sin fecha de canal nada se excusa como historico', juzgar([vieja], { 'chatwoot:49': '' }, soloApagado.avisos, soloApagado.desde).codigo === 1);
+  afirmar('un log vacio no inventa un canal', leerAvisos([]).desde === null);
+
+  // La fecha de Postgres, que es la que este gate lee de verdad. `Date.parse` da NaN con `+00`:
+  // sin normalizarla, NINGUNA promesa podia clasificarse como historica y el corte por fecha era
+  // codigo muerto que parecia vivo.
+  afirmar('la fecha de psql (+00) se parsea', Number.isFinite(instante('2026-09-03 15:09:34+00')));
+  afirmar('el ISO con Z se sigue parseando', Number.isFinite(instante('2026-09-04T14:36:00Z')));
+  afirmar('+00 y +00:00 son el mismo instante', instante('2026-09-03 15:09:34+00') === instante('2026-09-03T15:09:34+00:00'));
+  afirmar('una fecha ilegible es NaN, no cero', !Number.isFinite(instante('cuando sea')));
+
+  // Compatibilidad: los llamadores viejos (3 argumentos o menos) no pueden quedar en verde falso.
+  afirmar('sin argumentos de aviso se comporta como antes', juzgar([promesa], { 'chatwoot:49': '' }).codigo === 1);
+
   const fallados = casos.filter((c) => !c.ok);
   for (const c of fallados) console.error(`FALLO: ${c.nombre}`);
   console.log(`${casos.length - fallados.length}/${casos.length} casos`);
@@ -302,16 +608,24 @@ function selfCheck() {
 
 // ---------------------------------------------------------------------------
 
-if (process.argv.includes('--self-check')) {
-  process.exit(selfCheck());
-}
+// ⚠️ Solo mide en VIVO si se lo invoca como programa. Sin esta guarda, un `import` de `juzgar`
+// —para probar el veredicto con datos reales, o desde otro gate— dispara dos `docker exec`
+// contra produccion y un `process.exit()` como efecto de CARGAR el modulo: el proceso que
+// importa se muere antes de correr su propia linea. Medido el 2026-09-03 intentando justamente
+// eso. `objetivo_visible.mjs` ya tenia la guarda y este archivo la copio sin ella.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  if (process.argv.includes('--self-check')) {
+    process.exit(selfCheck());
+  }
 
-let veredicto;
-try {
-  const frase = frasePromesa(readFileSync(CONFIG_DEL_BOT, 'utf8'));
-  veredicto = juzgar(leerPromesas(frase), leerReservas());
-} catch (e) {
-  veredicto = { codigo: 2, texto: `NO SE PUDO MEDIR — ${e.message}` };
+  let veredicto;
+  try {
+    const frase = frasePromesa(readFileSync(CONFIG_DEL_BOT, 'utf8'));
+    const { avisos, desde } = leerAvisos(leerLogDelBot());
+    veredicto = juzgar(leerPromesas(frase), leerReservas(), avisos, desde);
+  } catch (e) {
+    veredicto = { codigo: 2, texto: `NO SE PUDO MEDIR — ${e.message}` };
+  }
+  console.log(veredicto.texto);
+  process.exit(veredicto.codigo);
 }
-console.log(veredicto.texto);
-process.exit(veredicto.codigo);

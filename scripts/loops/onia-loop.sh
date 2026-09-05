@@ -133,6 +133,11 @@ case "$NOMBRE" in
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
   contenido-cola)
+    # Ahorro 2026-09-04: Sergio pidió enfocar la cuota en lo vendible. Este carril no
+    # escribe código de producto (mide, publica o redacta), así que no necesita el
+    # modelo más caro: 13 de 15 loops corrían en opus/max y 3 se llevaban el 58 %%.
+    MODELO=claude-sonnet-5
+    ESFUERZO=medium
     # Carril CONTENIDO (Lucia, @oniahq, marca personal). Vivia en la app de Claude
     # Code de la laptop de Sergio y se mudo al VPS el 2026-09-02, con su OK.
     #
@@ -152,6 +157,11 @@ case "$NOMBRE" in
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
   lucia)
+    # Ahorro 2026-09-04: Sergio pidió enfocar la cuota en lo vendible. Este carril no
+    # escribe código de producto (mide, publica o redacta), así que no necesita el
+    # modelo más caro: 13 de 15 loops corrían en opus/max y 3 se llevaban el 58 %%.
+    MODELO=claude-sonnet-5
+    ESFUERZO=medium
     # Carril Lucia / modelos (Higgsfield). Era una sesion de Windows: se mudo al
     # VPS el 2026-09-02 para que corra con la laptop apagada.
     # 🔴 Es el UNICO carril que puede quemar plata solo. Su prompt le prohibe
@@ -162,6 +172,11 @@ case "$NOMBRE" in
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
   recorrido-cliente)
+    # Ahorro 2026-09-04: Sergio pidió enfocar la cuota en lo vendible. Este carril no
+    # escribe código de producto (mide, publica o redacta), así que no necesita el
+    # modelo más caro: 13 de 15 loops corrían en opus/max y 3 se llevaban el 58 %%.
+    MODELO=claude-sonnet-5
+    ESFUERZO=medium
     # Recorre el producto de punta a punta como un cliente real: home -> alta ->
     # rubro -> cargar un dato -> pantalla de cobro -> bandeja. El canario mira
     # pantallas SUELTAS; este mira el CAMINO, que es donde se pierde la plata.
@@ -173,6 +188,11 @@ case "$NOMBRE" in
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
   tendencias)
+    # Ahorro 2026-09-04: Sergio pidió enfocar la cuota en lo vendible. Este carril no
+    # escribe código de producto (mide, publica o redacta), así que no necesita el
+    # modelo más caro: 13 de 15 loops corrían en opus/max y 3 se llevaban el 58 %%.
+    MODELO=claude-sonnet-5
+    ESFUERZO=medium
     # Investiga que funciona AHORA (formatos, ganchos, estructura de carrusel) y
     # lo convierte en recetas EJECUTABLES para los carriles de contenido. El
     # radar viejo era solo de la marca personal; para producto y ads no habia
@@ -193,6 +213,11 @@ case "$NOMBRE" in
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
   calidad-generado)
+    # Ahorro 2026-09-04: Sergio pidió enfocar la cuota en lo vendible. Este carril no
+    # escribe código de producto (mide, publica o redacta), así que no necesita el
+    # modelo más caro: 13 de 15 loops corrían en opus/max y 3 se llevaban el 58 %%.
+    MODELO=claude-sonnet-5
+    ESFUERZO=medium
     # Juzga lo que Higgsfield genera y cuida que Lucia sea SIEMPRE la misma cara.
     # No genera nada: abre las piezas del ultimo lote, las mira contra la rubrica,
     # y escribe en la bitacora POR QUE salio bien la que salio bien — eso es lo
@@ -204,6 +229,11 @@ case "$NOMBRE" in
     TOOLS=Read,Write,Edit,Grep,Glob,Bash
     ;;
   supervisor)
+    # Ahorro 2026-09-04: Sergio pidió enfocar la cuota en lo vendible. Este carril no
+    # escribe código de producto (mide, publica o redacta), así que no necesita el
+    # modelo más caro: 13 de 15 loops corrían en opus/max y 3 se llevaban el 58 %%.
+    MODELO=claude-sonnet-5
+    ESFUERZO=medium
     # Audita a los OTROS loops: abre sus commits y dice si el trabajo sirve.
     # Ninguno se mira a si mismo, y un loop que produce basura no falla — commitea,
     # reporta bien, y se ve igual que uno que sirve. Contar commits mide actividad;
@@ -263,7 +293,25 @@ fi
 
 # ── barandas verificadas ANTES de gastar una sesion --------------------------
 [ -f "$PROMPT" ]      || { avisar "falta el prompt $PROMPT"; exit 2; }
-[ -d "$WT/.git" ] || [ -f "$WT/.git" ] || { avisar "no existe el worktree $WT"; exit 2; }
+# Un worktree que falta ya no detiene el carril: se rehace. Nace del 2026-09-04,
+# cuando el disco del VPS estaba al 85 % con 72 GB en /root/loops y borrar un
+# worktree de un carril pausado significaba dejarlo muerto hasta que alguien lo
+# recreara a mano. El repo base es el mismo del que salen todos; la rama ya la
+# fija el `case` de arriba. Si tampoco se puede rehacer, ahi si se avisa y se sale.
+if [ ! -d "$WT/.git" ] && [ ! -f "$WT/.git" ]; then
+  BASE_REPO=${ONIA_LOOPS_REPO:-/root/loops/onia-hermes}
+  log "no existe el worktree $WT — lo rehago desde $BASE_REPO en la rama $RAMA"
+  rm -rf "$WT"
+  if git -C "$BASE_REPO" fetch origin --quiet 2>/dev/null &&
+     { git -C "$BASE_REPO" worktree add "$WT" "$RAMA" >/dev/null 2>&1 ||
+       git -C "$BASE_REPO" worktree add -b "$RAMA" "$WT" "origin/$RAMA" >/dev/null 2>&1 ||
+       git -C "$BASE_REPO" worktree add -b "$RAMA" "$WT" origin/main >/dev/null 2>&1; }; then
+    log "worktree rehecho en $WT ($RAMA)"
+  else
+    avisar "no existe el worktree $WT y no pude rehacerlo desde $BASE_REPO"
+    exit 2
+  fi
+fi
 ACTUAL=$(git -C "$WT" branch --show-current 2>/dev/null || echo '?')
 [ "$ACTUAL" = "$RAMA" ] || { avisar "el worktree $WT esta en '$ACTUAL' y se esperaba '$RAMA'"; exit 2; }
 cd "$WT" || { avisar "no se pudo entrar a $WT"; exit 2; }
@@ -343,6 +391,27 @@ trap 'rm -f "$PROMPT_FINAL"' EXIT
     fi
     echo; echo "---"; echo; echo "# TU CARRIL"; echo
   fi
+  # Sergio, 2026-09-03: "¿no se supone que aprenden de si mismos y solucionan sus
+  # errores?". No: un modelo no cambia al correr; "aprende" solo por lo que le
+  # entra en contexto. Hasta aca cada vuelta arrancaba sin ver la anterior, y
+  # repetia el mismo callejon (46 % de vueltas sin commit, medido hoy). Ahora ve
+  # su ULTIMA vuelta: OBJETIVO/RAZON/LECCION que dejo escritas y como termino.
+  # Es la penultima ARRANCA del log (la ultima es la de ahora, ya escrita arriba).
+  #
+  # El `s/^[*_#> -]*//` del sed NO es adorno: los loops escriben markdown, y sin el la linea
+  # `**OBJETIVO:** ...` no pasaba el grep. Medido el 2026-09-04 (t_0314b1bb): contenido-cola
+  # avanzo de "publicadas 1" a "publicadas 2" y el corredor le mostro la vieja como si fuera la
+  # ultima, asi que se leia a si mismo estancado — y la regla del sistema le ordena cambiar un
+  # metodo que estaba funcionando. Es la misma limpieza que ya hacia la linea de mas abajo que
+  # manda las LECCION: a la memoria; la asimetria entre las dos ERA el defecto.
+  # Blindado por scripts/ultima-vuelta-visible.test.mjs (`npm run test:ultima-vuelta`).
+  PREV_INI=$(grep -n "===== ARRANCA $NOMBRE" "$LOG" 2>/dev/null | tail -2 | head -1 | cut -d: -f1)
+  PREV_FIN=$(grep -n "===== ARRANCA $NOMBRE" "$LOG" 2>/dev/null | tail -1 | cut -d: -f1)
+  if [ -n "$PREV_INI" ] && [ -n "$PREV_FIN" ] && [ "$PREV_INI" != "$PREV_FIN" ]; then
+    echo "# TU ULTIMA VUELTA (lo que vos mismo dejaste escrito; si fallo, cambia el metodo)"; echo
+    sed -n "${PREV_INI},${PREV_FIN}p" "$LOG"       | sed -E 's/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:]+Z //; s/^[*_#> -]*//'       | grep -E "^(OBJETIVO|RAZ[OÓ]N|LECCI[OÓ]N):|===== (ARRANCA|TERMINA) "       | tail -12
+    echo; echo "---"; echo
+  fi
   cat "$PROMPT"
 } > "$PROMPT_FINAL"
 # `grep -c` imprime "0" Y sale con 1 en un archivo vacio: con `|| echo 0` salian DOS
@@ -359,6 +428,21 @@ rm -f "$PROMPT_FINAL"
 # Lo que este loop aprendio en la vuelta entra a la memoria compartida ahora, no
 # "en algun momento": el consolidador es idempotente y con cerrojo, asi que es
 # seguro llamarlo desde 15 loops. Si no hay nada en la bandeja, no hace nada.
+# Sergio, 2026-09-03 22:40 La Paz: "¿los loops están trabajando?". Dos vueltas (contenido-cola,
+# tendencias) murieron con "You've hit your session limit" y el log las contaba como
+# "vuelta valida": los loops corren con la MISMA suscripcion de Claude que la sesion de
+# control, asi que se pisan la cuota. Queda escrito como RAZON en el log: la proxima vuelta
+# lo ve en TU ULTIMA VUELTA y el supervisor lo cuenta como perdida, no como trabajo.
+CUR_INI=$(grep -n "===== ARRANCA $NOMBRE" "$LOG" 2>/dev/null | tail -1 | cut -d: -f1)
+if tail -n +"${CUR_INI:-1}" "$LOG" 2>/dev/null | grep -q "hit your session limit"; then
+  log "RAZON: vuelta PERDIDA por limite de uso de Claude (cuota compartida con la sesion de control); no es un fallo del loop"
+fi
+
+# Lo que el loop escribio como `LECCION: ...` en ESTA vuelta va solo a la memoria
+# compartida: asi la leccion no depende de que el loop se acuerde de llamar a
+# onia-aprender.sh. Tope 5 por vuelta; el consolidador deduplica.
+CUR_INI=$(grep -n "===== ARRANCA $NOMBRE" "$LOG" 2>/dev/null | tail -1 | cut -d: -f1)
+tail -n +"${CUR_INI:-1}" "$LOG" 2>/dev/null   | sed -E 's/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:]+Z //; s/^[*_#> -]*//'   | grep -E "^LECCI[OÓ]N: ." | cut -c1-600 | head -5   | while IFS= read -r LEC; do /root/bin/onia-aprender.sh "[$NOMBRE] ${LEC#LECCI*N: }" >/dev/null 2>&1 || true; done
 /root/bin/onia-consolidar-memoria.sh >> "$LOG" 2>&1 || true
 
 T=$(( $(date +%s) - T0 ))

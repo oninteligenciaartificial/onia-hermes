@@ -884,9 +884,88 @@ malos. Y los cuadros 3–5 del propio `INVENTARIO-caras.jpg` la tienen.
 valen son los estructurales (cejas, mandíbula, edad), y por eso la rúbrica los pone primero.
 Un rasgo que sólo aparece en piezas de un mismo generador es sospechoso de ser del generador.
 
+### P10 · 🔴 Recortar la mano no es contar los dedos — y el recorte tranquiliza
+
+**El caso.** `generadas-20260902/` es el lote mejor documentado del carril, y su auditoría hizo
+lo que la rúbrica pide: recortó las manos. Los dos recortes están commiteados
+(`_E2-B-HAND-crop.jpg`, `_E3-cafe-HANDS.jpg`). Con esos recortes a la vista, el LEEME canonizó
+`E3-cafe.jpg` como **"la prueba 9/9 de la receta"** y `E2-B-rooftop.jpg` como **"la mejor
+rooftop"**. `E2-B-rooftop.jpg` tiene **seis dedos**, y fue elegida como **portada del carrusel
+fijado** — la primera imagen que ve todo el que entra al perfil.
+
+**Por qué el recorte no alcanzó.** `_E2-B-HAND-crop.jpg` mide 960×930 y muestra la mano entera.
+Mirada así se lee como una mano: hay piel, hay dedos, hay un vaso. Los dedos se cuentan sólo si
+uno **se propone contarlos**, y a esa escala las crestas 4 y 5 comparten un degradé suave que a
+ojo pasa por el borde de la palma. El recorte hace *sentir* que la casilla 2.1 se cumplió —se
+miró la mano— cuando lo que la casilla pide es un **número**.
+
+**El método que sí lo ve, y tarda 20 segundos.** Recortar la COLUMNA de dedos sola (no la mano),
+estirarla y realzar bordes para despegar las crestas del degradé:
+
+```sh
+ffmpeg -i _E2-B-HAND-crop.jpg -vf \
+  "crop=300:560:520:40,scale=700:-1,eq=contrast=1.9:brightness=-0.06:saturation=0.3,unsharp=7:7:2.2" \
+  /tmp/dedos.png
+```
+
+Se cuentan **pliegues**, no bultos: N pliegues ⇒ N+1 dedos. En `E2-B` dan 4 pliegues → 5 dedos,
+y el pulgar está del otro lado del vaso → **seis**. Evidencia:
+[`L2-portada-seis-dedos.jpg`](../../../docs/research/calidad-generado/L2-portada-seis-dedos.jpg).
+
+**Y el mismo método absuelve, que es la mitad que importa.** A poco zoom yo había anotado sobre
+`E3-cafe.jpg` "dedos fundidos, sin uñas". Con el zoom correcto son **3 + 3 yemas con uña bien
+formada**: dos manos normales —
+[`L2-e3cafe-manos-OK.jpg`](../../../docs/research/calidad-generado/L2-e3cafe-manos-OK.jpg). Lo que
+se veía mal era la **lámina compuesta**, donde el texto y el velo oscuro caen encima de las manos
+y las empastan. **El defecto se busca en la foto fuente, no en la lámina rendeada**: la lámina
+inventa fallas que no existen y tapa las que sí. Es el modo de falla del canario visual otra vez
+— el instrumento produciendo el defecto que después reporta.
+
 ---
 
 ## Veredictos
+
+### `posts-20260807/L2/` — carrusel FIJADO «¿Quién es Lucía?» — **NO SE PUBLICA: falla la lámina 1**
+
+Las 7 abiertas y miradas el 2026-09-03 (commit `cc2346430` de `claude/lucia-vps`, que es la
+versión que Sergio tiene delante en `t_a9ff7367`). **Nunca había pasado por esta rúbrica**: su
+LEEME dice que la primera versión *"sacó 9/9 en la rúbrica visual"*, y esa pasada no contó dedos.
+
+| Bloque | Resultado |
+|---|---|
+| **1 · Identidad** | **✓ las 7.** Tira completa montada (ítem 1.0), ninguna elegida a dedo: cejas arqueadas con cola, mandíbula ovalada, 25–27 años, pecas presentes, piel pareja **sin los manchones del `soul_2`** (1.7), argolla dorada y cadenita fina consistentes. Es el primer lote del carril que pasa 1.0 entero — [`L2-tira-caras-7.jpg`](../../../docs/research/calidad-generado/L2-tira-caras-7.jpg) |
+| **2 · Anatomía** | **✗ por la lámina 1** (ver abajo). Las otras 6 ✓ |
+| **3 · Texto** | ✓ las 7. El overlay está en castellano correcto; la pantalla de la laptop en la 4 queda borrosa y sin texto legible |
+| **4 · Marca** | ✓ las 7. La lámina 2 declara *"Creada con inteligencia artificial"* y la 3 *"etiqueta de IA activada"* (4.1). Sin prueba social, sin estado de obra |
+| **5 · Técnico** | ✓ las 7. 1080×1350 exactas, 131–206 KB, sin md5 repetidos (la 7 ya no clona la portada) |
+
+**La que rompe el lote — `slide-01.jpg`, y es la PORTADA:**
+
+- **Bloque 2 ✗ (2.1) · la mano que sostiene el vaso tiene seis dedos.** Sobre la foto fuente
+  `generadas-20260902/E2-B-rooftop.jpg`, la columna de dedos del lado derecho del vaso muestra
+  **4 pliegues → 5 crestas de dedo**, y el pulgar está apoyado del **otro** lado del vaso, con su
+  uña visible. 5 + 1 = 6. Método y comando en P10; evidencia commiteada.
+- Secundario, misma mano: el dorso no tiene **ni un nudillo** en todo su largo, y mide ~1,7× las
+  falanges visibles cuando debería medir ~1:1 — es la "manopla" que nombra 2.1. Los parches
+  gris-violáceos del dorso son el intento fallido de tendones.
+
+**Motivo en una línea:** el carrusel que va **fijado arriba del perfil** —la primera pieza que ve
+todo el que entra— abre con una mano de seis dedos, y la única auditoría previa que tuvo la
+declaró la mejor foto del banco.
+
+**Qué NO es un problema, para que nadie lo vuelva a abrir:**
+
+- La lámina 5 (`E3-cafe.jpg`) **está bien de manos**: 3 + 3 yemas con uña, dos manos normales. Se
+  ve empastada sólo en la lámina compuesta, por el velo y el texto encima (P10).
+- La 4 sigue con **dos personas al fondo con laptops** bajo el pill «QUIÉN ME HACE». El texto ya
+  no dice "equipo", pero la foto lo sugiere, y Onia es Sergio solo. **Eso no es falla de rúbrica:
+  es la decisión que ya está en el tablero** (cambiar la foto = 2 cr). No se re-pregunta.
+
+**Costo de arreglarlo: 0 créditos, y no hay que generar nada.** La lámina 1 pide "su retrato más
+fuerte" y el mismo banco `generadas-20260902/` tiene dos rooftop más ya commiteadas y con la cara
+correcta: `E2-A-rooftop.jpg` (la del skyline, hoy en la lámina 2) y `E2-C-rooftop.jpg` (mirada a
+cámara, hoy en la 6). **Ninguna de las dos tiene manos en cuadro.** Se repunta el brief y se vuelve
+a rendear con el comando del LEEME, que es determinista. `E2-B-rooftop.jpg` sale del banco.
 
 ### `posts-20260807/` P1–P6 — **el lote NO se publica: 4 de 6 NO PASAN**
 
@@ -1002,4 +1081,446 @@ sólo si después del cambio de UUID la cara todavía no cierra.
   hipótesis fuerte con evidencia en disco, **no un arreglo verificado** — y confirmarla cuesta
   2 cr que este loop no puede gastar.
 - **No se puede medir tendencia de deriva con n=1** (el lote más nuevo tiene una imagen).
-- **Ninguna pieza de este carril fue generada por este loop.** Acá no se dispara nada pago.
+- ~~Ninguna pieza de este carril fue generada por este loop. Acá no se dispara nada pago.~~
+  ⚠️ **Falso desde el 2026-09-03 16:52 UTC.** Este loop generó `S1` por CLI y pagó 0,12 cr
+  (ver E9 abajo). La frase quedó de cuando el prompt del carril prohibía generar; Sergio lo
+  habilitó el 2026-09-02 (*"Lucía tiene permitido generar, si no no podría practicar"*).
+
+---
+
+# E9 · ¿El motor barato sostiene la cara? — medido el 2026-09-03, 0,12 cr
+
+**La pregunta, y por qué vale la pena:** el carril genera con `nano_banana_pro` a **2 cr por
+imagen**. `text2image_soul_v2` cuesta **0,12 cr** — 16× menos — y su tabla de params (`model get`)
+muestra que **sí acepta `image_references`**. Si sostuviera la identidad, un lote de 6 pasaría de
+12 cr a 0,72 cr y el carril podría practicar diez veces más por el mismo dinero.
+
+**Respuesta: NO. Y el motivo es estructural, no de prompt.**
+
+## Lo que se disparó
+
+| # | Qué se probó | Costo real | Resultado |
+|---|---|---|---|
+| **S1** | `image_references` = foto canónica de Lucía (`E3-hotel.jpg`, ruta local, se sube sola) | **0,12 cr** | ⛔ **Falla doble** |
+| **S2** | `custom_reference_id` = el Element `lucia-skin-v1` (`58bbd635-…`) | **0 cr** | `Error: Character not found` |
+
+Comando de S1:
+
+```bash
+higgsfield generate create text2image_soul_v2 \
+  --prompt "<E2 base + frase de LUZ §12>" \
+  --aspect-ratio 9:16 --quality 2k \
+  --image-references …/generadas-20260902/E3-hotel.jpg \
+  --wait --wait-timeout 5m
+```
+
+Cotizado antes con `generate cost` = 0,12 cr; el cobro en `account transactions` fue **−0,12
+exacto**. Saldo 1939,06 → 1938,94. **S2 falló sin cobrar**: un job rechazado por referencia
+inválida sale gratis.
+
+## Por qué S1 falla, y es lo contrario de lo que uno espera
+
+`S1-rooftop-soulv2.jpg` **copió lo que debía cambiar y cambió lo que debía copiar**:
+
+| Eje | Pedido en el prompt | Qué salió |
+|---|---|---|
+| **Escena** | Rooftop abierto en Santa Cruz, baranda de vidrio, atardecer, vaso para llevar, ciudad de fondo | ⛔ **El hall de hotel de la foto de referencia** — sofás de cuero, lámparas, techo de madera. Sin rooftop, sin baranda, sin ciudad, sin café |
+| **Cara** | «the same woman as in the reference image, keep the exact same face» | ⛔ **No es Lucía.** Sin pecas, pelo castaño claro con mechas, cara más angulosa y genérica |
+| Rasgos sagrados | pecas > argollas + cadenita | ⛔ pecas **ausentes** · ✅ argollas y cadenita presentes |
+
+**El diagnóstico:** en `text2image_soul_v2`, `image_references` es una referencia de **estilo y
+escena**, no de identidad. Por eso clonó el lobby y descartó el rostro. No es un prompt flojo: es
+la ranura equivocada.
+
+## Dónde está la ranura de identidad, y por qué tampoco sirve HOY
+
+S2 devolvió `Character not found` — **distinto** del `Media input not found` que da
+`--image-references` con el mismo UUID (§11 de `TECNICA-HIGGSFIELD.md`). Son **dos registros
+separados**:
+
+- `custom_reference_id` lee **Soul refs** (`higgsfield soul-id list`).
+- `image_references` lee **uploads / job ids**.
+- El ancla buena, `lucia-skin-v1` (`58bbd635-…`), es un **Element** — un tercer registro, que
+  **ningún** parámetro de Soul v2 puede leer.
+
+Y las únicas dos Soul refs de Lucía que existen en la cuenta son **exactamente las dos que el
+banco prohíbe**:
+
+| ID | Nombre | Estado en `BANCO-OFICIAL.md` |
+|---|---|---|
+| `36305a9b-…` | `LUCIA-REAL-v2-clean` | ⛔ **PROHIBIDO** — piel roja; entrenada con frames de una persona real sin permiso documentado |
+| `e6d8703c-…` | `LUCIA-SINTETICA-v3` | ⛔ perdió el A/B del 22-ago; le cambia los ojos a gris azulado |
+
+**Conclusión operativa: el ahorro de 16× no está disponible hoy, y no lo destraba ningún prompt.**
+La receta de §11 (`nano_banana_pro` + `--image-references <foto>`, 2 cr) sigue siendo la única
+probada para cara protagonista.
+
+## Lo que SÍ lo destrabaría — cotizado hasta donde se puede
+
+Entrenar una **Soul ref nueva** con las 7 fotos del ancla vigente:
+
+```bash
+higgsfield soul-id create --name "LUCIA-ancla-v1" --soul-2 \
+  --image <foto1> … --image <foto7>     # acepta 5–20, ruta local o upload id
+```
+
+⚠️ **El costo del entrenamiento NO se pudo cotizar**: `generate cost` sólo cotiza jobs de
+generación, y `soul-id create` no tiene equivalente. Es el dato que falta y **no se estima acá**.
+Si el entrenamiento resultara barato, cada imagen posterior costaría 0,12 en vez de 2 cr.
+
+**Y hay un riesgo que no se puede saltear:** las dos Soul refs anteriores de Lucía salieron mal
+(piel roja, ojos grises). Una tercera puede salir mal igual. Entrenar no garantiza la cara: hay
+que medirla contra `STACK-rasgos-10-angulos.jpg` después.
+
+## Lo que este experimento deja escrito para el próximo
+
+- **`model get <job_type>` muestra la ranura, no dice para qué sirve.** Ver `image_references` en
+  la tabla de Soul v2 hace pensar «sostiene identidad». Sostiene **estilo**. La tabla de params no
+  es documentación de comportamiento.
+- **Un job rechazado por referencia inválida no cobra.** Probar un UUID en la ranura dudosa es
+  gratis: conviene hacerlo **antes** de gastar.
+- **El CLI no tiene `generate image`.** El subcomando real es **`generate create`**
+  (`generate image` no existe y muere en el parseo). Varios docs del carril lo escriben mal.
+
+---
+
+# E10 · El motor de 2 cr sostiene la cara Y obedece el encuadre — medido el 2026-09-03, 2 cr
+
+## La pregunta
+
+E9 midió que `text2image_soul_v2` (0,12 cr) **copia el lugar y cambia la persona**. La pregunta
+inversa, que faltaba: `nano_banana_pro` (2 cr) con foto-como-referencia, ¿sostiene la persona y
+**obedece** un cambio de pose y encuadre, o devuelve la referencia otra vez?
+
+**Sí a las dos.** Es el primer caso medido en que la referencia manda identidad y el prompt manda
+composición, cada uno en lo suyo.
+
+## Para qué se generó — no fue práctica suelta
+
+El carrusel fijado L2 tenía **6 fotos para 7 lugares**: la lámina 7 (el cierre) repetía la foto de
+la portada, píxel por píxel. Era una de las dos decisiones abiertas de Sergio en `t_a9ff7367`.
+Ahora la 7 tiene foto propia y esa decisión **ya no hay que tomarla**.
+
+## El comando exacto
+
+```sh
+higgsfield generate cost   nano_banana_pro --prompt "<abajo>" --aspect-ratio 4:5 --resolution 2k \
+  --image-references generadas-20260902/E2-B-rooftop.jpg      # -> 2 credits (gratis, antes)
+higgsfield generate create nano_banana_pro --prompt "<abajo>" --aspect-ratio 4:5 --resolution 2k \
+  --image-references generadas-20260902/E2-B-rooftop.jpg --wait --wait-timeout 5m
+```
+
+Prompt (guardado también en `generadas-20260903/_S3-prompt.txt`):
+
+> Same young woman as the reference photo: dark brown hair, prominent freckles across nose and
+> cheeks, warm olive skin, small gold hoop earrings and a thin gold chain, wearing the same
+> oatmeal linen tee. Rooftop terrace in Santa Cruz de la Sierra at golden hour, glass and steel
+> railing, low city rooftops behind her. She stands on the RIGHT side of the frame in
+> three-quarter back view, one hand resting on the railing, turned away from camera and looking
+> out toward the horizon, calm half-smile visible in profile. Open sky and soft out-of-focus
+> rooftop floor fill the LOWER LEFT of the frame, empty and uncluttered. Vertical portrait, 35mm,
+> shallow depth of field, warm low side light from the setting sun. natural true-to-life colors,
+> no color grading, no filter look, accurate white balance. [TEXT RULE - MANDATORY] No legible
+> text anywhere in frame.
+
+## Resultado — mirado, no supuesto
+
+`generadas-20260903/S3-rooftop-cierre.jpg` · **1856×2304 = ratio 0,806** (4:5 nativo, sin recorte).
+
+| Casilla | Veredicto |
+|---|---|
+| Identidad (pecas, cejas, ojos, aro de oro, cadena) | ✅ es Lucía — pecas presentes, el rasgo sagrado #1 que S1 perdió |
+| Raccord con la portada (misma remera de lino crudo, mismo golden hour) | ✅ |
+| Obedeció la escena pedida (rooftop, perfil, mano en la baranda) | ✅ — **no** repitió la pose de la referencia |
+| Espacio de texto abajo-izquierda | ✅ piso de terraza vacío, es donde cae el bloque |
+| Texto ilegible en cuadro | ✅ ninguno |
+| Manos | ✅ una mano visible sobre la baranda, dedos correctos |
+
+## Las dos ranuras, ahora medidas las dos
+
+| Motor | Ranura de referencia | Qué manda de verdad | Costo |
+|---|---|---|---:|
+| `text2image_soul_v2` | `--image-references` | **estilo y lugar** — cambia la cara (E9) | 0,12 |
+| `nano_banana_pro` | `--image-references` | **identidad** — el prompt manda la escena (E10) | 2 |
+
+**Regla que sale de acá:** cara reconocible ⇒ `nano_banana_pro`, sin excepción. Los 0,12 cr de
+Soul v2 no son "lo mismo más barato": son otro trabajo. Un carril que elige por precio elige mal.
+
+## Costo
+
+| Concepto | Créditos |
+|---|---:|
+| S3 — `nano_banana_pro` 4:5 2k | **2,00** |
+| **Total del lote** | **2,00** |
+
+Cotizado antes con `generate cost` (2 credits) y el cobro coincidió **exacto**:
+saldo 1934,14 → 1932,14.
+
+---
+
+# Vuelta 2026-09-03 21:40-21:50 UTC — la portada fijada, y un techo que no es el saldo
+
+## Gasto: **0 créditos**. Saldo 1932,14 antes y después.
+
+| Intento | Modelo | Cotizado | Cobrado | Qué pasó |
+|---|---|---:|---:|---|
+| Foto de reemplazo para la lámina 3 | `nano_banana_pro` 2k 9:16 | 2,00 | **0** | rechazado: `grace_daily_limit_reached` |
+
+**El rechazo por cupo diario NO cobra** — verificado en las dos puntas: `account status` da
+1932,14 antes y después, y `account transactions` no suma una línea (la última sigue siendo la
+de las 18:40). Es el mismo comportamiento ya medido para el rechazo por referencia inválida:
+**probar algo dudoso es gratis; lo que cuesta es que salga bien.**
+
+⚠️ Y el cupo diario **no es el saldo**: se agotó con **1932 créditos en la cuenta**. `generate
+cost` siguió respondiendo gratis con el `create` bloqueado, así que medir nunca cuenta contra el
+cupo. Ya estaba anotado en `TECNICA-HIGGSFIELD.md` §«límite DIARIO» — se confirma, y se respeta
+la regla: **no se reintenta en la misma vuelta**, la vuelta se cierra con la tarea de 0 créditos.
+
+## La pregunta de la vuelta: ¿la mano de la portada tiene seis dedos?
+
+**Respuesta medida: no — tiene cinco.** Pero la portada se cambió igual, y esa es la parte que
+importa.
+
+`carril-calidad` frenó el lote con «4 pliegues = 5 crestas + pulgar = 6». Recontado acá sobre la
+foto **fuente** (nunca sobre la lámina, que empasta con el velo y el texto) con cuatro
+instrumentos independientes — zoom 4x, 5x, 8x y `edgedetect` sobre la columna de dedos — los
+cuatro dan **3 pliegues = 4 crestas + pulgar = 5**. La discrepancia es de exactamente un pliegue:
+el contorno del canto de la mano por debajo del meñique se lee como una cresta más.
+
+**Lo que no se puede defender, y decide:** el dorso **no tiene ni un nudillo**, y dos auditorías
+independientes contaron distinto mirando la misma foto. Una mano que se discute no va en la
+lámina **fijada arriba del perfil**.
+
+**Regla que sale de acá:** cuando dos carriles cuentan distinto sobre la misma foto, no se gana
+la discusión — **se saca la foto del lugar más caro**. El desempate cuesta más que el
+intercambio, y el intercambio salió **0 créditos**: portada ← `E3-hotel.jpg` (sin manos en
+cuadro), y `E2-B` bajó a la lámina 3. Siguen siendo 7 fotos distintas para 7 láminas: no se
+duplicó nada.
+
+Detalle, comandos y tabla del intercambio: `posts-20260807/L2/LEEME.md`.
+
+---
+
+# P11 · La foto pasa y la pieza no: el cierre del carrusel fijado no pide nada — 2026-09-04, 0 cr
+
+Auditoría independiente del lote **`generadas-20260903`** (el más nuevo) por el carril
+`calidad-generado`. **0 créditos: no se generó nada, se miró.**
+
+## Veredicto del lote — 2 piezas, 2 veredictos
+
+| Pieza | Veredicto | Motivo |
+|---|---|---|
+| `S1-rooftop-soulv2.jpg` | ⛔ **NO PASA** (confirmado, ya estaba en §E9) | Perdió las pecas (rasgo sagrado #1) y copió la escena de la referencia. Se conserva como contraejemplo |
+| `S3-rooftop-cierre.jpg` | ✅ **PASA como foto** — pero ver abajo | Identidad, encuadre, texto y manos ✓. La **pieza compuesta** que sale de ella falla la casilla 11 |
+
+## La mano de S3, recontada aparte — y a favor del carril que la generó
+
+S3 se generó con `--image-references generadas-20260902/E2-B-rooftop.jpg`, **la foto que este
+carril y `lucia` disputaron por seis dedos**. Su casilla de manos la escribió el mismo carril que
+la generó, así que se recontó desde cero con el método de `RUBRICA-IMPOLUTO.md` §2.1a, sobre la
+**foto fuente** y no sobre la lámina:
+
+```sh
+ffmpeg -i generadas-20260903/S3-rooftop-cierre.jpg \
+  -vf "crop=250:235:358:1820,scale=1000:-1,eq=contrast=1.9:brightness=-0.06:saturation=0.3,unsharp=7:7:2.2" \
+  /tmp/s3-dedos.png
+```
+
+**Cuenta: 5.** Índice extendido a lo largo de la baranda, tres dedos colgando por debajo del
+vidrio, y el pulgar —el único con uña visible— cayendo desde el lado de la muñeca. La casilla 4
+**se confirma**: el veredicto del carril que la generó era correcto.
+
+> Se deja anotado que se recontó y **dio lo mismo**. Un carril de calidad que sólo escribe cuando
+> encuentra algo enseña a desconfiar de él cuando calla. La disputa de E2-B no se reabre: esa foto
+> ya salió del lugar caro y cerrar dos veces la misma discusión no es medir.
+
+## 🔴 El hallazgo: la pieza que se entrega no pide nada
+
+La foto pasa. **La lámina que sale de ella, no.** `slide-07.jpg` es el cierre del carrusel
+**fijado** del perfil — lo último que lee todo el que entra, en la pieza que queda arriba para
+siempre — y su copy es:
+
+> «Seguime para ver hasta dónde llega. Y si tenés un negocio y querés lo que hay detrás de mí,
+> está todo en @oniahq.»
+
+Leídas **las 7 láminas** en el brief: **ninguna dice COMUNIDAD**. La 6 llega a un centímetro y
+falla igual — «Decime en los comentarios qué te gustaría ver acá» pide comentar **sin la palabra
+clave**, así que el comentario no dispara nada y nadie recibe el enlace de la comunidad.
+
+```sh
+python3 -c "import json,sys; d=json.load(open(sys.argv[1])); s=d['slides'][-1]; \
+  print(s.get('headline','')); print(s.get('body',''))" \
+  posts-20260807/briefs/lucia-quien-es-fijado.json | grep -c COMUNIDAD
+# -> 0
+```
+
+La convención ya existía en el propio carril (`generadas-20260828/CREATIVO.md`, 3 menciones:
+*«Comentá COMUNIDAD y te muestro cómo se hace el de tu local»*). **Existía la costumbre y no
+existía la casilla**, así que la pieza más cara del perfil salió sin ella y pasó todas las
+auditorías anteriores.
+
+Arreglado en la rúbrica como **casilla 11** (`RUBRICA-IMPOLUTO.md`), con su método en 4.6. El
+arreglo del brief es del carril dueño de la carpeta, no de éste: queda pedido en el tablero.
+
+## Lo que enseña — es el escalón siguiente de la casilla 10
+
+La casilla 10 nació de que la rúbrica sólo miraba píxeles y aprobaba una pieza que **mentía**.
+Pero sólo pregunta si el copy afirma algo falso. **Una rúbrica que sólo caza mentiras aprueba una
+pieza honesta e inútil.** Las dos mitades del copy se verifican por separado: que no afirme lo
+que no existe (10) **y** que pida lo que la pieza tiene que conseguir (11).
+
+## 🔴 Y por qué esto no se vio antes: el instrumento medía un fósil
+
+El chequeo de arranque de este carril mide el lote más nuevo con `ls generadas-* | tail -1`
+**sobre su propio worktree**. El worktree estaba **310 commits detrás de `origin/main`**, así que
+devolvía `generadas-20260828` con **1 imagen** y 2 veredictos: *objetivo cumplido*. En `main`
+había **5 lotes y ~23 imágenes publicables**, incluido el lote más nuevo entero.
+
+**La medida daba verde porque no veía el trabajo, no porque estuviera hecho.** Se arregla
+mergeando `origin/main` **antes** de medir — no cambiando el comando:
+
+```sh
+git merge origin/main --no-edit && ls -d .../generadas-* | sort | tail -1
+```
+
+---
+
+# P12 · La pieza FIJADA, auditada por segunda mano contra la casilla 11 — 2026-09-04, 0 cr
+
+El carril `lucia` corrigió la pieza fijada dos veces el mismo día (`a3bef97d6` 06:38 → `88d23dd67`
+06:44) y dejó el veredicto en su propio commit. **Un carril no se audita solo**, y esta es la pieza
+que queda arriba del perfil para siempre, esperando el dedo de Sergio en `t_c7686e93`. Se recontó
+todo desde cero. **0 créditos: no se generó nada.**
+
+## Veredicto: ✅ PASA la casilla 11 — verificado, no heredado
+
+| Qué exige la casilla 11 | Medido acá | ✓ |
+|---|---|---|
+| El cierre pide UNA palabra | `slide-07`: «Comentá **HUMO** y te mando las 5 herramientas…» | ✓ |
+| Ningún otro «comentá» compite | `slide-06` quedó sólo con la pregunta, sin pedido | ✓ |
+| El caption pide la misma | Caption del brief: «Comentá HUMO…» | ✓ |
+| La palabra está CABLEADA y activa | Workflow `1jS4jwmNmvcQpqqH` (`active=1`, el único de **4 copias**): `lucia` → `SISTEMA`, `HUMO` | ✓ |
+| Lo que la palabra promete, existe | El PDF responde **200, 306.319 B, 3 páginas** en 0,09 s | ✓ |
+
+Las dos láminas se **miraron** renderizadas, no se grepearon: identidad fiel (pecas presentes —
+rasgo sagrado #1—, aros, cadenita), texto sin desborde, un solo llamado en toda la pieza.
+
+Y el barrido llegó hasta el **archivo servido**, que es donde muere este tipo de arreglo: el PDF de
+producción, el de `hermes-content/recursos/humo/` y el de `web-factory/…/public/recursos/` tienen
+el **mismo md5** (`b0812afb…`). No hay una copia vieja sirviéndose.
+
+## Lo único que se anota, y NO reprueba
+
+La lámina promete *«las 5 herramientas de IA que uso — **tres son gratis**»*. Abierto el PDF
+(`pag-2.png`): son **5 herramientas** ✓, pero las que tienen camino gratis son **cuatro** —
+Claude/ChatGPT (`gratis a Bs 140/mes`), Whisper (`gratis`), n8n (`gratis si lo instalás vos`) y
+ElevenLabs (`gratis / desde Bs 35`); sólo la 5ª es paga (`desde Bs 1 por imagen`).
+
+**Se anota como imprecisión, no como casilla rota, y la distinción es la casilla 10 entera:** la 10
+caza *el plural que infla*. Acá el copy promete **menos** de lo que entrega, así que el lead recibe
+más de lo que le dijeron. Contarlo como «no pasa» sería inflar un hallazgo para justificar la
+vuelta — el sesgo exacto contra el que advierte la regla del instrumento que te da la razón.
+
+## Lo que enseña esta vuelta, y vale más que el veredicto
+
+**La casilla 11 se escribió DOS veces el mismo día, en dos carriles, y una de las dos versiones
+estaba mal.** La mía (`c6f43dcdf`) decía *«pide la palabra exacta: COMUNIDAD»* y traía un
+`grep -c COMUNIDAD` como método. La de `lucia` exige que la palabra **esté cableada**. Al mergear,
+las dos chocaron en los mismos 4 hunks.
+
+Si el merge se resuelve «a favor de casa» —el reflejo natural— la rúbrica del proyecto queda
+mandando a escribir `COMUNIDAD`, **que no responde nada**, en la pieza más cara del perfil. El
+carril de calidad habría *institucionalizado* el fallo mudo que existe para cazar, y con su propio
+comando como prueba.
+
+> **Regla:** al mergear un archivo que dos carriles escribieron el mismo día, no gana el lado
+> propio: gana el que **se puede medir**. Un método verificable (`active=1` en el workflow) le gana
+> siempre a uno que sólo repite una preferencia escrita en un doc. Resuelto en `fc713f131`
+> tomando el lado de `lucia` en los 4 hunks, y conservando de este carril lo que main no tenía:
+> el **2.1a** (contar dedos) y la fila del mapa Parte I ↔ II.
+
+---
+
+# P13 — 2026-09-04 07:5x UTC · Arreglar donde saltó no barre a los hermanos
+
+**Gasto: 0 créditos. Saldo 1932,14 antes y después** (`higgsfield account status`, las dos puntas
+de la vuelta). Cero generación: toda la vuelta fue texto y medición.
+
+**La pregunta:** ¿quedó alguna otra pieza pidiendo una palabra que el sistema no responde?
+
+**Sí: cinco.** La vuelta anterior arregló la lámina fijada (`COMUNIDAD` → `HUMO`) y la casilla 11
+de la rúbrica quedó bien escrita. Las dos cosas eran ciertas y las dos miraban **la pieza donde
+saltó el defecto**. Barriendo el árbol entero aparecieron cinco CTA más, en guiones listos para
+publicar, pidiendo `ONIA` (×4) y `COMUNIDAD` (×1):
+
+| Archivo | Pedía | Dice ahora |
+|---|---|---|
+| `generadas-20260828/CREATIVO.md:108` | `ONIA` | `SISTEMA` |
+| `generadas-20260828/CREATIVO.md:208` | `COMUNIDAD` | `SISTEMA` |
+| `generadas-20260901/CREATIVO.md:93` | `ONIA` | `SISTEMA` |
+| `generadas-20260902/CREATIVO.md:105` | `ONIA` | `SISTEMA` |
+| `generadas-20260902/CREATIVO-STILLS.md:102` | `ONIA` | `SISTEMA` |
+
+Los cinco prometen «te paso cómo se ve» — que es literalmente lo que responde el DM de `SISTEMA`
+(«te muestro cómo se ve todo junto: acá agendás 20 minutos… el mapa de tu negocio»). El
+reemplazo no cambió la promesa, sólo la hizo cumplible.
+
+⚠️ **`ONIA` engaña al grep.** Buscando palabras clave en el workflow, `ONIA` aparece — pero es el
+**nombre** del workflow (`ONIA - Comentario IG -> DM`) y la marca, no una palabra cableada. Se ve
+sólo abriendo el objeto `palabras: {…}` de la cuenta. Un grep sirve para descartar, nunca para
+confirmar, y acá el grep decía que sí.
+
+**Lo que enseña, y es la lección de la vuelta:** verificar a mano antes de escribir una palabra
+—que es lo que la casilla 11 mandaba a hacer— sólo cuida **la pieza que estás tocando**. Por
+construcción no puede encontrar los hermanos: nadie los está tocando. Un defecto que nace de una
+preferencia escrita (*«el CTA fijo es COMUNIDAD»*) no aparece una vez, aparece en todo lo que se
+escribió creyendo esa preferencia. **La reparación tiene que ser un barrido, y el barrido tiene
+que quedar automatizado o se vuelve a acumular.**
+
+**El gate:** `scripts/palabras-cableadas.py` (exit 0 = verde). Sujetos del **disco**, palabras del
+**n8n activo** — ninguna lista escrita a mano, así que una pieza nueva nace cubierta y un cambio
+de cableado se detecta solo. Sin poder leer n8n sale **rojo**: no aprueba por no haber podido
+mirar. Probado en las dos direcciones: reintroducir `COMUNIDAD` en un brief → exit 1 señalando
+archivo y línea; restaurar → exit 0.
+
+**Lo que NO se tocó, a propósito:** las menciones de `COMUNIDAD` en `L2/LEEME.md:225-226` y en la
+casilla 11 de la rúbrica. Son bitácora: *narran* el error, no lo piden. Reescribirlas sería
+falsificar el registro de lo que pasó. El gate las reporta como **aviso** en vez de rojo — pero
+las reporta, porque un gate que se calla sobre lo que no supo clasificar es como falla abierto.
+
+**Sigue pendiente y no es mío:** `COMUNIDAD` es el CTA que Sergio quiere fijo y necesita el enlace
+del grupo para cablearse (`t_ce495931`, bloqueada en él). Hasta que exista, ninguna pieza la pide:
+primero se cablea, después se promete.
+
+---
+
+## P13 — 2026-09-04 12:4x UTC · La objeción que se le mandó a Sergio como gasto tenía salida gratis
+
+**Gasto: 0 créditos.** Saldo 1932,14 antes y después (`higgsfield account status`). No se generó
+ninguna imagen: la única foto nueva del día es una **variante procesada** de una que ya existía.
+
+**La pregunta de la vuelta:** ¿por qué hay 9 piezas esperando OK y 0 aprobadas?
+
+No por falta de piezas. Midiendo la cola: la pieza que más importa —el carrusel FIJADO del
+perfil— llevaba **21 horas** esperando, y lo que la trababa no era Sergio:
+
+| lo que veía Sergio en la tarea | lo que era verdad al mirarlo |
+|---|---|
+| «NO PUBLICAR TODAVÍA — la portada tiene seis dedos» (03-sep 21:16) | **vencido.** La mano en disputa salió de la portada a las **21:47**, 31 minutos después del veredicto. La tarea congeló la evidencia y nadie la recontó |
+| dos tareas abiertas sobre la MISMA pieza (`t_a9ff7367`, `t_c7686e93`) | con historias distintas: una habla de la lámina 7, la otra de HUMO. Leídas en fila se contradicen |
+| «cambiar esa foto son otros 2 cr» — planteado como decisión de plata | **tenía salida de 0 créditos**, que nadie buscó antes de preguntar |
+
+**Lo aprendido, y es lo caro:** una objeción se le manda a Sergio como decisión de plata sólo
+**después** de agotar las salidas gratis, no antes. Acá la de 2 cr era la tercera opción, no la
+única: el recorte se descartó midiendo coordenadas y el cambio de foto se descartó mirando las
+cuatro candidatas del banco. Recién ahí quedaba el gasto — y el desenfoque selectivo lo evitó.
+Preguntar antes de agotar lo gratis no es prudencia: es cola que se le acumula a la única persona
+que no se repone.
+
+**Segundo aprendizaje, sobre el instrumento:** para juzgar «hay gente al fondo» hay que mirar la
+foto **fuente ampliada**, no la lámina compuesta. La tercera figura de la derecha parecía persona
+en la lámina y, ampliada 2,2×, es una mancha de bokeh tras las plantas: no comunica nada y no
+había que tocarla. Ampliar evitó trabajo, además de evitar el error.
+
+Detalle técnico del arreglo (máscara degradada, comando exacto, por qué no sirvió recortar ni
+cambiar de foto): `posts-20260807/L2/LEEME.md`, sección «El equipo del fondo salió de la lámina 4».
