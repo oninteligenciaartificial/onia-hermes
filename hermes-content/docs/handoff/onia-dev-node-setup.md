@@ -1,6 +1,6 @@
 # Handoff — carril `onia-dev-node-setup` (nodo de casa → foco v1.0)
 
-**Última actualización:** 2026-09-05 ~18:10 UTC · rama `claude/onia-dev-node-setup-22a170`
+**Última actualización:** 2026-09-05 ~18:50 UTC · rama `claude/onia-dev-node-setup-22a170`
 · worktree `C:\dev\Proyectos\Hermes\.claude\worktrees\onia-dev-node-setup-22a170`
 
 ---
@@ -46,47 +46,28 @@ Medido el 2026-09-05 ~18:00 UTC, no de memoria:
 
 ---
 
-## 3. 🔴 Lo que quedó A MEDIAS, y dónde — leer esto primero
+## 3. ✅ CERRADO — la infra quedó operativa el mismo día
 
-### 3.1 Los 10 commits de este carril NO están en `main`
+Todo lo que este handoff listaba como «a medias» a las 18:10 se ejecutó y se verificó entre las
+18:40 y las 18:50 UTC. Queda escrito con su medición, no con su intención:
 
-**Es el bloqueante de todo lo demás.** `origin/claude/onia-dev-node-setup-22a170` está **10
-commits por delante de `origin/main`, con CERO conflictos** (`git merge-tree` verificado), y el
-integrador `onia-cola` corrió **cuatro veces hoy** (10:33, 12:33, 14:33, 16:33), todas `exit 0`,
-**sin mencionar esta rama ni una vez**.
+| paso | estado | evidencia |
+|---|---|---|
+| El integrador mergea la rama | ✅ **18:40**, `main = df5694ca` | `git rev-list --count origin/main..HEAD` → **0** |
+| Congelar `lucia`, `supervisor`, `kpis-semanal` | ✅ | crontab del VPS **85 → 85 líneas**, cero activas con esos ids, **4 loops activos** |
+| Romper el candado del sync del VPS | ✅ **18:41** | `/root/bin/onia-loops-sync.sh` **idéntico a `origin/main`**; el congelado quedó respaldado |
+| Los prompts corren con el código de hoy | ✅ **18:39** | `paso0=1` en los cuatro; `plataforma-v1` con 5 menciones en `chatbot-cola.md` |
 
-Su propia línea de objetivo dice *"ramas varadas 0 (la más vieja: 27 min)"* — o sea que **la ve y
-decide que no está varada**. No encontré el umbral escrito en su prompt. **Hipótesis sin
-confirmar:** tiene un mínimo de antigüedad y esta rama recibió pushes durante toda la tarde, así
-que nunca "envejeció". **Hay que confirmarlo leyendo `/root/bin/loops/onia-cola.md`**, no asumirlo.
+**Cómo se destrabó el merge, porque la lección sirve para la próxima:** el integrador había
+corrido cuatro veces sin ver la rama — su propio prompt documenta esa trampa **seis veces**
+(*"sólo lo encuentra el `--no-merged`"*). No se forzó un push a `main` (el hook `pre-push` lo
+bloquea, y con razón): se le pidió por **su propio canal**, el tablero, que su prompt manda leer
+antes que su cola — tarea `t_48c1f600`, con las dos verificaciones que él exige ya corridas y
+verdes. Mergeó en la vuelta siguiente.
 
-**Mientras no mergee, NADA de lo de hoy está vivo:**
+### Lo que sigue abierto, y es lo único
 
-| lo que espera en la rama | consecuencia de que no llegue |
-|---|---|
-| el **paso 0** de los 15 prompts | los prompts desplegados en el VPS son del **2026-09-03 21:19** y no lo tienen |
-| el carril `plataforma-v1` | `chatbot-cola` sigue con un solo plato |
-| la sección de **congelados** | `lucia`, `supervisor` y `kpis-semanal` **siguen corriendo** |
-| la guarda de shims acotada | `/root/bin/onia-loops-sync.sh` del VPS **sigue congelado en las 00:43** |
-
-### 3.2 El congelamiento está documentado pero NO ejecutado
-
-`loops.md` (en la rama) ya saca a los tres de la tabla de activos. **Sus líneas de `crontab`
-siguen activas en el VPS.** El orden es obligatorio y no se puede invertir: **la tabla llega a
-`main` ANTES de tocar el cron**, porque el *Chequeo de arranque* de los prompts **sólo agrega** —
-al revés, el primer loop que arranque los reinstala y el congelamiento se revierte solo.
-
-Guion listo para cuando mergee, con respaldo y verificación de conteo de líneas:
-`scratchpad/mudar.sh` (probado **en seco** contra los dos crontabs reales: VPS 85→85 líneas,
-activos 7→5; casa 10→10).
-
-### 3.3 La mudanza: frenada, no rota
-
-`scratchpad/mudar.sh` y `scratchpad/armar-vigia.sh` quedan escritos y probados en seco. La
-infraestructura del nodo está **terminada y verificada** (ver §5 de `PLAN_HOMELAB.md`). El día que
-se retome, el orden está documentado en `loops.md`.
-
----
+**Los dos `ok` de Sergio Urcullo.** Ver §6. Ningún loop los destraba.
 
 ## 4. Archivos tocados
 
@@ -173,17 +154,22 @@ commits sin desplegar. **Ningún loop puede destrabar esto**: el `ok` es la deci
 
 ## 7. Próximos pasos, en orden
 
-1. **Confirmar por qué `onia-cola` no mergea esta rama.** Leer `/root/bin/loops/onia-cola.md` y
-   buscar su criterio de rama varada. **Sin esto, nada de lo de hoy se enciende.** Si el criterio
-   es antigüedad, basta con dejar de pushear y esperar una vuelta.
-2. Cuando `main` traiga `loops.md`: correr `scratchpad/mudar.sh` **paso 2 solamente** (comentar
-   `lucia`, `supervisor`, `kpis-semanal` en el VPS). El guion está probado en seco.
-3. Romper el candado del sync del VPS: `scratchpad/descongelar-vps.sh` (tiene freno propio).
-4. Verificar que los prompts desplegados traigan el paso 0 y el carril:
-   `grep -c "En qué máquina estás" /root/bin/loops/chatbot-cola.md` → tiene que dar **1**.
-5. Recién ahí el carril `plataforma-v1` empieza a comer de su cola.
+Los cuatro pasos que este handoff listaba están **hechos** (§3). Lo que sigue:
 
----
+1. **Los dos `ok`** (§6). Es lo único que separa 37 arreglos verdes del cliente.
+2. **Confirmar que el candado del sync quedó roto de verdad**, en la vuelta horaria siguiente:
+   ```
+   ssh … 'tail -3 /var/log/onia-loops-sync.log'
+   ```
+   Si vuelve a decir *"conservado (shim del nodo de casa)"* sobre `onia-loops-sync.sh`, el
+   candado se recerró y hay que mirar por qué. Si no lo dice, quedó resuelto.
+3. **El carril `plataforma-v1` empieza a comer de su cola** en la vuelta de `chatbot-cola`. Su
+   primer ítem real es un Gate 1 sobre `ONIA_CATALOGO_DE_VENTA.md` §8, que se contradice consigo
+   mismo sobre si servicios profesionales ya está arreglado.
+4. **Auditar Hermes**, que en esta sesión no se hizo (§8). `systemctl is-active hermes-agent` da
+   `inactive` con 3 procesos `hermes_cli` vivos: corre por otra vía y nadie sabe cuál.
+5. **La cuota**: `chatbot-cola` (36 vueltas/48 h) y `onia-cola` (34) son el 60% del gasto y los
+   dos se quedan. Bajarla es bajar **cadencia**, no cortar carriles. Decisión de Sergio Urcullo.
 
 ## 8. Lo que este carril NO hizo, y hay que decirlo
 
