@@ -119,10 +119,7 @@ manda. Un loop se compara **sólo contra el registro de su propia máquina**:
 | `chatbot-cola` | **VPS** | `3 */2 * * *` (UTC) | Carril chatbot: su cola hasta que un desconocido escriba y se vea en la bandeja |
 | `onia-cola` | **VPS** | `33 */2 * * *` (UTC) | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
 | `web-venta` | **VPS** | `48 */2 * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
-| `lucia` | **VPS** | `37 9,21 * * *` (UTC) | Carril modelos/Higgsfield (rama `claude/lucia-vps`): guiones, briefs y prompts LISTOS. **No dispara nada pago** |
-| `kpis-semanal` | **VPS** | `7 13 * * 1` (UTC) | Tablero KPIs del lunes del carril marca personal; pide a Sergio los numeros que solo el ve |
 | `recorrido-cliente` | **VPS** | `9 1,4,7,10,13,16,19,22 * * *` (UTC) | Recorre el camino del cliente de punta a punta (rama `claude/recorrido-cliente`) y dice **en qué paso exacto se rompe**, con la captura como prueba |
-| `supervisor` | **VPS** | `29 6,18 * * *` (UTC) | **Audita a los otros loops**: que ninguno cobre por trabajo que no sirve (rama `claude/supervisor`). No mergea a `main` — deja lo que encuentra en el tablero |
 
 ⚠️ **Corregido 2026-09-03 21:10 UTC — cinco cadencias BAJADAS a propósito, y la tabla seguía con
 las viejas.** `canario-visual`, `marca-personal`, `docs-auditoria`, `investigacion` y `supervisor`
@@ -378,8 +375,45 @@ auto-cura es correcta; lo que no puede es curar hacia una tabla que miente.
 | `calidad-generado` | `5 3,9,15,21 * * *` | Juzga piezas; sin publicación en curso no tiene qué juzgar. |
 | `contenido-cola` | `11 */3 * * *` | La aguja no se movió en 3 vueltas: el cuello es el canal y la cola de Sergio, no la cantidad de piezas. |
 
-**Los que siguen corriendo son siete**, y son los que tocan producto o lo integran: `chatbot-cola`,
-`onia-cola`, `web-venta`, `lucia`, `recorrido-cliente`, `supervisor` y `kpis-semanal`.
+Tras esa pausa quedaron corriendo siete. El 2026-09-05 se congelaron tres más (sección
+siguiente) y **quedan cuatro**.
+
+## Congelados el 2026-09-05 (objetivo: terminar `onia-platform` y cerrar 5 clientes con la v1.0) — NO rearmar
+
+> Sergio Urcullo, 2026-09-05: *"quiero que te enfoques en solo los loops que nos lleven a terminar
+> de desarrollar la Onia Platform… quiero que todo quede congelado de los otros, no los elimines,
+> que quede congelado hasta decisión nueva"*.
+
+**Congelado ≠ apagado ≠ borrado.** El prompt, la rama y el worktree **quedan intactos**; sólo se
+comenta su línea de `crontab`, con el motivo al principio
+(`# CONGELADO 2026-09-05 (foco v1.0) — …`). Se revive descomentando, sin reinstalar nada.
+
+⚠️ **Salen de la tabla de activos, y por la misma razón de siempre:** el *Chequeo de arranque* de
+los quince prompts **sólo agrega**, así que mientras figuren como activas, el primer loop que
+arranque las rearma y el congelamiento se revierte solo. Por eso el orden no es negociable:
+**esta tabla llega a `main` ANTES de tocar el `crontab`.**
+
+| id | cron que tenía | por qué se congeló |
+|---|---|---|
+| `lucia` | `37 9,21 * * *` | Guiones, briefs y prompts de modelos/Higgsfield. No toca `onia-platform` ni acerca un cierre. |
+| `supervisor` | `29 6,18 * * *` | Audita a los otros loops. Con cuatro carriles vivos y un objetivo estrecho, audita más de lo que hay que auditar. |
+| `kpis-semanal` | `7 13 * * 1` | Tablero de KPIs del carril marca personal, que ya estaba pausado desde el 2026-09-04. Medía un carril congelado. |
+
+**Los cuatro que quedan, y por qué cada uno sobrevive al recorte:**
+
+| id | por qué se queda |
+|---|---|
+| `onia-cola` | **El integrador.** Sin él nada de lo que se desarrolle llega a `main`, y por lo tanto al cliente. No es opcional: es el único camino a producción. |
+| `chatbot-cola` | **El único loop que escribe en el repo `onia-platform`** — 28 commits en 7 días, medidos. Su carril hoy es el add-on chatbot; ver el hueco de abajo. |
+| `recorrido-cliente` | Recorre el camino del cliente de punta a punta y dice **en qué paso exacto se rompe**, con la captura como prueba. Es el instrumento que encuentra lo que frena un cierre. |
+| `web-venta` | Dueño de `onia.com.bo/` y `/empezar`: la puerta por donde entra el lead. El 2026-09-04 encontró que los dos CTA de `/contacto` agendaban contra un Cal.com muerto — un lead que no puede agendar no se convierte en cliente. |
+
+🔴 **El hueco que este recorte deja a la vista:** *ningún loop tiene como carril terminar
+`onia-platform`*. El único que escribe en ese repo es `chatbot-cola`, y su carril es el **chatbot**,
+que por la regla de `CLAUDE.md` es un **add-on, no la oferta** (*"El SISTEMA es la oferta; el
+chatbot es un add-on"*). Con el objetivo puesto en la v1.0 del sistema, eso hay que resolverlo:
+o se amplía ese carril al producto entero, o se abre uno propio. **Decisión de Sergio Urcullo,
+anotada y sin ejecutar.**
 
 ## Apagados a propósito el 2026-08-31 — NO rearmar
 
