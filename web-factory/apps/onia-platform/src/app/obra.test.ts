@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { PAGINAS_PUBLICAS, metadataDe } from "./rutas";
+import { PAGINAS, estaProhibida, metadataDe } from "./rutas";
 
 /**
- * Ninguna página publicada declara estado de obra en su metadata.
+ * Ninguna página que el sitio SIRVE declara estado de obra en su metadata.
  *
  * Es la regla de Sergio del 2026-08-20 —*"no entiendo por qué dices si es que
  * estamos construyendo algo que aún no está listo… hace escapar a los clientes
@@ -24,11 +24,32 @@ import { PAGINAS_PUBLICAS, metadataDe } from "./rutas";
  * Una promesa que cambia se barre en toda la superficie, y la metadata es la
  * parte de la superficie que no se ve mirando.
  *
- * ⚠️ **El corte de sujetos es el disco menos el `disallow` de `robots.ts`**, el
- * mismo de `compartir.test.ts` y por el mismo motivo: una lista de inclusión
- * (el sitemap, un array de rutas) falla ABIERTA — el día que una página sale de
- * esa lista por un motivo no relacionado, deja de tener gate y nada se pone en
- * rojo. Con el disco, una página nueva nace cubierta.
+ * ⚠️ **El sujeto es el disco ENTERO**, igual que `obra-en-el-cuerpo.test.ts`.
+ * Una lista de inclusión (el sitemap, un array de rutas) falla ABIERTA — el día
+ * que una página sale de esa lista por un motivo no relacionado deja de tener
+ * gate y nada se pone en rojo. Con el disco, una página nueva nace cubierta.
+ *
+ * ⚠️ **Hasta el 2026-09-04 el corte era el disco MENOS el `disallow` de
+ * `robots.ts`, y esa resta tenía un agujero del tamaño de una página viva.** La
+ * justificación escrita acá era *"lo que Google no indexa, Google no lo lee"*.
+ * Es cierta sobre Google y falsa sobre el resto: `robots.txt` es una
+ * instrucción para RASTREADORES, no una pantalla apagada, y la `description` no
+ * la lee sólo el buscador — la lee el fetcher que arma la tarjeta de enlace de
+ * WhatsApp, que es el canal por el que Sergio le manda el sitio a un lead.
+ *
+ * Medido el 2026-09-04 contra producción, que es lo que lo vuelve un hecho y no
+ * un argumento:
+ *
+ *     curl -A "WhatsApp/2.23.20.0" https://onia.com.bo/v1/comparativa
+ *     → HTTP 200, 38.727 bytes
+ *     → description: "…con fecha de consulta. Y lo que Onia todavía no hace."
+ *
+ * Esa frase es EXACTAMENTE la que se sacó de `/comparativa` el 2026-09-03 por
+ * anunciar la carencia en el renglón que busca el clic. Se arregló la instancia
+ * donde el defecto saltó y su gemela de `/v1` quedó atrás — el mismo barrido a
+ * medias que `obra-en-el-cuerpo.test.ts` documenta sobre el CUERPO de esa misma
+ * página. Los dos gates miran ahora el mismo conjunto de sujetos, así que la
+ * mitad que arregla uno no puede volver a sobrevivir en la del otro.
  *
  * ⚠️ **Lo que este gate NO prohíbe, y es deliberado**, porque una lista de
  * palabras que grita de más termina borrada:
@@ -115,7 +136,26 @@ describe("ninguna página publicada exhibe obra en su metadata", () => {
     expect(OBRA.length, "la lista de frases de obra se vació").toBeGreaterThan(5);
   });
 
-  it.each(PAGINAS_PUBLICAS.map((p) => [p.ruta || "/", p]))(
+  it("el sujeto incluye las páginas que robots.ts deshabilita", () => {
+    // El ancla del CORTE, no de los patrones. Volver a restar `robots.ts` —que
+    // es como esta frase sobrevivió en `/v1/comparativa`— deja este caso en
+    // rojo en vez de vaciar el gate en silencio. Se afirma sobre una página
+    // deshabilitada REAL del árbol, no sobre una inventada: si `/v1` algún día
+    // se borra de verdad (no se deshabilita: se borra), este caso avisa que el
+    // ancla se quedó sin sujeto en lugar de seguir midiendo nada.
+    const deshabilitadas = PAGINAS.filter((p) => estaProhibida(p.ruta));
+    expect(
+      deshabilitadas.length,
+      "no quedan páginas deshabilitadas en el árbol: este ancla ya no ancla nada",
+    ).toBeGreaterThan(0);
+    expect(
+      deshabilitadas.every((p) => PAGINAS.includes(p)),
+      "el gate volvió a restar el disallow de robots.ts, y una página que " +
+        "responde 200 se quedó sin vigilancia sobre su description",
+    ).toBe(true);
+  });
+
+  it.each(PAGINAS.map((p) => [p.ruta || "/", p]))(
     "%s no se presenta como obra",
     (rotulo, pagina) => {
       const meta = sinComentarios(metadataDe(pagina));

@@ -118,8 +118,8 @@ export default function PreciosPage() {
                 <a href="/comparativa">
                   Mirá Onia contra todo lo que se vende en Bolivia
                 </a>{" "}
-                — con los precios públicos de cada uno y lo que todavía no
-                hacemos, dicho de frente. ¿Preferís tocarlo antes que leer?{" "}
+                — con el precio público de cada uno y su fecha de consulta.
+                ¿Preferís tocarlo antes que leer?{" "}
                 <a href="/prueba-gratis">Probalo gratis 14 días</a>.
               </p>
             </Reveal>
