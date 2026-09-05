@@ -1,4 +1,11 @@
-Loop del carril CHATBOT de ONIA. Arrancás sin memoria: todo está en los archivos.
+Loop del carril **PLATAFORMA v1.0** de ONIA — que incluye el chatbot, porque el chatbot es un
+add-on DEL producto. Arrancás sin memoria: todo está en los archivos.
+
+🔴 **Tu carril se amplió el 2026-09-05 y esto cambia qué comés.** Sergio Urcullo redujo el
+objetivo del sistema entero a *terminar `onia-platform` y cerrar cinco clientes con la v1.0*, y
+congeló todo lo demás. Al recortar quedó a la vista que **ningún loop tenía como carril terminar
+el producto** — y vos sos el único que escribe en ese repo. Así que ahora tenés **dos platos, en
+orden**, y el segundo es nuevo. Ver «Trabajar».
 
 ## OBJETIVO (medible)
 
@@ -21,7 +28,10 @@ bash webhook-server.sh logs 2>/dev/null | tail -80 | grep -E "demo_agendada|hand
 
 Y el chequeo de **DOS mensajes en el widget real** de la sección «Chequeo de tu DEFINICIÓN DE
 HECHO» de abajo: ése mide el segundo turno, que es donde el bot murió dos veces. La línea
-`OBJETIVO:` es `simulador X/3 · widget Y/2 · avisos demo/handoff Z`.
+`OBJETIVO:` es `simulador X/3 · widget Y/2 · avisos demo/handoff Z · v1.0 A/6`.
+
+`A/6` son los ítems cerrados de `hermes-content/docs/cola/plataforma-v1.md`. **Se cuenta, no se
+estima:** `grep -c '^- \[x\]' hermes-content/docs/cola/plataforma-v1.md`.
 
 # DÓNDE ESTÁS CORRIENDO — leelo antes que nada
 
@@ -90,8 +100,22 @@ Una credencial que falta es la última variable de entorno, no un bloqueo. Se co
 
 ## Objetivo del carril
 
-**Que un desconocido escriba y esa conversación se vea en la bandeja.**
-**Hecho =** se abre `/inbox` con la sesión del dueño y hay una conversación de una persona que no somos nosotros.
+**1 (el que ya tenías, y sigue primero).** Que un desconocido escriba y esa conversación se vea
+en la bandeja. **Hecho =** se abre `/inbox` con la sesión del dueño y hay una conversación de una
+persona que no somos nosotros.
+
+**2 (nuevo, 2026-09-05).** Que los **cinco rubros que ya se venden** se recorran de punta a punta
+sin que el camino se rompa, y que lo que un cliente ve nunca contradiga lo que el producto hace.
+**Hecho =** los seis ítems de `hermes-content/docs/cola/plataforma-v1.md` cerrados con su prueba.
+
+🔴 **`v1.0` está DEFINIDA y no la redefinís vos:** los cinco rubros vendibles hoy (dental,
+estética, comercio, importadora acotada, servicios profesionales). Veterinaria y ganadería
+**quedan afuera** — tienen bloqueo real y meterlos es desarrollo nuevo, no pulido.
+
+🔴 **Y `🟡` en el catálogo NO significa «a medias».** Lo dice el propio catálogo: *"lo que le
+falta a un 🟡 es kilometraje, no código"*. Hay **doce** módulos en 🟡 y ninguno pide reescritura.
+Un loop que lea 🟡 como «falta construir» reconstruye doce módulos que ya funcionan, y eso no
+acerca un cierre: lo aleja.
 
 El norte de todos los carriles: `hermes-content/docs/ONIA_DEFINICION_DE_TERMINADO.md`.
 
@@ -235,12 +259,27 @@ volver a investigarlo desde cero.
 NO**. Ya pasó el 2026-08-31 en Windows: los archivos quedaron en disco, desregistrados, los loops
 dejaron de correr y **nada avisó** — se descubrió por casualidad.
 
-Acá el registro es el **crontab del VPS**, no la app:
+Acá el registro es el **crontab de la máquina donde estás corriendo**, no la app.
+Desde el 2026-09-05 esa máquina puede no ser el VPS: hay un nodo de casa que también
+corre loops, y cada uno se compara **sólo contra sus propias filas**.
+
+0. **¿En qué máquina estás?** Averigualo ANTES de comparar nada. Se pregunta por archivos,
+   nunca por hostname ni IP — *una IP se mueve, un hostname se renombra*:
+   - existe `/usr/local/lib/hermes-agent/venv/bin/python` → sos el **`VPS`**
+   - existe `/root/.onia-nodo` → sos la máquina cuyo nombre dice adentro (hoy: `casa`)
+   - ninguno de los dos → **no compares ni rearmes nada**, y decilo en tu vuelta.
+
+   ⚠️ **Este paso no es burocracia.** Sin él, este mismo bloque seguido al pie de la letra en el
+   nodo de casa habría instalado ahí los **diez crons del VPS**, apuntando a worktrees que no
+   existen. Lo detectó el loop `web-venta` el 2026-09-04 (tarea `t_812bd90a`) antes de que
+   pasara. Para cruzar el resultado, `node scripts/loops_registrados.mjs` ya sabe en qué máquina
+   está — usalo como **confirmación, no en lugar de** estos pasos: si el repo no está donde
+   esperás, el comando no corre y el chequeo tiene que seguir funcionando igual.
 
 1. `crontab -l`
 2. Compará contra la lista versionada: `hermes-content/docs/cola/loops.md`, tabla
    **"Deben existir y estar activos"**, columna **"dónde corre"**.
-3. Para cada loop de esa tabla que diga **`VPS`** y **no tenga su línea en `crontab -l`** (o la
+3. Para cada loop de esa tabla cuya columna «dónde corre» diga **TU máquina (paso 0)** y **no tenga su línea en `crontab -l`** (o la
    tenga comentada con `#`): volvé a ponerla exactamente como dice la columna `cron (UTC)`,
    apuntando a `/root/bin/onia-loop.sh <id>`, y mandá **un `onia-tg.sh` de UNA línea** diciendo
    cuál faltaba y que lo rearmaste.
@@ -271,11 +310,21 @@ Aun así, `git branch --show-current` primero. Si no es la esperada, PARÁ y rep
 
 ## Trabajar
 
-Leé `hermes-content/docs/cola/chatbot.md`. Primer ítem no bloqueado de "Ahora".
+**Tenés DOS colas, y el orden es fijo:**
+
+1. `hermes-content/docs/cola/chatbot.md` — primero, **mientras le queden 🔴 abiertos**. Hoy
+   quedan dos, y los dos matan cierres: el bot dice *"Listo, agendado"* sin reserva real, y
+   promete *"ya le pasé tu consulta a Sergio"* y **nadie se la pasa**. Un lead que pide demo y
+   cree que quedó agendada es un cliente perdido con la peor cara posible.
+2. `hermes-content/docs/cola/plataforma-v1.md` — cuando esa cola no tenga 🔴 abiertos.
+
+Primer ítem no bloqueado de "Ahora" de la cola que corresponda. **Un ítem por vuelta**: no
+empieces el segundo plato con un 🔴 del primero abierto.
 
 **Gate 1:** este carril tiene la peor tasa medida — **7 de 15 pendientes heredados eran fantasma (46%)**. En un caso el mismo archivo cerraba una pieza y más abajo la repetía como pendiente. Antes de trabajar: abrí el `archivo:línea`, corré el grep, mirá el commit. Si ya está hecho, movelo a "Cerrado" con su prueba y seguí. Un `grep` sirve para **descartar**, nunca para **confirmar**.
 
-`node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md` en verde antes de commitear.
+`node scripts/verificar_cola.js <la cola que tocaste>` en verde antes de commitear — la de
+chatbot o la de plataforma-v1, la que hayas editado.
 
 **Desarrollar:** test primero en ROJO por el motivo correcto. Gates: `npx tsc --noEmit` + `npx vitest run` + `npx eslint .` — los TRES, en `/root/loops/onia-platform-chatbot`. Si toca pantalla, se abre y se MIRA con captura (Playwright está en `/root/node_modules`, navegadores en `/root/.cache/ms-playwright/`; como root va con `--no-sandbox`).
 
@@ -401,6 +450,36 @@ Al final de tu salida, las mismas líneas que el corredor le va a mostrar a tu p
 **Dos vueltas seguidas sin avance = cambiar de método, no repetirlo.** Una vuelta sin commit
 es un resultado honesto si trae su `RAZÓN:`; una vuelta con commit y la medida igual que ayer
 es la que hay que evitar.
+
+## 🔴 Cierre de vuelta — ¿lo que arreglaste lo ve el cliente?
+
+**Construido ≠ terminado.** Un arreglo verificado, gateado y mergeado a `master` vale **cero**
+para el cliente mientras el contenedor siga corriendo el build viejo.
+
+**El circuito de deploy YA EXISTE — no lo construyas.** Lo hizo `onia-cola` el 2026-09-05: una
+tarea del tablero con `DESPLEGAR: landing|plataforma` se ejecuta cuando Sergio Urcullo contesta
+`ok <id>`. Vive en `/root/bin/onia-publicar-aprobado.mjs`. **El cuello no es técnico: es una
+decisión de Sergio Urcullo**, y eso no lo destraba ningún loop.
+
+**Lo único que hacés al cerrar la vuelta:** si tu arreglo toca el producto, mirá si hay un pedido
+de deploy vivo para `plataforma`:
+
+```
+/root/bin/onia-tablero.sh list --status blocked 2>/dev/null | grep -i 'Publicar app.onia'
+```
+
+- **Hay pedido vivo** → tu ítem **no está terminado**, está *esperando publicación*. Decilo así
+  en tu línea de vuelta y **no lo cuentes como cerrado**.
+- **No hay pedido y hay commits sin desplegar** → nombralo en tu vuelta, en UNA línea.
+
+🔴 **NO mandes Telegram por esto.** `onia-cola` ya mide «commits sin desplegar» en cada vuelta y
+ya creó el pedido. Un segundo aviso del mismo hecho, cada 2 h, son doce mensajes diarios que
+dicen lo mismo — y así se pierde el que importa. Ya pasó: el 2026-09-05 Sergio Urcullo pidió
+explícitamente ordenar el Telegram porque lo llenaban avisos innecesarios.
+
+⚠️ **Y vos no desplegás a mano.** El runbook tumbó `app.onia.com.bo` tres veces mientras se
+aprendía, y el circuito existe justamente para que nadie lo repita a pulso. Si el pedido está
+`blocked`, se queda `blocked`.
 
 ## 🧠 MEMORIA COMPARTIDA — la leés al arrancar, le escribís al cerrar
 
