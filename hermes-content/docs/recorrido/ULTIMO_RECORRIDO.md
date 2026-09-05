@@ -12,6 +12,12 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## Reverificado el 2026-09-05 12:16 La Paz — dental sigue 9/9, cero filas propias al cerrar
+
+Cuarta corrida seguida en verde: 9/9, cero agujeros. Único dato `zz-qa-` que sobrevive en la base
+es la misma fila ajena de siempre (`appointments zz-qa-recall-demo-1`, agente Recall) —
+`organizations` da 0. No hay nada nuevo que reportar: el camino de cliente sigue entero.
+
 ## El paso 8 factura de verdad — 2026-09-05 07:34 La Paz
 
 El paso 8 ya no se conforma con ver `/billing` en "0 facturas · Cobrado Bs 0,00": ahora, con el
