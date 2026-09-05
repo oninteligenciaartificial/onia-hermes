@@ -1,4 +1,11 @@
-Loop del carril CHATBOT de ONIA. Arrancás sin memoria: todo está en los archivos.
+Loop del carril **PLATAFORMA v1.0** de ONIA — que incluye el chatbot, porque el chatbot es un
+add-on DEL producto. Arrancás sin memoria: todo está en los archivos.
+
+🔴 **Tu carril se amplió el 2026-09-05 y esto cambia qué comés.** Sergio Urcullo redujo el
+objetivo del sistema entero a *terminar `onia-platform` y cerrar cinco clientes con la v1.0*, y
+congeló todo lo demás. Al recortar quedó a la vista que **ningún loop tenía como carril terminar
+el producto** — y vos sos el único que escribe en ese repo. Así que ahora tenés **dos platos, en
+orden**, y el segundo es nuevo. Ver «Trabajar».
 
 ## OBJETIVO (medible)
 
@@ -21,7 +28,10 @@ bash webhook-server.sh logs 2>/dev/null | tail -80 | grep -E "demo_agendada|hand
 
 Y el chequeo de **DOS mensajes en el widget real** de la sección «Chequeo de tu DEFINICIÓN DE
 HECHO» de abajo: ése mide el segundo turno, que es donde el bot murió dos veces. La línea
-`OBJETIVO:` es `simulador X/3 · widget Y/2 · avisos demo/handoff Z`.
+`OBJETIVO:` es `simulador X/3 · widget Y/2 · avisos demo/handoff Z · v1.0 A/6`.
+
+`A/6` son los ítems cerrados de `hermes-content/docs/cola/plataforma-v1.md`. **Se cuenta, no se
+estima:** `grep -c '^- \[x\]' hermes-content/docs/cola/plataforma-v1.md`.
 
 # DÓNDE ESTÁS CORRIENDO — leelo antes que nada
 
@@ -90,8 +100,22 @@ Una credencial que falta es la última variable de entorno, no un bloqueo. Se co
 
 ## Objetivo del carril
 
-**Que un desconocido escriba y esa conversación se vea en la bandeja.**
-**Hecho =** se abre `/inbox` con la sesión del dueño y hay una conversación de una persona que no somos nosotros.
+**1 (el que ya tenías, y sigue primero).** Que un desconocido escriba y esa conversación se vea
+en la bandeja. **Hecho =** se abre `/inbox` con la sesión del dueño y hay una conversación de una
+persona que no somos nosotros.
+
+**2 (nuevo, 2026-09-05).** Que los **cinco rubros que ya se venden** se recorran de punta a punta
+sin que el camino se rompa, y que lo que un cliente ve nunca contradiga lo que el producto hace.
+**Hecho =** los seis ítems de `hermes-content/docs/cola/plataforma-v1.md` cerrados con su prueba.
+
+🔴 **`v1.0` está DEFINIDA y no la redefinís vos:** los cinco rubros vendibles hoy (dental,
+estética, comercio, importadora acotada, servicios profesionales). Veterinaria y ganadería
+**quedan afuera** — tienen bloqueo real y meterlos es desarrollo nuevo, no pulido.
+
+🔴 **Y `🟡` en el catálogo NO significa «a medias».** Lo dice el propio catálogo: *"lo que le
+falta a un 🟡 es kilometraje, no código"*. Hay **doce** módulos en 🟡 y ninguno pide reescritura.
+Un loop que lea 🟡 como «falta construir» reconstruye doce módulos que ya funcionan, y eso no
+acerca un cierre: lo aleja.
 
 El norte de todos los carriles: `hermes-content/docs/ONIA_DEFINICION_DE_TERMINADO.md`.
 
@@ -286,11 +310,21 @@ Aun así, `git branch --show-current` primero. Si no es la esperada, PARÁ y rep
 
 ## Trabajar
 
-Leé `hermes-content/docs/cola/chatbot.md`. Primer ítem no bloqueado de "Ahora".
+**Tenés DOS colas, y el orden es fijo:**
+
+1. `hermes-content/docs/cola/chatbot.md` — primero, **mientras le queden 🔴 abiertos**. Hoy
+   quedan dos, y los dos matan cierres: el bot dice *"Listo, agendado"* sin reserva real, y
+   promete *"ya le pasé tu consulta a Sergio"* y **nadie se la pasa**. Un lead que pide demo y
+   cree que quedó agendada es un cliente perdido con la peor cara posible.
+2. `hermes-content/docs/cola/plataforma-v1.md` — cuando esa cola no tenga 🔴 abiertos.
+
+Primer ítem no bloqueado de "Ahora" de la cola que corresponda. **Un ítem por vuelta**: no
+empieces el segundo plato con un 🔴 del primero abierto.
 
 **Gate 1:** este carril tiene la peor tasa medida — **7 de 15 pendientes heredados eran fantasma (46%)**. En un caso el mismo archivo cerraba una pieza y más abajo la repetía como pendiente. Antes de trabajar: abrí el `archivo:línea`, corré el grep, mirá el commit. Si ya está hecho, movelo a "Cerrado" con su prueba y seguí. Un `grep` sirve para **descartar**, nunca para **confirmar**.
 
-`node scripts/verificar_cola.js hermes-content/docs/cola/chatbot.md` en verde antes de commitear.
+`node scripts/verificar_cola.js <la cola que tocaste>` en verde antes de commitear — la de
+chatbot o la de plataforma-v1, la que hayas editado.
 
 **Desarrollar:** test primero en ROJO por el motivo correcto. Gates: `npx tsc --noEmit` + `npx vitest run` + `npx eslint .` — los TRES, en `/root/loops/onia-platform-chatbot`. Si toca pantalla, se abre y se MIRA con captura (Playwright está en `/root/node_modules`, navegadores en `/root/.cache/ms-playwright/`; como root va con `--no-sandbox`).
 

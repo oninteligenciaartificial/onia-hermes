@@ -116,7 +116,7 @@ manda. Un loop se compara **sólo contra el registro de su propia máquina**:
 
 | id | dónde corre | cron | para qué sirve |
 |---|---|---|---|
-| `chatbot-cola` | **VPS** | `3 */2 * * *` (UTC) | Carril chatbot: su cola hasta que un desconocido escriba y se vea en la bandeja |
+| `chatbot-cola` | **VPS** | `3 */2 * * *` (UTC) | **Carril `plataforma-v1` desde el 2026-09-05** (el id no se renombró: cambiarlo tocaría cron, worktrees, logs y gate sin ganar nada). Dos colas en orden: `cola/chatbot.md` mientras le queden 🔴, después `cola/plataforma-v1.md`. **Es el único loop que escribe en el repo `onia-platform`** |
 | `onia-cola` | **VPS** | `33 */2 * * *` (UTC) | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
 | `web-venta` | **VPS** | `48 */2 * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
 | `recorrido-cliente` | **VPS** | `9 1,4,7,10,13,16,19,22 * * *` (UTC) | Recorre el camino del cliente de punta a punta (rama `claude/recorrido-cliente`) y dice **en qué paso exacto se rompe**, con la captura como prueba |
@@ -408,12 +408,22 @@ arranque las rearma y el congelamiento se revierte solo. Por eso el orden no es 
 | `recorrido-cliente` | Recorre el camino del cliente de punta a punta y dice **en qué paso exacto se rompe**, con la captura como prueba. Es el instrumento que encuentra lo que frena un cierre. |
 | `web-venta` | Dueño de `onia.com.bo/` y `/empezar`: la puerta por donde entra el lead. El 2026-09-04 encontró que los dos CTA de `/contacto` agendaban contra un Cal.com muerto — un lead que no puede agendar no se convierte en cliente. |
 
-🔴 **El hueco que este recorte deja a la vista:** *ningún loop tiene como carril terminar
-`onia-platform`*. El único que escribe en ese repo es `chatbot-cola`, y su carril es el **chatbot**,
-que por la regla de `CLAUDE.md` es un **add-on, no la oferta** (*"El SISTEMA es la oferta; el
-chatbot es un add-on"*). Con el objetivo puesto en la v1.0 del sistema, eso hay que resolverlo:
-o se amplía ese carril al producto entero, o se abre uno propio. **Decisión de Sergio Urcullo,
-anotada y sin ejecutar.**
+✅ **El hueco que este recorte dejó a la vista, y cómo se cerró el mismo día.** Ningún loop tenía
+como carril terminar `onia-platform`: el único que escribe en ese repo es `chatbot-cola`, y su
+carril era el **chatbot**, que por `CLAUDE.md` es un **add-on, no la oferta**. Sergio Urcullo
+eligió **ampliar ese carril** en vez de abrir un quinto loop — así no se suma cuota: son las
+mismas 36 vueltas/48 h apuntando a lo que importa.
+
+Lo que se hizo, y lo que a propósito NO:
+
+- se abrió `cola/plataforma-v1.md` con los seis ítems de `ONIA_CATALOGO_DE_VENTA.md` §8, que ya
+  estaban escritos y **sin operar**, cada uno con su evidencia (gate `verificar_cola.js` en verde);
+- el prompt pasa a tener **dos platos en orden**: el chatbot mientras le queden 🔴 —hoy dos, y los
+  dos matan cierres— y después la v1.0;
+- **el id NO se renombró.** `chatbot-cola` aparece en el cron, en `/root/bin/loops/<id>.md`, en los
+  logs, en los worktrees y en este gate: renombrarlo es superficie grande para una ganancia
+  cosmética. **Queda como deuda anotada**, no como olvido: el nombre dice menos de lo que el
+  carril hace.
 
 ## Apagados a propósito el 2026-08-31 — NO rearmar
 
