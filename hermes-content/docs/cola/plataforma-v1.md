@@ -44,6 +44,37 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [ ] 🔴 **El último eslabón está roto: `onia-platform` NO se despliega solo, y por eso lo que
+      este carril arregle puede valer CERO.** Medido el 2026-09-05: el contenedor `onia-platform`
+      arrancó 03:07 y `origin/master` estaba en 04:41 — **tres commits arreglados que ningún
+      cliente veía**, incluido un fix de pantalla del chatbot. No hay ninguna línea de deploy en
+      el `crontab` del VPS ni ningún script: `--como` aparece **sólo** dentro del propio
+      `onia-platform/.claude/skills/onia-deploy/SKILL.md`, como advertencia sobre un flag
+      hipotético. El runbook es prosa que alguien ejecuta a mano.
+
+      **Decisión de Sergio Urcullo, 2026-09-05: que el loop despliegue, con gates.** Se construye
+      en ese orden y no se salta ningún paso:
+
+      1. Un script que implemente los cinco pasos del runbook **tal como están escritos**, con sus
+         gates ANTES del swap (bundle sin `localhost`/`127.0.0.1`, `anon key` vigente presente,
+         `test -f standalone/server.js && test -d standalone/node_modules`) y el backup del build
+         anterior **copiado, jamás movido**.
+      2. Que escriba el SHA desplegado en `/root/.onia-platform-desplegado`. Hoy el contenedor
+         **no expone su commit**, así que «producción está atrás» sólo se puede estimar por la
+         fecha de arranque. Un marcador lo vuelve exacto.
+      3. **Azul-verde de verdad**: el runbook ya advierte que un flag `--como=otro-nombre` no
+         alcanza si el script igual para y renombra el vivo. Se prueba contra un gemelo **sin
+         tocar el contenedor vivo**, y recién con el gemelo verde se hace el swap.
+      4. Recién entonces el prompt lo invoca al cierre de vuelta.
+
+      ⚠️ **No se automatiza en una vuelta y no se improvisa.** Este runbook tumbó
+      `app.onia.com.bo` **tres veces** mientras se aprendía, y sus siete trampas están escritas
+      porque cada una se pagó. Mientras el script no exista y no esté probado, el loop **avisa**
+      (ver «Cierre de vuelta» en el prompt) pero **no despliega**.
+
+      Runbook: `onia-platform/.claude/skills/onia-deploy/SKILL.md`. Verificación posterior:
+      `onia-platform/.claude/skills/onia-verificacion/SKILL.md`.
+
 - [ ] 🔴 **Gate 1 sobre el propio §8: su ítem 1 se contradice con la tabla de rubros del mismo
       archivo.** §8 dice *"terminar el arreglo de servicios profesionales (`/patients` en su nav)
       — es lo único que separa a ese rubro de ser vendible"*, y la tabla de §2 dice del mismo

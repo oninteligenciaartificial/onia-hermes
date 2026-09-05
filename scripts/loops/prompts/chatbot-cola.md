@@ -451,6 +451,48 @@ Al final de tu salida, las mismas líneas que el corredor le va a mostrar a tu p
 es un resultado honesto si trae su `RAZÓN:`; una vuelta con commit y la medida igual que ayer
 es la que hay que evitar.
 
+## 🔴 Cierre de vuelta — ¿lo que arreglaste lo ve el cliente?
+
+**Construido ≠ terminado.** Un arreglo verificado, gateado y mergeado a `master` vale **cero**
+para el cliente si el contenedor sigue corriendo el build viejo. Ya pasó: el 2026-09-05 había
+**tres commits arreglados que nadie veía**, y el 2026-09-04 el ítem más caro de la cola fue
+exactamente eso.
+
+`onia-platform` **no se despliega solo** — no hay cron ni script; el runbook se ejecuta a mano.
+Mientras el ítem 1 de `hermes-content/docs/cola/plataforma-v1.md` no esté cerrado, **vos no
+desplegás**: medís y avisás. Al final de cada vuelta:
+
+```
+cd /root/loops/onia-platform && git fetch -q origin master
+INI=$(docker inspect onia-platform --format '{{.State.StartedAt}}' | cut -c1-19)
+N=$(git log --since="$INI" --oneline origin/master | wc -l)
+```
+
+`N` es cuántos commits de `master` **no** están en producción. Es una **estimación por fecha de
+arranque**, no exacta: el contenedor no expone su commit. Por eso el ítem 1 pide un marcador.
+
+**Avisás sólo si `N` CRECIÓ desde tu último aviso.** No por vuelta: corrés cada 2 h y un aviso
+por vuelta son doce mensajes diarios que dicen lo mismo — así se pierde el que importa, y ya se
+llenó el Telegram de Sergio una vez por esto:
+
+```
+M=/var/lib/onia/platform-sin-desplegar
+mkdir -p /var/lib/onia; PREV=$(cat $M 2>/dev/null || echo 0)
+if [ "$N" -gt "$PREV" ]; then
+  /root/bin/onia-tg.sh "🚚 <b>$N commits en master sin desplegar</b> (antes: $PREV). El contenedor arranco $INI. El cliente no ve esos arreglos todavia."
+fi
+printf '%s' "$N" > $M
+```
+
+Si `N` bajó (alguien desplegó), **se actualiza el marcador y no se avisa nada**: que algo se
+arregle no es noticia.
+
+⚠️ **Y si el ítem 1 YA está cerrado** —el script existe y está probado contra un gemelo sin
+tocar el vivo— entonces sí desplegás, y sólo con los tres gates de tu sección «Desarrollar» en
+verde (`tsc --noEmit`, `vitest run`, `eslint .`) **más** los gates propios del runbook antes del
+swap. Si alguno está rojo, no desplegás y lo decís. **Un deploy no arregla un build roto: lo
+publica.**
+
 ## 🧠 MEMORIA COMPARTIDA — la leés al arrancar, le escribís al cerrar
 
 > **Nace del 2026-09-03.** Sergio: *"que los loops usen la memoria de hermes también, pero
