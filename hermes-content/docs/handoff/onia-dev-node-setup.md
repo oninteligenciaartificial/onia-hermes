@@ -18,6 +18,25 @@
 La mudanza se **frenó a propósito** cuando cambió el objetivo. Mudar loops de máquina no acerca un
 cierre: mueve dónde corre el mismo trabajo.
 
+### Sesión del 2026-09-05, 19:30-21:00 UTC — objetivo y resultado
+
+**Objetivo:** *dejar operativa la infra de loops.* **Hecho** = los 4 loops decididos corriendo
+con el código de hoy, los 3 congelados apagados, el sync del VPS descongelado.
+
+**✅ Cumplido y verificado midiendo, no leyendo este archivo.** El detalle está en §3
+(*«Recontado a las 20:00 UTC»*). Lo que ese reconteo agregó y el cierre de las 18:50 no tenía:
+
+1. Se miró que los loops **CORRAN**, no que su cron exista — la distinción que §5 dice que
+   cuesta caro. Los cuatro con `exit 0` el mismo día.
+2. **`lucia` no estaba apagada**: `lucia-cierre.sh` siguió gastando cuota de Claude a diario.
+3. **Hermes quedó auditado** (era el pendiente de §8) y el resultado es peor que «corre por otra
+   vía» — ver §6 y §8.
+4. Se documentó una **trampa de orden** que la primera mudanza real iba a pisar.
+
+**Lo que este objetivo NO incluía, y por eso no se hizo: mudar.** La regla de objetivo único
+pide confirmación explícita para cambiarlo a mitad, y además la mudanza **no se puede completar
+desde acá**: depende de un comando en la PC de casa (§6).
+
 ---
 
 ## 2. Qué quedó EN PRODUCCIÓN (vivo ahora)
@@ -207,6 +226,23 @@ commits sin desplegar. **Ningún loop puede destrabar esto**: el `ok` es la deci
 - **`web-venta` queda vivo** aunque venda y no desarrolle: es la puerta del lead.
 - **El loop despliega con gates** — ya resuelto por el circuito existente (§5.1).
 
+**🔴 Lo que traba la mudanza, y solo se corre en la PC de casa** (agregado 2026-09-05 21:00):
+
+`\\wsl$\Ubuntu\root\loops\onia-hermes\scripts\loops\homelab-wsl-arranque.ps1` — ya está en
+`main`, o sea ya está en el clon del nodo. En seco no toca nada; con `-Aplicar` crea la tarea.
+**Mientras no se aplique, el nodo tiene el `crontab` perfecto y no corre** (`PLAN_HOMELAB.md`
+§Sistema operativo). Y una decisión adentro: el disparador es *al iniciar sesión*, no *al
+arrancar* — las distros de WSL son **por usuario** y una tarea como SYSTEM no ve su Ubuntu.
+Para sobrevivir a un corte de luz sin que nadie inicie sesión hay que elegir: contraseña
+guardada en la tarea, o inicio de sesión automático de Windows. El script no hace ninguno.
+
+**🔴 El gateway de Hermes corre sin supervisión.** Medido: `hermes_cli.main gateway run` vive en
+`user.slice/…/session-*.scope` — huérfano de una sesión SSH muerta, no un servicio. `ppid 1`
+engaña: es reparenting. El `dashboard` al menos lo revive un cron cada 10 min; **el gateway no
+tiene quien lo reviva**. La última vez que Hermes murió en silencio fueron **9 días**. El arreglo
+es una unidad systemd, pero hay que parar el proceso vivo primero para no quedar con dos
+gateways — **no se tocó sin su ok**.
+
 **Pendiente de decisión, anotado y sin ejecutar:**
 
 - **La cuota no bajó con el recorte.** `chatbot-cola` (36 vueltas/48 h) y `onia-cola` (34) son el
@@ -216,29 +252,71 @@ commits sin desplegar. **Ningún loop puede destrabar esto**: el `ok` es la deci
 
 ## 7. Próximos pasos, en orden
 
-Los cuatro pasos que este handoff listaba están **hechos** (§3). Lo que sigue:
+Reescrito 2026-09-05 21:00. Los pasos 2 y 4 de la lista anterior están **hechos**: el candado
+del sync quedó roto (18:44 y 19:44 limpios) y Hermes quedó auditado.
 
-1. **Los dos `ok`** (§6). Es lo único que separa 37 arreglos verdes del cliente.
-2. **Confirmar que el candado del sync quedó roto de verdad**, en la vuelta horaria siguiente:
-   ```
-   ssh … 'tail -3 /var/log/onia-loops-sync.log'
-   ```
-   Si vuelve a decir *"conservado (shim del nodo de casa)"* sobre `onia-loops-sync.sh`, el
-   candado se recerró y hay que mirar por qué. Si no lo dice, quedó resuelto.
-3. **El carril `plataforma-v1` empieza a comer de su cola** en la vuelta de `chatbot-cola`. Su
-   primer ítem real es un Gate 1 sobre `ONIA_CATALOGO_DE_VENTA.md` §8, que se contradice consigo
-   mismo sobre si servicios profesionales ya está arreglado.
-4. **Auditar Hermes**, que en esta sesión no se hizo (§8). `systemctl is-active hermes-agent` da
-   `inactive` con 3 procesos `hermes_cli` vivos: corre por otra vía y nadie sabe cuál.
-5. **La cuota**: `chatbot-cola` (36 vueltas/48 h) y `onia-cola` (34) son el 60% del gasto y los
+1. **Los dos `ok`** (§6). Sigue siendo lo único que separa 37 arreglos verdes del cliente.
+   *Listo =* las dos tareas salen de `blocked` y el publicador corre.
+2. **Aplicar `homelab-wsl-arranque.ps1 -Aplicar`** en la PC de casa.
+   *Listo =* se reinicia Windows, **nadie abre Ubuntu**, y `wsl -l -v` dice `Running`. Un cron
+   que no se probó después de un reinicio no está probado — lo dice el propio script.
+3. **Mudar `web-venta` al nodo**, y es el único activo de la primera tanda: los otros tres que
+   corren hoy son de los que se quedan. Cadencia **tal cual**: `48 */2 * * *`.
+   ⚠️ **En UNA sola ventana**, no «la tabla primero» — ver la trampa documentada en
+   `cola/loops.md` (commit `6b82f2cc`): instalar el cron en el nodo, sacar la línea del VPS y
+   pushear la tabla movida, todo junto, en un hueco entre corridas.
+   *Listo =* `loops_registrados.mjs` verde en las DOS máquinas y una vuelta de `web-venta`
+   con `exit 0` en el log del nodo.
+4. **Verificar la corrida de `onia-ordenador-tablero` de las 22:00 UTC.** Se le fijó el modelo
+   (`--provider openai-api --model gpt-5-mini`) porque llevaba **15 fallos seguidos** por
+   `drift_skip:silent`, pero **su corrida con el arreglo no se llegó a ver**.
+   *Listo =* `hermes cron list --all` muestra `Last run: … ok` para ese id.
+5. **`onia-veredicto-sergio`** arrastra el mismo drift y sigue pausado. Mismo arreglo, una
+   línea, cuando se decida reanudarlo.
+6. **Tailscale** (paso 3 de `PLAN_HOMELAB.md`). Sin él **no hay camino de entrada al nodo**:
+   se lo puede ver por lo que sube al VPS, no administrar. Con él, la mudanza no depende de
+   que Sergio Urcullo esté sentado en esa máquina.
+7. **La cuota**: `chatbot-cola` (36 vueltas/48 h) y `onia-cola` (34) son el 60% del gasto y los
    dos se quedan. Bajarla es bajar **cadencia**, no cortar carriles. Decisión de Sergio Urcullo.
 
 ## 8. Lo que este carril NO hizo, y hay que decirlo
 
-- **No mudó ningún loop.** El VPS corre 7, casa corre 0.
+- **No mudó ningún loop.** El VPS corre 4, casa corre 0. La mudanza está decidida y bloqueada
+  en el paso 2 de §7.
 - **No tocó `onia-platform`** ni desplegó nada. El reparto se respetó.
-- **No verificó Hermes a fondo.** Lo medido: el proxy responde (401 sin credencial, o sea vivo),
-  `default: gpt-5-mini` como pediste, `MEMORY.md` en `/root/.hermes/memories/` con **221 entradas**
-  y escritura a las 16:56 — **aprende**. `systemctl is-active hermes-agent` da `inactive` pero hay
-  **3 procesos `hermes_cli`** vivos: corre por otra vía, no por ese servicio. **Eso no se
-  investigó** y no se puede llamar «Hermes está perfecto» sin hacerlo.
+- ~~No verificó Hermes a fondo.~~ → **auditado el 2026-09-05 21:00.** No existe la unidad
+  `hermes-agent`; los unit files son `hermes-assets.service` y `hermes-control-tower.service`,
+  y solo el segundo está activo. Los dos procesos vivos están en un **scope de sesión SSH**,
+  o sea huérfanos, no servicios (§6). **15 de 15 trabajos estaban `[paused]`**; se reanudó uno.
+- **No se expuso el Control Tower.** Escucha en `127.0.0.1:9119` **sin proxy**: hoy solo se ve
+  por túnel (`ssh -N -L 9119:127.0.0.1:9119`). Publicarlo es una decisión de seguridad, no un
+  paso de infraestructura.
+
+### 🔴 Intentos fallidos y recomendaciones EQUIVOCADAS de esta sesión
+
+El campo que más vale. Las tres salieron del mismo tramo:
+
+1. **Recomendé mudar `canario-visual` y `recorrido-cliente` al nodo. `PLAN_HOMELAB.md` §1 dice
+   explícitamente que esos dos NO se mudan**, y con motivo: `canario-visual` mide contra
+   umbrales calibrados desde el enlace del VPS (desde una casa mide el WiFi de Sergio Urcullo)
+   y `recorrido-cliente` escribe en la base de producción por `docker exec`. Recomendé los dos
+   peores. **Causa:** razé por perfil de carga (CPU, navegador) en vez de leer el criterio
+   escrito, que no es el tema del carril sino **con qué tiene que hablar para trabajar**.
+2. **Recomendé NO mudar**, contra una decisión ya tomada. **Causa:** tomé como autoridad el
+   handoff (que reabrió la premisa por disco y cuota) en vez de `PLAN_HOMELAB.md` §0, que dice
+   lo que Sergio Urcullo dijo: *«el producto de los clientes deja de competir contra quince
+   agentes escribiendo código»*. Esa razón no depende ni del disco ni de la cuota, así que el
+   argumento del handoff no la tocaba.
+3. **Le pregunté si el nodo era Linux nativo o WSL2.** El doc ya lo respondía: `PLAN_HOMELAB.md`
+   §Sistema operativo tiene la corrección del 2026-09-04 encima (*«lo que se hizo de verdad:
+   WSL2 con Ubuntu 26.04»*). Pregunté algo que estaba escrito.
+
+**Las tres son la misma falla, y el canario la marcó antes que yo.** Dejé de decir «Sergio
+Urcullo» tres respuestas seguidas y él lo vio. El handoff de `onia-v1-servicios` ya deja escrito
+exactamente esto: *«si notás que estás salteando el canario, asumí que también estás salteando la
+verificación»*. Se cumplió al pie de la letra: en ese mismo tramo di por medido que los loops
+del nodo seguían comentados **sin poder leer su `crontab`** — era una inferencia por tamaño de
+log, no un hecho.
+
+**Para la sesión nueva:** cuando el plan y un handoff se contradigan, **manda el plan**. El
+handoff es lo que una sesión midió y opinó; el plan es lo que se acordó.
