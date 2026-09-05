@@ -33,6 +33,9 @@ BASE="${ONIA_LOOPS_BASE:-/root/loops}"
 BIN="${ONIA_LOOPS_BIN:-/root/bin}"
 HERMES_DIR="${ONIA_HERMES_DIR:-/root/.hermes}"
 CLON="$BASE/onia-hermes"
+# El PRODUCTO, en solo lectura. La rama por defecto es `master`, no `main`.
+PLATFORM="${ONIA_PLATFORM_DIR:-$BASE/onia-platform}"
+PLATFORM_URL="${ONIA_PLATFORM_URL:-git@github.com:oninteligenciaartificial/onia-platform.git}"
 
 # Qué loops corre ESTA maquina. Cada linea: <id> <rama> <cron>.
 # Los horarios salen de hermes-content/docs/cola/loops.md — con un DESFASE de
@@ -121,6 +124,33 @@ if [ "$SOLO_PRUEBA" = 0 ]; then
   [ "$RAMA_CLON" = "main" ] && git -C "$CLON" merge --ff-only origin/main --quiet 2>/dev/null
 fi
 ok "clon en $CLON"
+
+# 🔴 EL PRODUCTO, EN SOLO LECTURA. Cuatro de los cinco loops de la primera tanda
+# LEEN precios de $PLATFORM: web-venta:16 y web-factory-dev:290 de
+# lib/subscription-plans.ts, chatbot-cola:17 de lib/pricing.ts, y
+# marca-personal:178 el app/layout.tsx de la landing. Sin este clon un loop que no
+# puede leer la fuente unica NO se calla: escribe el precio igual, sacado de un doc
+# viejo. Falla PARECIENDO que funciono, que es el modo de falla mas caro que tiene
+# este sistema. Medido el 2026-09-04: el instalador no lo clonaba y nada lo avisaba.
+#
+# El push queda ROTO a proposito. Los prompts ya prohiben escribir aca ("leer esta
+# permitido, escribir en onia-platform no", tendencias:280) — pero un prompt es una
+# instruccion y una URL rota es un hecho. Este nodo no despliega el producto.
+if [ "$SOLO_PRUEBA" = 0 ]; then
+  if [ ! -d "$PLATFORM/.git" ]; then
+    git clone --filter=blob:none "$PLATFORM_URL" "$PLATFORM" >/dev/null 2>&1 \
+      || rojo "aviso: no pude clonar el producto en $PLATFORM"
+  fi
+  if [ -d "$PLATFORM/.git" ]; then
+    git -C "$PLATFORM" remote set-url --push origin DESHABILITADO-NODO-DE-DESARROLLO
+    git -C "$PLATFORM" fetch origin --quiet 2>/dev/null || true
+  fi
+fi
+if [ -s "$PLATFORM/lib/subscription-plans.ts" ]; then
+  ok "producto en $PLATFORM (solo lectura, push deshabilitado)"
+else
+  rojo "aviso: falta $PLATFORM/lib/subscription-plans.ts — los loops no van a poder leer los precios"
+fi
 
 for id in $ASIGNADOS; do
   RAMA=$(echo "$CATALOGO" | awk -v i="$id" '$1==i{print $2}')
@@ -272,14 +302,31 @@ FALLOS=0
 probar() { # probar <que> <comando>
   if eval "$2" >/dev/null 2>&1; then ok "$1"; else rojo "$1"; FALLOS=$((FALLOS+1)); fi
 }
+# 🔴 `probar_instalado` es para lo que --prueba NO CREA: los pasos 4 y 5 se
+# saltean a proposito en ese modo, y despues este bloque verificaba los archivos
+# que esos pasos crean. Resultado: `--prueba` NUNCA podia salir verde — siempre
+# terminaba en "8 chequeo(s) en rojo · NO dejar los loops corriendo asi", que
+# asusta y es mentira en ese modo. Medido el 2026-09-04 montando el nodo de casa.
+# Lo que --prueba SI prueba de verdad: requisitos, SSH al VPS, GitHub y claude.
+probar_instalado() {
+  if [ "$SOLO_PRUEBA" = 1 ]; then
+    printf '  \033[2m· %s — no aplica en --prueba (lo crea la instalacion real)\033[0m\n' "$1"
+    return 0
+  fi
+  probar "$@"
+}
+
 probar "SSH al VPS"                    "\"\${SSH[@]}\" true"
-probar "tablero legible (SQLite del VPS)" "$BIN/onia-tablero.sh list 2>&1 | head -1 | grep -qv 'Permission denied'"
 probar "GitHub alcanzable (git ls-remote)" "git -C '$CLON' ls-remote --exit-code origin HEAD"
 probar "claude autenticado (sin API key)" "unset ANTHROPIC_API_KEY; echo 'responde OK y nada mas' | timeout 90 claude -p --max-turns 1 2>&1 | grep -qi ok"
-probar "memoria local presente"        "[ -s '$HERMES_DIR/memories/MEMORY.md' ]"
-probar "corredor ejecutable"           "[ -x '$BIN/onia-loop.sh' ]"
+probar_instalado "tablero legible (SQLite del VPS)" "$BIN/onia-tablero.sh list 2>&1 | head -1 | grep -qv 'Permission denied'"
+probar_instalado "memoria local presente"        "[ -s '$HERMES_DIR/memories/MEMORY.md' ]"
+probar_instalado "corredor ejecutable"           "[ -x '$BIN/onia-loop.sh' ]"
+# Los precios son fuente unica: un loop que no los puede leer escribe uno viejo.
+probar_instalado "precios del producto legibles" "[ -s '$PLATFORM/lib/subscription-plans.ts' ]"
+probar_instalado "producto sin push (este nodo no despliega)" "git -C '$PLATFORM' remote get-url --push origin | grep -q DESHABILITADO"
 for id in $ASIGNADOS; do
-  probar "prompt de $id desplegado"    "[ -s '$BIN/loops/$id.md' ]"
+  probar_instalado "prompt de $id desplegado"    "[ -s '$BIN/loops/$id.md' ]"
 done
 # El aviso a Telegram es lo ULTIMO que se prueba y lo unico que manda un mensaje:
 # si el resto fallo, Sergio se entera igual, y con el numero de fallos adentro.
