@@ -31,11 +31,48 @@ Entonces esto **no es una función que falte. Es un costo y un riesgo**:
 - Ya hay un tope por cliente (`ChatbotUsoMensual`: 500 conversaciones al mes), así que el gasto
   **está acotado por diseño**. Eso es lo que salva la situación hoy.
 
-**Decisión, y es de precio, no de código:** el cliente **nunca** conecta una clave de OpenAI. El
-consumo de IA es parte de lo que compra. Lo que hay que hacer es (a) medir cuánto cuesta una
-conversación de verdad, y (b) que el tope del plan y el precio del add-on estén por encima de
-ese costo. Pedirle al dueño de una ferretería que se saque una API key de OpenAI es perder la
-venta en el primer paso.
+**Decisión (corregida el 2026-09-05):** la clave propia se ofrece, **pero como opción, no como
+requisito**. Por defecto la pone Onia y el consumo es parte de lo que compra.
+
+⚠️ Acá decía *"el cliente **nunca** conecta una clave de OpenAI"*. Sergio lo objetó con un dato,
+y el dato es cierto: *"como funcionan las otras plataformas de chatbots, he visto que SendyPro
+hace conectar API"*. Se verificó. **SendyPro lo hace, y SendPulse también.**
+
+Pero mirando CÓMO lo hacen, la conclusión no es la que parece:
+
+- En SendyPro, OpenAI figura en la **lista de integraciones** junto a Shopify, Google Sheets,
+  Calendar, Zapier y Webhooks. Es algo que se *habilita*, no el requisito para que el bot
+  arranque. Su propio titular vende *"IA con audios realistas… sin cargos por mensaje"*: **la IA
+  viene incluida.**
+- En SendPulse la documentación lo describe igual: entrás a Integraciones, apretás "Habilitar"
+  al lado de OpenAI y pegás tu clave. Es un paso opcional para el que la quiere.
+- Y **a quién le venden**: SendyPro es partner oficial de Meta para WhatsApp API. Su cliente ya
+  está haciendo marketing por WhatsApp y ya tiene cuenta de OpenAI. El nuestro es el dueño de
+  una ferretería en Santa Cruz que, según nuestra propia definición de "usable", tiene que poder
+  **registrarse solo y llegar a cobrar sin que nadie lo ayude**.
+
+**Entonces: las dos cosas, y el orden importa.**
+
+| | Por defecto | Opción avanzada |
+|---|---|---|
+| Quién pone la clave | Onia | El cliente, con su propia cuenta de OpenAI |
+| Quién paga el consumo | Onia | El cliente, directo a OpenAI |
+| Tope | El del plan (500 conversaciones/mes) | **Sin tope nuestro** — paga lo que use |
+| A quién le sirve | Al que compra y quiere que ande | Al que tiene volumen y prefiere controlarlo |
+
+Es exactamente la regla que Sergio fijó ese mismo día para el catálogo: **simple por defecto,
+avanzado opcional**. Un campo "pegá tu clave de OpenAI" en el primer paso del alta pierde la
+venta; el mismo campo dentro de «Conexiones», para el que lo busca, no le estorba a nadie.
+
+**Lo que hay que verificar antes de prometerlo (y no se puede desde acá):** que un negocio
+boliviano PUEDA sacar una cuenta de OpenAI — hace falta una tarjeta que acepte cobros del
+exterior, y muchos comercios chicos no la tienen. Si resulta que no pueden, la opción avanzada
+igual se construye (para los que sí) pero **deja de ser una salida al problema del costo**, y
+todo el peso vuelve a medir cuánto cuesta una conversación.
+
+**Lo bueno: se construya como se construya, el código es el mismo.** Credencial cifrada por
+organización, con el molde de `GatewayConfig`. Lo único que cambia es cuál es el valor por
+defecto — y eso se decide sin tocar una línea.
 
 ### 2. «Los agentes hay que construirlos» — **ya están, y no usan IA**
 
@@ -175,8 +212,10 @@ en la 1.0 entra **solo esto**, y solo cuando le toque el turno en el orden del a
 ### Qué NO entra (anotado, no perseguido)
 
 - Conectar Google Drive del cliente — hasta que un cliente que paga lo pida.
-- Claves de OpenAI por cliente — el modelo es que Onia lo incluye; se revisa si el costo medido
-  en el punto 1 rompe el margen.
+- **Clave de OpenAI propia del cliente (BYOK)** — decidido que va, como opción dentro de
+  «Conexiones», nunca en el alta. **No entra en la 1.0**: no bloquea vender, y hasta no tener el
+  número del punto 1 no sabemos si resuelve algo. Se construye con el molde de `GatewayConfig`,
+  y quien la conecte se queda sin el tope de 500 conversaciones.
 - Que el LLM redacte los mensajes de los agentes — la plantilla alcanza para vender.
 - Agentes que actúan sin aprobación — **nunca**, no es cuestión de versión.
 - Prospección automática hacia afuera — riesgo de perder el WhatsApp, y no es producto.
@@ -187,5 +226,7 @@ en la 1.0 entra **solo esto**, y solo cuando le toque el turno en el orden del a
 
 1. **¿El consumo de IA lo incluye Onia siempre, o hay un tope que el cliente paga aparte?**
    Hoy de hecho lo incluye Onia. La respuesta cambia el precio del add-on, no el código.
+   Resuelto en parte el 5-sep: **las dos, con Onia por defecto**. Falta el número del costo por
+   conversación para saber si el tope de 500 alcanza.
 2. Cuando toque Google Drive: **de qué cuenta sale el archivo** — la del cliente (él conecta) o
    una de Onia (nosotros pagamos el espacio).
