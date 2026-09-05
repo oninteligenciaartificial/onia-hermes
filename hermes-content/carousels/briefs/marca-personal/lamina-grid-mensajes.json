@@ -1,0 +1,20 @@
+{
+  "title": "Los 6 mensajes de siempre · escribí una vez",
+  "pieza": "hermes-content/carousels/out/lamina-grid-mensajes.png",
+  "cuenta": "sergio",
+  "formato": "feed 4:5 (1080x1350), imagen unica",
+  "caption": "Vos ya escribiste estos seis mensajes. El problema es que los escribís de nuevo cada día.\n\nCuánto sale y cómo se paga. Qué horario tenés hoy. Sí hay lugar, así reservás. Tu pedido, cuándo llega. No estoy ahora, te contesto a las 9. Qué necesito para empezar.\n\nSon seis. Se escriben UNA vez y quedan a un atajo de distancia:\nWhatsApp Business → Herramientas → Respuestas rápidas → creás una, le ponés un atajo corto (/precio, /horario, /reserva) y listo. Después tipeás la barra y el mensaje sale entero.\n\nDos detalles que hacen la diferencia:\n· El atajo tiene que ser corto y obvio. Si tenés que acordarte, no lo vas a usar.\n· El de \"no estoy ahora\" decí a qué hora SÍ vas a contestar. Un \"ya te respondo\" sin hora es lo mismo que no contestar.\n\nDiez minutos hoy, y mañana la mitad de tus mensajes ya están escritos. Esta es la pieza 1 de las cuatro que hacen falta para atender 24/7: sin ella, lo demás no tiene qué decir.\n\n¿Cuál de los seis te comen más tiempo? Ponelo en los comentarios y te paso el texto ya redactado.",
+  "hashtags": [
+    "#whatsappbusiness",
+    "#automatizacion",
+    "#negocios",
+    "#bolivia",
+    "#pymes",
+    "#emprender",
+    "#santacruz"
+  ],
+  "comment_trigger": "",
+  "_por_que_sin_palabra_clave": "La cuenta 'sergio' (entry_id 17841441395192146) tiene palabras: {} en el workflow n8n ACTIVO 'ONIA - Comentario IG -> DM (Private Reply)' — medido el 2026-09-04 sobre la sqlite del contenedor. Regla escrita ahi: 'palabra solo con recurso detras'. Una palabra clave aca sale con palabra=null y quien comenta no recibe NADA, sin dejar registro.",
+  "_pareja": "Va despues del statement «Atender clientes 24/7 · solo son 4 cosas» (t_d4a7c724): aquel dice QUE hacer y este entrega CUALES son los seis mensajes.",
+  "alt_text": "Grilla de seis iconos 3D en escala de grises con sus etiquetas en verde — cuanto sale, que horario, si hay lugar, tu pedido, no estoy ahora, que necesito — bajo el titulo 'Escribi una vez' y sobre la ruta WhatsApp Business, Herramientas, Respuestas rapidas."
+}
