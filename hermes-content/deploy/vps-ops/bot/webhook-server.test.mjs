@@ -756,3 +756,57 @@ test("HTTP REAL: cada webhook deja UNA linea en el log (era CERO y costo una sem
     await once(server, "close");
   }
 });
+
+test("HTTP REAL: el aviso que NO sale dice DE QUIEN era (sin eso no se puede recuperar)", async () => {
+  // Medido en produccion el 2026-09-04: con el flag apagado el log dejaba exactamente esto
+  //     [aviso] skipped (cuota_agotada): aviso por Telegram apagado (ONIA_BOT_TG_AVISO)
+  // y no hay forma de saber a quien habia que atender. La linea del webhook de al lado si trae
+  // `conv=`, pero son dos callbacks asincronos distintos: con dos mensajes a la vez el `[aviso]`
+  // se intercala con la linea de OTRA conversacion y el cruce por proximidad miente.
+  //
+  // El propio aviso-telegram.mjs ya dice "un aviso que no dice a quien contestarle no sirve" y
+  // aplica esa regla al mensaje que le llega a Sergio. Falta aplicarla a la linea que queda
+  // cuando el aviso NO llega, que es el unico caso en que hace falta.
+  const lineas = [];
+  const server = createWebhookServer({
+    config: CONFIG,
+    runChatwootTurn: motorMock({
+      stageBefore: "nuevo",
+      stageAfter: "handoff_humano",
+      notify: [{ kind: "handoff", reason: "cuota_agotada", text: "quiero una limpieza dental" }],
+    }),
+    nowMs: NOW_MS,
+    n8nConfig: { enabled: false },
+    fireEvent: () => {},
+    avisoConfig: { enabled: false }, // el estado REAL de produccion hoy
+    log: (linea) => lineas.push(linea),
+  });
+  server.listen(0);
+  await once(server, "listening");
+  const { port } = server.address();
+
+  try {
+    const body = mensajeEntrante({ content: "hola, quiero una limpieza dental" });
+    const res = await fetch(`http://127.0.0.1:${port}${WEBHOOK_PATH}`, {
+      method: "POST",
+      headers: { "content-type": "application/json", ...sign(body) },
+      body,
+    });
+    assert.equal(res.status, 200);
+    await res.json();
+
+    // El aviso es fire-and-forget: su callback corre despues de la respuesta HTTP.
+    for (let i = 0; i < 50 && !lineas.some((l) => l.includes("[aviso]")); i += 1) {
+      await new Promise((r) => setTimeout(r, 10));
+    }
+
+    const delAviso = lineas.filter((l) => l.includes("[aviso]"));
+    assert.equal(delAviso.length, 1, `el aviso deja UNA linea; salieron ${delAviso.length}: ${JSON.stringify(lineas)}`);
+    assert.match(delAviso[0], /skipped/, "apagado tiene que verse como skipped, no como exito");
+    assert.match(delAviso[0], /conv=77/, "sin la conversacion el aviso perdido NO se puede recuperar");
+    assert.match(delAviso[0], /cuota_agotada/, "el motivo tambien: dice por que el bot derivo");
+  } finally {
+    server.close();
+    await once(server, "close");
+  }
+});

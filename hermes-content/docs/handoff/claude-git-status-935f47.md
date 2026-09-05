@@ -9,7 +9,258 @@
 
 ---
 
-## 0. Estado al 2026-09-03 — lo vigente (lo de abajo es historia y sigue valiendo como lección)
+## 0. CIERRE DE CORRIDA — 2026-09-04 ~15:00 La Paz
+
+> **Esta sección manda sobre §1-§10 de más abajo**, que son historia del mismo carril.
+> Horas en La Paz (UTC−4). Escrita porque Sergio pidió cerrar y abrir sesión nueva.
+
+### Objetivo de la corrida
+Dejar la 1.0 usable: cerrar Configuración, rediseñar el panel de inicio, y sacar de la venta lo
+que no es cierto. **Hecho** = desplegado y verificado MIRANDO la pantalla, o en rama con las
+capturas mandadas a Sergio.
+
+### Qué quedó EN PRODUCCIÓN
+**Un solo despliegue, `3606c46`, 18:12 UTC (14:12 La Paz), gates 5/5, 0 errores en 3 min.**
+Tres defectos, y **dos eran de todo el sistema, no de la pantalla donde saltaron**:
+
+| Defecto | Causa real | Alcance |
+|---|---|---|
+| No se podía abrir «Configuración avanzada» | `GuiaInicio` vivía en `Header.tsx` → se montaba en TODA pantalla y su `fixed inset-0` se comía el clic | todas las pantallas |
+| El botón flotante tapaba «Guardar» | `pb-32` en `LayoutShell` contra un FAB de 96-152 px | todo el celular |
+| El rol decía «Administra» | literal en `vocabulario.ts`, 4 rubros + `ROL_DE_RESPALDO` | perfil, equipo y alta |
+
+Verificado en vivo: login 200 · panel 200 · configuración 200 · «Administrador» leído en pantalla.
+14 tests nuevos, cada uno comprobado fallando al revertir el arreglo. Suite 2913.
+
+### Qué quedó a medias, y dónde
+1. **`feat/panel-tres-renglones`** (`onia-platform`, worktree `.claude/worktrees/v1-panel`, HEAD
+   `110a15c`, **pusheado**). El panel dental en tres renglones, construido y verificado.
+   🔴 **Espera el «ok panel» de Sergio.** Se le mandaron 4 capturas y aviso por Telegram. Es una
+   pantalla viva: no se reemplaza sin que él vea la pieza (lección cara del 20-ago).
+   Medido: 9 interactivos y 103 palabras en la primera pantalla del celular; 21 → 9 consultas.
+2. **Port del panel de COMERCIO a tres renglones** — ✅ **TERMINADO**, en la MISMA rama
+   `feat/panel-tres-renglones`, pusheado. 25 agentes, 0 errores. HEAD `98b7c97`.
+   `comercio-hoy.tsx` 549 → 177 líneas; lógica pura nueva en `lib/comercio/panel-hoy.ts` (248) con
+   sus tests. **17 consultas en ~6 tandas encadenadas → 12 en UNA.** Suite **2963**.
+   «Tu día» = los tickets del día con «Ahora» al FINAL (el mostrador no tiene futuro agendado) y la
+   ventana móvil son las 4 ÚLTIMAS, no las 4 próximas.
+   Borrado: `Barcode.tsx` y `protagonistaDelPanel` (+ sus 4 tests). **NO borrado a propósito**:
+   `Sparkline.tsx` y los 6 helpers de `lib/comercio/hoy.ts` (22 tests) — huérfanos por efecto del
+   port, con destino en `/reports`.
+
+   **Tres defectos de plata que el rediseño destapó** (ninguno era el objetivo):
+   - 🔴 **Una venta fiada ANULADA seguía contando como deuda ENTERA** (`3d2efb5`). Dos circuitos
+     escriben la misma columna de texto libre: `anularVenta` pone `"anulado"` y el contrato del core
+     pone `"cancelled"`; el lector filtraba solo el segundo. Como anular también marca los pagos y
+     esos sí se descartaban, el saldo quedaba igual al total. Se veía en **tres** superficies: panel
+     de comercio, `/comercio/fiados` y el balance de comprobación fiscal.
+   - 🔴 **El panel DENTAL afirmaba cosas de un día que solo había leído a medias** (`98b7c97`).
+     `take: 30` sobre las citas: con 4 profesionales se pasa, y «Ahora» se iba al final diciendo que
+     el día terminó. **Esto iba a salir en el panel que espera el OK de Sergio Urcullo.**
+   - El resumen del mostrador contaba solo los 50 tickets traídos y se **contradecía con «Entró
+     hoy»** en la misma pantalla. Ahora el total sale de un `groupBy` del día entero, y el
+     parámetro es **obligatorio** para que no se pueda olvidar en silencio.
+   - Menor: «Dr(a).» se colaba en cada fila de una estética. El título profesional pasó a ser campo
+     del vocabulario, solo en dental y veterinaria.
+
+   **Medido en el celular con datos: 9 interactivos (igual que dental) y 142 palabras.** El tope era
+   120: **no cumple**, por la tercera tarjeta de atención («corte de caja», que dental no tiene).
+   Queda como deuda declarada, no como éxito.
+
+   El guion del workflow quedó en
+   `~/.claude/projects/.../workflows/scripts/portar-comercio-tres-renglones-wf_c19be55b-a26.js`.
+3. **`fix/venta-honesta`** (`onia-hermes`, pusheada, **sin mergear**). Saca la promesa de factura
+   del SIN de diez lugares y baja el bot a add-on. **Bloquea escribirle a los leads.**
+4. **Recorrido del dueño nuevo en producción** — ✅ **terminado, y es lo más caro del día.**
+   Con cuenta nueva de rubro **Servicios**, cada pantalla mirada: **un dueño solo NO puede hacer
+   lo que su propia alta le promete.** No hay pantalla de clientes (única puerta: Caja → Fiado,
+   6 clics, y ese cliente no aparece en la cita); la cita abre con **0 opciones** y frena con un
+   globo del navegador **en inglés**; **no hay recibo** (`/print/invoice` cuelga de `/billing`,
+   que el rubro no tiene); cobrar un servicio exige **inventar stock** (422) y el **SKU es
+   obligatorio sin estar marcado**. Y `/register` le promete textual «Agenda, citas, cobros y
+   contabilidad» — `lib/platform/vertical-pack.ts:361` no tiene entrada de clientes y el modal
+   lee `/api/patients`.
+   **Sí funciona solo:** registrarse (el correo sale) → cargar un servicio → cobrar en efectivo →
+   verlo en Contabilidad con IVA 13 % e IT 3 % y CSV. Fechas propias en La Paz; ningún icono como
+   texto. Limpieza verificada: 0 filas `zz-qa-%`; quedan las 5 orgs reales intactas.
+   ⚠️ **El instrumento miente:** `scripts/recorrido_cliente.mjs` canta «paso 3 ROTO» sobre un
+   flujo sano — saca la foto mientras el botón dice «Creando cuenta…». Falso rojo suyo.
+
+### Archivos que importan para retomar
+- `app/(dashboard)/dashboard/panel-hoy.tsx` — presentación pura, sin Prisma ni Date. Es el contrato
+  para portar cualquier rubro: `PanelHoyDatos`, `FilaAtencion`, `FilaCita`, `AccionPanel`.
+- `app/dev/dashboard/page.tsx` — **el banco de pruebas**. Sin esto no hay forma de MIRAR el panel
+  sin base ni sesión. Cualquier rubro nuevo agrega su estado acá.
+- `lib/onboarding/guia-apertura.ts` (`laGuiaSeAbreSola`) — decide dónde saluda la guía.
+- `lib/plan-limits.ts` — **los topes por plan viven acá, no en `subscription-plans.ts`**.
+- `app/(dashboard)/dashboard/comercio-hoy.tsx` — 549 líneas, 11 consultas, sin portar.
+
+### Intentos fallidos — lo que NO hay que repetir
+- **`setsid` no existe en este Git Bash.** Un servidor lanzado con `setsid nohup …` no arranca y
+  el error no aparece hasta que el `curl` da 000. Usar el modo background de la herramienta.
+- **Un script de Playwright en `/tmp` no encuentra `playwright`**: ESM resuelve desde el archivo,
+  no desde el `cwd`. Escribirlo DENTRO del worktree.
+- **El dev server del banco muere sin variables de entorno**: el proxy revienta con *"Your
+  project's URL and Key are required"* y TODA ruta da 500. Hace falta un `.env.local` temporal con
+  valores falsos — y **borrarlo**, porque un build de producción hornea `127.0.0.1` en el bundle.
+- 🔴 **Una captura `fullPage` MIENTE sobre los elementos `position: fixed`**: los dibuja donde no
+  se ven. Me hizo creer que la barra «Agendar cita» tapaba la plata. Para juzgar si algo tapa algo:
+  capturar el **viewport** arriba y abajo, y medir con `getBoundingClientRect`.
+- **«Fuente única» sin decir CUÁL manda al archivo equivocado.** El doc de alcance mandaba a leer
+  los topes de `subscription-plans.ts`, que solo tiene montos, y por eso el plan Básico figuraba
+  con los topes del plan GRATIS (1 usuario · 30 clientes en vez de 2 · 300). Corregido en
+  `a10cd543`. Son TRES archivos: montos, topes y add-ons.
+- **Un subagente escribió por error en el checkout principal** en vez de su worktree. Lo detectó y
+  restauró; verificado limpio. La ruta explícita en el prompt no alcanza: hay que verificarlo.
+
+### Qué depende de Sergio
+1. 🔴 **«ok panel»** — sin eso el panel de tres renglones no se publica.
+2. Mergear y desplegar `fix/venta-honesta`, o decir que no. **Hasta entonces no se le escribe a
+   ningún lead**, porque el material promete factura del SIN y no la emitimos.
+3. Los 7 mensajes a leads · conectar su WhatsApp (1 clic) · credenciales del BCP · Punto de Venta 1
+   en el SIN · elegir molde de texto A o B para @oniahq.
+4. Decisión: bajar «Facturación» del menú principal (hoy es tracción antes del 1-oct).
+
+### Próximos pasos, en orden
+0. 🔴 **Servicios y comercio: o entregan lo que el alta promete, o el alta deja de prometerlo.**
+   Es lo primero, antes que el panel y antes que escribirle a nadie. *Listo* = el recorrido
+   completo se puede hacer solo en el rubro, o la tarjeta de `/register` dice la verdad.
+1. **Confirmar si el port de comercio sobrevivió.** `git -C <worktree v1-panel> log` — si no hay
+   commits nuevos sobre `110a15c`, relanzar el workflow guardado. *Listo* = comercio en tres
+   renglones, capturas miradas, gates verdes.
+2. Con el «ok»: mergear el panel y desplegar con el runbook de siempre. *Listo* = panel nuevo vivo
+   y mirado en producción.
+3. `importadora-hoy.tsx` (192 líneas) — el único rubro sin portar, y **arrastra el mismo defecto de
+   `DEFAULT_TZ` fijo** (`importadora-hoy.tsx:42`) que el port de comercio corrigió.
+3-bis. `app/api/comercio/caja/route.ts:46,86` escribe la clave del corte con `DEFAULT_TZ`: hoy
+   coincide porque el default de la columna es America/La_Paz, y se rompe el día que una
+   organización configure otra zona. Queda marcado en el componente.
+3-ter. **Servicios profesionales entra a este panel** y su día son reuniones, no ventas. Hoy ve su
+   corrida de caja con el vocabulario correcto; un «día de agenda» sería feature nueva.
+3-quater. ~63 de los 85 selectores `.dv2-*` de `dashboard-v2.css` quedaron sin consumidor. El
+   archivo sigue vivo por `page.tsx` e `importadora-hoy.tsx`: es poda pendiente, no se hizo acá.
+4. Cobros y contabilidad (pasos 3 y 4 del orden de la 1.0).
+5. **Código muerto pendiente de decisión**: `Sparkline` queda huérfano al portar comercio, y varios
+   helpers de `lib/comercio/hoy.ts` tienen lógica testeada que `/reports` podría querer. NO se
+   borran en el mismo carril que un rediseño.
+
+### 12 tests que fallan en Windows, y no son nuestros
+Fallan idénticos en `origin/main` puro por una ruta `C:\C:\…`. Consecuencia real: **el gate que
+protege los precios recorre 0 archivos en esta máquina**, o sea que hoy no protege nada acá.
+
+---
+
+## 0-mañana. Estado al 2026-09-04 ~08:30 La Paz — PUBLICAR dejó de fallar (y por qué casi sale peor)
+
+**Objetivo:** que publicar deje de fallar; camino de publicación probado punta a punta, sin sacar
+nada con la cara de Lucía ni de la marca sin el OK de Sergio.
+
+### Qué estaba roto de verdad
+
+**No era Higgsfield y no era "Postiz caído".** Postiz respondía perfecto; el diagnóstico previo
+lo midió contra el puerto equivocado (`127.0.0.1:5000` es el puerto INTERNO del contenedor; el
+host mapea **4007**). Lo que estaba muerto era el **backend** de Postiz:
+
+- Postiz v2.23 **no arranca sin Temporal**: revienta en `TemporalRegister.onModuleInit`
+  (`Name resolution failed for target dns:temporal:7233`) y nunca hace `listen(3000)`. `/api` daba
+  502 y por eso el MCP de Postiz devolvía 502.
+- **Nadie lo notó durante ~3 semanas** porque el healthcheck del contenedor solo mira
+  `localhost:5000` (el frontend): es **CIEGO al backend**, así que Postiz figuraba `healthy`
+  mientras su API estaba muerta. El contenedor `temporal` no existía (cero imágenes bajadas):
+  se levantó alguna vez con `--no-deps` y quedó así desde que la imagen se actualizó el 14-ago.
+
+### En producción, verificado mirando
+
+- `temporal` + `temporal-postgresql` + `temporal-elasticsearch` levantados y `healthy`; backend de
+  Postiz escuchando en 3000, `GET /api/` → **200**, pm2 con los 3 procesos y **0 reinicios**.
+  Redes del contenedor intactas (`easypanel`, `postiz-network`, `temporal-network`).
+- **Las 3 cuentas de Instagram están conectadas y sanas**: `@oniahq`
+  (`cmsw091nx0001lq9c8kr6dsg8`), `sergio_urcullo` (`cmt39kug00022lq9cnw5z12wb`), Lucía
+  (`cmt1sv4eh001alq9cl3y6q7es`). Tokens válidos hasta **13/17/18-oct-2026**, ninguna `refreshNeeded`.
+- **El token contra Meta funciona de verdad**: `/public/v1/analytics/<integration>` devolvió
+  métricas reales de IG. No es un 200 de cortesía, es la Graph API contestando.
+- Circuito `ok <id>` → publicar **cableado y probado punta a punta en seco**: tarea con línea
+  `PUBLICAR:` → parseo → validación → subida de la lámina → POST a la API → post creado
+  (`postId cmtmxajfi...`), borrado después. Caso negativo (tarea sin línea) sale con código 2.
+
+### 🔴 Lo que hice mal y hay que saber: restaurar Temporal DISPARÓ el backlog
+
+El volumen `temporal-postgres-data` **sobrevivió**: al volver Temporal, los workflows viejos
+reanudaron y **publicaron 5 posts vencidos en @oniahq entre 12:03 y 12:15 UTC** (fechas 24, 26,
+28, 31-ago y 2-sep) sin OK fresco. Los detecté a los ~10 min, **paré el orchestrator**, y desarmé
+el resto:
+
+- Todos los `post_*` workflows vivos → **terminados**.
+- Los **57 posts** que quedaban en cola → pasados a **DRAFT** (contenido intacto, se re-programan
+  desde la UI). Estado final: `PUBLISHED 14 · DRAFT 57 · QUEUE 0`, cero workflows corriendo.
+- Orchestrator reactivado y verificado 2,5 min: **no publicó nada**.
+
+**La lección:** levantar un motor de scheduling dormido no es un acto neutro — reanuda todo lo que
+tenía pendiente. Antes de encender Temporal/colas, hay que mirar QUÉ hay en cola y desarmar lo
+vencido PRIMERO. `pm2 stop orchestrator` no alcanza como red de seguridad: no sobrevive a un
+`docker restart`.
+
+### Por qué se generaron 1.196 imágenes y no se publicó ninguna
+
+Dos causas, y las dos había que arreglar:
+
+1. **La API estaba muerta** (arriba).
+2. **`ok <id>` no publicaba.** Corría `kanban unblock` y **nada más**. Peor: los loops habían
+   aprendido a pedirle a Sergio que subiera los archivos A MANO desde el teléfono
+   (t_7282a714: *"descargalas en orden, guardalas en la galería y subilas"*). El circuito entero
+   terminaba en una tarea manual que no ocurre nunca.
+3. Los **objetivos de los loops medían PRODUCCIÓN**: `lucia` y `marca-personal` pedían "≥ 1 tarea
+   `needs_input` nueva por vuelta", y `contenido-cola` pedía la pieza "para que Sergio la
+   publique". Un loop que cobra por dejar una tarea bloqueada deja tareas bloqueadas.
+
+### Archivos
+
+- `scripts/kanban/publicar-aprobado.mjs` **(nuevo)** — publica la pieza de una tarea aprobada.
+  Lee una línea `PUBLICAR: cuenta=<oniahq|sergio|lucia> imagenes=<ruta> texto=<brief.json>` del
+  cuerpo. **La línea es DATO, no comando**: lista blanca de cuentas, rutas absolutas sin `..`,
+  validación en disco, e invocación con `execFile` (sin shell). Trae `--autotest`.
+  Códigos: 0 publicó · 2 la tarea no era una pieza · 1 falló.
+- `scripts/postiz_schedule.mjs` — `--now` (publica ya) y `--draft` (crea sin publicar: es la única
+  forma de probar esto, no hay cuenta de prueba).
+- `scripts/kanban/telegram-entrada.py` — al desbloquear, publica; si falla, **manda el error**.
+- `scripts/loops/sincronizar.sh` — despliega los dos `.mjs` a `/root/bin`.
+- `scripts/loops/prompts/{lucia,contenido-cola,marca-personal}.md` — objetivo pasado de producción
+  a **publicación** + exigen la línea `PUBLICAR:`.
+- **VPS:** `/root/.hermes/SOUL.md` (bloque nuevo: `ok <id>` corre el publicador; backup
+  `.bak-20260904-publicar`) · `/opt/postiz/postiz-docker-compose/docker-compose.override.yaml`
+  (comentario de por qué Temporal y ES no son opcionales; backup `.bak-20260904-temporal`) ·
+  `/root/.postiz-api-key` (600) · `/root/bin/onia-{publicar-aprobado,postiz-schedule}.mjs`.
+
+### Intentos fallidos (para no repetirlos)
+
+- **Temporal sin Elasticsearch NO se puede.** Lo probé para no meter otra JVM en un VPS que
+  Hostinger ya estranguló: con visibilidad SQL, Temporal admite **máximo 3 search attributes de
+  tipo Text** y `auto-setup` ya los ocupa, así que el `addSearchAttributes` de Postiz
+  (`organizationId` + `postId`) muere con *"cannot have more than 3 search attribute of type
+  Text"*. Con ES no hay tope. Queda escrito en el override: **no lo "optimices" sacando ES**.
+- **`pm2 restart` deja procesos huérfanos**: el orchestrator quedó en crash-loop con
+  `EADDRINUSE :::3002`. Se arregla con `docker restart postiz` (que **sí** conserva las redes,
+  a diferencia de `docker compose up -d postiz`, que desconecta `easypanel` — trampa ya conocida).
+- El `psql -c` con `$$` dentro de `ssh` + heredoc **sin comillas** se come los `$$` (bash los
+  expande al PID). Heredoc con `'EOF'` citado.
+
+### Qué depende de Sergio
+
+1. **Aprobar el primer post real por el circuito nuevo.** Nada salió con su cara ni con la marca
+   por decisión mía; el camino está probado en seco pero **el último paso (publicar de verdad)
+   nunca se ejerció**, porque no hay cuenta de prueba.
+2. **Los 57 borradores**: decidir cuáles se re-programan y cuáles se tiran. Están intactos.
+3. **Los 5 posts que salieron solos hoy en @oniahq** — si alguno no debía salir, borrarlo.
+
+### Próximos pasos
+
+- Que Sergio apruebe una pieza y verificar el `ok <id>` real (es el único tramo sin ejercer).
+- Arreglar el healthcheck ciego de Postiz para que un backend muerto se vea (tarea en el tablero).
+- Los loops ya miden publicación: mirar en 2 vueltas si el número sube.
+
+---
+
+## 0-bis. Estado al 2026-09-03 — historia (sigue valiendo como lección)
 
 **Objetivo del día:** Sergio opera solo por Telegram con la PC apagada, y el sistema pasa de
 "terminar" a "llegar" (reel de @eriktaveras: *"no es terminar el SaaS, es llegar antes"*).

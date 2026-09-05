@@ -682,7 +682,11 @@ export function createWebhookServer(deps = {}) {
       try {
         dispararAvisoTelegram(outcome.avisoTelegram, avisoConfig, deps, (result) => {
           const motivos = outcome.avisoTelegram.motivos.join(",");
-          log(`[aviso] ${result?.status} (${motivos}): ${result?.reason}`);
+          // `conv=` va SIEMPRE, y sobre todo cuando el aviso no salió: esa línea es lo único que
+          // queda de una persona a la que el bot le prometió que Sergio le escribe. Sin el número
+          // no se puede ir a buscarla después.
+          const conv = outcome.avisoTelegram.conversationId ?? "?";
+          log(`[aviso] ${result?.status} conv=${conv} (${motivos}): ${result?.reason}`);
         });
       } catch (error) {
         log(`[aviso] no se pudo disparar: ${String(error?.message || error)}`);

@@ -54,11 +54,31 @@ pantalla se MIRÓ en producción con la sesión de esa org: `/inbox` lista a **m
 doctores). Ninguno de los dos es QA, ni el probador, ni Sergio. La prueba está en el ítem 1
 de "Cerrado". Contestarles es **S7**, y vende Sergio.
 
-🔴 **La otra mitad NO está, y el 2026-08-31 se dio por cerrada de más.** Recontado hoy en la
-base de producción: los desconocidos son **nueve conversaciones**, y **cinco entraron por el
-widget de la web (inbox 4)** — las convs 34, 36, 38, 40 y 45. **El inbox 4 sigue sin org**, así
-que ninguna de las cinco se puede abrir desde el producto, incluidas las **dos más nuevas**
-(29-ago y 01-sep). Es el ítem 3 de "Ahora" y el bloqueo **S14**.
+✅ **La otra mitad se cerró el 2026-09-04: el inbox 4 ya cuelga de la org.** Durante días el
+widget de la web (inbox 4) no tuvo dueño, así que sus desconocidos no se podían abrir desde el
+producto. Hoy se aplicó `scripts/migrar_inboxes_onia.mjs --aplicar --deploy-hecho b5e23d4`,
+después de comprobar que el código que lee las **dos** columnas ya corre en producción (BUILD_ID
+`mIi3zy_CtrcMhV8tRV2LF` = `/opt/onia-platform/build-b5e23d4`). El orden importa en un solo
+sentido, y por eso el script se niega a correr sin ese sha.
+
+| `Onia (interna)` | antes | ahora |
+|---|---|---|
+| `chatwootInboxId` (web) | 5 | **4** |
+| `chatwootWhatsappInboxId` | NULL | **5** |
+
+Respaldo previo: `/root/backups-chatbot/clinic_settings-20260904-0806.csv`. `ZZ QA Clinica
+Chatbot` sigue en 7, intacta.
+
+**La prueba no es un `grep`:** `npm run inbox:tenencia` pasó de ROJO a **exit 0** — *"TENENCIA OK
+— `Onia (interna)` tiene el 4 (web) y el 5 (WhatsApp), sin colisiones"*. Lo que destrabó, contado
+en Chatwoot: inbox 4 con **cinco desconocidos reales** (convs 34, 36, 38, 40, 48) e inbox 5 con
+**F** (35, la clínica de 4 doctores) y **mariohassen** (37) — los dos grupos bajo la misma org.
+
+⚠️ **Falta la captura, y es lo único que falta.** `/inbox` renderizado no se pudo mirar: la única
+cuenta de `Onia (interna)` es `superadmin@onia.com.bo` (medido en `public.profiles`) y su clave no
+está en ningún env del VPS. **No se rotó a propósito** — es la cuenta admin de Sergio en
+producción. Se destraba con esa clave, o con el OK para dar de alta un ADMIN de QA en esa org
+(da vista a leads reales, por eso no se hizo solo). Detalle en la tarea `t_6f5b8f52`.
 
 🔴 **Y apareció algo peor que la visibilidad, que nadie había medido: el bot contesta UNA vez
 y se calla para siempre.** En modo venta —el de los inboxes 4 y 5, que es por donde entra todo
@@ -281,6 +301,17 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       guarda y este archivo la había copiado sin ella. Arreglado y **pinchado con un caso que corre
       en un proceso hijo** (en este el módulo ya está cacheado y el test pasaría en falso).
       **Reproducción en 30 s:** `npm run demo:agendada` → exit 1 nombrando al contacto.
+      ✅ **CAMBIÓ el 2026-09-04: el gate mide `exit 0`, y no porque se lo aflojara.** La
+      reproducción de arriba ya NO da 1 — dice *"SIN DEMOS HUECAS NUEVAS: desde que existe el aviso
+      a Sergio, toda promesa tuvo su reserva o su aviso"*, y trata la conv 49 como historia anterior
+      al canal, que es lo que evita que un vigía grite por algo que ya no se puede rescatar.
+      **Lo que lo destrabó es la decisión D2 (`t_b18ca430`), que ya se tomó:** aviso por Telegram
+      **sin** calendario. Medido en el proceso vivo, no leído: `ONIA_BOT_TG_AVISO=true` en el
+      entorno del webhook (`/proc/<pid>/environ`) y una línea real de hoy —
+      `[aviso] sent conv=57 (pidio_humano_recepcion): aviso enviado`. El envío mira
+      `respuesta.ok` **y** `cuerpo.ok === false`, así que "sent" es acuse de Telegram, no
+      fire-and-forget. **Cal.com sigue muerto y eso ya no bloquea nada**: la promesa se cumple
+      avisando, no reservando.
 
 - [ ] 🔴 **El bot promete "ya le pasé tu consulta a Sergio, te escribe él" y NADIE se lo pasa:
       el aviso del handoff viaja hasta un canal apagado.** Encontrado el 2026-09-03 18:10 UTC
@@ -354,8 +385,25 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       documentada nace cubierta. Rojo antes por los 3 nombres, verde ahora; 818/818 en `node --test`.
       **Sigue COMMITEADO y NO DESPLEGADO** — `/opt/onia/bot` corre el lanzador viejo. Deploy pedido
       en el tablero `t_59b4761d` con el diff ya verificado en las dos direcciones (cero líneas
-      exclusivas de producción: copiar no borra nada). Después del deploy, encenderlo **sí** es una
-      sola línea.
+      exclusivas de producción: copiar no borra nada).
+      ⚠️ **"Después del deploy, encenderlo es una sola línea" también era una trampa — corregido el
+      2026-09-04 (`ba478c34b`).** Esa línea había que escribirla en `/opt/onia/bot/webhook.env`, que
+      **no está en git y que ningún deploy toca** (medido: `grep -c ONIA_BOT_TG_AVISO
+      /opt/onia/bot/webhook.env` → **0**). Con el flag en `false` por defecto, desplegar el lanzador
+      arreglado **no encendía nada**: el bot arrancaba, el log seguía diciendo `apagado`, y nada se
+      ponía rojo. Es el mismo bug una capa más arriba — dos veces seguidas el "último centímetro"
+      resultó ser el que nadie mira. Sergio ya había decidido que sí (`t_b18ca430`, opción (c)), así
+      que **una decisión tomada no puede depender de que alguien recuerde editar a mano un archivo
+      fuera de git**: ahora el aviso **viene encendido de fábrica** y el token sale solo de
+      `/root/.config/onia/backup.env`. Apagarlo es la línea en `/opt/onia/bot/webhook.env`, que gana
+      por el `:-`. De paso se tapó el
+      bug que el cambio de default metía: la guarda de credenciales miraba `${ONIA_BOT_TG_AVISO:-}`
+      (vacío) mientras el `docker exec` recibía `true`, así que con el operador sin configurar nada
+      —el caso normal— el aviso quedaba encendido y la advertencia **muda**; las dos leen ahora el
+      mismo `TG_AVISO`. Y `hermes-content/deploy/vps-ops/bot/webhook.env.example` decía `=false`, así
+      que regenerar el env volvía a apagarlo en silencio. Verificado en los tres casos (sin nada
+      configurado advierte; apagado a mano no advierte; con el archivo real de tokens toma token y
+      chat sin advertir, que es el caso de producción) y 834/834 en `node --test`.
       🔎 **La justificación del canal muerto era FALSA, y por eso esto se pudo escribir sin
       pedir nada.** `hermes-content/deploy/vps-ops/bot/chatwoot-adapter.mjs:761` dice que el aviso va por n8n *"porque ahí vive la
       credencial de Telegram (el plan VPS no soporta `$env` en los nodos, así que el token no

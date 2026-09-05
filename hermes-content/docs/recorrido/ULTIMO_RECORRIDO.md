@@ -12,10 +12,119 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
-## Medido el 2026-09-04 07:30 UTC — rubro DENTAL: **los 9 pasos, de punta a punta**
+## Medido el 2026-09-04 16:11 La Paz — **los CINCO rubros recorridos; cuatro enteros y uno ROTO**
 
-**Un negocio nuevo hace el camino entero.** Es la primera vez que alguien puede afirmarlo con
-pruebas: `resumen.json` → `llegoHasta 9 / 9`, `completo: true`, `agujeros: []`, `corte: null`.
+| Rubro | Resultado | Dónde está la prueba |
+|---|---|---|
+| Clínica dental | **9 de 9** | `capturas/` |
+| Comercio / tienda | **8 de 8** (el paso 7 no le corresponde) | `capturas/comercio/` |
+| Estética y spa | **9 de 9** | `capturas/estetica/` |
+| **Servicios profesionales** | **6 de 9 — ROTO en el paso 7** | `capturas/servicios/` |
+| Importadora / distribuidora | **9 de 9** (el paso 7 no le corresponde) | `capturas/importadora/` |
+
+Los cinco con `--escribir` y **cero filas de este carril** en la base al cerrar.
+
+### Importadora / distribuidora: entera, sin agujeros
+
+Misma forma que comercio: la tarjeta de `/register` no promete agenda («Catálogo, cotizaciones
+B2B y costeo de importación»), así que el paso 7 sale `no-aplica` y no cuenta como agujero.
+Alta con confirmación de correo, onboarding en 6 pantallas, dato cargado y encontrado de vuelta
+en el storefront `/comercio`, pantalla de cobro (`/comercio/fiados`) vista y frenada ahí a
+propósito.
+
+Un detalle sin gravedad, anotado para no perderlo: el dato cargado (`...-paciente`) queda visible
+en el storefront pero **no aparece en los widgets de `/dashboard`** — no es un agujero del
+recorrido (el dato SÍ persiste y SÍ se ve en su pantalla propia), pero si otro carril audita el
+panel de importadora, esta es la pista.
+
+> ⚠️ La única fila `zz-qa-` que queda en producción es **ajena** (`zz-qa-recall-demo-1`, fixture
+> del agente Recall de otro carril). Aparece en `resumen.json` como `zzQaAjenas` y **no se toca**:
+> el chequeo de cierre «`count(*) LIKE 'zz-qa-%'` = 0» hoy da **1** y eso NO es basura mía.
+
+### Servicios profesionales: promete agendar y no puede agendar nunca
+
+Es el hallazgo de la vuelta, y es de los caros: **la venta promete lo que el producto no entrega.**
+
+- La tarjeta del rubro en `/register` promete, textual: **«Agenda, citas, cobros y contabilidad»**.
+- El menú tiene *Citas* y *Agenda de hoy*, y la **primera** acción rápida del botón `+` es
+  **«Nueva cita»**. El producto vende agendar como lo primero que hace ese rubro.
+- El formulario de la cita exige **«Cliente \*»** y ese desplegable tiene **CERO opciones**.
+  No es que no se eligió: **no hay nada para elegir.**
+- Causa, leída en la fuente y no supuesta: `SERVICIOS_NAV_ITEMS` (`lib/platform/vertical-pack.ts`)
+  **no tiene ninguna entrada de clientes**. Dental sí (`/patients` → «Pacientes»). En ese pack no
+  existe la pantalla donde crear el cliente que la cita pide — aunque el vocabulario del rubro sí
+  define `clientes` y el buscador de arriba dice **«Buscar clientes…»**.
+
+Prueba: `capturas/servicios/paso-07c-cita-enviada.png` — el desplegable vacío con el globo de
+validación del navegador, y todo el resto del formulario lleno. Reportado en el tablero como
+`t_2b03ea3d` (prioridad 1) al carril `onia-cola`: **este carril mide, no toca el producto.**
+
+### Dos falsos rojos MÍOS que se cazaron en el camino
+
+Los dos son del instrumento, no del producto, y los dos habrían acusado a un producto sano:
+
+1. **El paso 6 daba ROJO en servicios profesionales** («el menú no ofrece ninguna pantalla donde
+   cargar un dato») porque mi mapa buscaba sólo *cliente*/*paciente*. Ese pack carga su dato en
+   `/comercio`, que ahí se llama **«Servicios»** — igual que comercio lo carga en «Catálogo». El
+   patrón de clientes quedó primero, así que el día que aparezca esa pantalla, gana ella.
+2. **La evidencia de cada rubro apuntaba a las capturas de DENTAL.** La ruta del `resumen.json`
+   estaba escrita a mano; las capturas se guardaban en la carpeta del rubro y se reportaban en la
+   de dental, **donde vive un PNG con el mismo nombre**. Medido: **17 de 17** rutas de comercio y
+   estética apuntaban al archivo equivocado, **y las 17 existían**. Un chequeo de «¿existe la
+   captura?» daba verde sobre las 17. Este carril entrega una sola cosa —la prueba de dónde se
+   rompe— y la estaba entregando de otro rubro.
+
+Gates del instrumento: `scripts/recorrido_cliente.test.mjs` (6 casos, verificados en rojo
+inyectando el defecto real antes de arreglarlo).
+
+### Por qué comercio cierra en 8 y eso NO es un agujero
+
+Una tienda no tiene citas: su menú ofrece Catálogo, Inventario y Caja, y está bien que sea así.
+Hasta hoy el paso 7 salía `no-medido` y contaba como agujero, así que comercio daba **6 de 9** —
+un rojo permanente contra un producto sano, y **2 de los 5 rubros que se venden quedaban
+imposibilitados de completar el recorrido para siempre**.
+
+El escape fácil («si no hay agenda, no aplica») era peor: el día que dental *pierda* su agenda,
+saldría verde. Así que quién debe tener agenda no lo decide una tabla escrita a mano —se vence—,
+lo decide **la promesa de venta del propio rubro**, leída de su tarjeta en `/register`:
+
+| Tarjeta viva en `/register` | ¿Promete agenda? | Paso 7 |
+|---|---|---|
+| Clínica dental — «Pacientes, **citas**, tratamientos y cobros» | sí | obligatorio |
+| Estética y spa — «**Agenda**, clientas, tratamientos y caja» | sí | obligatorio |
+| Servicios profesionales — «**Agenda**, **citas**, cobros y contabilidad» | sí | obligatorio |
+| Comercio / tienda — «Catálogo, inventario, caja y clientes» | no | `no-aplica` |
+| Importadora — «Catálogo, cotizaciones B2B y costeo de importación» | no | `no-aplica` |
+
+- promete y no está → **ROJO**, y del caro: la venta ofrece lo que el producto no entrega.
+- no promete y no está → `no-aplica`, y se **nombra** en el veredicto (no desaparece).
+- no promete y sí está → se mide igual: probar de más nunca miente.
+- no se pudo leer la tarjeta → **se exige la agenda**. Este paso falla cerrado.
+
+Estética es la prueba de que el gate no se rindió: promete «Agenda», la tiene, y la cita entró
+(POST 201, id `cmtmt5zjv003j01rw6koicr3k`) y se vio en el calendario.
+
+### 🔴 El prefijo `zz-qa-` dejó de ser de este carril
+
+Apareció en producción la cita **`zz-qa-recall-demo-1`** («zz-qa- control anual (dato de prueba,
+agente Recall)», creada 2026-09-04 08:37 UTC en la organización `ZZ QA Clinica Chatbot`): un dato
+de prueba que **otro carril** sembró para su agente.
+
+Mi limpieza borraba por `LIKE 'zz-qa-%'` a secas. **Zafó de casualidad**: el fixture ajeno puso el
+texto en `reason` y yo borraba por `notes`. El día que uno use `notes`, un `DELETE FROM appointments
+WHERE notes LIKE 'zz-qa-%'` se lo lleva puesto, sin aviso y sin forma de saber que existió.
+
+Arreglado: el borrado va por la **forma** `zz-qa-AAAA-MM-DD-HHMM…`, que es la que llevan mis filas
+—y cubre también a los huérfanos de una corrida mía que se haya caído a la mitad—. Lo que lleva el
+prefijo y no tiene esa forma se **cuenta, se informa y jamás se toca** (`zzQaAjenas` en el resumen).
+
+Verificado en vivo, no supuesto: corrida completa de dental → `0` filas mías y la fila ajena
+**sigue existiendo** después de la limpieza.
+
+⚠️ **Ojo con el chequeo de cierre `count(*) … LIKE 'zz-qa-%' = 0`**: hoy da 1 y eso **no es basura
+sin limpiar**. Lo que hay que exigir en 0 es lo que tiene mi forma.
+
+### La corrida de dental, en detalle
 
 Cuenta `zz-qa-2026-09-04-0717@onia.com.bo` creada desde `onia.com.bo`, correo confirmado con el
 enlace del mail, alta completa (rubro → negocio → horarios lun-vie 09-13 y 15-19 → equipo con el

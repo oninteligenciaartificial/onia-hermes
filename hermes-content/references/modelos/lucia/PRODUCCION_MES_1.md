@@ -22,11 +22,16 @@
 
 ---
 
-## L1 · Reel de lanzamiento "No soy real" — ✅ RENDERIZADO, espera OK
+## L1 · Reel de lanzamiento "No soy real" — ✅ RENDERIZADO 2026-08-23 (v7), en el tablero desde 2026-09-04
 
-22 s · 4 beats · voz Marcela · b-roll (rooftop → café → gimnasio → laptop → playa).
-Preview: `reel-lanzamiento-20260822/renders/preview-v4-verde-360.mp4`.
+22 s · 4 beats · voz Marcela · b-roll (rooftop → café → gimnasio → **rooftop cierre**, no playa —
+el clip de playa perdía las pecas y se reemplazó a 0 créditos el 23-ago, ver `TABLA-DE-CORTES.md`).
+Entrega: `reel-lanzamiento-20260822/final/lucia-lanzamiento-v7.mp4`.
+Preview: `reel-lanzamiento-20260822/renders/preview-v7-360.mp4`.
 CTA: seguir (sin palabra — es presentación). **Es la pieza que abre todo.**
+
+⚠️ **Corregido 2026-09-04.** Esta sección decía "espera OK" desde el 23-ago y nunca se creó la
+tarea del tablero pidiéndolo — 12 días listo y Sergio nunca lo vio. Tarea: `t_aa4c5c10`.
 
 ## L2 · Carrusel fijado "¿Quién es Lucía?" — ✅ RENDERIZADO 2026-09-03, espera OK
 

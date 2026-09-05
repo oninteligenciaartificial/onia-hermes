@@ -63,3 +63,18 @@ que sí existe es el de Playwright:
   `calidad-generado` y `supervisor`. Es exactamente el modo de falla que el propio `loops.md`
   describe ("existe, corre, gasta, y la auto-cura no lo rearma nunca porque no sabe que
   existe"). **Es zona de `docs-auditoria`, no la toqué.**
+
+## 2026-09-04 — cerrado y abierto
+
+- [x] **Receta de video del rubro** — `references/tendencias/video-ad-primeros-3-segundos.md`.
+      3 variantes (A subtítulo palabra a palabra · B UGC con palabra agrandada · C tarjetas de
+      color sin cámara), cada una con su Library ID, cortes medidos con `ffmpeg` y fotogramas
+      mirados. Cierra los dos primeros huecos que declaraba el README.
+- [x] **Chequeo de fuentes vivas: estaba roto y fallaba en VERDE.** `grep "Fuente: *https?://"`
+      no matchea `` ## `Fuente:` https://… `` → devolvía 0 URLs y se leía como "todas vivas".
+      Comando corregido en el README.
+- [ ] **AHORA — el cierre de los videos.** La receta cubre sólo los primeros 3,6 s. Falta el CTA:
+      qué se pide, cómo se muestra, en qué segundo. Los 6 mp4 ya están medidos; se rehacen con el
+      comando del README. Es el hueco más grande y el más barato.
+- [ ] Bloqueado en Sergio: tablero `t_ad2df41f` — token de Meta vencido el 2026-08-17, sin él no
+      hay reels orgánicos por hashtag. **No re-verificar hasta que vuelva a `ready`.**

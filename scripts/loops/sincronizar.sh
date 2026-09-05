@@ -27,13 +27,36 @@ set -uo pipefail
 
 REPO=${ONIA_LOOPS_REPO:-/root/loops/onia-hermes}
 DESTINO_BIN=${ONIA_LOOPS_BIN:-/root/bin}
-FUENTE="$REPO/scripts/loops"
 CAMBIOS=0
 # Indirecto para poder PROBAR este script sin mandarle un Telegram falso a Sergio.
 # Una guarda que no se puede ejercitar es una guarda que nadie sabe si anda.
 TG=${ONIA_TG:-/root/bin/onia-tg.sh}
 
 log() { printf '%s %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$*"; }
+
+# 🔴 De donde se copia NO depende del checkout. El 2026-09-04 este clon quedo en
+# 'feature/menu-limpio-t_54ff72b5' (un carril lo dejo ahi) y el sincronizador
+# desplego los prompts DE ESA RAMA a los 15 loops: el supervisor nuevo no llego y
+# los loops podrian haber corrido con prompts a medias de otro carril. Ahora el
+# contenido sale SIEMPRE de origin/main, se materializa en un directorio temporal
+# y de ahi se copia; si el fetch fallo y no hay origin/main, se cae al arbol y se
+# avisa, en vez de publicar una rama de trabajo en silencio.
+RAIZ="$REPO"
+TMPMAIN=""
+if git -C "$REPO" rev-parse --verify -q origin/main >/dev/null 2>&1; then
+  TMPMAIN=$(mktemp -d /tmp/onia-sync-main-XXXXXX) || TMPMAIN=""
+  if [ -n "$TMPMAIN" ] && git -C "$REPO" archive origin/main | tar -x -C "$TMPMAIN" 2>/dev/null; then
+    RAIZ="$TMPMAIN"
+    trap 'rm -rf "$TMPMAIN"' EXIT
+    log "fuente: origin/main ($(git -C "$REPO" rev-parse --short origin/main))"
+  else
+    [ -n "$TMPMAIN" ] && rm -rf "$TMPMAIN"; TMPMAIN=""
+    log "aviso: no pude materializar origin/main — copio del arbol de $REPO ($RAMA)"
+  fi
+else
+  log "aviso: no hay origin/main — copio del arbol de $REPO ($RAMA)"
+fi
+FUENTE="$RAIZ/scripts/loops"
 
 [ -d "$FUENTE/prompts" ] || { log "FALLO: no existe $FUENTE/prompts"; exit 2; }
 
@@ -44,8 +67,9 @@ RAMA=$(git -C "$REPO" branch --show-current 2>/dev/null)
 if [ "$RAMA" = "main" ]; then
   git -C "$REPO" merge --ff-only origin/main --quiet 2>/dev/null || log "aviso: main no avanzo por ff (el integrador tiene trabajo local)"
 else
-  log "aviso: $REPO esta en '$RAMA', no en main — sincronizo igual desde el arbol tal cual esta"
+  log "aviso: $REPO esta en '$RAMA', no en main"
 fi
+
 
 poner() {  # poner <origen> <destino>
   local origen="$1" destino="$2" tmp="$2.nuevo.$$"
@@ -137,7 +161,7 @@ poner "$FUENTE/sincronizar.sh" "$DESTINO_BIN/onia-loops-sync.sh"
 # el arbol de abajo a un loop en curso), asi que una herramienta compartida NO puede
 # vivir en una rama — llega solo a quien casualmente este actualizado. Va a /root/bin
 # junto a onia-tg.sh, que es exactamente el mismo caso y por eso nunca fallo.
-poner "$REPO/scripts/kanban/tablero.sh" "$DESTINO_BIN/onia-tablero.sh"
+poner "$RAIZ/scripts/kanban/tablero.sh" "$DESTINO_BIN/onia-tablero.sh"
 
 # El lector de Telegram de RESPALDO, por la misma razon que el tablero: es una
 # herramienta del VPS, no un archivo de carril.
@@ -154,16 +178,33 @@ poner "$REPO/scripts/kanban/tablero.sh" "$DESTINO_BIN/onia-tablero.sh"
 # arreglarlo — Telegram entrega cada mensaje una sola vez, al que lo pida
 # primero. El script ya se niega solo si el gateway está vivo; esto es para que
 # nadie llegue hasta ahí. Lo cubre `npm run test:telegram-un-consumidor`.
-poner "$REPO/scripts/kanban/telegram-entrada.py" "$DESTINO_BIN/onia-tg-entrada.py"
+poner "$RAIZ/scripts/kanban/telegram-entrada.py" "$DESTINO_BIN/onia-tg-entrada.py"
+
+# El publicador que corre cuando Sergio contesta `ok <id>`, y el cliente de Postiz
+# que usa. Van a /root/bin por la MISMA razon que el tablero: los llama el lector
+# de Telegram, que no vive en ningun worktree y por lo tanto no tiene el repo al
+# lado. Sin estos dos, `ok <id>` vuelve a ser solo un `unblock` y la pieza se
+# queda en el disco — que es exactamente el bug que se arreglo el 2026-09-04.
+poner "$RAIZ/scripts/kanban/publicar-aprobado.mjs" "$DESTINO_BIN/onia-publicar-aprobado.mjs"
+poner "$RAIZ/scripts/postiz_schedule.mjs"          "$DESTINO_BIN/onia-postiz-schedule.mjs"
 
 # La memoria compartida: el corredor la inyecta y los loops le escriben por estos
 # dos. Si no se despliegan solos, el corredor de main llama a un script que no
 # existe en /root/bin y los 15 loops fallan mudos en la primera linea.
 poner "$FUENTE/aprender.sh"            "$DESTINO_BIN/onia-aprender.sh"
 poner "$FUENTE/consolidar-memoria.sh"  "$DESTINO_BIN/onia-consolidar-memoria.sh"
+# El extractor de patrones de fallo: la otra mitad del circuito de aprendizaje.
+# `aprender.sh` sabe ESCRIBIR una leccion; sin esto, nadie sabe QUE leccion hace
+# falta, porque nadie compara una vuelta con la anterior. Lo corre el supervisor.
+poner "$FUENTE/extraer-fallos.sh"      "$DESTINO_BIN/onia-extraer-fallos.sh"
 # Los vigias y el renovador de horarios, por la misma razon: existian solo en
 # /root/bin y una reinstalacion desde el repo los borraba sin avisar.
 poner "$FUENTE/vigia-disco.sh"             "$DESTINO_BIN/onia-vigia-disco.sh"
+# El vigia de los loops que corren FUERA del VPS. Corre en el VPS a proposito: el
+# aviso de la PC de casa sale por un shim SSH a esta maquina, asi que la PC no
+# puede avisar de su propia muerte (PLAN_HOMELAB.md §6). Sin lista de loops
+# mudados no hace nada, asi que es seguro tenerlo desplegado desde antes.
+poner "$FUENTE/vigia-loops-remotos.sh"     "$DESTINO_BIN/onia-vigia-loops-remotos.sh"
 poner "$FUENTE/aligerar-worktrees.sh"      "$DESTINO_BIN/onia-aligerar-worktrees.sh"
 poner "$FUENTE/respaldar-memoria-hermes.sh" "$DESTINO_BIN/onia-respaldar-memoria.sh"
 poner "$FUENTE/renovar-slots-bot.py"       "$DESTINO_BIN/onia-renovar-slots.py"
@@ -187,8 +228,8 @@ poner "$FUENTE/hf-login-finish.sh"         "$DESTINO_BIN/hf-login-finish.sh"
 # 2026-09-03, a mitad de un deploy). `poner` hace bash -n y chmod 755 en cada
 # copia: un runbook que no se puede ejecutar no vuelve a pasar en silencio.
 if [ -d /opt/onia-landing/_deploy ]; then
-  poner "$REPO/hermes-content/deploy/onia-landing/build-and-stage.sh"  /opt/onia-landing/_deploy/build-and-stage.sh
-  poner "$REPO/hermes-content/deploy/onia-landing/swap-and-verify.sh"  /opt/onia-landing/_deploy/swap-and-verify.sh
+  poner "$RAIZ/hermes-content/deploy/onia-landing/build-and-stage.sh"  /opt/onia-landing/_deploy/build-and-stage.sh
+  poner "$RAIZ/hermes-content/deploy/onia-landing/swap-and-verify.sh"  /opt/onia-landing/_deploy/swap-and-verify.sh
 fi
 
 # El runbook de deploy de la PLATAFORMA (app.onia.com.bo). Mismo agujero que la
@@ -199,8 +240,8 @@ fi
 # llegar al cliente. deploy-gates-swap.sh NO se sincroniza: sigue siendo el
 # unico paso que pide OK de Sergio, y se edita en el VPS a proposito.
 if [ -d /opt/onia-platform ]; then
-  poner "$REPO/hermes-content/deploy/onia-platform/build-and-stage.sh"    /opt/onia-platform/build-and-stage.sh
-  poner "$REPO/hermes-content/deploy/onia-platform/recreate-container.sh" /opt/onia-platform/recreate-container.sh
+  poner "$RAIZ/hermes-content/deploy/onia-platform/build-and-stage.sh"    /opt/onia-platform/build-and-stage.sh
+  poner "$RAIZ/hermes-content/deploy/onia-platform/recreate-container.sh" /opt/onia-platform/recreate-container.sh
 fi
 
 mkdir -p "$DESTINO_BIN/loops"

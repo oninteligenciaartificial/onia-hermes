@@ -17,7 +17,7 @@ const BASE = 'https://postiz.onia.com.bo/api/public/v1';
 const INTEGRATION = 'cmsw091nx0001lq9c8kr6dsg8'; // @oniahq
 
 function parseArgs(argv) {
-  const a = { slides: '', image: '', captionFrom: '', date: '', keyFile: '', integration: '', list: false, delete: '' };
+  const a = { slides: '', image: '', captionFrom: '', date: '', keyFile: '', integration: '', list: false, delete: '', now: false, draft: false };
   for (let i = 2; i < argv.length; i++) {
     const k = argv[i];
     if (k === '--slides') a.slides = argv[++i];
@@ -26,6 +26,11 @@ function parseArgs(argv) {
     else if (k === '--caption-from') a.captionFrom = argv[++i];
     else if (k === '--date') a.date = argv[++i];
     else if (k === '--key-file') a.keyFile = argv[++i];
+    else if (k === '--now') a.now = true;
+    // --draft crea el post SIN publicarlo. Es la unica forma de probar el
+    // circuito entero (subida + creacion + respuesta) sin ensuciar una cuenta
+    // real: no hay cuenta de prueba, las tres conectadas son de verdad.
+    else if (k === '--draft') a.draft = true;
     else if (k === '--list') a.list = true;
     else if (k === '--delete') a.delete = argv[++i];
   }
@@ -84,8 +89,8 @@ const main = async () => {
     return;
   }
 
-  if ((!args.slides && !args.image) || !args.captionFrom || !args.date) {
-    throw new Error('Faltan --slides (o --image), --caption-from y --date');
+  if ((!args.slides && !args.image) || !args.captionFrom || (!args.date && !args.now && !args.draft)) {
+    throw new Error('Faltan --slides (o --image), --caption-from y --date (o --now)');
   }
 
   // --image: un post de una sola imagen (los de Lucia). --slides: carrusel.
@@ -120,12 +125,17 @@ const main = async () => {
   const value = [{ content: caption, image }];
   if (comment) value.push({ content: comment, image: [] });
 
+  // --now publica YA. Es lo que usa el circuito de aprobacion: cuando Sergio
+  // contesta `ok <id>` por Telegram no quiere una cita en la agenda, quiere que
+  // la pieza salga. `schedule` con fecha sigue siendo el default.
+  const fecha = args.date || new Date().toISOString();
+
   const out = await api(key, '/posts', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      type: 'schedule',
-      date: args.date,
+      type: args.draft ? 'draft' : args.now ? 'now' : 'schedule',
+      date: fecha,
       shortLink: false,
       tags: [],
       posts: [
@@ -138,7 +148,7 @@ const main = async () => {
     }),
   });
 
-  console.log(JSON.stringify({ ok: true, slides: files.length, date: args.date, out }, null, 2));
+  console.log(JSON.stringify({ ok: true, slides: files.length, date: fecha, tipo: args.draft ? 'draft' : args.now ? 'now' : 'schedule', out }, null, 2));
 };
 
 main().catch((e) => {

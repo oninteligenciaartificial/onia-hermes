@@ -61,6 +61,39 @@ test("clearHumanTakeover NO toca un stage que no es handoff", () => {
   assert.equal(limpio.humanTookOver, false);
 });
 
+// Medido en produccion el 2026-09-04: la conversacion 57 pidio un humano a las 14:38:10
+// (aviso a Sergio ENVIADO), y 35 s despues Chatwoot la auto-resolvio con
+// "marked resolved by system due to 0 minutes of inactivity". Eso disparo el desarme y
+// dejo `chatwoot:57 | nuevo | human_took_over=f`: la promesa de que un humano escribe se
+// borro sola, sin que NADIE la atendiera. Le paso a 8 conversaciones desde el 29-ago.
+// Resolver solo significa "termine" cuando alguien empezo: sin humano que haya escrito,
+// el que resuelve es el barrendero de Chatwoot, no Sergio.
+test("un handoff que NADIE atendio sobrevive al auto-resolve de Chatwoot", () => {
+  const state = createState({ conversationKey: "chatwoot:57", botStage: "handoff_humano" });
+  assert.equal(state.humanTookOver, false, "nadie contesto: el handoff sigue pendiente");
+
+  const limpio = clearHumanTakeover(state);
+  assert.equal(
+    limpio.botStage,
+    "handoff_humano",
+    "auto-resolve sin humano NO puede borrar el handoff: el lead queda esperando a Sergio",
+  );
+});
+
+test("tras el auto-resolve el lead que vuelve recibe el acuse, no el saludo de cero", () => {
+  const config = createBotConfig();
+  const state = clearHumanTakeover(
+    createState({ conversationKey: "chatwoot:57", botStage: "handoff_humano" }),
+  );
+
+  const vuelve = step(state, { text: "hola?", receivedAt: "2026-09-04T15:00:00Z" }, { config });
+  assert.equal(vuelve.nextState.botStage, "handoff_humano");
+  assert.ok(
+    vuelve.notes.some((n) => String(n).startsWith("handoff:")),
+    `esperaba el acuse de handoff, salio: ${JSON.stringify(vuelve.notes)}`,
+  );
+});
+
 // ---------------------------------------------------------------------------
 // 3. E2E del ciclo: callado con humano -> resuelto -> contesta de nuevo.
 
