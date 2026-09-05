@@ -29,7 +29,8 @@
    **nueve líneas de negocio abiertas con una sola persona**. Una empresa se define tanto
    por lo que rechaza como por lo que hace.
 5. La ruta es **podar, no sumar**: una línea, cuatro etapas, cada una con criterio de salida
-   numérico (§7).
+   numérico (§7). ✅ **La etapa 1 dejó de ser recomendación: Sergio Urcullo la decidió el
+   2026-09-05 — «cerrar cinco clientes con la versión 1.0»** (§16, con su cita y su fuente).
 6. **El producto es MUY rentable: 94-99,8% de margen bruto, y operar cuesta Bs ~461/mes tenga
    1 cliente o 40** (§8). No hay problema de rentabilidad — hay problema de clientes, que es
    otra cosa y se arregla distinto.
@@ -214,7 +215,7 @@ trámite, y llevan semanas frenadas mientras se construyen features que todavía
 
 Ninguna se salta. El criterio de avance es un número, no una sensación.
 
-### Etapa 1 — Producto único · hoy → 5 clientes
+### Etapa 1 — Producto único · hoy → 5 clientes  ✅ **VIGENTE** (decidida 2026-09-05, §16)
 - Congelar (no borrar) todo lo que no sea **Onia Platform + chatbot**.
 - Vender **solo** el rubro dental/estética — el único 🟢 (`ONIA_CATALOGO_DE_VENTA.md`).
 - Arreglar la entidad legal (§6.1).
@@ -381,6 +382,18 @@ siempre se puede agregar una más, y sin cliente real nadie dice cuál falta.
 
 > **v1.0 = un cliente del rubro dental se registra, carga sus datos, atiende su primer día
 > real y paga el segundo mes — sin que Sergio Urcullo toque nada más que responder dudas.**
+
+⚠️ **Hay DOS definiciones de «v1.0» vivas en el repo, y NO se contradicen — pero hay que leer
+las dos.** Que existan sueltas es el patrón que más caro sale acá, así que quedan atadas:
+
+| Doc | Qué define | En una línea |
+|---|---|---|
+| **`cola/plataforma-v1.md`** (carril `plataforma-v1`, 2026-09-05) | **el ALCANCE** | los **cinco rubros que ya se venden** se recorren de punta a punta sin romperse, y lo que el cliente ve nunca contradice lo que el producto hace. Veterinaria y ganadería quedan **fuera** |
+| **Este doc, §11** | **el CRITERIO DE CIERRE** | un cliente lo logra **solo** y **paga el segundo mes** |
+
+**Se complementan: una dice hasta dónde llega la v1.0, la otra dice cuándo se puede declarar
+terminada.** Ninguna sobra. Y las dos comparten el mismo veto: nada de esto lo cierra una
+demo — lo cierra un cliente real.
 
 Cinco condiciones verificables, todas medibles en producción:
 
@@ -643,9 +656,23 @@ pero define qué rutas están abiertas **hoy**:
 
 ---
 
-## 16. Qué contradice este documento (declarado, no escondido)
+## 16. La tensión que este documento declaraba — RESUELTA el 2026-09-05
 
-**La decisión vigente de Sergio Urcullo del 2026-08-31** (`COLA.md`,
+> ✅ **Sergio Urcullo decidió, y la decisión coincide con la etapa 1 de §7.** Textual, en
+> `hermes-content/docs/cola/plataforma-v1.md` (commiteado a `main` por el carril
+> `plataforma-v1` el mismo día):
+>
+> *"quiero que te enfoques en solo los loops que nos lleven a terminar de desarrollar la Onia
+> Platform… tenemos unos objetivos nuevos que es, por lo menos, **cerrar cinco clientes con la
+> versión 1.0**"*.
+>
+> **La etapa vigente ya no es una recomendación de este doc: es la decisión del dueño.** Este
+> documento no la tomó ni la puede tomar (`CLAUDE.md`); la registra. Lo de abajo queda como
+> **historia del razonamiento**, no como estado.
+
+### Qué decía la tensión (historia, 2026-08-31 → 2026-09-05)
+
+**La decisión anterior de Sergio Urcullo, del 2026-08-31** (`COLA.md`,
 `ONIA_DEFINICION_DE_TERMINADO.md`): *"dedicate a terminar el producto y recién escribimos"*,
 con los 7 leads en espera.
 
@@ -665,9 +692,10 @@ concretas no le llegó ni una plantilla automática. El costo de no escribir **y
 Súmese que el repo se contradice a sí mismo: `ONIA_PUEDO_VENDER_HOY.md` (18-ago) dice textual
 **"SÍ se puede vender el sistema"**, y los 3 pedidos de acceso pidieron **el único rubro 🟢**.
 
-**Este documento no deroga esa decisión** — cambiar el objetivo vigente es de Sergio Urcullo.
-Deja escrito qué se gana y qué se pierde con cada opción, para que la decisión se tome con la
-cuenta delante. Cuando se resuelva, **se edita esta sección** y se alinea `COLA.md`.
+**Cómo se cerró:** no la derogó este documento — la cerró Sergio Urcullo, y el objetivo que
+eligió (*cinco clientes con la v1.0*) **junta las dos mitades** que estaban peleando: se
+termina la v1.0 **y** se mide en clientes cerrados, no en features. La lista de leads sigue
+viva en `ONIA_LEADS_ESPERANDO.md` y **cuándo se les escribe sigue siendo decisión suya**.
 
 ---
 
