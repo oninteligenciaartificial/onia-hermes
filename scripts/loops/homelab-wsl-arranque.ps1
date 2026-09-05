@@ -77,8 +77,16 @@ $esAdmin = ([Security.Principal.WindowsPrincipal] `
             [Security.Principal.WindowsIdentity]::GetCurrent()
            ).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
+# Registrar una tarea que corre COMO EL USUARIO ACTUAL y se dispara con SU propio
+# inicio de sesion NO necesita elevacion. Probado el 2026-09-05 en esta maquina.
+# La guarda decia lo contrario y hacia falsa una restriccion que no existe: eso
+# manda a pedir permisos de administrador de gusto, que es como se normaliza darlos.
+# Elevacion SI hace falta para las dos opciones que sobreviven a un reinicio sin
+# sesion iniciada (LogonType Password / S4U, o tocar el inicio automatico), y esas
+# no las hace este script.
 if (-not $esAdmin) {
-  Morir "hay que correr esto en un PowerShell ABIERTO COMO ADMINISTRADOR."
+  Aviso "sin permisos de administrador. Alcanza para lo que hace este script."
+  Aviso "Solo harian falta para que la tarea corra SIN que nadie inicie sesion."
 }
 
 $wsl = Join-Path $env:SystemRoot "System32\wsl.exe"
