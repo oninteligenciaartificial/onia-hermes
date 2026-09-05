@@ -16,16 +16,48 @@
 // que no puede medir, porque un gate que miente es peor que uno ausente.
 
 import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 
 const DOC = 'hermes-content/docs/cola/loops.md';
 
+// 🔴 EL GATE MIDE CONTRA LOS LOOPS DE **SU** MAQUINA, no contra los del VPS siempre.
+//
+// Hasta el 2026-09-05 comparaba el `crontab -l` de donde corriera contra las filas
+// **VPS** de la tabla. Con una sola maquina eso era correcto. Con dos, miente: en el
+// nodo de casa reportaba los 7 loops del VPS como "faltan en el cron" y dejaba `main`
+// en ROJO para los quince carriles — el integrador corre la cadena entera antes de
+// tocar `main`, asi que ningun carril podia mergear.
+//
+// Peor: el "Chequeo de arranque" pegado en los 15 prompts dice "si una fila de la
+// tabla no tiene su linea en crontab -l, volve a ponerla". Con este gate mintiendo,
+// el primer loop que corriera en casa instalaba ahi los 10 crons del VPS, apuntando a
+// worktrees que no existen. Lo diagnostico el propio loop `web-venta` (tarea
+// t_812bd90a) y no lo toco porque no era su carril.
+//
+// QUE MAQUINA SOY se resuelve preguntando por ARTEFACTOS, nunca por hostname ni IP.
+// Es la misma prueba que ya usan scripts/kanban/tablero.sh e instalar-homelab.sh:
+// "una IP se mueve, un hostname se renombra".
+const CLI_HERMES = '/usr/local/lib/hermes-agent/venv/bin/python'; // solo existe en el VPS
+const MARCA_NODO = '/root/.onia-nodo';                            // lo escribe instalar-homelab.sh
+
+export function maquinaActual({ existe = existsSync, leer = readFileSync } = {}) {
+  // La marca explicita gana: si alguien la puso, sabe mas que cualquier heuristica.
+  if (existe(MARCA_NODO)) {
+    const v = String(leer(MARCA_NODO, 'utf8')).trim();
+    if (v) return v;
+  }
+  if (existe(CLI_HERMES)) return 'VPS';
+  return null; // no se sabe: NO se mide, que es distinto de medir mal
+}
+
 // --- parseo -----------------------------------------------------------------
 
-// Filas de la tabla de activos marcadas **VPS**: | `id` | **VPS** | `cron` (UTC) | para que |
+// Filas de la tabla de activos de UNA maquina: | `id` | **VPS** | `cron` (UTC) | para que |
+// La columna "donde corre" puede venir en negrita (**VPS**, **casa**) o pelada (Windows):
+// se captura igual y se filtra despues, asi agregar una maquina no toca esta expresion.
 // Se limita a la seccion de activos: la tabla de "Apagados a proposito" tiene otra forma
-// (3 columnas, sin **VPS**) y no debe contarse como registro vigente.
-export function loopsDelDoc(markdown) {
+// (3 columnas, sin la columna de maquina) y no debe contarse como registro vigente.
+export function loopsDelDoc(markdown, maquina = 'VPS') {
   const inicio = markdown.indexOf('## Deben existir y estar activos');
   if (inicio === -1) throw new Error(`no encuentro la seccion de activos en ${DOC}`);
   const resto = markdown.slice(inicio + 1);
@@ -33,11 +65,12 @@ export function loopsDelDoc(markdown) {
   const seccion = fin === -1 ? resto : resto.slice(0, fin);
 
   const filas = new Map();
-  const re = /^\|\s*`([a-z0-9-]+)`\s*\|\s*\*\*VPS\*\*\s*\|\s*`([^`]+)`/gm;
+  const re = /^\|\s*`([a-z0-9-]+)`\s*\|\s*\**\s*([A-Za-z][A-Za-z0-9_-]*)\s*\**\s*\|\s*`([^`]+)`/gm;
   let m;
   while ((m = re.exec(seccion)) !== null) {
+    if (m[2].toLowerCase() !== String(maquina).toLowerCase()) continue;
     // El doc escribe el horario como `3 * * * *` (UTC): el sufijo no es parte del cron.
-    filas.set(m[1], m[2].trim());
+    filas.set(m[1], m[3].trim());
   }
   return filas;
 }
@@ -110,6 +143,7 @@ function selfCheck() {
 | \`onia-cola\` | **VPS** | \`33 * * * *\` (UTC) | el integrador |
 | \`solo-en-doc\` | **VPS** | \`0 5 * * *\` (UTC) | no tiene cron |
 | \`contenido-cola\` | Windows | \`31 */3 * * *\` | no es del VPS |
+| \`recorrido-cliente\` | **casa** | \`9 1,4 * * *\` (UTC) | corre en el nodo de casa |
 
 ## Apagados a propósito el 2026-08-31 — NO rearmar
 
@@ -130,9 +164,37 @@ function selfCheck() {
   let totalCasos = 0;
   const esperar = (cond, que) => { totalCasos++; if (!cond) fallos.push(que); else console.log(`  ok - ${que}`); };
 
-  esperar(d.size === 2, 'la tabla aporta solo las filas **VPS** (Windows afuera)');
+  esperar(d.size === 2, 'la tabla aporta solo las filas de MI maquina (Windows y casa afuera)');
   esperar(!d.has('web-factory-salud'), 'la tabla de apagados NO cuenta como registro vigente');
   esperar(d.get('onia-cola') === '33 * * * *', 'el sufijo "(UTC)" no se cuela en el horario');
+
+  // --- una tabla, TRES maquinas -------------------------------------------
+  // Sin esto, el gate del nodo de casa reportaba los 7 loops del VPS como faltantes
+  // y dejaba `main` en rojo para los quince carriles (medido 2026-09-05).
+  const dCasa = loopsDelDoc(doc, 'casa');
+  esperar(dCasa.size === 1 && dCasa.has('recorrido-cliente'),
+    'pidiendo "casa" salen SOLO las filas de casa, no las del VPS');
+  esperar(dCasa.get('recorrido-cliente') === '9 1,4 * * *',
+    'la fila de casa tambien le saca el sufijo "(UTC)" al horario');
+  const dWin = loopsDelDoc(doc, 'Windows');
+  esperar(dWin.size === 1 && dWin.has('contenido-cola'),
+    'la columna sin negrita (Windows) se lee igual que la que la tiene');
+  esperar(loopsDelDoc(doc, 'no-existe').size === 0,
+    'una maquina sin filas da CERO, no la tabla entera');
+
+  // --- que maquina soy ------------------------------------------------------
+  // Se pregunta por artefactos, nunca por hostname: "una IP se mueve, un hostname
+  // se renombra". La marca explicita le gana a la heuristica del VPS.
+  esperar(maquinaActual({ existe: () => false }) === null,
+    'sin marca y sin CLI de Hermes: NO se adivina la maquina, se devuelve null');
+  esperar(maquinaActual({ existe: (p) => p === CLI_HERMES }) === 'VPS',
+    'el CLI de Hermes identifica al VPS');
+  esperar(maquinaActual({ existe: (p) => p === MARCA_NODO, leer: () => 'casa\n' }) === 'casa',
+    'la marca del nodo manda, y se le limpia el salto de linea');
+  esperar(maquinaActual({ existe: () => true, leer: () => 'casa' }) === 'casa',
+    'con marca Y CLI presentes gana la marca explicita');
+  esperar(maquinaActual({ existe: (p) => p === MARCA_NODO, leer: () => '  \n' }) === null,
+    'una marca vacia no cuenta: es lo mismo que no saber');
   esperar(c.size === 2, 'del crontab salen solo los onia-loop.sh, y no los otros crons');
   esperar(!c.has('apagado'), 'una linea comentada con # NO cuenta como registrada');
 
@@ -164,20 +226,30 @@ function selfCheck() {
 // --- medicion real ----------------------------------------------------------
 
 function medir() {
+  // Primero QUE MAQUINA SOY. Sin eso no se mide: comparar el cron de una maquina
+  // contra las filas de otra es exactamente como este gate dejaba `main` en rojo.
+  const maquina = maquinaActual();
+  if (!maquina) {
+    console.log('no se cual maquina es esta: no se puede medir aca (esto NO es una falla).');
+    console.log(`Se reconoce el VPS por ${CLI_HERMES}, y cualquier otro nodo por ${MARCA_NODO}.`);
+    console.log('Si esta maquina corre loops, el instalador tiene que dejar esa marca.');
+    return;
+  }
+
   let salida;
   try {
     salida = execFileSync('crontab', ['-l'], { encoding: 'utf8' });
   } catch {
     console.log('sin `crontab -l` disponible: no se puede medir acá (esto NO es una falla).');
-    console.log('El registro de los loops vive en el VPS 187.77.16.63 — corré esto ahí.');
+    console.log(`Esta maquina se identifica como "${maquina}"; el registro vive en su crontab.`);
     return;
   }
 
-  const doc = loopsDelDoc(readFileSync(DOC, 'utf8'));
+  const doc = loopsDelDoc(readFileSync(DOC, 'utf8'), maquina);
   const cron = loopsDelCron(salida);
   const problemas = comparar(doc, cron);
 
-  console.log(`loops en cron: ${cron.size} · filas VPS en ${DOC}: ${doc.size}`);
+  console.log(`maquina: ${maquina} · loops en su cron: ${cron.size} · filas "${maquina}" en ${DOC}: ${doc.size}`);
   if (problemas.length === 0) {
     console.log('OK: la tabla y el crontab coinciden en id y horario, en las dos direcciones.');
     return;

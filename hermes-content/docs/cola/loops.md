@@ -1,12 +1,37 @@
 # Los loops — qué debe estar registrado
 
 **Fuente de verdad de QUÉ loops deben existir y DÓNDE corre cada uno.** Un loop es un prompt en
-disco con un horario registrado en algún lado — y desde el 2026-09-01 ese "algún lado" son **dos**:
+disco con un horario registrado en algún lado — y desde el 2026-09-05 ese "algún lado" son **tres**:
 
 | dónde corre | el prompt vive en | el horario vive en |
 |---|---|---|
-| Windows | `C:\Users\PC\.claude\scheduled-tasks\<id>\SKILL.md` | la app de Claude Code (`list_scheduled_tasks`) |
-| VPS | `/root/bin/loops/<id>.md` (fuente: [`scripts/loops/prompts/`](../../../scripts/loops/prompts/)) | `crontab -l` en `187.77.16.63` |
+| `Windows` | `C:\Users\PC\.claude\scheduled-tasks\<id>\SKILL.md` | la app de Claude Code (`list_scheduled_tasks`) |
+| `VPS` | `/root/bin/loops/<id>.md` (fuente: [`scripts/loops/prompts/`](../../../scripts/loops/prompts/)) | `crontab -l` en `187.77.16.63` |
+| `casa` | `/root/bin/loops/<id>.md` dentro de WSL | `crontab -l` en la PC de casa (`DESKTOP-0GGGNMF`) |
+
+🔴 **La columna «dónde corre» no es informativa: la lee un gate.** Cada máquina se compara
+**sólo contra sus propias filas**, y para eso tiene que saber cuál es. Se resuelve preguntando
+por **artefactos, nunca por hostname ni IP** — *una IP se mueve, un hostname se renombra*:
+
+| máquina | cómo se reconoce |
+|---|---|
+| `VPS` | existe `/usr/local/lib/hermes-agent/venv/bin/python` (el CLI de Hermes) |
+| cualquier otra | el archivo `/root/.onia-nodo` con su nombre, que deja `instalar-homelab.sh` |
+| ninguna de las dos | **no se mide** — un gate que miente es peor que uno ausente |
+
+> **Por qué existe esta tercera fila, con fecha:** hasta el 2026-09-05 el gate comparaba el
+> `crontab` de *cualquier* máquina contra las filas `VPS`. En el nodo de casa eso reportaba los
+> siete loops del VPS como *"faltan en el cron"* y dejaba **`main` en rojo para los quince
+> carriles** — el integrador corre la cadena entera antes de tocar `main`, así que ninguno podía
+> mergear. Y peor: el *Chequeo de arranque* pegado en los quince prompts dice *"si una fila no
+> tiene su línea en `crontab -l`, volvé a ponerla"*, así que el primer loop que corriera allá
+> **habría instalado los diez crons del VPS** apuntando a worktrees que no existen. Lo diagnosticó
+> el propio loop `web-venta` (tarea `t_812bd90a`) y no lo tocó porque no era su carril.
+>
+> ⚠️ **Lo que todavía NO está arreglado:** los quince prompts siguen diciendo textual *"Corrés en
+> el VPS (187.77.16.63)"*, que es mentira fuera del VPS, y su *Chequeo de arranque* no compara
+> contra la máquina antes de rearmar. **Mientras eso siga así, `casa` no debe tener filas acá.**
+> El gate ya no miente; los prompts sí.
 
 🔄 **Desde el 2026-09-02 el VPS se despliega solo.** `/root/bin/onia-loops-sync.sh` corre cada
 hora al minuto 44 —once minutos después del integrador— y copia el corredor y los prompts
