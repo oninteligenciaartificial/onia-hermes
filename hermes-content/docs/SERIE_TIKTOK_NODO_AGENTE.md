@@ -62,6 +62,47 @@ diferencia es un carácter."
 
 ---
 
+### 📌 EP 0 — "El error que no deja error" ⭐⭐ *el mejor de todos — abre la serie*
+
+**El momento:** a las 23:54 una tarea tenía que arrancar. **No arrancó.** Y no hubo
+error, ni log, ni aviso. Nada. Porque **un programa que no arranca no genera ninguna
+señal** — se ve exactamente igual que uno que todavía no le tocó.
+
+La única pista fue **notar que faltaba un archivo**.
+
+**Qué mostrar — esto es una historia de detectives, y se cuenta como tal:**
+
+1. La carpeta de logs: cuatro archivos, y uno que debería estar y no está.
+2. **El testigo.** Otra tarea corría *cada hora*. Sus registros: `22:52 · 23:52 ·
+   00:52 · 01:52` — **cuatro de cuatro, sin fallar una**. Eso mata dos sospechosos
+   de un tiro: la máquina no estaba dormida, y el programador no estaba muerto.
+3. Los tres sospechosos descartados en pantalla, tachándolos: *¿se suspendió la
+   máquina?* → `uptime: 6 horas`. *¿el candado?* → es uno por tarea, no compartido.
+   *¿faltaba algo?* → corrida a mano, arranca perfecto.
+4. **El culpable.** Dos comandos, lado a lado:
+
+   ```
+   servidor:   Etc/UTC
+   mi PC:      America/Caracas  (−04)
+   ```
+
+   El programador **interpreta los horarios en la hora local de cada máquina**. Las
+   mismas líneas, en dos husos, son dos horarios distintos. **Todo estaba corrido
+   cuatro horas.**
+
+5. El detalle que remata: una de las tareas prepara algo *"con dos horas de colchón"*.
+   Corrida cuatro horas, **lo preparaba después de necesitarlo**.
+
+**La lección:** *cuando algo no falla pero tampoco pasa, buscá un testigo — algo
+parecido que sí funcione. La diferencia entre los dos es la respuesta.*
+
+**Gancho:** "Una de mis tareas automáticas no corrió. No dio error. No dejó log. No
+avisó. Así la encontré."
+
+*(Y el chiste final: la PC está en Bolivia y Windows le había puesto **Caracas**.)*
+
+---
+
 ### 📌 EP 2 — "Verificar no es contar" ⭐ *el mejor de la serie*
 
 **El momento:** después de agregar la llave, el control era *"¿hay 4 líneas?"*. **Dio 4.
@@ -225,8 +266,13 @@ es lo correcto.)*
 | **Duración** | 45-70 s. El EP 2 aguanta 90 |
 | **Estructura** | Gancho (3 s) → el error en pantalla (10 s) → por qué pasa (20 s) → el arreglo (15 s) → la lección fuera de la terminal (10 s) |
 | **Cierre** | La lección, **nunca** "seguime para más" |
-| **Orden** | 2 → 3 → 1 → 4 → 5 → 6 → 8 → 7 → 9. Se abre con el más fuerte |
+| **Orden** | **0** → 2 → 3 → 1 → 4 → 5 → 6 → 8 → 7 → 9. Se abre con el más fuerte |
 | **Cadencia** | 2 por semana. Hay para 5 semanas |
+
+**El EP 0 y el EP 2 son la misma idea vista de dos lados**, y por eso van juntos al
+principio: uno muestra una verificación que dio verde estando rota, el otro un fallo
+que no dejó ninguna huella. Los dos dicen lo mismo — **la ausencia de error no es
+evidencia de que algo funcione** — y es la idea más transferible de la serie.
 
 **El sistema visual sale de la landing real**, no se inventa: ver la regla de tipografía en
 `scripts/loops/prompts/marca-personal.md:178` (Archivo variable con pesos medios, micro
