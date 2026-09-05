@@ -56,14 +56,20 @@ Lo que se arregló, y lo que se aprendió, en `handoff/onia-v1-servicios.md`:
 - **La cita NO era imposible**: eso ya lo había arreglado el deploy `3606c46` (14:12 del 4-sep);
   la medición de este doc se hizo ANTES de ese swap. Dato vencido, corregido acá.
 
-⚠️ **COMERCIO: escrito y en `master` el 5-sep, TODAVÍA SIN DESPLEGAR.** La pantalla de clientes
-existe (`app/(dashboard)/comercio/clientes/`), lee `OniaCoreBusinessPartner` como correspondía —no
-`Patient`— y está en la nav del pack (`vertical-pack.ts:282`). **No cuenta como hecho hasta el
-deploy y hasta MIRARLA en producción con una cuenta nueva.**
+⚠️ **COMERCIO: DESPLEGADO el 5-sep (build `oOZyQ_Mk9rGnBbzr8469b`, sha `f05b2fc`), falta MIRARLO.**
+La pantalla de clientes lee `OniaCoreBusinessPartner` como correspondía —no `Patient`— está en la
+nav del pack (`vertical-pack.ts:282`), su `page.js` está compilado en el runtime vivo y la tabla
+existe en producción. **Todavía NO cuenta como hecho:** nadie recorrió el camino completo con una
+cuenta nueva. Lo que sí se miró renderizado es `/login` y las dos pantallas de `/register`.
 
-⚠️ **Recibo imprimible: escrito y en `master` el 5-sep, sin desplegar.** Ruta nueva
-`/print/recibo-venta/[paymentId]` sobre `OniaCommercePayment`, enlazada desde la caja al cerrar la
-venta (`VentaForm.tsx:334`). Misma advertencia: sin deploy no existe.
+⚠️ **Recibo imprimible: DESPLEGADO el 5-sep, falta MIRARLO.** `/print/recibo-venta/[paymentId]`
+sobre `OniaCommercePayment`, enlazado desde la caja al cerrar la venta (`VentaForm.tsx:334`),
+compilado en el runtime y con su tabla en producción. Misma advertencia: sin recorrido no cuenta.
+
+> ⚠️ **Quién escribió qué, porque ya se confundió una vez.** La pantalla de Clientes (`502a22b`) y
+> el recibo (`fb54daf`) son de la sesión de panel/UI del 5-sep, no de la de usuarios y pricing —
+> esa aportó el tope de asientos, la fuente única de límites y los arreglos de seguridad. Listarlos
+> juntos bajo "lo que movió el merge" los hizo sonar de quien solo los mergeó.
 
 🔴 **Hueco anotado (5-sep): la IMPORTADORA no llega ni a Clientes ni a recibo.** Medido sobre
 `ELECTRICO_NAV_ITEMS`, comparando los tres packs de la familia comercio:
@@ -103,7 +109,9 @@ Se anota para que la sesión que la encienda no descubra esto de cero.
 
 0. **Que el rubro entregue lo que su propia alta promete.**
    ✅ **SERVICIOS: hecho y desplegado el 4-sep**, verificado contra producción con cuenta nueva.
-   ⚠️ **COMERCIO: escrito y mergeado a `master` el 5-sep. Falta desplegarlo y mirarlo.**
+   ⚠️ **COMERCIO: desplegado el 5-sep. Falta el recorrido con cuenta nueva** — es lo único que
+   separa esto de un ✅. La tarjeta de `/register` promete «Catálogo, inventario, caja y clientes»
+   (mirado renderizado el 5-sep); las cuatro piezas existen, nadie las caminó juntas.
 1. **Material de venta honesto.** La web y el guion prometen factura del SIN, que está apagada.
    *En corrección (`t_db9acebf`).* **Bloquea escribirle a los leads.**
 2. **El dueño conecta su WhatsApp.** Meta ya aprobó los permisos; el botón está vivo. Falta que
@@ -179,8 +187,9 @@ Cerrado y sin desvíos. Cada paso se despliega y se verifica MIRÁNDOLO antes de
 
 1. ~~Configuración: de 7 pestañas a una página con «Configuración avanzada».~~ **Hecho, vivo el 4-sep.**
 2. ~~Que el rubro SERVICIOS entregue lo que promete su alta.~~ **Hecho, vivo el 4-sep.**
-3. ~~Que el rubro COMERCIO entregue lo que promete su alta.~~ **Escrito y en `master` el 5-sep;
-   falta el deploy.** *Listo = el recorrido se hace solo EN PRODUCCIÓN, mirado con cuenta nueva.*
+3. ~~Que el rubro COMERCIO entregue lo que promete su alta.~~ **Desplegado el 5-sep; falta el
+   recorrido.** *Listo = el camino se hace solo EN PRODUCCIÓN, mirado con cuenta nueva: registrarse
+   → cargar un producto → cargar un cliente → caja → cobrar → recibo.*
 4. ~~Panel de inicio en tres renglones.~~ **CANCELADO.** Sergio Urcullo descartó
    `feat/panel-tres-renglones` **y** el mockup minimal de `claude/onia-minimal-dashboard-369bc4`:
    el panel es el que ya está vivo. Lo que sí se hizo y está en `master` es el rediseño sobre ESE
