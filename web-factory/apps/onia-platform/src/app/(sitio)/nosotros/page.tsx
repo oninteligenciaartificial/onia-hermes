@@ -46,7 +46,7 @@ const PRINCIPIOS = [
   {
     titulo: "Honestidad primero",
     detalle:
-      "Lo que está en trámite lo publicamos como en trámite, y lo que el sistema todavía no hace está escrito en la página de comparación. Preferimos que lo leas acá y no que lo descubras en la primera semana.",
+      "Lo que está en trámite lo publicamos como en trámite, con su fecha y su resolución. Preferimos que lo leas antes de contratar y no que lo descubras en la primera semana.",
   },
   {
     titulo: "La IA propone, vos aprobás",

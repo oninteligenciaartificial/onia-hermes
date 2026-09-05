@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import { describe, expect, it } from "vitest";
 
 import { PAGINAS, archivoDe, cadenaHastaSimbolo, moduloDe } from "./rutas";
@@ -71,6 +73,80 @@ describe("ninguna página servida enumera lo que al producto le falta", () => {
     expect(cadena, "el recorredor no encontró CONTENDIENTES: mide en falso").not.toBeNull();
     expect(cadena!.length).toBeGreaterThan(1);
   });
+
+  /*
+   * La otra mitad, y la que el recorredor de imports no puede ver: ANUNCIAR el
+   * ledger a mano, con el texto escrito en la página.
+   *
+   * El caso vivo, medido el 2026-09-04 en `onia.com.bo/v1/precios` (HTTP 200):
+   * el pie del bloque de planes invitaba a *"Mirá Onia contra todo lo que se
+   * vende en Bolivia — con los precios públicos de cada uno y lo que todavía no
+   * hacemos, dicho de frente"*. Ninguna de las dos comprobaciones de arriba lo
+   * ve: no importa `TODAVIA_NO`, lo escribe. Y es doblemente malo — es obra a
+   * la vista, y además es FALSO desde el 2026-09-03, porque manda a leer a
+   * `/comparativa` un ledger que esa página decidió no mostrar. El `it.each` de
+   * arriba lo prueba: si ninguna pantalla puede pintarlo, prometerlo es mentir.
+   *
+   * ⚠️ El patrón se ancla en «lo que … no hace/hacemos», que es el TÍTULO del
+   * ledger, y no en «todavía no» a secas. Es a propósito: la advertencia fiscal
+   * («nuestro emisor … todavía no emite factura con valor fiscal») tiene que
+   * poder seguir escrita donde corresponde, y un patrón más ancho obligaría a
+   * borrarla — que es exactamente al revés de lo que hay que hacer.
+   *
+   * ⚠️ Y se leen las páginas SIN sus comentarios: las cabeceras de
+   * `(sitio)/comparativa/page.tsx` y `v1/comparativa/page.tsx` citan la frase
+   * para explicar por qué se sacó. Un gate que se dispara con la bitácora del
+   * arreglo obliga a borrar el registro de lo que pasó, y termina borrado él.
+   */
+  const ANUNCIA_EL_LEDGER =
+    /lo que (?:\S+ ){0,3}?(?:todav[ií]a |a[uú]n )?no (?:lo )?hace(?:mos)?\b/i;
+
+  it("el patrón reconoce las tres frases que estuvieron vivas y perdona la fiscal", () => {
+    // Sin este ancla, un patrón roto deja el `it.each` de abajo en verde sobre
+    // cualquier cosa. Los cuatro casos son texto REAL de producción.
+    //
+    // Las tres primeras son la MISMA promesa escrita de tres formas, y por eso
+    // el sujeto del medio es un comodín: la primera versión del patrón sólo
+    // contemplaba «lo que Onia todavía no hace» y «lo que todavía no hacemos»,
+    // y dejaba pasar la de /nosotros —«lo que el SISTEMA todavía no hace»—, que
+    // estaba viva al lado. Un gate que cubre dos de las tres formas de escribir
+    // la misma frase es medio barrido, que es el defecto que vino a cerrar.
+    for (const vivo of [
+      "con los precios públicos de cada uno y lo que todavía no hacemos, dicho de frente",
+      "con fecha de consulta. Y lo que Onia todavía no hace.",
+      "lo que el sistema todavía no hace está escrito en la página de comparación",
+    ]) {
+      expect(
+        ANUNCIA_EL_LEDGER.test(vivo),
+        `el gate dejó de reconocer una frase que estuvo viva: «${vivo}»`,
+      ).toBe(true);
+    }
+    expect(
+      ANUNCIA_EL_LEDGER.test(
+        "nuestro emisor está en trámite de homologación ante el SIN y todavía no emite " +
+          "factura con valor fiscal",
+      ),
+      "el patrón se comió la advertencia fiscal, que SÍ tiene que poder escribirse",
+    ).toBe(false);
+  });
+
+  it.each(PAGINAS.map((p) => [p.ruta || "/", p] as const))(
+    "%s no anuncia el ledger por texto",
+    (_ruta, pagina) => {
+      const fuente = readFileSync(archivoDe(pagina), "utf8")
+        .replace(/\/\*[\s\S]*?\*\//g, " ")
+        .replace(/^[ \t]*\/\/.*$/gm, " ");
+      // El JSX parte las frases en varias líneas: se aplanan los espacios antes
+      // de buscar, o «lo que todavía no\n hacemos» no matchea nada.
+      const encontrada = ANUNCIA_EL_LEDGER.exec(fuente.replace(/\s+/g, " "));
+      expect(
+        encontrada?.[0] ?? null,
+        `${pagina.archivo} anuncia por texto la lista de lo que al producto le ` +
+          `falta. Ninguna pantalla la pinta, así que además de exhibir obra manda ` +
+          `a leer algo que no está.`,
+      ).toBeNull();
+    },
+  );
 
   it.each(PAGINAS.map((p) => [p.ruta || "/", p] as const))(
     "%s no puede pintar la lista de lo que falta",

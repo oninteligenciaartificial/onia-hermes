@@ -2046,7 +2046,9 @@
   gap: 0.6rem;
   padding: 0.7rem clamp(1rem, 4vw, 1.5rem)
     calc(0.7rem + env(safe-area-inset-bottom, 0px));
-  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  /* 97 %: es la barra fija de abajo en móvil, y el contenido le pasa por debajo
+     igual que al header de arriba. Ver barras-opacas.test.ts */
+  background: color-mix(in srgb, var(--bg) 97%, transparent);
   backdrop-filter: blur(12px);
   border-top: 1px solid var(--line);
 }
