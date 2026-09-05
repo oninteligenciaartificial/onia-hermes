@@ -71,6 +71,24 @@ export const ZONA = "web-factory/apps/onia-platform";
 export const BUILD_ID_VIVO =
   "/opt/onia-landing/runtime-next/apps/onia-platform/.next/BUILD_ID";
 
+/**
+ * Dónde vive el sitio cuando no vive en esta máquina.
+ *
+ * POR QUÉ. Este carril dejó de correr sólo en el VPS: el 2026-09-04 pasó a
+ * correr también en el nodo de casa (WSL), donde `/opt/onia-landing` no existe.
+ * El gate salía por «no pude leer la fecha del build vivo. ¿Estoy en el VPS?»
+ * en su PRIMERA línea, sin llegar a preguntarle nada a git — y con eso el único
+ * instrumento capaz de ver un deploy varado dejó de producir veredicto durante
+ * dos vueltas, mientras veinte arreglos ya en `main` no llegaban al cliente.
+ *
+ * Dónde está montado el disco es una circunstancia de la máquina, no una
+ * propiedad del sitio: el gate pregunta local primero y por SSH después.
+ */
+export const VPS_SSH = process.env.ONIA_VPS_SSH ?? "root@187.77.16.63";
+
+/** Sin `BatchMode` un SSH sin llave se cuelga pidiendo contraseña y el cron muere por timeout. */
+const SSH_ARGS = ["-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "-o", "StrictHostKeyChecking=accept-new"];
+
 /** Donde el runbook de la casa deja los builds ya armados, sin tocar producción. */
 export const STAGED_DIR = "/opt/onia-landing";
 export const STAGED_PREFIX = "runtime-next.new-";
@@ -138,7 +156,9 @@ export function diagnosticar({ buildIdMtimeMs, commits, homeStatus }) {
     return {
       codigo: NO_PUDE_MEDIR,
       varados: [],
-      motivo: `no pude leer la fecha del build vivo (${BUILD_ID_VIVO}). ¿Estoy en el VPS?`,
+      motivo:
+        `no pude leer la fecha del build vivo (${BUILD_ID_VIVO}), ni en este disco` +
+        ` ni por SSH a ${VPS_SSH}. Sin eso no sé qué está publicado: NO es «al día».`,
     };
   }
   if (!Array.isArray(commits)) {
@@ -260,11 +280,12 @@ export const COMANDO_PUBLICAR = "bash /opt/onia-landing/_deploy/publicar.sh";
  * rechaza. La fecha sale del BUILD_ID —igual que la del runtime vivo— y no del
  * nombre del directorio: el nombre lo pone quien lo creó y puede mentir.
  */
-export function stagedDisponible(dir = STAGED_DIR) {
+export function stagedLocal(dir = STAGED_DIR) {
   let entradas;
   try {
     entradas = readdirSync(dir).filter((n) => n.startsWith(STAGED_PREFIX));
   } catch {
+    // El directorio no existe acá. Es «no pude preguntar», no «no hay ninguno».
     return null;
   }
 
@@ -284,16 +305,94 @@ export function stagedDisponible(dir = STAGED_DIR) {
     }
   }
 
-  return candidatos.sort((a, b) => b.mtimeMs - a.mtimeMs)[0] ?? null;
+  return candidatos;
 }
 
-/** mtime del BUILD_ID vivo, en ms. `null` si no se puede leer. */
-export function fechaBuildVivo(ruta = BUILD_ID_VIVO) {
+/**
+ * La respuesta del VPS, parseada. Aparte de la red para poder probarla.
+ *
+ * Una línea a la que le falta un campo es un directorio del que no sabemos la
+ * fecha o el BUILD_ID: se descarta en vez de ofrecerse, igual que la rama local
+ * descarta el build sin `server.js`. Ofrecer una ruta que el swap va a rechazar
+ * es un fallo que se disfraza de pedido atendido.
+ *
+ * @param {string} stdout
+ */
+export function parsearStagedRemoto(stdout) {
+  const candidatos = [];
+  for (const linea of String(stdout).split("\n")) {
+    if (!linea.trim()) continue;
+    const [ruta, epoch, buildId] = linea.split("\t");
+    const seg = Number(epoch);
+    if (!ruta?.trim() || !buildId?.trim() || !Number.isFinite(seg) || seg <= 0) continue;
+    candidatos.push({ ruta: ruta.trim(), mtimeMs: seg * 1000, buildId: buildId.trim() });
+  }
+  return candidatos.sort((a, b) => b.mtimeMs - a.mtimeMs);
+}
+
+/**
+ * Lo mismo que `stagedLocal`, preguntado por SSH. `null` si el SSH no contestó.
+ *
+ * Se comprueban en el VPS exactamente las mismas dos cosas que comprueba la
+ * rama local —el `server.js` que exige el swap y un BUILD_ID legible— para que
+ * el veredicto no dependa de desde dónde se miró.
+ */
+export function stagedPorSsh(dir = STAGED_DIR, destino = VPS_SSH) {
+  const guion =
+    `for d in ${dir}/${STAGED_PREFIX}*/; do ` +
+    `[ -f "\${d}${STAGED_MARCA}" ] || continue; ` +
+    `b="\${d}apps/onia-platform/.next/BUILD_ID"; ` +
+    `[ -f "$b" ] || continue; ` +
+    `printf '%s\\t%s\\t%s\\n' "\${d%/}" "$(stat -c %Y "$b")" "$(cat "$b")"; ` +
+    `done`;
+  const r = spawnSync("ssh", [...SSH_ARGS, destino, guion], { encoding: "utf8" });
+  if (r.status !== 0) return null;
+  return parsearStagedRemoto(r.stdout);
+}
+
+/**
+ * El build armado más reciente que `swap-and-verify.sh` aceptaría, o `null`.
+ *
+ * Se busca en el MISMO disco donde se encontró el runtime vivo. Medir el
+ * runtime por SSH y el staged en el disco local diría «no hay ningún build
+ * armado» sobre una máquina donde sí lo hay, y mandaría a rearmar uno que ya
+ * existe: un pedido de deploy inventado, que a Sergio le llega igual que los
+ * reales.
+ */
+export function stagedDisponible(dir = STAGED_DIR, { local = stagedLocal, remoto = stagedPorSsh } = {}) {
+  const candidatos = local(dir) ?? remoto(dir);
+  if (!Array.isArray(candidatos)) return null;
+  return candidatos.slice().sort((a, b) => b.mtimeMs - a.mtimeMs)[0] ?? null;
+}
+
+/** mtime del BUILD_ID vivo en este disco, en ms. `null` si no está montado acá. */
+export function mtimeLocal(ruta = BUILD_ID_VIVO) {
   try {
     return statSync(ruta).mtimeMs;
   } catch {
     return null;
   }
+}
+
+/** Lo mismo, preguntado al VPS. `null` si el SSH no contestó. */
+export function mtimePorSsh(ruta = BUILD_ID_VIVO, destino = VPS_SSH) {
+  const r = spawnSync("ssh", [...SSH_ARGS, destino, "stat", "-c", "%Y", ruta], {
+    encoding: "utf8",
+  });
+  if (r.status !== 0) return null;
+  const seg = Number(r.stdout.trim());
+  return Number.isFinite(seg) && seg > 0 ? seg * 1000 : null;
+}
+
+/**
+ * mtime del BUILD_ID vivo, en ms, venga de donde venga. `null` si ninguna de
+ * las dos vías contestó — que sigue siendo ausencia de dato, nunca «al día».
+ *
+ * El disco local manda siempre que conteste: en el VPS salir a la red sería más
+ * lento y podría no estar configurado.
+ */
+export function fechaBuildVivo(ruta = BUILD_ID_VIVO, { local = mtimeLocal, remoto = mtimePorSsh } = {}) {
+  return local(ruta) ?? remoto(ruta);
 }
 
 /**
