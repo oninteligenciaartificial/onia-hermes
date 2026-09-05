@@ -83,6 +83,10 @@ const QA = {
   // nombre: sus NOTAS son la única marca zz-qa- que la hace borrable sin dudar.
   profesional: `zz-qa-${SELLO}-profesional`,
   cita: `zz-qa-${SELLO}-cita`,
+  // El ítem manual de la factura del paso 8. Va en la DESCRIPCIÓN del ítem, no en un campo propio
+  // de la factura — es lo único de la factura que lleva el prefijo, y por eso la limpieza busca
+  // la organización dueña, no la factura por su propio texto.
+  itemFactura: `zz-qa-${SELLO}-item`,
 };
 
 /** La fecha en hora de Bolivia (UTC-4, sin horario de verano). El VPS vive en UTC: a las 21:00 de La Paz "mañana" ya es otro día. */
@@ -250,6 +254,84 @@ async function llegar(page, ruta, archivo) {
   const pedida = ruta.replace(/\/$/, '');
   const llego = destino === pedida && !tapa;
   return { ...r, ...vista, destino, pedida, llego, tapa, despejo };
+}
+
+/**
+ * Crea una factura `zz-qa-` de verdad para el paciente del paso 6 y llega a la pantalla que
+ * pide la plata — no al listado vacío. Frena ahí: nunca marca la factura como pagada.
+ *
+ * POR QUÉ EXISTE: el paso 8 llegaba a `/billing` y esa pantalla siempre decía "0 facturas ·
+ * Cobrado Bs 0,00", así que "OK" no probaba que cobrar funcione — sólo que la pantalla abra.
+ * `hermes-content/docs/cola/recorrido-cliente.md` lo dejó anotado como el escalón siguiente.
+ * El ítem lleva el prefijo en la DESCRIPCIÓN (la factura en sí no tiene campo para eso); la
+ * limpieza no la busca por su propio texto, la organización a la que cuelga cae con el resto
+ * de las ~70 tablas de la organización (`invoices.organizationId` es `onDelete: Cascade`,
+ * `prisma/schema.prisma:832`).
+ */
+async function facturarZzQa(page, ctx) {
+  const nuevo = await ir(page, `${APP}/billing/new`);
+  if (nuevo.status >= 400) return { estado: 'no-medido', detalle: `/billing/new devolvió ${nuevo.status}` };
+  await despejar(page);
+
+  const selectPaciente = page.locator('select').first();
+  if (!(await selectPaciente.count().catch(() => 0))) {
+    const vista = await mirar(page, 'paso-08b-factura.png');
+    return { estado: 'no-medido', detalle: `/billing/new no ofrece el formulario esperado (sin desplegable de cliente)`, ...vista };
+  }
+  const opciones = await selectPaciente.locator('option').allTextContents();
+  if (!opciones.some((t) => t.trim() === ctx.datoCargado)) {
+    const vista = await mirar(page, 'paso-08b-factura.png');
+    return {
+      estado: 'roto',
+      detalle: `el paciente "${ctx.datoCargado}" del paso 6 NO aparece en el desplegable de la factura. Ofrece: ${opciones.map((t) => t.trim()).filter(Boolean).join(' · ') || '(nada)'}`,
+      ...vista,
+    };
+  }
+  await selectPaciente.selectOption({ label: ctx.datoCargado });
+
+  // El bloque "Ítem manual" es la única tarjeta con esa cabecera: 1 input de texto (descripción)
+  // y 2 de número (cantidad, precio), más el botón "Agregar" al lado. No hay `htmlFor` que
+  // relacione label↔input (getByLabel no sirve acá), así que se ubica por el contenedor.
+  //
+  // 🔴 `hasText` sobre el DIV entero agarra la tarjeta EQUIVOCADA: la del catálogo dice "Podés
+  // cobrar igual con un ítem manual, abajo" en un párrafo, y esa frase matchea primero porque
+  // aparece antes en el DOM. El filtro tiene que mirar el <h3>, no el texto de cualquier hijo.
+  const bloque = page.locator('div.bg-surface-container-lowest')
+    .filter({ has: page.locator('h3', { hasText: 'Ítem manual' }) }).first();
+  const nBloque = await bloque.count().catch(() => 0);
+  if (!nBloque) {
+    const vista = await mirar(page, 'paso-08b-factura.png');
+    return { estado: 'no-medido', detalle: '/billing/new no ofrece el ítem manual esperado', ...vista };
+  }
+  await bloque.locator('input[type=text]').first().fill(QA.itemFactura);
+  await bloque.locator('input[type=number]').nth(0).fill('1');
+  await bloque.locator('input[type=number]').nth(1).fill('10');
+  await bloque.locator('button', { hasText: 'Agregar' }).click();
+
+  const submit = page.locator('button[type=submit]');
+  const items = await page.locator('text=Subtotal').count().catch(() => 0);
+  if (!items) {
+    const vista = await mirar(page, 'paso-08b-factura.png');
+    return { estado: 'roto', detalle: `"Agregar" no cargó el ítem "${QA.itemFactura}" en el resumen`, ...vista };
+  }
+  await submit.click();
+  await page.waitForURL(/\/billing\/[^/]+$/, { timeout: 10_000 }).catch(() => {});
+  await despejar(page);
+  const vista = await mirar(page, 'paso-08c-factura-creada.png');
+  const destino = new URL(page.url()).pathname;
+  if (!/^\/billing\/[^/]+$/.test(destino) || destino === '/billing/new') {
+    return { estado: 'roto', detalle: `enviar la factura no llevó a su pantalla de cobro: quedó en ${destino}`, ...vista };
+  }
+  const texto = await page.evaluate(() => document.body.innerText || '');
+  const tieneElItem = texto.includes(QA.itemFactura);
+  ctx.facturaCreada = { url: page.url(), item: QA.itemFactura };
+  return {
+    estado: 'ok',
+    detalle: `factura zz-qa- creada (${destino}) con el ítem "${QA.itemFactura}"${tieneElItem ? ' visible en su pantalla de cobro' : ' — el ítem no aparece en el texto de la pantalla'} — FRENADO acá a propósito, sin marcarla pagada`,
+    facturaUrl: page.url(),
+    itemVisible: tieneElItem,
+    ...vista,
+  };
 }
 
 /**
@@ -1479,6 +1561,16 @@ const PASOS = [
       const comoSeLlama = `la pantalla de cobro (${cobro?.texto?.replace(/^\S+\s/, '') || 'Facturación'})`;
       if (v.status >= 400) return { estado: 'roto', detalle: `${comoSeLlama} devolvió ${v.status} en ${ruta}`, menuCobro: cobro || null, ...v };
       if (!v.llego) return { estado: 'no-medido', detalle: motivoNoLlego(v, ctx, comoSeLlama), menuCobro: cobro || null, ...v };
+
+      // El listado vacío ("0 facturas") no prueba que cobrar funcione. El escalón siguiente:
+      // crear una factura zz-qa- de verdad y llegar a SU pantalla de cobro. Sólo aplica si esta
+      // pantalla es Facturación (dental/comercio/servicios/estética) y el paso 6 dejó un
+      // paciente con quien facturar; si no (p.ej. importadora, que cobra por "Créditos"), el
+      // listado que se vio es la medida real y se reporta como antes.
+      if (ctx.datoCargado && ruta === '/billing') {
+        const factura = await facturarZzQa(page, ctx);
+        return { ...factura, menuCobro: cobro || null };
+      }
       return { estado: 'ok', detalle: `${comoSeLlama} a la vista en ${page.url()} — FRENADO acá a propósito`, menuCobro: cobro || null, ...v };
     },
   },
@@ -1564,7 +1656,8 @@ function limpiarProduccion() {
       filas: psql(`SELECT 'appointments '||id||' '||coalesce(nullif(notes,''), reason) FROM appointments WHERE coalesce(notes,'') ~ '${MIO}' OR coalesce(reason,'') ~ '${MIO}'
         UNION ALL SELECT 'patients '||id||' '||name FROM patients WHERE name ~ '${MIO}'
         UNION ALL SELECT 'organizations '||id||' '||name FROM organizations WHERE name ~ '${MIO}'
-        UNION ALL SELECT 'auth.users '||id||' '||email FROM auth.users WHERE email ~ '${MIO}'`).split('\n').filter(Boolean),
+        UNION ALL SELECT 'auth.users '||id||' '||email FROM auth.users WHERE email ~ '${MIO}'
+        UNION ALL SELECT 'invoices '||i.id||' '||i."invoiceNumber"||' '||i.total FROM invoices i JOIN organizations o ON o.id = i."organizationId" WHERE o.name ~ '${MIO}'`).split('\n').filter(Boolean),
       ajenas: psql(AJENAS).split('\n').filter(Boolean),
     };
     psql(`BEGIN;
@@ -1720,6 +1813,7 @@ async function main() {
     const creado = [`cuenta ${QA.email}`, `organización ${QA.negocio}`];
     if (ctx.datoCargado) creado.push(`paciente ${ctx.datoCargado}`);
     if (ctx.citaCreada) creado.push(`cita ${ctx.citaCreada.fecha} ${ctx.citaCreada.hora} (notas ${ctx.citaCreada.notas})`);
+    if (ctx.facturaCreada) creado.push(`factura con ítem ${ctx.facturaCreada.item}`);
     const ajenas = borrado?.ajenas?.length
       ? `\n   ⓘ  Hay ${borrado.ajenas.length} fila(s) con prefijo zz-qa- que NO son de este carril y NO se tocaron: ${borrado.ajenas.join(' | ')}`
       : '';

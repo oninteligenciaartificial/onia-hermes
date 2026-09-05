@@ -12,6 +12,21 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## El paso 8 factura de verdad — 2026-09-05 07:34 La Paz
+
+El paso 8 ya no se conforma con ver `/billing` en "0 facturas · Cobrado Bs 0,00": ahora, con el
+paciente `zz-qa-` del paso 6, entra a `/billing/new`, lo elige, carga un ítem manual
+`zz-qa-...-item` (Bs 10) y **envía la factura**. Llega a `/billing/<id>` — la pantalla de cobro
+real, con el ítem a la vista — y **ahí FRENA**: nunca la marca pagada, nunca escanea un QR.
+
+Medido 3 veces seguidas en producción, dental, 9/9 completo cada vez:
+`hermes-content/docs/recorrido/capturas/paso-08c-factura-creada.png`. La factura cuelga de la
+organización (`invoices.organizationId onDelete: Cascade`, `prisma/schema.prisma:832`) y se borra
+sola al borrar la organización `zz-qa-`; además ahora se IMPRIME antes de borrar, como toda fila
+propia. 0 filas `zz-qa-` mías al cerrar las 3 corridas (queda la misma `zz-qa-recall-demo-1` ajena).
+
+Detalle en `hermes-content/docs/cola/recorrido-cliente.md`, sección Cerrado.
+
 ## Reverificado el 2026-09-05 01:11 La Paz — dental sigue 9/9; `t_2b03ea3d` (servicios) sigue abierta
 
 Corrida nueva en dental: 9 de 9, cero agujeros, cero filas `zz-qa-` propias al cerrar (queda la

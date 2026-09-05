@@ -14,21 +14,21 @@ Instrumento: `scripts/recorrido_cliente.mjs`.
 > `pending_adoption`, veterinaria retirada el 2026-08-13 por el modelo de facturación) — no son un
 > rubro pendiente de este carril, medido el 2026-09-05.
 
-### 1. El paso 8 mira el cobro vacío: nunca hubo una factura que cobrar
-
-`/billing` se ve entera (`../recorrido/capturas/paso-08b-cobro.png`) y dice *"0 facturas ·
-Cobrado Bs 0,00"*. Es una pantalla de cobro **sin nada que cobrar**: el botón "Nueva Factura"
-existe y se ve, pero el recorrido nunca comprueba que el cobro **funcione** — sólo que la
-pantalla abra.
-
-El escalón siguiente es crear una factura `zz-qa-` para el paciente `zz-qa-` del paso 6 y llegar
-hasta la pantalla que pide la plata. **Y ahí se FRENA**: nunca se completa un pago, no se escanea
-un QR, no se confirma una transferencia. Que el botón exista y la pantalla se vea es todo lo que
-hay que reportar. Ojo con los precios: los que muestre la pantalla se **comparan** contra
-`onia-platform/lib/subscription-plans.ts` y `lib/pricing.ts`; una diferencia es un hallazgo, no
-una licencia para corregir nada.
-
 ## Cerrado
+
+- **El paso 8 ya factura de verdad, no mira más el cobro vacío** — cerrado el 2026-09-05. Antes
+  llegaba a `/billing` y esa pantalla siempre dice "0 facturas · Cobrado Bs 0,00": "OK" sólo
+  probaba que la pantalla abra, nunca que cobrar funcione. Ahora, si hay un paciente `zz-qa-` del
+  paso 6, el script entra a `/billing/new`, lo elige en el desplegable, carga un ítem manual
+  `zz-qa-...-item` (Bs 10) y **envía la factura de verdad**: llega a `/billing/<id>`, la pantalla
+  de cobro real con el ítem a la vista, y **ahí FRENA** — nunca la marca pagada. Medido 3 veces
+  seguidas en producción (dental), 9/9 completo cada vez y 0 filas `zz-qa-` al cerrar (la factura
+  cuelga de la organización, que cascadea en `invoices.organizationId` — `prisma/schema.prisma:832`
+  —, y ahora también se IMPRIME antes de borrar, como toda fila `zz-qa-`). Trampa cazada en el
+  camino: `page.locator('div', {hasText:'Ítem manual'})` matcheaba la tarjeta del CATÁLOGO, no la
+  del ítem manual, porque ese texto también aparece en un párrafo suyo ("Podés cobrar igual con un
+  ítem manual, abajo") que sale antes en el DOM — el filtro ahora mira el `<h3>`, no el div entero.
+  Ver `scripts/recorrido_cliente.mjs` `facturarZzQa()`.
 
 - **Los CINCO rubros activos, recorridos** — importadora / distribuidora cerró 9/9 el 2026-09-04
   (era el último de la lista). Ganadero y veterinaria no cuentan como pendiente: `RUBROS_ACTIVOS`
