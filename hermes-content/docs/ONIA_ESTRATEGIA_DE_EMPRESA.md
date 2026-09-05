@@ -1,13 +1,14 @@
 # De freelancer a empresa — la estrategia, y por qué NO es financiación ni equipo
 
-> **Doc VIVO, sin fecha: se EDITA, no se reemplaza.** Responde una pregunta de Sergio Urcullo
-> (2026-09-05): *"quisiera escalarlo de una manera que no sea solo yo como un freelancer…
-> quisiera que fuera una empresa, de verdad"*, y la anterior del mismo día: *"¿necesitamos
-> financiación? ¿necesitamos un equipo de desarrollo?"*.
+> **Doc VIVO, sin fecha: se EDITA, no se reemplaza.** Responde tres preguntas de Sergio Urcullo
+> del 2026-09-05: *"¿necesitamos financiación? ¿necesitamos un equipo de desarrollo?"* ·
+> *"quisiera escalarlo de manera que no sea solo yo como un freelancer… quisiera que fuera una
+> empresa, de verdad"* · *"¿qué tan rentable ves nuestro producto?"*, con su tesis de plataforma
+> (*"se le conecta hartísimas cosas… primero la v1.0 y luego vamos añadiendo"*).
 >
 > **Todo lo medible de acá se midió contra el repo y la base de producción el 2026-09-05.**
 > No hereda conclusiones: cada cifra lleva de dónde sale. Si una quedó vieja, se recuenta
-> con los comandos de §10 y **se corrige este archivo**.
+> con los comandos de §15 y **se corrige este archivo**.
 >
 > ⛔ **No es fuente de precios.** Los precios se leen de `onia-platform/lib/subscription-plans.ts`
 > (`DEFAULT_PLAN_AMOUNTS`) y `lib/pricing.ts`. Acá aparecen **fórmulas**, y el número es
@@ -29,6 +30,16 @@
    por lo que rechaza como por lo que hace.
 5. La ruta es **podar, no sumar**: una línea, cuatro etapas, cada una con criterio de salida
    numérico (§7).
+6. **El producto es MUY rentable: 94-99,8% de margen bruto, y operar cuesta Bs ~461/mes tenga
+   1 cliente o 40** (§8). No hay problema de rentabilidad — hay problema de clientes, que es
+   otra cosa y se arregla distinto.
+7. **El techo no es técnico: son las horas de soporte de una persona** (§9). Una persona sola
+   topa en ~30-50 clientes. Bajar el soporte por cliente **sube el techo del negocio**; una
+   feature nueva sólo agrega valor a un cliente.
+8. **La tesis de plataforma ("se le conecta de todo") es correcta, y tiene un test de tres
+   preguntas** que separa el add-on que apalanca del negocio nuevo disfrazado (§10). El chatbot
+   pasa las tres; la web, el influencer y el contenido fallan.
+9. **La v1.0 no es una lista de features: es un cliente que paga el SEGUNDO mes** (§11).
 
 ---
 
@@ -224,7 +235,192 @@ Acá se decide **empresa o agencia**, y se decide en un solo punto:
 
 ---
 
-## 8. Restricción de firma (planificación, no juicio)
+## 8. ¿Es rentable el producto? — medido, no estimado
+
+**Sí, y con márgenes de software puro.** Los números salen de `ONIA_AGENTES_COSTO_API.md`
+(medido contra producción y el VPS el 2026-08-20, cuentas rehechas el 2026-08-27), no de una
+proyección.
+
+### 8.1 La estructura de costos
+
+| Concepto | Costo | ¿Escala con clientes? |
+|---|---|---|
+| **VPS** (Hostinger KVM, 4 vCPU / 16 GB, 41 contenedores) | US$40 ≈ Bs 461/mes | ❌ **No** — aguanta decenas de orgs |
+| API del chatbot | **Bs 0,80–23 por cliente/mes** | ✅ sí, y es ruido |
+| API de los agentes (Recall, Cobrador, Captador) | **Bs 0** | ❌ no llaman a ningún modelo: redactan con plantillas |
+| Transporte de Meta (WhatsApp) | **Bs 0 para nosotros** | ❌ desde el 2026-08-21 lo paga el cliente en SU cuenta |
+| Claude Max (**construir**, no operar) | US$200 ≈ Bs 2.304/mes | ❌ no sube con clientes; baja cuando el producto esté hecho |
+
+**Operar el producto cuesta Bs ~461 al mes tenga 1 cliente o tenga 40.** Ésa es la frase que
+define la rentabilidad de todo el negocio.
+
+### 8.2 El margen
+
+Del add-on de chatbot, que es el peor caso porque es el único con costo variable real:
+
+| Escenario | Costo de API | Margen bruto |
+|---|---|---|
+| Típico | Bs 0,76 | **99,8%** |
+| Pico medido | Bs 22,66 | **94,2%** |
+| Peor caso construible (9.000 msg/mes, modelo caro) | Bs 60,44 | **84,5%** |
+
+**Ni siquiera el peor caso construible pierde plata.** Los planes de suscripción son aún
+mejores: su costo variable es cero.
+
+### 8.3 Qué pasa al escalar
+
+Con el ARPU completo (plan Profesional + chatbot), cifras derivadas de `DEFAULT_PLAN_AMOUNTS`
+y `pricing.ts` — **si los precios cambian, se recalcula, no se corrige a mano**:
+
+| Clientes | Ingreso/mes | Costo de operar | Margen bruto |
+|---|---|---|---|
+| 3 | Bs 3.420 | Bs ~530 | 85% — **cubre TODO el gasto conocido, desarrollo incluido** |
+| 10 | Bs 11.400 | Bs ~690 | **94%** |
+| 40 | Bs 45.600 | Bs ~1.380 | **97%** |
+
+**Tres clientes completos pagan todo lo que ONIA gasta hoy**, Claude Max incluido. De ahí en
+adelante casi todo lo que entra es margen.
+
+**La respuesta a "¿qué tan rentable es?": el producto no tiene un problema de rentabilidad.
+Tiene un problema de clientes.** Y son dos cosas distintas: la primera se arregla con
+ingeniería o con precio; la segunda, sólo vendiendo.
+
+---
+
+## 9. El techo real no es técnico: es el soporte
+
+El VPS aguanta decenas de organizaciones y la API es ruido. **Lo único que se agota es el
+tiempo de una persona.**
+
+Medido en `ONIA_AGENTES_COSTO_API.md`: a Bs 100/h, el add-on de chatbot aguanta **~3,9 h de
+soporte al mes** antes de perder plata. *"Un cliente que llame dos veces por semana ya no deja
+margen."*
+
+Eso convierte una cuenta de horas en el techo del negocio:
+
+| Clientes | Soporte a 1 h/mes c/u | ¿Lo sostiene una persona? |
+|---|---|---|
+| 10 | 10 h/mes | ✅ cómodo |
+| 40 | 40 h/mes | ⚠️ un cuarto del mes, sin margen para construir |
+| 100 | 100 h/mes | ❌ imposible |
+
+**Una persona sola topa alrededor de 30-50 clientes**, y ahí es donde entra el contratado de la
+etapa 3 (§7) — pagado con recurrente, no con capital.
+
+**Consecuencia operativa, y es la más importante de este documento:** el trabajo que baja las
+horas de soporte por cliente (self-service, el `knowledge.json` bien cargado, onboarding que no
+requiere a Sergio Urcullo) **NO es "pulir el producto": es lo único que sube el techo del
+negocio.** Una feature nueva agrega valor a un cliente; una hora de soporte eliminada agrega
+capacidad para todos los que faltan.
+
+---
+
+## 10. La tesis de plataforma — y el test que separa apalancar de dispersar
+
+> Sergio Urcullo, 2026-09-05: *"se le conecta hartísimas cosas… la página web, un modelo de IA,
+> un influencer, IA local… quiero escalar primero a Onia Platform, que ya funcione una v1.0, y
+> luego ir añadiendo, añadiendo, para que sea un productazo"*.
+
+**La tesis es correcta y es el modelo de las mejores empresas de software** (Shopify + apps,
+Salesforce + AppExchange, HubSpot). El núcleo capta al cliente; los añadidos multiplican el
+ingreso por cliente **sin costo de adquisición nuevo**. Es la forma más barata de crecer que
+existe.
+
+**Pero tiene una condición dura que hoy no se cumple: una plataforma necesita base instalada.**
+Un add-on se le vende a los clientes que ya tenés. Con **cero clientes**, cada "conexión" nueva
+no es expansión — es una línea de negocio nueva compitiendo por la misma persona (§3).
+
+### El test de las tres preguntas
+
+Antes de construir cualquier añadido, las tres. **Si falla una, no es un add-on: es un negocio
+nuevo disfrazado de add-on.**
+
+1. **¿Se le vende al MISMO cliente que ya paga el núcleo?** (si hay que salir a conseguir otro
+   cliente, no es expansión: es adquisición)
+2. **¿Deja de tener sentido sin el núcleo?** (si funciona solo, es otro producto)
+3. **¿Se entrega sin horas mías por cliente?** (si cada venta abre un proyecto, es un servicio)
+
+### El test aplicado a lo que hay hoy
+
+| Añadido | ¿Mismo cliente? | ¿Depende del núcleo? | ¿Entrega automática? | Veredicto |
+|---|---|---|---|---|
+| **Chatbot WhatsApp** | ✅ | ✅ vive de los datos del sistema | ✅ alta en 1 click | 🟢 **add-on modelo** — 99,8% de margen |
+| **Agenda pública** | ✅ | ✅ | ✅ | 🟢 add-on |
+| **Usuario extra** | ✅ | ✅ | ✅ | 🟢 add-on |
+| **Self-hosted** | ✅ | ✅ | ⚠️ instalación por cliente | 🟡 add-on caro de entregar — cobrar la instalación aparte (ya lo hace) |
+| **Página web** (web-factory) | ✅ | ❌ un negocio compra web sin sistema | ❌ es un proyecto | 🔴 **línea de servicio**, no add-on |
+| **Influencer IA** | ❌ | ❌ | ❌ | 🔴 **otro producto entero** |
+| **Contenido / ads** | ❌ | ❌ | ❌ | 🔴 servicio de agencia |
+| **IA local** | ✅ | ✅ *si es "tu sistema anda sin internet"* | ⚠️ | 🟡 **depende de cómo se plantee** — como capacidad del núcleo, sí; como "te vendo infraestructura de IA", es otro negocio |
+
+**Lo que este test resuelve:** deja de hacer falta preguntar caso por caso. Tres preguntas y el
+añadido se clasifica solo.
+
+**Y explica por qué el chatbot fue la decisión correcta y las otras no:** el chatbot pasa las
+tres. Es el ejemplo de qué buscar en el siguiente.
+
+---
+
+## 11. Qué es la v1.0 — un criterio de corte, no una lista de features
+
+El problema de "terminar el producto" (§14) es que **una lista de features no tiene fondo**:
+siempre se puede agregar una más, y sin cliente real nadie dice cuál falta.
+
+**La v1.0 no se define por lo que el producto hace. Se define por lo que un cliente logra solo:**
+
+> **v1.0 = un cliente del rubro dental se registra, carga sus datos, atiende su primer día
+> real y paga el segundo mes — sin que Sergio Urcullo toque nada más que responder dudas.**
+
+Cinco condiciones verificables, todas medibles en producción:
+
+| # | Condición | Cómo se mide |
+|---|---|---|
+| 1 | Se registra y entra solo | `ONIA_ALTA_AUTOMATICA=abierta` ✅ ya cumple |
+| 2 | Carga sus datos sin ayuda | un onboarding completado sin intervención en el log |
+| 3 | Usa el sistema un día real | citas y cobros creados por él, no por QA |
+| 4 | **Paga** | una fila `APPROVED` en `subscription_payments` que no sea de prueba |
+| 5 | **Vuelve a pagar** | la segunda fila, 30 días después |
+
+**La 5 es la que convierte producto en empresa.** Un cliente que paga una vez validó la venta;
+uno que paga dos veces validó el producto.
+
+**Todo lo que no sirva a esas cinco condiciones no es v1.0**, por bueno que sea. Se anota y
+espera — incluidas las conexiones del §10, que son v1.1 en adelante.
+
+---
+
+## 12. La secuencia de expansión — y las métricas que la gobiernan
+
+El orden no es de gusto: cada paso paga el siguiente.
+
+```
+v1.0  →  UN rubro (dental), núcleo + chatbot, 5 clientes pagando
+v1.1  →  bajar horas de soporte por cliente  (sube el techo del §9)
+v1.2  →  el segundo rubro, ENCENDIDO desde el core, no escrito de cero
+v1.3  →  el siguiente add-on que pase el test del §10
+v2.0  →  recién acá, las conexiones grandes (IA local, integraciones a medida)
+```
+
+**Por qué ese orden y no otro:** v1.1 va antes que v1.2 porque un rubro nuevo con el soporte sin
+resolver multiplica el problema en vez del ingreso. Sumar rubros con onboarding manual es
+sumar horas, no clientes.
+
+### Las cinco métricas que hay que mirar, y ninguna más
+
+| Métrica | Qué mide | Dónde se lee |
+|---|---|---|
+| **Clientes que pagan** | si el negocio existe | `subscription_payments` en `APPROVED` |
+| **Ingreso recurrente mensual** | el tamaño real | suma de suscripciones activas |
+| **Horas de soporte por cliente** | **el techo (§9)** | hay que empezar a anotarlo — hoy no se mide |
+| **Renovación al mes 2** | si el producto sirve | segunda fila de pago del mismo cliente |
+| **Ingreso por cliente (ARPU)** | si la tesis de plataforma funciona | ingreso ÷ clientes; **sube sólo si los add-ons se venden** |
+
+⚠️ **Cuatro de las cinco se pueden leer hoy en la base. La tercera —horas de soporte— no se
+mide y es la que define el techo.** Empezar a anotarla es más barato que cualquier feature.
+
+---
+
+## 13. Restricción de firma (planificación, no juicio)
 
 `ONIA_LEGAL_BOLIVIA_ESTADO.md` registra que la titular es **Leslie Mercado Moreno** y que
 Sergio Urcullo no firma. Es una restricción operativa real y ya resuelta en la estructura,
@@ -237,7 +433,7 @@ pero define qué rutas están abiertas **hoy**:
 
 ---
 
-## 9. Qué contradice este documento (declarado, no escondido)
+## 14. Qué contradice este documento (declarado, no escondido)
 
 **La decisión vigente de Sergio Urcullo del 2026-08-31** (`COLA.md`,
 `ONIA_DEFINICION_DE_TERMINADO.md`): *"dedicate a terminar el producto y recién escribimos"*,
@@ -265,7 +461,7 @@ cuenta delante. Cuando se resuelva, **se edita esta sección** y se alinea `COLA
 
 ---
 
-## 10. Cómo se re-verifica todo esto
+## 15. Cómo se re-verifica todo esto
 
 ```bash
 # Clientes pagando y orgs reales (base de producción)
@@ -284,9 +480,9 @@ git worktree list | wc -l          # worktrees abiertos: >2 es señal de dispers
 
 ---
 
-## 11. Documentos relacionados
+## 16. Documentos relacionados
 
-`ONIA_DEFINICION_DE_TERMINADO.md` (el objetivo vigente) · `ONIA_LEADS_ESPERANDO.md` (las 7
+**`ONIA_AGENTES_COSTO_API.md`** (la fuente de los márgenes de §8 y del techo de §9) · `ONIA_DEFINICION_DE_TERMINADO.md` (el objetivo vigente) · `ONIA_LEADS_ESPERANDO.md` (las 7
 personas) · `ONIA_PUEDO_VENDER_HOY.md` (qué se puede prometer) · `ONIA_LEGAL_BOLIVIA_ESTADO.md`
 (SEPREC, NIT, marca) · `FINANCE_LOG_2026.md` (gasto y capital) · `ONIA_CATALOGO_DE_VENTA.md`
 (qué rubro está 🟢).
