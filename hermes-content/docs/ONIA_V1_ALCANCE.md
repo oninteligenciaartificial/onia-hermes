@@ -65,12 +65,27 @@ deploy y hasta MIRARLA en producción con una cuenta nueva.**
 `/print/recibo-venta/[paymentId]` sobre `OniaCommercePayment`, enlazada desde la caja al cerrar la
 venta (`VentaForm.tsx:334`). Misma advertencia: sin deploy no existe.
 
-🔴 **Hueco anotado (5-sep): la IMPORTADORA no llega a Clientes.** `proveegest-electrico` es el
-único pack de la familia comercio cuya nav no incluye `/comercio/clientes` — usa
-`ELECTRICO_NAV_ITEMS`, que tiene Catálogo, Inventario y Créditos pero no Clientes. La pantalla
-funcionaría tal cual. Su alta NO promete «clientes» explícitamente (a diferencia de la tarjeta de
-comercio), así que no es promesa rota: es un rubro que vende a crédito a clientes que no puede
-listar. Una línea en la nav.
+🔴 **Hueco anotado (5-sep): la IMPORTADORA no llega ni a Clientes ni a recibo.** Medido sobre
+`ELECTRICO_NAV_ITEMS`, comparando los tres packs de la familia comercio:
+
+| Pack | Clientes | Caja | Recibo imprimible |
+|---|---|---|---|
+| comercio (`gestios-general`) | ✅ `/comercio/clientes` | ✅ `/comercio/caja` | ✅ `/print/recibo-venta` |
+| servicios | ✅ `/patients` (renombrado por vocabulario) | ✅ `/comercio/caja` | ✅ `/print/recibo-venta` |
+| **importadora (`proveegest-electrico`)** | ❌ | ❌ | ❌ **ninguna ruta** |
+
+⚠️ **Corregido el mismo 5-sep, unas horas después de escribirlo.** Acá decía que a la importadora
+le faltaba Clientes y que era *«una línea en la nav»*. Es **falso y demasiado optimista**: tampoco
+tiene `/comercio/caja` ni `/billing`, así que no llega a `recibo-venta` **ni** a `receipt`. Un
+rubro que vende y no puede emitir comprobante por ningún camino no se arregla con una línea.
+
+Su nav real es: Catálogo · Inventario · Créditos · Cotizaciones · Costeo · Alerta de reprecio. O
+sea cierra por **cotización y crédito**, no por caja — puede que ese sea el flujo correcto para una
+importadora y no le falte nada. **Eso lo decide Sergio Urcullo, no se asume acá.** Lo que sí está
+medido es que hoy no hay comprobante.
+
+La importadora **no está en la 1.0**: el orden de rubros es dental (vivo) → comercio → importadora.
+Se anota para que la sesión que la encienda no descubra esto de cero.
 
 | Pieza | Estado |
 |---|---|
