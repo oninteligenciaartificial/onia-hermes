@@ -454,44 +454,32 @@ es la que hay que evitar.
 ## 🔴 Cierre de vuelta — ¿lo que arreglaste lo ve el cliente?
 
 **Construido ≠ terminado.** Un arreglo verificado, gateado y mergeado a `master` vale **cero**
-para el cliente si el contenedor sigue corriendo el build viejo. Ya pasó: el 2026-09-05 había
-**tres commits arreglados que nadie veía**, y el 2026-09-04 el ítem más caro de la cola fue
-exactamente eso.
+para el cliente mientras el contenedor siga corriendo el build viejo.
 
-`onia-platform` **no se despliega solo** — no hay cron ni script; el runbook se ejecuta a mano.
-Mientras el ítem 1 de `hermes-content/docs/cola/plataforma-v1.md` no esté cerrado, **vos no
-desplegás**: medís y avisás. Al final de cada vuelta:
+**El circuito de deploy YA EXISTE — no lo construyas.** Lo hizo `onia-cola` el 2026-09-05: una
+tarea del tablero con `DESPLEGAR: landing|plataforma` se ejecuta cuando Sergio Urcullo contesta
+`ok <id>`. Vive en `/root/bin/onia-publicar-aprobado.mjs`. **El cuello no es técnico: es una
+decisión de Sergio Urcullo**, y eso no lo destraba ningún loop.
 
-```
-cd /root/loops/onia-platform && git fetch -q origin master
-INI=$(docker inspect onia-platform --format '{{.State.StartedAt}}' | cut -c1-19)
-N=$(git log --since="$INI" --oneline origin/master | wc -l)
-```
-
-`N` es cuántos commits de `master` **no** están en producción. Es una **estimación por fecha de
-arranque**, no exacta: el contenedor no expone su commit. Por eso el ítem 1 pide un marcador.
-
-**Avisás sólo si `N` CRECIÓ desde tu último aviso.** No por vuelta: corrés cada 2 h y un aviso
-por vuelta son doce mensajes diarios que dicen lo mismo — así se pierde el que importa, y ya se
-llenó el Telegram de Sergio una vez por esto:
+**Lo único que hacés al cerrar la vuelta:** si tu arreglo toca el producto, mirá si hay un pedido
+de deploy vivo para `plataforma`:
 
 ```
-M=/var/lib/onia/platform-sin-desplegar
-mkdir -p /var/lib/onia; PREV=$(cat $M 2>/dev/null || echo 0)
-if [ "$N" -gt "$PREV" ]; then
-  /root/bin/onia-tg.sh "🚚 <b>$N commits en master sin desplegar</b> (antes: $PREV). El contenedor arranco $INI. El cliente no ve esos arreglos todavia."
-fi
-printf '%s' "$N" > $M
+/root/bin/onia-tablero.sh list --status blocked 2>/dev/null | grep -i 'Publicar app.onia'
 ```
 
-Si `N` bajó (alguien desplegó), **se actualiza el marcador y no se avisa nada**: que algo se
-arregle no es noticia.
+- **Hay pedido vivo** → tu ítem **no está terminado**, está *esperando publicación*. Decilo así
+  en tu línea de vuelta y **no lo cuentes como cerrado**.
+- **No hay pedido y hay commits sin desplegar** → nombralo en tu vuelta, en UNA línea.
 
-⚠️ **Y si el ítem 1 YA está cerrado** —el script existe y está probado contra un gemelo sin
-tocar el vivo— entonces sí desplegás, y sólo con los tres gates de tu sección «Desarrollar» en
-verde (`tsc --noEmit`, `vitest run`, `eslint .`) **más** los gates propios del runbook antes del
-swap. Si alguno está rojo, no desplegás y lo decís. **Un deploy no arregla un build roto: lo
-publica.**
+🔴 **NO mandes Telegram por esto.** `onia-cola` ya mide «commits sin desplegar» en cada vuelta y
+ya creó el pedido. Un segundo aviso del mismo hecho, cada 2 h, son doce mensajes diarios que
+dicen lo mismo — y así se pierde el que importa. Ya pasó: el 2026-09-05 Sergio Urcullo pidió
+explícitamente ordenar el Telegram porque lo llenaban avisos innecesarios.
+
+⚠️ **Y vos no desplegás a mano.** El runbook tumbó `app.onia.com.bo` tres veces mientras se
+aprendía, y el circuito existe justamente para que nadie lo repita a pulso. Si el pedido está
+`blocked`, se queda `blocked`.
 
 ## 🧠 MEMORIA COMPARTIDA — la leés al arrancar, le escribís al cerrar
 
