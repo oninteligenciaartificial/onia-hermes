@@ -26,7 +26,7 @@ Medido el 2026-09-05 ~18:50 UTC, no de memoria:
 
 | | estado real |
 |---|---|
-| Loops activos en el **VPS** | **4** — `onia-cola`, `chatbot-cola`, `web-venta`, `recorrido-cliente`. Los otros tres quedaron **congelados** (comentados, no borrados) |
+| Loops activos en el **VPS** | **4** — `onia-cola`, `chatbot-cola`, `web-venta`, `recorrido-cliente`. Los otros tres quedaron **congelados** (comentados, no borrados). ⚠️ `lucia` siguió medio viva hasta las 20:05 por un cron propio, `lucia-cierre.sh` — ver §3 |
 | Loops activos en **casa** | **0** — los 5 instalados están comentados en su `crontab` |
 | Mantenimiento activo en casa | **3** (rsync de logs, memoria, sincronización horaria) |
 | Repo del nodo de casa | **al día con `origin/main`**, 0 commits detrás |
@@ -66,6 +66,56 @@ corrido cuatro veces sin ver la rama — su propio prompt documenta esa trampa *
 bloquea, y con razón): se le pidió por **su propio canal**, el tablero, que su prompt manda leer
 antes que su cola — tarea `t_48c1f600`, con las dos verificaciones que él exige ya corridas y
 verdes. Mergeó en la vuelta siguiente.
+
+### Recontado a las 20:00 UTC por una sesión distinta — y apareció un agujero
+
+El cierre de arriba se volvió a medir de cero a las 19:30-20:10 UTC, sin leer este handoff como
+prueba. **Los cuatro renglones aguantan**, y esta vez mirando que los loops CORRAN, no que su
+cron exista — que es la distinción que §5 de este mismo archivo dice que cuesta caro:
+
+| qué | medido el 2026-09-05 |
+|---|---|
+| `main` trae el congelamiento | `grep -c 'Congelados el 2026-09-05'` → **1** |
+| Prompts vivos en el VPS | `paso0=1` · `plataforma-v1=5` · **4** loops activos |
+| Los 4 corren de verdad | últimas vueltas **todas `exit 0`**: `onia-cola` 18:42:56Z · `chatbot-cola` 18:13:28Z · `web-venta` 18:59:09Z · `recorrido-cliente` 19:12:08Z |
+| El sync quedó suelto | 18:44 y 19:44 dicen solo `fuente:`, **sin** la línea `conservado (shim del nodo de casa)` |
+| Los 3 congelados pararon | `lucia` última 09:47Z · `supervisor` 18:32Z (su turno de las 18:29, el crontab se editó 18:41) · `kpis-semanal` del 09-03 |
+
+#### 🔴 Pero `lucia` NO estaba apagada, y la herramienta no podía verlo
+
+`congelar-loops-vps.sh` sustituye sobre el patrón `^[^#].*onia-loop\.sh <id>`. **Un carril que
+además tiene un cron propio con otro nombre de script queda vivo.** Era el caso:
+
+```
+# CONGELADO 2026-09-05 (foco v1.0) — 37 9,21 * * * onia-loop.sh lucia
+10 11 * * * /root/bin/lucia-cierre.sh >/dev/null 2>&1      <- seguía disparando
+```
+
+`lucia-cierre.sh` corre `claude -p --max-turns 60` con tope de 20 min, **todos los días a las
+11:10 UTC** — corrió el 02, 03, 04 y **el 05 a las 11:10, `rc=0`, 69 s**. Y su propia cabecera
+dice **«Cero creditos»**, que es falso: gasta exactamente el recurso por el que se lo congela.
+Esa línea es la que hace que nadie lo mire.
+
+> **No fue un descuido de quien congeló.** La herramienta define qué significa «congelar lucia»,
+> y su definición era «la línea `onia-loop.sh lucia`». Congeló lo que sabía ver, y se calló sobre
+> el resto. Un guion que apaga la mitad de un carril **sin decirlo** es peor que uno que no apaga
+> nada, porque deja a todos creyendo que el carril está quieto.
+
+**Arreglado en las dos capas:**
+
+1. La línea quedó comentada en el VPS con el método que §5 exige (archivo, verificar, recién
+   instalar): respaldo en `/root/crontab.antes-de-congelar-lucia-cierre-2026-09-05.txt`,
+   **85 líneas antes y después**, y los **4 loops siguen activos**. Se revierte descomentando.
+2. `congelar-loops-vps.sh` ahora **avisa** de las líneas activas que nombran un carril y que él no
+   puede comentar. Sale también en `--seco`, que es donde sirve: antes de aplicar, no después.
+
+#### Anotado, no perseguido
+
+- **`claude-guardia.sh` corre cada 10 min y SÍ llama a Claude.** No es cuota parada: solo dispara
+  cuando Sentry trae un issue de código que no vio antes. Se deja como está; queda escrito para
+  que la próxima medición de cuota no lo descubra de nuevo como sorpresa.
+- El resto de los ~20 crons del VPS que no son loops (backups, recordatorios, watchdogs del bot,
+  vigía de auth) **no llaman a Claude**. Se revisaron uno por uno el 2026-09-05.
 
 ### Lo que sigue abierto, y es lo único
 

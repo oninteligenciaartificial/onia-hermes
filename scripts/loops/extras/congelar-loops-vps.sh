@@ -84,6 +84,27 @@ diff "$ANTES" "$TMPN" | grep '^>' | sed 's/^> /    /'
 [ "$CAMBIOS" = 0 ] && echo "    (ninguna — nada que congelar)"
 rm -f "$TMPN"
 
+# ── Lo que este guion NO puede apagar, dicho en voz alta ─────────────────────
+# El patron es `onia-loop.sh <id>`. Un carril que ademas tiene un cron PROPIO
+# con otro nombre de script queda vivo, y quien congela se va creyendo que apago
+# el carril entero.
+#
+# Paso el 2026-09-05 con lucia: la linea `onia-loop.sh lucia` quedo comentada y
+# `/root/bin/lucia-cierre.sh` siguio disparando todos los dias a las 11:10,
+# corriendo `claude -p --max-turns 60`. Su cabecera dice "Cero creditos" y es
+# FALSO — gasta cuota, que es justo el recurso por el que se congela. No fue un
+# descuido de quien lo corrio: la herramienta no podia verlo y tampoco lo decia.
+SUELTAS=$(printf '%s
+' "$NUEVO" | grep -E "^[^#]" | grep -iE "($PAT)" | grep -vE "onia-loop\.sh ")
+if [ -n "$SUELTAS" ]; then
+  echo
+  echo "  !! SIGUEN VIVAS otras lineas de cron que nombran estos carriles y que"
+  echo "     este guion NO comenta (no tienen la forma 'onia-loop.sh <id>'):"
+  printf '%s
+' "$SUELTAS" | sed 's/^/       /'
+  echo "     Miralas a mano: congelar el loop NO apaga el carril entero."
+fi
+
 if [ "$SECO" = 1 ]; then
   echo "  --- como quedaria ---"
   printf '%s\n' "$NUEVO" | grep -nE "onia-loop\.sh ($PAT)( |\$)" | sed 's/^/    /'
