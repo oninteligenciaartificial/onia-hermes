@@ -244,6 +244,13 @@ y desactivar la suspensión. Funciona; hay que aceptar que es más frágil.
 
 ```bash
 sudo apt update && sudo apt install -y git openssh-client rsync cron util-linux curl ca-certificates
+# ⚠️ Agregado 2026-09-04: **ffmpeg**. No es requisito duro, pero sin el los carriles que
+# tocan video gastan una vuelta entera descubriendolo — le paso a `tendencias`: el unico
+# ffmpeg de la maquina era el de Playwright, que solo graba WebM y no decodifica h264.
+sudo apt install -y ffmpeg
+# Utiles de trabajo, no requisitos: busqueda rapida, JSON, monitor, sesiones, compilador
+# (varios paquetes de npm compilan codigo nativo al instalarse y sin esto fallan feo).
+sudo apt install -y ripgrep jq htop tmux build-essential
 # ⚠️ Corregido 2026-09-04: NO hace falta NodeSource. El instalador exige `-ge 20`
 # (instalar-homelab.sh:86), no "= 20", y Ubuntu 26.04 trae **Node 22 firmado** en su
 # propio catalogo. Un repositorio externo menos y una clave de firma menos que mantener.

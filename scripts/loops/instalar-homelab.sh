@@ -89,6 +89,20 @@ NODE_MAJOR=$(node -p 'process.versions.node.split(".")[0]' 2>/dev/null || echo 0
 [ "$NODE_MAJOR" -ge 20 ] || morir "node $NODE_MAJOR es muy viejo; hace falta >= 20 (el VPS corre v20.20.2)."
 ok "git, ssh, rsync, flock, cron, node v$NODE_MAJOR, claude"
 
+# ffmpeg NO es requisito duro —solo algunos carriles tocan video— pero su ausencia
+# se paga TARDE y en silencio. El 2026-09-04 `tendencias` gasto una vuelta entera
+# descubriendo que el unico ffmpeg de esta maquina era el de Playwright
+# (/root/.cache/ms-playwright/ffmpeg-*/ffmpeg-linux), que solo graba WebM y NO
+# decodifica h264: bajo los tres videos bien y no pudo abrir ninguno. El loop lo
+# diagnostico solo y lo dejo escrito, que es lo correcto — pero la vuelta se fue ahi.
+if command -v ffmpeg >/dev/null 2>&1; then
+  ok "ffmpeg $(ffmpeg -version 2>/dev/null | head -1 | awk '{print $3}')"
+else
+  rojo "aviso: falta ffmpeg. Los carriles que tocan video (tendencias, marca-personal)
+  van a gastar una vuelta descubriendolo. El de Playwright NO sirve: solo WebM.
+  Instalar:  apt install -y ffmpeg"
+fi
+
 [ -f "$LLAVE" ] || morir "no esta la llave SSH del VPS en $LLAVE.
   Copiarla desde la laptop de Sergio (~/.ssh/onia_hermes_vps_ed25519) y darle chmod 600."
 chmod 600 "$LLAVE" 2>/dev/null || true
