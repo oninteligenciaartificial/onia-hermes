@@ -25,9 +25,11 @@ semana del <lunes>`. Si un comando falla, la celda dice `no medido: <error>`, no
 
 ## Chequeo de arranque — que el conjunto de loops siga registrado
 
+0. En que maquina estas, ANTES de comparar. Se pregunta por archivos, no por hostname ni IP: existe /usr/local/lib/hermes-agent/venv/bin/python -> sos el VPS; existe /root/.onia-nodo -> sos la maquina que nombra ese archivo (hoy: casa); ninguno -> no compares ni rearmes nada y decilo. Sin este paso, este bloque instalaria en el nodo de casa los 10 crons del VPS (tarea t_812bd90a). Cruzar con: node scripts/loops_registrados.mjs, como confirmacion y no en lugar de estos pasos.
+
 1. `crontab -l`
 2. Compara contra hermes-content/docs/cola/loops.md, tabla "Deben existir y estar activos", columna "donde corre".
-3. Loop de esa tabla que diga VPS sin su linea en el crontab (o comentada): reponela igual a la columna cron (UTC) apuntando a /root/bin/onia-loop.sh <id>, y avisa con UN onia-tg.sh de una linea.
+3. Loop de esa tabla que diga TU maquina (paso 0) sin su linea en el crontab (o comentada): reponela igual a la columna cron (UTC) apuntando a /root/bin/onia-loop.sh <id>, y avisa con UN onia-tg.sh de una linea.
 4. Los que digan Windows no son tuyos. Los de "Apagados a proposito" no se rearman.
 5. Si todo esta bien, este paso no escribe nada.
 

@@ -235,12 +235,27 @@ volver a investigarlo desde cero.
 NO**. Ya pasó el 2026-08-31 en Windows: los archivos quedaron en disco, desregistrados, los loops
 dejaron de correr y **nada avisó** — se descubrió por casualidad.
 
-Acá el registro es el **crontab del VPS**, no la app:
+Acá el registro es el **crontab de la máquina donde estás corriendo**, no la app.
+Desde el 2026-09-05 esa máquina puede no ser el VPS: hay un nodo de casa que también
+corre loops, y cada uno se compara **sólo contra sus propias filas**.
+
+0. **¿En qué máquina estás?** Averigualo ANTES de comparar nada. Se pregunta por archivos,
+   nunca por hostname ni IP — *una IP se mueve, un hostname se renombra*:
+   - existe `/usr/local/lib/hermes-agent/venv/bin/python` → sos el **`VPS`**
+   - existe `/root/.onia-nodo` → sos la máquina cuyo nombre dice adentro (hoy: `casa`)
+   - ninguno de los dos → **no compares ni rearmes nada**, y decilo en tu vuelta.
+
+   ⚠️ **Este paso no es burocracia.** Sin él, este mismo bloque seguido al pie de la letra en el
+   nodo de casa habría instalado ahí los **diez crons del VPS**, apuntando a worktrees que no
+   existen. Lo detectó el loop `web-venta` el 2026-09-04 (tarea `t_812bd90a`) antes de que
+   pasara. Para cruzar el resultado, `node scripts/loops_registrados.mjs` ya sabe en qué máquina
+   está — usalo como **confirmación, no en lugar de** estos pasos: si el repo no está donde
+   esperás, el comando no corre y el chequeo tiene que seguir funcionando igual.
 
 1. `crontab -l`
 2. Compará contra la lista versionada: `hermes-content/docs/cola/loops.md`, tabla
    **"Deben existir y estar activos"**, columna **"dónde corre"**.
-3. Para cada loop de esa tabla que diga **`VPS`** y **no tenga su línea en `crontab -l`** (o la
+3. Para cada loop de esa tabla cuya columna «dónde corre» diga **TU máquina (paso 0)** y **no tenga su línea en `crontab -l`** (o la
    tenga comentada con `#`): volvé a ponerla exactamente como dice la columna `cron (UTC)`,
    apuntando a `/root/bin/onia-loop.sh <id>`, y mandá **un `onia-tg.sh` de UNA línea** diciendo
    cuál faltaba y que lo rearmaste.
