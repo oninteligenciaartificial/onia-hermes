@@ -26,6 +26,36 @@ Instrucciones de proyecto. Override sobre defaults.
 - Mismo carril (misma carpeta) → subagentes **secuenciales**. Carriles distintos →
   paralelo.
 
+## El objetivo del NEGOCIO manda sobre el de la sesión (REGLA)
+
+> Sergio Urcullo, 2026-09-05: *"quisiera escalarlo de una manera que no sea solo yo como un
+> freelancer… quisiera que fuera una empresa, de verdad"*.
+
+- **Fuente única: `hermes-content/docs/ONIA_ESTRATEGIA_DE_EMPRESA.md`.** Fija **UNA etapa
+  vigente** con criterio de salida **numérico**. El objetivo de la sesión se elige DENTRO de
+  esa etapa; lo que no le sirve **se anota como pendiente y no se hace**, por buena que sea la
+  idea y aunque alguien ya la haya empezado.
+- ⛔ **No se abre una línea de negocio nueva.** Medido el 2026-09-05: **nueve líneas activas**
+  (SaaS, chatbot, web-factory, video, influencers IA, contenido/ads, consultoría, marca
+  personal, hardware) y **8 worktrees simultáneos**, con **una sola persona** y **cero clientes
+  pagando**. Una empresa hace una cosa con muchas manos; un freelancer hace muchas con una.
+  Abrir la décima es la decisión más cara disponible. Congelar ≠ borrar: se congela y se anota.
+- **Un añadido pasa el TEST DE TRES PREGUNTAS o no se construye** (§10 de ese doc): ¿se le vende
+  al MISMO cliente que ya paga? · ¿deja de tener sentido sin el núcleo? · ¿se entrega sin horas
+  de Sergio Urcullo por cliente? Falla una → **no es un add-on, es un negocio nuevo disfrazado**.
+  El chatbot pasa las tres (99,8% de margen); la web, el influencer y el contenido fallan.
+- **El techo del negocio no es técnico: son horas de soporte** (§9). Operar cuesta Bs ~461/mes
+  con 1 cliente o con 40, y el margen es 94-99,8% — **el producto no tiene problema de
+  rentabilidad, tiene problema de clientes**. Bajar el soporte por cliente SUBE el techo; una
+  feature nueva sólo agrega valor a uno. Priorizar en ese orden.
+- **"¿Necesitamos financiación o un equipo de desarrollo?" ya está contestado y medido: NO.**
+  El break-even es `gasto mensual ÷ precio del plan` ≈ **5 clientes**. Un desarrollador lo
+  triplicaría. Construir es lo único que sobra — lo escaso son clientes. No se reabre esa
+  discusión sin datos nuevos; está en §4 y §5 de ese doc, con su aritmética.
+- **Ninguna sesión cambia la etapa vigente por su cuenta.** Eso lo decide Sergio Urcullo; la
+  sesión que crea que corresponde cambiarla **lo plantea, con la cuenta delante, y sigue con
+  lo desbloqueado**.
+
 ## Skills del proyecto (REGLA)
 
 - Toda sesión arranca invocando **`onia-router`**: él es el índice y rutea la tarea a su
