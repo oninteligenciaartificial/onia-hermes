@@ -236,7 +236,31 @@ arrancar* — las distros de WSL son **por usuario** y una tarea como SYSTEM no 
 Para sobrevivir a un corte de luz sin que nadie inicie sesión hay que elegir: contraseña
 guardada en la tarea, o inicio de sesión automático de Windows. El script no hace ninguno.
 
-**🔴 El gateway de Hermes corre sin supervisión.** Medido: `hermes_cli.main gateway run` vive en
+**✅ RESUELTO 21:03 UTC — el gateway quedó supervisado.** Lo de abajo se conserva porque explica la causa, que no era la que yo supuse.
+
+> **No hacía falta escribir una unidad: ya existía.** `hermes-gateway.service` estaba en
+> `/root/.config/systemd/user/`, **`enabled`**, muerto desde el 2026-09-03 19:08 con
+> *«restart counter is at 34»*. Y la causa **no era un bug**: el journal lo dice literal —
+> `❌ Gateway already running (PID 4059937)`. Alguien había arrancado uno **a mano**, el
+> servicio se negó correctamente a duplicarlo 34 veces, lo pararon, y el de mano quedó de
+> huérfano 2 días. **Dos gateways peleándose, no un defecto.**
+>
+> Arreglo: `hermes gateway stop` (mata el huérfano) + `systemctl --user start
+> hermes-gateway.service`. Verificado por **cgroup**, no por `ppid`:
+> `…/app.slice/hermes-gateway.service`, y el PID que reporta `hermes gateway list` (775798)
+> coincide con el `MainPID`. `Restart=always` · `RestartUSec=5s` · `enabled` · `Linger=yes`
+> para root, así que sobrevive al cierre de sesión **y arranca en el boot**. Y conectó, que no
+> es lo mismo que arrancó: `[Telegram] Connected to Telegram (polling mode)`.
+>
+> ⚠️ **Anotado sin perseguir, y no es menor:** al arrancar avisa que su SQLite (3.50.4) tiene
+> el **bug de corrupción de WAL** (`sqlite.org/wal.html#walresetbug`). Afecta `state.db`,
+> `kanban.db` y `cron/executions.db`. En `executions.db` se protegió solo
+> (`journal_mode=DELETE`); en las otras **dejó WAL puesto** porque no puede degradarlo en
+> caliente con lectores concurrentes. **`kanban.db` es el tablero** — donde viven las tareas y
+> los `ok` de Sergio Urcullo. El propio Hermes da el remedio: `hermes update` (repara el
+> runtime embebido) y `hermes doctor`. No se corrió: es otro objetivo.
+
+**🔴 El gateway de Hermes corría sin supervisión** (estado hasta las 21:03 del 2026-09-05). Medido: `hermes_cli.main gateway run` vive en
 `user.slice/…/session-*.scope` — huérfano de una sesión SSH muerta, no un servicio. `ppid 1`
 engaña: es reparenting. El `dashboard` al menos lo revive un cron cada 10 min; **el gateway no
 tiene quien lo reviva**. La última vez que Hermes murió en silencio fueron **9 días**. El arreglo
