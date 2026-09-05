@@ -126,11 +126,21 @@ test("el bot de un CLIENTE no hereda el conocimiento de Onia: contestaria NUESTR
 // El parser correcto ya existia y estaba exportado (`parseSlotsSpec`, followup-run.mjs:83):
 // simulate.mjs era el unico que lo reimplementaba, y lo reimplementaba mal.
 
+// Los horarios de estos casos se copiaron CONGELADOS de produccion el 2026-09-04 y
+// al dia siguiente ya no eran ofrecibles: `parseSlotsSpec` marca `pending` el que da
+// menos de 24 h de aviso, asi que los cuatro se pusieron rojos con el codigo sano —
+// median el calendario sin querer. Lo que prueban es el FORMATO (etiqueta con tildes
+// y coma + ISO detras de un `@`) y el renderizado, no la fecha: la etiqueta se
+// mantiene con la forma real de produccion y el ISO se ancla al reloj.
+const ISO_A = new Date(Date.now() + 48 * 3600_000).toISOString().replace(/\.\d{3}Z$/, "Z");
+const ISO_B = new Date(Date.now() + 96 * 3600_000).toISOString().replace(/\.\d{3}Z$/, "Z");
+const SPEC_PROD = `sábado 5 de septiembre, 09:00@${ISO_A}|lunes 7 de septiembre, 14:00@${ISO_B}`;
+
 test("--slots con el formato REAL de produccion no filtra el ISO al guion que ve el cliente", () => {
-  const config = buildConfig({ slots: "sábado 5 de septiembre, 09:00@2026-09-05T13:00:00Z|lunes 7 de septiembre, 14:00@2026-09-07T18:00:00Z" });
+  const config = buildConfig({ slots: SPEC_PROD });
 
   assert.equal(config.slots[0].label, "sábado 5 de septiembre, 09:00");
-  assert.equal(config.slots[0].startAt, "2026-09-05T13:00:00Z", "el ISO no se tira: es lo que reserva la demo");
+  assert.equal(config.slots[0].startAt, ISO_A, "el ISO no se tira: es lo que reserva la demo");
   assert.equal(config.slots[1].label, "lunes 7 de septiembre, 14:00");
 
   // Y sobre todo: que no se vea. El guion es la superficie que lee un desconocido.
@@ -140,7 +150,7 @@ test("--slots con el formato REAL de produccion no filtra el ISO al guion que ve
 });
 
 test("sin --slots toma ONIA_BOT_SLOTS del entorno, que es de donde los lee produccion", () => {
-  const env = { ONIA_BOT_SLOTS: "sábado 5 de septiembre, 09:00@2026-09-05T13:00:00Z|lunes 7 de septiembre, 14:00@2026-09-07T18:00:00Z" };
+  const env = { ONIA_BOT_SLOTS: SPEC_PROD };
   const config = buildConfig({}, { env });
 
   assert.equal(config.slots[0].label, "sábado 5 de septiembre, 09:00");
@@ -180,14 +190,14 @@ test("sin --slots ni entorno, los horarios salen del webhook.env DESPLEGADO", (t
   const envFile = join(mkdtempSync(join(tmpdir(), "onia-slots-")), "webhook.env");
   writeFileSync(
     envFile,
-    'ONIA_BOT_MODEL=gpt-4.1-mini\nONIA_BOT_SLOTS="sábado 5 de septiembre, 09:00@2026-09-05T13:00:00Z|lunes 7 de septiembre, 14:00@2026-09-07T18:00:00Z"\n',
+    `ONIA_BOT_MODEL=gpt-4.1-mini\nONIA_BOT_SLOTS="${SPEC_PROD}"\n`,
   );
   t.after(() => rmSync(dirname(envFile), { recursive: true, force: true }));
 
   const config = buildConfig({}, { env: {}, envFile });
 
   assert.equal(config.slots?.[0]?.label, "sábado 5 de septiembre, 09:00", "no leyo el archivo que carga produccion");
-  assert.equal(config.slots[0].startAt, "2026-09-05T13:00:00Z");
+  assert.equal(config.slots[0].startAt, ISO_A);
   assert.doesNotMatch(
     preguntar(config, "hola, quiero información"),
     /no tengo horarios libres/i,
@@ -197,7 +207,7 @@ test("sin --slots ni entorno, los horarios salen del webhook.env DESPLEGADO", (t
 
 test("el valor del webhook.env viene ENTRECOMILLADO: las comillas no se filtran al guion", (t) => {
   const envFile = join(mkdtempSync(join(tmpdir(), "onia-slots-")), "webhook.env");
-  writeFileSync(envFile, 'ONIA_BOT_SLOTS="sábado 5 de septiembre, 09:00@2026-09-05T13:00:00Z"\n');
+  writeFileSync(envFile, `ONIA_BOT_SLOTS="sábado 5 de septiembre, 09:00@${ISO_A}"\n`);
   t.after(() => rmSync(dirname(envFile), { recursive: true, force: true }));
 
   const config = buildConfig({}, { env: {}, envFile });
