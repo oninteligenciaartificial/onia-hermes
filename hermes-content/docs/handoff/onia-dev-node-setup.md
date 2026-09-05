@@ -54,9 +54,27 @@ sin subir.
 
 **Circuito de memoria verificado de punta a punta:** un hecho escrito desde este
 nodo aterriza en la bandeja del VPS **firmado `nodo-casa`**, y la bandeja local
-queda en 0.
+queda en 0. También llegan los que escriben los loops (`…-tendencias-…`).
 
-**En el repo:** cuatro commits en la rama del carril (ver *Archivos*). **Todavía no
+### Y después: 3 horas de operación autónoma, con cron solo
+
+```
+23:52  web-venta        (cron)   ·  00:52  web-venta  ·  01:52  web-venta
+00:24  web-factory-dev  (cron)   →  TERMINA 00:40:50 — 1009s — exit 0 — 2 commits
+01:40  lucia            (cron)   →  TERMINA 01:44:44 —  283s — exit 0 — 1 commit
+```
+
+**Cuatro loops distintos han corrido solos.** Los logs suben al VPS cada 10 min
+(verificado por marca de tiempo allá) y `sincronizar.sh` corre a los :44
+conservando los shims.
+
+**Producto clonado** en `/root/loops/onia-platform` (56 MB, rama `master`), con el
+**push roto** y verificado fallando. Los tres comandos que los loops usan para leer
+precios (`web-venta:16`, `chatbot-cola:17`, `marca-personal:178`) devuelven datos.
+
+**Disco:** 45 GB usados de 1007 (5 %). `/root/loops` = 41 GB.
+
+**En el repo:** siete commits en la rama del carril (ver *Archivos*). **Todavía no
 mergeados a `main`.**
 
 **En el VPS: NADA se cambió**, salvo agregar una línea a `/root/.ssh/authorized_keys`
@@ -81,7 +99,21 @@ Faltan las dos piezas que el plan pide en `PLAN_HOMELAB.md:223`:
 **No se aplicaron a propósito:** son configuración persistente de la máquina de Sergio
 y él pidió hacerlas viéndolas.
 
-### 🟡 2. `onia-platform` no está clonado
+### ✅ 2. `onia-platform` — RESUELTO el mismo día
+
+> Clonado en `/root/loops/onia-platform` (56 MB con `--filter=blob:none`, contra
+> 1,6 GB del clon completo del VPS), rama **`master`** — no `main`. El **push está
+> roto** (`remote set-url --push … DESHABILITADO-NODO-DE-DESARROLLO`) y verificado
+> fallando: un prompt es una instrucción, una URL rota es un hecho.
+>
+> Y se agregó al instalador (`bb0854f4`) con dos controles de humo, para que una
+> instalación futura no lo omita. **El nombre del repo se verificó**, no se asumió:
+> `git@github.com:oninteligenciaartificial/onia-platform.git`, accesible con la llave
+> del homelab. (El VPS lo alcanza por un alias `gh-platform` con una *deploy key*
+> propia — acá no hace falta.)
+>
+> Lo que sigue abajo es la descripción del problema, que se conserva porque explica
+> **por qué** hacía falta.
 
 4 de los 5 loops asignados **leen precios** de
 `/root/loops/onia-platform/lib/subscription-plans.ts` (`web-venta:16`,
@@ -122,6 +154,37 @@ Power On*) es lo que hace que la PC vuelva sola tras un corte de luz.
 | `f8a03858` | `instalar-homelab.sh` — inyección de comandos en los 4 shims; el nombre del worktree se inventaba en vez de leerse del corredor |
 | `4524946d` | Este handoff, `homelab-wsl-arranque.ps1` y la serie de TikTok |
 | `f95a1770` | **`sincronizar.sh` pisaba los shims cada hora** — el nodo aprendía hacia un pozo, y quedaba un segundo escritor de `MEMORY.md`; y el shim no reenviaba `ONIA_LOOP_ID`, así que todo hecho se firmaba `desconocido` |
+| `bf71c58e` | Handoff con las dos vueltas completas |
+| `bb0854f4` | El instalador **clona el producto** en sólo lectura (4 de 5 loops leen precios de ahí); y **`--prueba` ya puede salir verde** |
+| `066d4b88` | `PLAN_HOMELAB.md` se contradecía a sí mismo sobre WSL y mandaba a formatear |
+| `4f89b191` | 🔴 **Los horarios estaban corridos 4 horas** — ver abajo |
+
+### 🔴 El sexto bug: cuatro horas de corrimiento, y nada lo avisaba
+
+WSL heredó `America/Caracas` (−04) de Windows. El VPS corre en `Etc/UTC`. **`cron`
+interpreta los horarios en hora local**, y el de Ubuntu **no soporta `CRON_TZ`**
+(verificado: 0 apariciones de esa cadena en `/usr/sbin/cron`, con `crontab` como
+control). Todas las líneas del catálogo con hora fija disparaban 4 horas tarde.
+
+**Cómo se encontró, que es lo que vale.** `tendencias` simplemente **no apareció** a
+su hora. Sin error, sin log, sin aviso: *un loop que no arranca no genera ninguna
+señal*, así que la única pista fue notar la **ausencia de un archivo**.
+
+El diagnóstico salió de usar un loop **horario como testigo**: `web-venta` corrió
+22:52, 23:52, 00:52 y 01:52 **sin fallar una** — lo que descarta cron muerto y
+máquina dormida de una sola pasada, y deja la zona como única explicación. Se
+descartó también el `flock`: el candado es **por loop**
+(`/run/onia-loop-$NOMBRE.lock`), así que dos carriles a 2 minutos no se bloquean.
+
+**Rompía dos cosas de diseño a la vez:** el desfase deliberado contra el VPS para no
+pisarse la cuota de Claude (que es por cuenta, no por máquina), y los colchones que
+algunos carriles calculan a mano — `marca-personal` dice *"corre 21:00 UTC así el
+drop de las 19:00 está listo con 2 h de colchón"*, y corrido 4 h **prepararía el
+drop después de necesitarse**.
+
+Arreglado en el nodo (`timedatectl set-timezone UTC` + reinicio de cron, VPS y PC
+dan la misma hora al minuto) y blindado en el instalador, que ahora compara
+`date +%z` de las dos máquinas y **muere con el comando exacto** si difieren.
 
 ### ⚠️ El quinto bug merece leerse: era el más silencioso de todos
 
@@ -166,11 +229,20 @@ y no rompe nada.
    descarga. No se llegó a probar `--web-download`: WSL apareció instalado por otra vía
    antes de agotar esa rama.
 
-2. **Diagnosticar desde Windows con `wsl.exe -u root -- bash -lc '...'` contamina el
-   entorno.** El worktree exporta `GIT_DIR`, y WSL lo hereda: todo `git -C` falla con
-   `not a git repository: /mnt/c/.../C:/dev/...` — una ruta Linux pegada a una de
-   Windows. **Se perdieron tres diagnósticos así.** Solución: `unset GIT_DIR
-   GIT_WORK_TREE GIT_INDEX_FILE GIT_COMMON_DIR GIT_PREFIX` al inicio de cada script.
+2. **Diagnosticar desde Windows con `wsl.exe -u root -- bash -lc '...'` rompe todo
+   `git`**, con el error `not a git repository: /mnt/c/.../C:/dev/...` — una ruta
+   Linux pegada a una de Windows. **Se perdieron tres diagnósticos así**, y el
+   diagnóstico *del diagnóstico* también estuvo mal un rato:
+
+   ⚠️ **Primero lo atribuí a que WSL hereda `GIT_DIR` del worktree. Es sólo la mitad,
+   y no la importante.** La causa real es el **directorio de trabajo**: el script
+   arranca dentro del worktree de Windows montado en `/mnt/c/…`, que tiene un archivo
+   `.git` con `gitdir: C:/…` — una ruta que Linux no resuelve. Por eso `git -C /ruta`
+   funcionaba (lleva su propio directorio) y `git ls-remote` a secas no.
+
+   **La receta que sí funciona, y hay que usarla siempre:** `cd /root` **y**
+   `unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_COMMON_DIR GIT_PREFIX` al inicio
+   de cada script.
 
 3. **Comandos en línea a través de cuatro shells (Bash → wsl → bash → ssh) se rompen.**
    El `$(...)` desaparece y las comillas se comen entre sí. Dio dos falsos negativos
@@ -194,18 +266,35 @@ y no rompe nada.
    `GROQ_API_KEY` que ya vive en `/root/.hermes/.env`, ejecutando el `curl` **desde el
    VPS** para no mover la credencial.
 
-8. **`--prueba` del instalador NUNCA puede salir verde.** Salta los pasos 4 y 5 y
-   después verifica los archivos que esos pasos crean: siempre reporta 8 en rojo y el
-   cartel *"NO dejar los loops corriendo asi"*. Asusta y es mentira en ese modo.
+8. **`--prueba` del instalador NUNCA podía salir verde.** Saltaba los pasos 4 y 5 y
+   después verificaba los archivos que esos pasos crean: siempre reportaba 8 en rojo
+   y el cartel *"NO dejar los loops corriendo asi"*. Asusta, es mentira en ese modo, y
+   entrena a ignorar el único cartel rojo que importa. **Arreglado en `bb0854f4`.**
+
+9. **Hipótesis descartadas sobre por qué `tendencias` no disparó** (antes de dar con
+   la zona horaria). Sirven para no repetir el camino:
+   - *"WSL se suspendió"* → **falso**: `uptime` daba 6 h sin cortes, y `web-venta`
+     corrió las cuatro horas seguidas sin faltar una.
+   - *"El `flock` lo bloqueó porque `web-venta` arrancó 2 minutos antes con tope de
+     50 min"* → **falso**: el candado es **por loop**, `/run/onia-loop-$NOMBRE.lock`.
+   - *"Falta el `case` en el corredor, o el prompt, o el worktree"* → **falso**: los
+     tres estaban, y correrlo a mano arrancó perfecto con 175 hechos de memoria.
+
+   Lo que lo resolvió fue **usar un loop horario como testigo**: si el que corre cada
+   hora nunca falla y el que corre a hora fija nunca aparece, el problema no es cron
+   ni la máquina — es cómo se interpreta la hora.
 
 ---
 
 ## Qué depende de Sergio
 
 1. **Aplicar el arranque automático de WSL** (bloqueante, ver arriba). Se hace juntos.
-2. **Confirmar el nombre del repo del producto** para el clon de sólo lectura.
-3. **Mergear los dos commits a `main`.** Tocan `sincronizar.sh`, que corre en el VPS para
-   los 15 loops — conviene que lo revise la sesión de control.
+   *Es lo único que separa este nodo de estar terminado.*
+2. ~~Confirmar el nombre del repo del producto~~ → **hecho**: se verificó en vez de
+   preguntarlo, y quedó clonado.
+3. **Mergear los siete commits a `main`.** Tocan `sincronizar.sh`, que corre en el VPS
+   para los 15 loops — conviene que lo revise la sesión de control. **El VPS gana ahí
+   el arreglo de los 5,4 GB por hora en `/tmp`.**
 4. **Decidir cuándo sacar los 5 loops del `crontab` del VPS** (paso 10, con el vigía
    confirmando que ve esta PC).
 5. **Tailscale y BIOS**, cuando quiera.
@@ -244,13 +333,13 @@ Vistos de paso; **no se tocó nada allá**.
 
 1. **Arranque automático de WSL + sin suspensión.**
    *Listo cuando:* se reinicia Windows, nadie abre Ubuntu, y `crontab` dispara igual.
-2. **Mirar el log de la primera vuelta completa** de `web-factory-dev` y `web-venta`.
-   *Listo cuando:* el log dice `TERMINA` con commit, no `timeout` ni `session limit`.
-3. **Clonar `onia-platform`** en sólo lectura.
-   *Listo cuando:* `web-venta` puede leer `subscription-plans.ts` y su `git push` falla.
-4. **Mergear los dos commits a `main`.**
+2. ~~Mirar el log de la primera vuelta completa~~ → **hecho**: cuatro loops han corrido
+   solos, todos `exit 0` con commits subidos.
+3. ~~Clonar `onia-platform`~~ → **hecho**, con el push roto y verificado.
+4. **Mergear los siete commits a `main`.**
    *Listo cuando:* el `sincronizar.sh` de las :44 corre limpio y el clon queda sin
-   modificaciones locales.
+   modificaciones locales (hoy tiene 2 archivos parcheados a mano, que se resuelven
+   solos en cuanto `main` tenga los arreglos).
 5. **Dejar correr 24 h y comparar** las vueltas de esta PC contra las del VPS.
    *Listo cuando:* el vigía de loops remotos ve los logs subidos cada 10 min.
 6. **Recién ahí: sacar los 5 loops del `crontab` del VPS.** Lo coordina la sesión de
