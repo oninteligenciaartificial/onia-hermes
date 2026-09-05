@@ -1,10 +1,11 @@
-import { existsSync, readFileSync, statSync } from "node:fs";
-import { dirname, join, relative, resolve } from "node:path";
+import { existsSync, readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 
 import { CONTENDIENTES } from "@/lib/proof";
+import { cadenaHastaSimbolo, moduloDe } from "../rutas";
 import { NAV_HEADER } from "./nav";
 
 /**
@@ -42,80 +43,19 @@ import { NAV_HEADER } from "./nav";
  */
 
 const AQUI = dirname(fileURLToPath(import.meta.url));
-/** `src/`, para resolver el alias `@/`. */
-const SRC = join(AQUI, "..", "..");
 
 /** El símbolo de `lib/proof.ts` que pinta la tabla de competidores. */
 const TABLA_COMPETIDORES = "CONTENDIENTES";
-const PROOF = join(SRC, "lib", "proof.ts");
-
-const EXTENSIONES = ["", ".ts", ".tsx", "/index.ts", "/index.tsx"];
+const PROOF = moduloDe("@/lib/proof");
 
 /**
- * Resuelve un import a un archivo del árbol. Devuelve `null` para lo que no es
- * nuestro (paquetes de node_modules) y para los CSS, que no importan nada.
+ * El recorredor del grafo vive en `app/rutas.ts`, compartido con
+ * `obra-en-el-cuerpo.test.ts`. Acá había una copia: dos copias del mismo
+ * recorrido miden cosas distintas al mes, que es justo el motivo por el que
+ * `rutas.ts` existe.
  */
-function resolverImport(desde: string, spec: string): string | null {
-  if (spec.endsWith(".css")) return null;
-  let base: string;
-  if (spec.startsWith("@/")) base = join(SRC, spec.slice(2));
-  else if (spec.startsWith(".")) base = resolve(dirname(desde), spec);
-  else return null; // paquete externo
-  for (const ext of EXTENSIONES) {
-    const camino = base + ext;
-    // `existsSync` solo no alcanza: `@/motion` existe y es una CARPETA, y
-    // leerla revienta con EISDIR. El índice se busca aparte, en EXTENSIONES.
-    if (existsSync(camino) && statSync(camino).isFile()) return camino;
-  }
-  return null;
-}
-
-/**
- * Los `import { A, B } from "X"` de un archivo. El `[^}]*` cruza saltos de
- * línea solo, que es como está escrito el import de `comparativa/page.tsx`.
- */
-function importsConLlaves(texto: string): { bindings: string; spec: string }[] {
-  return [...texto.matchAll(/import\s*\{([^}]*)\}\s*from\s*["']([^"']+)["']/g)].map((m) => ({
-    bindings: m[1],
-    spec: m[2],
-  }));
-}
-
-/** Todo import del archivo, con o sin llaves (default, namespace, side-effect). */
-function todosLosSpecs(texto: string): string[] {
-  return [...texto.matchAll(/from\s*["']([^"']+)["']/g)].map((m) => m[1]);
-}
-
-/**
- * ¿La pantalla puede pintar la tabla de competidores? Recorre el grafo de
- * imports desde su `page.tsx` y devuelve la cadena que llega hasta ella, para
- * que el fallo diga POR DÓNDE entra y no solo que entra.
- */
-function cadenaHastaLosCompetidores(entrada: string): string[] | null {
-  const visitados = new Set<string>();
-  const cola: { archivo: string; cadena: string[] }[] = [
-    { archivo: entrada, cadena: [relative(SRC, entrada)] },
-  ];
-  while (cola.length > 0) {
-    const { archivo, cadena } = cola.shift()!;
-    if (visitados.has(archivo)) continue;
-    visitados.add(archivo);
-    const texto = readFileSync(archivo, "utf8");
-
-    for (const { bindings, spec } of importsConLlaves(texto)) {
-      if (!new RegExp(`\\b${TABLA_COMPETIDORES}\\b`).test(bindings)) continue;
-      if (resolverImport(archivo, spec) === PROOF) return cadena;
-    }
-
-    for (const spec of todosLosSpecs(texto)) {
-      const destino = resolverImport(archivo, spec);
-      if (destino && !visitados.has(destino)) {
-        cola.push({ archivo: destino, cadena: [...cadena, relative(SRC, destino)] });
-      }
-    }
-  }
-  return null;
-}
+const cadenaHastaLosCompetidores = (entrada: string) =>
+  cadenaHastaSimbolo(entrada, TABLA_COMPETIDORES, PROOF);
 
 describe("el header de escritorio es el camino de compra", () => {
   /**
