@@ -247,10 +247,25 @@ produce solo". Los ganchos del banco (RADAR §2) se cruzan con estos temas.
       del bloque verde y asomaba como una mancha gris — es la trampa #5 de la FICHA de
       `carrusel-pinterest-refs`, que ya estaba escrita y volvió a pasar en un formato nuevo.
       Aplicado en el generador `generar-statement-atender.py` y en la FICHA del patrón.
-- [ ] **Los otros generadores a la tipografía de marca** (abierto 02-sep, **3 de 12 hechos**):
+- [ ] **Los otros generadores a la tipografía de marca** (abierto 02-sep, **9 en rojo de 29**):
       quedan `generar-carrusel-atender.py` · `-chatbot.py` · `-comunidad.py` · `-cursos.py` ·
       `-sistema.py` · `-tareas.py` · `-grid-senales.py` ·
       `generar-statement-16anos.py` · `generar-statement-post.py`.
+      ⚠️ **05-sep: el contador vivía a mano acá y estaba mal en las dos cifras** — decía
+      «3 de 12» y son **9 en rojo de 29 archivos**. Ahora lo cuenta un chequeo, no este doc:
+
+          python3 scripts/marca-personal/chequear-tipografia-marca.py    # exit 1 si queda alguno
+
+      Separa por **contexto**: `generar-*.py` es ROJO (cada pieza nace con el defecto) y
+      `experimento-*.py` sale como AVISO —son los 11 que **probaron** que el condensed no iba,
+      y ponerlos en rojo obliga a borrar la evidencia—. **No se cablea a `npm test` de la raíz
+      mientras el contador sea > 0**: pondría `main` en rojo y trabaría el merge de los 15
+      carriles por una deuda de este carril.
+      🔴 **Su primera versión salió «(ninguna)» con los 21 defectos presentes**: capturaba el
+      valor con `[^;"']+` y `font-variation-settings` lleva los ejes **entre comillas**, así que
+      cortaba antes de leer ninguno. No lo destapó el resultado —que parecía una buena
+      noticia— sino probar el instrumento **en las dos direcciones** antes de creerle. El
+      autotest quedó adentro y corre antes del veredicto.
       **Receta exacta arriba** — no es buscar-y-reemplazar: peso + jerarquía van juntos, y hay
       que MIRAR el render por el desborde del eje `wdth`. Una por vuelta alcanza; cada una
       necesita elegir a mano su remate de 2-3 palabras.
