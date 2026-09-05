@@ -113,8 +113,16 @@ paso "3/7 · repo y worktrees"
 if [ "$SOLO_PRUEBA" = 0 ]; then
   mkdir -p "$BASE" "$BIN" "$BIN/loops" "$HERMES_DIR/memories" "$BASE/estado" || morir "no pude crear las carpetas base"
   if [ ! -d "$CLON/.git" ]; then
-    # --filter=blob:none: el clon completo son 13 GB medidos en el VPS. El
-    # blobless baja ~1 GB y trae el resto por demanda; para un carril que toca
+    # --filter=blob:none: el clon completo son 13 GB medidos en el VPS.
+    #
+    # ⚠️ Corregido 2026-09-04 midiendolo en el nodo de casa: el blobless NO son
+    # "~1 GB". El filtro difiere los blobs, pero el CHECKOUT de main los pide
+    # igual, y `du -sh` sobre el clon terminado da **9,8 GB**. Sigue siendo mejor
+    # que 13, y sobre todo es lo que hace viable el resto; pero quien planifique
+    # disco tiene que contar 9,8 GB + un arbol de trabajo por worktree.
+    # El del producto (onia-platform) si es chico: 56 MB contra 1,6 GB completo.
+    #
+    # Para un carril que toca
     # unos pocos archivos por vuelta es la diferencia entre entrar o no en un
     # disco de casa.
     git clone --filter=blob:none "$REPO_URL" "$CLON" || morir "no pude clonar $REPO_URL (¿la llave de GitHub esta en el agente?)"

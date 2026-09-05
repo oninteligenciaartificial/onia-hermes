@@ -204,7 +204,23 @@ Después, en el instalador: `ONIA_VPS=root@100.x.y.z`.
 
 ### Sistema operativo: **Linux nativo, no Windows, no WSL2**
 
-Si la PC tiene Windows, la recomendación es **formatear e instalar Ubuntu Server 24.04 LTS**
+> ⚠️ **ESTA SECCIÓN QUEDÓ DESACTUALIZADA — corregido 2026-09-04.** Contradice a la de
+> arriba (*"Windows no se borra: Linux va adentro"*, §Máquina), que se escribió después y
+> nunca reemplazó a esta. **Las dos estuvieron vivas en el mismo archivo**, que es justo
+> lo que `CLAUDE.md §2` prohíbe: *"un tema = un archivo... si cambia, se EDITA"*. Con eso,
+> cualquier sesión que leyera este doc elegía al azar entre formatear y no formatear.
+>
+> **Lo que se hizo de verdad el 2026-09-04: WSL2 con Ubuntu 26.04.** Está instalado,
+> con `systemd`, y corrió dos vueltas completas de loop (`web-factory-dev` 698 s exit 0,
+> `web-venta` 995 s exit 0, esta última disparada sola por `cron`). Estado y detalle en
+> [`handoff/onia-dev-node-setup.md`](handoff/onia-dev-node-setup.md).
+>
+> **Lo que sigue siendo cierto de esta sección es el punto 3**, y hay que tomarlo en
+> serio: WSL no arranca solo. La pieza que lo resuelve existe y está sin aplicar en
+> [`scripts/loops/homelab-wsl-arranque.ps1`](../../scripts/loops/homelab-wsl-arranque.ps1).
+> **Mientras eso no se aplique, este nodo tiene el `crontab` perfecto y no corre.**
+
+Si la PC tiene Windows, la recomendación era **formatear e instalar Ubuntu Server 24.04 LTS**
 (sin escritorio: ahorra ~1 GB de RAM y no hay nada que mirar en esa máquina).
 
 Por qué, en orden de peso:
@@ -228,7 +244,12 @@ y desactivar la suspensión. Funciona; hay que aceptar que es más frágil.
 
 ```bash
 sudo apt update && sudo apt install -y git openssh-client rsync cron util-linux curl ca-certificates
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -   # node 20, igual que el VPS (v20.20.2)
+# ⚠️ Corregido 2026-09-04: NO hace falta NodeSource. El instalador exige `-ge 20`
+# (instalar-homelab.sh:86), no "= 20", y Ubuntu 26.04 trae **Node 22 firmado** en su
+# propio catalogo. Un repositorio externo menos y una clave de firma menos que mantener.
+#   sudo apt install -y nodejs npm
+# La linea de abajo se conserva para una Ubuntu vieja cuyo `nodejs` sea < 20:
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -   # solo si apt trae node < 20
 sudo apt install -y nodejs
 sudo npm i -g @anthropic-ai/claude-code
 sudo claude          # /login con la suscripción de Sergio — NO con API key
@@ -338,19 +359,35 @@ perdida se pierde; la siguiente llega a horario.
 
 ### Los pasos de Sergio, en orden
 
-| # | Qué | Dónde |
-|---|---|---|
-| 1 | Decidir la máquina y verificar que llegue a **8 GB RAM / 120 GB SSD** | físico |
-| 2 | Instalar **Ubuntu Server 24.04 LTS** | PC de casa |
-| 3 | BIOS: *Restore on AC Power Loss* → **Power On** | PC de casa |
-| 4 | Tailscale en el VPS y en la PC, y `tailscale ping` en verde | los dos |
-| 5 | Copiar `~/.ssh/onia_hermes_vps_ed25519` a `/root/.ssh/` (`chmod 600`) | PC de casa |
-| 6 | Instalar node 20 + `claude`, y hacer **`/login` con la suscripción** (no API key) | PC de casa |
-| 7 | Clave SSH de GitHub con permiso de push a las ramas de carril | PC de casa |
-| 8 | Correr el instalador con `--prueba`, y si está verde, sin `--prueba` | PC de casa |
-| 9 | Una vuelta a mano (`/root/bin/onia-loop.sh web-factory-dev`) y **mirar el log** | PC de casa |
-| 10 | **Recién ahí**, sacar del `crontab` del VPS los loops mudados | VPS |
-| 11 | Cerrar el puerto 22 público, con una sesión de respaldo abierta | VPS |
+> **Estado al 2026-09-04.** Esto dejó de ser un plan y es una lista viva. Detalle,
+> evidencia e intentos fallidos en [`handoff/onia-dev-node-setup.md`](handoff/onia-dev-node-setup.md).
+
+| # | Qué | Dónde | Estado |
+|---|---|---|---|
+| 1 | Máquina: **8 GB RAM / 120 GB SSD** mínimo | físico | ✅ i5-12400F · 16 GB · 955 GB libres |
+| 2 | ~~Instalar Ubuntu Server 24.04~~ → **WSL2 + Ubuntu 26.04 + `systemd`** | PC de casa | ✅ |
+| 3 | BIOS: *Restore on AC Power Loss* → **Power On** | PC de casa | ⬜ pendiente |
+| 3b | **Que WSL arranque solo y no se suspenda** ([`homelab-wsl-arranque.ps1`](../../scripts/loops/homelab-wsl-arranque.ps1)) | PC de casa | 🔴 **BLOQUEANTE** — script listo, sin aplicar |
+| 4 | Tailscale en el VPS y en la PC, y `tailscale ping` en verde | los dos | ⬜ pendiente (no bloquea) |
+| 5 | ~~Copiar `~/.ssh/onia_hermes_vps_ed25519`~~ → **generar una llave PROPIA** y autorizar su `.pub` | PC de casa | ✅ `homelab-onia-vps` |
+| 6 | node ≥ 20 + `claude`, **`/login` con la suscripción** (no API key) — **también para `root`**, que es quien ejecuta | PC de casa | ✅ node 22 · claude 2.1.261 |
+| 7 | Llave SSH de GitHub **de `root`** | PC de casa | ✅ `homelab-onia-github` |
+| 8 | Instalador `--prueba`, y si está verde, sin `--prueba` | PC de casa | ✅ 14/14 verde |
+| 9 | Una vuelta a mano y **mirar el log** | PC de casa | ✅ 2 vueltas completas, exit 0 |
+| 10 | **Recién ahí**, sacar del `crontab` del VPS los loops mudados | VPS | ⬜ lo coordina la sesión de control |
+| 11 | Cerrar el puerto 22 público, con una sesión de respaldo abierta | VPS | ⬜ pendiente |
+
+⚠️ **Dos correcciones al plan original, y las dos importan:**
+
+- **Paso 5 — no se copia la llave, se genera una propia.** Una llave privada que viaja
+  entre máquinas deja de ser de una máquina: si se filtra no sabés de cuál salió, y
+  revocarla te deja afuera a vos también. Generando una por nodo, revocar es borrar una
+  línea del `authorized_keys` y la laptop sigue entrando. Además el registro del VPS
+  distingue quién se conectó — y este nodo se conecta **~144 veces por día** sólo para
+  subir logs.
+- **Paso 6 — `root` es el que ejecuta.** El instalador exige `id -u = 0` y escribe el
+  `crontab` de root. `claude` instalado y logueado con el usuario normal **no lo ve**:
+  otra casa, otro `PATH`, otras credenciales. Hay que instalarlo y loguearlo **dos veces**.
 
 ⚠️ **El paso 10 va después del 9, nunca antes.** Un loop apagado en el VPS y roto en casa es un
 carril muerto que **no avisa** — el modo de falla que este sistema ya documentó tres veces.
