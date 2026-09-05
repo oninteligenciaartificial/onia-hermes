@@ -78,6 +78,21 @@ del PNG y habrían sido publicables: un "3 COSAS" sobre un lienzo con 4 iconos, 
 cortaba "CONTRATAR" en los dos bordes (medido 186px de texto en un círculo de 166px, no a ojo), y
 una cinta adhesiva tapada detrás de un bloque verde. Ninguna de las seis señales de basura.
 
+## Veredicto: `canario-visual` SIRVE
+
+Última vuelta real antes de la pausa por foco-vender (`6bd2ec177`, 2026-09-03). Encontró un
+fantasma de texto en casi TODAS las pantallas y, antes de reportarlo como bug del sitio, dudó de
+su propio instrumento primero (regla 4 de este loop): el `waitForTimeout` de 350ms fotografiaba
+la animación `whileInView` a mitad de camino. Subió el piso a 900ms, volvió a medir, y el
+fantasma desapareció en home/precios/rubros/empezar — quedó **uno solo**, real: en
+`onia.com.bo/chatbot`, el header sticky (fondo al 88% de opacidad + blur, no opaco de verdad)
+deja pasar el título blanco en negrita de la sección de precio al final del scroll. Lo verificó
+con estilo computado y una espera de hasta 2.500ms para descartar que fuera tránsito de
+animación, y dejó el ítem en `COLA.md` con captura y repro exactos. Coincide con el hecho ya
+anotado en la memoria compartida el mismo día (canario-visual, 2026-09-03 11:46). Ninguna de las
+seis señales de basura — al revés, es el ejemplo de "medí con el instrumento correcto, y
+desconfiá del que te da la razón" bien aplicado.
+
 ## Qué quedó en producción
 
 - **`loops_avance.sh` arreglado y con gate** — commit `e27537cc2`. Rojo antes por el motivo
@@ -187,12 +202,12 @@ grep -c '<frase de la lección>' /root/.hermes/memories/MEMORY.md # tiene que da
 
 ## Próximos pasos
 
-1. **Auditar `canario-visual` o `investigacion`.** `marca-personal` quedó auditado esta vuelta
-   (SIRVE, ver arriba).
+1. **Auditar `investigacion`.**
    **Ya auditados:** `web-venta`, `chatbot`, `lucia`, `onia-cola`, `recorrido-cliente`,
-   `calidad-generado`, `tendencias`, `docs-auditoria`, `web-factory-dev`, `marca-personal`.
-   **Nunca auditados:** `canario-visual`, `investigacion`. Los dos están hoy `PAUSADO` en cron
-   (foco vender), así que se audita su ÚLTIMA vuelta real antes de la pausa, no una vuelta nueva.
+   `calidad-generado`, `tendencias`, `docs-auditoria`, `web-factory-dev`, `marca-personal`,
+   `canario-visual` (SIRVE, auditado 2026-09-05 14:29 La Paz — commit `6bd2ec177`, ver abajo).
+   **Nunca auditado:** `investigacion`. Sigue `PAUSADO` en cron (foco vender), así que se audita
+   su ÚLTIMA vuelta real antes de la pausa, no una vuelta nueva.
 2. ~~`kpis-semanal` sigue sin correr~~. **CERRADO**: su cron es semanal (`7 13 * * 1`, lunes) y hoy
    es viernes — no está escondido en el descarte "aún no vio el prompt", simplemente no le tocó
    correr todavía. Se vuelve a mirar el próximo lunes después de las 13:07 UTC.
