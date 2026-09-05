@@ -68,6 +68,10 @@ const SALIDA = arg("salida", "/root/bandeja-produccion.png");
 // captura sólo alcanza a las conversaciones mas nuevas, y la prueba de que la bandeja lista
 // los DOS canales juntos vive mas abajo (los de WhatsApp son de agosto).
 const SCROLL = Number(arg("scroll", "0"));
+// --ancla "<texto>": la pieza a mirar vive bajo el pliegue (la tarjeta del canal de WhatsApp
+// está al final de /settings/chatbot). Sin esto la captura sale del tope de la página y NO
+// prueba nada sobre la pieza — con la misma cara que una captura buena.
+const ANCLA = arg("ancla", "");
 
 function envDelContenedor(contenedor) {
   const crudo = execFileSync("docker", ["exec", contenedor, "env"], { encoding: "utf8" });
@@ -206,6 +210,29 @@ if (SCROLL > 0) {
   }
   console.log(`scroll: pedido ${movido.pedido}px, quedó en ${movido.quedo}px (alto ${movido.alto}px)`);
   await pagina.waitForTimeout(800);
+}
+
+if (ANCLA) {
+  // El texto se busca con :has-text sobre el DOM real, no con un grep del HTML: React parte
+  // el texto entre expresiones JSX con comentarios (`Bs <!-- -->3.300`) y ahí un match literal
+  // falla ABIERTO. Y si el ancla no aparece se sale con 2: una captura del tope de la página
+  // tiene exactamente la misma cara que una captura buena, y se firmaría como prueba.
+  const nodo = pagina.locator(`:text-is(${JSON.stringify(ANCLA)})`).last();
+  try {
+    await nodo.waitFor({ state: "visible", timeout: 20000 });
+  } catch {
+    console.error(
+      `El ancla ${JSON.stringify(ANCLA)} NO está en ${RUTA}. No se saca la captura: sería del ` +
+        `tope de la página y se leería como prueba de una pieza que no se vio.`
+    );
+    await navegador.close();
+    process.exit(2);
+  }
+  // `block: "center"` y no scrollIntoViewIfNeeded: éste deja la pieza pegada al borde inferior,
+  // por debajo del margen que dispara las animaciones de entrada, y sale sin pintar.
+  await nodo.evaluate((n) => n.scrollIntoView({ block: "center", behavior: "auto" }));
+  await pagina.waitForTimeout(1200);
+  console.log(`ancla ${JSON.stringify(ANCLA)}: encontrada y centrada.`);
 }
 
 await pagina.screenshot({ path: SALIDA });
