@@ -141,6 +141,7 @@ Se venden **después del primer cierre**, sobre cualquier plan. Precios: `lib/pr
 | Self-hosted | instalación en servidor del cliente | 🟡 |
 
 ⚠️ **Las tres claves de add-on siguen sin lector — revisado una por una el 2026-08-30.**
+✅ **Y desde el 2026-09-05 ya no se pueden OTORGAR.** El backoffice las marcaba «Sin efecto todavía» y al lado dejaba apretar Otorgar igual: escribía la fila, quedaba «activa» en la ficha del cliente y no encendía nada. No eran tres sino **cinco** (las tres de acá más `addon.extra_seats` y `module.public_booking`), así que el arreglo fue una condición en la ruta `PATCH /api/admin/organizations/[id]/entitlements` (409) y en el botón, no clave por clave. Revocar sigue permitido, para poder limpiar un otorgamiento anterior. Qué enciende y qué no sale de `CON_EFECTO_REAL`, con un test que falla si el mapa miente.
 Ningún archivo de `app/` o `components/` consulta `addon.inventory_advanced`,
 `addon.chatbot` ni `addon.web`; el único ítem de nav gateado por feature es `/agents`
 (`module.agents`). Pero **no es el mismo problema en las tres**:
@@ -148,8 +149,8 @@ Ningún archivo de `app/` o `components/` consulta `addon.inventory_advanced`,
 | Clave | Qué pasa de verdad | Qué corresponde |
 |---|---|---|
 | `addon.inventory_advanced` | **Ya resuelto.** El add-on se retiró de la oferta el 2026-08-27. Que la clave no la lea nadie es ahora lo correcto, no un bug | nada — cerrado |
-| `addon.chatbot` | ⚠️ **La clave está muerta y la que trabaja es OTRA** (verificado el 2026-08-31: `addon.chatbot` sólo aparece en tests; el gate vivo es `addon.whatsapp`, con `isWhatsAppAddonActive()` en `lib/plan-limits.ts`). Y **medio chatbot ya está gateado**: `GET /api/chatbot-knowledge/published` exige el add-on desde el 2026-08-18. Lo que sigue abierto es la bandeja `/inbox`, en el nav de todos los packs sin gate | **decide Sergio** (ítem F2 de `COLA.md`): gatear `/inbox` con `addon.whatsapp` baja una superficie viva —hoy ninguna org tiene el add-on—, o dejar de crear el inbox de Chatwoot salvo add-on activo, que ataca la raíz sin apagar nada |
-| `addon.web` | La web del cliente la entrega **web-factory**, otro repo, y no tiene ni debería tener pantalla en la plataforma | sacar la clave del catálogo, o dejarla documentada como decorativa |
+| `addon.chatbot` | ⚠️ **La clave está muerta y la que trabaja es OTRA** (verificado el 2026-08-31: `addon.chatbot` sólo aparece en tests; el gate vivo es `addon.whatsapp`, con `isWhatsAppAddonActive()` en `lib/plan-limits.ts`). Y **medio chatbot ya está gateado**: `GET /api/chatbot-knowledge/published` exige el add-on desde el 2026-08-18. Lo que sigue abierto es la bandeja `/inbox`, en el nav de todos los packs sin gate | **decide Sergio** (ítem F2 de `COLA.md`): gatear `/inbox` con `addon.whatsapp` baja una superficie viva — ⚠️ **acá decía «hoy ninguna org tiene el add-on» y es falso, contado en la base de producción el 2026-09-05: la tienen **cuatro**, todas por `grant` manual (Clínica Sergio 09-04, Onia interna 09-02, y las dos ZZ QA del 08-18). Ninguna es de un cliente pagante, así que el espíritu se sostiene, pero el número no: gatear `/inbox` hoy **sí** apaga algo, y lo apaga justo en las dos orgs propias donde Sergio Urcullo lo vería—, o dejar de crear el inbox de Chatwoot salvo add-on activo, que ataca la raíz sin apagar nada |
+| `addon.web` | La web del cliente la entrega **web-factory**, otro repo, y no tiene ni debería tener pantalla en la plataforma **resuelto el 2026-09-05 por una tercera vía**: la clave se queda (borrarla pierde el rastro de un otorgamiento viejo) pero **ya no se puede otorgar** — la ruta la rechaza con 409 y la pantalla tiene el botón apagado |
 
 **Servicios que no son software:**
 

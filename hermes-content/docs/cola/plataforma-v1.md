@@ -124,15 +124,56 @@ y sin operar. Acá se opera, con verificación por ítem.
       **Cero cambios de código: no hacía falta ninguno.** El trabajo fue medir y corregir el
       documento.
 
-- [ ] 🔴 **Add-ons sin consumidor: o los consume algo, o salen del catálogo.**
+- [x] 🟢 **Add-ons sin consumidor — CERRADO el 2026-09-05, y la premisa era falsa.**
+      El pedido original:
+
+      > 🔴 **Add-ons sin consumidor: o los consume algo, o salen del catálogo.**
       `addon.inventory_advanced`, `addon.chatbot` y `addon.web`. El catálogo ya midió que
       `addon.chatbot` **está muerta y la que trabaja es otra** (revisado 2026-08-30 y 2026-08-31:
       sólo aparece en tests). Un add-on que se cobra y no habilita nada es una promesa rota
       cobrada — el peor defecto posible con un cliente nuevo.
 
-      Medición previa en `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` §5. Los montos y las
-      claves de add-on son fuente única en `lib/pricing.ts` (`onia-platform`): ahí se comprueba
-      qué clave cobra y con `grep` en `app/` quién la lee. Si nadie la lee, no habilita nada.
+      > Medición previa en `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` §5.
+
+      **Lo primero, porque cambia el ítem entero: ninguna de las tres se cobra.** El ítem temía
+      «un add-on que se cobra y no habilita nada». Contado en `lib/pricing.ts`, lo que se vende hoy
+      son seis cosas (`PUBLIC_PRICING_ADDONS`) y **ninguna** está detrás de estas claves: el chatbot
+      se cobra y se enciende con `addon.whatsapp`, e «Inventario avanzado» se retiró de la oferta el
+      2026-08-27. **La promesa rota cobrada no existía.**
+
+      **Y en la base de producción tampoco hay nada que limpiar** (2026-09-05):
+
+      | clave | filas en producción |
+      |---|---|
+      | `addon.whatsapp` | 4 activas — Clínica Sergio, Onia interna y dos ZZ QA |
+      | `module.agents` | 5 activas |
+      | `addon.chatbot` · `addon.web` · `addon.inventory_advanced` | **cero** |
+      | columna vieja `inventoryAddon` | `f` en las 6 organizaciones |
+
+      **Lo que SÍ estaba roto, y no era lo que el ítem miraba.** El backoffice marcaba esas claves
+      «Sin efecto todavía · Ninguna pantalla ni API lee esta capacidad» **y al lado dejaba apretar
+      Otorgar igual**: escribía la fila, quedaba «activa» en la ficha del cliente, y no encendía
+      nada. El cartel decía la verdad y el botón la desmentía. No eran tres claves sino **cinco**
+      — las tres del ítem más `addon.extra_seats` y `module.public_booking`, que `types.ts` ya
+      documentaba desde el 2026-09-01.
+
+      **Arreglado donde está el borde, no donde se ve.** `PATCH
+      /api/admin/organizations/[id]/entitlements` ya rechazaba una clave fuera del catálogo
+      cerrado (400); ahora rechaza también la que está en el catálogo y no consume nadie (409,
+      código distinto a propósito). El botón apagado es la capa de arriba. **Revocar sigue vivo**
+      en las dos: cerrar la puerta no puede dejar encerrado lo que alguien otorgó antes.
+      Commit `2b4db83` en `onia-platform`; 12 tests nuevos, suite 2979 verde, typecheck limpio.
+
+      **La tercera vía, contra el «o/o» del ítem.** Las claves **no** salen del catálogo: borrarlas
+      pierde el rastro de un otorgamiento viejo y rompería 31 usos de test, y `addon.chatbot` ya
+      tenía una decisión escrita de no borrarla (`CapacidadesOrg.render.test.ts`: *«no se borró del
+      catálogo a propósito»*). Se quedan visibles, marcadas, y **no otorgables**.
+
+      ⚠️ **De paso, un dato de §5 estaba al revés y sostiene una decisión de Sergio Urcullo.**
+      Decía que gatear `/inbox` con `addon.whatsapp` «baja una superficie viva — hoy ninguna org
+      tiene el add-on». La tienen cuatro. Ninguna es de cliente pagante, así que la conclusión
+      aguanta, pero el número no: hacerlo hoy apaga `/inbox` en las dos orgs propias. Corregido
+      en §5 con el conteo por organización.
 
 - [ ] 🟡 **`/requerimientos`: ~~huérfana~~ — no lo está. Lo que le falta es kilometraje.**
       ⚠️ Este ítem nació con el fantasma de §8.3 pegado: decía «no la enlaza ningún nav».
