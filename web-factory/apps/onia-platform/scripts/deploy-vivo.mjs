@@ -94,11 +94,44 @@ export const STAGED_VIEJO = "VIEJO";
 export const STAGED_NINGUNO = "NINGUNO";
 
 /**
+ * Lo que Next NUNCA empaqueta: por más que cambie, el navegador de un lead ve
+ * exactamente lo mismo antes y después de publicar.
+ *
+ * Es una lista de EXCLUSIÓN corta y nombrada, no una lista de inclusión de «lo
+ * que sí viaja», y la diferencia es la que decide el sesgo del gate: un archivo
+ * de una clase que nadie previó cuenta como que viaja, así que el error posible
+ * es pedir un deploy de más —barato— y nunca declarar al día un sitio que no lo
+ * está.
+ */
+export const NO_LLEGA_AL_CLIENTE = [
+  /(^|\/)scripts\//,
+  /(^|\/)__tests__\//,
+  /\.test\.[cm]?[jt]sx?$/,
+  /(^|\/)vitest\.config\.[cm]?[jt]s$/,
+];
+
+/**
+ * ¿Este commit puede cambiar algo de lo que ve un lead?
+ *
+ * Basta UN archivo que viaje. Exigir que viajen todos dejaría pasar un arreglo
+ * real escondido entre tests, que es el fallo abierto de siempre; y una lista
+ * ausente o vacía es ausencia de dato —`git log --name-only` pudo no
+ * contestar—, así que se responde que sí. La misma regla que separa `[]` de
+ * `null` en el resto de este archivo.
+ *
+ * @param {string[]|undefined|null} archivos
+ */
+export function llegaAlCliente(archivos) {
+  if (!Array.isArray(archivos) || archivos.length === 0) return true;
+  return archivos.some((f) => !NO_LLEGA_AL_CLIENTE.some((re) => re.test(f)));
+}
+
+/**
  * El diagnóstico, puro: recibe lo medido y decide. Separado de la medición para
  * poder probar las ramas que no se pueden reproducir a pedido (git mudo, home
  * caída) sin tocar producción.
  *
- * @param {{buildIdMtimeMs: number|null, commits: Array<{sha:string,ct:number,subject:string}>|null, homeStatus: number|null}} m
+ * @param {{buildIdMtimeMs: number|null, commits: Array<{sha:string,ct:number,subject:string,archivos?:string[]}>|null, homeStatus: number|null}} m
  */
 export function diagnosticar({ buildIdMtimeMs, commits, homeStatus }) {
   if (typeof buildIdMtimeMs !== "number") {
@@ -125,13 +158,25 @@ export function diagnosticar({ buildIdMtimeMs, commits, homeStatus }) {
 
   // Estricto: `next build` escribe el BUILD_ID al TERMINAR, así que un commit
   // del mismo segundo ya está adentro.
-  const varados = commits.filter((c) => c.ct * 1000 > buildIdMtimeMs);
+  const posteriores = commits.filter((c) => c.ct * 1000 > buildIdMtimeMs);
+  // …y de esos, sólo los que un lead podría notar. Un commit al instrumento del
+  // carril es trabajo real, pero publicarlo no le cambia la pantalla a nadie:
+  // contarlo invalidaba el build armado en cada vuelta y el deploy no salía
+  // nunca (medido el 2026-09-04, tres pedidos vencidos el mismo día).
+  const varados = posteriores.filter((c) => llegaAlCliente(c.archivos));
+  const soloHerramientas = posteriores.length - varados.length;
 
   return varados.length === 0
-    ? { codigo: AL_DIA, varados, motivo: "el sitio vivo sirve todo lo que main tiene" }
+    ? {
+        codigo: AL_DIA,
+        varados,
+        soloHerramientas,
+        motivo: "el sitio vivo sirve todo lo que main tiene",
+      }
     : {
         codigo: ARREGLOS_VARADOS,
         varados,
+        soloHerramientas,
         motivo: `${varados.length} arreglo(s) en main que el cliente no ve`,
       };
 }
@@ -245,7 +290,11 @@ export function commitsDesde(desdeMs, zona = ZONA) {
     "git",
     [
       "log",
-      "--format=%H%x09%ct%x09%s",
+      // El NUL abre cada cabecera. Es el único byte que no puede aparecer en el
+      // asunto de un commit ni en un nombre de archivo, así que distinguir
+      // cabecera de archivo no depende de adivinar el formato de git.
+      "--format=%x00%H%x09%ct%x09%s",
+      "--name-only",
       `--since=@${Math.floor(desdeMs / 1000)}`,
       "origin/main",
       "--",
@@ -254,14 +303,24 @@ export function commitsDesde(desdeMs, zona = ZONA) {
     { encoding: "utf8" },
   );
   if (r.status !== 0) return null;
-  return r.stdout
-    .split("\n")
-    .filter(Boolean)
-    .map((l) => {
-      const [sha, ct, ...resto] = l.split("\t");
-      return { sha: sha.slice(0, 9), ct: Number(ct), subject: resto.join("\t") };
-    })
-    .filter((c) => Number.isFinite(c.ct));
+
+  const commits = [];
+  for (const linea of r.stdout.split("\n")) {
+    if (linea.startsWith("\0")) {
+      const [sha, ct, ...resto] = linea.slice(1).split("\t");
+      commits.push({
+        sha: sha.slice(0, 9),
+        ct: Number(ct),
+        subject: resto.join("\t"),
+        archivos: [],
+      });
+    } else if (linea && commits.length > 0) {
+      // Con pathspec, `--name-only` sólo lista los archivos de la zona: es
+      // exactamente el conjunto sobre el que hay que decidir si viaja.
+      commits[commits.length - 1].archivos.push(linea);
+    }
+  }
+  return commits.filter((c) => Number.isFinite(c.ct));
 }
 
 /** Código HTTP de la home. `null` si no contestó. */
@@ -295,12 +354,23 @@ function main() {
       ? new Date(buildIdMtimeMs).toISOString().replace("T", " ").slice(0, 16) + " UTC"
       : "?";
 
+  // Se nombra siempre, en las dos ramas: si no, el conteo del gate no cuadra
+  // con el de `git log` y el que audita concluye que el gate se comió commits.
+  const nota =
+    r.soloHerramientas > 0
+      ? `\n(${r.soloHerramientas} commit(s) más de la zona tocan sólo herramientas` +
+        " —scripts y tests—, que no viajan al navegador: no piden deploy.)"
+      : "";
+
   if (r.codigo === AL_DIA) {
-    console.log(`DEPLOY AL DIA — onia.com.bo sirve el build del ${cuando}, sin nada varado.`);
+    console.log(
+      `DEPLOY AL DIA — onia.com.bo sirve el build del ${cuando}, sin nada varado.${nota}`,
+    );
   } else if (r.codigo === ARREGLOS_VARADOS) {
     console.error(`ARREGLOS VARADOS — onia.com.bo sirve el build del ${cuando}.`);
     console.error(`${r.varados.length} commit(s) de ${ZONA} en main que el cliente NO ve:\n`);
     for (const c of r.varados) console.error(`  ${c.sha}  ${c.subject}`);
+    if (nota) console.error(nota);
     const staged = stagedDisponible();
     const s = evaluarStaged({ staged, varados: r.varados });
     console.error(

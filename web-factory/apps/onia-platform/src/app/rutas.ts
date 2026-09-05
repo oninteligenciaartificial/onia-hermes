@@ -1,5 +1,5 @@
-import { readdirSync, readFileSync } from "node:fs";
-import { dirname, join, relative } from "node:path";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 /**
@@ -15,8 +15,20 @@ import { fileURLToPath } from "node:url";
  */
 
 const APP = dirname(fileURLToPath(import.meta.url));
+/** `src/`, para resolver el alias `@/`. */
+const SRC = join(APP, "..");
 
 export type Pagina = { archivo: string; ruta: string };
+
+/** El `page.tsx` de una página, en ruta absoluta. */
+export function archivoDe(pagina: Pagina): string {
+  return join(APP, pagina.archivo);
+}
+
+/** Un módulo del árbol por su ruta con alias (`@/lib/proof` → …/src/lib/proof.ts). */
+export function moduloDe(spec: string): string {
+  return join(SRC, spec.replace(/^@\//, "") + ".ts");
+}
 
 /** Todas las `page.tsx` del disco, con su ruta pública. */
 function paginas(dir: string): Pagina[] {
@@ -74,6 +86,76 @@ export function estaProhibida(ruta: string): boolean {
  * `/terminos` no se quiere en Google y se manda por WhatsApp igual.
  */
 export const PAGINAS_PUBLICAS: Pagina[] = PAGINAS.filter((p) => !estaProhibida(p.ruta));
+
+const EXTENSIONES = ["", ".ts", ".tsx", "/index.ts", "/index.tsx"];
+
+/**
+ * Resuelve un import a un archivo del árbol. Devuelve `null` para lo que no es
+ * nuestro (paquetes de node_modules) y para los CSS, que no importan nada.
+ */
+function resolverImport(desde: string, spec: string): string | null {
+  if (spec.endsWith(".css")) return null;
+  let base: string;
+  if (spec.startsWith("@/")) base = join(SRC, spec.slice(2));
+  else if (spec.startsWith(".")) base = resolve(dirname(desde), spec);
+  else return null; // paquete externo
+  for (const ext of EXTENSIONES) {
+    const camino = base + ext;
+    // `existsSync` solo no alcanza: `@/motion` existe y es una CARPETA, y
+    // leerla revienta con EISDIR. El índice se busca aparte, en EXTENSIONES.
+    if (existsSync(camino) && statSync(camino).isFile()) return camino;
+  }
+  return null;
+}
+
+/**
+ * ¿La pantalla puede pintar `simbolo`? Recorre el grafo de imports desde su
+ * `page.tsx` y devuelve la CADENA que llega hasta él —para que el fallo diga
+ * por dónde entra, no sólo que entra—, o `null` si no lo alcanza.
+ *
+ * Se mide sobre el grafo y no sobre el texto del `page.tsx` porque el dato casi
+ * nunca está escrito en la página: lo importa. Un `grep` de «Sintic» sobre
+ * `comparativa/page.tsx` sale VACÍO y firmaría verde sobre la página que ES el
+ * defecto; la cadena real es `page.tsx` → `components/sections/proof.tsx` →
+ * `lib/proof.ts`.
+ *
+ * ⚠️ Vive acá, y no copiado en cada gate, por el mismo motivo que el parser de
+ * metadata: dos copias del mismo recorredor miden cosas distintas al mes. Y por
+ * eso todo gate que lo use debe anclarlo con un caso que SÍ tiene que encontrar
+ * — si el resolver se rompe, el recorrido no encuentra nada y falla ABIERTO,
+ * que es la dirección en la que nadie mira.
+ */
+export function cadenaHastaSimbolo(
+  entrada: string,
+  simbolo: string,
+  modulo: string,
+): string[] | null {
+  const conLlaves = /import\s*\{([^}]*)\}\s*from\s*["']([^"']+)["']/g;
+  const cualquierImport = /from\s*["']([^"']+)["']/g;
+  const visitados = new Set<string>();
+  const cola: { archivo: string; cadena: string[] }[] = [
+    { archivo: entrada, cadena: [relative(SRC, entrada)] },
+  ];
+  while (cola.length > 0) {
+    const { archivo, cadena } = cola.shift()!;
+    if (visitados.has(archivo)) continue;
+    visitados.add(archivo);
+    const texto = readFileSync(archivo, "utf8");
+
+    for (const m of texto.matchAll(conLlaves)) {
+      if (!new RegExp(`\\b${simbolo}\\b`).test(m[1])) continue;
+      if (resolverImport(archivo, m[2]) === modulo) return cadena;
+    }
+
+    for (const m of texto.matchAll(cualquierImport)) {
+      const destino = resolverImport(archivo, m[1]);
+      if (destino && !visitados.has(destino)) {
+        cola.push({ archivo: destino, cadena: [...cadena, relative(SRC, destino)] });
+      }
+    }
+  }
+  return null;
+}
 
 /** El cuerpo de `{ … }` que arranca en `desde`, contando llaves. */
 function bloque(fuente: string, desde: number): string {

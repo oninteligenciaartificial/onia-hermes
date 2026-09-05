@@ -70,14 +70,33 @@ export const NAV_SERVICIOS: readonly NavItem[] = [
 ];
 
 /**
- * Header de escritorio: cinco. No entran los ocho — a 940px el header se
- * desborda y el CTA se cae de la fila (medido). Agentes y Chatbot viven en el
- * pie, en el menú de teléfono y linkeados desde la portada.
+ * Header de escritorio: el CAMINO DE COMPRA, y nada más. No entran los ocho —
+ * a 940px el header se desborda y el CTA se cae de la fila (medido). Agentes y
+ * Chatbot viven en el pie, en el menú de teléfono y linkeados desde la portada.
+ *
+ * `/comparativa` SALE del header el 2026-09-04. Estaba pegada a `/precios`, o
+ * sea que el camino de compra le ofrecía al lead, en el mismo renglón que el
+ * precio, una pantalla que nombra seis competidores CON su precio y que además
+ * dice textual «El Portal del SIN es gratis y cumple la ley. Eso lo decimos
+ * nosotros primero». Enseñarle al que ya está por comprar que hay una opción
+ * gratis del Estado es la fricción más cara que puede tener un header.
+ *
+ * El error NO es comparar: `lety.ai` —la referencia que fijó Sergio el
+ * 2026-09-03 junto con `dapta.ai`— también compara contra cuatro competidores
+ * con nombre. La diferencia medida es que Lety se niega a publicar el precio
+ * ajeno, y que la comparación no ocupa una ranura del menú de arriba.
+ *
+ * **No se baja: sale del CAMINO, no del sitio.** Sigue publicada, en el
+ * sitemap, en `NAV_DECIDIR` (pie y menú de teléfono) y enlazada desde el cuerpo
+ * de `/precios`. Lo verifica `alcance.test.ts`, que exige que toda página
+ * publicada sea alcanzable desde el árbol vivo.
+ *
+ * El invariante que lo sostiene está en `header-camino-de-compra.test.ts`:
+ * ninguna pantalla del header muestra la tabla de competidores.
  */
 export const NAV_HEADER: readonly NavItem[] = [
   { href: "/rubros", label: "Rubros" },
   { href: "/precios", label: "Precios" },
-  { href: "/comparativa", label: "Comparativa" },
   { href: "/facturacion", label: "Facturación" },
   { href: "/contacto", label: "Contacto" },
 ];
