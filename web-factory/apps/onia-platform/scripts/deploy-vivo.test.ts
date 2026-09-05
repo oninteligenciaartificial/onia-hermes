@@ -1,17 +1,25 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 import {
   AL_DIA,
   ARREGLOS_VARADOS,
+  COMANDO_PUBLICAR,
   NO_PUDE_MEDIR,
   STAGED_CUBRE,
   STAGED_MARCA,
   STAGED_NINGUNO,
+  STAGED_PREFIX,
   STAGED_VIEJO,
   ZONA,
   diagnosticar,
   evaluarStaged,
   llegaAlCliente,
+  BUILD_ID_VIVO,
+  STAGED_DIR,
+  fechaBuildVivo,
+  parsearStagedRemoto,
+  stagedDisponible,
 } from "./deploy-vivo.mjs";
 
 /**
@@ -365,6 +373,208 @@ describe("deploy-vivo: qué archivos llegan de verdad al cliente", () => {
     it("sin lista de archivos NO se descarta el commit", () => {
       expect(llegaAlCliente(undefined)).toBe(true);
       expect(llegaAlCliente([])).toBe(true);
+    });
+  });
+});
+
+/**
+ * El comando que este gate imprime es lo ÚNICO que alguien copia de acá: va
+ * pegado en la tarea del tablero y se queda ahí hasta que Sergio contesta.
+ *
+ * Si nombra la carpeta armada, caduca — el build siguiente la borra — y el
+ * fallo se disfraza de decisión pendiente: la tarea sigue diciendo «espera el
+ * OK» cuando ya no se puede ejecutar ningún día. Medido sobre t_cb722b7e, que
+ * se rehizo TRES veces el 2026-09-04 y las tres venció antes de la respuesta,
+ * con quince arreglos sin llegar al cliente.
+ *
+ * Por eso el invariante no es «la ruta está bien derivada» sino «no hay ruta».
+ */
+describe("deploy-vivo: el comando que se pega no puede caducar", () => {
+  const fuente = readFileSync(new URL("./deploy-vivo.mjs", import.meta.url), "utf8");
+
+  /**
+   * Los comentarios se sacan ANTES de aplicar el patrón. Este archivo explica
+   * en prosa por qué la ruta con timestamp es el defecto, y la cita textual —
+   * `runtime-next.new-…`, `swap-and-verify.sh <ruta>` — pondría el guard en
+   * rojo sobre su propia bitácora, obligando a borrar la explicación para que
+   * pase. Ya pasó con el guard del hero el 2026-09-04.
+   */
+  const codigo = fuente
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .split("\n")
+    .filter((l) => !l.trim().startsWith("//"));
+
+  /**
+   * El patrón se aplica a lo que el gate IMPRIME, no a todo el archivo.
+   *
+   * `STAGED_PREFIX` es una constante legítima: sin ella `stagedDisponible()` no
+   * puede encontrar los builds en disco, que es justo lo que permite decir «hay
+   * uno armado y está viejo». Prohibirla en todo el código pone en rojo la
+   * capacidad de MEDIR para castigar la de EMITIR — y el arreglo obvio sería
+   * dejar al gate ciego. Lo que no puede salir por pantalla es la carpeta.
+   */
+  const salida = codigo.filter((l) => l.includes("console.")).join("\n");
+  const todo = codigo.join("\n");
+
+  it("apunta a publicar.sh y no lleva argumentos", () => {
+    expect(COMANDO_PUBLICAR).toContain("publicar.sh");
+    expect(COMANDO_PUBLICAR).not.toContain(STAGED_PREFIX);
+    // Sin argumentos: `bash <ruta>` y nada más. Un tercer token sería la ruta
+    // volviendo por la ventana.
+    expect(COMANDO_PUBLICAR.trim().split(/\s+/)).toHaveLength(2);
+  });
+
+  /**
+   * El caso que de verdad se rompió: el gate imprimía
+   * `swap-and-verify.sh ${staged.ruta}`. Con el arreglo puesto, ninguna línea
+   * de código puede volver a emitir la ruta armada — ni interpolada, ni
+   * concatenada.
+   */
+  it("ninguna línea de salida emite la carpeta armada", () => {
+    expect(salida).not.toContain(STAGED_PREFIX);
+    // `staged.ruta` no se usa ya en ninguna parte: la carpeta se mide para
+    // decidir si hay que rearmar, y esa decisión la toma `publicar.sh` sola.
+    expect(todo).not.toContain("staged.ruta");
+  });
+
+  /**
+   * `swap-and-verify.sh` y `build-and-stage.sh` son los dos comandos que
+   * EXIGEN una ruta o dejan el trabajo a medias. Que no se los nombre como
+   * receta es lo que mantiene un solo comando en la tarea; `publicar.sh` los
+   * llama por dentro.
+   */
+  it("no ofrece los comandos que sí caducan", () => {
+    expect(salida).not.toContain("swap-and-verify.sh");
+    expect(salida).not.toContain("build-and-stage.sh");
+  });
+});
+
+/**
+ * De dónde saca el gate lo que mide, y por qué eso decidió dos vueltas enteras.
+ *
+ * El 2026-09-04 este carril dejó de correr en el VPS y pasó a correr en el nodo
+ * de casa (WSL). El sitio no está montado ahí, así que `statSync` del BUILD_ID
+ * tiraba y el gate salía por `NO PUDE MEDIR — ¿Estoy en el VPS?` en su primera
+ * línea, sin llegar a preguntarle nada a git.
+ *
+ * No fue un fallo en verde —el exit sigue siendo 2— pero el efecto fue el
+ * mismo: el único instrumento capaz de ver el deploy varado no producía
+ * veredicto, y los cuatro números del objetivo (prohibidos 0, precios 0, CTA
+ * rotos 0, favicon 200) firmaron «meta cumplida» dos vueltas seguidas con
+ * VEINTE arreglos mergeados que el cliente no veía. Entre ellos, otra vez, los
+ * nueve botones «Creá tu cuenta» abriendo otra página de venta, y el pie
+ * vendiendo la factura SIAT que el emisor todavía no emite.
+ *
+ * La lección es la de siempre en este carril, en su forma más cara: un gate que
+ * no puede medir donde corre no es un gate. Dónde vive el disco del sitio es
+ * una circunstancia de la máquina, no una propiedad del sitio.
+ */
+describe("deploy-vivo: mide el sitio vivo aunque no corra en el VPS", () => {
+  const ms = (s: number) => s * 1000;
+
+  it("si el sitio no está montado en esta máquina, pregunta por SSH", () => {
+    const r = fechaBuildVivo(BUILD_ID_VIVO, {
+      local: () => null,
+      remoto: () => ms(7_000),
+    });
+
+    expect(r).toBe(ms(7_000));
+  });
+
+  /**
+   * En el VPS el disco está a mano y SSH no debe usarse: es más lento y puede
+   * no estar configurado. El local manda siempre que conteste.
+   */
+  it("si el sitio está montado acá, NO sale a la red", () => {
+    let salioALaRed = false;
+    const r = fechaBuildVivo(BUILD_ID_VIVO, {
+      local: () => ms(3_000),
+      remoto: () => {
+        salioALaRed = true;
+        return ms(9_999);
+      },
+    });
+
+    expect(r).toBe(ms(3_000));
+    expect(salioALaRed).toBe(false);
+  });
+
+  /**
+   * El sesgo, otra vez: sin disco y sin SSH no se sabe nada, y no saber nada
+   * NUNCA es «al día». `diagnosticar` ya convierte ese `null` en NO_PUDE_MEDIR.
+   */
+  it("sin disco y sin SSH devuelve null, que es ausencia de dato", () => {
+    const r = fechaBuildVivo(BUILD_ID_VIVO, { local: () => null, remoto: () => null });
+
+    expect(r).toBeNull();
+    expect(diagnosticar({ buildIdMtimeMs: r, commits: [], homeStatus: 200 }).codigo).toBe(
+      NO_PUDE_MEDIR,
+    );
+  });
+
+  /**
+   * El build armado se busca en el mismo disco que el vivo. Si el gate midiera
+   * el runtime por SSH y el staged en el disco local, diría «no hay ningún
+   * build armado» sobre una máquina donde sí lo hay, y mandaría a rearmar uno
+   * que ya existe — un pedido de deploy inventado, que a Sergio le llega igual
+   * que los reales.
+   */
+  it("busca el build armado en el mismo disco donde encontró el vivo", () => {
+    const candidato = {
+      ruta: "/opt/onia-landing/runtime-next.new-20260905023618",
+      buildId: "abc123",
+      mtimeMs: ms(5_000),
+    };
+    const r = stagedDisponible(STAGED_DIR, {
+      local: () => null,
+      remoto: () => [candidato],
+    });
+
+    expect(r).toEqual(candidato);
+  });
+
+  /**
+   * Un SSH que falla y un VPS sin builds armados dan la misma pinta si se los
+   * confunde: lista vacía. `null` es «no pude preguntar» y manda a NO PUDE
+   * MEDIR; `[]` es «pregunté y no hay», que manda a armarlo.
+   */
+  it("distingue «no hay staged» de «no pude preguntar»", () => {
+    expect(stagedDisponible(STAGED_DIR, { local: () => null, remoto: () => [] })).toBeNull();
+    expect(stagedDisponible(STAGED_DIR, { local: () => null, remoto: () => null })).toBeNull();
+  });
+
+  /**
+   * El parseo de la respuesta remota, aparte de la red para poder probarlo.
+   * Una línea a medias es un directorio que el swap rechazaría: se descarta en
+   * vez de ofrecerse, igual que hace la rama local con `STAGED_MARCA`.
+   */
+  describe("parsearStagedRemoto", () => {
+    it("lee ruta, fecha y BUILD_ID, y devuelve el más nuevo primero", () => {
+      const r = parsearStagedRemoto(
+        "/opt/onia-landing/runtime-next.new-A\t1000\tbuildA\n" +
+          "/opt/onia-landing/runtime-next.new-B\t3000\tbuildB\n",
+      );
+
+      expect(r).toHaveLength(2);
+      expect(r?.[0].buildId).toBe("buildB");
+      expect(r?.[0].mtimeMs).toBe(ms(3_000));
+      expect(r?.[0].ruta).toBe("/opt/onia-landing/runtime-next.new-B");
+    });
+
+    it("descarta las líneas incompletas en vez de ofrecer una ruta rota", () => {
+      const r = parsearStagedRemoto(
+        "/opt/onia-landing/runtime-next.new-A\n" +
+          "/opt/onia-landing/runtime-next.new-B\t3000\tbuildB\n" +
+          "\t\t\n",
+      );
+
+      expect(r).toHaveLength(1);
+      expect(r?.[0].buildId).toBe("buildB");
+    });
+
+    it("sin ninguna carpeta contesta con la lista vacía, no con null", () => {
+      expect(parsearStagedRemoto("")).toEqual([]);
+      expect(parsearStagedRemoto("\n \n")).toEqual([]);
     });
   });
 });
