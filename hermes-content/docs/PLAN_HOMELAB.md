@@ -38,6 +38,34 @@ Sergio conserva su equipo tal como lo usa. Dos caminos, en orden de recomendaci�
    rápido de montar y comparte disco con Windows, pero depende de que la sesión de Windows esté
    activa y su ciclo de vida es menos predecible para tareas de 24 h.
 
+### 🔴 Las TRES cosas que `/etc/wsl.conf` tiene que decir (verificado el 2026-09-05)
+
+Montado y probado con un reinicio real. **Con dos de las tres no alcanza:**
+
+```ini
+[boot]
+systemd=true                    # sin esto no hay cron: systemd es quien lo levanta
+
+[user]
+default=<tu-usuario>            # si falta, WSL abre como root y todo queda con dueño root
+
+[time]
+useWindowsTimezone = false      # WSL PISA /etc/localtime desde Windows en CADA arranque
+```
+
+**La tercera es la que nadie ve venir.** El VPS corre en `Etc/UTC` y WSL hereda la zona de
+Windows — acá, `America/Caracas` (−04). `cron` interpreta los horarios en hora **local**, y el
+de Ubuntu **no soporta `CRON_TZ`** (verificado: 0 apariciones de esa cadena en `/usr/sbin/cron`,
+con `crontab` como control). Resultado: **todos los horarios con hora fija disparan 4 h tarde.**
+
+Y se revierte sola: `timedatectl set-timezone UTC` **no sobrevive al reinicio** sin esta línea.
+Se midió dos veces — se arregló el 4-sep, y el reinicio del 5-sep lo devolvió a `−04`.
+
+*La opción se confirmó en el binario, no se adivinó:* `grep -ao "useWindowsTimezone" /init`.
+
+⚠️ **Y el `[user]` se pierde fácil:** el 4-sep un `tee` pisó el archivo entero y se llevó esa
+sección. **A `/etc/wsl.conf` se le AGREGA con `>>`, nunca se lo reescribe con `>`.**
+
 En cualquiera de los dos, el instalador `scripts/loops/instalar-homelab.sh` corre igual: replica las
 rutas del VPS y no distingue si está en metal, en VM o en WSL.
 
