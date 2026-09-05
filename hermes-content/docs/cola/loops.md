@@ -28,10 +28,15 @@ por **artefactos, nunca por hostname ni IP** — *una IP se mueve, un hostname s
 > **habría instalado los diez crons del VPS** apuntando a worktrees que no existen. Lo diagnosticó
 > el propio loop `web-venta` (tarea `t_812bd90a`) y no lo tocó porque no era su carril.
 >
-> ✅ **Cerrado el mismo 2026-09-05, y por eso `casa` ya tiene filas.** Los quince prompts llevan
-> un **paso 0** en su *Chequeo de arranque* que pregunta por la máquina ANTES de comparar, y su
-> paso 3 rearma sólo las filas de *su* máquina. Mientras ese párrafo decía lo contrario, `casa`
-> tenía que estar vacía; ya no.
+> ✅ **Cerrado el mismo 2026-09-05.** Los quince prompts llevan un **paso 0** en su *Chequeo de
+> arranque* que pregunta por la máquina ANTES de comparar, y su paso 3 rearma sólo las filas de
+> *su* máquina. Ya no hay impedimento técnico para que `casa` tenga filas.
+>
+> **Pero hoy tiene CERO, y es una decisión, no una falta.** El 2026-09-05 Sergio Urcullo redujo el
+> objetivo a *terminar `onia-platform` y cerrar cinco clientes con la v1.0*, y todo lo que no sirva
+> a eso queda **congelado hasta nueva decisión**. Mudar loops de máquina no acerca ese objetivo:
+> mueve dónde corre el mismo trabajo. La infraestructura del nodo quedó **terminada y probada**
+> (ver `PLAN_HOMELAB.md`) y está lista para el día que se retome.
 >
 > ⚠️ **El paso 3 sólo AGREGA, nunca borra.** Eso fija el orden al mudar un loop: **esta tabla
 > tiene que llegar a `main` ANTES de sacar su línea del cron viejo.** Al revés, el primer loop
@@ -113,8 +118,8 @@ manda. Un loop se compara **sólo contra el registro de su propia máquina**:
 |---|---|---|---|
 | `chatbot-cola` | **VPS** | `3 */2 * * *` (UTC) | Carril chatbot: su cola hasta que un desconocido escriba y se vea en la bandeja |
 | `onia-cola` | **VPS** | `33 */2 * * *` (UTC) | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
-| `web-venta` | **casa** | `48 */2 * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
-| `lucia` | **casa** | `37 9,21 * * *` (UTC) | Carril modelos/Higgsfield (rama `claude/lucia-vps`): guiones, briefs y prompts LISTOS. **No dispara nada pago** |
+| `web-venta` | **VPS** | `48 */2 * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
+| `lucia` | **VPS** | `37 9,21 * * *` (UTC) | Carril modelos/Higgsfield (rama `claude/lucia-vps`): guiones, briefs y prompts LISTOS. **No dispara nada pago** |
 | `kpis-semanal` | **VPS** | `7 13 * * 1` (UTC) | Tablero KPIs del lunes del carril marca personal; pide a Sergio los numeros que solo el ve |
 | `recorrido-cliente` | **VPS** | `9 1,4,7,10,13,16,19,22 * * *` (UTC) | Recorre el camino del cliente de punta a punta (rama `claude/recorrido-cliente`) y dice **en qué paso exacto se rompe**, con la captura como prueba |
 | `supervisor` | **VPS** | `29 6,18 * * *` (UTC) | **Audita a los otros loops**: que ninguno cobre por trabajo que no sirve (rama `claude/supervisor`). No mergea a `main` — deja lo que encuentra en el tablero |
