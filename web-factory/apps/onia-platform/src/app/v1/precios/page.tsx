@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { bs, plan, semanalDesde } from "@/lib/pricing";
+import { PLANES, bs, plan, semanalDesde } from "@/lib/pricing";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Pricing } from "@/components/landing-v1/pricing";
@@ -57,14 +57,18 @@ const JSON_LD = {
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
       url: `${SITE_URL}/precios`,
-      offers: [
-        { name: "Básico", price: "320" },
-        { name: "Pro", price: "750" },
-        { name: "Full", price: "1500" },
-      ].map((plan) => ({
+      // Los tres montos estaban tipeados a mano acá —"320", "750", "1500"—
+      // treinta y cinco líneas debajo de la `description` que YA los leía de
+      // la tabla. El gate de precios no los veía porque busca el número
+      // pegado a «Bs» o suelto entre etiquetas, y en el JSON-LD el precio
+      // viaja desnudo y fuera del JSX, con la moneda en otra clave. Google
+      // saca de acá el precio que publica: un plan que cambie dejaba al
+      // buscador anunciando el viejo, que es la forma exacta del desastre de
+      // los cuatro precios vivos. Misma corrección que en `v1/page.tsx`.
+      offers: PLANES.map((p) => ({
         "@type": "Offer",
-        name: plan.name,
-        price: plan.price,
+        name: p.nombre,
+        price: String(p.mensual),
         priceCurrency: "BOB",
         category: "Suscripción mensual",
         availability: "https://schema.org/InStock",
@@ -118,8 +122,8 @@ export default function PreciosPage() {
                 <a href="/comparativa">
                   Mirá Onia contra todo lo que se vende en Bolivia
                 </a>{" "}
-                — con los precios públicos de cada uno y lo que todavía no
-                hacemos, dicho de frente. ¿Preferís tocarlo antes que leer?{" "}
+                — con el precio público de cada uno y su fecha de consulta.
+                ¿Preferís tocarlo antes que leer?{" "}
                 <a href="/prueba-gratis">Probalo gratis 14 días</a>.
               </p>
             </Reveal>

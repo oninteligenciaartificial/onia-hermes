@@ -1,0 +1,19 @@
+{
+  "title": "Atender clientes 24/7 · solo son 4 cosas",
+  "pieza": "hermes-content/carousels/out/statement-atender-24-7.png",
+  "cuenta": "sergio",
+  "formato": "feed 4:5 (1080x1350), imagen unica",
+  "caption": "Atender clientes 24/7 no es contratar a nadie. Son cuatro piezas, y el orden importa:\n\n1. WhatsApp Business con respuestas rapidas. Lo que ya contestas diez veces por dia, escrito UNA vez.\n2. Un asistente que lea el mensaje y redacte con TUS datos: precios, horarios, direccion. (Yo uso Claude.)\n3. Una agenda con horarios reales. Si el asistente puede ofrecer un horario concreto, la charla termina en cita y no en \"despues te aviso\".\n4. Un recordatorio el dia antes. Es la pieza mas barata de las cuatro y la que mas plata salva: la ausencia se avisa, no se descubre.\n\nEl error tipico es empezar por la 2. Sin la 3 y la 4 el asistente contesta lindo y no pasa nada.\n\nArranca hoy por la 1: WhatsApp Business -> Herramientas -> Respuestas rapidas, y carga las cinco preguntas que mas te repiten. Son diez minutos y ya te ahorra la mitad de los mensajes.\n\nDecime en los comentarios cual de las cuatro te falta y te digo por donde armarla.",
+  "hashtags": [
+    "#automatizacion",
+    "#IA",
+    "#bolivia",
+    "#negocios",
+    "#pymes",
+    "#santacruz",
+    "#whatsappbusiness"
+  ],
+  "comment_trigger": "",
+  "_por_que_sin_palabra_clave": "La cuenta 'sergio' (entry_id 17841441395192146) tiene palabras: {} en el workflow n8n ACTIVO 'ONIA - Comentario IG -> DM (Private Reply)' — medido el 2026-09-04 sobre la sqlite del contenedor. Su propio comentario fija la regla: 'palabra solo con recurso detras. Hasta entonces esta cuenta no dispara DMs'. Una palabra clave aca (COMUNIDAD incluida) sale con palabra=null y el que comenta no recibe NADA, sin dejar registro. Por eso el CTA pide un comentario que Sergio contesta el mismo: funciona hoy, sin n8n.",
+  "alt_text": "Cuatro iconos 3D — WhatsApp, Claude, agenda y recordatorio — alrededor del texto 'Atender clientes 24/7: solo son 4 cosas', con un sticker negro que dice SIN CONTRATAR."
+}

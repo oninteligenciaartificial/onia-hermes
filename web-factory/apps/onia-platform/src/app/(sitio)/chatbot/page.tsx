@@ -7,6 +7,8 @@ import {
   META_NOTA,
   A_MEDIDA,
   fmtBs,
+  SALARIO_MINIMO,
+  pctDelSalarioMinimo,
 } from "@/content/chatbot-precios";
 import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
 import { Block, Shape, Btn, Kicker, JsonLd } from "../ui";
@@ -66,17 +68,15 @@ const JSON_LD = {
  * nacional 2026 es dato público con fuente legal (DS 5516), y por eso la
  * fuente se muestra en pantalla junto al número.
  *
- * El porcentaje se DERIVA de `CHATBOT_PLAN.mensual` en vez de escribirse "12":
- * si mañana cambia el precio en content/chatbot-precios.ts (la fuente única),
- * la frase se mueve sola en lugar de quedar mintiendo. Hoy: 390 / 3.300 =
- * 11,8 % → 12 %.
- *
- * ⚠️ La constante vive acá y no en content/chatbot-precios.ts —que es donde
- * corresponde, al lado del precio del que es referencia— porque este carril
- * solo toca las páginas del sitio. Anotado en el reporte.
+ * El monto y el porcentaje salen de content/chatbot-precios.ts, la fuente
+ * única, al lado del precio del que son referencia: las dos mitades de la
+ * frase se mueven por separado —el DS cambia el salario, Sergio cambia el
+ * precio— y escritas acá cualquiera dejaba a la otra mintiendo. Hasta el
+ * 2026-09-04 esta constante estaba tipeada también en la portada y en
+ * /precios; lo sostuvo un comentario que decía que la fuente estaba "fuera de
+ * este carril", y era falso. Ver (sitio)/salario-minimo.test.ts.
  */
-const SALARIO_MINIMO_2026 = 3300;
-const PCT_SALARIO = Math.round((CHATBOT_PLAN.mensual / SALARIO_MINIMO_2026) * 100);
+const PCT_SALARIO = pctDelSalarioMinimo();
 
 /**
  * Apartado del CHATBOT. Montos y promesa SOLO de content/chatbot-precios.ts,
@@ -199,9 +199,10 @@ export default function Chatbot() {
             className={s.body}
             style={{ maxWidth: "44em", fontSize: "1.15em" }}
           >
-            Es el {PCT_SALARIO} % del salario mínimo nacional 2026 (Bs{" "}
-            {fmtBs(SALARIO_MINIMO_2026)}, según el DS 5516), sin aguinaldo ni
-            domingos, por algo que atiende las 24 horas.
+            Es el {PCT_SALARIO} % del salario mínimo nacional{" "}
+            {SALARIO_MINIMO.anio} (Bs {fmtBs(SALARIO_MINIMO.monto)}, según el{" "}
+            {SALARIO_MINIMO.norma}), sin aguinaldo ni domingos, por algo que
+            atiende las 24 horas.
           </p>
           <p className={s.body} style={{ maxWidth: "48em" }}>
             O {precioAnual(bot)}. {META_NOTA} {A_MEDIDA}

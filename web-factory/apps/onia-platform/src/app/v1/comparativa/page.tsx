@@ -5,11 +5,23 @@ import { Proof } from "@/components/sections/proof";
 import { Reveal } from "@/motion";
 import { HUECO } from "@/lib/proof";
 
+/**
+ * ⚠️ La `description` cerraba con *"Y lo que Onia todavía no hace."* hasta el
+ * 2026-09-04, y ésta es la MISMA frase que `(sitio)/comparativa` sacó el
+ * 2026-09-03 por anunciar la carencia en el renglón que busca el clic. Se
+ * arregló allá y su gemela de acá quedó atrás.
+ *
+ * Que esta página esté en el `disallow` de `robots.ts` no la apagaba: medido
+ * contra producción el 2026-09-04, `curl -A "WhatsApp/2.23.20.0"` sobre
+ * `/v1/comparativa` devuelve **HTTP 200** con esa `description` entera — o sea
+ * que era lo que veía un lead al recibir el enlace reenviado. Ahora dice lo
+ * mismo que su canónica, que es el texto ya decidido.
+ */
 export const metadata: Metadata = {
   metadataBase: new URL("https://onia.com.bo/"),
   title: "Onia comparada con los sistemas que se venden en Bolivia",
   description:
-    "Precios y capacidades publicados por el Portal del SIN, los facturadores bolivianos y el software dental de la región, con fecha de consulta. Y lo que Onia todavía no hace.",
+    "Qué cobra y qué resuelve cada sistema que se vende en Bolivia: Portal del SIN, facturadores y software dental de la región. Con precio público y fecha de consulta.",
   alternates: { canonical: "/comparativa" },
 };
 

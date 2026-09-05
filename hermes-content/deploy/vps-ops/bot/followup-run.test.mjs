@@ -638,7 +638,11 @@ test("parseArgs: dry-run por defecto, y acepta las dos formas de cada flag", () 
 
 test("parseSlotsSpec / buildConfig: los horarios entran por CLI o por env, sin inventarse", () => {
   assert.equal(parseSlotsSpec(""), null);
-  assert.deepEqual(parseSlotsSpec("jueves 15:00@2026-07-30T19:00:00Z|viernes 10:00"), [
+  // `now` fijo: este caso prueba el PARSEO, y sin anclarlo tenia fecha de
+  // vencimiento — el 2026-07-30 ya paso, y un horario vencido ahora sale
+  // `pending` (ver el test de anticipacion, abajo).
+  const antesDelSlot = Date.parse("2026-07-29T00:00:00Z");
+  assert.deepEqual(parseSlotsSpec("jueves 15:00@2026-07-30T19:00:00Z|viernes 10:00", { now: antesDelSlot }), [
     { key: "A", label: "jueves 15:00", startAt: "2026-07-30T19:00:00Z", pending: false },
     { key: "B", label: "viernes 10:00", startAt: null, pending: false },
   ]);
@@ -651,6 +655,53 @@ test("parseSlotsSpec / buildConfig: los horarios entran por CLI o por env, sin i
   assert.equal(sinOverrides.dryRun, DEFAULT_CONFIG.dryRun, "y el dryRun sigue siendo el del codigo");
   assert.ok(slotsPending(sinOverrides));
   assert.equal(buildConfig({ slots: "jueves 15:00|viernes 10:00" }).slots[0].label, "jueves 15:00");
+});
+
+test("parseSlotsSpec: un horario que ya no da 24 h de aviso NO se ofrece, sale pendiente", () => {
+  // SEGUNDO CORTE. El primero vive en scripts/loops/renovar-slots-bot.py, que
+  // genera los horarios con margen para toda su vigencia. Este es el que aguanta
+  // cuando ese cron NO corre: el valor de ayer se queda en webhook.env y el bot,
+  // sin este corte, sigue ofreciendolo — primero con pocas horas de aviso y
+  // despues directamente en el pasado, que es "peor que no ofrecer nada, porque
+  // parece que funciona" (docstring del generador).
+  //
+  // El corte no INVENTA una rama nueva: marca `pending`, que es el estado que el
+  // motor ya sabe manejar (M0_SIN_HORARIOS / PENDING_HORARIO_SIN_HORARIOS) y que
+  // `detectSlotChoice` ya descarta. Un horario que no se puede sostener es, para
+  // el guion, exactamente lo mismo que un horario sin definir.
+  const ahora = Date.parse("2026-09-05T08:03:00Z"); // 04:03 La Paz, el caso medido
+
+  const [a, b] = parseSlotsSpec(
+    "sábado 5 de septiembre, 09:00@2026-09-05T13:00:00Z|lunes 7 de septiembre, 14:00@2026-09-07T18:00:00Z",
+    { now: ahora },
+  );
+  assert.equal(a.pending, true, "a 4 h 57 min de aviso, ese horario no se ofrece");
+  assert.equal(b.pending, false, "el de dentro de 2 dias sigue siendo ofrecible");
+  assert.equal(a.label, "sábado 5 de septiembre, 09:00", "la etiqueta se conserva para el log");
+
+  // Un horario en el PASADO: el sintoma que el generador dice evitar y no evitaba.
+  const [pasado] = parseSlotsSpec("viernes 4 de septiembre, 14:00@2026-09-04T18:00:00Z", { now: ahora });
+  assert.equal(pasado.pending, true, "un horario vencido nunca se ofrece");
+
+  // Justo en el limite: 24 h exactas SI se ofrecen (el generador entrega ese borde).
+  const [borde] = parseSlotsSpec("x@2026-09-06T08:03:00Z", { now: ahora });
+  assert.equal(borde.pending, false, "24 h exactas cumplen la regla de Sergio");
+
+  // Fail-closed: un ISO ilegible no se puede sostener. La comparacion contra NaN
+  // da false, asi que el horario cae a `pending` sin necesitar un caso aparte —
+  // pero se ancla aca porque la direccion importa: el error posible es negarse a
+  // ofrecer un horario bueno, nunca prometer uno que no se puede verificar.
+  const [ilegible] = parseSlotsSpec("y@ayer a la tarde", { now: ahora });
+  assert.equal(ilegible.pending, true, "si no se puede verificar, no se promete");
+  // Ojo: el formato que imprime psql ("2026-09-06 08:03:00+00", offset de dos
+  // digitos) SI lo lee Date.parse en Node 20, y al instante correcto — medido el
+  // 2026-09-05. No es la fuente de NaN que la memoria compartida le atribuia.
+  const [psql] = parseSlotsSpec("z@2026-09-07 18:00:00+00", { now: ahora });
+  assert.equal(psql.pending, false, "el formato de psql se entiende, no se descarta");
+
+  // Y el conjunto entero cae a "sin horarios" en cuanto UNO no se puede sostener:
+  // el guion ofrece A y B, no hay forma de renderizar medio par.
+  assert.ok(slotsPending({ slots: [a, b] }), "con A caido, el bot pide horario en vez de inventar");
 });
 
 // ---------------------------------------------------------------------------

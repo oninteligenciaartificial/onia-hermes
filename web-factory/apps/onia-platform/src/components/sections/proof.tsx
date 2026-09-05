@@ -2,14 +2,7 @@
 
 import * as m from "motion/react-m";
 import { Reveal, easeOutExpo, viewportOnce } from "@/motion";
-import {
-  CONTENDIENTES,
-  EJES,
-  FECHA_CONSULTA,
-  HUECO,
-  TC_NOTA,
-  TODAVIA_NO,
-} from "@/lib/proof";
+import { CONTENDIENTES, EJES, FECHA_CONSULTA, HUECO, TC_NOTA } from "@/lib/proof";
 import type { Contendiente, Estado } from "@/lib/proof";
 import styles from "./proof.module.css";
 
@@ -23,9 +16,20 @@ import styles from "./proof.module.css";
  *  1. El mapa de la categoria con nombres y precios PUBLICOS de la competencia.
  *     El visitante puede abrir cada web y verificarlo. Ahi se ve el hueco: los
  *     que facturan no agendan, los que agendan no facturan en Bolivia.
- *  2. Nuestro propio renglon con la factura fiscal marcada EN TRAMITE, y un
- *     ledger de lo que el sistema todavia no hace. Decirlo primero es lo que
- *     hace creible todo lo demas: es un estado del producto, no una disculpa.
+ *  2. Nuestro propio renglon con la factura fiscal marcada EN TRAMITE. Decirlo
+ *     primero es lo que hace creible todo lo demas: es un estado del producto,
+ *     no una disculpa.
+ *
+ * ⚠️ Aca abajo vivia un tercer bloque —"Y esto todavia no lo hace.", las tres
+ * lineas de TODAVIA_NO— y se saco el 2026-09-04. No es un cambio de opinion:
+ * la decision ya estaba tomada y escrita en `(sitio)/comparativa/page.tsx`
+ * ("la tercera anuncia obra en curso, que en una superficie de venta esta
+ * prohibida"), y esta copia de /v1 quedo atras sirviendola con 200 —"el pack
+ * del rubro se esta construyendo"— porque el arreglo se aplico solo donde el
+ * defecto salto. Las dos lineas que si importan al que compra no se perdieron:
+ * la fiscal vive en /facturacion y en el bloque fiscal de /precios, y el
+ * veredicto de la fila de Onia, aca arriba, dice de frente lo del tramite.
+ * Lo sostiene `app/obra-en-el-cuerpo.test.ts`.
  *
  * Forma: un ledger de filas, no una grilla de cards. Cada fila es un
  * contendiente; los tres ejes se leen como una fila de senales encendidas o
@@ -125,30 +129,6 @@ export function Proof() {
           convirtieron a {TC_NOTA}. Ninguna cifra de este cuadro es nuestra.
         </p>
 
-        <div className={styles.noWrap}>
-          <Reveal className={styles.noHead}>
-            <h3 className={styles.noTitle}>Y esto todavía no lo hace.</h3>
-            <p className={styles.noLead}>
-              Lo decimos nosotros primero. Si te enterás en la primera semana,
-              perdimos los dos.
-            </p>
-          </Reveal>
-          <ul className={styles.noLista}>
-            {TODAVIA_NO.map((p, i) => (
-              <m.li
-                key={p.que}
-                className={styles.noItem}
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={viewportOnce}
-                transition={{ duration: 0.45, ease: easeOutExpo, delay: i * 0.06 }}
-              >
-                <strong className={styles.noQue}>{p.que}</strong>
-                <span className={styles.noDetalle}>{p.detalle}</span>
-              </m.li>
-            ))}
-          </ul>
-        </div>
       </div>
     </section>
   );

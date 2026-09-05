@@ -303,3 +303,12 @@ lector se va con algo en la mano.
 necesita el enlace del grupo (sólo lo tiene él) y una edición del workflow, que es de otro carril.
 Queda pedido en el tablero. La casilla 11 de la rúbrica se corrigió: no pregunta si la pieza dice
 una palabra, pregunta si esa palabra **responde hoy**, con el comando para medirlo.
+
+## PUBLICAR cableado — 2026-09-05
+
+`onia-publicar-aprobado.mjs` (vía `postiz_schedule.mjs`) sólo detecta `slide-N.png` en modo
+carrusel — un `.jpg` en el directorio no cuenta, aunque sea la pieza aprobada. Se agregaron
+`slide-01.png`…`slide-07.png` (mismo píxel que los `.jpg`, sólo reencodeados con `ffmpeg`,
+forzados al repo con `git add -f` porque el `.gitignore` de la carpeta excluye `*.png`) y
+`brief.json` con el `caption`. La tarea del tablero con la línea `PUBLICAR:` es `t_4e7adc7b`
+(reemplaza a `t_a9ff7367`, archivada). Detalle del bug y su reproducción: tarea `t_5eb4bccd`.

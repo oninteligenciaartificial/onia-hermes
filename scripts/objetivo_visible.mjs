@@ -64,8 +64,41 @@ import { execFileSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
-/** El inbox cuya bandeja ES el objetivo del carril (el WhatsApp del +591 75414930). */
-export const INBOX = 5;
+/**
+ * Los inboxes por donde entra un desconocido: el widget web de `onia.com.bo` (4) y WhatsApp (5).
+ * Son DOS y no uno porque los cinco desconocidos reales que motivaron este gate escribieron por
+ * el **4**, no por el 5 (ver la cabecera de `lib/chatbot/inboxes-de-la-org.ts` en `onia-platform`).
+ */
+export const INBOXES_DEL_OBJETIVO = [4, 5];
+
+/**
+ * A quien preguntarle por la bandeja: el dueño de CUALQUIER inbox del objetivo, mirando LAS DOS
+ * columnas de canal.
+ *
+ * ⚠️ Nace del 2026-09-05, y es la tercera vez que este archivo se queda ciego por una suposicion
+ * hardcodeada sobre DONDE vive un dato (las dos anteriores: la ruta de `@supabase/ssr`, dos veces).
+ * La consulta preguntaba `chatwootInboxId = 5`, o sea el inbox de WhatsApp en la columna del canal
+ * WEB. Eso era cierto hasta que se arreglo el bug que este gate existe para cazar: `clinic_settings`
+ * paso a tener UNA columna por canal y la migracion movio el 5 a `chatwootWhatsappInboxId`, dejando
+ * el 4 en la vieja. Desde entonces la consulta devolvia VACIO y el gate salia `NO MEDIDO`.
+ *
+ * O sea: **el arreglo que hizo bien el producto dejo ciego al instrumento que lo medía.** No fallo
+ * en verde —el exit es 2— pero el efecto medido es el mismo, porque el objetivo del carril se mide
+ * aparte con otras tres cifras y esas seguian dando en meta.
+ *
+ * Se pregunta por las dos columnas, igual que `inboxesDeLaOrg()` arma su lista `todos`: asi el
+ * gate sobrevive a que el dato se mueva de columna otra vez, en cualquiera de las dos direcciones.
+ */
+export function sqlDueño(inboxes = INBOXES_DEL_OBJETIVO) {
+  const lista = inboxes.join(', ');
+  return (
+    'select u.email from public.clinic_settings cs ' +
+    'join public.profiles p on p."organizationId" = cs."organizationId" ' +
+    'join auth.users u on u.id::text = p."userId" ' +
+    `where cs."chatwootInboxId" in (${lista}) or cs."chatwootWhatsappInboxId" in (${lista}) ` +
+    'order by u.email limit 1;'
+  );
+}
 
 /**
  * Donde puede vivir `@supabase/ssr`: en un checkout de `onia-platform`, que es quien lo usa de
@@ -186,7 +219,8 @@ export function juzgar(respuesta) {
         'BANDEJA VACIA — 200, `sinCanal:false`, y CERO conversaciones. Es la falla muda que este ' +
         'gate existe para cazar: la columna puede estar perfecta y aun asi no llegar nada. Las dos ' +
         'causas conocidas son el token de Chatwoot del contenedor `onia-platform` sin membresia en ' +
-        `el inbox ${INBOX}, y \`esDeInbox\` filtrando todas las filas (\`lib/chatbot/bandeja.ts\`).`,
+        `los inboxes ${INBOXES_DEL_OBJETIVO.join('/')}, y \`esDeInbox\` filtrando todas las filas ` +
+        '(`lib/chatbot/bandeja.ts`).',
     };
   }
 
@@ -227,11 +261,7 @@ function correr(cmd, args, opciones = {}) {
  * consulta entera con `invalid input syntax for type uuid`; castear el lado `auth.users` las
  * ignora, que es lo que se quiere.
  */
-export const SQL_DUEÑO =
-  'select u.email from public.clinic_settings cs ' +
-  'join public.profiles p on p."organizationId" = cs."organizationId" ' +
-  `join auth.users u on u.id::text = p."userId" where cs."chatwootInboxId" = ${INBOX} ` +
-  'order by u.email limit 1;';
+export const SQL_DUEÑO = sqlDueño();
 
 function leerDueño(contenedor) {
   const salida = correr('docker', ['exec', '-i', contenedor, 'psql', '-U', 'postgres', '-d', 'postgres', '-t', '-A'], {
@@ -247,7 +277,12 @@ function leerEnv(contenedor, nombre) {
 
 async function medir({ plataforma, base, appUrl, ssrDir }) {
   const dueño = leerDueño(base);
-  if (!dueño) throw new Error(`ninguna org tiene el inbox ${INBOX}: no hay dueño a quien preguntarle`);
+  if (!dueño) {
+    throw new Error(
+      `ninguna org tiene los inboxes ${INBOXES_DEL_OBJETIVO.join(' ni ')} en \`chatwootInboxId\` ni en ` +
+        '`chatwootWhatsappInboxId`: no hay dueño a quien preguntarle. Se ve con `npm run inbox:tenencia`',
+    );
+  }
 
   const supabaseUrl = leerEnv(plataforma, 'NEXT_PUBLIC_SUPABASE_URL');
   const anon = leerEnv(plataforma, 'NEXT_PUBLIC_SUPABASE_ANON_KEY');
@@ -449,6 +484,44 @@ function selfCheck() {
     afirmar(vivo, `\`@supabase/ssr\` sigue instalado en alguno de: ${SSR_CANDIDATOS.join(', ')}`);
   } else {
     console.log('  (salteado: ningun candidato de `@supabase/ssr` en disco — no es el VPS)');
+  }
+
+  // A QUIEN LE PREGUNTA POR LA BANDEJA. Sin estos casos, `SQL_DUEÑO` no tenia NI UNO: los 30 de
+  // arriba prueban `juzgar()`, que es la parte que nunca se rompio. Lo que se rompio fue la
+  // suposicion de en que columna vive el inbox, y no la custodiaba nadie.
+  afirmar(/chatwootWhatsappInboxId/.test(sqlDueño()), 'el dueño se busca TAMBIEN por la columna de WhatsApp');
+  afirmar(/chatwootInboxId/.test(sqlDueño()), 'y por la de la web: un desconocido entra por cualquiera de las dos');
+  afirmar(sqlDueño([4, 5]).includes('in (4, 5)'), 'pregunta por todos los inboxes del objetivo, no por uno');
+  afirmar(!/=\s*5\b/.test(sqlDueño()), 'y NO ata el inbox 5 a una sola columna, que es como quedo ciego');
+  afirmar(INBOXES_DEL_OBJETIVO.includes(4), 'el inbox 4 (widget web) cuenta: por ahi entraron los 5 desconocidos reales');
+
+  // ⚠️ EL GUARDIA CONTRA LA BASE REAL, hermano del de `@supabase/ssr` contra disco. Los cinco
+  // casos de arriba pasan verdes aunque la consulta no encuentre a NADIE en produccion — que es
+  // exactamente como se perdio esta medicion. Solo corre donde hay base: fuera del VPS no hay
+  // nada que custodiar y un rojo ahi seria falso.
+  const contenedorBase = process.env.ONIA_DB_CONTAINER || 'supabase-db';
+  let hayBase = false;
+  try {
+    correr('docker', ['inspect', '--format', '{{.State.Running}}', contenedorBase], { stdio: 'pipe' });
+    hayBase = true;
+  } catch {
+    hayBase = false;
+  }
+  if (hayBase) {
+    let dueñoReal = '';
+    try {
+      dueñoReal = leerDueño(contenedorBase);
+    } catch (e) {
+      dueñoReal = `(la consulta exploto: ${e.message.split('\n')[0]})`;
+    }
+    afirmar(
+      /@/.test(dueñoReal),
+      `\`SQL_DUEÑO\` encuentra un dueño en la base de HOY (devolvio "${dueñoReal}"). Si esto esta ` +
+        'en rojo, el gate no puede medir el objetivo del carril: mira en que columna quedo el inbox ' +
+        'con `npm run inbox:tenencia`.',
+    );
+  } else {
+    console.log(`  (salteado: no hay contenedor \`${contenedorBase}\` — no es el VPS)`);
   }
 
   if (!process.exitCode) console.log(`self-check: ok — ${total()} casos`);

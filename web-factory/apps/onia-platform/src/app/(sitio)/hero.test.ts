@@ -169,3 +169,61 @@ describe("el hero de la portada se DIBUJA, no se captura", () => {
     );
   });
 });
+
+/**
+ * La IMAGEN de la tarjeta dice lo mismo que el `<head>` que la acompaña.
+ *
+ * Es el eslabón que el barrido del 2026-09-04 no alcanzó, y el más caro de los
+ * tres: el hero cambió, `TITULO`/`DESCRIPCION`/`OG_*` cambiaron con él, y
+ * `tarjeta-social.tsx` se quedó con el hero ANTERIOR entero —"Cerrás vos / El
+ * negocio no", "Un negocio abre 9 horas. Onia atiende las otras 15" y la banda
+ * del día partida en 9/15, que es justo la pieza que `hero.test.ts` acababa de
+ * echar de la portada por ser el argumento del add-on—. La tarjeta quedaba
+ * contradiciéndose sola: el título ofrecía el sistema y el dibujo, que pesa
+ * más y se ve primero, seguía vendiendo al asistente.
+ *
+ * Duele acá más que en la página porque se ve ANTES de que el sitio cargue, y
+ * al que nunca abre el link es lo ÚNICO que ve: es el canal por el que Sergio
+ * manda onia.com.bo a un lead. Ninguna captura del sitio la mira y `curl` a la
+ * ruta tampoco —`forma.test.ts` sólo exige que la tarjeta EXISTA, no qué dice—,
+ * así que el defecto no tenía un solo instrumento encima.
+ *
+ * Se vigila el copy, no el dibujo: qué promete, no cómo se ve.
+ */
+describe("la tarjeta que se ve al compartir el link vende lo mismo que el head", () => {
+  const TARJETA = readFileSync(join(AQUI, "tarjeta-social.tsx"), "utf8");
+
+  /** Sin comentarios: la bitácora de arriba nombra el defecto que explica. */
+  const copy = TARJETA.replace(/\/\*[\s\S]*?\*\//g, " ");
+
+  it("no titula con el add-on ni con su escena", () => {
+    expect(copy, "la tarjeta volvió a vender el asistente").not.toMatch(
+      /asistente|chatbot|\bbot\b|recepcionista|atiende las otras|abre 9 horas/i,
+    );
+  });
+
+  it("dice el titular vigente, el mismo del h1", () => {
+    expect(copy).toMatch(/Todo el negocio/);
+    expect(copy).toMatch(/en una pantalla/i);
+  });
+
+  it("el precio de la tarjeta sale de la fuente, no tipeado", () => {
+    // mismo criterio que el hero: si la tarjeta publica un número, lo lee de
+    // lib/pricing.ts. Una cifra a mano acá se comparte por WhatsApp durante
+    // meses sin que ninguna pantalla la muestre.
+    expect(copy).toMatch(/plan\("basico"\)\.mensual/);
+  });
+
+  it("sigue dibujada: cero captura, como el hero", () => {
+    expect(copy).not.toMatch(/<img\b/);
+    expect(copy).not.toMatch(/backgroundImage/);
+  });
+
+  it("el alt describe lo que la tarjeta dibuja hoy", () => {
+    // el alt es la versión en texto de la misma promesa: si queda viejo, el
+    // lector de pantalla y el buscador leen el hero anterior.
+    const alt = /export const alt =\s*([\s\S]*?);/.exec(TARJETA)?.[1] ?? "";
+    expect(alt).toMatch(/Todo el negocio/);
+    expect(alt).not.toMatch(/atiende las otras|abre 9 horas|asistente/i);
+  });
+});

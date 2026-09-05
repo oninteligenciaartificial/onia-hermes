@@ -147,10 +147,24 @@ function tipeadosAMano(): Hallazgo[] {
     // 2026-09-04 inyectando el defecto exacto —`<span>1.500</span>` en el
     // bloque de precio de la portada, la primera pantalla que ve un lead—:
     // este archivo pasó con sus 4 casos en VERDE. La tercera forma lo caza.
+    //
+    // ⚠️ Y las TRES juntas seguían siendo ciegas a la única superficie de
+    // precio que vive FUERA del JSX: el JSON-LD. Ahí el monto viaja desnudo y
+    // sin etiquetas alrededor —`price: "320"`, con la moneda en otra clave
+    // (`priceCurrency: "BOB"`)—, así que ni el "Bs" pegado ni el texto entre
+    // `>` y `<` lo delatan. No es superficie menor: es de donde Google saca el
+    // precio que publica en el buscador, y no se ve en ninguna captura.
+    // Medido el 2026-09-05: `/v1/precios` ya leía la tabla en su `description`
+    // —atada a la fuente el día anterior, con el comentario que lo narra— y
+    // TREINTA Y CINCO LÍNEAS MÁS ABAJO, en el mismo archivo, tipeaba los tres
+    // montos a mano en su JSON-LD; `/v1/modulos/dental` hacía lo mismo con el
+    // Básico, dos líneas debajo de un `plan("basico").mensual` bien leído. Las
+    // dos rutas las sirve producción con 200. La cuarta forma las caza.
     for (const re of [
       /Bs\s*([0-9][0-9.]*)/g,
       /([0-9][0-9.]*)\s*Bs\b/g,
       textoJsxDesnudo(),
+      /\bprice:\s*"([0-9][0-9.]*)"/g,
     ]) {
       let m: RegExpExecArray | null;
       while ((m = re.exec(src)) !== null) {

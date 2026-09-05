@@ -71,6 +71,24 @@ export const ZONA = "web-factory/apps/onia-platform";
 export const BUILD_ID_VIVO =
   "/opt/onia-landing/runtime-next/apps/onia-platform/.next/BUILD_ID";
 
+/**
+ * Dónde vive el sitio cuando no vive en esta máquina.
+ *
+ * POR QUÉ. Este carril dejó de correr sólo en el VPS: el 2026-09-04 pasó a
+ * correr también en el nodo de casa (WSL), donde `/opt/onia-landing` no existe.
+ * El gate salía por «no pude leer la fecha del build vivo. ¿Estoy en el VPS?»
+ * en su PRIMERA línea, sin llegar a preguntarle nada a git — y con eso el único
+ * instrumento capaz de ver un deploy varado dejó de producir veredicto durante
+ * dos vueltas, mientras veinte arreglos ya en `main` no llegaban al cliente.
+ *
+ * Dónde está montado el disco es una circunstancia de la máquina, no una
+ * propiedad del sitio: el gate pregunta local primero y por SSH después.
+ */
+export const VPS_SSH = process.env.ONIA_VPS_SSH ?? "root@187.77.16.63";
+
+/** Sin `BatchMode` un SSH sin llave se cuelga pidiendo contraseña y el cron muere por timeout. */
+const SSH_ARGS = ["-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "-o", "StrictHostKeyChecking=accept-new"];
+
 /** Donde el runbook de la casa deja los builds ya armados, sin tocar producción. */
 export const STAGED_DIR = "/opt/onia-landing";
 export const STAGED_PREFIX = "runtime-next.new-";
@@ -94,18 +112,53 @@ export const STAGED_VIEJO = "VIEJO";
 export const STAGED_NINGUNO = "NINGUNO";
 
 /**
+ * Lo que Next NUNCA empaqueta: por más que cambie, el navegador de un lead ve
+ * exactamente lo mismo antes y después de publicar.
+ *
+ * Es una lista de EXCLUSIÓN corta y nombrada, no una lista de inclusión de «lo
+ * que sí viaja», y la diferencia es la que decide el sesgo del gate: un archivo
+ * de una clase que nadie previó cuenta como que viaja, así que el error posible
+ * es pedir un deploy de más —barato— y nunca declarar al día un sitio que no lo
+ * está.
+ */
+export const NO_LLEGA_AL_CLIENTE = [
+  /(^|\/)scripts\//,
+  /(^|\/)__tests__\//,
+  /\.test\.[cm]?[jt]sx?$/,
+  /(^|\/)vitest\.config\.[cm]?[jt]s$/,
+];
+
+/**
+ * ¿Este commit puede cambiar algo de lo que ve un lead?
+ *
+ * Basta UN archivo que viaje. Exigir que viajen todos dejaría pasar un arreglo
+ * real escondido entre tests, que es el fallo abierto de siempre; y una lista
+ * ausente o vacía es ausencia de dato —`git log --name-only` pudo no
+ * contestar—, así que se responde que sí. La misma regla que separa `[]` de
+ * `null` en el resto de este archivo.
+ *
+ * @param {string[]|undefined|null} archivos
+ */
+export function llegaAlCliente(archivos) {
+  if (!Array.isArray(archivos) || archivos.length === 0) return true;
+  return archivos.some((f) => !NO_LLEGA_AL_CLIENTE.some((re) => re.test(f)));
+}
+
+/**
  * El diagnóstico, puro: recibe lo medido y decide. Separado de la medición para
  * poder probar las ramas que no se pueden reproducir a pedido (git mudo, home
  * caída) sin tocar producción.
  *
- * @param {{buildIdMtimeMs: number|null, commits: Array<{sha:string,ct:number,subject:string}>|null, homeStatus: number|null}} m
+ * @param {{buildIdMtimeMs: number|null, commits: Array<{sha:string,ct:number,subject:string,archivos?:string[]}>|null, homeStatus: number|null}} m
  */
 export function diagnosticar({ buildIdMtimeMs, commits, homeStatus }) {
   if (typeof buildIdMtimeMs !== "number") {
     return {
       codigo: NO_PUDE_MEDIR,
       varados: [],
-      motivo: `no pude leer la fecha del build vivo (${BUILD_ID_VIVO}). ¿Estoy en el VPS?`,
+      motivo:
+        `no pude leer la fecha del build vivo (${BUILD_ID_VIVO}), ni en este disco` +
+        ` ni por SSH a ${VPS_SSH}. Sin eso no sé qué está publicado: NO es «al día».`,
     };
   }
   if (!Array.isArray(commits)) {
@@ -125,13 +178,25 @@ export function diagnosticar({ buildIdMtimeMs, commits, homeStatus }) {
 
   // Estricto: `next build` escribe el BUILD_ID al TERMINAR, así que un commit
   // del mismo segundo ya está adentro.
-  const varados = commits.filter((c) => c.ct * 1000 > buildIdMtimeMs);
+  const posteriores = commits.filter((c) => c.ct * 1000 > buildIdMtimeMs);
+  // …y de esos, sólo los que un lead podría notar. Un commit al instrumento del
+  // carril es trabajo real, pero publicarlo no le cambia la pantalla a nadie:
+  // contarlo invalidaba el build armado en cada vuelta y el deploy no salía
+  // nunca (medido el 2026-09-04, tres pedidos vencidos el mismo día).
+  const varados = posteriores.filter((c) => llegaAlCliente(c.archivos));
+  const soloHerramientas = posteriores.length - varados.length;
 
   return varados.length === 0
-    ? { codigo: AL_DIA, varados, motivo: "el sitio vivo sirve todo lo que main tiene" }
+    ? {
+        codigo: AL_DIA,
+        varados,
+        soloHerramientas,
+        motivo: "el sitio vivo sirve todo lo que main tiene",
+      }
     : {
         codigo: ARREGLOS_VARADOS,
         varados,
+        soloHerramientas,
         motivo: `${varados.length} arreglo(s) en main que el cliente no ve`,
       };
 }
@@ -186,6 +251,28 @@ export function evaluarStaged({ staged, varados }) {
 }
 
 /**
+ * El comando que se pega en la tarea de deploy. UNO, sin argumentos.
+ *
+ * POR QUÉ NO NOMBRA LA CARPETA. El runbook de la casa es
+ * `swap-and-verify.sh <ruta-staged>`, y esa ruta lleva timestamp
+ * (`runtime-next.new-20260905023618`). Quien pide el deploy la mide, la escribe
+ * en la tarea, y ahí se queda quieta — mientras el build siguiente BORRA esa
+ * carpeta. Cuando Sergio contesta «ok», el swap corta con `ERR: bad STAGE path`
+ * y no publica nada, ningún día.
+ *
+ * Y el fallo se disfraza de decisión pendiente: la tarea se lee como «espera el
+ * OK de Sergio» cuando ya es inejecutable, así que nadie mira la ruta. Medido
+ * sobre t_cb722b7e, que envejeció TRES veces el 2026-09-04 (12:40 el staged
+ * traía viva una etiqueta ya sacada; 16:41 corregido; 20:55 la carpeta ya no
+ * existía). Derivar la ruta «recién» no salva: caduca entre que se escribe y
+ * que Sergio contesta, que es justo el rato que el pedido pasa esperando.
+ *
+ * `publicar.sh` mide, arma si hace falta y publica, así que sirve igual en las
+ * TRES ramas (cubre / viejo / ninguno) y no puede quedar viejo.
+ */
+export const COMANDO_PUBLICAR = "bash /opt/onia-landing/_deploy/publicar.sh";
+
+/**
  * El build armado más reciente que `swap-and-verify.sh` aceptaría, o `null`.
  *
  * Se descartan los que no tienen `server.js` en vez de elegir el más nuevo a
@@ -193,11 +280,12 @@ export function evaluarStaged({ staged, varados }) {
  * rechaza. La fecha sale del BUILD_ID —igual que la del runtime vivo— y no del
  * nombre del directorio: el nombre lo pone quien lo creó y puede mentir.
  */
-export function stagedDisponible(dir = STAGED_DIR) {
+export function stagedLocal(dir = STAGED_DIR) {
   let entradas;
   try {
     entradas = readdirSync(dir).filter((n) => n.startsWith(STAGED_PREFIX));
   } catch {
+    // El directorio no existe acá. Es «no pude preguntar», no «no hay ninguno».
     return null;
   }
 
@@ -217,16 +305,94 @@ export function stagedDisponible(dir = STAGED_DIR) {
     }
   }
 
-  return candidatos.sort((a, b) => b.mtimeMs - a.mtimeMs)[0] ?? null;
+  return candidatos;
 }
 
-/** mtime del BUILD_ID vivo, en ms. `null` si no se puede leer. */
-export function fechaBuildVivo(ruta = BUILD_ID_VIVO) {
+/**
+ * La respuesta del VPS, parseada. Aparte de la red para poder probarla.
+ *
+ * Una línea a la que le falta un campo es un directorio del que no sabemos la
+ * fecha o el BUILD_ID: se descarta en vez de ofrecerse, igual que la rama local
+ * descarta el build sin `server.js`. Ofrecer una ruta que el swap va a rechazar
+ * es un fallo que se disfraza de pedido atendido.
+ *
+ * @param {string} stdout
+ */
+export function parsearStagedRemoto(stdout) {
+  const candidatos = [];
+  for (const linea of String(stdout).split("\n")) {
+    if (!linea.trim()) continue;
+    const [ruta, epoch, buildId] = linea.split("\t");
+    const seg = Number(epoch);
+    if (!ruta?.trim() || !buildId?.trim() || !Number.isFinite(seg) || seg <= 0) continue;
+    candidatos.push({ ruta: ruta.trim(), mtimeMs: seg * 1000, buildId: buildId.trim() });
+  }
+  return candidatos.sort((a, b) => b.mtimeMs - a.mtimeMs);
+}
+
+/**
+ * Lo mismo que `stagedLocal`, preguntado por SSH. `null` si el SSH no contestó.
+ *
+ * Se comprueban en el VPS exactamente las mismas dos cosas que comprueba la
+ * rama local —el `server.js` que exige el swap y un BUILD_ID legible— para que
+ * el veredicto no dependa de desde dónde se miró.
+ */
+export function stagedPorSsh(dir = STAGED_DIR, destino = VPS_SSH) {
+  const guion =
+    `for d in ${dir}/${STAGED_PREFIX}*/; do ` +
+    `[ -f "\${d}${STAGED_MARCA}" ] || continue; ` +
+    `b="\${d}apps/onia-platform/.next/BUILD_ID"; ` +
+    `[ -f "$b" ] || continue; ` +
+    `printf '%s\\t%s\\t%s\\n' "\${d%/}" "$(stat -c %Y "$b")" "$(cat "$b")"; ` +
+    `done`;
+  const r = spawnSync("ssh", [...SSH_ARGS, destino, guion], { encoding: "utf8" });
+  if (r.status !== 0) return null;
+  return parsearStagedRemoto(r.stdout);
+}
+
+/**
+ * El build armado más reciente que `swap-and-verify.sh` aceptaría, o `null`.
+ *
+ * Se busca en el MISMO disco donde se encontró el runtime vivo. Medir el
+ * runtime por SSH y el staged en el disco local diría «no hay ningún build
+ * armado» sobre una máquina donde sí lo hay, y mandaría a rearmar uno que ya
+ * existe: un pedido de deploy inventado, que a Sergio le llega igual que los
+ * reales.
+ */
+export function stagedDisponible(dir = STAGED_DIR, { local = stagedLocal, remoto = stagedPorSsh } = {}) {
+  const candidatos = local(dir) ?? remoto(dir);
+  if (!Array.isArray(candidatos)) return null;
+  return candidatos.slice().sort((a, b) => b.mtimeMs - a.mtimeMs)[0] ?? null;
+}
+
+/** mtime del BUILD_ID vivo en este disco, en ms. `null` si no está montado acá. */
+export function mtimeLocal(ruta = BUILD_ID_VIVO) {
   try {
     return statSync(ruta).mtimeMs;
   } catch {
     return null;
   }
+}
+
+/** Lo mismo, preguntado al VPS. `null` si el SSH no contestó. */
+export function mtimePorSsh(ruta = BUILD_ID_VIVO, destino = VPS_SSH) {
+  const r = spawnSync("ssh", [...SSH_ARGS, destino, "stat", "-c", "%Y", ruta], {
+    encoding: "utf8",
+  });
+  if (r.status !== 0) return null;
+  const seg = Number(r.stdout.trim());
+  return Number.isFinite(seg) && seg > 0 ? seg * 1000 : null;
+}
+
+/**
+ * mtime del BUILD_ID vivo, en ms, venga de donde venga. `null` si ninguna de
+ * las dos vías contestó — que sigue siendo ausencia de dato, nunca «al día».
+ *
+ * El disco local manda siempre que conteste: en el VPS salir a la red sería más
+ * lento y podría no estar configurado.
+ */
+export function fechaBuildVivo(ruta = BUILD_ID_VIVO, { local = mtimeLocal, remoto = mtimePorSsh } = {}) {
+  return local(ruta) ?? remoto(ruta);
 }
 
 /**
@@ -245,7 +411,11 @@ export function commitsDesde(desdeMs, zona = ZONA) {
     "git",
     [
       "log",
-      "--format=%H%x09%ct%x09%s",
+      // El NUL abre cada cabecera. Es el único byte que no puede aparecer en el
+      // asunto de un commit ni en un nombre de archivo, así que distinguir
+      // cabecera de archivo no depende de adivinar el formato de git.
+      "--format=%x00%H%x09%ct%x09%s",
+      "--name-only",
       `--since=@${Math.floor(desdeMs / 1000)}`,
       "origin/main",
       "--",
@@ -254,14 +424,24 @@ export function commitsDesde(desdeMs, zona = ZONA) {
     { encoding: "utf8" },
   );
   if (r.status !== 0) return null;
-  return r.stdout
-    .split("\n")
-    .filter(Boolean)
-    .map((l) => {
-      const [sha, ct, ...resto] = l.split("\t");
-      return { sha: sha.slice(0, 9), ct: Number(ct), subject: resto.join("\t") };
-    })
-    .filter((c) => Number.isFinite(c.ct));
+
+  const commits = [];
+  for (const linea of r.stdout.split("\n")) {
+    if (linea.startsWith("\0")) {
+      const [sha, ct, ...resto] = linea.slice(1).split("\t");
+      commits.push({
+        sha: sha.slice(0, 9),
+        ct: Number(ct),
+        subject: resto.join("\t"),
+        archivos: [],
+      });
+    } else if (linea && commits.length > 0) {
+      // Con pathspec, `--name-only` sólo lista los archivos de la zona: es
+      // exactamente el conjunto sobre el que hay que decidir si viaja.
+      commits[commits.length - 1].archivos.push(linea);
+    }
+  }
+  return commits.filter((c) => Number.isFinite(c.ct));
 }
 
 /** Código HTTP de la home. `null` si no contestó. */
@@ -295,12 +475,23 @@ function main() {
       ? new Date(buildIdMtimeMs).toISOString().replace("T", " ").slice(0, 16) + " UTC"
       : "?";
 
+  // Se nombra siempre, en las dos ramas: si no, el conteo del gate no cuadra
+  // con el de `git log` y el que audita concluye que el gate se comió commits.
+  const nota =
+    r.soloHerramientas > 0
+      ? `\n(${r.soloHerramientas} commit(s) más de la zona tocan sólo herramientas` +
+        " —scripts y tests—, que no viajan al navegador: no piden deploy.)"
+      : "";
+
   if (r.codigo === AL_DIA) {
-    console.log(`DEPLOY AL DIA — onia.com.bo sirve el build del ${cuando}, sin nada varado.`);
+    console.log(
+      `DEPLOY AL DIA — onia.com.bo sirve el build del ${cuando}, sin nada varado.${nota}`,
+    );
   } else if (r.codigo === ARREGLOS_VARADOS) {
     console.error(`ARREGLOS VARADOS — onia.com.bo sirve el build del ${cuando}.`);
     console.error(`${r.varados.length} commit(s) de ${ZONA} en main que el cliente NO ve:\n`);
     for (const c of r.varados) console.error(`  ${c.sha}  ${c.subject}`);
+    if (nota) console.error(nota);
     const staged = stagedDisponible();
     const s = evaluarStaged({ staged, varados: r.varados });
     console.error(
@@ -308,22 +499,26 @@ function main() {
         "\nque ya existe (una sola, no una por commit).\n",
     );
 
+    // El ESTADO del staged se sigue diciendo —es el diagnóstico, y sirve para
+    // saber si hay que rearmar—, pero ya no se emite un comando por rama: el
+    // que se pega es siempre el mismo y no nombra ninguna carpeta.
     if (s.estado === STAGED_CUBRE) {
-      console.error(`Build ya armado que SÍ los trae (${s.motivo}):\n`);
-      console.error(`  bash /opt/onia-landing/_deploy/swap-and-verify.sh ${staged.ruta}`);
-      console.error(`  BUILD_ID staged ${staged.buildId} — el vivo es otro (${cuando})`);
-      console.error(
-        "\nLa ruta se derivó recién, no se copió de otra vuelta: los staged se borran" +
-          "\nunos a otros y un comando pegado ayer apunta a una carpeta que ya no existe.",
-      );
+      console.error(`Hay un build armado que SÍ los trae (${s.motivo}).`);
+      console.error(`BUILD_ID staged ${staged.buildId} — el vivo es otro (${cuando}).\n`);
     } else if (s.estado === STAGED_VIEJO) {
-      console.error(`NO publicar el build que hay armado — ${s.motivo}:\n`);
+      console.error(`El build que hay armado quedó viejo — ${s.motivo}:\n`);
       for (const c of s.faltan) console.error(`  queda afuera  ${c.sha}  ${c.subject}`);
-      console.error("\nHay que rearmarlo desde main:  bash /opt/onia-landing/_deploy/build-and-stage.sh");
+      console.error("");
     } else {
-      console.error(`${s.motivo}. Hay que armarlo desde main antes de pedir el swap:`);
-      console.error("  bash /opt/onia-landing/_deploy/build-and-stage.sh");
+      console.error(`${s.motivo}.\n`);
     }
+
+    console.error(`El comando, el mismo en los tres casos (mide, arma si hace falta y publica):\n`);
+    console.error(`  ${COMANDO_PUBLICAR}\n`);
+    console.error(
+      "No nombra la carpeta armada a propósito: los staged se borran unos a otros y" +
+        "\nun pedido que la nombra ya no se puede ejecutar cuando llega el OK.",
+    );
   } else {
     console.error(`NO PUDE MEDIR — ${r.motivo}`);
   }
