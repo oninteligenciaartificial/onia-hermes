@@ -16,7 +16,75 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { veredicto } from './addon_canal_vivo.mjs';
+import { veredicto, sinCanal } from './addon_canal_vivo.mjs';
+
+// ─── Quien queda sin canal ─────────────────────────────────────────────────
+//
+// Esta es la mitad que el 2026-09-05 daba ROJO FALSO durante horas, con el
+// texto de un defecto real y sosteniendo DOS pedidos de deploy ya vencidos.
+//
+// El gate definia "afectada" como "tiene la capacidad activa y la columna vieja
+// en false" — que era el sintoma correcto MIENTRAS el codigo leia la columna
+// cruda. Desplegado el fix, esa consulta describe el estado SANO: son justo las
+// orgs que el arreglo arreglo. Por construccion no podia volver a verde nunca,
+// porque para eso el booleano viejo tendria que estar en `true`, que es la
+// columna que el fix dejo de usar.
+//
+// La pregunta correcta es la que hace el producto (lib/plan-limits.ts):
+//   isWhatsAppAddonActive = whatsappAddon || (entitlement active y no vencido)
+// Una org queda sin canal cuando le OTORGARON el add-on y esa expresion da
+// false. Medido mirando la pantalla de zz-qa-clinica-chatbot-9k651, una de las
+// tres que el gate declaraba rotas: decia "Conectar mi WhatsApp".
+
+const FUTURO = new Date('2030-01-01T00:00:00Z');
+const AHORA = new Date('2026-09-05T18:00:00Z');
+
+test('SANA: capacidad activa sin vencimiento y la columna vieja en false', () => {
+  // El caso de las 3 orgs reales del 2026-09-05. El gate viejo las contaba a las
+  // tres como rotas; el producto les da el canal.
+  const filas = [
+    { slug: 'onia-interna', whatsappAddon: false, status: 'active', validUntil: null },
+    { slug: 'zz-qa-clinica-chatbot-9k651', whatsappAddon: false, status: 'active', validUntil: FUTURO },
+    { slug: 'zz-qa-ferreteria-tornillo-ommbt', whatsappAddon: false, status: 'active', validUntil: null },
+  ];
+  assert.deepEqual(sinCanal(filas, AHORA), []);
+});
+
+test('SANA: la columna vieja en true alcanza sola, aunque no haya capacidad', () => {
+  const filas = [{ slug: 'clinica-sergio', whatsappAddon: true, status: null, validUntil: null }];
+  assert.deepEqual(sinCanal(filas, AHORA), []);
+});
+
+test('ROTA: se lo otorgaron y la capacidad VENCIO — el producto le niega el canal', () => {
+  const filas = [{ slug: 'vencida', whatsappAddon: false, status: 'active', validUntil: new Date('2026-08-30T00:00:00Z') }];
+  assert.deepEqual(sinCanal(filas, AHORA).map((o) => o.slug), ['vencida']);
+});
+
+test('ROTA: se lo otorgaron y la fila quedo en un status que no es active', () => {
+  const filas = [{ slug: 'revocada', whatsappAddon: false, status: 'revoked', validUntil: null }];
+  assert.deepEqual(sinCanal(filas, AHORA).map((o) => o.slug), ['revocada']);
+});
+
+test('BUILD VIEJO: las MISMAS orgs sanas vuelven a estar rotas si el build ignora la capacidad', () => {
+  // La causa 'falta_desplegar' tiene que sobrevivir al arreglo. Si este caso
+  // diera [], el gate habria perdido la mitad que motivo su existencia: el dia
+  // que produccion vuelva a correr un build que lee la columna cruda, tres
+  // clientes con el add-on pagado ven "Contratar el chatbot" y nadie se entera.
+  const filas = [
+    { slug: 'onia-interna', whatsappAddon: false, status: 'active', validUntil: null },
+    { slug: 'zz-qa-clinica-chatbot-9k651', whatsappAddon: false, status: 'active', validUntil: FUTURO },
+  ];
+  assert.deepEqual(sinCanal(filas, AHORA, false).map((o) => o.slug), ['onia-interna', 'zz-qa-clinica-chatbot-9k651']);
+  // ...y el que tiene la columna vieja en true sigue sano tambien en ese mundo.
+  assert.deepEqual(sinCanal([{ slug: 'ok', whatsappAddon: true, status: null, validUntil: null }], AHORA, false), []);
+});
+
+test('FUERA DE ALCANCE: a quien nunca se lo otorgaron no le falta nada', () => {
+  // Sin fila de entitlement y sin la columna: no compro el add-on. Contarla como
+  // afectada seria el error simetrico — inventar 3 clientes rotos por vuelta.
+  const filas = [{ slug: 'no-compro', whatsappAddon: false, status: null, validUntil: null }];
+  assert.deepEqual(sinCanal(filas, AHORA), []);
+});
 
 test('ROJO: el build vivo lee la columna cruda y hay clientes con la capacidad otorgada', () => {
   const v = veredicto({
