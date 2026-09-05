@@ -469,6 +469,43 @@ Por eso los avisos dicen *"no llegan sus registros"* y nunca *"está caído"*: l
 honesta de un silencio es que no hay noticias. El que lo reciba tiene que mirar la PC — el vigía
 acota el problema a esa máquina, no lo diagnostica.
 
+### 🔴 El segundo punto ciego, y este ya pasó: **un nodo que corre código viejo**
+
+El vigía de arriba responde *"¿el loop está dando vueltas?"*. No responde *"¿está dando vueltas
+con el código de hoy?"*. Son preguntas distintas y la segunda falla en silencio.
+
+**Medido el 2026-09-05**, con el nodo instalado el día anterior:
+
+| qué | estado real |
+|---|---|
+| el cron de sincronización | fallaba con `Permission denied` **en cada vuelta**, desde la instalación |
+| el repo del nodo | **97 commits atrás** de `origin/main` |
+| los prompts desplegados | congelados en los del 2026-09-04 22:45 |
+
+Dos causas independientes, y ninguna hace ruido:
+
+1. `sincronizar.sh` está como `100644` en git y la línea de cron lo invocaba **por ruta**, sin
+   `bash`. La instalación no lo nota porque ahí sí se corre con `bash` y sale verde: **la prueba
+   de humo pasa y lo único que falla es el trabajo repetido.**
+2. El script que arregla eso es el mismo que está desactualizado. Un nodo atrasado no se puede
+   poner al día solo.
+
+**Y lo mismo le pasó al VPS, por otra vía:** la guarda que protege los shims del nodo buscaba su
+marca en el archivo destino entero, y esa marca aparece en el código de la propia guarda — así
+que `sincronizar.sh` se negaba a desplegarse a sí mismo. El sync del VPS quedó congelado desde
+las 00:43 y cada vuelta horaria loggeó *"conservado (shim del nodo de casa)"* **en el VPS**,
+donde no hay ningún nodo de casa. Quince horas de un mensaje absurdo que nadie leyó.
+
+**La regla que sale de acá:** encender un loop en una máquina sin verificar antes qué versión del
+prompt tiene desplegada es peligroso, no sólo desprolijo. Los prompts viejos no traen el **paso 0**
+del *Chequeo de arranque*, así que comparan contra las filas `VPS` — y su paso 3 **reinstala lo
+que falte**. Un loop con el prompt viejo corriendo en la PC de casa le habría instalado ahí los
+diez crons del VPS. Antes de encender:
+
+```bash
+grep -c "En qué máquina estás" /root/bin/loops/<id>.md   # tiene que dar 1
+```
+
 ### Los otros
 
 | Riesgo | Tamaño real |
