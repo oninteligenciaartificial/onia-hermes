@@ -28,10 +28,16 @@ por **artefactos, nunca por hostname ni IP** — *una IP se mueve, un hostname s
 > **habría instalado los diez crons del VPS** apuntando a worktrees que no existen. Lo diagnosticó
 > el propio loop `web-venta` (tarea `t_812bd90a`) y no lo tocó porque no era su carril.
 >
-> ⚠️ **Lo que todavía NO está arreglado:** los quince prompts siguen diciendo textual *"Corrés en
-> el VPS (187.77.16.63)"*, que es mentira fuera del VPS, y su *Chequeo de arranque* no compara
-> contra la máquina antes de rearmar. **Mientras eso siga así, `casa` no debe tener filas acá.**
-> El gate ya no miente; los prompts sí.
+> ✅ **Cerrado el mismo 2026-09-05, y por eso `casa` ya tiene filas.** Los quince prompts llevan
+> un **paso 0** en su *Chequeo de arranque* que pregunta por la máquina ANTES de comparar, y su
+> paso 3 rearma sólo las filas de *su* máquina. Mientras ese párrafo decía lo contrario, `casa`
+> tenía que estar vacía; ya no.
+>
+> ⚠️ **El paso 3 sólo AGREGA, nunca borra.** Eso fija el orden al mudar un loop: **esta tabla
+> tiene que llegar a `main` ANTES de sacar su línea del cron viejo.** Al revés, el primer loop
+> que corra en la máquina vieja ve *"fila mía sin línea en cron"* y **la vuelve a instalar** —
+> y quedan las dos máquinas corriendo el mismo loop sobre la misma rama. Y como nunca borra, la
+> línea vieja **no se va sola**: hay que sacarla a mano.
 
 🔄 **Desde el 2026-09-02 el VPS se despliega solo.** `/root/bin/onia-loops-sync.sh` corre cada
 hora al minuto 44 —once minutos después del integrador— y copia el corredor y los prompts
@@ -97,13 +103,18 @@ manda. Un loop se compara **sólo contra el registro de su propia máquina**:
 - **`VPS`** → línea de `crontab` en `187.77.16.63`, apuntando a `/root/bin/onia-loop.sh <id>`.
   Se lista con `crontab -l`. Detalle de instalación y barandas:
   [`scripts/loops/README.md`](../../../scripts/loops/README.md).
+- **`casa`** → línea de `crontab` dentro de WSL en la PC de casa, misma forma que el VPS. **El
+  horario se muda TAL CUAL**: mudar no es cambiar la cadencia. La lista por defecto de
+  `instalar-homelab.sh` es anterior a las bajadas de cadencia del 3 y 4 de septiembre y corre
+  `web-venta` cada hora y `lucia` 8 veces al día — usarla al mudar multiplicaría el gasto por 2
+  y por 4. **Manda la columna `cron (UTC)` de esta tabla, no el instalador.**
 
 | id | dónde corre | cron | para qué sirve |
 |---|---|---|---|
 | `chatbot-cola` | **VPS** | `3 */2 * * *` (UTC) | Carril chatbot: su cola hasta que un desconocido escriba y se vea en la bandeja |
 | `onia-cola` | **VPS** | `33 */2 * * *` (UTC) | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
-| `web-venta` | **VPS** | `48 */2 * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
-| `lucia` | **VPS** | `37 9,21 * * *` (UTC) | Carril modelos/Higgsfield (rama `claude/lucia-vps`): guiones, briefs y prompts LISTOS. **No dispara nada pago** |
+| `web-venta` | **casa** | `48 */2 * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
+| `lucia` | **casa** | `37 9,21 * * *` (UTC) | Carril modelos/Higgsfield (rama `claude/lucia-vps`): guiones, briefs y prompts LISTOS. **No dispara nada pago** |
 | `kpis-semanal` | **VPS** | `7 13 * * 1` (UTC) | Tablero KPIs del lunes del carril marca personal; pide a Sergio los numeros que solo el ve |
 | `recorrido-cliente` | **VPS** | `9 1,4,7,10,13,16,19,22 * * *` (UTC) | Recorre el camino del cliente de punta a punta (rama `claude/recorrido-cliente`) y dice **en qué paso exacto se rompe**, con la captura como prueba |
 | `supervisor` | **VPS** | `29 6,18 * * *` (UTC) | **Audita a los otros loops**: que ninguno cobre por trabajo que no sirve (rama `claude/supervisor`). No mergea a `main` — deja lo que encuentra en el tablero |

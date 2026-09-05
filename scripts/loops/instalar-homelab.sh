@@ -38,20 +38,32 @@ PLATFORM="${ONIA_PLATFORM_DIR:-$BASE/onia-platform}"
 PLATFORM_URL="${ONIA_PLATFORM_URL:-git@github.com:oninteligenciaartificial/onia-platform.git}"
 
 # Qué loops corre ESTA maquina. Cada linea: <id> <rama> <cron>.
-# Los horarios salen de hermes-content/docs/cola/loops.md — con un DESFASE de
-# unos minutos respecto del VPS, a proposito: si los dos nodos arrancan al mismo
-# minuto se pisan la cuota de Claude, que es COMPARTIDA por cuenta y no por
-# maquina (ver el bloque "session limit" de onia-loop.sh).
+#
+# ⚠️ El horario va IDENTICO al de la columna `cron (UTC)` de
+# hermes-content/docs/cola/loops.md. No es una preferencia: el gate
+# (scripts/loops_registrados.mjs) compara el HORARIO, no solo el id, y un minuto
+# de diferencia sale como "horario distinto" y deja `main` en rojo para los
+# quince carriles, porque el integrador corre la cadena entera antes de mergear.
+#
+# Hasta el 2026-09-05 esta tabla tenia un desfase de +3 min "a proposito", para
+# que los dos nodos no arrancaran en el mismo minuto y se pisaran la cuota de
+# Claude (que es COMPARTIDA por cuenta, no por maquina). La premisa era falsa:
+# un loop corre en UNA sola maquina —lo dice su columna «donde corre»—, asi que
+# nunca podia pisarse a si mismo. Lo unico que lograba el desfase era romper el
+# gate. Peor: `web-venta` y `lucia` habian quedado ademas con la CADENCIA vieja,
+# anterior a las bajadas del 3 y 4 de septiembre —cada hora en vez de cada 2 h, y
+# 8 veces al dia en vez de 2—, asi que mudarlos con esta lista los habria corrido
+# 2 y 4 veces mas seguido. Mudar no es cambiar la cadencia.
 CATALOGO=$(cat <<'EOF'
-web-factory-dev   claude/web-factory-dev              24 2,8,14,20 * * *
-web-venta         claude/web-venta                    52 * * * *
-tendencias        claude/tendencias                   54 11,23 * * *
-lucia             claude/lucia-vps                    40 0,3,6,9,12,15,18,21 * * *
-marca-personal    claude/marca-personal-loop          59 13,21 * * *
-investigacion     claude/investigacion                29 9 * * *
-supervisor        claude/supervisor                   32 2,8,14,20 * * *
-calidad-generado  claude/calidad-generado             8 3,9,15,21 * * *
-contenido-cola    claude/ads-creatividades-publicos   14 */3 * * *
+web-factory-dev   claude/web-factory-dev              21 2,8,14,20 * * *
+web-venta         claude/web-venta                    48 */2 * * *
+tendencias        claude/tendencias                   51 11,23 * * *
+lucia             claude/lucia-vps                    37 9,21 * * *
+marca-personal    claude/marca-personal-loop          56 13,21 * * *
+investigacion     claude/investigacion                26 9 * * *
+supervisor        claude/supervisor                   29 6,18 * * *
+calidad-generado  claude/calidad-generado             5 3,9,15,21 * * *
+contenido-cola    claude/ads-creatividades-publicos   11 */3 * * *
 EOF
 )
 ASIGNADOS="${ONIA_LOOPS_HOMELAB:-web-factory-dev web-venta tendencias lucia marca-personal}"
