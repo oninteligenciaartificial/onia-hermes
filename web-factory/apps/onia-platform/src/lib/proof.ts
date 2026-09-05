@@ -122,9 +122,35 @@ export const CONTENDIENTES: readonly Contendiente[] = [
 /**
  * El hallazgo. No es una ventaja de features: es una categoria que nadie ocupa.
  * Sale de ONIA_PRECIOS_COMPETENCIA_20260730.md §Lectura punto 4.
+ *
+ * 🔴 **Nombra los TRES ejes, y uno de ellos —la factura— nosotros no lo
+ * cumplimos todavia** (`siat: "tramite"` en la fila de Onia de aca arriba). Por
+ * eso solo se publica JUNTO a `CONTENDIENTES`: con la tabla al lado es el hueco
+ * del mercado, con su fuente y con nuestro tramite a la vista; sin la tabla se
+ * lee como que Onia lo ocupa entero, que es una promesa falsa. Lo sostiene
+ * `app/(sitio)/promesa-en-el-cuerpo.test.ts`, que mide el grafo de imports.
+ *
+ * Para una superficie donde la tabla no entra —la portada— va `HUECO_PARTIDO`.
  */
 export const HUECO =
   "No existe un solo software vendido en Bolivia que cruce agenda + ficha del cliente + factura SIAT.";
+
+/**
+ * El MISMO hallazgo, dicho sin prometer la pata que todavia no tenemos.
+ *
+ * La portada no puede traer la tabla entera, y sin ella `HUECO` deja de ser un
+ * dato para volverse una insinuacion: si "nadie cruza agenda + ficha + factura
+ * SIAT" y el parrafo siguiente dice "Onia unifica...", el lead entiende que
+ * facturamos. No facturamos: el emisor esta en tramite ante el SIN.
+ *
+ * Esta forma dice el hueco por sus dos mitades, que es como se ve en los datos,
+ * y describe a los OTROS en vez de prometer por nosotros. Es verificable contra
+ * `CONTENDIENTES` y su test lo comprueba fila por fila, asi que el dia que
+ * alguien del mercado cruce las dos patas la frase se pone en ROJO en vez de
+ * quedar mintiendo en la primera pantalla que ve un lead.
+ */
+export const HUECO_PARTIDO =
+  "El que te factura en Bolivia no te agenda. El que te agenda no factura en Bolivia.";
 
 /**
  * El ledger de honestidad, INTERNO: cada linea es una cosa DEL PRODUCTO que

@@ -10,7 +10,7 @@ import {
   SALARIO_MINIMO,
   pctDelSalarioMinimo,
 } from "@/content/chatbot-precios";
-import { HUECO, FECHA_CONSULTA } from "@/lib/proof";
+import { HUECO_PARTIDO, FECHA_CONSULTA } from "@/lib/proof";
 import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
 import { EMPEZAR_URL } from "./nav";
 import { ALTA_VERBO_VOS, CTA_ALTA, ctaAltaPlan } from "./alta";
@@ -452,12 +452,16 @@ export default function Portada() {
         </Reveal>
       </Block>
 
-      {/* 3 · HECHO FUERTE — el hueco de mercado, sourced (proof.ts) */}
+      {/* 3 · HECHO FUERTE — el hueco de mercado, sourced (proof.ts).
+          Va HUECO_PARTIDO y no HUECO: acá no entra la tabla, y sin la tabla la
+          forma larga nombra la factura SIAT —que tenemos en trámite— justo
+          antes de "Onia unifica…", así que promete que facturamos. Lo sostiene
+          promesa-en-el-cuerpo.test.ts; la forma larga vive en /comparativa. */}
       <Block surface="green" labelledBy="hecho">
         <Reveal>
           <Kicker>El hueco</Kicker>
           <p id="hecho" className={s.h2} style={{ maxWidth: "22ch" }}>
-            {HUECO}
+            {HUECO_PARTIDO}
           </p>
           <p className={s.body} style={{ fontSize: "1.15em" }}>
             Onia unifica la gestión y los agentes con IA en un solo sistema,
