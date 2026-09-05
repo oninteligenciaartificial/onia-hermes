@@ -327,6 +327,14 @@ BAJAR
 fi
 
 # ── 5. Corredor y prompts, desde origin/main ─────────────────────────────────
+# ⚠️ La linea de cron lo invoca con `/bin/bash` EXPLICITO, no por su bit de
+# ejecucion. El 2026-09-05 el nodo de casa aparecio congelado 97 commits atras:
+# `sincronizar.sh` esta como 100644 en git, asi que el cron fallaba con
+# "Permission denied" en cada vuelta. Y no se noto porque la instalacion SI
+# funciona —la linea 336 ya lo corre con `bash`—, asi que la prueba de humo
+# pasaba en verde y lo unico que fallaba era el trabajo repetido. El nodo
+# quedo corriendo el codigo del dia que se instalo, en silencio, con una sola
+# linea en un log que nadie mira.
 # Se REUSA sincronizar.sh tal cual. Ya despliega desde origin/main de forma
 # atomica y trae las dos guardas anti-degradacion; escribir un segundo
 # desplegador para el homelab seria mantener dos.
@@ -369,7 +377,7 @@ if [ "$SOLO_PRUEBA" = 0 ]; then
   # mientras corre aca, su log se actualiza solo". O sea que hoy no lee nada.
   # El dia del paso 10 alcanza con arrancarlo con ONIA_LOG_DIR=/var/log/homelab,
   # que es una variable que ese script YA tiene. Cero cambios de codigo alla.
-  BLOQUE="$MARCA"$'\n'"*/10 * * * * rsync -q --rsync-path='mkdir -p /var/log/homelab && rsync' -e 'ssh -i $LLAVE -o StrictHostKeyChecking=accept-new -o BatchMode=yes -o ConnectTimeout=20' /var/log/onia-loop-*.log $VPS:/var/log/homelab/ >/dev/null 2>&1"$'\n'"*/15 * * * * $BIN/onia-memoria-bajar.sh >/dev/null 2>&1"$'\n'"44 * * * * ONIA_LOOPS_REPO=$CLON ONIA_LOOPS_BIN=$BIN ONIA_TG=$BIN/onia-tg.sh $CLON/scripts/loops/sincronizar.sh >/var/log/onia-loops-sync.log 2>&1"
+  BLOQUE="$MARCA"$'\n'"*/10 * * * * rsync -q --rsync-path='mkdir -p /var/log/homelab && rsync' -e 'ssh -i $LLAVE -o StrictHostKeyChecking=accept-new -o BatchMode=yes -o ConnectTimeout=20' /var/log/onia-loop-*.log $VPS:/var/log/homelab/ >/dev/null 2>&1"$'\n'"*/15 * * * * $BIN/onia-memoria-bajar.sh >/dev/null 2>&1"$'\n'"44 * * * * ONIA_LOOPS_REPO=$CLON ONIA_LOOPS_BIN=$BIN ONIA_TG=$BIN/onia-tg.sh /bin/bash $CLON/scripts/loops/sincronizar.sh >/var/log/onia-loops-sync.log 2>&1"
   for id in $ASIGNADOS; do
     CRON=$(echo "$CATALOGO" | awk -v i="$id" '$1==i{$1="";$2="";sub(/^ +/,"");print}')
     BLOQUE="$BLOQUE"$'\n'"$CRON $BIN/onia-loop.sh $id"
