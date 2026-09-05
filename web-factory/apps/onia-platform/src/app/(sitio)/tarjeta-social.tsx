@@ -1,5 +1,7 @@
 import { ImageResponse } from "next/og";
 
+import { bs, plan, PRUEBA } from "@/lib/pricing";
+
 /**
  * La tarjeta social del sitio de venta — DIBUJADA, no fotografiada.
  *
@@ -14,12 +16,27 @@ import { ImageResponse } from "next/og";
  *
  * Se dibuja con el mismo lenguaje que el resto del sitio (Sergio, 2026-09-01:
  * "no coloques capturas literales del sistema, se ve mal, coloca cosas
- * referenciales") y con la MISMA pieza que él aprobó ese día: el hero del
- * resultado. El día del negocio empieza a las 09:00 —como lo piensa el dueño,
- * no como lo piensa un reloj—, nueve horas de tinta son las que atiende él y
- * quince de verde señal las que atiende Onia; el verde se escapa por el borde
- * derecho porque esas horas no terminan. Cero <img>, cero sombra, y el verde va
- * en FORMAS, nunca en texto.
+ * referenciales"). Cero <img>, cero sombra, y el verde va en FORMAS, nunca en
+ * texto.
+ *
+ * ⚠️ **Qué dice, y por qué cambió el 2026-09-05.** Hasta hoy esta tarjeta era
+ * el hero ANTERIOR entero: "Cerrás vos / El negocio no", "Un negocio abre 9
+ * horas. Onia atiende las otras 15" y el día partido en 9/15. Esa escena es la
+ * del ASISTENTE —add-on de `lib/pricing.ts`, Bs 390—, y el 2026-09-04 se la
+ * echó de la portada justamente por eso (`hero.test.ts`, Sergio 2026-09-03:
+ * "el sistema no ofrece directamente el bot, ofrece solo el sistema").
+ *
+ * El barrido de ese día alcanzó el hero, el `<title>`, la `description` y los
+ * `og:*` — y paró ahí. La tarjeta quedó contradiciendo a su propio `<head>`:
+ * el título ofrecía el sistema y el dibujo, que pesa más y se lee primero,
+ * seguía vendiendo al bot. Es la superficie que se ve ANTES de que el sitio
+ * cargue y la ÚNICA que ve el que nunca abre el link — el canal por el que
+ * Sergio manda onia.com.bo a un lead. Ninguna captura del sitio la mira.
+ *
+ * Ahora dibuja lo que el hero promete: las cinco piezas del negocio, hoy
+ * sueltas, dentro de una sola pantalla. El precio se INTERPOLA de
+ * `lib/pricing.ts` — una cifra a mano acá se comparte por WhatsApp durante
+ * meses sin que ninguna pantalla la muestre. Lo vigila `hero.test.ts`.
  *
  * ⚠️ **Por qué el dibujo vive acá y no en `opengraph-image.tsx`.** Ese archivo
  * decía que, por vivir en el segmento `(sitio)`, "la heredan sus DOCE rutas".
@@ -44,7 +61,7 @@ import { ImageResponse } from "next/og";
  */
 
 export const alt =
-  "Onia — Cerrás vos, el negocio no. El día de un negocio dibujado: nueve horas que atiende el dueño y quince que atiende Onia.";
+  "Onia — Todo el negocio, en una pantalla. Agenda, clientes, caja, cobros e inventario dibujados como cinco piezas sueltas que entran en un solo sistema.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -55,9 +72,22 @@ const TINTA_SUAVE = "#424A46";
 const SENAL = "#00d26a";
 const LINEA = "#D4D9D6";
 
-/** El día: 24 horas desde las 09:00. Las primeras nueve las atiende el dueño. */
-const HORAS_ABIERTO = 9;
-const HORAS_DIA = 24;
+/**
+ * Las piezas del negocio, en el mismo orden y con las mismas palabras que el
+ * hero y la `description`: si acá dijeran otra cosa, la tarjeta prometería un
+ * sistema distinto del que abre al hacer clic.
+ */
+const PIEZAS = ["Agenda", "Clientes", "Caja", "Cobros", "Inventario"];
+
+/**
+ * La bajada se arma como UN string y no se interpola dentro del JSX.
+ *
+ * No es estilo: Satori exige `display: flex` explícito en todo div con más de
+ * un hijo, y `Desde Bs {…} al mes. {…} días` son cinco nodos de texto para él.
+ * Interpolado en el JSX rompe el `next build` entero —las cinco rutas con
+ * tarjeta fallan al prerenderizar— y el error no dice cuál es el div.
+ */
+const BAJADA = `Desde Bs ${bs(plan("basico").mensual)} al mes. ${PRUEBA.dias} días gratis, sin tarjeta.`;
 
 export function dibujarTarjeta(): ImageResponse {
   return new ImageResponse(
@@ -91,7 +121,7 @@ export function dibujarTarjeta(): ImageResponse {
               letterSpacing: "-0.035em",
             }}
           >
-            Cerrás vos.
+            Todo el negocio,
           </div>
           <div
             style={{
@@ -102,36 +132,58 @@ export function dibujarTarjeta(): ImageResponse {
               letterSpacing: "-0.035em",
             }}
           >
-            El negocio no.
+            en una pantalla.
           </div>
           <div style={{ fontSize: 30, color: TINTA_SUAVE, marginTop: 22, lineHeight: 1.35 }}>
-            Un negocio abre 9 horas. Onia atiende las otras 15.
+            {BAJADA}
           </div>
         </div>
 
-        {/* el día, dibujado. El verde sale por el borde derecho: no termina. */}
+        {/* Las cinco piezas, dentro de UN marco: eso es "en una pantalla".
+            El marco se escapa por el borde derecho igual que se escapaba el
+            verde del día — el sistema sigue, no se acaba en la tarjeta. */}
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          <div style={{ display: "flex", alignItems: "flex-end", gap: 6, height: 64 }}>
-            {Array.from({ length: HORAS_DIA }, (_, i) => {
-              const abierto = i < HORAS_ABIERTO;
-              return (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              padding: "18px 0 18px 18px",
+              border: `2px solid ${LINEA}`,
+              borderRadius: 14,
+              backgroundColor: "#FFFFFF",
+            }}
+          >
+            {PIEZAS.map((pieza, i) => (
+              <div
+                key={pieza}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  padding: "14px 22px",
+                  borderRadius: 8,
+                  backgroundColor: PAPEL,
+                  fontSize: 26,
+                  color: TINTA,
+                  fontWeight: 600,
+                }}
+              >
                 <div
-                  key={i}
                   style={{
-                    width: 42,
-                    height: abierto ? 30 : 64,
-                    backgroundColor: abierto ? TINTA : SENAL,
-                    borderRadius: 3,
+                    width: 10,
+                    height: 10,
+                    borderRadius: 2,
+                    backgroundColor: i === 0 ? SENAL : LINEA,
                   }}
                 />
-              );
-            })}
+                {pieza}
+              </div>
+            ))}
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 16, paddingRight: 72 }}>
-            <div style={{ fontSize: 22, color: TINTA_SUAVE }}>09:00 — 18:00 · atendés vos</div>
-            <div style={{ width: 1, height: 22, backgroundColor: LINEA }} />
-            <div style={{ fontSize: 22, color: TINTA, fontWeight: 600 }}>
-              18:00 — 09:00 · atiende Onia
+            <div style={{ fontSize: 22, color: TINTA_SUAVE }}>
+              Un solo sistema, ya armado para tu rubro
             </div>
           </div>
         </div>
