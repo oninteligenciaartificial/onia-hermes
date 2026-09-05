@@ -231,6 +231,28 @@ export function evaluarStaged({ staged, varados }) {
 }
 
 /**
+ * El comando que se pega en la tarea de deploy. UNO, sin argumentos.
+ *
+ * POR QUÉ NO NOMBRA LA CARPETA. El runbook de la casa es
+ * `swap-and-verify.sh <ruta-staged>`, y esa ruta lleva timestamp
+ * (`runtime-next.new-20260905023618`). Quien pide el deploy la mide, la escribe
+ * en la tarea, y ahí se queda quieta — mientras el build siguiente BORRA esa
+ * carpeta. Cuando Sergio contesta «ok», el swap corta con `ERR: bad STAGE path`
+ * y no publica nada, ningún día.
+ *
+ * Y el fallo se disfraza de decisión pendiente: la tarea se lee como «espera el
+ * OK de Sergio» cuando ya es inejecutable, así que nadie mira la ruta. Medido
+ * sobre t_cb722b7e, que envejeció TRES veces el 2026-09-04 (12:40 el staged
+ * traía viva una etiqueta ya sacada; 16:41 corregido; 20:55 la carpeta ya no
+ * existía). Derivar la ruta «recién» no salva: caduca entre que se escribe y
+ * que Sergio contesta, que es justo el rato que el pedido pasa esperando.
+ *
+ * `publicar.sh` mide, arma si hace falta y publica, así que sirve igual en las
+ * TRES ramas (cubre / viejo / ninguno) y no puede quedar viejo.
+ */
+export const COMANDO_PUBLICAR = "bash /opt/onia-landing/_deploy/publicar.sh";
+
+/**
  * El build armado más reciente que `swap-and-verify.sh` aceptaría, o `null`.
  *
  * Se descartan los que no tienen `server.js` en vez de elegir el más nuevo a
@@ -378,22 +400,26 @@ function main() {
         "\nque ya existe (una sola, no una por commit).\n",
     );
 
+    // El ESTADO del staged se sigue diciendo —es el diagnóstico, y sirve para
+    // saber si hay que rearmar—, pero ya no se emite un comando por rama: el
+    // que se pega es siempre el mismo y no nombra ninguna carpeta.
     if (s.estado === STAGED_CUBRE) {
-      console.error(`Build ya armado que SÍ los trae (${s.motivo}):\n`);
-      console.error(`  bash /opt/onia-landing/_deploy/swap-and-verify.sh ${staged.ruta}`);
-      console.error(`  BUILD_ID staged ${staged.buildId} — el vivo es otro (${cuando})`);
-      console.error(
-        "\nLa ruta se derivó recién, no se copió de otra vuelta: los staged se borran" +
-          "\nunos a otros y un comando pegado ayer apunta a una carpeta que ya no existe.",
-      );
+      console.error(`Hay un build armado que SÍ los trae (${s.motivo}).`);
+      console.error(`BUILD_ID staged ${staged.buildId} — el vivo es otro (${cuando}).\n`);
     } else if (s.estado === STAGED_VIEJO) {
-      console.error(`NO publicar el build que hay armado — ${s.motivo}:\n`);
+      console.error(`El build que hay armado quedó viejo — ${s.motivo}:\n`);
       for (const c of s.faltan) console.error(`  queda afuera  ${c.sha}  ${c.subject}`);
-      console.error("\nHay que rearmarlo desde main:  bash /opt/onia-landing/_deploy/build-and-stage.sh");
+      console.error("");
     } else {
-      console.error(`${s.motivo}. Hay que armarlo desde main antes de pedir el swap:`);
-      console.error("  bash /opt/onia-landing/_deploy/build-and-stage.sh");
+      console.error(`${s.motivo}.\n`);
     }
+
+    console.error(`El comando, el mismo en los tres casos (mide, arma si hace falta y publica):\n`);
+    console.error(`  ${COMANDO_PUBLICAR}\n`);
+    console.error(
+      "No nombra la carpeta armada a propósito: los staged se borran unos a otros y" +
+        "\nun pedido que la nombra ya no se puede ejecutar cuando llega el OK.",
+    );
   } else {
     console.error(`NO PUDE MEDIR — ${r.motivo}`);
   }

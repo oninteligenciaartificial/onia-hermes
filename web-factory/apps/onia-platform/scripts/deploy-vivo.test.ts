@@ -1,12 +1,15 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 import {
   AL_DIA,
   ARREGLOS_VARADOS,
+  COMANDO_PUBLICAR,
   NO_PUDE_MEDIR,
   STAGED_CUBRE,
   STAGED_MARCA,
   STAGED_NINGUNO,
+  STAGED_PREFIX,
   STAGED_VIEJO,
   ZONA,
   diagnosticar,
@@ -366,5 +369,77 @@ describe("deploy-vivo: qué archivos llegan de verdad al cliente", () => {
       expect(llegaAlCliente(undefined)).toBe(true);
       expect(llegaAlCliente([])).toBe(true);
     });
+  });
+});
+
+/**
+ * El comando que este gate imprime es lo ÚNICO que alguien copia de acá: va
+ * pegado en la tarea del tablero y se queda ahí hasta que Sergio contesta.
+ *
+ * Si nombra la carpeta armada, caduca — el build siguiente la borra — y el
+ * fallo se disfraza de decisión pendiente: la tarea sigue diciendo «espera el
+ * OK» cuando ya no se puede ejecutar ningún día. Medido sobre t_cb722b7e, que
+ * se rehizo TRES veces el 2026-09-04 y las tres venció antes de la respuesta,
+ * con quince arreglos sin llegar al cliente.
+ *
+ * Por eso el invariante no es «la ruta está bien derivada» sino «no hay ruta».
+ */
+describe("deploy-vivo: el comando que se pega no puede caducar", () => {
+  const fuente = readFileSync(new URL("./deploy-vivo.mjs", import.meta.url), "utf8");
+
+  /**
+   * Los comentarios se sacan ANTES de aplicar el patrón. Este archivo explica
+   * en prosa por qué la ruta con timestamp es el defecto, y la cita textual —
+   * `runtime-next.new-…`, `swap-and-verify.sh <ruta>` — pondría el guard en
+   * rojo sobre su propia bitácora, obligando a borrar la explicación para que
+   * pase. Ya pasó con el guard del hero el 2026-09-04.
+   */
+  const codigo = fuente
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .split("\n")
+    .filter((l) => !l.trim().startsWith("//"));
+
+  /**
+   * El patrón se aplica a lo que el gate IMPRIME, no a todo el archivo.
+   *
+   * `STAGED_PREFIX` es una constante legítima: sin ella `stagedDisponible()` no
+   * puede encontrar los builds en disco, que es justo lo que permite decir «hay
+   * uno armado y está viejo». Prohibirla en todo el código pone en rojo la
+   * capacidad de MEDIR para castigar la de EMITIR — y el arreglo obvio sería
+   * dejar al gate ciego. Lo que no puede salir por pantalla es la carpeta.
+   */
+  const salida = codigo.filter((l) => l.includes("console.")).join("\n");
+  const todo = codigo.join("\n");
+
+  it("apunta a publicar.sh y no lleva argumentos", () => {
+    expect(COMANDO_PUBLICAR).toContain("publicar.sh");
+    expect(COMANDO_PUBLICAR).not.toContain(STAGED_PREFIX);
+    // Sin argumentos: `bash <ruta>` y nada más. Un tercer token sería la ruta
+    // volviendo por la ventana.
+    expect(COMANDO_PUBLICAR.trim().split(/\s+/)).toHaveLength(2);
+  });
+
+  /**
+   * El caso que de verdad se rompió: el gate imprimía
+   * `swap-and-verify.sh ${staged.ruta}`. Con el arreglo puesto, ninguna línea
+   * de código puede volver a emitir la ruta armada — ni interpolada, ni
+   * concatenada.
+   */
+  it("ninguna línea de salida emite la carpeta armada", () => {
+    expect(salida).not.toContain(STAGED_PREFIX);
+    // `staged.ruta` no se usa ya en ninguna parte: la carpeta se mide para
+    // decidir si hay que rearmar, y esa decisión la toma `publicar.sh` sola.
+    expect(todo).not.toContain("staged.ruta");
+  });
+
+  /**
+   * `swap-and-verify.sh` y `build-and-stage.sh` son los dos comandos que
+   * EXIGEN una ruta o dejan el trabajo a medias. Que no se los nombre como
+   * receta es lo que mantiene un solo comando en la tarea; `publicar.sh` los
+   * llama por dentro.
+   */
+  it("no ofrece los comandos que sí caducan", () => {
+    expect(salida).not.toContain("swap-and-verify.sh");
+    expect(salida).not.toContain("build-and-stage.sh");
   });
 });
