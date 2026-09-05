@@ -151,6 +151,20 @@ if [ "$SOLO_PRUEBA" = 1 ]; then paso "solo prueba: no instalo nada"; fi
 paso "3/7 · repo y worktrees"
 if [ "$SOLO_PRUEBA" = 0 ]; then
   mkdir -p "$BASE" "$BIN" "$BIN/loops" "$HERMES_DIR/memories" "$BASE/estado" || morir "no pude crear las carpetas base"
+
+  # 🔴 La marca que dice QUE MAQUINA ES ESTA. La lee scripts/loops_registrados.mjs
+  # para comparar el crontab contra las filas de SU maquina y no contra las del VPS.
+  #
+  # Sin ella, ese gate reportaba los 7 loops del VPS como "faltan en el cron" y dejaba
+  # `main` en ROJO para los quince carriles — el integrador corre la cadena entera
+  # antes de tocar `main`, asi que ninguno podia mergear. Y el "Chequeo de arranque"
+  # pegado en los 15 prompts los habria REARMADO aca, apuntando a worktrees que no
+  # existen. Lo diagnostico el loop web-venta el 2026-09-04 (tarea t_812bd90a).
+  #
+  # Es un archivo y no una deteccion por hostname a proposito: una IP se mueve y un
+  # hostname se renombra, pero una marca puesta por el instalador dice lo que el
+  # instalador sabe. El VPS no la necesita: alli se reconoce por el CLI de Hermes.
+  printf '%s\n' "${ONIA_NODO:-casa}" > /root/.onia-nodo && chmod 644 /root/.onia-nodo
   if [ ! -d "$CLON/.git" ]; then
     # --filter=blob:none: el clon completo son 13 GB medidos en el VPS.
     #
