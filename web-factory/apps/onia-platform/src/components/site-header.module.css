@@ -15,7 +15,10 @@
   height: var(--header-h);
   display: flex;
   align-items: center;
-  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  /* 97 %: era 82 %, la más transparente de las tres barras del sitio. Sirve
+     /nosotros, /privacidad, /terminos, /servicios/* y las /v1/*, así que dejaba
+     pasar el texto de atrás en más páginas que la del sitio. Ver barras-opacas.test.ts */
+  background: color-mix(in srgb, var(--bg) 97%, transparent);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--line-soft);
 }
