@@ -12,6 +12,15 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## Reverificado el 2026-09-05 01:11 La Paz — dental sigue 9/9; `t_2b03ea3d` (servicios) sigue abierta
+
+Corrida nueva en dental: 9 de 9, cero agujeros, cero filas `zz-qa-` propias al cerrar (queda la
+misma fila ajena `zz-qa-recall-demo-1`, de otro carril). Confirmado además que **no falta ningún
+rubro**: `RUBROS_ACTIVOS` (`onia-platform/lib/platform/rubros-activos.ts`) sólo ofrece los cinco
+ya recorridos — ganadero y veterinaria están explícitamente fuera de venta, no son un hueco de
+este carril. La tarea `t_2b03ea3d` (servicios profesionales no puede agendar) sigue `ready`, sin
+tocar, en el tablero — es del carril `onia-cola`.
+
 ## Medido el 2026-09-04 16:11 La Paz — **los CINCO rubros recorridos; cuatro enteros y uno ROTO**
 
 | Rubro | Resultado | Dónde está la prueba |
