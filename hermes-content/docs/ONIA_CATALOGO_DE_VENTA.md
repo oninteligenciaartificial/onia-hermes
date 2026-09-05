@@ -64,7 +64,7 @@ TRES" — quedó viejo y le sacaba un rubro a la venta sin motivo.
 | Estética y spa | `esteticagest-clinical` | ✅ **sí** — es la MISMA nav dental con el vocabulario cambiado (`navClinicaDe`), no un rubro aparte. Calza porque la clienta es una persona con CI y es quien recibe la factura |
 | Comercio / ferretería / tienda | `gestios-general` | ✅ **sí** — catálogo, inventario, caja, fiados |
 | Importadora / distribuidora | `proveegest-electrico` | ⚠️ **sí, ACOTADO** — se venden **cotizaciones B2B + costeo de importación**, y nada más del rubro. Fuera de eso no hay pantallas propias |
-| Servicios profesionales | `gestios-servicios-profesionales` | ✅ **sí — arreglado y verificado el 2026-08-30.** Acá decía "NO, en arreglo": quedó viejo y **costaba un rubro entero**. El arreglo ya está en `master` y **no fue abrirle `/patients`** (eso le daría la ficha clínica —`medical-alerts`, `records`— a un estudio contable, con sus APIs devolviendo 403): es **alta inline del cliente en el propio modal de nueva cita**, contra `/api/patients`, que sí es suya (`CON_AGENDA`). Verificado en `app/(dashboard)/appointments/page.tsx:129-143` y con tres guards en `page.test.ts` |
+| Servicios profesionales | `gestios-servicios-profesionales` | ✅ **sí — arreglado el 2026-08-30, ampliado el 2026-09-04.** Acá decía "NO, en arreglo": quedó viejo y **costaba un rubro entero**. El primer arreglo fue **alta inline del cliente en el propio modal de nueva cita**, contra `/api/patients`, que sí es suya (`CON_AGENDA`). Verificado en `app/(dashboard)/appointments/page.tsx:129-143` y con tres guards en `page.test.ts`. ⚠️ **Acá decía además «y no fue abrirle `/patients`» — vencido el 2026-09-04: sí se le abrió**, y las dos objeciones que esta misma celda nombraba están resueltas. La ficha esconde alertas médicas, alergias, tipo de sangre, historia clínica y tratamientos cuando el pack no es clínico (`fichaClinica()` en `lib/platform/vertical-pack.ts`, **derivada** de si el nav declara `/treatments` — no es una lista que haya que mantener a mano), y **no hay 403** porque el segmento `patients/*` entero pasó a `CON_AGENDA` en `lib/platform/api-route-registry.ts`. El alta inline SE QUEDA: agendar sin salir del modal sigue siendo el camino corto. Recontado el 2026-09-05, ver §8.1 |
 | Veterinaria | `vetgest-clinical` | ⛔ **NO todavía — pero es MÁS BARATO de lo que decía acá.** El bloqueo es real: la factura toma el CI del paciente (`lib/fiscal/rcv-export.ts:148`, `invoice.patient?.ci` → `nitCliente`), y en una veterinaria el paciente es el animal. **Lo que era falso es el costo:** esto NO es "migrar datos vivos". Es agregar columnas **anulables** de responsable a `Patient` y una lectura con fallback (`responsable?.ci ?? patient.ci`), así que **las filas que ya existen siguen funcionando sin backfill**. Cotizado el 2026-08-30 — ver el detalle en `COLA.md` |
 | Ganadería | `ganadero-offline` | ⛔ **NO.** El track está encendido y las orgs que ya existen siguen andando, pero no hay entidades de hacienda ni sanidad: es el catálogo de comercio con otro nombre. Además el nombre promete **modo offline que no existe** |
 
@@ -275,14 +275,29 @@ Esto es lo que evita vender algo que después no se entrega.
 
 ## 8. Lo que hay que cerrar
 
-No es una lista de deseos, es el trabajo pendiente, en orden:
+No es una lista de deseos, es el trabajo pendiente, en orden.
 
-1. **Terminar el arreglo de servicios profesionales** (`/patients` en su nav) — es lo
-   único que separa a ese rubro de ser vendible.
+> **Último reconteo: 2026-09-05.** Dos de los seis ítems ya estaban hechos y esta lista
+> seguía pidiéndolos (1 y 3). Una lista de pendientes sin fecha de reconteo no envejece:
+> **manda a construir lo que ya está construido.** Quien la lea después de esta fecha,
+> cuenta primero y edita acá la fecha — aunque no cambie ningún ítem.
+
+1. ~~**Terminar el arreglo de servicios profesionales** (`/patients` en su nav)~~ →
+   **CERRADO el 2026-09-04. Recontado el 2026-09-05: el fantasma era esta línea**, no §2.
+   `/patients` está en `SERVICIOS_NAV_ITEMS` etiquetado «Clientes»
+   (`onia-platform/lib/platform/vertical-pack.ts:388`), en `master`, y **en el bundle que hoy
+   sirve producción**: `{href:"/patients",icon:"group",label:"Clientes"}` dentro de
+   `/opt/onia-platform/runtime-next`. 69 tests verdes entre `patients/ficha-por-rubro.test.ts`
+   y `lib/platform/api-guard.test.ts`.
 2. **Cerrar la revisión de los add-ons sin consumidor** (`addon.inventory_advanced`,
    `addon.chatbot`, `addon.web`): o los consume algo, o salen del catálogo.
-3. **Decidir qué hacer con `/requerimientos`:** enlazarla desde el nav, o dejar de
-   contarla como módulo.
+3. ~~**Decidir qué hacer con `/requerimientos`:** enlazarla desde el nav~~ → **el enlace
+   ya existe; esta línea también estaba vencida.** Medido el 2026-09-05: **tres** navs la
+   declaran —`proveegest-electrico`, `gestios-general` y `gestios-servicios-profesionales`
+   (`vertical-pack.ts:175,279,395`)— y el bundle desplegado trae 12 apariciones de esa
+   entrada. Los dos packs clínicos (dental, estética) siguen sin ella, y **eso sí** es una
+   decisión abierta: si un consultorio quiere pedirle un estudio al paciente, hoy no tiene
+   camino. Lo que ya no hay que decidir es si la pantalla está huérfana — no lo está.
 4. Recorrer cada módulo 🟡 con datos reales y **mirarlo renderizado**.
 5. Cerrar el pendiente fiscal (`SIAT_EMISSION`) para poder facturar de verdad.
 6. Decidir si los agentes se agendan (cron propio) o se venden como disparo manual.

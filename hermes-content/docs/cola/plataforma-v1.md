@@ -77,7 +77,10 @@ y sin operar. Acá se opera, con verificación por ítem.
       Evidencia: `hermes-content/docs/cola/plataforma-v1.md` (este archivo) y el runbook
       `onia-platform/.claude/skills/onia-deploy/SKILL.md`. Pedidos: `onia-tablero.sh show t_8ac57b3f`.
 
-- [ ] 🔴 **Gate 1 sobre el propio §8: su ítem 1 se contradice con la tabla de rubros del mismo
+- [x] 🟢 **Gate 1 — CONTADO el 2026-09-05. El que mentía era §8, no §2.**
+      El pedido original, tal cual estaba escrito:
+
+      > 🔴 **Gate 1 sobre el propio §8: su ítem 1 se contradice con la tabla de rubros del mismo
       archivo.** §8 dice *"terminar el arreglo de servicios profesionales (`/patients` en su nav)
       — es lo único que separa a ese rubro de ser vendible"*, y la tabla de §2 dice del mismo
       rubro *"✅ sí — arreglado y verificado el 2026-08-30"*. **Uno de los dos miente y hay que
@@ -86,9 +89,40 @@ y sin operar. Acá se opera, con verificación por ítem.
       Este carril arrastra la peor tasa medida del sistema — 46% de pendientes fantasma — así que
       esto va primero.
 
-      Fuente que se contradice: `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` (§2 contra §8).
-      El vocabulario por rubro que decide qué dice ese nav vive en `lib/onboarding/vocabulario.ts`
-      del repo `onia-platform` — ubicarlo con `grep`, no asumir la ruta.
+      > Fuente que se contradice: `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` (§2 contra §8).
+
+      **Cómo se contó.** Ninguno de los dos era «el que convenía»: §8 estaba vencido y §2 estaba
+      vencido **en su paréntesis**, no en su veredicto. `/patients` **sí** está en el nav de
+      servicios profesionales, etiquetado «Clientes» — y no solo en el repo:
+
+      | dónde | evidencia |
+      |---|---|
+      | fuente | `lib/platform/vertical-pack.ts:388`, dentro de `SERVICIOS_NAV_ITEMS` |
+      | `master` | `git show master:lib/platform/vertical-pack.ts` → la misma línea |
+      | **producción** | `{href:"/patients",icon:"group",label:"Clientes",roles:[...F]}` en el bundle de `/opt/onia-platform/runtime-next` (runtime del 2026-09-05 03:07 UTC) |
+      | comportamiento | 69 tests verdes: `patients/ficha-por-rubro.test.ts` + `lib/platform/api-guard.test.ts` |
+
+      §2 advertiía que abrirle `/patients` «le daría la ficha clínica a un estudio contable, con
+      sus APIs devolviendo 403». **Las dos objeciones ya estaban resueltas**, así que corregir §2
+      no fue borrar una advertencia viva: `fichaClinica()` esconde alertas médicas, alergias,
+      tipo de sangre, historia clínica y tratamientos —y es **derivada** de si el nav declara
+      `/treatments`, no una lista a mano—, y el segmento `patients/*` entero pasó a `CON_AGENDA`,
+      así que no hay 403.
+
+      **El conteo destapó un segundo fantasma en el mismo §8: su ítem 3.** Dice que a
+      `/requerimientos` hay que «enlazarla desde el nav». Ya está enlazada en **tres**
+      (`vertical-pack.ts:175,279,395`), con 12 apariciones en el bundle desplegado. El ítem de
+      `/requerimientos` de más abajo arrastraba lo mismo y quedó reescrito.
+
+      **La lección, que vale más que los dos ítems.** Los dos fantasmas eran del **mismo
+      archivo**: §8 se escribió una vez como lista de trabajo y **nadie la volvió a contar**
+      mientras §2 y el código sí avanzaban. Una lista de pendientes sin fecha de reconteo no
+      envejece: **miente**. Y miente hacia el lado caro — manda a construir lo que ya está
+      construido, que es exactamente el 46% que este carril tiene medido. Los dos ítems quedaron
+      `~~tachados~~` en el catálogo con la fecha del reconteo al lado.
+
+      **Cero cambios de código: no hacía falta ninguno.** El trabajo fue medir y corregir el
+      documento.
 
 - [ ] 🔴 **Add-ons sin consumidor: o los consume algo, o salen del catálogo.**
       `addon.inventory_advanced`, `addon.chatbot` y `addon.web`. El catálogo ya midió que
@@ -100,9 +134,18 @@ y sin operar. Acá se opera, con verificación por ítem.
       claves de add-on son fuente única en `lib/pricing.ts` (`onia-platform`): ahí se comprueba
       qué clave cobra y con `grep` en `app/` quién la lee. Si nadie la lee, no habilita nada.
 
-- [ ] 🟡 **`/requerimientos` es una pantalla huérfana: existe, tiene su portal, y no la enlaza
-      ningún nav.** Decidir y ejecutar: se enlaza, o deja de contarse como módulo en el catálogo.
-      Las dos salidas son válidas; dejarla como está no.
+- [ ] 🟡 **`/requerimientos`: ~~huérfana~~ — no lo está. Lo que le falta es kilometraje.**
+      ⚠️ Este ítem nació con el fantasma de §8.3 pegado: decía «no la enlaza ningún nav».
+      **Falso, medido el 2026-09-05:** la enlazan tres —`proveegest-electrico`,
+      `gestios-general` y `gestios-servicios-profesionales` (`vertical-pack.ts:175,279,395`)—
+      con 12 apariciones en el bundle desplegado. No hay nada que enlazar ni nada que sacar
+      del catálogo.
+
+      Lo que **sí** queda, y es más chico: (a) recorrerla con datos reales, que cae dentro del
+      ítem de kilometraje de abajo; y (b) decidir si los dos packs clínicos —dental, estética—
+      también la llevan. Hoy no la tienen: un consultorio que quiera pedirle un estudio al
+      paciente no tiene camino. Es una decisión de producto de una línea de nav cada una, no
+      desarrollo.
 
       Está listada como módulo en `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` §4.
 
