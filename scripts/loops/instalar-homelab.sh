@@ -327,7 +327,23 @@ if [ "$SOLO_PRUEBA" = 0 ]; then
   # que es la verdad, pero inutil como alarma. Cada 10 min, y si el VPS no
   # contesta se pierde esta subida y la siguiente lo alcanza (rsync manda el
   # archivo entero, no un delta que se pueda desincronizar).
-  BLOQUE="$MARCA"$'\n'"*/10 * * * * rsync -q -e 'ssh -i $LLAVE -o StrictHostKeyChecking=accept-new -o BatchMode=yes -o ConnectTimeout=20' /var/log/onia-loop-*.log $VPS:/var/log/ >/dev/null 2>&1"$'\n'"*/15 * * * * $BIN/onia-memoria-bajar.sh >/dev/null 2>&1"$'\n'"44 * * * * ONIA_LOOPS_REPO=$CLON ONIA_LOOPS_BIN=$BIN ONIA_TG=$BIN/onia-tg.sh $CLON/scripts/loops/sincronizar.sh >/var/log/onia-loops-sync.log 2>&1"
+  #
+  # 🔴 VAN A /var/log/homelab/, NO a /var/log/. Y esto NO es cosmetica.
+  # Mientras dure la transicion —los 5 carriles corriendo en las DOS maquinas
+  # porque el paso 10 del plan todavia no se dio— el VPS escribe su propio
+  # `onia-loop-<id>.log` y esta subida, con el MISMO nombre, se lo pisaba entero
+  # cada 10 minutos. Medido el 2026-09-04: el log de web-venta en el VPS tenia
+  # solo corridas de los :52 (el cron de la PC de casa); ni una sola de los :48,
+  # que es el cron del propio VPS. Sus vueltas desaparecian, y con ellas la base
+  # sobre la que el loop `supervisor` audita ese carril. No hay copias rotadas.
+  #
+  # Y no le quita nada al vigia: su lista (/root/.config/onia/loops-remotos.txt)
+  # tiene HOY todas las lineas comentadas, con esta nota escrita al lado —
+  # "se descomenta el dia que el loop sale del crontab del VPS, NO antes:
+  # mientras corre aca, su log se actualiza solo". O sea que hoy no lee nada.
+  # El dia del paso 10 alcanza con arrancarlo con ONIA_LOG_DIR=/var/log/homelab,
+  # que es una variable que ese script YA tiene. Cero cambios de codigo alla.
+  BLOQUE="$MARCA"$'\n'"*/10 * * * * rsync -q --rsync-path='mkdir -p /var/log/homelab && rsync' -e 'ssh -i $LLAVE -o StrictHostKeyChecking=accept-new -o BatchMode=yes -o ConnectTimeout=20' /var/log/onia-loop-*.log $VPS:/var/log/homelab/ >/dev/null 2>&1"$'\n'"*/15 * * * * $BIN/onia-memoria-bajar.sh >/dev/null 2>&1"$'\n'"44 * * * * ONIA_LOOPS_REPO=$CLON ONIA_LOOPS_BIN=$BIN ONIA_TG=$BIN/onia-tg.sh $CLON/scripts/loops/sincronizar.sh >/var/log/onia-loops-sync.log 2>&1"
   for id in $ASIGNADOS; do
     CRON=$(echo "$CATALOGO" | awk -v i="$id" '$1==i{$1="";$2="";sub(/^ +/,"");print}')
     BLOQUE="$BLOQUE"$'\n'"$CRON $BIN/onia-loop.sh $id"
