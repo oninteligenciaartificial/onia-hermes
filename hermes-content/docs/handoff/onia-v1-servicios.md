@@ -138,6 +138,50 @@ Sergio** — no se tocó y no se desplegó.
 
 ---
 
+## Anotado, no perseguido (pedidos que llegaron a mitad de sesión)
+
+Sergio: *"en caso de que te empiece a tirar demasiadas cosas… solo anótalas, pero vamos por una
+versión cien por ciento funcional"*. Van acá y no al código:
+
+- **Agentes y conexiones de recursos** → escrito en `hermes-content/docs/ONIA_AGENTES_Y_CONEXIONES.md`.
+  Dos supuestos suyos resultaron falsos al medirlos, y cambian el plan: **el chatbot SÍ funciona
+  hoy** (una sola clave de OpenAI, la de Sergio, para todos los clientes — es un costo que crece
+  con cada venta, no una función que falte), y **los agentes ya existen y son deterministas**
+  (SQL + plantilla, cero IA) — lo que falta es que propongan algo: 40 corridas, 0 propuestas.
+  De todo eso, a la 1.0 entran **tres cosas** y ninguna es construir un agente nuevo.
+- **`recorrido-cliente` y `lucia-cierre` siguen gastando OpenAI** (8 y 1 corridas por día).
+  Se le preguntó si se apagan también; sin respuesta todavía.
+- **`web-factory-dev` figura pausado pero su log se toca.** Puede ser el sincronizador. Sin
+  perseguir.
+
+---
+
+## Notificaciones de Hermes — APAGADAS el 2026-09-04 ~21:50 La Paz
+
+Pedido de Sergio: *"cancelemos las notificaciones de Hermes, me está quemando tokens de OpenAI"*.
+
+- **Los 15 trabajos programados de Hermes → `pause`.** Eran las notificaciones: 13 entregaban
+  por Telegram solos (estado operativo diario, plan de video, agenda de la semana, prospección
+  del martes…). Cada uno levantaba un agente con skills contra OpenAI vía el proxy `litellm`.
+  Nada borrado: `hermes cron resume <id>` los devuelve. ⚠️ **`hermes cron list` sin `--all` no
+  muestra los pausados y dice "No scheduled jobs"** — parece que se borraron y no.
+- **`hermes-vigia.sh` (cron horario) → comentado**, con el motivo al lado. Llamaba al LLM y ya
+  no tiene trabajos que vigilar. Se reactiva JUNTO con los jobs.
+- **NO se tocó** el gateway de Telegram entrante (es su canal, responde cuando él escribe) ni la
+  clave del producto (el chatbot que se vende; 0 llamadas en 24 h, no era el gasto).
+
+🔴 **Error propio, y cómo terminó:** al comentar la línea del vigía, un `sed` con `#` de
+delimitador Y `#` en el reemplazo falló, y como el pipe siguió, **`crontab -` recibió vacío y
+borró las 82 líneas**. Se detectó en la verificación siguiente y se restauró del respaldo hecho
+un segundo antes; ninguna corrida se perdió (01:50 UTC, la próxima tarea era 04:09). La segunda
+vez: construir el crontab en un archivo, **verificar antes de instalar** (líneas, loops activos,
+línea apagada) y recién ahí `crontab archivo`. **Nunca `algo | crontab -` sin comprobar la
+salida del `algo`.**
+
+Estado de los loops de Claude: **7 activos, 8 pausados**, intactos.
+
+---
+
 ## Regla nueva que salió de esta sesión
 
 **Simple primero, avanzado OPCIONAL — esconder no es borrar.** Dicho por Sergio Urcullo
