@@ -26,6 +26,28 @@ Instrucciones de proyecto. Override sobre defaults.
 - Mismo carril (misma carpeta) → subagentes **secuenciales**. Carriles distintos →
   paralelo.
 
+## El objetivo del NEGOCIO manda sobre el de la sesión (REGLA)
+
+> Sergio Urcullo, 2026-09-05: *"quisiera escalarlo de una manera que no sea solo yo como un
+> freelancer… quisiera que fuera una empresa, de verdad"*.
+
+- **Fuente única: `hermes-content/docs/ONIA_ESTRATEGIA_DE_EMPRESA.md`.** Fija **UNA etapa
+  vigente** con criterio de salida **numérico**. El objetivo de la sesión se elige DENTRO de
+  esa etapa; lo que no le sirve **se anota como pendiente y no se hace**, por buena que sea la
+  idea y aunque alguien ya la haya empezado.
+- ⛔ **No se abre una línea de negocio nueva.** Medido el 2026-09-05: **nueve líneas activas**
+  (SaaS, chatbot, web-factory, video, influencers IA, contenido/ads, consultoría, marca
+  personal, hardware) y **8 worktrees simultáneos**, con **una sola persona** y **cero clientes
+  pagando**. Una empresa hace una cosa con muchas manos; un freelancer hace muchas con una.
+  Abrir la décima es la decisión más cara disponible. Congelar ≠ borrar: se congela y se anota.
+- **"¿Necesitamos financiación o un equipo de desarrollo?" ya está contestado y medido: NO.**
+  El break-even es `gasto mensual ÷ precio del plan` ≈ **5 clientes**. Un desarrollador lo
+  triplicaría. Construir es lo único que sobra — lo escaso son clientes. No se reabre esa
+  discusión sin datos nuevos; está en §4 y §5 de ese doc, con su aritmética.
+- **Ninguna sesión cambia la etapa vigente por su cuenta.** Eso lo decide Sergio Urcullo; la
+  sesión que crea que corresponde cambiarla **lo plantea, con la cuenta delante, y sigue con
+  lo desbloqueado**.
+
 ## Skills del proyecto (REGLA)
 
 - Toda sesión arranca invocando **`onia-router`**: él es el índice y rutea la tarea a su

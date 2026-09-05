@@ -56,6 +56,21 @@ git log --oneline --since="<fecha del handoff>" | head -20
 **El paso 2 es el que más veces se saltea y el que más caro sale.** Un handoff de hace 4 días
 con el objetivo ya escrito vale más que una hora de análisis nuevo.
 
+### El paso 0: ¿esta tarea sirve a la etapa vigente del negocio?
+
+Antes de los cuatro comandos, una pregunta más barata:
+
+```bash
+head -40 hermes-content/docs/ONIA_ESTRATEGIA_DE_EMPRESA.md   # §0 y la etapa vigente (§7)
+```
+
+Ese doc fija **una etapa a la vez, con criterio de salida numérico**. Una tarea que no sirve a
+la etapa vigente **se anota como pendiente y no se hace**, aunque esté bien planteada y aunque
+alguien ya haya empezado. Nace del mismo día que esta skill: 9 líneas de negocio abiertas y
+8 worktrees simultáneos con **una sola persona** — la dispersión no se ve desde adentro de un
+carril, sólo desde el objetivo. **Trabajo bien hecho en el frente equivocado sigue valiendo
+cero.**
+
 ### La regla de oro del arranque
 
 > **Antes de declarar que algo falta, buscá si ya está.**
