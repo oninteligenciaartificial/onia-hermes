@@ -106,20 +106,63 @@ async function salida(cmd, args) {
   return stdout;
 }
 
-/** Orgs con la capacidad activa y la columna vieja en false. */
-async function medirAfectadas() {
+/**
+ * Quien, de los que TIENEN el add-on otorgado, se queda sin canal.
+ *
+ * Replica la pregunta que hace el producto (onia-platform/lib/plan-limits.ts):
+ *   isWhatsAppAddonActive = whatsappAddon || (entitlement active y no vencido)
+ *
+ * `leeCapacidad` es de que mundo hablamos, y por eso el gate sigue distinguiendo
+ * las dos causas: si el build vivo ignora la capacidad, al otorgado sin la
+ * columna vieja no le sirve tenerla; si la lee, alcanza con que este vigente.
+ *
+ * ⚠️ Hasta el 2026-09-05 esto era una sola consulta —"capacidad activa y columna
+ * vieja en false"— y daba ROJO FALSO con el fix ya desplegado: esa condicion
+ * describe a las orgs que el arreglo ARREGLO, asi que el gate no podia volver a
+ * verde nunca (para eso el booleano viejo tendria que estar en `true`, que es la
+ * columna que el fix dejo de usar). Mando a "revisar isWhatsAppAddonActive",
+ * que estaba sano, y sostuvo dos pedidos de deploy vencidos esperando el ok de
+ * Sergio Urcullo.
+ */
+export function sinCanal(filas, ahora = new Date(), leeCapacidad = true) {
+  return filas.filter((f) => {
+    // Sin fila de capacidad y sin la columna: no compro el add-on, no le falta nada.
+    const otorgado = f.whatsappAddon === true || f.status != null;
+    if (!otorgado) return false;
+    // La columna vieja alcanza sola en los dos mundos.
+    if (f.whatsappAddon === true) return false;
+    // El build ignora la capacidad: por bien otorgada que este, no la ve.
+    if (!leeCapacidad) return true;
+    const vigente = f.status === 'active' && (f.validUntil == null || new Date(f.validUntil) > ahora);
+    return !vigente;
+  });
+}
+
+/** Orgs a las que el producto le negaria el canal teniendo el add-on otorgado. */
+async function medirAfectadas(leeCapacidad) {
   try {
     const sql =
-      `select o.slug from public.organizations o ` +
-      `join public.organization_entitlements e on e."organizationId"=o.id ` +
-      `and e."featureKey"='addon.whatsapp' and e.status='active' ` +
-      `where o."whatsappAddon" is not true order by o.slug;`;
-    const out = await salida('docker', ['exec', CONTENEDOR_DB, 'psql', '-U', 'postgres', '-d', 'postgres', '-tAc', sql]);
-    return out
+      `select o.slug, o."whatsappAddon", coalesce(e.status,''), ` +
+      `coalesce(to_char(e."validUntil" at time zone 'UTC','YYYY-MM-DD"T"HH24:MI:SS"Z"'),'') ` +
+      `from public.organizations o ` +
+      `left join public.organization_entitlements e on e."organizationId"=o.id ` +
+      `and e."featureKey"='addon.whatsapp' order by o.slug;`;
+    const out = await salida('docker', ['exec', CONTENEDOR_DB, 'psql', '-U', 'postgres', '-d', 'postgres', '-tAF|', '-c', sql]);
+    const filas = out
       .split('\n')
       .map((l) => l.trim())
       .filter(Boolean)
-      .map((slug) => ({ slug }));
+      .map((l) => l.split('|'))
+      .filter((c) => c.length >= 4)
+      .map(([slug, addon, status, validUntil]) => ({
+        slug,
+        whatsappAddon: addon === 't',
+        status: status || null,
+        validUntil: validUntil || null,
+      }));
+    // Cero filas es "no pude medir", no "nadie afectado": la base siempre tiene orgs.
+    if (filas.length === 0) return null;
+    return sinCanal(filas, new Date(), leeCapacidad);
   } catch {
     return null;
   }
@@ -181,11 +224,15 @@ async function medirShaQueArregla(repo) {
 async function main() {
   const repo = repoDisponible();
   const shaVivo = await medirShaVivo();
-  const [afectadas, buildLeeCapacidad, shaQueArregla] = await Promise.all([
-    medirAfectadas(),
+  const [buildLeeCapacidad, shaQueArregla] = await Promise.all([
     medirBuildLeeCapacidad(repo, shaVivo),
     medirShaQueArregla(repo),
   ]);
+  // Quien queda sin canal depende de QUE build corre, asi que esto va despues:
+  // con el build viejo, tener la capacidad no sirve de nada. Si no se pudo medir
+  // el build, tampoco se puede decidir quien esta afectado -> no_medido, que el
+  // veredicto ya trata como "nunca verde".
+  const afectadas = buildLeeCapacidad === null ? null : await medirAfectadas(buildLeeCapacidad);
 
   const v = veredicto({ afectadas, buildLeeCapacidad, shaVivo, shaQueArregla });
   console.log(v.mensaje);

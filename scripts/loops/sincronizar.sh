@@ -114,8 +114,19 @@ poner() {  # poner <origen> <destino>
   #
   # Reordenar los pasos del instalador no alcanzaba: este script corre por cron
   # cada hora (`44 * * * *`) y los volveria a pisar. La guarda va aca.
-  # En el VPS no hay shims, asi que esto no hace nada alla.
-  if grep -q 'Generado por instalar-homelab.sh' "$destino" 2>/dev/null; then
+  #
+  # 🔴 SOLO EL ENCABEZADO (head -5). La marca esta en la LINEA 2 de todo shim que
+  # genera el instalador. Buscarla en el archivo entero hacia que este script se
+  # bloqueara A SI MISMO: `poner` lo despliega como /root/bin/onia-loops-sync.sh,
+  # y su copia contiene el literal 'Generado por instalar-homelab.sh' — el de esta
+  # linea de aca abajo. Medido el 2026-09-05: el sync desplegado del VPS quedo
+  # congelado en las 00:43 y cada vuelta horaria desde entonces loggeaba
+  # "conservado (shim del nodo de casa)" EN EL VPS, donde no hay ningun nodo de
+  # casa. El mensaje absurdo era la pista, y estuvo 15 horas en el log.
+  #
+  # Una guarda que se apaga a si misma no falla ruidosa: deja de aplicar arreglos
+  # en silencio, que es la unica forma de fallo que este script existe para evitar.
+  if head -5 "$destino" 2>/dev/null | grep -q 'Generado por instalar-homelab.sh'; then
     log "conservado (shim del nodo de casa, no se pisa): $destino"
     return 0
   fi
@@ -294,6 +305,19 @@ fi
 if [ -d /opt/onia-platform ]; then
   poner "$RAIZ/hermes-content/deploy/onia-platform/build-and-stage.sh"    /opt/onia-platform/build-and-stage.sh
   poner "$RAIZ/hermes-content/deploy/onia-platform/recreate-container.sh" /opt/onia-platform/recreate-container.sh
+fi
+
+# El publicador del BOT, el tercer destino que Sergio aprueba con `ok <id>`.
+# Hasta el 2026-09-05 el bot no estaba en la lista blanca de
+# publicar-aprobado.mjs: el `ok` devolvia "destino desconocido" y no desplegaba
+# nada, con DOS tareas `ready` pidiendo el mismo swap sobre un bot que le decia
+# "en construccion" a 2 de los 5 rubros que se venden. A diferencia de
+# /opt/onia-landing/_deploy y /opt/onia-platform, este directorio NO existia:
+# hay que crearlo, o el `poner` falla y el circuito queda cableado a una ruta
+# que no esta — que es justo el fallo mudo que este envoltorio viene a cerrar.
+if [ -d /opt/onia/bot ]; then
+  mkdir -p /opt/onia/bot/_deploy
+  poner "$RAIZ/hermes-content/deploy/vps-ops/bot/publicar.sh" /opt/onia/bot/_deploy/publicar.sh
 fi
 
 mkdir -p "$DESTINO_BIN/loops"

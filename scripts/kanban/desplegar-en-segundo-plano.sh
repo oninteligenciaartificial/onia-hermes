@@ -80,11 +80,18 @@ TABLERO=/root/bin/onia-tablero.sh
 # La ruta la elige una lista blanca del codigo que nos llama, nunca el cuerpo de
 # la tarea. Se vuelve a comprobar aca: este script tambien se puede correr solo.
 case "$SCRIPT" in
-  /opt/onia-landing/_deploy/publicar.sh|/opt/onia-platform/_deploy/publicar.sh) ;;
+  /opt/onia-landing/_deploy/publicar.sh|/opt/onia-platform/_deploy/publicar.sh|/opt/onia/bot/_deploy/publicar.sh) ;;
   *) echo "$(date -u '+%F %T') ERR destino fuera de la lista blanca: $SCRIPT" >> "$LOG"; exit 1 ;;
 esac
 
-QUE=$([ "$SCRIPT" = "/opt/onia-landing/_deploy/publicar.sh" ] && echo "onia.com.bo" || echo "app.onia.com.bo")
+# El nombre que ve Sergio en el aviso. Son TRES destinos desde el 2026-09-05, asi
+# que un ternario ya no alcanza: con dos ramas, el bot se anunciaba como
+# "app.onia.com.bo" — el aviso mentiria sobre que se publico.
+case "$SCRIPT" in
+  /opt/onia-landing/_deploy/publicar.sh)  QUE="onia.com.bo" ;;
+  /opt/onia-platform/_deploy/publicar.sh) QUE="app.onia.com.bo" ;;
+  /opt/onia/bot/_deploy/publicar.sh)      QUE="el bot de WhatsApp" ;;
+esac
 INICIO=$(date -u '+%F %T')
 {
   echo "════ $INICIO UTC — arranca deploy de $QUE (tarea $TAREA${SECO:+ $SECO})"
