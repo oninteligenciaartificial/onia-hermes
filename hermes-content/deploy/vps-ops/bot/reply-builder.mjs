@@ -43,12 +43,25 @@ export function activeSlots(state, config) {
 }
 
 /**
- * ¿Hay algun horario de VERDAD para ofrecer? Un slot `pending` es un placeholder, no una opcion.
+ * ¿Hay horarios de VERDAD para ofrecer? Un slot `pending` es un placeholder, no una opcion.
  * Cubre los dos caminos por los que la conversacion se queda sin horarios: `slotsOffered: []`
  * (welcomeResult no ofrecio ninguno) y `config.slots` todavia en "pendiente de definir".
+ *
+ * Los tiene que tener TODOS, no alguno: las plantillas del guion (M0, M0b, PENDING_HORARIO)
+ * ponen {{slot_a}} Y {{slot_b}} sobre la mesa en la misma frase, asi que con uno solo real el
+ * otro sale igual, con su etiqueta, y el prospecto puede elegirlo. Mientras `pending` fue
+ * todo-o-nada (los dos placeholders de DEMO_SLOTS) daba lo mismo; desde que el corte por
+ * anticipacion (ANTICIPACION_MINIMA_MS) lo volvio un estado POR horario, `some` empezo a
+ * ofrecer el vencido — y encima contradiciendo a la bienvenida, que mira `slotsPending`
+ * (ALGUNO pending) y ya se habia callado. Medido en produccion el 2026-09-05, ver el test
+ * "HORARIO VENCIDO" de bot-engine.test.mjs.
+ *
+ * Cuando falla, el guion cae a la rama SIN_HORARIOS, que no es silencio: sigue el embudo
+ * pidiendo el contacto y avisa a Sergio para que coordine el la hora.
  */
 function hayHorarioReal(state, config) {
-  return (activeSlots(state, config) || []).some((slot) => slot && !slot.pending);
+  const slots = (activeSlots(state, config) || []).filter(Boolean);
+  return slots.length > 0 && slots.every((slot) => !slot.pending);
 }
 
 function catalogo(config) {
