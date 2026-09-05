@@ -274,7 +274,7 @@ Las tres formas de fantasma que ya aparecieron acá:
       neutralización. O sea que la promesa que este ítem quería (que el hover no se mueva
       cuando el visitante pidió no ver movimiento) está **mejor** cubierta que con la clase.
 
-- [ ] **El punto final del spark del KPI mide 5,03 px y el piso que fijó W4 es 8.**
+- [x] **El punto final del spark del KPI mide 5,03 px y el piso que fijó W4 es 8.**
       A6 lo dejó anotado dentro de su propio `[x]`: *"sigue en `r=3` y, con la escala de 0,839,
       mide 5,03px renderizados — bajo el piso de 8px"*. Es el único marcador del panel que
       quedó fuera de la regla que el propio carril se puso en W4.
@@ -311,6 +311,46 @@ Las tres formas de fantasma que ya aparecieron acá:
       (`width: calc(100% + 18px)`) y el punto entra entero, al precio de romper la simetría del
       sangrado; (b) el punto se dibuja por encima del recorte —sacar el spark del `overflow` de
       la tarjeta— que conserva el diseño pero toca la anatomía de la card.
+
+      ✅ **CERRADO el 2026-09-04 — 108/108 marcadores sobre el piso, y NO hubo que decidir
+      diseño: las dos salidas de arriba costaban de más porque las dos movían el punto en UN
+      solo eje.** El recorte lo hace un ARCO, así que la restricción es un círculo: alejar el
+      punto de los dos bordes **a la vez** cuesta la raíz de dos, no el doble. Medido: por el
+      eje horizontal solo pedía ~22 unidades (de ahí el "renunciar al sangrado"); **en diagonal
+      alcanzan 4**. Es el mismo error de método que el titular de la ferretería dos ítems más
+      arriba —una reserva que mira una sola de las dos restricciones—, y las dos veces la salida
+      cara apareció por mirar un eje.
+      **El arreglo** (`packages/templates/src/dashboard.ts`, `MARCADOR_KPI_PAD_ESQUINA`): el
+      padding que reserva el lugar del punto pasa de `6` a `6+4` **sólo a la derecha y abajo**,
+      que son los dos únicos lados donde el dibujo toca una esquina redondeada de la card
+      (el punto final siempre es el último valor, y el spark está pegado al piso). Arriba e
+      izquierda quedan en `6`: subirlos achataría la curva y achicaría el sangrado de gratis.
+      La base del relleno **no se movió** (sigue a `MARCADOR_KPI_R` del piso), así que la
+      silueta del área contra el borde de la tarjeta —que es lo que se ve— queda idéntica.
+      **Por qué no necesitó OK**: el sangrado de borde a borde se conserva entero y la curva es
+      indistinguible (comparadas las capturas antes/después de la misma tarjeta a 4x). De yapa
+      queda **más pareja** que antes: el disco estaba tangente al borde derecho (0 px de aire)
+      contra 4,05 px del arranque de la curva a la izquierda; ahora son 2,7 px contra 4,05 px.
+      **Evidencia** — el gate en ROJO primero, por el motivo correcto:
+      `✗ dashboard-edge 390x844 light: <wf-kpi-spark> pinta 5.00px (piso 8) — RECORTADO: la
+      geometría declara 8.10px` (×2, claro y oscuro). Después: **`✓ Todos los marcadores llegan
+      al piso de 8px`**, 108 medidos, peor diámetro 8,00 px.
+      **Mirado renderizado** a 390 y 1440 × claro/oscuro con `deviceScaleFactor: 4` (el defecto
+      son 3 px: a 1x no se juzga), cero recursos caídos: antes un **gajo** metido en la esquina,
+      ahora **disco entero**. Geometría del disco contra el arco: −0,97 px a 390 y −2,31 px a
+      1440 (negativo = entra entero).
+      ⚠️ **El gate del navegador no alcanzaba solo, y por eso hay guarda unitaria.** El test que
+      ya existía mira el borde del **viewBox** y daba VERDE sobre este defecto: el punto le entra
+      al viewBox y lo come la **card**. Va
+      `dashboard.test.ts` → *"el punto del KPI libra la ESQUINA REDONDEADA de la tarjeta, no sólo
+      el borde recto"*, que reconstruye el arco real (radio 12 del token menos 1 px de borde) en
+      la escala más chica medida. Su serie **cierra en 0 a propósito**: la que ya estaba termina
+      en el máximo —el punto se va arriba— y con ella el test no podría fallar nunca. Falsificado
+      volviendo el padding a `6`: cae con *"centro a 5.05x5.05px de la esquina"*, que es exacto
+      el número que midió el navegador en producción (5,09×5,05).
+      📌 **Queda anotado para el dueño de `tests/e2e/`** (no es zona de este carril): las
+      baselines de `visual.spec.ts` son `-chromium-win32.png` y esta geometría las mueve. Hay que
+      regenerarlas en Windows con `--update-snapshots`; en Linux ni siquiera corren.
 
 - [ ] **Carril B — portfolio sigue sin ancla (N=1), el último rubro que se receta por analogía.**
       B1 y B2 cerraron los seis rubros que tenían, y las dos terminan con la misma frase

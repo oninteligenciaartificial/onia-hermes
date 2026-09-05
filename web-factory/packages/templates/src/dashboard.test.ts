@@ -299,6 +299,55 @@ describe("marcadores", () => {
     expect(cy - radio, "se sale por arriba").toBeGreaterThanOrEqual(0);
   });
 
+  it("el punto del KPI libra la ESQUINA REDONDEADA de la tarjeta, no solo el borde recto", () => {
+    // El test de arriba mira el borde del viewBox y da VERDE sobre el defecto:
+    // el sparkline sangra hasta el borde de la card (`margin: 4px -18px -16px`) y
+    // `.wf-kpi` recorta con `border-radius: 12px` + `overflow: hidden`, asi que
+    // cuando el ultimo valor es el MINIMO el punto cae en la esquina de abajo a
+    // la derecha y el arco se lo come. Medido en el navegador: pintaba 5,00px
+    // declarando 8,10px, bajo el piso de 8 que fijo W4.
+    //
+    // La serie de abajo termina en su MINIMO a proposito: `conSparkKpi` termina
+    // en el maximo (el punto se va arriba, lejos del piso de la card) y con ella
+    // este test no puede fallar nunca.
+    const terminaEnMinimo: DashboardClient = {
+      ...conSparkKpi,
+      dashboard: {
+        ...conSparkKpi.dashboard,
+        // Cierra en 0 —el piso de la escala, porque `yFor` fuerza `min <= 0`— y
+        // no en "un valor bajo": ahi el punto se apoya en el borde de abajo, que
+        // es exactamente donde el panel real lo tenia (medido: centro a
+        // 5,09x5,05px de la esquina de la card).
+        kpis: [{ ...conSparkKpi.dashboard.kpis[0], spark: [12, 4, 19, 7, 22, 9, 0] }],
+      },
+    };
+    const svg = renderDashboardBody(terminaEnMinimo).match(/<svg class="wf-kpi-spark"[\s\S]*?<\/svg>/)?.[0] ?? "";
+    const marcador = svg.match(/<circle[^>]*data-wf-marker[^>]*>/)?.[0] ?? "";
+    const [, ancho, alto] = svg.match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/) ?? [];
+    const cx = Number(marcador.match(/cx="([\d.]+)"/)?.[1]);
+    const cy = Number(marcador.match(/cy="([\d.]+)"/)?.[1]);
+    const radio = Number(marcador.match(/ r="([\d.]+)"/)?.[1]);
+
+    // Se comprueba la geometria REAL del recorte, no un numero copiado: a escala
+    // `s`, el arco tiene radio `12 - 1` (el token menos el borde) y su centro
+    // esta a 12px de la esquina de la card, con el SVG 1px adentro. El disco
+    // entra entero si su centro no se aleja del centro del arco mas que
+    // `11 - r*s`. Se evalua en la escala mas CHICA medida (0,675 a 390px), que
+    // es la que aprieta.
+    const s = 0.675;
+    const dx = 1 + (Number(ancho) - cx) * s;
+    const dy = 1 + (Number(alto) - cy) * s;
+    const distanciaAlArco = Math.hypot(12 - dx, 12 - dy);
+
+    expect(cy, "la serie de prueba no termina abajo: el test no probaria nada").toBeGreaterThan(
+      Number(alto) / 2,
+    );
+    expect(
+      distanciaAlArco,
+      `el punto entra al viewBox pero la esquina redondeada de la card lo recorta (centro a ${dx.toFixed(2)}x${dy.toFixed(2)}px de la esquina)`,
+    ).toBeLessThanOrEqual(11 - radio * s);
+  });
+
   it("todo punto de dato queda marcado, para que el gate del navegador no mida de menos", () => {
     // El gate que mide en pixeles reales elige sus sujetos por `data-wf-marker`.
     // Si un grafico dibuja puntos sin marcarlos, ese gate no los ve y aprueba
