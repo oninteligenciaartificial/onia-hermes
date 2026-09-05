@@ -43,6 +43,26 @@ por **artefactos, nunca por hostname ni IP** — *una IP se mueve, un hostname s
 > que corra en la máquina vieja ve *"fila mía sin línea en cron"* y **la vuelve a instalar** —
 > y quedan las dos máquinas corriendo el mismo loop sobre la misma rama. Y como nunca borra, la
 > línea vieja **no se va sola**: hay que sacarla a mano.
+>
+> 🔴 **Corregido 2026-09-05: «la tabla primero» NO alcanza, y sola deja `main` en rojo.**
+> Ese orden se escribió mirando sólo el *Chequeo de arranque*, que efectivamente rearma. Pero
+> desde el mismo 2026-09-05 `scripts/loops_registrados.mjs` compara **en las dos direcciones**
+> (su propia salida lo dice: *«coinciden en id y horario, en las dos direcciones»*). Entonces:
+>
+> | si hacés… | pasa esto |
+> |---|---|
+> | tabla a `main` primero, cron después | la máquina vieja tiene una línea de cron que ya no está en su tabla → **gate en rojo** → el integrador corre la cadena entera antes de tocar `main`, así que **los quince carriles dejan de mergear** |
+> | cron primero, tabla después | el *Chequeo de arranque* ve «fila mía sin línea» y **la rearma** |
+>
+> **Las dos cosas van JUNTAS**, en la misma ventana: se saca la línea del cron viejo y se
+> pushea la tabla movida casi en el mismo minuto, eligiendo un hueco entre corridas. Con las
+> dos aplicadas la máquina vieja queda sin fila y sin línea — las dos direcciones de acuerdo,
+> **verde**. Nadie lo había pisado porque **no se mudó ningún loop desde que el gate es
+> bidireccional**: las dos reglas nacieron el mismo día y nunca se cruzaron.
+>
+> El gate **no falla** donde no puede medir: si no reconoce la máquina (`/root/.onia-nodo` o el
+> CLI de Hermes) o no hay `crontab -l`, sale sin error a propósito. Así que este choque sólo
+> aparece en el VPS y en el nodo, no en Windows.
 
 🔄 **Desde el 2026-09-02 el VPS se despliega solo.** `/root/bin/onia-loops-sync.sh` corre cada
 hora al minuto 44 —once minutos después del integrador— y copia el corredor y los prompts
