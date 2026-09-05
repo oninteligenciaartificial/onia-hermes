@@ -40,33 +40,35 @@ Si hay 3, la versión 1.1 la decide lo que pidan esos tres, no nosotros.
 Un negocio de Bolivia se registra solo, carga a sus clientes, agenda, cobra, y el dueño ve su día
 desde el celular.
 
-⚠️ **Corregido el 4-sep-2026, y es lo más caro que apareció.** Acá decía *"todo esto ya está vivo y
-verificado en producción"*. Es **falso para servicios y comercio**, que son 2 de los rubros que
-vendemos. Se midió haciendo el recorrido entero contra producción con una cuenta nueva de rubro
-Servicios, mirando cada pantalla renderizada:
+⚠️ **Corregido el 4-sep-2026**, cuando se midió el recorrido entero contra producción con una
+cuenta nueva. Acá decía *"todo esto ya está vivo y verificado en producción"*, y era **falso para
+servicios y comercio**, 2 de los rubros que vendemos.
 
-- **No hay pantalla de clientes.** La única puerta es Caja → método Fiado, 6 clics, y ese cliente
-  aparece en «Por cobrar» pero **no** en el selector de la cita.
-- **La cita es imposible.** «Seleccionar cliente» abre con **cero opciones** y frena con un globo
-  del navegador **en inglés**.
-- **No hay recibo.** La única acción de una venta es «Anular»; `/print/invoice` cuelga de
-  `/billing`, que este rubro no tiene.
-- **Cobrar un servicio exige inventar stock** (422 «Stock insuficiente: disponible 0»), y el SKU es
-  obligatorio sin estar marcado como tal.
+✅ **SERVICIOS: arreglado y desplegado el 4-sep** (`3e20395` + `443e3e7`), verificado dos veces
+contra producción con cuenta nueva. El recorrido entero se hace solo: registrarse → cargar un
+servicio → cargar un cliente → agendar con hora → **cobrar** → verlo en Contabilidad.
+Lo que se arregló, y lo que se aprendió, en `handoff/onia-v1-servicios.md`:
 
-Y la propia tarjeta de `/register` le promete a ese rubro, textual, **«Agenda, citas, cobros y
-contabilidad»**. Es una promesa falsa en el último clic antes de crear la cuenta.
+- **Cobrar era imposible:** 422 «Stock insuficiente: disponible 0, solicitado 1». Cobrar una
+  declaración de impuestos exigía inventarle stock. Hoy da 201.
+- **No había pantalla de clientes.** Hoy «Clientes» está en el menú, con lista, alta y ficha —
+  y la ficha ya no le pide el tipo de sangre a un estudio contable.
+- **La cita NO era imposible**: eso ya lo había arreglado el deploy `3606c46` (14:12 del 4-sep);
+  la medición de este doc se hizo ANTES de ese swap. Dato vencido, corregido acá.
 
-**Lo que un dueño de servicios SÍ puede hacer solo hoy:** registrarse → cargar un servicio →
-cobrarlo en efectivo → verlo en Contabilidad con IVA e IT calculados. Eso es el trial que vive:
-**cobra, pero no agenda ni entrega comprobante.**
+🔴 **COMERCIO sigue roto igual.** Su tarjeta de `/register` promete «Catálogo, inventario, caja y
+**clientes**» y no tiene pantalla de clientes. **No es copiar y pegar lo de servicios**: su gente
+vive en `OniaCoreBusinessPartner` (los fiados), no en `Patient`.
+
+🔴 **Sin recibo imprimible, en los dos.** `/print/receipt` lee la tabla `Payment` del pack dental;
+comercio usa `OniaCommercePayment`. Es una ruta nueva, no un permiso.
 
 | Pieza | Estado |
 |---|---|
 | Registro solo, con 14 días de prueba | ✅ vivo |
-| Agenda y citas (crear, ver el día, agenda pública) | ✅ en los rubros clínicos · 🔴 **inalcanzable en servicios y comercio** |
-| Clientes o pacientes con su ficha | ✅ en los rubros clínicos · 🔴 **no existe la pantalla en servicios y comercio** |
-| Cobros: factura interna, pago, recibo imprimible | ✅ cobro vivo en todos · 🔴 **sin recibo imprimible fuera de los clínicos** |
+| Agenda y citas (crear, ver el día, agenda pública) | ✅ clínicos y **servicios** · 🔴 comercio no agenda (y no debería) |
+| Clientes o pacientes con su ficha | ✅ clínicos y **servicios (4-sep)** · 🔴 **no existe la pantalla en comercio** |
+| Cobros: factura interna, pago, recibo imprimible | ✅ cobro vivo en todos (**servicios, desde el 4-sep**) · 🔴 **sin recibo imprimible fuera de los clínicos** |
 | Contabilidad: libro de compras, resumen de IVA para el contador | ✅ vivo |
 | Chatbot del sitio web con cuota de 500 conversaciones | ✅ vivo (add-on) |
 | Entrar seguro: bloqueo por intentos, verificación en dos pasos | ✅ vivo |
@@ -75,10 +77,9 @@ cobrarlo en efectivo → verlo en Contabilidad con IVA e IT calculados. Eso es e
 
 ### Lo que falta para poder cobrar, y es corto
 
-0. 🔴 **Que el rubro entregue lo que su propia alta promete.** Antes que cualquier otra cosa: o
-   servicios y comercio tienen dónde cargar un cliente y agendar, o la tarjeta de `/register` deja
-   de prometerlo. Vender una agenda que no existe es la forma más cara de perder al primer cliente
-   que pague. *Sin arreglar (medido el 4-sep).*
+0. **Que el rubro entregue lo que su propia alta promete.**
+   ✅ **SERVICIOS: hecho y desplegado el 4-sep**, verificado contra producción con cuenta nueva.
+   🔴 **COMERCIO: falta.** Promete «clientes» y no tiene la pantalla. Es el primer paso pendiente.
 1. **Material de venta honesto.** La web y el guion prometen factura del SIN, que está apagada.
    *En corrección (`t_db9acebf`).* **Bloquea escribirle a los leads.**
 2. **El dueño conecta su WhatsApp.** Meta ya aprobó los permisos; el botón está vivo. Falta que
@@ -139,10 +140,17 @@ Cerrado y sin desvíos. Cada paso se despliega y se verifica MIRÁNDOLO antes de
 **Ninguno de estos es "el objetivo": el objetivo es la 1.0 usable, y estos son sus pasos.**
 
 1. ~~Configuración: de 7 pestañas a una página con «Configuración avanzada».~~ **Hecho, vivo el 4-sep.**
-2. Panel de inicio en tres renglones, con el primer día resuelto. **Construido; espera el OK.**
-3. Cobros: cliente, catálogo y total pegado al botón.
-4. Contabilidad: arriba, cuánto pagar y hasta cuándo.
-5. Velocidad: el panel abre en menos de 1,5 s.
+2. ~~Que el rubro SERVICIOS entregue lo que promete su alta.~~ **Hecho, vivo el 4-sep.**
+3. **Que el rubro COMERCIO entregue lo que promete su alta** — le falta la pantalla de clientes.
+   *Listo = el recorrido se hace solo, o la tarjeta de `/register` deja de prometerlo.*
+4. Panel de inicio en tres renglones, con el primer día resuelto. **Construido; espera el OK.**
+5. Cobros: cliente, catálogo y total pegado al botón. Acá entra el **recibo imprimible**.
+6. Contabilidad: arriba, cuánto pagar y hasta cuándo.
+7. Velocidad: el panel abre en menos de 1,5 s.
+
+> Se insertó el paso 3 (comercio) el 4-sep, después de cerrar servicios: es el mismo defecto en
+> el otro rubro que vendemos, y una promesa falsa en `/register` cuesta el primer cliente que
+> paga. El resto conserva su orden.
 
 > El orden cambió respecto de lo escrito el 4-sep a la mañana: Configuración se cerró primero
 > porque los tres defectos que bloqueaban su uso salieron al MIRARLA, y arreglarlos ahí arregló
