@@ -12,6 +12,11 @@ import {
   diagnosticar,
   evaluarStaged,
   llegaAlCliente,
+  BUILD_ID_VIVO,
+  STAGED_DIR,
+  fechaBuildVivo,
+  parsearStagedRemoto,
+  stagedDisponible,
 } from "./deploy-vivo.mjs";
 
 /**
@@ -365,6 +370,136 @@ describe("deploy-vivo: qué archivos llegan de verdad al cliente", () => {
     it("sin lista de archivos NO se descarta el commit", () => {
       expect(llegaAlCliente(undefined)).toBe(true);
       expect(llegaAlCliente([])).toBe(true);
+    });
+  });
+});
+
+/**
+ * De dónde saca el gate lo que mide, y por qué eso decidió dos vueltas enteras.
+ *
+ * El 2026-09-04 este carril dejó de correr en el VPS y pasó a correr en el nodo
+ * de casa (WSL). El sitio no está montado ahí, así que `statSync` del BUILD_ID
+ * tiraba y el gate salía por `NO PUDE MEDIR — ¿Estoy en el VPS?` en su primera
+ * línea, sin llegar a preguntarle nada a git.
+ *
+ * No fue un fallo en verde —el exit sigue siendo 2— pero el efecto fue el
+ * mismo: el único instrumento capaz de ver el deploy varado no producía
+ * veredicto, y los cuatro números del objetivo (prohibidos 0, precios 0, CTA
+ * rotos 0, favicon 200) firmaron «meta cumplida» dos vueltas seguidas con
+ * VEINTE arreglos mergeados que el cliente no veía. Entre ellos, otra vez, los
+ * nueve botones «Creá tu cuenta» abriendo otra página de venta, y el pie
+ * vendiendo la factura SIAT que el emisor todavía no emite.
+ *
+ * La lección es la de siempre en este carril, en su forma más cara: un gate que
+ * no puede medir donde corre no es un gate. Dónde vive el disco del sitio es
+ * una circunstancia de la máquina, no una propiedad del sitio.
+ */
+describe("deploy-vivo: mide el sitio vivo aunque no corra en el VPS", () => {
+  const ms = (s: number) => s * 1000;
+
+  it("si el sitio no está montado en esta máquina, pregunta por SSH", () => {
+    const r = fechaBuildVivo(BUILD_ID_VIVO, {
+      local: () => null,
+      remoto: () => ms(7_000),
+    });
+
+    expect(r).toBe(ms(7_000));
+  });
+
+  /**
+   * En el VPS el disco está a mano y SSH no debe usarse: es más lento y puede
+   * no estar configurado. El local manda siempre que conteste.
+   */
+  it("si el sitio está montado acá, NO sale a la red", () => {
+    let salioALaRed = false;
+    const r = fechaBuildVivo(BUILD_ID_VIVO, {
+      local: () => ms(3_000),
+      remoto: () => {
+        salioALaRed = true;
+        return ms(9_999);
+      },
+    });
+
+    expect(r).toBe(ms(3_000));
+    expect(salioALaRed).toBe(false);
+  });
+
+  /**
+   * El sesgo, otra vez: sin disco y sin SSH no se sabe nada, y no saber nada
+   * NUNCA es «al día». `diagnosticar` ya convierte ese `null` en NO_PUDE_MEDIR.
+   */
+  it("sin disco y sin SSH devuelve null, que es ausencia de dato", () => {
+    const r = fechaBuildVivo(BUILD_ID_VIVO, { local: () => null, remoto: () => null });
+
+    expect(r).toBeNull();
+    expect(diagnosticar({ buildIdMtimeMs: r, commits: [], homeStatus: 200 }).codigo).toBe(
+      NO_PUDE_MEDIR,
+    );
+  });
+
+  /**
+   * El build armado se busca en el mismo disco que el vivo. Si el gate midiera
+   * el runtime por SSH y el staged en el disco local, diría «no hay ningún
+   * build armado» sobre una máquina donde sí lo hay, y mandaría a rearmar uno
+   * que ya existe — un pedido de deploy inventado, que a Sergio le llega igual
+   * que los reales.
+   */
+  it("busca el build armado en el mismo disco donde encontró el vivo", () => {
+    const candidato = {
+      ruta: "/opt/onia-landing/runtime-next.new-20260905023618",
+      buildId: "abc123",
+      mtimeMs: ms(5_000),
+    };
+    const r = stagedDisponible(STAGED_DIR, {
+      local: () => null,
+      remoto: () => [candidato],
+    });
+
+    expect(r).toEqual(candidato);
+  });
+
+  /**
+   * Un SSH que falla y un VPS sin builds armados dan la misma pinta si se los
+   * confunde: lista vacía. `null` es «no pude preguntar» y manda a NO PUDE
+   * MEDIR; `[]` es «pregunté y no hay», que manda a armarlo.
+   */
+  it("distingue «no hay staged» de «no pude preguntar»", () => {
+    expect(stagedDisponible(STAGED_DIR, { local: () => null, remoto: () => [] })).toBeNull();
+    expect(stagedDisponible(STAGED_DIR, { local: () => null, remoto: () => null })).toBeNull();
+  });
+
+  /**
+   * El parseo de la respuesta remota, aparte de la red para poder probarlo.
+   * Una línea a medias es un directorio que el swap rechazaría: se descarta en
+   * vez de ofrecerse, igual que hace la rama local con `STAGED_MARCA`.
+   */
+  describe("parsearStagedRemoto", () => {
+    it("lee ruta, fecha y BUILD_ID, y devuelve el más nuevo primero", () => {
+      const r = parsearStagedRemoto(
+        "/opt/onia-landing/runtime-next.new-A\t1000\tbuildA\n" +
+          "/opt/onia-landing/runtime-next.new-B\t3000\tbuildB\n",
+      );
+
+      expect(r).toHaveLength(2);
+      expect(r?.[0].buildId).toBe("buildB");
+      expect(r?.[0].mtimeMs).toBe(ms(3_000));
+      expect(r?.[0].ruta).toBe("/opt/onia-landing/runtime-next.new-B");
+    });
+
+    it("descarta las líneas incompletas en vez de ofrecer una ruta rota", () => {
+      const r = parsearStagedRemoto(
+        "/opt/onia-landing/runtime-next.new-A\n" +
+          "/opt/onia-landing/runtime-next.new-B\t3000\tbuildB\n" +
+          "\t\t\n",
+      );
+
+      expect(r).toHaveLength(1);
+      expect(r?.[0].buildId).toBe("buildB");
+    });
+
+    it("sin ninguna carpeta contesta con la lista vacía, no con null", () => {
+      expect(parsearStagedRemoto("")).toEqual([]);
+      expect(parsearStagedRemoto("\n \n")).toEqual([]);
     });
   });
 });
