@@ -22,15 +22,17 @@ cierre: mueve dónde corre el mismo trabajo.
 
 ## 2. Qué quedó EN PRODUCCIÓN (vivo ahora)
 
-Medido el 2026-09-05 ~18:00 UTC, no de memoria:
+Medido el 2026-09-05 ~18:50 UTC, no de memoria:
 
 | | estado real |
 |---|---|
-| Loops activos en el **VPS** | **7** (`chatbot-cola`, `onia-cola`, `web-venta`, `lucia`, `kpis-semanal`, `recorrido-cliente`, `supervisor`) |
+| Loops activos en el **VPS** | **4** — `onia-cola`, `chatbot-cola`, `web-venta`, `recorrido-cliente`. Los otros tres quedaron **congelados** (comentados, no borrados) |
 | Loops activos en **casa** | **0** — los 5 instalados están comentados en su `crontab` |
 | Mantenimiento activo en casa | **3** (rsync de logs, memoria, sincronización horaria) |
 | Repo del nodo de casa | **al día con `origin/main`**, 0 commits detrás |
 | Sincronización horaria de casa | **funciona** (última: 17:44:03 UTC, 1 archivo) |
+| Prompts desplegados en el VPS | **al día, 18:39** — `paso0=1` en los cuatro, `plataforma-v1` vivo en `chatbot-cola` |
+| `/root/bin/onia-loops-sync.sh` del VPS | **descongelado 18:41**, idéntico a `origin/main` |
 
 **Cambios que SÍ están vivos en el VPS** (los hice yo, fuera del repo):
 
@@ -71,7 +73,7 @@ verdes. Mergeó en la vuelta siguiente.
 
 ## 4. Archivos tocados
 
-**En el repo** (rama `claude/onia-dev-node-setup-22a170`, 10 commits):
+**En el repo** (rama `claude/onia-dev-node-setup-22a170`, 14 commits, **todos en `main` desde las 18:40**):
 
 | archivo | qué |
 |---|---|
@@ -83,6 +85,8 @@ verdes. Mergeó en la vuelta siguiente.
 | `scripts/loops/sincronizar.sh` | guarda de shims acotada a `head -5`; **100644 → 100755** |
 | `scripts/loops_registrados.mjs` | gate consciente de la máquina (self-check 21/21) |
 | `hermes-content/docs/PLAN_HOMELAB.md` | el segundo punto ciego: un nodo que corre código viejo |
+| `scripts/loops/extras/congelar-loops-vps.sh` | **nuevo** — congela loops con la **guarda de orden adentro**: se niega (`exit 1`) si `loops.md` de `main` todavía los lista como activos |
+| `scripts/loops/extras/descongelar-sync-vps.sh` | **nuevo** — rompe una vez el candado circular del sync, con freno propio |
 
 **Fuera del repo, en máquinas** — ver §2.
 
@@ -107,9 +111,10 @@ verdes. Mergeó en la vuelta siguiente.
    la guarda**. `sincronizar.sh` se negaba a desplegarse a sí mismo: el sync del VPS quedó
    congelado desde las 00:43 y cada hora loggeó *"conservado (shim del nodo de casa)"* **en el
    VPS**, donde no hay nodo de casa. El mensaje absurdo estuvo 15 h en el log sin que nadie lo
-   leyera. Arreglado (`head -5`), **pero el arreglo está en la rama sin mergear**, y el candado es
-   circular: la copia vieja es la que decide. **Hay que romperlo a mano una vez** —
-   `scratchpad/descongelar-vps.sh`, ya escrito, con freno si `main` aún no trae el arreglo.
+   leyera. Arreglado (`head -5`) y **el candado ya se rompió a mano el 2026-09-05 18:41** — era
+   circular: la copia vieja era la que decidía, así que el arreglo no podía aplicarse solo. El
+   guion quedó en el repo: `scripts/loops/extras/descongelar-sync-vps.sh`, con freno si `main` aún
+   no trae la guarda acotada.
 
 4. **Tres bugs en mi propio guion de mudanza, atrapados antes de correrlo:** `#` como delimitador
    de `sed` con `#` en el patrón; `$@` que bash expandía dentro de comillas dobles; y un `$?` que
