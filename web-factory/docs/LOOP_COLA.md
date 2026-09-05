@@ -381,6 +381,42 @@ Las tres formas de fantasma que ya aparecieron acá:
       que el dato diga — incluso si desmiente lo que hoy está escrito, que es lo que pasó en
       los dos rubros anteriores.
 
+- [x] **El gate visual del panel fallaba ABIERTO en Linux: se dibujaba sus propias baselines
+      y pasaba en verde contra ellas.** Salió de la tarea `t_b3999c1b`, que lo daba por
+      "dormido" — y era lo contrario.
+      **Evidencia, medida corriendo el gate dos veces seguidas sin tocar una línea**:
+      corrida 1 → `8 failed`; corrida 2 → **`8 passed (11.3s)`**. Las 8 baselines vivían sólo
+      como `-chromium-win32.png`; en Linux Playwright busca `-chromium-linux.png`, no lo
+      encontraba, y con el modo por defecto (`updateSnapshots: "missing"`) lo **escribía** con
+      el render del momento. O sea que en el VPS y en nodo-casa —donde corren los loops— el
+      gate adoptaba como verdad cualquier cosa que encontrara, **incluida una regresión**, y
+      no podía cazar nada nunca. El tope de `maxDiffPixels: 20` que A10 midió con tanto
+      cuidado no protegía nada del lado Linux.
+      **El arreglo, dos mitades** (`web-factory/tests/e2e/visual.spec.ts`):
+      1. Un guard que exige que la baseline de **esta** plataforma exista antes de comparar, y
+         que **no la genera solo**. Se saltea únicamente si a la corrida le pidieron escribirlas
+         (`--update-snapshots`), que es el único caso donde generar es el objetivo.
+      2. Las 8 baselines `-chromium-linux.png`, commiteadas.
+      **Falsificado en ROJO primero, por el motivo correcto**: escondiendo una baseline, el
+      gate da `1 failed · 7 passed` con el mensaje del guard (nombra el archivo y el comando),
+      y —lo que importa— **no la re-escribe**: el fallo abierto queda cerrado.
+      Con `--update-snapshots` la regenera, y sale **byte a byte idéntica** (mismo md5) a la
+      que se miró: el render es determinista en esta máquina.
+      **El gate sigue MORDIENDO**, que es lo que separa un verde vivo de un verde vacío:
+      revirtiendo `MARCADOR_KPI_PAD_ESQUINA` al estado pre-arreglo (el gajo de `a7e26b6a`), da
+      **384 a 1.824 píxeles** de diferencia contra un tope de 20. Restaurado byte a byte.
+      **Mirado renderizado antes de commitear** — no se commitea una baseline sin abrirla:
+      `dashboard-demo-1440-light` y `dashboard-edge-1440-light`. Los cuatro puntos de las
+      tarjetas KPI son círculos enteros y bien adentro de su tarjeta, las fuentes de Google
+      resolvieron, y el fixture de borde renderiza el negativo sin aplastarse, el cero, la
+      serie de 90 puntos y los tres estados (cargando / vacío / error).
+      **3 corridas limpias seguidas: 8/8 verde**, sin el flap de alto que anotó A10.
+      ⚠️ **Queda abierta la mitad que no se puede hacer desde Linux**: las 8 `-chromium-win32.png`
+      siguen **viejas** (`a7e26b6a` les movió la geometría del spark). Con el guard puesto, una
+      corrida en Windows da rojo por diferencia de píxeles, que es correcto. Se regeneran con
+      `cd web-factory && pnpm exec playwright test visual.spec.ts --project=chromium --update-snapshots`,
+      **mirando los PNG antes de commitearlos**. Anotado en `t_b3999c1b`, que queda abierta por eso.
+
 ## Bloqueado (decide Sergio)
 
 > Reverificado el 2026-09-01. Un bloqueo vencido es peor que un fantasma: le pide a Sergio
