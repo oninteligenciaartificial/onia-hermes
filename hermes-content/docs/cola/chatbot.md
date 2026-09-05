@@ -178,7 +178,18 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
-- [ ] 🔴 **El bot cierra la venta y la demo NO EXISTE: dice "Listo, agendado" sin reserva y sin
+- [x] ✅ **CERRADO el 2026-09-05: la promesa ya se cumple avisando.** El gate que este ítem
+      construyó —`npm run demo:agendada`, el que mide el estado append-only y no el mensaje— sale
+      **exit 0** medido hoy: *"SIN DEMOS HUECAS NUEVAS — desde que existe el aviso a Sergio, toda
+      promesa tuvo su reserva o su aviso"*. La única promesa hueca que queda (conv 49) es de la
+      sonda QA y es **anterior** al canal de aviso, así que se informa como historia y no como
+      incidente. Lo que lo destrabó fue D2 (`t_b18ca430`): aviso por Telegram **sin** calendario,
+      hoy encendido y con credenciales en el proceso vivo (ver el ítem de abajo). Cal.com sigue
+      muerto y ya no bloquea nada. **La historia de cómo se llegó acá se conserva entera abajo:
+      es el registro de tres modos de falla distintos, no relleno.**
+
+      🔻 **Historia del ítem (cerrado, no rehacer):**
+      **El bot cerraba la venta y la demo NO EXISTÍA: decía "Listo, agendado" sin reserva y sin
       avisarle a nadie.** Encontrado el 2026-09-03 recorriendo el frente (escalón 3), con los
       **tres** gates del carril en VERDE al mismo tiempo.
       **La medición, en producción y no en un test.** Se mandó el turno 3 por el widget real
@@ -313,8 +324,23 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       fire-and-forget. **Cal.com sigue muerto y eso ya no bloquea nada**: la promesa se cumple
       avisando, no reservando.
 
-- [ ] 🔴 **El bot promete "ya le pasé tu consulta a Sergio, te escribe él" y NADIE se lo pasa:
-      el aviso del handoff viaja hasta un canal apagado.** Encontrado el 2026-09-03 18:10 UTC
+- [x] ✅ **CERRADO el 2026-09-05: el aviso está DESPLEGADO y ENCENDIDO en producción.** El ítem
+      se quedó abierto por su última línea (*"NO DESPLEGADO — el archivo nuevo falta en el VPS y
+      `webhook-server.mjs` difiere"*), y eso **venció**. Medido hoy contra el VPS, no leído:
+      · `/opt/onia/bot/aviso-telegram.mjs` existe (9.628 B, 04-sep 14:34)
+      · `webhook-server.mjs` repo vs producción → **idéntico** (`diff -q`)
+      · el lanzador pasa las variables del aviso (`grep -c ONIA_BOT_TG_AVISO webhook-server.sh` → 5)
+      · y en el **proceso vivo** (PID 25138): `ONIA_BOT_TG_AVISO=true` con `TG_BOT_TOKEN` y
+        `TG_CHAT_ID` presentes — que es el único lugar donde este flag dice la verdad.
+      `npm run avisos:vivo` da **circuito ok** en sus cuatro eslabones (flag, credenciales, el
+      motor emitiendo `notify_sergio`, texto accionable) con **0 eventos**, que es verde: no hubo
+      handoffs, no es que no salgan. Lo que queda en el espejo sin desplegar son **instrumentos**
+      de medición nuevos (`avisos-vivo.mjs`, `rubros-vivos.mjs`, `anticipacion-viva.mjs` y sus
+      tests), no el motor — no atienden a nadie y su lugar es el repo.
+
+      🔻 **Historia del ítem (cerrado, no rehacer):**
+      **El bot prometía "ya le pasé tu consulta a Sergio, te escribe él" y NADIE se lo pasaba:
+      el aviso del handoff viajaba hasta un canal apagado.** Encontrado el 2026-09-03 18:10 UTC
       cerrando el ítem de abajo, mirando el frente *"lo que promete"* — no por la cola.
       **La medición, en producción:** conversación 49, mensaje 389 (recién derivada por el arreglo
       de abajo). Texto literal del bot: *"Eso lo tiene que ver Sergio, no yo… **Ya le pasé tu
