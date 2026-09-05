@@ -23,6 +23,31 @@ import { renderFontLinks } from "./font-links";
  *  dejo pasar el defecto una vez. */
 const MARCADOR_KPI_R = 6;
 
+/** Holgura EXTRA del punto final, en unidades del viewBox, contra la esquina
+ *  REDONDEADA de la tarjeta — no contra el borde del viewBox, que ya lo cubre
+ *  `MARCADOR_KPI_R`.
+ *
+ *  El sparkline sangra hasta el borde de la card (`margin: 4px -18px -16px`) y
+ *  `.wf-kpi` recorta con `border-radius: 12px` + `overflow: hidden`. Cuando el
+ *  ultimo valor es el MINIMO de la serie, el punto cae en la esquina de abajo a
+ *  la derecha y el arco se lo come: medido, pintaba 5,00px declarando 8,10px.
+ *  Reservar contra el borde recto NO alcanza — es el mismo defecto que el
+ *  titular de la ferreteria, una reserva que mira una sola de las dos
+ *  restricciones.
+ *
+ *  La cuenta, con `s` = escala del SVG (0,675 a 390px y 0,839 a 1440, medidas):
+ *  el recorte es un arco de radio 11px (los 12 del token menos el borde de 1px)
+ *  centrado a 12px de la esquina, y el disco entra entero si
+ *  `√2·(12 − (1 + P·s)) ≤ 11 − MARCADOR_KPI_R·s`. Da P ≥ 9,02 en la peor escala
+ *  medida; con 10 sobra ~0,9px y sigue valiendo hasta s = 0,56 (una card de
+ *  ~180px, mas angosta que el viewport de 375 que es el mas chico que servimos).
+ *
+ *  Va en DIAGONAL y por eso cuesta 4 unidades: la restriccion es un arco, asi
+ *  que alejar el punto de los dos bordes a la vez es cuatro veces mas barato que
+ *  alejarlo solo del derecho (que pedia ~22 unidades, o sea renunciar al
+ *  sangrado de borde a borde que pide la ficha del patron). */
+const MARCADOR_KPI_PAD_ESQUINA = MARCADOR_KPI_R + 4;
+
 export type DashboardKpi = {
   label: string;
   value: string;
@@ -1002,17 +1027,38 @@ function renderKpiSpark(values: number[], label: string): string {
   const height = 44;
   // El padding reserva el lugar del punto final: si fuera menor que su radio, el
   // disco se saldria del viewBox y el SVG lo recortaria contra el borde (el
-  // ultimo punto cae justo en `width - pad`, y si es el maximo, en `y = pad`).
-  const pad = MARCADOR_KPI_R;
+  // ultimo punto cae justo en `width - padDer`, y si es el maximo, en `y = padArriba`).
+  //
+  // Asimetrico A PROPOSITO, y no por gusto: los unicos dos lados donde el dibujo
+  // toca una ESQUINA REDONDEADA de la tarjeta son el derecho y el de abajo — el
+  // punto final siempre es el ultimo valor (derecha) y el sparkline esta pegado
+  // al piso de la card. Arriba e izquierda el SVG termina dentro de la tarjeta,
+  // asi que ahi alcanza con el radio y subirlos solo achataria la curva y
+  // achicaria el sangrado de gratis. De yapa queda MAS parejo que antes: hoy el
+  // disco quedaba tangente al borde derecho (0px de aire) contra 4,05px del
+  // arranque de la curva a la izquierda.
+  const padArriba = MARCADOR_KPI_R;
+  const padIzq = MARCADOR_KPI_R;
+  const padDer = MARCADOR_KPI_PAD_ESQUINA;
+  const padAbajo = MARCADOR_KPI_PAD_ESQUINA;
   const count = values.length;
 
   const xFor = (index: number): number =>
-    pad + (count <= 1 ? (width - 2 * pad) / 2 : (index / (count - 1)) * (width - 2 * pad));
+    padIzq +
+    (count <= 1
+      ? (width - padIzq - padDer) / 2
+      : (index / (count - 1)) * (width - padIzq - padDer));
   const yFor = (value: number): number =>
-    height - pad - ((value - min) / range) * (height - 2 * pad);
+    height - padAbajo - ((value - min) / range) * (height - padArriba - padAbajo);
 
   const line = values.map((v, index) => `${xFor(index).toFixed(1)},${yFor(v).toFixed(1)}`).join(" ");
-  const area = `${xFor(0).toFixed(1)},${height - pad} ${line} ${xFor(count - 1).toFixed(1)},${height - pad}`;
+  // La base del relleno NO baja con `padAbajo`: se queda donde estaba (a
+  // `MARCADOR_KPI_R` del piso) para que la silueta del area contra el borde de la
+  // tarjeta — que es lo que se ve — quede identica byte a byte a la de antes.
+  // Sigue por debajo del minimo de la curva, asi que el poligono queda bien
+  // formado.
+  const baseArea = height - MARCADOR_KPI_R;
+  const area = `${xFor(0).toFixed(1)},${baseArea} ${line} ${xFor(count - 1).toFixed(1)},${baseArea}`;
   const last = count ? values[count - 1] : undefined;
   const dot = last !== undefined
     ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last).toFixed(1)}" r="${MARCADOR_KPI_R}" fill="currentColor" data-wf-marker></circle>`

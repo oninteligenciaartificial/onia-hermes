@@ -67,7 +67,11 @@ async function medirMarcadores(page: Page): Promise<Marcador[]> {
        menos y hunde justo al que cumple por poco. */
     const medidas: Marcador[] = [];
 
-    for (const marcador of document.querySelectorAll("svg [data-wf-marker]")) {
+    // `Array.from` y no `for..of` sobre el NodeList: la config de tipos de
+    // `packages` no trae `dom.iterable`, asi que recorrerlo directo compila en el
+    // navegador y rompe `tsc -p tsconfig.packages.json` (TS2488). El gate anda
+    // igual; lo que quedaba roto era el typecheck del paquete.
+    for (const marcador of Array.from(document.querySelectorAll("svg [data-wf-marker]"))) {
       // `elementFromPoint` solo ve la ventana: sin traer el marcador al centro,
       // todo lo que quedo bajo el pliegue mide 0 y el gate inventa un rojo.
       marcador.scrollIntoView({ block: "center", inline: "center" });

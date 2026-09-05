@@ -1,3 +1,5 @@
+import fs from "node:fs";
+
 import { expect, test } from "@playwright/test";
 
 /**
@@ -43,7 +45,36 @@ const SCHEMES = ["light", "dark"] as const;
 for (const target of PAGES) {
   for (const viewport of VIEWPORTS) {
     for (const scheme of SCHEMES) {
-      test(`visual: ${target.name} — ${viewport.name} — ${scheme}`, async ({ page }) => {
+      test(`visual: ${target.name} — ${viewport.name} — ${scheme}`, async ({ page }, testInfo) => {
+        const nombre = `${target.slug}-${viewport.name}-${scheme}.png`;
+
+        // La baseline de ESTA plataforma tiene que existir ANTES de comparar.
+        //
+        // Sin esto el gate falla ABIERTO, y se midio: las 8 baselines vivian solo
+        // como `-chromium-win32.png`, asi que en Linux —donde corren los loops y
+        // el VPS— Playwright buscaba `-chromium-linux.png`, no lo encontraba, y
+        // con el modo por defecto (`updateSnapshots: "missing"`) lo ESCRIBIA con
+        // el render del momento. Corrida 1: 8 en rojo. Corrida 2, sin tocar una
+        // linea: 8 en VERDE contra baselines que el gate se dibujo a si mismo.
+        // O sea que en Linux adoptaba como verdad cualquier cosa que encontrara,
+        // incluida una regresion, y no podia cazar nada nunca.
+        //
+        // El chequeo se saltea si a la corrida le PIDIERON escribir baselines
+        // (`--update-snapshots`, que deja el modo en "all"/"changed"): ahi
+        // generarlas es justo el objetivo. Queda activo en el modo por defecto,
+        // que es el unico donde el auto-escrito es silencioso.
+        if (testInfo.config.updateSnapshots === "missing") {
+          const baseline = testInfo.snapshotPath(nombre);
+          expect(
+            fs.existsSync(baseline),
+            `Falta la baseline de esta plataforma: ${baseline}\n` +
+              `NO se genera sola a proposito: si se autogenerara, la corrida siguiente pasaria\n` +
+              `en verde contra un render sin mirar y el gate dejaria de proteger nada.\n` +
+              `Generala a mano, MIRA los PNG antes de commitearlos, y commitealos:\n` +
+              `  cd web-factory && pnpm exec playwright test visual.spec.ts --project=chromium --update-snapshots`,
+          ).toBe(true);
+        }
+
         await page.setViewportSize({ width: viewport.width, height: viewport.height });
         await page.emulateMedia({ colorScheme: scheme, reducedMotion: "reduce" });
         await page.goto(`/${target.slug}/`);
@@ -52,7 +83,7 @@ for (const target of PAGES) {
         // deja el panel en la fuente del sistema y la baseline queda podrida.
         await page.evaluate(() => document.fonts.ready);
 
-        await expect(page).toHaveScreenshot(`${target.slug}-${viewport.name}-${scheme}.png`, {
+        await expect(page).toHaveScreenshot(nombre, {
           fullPage: true,
           // Tope ABSOLUTO, no ratio. Con `maxDiffPixelRatio: 0.002` sobre una
           // captura fullPage de 1440x1700 el presupuesto era de ~4.900 pixeles:
