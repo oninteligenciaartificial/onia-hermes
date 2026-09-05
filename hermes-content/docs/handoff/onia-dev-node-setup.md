@@ -116,6 +116,13 @@ Esa línea es la que hace que nadie lo mire.
   que la próxima medición de cuota no lo descubra de nuevo como sorpresa.
 - El resto de los ~20 crons del VPS que no son loops (backups, recordatorios, watchdogs del bot,
   vigía de auth) **no llaman a Claude**. Se revisaron uno por uno el 2026-09-05.
+- ⚠️ **`/root/bin/lucia-perfeccion.sh` es el único script de `/root/bin` que ESCRIBE el crontab**
+  (los demás solo lo leen). Hoy **no está agendado** y solo se borra a sí mismo
+  (`grep -v lucia-perfeccion.sh`), así que **no puede resucitar** lo congelado. Pero lo hace con
+  `crontab -l | grep -v … | crontab -`, que es **el patrón exacto que ya borró 82 líneas** (§5).
+  Está dormido; el día que se reabra su ventana, vuelve a estar armado. Cambiarlo por
+  construir-verificar-instalar es una línea de trabajo, no se hizo acá para no tocar un carril
+  ajeno.
 
 ### Lo que sigue abierto, y es lo único
 
