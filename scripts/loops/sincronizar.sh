@@ -114,8 +114,19 @@ poner() {  # poner <origen> <destino>
   #
   # Reordenar los pasos del instalador no alcanzaba: este script corre por cron
   # cada hora (`44 * * * *`) y los volveria a pisar. La guarda va aca.
-  # En el VPS no hay shims, asi que esto no hace nada alla.
-  if grep -q 'Generado por instalar-homelab.sh' "$destino" 2>/dev/null; then
+  #
+  # 🔴 SOLO EL ENCABEZADO (head -5). La marca esta en la LINEA 2 de todo shim que
+  # genera el instalador. Buscarla en el archivo entero hacia que este script se
+  # bloqueara A SI MISMO: `poner` lo despliega como /root/bin/onia-loops-sync.sh,
+  # y su copia contiene el literal 'Generado por instalar-homelab.sh' — el de esta
+  # linea de aca abajo. Medido el 2026-09-05: el sync desplegado del VPS quedo
+  # congelado en las 00:43 y cada vuelta horaria desde entonces loggeaba
+  # "conservado (shim del nodo de casa)" EN EL VPS, donde no hay ningun nodo de
+  # casa. El mensaje absurdo era la pista, y estuvo 15 horas en el log.
+  #
+  # Una guarda que se apaga a si misma no falla ruidosa: deja de aplicar arreglos
+  # en silencio, que es la unica forma de fallo que este script existe para evitar.
+  if head -5 "$destino" 2>/dev/null | grep -q 'Generado por instalar-homelab.sh'; then
     log "conservado (shim del nodo de casa, no se pisa): $destino"
     return 0
   fi
