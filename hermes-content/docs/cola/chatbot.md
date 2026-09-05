@@ -1638,6 +1638,34 @@ archivos.**
 
 ## Cerrado — no rehacer
 
+- [x] **El bot decía "no tengo horarios libres" y dos turnos después ofrecía el que acababa de
+      descartar.** Cerrado el 2026-09-05, en la misma vuelta en que se encontró. Commit
+      `d6a699205`. Archivos: `hermes-content/deploy/vps-ops/bot/reply-builder.mjs`,
+      `bot-engine.test.mjs`.
+      **Cómo apareció:** corriendo el simulador del chequeo de arranque contra los `ONIA_BOT_SLOTS`
+      reales de `/opt/onia/bot/webhook.env`. La bienvenida salía *"Justo ahora no tengo horarios
+      libres para ofrecerte"* y la respuesta de facturación cerraba con *"¿Te reservo **sábado 5 de
+      septiembre, 09:00** o **lunes 7 de septiembre, 14:00**?"* — el sábado era **ese mismo día**.
+      **La causa:** las dos ramas leen el mismo flag `pending` con **polaridad opuesta** —
+      `slotsPending()` (ALGUNO pending → `M0_SIN_HORARIOS`) contra `hayHorarioReal()` (ALGUNO real
+      → `PENDING_HORARIO`, que pone las DOS etiquetas). Mientras `pending` fue todo-o-nada (los dos
+      placeholders de `DEMO_SLOTS`) las dos decían lo mismo; el corte por anticipación que entró la
+      vuelta anterior (`375b8af08`, `ANTICIPACION_MINIMA_MS`) lo volvió un estado **por horario** y
+      ahí el desacuerdo salió a la superficie. Es el arreglo de ayer aplicado a una variante y no a
+      su hermana — el modo de falla que este carril ya tiene escrito.
+      **Barrido completo, no sólo donde saltó:** las otras tres superficies que muestran horarios ya
+      cortaban con la polaridad buena y se verificaron una por una — bienvenida y `M0b`
+      (`slotsPending`), barrido de follow-up (`followup-run.mjs:283`) y plantilla **paga**
+      (`followUpTemplate:186`, `.some(pending) → null`). El único agujero era `hayHorarioReal`.
+      **Prueba:** test `"HORARIO VENCIDO"` en rojo primero por el motivo correcto (ofrecía el
+      sábado), verde después; **834** del bot y la cadena `npm test` en verde.
+      🔴 **Commiteado, NO desplegado.** El bot vivo corre `/tmp/onia-bot/` y su `config.mjs` no
+      tiene el corte (`docker exec onia-center grep -c ANTICIPACION_MINIMA_MS /tmp/onia-bot/config.mjs`
+      → **0**). Medido en producción el 06:12 La Paz por el widget real (conversación 49): el bot
+      ofreció *"sábado 5 de septiembre, 09:00"* dos veces, a 2 h 48 min. Pedido en la tarea de
+      deploy que ya existe, **t_43e4b9ec**, con los dos SHA: desplegar sólo `375b8af08` deja al bot
+      contradiciéndose.
+
 - [x] **La guarda de entrada de `espejo-check.mjs` reventaba al importarlo, y el molde ya se había
       copiado a otro gate.** Hecho el 2026-09-02, en la misma vuelta en que se encontró.
       Archivos: `hermes-content/deploy/vps-ops/bot/espejo-check.mjs`, `scripts/s11_desplegado.mjs`.

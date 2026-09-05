@@ -1024,3 +1024,46 @@ test("PREGUNTA DE PRODUCTO no se come lo que ya tenia dueño: soporte, precio y 
   const precio = run(["DEMO", "¿cuanto sale el sistema al mes?"]);
   assert.ok(!precio.turns[1].notes.includes("handoff:detalle_tecnico_de_producto"), "precio tiene su propia rama");
 });
+
+// ---------------------------------------------------------------------------
+// HORARIOS MIXTOS: uno sostenible y uno vencido
+// ---------------------------------------------------------------------------
+// Medido el 2026-09-05 06:03 La Paz con el simulador contra los horarios REALES de
+// produccion (`ONIA_BOT_SLOTS` de /opt/onia/bot/webhook.env): el bot saludaba con
+// "Justo ahora no tengo horarios libres para ofrecerte" y DOS turnos despues cerraba la
+// respuesta de facturacion con "¿Te reservo **sábado 5 de septiembre, 09:00** o **lunes 7
+// de septiembre, 14:00**?" — el sábado era ese mismo dia a 3 h, o sea la promesa que
+// Sergio prohibio ("que se agenden un dia antes para tener tiempo de cancelar") y ademas
+// contradiciendo lo que el mismo bot acababa de decir.
+//
+// La causa es que las dos ramas leen el MISMO flag con polaridad opuesta y hasta ayer eso
+// no se notaba, porque `pending` era todo-o-nada (los dos placeholders de DEMO_SLOTS):
+//   - bienvenida  -> `slotsPending()` = ALGUNO pending  -> M0_SIN_HORARIOS
+//   - re-pregunta -> `hayHorarioReal()` = ALGUNO real   -> PENDING_HORARIO con las DOS etiquetas
+// El corte por anticipacion (ANTICIPACION_MINIMA_MS, config.mjs) volvio `pending` un estado
+// POR HORARIO, y ahi el desacuerdo salio a la superficie.
+//
+// La invariante que se fija: una etiqueta de horario `pending` NO puede llegar nunca al
+// prospecto, por ninguna de las dos ramas. Es la misma familia de bug que ya mordio a este
+// carril (un arreglo aplicado a una variante y no a su hermana), asi que se prueba el
+// recorrido entero, no la funcion.
+const CONFIG_MIXTO = createBotConfig({
+  slots: [
+    { key: "A", label: "sábado 5 de septiembre, 09:00", startAt: "2026-07-27T17:00:00Z", pending: true },
+    { key: "B", label: "lunes 7 de septiembre, 14:00", startAt: "2026-07-29T18:00:00Z", pending: false },
+  ],
+});
+
+test("HORARIO VENCIDO: la etiqueta del que ya no da un dia de aviso no sale por ninguna rama", () => {
+  const { turns } = run(["Hola, quiero informacion", "¿me hace la facturacion del SIAT?"], { config: CONFIG_MIXTO });
+
+  // La bienvenida ya se comporta: no ofrece horarios.
+  assert.ok(keysOf(turns[0]).includes("M0_SIN_HORARIOS"), "la bienvenida no puede ofrecer horarios");
+
+  // Y la re-pregunta del embudo tiene que decir lo MISMO. Aca es donde salia la contradiccion.
+  const todo = turns.map(textOf).join("\n");
+  assert.ok(
+    !todo.includes("sábado 5 de septiembre, 09:00"),
+    `se ofrecio un horario que no da un dia de aviso:\n${todo}`,
+  );
+});
