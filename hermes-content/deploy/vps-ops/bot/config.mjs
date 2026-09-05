@@ -323,8 +323,20 @@ export const SCRIPT = Object.freeze({
   M7: "_(Estoy respondiendo automático fuera de horario de oficina. {{humano}} te confirma en la mañana.)_",
 
   // SIAT / fiscal — respuesta fija segura (spec §2.3). Solo lo que es publico, cero promesa.
+  //
+  // SIN FECHA A PROPOSITO. Acá decía "desde el 30 de septiembre es obligatoria", que es justo el
+  // dato que caduca — y este texto es el FALLBACK de la FAQ `siat`, la que lleva
+  // `vigenteHasta: 2026-09-30`. O sea al vencer la FAQ el guion caía acá y repetía la misma
+  // afirmación, sin vencimiento que la pudiera callar: medido el 2026-09-05 corriendo el motor
+  // con el reloj en 2026-10-15 y en 2027-06-01, el bot seguía diciéndola en futuro sobre algo que
+  // para el prospecto ya había pasado. El vencimiento quedaba decorativo.
+  //
+  // La fecha vive en la FAQ, que es la que sabe vencerse. Acá va sólo lo durablemente cierto, y
+  // el "desde cuándo te aplica a vos" —que además depende del NIT y del grupo de contribuyente—
+  // se deriva al humano, que es de quien era la respuesta desde el principio.
+  // Lo cuida `fecha-que-caduca.test.mjs` sobre el guion ENTERO, no sobre esta clave.
   M_SIAT_BODY:
-    "Sobre facturación en línea te contesto sólo lo que es público: desde el 30 de septiembre es obligatoria y el SIN tiene un portal gratis. Lo que hace {{producto}} es que los datos ya estén cargados para que no tipees dos veces. El detalle exacto de tu caso lo ve {{humano}} en la demo.",
+    "Sobre facturación en línea te contesto sólo lo que es público: el SIN tiene un portal gratis. Lo que hace {{producto}} es que los datos ya estén cargados para que no tipees dos veces. Desde cuándo te aplica a vos según tu NIT lo ve {{humano}} en la demo.",
 
   // M0 SIN HORARIOS — la bienvenida cuando no hay disponibilidad real que ofrecer.
   // No es un caso raro: alcanza con que Cal.com no conteste O con que la agenda no tenga hueco en
