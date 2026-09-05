@@ -16,6 +16,60 @@
 # falla el build, y nadie se entera. El resultado va SIEMPRE, salga bien o mal.
 set -uo pipefail
 
+# ── Veredicto ────────────────────────────────────────────────────────────────
+# Traduce (codigo de salida, simulacro) en lo que se le cuenta a Sergio Urcullo:
+# TITULO para el aviso de Telegram y NOTA para el comentario de la tarea.
+#
+# Esta aparte y con autotest porque aca vivio un bug: en simulacro el aviso de
+# Telegram avisaba "(simulacro, no se toco produccion)" y la NOTA no, asi que la
+# tarea quedaba diciendo "publicado" sobre un deploy que no ocurrio. El chat se
+# scrollea y la tarea no: el unico registro que sobrevive era el falso.
+veredicto() {
+  local codigo=$1 seco=${2:-}
+  if [ -n "$seco" ]; then
+    TITULO="🧪 <b>$QUE: simulacro</b>"
+    NOTA="SIMULACRO ($seco): produccion NO se toco y el sitio sigue sirviendo el build viejo. El circuito se recorrio entero y salio con codigo $codigo. Esto NO es un deploy: el pedido sigue esperando."
+    return
+  fi
+  case "$codigo" in
+    0) TITULO="✅ <b>$QUE publicado</b>"; NOTA="DEPLOY EJECUTADO tras el ok de Sergio Urcullo: $QUE publicado (codigo 0)." ;;
+    2) TITULO="⚠️ <b>$QUE: no se pudo medir</b>"; NOTA="DEPLOY NO EJECUTADO: el publicador no pudo medir el estado (codigo 2). Produccion NO se toco." ;;
+    *) TITULO="🔴 <b>$QUE NO se publico</b>"; NOTA="DEPLOY FALLIDO (codigo $codigo). Produccion quedo como estaba o a medias: mirar $LOG." ;;
+  esac
+}
+
+# Gate: un simulacro NO puede quedar escrito como un deploy. Corre solo, sin
+# tocar produccion ni el tablero: `bash desplegar-en-segundo-plano.sh --autotest`
+autotest() {
+  QUE=onia.com.bo
+  LOG=/tmp/autotest-deploy.log
+  local fallas=0
+  contiene() { case "$1" in *"$2"*) return 0 ;; *) return 1 ;; esac; }
+  afirmar() { # <descripcion> <codigo de la condicion>
+    if [ "$2" = 0 ]; then echo "  ok    $1"; else echo "  FALLA $1"; fallas=$((fallas + 1)); fi
+  }
+
+  # Lo que Sergio Urcullo tiene que poder distinguir de un vistazo.
+  veredicto 0 "--dry-run"
+  ! contiene "$NOTA" "DEPLOY EJECUTADO"; afirmar "simulacro: la nota NO puede decir DEPLOY EJECUTADO" $?
+  ! contiene "$NOTA" "publicado";       afirmar "simulacro: la nota NO puede decir publicado" $?
+  contiene "$NOTA" "SIMULACRO";         afirmar "simulacro: la nota tiene que decir SIMULACRO" $?
+  ! contiene "$TITULO" "✅";            afirmar "simulacro: el titulo NO puede llevar el tilde verde" $?
+
+  # Y los tres veredictos reales tienen que seguir diciendo lo suyo.
+  veredicto 0 ""
+  contiene "$NOTA" "DEPLOY EJECUTADO";  afirmar "deploy real: la nota dice DEPLOY EJECUTADO" $?
+  veredicto 2 ""
+  contiene "$NOTA" "NO EJECUTADO";      afirmar "codigo 2: la nota dice NO EJECUTADO" $?
+  veredicto 1 ""
+  contiene "$NOTA" "FALLIDO";           afirmar "codigo 1: la nota dice FALLIDO" $?
+
+  [ "$fallas" = 0 ] && { echo "autotest OK"; return 0; }
+  echo "autotest: $fallas falla(s)"; return 1
+}
+
+[ "${1:-}" = "--autotest" ] && { autotest; exit $?; }
+
 SCRIPT=${1:?falta la ruta del publicador}
 TAREA=${2:?falta el id de la tarea}
 SECO=${3:-}
@@ -44,11 +98,7 @@ FIN=$(date -u '+%F %T')
 COLA=$(tail -n 6 "$LOG" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g')
 echo "════ $FIN UTC — termino con codigo $CODIGO" >> "$LOG"
 
-case "$CODIGO" in
-  0) TITULO="✅ <b>$QUE publicado</b>"; NOTA="DEPLOY EJECUTADO tras el ok de Sergio Urcullo: $QUE publicado (codigo 0)." ;;
-  2) TITULO="⚠️ <b>$QUE: no se pudo medir</b>"; NOTA="DEPLOY NO EJECUTADO: el publicador no pudo medir el estado (codigo 2). Produccion NO se toco." ;;
-  *) TITULO="🔴 <b>$QUE NO se publico</b>"; NOTA="DEPLOY FALLIDO (codigo $CODIGO). Produccion quedo como estaba o a medias: mirar $LOG." ;;
-esac
+veredicto "$CODIGO" "$SECO"
 
 [ -x "$TG" ] && "$TG" "$TITULO
 Tarea <code>$TAREA</code>${SECO:+ (simulacro, no se toco produccion)}
