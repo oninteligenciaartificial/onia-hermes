@@ -94,7 +94,17 @@ Las tres formas de fantasma que ya aparecieron acá:
 3. `pnpm typecheck:packages` verde; rojo en zona → arreglar mínimo y commitear.
 4. **`pnpm install --frozen-lockfile` desde `web-factory/`.** Si falla, el deploy de
    `onia.com.bo` está roto aunque nada de su app lo esté — ver el primer ítem de `## Ahora`.
+   ⚠️ **Corregido el 2026-09-04: `pnpm` NO estaba instalado en el VPS**, así que los pasos 3, 4
+   y 6 de este runbook —los tres que empiezan con `pnpm`— eran **inejecutables** en la máquina
+   donde corre el loop, y por eso nadie vio que `web-factory` se había quedado **sin un solo
+   `node_modules`**. Se resolvió con `corepack enable`, que dejó el shim en `/usr/bin/pnpm`
+   con la versión que fija `packageManager` (10.33.3), verificado en entorno limpio. Si algún
+   día vuelve a faltar: `corepack enable` desde `web-factory/`, no `npm i -g pnpm`.
 5. Node zombies de tests viejos → matar. Cerrar con la prueba (200, hash, exit 0).
+6. `pnpm --filter @onia/templates gate:marcadores` — mide en Chromium los 108 puntos de dato
+   de los dos paneles (claro/oscuro × 1440/390) contra el piso de 8 px de W4. Hoy da **rojo en
+   2 de 108** a propósito: es el ítem del punto del KPI en `## Ahora`, con su causa medida. Si
+   se pone rojo en OTRO caso, eso sí es nuevo.
 
    ⚠️ **El chequeo 4 nunca se había corrido de verdad, y tenía presa** (2026-09-02).
    La máquina cargaba **24 `node.exe` / 1.328 MB**. Dos eran del carril muerto
@@ -213,7 +223,43 @@ Las tres formas de fantasma que ya aparecieron acá:
       que se descubra medio año después. El siguiente recorte, si hace falta, sale de
       `motion/react` (`LazyMotion` + `m` en lugar de `motion`), que es lo que queda arriba.
 
-- [ ] **La primitiva de hover-lift existe, está documentada, y no la usa ni un bloque.**
+- [x] **Los gates de las dos webs de cliente NO PODÍAN CORRER en el VPS, y el fallo salía con
+      cara de "la web del cliente está rota".**
+      Medido el 2026-09-04 al arrancar la vuelta: `npm run typecheck` daba **ROJO en las dos
+      apps** con el código intacto. La causa era `sh: 1: tsc: not found` — `web-factory` no
+      tenía **un solo `node_modules`** (ni en este worktree ni en el clon principal, con 915 GB
+      libres, así que no era el disco). Ese rojo es la dirección **cara** del error: manda a
+      arreglar código sano. Y la trampa gemela es peor porque sale VERDE — `npx tsc --noEmit`
+      sin `node_modules` baja otro paquete llamado `tsc` y **sale con éxito**.
+      **Por qué nadie lo vio**: los pasos 3, 4 y 6 del runbook de salud de acá arriba empiezan
+      con `pnpm`… y **`pnpm` no estaba instalado en el VPS** (`command -v pnpm` vacío). Los tres
+      pasos que debían detectar esto eran inejecutables en la máquina donde corre el loop.
+      **Lo reparado, en orden, cada uno verificado**: `corepack enable` deja el shim en
+      `/usr/bin/pnpm` con la versión de `packageManager` (10.33.3, probado en entorno limpio) ·
+      `pnpm install --frozen-lockfile` (28,4 s, las dos apps son workspaces y se instalaron) ·
+      `playwright install chromium` (faltaba el navegador entero) · `playwright install-deps
+      chromium` (el binario estaba y **no arrancaba**: `libnspr4.so: cannot open shared object
+      file`).
+      **El arreglo que evita que vuelva a mentir**: `scripts/preflight.mjs` en las dos apps,
+      enganchado a `typecheck`, `prebuild` y `gates`. Separa **"no hay instrumento"** de **"el
+      código está roto"**: nombra qué falta, imprime el comando que lo repara *en esta máquina*
+      (detecta si `pnpm` está en el PATH y si no dice `corepack pnpm`) y sale con **3** — ni 0
+      ni 1. Falsificado en rojo escondiendo `node_modules/.bin/tsc`: `✗ INSTRUMENTO AUSENTE …
+      falta node_modules/.bin/tsc`, exit 3, y verde otra vez al restaurarlo.
+      ⚠️ **El navegador se prueba LANZÁNDOLO, y esa distinción no es cosmética**: la primera
+      versión miraba `existsSync(chromium.executablePath())` y daba **VERDE** — porque
+      `executablePath()` devuelve `chromium-1228/chrome-linux64/chrome` mientras los gates
+      lanzan el **`chromium_headless_shell-1228`**, que era justo el que faltaba. Habría sido el
+      mismo falso verde que este preflight existe para eliminar. Y aun con los dos binarios en
+      disco, sin `libnspr4.so` no abría: **un archivo presente no es un navegador que abre.**
+      **Evidencia final, con el instrumento ya en pie** — las dos apps de punta a punta:
+      typecheck OK · **peso: dental 143 kB y ferretería 148 kB contra 150** · pliegue **10/10
+      verde en las dos** (dental sobra 61-75 px, ferretería 40-258 px) · parallax vivo y quieto
+      bajo reduced-motion en las dos · contraste verde con sus 3 avisos de siempre (el ítem del
+      ghost). **Mirado renderizado**: `capturas/hero-1440x800.png`, hero entero, titular en 3
+      líneas y los dos CTA dentro del pliegue.
+
+- [x] **La primitiva de hover-lift existe, está documentada, y no la usa ni un bloque.**
       T34 se cerró como fantasma con esta frase adentro: *"lo que SÍ falta y no es esto:
       ningún bloque la usa — cablearla a las cards es otra tarea, anotada"*. Nunca fue línea.
       Una primitiva que ninguna card usa es una promesa de la galería que el cliente no ve.
@@ -225,16 +271,101 @@ Las tres formas de fantasma que ya aparecieron acá:
       **Hecho cuando**: las cards de al menos un bloque real la llevan, con su test de que la
       clase sigue puesta, y **mirado** el hover en la galería en claro y oscuro + con
       reduced-motion forzado, comprobando que ahí no se levanta.
+      ✅ **CERRADO el 2026-09-04 — FANTASMA: la primitiva ya no existe, y su "hecho cuando" era
+      hoy la acción equivocada.** El ítem se escribió con la evidencia de `motion.ts:53`, pero
+      **A8 la borró el 2026-09-01** — el mismo día en que se re-verificó esta cola, así que
+      quedó pidiendo cablear algo que ya no está. Hoy `grep -rn wf-hover-lift` sobre
+      `packages/` y `apps/` devuelve **cero definiciones**: sólo tres comentarios que narran el
+      borrado (`packages/blocks/src/motion.ts:27`, `packages/templates/src/clinic-css.test.ts:6`
+      y `:12`).
+      **Y cablearla habría sido un error medido, no una mejora**: A7 midió que su CSS sólo
+      viajaba en `logistics`/`realestate` —que no dibujan tarjetas— y que la página que sí las
+      dibuja (`clinic`) ya se levanta sola con su propia puerta de reduced-motion, así que la
+      clase habría quedado **inerte sobre una tarjeta que ya se movía**. Su sombra
+      `rgba(10,17,38,.35)` era además ciega al tema.
+      **Lo único que la primitiva aportaba y a la tarjeta le faltaba —la puerta de
+      reduced-motion— no se perdió**: lo guarda `clinic-css.test.ts`, que además tiene un gate
+      que atrapa **cualquier `:hover` nuevo con `translate/scale/rotate`** sin su
+      neutralización. O sea que la promesa que este ítem quería (que el hover no se mueva
+      cuando el visitante pidió no ver movimiento) está **mejor** cubierta que con la clase.
 
-- [ ] **El punto final del spark del KPI mide 5,03 px y el piso que fijó W4 es 8.**
+- [x] **El punto final del spark del KPI mide 5,03 px y el piso que fijó W4 es 8.**
       A6 lo dejó anotado dentro de su propio `[x]`: *"sigue en `r=3` y, con la escala de 0,839,
       mide 5,03px renderizados — bajo el piso de 8px"*. Es el único marcador del panel que
       quedó fuera de la regla que el propio carril se puso en W4.
-      **Evidencia**: `web-factory/packages/templates/src/dashboard.ts:993` sigue emitiendo
-      `r="3"` en el círculo del último punto.
       **Hecho cuando**: medido en el navegador el diámetro RENDERIZADO (no el atributo) en
       `dashboard-demo` y `dashboard-edge` × claro/oscuro × 1440/390, ≥8 px en todas, con el
       test que **cae** al volver a 3 verificado en rojo antes de darlo por bueno.
+
+      🔧 **2026-09-04 — ya hay gate, y el punto pasó de 4,05-5,03 px a 8,10-10,07 px en 6 de
+      los 8 casos. Queda UNO, y ese no se cierra sin una decisión de diseño.**
+      **El gate**: `pnpm --filter @onia/templates gate:marcadores`
+      (`packages/templates/scripts/gate-marcadores.ts`). Genera los dos paneles con el MISMO
+      `generateSite` que usa la fábrica —no un HTML armado a mano— y mide los 108 marcadores de
+      la matriz completa. Falsificado en rojo volviendo a `r="3"` (reproduce **5,03 px exacto**,
+      el número que decía esta línea, así que el instrumento coincide con el de A6) y con el
+      piso subido a 12 (`exit 1`).
+      ⚠️ **Mide PÍXELES PINTADOS, no el bounding box**, y eso no es un detalle de estilo: el box
+      declara la geometría aunque el SVG **recorte** el dibujo. El primer intento —un trazo
+      `non-scaling-stroke` de 8 px, que da 8 px en cualquier escala— medía **8,00 px verdes**
+      mientras en pantalla quedaba un **gajo de 3×3 px**, peor que el defecto original. Se
+      descartó por eso. Un gate de tamaño que mire geometría declarada aprueba recortes.
+      **Lo que queda, medido**: con `r=6` + `pad=6` el punto le entra al viewBox, pero el
+      sparkline **sangra hasta el borde de la tarjeta** (`width: calc(100% + 36px)`,
+      `margin: 4px -18px -16px`) y la tarjeta tiene `border-radius: 12px` con
+      `overflow: hidden`. Cuando el último valor es el **mínimo** de la serie, el punto cae en
+      la **esquina redondeada de abajo a la derecha** y la curva se lo come: pinta **5,00 px**
+      contra 8,10 declarados. Pasa en `dashboard-edge` a 390 (claro y oscuro). A 1440 no, y en
+      `dashboard-demo` tampoco: ahí el último valor es el máximo y la esquina de arriba queda
+      lejos, porque el spark está pegado al fondo de la tarjeta y no al techo.
+      **Por qué no lo cierro solo**: sacarlo de la esquina pide ~22 de 320 unidades de padding
+      (11 px de pantalla a escala 0,675), o sea **renunciar al sangrado de borde a borde** que
+      pide la ficha del patrón (banco: Stakent 23902428). Eso es cambiar cómo se ve la tarjeta,
+      no arreglar un defecto, y un cambio visual se muestra renderizado antes de aplicarlo.
+      **Las dos salidas, para decidir**: (a) el spark deja de sangrar a la derecha
+      (`width: calc(100% + 18px)`) y el punto entra entero, al precio de romper la simetría del
+      sangrado; (b) el punto se dibuja por encima del recorte —sacar el spark del `overflow` de
+      la tarjeta— que conserva el diseño pero toca la anatomía de la card.
+
+      ✅ **CERRADO el 2026-09-04 — 108/108 marcadores sobre el piso, y NO hubo que decidir
+      diseño: las dos salidas de arriba costaban de más porque las dos movían el punto en UN
+      solo eje.** El recorte lo hace un ARCO, así que la restricción es un círculo: alejar el
+      punto de los dos bordes **a la vez** cuesta la raíz de dos, no el doble. Medido: por el
+      eje horizontal solo pedía ~22 unidades (de ahí el "renunciar al sangrado"); **en diagonal
+      alcanzan 4**. Es el mismo error de método que el titular de la ferretería dos ítems más
+      arriba —una reserva que mira una sola de las dos restricciones—, y las dos veces la salida
+      cara apareció por mirar un eje.
+      **El arreglo** (`packages/templates/src/dashboard.ts`, `MARCADOR_KPI_PAD_ESQUINA`): el
+      padding que reserva el lugar del punto pasa de `6` a `6+4` **sólo a la derecha y abajo**,
+      que son los dos únicos lados donde el dibujo toca una esquina redondeada de la card
+      (el punto final siempre es el último valor, y el spark está pegado al piso). Arriba e
+      izquierda quedan en `6`: subirlos achataría la curva y achicaría el sangrado de gratis.
+      La base del relleno **no se movió** (sigue a `MARCADOR_KPI_R` del piso), así que la
+      silueta del área contra el borde de la tarjeta —que es lo que se ve— queda idéntica.
+      **Por qué no necesitó OK**: el sangrado de borde a borde se conserva entero y la curva es
+      indistinguible (comparadas las capturas antes/después de la misma tarjeta a 4x). De yapa
+      queda **más pareja** que antes: el disco estaba tangente al borde derecho (0 px de aire)
+      contra 4,05 px del arranque de la curva a la izquierda; ahora son 2,7 px contra 4,05 px.
+      **Evidencia** — el gate en ROJO primero, por el motivo correcto:
+      `✗ dashboard-edge 390x844 light: <wf-kpi-spark> pinta 5.00px (piso 8) — RECORTADO: la
+      geometría declara 8.10px` (×2, claro y oscuro). Después: **`✓ Todos los marcadores llegan
+      al piso de 8px`**, 108 medidos, peor diámetro 8,00 px.
+      **Mirado renderizado** a 390 y 1440 × claro/oscuro con `deviceScaleFactor: 4` (el defecto
+      son 3 px: a 1x no se juzga), cero recursos caídos: antes un **gajo** metido en la esquina,
+      ahora **disco entero**. Geometría del disco contra el arco: −0,97 px a 390 y −2,31 px a
+      1440 (negativo = entra entero).
+      ⚠️ **El gate del navegador no alcanzaba solo, y por eso hay guarda unitaria.** El test que
+      ya existía mira el borde del **viewBox** y daba VERDE sobre este defecto: el punto le entra
+      al viewBox y lo come la **card**. Va
+      `dashboard.test.ts` → *"el punto del KPI libra la ESQUINA REDONDEADA de la tarjeta, no sólo
+      el borde recto"*, que reconstruye el arco real (radio 12 del token menos 1 px de borde) en
+      la escala más chica medida. Su serie **cierra en 0 a propósito**: la que ya estaba termina
+      en el máximo —el punto se va arriba— y con ella el test no podría fallar nunca. Falsificado
+      volviendo el padding a `6`: cae con *"centro a 5.05x5.05px de la esquina"*, que es exacto
+      el número que midió el navegador en producción (5,09×5,05).
+      📌 **Queda anotado para el dueño de `tests/e2e/`** (no es zona de este carril): las
+      baselines de `visual.spec.ts` son `-chromium-win32.png` y esta geometría las mueve. Hay que
+      regenerarlas en Windows con `--update-snapshots`; en Linux ni siquiera corren.
 
 - [ ] **Carril B — portfolio sigue sin ancla (N=1), el último rubro que se receta por analogía.**
       B1 y B2 cerraron los seis rubros que tenían, y las dos terminan con la misma frase
@@ -249,6 +380,42 @@ Las tres formas de fantasma que ya aparecieron acá:
       `web-factory/data/references/design-sources/`, y la sección del playbook reescrita con lo
       que el dato diga — incluso si desmiente lo que hoy está escrito, que es lo que pasó en
       los dos rubros anteriores.
+
+- [x] **El gate visual del panel fallaba ABIERTO en Linux: se dibujaba sus propias baselines
+      y pasaba en verde contra ellas.** Salió de la tarea `t_b3999c1b`, que lo daba por
+      "dormido" — y era lo contrario.
+      **Evidencia, medida corriendo el gate dos veces seguidas sin tocar una línea**:
+      corrida 1 → `8 failed`; corrida 2 → **`8 passed (11.3s)`**. Las 8 baselines vivían sólo
+      como `-chromium-win32.png`; en Linux Playwright busca `-chromium-linux.png`, no lo
+      encontraba, y con el modo por defecto (`updateSnapshots: "missing"`) lo **escribía** con
+      el render del momento. O sea que en el VPS y en nodo-casa —donde corren los loops— el
+      gate adoptaba como verdad cualquier cosa que encontrara, **incluida una regresión**, y
+      no podía cazar nada nunca. El tope de `maxDiffPixels: 20` que A10 midió con tanto
+      cuidado no protegía nada del lado Linux.
+      **El arreglo, dos mitades** (`web-factory/tests/e2e/visual.spec.ts`):
+      1. Un guard que exige que la baseline de **esta** plataforma exista antes de comparar, y
+         que **no la genera solo**. Se saltea únicamente si a la corrida le pidieron escribirlas
+         (`--update-snapshots`), que es el único caso donde generar es el objetivo.
+      2. Las 8 baselines `-chromium-linux.png`, commiteadas.
+      **Falsificado en ROJO primero, por el motivo correcto**: escondiendo una baseline, el
+      gate da `1 failed · 7 passed` con el mensaje del guard (nombra el archivo y el comando),
+      y —lo que importa— **no la re-escribe**: el fallo abierto queda cerrado.
+      Con `--update-snapshots` la regenera, y sale **byte a byte idéntica** (mismo md5) a la
+      que se miró: el render es determinista en esta máquina.
+      **El gate sigue MORDIENDO**, que es lo que separa un verde vivo de un verde vacío:
+      revirtiendo `MARCADOR_KPI_PAD_ESQUINA` al estado pre-arreglo (el gajo de `a7e26b6a`), da
+      **384 a 1.824 píxeles** de diferencia contra un tope de 20. Restaurado byte a byte.
+      **Mirado renderizado antes de commitear** — no se commitea una baseline sin abrirla:
+      `dashboard-demo-1440-light` y `dashboard-edge-1440-light`. Los cuatro puntos de las
+      tarjetas KPI son círculos enteros y bien adentro de su tarjeta, las fuentes de Google
+      resolvieron, y el fixture de borde renderiza el negativo sin aplastarse, el cero, la
+      serie de 90 puntos y los tres estados (cargando / vacío / error).
+      **3 corridas limpias seguidas: 8/8 verde**, sin el flap de alto que anotó A10.
+      ⚠️ **Queda abierta la mitad que no se puede hacer desde Linux**: las 8 `-chromium-win32.png`
+      siguen **viejas** (`a7e26b6a` les movió la geometría del spark). Con el guard puesto, una
+      corrida en Windows da rojo por diferencia de píxeles, que es correcto. Se regeneran con
+      `cd web-factory && pnpm exec playwright test visual.spec.ts --project=chromium --update-snapshots`,
+      **mirando los PNG antes de commitearlos**. Anotado en `t_b3999c1b`, que queda abierta por eso.
 
 ## Bloqueado (decide Sergio)
 

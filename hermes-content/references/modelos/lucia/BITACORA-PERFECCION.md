@@ -1491,3 +1491,54 @@ las reporta, porque un gate que se calla sobre lo que no supo clasificar es como
 **Sigue pendiente y no es mío:** `COMUNIDAD` es el CTA que Sergio quiere fijo y necesita el enlace
 del grupo para cablearse (`t_ce495931`, bloqueada en él). Hasta que exista, ninguna pieza la pide:
 primero se cablea, después se promete.
+
+---
+
+## P13 — 2026-09-04 12:4x UTC · La objeción que se le mandó a Sergio como gasto tenía salida gratis
+
+**Gasto: 0 créditos.** Saldo 1932,14 antes y después (`higgsfield account status`). No se generó
+ninguna imagen: la única foto nueva del día es una **variante procesada** de una que ya existía.
+
+**La pregunta de la vuelta:** ¿por qué hay 9 piezas esperando OK y 0 aprobadas?
+
+No por falta de piezas. Midiendo la cola: la pieza que más importa —el carrusel FIJADO del
+perfil— llevaba **21 horas** esperando, y lo que la trababa no era Sergio:
+
+| lo que veía Sergio en la tarea | lo que era verdad al mirarlo |
+|---|---|
+| «NO PUBLICAR TODAVÍA — la portada tiene seis dedos» (03-sep 21:16) | **vencido.** La mano en disputa salió de la portada a las **21:47**, 31 minutos después del veredicto. La tarea congeló la evidencia y nadie la recontó |
+| dos tareas abiertas sobre la MISMA pieza (`t_a9ff7367`, `t_c7686e93`) | con historias distintas: una habla de la lámina 7, la otra de HUMO. Leídas en fila se contradicen |
+| «cambiar esa foto son otros 2 cr» — planteado como decisión de plata | **tenía salida de 0 créditos**, que nadie buscó antes de preguntar |
+
+**Lo aprendido, y es lo caro:** una objeción se le manda a Sergio como decisión de plata sólo
+**después** de agotar las salidas gratis, no antes. Acá la de 2 cr era la tercera opción, no la
+única: el recorte se descartó midiendo coordenadas y el cambio de foto se descartó mirando las
+cuatro candidatas del banco. Recién ahí quedaba el gasto — y el desenfoque selectivo lo evitó.
+Preguntar antes de agotar lo gratis no es prudencia: es cola que se le acumula a la única persona
+que no se repone.
+
+**Segundo aprendizaje, sobre el instrumento:** para juzgar «hay gente al fondo» hay que mirar la
+foto **fuente ampliada**, no la lámina compuesta. La tercera figura de la derecha parecía persona
+en la lámina y, ampliada 2,2×, es una mancha de bokeh tras las plantas: no comunica nada y no
+había que tocarla. Ampliar evitó trabajo, además de evitar el error.
+
+Detalle técnico del arreglo (máscara degradada, comando exacto, por qué no sirvió recortar ni
+cambiar de foto): `posts-20260807/L2/LEEME.md`, sección «El equipo del fondo salió de la lámina 4».
+
+## P13 · text2image_soul_v2 con UNA sola foto canon como referencia no sostiene la cara ni la escena — 2026-09-05
+
+**Intento:** para reponer los 3 fondos que le faltan a L6 (noche/celular, trabajando, estudiando,
+las 7 fuentes de `tanda-20260821/` están ausentes en las 8 worktrees del VPS, ver comentario en
+`t_0d811317`), generé con `text2image_soul_v2 --image-references canon/04-cafe-celular.jpg`
+(0,12 cr, `generadas-20260905/L6-S1-noche-celular.png`).
+
+**Resultado: rechazada.** No es de noche, no hay luz de pantalla — salió un restaurante de día.
+Y la cara no pasa la rúbrica: ojos verdosos (debe ser marrón almendrado), pecas casi invisibles,
+cara más ovalada que la del canon. `text2image_soul_v2` con **una sola** foto de referencia (el
+máximo que admite `image_references`, ver `higgsfield model get text2image_soul_v2`) no alcanza
+para sostener identidad + escena nueva a la vez — el Element-ancla `lucia-skin-v1` que sí funciona
+(`BANCO-OFICIAL.md`) usa **7 fotos** vía `nano_banana_2`/`nano_banana_pro` (2 cr), no una sola vía
+Soul V2. **No probar de nuevo esta combinación** (modelo barato + 1 referencia) para escenas que
+se alejan del encuadre de la foto de referencia; para las 3 fuentes que faltan, el camino real es
+nano_banana_pro con las 7 `canon/*.jpg` como `--image-references` (14 cr para 3 imágenes = fuera
+del tope de esta vuelta, cotizar aparte).

@@ -10,7 +10,13 @@ import {
   NOTA_FISCAL,
   bs,
 } from "@/lib/pricing";
-import { CHATBOT_PLAN, precioAnual, fmtBs } from "@/content/chatbot-precios";
+import {
+  CHATBOT_PLAN,
+  precioAnual,
+  fmtBs,
+  SALARIO_MINIMO,
+  pctDelSalarioMinimo,
+} from "@/content/chatbot-precios";
 import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
 import { EMPEZAR_URL } from "../nav";
 import { CTA_ALTA, ctaAltaPlan } from "../alta";
@@ -44,15 +50,12 @@ const ADDONS_RESTO = ADDONS.filter((addon) => addon.href !== "/chatbot");
  * `CHATBOT_PLAN.mensual` en vez de escribirse "12": si mañana cambia el precio
  * en la fuente única, la frase se mueve sola en lugar de quedar mintiendo.
  *
- * ⚠️ DUPLICADO CONOCIDO. La misma constante vive en (sitio)/chatbot/page.tsx:78
- * y en (sitio)/page.tsx. Le corresponde estar UNA vez, en
- * content/chatbot-precios.ts, al lado del precio del que es referencia — pero
- * ese archivo está fuera de este carril. Anotado en el reporte.
+ * ⚠️ DUPLICADO RESUELTO el 2026-09-04: el monto salía de una constante tipeada
+ * acá, en (sitio)/page.tsx y en (sitio)/chatbot/page.tsx. Hoy las tres leen
+ * content/chatbot-precios.ts, al lado del precio del que es referencia, y lo
+ * vigila (sitio)/salario-minimo.test.ts.
  */
-const SALARIO_MINIMO_2026 = 3300;
-const PCT_SALARIO = Math.round(
-  (CHATBOT_PLAN.mensual / SALARIO_MINIMO_2026) * 100,
-);
+const PCT_SALARIO = pctDelSalarioMinimo();
 
 /**
  * La `description` se ARMA con PLANES, no se escribe. Es la superficie que no
@@ -273,9 +276,14 @@ export default function Precios() {
                 Sin instalación. O {precioAnual(CHATBOT_PLAN)}.
               </p>
               <p className={s.offerAnchor}>
-                Es el <b>{PCT_SALARIO} % del salario mínimo nacional 2026</b>{" "}
-                (Bs {fmtBs(SALARIO_MINIMO_2026)}, según el DS 5516), sin
-                aguinaldo ni domingos, por algo que atiende las 24 horas.
+                Es el{" "}
+                <b>
+                  {PCT_SALARIO} % del salario mínimo nacional{" "}
+                  {SALARIO_MINIMO.anio}
+                </b>{" "}
+                (Bs {fmtBs(SALARIO_MINIMO.monto)}, según el{" "}
+                {SALARIO_MINIMO.norma}), sin aguinaldo ni domingos, por algo que
+                atiende las 24 horas.
               </p>
             </div>
           </div>

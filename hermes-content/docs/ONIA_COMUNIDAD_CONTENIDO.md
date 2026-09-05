@@ -23,6 +23,20 @@ y nosotros tenemos skills reales corriendo: ventaja injusta.
 - Cada drop: útil en <2 min, aplicable HOY, cierra con una pregunta o mini-tarea.
 - Los drops alimentan los videos (lo que más reaccione en la comunidad = próximo reel).
 
+### Calendario vigente — decidido 2026-09-03 (opción B, tarea `t_f5b868da`)
+
+**D0 arrancó el miércoles 2026-09-02**, no un lunes. La serie D0-D6 va corrida y **termina
+completa el martes 2026-09-08**; no se pisa ningún día para forzar el ritmo lun-dom.
+
+| días | qué va |
+|---|---|
+| mié 02 → mar 08-sep | **serie D0-D6 completa**, un drop por día (D3 = sáb 05, D4 = dom 06, D5 = lun 07, D6 = mar 08) |
+| mié 09 → dom 13-sep | **puente**: recordatorios y repost de lo que más reaccionó — **sin pieza nueva** |
+| lun 14-sep | arranca **SEMANA 2** (la sección de abajo, ya con ritmo lun-dom que engancha) |
+
+Se descartó la opción A (arrancar la semana 2 el lunes 07) porque pisaba D5 y D6: costaba
+los dos últimos drops de la serie para ganar sólo la prolijidad del calendario.
+
 ## Los primeros 7 drops (copy-paste)
 
 ### D0 — Bienvenida (hoy, al abrir)
@@ -102,6 +116,9 @@ y nosotros tenemos skills reales corriendo: ventaja injusta.
    qué automatizaría primero" — genera comentarios masivos y alimenta D6.
 
 ## Drops SEMANA 2 (ritmo fijo lun-dom, listos para pegar)
+
+> **Arranca el lunes 2026-09-14**, no el 07 — ver "Calendario vigente" arriba. Entre el D6
+> (martes 08) y este lunes van cinco días de puente sin pieza nueva.
 
 ### Lun — Herramienta de la semana: n8n
 

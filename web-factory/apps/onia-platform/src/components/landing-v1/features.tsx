@@ -13,7 +13,6 @@ const RUBROS_VIVOS = [
   "Comercio",
   "Importadora",
   "Estética",
-  "Veterinaria",
   "Servicios",
 ] as const;
 

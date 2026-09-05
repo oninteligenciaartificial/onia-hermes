@@ -97,16 +97,51 @@ determinista.
 Verificado **mirando** las tres a resolución completa: ningún desborde de caja, el cuerpo de la 4
 entra en 4 líneas sin tocar el pie, y la 1 mantiene el titular en una sola línea.
 
-## 🟡 Dos cosas para que decida Sergio — ninguna la puedo cerrar yo
+## ✅ Las dos objeciones están cerradas — la pieza no espera ninguna decisión técnica
 
-1. **La lámina 4 muestra dos personas borrosas al fondo**, con laptops, debajo del pill «QUIÉN ME
-   HACE» y el titular «Hecha en Bolivia». El texto ya no dice «equipo»; **la foto lo sugiere**.
-   Es un coworking (gente ajena, que es justo donde trabaja alguien que trabaja solo), así que
-   defendible — pero es la lámina que responde «quién me hace» y es la pieza FIJADA. Cambiar la
-   foto es cambiar la pieza: no lo hago sin OK. La 5 tiene gente al fondo también y ahí **no**
-   molesta, porque su pill es «QUÉ VAS A VER»: un café con desconocidos es sólo un café.
+1. ~~**La lámina 4 muestra dos personas borrosas al fondo**~~ — ✅ **RESUELTO el 2026-09-04,
+   0 créditos.** Ver la sección de abajo.
 2. ~~**La lámina 7 repite la foto de la portada**~~ — ✅ **RESUELTO el 2026-09-03, 2 cr.** Ya no
    repite: tiene foto propia.
+
+## ✅ El «equipo» del fondo salió de la lámina 4 — 2026-09-04, 0 créditos
+
+**Qué estaba mal.** Bajo el pill «QUIÉN ME HACE» y el titular «Hecha en Bolivia» se leían **dos
+hombres nítidos con laptops abiertas**, en sillas de oficina. Onia no tiene equipo — lo vende
+Sergio solo — así que la lámina que contesta *quién me hace* estaba fabricando prueba social **por
+imagen**, en la pieza FIJADA arriba del perfil. La 5 tiene gente al fondo y ahí no molesta: su
+pill es «QUÉ VAS A VER», y un café con desconocidos es sólo un café.
+
+**Por qué NO se cambió la foto, que era el plan anterior.** Se probaron las dos salidas de 0
+créditos antes de aceptar el gasto de 2 cr, y las dos se descartan **midiendo, no opinando**:
+
+| salida | por qué no |
+|---|---|
+| **Recortar** el cuadro para dejar la gente afuera | las dos figuras están a la **misma altura que la cara** de Lucía (y 738-1242 contra 828-1380) y a su izquierda: no hay recorte 4:5 que las saque sin cortarle la cara |
+| **Cambiar la foto** por otra del banco | ninguna sirve. `B06`/`B07`/`G04` ponen a Lucía de **trabajadora del rubro** (contradice «soy un personaje digital»), las tres traen **otra persona**, y `G01` tiene **texto y precios legibles** en la pizarra, que la rúbrica prohíbe |
+
+**Lo que se hizo.** Desenfoque selectivo del fondo sobre la foto fuente, con **máscara degradada**
+—no un rectángulo: un parche de borde duro se ve, y se ve peor que el defecto—. Es la profundidad
+de campo que esa toma tendría a diafragma abierto: las figuras quedan como bokeh sin rostro ni
+forma legible, y la cara, la laptop y el copy quedan **intactos**.
+
+```sh
+cd hermes-content/references/modelos/lucia/generadas-20260902
+ffmpeg -v error -y -i E3-coworking.jpg -filter_complex "\
+[0:v]gblur=sigma=28[blur];\
+[0:v]format=gray,geq='if(lt(X,540), 255, if(lt(X,760), 255*(760-X)/220, 0))*if(lt(Y,1180),1,if(lt(Y,1450),(1450-Y)/270,0))'[mask];\
+[0:v][blur][mask]maskedmerge" E3-coworking-FONDO-SUAVE.jpg
+```
+
+| | |
+|---|---|
+| Foto nueva | `../../generadas-20260902/E3-coworking-FONDO-SUAVE.jpg` (1536×2752, mismas dimensiones) |
+| Créditos | **0** — no se generó ninguna imagen: es la misma foto con el fondo suavizado |
+| Original | `E3-coworking.jpg` **se conserva** intacto, por si el criterio cambia |
+
+**Séptima confirmación de que el render es determinista:** de las 7 láminas cambió **sólo**
+`slide-04.jpg`. Las otras seis, md5 idéntico — verificado sacando el `md5sum` de las 7 antes de
+renderizar y comparándolo después, no por `git status`.
 
 ## ✅ La lámina 7 dejó de repetir la portada — 2026-09-03, 2 créditos
 
@@ -268,3 +303,12 @@ lector se va con algo en la mano.
 necesita el enlace del grupo (sólo lo tiene él) y una edición del workflow, que es de otro carril.
 Queda pedido en el tablero. La casilla 11 de la rúbrica se corrigió: no pregunta si la pieza dice
 una palabra, pregunta si esa palabra **responde hoy**, con el comando para medirlo.
+
+## PUBLICAR cableado — 2026-09-05
+
+`onia-publicar-aprobado.mjs` (vía `postiz_schedule.mjs`) sólo detecta `slide-N.png` en modo
+carrusel — un `.jpg` en el directorio no cuenta, aunque sea la pieza aprobada. Se agregaron
+`slide-01.png`…`slide-07.png` (mismo píxel que los `.jpg`, sólo reencodeados con `ffmpeg`,
+forzados al repo con `git add -f` porque el `.gitignore` de la carpeta excluye `*.png`) y
+`brief.json` con el `caption`. La tarea del tablero con la línea `PUBLICAR:` es `t_4e7adc7b`
+(reemplaza a `t_a9ff7367`, archivada). Detalle del bug y su reproducción: tarea `t_5eb4bccd`.

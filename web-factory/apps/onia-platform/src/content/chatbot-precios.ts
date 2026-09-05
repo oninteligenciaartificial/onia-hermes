@@ -106,6 +106,44 @@ export function fmtBs(v: number): string {
   return Math.round(v).toLocaleString("es-BO");
 }
 
+/**
+ * El salario mínimo nacional — el dato AJENO contra el que anclamos el precio.
+ *
+ * Vive acá, al lado del precio del que es referencia, porque las dos mitades
+ * de la frase se mueven por separado: el monto lo fija un DS (cambia por año)
+ * y el precio del chatbot lo fija Sergio. Separadas, cualquiera de las dos
+ * deja a la otra mintiendo.
+ *
+ * ⚠️ Hasta el 2026-09-04 estaba tipeado TRES veces —la portada, `/precios` y
+ * `/chatbot`, cada una recalculando su propio porcentaje—, y lo que mantuvo
+ * vivo el duplicado fue un comentario al lado de cada copia diciendo que le
+ * correspondía estar acá *«pero ese archivo está fuera de este carril»*. Era
+ * falso: `src/content/` es la misma app que las páginas que lo escribían. Un
+ * comentario que explica por qué algo no se puede hacer es una hipótesis con
+ * fecha. La invariante ahora se ejecuta: `(sitio)/salario-minimo.test.ts`.
+ *
+ * Es dato público con fuente legal, y por eso la norma se publica en pantalla
+ * junto al número: un anclaje sin fuente es una cifra inventada.
+ */
+export const SALARIO_MINIMO = {
+  /** Bs por mes. DS 5516. */
+  monto: 3300,
+  /** El año que nombra la frase en pantalla. */
+  anio: 2026,
+  /** La norma que lo fija, mostrada al lado del monto. */
+  norma: "DS 5516",
+} as const;
+
+/**
+ * Qué porcentaje del salario mínimo cuesta el chatbot — derivado, nunca
+ * escrito. Hoy: 390 / 3.300 = 11,8 % → 12 %.
+ */
+export function pctDelSalarioMinimo(
+  stack: ChatbotStack = CHATBOT_PLAN,
+): number {
+  return Math.round((stack.mensual / SALARIO_MINIMO.monto) * 100);
+}
+
 /** "Bs 390/mes, sin instalación" — una sola forma de decir el precio. */
 export function precioStack(stack: ChatbotStack = CHATBOT_PLAN): string {
   return `Bs ${fmtBs(stack.mensual)}/mes, sin instalación`;

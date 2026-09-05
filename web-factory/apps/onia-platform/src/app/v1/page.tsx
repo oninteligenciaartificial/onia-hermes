@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { bs, plan } from "@/lib/pricing";
+import { PLANES, bs, plan } from "@/lib/pricing";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Hero } from "@/components/landing-v1/hero";
@@ -19,12 +19,18 @@ const TITLE = "Onia · Tu negocio no pierde citas ni cobros | Bolivia";
 const DESCRIPTION =
   `Onia Platform es el sistema de gestión con inteligencia artificial para negocios en Bolivia: agenda, clientes, cobros y agentes que trabajan 24/7 con tu aprobación. Desde Bs ${bs(plan("basico").mensual)} al mes. Probalo 14 días gratis, sin tarjeta.`;
 
-/**
- * La imagen social es una captura REAL del sistema (el selector de rubro de
- * app.onia.com.bo), no un mockup. Regla de la casa: nada de pantallas
- * dibujadas haciendo de prueba.
+/*
+ * La tarjeta social NO se declara acá: la dibuja `opengraph-image.tsx` de este
+ * mismo segmento, igual que en la portada de `(sitio)`.
+ *
+ * ⚠️ Hasta hoy esta página declaraba `/og/onia-rubros.jpg`, una CAPTURA del
+ * selector de rubro de `app.onia.com.bo` con «MUY PRONTO» impreso adentro y
+ * tres tarjetas vacías debajo. La home se la sacó el 2026-09-02 por eso mismo;
+ * acá quedó viva y producción sirve `/v1` con 200, así que era la imagen que
+ * veía quien recibiera ese link por WhatsApp — obra a la vista en la única
+ * superficie que se ve ANTES de abrir el sitio. Y ningún barrido de texto
+ * podía verla: la palabra prohibida estaba dentro de un JPG.
  */
-const OG_IMAGE = "/og/onia-rubros.jpg";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -39,21 +45,12 @@ export const metadata: Metadata = {
     description:
       `Onia recuerda cada cita, persigue cada deuda y hace volver al cliente que se enfrió. Vos aprobás; el sistema hace. Desde Bs ${bs(plan("basico").mensual)}/mes, 14 días gratis.`,
     url: "/",
-    images: [
-      {
-        url: OG_IMAGE,
-        width: 1200,
-        height: 630,
-        alt: "Pantalla real de Onia: elegís el rubro de tu negocio al crear la cuenta.",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Tu negocio no pierde citas ni cobros — Onia, Bolivia",
     description:
       `Onia recuerda cada cita, persigue cada deuda y hace volver al cliente que se enfrió. Vos aprobás; el sistema hace. Desde Bs ${bs(plan("basico").mensual)}/mes, 14 días gratis.`,
-    images: [OG_IMAGE],
   },
 };
 
@@ -85,16 +82,19 @@ const JSON_LD = {
       operatingSystem: "Web",
       url: SITE_URL,
       publisher: { "@id": `${SITE_URL}#org` },
+      // Misma corrección que en la portada de `(sitio)`: la factura sale de la
+      // enumeración mientras el emisor esté en trámite ante el SIN.
       description:
-        "Sistema de gestión con IA para negocios en Bolivia: agenda, clientes, cobros, facturación y agentes con aprobación humana.",
-      offers: [
-        { name: "Básico", price: "320" },
-        { name: "Pro", price: "750" },
-        { name: "Full", price: "1500" },
-      ].map((plan) => ({
+        "Sistema de gestión con IA para negocios en Bolivia: agenda, clientes, cobros, inventario y agentes con aprobación humana.",
+      // Los montos NO se escriben acá. Estaban tipeados a mano ("320", "750",
+      // "1500") y el gate de precios no los veía: busca el número pegado a
+      // «Bs», y en el JSON-LD el precio viaja desnudo, con la moneda en otra
+      // clave. Un plan que cambie de precio dejaba a Google publicando el
+      // viejo — la forma exacta del desastre de los cuatro precios vivos.
+      offers: PLANES.map((plan) => ({
         "@type": "Offer",
-        name: plan.name,
-        price: plan.price,
+        name: plan.nombre,
+        price: String(plan.mensual),
         priceCurrency: "BOB",
         category: "Suscripción mensual",
         availability: "https://schema.org/InStock",

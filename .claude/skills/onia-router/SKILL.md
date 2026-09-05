@@ -57,6 +57,12 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 | **extracción web** (alta por URL · prospección) | **NO instalar scrapers nuevos** (ScrapeGraphAI evaluado y descartado). Crawl4AI del VPS + LiteLLM ya resuelven: `scripts/alta-por-extraccion.py`. Doc: `hermes-content/docs/platform/ONIA_EXTRACCION_WEB_DECISION.md` | `onia-crm-prospeccion` | — |
 
 ## Reglas duras que aplican SIEMPRE (de CLAUDE.md)
+- 🎯 **Antes de elegir carril, leer `hermes-content/docs/ONIA_ESTRATEGIA_DE_EMPRESA.md`.**
+  Dice cuál es la **etapa vigente** del negocio y su criterio de salida numérico. Una tarea que
+  no sirve a esa etapa **se anota como pendiente y NO se hace** — por buena que sea. Ahí está
+  también la respuesta medida a "¿necesitamos financiación / equipo de desarrollo?" (no: el
+  break-even son 5 clientes), y por qué **abrir una línea de negocio nueva es la decisión más
+  cara disponible** con una sola persona.
 - **Objetivo único por sesión.** Definirlo al inicio; no descarrilar; terminarlo antes de cerrar.
 - **Carriles = 1 sesión = 1 worktree = 1 rama.** Un subagente nunca edita archivos de otro carril.
   Verificar `git branch --show-current` y rutas del worktree antes de gatear/commitear.

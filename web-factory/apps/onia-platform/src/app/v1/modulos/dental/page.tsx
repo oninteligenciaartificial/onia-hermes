@@ -97,7 +97,17 @@ const JSON_LD = {
       url: `${SITE_URL}/modulos/dental`,
       description:
         "Software de gestión para clínicas dentales en Bolivia: agenda, odontograma, recordatorios, caja, contabilidad y agentes con IA.",
-      offers: { "@type": "Offer", price: "320", priceCurrency: "BOB", category: "Suscripción mensual" },
+      // El monto se LEE de la tabla: acá estaba tipeado "320", dos líneas
+      // debajo de un `plan("basico").mensual` bien leído en la `description`.
+      // En el JSON-LD el precio viaja desnudo y con la moneda en otra clave,
+      // así que ningún gate lo veía y ninguna captura lo muestra — y es de
+      // donde Google saca el precio que publica.
+      offers: {
+        "@type": "Offer",
+        price: String(plan("basico").mensual),
+        priceCurrency: "BOB",
+        category: "Suscripción mensual",
+      },
     },
     {
       "@type": "FAQPage",

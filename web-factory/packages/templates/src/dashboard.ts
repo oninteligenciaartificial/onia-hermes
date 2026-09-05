@@ -1,6 +1,53 @@
 import { clientTokenCss } from "@onia/tokens";
 import { renderFontLinks } from "./font-links";
 
+/** Radio del punto final del sparkline del KPI, en unidades del viewBox.
+ *
+ *  El piso de W4 son 8px RENDERIZADOS, y ese SVG se dibuja con `meet` dentro de
+ *  una caja con `aspect-ratio`, asi que se achica con la tarjeta: medido, la
+ *  escala va de 0,675 (390px) a 0,839 (1440px). Con `r="3"` el punto medIa
+ *  4,05px y 5,03px — bajo el piso en las dos. Con 6 mide 8,1px y 10,1px.
+ *
+ *  Se resolvio con un radio en unidades del viewBox y NO con un trazo
+ *  `non-scaling-stroke` de 8px, que era lo primero que parecia correcto: al no
+ *  escalar, el disco no le entra al padding y el SVG lo RECORTA contra su borde.
+ *  Medido: quedaba pintado 3x3px a 390 — peor que el defecto que venia a
+ *  arreglar — y un gate que mira el grosor declarado lo da por "8px" igual. En
+ *  unidades del viewBox la holgura se achica junto con el punto, asi que vale
+ *  para CUALQUIER ancho de tarjeta. Por eso `pad` no puede ser menor que esto.
+ *
+ *  Un arreglo paralelo (4e69ba800) llego a 4.8 midiendo SOLO a 1440 y anotando
+ *  que 0,839 era "el peor caso, en mobile la tarjeta es mas ancha". Es al reves:
+ *  a 390 la escala cae a 0,675 y ese 4.8 rendiriza 6,48px, bajo el piso. Si
+ *  volves a dimensionar esto, media la escala CHICA — la premisa comoda ya
+ *  dejo pasar el defecto una vez. */
+const MARCADOR_KPI_R = 6;
+
+/** Holgura EXTRA del punto final, en unidades del viewBox, contra la esquina
+ *  REDONDEADA de la tarjeta — no contra el borde del viewBox, que ya lo cubre
+ *  `MARCADOR_KPI_R`.
+ *
+ *  El sparkline sangra hasta el borde de la card (`margin: 4px -18px -16px`) y
+ *  `.wf-kpi` recorta con `border-radius: 12px` + `overflow: hidden`. Cuando el
+ *  ultimo valor es el MINIMO de la serie, el punto cae en la esquina de abajo a
+ *  la derecha y el arco se lo come: medido, pintaba 5,00px declarando 8,10px.
+ *  Reservar contra el borde recto NO alcanza — es el mismo defecto que el
+ *  titular de la ferreteria, una reserva que mira una sola de las dos
+ *  restricciones.
+ *
+ *  La cuenta, con `s` = escala del SVG (0,675 a 390px y 0,839 a 1440, medidas):
+ *  el recorte es un arco de radio 11px (los 12 del token menos el borde de 1px)
+ *  centrado a 12px de la esquina, y el disco entra entero si
+ *  `√2·(12 − (1 + P·s)) ≤ 11 − MARCADOR_KPI_R·s`. Da P ≥ 9,02 en la peor escala
+ *  medida; con 10 sobra ~0,9px y sigue valiendo hasta s = 0,56 (una card de
+ *  ~180px, mas angosta que el viewport de 375 que es el mas chico que servimos).
+ *
+ *  Va en DIAGONAL y por eso cuesta 4 unidades: la restriccion es un arco, asi
+ *  que alejar el punto de los dos bordes a la vez es cuatro veces mas barato que
+ *  alejarlo solo del derecho (que pedia ~22 unidades, o sea renunciar al
+ *  sangrado de borde a borde que pide la ficha del patron). */
+const MARCADOR_KPI_PAD_ESQUINA = MARCADOR_KPI_R + 4;
+
 export type DashboardKpi = {
   label: string;
   value: string;
@@ -790,7 +837,7 @@ function renderLineChart(chart: DashboardChart): string {
           (point, index) =>
             `<circle cx="${xFor(index, count).toFixed(1)}" cy="${yFor(point.value).toFixed(
               1,
-            )}" r="4" fill="${color}"><title>${escapeHtml(entry.name)} - ${escapeHtml(point.label)}: ${
+            )}" r="4" fill="${color}" data-wf-marker><title>${escapeHtml(entry.name)} - ${escapeHtml(point.label)}: ${
               point.value
             }</title></circle>`,
         )
@@ -957,7 +1004,7 @@ function renderSparkline(chart: DashboardChart): string {
   const area = `${xFor(0).toFixed(1)},${height - pad} ${line} ${xFor(count - 1).toFixed(1)},${height - pad}`;
   const last = points[count - 1];
   const dot = last
-    ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last.value).toFixed(1)}" r="4" fill="var(--wf-series-1)"></circle>`
+    ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last.value).toFixed(1)}" r="4" fill="var(--wf-series-1)" data-wf-marker></circle>`
     : "";
 
   // `preserveAspectRatio="none"` estiraba el viewBox al ancho de la tarjeta y con
@@ -978,29 +1025,43 @@ function renderKpiSpark(values: number[], label: string): string {
   const range = max - min || 1;
   const width = 320;
   const height = 44;
-  // Piso de 8px de DIAMETRO RENDERIZADO que fija `dataviz`. Aca no alcanza con
-  // copiar el r=4 del chart grande: ese SVG se dibuja a escala ~1,02 (327px de
-  // caja para 320 de viewBox) y el del KPI vive dentro de la tarjeta angosta,
-  // que a 1440 mide 268px => escala 0,839, la mas chica del panel. Medido en el
-  // navegador: r=3 daba 5,03px y r=4 daria 6,71px, los dos bajo el piso; r=4.8
-  // da 8,05px. En mobile la tarjeta es mas ancha, o sea que 0,839 es el peor
-  // caso y sizear contra el lo cubre en todos los anchos.
-  const dotR = 4.8;
-  // El pad tiene que cubrir el radio del punto: con pad 4 el circulo se recorta
-  // contra el borde del viewBox cuando el ultimo valor es el maximo de la serie.
-  const pad = dotR;
+  // El padding reserva el lugar del punto final: si fuera menor que su radio, el
+  // disco se saldria del viewBox y el SVG lo recortaria contra el borde (el
+  // ultimo punto cae justo en `width - padDer`, y si es el maximo, en `y = padArriba`).
+  //
+  // Asimetrico A PROPOSITO, y no por gusto: los unicos dos lados donde el dibujo
+  // toca una ESQUINA REDONDEADA de la tarjeta son el derecho y el de abajo — el
+  // punto final siempre es el ultimo valor (derecha) y el sparkline esta pegado
+  // al piso de la card. Arriba e izquierda el SVG termina dentro de la tarjeta,
+  // asi que ahi alcanza con el radio y subirlos solo achataria la curva y
+  // achicaria el sangrado de gratis. De yapa queda MAS parejo que antes: hoy el
+  // disco quedaba tangente al borde derecho (0px de aire) contra 4,05px del
+  // arranque de la curva a la izquierda.
+  const padArriba = MARCADOR_KPI_R;
+  const padIzq = MARCADOR_KPI_R;
+  const padDer = MARCADOR_KPI_PAD_ESQUINA;
+  const padAbajo = MARCADOR_KPI_PAD_ESQUINA;
   const count = values.length;
 
   const xFor = (index: number): number =>
-    pad + (count <= 1 ? (width - 2 * pad) / 2 : (index / (count - 1)) * (width - 2 * pad));
+    padIzq +
+    (count <= 1
+      ? (width - padIzq - padDer) / 2
+      : (index / (count - 1)) * (width - padIzq - padDer));
   const yFor = (value: number): number =>
-    height - pad - ((value - min) / range) * (height - 2 * pad);
+    height - padAbajo - ((value - min) / range) * (height - padArriba - padAbajo);
 
   const line = values.map((v, index) => `${xFor(index).toFixed(1)},${yFor(v).toFixed(1)}`).join(" ");
-  const area = `${xFor(0).toFixed(1)},${height - pad} ${line} ${xFor(count - 1).toFixed(1)},${height - pad}`;
+  // La base del relleno NO baja con `padAbajo`: se queda donde estaba (a
+  // `MARCADOR_KPI_R` del piso) para que la silueta del area contra el borde de la
+  // tarjeta — que es lo que se ve — quede identica byte a byte a la de antes.
+  // Sigue por debajo del minimo de la curva, asi que el poligono queda bien
+  // formado.
+  const baseArea = height - MARCADOR_KPI_R;
+  const area = `${xFor(0).toFixed(1)},${baseArea} ${line} ${xFor(count - 1).toFixed(1)},${baseArea}`;
   const last = count ? values[count - 1] : undefined;
   const dot = last !== undefined
-    ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last).toFixed(1)}" r="${dotR}" fill="currentColor"></circle>`
+    ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last).toFixed(1)}" r="${MARCADOR_KPI_R}" fill="currentColor" data-wf-marker></circle>`
     : "";
 
   // Mismo defecto que W2 arreglo en el sparkline grande, que aca habia quedado:

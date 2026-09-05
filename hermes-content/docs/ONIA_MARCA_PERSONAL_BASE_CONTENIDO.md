@@ -231,13 +231,49 @@ produce solo". Los ganchos del banco (RADAR §2) se cruzan con estos temas.
       Aplicado a `generar-carrusel-prompts.py` (**las 7 láminas regeneradas**) y usado desde
       cero en el generador nuevo `generar-carrusel-equipo.py`. FICHA de
       `carrusel-pinterest-refs` actualizada con la receta.
-- [ ] **Los otros generadores a la tipografía de marca** (abierto 02-sep, **3 de 12 hechos**):
+- [x] **La receta de marca sobre un STATEMENT — el formato donde el claim ES la pieza** (04-sep)
+      — A/B/C2 en `carousels/out/experimento-statement-tipografia/`, generador
+      `scripts/marca-personal/experimento-statement-tipografia.py`. En portada, grid e historia
+      el texto grande convive con algo que sostiene la pieza; acá los 4 íconos son el eco y el
+      claim es todo, así que no se podía dar por transferido. **Gana C2** (contexto gris chico +
+      remate 650/`wdth` 96 con highlight verde + collage): a 33 % es la única de las tres que se
+      lee de un golpe. **B (buscar-y-reemplazar) es retroceso por CUARTA vez** — mismo tamaño y
+      peso menor deja el claim aguado y sin jerarquía que lo compense.
+      **Tres defectos reales que sólo se vieron MIRANDO** (ninguno cambia el peso del PNG, los
+      tres estaban publicables): (1) **de contenido** — el remate decía "3 COSAS" y el lienzo
+      mostraba 4 íconos: la fórmula del patrón es *N cosas + los N objetos* y con N distinto la
+      pieza se contradice sola; (2) el sticker cortaba "CONTRATAR" por los dos lados (9 caracteres
+      a 28px no entran en 166px de diámetro → 186px/24px, medido); (3) la cinta quedaba **detrás**
+      del bloque verde y asomaba como una mancha gris — es la trampa #5 de la FICHA de
+      `carrusel-pinterest-refs`, que ya estaba escrita y volvió a pasar en un formato nuevo.
+      Aplicado en el generador `generar-statement-atender.py` y en la FICHA del patrón.
+- [ ] **Los otros generadores a la tipografía de marca** (abierto 02-sep, **9 en rojo de 29**):
       quedan `generar-carrusel-atender.py` · `-chatbot.py` · `-comunidad.py` · `-cursos.py` ·
       `-sistema.py` · `-tareas.py` · `-grid-senales.py` ·
       `generar-statement-16anos.py` · `generar-statement-post.py`.
+      ⚠️ **05-sep: el contador vivía a mano acá y estaba mal en las dos cifras** — decía
+      «3 de 12» y son **9 en rojo de 29 archivos**. Ahora lo cuenta un chequeo, no este doc:
+
+          python3 scripts/marca-personal/chequear-tipografia-marca.py    # exit 1 si queda alguno
+
+      Separa por **contexto**: `generar-*.py` es ROJO (cada pieza nace con el defecto) y
+      `experimento-*.py` sale como AVISO —son los 11 que **probaron** que el condensed no iba,
+      y ponerlos en rojo obliga a borrar la evidencia—. **No se cablea a `npm test` de la raíz
+      mientras el contador sea > 0**: pondría `main` en rojo y trabaría el merge de los 15
+      carriles por una deuda de este carril.
+      🔴 **Su primera versión salió «(ninguna)» con los 21 defectos presentes**: capturaba el
+      valor con `[^;"']+` y `font-variation-settings` lleva los ejes **entre comillas**, así que
+      cortaba antes de leer ninguno. No lo destapó el resultado —que parecía una buena
+      noticia— sino probar el instrumento **en las dos direcciones** antes de creerle. El
+      autotest quedó adentro y corre antes del veredicto.
       **Receta exacta arriba** — no es buscar-y-reemplazar: peso + jerarquía van juntos, y hay
       que MIRAR el render por el desborde del eje `wdth`. Una por vuelta alcanza; cada una
       necesita elegir a mano su remate de 2-3 palabras.
+      ⚠️ **04-sep: los generadores no eran el único lugar donde vivía la tipografía rechazada.**
+      La **FICHA del patrón `statement-3d-minimal`** —lo que copia cada pieza nueva— mandaba
+      `900 / wdth 62` y ni una capa de collage. Migrar generadores uno por uno no cierra el
+      agujero si la receta de la que nacen sigue rota: **al migrar un formato, revisar su FICHA
+      en la misma vuelta.** Corregida.
       ✅ 03-sep: `generar-lamina-grid-ia.py` migrado (ver el ítem de abajo).
       ✅ 03-sep: `generar-historia-quiz.py` migrado (ver el último ítem de esta sección).
 - [x] **La receta ganadora sobre una lámina GRID 2x3** (03-sep) — A/B/C/C2 renderizado y

@@ -122,17 +122,57 @@ export const CONTENDIENTES: readonly Contendiente[] = [
 /**
  * El hallazgo. No es una ventaja de features: es una categoria que nadie ocupa.
  * Sale de ONIA_PRECIOS_COMPETENCIA_20260730.md §Lectura punto 4.
+ *
+ * 🔴 **Nombra los TRES ejes, y uno de ellos —la factura— nosotros no lo
+ * cumplimos todavia** (`siat: "tramite"` en la fila de Onia de aca arriba). Por
+ * eso solo se publica JUNTO a `CONTENDIENTES`: con la tabla al lado es el hueco
+ * del mercado, con su fuente y con nuestro tramite a la vista; sin la tabla se
+ * lee como que Onia lo ocupa entero, que es una promesa falsa. Lo sostiene
+ * `app/(sitio)/promesa-en-el-cuerpo.test.ts`, que mide el grafo de imports.
+ *
+ * Para una superficie donde la tabla no entra —la portada— va `HUECO_PARTIDO`.
  */
 export const HUECO =
   "No existe un solo software vendido en Bolivia que cruce agenda + ficha del cliente + factura SIAT.";
 
 /**
- * El ledger de honestidad. Cada linea es una cosa DEL PRODUCTO que HOY no
- * funciona, dicha por nosotros primero. Verificado contra
- * ONIA_PLATFORM_ESTRUCTURA_20260730 §3.
+ * El MISMO hallazgo, dicho sin prometer la pata que todavia no tenemos.
+ *
+ * La portada no puede traer la tabla entera, y sin ella `HUECO` deja de ser un
+ * dato para volverse una insinuacion: si "nadie cruza agenda + ficha + factura
+ * SIAT" y el parrafo siguiente dice "Onia unifica...", el lead entiende que
+ * facturamos. No facturamos: el emisor esta en tramite ante el SIN.
+ *
+ * Esta forma dice el hueco por sus dos mitades, que es como se ve en los datos,
+ * y describe a los OTROS en vez de prometer por nosotros. Es verificable contra
+ * `CONTENDIENTES` y su test lo comprueba fila por fila, asi que el dia que
+ * alguien del mercado cruce las dos patas la frase se pone en ROJO en vez de
+ * quedar mintiendo en la primera pantalla que ve un lead.
+ */
+export const HUECO_PARTIDO =
+  "El que te factura en Bolivia no te agenda. El que te agenda no factura en Bolivia.";
+
+/**
+ * El ledger de honestidad, INTERNO: cada linea es una cosa DEL PRODUCTO que
+ * HOY no funciona. Verificado contra ONIA_PLATFORM_ESTRUCTURA_20260730 §3.
  *
  * Es un ledger de producto, no de la empresa: acá van funciones que faltan, no
  * "somos nuevos" ni "no tenemos clientes".
+ *
+ * 🔴 **NO SE RENDERIZA EN NINGUNA PANTALLA.** Es una lista de lo que falta, y
+ * eso está prohibido en toda superficie que el sitio sirva (Sergio,
+ * 2026-08-20). Vivió en la comparativa hasta el 2026-09-04 y sobrevivió cinco
+ * días en la copia de `/v1`, que responde 200: ahí anunciaba que "el pack del
+ * rubro se está construyendo". Queda acá porque el dato es cierto y lo usan los
+ * docs internos, no porque se pueda publicar.
+ *
+ * Lo que SÍ se le dice al que compra vive donde le sirve: la factura fiscal en
+ * `/facturacion`, en el bloque fiscal de `/precios` y en el `veredicto` de la
+ * fila de Onia de acá arriba. Eso no es enumerar huecos: es la advertencia que
+ * evita que alguien compre creyendo que factura.
+ *
+ * Lo sostiene `app/obra-en-el-cuerpo.test.ts`, que mide el grafo de imports —
+ * así que importarlo desde una página pone el gate en ROJO nombrando la cadena.
  */
 export interface Pendiente {
   que: string;

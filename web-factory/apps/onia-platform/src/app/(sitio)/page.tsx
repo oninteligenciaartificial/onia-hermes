@@ -7,8 +7,10 @@ import {
   precioStack,
   precioAnual,
   fmtBs,
+  SALARIO_MINIMO,
+  pctDelSalarioMinimo,
 } from "@/content/chatbot-precios";
-import { HUECO, FECHA_CONSULTA } from "@/lib/proof";
+import { HUECO_PARTIDO, FECHA_CONSULTA } from "@/lib/proof";
 import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
 import { EMPEZAR_URL } from "./nav";
 import { ALTA_VERBO_VOS, CTA_ALTA, ctaAltaPlan } from "./alta";
@@ -110,16 +112,15 @@ const ADDONS_RESTO = ADDONS.filter((addon) => addon.href !== "/chatbot");
  * `CHATBOT_PLAN.mensual` en vez de escribirse "12": si mañana cambia el precio
  * en la fuente única, la frase se mueve sola en lugar de quedar mintiendo.
  *
- * ⚠️ DUPLICADO CONOCIDO. Esta misma constante vive en
- * (sitio)/chatbot/page.tsx:78 y en (sitio)/precios/page.tsx. Le corresponde
- * estar UNA vez, en content/chatbot-precios.ts, al lado del precio del que es
- * referencia — pero ese archivo está fuera de este carril. Anotado en el
- * reporte: mover la constante allá y que las tres pantallas la importen.
+ * ⚠️ DUPLICADO RESUELTO el 2026-09-04. Esta constante estaba tipeada acá, en
+ * (sitio)/chatbot/page.tsx y en (sitio)/precios/page.tsx, y lo que sostuvo las
+ * tres copias fue el comentario que había en este mismo lugar: decía que le
+ * correspondía estar en content/chatbot-precios.ts *"pero ese archivo está
+ * fuera de este carril"*. Era falso —`src/content/` es esta misma app— y la
+ * frase congeló el arreglo por leerse como medida. Hoy sale de la fuente, y la
+ * invariante se ejecuta en vez de leerse: (sitio)/salario-minimo.test.ts.
  */
-const SALARIO_MINIMO_2026 = 3300;
-const PCT_SALARIO = Math.round(
-  (CHATBOT_PLAN.mensual / SALARIO_MINIMO_2026) * 100,
-);
+const PCT_SALARIO = pctDelSalarioMinimo();
 
 /**
  * FAQ de la portada — respuestas con los números TRAÍDOS de las fuentes.
@@ -251,8 +252,13 @@ const JSON_LD = {
       operatingSystem: "Web",
       url: `${SITE_URL}/`,
       publisher: { "@id": `${SITE_URL}/#org` },
+      // ⚠️ La factura NO se enumera acá: el emisor está en trámite ante el SIN
+      // (`proof.ts` → siat: "tramite"). Esta cadena es la descripción del
+      // producto que lee Google, así que nombrarla entre los módulos la vende
+      // igual que el pie (198cca363) y que el cuerpo de esta misma página
+      // (5423e2f50). Cuando la homologación concluya, vuelve — con evidencia.
       description:
-        "Sistema de gestión con IA para negocios en Bolivia: agenda, clientes, cobros, facturación y agentes con aprobación humana.",
+        "Sistema de gestión con IA para negocios en Bolivia: agenda, clientes, cobros, inventario y agentes con aprobación humana.",
       offers: PLANES.map((plan) => ({
         "@type": "Offer",
         name: plan.nombre,
@@ -451,12 +457,16 @@ export default function Portada() {
         </Reveal>
       </Block>
 
-      {/* 3 · HECHO FUERTE — el hueco de mercado, sourced (proof.ts) */}
+      {/* 3 · HECHO FUERTE — el hueco de mercado, sourced (proof.ts).
+          Va HUECO_PARTIDO y no HUECO: acá no entra la tabla, y sin la tabla la
+          forma larga nombra la factura SIAT —que tenemos en trámite— justo
+          antes de "Onia unifica…", así que promete que facturamos. Lo sostiene
+          promesa-en-el-cuerpo.test.ts; la forma larga vive en /comparativa. */}
       <Block surface="green" labelledBy="hecho">
         <Reveal>
           <Kicker>El hueco</Kicker>
           <p id="hecho" className={s.h2} style={{ maxWidth: "22ch" }}>
-            {HUECO}
+            {HUECO_PARTIDO}
           </p>
           <p className={s.body} style={{ fontSize: "1.15em" }}>
             Onia unifica la gestión y los agentes con IA en un solo sistema,
@@ -798,9 +808,14 @@ export default function Portada() {
                 Sin instalación. O {precioAnual(CHATBOT_PLAN)}.
               </p>
               <p className={s.offerAnchor}>
-                Es el <b>{PCT_SALARIO} % del salario mínimo nacional 2026</b>{" "}
-                (Bs {fmtBs(SALARIO_MINIMO_2026)}, según el DS 5516), sin
-                aguinaldo ni domingos, por algo que atiende las 24 horas.
+                Es el{" "}
+                <b>
+                  {PCT_SALARIO} % del salario mínimo nacional{" "}
+                  {SALARIO_MINIMO.anio}
+                </b>{" "}
+                (Bs {fmtBs(SALARIO_MINIMO.monto)}, según el{" "}
+                {SALARIO_MINIMO.norma}), sin aguinaldo ni domingos, por algo que
+                atiende las 24 horas.
               </p>
             </div>
           </div>

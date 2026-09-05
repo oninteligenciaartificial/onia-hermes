@@ -2436,7 +2436,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
     se barre en TODA la superficie" pide vigilar, pero sin confirmar si `/register` ya crea
     cuentas de verdad no corresponde declararlo bug ni arreglo. No se tocó la baseline.
 
-- [ ] 🟡 **`onia.com.bo/chatbot` — el header sticky deja pasar el texto de atrás y se vuelve
+- [x] 🟡 **`onia.com.bo/chatbot` — el header sticky deja pasar el texto de atrás y se vuelve
       ilegible al llegar al final de la página.** Canario visual, 2026-09-03. El `<header>`
       del sitio tiene fondo con **88% de opacidad** (`color(srgb .976 .984 .980 / 0.88)`) y
       `backdrop-filter: blur(10px)` — no es opaco de verdad. Cuando el scroll llega a la
@@ -2460,6 +2460,23 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       Se subió el piso de espera de la herramienta (`scripts/canario_visual.mjs`, 350→900ms,
       con self-check verde) ANTES de escribir este ítem, y sólo quedó **éste**, que persiste
       incluso a 2.500 ms — por eso es real y no un artefacto de captura.
+      ✅ **CERRADO el 2026-09-05 (web-venta).** Reproducido primero en producción, mirando:
+      fondo `… / 0.88`, `blur(10px)`, y `elementsFromPoint` en el medio del header devolvía la
+      `SECTION.sitio_block sitio_green` de atrás. Lo que se ve fantasma son las LETRAS BLANCAS
+      del título, no el verde: medidas en píxeles contra el header limpio daban **9,2/255** de
+      contraste. **No era una barra sino TRES** —`(sitio)/sitio.module.css .header` (88 %),
+      `components/site-header.module.css .header` (82 %, que sirve `/nosotros`, `/privacidad`,
+      `/terminos`, `/servicios/*` y las `/v1/*`) y la barra fija de abajo de `landing-v1`
+      (92 %)—, así que arreglar sólo `/chatbot` dejaba el defecto vivo en más páginas que las
+      que lo mostraban. Las tres a **97 %**, conservando el `backdrop-filter` (sigue siendo de
+      vidrio; la dirección visual no se tocó, que es decisión de Sergio). Verificado con el
+      MISMO scroll, alto de página y pila de elementos, sin respuestas ≥400: el contraste del
+      fantasma bajó a **2,2/255** (4,2× más tenue, imperceptible). Gate nuevo
+      `src/app/barras-opacas.test.ts`, en ROJO primero: deriva las barras del DISCO (toda regla
+      `position: sticky|fixed` con fondo `color-mix(… N%, transparent)`), así una barra nueva
+      nace cubierta. Su primer intento encontró CERO sujetos —el patrón se cortaba en el `)` de
+      `var(--bg)`— y la aserción de opacidad pasaba igual en verde sobre la lista vacía: lo cazó
+      la guarda `MINIMO_SUJETOS`, que es justo por lo que está.
 
 ## Rechazado hoy con motivo (2026-08-30) — no volver a abrirlo
 

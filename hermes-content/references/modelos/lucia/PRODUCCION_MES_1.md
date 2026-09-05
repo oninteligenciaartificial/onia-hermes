@@ -22,11 +22,16 @@
 
 ---
 
-## L1 · Reel de lanzamiento "No soy real" — ✅ RENDERIZADO, espera OK
+## L1 · Reel de lanzamiento "No soy real" — ✅ RENDERIZADO 2026-08-23 (v7), en el tablero desde 2026-09-04
 
-22 s · 4 beats · voz Marcela · b-roll (rooftop → café → gimnasio → laptop → playa).
-Preview: `reel-lanzamiento-20260822/renders/preview-v4-verde-360.mp4`.
+22 s · 4 beats · voz Marcela · b-roll (rooftop → café → gimnasio → **rooftop cierre**, no playa —
+el clip de playa perdía las pecas y se reemplazó a 0 créditos el 23-ago, ver `TABLA-DE-CORTES.md`).
+Entrega: `reel-lanzamiento-20260822/final/lucia-lanzamiento-v7.mp4`.
+Preview: `reel-lanzamiento-20260822/renders/preview-v7-360.mp4`.
 CTA: seguir (sin palabra — es presentación). **Es la pieza que abre todo.**
+
+⚠️ **Corregido 2026-09-04.** Esta sección decía "espera OK" desde el 23-ago y nunca se creó la
+tarea del tablero pidiéndolo — 12 días listo y Sergio nunca lo vio. Tarea: `t_aa4c5c10`.
 
 ## L2 · Carrusel fijado "¿Quién es Lucía?" — ✅ RENDERIZADO 2026-09-03, espera OK
 
@@ -134,18 +139,29 @@ el inbox 4) pero **falta verificarlo MIRANDO**. Capturas y scripts ya hechos en
 ```
 Captura real de app.onia.com.bo (Playwright) — **cero generación, cero créditos**.
 
-## L6 · Carrusel "5 señales de que tu negocio necesita un sistema" — ✅ RENDERIZADO, espera OK
+## L6 · Carrusel "5 señales de que tu negocio necesita un sistema" — ⚠️ SÓLO BRIEF, no está renderizado
 
 Pack `editorial-clean`, 7 slides, fondo fotográfico del banco de Lucía.
 **Gate de copy (§10.2):** cada señal en segunda persona, desde la silla del dueño y
 terminando en plata. Si no nombra el dolor exacto, no sale.
 
-**Costo real: 0 créditos** (se estimaban ~4). Todas las fotos salieron del banco existente
-`tanda-20260821/`; el render es local con `scripts/carousel_render.js`. No hizo falta generar.
+**Costo estimado: 0 créditos.** Todas las fotos ya están en el banco `tanda-20260821/`; el
+render es local con `scripts/carousel_render.js`. No hace falta generar.
 
-- Brief: `posts-20260807/briefs/lucia-l6-cinco-senales.json`
-- Render bueno: **`posts-20260807/L6/slide-01..07.jpg`** + `_HOJA-DE-CONTACTO.jpg`
-- Comando: `node scripts/carousel_render.js --brief <brief> --out <dir> --account lucia --pack editorial-clean --format feed`
+- Brief: `posts-20260807/briefs/lucia-l6-cinco-senales.json` (existe, en `main`)
+- Render: **NO existe** — ni en este repo ni en `main`, en ninguna rama. `git ls-tree -r
+  origin/main --name-only | grep posts-20260807/L6` da vacío.
+- Comando para renderizarlo: `node scripts/carousel_render.js --brief posts-20260807/briefs/lucia-l6-cinco-senales.json --out posts-20260807/L6 --account lucia --pack editorial-clean --format feed`
+
+⚠️ **Corregido 2026-09-04 22:0x UTC.** Esta sección decía "✅ RENDERIZADO, espera OK" desde el
+commit que agregó el brief (`f2194870`, 23-ago), que dice textualmente "verificado MIRANDO las
+7 slides" — y esas 7 slides nunca se commitearon: ni en esta rama ni en `main` existe un solo
+`posts-20260807/L6/*.jpg`. Es la misma clase de fantasma que L1 (`t_aa4c5c10`): un "listo" que
+nadie puede abrir, doce días viejo. Las imágenes de fondo que pide el brief
+(`tanda-20260821/BROLL-TEST/IMG-05-ugc-selfie.png` y las otras 6) tampoco están en este disco —
+son PNG gitignoreados, así que sólo existen en la máquina donde se generaron. **Falta
+correr el render de nuevo** (0 créditos) desde una máquina que tenga esas 7 fuentes, y recién
+ahí crear la tarea del tablero pidiendo el OK de Sergio.
 
 ⚠️ **Corregido 2026-09-03 — esta línea mandaba a publicar la versión DESCARTADA.** Decía
 `render-l6/slide-01..07.png`, y esa carpeta lleva adentro un `_NO-SUBIR.md` que dice, textual:
@@ -162,14 +178,15 @@ Se corrigieron **dos** errores en esa sola línea, y el segundo esconde al prime
    ("originales pesados, quedan locales; los JPG q3 son los assets usables"). Copiar la ruta
    del render y pegarla en un doc produce una cita a un archivo que **git nunca va a tener**.
 
-✅ **RESUELTO — ya está en `main`.** Acá decía «ninguna de las dos carpetas está en `main`;
-`origin/main` tiene **0** láminas de Lucía», y era cierto cuando se escribió. **Recontado el
-2026-09-03 21:40 UTC: `origin/main` tiene 133 láminas**, y este carril quedó al día por
-fast-forward limpio (`HEAD` era ancestro de `main`, 373 commits atrás). L6 **se abre desde un
-clon limpio**. Se mide con:
+✅ **RESUELTO PARA EL FEED EN GENERAL — no para L6.** Acá decía «ninguna de las dos carpetas
+está en `main`; `origin/main` tiene **0** láminas de Lucía», y era cierto cuando se escribió.
+**Recontado el 2026-09-04: `origin/main` tiene 134 láminas** — pero son de otras piezas (L2,
+avatares, calibración, etc.); **ninguna es de L6**, que sigue sin un solo archivo commiteado
+(ver arriba). El clon dejó de estar vacío; eso no significa que L6 exista. Se mide con:
 
 ```sh
-git ls-tree -r origin/main --name-only | grep -icE "modelos/lucia/.*\.(jpg|png|jpeg)$"   # → 133
+git ls-tree -r origin/main --name-only | grep -icE "modelos/lucia/.*\.(jpg|png|jpeg)$"   # → 134
+git ls-tree -r origin/main --name-only | grep -c "posts-20260807/L6"                     # → 0
 ```
 
 ⚠️ La tarea `t_61685a5a` («el feed existe pero main no tiene ni una lámina») nace de esta misma

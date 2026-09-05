@@ -41,21 +41,43 @@ log() { printf '%s %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$*"; }
 # contenido sale SIEMPRE de origin/main, se materializa en un directorio temporal
 # y de ahi se copia; si el fetch fallo y no hay origin/main, se cae al arbol y se
 # avisa, en vez de publicar una rama de trabajo en silencio.
+# 🔴 RAMA se calcula ACA y no 20 lineas mas abajo: los avisos de las dos ramas de
+# error de este bloque la usan, y con `set -u` una variable sin asignar MATA el
+# script. Medido el 2026-09-04 en el nodo de casa: el aviso "no pude materializar
+# origin/main" —que existe justamente para DEGRADAR CON GRACIA— reventaba con
+# "RAMA: unbound variable" y se llevaba puesto el despliegue entero. El camino de
+# rescate era el unico que no se podia ejecutar. Mismo patron que el `avisar()`
+# definido despues del `exit` que lo necesitaba (ver el README de esta carpeta).
+RAMA=$(git -C "$REPO" branch --show-current 2>/dev/null)
+
+# 🔴 Los subarboles que este script REALMENTE copia. Antes archivaba el repo
+# entero, y eso son 5,4 GB en /tmp por vuelta — horaria en el VPS (`44 * * * *`).
+# En WSL /tmp es un tmpfs de 5,4 GB EN RAM: se llenaba al ras y tar moria sin
+# espacio, mudo, por el 2>/dev/null de abajo. Medido: 5,4 GB y minutos -> 4,2 MB
+# y 0 s. Si alguna vez agregas un `poner "$RAIZ/..."` de otra carpeta, sumala aca
+# o el archivo no va a existir y `poner` va a avisar que falta.
+RUTAS_SYNC="scripts/loops scripts/kanban scripts/postiz_schedule.mjs hermes-content/deploy"
+TARERR="/tmp/onia-sync-tar.$$.err"
+
 RAIZ="$REPO"
 TMPMAIN=""
 if git -C "$REPO" rev-parse --verify -q origin/main >/dev/null 2>&1; then
   TMPMAIN=$(mktemp -d /tmp/onia-sync-main-XXXXXX) || TMPMAIN=""
-  if [ -n "$TMPMAIN" ] && git -C "$REPO" archive origin/main | tar -x -C "$TMPMAIN" 2>/dev/null; then
+  if [ -n "$TMPMAIN" ] && git -C "$REPO" archive origin/main $RUTAS_SYNC | tar -x -C "$TMPMAIN" 2>"$TARERR"; then
     RAIZ="$TMPMAIN"
     trap 'rm -rf "$TMPMAIN"' EXIT
     log "fuente: origin/main ($(git -C "$REPO" rev-parse --short origin/main))"
   else
+    # El motivo ya no se pierde. Con `2>/dev/null` este fallo fue MUDO el
+    # 2026-09-04 y parecia culpa de git, cuando era /tmp lleno.
+    MOTIVO=$(head -1 "$TARERR" 2>/dev/null)
     [ -n "$TMPMAIN" ] && rm -rf "$TMPMAIN"; TMPMAIN=""
-    log "aviso: no pude materializar origin/main — copio del arbol de $REPO ($RAMA)"
+    log "aviso: no pude materializar origin/main (${MOTIVO:-sin detalle de tar}) — copio del arbol de $REPO ($RAMA)"
   fi
 else
   log "aviso: no hay origin/main — copio del arbol de $REPO ($RAMA)"
 fi
+rm -f "$TARERR"
 FUENTE="$RAIZ/scripts/loops"
 
 [ -d "$FUENTE/prompts" ] || { log "FALLO: no existe $FUENTE/prompts"; exit 2; }
@@ -63,7 +85,8 @@ FUENTE="$RAIZ/scripts/loops"
 # `main` al día. Sólo fast-forward: si el árbol del integrador quedó con trabajo
 # propio a medias, esto NO lo pisa — se queja y sale.
 if ! git -C "$REPO" fetch origin --quiet; then log "aviso: fetch fallo, sincronizo con lo que hay"; fi
-RAMA=$(git -C "$REPO" branch --show-current 2>/dev/null)
+# RAMA ya se calculo arriba (un fetch no cambia de rama). Se dejaba aca y por eso
+# los avisos de mas arriba morian con "unbound variable".
 if [ "$RAMA" = "main" ]; then
   git -C "$REPO" merge --ff-only origin/main --quiet 2>/dev/null || log "aviso: main no avanzo por ff (el integrador tiene trabajo local)"
 else
@@ -73,6 +96,30 @@ fi
 
 poner() {  # poner <origen> <destino>
   local origen="$1" destino="$2" tmp="$2.nuevo.$$"
+
+  # 🔴 UN SHIM DEL NODO DE CASA NO SE PISA. En el VPS estos helpers son locales;
+  # en la PC de casa son shims que salen por SSH, y eso NO es un rodeo: es lo que
+  # mantiene UNA sola fuente de verdad. El tablero es un SQLite con cerrojo que
+  # vive en el VPS, y MEMORY.md lo escribe UN solo consolidador, alla.
+  #
+  # Medido el 2026-09-04 montando el nodo: el paso 4 del instalador dejaba los 4
+  # shims en /root/bin y el paso 5 —este script— los pisaba con los scripts reales.
+  # Consecuencias, las dos silenciosas:
+  #   · onia-aprender.sh escribia en la bandeja LOCAL de la PC. El loop
+  #     web-factory-dev ya habia dejado 2 hechos ahi que nunca iban a llegar a
+  #     MEMORY.md. Un nodo que aprende hacia un pozo y no se queja.
+  #   · onia-consolidar-memoria.sh quedaba local, o sea un SEGUNDO escritor de
+  #     MEMORY.md — exactamente lo que el diseno prohibe por construccion, y que
+  #     el 2026-09-03 ya metio una entrada vacia con el cerrojo funcionando bien.
+  #
+  # Reordenar los pasos del instalador no alcanzaba: este script corre por cron
+  # cada hora (`44 * * * *`) y los volveria a pisar. La guarda va aca.
+  # En el VPS no hay shims, asi que esto no hace nada alla.
+  if grep -q 'Generado por instalar-homelab.sh' "$destino" 2>/dev/null; then
+    log "conservado (shim del nodo de casa, no se pisa): $destino"
+    return 0
+  fi
+
   cmp -s "$origen" "$destino" 2>/dev/null && return 0
   cp -- "$origen" "$tmp" || { log "FALLO copiando $destino"; return 1; }
   # Un corredor roto NO reemplaza a uno que anda.
@@ -187,6 +234,11 @@ poner "$RAIZ/scripts/kanban/telegram-entrada.py" "$DESTINO_BIN/onia-tg-entrada.p
 # queda en el disco — que es exactamente el bug que se arreglo el 2026-09-04.
 poner "$RAIZ/scripts/kanban/publicar-aprobado.mjs" "$DESTINO_BIN/onia-publicar-aprobado.mjs"
 poner "$RAIZ/scripts/postiz_schedule.mjs"          "$DESTINO_BIN/onia-postiz-schedule.mjs"
+# El brazo del `ok <id>` cuando la tarea es un DEPLOY y no una pieza. Sin el,
+# `ok` sobre un pedido de publicar el sitio desbloquea la tarea y no despliega
+# nada: el mismo bug del 2026-09-04, un escalon mas abajo. Medido el 2026-09-05
+# sobre t_4cd13524 (codigo 2, "no era una pieza"), con 30 arreglos esperando.
+poner "$RAIZ/scripts/kanban/desplegar-en-segundo-plano.sh" "$DESTINO_BIN/onia-desplegar-fondo.sh"
 
 # La memoria compartida: el corredor la inyecta y los loops le escriben por estos
 # dos. Si no se despliegan solos, el corredor de main llama a un script que no

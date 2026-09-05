@@ -88,7 +88,35 @@ echo "$AGREGADOS agregado(s), $REPETIDOS repetido(s) — MEMORY.md tiene $N entr
 # Retencion de lo procesado: 200 archivos alcanzan para auditar un mes.
 ls -1t "$HECHOS"/*.md 2>/dev/null | tail -n +201 | xargs -r rm -f
 
+# 🔴 El aviso de tope SOLO se manda cuando EMPEORA, y nunca dos veces seguidas.
+#
+# Antes se disparaba en CADA vuelta del consolidador mientras N superara el tope.
+# Como nadie compacta al instante, eso son varios Telegram por hora repitiendo lo
+# mismo. Medido el 2026-09-05 en el telefono de Sergio: el mismo aviso a las 06:42,
+# 08:12, 09:04... con MEMORY.md en 215 entradas sobre un tope de 120. Pedido suyo,
+# textual: "ordena telegram, me llenan de mensajes innecesarios".
+#
+# El estandar ya estaba escrito en el README de esta carpeta —"como mucho 1 cada
+# 6 h por loop (el ruido apaga la senal)"— y este aviso era el que no lo cumplia.
+#
+# Regla nueva, en dos condiciones que se piden JUNTAS:
+#   · que hayan pasado al menos 6 h desde el ultimo aviso, y
+#   · que la memoria haya crecido >= PASO entradas desde ese aviso.
+# Un desborde estable se calla. Uno que crece, avisa — y cada vez mas arriba.
 if [ "$N" -gt "$TOPE_ENTRADAS" ]; then
-  /root/bin/onia-tg.sh "🧠 <b>Memoria</b>: MEMORY.md llegó a ${N} entradas (tope ${TOPE_ENTRADAS}). Toca pedirle a Hermes que compacte SOLO lo aprendido por los loops — las reglas de SOUL.md no se tocan." >/dev/null 2>&1 || true
+  SELLO="${ONIA_MEM_AVISO:-/var/lib/onia/memoria-aviso}"
+  PASO="${ONIA_MEM_AVISO_PASO:-25}"
+  ESPERA="${ONIA_MEM_AVISO_HORAS:-6}"
+  mkdir -p "$(dirname "$SELLO")" 2>/dev/null || true
+
+  ULT_N=0; ULT_T=0
+  [ -f "$SELLO" ] && read -r ULT_N ULT_T < "$SELLO" 2>/dev/null
+  : "${ULT_N:=0}"; : "${ULT_T:=0}"
+  AHORA=$(date +%s)
+
+  if [ "$N" -ge $(( ULT_N + PASO )) ] && [ $(( AHORA - ULT_T )) -ge $(( ESPERA * 3600 )) ]; then
+    /root/bin/onia-tg.sh "🧠 <b>Memoria</b>: MEMORY.md llegó a ${N} entradas (tope ${TOPE_ENTRADAS}). Toca pedirle a Hermes que compacte SOLO lo aprendido por los loops — las reglas de SOUL.md no se tocan." >/dev/null 2>&1 || true
+    printf '%s %s\n' "$N" "$AHORA" > "$SELLO" 2>/dev/null || true
+  fi
 fi
 exit 0

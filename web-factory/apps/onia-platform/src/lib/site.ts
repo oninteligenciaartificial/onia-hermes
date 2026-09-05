@@ -49,12 +49,16 @@ export const WA_URL_LANDING = waLink(
   "Hola, vengo de la web de Onia. Quiero saber si me sirve para mi negocio.",
 );
 
-export const WA_TEXT_COMERCIO =
-  "Hola, quiero que me avisen cuando Onia para comercio esté listo";
-export const WA_TEXT_SERVICIOS =
-  "Hola, quiero que me avisen cuando Onia para servicios esté listo";
-export const WA_TEXT_PROVEEDORES =
-  "Hola, quiero que me avisen cuando Onia para importadoras esté listo";
+/*
+ * Acá vivían WA_TEXT_COMERCIO, WA_TEXT_SERVICIOS y WA_TEXT_PROVEEDORES: tres
+ * textos de WhatsApp que le hacían pedir al lead que le avisaran cuando Onia
+ * para su rubro estuviera terminada. Eran de cuando esos tres rubros no
+ * existían; hoy los tres están vivos y el alta los ofrece, así que el mensaje
+ * contradecía a la pantalla que lo enviaba. No los llamaba nadie, y por eso
+ * ningún gate de superficie podía verlos — un texto muerto es invisible para
+ * toda captura y todo `curl`. Se borraron el 2026-09-05; el gate que impide que
+ * vuelvan es `cta-sin-obra.test.ts`, al lado de este archivo.
+ */
 
 export const APP_URL = "https://app.onia.com.bo";
 export const DENTALGEST_URL = "https://dentalgest.app";

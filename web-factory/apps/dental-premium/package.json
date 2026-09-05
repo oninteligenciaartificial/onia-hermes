@@ -4,16 +4,17 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "tsc --noEmit",
+    "prebuild": "npm run typecheck",
     "build": "next build",
     "postbuild": "node scripts/completar-standalone.mjs",
     "start": "next start",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "npm run preflight && tsc --noEmit",
     "gate:pliegue": "node scripts/gate-pliegue.mjs",
     "gate:contraste": "node scripts/gate-contraste.mjs",
     "gate:peso": "node scripts/gate-peso.mjs && node scripts/completar-standalone.mjs",
     "gate:parallax": "node scripts/gate-parallax.mjs",
-    "gates": "npm run typecheck && npm run gate:peso && npm run gate:pliegue && npm run gate:contraste && npm run gate:parallax"
+    "gates": "npm run preflight && npm run typecheck && npm run gate:peso && npm run gate:pliegue && npm run gate:contraste && npm run gate:parallax",
+    "preflight": "node scripts/preflight.mjs"
   },
   "dependencies": {
     "next": "15.5.4",

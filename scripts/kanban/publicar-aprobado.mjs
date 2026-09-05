@@ -25,7 +25,7 @@
 // parsean TRES campos, se validan contra una lista blanca de cuentas y contra el
 // disco, y se invoca el publicador con execFile (sin shell, sin interpolacion).
 
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
 import { existsSync, readFileSync, statSync, readdirSync } from 'node:fs';
 import { isAbsolute, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -54,6 +54,54 @@ const CUENTAS = {
 };
 
 const IMAGEN = /\.(png|jpe?g)$/i;
+
+// Lista blanca de destinos de DEPLOY. Mismo criterio que CUENTAS: el cuerpo de
+// la tarea elige un NOMBRE, nunca una ruta ni un comando. La ruta vive aca, en
+// el codigo, asi una tarea no puede hacer correr cualquier cosa como root.
+//
+// POR QUE EXISTE, y es el mismo agujero que las 1.196 imagenes sin publicar, un
+// escalon mas abajo. El arreglo del 2026-09-04 cableo `ok <id>` -> publicar una
+// PIEZA, y dejo afuera la otra cosa que Sergio aprueba por Telegram: un DEPLOY.
+// Medido el 2026-09-05 14:4x UTC sobre t_4cd13524 (el pedido de publicar
+// onia.com.bo, avisado y esperando desde las 02:59):
+//
+//   node /root/bin/onia-publicar-aprobado.mjs t_4cd13524  ->  codigo 2
+//   {"publicable":false,"motivo":"la tarea no trae linea PUBLICAR:"}
+//
+// y SOUL.md ensena que el 2 "es lo normal: segui". O sea: Sergio contesta `ok`,
+// ve el tilde verde de "desbloqueada", y onia.com.bo NO se publica. La tarea
+// queda en `ready` y ningun loop la ejecuta, porque desplegar es decision suya.
+// Resultado: 30 arreglos de la landing y 5 de la plataforma sin llegar al
+// cliente, con el pedido escrito, el aviso entregado y el comando listo.
+const DESTINOS = {
+  landing: '/opt/onia-landing/_deploy/publicar.sh',
+  plataforma: '/opt/onia-platform/_deploy/publicar.sh',
+};
+
+// El deploy corre en SEGUNDO PLANO a proposito. Un build de Next tarda minutos y
+// el que nos llama corta antes (telegram-entrada.py mata a los 360 s): matar un
+// swap a mitad deja produccion en un estado que nadie pidio. Se lanza suelto, se
+// contesta "arranco", y el runner avisa por Telegram como termino.
+// Mismos dos layouts que PUBLICADOR: `scripts/kanban/` en el repo, y plano en
+// /root/bin cuando lo despliega sincronizar.sh (que lo renombra, como a todos).
+const RUNNER = [
+  join(AQUI, 'desplegar-en-segundo-plano.sh'),
+  join(AQUI, 'onia-desplegar-fondo.sh'),
+].find((p) => existsSync(p));
+
+export function parsearDespliegue(cuerpo) {
+  const lineas = String(cuerpo || '')
+    .split('\n')
+    .map((l) => l.trim())
+    .filter((l) => /^DESPLEGAR:/i.test(l));
+  if (!lineas.length) return null;
+
+  const destino = (lineas[0].slice(lineas[0].indexOf(':') + 1).trim().split(/\s+/)[0] || '').toLowerCase();
+  if (!DESTINOS[destino]) {
+    throw new Error(`destino desconocido "${destino}" (validos: ${Object.keys(DESTINOS).join(', ')})`);
+  }
+  return { destino, script: DESTINOS[destino], varias: lineas.length > 1 };
+}
 
 export function parsearLinea(cuerpo) {
   // La primera linea PUBLICAR: gana. Dos lineas serian dos publicaciones y
@@ -129,6 +177,27 @@ function autotest() {
   // El payload con shell adentro se parsea como DATO y muere en la lista blanca,
   // no se ejecuta.
   cae('PUBLICAR: cuenta=$(rm -rf /) imagenes=/tmp/a.png texto=/tmp/b.json', 'cuenta desconocida');
+
+  // ── DESPLEGAR: ────────────────────────────────────────────────────────────
+  ok(parsearDespliegue('sin nada aca') === null, 'sin linea DESPLEGAR debe dar null');
+  const d = parsearDespliegue('bla\nDESPLEGAR: landing\nbla');
+  ok(d.destino === 'landing', 'no leyo el destino landing');
+  ok(d.script === DESTINOS.landing, 'no resolvio la ruta del publicador de landing');
+  ok(parsearDespliegue('DESPLEGAR: Plataforma').destino === 'plataforma', 'el destino tiene que ser insensible a mayusculas');
+  const caeD = (t, frag) => {
+    try { parsearDespliegue(t); } catch (e) { ok(String(e.message).includes(frag), `esperaba "${frag}", dio "${e.message}"`); return; }
+    throw new Error(`AUTOTEST: "${t}" tenia que fallar por ${frag}`);
+  };
+  caeD('DESPLEGAR: produccion', 'destino desconocido');
+  // Igual que arriba: el cuerpo lo escribe un LLM. Una ruta o un comando en vez
+  // de un nombre muere en la lista blanca, no se ejecuta.
+  caeD('DESPLEGAR: /opt/loquesea/publicar.sh', 'destino desconocido');
+  caeD('DESPLEGAR: landing; rm -rf /', 'destino desconocido');
+  caeD('DESPLEGAR:', 'destino desconocido');
+  // El caso que motivo todo esto: un cuerpo con PUBLICAR gana, pero uno SIN
+  // PUBLICAR y CON DESPLEGAR ya no se cae al codigo 2.
+  ok(parsearLinea('DESPLEGAR: landing') === null, 'DESPLEGAR no es una pieza');
+  ok(parsearDespliegue('DESPLEGAR: landing') !== null, 'DESPLEGAR: landing tenia que parsear');
   console.log('autotest OK');
 }
 
@@ -137,10 +206,31 @@ const main = () => {
   if (arg === '--autotest') return autotest();
   if (!arg) throw new Error('uso: publicar-aprobado.mjs <id-de-tarea>');
 
-  const pieza = parsearLinea(cuerpoDeTarea(arg));
+  const cuerpo = cuerpoDeTarea(arg);
+  const pieza = parsearLinea(cuerpo);
   if (!pieza) {
+    // Antes de rendirse: la otra cosa que Sergio aprueba por Telegram es un
+    // DEPLOY. Sin esto, `ok <id>` sobre un pedido de publicar el sitio desbloquea
+    // la tarea y no despliega nada.
+    const deploy = parsearDespliegue(cuerpo);
+    if (deploy) {
+      if (!RUNNER) throw new Error('falta desplegar-en-segundo-plano.sh (lo despliega sincronizar.sh)');
+      if (!existsSync(deploy.script)) throw new Error(`no existe el publicador ${deploy.script}`);
+      const seco = process.env.ONIA_DESPLEGAR_DRY === '1';
+      const hijo = spawn('setsid', ['bash', RUNNER, deploy.script, arg, seco ? '--dry-run' : ''].filter(Boolean), {
+        detached: true, stdio: 'ignore',
+      });
+      hijo.unref();
+      console.log(JSON.stringify({
+        publicable: false, desplegando: true, destino: deploy.destino, seco: seco || undefined,
+        motivo: `arranco el deploy de ${deploy.destino} en segundo plano (tarda minutos); te aviso por Telegram como termino`,
+        log: '/var/log/onia-deploy-aprobado.log',
+        aviso: deploy.varias ? 'la tarea traia mas de una linea DESPLEGAR: se uso la primera' : undefined,
+      }));
+      return;
+    }
     // Codigo 2 = "no habia nada que publicar". Distinto de fallar.
-    console.log(JSON.stringify({ publicable: false, motivo: 'la tarea no trae linea PUBLICAR:' }));
+    console.log(JSON.stringify({ publicable: false, motivo: 'la tarea no trae linea PUBLICAR: ni DESPLEGAR:' }));
     process.exit(2);
   }
   const info = validarEnDisco(pieza);

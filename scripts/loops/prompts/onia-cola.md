@@ -11,10 +11,18 @@ commits verdes en `main`/`master` sin desplegar que no tengan un pedido de deplo
 
 ```
 for r in "/root/loops/onia-hermes origin/main" "/root/loops/onia-platform origin/master"; do set -- $r; git -C $1 fetch --quiet --prune; for b in $(git -C $1 branch -r --list 'origin/claude/*' --no-merged $2 | grep -vE 'carril-contenido|ads-creatividades-publicos|onia-core-adoption-sprint5'); do echo "$1 $b: $(git -C $1 rev-list --count $2..$b) commits, último $(git -C $1 log -1 --format=%cr $b)"; done; done
-docker inspect onia-platform --format '{{.Created}}'; git -C /root/loops/onia-platform log -1 --format='%ci %h %s' origin/master                       # plataforma: contenedor más viejo que el último commit = sin desplegar
+V=$(docker exec onia-platform cat /app/.next/BUILD_ID); for d in /opt/onia-platform/build-*/; do [ "$(cat $d/.next/standalone/.next/BUILD_ID 2>/dev/null)" = "$V" ] && echo "plataforma CORRE $(basename $d)"; done; git -C /root/loops/onia-platform log -1 --format='%ci %h %s' origin/master   # sin desplegar = los commits POSTERIORES al sha que corre
 stat -c '%y' /opt/onia-landing/runtime-next/apps/onia-platform/.next/BUILD_ID; git -C /root/loops/onia-hermes log -1 --format='%ci %h' origin/main -- web-factory/apps/onia-platform   # landing: ídem
 /root/bin/onia-tablero.sh list | grep -iE "deploy|publicar"                                                                                      # ¿ya hay pedido? se comenta ahí, no se abre otro
 ```
+
+⚠️ **`docker inspect --format '{{.Created}}'` NO mide si la plataforma está desplegada, y hasta el
+2026-09-04 esta sección mandaba usarlo.** El swap reemplaza el runtime y **reinicia** el contenedor:
+no lo recrea, así que `Created` queda anclado al día que se levantó. Medido esa tarde: `Created`
+06:27 UTC contra un último commit de las 18:08 — por esa regla, "17 commits sin desplegar"; casando
+el `BUILD_ID` vivo contra los `build-*` del disco, corría `build-3606c46`, que **es** el HEAD de
+`master`. Cero. Un instrumento que inventa trabajo urgente hace abrir pedidos de deploy que no
+existen, y a Sergio le llegan igual que los de verdad.
 
 La línea `OBJETIVO:` es `ramas varadas N (la más vieja: X h) · commits sin desplegar: plataforma
 A, landing B · pedido de deploy: <id>`. Las ramas de contenido y la de `onia-core-adoption` NO
@@ -295,6 +303,25 @@ Ramas de carril activas en **`onia-hermes`** (base `origin/main`):
   dos enumeraciones que este prompt manda hacer son ciegas a él por construcción. Se lo encuentra
   sólo con el `--no-merged` de más abajo. **NO lo confundas con `claude/web-factory-dev`**, que es
   otro carril, del VPS, sobre la misma carpeta.
+- `claude/onia-dev-node-setup-22a170` — carril **nodo de casa** (homelab): mueve loops a la PC de
+  Sergio bajo WSL. ⚠️ **Segundo carril que corre fuera del VPS**, así que —igual que
+  `onia-web-architecture-b37eca`— no tiene `RAMA=` en el corredor ni línea propia en `crontab -l`,
+  y sólo lo encuentra el `--no-merged`. **Lo que toca NO es sólo la PC de casa:**
+  `scripts/loops/sincronizar.sh` **ES** el `/root/bin/onia-loops-sync.sh` que despliega los prompts
+  de los 15 loops del VPS (se copia a sí mismo con otro nombre, línea 150) — por eso un `grep
+  sincronizar` del crontab da vacío y hace creer que el cambio no toca producción. Antes de
+  mergearlo: `bash -n` sobre los dos scripts, y verificar que las rutas de `RUTAS_SYNC` cubran
+  todos los `poner "$RAIZ/…"`. Es un script que **se autodespliega**: una versión rota no se puede
+  reparar a sí misma.
+
+⚠️ **Y una SEXTA repetición el 2026-09-05 00:33 UTC: `claude/onia-dev-node-setup-22a170`, con 5
+commits de hacía 82 minutos.** Traía dos arreglos que afectaban al VPS entero, no a la PC de casa:
+el sincronizador calculaba `RAMA` *después* de los avisos que la usan, así que con `set -u` el
+camino de rescate —el que existe justamente para degradar con gracia— moría con `unbound variable`
+y se llevaba puesto el despliegue de los 15 prompts; y archivaba el repo **entero** (5,4 GB en
+`/tmp` por vuelta, horaria) para copiar 4 subárboles de 4,2 MB. Integrado en `0ef57d488` y
+verificado en vivo: el sincronizador corrió, se autoactualizó desde `main` y `/tmp` no se movió.
+**La lección es la de siempre y ya van seis: la lista se atrasa, el `--no-merged` no.**
 
 ⚠️ **Y una séptima el 2026-09-03 07:40 UTC: `claude/onia-web-architecture-b37eca`, con 12
 commits.** Es la primera que se cuela por un agujero **distinto** al de las seis de abajo: aquéllas
@@ -382,8 +409,19 @@ Radar, ítem 38.
 
 Ramas de carril activas en **`onia-platform`** (base `origin/master`):
 
-- *(al 2026-09-02 13:38 UTC, ninguna de carril.* `claude/chatbots-platform-review-0d1d09`
-  **ya está mergeada a `master`** — se destrabó ese día y por eso salió de esta lista.*)*
+- `claude/onia-v1-servicios-98acde` — **la sesión de control** (Onia v1, packs por rubro). Apareció
+  el 2026-09-04 22:25 UTC con 2 commits y **0 atrás de `master`**: arregla que el rubro de
+  servicios no pudiera cobrar ni cargar un cliente, y que la ficha compartida le dijera "este
+  paciente" a un estudio contable. 25 archivos, +878/−233, cero borrados, con `.test.ts` propio.
+  **Es la quinta vez que este archivo se entera tarde de un carril**, y la primera en este repo.
+  Si sigue sin mergear, mergeala: al 2026-09-04 tenía 30 min de vida, por eso no entró todavía.
+  ⚠️ Sus gates **no se pueden medir en un worktree pelado**: sin `node_modules`, `npx tsc` ni
+  siquiera es el compilador (baja otro paquete y avisa "This is not the tsc command you are
+  looking for"), y encadenado a un `| tail` el `$?` da **0** — un verde que no midió nada. Los
+  tres gates van desde `/root/loops/onia-platform`, que sí los tiene.
+- *(`claude/chatbots-platform-review-0d1d09` **ya está mergeada a `master`** desde el 2026-09-02
+  — se destrabó ese día y por eso salió de esta lista. Ojo que su homónima de `onia-hermes` sigue
+  viva y es otro carril.)*
 - `claude/onia-core-adoption-sprint5` — **NO la mergees**: 382 commits atrás de `master` con 1
   commit propio (`aa8f211`, +910/−240 en 2 archivos de schema del core). Diverge hace demasiado,
   así que es decisión de Sergio — anotada en el radar, ítem 26.

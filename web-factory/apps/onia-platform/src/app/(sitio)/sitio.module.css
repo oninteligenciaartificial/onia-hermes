@@ -1480,7 +1480,11 @@
   position: sticky;
   top: 0;
   z-index: 20;
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  /* 97 % y no 88 %: al 88 % el 12 % de lo que pasa por debajo sube y se lee. En
+     /chatbot, al final de la página, el título blanco de la sección verde de precio
+     se veía fantasma encima del nav (medido 2026-09-05). Sigue siendo de vidrio —el
+     backdrop-filter no se toca—, sólo deja de filtrar texto. Ver barras-opacas.test.ts */
+  background: color-mix(in srgb, var(--bg) 97%, transparent);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--line-soft);
 }
