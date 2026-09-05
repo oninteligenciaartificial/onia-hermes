@@ -70,15 +70,19 @@ const main = async () => {
   const key = apiKey(args);
 
   if (args.list) {
-    const now = new Date();
-    const rows = [];
-    for (let w = 0; w < 8; w++) {
-      const d = new Date(now.getTime() + w * 7 * 864e5);
-      const year = d.getUTCFullYear();
-      const week = Math.ceil(((d - new Date(Date.UTC(year, 0, 1))) / 864e5 + 1) / 7);
-      const got = await api(key, `/posts?week=${week}&year=${year}&display=week&customer=`).catch(() => null);
-      if (Array.isArray(got)) rows.push(...got);
-    }
+    // Esta version de Postiz filtra por startDate/endDate ISO 8601 y RECHAZA con 400 el
+    // week/year/display que se pedia antes. Como el error se tragaba con `.catch(() => null)`,
+    // --list imprimia [] teniendo posts programados de verdad: decia «no hay nada agendado»
+    // sobre una agenda llena. Medido el 2026-09-05: [] contra 2 DRAFT vivos en la misma API.
+    // Si la API falla, ahora revienta a proposito — un listado vacio no puede significar a la
+    // vez «no hay nada» y «no pude preguntar».
+    const desde = new Date();
+    const hasta = new Date(desde.getTime() + 8 * 7 * 864e5);
+    const got = await api(
+      key,
+      `/posts?startDate=${desde.toISOString()}&endDate=${hasta.toISOString()}&customer=`,
+    );
+    const rows = Array.isArray(got) ? got : (got?.posts ?? []);
     console.log(JSON.stringify(rows.map((p) => ({ id: p.id, date: p.publishDate, state: p.state })), null, 2));
     return;
   }
