@@ -1,10 +1,8 @@
 /**
  * Constantes del sitio ONIA Platform.
  *
- * PLACEHOLDERS deliberados (ver README-CARRIL / plan de arranque):
- * - APP_URL / DENTALGEST_URL: dominios segun la arquitectura decidida
- *   (onia.com.bo = este sitio, app.onia.com.bo = la app,
- *   dentalgest.app = embudo dental).
+ * Los dominios que servimos son DOS: `onia.com.bo` (este sitio) y
+ * `app.onia.com.bo` (la app). No hay un tercero.
  */
 
 /**
@@ -61,7 +59,26 @@ export const WA_URL_LANDING = waLink(
  */
 
 export const APP_URL = "https://app.onia.com.bo";
-export const DENTALGEST_URL = "https://dentalgest.app";
+
+/**
+ * Acá vivía `DENTALGEST_URL = "https://dentalgest.app"`, un placeholder del plan
+ * de arranque que nadie llegó a usar. Se borró el 2026-09-05 por dos motivos, y
+ * cualquiera de los dos alcanzaba:
+ *
+ * 1. El dominio está MUERTO: 404 con `x-vercel-error: DEPLOYMENT_NOT_FOUND`, un
+ *    proyecto de Vercel borrado.
+ * 2. `DentalGest` es un nombre de pack retirado. `CLAUDE.md` es explícito: no es
+ *    un producto ni una marca, al cliente se le nombra el rubro («módulo
+ *    dental»). Mandarlo a un embudo con otra marca contradice que haya UN
+ *    producto.
+ *
+ * Y era peligroso justo por estar sin usar: ningún instrumento de superficie ve
+ * una constante muerta —no sale en la captura, ni en el `curl`, ni en el HTML— y
+ * encima estaba en la lista blanca de `enlaces.test.ts`, así que el día que
+ * alguien la cableara a un botón el gate le daba verde contra un 404. El guard
+ * que impide que vuelva es el caso «ninguna entrada de la lista está de más» de
+ * ese archivo.
+ */
 
 /**
  * CTA de las paginas de servicios (chatbot, marketing IA, consultoria).
