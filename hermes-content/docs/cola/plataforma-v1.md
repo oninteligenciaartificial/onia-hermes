@@ -66,9 +66,28 @@ y sin operar. Acá se opera, con verificación por ítem.
 
       | destino | commits sin desplegar | desde |
       |---|---|---|
-      | `landing` (`onia.com.bo`) | **41** | build vivo del 2026-09-04 10:04 UTC |
-      | `plataforma` (`app.onia.com.bo`) | **22** | corre `build-545dd28`; `master` va por `b491970` |
-      | `bot` (WhatsApp) | — | último copiado a `/opt/onia/bot` el 2026-09-04 20:36 |
+      | `landing` (`onia.com.bo`) | **25** | build vivo del 2026-09-04 10:04 UTC |
+      | `plataforma` (`app.onia.com.bo`) | **3** | corre `build-5fc8bcd` (hoy 17:08 UTC) |
+      | `bot` (WhatsApp) | 17 archivos | último copiado a `/opt/onia/bot` el 2026-09-04 20:36 |
+
+      ⚠️ **La plataforma SE PUBLICÓ el 2026-09-06 a las 17:08 UTC (13:08 La Paz), y esta tabla
+      decía lo contrario — corregido a las 19:45 UTC por `onia-cola`.** Decía «22 sin desplegar,
+      corre `build-545dd28`». Hoy corre `build-5fc8bcd` y los **trece** shas que el pedido
+      prometía están adentro (`8b420b6 38bcf8a 195349b 2099778 5922faa 30526c3 5fc333d ad2d45f
+      3fe2db9 06b68c9 a797954 df3e645 bcdfd79`, verificados uno por uno con
+      `git merge-base --is-ancestor <sha> 5fc8bcd`): el alta sin horarios, el corte del mediodía,
+      los dos rubros que el panel negaba, el botón Otorgar sin efecto, la Planilla sin camino y
+      las métricas del asistente **están vivos**. El pedido siguió `blocked` igual, así que le
+      pedía a Sergio Urcullo un `ok` **por trabajo ya hecho** — el modo de falla que este ítem
+      describe, pero al revés: no «dice resuelto sobre lo pendiente», sino **«dice pendiente
+      sobre lo resuelto»**, y de ese lado nadie sospecha porque el pedido sigue ahí, prolijo y
+      ejecutable. Cerrado con su evidencia; los **3** arreglos posteriores tienen pedido nuevo,
+      porque el cuerpo del viejo no los describía y el cuerpo es lo único que él lee.
+
+      **La cifra de la tabla se saca del publicador, no de `git log`.** `bash
+      /opt/onia-platform/_deploy/publicar.sh --dry-run` (y su gemelo de `onia-landing`) filtra lo
+      que no viaja al navegador: el mismo día `git log --since` crudo daba **42** para landing, el
+      cuerpo de la tarea decía **24** y el publicador **25**. Sólo la última es accionable.
 
       **Este loop NO vuelve a avisar de esto**: el integrador ya mide y ya creó el pedido; un
       segundo aviso del mismo hecho es el spam que hizo que nadie leyera el primero. Lo que sí
