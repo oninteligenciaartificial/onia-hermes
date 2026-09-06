@@ -22,7 +22,7 @@ dos patrones — no una variante de estilo.
 | Verde | highlight en el remate de cada pieza | sólo CTA y donde nombra Onia |
 | Objetos | Fluent 3D emoji a color | squircle app-icon con el **logo real** de la marca |
 | Sombra | `0 30px 45px rgba(0,0,0,.25)` | `0 24px 48px rgba(0,0,0,.14)` — más suave |
-| Formato | imagen única | **carrusel** de 8 + imagen única |
+| Formato | imagen única | **carrusel** (hoy 9 láminas) + imagen única |
 
 ## Los 5 layouts (leídos de las 8 referencias)
 
@@ -52,11 +52,12 @@ Valores exactos en [`tokens.css`](tokens.css). Lo que no se puede poner en una v
 - **Etiqueta de procedencia** (`open source`, `plan gratis`) debajo del precio, en el mismo
   tratamiento que el handle — mono, mayúscula, gris. Lee como dato técnico y no compite con
   el precio. Es opcional: se pone sólo donde es **verificable**.
-- **Ningún objeto lleva el verde de Onia.** Se probó vestir a Hermes de verde para decir
-  "ésta es mía" — y era falso: Hermes es código MIT de terceros. Vestir una herramienta
-  ajena con nuestra marca sugiere autoría. Cada objeto usa **su propio** color de marca; el
-  verde vive sólo en el highlight de la portada y en el del CTA. Relleno verde + tinta negra
-  (8,72:1), nunca verde como tinta.
+- **El verde de Onia lo lleva un solo objeto, y sólo si es nuestro.** Se probó vestir de
+  verde a Hermes para decir "ésta es mía" y era falso — es código MIT de terceros; vestir
+  una herramienta ajena con nuestra marca sugiere autoría. El verde volvió cuando entró
+  **Onia Platform**, que sí es de Sergio Urcullo: usa el icono publicado
+  `brand/v2/onia-icon-rounded.svg`. Todos los demás objetos usan **su propio** color de
+  marca. En los textos, verde de relleno + tinta negra (8,72:1), nunca verde como tinta.
 
 ## Tipografía — ✅ INTER, aprobada por Sergio Urcullo (06-sep, mirando el A/B)
 
@@ -89,7 +90,7 @@ aparte y deja el A/B mirable.
    plano lo despega del fondo y rompe la calma. Va `.14`.
 2. **El verde como texto reprueba AA** (2,12:1 sobre fondo claro, medido en §7). En este
    patrón el verde va de **relleno** con tinta negra, igual que allá — sólo que acá aparece
-   en dos láminas de ocho, no en todas.
+   en dos láminas de nueve, no en todas.
 3. **CTA de palabra clave: NO en `@sergio_urcullo`.** Esa cuenta tiene `palabras: {}` en el
    workflow n8n activo de private-reply (medido 2026-09-04, ver
    `briefs/marca-personal/lamina-grid-mensajes.json`): un "Comentá X" ahí no entrega nada y
@@ -164,3 +165,19 @@ aparte y deja el A/B mirable.
    aproximarlo — redibujarlo sería repetir la trampa #9. `_imagen()` lo toma de
    `logos/hermes.*` y cae al glifo de nodos si falta, así el generador nunca se rompe por un
    asset ausente: sólo entrega menos.
+14. 🔴 **"Próximamente" está PROHIBIDO, y lo pidió Sergio Urcullo.** El 06-sep pidió "algo
+   como próximamente" para la lámina de Onia Platform. `CLAUDE.md` § *La venta nunca exhibe
+   obra* prohíbe exactamente esa palabra en toda superficie que ve un cliente — y la regla
+   **nació de él** el 2026-08-20: *"hace escapar a los clientes porque hacen creer que el
+   sistema no funciona"*.
+   **Resuelto sin desobedecer ni ignorar:** el slot dice **"Te cuento pronto"**. Da la misma
+   intriga, pero habla de la **historia** ("te voy a contar"), no del **estado del producto**
+   ("no está listo"). Esa distinción es la regla entera. Pendiente de su ratificación si
+   quiere la palabra literal.
+15. **Una herramienta que no se usa vuelve mentira toda la pieza.** Notion salió: *"gratis,
+   aunque ni lo uso"* (06-sep). El valor entero de «Mi stack» es que las siete cosas son
+   reales; una de adorno se lleva puestas a las otras seis. Su `.path` queda vendorizado por
+   si vuelve en otra pieza. Al salir se barrieron los conteos otra vez: `seis`→`cinco cuestan $0`.
+16. **El slot de precio acepta una frase, pero no al mismo cuerpo.** A 92px "Te cuento
+   pronto" competía con el nombre; `.precio.texto` lo baja a 60px y sigue siendo el segundo
+   foco. Se aplica solo cuando el valor no empieza con `$`.

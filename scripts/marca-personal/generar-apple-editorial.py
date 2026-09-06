@@ -136,6 +136,10 @@ ICONOS = {
     # Notion va al reves —blanco con glifo negro y filo— porque asi es su icono real.
     # El filo existe para que no se pierda sobre el fondo #F5F5F7.
     "notion": _squircle("#FFFFFF", _marca("notion", "#0A0A0A"), borde="#D2D2D7"),
+    # Onia Platform: el icono de marca YA publicado (brand/v2/onia-icon-rounded.svg), a
+    # sangre sobre todo el squircle. Es el UNICO objeto que lleva el verde de Onia — y acá
+    # sí corresponde, porque es lo único del stack que construyó Sergio Urcullo.
+    "onia": _squircle("#00D26A", _imagen("onia", alto=256)),
     # Sin logo oficial en simple-icons: se dibujan.
     "vps": _squircle("#1D1D1F", _torre()),
     "hyperframes": _squircle(
@@ -171,7 +175,7 @@ LAMINAS = [
         "layout": "D",
         "contexto": "Todo mi negocio corre con",
         "remate": "SIETE COSAS",
-        "pie": "y seis cuestan",
+        "pie": "y cinco cuestan",
         "pie_hl": "$0",
     },
     {
@@ -206,20 +210,16 @@ LAMINAS = [
         "layout": "E",
         "icono": "whatsapp",
         "nombre": "WhatsApp Business",
-        "desc": "El canal donde se atiende. El transporte de Meta\nlo paga la cuenta del negocio, no yo.",
+        # Antes decia "el transporte de Meta lo paga la cuenta del negocio, no yo": jerga
+        # de plataforma que a un dueno de negocio no le dice nada. Ahora nombra lo que el
+        # lector hace todos los dias, y el paso concreto — las respuestas rapidas son las
+        # mismas del brief lamina-grid-mensajes.json, contenido ya verificado.
+        "desc": "Donde me escriben los clientes. Con las respuestas\nrápidas dejé escritos de una vez los seis mensajes\nque antes tipeaba todos los días.",
         "precio": "$0",
     },
-    # ⚠️ El plan de Notion NO esta verificado en ningun lado del repo. "Bs 0" asume plan
-    # gratis y queda PENDIENTE de confirmacion de Sergio Urcullo: un precio sin verificar en
-    # pieza publica es justo lo que prohibe la regla de fuente unica.
-    {
-        "layout": "E",
-        "icono": "notion",
-        "nombre": "Notion",
-        "desc": "Donde vive cada decisión, cada documento y la\nbiblioteca de la comunidad. Un solo lugar, no doce.",
-        "precio": "$0",
-        "etiqueta": "Plan gratis",
-    },
+    # Notion SALIO: Sergio Urcullo, 06-sep — "gratis, aunque ni lo uso". Una herramienta que
+    # no se usa en una pieza cuyo valor entero es que las siete son reales la vuelve mentira.
+    # Su .path queda vendorizado por si vuelve en otra pieza.
     # Chatwoot SALIO de la pieza (Sergio Urcullo, 06-sep). No es pudor: es la capa que hace
     # funcionar el chatbot que se vende desde Onia Platform. Las otras cinco herramientas no
     # tienen ese problema —nadie compra Claude en vez de Onia—, pero Chatwoot con "Bs 0" al
@@ -247,6 +247,25 @@ LAMINAS = [
         "desc": "Un agente open source que vive en mi servidor.\nYo le escribí el alma: su identidad, su memoria\ny a quién avisar cuando algo se rompe.",
         "precio": "$0",
         "etiqueta": "Open source · MIT",
+    },
+    # El cierre del arco: lo unico del stack que no instalo, sino que construyo. Va ultima
+    # a proposito — es la carta mas fuerte y la unica que lleva el verde de Onia.
+    #
+    # ⚠️ El slot de precio dice "Te cuento pronto" y NO "Próximamente", que fue la palabra
+    # que pidio Sergio Urcullo. Motivo: CLAUDE.md § "La venta nunca exhibe obra" prohibe
+    # explicitamente "próximamente" en toda superficie que ve un cliente, y esa regla nacio
+    # de el ("hace escapar a los clientes"). "Te cuento pronto" da la misma intriga hablando
+    # de la HISTORIA, no del estado del producto. Si el ratifica la palabra literal, se cambia.
+    #
+    # Promesas: agenda y clientes son 🟢 en ONIA_CATALOGO_DE_VENTA.md; el chatbot es 🟢 en
+    # su §5. Sin precio de producto: es contenido, no venta.
+    {
+        "layout": "E",
+        "icono": "onia",
+        "nombre": "Onia Platform",
+        "desc": "Donde manejo el negocio: los clientes, la agenda\ny el chatbot que contesta cuando no estoy.\nEs la única que no instalé. La construí.",
+        "precio": "Te cuento pronto",
+        "etiqueta": "Lo que estoy construyendo",
     },
     {
         "layout": "D",
@@ -316,6 +335,9 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 /* Un solo tamano para todo el precio, unidad incluida: es como lo muestran las refs
    5/6/7 ("$20/mes"). Con la unidad en otro cuerpo quedaba pegada y desalineada. */
 .precio{{font-size:92px;margin-top:58px}}
+/* Cuando el slot no lleva cifra sino una frase, 92px la vuelve un titular que compite con
+   el nombre. Baja a 60px y sigue siendo el segundo foco. */
+.precio.texto{{font-size:60px}}
 /* Etiqueta de procedencia (open source / plan gratis). Mismo tratamiento que el handle
    —mono, mayuscula, gris— para que lea como dato tecnico y no compita con el precio. */
 .etiqueta{{font-family:'OniaMono',monospace;font-size:25px;font-weight:500;
@@ -349,7 +371,8 @@ def markup(lamina):
     return (f'<div class="obj">{ICONOS[lamina["icono"]]}</div>'
             f'<div class="display nombre">{lamina["nombre"]}</div>'
             f'<div class="desc">{lamina["desc"]}</div>'
-            f'<div class="display precio">{lamina["precio"]}</div>{etiqueta}')
+            f'<div class="display precio{"" if lamina["precio"].startswith("$") else " texto"}">'
+            f'{lamina["precio"]}</div>{etiqueta}')
 
 
 def render(tipo, out_dir):

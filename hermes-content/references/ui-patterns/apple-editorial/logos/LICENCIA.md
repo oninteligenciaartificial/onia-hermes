@@ -21,3 +21,14 @@ la lamina dice "uso esta herramienta", no sugiere afiliacion ni autoria.
 ⚠️ Hermes **no es codigo de Onia**. Verificado el 2026-09-06: `NousResearch/hermes-agent`,
 publico, licencia MIT, Python. Lo que si es de Sergio Urcullo es el `SOUL.md`, la memoria
 y la configuracion con la que corre en su servidor.
+
+## onia.svg
+
+Copia de `web-factory/apps/onia-platform/public/brand/v2/onia-icon-rounded.svg` — el icono
+de marca decidido y publicado (tile verde `#00D26A` con el monograma "on"). Es marca PROPIA,
+asi que no hay pregunta de uso: se copia acá para que el patron sea autocontenido y el render
+no dependa de otro arbol.
+
+⚠️ El verde del icono publicado es `#00D26A` y el token de marca de la §7 es `#00C661`. Se
+respeta el archivo publicado tal cual; la diferencia queda anotada, no "corregida" por un
+generador.
