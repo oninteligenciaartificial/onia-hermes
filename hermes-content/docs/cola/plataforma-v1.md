@@ -380,10 +380,35 @@ y sin operar. Acá se opera, con verificación por ítem.
       lleva el caso que YA cumple, para que no apruebe en verde sin encontrar nada. Si no ve el
       repo hermano sale con 2 (NO MEDIDO), nunca verde.
 
-      **Falta:** los mismos módulos en los otros cuatro rubros (comercio, importadora, estética,
-      servicios profesionales). Ojo: hoy sólo hay org real para comercio
-      (`zz-qa-ferreteria-tornillo-ommbt`, **trial vencido el 2026-08-30** — hay que extenderlo o
-      la feature se lee muerta) e importadora (`bolivian-electricidad-e6t21`); **estética y
+      **Avance 2026-09-06 — segunda tanda MIRADA: los 9 módulos del pack de comercio
+      (`gestios-general`), y los nueve están sanos.** Org `zz-qa-ferreteria-tornillo-ommbt`
+      (trial vencido el 2026-08-30, **extendido al 2026-10-06** para poder medir), cuenta
+      `oninteligenciaartificial+qacomercio@gmail.com`, capturados con
+      `scripts/mirar_bandeja_dueno.mjs --ruta /X` y **abiertos y leídos uno por uno**:
+      `/comercio` (catálogo), `/comercio/inventario`, `/comercio/caja`, `/comercio/fiados`,
+      `/comercio/clientes`, `/contabilidad`, `/rrhh`, `/empresa`, `/requerimientos`.
+      Capturas en `/root/capturas-comercio/`.
+
+      La org tiene **cero productos**, así que lo que se recorrió es el **estado vacío** — que es
+      el primer camino de todo cliente nuevo, y es donde ya se rompió el de horarios («Saltar por
+      ahora» dejaba la agenda muerta). Acá **ninguno queda muerto**: cada pantalla vacía dice qué
+      falta y ofrece la salida («Cargá el primero con el botón Nuevo producto», «Tus clientes
+      aparecen acá solos → Ir a la caja», «Los fiados se registran desde la caja»). Vocabulario de
+      comercio correcto (catálogo/productos/clientes, nunca «pacientes») y ninguna exhibe obra.
+
+      ⚠️ **Un falso positivo que cuesta caro y que conviene no volver a pagar:** en la primera
+      pasada `/comercio/caja` salió con **«Algo salió mal — ha ocurrido un error inesperado»**, la
+      cara exacta de un bug del producto. No lo era: un chunk de JS
+      (`/_next/static/chunks/2hdoqbwoi0rkc.js`) había devuelto **522 transitorio**, y el error
+      boundary de `app/(dashboard)/error.tsx` atrapa eso igual que a un fallo real. El chunk
+      **existe en el build vivo** (17.794 B) y responde 200 en tres intentos; recapturada, la caja
+      se ve entera. Lo delator ya estaba impreso: el propio script escribe `respuestas >=400:` en
+      su log y **yo miré la foto sin leer el log**. La captura sola no alcanza —
+      se miran **las dos**, y antes de tocar código se descarta el chunk caído.
+
+      **Falta:** importadora, estética y servicios profesionales. Importadora tiene org
+      (`bolivian-electricidad-e6t21`) pero es de un **cliente real y su dueño es la cuenta de
+      Sergio Urcullo** — mirarla no se hace con una sesión ajena sin avisar; **estética y
       servicios profesionales no tienen ninguna org en producción**, así que hay que darlas de
       alta antes de poder mirarlas.
 
