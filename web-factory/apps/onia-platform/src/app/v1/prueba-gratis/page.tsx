@@ -44,7 +44,12 @@ const PASOS = [
   {
     titulo: "Tu cuenta queda lista",
     detalle:
-      "Sin instalación ni proyecto de meses. Le das el nombre de tu negocio y el sistema busca y carga tus datos.",
+      // La promesa dice el camino que CORRE: la persona pega el enlace y el
+      // motor lo lee (`traerHtml` cae a fetch nativo). Decía «le das el nombre
+      // y el sistema busca», que es el paso (3) del orquestador y depende de
+      // `SEARXNG_URL` — ausente en producción, así que devolvía el formulario
+      // vacío. Ver capacidad-degradada.test.ts.
+      "Sin instalación ni proyecto de meses. Pegás el enlace de tu web y el sistema lee la página y carga tus datos.",
   },
   {
     titulo: "Usalo de verdad 14 días",

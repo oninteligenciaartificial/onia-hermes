@@ -11,7 +11,8 @@
     "build": "next build",
     "start": "next start",
     "test": "node scripts/test-con-dependencias.mjs",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "busqueda:viva": "node scripts/busqueda-alta-viva.mjs"
   },
   "dependencies": {
     "motion": "^12.23.26",
