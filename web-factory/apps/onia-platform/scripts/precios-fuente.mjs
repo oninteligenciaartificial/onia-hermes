@@ -251,6 +251,14 @@ export function cifrasDelProducto({ planes, addons, prueba, limites }) {
     "Grupo / Empresarial · implementación desde": num(grupo, "setupFrom"),
     "add-on chatbot · mensual": num(chatbot, "entryMonthly"),
     "add-on chatbot · anual": num(chatbot, "annualTotal"),
+    /**
+     * El cupo que el producto CORTA: `lib/chatbot/cupo.ts` lo lee de acá para
+     * decidir `agotada`, y al agotarse el bot deriva la conversación a una
+     * persona. Faltaba en este cruce, y ese hueco es lo que dejó al sitio
+     * vender el chatbot sin nombrar su límite hasta el 2026-09-06: el dueño se
+     * enteraba pagando, cuando sus clientes recibían «se agotaron».
+     */
+    "add-on chatbot · conversaciones por mes": num(chatbot, "includedConversations"),
     "add-on reservas online · mensual": num(reservas, "monthly"),
     "add-on usuario extra · mensual": num(usuario, "monthly"),
     "add-on usuario extra · máximo en Básico": num(usuario, "basicMaxSeats"),
@@ -392,6 +400,9 @@ export function cifrasDelSitio({ precios, chatbot }) {
     ),
     "add-on chatbot · mensual": num(stacks, "mensual"),
     "add-on chatbot · anual": num(stacks, "anual"),
+    /** `export const X = N`, no una clave de objeto — como los del trial. */
+    "add-on chatbot · conversaciones por mes":
+      Number(chatbot?.match(/CONVERSACIONES_INCLUIDAS\s*=\s*(\d+)/)?.[1] ?? NaN) || null,
     "add-on reservas online · mensual": num(agenda, "mensualAddon"),
     "add-on usuario extra · mensual": num(usuario, "mensualAddon"),
     "add-on usuario extra · máximo en Básico": num(usuario, "maxEnBasico"),
@@ -428,7 +439,7 @@ const falta = (v) => v === null || v === undefined;
  * que siguen vivos.
  */
 export const esPromesa = (cifra) =>
-  /· fichas$|· usuarios$|· recordatorios por mes$/.test(cifra) ||
+  /· fichas$|· usuarios$|· recordatorios por mes$|· conversaciones por mes$/.test(cifra) ||
   cifra.startsWith("primer plan con");
 
 /** Puro: sin red y sin disco, para poder probarlo con casos que hoy no existen. */
