@@ -29,9 +29,9 @@
     {
       "id": "siat",
       "title": "Facturación en línea / SIAT",
-      "body": "Sobre facturación en línea te contesto sólo lo que es público: desde el 30 de septiembre es obligatoria y el Servicio de Impuestos tiene un portal gratuito para emitir. Lo que hace {{producto}} es que los datos ya estén cargados para no tipear dos veces. Lo que te conviene a vos según tu NIT y tu volumen lo ve {{humano}} en la demo.",
+      "body": "Sobre facturación en línea te contesto sólo lo que es público: desde el 1 de octubre de 2026 los grupos 9.º al 12.º de contribuyentes emiten con facturación en línea (RND 102600000007), y el Servicio de Impuestos tiene un portal gratuito para hacerlo. Lo que hace {{producto}} es que los datos ya estén cargados para no tipear dos veces. Si te alcanza a vos, según tu NIT y tu volumen, lo ve {{humano}} en la demo.",
       "status": "publicado",
-      "vigenteHasta": "2026-09-30",
+      "vigenteHasta": "2027-09-30",
       "tags": ["fiscal", "siat"]
     }
   ],
