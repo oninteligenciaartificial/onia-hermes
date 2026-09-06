@@ -84,29 +84,27 @@ describe("el mensaje que envía el asistente no exhibe obra", () => {
     ).toEqual([]);
   });
 
-  it("la rama sin plan —hoy dormida— tampoco exhibe obra cuando despierte", () => {
-    // Los cinco rubros de `Rubro` tienen plan hoy, así que el `it.each` de
-    // arriba NUNCA entra a la rama `!disponible`. Ahí es donde vivió el texto
-    // podrido: dormido, invisible para cualquier medición de la pantalla, y
-    // listo para despertarse el día que alguien sume un rubro sin plan. Por eso
-    // se la fuerza a mano — es el único caso del archivo que se construye así,
-    // y es a propósito.
-    const rec = recomendar("comercio", "solo", new Set<Tiene>(["nada"]), "");
-    const sinPlan = { ...rec, disponible: false, plan: null };
-    const texto = buildWaText("comercio", "solo", ["nada"], "", sinPlan);
-
-    const encontradas = OBRA.filter((f) => f.patron.test(texto));
-    expect(
-      encontradas.map((f) => `${f.patron.source} — ${f.porque}`),
-      `la rama sin plan volvió a anunciar obra:\n\n  ${texto}\n`,
-    ).toEqual([]);
-
-    // Y la regla es "la demanda futura se captura SIN ADMITIR": el mensaje
-    // tiene que seguir pidiendo el contacto. Un gate que sólo prohíbe frases se
-    // satisface borrando el mensaje, así que acá se exige que siga vivo.
-    expect(texto).toMatch(/Mi rubro:/);
-    expect(texto, "dejó de pedir el contacto: se volvió mudo en vez de honesto").toMatch(
-      /propuesta|armemos|caso/i,
-    );
+  /**
+   * Acá había un caso que forzaba a mano la rama sin plan (`{...rec, plan:
+   * null}`) para vigilar el texto dormido que nadie podía ver. Ya no se puede
+   * escribir: el 2026-09-06 `plan` dejó de ser nullable y la rama se eliminó
+   * junto con el resto de la maquinaria de "próximamente" del wizard.
+   *
+   * El caso hacía lo correcto con lo que había, pero la lección de esa vuelta
+   * fue que vigilar un texto invisible es la respuesta cara: se pudre igual
+   * —hay que acordarse de auditarlo— y el arreglo siguiente lo hereda ya
+   * aprobado. Lo barato es que el estado no pueda existir. Lo que queda de
+   * guardia es el tipo, más `obra-en-la-pantalla.test.ts`, que falla si alguien
+   * vuelve a listar un rubro no entregable.
+   */
+  it("todo rubro del wizard tiene plan: la rama sin plan no existe", () => {
+    for (const rubro of RUBROS) {
+      const rec = recomendar(rubro, "solo", new Set<Tiene>(["nada"]), "");
+      expect(
+        rec.plan?.nombre,
+        `${rubro} se quedó sin plan: vuelve a hacer falta una rama para el ` +
+          `rubro que no se puede contratar, y ahí es donde se pudre el texto`,
+      ).toBeTruthy();
+    }
   });
 });

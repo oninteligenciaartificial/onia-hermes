@@ -3,7 +3,6 @@
  * Fuente: ONIA_WIZARD_EMPEZAR_SPEC_2026.md §3. Misma entrada, misma salida.
  */
 
-import { esRubroDisponible } from "./data";
 
 export type Rubro = "dental" | "comercio" | "servicios" | "proveedores" | "estetica";
 export type Equipo = "solo" | "2-5" | "6-15" | "15+";
@@ -24,9 +23,18 @@ export type Nota =
   | "compara-demo"
   | "downsell-basico";
 
+/**
+ * `plan` NO es opcional, y `disponible` ya no existe.
+ *
+ * Los dos campos sostenían la variante "próximamente" del resultado: un rubro
+ * sin plan caía en una pantalla que lo dibujaba a medio armar. Como el wizard
+ * sólo ofrece rubros que se contratan hoy (ver `RUBRO_OPTIONS`), ese estado no
+ * tenía sujeto — pero mientras el tipo lo admitía, la pantalla de obra seguía
+ * en el árbol esperando quién la encendiera. El tipo es ahora el que garantiza
+ * que no puede volver.
+ */
 export interface Recomendacion {
-  disponible: boolean;
-  plan: { id: PlanId; nombre: string; precio: Precio } | null;
+  plan: { id: PlanId; nombre: string; precio: Precio };
   faltan: Falta[];
   yaTenes: Tiene[];
   notas: Nota[];
@@ -44,13 +52,11 @@ export function recomendar(
   // como downsell, nunca como apertura. Onia es UNA plataforma: los planes no
   // llevan marca de rubro.
   //
-  // La disponibilidad sale de RUBRO_OPTIONS y NO se repite aca: estaba
-  // hardcodeada en "dental" y mandaba comercio e importadora a la variante
-  // "proximamente" aunque el producto ya deja registrarse en los tres.
-  const disponible = esRubroDisponible(rubro);
-  const plan = !disponible
-    ? null
-    : equipo === "15+"
+  // Todo rubro del selector se contrata hoy (RUBRO_OPTIONS), así que siempre
+  // hay plan que recomendar. Antes esto empezaba con `!disponible ? null`, y
+  // ese null era la puerta a la pantalla de obra.
+  const plan =
+    equipo === "15+"
       ? {
           id: "grupo" as const,
           nombre: "Grupo clínico",
@@ -81,10 +87,9 @@ export function recomendar(
   if (!tiene.has("facturacion")) notas.push("facturacion-incluida");
   if (tiene.has("sistema")) notas.push("compara-demo");
   // downsell explicito solo para el consultorio de una persona
-  if (disponible && equipo === "solo") notas.push("downsell-basico");
+  if (equipo === "solo") notas.push("downsell-basico");
 
   return {
-    disponible,
     plan,
     faltan,
     yaTenes,
