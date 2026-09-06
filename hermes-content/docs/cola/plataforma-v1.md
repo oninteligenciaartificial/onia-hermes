@@ -360,7 +360,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       dieran por desaparecido con `ls` sobre la ruta equivocada: **un `ls` que falla prueba que
       NO está ahí, nunca que no está.** Las tres citas quedaron con la ruta completa.
 
-- [ ] 🟡 **Recorrer cada módulo 🟡 con datos reales y MIRARLO renderizado**, rubro por rubro de
+- [x] 🟡 **Recorrer cada módulo 🟡 con datos reales y MIRARLO renderizado**, rubro por rubro de
       los cinco de la v1.0. Es kilometraje, no código: lo que se busca es dónde se rompe el
       camino, no qué reescribir. Se cruza con el loop `recorrido-cliente`, que ya hace esto de
       punta a punta — **leer su cola antes de repetir su trabajo**:
@@ -655,6 +655,48 @@ y sin operar. Acá se opera, con verificación por ítem.
       `public."User"`, tabla que no existe (es `public.profiles`), y el `catch` se tragaba el
       error — el script llegó a reportar «el alta NO creó la organización» sobre un alta que
       había funcionado perfecto.
+
+      **CERRADO 2026-09-06 — sexta tanda: los 6 transversales que faltaban de importadora, y con
+      eso los CINCO rubros de la v1.0 quedaron recorridos.** Org `qa-modulos-rj7tv`, cuenta
+      `zz-qa-importadora-modulos@onia.com.bo`, capturas en `/root/capturas-importadora/`
+      **abiertas y leídas una por una**, con el log de cada corrida al lado: **cero respuestas
+      ≥400 en las seis**, así que ningún error boundary de chunk caído se leyó como bug del
+      producto. Sanas cinco: `/inbox` («Tu canal de chat todavía no está encendido» → «Configurar
+      mi asistente»), `/requerimientos`, `/contabilidad` (IVA 13% e IT 3%, Ley 843, con la
+      salvedad «no reemplaza la declaración en el SIAT ni es asesoría fiscal»), `/team` y `/rrhh`
+      («Equipo y planilla», SMN Bs 3.300, aporte a la Gestora 12,71%, RC-IVA). Los estados vacíos
+      ofrecen la salida en todos.
+
+      ✅ **La que no: `/empresa`.** Su menú la llama **«Gastos»** y la pantalla se titulaba
+      **«Empresa · Tu empresa este mes»**. Recontado contra los siete packs antes de tocar nada:
+      **seis la llaman «Gastos»** y sólo `gestios-servicios-profesionales` la llama «Empresa» —
+      o sea el título estaba escrito para el único pack que NO es de la v1.0, y les hablaba mal a
+      los cuatro que sí lo son. **ARREGLADO y atado** en `7149658` (`onia-platform`, rama del
+      carril): el rótulo se **deriva** del pack, así que un rubro nuevo nace cubierto. El gate va
+      en `lib/platform/copy-de-pantallas-compartidas.test.ts`, el archivo que ya cubre esta
+      familia, con los sujetos sacados de `VERTICAL_PACKS`; falló primero en ROJO por el motivo
+      correcto y lleva el caso que ancla que **el rótulo no es igual en todos los rubros** — si lo
+      fuera, la regla sobraría y el barrido pasaría en verde el día que alguien vuelva a fijar el
+      título. Verde: tsc 0 · vitest 3175 · eslint 0 errores. **Commiteado, NO desplegado.**
+      Captura del defecto: `/root/capturas-importadora/empresa.png`.
+
+      ⚠️ **Un falso positivo que se descartó leyendo el código y no la foto:** en la captura,
+      `/empresa` ofrece «Ver agenda» y «Reuniones», y ni Agenda ni Reuniones están en el menú de
+      importadora — la firma exacta del defecto de fiados («los fiados se registran desde la
+      caja», que no existe en ese menú). No lo era: los dos apuntan a `/empresa/reuniones`, una
+      **subruta del propio módulo**, igual que «Ver y cargar gastos» y «Ver colaboradores». Un
+      enlace a una pantalla que no está en el menú sólo es defecto si esa pantalla es de OTRO
+      módulo; las subrutas del módulo abierto no tienen por qué estar en la navegación.
+
+      **Balance de los cinco rubros:** dental 8 módulos, comercio 9, estética 13, servicios
+      profesionales 12, importadora 13 — **55 pantallas miradas renderizadas**, con 5 defectos
+      encontrados y arreglados (`/treatments` y `/agents` en estética, `/comercio/caja` en
+      servicios, `/comercio/fiados` en importadora y servicios, `/empresa` en los seis packs que
+      la llaman «Gastos»). **Los cinco eran del mismo tipo y ninguno lo podía ver un barrido de
+      literales:** el texto era correcto en el rubro que lo escribió y estaba mal el par
+      (rubro, texto). Lo único que los encuentra es abrir la pantalla **con la sesión del rubro
+      que la nombra distinto** — y el eje que hay que cruzar es el **rótulo del menú**, no el
+      vocabulario del rubro, que es lo que ya estaba bien en todas.
 
 - [x] 🟡 **Los agentes de IA (`/agents`) — DECIDIDO Y ATADO el 2026-09-05: corren solos, con cron
       propio, UNA vez al día.** No hace falta una tercera corrección del catálogo: §7 ya dice la
