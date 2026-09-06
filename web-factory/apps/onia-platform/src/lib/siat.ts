@@ -17,9 +17,19 @@
  * Si una cifra o una fecha cambia, se cambia ACÁ y no en las páginas.
  */
 
-/** Titular de la página normativa. */
+/**
+ * Titular de la página normativa.
+ *
+ * En PRESENTE a propósito, y no es preferencia de estilo: el sitio se sirve
+ * estático y el HTML se queda quieto hasta el próximo deploy, que es manual.
+ * Decía *«solo podrán facturar en línea»* —futuro— así que el 1 de octubre se
+ * convertía solo en una promesa vencida, publicada tal cual, en la página que
+ * existe para captar justo esa búsqueda. Enunciada como norma («desde tal
+ * fecha, facturan así») es verdadera antes y después.
+ * Vigilado por `(sitio)/plazo-que-vence.test.ts`.
+ */
 export const SIAT_TITULAR =
-  "Desde el 1 de octubre de 2026, miles de negocios solo podrán facturar en línea.";
+  "Desde el 1 de octubre de 2026, miles de negocios en Bolivia facturan únicamente en línea.";
 
 /** La bajada: qué dice la norma, con su número de RND. */
 export const SIAT_BAJADA =
@@ -89,7 +99,7 @@ export const SIAT_FAQ: readonly SiatFaq[] = [
     a: "Sí. El SIN ofrece el Portal Web en Línea gratuito, donde emitís factura por factura tipeando los datos a mano. Cumple la norma al 100%. Lo que un sistema como Onia agrega no es el cumplimiento: es no re-tipear — la factura sale sola de tu venta, con tu caja y tu contabilidad conectadas.",
   },
   {
-    q: "¿Qué pasa si no migro antes del 1 de octubre de 2026?",
+    q: "¿Qué pasa con mi facturación desde el 1 de octubre de 2026?",
     a: "Desde esa fecha los grupos alcanzados solo pueden emitir por su modalidad de facturación en línea asignada (RND 102600000007). Emitir por medios anteriores deja de ser válido para esos contribuyentes.",
   },
   {
@@ -215,7 +225,7 @@ export const SIAT_GUIA_A_MANO: readonly string[] = [
  * tenemos una muestra de negocios habilitados y no se inventa una.
  */
 export const SIAT_GUIA_FRENA: readonly string[] = [
-  "Dejarlo para la última semana de septiembre. No es un formulario: son seis pasos y cada uno depende del anterior.",
+  "Dejarlo para la última semana antes de tu plazo. No es un formulario: son seis pasos y cada uno depende del anterior.",
   "Descubrir una marca de riesgo recién en el paso 3. Se resuelve, pero no en una tarde, y hasta que no se resuelva el trámite queda parado.",
   "Llegar al paso 6 sin los catálogos sincronizados. La prueba no valida, volvés al paso 5 y ya con la fecha encima.",
 ];
