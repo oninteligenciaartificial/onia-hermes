@@ -589,8 +589,10 @@ y sin operar. Acá se opera, con verificación por ítem.
       sacar la captura porque ese texto **no está** en `/settings` de estética. No se reporta lo
       que no se vio.
 
-      **Falta para cerrar el ítem:** importadora (org de un cliente real, `bolivian-
-      electricidad-e6t21`, cuyo dueño es la cuenta de Sergio Urcullo — mirarla necesita su OK).
+      ⚠️ **Acá decía «Falta: importadora — mirarla necesita el OK de Sergio Urcullo», y ese
+      bloqueo estaba VENCIDO:** nació antes de `scripts/alta_qa_rubro.mjs`, que da de alta una org
+      QA propia sin tocar la del cliente (`bolivian-electricidad-e6t21`). Se resolvió en la quinta
+      y la sexta tanda, más abajo — **no hacía falta ningún OK.**
 
       **Avance 2026-09-06 — cuarta tanda MIRADA: los 12 módulos de servicios profesionales, y
       la CAJA le habla en comercio.** Org `qa-modulos-mrk0q` (`gestios-servicios-profesionales`,
@@ -670,10 +672,9 @@ y sin operar. Acá se opera, con verificación por ítem.
       rubro**. Una pantalla mirada no queda cubierta para siempre: queda cubierta para el eje que
       se miró.
 
-      **Falta para cerrar el ítem:** los 6 módulos transversales de importadora que no entraron en
-      esta vuelta — `/inbox`, `/requerimientos`, `/empresa`, `/contabilidad`, `/team`, `/rrhh`.
-      Están mirados en otros rubros, pero no con la sesión de importadora, que es justo el eje que
-      acaba de fallar. Se retoman con
+      ✅ **Eso ya se hizo — los 6 transversales de importadora (`/inbox`, `/requerimientos`,
+      `/empresa`, `/contabilidad`, `/team`, `/rrhh`) se miraron en la sexta tanda, más abajo.**
+      El comando que se usó, que sirve para cualquier rubro:
       `node scripts/mirar_bandeja_dueno.mjs --email zz-qa-importadora-modulos@onia.com.bo --ruta /X
       --salida /root/capturas-importadora/X.png` (ojo: `--salida` es un **archivo**, no una
       carpeta; pasarle una carpeta muere con `unsupported mime type "null"`).
@@ -763,6 +764,35 @@ y sin operar. Acá se opera, con verificación por ítem.
       (rubro, texto). Lo único que los encuentra es abrir la pantalla **con la sesión del rubro
       que la nombra distinto** — y el eje que hay que cruzar es el **rótulo del menú**, no el
       vocabulario del rubro, que es lo que ya estaba bien en todas.
+
+      🔒 **Y el recorrido de 55 pantallas no se vuelve a hacer, así que lo que quedaba abierto era
+      la pantalla número 56 — cerrado el 2026-09-06 en `f997f2f`.** Los tres gates que dejaron los
+      arreglos derivan sus **sujetos** de `VERTICAL_PACKS` (un rubro nuevo nace cubierto), pero su
+      lista de **pantallas** está escrita a mano: la misma lista-de-inclusión un escalón más
+      arriba, la que ya falló abierta en otros gates de este proyecto. Contado: los packs comparten
+      **seis** pantallas con rótulos distintos —`/comercio`, `/comercio/fiados`, `/dashboard`,
+      `/empresa`, `/patients`, `/treatments`— y los gates cubrían **dos**. Las otras cuatro están
+      **sanas** (`/comercio` y `/patients` derivan su idioma del pack; `/dashboard` se titula
+      «Hoy», que no es palabra de ningún rubro), pero eso no lo sabía nadie de forma ejecutable.
+      `lib/platform/pantallas-compartidas-cubiertas.test.ts` no prueba el copy: prueba la
+      **cobertura** — toda pantalla que dos packs nombran distinto tiene que estar declarada con
+      **cómo** se cubre, y toda declaración tiene que seguir siendo cierta. Verificado por mutación
+      en las cuatro direcciones, cada una roja por su motivo; la que importa es la cuarta:
+      agregando una pantalla NUEVA al menú de dos packs con rótulos distintos, el gate la **nombra**
+      y manda al archivo a extender, en vez de callarse.
+
+      **Y de las cuatro «sanas», dos lo estaban por una mirada y ahora lo están por una
+      invariante** (`0a5bdbe`). «La pantalla ya deriva su título del pack» **no** es cobertura:
+      `/comercio` y `/patients` lo hacían y lo único que lo sostenía era haberlas MIRADO una vez
+      — un cambio en el vocabulario, en `llevaInventario` o en el rótulo del menú las despegaba
+      sin que nada se pusiera rojo. Medido antes de escribir nada: las **8** combinaciones
+      (rubro, pantalla) coinciden hoy, así que no había defecto, faltaba la regla. Llevan la misma
+      que `/treatments` y `/empresa`, con el ancla de que **el rótulo no es igual en todos los
+      rubros** (sin eso, con un solo rótulo posible cualquier literal fijo acierta). Por eso la
+      variante «derivado» se eliminó del gate de cobertura: era una tercera forma de declararse
+      cubierto sin gate, que es exactamente lo que acá fallaba. Quedan **cinco por gate** y
+      `/dashboard` neutral con su motivo escrito. Verde: tsc 0 · vitest 3214 · eslint 0 errores.
+      **Son gates: no viajan al navegador y no piden deploy.**
 
 - [x] 🟡 **Los agentes de IA (`/agents`) — DECIDIDO Y ATADO el 2026-09-05: corren solos, con cron
       propio, UNA vez al día.** No hace falta una tercera corrección del catálogo: §7 ya dice la
