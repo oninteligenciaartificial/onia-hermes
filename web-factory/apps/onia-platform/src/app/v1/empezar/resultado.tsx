@@ -135,8 +135,14 @@ function VarianteDental({
     yaTenesLineas.push({
       id: "web",
       texto: url
-        ? `Tu web: ${url}. Una persona del equipo la revisa y te manda el análisis gratis por WhatsApp en el día.`
-        : "Tenés web. Si querés el análisis gratis, pasánosla por WhatsApp.",
+        ? // Ni «una persona del equipo» ni «en el día»: no hay equipo —lo vende
+          // Sergio Urcullo solo— y el wizard no manda NADA a un servidor
+          // nuestro (su única salida es el wa.me que abre el propio lead), así
+          // que lo que escribe acá muere en su navegador si no aprieta el
+          // botón. Lo que sí es verdad es el mecanismo, y decirlo explica de
+          // paso por qué le pedimos el dato.
+          `Tu web: ${url}. Viaja en el mensaje de WhatsApp que abrís al final, así la miramos y te decimos qué le falta.`
+        : "Tenés web. Si querés que la miremos, pasánosla por WhatsApp.",
     });
   }
   if (rec.yaTenes.includes("chatbot")) {
