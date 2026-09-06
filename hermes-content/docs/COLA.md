@@ -2200,10 +2200,16 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
         (era 29 KB de HTML de error) y la `description` de `/terminos` ya no dice "borrador"—.
         Lo que falta **no es el deploy: es el merge**.
 
-- [ ] 🔴 **Tres arreglos del carril están commiteados hace horas y NO llegan al cliente porque
-      `claude/web-venta` no se mergeó a `main`.** No es "esperando a Sergio": el integrador
-      (`onia-cola`) mergea, y el deploy ya demostró hoy que corre solo. Medido con
-      `git merge-base --is-ancestor <sha> origin/main`:
+- [x] 🔴 **Tres arreglos del carril están commiteados hace horas y NO llegan al cliente porque
+      `claude/web-venta` no se mergeó a `main`.** **CERRADO 2026-09-06 01:50 La Paz** por el
+      integrador: los tres shas dan `EN MAIN` con el mismo comando que los midió, y el defecto
+      caro murió también **en producción** — `curl -s https://onia.com.bo/contacto | grep -c
+      cal.onia.com.bo` → **0** (decía 2). Entró en el build del 04-sep 10:04 UTC.
+      ⚠️ **Su premisa "el deploy ya demostró hoy que corre solo" era falsa y no hay que heredarla:**
+      `onia.com.bo` **no** se despliega solo (cero crons, cero timers — medido el 2026-09-04); los
+      `BUILD_ID` que cambian son swaps a mano. Que este arreglo llegara no fue automatismo.
+      Hoy hay **39** commits de la app esperando publicación, cubiertos por el pedido `t_30e607a8`.
+      Medido con `git merge-base --is-ancestor <sha> origin/main`:
       - `ea150d179` (17:58) — **el que más cuesta**: los dos CTA de `/contacto` agendan contra
         `cal.onia.com.bo`, un Cal.com muerto. **Sigue vivo en producción ahora mismo**:
         `curl -s https://onia.com.bo/contacto | grep cal.onia.com.bo` → dos aciertos.
