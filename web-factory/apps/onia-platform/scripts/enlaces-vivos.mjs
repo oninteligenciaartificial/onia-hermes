@@ -72,12 +72,13 @@ function rutasDelDisco(dir = join(SRC, 'app'), prefijo = '') {
 }
 
 /**
- * `/v1/**` y `/patrones` estan fuera a proposito, y NO por comodidad: llevan
- * `noindex, nofollow`, estan en `Disallow` de robots.txt y no aparecen en el sitemap
- * (verificado el 2026-09-04). Son superficie congelada, no superficie de venta. Si
- * alguna vez se despublican, esta lista es el unico lugar que hay que tocar.
+ * Que rutas se barren y cuales no vive en `rutas-de-venta.mjs`, con su motivo y su
+ * test. Hasta el 2026-09-05 estaba aca y eximia `/v1/**` entero por llevar noindex
+ * y estar en el Disallow de robots.txt — un corte que este mismo carril ya habia
+ * medido FALSO el dia anterior: robots manda sobre rastreadores, no apaga la
+ * pantalla, y esas ocho paginas responden 200 y se comparten por WhatsApp.
  */
-const FUERA_DE_VENTA = (r) => r === '/patrones' || r === '/v1' || r.startsWith('/v1/');
+import { FUERA_DE_VENTA } from './rutas-de-venta.mjs';
 
 const pedir = (url, seguir = false) => {
   // `curl` y no `fetch`: hace falta el codigo y el destino del redirect SIN seguirlo,
