@@ -7,7 +7,30 @@ disco con un horario registrado en algún lado — y desde el 2026-09-05 ese "al
 |---|---|---|
 | `Windows` | `C:\Users\PC\.claude\scheduled-tasks\<id>\SKILL.md` | la app de Claude Code (`list_scheduled_tasks`) |
 | `VPS` | `/root/bin/loops/<id>.md` (fuente: [`scripts/loops/prompts/`](../../../scripts/loops/prompts/)) | `crontab -l` en `187.77.16.63` |
-| `casa` | `/root/bin/loops/<id>.md` dentro de WSL | `crontab -l` en la PC de casa (`DESKTOP-0GGGNMF`) |
+| `casa` | `/root/bin/loops/<id>.md` dentro de WSL | `crontab -l` en **nodo-casa** (`DESKTOP-0GGGNMF`) |
+
+🔴 **Los nombres de las máquinas, definidos el 2026-09-06 — y la ambigüedad ya costó.**
+Acá y en `PLAN_HOMELAB.md` se decía **«la PC de casa»**, y en la casa de Sergio Urcullo hay
+**dos** Windows detrás del mismo router (misma IP pública). Ese día corrió el instalador de
+arranque de WSL en la equivocada y Windows contestó *«el argumento … no existe»*, que no dice
+«máquina equivocada» en ningún lado. Un nombre ambiguo se paga en un error que no se explica
+solo.
+
+| nombre | máquina | qué es | cómo se reconoce |
+|---|---|---|---|
+| **laptop** | `DESKTOP-ENV6SDA` | HP Victus 16, 12 hilos, 23,6 GB, **con batería**, Win 11 Home. Donde Sergio Urcullo trabaja y habla con las sesiones. **No tiene nada del nodo** | su Ubuntu **no** tiene `/root/loops` ni `/root/.onia-nodo` |
+| **nodo-casa** | `DESKTOP-0GGGNMF` | El tercer nodo: `/root/loops`, los 5 worktrees, y las 5 líneas de cron **comentadas** | existe `/root/.onia-nodo` |
+| **VPS** | `srv1360183` · 187.77.16.63 | Producción: la app, Supabase, Chatwoot y los 4 loops vivos | existe `/usr/local/lib/hermes-agent/venv/bin/python` |
+
+El nombre `nodo-casa` no se inventó acá: es con el que **ese nodo ya firma** los hechos que
+escribe en la memoria compartida. ⚠️ El valor de la columna *dónde corre* sigue siendo `casa`
+a propósito — `loops_registrados.mjs` compara contra esa cadena exacta; cambiarla rompe el gate.
+
+> **Y sirve saber esto:** el 2026-09-06 se midió que **nodo-casa está despierto y su cron
+> dispara** (sube logs al VPS cada 10 min, baja memoria cada 15, sincroniza a los :44, sin
+> cortes desde el 2026-08-30). O sea que el arranque automático de WSL **no es el bloqueante
+> para encender un loop hoy**: es el seguro para que sobreviva un reinicio. Lo único que separa
+> a ese nodo de correr un loop es **descomentar su línea**, coordinado con el VPS y esta tabla.
 
 🔴 **La columna «dónde corre» no es informativa: la lee un gate.** Cada máquina se compara
 **sólo contra sus propias filas**, y para eso tiene que saber cuál es. Se resuelve preguntando
