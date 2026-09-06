@@ -16,7 +16,7 @@ Hola [Nombre], soy Sergio de ONIA — hablamos hace un tiempo por el sistema par
 En ese momento me dijiste que te quedaba corto, y tenías razón. Te escribo porque cambió bastante:
 
 1. Ahora tiene un agente que trabaja solo: cuando un paciente falta, te propone la reprogramación por WhatsApp y vos aprobás con un click. Llena el hueco, no manda recorditos.
-2. Factura SIAT incluida en los 3 planes, sin costo aparte (desde el 1 de octubre solo se factura en línea; igual podés cumplir gratis tipeando en el portal del SIN — lo nuestro es que no tengas que tipear).
+2. Cada venta queda cerrada con su detalle y su monto, lista para facturar en el Portal Web del SIN, que es gratis (desde el 1 de octubre de 2026 esos negocios facturan en línea).
 3. Odontograma, historial y consentimientos en la ficha del paciente.
 
 ¿Te muestro en 20 min lo que cambió? La cuenta la hacemos con los números de tu clínica.
@@ -27,7 +27,7 @@ Variante si la objeción fue "ustedes son muy chicos":
 ```
 Hola [Nombre], Sergio de ONIA. Hace un tiempo hablamos por el sistema para [Clínica] y quedó ahí — con razón, estábamos arrancando.
 
-Hoy el sistema tiene un agente que reprograma citas por WhatsApp solo (vos aprobás cada mensaje antes de que salga), la factura SIAT va incluida en todos los planes sin costo aparte, y a las primeras clínicas de Santa Cruz que arranquen les regalamos la implementación completa. Chicos seguimos siendo — la diferencia es que me tenés a mí directo, no a un call center.
+Hoy el sistema tiene un agente que reprograma citas por WhatsApp solo (vos aprobás cada mensaje antes de que salga), cada venta te queda lista para facturar en el portal gratuito del SIN, y a las primeras clínicas de Santa Cruz que arranquen les regalamos la implementación completa. Chicos seguimos siendo — la diferencia es que me tenés a mí directo, no a un call center.
 
 ¿20 minutos esta semana para que lo veas andando? Si no te convence, quedamos como amigos.
 ```
@@ -37,7 +37,7 @@ Variante si el lead quedó en silencio sin objeción clara:
 ```
 Hola [Nombre], Sergio de ONIA — hace un tiempo hablamos por el sistema para [Clínica] y quedó ahí, seguro por las mil cosas de la clínica.
 
-Te escribo porque desde entonces cambió bastante: ahora tiene un agente que, cuando un paciente falta, te propone reprogramarlo por WhatsApp y vos aprobás con un click — llena el hueco, no manda recorditos. Y la factura SIAT va incluida en todos los planes, sin costo aparte.
+Te escribo porque desde entonces cambió bastante: ahora tiene un agente que, cuando un paciente falta, te propone reprogramarlo por WhatsApp y vos aprobás con un click — llena el hueco, no manda recorditos. Y cada venta te queda cerrada y lista para facturar en el portal gratuito del SIN.
 
 ¿Te muestro en 20 minutos con los números de tu clínica? Decime qué día te queda y coordino yo.
 ```
@@ -55,7 +55,7 @@ Una pregunta corta: ¿cuántos pacientes les faltaron sin avisar el mes pasado? 
 Si responden con interés:
 
 ```
-Buenísimo. Es un sistema que se llama DentalGest: agenda, ficha con odontograma, factura SIAT incluida sin costo aparte, y un agente que cuando alguien falta le propone reprogramar por WhatsApp — ustedes aprueban cada mensaje antes de que salga.
+Buenísimo. Es un sistema que se llama DentalGest: agenda, ficha con odontograma, cada venta lista para facturar en el portal del SIN, y un agente que cuando alguien falta le propone reprogramar por WhatsApp — ustedes aprueban cada mensaje antes de que salga.
 
 ¿Cuándo les queda bien una demo de 20 min: [día 1] o [día 2]? Puedo ir a la clínica o por videollamada.
 ```

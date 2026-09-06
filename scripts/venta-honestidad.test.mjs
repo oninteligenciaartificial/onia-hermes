@@ -135,3 +135,122 @@ test("el inventario sigue contandose como valor incluido, capacidad por capacida
     assert.match(planes, termino, `el \`incluye\` del plan dejo de nombrar ${termino}`);
   }
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// El KIT DE VENTA no puede prometer una capacidad que el producto no entrega.
+//
+// POR QUE EXISTE, medido el 2026-09-06 por onia-cola (tarea t_9b7d6f71, abierta por
+// web-venta el 04-sep). El SITIO ya se habia limpiado dos veces —el pie que listaba
+// "Facturacion SIAT" (198cca363) y /nosotros, que reescribia la promesa fiscal a mano
+// (8db85fba8)— y el KIT seguia con SEIS lineas vendiendo "factura SIAT incluida en los
+// 3 planes, sin costo aparte" mientras `docker exec onia-platform env | grep -c SIAT`
+// daba 0. Es exactamente "una promesa que cambia se barre en TODA la superficie":
+// se barrio la superficie que se estaba tocando y no la hermana.
+//
+// Y la pista de que era despegue y no decision: el material MAS VIEJO era el honesto.
+// SPEECH_REUNION_SCZ_20260801.md ya contestaba "el emisor esta en homologacion ante el
+// SIN" y dejaba escrito literal "No prometer facturacion SIAT ya en vivo". Los scripts
+// de WhatsApp y el guion de demo se despegaron DESPUES de esa regla.
+//
+// COMO ESTA ESCRITO, y es lo que lo hace no caducar:
+//  · el valor se ancla a la FUENTE (la fila de Onia en proof.ts), nunca al valor que el
+//    kit tenia hoy. El dia que el emisor salga de homologacion, `siat: "si"` apaga este
+//    gate solo — no hay que acordarse de venir a borrarlo. Un gate que afirma el dato en
+//    vez de leerlo lo cementa (ya paso: dos gates del bot exigian "30 de septiembre"
+//    siendo el plazo el 1 de octubre, y lo defendian en verde).
+//  · los SUJETOS salen del DISCO, no de una lista de los dos archivos que fallaron: un
+//    material nuevo del kit nace cubierto y hay que excluirlo a la vista, con su motivo.
+//  · perdona la PROSA que narra el defecto y las instrucciones NEGADAS ("No prometer
+//    SIAT en vivo", "❌ ..."). Un barrido de literales que no distingue eso obliga a
+//    borrar la regla que enseña a no cometer el error.
+import { readdirSync, statSync } from "node:fs";
+
+const PROOF = "web-factory/apps/onia-platform/src/lib/proof.ts";
+const KIT = "hermes-content/sales-kit";
+
+// Carpetas con FECHA en el nombre = historia (CLAUDE.md). Un deck que alguien ya vio en
+// una reunion no se reescribe: cambiar lo que un cliente ya leyo es decision comercial.
+// El caso de abajo se pone rojo si esta exencion apunta a algo que ya no existe, asi que
+// una exencion vencida no puede tapar al material siguiente.
+const EXENTOS_HISTORICOS = ["presentacion-scz-20260801"];
+
+/** El estado del emisor segun la fuente: "si" | "tramite" | "no". */
+function estadoSiatDeLaFuente() {
+  const filaOnia = leer(PROOF)
+    .split("\n")
+    .find((l) => /estados:\s*\{[^}]*siat:\s*"(si|tramite|no)"/.test(l) && /siat:\s*"tramite"/.test(l));
+  const m = filaOnia?.match(/siat:\s*"(si|tramite|no)"/);
+  return m ? m[1] : leer(PROOF).match(/siat:\s*"(tramite)"/)?.[1] ?? null;
+}
+
+function materialesVivosDelKit() {
+  const salida = [];
+  const recorrer = (rel) => {
+    for (const entrada of readdirSync(path.join(RAIZ, rel))) {
+      const hijo = path.join(rel, entrada);
+      if (statSync(path.join(RAIZ, hijo)).isDirectory()) {
+        if (!EXENTOS_HISTORICOS.includes(entrada)) recorrer(hijo);
+      } else if (entrada.endsWith(".md")) salida.push(hijo);
+    }
+  };
+  recorrer(KIT);
+  return salida;
+}
+
+/** Una linea que AFIRMA que entregamos la factura SIAT. Perdona lo negado y la prosa. */
+function prometeEmitirSiat(linea) {
+  if (!/SIAT/i.test(linea)) return false;
+  if (/^\s*[-*>|\s]*❌/.test(linea)) return false;                    // "❌ no decir esto"
+  if (/\bno\s+(prometer|prometas|decir|digas)\b/i.test(linea)) return false; // la regla que lo prohibe
+  if (/\bno\s+(incluye|esta|está)\b/i.test(linea)) return false;      // la salvedad honesta
+  if (/homologaci[oó]n|tr[aá]mite/i.test(linea)) return false;        // la respuesta honesta
+  return /\b(incluid[ao]s?|incluye|incluyen)\b/i.test(linea);
+}
+
+test("el kit de venta no promete emitir la factura SIAT mientras el emisor no emita", () => {
+  const estado = estadoSiatDeLaFuente();
+  assert.ok(estado, `no pude leer el estado de SIAT en ${PROOF}: la fuente cambio de forma`);
+  if (estado === "si") return; // el emisor salio de homologacion: el kit ya puede prometerlo
+
+  const ofensores = [];
+  for (const rel of materialesVivosDelKit()) {
+    leer(rel).split("\n").forEach((linea, i) => {
+      if (prometeEmitirSiat(linea)) ofensores.push(`${rel}:${i + 1}  ${linea.trim().slice(0, 90)}`);
+    });
+  }
+  assert.deepEqual(
+    ofensores,
+    [],
+    `El kit promete factura SIAT y la fuente dice siat:"${estado}".\n` +
+      `Molde honesto ya escrito: "el emisor esta en homologacion ante el SIN; hasta que salga, el\n` +
+      `sistema deja la venta lista y se factura por el portal gratuito del SIN".\n` +
+      ofensores.join("\n")
+  );
+});
+
+// Las DOS direcciones. Sin el caso que YA cumple, el detector podria estar siempre-vacio
+// (verde sobre cualquier cosa) y nadie se enteraria; sin el que debe fallar, podria estar
+// siempre-lleno. Un gate probado en una sola direccion no prueba nada.
+test("el detector del kit anda en las dos direcciones", () => {
+  assert.ok(prometeEmitirSiat("factura SIAT incluida en los 3 planes, sin costo aparte"));
+  assert.ok(prometeEmitirSiat("y ya incluye la factura SIAT."));
+  assert.ok(!prometeEmitirSiat("- No prometer facturación SIAT \"ya en vivo\" (está en homologación)."));
+  assert.ok(!prometeEmitirSiat("❌ \"Vos sos grupo X del SIAT\" (depende del NIT)."));
+  assert.ok(!prometeEmitirSiat("El emisor está en homologación ante el SIN; se factura por el portal."));
+  assert.ok(!prometeEmitirSiat("demo enfocada en orden + SIAT (posible Básico como downsell)"));
+});
+
+test("los sujetos salen del disco y las exenciones no estan vencidas", () => {
+  const vivos = materialesVivosDelKit();
+  assert.ok(vivos.length >= 3, `el kit deberia tener material vivo, encontre ${vivos.length}`);
+  assert.ok(
+    vivos.some((r) => r.includes("03-SCRIPTS-WHATSAPP")),
+    "el barrido dejo de ver los scripts de WhatsApp: el recorrido del disco se rompio"
+  );
+  for (const exento of EXENTOS_HISTORICOS) {
+    assert.ok(
+      readdirSync(path.join(RAIZ, KIT)).includes(exento),
+      `la exencion "${exento}" ya no existe: borrala en vez de dejarla tapando material nuevo`
+    );
+  }
+});
