@@ -53,6 +53,27 @@ export const SIAT_BLOQUES: readonly SiatBloque[] = [
   },
 ] as const;
 
+/**
+ * Dónde está Onia con el SIN, en UNA frase, para las páginas que lo mencionan
+ * al pasar y no pueden traer el bloque entero de arriba.
+ *
+ * Existe porque `/nosotros` lo re-escribía a mano y se comía la mitad: decía
+ * *"registrado ante el SIN con las pruebas técnicas de la Fase 1 completadas"*
+ * y ahí cortaba, sin el "quedan las etapas formales" que sí está en
+ * `SIAT_BLOQUES`. Bajo su h2 —"El sistema corre en producción"— eso se lee como
+ * que Onia ya factura, y no factura (`lib/proof.ts`: `siat: "tramite"`).
+ *
+ * ⚠️ Las dos mitades van JUNTAS o no va ninguna. El logro sin la salvedad es
+ * una promesa falsa; la salvedad sin el logro regala el único avance
+ * verificable que tenemos. Vigilado por `(sitio)/promesa-fiscal.test.ts`, que
+ * exige las dos en este texto y en toda página que afirme el registro.
+ *
+ * Se escribe en minúscula y sin punto final a propósito: entra como cláusula
+ * dentro de una oración más larga, no como párrafo suelto.
+ */
+export const SIAT_ESTADO_ONIA =
+  "nuestro emisor de facturación está registrado ante el SIN y ya completó las pruebas técnicas de la Fase 1; quedan las etapas formales del trámite, así que hasta que la homologación concluya emitís por el portal gratuito del SIN, con tus ventas ya cargadas y sin re-tipear";
+
 export interface SiatFaq {
   q: string;
   a: string;

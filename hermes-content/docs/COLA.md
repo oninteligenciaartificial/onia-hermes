@@ -63,7 +63,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
-- [ ] **`/nosotros` re-escribe a mano la promesa fiscal en vez de leerla de su fuente**
+- [x] **`/nosotros` re-escribe a mano la promesa fiscal en vez de leerla de su fuente**
       (web-venta, 2026-09-06). `src/app/(sitio)/nosotros/page.tsx:151` dice *"nuestro emisor
       de facturación está registrado ante el SIN con las pruebas técnicas de la Fase 1
       completadas"*, tipeado a mano. La fuente es `src/content/siat.ts:52`, que además
@@ -74,6 +74,15 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       `/nosotros` no importa el símbolo — lo escribe. Es la misma forma del desastre de los
       cuatro precios vivos: dos copias del mismo hecho, y la de la página no envejece con la
       fuente. **Arreglo:** que `/nosotros` lea de `siat.ts`, y extender el gate al cuerpo.
+      **HECHO 2026-09-06** (`8db85fba8`). La ruta que citaba este ítem era
+      `src/content/siat.ts` y la fuente real es `src/lib/siat.ts`. Ahora `/nosotros`
+      lee `SIAT_ESTADO_ONIA`, que trae las dos mitades juntas. Gate nuevo:
+      `(sitio)/promesa-fiscal.test.ts` — la mitad tipeada a mano que
+      `promesa-en-el-cuerpo.test.ts` no puede ver (aquél sigue el grafo de imports).
+      ⚠️ Su primera versión dio **verde sobre el defecto**: buscaba la salvedad en el
+      archivo entero y el principio «Honestidad primero» de la misma página la
+      absolvía desde 90 líneas más arriba. El sujeto es la **vecindad** de la
+      afirmación, no el documento. Pantalla mirada renderizada; 613 tests verdes.
 
 > **Cuatro de los seis ítems del plan de la mañana murieron al verificarlos.** No estaban
 > hechos "más o menos": estaban hechos, o estaban decididos, o el costo era otro. Queda
