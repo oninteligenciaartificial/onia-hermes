@@ -676,3 +676,4 @@ los rearma (apuntan a otro binario); si faltan, reponerlos a mano de esta lista.
 | `onia-drop-recordatorio.sh` | `45 22 * * *` | manda el drop del dia listo-para-pegar 15 min antes de las 19:00 La Paz |
 | `onia-vigia-embudo.sh` | `19 */6 * * *` | chequea landing, cal y Postiz; avisa SOLO al caerse o volver |
 | `onia-leads-vigia.sh` | `9 */2 * * *` | avisa solicitudes de acceso nuevas (access_requests) con datos de contacto |
+| `onia-vigia-ci.sh` | ⬜ **escrito y probado, sin instalar** | avisa cuando un workflow de GitHub Actions pasa a rojo en `master` de `onia-platform`, y cuando se recupera. **Uno por episodio, no uno por vuelta.** Le falta un token con `Actions: Read-only` en `/root/.config/onia/github-token`; el `GITHUB_TOKEN` de n8n NO sirve (403 en `actions/runs`, `check-runs` y `status`). Fuente: [`vigia-ci.sh`](../../../scripts/loops/vigia-ci.sh), probado por [`vigia-ci.test.sh`](../../../scripts/loops/vigia-ci.test.sh) (13 casos) |
