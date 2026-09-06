@@ -173,15 +173,20 @@ function selfCheck() {
   ok(rutasDe("sin ruta").length === 0, "rutasDe inventa rutas");
 
   // pantallasFantasma: encuentra la ausente Y absuelve a la que existe (el caso que YA cumple).
-  const dashboard = rutaDashboard();
-  if (!dashboard) {
-    fallos.push("self-check no pudo correr: falta el árbol de onia-platform");
-  } else {
-    const inventada = [{ modulo: "X", pantalla: "`/no-existe-jamas`", estado: "🟡", rutas: ["no-existe-jamas"] }];
-    ok(pantallasFantasma(inventada, dashboard).length === 1, "no detecta una pantalla ausente");
-    const viva = [{ modulo: "Y", pantalla: "`/billing`", estado: "🟡", rutas: ["billing"] }];
-    ok(pantallasFantasma(viva, dashboard).length === 0, "marca como fantasma una pantalla que SÍ existe");
-  }
+  //
+  // El árbol de prueba es ESTE repo (`scripts/`, que tiene `scripts/loops` adentro), NO el hermano.
+  // Antes se medía contra `rutaDashboard()` real y, sin el otro repo, el self-check devolvía 1:
+  // un rojo por AMBIENTE. Como este self-check corre en la cadena `npm test`, ese rojo traba el
+  // merge de LOS QUINCE CARRILES por algo que no tiene nada que ver con el cambio de nadie.
+  // La ausencia del hermano la reporta `medir()` con su exit 2 (NO MEDIDO), que es su lugar.
+  const inventada = [{ modulo: "X", pantalla: "`/no-existe-jamas`", estado: "🟡", rutas: ["no-existe-jamas"] }];
+  ok(pantallasFantasma(inventada, AQUI).length === 1, "no detecta una pantalla ausente");
+  const viva = [{ modulo: "Y", pantalla: "`/loops`", estado: "🟡", rutas: ["loops"] }];
+  ok(pantallasFantasma(viva, AQUI).length === 0, "marca como fantasma una pantalla que SÍ existe");
+
+  // Y la puerta del NO MEDIDO: sin ningún candidato no inventa un árbol, que es lo que hace que
+  // `medir()` salga con 2 en vez de aprobar en verde sin haber mirado nada.
+  ok(rutaDashboard(["/no/existe/jamas"]) === null, "rutaDashboard inventa un árbol que no está");
 
   // contradiceASiete: dispara con el texto real que tenía la tabla, y calla cuando ya está corregido.
   const conSiete = "## 7. Lo que NO se puede prometer\nlos agentes SÍ corren solos\n";

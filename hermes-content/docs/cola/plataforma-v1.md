@@ -419,6 +419,20 @@ y sin operar. Acá se opera, con verificación por ítem.
       lleva el caso que YA cumple, para que no apruebe en verde sin encontrar nada. Si no ve el
       repo hermano sale con 2 (NO MEDIDO), nunca verde.
 
+      ⚠️ **«Atado» no era cierto hasta el 2026-09-06 15:5x UTC: el gate existía y no lo corría
+      nadie** — ni estaba en la cadena `npm test` ni tenía un `npm run` que lo invocara. Y no era
+      un olvido: cablearlo tal cual **ponía `main` en rojo por AMBIENTE**, porque su `--self-check`
+      exigía el árbol del repo hermano y devolvía **1** cuando no lo encontraba (reproducido
+      apuntando los tres candidatos a rutas inexistentes). Ese rojo traba el merge de los quince
+      carriles por algo ajeno al cambio de cualquiera. `guards-cableados` no podía verlo: ata los
+      `test:*` **declarados**, y éste nunca se declaró — la misma lista-de-inclusión que ya falló
+      abierto en otros gates. **Arreglado** (`onia-cola`): el self-check pasó a ser **puro**
+      (prueba las dos direcciones contra `scripts/`, con `scripts/loops` como la pantalla que SÍ
+      existe) y la ausencia del hermano la sigue reportando `medir()` con su exit 2. Verificado
+      por mutación: rompiendo el detector en cada dirección, el self-check se pone rojo por el
+      motivo correcto. Ahora corre en la cadena como `test:catalogo-instrumento`, y la medición
+      viva es `npm run catalogo:modulos-vivos`.
+
       **Avance 2026-09-06 — segunda tanda MIRADA: los 9 módulos del pack de comercio
       (`gestios-general`), y los nueve están sanos.** Org `zz-qa-ferreteria-tornillo-ommbt`
       (trial vencido el 2026-08-30, **extendido al 2026-10-06** para poder medir), cuenta
