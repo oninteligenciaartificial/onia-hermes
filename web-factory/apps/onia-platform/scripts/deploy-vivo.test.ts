@@ -1,4 +1,7 @@
+import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 import {
@@ -12,6 +15,7 @@ import {
   STAGED_PREFIX,
   STAGED_VIEJO,
   ZONA,
+  commitsDesde,
   diagnosticar,
   evaluarStaged,
   llegaAlCliente,
@@ -242,6 +246,98 @@ describe("deploy-vivo: qué build hay armado para publicar", () => {
 describe("deploy-vivo: la zona que vigila", () => {
   it("vigila la app completa, no una lista de subcarpetas", () => {
     expect(ZONA).toBe("web-factory/apps/onia-platform");
+  });
+});
+
+/**
+ * Un merge NO es un arreglo varado — y por qué no alcanzaba con `llegaAlCliente`.
+ *
+ * EL SUCESO, medido el 2026-09-06: el gate declaraba 43 commits en la zona desde
+ * el build vivo, y SIETE eran merges (16 % inflado). En su propia salida listaba
+ * tres veces «Merge remote-tracking branch 'origin/claude/web-venta'». Un merge
+ * duplica el arreglo que ya se contó por su commit propio, así que el número que
+ * termina en el pedido de deploy que Sergio Urcullo aprueba exagera cuánto
+ * trabajo urgente hay parado.
+ *
+ * LA MECÁNICA, que no es «falta un flag». `git log --name-only` no lista los
+ * archivos de un merge (no muestra su diff salvo con `-m`/`-c`), así que todo
+ * merge llegaba con `archivos: []` — y `llegaAlCliente([])` responde `true` A
+ * PROPÓSITO, porque una lista vacía es ausencia de dato y el sesgo seguro es
+ * shippear. Ese default es correcto para un commit normal y equivocado para un
+ * merge, que por construcción no aporta cambios propios. Por eso se corrige
+ * sacando los merges del conjunto ANTES de clasificar, y no tocando
+ * `llegaAlCliente`, que debe seguir fallando hacia «sí viaja».
+ *
+ * Es la misma familia que este archivo ya cazó con las herramientas del carril:
+ * falla CERRADO, y un número alto y estable se lee como diagnóstico en vez de
+ * como síntoma.
+ */
+describe("deploy-vivo: un merge no es un arreglo", () => {
+  // Ventana amplia y fija: el repo mergea ramas de carril a diario, así que
+  // contiene merges con enorme margen. Si algún día no contuviera, el caso de
+  // abajo se pone ROJO en vez de pasar vacío.
+  const DIAS = 60;
+  const desdeMs = Date.now() - DIAS * 24 * 60 * 60 * 1000;
+
+  const shasDeMerges = () => {
+    const r = spawnSync(
+      "git",
+      [
+        "log",
+        "--format=%H",
+        "--merges",
+        `--since=@${Math.floor(desdeMs / 1000)}`,
+        "origin/main",
+        "--",
+        `:/${ZONA}`,
+      ],
+      { encoding: "utf8", cwd: dirname(fileURLToPath(import.meta.url)) },
+    );
+    if (r.status !== 0) return null;
+    return r.stdout.split("\n").filter(Boolean);
+  };
+
+  /**
+   * El caso que impide que este bloque pase sin medir nada.
+   *
+   * Sin él, `--no-merges` se podría borrar del script y los dos casos seguirían
+   * verdes el día que la ventana no tuviera merges: el conjunto a excluir sería
+   * vacío y la intersección daría vacía por el motivo equivocado. Es la trampa
+   * exacta de esta familia —un gate que se queda sin sujetos firma en verde—,
+   * así que la premisa se afirma explícitamente.
+   */
+  it("la ventana elegida CONTIENE merges (si no, lo de abajo no probaría nada)", () => {
+    const merges = shasDeMerges();
+    expect(merges, "git no contestó: el caso siguiente no puede concluir").not.toBeNull();
+    expect(merges!.length).toBeGreaterThan(0);
+  });
+
+  it("no devuelve ni un merge, así que el pedido no cuenta el mismo arreglo dos veces", () => {
+    const commits = commitsDesde(desdeMs);
+    const merges = shasDeMerges();
+    expect(commits).not.toBeNull();
+    expect(merges).not.toBeNull();
+
+    // `commitsDesde` acorta el sha a 9; se compara por prefijo contra el completo.
+    const devueltos = new Set(commits!.map((c) => c.sha));
+    const colados = merges!.filter((m) => devueltos.has(m.slice(0, 9)));
+
+    expect(
+      colados,
+      `se colaron ${colados.length} merge(s) en el conteo de arreglos varados`,
+    ).toEqual([]);
+  });
+
+  /**
+   * La otra dirección: que el filtro no se haya llevado puesto el trabajo real.
+   * Un `--no-merges` mal puesto —o un pathspec roto— vaciaría el conteo, y este
+   * gate fallaría ABIERTO declarando «al día» un sitio atrasado, que es
+   * justamente lo que `deploy-vivo` existe para impedir.
+   */
+  it("sigue contando los commits normales de la zona", () => {
+    const commits = commitsDesde(desdeMs);
+    expect(commits).not.toBeNull();
+    expect(commits!.length).toBeGreaterThan(0);
   });
 });
 
