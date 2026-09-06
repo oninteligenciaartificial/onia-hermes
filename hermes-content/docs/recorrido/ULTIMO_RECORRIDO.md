@@ -12,7 +12,16 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
-## ROTO el 2026-09-06 10:34 La Paz — la barra del asistente IA tapa el cierre de "Primeros pasos"
+## Reverificado el 2026-09-06 19:12 La Paz — dental 9/9 de nuevo, el bug de la barra ya está arreglado
+
+`t_6325e553` (la barra del asistente IA tapando el cierre de "Primeros pasos") está `done` desde
+las 14:17. Corrida `--escribir` completa hoy: **RECORRIDO COMPLETO en Clínica dental, 9/9 pasos
+OK**, incluido el paso 5 (elegir-rubro) y el 9 (bandeja) que estaban rotos en el corte de abajo.
+De paso se cerró `t_b777fb4e`: el paso 7 ya usa el alta inline del modal de cita antes de acusar a
+un rubro sano (líneas 1440-1478 de `scripts/recorrido_cliente.mjs`); esta corrida ni lo necesitó
+porque el select ya traía al paciente del paso 6. Cero filas `zz-qa-` propias al cerrar.
+
+## ROTO el 2026-09-06 10:34 La Paz — la barra del asistente IA tapa el cierre de "Primeros pasos" (ARREGLADO, ver arriba)
 
 Dental vuelve a romperse después de cuatro corridas en verde: **paso 5 (elegir-rubro) y paso 9
 (bandeja) salen rotos/no-medidos**, no por el onboarding en sí — la traza de 6 pantallas (pregunta
