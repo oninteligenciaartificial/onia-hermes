@@ -61,21 +61,43 @@ y sin operar. Acá se opera, con verificación por ítem.
       Lo que NO es fantasma y sigue abierto es lo de abajo: el circuito existe y espera decisión.
 
 - [ ] 🔴 **Hay arreglos verdes esperando UN `ok` de Sergio Urcullo, y no llegan al cliente.**
-      Medido el 2026-09-05 17:5x UTC: dos tareas en `blocked`, creadas 14:43, sin contestar.
+      Medido el 2026-09-06 10:35 UTC por `onia-cola`: **tres** destinos con pedido en `blocked`,
+      uno por destino, y **ninguno contestado**.
 
-      | tarea | destino | lo más caro que destraba |
+      | destino | commits sin desplegar | desde |
       |---|---|---|
-      | `t_e05a44d7` | `landing` | la tarjeta que se ve al compartir `onia.com.bo` por WhatsApp era una captura con «MUY PRONTO» impresa adentro |
-      | `t_8ac57b3f` | `plataforma` | el dueño con el add-on del chatbot **ya pagado** no puede conectar su WhatsApp: 3 de 4 orgs ven un cartel de venta en vez del botón |
+      | `landing` (`onia.com.bo`) | **41** | build vivo del 2026-09-04 10:04 UTC |
+      | `plataforma` (`app.onia.com.bo`) | **22** | corre `build-545dd28`; `master` va por `b491970` |
+      | `bot` (WhatsApp) | — | último copiado a `/opt/onia/bot` el 2026-09-04 20:36 |
 
-      El propio integrador lo cuenta cada vuelta: **plataforma 5 · landing 32** commits sin
-      desplegar. **Este loop NO vuelve a avisar de esto**: el integrador ya mide y ya creó el
-      pedido; un segundo aviso del mismo hecho es el spam que hizo que nadie leyera el primero.
-      Lo que sí hace este carril es **no dar por entregado** un arreglo suyo mientras su pedido
-      siga en `blocked` — construido ≠ terminado.
+      **Este loop NO vuelve a avisar de esto**: el integrador ya mide y ya creó el pedido; un
+      segundo aviso del mismo hecho es el spam que hizo que nadie leyera el primero. Lo que sí
+      hace este carril es **no dar por entregado** un arreglo suyo mientras su pedido siga en
+      `blocked` — construido ≠ terminado.
+
+      ⚠️ **Acá había DOS IDs de tarea escritos a mano (`t_e05a44d7`, `t_8ac57b3f`) y los dos
+      caducaron — corregido el 2026-09-06.** Hoy figuran `archived` y **`done`**, y el ítem
+      remataba con *«Pedidos: `onia-tablero.sh show t_8ac57b3f`»*: quien lo obedecía leía
+      **`done`** y concluía que la plataforma ya se había desplegado, con **22 arreglos** que el
+      cliente no ve. Un pedido de deploy **se rehace** cuando su evidencia envejece (el `edit` del
+      tablero no cambia el cuerpo), así que el ID viejo muere y el nuevo no está escrito en
+      ningún lado — el ID rota **en la dirección cara**: dice «resuelto» sobre lo que sigue sin
+      publicar. Es el mismo remedio que ya se le aplicó al comando de deploy, un escalón más
+      arriba: **el pedido vivo se DERIVA, nunca se copia de una medición anterior.**
+
+      ```sh
+      # los pedidos vivos, sin IDs escritos a mano (uno por destino, o sobra/falta uno):
+      for id in $(/root/bin/onia-tablero.sh list | grep -E '^[⊘▶◻]' | awk '{print $2}'); do
+        d=$(/root/bin/onia-tablero.sh show "$id" | grep -iE '^DESPLEGAR:')
+        [ -n "$d" ] && echo "$id  $d"
+      done
+      # 2026-09-06 devuelve exactamente 3 lineas: bot, landing, plataforma.
+      # Ojo: NO usar `show | grep -q &&`, que cierra el pipe antes de tiempo y el
+      # tablero remata con un BrokenPipeError que se lee como si fallara.
+      ```
 
       Evidencia: `hermes-content/docs/cola/plataforma-v1.md` (este archivo) y el runbook
-      `onia-platform/.claude/skills/onia-deploy/SKILL.md`. Pedidos: `onia-tablero.sh show t_8ac57b3f`.
+      `onia-platform/.claude/skills/onia-deploy/SKILL.md`.
 
 - [x] 🔴 **§8 ítem 1 estaba CUMPLIDO, no falso — y la vuelta del 2026-09-05 lo dio vuelta al
       revés. Corregido el mismo día, midiendo contra `origin/master`.** El pendiente decía
@@ -99,13 +121,15 @@ y sin operar. Acá se opera, con verificación por ítem.
       fósil: primero `git merge origin/master`, y recién después medir.
       Verificable: `git rev-list --count HEAD..origin/master` debe dar **0** antes de juzgar.
 
-      **Anclado en código, y todavía NO en `master`:** el gate `agenda-necesita-clientes` (suite
-      `lib/platform` de `onia-platform`) exige que todo pack que ofrezca agenda pueda abrir la
-      pantalla de sus clientes — sujetos derivados del disco, así que un rubro nuevo nace
-      cubierto. Rojo probado sacando la entrada del nav (2 casos fallan, los otros 4 packs
-      siguen verdes); verde con ella. Hoy vive en la rama del carril
-      (`claude/chatbots-platform-review-0d1d09`) y llega a `master` con el merge de `onia-cola`:
-      hasta entonces **no lo puede correr otro carril**, por eso no se cita como ruta.
+      **Anclado en código y YA en `master`:** el gate
+      `onia-platform/lib/platform/agenda-necesita-clientes.test.ts` exige que todo pack que
+      ofrezca agenda pueda abrir la pantalla de sus clientes — sujetos derivados del disco, así
+      que un rubro nuevo nace cubierto. Rojo probado sacando la entrada del nav (2 casos fallan,
+      los otros 4 packs siguen verdes); verde con ella.
+      *(Acá decía «todavía NO en `master`… hasta entonces **no lo puede correr otro carril**, por
+      eso no se cita como ruta». **Venció**: `onia-cola` mergeó la rama y el 2026-09-06 el gate
+      corre desde `master` — `npx vitest run lib/platform/agenda-necesita-clientes.test.ts` →
+      **6 tests verdes, exit 0**. Ya se cita como ruta y cualquier carril lo puede correr.)*
 
 - [x] 🟢 **FANTASMA — nació del error de arriba y murió con él. Medido el 2026-09-05, sin
       escribir una línea de producto.** Este ítem decía que en `gestios-servicios-profesionales`
