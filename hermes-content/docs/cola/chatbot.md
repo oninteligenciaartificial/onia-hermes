@@ -1664,6 +1664,30 @@ archivos.**
 
 ## Cerrado — no rehacer
 
+- [x] 🔴 **El bot adelantaba UN DÍA el plazo fiscal, y los DOS gates del tema exigían la fecha
+      equivocada.** Cerrado el 2026-09-06 (`85a3f41d2`). Archivos:
+      `hermes-content/deploy/vps-ops/bot/knowledge.onia.json`,
+      `hermes-content/docs/chatbot/campanas-onia.knowledge.json`,
+      `hermes-content/deploy/vps-ops/bot/fecha-que-caduca.test.mjs`, `evals/evals.test.mjs`.
+      **Cómo apareció:** midiendo el objetivo al arrancar. El simulador dio 3/3 y en la respuesta
+      del SIAT decía *"desde el 30 de septiembre es obligatoria"*. El plazo real es el **1 de
+      octubre de 2026** (RND 102600000007, grupos 9.º al 12.º), que es lo que
+      `onia.com.bo/facturacion` publica citando la resolución.
+      **Por qué sobrevivió, y es lo único que vale la pena recordar:** no faltaba un gate — había
+      **dos** y los dos pedían el dato equivocado (`fecha-que-caduca.test.mjs` con
+      `/30 de septiembre/`, y `evals` E04 igual). Los escribí el 05-sep mirando si el dato
+      **vencía**; ninguno miró si era **cierto**. Un gate que verifica la propiedad de al lado no
+      es neutral: protege el defecto y le pone cara de verde.
+      **Y estaban TRES copias** — el default de `config.mjs` ya estaba sano desde el 05-sep, así
+      que aquel arreglo tocó una variante y dejó las hermanas vivas. Es la misma familia que ya
+      mordió en este carril (M0/M0_SIN_HORARIOS).
+      **Prueba:** 7/7 en `fecha-que-caduca`, 12/12 en `evals` (E04 incluido), y el simulador
+      contra `knowledge.onia.json` —el artefacto que producción carga— sirviendo el texto nuevo.
+      `vigenteHasta` pasó a 2027-09-30: con la redacción durable, vencerlo el 30-sep callaba el
+      dato justo el día que entra en vigor.
+      ⚠️ **Commiteado, NO desplegado.** El bot vivo corre desde `/opt/onia/bot` (rsync, no
+      checkout): hasta que se despliegue, producción sigue diciendo la fecha vieja.
+
 - [x] **Las CUATRO cifras del carril daban en meta con el bot vivo sin el corte de anticipación:
       ninguna mira el proceso que corre.** Cerrado el 2026-09-05. Archivos:
       `hermes-content/deploy/vps-ops/bot/anticipacion-viva.mjs` (nuevo), `package.json`.
