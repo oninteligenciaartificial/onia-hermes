@@ -313,6 +313,16 @@ No es una lista de deseos, es el trabajo pendiente, en orden.
    clientes, así que sacar la entrada siguiendo un doc viejo se pone **rojo**. Escrito el
    2026-09-05 en la rama del carril; entra a `master` con el merge.
 
+   ✅ **MIRADO el 2026-09-06, que es lo único que faltaba: todo este ítem se había discutido
+   leyendo código.** Se abrió `/appointments` de producción con la sesión del dueño y se
+   apretó «Nueva Cita»: el modal ofrece **«+ Nuevo paciente»** justo arriba del desplegable
+   —el rótulo sale del rubro, así que en servicios profesionales dice «+ Nuevo cliente»—.
+   Captura: `hermes-content/docs/recorrido/capturas/alta-inline-en-el-modal-de-cita.png`.
+   Se mira con `node scripts/mirar_bandeja_dueno.mjs --ruta /appointments --click "Nueva Cita"`.
+   **Lo que NO se probó, dicho de frente:** no existe ninguna organización de ese rubro en
+   producción (contado en `supabase-db`), así que el modal se miró en una dental; el botón
+   no depende del rubro ni de que ya haya clientes (`page.tsx:716-722`), el rótulo sí.
+
    ⚠️ **Las dos objeciones que esta celda usaba para justificar el «no» también vencieron**
    (§2, misma fecha): la ficha esconde alertas médicas, alergias, tipo de sangre, historia
    clínica y tratamientos cuando el pack no es clínico (`fichaClinica()` en

@@ -72,6 +72,12 @@ const SCROLL = Number(arg("scroll", "0"));
 // está al final de /settings/chatbot). Sin esto la captura sale del tope de la página y NO
 // prueba nada sobre la pieza — con la misma cara que una captura buena.
 const ANCLA = arg("ancla", "");
+// --click "<texto>": la pieza a mirar puede vivir DETRAS de un clic (un modal, un panel que
+// se despliega). Sin esto, lo unico que se puede mirar de la plataforma son las pantallas de
+// primer nivel — y los formularios, que es donde el cliente se traba, quedan sin instrumento.
+// Nace del 2026-09-06: "servicios profesionales no puede agendar" llevaba dos dias sin poder
+// resolverse porque el bloqueo esta dentro del modal de Nueva Cita, y nadie lo habia MIRADO.
+const CLICK = arg("click", "");
 
 function envDelContenedor(contenedor) {
   const crudo = execFileSync("docker", ["exec", contenedor, "env"], { encoding: "utf8" });
@@ -193,6 +199,27 @@ if (new URL(urlFinal).pathname !== rutaPedida) {
   console.error(`La sesión NO entró: se pidió ${rutaPedida} y la app terminó en ${new URL(urlFinal).pathname}.`);
   await navegador.close();
   process.exit(2);
+}
+
+if (CLICK) {
+  // Se busca el BOTON por su nombre accesible, no un nodo con ese texto: en esta app el rotulo
+  // suele ser un <span> adentro del <button>, y clickear el span funciona por propagacion pero
+  // falla mudo cuando el rotulo es una ligadura de Material Symbols. Y si no aparece se sale
+  // con 2: una captura de la pantalla SIN el modal abierto tiene la misma cara que una buena.
+  const boton = pagina.getByRole("button", { name: CLICK }).first();
+  try {
+    await boton.waitFor({ state: "visible", timeout: 20000 });
+  } catch {
+    console.error(
+      `El botón ${JSON.stringify(CLICK)} NO está en ${RUTA}. No se saca la captura: sería de la ` +
+        `pantalla sin abrir y se leería como prueba de algo que no se vio.`
+    );
+    await navegador.close();
+    process.exit(2);
+  }
+  await boton.click();
+  await pagina.waitForTimeout(1500);
+  console.log(`click ${JSON.stringify(CLICK)}: apretado.`);
 }
 
 if (SCROLL > 0) {
