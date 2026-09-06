@@ -316,9 +316,17 @@ export function StepTiene({
               value={webUrl}
               onChange={(e) => onWebUrl(e.target.value)}
             />
+            {/*
+              Acá decía «lo hace una persona del equipo, no un robot — te lo
+              mandamos por WhatsApp en el día»: se lucía contra el robot con un
+              equipo que no existe, y le ponía plazo a algo que ningún circuito
+              entrega. Este campo no viaja a ningún servidor nuestro: lo que se
+              escribe acá sólo sale en el mensaje de WhatsApp que abre el lead.
+              Decir eso es verdad y además explica por qué le pedimos el dato.
+            */}
             <p className={styles.urlMicro}>
-              El análisis lo hace una persona del equipo, no un robot — te lo
-              mandamos por WhatsApp en el día.
+              Viaja en el mensaje de WhatsApp que abrís al final: así la miramos
+              y te decimos qué le falta.
             </p>
           </m.div>
         ) : null}
