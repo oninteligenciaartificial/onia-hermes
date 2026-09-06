@@ -353,6 +353,40 @@ y sin operar. Acá se opera, con verificación por ítem.
 
       Los doce módulos 🟡 con su pantalla están en `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` §4.
 
+      **Avance 2026-09-06 — primera tanda MIRADA: 8 módulos 🟡 en dental, y los ocho están sanos.**
+      Capturados con la sesión real del dueño (`scripts/mirar_bandeja_dueno.mjs --email
+      oninteligenciaartificial+qachatbot@gmail.com --ruta /X`, org `zz-qa-clinica-chatbot-9k651`,
+      plan professional) y **abiertos y leídos uno por uno**, no contados por exit 0:
+      `/billing` (2 facturas reales, cobrado Bs 100), `/contabilidad` (IVA/IT del mes, con la
+      salvedad "no reemplaza la declaración en el SIAT"), `/rrhh` (planilla con SMN 3.300 y bono
+      de antigüedad), `/agents` (los dos agentes activos, "corre cada 24 h", 1 acción esperando
+      aprobación), `/empresa`, `/communications`, `/reports`, `/requerimientos`.
+      Capturas en `/root/capturas-amarillos/`. **Ninguno pide código: es kilometraje, como decía
+      el catálogo.**
+
+      **Lo que sí apareció, y no estaba en ninguna pantalla: el catálogo vendía un módulo que no
+      existe.** §4 declaraba «Operaciones» con pantalla `/operations`, y esa ruta **no existe** —
+      `next.config.ts:80` la redirige a `/dashboard`, no está en ninguna nav, ni en
+      `route-access.ts`, ni en `vertical-pack.ts`. La redirección es lo que lo mantuvo vivo: quien
+      tipeaba la URL no veía un 404, veía el panel, así que ni un barrido de enlaces rotos podía
+      encontrarlo. Con él, otros tres: `/accounting` (redirige a `/contabilidad`), la fila de
+      Agentes que decía «no corren solos» cuando **§7 del mismo archivo** dice desde el 2026-08-30
+      que sí (subvender una capacidad real), y `/requerimientos` marcada «pantalla huérfana, cero
+      `href` en todo el repo» cuando está en `navigation.ts:100`.
+
+      **Arreglado y atado** en §4 del catálogo + `scripts/catalogo_modulos_vivos.mjs`: cruza cada
+      ruta declarada contra el árbol de rutas del producto (`onia-platform`, carpeta del dashboard) y exige que §4 no contradiga a §7.
+      Falló primero en rojo por el motivo correcto (2 pantallas fantasma + 1 contradicción) y
+      lleva el caso que YA cumple, para que no apruebe en verde sin encontrar nada. Si no ve el
+      repo hermano sale con 2 (NO MEDIDO), nunca verde.
+
+      **Falta:** los mismos módulos en los otros cuatro rubros (comercio, importadora, estética,
+      servicios profesionales). Ojo: hoy sólo hay org real para comercio
+      (`zz-qa-ferreteria-tornillo-ommbt`, **trial vencido el 2026-08-30** — hay que extenderlo o
+      la feature se lee muerta) e importadora (`bolivian-electricidad-e6t21`); **estética y
+      servicios profesionales no tienen ninguna org en producción**, así que hay que darlas de
+      alta antes de poder mirarlas.
+
 - [x] 🟡 **Los agentes de IA (`/agents`) — DECIDIDO Y ATADO el 2026-09-05: corren solos, con cron
       propio, UNA vez al día.** No hace falta una tercera corrección del catálogo: §7 ya dice la
       verdad y ahora hay un gate que la sostiene.
