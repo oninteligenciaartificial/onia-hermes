@@ -178,6 +178,40 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-06: al lead que escribió por el chat de la web le decíamos al dueño
+      que había venido de WhatsApp.** Salió midiendo D1 en producción, no de una hipótesis: se
+      disparó el webhook REAL de Chatwoot contra `app.onia.com.bo` (inbox 7 de la org QA, la única
+      forma de ejercer el circuito entero) y el contacto quedó en la lista de Pacientes con
+      `notes = "Entró por WhatsApp el 2026-09-06."` — habiendo entrado por el widget web.
+
+      **Por qué importa más de lo que parece:** la procedencia se escribe **una sola vez, al crear**,
+      y el módulo nunca la pisa (`notes` es campo clínico: ahí vive *"Alérgica a la penicilina"*).
+      O sea que si miente, miente para siempre, y el dueño le contesta por WhatsApp a alguien que
+      escribió por la web.
+
+      **La causa, y la clase de bug:** `nombreDelCanal()` era una **segunda copia** de la decisión
+      que ya vive en `canalDeInbox()` (`lib/chatbot/inboxes-de-la-org.ts`), con el orden invertido.
+      Mientras dure el fallback de migración —`whatsapp = web` cuando la columna nueva está vacía,
+      que es el estado de **todas** las orgs de producción hoy— el mismo inbox es los dos canales y
+      **sólo el orden decide**. `canalDeInbox` le da el empate al web a propósito y está probado;
+      la copia preguntaba por WhatsApp primero. Es la hermana de `isWhatsAppAddonActive`: el helper
+      canónico existía y el que llamaba reimplementó la pregunta.
+
+      **Arreglo:** `onia-platform` `b2c25d4` (rama `claude/chatbots-platform-review-0d1d09`).
+      3 casos nuevos en `lib/chatbot/contacto-desde-chatwoot.test.ts`, el primero **rojo por el
+      motivo exacto** (`expected 'Entró por WhatsApp el 2026-09-06.' to match /el chat de la web/i`)
+      y los otros dos en la dirección inversa (con las dos columnas cargadas WhatsApp sigue siendo
+      WhatsApp, y Meta no se confunde con la web). Gates: `tsc` 0 · **3178** tests · `eslint` 0
+      errores. **NO DESPLEGADO** — llega al cliente con el swap de `plataforma` (`t_0268567b`).
+
+      ⚠️ **Y el instrumento falló primero, en la dirección cara:** `mirar_bandeja_dueno.mjs --ancla`
+      resuelve con `:text-is()`, que es match **exacto**, así que `--ancla "Tu asistente"` sobre el
+      título `"Tu asistente, estos 7 días"` salió con *"El ancla NO está en /settings/chatbot"* —
+      la misma cara que una tarjeta que no se renderiza. Casi se abre un bug sobre D4 estando vivo.
+      Se descartó midiendo por otro lado (la función devolvió `{3,3,0}` contra la base de
+      producción) y la captura salió con un ancla que **sí** es el texto completo de su nodo
+      (`"pasaron a vos"`). Al usarlo: el ancla se elige del texto **entero** de un elemento.
+
 - [x] ✅ **CERRADO el 2026-09-05: la promesa ya se cumple avisando.** El gate que este ítem
       construyó —`npm run demo:agendada`, el que mide el estado append-only y no el mensaje— sale
       **exit 0** medido hoy: *"SIN DEMOS HUECAS NUEVAS — desde que existe el aviso a Sergio, toda
