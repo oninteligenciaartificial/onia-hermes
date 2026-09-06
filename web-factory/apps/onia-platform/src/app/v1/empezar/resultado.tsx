@@ -9,13 +9,11 @@ import { APP_URL } from "@/lib/site";
 import {
   FALTA_COPY,
   FALTA_TAG,
-  HOY_EXISTE,
   NOTA_CUADERNO,
   NOTA_DOWNSELL,
   NOTA_FACTURACION,
   PLAN_INCLUYE,
   PRECIO_COPY,
-  PROXIMO_ASSEMBLY,
 } from "./data";
 import { recomendar } from "./recommend";
 import type { Equipo, Rubro, Tiene } from "./recommend";
@@ -24,10 +22,14 @@ import styles from "./wizard.module.css";
 
 /**
  * Pantalla de resultado (spec §2.4/§2.5) — el pago del wizard.
- * Variante A (dental): la card del plan aterriza con peso y los módulos que
- * faltan se ENCIENDEN en cascada (patrón de modules.tsx: 350ms + i×420ms).
- * Variante B (próximamente): lista de espera honesta con ensamblaje a medio
- * armar (patrón de rubros.tsx). reduced-motion: todo encendido de entrada.
+ * La card del plan aterriza con peso y los módulos que faltan se ENCIENDEN en
+ * cascada (patrón de modules.tsx: 350ms + i×420ms). reduced-motion: todo
+ * encendido de entrada.
+ *
+ * Había una segunda variante para el rubro "que todavía no": dibujaba sus
+ * módulos con tres de cuatro bloques en fantasma, listaba aparte lo que SÍ
+ * existe y decía que el motor corre "para seis rubros" cuando el sitio vende
+ * cinco. Se fue entera el 2026-09-06 con el dato que la encendía.
  */
 
 const CASCADE_MS = 420;
@@ -64,7 +66,7 @@ export function Resultado({
   );
   const url = normalizeUrl(webUrl);
 
-  return rec.disponible && rec.plan ? (
+  return (
     <VarianteDental
       rubro={rubro}
       rec={rec}
@@ -74,19 +76,10 @@ export function Resultado({
       onReset={onReset}
       h1Ref={h1Ref}
     />
-  ) : (
-    <VarianteProximamente
-      rubro={rubro as Exclude<Rubro, "dental">}
-      rec={rec}
-      url={url}
-      waHref={waHref}
-      onReset={onReset}
-      h1Ref={h1Ref}
-    />
   );
 }
 
-/* ---- Variante A · dental ---- */
+/* ---- la pantalla del plan ---- */
 
 type Rec = ReturnType<typeof recomendar>;
 
@@ -142,8 +135,14 @@ function VarianteDental({
     yaTenesLineas.push({
       id: "web",
       texto: url
-        ? `Tu web: ${url}. Una persona del equipo la revisa y te manda el análisis gratis por WhatsApp en el día.`
-        : "Tenés web. Si querés el análisis gratis, pasánosla por WhatsApp.",
+        ? // Ni «una persona del equipo» ni «en el día»: no hay equipo —lo vende
+          // Sergio Urcullo solo— y el wizard no manda NADA a un servidor
+          // nuestro (su única salida es el wa.me que abre el propio lead), así
+          // que lo que escribe acá muere en su navegador si no aprieta el
+          // botón. Lo que sí es verdad es el mecanismo, y decirlo explica de
+          // paso por qué le pedimos el dato.
+          `Tu web: ${url}. Viaja en el mensaje de WhatsApp que abrís al final, así la miramos y te decimos qué le falta.`
+        : "Tenés web. Si querés que la miremos, pasánosla por WhatsApp.",
     });
   }
   if (rec.yaTenes.includes("chatbot")) {
@@ -243,101 +242,6 @@ function VarianteDental({
         waLabel="Armar mi cuenta por WhatsApp"
         secundario={{ label: "Probar la demo", href: APP_URL }}
         micro="Responde una persona, no un menú. La demo anda con datos de ejemplo, sin compromiso."
-        onReset={onReset}
-      />
-    </div>
-  );
-}
-
-/* ---- Variante B · rubro próximamente ---- */
-
-type VarianteProximamenteProps = {
-  rubro: Exclude<Rubro, "dental">;
-  rec: Rec;
-  url: string;
-  waHref: string;
-  onReset: () => void;
-  h1Ref: RefObject<HTMLHeadingElement | null>;
-};
-
-function VarianteProximamente({
-  rubro,
-  rec,
-  url,
-  waHref,
-  onReset,
-  h1Ref,
-}: VarianteProximamenteProps) {
-  const arm = PROXIMO_ASSEMBLY[rubro];
-  const conAnalisis = rec.analisisWeb && url !== "";
-
-  return (
-    <div>
-      <p className="kicker">Tu recomendación</p>
-      <h1 ref={h1Ref} tabIndex={-1} className={styles.q}>
-        Tu rubro se arma a medida, con vos.
-      </h1>
-      <p className={styles.sub}>
-        {arm.nombre} se monta sobre el mismo motor que ya corre en producción
-        para seis rubros. Dejanos tu caso: lo registramos y te contactamos con
-        la propuesta armada — sin que repitas nada.
-      </p>
-
-      {/* ensamblaje a medio armar — patrón aBlock/aGhost de rubros.tsx */}
-      <div className={styles.assembly} aria-hidden>
-        {arm.blocks.map((b, i) => {
-          const ghost = i >= arm.built;
-          return (
-            <m.div
-              key={b}
-              className={`${styles.aBlock} ${ghost ? styles.aGhost : ""}`}
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              animate={{ opacity: ghost ? 0.55 : 1, y: 0, scale: 1 }}
-              transition={{ ...springs.heavy, delay: 0.08 + i * 0.11 }}
-            >
-              <span className={styles.aDot} />
-              {b}
-              {ghost ? (
-                <span className={styles.aGhostNote}>a medida</span>
-              ) : null}
-            </m.div>
-          );
-        })}
-      </div>
-
-      <Reveal className={styles.block}>
-        <p className={`mono ${styles.blockTitle}`}>Esto sí existe hoy</p>
-        <ul className={styles.chips}>
-          {HOY_EXISTE.map((c) => (
-            <li key={c} className={styles.chip}>
-              <span className={styles.chipDot} aria-hidden />
-              {c}
-            </li>
-          ))}
-        </ul>
-        <p className={styles.planNote}>
-          Se cotizan según tu caso — pedilos en el mismo WhatsApp.
-        </p>
-      </Reveal>
-
-      {conAnalisis ? (
-        <Reveal className={styles.block}>
-          <p className={styles.haveItem}>
-            <span className={styles.haveCheck} aria-hidden>
-              ✓
-            </span>
-            Mientras tanto, algo hoy: nos pasaste {url} — una persona del
-            equipo la revisa y te manda el análisis gratis por WhatsApp en el
-            día.
-          </p>
-        </Reveal>
-      ) : null}
-
-      <CierreCtas
-        waHref={waHref}
-        waLabel="Anotarme — avísenme cuando esté"
-        secundario={{ label: "Ver el pack que ya anda", href: "/#rubros" }}
-        micro="Responde una persona, no un menú."
         onReset={onReset}
       />
     </div>

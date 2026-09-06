@@ -95,7 +95,7 @@ Referencias si no dio números (siempre como referencia de mercado de Santa Cruz
 
 **Regla dura: cotizá SOLO el Pro. No abras con tres precios.**
 
-> "El plan que va con tu clínica es el **Pro: Bs 750 al mes** — precio de lanzamiento. Incluye todo lo que viste: agenda, fichas con odontograma, el agente que reprograma por WhatsApp, y la factura SIAT incluida — el cumplimiento no se cobra aparte en ningún plan."
+> "El plan que va con tu clínica es el **Pro: Bs 750 al mes** — precio de lanzamiento. Incluye todo lo que viste: agenda, fichas con odontograma, el agente que reprograma por WhatsApp, y cada venta lista para facturar en el portal del SIN — eso no se cobra aparte en ningún plan."
 
 **El cierre — implementación regalada:**
 
@@ -110,7 +110,8 @@ Referencias si no dio números (siempre como referencia de mercado de Santa Cruz
 ### Manejo de precio fuera de guion
 
 - **Pide precio antes de la demo** → "Bs 750 el plan que le calza a la mayoría de las clínicas — pero el número solo no te dice nada; dame 15 minutos y hacemos la cuenta con TUS citas perdidas."
-- **"Está caro"** → volver a §6 (la cuenta), NUNCA bajar la lista. Si insiste y es consultorio de 1 sillón → downsell: "Hay un plan Básico a Bs 320 — lo que cobrás por tres consultas — que te ordena la clínica y ya incluye la factura SIAT. Sin el agente de WhatsApp, eso sí. Podés arrancar ahí y subir cuando quieras."
+- **"Está caro"** → volver a §6 (la cuenta), NUNCA bajar la lista. Si insiste y es consultorio de 1 sillón → downsell: "Hay un plan Básico a Bs 320 — lo que cobrás por tres consultas — que te ordena la clínica y ya te deja cada venta lista para facturar en el portal del SIN. Sin el agente de WhatsApp, eso sí. Podés arrancar ahí y subir cuando quieras."
+- **"¿La factura electrónica ya funciona?"** → decilo de frente, es la respuesta que ya usamos en reunión: "El emisor está en homologación ante el SIN. Hasta que salga, el sistema te deja la venta cerrada con detalle y monto, y la factura se emite en el Portal Web del SIN, que es gratis y legal. Te lo digo así porque así trabajamos — y facturar lo hace cualquier sistema: lo nuestro son los agentes que trabajan solos."
 - **"Hacéme descuento"** → "El descuento ya te lo estoy dando: la implementación regalada vale hasta Bs 9.096 a precio de mercado. La tarifa de lista no se mueve — es la garantía de que a tu colega de la otra cuadra no le cobré distinto."
 
 ### Lo que está PROHIBIDO decir en la demo

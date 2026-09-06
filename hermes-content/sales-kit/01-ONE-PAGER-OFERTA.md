@@ -26,7 +26,7 @@
 | **Para qué** | Ordenar la clínica | **Que ningún paciente se te escape** | Que la clínica opere sola |
 | Agenda + fichas con odontograma e historial | ✅ | ✅ | ✅ |
 | Panel del dueño con pendientes del día | ✅ | ✅ | ✅ |
-| **Factura SIAT en línea** | ✅ incluida | ✅ incluida | ✅ incluida |
+| **Venta lista para facturar en el portal del SIN** | ✅ | ✅ | ✅ |
 | Agente que **reprograma** citas por WhatsApp (propone, vos aprobás) | — | ✅ | ✅ |
 | Documentos y consentimientos digitales | — | ✅ | ✅ |
 | Roles (recepción no ve lo clínico) | — | ✅ | ✅ |
@@ -40,7 +40,7 @@
 | Usuarios | 3 | 8 | 20 |
 | Soporte | correo | WhatsApp | WhatsApp directo |
 
-**La diferencia entre niveles en una línea:** Básico ordena → Pro cobra y no pierde pacientes → Full opera sola. El SIAT va incluido en los tres: el cumplimiento no se cobra aparte, lo que sube de nivel es la automatización.
+**La diferencia entre niveles en una línea:** Básico ordena → Pro cobra y no pierde pacientes → Full opera sola. Dejar la venta lista para facturar va en los tres: eso no se cobra aparte, lo que sube de nivel es la automatización.
 
 > **Sobre el SIAT, de frente:** desde el **1 de octubre de 2026** solo se emite factura en modalidad en línea (plazo vigente del SIN: 30-sep-2026). Nuestro emisor está en homologación ante el SIN; hasta que esté aprobado, DentalGest te deja la venta lista y facturás por el Portal Web gratuito del SIN. Cuando la homologación salga, facturás desde el sistema sin tipear nada dos veces.
 
@@ -89,7 +89,7 @@ La competencia cobra la implementación y migración de datos entre **Bs 2.274 y
 
 Qué hace:
 ✅ Agenda + fichas con odontograma e historial
-✅ Factura SIAT en línea sin re-tipear (incluida en todos los planes)
+✅ Cada venta cerrada con detalle y monto, lista para facturar en el Portal Web del SIN (en todos los planes)
 ✅ Agente que REPROGRAMA por WhatsApp cuando un paciente falta (te propone, vos aprobás)
 ✅ Panel del dueño: sabés qué pasa en tu clínica sin estar encima
 

@@ -192,10 +192,23 @@ export function desciendeDe(ancestro, hijo, repo = REPO) {
   }
 }
 
-/** Commits de la rama de deploy posteriores al sha vivo que SÍ viajan al cliente. */
+/**
+ * Commits de la rama de deploy posteriores al sha vivo que SÍ viajan al cliente.
+ *
+ * ⚠️ `--no-merges` no es cosmético: es el número que se cita en el pedido de
+ * deploy, o sea lo único que Sergio Urcullo lee antes de contestar «ok». Sin él
+ * el conteo salía inflado (el 2026-09-06: «4 arreglos» sobre 2 reales, porque
+ * los dos merges que los trajeron contaban de nuevo el mismo trabajo).
+ *
+ * Y el filtro va ACÁ y no en `llegaAlCliente` a propósito: `git log --name-only`
+ * no lista los archivos de un merge, así que todo merge llega con `[]`, y ese
+ * `[]` significa «no sé qué tocó» — que por diseño cuenta como que viaja, para
+ * pedir un deploy de más y nunca declarar al día lo que no lo está. Tocar el
+ * clasificador rompería ese sesgo para todos los commits, no sólo los merges.
+ */
 export function varadosDesde(shaVivo, repo = REPO) {
   if (!shaVivo) return null;
-  const crudo = corre('git', ['-C', repo, 'log', '--format=%h\t%s', `${shaVivo}..${RAMA_DEPLOY}`]);
+  const crudo = corre('git', ['-C', repo, 'log', '--no-merges', '--format=%h\t%s', `${shaVivo}..${RAMA_DEPLOY}`]);
   if (crudo === null) return null;
   if (crudo === '') return [];
   const out = [];

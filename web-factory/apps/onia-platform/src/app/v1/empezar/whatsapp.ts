@@ -47,33 +47,26 @@ export function buildWaText(
   const cabecera = `Hola, vengo del asistente de Onia. Mi rubro: ${RUBRO_MSG[rubro]}`;
   const equipoTxt = `Equipo: ${EQUIPO_MSG[equipo]}.`;
 
-  if (rec.disponible && rec.plan) {
-    const faltan = rec.faltan
-      .map((f) => (f === "web" ? "página web" : "chatbot"))
-      .join(", ");
-    return (
-      `${cabecera}. ${equipoTxt} Hoy tengo: ${hoy}. ` +
-      `Me recomendó ${rec.plan.nombre}` +
-      (faltan ? ` y me faltarían: ${faltan}` : "") +
-      ". Quiero armar mi cuenta." +
-      (rec.analisisWeb ? " ¿Me mandan el análisis gratis de mi web?" : "")
-    );
-  }
-
-  // Rama sin plan. HOY está dormida —los cinco rubros de la unión `Rubro`
-  // tienen plan—, y por eso el texto que tenía se pudo pudrir sin que nadie lo
-  // viera: decía "(todavía en construcción)" y "Anótenme para que me avisen
-  // cuando esté", o sea obra a la vista puesta en boca del lead, al final del
-  // embudo y en el único texto que sale de su teléfono. El día que alguien
-  // sume un rubro sin plan, eso se despierta solo. Se dice lo mismo que ya dice
-  // la pantalla de esta misma rama (`NOTA_PROXIMAMENTE`): el motor ya corre y
-  // el caso se arma con el cliente. La demanda futura se captura sin admitir.
+  // Acá había una segunda rama, la del rubro sin plan. Estaba DORMIDA —los
+  // cinco rubros de la unión `Rubro` tienen plan— y por eso su texto se pudo
+  // pudrir sin que nadie lo viera: decía "(todavía en construcción)" y
+  // "Anótenme para que me avisen cuando esté", o sea obra a la vista puesta en
+  // boca del lead, al final del embudo y en el único texto que sale de su
+  // teléfono. Se reescribió el 2026-09-05 y se ELIMINÓ el 2026-09-06, con el
+  // resto de la maquinaria de "próximamente" del wizard: un texto que ningún
+  // lead puede ver tampoco lo ve quien lo audita, así que se pudre de nuevo, y
+  // el día que despierta entra ya aprobado. Ahora `plan` no es nullable y el
+  // selector sólo ofrece rubros que se contratan: el caso no existe, en vez de
+  // existir mudo.
+  const faltan = rec.faltan
+    .map((f) => (f === "web" ? "página web" : "chatbot"))
+    .join(", ");
   return (
     `${cabecera}. ${equipoTxt} Hoy tengo: ${hoy}. ` +
-    "Quiero que armemos mi caso y me pasen la propuesta." +
-    (tiene.includes("web") && url
-      ? ` Mi web: ${url} — quiero el análisis gratis.`
-      : "")
+    `Me recomendó ${rec.plan.nombre}` +
+    (faltan ? ` y me faltarían: ${faltan}` : "") +
+    ". Quiero armar mi cuenta." +
+    (rec.analisisWeb ? " ¿Me mandan el análisis gratis de mi web?" : "")
   );
 }
 

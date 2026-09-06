@@ -405,6 +405,17 @@ export function fechaBuildVivo(ruta = BUILD_ID_VIVO, { local = mtimeLocal, remot
  * salen cero commits y el gate firma «al día». Fue el primer veredicto que dio
  * al escribirlo —verde, con seis arreglos varados a la vista— o sea el mismo
  * fallo abierto que viene a cerrar, en su propia implementación.
+ *
+ * ⚠️ `--no-merges` no es cosmético: sin él el conteo salía 16 % inflado (43
+ * commits, 7 merges, medido el 2026-09-06), y ese número es el que Sergio
+ * Urcullo lee en el pedido de deploy. Un merge duplica el arreglo que ya se
+ * contó por su commit propio.
+ *
+ * Y el filtro va ACÁ y no en `llegaAlCliente` a propósito: `git log --name-only`
+ * no lista los archivos de un merge, así que los merges llegaban con
+ * `archivos: []` y caían en el «ante la duda, sí viaja» —que es el sesgo
+ * correcto para un commit normal y hay que conservar—. Se los saca del conjunto
+ * antes de clasificar, en vez de enseñarle a `llegaAlCliente` a fallar cerrado.
  */
 export function commitsDesde(desdeMs, zona = ZONA) {
   const r = spawnSync(
@@ -416,6 +427,7 @@ export function commitsDesde(desdeMs, zona = ZONA) {
       // cabecera de archivo no depende de adivinar el formato de git.
       "--format=%x00%H%x09%ct%x09%s",
       "--name-only",
+      "--no-merges",
       `--since=@${Math.floor(desdeMs / 1000)}`,
       "origin/main",
       "--",

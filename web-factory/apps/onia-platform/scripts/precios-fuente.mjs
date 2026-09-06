@@ -1,6 +1,18 @@
 #!/usr/bin/env node
 /**
- * Los precios que el sitio PUBLICA, cruzados contra los que el producto COBRA.
+ * Lo que el sitio PROMETE, cruzado contra lo que el producto COBRA Y ENTREGA.
+ *
+ * Dos familias, y la segunda se agrego el 2026-09-06:
+ *  a) los MONTOS (planes, add-ons, prueba) — se pagan mal en el checkout;
+ *  b) los TOPES y los TIERS (cuantas fichas, cuantos usuarios, cuantos
+ *     recordatorios, y desde que plan hay agentes, reservas o reportes) — se
+ *     pagan mal DESPUES, cuando el cliente ya entro y le falta lo que la
+ *     pantalla le prometio. `src/lib/pricing.ts` los escribe en PROSA dentro
+ *     del `incluye` de cada plan, asi que hasta hoy no los cruzaba nadie: el
+ *     dia que el producto mueva `patients` o `publicBookingIncluded` en
+ *     `lib/plan-catalogo.ts`, el sitio sigue vendiendo el numero viejo con los
+ *     566 tests en verde. Es el MISMO agujero que los montos, un campo mas
+ *     abajo.
  *
  * POR QUE EXISTE. `precios.test.ts` y `precios-addons.test.ts` vigilan que
  * ninguna pantalla tipee un monto a mano: todas leen `src/lib/pricing.ts`. Eso
@@ -73,6 +85,21 @@ const SSH_ARGS = [
 export const FUENTE_PLANES = "lib/subscription-plans.ts";
 export const FUENTE_ADDONS = "lib/pricing.ts";
 export const FUENTE_PRUEBA = "lib/subscription/plan-state.ts";
+/**
+ * Los TOPES y las capacidades por plan (`PLAN_LIMITS`). Es la otra mitad del
+ * mismo agujero: `pricing.ts` del sitio no solo copia los montos, tambien
+ * copia —en prosa, dentro de `incluye`— cuantas fichas entran, cuantos
+ * usuarios y desde que plan hay agentes, reservas o reportes. El monto ya se
+ * cruzaba; el tope no lo cruzaba nadie.
+ */
+export const FUENTE_LIMITES = "lib/plan-catalogo.ts";
+
+/** Los tres planes comprables, con el nombre que les da cada lado. */
+export const PLANES_EN_ORDEN = [
+  { producto: "basic", sitio: "basico", etiqueta: "Básico" },
+  { producto: "professional", sitio: "pro", etiqueta: "Pro" },
+  { producto: "clinic", sitio: "full", etiqueta: "Full" },
+];
 
 export function leerLocal(ruta) {
   return existsSync(ruta) ? readFileSync(ruta, "utf8") : null;
@@ -99,6 +126,32 @@ export function leerDelProducto(
 function num(trozo, clave) {
   const m = trozo?.match(new RegExp(`\\b${clave}:\\s*(\\d+)`));
   return m ? Number(m[1]) : null;
+}
+
+/**
+ * Como `num`/el match literal, pero siguiendo UNA indirección: si la clave
+ * apunta a un identificador (`dias: PRUEBA_DIAS`) en vez de a un literal, va a
+ * buscar su `const PRUEBA_DIAS = …` al archivo entero.
+ *
+ * Existe porque el lector se quedó ciego el día que el valor pasó de literal a
+ * constante (2026-09-06, al hacer que las tres tarjetas leyeran la nota de la
+ * prueba de una sola fuente). Ese es el modo de falla de esta familia: el cruce
+ * no grita, devuelve `null` y —de no ser por la guarda de ilegibles— cantaría
+ * "ninguna cifra difiere". Resolver la indirección deja pasar las dos formas.
+ */
+function valorResuelto(trozo, clave, archivo, { texto = false } = {}) {
+  const literal = texto ? `"([^"]+)"` : `(\\d+)`;
+  const directo = trozo?.match(new RegExp(`\\b${clave}:\\s*${literal}`));
+  if (directo) return texto ? directo[1] : Number(directo[1]);
+
+  const porNombre = trozo?.match(new RegExp(`\\b${clave}:\\s*([A-Za-z_$][\\w$]*)`));
+  if (!porNombre) return null;
+
+  const decl = archivo?.match(
+    new RegExp(`\\bconst\\s+${porNombre[1]}\\s*=\\s*${literal}`),
+  );
+  if (!decl) return null;
+  return texto ? decl[1] : Number(decl[1]);
 }
 
 /**
@@ -130,16 +183,87 @@ export function planesDelProducto(fuente) {
   return salida;
 }
 
+/** Un `clave: 123` que ADEMAS puede ser `-1` (el codigo del producto para "ilimitado"). */
+function entero(trozo, clave) {
+  const m = trozo?.match(new RegExp(`\\b${clave}:\\s*(-?\\d+)`));
+  return m ? Number(m[1]) : null;
+}
+
+/** Un `clave: true|false`. `null` si la clave no esta. */
+function booleano(trozo, clave) {
+  const m = trozo?.match(new RegExp(`\\b${clave}:\\s*(true|false)`));
+  return m ? m[1] === "true" : null;
+}
+
+/**
+ * `PLAN_LIMITS`: los topes que el producto APLICA (`checkPatientLimit` y
+ * companía salen de aca). Cada plan es un objeto plano, asi que `[^}]*` alcanza.
+ */
+export function limitesDelProducto(fuente) {
+  const bloque = bloqueExportado(fuente ?? "", "PLAN_LIMITS");
+  if (!bloque) return {};
+  const salida = {};
+  for (const m of bloque.matchAll(
+    /\b(basic|professional|clinic):\s*\{([^}]*)\}/g,
+  )) {
+    salida[m[1]] = {
+      fichas: entero(m[2], "patients"),
+      usuarios: entero(m[2], "users"),
+      recordatorios: entero(m[2], "emailsPerMonth"),
+      agentes: booleano(m[2], "agentsIncluded"),
+      reservas: booleano(m[2], "publicBookingIncluded"),
+      reportes: booleano(m[2], "reportsEnabled"),
+    };
+  }
+  return salida;
+}
+
+/**
+ * El primer plan (de barato a caro) que enciende `capacidad`, con el id del
+ * producto. Es la forma de cruzar un tier sin depender de como lo redacta cada
+ * lado: al sitio se le pregunta "cual es el primero que lo NOMBRA" y al
+ * producto "cual es el primero que lo tiene en `true`". `null` si ninguno.
+ */
+export function primerPlanCon(porPlan, capacidad) {
+  for (const p of PLANES_EN_ORDEN) {
+    const v = porPlan[p.producto]?.[capacidad];
+    if (v === true) return p.producto;
+    if (v === null || v === undefined) return null; // ilegible: no se adivina
+  }
+  return null;
+}
+
+/**
+ * Los tres topes de cada plan, con la MISMA clave de los dos lados. `-1` es
+ * "ilimitado" y es un valor legitimo, no un dato que falte.
+ */
+function topesAplanados(porPlan) {
+  const salida = {};
+  for (const p of PLANES_EN_ORDEN) {
+    salida[`plan ${p.etiqueta} · fichas`] = porPlan[p.producto]?.fichas ?? null;
+    salida[`plan ${p.etiqueta} · usuarios`] =
+      porPlan[p.producto]?.usuarios ?? null;
+    salida[`plan ${p.etiqueta} · recordatorios por mes`] =
+      porPlan[p.producto]?.recordatorios ?? null;
+  }
+  return salida;
+}
+
 /** Las cifras del producto, aplanadas con el nombre con el que se le habla a Sergio. */
-export function cifrasDelProducto({ planes, addons, prueba }) {
+export function cifrasDelProducto({ planes, addons, prueba, limites }) {
   const p = planesDelProducto(planes ?? "");
   const chatbot = bloqueExportado(addons ?? "", "WHATSAPP_ADDON");
   const reservas = bloqueExportado(addons ?? "", "BOOKING_ADDON_PRICE");
   const usuario = bloqueExportado(addons ?? "", "EXTRA_USER_ADDON_PRICE");
   const grupo = bloqueExportado(addons ?? "", "ENTERPRISE_PLAN_PRICE");
   const trial = prueba?.match(/TRIAL_PLAN\s*=\s*"([a-z]+)"/);
+  const l = limitesDelProducto(limites ?? "");
 
   return {
+    ...topesAplanados(l),
+    "primer plan con agentes de IA": primerPlanCon(l, "agentes"),
+    "primer plan con reservas online incluidas": primerPlanCon(l, "reservas"),
+    "primer plan con reportes completos": primerPlanCon(l, "reportes"),
     "plan Básico · mensual": p.basic?.mensual ?? null,
     "plan Básico · semanal": p.basic?.semanal ?? null,
     "plan Básico · anual": p.basic?.anual ?? null,
@@ -153,6 +277,14 @@ export function cifrasDelProducto({ planes, addons, prueba }) {
     "Grupo / Empresarial · implementación desde": num(grupo, "setupFrom"),
     "add-on chatbot · mensual": num(chatbot, "entryMonthly"),
     "add-on chatbot · anual": num(chatbot, "annualTotal"),
+    /**
+     * El cupo que el producto CORTA: `lib/chatbot/cupo.ts` lo lee de acá para
+     * decidir `agotada`, y al agotarse el bot deriva la conversación a una
+     * persona. Faltaba en este cruce, y ese hueco es lo que dejó al sitio
+     * vender el chatbot sin nombrar su límite hasta el 2026-09-06: el dueño se
+     * enteraba pagando, cuando sus clientes recibían «se agotaron».
+     */
+    "add-on chatbot · conversaciones por mes": num(chatbot, "includedConversations"),
     "add-on reservas online · mensual": num(reservas, "monthly"),
     "add-on usuario extra · mensual": num(usuario, "monthly"),
     "add-on usuario extra · máximo en Básico": num(usuario, "basicMaxSeats"),
@@ -186,16 +318,98 @@ export function planesDelSitio(fuente) {
   return salida;
 }
 
+/**
+ * Lo que el plan DICE que incluye, sin su `sinEsto`.
+ *
+ * El corte importa: el Básico nombra "Agentes de IA" y "Reservas online" en su
+ * `sinEsto` justamente para decir que NO los trae. Buscar la capacidad en el
+ * plan entero daria "el Básico ya tiene agentes" — el gate leeria la negacion
+ * como promesa y saldria verde al reves.
+ */
+export function incluyeDelSitio(trozo) {
+  const desde = trozo.indexOf("incluye:");
+  if (desde < 0) return null;
+  const hasta = trozo.indexOf("sinEsto:", desde);
+  return trozo.slice(desde, hasta < 0 ? trozo.length : hasta);
+}
+
+/**
+ * Un tope escrito en prosa. `ilimitado` gana sobre el numero porque el texto
+ * del Full no trae cifra ("Usuarios ilimitados"), y devolver `null` ahi
+ * apagaria el cruce de los otros dos planes.
+ */
+function topeEnProsa(texto, { ilimitado, conNumero }) {
+  if (texto === null || texto === undefined) return null;
+  if (ilimitado.test(texto)) return -1;
+  const m = texto.match(conNumero);
+  return m ? Number(m[1].replace(/\./g, "")) : null;
+}
+
+/** Los topes que el sitio PUBLICA, leidos del `incluye` de cada plan. */
+export function limitesDelSitio(fuente) {
+  const marcas = [...fuente.matchAll(/\bid:\s*"(basico|pro|full)"/g)];
+  const salida = {};
+  marcas.forEach((m, i) => {
+    const hasta = i + 1 < marcas.length ? marcas[i + 1].index : fuente.length;
+    const inc = incluyeDelSitio(fuente.slice(m.index, hasta));
+    salida[m[1]] = {
+      fichas: topeEnProsa(inc, {
+        ilimitado: /fichas[^"]*ilimitad/i,
+        conNumero: /([\d.]+)\s+fichas/i,
+      }),
+      usuarios: topeEnProsa(inc, {
+        ilimitado: /usuarios\s+ilimitad/i,
+        /** El Básico escribe su linea como plantilla, asi que abre con backtick. */
+        conNumero: /(?:^|["`\s])(\d[\d.]*)\s+usuarios/i,
+      }),
+      recordatorios: topeEnProsa(inc, {
+        ilimitado: /recordatorios[^"]*sin\s+tope/i,
+        conNumero: /([\d.]+)\s+recordatorios/i,
+      }),
+      /** El tier se cruza por quien lo NOMBRA primero; la herencia textual
+       *  ("Todo lo del Pro") no estorba porque solo importa el primero. */
+      agentes: /\bAgente\s+[A-Z]/.test(inc ?? "") || null,
+      reservas: /Reservas\s+online\s+incluidas/i.test(inc ?? "") || null,
+      reportes: /Reportes\s+completos/i.test(inc ?? "") || null,
+    };
+  });
+  return salida;
+}
+
+/**
+ * El mismo `primerPlanCon` del lado producto, pero traduciendo los ids del
+ * sitio a los del producto para que las dos respuestas sean comparables.
+ */
+function primerPlanDelSitioCon(porPlan, capacidad) {
+  if (PLANES_EN_ORDEN.some((p) => !porPlan[p.sitio])) return null;
+  for (const p of PLANES_EN_ORDEN) {
+    if (porPlan[p.sitio]?.[capacidad] === true) return p.producto;
+  }
+  return null;
+}
+
 export function cifrasDelSitio({ precios, chatbot }) {
   const p = planesDelSitio(precios ?? "");
   const grupo = bloqueExportado(precios ?? "", "GRUPO");
   const agenda = bloqueExportado(precios ?? "", "AGENDA_ADDON");
   const usuario = bloqueExportado(precios ?? "", "USUARIO_EXTRA_ADDON");
   const prueba = bloqueExportado(precios ?? "", "PRUEBA");
-  const planPrueba = prueba?.match(/planQueCorre:\s*"([^"]+)"/);
+  const planPrueba = valorResuelto(prueba, "planQueCorre", precios ?? "", { texto: true });
   const stacks = bloqueExportado(chatbot ?? "", "CHATBOT_STACKS");
+  const ls = limitesDelSitio(precios ?? "");
+  /** Re-llavado al id del producto para que las claves salgan identicas. */
+  const lsPorProducto = Object.fromEntries(
+    PLANES_EN_ORDEN.map((p) => [p.producto, ls[p.sitio]]),
+  );
 
   return {
+    ...topesAplanados(lsPorProducto),
+    "primer plan con agentes de IA": primerPlanDelSitioCon(ls, "agentes"),
+    "primer plan con reservas online incluidas": primerPlanDelSitioCon(
+      ls,
+      "reservas",
+    ),
+    "primer plan con reportes completos": primerPlanDelSitioCon(ls, "reportes"),
     "plan Básico · mensual": p.basico?.mensual ?? null,
     "plan Básico · semanal": p.basico?.semanal ?? null,
     "plan Básico · anual": p.basico?.anual ?? null,
@@ -212,15 +426,18 @@ export function cifrasDelSitio({ precios, chatbot }) {
     ),
     "add-on chatbot · mensual": num(stacks, "mensual"),
     "add-on chatbot · anual": num(stacks, "anual"),
+    /** `export const X = N`, no una clave de objeto — como los del trial. */
+    "add-on chatbot · conversaciones por mes":
+      Number(chatbot?.match(/CONVERSACIONES_INCLUIDAS\s*=\s*(\d+)/)?.[1] ?? NaN) || null,
     "add-on reservas online · mensual": num(agenda, "mensualAddon"),
     "add-on usuario extra · mensual": num(usuario, "mensualAddon"),
     "add-on usuario extra · máximo en Básico": num(usuario, "maxEnBasico"),
-    "prueba gratis · días": num(prueba, "dias"),
+    "prueba gratis · días": valorResuelto(prueba, "dias", precios),
     /** El producto lo nombra `professional`; el sitio, por su etiqueta. */
     "prueba gratis · plan que corre":
-      { Pro: "professional", Básico: "basic", Full: "clinic" }[
-        planPrueba?.[1]
-      ] ?? planPrueba?.[1] ?? null,
+      { Pro: "professional", Básico: "basic", Full: "clinic" }[planPrueba] ??
+      planPrueba ??
+      null,
   };
 }
 
@@ -228,7 +445,7 @@ export function cifrasDelSitio({ precios, chatbot }) {
 
 /** Toda cifra que el sitio publica y el producto define. El verde las exige TODAS. */
 export const CIFRAS = Object.keys(
-  cifrasDelProducto({ planes: "", addons: "", prueba: "" }),
+  cifrasDelProducto({ planes: "", addons: "", prueba: "", limites: "" }),
 );
 
 /**
@@ -239,6 +456,17 @@ export const CIFRAS = Object.keys(
  * veredicto, que es el modo de fallo exacto que este cruce viene a evitar.
  */
 const falta = (v) => v === null || v === undefined;
+
+/**
+ * Separa las dos familias de cifra para no describir mal el defecto. Un monto
+ * desalineado se paga en el checkout; un tope o un tier desalineado se paga
+ * DESPUES, cuando el cliente ya entro y le falta lo que la pantalla prometia.
+ * Mandar a arreglar el archivo equivocado es como se dan por cerrados los bugs
+ * que siguen vivos.
+ */
+export const esPromesa = (cifra) =>
+  /· fichas$|· usuarios$|· recordatorios por mes$|· conversaciones por mes$/.test(cifra) ||
+  cifra.startsWith("primer plan con");
 
 /** Puro: sin red y sin disco, para poder probarlo con casos que hoy no existen. */
 export function comparar(delProducto, delSitio) {
@@ -273,12 +501,14 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   const planes = leerDelProducto(FUENTE_PLANES);
   const addons = leerDelProducto(FUENTE_ADDONS);
   const prueba = leerDelProducto(FUENTE_PRUEBA);
+  const limites = leerDelProducto(FUENTE_LIMITES);
 
-  if (!planes || !addons || !prueba) {
+  if (!planes || !addons || !prueba || !limites) {
     const faltan = [
       !planes && FUENTE_PLANES,
       !addons && FUENTE_ADDONS,
       !prueba && FUENTE_PRUEBA,
+      !limites && FUENTE_LIMITES,
     ].filter(Boolean);
     console.error(
       `NO PUDE MEDIR: no pude leer ${faltan.join(", ")} del producto ` +
@@ -288,7 +518,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     process.exit(NO_PUDE_MEDIR);
   }
 
-  const delProducto = cifrasDelProducto({ planes, addons, prueba });
+  const delProducto = cifrasDelProducto({ planes, addons, prueba, limites });
   const delSitio = cifrasDelSitio({
     precios: readFileSync(PRECIOS_SITIO, "utf8"),
     chatbot: readFileSync(CHATBOT_SITIO, "utf8"),
@@ -320,9 +550,13 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
 
   for (const d of difieren) {
     console.error(
-      `ROJO: ${d.cifra} — el producto cobra ${d.producto} y el sitio publica ${d.sitio}.\n` +
-        `  El lead ve un numero en la pantalla de venta y el checkout le cobra otro. ` +
-        `Manda el producto (CLAUDE.md): se corrige el sitio, en src/lib/pricing.ts o src/content/chatbot-precios.ts.`,
+      esPromesa(d.cifra)
+        ? `ROJO: ${d.cifra} — el producto entrega ${d.producto} y el sitio promete ${d.sitio}.\n` +
+          `  El lead paga esperando lo que dice la pantalla y el producto le da otra cosa. ` +
+          `Manda el producto (CLAUDE.md): se corrige el sitio, en el \`incluye\` del plan en src/lib/pricing.ts.`
+        : `ROJO: ${d.cifra} — el producto cobra ${d.producto} y el sitio publica ${d.sitio}.\n` +
+          `  El lead ve un numero en la pantalla de venta y el checkout le cobra otro. ` +
+          `Manda el producto (CLAUDE.md): se corrige el sitio, en src/lib/pricing.ts o src/content/chatbot-precios.ts.`,
     );
   }
   process.exit(DESALINEADO);

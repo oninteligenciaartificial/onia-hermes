@@ -293,6 +293,7 @@ poner "$FUENTE/hf-login-finish.sh"         "$DESTINO_BIN/hf-login-finish.sh"
 if [ -d /opt/onia-landing/_deploy ]; then
   poner "$RAIZ/hermes-content/deploy/onia-landing/build-and-stage.sh"  /opt/onia-landing/_deploy/build-and-stage.sh
   poner "$RAIZ/hermes-content/deploy/onia-landing/swap-and-verify.sh"  /opt/onia-landing/_deploy/swap-and-verify.sh
+  poner "$RAIZ/hermes-content/deploy/onia-landing/publicar.sh"         /opt/onia-landing/_deploy/publicar.sh
 fi
 
 # El runbook de deploy de la PLATAFORMA (app.onia.com.bo). Mismo agujero que la
@@ -303,10 +304,24 @@ fi
 # llegar al cliente. deploy-gates-swap.sh NO se sincroniza: sigue siendo el
 # unico paso que pide OK de Sergio, y se edita en el VPS a proposito.
 if [ -d /opt/onia-platform ]; then
+  mkdir -p /opt/onia-platform/_deploy
   poner "$RAIZ/hermes-content/deploy/onia-platform/build-and-stage.sh"    /opt/onia-platform/build-and-stage.sh
   poner "$RAIZ/hermes-content/deploy/onia-platform/recreate-container.sh" /opt/onia-platform/recreate-container.sh
+  poner "$RAIZ/hermes-content/deploy/onia-platform/publicar.sh"           /opt/onia-platform/_deploy/publicar.sh
 fi
 
+# 🔴 LOS TRES `publicar.sh` SE SINCRONIZAN, no solo el del bot. Medido el
+# 2026-09-06: de los tres destinos que el `ok <id>` de Sergio ejecuta, este
+# script copiaba UNO — el del bot, agregado el 05-sep cuando ese destino no
+# estaba en la lista blanca del ejecutor. El arreglo se aplico a la instancia
+# que lo motivo y no viajo a sus dos hermanas, asi que /opt/onia-landing y
+# /opt/onia-platform corrian copias hechas a mano: coincidian con main por
+# diligencia, no por construccion. El fallo es mudo en las dos direcciones —
+# un arreglo commiteado no llega, y un arreglo hecho en /opt no esta en git.
+# Anclado en scripts/publicadores-desplegados.test.mjs (`npm run
+# test:publicadores`), que deriva los sujetos de la lista blanca del ejecutor y
+# del disco: un publicador nuevo nace cubierto.
+#
 # El publicador del BOT, el tercer destino que Sergio aprueba con `ok <id>`.
 # Hasta el 2026-09-05 el bot no estaba en la lista blanca de
 # publicar-aprobado.mjs: el `ok` devolvia "destino desconocido" y no desplegaba

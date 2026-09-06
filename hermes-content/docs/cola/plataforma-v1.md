@@ -61,21 +61,71 @@ y sin operar. Acá se opera, con verificación por ítem.
       Lo que NO es fantasma y sigue abierto es lo de abajo: el circuito existe y espera decisión.
 
 - [ ] 🔴 **Hay arreglos verdes esperando UN `ok` de Sergio Urcullo, y no llegan al cliente.**
-      Medido el 2026-09-05 17:5x UTC: dos tareas en `blocked`, creadas 14:43, sin contestar.
+      Medido el 2026-09-06 10:35 UTC por `onia-cola`: **tres** destinos con pedido en `blocked`,
+      uno por destino, y **ninguno contestado**.
 
-      | tarea | destino | lo más caro que destraba |
-      |---|---|---|
-      | `t_e05a44d7` | `landing` | la tarjeta que se ve al compartir `onia.com.bo` por WhatsApp era una captura con «MUY PRONTO» impresa adentro |
-      | `t_8ac57b3f` | `plataforma` | el dueño con el add-on del chatbot **ya pagado** no puede conectar su WhatsApp: 3 de 4 orgs ven un cartel de venta en vez del botón |
+      | destino | cuánto falta por publicar — se DERIVA, no se copia |
+      |---|---|
+      | `landing` (`onia.com.bo`) | `bash /opt/onia-landing/_deploy/publicar.sh --dry-run` |
+      | `plataforma` (`app.onia.com.bo`) | `bash /opt/onia-platform/_deploy/publicar.sh --dry-run` |
+      | `bot` (WhatsApp) | `bash /opt/onia/bot/_deploy/publicar.sh --dry-run` |
 
-      El propio integrador lo cuenta cada vuelta: **plataforma 5 · landing 32** commits sin
-      desplegar. **Este loop NO vuelve a avisar de esto**: el integrador ya mide y ya creó el
-      pedido; un segundo aviso del mismo hecho es el spam que hizo que nadie leyera el primero.
-      Lo que sí hace este carril es **no dar por entregado** un arreglo suyo mientras su pedido
-      siga en `blocked` — construido ≠ terminado.
+      ⚠️ **Acá había una columna con las cifras (25 / 3 / 17) y se sacó el 2026-09-06 17:55 La
+      Paz, porque un número escrito acá se pudre en una hora.** Cada merge a `main` lo sube y
+      cada swap lo baja a cero, así que la tabla mentía casi siempre — y en las dos direcciones:
+      de más («quedan 25» cuando ya se publicaron) y de menos («quedan 3» con 27 esperando). Es
+      el MISMO defecto que este ítem ya documenta dos párrafos abajo para los IDs de tarea
+      escritos a mano, un escalón más arriba: **lo que cambia solo no se copia, se deriva.** Los
+      tres comandos salen con código 0 sin tocar producción y ya filtran lo que no viaja al
+      navegador; medido así el 2026-09-06 17:38 La Paz daban 27 · 4 · 17 archivos.
+
+      ⚠️ **La plataforma SE PUBLICÓ el 2026-09-06 a las 17:08 UTC (13:08 La Paz), y esta tabla
+      decía lo contrario — corregido a las 19:45 UTC por `onia-cola`.** Decía «22 sin desplegar,
+      corre `build-545dd28`». Hoy corre `build-5fc8bcd` y los **trece** shas que el pedido
+      prometía están adentro (`8b420b6 38bcf8a 195349b 2099778 5922faa 30526c3 5fc333d ad2d45f
+      3fe2db9 06b68c9 a797954 df3e645 bcdfd79`, verificados uno por uno con
+      `git merge-base --is-ancestor <sha> 5fc8bcd`): el alta sin horarios, el corte del mediodía,
+      los dos rubros que el panel negaba, el botón Otorgar sin efecto, la Planilla sin camino y
+      las métricas del asistente **están vivos**. El pedido siguió `blocked` igual, así que le
+      pedía a Sergio Urcullo un `ok` **por trabajo ya hecho** — el modo de falla que este ítem
+      describe, pero al revés: no «dice resuelto sobre lo pendiente», sino **«dice pendiente
+      sobre lo resuelto»**, y de ese lado nadie sospecha porque el pedido sigue ahí, prolijo y
+      ejecutable. Cerrado con su evidencia; los **3** arreglos posteriores tienen pedido nuevo,
+      porque el cuerpo del viejo no los describía y el cuerpo es lo único que él lee.
+
+      **La cifra de la tabla se saca del publicador, no de `git log`.** `bash
+      /opt/onia-platform/_deploy/publicar.sh --dry-run` (y su gemelo de `onia-landing`) filtra lo
+      que no viaja al navegador: el mismo día `git log --since` crudo daba **42** para landing, el
+      cuerpo de la tarea decía **24** y el publicador **25**. Sólo la última es accionable.
+
+      **Este loop NO vuelve a avisar de esto**: el integrador ya mide y ya creó el pedido; un
+      segundo aviso del mismo hecho es el spam que hizo que nadie leyera el primero. Lo que sí
+      hace este carril es **no dar por entregado** un arreglo suyo mientras su pedido siga en
+      `blocked` — construido ≠ terminado.
+
+      ⚠️ **Acá había DOS IDs de tarea escritos a mano (`t_e05a44d7`, `t_8ac57b3f`) y los dos
+      caducaron — corregido el 2026-09-06.** Hoy figuran `archived` y **`done`**, y el ítem
+      remataba con *«Pedidos: `onia-tablero.sh show t_8ac57b3f`»*: quien lo obedecía leía
+      **`done`** y concluía que la plataforma ya se había desplegado, con **22 arreglos** que el
+      cliente no ve. Un pedido de deploy **se rehace** cuando su evidencia envejece (el `edit` del
+      tablero no cambia el cuerpo), así que el ID viejo muere y el nuevo no está escrito en
+      ningún lado — el ID rota **en la dirección cara**: dice «resuelto» sobre lo que sigue sin
+      publicar. Es el mismo remedio que ya se le aplicó al comando de deploy, un escalón más
+      arriba: **el pedido vivo se DERIVA, nunca se copia de una medición anterior.**
+
+      ```sh
+      # los pedidos vivos, sin IDs escritos a mano (uno por destino, o sobra/falta uno):
+      for id in $(/root/bin/onia-tablero.sh list | grep -E '^[⊘▶◻]' | awk '{print $2}'); do
+        d=$(/root/bin/onia-tablero.sh show "$id" | grep -iE '^DESPLEGAR:')
+        [ -n "$d" ] && echo "$id  $d"
+      done
+      # 2026-09-06 devuelve exactamente 3 lineas: bot, landing, plataforma.
+      # Ojo: NO usar `show | grep -q &&`, que cierra el pipe antes de tiempo y el
+      # tablero remata con un BrokenPipeError que se lee como si fallara.
+      ```
 
       Evidencia: `hermes-content/docs/cola/plataforma-v1.md` (este archivo) y el runbook
-      `onia-platform/.claude/skills/onia-deploy/SKILL.md`. Pedidos: `onia-tablero.sh show t_8ac57b3f`.
+      `onia-platform/.claude/skills/onia-deploy/SKILL.md`.
 
 - [x] 🔴 **§8 ítem 1 estaba CUMPLIDO, no falso — y la vuelta del 2026-09-05 lo dio vuelta al
       revés. Corregido el mismo día, midiendo contra `origin/master`.** El pendiente decía
@@ -99,13 +149,15 @@ y sin operar. Acá se opera, con verificación por ítem.
       fósil: primero `git merge origin/master`, y recién después medir.
       Verificable: `git rev-list --count HEAD..origin/master` debe dar **0** antes de juzgar.
 
-      **Anclado en código, y todavía NO en `master`:** el gate `agenda-necesita-clientes` (suite
-      `lib/platform` de `onia-platform`) exige que todo pack que ofrezca agenda pueda abrir la
-      pantalla de sus clientes — sujetos derivados del disco, así que un rubro nuevo nace
-      cubierto. Rojo probado sacando la entrada del nav (2 casos fallan, los otros 4 packs
-      siguen verdes); verde con ella. Hoy vive en la rama del carril
-      (`claude/chatbots-platform-review-0d1d09`) y llega a `master` con el merge de `onia-cola`:
-      hasta entonces **no lo puede correr otro carril**, por eso no se cita como ruta.
+      **Anclado en código y YA en `master`:** el gate
+      `onia-platform/lib/platform/agenda-necesita-clientes.test.ts` exige que todo pack que
+      ofrezca agenda pueda abrir la pantalla de sus clientes — sujetos derivados del disco, así
+      que un rubro nuevo nace cubierto. Rojo probado sacando la entrada del nav (2 casos fallan,
+      los otros 4 packs siguen verdes); verde con ella.
+      *(Acá decía «todavía NO en `master`… hasta entonces **no lo puede correr otro carril**, por
+      eso no se cita como ruta». **Venció**: `onia-cola` mergeó la rama y el 2026-09-06 el gate
+      corre desde `master` — `npx vitest run lib/platform/agenda-necesita-clientes.test.ts` →
+      **6 tests verdes, exit 0**. Ya se cita como ruta y cualquier carril lo puede correr.)*
 
 - [x] 🟢 **FANTASMA — nació del error de arriba y murió con él. Medido el 2026-09-05, sin
       escribir una línea de producto.** Este ítem decía que en `gestios-servicios-profesionales`
@@ -394,6 +446,20 @@ y sin operar. Acá se opera, con verificación por ítem.
       Falló primero en rojo por el motivo correcto (2 pantallas fantasma + 1 contradicción) y
       lleva el caso que YA cumple, para que no apruebe en verde sin encontrar nada. Si no ve el
       repo hermano sale con 2 (NO MEDIDO), nunca verde.
+
+      ⚠️ **«Atado» no era cierto hasta el 2026-09-06 15:5x UTC: el gate existía y no lo corría
+      nadie** — ni estaba en la cadena `npm test` ni tenía un `npm run` que lo invocara. Y no era
+      un olvido: cablearlo tal cual **ponía `main` en rojo por AMBIENTE**, porque su `--self-check`
+      exigía el árbol del repo hermano y devolvía **1** cuando no lo encontraba (reproducido
+      apuntando los tres candidatos a rutas inexistentes). Ese rojo traba el merge de los quince
+      carriles por algo ajeno al cambio de cualquiera. `guards-cableados` no podía verlo: ata los
+      `test:*` **declarados**, y éste nunca se declaró — la misma lista-de-inclusión que ya falló
+      abierto en otros gates. **Arreglado** (`onia-cola`): el self-check pasó a ser **puro**
+      (prueba las dos direcciones contra `scripts/`, con `scripts/loops` como la pantalla que SÍ
+      existe) y la ausencia del hermano la sigue reportando `medir()` con su exit 2. Verificado
+      por mutación: rompiendo el detector en cada dirección, el self-check se pone rojo por el
+      motivo correcto. Ahora corre en la cadena como `test:catalogo-instrumento`, y la medición
+      viva es `npm run catalogo:modulos-vivos`.
 
       **Avance 2026-09-06 — segunda tanda MIRADA: los 9 módulos del pack de comercio
       (`gestios-general`), y los nueve están sanos.** Org `zz-qa-ferreteria-tornillo-ommbt`

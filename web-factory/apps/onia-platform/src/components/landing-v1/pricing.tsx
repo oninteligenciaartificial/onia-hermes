@@ -7,6 +7,7 @@ import {
   NO_INCLUYE,
   NOTA_FISCAL,
   PLANES,
+  PRUEBA,
   bs,
 } from "@/lib/pricing";
 import styles from "./landing.module.css";
@@ -102,18 +103,20 @@ export function Pricing({ sinEncabezado = false }: { sinEncabezado?: boolean }) 
               {/* Pie anclado al fondo (.planCta lleva margin-top:auto): las tres
                   tarjetas miden lo mismo y los tres botones quedan a la misma
                   altura, midan lo que midan las listas de arriba. La nota de la
-                  prueba va ARRIBA del boton para no descolgarlo. */}
+                  prueba va ARRIBA del boton para no descolgarlo.
+
+                  La nota la lleva CADA tarjeta, no sólo la destacada: el boton
+                  de las tres arranca la misma prueba, que corre con el plan Pro
+                  (TRIAL_PLAN del producto), asi que "este mismo plan" sólo es
+                  cierto en una. El texto sale de PRUEBA.notaPorPlan — tipearlo
+                  acá es como llegó a contradecir a su propia fuente. */}
               <div className={styles.planCta}>
-                {plan.destacado && (
-                  <span className={styles.guarantee}>
-                    14 días de prueba sin tarjeta, corriendo con este mismo plan.
-                  </span>
-                )}
+                <span className={styles.guarantee}>{PRUEBA.notaPorPlan[plan.id]}</span>
                 <a
                   className={`${styles.btn} ${plan.destacado ? styles.btnPrimary : styles.btnGhost}`}
                   href={REGISTRO_URL}
                 >
-                  {plan.destacado ? "Probar gratis 14 días" : "Empezar"}
+                  {plan.destacado ? `Probar gratis ${PRUEBA.dias} días` : "Empezar"}
                 </a>
               </div>
             </Reveal>

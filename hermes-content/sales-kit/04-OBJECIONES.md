@@ -10,7 +10,7 @@
 
 Detrás: lo vio en una versión anterior. Es la objeción más fácil — cambió de verdad.
 
-> "Tenías razón cuando lo dijiste. Desde esa vez cambió esto: ahora tiene un **agente que trabaja solo** — cuando un paciente falta, detecta el hueco y te propone la reprogramación por WhatsApp; vos aprobás con un click y el mensaje sale. Además la **factura SIAT en línea va incluida** en todos los planes, y la ficha del paciente tiene odontograma, historial y consentimientos. Dame 20 minutos y decime vos si sigue siendo básico."
+> "Tenías razón cuando lo dijiste. Desde esa vez cambió esto: ahora tiene un **agente que trabaja solo** — cuando un paciente falta, detecta el hueco y te propone la reprogramación por WhatsApp; vos aprobás con un click y el mensaje sale. Además **cada venta te queda lista para facturar** en el portal gratuito del SIN, en todos los planes, y la ficha del paciente tiene odontograma, historial y consentimientos. Dame 20 minutos y decime vos si sigue siendo básico."
 
 ## 2a. "Somos muy chicos para esto"
 
@@ -34,7 +34,7 @@ Detrás: el statu quo funciona "suficiente". No atacar el cuaderno — atacar el
 
 ## 4. "¿Cuánto cuesta?" (la aritmética, Pro primero)
 
-> "El plan que le calza a tu clínica es el **Pro: Bs 750 al mes**, precio de lanzamiento, con la factura SIAT incluida. Para que el número te diga algo: es lo que cobrás por **dos ajustes de ortodoncia**. Si el sistema te recupera dos citas al mes, sale gratis — y todo lo que recupere de ahí para arriba es tuyo. ¿Cuántas citas se te pierden hoy al mes?"
+> "El plan que le calza a tu clínica es el **Pro: Bs 750 al mes**, precio de lanzamiento, y te deja cada venta lista para facturar en el portal del SIN. Para que el número te diga algo: es lo que cobrás por **dos ajustes de ortodoncia**. Si el sistema te recupera dos citas al mes, sale gratis — y todo lo que recupere de ahí para arriba es tuyo. ¿Cuántas citas se te pierden hoy al mes?"
 
 Si el perfil es 2+ profesionales / alto flujo: "Para el tamaño tuyo está el Full a Bs 1.500 — **media endodoncia**. Una endodoncia multirradicular recuperada (Bs 2.100) te paga el mes y te sobran Bs 600. Un implante recuperado paga dos meses."
 

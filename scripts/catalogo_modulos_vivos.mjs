@@ -27,24 +27,86 @@
 import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { dirname, resolve } from "node:path";
+import { execFileSync } from "node:child_process";
 
 const AQUI = dirname(fileURLToPath(import.meta.url));
 
 const CATALOGO = resolve(AQUI, "../hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md");
 
 /**
- * Donde vive el arbol de rutas del producto. Se prueban en orden y gana el primero que exista:
- * el worktree de este carril primero, porque es el unico que tiene lo que todavia no se mergeo.
+ * Donde vive el arbol de rutas del producto. Se prueban en orden.
+ *
+ * ⚠️ Acá decía "gana el primero que exista: el worktree de este carril primero, porque es el
+ * unico que tiene lo que todavia no se mergeo". Eso era cierto para el carril que lo escribio y
+ * FALSO para cualquier otro que corra el gate: el primer candidato es el worktree del carril
+ * chatbot, que vive en una RAMA DE CARRIL y el 2026-09-06 estaba 5 commits atras de master.
+ * Medir el catalogo de `main` contra un arbol de producto atrasado es el fosil que esta memoria
+ * ya tiene documentado dos veces, y falla en la direccion cara: VERDE sobre un modulo que el
+ * catalogo vende y master ya no tiene. Ese dia no dio un veredicto falso de casualidad (los dos
+ * arboles tenian las mismas 24 carpetas); la casualidad no es una garantia.
+ *
+ * Ahora gana el arbol CONFIABLE — el que esta en la rama base y al dia— y si no hay ninguno se
+ * usa el primero que exista pero DICIENDOLO, junto con el que quedo afuera y por que.
  */
 const CANDIDATOS = [
-  "/root/loops/onia-platform-chatbot/app/(dashboard)",
   "/root/loops/onia-platform/app/(dashboard)",
+  "/root/loops/onia-platform-chatbot/app/(dashboard)",
   resolve(AQUI, "../../onia-platform/app/(dashboard)"),
 ];
 
+/** La rama base del repo del producto. Ese repo NO usa `main`. */
+const RAMA_BASE = "master";
+
+/**
+ * Rama y atraso del repo que contiene esa carpeta. Devuelve null si no se puede preguntar —
+ * degradar con gracia importa: un gate que se cae porque git no contesta es un rojo ambiental,
+ * y un rojo ambiental en la cadena `npm test` traba el merge de los quince carriles.
+ */
+export function estadoGit(ruta) {
+  try {
+    const q = (args) =>
+      execFileSync("git", ["-C", ruta, ...args], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
+    return { rama: q(["rev-parse", "--abbrev-ref", "HEAD"]), atras: Number(q(["rev-list", "--count", `HEAD..origin/${RAMA_BASE}`])) };
+  } catch {
+    return null;
+  }
+}
+
+/** Un arbol sirve de referencia si esta en la rama base y no le falta ningun commit de ella. */
+function esConfiable(estado) {
+  return estado !== null && estado.rama === RAMA_BASE && estado.atras === 0;
+}
+
+/**
+ * Elige el arbol y explica la eleccion. Se separa de `rutaDashboard` para poder probarla con un
+ * `estadoDe` inyectado: sin eso el caso dependeria del estado real de los worktrees del VPS, que
+ * cambia solo, y un test que cambia solo no prueba nada.
+ */
+export function elegirArbol(candidatos = CANDIDATOS, estadoDe = estadoGit) {
+  const existentes = candidatos.filter((ruta) => existsSync(ruta));
+  if (existentes.length === 0) return { ruta: null, aviso: null, descartados: [] };
+
+  const conEstado = existentes.map((ruta) => ({ ruta, estado: estadoDe(ruta) }));
+  const bueno = conEstado.find((c) => esConfiable(c.estado));
+  const elegido = bueno || conEstado[0];
+  const descartados = conEstado.filter((c) => c.ruta !== elegido.ruta).map((c) => describir(c));
+
+  return {
+    ruta: elegido.ruta,
+    // Sin arbol confiable el veredicto puede no valer para la rama base: se dice, no se calla.
+    aviso: bueno ? null : `el arbol medido NO es de ${RAMA_BASE} al dia (${describir(elegido)}) — el veredicto puede no valer para la rama base`,
+    descartados,
+  };
+}
+
+function describir({ ruta, estado }) {
+  if (!estado) return `${ruta} (no pude preguntarle a git)`;
+  return `${ruta} (rama ${estado.rama}, ${estado.atras} commit(s) atras de ${RAMA_BASE})`;
+}
+
 /** La carpeta de rutas del producto, o null si este arbol no tiene el otro repo. */
 export function rutaDashboard(candidatos = CANDIDATOS) {
-  return candidatos.find((ruta) => existsSync(ruta)) || null;
+  return elegirArbol(candidatos).ruta;
 }
 
 /**
@@ -125,7 +187,7 @@ export function contradiceASiete(fuente, filas) {
 function medir() {
   const fuente = readFileSync(CATALOGO, "utf8");
   const filas = parsearModulos(fuente);
-  const dashboard = rutaDashboard();
+  const { ruta: dashboard, aviso, descartados } = elegirArbol();
 
   console.log(`catálogo: ${CATALOGO}`);
   console.log(`módulos declarados: ${filas.length}`);
@@ -135,7 +197,12 @@ function medir() {
     for (const c of CANDIDATOS) console.log(`  ${c}`);
     return 2;
   }
-  console.log(`producto:  ${dashboard}`);
+  console.log(`producto:  ${describir({ ruta: dashboard, estado: estadoGit(dashboard) })}`);
+  // Nombrar al que queda afuera: un gate que elige en silencio entre dos copias hace creer que
+  // sólo había una, y ahí es donde un veredicto se mide contra el árbol equivocado sin que nadie
+  // lo note. Mismo patrón que el cron que elegía entre dos copias del mismo script.
+  for (const d of descartados) console.log(`           (no medido: ${d})`);
+  if (aviso) console.log(`  AVISO  ${aviso}`);
 
   const fantasma = pantallasFantasma(filas, dashboard);
   const choques = contradiceASiete(fuente, filas);
@@ -173,15 +240,45 @@ function selfCheck() {
   ok(rutasDe("sin ruta").length === 0, "rutasDe inventa rutas");
 
   // pantallasFantasma: encuentra la ausente Y absuelve a la que existe (el caso que YA cumple).
-  const dashboard = rutaDashboard();
-  if (!dashboard) {
-    fallos.push("self-check no pudo correr: falta el árbol de onia-platform");
-  } else {
-    const inventada = [{ modulo: "X", pantalla: "`/no-existe-jamas`", estado: "🟡", rutas: ["no-existe-jamas"] }];
-    ok(pantallasFantasma(inventada, dashboard).length === 1, "no detecta una pantalla ausente");
-    const viva = [{ modulo: "Y", pantalla: "`/billing`", estado: "🟡", rutas: ["billing"] }];
-    ok(pantallasFantasma(viva, dashboard).length === 0, "marca como fantasma una pantalla que SÍ existe");
-  }
+  //
+  // El árbol de prueba es ESTE repo (`scripts/`, que tiene `scripts/loops` adentro), NO el hermano.
+  // Antes se medía contra `rutaDashboard()` real y, sin el otro repo, el self-check devolvía 1:
+  // un rojo por AMBIENTE. Como este self-check corre en la cadena `npm test`, ese rojo traba el
+  // merge de LOS QUINCE CARRILES por algo que no tiene nada que ver con el cambio de nadie.
+  // La ausencia del hermano la reporta `medir()` con su exit 2 (NO MEDIDO), que es su lugar.
+  const inventada = [{ modulo: "X", pantalla: "`/no-existe-jamas`", estado: "🟡", rutas: ["no-existe-jamas"] }];
+  ok(pantallasFantasma(inventada, AQUI).length === 1, "no detecta una pantalla ausente");
+  const viva = [{ modulo: "Y", pantalla: "`/loops`", estado: "🟡", rutas: ["loops"] }];
+  ok(pantallasFantasma(viva, AQUI).length === 0, "marca como fantasma una pantalla que SÍ existe");
+
+  // Y la puerta del NO MEDIDO: sin ningún candidato no inventa un árbol, que es lo que hace que
+  // `medir()` salga con 2 en vez de aprobar en verde sin haber mirado nada.
+  ok(rutaDashboard(["/no/existe/jamas"]) === null, "rutaDashboard inventa un árbol que no está");
+
+  // elegirArbol: el caso que motivó el arreglo. Dos árboles existen, el PRIMERO de la lista está
+  // en una rama de carril y atrasado (así estaba el worktree del chatbot el 2026-09-06) — hay que
+  // saltearlo y quedarse con el de la rama base al día, aunque venga después.
+  const dos = [AQUI, resolve(AQUI, "..")];
+  const atrasadoPrimero = (r) => (r === dos[0] ? { rama: "claude/otro-carril", atras: 5 } : { rama: RAMA_BASE, atras: 0 });
+  const elegido = elegirArbol(dos, atrasadoPrimero);
+  ok(elegido.ruta === dos[1], "elige el árbol atrasado de una rama de carril teniendo uno al día");
+  ok(elegido.aviso === null, "avisa aunque el árbol elegido SEA de la rama base al día");
+  ok(elegido.descartados.length === 1 && /5 commit/.test(elegido.descartados[0]), "no nombra al candidato que quedó afuera");
+
+  // La dirección contraria, que es la que se rinde en silencio: si NINGUNO es confiable, se mide
+  // igual (un veredicto vale más que ninguno) pero el aviso es obligatorio. Sin este caso, un
+  // `aviso` siempre-null pasaría el caso de arriba y nadie se enteraría nunca.
+  const ningunoSirve = elegirArbol(dos, () => ({ rama: "claude/x", atras: 3 }));
+  ok(ningunoSirve.ruta === dos[0], "sin árbol confiable no cae al primero que existe");
+  // El patrón busca las PIEZAS que el aviso tiene que llevar (la rama base y la rama medida), no
+  // la oración literal: escrito como frase exacta este caso ya falló una vez por un "de" de más,
+  // y un test que se rompe al reescribir el copy se termina relajando hasta que no mide nada.
+  ok(new RegExp(RAMA_BASE).test(ningunoSirve.aviso || "") && /claude\/x/.test(ningunoSirve.aviso || ""),
+    "no avisa que midió contra un árbol que no es la rama base");
+
+  // Y que git no conteste no puede tumbar el gate: degrada a "no confiable", nunca a excepción.
+  const sinGit = elegirArbol(dos, () => null);
+  ok(sinGit.ruta === dos[0] && sinGit.aviso !== null, "no degrada con gracia cuando git no contesta");
 
   // contradiceASiete: dispara con el texto real que tenía la tabla, y calla cuando ya está corregido.
   const conSiete = "## 7. Lo que NO se puede prometer\nlos agentes SÍ corren solos\n";

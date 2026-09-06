@@ -20,9 +20,22 @@
  *        modo cliente NO usa LLM: son intents contra un JSON validado.
  *      - "Recordatorios automáticos de cita y de cobro" → no existen todavía.
  *      - "agenda" → no agenda: todo pedido de cita va a una persona.
- *      - "500 conversaciones por mes incluidas" → no hay contador ni corte
- *        implementado, así que no se promete un cupo (ni CUPO_MENSUAL ni
- *        META_MARKUP_PCT siguen existiendo: se borraron, no se maquillaron).
+ *      - "500 conversaciones por mes incluidas" → no había contador ni corte
+ *        implementado, así que no se prometía un cupo (META_MARKUP_PCT no
+ *        existe más: se borró, no se maquilló).
+ *
+ *    ⚠️ Ese último punto quedó VENCIDO el 2026-09-03 y siguió leyéndose como
+ *    presente tres días — corregido el 2026-09-06. El contador existe y CORTA:
+ *    `onia-platform/lib/chatbot/cupo.ts` cuenta por mes, expone
+ *    `agotada: usadas >= limite`, el motor deriva a una persona cuando es
+ *    true, y hay una recarga que se le COBRA al dueño cuando se le acaba. O
+ *    sea que el cupo pasó de ser copy a ser una condición que el cliente
+ *    sufre — y la venta seguía sin nombrarlo, así que se enteraba pagando.
+ *    Un comentario que explica por qué algo NO se dice es una hipótesis con
+ *    fecha: mientras esta cabecera dijo «no se promete un cupo», cada vuelta
+ *    que la leía volvía a sacarlo. Hoy se promete, con su salida al lado.
+ *    Guarda: `app/(sitio)/limite-que-corta.test.ts` (y el número se cruza
+ *    contra el producto con `scripts/limites-vivos.mjs`).
  *
  *    Lo que quedó es lo que el código SÍ hace, y es defendible: contesta al
  *    instante a cualquier hora, responde con la información que el negocio
@@ -35,6 +48,20 @@
  */
 
 export type StackId = "whatsapp";
+
+/**
+ * Conversaciones que el add-on atiende por mes — ESPEJO de
+ * `WHATSAPP_ADDON.includedConversations` (`onia-platform/lib/pricing.ts`), que
+ * es el número que el producto APLICA: `lib/chatbot/cupo.ts` lo lee para
+ * cortar («El cupo sale de pricing.ts: lo que se vende es lo que se aplica»).
+ *
+ * Vive acá porque el otro repo no está en este worktree, igual que los montos
+ * de `lib/pricing.ts`. Que las dos copias coincidan NO es una propiedad del
+ * código: lo cruza `scripts/limites-vivos.mjs` contra la fuente real, fuera de
+ * la cadena `npm test` (exigir el repo hermano pondría rojo por ambiente y
+ * trabaría el merge de los quince carriles).
+ */
+export const CONVERSACIONES_INCLUIDAS = 500;
 
 export interface ChatbotStack {
   readonly id: StackId;
@@ -64,6 +91,11 @@ export const CHATBOT_STACKS: readonly ChatbotStack[] = [
       "El mensaje de las 11 de la noche, el del domingo, el del feriado. El que preguntó, nadie contestó y se fue a otro lado.",
     incluye: [
       "Contesta al instante a cualquier hora: de noche, el domingo y el feriado",
+      // El límite se dice ACÁ, segundo, pegado a la frase que promete «a
+      // cualquier hora» — no al pie ni en una FAQ. Y con su salida: al
+      // agotarse la conversación NO se pierde, pasa a una persona. Es lo que
+      // el producto hace de verdad (`cupo.ts` → textoDeCupo).
+      `Atiende hasta ${CONVERSACIONES_INCLUIDAS} conversaciones por mes; si se agotan, las nuevas pasan a una persona de tu equipo y podés sumar más`,
       "Responde con la información real que vos publicaste: horarios, servicios y los datos de la cita",
       "No inventa ni cotiza por su cuenta: solo dice lo que vos cargaste",
       "Lo que no sabe se lo pasa a una persona, con la conversación completa",
