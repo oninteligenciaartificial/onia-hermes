@@ -9,45 +9,49 @@ disponible) · 2 monitores (1920×1080 primario + 1536×864) · OBS **32.0.4** �
 
 ---
 
-## 1. La decisión de cámara: el iPhone NO se conecta a la laptop
+## 1. La cámara: iPhone por cable, con Camo gratis
 
-Es contraintuitivo, así que va primero, con el porqué.
+**El iPhone se conecta por cable USB y aparece en OBS como una cámara más.** La app es
+[Camo](https://camo.com/pricing), de Reincubate.
 
-**Todas las apps de iPhone-como-webcam limitan el plan gratuito a 640×480 con marca de
-agua** (verificado 2026-09-06): [Iriun](https://iriun.com/), [Camo](https://camo.com/pricing)
-(gratis = 720p + marca de agua), [DroidCam](https://apps.apple.com/us/app/-/id1510258102).
-Ninguna sirve para YouTube sin pagar.
+Lo que entra en el plan **gratuito** (verificado en la fuente oficial el 2026-09-06):
 
-Y aun pagando, hay un problema peor: **el iPhone convertido en webcam comprime la imagen
-para pasarla por USB/WiFi**. Sale peor que el mismo iPhone grabando en su propia memoria.
+- **720p**, uso ilimitado, sin límite de tiempo
+- **Sin marca de agua.** La marca que aparece al abrir es una *capa de escena de demo*:
+  se borra desde el editor de escenas de Camo sin pagar nada
+  ([Reincubate lo confirma](https://x.com/reincubate/status/1983561587400081415))
+- **El micrófono del iPhone, gratis.** Desde [Camo 1.2](https://camo.com/blog/camo-audio-support-release)
+  el mezclador de audio multi-fuente está disponible para todos, con cancelación de ruido
 
-### El método que se usa: grabación doble
+Esto último es lo que decide: el único micrófono de esta laptop es el array interno
+(`Intel Smart Sound`), que graba el ventilador. **El mic del iPhone le pasa por encima**, y
+entra por el mismo cable que el video.
 
-| Qué graba | Con qué | Qué produce |
-|---|---|---|
-| Pantalla | OBS (perfil `ONIA YouTube`) | `E:\ONIA-YouTube\grabaciones\ONIA-YT-*.mp4` |
-| Cara **y voz** | iPhone, app Cámara normal, 1080p 30 fps | el archivo del carrete |
+> ⚠️ **Corregido el 2026-09-06.** Acá decía que el iPhone NO se conectara, porque "todas
+> las apps limitan el plan gratis a 640×480 con marca de agua". Eso era un resumen de
+> buscador, no la fuente. La página oficial de Camo dice *"no watermark, no ads, no spam"*
+> en el plan gratis. La regla vieja mandaba al método más complicado por no leer la fuente
+> primaria: 720p sin marca de agua y con audio alcanza de sobra, sobre todo para una cámara
+> que va en un círculo de 340 px.
 
-Se sincronizan en la edición con **una palmada** delante del iPhone al empezar.
+### 720p alcanza — y por qué
 
-**El audio que va al video final es el del iPhone.** Esto es lo que más sube la calidad
-del canal y es gratis: el único micrófono de esta laptop es el array interno
-(`Intel Smart Sound`), que graba el ventilador. El mic del iPhone le pasa por encima.
+La cámara va en un círculo de 340 px en la esquina (escena `2 · Pantalla + cara`). De un
+frame de 1280×720 se recorta el cuadrado central de 720×720 y después se muestra a 340 px:
+sobra resolución. Solo en `3 · Cara` (pantalla completa) se nota un poco de blandura, y es
+aceptable.
 
-Ventaja adicional: 0 latencia, 0 marca de agua, 0 drivers, y el iPhone puede grabar en
-4K si algún día se quiere reencuadrar.
-
-Contra: no ves tu encuadre en vivo. Se resuelve encuadrando con la cámara frontal antes
-de arrancar.
-
-### Alternativas, y por qué no son la primera opción
+### Alternativas, si algún día molesta
 
 - **Logitech StreamCam** — aparece configurada en el perfil viejo `ONIA_Reuniones`, así
   que existió en esta máquina. Hoy **no está conectada** (Windows solo ve la webcam
-  interna `HP Wide Vision HD`). Si aparece: 1080p60 por USB, encuadre en vivo, cero
-  fricción. Pero su micrófono es mediocre — el audio seguiría viniendo del iPhone.
-- **Camo Pro** (~USD 40/año) — si algún día molesta no ver el encuadre en vivo.
-- **Capturadora HDMI** (~USD 25) + adaptador — máxima calidad en vivo, más cables.
+  interna `HP Wide Vision HD`). Si aparece: 1080p60 por USB. Pero su micrófono es peor que
+  el del iPhone.
+- **Camo Pro** — solo para pasar de 720p a 1080p/4K.
+- **Grabación doble** (OBS la pantalla, iPhone grabando aparte con su app Cámara,
+  sincronizados con una palmada al empezar). Es el plan B si Camo falla: da la mejor imagen
+  posible, pero no ves tu encuadre en vivo y hay que sincronizar dos archivos.
+- **Capturadora HDMI** (~USD 25) + adaptador — máxima calidad, más cables.
 
 ---
 
@@ -85,32 +89,53 @@ El círculo se hace con `E:\ONIA-YouTube\assets\mask-circulo.png` (generado con 
 un filtro *Image Mask/Blend* sobre la escena anidada — OBS no admite filtros por
 scene-item, por eso la escena auxiliar.
 
-### Los 2 clics que faltan (OBS no los puede adivinar)
+### Los clics que faltan (OBS no los puede adivinar)
 
 1. **Fuente `Pantalla`** → doble clic → elegir el monitor de **1920×1080**.
-2. **Fuente `Camara`** → doble clic → elegir el dispositivo. Solo hace falta si algún día
-   conectás la StreamCam; con el método de grabación doble esta fuente queda sin usar.
-
-Si la cámara que elegís entrega **1280×720** en vez de 1920×1080, abrí `_cam · circulo`,
-seleccioná `Camara` y cambiá el tamaño del *bounding box* de 1080×1080 a 720×720. Si no,
-el círculo recorta de más.
+2. **Fuente `Camara`** → doble clic → elegir **`Reincubate Camo`** (aparece recién después
+   de instalar Camo y conectar el iPhone).
+3. En `_cam · circulo`, seleccionar `Camara` → `Ctrl+E` → cambiar el *bounding box* de
+   **1080×1080 a 720×720**, porque Camo gratis entrega 1280×720. Si no, el círculo recorta
+   de más.
 
 ---
 
-## 3. Antes de cada grabación
+## 3. Instalar Camo (una sola vez)
+
+1. En el iPhone: **Camo Camera** desde la App Store.
+2. En Windows: **Camo Studio** desde [camo.com/downloads](https://camo.com/downloads).
+3. Conectar el iPhone **por cable USB**. En el iPhone: *Confiar en esta computadora* → sí.
+4. Abrir Camo Studio. Debería mostrar la imagen del iPhone.
+5. **Borrar la capa de marca de agua** en el editor de escenas de Camo. Es una capa demo,
+   no hace falta pagar.
+6. En Camo Studio → audio → elegir el **micrófono del iPhone** y activar la cancelación de
+   ruido.
+
+> Si Windows no detecta el iPhone: probá **otro cable**. Muchos cables son solo de carga y
+> no llevan datos. Si sigue sin aparecer, instalá **Apple Devices** desde la Microsoft
+> Store (en esta máquina no hay nada de Apple instalado).
+
+Con Camo el audio y el video llegan por el mismo cable y quedan en **un solo archivo**: no
+hay que sincronizar nada.
+
+---
+
+## 4. Antes de cada grabación
 
 - [ ] Monitor de 1920×1080 como pantalla de trabajo
 - [ ] Terminal con fuente grande (a 1080p, menos de 16 pt no se lee en celular)
 - [ ] Notificaciones en silencio (`Win+N` → Asistente de concentración)
-- [ ] iPhone en horizontal, apoyado, **modo avión**
-- [ ] Grabar en el iPhone → **palmada** → recién ahí `F9` en OBS
-- [ ] Al terminar: parar los dos, y pasar el archivo del iPhone a `E:\ONIA-YouTube\`
+- [ ] iPhone conectado por cable, apoyado a la altura de los ojos, **modo avión** (el modo
+      avión no corta el USB, pero sí las llamadas que interrumpen la grabación)
+- [ ] Camo Studio abierto **antes** que OBS
+- [ ] Hablar 10 segundos y mirar el medidor de `Mic Sergio` en OBS: tiene que moverse en el
+      **verde**, tocando amarillo en los picos. Si toca rojo, bajar el volumen de la fuente
+- [ ] `F9` para grabar
 
 ---
 
-## 4. Pendientes anotados (no se hacen hasta que haga falta)
+## 5. Pendientes anotados (no se hacen hasta que haga falta)
 
-- Script de sincronización automática iPhone↔OBS por la palmada (ffmpeg detecta el pico).
-  No se escribe hasta tener el primer par de archivos reales que probarlo.
 - Lower-thirds e intro animada con **HyperFrames** (ya está en el repo, no instalar nada).
-- Micrófono lavalier de 3,5 mm (~Bs 150) — solo si el método de grabación doble molesta.
+- Script de sincronización por palmada — **solo si algún día se usa grabación doble**. Con
+  Camo no hace falta.
