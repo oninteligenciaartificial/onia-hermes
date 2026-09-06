@@ -129,6 +129,32 @@ function num(trozo, clave) {
 }
 
 /**
+ * Como `num`/el match literal, pero siguiendo UNA indirección: si la clave
+ * apunta a un identificador (`dias: PRUEBA_DIAS`) en vez de a un literal, va a
+ * buscar su `const PRUEBA_DIAS = …` al archivo entero.
+ *
+ * Existe porque el lector se quedó ciego el día que el valor pasó de literal a
+ * constante (2026-09-06, al hacer que las tres tarjetas leyeran la nota de la
+ * prueba de una sola fuente). Ese es el modo de falla de esta familia: el cruce
+ * no grita, devuelve `null` y —de no ser por la guarda de ilegibles— cantaría
+ * "ninguna cifra difiere". Resolver la indirección deja pasar las dos formas.
+ */
+function valorResuelto(trozo, clave, archivo, { texto = false } = {}) {
+  const literal = texto ? `"([^"]+)"` : `(\\d+)`;
+  const directo = trozo?.match(new RegExp(`\\b${clave}:\\s*${literal}`));
+  if (directo) return texto ? directo[1] : Number(directo[1]);
+
+  const porNombre = trozo?.match(new RegExp(`\\b${clave}:\\s*([A-Za-z_$][\\w$]*)`));
+  if (!porNombre) return null;
+
+  const decl = archivo?.match(
+    new RegExp(`\\bconst\\s+${porNombre[1]}\\s*=\\s*${literal}`),
+  );
+  if (!decl) return null;
+  return texto ? decl[1] : Number(decl[1]);
+}
+
+/**
  * El cuerpo de un `export const <nombre>`, hasta el proximo `export`. Alcanza
  * porque solo se leen claves numericas propias de cada bloque.
  */
@@ -368,7 +394,7 @@ export function cifrasDelSitio({ precios, chatbot }) {
   const agenda = bloqueExportado(precios ?? "", "AGENDA_ADDON");
   const usuario = bloqueExportado(precios ?? "", "USUARIO_EXTRA_ADDON");
   const prueba = bloqueExportado(precios ?? "", "PRUEBA");
-  const planPrueba = prueba?.match(/planQueCorre:\s*"([^"]+)"/);
+  const planPrueba = valorResuelto(prueba, "planQueCorre", precios ?? "", { texto: true });
   const stacks = bloqueExportado(chatbot ?? "", "CHATBOT_STACKS");
   const ls = limitesDelSitio(precios ?? "");
   /** Re-llavado al id del producto para que las claves salgan identicas. */
@@ -406,12 +432,12 @@ export function cifrasDelSitio({ precios, chatbot }) {
     "add-on reservas online · mensual": num(agenda, "mensualAddon"),
     "add-on usuario extra · mensual": num(usuario, "mensualAddon"),
     "add-on usuario extra · máximo en Básico": num(usuario, "maxEnBasico"),
-    "prueba gratis · días": num(prueba, "dias"),
+    "prueba gratis · días": valorResuelto(prueba, "dias", precios),
     /** El producto lo nombra `professional`; el sitio, por su etiqueta. */
     "prueba gratis · plan que corre":
-      { Pro: "professional", Básico: "basic", Full: "clinic" }[
-        planPrueba?.[1]
-      ] ?? planPrueba?.[1] ?? null,
+      { Pro: "professional", Básico: "basic", Full: "clinic" }[planPrueba] ??
+      planPrueba ??
+      null,
   };
 }
 

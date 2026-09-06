@@ -185,11 +185,41 @@ export const GRUPO = {
 } as const;
 
 /** Prueba gratis: lib/subscription/plan-state.ts (TRIAL_DAYS / TRIAL_PLAN). */
+const PRUEBA_DIAS = 14;
+
+/**
+ * Con qué plan corre la prueba. NO es el plan que el lead eligió: el producto
+ * da de alta toda cuenta con `TRIAL_PLAN = "professional"`
+ * (`onia-platform/app/api/auth/register/route.ts:272`), apriete la tarjeta que
+ * apriete. Si esto cambia allá, cambia acá — y `prueba-vs-plan.test.ts` obliga
+ * a que las tres tarjetas se enteren.
+ */
+const PRUEBA_PLAN = "Pro";
+
+/**
+ * La nota de prueba de CADA tarjeta, porque el botón de las tres arranca la
+ * misma prueba y sólo en una de ellas es «este mismo plan».
+ *
+ * Vivía tipeada a mano en `landing-v1/pricing.tsx` y sólo se pintaba en la
+ * tarjeta destacada; como la destacada es justo el Pro, el texto era cierto
+ * donde se veía y las otras dos callaban. Quien elegía el Básico probaba 14
+ * días de Pro y recién al pagar Bs 320 se le apagaban los agentes, las reservas
+ * online y los reportes completos, con los topes cayendo de 1.500 a 300 fichas
+ * y de 5 a 2 usuarios. Decirlo no ahuyenta: para el Básico es el mejor
+ * argumento de la tarjeta —probás el nivel de arriba— y para el Full avisa que
+ * lo que se prueba tiene techo.
+ */
+const NOTA_PRUEBA_POR_PLAN: Record<string, string> = {
+  basico: `${PRUEBA_DIAS} días de prueba sin tarjeta, con el plan ${PRUEBA_PLAN} completo. Al pasar a Básico quedás con lo de esta tarjeta.`,
+  pro: `${PRUEBA_DIAS} días de prueba sin tarjeta, corriendo con este mismo plan.`,
+  full: `${PRUEBA_DIAS} días de prueba sin tarjeta, con el plan ${PRUEBA_PLAN}. Al pasar a Full se van los topes.`,
+};
+
 export const PRUEBA = {
-  dias: 14,
-  planQueCorre: "Pro",
-  copy:
-    "14 días de prueba sin poner tarjeta, corriendo con el plan Pro completo. Al terminar, la cuenta queda en solo lectura: no se borra nada y podés exportar tus datos.",
+  dias: PRUEBA_DIAS,
+  planQueCorre: PRUEBA_PLAN,
+  copy: `${PRUEBA_DIAS} días de prueba sin poner tarjeta, corriendo con el plan ${PRUEBA_PLAN} completo. Al terminar, la cuenta queda en solo lectura: no se borra nada y podés exportar tus datos.`,
+  notaPorPlan: NOTA_PRUEBA_POR_PLAN,
 } as const;
 
 export function bs(n: number): string {
