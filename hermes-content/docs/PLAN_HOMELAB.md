@@ -409,7 +409,7 @@ perdida se pierde; la siguiente llega a horario.
 | 7 | Llave SSH de GitHub **de `root`** | PC de casa | ✅ `homelab-onia-github` |
 | 8 | Instalador `--prueba`, y si está verde, sin `--prueba` | PC de casa | ✅ 14/14 verde |
 | 9 | Una vuelta a mano y **mirar el log** | PC de casa | ✅ 2 vueltas completas, exit 0 |
-| 10 | **Recién ahí**, sacar del `crontab` del VPS los loops mudados | VPS | ⬜ lo coordina la sesión de control |
+| 10 | **Recién ahí**, sacar del `crontab` del VPS los loops mudados | VPS + `nodo-casa` | 🔴 **receta escrita abajo, sin ejecutar.** La parte A (VPS + tabla) está lista; la parte B necesita el teclado de `nodo-casa` |
 | 11 | Cerrar el puerto 22 público, con una sesión de respaldo abierta | VPS | ⬜ pendiente |
 
 ⚠️ **Dos correcciones al plan original, y las dos importan:**
@@ -426,6 +426,55 @@ perdida se pierde; la siguiente llega a horario.
 
 ⚠️ **El paso 10 va después del 9, nunca antes.** Un loop apagado en el VPS y roto en casa es un
 carril muerto que **no avisa** — el modo de falla que este sistema ya documentó tres veces.
+
+### El paso 10 para `web-venta`, escrito entero — 2026-09-06
+
+Es el primero de los cinco y el único de la primera tanda que **estaba corriendo**; los otros
+cuatro están pausados, así que mudarlos es gratis y no necesitan esta coreografía.
+
+🔴 **El orden NO es libre, y la razón no es el gate: es que las dos máquinas dispararían en el
+MISMO minuto.** El horario se muda tal cual (`48 */2 * * *`), así que con la línea puesta en
+`nodo-casa` y todavía viva en el VPS, los dos corren a las :48 sobre **la misma rama**
+`claude/web-venta`. El `flock -n` del corredor es por máquina, no entre máquinas: no los separa.
+
+**Por eso va primero el VPS y último el nodo**, aunque deje un hueco de hasta dos horas sin
+`web-venta`. El hueco es visible y barato; dos corredores pisándose la misma rama, no.
+
+**Parte A — VPS y tabla, en la misma ventana (lo hace la sesión de control).** Elegir un hueco:
+no entre :45 y :55.
+
+```bash
+ssh -i ~/.ssh/onia_hermes_vps_ed25519 root@187.77.16.63 'set -e
+  crontab -l > /root/crontab.antes-de-mudar-web-venta-$(date +%F).txt
+  crontab -l | grep -v "onia-loop\.sh web-venta" | crontab -
+  sed -i "s|^# web-venta |web-venta |" /root/.config/onia/loops-remotos.txt
+  crontab -l | grep -c "onia-loop.sh" ; grep -v "^#" /root/.config/onia/loops-remotos.txt'
+```
+
+Y en el MISMO minuto, en el repo: mover la fila de `web-venta` de la tabla de activos de
+[`cola/loops.md`](cola/loops.md) de `**VPS**` a `**casa**` —**el horario NO se toca**— y pushear.
+*Verificación de la parte A:* `node scripts/loops_registrados.mjs` **en el VPS** dice
+*"coinciden en id y horario, en las dos direcciones"* y el conteo de loops baja de 4 a **3**.
+
+**Parte B — `nodo-casa`, y sólo se puede desde su teclado** (`DESKTOP-0GGGNMF`, se reconoce por
+`/root/.onia-nodo`; la laptop `DESKTOP-ENV6SDA` no lo tiene). Idempotente: pone la línea exacta
+sin importar cómo esté hoy la comentada, y se niega sola si la máquina es la equivocada.
+
+```
+wsl -d Ubuntu -u root -e sh -c '[ -f /root/.onia-nodo ] || { echo "ESTA NO ES nodo-casa: $(hostname)"; exit 1; }; crontab -l > /root/crontab.antes-de-web-venta.txt 2>/dev/null; { crontab -l 2>/dev/null | grep -v "onia-loop\.sh web-venta"; echo "48 */2 * * * /root/bin/onia-loop.sh web-venta"; } | crontab -; hostname; cat /root/.onia-nodo; crontab -l | grep onia-loop'
+```
+
+**Sin redirección de log a propósito**: `onia-loop.sh` escribe él mismo en
+`/var/log/onia-loop-<id>.log` (línea 255), y de ahí lo sube el rsync de los `*/10` a
+`/var/log/homelab/` del VPS. Agregarle un `>>` duplica la salida.
+
+*Listo =* las tres cosas juntas: gate verde en las **dos** máquinas, un `===== TERMINA` con
+exit 0 en `/var/log/onia-loop-web-venta.log` del nodo, y ese log llegando a
+`/var/log/homelab/` del VPS.
+
+**Mientras tanto, `web-venta` sigue en el VPS.** No se apaga contra la promesa de que alguien
+corra la parte B: media mudanza deja al dueño de `onia.com.bo` sin correr en ninguna máquina,
+que es peor que no haber empezado.
 
 ---
 

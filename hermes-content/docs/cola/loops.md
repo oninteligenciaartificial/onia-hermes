@@ -161,7 +161,7 @@ manda. Un loop se compara **sólo contra el registro de su propia máquina**:
 |---|---|---|---|
 | `chatbot-cola` | **VPS** | `3 * * * *` (UTC) | **Carril `plataforma-v1` desde el 2026-09-05** (el id no se renombró: cambiarlo tocaría cron, worktrees, logs y gate sin ganar nada). Dos colas en orden: `cola/chatbot.md` mientras le queden 🔴, después `cola/plataforma-v1.md`. **Es el único loop que escribe en el repo `onia-platform`** |
 | `onia-cola` | **VPS** | `33 * * * *` (UTC) | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
-| `web-venta` | **VPS** | `48 */2 * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
+| `web-venta` | **casa** | `48 */2 * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
 | `recorrido-cliente` | **VPS** | `9 1,4,7,10,13,16,19,22 * * *` (UTC) | Recorre el camino del cliente de punta a punta (rama `claude/recorrido-cliente`) y dice **en qué paso exacto se rompe**, con la captura como prueba |
 
 ⚡ **Cadencia subida a cada hora el 2026-09-05 para `chatbot-cola` y `onia-cola`** (eran
@@ -441,6 +441,40 @@ auto-cura es correcta; lo que no puede es curar hacia una tabla que miente.
 
 Tras esa pausa quedaron corriendo siete. El 2026-09-05 se congelaron tres más (sección
 siguiente) y **quedan cuatro**.
+
+### 🔴 `canario-visual`: la pausa pasa a ser una DECISIÓN — 2026-09-06
+
+Hasta hoy figuraba acá como *pausado por cuota*, que es una pausa que se revierte sola el día
+que sobre cuota. Se cerró: **queda congelado, y no se muda a `nodo-casa`.** Las tres cosas que
+lo deciden estaban medidas y ninguna es la cuota:
+
+1. **A `nodo-casa` NO va** (`PLAN_HOMELAB.md` §1, fila `canario-visual`). **Es un instrumento
+   calibrado**: mide peso y milisegundos de las pantallas contra umbrales tomados desde el
+   enlace del VPS — para eso nació, la fuente de iconos pesaba 3,9 MB y tardaba 117 s. Desde
+   una casa, cada umbral pasa a medir el WiFi de Sergio Urcullo. Mudarlo no lo revive: lo
+   convierte en un generador de alarmas falsas.
+2. **En el VPS tampoco se revive hoy**, y no por cuota: **produce ítems de cola, no los cierra**
+   (sección *"El sistema integraba y auditaba, y no construía nada"*). La cola de Sergio Urcullo
+   tiene **83 tareas esperándole**. Un productor de ítems con la cola llena resta, no suma.
+3. **Y arrancaría mintiendo.** Su worktree estaba **268 commits atrás de `main`** el 2026-09-03
+   —el segundo peor de los once medidos—, y este archivo ya lo dice con su nombre: *«MIRA
+   pantallas y las compara contra archivos del repo; 268 commits atrás puede reportar un
+   defecto ya arreglado»*.
+
+⚠️ **Lo que se pierde, dicho de frente: hoy NADIE mira una pantalla de cliente por horario.**
+Verificado el 2026-09-06, no recordado: la línea del VPS está comentada desde el 04-sep, y la
+tarea de Windows quedó `enabled:false` el 01-sep (último `lastRunAt` 2026-09-01T18:26Z). **Es
+el único canario visual que existe, y no corre en ninguna de las tres máquinas.**
+
+**Lo que sí queda cubierto, y lo que no.** `recorrido-cliente` (`9 1,4,7,…,22`) recorre el camino
+del cliente de punta a punta y dice en qué paso se rompe, **con la captura como prueba** — así
+que un cliente que no puede registrarse, agendar o pagar **sigue teniendo quién lo encuentre**.
+Lo que nadie mide mientras tanto es lo otro que el canario medía: **peso y milisegundos** de las
+pantallas. Una regresión de rendimiento hoy entra sin que nada la vea.
+
+**Se revive cuando** vuelva a haber un carril que cierre los ítems que produce —o sea, después
+de la v1.0—, y **el día que se revive va en el VPS, no en casa**, y con su worktree puesto al día
+antes de la primera vuelta.
 
 ## Congelados el 2026-09-05 (objetivo: terminar `onia-platform` y cerrar 5 clientes con la v1.0) — NO rearmar
 
