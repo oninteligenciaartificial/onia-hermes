@@ -303,11 +303,46 @@ y sin operar. Acá se opera, con verificación por ítem.
 
       Los doce módulos 🟡 con su pantalla están en `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` §4.
 
-- [ ] 🟡 **Los agentes de IA (`/agents`) se venden como módulo y el catálogo se corrigió a sí
-      mismo dos veces sobre si corren solos.** Decidir en firme: se agendan con cron propio, o se
-      venden como disparo manual — y que la pantalla diga exactamente eso.
+- [x] 🟡 **Los agentes de IA (`/agents`) — DECIDIDO Y ATADO el 2026-09-05: corren solos, con cron
+      propio, UNA vez al día.** No hace falta una tercera corrección del catálogo: §7 ya dice la
+      verdad y ahora hay un gate que la sostiene.
 
-      Las dos correcciones sucesivas están en `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` §7.
+      **La decisión, medida contra producción — no contra el doc:**
+      `crontab -l` → `0 11 * * * /root/bin/run-onia-agents-cron.sh` (07:00 La Paz), y
+      `/var/log/onia-agents-cron.log` muestra corridas diarias con `http=200`, la última el
+      2026-09-05 con `ran:6`. En el contenedor, `AGENTS_RUNTIME=1`. **Se venden como "corren
+      todos los días sin que hagas nada", y es cierto.**
+
+      **Y la pantalla NO decía exactamente eso — ese era el defecto real, no la indecisión.**
+      `agents-view.tsx` pintaba la cadencia con `Math.round(intervalMinutes / 60)` leyendo el
+      intervalo declarado del agente. Como al runtime lo despierta el cron **diario**, un
+      `intervalMinutes` más corto no acelera nada: sólo evita el `not_due`. El caso caro es el
+      **captador**, que declara `intervalMinutes: 30` → la pantalla mostraba **"corre cada 1 h"**,
+      y es el **único rol detrás de un add-on de pago** (`addon.captador`): quien lo comprara leía
+      una latencia **24× más rápida** que la que recibe.
+
+      **Alcance medido antes de arreglar:** ninguna org tiene hoy `addon.captador`
+      (`select … where "featureKey"='addon.captador'` → vacío), así que el daño estaba **latente**
+      — que es justo cuando sale barato atarlo.
+
+      **Arreglado** en `onia-platform` `5922faa` (rama `claude/chatbots-platform-review-0d1d09`):
+      la cadencia se topea contra el disparador real y se dice en días
+      (`lib/onia-core/modules/agents-cadencia.ts`). El test falló primero en rojo por el motivo
+      correcto — `expected 'corre cada 1 h' not to match /cada 1 h/` — y lleva el caso que YA
+      cumple, para que un helper que se rinda devolviendo `null` no pase en verde.
+      Gates: `tsc` 0 · `vitest` 3072 passed · `eslint` 0 errores.
+
+      ⚠️ **Commiteado, NO desplegado**: el contenedor sigue con el build viejo. Anotado en el
+      pedido de deploy que ya existe (`t_0268567b`), no en uno nuevo.
+
+      ⚠️ **`verificar_cola.js` marca `agents-cadencia.ts` como fantasma y NO lo es** — no hay que
+      investigarlo de cero la próxima vuelta: el verificador resuelve el repo hermano contra
+      `/root/loops/onia-platform`, que es el clon de `master`, y el archivo todavía vive sólo en
+      `claude/chatbots-platform-review-0d1d09`. Se apaga solo cuando `onia-cola` mergee. Se
+      confirma con `ls /root/loops/onia-platform-chatbot/lib/onia-core/modules/agents-cadencia.ts`.
+
+      Las dos correcciones sucesivas del catálogo están en
+      `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` §7.
 
 - [ ] ⚪ **Pendiente fiscal (`SIAT_EMISSION`) para facturar de verdad.** Va último a propósito:
       es un trámite externo, no código, y `/billing` ya funciona sin él. **No bloquea un cierre**
