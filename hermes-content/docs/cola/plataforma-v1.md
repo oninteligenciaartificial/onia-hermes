@@ -559,6 +559,59 @@ y sin operar. Acá se opera, con verificación por ítem.
       Cargá el primero en Servicios (con precio)»* — sin stock, y con el nombre que esa pantalla
       tiene **en su menú**.
 
+      **Avance 2026-09-06 — quinta tanda: importadora ya tiene a quién mirar, y la pantalla de
+      créditos le hablaba como a una tienda de barrio.** El bloqueo escrito acá («su única org es
+      de un cliente real, mirarla necesita el OK de Sergio Urcullo») estaba **vencido**: nació
+      antes que `scripts/alta_qa_rubro.mjs`, que da de alta una org QA propia sin tocar la del
+      cliente. Org `qa-modulos-rj7tv` (`proveegest-electrico`, plan professional, trial al
+      2026-09-20), cuenta `zz-qa-importadora-modulos@onia.com.bo`, dada de alta por el alta REAL
+      y con el onboarding recorrido por la UI (6/6 pasos OK, `onboardingCompletedAt` null →
+      `2026-09-06 17:05`, 5 filas de `doctor_schedules` escritas por el paso de equipo, cero
+      respuestas ≥400). Capturas en `/root/capturas-onboarding-importadora/`.
+
+      **7 de los 13 módulos del pack MIRADOS**, capturas en `/root/capturas-importadora/`
+      abiertas y leídas una por una, con el log de cada corrida al lado (**cero respuestas ≥400**
+      en las siete, así que ningún error boundary de chunk caído se leyó como bug del producto).
+      Sanas seis: `/dashboard`, `/comercio` (catálogo, «productos» es correcto acá: una
+      importadora sí vende cosas con stock), `/comercio/inventario`,
+      `/importadora/cotizaciones` («Cotizaciones B2B», estado vacío con salida),
+      `/importadora/costeo` y `/importadora/reprecio` — estas dos, excelentes y muy propias del
+      rubro (FOB, GA, subpartida NANDINA, TCO oficial del BCB, DS 5646, y *«el sistema no
+      inventa tasa»*).
+
+      🔴 **La que no: `/comercio/fiados`.** Su menú la llama **«Créditos»** y la pantalla se
+      titulaba **«Fiados y deudas»**, hablaba de *«fiados del mostrador»*, mostraba el KPI *«En la
+      calle»* y remataba con *«Los fiados se registran desde **la caja**»* — y **la caja no está
+      en el menú de importadora**. El estado vacío, que es el primer camino de todo cliente
+      nuevo, mandaba al dueño a una pantalla que él no tiene, a registrar algo que su negocio no
+      hace: un importador B2B no fía en el mostrador, da crédito comercial contra factura.
+      Captura: `/root/capturas-importadora/comercio-fiados.png`.
+
+      ✅ **ARREGLADO y atado** en `1f96d16` (`onia-platform`, rama del carril). No era un texto
+      sino **seis**: título, bajada, KPI, encabezado de sección, estado vacío y contador por
+      cliente. `lib/comercio/idioma-de-credito.ts` (nuevo, puro) **deriva** todo del pack —el
+      rótulo que ese pack le pone a la pantalla en su menú, y si la caja está en ese menú—, así
+      que un rubro nuevo nace cubierto; y se lee de la **ORG**, no de la sesión. Gate
+      `lib/comercio/idioma-de-credito.test.ts` con sujetos derivados de `VERTICAL_PACKS`,
+      verificado en ROJO reinyectando el defecto en su forma real. Verde: tsc 0 · vitest 3163 ·
+      eslint 0 errores. **Commiteado, NO desplegado** (sha comentado en `t_0268567b`).
+
+      ⚠️ **Y no era un rubro suelto: `gestios-servicios-profesionales` la llama «Por cobrar» en su
+      menú y leía exactamente lo mismo.** Son **2 de los 4 packs** que tienen esta pantalla. En la
+      tanda anterior miré `/comercio/fiados` con la sesión de servicios profesionales y **la di
+      por sana**: el defecto no se ve leyendo el texto —«fiado» es copy correcto y bien escrito—,
+      se ve cruzando el texto contra **el nombre que esa misma pantalla tiene en el menú del
+      rubro**. Una pantalla mirada no queda cubierta para siempre: queda cubierta para el eje que
+      se miró.
+
+      **Falta para cerrar el ítem:** los 6 módulos transversales de importadora que no entraron en
+      esta vuelta — `/inbox`, `/requerimientos`, `/empresa`, `/contabilidad`, `/team`, `/rrhh`.
+      Están mirados en otros rubros, pero no con la sesión de importadora, que es justo el eje que
+      acaba de fallar. Se retoman con
+      `node scripts/mirar_bandeja_dueno.mjs --email zz-qa-importadora-modulos@onia.com.bo --ruta /X
+      --salida /root/capturas-importadora/X.png` (ojo: `--salida` es un **archivo**, no una
+      carpeta; pasarle una carpeta muere con `unsupported mime type "null"`).
+
       El gate (`app/(dashboard)/comercio/caja/VentaForm.render.test.ts`) renderiza el form con los
       sujetos de `VERTICAL_PACKS` y lee el **texto visible**, no el HTML crudo — buscar la palabra
       en el markup la encontraría dentro de una clase, que es como un `includes("disabled")` da
