@@ -13,6 +13,13 @@
  *   node scripts/recorrido_cliente.mjs --escribir   # además ENVÍA el alta, carga un paciente y
  *                                                   # agenda una cita (filas zz-qa- reales) y las
  *                                                   # BORRA al terminar, contando lo que queda
+ *   node scripts/recorrido_cliente.mjs --solo-limpiar  # SIN navegador: sólo barre lo `zz-qa-`
+ *                                                   # propio que haya quedado vivo. Correrlo AL
+ *                                                   # ARRANCAR cada vuelta, antes del recorrido
+ *                                                   # completo — así un huérfano de una corrida
+ *                                                   # que se cortó antes de terminar (el recorrido
+ *                                                   # completo tarda 3-30 min) no sobrevive ni un
+ *                                                   # ciclo. Ver t_f52601e2, 2026-09-06.
  *
  * Escribe hermes-content/docs/recorrido/capturas/paso-NN-<nombre>.png y un resumen.json.
  *
@@ -36,6 +43,7 @@ import { execFileSync } from 'node:child_process';
 const RAIZ = process.cwd();
 const OUT = process.env.RECORRIDO_OUT || join(RAIZ, 'hermes-content', 'docs', 'recorrido', 'capturas');
 const ESCRIBIR = process.argv.includes('--escribir');
+const SOLO_LIMPIAR = process.argv.includes('--solo-limpiar');
 
 /**
  * La ruta con la que se REPORTA una captura en `resumen.json`, relativa a la raíz del repo.
@@ -1853,8 +1861,21 @@ async function main() {
 // LANZA el recorrido entero contra producción (crea cuenta, paciente y cita) y después mata al
 // proceso que lo importó con su `process.exit(0)`. Ya le pasó a otro carril con un gate suyo.
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  // 🔴 SIN NAVEGADOR, SIN CTX: existe porque el recorrido completo tarda 3-30 minutos y una
+  // vuelta puede soltar el turno antes de llegar a limpiarProduccion() (medido 2026-09-06,
+  // t_f52601e2: 4 corridas de ~188s dejaron 4 organizaciones + usuarios vivos en producción
+  // porque el recorrido nunca llegó al final). `--solo-limpiar` es la póliza: barre lo MÍO
+  // (forma `zz-qa-AAAA-MM-DD-HHMM`) sin depender de que el recorrido entero termine. Se corre
+  // SIEMPRE al arrancar la vuelta, antes del recorrido completo — así un huérfano de la vuelta
+  // anterior no sobrevive ni un ciclo.
+  if (SOLO_LIMPIAR) {
+    const r = limpiarProduccion();
+    console.log(JSON.stringify(r, null, 2));
+    process.exit(r.ok ? 0 : 1);
+  } else {
   main().catch((e) => {
     console.error('el recorrido no pudo arrancar:', e.message);
     process.exit(1);
   });
+  }
 }
