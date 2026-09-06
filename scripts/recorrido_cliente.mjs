@@ -13,6 +13,13 @@
  *   node scripts/recorrido_cliente.mjs --escribir   # además ENVÍA el alta, carga un paciente y
  *                                                   # agenda una cita (filas zz-qa- reales) y las
  *                                                   # BORRA al terminar, contando lo que queda
+ *   node scripts/recorrido_cliente.mjs --solo-limpiar  # SIN navegador: sólo barre lo `zz-qa-`
+ *                                                   # propio que haya quedado vivo. Correrlo AL
+ *                                                   # ARRANCAR cada vuelta, antes del recorrido
+ *                                                   # completo — así un huérfano de una corrida
+ *                                                   # que se cortó antes de terminar (el recorrido
+ *                                                   # completo tarda 3-30 min) no sobrevive ni un
+ *                                                   # ciclo. Ver t_f52601e2, 2026-09-06.
  *
  * Escribe hermes-content/docs/recorrido/capturas/paso-NN-<nombre>.png y un resumen.json.
  *
@@ -36,6 +43,7 @@ import { execFileSync } from 'node:child_process';
 const RAIZ = process.cwd();
 const OUT = process.env.RECORRIDO_OUT || join(RAIZ, 'hermes-content', 'docs', 'recorrido', 'capturas');
 const ESCRIBIR = process.argv.includes('--escribir');
+const SOLO_LIMPIAR = process.argv.includes('--solo-limpiar');
 
 /**
  * La ruta con la que se REPORTA una captura en `resumen.json`, relativa a la raíz del repo.
@@ -1429,9 +1437,44 @@ const PASOS = [
         await s.selectOption(real.v);
         elegido[/cat[áa]logo/i.test(opciones[0]?.t || '') ? 'motivo' : 'profesional'] = real.t;
       }
+      // 🔴 Un select vacío o sin el paciente del paso 6 no es "el producto no tiene con qué
+      // llenarlo": desde ae2273d (2026-08-23) el modal ofrece alta inline, dos centímetros arriba
+      // del desplegable — "+ Nuevo <cliente>" / "+ Nueva <cliente>", según el rubro. Medido
+      // 2026-09-06 (t_b777fb4e): declarar roto ANTES de probar ese camino le costó dos vueltas de
+      // otro carril investigando código sano. Se prueba acá; si el producto tampoco lo ofrece o
+      // falla, RECIÉN entonces es un defecto real.
+      let altaInline = null;
+      if (!elegido.paciente) {
+        const nuevoBtn = dlg.getByRole('button', { name: /^\+\s*(nuevo|nueva)\s/i }).first();
+        if (await nuevoBtn.count().catch(() => 0)) {
+          await nuevoBtn.click({ timeout: 5000 }).catch(() => {});
+          await page.waitForTimeout(400);
+          const nombreInput = dlg.locator('input[type=text]').first();
+          if (await nombreInput.isVisible().catch(() => false)) {
+            await nombreInput.fill(ctx.datoCargado);
+            const guardar = dlg.getByRole('button', { name: /guardar y seleccionar/i }).first();
+            const creado = page.waitForResponse((r) => /\/api\/patients(\?|$)/.test(r.url()) && r.request().method() === 'POST', { timeout: 15_000 }).catch(() => null);
+            await guardar.click({ timeout: 5000 }).catch(() => {});
+            const resp = await creado;
+            await page.waitForTimeout(1000);
+            const selCliente = dlg.locator('#cita-cliente');
+            const valor = await selCliente.inputValue().catch(() => '');
+            const texto = valor
+              ? await selCliente.locator(`option[value="${valor}"]`).innerText().catch(() => '')
+              : '';
+            altaInline = { intentado: true, statusPost: resp?.status ?? null, seleccionoAlPaciente: texto.trim() === ctx.datoCargado };
+            if (texto.trim() === ctx.datoCargado) elegido.paciente = texto.trim();
+          } else {
+            altaInline = { intentado: true, detalle: 'apreté "+ Nuevo/a" y no apareció el campo de nombre' };
+          }
+        }
+      }
       if (!elegido.paciente) {
         const vista = await mirar(page, 'paso-07b-cita-formulario.png');
-        return cerrar({ estado: 'roto', detalle: `el paciente "${ctx.datoCargado}" del paso 6 NO aparece en el desplegable de la cita. Ofrece: ${(elegido.pacientesOfrecidos || []).join(' · ') || '(nada)'}`, elegido, ...vista });
+        const conAlta = altaInline
+          ? ` — probé el alta inline ("+ Nuevo/a") y ${altaInline.seleccionoAlPaciente === false ? `no dejó al paciente seleccionado (POST /api/patients → ${altaInline.statusPost})` : altaInline.detalle}`
+          : ' — el modal tampoco ofrece un botón de alta inline ("+ Nuevo/a")';
+        return cerrar({ estado: 'roto', detalle: `el paciente "${ctx.datoCargado}" del paso 6 NO aparece en el desplegable de la cita. Ofrece: ${(elegido.pacientesOfrecidos || []).join(' · ') || '(nada)'}${conAlta}`, elegido, altaInline, ...vista });
       }
 
       // Mañana, día hábil, en hora de Bolivia: el server rechaza toda hora ya pasada, y lo que
@@ -1539,8 +1582,8 @@ const PASOS = [
       }
       return cerrar({
         estado: 'ok',
-        detalle: `cita ${fecha} ${elegido.hora} con ${elegido.paciente} agendada (201, id ${cita?.id || '?'}) y VISTA en la agenda de ${page.url()}`,
-        elegido, fecha, capturaFormulario: lleno.captura, ...agendaRecargada,
+        detalle: `cita ${fecha} ${elegido.hora} con ${elegido.paciente} agendada (201, id ${cita?.id || '?'}) y VISTA en la agenda de ${page.url()}${altaInline?.seleccionoAlPaciente ? ' — el paciente se dio de alta INLINE, desde el propio modal' : ''}`,
+        elegido, fecha, altaInline, capturaFormulario: lleno.captura, ...agendaRecargada,
       });
     },
   },
@@ -1853,8 +1896,21 @@ async function main() {
 // LANZA el recorrido entero contra producción (crea cuenta, paciente y cita) y después mata al
 // proceso que lo importó con su `process.exit(0)`. Ya le pasó a otro carril con un gate suyo.
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  // 🔴 SIN NAVEGADOR, SIN CTX: existe porque el recorrido completo tarda 3-30 minutos y una
+  // vuelta puede soltar el turno antes de llegar a limpiarProduccion() (medido 2026-09-06,
+  // t_f52601e2: 4 corridas de ~188s dejaron 4 organizaciones + usuarios vivos en producción
+  // porque el recorrido nunca llegó al final). `--solo-limpiar` es la póliza: barre lo MÍO
+  // (forma `zz-qa-AAAA-MM-DD-HHMM`) sin depender de que el recorrido entero termine. Se corre
+  // SIEMPRE al arrancar la vuelta, antes del recorrido completo — así un huérfano de la vuelta
+  // anterior no sobrevive ni un ciclo.
+  if (SOLO_LIMPIAR) {
+    const r = limpiarProduccion();
+    console.log(JSON.stringify(r, null, 2));
+    process.exit(r.ok ? 0 : 1);
+  } else {
   main().catch((e) => {
     console.error('el recorrido no pudo arrancar:', e.message);
     process.exit(1);
   });
+  }
 }
