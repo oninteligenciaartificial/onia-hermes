@@ -547,10 +547,56 @@ y sin operar. Acá se opera, con verificación por ítem.
       sacar la captura porque ese texto **no está** en `/settings` de estética. No se reporta lo
       que no se vio.
 
-      **Falta para cerrar el ítem:** servicios profesionales (no tiene org: se da de alta con
-      `scripts/alta_qa_rubro.mjs --rubro "Servicios profesionales"` + `onboarding_por_la_ui.mjs`,
-      los dos ya existen y son idempotentes) e importadora (org de un cliente real, `bolivian-
+      **Falta para cerrar el ítem:** importadora (org de un cliente real, `bolivian-
       electricidad-e6t21`, cuyo dueño es la cuenta de Sergio Urcullo — mirarla necesita su OK).
+
+      **Avance 2026-09-06 — cuarta tanda MIRADA: los 12 módulos de servicios profesionales, y
+      la CAJA le habla en comercio.** Org `qa-modulos-mrk0q` (`gestios-servicios-profesionales`,
+      plan professional, trial al 2026-09-20), cuenta `zz-qa-servicios-modulos@onia.com.bo`, dada
+      de alta por el alta REAL y con el onboarding recorrido por la UI (`onboardingCompletedAt`
+      null → `2026-09-06 15:05`). Capturas en `/root/capturas-servicios/` **abiertas y leídas una
+      por una**, con el log de cada corrida al lado: **cero respuestas ≥400 en las doce**, así que
+      ningún error boundary de chunk caído se leyó como bug del producto.
+
+      Sanas y con vocabulario propio del rubro —«tu estudio», «Clientes», «Servicios», nunca
+      «pacientes» ni «tu clínica»— once: `/dashboard`, `/comercio` («Servicios», «0 servicio(s)
+      cargados», «Cargá el primero con el botón «Nuevo servicio»»), `/patients` («Clientes»,
+      «Agregar primer cliente»), `/agenda`, `/appointments` («la disponibilidad de **tu
+      estudio**»), `/comercio/fiados`, `/requerimientos`, `/contabilidad`, `/team`, `/rrhh`,
+      `/empresa`. Los estados vacíos ofrecen la salida en todos.
+
+      🔴 **La que no: `/comercio/caja`.** Con cero servicios cargados, el bloque «Registrar venta»
+      dice *«Todavía no hay **productos vendibles**. Cargá el primero en el **catálogo** (con
+      precio y **stock**)»*. Un estudio contable o jurídico no vende productos, no tiene catálogo
+      —su menú y su pantalla se llaman **Servicios**— y **un servicio no tiene stock**. Y se
+      contradice con su propia hermana: `/comercio` ya deriva el idioma del pack (`esServicios`)
+      y dice «0 servicio(s) cargados», así que la caja manda al cliente a una pantalla que en su
+      menú no existe con ese nombre, a cargar un dato que su rubro no tiene.
+      Captura: `/root/capturas-servicios/comercio-caja.png`.
+
+      **Dónde está y cómo se arregla** (no hace falta investigarlo de cero):
+      `app/(dashboard)/comercio/caja/VentaForm.tsx:175`, texto fijo. El patrón correcto ya existe
+      a dos carpetas: `app/(dashboard)/comercio/page.tsx:32-36` deriva `esServicios` del pack y
+      elige la palabra. Falta pasarle esa señal al `VentaForm` desde su server component y un
+      gate con sujetos derivados de `VERTICAL_PACKS`, como el de
+      `lib/platform/copy-de-pantallas-compartidas.test.ts`. **NO se arregló en esta vuelta**: se
+      encontró con el tope de tiempo encima y el arreglo pide los tres gates (3.135 tests);
+      dejarlo a medio escribir rompe la regla de que el árbol compile solo.
+
+      **Confirmado que los dos defectos del alta NO eran de estética, son de todo rubro con
+      agenda** — se reprodujeron idénticos acá, lo que ensancha el pedido de deploy `t_0268567b`:
+      (1) el paso de horarios trae los **siete días en «Cerrado» con «Continuar» habilitado**
+      (`/root/capturas-onboarding-servicios/03-horarios.png`), y (2) el paso de datos encabeza
+      *«No pudimos encontrar tus datos, así que los cargamos juntos»* con etiquetas «No lo
+      encontramos — completalo» en cada campo, **entrando por «Completar el formulario», donde
+      nunca se buscó nada** (`/root/capturas-onboarding-servicios/02-negocio.png`).
+
+      ⚠️ **Un matiz que evita un diagnóstico falso:** acá la agenda **no** quedó muerta (5 filas
+      en `doctor_schedules`, lun-vie 09:00-18:00) pese a pasar el paso de horarios con todo
+      cerrado. No es que el defecto no aplique: las filas las escribió el **paso de equipo**, con
+      doctor asignado. O sea que el mismo camino por defecto deja la agenda viva o muerta según
+      si el rubro carga equipo, y medirlo sólo en un rubro habría dado por arreglado —o por
+      inexistente— un defecto que sigue vivo.
 
       Un verde falso que se cazó en el propio instrumento antes de que mintiera: por el camino
       «la org ya existía» salía con código 0 **sin confirmar el correo**, o sea declaraba
