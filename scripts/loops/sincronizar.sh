@@ -268,6 +268,10 @@ poner "$FUENTE/vigia-disco.sh"             "$DESTINO_BIN/onia-vigia-disco.sh"
 # puede avisar de su propia muerte (PLAN_HOMELAB.md §6). Sin lista de loops
 # mudados no hace nada, asi que es seguro tenerlo desplegado desde antes.
 poner "$FUENTE/vigia-loops-remotos.sh"     "$DESTINO_BIN/onia-vigia-loops-remotos.sh"
+# El vigia del CI de GitHub. Sin el, un `master` roto por Actions no se lo dice
+# a nadie: el 2026-09-06 un .ico en RGB lo tumbo y se supo 10 min despues, de
+# casualidad. Sale 0 y avisa una sola vez mientras le falte el token.
+poner "$FUENTE/vigia-ci.sh"                "$DESTINO_BIN/onia-vigia-ci.sh"
 poner "$FUENTE/aligerar-worktrees.sh"      "$DESTINO_BIN/onia-aligerar-worktrees.sh"
 poner "$FUENTE/respaldar-memoria-hermes.sh" "$DESTINO_BIN/onia-respaldar-memoria.sh"
 poner "$FUENTE/renovar-slots-bot.py"       "$DESTINO_BIN/onia-renovar-slots.py"

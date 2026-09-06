@@ -676,3 +676,21 @@ los rearma (apuntan a otro binario); si faltan, reponerlos a mano de esta lista.
 | `onia-drop-recordatorio.sh` | `45 22 * * *` | manda el drop del dia listo-para-pegar 15 min antes de las 19:00 La Paz |
 | `onia-vigia-embudo.sh` | `19 */6 * * *` | chequea landing, cal y Postiz; avisa SOLO al caerse o volver |
 | `onia-leads-vigia.sh` | `9 */2 * * *` | avisa solicitudes de acceso nuevas (access_requests) con datos de contacto |
+| `onia-vigia-ci.sh` | `*/10 * * * *` | avisa cuando un workflow de GitHub Actions pasa a rojo en `master` de `onia-platform`, y cuando se recupera. **Uno por episodio, no uno por vuelta.** Fuente: [`vigia-ci.sh`](../../../scripts/loops/vigia-ci.sh), probado por [`vigia-ci.test.sh`](../../../scripts/loops/vigia-ci.test.sh) (13 casos) |
+
+🔴 **El token del vigía de CI: dónde está y por qué es propio.** Vive en
+`/root/.config/onia/github-token` (root, `600`, fuera del repo y fuera de git). Es un
+**fine-grained PAT con `Actions: Read-only`** sobre `onia-platform`, que es privado.
+
+- **El `GITHUB_TOKEN` que ya está en el contenedor de n8n NO sirve**, y se probó: lee el repo
+  (200) pero devuelve **403 `Resource not accessible by personal access token`** en
+  `actions/runs`, en `check-runs` y en `status` — las tres puertas.
+- **Tampoco se copió el token de `gh` de la laptop.** `PLAN_HOMELAB.md` §5: una llave privada
+  que viaja entre máquinas deja de ser de una máquina, y revocarla te deja afuera a vos también.
+- ⚠️ **Trampa al instalarlo, pagada el 2026-09-06:** el comando usaba `read -s`, que **no muestra
+  nada al pegar**. Pareció que no había funcionado y el token quedó pegado **tres veces seguidas**
+  (279 bytes = 93 × 3), y la API contestó `Bad credentials`. Se detectó mirando la FORMA del
+  archivo (largo, saltos de línea, clases de caracteres) sin imprimir el valor. Un pedido de
+  credencial que no devuelve feedback se pega dos veces.
+- Si se pierde el VPS, se pierde con él: **no está versionado en ningún lado**, igual que
+  `loops-remotos.txt`.
