@@ -1437,9 +1437,44 @@ const PASOS = [
         await s.selectOption(real.v);
         elegido[/cat[áa]logo/i.test(opciones[0]?.t || '') ? 'motivo' : 'profesional'] = real.t;
       }
+      // 🔴 Un select vacío o sin el paciente del paso 6 no es "el producto no tiene con qué
+      // llenarlo": desde ae2273d (2026-08-23) el modal ofrece alta inline, dos centímetros arriba
+      // del desplegable — "+ Nuevo <cliente>" / "+ Nueva <cliente>", según el rubro. Medido
+      // 2026-09-06 (t_b777fb4e): declarar roto ANTES de probar ese camino le costó dos vueltas de
+      // otro carril investigando código sano. Se prueba acá; si el producto tampoco lo ofrece o
+      // falla, RECIÉN entonces es un defecto real.
+      let altaInline = null;
+      if (!elegido.paciente) {
+        const nuevoBtn = dlg.getByRole('button', { name: /^\+\s*(nuevo|nueva)\s/i }).first();
+        if (await nuevoBtn.count().catch(() => 0)) {
+          await nuevoBtn.click({ timeout: 5000 }).catch(() => {});
+          await page.waitForTimeout(400);
+          const nombreInput = dlg.locator('input[type=text]').first();
+          if (await nombreInput.isVisible().catch(() => false)) {
+            await nombreInput.fill(ctx.datoCargado);
+            const guardar = dlg.getByRole('button', { name: /guardar y seleccionar/i }).first();
+            const creado = page.waitForResponse((r) => /\/api\/patients(\?|$)/.test(r.url()) && r.request().method() === 'POST', { timeout: 15_000 }).catch(() => null);
+            await guardar.click({ timeout: 5000 }).catch(() => {});
+            const resp = await creado;
+            await page.waitForTimeout(1000);
+            const selCliente = dlg.locator('#cita-cliente');
+            const valor = await selCliente.inputValue().catch(() => '');
+            const texto = valor
+              ? await selCliente.locator(`option[value="${valor}"]`).innerText().catch(() => '')
+              : '';
+            altaInline = { intentado: true, statusPost: resp?.status ?? null, seleccionoAlPaciente: texto.trim() === ctx.datoCargado };
+            if (texto.trim() === ctx.datoCargado) elegido.paciente = texto.trim();
+          } else {
+            altaInline = { intentado: true, detalle: 'apreté "+ Nuevo/a" y no apareció el campo de nombre' };
+          }
+        }
+      }
       if (!elegido.paciente) {
         const vista = await mirar(page, 'paso-07b-cita-formulario.png');
-        return cerrar({ estado: 'roto', detalle: `el paciente "${ctx.datoCargado}" del paso 6 NO aparece en el desplegable de la cita. Ofrece: ${(elegido.pacientesOfrecidos || []).join(' · ') || '(nada)'}`, elegido, ...vista });
+        const conAlta = altaInline
+          ? ` — probé el alta inline ("+ Nuevo/a") y ${altaInline.seleccionoAlPaciente === false ? `no dejó al paciente seleccionado (POST /api/patients → ${altaInline.statusPost})` : altaInline.detalle}`
+          : ' — el modal tampoco ofrece un botón de alta inline ("+ Nuevo/a")';
+        return cerrar({ estado: 'roto', detalle: `el paciente "${ctx.datoCargado}" del paso 6 NO aparece en el desplegable de la cita. Ofrece: ${(elegido.pacientesOfrecidos || []).join(' · ') || '(nada)'}${conAlta}`, elegido, altaInline, ...vista });
       }
 
       // Mañana, día hábil, en hora de Bolivia: el server rechaza toda hora ya pasada, y lo que
@@ -1547,8 +1582,8 @@ const PASOS = [
       }
       return cerrar({
         estado: 'ok',
-        detalle: `cita ${fecha} ${elegido.hora} con ${elegido.paciente} agendada (201, id ${cita?.id || '?'}) y VISTA en la agenda de ${page.url()}`,
-        elegido, fecha, capturaFormulario: lleno.captura, ...agendaRecargada,
+        detalle: `cita ${fecha} ${elegido.hora} con ${elegido.paciente} agendada (201, id ${cita?.id || '?'}) y VISTA en la agenda de ${page.url()}${altaInline?.seleccionoAlPaciente ? ' — el paciente se dio de alta INLINE, desde el propio modal' : ''}`,
+        elegido, fecha, altaInline, capturaFormulario: lleno.captura, ...agendaRecargada,
       });
     },
   },
