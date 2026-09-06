@@ -10,11 +10,25 @@ import { precioStack } from "@/content/chatbot-precios";
 import { precioWebDesde } from "@/content/webs";
 import { bs, GRUPO, plan, type Plan } from "@/lib/pricing";
 
+/**
+ * Un rubro que el wizard OFRECE. Estar en la lista significa que se contrata
+ * hoy: no hay campo `disponible`, y la ausencia es a propósito.
+ *
+ * Lo había, en `true` para los cinco, y ese dato era el único interruptor de
+ * toda la maquinaria de obra del wizard: el badge "PRÓXIMAMENTE" del selector,
+ * la nota de lista de espera y una pantalla de resultado que dibujaba el rubro
+ * a medio armar. Apagada por un dato y no por código está ARMADA — el día que
+ * entre el sexto rubro, lo natural es darlo de alta como `disponible: false`, y
+ * el sitio empieza a exhibir obra sin que nada se ponga rojo.
+ *
+ * Lo que no está listo NO SE NOMBRA (Sergio, 2026-08-20): se deja fuera de la
+ * lista, y quien busque otro rubro cae en el escape de WhatsApp que ya está al
+ * pie del selector. Guarda: `obra-en-la-pantalla.test.ts`.
+ */
 export interface RubroOption {
   id: Rubro;
   nombre: string;
   desc: string;
-  disponible: boolean;
 }
 
 export const RUBRO_OPTIONS: readonly RubroOption[] = [
@@ -22,35 +36,30 @@ export const RUBRO_OPTIONS: readonly RubroOption[] = [
     id: "dental",
     nombre: "Dental",
     desc: "Clínicas y consultorios dentales",
-    disponible: true,
-  },
-  {
-    id: "comercio",
-    nombre: "Comercio",
-    desc: "Tiendas y comercios",
-    disponible: true,
   },
   {
     // Autorizado 2026-08-15 tras QA del embudo completo en produccion: registro,
     // onboarding con vocabulario propio, panel, /agenda y /comercio/caja
     // operativos, cero errores HTTP. El registro del producto lo vende.
+    id: "comercio",
+    nombre: "Comercio",
+    desc: "Tiendas y comercios",
+  },
+  {
     id: "servicios",
     nombre: "Servicios",
     desc: "Estudios y profesionales que agendan y cobran",
-    disponible: true,
   },
   {
     id: "proveedores",
     nombre: "Importadora",
     desc: "Importadoras y distribuidoras",
-    disponible: true,
   },
   {
     // Tambien contratable (QA 2026-08-15). El wizard no la listaba.
     id: "estetica",
     nombre: "Estética y spa",
     desc: "Centros de estética, spas y peluquerías",
-    disponible: true,
   },
 ] as const;
 
@@ -58,13 +67,12 @@ export const RUBRO_OPTIONS: readonly RubroOption[] = [
  * Unica fuente de verdad de "que rubro se puede contratar hoy". La usan el
  * selector del wizard y `recomendar()`; antes `recommend.ts` lo tenia
  * hardcodeado en "dental" y los dos datos se contradecian.
+ *
+ * Hoy es "está en la lista": ofrecer y poder entregar son lo mismo.
  */
 export function esRubroDisponible(rubro: Rubro): boolean {
-  return RUBRO_OPTIONS.some((o) => o.id === rubro && o.disponible);
+  return RUBRO_OPTIONS.some((o) => o.id === rubro);
 }
-
-export const NOTA_PROXIMAMENTE =
-  "Este rubro lo armamos con vos, sobre el motor que ya corre. Seguí: registramos tu caso y te contactamos con la propuesta armada.";
 
 export const ESCAPE_WA_URL = waLink(
   "Hola, mi rubro no está en la lista de Onia. Mi negocio es: ",
@@ -202,64 +210,6 @@ export const FALTA_COPY: Record<"web" | "chatbot", { nombre: string; copy: strin
 };
 
 export const FALTA_TAG = "servicio aparte, con su propio precio";
-
-/**
- * Ensamblaje a medio armar de la variante B — mismos labels que
- * RUBROS[].blocks de components/sections/rubros.tsx (spec §2.5).
- * Si cambian allá, cambiar acá.
- */
-export const PROXIMO_ASSEMBLY: Record<
-  Exclude<Rubro, "dental">,
-  { nombre: string; blocks: readonly string[]; built: number }
-> = {
-  comercio: {
-    nombre: "Comercio",
-    blocks: [
-      "Cuenta y usuarios (base común)",
-      "Inventario",
-      "Ventas y cobro QR",
-      "Facturación",
-    ],
-    built: 1,
-  },
-  servicios: {
-    nombre: "Servicios",
-    blocks: [
-      "Cuenta y usuarios (base común)",
-      "Agenda de trabajos",
-      "Presupuestos",
-      "Cobros",
-    ],
-    built: 1,
-  },
-  proveedores: {
-    nombre: "Importadora",
-    blocks: [
-      "Cuenta y usuarios (base común)",
-      "Pedidos y entregas",
-      "Stock y cuentas por cobrar",
-      "Costeo de importación",
-    ],
-    built: 1,
-  },
-  estetica: {
-    nombre: "Estética y spa",
-    blocks: [
-      "Cuenta y usuarios (base común)",
-      "Agenda y clientas",
-      "Tratamientos",
-      "Caja y cobros",
-    ],
-    built: 1,
-  },
-};
-
-/** Lo que SÍ existe hoy para rubros en construcción (se cotiza, sin cifras). */
-export const HOY_EXISTE: readonly string[] = [
-  "Página web",
-  "Chatbot de WhatsApp",
-  "Automatizaciones",
-] as const;
 
 /* ---- labels para el mensaje de WhatsApp (spec §4) ---- */
 
