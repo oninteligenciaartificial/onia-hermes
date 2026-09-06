@@ -49,6 +49,12 @@ Valores exactos en [`tokens.css`](tokens.css). Lo que no se puede poner en una v
 - **El precio es el segundo foco**, después del nombre. Nunca del mismo tamaño que la
   descripción.
 - **Divisor hairline sólo en layout A.** En los demás, el aire separa.
+- **Etiqueta de procedencia** (`open source`, `plan gratis`) debajo del precio, en el mismo
+  tratamiento que el handle — mono, mayúscula, gris. Lee como dato técnico y no compite con
+  el precio. Es opcional: se pone sólo donde es **verificable**.
+- **El verde marca propiedad, no decora.** En «Mi stack» el único objeto con el verde de
+  Onia es Hermes, que es lo único que escribió Sergio Urcullo: dice "ésta es mía" sin gastar
+  una palabra. Relleno verde + glifo negro (8,72:1), nunca verde como tinta.
 
 ## Tipografía — ✅ INTER, aprobada por Sergio Urcullo (06-sep, mirando el A/B)
 
@@ -108,6 +114,19 @@ aparte y deja el A/B mirable.
    Onia—, pero Chatwoot con "Bs 0" al lado le enseña al lector el camino para saltearse
    el producto. Era la única lámina que le daba un motivo para **no** comprar.
    **La regla:** en build-in-public se muestra con qué trabajás, no con qué se replica lo
-   que cobrás. Al sacar una lámina hay que barrer los conteos: portada, remate del cierre
-   y total (acá "SEIS"→"CINCO", "cuatro"→"tres"), o la pieza se contradice sola — es la
-   misma coherencia número↔objetos que exige `statement-3d-minimal`.
+   que cobrás. Al sacar o meter una lámina hay que barrer los conteos: portada, remate del
+   cierre y total — o la pieza se contradice sola. Es la misma coherencia número↔objetos que
+   exige `statement-3d-minimal`. Ya se barrió dos veces el 06-sep: SEIS→CINCO al sacar
+   Chatwoot, y CINCO→SIETE al entrar Notion y Hermes.
+8. **La procedencia de una herramienta se verifica antes de escribirla, no después.** En la
+   tanda del 06-sep las tres suposiciones fáciles eran falsas o no comprobables:
+   **HyperFrames NO es nuestro** (es `heygen-com/hyperframes`, de terceros — por eso su
+   lámina no lleva etiqueta de autoría y sólo afirma un uso propio); **Hermes sí es de
+   Sergio Urcullo** (`hermes-content/deploy/hermes-agent/SOUL.md`, "el jefe de gabinete de
+   Sergio") y él lo declaró **open source**; y el **plan de Notion no está registrado en
+   ningún lado del repo** — el "Bs 0" asume plan gratis y sigue pendiente de su confirmación.
+   Un precio sin verificar en pieza pública es justo lo que prohíbe la regla de fuente única.
+9. **"Homelab" es de Sergio Urcullo, con el matiz anotado.** Pidió esa palabra en lugar de
+   "VPS Hostinger". El servidor es un KVM **alquilado**, no hardware en su casa, así que la
+   bajada no afirma que esté ahí: dice "un solo servidor que administro yo". El título usa el
+   término de la cultura self-hosted sin sostener un dato falso.

@@ -109,8 +109,25 @@ ICONOS = {
     ),
     "hyperframes": _squircle(
         "#1D1D1F",
-        '<rect x="58" y="72" width="140" height="112" rx="14" fill="none" stroke="#00C661" stroke-width="10"/>'
-        '<path d="M112 106 L152 128 L112 150 Z" fill="#00C661"/>',
+        '<rect x="58" y="72" width="140" height="112" rx="14" fill="none" stroke="#FFFFFF" stroke-width="10"/>'
+        '<path d="M112 106 L152 128 L112 150 Z" fill="#FFFFFF"/>',
+    ),
+    "notion": _squircle(
+        "#FFFFFF",
+        '<path d="M92 176 V88 L164 176 V88" stroke="#1D1D1F" stroke-width="15" fill="none"'
+        ' stroke-linecap="square" stroke-linejoin="miter"/>',
+        borde="#D2D2D7",
+    ),
+    # Hermes lleva el verde de Onia y es el UNICO objeto que lo lleva: dice "esta es mia"
+    # sin gastar una palabra. Relleno verde con glifo negro — el tratamiento de §7 que mide
+    # 8,72:1; el verde como tinta reprueba AA.
+    "hermes": _squircle(
+        "#00C661",
+        '<circle cx="128" cy="128" r="26" fill="#0A0A0A"/>'
+        '<circle cx="70" cy="80" r="15" fill="#0A0A0A"/><circle cx="186" cy="80" r="15" fill="#0A0A0A"/>'
+        '<circle cx="70" cy="176" r="15" fill="#0A0A0A"/><circle cx="186" cy="176" r="15" fill="#0A0A0A"/>'
+        '<path d="M84 90 L112 114 M172 90 L144 114 M84 166 L112 142 M172 166 L144 142"'
+        ' stroke="#0A0A0A" stroke-width="10" stroke-linecap="round"/>',
     ),
 }
 
@@ -123,8 +140,8 @@ LAMINAS = [
     {
         "layout": "D",
         "contexto": "Todo mi negocio corre con",
-        "remate": "CINCO COSAS",
-        "pie": "y tres cuestan",
+        "remate": "SIETE COSAS",
+        "pie": "y cinco cuestan",
         "pie_hl": "Bs 0",
     },
     {
@@ -137,16 +154,20 @@ LAMINAS = [
     {
         "layout": "E",
         "icono": "vps",
-        "nombre": "VPS Hostinger",
-        "desc": "4 vCPU, 16 GB, 41 contenedores corriendo.\nTodo lo que viene abajo vive acá adentro.",
+        # "Homelab" es la palabra que pidio Sergio Urcullo en lugar de "VPS Hostinger".
+        # La bajada NO afirma que el hardware este en su casa —es un KVM alquilado—, asi
+        # que el titulo usa el termino de la cultura self-hosted sin sostener un dato falso.
+        "nombre": "Homelab",
+        "desc": "4 vCPU, 16 GB, 41 contenedores corriendo.\nUn solo servidor que administro yo, y todo\nlo que viene abajo vive acá adentro.",
         "precio": "Bs 461/mes",
     },
     {
         "layout": "E",
         "icono": "n8n",
         "nombre": "n8n",
-        "desc": "Las automatizaciones: embudo, seguimientos, avisos.\nVive dentro del VPS, así que no suma un peso.",
+        "desc": "Las automatizaciones: embudo, seguimientos, avisos.\nCorre en mi servidor, así que no suma un peso.",
         "precio": "Bs 0",
+        "etiqueta": "Open source",
     },
     {
         "layout": "E",
@@ -154,6 +175,17 @@ LAMINAS = [
         "nombre": "WhatsApp Business",
         "desc": "El canal donde se atiende. El transporte de Meta\nlo paga la cuenta del negocio, no yo.",
         "precio": "Bs 0",
+    },
+    # ⚠️ El plan de Notion NO esta verificado en ningun lado del repo. "Bs 0" asume plan
+    # gratis y queda PENDIENTE de confirmacion de Sergio Urcullo: un precio sin verificar en
+    # pieza publica es justo lo que prohibe la regla de fuente unica.
+    {
+        "layout": "E",
+        "icono": "notion",
+        "nombre": "Notion",
+        "desc": "Donde vive cada decisión, cada documento y la\nbiblioteca de la comunidad. Un solo lugar, no doce.",
+        "precio": "Bs 0",
+        "etiqueta": "Plan gratis",
     },
     # Chatwoot SALIO de la pieza (Sergio Urcullo, 06-sep). No es pudor: es la capa que hace
     # funcionar el chatbot que se vende desde Onia Platform. Las otras cinco herramientas no
@@ -163,13 +195,28 @@ LAMINAS = [
     {
         "layout": "E",
         "icono": "hyperframes",
+        # Sin etiqueta de autoria a proposito: HyperFrames es `heygen-com/hyperframes`, de
+        # terceros. La bajada solo afirma un uso propio, que si es verificable.
         "nombre": "HyperFrames",
         "desc": "Video desde HTML. El teaser de la comunidad\nse renderizó en el servidor en 30 segundos.",
         "precio": "Bs 0",
     },
+    # El giro, justo antes del cierre: la unica del stack que escribio el, y encima abierta.
+    # Hermes vive en hermes-content/deploy/hermes-agent/SOUL.md ("el jefe de gabinete de
+    # Sergio"). Open source por decision de Sergio Urcullo (06-sep) — es su codigo y su
+    # licencia. OJO: hoy no hay repo publico enlazable; si la lamina lo dice, alguien lo va
+    # a pedir en los comentarios.
+    {
+        "layout": "E",
+        "icono": "hermes",
+        "nombre": "Hermes",
+        "desc": "Mi jefe de gabinete, y lo escribí yo. Un agente que\nvive en el servidor con su propia memoria, coordina\nlos bots y me avisa cuando algo se rompe.",
+        "precio": "Bs 0",
+        "etiqueta": "Open source",
+    },
     {
         "layout": "D",
-        "contexto": "Cinco herramientas, dos facturas",
+        "contexto": "Siete herramientas, dos facturas",
         "remate": "Bs 2.765",
         "sub": "al mes. Y la parte grande es para construir,\nno para que el negocio siga funcionando.",
         # El CTA reusa el mismo highlight verde de la portada en vez de un boton de ancho
@@ -235,6 +282,10 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 /* Un solo tamano para todo el precio, unidad incluida: es como lo muestran las refs
    5/6/7 ("$20/mes"). Con la unidad en otro cuerpo quedaba pegada y desalineada. */
 .precio{{font-size:92px;margin-top:58px}}
+/* Etiqueta de procedencia (open source / plan gratis). Mismo tratamiento que el handle
+   —mono, mayuscula, gris— para que lea como dato tecnico y no compita con el precio. */
+.etiqueta{{font-family:'OniaMono',monospace;font-size:25px;font-weight:500;
+  letter-spacing:.08em;text-transform:uppercase;color:#A1A1A6;margin-top:24px}}
 .sub{{font-size:38px;color:var(--muted);line-height:1.4;margin-top:30px;
   white-space:pre-line;letter-spacing:-.01em}}
 /* chip en su propia linea: en linea con el texto gris la frase se partia en dos y el
@@ -259,10 +310,12 @@ def markup(lamina):
             cuerpo += (f'<div class="cta"><span class="hl">{lamina["cta_hl"]}</span>'
                        f'<span class="cta-gris">{lamina["cta_gris"]}</span></div>')
         return cuerpo
+    etiqueta = (f'<div class="etiqueta">{lamina["etiqueta"]}</div>'
+                if lamina.get("etiqueta") else "")
     return (f'<div class="obj">{ICONOS[lamina["icono"]]}</div>'
             f'<div class="display nombre">{lamina["nombre"]}</div>'
             f'<div class="desc">{lamina["desc"]}</div>'
-            f'<div class="display precio">{lamina["precio"]}</div>')
+            f'<div class="display precio">{lamina["precio"]}</div>{etiqueta}')
 
 
 def render(tipo, out_dir):
@@ -312,7 +365,7 @@ window.addEventListener('load', function(){
       return rects.length ? Math.max.apply(null, rects.map(function(x){return x.width})) : 0;
     }
     var out = ['FUENTE|' + ok];
-    document.querySelectorAll('.remate,.nombre,.precio,.desc,.contexto,.pie,.sub,.cta')
+    document.querySelectorAll('.remate,.nombre,.precio,.desc,.contexto,.pie,.sub,.cta,.etiqueta')
       .forEach(function(el){
         out.push('SONDA|' + el.className.replace(/display /,'') + '|' + Math.round(ancho(el)));
       });
