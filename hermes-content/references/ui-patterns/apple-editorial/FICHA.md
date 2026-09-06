@@ -33,7 +33,7 @@ dos patrones — no una variante de estilo.
 | **C** | Duelo 2-up con dato de remate, fondo crema, acento serif | 3 | contraste con cifra |
 | **D** | Statement puro: texto centrado, sin objeto | 4 | portada, transición, CTA |
 | **E** | Ficha de producto: objeto + nombre gigante + 2-3 líneas gris + **precio gigante** | 5,6,7 | el carrusel-stack, una cosa por lámina |
-| **F** | Portada con foto recortada sobre gris claro | 8 | presentación — 🔴 **bloqueado**: no hay foto de Sergio Urcullo recortable en este carril |
+| **F** | Portada con foto recortada sobre gris claro | 8 | ✅ construido — `--pieza portada-f`. Foto recortada por `recortar-foto.py` (croma local, sin generación ni créditos) |
 
 ## Receta visual (medida, no a ojo)
 
@@ -85,6 +85,14 @@ Lo decide Sergio Urcullo. Este patrón no toca §7 ni el trío: vendoriza su can
 aparte y deja el A/B mirable.
 
 ## Trampas (se van llenando al costo de un render)
+
+0. 🔴 **El encuadre de la foto decide qué se puede pedir.** El 06-sep Sergio Urcullo pidió
+   "pantalón de lino blanco" y "un Rolex Datejust" sobre su foto. La foto es un **busto
+   cortado al pecho**: no hay muñecas ni piernas en cuadro. El reloj no tiene dónde ir, y el
+   pantalón no sería un retoque sino **generar el cuerpo entero desde el pecho para abajo** y
+   pegarle la cabeza — un cuerpo sintético con su cara, no una foto suya.
+   **Antes de aceptar un pedido de retoque, mirar qué hay en el encuadre.** Con una foto de
+   cuerpo entero los dos pedidos son un retoque normal; con un busto son otra cosa.
 
 1. **La sombra de `statement-3d-minimal` es demasiado dura acá.** `.25` sobre un squircle
    plano lo despega del fondo y rompe la calma. Va `.14`.

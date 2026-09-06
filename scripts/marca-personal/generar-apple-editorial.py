@@ -292,6 +292,21 @@ FONTS_PATRON = REPO / "hermes-content/references/ui-patterns/apple-editorial/fon
 FONTS_MARCA = REPO / "hermes-content/brand/fonts"
 MONO_WOFF2 = FONTS_MARCA / "SplineSansMono-var-latin.woff2"
 
+# Layout F — portada con foto recortada (referencia bastian.xu, la #8 del batch).
+# La foto sale de recortar-foto.py: croma local, sin generacion ni creditos.
+PORTADA_F = [
+    {
+        "layout": "F",
+        "nombre": "Soy Sergio Urcullo,",
+        # Dos lineas exactas. La version larga dejaba "bolivianos" huerfano en una tercera
+        # linea: el salto manual no controla el wrap, lo controla el largo del texto.
+        "sub": "y automatizo negocios bolivianos\npara que dejen de hacer todo a mano.",
+        "foto": "sergio-chroma.png",
+    },
+]
+
+PIEZAS = {"mi-stack": None, "portada-f": PORTADA_F}  # mi-stack se resuelve a LAMINAS abajo
+
 FUENTES = {
     # Maxima fidelidad con las referencias que mando Sergio Urcullo. Vendorizada aca,
     # no adoptada como fuente de marca: esa decision no la toma un generador.
@@ -351,12 +366,32 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 .cta{{margin-top:70px;font-size:40px;color:var(--muted);letter-spacing:-.01em}}
 .cta .hl{{display:inline-block;margin-bottom:22px}}
 .cta-gris{{display:block}}
+/* layout F — portada con foto recortada (referencia bastian.xu). El texto va arriba y
+   alineado a la IZQUIERDA, no centrado: en la referencia el bloque de nombre ancla la
+   esquina y la foto entra por abajo a sangre. Centrarlo lo vuelve una placa cualquiera. */
+.lienzo.f{{justify-content:flex-start;text-align:left;align-items:stretch;padding:120px 96px 0}}
+.f .nombre-f{{font-size:92px;line-height:1.0}}
+.f .sub-f{{font-size:44px;color:var(--muted);line-height:1.22;margin-top:18px;
+  letter-spacing:-.01em;max-width:820px;white-space:pre-line}}
+/* La foto sale del flujo y se apoya en el borde inferior: a sangre, como la referencia. */
+.f .foto{{position:absolute;left:50%;transform:translateX(-50%);bottom:0;
+  max-height:72%;width:auto;object-fit:contain;object-position:bottom}}
+/* El handle centrado caia ENCIMA del polo azul marino y no se leia. En F va al margen
+   derecho, sobre el gris del fondo, que es donde queda aire. */
+.f .handle{{right:96px;left:auto;text-align:right;bottom:52px}}
 .handle{{position:absolute;bottom:76px;left:0;right:0;font-family:'OniaMono',monospace;
   font-size:23px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;
   color:#A1A1A6}}"""
 
 
 def markup(lamina):
+    if lamina["layout"] == "F":
+        foto = LOGOS / lamina["foto"]
+        if not foto.exists():
+            raise SystemExit(f"Falta la foto recortada {foto}. Corré recortar-foto.py.")
+        return (f'<div class="display nombre-f">{lamina["nombre"]}</div>'
+                f'<div class="sub-f">{lamina["sub"]}</div>'
+                f'<img class="foto" src="{foto.as_uri()}">')
     if lamina["layout"] == "D":
         cuerpo = (f'<div class="contexto">{lamina["contexto"]}</div>'
                   f'<div class="display remate">{lamina["remate"]}</div>')
@@ -377,13 +412,13 @@ def markup(lamina):
             f'{lamina["precio"]}</div>{etiqueta}')
 
 
-def render(tipo, out_dir):
+def render(tipo, out_dir, laminas=None):
     out_dir.mkdir(parents=True, exist_ok=True)
     chrome = _chrome()
     hoja = css(tipo)
-    for i, lamina in enumerate(LAMINAS, 1):
+    for i, lamina in enumerate(laminas or LAMINAS, 1):
         html = (f"<!doctype html><html><head><meta charset='utf-8'><style>{hoja}</style></head>"
-                f"<body><div class='lienzo'>{markup(lamina)}"
+                f"<body><div class='lienzo{" f" if lamina["layout"] == "F" else ""}'>{markup(lamina)}"
                 f"<div class='handle'>{HANDLE}</div></div></body></html>")
         with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as fh:
             fh.write(html)
@@ -424,7 +459,7 @@ window.addEventListener('load', function(){
       return rects.length ? Math.max.apply(null, rects.map(function(x){return x.width})) : 0;
     }
     var out = ['FUENTE|' + ok];
-    document.querySelectorAll('.remate,.nombre,.precio,.desc,.contexto,.pie,.sub,.cta,.etiqueta')
+    document.querySelectorAll('.remate,.nombre,.precio,.desc,.contexto,.pie,.sub,.cta,.etiqueta,.nombre-f,.sub-f')
       .forEach(function(el){
         out.push('SONDA|' + el.className.replace(/display /,'') + '|' + Math.round(ancho(el)));
       });
@@ -436,15 +471,15 @@ window.addEventListener('load', function(){
 """.replace("__FAM__", nombre)
 
 
-def check(tipo):
+def check(tipo, laminas=None):
     """Rinde cada lamina midiendo, y falla si algun texto pasa el ancho util."""
     chrome = _chrome()
     hoja = css(tipo)
     sonda = sonda_js(FUENTES[tipo][0])
     fallos = []
-    for i, lamina in enumerate(LAMINAS, 1):
+    for i, lamina in enumerate(laminas or LAMINAS, 1):
         html = (f"<!doctype html><html><head><meta charset='utf-8'><style>{hoja}</style>"
-                f"{sonda}</head><body><div class='lienzo'>{markup(lamina)}"
+                f"{sonda}</head><body><div class='lienzo{" f" if lamina["layout"] == "F" else ""}'>{markup(lamina)}"
                 f"<div class='handle'>{HANDLE}</div></div></body></html>")
         with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as fh:
             fh.write(html)
@@ -473,24 +508,26 @@ def check(tipo):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--tipografia", choices=list(FUENTES), default="inter")
+    ap.add_argument("--pieza", choices=list(PIEZAS), default="mi-stack")
     ap.add_argument("--out", default=None)
     ap.add_argument("--check", action="store_true",
                     help="solo mide desborde de texto, no rinde PNG")
     args = ap.parse_args()
+    laminas = PIEZAS[args.pieza] or LAMINAS
 
     if args.check:
-        print(f"gate de desborde · tipografia={args.tipografia} · util={UTIL}px")
-        fallos = check(args.tipografia)
+        print(f"gate de desborde · {args.pieza} · tipografia={args.tipografia} · util={UTIL}px")
+        fallos = check(args.tipografia, laminas)
         for f in fallos:
             print(f"  DESBORDA  {f}")
         if fallos:
             raise SystemExit(f"{len(fallos)} desborde(s)")
-        print(f"  OK · {len(LAMINAS)} laminas dentro del margen")
+        print(f"  OK · {len(laminas)} laminas dentro del margen")
         return
 
-    destino = Path(args.out) if args.out else OUT_BASE / f"apple-mi-stack-{args.tipografia}"
-    print(f"apple-editorial · tipografia={args.tipografia} · {len(LAMINAS)} laminas")
-    render(args.tipografia, destino)
+    destino = Path(args.out) if args.out else OUT_BASE / f"apple-{args.pieza}-{args.tipografia}"
+    print(f"apple-editorial · {args.pieza} · tipografia={args.tipografia} · {len(laminas)} laminas")
+    render(args.tipografia, destino, laminas)
     print(f"OK -> {destino}")
 
 
