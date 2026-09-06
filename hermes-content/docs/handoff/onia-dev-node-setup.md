@@ -14,7 +14,7 @@ A mitad de sesión Sergio Urcullo sumó los pedidos del doc de infra de la sesi�
 
 | # | qué | estado |
 |---|---|---|
-| 1 | `web-venta` corriendo en `nodo-casa`, gate verde en las DOS máquinas, una vuelta exit 0 | 🟡 **mudado y corriendo**; falta confirmar el gate DEL NODO. §6 |
+| 1 | `web-venta` corriendo en `nodo-casa`, gate verde en las DOS máquinas, una vuelta exit 0 | ✅ **las tres cosas**, verificadas por separado. §2 |
 | 2 | `canario-visual` decidido y aplicado | ✅ congelado, con motivo y consecuencia escritos |
 | 3 | Hermes sin trabajos rotos en silencio | ✅ corriendo, verificado con una vuelta real |
 | 4 | `onia-vigia-aprobaciones.sh` versionado | ✅ **ya lo estaba** — el handoff anterior se equivocaba |
@@ -29,6 +29,7 @@ A mitad de sesión Sergio Urcullo sumó los pedidos del doc de infra de la sesi�
 | pieza | estado |
 |---|---|
 | **`web-venta` en `nodo-casa`** | ✅ `22:48:01Z ARRANCA` → `23:01:47Z TERMINA — 826s — exit 0 — 74 commit(s) — sin publicar: 0` |
+| **Gate del NODO** | ✅ `maquina: casa · loops en su cron: 1 · filas "casa": 1` · *"coinciden en id y horario, en las dos direcciones"* · `EXIT=0` |
 | Línea del VPS | ✅ retirada **22:38:02Z**, 10 min antes de la corrida de las `:48` — **sin solapamiento** |
 | Gate del VPS | ✅ *"coinciden en id y horario, en las dos direcciones"* · **3 loops** (eran 4) |
 | Vigía de loops remotos | ✅ **encendido para `web-venta`, cadencia 120**. Antes no vigilaba nada |
@@ -58,9 +59,10 @@ A mitad de sesión Sergio Urcullo sumó los pedidos del doc de infra de la sesi�
 
 **Nada sin commitear.** Árbol limpio, todo pusheado a `claude/onia-dev-node-setup-22a170`.
 
-**🟡 Falta UNA verificación, y es de una máquina que no se alcanza:** el gate del lado del
-nodo. No sale en su log porque `claude -p` no vuelca la salida de sus herramientas. Se cierra
-con el comando de §6.1, de solo lectura.
+**Nada.** La última verificación pendiente —el gate del lado del nodo— se cerró el 2026-09-06
+23:5x, tecleada por Sergio Urcullo en `nodo-casa`:
+`maquina: casa · loops en su cron: 1 · filas "casa": 1 · OK, en las dos direcciones · EXIT=0`.
+No salía en su log porque `claude -p` no vuelca la salida de sus herramientas.
 
 **🟡 El doc de infra de la sesión de producto no está en `main`.** Es su propio reclamo de
 visibilidad (#2.3) pasándole a su propio pedido: un pedido que no llega al integrador es un
@@ -137,27 +139,20 @@ tiene que llegar listo, idempotente, con guarda de máquina **y devolviendo feed
 
 ## 6. Qué depende de Sergio Urcullo
 
-**🟡 1. Una línea en `nodo-casa`**, de solo lectura. Cierra el objetivo 1:
-
-```
-sudo sh -c 'cd /root/loops/onia-hermes-web-venta && node scripts/loops_registrados.mjs; echo "EXIT=$?"'
-```
-
-**🔴 2. `ok t_30e607a8`** — publica `onia.com.bo`. 24 arreglos esperando desde el 2026-09-05
+**🔴 1. `ok t_30e607a8`** — publica `onia.com.bo`. 24 arreglos esperando desde el 2026-09-05
 22:58; la landing sirve el build del 04-sep. ⚠️ `t_e05a44d7` figura `archived` **sin haberse
 desplegado**: archivar no es desplegar.
 
-**🟡 3. Que el doc de infra llegue a `main`** (hoy sólo en `claude/usuarios-pricing-v1-cierre-db1230`).
+**🟡 2. Que el doc de infra llegue a `main`** (hoy sólo en `claude/usuarios-pricing-v1-cierre-db1230`).
 
-**🟡 4. Decidir si `nodo-casa` sobrevive a un reinicio.** Ahora importa más: **hay un loop de
+**🟡 3. Decidir si `nodo-casa` sobrevive a un reinicio.** Ahora importa más: **hay un loop de
 producción corriendo allá.** Mitigado por el vigía de loops remotos, que avisa si se calla.
 
 ---
 
 ## 7. Próximos pasos, en orden
 
-1. **La línea de §6.1** — es lo único que falta del objetivo 1.
-2. **`ok t_30e607a8`.**
+1. **`ok t_30e607a8`.**
 3. **Los otros 4 de la primera tanda** (`web-factory-dev`, `tendencias`, `lucia`,
    `marca-personal`): pausados en las dos máquinas, así que se mudan **sin la coreografía** —
    pero **la tabla sigue yendo antes que el cron del VPS**.
