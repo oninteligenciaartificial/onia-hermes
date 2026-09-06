@@ -345,6 +345,16 @@ y sin operar. Acá se opera, con verificación por ítem.
       Recorrer `/requerimientos` con datos reales sigue vivo, y cae en ese mismo ítem.
       Está listada como módulo en `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` §4.
 
+      ⚠️ **La explicación de arriba está VENCIDA — medido el 2026-09-06.** Decía que el rojo del
+      gate se apagaría solo «cuando `onia-cola` mergee», y ya mergeó: `HEAD` del worktree de
+      `onia-platform` **es ancestro de `origin/master`** y aun así
+      `__tests__/patients/ficha-por-rubro.test.ts` **no existe** (`ls` da *No such file*). O sea
+      el fantasma de las líneas 185 y 283 dejó de ser «todavía no llegó» y pasó a ser una
+      referencia a un archivo que no está: o lo renombraron en el merge, o nunca entró. Hay que
+      buscarlo y corregir las dos líneas, no volver a esperar. Se ve con:
+      `node scripts/verificar_cola.js hermes-content/docs/cola/plataforma-v1.md` (exit 1, 2
+      fantasmas, los dos por ese archivo).
+
 - [ ] 🟡 **Recorrer cada módulo 🟡 con datos reales y MIRARLO renderizado**, rubro por rubro de
       los cinco de la v1.0. Es kilometraje, no código: lo que se busca es dónde se rompe el
       camino, no qué reescribir. Se cruza con el loop `recorrido-cliente`, que ya hace esto de
@@ -411,6 +421,39 @@ y sin operar. Acá se opera, con verificación por ítem.
       Sergio Urcullo** — mirarla no se hace con una sesión ajena sin avisar; **estética y
       servicios profesionales no tienen ninguna org en producción**, así que hay que darlas de
       alta antes de poder mirarlas.
+
+      **Avance 2026-09-06 — el bloqueo de «no hay a quién mirar» está levantado para estética.**
+      Recontado primero contra la base, no contra este doc: las 5 orgs de producción eran 3 de
+      dental, 1 de comercio y 1 de importadora — cero de estética y cero de servicios
+      profesionales, tal como decía. Ahora hay una org de estética **dada de alta por el alta
+      REAL de producción**, no insertada por SQL: `zz-qa-estetica-modulos-6tzgb`,
+      `verticalTrackId=esteticagest-clinical`, plan `professional`, trial al 2026-10-06.
+      Instrumento nuevo y reusable: `scripts/alta_qa_rubro.mjs`
+      (`--rubro "Estética y spa" --negocio "ZZ QA Estetica Modulos"`), idempotente — la segunda
+      corrida encuentra la org y **no** crea una segunda.
+
+      Se hace por la pantalla y no por SQL a propósito: insertar la org saltearía justo lo que
+      hay que verificar y dejaría un sujeto que el producto nunca construyó (sin onboarding, sin
+      las filas que el alta escribe). Mirar módulos sobre eso no probaría nada del cliente real.
+      De paso quedó medido que **el alta de estética funciona de punta a punta**: ofrece el
+      rubro, acepta el formulario y crea la org con el track correcto.
+
+      ⚠️ **Dónde se retoma, y por qué no se miró ningún módulo todavía:** la sesión del dueño
+      entra (magiclink OK, correo confirmado con el token real del mail) pero la app la **manda a
+      `/onboarding`**, porque la org nueva no lo completó — `onboardingCompletedAt` es null y el
+      redirect es global, así que **ninguna** ruta de módulo se puede mirar hasta pasarlo.
+      Próximo paso concreto: completar el onboarding de esa org por la UI (no marcando la columna
+      a mano: eso fingiría el paso y dejaría la org sin la agenda por defecto ni el resto de lo
+      que el onboarding escribe), y recién ahí recorrer los 8 🟡 transversales con
+      `scripts/mirar_bandeja_dueno.mjs --email zz-qa-estetica-modulos@onia.com.bo --ruta /X`.
+
+      Un verde falso que se cazó en el propio instrumento antes de que mintiera: por el camino
+      «la org ya existía» salía con código 0 **sin confirmar el correo**, o sea declaraba
+      utilizable una cuenta que no podía entrar. La confirmación ahora corre en los DOS caminos.
+      El otro fallo fue mío y no del producto: la consulta de idempotencia preguntaba por
+      `public."User"`, tabla que no existe (es `public.profiles`), y el `catch` se tragaba el
+      error — el script llegó a reportar «el alta NO creó la organización» sobre un alta que
+      había funcionado perfecto.
 
 - [x] 🟡 **Los agentes de IA (`/agents`) — DECIDIDO Y ATADO el 2026-09-05: corren solos, con cron
       propio, UNA vez al día.** No hace falta una tercera corrección del catálogo: §7 ya dice la
