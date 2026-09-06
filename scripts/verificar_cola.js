@@ -188,6 +188,21 @@ function evidenciaDe(textoCrudo) {
     // `claude/` en los dos repos, asi que el prefijo alcanza para distinguirla.
     if (/^claude\//.test(ruta)) continue;
 
+    // Una ETIQUETA XML/HTML no es un archivo. La cola pega la salida de un `curl` para probar
+    // lo que sirve produccion: `<loc>https://onia.com.bo/terminos</loc>`. Tiene barra y termina
+    // en algo con forma de extension, asi que salia fantasma (medido el 2026-09-06 sobre
+    // COLA.md, item de la linea 1938). Ningun archivo de estos repos tiene `<` ni `>` en el
+    // nombre, asi que esto no puede tapar uno de verdad.
+    if (/[<>]/.test(ruta)) continue;
+
+    // Un TIPO MIME tampoco: `image/x-icon`, `text/html`. La cola los cita porque son la
+    // respuesta de un `curl -I` (medido el 2026-09-06: el item del favicon, linea 1856, pegaba
+    // su Content-Type y salia fantasma). Tienen barra, asi que caian en "esto parece una ruta".
+    // El recorte es angosto a proposito: se pide que el primer segmento sea un tipo MIME
+    // conocido Y que el subtipo no tenga punto. Un archivo de verdad dentro de una carpeta
+    // llamada `image/` lleva extension (`image/logo.png`) y se sigue verificando.
+    if (/^(image|text|application|audio|video|font|multipart)\/[a-z0-9+-]+$/i.test(ruta)) continue;
+
     // Una ruta se reconoce por tener separador o extension. "10 min" no es una ruta.
     if (/[\/]/.test(ruta)) { rutas.push(ruta); continue; }
 
@@ -254,6 +269,9 @@ const REPOS_HERMANOS = ['onia-platform'];
 const APPS_DEL_REPO = ['web-factory/apps/onia-platform'];
 
 function existeEnAlgunRepo(ruta, baseDir) {
+  // Una zona termina en barra y se resuelve como CARPETA, no como archivo: el indice de
+  // sufijos solo tiene archivos y le diria fantasma. Ver `existeComoCarpeta`.
+  if (ruta.endsWith('/')) return existeComoCarpeta(ruta, baseDir);
   if (fs.existsSync(path.resolve(baseDir, ruta))) return true;
   for (const app of APPS_DEL_REPO) {
     if (fs.existsSync(path.resolve(baseDir, app, ruta))) return true;
@@ -387,6 +405,32 @@ function indiceDe(baseDir) {
   caminar(clave, '', 0);
   indicePorNombre.set(clave, porNombre);
   return porNombre;
+}
+
+// Una CARPETA citada como zona (`app/servicios/`, `app/(sitio)/`) no es un archivo, pero
+// tampoco es algo que el gate deba ignorar: la cola la usa para decir DONDE vive un problema
+// ("las dos siguen en `app/servicios/`, el arbol viejo"), y una carpeta inventada es un
+// fantasma tan caro como un archivo inventado. Por eso se verifica en vez de descartarse.
+//
+// Se resuelve reusando el indice de archivos en lugar de construir uno de directorios: una
+// carpeta existe si algun archivo del repo la tiene de PREFIJO, cortando en limite de segmento.
+// Eso es lo que impide que esto afloje el gate — `app/inventada/` no matchea ningun archivo y
+// sigue saliendo fantasma.
+//
+// Medido el 2026-09-06: `app/servicios/` y `app/(sitio)/` salian fantasma sobre carpetas que
+// existen (viven bajo `web-factory/apps/onia-platform/src/`, asi que el prefijo que falta es
+// intermedio, igual que en el caso de las rutas parciales).
+function existeComoCarpeta(ruta, baseDir) {
+  const zona = ruta.replace(/\/+$/, '');
+  if (!zona) return false;
+  if (fs.existsSync(path.resolve(baseDir, zona))) return true;
+  for (const app of APPS_DEL_REPO) {
+    if (fs.existsSync(path.resolve(baseDir, app, zona))) return true;
+  }
+  for (const lista of indiceDe(baseDir).values()) {
+    if (lista.some((p) => p.startsWith(zona + '/') || p.includes('/' + zona + '/'))) return true;
+  }
+  return false;
 }
 
 function existeComoSufijo(ruta, baseDir) {
@@ -644,6 +688,9 @@ function selfCheck() {
   fs.writeFileSync(path.join(tmp, 'a', 'page.tsx'), 'x');   // ambiguo: dos con el mismo nombre
   fs.writeFileSync(path.join(tmp, 'b', 'page.tsx'), 'x');
   fs.writeFileSync(path.join(tmp, 'a', 'unico-nombre.tsx'), 'x');  // sin ambiguedad: uno solo
+  // Para el caso de ZONA: una carpeta existe si algun archivo la tiene de prefijo.
+  fs.mkdirSync(path.join(tmp, 'sub'), { recursive: true });
+  fs.writeFileSync(path.join(tmp, 'sub', 'algo.txt'), 'x');
 
   // El caso que da nombre al archivo: 4 de 6 eran fantasma.
   let r = revisarCola('## Ahora\n- [ ] Publicar algo · `existe.png` · 10 min\n', tmp);
@@ -978,6 +1025,34 @@ function selfCheck() {
   // Su reciproco: una ruta de verdad que arranque con otra cosa se sigue verificando.
   r = revisarCola('## Ahora\n- [ ] Ver `scripts/no-esta.js`\n', tmp);
   ok(r.problemas.some((p) => p.regla === 'fantasma'), 'la carve-out de ramas no tapa otras rutas');
+
+  // (6b) Una ETIQUETA XML/HTML no es un archivo: la cola pega la salida de un curl para probar
+  // lo que sirve produccion. Medido el 2026-09-06 sobre COLA.md (item de la linea 1938).
+  r = revisarCola('## Ahora\n- [ ] Traia `<loc>https://onia.com.bo/terminos</loc>` · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'una etiqueta XML no es una ruta');
+  // Su reciproco: sin las etiquetas, una ruta inexistente se sigue verificando.
+  r = revisarCola('## Ahora\n- [ ] Ver `carpeta/loc-no-esta.png`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'), 'la carve-out de XML no tapa otras rutas');
+
+  // (6c) Un TIPO MIME tampoco: es la respuesta de un `curl -I`, no un archivo. Medido el
+  // 2026-09-06: el item del favicon (linea 1856) pegaba su Content-Type y salia fantasma.
+  r = revisarCola('## Ahora\n- [ ] Devolvia `image/x-icon` y `text/html` · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'un tipo MIME no es una ruta');
+  // Su reciproco, que es lo que mantiene angosto el recorte: un archivo DENTRO de una carpeta
+  // que se llame igual que un tipo MIME lleva extension, y se sigue verificando.
+  r = revisarCola('## Ahora\n- [ ] Ver `image/no-esta.png`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'), 'la carve-out de MIME no tapa un archivo con extension');
+
+  // (6d) Una ZONA (carpeta con barra final) SI se verifica, como carpeta y no como archivo: la
+  // cola escribe "las dos siguen en `app/servicios/`" para decir donde vive un problema.
+  // Medido el 2026-09-06: `app/servicios/` y `app/(sitio)/` salian fantasma sobre carpetas que
+  // existen bajo `web-factory/apps/onia-platform/src/`.
+  r = revisarCola('## Ahora\n- [ ] Viven en `sub/`\n', tmp);
+  ok(!r.problemas.length, 'una carpeta que existe cuenta como evidencia');
+  // Su reciproco, sin el cual esto seria un "ignorar todo lo que termine en barra", que es
+  // exactamente como se afloja un gate sin darse cuenta.
+  r = revisarCola('## Ahora\n- [ ] Viven en `carpeta-inventada/`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'), 'una carpeta inventada sigue siendo fantasma');
 
   // (7) Una ruta PARCIAL con barra cuenta como evidencia si algun archivo del repo TERMINA en
   // ella. El sitio de venta cita `(sitio)/opengraph-image.tsx` —relativo a `src/app/`, no a la
