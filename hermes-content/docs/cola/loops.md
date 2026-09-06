@@ -161,7 +161,7 @@ manda. Un loop se compara **sólo contra el registro de su propia máquina**:
 |---|---|---|---|
 | `chatbot-cola` | **VPS** | `3 * * * *` (UTC) | **Carril `plataforma-v1` desde el 2026-09-05** (el id no se renombró: cambiarlo tocaría cron, worktrees, logs y gate sin ganar nada). Dos colas en orden: `cola/chatbot.md` mientras le queden 🔴, después `cola/plataforma-v1.md`. **Es el único loop que escribe en el repo `onia-platform`** |
 | `onia-cola` | **VPS** | `33 * * * *` (UTC) | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
-| `web-venta` | **VPS** | `48 */2 * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
+| `web-venta` | **casa** | `48 */2 * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
 | `recorrido-cliente` | **VPS** | `9 1,4,7,10,13,16,19,22 * * *` (UTC) | Recorre el camino del cliente de punta a punta (rama `claude/recorrido-cliente`) y dice **en qué paso exacto se rompe**, con la captura como prueba |
 
 ⚡ **Cadencia subida a cada hora el 2026-09-05 para `chatbot-cola` y `onia-cola`** (eran
