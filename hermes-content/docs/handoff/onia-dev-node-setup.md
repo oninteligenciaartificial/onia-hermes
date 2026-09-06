@@ -128,6 +128,20 @@ Esa línea es la que hace que nadie lo mire.
 2. `congelar-loops-vps.sh` ahora **avisa** de las líneas activas que nombran un carril y que él no
    puede comentar. Sale también en `--seco`, que es donde sirve: antes de aplicar, no después.
 
+#### 2026-09-06 — lo que se cerró al día siguiente
+
+| qué | evidencia |
+|---|---|
+| **Cadencia horaria aplicada sin ventana roja** | El vigilante esperó al merge y actuó solo: `22:41:36Z main ya la trae (intento 77)` → `APLICADO… loops activos: 4` → **`gate: exit=0`**. Las dos mitades quedaron juntas, que es lo que la trampa de `cola/loops.md` exige |
+| **El trabajo de Hermes corrió** | `onia-ordenador-tablero` → `Last run: 2026-09-06T10:01:48 ok · Execution: completed`. Venía de **15 fallos seguidos** por `drift_skip:silent`; lo destrabó fijarle el modelo |
+| **`hermes-vigia.sh` reencendido** | Se cumplió su propia condición escrita (*«se reactiva JUNTO con los jobs, no antes»*). Respaldo `/root/crontab.antes-de-encender-vigia-2026-09-06.txt`, 85 líneas, 4 loops antes y después |
+
+**Y el vigiía encontró algo en su primera corrida:** había un **incidente abierto desde el
+2026-09-04 20:12** que quedó colgado cuando lo apagaron. Lo cerró con **un solo** mensaje de
+recuperación y dejó `/var/lib/hermes-vigia/` limpio. No hay riesgo de ráfaga: solo cuenta
+como roto un trabajo cuyo último resultado sea `error:` **dentro de una ventana de 26 h**, y
+usa `cron list` sin `--all`, que no ve los pausados.
+
 #### Anotado, no perseguido
 
 - **`claude-guardia.sh` corre cada 10 min y SÍ llama a Claude.** No es cuota parada: solo dispara
