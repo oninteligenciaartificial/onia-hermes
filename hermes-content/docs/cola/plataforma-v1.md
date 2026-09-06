@@ -175,9 +175,123 @@ y sin operar. Acá se opera, con verificación por ítem.
       **NO DESPLEGADO** — commiteado en `claude/chatbots-platform-review-0d1d09`; llega al cliente
       con el pedido de deploy de `plataforma` que ya existe.
 
-- [ ] 🟡 **`/requerimientos` es una pantalla huérfana: existe, tiene su portal, y no la enlaza
-      ningún nav.** Decidir y ejecutar: se enlaza, o deja de contarse como módulo en el catálogo.
-      Las dos salidas son válidas; dejarla como está no.
+      ⚠️ **El carril de la sesión de control midió lo MISMO el mismo día, por su cuenta**
+      (rama `claude/onia-v1-servicios-98acde`, ítem de acá abajo). Los dos veredictos
+      coinciden y el arreglo del botón es uno solo (`2b4db83`); lo que la duplicación cuesta
+      es dos vueltas de dos carriles sobre el mismo pendiente. Se conservan las dos bitácoras
+      porque cada una midió algo que la otra no —acá el bug del gate, allá la base de
+      producción y el conteo de `/inbox`—, pero **el ítem está cerrado una sola vez**.
+
+- [x] 🟢 **Gate 1 — CONTADO el 2026-09-05. El que mentía era §8, no §2.**
+      El pedido original, tal cual estaba escrito:
+
+      > 🔴 **Gate 1 sobre el propio §8: su ítem 1 se contradice con la tabla de rubros del mismo
+      archivo.** §8 dice *"terminar el arreglo de servicios profesionales (`/patients` en su nav)
+      — es lo único que separa a ese rubro de ser vendible"*, y la tabla de §2 dice del mismo
+      rubro *"✅ sí — arreglado y verificado el 2026-08-30"*. **Uno de los dos miente y hay que
+      contarlo de nuevo**, no elegir el que convenga: abrir el nav de
+      `gestios-servicios-profesionales`, mirar si `/patients` está, y corregir el que esté mal.
+      Este carril arrastra la peor tasa medida del sistema — 46% de pendientes fantasma — así que
+      esto va primero.
+
+      > Fuente que se contradice: `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` (§2 contra §8).
+
+      **Cómo se contó.** Ninguno de los dos era «el que convenía»: §8 estaba vencido y §2 estaba
+      vencido **en su paréntesis**, no en su veredicto. `/patients` **sí** está en el nav de
+      servicios profesionales, etiquetado «Clientes» — y no solo en el repo:
+
+      | dónde | evidencia |
+      |---|---|
+      | fuente | `lib/platform/vertical-pack.ts:388`, dentro de `SERVICIOS_NAV_ITEMS` |
+      | `master` | `git show master:lib/platform/vertical-pack.ts` → la misma línea |
+      | **producción** | `{href:"/patients",icon:"group",label:"Clientes",roles:[...F]}` en el bundle de `/opt/onia-platform/runtime-next` (runtime del 2026-09-05 03:07 UTC) |
+      | comportamiento | 69 tests verdes: `patients/ficha-por-rubro.test.ts` + `lib/platform/api-guard.test.ts` |
+
+      §2 advertiía que abrirle `/patients` «le daría la ficha clínica a un estudio contable, con
+      sus APIs devolviendo 403». **Las dos objeciones ya estaban resueltas**, así que corregir §2
+      no fue borrar una advertencia viva: `fichaClinica()` esconde alertas médicas, alergias,
+      tipo de sangre, historia clínica y tratamientos —y es **derivada** de si el nav declara
+      `/treatments`, no una lista a mano—, y el segmento `patients/*` entero pasó a `CON_AGENDA`,
+      así que no hay 403.
+
+      **El conteo destapó un segundo fantasma en el mismo §8: su ítem 3.** Dice que a
+      `/requerimientos` hay que «enlazarla desde el nav». Ya está enlazada en **tres**
+      (`vertical-pack.ts:175,279,395`), con 12 apariciones en el bundle desplegado. El ítem de
+      `/requerimientos` de más abajo arrastraba lo mismo y quedó reescrito.
+
+      **La lección, que vale más que los dos ítems.** Los dos fantasmas eran del **mismo
+      archivo**: §8 se escribió una vez como lista de trabajo y **nadie la volvió a contar**
+      mientras §2 y el código sí avanzaban. Una lista de pendientes sin fecha de reconteo no
+      envejece: **miente**. Y miente hacia el lado caro — manda a construir lo que ya está
+      construido, que es exactamente el 46% que este carril tiene medido. Los dos ítems quedaron
+      `~~tachados~~` en el catálogo con la fecha del reconteo al lado.
+
+      **Cero cambios de código: no hacía falta ninguno.** El trabajo fue medir y corregir el
+      documento.
+
+- [x] 🟢 **Add-ons sin consumidor — CERRADO el 2026-09-05, y la premisa era falsa.**
+      El pedido original:
+
+      > 🔴 **Add-ons sin consumidor: o los consume algo, o salen del catálogo.**
+      `addon.inventory_advanced`, `addon.chatbot` y `addon.web`. El catálogo ya midió que
+      `addon.chatbot` **está muerta y la que trabaja es otra** (revisado 2026-08-30 y 2026-08-31:
+      sólo aparece en tests). Un add-on que se cobra y no habilita nada es una promesa rota
+      cobrada — el peor defecto posible con un cliente nuevo.
+
+      > Medición previa en `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` §5.
+
+      **Lo primero, porque cambia el ítem entero: ninguna de las tres se cobra.** El ítem temía
+      «un add-on que se cobra y no habilita nada». Contado en `lib/pricing.ts`, lo que se vende hoy
+      son seis cosas (`PUBLIC_PRICING_ADDONS`) y **ninguna** está detrás de estas claves: el chatbot
+      se cobra y se enciende con `addon.whatsapp`, e «Inventario avanzado» se retiró de la oferta el
+      2026-08-27. **La promesa rota cobrada no existía.**
+
+      **Y en la base de producción tampoco hay nada que limpiar** (2026-09-05):
+
+      | clave | filas en producción |
+      |---|---|
+      | `addon.whatsapp` | 4 activas — Clínica Sergio, Onia interna y dos ZZ QA |
+      | `module.agents` | 5 activas |
+      | `addon.chatbot` · `addon.web` · `addon.inventory_advanced` | **cero** |
+      | columna vieja `inventoryAddon` | `f` en las 6 organizaciones |
+
+      **Lo que SÍ estaba roto, y no era lo que el ítem miraba.** El backoffice marcaba esas claves
+      «Sin efecto todavía · Ninguna pantalla ni API lee esta capacidad» **y al lado dejaba apretar
+      Otorgar igual**: escribía la fila, quedaba «activa» en la ficha del cliente, y no encendía
+      nada. El cartel decía la verdad y el botón la desmentía. No eran tres claves sino **cinco**
+      — las tres del ítem más `addon.extra_seats` y `module.public_booking`, que `types.ts` ya
+      documentaba desde el 2026-09-01.
+
+      **Arreglado donde está el borde, no donde se ve.** `PATCH
+      /api/admin/organizations/[id]/entitlements` ya rechazaba una clave fuera del catálogo
+      cerrado (400); ahora rechaza también la que está en el catálogo y no consume nadie (409,
+      código distinto a propósito). El botón apagado es la capa de arriba. **Revocar sigue vivo**
+      en las dos: cerrar la puerta no puede dejar encerrado lo que alguien otorgó antes.
+      Commit `2b4db83` en `onia-platform`; 12 tests nuevos, suite 2979 verde, typecheck limpio.
+
+      **La tercera vía, contra el «o/o» del ítem.** Las claves **no** salen del catálogo: borrarlas
+      pierde el rastro de un otorgamiento viejo y rompería 31 usos de test, y `addon.chatbot` ya
+      tenía una decisión escrita de no borrarla (`CapacidadesOrg.render.test.ts`: *«no se borró del
+      catálogo a propósito»*). Se quedan visibles, marcadas, y **no otorgables**.
+
+      ⚠️ **De paso, un dato de §5 estaba al revés y sostiene una decisión de Sergio Urcullo.**
+      Decía que gatear `/inbox` con `addon.whatsapp` «baja una superficie viva — hoy ninguna org
+      tiene el add-on». La tienen cuatro. Ninguna es de cliente pagante, así que la conclusión
+      aguanta, pero el número no: hacerlo hoy apaga `/inbox` en las dos orgs propias. Corregido
+      en §5 con el conteo por organización.
+
+- [ ] 🟡 **`/requerimientos`: ~~huérfana~~ — no lo está. Lo que le falta es kilometraje.**
+      ⚠️ Este ítem nació con el fantasma de §8.3 pegado: decía «no la enlaza ningún nav».
+      **Falso, medido el 2026-09-05:** la enlazan tres —`proveegest-electrico`,
+      `gestios-general` y `gestios-servicios-profesionales` (`vertical-pack.ts:175,279,395`)—
+      con 12 apariciones en el bundle desplegado. No hay nada que enlazar ni nada que sacar
+      del catálogo.
+
+      Lo que **sí** queda, y es más chico: (a) recorrerla con datos reales, que cae dentro del
+      ítem de kilometraje de abajo; y (b) decidir si los dos packs clínicos —dental, estética—
+      también la llevan. Hoy no la tienen: un consultorio que quiera pedirle un estudio al
+      paciente no tiene camino. Es una decisión de producto de una línea de nav cada una, no
+      desarrollo.
 
       Está listada como módulo en `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` §4.
 
