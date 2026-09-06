@@ -211,11 +211,30 @@ async function queTapa(page) {
  * pueda salir de ahí.
  */
 async function despejar(page) {
-  const salidas = [/Cerrar por ahora/i, /^Cerrar$/i];
+  // "Cerrar la guía" es el ícono X de GuiaInicio.tsx:164 (aria-label, sin texto visible);
+  // los otros dos son botones de texto. Probar los tres: el 2026-09-06 el click normal en
+  // "Cerrar por ahora" fallaba callado (catch(()=>{})) sin decir por qué, y el paso 5 salía
+  // "roto" con /dashboard ya alcanzado — el modal simplemente no se había podido cerrar.
+  const salidas = [/Cerrar por ahora/i, /Cerrar la guía/i, /^Cerrar$/i];
   for (const nombre of salidas) {
     const b = page.getByRole('button', { name: nombre });
     if (!(await b.count().catch(() => 0))) continue;
-    await b.first().click({ timeout: 5000 }).catch(() => {});
+    const err = await b.first().click({ timeout: 5000 }).then(() => null).catch((e) => String(e.message || e).split('\n').slice(0, 4).join(' | '));
+    if (err) {
+      // El click normal exige que el botón esté libre de algo encima; si algo lo tapa
+      // (p.ej. otro overlay fixed), forzamos UNA vez y lo dejamos anotado en vez de tragarlo.
+      const bb = await b.first().boundingBox().catch(() => null);
+      const enElPunto = bb
+        ? await page.evaluate(({ x, y }) => {
+          const el = document.elementFromPoint(x, y);
+          return el ? `${el.tagName}.${(el.className || '').toString().slice(0, 40)}` : '(nada)';
+        }, { x: bb.x + bb.width / 2, y: bb.y + bb.height / 2 })
+        : '(sin boundingBox)';
+      console.log(`        · despejar(): "${nombre}" no se pudo clickear normal (${err}) — en ese punto hay: ${enElPunto}, reintento con force`);
+      const err2 = await b.first().click({ timeout: 5000, force: true }).then(() => null).catch((e2) => String(e2.message || e2).split('\n').slice(0, 4).join(' | '));
+      if (err2) console.log(`        · despejar(): "${nombre}" tampoco con force (${err2})`);
+      else console.log(`        · despejar(): "${nombre}" click con force NO tiró error`);
+    }
     await page.waitForTimeout(900);
     if (!(await queTapa(page))) return true;
   }

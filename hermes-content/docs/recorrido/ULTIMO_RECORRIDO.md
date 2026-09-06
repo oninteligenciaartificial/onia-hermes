@@ -12,6 +12,24 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## ROTO el 2026-09-06 10:34 La Paz — la barra del asistente IA tapa el cierre de "Primeros pasos"
+
+Dental vuelve a romperse después de cuatro corridas en verde: **paso 5 (elegir-rubro) y paso 9
+(bandeja) salen rotos/no-medidos**, no por el onboarding en sí — la traza de 6 pantallas (pregunta
+→ negocio → horarios → servicios → equipo → listo) completa bien y `/dashboard` SÍ se alcanza —
+sino porque el modal "Primeros pasos" que se abre encima queda pegado en pantalla: sus dos
+botones de cierre (`GuiaInicio.tsx:164` el ícono X, `:277` "Cerrar por ahora") están geométricamente
+detrás de la barra flotante del asistente (`BarraAsistente.tsx`, `.ba-barra`/`.ba-velo`,
+`globals.css:1315` z-index:50). `document.elementFromPoint()` en las coordenadas de cada botón
+devuelve `BUTTON.ba-barra` y `DIV.ba-velo`, nunca el botón — un click real (con o sin `force`)
+nunca le llega al `onClick={cerrar}`. Reproducido 3 veces con cuentas `zz-qa-` distintas.
+
+El instrumento se arregló de paso (`despejar()` ahora también prueba `/Cerrar la guía/i` y
+diagnostica QUÉ elemento recibe el click en vez de tragarse el error) — pero **el bug es del
+producto**, no del script: reportado en el tablero `t_6325e553`, prioridad 1, para el dueño de
+`onia-platform`. Capturas: `paso-05c-gate-levantado.png`, `paso-09-bandeja.png`. Cero filas
+`zz-qa-` propias al cerrar (3 corridas seguidas).
+
 ## Reverificado el 2026-09-05 12:16 La Paz — dental sigue 9/9, cero filas propias al cerrar
 
 Cuarta corrida seguida en verde: 9/9, cero agujeros. Único dato `zz-qa-` que sobrevive en la base
