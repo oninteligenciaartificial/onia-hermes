@@ -280,19 +280,69 @@ y sin operar. Acá se opera, con verificación por ítem.
       aguanta, pero el número no: hacerlo hoy apaga `/inbox` en las dos orgs propias. Corregido
       en §5 con el conteo por organización.
 
-- [ ] 🟡 **`/requerimientos`: ~~huérfana~~ — no lo está. Lo que le falta es kilometraje.**
-      ⚠️ Este ítem nació con el fantasma de §8.3 pegado: decía «no la enlaza ningún nav».
-      **Falso, medido el 2026-09-05:** la enlazan tres —`proveegest-electrico`,
-      `gestios-general` y `gestios-servicios-profesionales` (`vertical-pack.ts:175,279,395`)—
-      con 12 apariciones en el bundle desplegado. No hay nada que enlazar ni nada que sacar
-      del catálogo.
+- [x] 🟡 **`/requerimientos`: CERRADO el 2026-09-06 — la tenían los SIETE packs desde siempre.
+      Y midiendo eso apareció la que de verdad no tenía camino: la Planilla.**
 
-      Lo que **sí** queda, y es más chico: (a) recorrerla con datos reales, que cae dentro del
-      ítem de kilometraje de abajo; y (b) decidir si los dos packs clínicos —dental, estética—
-      también la llevan. Hoy no la tienen: un consultorio que quiera pedirle un estudio al
-      paciente no tiene camino. Es una decisión de producto de una línea de nav cada una, no
-      desarrollo.
+      Este ítem se corrigió una vez (§8.3 decía «no la enlaza ningún nav»; falso) y **quedó
+      corregido a medias**: pasó a decir que la llevan tres packs y que los dos clínicos «hoy
+      no la tienen». **También falso.** Medido, no grepeado:
 
+      ```
+      Object.entries(VERTICAL_PACKS).map(([id, p]) => [id, p.nav.map(n=>n.href).includes("/requerimientos")])
+      → los 7 packs: true
+      ```
+
+      **Por qué las dos correcciones fallaron igual, que es la parte que sirve.** Las dos
+      grepearon `vertical-pack.ts` y encontraron 3 hits. Pero el pack dental **no declara su
+      nav**: es `sidebarNavItems` por referencia (`vertical-pack.ts:99`), y estética y
+      veterinaria la derivan con `navClinicaDe()`, que mapea el MISMO array renombrando dos
+      rótulos. El href vive en `components/layout/navigation.ts:87` — un archivo que el grep
+      nunca tocó. **Un `grep` sirve para descartar, nunca para confirmar una ausencia**, y acá
+      confirmó dos veces la misma ausencia inexistente. La forma barata de no repetirlo:
+      preguntarle al pack YA construido, no al archivo donde uno espera que esté escrito.
+
+      ✅ **Y la medición correcta encontró un agujero real, que se arregló en la misma vuelta:
+      `/rrhh` (Planilla) no tenía camino en los tres packs clínicos.** Misma familia exacta que
+      `/requerimientos` y `/empresa`: segmento COMÚN, permiso concedido, **camino ausente**. La
+      única puerta del pack dental era un botón adentro de `/team`, puesto ahí a propósito
+      porque esta nav estaba congelada por snapshot. No alcanza: «Equipo» son los USUARIOS del
+      sistema y «Planilla» los EMPLEADOS — una clínica con 4 empleados que no usan el sistema
+      no tiene motivo para abrir Equipo, así que su planilla (**plan professional+, o sea
+      PAGA**) sólo aparecía tipeando la URL. Dental y estética son **2 de los 5 rubros de la
+      v1.0**.
+
+      Arreglado en `onia-platform` `ad2d45f` (rama `claude/chatbots-platform-review-0d1d09`):
+      entra Planilla al grupo «dinero» de `navigation.ts`, y va con el gate que cierra la clase
+      —`lib/platform/caminos-transversales.test.ts`— que **deriva sus sujetos de
+      `COMMON_SEGMENTS` menos una lista de EXENTOS con su motivo**, así una transversal nueva
+      nace cubierta y hay que eximirla a mano, a la vista. Falló primero en rojo nombrando los
+      3 packs, y lleva dos casos que YA cumplen (que ningún exento sea un nombre inventado; que
+      la lista de sujetos no quede vacía), porque un filtro que devuelve `[]` pasa en verde.
+
+      El fixture y los 3 snapshots congelados de la nav se actualizaron **a propósito y con su
+      motivo**: eso es el guardia funcionando, no drift. El diff de snapshots son 50 líneas
+      agregadas y **0 borradas**, todas `/rrhh`.
+      Gates: `tsc` 0 · `vitest` 3078 passed · `eslint` 0 errores · `iconos-en-la-fuente` 35/35.
+
+      ⚠️ **Commiteado, NO desplegado** — el contenedor sigue con el build viejo
+      (`BUILD_ID 3OJpL4LsTtarEkANQEORf`). Anotado en el pedido de deploy que ya existe
+      (`t_0268567b`), no en uno nuevo.
+
+      ⚠️ **Lo que NO se hizo y no hay que darlo por hecho:** no se miró el sidebar renderizado.
+      El riesgo visual de esta clase de cambio es uno solo y conocido —que el icono salga como
+      palabra, el bug más famoso del proyecto— y lo cubre `scripts/iconos-en-la-fuente.mjs`,
+      que corrió verde; `badge` además ya se dibuja hoy en producción para los otros tres
+      packs. Mirarlo entero cae dentro del ítem de kilometraje de abajo, después del deploy.
+
+      ⚠️ **`verificar_cola.js` marca `caminos-transversales.test.ts` como fantasma y NO lo es**
+      — misma causa ya anotada para `agents-cadencia.ts`: el verificador resuelve el repo
+      hermano contra `/root/loops/onia-platform`, el clon de `master`, y el archivo todavía
+      vive sólo en la rama. **El gate ya salía en exit 1 antes de esta vuelta** por el mismo
+      motivo (`patients/ficha-por-rubro.test.ts`, línea 185); no es una regresión de este
+      cambio y se apaga solo cuando `onia-cola` mergee. Se confirma con
+      `ls /root/loops/onia-platform-chatbot/lib/platform/caminos-transversales.test.ts`.
+
+      Recorrer `/requerimientos` con datos reales sigue vivo, y cae en ese mismo ítem.
       Está listada como módulo en `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` §4.
 
 - [ ] 🟡 **Recorrer cada módulo 🟡 con datos reales y MIRARLO renderizado**, rubro por rubro de
