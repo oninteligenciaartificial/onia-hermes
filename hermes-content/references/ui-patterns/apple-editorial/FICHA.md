@@ -50,18 +50,19 @@ Valores exactos en [`tokens.css`](tokens.css). Lo que no se puede poner en una v
   descripción.
 - **Divisor hairline sólo en layout A.** En los demás, el aire separa.
 
-## Tipografía — ⏳ A/B RENDERIZADO, ESPERANDO VEREDICTO
+## Tipografía — ✅ INTER, aprobada por Sergio Urcullo (06-sep, mirando el A/B)
 
 SF Pro **no se puede empaquetar** (licencia Apple restringida a desarrollo en sus
-plataformas). Las dos candidatas se rinden con `--tipografia`:
+plataformas). Se rindió el A/B completo y él eligió A: *"este está perfecto"*.
 
-| | familia | a favor | en contra |
-|---|---|---|---|
-| **inter** | Inter (OFL), vendorizada por `build-inter.py` | ~95% de fidelidad con las refs; llega a `wght` 700 | no está en el trío de marca |
-| **dmsans** | DM Sans, del trío de `ONIA_BRAND_IDENTITY_2026.md` §2 | legal de marca, ya vendorizada | 🔴 **el archivo está recortado a `wght` 400–500** por `build-onia-fonts.py`: no puede dar el peso display que piden las refs, y por eso se ve liviana |
+| | familia | veredicto |
+|---|---|---|
+| **inter** ✅ | Inter (OFL), vendorizada por `build-inter.py` | **GANA.** ~95% de fidelidad con las refs y llega a `wght` 700 |
+| **dmsans** | DM Sans, del trío de `ONIA_BRAND_IDENTITY_2026.md` §2 | pierde, y no por gusto: **el archivo está recortado a `wght` 400–500** por `build-onia-fonts.py`, así que *no puede* dar el peso display que piden las refs — por eso se ve liviana |
 
 Handle y micro-etiquetas: **Spline Sans Mono** del trío de marca, ya vendorizada.
-**No adoptar ninguna hasta que Sergio Urcullo mire el A/B.**
+La salida `dmsans` se borró para no dejar dos versiones de la misma pieza conviviendo;
+el generador conserva la opción por si hace falta rehacer la comparación.
 
 ### 🔴 Tres leyes tipográficas conviviendo (hallazgo del 06-sep, sin resolver)
 
@@ -100,3 +101,13 @@ aparte y deja el A/B mirable.
    primera corrida.
 6. **Un squircle blanco sobre `#F5F5F7` no tiene contraste** y lee como mancha flotante
    (pasó con n8n). Los objetos claros van sobre fondo oscuro.
+7. 🔴 **Una pieza de "mi stack" no nombra la capa que sostiene lo que vendés.** Sergio
+   Urcullo sacó **Chatwoot** de la pieza el 06-sep, y la razón vale para cualquier pieza
+   futura: Chatwoot es la infraestructura del chatbot que se vende desde Onia Platform.
+   Las otras cinco herramientas no tienen ese problema —nadie compra Claude en vez de
+   Onia—, pero Chatwoot con "Bs 0" al lado le enseña al lector el camino para saltearse
+   el producto. Era la única lámina que le daba un motivo para **no** comprar.
+   **La regla:** en build-in-public se muestra con qué trabajás, no con qué se replica lo
+   que cobrás. Al sacar una lámina hay que barrer los conteos: portada, remate del cierre
+   y total (acá "SEIS"→"CINCO", "cuatro"→"tres"), o la pieza se contradice sola — es la
+   misma coherencia número↔objetos que exige `statement-3d-minimal`.

@@ -123,8 +123,8 @@ LAMINAS = [
     {
         "layout": "D",
         "contexto": "Todo mi negocio corre con",
-        "remate": "SEIS COSAS",
-        "pie": "y cuatro cuestan",
+        "remate": "CINCO COSAS",
+        "pie": "y tres cuestan",
         "pie_hl": "Bs 0",
     },
     {
@@ -155,13 +155,11 @@ LAMINAS = [
         "desc": "El canal donde se atiende. El transporte de Meta\nlo paga la cuenta del negocio, no yo.",
         "precio": "Bs 0",
     },
-    {
-        "layout": "E",
-        "icono": "chatwoot",
-        "nombre": "Chatwoot",
-        "desc": "Una sola bandeja para todos los canales.\nTambién vive dentro del VPS.",
-        "precio": "Bs 0",
-    },
+    # Chatwoot SALIO de la pieza (Sergio Urcullo, 06-sep). No es pudor: es la capa que hace
+    # funcionar el chatbot que se vende desde Onia Platform. Las otras cinco herramientas no
+    # tienen ese problema —nadie compra Claude en vez de Onia—, pero Chatwoot con "Bs 0" al
+    # lado le ensena al lector el camino para saltearse el producto. Era la unica lamina que
+    # le daba un motivo para no comprar. El icono queda definido por si vuelve en otra pieza.
     {
         "layout": "E",
         "icono": "hyperframes",
@@ -171,7 +169,7 @@ LAMINAS = [
     },
     {
         "layout": "D",
-        "contexto": "Seis herramientas, dos facturas",
+        "contexto": "Cinco herramientas, dos facturas",
         "remate": "Bs 2.765",
         "sub": "al mes. Y la parte grande es para construir,\nno para que el negocio siga funcionando.",
         # El CTA reusa el mismo highlight verde de la portada en vez de un boton de ancho
