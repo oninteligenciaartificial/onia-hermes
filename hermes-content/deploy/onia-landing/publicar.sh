@@ -68,7 +68,7 @@ esac
 # ── armar, sólo si lo que hay en disco no alcanza ────────────────────────────
 if [ "$ESTADO" != "CUBRE" ]; then
   echo "== el build armado no sirve ($ESTADO): rearmo desde origin/main =="
-  if [ -n "$DRY" ]; then echo "[dry-run] correría: bash $DEPLOY/build-and-stage.sh"; else
+  if [ -n "$DRY" ]; then echo "[dry-run] correría: bash $DEPLOY/build-and-stage.sh"; REARMARIA=1; else
     # Dos builds a la vez se pisan el directorio y ninguno se entera (medido el
     # 2026-09-03 en onia-platform: un swap ajeno se llevó el artefacto de otro).
     if ps -eo args | grep -F 'build-and-stage.sh' | grep -qv grep; then
@@ -77,6 +77,12 @@ if [ "$ESTADO" != "CUBRE" ]; then
     bash "$DEPLOY/build-and-stage.sh" || { echo "ERR: el build falló, no publico"; exit 1; }
   fi
   IFS=$'\t' read -r ESTADO MOTIVO RUTA <<<"$(medir)"
+  # En seco el build NO corrió, así que esta segunda medición devuelve la MISMA carpeta
+  # vieja que acabamos de declarar insuficiente. Anunciarla como «publicaría» hace que
+  # quien lee el simulacro frene un deploy sano creyendo que va a publicar código de otro
+  # día — y el simulacro es lo único que se mira antes de pedir el `ok`. La corrida real no
+  # pasa por acá: ahí el staged existe y `RUTA` ya apunta al recién armado.
+  [ -n "$DRY" ] && [ -n "${REARMARIA:-}" ] && RUTA=""
   [ "$ESTADO" = "AL_DIA" ] && { echo "YA ESTA PUBLICADO — $MOTIVO"; exit 0; }
   if [ "$ESTADO" != "CUBRE" ] && [ -z "$DRY" ]; then
     echo "ERR: ni recién armado el staged cubre lo varado ($ESTADO). NO publico."; exit 1
