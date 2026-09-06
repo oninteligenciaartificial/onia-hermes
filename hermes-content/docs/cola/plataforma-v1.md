@@ -229,7 +229,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       | fuente | `lib/platform/vertical-pack.ts:388`, dentro de `SERVICIOS_NAV_ITEMS` |
       | `master` | `git show master:lib/platform/vertical-pack.ts` → la misma línea |
       | **producción** | `{href:"/patients",icon:"group",label:"Clientes",roles:[...F]}` en el bundle de `/opt/onia-platform/runtime-next` (runtime del 2026-09-05 03:07 UTC) |
-      | comportamiento | 69 tests verdes: `patients/ficha-por-rubro.test.ts` + `lib/platform/api-guard.test.ts` |
+      | comportamiento | 69 tests verdes: `app/(dashboard)/patients/ficha-por-rubro.test.ts` + `lib/platform/api-guard.test.ts` |
 
       §2 advertiía que abrirle `/patients` «le daría la ficha clínica a un estudio contable, con
       sus APIs devolviendo 403». **Las dos objeciones ya estaban resueltas**, así que corregir §2
@@ -362,7 +362,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       — misma causa ya anotada para `agents-cadencia.ts`: el verificador resuelve el repo
       hermano contra `/root/loops/onia-platform`, el clon de `master`, y el archivo todavía
       vive sólo en la rama. **El gate ya salía en exit 1 antes de esta vuelta** por el mismo
-      motivo (`patients/ficha-por-rubro.test.ts`, línea 185); no es una regresión de este
+      motivo (`app/(dashboard)/patients/ficha-por-rubro.test.ts`, línea 185); no es una regresión de este
       cambio y se apaga solo cuando `onia-cola` mergee. Se confirma con
       `ls /root/loops/onia-platform-chatbot/lib/platform/caminos-transversales.test.ts`.
 
@@ -372,12 +372,17 @@ y sin operar. Acá se opera, con verificación por ítem.
       ⚠️ **La explicación de arriba está VENCIDA — medido el 2026-09-06.** Decía que el rojo del
       gate se apagaría solo «cuando `onia-cola` mergee», y ya mergeó: `HEAD` del worktree de
       `onia-platform` **es ancestro de `origin/master`** y aun así
-      `__tests__/patients/ficha-por-rubro.test.ts` **no existe** (`ls` da *No such file*). O sea
+      `app/(dashboard)/patients/ficha-por-rubro.test.ts` **no existía con ese nombre** (`ls` da *No such file*). O sea
       el fantasma de las líneas 185 y 283 dejó de ser «todavía no llegó» y pasó a ser una
       referencia a un archivo que no está: o lo renombraron en el merge, o nunca entró. Hay que
-      buscarlo y corregir las dos líneas, no volver a esperar. Se ve con:
-      `node scripts/verificar_cola.js hermes-content/docs/cola/plataforma-v1.md` (exit 1, 2
-      fantasmas, los dos por ese archivo).
+      buscarlo y corregir las dos líneas, no volver a esperar.
+
+      ✅ **BUSCADO Y CORREGIDO el 2026-09-06.** El archivo **existe**: es
+      `app/(dashboard)/patients/ficha-por-rubro.test.ts`. Lo que estaba mal era la RUTA escrita
+      en esta cola, no el archivo — un fantasma del que citaba, no del que se citaba. Se
+      encontró en un comando (`find . -name 'ficha-por-rubro*'`), después de que dos vueltas lo
+      dieran por desaparecido con `ls` sobre la ruta equivocada: **un `ls` que falla prueba que
+      NO está ahí, nunca que no está.** Las tres citas quedaron con la ruta completa.
 
 - [ ] 🟡 **Recorrer cada módulo 🟡 con datos reales y MIRARLO renderizado**, rubro por rubro de
       los cinco de la v1.0. Es kilometraje, no código: lo que se busca es dónde se rompe el
@@ -470,6 +475,42 @@ y sin operar. Acá se opera, con verificación por ítem.
       a mano: eso fingiría el paso y dejaría la org sin la agenda por defecto ni el resto de lo
       que el onboarding escribe), y recién ahí recorrer los 8 🟡 transversales con
       `scripts/mirar_bandeja_dueno.mjs --email zz-qa-estetica-modulos@onia.com.bo --ruta /X`.
+
+      **Avance 2026-09-06 — el onboarding se recorrió por la UI y estética quedó mirable. Y el
+      recorrido encontró el defecto que mata el primer día de un cliente nuevo.**
+      Instrumento: `scripts/onboarding_por_la_ui.mjs` (los 6 pasos, captura de cada uno en
+      `/root/capturas-onboarding-estetica/`, veredicto contra la BASE y no contra la pantalla).
+      Se entra por «Completar el formulario», nunca por «Buscar mi negocio»: ese botón dispara la
+      extracción con IA, que es gasto. `onboardingCompletedAt` pasó de null a `2026-09-06 12:07`.
+
+      🔴 **El paso de horarios viene con los SIETE días en «Cerrado» y `Continuar` HABILITADO**,
+      bajo una bajada que dice *"La agenda no va a aceptar citas fuera de este horario"*. Quien
+      aprieta el botón grande —el camino por defecto, no el de saltear— termina el alta con la
+      agenda muerta: **0 filas en `doctor_schedules`**, el modal de Agendar Cita con «Profesional»
+      vacío y el botón apagado **sin decir por qué**, y la pantalla de cierre celebrando el alta
+      con un tilde verde y «HORARIOS: Sin cargar». Capturas: `/root/estetica-nueva-cita.png` y
+      `/root/capturas-onboarding-estetica/{03-horarios,06-listo}.png`.
+
+      **El código YA está arreglado y el defecto sigue vivo igual: falta el deploy.**
+      `diasAgendaParaAlta` (`lib/onboarding/horarios-agenda.ts`) tiene el piso `JORNADA_POR_DEFECTO`
+      desde `195349b` (06-sep), pero producción corre `build-545dd28` (05-sep) —casado por
+      `BUILD_ID`— y `git merge-base --is-ancestor 195349b 545dd28` da **falso**. Evidencia
+      comentada en el pedido de deploy que ya existía, `t_0268567b`; **no se abrió una tarea
+      nueva**: el título de esa dice «quien se salta un paso» y el hallazgo la ensancha (también
+      le pasa a quien NO saltea).
+
+      **Atado para que no vuelva a pasar mudo:** el recorrido exige agenda si el alta *mostró* el
+      paso de horarios — el sujeto sale de lo observado, no de una lista de rubros, así que un
+      rubro nuevo nace cubierto. Y hay `--solo-agenda` para medir una cuenta ya dada de alta sin
+      volver a crear una org. Probado en las dos direcciones: **exit 1** sobre estética (0 filas)
+      y **exit 0** sobre la dental de QA (7 filas) — un gate que sólo prueba el rojo pasa igual
+      estando roto. Es también el chequeo del swap: tras el deploy tiene que dar exit 0.
+
+      **Falta (sin bloqueo ya):** recorrer los 8 🟡 transversales de estética, que ahora sí se
+      pueden mirar. Y un defecto de copy chico, con su reproducción: entrando por «Completar el
+      formulario», el paso 2 encabeza *"No pudimos encontrar tus datos, así que los cargamos
+      juntos"* — nunca se buscó nada, porque el cliente eligió cargarlos a mano
+      (`/root/capturas-onboarding-estetica/02-negocio.png`, bajada de `paso-negocio`).
 
       Un verde falso que se cazó en el propio instrumento antes de que mintiera: por el camino
       «la org ya existía» salía con código 0 **sin confirmar el correo**, o sea declaraba
