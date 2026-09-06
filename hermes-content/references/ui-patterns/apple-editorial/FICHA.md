@@ -52,9 +52,11 @@ Valores exactos en [`tokens.css`](tokens.css). Lo que no se puede poner en una v
 - **Etiqueta de procedencia** (`open source`, `plan gratis`) debajo del precio, en el mismo
   tratamiento que el handle — mono, mayúscula, gris. Lee como dato técnico y no compite con
   el precio. Es opcional: se pone sólo donde es **verificable**.
-- **El verde marca propiedad, no decora.** En «Mi stack» el único objeto con el verde de
-  Onia es Hermes, que es lo único que escribió Sergio Urcullo: dice "ésta es mía" sin gastar
-  una palabra. Relleno verde + glifo negro (8,72:1), nunca verde como tinta.
+- **Ningún objeto lleva el verde de Onia.** Se probó vestir a Hermes de verde para decir
+  "ésta es mía" — y era falso: Hermes es código MIT de terceros. Vestir una herramienta
+  ajena con nuestra marca sugiere autoría. Cada objeto usa **su propio** color de marca; el
+  verde vive sólo en el highlight de la portada y en el del CTA. Relleno verde + tinta negra
+  (8,72:1), nunca verde como tinta.
 
 ## Tipografía — ✅ INTER, aprobada por Sergio Urcullo (06-sep, mirando el A/B)
 
@@ -143,5 +145,22 @@ aparte y deja el A/B mirable.
    "4 vCPU / 16 GB / 41 contenedores" que le había puesto — **son del VPS, no de esta
    máquina**, y las de la PC no están registradas en ningún lado. Sin dato verificado, no se
    escribe dato.
-   🔴 **Queda abierto:** si el VPS de §8.1 (US$40/mes) sigue vivo y pagado, la pieza está
-   omitiendo una factura real y el total no es $200 sino $240. Depende de Sergio Urcullo.
+   ✅ **Resuelto (06-sep):** el VPS de §8.1 sigue vivo, y Sergio Urcullo decidió **no
+   ponerlo** en la pieza. El total de $200 refleja esa decisión, no un olvido.
+12. 🔴 **Hermes SÍ es open source — pero NO es código de Onia. Casi se publica una falsa
+   autoría.** La lámina llegó a decir *"mi jefe de gabinete, y lo escribí yo"*. Es
+   `NousResearch/hermes-agent`: **público, MIT, Python, 242k estrellas** (verificado con
+   `gh repo view`, no de memoria).
+   La trampa fue una **colisión de nombres** que la memoria del proyecto ya tenía marcada:
+   `hermes-content/deploy/hermes-agent/SOUL.md` dice *"Hermes — el jefe de gabinete de
+   Sergio"* y se lee como si el agente fuera nuestro. **Lo nuestro es el SOUL.md, la memoria
+   y la config**; el agente es de terceros. Eso es lo que dice la lámina ahora: *"un agente
+   open source que vive en mi servidor; yo le escribí el alma"*.
+   **La regla:** antes de escribir "lo hice yo" sobre cualquier pieza del stack, se corre
+   `gh repo view` sobre el upstream. Reclamar autoría de un proyecto ajeno en pieza pública
+   es el peor error que esta pieza podía cometer, y estuvo a un render de salir.
+13. **Un logo que es ilustración no se redibuja: se busca el original.** El de Hermes es
+   line art (`nous-girl.jpg` del repo de NousResearch). Se bajó del upstream en vez de
+   aproximarlo — redibujarlo sería repetir la trampa #9. `_imagen()` lo toma de
+   `logos/hermes.*` y cae al glifo de nodos si falta, así el generador nunca se rompe por un
+   asset ausente: sólo entrega menos.

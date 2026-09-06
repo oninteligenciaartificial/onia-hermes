@@ -10,3 +10,14 @@ las referencias del patron. No se alteran las formas ni se sugiere afiliacion.
 
 Colores oficiales aplicados por el generador (ver `ICONOS` en
 `scripts/marca-personal/generar-apple-editorial.py`).
+
+## hermes.jpg
+
+`nous-girl.jpg` de [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent)
+(`apps/desktop/public/`), el repo **publico y MIT** del agente Hermes. Es la imagen que
+Sergio Urcullo identifico como el logo del proyecto. Mismo uso nominativo que el resto:
+la lamina dice "uso esta herramienta", no sugiere afiliacion ni autoria.
+
+⚠️ Hermes **no es codigo de Onia**. Verificado el 2026-09-06: `NousResearch/hermes-agent`,
+publico, licencia MIT, Python. Lo que si es de Sergio Urcullo es el `SOUL.md`, la memoria
+y la configuracion con la que corre en su servidor.

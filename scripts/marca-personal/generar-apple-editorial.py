@@ -92,6 +92,23 @@ def _marca(slug, color):
             f'<path d="{d}" fill="{color}"/></g>')
 
 
+def _imagen(nombre, alto=196):
+    """Logo en mapa de bits dentro del squircle (PNG/JPG), centrado.
+
+    Existe para el logo de Hermes, que es una ilustracion y no un glifo: redibujarla
+    "parecida" es exactamente la trampa #9 de la FICHA. Devuelve '' si el archivo no
+    esta, y el llamador cae al glifo dibujado — asi el generador nunca se rompe por un
+    asset ausente, solo entrega menos.
+    """
+    for ext in (".png", ".jpg", ".jpeg", ".svg", ".webp"):
+        ruta = LOGOS / f"{nombre}{ext}"
+        if ruta.exists():
+            off = (256 - alto) / 2
+            return (f'<image href="{ruta.as_uri()}" x="{off}" y="{off}" '
+                    f'width="{alto}" height="{alto}" preserveAspectRatio="xMidYMid meet"/>')
+    return ""
+
+
 def _torre():
     # Torre de escritorio: el homelab es una maquina fisica que Sergio Urcullo ya tenia,
     # no un servidor alquilado. La primera version salio angosta y con dos rayas, y a
@@ -126,16 +143,21 @@ ICONOS = {
         '<rect x="58" y="72" width="140" height="112" rx="14" fill="none" stroke="#FFFFFF" stroke-width="10"/>'
         '<path d="M112 106 L152 128 L112 150 Z" fill="#FFFFFF"/>',
     ),
-    # Hermes lleva el verde de Onia y es el UNICO objeto que lo lleva: dice "esta es mia"
-    # sin gastar una palabra. Relleno verde con glifo negro — el tratamiento de la §7 que
-    # mide 8,72:1; el verde como tinta reprueba AA.
+    # Hermes usa el logo REAL del proyecto (nous-girl de NousResearch/hermes-agent, MIT).
+    # NO lleva el verde de Onia: es codigo de terceros, y vestirlo con nuestra marca
+    # sugeriria autoria. Squircle blanco con filo, como Notion — el line art es blanco y
+    # negro y sobre blanco lee perfecto. El glifo de nodos queda de respaldo por si falta
+    # el archivo, para que el generador no se rompa por un asset ausente.
     "hermes": _squircle(
-        "#00C661",
-        '<circle cx="128" cy="128" r="26" fill="#0A0A0A"/>'
-        '<circle cx="70" cy="80" r="15" fill="#0A0A0A"/><circle cx="186" cy="80" r="15" fill="#0A0A0A"/>'
-        '<circle cx="70" cy="176" r="15" fill="#0A0A0A"/><circle cx="186" cy="176" r="15" fill="#0A0A0A"/>'
-        '<path d="M84 90 L112 114 M172 90 L144 114 M84 166 L112 142 M172 166 L144 142"'
-        ' stroke="#0A0A0A" stroke-width="10" stroke-linecap="round"/>',
+        "#FFFFFF",
+        _imagen("hermes") or (
+            '<circle cx="128" cy="128" r="26" fill="#0A0A0A"/>'
+            '<circle cx="70" cy="80" r="15" fill="#0A0A0A"/><circle cx="186" cy="80" r="15" fill="#0A0A0A"/>'
+            '<circle cx="70" cy="176" r="15" fill="#0A0A0A"/><circle cx="186" cy="176" r="15" fill="#0A0A0A"/>'
+            '<path d="M84 90 L112 114 M172 90 L144 114 M84 166 L112 142 M172 166 L144 142"'
+            ' stroke="#0A0A0A" stroke-width="10" stroke-linecap="round"/>'
+        ),
+        borde="#D2D2D7",
     ),
 }
 
@@ -212,18 +234,19 @@ LAMINAS = [
         "desc": "Video desde HTML. El teaser de la comunidad\nse renderizó en el servidor en 30 segundos.",
         "precio": "$0",
     },
-    # El giro, justo antes del cierre: la unica del stack que escribio el, y encima abierta.
-    # Hermes vive en hermes-content/deploy/hermes-agent/SOUL.md ("el jefe de gabinete de
-    # Sergio"). Open source por decision de Sergio Urcullo (06-sep) — es su codigo y su
-    # licencia. OJO: hoy no hay repo publico enlazable; si la lamina lo dice, alguien lo va
-    # a pedir en los comentarios.
+    # El giro, justo antes del cierre. ⚠️ Corregido el 06-sep: la bajada decia "lo escribi
+    # yo" y es FALSO. Hermes es NousResearch/hermes-agent — publico, MIT, Python, 242k
+    # estrellas (verificado con `gh repo view`). Lo de Sergio Urcullo es el SOUL.md, la
+    # memoria y la config con la que corre en su maquina, que es lo que ahora dice la
+    # lamina. Reclamar autoria de un proyecto ajeno en pieza publica es lo peor que podia
+    # tener esta pieza.
     {
         "layout": "E",
         "icono": "hermes",
         "nombre": "Hermes",
-        "desc": "Mi jefe de gabinete, y lo escribí yo. Un agente que\nvive en el servidor con su propia memoria, coordina\nlos bots y me avisa cuando algo se rompe.",
+        "desc": "Un agente open source que vive en mi servidor.\nYo le escribí el alma: su identidad, su memoria\ny a quién avisar cuando algo se rompe.",
         "precio": "$0",
-        "etiqueta": "Open source",
+        "etiqueta": "Open source · MIT",
     },
     {
         "layout": "D",
