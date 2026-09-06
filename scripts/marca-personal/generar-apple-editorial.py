@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CARRUSEL "Mi stack" — patron apple-editorial (8 laminas 1080x1350).
+"""CARRUSEL "Mi stack" — patron apple-editorial (9 laminas 1080x1350).
 
 Patron nuevo, decidido por Sergio Urcullo el 2026-09-06: CONVIVE con
 statement-3d-minimal y carrusel-pinterest-refs, no los reemplaza. La diferencia dura
@@ -13,24 +13,29 @@ Implementa 2 de los 5 layouts de la FICHA — los que esta pieza usa:
   E = ficha de producto (objeto + nombre + descripcion + precio gigante)
 A, B y C se implementan cuando una pieza los pida; scaffolding vacio no sirve a nadie.
 
-OBJETOS: squircle app-icon dibujado en SVG, no arte generativo. Las referencias 1/5/6/7
-usan iconos de aplicacion, no renders 3D: el SVG da nitidez exacta a 1080px, control del
-radio y de la sombra, y costo cero. El arte generado se reserva para los layouts B y C,
-que si piden objetos reales (taza, reloj).
+OBJETOS: squircle app-icon con el LOGO REAL de cada marca (simple-icons, CC0,
+vendorizado por build-logos.py) sobre el color oficial. Los glifos dibujados a mano se
+veian aproximados y el de WhatsApp salio directamente mal; en una pieza publica eso lee
+como falsificacion. Solo se dibujan los tres que no tienen logo publicado: la torre del
+homelab, HyperFrames y Hermes.
 
-TIPOGRAFIA: A/B sin veredicto. `--tipografia inter` (fidelidad con las refs) vs
-`archivo` (la de marca, §7). SF Pro no se puede empaquetar: licencia Apple restringida
-a desarrollo en sus plataformas. NO adoptar ninguna hasta que Sergio Urcullo mire.
+TIPOGRAFIA: Inter, elegida por Sergio Urcullo mirando el A/B (06-sep). `--tipografia
+dmsans` conserva la comparacion. SF Pro no se puede empaquetar: licencia Apple
+restringida a desarrollo en sus plataformas.
 
-CIFRAS: las de precio salen de ONIA_ESTRATEGIA_DE_EMPRESA.md §8.1 (tabla de estructura
-de costos), no de memoria. Si cambian ahi, se recalculan aca — no se corrigen a mano.
+CIFRAS: en DOLARES por pedido de Sergio Urcullo. Claude Max sale de
+ONIA_ESTRATEGIA_DE_EMPRESA.md §8.1 (US$200/mes). El homelab va en $0 porque es una PC
+que el ya tenia — no es el VPS alquilado de esa misma tabla, y las specs de la PC no
+estan registradas en ningun lado, asi que la lamina no afirma ninguna.
+PENDIENTE: el plan de Notion no esta registrado; "$0" asume plan gratis.
 
 CTA: pide respuesta humana a proposito. La cuenta @sergio_urcullo tiene `palabras: {}`
 en el workflow n8n activo de private-reply (medido 2026-09-04): un "Comenta X" ahi no
 entrega nada y no deja registro.
 
 Uso:
-  python scripts/marca-personal/generar-apple-editorial.py [--tipografia inter|archivo]
+  python scripts/marca-personal/generar-apple-editorial.py [--tipografia inter|dmsans]
+  python scripts/marca-personal/generar-apple-editorial.py --check   # gate, sin rendir
 """
 import argparse
 import glob
@@ -66,61 +71,64 @@ def _squircle(bg, glifo, borde=""):
             f'<rect width="256" height="256" rx="59" fill="{bg}"/>{b}{glifo}</svg>')
 
 
-def _starburst(color="#fff", n=12, largo=74, ancho=15):
-    # Rafaga radial de rayos redondeados. Se dibuja con rects rotados en vez de un
-    # path: mismo resultado y se puede leer al editarlo.
-    return "".join(
-        f'<rect x="{128 - ancho / 2}" y="{128 - largo}" width="{ancho}" height="{largo}" '
-        f'rx="{ancho / 2}" fill="{color}" transform="rotate({i * 360 / n} 128 128)"/>'
-        for i in range(n)
+LOGOS = REPO / "hermes-content/references/ui-patterns/apple-editorial/logos"
+
+
+def _marca(slug, color):
+    """Logo REAL de simple-icons (viewBox 24x24) escalado y centrado en el squircle.
+
+    Los glifos dibujados a mano se ven aproximados y en una pieza publica leen como
+    falsificacion: el de WhatsApp salio mal y Sergio Urcullo lo marco. Las referencias
+    usan el icono de aplicacion real de cada herramienta, asi que acá también.
+    """
+    archivo = LOGOS / f"{slug}.path"
+    if not archivo.exists():
+        raise SystemExit(f"Falta {archivo}. Corré build-logos.py del patrón.")
+    d = archivo.read_text(encoding="utf-8").strip()
+    lado = 132              # area optica del glifo dentro de los 256 del squircle
+    escala = lado / 24
+    off = (256 - lado) / 2
+    return (f'<g transform="translate({off} {off}) scale({escala})">'
+            f'<path d="{d}" fill="{color}"/></g>')
+
+
+def _torre():
+    # Torre de escritorio: el homelab es una maquina fisica que Sergio Urcullo ya tenia,
+    # no un servidor alquilado. La primera version salio angosta y con dos rayas, y a
+    # tamano de miniatura leia como un TELEFONO — visto en la hoja de contacto, no supuesto.
+    # Esta es mas ancha, con bahia de lectora arriba y rejilla de ventilacion: la silueta
+    # de una PC vieja. El punto verde es el LED de encendido.
+    vents = "".join(
+        f'<rect x="106" y="{124 + i * 14}" width="44" height="6" rx="3" fill="#1D1D1F"/>'
+        for i in range(4)
     )
-
-
-def _server():
-    filas = []
-    for i in range(3):
-        y = 68 + i * 47
-        filas.append(f'<rect x="62" y="{y}" width="132" height="34" rx="9" fill="#fff" opacity="{1 - i * 0.18}"/>')
-        filas.append(f'<circle cx="176" cy="{y + 17}" r="7" fill="#673DE6"/>')
-    return "".join(filas)
+    return ('<rect x="80" y="44" width="96" height="168" rx="13" fill="#fff"/>'
+            # bahia de la lectora de CD
+            '<rect x="96" y="62" width="64" height="13" rx="4" fill="#1D1D1F"/>'
+            '<rect x="96" y="86" width="64" height="13" rx="4" fill="#1D1D1F"/>'
+            + vents +
+            '<circle cx="128" cy="192" r="10" fill="#00C661"/>')
 
 
 ICONOS = {
-    "claude": _squircle("#D97757", _starburst()),
-    "vps": _squircle("#673DE6", _server()),
-    # Fondo oscuro, no blanco: el squircle blanco sobre #F5F5F7 daba contraste casi nulo
-    # y leia como una mancha flotante (visto en el render, no supuesto). El oscuro ademas
-    # se parece mas al mark real de n8n.
-    "n8n": _squircle(
-        "#1A1A2E",
-        '<path d="M78 128 H124 M132 96 H178 M132 160 H178" stroke="#EA4B71" stroke-width="11" stroke-linecap="round"/>'
-        '<circle cx="70" cy="128" r="20" fill="#EA4B71"/>'
-        '<circle cx="186" cy="96" r="16" fill="#EA4B71"/>'
-        '<circle cx="186" cy="160" r="16" fill="#EA4B71"/>',
-    ),
-    "whatsapp": _squircle(
-        "#25D366",
-        '<path d="M128 60c-37 0-67 30-67 67 0 12 3 23 9 33l-10 36 37-10c10 5 21 8 31 8 37 0 67-30 67-67s-30-67-67-67z" fill="#fff"/>'
-        '<path d="M104 100c-2-5-4-5-6-5h-5c-2 0-5 1-8 4-3 3-10 10-10 24s10 28 12 30c1 2 20 32 49 43 24 9 29 7 34 7 5-1 16-7 19-13 2-7 2-12 2-13-1-1-3-2-5-3l-19-9c-3-1-5-2-7 1l-7 9c-2 2-3 3-6 1-3-1-13-5-25-15-9-8-15-18-17-21-2-3 0-5 1-6l4-5c2-2 2-3 3-5s1-4 0-5l-9-19z" fill="#25D366"/>',
-    ),
-    "chatwoot": _squircle(
-        "#1F93FF",
-        '<path d="M128 62c-37 0-67 27-67 61 0 19 10 36 25 47v33l31-19c4 1 8 1 11 1 37 0 67-27 67-62s-30-61-67-61z" fill="#fff"/>',
-    ),
+    # Marcas REALES (simple-icons, CC0) sobre squircle en el color oficial de cada una.
+    # Antes eran glifos dibujados a mano: aproximados, y el de WhatsApp directamente mal.
+    "claude": _squircle("#D97757", _marca("claude", "#FFFFFF")),
+    "whatsapp": _squircle("#25D366", _marca("whatsapp", "#FFFFFF")),
+    "n8n": _squircle("#EA4B71", _marca("n8n", "#FFFFFF")),
+    # Notion va al reves —blanco con glifo negro y filo— porque asi es su icono real.
+    # El filo existe para que no se pierda sobre el fondo #F5F5F7.
+    "notion": _squircle("#FFFFFF", _marca("notion", "#0A0A0A"), borde="#D2D2D7"),
+    # Sin logo oficial en simple-icons: se dibujan.
+    "vps": _squircle("#1D1D1F", _torre()),
     "hyperframes": _squircle(
         "#1D1D1F",
         '<rect x="58" y="72" width="140" height="112" rx="14" fill="none" stroke="#FFFFFF" stroke-width="10"/>'
         '<path d="M112 106 L152 128 L112 150 Z" fill="#FFFFFF"/>',
     ),
-    "notion": _squircle(
-        "#FFFFFF",
-        '<path d="M92 176 V88 L164 176 V88" stroke="#1D1D1F" stroke-width="15" fill="none"'
-        ' stroke-linecap="square" stroke-linejoin="miter"/>',
-        borde="#D2D2D7",
-    ),
     # Hermes lleva el verde de Onia y es el UNICO objeto que lo lleva: dice "esta es mia"
-    # sin gastar una palabra. Relleno verde con glifo negro — el tratamiento de §7 que mide
-    # 8,72:1; el verde como tinta reprueba AA.
+    # sin gastar una palabra. Relleno verde con glifo negro — el tratamiento de la §7 que
+    # mide 8,72:1; el verde como tinta reprueba AA.
     "hermes": _squircle(
         "#00C661",
         '<circle cx="128" cy="128" r="26" fill="#0A0A0A"/>'
@@ -141,32 +149,35 @@ LAMINAS = [
         "layout": "D",
         "contexto": "Todo mi negocio corre con",
         "remate": "SIETE COSAS",
-        "pie": "y cinco cuestan",
-        "pie_hl": "Bs 0",
+        "pie": "y seis cuestan",
+        "pie_hl": "$0",
     },
     {
         "layout": "E",
         "icono": "claude",
         "nombre": "Claude Max",
         "desc": "La capa que piensa. Escribe el código, los textos\ny los sistemas. Es lo único caro, y es para construir:\nno para que el negocio funcione.",
-        "precio": "Bs 2.304/mes",
+        "precio": "$200/mes",
     },
     {
         "layout": "E",
         "icono": "vps",
-        # "Homelab" es la palabra que pidio Sergio Urcullo en lugar de "VPS Hostinger".
-        # La bajada NO afirma que el hardware este en su casa —es un KVM alquilado—, asi
-        # que el titulo usa el termino de la cultura self-hosted sin sostener un dato falso.
+        # Sergio Urcullo, 06-sep: "es una pc vieja que tengo". O sea hardware PROPIO, no el
+        # KVM alquilado — mi reparo anterior sobre el termino "homelab" no aplicaba a esta
+        # lamina. Se cayeron las specs "4 vCPU / 16 GB / 41 contenedores": eran del VPS de
+        # ONIA_ESTRATEGIA_DE_EMPRESA.md §8.1, no de esta maquina, y las de la PC no estan
+        # registradas en ningun lado. Sin dato verificado no se escribe dato.
         "nombre": "Homelab",
-        "desc": "4 vCPU, 16 GB, 41 contenedores corriendo.\nUn solo servidor que administro yo, y todo\nlo que viene abajo vive acá adentro.",
-        "precio": "Bs 461/mes",
+        "desc": "Una PC vieja que ya tenía guardada.\nAhí adentro corre todo lo que viene abajo.",
+        "precio": "$0",
+        "etiqueta": "Hardware que ya tenía",
     },
     {
         "layout": "E",
         "icono": "n8n",
         "nombre": "n8n",
         "desc": "Las automatizaciones: embudo, seguimientos, avisos.\nCorre en mi servidor, así que no suma un peso.",
-        "precio": "Bs 0",
+        "precio": "$0",
         "etiqueta": "Open source",
     },
     {
@@ -174,7 +185,7 @@ LAMINAS = [
         "icono": "whatsapp",
         "nombre": "WhatsApp Business",
         "desc": "El canal donde se atiende. El transporte de Meta\nlo paga la cuenta del negocio, no yo.",
-        "precio": "Bs 0",
+        "precio": "$0",
     },
     # ⚠️ El plan de Notion NO esta verificado en ningun lado del repo. "Bs 0" asume plan
     # gratis y queda PENDIENTE de confirmacion de Sergio Urcullo: un precio sin verificar en
@@ -184,7 +195,7 @@ LAMINAS = [
         "icono": "notion",
         "nombre": "Notion",
         "desc": "Donde vive cada decisión, cada documento y la\nbiblioteca de la comunidad. Un solo lugar, no doce.",
-        "precio": "Bs 0",
+        "precio": "$0",
         "etiqueta": "Plan gratis",
     },
     # Chatwoot SALIO de la pieza (Sergio Urcullo, 06-sep). No es pudor: es la capa que hace
@@ -199,7 +210,7 @@ LAMINAS = [
         # terceros. La bajada solo afirma un uso propio, que si es verificable.
         "nombre": "HyperFrames",
         "desc": "Video desde HTML. El teaser de la comunidad\nse renderizó en el servidor en 30 segundos.",
-        "precio": "Bs 0",
+        "precio": "$0",
     },
     # El giro, justo antes del cierre: la unica del stack que escribio el, y encima abierta.
     # Hermes vive en hermes-content/deploy/hermes-agent/SOUL.md ("el jefe de gabinete de
@@ -211,14 +222,14 @@ LAMINAS = [
         "icono": "hermes",
         "nombre": "Hermes",
         "desc": "Mi jefe de gabinete, y lo escribí yo. Un agente que\nvive en el servidor con su propia memoria, coordina\nlos bots y me avisa cuando algo se rompe.",
-        "precio": "Bs 0",
+        "precio": "$0",
         "etiqueta": "Open source",
     },
     {
         "layout": "D",
-        "contexto": "Siete herramientas, dos facturas",
-        "remate": "Bs 2.765",
-        "sub": "al mes. Y la parte grande es para construir,\nno para que el negocio siga funcionando.",
+        "contexto": "Siete herramientas, una factura",
+        "remate": "$200",
+        "sub": "al mes, y es todo para construir.\nMantener el negocio andando no me cuesta nada.",
         # El CTA reusa el mismo highlight verde de la portada en vez de un boton de ancho
         # completo: el boton leia como banner web y partia la frase en dos lineas — nada
         # asi aparece en las 8 referencias. Verde en dos puntos de ocho laminas.

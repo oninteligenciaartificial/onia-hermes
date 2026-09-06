@@ -20,7 +20,7 @@ dos patrones — no una variante de estilo.
 |---|---|---|
 | Collage (cinta · sticker · ícono flotante) | **obligatorio** | **prohibido** |
 | Verde | highlight en el remate de cada pieza | sólo CTA y donde nombra Onia |
-| Objetos | Fluent 3D emoji a color | squircle app-icon, color de marca real |
+| Objetos | Fluent 3D emoji a color | squircle app-icon con el **logo real** de la marca |
 | Sombra | `0 30px 45px rgba(0,0,0,.25)` | `0 24px 48px rgba(0,0,0,.14)` — más suave |
 | Formato | imagen única | **carrusel** de 8 + imagen única |
 
@@ -126,7 +126,22 @@ aparte y deja el A/B mirable.
    Sergio") y él lo declaró **open source**; y el **plan de Notion no está registrado en
    ningún lado del repo** — el "Bs 0" asume plan gratis y sigue pendiente de su confirmación.
    Un precio sin verificar en pieza pública es justo lo que prohíbe la regla de fuente única.
-9. **"Homelab" es de Sergio Urcullo, con el matiz anotado.** Pidió esa palabra en lugar de
-   "VPS Hostinger". El servidor es un KVM **alquilado**, no hardware en su casa, así que la
-   bajada no afirma que esté ahí: dice "un solo servidor que administro yo". El título usa el
-   término de la cultura self-hosted sin sostener un dato falso.
+9. 🔴 **Logo dibujado a mano = falsificación.** Los squircles llevaban glifos que yo dibujé
+   "parecidos" a cada marca. El de WhatsApp salió directamente mal y lo marcó Sergio Urcullo.
+   Las 8 referencias usan el **icono de aplicación real** de cada herramienta, y ahí está la
+   mitad de por qué se ven caras. Ahora los logos se vendorizan con `build-logos.py` desde
+   **simple-icons** (CC0) sobre el color oficial de cada marca — uso nominativo, igual que
+   las refs. Sólo se dibujan los que no tienen logo publicado: la torre del homelab,
+   HyperFrames y Hermes.
+10. **Un objeto dibujado se juzga en la miniatura, no en el lienzo.** La primera torre del
+   homelab era angosta con dos rayas y a tamaño de hoja de contacto leía como un **teléfono**.
+   Se vio mirando, no calculando. Va ancha, con bahía de lectora y rejilla de ventilación.
+11. **"Homelab" es hardware propio de Sergio Urcullo** — *"es una pc vieja que tengo"*
+   (06-sep). ⚠️ **Corregido:** acá decía que era un KVM alquilado y que por eso la bajada no
+   podía afirmar que estuviera en su casa. Era una suposición mía: confundí esta lámina con
+   el VPS de `ONIA_ESTRATEGIA_DE_EMPRESA.md` §8.1. Se cayeron también las specs
+   "4 vCPU / 16 GB / 41 contenedores" que le había puesto — **son del VPS, no de esta
+   máquina**, y las de la PC no están registradas en ningún lado. Sin dato verificado, no se
+   escribe dato.
+   🔴 **Queda abierto:** si el VPS de §8.1 (US$40/mes) sigue vivo y pagado, la pieza está
+   omitiendo una factura real y el total no es $200 sino $240. Depende de Sergio Urcullo.
