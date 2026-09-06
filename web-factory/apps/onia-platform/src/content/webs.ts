@@ -194,7 +194,12 @@ export const WEB_STACKS: readonly WebStack[] = [
       "Si a un producto le falta precio, el sistema pasa solo a “pedir cotización”",
     ],
     noIncluye: [
-      "Cobro con tarjeta: NO hay pasarela online. Esto no existe en el sistema todavía",
+      // Decía «NO hay pasarela online. Esto no existe en el sistema todavía» y
+      // producción lo servía en un `<li>` de /servicios/webs: le admitía al lead
+      // que a lo que le estamos cobrando le falta algo, y encima lo cargaba a
+      // «el sistema», que es el producto y no este servicio. El alcance se acota
+      // igual sin nombrar lo que no está — y de paso le contesta cómo cobra.
+      "Cobro con tarjeta en línea: el pedido te llega completo y lo cobrás por tu medio de siempre — QR, transferencia o efectivo",
       "Cuenta para que cargues productos vos mismo",
       "Migración de un catálogo grande (se cotiza aparte)",
     ],

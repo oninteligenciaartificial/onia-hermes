@@ -157,6 +157,58 @@ export function cadenaHastaSimbolo(
   return null;
 }
 
+/**
+ * ¿La pantalla puede pintar un TEXTO que matchea `patron`? Igual que
+ * `cadenaHastaSimbolo`, pero persiguiendo la frase y no el nombre del símbolo,
+ * y devolviendo además el fragmento que la disparó — para que el fallo diga qué
+ * dice el sitio, no sólo dónde.
+ *
+ * Hace falta porque un símbolo con nombre (`TODAVIA_NO`) es la forma CÓMODA del
+ * defecto: la lista de huecos del producto puesta en una sección, con título. La
+ * forma que se escapa es UNA línea suelta metida en otro dato —medida el
+ * 2026-09-06 en `content/webs.ts`, dentro de un ítem de `noIncluye`—, que no es
+ * un símbolo, no está escrita en ningún `page.tsx` y aun así la sirve producción.
+ *
+ * Se lee SIN comentarios y con los espacios aplanados: el JSX y los objetos de
+ * contenido parten las frases en varias líneas, así que buscar sobre el texto
+ * crudo deja pasar justo lo que está formateado.
+ *
+ * ⚠️ Mismo aviso que su hermana: **anclalo con un caso que SÍ tiene que
+ * encontrar.** Si el resolver de imports se rompe, el recorrido no visita nada,
+ * el patrón no matchea y el gate firma verde sobre un sitio sin vigilancia.
+ */
+export function cadenaHastaTexto(
+  entrada: string,
+  patron: RegExp,
+): { cadena: string[]; encontrado: string } | null {
+  const cualquierImport = /from\s*["']([^"']+)["']/g;
+  const visitados = new Set<string>();
+  const cola: { archivo: string; cadena: string[] }[] = [
+    { archivo: entrada, cadena: [relative(SRC, entrada)] },
+  ];
+  while (cola.length > 0) {
+    const { archivo, cadena } = cola.shift()!;
+    if (visitados.has(archivo)) continue;
+    visitados.add(archivo);
+    const texto = readFileSync(archivo, "utf8");
+
+    const limpio = texto
+      .replace(/\/\*[\s\S]*?\*\//g, " ")
+      .replace(/^[ \t]*\/\/.*$/gm, " ")
+      .replace(/\s+/g, " ");
+    const hallado = limpio.match(patron);
+    if (hallado) return { cadena, encontrado: hallado[0] };
+
+    for (const m of texto.matchAll(cualquierImport)) {
+      const destino = resolverImport(archivo, m[1]);
+      if (destino && !visitados.has(destino)) {
+        cola.push({ archivo: destino, cadena: [...cadena, relative(SRC, destino)] });
+      }
+    }
+  }
+  return null;
+}
+
 /** El cuerpo de `{ … }` que arranca en `desde`, contando llaves. */
 function bloque(fuente: string, desde: number): string {
   const abre = fuente.indexOf("{", desde);
