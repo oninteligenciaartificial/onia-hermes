@@ -63,6 +63,18 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [ ] **`/nosotros` re-escribe a mano la promesa fiscal en vez de leerla de su fuente**
+      (web-venta, 2026-09-06). `src/app/(sitio)/nosotros/page.tsx:151` dice *"nuestro emisor
+      de facturación está registrado ante el SIN con las pruebas técnicas de la Fase 1
+      completadas"*, tipeado a mano. La fuente es `src/content/siat.ts:52`, que además
+      aclara lo que la página se come: *"Quedan las etapas formales del trámite (inspección
+      del SIN)"*, y `lib/proof.ts:115` tiene el estado en `siat: "tramite"`. **No lo ve
+      ningún gate**: `facturacion.test.ts` sólo vigila `textosDeMetadata()` (el `<head>` y el
+      JSON-LD), no el cuerpo; y los gates que recorren imports no lo alcanzan porque
+      `/nosotros` no importa el símbolo — lo escribe. Es la misma forma del desastre de los
+      cuatro precios vivos: dos copias del mismo hecho, y la de la página no envejece con la
+      fuente. **Arreglo:** que `/nosotros` lea de `siat.ts`, y extender el gate al cuerpo.
+
 > **Cuatro de los seis ítems del plan de la mañana murieron al verificarlos.** No estaban
 > hechos "más o menos": estaban hechos, o estaban decididos, o el costo era otro. Queda
 > escrito acá para que ninguna sesión los vuelva a abrir.
