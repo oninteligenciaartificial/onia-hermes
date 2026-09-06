@@ -1,181 +1,178 @@
 # Handoff — carril `infra de loops` (rama `claude/onia-dev-node-setup-22a170`)
 
 > Formato: [`README.md`](README.md) de esta carpeta. Se **sobrescribe**: es el estado ACTUAL.
-> Última escritura: **2026-09-06 21:34 UTC**. Todo lo de acá está medido ese día, no recordado.
+> Última escritura: **2026-09-06 22:1x UTC**. Todo lo de acá está medido ese día, no recordado.
 
 ---
 
 ## 1. Objetivo
 
-**Dejar operativa la infra de loops de Onia.**
+**Terminar la configuración de la infra: canarios, loops, Hermes y configuración básica.**
 
-**Hecho** = los 4 loops decididos corriendo con el código de hoy · los 3 congelados apagados ·
-el sync del VPS descongelado.
+**Hecho** = cuatro cosas, y se cerraron **tres**:
 
-**✅ Cumplido**, y verificado mirando que los loops **CORRAN**, no que su cron exista — que es la
-distinción que este proyecto ya pagó tres veces (*"un loop puede morir con su cron INTACTO"*).
-
-Después Sergio Urcullo sumó cuatro pedidos que no eran el objetivo. Están abajo, cada uno cerrado
-o con su bloqueante nombrado.
+| # | qué | estado |
+|---|---|---|
+| 1 | `web-venta` corriendo en `nodo-casa`, gate verde en las dos máquinas y una vuelta con exit 0 | 🔴 **NO** — bloqueado en una máquina que no se alcanza. §3 |
+| 2 | `canario-visual` decidido y aplicado | ✅ **congelado**, con el motivo y la consecuencia escritos |
+| 3 | Hermes sin trabajos rotos en silencio (`onia-veredicto-sergio` sin `drift_skip`) | ✅ **corriendo**, verificado con una vuelta real |
+| 4 | `onia-vigia-aprobaciones.sh` versionado en el repo | ✅ **ya lo estaba** — el handoff anterior se equivocaba. §5 |
 
 ---
 
 ## 2. Qué quedó EN PRODUCCIÓN
 
-Medido el 2026-09-06 21:34 UTC.
+Medido el 2026-09-06, cada línea con el comando que la midió.
 
 | pieza | estado |
 |---|---|
-| Gate `loops_registrados.mjs` en el VPS | ✅ *"coinciden en id y horario, en las dos direcciones"* |
-| `onia-cola` | ✅ `33 * * * *` — **cada hora** · última vuelta 20:47Z |
-| `chatbot-cola` | ✅ `3 * * * *` — **cada hora** · última vuelta 21:14Z |
-| `web-venta` | ✅ `48 */2 * * *` · última vuelta 20:57Z |
-| `recorrido-cliente` | ✅ `9 1,4,7,…,22 * * *` · última vuelta 19:14Z |
-| Los 3 congelados | ✅ **0** líneas activas que nombren `lucia`, `supervisor` o `kpis-semanal` |
-| Sync del VPS | ✅ descongelado — sin la línea `conservado (shim del nodo de casa)` |
-| Gateway de Hermes | ✅ `active`, unidad systemd, `Restart=always`, arranca en el boot |
-| SQLite de Hermes | ✅ **3.53.1** (era 3.50.4 con el bug de WAL) |
-| `hermes-vigia.sh` | ✅ encendido, minuto 12 |
-| Aviso de aprobaciones | ✅ bajado de `*/2` a `*/30` |
-| **nodo-casa** | ⏸ despierto y sincronizando, **0 loops corriendo** |
+| Gate `loops_registrados.mjs` en el VPS | ✅ *"coinciden en id y horario, en las dos direcciones"* · 4 loops |
+| Los 4 loops (`onia-cola`, `chatbot-cola`, `web-venta`, `recorrido-cliente`) | ✅ sin tocar — **esta sesión no cambió ni un horario** |
+| **`onia-veredicto-sergio`** | ✅ `enabled=true` · `state=scheduled` · `provider=openai-api` · `model=gpt-5-mini` · `last_status=ok` · `failure_streak=0` · próxima 2026-09-07 16:00 (La Paz) |
+| `hermes cron doctor` | ✅ *"Cron doctor found no issues. Checked 2 active job(s)."* — estaba en 1 issue |
+| `canario-visual` | ⏸ congelado a propósito, en las **tres** máquinas. VPS comentado desde el 04-sep; Windows `enabled:false` desde el 01-sep (`lastRunAt 2026-09-01T18:26Z`) |
+| `/root/.config/onia/loops-remotos.txt` | ✅ dos cadencias viejas corregidas (abajo). Sigue con **0 líneas activas**: el vigía de loops remotos no lee nada hasta el paso 10 |
+| `nodo-casa` | ⏸ despierto y sincronizando, **0 loops corriendo** |
 
-**Cambios hechos en el VPS fuera del repo** (todos con respaldo previo, 85 líneas antes y después):
+**Cambios hechos en el VPS fuera del repo**, los dos con respaldo previo:
 
 | qué | respaldo |
 |---|---|
-| `lucia-cierre.sh` congelado | `/root/crontab.antes-de-congelar-lucia-cierre-2026-09-05.txt` |
-| cadencia horaria aplicada | `/root/crontab.antes-de-cadencia-horaria-2026-09-05.txt` |
-| `hermes-vigia.sh` reencendido | `/root/crontab.antes-de-encender-vigia-2026-09-06.txt` |
-| aprobaciones a `*/30` | `/root/crontab.antes-de-bajar-aprobaciones-2026-09-06.txt` |
-| Hermes actualizado a `7166071fca` | commit anterior `ff7233b8` + bases en `/root/respaldo-hermes-antes-update-2026-09-06/consistente` (9/9, respaldo en caliente correcto) |
+| `hermes cron edit 94f352c07554 --provider openai-api --model gpt-5-mini` + `resume` + una vuelta | `/root/jobs.json.antes-de-pinear-veredicto-2026-09-06.bak` |
+| `loops-remotos.txt`: `web-venta` 60→**120**, `lucia` 180→**720** | `/root/loops-remotos.antes-de-cadencias-2026-09-06.bak` |
+
+🔴 **Por qué esas dos cadencias importaban aunque estén comentadas.** El vigía avisa cuando pasan
+**más de dos cadencias** sin corrida. `web-venta` corre `48 */2` — hueco de **120 min**, no 60 — y
+`lucia` `37 9,21` — hueco de **720**, no 180. Eran los valores de ANTES de las bajadas del 3 y 4
+de septiembre. El día del paso 10, con 60 escrito, el vigía habría gritado **en cada ciclo sano**;
+y el propio archivo advierte que *"una alarma que grita sin razón se apaga sola en la cabeza del
+que la lee"*. Era una mina armada, no un número feo.
 
 ---
 
 ## 3. Qué quedó a medias, y dónde
 
-**Nada sin commitear y nada sin pushear.** Los tres worktrees limpios; esta rama al día con `main`.
+**Nada sin commitear.** Un solo carril, esta rama, árbol limpio.
 
-**🔴 La mudanza a nodo-casa: decidida, preparada, NO ejecutada.** Cero loops corren allá.
-Bloqueante: **una línea de cron que hay que descomentar en `DESKTOP-0GGGNMF`**, y desde ninguna
-otra máquina se llega a ese nodo.
+**🔴 `web-venta` a `nodo-casa`: la receta quedó escrita entera, sin ejecutar.**
+[`PLAN_HOMELAB.md`](../PLAN_HOMELAB.md) §5, *"El paso 10 para `web-venta`, escrito entero"*: parte
+A (VPS + tabla, un comando y un push) y parte B (el nodo, un comando idempotente que se niega solo
+si la máquina es la equivocada).
 
-**🔴 La landing sigue sin publicar.** `/opt/onia-landing/runtime-next` es del **2026-09-04 10:04**.
-La plataforma sí se publicó (runtime del 06-sep 17:08). Ver §6.
+**Y se decidió NO empezar por la mitad que sí se podía hacer.** La parte A apaga `web-venta` en el
+VPS; sin la parte B el dueño de `onia.com.bo` **no corre en ninguna máquina**, esperando a alguien
+al que no se llega. Media mudanza es peor que ninguna: es el modo de falla que este plan documentó
+tres veces. Por eso `web-venta` **sigue corriendo en el VPS**, intacto.
 
-**🟡 `onia-vigia-aprobaciones.sh` no está versionado.** Vive solo en el VPS y el sync no lo
-despliega. Es el script que le escribe a Sergio Urcullo todos los días: si esa máquina se pierde,
-se pierde con ella.
-
-**🟡 Sigue mandando un mensaje POR TAREA**, solo que agrupadas cada 30 min. Agruparlas en uno solo
-no se hizo a propósito: ese script ya silenció el resumen de 11 tareas por un escape mal puesto
-(2026-09-03), y reescribir su envío sin necesidad es pedirle que vuelva a pasar.
+**El orden tampoco es libre, y la razón NO es el gate.** El horario se muda tal cual (`48 */2`),
+así que con la línea puesta en las dos máquinas **las dos disparan en el mismo minuto sobre la
+misma rama**, y el `flock -n` del corredor es por máquina. Por eso va VPS primero y nodo último,
+aceptando un hueco de hasta dos horas.
 
 ---
 
 ## 4. Archivos y cambios
 
-Todos en `claude/onia-dev-node-setup-22a170`, ya mergeados a `main` por el integrador.
-
-| commit | qué arregla |
+| archivo | qué cambia |
 |---|---|
-| `3c9a56d8` | **Congelar un carril apagaba solo la mitad y no lo decía.** `congelar-loops-vps.sh` sustituye sobre `onia-loop.sh <id>`; `lucia` tenía además `lucia-cierre.sh` con otro nombre, corriendo `claude -p` a diario con una cabecera que dice «Cero creditos» y es falso. El guion ahora **lista lo que no puede apagar**, y también en `--seco` |
-| `6b82f2cc` | **«La tabla primero» al mudar un loop deja `main` en rojo para los quince.** El gate compara id **y horario** y hace `exit 1`; con la tabla movida y el cron viejo intacto se bloquea la cadena de `npm test` — incluido el integrador, único que podría arreglarla. Van **juntas** |
-| `31b59b22` | Cadencia horaria de `onia-cola` y `chatbot-cola` en la tabla, con la medición al lado |
-| `c8a0bbb3` | **El gateway de Hermes quedó supervisado** |
-| `dd5b10e8` | **«La PC de casa» era ambiguo**: hay DOS Windows en su casa. Los nombres quedan definidos por artefacto |
-| `f1516f7f` · `01439c80` · `a5ea0c52` | Notas y estado |
+| `hermes-content/docs/cola/loops.md` | `canario-visual` deja de ser *"pausado por cuota"* —que se revierte solo el día que sobre cuota— y pasa a **decisión**: no se muda a `nodo-casa` (§1 del plan: es un instrumento calibrado contra el enlace del VPS), no se revive hoy en el VPS (produce ítems de cola con 83 tareas esperando a Sergio Urcullo), y arrancaría con su worktree 268 commits atrás. Con la consecuencia escrita: **hoy nadie mide peso ni milisegundos de las pantallas**; `recorrido-cliente` cubre el camino roto, no el rendimiento |
+| `hermes-content/docs/PLAN_HOMELAB.md` | La receta del paso 10 para `web-venta`, con los dos comandos exactos, el porqué del orden y el *Listo =*. Fila 10 del checklist al estado real |
+| *(VPS, fuera del repo)* | `onia-veredicto-sergio` pineado + reanudado + corrido · dos cadencias del vigía remoto |
 
-**Scripts dejados en el VPS** (no versionados, de un solo uso):
-`/root/congelar-lucia-cierre.sh` · `/root/aplicar-cadencia-horaria.sh` · `/root/encender-vigia.sh` ·
-`/root/bajar-aprobaciones.sh`. Todos con el mismo patrón: construir en archivo, **verificar**,
-recién instalar — porque un `| crontab -` sin comprobar la salida ya borró 82 líneas.
+**El gate no se toca y no se rompe:** `loops_registrados.mjs` lee **sólo** desde
+`## Deben existir y estar activos` hasta el próximo `## ` (líneas 61-65). El bloque nuevo va bajo
+`## Pausados`, fuera de esa ventana. Verificado leyendo el parser, no suponiéndolo.
 
 ---
 
 ## 5. 🔴 Intentos fallidos y errores propios — el campo que más vale
 
-**Tres recomendaciones equivocadas, todas del mismo tramo en que dejé de cumplir el canario.**
-Sergio Urcullo lo vio antes que yo.
+**1. El handoff anterior daba por pendiente algo que ya estaba hecho, y con dos afirmaciones
+falsas.** Decía: *"`onia-vigia-aprobaciones.sh` no está versionado. Vive solo en el VPS y el sync
+no lo despliega"*. Las dos son falsas, medidas hoy:
 
-1. **Recomendé mudar `canario-visual` y `recorrido-cliente` a nodo-casa.** `PLAN_HOMELAB.md` §1
-   dice que esos dos **NO se mudan**: `canario-visual` mide contra umbrales calibrados desde el
-   enlace del VPS (desde una casa mide el WiFi), y `recorrido-cliente` escribe en la base de
-   producción por `docker exec`. **Recomendé los dos peores.** Causa: razoné por perfil de carga
-   (CPU, navegador) en vez de leer el criterio escrito, que es **con qué tiene que hablar para
-   trabajar**.
-2. **Recomendé NO mudar**, contra una decisión ya tomada. Causa: tomé como autoridad el handoff
-   —que reabrió la premisa por disco y cuota— en vez de `PLAN_HOMELAB.md` §0, que dice lo que
-   Sergio Urcullo dijo: *«el producto de los clientes deja de competir contra quince agentes
-   escribiendo código»*. Esa razón no depende del disco ni de la cuota.
-3. **Le pregunté si el nodo era Linux nativo o WSL2.** El doc ya lo respondía con una corrección
-   del 2026-09-04 encima.
+- está en el repo como `scripts/loops/vigia-aprobaciones.sh`, **con tres commits de historia**
+  (`ea17ab78`, `609aefe2`, `6a3313e5`) y **byte a byte idéntico** al del VPS (151 líneas, `diff`
+  vacío);
+- el sync **sí** lo despliega, con su comentario al lado:
+  `poner "$FUENTE/vigia-aprobaciones.sh" "$DESTINO_BIN/onia-vigia-aprobaciones.sh"`.
 
-> **Regla que queda:** cuando el plan y un handoff se contradigan, **manda el plan**. El handoff es
-> lo que una sesión midió y opinó; el plan es lo que se acordó.
+**Lo que engañó fue el nombre**: en el repo se llama `vigia-*` y en el VPS `onia-vigia-*` — el
+prefijo lo pone el `poner`. Los siete scripts de esa carpeta siguen ese patrón. **Un handoff se
+verifica igual que producción**: un `ls` del VPS y un `find` del repo con el mismo nombre no se
+cruzan nunca, y de ahí sale un pendiente inventado que la sesión siguiente ejecuta.
 
-**Y dos más, de ejecución:**
+**2. La receta del arreglo de Hermes estaba incompleta: hacían falta DOS comandos, no uno.**
+El paso 5 decía `hermes cron edit <id> --provider … --model …`. El job además estaba
+`enabled:false` / `state:paused` desde el 2026-09-04 21:50, así que pinearlo lo dejaba **pineado y
+apagado**. Hizo falta `hermes cron resume 94f352c07554`. Pinear no enciende.
 
-4. **Creé la tarea `t_30133de2` (landing sin publicar) y era duplicada e invisible.** Otra sesión
-   la archivó 11 min después, con razón: ya existía `t_30e607a8` con el mismo `DESPLEGAR: landing`,
-   y la mía nació en `ready` — el vigía de aprobaciones **solo mira las `blocked`**, así que no le
-   habría avisado a nadie. **Antes de escribir una tarea: buscar si ya está, y crearla `blocked`
-   si necesita una decisión.**
-5. **Conté mal los golpes de cuota** filtrando por fecha líneas que **no tienen fecha propia**
-   (`session limit` sale dentro de la salida de Claude). Daba el total del archivo y parecía que
-   la cadencia horaria había roto algo. El método que sí sirve: `awk` que recuerda el último
-   `ARRANCA` y fecha el golpe por su vuelta.
+**3. Y ni así estaba terminado: `hermes cron doctor` seguía en rojo.** El doctor reporta la
+**última corrida**, y la última era el error del 04-sep. Con el pin puesto y el job en
+`scheduled`, la única prueba posible era *"corre mañana"* — que es exactamente *construido ≠
+terminado*. Se forzó una vuelta real (`hermes cron run`): **`Ran now: succeeded`**, y recién ahí
+`last_error=None`, `failure_streak=0` y el doctor en verde. Costó un mensaje de Telegram un día
+antes y una llamada de inferencia; es lo que separa suponer de verificar.
 
-**Lo que NO hay que volver a intentar para llegar a nodo-casa** (cinco caminos, todos agotados):
-SSH directo (no recibe conexiones) · `ListAgents` encuentra la sesión `WSL install 403 error` pero
-`SendMessage` **no existe en este build** · `list_sessions` devuelve solo las locales, sin
-`sessionId` para la de Remote Control · `send_message` con la referencia corta → *"Session not
-found"* · la LAN solo muestra el router. **Hasta que haya Tailscale, ese nodo se toca desde su
-propio teclado.**
+**4. Los otros 13 trabajos de Hermes están `paused`, y 5 con `Connection error`.** Son los
+`hermes-*` diarios y semanales, viejos. **No se tocaron**: no estaban en el objetivo y encenderlos
+sin decidir qué hacen es abrir un frente. Quedan anotados acá, no arreglados a escondidas.
+
+**5. Un `/tmp` de Git Bash no es el `/tmp` que ve `node` en Windows.** Un heredoc a `/tmp/x.md`
+leído después con `fs.readFileSync` falló con `ENOENT: C:\tmp\x.md`. Se pasó el texto por variable
+de entorno.
+
+**Lo que NO hay que volver a intentar para llegar a `nodo-casa` — ahora son SEIS caminos
+agotados:** SSH directo · `ListAgents`+`SendMessage` · `list_sessions` · `send_message` por
+referencia corta · barrer la LAN · **y el que se descartó hoy: no hay túnel inverso.** `ss -tnp` en
+el VPS muestra sólo sesiones `sshd` **entrantes** desde la IP de la casa (las de esta sesión),
+ningún puerto escuchando de vuelta. `nodo-casa` sólo hace conexiones salientes, por diseño
+(`PLAN_HOMELAB.md` §2). **Hasta que haya Tailscale, ese nodo se toca desde su propio teclado.**
 
 ---
 
 ## 6. Qué depende de Sergio Urcullo
 
-**🔴 1. `ok t_30e607a8`** — publica `onia.com.bo`. 24 arreglos que un lead no ve, esperando desde
-el 2026-09-05 22:58. El más caro: la tarjeta que se ve al compartir el link por WhatsApp vendía el
-chatbot en vez del sistema, y la de `/v1` tenía **«MUY PRONTO» impreso dentro de la imagen**.
-⚠️ La tarea vieja `t_e05a44d7` figura `archived` **sin haberse desplegado**: archivar no es
-desplegar.
+**🔴 1. `ok t_30e607a8`** — publica `onia.com.bo`. 24 arreglos esperando desde el 2026-09-05 22:58;
+la landing sigue sirviendo el build del 04-sep. ⚠️ La tarea vieja `t_e05a44d7` figura `archived`
+**sin haberse desplegado**: archivar no es desplegar. *Listo =* `stat -c %y
+/opt/onia-landing/runtime-next` da 06-sep o posterior.
 
-**🔴 2. Un comando en nodo-casa (`DESKTOP-0GGGNMF`), NO en la laptop.** El 2026-09-06 lo corrió en
-la laptop y Windows contestó *"el argumento … no existe"*, que no dice «máquina equivocada».
-De solo lectura:
+**🔴 2. La parte B del paso 10, en `nodo-casa` (`DESKTOP-0GGGNMF`), NO en la laptop.** Un solo
+comando, en [`PLAN_HOMELAB.md`](../PLAN_HOMELAB.md) §5. Es idempotente y **se niega solo** si la
+máquina es la equivocada — el 2026-09-06 se corrió el instalador en la laptop y Windows contestó
+*"el argumento … no existe"*, que no dice «máquina equivocada» en ningún lado. Avisar cuando
+termine: la parte A se hace en la misma ventana, del otro lado.
 
-```
-wsl -d Ubuntu -u root -e sh -c "hostname; cat /root/.onia-nodo; crontab -l | grep onia-loop"
-```
-
-**🟡 3. Decidir si el nodo sobrevive a un reinicio.** `homelab-wsl-arranque.ps1 -Aplicar` crea la
-tarea que despierta WSL **al iniciar sesión**. Para que aguante un corte de luz sin que nadie
-inicie sesión hace falta elegir: contraseña guardada en la tarea, o inicio de sesión automático.
-**No es el bloqueante para encender un loop hoy** — el nodo ya está despierto.
+**🟡 3. Decidir si el nodo sobrevive a un reinicio.** `homelab-wsl-arranque.ps1 -Aplicar` despierta
+WSL **al iniciar sesión**. Para aguantar un corte de luz sin que nadie inicie sesión hace falta
+elegir: contraseña guardada en la tarea, o inicio de sesión automático. **No bloquea el paso 10**
+— el nodo ya está despierto.
 
 **🟡 4. Si el aviso de aprobaciones sigue molestando**, agruparlo en un mensaje único. Hoy son 83
-tareas esperándole y llegan de a una.
+tareas y llegan de a una, agrupadas cada 30 min. ⚠️ Ese script ya silenció el resumen de 11 tareas
+por un escape mal puesto (2026-09-03): reescribir su envío sin necesidad es pedirle que vuelva a
+pasar.
 
 ---
 
 ## 7. Próximos pasos, en orden
 
-1. **`ok t_30e607a8`.** *Listo =* `stat -c %y /opt/onia-landing/runtime-next` da 06-sep o posterior.
-2. **La salida del comando de §6.2.** *Listo =* se sabe qué líneas tiene el crontab de nodo-casa.
-3. **Mudar `web-venta` a nodo-casa**, único activo de la primera tanda (los otros tres que corren
-   se quedan por diseño). Cadencia **tal cual**: `48 */2 * * *`.
-   ⚠️ **Las tres cosas en UNA ventana** — cron en el nodo, sacar la línea del VPS, mover la fila de
-   la tabla. Separadas, una deja `main` en rojo para los quince y la otra hace que el Chequeo de
-   arranque la rearme. *Listo =* gate verde en las **dos** máquinas y una vuelta con `exit 0` en el
-   log del nodo.
-4. **Los otros 4 de la primera tanda** (`web-factory-dev`, `tendencias`, `lucia`, `marca-personal`)
-   se mudan cuando se los reviva: hoy están pausados y mudarlos es gratis.
-5. **`onia-veredicto-sergio`** arrastra el mismo `drift_skip` que tenía `onia-ordenador-tablero`.
-   Se arregla igual: `hermes cron edit <id> --provider openai-api --model gpt-5-mini`.
-6. **Versionar `onia-vigia-aprobaciones.sh`** en el repo.
-7. **Tailscale** (paso 3 de `PLAN_HOMELAB.md`). Sin él, nodo-casa se ve pero no se administra.
+1. **`ok t_30e607a8`.** Es lo único que separa 24 arreglos del lead que los ve.
+2. **Paso 10 de `web-venta`**, las dos partes en la misma ventana. Receta completa en
+   `PLAN_HOMELAB.md` §5. *Listo =* gate verde en las **dos** máquinas, `TERMINA` con exit 0 en
+   `/var/log/onia-loop-web-venta.log` del nodo, y ese log llegando a `/var/log/homelab/` del VPS.
+3. **Los otros 4 de la primera tanda** (`web-factory-dev`, `tendencias`, `lucia`,
+   `marca-personal`): están pausados, así que se mudan **sin la coreografía** del paso 2 — no hay
+   dos corredores que puedan pisarse. Sus cadencias en `loops-remotos.txt` ya están al día.
+4. **Tailscale** (§2 del plan). Sin él `nodo-casa` se ve pero no se administra, y cada mudanza
+   sigue costando un viaje al teclado. Es también lo que permite **cerrar el puerto 22 público**
+   del VPS, hoy abierto a todo internet.
+5. **Versionar `/root/.config/onia/loops-remotos.txt`.** Es config viva del vigía, sin respaldo en
+   git: si se pierde el VPS, se pierde con él — el mismo agujero que este handoff creyó que tenía
+   el script de aprobaciones, sólo que acá **sí** es cierto.
+6. **Decidir qué pasa con los 13 trabajos `hermes-*` pausados**, 5 de ellos con `Connection error`.
+   O se reviven con proveedor pineado, o se borran. Hoy son ruido en `jobs.json`.
 
 ---
 
@@ -187,5 +184,5 @@ tareas esperándole y llegan de a una.
 | **nodo-casa** | `DESKTOP-0GGGNMF` — el tercer nodo, con los 5 worktrees | existe `/root/.onia-nodo` |
 | **VPS** | `srv1360183` · 187.77.16.63 — la app y los 4 loops | existe el CLI de Hermes |
 
-Las dos primeras están **en la misma casa, con la misma IP pública**. Por eso «la PC de casa» era
-ambiguo. Se reconocen por **archivo, nunca por hostname**: una IP se mueve, un hostname se renombra.
+Las dos primeras están **en la misma casa, con la misma IP pública**. Se reconocen por **archivo,
+nunca por hostname**: una IP se mueve, un hostname se renombra.
