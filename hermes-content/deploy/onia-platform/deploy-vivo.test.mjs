@@ -16,6 +16,9 @@ import {
   llegaAlCliente,
   diagnosticar,
   evaluarStaged,
+  varadosDesde,
+  REPO,
+  RAMA_DEPLOY,
 } from './deploy-vivo.mjs';
 
 const AQUI = dirname(fileURLToPath(import.meta.url));
@@ -151,6 +154,84 @@ test('un staged del HEAD pero incompleto NO cubre: el swap dejaría producción 
 
 test('sin staged es NINGUNO, y hay que armar antes de publicar', () => {
   assert.equal(evaluarStaged({ staged: null, headSha: '0db6549' }).estado, NINGUNO);
+});
+
+// ── un merge no es un arreglo ───────────────────────────────────────────────
+// El número que sale de acá es el que se cita en el pedido de deploy, o sea lo
+// ÚNICO que Sergio Urcullo lee antes de contestar «ok». Contando los merges se
+// infla: el 2026-09-06 el publicador dijo «4 arreglos» sobre 2 reales (la
+// pantalla de gastos y la de créditos), porque los dos merges que los trajeron
+// contaban de nuevo el mismo trabajo.
+//
+// La causa es que `git log --name-only` NO lista los archivos de un merge (no
+// muestra su diff salvo con `-m`/`-c`), así que todo merge llega con
+// `archivos: []` — y `llegaAlCliente([])` responde `true` A PROPÓSITO, porque
+// «no sé qué tocó» tiene que pedir un deploy de más y nunca declarar al día lo
+// que no lo está. Ese sesgo hay que CONSERVARLO: el arreglo va en la consulta,
+// sacando los merges antes de clasificar, y no tocando `llegaAlCliente`.
+//
+// Es el mismo defecto que su gemelo de landing ya tenía arreglado esta mañana
+// (`web-factory/apps/onia-platform/scripts/deploy-vivo.mjs`, 16 % inflado). El
+// arreglo no viajó al hermano: por eso el caso vive acá y no sólo allá.
+
+/** Los merges de la misma ventana, preguntados aparte del instrumento. */
+function shasDeMerges(desde) {
+  try {
+    return execFileSync('git', ['-C', REPO, 'log', '--merges', '--format=%h', `${desde}..${RAMA_DEPLOY}`], {
+      encoding: 'utf8',
+      timeout: 30000,
+      stdio: ['ignore', 'pipe', 'ignore'],
+    })
+      .trim()
+      .split('\n')
+      .filter(Boolean);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Ventana ancha del repo real. Se salta si el clon no está: este archivo corre
+ * en la cadena `npm test` de la raíz, y un rojo por AMBIENTE traba el merge de
+ * los quince carriles.
+ */
+function ventana() {
+  try {
+    return execFileSync('git', ['-C', REPO, 'rev-parse', '--short', `${RAMA_DEPLOY}~40`], {
+      encoding: 'utf8',
+      timeout: 30000,
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim();
+  } catch {
+    return null;
+  }
+}
+
+// Sin este caso, el de abajo pasaría en verde el día que la ventana no tuviera
+// merges — y entonces `--no-merges` se podría borrar del script sin que nada se
+// pusiera rojo. Es la dirección que nadie audita.
+test('la ventana elegida CONTIENE merges (si no, el caso siguiente no prueba nada)', (t) => {
+  const desde = ventana();
+  if (!desde) return t.skip('sin el clon de onia-platform: ambiental, no es un defecto');
+  const merges = shasDeMerges(desde);
+  assert.notEqual(merges, null, 'git no contestó: el caso siguiente no puede concluir');
+  assert.ok(merges.length > 0, 'la ventana no tiene merges: elegí una más ancha');
+});
+
+test('no devuelve ni un merge, así que el pedido no cuenta dos veces el mismo arreglo', (t) => {
+  const desde = ventana();
+  if (!desde) return t.skip('sin el clon de onia-platform: ambiental, no es un defecto');
+  const merges = shasDeMerges(desde);
+  if (merges === null || merges.length === 0) return t.skip('sin merges en la ventana: ver el caso de arriba');
+
+  const varados = varadosDesde(desde);
+  assert.notEqual(varados, null, 'git no contestó');
+  const colados = varados.filter((c) => merges.includes(c.sha));
+  assert.deepEqual(
+    colados.map((c) => `${c.sha} ${c.asunto}`),
+    [],
+    'un merge se coló en el recuento: el pedido le muestra a Sergio Urcullo más arreglos de los que hay',
+  );
 });
 
 // ── el instrumento no se dispara solo ───────────────────────────────────────
