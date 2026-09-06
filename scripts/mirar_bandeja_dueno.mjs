@@ -185,8 +185,12 @@ console.log("respuestas >=400:", fallos.length ? `\n  ${fallos.slice(0, 8).join(
 // Exigir la ruta PEDIDA, no "cualquier cosa que no sea /login": la app rebota a /register, a
 // /onboarding o a la portada segun por que no entro la sesion, y todas esas pasaban el filtro
 // viejo y se llevaban un exit 0 con una captura que no prueba nada.
-if (new URL(urlFinal).pathname !== RUTA) {
-  console.error(`La sesión NO entró: se pidió ${RUTA} y la app terminó en ${new URL(urlFinal).pathname}.`);
+// Se comparan PATHNAME contra PATHNAME: `RUTA` puede traer query string (una
+// ruta de API con ?doctorId=&date=) y compararla cruda contra el pathname da un
+// falso negativo — la sesion entro perfecto y el guard la declaraba rechazada.
+const rutaPedida = new URL(RUTA, `https://${host}`).pathname;
+if (new URL(urlFinal).pathname !== rutaPedida) {
+  console.error(`La sesión NO entró: se pidió ${rutaPedida} y la app terminó en ${new URL(urlFinal).pathname}.`);
   await navegador.close();
   process.exit(2);
 }
