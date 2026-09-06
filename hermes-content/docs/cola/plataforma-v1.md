@@ -579,7 +579,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       estudio**»), `/comercio/fiados`, `/requerimientos`, `/contabilidad`, `/team`, `/rrhh`,
       `/empresa`. Los estados vacíos ofrecen la salida en todos.
 
-      🔴 **La que no: `/comercio/caja`.** Con cero servicios cargados, el bloque «Registrar venta»
+      ✅ **La que no era `/comercio/caja` — arreglada el 2026-09-06, ver abajo.** Con cero servicios cargados, el bloque «Registrar venta»
       dice *«Todavía no hay **productos vendibles**. Cargá el primero en el **catálogo** (con
       precio y **stock**)»*. Un estudio contable o jurídico no vende productos, no tiene catálogo
       —su menú y su pantalla se llaman **Servicios**— y **un servicio no tiene stock**. Y se
@@ -588,14 +588,35 @@ y sin operar. Acá se opera, con verificación por ítem.
       menú no existe con ese nombre, a cargar un dato que su rubro no tiene.
       Captura: `/root/capturas-servicios/comercio-caja.png`.
 
-      **Dónde está y cómo se arregla** (no hace falta investigarlo de cero):
-      `app/(dashboard)/comercio/caja/VentaForm.tsx:175`, texto fijo. El patrón correcto ya existe
-      a dos carpetas: `app/(dashboard)/comercio/page.tsx:32-36` deriva `esServicios` del pack y
-      elige la palabra. Falta pasarle esa señal al `VentaForm` desde su server component y un
-      gate con sujetos derivados de `VERTICAL_PACKS`, como el de
-      `lib/platform/copy-de-pantallas-compartidas.test.ts`. **NO se arregló en esta vuelta**: se
-      encontró con el tope de tiempo encima y el arreglo pide los tres gates (3.135 tests);
-      dejarlo a medio escribir rompe la regla de que el árbol compile solo.
+      ✅ **ARREGLADO el 2026-09-06** en `9c72275` (`onia-platform`, rama del carril). No era un
+      texto sino **seis**: el estado vacío, los tres errores del carrito, la etiqueta del picker y
+      la columna de la tabla — todos escritos en comercio. La señal se deriva del pack en
+      `lib/comercio/idioma-de-venta.ts` (nuevo, puro), y **`CajaPantalla` la lee de la ORG, no de
+      la sesión**: así el banco `/dev/demo`, que monta ese mismo componente sin sesión, tampoco
+      queda hablando en comercio. Un estudio lee ahora *«Todavía no hay servicios vendibles.
+      Cargá el primero en Servicios (con precio)»* — sin stock, y con el nombre que esa pantalla
+      tiene **en su menú**.
+
+      El gate (`app/(dashboard)/comercio/caja/VentaForm.render.test.ts`) renderiza el form con los
+      sujetos de `VERTICAL_PACKS` y lee el **texto visible**, no el HTML crudo — buscar la palabra
+      en el markup la encontraría dentro de una clase, que es como un `includes("disabled")` da
+      verdadero siempre contra Tailwind. Falló primero en ROJO por el motivo correcto (*«la caja
+      de gestios-servicios-profesionales dice producto, que es de otro rubro»*), lleva el caso que
+      YA cumple (un comercio sigue leyendo «catálogo» y «stock») y **se probó por mutación**:
+      apuntando `CajaPantalla` a un idioma fijo se pone en rojo y al restaurarlo vuelve a verde.
+      MIRADO renderizado con el CSS del build vivo y cero respuestas ≥400:
+      `/root/capturas-servicios/comercio-caja-arreglada.png`.
+      Verde: tsc 0 · vitest 3155 · eslint 0 errores. **Commiteado, NO desplegado.**
+
+      ⚠️ **Ganadería (`ganadero-offline`) también tiene la caja y vende «hacienda», no productos.**
+      Lleva inventario, así que el helper le deja el idioma de comercio — que es lo que decía
+      antes, no una regresión. Queda **fuera de la v1.0** a propósito y no se tocó: cambiarlo sin
+      una sesión de ese rubro con qué mirarlo sería inventar alcance.
+
+      Un tropiezo que conviene no volver a pagar: el ancla que exige que `CajaPantalla` **no** use
+      `getAccountContext` se puso roja por **su propio comentario**, el que explica por qué no se
+      usa. Se filtran los comentarios antes de aplicar el patrón — si no, el gate obliga a borrar
+      la bitácora que lo justifica.
 
       **Confirmado que los dos defectos del alta NO eran de estética, son de todo rubro con
       agenda** — se reprodujeron idénticos acá, lo que ensancha el pedido de deploy `t_0268567b`:
