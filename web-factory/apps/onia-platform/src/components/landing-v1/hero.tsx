@@ -1,5 +1,5 @@
 import { PressableCta, Reveal } from "@/motion";
-import { PLANES, bs } from "@/lib/pricing";
+import { PLANES, PRUEBA, bs } from "@/lib/pricing";
 import { Modules, Row, Shot } from "./shot";
 import { ParallaxSoft } from "./parallax";
 import styles from "./landing.module.css";
@@ -48,7 +48,7 @@ export function Hero() {
             <div className={styles.heroCta}>
               <PressableCta>
                 <a className={`${styles.btn} ${styles.btnPrimary}`} href="#precios">
-                  Probar gratis 14 días
+                  Probar gratis {PRUEBA.dias} días
                 </a>
               </PressableCta>
               <a className={`${styles.btn} ${styles.btnGhost}`} href="#como">
