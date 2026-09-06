@@ -121,12 +121,58 @@ export const PRECIO_COPY: Record<Precio, string> = {
   "a-medida": `${GRUPO.nombre}: Bs ${bs(GRUPO.mensual)}/mes (anual Bs ${bs(GRUPO.anual)}) más implementación desde Bs ${bs(GRUPO.implementacionDesde)}. No se compra en línea — se cotiza con tu caso.`,
 };
 
-export const PLAN_INCLUYE: readonly string[] = [
-  "Agenda",
-  "Historia clínica con odontograma",
-  "Cobros y caja",
-  "Agente IA que reprograma — con tu aprobación",
-] as const;
+/**
+ * Los módulos que el resultado enciende, POR RUBRO.
+ *
+ * ⚠️ Esto era UNA lista plana, escrita para dental, y `VarianteDental` la
+ * pintaba sin mirar el rubro. Como los cinco rubros están `disponible: true`,
+ * los cinco caían ahí: a una tienda, a una importadora, a un spa y a un estudio
+ * se les ofrecía «Historia clínica con odontograma» —cuatro de cada cinco
+ * leads— justo debajo de «Armado con tus 3 respuestas — nada genérico».
+ * Medido el 2026-09-06 manejando el wizard en producción. Guarda:
+ * `modulos-por-rubro.test.ts`.
+ *
+ * Los nombres NO se inventan acá: son capacidades que el sitio ya publica en
+ * `lib/pricing.ts` (`PLANES[].incluye`) y en el ensamblaje por rubro de esta
+ * misma pantalla. La línea del agente sale del `resultado` del plan Pro —«los
+ * agentes te proponen a quién contactar y vos aprobás con un toque»—, que es
+ * transversal; en los rubros que agendan se dice en su forma concreta.
+ */
+const AGENTE_CONTACTAR = "Agente IA que te propone a quién contactar — con tu aprobación";
+const AGENTE_REPROGRAMA = "Agente IA que reprograma — con tu aprobación";
+
+export const PLAN_INCLUYE: Record<Rubro, readonly string[]> = {
+  dental: [
+    "Agenda",
+    "Historia clínica con odontograma",
+    "Cobros y caja",
+    AGENTE_REPROGRAMA,
+  ],
+  comercio: [
+    "Inventario con existencias y aviso de stock mínimo",
+    "Ventas y cobro QR",
+    "Cobros y caja",
+    AGENTE_CONTACTAR,
+  ],
+  servicios: [
+    "Agenda de trabajos",
+    "Fichas de clientes y presupuestos",
+    "Cobros y caja",
+    AGENTE_CONTACTAR,
+  ],
+  proveedores: [
+    "Pedidos y entregas",
+    "Stock y cuentas por cobrar",
+    "Cobros y caja",
+    AGENTE_CONTACTAR,
+  ],
+  estetica: [
+    "Agenda y clientas",
+    "Ficha de tratamientos",
+    "Caja y cobros",
+    AGENTE_REPROGRAMA,
+  ],
+} as const;
 
 export const NOTA_DOWNSELL = `Si te queda grande, hay un plan de entrada de Bs ${bs(plan("basico").mensual)}/mes (2 usuarios, hasta 300 fichas) que ordena la agenda y las fichas — los agentes de IA no vienen ahí.`;
 

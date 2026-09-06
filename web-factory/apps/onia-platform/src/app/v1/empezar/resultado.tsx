@@ -66,6 +66,7 @@ export function Resultado({
 
   return rec.disponible && rec.plan ? (
     <VarianteDental
+      rubro={rubro}
       rec={rec}
       plan={rec.plan}
       url={url}
@@ -90,6 +91,7 @@ export function Resultado({
 type Rec = ReturnType<typeof recomendar>;
 
 type VarianteDentalProps = {
+  rubro: Rubro;
   rec: Rec;
   plan: NonNullable<Rec["plan"]>;
   url: string;
@@ -98,7 +100,15 @@ type VarianteDentalProps = {
   h1Ref: RefObject<HTMLHeadingElement | null>;
 };
 
-function VarianteDental({ rec, plan, url, waHref, onReset, h1Ref }: VarianteDentalProps) {
+function VarianteDental({
+  rubro,
+  rec,
+  plan,
+  url,
+  waHref,
+  onReset,
+  h1Ref,
+}: VarianteDentalProps) {
   const lackRef = useRef<HTMLDivElement>(null);
   const inView = useInView(lackRef, { once: true, amount: 0.2 });
   const reduced = useReducedMotion();
@@ -170,7 +180,7 @@ function VarianteDental({ rec, plan, url, waHref, onReset, h1Ref }: VarianteDent
         <h2 className={styles.planName}>{plan.nombre}</h2>
         <p className={`mono ${styles.planPrice}`}>{PRECIO_COPY[plan.precio]}</p>
         <ul className={styles.chips} aria-label="Incluye">
-          {PLAN_INCLUYE.map((c) => (
+          {PLAN_INCLUYE[rubro].map((c) => (
             <li key={c} className={styles.chip}>
               <span className={styles.chipDot} aria-hidden />
               {c}
