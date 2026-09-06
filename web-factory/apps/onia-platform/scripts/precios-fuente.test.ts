@@ -9,8 +9,12 @@ import {
   cifrasDelProducto,
   cifrasDelSitio,
   comparar,
+  esPromesa,
+  limitesDelProducto,
+  limitesDelSitio,
   planesDelProducto,
   planesDelSitio,
+  primerPlanCon,
 } from "./precios-fuente.mjs";
 
 /**
@@ -47,7 +51,7 @@ describe("el cruce lee de verdad el lado del SITIO", () => {
     chatbot: readFileSync(CHATBOT_SITIO, "utf8"),
   });
 
-  it("encuentra las 18 cifras en los archivos vivos del sitio", () => {
+  it("encuentra todas las cifras en los archivos vivos del sitio", () => {
     const ilegibles = CIFRAS.filter((c) => delSitio[c] === null);
     expect(
       ilegibles,
@@ -90,6 +94,91 @@ export const DEFAULT_PLAN_AMOUNTS: Record<SubscriptionPlan, PlanPriceTable> = {
   });
 });
 
+describe("los TOPES y los TIERS del sitio (la mitad que no se cruzaba)", () => {
+  const precios = readFileSync(PRECIOS_SITIO, "utf8");
+  type Topes = Record<
+    string,
+    {
+      fichas: number | null;
+      usuarios: number | null;
+      recordatorios: number | null;
+      reservas: boolean | null;
+    }
+  >;
+
+  it("lee los tres topes del Básico, que están escritos en prosa", () => {
+    const l = limitesDelSitio(precios) as Topes;
+    expect(l.basico.fichas).toBeGreaterThan(0);
+    expect(l.basico.usuarios).toBeGreaterThan(0);
+    expect(l.basico.recordatorios).toBeGreaterThan(0);
+  });
+
+  it('"ilimitado" se lee como -1, que es como lo escribe el producto', () => {
+    // El Full no trae cifra ("Usuarios ilimitados"): sin este caso, el tope
+    // saldría `null`, el cruce lo llamaría ilegible y taparía a los otros dos.
+    const l = limitesDelSitio(precios) as Topes;
+    expect(l.full.fichas).toBe(-1);
+    expect(l.full.usuarios).toBe(-1);
+    expect(l.full.recordatorios).toBe(-1);
+  });
+
+  it("lo que el plan NIEGA no cuenta como que lo incluye", () => {
+    // La inversión que dejaría el gate verde al revés: un plan nombra la
+    // capacidad en su `sinEsto` justamente para decir que NO la trae. Si el
+    // parser leyera el plan entero, ese tier daría `true` y el cruce aprobaría
+    // un sitio que promete lo que el producto no da.
+    //
+    // Va con fixture y no con el archivo vivo A PROPÓSITO: hoy el Básico
+    // escribe "Reservas online — se agrega como add-on", sin la palabra
+    // "incluidas", así que el patrón no lo matchea ni leyendo el plan entero.
+    // Escrito contra el archivo vivo, este caso pasaba en VERDE con la guarda
+    // ROTA — medido el 2026-09-06. Un texto que hoy no dispara el patrón no
+    // prueba la guarda: lo que se prueba es el CORTE.
+    const planQueNiega = `
+      { id: "basico",
+        incluye: ["2 usuarios", "Hasta 300 fichas", "200 recordatorios por email al mes"],
+        sinEsto: ["Reservas online incluidas: no, eso viene desde Pro"] },
+    `;
+    const l = limitesDelSitio(planQueNiega) as Topes;
+    expect(l.basico.usuarios).toBe(2); // el `incluye` sí se leyó
+    expect(l.basico.reservas).not.toBe(true); // y el `sinEsto` no se contó
+  });
+});
+
+describe("el cruce lee la forma literal de PLAN_LIMITS", () => {
+  /** Copia textual de `onia-platform/lib/plan-catalogo.ts`. */
+  const LIMITES_FIXTURE = `
+export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
+  free: { patients: 30, users: 1, emailsPerMonth: 0, publicBookingIncluded: false, agentsIncluded: false, reportsEnabled: false },
+  basic: { patients: 300, users: 2, emailsPerMonth: 200, publicBookingIncluded: false, agentsIncluded: false, reportsEnabled: false },
+  professional: { patients: 1500, users: 5, emailsPerMonth: 800, publicBookingIncluded: true, agentsIncluded: true, reportsEnabled: true },
+  clinic: { patients: -1, users: -1, emailsPerMonth: -1, publicBookingIncluded: true, agentsIncluded: true, reportsEnabled: true },
+};
+`;
+
+  it("saca los topes, incluido el -1 de ilimitado", () => {
+    const l = limitesDelProducto(LIMITES_FIXTURE) as Record<
+      string,
+      { fichas: number; usuarios: number; recordatorios: number }
+    >;
+    expect(l.basic).toMatchObject({ fichas: 300, usuarios: 2, recordatorios: 200 });
+    expect(l.clinic).toMatchObject({ fichas: -1, usuarios: -1, recordatorios: -1 });
+  });
+
+  it("el tier es el plan más barato que enciende la capacidad", () => {
+    const l = limitesDelProducto(LIMITES_FIXTURE);
+    expect(primerPlanCon(l, "reservas")).toBe("professional");
+    expect(primerPlanCon(l, "agentes")).toBe("professional");
+  });
+
+  it("un tier ilegible no se adivina: devuelve null y el cruce lo canta", () => {
+    // Sin esto, una capacidad renombrada en el producto se leería como
+    // "ningún plan la tiene" y el gate compararía contra un dato inventado.
+    const sinLaClave = LIMITES_FIXTURE.replace(/publicBookingIncluded/g, "otraCosa");
+    expect(primerPlanCon(limitesDelProducto(sinLaClave), "reservas")).toBeNull();
+  });
+});
+
 describe("el veredicto", () => {
   const iguales = { "plan Básico · mensual": 320, "add-on chatbot · mensual": 390 };
 
@@ -106,6 +195,12 @@ describe("el veredicto", () => {
     });
   });
 
+  it("distingue el monto de la promesa, para no mandar al archivo equivocado", () => {
+    expect(esPromesa("plan Básico · mensual")).toBe(false);
+    expect(esPromesa("plan Básico · fichas")).toBe(true);
+    expect(esPromesa("primer plan con reservas online incluidas")).toBe(true);
+  });
+
   it("una cifra ilegible NO se cuenta como coincidencia", () => {
     // Es el modo de fallo caro: sin esto, un parser roto se lee como sitio sano.
     const { difieren, ilegibles } = comparar(
@@ -117,7 +212,12 @@ describe("el veredicto", () => {
   });
 
   it("con las dos fuentes vacías nada se declara coincidente", () => {
-    const vacio = cifrasDelProducto({ planes: "", addons: "", prueba: "" });
+    const vacio = cifrasDelProducto({
+      planes: "",
+      addons: "",
+      prueba: "",
+      limites: "",
+    });
     const { difieren, ilegibles } = comparar(vacio, vacio);
     expect(difieren).toEqual([]);
     expect(ilegibles).toEqual(CIFRAS);
