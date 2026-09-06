@@ -779,8 +779,20 @@ y sin operar. Acá se opera, con verificación por ítem.
       **cómo** se cubre, y toda declaración tiene que seguir siendo cierta. Verificado por mutación
       en las cuatro direcciones, cada una roja por su motivo; la que importa es la cuarta:
       agregando una pantalla NUEVA al menú de dos packs con rótulos distintos, el gate la **nombra**
-      y manda al archivo a extender, en vez de callarse. Verde: tsc 0 · vitest 3200 · eslint 0
-      errores. **Es un gate: no viaja al navegador y no pide deploy.**
+      y manda al archivo a extender, en vez de callarse.
+
+      **Y de las cuatro «sanas», dos lo estaban por una mirada y ahora lo están por una
+      invariante** (`0a5bdbe`). «La pantalla ya deriva su título del pack» **no** es cobertura:
+      `/comercio` y `/patients` lo hacían y lo único que lo sostenía era haberlas MIRADO una vez
+      — un cambio en el vocabulario, en `llevaInventario` o en el rótulo del menú las despegaba
+      sin que nada se pusiera rojo. Medido antes de escribir nada: las **8** combinaciones
+      (rubro, pantalla) coinciden hoy, así que no había defecto, faltaba la regla. Llevan la misma
+      que `/treatments` y `/empresa`, con el ancla de que **el rótulo no es igual en todos los
+      rubros** (sin eso, con un solo rótulo posible cualquier literal fijo acierta). Por eso la
+      variante «derivado» se eliminó del gate de cobertura: era una tercera forma de declararse
+      cubierto sin gate, que es exactamente lo que acá fallaba. Quedan **cinco por gate** y
+      `/dashboard` neutral con su motivo escrito. Verde: tsc 0 · vitest 3214 · eslint 0 errores.
+      **Son gates: no viajan al navegador y no piden deploy.**
 
 - [x] 🟡 **Los agentes de IA (`/agents`) — DECIDIDO Y ATADO el 2026-09-05: corren solos, con cron
       propio, UNA vez al día.** No hace falta una tercera corrección del catálogo: §7 ya dice la
