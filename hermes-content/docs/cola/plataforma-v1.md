@@ -506,11 +506,51 @@ y sin operar. Acá se opera, con verificación por ítem.
       y **exit 0** sobre la dental de QA (7 filas) — un gate que sólo prueba el rojo pasa igual
       estando roto. Es también el chequeo del swap: tras el deploy tiene que dar exit 0.
 
-      **Falta (sin bloqueo ya):** recorrer los 8 🟡 transversales de estética, que ahora sí se
-      pueden mirar. Y un defecto de copy chico, con su reproducción: entrando por «Completar el
+      **Falta:** un defecto de copy chico, con su reproducción: entrando por «Completar el
       formulario», el paso 2 encabeza *"No pudimos encontrar tus datos, así que los cargamos
       juntos"* — nunca se buscó nada, porque el cliente eligió cargarlos a mano
       (`/root/capturas-onboarding-estetica/02-negocio.png`, bajada de `paso-negocio`).
+
+      **Avance 2026-09-06 — tercera tanda MIRADA: los 13 módulos de estética, y DOS hablaban en
+      dental.** Org `zz-qa-estetica-modulos-6tzgb`, cuenta `zz-qa-estetica-modulos@onia.com.bo`,
+      capturas en `/root/capturas-estetica/` **abiertas y leídas una por una** (y el log de cada
+      corrida junto a la foto: cero respuestas ≥400, así que ningún error boundary de chunk caído
+      se leyó como bug del producto). Sanas y con vocabulario correcto —«clientas», «tu centro de
+      estética»— las once: `/patients`, `/agenda`, `/appointments`, `/dashboard`, `/inventory`,
+      `/billing`, `/contabilidad`, `/rrhh`, `/empresa`, `/communications`, `/reports`,
+      `/requerimientos`. Los estados vacíos ofrecen la salida en todos.
+
+      🔴 **Las dos que no: `/treatments` decía «Catálogo de servicios y precios de tu clínica» y
+      `/agents` ofrecía «Recall — reactivación de pacientes».** Un centro de estética no es una
+      clínica y no tiene pacientes. **Arreglado y atado** en `581afdf` (`onia-platform`, rama del
+      carril): `lib/onia-core/modules/agents-rotulos.ts` (nuevo, puro, del que `AGENT_KINDS`
+      IMPORTA sus rótulos en vez de tenerlos escritos otra vez) + `agents-view.tsx` traduciendo en
+      **las dos ramas** —la org sin agentes pinta el catálogo, la que ya los tiene pinta lo
+      guardado en la fila, sembrado en dental— + `app/(dashboard)/treatments/page.tsx` leyendo el vocabulario y
+      titulándose con el rótulo del menú que el dueño tocó (la veterinaria lo llama «Servicios» y
+      la pantalla se titulaba «Tratamientos»). Gates en `lib/onia-core/modules/agents-rotulos.test.ts`
+      y `lib/platform/copy-de-pantallas-compartidas.test.ts`, con sujetos derivados de
+      `VERTICAL_PACKS` y verificados en ROJO reinyectando el defecto en su forma real.
+      Verde: tsc 0 · vitest 3135 · eslint 0 errores. **Commiteado, NO desplegado.**
+
+      **La lección, que vale más que las dos pantallas:** todos los barridos de este proyecto
+      persiguen texto PROHIBIDO. Acá **no sobraba ninguna palabra** — «tu clínica» es copy
+      legítimo, y correcto, en el rubro que lo escribió. Lo que estaba mal era el par
+      (rubro, texto), y eso no se juzga leyendo el texto: hay que abrir la pantalla **con la
+      sesión del rubro equivocado**. Misma familia que `/v1/empezar` ofreciéndole «Historia
+      clínica con odontograma» a un lead de Comercio. Un rubro derivado de otro (estética y
+      veterinaria salen del pack clínico con `navClinicaDe()`) es donde más barato sale heredar
+      el idioma del padre.
+
+      Se buscó una tercera instancia y **no se reprodujo**: `app/(dashboard)/settings/PlanClient.tsx` tiene
+      «Para clínicas que quieren automatizar…», pero con el ancla puesta el instrumento se negó a
+      sacar la captura porque ese texto **no está** en `/settings` de estética. No se reporta lo
+      que no se vio.
+
+      **Falta para cerrar el ítem:** servicios profesionales (no tiene org: se da de alta con
+      `scripts/alta_qa_rubro.mjs --rubro "Servicios profesionales"` + `onboarding_por_la_ui.mjs`,
+      los dos ya existen y son idempotentes) e importadora (org de un cliente real, `bolivian-
+      electricidad-e6t21`, cuyo dueño es la cuenta de Sergio Urcullo — mirarla necesita su OK).
 
       Un verde falso que se cazó en el propio instrumento antes de que mintiera: por el camino
       «la org ya existía» salía con código 0 **sin confirmar el correo**, o sea declaraba

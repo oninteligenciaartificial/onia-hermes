@@ -258,7 +258,13 @@ const EXTENSIONES = new Set([
 //
 // No se pasa a rutas absolutas a proposito: una cola con `C:\dev\...` adentro
 // solo sirve en la maquina de Sergio.
-const REPOS_HERMANOS = ['onia-platform'];
+// `onia-platform-chatbot` es el WORKTREE del carril, y va acá por un falso rojo
+// medido el 2026-09-06: el clon `onia-platform` está en `master`, así que todo
+// archivo que el carril acaba de crear en SU rama sale fantasma — el gate le
+// exige evidencia a la cola y después llama inexistente a la única que hay. El
+// efecto es el peor posible: empuja a NO citar el archivo que uno acaba de
+// escribir. No afloja nada, sigue exigiendo que el archivo exista en disco.
+const REPOS_HERMANOS = ['onia-platform', 'onia-platform-chatbot'];
 
 // Y las apps que viven DENTRO de este repo. Un item del sitio de venta escribe sus rutas
 // relativas a la app (`src/app/terminos/opengraph-image.tsx`), no al repo — es como se
