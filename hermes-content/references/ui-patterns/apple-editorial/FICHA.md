@@ -165,15 +165,20 @@ aparte y deja el A/B mirable.
    aproximarlo — redibujarlo sería repetir la trampa #9. `_imagen()` lo toma de
    `logos/hermes.*` y cae al glifo de nodos si falta, así el generador nunca se rompe por un
    asset ausente: sólo entrega menos.
-14. 🔴 **"Próximamente" está PROHIBIDO, y lo pidió Sergio Urcullo.** El 06-sep pidió "algo
-   como próximamente" para la lámina de Onia Platform. `CLAUDE.md` § *La venta nunca exhibe
-   obra* prohíbe exactamente esa palabra en toda superficie que ve un cliente — y la regla
-   **nació de él** el 2026-08-20: *"hace escapar a los clientes porque hacen creer que el
-   sistema no funciona"*.
-   **Resuelto sin desobedecer ni ignorar:** el slot dice **"Te cuento pronto"**. Da la misma
-   intriga, pero habla de la **historia** ("te voy a contar"), no del **estado del producto**
-   ("no está listo"). Esa distinción es la regla entera. Pendiente de su ratificación si
-   quiere la palabra literal.
+14. ⚖️ **"Próximamente" — EXCEPCIÓN RATIFICADA por Sergio Urcullo. No revertir.**
+   `CLAUDE.md` § *La venta nunca exhibe obra* prohíbe exactamente esa palabra en toda
+   superficie que ve un cliente, y la regla **nació de él** el 2026-08-20: *"hace escapar a
+   los clientes porque hacen creer que el sistema no funciona"*.
+   El 06-sep la pidió para la lámina de Onia Platform. Se le planteó el choque **con la regla
+   citada** y se ofreció **"Te cuento pronto"** como alternativa — misma intriga, pero
+   hablando de la **historia** en vez del **estado del producto**. Él respondió:
+   *"ponela literal, próximamente"*.
+   **Queda así.** Es su marca y su decisión, tomada con la regla delante. Dos cosas para la
+   sesión que lea esto:
+   - **No lo "corrijas" al leer la regla.** Está registrado acá y en el comentario del
+     generador justamente para que nadie lo revierta creyendo que fue un descuido.
+   - **La excepción vale SOLO para esta lámina.** La regla sigue vigente en todo lo demás:
+     nada de "muy pronto", "beta" ni "en construcción" en ninguna otra superficie.
 15. **Una herramienta que no se usa vuelve mentira toda la pieza.** Notion salió: *"gratis,
    aunque ni lo uso"* (06-sep). El valor entero de «Mi stack» es que las siete cosas son
    reales; una de adorno se lleva puestas a las otras seis. Su `.path` queda vendorizado por

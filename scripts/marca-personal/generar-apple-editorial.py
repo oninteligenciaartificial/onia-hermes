@@ -251,11 +251,13 @@ LAMINAS = [
     # El cierre del arco: lo unico del stack que no instalo, sino que construyo. Va ultima
     # a proposito — es la carta mas fuerte y la unica que lleva el verde de Onia.
     #
-    # ⚠️ El slot de precio dice "Te cuento pronto" y NO "Próximamente", que fue la palabra
-    # que pidio Sergio Urcullo. Motivo: CLAUDE.md § "La venta nunca exhibe obra" prohibe
-    # explicitamente "próximamente" en toda superficie que ve un cliente, y esa regla nacio
-    # de el ("hace escapar a los clientes"). "Te cuento pronto" da la misma intriga hablando
-    # de la HISTORIA, no del estado del producto. Si el ratifica la palabra literal, se cambia.
+    # ⚠️ "Próximamente" es una EXCEPCION EXPLICITA a CLAUDE.md § "La venta nunca exhibe obra",
+    # que prohibe esa palabra exacta en toda superficie que ve un cliente. Se le planteo el
+    # choque a Sergio Urcullo con la regla citada, se ofrecio "Te cuento pronto" como
+    # alternativa, y el 2026-09-06 el RATIFICO la palabra literal: "ponela literal,
+    # próximamente". Es su decision y su marca.
+    # NO revertir esto por leer la regla: la regla sigue vigente para todo lo demas, y esta
+    # excepcion vale SOLO para esta lamina. Detalle en la trampa #14 de la FICHA.
     #
     # Promesas: agenda y clientes son 🟢 en ONIA_CATALOGO_DE_VENTA.md; el chatbot es 🟢 en
     # su §5. Sin precio de producto: es contenido, no venta.
@@ -264,7 +266,7 @@ LAMINAS = [
         "icono": "onia",
         "nombre": "Onia Platform",
         "desc": "Donde manejo el negocio: los clientes, la agenda\ny el chatbot que contesta cuando no estoy.\nEs la única que no instalé. La construí.",
-        "precio": "Te cuento pronto",
+        "precio": "Próximamente",
         "etiqueta": "Lo que estoy construyendo",
     },
     {
