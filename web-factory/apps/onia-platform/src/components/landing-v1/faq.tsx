@@ -41,7 +41,12 @@ export const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "¿Cuánto tarda dejarlo andando?",
-    a: "Un día. Te registrás solo, el sistema busca tus datos (tu web o tus redes) y los carga por vos. Sin instalación ni proyecto de meses.",
+    // Esta respuesta viaja además al JSON-LD FAQPage que arma `page.tsx`, así
+    // que la promesa la publica también el buscador. Decía «el sistema busca
+    // tus datos (tu web o tus redes)»: eso es el paso (3) del motor de alta,
+    // que necesita `SEARXNG_URL` y en producción devuelve vacío. Lo que sí
+    // corre es leer el enlace que la persona pega. Ver capacidad-degradada.test.ts.
+    a: "Un día. Te registrás solo, pegás el enlace de tu web y el sistema carga tus datos por vos. Sin instalación ni proyecto de meses.",
   },
   {
     q: "¿Hay contrato de permanencia?",
