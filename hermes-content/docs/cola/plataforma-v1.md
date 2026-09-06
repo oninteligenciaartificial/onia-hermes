@@ -64,11 +64,20 @@ y sin operar. Acá se opera, con verificación por ítem.
       Medido el 2026-09-06 10:35 UTC por `onia-cola`: **tres** destinos con pedido en `blocked`,
       uno por destino, y **ninguno contestado**.
 
-      | destino | commits sin desplegar | desde |
-      |---|---|---|
-      | `landing` (`onia.com.bo`) | **25** | build vivo del 2026-09-04 10:04 UTC |
-      | `plataforma` (`app.onia.com.bo`) | **3** | corre `build-5fc8bcd` (hoy 17:08 UTC) |
-      | `bot` (WhatsApp) | 17 archivos | último copiado a `/opt/onia/bot` el 2026-09-04 20:36 |
+      | destino | cuánto falta por publicar — se DERIVA, no se copia |
+      |---|---|
+      | `landing` (`onia.com.bo`) | `bash /opt/onia-landing/_deploy/publicar.sh --dry-run` |
+      | `plataforma` (`app.onia.com.bo`) | `bash /opt/onia-platform/_deploy/publicar.sh --dry-run` |
+      | `bot` (WhatsApp) | `bash /opt/onia/bot/_deploy/publicar.sh --dry-run` |
+
+      ⚠️ **Acá había una columna con las cifras (25 / 3 / 17) y se sacó el 2026-09-06 17:55 La
+      Paz, porque un número escrito acá se pudre en una hora.** Cada merge a `main` lo sube y
+      cada swap lo baja a cero, así que la tabla mentía casi siempre — y en las dos direcciones:
+      de más («quedan 25» cuando ya se publicaron) y de menos («quedan 3» con 27 esperando). Es
+      el MISMO defecto que este ítem ya documenta dos párrafos abajo para los IDs de tarea
+      escritos a mano, un escalón más arriba: **lo que cambia solo no se copia, se deriva.** Los
+      tres comandos salen con código 0 sin tocar producción y ya filtran lo que no viaja al
+      navegador; medido así el 2026-09-06 17:38 La Paz daban 27 · 4 · 17 archivos.
 
       ⚠️ **La plataforma SE PUBLICÓ el 2026-09-06 a las 17:08 UTC (13:08 La Paz), y esta tabla
       decía lo contrario — corregido a las 19:45 UTC por `onia-cola`.** Decía «22 sin desplegar,
