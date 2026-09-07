@@ -1028,9 +1028,22 @@ y sin operar. Acá se opera, con verificación por ítem.
 
       **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **3273 pasan / 288 archivos** ·
       `npx eslint .` 0 errores. **No está terminado hasta que se publique:** anotado en el pedido
-      `t_deddf471` (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo. ⚠️ `33b40ff`
-      **no está en `master` todavía** (3 commits fuera): si el swap corre antes del merge del
-      integrador, este arreglo no viaja.
+      `t_deddf471` (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo.
+      ✅ **El riesgo que decía acá está levantado (2026-09-07):** `33b40ff` ya está en `master`
+      —entró con el merge `2aa79f8`, tres gates verdes sobre el árbol real (tsc 0, 3273 tests,
+      lint 0 errores)— así que el swap lo publica sí o sí. Ese aviso duró lo que tardó el
+      integrador en pasar: **un `no está en master todavía` es una medición con fecha de
+      vencimiento**, y leído tarde manda al revés (hace creer que el arreglo no viaja).
+
+- [ ] 🔴 **`/billing/new`: crear factura no lleva a la pantalla de cobro.** Medido el
+      2026-09-07 por `recorrido-cliente` con `--escribir`, rubro Clínica dental: se carga un
+      ítem manual (Bs 10,00) y se aprieta «Crear Factura». La factura SÍ se crea en la base
+      (`invoices` id `cmtqq67wl000q01rwujm8y6lo`, folio `2026-0001`, Bs 10.00) pero la pantalla
+      se queda en `/billing/new` sin redirigir a ningún lado, y volviendo a `/billing` (Cobros)
+      la lista sigue diciendo «0 facturas / No hay facturas aún» — como si la factura recién
+      creada no existiera para esa vista. Tablero: `t_6359aa00`. Capturas:
+      `hermes-content/docs/recorrido/capturas/paso-08-cobro.png` (Cobros vacío antes) y
+      `paso-08c-factura-creada.png` (formulario con el ítem, antes de apretar Crear Factura).
 
 - [ ] ⚪ **Pendiente fiscal (`SIAT_EMISSION`) para facturar de verdad.** Va último a propósito:
       es un trámite externo, no código, y `/billing` ya funciona sin él. **No bloquea un cierre**

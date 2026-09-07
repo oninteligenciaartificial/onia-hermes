@@ -12,6 +12,23 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## ROTO el 2026-09-07 04:13 La Paz — dental llega al paso 7/9, se corta en el cobro
+
+Corrida `--escribir` completa: pasos 1-7 **OK** (alta, onboarding de 6 pantallas, paciente
+cargado, cita agendada y VISTA en `/appointments`). El **paso 8 (cobro) sale ROTO**: en
+`/billing/new` se carga un ítem manual y se aprieta "Crear Factura" — la factura SÍ entra a la
+base (`invoices` id `cmtqq67wl000q01rwujm8y6lo`, folio `2026-0001`, Bs 10.00) pero la pantalla
+se queda en `/billing/new` sin redirigir, y volviendo a `/billing` (Cobros) la lista sigue
+diciendo "0 facturas / No hay facturas aún" — la factura recién creada no aparece ahí. El paso 9
+(bandeja) sale OK con nota: el dato del paso 6 no figura en `/dashboard` porque ese panel no
+lista pacientes, no es un fallo del panel.
+
+Es el primer corte real desde que el bug de la barra del asistente (abajo) se arregló. Reportado
+en el tablero `t_6359aa00`, prioridad 1, para el dueño de `onia-platform`, y anotado en
+`hermes-content/docs/cola/plataforma-v1.md`. Capturas: `paso-08-cobro.png` (Cobros vacío antes),
+`paso-08c-factura-creada.png` (formulario cargado, antes de crear). Cero filas `zz-qa-` propias
+al cerrar (quedan 4 filas ajenas de otros carriles, sin tocar).
+
 ## Reverificado el 2026-09-06 19:12 La Paz — dental 9/9 de nuevo, el bug de la barra ya está arreglado
 
 `t_6325e553` (la barra del asistente IA tapando el cierre de "Primeros pasos") está `done` desde
