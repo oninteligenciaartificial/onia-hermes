@@ -12,6 +12,18 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## Reverificado el 2026-09-07 19:13 La Paz — Servicios profesionales pasa a 9/9: el arreglo de `t_2b03ea3d` sostiene
+
+Corrida `--escribir` completa con `RECORRIDO_RUBRO='Servicios profesionales'`: **RECORRIDO
+COMPLETO, 9/9 pasos OK** — el paso 6 (cliente) y el paso 7 (agendar) que estaban rotos el
+2026-09-04 (6/9, desplegable de Cliente vacío) ahora entran solos: el modal de Nueva Cita ya
+ofrece el alta inline del cliente, la cita quedó vista en `/appointments`
+(`cmtrmgop9001501rwiwrmowq2`). El paso 8 (cobro) de este rubro aterriza en `/comercio/caja`, no
+en `/billing` — es la misma pantalla compartida que dental (`t_2b03ea3d` ya está `done` en el
+tablero, cerrada el 2026-09-06 05:11). Cero filas `zz-qa-` propias al cerrar (4 ajenas sin
+tocar). Con esto van **cuatro de los cinco rubros vendidos** confirmados 9/9 (dental, estética,
+importadora, servicios profesionales); comercio queda en 8/8 porque su rubro no promete agenda.
+
 ## Reverificado el 2026-09-07 16:09 La Paz — dental sigue 9/9
 
 Corrida `--escribir` completa desde nodo-casa (VPS medido por SSH): **RECORRIDO COMPLETO en
