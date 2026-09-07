@@ -1145,6 +1145,56 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] 🔴 **CERRADO el 2026-09-07: la AYUDA le enseñaba a un centro de estética y a una
+      veterinaria dónde está «el odontograma» — una pantalla que el producto les CIERRA.**
+
+      **El defecto:** `/help` la tienen los **siete** packs, y su listado traía la pregunta
+      *«¿Dónde está el odontograma?»* con la respuesta *«En la ficha del paciente, en su
+      pestaña de odontograma»*. Pero `/patients/[id]/odontogram` **redirige** a todo el que no
+      sea dental, y la ficha **no le pinta el enlace**. O sea: las dos pantallas cortaban bien
+      y el índice de ayuda mandaba a buscar algo que no está. **Estética es rubro vendible de
+      la v1.0.**
+
+      🔴 **Por qué ningún guard lo veía, que es lo reusable.** `construirFaq` ya tenía **dos**
+      filtros y el defecto cae en el **hueco entre ellos**:
+
+      | guard | qué mira | por qué no alcanza |
+      |---|---|---|
+      | `ruta` | la nav del pack | el odontograma **no es ítem de menú de nadie**: vive dentro de la ficha. Declararlo ahí lo escondía **hasta del dental** |
+      | `familias` | la familia de rubro | la familia `clinica` son **tres tracks**: dental, estética y veterinaria |
+
+      Es un escalón distinto del hueco ya anotado entre dos gates hermanos: acá los dos guards
+      están bien y el que aplicaba era **más grueso que su sujeto**. La superficie afectada son
+      las **subrutas de ficha**, que ningún gate de caminos recorre.
+
+      **Arreglo:** `onia-platform` `0d0d02a` (rama `claude/chatbots-platform-review-0d1d09`).
+      No es una lista de tracks al lado de la pregunta —eso vuelve a divergir—: se agrega
+      `soloSi`, al que se le pasa el **mismo predicado que usa la pantalla**.
+      `tieneOdontograma()` queda en `vertical-pack.ts` junto a `fichaClinica` y
+      `llevaInventario`, y ahora lo leen los **tres** lugares que antes lo tenían tipeado
+      suelto (la ruta, la ficha y la ayuda). Un track nuevo con odontograma se agrega tocando
+      **sólo esa función**.
+
+      **El odontograma NO se borró:** el dentista conserva su pregunta, y ese caso está anclado
+      porque sin él **borrar** la pregunta pasaba en verde.
+
+      Gate nuevo `lib/ayuda/ayuda-por-track.test.ts`, con los sujetos derivados de los **siete
+      packs** (un rubro nuevo nace cubierto). Validado por **mutación en tres direcciones**,
+      las tres en rojo: sacar el filtro `soloSi`, volver a `familias: CLINICA`, y hacer que el
+      predicado diga que sí a todos.
+
+      ⚠️ **Y un fallo callado que encontró el propio gate:** olvidar `trackId` en una llamada
+      hace que `soloSi` reciba `undefined`, conteste que no, y la pregunta desaparezca **para
+      todos** — se lee como «esa ayuda no existe». Por eso el parámetro es **obligatorio**: que
+      `tsc` lo exija es lo único que lo hace visible. Pasó de verdad en el primer intento.
+
+      **MIRADO renderizado** en las dos direcciones (banco `/dev/faq-ayuda`, cero respuestas
+      `>=400`): dental muestra la pregunta bajo «Pacientes»; estética dice «Clientas», ya no la
+      ve y no queda tarjeta vacía. Gates: `tsc` 0 · `vitest` **3360** passed / 293 archivos ·
+      `eslint` 0 errores.
+
+      **NO DESPLEGADO** — llega al cliente con el swap de `plataforma` (`t_deddf471`).
+
 - [x] 🟡 **El gate de cobertura multi-rubro miraba 6 de 25 pantallas compartidas: ampliado a
       las 25.** `lib/platform/pantallas-compartidas-cubiertas.test.ts` excluía por escrito las
       que todos los packs llaman **igual**, con este razonamiento adentro: *«si todos la llaman
