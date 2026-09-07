@@ -31,11 +31,81 @@
 //
 // Uso:  node avisos-vivo.mjs          (exit 0 verde · 1 rojo · 2 no se pudo medir)
 
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
+import { existsSync, mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 
 export const BOT_DIR = "/opt/onia/bot";
 export const CONTENEDOR = "onia-center";
+
+/** La maquina donde vive el bot desplegado. Se le pregunta cuando el disco local no lo tiene. */
+export const VPS_DEL_BOT = "root@187.77.16.63";
+const LLAVE_VPS = "/root/.ssh/onia_hermes_vps_ed25519";
+
+/** Sin esto no hay nada que medir: es el modulo que el gate maneja de verdad. */
+const MOTOR = "bot-engine.mjs";
+
+/**
+ * Devuelve el directorio del bot DESPLEGADO listo para importar, o `null` si no se puede.
+ *
+ * Por que existe: este gate importa el artefacto que CORRE, no el del repo — ahi esta todo su
+ * valor, porque cada pieza ya tiene su test y lo unico que nadie prueba es el empalme entre
+ * ellas. Eso lo ataba a `/opt/onia/bot`, que existe en el VPS y NO en nodo-casa, adonde se mudo
+ * este carril el 2026-09-06: desde entonces el tercer numero del objetivo salia `no_medido` en
+ * cada vuelta, con el circuito sano del otro lado.
+ *
+ * Los dos escalones, y por que NO hay un tercero que apunte al repo: traerse el artefacto
+ * cuesta un `tar` por vuelta; apuntar al repo seria mas facil y **romperia lo que el gate
+ * existe para probar** — mediria codigo commiteado y firmaria sobre produccion.
+ */
+export function resolverBotDesplegado(deps = {}) {
+  const existe = deps.existsSync || existsSync;
+  const correr = deps.spawnSync || spawnSync;
+
+  // 1. El artefacto en el disco de esta maquina. Es el caso del VPS, y no sale a la red.
+  if (existe(BOT_DIR)) return { dir: BOT_DIR, origen: "local" };
+
+  // 2. nodo-casa: se lo trae del VPS a un temporal.
+  const destino = mkdtempSync(join(tmpdir(), "onia-bot-desplegado-"));
+  const fallar = () => {
+    try {
+      rmSync(destino, { recursive: true, force: true });
+    } catch {
+      /* que no exista ya es el resultado buscado */
+    }
+    return null;
+  };
+
+  let bajado;
+  try {
+    bajado = correr(
+      "ssh",
+      ["-o", "BatchMode=yes", "-o", "ConnectTimeout=15", "-i", LLAVE_VPS, VPS_DEL_BOT, `tar -cf - -C ${BOT_DIR} .`],
+      { encoding: "buffer", maxBuffer: 64 * 1024 * 1024, timeout: 120_000 },
+    );
+  } catch {
+    return fallar();
+  }
+  // El estado del `ssh` se mira SOLO, sin tuberia: `ssh | tar` devuelve el del ultimo comando,
+  // asi que un VPS caido puede terminar en exit 0 con el destino vacio.
+  if (!bajado || bajado.status !== 0) return fallar();
+
+  let extraido;
+  try {
+    extraido = correr("tar", ["-xf", "-", "-C", destino], { input: bajado.stdout, timeout: 60_000 });
+  } catch {
+    return fallar();
+  }
+  if (!extraido || extraido.status !== 0) return fallar();
+
+  // Y aun con los dos en 0 se verifica el ARTEFACTO, no el codigo de salida: lo que hace falta
+  // es el motor en el destino, no que los comandos hayan dicho que si.
+  if (!existe(join(destino, MOTOR))) return fallar();
+
+  return { dir: destino, origen: "remoto" };
+}
 
 // ---------------------------------------------------------------------------
 // Nucleo puro — esto es lo que prueba el test, sin tocar produccion
@@ -133,11 +203,12 @@ async function credencialesResponden(token, chatId) {
  * desplegado. Es el unico eslabon que prueba que las piezas encajan entre si: cada una
  * tiene su test, y aun asi el empalme puede estar cambiado de nombre.
  */
-async function motorProduceAviso() {
+async function motorProduceAviso(dir) {
   try {
-    const engine = await import(`${BOT_DIR}/bot-engine.mjs`);
-    const { DEFAULT_CONFIG } = await import(`${BOT_DIR}/config.mjs`);
-    const { construirAviso } = await import(`${BOT_DIR}/aviso-telegram.mjs`);
+    const mod = (archivo) => pathToFileURL(join(dir, archivo)).href;
+    const engine = await import(mod(MOTOR));
+    const { DEFAULT_CONFIG } = await import(mod("config.mjs"));
+    const { construirAviso } = await import(mod("aviso-telegram.mjs"));
 
     const ahora = () => new Date().toISOString();
     let estado = engine.createState({ conversationKey: "chatwoot:0", leadKey: "gate", channel: "web" });
@@ -160,16 +231,39 @@ async function motorProduceAviso() {
   }
 }
 
-function lineasDelLog() {
-  const out = sh("bash", [`${BOT_DIR}/webhook-server.sh`, "logs"], 30000);
+/**
+ * El log del proceso vivo. El `logs` de `webhook-server.sh` es un `docker exec` contra el
+ * contenedor, asi que sirve igual desde la copia traida del VPS: en nodo-casa `docker` es un
+ * shim que delega por SSH, o sea que el log sale de produccion en las dos maquinas.
+ */
+function lineasDelLog(dir) {
+  if (!dir) return [];
+  const out = sh("bash", [join(dir, "webhook-server.sh"), "logs"], 30000);
   return out ? out.split("\n") : [];
 }
 
 export async function medir() {
+  const bot = resolverBotDesplegado();
+  try {
+    return await medirCon(bot);
+  } finally {
+    // El temporal se borra siempre: en WSL `/tmp` es un tmpfs que vive EN RAM, y son 7 MB
+    // por vuelta con este loop corriendo cada hora.
+    if (bot?.origen === "remoto") {
+      try {
+        rmSync(bot.dir, { recursive: true, force: true });
+      } catch {
+        /* dejar basura en /tmp no justifica tumbar la medicion */
+      }
+    }
+  }
+}
+
+async function medirCon(bot) {
   const env = envDelProcesoVivo();
-  const motor = await motorProduceAviso();
+  const motor = bot ? await motorProduceAviso(bot.dir) : null;
   // Sin el proceso vivo o sin el codigo desplegado no hay nada que afirmar.
-  if (!env || !motor) return { circuito: null, eventos: contarEventos(lineasDelLog()), ejemplo: null };
+  if (!env || !motor) return { circuito: null, eventos: contarEventos(lineasDelLog(bot?.dir)), ejemplo: null };
 
   const credencialesOk = await credencialesResponden(env.TG_BOT_TOKEN, env.TG_CHAT_ID);
   return {
@@ -179,7 +273,7 @@ export async function medir() {
       motorEmiteNotify: motor.emite,
       textoAccionable: motor.accionable,
     },
-    eventos: contarEventos(lineasDelLog()),
+    eventos: contarEventos(lineasDelLog(bot.dir)),
     ejemplo: motor.ejemplo,
   };
 }

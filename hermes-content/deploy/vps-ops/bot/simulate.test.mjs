@@ -235,3 +235,104 @@ test("el entorno le GANA al archivo: es lo que produccion resuelve ultimo", (t) 
 test("el webhook.env que se lee es el DESPLEGADO, no una copia de adorno", () => {
   assert.equal(WEBHOOK_ENV_DESPLEGADO, "/opt/onia/bot/webhook.env", "si esta ruta cambia, el simulador mide otra cosa que produccion");
 });
+
+// ---------------------------------------------------------------------------------------------
+// EL ARREGLO DE ARRIBA ESTABA ATADO A UNA MAQUINA, Y AL MUDARSE EL CARRIL VOLVIO EL MISMO BUG.
+//
+// El escalon `webhook.env DESPLEGADO` se cableo el 2026-09-04, cuando este loop corria en el VPS.
+// El 2026-09-06 el carril se mudo a nodo-casa (WSL), donde `/opt/onia/bot` NO EXISTE — y el
+// falso verde numero 2 de la cabecera volvio entero: medido el 2026-09-07, el simulador caia en
+// `M0_SIN_HORARIOS` («Justo ahora no tengo horarios libres para ofrecerte») mientras produccion
+// tenia DOS horarios cargados en ese mismo archivo. O sea que el "3/3" que este carril reporta
+// cada vuelta volvia a certificar un guion que ningun prospecto ve.
+//
+// No es un bug nuevo: es el ya conocido «un gate que lee una ruta absoluta del VPS deja de medir
+// cuando su loop se muda de maquina». Y avisar no alcanza — el simulador YA imprimia
+// «⚠️ sin horarios ... esta es OTRA rama del guion» las dos veces, y no cambio nada. Un aviso no
+// arregla un instrumento.
+//
+// El escalon que falta es preguntarle al VPS, que es donde vive el archivo: nodo-casa tiene SSH
+// con BatchMode contra 187.77.16.63. Se prueba en las DOS direcciones, porque el modo de falla
+// caro no es que no lea: es que al no leer se invente la rama sin horarios y la firme en verde.
+
+test("sin el webhook.env local, los horarios se le piden al VPS — es donde vive el archivo", () => {
+  const config = buildConfig(
+    {},
+    {
+      env: {},
+      // nodo-casa: el archivo desplegado no existe en el disco local.
+      readFileSync: () => {
+        throw Object.assign(new Error("ENOENT"), { code: "ENOENT" });
+      },
+      spawnSync: (cmd, args) => {
+        assert.equal(cmd, "ssh", "el ultimo escalon es SSH al VPS, no otra cosa");
+        assert.ok(
+          args.some((a) => String(a).includes(WEBHOOK_ENV_DESPLEGADO)),
+          "le tiene que pedir al VPS el MISMO archivo que carga produccion",
+        );
+        return { status: 0, stdout: `ONIA_BOT_SLOTS="${SPEC_PROD}"\n`, stderr: "" };
+      },
+    },
+  );
+
+  assert.equal(config.slots?.[0]?.label, "sábado 5 de septiembre, 09:00", "no le pregunto al VPS");
+  assert.equal(config.slots[0].startAt, ISO_A);
+  assert.doesNotMatch(
+    preguntar(config, "hola, quiero información"),
+    /no tengo horarios libres/i,
+    "mide la rama SIN_HORARIOS teniendo los horarios de produccion a un SSH de distancia",
+  );
+});
+
+test("si el VPS tampoco contesta, NO se inventa la rama: lo dice", () => {
+  const avisos = [];
+  const config = buildConfig(
+    {},
+    {
+      env: {},
+      readFileSync: () => {
+        throw Object.assign(new Error("ENOENT"), { code: "ENOENT" });
+      },
+      spawnSync: () => ({ status: 255, stdout: "", stderr: "ssh: connect timed out" }),
+      warn: (linea) => avisos.push(String(linea)),
+    },
+  );
+
+  // Cae al placeholder de config.mjs, que es la rama HONESTA: no inventa un horario ofrecible.
+  assert.ok(
+    config.slots.every((s) => s.pending && s.startAt === null),
+    "se invento un horario ofrecible sin haber podido leer ninguno",
+  );
+  const aviso = avisos.join("\n");
+  assert.match(aviso, /OTRA rama del guion/, "el aviso honesto de siempre tiene que seguir saliendo");
+  assert.match(
+    aviso,
+    /VPS|ssh/i,
+    "el aviso tiene que decir que TAMBIEN se le pregunto al VPS: si no, se lee como 'la maquina no tiene el archivo' y se arregla en el lugar equivocado",
+  );
+});
+
+test("una ruta que NO es la desplegada nunca sale a la red", () => {
+  // Los casos hermeticos de arriba pasan `envFile: "/no/existe/webhook.env"`. Si el escalon
+  // remoto disparara con cualquier ruta, la suite entera se colgaria contra un SSH real — y en
+  // una maquina sin la llave daria un rojo que no tiene nada que ver con el codigo.
+  //
+  // ⚠️ El testigo se ANOTA, no se tira. La primera version de este caso hacia
+  // `spawnSync: () => assert.fail(...)`, y `leerDelEnvRemoto` envuelve la llamada en un
+  // try/catch (para sobrevivir a un `ssh` que no existe): se comia la excepcion del assert y el
+  // caso pasaba en VERDE aun ensanchando el gate a proposito. Lo cazo la mutacion
+  // `esLaDesplegada = true`, no la lectura. Un guardia que no puede fallar no es un guardia.
+  let salioALaRed = false;
+  buildConfig(
+    {},
+    {
+      ...SIN_AMBIENTE,
+      spawnSync: () => {
+        salioALaRed = true;
+        return { status: 1, stdout: "", stderr: "" };
+      },
+    },
+  );
+
+  assert.equal(salioALaRed, false, "salio a la red por una ruta que produccion no usa");
+});

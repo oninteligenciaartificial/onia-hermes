@@ -178,6 +178,81 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-07: el tercer número del objetivo (`avisos demo/handoff`) volvió a
+      medirse desde nodo-casa.** Medido, no leído: `npm run avisos:vivo` → **exit 0**, `circuito:
+      medido` con los cuatro eslabones en `ok` (`flagEncendido`, `credencialesOk`,
+      `motorEmiteNotify`, `textoAccionable`), en 12 s. El número dejó de ser `no_medido` y pasó a
+      leerse entero: **circuito sano · 0 eventos** = nadie pidió un humano todavía, que es la
+      lectura correcta y la que el gate existe para permitir.
+
+      **Arreglo:** `resolverBotDesplegado()` en `avisos-vivo.mjs`, con dos escalones. Si
+      `/opt/onia/bot` está en el disco (el VPS) se usa y **no se sale a la red**; si no está
+      (nodo-casa) se trae el artefacto del VPS por `ssh tar -cf -` a un temporal y se importa de
+      ahí. **No hay un tercer escalón que apunte al repo a propósito:** sería más fácil y
+      rompería lo único que este gate prueba — que las piezas que CORREN encajan entre sí.
+      `lineasDelLog()` sirve igual desde la copia porque su `logs` es un `docker exec`, y en
+      nodo-casa `docker` es un shim que delega en el VPS.
+
+      **Las dos direcciones, en el script real y no sólo en los tests:** con `ssh` funcionando →
+      `ok` / exit 0. Con un `ssh` falso que sale 255 al frente del `PATH` → `VEREDICTO: no_medido`
+      / **exit 2**, nunca `ok`. Suite del bot **874/874**.
+
+      ⚠️ **Dos guardias míos nacieron huecos y los cazó la MUTACIÓN, no la lectura** — el mismo
+      método que salvó al simulador ayer, y la razón de escribirlo acá:
+
+      1. **El chequeo del estado del `ssh` no lo sostenía ningún caso.** Quitándolo, los 12 tests
+         seguían verdes: con el VPS caído el destino queda vacío, así que la verificación del
+         artefacto ya lo tapaba. Lo que sólo ve el estado es la **transferencia cortada a la
+         mitad** — `tar` extrae lo que llegó, `bot-engine.mjs` puede estar y `config.mjs` no, y el
+         gate importaría un árbol truncado que falla *como si el bot estuviera roto*. Ése es el
+         caso que ahora lo sostiene.
+      2. **El espía devolvía un solo estado para todos los comandos**, así que el `tar` tapaba al
+         `ssh` y el caso pasaba por el motivo equivocado. Ahora el estado se da **por comando**.
+
+      Matriz final: rompiendo el guardia del artefacto, el del estado del `ssh` o el de la
+      hermeticidad, cada uno da **1 caso en rojo**; sin mutación, los **12 en verde**.
+
+      ⚠️ **Y una fuga que el test se hacía a sí mismo:** el caso feliz devuelve un temporal real y
+      el que limpia es `medir()`, así que cada corrida de la suite dejaba un directorio en `/tmp`
+      — que en WSL es un **tmpfs que vive en RAM**. Había 24 acumulados. El test ahora limpia el
+      suyo; los caminos que fallan ya se limpiaban solos. Verificado: 0 después de correr.
+
+- [x] ✅ **CERRADO el 2026-09-07: el «3 de 3» de este carril volvió a certificar un guion que ningún
+      lead ve — el mismo falso verde del 2026-09-04, resucitado por la mudanza de máquina.**
+      Medido al arrancar la vuelta, no leído: el simulador contestaba
+      *«Justo ahora no tengo horarios libres para ofrecerte»* (`M0_SIN_HORARIOS`) mientras
+      producción tenía **dos** horarios cargados — `ssh root@187.77.16.63 'grep ONIA_BOT_SLOTS
+      /opt/onia/bot/webhook.env'` → *«martes 8 de septiembre, 14:00@… | miércoles 9…»*.
+
+      **La causa es de clase, no de código:** el escalón que arregló esto el 2026-09-04 leía la
+      ruta absoluta `/opt/onia/bot/webhook.env`. El 2026-09-06 el carril se mudó a **nodo-casa**
+      (WSL), donde `/opt/onia/bot` **no existe** — así que el instrumento dejó de medir y el
+      número siguió saliendo verde. Es el ya conocido *«un gate atado a una ruta del VPS deja de
+      medir cuando su loop se muda»*; acá le tocó al instrumento que produce la cifra del carril.
+      Y **avisar no alcanzó**: el simulador ya imprimía `⚠️ sin horarios … esta es OTRA rama del
+      guion` en cada corrida, dos veces, y nadie cambió de rama.
+
+      **Arreglo:** cuarto escalón — si el disco local no tiene el archivo, se le pregunta al VPS
+      por SSH (nodo-casa lo tiene con `BatchMode`). Sólo sobre la ruta REAL de producción: pedirle
+      al VPS un archivo de prueba no significa nada, y así los casos que inyectan rutas falsas
+      siguen sin salir a la red. Cuando **ni el disco ni el VPS** contestan, cae al placeholder y
+      lo dice nombrando **los dos** intentos — si el aviso sólo nombrara el archivo, se lee como
+      «esta máquina no lo tiene» y manda a copiarlo a mano, que es el lugar equivocado.
+
+      **Prueba:** 3 casos nuevos en `simulate.test.mjs`, el primero **rojo por el motivo exacto**
+      (`expected 'sábado 5 de septiembre, 09:00'` / `actual 'HORARIO A (pendiente de definir)'`).
+      Suite del bot **857/857** en 5,2 s (sin cambio de duración: nada sale a la red de verdad).
+      Y la medición vuelve a ser la de producción: el simulador ahora sirve `M0` / `M0b` con
+      *«A) martes 8 de septiembre, 14:00 · B) miércoles 9 de septiembre, 14:00»*.
+
+      ⚠️ **Mi propio guardia era hueco y lo cazó la MUTACIÓN, no la lectura.** El caso *«una ruta
+      que NO es la desplegada nunca sale a la red»* — el que protege la hermeticidad de toda la
+      suite — hacía `spawnSync: () => assert.fail(...)`, y el lector remoto envuelve la llamada en
+      un `try` con `catch` (para sobrevivir a un `ssh` ausente): **se comía la excepción del assert**, así
+      que pasaba en verde incluso ensanchando el gate a propósito. Reescrito para **anotar** el
+      testigo en vez de tirarlo; verificado en las dos direcciones (con `esLaDesplegada = true`
+      da rojo, sin la mutación da verde). Un guardia que no puede fallar no es un guardia.
+
 - [x] ✅ **CERRADO el 2026-09-06: al lead que escribió por el chat de la web le decíamos al dueño
       que había venido de WhatsApp.** Salió midiendo D1 en producción, no de una hipótesis: se
       disparó el webhook REAL de Chatwoot contra `app.onia.com.bo` (inbox 7 de la org QA, la única

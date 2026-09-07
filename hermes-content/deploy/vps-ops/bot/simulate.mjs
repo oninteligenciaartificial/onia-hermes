@@ -26,6 +26,7 @@
 // Spec: hermes-content/docs/ONIA_CHATBOT_PROPIO_SPEC_20260725.md §6 (via A).
 
 import readline from "node:readline";
+import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { createBotConfig, DEFAULT_CONFIG, parseSlotsSpec } from "./config.mjs";
@@ -214,19 +215,17 @@ export function cargarConocimientoPublicado(deps = {}) {
 /** El archivo de entorno que el bot vivo carga de verdad. NO es una copia: es el que se instala. */
 export const WEBHOOK_ENV_DESPLEGADO = "/opt/onia/bot/webhook.env";
 
+/** La maquina donde vive ese archivo. Se pregunta por SSH cuando el disco local no lo tiene. */
+export const VPS_DEL_BOT = "root@187.77.16.63";
+const LLAVE_VPS = "/root/.ssh/onia_hermes_vps_ed25519";
+
 /**
- * Lee UNA variable del `webhook.env` desplegado. Sin dependencias: es `CLAVE=valor` por linea,
- * con el valor entrecomillado (asi lo escribe el lanzador). Las comillas se sacan o se filtran
- * al guion que ve el prospecto.
+ * Saca UNA variable del texto de un `webhook.env`: es `CLAVE=valor` por linea, con el valor
+ * entrecomillado (asi lo escribe el lanzador). Las comillas se sacan o se filtran al guion que
+ * ve el prospecto. Pura a proposito: la usan el escalon local y el remoto, asi que el valor se
+ * interpreta IGUAL venga del disco o del VPS.
  */
-function leerDelEnvDesplegado(path, clave, deps = {}) {
-  const read = deps.readFileSync || readFileSync;
-  let texto;
-  try {
-    texto = read(path, "utf8");
-  } catch {
-    return null;
-  }
+function valorDeEnv(texto, clave) {
   for (const linea of String(texto).split("\n")) {
     const limpia = linea.trim();
     if (!limpia || limpia.startsWith("#") || !limpia.startsWith(`${clave}=`)) continue;
@@ -235,6 +234,42 @@ function leerDelEnvDesplegado(path, clave, deps = {}) {
     return sinComillas.trim() || null;
   }
   return null;
+}
+
+/** Lee UNA variable del `webhook.env` desplegado en el disco de ESTA maquina. */
+function leerDelEnvDesplegado(path, clave, deps = {}) {
+  const read = deps.readFileSync || readFileSync;
+  try {
+    return valorDeEnv(read(path, "utf8"), clave);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Lo mismo, pero preguntandole al VPS. Existe porque este carril se mudo a nodo-casa (WSL) el
+ * 2026-09-06 y alla `/opt/onia/bot` NO EXISTE: el escalon local devolvia null y el simulador
+ * volvia a medir `M0_SIN_HORARIOS` con produccion sirviendo dos horarios. Un instrumento atado a
+ * la ruta absoluta de UNA maquina deja de medir el dia que su loop se muda, y el numero que
+ * reporta sigue saliendo verde.
+ *
+ * Solo se intenta sobre la ruta REAL de produccion: preguntarle al VPS por un archivo de prueba
+ * no significa nada, y ademas mantiene hermeticos a los casos que inyectan rutas falsas.
+ */
+function leerDelEnvRemoto(path, clave, deps = {}) {
+  const correr = deps.spawnSync || spawnSync;
+  let r;
+  try {
+    r = correr(
+      "ssh",
+      ["-o", "BatchMode=yes", "-o", "ConnectTimeout=15", "-i", LLAVE_VPS, VPS_DEL_BOT, `cat ${path}`],
+      { encoding: "utf8", timeout: 30_000 },
+    );
+  } catch {
+    return null;
+  }
+  if (!r || r.status !== 0 || !r.stdout) return null;
+  return valorDeEnv(r.stdout, clave);
 }
 
 /**
@@ -257,13 +292,19 @@ function leerDelEnvDesplegado(path, clave, deps = {}) {
 export function cargarSlotsPublicados(args = {}, deps = {}) {
   const env = deps.env || process.env;
   const envFile = deps.envFile || WEBHOOK_ENV_DESPLEGADO;
+  // El cuarto escalon solo aplica a la ruta REAL: ver `leerDelEnvRemoto`.
+  const esLaDesplegada = envFile === WEBHOOK_ENV_DESPLEGADO;
   const raw =
     String(args.slots || env.ONIA_BOT_SLOTS || "").trim() ||
-    String(leerDelEnvDesplegado(envFile, "ONIA_BOT_SLOTS", deps) || "").trim();
+    String(leerDelEnvDesplegado(envFile, "ONIA_BOT_SLOTS", deps) || "").trim() ||
+    (esLaDesplegada ? String(leerDelEnvRemoto(envFile, "ONIA_BOT_SLOTS", deps) || "").trim() : "");
   if (!raw) {
+    // Se nombra TAMBIEN el intento remoto: sin eso el aviso se lee como "esta maquina no tiene el
+    // archivo" y manda a arreglarlo copiando un `webhook.env` a mano, que es el lugar equivocado.
+    const donde = esLaDesplegada ? `${envFile}, ni ${VPS_DEL_BOT} por ssh` : envFile;
     return {
       slots: null,
-      aviso: `⚠️ sin horarios (ni --slots, ni ONIA_BOT_SLOTS, ni ${envFile}) — si produccion los tiene cargados, esta es OTRA rama del guion`,
+      aviso: `⚠️ sin horarios (ni --slots, ni ONIA_BOT_SLOTS, ni ${donde}) — si produccion los tiene cargados, esta es OTRA rama del guion`,
     };
   }
   return { slots: parseSlotsSpec(raw), aviso: null };
