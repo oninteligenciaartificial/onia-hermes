@@ -1135,6 +1135,26 @@ y sin operar. Acá se opera, con verificación por ítem.
 
       Lo que sí se puede prometer hoy está en `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` §7.
 
+- [ ] 🟡 **El gate de cobertura multi-rubro mira 6 de 25 pantallas compartidas — ampliar su
+      sujeto.** Medido el 2026-09-07:
+      `lib/platform/pantallas-compartidas-cubiertas.test.ts` excluye por escrito las pantallas
+      que todos los packs llaman **igual**, y esa premisa ya falló **tres** veces
+      (`/appointments`, `/comercio/caja`, `/inventory` — ver el ítem en «Cerrado» con la tabla).
+      Las tres se arreglaron como instancia y quedan **19 pantallas sin vigilar**.
+
+      **Lo que hay que hacer:** el sujeto pasa de «compartida con rótulo distinto» a
+      **«compartida por dos o más packs»**, y cada una declara CÓMO se cubre. Las 19 nuevas hay
+      que declararlas una por una — por eso no entró en una vuelta: es el trabajo, no un
+      obstáculo.
+
+      ⚠️ **Al hacerlo, NO declarar cobertura con `grep vocabularioDeTrack`**: da CERO sobre
+      `/comercio/caja`, que sí deriva (usa `idioma.ques`). Es lista de inclusión de nombres de
+      símbolo y falla abierto. Y el propio gate ya dice que «la pantalla deriva del pack» no
+      alcanza como cobertura: tiene que quedar una invariante ejecutable o un motivo medido.
+
+      Se ve con: contar los `href` que 2+ packs comparten en `VERTICAL_PACKS` (25) contra las
+      filas de `COBERTURA` (6).
+
 ## Lo que este carril NO hace
 
 - **No toca los dos rubros bloqueados** (veterinaria, ganadería). Están fuera de la v1.0.
@@ -1144,6 +1164,52 @@ y sin operar. Acá se opera, con verificación por ítem.
 - **No le escribe a un prospecto.** Regla del [`README.md`](README.md) de esta carpeta.
 
 ## Cerrado
+
+- [x] 🔴 **CERRADO el 2026-09-07: a un centro de estética le sugeríamos un proveedor dental —
+      y el defecto estaba en el punto ciego del gate que existe para cazarlo.**
+
+      **El defecto:** en `/inventory` el campo **Proveedor** proponía de ejemplo
+      *«Dental Supply Bolivia»*. Esa pantalla la comparten los **tres packs clínicos**
+      —dental, **estética** (rubro vendible de la v1.0) y veterinaria— y los tres la llaman
+      **«Inventario»**. Al dueño de un centro de estética el sistema le sugería el proveedor
+      de otro negocio.
+
+      **Por qué no lo vio nadie, que vale más que el defecto:** es un `placeholder`. No es un
+      párrafo, no sobra ninguna palabra, ningún barrido de literales prohibidos lo mira, y en
+      el rubro que lo escribió es copy **legítimo**. Es la forma más escondida de la familia
+      (rubro, texto).
+
+      🔴 **Y el hallazgo grande, medido: el gate de cobertura mira 6 de 25 pantallas
+      compartidas.** `lib/platform/pantallas-compartidas-cubiertas.test.ts` excluye **por
+      escrito** las pantallas que todos los packs llaman igual, razonando que *«si todos los
+      packs la llaman igual, no hay par (rubro, texto) que pueda contradecirse»*. Esa premisa
+      **ya falló tres veces, las tres con rótulo idéntico en todos sus packs**:
+
+      | pantalla | rótulo | defecto | cuándo |
+      |---|---|---|---|
+      | `/appointments` | «Citas» en los 4 | «El doctor» a un estudio contable | 2026-09-07 |
+      | `/comercio/caja` | «Caja» en los 3 | «productos con stock» a servicios profesionales | 2026-09-06 |
+      | `/inventory` | «Inventario» en los 3 | proveedor dental a estética | 2026-09-07 |
+
+      Las tres se arreglaron como **instancia**; la premisa sigue en pie y deja **19 pantallas
+      sin vigilar**. **El rótulo del menú no es el eje** — el defecto vive en el copy, no en el
+      nombre. Queda anotado en «Después»: el sujeto del gate tiene que ser *toda* pantalla que
+      dos packs comparten.
+
+      ⚠️ **Y un instrumento que casi me hace declarar sanas a las que no lo están:** medir
+      «esta pantalla deriva del vocabulario» con `grep vocabularioDeTrack` da **CERO** sobre
+      `/comercio/caja`, que **sí** deriva (usa otro helper, `idioma.ques`). Es una lista de
+      inclusión de nombres de símbolo y falla **abierto**.
+
+      **Arreglo:** `onia-platform` `e843507` (rama `claude/chatbots-platform-review-0d1d09`).
+      Gate nuevo en `app/(dashboard)/inventory/placeholder-sin-rubro.test.ts`, que **deriva sus
+      sujetos de los placeholders del archivo** — un ejemplo nuevo nace cubierto. Rojo primero
+      por el motivo exacto (1 de 12) y validado por **mutación** en la otra dirección («caja
+      veterinaria» también lo pone rojo). No prohíbe el idioma compartido de los tres clínicos
+      («bioseguridad», «uso en consulta»): prohibirlo obligaría a empeorar ejemplos que hoy
+      están bien. Gates: `tsc` 0 · **3306** tests · `eslint` 0 errores.
+
+      **NO DESPLEGADO** — llega al cliente con el swap de `plataforma` (`t_deddf471`).
 
 - [x] 🔴 **CERRADO el 2026-09-07: el CONTRATO que firma quien se da de alta describía una
       clínica dental — y el alta vende los cinco rubros.**
