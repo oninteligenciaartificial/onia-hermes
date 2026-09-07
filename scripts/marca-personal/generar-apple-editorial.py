@@ -172,25 +172,37 @@ def _tarjeta_clientes():
 
 
 def _tarjeta_creditos():
-    """Panel de saldo estilo el de la cuarta celda de la referencia #2.
+    """Panel de uso de CLAUDE, en los colores de Claude.
 
-    A diferencia del de clientes, ESTE numero es real: el pool compartido de Higgsfield
-    ronda los 2.100 creditos y cada imagen cuesta 0,12 (CLAUDE.md §Video, y
-    BASE_CONTENIDO §1). No hizo falta inventar nada.
+    Sergio Urcullo, 06-sep: los tokens tienen que verse como de Claude. Antes esta celda
+    mostraba el saldo de Higgsfield sobre un panel oscuro y neutro: no se leia de quien
+    era. Ahora va sobre la crema oficial #F3E9D7, con el coral #D97757 en la barra y en
+    el boton, y el estallido de la marca arriba a la izquierda. La celda dice "Claude"
+    sin escribir la palabra.
+
+    La cifra `$0,25 / 1M` es el precio publico de lectura de cache de Fable 5.1
+    (anthropic.com, leido el 2026-09-06) — real, y la misma que sostiene el otro carrusel.
     """
     return (
         '<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">'
-        '<rect x="10" y="34" width="280" height="232" rx="20" fill="#1D1D1F"/>'
-        '<text x="34" y="76" font-family="OniaMono,monospace" font-size="15" '
-        'letter-spacing="1.6" fill="#8E8E93">SALDO</text>'
-        '<text x="33" y="134" font-family="Inter,sans-serif" font-size="54" '
-        'font-weight="700" letter-spacing="-2" fill="#FFFFFF">2.100</text>'
-        '<text x="34" y="166" font-family="Inter,sans-serif" font-size="19" '
-        'fill="#8E8E93">0,12 por imagen</text>'
-        '<rect x="34" y="186" width="232" height="9" rx="5" fill="#3A3A3C"/>'
-        '<rect x="34" y="186" width="152" height="9" rx="5" fill="#00C661"/>'
-        '<rect x="34" y="216" width="110" height="38" rx="11" fill="#00C661"/>'
-        '<rect x="156" y="216" width="110" height="38" rx="11" fill="#2C2C2E"/></svg>')
+        '<rect x="10" y="34" width="280" height="232" rx="20" fill="#F3E9D7"/>'
+        # estallido chico de la marca, en coral
+        '<g transform="translate(30 52) scale(0.105)">'
+        '<circle cx="128" cy="128" r="30" fill="#D97757"/>'
+        + "".join(
+            f'<rect x="{128 - 11}" y="{128 - 92}" width="22" height="76" rx="11" '
+            f'fill="#D97757" transform="rotate({i * 30} 128 128)"/>' for i in range(12))
+        + '</g>'
+        '<text x="66" y="74" font-family="OniaMono,monospace" font-size="15" '
+        'letter-spacing="1.6" fill="#8A7B63">TOKENS DE CLAUDE</text>'
+        '<text x="33" y="140" font-family="Inter,sans-serif" font-size="52" '
+        'font-weight="700" letter-spacing="-2" fill="#3A2E1E">$0,25</text>'
+        '<text x="34" y="172" font-family="Inter,sans-serif" font-size="19" '
+        'fill="#8A7B63">por millón · lectura de caché</text>'
+        '<rect x="34" y="192" width="232" height="9" rx="5" fill="#E0D2B8"/>'
+        '<rect x="34" y="192" width="58" height="9" rx="5" fill="#D97757"/>'
+        '<rect x="34" y="220" width="110" height="38" rx="11" fill="#D97757"/>'
+        '<rect x="156" y="220" width="110" height="38" rx="11" fill="#E4D8C0"/></svg>')
 
 
 ICONOS = {
@@ -202,7 +214,12 @@ ICONOS = {
     # blanco. El real es al reves, estallido coral #D97757 sobre crema #F3E9D7, y la
     # entrada de simple-icons ademas dibuja el estallido mucho mas tosco.
     # Leccion: "logo real" no es lo mismo que "logo de una libreria de logos".
-    "claude": _squircle("#F3E9D7", _imagen("claude-oficial", alto=256)),
+    # Fondo BLANCO por pedido de Sergio Urcullo (06-sep). El PNG oficial trae la crema
+    # #F3E9D7 horneada; `claude-oficial-blanco.png` la reemplaza por blanco midiendo
+    # distancia de color, para no dejarle halo a los bordes suavizados del estallido.
+    # El trazo sigue siendo el coral oficial: cambia el fondo, no la marca.
+    "claude": _squircle("#FFFFFF", _imagen("claude-oficial-blanco", alto=256),
+                        borde="#E8E8ED"),
     "whatsapp": _squircle("#25D366", _marca("whatsapp", "#FFFFFF")),
     "n8n": _squircle("#EA4B71", _marca("n8n", "#FFFFFF")),
     # Notion va al reves —blanco con glifo negro y filo— porque asi es su icono real.
