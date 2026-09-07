@@ -200,7 +200,13 @@ Cerrado y sin desvíos. Cada paso se despliega y se verifica MIRÁNDOLO antes de
    | Recibo | ✅ `/print/recibo-venta/…` con encabezado del negocio, monto, método, detalle, y el límite dicho de frente: «Comprobante interno de pago. No reemplaza a la factura ni a la nota de venta» |
    | El cliente aparece | ✅ «1 en total · 1 te debe(n) Bs 124,00 — Marta Quispe · 71234567 · 06/09/2026» |
 
-   🟠 **Hueco 1 — no hay alta manual de cliente.** La pantalla de Clientes no tiene ningún
+   ✅ **Hueco 1 — CERRADO el 6-sep** (`31b1586`, desplegado y probado en producción: se dio de
+   alta «Don Ramiro Ferretería» sin fiarle nada, y el duplicado rebota con
+   *«Ya tenés a Marta Quispe con ese teléfono»* — contra una clienta que había creado el
+   FIADO, o sea los dos caminos comparten el criterio). El encabezado ya no se contradice con
+   la tarjeta. Lo que decía antes:
+
+   🟠 ~~**Hueco 1 — no hay alta manual de cliente.**~~ La pantalla de Clientes no tiene ningún
    «Nuevo cliente»: su única acción es «Ir a la caja». Un cliente existe **solo** si le fiaste
    algo. Una ferretería que quiere anotar a un cliente habitual sin fiarle, no puede. Y la
    pantalla **se contradice a sí misma**: el encabezado dice «Todavía no cargaste ninguno»

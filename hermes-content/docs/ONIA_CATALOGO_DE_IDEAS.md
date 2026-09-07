@@ -277,7 +277,7 @@ decisiones de plata para Sergio en §8 de ese doc.
 
 | # | Pedido | Clase | Estado | Qué lo frena / gatillo |
 |---|---|---|---|---|
-| 1 | Alta manual de cliente en comercio | defecto 1.0 | 🟢 **EN CURSO** | — |
+| 1 | Alta manual de cliente en comercio | defecto 1.0 | ✅ **HECHO 6-sep** (`31b1586`, en producción y probado ahí) | — |
 | 2 | Reimprimir un recibo después de cobrar | defecto 1.0 | 🟢 **EN CURSO** | — |
 | 3 | Layout que use el ANCHO, no solo scroll vertical | UX 1.0 | 🟡 anotado | Toca TODAS las pantallas. Es rediseño, no arreglo: entra después de lanzar o se come el lanzamiento |
 | 4 | Sidebar colapsable a solo iconos | UX 1.0 | 🟡 anotado | Chico y contenido. Candidato a entrar con el #3, misma pasada |
