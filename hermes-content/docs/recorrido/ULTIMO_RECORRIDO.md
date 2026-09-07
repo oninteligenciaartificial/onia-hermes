@@ -12,7 +12,19 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
-## ROTO el 2026-09-07 04:13 La Paz — dental llega al paso 7/9, se corta en el cobro
+## Reverificado el 2026-09-07 06:14 La Paz — dental vuelve a 9/9: el corte de abajo era el INSTRUMENTO, no el producto
+
+`t_daa76d62` (tablero, dueño `chatbot-cola`): `scripts/recorrido_cliente.mjs:345` esperaba la
+navegación con `waitForURL(/\/billing\/[^/]+$/)`, y `/billing/new` **ya cumple** ese patrón
+(`new` matchea `[^/]+`) — el `waitForURL` resolvía al instante, sin esperar nada, y la línea
+siguiente comparaba la URL de PARTIDA. El "ROTO" de abajo (04:13) no era un bug de `/billing`:
+era la foto tomada con el POST todavía en vuelo (el botón en "Guardando", sin cartel de error).
+Arreglado excluyendo la URL de origen del predicado de espera (línea 345-352). Corrida
+`--escribir` completa hoy: **RECORRIDO COMPLETO en Clínica dental, 9/9 pasos OK**, paso 8
+incluido (`/billing/cmtr31f2q002701rw5oa2gu1g`, factura con el ítem visible). Cero filas `zz-qa-`
+propias al cerrar (4 ajenas de otros carriles, sin tocar). Tarea `t_daa76d62` cerrada.
+
+## ROTO el 2026-09-07 04:13 La Paz — dental llega al paso 7/9, se corta en el cobro (FALSO — ver arriba)
 
 Corrida `--escribir` completa: pasos 1-7 **OK** (alta, onboarding de 6 pantallas, paciente
 cargado, cita agendada y VISTA en `/appointments`). El **paso 8 (cobro) sale ROTO**: en
