@@ -1135,42 +1135,6 @@ y sin operar. Acá se opera, con verificación por ítem.
 
       Lo que sí se puede prometer hoy está en `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` §7.
 
-- [ ] 🟡 **El gate de cobertura multi-rubro mira 6 de 25 pantallas compartidas — ampliar su
-      sujeto.** `lib/platform/pantallas-compartidas-cubiertas.test.ts` excluye por escrito las
-      pantallas que todos los packs llaman **igual**, y esa premisa ya falló **cuatro** veces
-      (`/appointments`, `/comercio/caja`, `/inventory` y ahora `/settings` — ver «Cerrado»).
-
-      **Medido el 2026-09-07, ya no hay que volver a derivarlo:** los packs comparten **25**
-      pantallas, el gate declara **6** (las de rótulo distinto: `/comercio`, `/comercio/fiados`,
-      `/dashboard`, `/empresa`, `/patients`, `/treatments`) y quedan **19 sin vigilar** —
-      `/admin`, `/agenda`, `/agents`, `/appointments`, `/billing`, `/billing/recurring`,
-      `/comercio/caja`, `/comercio/clientes`, `/comercio/inventario`, `/communications`,
-      `/contabilidad`, `/help`, `/inbox`, `/inventory`, `/reports`, `/requerimientos`, `/rrhh`,
-      `/settings`, `/team`.
-
-      **Lo que hay que hacer:** el sujeto pasa de «compartida con rótulo distinto» a
-      **«compartida por dos o más packs»**, y cada una declara CÓMO se cubre.
-
-      ✅ **Barrido de copy ya hecho sobre las 19** (detector: literales con espacio, sin
-      comentarios ni identificadores, buscando palabra de un solo rubro). Resultado:
-      `/help`, `/reports`, `/billing`, `/team` y `/appointments` **ya derivan del vocabulario**
-      — sus hits eran los COMENTARIOS que explican arreglos previos, no copy. `/admin` es el
-      panel de superadmin (nosotros), no superficie de cliente. El único defecto vivo era
-      `/settings`, **arreglado en esta vuelta**.
-
-      ⚠️ **Dos trampas del detector, medidas:** `diente` sin límite de palabra matchea
-      «pen**diente**s» (falso positivo en `/communications`, `/reports`, `/rrhh`,
-      `/requerimientos`), y `doctorId` / `patientEmail` se cuelan como frase si llevan `, `.
-      Anclar con `\b` y descartar identificadores.
-
-      ⚠️ **NO declarar cobertura con `grep vocabularioDeTrack`**: da CERO sobre `/comercio/caja`,
-      que sí deriva (usa `idioma.ques`) — y da VERDADERO sobre `/settings`, que lo importaba y
-      aun así decía dental. Es lista de inclusión de nombres de símbolo y falla en las **dos**
-      direcciones.
-
-      Se ve con: contar los `href` que 2+ packs comparten en `VERTICAL_PACKS` (25) contra las
-      filas de `COBERTURA` (6).
-
 ## Lo que este carril NO hace
 
 - **No toca los dos rubros bloqueados** (veterinaria, ganadería). Están fuera de la v1.0.
@@ -1180,6 +1144,44 @@ y sin operar. Acá se opera, con verificación por ítem.
 - **No le escribe a un prospecto.** Regla del [`README.md`](README.md) de esta carpeta.
 
 ## Cerrado
+
+- [x] 🟡 **El gate de cobertura multi-rubro miraba 6 de 25 pantallas compartidas: ampliado a
+      las 25.** `lib/platform/pantallas-compartidas-cubiertas.test.ts` excluía por escrito las
+      que todos los packs llaman **igual**, con este razonamiento adentro: *«si todos la llaman
+      igual, no hay par (rubro, texto) que pueda contradecirse»*. Es cierto del **rótulo** y
+      falso del **contenido**, y esa premisa falló **cuatro** veces seguidas, las cuatro con
+      rótulo idéntico en los siete packs: `/appointments`, `/comercio/caja`, `/inventory` y
+      `/settings` (los cuatro más abajo en esta misma sección).
+
+      **Lo que cambió:** el sujeto pasa de «compartida con rótulo distinto» a **«compartida por
+      dos o más packs»** — de 6 filas a 25 — y cada una declara CÓMO se cubre, en tres formas
+      que **todas dejan rastro ejecutable**:
+
+      | forma | cuántas | qué se verifica en cada corrida |
+      |---|---|---|
+      | `gate` | 9 | el gate propio existe y nombra la ruta |
+      | `barrido` | 15 | este archivo barre los fuentes de la ruta: cero palabra de un solo rubro |
+      | `fuera-de-cliente` | 1 | `/admin`: todo pack que la muestra la da sólo a `SUPERADMIN` |
+
+      **«Ya deriva del pack» sigue prohibida como cobertura**, y ahora con su medición: `/settings`
+      IMPORTABA `vocabularioDeTrack`, lo usaba para dos campos y tenía ocho textos dentales
+      tipeados al lado. Un chequeo de imports la daba por cubierta.
+
+      ⚠️ **Las tres trampas del detector, todas con su caso que las ancla** — las tres van en la
+      dirección cara, hacen acusar a una pantalla sana: `diente` sin `\b` matchea
+      «pen**diente**s» (`/communications`, `/reports`, `/rrhh`, `/requerimientos`);
+      `doctorId, patientEmail` se cuela como frase por la coma; y `` `Eliminar a ${doctor.name}` ``
+      trae el identificador dentro de la interpolación. El mismo caso exige que el detector **sí**
+      encuentre «paciente» y «Odontograma»: sin esa mitad puede pudrirse en «siempre vacío» y las
+      15 filas pasan en verde sin mirar nada.
+
+      **Validado por MUTACIÓN, las cuatro en rojo:** volver el sujeto a rótulo distinto (2 casos),
+      borrar una fila (`/contabilidad`), romper el detector, e inyectar «pacientes» en `/rrhh`.
+      Gates: `tsc` 0 · `vitest` 3.356 · `eslint` 0. Commit `c603bbf` (rama
+      `claude/chatbots-platform-review-0d1d09`, publicada en `50cb996` con `origin/master`
+      mergeado — el árbol gateado es el publicado, `1a5cf5dd`).
+
+      Se ve con: `npx vitest run lib/platform/pantallas-compartidas-cubiertas.test.ts` (47 casos).
 
 - [x] 🔴 **La pantalla donde el cliente decide CUÁNTO PAGA le hablaba en dental a cuatro
       rubros.** `/settings` la comparten los **siete** packs y las tarjetas de plan se le
