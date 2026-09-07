@@ -29,7 +29,7 @@ que el ya tenia — no es el VPS alquilado de esa misma tabla, y las specs de la
 estan registradas en ningun lado, asi que la lamina no afirma ninguna.
 PENDIENTE: el plan de Notion no esta registrado; "$0" asume plan gratis.
 
-CTA: pide respuesta humana a proposito. La cuenta @sergio_urcullo tiene `palabras: {}`
+CTA: pide respuesta humana a proposito. La cuenta @sergiourcullo tiene `palabras: {}`
 en el workflow n8n activo de private-reply (medido 2026-09-04): un "Comenta X" ahi no
 entrega nada y no deja registro.
 

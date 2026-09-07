@@ -86,6 +86,20 @@ aparte y deja el A/B mirable.
 
 ## Trampas (se van llenando al costo de un render)
 
+0c. 🔴 **El handle se verifica contra Sergio Urcullo, no contra el repo.** El 06-sep había
+   **dos** conviviendo: `scripts/carousel_render.js` firmaba `@sergio_urcullo` citando una
+   verificación por Graph API de agosto, y los 13 generadores de `scripts/marca-personal/`
+   usaban `@sergiourcullo` (75 usos contra 1). Él confirmó el segundo: **renombró la cuenta**
+   y el cambio nunca llegó al motor viejo, que quedó firmando con un handle inexistente.
+   **Un handle mal puesto no rompe ningún build.** No hay gate que lo atrape: sale publicado
+   y listo. Ya había pasado antes — ese mismo campo decía `@sergio`, inventado.
+   Corregido en `carousel_render.js`. ⚠️ Sobrevive en **7 documentos**, y ahí hay que separar:
+   los que **narran lo que pasó en agosto** (`ONIA_AVISO_AUTOMATIZACION_IG.md`) son historia y
+   se dejan; los que describen el **estado de hoy** (`ETAPA2_OPERACION.md` §76,
+   `ONIA_CIRCUITO_COMENTARIO_DM.md`, `ONIA_SERGIO_DM_PALABRAS.md`,
+   `ONIA_PLAN_DE_CONTENIDO_3_FRENTES.md`, `ONIA_CUENTAS_Y_MODELOS_SEPARACION_20260821.md`)
+   están mintiendo y son de otro carril. Pendiente anotado, no ejecutado acá.
+
 0b. **En un duelo, los dos remates se miden con la misma vara.** La primera versión ponía
    "0" de un lado y "todos los días" del otro: cantidad contra frecuencia, y la comparación
    no cierra. Va `0 avisos` contra `1 por día`. La referencia #3 lo hace igual — *310 cal*
@@ -104,7 +118,7 @@ aparte y deja el A/B mirable.
 2. **El verde como texto reprueba AA** (2,12:1 sobre fondo claro, medido en §7). En este
    patrón el verde va de **relleno** con tinta negra, igual que allá — sólo que acá aparece
    en dos láminas de nueve, no en todas.
-3. **CTA de palabra clave: NO en `@sergio_urcullo`.** Esa cuenta tiene `palabras: {}` en el
+3. **CTA de palabra clave: NO en `@sergiourcullo`.** Esa cuenta tiene `palabras: {}` en el
    workflow n8n activo de private-reply (medido 2026-09-04, ver
    `briefs/marca-personal/lamina-grid-mensajes.json`): un "Comentá X" ahí no entrega nada y
    no deja registro. El CTA de este patrón pide respuesta humana, no automatizada.
