@@ -171,26 +171,53 @@ def _tarjeta_clientes():
         '<circle cx="266" cy="152" r="9" fill="#00C661"/></svg>')
 
 
-def _tarjeta_creditos():
-    """Panel de saldo estilo el de la cuarta celda de la referencia #2.
+def _tarjeta_transferencia():
+    """No existe un logo de "transferencia bancaria", asi que se dibuja: comprobante con
+    monto tapado. El monto va TAPADO a proposito — cualquier cifra ahi seria inventada."""
+    return (
+        '<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">'
+        '<rect x="34" y="26" width="188" height="204" rx="18" fill="#FFFFFF" '
+        'stroke="#D2D2D7" stroke-width="3"/>'
+        '<circle cx="128" cy="80" r="26" fill="#E4F9EE"/>'
+        '<path d="M116 80 L125 89 L141 71" stroke="#00C661" stroke-width="9" fill="none" '
+        'stroke-linecap="round" stroke-linejoin="round"/>'
+        '<rect x="66" y="126" width="124" height="14" rx="7" fill="#1D1D1F"/>'
+        '<rect x="82" y="154" width="92" height="10" rx="5" fill="#C9C9CE"/>'
+        '<rect x="66" y="186" width="124" height="26" rx="8" fill="#F0F0F3"/></svg>')
 
-    A diferencia del de clientes, ESTE numero es real: el pool compartido de Higgsfield
-    ronda los 2.100 creditos y cada imagen cuesta 0,12 (CLAUDE.md §Video, y
-    BASE_CONTENIDO §1). No hizo falta inventar nada.
+
+def _tarjeta_creditos():
+    """Panel de uso de CLAUDE, en los colores de Claude.
+
+    Sergio Urcullo, 06-sep: los tokens tienen que verse como de Claude. Antes esta celda
+    mostraba el saldo de Higgsfield sobre un panel oscuro y neutro: no se leia de quien
+    era. Ahora va sobre la crema oficial #F3E9D7, con el coral #D97757 en la barra y en
+    el boton, y el estallido de la marca arriba a la izquierda. La celda dice "Claude"
+    sin escribir la palabra.
+
+    La cifra `$0,25 / 1M` es el precio publico de lectura de cache de Fable 5.1
+    (anthropic.com, leido el 2026-09-06) — real, y la misma que sostiene el otro carrusel.
     """
     return (
         '<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">'
-        '<rect x="10" y="34" width="280" height="232" rx="20" fill="#1D1D1F"/>'
-        '<text x="34" y="76" font-family="OniaMono,monospace" font-size="15" '
-        'letter-spacing="1.6" fill="#8E8E93">SALDO</text>'
-        '<text x="33" y="134" font-family="Inter,sans-serif" font-size="54" '
-        'font-weight="700" letter-spacing="-2" fill="#FFFFFF">2.100</text>'
-        '<text x="34" y="166" font-family="Inter,sans-serif" font-size="19" '
-        'fill="#8E8E93">0,12 por imagen</text>'
-        '<rect x="34" y="186" width="232" height="9" rx="5" fill="#3A3A3C"/>'
-        '<rect x="34" y="186" width="152" height="9" rx="5" fill="#00C661"/>'
-        '<rect x="34" y="216" width="110" height="38" rx="11" fill="#00C661"/>'
-        '<rect x="156" y="216" width="110" height="38" rx="11" fill="#2C2C2E"/></svg>')
+        '<rect x="10" y="34" width="280" height="232" rx="20" fill="#F3E9D7"/>'
+        # estallido chico de la marca, en coral
+        '<g transform="translate(30 52) scale(0.105)">'
+        '<circle cx="128" cy="128" r="30" fill="#D97757"/>'
+        + "".join(
+            f'<rect x="{128 - 11}" y="{128 - 92}" width="22" height="76" rx="11" '
+            f'fill="#D97757" transform="rotate({i * 30} 128 128)"/>' for i in range(12))
+        + '</g>'
+        '<text x="66" y="74" font-family="OniaMono,monospace" font-size="15" '
+        'letter-spacing="1.6" fill="#8A7B63">TOKENS DE CLAUDE</text>'
+        '<text x="33" y="140" font-family="Inter,sans-serif" font-size="52" '
+        'font-weight="700" letter-spacing="-2" fill="#3A2E1E">$0,25</text>'
+        '<text x="34" y="172" font-family="Inter,sans-serif" font-size="19" '
+        'fill="#8A7B63">por millón · lectura de caché</text>'
+        '<rect x="34" y="192" width="232" height="9" rx="5" fill="#E0D2B8"/>'
+        '<rect x="34" y="192" width="58" height="9" rx="5" fill="#D97757"/>'
+        '<rect x="34" y="220" width="110" height="38" rx="11" fill="#D97757"/>'
+        '<rect x="156" y="220" width="110" height="38" rx="11" fill="#E4D8C0"/></svg>')
 
 
 ICONOS = {
@@ -202,7 +229,12 @@ ICONOS = {
     # blanco. El real es al reves, estallido coral #D97757 sobre crema #F3E9D7, y la
     # entrada de simple-icons ademas dibuja el estallido mucho mas tosco.
     # Leccion: "logo real" no es lo mismo que "logo de una libreria de logos".
-    "claude": _squircle("#F3E9D7", _imagen("claude-oficial", alto=256)),
+    # Fondo BLANCO por pedido de Sergio Urcullo (06-sep). El PNG oficial trae la crema
+    # #F3E9D7 horneada; `claude-oficial-blanco.png` la reemplaza por blanco midiendo
+    # distancia de color, para no dejarle halo a los bordes suavizados del estallido.
+    # El trazo sigue siendo el coral oficial: cambia el fondo, no la marca.
+    "claude": _squircle("#FFFFFF", _imagen("claude-oficial-blanco", alto=256),
+                        borde="#E8E8ED"),
     "whatsapp": _squircle("#25D366", _marca("whatsapp", "#FFFFFF")),
     "n8n": _squircle("#EA4B71", _marca("n8n", "#FFFFFF")),
     # Notion va al reves —blanco con glifo negro y filo— porque asi es su icono real.
@@ -212,6 +244,19 @@ ICONOS = {
     # sangre sobre todo el squircle. Es el UNICO objeto que lleva el verde de Onia — y acá
     # sí corresponde, porque es lo único del stack que construyó Sergio Urcullo.
     "onia": _squircle("#00D26A", _imagen("onia", alto=256)),
+    # ⚠️ Los otros dos de la fila 1, corregidos el 06-sep — Sergio Urcullo: "los logos
+    # siguen siendo fake". Tenia razon en los dos, por motivos distintos:
+    #   · ChatGPT: el NUDO de simple-icons si es la marca real; lo falso era MI color.
+    #     Lo habia puesto en verde copiando la referencia #1, que muestra el icono VIEJO.
+    #     El actual es negro con el nudo en blanco.
+    #   · Gemini: simple-icons lo da como destello PLANO. El real tiene el degradado
+    #     aurora (azul → violeta → rosa) y sin eso no se reconoce. Va el SVG oficial
+    #     bajado de gemini.google.com, a sangre.
+    # La regla que deja esto: para una marca conocida, el asset oficial del producto
+    # gana siempre; una libreria de iconos sirve para la FORMA, nunca para el color.
+    "chatgpt": _squircle("#0A0A0A", _marca("chatgpt", "#FFFFFF")),
+    "gemini": _squircle("#FFFFFF", _imagen("gemini-oficial", alto=150), borde="#E8E8ED"),
+    "usdt": _squircle("#26A17B", _marca("usdt", "#FFFFFF")),
     # Sin logo oficial en simple-icons: se dibujan.
     "vps": _squircle("#1D1D1F", _torre()),
     "hyperframes": _squircle(
@@ -237,7 +282,8 @@ ICONOS = {
     ),
 }
 
-DIBUJOS = {"clientes": _tarjeta_clientes, "creditos": _tarjeta_creditos}
+DIBUJOS = {"clientes": _tarjeta_clientes, "creditos": _tarjeta_creditos,
+           "transferencia": _tarjeta_transferencia}
 
 # --- Contenido. Las cifras de precio salen de ONIA_ESTRATEGIA_DE_EMPRESA.md §8.1.
 LAMINAS = [
@@ -468,9 +514,41 @@ FABLE = [
     },
 ]
 
+# Layout A — grilla comparativa 3x3 (referencia #1 del batch). Es el meme de founders
+# LOCALIZADO, y el chiste vive en la tercera fila: el original pone Stripe / PayPal /
+# Hotmart, y en Bolivia ninguna de las tres te sirve — Stripe directamente no acepta el
+# pais ([[lety-cobra-tarjeta-antes-del-trial]]). Por eso la fila es transferencia, USDT y
+# efectivo: el que la ve se rie porque le pasa.
+# Sergio Urcullo sacó "QR del banco" el 06-sep y entró USDT en su lugar.
+# Cero cifras y cero promesas: la pieza no afirma nada que haya que sostener despues.
+FOUNDERS_BO = [
+    {
+        "layout": "A",
+        "titulo": "Los founders bolivianos\ntienen 3 grandes decisiones:",
+        "filas": [
+            [
+                {"icono": "claude", "rotulo": "Claude"},
+                {"icono": "chatgpt", "rotulo": "ChatGPT"},
+                {"icono": "gemini", "rotulo": "Gemini"},
+            ],
+            [
+                {"objeto": "cafe.png", "rotulo": "Café"},
+                {"objeto": "mate.png", "rotulo": "Mate"},
+                {"objeto": "energetica.png", "rotulo": "Energética"},
+            ],
+            [
+                {"dibujo": "transferencia", "rotulo": "Transferencia"},
+                {"icono": "usdt", "rotulo": "USDT"},
+                {"objeto": "efectivo.png", "rotulo": "Efectivo"},
+            ],
+        ],
+    },
+]
+
 PIEZAS = {
     "mi-stack": None,
     "fable": FABLE,
+    "founders-bo": FOUNDERS_BO,
     "portada-f": PORTADA_F,
     "duelo-cuaderno": DUELO_CUADERNO,
     "vitamina-c": VITAMINA_C,
@@ -537,6 +615,32 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 .cta{{margin-top:70px;font-size:40px;color:var(--muted);letter-spacing:-.01em}}
 .cta .hl{{display:inline-block;margin-bottom:22px}}
 .cta-gris{{display:block}}
+/* layout A — grilla comparativa 3xN (referencia #1 del batch: Claude/ChatGPT/Gemini,
+   DY/DWY/DFY, Stripe/Paypal/Hotmart). El divisor hairline entre filas es lo que la hace
+   leer como TABLA y no como collage: sin el, nueve objetos sueltos son ruido.
+   Es el layout mas caro del patron — pide 9 objetos con altura optica pareja. */
+/* Nueve objetos + tres filas de etiquetas + titulo NO entran a tamano de portada. La
+   primera version desbordo por abajo: la fila 3 quedaba cortada y su etiqueta chocaba
+   con el handle, y el titulo se iba a TRES lineas (la FICHA manda maximo dos). Todo el
+   bloque esta calibrado para cerrar dentro de los 1350px con aire. */
+.lienzo.a{{justify-content:center;padding:74px 88px 132px}}
+.titulo-a{{font-size:70px;font-weight:{peso};font-variation-settings:{vf};
+  letter-spacing:-.03em;line-height:1.06;color:var(--ink);white-space:pre-line;
+  margin-bottom:20px}}
+.fila-a{{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;width:100%;
+  padding:42px 0;border-top:1px solid var(--hairline)}}
+.fila-a.primera{{border-top:none}}
+.celda-a{{display:flex;flex-direction:column;align-items:center;gap:16px}}
+/* altura FIJA: nueve objetos de proporciones distintas solo leen parejos si comparten caja.
+   ⚠️ `object-fit` NO aplica a un <svg> en linea —solo a elementos reemplazados como <img>—
+   asi que los squircles desbordaban su caja, se comian las etiquetas de su fila y pisaban
+   la fila de abajo. El <svg> se acota con height/width propios, no con object-fit. */
+.celda-a .obj-a{{height:170px;width:100%;display:flex;align-items:center;
+  justify-content:center;filter:drop-shadow(0 14px 26px rgba(0,0,0,.13))}}
+.celda-a .obj-a > svg{{height:100%;width:auto;max-width:100%}}
+.celda-a img.obj-a{{object-fit:contain}}
+.celda-a .rotulo-a{{font-size:38px;font-weight:{peso};font-variation-settings:{vf};
+  letter-spacing:-.02em;color:var(--ink);text-align:center}}
 /* layout B — grilla 2x2 con el objeto encajonado (referencia #2 del batch). Cada celda
    es una tarjeta blanca con filo: eso separa los objetos entre si sin dibujar divisores,
    y hace que una foto y un icono dibujado convivan sin pelearse. */
@@ -587,6 +691,26 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 
 
 def markup(lamina):
+    if lamina["layout"] == "A":
+        filas = []
+        for n, fila in enumerate(lamina["filas"]):
+            celdas = []
+            for c in fila:
+                if c.get("icono"):
+                    cuerpo = f'<div class="obj-a">{ICONOS[c["icono"]]}</div>'
+                elif c.get("dibujo"):
+                    cuerpo = f'<div class="obj-a">{DIBUJOS[c["dibujo"]]()}</div>'
+                else:
+                    obj = OBJETOS / c["objeto"]
+                    if not obj.exists():
+                        raise SystemExit(f"Falta el objeto {obj}. Corré buscar-objetos.py.")
+                    cuerpo = f'<img class="obj-a" src="{obj.as_uri()}">'
+                celdas.append(f'<div class="celda-a">{cuerpo}'
+                              f'<div class="rotulo-a">{c["rotulo"]}</div></div>')
+            clase = "fila-a primera" if n == 0 else "fila-a"
+            filas.append(f'<div class="{clase}">{"".join(celdas)}</div>')
+        return (f'<div class="display titulo-a">{lamina["titulo"]}</div>'
+                f'{"".join(filas)}')
     if lamina["layout"] == "B":
         celdas = []
         for c in lamina["celdas"]:
@@ -647,7 +771,7 @@ def render(tipo, out_dir, laminas=None):
     hoja = css(tipo)
     for i, lamina in enumerate(laminas or LAMINAS, 1):
         html = (f"<!doctype html><html><head><meta charset='utf-8'><style>{hoja}</style></head>"
-                f"<body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("B", "C", "F") else ""}'>{markup(lamina)}"
+                f"<body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("A", "B", "C", "F") else ""}'>{markup(lamina)}"
                 f"<div class='handle'>{HANDLE}</div></div></body></html>")
         with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as fh:
             fh.write(html)
@@ -688,7 +812,7 @@ window.addEventListener('load', function(){
       return rects.length ? Math.max.apply(null, rects.map(function(x){return x.width})) : 0;
     }
     var out = ['FUENTE|' + ok];
-    document.querySelectorAll('.remate,.nombre,.precio,.desc,.contexto,.pie,.sub,.cta,.etiqueta,.nombre-f,.sub-f,.titulo-c,.dato,.titulo-b,.rotulo')
+    document.querySelectorAll('.remate,.nombre,.precio,.desc,.contexto,.pie,.sub,.cta,.etiqueta,.nombre-f,.sub-f,.titulo-c,.dato,.titulo-b,.rotulo,.titulo-a,.rotulo-a')
       .forEach(function(el){
         out.push('SONDA|' + el.className.replace(/display /,'') + '|' + Math.round(ancho(el)));
       });
@@ -708,7 +832,7 @@ def check(tipo, laminas=None):
     fallos = []
     for i, lamina in enumerate(laminas or LAMINAS, 1):
         html = (f"<!doctype html><html><head><meta charset='utf-8'><style>{hoja}</style>"
-                f"{sonda}</head><body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("B", "C", "F") else ""}'>{markup(lamina)}"
+                f"{sonda}</head><body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("A", "B", "C", "F") else ""}'>{markup(lamina)}"
                 f"<div class='handle'>{HANDLE}</div></div></body></html>")
         with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as fh:
             fh.write(html)

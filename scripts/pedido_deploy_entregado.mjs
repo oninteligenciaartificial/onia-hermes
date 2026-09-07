@@ -58,6 +58,9 @@ import { dirname, join } from 'node:path';
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..');
 const TABLERO = '/root/bin/onia-tablero.sh';
 const REPO_PLATAFORMA = '/root/loops/onia-platform';
+const DIR_BUILDS = '/opt/onia-platform';
+/** El nodo de casa no tiene `/opt`, pero sí llega al VPS por SSH. Ver `shaVivoPlataforma`. */
+const VPS = '/root/bin/onia-vps.sh';
 
 /** Palabras que parecen sha pero no lo son: sin este corte el gate junta basura, la declara
  *  «no publicada» y deja VIGENTE a todo pedido para siempre (falla en verde). */
@@ -111,6 +114,58 @@ export function shasPrometidos(texto) {
 }
 
 /**
+ * PURA: barre la lista del tablero y separa los pedidos de deploy de lo que NO se pudo leer.
+ * `leerCuerpo(id)` devuelve el texto de la tarea, o `null` si el `show` no contestó.
+ *
+ * ⚠️ LOS `ilegibles` SON LA MITAD DEL VALOR, y su ausencia es el bug que este barrido tenía.
+ * La versión anterior hacía `if (!cuerpo) continue`: un `show` que fallaba se descartaba
+ * EXACTAMENTE igual que una tarea sin línea `DESPLEGAR:`, así que el pedido desaparecía del
+ * barrido y el gate seguía hablando como si hubiera mirado el tablero entero. Desde que el
+ * integrador corre en el nodo de casa cada `show` es una llamada SSH —88 en un barrido—, o
+ * sea que un timeout suelto alcanza.
+ *
+ * La dirección del daño importa: un barrido incompleto se ve IDÉNTICO a un tablero sin
+ * pedidos, y de ahí sale la conclusión cara —«este destino no tiene pedido vivo»— que hace
+ * abrir un pedido DUPLICADO. Ese duplicado es el ruido que hace que Sergio Urcullo deje de
+ * creerle a los avisos. Medido a mano el 2026-09-07: un barrido leído a mitad de camino
+ * reportó 2 pedidos de 3 y ocultó justo el de `plataforma`.
+ */
+export function barrerPedidos({ lista, leerCuerpo }) {
+  const pedidos = [];
+  const ilegibles = [];
+  for (const linea of String(lista).split('\n')) {
+    if (!/^[⊘▶◻]/.test(linea)) continue;
+    const id = linea.trim().split(/\s+/)[1];
+    if (!id) continue;
+    const cuerpo = leerCuerpo(id);
+    if (cuerpo === null || cuerpo === undefined) {
+      ilegibles.push(id);
+      continue;
+    }
+    const m = String(cuerpo).match(/^DESPLEGAR:\s*(\S+)/im);
+    if (!m) continue;
+    pedidos.push({ id, destino: m[1].toLowerCase(), texto: String(cuerpo) });
+  }
+  return { pedidos, ilegibles };
+}
+
+/**
+ * PURA: cuál de los `build-<sha>` del disco es el que corre, casando su `BUILD_ID` contra el
+ * que sirve el contenedor. Devuelve `null` si no hay con qué casar.
+ *
+ * Nunca «el más nuevo» ni «el primero»: elegir uno sin casarlo declararía ENTREGADO contra un
+ * build inventado, y eso le borra a Sergio Urcullo un pedido real por un arreglo que el
+ * cliente nunca recibió.
+ */
+export function buildQueCorre({ buildIdVivo, candidatos }) {
+  if (!buildIdVivo) return null;
+  for (const c of candidatos || []) {
+    if (c && c.buildId && c.buildId === buildIdVivo) return c.sha;
+  }
+  return null;
+}
+
+/**
  * PURA: decide el estado de un pedido. `publicado(sha)` devuelve true / false / null,
  * donde null es «no se sabe» y arrastra a VIGENTE, nunca a ENTREGADO.
  */
@@ -140,46 +195,78 @@ function sh(cmd, args, opts = {}) {
   }
 }
 
-/** El sha que corre producción, derivado del artefacto — nunca de `origin/master`. */
+/**
+ * El sha que corre producción, derivado del artefacto — nunca de `origin/master`.
+ *
+ * ⚠️ SE MIDE DONDE ESTÁ `/opt`, NO DONDE CORRE EL LOOP. El integrador se mudó al nodo de
+ * casa, donde `/opt/onia-platform` no existe: `readdirSync` tiraba, esto devolvía `null` y
+ * el ÚNICO destino que este gate sabe medir salía «no pude derivar el build vivo» en cada
+ * vuelta. No fallaba en verde —el motivo se imprime— pero el efecto es el mismo que ya está
+ * medido para `deploy-vivo.mjs`: el instrumento que caza un pedido vencido queda mudo
+ * justo en la máquina del carril que lo posee. El nodo de casa SÍ llega al VPS por SSH.
+ */
 function shaVivoPlataforma() {
-  const buildId = sh('docker', ['exec', 'onia-platform', 'cat', '/app/.next/BUILD_ID']);
-  if (!buildId) return null;
-  let dirs = [];
-  try {
-    dirs = readdirSync('/opt/onia-platform').filter((d) => d.startsWith('build-'));
-  } catch {
-    return null;
+  if (existsSync(DIR_BUILDS)) {
+    const buildId = sh('docker', ['exec', 'onia-platform', 'cat', '/app/.next/BUILD_ID']);
+    let dirs = [];
+    try {
+      dirs = readdirSync(DIR_BUILDS).filter((d) => d.startsWith('build-'));
+    } catch {
+      return null;
+    }
+    const candidatos = dirs.map((d) => {
+      const p = `${DIR_BUILDS}/${d}/.next/standalone/.next/BUILD_ID`;
+      return { sha: d.slice('build-'.length), buildId: existsSync(p) ? sh('cat', [p]) : null };
+    });
+    return buildQueCorre({ buildIdVivo: buildId, candidatos });
   }
-  for (const d of dirs) {
-    const p = `/opt/onia-platform/${d}/.next/standalone/.next/BUILD_ID`;
-    if (existsSync(p) && sh('cat', [p]) === buildId) return d.slice('build-'.length);
-  }
-  return null;
+
+  // Sin `/opt` local: se le pregunta al VPS. Una sola llamada, y su salida se valida —si el
+  // SSH no contesta o devuelve cualquier otra cosa, esto es `null` (NO MEDIDO), nunca un sha
+  // adivinado que haría cerrar un pedido vivo.
+  if (!existsSync(VPS)) return null;
+  const guion = [
+    'V=$(docker exec onia-platform cat /app/.next/BUILD_ID 2>/dev/null) || exit 1',
+    '[ -n "$V" ] || exit 1',
+    `for d in ${DIR_BUILDS}/build-*/; do`,
+    '  [ "$(cat "$d/.next/standalone/.next/BUILD_ID" 2>/dev/null)" = "$V" ] && { basename "$d" | sed s/^build-//; exit 0; }',
+    'done',
+    'exit 1',
+  ].join('\n');
+  const salida = sh('bash', [VPS, 'bash', '-lc', guion], { timeout: 120_000 });
+  return salida && /^[0-9a-f]{7,40}$/.test(salida) ? salida : null;
 }
 
+/**
+ * Los pedidos vivos del tablero. Devuelve `null` si NO se pudo leer la lista, y el barrido
+ * con sus `ilegibles` si se pudo — ver `barrerPedidos`: un `show` que no contesta se NOMBRA,
+ * no se descarta.
+ */
 function pedidosVivos() {
-  const lista = sh('bash', [TABLERO, 'list']);
+  const lista = sh('bash', [TABLERO, 'list'], { timeout: 180_000 });
   if (lista === null) return null;
-  const out = [];
-  for (const linea of lista.split('\n')) {
-    if (!/^[⊘▶◻]/.test(linea)) continue;
-    const id = linea.trim().split(/\s+/)[1];
-    if (!id) continue;
-    const cuerpo = sh('bash', [TABLERO, 'show', id]);
-    if (!cuerpo) continue;
-    const m = cuerpo.match(/^DESPLEGAR:\s*(\S+)/im);
-    if (!m) continue;
-    out.push({ id, destino: m[1].toLowerCase(), texto: cuerpo });
-  }
-  return out;
+  return barrerPedidos({
+    lista,
+    leerCuerpo: (id) => sh('bash', [TABLERO, 'show', id], { timeout: 60_000 }),
+  });
 }
 
 async function medirEnVivo() {
-  const pedidos = pedidosVivos();
-  if (pedidos === null) {
+  const barrido = pedidosVivos();
+  if (barrido === null) {
     console.log('NO MEDIDO: no pude leer el tablero (' + TABLERO + ')');
     return 2;
   }
+  const { pedidos, ilegibles } = barrido;
+
+  // Un barrido incompleto NO puede concluir nada, ni siquiera «no hay pedidos»: las dos cosas
+  // se ven igual. Se dice cuántas tareas quedaron sin leer y con cuáles.
+  if (ilegibles.length > 0) {
+    console.log(`NO MEDIDO: ${ilegibles.length} tarea(s) abiertas no contestaron el show — ${ilegibles.join(', ')}`);
+    console.log('  El barrido quedo incompleto: puede haber un pedido de deploy que no vi.');
+    return 2;
+  }
+
   if (pedidos.length === 0) {
     console.log('OK: no hay pedidos de deploy vivos.');
     return 0;

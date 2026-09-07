@@ -13,7 +13,7 @@ seco — el chiste es que las cuatro cosas empiezan con C.
 | **Claude** | el logo real | es la única factura de su stack (`$200/mes`) |
 | **Clientes** | una línea que sube | **es lo que le falta**, y ése es el remate |
 | **Café** | foto de Unsplash | sin comentarios |
-| **Créditos** | panel de compra | los créditos de artes, gasto real |
+| **Créditos** | panel de uso de Claude | en los colores de Claude (crema + coral) con el estallido de la marca: la celda dice "Claude" sin escribir la palabra |
 
 **El remate no está escrito, está en la lista.** Cualquiera lee "Claude, café, créditos" y
 se ríe; el que dirige un negocio se detiene en "Clientes" y entiende el chiste completo.
@@ -55,7 +55,7 @@ proyecto, no un negocio.
 | Afirmación | Fuente |
 |---|---|
 | Claude está en su stack | `ONIA_ESTRATEGIA_DE_EMPRESA.md` §8.1 — Claude Max, US$200/mes |
-| los créditos son gasto real | `ONIA_MARCA_PERSONAL_BASE_CONTENIDO.md` §1 — 0,12 créditos por imagen |
+| el precio de los tokens | anthropic.com/claude-fable-and-mythos-5-1 — caché $0,25/M. Es la misma cifra que sostiene el carrusel de Fable |
 | le faltan clientes | `ONIA_ESTRATEGIA_DE_EMPRESA.md` §8.2: *"el producto no tiene un problema de rentabilidad, tiene un problema de clientes"* |
 | la taza | Unsplash, licencia y autor en `objetos/CREDITOS.md` |
 
@@ -70,8 +70,7 @@ choca de frente con una regla suya en `CLAUDE.md`:
 |---|---|---|
 | **12 clientes activos** | 🔴 **INVENTADA** | hoy son cero |
 | **+3 este mes** | 🔴 **INVENTADA** | ídem |
-| **2.100 créditos** | ✅ real | pool de Higgsfield, `CLAUDE.md` §Video |
-| **0,12 por imagen** | ✅ real | `BASE_CONTENIDO` §1 |
+| **$0,25 por millón** | ✅ real | precio público de lectura de caché de Fable 5.1, anthropic.com (leído 06-sep) |
 
 **Se eligieron chicas a propósito.** Un "12" lee como arranque; un "340%" sería a la vez
 más falso y mucho más caro de sostener el día que alguien pregunte. Aun así son falsas, y
@@ -82,8 +81,13 @@ lista, no en la cifra. Es un render.
 
 ## Lo que NO hace, y por qué
 
-⚠️ **El panel de créditos no lleva monto en dinero.** Los créditos son unidades de la
-plataforma, no bolivianos — mezclarlos confunde y además el precio del pool cambia.
+⚠️ **El panel de tokens NO muestra su saldo ni su consumo.** Muestra el **precio público**
+($0,25 por millón), que es un dato de Anthropic y no de su cuenta. Su consumo real no está
+registrado en ningún lado del repo, así que ponerlo habría sido inventar una cifra más.
+
+⚠️ **La primera versión mostraba los créditos de Higgsfield** sobre un panel oscuro neutro.
+Sergio Urcullo lo marcó el 06-sep: no se leía de quién eran. Ahora usa la crema y el coral
+oficiales de Claude, con el estallido de la marca — la celda se identifica sola.
 
 ⚠️ **No nombra a ningún cliente, ni real ni inventado.** La cifra es agregada; no hay
 logos, nombres ni testimonios. Ésa es la línea que no se cruza ni con permiso.

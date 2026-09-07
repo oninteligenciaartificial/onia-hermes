@@ -471,6 +471,14 @@ const SHAS_SIN_REPO_A_PROPOSITO = new Map([
   ['6edfab6', 'duplicado local de una rama ya squasheada; la cola lo cita para documentarlo'],
   ['a15c82f', 'idem 6edfab6'],
   ['e46e9ee', 'idem 6edfab6'],
+  // El cuarto del mismo conjunto, y quedo afuera por descuido: COLA.md:285 lo lista JUNTO a los
+  // tres de arriba ("(`6edfab6`, `a15c82f`, `e46e9ee`, `6d8b6b7`) son los duplicados locales"),
+  // y otras tres lineas lo citan justamente para narrar que NO existe (`COLA.md:215` "aca decia
+  // 6d8b6b7, que es el sha local de la rama antes del squash", `:1312`, `:2542`). O sea que el
+  // gate daba rojo sobre la bitacora que documenta este mismo defecto, y obedecerlo obligaba a
+  // borrar el registro de lo que paso. Medido el 2026-09-07: `git cat-file -t 6d8b6b7` dice
+  // "Not a valid object name" en los DOS repos. Su reciproco lo cubre `excepcion-sha-vencida`.
+  ['6d8b6b7', 'idem 6edfab6; la cola lo cita 4 veces para documentar que NO resuelve'],
 ]);
 
 // Los repos donde puede vivir un sha citado. Mismo paseo por los padres que `existeEnAlgunRepo`:
@@ -1171,7 +1179,21 @@ function selfCheck() {
 
   // Lo que motivo todo: un `[x]` citaba el sha LOCAL de una rama squasheada, que no existe en
   // ningun lado. La cola declaraba desplegado algo cuya prueba no se puede ni mirar.
-  r = revisarCola(conSha('6d8b6b7'), tmp, gitFalso([]));
+  //
+  // El fixture NO puede ser un sha real de la cola: hasta el 2026-09-07 era `6d8b6b7`, y el dia
+  // que ese sha entro a SHAS_SIN_REPO_A_PROPOSITO —donde ya estaban sus tres hermanos— este caso
+  // se cayo. El self-check hizo su trabajo, pero el modo de falla peligroso es el otro: un
+  // fixture que comparte valor con la lista blanca queda absuelto por ella y el caso pasa en
+  // VERDE sin medir nada. Por eso va un sha imposible y su guarda debajo.
+  // El fixture tiene que cumplir las TRES condiciones del extractor (linea 99): hex, con al
+  // menos un digito Y al menos una letra a-f. Probados y descartados en esta misma vuelta:
+  // `f1x7ure` (tiene x, u, r: no es hex) y `deadbee` (hex, pero sin un solo digito, que es la
+  // guarda que evita tomar una palabra inglesa por un sha). Los dos hacian fallar el caso por
+  // "no es un sha" en vez de por la regla — rojo por el motivo equivocado, que no mide nada.
+  const SHA_FIXTURE = '0ddbeef';
+  ok(!SHAS_SIN_REPO_A_PROPOSITO.has(SHA_FIXTURE),
+    'el sha de prueba no puede estar en la lista de excepciones: la lista lo absolveria y el caso pasaria sin medir');
+  r = revisarCola(conSha(SHA_FIXTURE), tmp, gitFalso([]));
   ok(r.problemas.some((p) => p.regla === 'sha-fantasma'), 'un sha que no existe en ningun repo se marca');
 
   // Reciproco 1: el sha que SI resuelve no molesta a nadie.
