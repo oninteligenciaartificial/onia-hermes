@@ -9,7 +9,7 @@ Entra por **§2 de `BASE_CONTENIDO`** — herramientas y modelos que se cuentan.
 
 | # | Layout | Qué dice |
 |---|---|---|
-| 01 | D | **El modelo más avanzado de Anthropic** · **FABLE 5.1** · y esto es lo que hace **mejor** |
+| 01 | D | icono de Claude · **El modelo más avanzado de Anthropic** · **FABLE 5.1** · adelanto 31,4 / 52,6 / 73,4 |
 | 02 | D | Antes parchaba el síntoma, **ahora busca la causa** |
 | 03 | **G** | **Flujos de trabajo de un negocio** · barras · 31,4% vs 26,9 / 19,6 / 17,1 |
 | 04 | **G** | **Investigación científica, hecha sola** · barras · 52,6% vs 29,0 / 22,4 / 24,7 |
@@ -18,6 +18,37 @@ Entra por **§2 de `BASE_CONTENIDO`** — herramientas y modelos que se cuentan.
 | 07 | E | Ficha: **Fable 5.1** · caché **$0,25** por millón (antes $1) |
 | 08 | D | Y encima **−75%** en caché |
 | 09 | D | **CTA**: ¿Claude, ChatGPT o Gemini? — pide un nombre en comentarios |
+
+## La pieza va vestida de Claude, no de gris
+
+Sergio Urcullo, 07-sep: *"colocá más cosas de Claude, más visuales, más colores, que
+resalte; el inicio del carrusel se ve muy triste"*. Era cierto y era doble problema: la
+portada no tenía **ni el logo del producto del que habla ni un solo color**, y el carrusel
+entero en gris no se distinguía de las otras cinco piezas del patrón en la grilla del
+perfil.
+
+| | |
+|---|---|
+| **Fondo** | crema **#F3E9D7** en las 9 láminas |
+| **Acento** | coral **#D97757** — barras ganadoras, cifras, chips, el "5.1" del título |
+| **Portada** | icono de Claude a 244 px + **adelanto de las tres cifras** |
+| **Lámina 02** | "el síntoma" **tachado** en coral: se ve el cambio antes de leerlo |
+
+**Los dos colores no son inventados ni elegidos a ojo**: salen **sampleados del PNG oficial
+del icono de Claude** que ya estaba vendorizado en `logos/` — son literalmente sus dos
+colores más frecuentes. Vestir la pieza con los colores de la marca de la que habla es lo
+mismo que hace Apple con cada producto que presenta.
+
+⚠️ **El coral reemplaza al verde de Onia sólo en esta pieza.** El verde es el color de la
+casa y este carrusel habla de un producto ajeno: pintar a Anthropic de verde Onia confunde
+de quién es el logro. La regla vale también al revés — la lámina 10 de "Mi stack" sí lleva
+verde, porque ahí quien habla es él.
+
+**El adelanto de la portada** (31,4% · 52,6% · 73,4%) es el mismo truco que la tira de
+iconos de "Mi stack": la portada deja de **enunciar** y pasa a **prometer**. El ojo ve tres
+números que todavía no entiende y desliza para saber de qué son — y son exactamente las
+láminas 03, 04 y 05. De paso llena el tercio inferior, que con sólo título y chip quedaba
+muerto y era la otra mitad de lo que la hacía ver triste.
 
 ## Layout G — el que faltaba
 
@@ -34,9 +65,8 @@ Tres decisiones del layout, para que nadie las "corrija" después:
 - **El orden de los modelos es el mismo en las tres láminas.** Por eso Fable 5 va cuarto
   aunque en CursorBench le gane a Opus 5: si el orden cambia por puntaje, la comparación
   entre láminas deja de servir.
-- **El ganador va en tinta plena, no en verde.** El verde es de la marca Onia y esta pieza
-  habla de un producto ajeno: pintar a Anthropic con el color de la casa confunde de quién
-  es el logro.
+- **El ganador va en el coral de Claude, no en el verde de Onia.** Pintar a Anthropic con
+  el color de la casa confunde de quién es el logro.
 
 **Y AutomationBench va primera de las tres a propósito**: es la única prueba de toda la
 tabla que mide flujos de trabajo de oficina, que es literalmente el negocio de Sergio
@@ -89,11 +119,12 @@ Mejor y más barato el mismo mes.
 
 ## Alt text
 
-> Carrusel de nueve láminas sobre fondo gris claro. La primera anuncia Fable 5.1 como el
-> modelo más avanzado de Anthropic. La segunda dice que ahora busca la causa en vez de
-> parchar el síntoma. Las tres siguientes son gráficos de barras que comparan cuatro
+> Carrusel de nueve láminas sobre el fondo crema de la marca Claude, con acentos en coral.
+> La primera muestra el icono de Claude y anuncia Fable 5.1 como el modelo más avanzado de
+> Anthropic, con un adelanto de tres cifras: 31,4 por ciento, 52,6 y 73,4. La segunda dice
+> que ahora busca la causa en vez de parchar el síntoma, que aparece tachado. Las tres siguientes son gráficos de barras que comparan cuatro
 > modelos en flujos de trabajo de negocio, investigación científica y programación, con
-> Fable 5.1 en barra negra y primero en las tres. La sexta dice que ahora usa una
+> Fable 5.1 en barra coral y primero en las tres. La sexta dice que ahora usa una
 > computadora, con un 77,9 por ciento. La séptima muestra el logo de Claude con el precio
 > de 0,25 dólares por millón de tokens de caché, y la octava un menos 75 por ciento.
 > Cierra preguntando qué modelo usa el lector.

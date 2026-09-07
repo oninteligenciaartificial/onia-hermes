@@ -514,19 +514,33 @@ VITAMINA_C = [
 # world's most advanced models for coding and knowledge work". La lamina 1 dice eso y
 # nada mas fuerte.
 FABLE = [
+    # La portada llevaba solo texto sobre gris y Sergio Urcullo la llamo "triste" (07-sep),
+    # con razon: era la unica lamina cuyo trabajo es frenar el scroll y no tenia ni el logo
+    # del producto del que habla ni un solo color. Ahora entra el icono de Claude arriba,
+    # el fondo crema de Anthropic y el chip coral.
     {
         "layout": "D",
+        "marca": "claude",
         "contexto": "El modelo más avanzado de Anthropic",
-        "remate": "FABLE 5.1",
+        "remate": 'FABLE <span class="coral">5.1</span>',
         "pie": "y esto es lo que hace",
         "pie_hl": "mejor",
         "gancho": True,
+        # Las tres cifras que vienen adentro, sin decir de que son. El que las ve quiere
+        # saberlo y desliza; son exactamente las laminas 03, 04 y 05.
+        "adelanto": [
+            {"cifra": "31,4%", "que": "Flujos de\nun negocio"},
+            {"cifra": "52,6%", "que": "Investigación\ncientífica"},
+            {"cifra": "73,4%", "que": "Código\nreal"},
+        ],
     },
     # La ventaja mas relatable primero. Cualquiera que le haya pedido codigo a una IA
     # conoce el parche que funciona hoy y explota el martes.
     {
         "layout": "D",
-        "contexto": "Antes parchaba el síntoma",
+        # El tachado hace el trabajo del titular sin gastar una palabra: se ve el cambio
+        # antes de leerlo. Segunda lamina del carrusel, y la segunda que se veia "triste".
+        "contexto": 'Antes parchaba <span class="tachado">el síntoma</span>',
         "remate": "AHORA BUSCA\nLA CAUSA",
         "sub": "Anthropic lo dice así: arregla la raíz del problema\nen vez de tomar atajos que dan peor trabajo.",
     },
@@ -589,6 +603,7 @@ FABLE = [
         "layout": "D",
         "contexto": "Y ahora usa una computadora",
         "remate": "77,9%",
+        "acento": True,
         # ⚠️ 77,9% es OSWorld 2.0 en su medicion PERMISIVA; la estricta da 41,7%. Publicar
         # el numero lindo sin mas seria elegir la vara que conviene. La lamina no explica
         # la diferencia —jerga de benchmark en una pieza para duenos de negocio no aporta—
@@ -616,6 +631,7 @@ FABLE = [
         "layout": "D",
         "contexto": "Y encima bajó de precio",
         "remate": "−75%",
+        "acento": True,
         "sub": "en lectura de caché — la parte que más se repite\ncuando un agente corre solo. Hasta 45% menos\nde costo si algo trabaja todo el día.",
     },
     # CTA que obliga a comentar: pregunta cerrada, respuesta de una palabra, sobre algo
@@ -670,6 +686,16 @@ PIEZAS = {
     "vitamina-c": VITAMINA_C,
 }  # mi-stack se resuelve a LAMINAS abajo
 
+# Fondo propio por pieza. Sergio Urcullo, 07-sep: "coloca mas cosas de claude, mas
+# visuales, mas colores, que resalte, el inicio del carrusel se ve muy triste".
+# El gris #F5F5F7 es el fondo del PATRON, y con todo el carrusel en gris y tinta la pieza
+# de Fable no se distinguia de las otras cinco ni decia de quien esta hablando.
+# La crema #F3E9D7 y el coral #D97757 NO son inventados: salen SAMPLEADOS del PNG oficial
+# del icono de Claude que ya estaba vendorizado en logos/ (los dos colores mas frecuentes
+# de la imagen). Vestir la pieza con los colores de la marca de la que habla es lo mismo
+# que hace Apple con cada producto que presenta.
+FONDO = {"fable": "claude"}
+
 FUENTES = {
     # Maxima fidelidad con las referencias que mando Sergio Urcullo. Vendorizada aca,
     # no adoptada como fuente de marca: esa decision no la toma un generador.
@@ -692,7 +718,10 @@ def css(tipo):
 @font-face{{font-family:'OniaSerif';src:url('{SERIF_WOFF2.as_uri()}') format('woff2');
   font-weight:400;font-display:block}}
 *{{margin:0;padding:0;box-sizing:border-box}}
-:root{{--bg:#F5F5F7;--ink:#1D1D1F;--muted:#6E6E73;--verde:#00C661;--crema:#F5F1E8;--surface:#FFFFFF;--hairline:#D2D2D7}}
+:root{{--bg:#F5F5F7;--ink:#1D1D1F;--muted:#6E6E73;--verde:#00C661;--crema:#F5F1E8;--surface:#FFFFFF;--hairline:#D2D2D7;
+  /* Colores de Anthropic, SAMPLEADOS del PNG oficial del icono de Claude que ya estaba
+     vendorizado en logos/ — son sus dos colores mas frecuentes, no una aproximacion a ojo. */
+  --claude-crema:#F3E9D7;--claude-coral:#D97757;--claude-hairline:#E3D6BE}}
 html,body{{width:1080px;height:1350px}}
 body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;overflow:hidden;
   -webkit-font-smoothing:antialiased}}
@@ -771,6 +800,42 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 /* layout B — grilla 2x2 con el objeto encajonado (referencia #2 del batch). Cada celda
    es una tarjeta blanca con filo: eso separa los objetos entre si sin dibujar divisores,
    y hace que una foto y un icono dibujado convivan sin pelearse. */
+/* Piel de la pieza de Claude. El carrusel entero se viste con los colores de la marca de
+   la que habla, que es lo que hace Apple con cada producto que presenta — y de paso lo
+   separa en la grilla del perfil de las otras cinco piezas, todas grises.
+   El acento coral reemplaza al verde de Onia SOLO acá: el verde es de la casa y esta pieza
+   habla de un producto ajeno. */
+.lienzo.claude{{background:var(--claude-crema)}}
+.lienzo.claude .hl{{background:var(--claude-coral);color:#FFFFFF}}
+.lienzo.claude .etiqueta,.lienzo.claude .handle,.lienzo.claude .pie-g,
+.lienzo.claude .rot{{color:#A8977A}}
+.lienzo.claude .barra .cana{{background:var(--claude-hairline)}}
+.lienzo.claude .barra.gana .cana{{background:var(--claude-coral)}}
+.lienzo.claude .barra.gana .val{{color:var(--claude-coral)}}
+.lienzo.claude .barra.gana .rot{{color:var(--ink)}}
+/* Remate en coral para las laminas de dato puro: sin esto quedaban tres pantallas
+   seguidas de tinta sobre crema y el color desaparecia del carrusel a la mitad. */
+.lienzo.claude .remate.acento{{color:var(--claude-coral)}}
+/* Portada: el icono de Claude arriba del titulo. Es la lamina que decide si alguien mira
+   el resto, y sin la marca era un cartel de texto que no decia de quien habla. */
+.marca-portada{{width:244px;height:244px;margin-bottom:40px;
+  filter:drop-shadow(0 22px 40px rgba(148,96,64,.24))}}
+.marca-portada svg{{width:100%;height:100%}}
+.coral{{color:var(--claude-coral)}}
+.tachado{{text-decoration:line-through;text-decoration-thickness:4px;
+  text-decoration-color:var(--claude-coral)}}
+/* Adelanto de cifras en la portada. Mismo truco que la tira de iconos de "Mi stack": la
+   portada deja de ENUNCIAR y pasa a PROMETER — el ojo ve tres numeros que no entiende
+   todavia y desliza para saber de que son. Ademas llena el tercio inferior, que con solo
+   titulo y chip quedaba muerto y era la mitad de lo que hacia ver "triste" la lamina. */
+.adelanto{{display:flex;gap:56px;justify-content:center;align-items:flex-start;
+  margin-top:66px;padding-top:44px;border-top:1px solid var(--claude-hairline);width:100%}}
+.adelanto .celda{{flex:1;max-width:230px}}
+.adelanto .cifra{{font-size:74px;font-weight:{peso};font-variation-settings:{vf};
+  letter-spacing:-.035em;color:var(--claude-coral);line-height:1}}
+.adelanto .que{{font-family:'OniaMono',monospace;font-size:22px;font-weight:500;
+  letter-spacing:.06em;text-transform:uppercase;color:#A8977A;margin-top:14px;
+  line-height:1.3;white-space:pre-line}}
 /* layout G — barras comparativas. Nace el 07-sep de "el de claude siento que esta muy
    pobre, intenta colocarles mas cosas de valor y mas visuales": el carrusel de Fable era
    siete laminas y seis eran texto centrado. Un porcentaje escrito se lee; un porcentaje
@@ -856,6 +921,16 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
   color:#A1A1A6}}"""
 
 
+def _clases(lamina):
+    """Clases del lienzo: el layout (los que traen grilla propia) y el fondo de la pieza."""
+    c = ["lienzo"]
+    if lamina["layout"] in ("A", "B", "C", "F", "G"):
+        c.append(lamina["layout"].lower())
+    if lamina.get("fondo"):
+        c.append(lamina["fondo"])
+    return " ".join(c)
+
+
 def markup(lamina):
     if lamina["layout"] == "A":
         filas = []
@@ -929,12 +1004,20 @@ def markup(lamina):
                 f'<img class="foto" src="{foto.as_uri()}">')
     if lamina["layout"] == "D":
         gancho = " gancho" if lamina.get("gancho") else ""
-        cuerpo = (f'<div class="contexto">{lamina["contexto"]}</div>'
-                  f'<div class="display remate{gancho}">{lamina["remate"]}</div>')
+        acento = " acento" if lamina.get("acento") else ""
+        marca = (f'<div class="marca-portada">{ICONOS[lamina["marca"]]}</div>'
+                 if lamina.get("marca") else "")
+        cuerpo = (f'{marca}<div class="contexto">{lamina["contexto"]}</div>'
+                  f'<div class="display remate{gancho}{acento}">{lamina["remate"]}</div>')
         if lamina.get("pie"):
             cuerpo += f'<div class="pie">{lamina["pie"]} <span class="hl">{lamina["pie_hl"]}</span></div>'
         if lamina.get("sub"):
             cuerpo += f'<div class="sub">{lamina["sub"]}</div>'
+        if lamina.get("adelanto"):
+            celdas = "".join(
+                f'<div class="celda"><div class="cifra">{c["cifra"]}</div>'
+                f'<div class="que">{c["que"]}</div></div>' for c in lamina["adelanto"])
+            cuerpo += f'<div class="adelanto">{celdas}</div>'
         if lamina.get("tira"):
             iconos = "".join(ICONOS[i] for i in lamina["tira"])
             cuerpo += f'<div class="tira">{iconos}</div>'
@@ -957,7 +1040,7 @@ def render(tipo, out_dir, laminas=None):
     hoja = css(tipo)
     for i, lamina in enumerate(laminas or LAMINAS, 1):
         html = (f"<!doctype html><html><head><meta charset='utf-8'><style>{hoja}</style></head>"
-                f"<body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("A", "B", "C", "F", "G") else ""}'>{markup(lamina)}"
+                f"<body><div class='{_clases(lamina)}'>{markup(lamina)}"
                 f"<div class='handle'>{HANDLE}</div></div></body></html>")
         with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as fh:
             fh.write(html)
@@ -998,7 +1081,7 @@ window.addEventListener('load', function(){
       return rects.length ? Math.max.apply(null, rects.map(function(x){return x.width})) : 0;
     }
     var out = ['FUENTE|' + ok];
-    document.querySelectorAll('.remate,.nombre,.precio,.desc,.contexto,.pie,.sub,.cta,.etiqueta,.nombre-f,.sub-f,.titulo-c,.dato,.titulo-b,.rotulo,.titulo-a,.rotulo-a,.nom,.bio,.titulo-g,.sub-g,.val,.rot,.pie-g,.cta-f')
+    document.querySelectorAll('.remate,.nombre,.precio,.desc,.contexto,.pie,.sub,.cta,.etiqueta,.nombre-f,.sub-f,.titulo-c,.dato,.titulo-b,.rotulo,.titulo-a,.rotulo-a,.nom,.bio,.titulo-g,.sub-g,.val,.rot,.pie-g,.cta-f,.cifra,.que')
       .forEach(function(el){
         out.push('SONDA|' + el.className.replace(/display /,'') + '|' + Math.round(ancho(el)));
       });
@@ -1018,7 +1101,7 @@ def check(tipo, laminas=None):
     fallos = []
     for i, lamina in enumerate(laminas or LAMINAS, 1):
         html = (f"<!doctype html><html><head><meta charset='utf-8'><style>{hoja}</style>"
-                f"{sonda}</head><body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("A", "B", "C", "F", "G") else ""}'>{markup(lamina)}"
+                f"{sonda}</head><body><div class='{_clases(lamina)}'>{markup(lamina)}"
                 f"<div class='handle'>{HANDLE}</div></div></body></html>")
         with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as fh:
             fh.write(html)
@@ -1053,6 +1136,8 @@ def main():
                     help="solo mide desborde de texto, no rinde PNG")
     args = ap.parse_args()
     laminas = PIEZAS[args.pieza] or LAMINAS
+    if args.pieza in FONDO:      # copia, no mutacion: los dicts de arriba son la fuente
+        laminas = [{**l, "fondo": FONDO[args.pieza]} for l in laminas]
 
     if args.check:
         print(f"gate de desborde · {args.pieza} · tipografia={args.tipografia} · util={UTIL}px")
