@@ -42,7 +42,10 @@ function main(argv) {
   const a = parseArgs(argv);
   const dir = path.resolve(a.dir);
   const slides = fs.readdirSync(dir)
-    .filter((f) => /^slide-\d+\.png$/i.test(f)).sort();
+    // `lamina-NN.png` ademas de `slide-NN.png`: los generadores de scripts/marca-personal/
+    // nombran en espanol, y por eso ese carril se venia escribiendo sus propias hojas de
+    // contacto a mano en vez de usar esta.
+    .filter((f) => /^(slide|lamina)-\d+\.png$/i.test(f)).sort();
   if (!slides.length) throw new Error('No slides in ' + dir);
 
   const cols = Number(a.cols);

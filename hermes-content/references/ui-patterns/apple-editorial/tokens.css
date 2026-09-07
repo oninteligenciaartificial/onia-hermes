@@ -1,0 +1,33 @@
+/* apple-editorial — DNA medido sobre las 8 referencias que mandó Sergio Urcullo (06-sep).
+   Convive con statement-3d-minimal y carrusel-pinterest-refs; NO los reemplaza.
+   Diferencia dura contra esos dos: acá NO hay collage, cinta, sticker ni grano. */
+:root{
+  /* color */
+  --ae-bg:        #F5F5F7;  /* gris Apple, refs 1,2,5,6,7,8 */
+  --ae-surface:   #FFFFFF;  /* tarjeta de la ref 2 y fondo de la ref 4 */
+  --ae-bg-edit:   #F5F1E8;  /* crema editorial, sólo layout C (ref 3) */
+  --ae-ink:       #1D1D1F;  /* casi-negro Apple, nunca #000 */
+  --ae-muted:     #6E6E73;  /* descripción y contexto */
+  --ae-hairline:  #D2D2D7;  /* divisor 1px de la ref 1 */
+  --ae-verde:     #00C661;  /* verde Onia — SOLO en CTA y donde la pieza nombra Onia */
+
+  /* tipografía — familia la fija el flag --tipografia (A/B pendiente de veredicto) */
+  --ae-tracking-display: -0.032em;   /* el apretado es lo que hace el look, no el peso */
+  --ae-tracking-label:   -0.020em;
+  --ae-lh-display: 0.98;
+  --ae-lh-body:    1.42;
+
+  /* espaciado — lienzo 1080x1350 */
+  --ae-pad-x: 96px;      /* ~9% lateral */
+  --ae-gap-obj-label: 28px;
+  --ae-gap-label-body: 20px;
+  --ae-gap-body-remate: 56px;
+
+  /* forma */
+  --ae-squircle: 23%;    /* app icon Apple; sobre 260px ≈ 60px */
+  --ae-card-radius: 24px;
+
+  /* elevación — MÁS SUAVE que statement-3d-minimal (.25): las refs son gentiles */
+  --ae-shadow-obj: 0 24px 48px rgba(0,0,0,.14);
+  --ae-shadow-card: 0 1px 3px rgba(0,0,0,.06);
+}
