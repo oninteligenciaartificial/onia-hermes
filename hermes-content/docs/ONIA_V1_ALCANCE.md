@@ -187,9 +187,33 @@ Cerrado y sin desvíos. Cada paso se despliega y se verifica MIRÁNDOLO antes de
 
 1. ~~Configuración: de 7 pestañas a una página con «Configuración avanzada».~~ **Hecho, vivo el 4-sep.**
 2. ~~Que el rubro SERVICIOS entregue lo que promete su alta.~~ **Hecho, vivo el 4-sep.**
-3. ~~Que el rubro COMERCIO entregue lo que promete su alta.~~ **Desplegado el 5-sep; falta el
-   recorrido.** *Listo = el camino se hace solo EN PRODUCCIÓN, mirado con cuenta nueva: registrarse
-   → cargar un producto → cargar un cliente → caja → cobrar → recibo.*
+3. ~~Que el rubro COMERCIO entregue lo que promete su alta.~~ **✅ CAMINADO EN PRODUCCIÓN el
+   6-sep**, con la cuenta real de `ZZ QA Ferretería Tornillo` (plan Profesional), pantalla por
+   pantalla. **El camino se hace solo, de punta a punta:**
+
+   | Paso | Resultado |
+   |---|---|
+   | Cargar un producto | ✅ Catálogo → «Nuevo producto». Placeholders del rubro de verdad («Cemento IP-30 50kg», «CEM-IP30-50», bolsa/kg). Quedó «1 producto(s) en el catálogo» |
+   | Cargar un cliente | ✅ pero **sólo por el fiado** — ver el hueco 1 |
+   | Caja | ✅ busca por nombre o SKU, muestra precio y stock, arma el ticket |
+   | Cobrar | ✅ efectivo y fiado. «Fiado registrado a Marta Quispe: Bs 124,00 (saldo Bs 124,00)» |
+   | Recibo | ✅ `/print/recibo-venta/…` con encabezado del negocio, monto, método, detalle, y el límite dicho de frente: «Comprobante interno de pago. No reemplaza a la factura ni a la nota de venta» |
+   | El cliente aparece | ✅ «1 en total · 1 te debe(n) Bs 124,00 — Marta Quispe · 71234567 · 06/09/2026» |
+
+   🟠 **Hueco 1 — no hay alta manual de cliente.** La pantalla de Clientes no tiene ningún
+   «Nuevo cliente»: su única acción es «Ir a la caja». Un cliente existe **solo** si le fiaste
+   algo. Una ferretería que quiere anotar a un cliente habitual sin fiarle, no puede. Y la
+   pantalla **se contradice a sí misma**: el encabezado dice «Todavía no cargaste ninguno»
+   —que implica que los cargás vos— y la tarjeta de al lado dice «Tus clientes aparecen acá
+   solos». Las dos frases están en la misma pantalla.
+
+   🟠 **Hueco 2 — el recibo no se puede reimprimir.** «Imprimir recibo» aparece sólo en el
+   instante posterior a cobrar; al recargar se pierde. Las filas de «Ventas del día» ofrecen
+   únicamente «Anular». Si el cliente vuelve una hora después, o la cajera cerró la pantalla,
+   el comprobante ya no se puede sacar.
+
+   Ninguno de los dos rompe el recorrido —por eso queda ✅— pero los dos se van a encontrar en
+   el primer negocio real.
 4. ~~Panel de inicio en tres renglones.~~ **CANCELADO.** Sergio Urcullo descartó
    `feat/panel-tres-renglones` **y** el mockup minimal de `claude/onia-minimal-dashboard-369bc4`:
    el panel es el que ya está vivo. Lo que sí se hizo y está en `master` es el rediseño sobre ESE
