@@ -454,8 +454,15 @@ export default function Portada() {
                 `cadencia-prometida.test.ts`. */}
             <div className={s.trustCell}>
               <div className={s.trustNum}>Cada día</div>
+              {/* «desde Pro» y no a secas: esta celda cae 147 caracteres
+                  DEBAJO del «Desde Bs 320 al mes» del hero, y el Básico —el
+                  plan que cuesta esos 320— no trae agentes (`PLANES[0].sinEsto`
+                  dice «Agentes de IA (vienen desde Pro)»). En una banda que
+                  promete hechos verificables, callar el plan es la forma más
+                  cara de decirlo: el lead paga y se le apagan. Lo vigila
+                  `capacidad-vs-precio.test.ts`. */}
               <p className={s.trustLabel}>
-                agentes que revisan y esperan tu aprobación
+                agentes que revisan y esperan tu aprobación, desde {plan("pro").nombre}
               </p>
             </div>
             <div className={s.trustCell}>

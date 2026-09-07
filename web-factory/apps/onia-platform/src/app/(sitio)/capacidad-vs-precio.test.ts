@@ -159,14 +159,38 @@ function esPrecioDelMasBarato(fragmento: string): boolean {
   );
 }
 
-/** Cuánto texto ve de un vistazo quien lee. Mismo criterio que `promesa-fiscal`. */
-const VENTANA = 340;
+/**
+ * Una oración y media, no un párrafo entero.
+ *
+ * `promesa-fiscal` usa 340 porque ahí el sujeto es «la afirmación y su
+ * salvedad». Acá 340 cruza el borde de sección y empieza a marcar frases que
+ * describen el PRODUCTO («Onia unifica la gestión y los agentes con IA»), que
+ * son ciertas y no prometen nada sobre el precio. Reescribir eso no es arreglar
+ * un defecto, es un cambio editorial de la portada — y eso lo decide Sergio
+ * Urcullo viendo la pieza, no un gate.
+ *
+ * A 160 queda lo indiscutible: la capacidad y el precio en la MISMA frase o
+ * pegados. Las tres que se arreglaron el 2026-09-07 estaban a 20, 25 y 147.
+ */
+const VENTANA = 160;
 
 /**
- * Absuelven a la capacidad: nombrar el plan que sí la trae, o decir que se
- * cobra aparte. Es lo que hace legítima a la tabla de `/precios`, que pone la
- * capacidad y el precio a un centímetro — pero con su salvedad al lado.
+ * La salvedad pertenece a la AFIRMACIÓN, no al párrafo, y por eso se busca
+ * pegada al marcador y no en toda la ventana.
+ *
+ * Medido el 2026-09-07, y es el modo de falla más feo de esta familia: al
+ * arreglar la banda de la home poniéndole «…, desde Pro» a los agentes, esa
+ * palabra pasó a absolver la ventana ENTERA — o sea que el arreglo de una
+ * instancia dejó al gate ciego para sus vecinas, y una inyección de «reservas
+ * online» a un centímetro del mismo precio pasaba en VERDE. Un gate que se
+ * apaga con su propio arreglo es peor que no tenerlo: parece cubierto.
+ *
+ * Se mira desde un poco antes del marcador (por «desde Pro: agentes…») hasta
+ * bastante después (por «agentes …, desde el plan Pro»).
  */
+const ANTES = 40;
+const DESPUES = 140;
+
 function tieneSalvedad(ventana: string): boolean {
   const v = plano(ventana);
   if (/add-?on|se agrega|aparte|no inclui|sin esto|sinesto/.test(v)) return true;
@@ -175,7 +199,11 @@ function tieneSalvedad(ventana: string): boolean {
   // rojo sobre un hero que ya dice con qué plan corre la prueba, y mandaría a
   // tipear a mano el nombre que `prueba-vs-plan.test.ts` prohíbe tipear.
   if (/planquecorre/.test(v)) return true;
-  return PLANES_DE_ARRIBA.some((nombre) => v.includes(plano(nombre)));
+  // Con LÍMITE DE PALABRA, y no es cosmética: «Pro» como subcadena vive dentro
+  // de «aprobación» y «aprobás», que es como termina CADA frase que habla de
+  // los agentes en este sitio. Sin el límite el gate se absolvía solo justo en
+  // las páginas donde vive el defecto. Medido el 2026-09-07.
+  return PLANES_DE_ARRIBA.some((nombre) => new RegExp(`\\b${plano(nombre)}\\b`).test(v));
 }
 
 type Hallazgo = { archivo: string; capacidad: string; marcador: string };
@@ -190,11 +218,24 @@ function hallazgos(): Hallazgo[] {
         .filter((m) => esPrecioDelMasBarato(m[0]))
         .map((m) => m.index ?? 0),
     ];
+    // La salvedad se busca sobre el texto COMPLETO y en posiciones absolutas,
+    // nunca sobre la ventana ya recortada: si se recorta primero, el recorte
+    // corta también la salvedad —«agentes …,| desde el plan Pro»— y el gate
+    // acusa de desnuda a una frase que está vestida tres palabras más allá.
+    // Medido el 2026-09-07: así salieron dos rojos falsos, los dos sobre copy
+    // que este mismo commit acababa de arreglar.
+    const texto = plano(fuente);
     for (const i of anclas) {
-      const ventana = fuente.slice(Math.max(0, i - VENTANA), i + VENTANA);
-      if (tieneSalvedad(ventana)) continue;
       for (const { linea, marcador } of EXCLUIDAS) {
-        if (!plano(ventana).includes(marcador)) continue;
+        // CADA aparición del marcador necesita su propia salvedad: basta una
+        // desnuda para que el lead la lea sin ella.
+        let desnuda = false;
+        for (let j = texto.indexOf(marcador); j !== -1; j = texto.indexOf(marcador, j + 1)) {
+          if (Math.abs(j - i) > VENTANA) continue;
+          const alLado = texto.slice(Math.max(0, j - ANTES), j + marcador.length + DESPUES);
+          if (!tieneSalvedad(alLado)) desnuda = true;
+        }
+        if (!desnuda) continue;
         const archivo = relative(SRC, ruta);
         if (out.some((h) => h.archivo === archivo && h.marcador === marcador)) continue;
         out.push({ archivo, capacidad: linea, marcador });
