@@ -44,6 +44,29 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **A un estudio contable le pedíamos el género y el cumpleaños de su cliente —
+      cerrado el 2026-09-07 (`e9b857a` en `onia-platform`, publicado en la rama).**
+      Gate: `/root/loops/onia-platform-chatbot/app/(dashboard)/patients/ficha-por-rubro.test.ts`.
+      La ficha la comparten los tres rubros clínicos y **servicios profesionales**, uno de
+      los cinco que la v1.0 vende. Lo clínico ya se había separado (tipo de sangre, emergencia,
+      alergias, historia, tratamientos) pero **cumpleaños y género quedaron afuera de ese
+      arreglo**: en el alta viven en el MISMO grid que el nombre y el CI, diez líneas encima de
+      un bloque que sí distingue el rubro. El cliente de un estudio contable puede ser una
+      EMPRESA, así que el sistema le pedía el género de una razón social, y la lista le ofrecía
+      **filtrar por género** y le calculaba la edad.
+      **Cuatro superficies**, todas bajo `/root/loops/onia-platform-chatbot/app/(dashboard)/patients`: el alta, la
+      edición, la ficha y **la lista**, que entró al gate por primera vez — el
+      filtro por género vivía justo en la pantalla que ninguno de los tres casos miraba.
+      **El gate dejó de CONTAR bloques** `{esClinico && (` y ahora pregunta, por literal, si
+      aparece sólo detrás del interruptor: el conteo se rompía al agregar un bloque (pasó acá)
+      y no decía cuál faltaba cuando bajaba. Filtra los comentarios antes de buscar, o acusa a
+      la bitácora que explica el propio defecto.
+      El interruptor es `fichaClinica()`, de `lib/platform/vertical-pack.ts`.
+      **Prueba:** `npx vitest run 'app/(dashboard)/patients/'` → 18/18; verificado por
+      **mutación** (sacando `esClinico` del filtro de género el gate cae en rojo por el motivo
+      correcto). `tsc` 0 · `eslint` 0 errores · **3253** tests. Sin desplegar: viaja en el
+      pedido de deploy de `plataforma` que ya espera el `ok`.
+
 - [x] 🔴 **Este carril se mudó de máquina y quedó SIN el árbol de `onia-platform`: no podía
       escribir una línea del producto, y nada se puso rojo — arreglado el 2026-09-07.**
       `chatbot-cola` pasó a correr en **nodo-casa** (`3 * * * *`, primera corrida allá hoy
@@ -915,6 +938,99 @@ y sin operar. Acá se opera, con verificación por ítem.
 
       Las dos correcciones sucesivas del catálogo están en
       `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` §7.
+
+- [x] 🟡 **CERRADO el 2026-09-07: la pantalla de Citas le decía «El doctor» a un estudio contable
+      y a una veterinaria — en el mismo formulario cuyo label ya decía «Profesional».**
+
+      **El defecto, medido:** en `/appointments`, el campo de quién atiende deriva bien su rótulo
+      del rubro (`nombreDeRol('DOCTOR', track)` → «Profesional», «Veterinario/a») y el aviso de
+      abajo tenía la palabra clavada: *«El doctor no trabaja este día o no hay horarios
+      configurados.»* La misma pantalla contradiciéndose sola, para los **cuatro** rubros con
+      agenda: dental, estética, veterinaria y **servicios profesionales**, que tiene Citas en su
+      menú y no tiene doctores.
+
+      **Por qué importa más de lo que parece:** ése es exactamente el mensaje que recibe el
+      cliente NUEVO cuya alta quedó sin horarios cargados — o sea, en su primer intento de
+      agendar de su vida. El bug hermano (alta que deja la agenda muerta) ya está cerrado; éste
+      era el cartel que quedaba.
+
+      **Por qué ningún gate lo veía, y es lo reusable.**
+      `lib/platform/pantallas-compartidas-cubiertas.test.ts` deriva sus sujetos de las pantallas
+      que dos packs nombran **DISTINTO** en el menú, apoyado en su propio razonamiento: *«si
+      todos los packs la llaman igual, no hay par (rubro, texto) que pueda contradecirse»*. Eso
+      es cierto del **rótulo** y falso del **contenido**: los cuatro packs llaman «Citas» a
+      `/appointments`, así que la pantalla quedaba fuera del barrido por la razón equivocada.
+
+      **La segunda mitad, que no se ve con ningún instrumento:** `roleLabels` seguía exportada en
+      `components/ui/Badge.tsx` con `DOCTOR: "Doctor"` y **cero consumidores** — la tabla que
+      `nombreDeRol` vino a reemplazar. Un rótulo muerto no sale en la captura, ni en el HTML
+      servido, ni en un barrido de la pantalla, y el día que alguien lo cablea entra **ya
+      aprobado**, porque nadie audita una constante que «ya estaba». Se borró.
+
+      **Arreglado y publicado** en `onia-platform` `a831216` (rama
+      `claude/chatbots-platform-review-0d1d09`, empujada desde el gemelo del VPS porque el push
+      de ese repo está deshabilitado en el nodo de casa). Gate nuevo:
+      `lib/platform/rol-en-el-idioma-del-rubro.test.ts`, con los sujetos derivados del **disco** y
+      un solo exento nombrado (`app/(dashboard)/admin`, que lo usa Onia y no el cliente).
+
+      **Validado por MUTACIÓN, no por leerlo:** revertir el literal pone rojo **sólo** el caso de
+      prosa; devolver `roleLabels` **sólo** el de la tabla; romper el filtro de comentarios
+      **sólo** su fixture. Ese filtro va con fixture y no contra los archivos vivos a propósito:
+      hoy lo sostienen las bitácoras que explican este mismo defecto, así que el día que alguien
+      las reescriba el guardia quedaría hueco — y un gate que persigue un literal en prosa, sin
+      filtro, obliga a borrar el registro de lo que pasó.
+
+      **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **3264 pasan / 288 archivos** ·
+      `npx eslint .` 0 errores. **No está terminado hasta que se publique:** viaja en el pedido
+      `t_deddf471` (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo.
+
+- [x] 🟡 **CERRADO el 2026-09-07: el cliente ya podía exportar sus datos y no había botón — y la
+      misma pantalla le ofrecía comprar la exportación que ya había pagado.**
+
+      **El defecto, medido:** `csvExportEnabled` es `true` desde `basic` en `lib/plan-catalogo.ts`
+      —a propósito, y con el comentario que cita la promesa— y `/api/reports/export` lo respeta
+      cortando con `canExportCsv(plan)`. Pero el **único** enlace a ese endpoint vivía detrás de
+      `isClinicPlan` (`isSuperAdmin || plan === "clinic"`), así que **basic, professional y
+      enterprise** tenían el permiso y **no tenían camino**: exportaban tipeando la URL a mano.
+      Es la **quinta** de la familia *permiso concedido, camino ausente* (`/requerimientos`,
+      `/empresa`, `/rrhh`, `/patients/[id]/prescriptions`).
+
+      **Por qué es peor que las cuatro anteriores:** aquéllas callaban; ésta **desmentía**. Al
+      plan Básico le mostraba el banner *«Actualizá al plan Profesional…»* con **«exportación
+      CSV»** en la lista de lo que se desbloquea al subir. Le cobraba lo que ya había pagado. Y
+      `onia.com.bo/precios` lo vende al pie de la tabla —*«Tus datos son tuyos: los exportás en
+      CSV desde el plan más chico»*— como una de sus **tres** razones de compra, junto a «sin
+      tarjeta» y «sin permanencia»: la venta prometía y el producto negaba.
+
+      **Lo reusable:** la pantalla tiene **DOS ramas** que renderizan por separado —la del reporte
+      básico, que retorna temprano y es donde vive el banner, y la de reportes completos—. El
+      enlace faltaba en una y estaba mal gateado en la otra; **arreglar una sola rama es como
+      nació este bug**. Ahora las dos preguntan `puedeExportarCsv`, que es la **misma pregunta que
+      hace la API**.
+
+      **El gate no mide la precondición.** Pregunta por `canExportCsv`, nunca por `isClinicPlan`:
+      uno que midiera `isClinicPlan` estaría midiendo el **síntoma** y quedaría rojo para siempre
+      apenas se arregla — el modo de falla que ya costó dos pedidos de deploy vencidos
+      (`addon_canal_vivo`). Sujetos derivados de `PLAN_LIMITS`, con el caso que **YA cumple**
+      (`free` sigue sin permiso) para que «dale el botón a todos» no pase en verde, y con el
+      filtro de comentarios probado en las **dos** direcciones — sin él, el gate se ponía rojo
+      sobre la bitácora que explica por qué ese texto no está.
+
+      **Mirado renderizado**, no sólo gateado: las dos cabeceras fotografiadas con el CSS y la
+      fuente de iconos del build **vivo** (`/root/reports-arreglado.png`). No se puede mirar en
+      producción: el contenedor corre el build anterior al arreglo. Los cinco iconos salen como
+      **glifo** (24 px), no como la palabra — el bug más caro del proyecto descartado a la vista.
+
+      **Arreglado y publicado** en `onia-platform` `33b40ff` (rama
+      `claude/chatbots-platform-review-0d1d09`, empujada desde el gemelo del VPS porque el push de
+      ese repo está deshabilitado en el nodo de casa; árbol verificado idéntico al local).
+      Gate nuevo: `app/(dashboard)/reports/camino-a-exportar.test.ts`.
+
+      **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **3273 pasan / 288 archivos** ·
+      `npx eslint .` 0 errores. **No está terminado hasta que se publique:** anotado en el pedido
+      `t_deddf471` (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo. ⚠️ `33b40ff`
+      **no está en `master` todavía** (3 commits fuera): si el swap corre antes del merge del
+      integrador, este arreglo no viaja.
 
 - [ ] ⚪ **Pendiente fiscal (`SIAT_EMISSION`) para facturar de verdad.** Va último a propósito:
       es un trámite externo, no código, y `/billing` ya funciona sin él. **No bloquea un cierre**
