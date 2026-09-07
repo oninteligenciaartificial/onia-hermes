@@ -185,6 +185,38 @@ Camo aporta solamente la imagen.
 
 ---
 
+## 3.b El audio entra bajo — medido, no supuesto
+
+Primera grabación de prueba (2026-09-06, `ONIA-YT-2026-09-06-20-47-32.mp4`):
+
+```
+video: 1920x1080 · 30 fps · h264 · 5,1 Mbps   ✅
+audio: mean -42,6 dB · max -21,4 dB           ❌ unos 20 dB por debajo
+```
+
+Para voz hablada lo sano es **mean −18 a −24 dB** y **max −6 a −9 dB**.
+
+Y había una trampa peor: la compuerta original abría a **−35 dB**. Con una voz que
+promedia −42, la compuerta **cortaba las palabras** y dejaba pasar solo los picos. Un
+filtro puesto para limpiar ruido se estaba comiendo el contenido.
+
+**Cadena corregida** (la compuerta se eliminó; RNNoise ya limpia el fondo y una segunda
+pieza que puede tragarse sílabas no vale el riesgo):
+
+```
+1 Ganancia +12 dB  >  2 Ruido (RNNoise)  >  3 Compresor (thr -24, salida +4)  >  4 Limitador (-2)
+```
+
+⚠️ **Esto es un parche, no el arreglo de raíz.** Amplificar en OBS sube también el ruido de
+fondo. Lo correcto es **subir la ganancia en el DJI** (receptor o app DJI Mimo) y después
+bajar la ganancia de OBS en la misma proporción. Medir de nuevo con:
+
+```bash
+ffmpeg -hide_banner -nostats -i ARCHIVO.mp4 -map 0:a:0 -af volumedetect -f null - 2>&1 | grep volume
+```
+
+---
+
 ## 4. Antes de cada grabación
 
 - [ ] Monitor de 1920×1080 como pantalla de trabajo
