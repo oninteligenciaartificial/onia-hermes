@@ -526,12 +526,21 @@ FABLE = [
         "pie": "y esto es lo que hace",
         "pie_hl": "mejor",
         "gancho": True,
-        # Las tres cifras que vienen adentro, sin decir de que son. El que las ve quiere
-        # saberlo y desliza; son exactamente las laminas 03, 04 y 05.
+        # ⚠️ LA PRIMERA VERSION DE ESTE ADELANTO ERA MALA Y LA CAZO SERGIO URCULLO:
+        # "¿que son esos numeros de abajo?". Ponia 31,4% / 52,6% / 73,4% —los puntajes
+        # crudos de las laminas 3, 4 y 5— apostando a que la falta de contexto diera
+        # curiosidad. No la da: un porcentaje sin unidad no intriga, confunde. Y "31,4%"
+        # ademas SUENA MAL, porque el lector lo lee como nota escolar y no como un
+        # puntaje de benchmark donde 31 es el mejor de la tabla.
+        # Si el dueño del contenido no entiende su propia portada, un desconocido menos.
+        #
+        # Estas tres se entienden SOLAS y sin saber que es un benchmark. Verificadas en la
+        # tabla oficial: gana las 7 pruebas comparables (ver el doc de la cola), 17,1 -> 31,4
+        # es 1,84x, y la lectura de cache bajo de $1 a $0,25.
         "adelanto": [
-            {"cifra": "31,4%", "que": "Flujos de\nun negocio"},
-            {"cifra": "52,6%", "que": "Investigación\ncientífica"},
-            {"cifra": "73,4%", "que": "Código\nreal"},
+            {"cifra": "7 de 7", "que": "pruebas\nganadas"},
+            {"cifra": "casi 2×", "que": "en tareas\nde oficina"},
+            {"cifra": "−75%", "que": "lo que cuesta\noperarlo"},
         ],
     },
     # La ventaja mas relatable primero. Cualquiera que le haya pedido codigo a una IA
@@ -686,14 +695,17 @@ PIEZAS = {
     "vitamina-c": VITAMINA_C,
 }  # mi-stack se resuelve a LAMINAS abajo
 
-# Fondo propio por pieza. Sergio Urcullo, 07-sep: "coloca mas cosas de claude, mas
-# visuales, mas colores, que resalte, el inicio del carrusel se ve muy triste".
-# El gris #F5F5F7 es el fondo del PATRON, y con todo el carrusel en gris y tinta la pieza
-# de Fable no se distinguia de las otras cinco ni decia de quien esta hablando.
-# La crema #F3E9D7 y el coral #D97757 NO son inventados: salen SAMPLEADOS del PNG oficial
-# del icono de Claude que ya estaba vendorizado en logos/ (los dos colores mas frecuentes
-# de la imagen). Vestir la pieza con los colores de la marca de la que habla es lo mismo
-# que hace Apple con cada producto que presenta.
+# Piel por pieza: una clase extra en el lienzo que habilita el acento de esa marca.
+# Sergio Urcullo, 07-sep: "coloca mas cosas de claude, mas visuales, mas colores, que
+# resalte, el inicio del carrusel se ve muy triste". El coral #D97757 NO es inventado:
+# sale SAMPLEADO del PNG oficial del icono de Claude ya vendorizado en logos/ (su color
+# mas frecuente despues del fondo).
+#
+# ⚠️ Esto llego a pintar tambien el FONDO de crema #F3E9D7, y el mismo dia lo rechazo:
+# "mejor que todos sean blancos nomas, pero esta bien que uses ahi los colores naranjas
+# de claude". La superficie es del patron; el color de marca entra como acento y nada mas.
+# `--claude-crema` queda definida en tokens pero HOY NO LA USA NADIE: si vuelve a hacer
+# falta, es esa. No reactivarla sin pedirselo.
 FONDO = {"fable": "claude"}
 
 FUENTES = {
@@ -800,16 +812,14 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 /* layout B — grilla 2x2 con el objeto encajonado (referencia #2 del batch). Cada celda
    es una tarjeta blanca con filo: eso separa los objetos entre si sin dibujar divisores,
    y hace que una foto y un icono dibujado convivan sin pelearse. */
-/* Piel de la pieza de Claude. El carrusel entero se viste con los colores de la marca de
-   la que habla, que es lo que hace Apple con cada producto que presenta — y de paso lo
-   separa en la grilla del perfil de las otras cinco piezas, todas grises.
-   El acento coral reemplaza al verde de Onia SOLO acá: el verde es de la casa y esta pieza
-   habla de un producto ajeno. */
-.lienzo.claude{{background:var(--claude-crema)}}
+/* Piel de la pieza de Claude: SOLO el acento, el fondo queda en el gris del patron.
+   ⚠️ El 07-sep esto pinto ademas el fondo entero de crema #F3E9D7 y Sergio Urcullo lo
+   rechazo en el mismo dia: "mejor que todos sean blancos nomas, pero esta bien que uses
+   ahi los colores naranjas de claude". El color de marca entra como ACENTO, no como
+   superficie — que es como lo usa el patron con todo lo demas.
+   El coral reemplaza al verde de Onia SOLO en esta pieza: el verde es de la casa y este
+   carrusel habla de un producto ajeno. */
 .lienzo.claude .hl{{background:var(--claude-coral);color:#FFFFFF}}
-.lienzo.claude .etiqueta,.lienzo.claude .handle,.lienzo.claude .pie-g,
-.lienzo.claude .rot{{color:#A8977A}}
-.lienzo.claude .barra .cana{{background:var(--claude-hairline)}}
 .lienzo.claude .barra.gana .cana{{background:var(--claude-coral)}}
 .lienzo.claude .barra.gana .val{{color:var(--claude-coral)}}
 .lienzo.claude .barra.gana .rot{{color:var(--ink)}}
@@ -829,12 +839,12 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
    todavia y desliza para saber de que son. Ademas llena el tercio inferior, que con solo
    titulo y chip quedaba muerto y era la mitad de lo que hacia ver "triste" la lamina. */
 .adelanto{{display:flex;gap:56px;justify-content:center;align-items:flex-start;
-  margin-top:66px;padding-top:44px;border-top:1px solid var(--claude-hairline);width:100%}}
-.adelanto .celda{{flex:1;max-width:230px}}
-.adelanto .cifra{{font-size:74px;font-weight:{peso};font-variation-settings:{vf};
+  margin-top:66px;padding-top:44px;border-top:1px solid var(--hairline);width:100%}}
+.adelanto .celda{{flex:1;max-width:236px}}
+.adelanto .cifra{{font-size:70px;font-weight:{peso};font-variation-settings:{vf};
   letter-spacing:-.035em;color:var(--claude-coral);line-height:1}}
 .adelanto .que{{font-family:'OniaMono',monospace;font-size:22px;font-weight:500;
-  letter-spacing:.06em;text-transform:uppercase;color:#A8977A;margin-top:14px;
+  letter-spacing:.06em;text-transform:uppercase;color:#A1A1A6;margin-top:14px;
   line-height:1.3;white-space:pre-line}}
 /* layout G — barras comparativas. Nace el 07-sep de "el de claude siento que esta muy
    pobre, intenta colocarles mas cosas de valor y mas visuales": el carrusel de Fable era
