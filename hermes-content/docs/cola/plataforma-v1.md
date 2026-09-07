@@ -44,6 +44,29 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **A un estudio contable le pedíamos el género y el cumpleaños de su cliente —
+      cerrado el 2026-09-07 (`e9b857a` en `onia-platform`, publicado en la rama).**
+      Gate: `/root/loops/onia-platform-chatbot/app/(dashboard)/patients/ficha-por-rubro.test.ts`.
+      La ficha la comparten los tres rubros clínicos y **servicios profesionales**, uno de
+      los cinco que la v1.0 vende. Lo clínico ya se había separado (tipo de sangre, emergencia,
+      alergias, historia, tratamientos) pero **cumpleaños y género quedaron afuera de ese
+      arreglo**: en el alta viven en el MISMO grid que el nombre y el CI, diez líneas encima de
+      un bloque que sí distingue el rubro. El cliente de un estudio contable puede ser una
+      EMPRESA, así que el sistema le pedía el género de una razón social, y la lista le ofrecía
+      **filtrar por género** y le calculaba la edad.
+      **Cuatro superficies**, todas bajo `/root/loops/onia-platform-chatbot/app/(dashboard)/patients`: el alta, la
+      edición, la ficha y **la lista**, que entró al gate por primera vez — el
+      filtro por género vivía justo en la pantalla que ninguno de los tres casos miraba.
+      **El gate dejó de CONTAR bloques** `{esClinico && (` y ahora pregunta, por literal, si
+      aparece sólo detrás del interruptor: el conteo se rompía al agregar un bloque (pasó acá)
+      y no decía cuál faltaba cuando bajaba. Filtra los comentarios antes de buscar, o acusa a
+      la bitácora que explica el propio defecto.
+      El interruptor es `fichaClinica()`, de `lib/platform/vertical-pack.ts`.
+      **Prueba:** `npx vitest run 'app/(dashboard)/patients/'` → 18/18; verificado por
+      **mutación** (sacando `esClinico` del filtro de género el gate cae en rojo por el motivo
+      correcto). `tsc` 0 · `eslint` 0 errores · **3253** tests. Sin desplegar: viaja en el
+      pedido de deploy de `plataforma` que ya espera el `ok`.
+
 - [x] 🔴 **Este carril se mudó de máquina y quedó SIN el árbol de `onia-platform`: no podía
       escribir una línea del producto, y nada se puso rojo — arreglado el 2026-09-07.**
       `chatbot-cola` pasó a correr en **nodo-casa** (`3 * * * *`, primera corrida allá hoy
