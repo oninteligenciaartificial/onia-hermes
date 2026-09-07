@@ -44,6 +44,37 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **El correo que le llega al cliente DEL cliente hablaba en dental para los siete rubros
+      — arreglado el 2026-09-06 (`aeeacd0` en `onia-platform`).** La confirmación de cita y el
+      recordatorio traían los rótulos **«Doctor»** y **«Tratamiento»** escritos a mano, y los
+      mandan **los cuatro packs con agenda**: dental, estética, veterinaria y servicios
+      profesionales. Ese correo sale **con el remite del negocio**, así que a la clienta de una
+      estética y al cliente de un estudio contable les llegaba, firmado por ellos,
+      *«Doctor: María Fernanda Paz»* y *«Tratamiento: Declaración mensual de impuestos»* — el
+      ridículo lo hace el dueño, no nosotros. Tres de los cinco rubros vendibles.
+
+      **Por qué sobrevivió, que es lo que vale:** es la superficie que **ningún instrumento del
+      proyecto mira**. No sale en una captura, no está en el HTML de ninguna URL, no lo ve un
+      `curl`, y el que lo recibe no entra nunca al sistema. El vocabulario por rubro del producto ya
+      resolvía esto para la pantalla —**diez** la leen, hasta la pantalla del recibo impreso— y el correo nunca la llamó. El vocabulario incluso trae escrito el
+      motivo (*«decirle 'paciente' al dueño de una ferretería delata que el sistema es de otro
+      rubro y que sólo le cambiaron el logo»*): estaba aplicado hacia adentro y no hacia afuera.
+      Es el mismo cruce que el bot ya vigila con `hermes-content/deploy/vps-ops/bot/rubros-vivos.mjs`,
+      un escalón más lejos: ahí la superficie es lo que el bot DICE; acá, lo que el sistema MANDA.
+
+      **Verificado:** test en ROJO primero (5 casos fallando, el de dental pasando), luego
+      el test nuevo (`email-idioma-del-rubro`, en `onia-platform`) en verde con el **caso que ya cumple**
+      anclado —dental sigue diciendo «Doctor», y un correo sin `trackId` sale byte a byte igual
+      que antes, o sea que ningún llamador viejo cambió—. Gates: `tsc` 0 · `vitest` **3223
+      passed** · `eslint` 0.
+
+      **El gate ataca la clase, no las tres instancias:** deriva sus sujetos del **disco**
+      (los árboles `lib` y `app` enteros del producto), así que el próximo archivo que mande uno de estos correos nace
+      cubierto y hay que excluirlo a la vista. Validado **por mutación**: sacándole el `trackId`
+      al alta de cita el test se pone rojo y **nombra el archivo**.
+
+      ⚠️ **Commiteado y pusheado, NO desplegado** — viaja en el próximo swap de `plataforma`.
+
 - [x] 🟢 **FANTASMA — el circuito de deploy YA EXISTE. Anotado y cerrado el mismo 2026-09-05,
       sin escribir una línea.** Este ítem decía *"construir el script que implemente los cinco
       pasos del runbook"*. **Falso.** El integrador `onia-cola` lo construyó ese mismo día
