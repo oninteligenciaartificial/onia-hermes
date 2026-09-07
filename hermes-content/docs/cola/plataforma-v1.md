@@ -344,6 +344,16 @@ y sin operar. Acá se opera, con verificación por ítem.
       Las dos correcciones sucesivas del catálogo están en
       `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` §7.
 
+- [ ] 🔴 **`/billing/new`: crear factura no lleva a la pantalla de cobro.** Medido el
+      2026-09-07 por `recorrido-cliente` con `--escribir`, rubro Clínica dental: se carga un
+      ítem manual (Bs 10,00) y se aprieta «Crear Factura». La factura SÍ se crea en la base
+      (`invoices` id `cmtqq67wl000q01rwujm8y6lo`, folio `2026-0001`, Bs 10.00) pero la pantalla
+      se queda en `/billing/new` sin redirigir a ningún lado, y volviendo a `/billing` (Cobros)
+      la lista sigue diciendo «0 facturas / No hay facturas aún» — como si la factura recién
+      creada no existiera para esa vista. Tablero: `t_6359aa00`. Capturas:
+      `hermes-content/docs/recorrido/capturas/paso-08-cobro.png` (Cobros vacío antes) y
+      `paso-08c-factura-creada.png` (formulario con el ítem, antes de apretar Crear Factura).
+
 - [ ] ⚪ **Pendiente fiscal (`SIAT_EMISSION`) para facturar de verdad.** Va último a propósito:
       es un trámite externo, no código, y `/billing` ya funciona sin él. **No bloquea un cierre**
       — bloquea la factura fiscal, que el catálogo ya sabe no prometer. Si un loop se planta acá
