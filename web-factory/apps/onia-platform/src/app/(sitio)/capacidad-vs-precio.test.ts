@@ -175,6 +175,13 @@ function esPrecioDelMasBarato(fragmento: string): boolean {
 const VENTANA = 160;
 
 /**
+ * El JSON-LD no se mide en caracteres de lectura: nadie lo lee. `description` y
+ * `price` son claves hermanas del mismo objeto, así que van juntas aunque haya
+ * tres claves en el medio.
+ */
+const VENTANA_JSONLD = 340;
+
+/**
  * La salvedad pertenece a la AFIRMACIÓN, no al párrafo, y por eso se busca
  * pegada al marcador y no en toda la ventana.
  *
@@ -212,11 +219,17 @@ function hallazgos(): Hallazgo[] {
   const out: Hallazgo[] = [];
   for (const ruta of PANTALLAS) {
     const fuente = comoSeLee(sinComentarios(readFileSync(ruta, "utf8")));
-    const anclas = [
-      ...[...fuente.matchAll(ANCLA)].map((m) => m.index ?? 0),
+    // La ventana depende del TIPO de anclaje, y no es una perilla: en prosa la
+    // distancia mide proximidad de lectura, pero en el JSON-LD `description` y
+    // `price` son hermanos del MISMO objeto —adyacentes por estructura— y entre
+    // los dos caben `applicationCategory`, `operatingSystem` y `url`. Medir el
+    // JSON-LD con la ventana de la prosa dejó un hueco: inyectar «reportes
+    // completos» en la oferta de dental pasaba en VERDE (medido 2026-09-07).
+    const anclas: { i: number; ventana: number }[] = [
+      ...[...fuente.matchAll(ANCLA)].map((m) => ({ i: m.index ?? 0, ventana: VENTANA })),
       ...[...fuente.matchAll(ANCLA_JSONLD)]
         .filter((m) => esPrecioDelMasBarato(m[0]))
-        .map((m) => m.index ?? 0),
+        .map((m) => ({ i: m.index ?? 0, ventana: VENTANA_JSONLD })),
     ];
     // La salvedad se busca sobre el texto COMPLETO y en posiciones absolutas,
     // nunca sobre la ventana ya recortada: si se recorta primero, el recorte
@@ -225,14 +238,22 @@ function hallazgos(): Hallazgo[] {
     // Medido el 2026-09-07: así salieron dos rojos falsos, los dos sobre copy
     // que este mismo commit acababa de arreglar.
     const texto = plano(fuente);
-    for (const i of anclas) {
+    for (const { i, ventana: alcance } of anclas) {
       for (const { linea, marcador } of EXCLUIDAS) {
         // CADA aparición del marcador necesita su propia salvedad: basta una
         // desnuda para que el lead la lea sin ella.
         let desnuda = false;
         for (let j = texto.indexOf(marcador); j !== -1; j = texto.indexOf(marcador, j + 1)) {
-          if (Math.abs(j - i) > VENTANA) continue;
-          const alLado = texto.slice(Math.max(0, j - ANTES), j + marcador.length + DESPUES);
+          if (Math.abs(j - i) > alcance) continue;
+          // La salvedad NO cruza el punto: una que vive en la oración siguiente
+          // es de OTRA capacidad. Sin este corte, «…y reportes completos.
+          // Agentes con IA desde el plan Pro» quedaba absuelto —el «desde Pro»
+          // de los agentes tapaba a los reportes— y la inyección pasaba en
+          // VERDE (medido 2026-09-07).
+          const crudo = texto.slice(Math.max(0, j - ANTES), j + marcador.length + DESPUES);
+          const relativo = Math.min(j, ANTES) + marcador.length;
+          const punto = crudo.indexOf(". ", relativo);
+          const alLado = punto === -1 ? crudo : crudo.slice(0, punto);
           if (!tieneSalvedad(alLado)) desnuda = true;
         }
         if (!desnuda) continue;
