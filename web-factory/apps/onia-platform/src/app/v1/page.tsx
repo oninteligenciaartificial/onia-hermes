@@ -16,8 +16,13 @@ import styles from "@/components/landing-v1/landing.module.css";
 
 const SITE_URL = "https://onia.com.bo/";
 const TITLE = "Onia · Tu negocio no pierde citas ni cobros | Bolivia";
+// Los agentes van DESPUÉS del precio y con su plan nombrado: el «desde» cotiza
+// el Básico, y el Básico no los trae (`PLANES[0].sinEsto`: «Agentes de IA
+// (vienen desde Pro)»). Prometerlos en la misma frase que el precio más bajo es
+// lo que hace que el lead se entere al pagar. Al final, además, viajan junto a
+// su salvedad si Google trunca la descripción.
 const DESCRIPTION =
-  `Onia Platform es el sistema de gestión con inteligencia artificial para negocios en Bolivia: agenda, clientes, cobros y agentes que revisan tu negocio cada día y esperan tu aprobación. Desde Bs ${bs(plan("basico").mensual)} al mes. Probalo ${PRUEBA.dias} días gratis, sin tarjeta.`;
+  `Onia Platform es el sistema de gestión con inteligencia artificial para negocios en Bolivia: agenda, clientes y cobros. Desde Bs ${bs(plan("basico").mensual)} al mes. Probalo ${PRUEBA.dias} días gratis, sin tarjeta. Agentes que revisan tu negocio cada día y esperan tu aprobación, desde el plan ${plan("pro").nombre}.`;
 
 /*
  * La tarjeta social NO se declara acá: la dibuja `opengraph-image.tsx` de este

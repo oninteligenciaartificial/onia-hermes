@@ -11,8 +11,14 @@ const REGISTRO_URL = `${APP_URL}/register`;
 export const metadata: Metadata = {
   metadataBase: new URL(`${SITE_URL}/`),
   title: "Software para clínicas dentales en Bolivia — Onia Platform",
+  // El plan que cuesta este «desde» NO trae los agentes: `PLANES[0].sinEsto`
+  // dice «Agentes de IA (vienen desde Pro)». Prometerlos en la misma frase que
+  // el precio más bajo hace que el lead pague creyendo que los compró y se
+  // entere cuando se le apagan — el daño que `lib/pricing.ts` ya describe. Por
+  // eso el plan va nombrado, y va AL FINAL: si Google trunca la descripción, se
+  // lleva la promesa junto con su salvedad en vez de dejar la promesa sola.
   description:
-    `Agenda, ficha del paciente con odontograma, recordatorios automáticos, caja, contabilidad con IVA/IT y agentes con IA que recuperan pacientes. Desde Bs ${bs(plan("basico").mensual)}/mes, ${PRUEBA.dias} días gratis.`,
+    `Agenda, ficha del paciente con odontograma, recordatorios automáticos, caja y contabilidad con IVA/IT. Desde Bs ${bs(plan("basico").mensual)}/mes, ${PRUEBA.dias} días gratis. Agentes con IA que recuperan pacientes, desde el plan ${plan("pro").nombre}.`,
   alternates: { canonical: "/modulos/dental" },
   openGraph: {
     type: "website",
@@ -95,8 +101,11 @@ const JSON_LD = {
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
       url: `${SITE_URL}/modulos/dental`,
-      description:
-        "Software de gestión para clínicas dentales en Bolivia: agenda, odontograma, recordatorios, caja, contabilidad y agentes con IA.",
+      // La `offers` de abajo cotiza el plan más barato, y ese plan no trae los
+      // agentes. Describir la oferta con ellos es la misma promesa sin precio
+      // que la `description` de arriba, pero en el lugar donde ningún gate de
+      // literales ni captura llega — y del que Google saca lo que publica.
+      description: `Software de gestión para clínicas dentales en Bolivia: agenda, odontograma, recordatorios, caja y contabilidad. Agentes con IA desde el plan ${plan("pro").nombre}.`,
       // El monto se LEE de la tabla: acá estaba tipeado "320", dos líneas
       // debajo de un `plan("basico").mensual` bien leído en la `description`.
       // En el JSON-LD el precio viaja desnudo y con la moneda en otra clave,
