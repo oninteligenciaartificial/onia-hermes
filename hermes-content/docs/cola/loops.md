@@ -19,8 +19,8 @@ solo.
 | nombre | máquina | qué es | cómo se reconoce |
 |---|---|---|---|
 | **laptop** | `DESKTOP-ENV6SDA` | HP Victus 16, 12 hilos, 23,6 GB, **con batería**, Win 11 Home. Donde Sergio Urcullo trabaja y habla con las sesiones. **No tiene nada del nodo** | su Ubuntu **no** tiene `/root/loops` ni `/root/.onia-nodo` |
-| **nodo-casa** | `DESKTOP-0GGGNMF` | El tercer nodo: `/root/loops`, los 5 worktrees, y las 5 líneas de cron **comentadas** | existe `/root/.onia-nodo` |
-| **VPS** | `srv1360183` · 187.77.16.63 | Producción: la app, Supabase, Chatwoot y los 4 loops vivos | existe `/usr/local/lib/hermes-agent/venv/bin/python` |
+| **nodo-casa** | `DESKTOP-0GGGNMF` | El tercer nodo: `/root/loops`, los 5 worktrees, y sus 5 líneas de cron — **`web-venta` activa desde el 2026-09-06**, las otras 4 comentadas | existe `/root/.onia-nodo` |
+| **VPS** | `srv1360183` · 187.77.16.63 | Producción: la app, Supabase, Chatwoot y los **3** loops que no pueden mudarse (tocan Docker/psql del propio VPS) | existe `/usr/local/lib/hermes-agent/venv/bin/python` |
 
 El nombre `nodo-casa` no se inventó acá: es con el que **ese nodo ya firma** los hechos que
 escribe en la memoria compartida. ⚠️ El valor de la columna *dónde corre* sigue siendo `casa`
@@ -417,7 +417,9 @@ justamente lo que se pudre. El conteo vigente es la tabla de arriba, y se cuenta
 
 ## Pausados el 2026-09-04 (foco: vender; cuota escasa) — NO rearmar
 
-Su línea **sigue en `crontab -l`, comentada**, con el motivo escrito al principio
+⚠️ **Cuatro de estos ya NO están en el VPS: se mudaron a `nodo-casa` el 2026-09-06** — loop y
+worktree — y su línea salió de este `crontab`. Ver la sección *Mudados a `nodo-casa`* más abajo.
+Para los que quedan: su línea **sigue en `crontab -l`, comentada**, con el motivo escrito al principio
 (`# PAUSADO 2026-09-04 (foco: vender; cuota escasa) — …`). Descomentarla es revivirlos: es una
 decisión de la sesión de control, no un cron a medio registrar.
 
@@ -522,6 +524,51 @@ Lo que se hizo, y lo que a propósito NO:
   logs, en los worktrees y en este gate: renombrarlo es superficie grande para una ganancia
   cosmética. **Queda como deuda anotada**, no como olvido: el nombre dice menos de lo que el
   carril hace.
+
+## Mudados a `nodo-casa` el 2026-09-06 — el loop Y su worktree
+
+> Sergio Urcullo, 2026-09-06: *"pero habíamos quedado que los loops iban a funcionar en la pc de
+> casa para que no se ahogue el vps"*. Tenía razón, y la medición corrigió **qué** se estaba
+> ahogando.
+
+🔴 **El VPS no se ahogaba por CPU: se ahogaba por DISCO.** Medido ese día, no recordado:
+`load 2.17` sobre 4 núcleos con **80,9% idle** y 10 GB de RAM libres — CPU y memoria sobraban.
+El disco estaba al **89%**, con 22 GB libres, y `/root/loops` pesaba **56 GB** contra los 27 de
+`/var/lib/docker`, que sí es producción. Con Docker en el mismo disco, llenarlo tumba
+`onia.com.bo`, `app.onia.com.bo`, la base y n8n **juntos**.
+
+🔴 **Y mudar un loop NO libera disco. Eso se midió con un caso, no se dedujo:** `web-venta` se
+mudó a `nodo-casa` esa misma mañana y **sus 3,1 GB siguieron en el VPS**. Mudar mueve dónde
+corre el trabajo; el árbol se queda donde estaba. **La mudanza no está hecha hasta que el
+worktree también se va.**
+
+| worktree sacado | rama | pesaba |
+|---|---|---|
+| `onia-hermes-lucia` | `claude/lucia-vps` | 5,7 GB |
+| `onia-hermes-marca-personal` | `claude/marca-personal-loop` | 5,7 GB |
+| `onia-hermes-webfactory` | `claude/web-factory-dev` | 3,1 GB |
+| `onia-hermes-web-venta` | `claude/web-venta` | 3,1 GB |
+
+Y `onia-hermes-canario` **no se sacó** —`canario-visual` se queda en el VPS por diseño, es un
+instrumento calibrado— pero se **achicó** con `sparse-checkout`: 5.595 MB → 1.683 MB. El árbol
+sigue ahí, sin los 3,9 GB de `hermes-content/references` que un carril congelado no lee.
+⚠️ **Se rehidrata al revivirlo**, y hay que hacerlo o corre sin sus referencias y falla mudo:
+`git -C /root/loops/onia-hermes-canario sparse-checkout disable`.
+
+**Resultado, medido antes y después: 89% → 79% de uso, de 22 a 41 GB libres.** `/root/loops`
+pasó de 56 GB a 36 GB.
+
+🔴 **El chequeo que evitó el daño, y que no es opcional.** Antes de sacar nada se preguntó por
+cada árbol: ¿está limpio, y tiene commits sin pushear? **`lucia-contenido` (10 GB) tenía DOS
+commits sin pushear** — parecía peso muerto y tenía trabajo adentro. No se tocó, y siguen ahí
+esperando a que alguien los suba. Los cuatro que sí se sacaron estaban limpios y con cero.
+
+**Se rehacen con un comando**, y el registro con rama y sha quedó en el VPS
+(`/root/worktrees-mudados-a-casa-2026-09-06.txt`):
+`git -C /root/loops/onia-hermes worktree add <ruta> <rama>`.
+
+**Sus líneas comentadas se sacaron del `crontab` del VPS**, reemplazadas por una nota. Su cron
+vive en `nodo-casa`, comentado hasta que se los reviva.
 
 ## Apagados a propósito el 2026-08-31 — NO rearmar
 
