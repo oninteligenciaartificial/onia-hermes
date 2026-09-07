@@ -2,7 +2,7 @@
  * Contenido normativo de facturación en línea (SIAT) — fuente ÚNICA.
  *
  * Estaba escrito una sola vez, adentro de
- * app/funciones/facturacion-electronica-siat/page.tsx. Al necesitarlo también
+ * app/v1/funciones/facturacion-electronica-siat/page.tsx. Al necesitarlo también
  * el preview (v3) la opción era copiarlo, y copiar un texto FISCAL es
  * exactamente cómo nacieron los cuatro precios vivos del chatbot: dos páginas
  * dicen cosas distintas sobre la misma ley y ninguna se entera. Vive acá; las

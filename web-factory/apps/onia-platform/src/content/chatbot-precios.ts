@@ -35,7 +35,15 @@
  *    fecha: mientras esta cabecera dijo «no se promete un cupo», cada vuelta
  *    que la leía volvía a sacarlo. Hoy se promete, con su salida al lado.
  *    Guarda: `app/(sitio)/limite-que-corta.test.ts` (y el número se cruza
- *    contra el producto con `scripts/limites-vivos.mjs`).
+ *    contra el producto con `npm run precios:fuente` —
+ *    `scripts/precios-fuente.mjs`, que compara `CONVERSACIONES_INCLUIDAS`
+ *    contra `includedConversations` de `onia-platform/lib/pricing.ts`).
+ *    ⚠️ Esta línea nombró hasta el 2026-09-07 un verificador «limites-vivos»
+ *    que nunca se escribió: el cruce existía con otro nombre, así que el dato
+ *    estaba sano y lo único roto era la forma de comprobarlo. Una afirmación
+ *    de cobertura falsa detiene la auditoría en vez de dispararla, por eso
+ *    ahora la vigila `app/cobertura-citada.test.ts` — y por eso el nombre
+ *    muerto se cuenta acá sin escribirlo como ruta: el gate mira rutas.
  *
  *    Lo que quedó es lo que el código SÍ hace, y es defendible: contesta al
  *    instante a cualquier hora, responde con la información que el negocio
@@ -57,9 +65,9 @@ export type StackId = "whatsapp";
  *
  * Vive acá porque el otro repo no está en este worktree, igual que los montos
  * de `lib/pricing.ts`. Que las dos copias coincidan NO es una propiedad del
- * código: lo cruza `scripts/limites-vivos.mjs` contra la fuente real, fuera de
- * la cadena `npm test` (exigir el repo hermano pondría rojo por ambiente y
- * trabaría el merge de los quince carriles).
+ * código: lo cruza `scripts/precios-fuente.mjs` (`npm run precios:fuente`)
+ * contra la fuente real, fuera de la cadena `npm test` (exigir el repo hermano
+ * pondría rojo por ambiente y trabaría el merge de los quince carriles).
  */
 export const CONVERSACIONES_INCLUIDAS = 500;
 
