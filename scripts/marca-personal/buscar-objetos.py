@@ -97,22 +97,42 @@ def buscar_pexels(consulta, key):
 
 
 def _leer_env():
-    """Lee las llaves del .env del repo si estan ahi, sin pisar las del entorno.
+    """Lee las llaves de los .env posibles, sin pisar las del entorno.
 
     Existe para que Sergio Urcullo solo tenga que PEGAR las llaves en un archivo y no
-    exportarlas a mano en cada sesion. El .env esta en .gitignore: nunca viaja al repo.
+    exportarlas a mano en cada sesion. Todos los .env estan en .gitignore.
+
+    Busca en TRES lugares porque en la practica la llave aparecio en el tercero:
+    la raiz del worktree, la raiz del checkout principal (un worktree no comparte
+    archivos ignorados con el) y el HOME. Se queda con la primera que encuentra.
+
+    `utf-8-sig` y no `utf-8`: `Add-Content -Encoding utf8` en Windows PowerShell 5.1
+    escribe **BOM**, y con utf-8 a secas la primera clave del archivo queda leida como
+    "\\ufeffPEXELS_API_KEY" y no matchea nunca. Falla silenciosa y muy dificil de ver.
     """
-    env = REPO / ".env"
-    if not env.exists():
-        return
-    for linea in env.read_text(encoding="utf-8", errors="replace").splitlines():
-        linea = linea.strip()
-        if not linea or linea.startswith("#") or "=" not in linea:
+    candidatos = [
+        REPO / ".env",
+        REPO.parent.parent.parent / ".env",   # .claude/worktrees/<x>/ -> checkout principal
+        Path.home() / ".env",
+    ]
+    for env in candidatos:
+        try:
+            if not env.exists():
+                continue
+            texto = env.read_text(encoding="utf-8-sig", errors="replace")
+        except OSError:
             continue
-        k, v = linea.split("=", 1)
-        k, v = k.strip(), v.strip().strip('"').strip("'")
-        if k in ("UNSPLASH_ACCESS_KEY", "PEXELS_API_KEY") and v and not os.environ.get(k):
-            os.environ[k] = v
+        for linea in texto.splitlines():
+            linea = linea.strip()
+            if not linea or linea.startswith("#") or "=" not in linea:
+                continue
+            k, v = linea.split("=", 1)
+            k, v = k.strip(), v.strip().strip('"').strip("'")
+            # el placeholder del instructivo no es una llave: si se cuela, el script
+            # cree que tiene llave y falla con 401 en vez de caer a otra fuente.
+            if (k in ("UNSPLASH_ACCESS_KEY", "PEXELS_API_KEY")
+                    and v and not v.startswith("pega_") and not os.environ.get(k)):
+                os.environ[k] = v
 
 
 def elegir_fuente(pedida):

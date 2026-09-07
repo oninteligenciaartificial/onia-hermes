@@ -40,3 +40,32 @@ aislados, que es exactamente lo que tienen Unsplash y Pexels.
 
 **Qué falta:** las dos llaves gratuitas en el `.env` del repo (ya está en `.gitignore`).
 El script las toma solo y cambia de fuente sin tocar código.
+| `cafe` | espresso cup | unsplash | Unsplash License | Trent Erwin | https://unsplash.com/photos/flat-lay-photography-teacup-on-top-of-saucer-fKImVjUwkXc |
+| `reloj` | wristwatch | unsplash | Unsplash License | Fashion Needles | https://unsplash.com/photos/a-stylish-rose-gold-watch-rests-on-a-display-55ZjBmoOH1U |
+| `cuaderno` | notebook | unsplash | Unsplash License | Stylite yu | https://unsplash.com/photos/person-holding-green-covered-book-aKjAbP8DrMw |
+| `celular` | smartphone | unsplash | Unsplash License | Rahul Chakraborty | https://unsplash.com/photos/smartphone-and-laptop-workspace-xsGxhtAsfSA |
+| `reloj` | luxury wristwatch white background | unsplash | Unsplash License | Faraz Fayaz | https://unsplash.com/photos/a-black-minimalist-watch-with-a-leather-strap-3weffxf3mdk |
+| `cuaderno` | closed notebook white background | unsplash | Unsplash License | MJH SHIKDER | https://unsplash.com/photos/white-printer-paper-on-white-surface-sWaBlk7OWrE |
+| `cuaderno` | leather bound journal notebook | unsplash | Unsplash License | Beechmore Books | https://unsplash.com/photos/blue-and-brown-leather-tablet-case-ajSG_cVll_k |
+
+---
+
+## ✅ Unsplash funciona (06-sep, con llave viva)
+
+Diferencia contra Openverse, mirada en `HOJA-unsplash.jpg`: fotografía de producto real,
+limpia y recortable. Es la fuente del patrón.
+
+**La consulta importa más de lo que parece.** Tres de las cuatro primeras salieron con
+basura alrededor y hubo que reescribirlas:
+
+| Primera consulta | Qué trajo | Consulta que sí sirvió |
+|---|---|---|
+| `wristwatch` | reloj sobre un cojín de exhibición | `luxury wristwatch white background` |
+| `notebook` | cuadernos + una mano + una ramita + un busto de yeso | `leather bound journal notebook` |
+| `closed notebook white background` | un **mockup de hojas en blanco**, no un cuaderno | ídem |
+
+Regla: pedir el objeto **aislado** (`white background`, `product`) y MIRAR el recorte. Un
+mockup y un objeto real pesan lo mismo en KB.
+
+⚠️ `PEXELS_API_KEY` sigue con el placeholder. No hace falta —Unsplash alcanza— pero tener
+las dos da más de dónde elegir cuando una consulta no rinde.
