@@ -378,6 +378,118 @@ export function limitesDelSitio(fuente) {
   return salida;
 }
 
+/* ──────────  la COBERTURA: que un tope nuevo no nazca mudo  ────────── */
+
+/**
+ * QUE AGUJERO TAPA ESTO, y por que no se ve mirando el veredicto.
+ *
+ * `CIFRAS` sale de `Object.keys(cifrasDelProducto(...))`: el universo de este
+ * cruce lo define el lado PRODUCTO. Eso cubre bien una direccion —una cifra que
+ * el producto define y el sitio no publica cae en `ilegibles`— y es CIEGO a la
+ * contraria: un numero que el SITIO publica sin clave del lado producto no
+ * entra en `CIFRAS`, asi que no se compara, no se nombra, y el script imprime
+ * "VERDE: las N cifras" por encima.
+ *
+ * Medido el 2026-09-07 inyectando un tope nuevo en el `incluye` del Basico en
+ * su forma real ("Hasta 7 sucursales conectadas"): `ilegibles 0 · difieren 0`
+ * y verde. No es hipotetico — es como nace este defecto: alguien agrega una
+ * fila al `incluye` para vender mejor, nadie toca el producto, y el sitio queda
+ * publicando un tope que el sistema no aplica.
+ *
+ * Es la lista de inclusion de siempre, un escalon mas adentro: el gate DERIVA
+ * bien sus sujetos del disco (lee el `incluye` de cada plan) y despues los
+ * clasifica con un puñado de palabras conocidas —fichas, usuarios,
+ * recordatorios— tirando en SILENCIO lo que no sabe nombrar. Derivar el sujeto
+ * no alcanza si la clasificacion es una lista blanca.
+ *
+ * COMO SE CIERRA. Se enumera TODO numero que el `incluye` publica y se exige
+ * que cada uno lo consuma un cruce o lo excuse una entrada con su motivo. Asi
+ * el que viene manana nace NOMBRADO en vez de mudo, y el error posible pasa a
+ * ser "sobra un aviso" en vez de "falta el unico que importaba".
+ */
+
+/**
+ * Numeros del `incluye` que a proposito NO se cruzan, cada uno con su motivo.
+ *
+ * Hoy esta VACIA, que es el mejor estado posible: los seis numeros que el sitio
+ * publica (2/300/200, 5/1.500/800) los consumen los topes de `limitesDelSitio`.
+ * Una entrada que sobra es peor que ninguna — pre-aprueba al proximo numero que
+ * caiga en ese valor sin que nadie lo mire —, asi que `excusasSinSujeto()` la
+ * caza y el guard la pone roja.
+ *
+ * @type {ReadonlyArray<{plan: string, valor: number, motivo: string}>}
+ */
+export const TOPES_SIN_CRUCE = [];
+
+/**
+ * Las constantes del sitio que este cruce SI sabe leer: las lee `cifrasDelSitio`
+ * y por eso una cifra interpolada desde ellas ya viaja cruzada. Una constante
+ * NUEVA citada dentro de un `incluye` (`${SUCURSALES_MAX}`) no la lee nadie, y
+ * se reporta igual que un numero tipeado a mano.
+ */
+export const CONSTANTES_CRUZADAS = [
+  "GRUPO",
+  "AGENDA_ADDON",
+  "USUARIO_EXTRA_ADDON",
+  "PRUEBA",
+];
+
+/**
+ * Todo lo que el `incluye` de cada plan publica como cifra: los numeros
+ * LITERALES y las constantes citadas por interpolacion. Las dos formas, porque
+ * el defecto entra por las dos y una sola deja media puerta abierta.
+ */
+export function numerosPublicados(fuente) {
+  const marcas = [...(fuente ?? "").matchAll(/\bid:\s*"(basico|pro|full)"/g)];
+  const salida = [];
+  marcas.forEach((m, i) => {
+    const hasta = i + 1 < marcas.length ? marcas[i + 1].index : (fuente ?? "").length;
+    const inc = incluyeDelSitio((fuente ?? "").slice(m.index, hasta));
+    if (inc === null) return;
+    for (const cruda of inc.split("\n")) {
+      const linea = cruda.trim().replace(/^["`]|["`],?$/g, "");
+      for (const s of cruda.matchAll(/\$\{([^}]*)\}/g)) {
+        for (const c of s[1].matchAll(/\b([A-Z][A-Z0-9_]{2,})\b/g)) {
+          salida.push({ plan: m[1], clase: "constante", valor: c[1], linea });
+        }
+      }
+      /** La interpolacion ya se conto arriba por su nombre: aca estorbaria. */
+      for (const n of cruda.replace(/\$\{[^}]*\}/g, " ").matchAll(/\d[\d.]*\d|\d/g)) {
+        salida.push({
+          plan: m[1],
+          clase: "número",
+          valor: Number(String(n[0]).replace(/\./g, "")),
+          linea,
+        });
+      }
+    }
+  });
+  return salida;
+}
+
+/** Lo que el sitio publica en su `incluye` y este cruce no mira. Vacio = cubierto. */
+export function publicadosSinCruzar(fuente) {
+  const ls = limitesDelSitio(fuente ?? "");
+  return numerosPublicados(fuente).filter((n) => {
+    if (n.clase === "constante") return !CONSTANTES_CRUZADAS.includes(n.valor);
+    const t = ls[n.plan] ?? {};
+    if ([t.fichas, t.usuarios, t.recordatorios].some((v) => v === n.valor)) return false;
+    return !TOPES_SIN_CRUCE.some((e) => e.plan === n.plan && e.valor === n.valor);
+  });
+}
+
+/**
+ * Excusas que ya no tienen sujeto. Una entrada de lista blanca que ningun
+ * numero usa no la mide nadie y queda PRE-APROBADA: el dia que alguien publique
+ * ese mismo valor, entra en verde sin que nadie lo haya mirado.
+ */
+export function excusasSinSujeto(fuente) {
+  const publicados = numerosPublicados(fuente);
+  return TOPES_SIN_CRUCE.filter(
+    (e) => !publicados.some((n) => n.clase === "número" && n.plan === e.plan && n.valor === e.valor),
+  );
+}
+
 /**
  * El mismo `primerPlanCon` del lado producto, pero traduciendo los ids del
  * sitio a los del producto para que las dos respuestas sean comparables.
@@ -560,9 +672,10 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     process.exit(NO_PUDE_MEDIR);
   }
 
+  const preciosSitio = readFileSync(PRECIOS_SITIO, "utf8");
   const delProducto = cifrasDelProducto({ planes, addons, prueba, limites });
   const delSitio = cifrasDelSitio({
-    precios: readFileSync(PRECIOS_SITIO, "utf8"),
+    precios: preciosSitio,
     chatbot: readFileSync(CHATBOT_SITIO, "utf8"),
   });
   const { ilegibles, difieren } = comparar(delProducto, delSitio);
@@ -583,9 +696,25 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     process.exit(NO_PUDE_MEDIR);
   }
 
+  const sinCruzar = publicadosSinCruzar(preciosSitio);
+  if (sinCruzar.length > 0) {
+    console.error(
+      `NO PUDE MEDIR: el sitio publica ${sinCruzar.length} cifra(s) en el \`incluye\` de un ` +
+        `plan que este cruce no mira, asi que NO estan verificadas contra el producto:\n` +
+        sinCruzar
+          .map((n) => `  · plan ${n.plan} — ${n.clase} ${n.valor} en "${n.linea}"`)
+          .join("\n") +
+        `\nUn tope que el sitio publica y el producto no aplica se paga DESPUES, cuando el ` +
+        `cliente ya entro. Cruzalo (una clave nueva en cifrasDelProducto/cifrasDelSitio) o, ` +
+        `si de verdad no es un tope del producto, excusalo con su motivo en TOPES_SIN_CRUCE.`,
+    );
+    process.exit(NO_PUDE_MEDIR);
+  }
+
   if (difieren.length === 0) {
     console.log(
-      `VERDE: las ${CIFRAS.length} cifras que publica el sitio son las que cobra el producto.`,
+      `VERDE: las ${CIFRAS.length} cifras que publica el sitio son las que cobra el producto, ` +
+        `y las ${numerosPublicados(preciosSitio).length} del \`incluye\` de los planes estan todas cruzadas.`,
     );
     process.exit(COINCIDEN);
   }

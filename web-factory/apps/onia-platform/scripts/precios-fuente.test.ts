@@ -5,17 +5,21 @@ import { describe, expect, it } from "vitest";
 import {
   CHATBOT_SITIO,
   CIFRAS,
+  CONSTANTES_CRUZADAS,
   PRECIOS_SITIO,
   cifrasDelProducto,
   cifrasDelSitio,
   comparar,
   esPromesa,
+  excusasSinSujeto,
   limitesDelProducto,
   limitesDelSitio,
+  numerosPublicados,
   planQueElSitioPrometeParaExportar,
   planesDelProducto,
   planesDelSitio,
   primerPlanCon,
+  publicadosSinCruzar,
 } from "./precios-fuente.mjs";
 
 /**
@@ -290,5 +294,84 @@ describe("el veredicto", () => {
     const { difieren, ilegibles } = comparar(vacio, vacio);
     expect(difieren).toEqual([]);
     expect(ilegibles).toEqual(CIFRAS);
+  });
+});
+
+/**
+ * La COBERTURA del cruce, que es distinta de su resultado.
+ *
+ * `CIFRAS` se deriva del lado PRODUCTO, así que el cruce es ciego a un número
+ * que el SITIO publique sin clave del otro lado: no entra en la comparación y
+ * el script imprime "VERDE: las N cifras" por encima. Medido el 2026-09-07
+ * inyectando "Hasta 7 sucursales conectadas" en el `incluye` del Básico —
+ * `ilegibles 0 · difieren 0`, verde.
+ *
+ * Estos casos exigen que un tope nuevo nazca NOMBRADO. Se validaron por
+ * mutación en las dos direcciones: con `publicadosSinCruzar` devolviendo `[]`
+ * los dos primeros caen, y con el filtro de ya-cruzados apagado cae el tercero
+ * (los 8 números vivos saldrían como huecos).
+ */
+describe("ningún tope que el sitio publica queda fuera del cruce", () => {
+  const real = readFileSync(PRECIOS_SITIO, "utf8");
+
+  it("hoy no hay ni una cifra publicada sin cruzar", () => {
+    expect(
+      publicadosSinCruzar(real),
+      "El `incluye` de un plan publica una cifra que este cruce no mira: no está " +
+        "verificada contra el producto. Cruzala, o excusala con su motivo en TOPES_SIN_CRUCE.",
+    ).toEqual([]);
+  });
+
+  it("un tope NUEVO tipeado a mano sale nombrado, no en silencio", () => {
+    const conTopeNuevo = real.replace(
+      '"Hasta 300 fichas de clientes o pacientes cargadas",',
+      '"Hasta 300 fichas de clientes o pacientes cargadas",\n      "Hasta 7 sucursales conectadas",',
+    );
+    expect(conTopeNuevo, "la inyección no se aplicó").not.toEqual(real);
+    expect(publicadosSinCruzar(conTopeNuevo)).toContainEqual({
+      plan: "basico",
+      clase: "número",
+      valor: 7,
+      linea: "Hasta 7 sucursales conectadas",
+    });
+  });
+
+  it("una constante NUEVA interpolada tampoco pasa por cruzada", () => {
+    // La interpolación es la forma cómoda y por eso la peligrosa: se lee como
+    // "sale de una constante, alguien la cuida" y no la cruza nadie.
+    const conConstante = real.replace(
+      '"Hasta 300 fichas de clientes o pacientes cargadas",',
+      '"Hasta 300 fichas de clientes o pacientes cargadas",\n      `Hasta ${SUCURSALES_MAX} sucursales`,',
+    );
+    expect(conConstante, "la inyección no se aplicó").not.toEqual(real);
+    expect(
+      publicadosSinCruzar(conConstante).map((n) => n.valor),
+    ).toContain("SUCURSALES_MAX");
+  });
+
+  it("el cruce sigue leyendo cifras del `incluye`: si deja de ver, esto cae", () => {
+    // Sin este caso, `publicadosSinCruzar` podría devolver `[]` por no encontrar
+    // NADA y los dos primeros seguirían verdes — el fallo mudo de esta familia.
+    expect(numerosPublicados(real).length).toBeGreaterThanOrEqual(6);
+  });
+
+  it("ninguna excusa de TOPES_SIN_CRUCE sobra", () => {
+    // Una entrada sin sujeto no la mide nadie y PRE-APRUEBA al próximo número
+    // que caiga en ese valor. Ya pasó en este carril con HOSTS_PERMITIDOS.
+    expect(
+      excusasSinSujeto(real),
+      "Sobra una excusa en TOPES_SIN_CRUCE: ningún número publicado la usa.",
+    ).toEqual([]);
+  });
+
+  it("CONSTANTES_CRUZADAS no bendice una constante que el cruce ya no lee", () => {
+    // Mismo riesgo que arriba, un nivel más arriba: si `cifrasDelSitio` deja de
+    // leer una de estas, la lista la seguiría dando por cruzada.
+    const cuerpo = cifrasDelSitio.toString();
+    for (const nombre of CONSTANTES_CRUZADAS) {
+      expect(cuerpo, `CONSTANTES_CRUZADAS declara ${nombre} y cifrasDelSitio no lo lee`).toContain(
+        nombre,
+      );
+    }
   });
 });
