@@ -420,18 +420,27 @@ LAMINAS = [
         "sub": "tengo 16 años y todos los días posteo\ncómo usar IA en un negocio de verdad.",
         "cta": "Seguime.",
     },
-    # CIERRE. El CTA obliga a comentar: pregunta cerrada, de una sola palabra, sobre algo
-    # que el lector YA tiene una opinion formada despues de ver las 7 fichas.
-    # ⚠️ NO usa palabra clave con respuesta automatica: la cuenta tiene `palabras: {}` en
-    # el workflow n8n de private-reply, asi que un "Comenta X" no entregaria nada.
-    # Cuando eso se cablee, este es el lugar donde entra.
+    # CIERRE. Pedido de Sergio Urcullo el 07-sep: "que la ultima pida comentar si o si,
+    # podes decir te paso mi stack y como instalarlo". Pasa de PREGUNTA a INTERCAMBIO —
+    # una palabra a cambio de algo concreto—, que es el CTA que mas comentarios saca
+    # porque el lector sabe exactamente que recibe.
+    #
+    # ⚠️ LA ENTREGA ES A MANO Y LA LAMINA LO DICE. La cuenta tiene `palabras: {}` en el
+    # workflow n8n de private-reply (medido 04-sep): "Comenta STACK" NO dispara ningun
+    # envio automatico. Por eso el pie dice "te contesto a todos, a mano" en vez de
+    # "recibilo al instante": prometer una automatica que no existe deja a cada
+    # comentarista esperando un DM que nunca llega, y eso se paga con la cuenta.
+    #
+    # 🔴 DEPENDE DE SERGIO URCULLO: la pieza promete "la lista con el paso a paso para
+    # instalar cada una" y ESE MATERIAL NO EXISTE TODAVIA. Antes de publicar tiene que
+    # estar escrito y a mano, o la promesa se rompe en el primer comentario.
     {
         "layout": "D",
-        "contexto": "Ahora te toca a vos",
-        "remate": "¿CUÁL TE FALTA?",
-        "sub": "Escribí abajo la que no tenés todavía y te digo\npor cuál conviene que empieces.",
-        "cta_hl": "Una sola palabra alcanza.",
-        "cta_gris": "Te contesto a todos.",
+        "contexto": "¿Lo querés armar igual?",
+        "remate": "COMENTÁ\n«STACK»",
+        "sub": "y te paso por privado la lista de las siete\ncon el paso a paso para instalar cada una.",
+        "cta_hl": "Con esa palabra alcanza.",
+        "cta_gris": "Te contesto a todos, a mano.",
     },
 ]
 
