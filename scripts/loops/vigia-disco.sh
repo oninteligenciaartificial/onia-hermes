@@ -22,7 +22,17 @@
 set -uo pipefail
 
 UMBRAL="${ONIA_DISCO_UMBRAL:-88}"      # % de uso a partir del cual avisa
-MARCA="/var/lib/onia-disco.avisado"    # un aviso por incidente, no uno por hora
+MARCA="${ONIA_DISCO_MARCA:-/var/lib/onia-disco.avisado}"  # un aviso por incidente, no uno por hora
+# Que maquina se nombra en el aviso. Este vigia nacio para el VPS y tenia "VPS"
+# escrito a mano; desde el 2026-09-07 los cuatro loops corren en nodo-casa, que
+# es una maquina distinta y con otro disco. Un aviso que nombra la maquina
+# equivocada manda a mirar donde no es — el mismo error que ya se corrigio en
+# vigia-loops-remotos.sh el mismo dia.
+MAQUINA="${ONIA_DISCO_MAQUINA:-el VPS}"
+# Que se cae si ese disco se llena. En el VPS son las webs, la base y n8n; en el
+# nodo son los cuatro loops, o sea el unico camino a main. No es la misma frase.
+CAIDA="${ONIA_DISCO_CAIDA:-Si se llena se caen JUNTOS: onia.com.bo, app.onia.com.bo, la base y n8n.}"
+TG="${ONIA_TG:-/root/bin/onia-tg.sh}"
 
 USO=$(df --output=pcent / | tail -1 | tr -dc '0-9')
 LIBRE=$(df -h --output=avail / | tail -1 | tr -d ' ')
@@ -30,7 +40,7 @@ LIBRE=$(df -h --output=avail / | tail -1 | tr -d ' ')
 if [ "${USO:-0}" -lt "$UMBRAL" ]; then
   # Se recupero: avisar UNA vez y limpiar la marca.
   if [ -f "$MARCA" ]; then
-    /root/bin/onia-tg.sh "🟢 <b>Disco del VPS recuperado</b> — ${USO}% usado, ${LIBRE} libres." >/dev/null 2>&1 || true
+    "$TG" "🟢 <b>Disco de $MAQUINA recuperado</b> — ${USO}% usado, ${LIBRE} libres." >/dev/null 2>&1 || true
     rm -f "$MARCA"
   fi
   exit 0
@@ -42,17 +52,20 @@ fi
 
 LOOPS=$(du -sh /root/loops 2>/dev/null | cut -f1)
 DOCKER=$(du -sh /var/lib/docker 2>/dev/null | cut -f1)
+# En el nodo de casa no hay docker: la linea se omite en vez de salir vacia.
+DOCKER_LINEA=""
+[ -d /var/lib/docker ] && DOCKER_LINEA="• <code>/var/lib/docker</code>: ${DOCKER} (si lo es)"
 # Cuantos worktrees mas entran antes de llenarlo. 5,5 GB es lo que pesa uno nuevo,
 # medido el 2026-09-02 sobre los 12 que habia.
 LIBRE_GB=$(df -BG --output=avail / | tail -1 | tr -dc '0-9')
 MARGEN=$(( LIBRE_GB / 6 ))
 
-/root/bin/onia-tg.sh "🔴 <b>Disco del VPS al ${USO}%</b> — quedan ${LIBRE}
+"$TG" "🔴 <b>Disco de $MAQUINA al ${USO}%</b> — quedan ${LIBRE}
 
-Si se llena se caen JUNTOS: onia.com.bo, app.onia.com.bo, la base y n8n.
+$CAIDA
 
 • <code>/root/loops</code>: ${LOOPS} (no es produccion)
-• <code>/var/lib/docker</code>: ${DOCKER} (si lo es)
+${DOCKER_LINEA}
 
 Margen: ~${MARGEN} worktree(s) mas antes de llenarlo.
 Cada worktree nuevo se lleva 5,5 GB porque copia entero <code>hermes-content</code>." >/dev/null 2>&1 || true
