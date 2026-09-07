@@ -344,3 +344,146 @@
   color: var(--accent-ink);
   font-weight: 700;
 }
+
+/* ── LA NOCHE, variante B: burbujas ─────────────────────────────────────────
+   La mecánica de Hostinger (halos difusos detrás del contenido) con nuestra
+   paleta clara. Allá son manchas púrpura sobre fondo oscuro y se ven mucho;
+   acá son verdes sobre papel y apenas se insinúan — que es lo correcto: dan
+   profundidad sin competir con el texto. */
+
+.cielo {
+  position: relative;
+  margin-top: 2rem;
+  padding: clamp(1.4rem, 1rem + 2vw, 3rem) 0;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+.halo {
+  /* `display: block` no es decorativo: son <span>, y a un inline el navegador
+     le ignora width/height — se renderizaban a 0x0 y el fondo quedaba plano.
+     Medido en el DOM, no a ojo. */
+  display: block;
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(70px);
+  opacity: 0.9;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.haloA {
+  width: 32rem;
+  height: 32rem;
+  top: -12rem;
+  left: -8rem;
+  background: radial-gradient(circle, var(--verde-200), transparent 68%);
+}
+
+.haloB {
+  width: 26rem;
+  height: 26rem;
+  bottom: -10rem;
+  right: -6rem;
+  background: radial-gradient(circle, var(--verde-200), transparent 70%);
+}
+
+.haloC {
+  width: 20rem;
+  height: 20rem;
+  top: 30%;
+  left: 45%;
+  background: radial-gradient(circle, var(--verde-100), transparent 72%);
+}
+
+/* Sin `prefers-reduced-transparency`: se probó y hacía daño en vez de bien.
+   La media feature es nueva y varios entornos la resuelven como `reduce` por
+   defecto (Chromium headless entre ellos), así que la regla apagaba el fondo
+   para gente que nunca pidió nada. Y no protege nada real: los halos son
+   verdes casi del color del papel, van detrás de todo y no hay texto encima
+   — el contraste del contenido no depende de ellos. */
+
+.cieloGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+  gap: 1.2rem;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .cieloGrid { grid-template-columns: 1fr; }
+}
+
+/* La burbuja grande: las quince horas dichas con una cifra, no con una foto. */
+.burbujaHoras {
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: 0.4rem;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  padding: 2rem;
+  max-width: 20rem;
+  margin-inline: auto;
+}
+
+.horasNum {
+  font-size: clamp(3.4rem, 2rem + 5vw, 5.6rem);
+  line-height: 0.9;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--accent);
+  margin: 0;
+}
+
+.horasTxt {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.45;
+}
+
+.cieloPanel {
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  padding: 1rem;
+}
+
+.burbujas {
+  list-style: none;
+  margin: 1.2rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  grid-column: 1 / -1;
+}
+
+/* Cada momento en su propia burbuja alargada. Fondo verde MUY claro con texto
+   oscuro: el verde va en la forma, nunca debajo de texto claro. */
+.burbuja {
+  flex: 1 1 15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1rem 1.3rem;
+  border-radius: 999px 999px 18px 999px;
+  background: var(--accent-soft);
+  border: 1px solid var(--verde-200);
+}
+
+.burbujaHora {
+  font-weight: 700;
+  font-size: 0.86rem;
+  color: var(--accent-ink);
+}
+
+.burbujaQue {
+  color: var(--ink);
+  line-height: 1.45;
+  font-size: 0.94rem;
+}
