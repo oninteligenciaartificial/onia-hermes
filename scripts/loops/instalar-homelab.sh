@@ -64,6 +64,17 @@ investigacion     claude/investigacion                26 9 * * *
 supervisor        claude/supervisor                   29 6,18 * * *
 calidad-generado  claude/calidad-generado             5 3,9,15,21 * * *
 contenido-cola    claude/ads-creatividades-publicos   11 */3 * * *
+# Los tres que hasta el 2026-09-06 NO podian mudarse. Su traba era UNA: hablan con
+# contenedores del VPS (docker exec sobre onia-platform, supabase-db y la base de
+# Chatwoot). El shim de docker, mas abajo, la disuelve — es el mismo mecanismo que
+# ya usaban onia-tg.sh y el tablero, no un rodeo nuevo.
+# 🔴 onia-cola es el INTEGRADOR: el unico con permiso de push a main. Mudarlo
+# significa que el unico camino a produccion corre en una casa. Es una decision
+# tomada (Sergio Urcullo, 2026-09-06: la pc vieja es mucho mejor que el vps), con
+# su riesgo nombrado: sin luz o sin internet alla, nada llega a main.
+onia-cola         main                                33 * * * *
+chatbot-cola      claude/chatbots-platform-review-0d1d09  3 * * * *
+recorrido-cliente claude/recorrido-cliente            9 1,4,7,10,13,16,19,22 * * *
 EOF
 )
 ASIGNADOS="${ONIA_LOOPS_HOMELAB:-web-factory-dev web-venta tendencias lucia marca-personal}"
@@ -299,6 +310,25 @@ shim onia-tg.sh                /root/bin/onia-tg.sh
 shim onia-consolidar-memoria.sh /root/bin/onia-consolidar-memoria.sh
 shim onia-tablero.sh           "export HOME=/root; /root/bin/onia-tablero.sh"
 
+# 🔴 EL SHIM QUE DESTRABA A LOS TRES ULTIMOS LOOPS (2026-09-06).
+# onia-cola, chatbot-cola y recorrido-cliente se quedaban en el VPS por UNA razon,
+# escrita en PLAN_HOMELAB §1: hablan con contenedores de esa maquina —
+#   docker exec onia-platform env | grep ALTA
+#   docker exec supabase-db psql ...      (filas zz-qa-% de prueba)
+#   docker exec -d ...                    (levanta el motor del bot)
+# Esas bases NO escuchan fuera de la red de Docker, asi que no alcanzaba con abrir
+# un puerto: habia que ejecutar EN el VPS. Con este shim, docker en el nodo corre
+# alla, con los argumentos citados por el mismo printf %q que protege a los otros.
+# Y eso importa mas aca que en ninguno: estos loops mandan SQL como argumento.
+#
+# ⚠️ No agrega privilegio: este nodo ya tenia SSH root al VPS para subir logs y
+# bajar memoria. Lo que agrega es alcance — un comando escrito por un modelo puede
+# correr contra produccion. El %q es lo que separa eso de una inyeccion.
+shim docker                    docker
+# Y el generico, para lo que no es docker: el stat sobre /opt/onia-landing que usa
+# onia-cola para saber si falta un deploy.
+shim onia-vps.sh               ""
+
 # Bajada de la memoria: SOLO LECTURA. Es una copia; el original vive en el VPS.
 # Si el VPS no contesta, se deja la copia vieja y se sigue: un loop con memoria
 # de hace una hora trabaja; uno que no arranca, no.
@@ -419,6 +449,13 @@ probar "claude autenticado (sin API key)" "unset ANTHROPIC_API_KEY; echo 'respon
 probar_instalado "tablero legible (SQLite del VPS)" "$BIN/onia-tablero.sh list 2>&1 | head -1 | grep -qv 'Permission denied'"
 probar_instalado "memoria local presente"        "[ -s '$HERMES_DIR/memories/MEMORY.md' ]"
 probar_instalado "corredor ejecutable"           "[ -x '$BIN/onia-loop.sh' ]"
+# 🔴 Que el docker que encuentra un loop sea EL SHIM, no un docker local. Si WSL
+# tiene la integracion de Docker Desktop, /usr/bin/docker existe y TAPA al shim
+# segun el PATH — y entonces onia-cola y recorrido-cliente van a preguntarle a un
+# Docker vacio por contenedores de produccion. El fallo seria claro (no such
+# container), pero se descubre a las 3 de la manana en vez de ahora.
+probar_instalado "docker resuelve al shim del VPS" "[ \"$(command -v docker)\" = '$BIN/docker' ]"
+probar_instalado "el shim de docker llega al VPS"  "$BIN/docker ps --format '{{.Names}}' 2>/dev/null | grep -q supabase-db"
 # Los precios son fuente unica: un loop que no los puede leer escribe uno viejo.
 probar_instalado "precios del producto legibles" "[ -s '$PLATFORM/lib/subscription-plans.ts' ]"
 probar_instalado "producto sin push (este nodo no despliega)" "git -C '$PLATFORM' remote get-url --push origin | grep -q DESHABILITADO"

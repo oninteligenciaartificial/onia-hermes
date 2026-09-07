@@ -33,6 +33,13 @@ LISTA=${ONIA_LOOPS_REMOTOS:-/root/.config/onia/loops-remotos.txt}
 LOGDIR=${ONIA_LOG_DIR:-/var/log}
 ESTADO=${ONIA_VIGIA_ESTADO:-/var/lib/onia-vigia-remotos}
 TG=${ONIA_TG:-/root/bin/onia-tg.sh}
+# Como se llama la maquina en los avisos. NO es cosmetico: este script nacio para
+# los loops de la PC de casa y tenia "La PC de casa" escrito a mano en los cuatro
+# mensajes. Reusarlo tal cual para los loops del VPS —que desde el 2026-09-05, con
+# `supervisor` congelado, no tenian NADIE que los mirara— habria avisado "la PC de
+# casa no da senales" cuando el que murio es el integrador. Un aviso que apunta a
+# la maquina equivocada a las 3 de la manana cuesta mas que no tenerlo.
+MAQUINA=${ONIA_VIGIA_MAQUINA:-la PC de casa}
 CICLOS=${ONIA_VIGIA_CICLOS:-2}          # cuantas cadencias de silencio se toleran
 
 [ -s "$LISTA" ] || exit 0
@@ -77,12 +84,12 @@ APAGON="$ESTADO/_apagon"
 # Caso 1 — TODOS callados a la vez: no son cinco loops rotos, es la maquina. Un
 # solo mensaje. Cinco avisos identicos logran que nadie lea el sexto.
 if [ "$N_MUDOS" = "$TOTAL" ] && [ "$TOTAL" -gt 1 ] && [ ! -f "$APAGON" ]; then
-  "$TG" "🔴 <b>La PC de casa no da senales</b> — los $TOTAL loops mudados estan callados a la vez.
+  "$TG" "🔴 <b>$MAQUINA no da senales</b> — sus $TOTAL loops estan callados a la vez.
 
-Eso es la maquina, no los loops: apagada, sin luz, sin internet, o su rsync de logs cortado.
+Eso es la maquina o el corredor, no un loop suelto.
 $DETALLE
 
-Desde el VPS no se puede distinguir 'apagada' de 'sin subir registros'. Hay que mirar la PC." >/dev/null 2>&1 || true
+Desde aca no se distingue 'esta caida' de 'corre y no deja registro'. Hay que mirar $MAQUINA." >/dev/null 2>&1 || true
   touch "$APAGON"
   for id in $MUDOS; do touch "$ESTADO/$id"; done
   exit 0
@@ -91,7 +98,7 @@ fi
 # Caso 1b — volvio a aparecer alguna senal despues de un apagon.
 if [ -f "$APAGON" ] && [ -n "$VIVOS" ]; then
   rm -f "$APAGON"
-  "$TG" "🟢 <b>La PC de casa volvio</b> — llegan registros de: <code>$(echo $VIVOS | sed 's/ /<\/code>, <code>/g')</code>." >/dev/null 2>&1 || true
+  "$TG" "🟢 <b>$MAQUINA volvio</b> — llegan registros de: <code>$(echo $VIVOS | sed 's/ /<\/code>, <code>/g')</code>." >/dev/null 2>&1 || true
   # Este mensaje YA nombra los que volvieron: si ademas se dispara el "recuperado"
   # de mas abajo por cada uno, un apagon de cinco loops manda seis mensajes que
   # dicen lo mismo. Se limpian sus marcas aca y el bloque de abajo los saltea.
@@ -103,12 +110,12 @@ fi
 for id in $MUDOS; do
   [ -f "$ESTADO/$id" ] && continue
   CAD=$(awk -v i="$id" '$1==i{print $2}' "$LISTA")
-  "$TG" "🔴 <b>Loop remoto callado</b>: <code>$id</code>
+  "$TG" "🔴 <b>Loop callado</b>: <code>$id</code> — en $MAQUINA
 
-No llegan sus registros al VPS hace mas de $CICLOS cadencias (cadencia ${CAD} min).
-Puede estar caido en la PC de casa, o estar corriendo bien y no subir el log. Desde aca no se distingue.
+Hace mas de $CICLOS cadencias que no deja un ARRANCA nuevo (cadencia ${CAD} min).
+Puede estar caido, o correr y no dejar registro. Desde aca no se distingue.
 
-Los otros loops remotos si estan llegando, asi que la PC esta viva." >/dev/null 2>&1 || true
+Los otros loops de $MAQUINA si estan llegando, asi que la maquina esta viva." >/dev/null 2>&1 || true
   touch "$ESTADO/$id"
 done
 
@@ -116,7 +123,7 @@ done
 for id in $VIVOS; do
   [ -f "$ESTADO/$id" ] || continue
   rm -f "$ESTADO/$id"
-  "$TG" "🟢 <b>Loop remoto recuperado</b>: <code>$id</code> volvio a arrancar." >/dev/null 2>&1 || true
+  "$TG" "🟢 <b>Loop recuperado</b>: <code>$id</code> volvio a arrancar en $MAQUINA." >/dev/null 2>&1 || true
 done
 
 exit 0
