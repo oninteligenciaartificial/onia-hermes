@@ -342,7 +342,15 @@ async function facturarZzQa(page, ctx) {
     return { estado: 'roto', detalle: `"Agregar" no cargó el ítem "${QA.itemFactura}" en el resumen`, ...vista };
   }
   await submit.click();
-  await page.waitForURL(/\/billing\/[^/]+$/, { timeout: 10_000 }).catch(() => {});
+  // 🔴 `/\/billing\/[^/]+$/` también matchea `/billing/new` (`new` es `[^/]+`), así que
+  // esperar ESE patrón resolvía al instante (0 s) sin haber navegado, y la línea de abajo
+  // comparaba la URL de PARTIDA — firmaba "roto" sobre un envío que seguía en vuelo.
+  // Medido 2026-09-07, ver hermes-content/docs/cola/plataforma-v1.md. La espera tiene que
+  // EXCLUIR el origen explícitamente.
+  await page.waitForURL((u) => {
+    const p = new URL(u).pathname;
+    return /^\/billing\/[^/]+$/.test(p) && p !== '/billing/new';
+  }, { timeout: 10_000 }).catch(() => {});
   await despejar(page);
   const vista = await mirar(page, 'paso-08c-factura-creada.png');
   const destino = new URL(page.url()).pathname;
