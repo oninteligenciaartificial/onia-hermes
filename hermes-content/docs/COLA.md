@@ -63,10 +63,45 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [ ] 🟠 **El gate de la cola lleva TRES arreglos y vuelve a rojo cada vez, porque las tres
+      rondas corrigieron el eje equivocado.** Medido el 2026-09-07 por `onia-cola`:
+      `node scripts/verificar_cola.js hermes-content/docs/COLA.md` sale **exit 1**. Cuatro
+      errores eran defectos de verdad y se cerraron en esa vuelta (ver la auditoría al pie del
+      ítem del gate, en "Después"); **los 14 que quedan son UNA sola clase** — 8
+      `sin-evidencia`, 5 `fantasma`, 1 `duplicado`.
+      **La clase, dicha entera:** el detector supone que *la evidencia de un ítem es un archivo
+      del repo*. Eso era cierto cuando la cola era sólo de producto. Dejó de serlo cuando
+      `web-venta` y `canario-visual` empezaron a escribir acá **ítems de medición**, cuya prueba
+      es una pantalla viva y un número, no un archivo: `contacto` (322 KB/104 ms), `register`
+      (705 KB/153 ms). De ahí salen los 8 `sin-evidencia`. De la misma raíz salen los 5
+      `fantasma` — sitemap.xml, home.json, home.png y .canario-out/ (sin backticks a propósito:
+      el gate los lee como evidencia) son **artefactos que se generan al correr**, no archivos
+      versionados — y el `duplicado`, que son **dos corridas
+      distintas del mismo chequeo en días distintos** compartiendo título (1844 y 2338 traen
+      mediciones distintas: 104 ms contra 158 ms).
+      **Método descartado, y es lo que se lleva el ítem:** agregar la carve-out N+1 de
+      **notación**. Van tres rondas (glob, elipsis, nombre de rama, ruta parcial, expansión de
+      llaves) y cada una convergió y volvió a divergir, porque ninguna toca el modelo. La
+      siguiente vuelta **no** empieza escribiendo un patrón nuevo.
+      **Las dos salidas, y hay que elegir UNA (no las dos):**
+      (a) enseñarle al gate la clase — una medición de pantalla cuenta como evidencia, y un
+      ítem fechado puede repetir título; o
+      (b) sacar los ítems de medición de este archivo y mandarlos a
+      `hermes-content/docs/historial/`, que es donde `CLAUDE.md` manda las fotos de un día.
+      (b) es más fiel a la regla de la casa, pero mueve contenido de otros dos carriles y el
+      corte por script ya borró un bloque en silencio antes: si se toma, se verifica por
+      **presencia del texto movido**, nunca por el número de ítems.
+      ⚠️ **Y lo que explica por qué esto se pudre sin que nadie lo note:** la cadena `npm test`
+      declara `test:cola-selfcheck`, que corre `--self-check` (el detector contra sus fixtures)
+      y **nunca** el gate contra `hermes-content/docs/COLA.md`. Por eso `guards-cableados` lo ve
+      cableado y verde mientras el sujeto real lleva días en rojo. Cablearlo tal cual **hoy no
+      se puede**: pondría rojo `main` y trabaría el merge de los 15 carriles por higiene de un
+      doc. Cablearlo es lo que cierra el ítem, y sólo después de (a) o (b).
+
 - [x] **`/nosotros` re-escribe a mano la promesa fiscal en vez de leerla de su fuente**
       (web-venta, 2026-09-06). `src/app/(sitio)/nosotros/page.tsx:151` dice *"nuestro emisor
       de facturación está registrado ante el SIN con las pruebas técnicas de la Fase 1
-      completadas"*, tipeado a mano. La fuente es `src/content/siat.ts:52`, que además
+      completadas"*, tipeado a mano. La fuente es `src/lib/siat.ts:52`, que además
       aclara lo que la página se come: *"Quedan las etapas formales del trámite (inspección
       del SIN)"*, y `lib/proof.ts:115` tiene el estado en `siat: "tramite"`. **No lo ve
       ningún gate**: `facturacion.test.ts` sólo vigila `textosDeMetadata()` (el `<head>` y el
@@ -75,7 +110,9 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       cuatro precios vivos: dos copias del mismo hecho, y la de la página no envejece con la
       fuente. **Arreglo:** que `/nosotros` lea de `siat.ts`, y extender el gate al cuerpo.
       **HECHO 2026-09-06** (`8db85fba8`). La ruta que citaba este ítem era
-      `src/content/siat.ts` y la fuente real es `src/lib/siat.ts`. Ahora `/nosotros`
+      src/content/siat.ts —sin backticks a propósito: no existe, y los backticks son
+      justamente lo que este gate lee como "acá hay evidencia"— y la fuente real es
+      `src/lib/siat.ts`. Ahora `/nosotros`
       lee `SIAT_ESTADO_ONIA`, que trae las dos mitades juntas. Gate nuevo:
       `(sitio)/promesa-fiscal.test.ts` — la mitad tipeada a mano que
       `promesa-en-el-cuerpo.test.ts` no puede ver (aquél sigue el grafo de imports).
@@ -2891,6 +2928,35 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       en esa misma carpeta no se veía y el caso nuevo daba rojo con el detector ya correcto.
       Se le dio árbol propio al bloque, en vez de agregarle al script una API de reset que sólo
       usarían los tests.
+
+      **↑ Auditado el 2026-09-07 11:00 UTC por `onia-cola` (escalón 2). El `[x]` sigue siendo
+      cierto por lo que hizo —sus carve-outs de notación están vivos y probados—, pero su
+      medición de cierre («el gate sobre `COLA.md` **exit 0, 20 ítems**») venció: hoy sale
+      **exit 1 con 18 ERROR**. Lo abierto se sigue en el ítem nuevo de "Ahora", no acá.**
+      Lo que esta vuelta **sí** cerró, porque eran defectos de verdad y no ruido:
+      - **El sha `6d8b6b7`, citado 4 veces y fantasma en los dos repos** (`git cat-file -t`
+        dice *Not a valid object name*). No era una clase nueva: es el **cuarto** del mismo
+        conjunto que `COLA.md:285` lista junto a `6edfab6`, `a15c82f` y `e46e9ee` — los tres ya
+        estaban en `SHAS_SIN_REPO_A_PROPOSITO` y éste quedó afuera por descuido. Se usó el
+        mecanismo que ya existía, con su motivo, y su recíproco (`excepcion-sha-vencida`) lo
+        sigue cubriendo.
+      - **Y al agregarlo, el `--self-check` se cayó — hizo exactamente su trabajo.** Su fixture
+        de "sha que no existe" **era** `6d8b6b7`, o sea el caso compartía valor con la lista
+        blanca. Del lado en que se cayó no hay daño (rojo ruidoso); el peligroso es el otro:
+        con la lista absolviendo al fixture, el caso pasa en **VERDE sin medir nada**. Ahora el
+        fixture es imposible (`0ddbeef`) y tiene **guarda propia** que prohíbe la colisión.
+        Probada por mutación: metiendo el fixture en la lista, el self-check sale rojo
+        nombrándola, **antes** de llegar al caso que quedaría hueco.
+        *(Dos fixtures descartados en el camino, por si alguien repite: `f1x7ure` no es hex y
+        `deadbee` no tiene un solo dígito — las tres condiciones del extractor están en la
+        línea 99. Los dos hacían fallar el caso por "no es un sha", que es rojo por el motivo
+        equivocado y no mide la regla.)*
+      - **La cita muerta `src/content/siat.ts`** del ítem de `/nosotros`: ese archivo nunca
+        existió, la fuente real es `src/lib/siat.ts` y **el propio ítem ya lo decía** en su
+        nota de cierre. Corregida la cita del cuerpo y sacados los backticks de la mención
+        narrativa, que es lo que el gate lee como "acá hay evidencia".
+      **Medido:** `--self-check` **96 casos**, exit 0 · el gate sobre `COLA.md` bajó de **18 a
+      14** ERROR · `npm test` exit 0.
 
       *(Texto original del ítem, para que se vea contra qué se midió.)* Medido el 2026-09-02 corriendo
       `node scripts/verificar_cola.js hermes-content/docs/COLA.md`: sale con 4 ERROR y **los
