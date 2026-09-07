@@ -178,36 +178,44 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
-- [ ] 🔴 **El tercer número del objetivo de este carril (`avisos demo/handoff`) NO SE PUEDE MEDIR
-      desde nodo-casa — misma clase que el ítem de abajo, instrumento hermano.** Encontrado el
-      2026-09-07 al medir el objetivo, después de arreglar el simulador.
+- [x] ✅ **CERRADO el 2026-09-07: el tercer número del objetivo (`avisos demo/handoff`) volvió a
+      medirse desde nodo-casa.** Medido, no leído: `npm run avisos:vivo` → **exit 0**, `circuito:
+      medido` con los cuatro eslabones en `ok` (`flagEncendido`, `credencialesOk`,
+      `motorEmiteNotify`, `textoAccionable`), en 12 s. El número dejó de ser `no_medido` y pasó a
+      leerse entero: **circuito sano · 0 eventos** = nadie pidió un humano todavía, que es la
+      lectura correcta y la que el gate existe para permitir.
 
-      **Reproducción, 30 segundos:**
+      **Arreglo:** `resolverBotDesplegado()` en `avisos-vivo.mjs`, con dos escalones. Si
+      `/opt/onia/bot` está en el disco (el VPS) se usa y **no se sale a la red**; si no está
+      (nodo-casa) se trae el artefacto del VPS por `ssh tar -cf -` a un temporal y se importa de
+      ahí. **No hay un tercer escalón que apunte al repo a propósito:** sería más fácil y
+      rompería lo único que este gate prueba — que las piezas que CORREN encajan entre sí.
+      `lineasDelLog()` sirve igual desde la copia porque su `logs` es un `docker exec`, y en
+      nodo-casa `docker` es un shim que delega en el VPS.
 
-      ```
-      cd /root/loops/onia-hermes-chatbot && npm run avisos:vivo
-      # → circuito: NO SE PUDO MEDIR · VEREDICTO: no_medido (exit 2)
-      ```
+      **Las dos direcciones, en el script real y no sólo en los tests:** con `ssh` funcionando →
+      `ok` / exit 0. Con un `ssh` falso que sale 255 al frente del `PATH` → `VEREDICTO: no_medido`
+      / **exit 2**, nunca `ok`. Suite del bot **874/874**.
 
-      **Causa exacta, ya localizada — no hace falta volver a investigarla:**
-      `avisos-vivo.mjs` `motorProduceAviso()` hace `await import(`${BOT_DIR}/bot-engine.mjs`)` con
-      `BOT_DIR = "/opt/onia/bot"`, que **no existe en nodo-casa**; el `import` tira, la función
-      devuelve `null` y `medir()` sale con `circuito: null`. Lo mismo `lineasDelLog()`, que corre
-      `bash /opt/onia/bot/webhook-server.sh logs` en el disco local.
-      ⚠️ **`envDelProcesoVivo()` NO es el problema:** usa `docker exec`, y en nodo-casa `docker`
-      es un shim que delega en el VPS por SSH — ése funciona.
+      ⚠️ **Dos guardias míos nacieron huecos y los cazó la MUTACIÓN, no la lectura** — el mismo
+      método que salvó al simulador ayer, y la razón de escribirlo acá:
 
-      **Por qué es más grande que el arreglo del simulador y no se hizo en la misma vuelta:** ahí
-      alcanzaba con leer UNA variable por `ssh cat`. Acá hay que **importar el artefacto
-      desplegado** (tres módulos que se importan entre sí), y el sentido del gate es justamente
-      que corra el código DESPLEGADO y no la copia del repo — así que la salida es traerse el
-      directorio (`ssh "tar -cf - -C /opt/onia/bot ."` a un temporal) y importar de ahí, no
-      apuntar al repo. Cambiar eso por el repo **rompería lo que el gate existe para probar.**
+      1. **El chequeo del estado del `ssh` no lo sostenía ningún caso.** Quitándolo, los 12 tests
+         seguían verdes: con el VPS caído el destino queda vacío, así que la verificación del
+         artefacto ya lo tapaba. Lo que sólo ve el estado es la **transferencia cortada a la
+         mitad** — `tar` extrae lo que llegó, `bot-engine.mjs` puede estar y `config.mjs` no, y el
+         gate importaría un árbol truncado que falla *como si el bot estuviera roto*. Ése es el
+         caso que ahora lo sostiene.
+      2. **El espía devolvía un solo estado para todos los comandos**, así que el `tar` tapaba al
+         `ssh` y el caso pasaba por el motivo equivocado. Ahora el estado se da **por comando**.
 
-      **Cuando se haga, las dos direcciones:** con SSH roto tiene que seguir saliendo
-      `no_medido` (exit 2), nunca `ok`. Y ojo con el guardia: el `try` con `catch` de
-      `motorProduceAviso()` se come cualquier excepción, así que un caso que afirme tirando pasa
-      en verde — el testigo se **anota**, no se tira (ver el ítem de abajo).
+      Matriz final: rompiendo el guardia del artefacto, el del estado del `ssh` o el de la
+      hermeticidad, cada uno da **1 caso en rojo**; sin mutación, los **12 en verde**.
+
+      ⚠️ **Y una fuga que el test se hacía a sí mismo:** el caso feliz devuelve un temporal real y
+      el que limpia es `medir()`, así que cada corrida de la suite dejaba un directorio en `/tmp`
+      — que en WSL es un **tmpfs que vive en RAM**. Había 24 acumulados. El test ahora limpia el
+      suyo; los caminos que fallan ya se limpiaban solos. Verificado: 0 después de correr.
 
 - [x] ✅ **CERRADO el 2026-09-07: el «3 de 3» de este carril volvió a certificar un guion que ningún
       lead ve — el mismo falso verde del 2026-09-04, resucitado por la mudanza de máquina.**

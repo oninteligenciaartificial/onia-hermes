@@ -18,8 +18,9 @@
 
 import test from "node:test";
 import assert from "node:assert/strict";
+import { rmSync } from "node:fs";
 
-import { diagnosticar, contarEventos } from "./avisos-vivo.mjs";
+import { diagnosticar, contarEventos, resolverBotDesplegado, BOT_DIR } from "./avisos-vivo.mjs";
 
 const CIRCUITO_SANO = {
   flagEncendido: true,
@@ -104,4 +105,109 @@ test("sin poder medir, el veredicto es no_medido — NUNCA ok", () => {
   const d = diagnosticar({ circuito: null, eventos: contarEventos([]) });
   assert.equal(d.veredicto, "no_medido");
   assert.notEqual(d.veredicto, "ok");
+});
+
+// ---------------------------------------------------------------------------
+// De donde sale el codigo que se mide — el escalon que faltaba
+// ---------------------------------------------------------------------------
+//
+// Este gate importa el bot DESPLEGADO (no el del repo) a proposito: su unico valor es
+// probar que las piezas que CORREN encajan entre si. Eso lo ataba a `/opt/onia/bot`, una
+// ruta que existe en el VPS y NO en nodo-casa, adonde se mudo este carril el 2026-09-06.
+// Desde entonces el tercer numero del objetivo salia `no_medido` en cada vuelta.
+//
+// Es la MISMA clase que el falso verde del simulador arreglado el 2026-09-07, un escalon
+// mas arriba: alla faltaba UNA variable y alcanzaba con `ssh cat`; aca hay que traerse el
+// artefacto entero. Apuntar al repo en vez de traerlo seria mas facil y ROMPERIA lo que el
+// gate existe para probar.
+
+const MOTOR = "bot-engine.mjs";
+
+/**
+ * Un `spawnSync` de mentira que ANOTA lo que le pidieron en vez de salir a la red.
+ *
+ * El estado se da POR COMANDO a proposito: uno solo para todos hace que el `tar` tape al
+ * `ssh` y el caso pase por el motivo equivocado — asi quedo hueco el chequeo del `ssh` en
+ * el primer intento de este escalon (visto por mutacion, no leyendo).
+ */
+function espia({ status = 0, stdout = "", porComando = {} } = {}) {
+  const llamadas = [];
+  const fn = (cmd, args) => {
+    llamadas.push({ cmd, args: args || [] });
+    return { status: cmd in porComando ? porComando[cmd] : status, stdout, stderr: "" };
+  };
+  return { fn, llamadas };
+}
+
+test("sin el bot en el disco local, se lo trae del VPS y SI se puede medir", () => {
+  // La brecha que este escalon cierra. Antes de esto el resolvedor no existia y el gate
+  // salia `no_medido` en nodo-casa con produccion sana del otro lado.
+  const { fn, llamadas } = espia();
+  const r = resolverBotDesplegado({
+    existsSync: (p) => p !== BOT_DIR && String(p).endsWith(MOTOR),
+    spawnSync: fn,
+  });
+
+  assert.ok(r, "con el VPS respondiendo, el resolvedor tiene que devolver un directorio");
+  assert.equal(r.origen, "remoto");
+  assert.notEqual(r.dir, BOT_DIR, "el remoto se copia a un temporal, no se finge la ruta del VPS");
+  assert.ok(
+    llamadas.some((l) => l.cmd === "ssh"),
+    "tiene que haberle preguntado al VPS",
+  );
+
+  // El caso feliz devuelve un temporal REAL y el que limpia es quien lo pidio (`medir`), asi
+  // que aca lo limpia el test: en WSL `/tmp` es un tmpfs que vive en RAM, y un directorio por
+  // corrida se acumula para siempre. Los caminos que fallan ya se limpian solos.
+  rmSync(r.dir, { recursive: true, force: true });
+});
+
+test("ni el disco ni el VPS: el resolvedor devuelve null y el veredicto sigue siendo no_medido", () => {
+  // La direccion cara, y la que NO se puede perder al agregar el escalon remoto: un gate
+  // que firma "al dia" sin ver produccion apaga al unico instrumento que miraba el problema.
+  const { fn } = espia({ status: 255 });
+  const r = resolverBotDesplegado({ existsSync: () => false, spawnSync: fn });
+
+  assert.equal(r, null);
+  assert.equal(diagnosticar({ circuito: null, eventos: contarEventos([]) }).veredicto, "no_medido");
+});
+
+test("un ssh CORTADO A LA MITAD no se acepta aunque el motor haya alcanzado a llegar", () => {
+  // Este caso es el que sostiene el chequeo de estado del `ssh`, y sin el ese guardia era
+  // HUECO: con el ssh caido el destino queda vacio, asi que la verificacion del artefacto ya
+  // lo tapaba y quitar el chequeo no ponia nada en rojo (medido por mutacion el 2026-09-07).
+  //
+  // El caso real que solo ve el estado: la transferencia se corta en el medio. `tar` extrae
+  // lo que alcanzo a bajar —puede incluir `bot-engine.mjs` y faltarle `config.mjs`— y el
+  // gate importaria un arbol truncado, que falla como si el bot estuviera roto.
+  // El `tar` sale 0 —extrajo lo que llego— y el motor esta en el destino: los dos guardias
+  // hermanos dan por bueno el arbol, y el ESTADO DEL SSH es lo unico que queda para verlo.
+  const { fn } = espia({ porComando: { ssh: 255, tar: 0 } });
+  const r = resolverBotDesplegado({
+    existsSync: (p) => p !== BOT_DIR && String(p).endsWith(MOTOR),
+    spawnSync: fn,
+  });
+
+  assert.equal(r, null, "si el ssh no salio 0, lo que haya quedado en el destino no es confiable");
+});
+
+test("el ssh puede salir 0 y no traer nada: sin el motor en el destino, NO se da por traido", () => {
+  // `ssh ... | tar -x` en una tuberia devuelve el estado del ULTIMO comando, asi que un ssh
+  // caido puede terminar en exit 0 con el destino VACIO. Se verifica el ARTEFACTO, no el
+  // codigo de salida: sin `bot-engine.mjs` no hay nada que medir.
+  const { fn } = espia({ status: 0, stdout: "" });
+  assert.equal(resolverBotDesplegado({ existsSync: () => false, spawnSync: fn }), null);
+});
+
+test("cuando el bot esta en el disco local, NO se sale a la red", () => {
+  // Hermeticidad. El testigo se ANOTA y se afirma DESPUES: afirmar TIRANDO adentro del
+  // doble no sirve, porque el resolvedor envuelve la llamada en try/catch para sobrevivir
+  // a un `ssh` ausente y se comeria el assert — el caso pasaria en verde con el gate roto.
+  // Es la misma trampa que se cazo por mutacion en `simulate.test.mjs` el 2026-09-07.
+  const { fn, llamadas } = espia();
+  const r = resolverBotDesplegado({ existsSync: () => true, spawnSync: fn });
+
+  assert.equal(r.dir, BOT_DIR);
+  assert.equal(r.origen, "local");
+  assert.deepEqual(llamadas, [], "con el artefacto en el disco no hay por que preguntarle al VPS");
 });
