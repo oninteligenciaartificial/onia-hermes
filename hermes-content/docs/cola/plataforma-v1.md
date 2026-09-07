@@ -1145,4 +1145,38 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] 🔴 **CERRADO el 2026-09-07: el CONTRATO que firma quien se da de alta describía una
+      clínica dental — y el alta vende los cinco rubros.**
+
+      **El defecto, medido en producción con `curl` (no supuesto):** `app.onia.com.bo/terms`
+      (HTTP 200) definía el servicio como *«software como servicio para gestión **dental**:
+      pacientes, agenda, tratamientos, **odontograma**»* y trataba al cliente como **«la
+      clínica»** en ocho cláusulas; `/data-processing` le imponía *«Obligaciones de la
+      clínica»*; el pie de `/contact` decía *«Sistema de gestión **dental** para **clínicas**
+      en Bolivia»*. Los tres los enlaza `app/(auth)/register/SignupForm.tsx`, y el alta ofrece
+      los cinco rubros de `RUBROS_ACTIVOS`: **el que elegía Comercio, Importadora o Servicios
+      profesionales aceptaba un contrato de odontología** que no describe lo que contrató.
+
+      **Por qué sobrevivió:** es superficie **compartida** por los cinco rubros. No pasa por
+      `lib/onboarding/vocabulario.ts` (que sólo cubre el panel), no sale en una captura del
+      dashboard y ningún gate de caminos la mira. Es la misma familia (rubro × texto) que ya
+      dio el correo de citas y la receta, un escalón más afuera: la superficie **legal**.
+
+      **El arreglo:** `800a583` en `claude/chatbots-platform-review-0d1d09`. La cláusula 4 no se
+      borró — se **acotó a los rubros de salud**, para no perder la protección donde sí
+      corresponde. `/privacy` quedó **intacto a propósito**: ya decía *«En verticales de salud
+      esto incluye datos de pacientes (historia clínica, odontograma…)»*, que es correcto.
+
+      **El gate:** `app/superficie-compartida-por-rubro.test.ts`, con los sujetos derivados del
+      **disco** y exenciones nombradas, así una pantalla nueva nace cubierta. La primera versión
+      marcaba `/privacy` — falso positivo que mandaba a romper una redacción buena —, por eso la
+      regla del odontograma mide la **vecindad** y perdona la mención ya acotada. Validado por
+      **mutación en las dos direcciones**. Gates: `tsc` 0, `eslint` 0 errores, `vitest`
+      3294/290.
+
+      ⚠️ **NO llega al cliente todavía:** `800a583` **no es ancestro de `origin/master`**;
+      necesita merge (`onia-cola`) para viajar en el deploy que espera el `ok` de Sergio Urcullo
+      (`t_deddf471`). Anotado ahí, sin abrir un pedido nuevo.
+
+
 *(vacío — esta cola se abrió el 2026-09-05)*
