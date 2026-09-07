@@ -83,9 +83,15 @@ y sin operar. Acá se opera, con verificación por ítem.
 
       Validado **por mutación en las dos direcciones**: revertir el arreglo de la receta → rojo
       nombrándola; recortar las raíces del barrido → rojo (sin ese caso, vaciar `RAICES` dejaba el
-      gate verde para siempre); restaurar → 8/8 verde. Gates: `tsc` 0 · `vitest` (suite completa) ·
-      `eslint`.
-      ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido de deploy de `plataforma`.
+      gate verde para siempre); restaurar → 8/8 verde. Gates: `tsc` 0 · `vitest` 3574 verdes (300
+      archivos) · `eslint` 0 errores.
+
+      ⚠️ **NO desplegado, y NO alcanza con el pedido de deploy que ya existe.** Medido al cerrar:
+      `git merge-base --is-ancestor 8bc5182 origin/master` da **NO**, y el pedido vivo
+      (`t_deddf471`) publicaría `69d95ad`, que es el HEAD de `master` — o sea que ejecutarlo hoy
+      **no incluye este arreglo**. Faltan DOS pasos, en este orden: que `onia-cola` mergee la rama
+      a `master`, y recién después el swap. Escribir «viaja con el pedido de deploy» sin
+      comprobarlo es lo que este carril corrigió el 2026-09-07 (`5eeac96f`).
 
 - [x] 🔴 **Abrir el enlace del correo CANCELABA la cita, sin que nadie decidiera nada —
       cerrado el 2026-09-07 (`bb0ba47` en `onia-platform`, publicado en la rama). Y estaba en
