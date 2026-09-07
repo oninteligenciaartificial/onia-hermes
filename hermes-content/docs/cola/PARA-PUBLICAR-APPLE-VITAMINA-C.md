@@ -20,28 +20,41 @@ se ríe; el que dirige un negocio se detiene en "Clientes" y entiende el chiste 
 
 ## Caption (IG · copiar tal cual)
 
-Cuatro cosas que necesito para que esto funcione. Tres las tengo.
+Cuatro cosas que necesito para que esto funcione. Tres se compran.
 
 Claude escribe conmigo, el café hace el resto, y los créditos se van en
-los artes. La cuarta no se compra: se sale a buscar.
+los artes. Las tres tienen precio y las tres se resuelven con una tarjeta.
 
-Y ésa es la parte que ninguna herramienta te va a resolver. Podés tener
-el mejor sistema del mundo montado — si nadie sabe que existe, sigue
-siendo un proyecto, no un negocio.
+La cuarta no. Los clientes no se compran: se salen a buscar, uno por uno,
+y es la única de las cuatro que ninguna herramienta te va a resolver.
+Podés tener el mejor sistema del mundo montado — si nadie sabe que
+existe, sigue siendo un proyecto, no un negocio.
 
-Esta semana estoy haciendo eso: menos construir, más hablar.
+Por eso esta semana estoy haciendo eso: menos construir, más hablar.
 
-¿Cuál de las cuatro te falta a vos?
+¿Cuál de las cuatro te está costando más a vos? Escribí la letra —
+C de Claude, café, créditos o clientes— y te digo qué haría yo.
 
 ## Versión X / LinkedIn
 
 Cuatro cosas que necesito para que esto funcione: Claude, café, créditos y clientes.
 
-Tres las tengo.
+Tres se compran con una tarjeta.
 
-La cuarta no se compra, se sale a buscar — y es la única que ninguna herramienta
-te resuelve. Podés tener el mejor sistema montado: si nadie sabe que existe, es un
-proyecto, no un negocio.
+La cuarta no: los clientes se salen a buscar, uno por uno, y es la única que
+ninguna herramienta te resuelve. Podés tener el mejor sistema montado: si nadie
+sabe que existe, es un proyecto, no un negocio.
+
+### ⚠️ Por qué cambió el copy el 07-sep
+
+La versión anterior decía **"tres las tengo"** — o sea, que la cuarta, clientes, le
+faltaba. Pero la lámina muestra un panel con **"12 clientes activos · +3 este mes"** y una
+curva subiendo: **la imagen desmentía al texto**, y en la misma pieza.
+
+Ahora el eje no es *tener o no tener* sino **se compra o no se compra**: las tres primeras
+se resuelven con una tarjeta y la cuarta se sale a buscar. Eso funciona con el panel
+delante, sostiene el mismo mensaje, y evita que el copy afirme un número de clientes —
+que es justo el dato que no conviene reforzar (ver la advertencia roja de más abajo).
 
 ## Alt text
 
