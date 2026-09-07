@@ -439,10 +439,17 @@ export default function Portada() {
               <div className={s.trustNum}>5</div>
               <p className={s.trustLabel}>rubros vivos en producción hoy</p>
             </div>
+            {/* «Cada día» y no «24/7»: a los agentes los despierta un cron del
+                host UNA vez por día (`0 11 * * * run-onia-agents-cron.sh`, que
+                el propio crontab del VPS rotula «Corrida diaria agentes»).
+                Poner 24/7 acá exageraba 24 veces algo que se cobra —y en la
+                banda que promete hechos verificables—, contra lo que la propia
+                /agentes ya dice bien: «Corre cada 24 horas». Lo vigila
+                `cadencia-prometida.test.ts`. */}
             <div className={s.trustCell}>
-              <div className={s.trustNum}>24/7</div>
+              <div className={s.trustNum}>Cada día</div>
               <p className={s.trustLabel}>
-                agentes que trabajan y esperan tu aprobación
+                agentes que revisan y esperan tu aprobación
               </p>
             </div>
             <div className={s.trustCell}>
