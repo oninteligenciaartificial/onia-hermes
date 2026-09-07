@@ -1035,15 +1035,44 @@ y sin operar. Acá se opera, con verificación por ítem.
       integrador en pasar: **un `no está en master todavía` es una medición con fecha de
       vencimiento**, y leído tarde manda al revés (hace creer que el arreglo no viaja).
 
-- [ ] 🔴 **`/billing/new`: crear factura no lleva a la pantalla de cobro.** Medido el
-      2026-09-07 por `recorrido-cliente` con `--escribir`, rubro Clínica dental: se carga un
-      ítem manual (Bs 10,00) y se aprieta «Crear Factura». La factura SÍ se crea en la base
-      (`invoices` id `cmtqq67wl000q01rwujm8y6lo`, folio `2026-0001`, Bs 10.00) pero la pantalla
-      se queda en `/billing/new` sin redirigir a ningún lado, y volviendo a `/billing` (Cobros)
-      la lista sigue diciendo «0 facturas / No hay facturas aún» — como si la factura recién
-      creada no existiera para esa vista. Tablero: `t_6359aa00`. Capturas:
-      `hermes-content/docs/recorrido/capturas/paso-08-cobro.png` (Cobros vacío antes) y
-      `paso-08c-factura-creada.png` (formulario con el ítem, antes de apretar Crear Factura).
+- [x] ✅ **CERRADO el 2026-09-07 como FANTASMA: `/billing/new` no está roto — el instrumento
+      firmaba «roto» sin haber esperado.** Este ítem entró el 2026-09-07 04:14 diciendo que crear
+      una factura no lleva a la pantalla de cobro, y era **el único 🔴 de producto de la v1.0**.
+      No se reescribió una línea de `/billing/new`: primero se midió la MEDICIÓN, y no se sostiene.
+
+      **La prueba, en un segundo y sin abrir nada** — `scripts/recorrido_cliente.mjs:345` esperaba
+      la navegación con un `waitForURL` cuyo patrón **la pantalla de partida ya cumple**: pide
+      «billing» seguido de un segmento cualquiera, y «new» es un segmento cualquiera.
+
+      ```
+      node -e "console.log(/\/billing\/[^/]+$/.test('/billing/new'))"   → true
+      ```
+
+      Así que `waitForURL` resolvió **al instante** —no esperó los 10 s que declara— y la línea 349
+      comparó la URL de partida contra sí misma. El veredicto «quedó en `/billing/new`» describe el
+      estado ANTES de que el producto tuviera tiempo de hacer nada.
+
+      **La captura lo confirma, MIRADA y no citada:** en `paso-08c-factura-creada.png` el botón está
+      en su estado «Guardando» (los tres puntos) y **no hay ningún cartel de error**. Si el `POST`
+      hubiera fallado, el cliente hace `setSaving(false)` y pinta el error
+      (`NewInvoiceClient.tsx:106-110`) — se vería el botón normal y el mensaje. Lo que muestra la
+      foto es el `POST` **en vuelo**. Y la factura terminó creándose (folio `2026-0001`): el `POST`
+      completó *después* del disparo de la foto.
+
+      **Y el producto navega, probado en la misma corrida:** el paso 6, el alta de un paciente, usa
+      el mismo `router.push` hacia una ruta de detalle nueva, salió `ok` y encontró el dato de vuelta
+      **en la lista** — o sea que en Next 16 la navegación re-consulta al servidor sola. Por eso
+      tampoco falta ningún `router.refresh()` acá, aunque 30 archivos de la casa lo usen: el que
+      faltaría no cambia este resultado.
+
+      ⚠️ **Lo que se cerró NO es «cobrar funciona»: es que la evidencia que decía lo contrario es
+      inválida.** La medición válida la dará `recorrido-cliente` cuando arregle su espera; el
+      arreglo exacto quedó escrito en el tablero (`t_daa76d62`, con las dos direcciones a probar).
+      Es el único `waitForURL` del archivo, así que el daño estaba acotado al paso 8.
+
+      **Por qué se escribe entero:** obedecer este ítem al pie de la letra mandaba a reescribir una
+      pantalla sana, que es el error más caro que este proyecto tiene medido — el falso ROJO que
+      hace deshacer código vivo. Tablero: `t_6359aa00`.
 
 - [ ] ⚪ **Pendiente fiscal (`SIAT_EMISSION`) para facturar de verdad.** Va último a propósito:
       es un trámite externo, no código, y `/billing` ya funciona sin él. **No bloquea un cierre**
