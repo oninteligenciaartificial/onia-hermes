@@ -44,9 +44,54 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **La ficha clínica le pedía «Caries dentinaria en pieza 46» a un centro de estética —
+      cerrado el 2026-09-07 (`3a4977d` en `onia-platform`, publicado en la rama). Y lo que lo
+      dejó vivo es que NINGÚN gate mira las subrutas.**
+      Gate: `onia-platform-chatbot/lib/platform/pantallas-compartidas-cubiertas.test.ts`, bloque *«las subrutas de una
+      pantalla compartida»* (89 casos).
+
+      El panel enlaza `onia-platform-chatbot/app/(dashboard)/patients/[id]/records/new/page.tsx` con el guard `esClinico`, o sea los **tres**
+      rubros clínicos, y sus tres placeholders estaban tipeados en dental: «Dolor en el diente
+      46», «Caries dentinaria en pieza 46», «Restauración con resina compuesta». Un centro de
+      estética —uno de los cinco rubros que la v1.0 vende— cargaba el historial de su clienta
+      leyendo eso. **El guard existía y funcionaba: era más GRUESO que su copy**, la misma forma
+      que `/help` enseñándole el odontograma a estética y veterinaria.
+
+      **La clase, que es lo que importa:** el gate de cobertura declara cada pantalla compartida
+      y la barre con `fuentesDeLaRuta`, que a propósito **no entra en subdirectorios**; y el gate
+      de caminos enumera ítems de menú, y una subruta no es ítem de menú de nadie. Entre los dos
+      quedaba un árbol entero —la ficha, el detalle, los formularios de alta— sin un solo sujeto.
+      Barriéndolo aparecieron **tres** archivos sirviendo copy de un rubro a todos:
+      `onia-platform-chatbot/app/(dashboard)/patients/[id]/records/new/page.tsx` (dental),
+      `onia-platform-chatbot/app/(dashboard)/reports/clinical-balance/page.tsx` («Tratamientos
+      completados», que en una veterinaria son «Servicios») y
+      `onia-platform-chatbot/app/(dashboard)/settings/chatbot/ChatbotClient.tsx`, con tres placeholders
+      de **veterinaria** fijos —«mascota, perro, gato»— para los siete rubros, en un archivo cuyo
+      propio prop `ejemplos` dice «nunca dental fijo»: el arreglo cubrió tres campos y dejó estos.
+
+      Arreglados derivando del pack con el mecanismo que ya existía (`ejemploRegistro` y
+      `ejemploPalabras` en `onia-platform-chatbot/lib/onboarding/vocabulario.ts`, al lado de
+      `ejemploServicio`, cuyo
+      comentario documenta **este mismo error** resuelto para el catálogo el 01-sep — nunca viajó
+      a la ficha).
+
+      ⚠️ **Y el gate nació hueco dos veces; lo destapó la mutación, no la lectura.** La v1 eximía
+      al archivo que *nombrara* `vocabularioDeTrack`, y `ChatbotClient` se escapaba por un
+      **comentario** que cita el símbolo. La v2 preguntaba por el símbolo sin comentarios y quedó
+      **peor**: al arreglar esa pantalla le agregué el import, y con eso el archivo se eximía
+      solo — revertir el arreglo dejaba los 89 casos en **verde**. Es el agujero contra el que
+      advierte la cabecera de ese mismo archivo (`/settings` importaba el vocabulario y tenía ocho
+      textos dentales al lado) y lo reabrí abajo. **No hay eximición por derivar:** la regla es
+      que en una subruta compartida no hay palabra de un solo rubro, y las tres que la necesitan
+      se declaran con el símbolo que las justifica, verificado en cada corrida.
+      Validado por mutación en cuatro direcciones: revertir el arreglo → rojo; una subruta
+      **nueva** con copy dental → rojo (nace cubierta); podrir una fila declarada → rojo;
+      restaurado → verde.
+      ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido de deploy de `plataforma`.
+
 - [x] 🔴 **A un estudio contable le pedíamos el género y el cumpleaños de su cliente —
       cerrado el 2026-09-07 (`e9b857a` en `onia-platform`, publicado en la rama).**
-      Gate: `/root/loops/onia-platform-chatbot/app/(dashboard)/patients/ficha-por-rubro.test.ts`.
+      Gate: `onia-platform-chatbot/app/(dashboard)/patients/ficha-por-rubro.test.ts`.
       La ficha la comparten los tres rubros clínicos y **servicios profesionales**, uno de
       los cinco que la v1.0 vende. Lo clínico ya se había separado (tipo de sangre, emergencia,
       alergias, historia, tratamientos) pero **cumpleaños y género quedaron afuera de ese
@@ -54,7 +99,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       un bloque que sí distingue el rubro. El cliente de un estudio contable puede ser una
       EMPRESA, así que el sistema le pedía el género de una razón social, y la lista le ofrecía
       **filtrar por género** y le calculaba la edad.
-      **Cuatro superficies**, todas bajo `/root/loops/onia-platform-chatbot/app/(dashboard)/patients`: el alta, la
+      **Cuatro superficies**, todas bajo `onia-platform-chatbot/app/(dashboard)/patients`: el alta, la
       edición, la ficha y **la lista**, que entró al gate por primera vez — el
       filtro por género vivía justo en la pantalla que ninguno de los tres casos miraba.
       **El gate dejó de CONTAR bloques** `{esClinico && (` y ahora pregunta, por literal, si
