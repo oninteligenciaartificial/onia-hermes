@@ -984,6 +984,54 @@ y sin operar. Acá se opera, con verificación por ítem.
       `npx eslint .` 0 errores. **No está terminado hasta que se publique:** viaja en el pedido
       `t_deddf471` (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo.
 
+- [x] 🟡 **CERRADO el 2026-09-07: el cliente ya podía exportar sus datos y no había botón — y la
+      misma pantalla le ofrecía comprar la exportación que ya había pagado.**
+
+      **El defecto, medido:** `csvExportEnabled` es `true` desde `basic` en `lib/plan-catalogo.ts`
+      —a propósito, y con el comentario que cita la promesa— y `/api/reports/export` lo respeta
+      cortando con `canExportCsv(plan)`. Pero el **único** enlace a ese endpoint vivía detrás de
+      `isClinicPlan` (`isSuperAdmin || plan === "clinic"`), así que **basic, professional y
+      enterprise** tenían el permiso y **no tenían camino**: exportaban tipeando la URL a mano.
+      Es la **quinta** de la familia *permiso concedido, camino ausente* (`/requerimientos`,
+      `/empresa`, `/rrhh`, `/patients/[id]/prescriptions`).
+
+      **Por qué es peor que las cuatro anteriores:** aquéllas callaban; ésta **desmentía**. Al
+      plan Básico le mostraba el banner *«Actualizá al plan Profesional…»* con **«exportación
+      CSV»** en la lista de lo que se desbloquea al subir. Le cobraba lo que ya había pagado. Y
+      `onia.com.bo/precios` lo vende al pie de la tabla —*«Tus datos son tuyos: los exportás en
+      CSV desde el plan más chico»*— como una de sus **tres** razones de compra, junto a «sin
+      tarjeta» y «sin permanencia»: la venta prometía y el producto negaba.
+
+      **Lo reusable:** la pantalla tiene **DOS ramas** que renderizan por separado —la del reporte
+      básico, que retorna temprano y es donde vive el banner, y la de reportes completos—. El
+      enlace faltaba en una y estaba mal gateado en la otra; **arreglar una sola rama es como
+      nació este bug**. Ahora las dos preguntan `puedeExportarCsv`, que es la **misma pregunta que
+      hace la API**.
+
+      **El gate no mide la precondición.** Pregunta por `canExportCsv`, nunca por `isClinicPlan`:
+      uno que midiera `isClinicPlan` estaría midiendo el **síntoma** y quedaría rojo para siempre
+      apenas se arregla — el modo de falla que ya costó dos pedidos de deploy vencidos
+      (`addon_canal_vivo`). Sujetos derivados de `PLAN_LIMITS`, con el caso que **YA cumple**
+      (`free` sigue sin permiso) para que «dale el botón a todos» no pase en verde, y con el
+      filtro de comentarios probado en las **dos** direcciones — sin él, el gate se ponía rojo
+      sobre la bitácora que explica por qué ese texto no está.
+
+      **Mirado renderizado**, no sólo gateado: las dos cabeceras fotografiadas con el CSS y la
+      fuente de iconos del build **vivo** (`/root/reports-arreglado.png`). No se puede mirar en
+      producción: el contenedor corre el build anterior al arreglo. Los cinco iconos salen como
+      **glifo** (24 px), no como la palabra — el bug más caro del proyecto descartado a la vista.
+
+      **Arreglado y publicado** en `onia-platform` `33b40ff` (rama
+      `claude/chatbots-platform-review-0d1d09`, empujada desde el gemelo del VPS porque el push de
+      ese repo está deshabilitado en el nodo de casa; árbol verificado idéntico al local).
+      Gate nuevo: `app/(dashboard)/reports/camino-a-exportar.test.ts`.
+
+      **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **3273 pasan / 288 archivos** ·
+      `npx eslint .` 0 errores. **No está terminado hasta que se publique:** anotado en el pedido
+      `t_deddf471` (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo. ⚠️ `33b40ff`
+      **no está en `master` todavía** (3 commits fuera): si el swap corre antes del merge del
+      integrador, este arreglo no viaja.
+
 - [ ] ⚪ **Pendiente fiscal (`SIAT_EMISSION`) para facturar de verdad.** Va último a propósito:
       es un trámite externo, no código, y `/billing` ya funciona sin él. **No bloquea un cierre**
       — bloquea la factura fiscal, que el catálogo ya sabe no prometer. Si un loop se planta acá
