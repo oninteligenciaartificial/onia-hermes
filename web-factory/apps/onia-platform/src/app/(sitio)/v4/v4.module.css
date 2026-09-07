@@ -11,7 +11,7 @@
 
 /* ── HERO CENTRADO ──────────────────────────────────────────────────────── */
 
-.heroCentro {
+.centro {
   text-align: center;
   display: grid;
   justify-items: center;
@@ -235,4 +235,112 @@
   color: var(--ink-soft);
   line-height: 1.5;
   margin: 0;
+}
+
+/* ── LA NOCHE ───────────────────────────────────────────────────────────────
+   Pedido de Sergio Urcullo, 2026-09-01 y repetido el 09-07: «algo mas visual
+   que muestre como el duerme mientras genera ingresos». La banda de la home lo
+   cuenta con barras; esto lo cuenta con una persona dormida al lado de la
+   pantalla que sigue trabajando. Las dos mitades, no una. */
+
+.noche {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+  gap: 1.4rem;
+  align-items: stretch;
+  margin-top: 2rem;
+}
+
+.nocheFoto {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  min-height: 20rem;
+}
+
+.nocheFoto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* El rotulo va SOBRE la foto, abajo. La foto es oscura y calida, asi que acá
+   sí hay texto claro sobre oscuro — es el unico lugar de la pieza donde el
+   fondo lo permite, y lleva su propio degradado para garantizar contraste. */
+.nocheRotulo {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 2.6rem 1.4rem 1.3rem;
+  background: linear-gradient(to top, rgb(10 12 11 / 0.82), transparent);
+  color: #fff;
+}
+
+.nocheHora {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.86;
+  margin: 0 0 0.25rem;
+}
+
+.nocheFrase {
+  font-size: clamp(1.3rem, 1rem + 1.1vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.nocheLado {
+  border: 1px solid var(--line-soft);
+  border-radius: 18px;
+  background: var(--surface);
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.momentos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.momentos li {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  gap: 0.8rem;
+  align-items: baseline;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--line-soft);
+}
+
+.momentos li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.momentoHora {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--accent-ink);
+}
+
+.momentoQue {
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+/* «Vos los aprobás» — el limite del producto, en verde y en negrita. Los
+   agentes dejan el borrador en la cola: no avisan, no mandan y no cobran
+   solos (onia-core/contract.json). Tres disenadores se equivocaron en esto
+   antes de que la home lo dejara escrito; acá no se repite. */
+.momentoVos {
+  color: var(--accent-ink);
+  font-weight: 700;
 }
