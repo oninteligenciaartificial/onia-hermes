@@ -213,6 +213,7 @@ export function limitesDelProducto(fuente) {
       agentes: booleano(m[2], "agentsIncluded"),
       reservas: booleano(m[2], "publicBookingIncluded"),
       reportes: booleano(m[2], "reportsEnabled"),
+      exportaCsv: booleano(m[2], "csvExportEnabled"),
     };
   }
   return salida;
@@ -264,6 +265,7 @@ export function cifrasDelProducto({ planes, addons, prueba, limites }) {
     "primer plan con agentes de IA": primerPlanCon(l, "agentes"),
     "primer plan con reservas online incluidas": primerPlanCon(l, "reservas"),
     "primer plan con reportes completos": primerPlanCon(l, "reportes"),
+    "primer plan que exporta en CSV": primerPlanCon(l, "exportaCsv"),
     "plan Básico · mensual": p.basic?.mensual ?? null,
     "plan Básico · semanal": p.basic?.semanal ?? null,
     "plan Básico · anual": p.basic?.anual ?? null,
@@ -388,6 +390,44 @@ function primerPlanDelSitioCon(porPlan, capacidad) {
   return null;
 }
 
+/**
+ * El tier que el sitio promete para la EXPORTACION DE DATOS, leido de la frase
+ * que lo promete y no de una tabla.
+ *
+ * POR QUE VA APARTE de los otros tres tiers. Agentes, reservas y reportes se
+ * cruzan por quien los NOMBRA primero dentro del `incluye` de cada plan: hay
+ * una fila por plan y el patron la encuentra. La exportacion no vive ahi — vive
+ * en `CONDICIONES`, una lista de frases sueltas que las DOS pantallas de precio
+ * renderizan al pie ("Tus datos son tuyos: los exportas en CSV desde el plan
+ * mas chico"). Sin fila por plan, `primerPlanDelSitioCon` no la ve, asi que era
+ * el unico tier que el sitio publica y nadie cruzaba: el dia que el producto
+ * mueva `csvExportEnabled` al Pro, esa frase sigue en pantalla prometiendolo
+ * desde el Basico y las 3 cifras de tier siguen en verde.
+ *
+ * COMO SE LEE EL TIER. Si la frase nombra un plan, ese; si dice "el plan mas
+ * chico" o no nombra ninguno, el mas barato que el sitio VENDE — una promesa
+ * sin condicion se le esta haciendo a todo el que puede pagar, y el mas barato
+ * es el que la puede desmentir.
+ *
+ * COMO NO FALLA EN VERDE. Si ninguna frase promete exportacion, devuelve `null`
+ * y el cruce sale ROJO DE INSTRUMENTO, no verde: que la promesa desaparezca es
+ * una decision de venta, y entonces este cruce se saca A LA VISTA. Callarse es
+ * como esta familia de gates deja de medir sin que nadie se entere.
+ */
+export function planQueElSitioPrometeParaExportar(fuente) {
+  const bloque = bloqueExportado(fuente ?? "", "CONDICIONES");
+  if (!bloque) return null;
+  const frase = bloque
+    .split(/",|`,/)
+    .find((f) => /export[áa]s?|exportar/i.test(f) && /\bCSV\b/i.test(f));
+  if (!frase) return null;
+  const nombrado = PLANES_EN_ORDEN.find((p) =>
+    new RegExp(`\\b${p.etiqueta}\\b`, "i").test(frase),
+  );
+  if (nombrado) return nombrado.producto;
+  return PLANES_EN_ORDEN[0].producto;
+}
+
 export function cifrasDelSitio({ precios, chatbot }) {
   const p = planesDelSitio(precios ?? "");
   const grupo = bloqueExportado(precios ?? "", "GRUPO");
@@ -410,6 +450,8 @@ export function cifrasDelSitio({ precios, chatbot }) {
       "reservas",
     ),
     "primer plan con reportes completos": primerPlanDelSitioCon(ls, "reportes"),
+    "primer plan que exporta en CSV":
+      planQueElSitioPrometeParaExportar(precios ?? ""),
     "plan Básico · mensual": p.basico?.mensual ?? null,
     "plan Básico · semanal": p.basico?.semanal ?? null,
     "plan Básico · anual": p.basico?.anual ?? null,

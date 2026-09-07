@@ -12,6 +12,7 @@ import {
   esPromesa,
   limitesDelProducto,
   limitesDelSitio,
+  planQueElSitioPrometeParaExportar,
   planesDelProducto,
   planesDelSitio,
   primerPlanCon,
@@ -176,6 +177,74 @@ export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
     // "ningún plan la tiene" y el gate compararía contra un dato inventado.
     const sinLaClave = LIMITES_FIXTURE.replace(/publicBookingIncluded/g, "otraCosa");
     expect(primerPlanCon(limitesDelProducto(sinLaClave), "reservas")).toBeNull();
+  });
+});
+
+describe("el tier que se promete en PROSA suelta, no en la tabla de planes", () => {
+  /**
+   * Los otros tres tiers (agentes, reservas, reportes) viven como una fila
+   * dentro del `incluye` de cada plan. La exportación de datos no: vive en
+   * `CONDICIONES`, la lista de frases que las dos pantallas de precio
+   * renderizan al pie. Por eso era el único tier publicado que nadie cruzaba.
+   */
+  const condiciones = (frase: string) => `
+export const CONDICIONES: readonly string[] = [
+  "Los precios están en bolivianos y no llevan IVA por encima.",
+  "${frase}",
+] as const;
+`;
+
+  it("«desde el plan más chico» es el más barato que el sitio VENDE", () => {
+    expect(
+      planQueElSitioPrometeParaExportar(
+        condiciones("Tus datos son tuyos: los exportás en CSV desde el plan más chico."),
+      ),
+    ).toBe("basic");
+  });
+
+  it("una promesa SIN condición de plan se le hace a todos: también el más barato", () => {
+    // Es la lectura estricta y la que puede desmentirla: si no dice "desde el
+    // Pro", el que paga el plan más chico la va a cobrar igual.
+    expect(
+      planQueElSitioPrometeParaExportar(condiciones("Tus datos son tuyos: los exportás en CSV.")),
+    ).toBe("basic");
+  });
+
+  it("si la frase nombra un plan, ése — y ahí el cruce lo compara contra el producto", () => {
+    expect(
+      planQueElSitioPrometeParaExportar(
+        condiciones("Tus datos son tuyos: los exportás en CSV desde el plan Pro."),
+      ),
+    ).toBe("professional");
+  });
+
+  it("sin promesa de exportación devuelve null: rojo de instrumento, NUNCA verde", () => {
+    // El modo de fallo de esta familia. Si la frase se saca o se reescribe y el
+    // patrón deja de matchear, callarse haría que el cruce apruebe cualquier
+    // tier del producto sin haber leído el lado del sitio.
+    expect(
+      planQueElSitioPrometeParaExportar(condiciones("Los planes se cobran por adelantado.")),
+    ).toBeNull();
+    expect(planQueElSitioPrometeParaExportar("")).toBeNull();
+  });
+
+  it("el producto contesta la misma pregunta desde csvExportEnabled", () => {
+    const fixture = `
+export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
+  free: { csvExportEnabled: false },
+  basic: { csvExportEnabled: true },
+  professional: { csvExportEnabled: true },
+  clinic: { csvExportEnabled: true },
+};
+`;
+    expect(primerPlanCon(limitesDelProducto(fixture), "exportaCsv")).toBe("basic");
+    // Y el día que el producto lo suba de plan, el cruce tiene que verlo.
+    expect(
+      primerPlanCon(
+        limitesDelProducto(fixture.replace("basic: { csvExportEnabled: true", "basic: { csvExportEnabled: false")),
+        "exportaCsv",
+      ),
+    ).toBe("professional");
   });
 });
 
