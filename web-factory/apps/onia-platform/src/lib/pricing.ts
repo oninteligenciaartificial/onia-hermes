@@ -333,7 +333,10 @@ export interface AddOn {
  * que el cliente ya tiene encendido: se cae en la primera pregunta del que ya lo
  * usa. El inventario ahora se cuenta donde corresponde, en el `incluye` del
  * Basico (y por herencia en Pro y Full). Guarda:
- * scripts/venta-honestidad.test.mjs. Detalle: ONIA_CATALOGO_DE_VENTA.md §5.
+ * onia-hermes/scripts/venta-honestidad.test.mjs (repo RAIZ, en su cadena
+ * `npm test` como `test:venta-honestidad` — esta app no tiene ese archivo, y
+ * escrito sin la raiz se lee como que lo vigila un gate de acá que no existe).
+ * Detalle: ONIA_CATALOGO_DE_VENTA.md §5.
  */
 export const ADDONS: readonly AddOn[] = [
   {
