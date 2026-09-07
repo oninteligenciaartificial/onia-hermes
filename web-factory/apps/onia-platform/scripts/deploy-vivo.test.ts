@@ -279,6 +279,21 @@ describe("deploy-vivo: un merge no es un arreglo", () => {
   const DIAS = 60;
   const desdeMs = Date.now() - DIAS * 24 * 60 * 60 * 1000;
 
+  /**
+   * Los tres casos de este bloque son los únicos del archivo que salen a `git`
+   * de verdad; el resto se prueba con datos inyectados. Y `onia-hermes` pesa
+   * varios GB, así que el PRIMER `git log` del proceso paga la caché fría del
+   * disco: medido el 2026-09-07 en nodo-casa (WSL), tardó más de los 5 s que
+   * vitest da por defecto y el caso murió por `Test timed out`, no por su
+   * afirmación. Verde en la corrida siguiente, con la caché tibia.
+   *
+   * Eso deja roja la cadena `npm test` de la raíz, que el integrador corre
+   * antes de tocar `main`: un timeout que depende de qué tenga cacheado el
+   * sistema operativo traba el merge de los quince carriles y no dice por qué.
+   * El tope se sube donde el trabajo es de disco; ninguna afirmación cambia.
+   */
+  const TOPE_GIT_MS = 60_000;
+
   const shasDeMerges = () => {
     const r = spawnSync(
       "git",
@@ -310,7 +325,7 @@ describe("deploy-vivo: un merge no es un arreglo", () => {
     const merges = shasDeMerges();
     expect(merges, "git no contestó: el caso siguiente no puede concluir").not.toBeNull();
     expect(merges!.length).toBeGreaterThan(0);
-  });
+  }, TOPE_GIT_MS);
 
   it("no devuelve ni un merge, así que el pedido no cuenta el mismo arreglo dos veces", () => {
     const commits = commitsDesde(desdeMs);
@@ -326,7 +341,7 @@ describe("deploy-vivo: un merge no es un arreglo", () => {
       colados,
       `se colaron ${colados.length} merge(s) en el conteo de arreglos varados`,
     ).toEqual([]);
-  });
+  }, TOPE_GIT_MS);
 
   /**
    * La otra dirección: que el filtro no se haya llevado puesto el trabajo real.
@@ -338,7 +353,7 @@ describe("deploy-vivo: un merge no es un arreglo", () => {
     const commits = commitsDesde(desdeMs);
     expect(commits).not.toBeNull();
     expect(commits!.length).toBeGreaterThan(0);
-  });
+  }, TOPE_GIT_MS);
 });
 
 /**
