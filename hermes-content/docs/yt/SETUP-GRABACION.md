@@ -117,6 +117,25 @@ El círculo se hace con `E:\ONIA-YouTube\assets\mask-circulo.png` (generado con 
 un filtro *Image Mask/Blend* sobre la escena anidada — OBS no admite filtros por
 scene-item, por eso la escena auxiliar.
 
+### ⚠️ Una escena anidada mide el CANVAS ENTERO salvo que se le diga otra cosa
+
+El círculo de la cámara se hace con una escena anidada (`_cam · circulo`) porque OBS no
+admite filtros por scene-item. Pero una escena, usada como fuente, **mide 1920×1080 aunque
+su contenido ocupe una esquina**. Metida en un recuadro de 480×480 con "escalar hasta
+límites externos", OBS escala el canvas completo y muestra su centro — que está vacío.
+
+Se ve como un cuadro delimitador imposible (apareció `666×416`) y un círculo deformado.
+
+**El arreglo es darle tamaño propio a la escena anidada:**
+
+```json
+"settings": { "custom_size": true, "cx": 720, "cy": 720, "items": [ ... ] }
+```
+
+Con la escena midiendo 720×720 y el recuadro en 480×480, las proporciones coinciden y el
+círculo sale redondo. Ojo: dentro de una escena con tamaño propio, lo relativo se mide
+contra **su** mitad de altura (360), no contra 540.
+
 ### ⚠️ Las coordenadas de OBS son relativas a la MITAD DE LA ALTURA
 
 Costó una tarde. Al generar el `.json` de escenas a mano, `pos_rel` y `bounds_rel` **no**
