@@ -1136,21 +1136,37 @@ y sin operar. Acá se opera, con verificación por ítem.
       Lo que sí se puede prometer hoy está en `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` §7.
 
 - [ ] 🟡 **El gate de cobertura multi-rubro mira 6 de 25 pantallas compartidas — ampliar su
-      sujeto.** Medido el 2026-09-07:
-      `lib/platform/pantallas-compartidas-cubiertas.test.ts` excluye por escrito las pantallas
-      que todos los packs llaman **igual**, y esa premisa ya falló **tres** veces
-      (`/appointments`, `/comercio/caja`, `/inventory` — ver el ítem en «Cerrado» con la tabla).
-      Las tres se arreglaron como instancia y quedan **19 pantallas sin vigilar**.
+      sujeto.** `lib/platform/pantallas-compartidas-cubiertas.test.ts` excluye por escrito las
+      pantallas que todos los packs llaman **igual**, y esa premisa ya falló **cuatro** veces
+      (`/appointments`, `/comercio/caja`, `/inventory` y ahora `/settings` — ver «Cerrado»).
+
+      **Medido el 2026-09-07, ya no hay que volver a derivarlo:** los packs comparten **25**
+      pantallas, el gate declara **6** (las de rótulo distinto: `/comercio`, `/comercio/fiados`,
+      `/dashboard`, `/empresa`, `/patients`, `/treatments`) y quedan **19 sin vigilar** —
+      `/admin`, `/agenda`, `/agents`, `/appointments`, `/billing`, `/billing/recurring`,
+      `/comercio/caja`, `/comercio/clientes`, `/comercio/inventario`, `/communications`,
+      `/contabilidad`, `/help`, `/inbox`, `/inventory`, `/reports`, `/requerimientos`, `/rrhh`,
+      `/settings`, `/team`.
 
       **Lo que hay que hacer:** el sujeto pasa de «compartida con rótulo distinto» a
-      **«compartida por dos o más packs»**, y cada una declara CÓMO se cubre. Las 19 nuevas hay
-      que declararlas una por una — por eso no entró en una vuelta: es el trabajo, no un
-      obstáculo.
+      **«compartida por dos o más packs»**, y cada una declara CÓMO se cubre.
 
-      ⚠️ **Al hacerlo, NO declarar cobertura con `grep vocabularioDeTrack`**: da CERO sobre
-      `/comercio/caja`, que sí deriva (usa `idioma.ques`). Es lista de inclusión de nombres de
-      símbolo y falla abierto. Y el propio gate ya dice que «la pantalla deriva del pack» no
-      alcanza como cobertura: tiene que quedar una invariante ejecutable o un motivo medido.
+      ✅ **Barrido de copy ya hecho sobre las 19** (detector: literales con espacio, sin
+      comentarios ni identificadores, buscando palabra de un solo rubro). Resultado:
+      `/help`, `/reports`, `/billing`, `/team` y `/appointments` **ya derivan del vocabulario**
+      — sus hits eran los COMENTARIOS que explican arreglos previos, no copy. `/admin` es el
+      panel de superadmin (nosotros), no superficie de cliente. El único defecto vivo era
+      `/settings`, **arreglado en esta vuelta**.
+
+      ⚠️ **Dos trampas del detector, medidas:** `diente` sin límite de palabra matchea
+      «pen**diente**s» (falso positivo en `/communications`, `/reports`, `/rrhh`,
+      `/requerimientos`), y `doctorId` / `patientEmail` se cuelan como frase si llevan `, `.
+      Anclar con `\b` y descartar identificadores.
+
+      ⚠️ **NO declarar cobertura con `grep vocabularioDeTrack`**: da CERO sobre `/comercio/caja`,
+      que sí deriva (usa `idioma.ques`) — y da VERDADERO sobre `/settings`, que lo importaba y
+      aun así decía dental. Es lista de inclusión de nombres de símbolo y falla en las **dos**
+      direcciones.
 
       Se ve con: contar los `href` que 2+ packs comparten en `VERTICAL_PACKS` (25) contra las
       filas de `COBERTURA` (6).
@@ -1164,6 +1180,30 @@ y sin operar. Acá se opera, con verificación por ítem.
 - **No le escribe a un prospecto.** Regla del [`README.md`](README.md) de esta carpeta.
 
 ## Cerrado
+
+- [x] 🔴 **La pantalla donde el cliente decide CUÁNTO PAGA le hablaba en dental a cuatro
+      rubros.** `/settings` la comparten los **siete** packs y las tarjetas de plan se le
+      muestran a todos los rubros clínicos (`esDental = !esComercio`), que no son sólo dental:
+      **estética, veterinaria y servicios profesionales** entran por la misma rama. Los tres
+      leían **«Odontograma interactivo»** (×3), **«Catálogo de tratamientos ilimitado»** (×3) y
+      **«Para clínicas grandes que necesitan control gerencial»** justo antes de pagar — ocho
+      textos por rubro, contados por el test antes de arreglar.
+
+      **Por qué sobrevivió, que es lo reusable:** un arreglo anterior ya había tomado el
+      vocabulario para `v.clientes` y `v.negocio` y **dejó el resto tipeado**, así que el
+      archivo IMPORTA `vocabularioDeTrack` y aun así decía dental — un chequeo del tipo «¿esta
+      pantalla deriva del pack?» la daba por cubierta. Y el gate de cobertura no podía verla:
+      excluye las pantallas que todos los packs llaman igual, y los siete la llaman
+      «Configuración».
+
+      **El odontograma NO se borró:** dental lo sigue viendo (es una feature real que tiene);
+      los demás leen la ficha de sus clientes, y el test ancla esa dirección inversa porque
+      vaciar el texto también haría pasar el caso principal.
+
+      Commit `633b6ed` (`onia-platform`, rama del carril). Gates: `tsc` exit 0 ·
+      `vitest` 3311 passed / 292 archivos · `eslint` exit 0.
+      Se ve con: `npx vitest run 'app/(dashboard)/settings/planes-en-el-idioma-del-rubro.test.ts'`
+
 
 - [x] 🔴 **CERRADO el 2026-09-07: a un centro de estética le sugeríamos un proveedor dental —
       y el defecto estaba en el punto ciego del gate que existe para cazarlo.**
