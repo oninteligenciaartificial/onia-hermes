@@ -373,3 +373,61 @@ En el mismo mensaje conviven *«ya lancemos la versión 1.0»* y nueve pedidos q
 Con la regla de la casa —**nada a medias, cerrar antes de abrir**— la 1.0 se lanza con lo que hoy
 está verificado, y estos nueve entran después, en el orden que Sergio Urcullo elija de esta tabla.
 Anotarlos acá es lo que hace posible lanzar sin perderlos.
+
+---
+
+## 13. Rediseñar la landing con «Fincash» de referencia — 2026-09-07
+
+Sergio Urcullo mandó una grabación de 14 s: *«quiero que tomes de referencia esta landing para
+hacer nuestra landing pero con nuestros colores datos y alma de la empresa»*.
+
+### 13.1 · Qué es exactamente la referencia (medido, no de memoria)
+
+**Fincash**, template de pago de *tailgrids* publicado en `21st.dev` (**USD 199**). La grabación
+es el preview del modal, con el botón «Buy $199» a la vista. Es un template de **fintech**, no de
+software de gestión.
+
+Su arco, en orden: header fijo (Home · Features · Pricing · Contact + CTA) → hero con mockups de
+la app (tarjeta de crédito, lista de transacciones) → **«Our Journey in Numbers»** (métricas de
+tracción) → features en tarjetas grandes, cada una con una captura de móvil → testimonios con
+foto y rol (Freelancer, Student, Start-up Founder) → **«Simple, Transparent Pricing»** con toggle
+Monthly/Annually −20 % y tres planes (Free · Starter · **Pro** destacado) → footer de cuatro
+columnas + newsletter + wordmark gigante de marca de agua.
+
+**Su lenguaje visual: fondo casi negro + un solo acento verde lima.**
+
+### 13.2 · Las tres cosas que chocan con lo que ya está decidido
+
+No son objeciones al pedido: son las decisiones vigentes que el pedido toca, y por eso hay que
+elegir antes de codear.
+
+1. **Nuestro lenguaje visual aprobado es BASE CLARA, cero sombras** (hero aprobado el 1-sep, ver
+   [[landing-v3-aprobada-base-clara]]). La referencia es dark. Son opuestos: no se pueden tener
+   los dos, y "nuestros colores" no resuelve cuál gana el FONDO.
+2. **«Our Journey in Numbers» y los testimonios no se pueden portar.** Cero clientes pagando ⇒
+   está prohibido inventar cifras de tracción, logos o testimonios (regla «No fabricar», y la
+   memoria [[primer-registro-real-y-alta-cerrada]]). Fincash llena media página con eso.
+   Portarlo honestamente significa **reemplazar esas dos secciones**, no traducirlas.
+3. **Las capturas del sistema NO se usan** (decisión registrada en
+   [[landing-v3-aprobada-base-clara]]: «NUNCA capturas del sistema»). La referencia apoya casi
+   todo su peso visual en mockups de su app.
+
+⚠️ Y la regla que este carril ya pagó caro: **una superficie viva no se reemplaza sin que Sergio
+Urcullo VEA la pieza terminada**. El 2026-08-20 se publicó una landing v2 sin ese paso, la
+rechazó entera al verla y hubo que revertir en producción.
+
+### 13.3 · Lo que sí se porta, y es lo valioso
+
+Estructura y ritmo, que es donde la referencia realmente gana:
+
+- **Precios EN la landing**, con toggle mensual/anual y un plan destacado. Hoy Precios es otra
+  página; el template lo pone en el camino de lectura.
+- Features como **tarjetas grandes con una sola idea**, en vez de lista.
+- **Un CTA único repetido** en header, mitad y cierre.
+- Footer de cuatro columnas con Legal separado de Producto.
+
+### 13.4 · Estado
+
+🟡 **Anotado, esperando cuatro decisiones de Sergio Urcullo** (fondo claro vs oscuro; qué
+reemplaza a métricas/testimonios; página nueva vs. reforma de la viva; y si entra antes o después
+de lanzar la 1.0). Sin eso, cualquier cosa que se construya se rehace.
