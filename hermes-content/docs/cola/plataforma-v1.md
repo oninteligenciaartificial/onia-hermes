@@ -1145,6 +1145,50 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] 🔴 **CERRADO el 2026-09-07: la quinta pantalla de la ficha decía «pacientes» a una
+      estética y a un estudio contable, y la ayuda mandaba al estudio a cargar sus clientes
+      en el catálogo de servicios.** Commit `90b2a47` (rama `claude/chatbots-platform-review-0d1d09`),
+      **NO desplegado** — producción corre `build-fe4026e`.
+
+      **El defecto, y por qué sobrevivió.** `/patients` la comparten **cuatro** rubros y tiene
+      **cinco** pantallas. Cuatro —listado, ficha, alta, edición— ya derivaban el nombre de la
+      persona de `vocabularioDeTrack`. La quinta, la importación por CSV, lo escribía en duro
+      **siete veces**: *«Importar pacientes desde CSV»*, *«Máximo 500 pacientes»*,
+      *«pacientes-ejemplo.csv»*. Medido sobre los cuatro packs: `clientes` vale **«clientas»**
+      en estética y **«clientes»** en servicios profesionales — **dos de los cuatro rubros
+      vendibles** leían el vocabulario de otro rubro justo donde cargan su cartera por primera
+      vez. **Lo tapó la hermana sana:** ver cuatro pantallas derivadas da la familia por cubierta.
+
+      **Y estaba a UN clic de verse, sin mirar código:** las dos superficies que la ANUNCIAN sí
+      derivan del rubro — el onboarding dice *«Cargá tus clientas»* (`lib/onboarding/aplicar.ts`)
+      y la ayuda *«Importar clientas»*. El dueño hacía clic en su propio idioma y aterrizaba en
+      el de otro.
+
+      🔴 **El segundo eje es el que ningún barrido de literales prohibidos puede ver, porque no
+      SOBRA una palabra: FALTA.** El registro de rutas le permite `patients/import` a
+      `CON_AGENDA` (los tres clínicos **más servicios profesionales**) y la entrada de la ayuda
+      la ofrecía sólo a la familia `clinica`. Y el resultado no era «no sé», que sería
+      inofensivo: medido con `buscarAyuda`, un estudio contable que pregunta *«¿puedo subir mi
+      lista de clientes desde un Excel?»* recibía **`/comercio/importar`** — la importación del
+      **catálogo**. Lo mandaba a cargar a sus clientes como servicios vendibles, **con
+      confianza**. Peor que el silencio, porque el dueño la sigue.
+
+      **La prueba: el gate se validó POR MUTACIÓN en tres direcciones**, y la tercera es la que
+      importa. Devolver `familias: CLINICA` → rojo. Devolver un literal `pacientes` → rojo.
+      **Esquivarlo borrando la palabra** (*«Importar desde CSV»*, *«Volver»*, la pantalla muda)
+      → **con la primera versión del guard pasaba en VERDE**, porque sólo pedía que el archivo
+      mencionara `vocabularioDeTrack` en alguna parte. Un gate que persigue lo que sobra
+      necesita su gemelo que exija que la función siga **viva**, y ese gemelo hay que probarlo
+      rompiéndolo: sin la mutación, habría reportado el arreglo hecho con medio arreglo.
+
+      Lleva además el caso que **ya cumplía** (el listado, que no puede moverse), el que protege
+      al comercio de que abrir esta entrada le desvíe la importación de **su** catálogo, y el
+      simétrico: no ofrecérsela a quien el producto se la niega.
+
+      **Archivos:** `app/(dashboard)/patients/import/page.tsx`,
+      `app/(dashboard)/patients/import/importar-en-el-idioma-del-rubro.test.ts`,
+      `lib/ayuda/base.ts`. Gates: `tsc` 0, `eslint` 0, `vitest` **3366** pasados.
+
 - [x] 🔴 **CERRADO el 2026-09-07: la AYUDA le enseñaba a un centro de estética y a una
       veterinaria dónde está «el odontograma» — una pantalla que el producto les CIERRA.**
 
