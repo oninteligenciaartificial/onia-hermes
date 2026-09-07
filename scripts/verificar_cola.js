@@ -1223,7 +1223,36 @@ function selfCheck() {
   ok(evidenciaDe('commit `753718f` y `no-es-sha`').shas.join() === '753718f',
     'se extrae el sha del trozo entero, no un pedazo');
 
+  // --- El guardia que impide que este gate se lea como rojo cuando es el ARBOL ---
+  // Se prueba en las DOS direcciones a proposito: un guardia que solo prueba el caso malo pasa
+  // igual si alguien lo deja siempre encendido, y entonces el gate no mide NUNCA y sale 2 para
+  // siempre — que es la forma silenciosa de apagarlo.
+  ok(puedeMedir(tmp) !== null, 'desde un arbol sin el repo, el gate NO puede medir');
+  ok(puedeMedir(path.resolve(__dirname, '..')) === null,
+    'desde la raiz de onia-hermes SI puede medir — sin esto el gate saldria 2 siempre');
+
   console.log(`self-check ok: ${casos} casos`);
+}
+
+// Todo veredicto de este gate depende del ARBOL desde el que se corre: `existeEnAlgunRepo` le
+// pregunta al disco por cada ruta, y sube hasta seis padres buscando el repo hermano. En un
+// arbol que no ve esos archivos, la MISMA cola que aca sale verde sale con decenas de
+// `fantasma` — medido el 2026-09-07 copiando `COLA.md` a un directorio pelado: 0 errores acá,
+// rojo entero allá, sin tocar una línea del documento.
+//
+// Eso hace que este gate NO se pueda cablear a la cadena `npm test` de la raíz: el integrador
+// la corre entera antes de tocar `main`, así que un carril cuyo worktree no tenga el repo
+// hermano —le pasó a `chatbot-cola` al mudarse de máquina— pondría `main` en rojo y trabaría el
+// merge de los quince, por higiene de un documento y sin un solo defecto real.
+//
+// El patrón de la casa para esto ya existe (`rubros-vivos.mjs`, `recordatorio_cita_vivo.mjs`):
+// el `--self-check` PURO va en la cadena, y la medición viva sale **2 = NO MEDIDO** cuando no
+// alcanza lo que necesita. Un 2 se lee distinto de un 1: "no pude medir" nunca es "está roto".
+function puedeMedir(baseDir) {
+  const faltan = ['CLAUDE.md', 'hermes-content'].filter(
+    (x) => !fs.existsSync(path.resolve(baseDir, x)),
+  );
+  return faltan.length ? faltan : null;
 }
 
 function main() {
@@ -1233,6 +1262,13 @@ function main() {
   const archivo = a[0];
   if (!archivo) {
     console.error('uso: node scripts/verificar_cola.js <cola.md>');
+    process.exit(2);
+  }
+
+  const faltan = puedeMedir(process.cwd());
+  if (faltan) {
+    console.log(`NO MEDIDO: desde ${process.cwd()} no se ve el repo (falta ${faltan.join(', ')}).`);
+    console.log('Todo `fantasma` de acá sería del árbol, no de la cola: se corre desde la raíz de onia-hermes.');
     process.exit(2);
   }
 

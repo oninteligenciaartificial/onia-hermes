@@ -52,7 +52,16 @@ era justamente que dejaran de serlo.)*
    `react/no-children-prop`.
 5. Si toca pantalla, **se abre y se MIRA** con captura. Un 200 no es verificación.
 6. Se marca acá con `[x]` y una línea de qué quedó. **Lo tachado no se rehace.**
-7. Si algo se bloquea con una decisión de Sergio: `PushNotification` de una línea **y seguir con
+7. **La bitácora de una corrida NO va en "Ahora": va en `## Registro de corridas`.** "Ahora" es
+   lo que queda por hacer; un `### Del carril X — corrida del <fecha>` es una foto de un día y
+   por `CLAUDE.md` es historia, no fuente de verdad.
+   ⚠️ **No es prolijidad: es lo que rompe la cola y su gate.** Medido el 2026-09-07 — "Ahora"
+   había llegado a **2.481 líneas (66 % del archivo) con 59 registros cerrados y UN solo ítem
+   abierto**, así que el paso 1 («tomá el primer ítem no bloqueado») mandaba a leer una
+   bitácora entera, y `verificar_cola.js` daba **exit 1** con 14 errores que eran **todos**
+   sobre trabajo ya terminado. Tres rondas intentaron arreglarlo aflojando el gate y las tres
+   volvieron a rojo: el gate mide "Ahora" por diseño, y lo que sobraba era el sujeto.
+8. Si algo se bloquea con una decisión de Sergio: `PushNotification` de una línea **y seguir con
    lo desbloqueado**. Un ítem trabado no frena la cola.
 
 **Nunca:** desplegar al VPS, tocar worktrees o ramas de otras sesiones, gastar plata, ni bajar una
@@ -63,8 +72,36 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
-- [ ] 🟠 **El gate de la cola lleva TRES arreglos y vuelve a rojo cada vez, porque las tres
-      rondas corrigieron el eje equivocado.** Medido el 2026-09-07 por `onia-cola`:
+- [x] 🟠 **El gate de la cola lleva TRES arreglos y vuelve a rojo cada vez, porque las tres
+      rondas corrigieron el eje equivocado. — CERRADO 2026-09-07 por `onia-cola`, con la
+      salida (b) y una corrección al diagnóstico.**
+      **Lo que estaba mal en este ítem: la clase no era del gate, era de la SECCIÓN.** Medido:
+      `## Ahora` tenía **2.481 líneas — el 66 % del archivo — con 59 registros cerrados y UN
+      solo ítem abierto** (éste), porque las 28 bitácoras `### … corrida del <fecha>` de
+      `canario-visual` y `web-venta` se venían escribiendo adentro. El gate mide "Ahora" **por
+      diseño** («el filtro es sobre lo que se declara accionable HOY»), así que los 14 errores
+      eran **todos** sobre trabajo ya terminado. Y la salida (a) no se podía tomar sin romper
+      un contrato ya escrito con su motivo: `scripts/verificar_cola.js:853` fija que *«un item
+      marcado hecho también se verifica, o la cola miente hacia atrás»*.
+      **Lo que se hizo:** se cerró "Ahora" con la sección `## Registro de corridas` justo antes
+      de la primera bitácora fechada — **cero texto movido**, verificado por multiset de líneas
+      (0 perdidas), no por conteo de ítems, que es como el corte por script ya borró un bloque
+      en silencio antes. Y se tildaron los **6 registros 🟢 terminados** que habían quedado en
+      `[ ]` — de ahí salía también el `duplicado` (dos corridas del mismo chequeo, ambas
+      abiertas). Resultado: `npm run cola:viva` → **exit 0, «10 items en Ahora, todos con
+      evidencia real»**. El paso 7 de "Cómo se trabaja esta cola" ahora fija dónde va una
+      bitácora, que es lo que impide que vuelva.
+      ⚠️ **Y por qué NO se cableó a `npm test`, que era lo que este ítem pedía para cerrarse:**
+      medido copiando `COLA.md` a un árbol pelado, la **misma** cola que acá sale verde sale
+      con decenas de `fantasma` allá — `existeEnAlgunRepo` le pregunta al disco y sube seis
+      padres buscando el repo hermano. Cablearlo es el rojo **por ambiente** que trabaría el
+      merge de los quince carriles (a `chatbot-cola` ya le faltó ese árbol al mudarse de
+      máquina). Va el patrón de la casa: el `--self-check` puro sigue en la cadena, la medición
+      viva queda como alias suelto (`npm run cola:viva`), y el gate ahora sale **2 = NO MEDIDO**
+      —nunca 1— cuando no ve el repo. Guardia probado por mutación en las dos direcciones:
+      apagarlo y dejarlo siempre encendido fallan cada uno por su propia razón.
+
+- [x] 🟠 **(diagnóstico anterior, conservado — era correcto salvo en el sujeto)** Medido el 2026-09-07 por `onia-cola`:
       `node scripts/verificar_cola.js hermes-content/docs/COLA.md` sale **exit 1**. Cuatro
       errores eran defectos de verdad y se cerraron en esa vuelta (ver la auditoría al pie del
       ítem del gate, en "Después"); **los 14 que quedan son UNA sola clase** — 8
@@ -390,6 +427,29 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       lineas del chatbot y no la palabra suelta.
       **Lo que NO se toco, a proposito:** las propuestas ya entregadas — queda anotado abajo en
       "Despues" porque tiene una trampa que no es de copy.
+
+---
+
+## Registro de corridas (2026-09-01 → 2026-09-03) — no rehacer
+
+> **Esto NO es cola: es la bitácora de lo ya corrido.** Cada `###` de abajo es una corrida
+> fechada de un carril (`canario-visual`, `web-venta`, `onia-cola`) con lo que midió ese día.
+> Se lee para no repetir un hallazgo; **no se toma trabajo de acá.**
+>
+> **Por qué existe esta sección, medido el 2026-09-07 por `onia-cola`:** estas 28 corridas
+> vivían dentro de `## Ahora`, que quedó con **2.481 líneas — el 66 % del archivo — y UN solo
+> ítem realmente abierto** contra 59 registros ya cerrados. Dos costos, y el segundo es el caro:
+> `node scripts/verificar_cola.js hermes-content/docs/COLA.md` daba **exit 1** con 14 errores
+> —8 `sin-evidencia`, 5 `fantasma`, 1 `duplicado`—, **todos** sobre registros de trabajo
+> terminado; y sobre todo, la instrucción que todos los carriles obedecen («tomá el primer ítem
+> no bloqueado de "Ahora"») mandaba a leer 2.481 líneas de bitácora para encontrar un ítem.
+>
+> ⚠️ **El gate NO estaba roto: la sección lo estaba.** Las tres rondas anteriores le agregaron
+> carve-outs de notación (glob, elipsis, nombre de rama, ruta parcial, expansión de llaves) y
+> las tres volvieron a divergir, porque el gate mide `## Ahora` **por diseño** —«el filtro es
+> sobre lo que se declara accionable HOY»— y lo que había ahí no era accionable. Y la salida
+> tampoco era aflojarlo: `verificar_cola.js:853` fija a propósito que *«un item marcado hecho
+> también se verifica, o la cola miente hacia atrás»*. Lo que sobraba era el sujeto.
 
 ### Del canario visual — corrida del 2026-09-01 (abiertas y MIRADAS, no un 200)
 
@@ -1285,7 +1345,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ### Del canario visual — corrida del 2026-09-02 04:41 UTC (diez pantallas, sin ítems nuevos)
 
-- [ ] 🟢 **Pasada completa de las diez pantallas, mirando cada captura. No encontré defecto
+- [x] 🟢 **Pasada completa de las diez pantallas, mirando cada captura. No encontré defecto
       nuevo.** Detalle de lo que sí toqué:
       - **Cinco baselines nuevas creadas** (no existían): `precios`, `rubros`,
         `chatbot-landing`, `contacto`, `register`. Es el punto de partida, no una verificación.
@@ -1528,7 +1588,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 </details>
 
-- [ ] 🟢 **Las otras nueve pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
+- [x] 🟢 **Las otras nueve pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
       Pesos/tiempos de hoy: home 2.857 KB/367 ms · precios 2.108 KB/803 ms · empezar 2.253 KB/464 ms ·
       rubros 2.587 KB/377 ms · contacto 322 KB/429 ms · register 704 KB/456 ms ·
       login-plataforma 699 KB/457 ms · login-chat 3.499 KB/1.249 ms.
@@ -1878,7 +1938,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       Arreglo `f0248601` en `main`, gate `cierre.test.ts` puesto, decisión ya cotizada en el
       radar. **Del lado del código no queda nada: falta sólo el deploy, que es de Sergio.**
 
-- [ ] 🟢 **Las otras cinco pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
+- [x] 🟢 **Las otras cinco pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
       Miradas una por una: `contacto` (322 KB/104 ms, formulario y CTAs completos),
       `register` (705 KB/153 ms, asistente de 2 pasos con 5 rubros, íconos legibles),
       `login-plataforma` (696 KB/128 ms, íconos legibles, "Pedí tu acceso" presente),
@@ -2265,13 +2325,13 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       `height` y `alt` real (son fotos de contexto, no capturas del sistema: cumplen la regla) ·
       los 19 enlaces internos y assets responden 200.
 
-- [ ] 🟢 **`/guia-facturacion` la enlaza UNA sola página (`/facturacion`) — no lo toqué, y el
+- [x] 🟢 **`/guia-facturacion` la enlaza UNA sola página (`/facturacion`) — no lo toqué, y el
       motivo importa.** Salió del mismo conteo. No es el mismo defecto que los servicios: está
       enlazada desde el árbol VIVO, así que un lead sí puede llegar. Parece deliberado (es el
       imán de la página de facturación). Queda anotado por si el dueño del contenido lo quiere
       también en el pie; el gate ya la cubre y hoy pasa.
 
-- [ ] 🟢 **Cloudflare ofusca el correo de contacto en `/privacidad` y `/terminos`, y para un
+- [x] 🟢 **Cloudflare ofusca el correo de contacto en `/privacidad` y `/terminos`, y para un
       rastreador sin JS el contacto legal dice `[email protected]`.** Medido: el HTML servido
       trae `<a href="/cdn-cgi/l/email-protection">` en 7 lugares de 4 páginas. **Mirado
       renderizado: para un humano NO hay defecto** — el decodificador de Cloudflare corre y la
@@ -2372,7 +2432,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Evidencia:** capturas de hoy en
       `hermes-content/docs/historial/canario-visual/2026-09-03-{home,precios,empezar,rubros,chatbot-landing}.png`.
 
-- [ ] 🟢 **Las otras cinco pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
+- [x] 🟢 **Las otras cinco pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
       `contacto` (322 KB/158 ms), `register` (707 KB/178 ms, 5 rubros con íconos legibles),
       `login-plataforma` (696 KB/98 ms, "Pedí tu acceso" presente), `login-chat`
       (3.500 KB/928 ms, formulario Chatwoot propio, no está caído), `panel-chatbot`

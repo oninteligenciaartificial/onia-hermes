@@ -72,6 +72,7 @@
     "test:sonda-widget": "node scripts/sonda_widget.mjs --self-check",
     "test:veredicto-widget": "node scripts/veredicto_widget.mjs --self-check",
     "test:cola-selfcheck": "node scripts/verificar_cola.js --self-check",
+    "cola:viva": "node scripts/verificar_cola.js hermes-content/docs/COLA.md",
     "demo:agendada": "node scripts/demo_agendada_real.mjs",
     "test:demo-agendada": "node scripts/demo_agendada_real.mjs --self-check",
     "test:rescate-envoltorio": "node --test scripts/rescate_envoltorio.test.mjs",
