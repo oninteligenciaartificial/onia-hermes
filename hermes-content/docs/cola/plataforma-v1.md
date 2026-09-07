@@ -44,6 +44,49 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **La receta que el paciente se lleva a la farmacia salía fechada al DÍA SIGUIENTE de
+      noche, y el pie del mismo papel decía la fecha correcta — cerrado el 2026-09-07
+      (`8bc5182` en `onia-platform`, publicado en la rama).**
+      Gate nuevo: `lib/platform/fecha-en-zona-del-negocio.test.ts` (8 casos).
+
+      El contenedor corre con `TZ` vacío — medido en vivo:
+      `docker exec onia-platform node -e "…"` devuelve `process.env.TZ` **undefined** e
+      `Intl.DateTimeFormat().resolvedOptions().timeZone` = **UTC**. Así que toda fecha que el
+      SERVIDOR formatea sin `timeZone` sale **4 h adelantada**, y entre las 20:00 y la medianoche
+      de La Paz **nombra el día siguiente** — justo la franja en la que atienden dental y estética.
+
+      ⚠️ **Esto es la CLASE del defecto que la vuelta anterior arregló como instancia.** El
+      2026-09-06 se arregló el aviso de cita al profesional (`lib/agenda/crear-cita.ts`), que iba
+      4 h adelantado mientras el correo de la misma cita iba bien. Quedaban **nueve** llamadas más,
+      todas de servidor, y la peor no era una pantalla sino **un documento que sale del sistema**:
+      `app/print/prescription/[id]/page.tsx` imprimía la fecha de emisión sin zona y, 90 líneas
+      más abajo, su pie de página **sí** la llevaba. Un mismo papel contradiciéndose. Arregladas
+      las nueve: la receta ahora lee `clinicSettings.timezone` (y el pie usa **la misma**, en vez
+      de la zona fija que tenía escrita, para que no se puedan volver a separar); las ocho del panel usan
+      `DEFAULT_TZ` de `lib/time.ts`, que ya era la fuente única.
+
+      **Por qué ningún gate podía verlo:** no sobra ninguna palabra (un barrido de literales
+      prohibidos no tiene qué buscar), el texto ya está en el idioma del rubro, la captura se ve
+      perfecta, y la fecha es un **dato real** — lo único mal es el huso en que se la calculó.
+      El sujeto del gate nuevo sale del **disco** (`app/`, `lib/`, `components/`), así que un
+      archivo nuevo nace cubierto; los `"use client"` quedan fuera a propósito, porque ahí formatea
+      el navegador del dueño, que ya está en su zona.
+
+      ⚠️ **Y el primer instrumento mentía en las dos direcciones, así que ninguna de las dos
+      listas servía.** `grep -v timeZone` por LÍNEA acusaba a `crear-cita.ts` y `whatsapp-bot.ts`,
+      que están **sanos** (la opción baja de renglón) — se resolvió recorriendo la llamada con
+      paréntesis balanceados. Y al revés: `toLocaleString` es **ambiguo** — `Number` tiene el suyo,
+      y las tres de `app/(dashboard)/communications/page.tsx` son **números** (`monthTotal.toLocaleString`).
+      Exigirles zona era mandar a romper código sano. Hoy `toLocaleDateString`/`toLocaleTimeString`
+      se exigen siempre y `toLocaleString` sólo cuando el receptor es reconociblemente una fecha;
+      el límite de esa heurística está escrito en la cabecera del gate, no escondido.
+
+      Validado **por mutación en las dos direcciones**: revertir el arreglo de la receta → rojo
+      nombrándola; recortar las raíces del barrido → rojo (sin ese caso, vaciar `RAICES` dejaba el
+      gate verde para siempre); restaurar → 8/8 verde. Gates: `tsc` 0 · `vitest` (suite completa) ·
+      `eslint`.
+      ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido de deploy de `plataforma`.
+
 - [x] 🔴 **Abrir el enlace del correo CANCELABA la cita, sin que nadie decidiera nada —
       cerrado el 2026-09-07 (`bb0ba47` en `onia-platform`, publicado en la rama). Y estaba en
       DOS puertas, no en una.**
