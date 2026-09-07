@@ -1074,6 +1074,60 @@ y sin operar. Acá se opera, con verificación por ítem.
       pantalla sana, que es el error más caro que este proyecto tiene medido — el falso ROJO que
       hace deshacer código vivo. Tablero: `t_6359aa00`.
 
+- [x] 🟡 **CERRADO el 2026-09-07: la pantalla de Roles le decía «Doctor» y «pack dental» a los
+      SIETE rubros — a un clic de la pantalla que ya se había arreglado.**
+
+      **El defecto, medido:** `/team/roles` (Equipo → botón «Roles») rotulaba las cinco claves de
+      rol con un mapa escrito a mano que decía **«Doctor»**. Ningún rubro llama así a ese rol —
+      **ni siquiera el dental**: en `rolesEquipo` son «Profesional» (dental, estética, servicios
+      profesionales) y «Veterinario/a» (veterinaria). Su copy visible ofrecía *«Asigna roles del
+      **pack dental** por miembro»*, un nombre interno que al cliente no se le nombra
+      (`CLAUDE.md`), y la fila mostraba **«Rol base: DOCTOR»**, la clave cruda del enum — el mismo
+      defecto que `vocabulario.ts` documenta como ya cerrado en Configuración.
+
+      La pantalla **no tiene guard de rubro** y se alcanza con **un clic** desde `/team`, así que
+      la ven los siete packs.
+
+      **Por qué sobrevivió, y es lo reusable:** `/team` YA estaba arreglada — sus tarjetas salen
+      del vocabulario (`resumen-equipo.ts`, con su test). Se arregló **la instancia y no la
+      clase**, y la hermana sana tapa a la rota: mirar `/team` da por cubierta la familia. Mismo
+      patrón en `/reports`, que derivaba `rolProfesional` para los títulos y dejaba `?? "Doctor"`
+      en la fila sin nombre resuelto — a una ferretería con plan Profesional.
+
+      **Arreglado** en `onia-platform` `776fd66` (rama `claude/chatbots-platform-review-0d1d09`,
+      empujada desde el gemelo del VPS porque el push de ese repo está deshabilitado en el nodo de
+      casa). ⚠️ `git am` **regenera el sha**, así que el commit local y el publicado son distintos
+      con el mismo árbol: se alineó con `reset --hard` al publicado sólo después de comparar
+      `git rev-parse HEAD^{tree}` en las dos máquinas — citar el local deja un sha fantasma, que
+      es justo lo que `verificar_cola.js` ataja. El rótulo sale de
+      `rolesEquipo`, la MISMA fuente del alta, los badges y `/team`. Gate nuevo:
+      `app/(dashboard)/team/roles/rotulos-de-rol-operativo.test.ts` — **16 casos**, con los
+      sujetos derivados de `VERTICAL_PACKS` (un pack nuevo nace cubierto) y uno de **cobertura**
+      que exige que ninguna clave quede sin rótulo, en vez de caer en la clave cruda.
+
+      **Validado por MUTACIÓN, las cinco en rojo:** copy con «pack dental» · mapa fijo en la
+      función pura · la clave cruda en la fila · el fallback tipeado de `/reports` · y el propio
+      filtro de comentarios devolviendo vacío. Ese filtro va con **ESTADO** y no por prefijo de
+      línea: el interior de un bloque `{/* … */}` arranca con texto normal, así que un filtro por
+      prefijo lo deja pasar — y sin él el gate da rojo sobre el comentario que explica este mismo
+      defecto y obliga a borrar la bitácora.
+
+      ⚠️ **Trampa de método que costó rehacer el trabajo:** validar por mutación revirtiendo con
+      `git checkout -- <archivo>` **no funciona para archivos nuevos** (`pathspec did not match`),
+      y en la misma corrida ese comando **sí** revirtió los archivos ya rastreados, deshaciendo
+      los arreglos. La mutación se revierte con una copia previa, no con `git checkout`.
+
+      **MIRADA, no supuesta:** producción corre un build anterior (el deploy espera el `ok`), así
+      que una captura de `app.onia.com.bo` mostraría el defecto y no el arreglo. Se renderizó el
+      componente con el **CSS del build vivo** (`docker exec onia-platform`, 155 KB) y se
+      fotografió: dental y estudio contable, los dos con «Profesional», «Rol base: Administrador»
+      y «Rol base: Profesional», y **cero respuestas ≥400** en la corrida. Herramienta:
+      `mirar-roles.render.test.ts` (`ONIA_MIRAR=1`, no es un gate).
+
+      **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **3289 pasan / 289 archivos** ·
+      `npx eslint .` 0 errores. **No está terminado hasta que se publique:** viaja en el pedido
+      `t_deddf471` (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo.
+
 - [ ] ⚪ **Pendiente fiscal (`SIAT_EMISSION`) para facturar de verdad.** Va último a propósito:
       es un trámite externo, no código, y `/billing` ya funciona sin él. **No bloquea un cierre**
       — bloquea la factura fiscal, que el catálogo ya sabe no prometer. Si un loop se planta acá
