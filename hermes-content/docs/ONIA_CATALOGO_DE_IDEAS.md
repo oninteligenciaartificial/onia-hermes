@@ -282,7 +282,7 @@ decisiones de plata para Sergio en §8 de ese doc.
 | 3 | Layout que use el ANCHO, no solo scroll vertical | UX 1.0 | 🟡 anotado | Toca TODAS las pantallas. Es rediseño, no arreglo: entra después de lanzar o se come el lanzamiento |
 | 4 | Sidebar colapsable a solo iconos | UX 1.0 | 🟡 anotado | Chico y contenido. Candidato a entrar con el #3, misma pasada |
 | 5 | Revisión final de precios | decisión | 🔴 **DE SERGIO URCULLO** | Las 4 preguntas ya están medidas en `handoff/onia-v1-panel-ui.md` §6. No falta análisis: falta que él elija |
-| 6 | Vender el chatbot SIN la plataforma | packaging | 🟡 anotado, alto valor | **Es el único de la lista que ensancha el embudo.** Ver §12.1 |
+| 6 | Vender el chatbot SIN la plataforma | packaging | 🟢 **APROBADO 6-sep**, post-lanzamiento | Ver §12.1. Va junto con el **2º escalón de conversaciones**, del que depende el precio de la recarga |
 | 7 | Organización interna de Onia (ingresos, usuarios activos, GA, SEO) | producto nuevo | 🟡 anotado | Ver §12.2 — es un tablero para NOSOTROS, no acerca ningún pago |
 | 8 | Conectar páginas web / API de OpenAI | capacidad | 🟡 anotado | Ver §12.3 — el motor del chatbot HOY no llama a OpenAI directo |
 | 9 | Mirar Sendy Pro (competidor de chatbots) | research | 🟡 anotado | Barato y útil. Entra con el #6, no antes |

@@ -174,6 +174,29 @@ por cabeza), el chatbot a Bs 390 contra Xmart (Bs 177 QR / Bs 296 Meta API), y l
 contrato pago, que hoy es de CERO días** sobre un rail de cobro que exige una acción manual cada
 mes.
 
+### Las cuatro decisiones de precio — CERRADAS el 2026-09-06 por Sergio Urcullo
+
+| Decisión | Qué se resolvió | Por qué |
+|---|---|---|
+| **Cargo de Bs 70 por usuario** | ❌ **SE SACA.** Los usuarios van incluidos | Es el eje donde nos comportábamos como el software extranjero: ningún competidor local cobra por cabeza (Growing Cloud da ilimitados, Sintic no cobra asientos, Xmart cobra por canal). Y convertía un Bs 320 competitivo en un Bs 390 que se lee como letra chica. El techo del negocio son horas de soporte, no asientos: sacarlo no cambia el margen real |
+| **Chatbot Bs 390** | ✅ **Se mantiene**, y se va a poder **vender suelto** | El problema medido no era el precio del add-on sino que el ticket de ENTRADA es Bs 710 (obliga a contratar un plan antes). Contra Xmart (Bs 177 QR / Bs 296 Meta API) eso es 2,4×-4×. Soltarlo baja la entrada 45 % sin tocar ningún precio. Es trabajo de producto: **post-lanzamiento** |
+| **Gracia del contrato pago** | ✅ **7 días** (hoy son 0) | La política de 0 días está escrita para un cobro automático, donde no pagar = irse. Pero el QR del BCP es de un solo uso: cada mes el cliente tiene que ACTUAR, así que atrasarse unas horas es lo normal. Ninguno de los siete competidores relevados corta en seco |
+| **Recarga de Bs 190** | ⏸️ **En suspenso hasta que exista el 2º escalón del chatbot** | Ver abajo |
+
+**Por qué la recarga quedó en suspenso, y no confirmada.** Medido el 6-sep contra los logs
+reales de LiteLLM: el bot gasta **USD 0,000966 por llamada**, y con ~10,5 mensajes por
+conversación (40 conversaciones, 419 mensajes) el costo marginal por conversación es
+**≈ Bs 0,12**. Contra eso, lo incluido sale Bs 0,78 (margen 6,5×) y la recarga Bs 0,95 (8×).
+**El costo no funda Bs 190** — diría que puede valer una fracción.
+
+Y el argumento que decía fundarla —*«recargar dos veces tiene que costar más que subir de
+nivel»*— apunta a un nivel **que no existe**: el chatbot tiene un solo escalón (Bs 390 por 500).
+Sergio Urcullo eligió construir ese segundo escalón primero y recién ahí fijar la recarga.
+
+⚠️ **Consecuencia asumida:** hasta que ese escalón exista, **Bs 190 sigue publicado sin
+fundamento**. El riesgo es teórico por ahora: en 40 días hubo 40 conversaciones sumando TODAS
+las organizaciones, así que nadie está cerca de las 500.
+
 **La promesa que sostiene vender temprano:** *todo lo que agreguemos a tu plan durante el primer
 año entra sin costo extra.* Cuesta cero hoy, hace que el que compra ahora gane por comprar antes, y
 nos obliga a mejorar. **No se promete una función concreta ni una fecha**: se promete el plan.
