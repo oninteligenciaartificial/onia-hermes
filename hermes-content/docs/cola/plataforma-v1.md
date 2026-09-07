@@ -939,6 +939,51 @@ y sin operar. Acá se opera, con verificación por ítem.
       Las dos correcciones sucesivas del catálogo están en
       `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` §7.
 
+- [x] 🟡 **CERRADO el 2026-09-07: la pantalla de Citas le decía «El doctor» a un estudio contable
+      y a una veterinaria — en el mismo formulario cuyo label ya decía «Profesional».**
+
+      **El defecto, medido:** en `/appointments`, el campo de quién atiende deriva bien su rótulo
+      del rubro (`nombreDeRol('DOCTOR', track)` → «Profesional», «Veterinario/a») y el aviso de
+      abajo tenía la palabra clavada: *«El doctor no trabaja este día o no hay horarios
+      configurados.»* La misma pantalla contradiciéndose sola, para los **cuatro** rubros con
+      agenda: dental, estética, veterinaria y **servicios profesionales**, que tiene Citas en su
+      menú y no tiene doctores.
+
+      **Por qué importa más de lo que parece:** ése es exactamente el mensaje que recibe el
+      cliente NUEVO cuya alta quedó sin horarios cargados — o sea, en su primer intento de
+      agendar de su vida. El bug hermano (alta que deja la agenda muerta) ya está cerrado; éste
+      era el cartel que quedaba.
+
+      **Por qué ningún gate lo veía, y es lo reusable.**
+      `lib/platform/pantallas-compartidas-cubiertas.test.ts` deriva sus sujetos de las pantallas
+      que dos packs nombran **DISTINTO** en el menú, apoyado en su propio razonamiento: *«si
+      todos los packs la llaman igual, no hay par (rubro, texto) que pueda contradecirse»*. Eso
+      es cierto del **rótulo** y falso del **contenido**: los cuatro packs llaman «Citas» a
+      `/appointments`, así que la pantalla quedaba fuera del barrido por la razón equivocada.
+
+      **La segunda mitad, que no se ve con ningún instrumento:** `roleLabels` seguía exportada en
+      `components/ui/Badge.tsx` con `DOCTOR: "Doctor"` y **cero consumidores** — la tabla que
+      `nombreDeRol` vino a reemplazar. Un rótulo muerto no sale en la captura, ni en el HTML
+      servido, ni en un barrido de la pantalla, y el día que alguien lo cablea entra **ya
+      aprobado**, porque nadie audita una constante que «ya estaba». Se borró.
+
+      **Arreglado y publicado** en `onia-platform` `a831216` (rama
+      `claude/chatbots-platform-review-0d1d09`, empujada desde el gemelo del VPS porque el push
+      de ese repo está deshabilitado en el nodo de casa). Gate nuevo:
+      `lib/platform/rol-en-el-idioma-del-rubro.test.ts`, con los sujetos derivados del **disco** y
+      un solo exento nombrado (`app/(dashboard)/admin`, que lo usa Onia y no el cliente).
+
+      **Validado por MUTACIÓN, no por leerlo:** revertir el literal pone rojo **sólo** el caso de
+      prosa; devolver `roleLabels` **sólo** el de la tabla; romper el filtro de comentarios
+      **sólo** su fixture. Ese filtro va con fixture y no contra los archivos vivos a propósito:
+      hoy lo sostienen las bitácoras que explican este mismo defecto, así que el día que alguien
+      las reescriba el guardia quedaría hueco — y un gate que persigue un literal en prosa, sin
+      filtro, obliga a borrar el registro de lo que pasó.
+
+      **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **3264 pasan / 288 archivos** ·
+      `npx eslint .` 0 errores. **No está terminado hasta que se publique:** viaja en el pedido
+      `t_deddf471` (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo.
+
 - [ ] ⚪ **Pendiente fiscal (`SIAT_EMISSION`) para facturar de verdad.** Va último a propósito:
       es un trámite externo, no código, y `/billing` ya funciona sin él. **No bloquea un cierre**
       — bloquea la factura fiscal, que el catálogo ya sabe no prometer. Si un loop se planta acá
