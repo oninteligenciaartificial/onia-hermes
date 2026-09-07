@@ -77,8 +77,12 @@ const PASOS: readonly { titulo: string; detalle: string }[] = [
   },
   {
     titulo: "Te la entregamos configurada",
+    // Acá decía «y alguien que te la explica». No hay ese alguien: el alta es
+    // automática, no agenda ni avisa a nadie, y a Onia la vende Sergio Urcullo
+    // solo. Lo que SÍ ocurre es que la cuenta llega armada para el rubro y el
+    // sistema guía la puesta en marcha; el WhatsApp queda como salida real.
     detalle:
-      "Sin instalación ni proyecto de meses: te entregamos el sistema con la configuración de tu rubro puesta y alguien que te la explica.",
+      "Sin instalación ni proyecto de meses: la cuenta llega con la configuración de tu rubro puesta y el sistema te guía la puesta en marcha paso a paso.",
   },
   {
     titulo: `Usalo de verdad ${PRUEBA.dias} días`,
