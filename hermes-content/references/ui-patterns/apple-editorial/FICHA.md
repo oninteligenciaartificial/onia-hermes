@@ -28,8 +28,8 @@ dos patrones — no una variante de estilo.
 
 | ID | Layout | Ref | Para qué |
 |---|---|---|---|
-| **A** | Grid comparativo 3×N, divisor hairline entre filas, objeto + label debajo | 1 | taxonomías, "las 3 decisiones" |
-| **B** | Grid 2×2, objeto encajonado en tarjeta blanca + label debajo | 2 | inventarios, "lo que necesito" |
+| **A** | Grid comparativo 3×N, divisor hairline entre filas, objeto + label debajo | 1 | ⬜ único sin construir — taxonomías, "las 3 decisiones" |
+| **B** | Grid 2×2, objeto encajonado en tarjeta blanca + label debajo | 2 | ✅ construido — `--pieza vitamina-c`. Las celdas aceptan logo, foto o tarjeta dibujada |
 | **C** | Duelo 2-up con dato de remate, fondo crema, acento serif | 3 | ✅ construido — `--pieza duelo-cuaderno`. Serif **Instrument Serif** vendorizada por `build-inter.py`; objetos de Unsplash |
 | **D** | Statement puro: texto centrado, sin objeto | 4 | portada, transición, CTA |
 | **E** | Ficha de producto: objeto + nombre gigante + 2-3 líneas gris + **precio gigante** | 5,6,7 | el carrusel-stack, una cosa por lámina |

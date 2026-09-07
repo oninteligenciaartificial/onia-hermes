@@ -128,6 +128,31 @@ def _torre():
             '<circle cx="128" cy="192" r="10" fill="#00C661"/>')
 
 
+def _tarjeta_clientes():
+    """Linea ascendente SIN cifras. A proposito: la referencia #2 muestra un grafico con
+    numeros inventados, y aca eso seria fabricar. Sergio Urcullo tiene CERO clientes
+    pagando (ONIA_ESTRATEGIA_DE_EMPRESA.md) — la linea dice "clientes" sin afirmar ninguno."""
+    return (
+        '<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">'
+        '<polyline points="30,240 80,215 120,200 165,150 210,120 265,55" fill="none" '
+        'stroke="#0A0A0A" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>'
+        '<polyline points="30,262 80,255 120,250 165,238 210,232 265,220" fill="none" '
+        'stroke="#C9C9CE" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>'
+        '<circle cx="265" cy="55" r="14" fill="#00C661"/></svg>')
+
+
+def _tarjeta_creditos():
+    """Panel oscuro estilo "comprar creditos", como la cuarta celda de la referencia #2.
+    Sin monto: el saldo real cambia todos los dias y una cifra dibujada envejece mal."""
+    return (
+        '<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">'
+        '<rect x="18" y="60" width="264" height="180" rx="22" fill="#1D1D1F"/>'
+        '<rect x="44" y="96" width="150" height="13" rx="6" fill="#6E6E73"/>'
+        '<rect x="44" y="124" width="96" height="11" rx="5" fill="#3A3A3C"/>'
+        '<rect x="44" y="164" width="98" height="48" rx="12" fill="#00C661"/>'
+        '<rect x="158" y="164" width="98" height="48" rx="12" fill="#3A3A3C"/></svg>')
+
+
 ICONOS = {
     # Marcas REALES (simple-icons, CC0) sobre squircle en el color oficial de cada una.
     # Antes eran glifos dibujados a mano: aproximados, y el de WhatsApp directamente mal.
@@ -165,6 +190,8 @@ ICONOS = {
         borde="#D2D2D7",
     ),
 }
+
+DIBUJOS = {"clientes": _tarjeta_clientes, "creditos": _tarjeta_creditos}
 
 # --- Contenido. Las cifras de precio salen de ONIA_ESTRATEGIA_DE_EMPRESA.md §8.1.
 LAMINAS = [
@@ -329,7 +356,77 @@ DUELO_CUADERNO = [
     },
 ]
 
-PIEZAS = {"mi-stack": None, "portada-f": PORTADA_F, "duelo-cuaderno": DUELO_CUADERNO}  # mi-stack se resuelve a LAMINAS abajo
+# Layout B — grilla 2x2 (referencia #2 del batch: "Necesito vitamina C", con Claude,
+# Clientes, Café y Créditos). El chiste es que las cuatro empiezan con C, y las cuatro son
+# reales para Sergio Urcullo: Claude lo paga, café toma, créditos gasta en artes, y
+# clientes es LO QUE LE FALTA — ONIA_ESTRATEGIA_DE_EMPRESA.md §8.2 lo dice con todas las
+# letras: "el producto no tiene un problema de rentabilidad, tiene un problema de
+# clientes". Que la lámina más honesta sea también el remate es la mitad de la pieza.
+VITAMINA_C = [
+    {
+        "layout": "B",
+        "titulo": "Necesito vitamina C",
+        "celdas": [
+            {"icono": "claude", "rotulo": "Claude"},
+            {"dibujo": "clientes", "rotulo": "Clientes"},
+            {"objeto": "cafe.png", "rotulo": "Café"},
+            {"dibujo": "creditos", "rotulo": "Créditos"},
+        ],
+    },
+]
+
+# Carrusel Fable 5.1. TODAS las cifras salen de la pagina oficial de Anthropic
+# (anthropic.com/claude-fable-and-mythos-5-1), leida el 2026-09-06 — no de memoria ni de
+# notas de prensa. El angulo es el COSTO y no los benchmarks a proposito: a un dueno de
+# negocio no le dice nada un 73,4% en CursorBench, y un puntaje envejece en semanas
+# mientras que "cuesta menos operar" se sostiene.
+FABLE = [
+    {
+        "layout": "D",
+        "contexto": "Salió el modelo con el que construyo",
+        "remate": "FABLE 5.1",
+        "pie": "y lo importante no es que sea más listo:",
+        "pie_hl": "es más barato",
+    },
+    {
+        "layout": "E",
+        "icono": "claude",
+        "nombre": "Lectura de caché",
+        "desc": "Lo que cuesta que el agente vuelva a leer\nlo que ya tenía cargado. Es la parte que más\nse repite cuando algo trabaja solo.",
+        "precio": "$0,25",
+        "etiqueta": "por millón · antes $1",
+    },
+    {
+        "layout": "E",
+        "icono": "claude",
+        "nombre": "Trabajo agéntico",
+        "desc": "Un agente que corre solo relee todo el rato.\nPor eso el ahorro se nota más ahí que en\nuna consulta suelta.",
+        "precio": "hasta 45%",
+        "etiqueta": "más barato",
+    },
+    {
+        "layout": "D",
+        "contexto": "Lo mismo, un cuarto del precio",
+        "remate": "−75%",
+        "sub": "en lectura de caché. Entrada y salida no se movieron:\nsiguen en $10 y $50 por millón.",
+    },
+    {
+        "layout": "D",
+        "contexto": "Operar un negocio con IA",
+        "remate": "CUESTA MENOS",
+        "sub": "cada vez. No hace falta esperar a que baje más:\nlo que hoy te parece caro, en un mes ya no lo es.",
+        "cta_hl": "¿Qué estás esperando para automatizar?",
+        "cta_gris": "Contame en los comentarios.",
+    },
+]
+
+PIEZAS = {
+    "mi-stack": None,
+    "fable": FABLE,
+    "portada-f": PORTADA_F,
+    "duelo-cuaderno": DUELO_CUADERNO,
+    "vitamina-c": VITAMINA_C,
+}  # mi-stack se resuelve a LAMINAS abajo
 
 FUENTES = {
     # Maxima fidelidad con las referencias que mando Sergio Urcullo. Vendorizada aca,
@@ -353,7 +450,7 @@ def css(tipo):
 @font-face{{font-family:'OniaSerif';src:url('{SERIF_WOFF2.as_uri()}') format('woff2');
   font-weight:400;font-display:block}}
 *{{margin:0;padding:0;box-sizing:border-box}}
-:root{{--bg:#F5F5F7;--ink:#1D1D1F;--muted:#6E6E73;--verde:#00C661;--crema:#F5F1E8}}
+:root{{--bg:#F5F5F7;--ink:#1D1D1F;--muted:#6E6E73;--verde:#00C661;--crema:#F5F1E8;--surface:#FFFFFF;--hairline:#D2D2D7}}
 html,body{{width:1080px;height:1350px}}
 body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;overflow:hidden;
   -webkit-font-smoothing:antialiased}}
@@ -392,6 +489,20 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 .cta{{margin-top:70px;font-size:40px;color:var(--muted);letter-spacing:-.01em}}
 .cta .hl{{display:inline-block;margin-bottom:22px}}
 .cta-gris{{display:block}}
+/* layout B — grilla 2x2 con el objeto encajonado (referencia #2 del batch). Cada celda
+   es una tarjeta blanca con filo: eso separa los objetos entre si sin dibujar divisores,
+   y hace que una foto y un icono dibujado convivan sin pelearse. */
+.lienzo.b{{justify-content:center;padding:96px 96px 150px}}
+.titulo-b{{font-size:96px;font-weight:{peso};font-variation-settings:{vf};
+  letter-spacing:-.032em;line-height:1;color:var(--ink);margin-bottom:78px}}
+.grilla{{display:grid;grid-template-columns:1fr 1fr;gap:60px 56px;width:100%}}
+.celda{{display:flex;flex-direction:column;align-items:center;gap:26px}}
+.caja{{width:100%;height:300px;background:var(--surface);border:1px solid var(--hairline);
+  border-radius:26px;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}}
+.caja img,.caja svg{{max-width:76%;max-height:76%;object-fit:contain}}
+.rotulo{{font-size:52px;font-weight:{peso};font-variation-settings:{vf};
+  letter-spacing:-.02em;color:var(--ink)}}
 /* layout C — duelo 2-up (referencia #3 del batch: chocolate vs reloj, "310 cal / 0 cal").
    Fondo crema y titulo SERIF: el aire editorial de esa referencia sale de esas dos cosas
    juntas, no de una. Con el gris y la sans queda otra lamina mas del carrusel. */
@@ -428,6 +539,22 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 
 
 def markup(lamina):
+    if lamina["layout"] == "B":
+        celdas = []
+        for c in lamina["celdas"]:
+            if c.get("icono"):
+                cuerpo = ICONOS[c["icono"]]
+            elif c.get("dibujo"):
+                cuerpo = DIBUJOS[c["dibujo"]]()
+            else:
+                obj = OBJETOS / c["objeto"]
+                if not obj.exists():
+                    raise SystemExit(f"Falta el objeto {obj}. Corré buscar-objetos.py.")
+                cuerpo = f'<img src="{obj.as_uri()}">'
+            celdas.append(f'<div class="celda"><div class="caja">{cuerpo}</div>'
+                          f'<div class="rotulo">{c["rotulo"]}</div></div>')
+        return (f'<div class="titulo-b">{lamina["titulo"]}</div>'
+                f'<div class="grilla">{"".join(celdas)}</div>')
     if lamina["layout"] == "C":
         lados = []
         for lado in lamina["lados"]:
@@ -472,7 +599,7 @@ def render(tipo, out_dir, laminas=None):
     hoja = css(tipo)
     for i, lamina in enumerate(laminas or LAMINAS, 1):
         html = (f"<!doctype html><html><head><meta charset='utf-8'><style>{hoja}</style></head>"
-                f"<body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("C", "F") else ""}'>{markup(lamina)}"
+                f"<body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("B", "C", "F") else ""}'>{markup(lamina)}"
                 f"<div class='handle'>{HANDLE}</div></div></body></html>")
         with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as fh:
             fh.write(html)
@@ -513,7 +640,7 @@ window.addEventListener('load', function(){
       return rects.length ? Math.max.apply(null, rects.map(function(x){return x.width})) : 0;
     }
     var out = ['FUENTE|' + ok];
-    document.querySelectorAll('.remate,.nombre,.precio,.desc,.contexto,.pie,.sub,.cta,.etiqueta,.nombre-f,.sub-f,.titulo-c,.dato')
+    document.querySelectorAll('.remate,.nombre,.precio,.desc,.contexto,.pie,.sub,.cta,.etiqueta,.nombre-f,.sub-f,.titulo-c,.dato,.titulo-b,.rotulo')
       .forEach(function(el){
         out.push('SONDA|' + el.className.replace(/display /,'') + '|' + Math.round(ancho(el)));
       });
@@ -533,7 +660,7 @@ def check(tipo, laminas=None):
     fallos = []
     for i, lamina in enumerate(laminas or LAMINAS, 1):
         html = (f"<!doctype html><html><head><meta charset='utf-8'><style>{hoja}</style>"
-                f"{sonda}</head><body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("C", "F") else ""}'>{markup(lamina)}"
+                f"{sonda}</head><body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("B", "C", "F") else ""}'>{markup(lamina)}"
                 f"<div class='handle'>{HANDLE}</div></div></body></html>")
         with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as fh:
             fh.write(html)
