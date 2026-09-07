@@ -73,7 +73,7 @@ const DESC_SEMANAL = bs(
 
 export const metadata: Metadata = {
   title: "Precios de Onia — planes en bolivianos, publicados",
-  description: `${DESC_PLANES} al mes (o semanal desde Bs ${DESC_SEMANAL}). Sin tarjeta para probar, sin contratos de permanencia y con la letra chica publicada. 14 días gratis.`,
+  description: `${DESC_PLANES} al mes (o semanal desde Bs ${DESC_SEMANAL}). Sin tarjeta para probar, sin contratos de permanencia y con la letra chica publicada. ${PRUEBA.dias} días gratis.`,
   alternates: { canonical: "/precios" },
   openGraph: {
     type: "website",
@@ -84,7 +84,7 @@ export const metadata: Metadata = {
     // número y el patrón sólo buscaba "Bs 320". La `description` de arriba ya
     // se había atado a la tabla y su hermana de OpenGraph —la que se ve al
     // compartir el enlace— quedó con los tres precios congelados.
-    description: `${PLANES.map((p) => `${p.nombre} ${bs(p.mensual)}`).join(" · ")} Bs/mes. 14 días gratis sin tarjeta, sin permanencia.`,
+    description: `${PLANES.map((p) => `${p.nombre} ${bs(p.mensual)}`).join(" · ")} Bs/mes. ${PRUEBA.dias} días gratis sin tarjeta, sin permanencia.`,
     url: "/precios",
   },
 };

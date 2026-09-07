@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { PRUEBA } from "@/lib/pricing";
 import { Row, Shot } from "./shot";
 import { Reveal, SplitTextReveal, StaggerGrid, StaggerItem } from "@/motion";
 import styles from "./landing.module.css";
@@ -329,7 +330,7 @@ export function Features() {
             Encendés lo que necesitás hoy y sumás el resto sin cambiar de sistema.
           </p>
           <a className={`${styles.btn} ${styles.btnPrimary}`} href="#precios">
-            Probar gratis 14 días
+            Probar gratis {PRUEBA.dias} días
           </a>
         </div>
       </div>

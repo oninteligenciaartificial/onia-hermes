@@ -398,7 +398,12 @@ export const CONDICIONES: readonly string[] = [
     .join(" y en ")}. ${PLANES.filter((p) => p.semanal === null)
     .map((p) => p.nombre)
     .join(" y ")} se cobra mensual o anual.`,
-  "14 días de prueba sin tarjeta, con el Pro completo. Al vencer, la cuenta queda en solo lectura — nada se borra.",
+  // Mismo caso que la línea de arriba: tipeaba "14 días" y "Pro" a mano
+  // teniendo PRUEBA_DIAS y PRUEBA_PLAN dos pantallas más arriba, en este mismo
+  // archivo. El cruce contra el producto (scripts/precios-fuente.mjs) valida
+  // las CONSTANTES, no las copias, así que el día que el trial cambie esta
+  // frase sigue en verde diciendo el número viejo.
+  `${PRUEBA_DIAS} días de prueba sin tarjeta, con el ${PRUEBA_PLAN} completo. Al vencer, la cuenta queda en solo lectura — nada se borra.`,
   "En los tres planes de arriba no cobramos implementación ni migración: el checkout cobra solo el plan. Grupo / Empresarial sí lleva implementación acompañada y se cotiza aparte.",
   "Tus datos son tuyos: los exportás en CSV desde el plan más chico.",
 ] as const;
