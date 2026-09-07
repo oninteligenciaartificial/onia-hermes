@@ -171,6 +171,21 @@ def _tarjeta_clientes():
         '<circle cx="266" cy="152" r="9" fill="#00C661"/></svg>')
 
 
+def _tarjeta_transferencia():
+    """No existe un logo de "transferencia bancaria", asi que se dibuja: comprobante con
+    monto tapado. El monto va TAPADO a proposito — cualquier cifra ahi seria inventada."""
+    return (
+        '<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">'
+        '<rect x="34" y="26" width="188" height="204" rx="18" fill="#FFFFFF" '
+        'stroke="#D2D2D7" stroke-width="3"/>'
+        '<circle cx="128" cy="80" r="26" fill="#E4F9EE"/>'
+        '<path d="M116 80 L125 89 L141 71" stroke="#00C661" stroke-width="9" fill="none" '
+        'stroke-linecap="round" stroke-linejoin="round"/>'
+        '<rect x="66" y="126" width="124" height="14" rx="7" fill="#1D1D1F"/>'
+        '<rect x="82" y="154" width="92" height="10" rx="5" fill="#C9C9CE"/>'
+        '<rect x="66" y="186" width="124" height="26" rx="8" fill="#F0F0F3"/></svg>')
+
+
 def _tarjeta_creditos():
     """Panel de uso de CLAUDE, en los colores de Claude.
 
@@ -229,6 +244,11 @@ ICONOS = {
     # sangre sobre todo el squircle. Es el UNICO objeto que lleva el verde de Onia — y acá
     # sí corresponde, porque es lo único del stack que construyó Sergio Urcullo.
     "onia": _squircle("#00D26A", _imagen("onia", alto=256)),
+    # Los otros dos de la fila 1. Colores como en la referencia #1 del batch: ChatGPT
+    # en su verde, Gemini en blanco con el destello azul.
+    "chatgpt": _squircle("#10A37F", _marca("chatgpt", "#FFFFFF")),
+    "gemini": _squircle("#FFFFFF", _marca("gemini", "#4285F4"), borde="#E8E8ED"),
+    "usdt": _squircle("#26A17B", _marca("usdt", "#FFFFFF")),
     # Sin logo oficial en simple-icons: se dibujan.
     "vps": _squircle("#1D1D1F", _torre()),
     "hyperframes": _squircle(
@@ -254,7 +274,8 @@ ICONOS = {
     ),
 }
 
-DIBUJOS = {"clientes": _tarjeta_clientes, "creditos": _tarjeta_creditos}
+DIBUJOS = {"clientes": _tarjeta_clientes, "creditos": _tarjeta_creditos,
+           "transferencia": _tarjeta_transferencia}
 
 # --- Contenido. Las cifras de precio salen de ONIA_ESTRATEGIA_DE_EMPRESA.md §8.1.
 LAMINAS = [
@@ -485,9 +506,41 @@ FABLE = [
     },
 ]
 
+# Layout A — grilla comparativa 3x3 (referencia #1 del batch). Es el meme de founders
+# LOCALIZADO, y el chiste vive en la tercera fila: el original pone Stripe / PayPal /
+# Hotmart, y en Bolivia ninguna de las tres te sirve — Stripe directamente no acepta el
+# pais ([[lety-cobra-tarjeta-antes-del-trial]]). Por eso la fila es transferencia, USDT y
+# efectivo: el que la ve se rie porque le pasa.
+# Sergio Urcullo sacó "QR del banco" el 06-sep y entró USDT en su lugar.
+# Cero cifras y cero promesas: la pieza no afirma nada que haya que sostener despues.
+FOUNDERS_BO = [
+    {
+        "layout": "A",
+        "titulo": "Los founders bolivianos\ntienen 3 grandes decisiones:",
+        "filas": [
+            [
+                {"icono": "claude", "rotulo": "Claude"},
+                {"icono": "chatgpt", "rotulo": "ChatGPT"},
+                {"icono": "gemini", "rotulo": "Gemini"},
+            ],
+            [
+                {"objeto": "cafe.png", "rotulo": "Café"},
+                {"objeto": "mate.png", "rotulo": "Mate"},
+                {"objeto": "energetica.png", "rotulo": "Energética"},
+            ],
+            [
+                {"dibujo": "transferencia", "rotulo": "Transferencia"},
+                {"icono": "usdt", "rotulo": "USDT"},
+                {"objeto": "efectivo.png", "rotulo": "Efectivo"},
+            ],
+        ],
+    },
+]
+
 PIEZAS = {
     "mi-stack": None,
     "fable": FABLE,
+    "founders-bo": FOUNDERS_BO,
     "portada-f": PORTADA_F,
     "duelo-cuaderno": DUELO_CUADERNO,
     "vitamina-c": VITAMINA_C,
@@ -554,6 +607,32 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 .cta{{margin-top:70px;font-size:40px;color:var(--muted);letter-spacing:-.01em}}
 .cta .hl{{display:inline-block;margin-bottom:22px}}
 .cta-gris{{display:block}}
+/* layout A — grilla comparativa 3xN (referencia #1 del batch: Claude/ChatGPT/Gemini,
+   DY/DWY/DFY, Stripe/Paypal/Hotmart). El divisor hairline entre filas es lo que la hace
+   leer como TABLA y no como collage: sin el, nueve objetos sueltos son ruido.
+   Es el layout mas caro del patron — pide 9 objetos con altura optica pareja. */
+/* Nueve objetos + tres filas de etiquetas + titulo NO entran a tamano de portada. La
+   primera version desbordo por abajo: la fila 3 quedaba cortada y su etiqueta chocaba
+   con el handle, y el titulo se iba a TRES lineas (la FICHA manda maximo dos). Todo el
+   bloque esta calibrado para cerrar dentro de los 1350px con aire. */
+.lienzo.a{{justify-content:center;padding:74px 88px 132px}}
+.titulo-a{{font-size:70px;font-weight:{peso};font-variation-settings:{vf};
+  letter-spacing:-.03em;line-height:1.06;color:var(--ink);white-space:pre-line;
+  margin-bottom:20px}}
+.fila-a{{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;width:100%;
+  padding:42px 0;border-top:1px solid var(--hairline)}}
+.fila-a.primera{{border-top:none}}
+.celda-a{{display:flex;flex-direction:column;align-items:center;gap:16px}}
+/* altura FIJA: nueve objetos de proporciones distintas solo leen parejos si comparten caja.
+   ⚠️ `object-fit` NO aplica a un <svg> en linea —solo a elementos reemplazados como <img>—
+   asi que los squircles desbordaban su caja, se comian las etiquetas de su fila y pisaban
+   la fila de abajo. El <svg> se acota con height/width propios, no con object-fit. */
+.celda-a .obj-a{{height:170px;width:100%;display:flex;align-items:center;
+  justify-content:center;filter:drop-shadow(0 14px 26px rgba(0,0,0,.13))}}
+.celda-a .obj-a > svg{{height:100%;width:auto;max-width:100%}}
+.celda-a img.obj-a{{object-fit:contain}}
+.celda-a .rotulo-a{{font-size:38px;font-weight:{peso};font-variation-settings:{vf};
+  letter-spacing:-.02em;color:var(--ink);text-align:center}}
 /* layout B — grilla 2x2 con el objeto encajonado (referencia #2 del batch). Cada celda
    es una tarjeta blanca con filo: eso separa los objetos entre si sin dibujar divisores,
    y hace que una foto y un icono dibujado convivan sin pelearse. */
@@ -604,6 +683,26 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 
 
 def markup(lamina):
+    if lamina["layout"] == "A":
+        filas = []
+        for n, fila in enumerate(lamina["filas"]):
+            celdas = []
+            for c in fila:
+                if c.get("icono"):
+                    cuerpo = f'<div class="obj-a">{ICONOS[c["icono"]]}</div>'
+                elif c.get("dibujo"):
+                    cuerpo = f'<div class="obj-a">{DIBUJOS[c["dibujo"]]()}</div>'
+                else:
+                    obj = OBJETOS / c["objeto"]
+                    if not obj.exists():
+                        raise SystemExit(f"Falta el objeto {obj}. Corré buscar-objetos.py.")
+                    cuerpo = f'<img class="obj-a" src="{obj.as_uri()}">'
+                celdas.append(f'<div class="celda-a">{cuerpo}'
+                              f'<div class="rotulo-a">{c["rotulo"]}</div></div>')
+            clase = "fila-a primera" if n == 0 else "fila-a"
+            filas.append(f'<div class="{clase}">{"".join(celdas)}</div>')
+        return (f'<div class="display titulo-a">{lamina["titulo"]}</div>'
+                f'{"".join(filas)}')
     if lamina["layout"] == "B":
         celdas = []
         for c in lamina["celdas"]:
@@ -664,7 +763,7 @@ def render(tipo, out_dir, laminas=None):
     hoja = css(tipo)
     for i, lamina in enumerate(laminas or LAMINAS, 1):
         html = (f"<!doctype html><html><head><meta charset='utf-8'><style>{hoja}</style></head>"
-                f"<body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("B", "C", "F") else ""}'>{markup(lamina)}"
+                f"<body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("A", "B", "C", "F") else ""}'>{markup(lamina)}"
                 f"<div class='handle'>{HANDLE}</div></div></body></html>")
         with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as fh:
             fh.write(html)
@@ -705,7 +804,7 @@ window.addEventListener('load', function(){
       return rects.length ? Math.max.apply(null, rects.map(function(x){return x.width})) : 0;
     }
     var out = ['FUENTE|' + ok];
-    document.querySelectorAll('.remate,.nombre,.precio,.desc,.contexto,.pie,.sub,.cta,.etiqueta,.nombre-f,.sub-f,.titulo-c,.dato,.titulo-b,.rotulo')
+    document.querySelectorAll('.remate,.nombre,.precio,.desc,.contexto,.pie,.sub,.cta,.etiqueta,.nombre-f,.sub-f,.titulo-c,.dato,.titulo-b,.rotulo,.titulo-a,.rotulo-a')
       .forEach(function(el){
         out.push('SONDA|' + el.className.replace(/display /,'') + '|' + Math.round(ancho(el)));
       });
@@ -725,7 +824,7 @@ def check(tipo, laminas=None):
     fallos = []
     for i, lamina in enumerate(laminas or LAMINAS, 1):
         html = (f"<!doctype html><html><head><meta charset='utf-8'><style>{hoja}</style>"
-                f"{sonda}</head><body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("B", "C", "F") else ""}'>{markup(lamina)}"
+                f"{sonda}</head><body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("A", "B", "C", "F") else ""}'>{markup(lamina)}"
                 f"<div class='handle'>{HANDLE}</div></div></body></html>")
         with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as fh:
             fh.write(html)

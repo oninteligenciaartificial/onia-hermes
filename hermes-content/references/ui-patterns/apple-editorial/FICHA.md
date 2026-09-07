@@ -28,7 +28,7 @@ dos patrones — no una variante de estilo.
 
 | ID | Layout | Ref | Para qué |
 |---|---|---|---|
-| **A** | Grid comparativo 3×N, divisor hairline entre filas, objeto + label debajo | 1 | ⬜ único sin construir — taxonomías, "las 3 decisiones" |
+| **A** | Grid comparativo 3×N, divisor hairline entre filas, objeto + label debajo | 1 | ✅ construido — `--pieza founders-bo`. **Los 6 layouts completos** |
 | **B** | Grid 2×2, objeto encajonado en tarjeta blanca + label debajo | 2 | ✅ construido — `--pieza vitamina-c`. Las celdas aceptan logo, foto o tarjeta dibujada |
 | **C** | Duelo 2-up con dato de remate, fondo crema, acento serif | 3 | ✅ construido — `--pieza duelo-cuaderno`. Serif **Instrument Serif** vendorizada por `build-inter.py`; objetos de Unsplash |
 | **D** | Statement puro: texto centrado, sin objeto | 4 | portada, transición, CTA |
@@ -85,6 +85,19 @@ Lo decide Sergio Urcullo. Este patrón no toca §7 ni el trío: vendoriza su can
 aparte y deja el A/B mirable.
 
 ## Trampas (se van llenando al costo de un render)
+
+0d. 🔴 **`object-fit` NO aplica a un `<svg>` en línea.** Sólo funciona en elementos
+   reemplazados (`<img>`, `<video>`). Un `<svg>` sin `width`/`height` propios se estira al
+   100% del contenedor e ignora la altura fija: en el layout A los squircles desbordaban su
+   caja, **se comían las etiquetas de su fila** y pisaban la fila de abajo. Se acota el SVG
+   con `height:100%;width:auto` sobre el propio elemento, no con `object-fit` en el padre.
+   Es un fallo de maquetación que ningún gate atrapa —el texto no desborda a lo ancho— y
+   sólo aparece MIRANDO.
+0e. **El layout A no entra si no se calibra el bloque entero.** Nueve objetos + tres filas
+   de etiquetas + título es lo más denso del patrón. La primera versión desbordó por abajo
+   y el título se fue a tres líneas (la receta manda dos). Al achicarlo de más quedó
+   cabecero, con el tercio inferior vacío. Los valores de `.lienzo.a` están calibrados para
+   cerrar dentro de los 1350px **y** llenarlos: tocar uno obliga a mirar el render otra vez.
 
 0c. 🔴 **El handle se verifica contra Sergio Urcullo, no contra el repo.** El 06-sep había
    **dos** conviviendo: `scripts/carousel_render.js` firmaba `@sergio_urcullo` citando una

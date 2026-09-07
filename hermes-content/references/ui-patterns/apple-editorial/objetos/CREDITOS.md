@@ -73,3 +73,8 @@ las dos da más de dónde elegir cuando una consulta no rinde.
 ✅ **Pexels verificado el 06-sep** con una consulta de prueba (respondió con licencia
 y autor). Las dos fuentes están vivas: si una consulta no rinde en una, se prueba en
 la otra con `--fuente`.
+| `mate` | yerba mate gourd bombilla | unsplash | Unsplash License | olga safronova | https://unsplash.com/photos/brown-ceramic-mug-on-white-textile-192yAV0NQno |
+| `energetica` | energy drink can isolated | unsplash | Unsplash License | Prasanna Inamati | https://unsplash.com/photos/a-can-of-monster-energy-drink-on-a-table-_2NOzM8-9ag |
+| `efectivo` | cash banknotes money isolated | unsplash | Unsplash License | Shamblen Studios | https://unsplash.com/photos/a-lot-of-money-sitting-on-top-of-a-green-surface-aCYnKTYgl0I |
+| `efectivo` | dollar bills money | pexels | Pexels License | Sergei Starostin | https://www.pexels.com/photo/paper-dollar-bills-6590651/ |
+| `energetica` | energy drink can | pexels | Pexels License | thiago japyassu | https://www.pexels.com/photo/closeup-of-an-open-can-18555421/ |
