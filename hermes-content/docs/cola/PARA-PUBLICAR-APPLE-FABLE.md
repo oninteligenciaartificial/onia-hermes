@@ -9,7 +9,7 @@ Entra por **§2 de `BASE_CONTENIDO`** — herramientas y modelos que se cuentan.
 
 | # | Layout | Qué dice |
 |---|---|---|
-| 01 | D | **El modelo más avanzado de Anthropic** · **FABLE 5.1** · y esto es lo que hace **mejor** |
+| 01 | D | icono de Claude · **El modelo más avanzado de Anthropic** · **FABLE 5.1** · adelanto **7 de 7 · casi 2× · −75%** |
 | 02 | D | Antes parchaba el síntoma, **ahora busca la causa** |
 | 03 | **G** | **Flujos de trabajo de un negocio** · barras · 31,4% vs 26,9 / 19,6 / 17,1 |
 | 04 | **G** | **Investigación científica, hecha sola** · barras · 52,6% vs 29,0 / 22,4 / 24,7 |
@@ -18,6 +18,51 @@ Entra por **§2 de `BASE_CONTENIDO`** — herramientas y modelos que se cuentan.
 | 07 | E | Ficha: **Fable 5.1** · caché **$0,25** por millón (antes $1) |
 | 08 | D | Y encima **−75%** en caché |
 | 09 | D | **CTA**: ¿Claude, ChatGPT o Gemini? — pide un nombre en comentarios |
+
+## El color de Claude entra como acento, no como fondo
+
+Sergio Urcullo, 07-sep: *"colocá más cosas de Claude, más visuales, más colores, que
+resalte; el inicio del carrusel se ve muy triste"*. Era cierto: la portada no tenía **ni el
+logo del producto del que habla ni un solo color**.
+
+| | |
+|---|---|
+| **Portada** | icono de Claude a 244 px + **adelanto de tres datos** |
+| **Acento** | coral **#D97757** — barras ganadoras, cifras, chips, el "5.1" del titular |
+| **Lámina 02** | "el síntoma" **tachado** en coral: se ve el cambio antes de leerlo |
+| **Fondo** | el gris del patrón, sin cambios |
+
+**El coral no está elegido a ojo**: sale **sampleado del PNG oficial del icono de Claude**
+ya vendorizado en `logos/` — es su color más frecuente después del fondo.
+
+⚠️ **Esto llegó a pintar también el fondo entero de crema `#F3E9D7`, y él lo rechazó el
+mismo día**: *"mejor que todos sean blancos nomás, pero está bien que uses ahí los colores
+naranjas de Claude"*. La superficie es del patrón; el color de la marca invitada entra como
+acento y nada más. El token `--claude-crema` sigue definido pero **hoy no lo usa nadie**:
+si vuelve a hacer falta, es ése — no reactivarlo sin pedírselo.
+
+⚠️ **El coral reemplaza al verde de Onia sólo en esta pieza.** El verde es el color de la
+casa y este carrusel habla de un producto ajeno: pintar a Anthropic de verde Onia confunde
+de quién es el logro. Al revés vale igual — la lámina 10 de "Mi stack" sí lleva verde,
+porque ahí quien habla es él.
+
+### 🔴 El adelanto de la portada se rehízo, y el error valía la pena anotarlo
+
+La primera versión ponía los tres puntajes crudos —**31,4% · 52,6% · 73,4%**— apostando a
+que la falta de contexto diera curiosidad. Sergio Urcullo la miró y preguntó: *"¿qué son
+esos números de abajo?"*.
+
+Ésa es la prueba que importa: **si el dueño del contenido no entiende su propia portada, un
+desconocido menos**. Un porcentaje sin unidad no intriga, confunde. Y "31,4%" encima **suena
+mal**: el lector lo lee como nota escolar, no como el mejor puntaje de una tabla.
+
+Los tres de ahora se entienden solos y sin saber qué es un benchmark:
+
+| Cifra | Etiqueta | De dónde sale |
+|---|---|---|
+| **7 de 7** | pruebas ganadas | gana **las 7 pruebas** de la tabla oficial: Terminal-Bench-Science, Terminal-Bench 4.0, GDPval-AA, OSWorld 2.0, Humanity's Last Exam, AutomationBench y CursorBench |
+| **casi 2×** | en tareas de oficina | AutomationBench: 17,1% → 31,4% = **1,84×** |
+| **−75%** | lo que cuesta operarlo | lectura de caché de $1 a $0,25 por millón |
 
 ## Layout G — el que faltaba
 
@@ -34,9 +79,8 @@ Tres decisiones del layout, para que nadie las "corrija" después:
 - **El orden de los modelos es el mismo en las tres láminas.** Por eso Fable 5 va cuarto
   aunque en CursorBench le gane a Opus 5: si el orden cambia por puntaje, la comparación
   entre láminas deja de servir.
-- **El ganador va en tinta plena, no en verde.** El verde es de la marca Onia y esta pieza
-  habla de un producto ajeno: pintar a Anthropic con el color de la casa confunde de quién
-  es el logro.
+- **El ganador va en el coral de Claude, no en el verde de Onia.** Pintar a Anthropic con
+  el color de la casa confunde de quién es el logro.
 
 **Y AutomationBench va primera de las tres a propósito**: es la única prueba de toda la
 tabla que mide flujos de trabajo de oficina, que es literalmente el negocio de Sergio
@@ -89,11 +133,13 @@ Mejor y más barato el mismo mes.
 
 ## Alt text
 
-> Carrusel de nueve láminas sobre fondo gris claro. La primera anuncia Fable 5.1 como el
-> modelo más avanzado de Anthropic. La segunda dice que ahora busca la causa en vez de
-> parchar el síntoma. Las tres siguientes son gráficos de barras que comparan cuatro
+> Carrusel de nueve láminas sobre fondo gris claro, con acentos en el coral de Claude. La
+> primera muestra el icono de Claude y anuncia Fable 5.1 como el modelo más avanzado de
+> Anthropic, con tres datos debajo: siete de siete pruebas ganadas, casi el doble en tareas
+> de oficina, y setenta y cinco por ciento menos de costo. La segunda dice que ahora busca
+> la causa en vez de parchar el síntoma, que aparece tachado. Las tres siguientes son gráficos de barras que comparan cuatro
 > modelos en flujos de trabajo de negocio, investigación científica y programación, con
-> Fable 5.1 en barra negra y primero en las tres. La sexta dice que ahora usa una
+> Fable 5.1 en barra coral y primero en las tres. La sexta dice que ahora usa una
 > computadora, con un 77,9 por ciento. La séptima muestra el logo de Claude con el precio
 > de 0,25 dólares por millón de tokens de caché, y la octava un menos 75 por ciento.
 > Cierra preguntando qué modelo usa el lector.
@@ -106,11 +152,18 @@ de notas de prensa de terceros.
 
 | Lámina | Prueba | Fable 5.1 | Opus 5 | GPT-5.6 Sol | Fable 5 |
 |---|---|---|---|---|---|
+| 01 | Terminal-Bench 4.0 | **55,8%** | 52,3% | 37,3% | 42,0% |
+| 01 | GDPval-AA v2 (trabajo de conocimiento) | **1853** | 1824 | 1711 | 1723 |
+| 01 | Humanity's Last Exam (con herramientas) | **65,0%** | 63,6% | — | 63,8% |
 | 03 | AutomationBench (flujos de negocio) | **31,4%** | 26,9% | 19,6% | 17,1% |
 | 04 | Terminal-Bench-Science 0.1 | **52,6%** | 29,0% | 22,4% | 24,7% |
 | 05 | CursorBench 3.2.0 | **73,4%** | 70,0% | 67,2% | 70,5% |
 | 06 | OSWorld 2.0 (uso de computadora, parcial) | **77,9%** | 75,4% | — | 72,9% |
 | 06 | OSWorld 2.0 (estricta) | **41,7%** | 39,6% | — | 36,1% |
+
+Las tres primeras filas no tienen lámina propia: están para sostener el **"7 de 7"** de la
+portada. Fable 5.1 queda primero en las siete pruebas de la tabla, y las columnas vacías
+son filas donde Anthropic no publicó puntaje de GPT-5.6 Sol.
 
 | Lámina | Otra afirmación | Verificado (cita textual) |
 |---|---|---|

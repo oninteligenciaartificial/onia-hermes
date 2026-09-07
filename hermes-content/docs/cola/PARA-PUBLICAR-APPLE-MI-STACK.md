@@ -24,7 +24,7 @@ precio.**
 | 08 | Onia Platform | Lo que está construyendo · **Próximamente** |
 | 09 | Total | Siete herramientas, **una factura**, **$200** al mes |
 | 10 | **Quién soy** | foto a sangre + 16 años + posteo todos los días + **Seguime** |
-| 11 | **CTA** | ¿Cuál te falta? — pide una palabra en comentarios |
+| 11 | **CTA** | **Comentá «STACK»** y te paso la lista con el paso a paso |
 
 **Por qué la portada es así.** Su único trabajo es frenar el scroll, así que lleva la
 **cifra** —$200 para operar una empresa entera es lo raro— al mayor tamaño del carrusel, y
@@ -74,8 +74,9 @@ Si estás esperando "tener presupuesto" para automatizar tu negocio,
 mirá otra vez la lista. Casi todo ya es gratis. Lo que falta es
 sentarse a armarlo.
 
-Escribí abajo la que no tenés todavía —una sola palabra alcanza— y te
-digo por cuál conviene que empieces. Contesto a todos.
+¿Lo querés armar igual? Comentá STACK y te paso por privado la lista
+de las siete con el paso a paso para instalar cada una. Con esa palabra
+alcanza — te contesto a todos, a mano.
 
 ## Versión X / LinkedIn (mismo contenido, sin carrusel)
 
@@ -97,7 +98,8 @@ es gratis. Lo que falta es sentarse a armarlo.
 > herramienta con su costo mensual: Claude Max 200 dólares, y luego Homelab, n8n, WhatsApp
 > Business, HyperFrames y Hermes, todas en cero. Onia Platform aparece como próximamente.
 > Cierra con el total, una foto grande de Sergio Urcullo presentándose y pidiendo que lo
-> sigan, y la pregunta "¿cuál te falta?".
+> sigan, y una lámina que invita a comentar la palabra STACK para recibir la lista
+> completa con el paso a paso.
 
 ## De dónde sale cada cosa que afirma (revisar antes de publicar)
 
@@ -116,18 +118,27 @@ es gratis. Lo que falta es sentarse a armarlo.
 
 - **Ni un precio de Onia Platform.** Es contenido, no venta. La regla del carril: las piezas
   de contenido no llevan precio de producto.
-- **Ningún "comentá PALABRA".** La cuenta `@sergiourcullo` tiene `palabras: {}` en el
-  workflow n8n activo de private-reply (medido 04-sep): una palabra clave hoy sale con
-  `palabra=null` y **quien comenta no recibe nada, sin dejar registro**.
-  El CTA igual **obliga a comentar** —pregunta cerrada, respuesta de una palabra, sobre algo
-  que el lector ya decidió después de ver las 7 fichas— pero las respuestas las contesta
-  Sergio Urcullo a mano. El día que se cableen las palabras en n8n, la lámina 11 es el lugar
-  donde entra la automática.
+- **La palabra clave NO dispara nada automático, y la lámina lo dice.** La cuenta
+  `@sergiourcullo` tiene `palabras: {}` en el workflow n8n activo de private-reply (medido
+  04-sep): "Comentá STACK" hoy sale con `palabra=null` y **quien comenta no recibiría nada,
+  sin dejar registro**. Por eso el pie dice *"te contesto a todos, a mano"* y no "recibilo
+  al instante": prometer una automática que no existe deja a cada comentarista esperando un
+  DM que nunca llega, y eso se paga con la cuenta. El día que se cableen las palabras en
+  n8n, esta lámina es el lugar exacto donde entra la automática — y el texto ya no habría
+  que tocarlo, sólo el pie.
 - **Chatwoot no aparece**, aunque está en el stack real. Es la infraestructura del chatbot
   que se vende desde Onia Platform: mostrarla con "$0" al lado le enseña al lector el camino
   para saltearse el producto.
 
 ## ⚠️ Pendiente antes de publicar
+
+- 🔴 **La lámina 11 promete "la lista de las siete con el paso a paso para instalar cada
+  una", y ese material hay que tenerlo a mano ANTES de publicar.** Está escrito y listo para
+  pegar en `PARA-PUBLICAR-DM-STACK.md`: es el texto exacto de la respuesta por privado.
+  Publicar el carrusel sin eso rompe la promesa en el primer comentario.
+- **Cada comentario es un DM a mano.** Es el costo de un CTA que promete entrega: si el post
+  saca 200 comentarios, son 200 mensajes. El texto de la respuesta es uno solo y se pega,
+  pero el envío es manual hasta que se cableen las palabras en n8n.
 
 - **"Próximamente" en la lámina 08** es una excepción explícita a `CLAUDE.md` §*La venta
   nunca exhibe obra*, ratificada por Sergio Urcullo el 06-sep con la regla delante. Está
