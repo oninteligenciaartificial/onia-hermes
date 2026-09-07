@@ -1165,12 +1165,32 @@ y sin operar. Acá se opera, con verificación por ítem.
       `npx eslint .` 0 errores. **No está terminado hasta que se publique:** viaja en el pedido
       `t_deddf471` (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo.
 
-- [ ] ⚪ **Pendiente fiscal (`SIAT_EMISSION`) para facturar de verdad.** Va último a propósito:
-      es un trámite externo, no código, y `/billing` ya funciona sin él. **No bloquea un cierre**
-      — bloquea la factura fiscal, que el catálogo ya sabe no prometer. Si un loop se planta acá
-      esperando, pierde la vuelta.
+- [ ] 🔴 **SIAT entra en la v1.0 — decisión de Sergio Urcullo, 2026-09-07: «sin factura no se
+      vende». Y el rótulo de este ítem estaba MAL, que es por qué llevaba semanas al final.**
+      Este mismo ítem decía *«es un trámite externo, no código»* y *«va último a propósito»*.
+      Medido hoy contra `ONIA_SIAT_ESTADO_HOMOLOGACION.md`: lo que falta **no es un trámite**,
+      son **5 de 6 tipos de caso sin cubrir**. El NIT está limpio y no bloquea nada.
 
-      Lo que sí se puede prometer hoy está en `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` §7.
+      **Lo que dice el marcador real del SIN** (última lectura del portal: **2026-08-27, hace 11
+      días — reléela antes de trabajar, no la cites**):
+      · estado `INICIADO`, **24,8% de la Fase 1**, Porcentaje General **0%**;
+      · **el SIN cuenta COBERTURA, no volumen** — 750 documentos contaron como 125 porque eran la
+        misma combinación repetida. Son **6 casos de 125 cada uno**, y **solo 1 está al 100%**;
+      · los que faltan son de tipo `1 · FACTURA COMPRA-VENTA`, `17 · FACTURA DE
+        HOSPITALES/CLÍNICAS` y `24 · NOTA DE CRÉDITO-DÉBITO`, con sus combinaciones;
+      · **límite de pruebas: 04/11/2026** (Art. 18.III). No se mueve.
+
+      ⚠️ **Y sigue en pie la advertencia vieja, que ahora significa otra cosa:** *«si un loop se
+      planta acá esperando, pierde la vuelta»*. Ya no aplica a esperar al SIN — aplica a esperar
+      **a que alguien te diga qué caso emitir**. La cobertura se calcula de la tabla del §5 de ese
+      doc; no hace falta preguntar.
+
+      **Primero medí, después emitís.** El porcentaje de arriba tiene 11 días: una vuelta que
+      trabaje sobre él sin releer el portal puede estar cubriendo un caso ya cerrado.
+
+      **Listo =** Porcentaje General del portal **> 0%** con al menos un caso nuevo al 100%, leído
+      del portal y no deducido. Y el número de esta cola actualizado con la fecha de esa lectura.
+
 
 ## Lo que este carril NO hace
 
