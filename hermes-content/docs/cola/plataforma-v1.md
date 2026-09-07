@@ -44,9 +44,54 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **La ficha clínica le pedía «Caries dentinaria en pieza 46» a un centro de estética —
+      cerrado el 2026-09-07 (`3a4977d` en `onia-platform`, publicado en la rama). Y lo que lo
+      dejó vivo es que NINGÚN gate mira las subrutas.**
+      Gate: `onia-platform-chatbot/lib/platform/pantallas-compartidas-cubiertas.test.ts`, bloque *«las subrutas de una
+      pantalla compartida»* (89 casos).
+
+      El panel enlaza `onia-platform-chatbot/app/(dashboard)/patients/[id]/records/new/page.tsx` con el guard `esClinico`, o sea los **tres**
+      rubros clínicos, y sus tres placeholders estaban tipeados en dental: «Dolor en el diente
+      46», «Caries dentinaria en pieza 46», «Restauración con resina compuesta». Un centro de
+      estética —uno de los cinco rubros que la v1.0 vende— cargaba el historial de su clienta
+      leyendo eso. **El guard existía y funcionaba: era más GRUESO que su copy**, la misma forma
+      que `/help` enseñándole el odontograma a estética y veterinaria.
+
+      **La clase, que es lo que importa:** el gate de cobertura declara cada pantalla compartida
+      y la barre con `fuentesDeLaRuta`, que a propósito **no entra en subdirectorios**; y el gate
+      de caminos enumera ítems de menú, y una subruta no es ítem de menú de nadie. Entre los dos
+      quedaba un árbol entero —la ficha, el detalle, los formularios de alta— sin un solo sujeto.
+      Barriéndolo aparecieron **tres** archivos sirviendo copy de un rubro a todos:
+      `onia-platform-chatbot/app/(dashboard)/patients/[id]/records/new/page.tsx` (dental),
+      `onia-platform-chatbot/app/(dashboard)/reports/clinical-balance/page.tsx` («Tratamientos
+      completados», que en una veterinaria son «Servicios») y
+      `onia-platform-chatbot/app/(dashboard)/settings/chatbot/ChatbotClient.tsx`, con tres placeholders
+      de **veterinaria** fijos —«mascota, perro, gato»— para los siete rubros, en un archivo cuyo
+      propio prop `ejemplos` dice «nunca dental fijo»: el arreglo cubrió tres campos y dejó estos.
+
+      Arreglados derivando del pack con el mecanismo que ya existía (`ejemploRegistro` y
+      `ejemploPalabras` en `onia-platform-chatbot/lib/onboarding/vocabulario.ts`, al lado de
+      `ejemploServicio`, cuyo
+      comentario documenta **este mismo error** resuelto para el catálogo el 01-sep — nunca viajó
+      a la ficha).
+
+      ⚠️ **Y el gate nació hueco dos veces; lo destapó la mutación, no la lectura.** La v1 eximía
+      al archivo que *nombrara* `vocabularioDeTrack`, y `ChatbotClient` se escapaba por un
+      **comentario** que cita el símbolo. La v2 preguntaba por el símbolo sin comentarios y quedó
+      **peor**: al arreglar esa pantalla le agregué el import, y con eso el archivo se eximía
+      solo — revertir el arreglo dejaba los 89 casos en **verde**. Es el agujero contra el que
+      advierte la cabecera de ese mismo archivo (`/settings` importaba el vocabulario y tenía ocho
+      textos dentales al lado) y lo reabrí abajo. **No hay eximición por derivar:** la regla es
+      que en una subruta compartida no hay palabra de un solo rubro, y las tres que la necesitan
+      se declaran con el símbolo que las justifica, verificado en cada corrida.
+      Validado por mutación en cuatro direcciones: revertir el arreglo → rojo; una subruta
+      **nueva** con copy dental → rojo (nace cubierta); podrir una fila declarada → rojo;
+      restaurado → verde.
+      ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido de deploy de `plataforma`.
+
 - [x] 🔴 **A un estudio contable le pedíamos el género y el cumpleaños de su cliente —
       cerrado el 2026-09-07 (`e9b857a` en `onia-platform`, publicado en la rama).**
-      Gate: `/root/loops/onia-platform-chatbot/app/(dashboard)/patients/ficha-por-rubro.test.ts`.
+      Gate: `onia-platform-chatbot/app/(dashboard)/patients/ficha-por-rubro.test.ts`.
       La ficha la comparten los tres rubros clínicos y **servicios profesionales**, uno de
       los cinco que la v1.0 vende. Lo clínico ya se había separado (tipo de sangre, emergencia,
       alergias, historia, tratamientos) pero **cumpleaños y género quedaron afuera de ese
@@ -54,7 +99,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       un bloque que sí distingue el rubro. El cliente de un estudio contable puede ser una
       EMPRESA, así que el sistema le pedía el género de una razón social, y la lista le ofrecía
       **filtrar por género** y le calculaba la edad.
-      **Cuatro superficies**, todas bajo `/root/loops/onia-platform-chatbot/app/(dashboard)/patients`: el alta, la
+      **Cuatro superficies**, todas bajo `onia-platform-chatbot/app/(dashboard)/patients`: el alta, la
       edición, la ficha y **la lista**, que entró al gate por primera vez — el
       filtro por género vivía justo en la pantalla que ninguno de los tres casos miraba.
       **El gate dejó de CONTAR bloques** `{esClinico && (` y ahora pregunta, por literal, si
@@ -182,24 +227,33 @@ y sin operar. Acá se opera, con verificación por ítem.
       verde después. Gates: `tsc` 0 · `vitest` 3373 verdes · `eslint` 0.
       ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido `t_deddf471`.
 
-- [ ] 🟠 **Las otras cuatro rutas de la misma clase siguen hablando dental.** Mismo defecto que
-      `55cfbf4`, otro camino — se dejaron fuera para no cerrar dos frentes en una vuelta.
-      Reproducción, sin investigar de nuevo:
+- [x] 🟠 **Las otras rutas de la misma clase ya no hablan dental — y eran 14, no 4** (`e6a7012`,
+      2026-09-07). Mismo defecto que `55cfbf4`, otro camino. Un estudio contable que borraba una
+      cita leía «Doctor no encontrado» y una clienta de estética «Paciente no encontrado».
 
-      ```
-      cd /root/loops/onia-platform-chatbot
-      grep -nE 'error: "[^"]*(paciente|doctor)' app/api/appointments/route.ts \
-        app/api/appointments/availability/route.ts app/api/doctor-schedules/route.ts \
-        'app/api/email/appointment-reminder/[id]/route.ts'
-      ```
+      ⚠️ **Este ítem nombraba CUATRO rutas y su lista era el punto ciego.** Derivando los sujetos
+      del REGISTRO en vez de la lista aparecieron **once**; ampliando el universo al segundo balde
+      (`COMMON_API_ROUTES`, que este ítem ni miraba) aparecieron **tres más**: `invoices`,
+      `recurring-invoices` y `app/api/email/invoice/[id]/route.ts` — las que **más** rubros leen, porque facturar lo
+      hacen los siete. Son **23 mensajes en 14 archivos**. La lista del cuerpo de un pendiente es
+      una PISTA; el sujeto se enumera del disco antes de cerrar.
 
-      Da 5: «No autorizado para crear citas de otro doctor», «Doctor no encontrado» ×2,
-      «doctorId y date son requeridos», «El paciente no tiene correo electrónico registrado».
-      Las cuatro son `CON_AGENDA`, así que las lee un estudio contable y un centro de estética.
-      **«doctor» necesita otro helper que «paciente»**: el rótulo del rol ya está resuelto en
-      `lib/platform/rol-en-el-idioma-del-rubro.test.ts` (`a831216`) — se reusa ese, no se inventa
-      uno. El de cliente ya existe: `clienteNoEncontrado` / `errorAlCliente` en
-      `lib/platform/idioma-del-error.ts`. Al cerrarlo, sumar esas rutas a `RUTAS_FICHA` del gate.
+      También cayó la premisa que traía escrita: **«doctor» no lo dice ningún rubro, ni el
+      dental** — llama «Profesional» a quien atiende (`vocabulario.ts` `rolesEquipo`), así que esa
+      palabra en prosa siempre es herencia clavada. Va por `nombreDeRol()`, otra fuente que la del
+      cliente: dos ejes, dos helpers (`rolQueAtiende` / `profesionalNoEncontrado` /
+      `errorAlProfesional`, más `elCliente` / `elClienteAlInicio` / `clienteEnTitulo`).
+      `doctorId` queda **fuera a propósito**: el límite de palabra lo excluye porque es el nombre
+      del parámetro de la API —su contrato—, no prosa que lea una persona.
+
+      Prueba: `lib/platform/idioma-del-error.test.ts` de **42 a 124 casos**, sujetos derivados de
+      los DOS baldes (una ruta nueva nace cubierta) y un único exento —la clave del enum
+      `ADMIN · DOCTOR · STAFF` del panel de Super Admin— eximido por literal exacto, no por ruta, y
+      vigilado por un caso que se pone rojo si el exento se pudre. Validado **por mutación en las
+      dos direcciones**: inyectar el defecto en una ruta `common` que no toqué → rojo; revertir un
+      arreglo → rojo; podrir el exento → rojo; y `doctorId`, que debe seguir permitido, sigue en
+      verde. Gates: `tsc` 0 · `vitest` 3496 verdes · `eslint` 0 errores.
+      ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido de deploy de `plataforma`.
 
 - [ ] 🔴 **Hay arreglos verdes esperando UN `ok` de Sergio Urcullo, y no llegan al cliente.**
       Medido el 2026-09-06 10:35 UTC por `onia-cola`: **tres** destinos con pedido en `blocked`,
