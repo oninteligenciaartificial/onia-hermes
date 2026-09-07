@@ -38,8 +38,36 @@ entra por el mismo cable que el video.
 
 La cámara va en un círculo de 340 px en la esquina (escena `2 · Pantalla + cara`). De un
 frame de 1280×720 se recorta el cuadrado central de 720×720 y después se muestra a 340 px:
-sobra resolución. Solo en `3 · Cara` (pantalla completa) se nota un poco de blandura, y es
-aceptable.
+sobra resolución. Solo en `3 · Cara` (pantalla completa) se nota un poco de blandura —
+mitigado con escalado `lanczos` — y es aceptable.
+
+**Subir de 720p cuesta USD 49,99/año** (Camo Pro; también USD 9,99/mes o 99,99 de por vida).
+Decidido el 2026-09-06: **no se paga.** El material principal es la pantalla, que ya es
+1080p nativo; la cámara va en un círculo. Pagar sube la resolución de lo que menos pesa.
+
+### ⚠️ Camo se desconecta cada 3-4 minutos
+
+Medido en su propio log el 2026-09-06:
+
+```
+20:17:55  ProcessHello                     ← conecta
+20:21:30  Disconnected, app closed         ← se cae a los 3,5 min
+20:28:06  get_device_list returned 1       ← vuelve solo
+```
+
+El iPhone **nunca** desapareció del USB durante esos cortes, así que no es el cable ni el
+driver: es la app del iPhone que se suspende. Se probó apagar `PowerEfficiencyMode` y
+`highQualitySegmentation`, y poner el bloqueo automático en Nunca.
+
+**Consecuencia operativa, no cosmética:** cuando Camo se cae, OBS pierde la fuente y **no
+la recupera solo** — queda negra hasta que se reinicia la fuente (doble clic en `Camara` →
+Aceptar).
+
+**Por eso se graba en tomas de 2-3 minutos, nunca 10 seguidos.** Una desconexión cuesta una
+toma, no el video entero. El guion ya está en bloques, así que esto no agrega trabajo.
+
+Si algún día molesta demasiado: el plan B es el iPhone grabando aparte con su app Cámara
+(4K real, cero cortes) y juntar en la edición.
 
 ### Alternativas, si algún día molesta
 
@@ -89,14 +117,28 @@ El círculo se hace con `E:\ONIA-YouTube\assets\mask-circulo.png` (generado con 
 un filtro *Image Mask/Blend* sobre la escena anidada — OBS no admite filtros por
 scene-item, por eso la escena auxiliar.
 
+### ⚠️ Las coordenadas de OBS son relativas a la MITAD DE LA ALTURA
+
+Costó una tarde. Al generar el `.json` de escenas a mano, `pos_rel` y `bounds_rel` **no**
+son fracciones del ancho: OBS los mide contra **la mitad de la altura del canvas**, con el
+origen en el centro. Para 1920×1080 la unidad es **540**:
+
+```
+bounds_rel = ancho / 540 , alto / 540
+pos_rel    = (x - 960) / 540 , (y - 540) / 540
+```
+
+Calculado como `x/960` (que es lo intuitivo), OBS reinterpreta todo al cargar: la captura
+de pantalla de 1920×1080 quedó en un recuadro de **540×540** y el círculo de la cámara en
+**95×170**. No da error — carga mal y ya.
+
 ### Los clics que faltan (OBS no los puede adivinar)
 
-1. **Fuente `Pantalla`** → doble clic → elegir el monitor de **1920×1080**.
-2. **Fuente `Camara`** → doble clic → elegir **`Reincubate Camo`** (aparece recién después
-   de instalar Camo y conectar el iPhone).
-3. En `_cam · circulo`, seleccionar `Camara` → `Ctrl+E` → cambiar el *bounding box* de
-   **1080×1080 a 720×720**, porque Camo gratis entrega 1280×720. Si no, el círculo recorta
-   de más.
+Ya hechos el 2026-09-06 y verificados en el `.json`: monitor de 1920×1080, cámara `Camo`,
+micrófono `DJI MIC MINI`, recorte del círculo a 720×720.
+
+Si la cámara queda negra tras una desconexión de Camo: **doble clic en `Camara` → Aceptar**.
+Eso la reinicia.
 
 ---
 
@@ -104,19 +146,23 @@ scene-item, por eso la escena auxiliar.
 
 1. En el iPhone: **Camo Camera** desde la App Store.
 2. En Windows: **Camo Studio** desde [camo.com/downloads](https://camo.com/downloads).
-3. Conectar el iPhone **por cable USB**. En el iPhone: *Confiar en esta computadora* → sí.
-4. Abrir Camo Studio. Debería mostrar la imagen del iPhone.
-5. **Borrar la capa de marca de agua** en el editor de escenas de Camo. Es una capa demo,
-   no hace falta pagar.
-6. En Camo Studio → audio → elegir el **micrófono del iPhone** y activar la cancelación de
-   ruido.
+   El `.msi` pesa **475 MB** — dejarlo terminar. Abrirlo a medio bajar da el error
+   *"no es un paquete de Windows Installer válido"*, que parece corrupción y es solo
+   descarga incompleta.
+3. **Apple Devices** desde la Microsoft Store — `winget install --id 9NP83LWLPZ9K --source msstore`.
+   Sin esto Windows no monta el iPhone por USB y **Camo cae a WiFi**, que es mucho más
+   lento. No alcanza con instalarla: hay que **abrirla una vez con el iPhone conectado**
+   para que registre el driver.
+4. Conectar el iPhone por cable. En el iPhone: *Confiar en esta computadora* → sí.
+5. En Camo Studio, panel derecho: elegir la escena **`Blank`** (`Ctrl+3`), no `Watermark`.
+   Ahí se va la marca de agua **sin pagar**.
+6. `Lens` elige la cámara física del iPhone (zoom óptico, sin pérdida). `Framing` es zoom
+   digital — dejarlo en 100 %.
 
-> Si Windows no detecta el iPhone: probá **otro cable**. Muchos cables son solo de carga y
-> no llevan datos. Si sigue sin aparecer, instalá **Apple Devices** desde la Microsoft
-> Store (en esta máquina no hay nada de Apple instalado).
+> Si el iPhone no aparece: probá **otro cable**. Muchos son solo de carga y no llevan datos.
 
-Con Camo el audio y el video llegan por el mismo cable y quedan en **un solo archivo**: no
-hay que sincronizar nada.
+**El audio NO sale del iPhone: sale del DJI MIC MINI** por USB, como fuente aparte en OBS.
+Camo aporta solamente la imagen.
 
 ---
 
