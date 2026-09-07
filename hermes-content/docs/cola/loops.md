@@ -19,8 +19,35 @@ solo.
 | nombre | máquina | qué es | cómo se reconoce |
 |---|---|---|---|
 | **laptop** | `DESKTOP-ENV6SDA` | HP Victus 16, 12 hilos, 23,6 GB, **con batería**, Win 11 Home. Donde Sergio Urcullo trabaja y habla con las sesiones. **No tiene nada del nodo** | su Ubuntu **no** tiene `/root/loops` ni `/root/.onia-nodo` |
-| **nodo-casa** | `DESKTOP-0GGGNMF` | El tercer nodo: `/root/loops`, los 5 worktrees, y sus 5 líneas de cron — **`web-venta` activa desde el 2026-09-06**, las otras 4 comentadas | existe `/root/.onia-nodo` |
-| **VPS** | `srv1360183` · 187.77.16.63 | Producción: la app, Supabase, Chatwoot y los **3** loops que no pueden mudarse (tocan Docker/psql del propio VPS) | existe `/usr/local/lib/hermes-agent/venv/bin/python` |
+| **nodo-casa** | `DESKTOP-0GGGNMF` | El tercer nodo: `/root/loops`, los worktrees, y **los CUATRO loops vivos** — `web-venta`, `onia-cola`, `chatbot-cola`, `recorrido-cliente` | existe `/root/.onia-nodo` |
+| **VPS** | `srv1360183` · 187.77.16.63 | Producción: la app, Supabase, Chatwoot y los publicadores. **Ya no corre ningún loop** | existe `/usr/local/lib/hermes-agent/venv/bin/python` |
+
+⚠️ **Esas dos celdas decían otra cosa hasta el 2026-09-07 — corregidas contra la medición.**
+Decían que en casa *«`web-venta` [estaba] activa y las otras 4 comentadas»* y que el VPS corría
+*«los 3 loops que no pueden mudarse»*. Contado en vivo a las 05:40 UTC: casa tiene **cuatro**
+líneas activas y el VPS **cero** (`crontab -l | grep -c 'onia-loop\.sh'` da `0` allá). La tabla de
+*«Deben existir y estar activos»* de más abajo sí estaba al día — la que envejeció es esta, que es
+prosa y no la lee ningún gate. Se ve con: `crontab -l | grep onia-loop.sh` en cada máquina.
+
+🔴 **La mudanza dejó al integrador sin poder mergear uno de sus dos repos, y en silencio.**
+`onia-cola` es el único loop autorizado a mergear, y le tocan **dos** repos. En nodo-casa,
+`/root/loops/onia-platform` tiene la url de push puesta a mano en
+`DESHABILITADO-NODO-DE-DESARROLLO` (es un seguro, puesto a propósito), y la llave de deploy
+`/root/.ssh/deploy_onia-platform` **sólo existe en el VPS**. Con el VPS ya sin loops, ninguna
+máquina quedaba en condiciones de integrar ese repo.
+
+**Hoy no muerde porque `onia-platform` no tiene ni una rama de carril sin mergear — y por eso es
+peligroso: falla ABIERTO.** El día que un carril pushee allá, el `--no-merged` crece y nada se
+pone rojo; la única señal sería que las vueltas del integrador digan *«no puedo»*, que en el log
+se lee igual que *«no había nada que hacer»*.
+
+**No se arregla re-habilitando el push** (revierte un seguro ajeno, y sin la llave tampoco
+funcionaría). La vía que **sí** funciona ya estaba ahí y nadie la había medido: el clon del VPS
+está en `master`, limpio, y su `git push --dry-run` contesta *«Everything up-to-date»*. Se lo
+alcanza desde casa con el shim `/root/bin/onia-vps.sh`. La línea de abajo **la lee un gate**
+(`scripts/integrador_puede_mergear.mjs`): si se borra, `npm test` se pone rojo y nombra el repo.
+
+VIA-INTEGRADOR onia-platform casa: /root/bin/onia-vps.sh bash -lc 'cd /root/loops/onia-platform && git fetch origin --quiet && git merge --no-ff --no-edit origin/<rama> && npx tsc --noEmit && npx vitest run && npm run lint && git push origin master'
 
 El nombre `nodo-casa` no se inventó acá: es con el que **ese nodo ya firma** los hechos que
 escribe en la memoria compartida. ⚠️ El valor de la columna *dónde corre* sigue siendo `casa`
