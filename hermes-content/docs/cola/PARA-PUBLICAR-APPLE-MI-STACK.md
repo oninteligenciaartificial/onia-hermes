@@ -23,7 +23,7 @@ precio.**
 | 07 | Hermes | Agente open source MIT con el alma escrita por él · **$0** |
 | 08 | Onia Platform | Lo que está construyendo · **Próximamente** |
 | 09 | Total | Siete herramientas, **una factura**, **$200** al mes |
-| 10 | **Quién soy** | foto + qué construye y para quién |
+| 10 | **Quién soy** | foto a sangre + 16 años + $200 al mes |
 | 11 | **CTA** | ¿Cuál te falta? — pide una palabra en comentarios |
 
 **Por qué la portada es así.** Su único trabajo es frenar el scroll, así que lleva la
@@ -34,6 +34,17 @@ exactamente el swipe. Contar una lista ("siete cosas") no frena a nadie.
 **Por qué "quién soy" va en la 10 y no en la 1.** Quien llegó hasta ahí ya vio el valor, y
 recién ahí le importa quién lo dijo. Presentarse primero es pedir atención antes de
 habérsela ganado.
+
+**Y por qué la foto va a sangre.** Sergio Urcullo, 07-sep: *"usa esta imagen mía en grande
+que se vea mejor"*. La primera versión usaba el layout Q —foto de 390 px al lado del
+texto— y ahí la cara era un accesorio del párrafo. Con el layout F la foto ocupa la lámina
+y el texto baja a dos líneas: en la única lámina donde el que habla se muestra, la cara
+tiene que ser lo que se ve. El layout Q quedó sin usar y se borró del generador.
+
+⚠️ **El handle va en blanco sobre el polo, y es a propósito.** Medido en el render: a la
+altura del handle la foto ocupa de x=94 a x=984 — no queda franja de fondo abajo, así que
+"moverlo al margen" no lo saca de la foto, sólo lo cambia de sitio. Invertido a blanco
+lee, y lee como firma puesta a propósito.
 
 ## Caption (IG · copiar tal cual)
 

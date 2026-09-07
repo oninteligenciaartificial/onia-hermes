@@ -402,11 +402,17 @@ LAMINAS = [
     # QUIÉN SOY. Va acá y no al principio a proposito: el que llego hasta la lamina 10 ya
     # vio el valor y recien ahi le importa quien lo dijo. Al reves —presentarse primero—
     # es pedirle atencion antes de habersela ganado.
+    #
+    # Usa el layout F (foto a sangre) y no el Q (foto chica al lado del texto): Sergio
+    # Urcullo, 07-sep, "usa esta imagen mia en grande que se vea mejor". Tenia razon —
+    # a 390px la foto era un accesorio del texto; a sangre la cara ES la lamina, que es
+    # justo lo que tiene que pasar en la unica lamina donde el que habla se muestra.
+    # El texto baja a dos lineas porque F no admite mas: el largo controla el wrap.
     {
-        "layout": "Q",
+        "layout": "F",
         "foto": "sergio-chroma.png",
-        "nombre": "Soy Sergio Urcullo",
-        "bio": "Tengo 16 años y construyo sistemas para\nnegocios bolivianos: que atiendan, agenden\ny cobren sin que el dueño esté encima.\n\nTodo lo que ves acá lo armé con estas siete\nherramientas.",
+        "nombre": "Soy Sergio Urcullo,",
+        "sub": "tengo 16 años y todo esto corre\nen mi servidor por $200 al mes.",
     },
     # CIERRE. El CTA obliga a comentar: pregunta cerrada, de una sola palabra, sobre algo
     # que el lector YA tiene una opinion formada despues de ver las 7 fichas.
@@ -489,14 +495,22 @@ VITAMINA_C = [
 ]
 
 # Carrusel Fable 5.1. TODAS las cifras salen de la pagina oficial de Anthropic
-# (anthropic.com/claude-fable-and-mythos-5-1), leida el 2026-09-06 — no de memoria ni de
-# notas de prensa. El angulo es el COSTO y no los benchmarks a proposito: a un dueno de
-# negocio no le dice nada un 73,4% en CursorBench, y un puntaje envejece en semanas
-# mientras que "cuesta menos operar" se sostiene.
+# (anthropic.com/claude-fable-and-mythos-5-1), releida el 2026-09-07 — no de memoria ni
+# de notas de prensa.
+#
+# El angulo es LO QUE HACE, no quien lo usa. Sergio Urcullo, 07-sep: "coloca el mejor
+# modelo de claude actualmente, no pongas que es el modelo que yo uso, enfocate en sus
+# mejoras y cosas que hace". Tiene razon: "el modelo con el que construyo" hace que la
+# noticia dependa de que al lector le importe Sergio Urcullo — y en la lamina 1, todavia
+# no le importa. La capacidad se sostiene sola.
+#
+# ⚠️ LO QUE DIGA "EL MEJOR" SE CITA, NO SE OPINA. La pagina dice textual: "They're the
+# world's most advanced models for coding and knowledge work". La lamina 1 dice eso y
+# nada mas fuerte.
 FABLE = [
     {
         "layout": "D",
-        "contexto": "Salió el modelo con el que construyo",
+        "contexto": "El modelo más avanzado de Anthropic",
         "remate": "FABLE 5.1",
         "pie": "y esto es lo que hace",
         "pie_hl": "mejor",
@@ -510,18 +524,6 @@ FABLE = [
         "remate": "AHORA BUSCA\nLA CAUSA",
         "sub": "Anthropic lo dice así: arregla la raíz del problema\nen vez de tomar atajos que dan peor trabajo.",
     },
-    # La ficha lleva el NOMBRE DEL PRODUCTO, no el del concepto. Sergio Urcullo, 06-sep:
-    # "seria mejor que diga que es fable 5.1". Tiene razon y es como funcionan las
-    # referencias 5/6/7: dicen "Claude", "Notion", "MacBook Pro" — el producto y su precio.
-    # "Lectura de cache" como titular obligaba al lector a adivinar de que se habla.
-    {
-        "layout": "E",
-        "icono": "claude",
-        "nombre": "Fable 5.1",
-        "desc": "El modelo con el que construyo. Lo que bajó\nes leer el caché: lo que el agente relee todo\nel rato cuando trabaja solo.",
-        "precio": "$0,25",
-        "etiqueta": "por millón · antes $1",
-    },
     # Los benchmarks van DESPUES de la ventaja explicada, no antes: un porcentaje sin
     # contexto no convence a nadie, pero confirma a quien ya entendio la idea.
     {
@@ -530,13 +532,35 @@ FABLE = [
         "remate": "73,4%",
         "sub": "en CursorBench, la prueba de trabajo con código real.\nY 65% en Humanity's Last Exam usando herramientas.",
     },
-    # Lo que hizo FUERA del codigo. Son los ejemplos que Anthropic publica y son los que
-    # hacen entender de que tamano es el salto, sin pedirle al lector que crea nada.
+    # El tamano del salto contra SU PROPIA version anterior, que es lo que de verdad
+    # muestra cuanto mejoro — un ranking dice quien va adelante, esto dice cuanto se movio.
+    #
+    # ⚠️ ACA HABIA UN ERROR MIO, y salio a un render de publicarse: esta lamina decia
+    # "diseño proteinas 10x mejor y acelero kernels de GPU 2,5x". Esas dos cifras son de
+    # MYTHOS 5.1 —el gemelo de entrega restringida—, no de Fable, y la pagina las atribuye
+    # explicitamente a Mythos. Adjudicarle a un producto el logro de otro es exactamente
+    # el error del que ya nos salvamos con Hermes. Reemplazadas por una cifra de Fable.
     {
         "layout": "D",
-        "contexto": "Y esto no es una demo de programación",
-        "remate": "10× y 2,5×",
-        "sub": "Diseñó proteínas que se adhieren 10 veces mejor\nque la competencia, y aceleró kernels de GPU\nhasta 2,5 veces. Con el mismo modelo.",
+        "contexto": "Contra su propia versión anterior",
+        "remate": "MÁS DEL DOBLE",
+        "sub": "En Terminal-Bench-Science pasó de 24,7% a 52,6%:\ntrabajo científico real hecho desde una terminal.\nEn Terminal-Bench 4.0, de 42,0% a 55,8%.",
+    },
+    # La ficha lleva el NOMBRE DEL PRODUCTO, no el del concepto. Sergio Urcullo, 06-sep:
+    # "seria mejor que diga que es fable 5.1". Tiene razon y es como funcionan las
+    # referencias 5/6/7: dicen "Claude", "Notion", "MacBook Pro" — el producto y su precio.
+    # "Lectura de cache" como titular obligaba al lector a adivinar de que se habla.
+    #
+    # Va en la 5 y no en la 3 (07-sep): el precio es la ultima ventaja, no la primera. El
+    # lector que llego hasta aca ya sabe QUE HACE el modelo, y recien entonces "cuanto
+    # cuesta" es una buena noticia y no el titular de una pieza sobre capacidades.
+    {
+        "layout": "E",
+        "icono": "claude",
+        "nombre": "Fable 5.1",
+        "desc": "Lo que bajó es leer el caché: lo que un\nagente relee todo el rato mientras trabaja\nsolo. Era la parte cara.",
+        "precio": "$0,25",
+        "etiqueta": "por millón · antes $1",
     },
     {
         "layout": "D",
@@ -665,14 +689,6 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 .tira > *{{width:96px;height:96px;flex:0 0 auto;
   filter:drop-shadow(0 10px 20px rgba(0,0,0,.13))}}
 .tira > * > svg{{width:100%;height:100%}}
-/* Lámina de presentación: foto recortada al lado del texto, no debajo. */
-.quien{{display:flex;align-items:center;gap:56px;text-align:left;width:100%}}
-.quien img{{width:390px;height:auto;flex:0 0 auto}}
-.quien .texto{{flex:1}}
-.quien .nom{{font-size:76px;font-weight:{peso};font-variation-settings:{vf};
-  letter-spacing:-.032em;line-height:1.02;color:var(--ink)}}
-.quien .bio{{font-size:36px;color:var(--muted);line-height:1.34;margin-top:22px;
-  white-space:pre-line;letter-spacing:-.01em}}
 .cta{{margin-top:70px;font-size:40px;color:var(--muted);letter-spacing:-.01em}}
 .cta .hl{{display:inline-block;margin-bottom:22px}}
 .cta-gris{{display:block}}
@@ -743,22 +759,20 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 /* La foto sale del flujo y se apoya en el borde inferior: a sangre, como la referencia. */
 .f .foto{{position:absolute;left:50%;transform:translateX(-50%);bottom:0;
   max-height:72%;width:auto;object-fit:contain;object-position:bottom}}
-/* El handle centrado caia ENCIMA del polo azul marino y no se leia. En F va al margen
-   derecho, sobre el gris del fondo, que es donde queda aire. */
-.f .handle{{right:96px;left:auto;text-align:right;bottom:52px}}
+/* El handle centrado caia ENCIMA del polo azul marino y no se leia.
+   ⚠️ Mandarlo al margen derecho NO lo arreglo, solo lo movio: medido en el render del
+   07-sep, a la altura del handle la foto ocupa de x=94 a x=984, o sea TODO el ancho util
+   — no hay franja de fondo abajo, y el gris quedaba igual sobre el azul, encima pegado
+   al logo bordado del polo.
+   Se deja sobre la foto y se invierte el color: blanco sobre azul marino lee, y lee como
+   firma puesta a proposito. `left` en vez de `right` lo aleja del bordado del pecho. */
+.f .handle{{left:110px;right:auto;text-align:left;bottom:56px;color:#FFFFFF;opacity:.78}}
 .handle{{position:absolute;bottom:76px;left:0;right:0;font-family:'OniaMono',monospace;
   font-size:23px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;
   color:#A1A1A6}}"""
 
 
 def markup(lamina):
-    if lamina["layout"] == "Q":          # quién soy
-        foto = LOGOS / lamina["foto"]
-        if not foto.exists():
-            raise SystemExit(f"Falta la foto recortada {foto}. Corré recortar-foto.py.")
-        return (f'<div class="quien"><img src="{foto.as_uri()}">'
-                f'<div class="texto"><div class="nom">{lamina["nombre"]}</div>'
-                f'<div class="bio">{lamina["bio"]}</div></div></div>')
     if lamina["layout"] == "A":
         filas = []
         for n, fila in enumerate(lamina["filas"]):
@@ -843,7 +857,7 @@ def render(tipo, out_dir, laminas=None):
     hoja = css(tipo)
     for i, lamina in enumerate(laminas or LAMINAS, 1):
         html = (f"<!doctype html><html><head><meta charset='utf-8'><style>{hoja}</style></head>"
-                f"<body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("A", "B", "C", "F", "Q") else ""}'>{markup(lamina)}"
+                f"<body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("A", "B", "C", "F") else ""}'>{markup(lamina)}"
                 f"<div class='handle'>{HANDLE}</div></div></body></html>")
         with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as fh:
             fh.write(html)
@@ -904,7 +918,7 @@ def check(tipo, laminas=None):
     fallos = []
     for i, lamina in enumerate(laminas or LAMINAS, 1):
         html = (f"<!doctype html><html><head><meta charset='utf-8'><style>{hoja}</style>"
-                f"{sonda}</head><body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("A", "B", "C", "F", "Q") else ""}'>{markup(lamina)}"
+                f"{sonda}</head><body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("A", "B", "C", "F") else ""}'>{markup(lamina)}"
                 f"<div class='handle'>{HANDLE}</div></div></body></html>")
         with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as fh:
             fh.write(html)
