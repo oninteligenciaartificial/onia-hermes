@@ -244,10 +244,18 @@ ICONOS = {
     # sangre sobre todo el squircle. Es el UNICO objeto que lleva el verde de Onia — y acá
     # sí corresponde, porque es lo único del stack que construyó Sergio Urcullo.
     "onia": _squircle("#00D26A", _imagen("onia", alto=256)),
-    # Los otros dos de la fila 1. Colores como en la referencia #1 del batch: ChatGPT
-    # en su verde, Gemini en blanco con el destello azul.
-    "chatgpt": _squircle("#10A37F", _marca("chatgpt", "#FFFFFF")),
-    "gemini": _squircle("#FFFFFF", _marca("gemini", "#4285F4"), borde="#E8E8ED"),
+    # ⚠️ Los otros dos de la fila 1, corregidos el 06-sep — Sergio Urcullo: "los logos
+    # siguen siendo fake". Tenia razon en los dos, por motivos distintos:
+    #   · ChatGPT: el NUDO de simple-icons si es la marca real; lo falso era MI color.
+    #     Lo habia puesto en verde copiando la referencia #1, que muestra el icono VIEJO.
+    #     El actual es negro con el nudo en blanco.
+    #   · Gemini: simple-icons lo da como destello PLANO. El real tiene el degradado
+    #     aurora (azul → violeta → rosa) y sin eso no se reconoce. Va el SVG oficial
+    #     bajado de gemini.google.com, a sangre.
+    # La regla que deja esto: para una marca conocida, el asset oficial del producto
+    # gana siempre; una libreria de iconos sirve para la FORMA, nunca para el color.
+    "chatgpt": _squircle("#0A0A0A", _marca("chatgpt", "#FFFFFF")),
+    "gemini": _squircle("#FFFFFF", _imagen("gemini-oficial", alto=150), borde="#E8E8ED"),
     "usdt": _squircle("#26A17B", _marca("usdt", "#FFFFFF")),
     # Sin logo oficial en simple-icons: se dibujan.
     "vps": _squircle("#1D1D1F", _torre()),

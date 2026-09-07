@@ -86,6 +86,23 @@ aparte y deja el A/B mirable.
 
 ## Trampas (se van llenando al costo de un render)
 
+0f. 🔴 **Una librería de iconos sirve para la FORMA, nunca para el color — y a veces ni
+   para la forma.** Sergio Urcullo marcó dos veces que los logos eran falsos, y las dos
+   tenía razón por motivos distintos:
+   · **Claude**: simple-icons dibuja el estallido más tosco, y encima yo lo había puesto
+     invertido (naranja con estallido blanco; el real es coral sobre crema).
+   · **ChatGPT**: el nudo de simple-icons **sí** es la marca real. Lo falso era mi color —
+     lo puse verde copiando la referencia #1, que muestra el icono **viejo**. Hoy es negro.
+   · **Gemini**: simple-icons lo da **plano**. El real tiene el degradado aurora (azul →
+     violeta → rosa) y sin eso no se reconoce.
+   **La regla:** para una marca conocida se baja el **asset oficial del propio producto**
+   (`claude.ai`, `gemini.google.com`). La librería queda como respaldo, y su color NUNCA se
+   da por bueno. Ninguno de estos errores dispara un gate: rinden igual de bien.
+0g. **Un objeto de stock se mira antes de aceptarlo, aunque la consulta parezca obvia.**
+   Buscando la lata, `red bull can` devolvió en Unsplash un **cartel de neón** —dos veces—
+   y en Pexels una foto con luz púrpura que no leía como producto. Hicieron falta cuatro
+   intentos y las dos fuentes. Consulta que funcionó: `red bull can white background studio`.
+
 0d. 🔴 **`object-fit` NO aplica a un `<svg>` en línea.** Sólo funciona en elementos
    reemplazados (`<img>`, `<video>`). Un `<svg>` sin `width`/`height` propios se estira al
    100% del contenedor e ignora la altura fija: en el layout A los squircles desbordaban su
