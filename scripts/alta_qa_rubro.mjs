@@ -47,6 +47,7 @@
  */
 import { execFileSync } from "node:child_process";
 import { createRequire } from "node:module";
+import { cargarPlaywright } from "./lib/playwright-que-arranca.mjs";
 
 const RAICES = [
   "/root/loops/onia-platform-chatbot/node_modules",
@@ -128,7 +129,7 @@ function orgDelCorreo() {
 }
 
 async function main() {
-  const { chromium } = cargar("playwright");
+  const { chromium } = await cargarPlaywright();
 
   // Idempotencia: si la org ya existe no se vuelve a dar de alta. Correr esto dos veces no
   // puede dejar dos organizaciones del mismo negocio en produccion.
