@@ -164,6 +164,43 @@ y sin operar. Acá se opera, con verificación por ítem.
 
       Lo que NO es fantasma y sigue abierto es lo de abajo: el circuito existe y espera decisión.
 
+- [x] 🟠 **El error que ve el cliente hablaba dental, aunque la pantalla ya lo tenía traducido.**
+      `55cfbf4` (2026-09-07). `/api/patients` y `/api/patients/[id]` contestaban «Paciente no
+      encontrado», «Error al actualizar paciente» y «Error al eliminar paciente» tipeados a mano,
+      y esas rutas **no son dentales**: `VERTICAL_API_ROUTES` las declara para `CON_AGENDA`, que
+      incluye **estética** («clienta») y **servicios profesionales** («cliente») — dos de los cinco
+      rubros vendibles de la v1.0.
+
+      Lo que lo hacía invisible: la pantalla **sí** derivaba el idioma, pero en el fallback —
+      `setError(data.error ?? \`Error al crear ${el} ${v.cliente}.\`)`. El `??` invierte cuál rama
+      se ve: gana `data.error`, así que el texto traducido sólo aparecía cuando la API **no**
+      contestaba. El trabajo de traducción ya estaba hecho y no llegaba al cliente. Ningún gate de
+      rubro podía verlo — todos barren `.tsx` de pantallas y estos literales viven en
+      `app/api/**/route.ts`.
+
+      Prueba: `lib/platform/idioma-del-error.test.ts` en ROJO primero, nombrando los 6 mensajes;
+      verde después. Gates: `tsc` 0 · `vitest` 3373 verdes · `eslint` 0.
+      ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido `t_deddf471`.
+
+- [ ] 🟠 **Las otras cuatro rutas de la misma clase siguen hablando dental.** Mismo defecto que
+      `55cfbf4`, otro camino — se dejaron fuera para no cerrar dos frentes en una vuelta.
+      Reproducción, sin investigar de nuevo:
+
+      ```
+      cd /root/loops/onia-platform-chatbot
+      grep -nE 'error: "[^"]*(paciente|doctor)' app/api/appointments/route.ts \
+        app/api/appointments/availability/route.ts app/api/doctor-schedules/route.ts \
+        'app/api/email/appointment-reminder/[id]/route.ts'
+      ```
+
+      Da 5: «No autorizado para crear citas de otro doctor», «Doctor no encontrado» ×2,
+      «doctorId y date son requeridos», «El paciente no tiene correo electrónico registrado».
+      Las cuatro son `CON_AGENDA`, así que las lee un estudio contable y un centro de estética.
+      **«doctor» necesita otro helper que «paciente»**: el rótulo del rol ya está resuelto en
+      `lib/platform/rol-en-el-idioma-del-rubro.test.ts` (`a831216`) — se reusa ese, no se inventa
+      uno. El de cliente ya existe: `clienteNoEncontrado` / `errorAlCliente` en
+      `lib/platform/idioma-del-error.ts`. Al cerrarlo, sumar esas rutas a `RUTAS_FICHA` del gate.
+
 - [ ] 🔴 **Hay arreglos verdes esperando UN `ok` de Sergio Urcullo, y no llegan al cliente.**
       Medido el 2026-09-06 10:35 UTC por `onia-cola`: **tres** destinos con pedido en `blocked`,
       uno por destino, y **ninguno contestado**.
