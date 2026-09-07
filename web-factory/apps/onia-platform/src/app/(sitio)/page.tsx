@@ -141,14 +141,20 @@ const FAQ = [
     a: `No. La prueba de ${PRUEBA.dias} días no pide tarjeta ni pago: ${ALTA_VERBO_VOS}, elegís tu rubro y usás el sistema completo esos ${PRUEBA.dias} días.`,
   },
   {
-    // lib/pricing.ts:283 (CONDICIONES) + (sitio)/empezar/page.tsx:79 (paso 02).
+    // lib/pricing.ts:283 (CONDICIONES) + (sitio)/empezar/page.tsx (paso 02).
+    // La pregunta es "¿los cargo yo?" y la respuesta vieja no la contestaba:
+    // decía "alguien que te la explica" y seguía de largo. Se contesta que sí,
+    // con la herramienta que existe de verdad (app/api/patients/import y
+    // app/api/comercio/products/import: CSV con asistente de columnas).
     q: "¿Los datos del Excel o del cuaderno los cargo yo?",
-    a: "No arrancás con la pantalla vacía: te entregamos el sistema con la configuración de tu rubro puesta y alguien que te la explica. En los tres planes no cobramos implementación ni migración — el checkout cobra solo el plan. Grupo / Empresarial sí lleva implementación acompañada y se cotiza aparte.",
+    a: "Sí, los cargás vos, y no a mano uno por uno: hay importación por CSV con un asistente que te va diciendo qué columna es cada cosa. No arrancás con la pantalla vacía — la cuenta llega con la configuración de tu rubro puesta. En los tres planes no cobramos implementación ni migración: el checkout cobra solo el plan. Grupo / Empresarial sí lleva implementación acompañada y se cotiza aparte.",
   },
   {
-    // (sitio)/empezar/page.tsx:79 — "alguien que te la explica".
+    // Acá decía "alguien que te la explica", y ese alguien no existe: el alta es
+    // automática y no avisa a nadie que te llame. Lo cierto es el asistente de
+    // puesta en marcha del producto y el WhatsApp, que sí contesta.
     q: "¿Y si no sé de computación? ¿Quién me enseña?",
-    a: "Nadie instala nada ni arranca un proyecto de meses: te entregamos la cuenta con la configuración de tu rubro puesta y alguien que te la explica. Si te trabás después, escribinos por WhatsApp.",
+    a: "Nadie instala nada ni arranca un proyecto de meses: la cuenta llega con la configuración de tu rubro puesta y el sistema te lleva paso a paso por la puesta en marcha. Si te trabás después, escribinos por WhatsApp.",
   },
   {
     // content/legal/terminos.md:83 (sin permanencia) y §3.4 (mora: gracia →

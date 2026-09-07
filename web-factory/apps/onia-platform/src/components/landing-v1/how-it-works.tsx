@@ -104,9 +104,16 @@ export function HowItWorks() {
         </Reveal>
 
         <Reveal className={styles.rail}>
+          {/*
+            Decía «Te lo dejamos andando nosotros: cargamos tus datos y
+            capacitamos a tu equipo» — una implementación entera (migración más
+            capacitación) prometida a cada prueba gratis, en la misma página que
+            aclara que no cobramos implementación. No hay quién la haga: la vende
+            y la opera Sergio Urcullo solo. Va lo que el producto sí entrega.
+          */}
           <p>
-            Te lo dejamos andando nosotros: cargamos tus datos y capacitamos a tu
-            equipo.
+            Entra andando: llega configurado para tu rubro y tus datos suben por
+            CSV con asistente de columnas.
           </p>
           <a className={`${styles.btn} ${styles.btnPrimary}`} href="#precios">
             Probar gratis {PRUEBA.dias} días
