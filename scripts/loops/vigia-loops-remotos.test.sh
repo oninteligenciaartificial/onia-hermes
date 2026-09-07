@@ -34,6 +34,18 @@ arranca_hace() {  # arranca_hace <id> <minutos>
     "$(date -u -d "-$2 min" +%FT%TZ)" "$1" > "$TMP/logs/onia-loop-$1.log"
 }
 
+# Marca ids como YA CONOCIDOS: su alta quedo hace mucho, asi que el vigia los
+# juzga sin gracia. Los casos 1-8 asumen eso — miden un loop que ya venia
+# corriendo, no uno recien mudado.
+conocidos() {  # conocidos <id>...
+  for i in "$@"; do printf '%s\n' "$(date -d '-30 day' +%s)" > "$TMP/estado/$i.alta"; done
+}
+
+# Envejece el alta de un id para simular que su ventana de gracia ya paso.
+envejecer_alta() {  # envejecer_alta <id> <minutos>
+  printf '%s\n' "$(date -d "-$2 min" +%s)" > "$TMP/estado/$1.alta"
+}
+
 run() {  # run [MAQUINA]
   : > "$TMP/mensajes.txt"
   TMP_MENSAJES="$TMP/mensajes.txt" \
@@ -49,6 +61,7 @@ run() {  # run [MAQUINA]
 echo "vigia-loops-remotos — cuando habla, cuando calla, y a QUE maquina culpa"
 
 printf 'onia-cola 60\nchatbot-cola 60\n' > "$TMP/lista.txt"
+conocidos onia-cola chatbot-cola
 
 # 1. Los dos frescos: no molesta.
 arranca_hace onia-cola 10; arranca_hace chatbot-cola 10; run
@@ -68,14 +81,14 @@ arranca_hace onia-cola 1; run
 case "$MSGS" in *"Loop recuperado"*) ok "vuelve: avisa recuperado" ;; *) falla "recuperado" "Loop recuperado" "$MSGS" ;; esac
 
 # 5. TODOS callados -> un solo mensaje de apagon, no uno por loop.
-rm -f "$TMP"/estado/*
+rm -f "$TMP"/estado/*; conocidos onia-cola chatbot-cola
 arranca_hace onia-cola 200; arranca_hace chatbot-cola 200; run
 case "$MSGS" in *"no da senales"*) ok "todos callados: avisa apagon" ;; *) falla "apagon" "no da senales" "$MSGS" ;; esac
 N=$(grep -c -- "^---$" "$TMP/mensajes.txt")
 [ "$N" = "1" ] && ok "apagon = UN mensaje, no uno por loop" || falla "apagon repetido" "1 mensaje" "$N"
 
 # 6. EL QUE MOTIVO EL ARCHIVO: el aviso nombra la maquina que se le pasa.
-rm -f "$TMP"/estado/*
+rm -f "$TMP"/estado/*; conocidos onia-cola chatbot-cola
 run "el VPS"
 case "$MSGS" in *"el VPS no da senales"*) ok "con MAQUINA='el VPS' culpa al VPS" ;; *) falla "maquina parametrizada" "el VPS no da senales" "$MSGS" ;; esac
 case "$MSGS" in *"PC de casa"*) falla "fuga de la maquina vieja" "sin 'PC de casa'" "$MSGS" ;; *) ok "y NO nombra la PC de casa" ;; esac
@@ -88,8 +101,45 @@ TMP_MENSAJES="$TMP/mensajes.txt" ONIA_TG="$TMP/tg.sh" ONIA_LOOPS_REMOTOS="$TMP/l
 
 # 8. Un id invalido no se interpola en el mensaje (lo que sale va a Telegram como HTML).
 printf '<b>malo</b> 60\nonia-cola 60\n' > "$TMP/lista.txt"
-rm -f "$TMP"/estado/*; arranca_hace onia-cola 200; run
+rm -f "$TMP"/estado/*; conocidos onia-cola; arranca_hace onia-cola 200; run
 case "$MSGS" in *"<b>malo</b>"*) falla "id invalido interpolado" "descartado" "$MSGS" ;; *) ok "id invalido: descartado, no llega a Telegram" ;; esac
+
+# ── La gracia del recien mudado ──────────────────────────────────────────────
+# EL BUG QUE MOTIVA ESTE BLOQUE (medido 2026-09-06 22:33): al mudar `web-venta` a
+# casa, el vigia lo dio por CAIDO 9 minutos despues, ANTES de su primera corrida
+# programada. Su log sincronizado traia corridas viejas de un experimento del
+# 05-sep, o sea 19 h de silencio: mas de 2 cadencias => MUDO. El caso "sin ningun
+# registro" que el script ya contemplaba NO cubre esto, y es peor, porque un log
+# viejo se lee como un loop que corria y se callo.
+# Quedan 4 loops por mudar en la misma lista: sin esto, cada mudanza le manda a
+# Sergio Urcullo un rojo falso y despues un verde. Un vigia que grita mal no
+# molesta: inutiliza.
+
+# 9. Un id NUEVO en la lista no se juzga hasta que pase una ventana entera.
+printf 'onia-cola 60\nweb-venta 60\n' > "$TMP/lista.txt"
+rm -f "$TMP"/estado/*; conocidos onia-cola
+arranca_hace onia-cola 10          # el conocido, sano
+arranca_hace web-venta 1140        # el recien mudado, con 19 h de log viejo
+run
+case "$MSGS" in *web-venta*) falla "recien mudado acusado" "(nada sobre web-venta)" "$MSGS" ;; *) ok "id NUEVO con log viejo: no lo acusa todavia" ;; esac
+
+# 10. RECIPROCO: pasada la ventana desde su alta, SI lo juzga. Sin esto la gracia
+#     seria un silenciador permanente, que es peor que el rojo falso.
+envejecer_alta web-venta 200; run
+case "$MSGS" in *"Loop callado"*web-venta*) ok "pasada la ventana: ahi si avisa" ;; *) falla "gracia eterna" "Loop callado web-venta" "$MSGS" ;; esac
+
+# 11. RECIPROCO 2: si arranca DENTRO de la gracia cuenta como vivo — la gracia
+#     tapa el rojo, no el verde.
+rm -f "$TMP"/estado/*; conocidos onia-cola
+arranca_hace onia-cola 10; arranca_hace web-venta 1140; run   # alta de web-venta
+arranca_hace web-venta 2; run                                  # y arranca por primera vez
+case "$MSGS" in *"Loop recuperado"*) falla "recuperado falso" "(nada: nunca estuvo caido)" "$MSGS" ;; *) ok "arranca dentro de la gracia: ni rojo ni 'recuperado' falso" ;; esac
+
+# 12. Un id en gracia no cuenta para el apagon: con el unico loop juzgable callado
+#     tiene que salir "Loop callado", no "la maquina no da senales".
+rm -f "$TMP"/estado/*; conocidos onia-cola
+arranca_hace onia-cola 200; arranca_hace web-venta 1140; run
+case "$MSGS" in *"no da senales"*) falla "apagon con uno en gracia" "Loop callado" "$MSGS" ;; *) ok "el que esta en gracia no cuenta para el apagon" ;; esac
 
 echo
 if [ "$FALLOS" = "0" ]; then echo "vigia-loops-remotos: TODO VERDE"; exit 0; fi

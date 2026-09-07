@@ -57,12 +57,34 @@ while read -r ID CAD _; do
     printf 'linea invalida en %s: %s %s\n' "$LISTA" "$ID" "${CAD:-}" >&2
     continue
   fi
-  TOTAL=$((TOTAL + 1))
   LOG="$LOGDIR/onia-loop-$ID.log"
   ULTIMA=$(grep "===== ARRANCA $ID " "$LOG" 2>/dev/null | tail -1 | awk '{print $1}')
   T=0
   [ -n "$ULTIMA" ] && T=$(date -d "$ULTIMA" +%s 2>/dev/null || echo 0)
   LIMITE=$(( CAD * CICLOS * 60 ))
+
+  # GRACIA DEL RECIEN MUDADO. Un id que aparece por primera vez en la lista se
+  # anota con su fecha de alta y no se juzga hasta que pase una ventana entera
+  # DESDE ESA ALTA — no desde la ultima marca del log. Sin esto, mudar un loop
+  # a casa dispara un rojo y despues un verde, los dos falsos: su log
+  # sincronizado suele traer corridas viejas (medido el 2026-09-06 con
+  # `web-venta`: 19 h de un experimento del 05-sep, dado por caido 9 min despues
+  # de la mudanza y antes de su primera corrida programada). El caso "sin ningun
+  # registro" que este script ya cubria NO alcanza: ahi hay registro, y viejo se
+  # lee como un loop que corria y se callo.
+  ALTA_F="$ESTADO/$ID.alta"
+  [ -f "$ALTA_F" ] || printf '%s\n' "$AHORA" > "$ALTA_F"
+  ALTA=$(cat "$ALTA_F" 2>/dev/null)
+  case "$ALTA" in ''|*[!0-9]*) ALTA=$AHORA ;; esac
+
+  # La gracia tapa el ROJO, nunca el verde: si ya arranco, se juzga vivo igual.
+  # Y no cuenta para TOTAL, porque si contara, un id en gracia impediria detectar
+  # el apagon del resto (MUDOS nunca igualaria a TOTAL).
+  if { [ "$T" = 0 ] || [ $(( AHORA - T )) -ge "$LIMITE" ]; } && [ $(( AHORA - ALTA )) -lt "$LIMITE" ]; then
+    continue
+  fi
+
+  TOTAL=$((TOTAL + 1))
   if [ "$T" -gt 0 ] && [ $(( AHORA - T )) -lt "$LIMITE" ]; then
     VIVOS="$VIVOS $ID"
   else
