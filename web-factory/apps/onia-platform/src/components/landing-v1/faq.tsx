@@ -1,4 +1,5 @@
 import { SplitTextReveal, StaggerGrid, StaggerItem } from "@/motion";
+import { PRUEBA } from "@/lib/pricing";
 import { WA_URL_LANDING } from "@/lib/site";
 import { precioStack } from "@/content/chatbot-precios";
 import styles from "./landing.module.css";
@@ -17,7 +18,7 @@ import styles from "./landing.module.css";
 export const FAQS: { q: string; a: string }[] = [
   {
     q: "¿Necesito tarjeta para probar?",
-    a: "No. La prueba de 14 días no pide tarjeta ni pago. Te registrás, elegís tu rubro y usás el sistema completo.",
+    a: `No. La prueba de ${PRUEBA.dias} días no pide tarjeta ni pago. Te registrás, elegís tu rubro y usás el sistema completo.`,
   },
   {
     q: "¿Qué pasa cuando termina la prueba?",
@@ -50,7 +51,7 @@ export const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "¿Hay contrato de permanencia?",
-    a: "No. Pagás por adelantado el ciclo que elijas —semana, mes o año— y no renovás cuando quieras, sin penalidad. Lo pagado cubre el período en curso: por eso la prueba de 14 días va antes y sin tarjeta, para que decidas sin poner un peso.",
+    a: `No. Pagás por adelantado el ciclo que elijas —semana, mes o año— y no renovás cuando quieras, sin penalidad. Lo pagado cubre el período en curso: por eso la prueba de ${PRUEBA.dias} días va antes y sin tarjeta, para que decidas sin poner un peso.`,
   },
 ];
 

@@ -52,6 +52,9 @@ export function CapturaGuia() {
   const [whatsapp, setWhatsapp] = useState("");
   const [estado, setEstado] = useState<Estado>("vacio");
   const [error, setError] = useState("");
+  // Si el pipeline se lo tragó, el lead NO existe para nosotros: la hoja se
+  // entrega igual (es suya), pero el aviso no se promete. 204 = registrado.
+  const [registrado, setRegistrado] = useState(false);
 
   async function enviar(evento: React.FormEvent<HTMLFormElement>) {
     evento.preventDefault();
@@ -75,7 +78,7 @@ export function CapturaGuia() {
     }
 
     try {
-      await fetch("/api/agenda-intake", {
+      const respuesta = await fetch("/api/agenda-intake", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
@@ -84,9 +87,11 @@ export function CapturaGuia() {
           src,
         }),
       });
+      setRegistrado(respuesta.status === 204);
     } catch {
       // Best-effort a propósito: la persona ya cumplió su parte y la hoja es
       // suya. Si el pipeline está caído, se pierde el lead, no la entrega.
+      // `registrado` queda en false: la hoja sale igual, el aviso no se promete.
     }
 
     setEstado("listo");
@@ -108,9 +113,12 @@ export function CapturaGuia() {
         >
           Guardar la hoja en PDF
         </button>
-        <p className={g.listoNota}>
-          Si el SIN vuelve a mover la fecha, te escribimos. Ya lo hizo dos veces.
-        </p>
+        {registrado && (
+          <p className={g.listoNota}>
+            Si el SIN vuelve a mover la fecha, te escribimos. Ya lo hizo dos
+            veces.
+          </p>
+        )}
       </div>
     );
   }

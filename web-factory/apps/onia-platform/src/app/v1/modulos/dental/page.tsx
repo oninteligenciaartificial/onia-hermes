@@ -3,7 +3,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { PressableCta, Reveal, SplitTextReveal, StaggerGrid, StaggerItem } from "@/motion";
 import { APP_URL, WA_URL_LANDING } from "@/lib/site";
-import { bs, plan } from "@/lib/pricing";
+import { bs, plan, PRUEBA } from "@/lib/pricing";
 
 const SITE_URL = "https://onia.com.bo";
 const REGISTRO_URL = `${APP_URL}/register`;
@@ -12,14 +12,14 @@ export const metadata: Metadata = {
   metadataBase: new URL(`${SITE_URL}/`),
   title: "Software para clínicas dentales en Bolivia — Onia Platform",
   description:
-    `Agenda, ficha del paciente con odontograma, recordatorios automáticos, caja, contabilidad con IVA/IT y agentes con IA que recuperan pacientes. Desde Bs ${bs(plan("basico").mensual)}/mes, 14 días gratis.`,
+    `Agenda, ficha del paciente con odontograma, recordatorios automáticos, caja, contabilidad con IVA/IT y agentes con IA que recuperan pacientes. Desde Bs ${bs(plan("basico").mensual)}/mes, ${PRUEBA.dias} días gratis.`,
   alternates: { canonical: "/modulos/dental" },
   openGraph: {
     type: "website",
     locale: "es_BO",
     title: "Software para clínicas dentales en Bolivia",
     description:
-      "La agenda llena y los impuestos al día — sin cuaderno ni planillas. 14 días gratis.",
+      `La agenda llena y los impuestos al día — sin cuaderno ni planillas. ${PRUEBA.dias} días gratis.`,
     url: "/modulos/dental",
   },
 };
@@ -151,7 +151,7 @@ export default function ModuloDentalPage() {
             <Reveal delay={0.18} className="actions">
               <PressableCta>
                 <a className="btn" href={REGISTRO_URL}>
-                  Probar gratis 14 días
+                  Probar gratis {PRUEBA.dias} días
                 </a>
               </PressableCta>
               <a className="btn btn-ghost" href="/precios">

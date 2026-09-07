@@ -1,4 +1,5 @@
 import { Reveal, SplitTextReveal } from "@/motion";
+import { PRUEBA } from "@/lib/pricing";
 import { WA_URL_LANDING } from "@/lib/site";
 import { Row, Shot, ShotImage } from "./shot";
 import { ModulesDemo } from "./modules-demo";
@@ -108,7 +109,7 @@ export function HowItWorks() {
             equipo.
           </p>
           <a className={`${styles.btn} ${styles.btnPrimary}`} href="#precios">
-            Probar gratis 14 días
+            Probar gratis {PRUEBA.dias} días
           </a>
           <a
             className={`${styles.btn} ${styles.btnGhost}`}

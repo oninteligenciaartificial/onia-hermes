@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PLANES, bs, plan } from "@/lib/pricing";
+import { PLANES, bs, plan, PRUEBA } from "@/lib/pricing";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Hero } from "@/components/landing-v1/hero";
@@ -17,7 +17,7 @@ import styles from "@/components/landing-v1/landing.module.css";
 const SITE_URL = "https://onia.com.bo/";
 const TITLE = "Onia · Tu negocio no pierde citas ni cobros | Bolivia";
 const DESCRIPTION =
-  `Onia Platform es el sistema de gestión con inteligencia artificial para negocios en Bolivia: agenda, clientes, cobros y agentes que trabajan 24/7 con tu aprobación. Desde Bs ${bs(plan("basico").mensual)} al mes. Probalo 14 días gratis, sin tarjeta.`;
+  `Onia Platform es el sistema de gestión con inteligencia artificial para negocios en Bolivia: agenda, clientes, cobros y agentes que trabajan 24/7 con tu aprobación. Desde Bs ${bs(plan("basico").mensual)} al mes. Probalo ${PRUEBA.dias} días gratis, sin tarjeta.`;
 
 /*
  * La tarjeta social NO se declara acá: la dibuja `opengraph-image.tsx` de este
@@ -43,14 +43,14 @@ export const metadata: Metadata = {
     siteName: "Onia Platform",
     title: "Tu negocio no pierde citas ni cobros — Onia, Bolivia",
     description:
-      `Onia recuerda cada cita, persigue cada deuda y hace volver al cliente que se enfrió. Vos aprobás; el sistema hace. Desde Bs ${bs(plan("basico").mensual)}/mes, 14 días gratis.`,
+      `Onia recuerda cada cita, persigue cada deuda y hace volver al cliente que se enfrió. Vos aprobás; el sistema hace. Desde Bs ${bs(plan("basico").mensual)}/mes, ${PRUEBA.dias} días gratis.`,
     url: "/",
   },
   twitter: {
     card: "summary_large_image",
     title: "Tu negocio no pierde citas ni cobros — Onia, Bolivia",
     description:
-      `Onia recuerda cada cita, persigue cada deuda y hace volver al cliente que se enfrió. Vos aprobás; el sistema hace. Desde Bs ${bs(plan("basico").mensual)}/mes, 14 días gratis.`,
+      `Onia recuerda cada cita, persigue cada deuda y hace volver al cliente que se enfrió. Vos aprobás; el sistema hace. Desde Bs ${bs(plan("basico").mensual)}/mes, ${PRUEBA.dias} días gratis.`,
   },
 };
 
