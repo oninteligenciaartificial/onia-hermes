@@ -44,6 +44,56 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **Este carril se mudó de máquina y quedó SIN el árbol de `onia-platform`: no podía
+      escribir una línea del producto, y nada se puso rojo — arreglado el 2026-09-07.**
+      `chatbot-cola` pasó a correr en **nodo-casa** (`3 * * * *`, primera corrida allá hoy
+      03:03 UTC), y la mudanza llevó el worktree de `onia-hermes` pero **no** el de
+      `onia-platform`: `/root/loops/onia-platform-chatbot` **no existía** en esa máquina
+      (sí en el VPS, la máquina vieja). Como este es **el único loop que escribe en
+      `onia-platform`** —el repo que ES el objetivo nº 1 del sistema desde el 2026-09-05—, el
+      segundo plato del carril estaba muerto: cero código de producto, cada vuelta, para siempre.
+
+      **Por qué sobrevivió, que es lo que vale:** el gate de registro
+      (`scripts/loops_registrados.mjs`) verifica que la **línea de cron** exista y coincida con
+      la tabla de `loops.md` **en las dos direcciones** — y esta mañana daba **`OK` / exit 0**,
+      con razón: el horario estaba perfecto. Lo que nadie verifica es el **espacio de trabajo**:
+      que los árboles que el loop necesita existan *en la máquina donde corre*. Un loop puede
+      estar impecablemente registrado y no tener dónde trabajar. Es la misma familia que este
+      repo ya tiene medida —*una lista de inclusión que cubre sólo lo que ya falló*— un escalón
+      más arriba: el gate cubre **el horario**, no **el taller**.
+
+      Y el modo de falla es el silencioso, no el ruidoso: el loop arranca, mide su objetivo,
+      no encuentra árbol, y lo honesto que puede reportar es *«no había nada desbloqueado que
+      hacer»* — indistinguible de una vuelta sana. El clon vecino `/root/loops/onia-platform`
+      sí estaba (lo usa `onia-cola` para mergear a `master`), así que un vistazo rápido a
+      `ls /root/loops` **confirma en falso** que la plataforma está disponible.
+
+      **Arreglado y verificado, no razonado:** `git worktree add` desde
+      `/root/loops/onia-platform` sobre `claude/chatbots-platform-review-0d1d09` (4.834
+      archivos), `git merge origin/master` → **0 commits atrás**, y `npm ci` → **692 paquetes**
+      con `vitest` y `tsc` locales. La prueba de que el árbol sirve de verdad no es que exista:
+      es **`npx tsc --noEmit` → exit 0**. Eso importa acá más que en otro lado, porque este repo
+      ya midió que en un worktree **pelado** `npx tsc` se baja *otro* paquete llamado `tsc`,
+      imprime *«This is not the tsc command you are looking for»* y **sale con éxito** — o sea
+      que el gate firma verde sin compilar un archivo. Un árbol sin `node_modules` no da rojo:
+      da un **verde falso**, que es el caro.
+
+      ⚠️ **De paso, un dato que corrige lo que la memoria compartida le dice hoy a los cuatro
+      carriles de casa.** Está escrito que un gate que lee rutas del VPS *«deja de medir cuando
+      su loop se muda al nodo de casa»*, y eso es cierto **sólo para archivos**: `/opt/onia-landing`,
+      `/opt/onia-platform` y `/opt/onia/bot` no existen allá. Pero **`docker` sí funciona**, y no
+      es un docker local: `/usr/bin/docker` → `/root/bin/docker` es un **shim que delega en el VPS
+      por SSH** (lo deja `instalar-homelab.sh`; `docker info` contesta `srv1360183`). O sea que
+      desde casa un `docker exec` **toca PRODUCCIÓN**. Son seis shims así, y `docker` es el que
+      importa acá. Consecuencia práctica para cualquier carril que escriba un gate: lo que hay
+      que evitar es la **ruta `/opt`**, no el `docker exec` — y un carril que dé por imposible
+      medir desde casa se está frenando de gratis. (Los otros cinco shims viven todos en
+      `/root/bin/`, fuera del repo: el del tablero, el de Telegram, el de aprender, el de
+      consolidar memoria y el del VPS.) Por eso `scripts/sonda_widget.mjs` —que lee
+      Chatwoot y `supabase-db` por `docker exec`— corre allá sin tocarle una línea: resuelve el
+      nombre del contenedor **por prefijo** (`docker ps --filter name=`), así que encuentra
+      `onia-chatbot_chatwoot-db.1.sddet…` aunque su constante diga `onia-chatbot_chatwoot-db`.
+
 - [x] 🔴 **El correo que le llega al cliente DEL cliente hablaba en dental para los siete rubros
       — arreglado el 2026-09-06 (`aeeacd0` en `onia-platform`).** La confirmación de cita y el
       recordatorio traían los rótulos **«Doctor»** y **«Tratamiento»** escritos a mano, y los
