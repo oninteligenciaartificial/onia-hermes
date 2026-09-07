@@ -85,7 +85,14 @@ y sin operar. Acá se opera, con verificación por ítem.
       en 404 **antes** de llegar a la escritura y los casos pasan sin medir nada.
       Gates: `tsc` 0 · `vitest` 3560 verdes · `eslint` 0 errores. Pantalla MIRADA renderizada con
       el CSS del build vivo (los tres estados), porque el deploy está esperando el `ok`.
-      ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido de deploy de `plataforma`.
+
+      ⚠️ **Publicado en la rama del carril, NO en `master` y NO desplegado — y el orden importa,
+      porque decirlo mal es un modo de falla conocido.** El publicador buildea desde
+      `origin/master` (`publicar.sh --dry-run` contesta hoy *«3 arreglos, HEAD 0331198»*), así
+      que **este arreglo todavía no viaja con el pedido de deploy**: primero lo tiene que mergear
+      el integrador (`onia-cola`), y recién ahí entra. Medido, no supuesto:
+      `git merge-base --is-ancestor bb0ba47 origin/master` → **no**. Escribir «viaja con el
+      pedido» antes del merge es prometerle a Sergio Urcullo un arreglo que el swap no incluiría.
 
 - [x] 🔴 **La ficha clínica le pedía «Caries dentinaria en pieza 46» a un centro de estética —
       cerrado el 2026-09-07 (`3a4977d` en `onia-platform`, publicado en la rama). Y lo que lo
