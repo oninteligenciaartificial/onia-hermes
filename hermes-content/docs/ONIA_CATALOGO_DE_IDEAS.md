@@ -261,3 +261,115 @@ decisiones de plata para Sergio en §8 de ese doc.
 2. Toda idea se clasifica contra el filtro §1: si no acerca un pago en semanas, nace 🟡 con gatillo explícito.
 3. Las 🔴 descartadas no se reabren sin un hecho NUEVO (cliente pagando, ley nueva, capital nuevo).
 4. Este doc se actualiza al cerrar cada sesión que toque estrategia (el detalle va al doc fuente, acá solo estado).
+
+---
+
+## 12. Pedidos de Sergio Urcullo — 2026-09-06 (once en un mensaje)
+
+> Entraron todos juntos, al final de la sesión que cerró el orden de trabajo de la 1.0.
+> Se anotan acá por la regla §11.1 — **una idea no se persigue en la sesión donde nace** — y
+> se clasifican contra el filtro §1: *¿acerca un pago en las próximas semanas?*
+>
+> **Lo único que se persigue ahora son los dos ítems marcados 🟢 EN CURSO**, porque son
+> defectos de la 1.0 encontrados caminando el recorrido de comercio, no ideas nuevas.
+> Todo lo demás espera a que la 1.0 esté lanzada. Él mismo lo dijo en el mismo mensaje:
+> *«ya lancemos la versión uno punto cero»* — y nueve de estos once la empujan hacia atrás.
+
+| # | Pedido | Clase | Estado | Qué lo frena / gatillo |
+|---|---|---|---|---|
+| 1 | Alta manual de cliente en comercio | defecto 1.0 | 🟢 **EN CURSO** | — |
+| 2 | Reimprimir un recibo después de cobrar | defecto 1.0 | 🟢 **EN CURSO** | — |
+| 3 | Layout que use el ANCHO, no solo scroll vertical | UX 1.0 | 🟡 anotado | Toca TODAS las pantallas. Es rediseño, no arreglo: entra después de lanzar o se come el lanzamiento |
+| 4 | Sidebar colapsable a solo iconos | UX 1.0 | 🟡 anotado | Chico y contenido. Candidato a entrar con el #3, misma pasada |
+| 5 | Revisión final de precios | decisión | 🔴 **DE SERGIO URCULLO** | Las 4 preguntas ya están medidas en `handoff/onia-v1-panel-ui.md` §6. No falta análisis: falta que él elija |
+| 6 | Vender el chatbot SIN la plataforma | packaging | 🟡 anotado, alto valor | **Es el único de la lista que ensancha el embudo.** Ver §12.1 |
+| 7 | Organización interna de Onia (ingresos, usuarios activos, GA, SEO) | producto nuevo | 🟡 anotado | Ver §12.2 — es un tablero para NOSOTROS, no acerca ningún pago |
+| 8 | Conectar páginas web / API de OpenAI | capacidad | 🟡 anotado | Ver §12.3 — el motor del chatbot HOY no llama a OpenAI directo |
+| 9 | Mirar Sendy Pro (competidor de chatbots) | research | 🟡 anotado | Barato y útil. Entra con el #6, no antes |
+| 10 | Pagos: cripto/Binance USDT por QR | rail de cobro | 🟡 anotado | Ver §12.4 |
+| 11 | LLC en EE.UU. para facturar en otros países | estructura | 🔴 fuera de la 1.0 | La 1.0 es **solo Bolivia** porque factura al SIAT. Gatillo: primer cliente fuera de Bolivia |
+
+### 12.1 · Vender el chatbot suelto — el único que ensancha el embudo
+
+Sergio Urcullo: *«el Onia platform es el sistema, el chatbot es el agente conversacional; que se
+pueda comprar uno o el otro, o los dos juntos… cada uno puede funcionar sin el otro, pero juntos
+son mejores»*.
+
+**Por qué vale más que el resto de la lista:** hoy el chatbot es un **add-on** (`pricing.ts`,
+Bs 390/mes) y para comprarlo hay que contratar antes un plan de la plataforma (Bs 320 el más
+barato). O sea el ticket de entrada al chatbot es **Bs 710, no Bs 390**. Contra Xmart —el ancla
+real, Bs 177 QR / Bs 296 Meta API— eso es entre 2,4× y 4× más caro por lo mismo. Soltarlo baja
+el ticket de entrada un 45 % sin tocar el precio de nada.
+
+**Lo que hay que resolver, y no es de copy:**
+- `Organization.whatsappAddon` es un **booleano sobre una organización que ya existe**. Un
+  cliente de solo-chatbot igual necesita organización, plan y login. Hoy **no existe un "plan
+  chatbot"** en `subscription-plans.ts`: los cuatro planes son de la plataforma.
+- El gate `isWhatsAppAddonActive()` asume plan vigente. Un solo-chatbot con `plan: free` choca
+  contra `checkPlanExpiry` y contra los topes de `plan-limits.ts`.
+- Decidir si el solo-chatbot ve el panel completo con casi todo vacío (mal) o una vista
+  recortada (trabajo).
+
+**Gatillo:** después de lanzar la 1.0, junto con el #9 (mirar Sendy Pro) y el #5 (precios),
+porque los tres contestan la misma pregunta.
+
+### 12.2 · Organización interna de Onia — tablero propio
+
+Pedido: una org de Onia con secciones **distintas a las de los rubros** (sin dental), que muestre
+nuevos ingresos, usuarios activos, Google Analytics y SEO.
+
+**Lo que ya existe y hay que mirar antes de construir:**
+- `onia-interna` **ya existe** como organización (plan `free`, `verticalTrackId:
+  dentagest-clinical` — o sea hoy le muestra pantallas de dentista, que es exactamente lo que
+  él señala).
+- Ya hay tarea abierta para sacarla del rubro dental (`t_3a60bfef`, candidato `gestios-general`).
+- `/admin/metricas` ya existe con métricas de la empresa.
+- 🔴 **ONIA Center está ABANDONADO** (decisión de Sergio Urcullo, 31-ago) y era exactamente
+  esto: el tablero interno. Reabrirlo con otro nombre es reabrirlo.
+
+**El riesgo:** es un producto para nosotros, con cero clientes pagando. Por el filtro §1 no
+acerca ningún pago, y por §10 de `ONIA_ESTRATEGIA_DE_EMPRESA.md` falla el test de tres
+preguntas — no se le vende al mismo cliente que ya paga.
+
+**El camino barato, si igual se quiere:** un `verticalTrackId` propio en `vertical-pack.ts` con
+su nav, reusando `/admin/metricas`. GA y SEO son **integraciones nuevas con terceros**: eso ya es
+otro tamaño y va aparte.
+
+### 12.3 · Conectar páginas web y la API de OpenAI
+
+Sergio Urcullo: *«el tema de las APIs de OpenAI nunca lo hiciste»*.
+
+**Estado medido, para que la discusión arranque desde lo real:** el motor del chatbot **no llama
+a OpenAI directo**. Va por **LiteLLM** (gateway con tope de gasto) y hoy corre `gpt-4.1-mini` por
+variable de entorno. O sea *sí* hay un LLM detrás; lo que no hay es integración directa ni clave
+de OpenAI propia en el producto.
+
+Lo de "conectar páginas web" hay que desarmarlo, porque son tres pedidos distintos:
+- (a) que el bot **lea el sitio del cliente** para responder con su contenido → es la capa de
+  conocimiento, **ya existe** y se edita desde `/settings/chatbot`;
+- (b) meter el **widget** en el sitio del cliente → **ya funciona** por Chatwoot;
+- (c) **alta por URL** → ya decidido y resuelto con Crawl4AI
+  (`ONIA_EXTRACCION_WEB_DECISION.md`, que además dice **no instalar scrapers nuevos**).
+
+Sin desarmarlo, esto no es un pedido: son tres, y dos ya están hechos.
+
+### 12.4 · Cobrar en cripto (Binance / USDT por QR)
+
+Idea de un amigo de Sergio Urcullo. Anotada con su límite:
+
+- El comprador de la 1.0 es **un dueño de negocio boliviano que paga en bolivianos**. Pedirle
+  USDT agrega fricción, no la saca — y el rail local (QR BNB/BCP, comisión 0) ya está construido
+  y esperando **credenciales suyas**.
+- Donde sí sirve es **fuera de Bolivia**, que es el mismo territorio del #11 (LLC).
+- ⚠️ Cobrar cripto tiene tratamiento fiscal propio en Bolivia y **no está estudiado**. Antes de
+  prometerlo hay que pasarlo por la skill `onia-contabilidad-bolivia` con fuente citada, como
+  cualquier tema fiscal.
+
+**Gatillo:** el mismo que el #11 — primer cliente fuera de Bolivia. Antes de eso es fricción.
+
+### 12.5 · Lo que este bloque le hace al lanzamiento, dicho claro
+
+En el mismo mensaje conviven *«ya lancemos la versión 1.0»* y nueve pedidos que la agrandan.
+Con la regla de la casa —**nada a medias, cerrar antes de abrir**— la 1.0 se lanza con lo que hoy
+está verificado, y estos nueve entran después, en el orden que Sergio Urcullo elija de esta tabla.
+Anotarlos acá es lo que hace posible lanzar sin perderlos.
