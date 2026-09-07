@@ -1541,5 +1541,46 @@ y sin operar. Acá se opera, con verificación por ítem.
       necesita merge (`onia-cola`) para viajar en el deploy que espera el `ok` de Sergio Urcullo
       (`t_deddf471`). Anotado ahí, sin abrir un pedido nuevo.
 
+- [x] 🔴 **CERRADO el 2026-09-07: al profesional le avisábamos la cita con una hora 4 h
+      adelantada — y a la noche, con el día cambiado.**
+
+      **El defecto:** `avisarCitaCreada` (`lib/agenda/crear-cita.ts`) manda **dos avisos de la
+      misma cita**. El correo al cliente pasaba `timezone: org.clinicSettings.timezone`; la
+      **notificación in-app y el push al profesional**, cuarenta líneas más arriba **en la misma
+      función**, formateaban con `toLocaleDateString`/`toLocaleTimeString` **sin `timeZone`**.
+
+      **Medido dentro del contenedor, no supuesto** (`docker exec onia-platform node -e …`):
+      `process.env.TZ` es `undefined` y `Intl.DateTimeFormat().resolvedOptions().timeZone`
+      devuelve **`UTC`**. Con eso, una cita de las **14:00** le llegaba al profesional como
+      **«06:00 p. m.»**, y una de las **20:30 del martes** como **«miércoles 12:30 a. m.»** —
+      mientras el cliente, por correo, leía la hora correcta. Los dos avisos de la misma cita
+      se contradecían entre sí, y el que se equivoca es el que tiene que estar ahí.
+
+      **Por qué sobrevivió a todos los gates:** no sobra ninguna palabra, el texto ya estaba en
+      el idioma del rubro (arreglado el 06-sep), la pantalla se ve perfecta y **el correo —que
+      es lo que se auditó— estaba bien**. El defecto sólo aparece **comparando los dos avisos
+      entre sí**. Es la misma clase «arreglar la instancia y no la clase»: `lib/whatsapp-bot.ts`
+      ya pasaba `timeZone: settings.timezone` en sus dos formateos.
+
+      **El arreglo:** `eec06d7` en `claude/chatbots-platform-review-0d1d09`. La construcción del
+      texto salió a `textoCitaParaElProfesional()`, que **exige la zona**, y `avisarCitaCreada`
+      carga la org **antes** de armar el aviso. El default quedó declarado **una sola vez**
+      (`TZ_POR_DEFECTO`) y el correo lo lee de ahí: dos defaults escritos por separado se
+      desincronizan sin que nada se ponga rojo.
+
+      **El gate:** `lib/agenda/aviso-en-hora-del-negocio.test.ts` — cubre la instancia (incluido
+      el caso que **cambia de día**, que es el peor) y además la **clase**: ningún
+      `toLocale*String` del módulo sin `timeZone`, filtrando comentarios **por estado** y no por
+      prefijo. **Validado por mutación en las dos direcciones:** romper el arreglo pone **5**
+      casos en rojo, y una llamada nueva sin zona **en otra parte del archivo** la ve **sólo** el
+      guard de clase (1 rojo) — o sea que ese guardia no es redundante. Gates: `tsc` 0,
+      `eslint` 0, `vitest` **3566** pasados / 299 archivos.
+
+      ⚠️ **NO llega al cliente todavía:** `eec06d7` **no es ancestro de `origin/master`**
+      (comprobado con `git merge-base --is-ancestor`), así que **no viaja en el swap que hoy
+      espera el `ok`** — el dry-run del publicador cuenta 4 arreglos sobre `HEAD 7c4ff18` y
+      éste no es uno. Entra cuando `onia-cola` mergee la rama. Anotado en `t_deddf471`, sin
+      abrir un pedido nuevo.
+
 
 *(vacío — esta cola se abrió el 2026-09-05)*
