@@ -1,6 +1,6 @@
 # CARRUSEL "Mi stack" — listo para pegar
 
-**Piezas:** `carousels/out/apple-mi-stack-inter/lamina-01..09.png` (9 láminas, 1080×1350).
+**Piezas:** `carousels/out/apple-mi-stack-inter/lamina-01..11.png` (11 láminas, 1080×1350).
 Hoja para mirarlas juntas antes de subir: `carousels/out/HOJA-apple-mi-stack-inter.png`.
 
 Primera pieza del patrón **`apple-editorial`** (referencias que mandó Sergio Urcullo el
@@ -10,22 +10,30 @@ elegida por él mirando el A/B.
 Objetivo: autoridad + guardable. **No se vende nada: la única lámina de producto va sin
 precio.**
 
-## Orden de las 9 láminas
+## Orden de las 11 láminas
 
 | # | Lámina | Qué dice |
 |---|---|---|
-| 01 | Portada | Todo mi negocio corre con **SIETE COSAS**, y cinco cuestan $0 |
-| 02 | Claude Max | La capa que piensa · **$200/mes** — lo único caro, y es para construir |
+| 01 | **Portada** | 16 años, una empresa en Bolivia, y **$200** al mes es todo lo que paga · **tira con los 7 iconos** |
+| 02 | Claude Max | La capa que piensa · **$200/mes** |
 | 03 | Homelab | Una PC vieja que ya tenía · **$0** |
 | 04 | n8n | Las automatizaciones · **$0** · open source |
 | 05 | WhatsApp Business | Donde le escriben los clientes · **$0** |
 | 06 | HyperFrames | Video desde HTML · **$0** |
-| 07 | Hermes | Agente open source (MIT) con el alma escrita por él · **$0** |
+| 07 | Hermes | Agente open source MIT con el alma escrita por él · **$0** |
 | 08 | Onia Platform | Lo que está construyendo · **Próximamente** |
-| 09 | Cierre | Siete herramientas, **una factura**, **$200** al mes |
+| 09 | Total | Siete herramientas, **una factura**, **$200** al mes |
+| 10 | **Quién soy** | foto + qué construye y para quién |
+| 11 | **CTA** | ¿Cuál te falta? — pide una palabra en comentarios |
 
-**El arco:** arranca por lo caro (Claude), baja a cinco cosas que no cuestan nada, y cierra
-con lo único que él construyó. La 08 es la que abre curiosidad antes del cierre.
+**Por qué la portada es así.** Su único trabajo es frenar el scroll, así que lleva la
+**cifra** —$200 para operar una empresa entera es lo raro— al mayor tamaño del carrusel, y
+debajo la **tira con los 7 iconos**: el ojo los cuenta, quiere saber cuál es cuál, y ése es
+exactamente el swipe. Contar una lista ("siete cosas") no frena a nadie.
+
+**Por qué "quién soy" va en la 10 y no en la 1.** Quien llegó hasta ahí ya vio el valor, y
+recién ahí le importa quién lo dijo. Presentarse primero es pedir atención antes de
+habérsela ganado.
 
 ## Caption (IG · copiar tal cual)
 
@@ -43,7 +51,8 @@ Si estás esperando "tener presupuesto" para automatizar tu negocio,
 mirá otra vez la lista. Casi todo ya es gratis. Lo que falta es
 sentarse a armarlo.
 
-¿Cuál te falta a vos? Decímelo en los comentarios.
+Escribí abajo la que no tenés todavía —una sola palabra alcanza— y te
+digo por cuál conviene que empieces. Contesto a todos.
 
 ## Versión X / LinkedIn (mismo contenido, sin carrusel)
 
@@ -60,10 +69,12 @@ es gratis. Lo que falta es sentarse a armarlo.
 
 ## Alt text (accesibilidad · pegar en "Configuración avanzada")
 
-> Carrusel de nueve láminas sobre fondo gris claro. Cada una muestra el ícono de una
-> herramienta y su costo mensual: Claude Max 200 dólares, y luego Homelab, n8n, WhatsApp
-> Business, HyperFrames y Hermes, todas en cero. La última es Onia Platform, marcada como
-> próximamente. Cierra con el total: siete herramientas, una factura, 200 dólares al mes.
+> Carrusel de once láminas sobre fondo gris claro. La portada muestra la cifra 200 dólares
+> en grande y una tira con los iconos de las siete herramientas. Después, una lámina por
+> herramienta con su costo mensual: Claude Max 200 dólares, y luego Homelab, n8n, WhatsApp
+> Business, HyperFrames y Hermes, todas en cero. Onia Platform aparece como próximamente.
+> Cierra con el total, una foto de Sergio Urcullo presentándose, y la pregunta "¿cuál te
+> falta?".
 
 ## De dónde sale cada cosa que afirma (revisar antes de publicar)
 
@@ -84,8 +95,11 @@ es gratis. Lo que falta es sentarse a armarlo.
   de contenido no llevan precio de producto.
 - **Ningún "comentá PALABRA".** La cuenta `@sergiourcullo` tiene `palabras: {}` en el
   workflow n8n activo de private-reply (medido 04-sep): una palabra clave hoy sale con
-  `palabra=null` y **quien comenta no recibe nada, sin dejar registro**. El CTA pide un
-  comentario que Sergio Urcullo contesta él.
+  `palabra=null` y **quien comenta no recibe nada, sin dejar registro**.
+  El CTA igual **obliga a comentar** —pregunta cerrada, respuesta de una palabra, sobre algo
+  que el lector ya decidió después de ver las 7 fichas— pero las respuestas las contesta
+  Sergio Urcullo a mano. El día que se cableen las palabras en n8n, la lámina 11 es el lugar
+  donde entra la automática.
 - **Chatwoot no aparece**, aunque está en el stack real. Es la infraestructura del chatbot
   que se vende desde Onia Platform: mostrarla con "$0" al lado le enseña al lector el camino
   para saltearse el producto.

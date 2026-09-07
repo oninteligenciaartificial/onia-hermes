@@ -9,18 +9,22 @@ Urcullo construye con Claude todos los días, así que habla de lo que usa.
 
 ## Orden de las 5 láminas
 
-| # | Layout | Qué dice |
-|---|---|---|
-| 01 | D | Salió **FABLE 5.1**, y lo importante no es que sea más listo: **es más barato** |
-| 02 | E | **Fable 5.1** · el modelo con el que construye · **$0,25** por millón (antes $1) |
-| 03 | D | **−75%** en caché. Entrada y salida no se movieron: $10 y $50 |
-| 04 | D | **hasta 45%** menos si algo corre solo todo el día |
-| 05 | D | Operar un negocio con IA **cuesta menos** cada vez + CTA |
+| # | Qué dice |
+|---|---|
+| 01 | Salió **FABLE 5.1**, y esto es lo que hace **mejor** |
+| 02 | Antes parchaba el síntoma, **ahora busca la causa** |
+| 03 | Ficha: **Fable 5.1** · caché **$0,25** por millón (antes $1) |
+| 04 | Le gana a Opus 5 y GPT-5.6 Sol: **73,4%** en CursorBench |
+| 05 | Y no es una demo de programación: **10× y 2,5×** en proteínas y kernels |
+| 06 | Y encima **−75%** en caché |
+| 07 | **CTA**: ¿Claude, ChatGPT o Gemini? — pide un nombre en comentarios |
 
-⚠️ **La ficha lleva el nombre del PRODUCTO, no el del concepto** (Sergio Urcullo, 06-sep:
-*"sería mejor que diga que es Fable 5.1"*). Es como funcionan las referencias 5/6/7 del
-batch: dicen "Claude", "Notion", "MacBook Pro" — el producto y su precio. "Lectura de
-caché" como titular obligaba al lector a adivinar de qué se habla.
+⚠️ **Reescrito el 06-sep.** La versión anterior era toda de precio y arrancaba diciéndole
+al lector "a vos no te sirven los benchmarks" — le hablaba desde arriba y no enseñaba
+ninguna ventaja. Ahora el orden es: **qué hace mejor** (la causa raíz, que es lo que
+cualquiera reconoce de haberle pedido código a una IA) → **los números que lo confirman**
+→ **lo que logró fuera del código** → y recién al final el precio. La ventaja primero, la
+prueba después.
 
 ## Caption (IG · copiar tal cual)
 

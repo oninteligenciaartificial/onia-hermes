@@ -287,16 +287,20 @@ DIBUJOS = {"clientes": _tarjeta_clientes, "creditos": _tarjeta_creditos,
 
 # --- Contenido. Las cifras de precio salen de ONIA_ESTRATEGIA_DE_EMPRESA.md §8.1.
 LAMINAS = [
-    # El remate es "SEIS COSAS" y no "6 HERRAMIENTAS" por una razon medida, no de gusto:
-    # 14 caracteres a 126px desbordan los 888px utiles, y en Archivo (wdth 96, mas ancho
-    # que Inter) desbordan mas. Es la trampa #2 de la FICHA de carrusel-pinterest-refs.
-    # El numero no se pierde: lo lleva el pie. Verificable con `--check`.
+    # PORTADA. Rehecha el 06-sep: Sergio Urcullo pidió que la primera imagen sea más
+    # impresionante para que la gente entre al carrusel. La anterior contaba una lista
+    # ("SIETE COSAS") y contar no frena a nadie.
+    # Ahora frena la CIFRA — $200 al mes para operar una empresa entera es lo raro — y
+    # abajo va la tira con los 7 iconos: el ojo los cuenta, quiere saber cuál es cuál, y
+    # ése es exactamente el swipe. La portada pasa de enunciar a prometer.
     {
         "layout": "D",
-        "contexto": "Todo mi negocio corre con",
-        "remate": "SIETE COSAS",
-        "pie": "y cinco cuestan",
+        "contexto": "Tengo 16 años, una empresa en Bolivia,\ny esto es todo lo que pago:",
+        "remate": "$200",
+        "pie": "al mes. Y cinco de las siete cuestan",
         "pie_hl": "$0",
+        "gancho": True,
+        "tira": ["claude", "vps", "n8n", "whatsapp", "hyperframes", "hermes", "onia"],
     },
     {
         "layout": "E",
@@ -394,11 +398,28 @@ LAMINAS = [
         "contexto": "Siete herramientas, una factura",
         "remate": "$200",
         "sub": "al mes, y es todo para construir.\nMantener el negocio andando no me cuesta nada.",
-        # El CTA reusa el mismo highlight verde de la portada en vez de un boton de ancho
-        # completo: el boton leia como banner web y partia la frase en dos lineas — nada
-        # asi aparece en las 8 referencias. Verde en dos puntos de ocho laminas.
-        "cta_hl": "¿Cuál te falta a vos?",
-        "cta_gris": "Contame en los comentarios.",
+    },
+    # QUIÉN SOY. Va acá y no al principio a proposito: el que llego hasta la lamina 10 ya
+    # vio el valor y recien ahi le importa quien lo dijo. Al reves —presentarse primero—
+    # es pedirle atencion antes de habersela ganado.
+    {
+        "layout": "Q",
+        "foto": "sergio-chroma.png",
+        "nombre": "Soy Sergio Urcullo",
+        "bio": "Tengo 16 años y construyo sistemas para\nnegocios bolivianos: que atiendan, agenden\ny cobren sin que el dueño esté encima.\n\nTodo lo que ves acá lo armé con estas siete\nherramientas.",
+    },
+    # CIERRE. El CTA obliga a comentar: pregunta cerrada, de una sola palabra, sobre algo
+    # que el lector YA tiene una opinion formada despues de ver las 7 fichas.
+    # ⚠️ NO usa palabra clave con respuesta automatica: la cuenta tiene `palabras: {}` en
+    # el workflow n8n de private-reply, asi que un "Comenta X" no entregaria nada.
+    # Cuando eso se cablee, este es el lugar donde entra.
+    {
+        "layout": "D",
+        "contexto": "Ahora te toca a vos",
+        "remate": "¿CUÁL TE FALTA?",
+        "sub": "Escribí abajo la que no tenés todavía y te digo\npor cuál conviene que empieces.",
+        "cta_hl": "Una sola palabra alcanza.",
+        "cta_gris": "Te contesto a todos.",
     },
 ]
 
@@ -477,8 +498,17 @@ FABLE = [
         "layout": "D",
         "contexto": "Salió el modelo con el que construyo",
         "remate": "FABLE 5.1",
-        "pie": "y lo importante no es que sea más listo:",
-        "pie_hl": "es más barato",
+        "pie": "y esto es lo que hace",
+        "pie_hl": "mejor",
+        "gancho": True,
+    },
+    # La ventaja mas relatable primero. Cualquiera que le haya pedido codigo a una IA
+    # conoce el parche que funciona hoy y explota el martes.
+    {
+        "layout": "D",
+        "contexto": "Antes parchaba el síntoma",
+        "remate": "AHORA BUSCA\nLA CAUSA",
+        "sub": "Anthropic lo dice así: arregla la raíz del problema\nen vez de tomar atajos que dan peor trabajo.",
     },
     # La ficha lleva el NOMBRE DEL PRODUCTO, no el del concepto. Sergio Urcullo, 06-sep:
     # "seria mejor que diga que es fable 5.1". Tiene razon y es como funcionan las
@@ -492,25 +522,37 @@ FABLE = [
         "precio": "$0,25",
         "etiqueta": "por millón · antes $1",
     },
+    # Los benchmarks van DESPUES de la ventaja explicada, no antes: un porcentaje sin
+    # contexto no convence a nadie, pero confirma a quien ya entendio la idea.
     {
         "layout": "D",
-        "contexto": "Lo mismo, un cuarto del precio",
+        "contexto": "Le gana a Opus 5 y a GPT-5.6 Sol",
+        "remate": "73,4%",
+        "sub": "en CursorBench, la prueba de trabajo con código real.\nY 65% en Humanity's Last Exam usando herramientas.",
+    },
+    # Lo que hizo FUERA del codigo. Son los ejemplos que Anthropic publica y son los que
+    # hacen entender de que tamano es el salto, sin pedirle al lector que crea nada.
+    {
+        "layout": "D",
+        "contexto": "Y esto no es una demo de programación",
+        "remate": "10× y 2,5×",
+        "sub": "Diseñó proteínas que se adhieren 10 veces mejor\nque la competencia, y aceleró kernels de GPU\nhasta 2,5 veces. Con el mismo modelo.",
+    },
+    {
+        "layout": "D",
+        "contexto": "Y encima bajó de precio",
         "remate": "−75%",
-        "sub": "en lectura de caché. Entrada y salida no se movieron:\nsiguen en $10 y $50 por millón.",
+        "sub": "en lectura de caché — la parte que más se repite\ncuando un agente corre solo. Hasta 45% menos\nde costo si algo trabaja todo el día.",
     },
+    # CTA que obliga a comentar: pregunta cerrada, respuesta de una palabra, sobre algo
+    # que el lector ya tiene decidido.
     {
         "layout": "D",
-        "contexto": "Y si algo corre solo todo el día",
-        "remate": "hasta 45%",
-        "sub": "menos de costo. Un agente relee sin parar,\nasí que el ahorro se le nota mucho más.",
-    },
-    {
-        "layout": "D",
-        "contexto": "Operar un negocio con IA",
-        "remate": "CUESTA MENOS",
-        "sub": "cada vez. No hace falta esperar a que baje más:\nlo que hoy te parece caro, en un mes ya no lo es.",
-        "cta_hl": "¿Qué estás esperando para automatizar?",
-        "cta_gris": "Contame en los comentarios.",
+        "contexto": "Ahora te toca a vos",
+        "remate": "¿CUÁL USÁS?",
+        "sub": "Claude, ChatGPT o Gemini. Escribí el tuyo abajo\ny te digo para qué me sirve mejor cada uno.",
+        "cta_hl": "Un nombre alcanza.",
+        "cta_gris": "Te contesto a todos.",
     },
 ]
 
@@ -591,6 +633,9 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 .contexto{{font-size:46px;font-weight:400;color:var(--muted);line-height:1.25;
   letter-spacing:-.01em}}
 .remate{{font-size:126px;margin-top:22px}}
+/* La portada es la unica lamina cuyo trabajo es FRENAR el scroll: su cifra
+   va mas grande que cualquier otra del carrusel. */
+.remate.gancho{{font-size:196px;letter-spacing:-.045em;margin-top:14px}}
 .pie{{font-size:44px;color:var(--muted);margin-top:40px;letter-spacing:-.01em}}
 .hl{{background:var(--verde);color:var(--ink);border-radius:10px;padding:2px 16px 8px;
   font-weight:{peso};white-space:nowrap;-webkit-box-decoration-break:clone}}
@@ -612,6 +657,22 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
   white-space:pre-line;letter-spacing:-.01em}}
 /* chip en su propia linea: en linea con el texto gris la frase se partia en dos y el
    chip quedaba descentrado contra una segunda linea centrada. */
+/* Tira de iconos para la portada: muestra en la lámina 1 TODO lo que viene adentro.
+   Es lo que convierte una portada en una promesa — el ojo cuenta los objetos y quiere
+   saber cuál es cuál, y eso es exactamente el swipe. */
+.tira{{display:flex;gap:26px;justify-content:center;align-items:center;margin-top:64px;
+  flex-wrap:wrap}}
+.tira > *{{width:96px;height:96px;flex:0 0 auto;
+  filter:drop-shadow(0 10px 20px rgba(0,0,0,.13))}}
+.tira > * > svg{{width:100%;height:100%}}
+/* Lámina de presentación: foto recortada al lado del texto, no debajo. */
+.quien{{display:flex;align-items:center;gap:56px;text-align:left;width:100%}}
+.quien img{{width:390px;height:auto;flex:0 0 auto}}
+.quien .texto{{flex:1}}
+.quien .nom{{font-size:76px;font-weight:{peso};font-variation-settings:{vf};
+  letter-spacing:-.032em;line-height:1.02;color:var(--ink)}}
+.quien .bio{{font-size:36px;color:var(--muted);line-height:1.34;margin-top:22px;
+  white-space:pre-line;letter-spacing:-.01em}}
 .cta{{margin-top:70px;font-size:40px;color:var(--muted);letter-spacing:-.01em}}
 .cta .hl{{display:inline-block;margin-bottom:22px}}
 .cta-gris{{display:block}}
@@ -691,6 +752,13 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 
 
 def markup(lamina):
+    if lamina["layout"] == "Q":          # quién soy
+        foto = LOGOS / lamina["foto"]
+        if not foto.exists():
+            raise SystemExit(f"Falta la foto recortada {foto}. Corré recortar-foto.py.")
+        return (f'<div class="quien"><img src="{foto.as_uri()}">'
+                f'<div class="texto"><div class="nom">{lamina["nombre"]}</div>'
+                f'<div class="bio">{lamina["bio"]}</div></div></div>')
     if lamina["layout"] == "A":
         filas = []
         for n, fila in enumerate(lamina["filas"]):
@@ -746,12 +814,16 @@ def markup(lamina):
                 f'<div class="sub-f">{lamina["sub"]}</div>'
                 f'<img class="foto" src="{foto.as_uri()}">')
     if lamina["layout"] == "D":
+        gancho = " gancho" if lamina.get("gancho") else ""
         cuerpo = (f'<div class="contexto">{lamina["contexto"]}</div>'
-                  f'<div class="display remate">{lamina["remate"]}</div>')
+                  f'<div class="display remate{gancho}">{lamina["remate"]}</div>')
         if lamina.get("pie"):
             cuerpo += f'<div class="pie">{lamina["pie"]} <span class="hl">{lamina["pie_hl"]}</span></div>'
         if lamina.get("sub"):
             cuerpo += f'<div class="sub">{lamina["sub"]}</div>'
+        if lamina.get("tira"):
+            iconos = "".join(ICONOS[i] for i in lamina["tira"])
+            cuerpo += f'<div class="tira">{iconos}</div>'
         if lamina.get("cta_hl"):
             cuerpo += (f'<div class="cta"><span class="hl">{lamina["cta_hl"]}</span>'
                        f'<span class="cta-gris">{lamina["cta_gris"]}</span></div>')
@@ -771,7 +843,7 @@ def render(tipo, out_dir, laminas=None):
     hoja = css(tipo)
     for i, lamina in enumerate(laminas or LAMINAS, 1):
         html = (f"<!doctype html><html><head><meta charset='utf-8'><style>{hoja}</style></head>"
-                f"<body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("A", "B", "C", "F") else ""}'>{markup(lamina)}"
+                f"<body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("A", "B", "C", "F", "Q") else ""}'>{markup(lamina)}"
                 f"<div class='handle'>{HANDLE}</div></div></body></html>")
         with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as fh:
             fh.write(html)
@@ -812,7 +884,7 @@ window.addEventListener('load', function(){
       return rects.length ? Math.max.apply(null, rects.map(function(x){return x.width})) : 0;
     }
     var out = ['FUENTE|' + ok];
-    document.querySelectorAll('.remate,.nombre,.precio,.desc,.contexto,.pie,.sub,.cta,.etiqueta,.nombre-f,.sub-f,.titulo-c,.dato,.titulo-b,.rotulo,.titulo-a,.rotulo-a')
+    document.querySelectorAll('.remate,.nombre,.precio,.desc,.contexto,.pie,.sub,.cta,.etiqueta,.nombre-f,.sub-f,.titulo-c,.dato,.titulo-b,.rotulo,.titulo-a,.rotulo-a,.nom,.bio')
       .forEach(function(el){
         out.push('SONDA|' + el.className.replace(/display /,'') + '|' + Math.round(ancho(el)));
       });
@@ -832,7 +904,7 @@ def check(tipo, laminas=None):
     fallos = []
     for i, lamina in enumerate(laminas or LAMINAS, 1):
         html = (f"<!doctype html><html><head><meta charset='utf-8'><style>{hoja}</style>"
-                f"{sonda}</head><body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("A", "B", "C", "F") else ""}'>{markup(lamina)}"
+                f"{sonda}</head><body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("A", "B", "C", "F", "Q") else ""}'>{markup(lamina)}"
                 f"<div class='handle'>{HANDLE}</div></div></body></html>")
         with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as fh:
             fh.write(html)
