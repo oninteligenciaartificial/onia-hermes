@@ -69,3 +69,7 @@ mockup y un objeto real pesan lo mismo en KB.
 
 ⚠️ `PEXELS_API_KEY` sigue con el placeholder. No hace falta —Unsplash alcanza— pero tener
 las dos da más de dónde elegir cuando una consulta no rinde.
+
+✅ **Pexels verificado el 06-sep** con una consulta de prueba (respondió con licencia
+y autor). Las dos fuentes están vivas: si una consulta no rinde en una, se prueba en
+la otra con `--fuente`.
