@@ -12,6 +12,13 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## Reverificado el 2026-09-07 16:09 La Paz — dental sigue 9/9
+
+Corrida `--escribir` completa desde nodo-casa (VPS medido por SSH): **RECORRIDO COMPLETO en
+Clínica dental, 9/9 pasos OK**, paso 8 incluido (`/billing/cmtrfvum5004101rwr9gmjm33`, factura
+con el ítem visible, frenado sin marcar pagada). Cero filas `zz-qa-` propias al cerrar (4 ajenas
+de otros carriles, sin tocar). Nada nuevo que reportar: el producto sostiene el camino completo.
+
 ## Reverificado el 2026-09-07 06:14 La Paz — dental vuelve a 9/9: el corte de abajo era el INSTRUMENTO, no el producto
 
 `t_daa76d62` (tablero, dueño `chatbot-cola`): `scripts/recorrido_cliente.mjs:345` esperaba la
