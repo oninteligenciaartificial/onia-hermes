@@ -72,6 +72,7 @@ def _squircle(bg, glifo, borde=""):
 
 
 LOGOS = REPO / "hermes-content/references/ui-patterns/apple-editorial/logos"
+OBJETOS = REPO / "hermes-content/references/ui-patterns/apple-editorial/objetos"
 
 
 def _marca(slug, color):
@@ -291,6 +292,8 @@ LAMINAS = [
 FONTS_PATRON = REPO / "hermes-content/references/ui-patterns/apple-editorial/fonts"
 FONTS_MARCA = REPO / "hermes-content/brand/fonts"
 MONO_WOFF2 = FONTS_MARCA / "SplineSansMono-var-latin.woff2"
+# Serif del layout C. No es del trio de marca: es tipografia de UN patron.
+SERIF_WOFF2 = FONTS_PATRON / "InstrumentSerif-latin.woff2"
 
 # Layout F — portada con foto recortada (referencia bastian.xu, la #8 del batch).
 # La foto sale de recortar-foto.py: croma local, sin generacion ni creditos.
@@ -305,7 +308,28 @@ PORTADA_F = [
     },
 ]
 
-PIEZAS = {"mi-stack": None, "portada-f": PORTADA_F}  # mi-stack se resuelve a LAMINAS abajo
+# Layout C — duelo 2-up (referencia #3). Contenido del brief ya aprobado
+# `briefs/onia-cuaderno-no-avisa-foto-20260820.json`: "Tu cuaderno no miente. Pero
+# tampoco avisa". Los dos remates son propiedades, no mediciones: un cuaderno de papel
+# no puede avisar (0), y los agentes del sistema corren una vez al dia segun
+# ONIA_CATALOGO_DE_VENTA.md. Nada inventado, nada que haya que sostener despues.
+DUELO_CUADERNO = [
+    {
+        "layout": "C",
+        "titulo": "Tu cuaderno no miente.\nPero tampoco avisa.",
+        "lados": [
+            # Los dos remates tienen la MISMA forma (cantidad + unidad), como el
+            # "310 cal / 0 cal" de la referencia. Con "0" de un lado y "todos los días"
+            # del otro, la comparacion no cierra: no se estan midiendo con la misma vara.
+            # "1 por dia" sale de ONIA_CATALOGO_DE_VENTA.md — los agentes corren una vez
+            # al dia. Ninguno de los dos numeros es una estimacion.
+            {"objeto": "cuaderno.png", "dato": "0 avisos", "etiqueta": "el cuaderno"},
+            {"objeto": "celular.png", "dato": "1 por día", "etiqueta": "el sistema"},
+        ],
+    },
+]
+
+PIEZAS = {"mi-stack": None, "portada-f": PORTADA_F, "duelo-cuaderno": DUELO_CUADERNO}  # mi-stack se resuelve a LAMINAS abajo
 
 FUENTES = {
     # Maxima fidelidad con las referencias que mando Sergio Urcullo. Vendorizada aca,
@@ -319,15 +343,17 @@ FUENTES = {
 
 def css(tipo):
     nombre, woff2, peso, vf = FUENTES[tipo]
-    for ruta in (woff2, MONO_WOFF2):
+    for ruta in (woff2, MONO_WOFF2, SERIF_WOFF2):
         if not ruta.exists():
             raise SystemExit(f"Falta la fuente {ruta}. Corré build-inter.py del patrón.")
     return f"""@font-face{{font-family:'{nombre}';src:url('{woff2.as_uri()}') format('woff2');
   font-weight:100 900;font-display:block}}
 @font-face{{font-family:'OniaMono';src:url('{MONO_WOFF2.as_uri()}') format('woff2');
   font-weight:400 500;font-display:block}}
+@font-face{{font-family:'OniaSerif';src:url('{SERIF_WOFF2.as_uri()}') format('woff2');
+  font-weight:400;font-display:block}}
 *{{margin:0;padding:0;box-sizing:border-box}}
-:root{{--bg:#F5F5F7;--ink:#1D1D1F;--muted:#6E6E73;--verde:#00C661}}
+:root{{--bg:#F5F5F7;--ink:#1D1D1F;--muted:#6E6E73;--verde:#00C661;--crema:#F5F1E8}}
 html,body{{width:1080px;height:1350px}}
 body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;overflow:hidden;
   -webkit-font-smoothing:antialiased}}
@@ -366,6 +392,23 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 .cta{{margin-top:70px;font-size:40px;color:var(--muted);letter-spacing:-.01em}}
 .cta .hl{{display:inline-block;margin-bottom:22px}}
 .cta-gris{{display:block}}
+/* layout C — duelo 2-up (referencia #3 del batch: chocolate vs reloj, "310 cal / 0 cal").
+   Fondo crema y titulo SERIF: el aire editorial de esa referencia sale de esas dos cosas
+   juntas, no de una. Con el gris y la sans queda otra lamina mas del carrusel. */
+.lienzo.c{{background:var(--crema);justify-content:center;padding-top:120px}}
+.titulo-c{{font-family:'OniaSerif',Georgia,serif;font-size:82px;line-height:1.08;
+  color:var(--ink);white-space:pre-line;letter-spacing:-.01em}}
+.duelo{{display:flex;gap:70px;align-items:flex-end;justify-content:center;
+  margin-top:110px;width:100%}}
+.lado{{flex:1;display:flex;flex-direction:column;align-items:center;gap:44px}}
+/* Altura FIJA de caja para los dos objetos: es la unica forma de que dos fotos de
+   proporciones distintas lean con la misma presencia. Sin esto, el mas ancho domina. */
+.lado img{{height:380px;width:100%;object-fit:contain;object-position:bottom;
+  filter:drop-shadow(0 24px 48px rgba(0,0,0,.14))}}
+.dato{{font-size:64px;font-weight:{peso};font-variation-settings:{vf};
+  letter-spacing:-.03em;color:var(--ink);line-height:1}}
+.dato .chico{{display:block;font-family:'OniaMono',monospace;font-size:23px;font-weight:500;
+  letter-spacing:.08em;text-transform:uppercase;color:#A1A1A6;margin-top:18px}}
 /* layout F — portada con foto recortada (referencia bastian.xu). El texto va arriba y
    alineado a la IZQUIERDA, no centrado: en la referencia el bloque de nombre ancla la
    esquina y la foto entra por abajo a sangre. Centrarlo lo vuelve una placa cualquiera. */
@@ -385,6 +428,17 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 
 
 def markup(lamina):
+    if lamina["layout"] == "C":
+        lados = []
+        for lado in lamina["lados"]:
+            obj = OBJETOS / lado["objeto"]
+            if not obj.exists():
+                raise SystemExit(f"Falta el objeto {obj}. Corré buscar-objetos.py.")
+            chico = f'<span class="chico">{lado["etiqueta"]}</span>' if lado.get("etiqueta") else ""
+            lados.append(f'<div class="lado"><img src="{obj.as_uri()}">'
+                         f'<div class="dato">{lado["dato"]}{chico}</div></div>')
+        return (f'<div class="titulo-c">{lamina["titulo"]}</div>'
+                f'<div class="duelo">{"".join(lados)}</div>')
     if lamina["layout"] == "F":
         foto = LOGOS / lamina["foto"]
         if not foto.exists():
@@ -418,7 +472,7 @@ def render(tipo, out_dir, laminas=None):
     hoja = css(tipo)
     for i, lamina in enumerate(laminas or LAMINAS, 1):
         html = (f"<!doctype html><html><head><meta charset='utf-8'><style>{hoja}</style></head>"
-                f"<body><div class='lienzo{" f" if lamina["layout"] == "F" else ""}'>{markup(lamina)}"
+                f"<body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("C", "F") else ""}'>{markup(lamina)}"
                 f"<div class='handle'>{HANDLE}</div></div></body></html>")
         with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as fh:
             fh.write(html)
@@ -459,7 +513,7 @@ window.addEventListener('load', function(){
       return rects.length ? Math.max.apply(null, rects.map(function(x){return x.width})) : 0;
     }
     var out = ['FUENTE|' + ok];
-    document.querySelectorAll('.remate,.nombre,.precio,.desc,.contexto,.pie,.sub,.cta,.etiqueta,.nombre-f,.sub-f')
+    document.querySelectorAll('.remate,.nombre,.precio,.desc,.contexto,.pie,.sub,.cta,.etiqueta,.nombre-f,.sub-f,.titulo-c,.dato')
       .forEach(function(el){
         out.push('SONDA|' + el.className.replace(/display /,'') + '|' + Math.round(ancho(el)));
       });
@@ -479,7 +533,7 @@ def check(tipo, laminas=None):
     fallos = []
     for i, lamina in enumerate(laminas or LAMINAS, 1):
         html = (f"<!doctype html><html><head><meta charset='utf-8'><style>{hoja}</style>"
-                f"{sonda}</head><body><div class='lienzo{" f" if lamina["layout"] == "F" else ""}'>{markup(lamina)}"
+                f"{sonda}</head><body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("C", "F") else ""}'>{markup(lamina)}"
                 f"<div class='handle'>{HANDLE}</div></div></body></html>")
         with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as fh:
             fh.write(html)

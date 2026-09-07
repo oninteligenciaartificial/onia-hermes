@@ -30,7 +30,7 @@ dos patrones — no una variante de estilo.
 |---|---|---|---|
 | **A** | Grid comparativo 3×N, divisor hairline entre filas, objeto + label debajo | 1 | taxonomías, "las 3 decisiones" |
 | **B** | Grid 2×2, objeto encajonado en tarjeta blanca + label debajo | 2 | inventarios, "lo que necesito" |
-| **C** | Duelo 2-up con dato de remate, fondo crema, acento serif | 3 | contraste con cifra |
+| **C** | Duelo 2-up con dato de remate, fondo crema, acento serif | 3 | ✅ construido — `--pieza duelo-cuaderno`. Serif **Instrument Serif** vendorizada por `build-inter.py`; objetos de Unsplash |
 | **D** | Statement puro: texto centrado, sin objeto | 4 | portada, transición, CTA |
 | **E** | Ficha de producto: objeto + nombre gigante + 2-3 líneas gris + **precio gigante** | 5,6,7 | el carrusel-stack, una cosa por lámina |
 | **F** | Portada con foto recortada sobre gris claro | 8 | ✅ construido — `--pieza portada-f`. Foto recortada por `recortar-foto.py` (croma local, sin generación ni créditos) |
@@ -85,6 +85,11 @@ Lo decide Sergio Urcullo. Este patrón no toca §7 ni el trío: vendoriza su can
 aparte y deja el A/B mirable.
 
 ## Trampas (se van llenando al costo de un render)
+
+0b. **En un duelo, los dos remates se miden con la misma vara.** La primera versión ponía
+   "0" de un lado y "todos los días" del otro: cantidad contra frecuencia, y la comparación
+   no cierra. Va `0 avisos` contra `1 por día`. La referencia #3 lo hace igual — *310 cal*
+   contra *0 cal*, misma unidad — y de ahí sale toda su fuerza.
 
 0. 🔴 **El encuadre de la foto decide qué se puede pedir.** El 06-sep Sergio Urcullo pidió
    "pantalón de lino blanco" y "un Rolex Datejust" sobre su foto. La foto es un **busto

@@ -35,22 +35,31 @@ LATIN = (
     "U+2212,U+2215,U+FEFF,U+FFFD"
 )
 
-TTF_URL = "https://raw.githubusercontent.com/google/fonts/main/ofl/inter/Inter%5Bopsz,wght%5D.ttf"
-OFL_URL = "https://raw.githubusercontent.com/google/fonts/main/ofl/inter/OFL.txt"
+# nombre local -> (TTF variable/estatico upstream, OFL)
+FAMILIAS = {
+    "Inter-var-latin": (
+        "https://raw.githubusercontent.com/google/fonts/main/ofl/inter/Inter%5Bopsz,wght%5D.ttf",
+        "https://raw.githubusercontent.com/google/fonts/main/ofl/inter/OFL.txt",
+    ),
+    # Serif del layout C: alto contraste y aire editorial, como la referencia #3 del batch
+    # (fondo crema + serif). El trio de marca no tiene ninguna serif, asi que se vendoriza
+    # aca — es tipografia de UN patron, no una decision de marca.
+    "InstrumentSerif-latin": (
+        "https://raw.githubusercontent.com/google/fonts/main/ofl/instrumentserif/InstrumentSerif-Regular.ttf",
+        "https://raw.githubusercontent.com/google/fonts/main/ofl/instrumentserif/OFL.txt",
+    ),
+}
 
 
-def main():
-    DEST.mkdir(parents=True, exist_ok=True)
-    UPSTREAM.mkdir(parents=True, exist_ok=True)
-
-    crudo = UPSTREAM / "Inter-var.ttf"
+def _construir(nombre, ttf_url, ofl_url):
+    crudo = UPSTREAM / f"{nombre}.ttf"
     if not crudo.exists():
-        print(f"bajando {TTF_URL}")
-        urllib.request.urlretrieve(TTF_URL, crudo)
+        print(f"bajando {ttf_url}")
+        urllib.request.urlretrieve(ttf_url, crudo)
 
-    ofl = DEST / "OFL-Inter.txt"
+    ofl = DEST / f"OFL-{nombre.split('-')[0]}.txt"
     if not ofl.exists():
-        urllib.request.urlretrieve(OFL_URL, ofl)
+        urllib.request.urlretrieve(ofl_url, ofl)
 
     fuente = TTFont(crudo)
     opciones = subset.Options()
@@ -61,10 +70,18 @@ def main():
     subsetter = subset.Subsetter(options=opciones)
     subsetter.populate(unicodes=subset.parse_unicodes(LATIN))
     subsetter.subset(fuente)
-    salida = DEST / "Inter-var-latin.woff2"
+    salida = DEST / f"{nombre}.woff2"
     fuente.flavor = "woff2"
     fuente.save(salida)
-    print(f"OK -> {salida}  {salida.stat().st_size // 1024} KB")
+    print(f"  {salida.name}  {salida.stat().st_size // 1024} KB")
+
+
+def main():
+    DEST.mkdir(parents=True, exist_ok=True)
+    UPSTREAM.mkdir(parents=True, exist_ok=True)
+    for nombre, (ttf, ofl) in FAMILIAS.items():
+        _construir(nombre, ttf, ofl)
+    print(f"OK -> {DEST}")
 
 
 if __name__ == "__main__":
