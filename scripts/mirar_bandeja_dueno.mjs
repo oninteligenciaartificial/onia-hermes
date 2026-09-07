@@ -35,7 +35,8 @@
 // El mint de sesión vive en `scripts/lib/sesion_dueno.mjs` desde el 2026-09-06: apareció un
 // segundo consumidor (recorrer el onboarding por la UI) y dos copias de esto divergen sin
 // fallar — la que quede vieja entra igual y mide otra cosa.
-import { cargar, acunarSesion } from "./lib/sesion_dueno.mjs";
+import { acunarSesion } from "./lib/sesion_dueno.mjs";
+import { cargarPlaywright } from "./lib/playwright-que-arranca.mjs";
 
 function arg(nombre, porDefecto) {
   const i = process.argv.indexOf(`--${nombre}`);
@@ -59,13 +60,23 @@ const ANCLA = arg("ancla", "");
 // Nace del 2026-09-06: "servicios profesionales no puede agendar" llevaba dos dias sin poder
 // resolverse porque el bloqueo esta dentro del modal de Nueva Cita, y nadie lo habia MIRADO.
 const CLICK = arg("click", "");
+// --movil: el viewport era 1440x900 fijo, así que TODA pantalla mirada con este instrumento
+// quedaba mirada sólo en escritorio. No es un detalle de comodidad: el panel esconde la
+// botonera superior en móvil y deja el FAB flotante como única acción, o sea que las dos
+// mitades del mismo defecto ("la misma acción tres veces") viven en viewports distintos y
+// una captura de escritorio no puede ver la otra. Nace de t_4f185df8, cuya definición de
+// hecho pide escritorio Y móvil y no se podía cumplir con este script.
+const MOVIL = process.argv.includes("--movil");
+const VIEWPORT = MOVIL ? { width: 390, height: 844 } : { width: 1440, height: 900 };
 
 const { host, cookies, email } = await acunarSesion(EMAIL);
 console.log(`sesión emitida para ${email} — ${cookies.length} cookie(s): ${cookies.map((c) => c.name).join(", ")}`);
 
-const { chromium } = cargar("playwright");
+const { chromium, raiz: raizPw } = await cargarPlaywright();
+console.log(`playwright: ${raizPw}`);
 const navegador = await chromium.launch({ args: ["--no-sandbox"] });
-const ctx = await navegador.newContext({ viewport: { width: 1440, height: 900 } });
+const ctx = await navegador.newContext({ viewport: VIEWPORT, isMobile: MOVIL, hasTouch: MOVIL });
+console.log(`viewport: ${VIEWPORT.width}x${VIEWPORT.height}${MOVIL ? " (móvil)" : " (escritorio)"}`);
 await ctx.addCookies(
   cookies.map((c) => ({ ...c, domain: host, path: "/", httpOnly: false, secure: true, sameSite: "Lax" }))
 );
