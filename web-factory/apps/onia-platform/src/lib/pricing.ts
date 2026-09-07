@@ -3,8 +3,27 @@
  *
  * REGLA DURA (2026-08-08): cada numero de este archivo sale del CODIGO QUE
  * COBRA, no de un doc ni de una propuesta. Si el codigo no lo enforcea, no se
- * publica. Verificado contra `C:\dev\proyectos\onia-platform`, rama `master`,
- * tip `6b8f152` (solo lectura):
+ * publica.
+ *
+ * COMO SE VERIFICA HOY — con un comando, no a mano:
+ *
+ *     node scripts/precios-fuente.mjs      # 31 cifras, montos + topes + tiers
+ *
+ * Aca decia "Verificado contra `C:\dev\proyectos\onia-platform`, rama `master`,
+ * tip `6b8f152` (solo lectura)". Las dos mitades de esa frase caducaron y ni
+ * una avisaba: la ruta es de una laptop Windows —los loops corren en Linux, el
+ * producto esta en `/root/loops/onia-platform`— y el tip esta congelado, asi
+ * que la verificacion que este archivo declaraba NO se puede re-correr en
+ * ninguna maquina de hoy. Una procedencia que no se puede repetir se lee igual
+ * que una verificada, que es el modo en que un comentario "manda al reves":
+ * el 2026-09-06 mande media vuelta a cruzar estos topes A MANO contra el otro
+ * repo —leyendo `PLAN_LIMITS` linea por linea— antes de descubrir que
+ * `scripts/precios-fuente.mjs` ya lo hacia entero, cada vuelta, y salia VERDE.
+ *
+ * El mapa de abajo sigue vigente y es lo unico que hay que mantener a mano:
+ * dice QUE archivo del producto manda sobre CADA cosa. El cruce de los VALORES
+ * lo hace el script, y si una fuente no se puede leer sale con codigo 2
+ * (ROJO DE INSTRUMENTO), nunca en verde.
  *
  *  - montos y ciclos ......... lib/subscription-plans.ts → DEFAULT_PLAN_AMOUNTS
  *    (basic 320/89/3.200 · professional 750/199/7.500 · clinic 1.500/-/15.000 ·
