@@ -195,10 +195,19 @@ Cerrado y sin desvíos. Cada paso se despliega y se verifica MIRÁNDOLO antes de
    el panel es el que ya está vivo. Lo que sí se hizo y está en `master` es el rediseño sobre ESE
    panel — saludo por hora de la organización, lienzo, franja de estado con plan y vencimiento, y
    la barra del asistente. Este punto ya no espera ningún OK.
-5. Cobros: cliente, catálogo y total pegado al botón. **El recibo imprimible ya está en `master`**;
-   falta el resto del paso.
-6. Contabilidad: arriba, cuánto pagar y hasta cuándo.
-7. Velocidad: el panel abre en menos de 1,5 s.
+5. ~~Cobros: cliente, catálogo y total pegado al botón.~~ **Hecho y verificado el 6-sep** mirando
+   `/billing/new` en producción: selector de cliente, «Agregar tratamientos» con su vacío honesto
+   («podés cobrar igual con un ítem manual»), y el **Total pegado a «Crear Factura»** en la
+   tarjeta de resumen. El recibo imprimible entró el 5-sep.
+6. ~~Contabilidad: arriba, cuánto pagar y hasta cuándo.~~ **Hecho y desplegado el 6-sep**
+   (`e0de0f2`). Estaba al revés: tres líneas de letra chica —Ley 843, D.S. 25619, «no reemplaza
+   la declaración en el SIAT»— se metían entre el título y los dos números que el dueño viene a
+   buscar. La letra chica pasó al pie, entera y con el mismo texto: cambia dónde se lee, no que
+   se diga.
+7. ~~Velocidad: el panel abre en menos de 1,5 s.~~ **Cumplido, medido el 6-sep** con Navigation
+   Timing sobre producción: TTFB 410 ms, `domInteractive` 562 ms, **carga completa 567 ms**, 28
+   recursos. ⚠️ Es con caché tibia; una visita FRÍA no se pudo medir desde acá y queda sin
+   verificar.
 
 > Se insertó el paso 3 (comercio) el 4-sep, después de cerrar servicios: es el mismo defecto en
 > el otro rubro que vendemos, y una promesa falsa en `/register` cuesta el primer cliente que
