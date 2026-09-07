@@ -3,13 +3,16 @@ import { SITE_URL } from "@/lib/site";
 
 /**
  * `/v1` es el archivo de la web anterior (mismo copy, otras URLs): fuera del
- * índice o compite consigo misma. `/patrones` es la demo interna de patrones.
+ * índice o compite consigo misma. `/patrones` es la demo interna de patrones,
+ * y `/v4` la exploración de portada del 2026-09-07 (estructura de Fincash),
+ * que se mira antes de decidir si reemplaza a `/` — hasta entonces no compite
+ * con la home en ningún buscador.
  * El resto del sitio SÍ se indexa — desde el 2026-08-21 la v3 es la web
  * publicada, no un preview.
  */
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: [{ userAgent: "*", allow: "/", disallow: ["/patrones", "/v1"] }],
+    rules: [{ userAgent: "*", allow: "/", disallow: ["/patrones", "/v1", "/v4"] }],
     sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }
