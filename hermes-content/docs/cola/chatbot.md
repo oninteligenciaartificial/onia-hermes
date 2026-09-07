@@ -178,6 +178,37 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [ ] 🔴 **El tercer número del objetivo de este carril (`avisos demo/handoff`) NO SE PUEDE MEDIR
+      desde nodo-casa — misma clase que el ítem de abajo, instrumento hermano.** Encontrado el
+      2026-09-07 al medir el objetivo, después de arreglar el simulador.
+
+      **Reproducción, 30 segundos:**
+
+      ```
+      cd /root/loops/onia-hermes-chatbot && npm run avisos:vivo
+      # → circuito: NO SE PUDO MEDIR · VEREDICTO: no_medido (exit 2)
+      ```
+
+      **Causa exacta, ya localizada — no hace falta volver a investigarla:**
+      `avisos-vivo.mjs` `motorProduceAviso()` hace `await import(`${BOT_DIR}/bot-engine.mjs`)` con
+      `BOT_DIR = "/opt/onia/bot"`, que **no existe en nodo-casa**; el `import` tira, la función
+      devuelve `null` y `medir()` sale con `circuito: null`. Lo mismo `lineasDelLog()`, que corre
+      `bash /opt/onia/bot/webhook-server.sh logs` en el disco local.
+      ⚠️ **`envDelProcesoVivo()` NO es el problema:** usa `docker exec`, y en nodo-casa `docker`
+      es un shim que delega en el VPS por SSH — ése funciona.
+
+      **Por qué es más grande que el arreglo del simulador y no se hizo en la misma vuelta:** ahí
+      alcanzaba con leer UNA variable por `ssh cat`. Acá hay que **importar el artefacto
+      desplegado** (tres módulos que se importan entre sí), y el sentido del gate es justamente
+      que corra el código DESPLEGADO y no la copia del repo — así que la salida es traerse el
+      directorio (`ssh "tar -cf - -C /opt/onia/bot ."` a un temporal) y importar de ahí, no
+      apuntar al repo. Cambiar eso por el repo **rompería lo que el gate existe para probar.**
+
+      **Cuando se haga, las dos direcciones:** con SSH roto tiene que seguir saliendo
+      `no_medido` (exit 2), nunca `ok`. Y ojo con el guardia: el `try` con `catch` de
+      `motorProduceAviso()` se come cualquier excepción, así que un caso que afirme tirando pasa
+      en verde — el testigo se **anota**, no se tira (ver el ítem de abajo).
+
 - [x] ✅ **CERRADO el 2026-09-07: el «3 de 3» de este carril volvió a certificar un guion que ningún
       lead ve — el mismo falso verde del 2026-09-04, resucitado por la mudanza de máquina.**
       Medido al arrancar la vuelta, no leído: el simulador contestaba
