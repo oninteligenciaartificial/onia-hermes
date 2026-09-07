@@ -44,6 +44,49 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **Abrir el enlace del correo CANCELABA la cita, sin que nadie decidiera nada —
+      cerrado el 2026-09-07 (`bb0ba47` en `onia-platform`, publicado en la rama). Y estaba en
+      DOS puertas, no en una.**
+      Gates nuevos: `app/cita/no-muta-en-get.test.ts` (9 casos) y
+      `app/api/appointments/respond/route.test.ts` (6).
+
+      El recordatorio de cita le manda al cliente del cliente dos botones, «Confirmar» y
+      «Cancelar» (`lib/email.ts:616-623`). Las dos puertas ejecutaban la acción **en el propio
+      GET**, así que no hacía falta DECIDIR: bastaba con que algo **tocara** el enlace. Los
+      filtros antispam corporativos (Safe Links, Proofpoint, Mimecast) visitan cada URL de un
+      correo entrante para escanearla, y la vista previa de WhatsApp hace lo mismo si el mensaje
+      se reenvía. Cualquiera de esos GET cancelaba la cita, le avisaba al negocio *«Fulano
+      canceló su cita»* y liberaba el turno — **sin forma de distinguirlo de una cancelación de
+      verdad**.
+
+      **La clase, que es lo que importa:** un gate de superficie no puede verlo. La ruta responde
+      200, la pantalla se ve perfecta, no sobra ninguna palabra y el texto ya era neutro entre
+      rubros — pasaba todos los cortes que este carril sabe hacer. Aparece con **otra** pregunta,
+      que hasta hoy nadie hacía: **¿el GET ESCRIBE?** `app/cita` no tenía un solo test, y es la
+      única superficie que ve el cliente **del** cliente.
+
+      **Y el arreglo subió a la clase, no a la instancia.** Barridos los `page.tsx` públicos,
+      apareció una SEGUNDA puerta: `/api/appointments/respond` — pública, exenta de login en
+      `proxy.ts:115`, con el mismo `confirmToken` y el mismo `update` en el GET. Arreglar sólo
+      `/cita` dejaba el agujero abierto entero. No se borra, porque el correo apuntó ahí hasta
+      `58e1b9b` (`git log -S "appointments/respond" -- lib/email.ts`) y hay correos **ya
+      entregados** con esa URL adentro: queda como redirección a la pantalla que pregunta. Hoy
+      **un solo lugar escribe** en todo el producto, la server action de `app/cita/acciones.ts`,
+      detrás de un POST que ningún escáner dispara.
+
+      **Cuánto faltó para que costara plata:** el cron de recordatorios corre **cada 15 min**
+      (`*/15 * * * * /root/bin/run-onia-appointment-reminders.sh`) y lleva **1.630 corridas con
+      `enviados24Email:0`** — todavía no hay citas reales, así que se cerró **antes** del primer
+      cliente. Con el primero, empezaba a morder sola.
+
+      Los dos gates **validados por mutación**, que es lo único que separa un verde de un verde
+      falso: dejar el formulario Y volver a escribir en el GET → rojo; sacar el botón → rojo. Y
+      un detalle que casi deja hueco el segundo gate: sin una cita viva en el mock, la ruta corta
+      en 404 **antes** de llegar a la escritura y los casos pasan sin medir nada.
+      Gates: `tsc` 0 · `vitest` 3560 verdes · `eslint` 0 errores. Pantalla MIRADA renderizada con
+      el CSS del build vivo (los tres estados), porque el deploy está esperando el `ok`.
+      ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido de deploy de `plataforma`.
+
 - [x] 🔴 **La ficha clínica le pedía «Caries dentinaria en pieza 46» a un centro de estética —
       cerrado el 2026-09-07 (`3a4977d` en `onia-platform`, publicado en la rama). Y lo que lo
       dejó vivo es que NINGÚN gate mira las subrutas.**
