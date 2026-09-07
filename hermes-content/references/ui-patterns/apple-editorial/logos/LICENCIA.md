@@ -32,3 +32,18 @@ no dependa de otro arbol.
 ⚠️ El verde del icono publicado es `#00D26A` y el token de marca de la §7 es `#00C661`. Se
 respeta el archivo publicado tal cual; la diferencia queda anotada, no "corregida" por un
 generador.
+
+## claude-oficial.png
+
+Icono de aplicación **oficial**, de `https://claude.ai/images/claude_app_icon.png`
+(estallido coral `#D97757` sobre crema `#F3E9D7`). Uso nominativo, igual que el resto.
+
+🔴 **Reemplaza al `claude.path` de simple-icons, que estaba MAL.** Sergio Urcullo lo marcó
+el 06-sep: *"el logo de claude no es el original"*. Tenía razón, y el error era doble —
+yo lo había puesto **invertido** (cuadrado naranja con estallido blanco; el real es al
+revés), y encima la entrada de simple-icons dibuja el estallido mucho más tosco, con
+rayos irregulares que se cruzan.
+
+**Lección:** "logo real" no es lo mismo que "logo de una librería de logos". Para una
+marca conocida, el icono oficial del propio producto gana siempre. `claude.path` queda
+por si hace falta una versión monocroma.

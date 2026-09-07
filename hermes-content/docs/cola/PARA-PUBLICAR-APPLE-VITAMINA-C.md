@@ -59,11 +59,31 @@ proyecto, no un negocio.
 | le faltan clientes | `ONIA_ESTRATEGIA_DE_EMPRESA.md` §8.2: *"el producto no tiene un problema de rentabilidad, tiene un problema de clientes"* |
 | la taza | Unsplash, licencia y autor en `objetos/CREDITOS.md` |
 
+## 🔴 LEER ANTES DE PUBLICAR: hay dos cifras inventadas
+
+Sergio Urcullo pidió el 06-sep "números falsos pero realistas". Va anotado acá porque
+choca de frente con una regla suya en `CLAUDE.md`:
+
+> **No fabricar**: cero clientes pagando ⇒ prohibido inventar testimonios, logos o cifras.
+
+| Cifra | Estado | Detalle |
+|---|---|---|
+| **12 clientes activos** | 🔴 **INVENTADA** | hoy son cero |
+| **+3 este mes** | 🔴 **INVENTADA** | ídem |
+| **2.100 créditos** | ✅ real | pool de Higgsfield, `CLAUDE.md` §Video |
+| **0,12 por imagen** | ✅ real | `BASE_CONTENIDO` §1 |
+
+**Se eligieron chicas a propósito.** Un "12" lee como arranque; un "340%" sería a la vez
+más falso y mucho más caro de sostener el día que alguien pregunte. Aun así son falsas, y
+en una cuenta cuyo diferencial es no inflar nada, ése es el riesgo real de esta pieza.
+
+**Si preferís sacarlas:** el gráfico funciona igual sin números — el chiste vive en la
+lista, no en la cifra. Es un render.
+
 ## Lo que NO hace, y por qué
 
-⚠️ **El gráfico de Clientes NO tiene cifras.** La referencia #2 muestra un gráfico con
-números (`PEN +343.8% · $5,214.09`). Acá eso sería **fabricar**: hay cero clientes pagando.
-La línea sube sin afirmar ningún número — dice "clientes", no "mis clientes crecieron X%".
+⚠️ **El panel de créditos no lleva monto en dinero.** Los créditos son unidades de la
+plataforma, no bolivianos — mezclarlos confunde y además el precio del pool cambia.
 
-⚠️ **El panel de créditos tampoco lleva monto.** El saldo real cambia todos los días y una
-cifra dibujada envejece mal.
+⚠️ **No nombra a ningún cliente, ni real ni inventado.** La cifra es agregada; no hay
+logos, nombres ni testimonios. Ésa es la línea que no se cruza ni con permiso.

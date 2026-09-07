@@ -63,12 +63,28 @@ def _chrome():
 
 
 # --- Objetos: squircle app-icon con el color de marca real y un glifo simple.
+_SQ = 0  # contador para ids de clipPath unicos: dos <clipPath> con el mismo id en la
+         # misma pagina y el navegador aplica solo el primero a todos.
+
+
 def _squircle(bg, glifo, borde=""):
+    """El contenido va RECORTADO al cuadrado redondeado.
+
+    Sin el clip, un logo a sangre que trae sus propias esquinas (el PNG oficial de Claude
+    las tiene casi rectas) entra como cuadrado duro y rompe el patron: todo lo demas es
+    redondeado. Se ve al instante y no lo atrapa ningun gate.
+    """
+    global _SQ
+    _SQ += 1
+    cid = f"sq{_SQ}"
     b = ""
     if borde:
         b = f'<rect x="2" y="2" width="252" height="252" rx="59" fill="none" stroke="{borde}" stroke-width="2"/>'
     return (f'<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">'
-            f'<rect width="256" height="256" rx="59" fill="{bg}"/>{b}{glifo}</svg>')
+            f'<defs><clipPath id="{cid}">'
+            f'<rect width="256" height="256" rx="59"/></clipPath></defs>'
+            f'<g clip-path="url(#{cid})">'
+            f'<rect width="256" height="256" fill="{bg}"/>{glifo}</g>{b}</svg>')
 
 
 LOGOS = REPO / "hermes-content/references/ui-patterns/apple-editorial/logos"
@@ -129,34 +145,64 @@ def _torre():
 
 
 def _tarjeta_clientes():
-    """Linea ascendente SIN cifras. A proposito: la referencia #2 muestra un grafico con
-    numeros inventados, y aca eso seria fabricar. Sergio Urcullo tiene CERO clientes
-    pagando (ONIA_ESTRATEGIA_DE_EMPRESA.md) — la linea dice "clientes" sin afirmar ninguno."""
+    """Panel de analitica con textura de producto real (pedido de Sergio Urcullo, 06-sep:
+    "hacelo mas real estilo startup").
+
+    🔴 LAS DOS CIFRAS SON INVENTADAS. El pidio "numeros falsos pero realistas" y se le
+    marco el choque con la regla de la casa (`no fabricar`: cero clientes pagando ⇒
+    prohibido inventar cifras). Se eligieron a proposito CHICAS —12 y +3— para que
+    lean como arranque y no como alarde: una cifra grande seria a la vez mas falsa y
+    mas cara de sostener si alguien pregunta.
+    Si el prefiere sacarlas, el grafico funciona igual sin ningun numero.
+    """
     return (
         '<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">'
-        '<polyline points="30,240 80,215 120,200 165,150 210,120 265,55" fill="none" '
-        'stroke="#0A0A0A" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>'
-        '<polyline points="30,262 80,255 120,250 165,238 210,232 265,220" fill="none" '
-        'stroke="#C9C9CE" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>'
-        '<circle cx="265" cy="55" r="14" fill="#00C661"/></svg>')
+        '<rect x="10" y="34" width="280" height="232" rx="20" fill="#FFFFFF" '
+        'stroke="#E8E8ED" stroke-width="2"/>'
+        '<text x="34" y="76" font-family="OniaMono,monospace" font-size="15" '
+        'letter-spacing="1.6" fill="#8E8E93">CLIENTES ACTIVOS</text>'
+        '<text x="33" y="132" font-family="Inter,sans-serif" font-size="58" '
+        'font-weight="700" letter-spacing="-2" fill="#1D1D1F">12</text>'
+        '<rect x="112" y="102" width="86" height="32" rx="16" fill="#E4F9EE"/>'
+        '<text x="127" y="124" font-family="Inter,sans-serif" font-size="19" '
+        'font-weight="700" fill="#0B8F4F">+3 mes</text>'
+        '<polyline points="34,236 82,222 122,214 166,182 212,162 266,152" fill="none" '
+        'stroke="#00C661" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>'
+        '<circle cx="266" cy="152" r="9" fill="#00C661"/></svg>')
 
 
 def _tarjeta_creditos():
-    """Panel oscuro estilo "comprar creditos", como la cuarta celda de la referencia #2.
-    Sin monto: el saldo real cambia todos los dias y una cifra dibujada envejece mal."""
+    """Panel de saldo estilo el de la cuarta celda de la referencia #2.
+
+    A diferencia del de clientes, ESTE numero es real: el pool compartido de Higgsfield
+    ronda los 2.100 creditos y cada imagen cuesta 0,12 (CLAUDE.md §Video, y
+    BASE_CONTENIDO §1). No hizo falta inventar nada.
+    """
     return (
         '<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">'
-        '<rect x="18" y="60" width="264" height="180" rx="22" fill="#1D1D1F"/>'
-        '<rect x="44" y="96" width="150" height="13" rx="6" fill="#6E6E73"/>'
-        '<rect x="44" y="124" width="96" height="11" rx="5" fill="#3A3A3C"/>'
-        '<rect x="44" y="164" width="98" height="48" rx="12" fill="#00C661"/>'
-        '<rect x="158" y="164" width="98" height="48" rx="12" fill="#3A3A3C"/></svg>')
+        '<rect x="10" y="34" width="280" height="232" rx="20" fill="#1D1D1F"/>'
+        '<text x="34" y="76" font-family="OniaMono,monospace" font-size="15" '
+        'letter-spacing="1.6" fill="#8E8E93">SALDO</text>'
+        '<text x="33" y="134" font-family="Inter,sans-serif" font-size="54" '
+        'font-weight="700" letter-spacing="-2" fill="#FFFFFF">2.100</text>'
+        '<text x="34" y="166" font-family="Inter,sans-serif" font-size="19" '
+        'fill="#8E8E93">0,12 por imagen</text>'
+        '<rect x="34" y="186" width="232" height="9" rx="5" fill="#3A3A3C"/>'
+        '<rect x="34" y="186" width="152" height="9" rx="5" fill="#00C661"/>'
+        '<rect x="34" y="216" width="110" height="38" rx="11" fill="#00C661"/>'
+        '<rect x="156" y="216" width="110" height="38" rx="11" fill="#2C2C2E"/></svg>')
 
 
 ICONOS = {
     # Marcas REALES (simple-icons, CC0) sobre squircle en el color oficial de cada una.
     # Antes eran glifos dibujados a mano: aproximados, y el de WhatsApp directamente mal.
-    "claude": _squircle("#D97757", _marca("claude", "#FFFFFF")),
+    # ⚠️ Icono OFICIAL bajado de claude.ai/images/claude_app_icon.png, no el de
+    # simple-icons. Sergio Urcullo marco el 06-sep que "el logo de claude no es el
+    # original" y tenia razon: yo lo tenia INVERTIDO — cuadrado naranja con estallido
+    # blanco. El real es al reves, estallido coral #D97757 sobre crema #F3E9D7, y la
+    # entrada de simple-icons ademas dibuja el estallido mucho mas tosco.
+    # Leccion: "logo real" no es lo mismo que "logo de una libreria de logos".
+    "claude": _squircle("#F3E9D7", _imagen("claude-oficial", alto=256)),
     "whatsapp": _squircle("#25D366", _marca("whatsapp", "#FFFFFF")),
     "n8n": _squircle("#EA4B71", _marca("n8n", "#FFFFFF")),
     # Notion va al reves —blanco con glifo negro y filo— porque asi es su icono real.
@@ -388,27 +434,29 @@ FABLE = [
         "pie": "y lo importante no es que sea más listo:",
         "pie_hl": "es más barato",
     },
+    # La ficha lleva el NOMBRE DEL PRODUCTO, no el del concepto. Sergio Urcullo, 06-sep:
+    # "seria mejor que diga que es fable 5.1". Tiene razon y es como funcionan las
+    # referencias 5/6/7: dicen "Claude", "Notion", "MacBook Pro" — el producto y su precio.
+    # "Lectura de cache" como titular obligaba al lector a adivinar de que se habla.
     {
         "layout": "E",
         "icono": "claude",
-        "nombre": "Lectura de caché",
-        "desc": "Lo que cuesta que el agente vuelva a leer\nlo que ya tenía cargado. Es la parte que más\nse repite cuando algo trabaja solo.",
+        "nombre": "Fable 5.1",
+        "desc": "El modelo con el que construyo. Lo que bajó\nes leer el caché: lo que el agente relee todo\nel rato cuando trabaja solo.",
         "precio": "$0,25",
         "etiqueta": "por millón · antes $1",
-    },
-    {
-        "layout": "E",
-        "icono": "claude",
-        "nombre": "Trabajo agéntico",
-        "desc": "Un agente que corre solo relee todo el rato.\nPor eso el ahorro se nota más ahí que en\nuna consulta suelta.",
-        "precio": "hasta 45%",
-        "etiqueta": "más barato",
     },
     {
         "layout": "D",
         "contexto": "Lo mismo, un cuarto del precio",
         "remate": "−75%",
         "sub": "en lectura de caché. Entrada y salida no se movieron:\nsiguen en $10 y $50 por millón.",
+    },
+    {
+        "layout": "D",
+        "contexto": "Y si algo corre solo todo el día",
+        "remate": "hasta 45%",
+        "sub": "menos de costo. Un agente relee sin parar,\nasí que el ahorro se le nota mucho más.",
     },
     {
         "layout": "D",
@@ -500,7 +548,7 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 .caja{{width:100%;height:300px;background:var(--surface);border:1px solid var(--hairline);
   border-radius:26px;display:flex;align-items:center;justify-content:center;
   overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}}
-.caja img,.caja svg{{max-width:76%;max-height:76%;object-fit:contain}}
+.caja img,.caja svg{{max-width:88%;max-height:88%;object-fit:contain}}
 .rotulo{{font-size:52px;font-weight:{peso};font-variation-settings:{vf};
   letter-spacing:-.02em;color:var(--ink)}}
 /* layout C — duelo 2-up (referencia #3 del batch: chocolate vs reloj, "310 cal / 0 cal").

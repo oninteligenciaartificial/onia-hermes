@@ -12,10 +12,15 @@ Urcullo construye con Claude todos los días, así que habla de lo que usa.
 | # | Layout | Qué dice |
 |---|---|---|
 | 01 | D | Salió **FABLE 5.1**, y lo importante no es que sea más listo: **es más barato** |
-| 02 | E | **Lectura de caché · $0,25** por millón (antes $1) |
-| 03 | E | **Trabajo agéntico · hasta 45%** más barato |
-| 04 | D | **−75%** en caché. Entrada y salida no se movieron: $10 y $50 |
+| 02 | E | **Fable 5.1** · el modelo con el que construye · **$0,25** por millón (antes $1) |
+| 03 | D | **−75%** en caché. Entrada y salida no se movieron: $10 y $50 |
+| 04 | D | **hasta 45%** menos si algo corre solo todo el día |
 | 05 | D | Operar un negocio con IA **cuesta menos** cada vez + CTA |
+
+⚠️ **La ficha lleva el nombre del PRODUCTO, no el del concepto** (Sergio Urcullo, 06-sep:
+*"sería mejor que diga que es Fable 5.1"*). Es como funcionan las referencias 5/6/7 del
+batch: dicen "Claude", "Notion", "MacBook Pro" — el producto y su precio. "Lectura de
+caché" como titular obligaba al lector a adivinar de qué se habla.
 
 ## Caption (IG · copiar tal cual)
 
