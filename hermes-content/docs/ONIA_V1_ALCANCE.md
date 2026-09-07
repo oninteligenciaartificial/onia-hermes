@@ -213,7 +213,14 @@ Cerrado y sin desvíos. Cada paso se despliega y se verifica MIRÁNDOLO antes de
    —que implica que los cargás vos— y la tarjeta de al lado dice «Tus clientes aparecen acá
    solos». Las dos frases están en la misma pantalla.
 
-   🟠 **Hueco 2 — el recibo no se puede reimprimir.** «Imprimir recibo» aparece sólo en el
+   ✅ **Hueco 2 — CERRADO el 6-sep** (`fe4026e`, desplegado y mirado en producción: la fila de
+   la venta en efectivo ofrece «Recibo · Anular» y la del fiado solo «Anular»). El dato ya
+   estaba en la consulta —traía el pago de cada orden, pero sólo su `method`— así que sólo
+   faltaba sacar su `id`. **El fiado sin anticipo no ofrece recibo a propósito:** un «recibo de
+   pago» sobre plata que no entró sería mentira; esa fila cobra por `/comercio/fiados`.
+   Lo que decía antes:
+
+   🟠 ~~**Hueco 2 — el recibo no se puede reimprimir.**~~ «Imprimir recibo» aparece sólo en el
    instante posterior a cobrar; al recargar se pierde. Las filas de «Ventas del día» ofrecen
    únicamente «Anular». Si el cliente vuelve una hora después, o la cajera cerró la pantalla,
    el comprobante ya no se puede sacar.
