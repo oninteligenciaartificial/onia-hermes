@@ -72,6 +72,24 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [ ] 🔴 **Tus cuatro números dieron VERDE 13 vueltas seguidas mientras 34 arreglos tuyos no
+      llegaban al cliente. El instrumento no distingue «arreglado» de «arreglado y publicado».**
+      Medido el 2026-09-07 18:41 UTC: `stat /opt/onia-landing/runtime-next` daba
+      **2026-09-04 10:04** —tres días— y `publicar.sh` contó **34 arreglo(s) que el cliente no
+      ve**. En esas mismas horas tu objetivo se declaró *«prohibidos 0 · precios fuera de fuente
+      0 · CTA rotos 0 · favicon 200»*, vuelta tras vuelta, y tu propia lección de la vuelta 13
+      dice *«décimotercera vuelta midiendo el árbol»*. El árbol, no el sitio.
+      **Por qué es tuyo y no del que despliega:** sos el dueño de `onia.com.bo` y `/empezar`. Un
+      arreglo que no se publica no existe para el lead, y hoy tu instrumento firma en verde
+      igual. Es la misma familia que ya mordió tres veces este día —un gate que mide donde no
+      duele— y la que `deploy-vivo.mjs` resuelve para el producto: compara el **BUILD_ID vivo**
+      contra los commits de tu zona en `origin/main`.
+      ⚠️ **El favicon no sirve como termómetro** y ya está escrito por qué: una vez que un deploy
+      lo trae, da 200 para siempre y queda clavado en verde sobre un sitio de días.
+      **Listo =** tu objetivo incluye un quinto número —*arreglos de mi zona en `main` que el
+      sitio vivo NO sirve*— que hoy daría **34** y no 0; y una vuelta en la que ese número baja
+      a 0 porque se pidió el deploy, no porque se dejó de mirar.
+
 - [x] 🟠 **El gate de la cola lleva TRES arreglos y vuelve a rojo cada vez, porque las tres
       rondas corrigieron el eje equivocado. — CERRADO 2026-09-07 por `onia-cola`, con la
       salida (b) y una corrección al diagnóstico.**
