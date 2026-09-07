@@ -23,7 +23,7 @@ precio.**
 | 07 | Hermes | Agente open source MIT con el alma escrita por él · **$0** |
 | 08 | Onia Platform | Lo que está construyendo · **Próximamente** |
 | 09 | Total | Siete herramientas, **una factura**, **$200** al mes |
-| 10 | **Quién soy** | foto a sangre + 16 años + $200 al mes |
+| 10 | **Quién soy** | foto a sangre + 16 años + posteo todos los días + **Seguime** |
 | 11 | **CTA** | ¿Cuál te falta? — pide una palabra en comentarios |
 
 **Por qué la portada es así.** Su único trabajo es frenar el scroll, así que lleva la
@@ -40,6 +40,18 @@ que se vea mejor"*. La primera versión usaba el layout Q —foto de 390 px al l
 texto— y ahí la cara era un accesorio del párrafo. Con el layout F la foto ocupa la lámina
 y el texto baja a dos líneas: en la única lámina donde el que habla se muestra, la cara
 tiene que ser lo que se ve. El layout Q quedó sin usar y se borró del generador.
+
+**La lámina 10 pide el seguimiento, no repite el stack.** Sergio Urcullo, 07-sep. La
+primera versión decía "todo esto corre en mi servidor por $200 al mes" — un dato que las
+nueve láminas anteriores ya habían dado, gastando la única lámina donde se le puede pedir
+algo al lector. Ahora dice las dos cosas que hacen seguir a alguien —**la edad y la
+frecuencia**— y cierra con el chip verde: *Seguime.*
+
+🔴 **"Todos los días posteo" es un COMPROMISO, no una medición.** No hay dato de cadencia
+de la cuenta en ningún lado del repo, y la frase la eligió Sergio Urcullo. Es una promesa
+sobre su propio comportamiento y él la controla — pero es una promesa **visible**: quien la
+lea y entre al perfil la verifica en dos segundos. Si la cadencia real no la sostiene, se
+cambia por "seguido" y la lámina funciona igual.
 
 ⚠️ **El handle va en blanco sobre el polo, y es a propósito.** Medido en el render: a la
 altura del handle la foto ocupa de x=94 a x=984 — no queda franja de fondo abajo, así que
@@ -84,8 +96,8 @@ es gratis. Lo que falta es sentarse a armarlo.
 > en grande y una tira con los iconos de las siete herramientas. Después, una lámina por
 > herramienta con su costo mensual: Claude Max 200 dólares, y luego Homelab, n8n, WhatsApp
 > Business, HyperFrames y Hermes, todas en cero. Onia Platform aparece como próximamente.
-> Cierra con el total, una foto de Sergio Urcullo presentándose, y la pregunta "¿cuál te
-> falta?".
+> Cierra con el total, una foto grande de Sergio Urcullo presentándose y pidiendo que lo
+> sigan, y la pregunta "¿cuál te falta?".
 
 ## De dónde sale cada cosa que afirma (revisar antes de publicar)
 

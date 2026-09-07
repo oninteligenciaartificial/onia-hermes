@@ -408,11 +408,17 @@ LAMINAS = [
     # a 390px la foto era un accesorio del texto; a sangre la cara ES la lamina, que es
     # justo lo que tiene que pasar en la unica lamina donde el que habla se muestra.
     # El texto baja a dos lineas porque F no admite mas: el largo controla el wrap.
+    #
+    # El texto pasa de contar el stack a PEDIR EL SEGUIMIENTO (07-sep). El dato del $200
+    # ya lo dieron las nueve laminas anteriores: repetirlo acá gastaba la única lámina
+    # donde se le puede pedir algo al lector. Las dos cosas que la hacen seguir son la
+    # edad y la frecuencia, y las dos van dichas juntas.
     {
         "layout": "F",
         "foto": "sergio-chroma.png",
         "nombre": "Soy Sergio Urcullo,",
-        "sub": "tengo 16 años y todo esto corre\nen mi servidor por $200 al mes.",
+        "sub": "tengo 16 años y todos los días posteo\ncómo usar IA en un negocio de verdad.",
+        "cta": "Seguime.",
     },
     # CIERRE. El CTA obliga a comentar: pregunta cerrada, de una sola palabra, sobre algo
     # que el lector YA tiene una opinion formada despues de ver las 7 fichas.
@@ -526,25 +532,69 @@ FABLE = [
     },
     # Los benchmarks van DESPUES de la ventaja explicada, no antes: un porcentaje sin
     # contexto no convence a nadie, pero confirma a quien ya entendio la idea.
-    {
-        "layout": "D",
-        "contexto": "Le gana a Opus 5 y a GPT-5.6 Sol",
-        "remate": "73,4%",
-        "sub": "en CursorBench, la prueba de trabajo con código real.\nY 65% en Humanity's Last Exam usando herramientas.",
-    },
-    # El tamano del salto contra SU PROPIA version anterior, que es lo que de verdad
-    # muestra cuanto mejoro — un ranking dice quien va adelante, esto dice cuanto se movio.
     #
-    # ⚠️ ACA HABIA UN ERROR MIO, y salio a un render de publicarse: esta lamina decia
-    # "diseño proteinas 10x mejor y acelero kernels de GPU 2,5x". Esas dos cifras son de
-    # MYTHOS 5.1 —el gemelo de entrega restringida—, no de Fable, y la pagina las atribuye
-    # explicitamente a Mythos. Adjudicarle a un producto el logro de otro es exactamente
-    # el error del que ya nos salvamos con Hermes. Reemplazadas por una cifra de Fable.
+    # Las tres van en BARRAS y no en texto (07-sep, "esta muy pobre... mas visuales"): un
+    # numero escrito se lee, un numero dibujado se compara. El orden de los modelos es el
+    # MISMO en las tres a proposito — el ojo aprende el formato en la primera y las otras
+    # dos las lee de un vistazo. Por eso Fable 5 va cuarto aunque en CursorBench le gane a
+    # Opus 5: el orden es por modelo, no por puntaje, o la comparacion deja de servir.
+    #
+    # Tabla completa releida el 07-sep en anthropic.com/claude-fable-and-mythos-5-1.
+    # AUTOMATIONBENCH va PRIMERO y no es casualidad: es la unica prueba de la tabla que
+    # mide flujos de trabajo de oficina, que es literalmente lo que hace el negocio de
+    # Sergio Urcullo. Es el dato mas util de la pagina y no estaba en la version anterior.
+    {
+        "layout": "G",
+        "titulo": "Flujos de trabajo\nde un negocio",
+        "sub": "Tareas de oficina completas, de punta a punta.\nCasi el doble que su versión anterior.",
+        "fuente": "AutomationBench · Anthropic",
+        "barras": [
+            {"rotulo": "Fable 5.1", "valor": 31.4, "gana": True},
+            {"rotulo": "Opus 5", "valor": 26.9},
+            {"rotulo": "GPT-5.6\nSol", "valor": 19.6},
+            {"rotulo": "Fable 5", "valor": 17.1},
+        ],
+    },
+    {
+        "layout": "G",
+        "titulo": "Investigación científica,\nhecha sola",
+        "sub": "Trabajo de laboratorio desde una terminal, sin\nnadie mirando. Casi el doble que el segundo.",
+        "fuente": "Terminal-Bench-Science 0.1 · Anthropic",
+        "barras": [
+            {"rotulo": "Fable 5.1", "valor": 52.6, "gana": True},
+            {"rotulo": "Opus 5", "valor": 29.0},
+            {"rotulo": "GPT-5.6\nSol", "valor": 22.4},
+            {"rotulo": "Fable 5", "valor": 24.7},
+        ],
+    },
+    {
+        "layout": "G",
+        "titulo": "Y programar,\nque es lo suyo",
+        # La unica de las tres donde la carrera es pareja (67,2 a 73,4) y las barras salen
+        # casi iguales. Se dice en la lamina en vez de dejar que el lector lo note solo:
+        # una pieza que presume de datos pierde mas por disimular un empate que por
+        # admitirlo, y admitirlo es lo que hace creer las otras dos.
+        "sub": "Trabajo con código real, no ejercicios de examen.\nAcá la carrera es pareja, y aun así queda arriba.",
+        "fuente": "CursorBench 3.2.0 · Anthropic",
+        "barras": [
+            {"rotulo": "Fable 5.1", "valor": 73.4, "gana": True},
+            {"rotulo": "Opus 5", "valor": 70.0},
+            {"rotulo": "GPT-5.6\nSol", "valor": 67.2},
+            {"rotulo": "Fable 5", "valor": 70.5},
+        ],
+    },
+    # Capacidad, no puntaje: "usa una computadora" se entiende sin saber que es un
+    # benchmark. Va en D para cortar el ritmo despues de tres laminas de barras.
     {
         "layout": "D",
-        "contexto": "Contra su propia versión anterior",
-        "remate": "MÁS DEL DOBLE",
-        "sub": "En Terminal-Bench-Science pasó de 24,7% a 52,6%:\ntrabajo científico real hecho desde una terminal.\nEn Terminal-Bench 4.0, de 42,0% a 55,8%.",
+        "contexto": "Y ahora usa una computadora",
+        "remate": "77,9%",
+        # ⚠️ 77,9% es OSWorld 2.0 en su medicion PERMISIVA; la estricta da 41,7%. Publicar
+        # el numero lindo sin mas seria elegir la vara que conviene. La lamina no explica
+        # la diferencia —jerga de benchmark en una pieza para duenos de negocio no aporta—
+        # pero dice lo que SI se sostiene con las dos varas: gana en ambas (41,7 vs 39,6
+        # de Opus 5 y 36,1 de Fable 5). Las dos cifras estan en el doc de la cola.
+        "sub": "Abre programas, hace clic y completa la tarea\nen una pantalla. Le gana a Opus 5 y a su versión\nanterior en las dos formas de medirlo.",
     },
     # La ficha lleva el NOMBRE DEL PRODUCTO, no el del concepto. Sergio Urcullo, 06-sep:
     # "seria mejor que diga que es fable 5.1". Tiene razon y es como funcionan las
@@ -721,6 +771,36 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 /* layout B — grilla 2x2 con el objeto encajonado (referencia #2 del batch). Cada celda
    es una tarjeta blanca con filo: eso separa los objetos entre si sin dibujar divisores,
    y hace que una foto y un icono dibujado convivan sin pelearse. */
+/* layout G — barras comparativas. Nace el 07-sep de "el de claude siento que esta muy
+   pobre, intenta colocarles mas cosas de valor y mas visuales": el carrusel de Fable era
+   siete laminas y seis eran texto centrado. Un porcentaje escrito se lee; un porcentaje
+   dibujado se COMPARA, que es justo lo que la pieza necesita hacer.
+   ⚠️ La altura es proporcional al valor desde CERO (`v / max * 100%`). Recortar la base
+   para "que se note mas la diferencia" es el truco de grafico mentiroso mas comun que
+   existe, y en una pieza que presume de datos verificados seria el peor lugar para usarlo. */
+.lienzo.g{{justify-content:center;padding:96px 96px 150px}}
+.titulo-g{{font-size:62px;font-weight:{peso};font-variation-settings:{vf};
+  letter-spacing:-.03em;line-height:1.06;color:var(--ink);white-space:pre-line}}
+.sub-g{{font-size:34px;color:var(--muted);line-height:1.35;margin-top:18px;
+  letter-spacing:-.01em;white-space:pre-line}}
+.barras{{display:flex;align-items:flex-end;justify-content:center;gap:38px;
+  height:560px;width:100%;margin-top:56px}}
+.barra{{flex:1;max-width:180px;display:flex;flex-direction:column;
+  justify-content:flex-end;height:100%}}
+.barra .val{{font-size:50px;font-weight:{peso};font-variation-settings:{vf};
+  letter-spacing:-.03em;color:var(--muted);margin-bottom:18px}}
+.barra .cana{{width:100%;background:var(--hairline);border-radius:22px 22px 10px 10px}}
+.barra .rot{{font-family:'OniaMono',monospace;font-size:22px;font-weight:500;
+  letter-spacing:.04em;text-transform:uppercase;color:#A1A1A6;margin-top:22px;
+  line-height:1.3;white-space:pre-line}}
+/* El ganador en tinta plena. NO en verde: el verde es de la marca Onia y esta pieza
+   habla de un producto ajeno — pintar a Anthropic con el color de la casa confunde
+   de quien es el logro. */
+.barra.gana .val{{color:var(--ink);font-size:60px}}
+.barra.gana .cana{{background:var(--ink)}}
+.barra.gana .rot{{color:var(--ink)}}
+.pie-g{{font-family:'OniaMono',monospace;font-size:22px;font-weight:500;
+  letter-spacing:.06em;text-transform:uppercase;color:#A1A1A6;margin-top:44px}}
 .lienzo.b{{justify-content:center;padding:96px 96px 150px}}
 .titulo-b{{font-size:96px;font-weight:{peso};font-variation-settings:{vf};
   letter-spacing:-.032em;line-height:1;color:var(--ink);margin-bottom:78px}}
@@ -756,6 +836,10 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 .f .nombre-f{{font-size:92px;line-height:1.0}}
 .f .sub-f{{font-size:44px;color:var(--muted);line-height:1.22;margin-top:18px;
   letter-spacing:-.01em;max-width:820px;white-space:pre-line}}
+/* Chip de accion bajo el subtitulo. Es la unica lamina del carrusel que le pide algo al
+   lector ademas del comentario, asi que lleva el verde de marca: acá sí es Onia hablando. */
+.f .cta-f{{margin-top:30px}}
+.f .cta-f .hl{{font-size:38px;display:inline-block}}
 /* La foto sale del flujo y se apoya en el borde inferior: a sangre, como la referencia. */
 .f .foto{{position:absolute;left:50%;transform:translateX(-50%);bottom:0;
   max-height:72%;width:auto;object-fit:contain;object-position:bottom}}
@@ -793,6 +877,20 @@ def markup(lamina):
             filas.append(f'<div class="{clase}">{"".join(celdas)}</div>')
         return (f'<div class="display titulo-a">{lamina["titulo"]}</div>'
                 f'{"".join(filas)}')
+    if lamina["layout"] == "G":          # barras comparativas
+        tope = max(b["valor"] for b in lamina["barras"])
+        cols = []
+        for b in lamina["barras"]:
+            gana = " gana" if b.get("gana") else ""
+            alto = b["valor"] / tope * 100
+            val = f'{b["valor"]:.1f}'.replace(".", ",") + lamina.get("unidad", "%")
+            cols.append(f'<div class="barra{gana}"><div class="val">{val}</div>'
+                        f'<div class="cana" style="height:{alto:.2f}%"></div>'
+                        f'<div class="rot">{b["rotulo"]}</div></div>')
+        sub = f'<div class="sub-g">{lamina["sub"]}</div>' if lamina.get("sub") else ""
+        return (f'<div class="titulo-g">{lamina["titulo"]}</div>{sub}'
+                f'<div class="barras">{"".join(cols)}</div>'
+                f'<div class="pie-g">{lamina["fuente"]}</div>')
     if lamina["layout"] == "B":
         celdas = []
         for c in lamina["celdas"]:
@@ -824,8 +922,10 @@ def markup(lamina):
         foto = LOGOS / lamina["foto"]
         if not foto.exists():
             raise SystemExit(f"Falta la foto recortada {foto}. Corré recortar-foto.py.")
+        cta = (f'<div class="cta-f"><span class="hl">{lamina["cta"]}</span></div>'
+               if lamina.get("cta") else "")
         return (f'<div class="display nombre-f">{lamina["nombre"]}</div>'
-                f'<div class="sub-f">{lamina["sub"]}</div>'
+                f'<div class="sub-f">{lamina["sub"]}</div>{cta}'
                 f'<img class="foto" src="{foto.as_uri()}">')
     if lamina["layout"] == "D":
         gancho = " gancho" if lamina.get("gancho") else ""
@@ -857,7 +957,7 @@ def render(tipo, out_dir, laminas=None):
     hoja = css(tipo)
     for i, lamina in enumerate(laminas or LAMINAS, 1):
         html = (f"<!doctype html><html><head><meta charset='utf-8'><style>{hoja}</style></head>"
-                f"<body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("A", "B", "C", "F") else ""}'>{markup(lamina)}"
+                f"<body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("A", "B", "C", "F", "G") else ""}'>{markup(lamina)}"
                 f"<div class='handle'>{HANDLE}</div></div></body></html>")
         with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as fh:
             fh.write(html)
@@ -898,7 +998,7 @@ window.addEventListener('load', function(){
       return rects.length ? Math.max.apply(null, rects.map(function(x){return x.width})) : 0;
     }
     var out = ['FUENTE|' + ok];
-    document.querySelectorAll('.remate,.nombre,.precio,.desc,.contexto,.pie,.sub,.cta,.etiqueta,.nombre-f,.sub-f,.titulo-c,.dato,.titulo-b,.rotulo,.titulo-a,.rotulo-a,.nom,.bio')
+    document.querySelectorAll('.remate,.nombre,.precio,.desc,.contexto,.pie,.sub,.cta,.etiqueta,.nombre-f,.sub-f,.titulo-c,.dato,.titulo-b,.rotulo,.titulo-a,.rotulo-a,.nom,.bio,.titulo-g,.sub-g,.val,.rot,.pie-g,.cta-f')
       .forEach(function(el){
         out.push('SONDA|' + el.className.replace(/display /,'') + '|' + Math.round(ancho(el)));
       });
@@ -918,7 +1018,7 @@ def check(tipo, laminas=None):
     fallos = []
     for i, lamina in enumerate(laminas or LAMINAS, 1):
         html = (f"<!doctype html><html><head><meta charset='utf-8'><style>{hoja}</style>"
-                f"{sonda}</head><body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("A", "B", "C", "F") else ""}'>{markup(lamina)}"
+                f"{sonda}</head><body><div class='lienzo{" " + lamina["layout"].lower() if lamina["layout"] in ("A", "B", "C", "F", "G") else ""}'>{markup(lamina)}"
                 f"<div class='handle'>{HANDLE}</div></div></body></html>")
         with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as fh:
             fh.write(html)
