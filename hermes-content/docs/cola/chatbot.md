@@ -178,6 +178,52 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-07: el gate de los avisos medía HANDOFF y daba por medida la DEMO —
+      la rama que lleva la plata.** El objetivo del carril dice «cada demo agendada **o** handoff le
+      llega a Sergio», y `avisos-vivo.mjs` manejaba el motor sólo hasta un pedido de humano. Su
+      propio encabezado lo declaraba (*«ante un pedido de humano»*), y aun así el veredicto se
+      leía como si cubriera las dos.
+
+      **Probado por MUTACIÓN antes de tocar nada, no por lectura:** borrando entero el
+      `notify_sergio` de la rama de agendar (`bot-engine.mjs`, el bloque `kind: "demo_agendada"`),
+      el gate viejo seguía dando **VERDE** — `{emite:true, accionable:true}`. O sea: el día que se
+      rompa el aviso de la demo, el único instrumento que mira este objetivo dice `circuito: ok`,
+      **ningún número se mueve**, y cada prospecto que YA eligió horario se pierde en silencio.
+
+      **Por qué probar una no dice nada de la otra:** son hermanas emitidas desde funciones
+      DISTINTAS del motor (`bot-engine.mjs:341` el handoff, `:729` la demo) y con payloads de
+      forma distinta — el handoff trae `reason`, la demo no. Es la misma familia de fallo que las
+      dos bienvenidas hermanas del 2026-09-04: se arregla una y la otra queda.
+
+      **Y la trampa que lo mantenía invisible:** `DEFAULT_CONFIG` trae los horarios en
+      `pending: true` (placeholders), así que elegir «A» cae en *«no tengo horarios libres»* y
+      **nunca** llega a agendar. Producción los carga de `ONIA_BOT_SLOTS`. El gate ahora inyecta
+      dos horarios reales y futuros, así la rama se maneja siempre — incluso el día que el
+      renovador no haya corrido.
+
+      **Arreglo:** `RAMAS_QUE_AVISAN = ["handoff", "demo_agendada"]` en `avisos-vivo.mjs`;
+      `motorProduceAviso()` recorre las dos, exige el `kind` esperado (no «algún notify»:
+      un `sin_horarios` en vez de la demo también es empalme roto), y `emite`/`accionable` son la
+      Y de todas. Una rama que no se puede manejar es **ROJO, nunca un salteo**. La salida nombra
+      cada rama SIEMPRE, no sólo cuando falla: un `motorEmiteNotify ok` sin decir sobre qué ramas
+      es justo la lectura que dejó pasar esto.
+
+      **Verificado en las dos direcciones contra el bot DESPLEGADO** (no contra el repo):
+      `npm run avisos:vivo` → exit 0 con `ok rama handoff` y `ok rama demo_agendada`; con el aviso
+      de la demo borrado → `demo_agendada {emite:false}` y el circuito entero en rojo **mientras el
+      handoff sigue verde**, que es el caso que ningún otro guardia puede ver. Anclado con 3 casos
+      en `avisos-vivo.test.mjs` (la mutación quedó permanente, con `assert.match` sobre el ancla
+      para que avise si cambia la forma). Suite del bot **877/877**, herméticos.
+
+      ⚠️ **De paso, un comentario vencido que empujaba en la dirección contraria:**
+      `aviso-telegram.mjs` decía *«APAGADO POR DEFECTO... una decisión de Sergio que está
+      preguntada y sin contestar»*. Sergio Urcullo la contestó el **2026-09-03** (opción **c**:
+      Telegram ya, Cal.com «cuando moleste anotar a mano») y desde entonces el default va en ON —
+      medido hoy en el proceso vivo: `ONIA_BOT_TG_AVISO=true` en `/proc/<pid>/environ` dentro de
+      `onia-center`. Un comentario que dice «esto está apagado esperando una decisión» hace que el
+      próximo lector lo deje apagado, que es exactamente cómo nació el bug que ese archivo vino a
+      arreglar.
+
 - [x] ✅ **CERRADO el 2026-09-07: el tercer número del objetivo (`avisos demo/handoff`) volvió a
       medirse desde nodo-casa.** Medido, no leído: `npm run avisos:vivo` → **exit 0**, `circuito:
       medido` con los cuatro eslabones en `ok` (`flagEncendido`, `credencialesOk`,

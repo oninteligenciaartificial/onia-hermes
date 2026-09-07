@@ -18,9 +18,22 @@
 
 import test from "node:test";
 import assert from "node:assert/strict";
-import { rmSync } from "node:fs";
+import { copyFileSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
-import { diagnosticar, contarEventos, resolverBotDesplegado, BOT_DIR } from "./avisos-vivo.mjs";
+import {
+  diagnosticar,
+  contarEventos,
+  resolverBotDesplegado,
+  motorProduceAviso,
+  RAMAS_QUE_AVISAN,
+  BOT_DIR,
+} from "./avisos-vivo.mjs";
+
+/** El bot de ESTE repo. Es el espejo del desplegado y no sale a la red: el gate sigue hermetico. */
+const DIR_BOT = dirname(fileURLToPath(import.meta.url));
 
 const CIRCUITO_SANO = {
   flagEncendido: true,
@@ -210,4 +223,60 @@ test("cuando el bot esta en el disco local, NO se sale a la red", () => {
   assert.equal(r.dir, BOT_DIR);
   assert.equal(r.origen, "local");
   assert.deepEqual(llamadas, [], "con el artefacto en el disco no hay por que preguntarle al VPS");
+});
+
+// ---------------------------------------------------------------------------
+// Las DOS ramas que avisan. Nace del 2026-09-07.
+//
+// El objetivo del carril dice "cada demo agendada O handoff le llega a Sergio", y este gate
+// manejaba el motor SOLO hasta un handoff — su propio encabezado lo declaraba ("ante un
+// pedido de humano"). Medido por mutacion ese dia: borrando entero el `notify_sergio` de la
+// rama de agendar, el gate seguia dando VERDE. O sea que el dia que se rompa el aviso de la
+// demo —la rama que lleva la plata, un prospecto que YA eligio horario— el unico instrumento
+// que mira este objetivo dice "circuito: ok" y ningun numero se mueve.
+//
+// Son hermanas y se emiten desde funciones DISTINTAS del motor, con payloads de forma
+// distinta (el handoff trae `reason`, la demo no): probar una no dice nada de la otra.
+// ---------------------------------------------------------------------------
+
+test("las ramas que avisan son las DOS que nombra el objetivo, no una", () => {
+  // Ancla contra el olvido: si alguien saca una rama de la lista, el gate vuelve a ser
+  // ciego de ese lado y nada mas se pondria rojo.
+  assert.deepEqual([...RAMAS_QUE_AVISAN].sort(), ["demo_agendada", "handoff"]);
+});
+
+test("el motor desplegado avisa en las DOS ramas", async () => {
+  const r = await motorProduceAviso(DIR_BOT);
+  assert.ok(r, "no se pudo manejar el motor del propio repo");
+  for (const kind of RAMAS_QUE_AVISAN) {
+    assert.equal(r.ramas[kind]?.emite, true, `la rama ${kind} no emite notify_sergio`);
+    assert.equal(r.ramas[kind]?.accionable, true, `el aviso de ${kind} no nombra la conversacion`);
+  }
+  assert.equal(r.emite, true);
+  assert.equal(r.accionable, true);
+});
+
+test("si el motor deja de avisar la DEMO, el gate se pone ROJO y el handoff no lo tapa", async () => {
+  // Este es el caso que NINGUN otro guardia puede ver, y por eso existe: con el handoff sano
+  // el veredicto global tiene que caer igual. Es la mutacion del 2026-09-07 hecha permanente.
+  const dir = mkdtempSync(join(tmpdir(), "avisos-rama-"));
+  try {
+    for (const f of readdirSync(DIR_BOT)) {
+      if (f.endsWith(".mjs") || f.endsWith(".json")) copyFileSync(join(DIR_BOT, f), join(dir, f));
+    }
+
+    const motor = join(dir, "bot-engine.mjs");
+    const fuente = readFileSync(motor, "utf8");
+    const avisoDeLaDemo = /\{\s*type: "notify_sergio",\s*payload: \{ kind: "demo_agendada",[\s\S]*?\},\s*\},\n/;
+    assert.match(fuente, avisoDeLaDemo, "cambio la forma del aviso de la demo: reescribi la mutacion");
+    writeFileSync(motor, fuente.replace(avisoDeLaDemo, ""));
+
+    const r = await motorProduceAviso(dir);
+    assert.ok(r, "la mutacion tiene que dejar el motor importable, si no no prueba nada");
+    assert.equal(r.ramas.handoff?.emite, true, "el handoff sigue sano: por eso el gate viejo daba verde");
+    assert.equal(r.ramas.demo_agendada?.emite, false, "la demo dejo de avisar y el gate no lo vio");
+    assert.equal(r.emite, false, "una rama rota tiene que romper el circuito entero");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });

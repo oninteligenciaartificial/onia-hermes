@@ -20,8 +20,11 @@
 //  2. credencialesOk   — `getMe` + `getChat` contra la API de Telegram. No manda nada.
 //                        Un token vencido o un chat_id equivocado hace fallar TODO aviso
 //                        futuro sin dejar rastro hasta el dia que hay alguien esperando.
-//  3. motorEmiteNotify — el motor DESPLEGADO, ante un pedido de humano, tiene que emitir
-//                        `notify_sergio`. Se maneja el engine real, no un mock.
+//  3. motorEmiteNotify — el motor DESPLEGADO tiene que emitir `notify_sergio` en LAS DOS
+//                        ramas que el objetivo nombra (handoff Y demo agendada), no en una.
+//                        Se maneja el engine real, no un mock. Ver `RAMAS_QUE_AVISAN`:
+//                        hasta el 2026-09-07 esto medía sólo el handoff y el gate quedaba
+//                        VERDE con el aviso de la demo borrado del motor.
 //  4. textoAccionable  — el aviso tiene que nombrar la conversacion. Uno que no dice a
 //                        quien contestarle no sirve (lo dice el propio aviso-telegram.mjs).
 //
@@ -199,33 +202,90 @@ async function credencialesResponden(token, chatId) {
 }
 
 /**
- * Maneja el motor DESPLEGADO hasta un handoff y arma el aviso con el `construirAviso`
- * desplegado. Es el unico eslabon que prueba que las piezas encajan entre si: cada una
- * tiene su test, y aun asi el empalme puede estar cambiado de nombre.
+ * Las DOS ramas que el objetivo del carril nombra: "cada demo agendada O handoff le llega a
+ * Sergio". Son HERMANAS y se emiten desde funciones DISTINTAS del motor, con payloads de
+ * forma distinta (el handoff trae `reason`, la demo no), asi que probar una no dice nada de
+ * la otra.
+ *
+ * 🔴 POR QUE ESTA LISTA EXISTE, medido el 2026-09-07. Este gate manejaba el motor SOLO hasta
+ * un handoff, y su propio encabezado lo declaraba ("ante un pedido de humano"). Borrando
+ * entero el `notify_sergio` de la rama de agendar, el gate seguia dando VERDE — o sea que el
+ * dia que se rompa el aviso de la demo, el unico instrumento que mira este objetivo dice
+ * "circuito: ok" y ningun numero se mueve, mientras cada demo reservada se pierde en silencio.
+ * Es la rama que lleva la plata: un prospecto que YA eligio horario.
+ *
+ * Una rama que no se puede manejar es ROJO, nunca un salteo: ese es el modo de falla del que
+ * venimos.
  */
-async function motorProduceAviso(dir) {
+export const RAMAS_QUE_AVISAN = Object.freeze(["handoff", "demo_agendada"]);
+
+/**
+ * Maneja el motor DESPLEGADO hasta CADA una de las ramas de `RAMAS_QUE_AVISAN` y arma el
+ * aviso con el `construirAviso` desplegado. Es el unico eslabon que prueba que las piezas
+ * encajan entre si: cada una tiene su test, y aun asi el empalme puede estar cambiado de
+ * nombre.
+ *
+ * `emite`/`accionable` son la Y de todas las ramas: basta que una falle para que el circuito
+ * este roto, porque cada una es un prospecto distinto que se pierde.
+ */
+export async function motorProduceAviso(dir) {
   try {
     const mod = (archivo) => pathToFileURL(join(dir, archivo)).href;
     const engine = await import(mod(MOTOR));
-    const { DEFAULT_CONFIG } = await import(mod("config.mjs"));
+    const { DEFAULT_CONFIG, createBotConfig } = await import(mod("config.mjs"));
     const { construirAviso } = await import(mod("aviso-telegram.mjs"));
 
     const ahora = () => new Date().toISOString();
-    let estado = engine.createState({ conversationKey: "chatwoot:0", leadKey: "gate", channel: "web" });
-    estado = engine.step(estado, { text: "Hola", receivedAt: ahora() }, { config: DEFAULT_CONFIG }).nextState;
-    const r = engine.step(
-      estado,
-      { text: "quiero hablar con un humano por favor", receivedAt: ahora() },
-      { config: DEFAULT_CONFIG },
-    );
 
-    const notify = (r.sideEffects || []).filter((e) => e.type === "notify_sergio").map((e) => e.payload);
-    if (notify.length === 0) return { emite: false, accionable: false };
+    // Los horarios de `DEFAULT_CONFIG` vienen `pending: true` (placeholders), y con esos el
+    // motor cae en "no tengo horarios libres" y NUNCA llega a agendar. Produccion los carga
+    // de `ONIA_BOT_SLOTS`; aca se inyectan dos reales y futuros para que la rama se maneje
+    // siempre, incluso el dia que el renovador no haya corrido.
+    const futuro = new Date(Date.now() + 72 * 3600 * 1000).toISOString();
+    const conHorarios = createBotConfig({
+      slots: [
+        { key: "A", label: "horario A del gate", startAt: futuro, pending: false },
+        { key: "B", label: "horario B del gate", startAt: futuro, pending: false },
+      ],
+    });
 
-    const aviso = construirAviso({ notify, conversationId: 4242, stageAfter: r.nextState?.botStage });
-    // "Accionable" = nombra la conversacion. Sin eso Sergio recibe un timbre sin puerta.
-    const accionable = Boolean(aviso?.texto?.includes("4242")) && aviso?.conversationId === 4242;
-    return { emite: true, accionable, ejemplo: aviso?.texto };
+    // Cada rama: el guion que la dispara y la config que hace falta para llegar.
+    const guiones = {
+      handoff: { config: DEFAULT_CONFIG, dice: "quiero hablar con un humano por favor" },
+      demo_agendada: { config: conHorarios, dice: "A" },
+    };
+
+    const ramas = {};
+    let ejemplo = null;
+
+    for (const kind of RAMAS_QUE_AVISAN) {
+      const { config, dice } = guiones[kind];
+      let estado = engine.createState({ conversationKey: "chatwoot:0", leadKey: "gate", channel: "web" });
+      estado = engine.step(estado, { text: "Hola", receivedAt: ahora() }, { config }).nextState;
+      const r = engine.step(estado, { text: dice, receivedAt: ahora() }, { config });
+
+      const notify = (r.sideEffects || []).filter((e) => e.type === "notify_sergio").map((e) => e.payload);
+      // Se exige el `kind` esperado, no "algun notify": si la rama emite otra cosa (un
+      // `sin_horarios` en vez de la demo) el empalme esta roto igual.
+      const deLaRama = notify.filter((p) => String(p?.kind) === kind);
+      if (deLaRama.length === 0) {
+        ramas[kind] = { emite: false, accionable: false };
+        continue;
+      }
+
+      const aviso = construirAviso({ notify: deLaRama, conversationId: 4242, stageAfter: r.nextState?.botStage });
+      // "Accionable" = nombra la conversacion. Sin eso Sergio recibe un timbre sin puerta.
+      const accionable = Boolean(aviso?.texto?.includes("4242")) && aviso?.conversationId === 4242;
+      ramas[kind] = { emite: true, accionable };
+      if (!ejemplo) ejemplo = aviso?.texto;
+    }
+
+    return {
+      emite: RAMAS_QUE_AVISAN.every((k) => ramas[k]?.emite),
+      accionable: RAMAS_QUE_AVISAN.every((k) => ramas[k]?.accionable),
+      ramas,
+      ejemplo,
+    };
   } catch {
     return null;
   }
@@ -275,6 +335,7 @@ async function medirCon(bot) {
     },
     eventos: contarEventos(lineasDelLog(bot.dir)),
     ejemplo: motor.ejemplo,
+    ramas: motor.ramas,
   };
 }
 
@@ -282,12 +343,20 @@ async function medirCon(bot) {
 // produccion y un process.exit() que mata al proceso importador (medido en este carril
 // el 2026-09-03 con demo_agendada_real.mjs).
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const { circuito, eventos, ejemplo } = await medir();
+  const { circuito, eventos, ejemplo, ramas } = await medir();
   const d = diagnosticar({ circuito, eventos });
 
   console.log(`circuito: ${circuito ? (d.veredicto === "no_medido" ? "?" : "medido") : "NO SE PUDO MEDIR"}`);
   if (circuito) {
     for (const [k, v] of Object.entries(circuito)) console.log(`  ${v ? "ok  " : "ROTO"} ${k}`);
+  }
+  // Las ramas van SIEMPRE, no sólo cuando fallan: un "motorEmiteNotify ok" sin decir sobre
+  // qué ramas es justo la lectura que dejó pasar el agujero del 2026-09-07.
+  if (ramas) {
+    for (const kind of RAMAS_QUE_AVISAN) {
+      const r = ramas[kind];
+      console.log(`  ${r?.emite && r?.accionable ? "ok  " : "ROTO"} rama ${kind}`);
+    }
   }
   console.log(`eventos: ${eventos.total} avisos (enviados ${eventos.enviados} · salteados ${eventos.salteados} · fallidos ${eventos.fallidos})`);
   if (d.motivos.length) console.log("motivos:\n  - " + d.motivos.join("\n  - "));
