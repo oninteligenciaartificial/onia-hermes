@@ -17,7 +17,7 @@ import styles from "@/components/landing-v1/landing.module.css";
 const SITE_URL = "https://onia.com.bo/";
 const TITLE = "Onia · Tu negocio no pierde citas ni cobros | Bolivia";
 const DESCRIPTION =
-  `Onia Platform es el sistema de gestión con inteligencia artificial para negocios en Bolivia: agenda, clientes, cobros y agentes que trabajan 24/7 con tu aprobación. Desde Bs ${bs(plan("basico").mensual)} al mes. Probalo ${PRUEBA.dias} días gratis, sin tarjeta.`;
+  `Onia Platform es el sistema de gestión con inteligencia artificial para negocios en Bolivia: agenda, clientes, cobros y agentes que revisan tu negocio cada día y esperan tu aprobación. Desde Bs ${bs(plan("basico").mensual)} al mes. Probalo ${PRUEBA.dias} días gratis, sin tarjeta.`;
 
 /*
  * La tarjeta social NO se declara acá: la dibuja `opengraph-image.tsx` de este

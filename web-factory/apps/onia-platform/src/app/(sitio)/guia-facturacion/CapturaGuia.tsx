@@ -115,8 +115,8 @@ export function CapturaGuia() {
         </button>
         {registrado && (
           <p className={g.listoNota}>
-            Si el SIN vuelve a mover la fecha, te escribimos. Ya lo hizo dos
-            veces.
+            Tu contacto quedó con nosotros. Dato para tenerlo en cuenta: el SIN
+            ya movió esta fecha dos veces.
           </p>
         )}
       </div>
@@ -177,10 +177,20 @@ export function CapturaGuia() {
         {estado === "enviando" ? "Un segundo…" : "Quiero la hoja"}
       </button>
 
+      {/*
+        Acá decía que el correo era «para que te llegue la hoja y el aviso si
+        cambia la fecha», y las dos mitades eran falsas: la hoja se entrega en
+        pantalla treinta líneas más abajo («Guardala en PDF o imprimila»), y
+        del aviso no hay quién lo dispare. Medido el 2026-09-07: el handler del
+        intake sólo hace `createOniaCenterEntity("lead", lead)`, esta app no
+        tiene una sola biblioteca de correo, y ningún cron vigila al SIN. Lo
+        que el dato SÍ hace es quedar como contacto, así que eso es lo que se
+        declara. Lo vigila `proposito-del-dato.test.ts`.
+      */}
       <p className={g.formNota}>
-        Un correo, nada más. La guía completa está debajo y se lee sin dejar
-        nada: el correo es para que te llegue la hoja y el aviso si cambia la
-        fecha.
+        Un correo, nada más. La guía completa está acá abajo y se lee sin dejar
+        nada: el correo queda como contacto para hablar de tu caso, y no se usa
+        para otra cosa.
       </p>
     </form>
   );
