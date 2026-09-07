@@ -178,6 +178,42 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-07: el «3 de 3» de este carril volvió a certificar un guion que ningún
+      lead ve — el mismo falso verde del 2026-09-04, resucitado por la mudanza de máquina.**
+      Medido al arrancar la vuelta, no leído: el simulador contestaba
+      *«Justo ahora no tengo horarios libres para ofrecerte»* (`M0_SIN_HORARIOS`) mientras
+      producción tenía **dos** horarios cargados — `ssh root@187.77.16.63 'grep ONIA_BOT_SLOTS
+      /opt/onia/bot/webhook.env'` → *«martes 8 de septiembre, 14:00@… | miércoles 9…»*.
+
+      **La causa es de clase, no de código:** el escalón que arregló esto el 2026-09-04 leía la
+      ruta absoluta `/opt/onia/bot/webhook.env`. El 2026-09-06 el carril se mudó a **nodo-casa**
+      (WSL), donde `/opt/onia/bot` **no existe** — así que el instrumento dejó de medir y el
+      número siguió saliendo verde. Es el ya conocido *«un gate atado a una ruta del VPS deja de
+      medir cuando su loop se muda»*; acá le tocó al instrumento que produce la cifra del carril.
+      Y **avisar no alcanzó**: el simulador ya imprimía `⚠️ sin horarios … esta es OTRA rama del
+      guion` en cada corrida, dos veces, y nadie cambió de rama.
+
+      **Arreglo:** cuarto escalón — si el disco local no tiene el archivo, se le pregunta al VPS
+      por SSH (nodo-casa lo tiene con `BatchMode`). Sólo sobre la ruta REAL de producción: pedirle
+      al VPS un archivo de prueba no significa nada, y así los casos que inyectan rutas falsas
+      siguen sin salir a la red. Cuando **ni el disco ni el VPS** contestan, cae al placeholder y
+      lo dice nombrando **los dos** intentos — si el aviso sólo nombrara el archivo, se lee como
+      «esta máquina no lo tiene» y manda a copiarlo a mano, que es el lugar equivocado.
+
+      **Prueba:** 3 casos nuevos en `simulate.test.mjs`, el primero **rojo por el motivo exacto**
+      (`expected 'sábado 5 de septiembre, 09:00'` / `actual 'HORARIO A (pendiente de definir)'`).
+      Suite del bot **857/857** en 5,2 s (sin cambio de duración: nada sale a la red de verdad).
+      Y la medición vuelve a ser la de producción: el simulador ahora sirve `M0` / `M0b` con
+      *«A) martes 8 de septiembre, 14:00 · B) miércoles 9 de septiembre, 14:00»*.
+
+      ⚠️ **Mi propio guardia era hueco y lo cazó la MUTACIÓN, no la lectura.** El caso *«una ruta
+      que NO es la desplegada nunca sale a la red»* — el que protege la hermeticidad de toda la
+      suite — hacía `spawnSync: () => assert.fail(...)`, y el lector remoto envuelve la llamada en
+      un `try` con `catch` (para sobrevivir a un `ssh` ausente): **se comía la excepción del assert**, así
+      que pasaba en verde incluso ensanchando el gate a propósito. Reescrito para **anotar** el
+      testigo en vez de tirarlo; verificado en las dos direcciones (con `esLaDesplegada = true`
+      da rojo, sin la mutación da verde). Un guardia que no puede fallar no es un guardia.
+
 - [x] ✅ **CERRADO el 2026-09-06: al lead que escribió por el chat de la web le decíamos al dueño
       que había venido de WhatsApp.** Salió midiendo D1 en producción, no de una hipótesis: se
       disparó el webhook REAL de Chatwoot contra `app.onia.com.bo` (inbox 7 de la org QA, la única
