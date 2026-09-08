@@ -1644,6 +1644,52 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] **CERRADO el 2026-09-08: el bot le decía al cliente la ENVOLVENTE de la semana como si
+      fuera el horario de atención — y lo mandaba a una puerta cerrada.** Commit `6b1ce7c`,
+      rama `claude/chatbots-platform-review-0d1d09` de `onia-platform`. ⚠️ **Commiteado y en
+      la rama, NO desplegado**: falta el merge a `master` (es de `onia-cola`) y después el
+      swap. Verificado: `git merge-base --is-ancestor 6b1ce7c origin/master` da NO, así que el
+      pedido `t_bf1607af` **todavía no lo publica** — comentado ahí.
+
+      **Qué estaba mal.** `clinicSettings.openTime/closeTime` es, **por construcción**, la
+      apertura más temprana y el cierre más tardío de *todos* los tramos de la semana —
+      `derivarHorarioClinica()` (`lib/onboarding/aplicar.ts:218`) lo dice en su propio
+      comentario. Sirve para lo que se escribió: acotar hasta dónde la agenda puede ofrecer
+      turnos. Es **falso** como respuesta a *«¿a qué hora abren?»*, y era exactamente eso lo
+      que el bot del cliente (add-on de **Bs 390/mes**) contestaba, en sus **dos** superficies:
+      el menú (`whatsapp-bot.ts`) y el contexto que recibe la IA (`whatsapp-ai.ts`), que lo
+      repetía en texto libre.
+
+      **Medido en producción, no deducido** (2026-09-08, org real `clinica-sergio-p2ljs`):
+
+      | | lo que el negocio hace | lo que el bot decía |
+      |---|---|---|
+      | lun–vie | 09:00–13:00 **y** 15:00–19:00 | `09:00 – 19:00` |
+      | sábado | 09:00–13:00 | `09:00 – 19:00` |
+      | domingo | cerrado | `09:00 – 19:00` |
+
+      O sea: dos horas por día, medio sábado y **todo el domingo** mandando pacientes a una
+      puerta cerrada. **La grilla verdadera ya estaba guardada al lado**, en
+      `perfilNegocio.horarios`, y `resumirHorarios()` ya sabía imprimirla.
+
+      **Por qué ningún gate podía verlo.** No sobra ninguna palabra (nada prohibido), el texto
+      ya deriva del rubro (`whatsapp-ai-idioma-del-rubro.test.ts` en verde), no hay pantalla
+      que fotografiar —es WhatsApp, la superficie del cliente DEL cliente— y **el número es
+      real**: sale de la base, así que ningún barrido de literales, precios ni vocabulario lo
+      alcanza. La clase es **un dato correcto para su propósito, reusado para otro**.
+
+      **Arreglo.** `lib/agenda/horario-que-se-dice.ts` (nuevo) resuelve la grilla real y cae a
+      la franja sola cuando no hay grilla — sin inventar días. `PatientContext` **pierde**
+      `openTime`/`closeTime` y **gana `horarioLineas` obligatorio**: un opcional con default
+      habría dejado el hueco mudo (gate del módulo en verde, llamador sin pasar nada);
+      haciéndolo obligatorio `tsc` nombró los 3 fixtures que lo construían. El par crudo ya no
+      es alcanzable desde ese contexto.
+
+      **Validado por mutación**, cada rojo confirmado por su línea `Tests N failed`: el módulo
+      ignorando la grilla → 6 rojos; el menú imprimiendo la envolvente (forma de *esquive*) →
+      1 rojo; la IA recibiéndola cruda → 1 rojo. Cada consumidor cae por **su propio** caso,
+      que ningún hermano tapa. Gates: `tsc` 0 · `vitest` **3837 verdes** · `eslint` 0 errores.
+
 - [x] **CERRADO el 2026-09-08: el bot de WhatsApp del CLIENTE le abría un menú de CITAS a
       comercio e importadora, que no tienen agenda.** Commit `e4465c9`, rama
       `claude/chatbots-platform-review-0d1d09` de `onia-platform`. ⚠️ **Commiteado y en la
