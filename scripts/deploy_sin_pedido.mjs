@@ -158,6 +158,11 @@ const DETECTORES = {
   bot: () => leerPendienteDelEspejo(
     dondeVive('node /root/loops/onia-hermes/hermes-content/deploy/vps-ops/bot/espejo-check.mjs 2>&1'),
   ),
+  // El emisor SIAT se despliega copiando archivos, como el bot, pero su publicador
+  // imprime el MISMO formato que los de landing y plataforma ("YA ESTA PUBLICADO" /
+  // "hay que publicar: N arreglo(s)") justamente para reusar este parser: un
+  // detector nuevo por destino es otra fuente que se desincroniza.
+  siat: () => leerPendienteDelSeco(dondeVive(`bash ${DESTINOS.siat} --dry-run 2>&1`)),
 };
 
 function pedidosVivos() {

@@ -80,7 +80,7 @@ TABLERO=/root/bin/onia-tablero.sh
 # La ruta la elige una lista blanca del codigo que nos llama, nunca el cuerpo de
 # la tarea. Se vuelve a comprobar aca: este script tambien se puede correr solo.
 case "$SCRIPT" in
-  /opt/onia-landing/_deploy/publicar.sh|/opt/onia-platform/_deploy/publicar.sh|/opt/onia/bot/_deploy/publicar.sh) ;;
+  /opt/onia-landing/_deploy/publicar.sh|/opt/onia-platform/_deploy/publicar.sh|/opt/onia/bot/_deploy/publicar.sh|/opt/onia-siat/_deploy/publicar.sh) ;;
   *) echo "$(date -u '+%F %T') ERR destino fuera de la lista blanca: $SCRIPT" >> "$LOG"; exit 1 ;;
 esac
 
@@ -91,6 +91,7 @@ case "$SCRIPT" in
   /opt/onia-landing/_deploy/publicar.sh)  QUE="onia.com.bo" ;;
   /opt/onia-platform/_deploy/publicar.sh) QUE="app.onia.com.bo" ;;
   /opt/onia/bot/_deploy/publicar.sh)      QUE="el bot de WhatsApp" ;;
+  /opt/onia-siat/_deploy/publicar.sh)     QUE="el emisor de facturas SIAT" ;;
 esac
 INICIO=$(date -u '+%F %T')
 {

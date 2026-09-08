@@ -339,6 +339,20 @@ if [ -d /opt/onia/bot ]; then
   poner "$RAIZ/hermes-content/deploy/vps-ops/bot/publicar.sh" /opt/onia/bot/_deploy/publicar.sh
 fi
 
+# El publicador del EMISOR SIAT, el cuarto destino. Es el que faltaba: hasta el
+# 2026-09-08 era el unico de los cuatro sin circuito — sin _deploy/, fuera de la
+# lista blanca del ejecutor y sin linea aca —, asi que un pedido
+# `DESPLEGAR: siat` nacia inejecutable y el `ok` de Sergio Urcullo daba tilde
+# verde sin desplegar nada. Por eso el arreglo del CUFD (a28b3689) llevaba
+# CUATRO DIAS en main sin llegar al archivo que el VPS ejecuta: con el emisor
+# viejo, las etapas VI y IX de la Fase 1 vuelven a fallar y queman la corrida.
+# Mismo caso que el bot: el directorio _deploy NO existe y hay que crearlo, o el
+# `poner` falla y el circuito queda cableado a una ruta que no esta.
+if [ -d /opt/onia-siat ]; then
+  mkdir -p /opt/onia-siat/_deploy
+  poner "$RAIZ/hermes-content/deploy/onia-siat/publicar.sh" /opt/onia-siat/_deploy/publicar.sh
+fi
+
 mkdir -p "$DESTINO_BIN/loops"
 # La misma guarda que el corredor, para los prompts. Medido el 2026-09-03 a las
 # 12:04: la guarda de arriba salvo onia-loop.sh, y en la MISMA corrida el sync
