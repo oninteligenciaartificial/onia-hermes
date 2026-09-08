@@ -1786,6 +1786,44 @@ y sin operar. Acá se opera, con verificación por ítem.
       matriz) también es suyo. Que `/opt/onia-siat` quede alineado con el repo es la tarea
       `t_7d2019bb`.
 
+- [x] 🔴 **CERRADO el 2026-09-08: el dueño elegía pagar el AÑO y el mensaje con el que
+      contrataba pedía el MES.** En `/settings/plan` el selector Mensual/Anual cambia la tarjeta
+      entera —precio anual, «Bs 7.500 facturado anualmente», «Ahorras Bs 1.500 al año»
+      (`PlanClient.tsx:559-603`)— y el modal del QR cobra el total anual (`:942`). Lo único que
+      no cambiaba era el mensaje del botón **«Contratar por WhatsApp»**, que es lo que
+      efectivamente le llega a Sergio Urcullo: Profesional y Completo lo tenían escrito con
+      `mensual` fijo y su monto mensual. Quien lo lee cobra la modalidad equivocada, al precio
+      equivocado, en el único camino de contratación que tiene la pantalla.
+
+      **Por qué sobrevivió, que es lo reusable:** `waMsg` está tipado
+      `(orgName: string, cycle: BillingCycle) => string` y el llamador **sí** le pasa el ciclo
+      (`:909`), pero una implementación puede declararse `(org) => ...` e ignorarlo —TypeScript
+      acepta la aridad menor—, así que `tsc` queda en 0 y nada se pone rojo. El arreglo del ciclo
+      se había hecho en Básico y no viajó a sus hermanos: **la instancia, no la clase.** Por eso
+      el arreglo no copia el ternario tres veces: la frase de modalidad sale ahora de un solo
+      lugar (`modalidadContratada`), así un plan nuevo no la puede tipear.
+
+      **Ningún gate podía verlo, y los tres vecinos estaban en verde:** no sobra ni falta una
+      palabra prohibida; el monto sale de `DEFAULT_PLAN_AMOUNTS`, así que
+      `monto-de-plan-a-mano.test.ts` pasa; y el vocabulario deriva del rubro, así que
+      `planes-en-el-idioma-del-rubro.test.ts` pasa **y no mira `waMsg`**. El defecto sólo existe
+      en el CRUCE (ciclo elegido, texto del mensaje).
+
+      **Gate:** `app/(dashboard)/settings/modalidad-de-cobro-en-el-mensaje.test.ts`, que mide los
+      textos que la función **devuelve** —no el fuente, así no se absuelve con su propio
+      comentario ni con la aridad declarada—, incluye la **mitad simétrica** (con ciclo mensual
+      el mensaje tampoco puede ofrecer el año) y dos anclajes: que existan sujetos que prometan
+      modalidad, y que **Empresa quede exenta por lo que su texto dice** (pide una propuesta
+      formal) y no por llamarse Empresa. **Validado por mutación en 4 direcciones:** revertir el
+      arreglo en Profesional → rojo; el esquive que toma `cycle` y no lo usa → rojo; detector
+      siempre-vacío → rojo; Empresa prometiendo modalidad → rojo.
+
+      Commit `9bbf0a7`. Gates: `npx tsc --noEmit` exit 0 · `npx vitest run` **3983 pasan / 330
+      archivos** · `npx eslint .` 0 errores.
+      ⚠️ **Commiteado y pusheado a la rama del carril, NO está en `master` y NO viaja con el
+      pedido de deploy vivo** (`t_daa8750c`): `git merge-base --is-ancestor 9bbf0a7
+      origin/master` da NO. Entra al cliente cuando el integrador lo mergee y se publique.
+
 - [x] 🔴 **CERRADO el 2026-09-08: en la pantalla donde el dueño PAGA Onia, el modal del QR le
       pedía «Clínica registrada» a los cinco rubros — y el botón flotante le decía «Nuevo
       paciente» a un centro de estética cuyo propio menú dice «Clientas».**
