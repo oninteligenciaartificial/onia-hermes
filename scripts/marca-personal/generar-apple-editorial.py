@@ -510,23 +510,23 @@ VITAMINA_C = [
 ]
 
 # Carrusel Fable 5.1. TODAS las cifras salen de la pagina oficial de Anthropic
-# (anthropic.com/claude-fable-and-mythos-5-1), releida el 2026-09-07 — no de memoria ni
-# de notas de prensa.
+# (anthropic.com/claude-fable-and-mythos-5-1), releida el 2026-09-07.
 #
-# El angulo es LO QUE HACE, no quien lo usa. Sergio Urcullo, 07-sep: "coloca el mejor
-# modelo de claude actualmente, no pongas que es el modelo que yo uso, enfocate en sus
-# mejoras y cosas que hace". Tiene razon: "el modelo con el que construyo" hace que la
-# noticia dependa de que al lector le importe Sergio Urcullo — y en la lamina 1, todavia
-# no le importa. La capacidad se sostiene sola.
+# ⚠️ TERCERA VERSION. Sergio Urcullo, 07-sep: "aun no me gusta la info que das en el de
+# fable... coloca info relevante que se entienda". Tenia razon y el problema era de fondo:
+# la pieza estaba escrita con los NOMBRES DE LAS PRUEBAS —AutomationBench, CursorBench,
+# Terminal-Bench-Science, OSWorld— y a un dueño de negocio boliviano eso no le dice nada.
+# Un titular que hay que googlear no es informacion: es ruido con aspecto de dato.
 #
-# ⚠️ LO QUE DIGA "EL MEJOR" SE CITA, NO SE OPINA. La pagina dice textual: "They're the
-# world's most advanced models for coding and knowledge work". La lamina 1 dice eso y
-# nada mas fuerte.
+# REGLA NUEVA DE ESTA PIEZA: en la lamina NO aparece ningun nombre de benchmark. Cada
+# numero se dice por lo que SIGNIFICA para el que lo lee ("termina 1 de cada 3 tareas
+# enteras", "abre programas y hace clic"), y el nombre de la prueba baja al pie chiquito
+# del layout G, que es donde va la trazabilidad sin estorbar la lectura.
+#
+# El angulo sigue siendo LO QUE HACE, no quien lo usa (pedido del 07-sep). Y lo que diga
+# "el mejor" se CITA, no se opina: la pagina dice textual "They're the world's most
+# advanced models for coding and knowledge work".
 FABLE = [
-    # La portada llevaba solo texto sobre gris y Sergio Urcullo la llamo "triste" (07-sep),
-    # con razon: era la unica lamina cuyo trabajo es frenar el scroll y no tenia ni el logo
-    # del producto del que habla ni un solo color. Ahora entra el icono de Claude arriba,
-    # el fondo crema de Anthropic y el chip coral.
     {
         "layout": "D",
         "marca": "claude",
@@ -535,50 +535,22 @@ FABLE = [
         "pie": "y esto es lo que hace",
         "pie_hl": "mejor",
         "gancho": True,
-        # ⚠️ LA PRIMERA VERSION DE ESTE ADELANTO ERA MALA Y LA CAZO SERGIO URCULLO:
-        # "¿que son esos numeros de abajo?". Ponia 31,4% / 52,6% / 73,4% —los puntajes
-        # crudos de las laminas 3, 4 y 5— apostando a que la falta de contexto diera
-        # curiosidad. No la da: un porcentaje sin unidad no intriga, confunde. Y "31,4%"
-        # ademas SUENA MAL, porque el lector lo lee como nota escolar y no como un
-        # puntaje de benchmark donde 31 es el mejor de la tabla.
-        # Si el dueño del contenido no entiende su propia portada, un desconocido menos.
-        #
-        # Estas tres se entienden SOLAS y sin saber que es un benchmark. Verificadas en la
-        # tabla oficial: gana las 7 pruebas comparables (ver el doc de la cola), 17,1 -> 31,4
-        # es 1,84x, y la lectura de cache bajo de $1 a $0,25.
+        # ⚠️ "hasta −45%" lleva el "hasta" porque la pagina dice "up to approximately 45%".
+        # Sin esa palabra la cifra pasa de ser un techo a ser una promesa.
         "adelanto": [
             {"cifra": "7 de 7", "que": "pruebas\nganadas"},
             {"cifra": "casi 2×", "que": "en tareas\nde oficina"},
-            {"cifra": "−75%", "que": "lo que cuesta\noperarlo"},
+            {"cifra": "hasta −45%", "que": "de costo si\ntrabaja solo"},
         ],
     },
-    # La ventaja mas relatable primero. Cualquiera que le haya pedido codigo a una IA
-    # conoce el parche que funciona hoy y explota el martes.
-    {
-        "layout": "D",
-        # El tachado hace el trabajo del titular sin gastar una palabra: se ve el cambio
-        # antes de leerlo. Segunda lamina del carrusel, y la segunda que se veia "triste".
-        "contexto": 'Antes parchaba <span class="tachado">el síntoma</span>',
-        "remate": "AHORA BUSCA\nLA CAUSA",
-        "sub": "Anthropic lo dice así: arregla la raíz del problema\nen vez de tomar atajos que dan peor trabajo.",
-    },
-    # Los benchmarks van DESPUES de la ventaja explicada, no antes: un porcentaje sin
-    # contexto no convence a nadie, pero confirma a quien ya entendio la idea.
-    #
-    # Las tres van en BARRAS y no en texto (07-sep, "esta muy pobre... mas visuales"): un
-    # numero escrito se lee, un numero dibujado se compara. El orden de los modelos es el
-    # MISMO en las tres a proposito — el ojo aprende el formato en la primera y las otras
-    # dos las lee de un vistazo. Por eso Fable 5 va cuarto aunque en CursorBench le gane a
-    # Opus 5: el orden es por modelo, no por puntaje, o la comparacion deja de servir.
-    #
-    # Tabla completa releida el 07-sep en anthropic.com/claude-fable-and-mythos-5-1.
-    # AUTOMATIONBENCH va PRIMERO y no es casualidad: es la unica prueba de la tabla que
-    # mide flujos de trabajo de oficina, que es literalmente lo que hace el negocio de
-    # Sergio Urcullo. Es el dato mas util de la pagina y no estaba en la version anterior.
+    # LA MAS RELEVANTE PRIMERO: es la unica prueba de toda la tabla que mide una tarea de
+    # oficina de punta a punta, o sea lo que hace un negocio. La lamina la cuenta con
+    # ejemplos y con "1 de cada 3", no con el nombre de la prueba ni con el porcentaje
+    # crudo: 31,4% se lee como nota baja, "1 de cada 3" se lee como lo que es.
     {
         "layout": "G",
-        "titulo": "Flujos de trabajo\nde un negocio",
-        "sub": "Tareas de oficina completas, de punta a punta.\nCasi el doble que su versión anterior.",
+        "titulo": "Le das el trabajo entero\ny lo termina",
+        "sub": "No un pedacito: la tarea completa, de principio a fin,\nsin que se la vuelvas a explicar en el medio.\nHoy lo logra 1 de cada 3 veces. Antes, 1 de cada 6.",
         "fuente": "AutomationBench · Anthropic",
         "barras": [
             {"rotulo": "Fable 5.1", "valor": 31.4, "gana": True},
@@ -587,10 +559,37 @@ FABLE = [
             {"rotulo": "Fable 5", "valor": 17.1},
         ],
     },
+    # Capacidad pura, sin porcentaje en el titular: "usa la computadora" se entiende sin
+    # ninguna explicacion y es lo que mas sorprende a alguien que nunca vio un agente.
+    {
+        "layout": "D",
+        "contexto": "Y ya no hay que dictarle",
+        "remate": "USA LA\nCOMPUTADORA",
+        "largo": True,
+        "sub": "Abre los programas, hace clic donde va y completa\nla tarea en la pantalla, como lo harías vos.\nAhí también le gana a Opus 5 y a su versión anterior.",
+    },
+    # Anthropic lo publica como caracteristica, no como puntaje. Para el lector de esta
+    # cuenta es LA diferencia practica: algo que trabaja de noche sin que nadie lo mire.
+    {
+        "layout": "D",
+        "contexto": "Y aguanta el turno largo",
+        "remate": "TRABAJA SOLO",
+        "sub": "Anthropic dice que se maneja mejor que la versión\nanterior en trabajos largos y sin supervisión.\nEs la diferencia entre una respuesta y un empleado.",
+    },
+    # La ventaja mas relatable: cualquiera que le pidio codigo a una IA conoce el parche
+    # que funciona hoy y explota el martes. El tachado hace el trabajo sin gastar palabras.
+    {
+        "layout": "D",
+        "contexto": 'Antes parchaba <span class="tachado">el síntoma</span>',
+        "remate": "AHORA BUSCA\nLA CAUSA",
+        "sub": "Anthropic lo dice así: arregla la raíz del problema\nen vez de tomar atajos que dan peor trabajo.",
+    },
+    # La prueba de que el salto no es marketing. Va DESPUES de las ventajas: primero se
+    # entiende QUE cambio, despues se muestra CUANTO.
     {
         "layout": "G",
-        "titulo": "Investigación científica,\nhecha sola",
-        "sub": "Trabajo de laboratorio desde una terminal, sin\nnadie mirando. Casi el doble que el segundo.",
+        "titulo": "Y no es sólo trabajo\nde oficina",
+        "sub": "En investigación científica hecha sin nadie al lado\npasó de resolver 1 de cada 4 casos a más de la mitad.\nEl segundo de la lista no llega a 3 de cada 10.",
         "fuente": "Terminal-Bench-Science 0.1 · Anthropic",
         "barras": [
             {"rotulo": "Fable 5.1", "valor": 52.6, "gana": True},
@@ -599,58 +598,16 @@ FABLE = [
             {"rotulo": "Fable 5", "valor": 24.7},
         ],
     },
-    {
-        "layout": "G",
-        "titulo": "Y programar,\nque es lo suyo",
-        # La unica de las tres donde la carrera es pareja (67,2 a 73,4) y las barras salen
-        # casi iguales. Se dice en la lamina en vez de dejar que el lector lo note solo:
-        # una pieza que presume de datos pierde mas por disimular un empate que por
-        # admitirlo, y admitirlo es lo que hace creer las otras dos.
-        "sub": "Trabajo con código real, no ejercicios de examen.\nAcá la carrera es pareja, y aun así queda arriba.",
-        "fuente": "CursorBench 3.2.0 · Anthropic",
-        "barras": [
-            {"rotulo": "Fable 5.1", "valor": 73.4, "gana": True},
-            {"rotulo": "Opus 5", "valor": 70.0},
-            {"rotulo": "GPT-5.6\nSol", "valor": 67.2},
-            {"rotulo": "Fable 5", "valor": 70.5},
-        ],
-    },
-    # Capacidad, no puntaje: "usa una computadora" se entiende sin saber que es un
-    # benchmark. Va en D para cortar el ritmo despues de tres laminas de barras.
-    {
-        "layout": "D",
-        "contexto": "Y ahora usa una computadora",
-        "remate": "77,9%",
-        "acento": True,
-        # ⚠️ 77,9% es OSWorld 2.0 en su medicion PERMISIVA; la estricta da 41,7%. Publicar
-        # el numero lindo sin mas seria elegir la vara que conviene. La lamina no explica
-        # la diferencia —jerga de benchmark en una pieza para duenos de negocio no aporta—
-        # pero dice lo que SI se sostiene con las dos varas: gana en ambas (41,7 vs 39,6
-        # de Opus 5 y 36,1 de Fable 5). Las dos cifras estan en el doc de la cola.
-        "sub": "Abre programas, hace clic y completa la tarea\nen una pantalla. Le gana a Opus 5 y a su versión\nanterior en las dos formas de medirlo.",
-    },
-    # La ficha lleva el NOMBRE DEL PRODUCTO, no el del concepto. Sergio Urcullo, 06-sep:
-    # "seria mejor que diga que es fable 5.1". Tiene razon y es como funcionan las
-    # referencias 5/6/7: dicen "Claude", "Notion", "MacBook Pro" — el producto y su precio.
-    # "Lectura de cache" como titular obligaba al lector a adivinar de que se habla.
-    #
-    # Va en la 5 y no en la 3 (07-sep): el precio es la ultima ventaja, no la primera. El
-    # lector que llego hasta aca ya sabe QUE HACE el modelo, y recien entonces "cuanto
-    # cuesta" es una buena noticia y no el titular de una pieza sobre capacidades.
+    # El precio, TRADUCIDO. "$0,25 por millon de tokens" no se entiende fuera del gremio;
+    # "lo que cuesta tenerlo trabajando" si. La ficha con el icono de Claude ademas cierra
+    # la identidad visual de la pieza.
     {
         "layout": "E",
         "icono": "claude",
-        "nombre": "Fable 5.1",
-        "desc": "Lo que bajó es leer el caché: lo que un\nagente relee todo el rato mientras trabaja\nsolo. Era la parte cara.",
-        "precio": "$0,25",
-        "etiqueta": "por millón · antes $1",
-    },
-    {
-        "layout": "D",
-        "contexto": "Y encima bajó de precio",
-        "remate": "−75%",
-        "acento": True,
-        "sub": "en lectura de caché — la parte que más se repite\ncuando un agente corre solo. Hasta 45% menos\nde costo si algo trabaja todo el día.",
+        "nombre": "Y encima bajó",
+        "desc": "Tener algo suyo trabajando todo el día cuesta\nhasta 45% menos: lo que un agente más repite\nmientras trabaja solo ahora vale la cuarta parte.",
+        "precio": "−75%",
+        "etiqueta": "en lo que más se repite",
     },
     # CTA que obliga a comentar: pregunta cerrada, respuesta de una palabra, sobre algo
     # que el lector ya tiene decidido.
@@ -663,7 +620,6 @@ FABLE = [
         "cta_gris": "Te contesto a todos.",
     },
 ]
-
 # Layout A — grilla comparativa 3x3 (referencia #1 del batch). Es el meme de founders
 # LOCALIZADO, y el chiste vive en la tercera fila: el original pone Stripe / PayPal /
 # Hotmart, y en Bolivia ninguna de las tres te sirve — Stripe directamente no acepta el
@@ -760,6 +716,9 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 /* La portada es la unica lamina cuyo trabajo es FRENAR el scroll: su cifra
    va mas grande que cualquier otra del carrusel. */
 .remate.gancho{{font-size:196px;letter-spacing:-.045em;margin-top:14px}}
+/* Palabra larga: "COMPUTADORA" a 126px mide 934px y el util son 888. Baja el cuerpo
+   en vez de acortar la palabra — el copy manda sobre la tipografia, no al reves. */
+.remate.largo{{font-size:104px}}
 .pie{{font-size:44px;color:var(--muted);margin-top:40px;letter-spacing:-.01em}}
 .hl{{background:var(--verde);color:var(--ink);border-radius:10px;padding:2px 16px 8px;
   font-weight:{peso};white-space:nowrap;-webkit-box-decoration-break:clone}}
@@ -1024,6 +983,7 @@ def markup(lamina):
     if lamina["layout"] == "D":
         gancho = " gancho" if lamina.get("gancho") else ""
         acento = " acento" if lamina.get("acento") else ""
+        acento += " largo" if lamina.get("largo") else ""
         marca = (f'<div class="marca-portada">{ICONOS[lamina["marca"]]}</div>'
                  if lamina.get("marca") else "")
         cuerpo = (f'{marca}<div class="contexto">{lamina["contexto"]}</div>'
