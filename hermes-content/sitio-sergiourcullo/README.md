@@ -31,23 +31,28 @@ verdad, hace falta autenticación y esto no la tiene.
 - **Nada de venta de Onia.** Estas páginas son contenido. El sistema propio se nombra una
   sola vez, en la lista de lo que la guía NO cubre.
 
-## Deploy
+## Deploy — 🟢 EN EL AIRE
 
-Va a **Vercel gratis** como `sergiourcullo.vercel.app` (decisión del 07-sep: no hay
-presupuesto para el dominio todavía).
+**https://sergiourcullo.vercel.app**
 
-🔴 **Bloqueado el 08-sep.** El MCP de Vercel lee los proyectos pero no puede crear uno:
-`403 forbidden — You don't have permission to create a project`. Se desbloquea de una de
-estas dos formas, y las dos las hace Sergio Urcullo:
+| Ruta | |
+|---|---|
+| `https://sergiourcullo.vercel.app/` | índice |
+| `https://sergiourcullo.vercel.app/stack` | la guía |
+| `https://sergiourcullo.vercel.app/stack/archivos` | **el link de la comunidad** — no enlazado, `noindex` verificado en la respuesta HTTP |
 
-1. **Crear el proyecto vacío** en vercel.com llamado exactamente `sergiourcullo`
-   (Add New → Project → Skip / deploy manual). Con el proyecto ya existente, el deploy
-   desde acá funciona.
-2. **Un token**: vercel.com → Settings → Tokens → Create, y guardarlo en el `.env` como
-   `VERCEL_TOKEN=...`. Con eso se despliega por CLI y no vuelve a hacer falta pedir nada.
+Proyecto `sergiourcullo` en Vercel, plan hobby, deploy manual por MCP (no por git).
+**Para volver a desplegar** hay que mandar los archivos de esta carpeta otra vez con
+`deploy_to_vercel` — el proyecto está linkeado a un repo `oninteligenciaartificial/sergiourcullo`
+que **no es éste**, así que un push acá no publica nada.
 
-Mientras tanto la guía vive en el artifact:
-`https://claude.ai/code/artifact/667b1ec5-e963-4f8d-b43c-268f4b4243c5`
+⚠️ **El alias largo `sergiourcullo-oninteligenciaartificial-8139s-projects.vercel.app` está
+detrás del SSO de Vercel** y devuelve 302 a un login. **El que se reparte es el corto**, que
+responde 200 público. Si alguna vez el corto empieza a pedir login, es Deployment Protection:
+Vercel → proyecto → Settings → Deployment Protection → Vercel Authentication en *Disabled*.
+
+Cuando se compre `sergiourcullo.com`, se agrega como dominio a este mismo proyecto y **los
+slugs no cambian**: los links repartidos por DM siguen sirviendo.
 
 ## Cómo se agrega una guía nueva
 

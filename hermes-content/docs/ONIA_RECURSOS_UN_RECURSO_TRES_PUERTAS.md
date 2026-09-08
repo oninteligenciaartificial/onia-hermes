@@ -80,10 +80,12 @@ Eso se rompe en el primer comentario.
 
 | Slug | Recurso | Estado | Lo promete | Archivos para comunidad |
 |---|---|---|---|---|
-| `/stack` | **El stack de $200** — las 6 herramientas, qué hace cada una, qué no hace, cómo instalarla | 🔵 borrador | Carrusel «Mi stack», lámina 11 (`COMENTÁ STACK`) | ⬜ falta: `docker-compose` de n8n, y el `SOUL.md` de Hermes con los datos borrados |
+| [`/stack`](https://sergiourcullo.vercel.app/stack) | **El stack de $200** — las 6 herramientas, qué hace cada una, qué no hace, cómo instalarla | 🟡 **en comunidad** | Carrusel «Mi stack», lámina 11 (`COMENTÁ STACK`) | 🟢 [`/stack/archivos`](https://sergiourcullo.vercel.app/stack/archivos) — `docker-compose` de n8n, las 6 respuestas de WhatsApp, plantilla del `SOUL.md` |
 
-> Hoy vive en `claude.ai/code/artifact/667b1ec5-e963-4f8d-b43c-268f4b4243c5` hasta que la
-> web esté arriba. El contenido fuente está en `hermes-content/sitio-sergiourcullo/`.
+> 🟢 **La web está arriba desde el 08-sep: https://sergiourcullo.vercel.app**. Fuente en
+> `hermes-content/sitio-sergiourcullo/`; para volver a desplegar, `deploy_to_vercel` con
+> los archivos de esa carpeta (el proyecto NO se publica por push desde este repo).
+> El artifact `667b1ec5` queda como respaldo; el link que se reparte es el de arriba.
 
 ### Candidatos, en orden — cada uno sale de un drop que ya funcionó
 
@@ -113,8 +115,6 @@ plataformas y para que Google lo encuentre. Un sitio de guías, nada más.
 ésta enseña. Si se mezclan, el que llega desde un comentario cree que le están vendiendo
 antes de leer una línea — y ahí se pierde el único clic que iba a dar.
 
-**Estado hoy:** en construcción en `hermes-content/sitio-sergiourcullo/` (estilos escritos,
-faltan las páginas y el deploy). Va a **Vercel gratis** como `sergiourcullo.vercel.app`
-hasta que se pueda comprar el dominio — decisión del 07-sep, cuando quedó claro que no hay
-presupuesto ahora. El día que se compre, se apunta al mismo proyecto y **los slugs no
-cambian**: por eso conviene fijarlos bien ahora y no tocarlos después.
+**Estado hoy: 🟢 en el aire, https://sergiourcullo.vercel.app** (08-sep). En Vercel gratis, hasta que se pueda comprar
+el dominio. El día que se compre, se agrega a este mismo proyecto y **los slugs no cambian**:
+los links ya repartidos por DM siguen sirviendo. Por eso no se tocan.
