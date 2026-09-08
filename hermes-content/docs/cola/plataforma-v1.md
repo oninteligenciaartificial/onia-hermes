@@ -44,6 +44,53 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **CERRADO el 2026-09-08 (`c334440`, en la rama del carril — NO en `master` todavía):
+      el correo del trial sólo sabía hablar en dental o en mostrador, y de los cinco rubros de
+      la v1.0 los tres del medio caían del lado equivocado.**
+
+      El drip es la **única superficie del producto que le escribe al dueño sin que él entre**:
+      cinco correos (días 3, 7, 12, 14 y 15) con **un solo botón**, en la semana en que decide
+      si paga. Partía a los rubros con `trackId === "dentagest-clinical"` — los **dos
+      extremos** — y todo lo que no era dental entraba como mostrador:
+
+      | rubro (v1.0) | lo que recibía | lo que es |
+      |---|---|---|
+      | Estética y spa | día 3: contaba `oniaCommerceProduct`, tabla **vacía por construcción** → «todavía no cargaste tus tratamientos» con 40 clientas adentro; el botón iba a `/comercio/inventario`, que su pack **ni tiene en el menú** → redirect mudo a `/dashboard`. Día 7: «no registraste ninguna venta» con la agenda llena | guarda a sus clientas en `patients` y vive de la **agenda** |
+      | Servicios profesionales | lo mismo | igual |
+      | Importadora y comercio | correcto | correcto (por eso nadie lo vio) |
+
+      **La clase, que es lo que importa:** un predicado de **dos extremos** no puede describir a
+      cinco rubros, y el del medio no lo delata ninguno de los dos que sí funcionan. Es la
+      misma firma que ya pagamos en `datos-negocio.test.ts` (un gate que probaba dental y un
+      comercio), pero acá el defecto no estaba en el gate: **estaba en el producto**, y en la
+      única superficie que sale a buscar al cliente. Ningún barrido de literales, precios, obra
+      ni vocabulario puede verla: no sobra ni falta una palabra — el número es real y sale de
+      la base, lo que está mal es **de qué tabla**.
+
+      **Arreglo:** los tres predicados se **derivan del pack**
+      (`onia-platform-chatbot/lib/subscription/drip-por-rubro.ts` →
+      `guardaClientesEnPatients`, `tieneAgenda`, y la ruta buscada **en el nav de ese pack**),
+      misma doctrina que sus hermanos de `vertical-pack.ts`: un rubro nuevo cae solo del lado
+      que le toca. La excepción de la importadora (cuenta cotizaciones además de ventas) queda
+      intacta. La decisión **salió del `route.ts`** porque un route de Next no puede exportar
+      helpers: mientras vivió ahí adentro **no había forma de gatearla**.
+
+      **Verificado midiendo, no leyendo:**
+      - El cron **está vivo**: `0 13 * * * /root/bin/run-onia-trial-drip.sh` (09:00 La Paz) y
+        `public.onia_trial_drip_sends` lleva **13 envíos reales**; hoy 13:00 UTC salió el paso 7
+        a `bolivian-electricidad-e6t21`. Hoy hay dos orgs en trial de los rubros afectados
+        (`zz-qa-estetica-modulos-6tzgb`, `qa-modulos-mrk0q`) que **todavía no recibieron** su
+        primer paso — o sea que esto se arregló antes de que saliera el primer correo torcido.
+      - **Mutación en las dos direcciones:** con el predicado viejo en el módulo caen **3**
+        casos; devolviéndolo al cron cae el **del llamador** — el caso que existe porque el
+        módulo puede quedar impecable y el cron seguir con su ternario, con el gate en verde y
+        `tsc` también.
+      - Gates sobre el árbol real: `tsc` 0 · `vitest` **3905/3905** · `eslint` 0 errores.
+
+      ⚠️ **Ambiental, para el que corra gates en el VPS:** allá `npx tsc --noEmit` daba 2
+      errores sobre `avisadoAgotadaAt` en `lib/chatbot/cupo.ts` — el schema lo declara y el
+      cliente Prisma generado no. **No era el cambio:** `npx prisma generate` y `tsc` pasó a 0.
+
 - [x] 🔴 **CERRADO el 2026-09-08: once acciones del panel le confirmaban al dueño —con el
       parpadeo de la pantalla— cosas que el servidor había rechazado.** Cancelar una cita,
       reprogramarla, dar de baja a un empleado, borrar a alguien del equipo, guardar los
