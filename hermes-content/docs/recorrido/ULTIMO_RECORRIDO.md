@@ -12,6 +12,19 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## Reverificado el 2026-09-08 05:09 La Paz — dental sigue 9/9, y la promesa de servicios profesionales ("...y contabilidad") se cruzó contra el código
+
+Corrida `--escribir` completa: **RECORRIDO COMPLETO en Clínica dental, 9/9 pasos OK**, cobro
+incluido (`/billing/cmts7rid4001p01rwwpij8y8x`, ítem visible, frenado sin marcar pagada). Cero
+filas `zz-qa-` propias al cerrar (4 ajenas de otros carriles, sin tocar). Nada roto.
+
+Con el recorrido en verde y los cinco rubros ya confirmados frescos (ver entrada de abajo,
+2026-09-07), se probó el escalón "promesa contra entrega": las 5 tarjetas de `/register` se
+leyeron en vivo con Playwright y se cruzó cada promesa contra el nav real del pack en
+`vertical-pack.ts`. Las cinco cierran — incluida "Servicios profesionales: Agenda, citas, cobros
+y **contabilidad**", que tiene `/contabilidad` en `SERVICIOS_NAV_ITEMS` (línea 405). Nada para
+reportar.
+
 ## Reverificado el 2026-09-07 21:09 y 21:14 La Paz — dental (9/9) y comercio (8/8) siguen sanos
 
 Dos corridas `--escribir` seguidas desde nodo-casa: **dental 9/9** (incluido cobro,
