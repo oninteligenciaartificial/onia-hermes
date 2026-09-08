@@ -9,8 +9,19 @@ se rehacen con los `cutplan-*.json` y los HTML de `assets/`, que sí están acá
 | `clip 1 video 2.mp4` | intro a cámara | `final/clip-1-video-2-intro.mp4` | 33.8s → **13.0s** |
 | `clip 2 video 1.mp4` | screencast del deck | `final/clip-2-video-1-explicacion.mp4` | 511.5s → **416.6s** |
 
-**El entregable es `final/claude-vs-claude-code-completo.mp4`** (7:10): intro + explicativo +
-endcard, con la cama de música. Los dos parciales quedan por si hay que rehacer una parte.
+**El entregable es `final/claude-vs-claude-code-completo.mp4`** (7:10, 80 MB): intro +
+explicativo + endcard, con la cama de música.
+
+**Cada pieza se rinde en UNA sola pasada.** La primera versión encadenaba re-encodes — el
+intro pasaba por cut → composición → zoom → master (tres generaciones) y el explicativo por
+cut → tapa → master (dos) — y terminaba en **0,78 Mbps** cuando el crudo del intro va a
+**10,3** y el del explicativo a **2,1**. Ahora el corte, los overlays y el zoom van en un solo
+`filter_complex` a CRF 13-15 preset slow: el intro subió a **8,3 Mbps** y el conjunto a **1,5**.
+Medido comparando el mismo cuadro de las dos versiones: en el tramo de **cámara** hay
+diferencia real (PSNR 40,8 dB entre ellas — se ven los pelos sueltos y la textura de la piel
+que antes eran manchas de compresión); en el **deck** no la hay (61,5 dB ≈ idénticos), porque
+un gráfico plano ya se comprimía perfecto. **El bitrate se gasta donde hay cámara, no donde
+hay láminas.** Los dos parciales quedan por si hay que rehacer una parte.
 También sale de acá `final/miniatura.png` (1280×720).
 
 **Música** (`scripts/pad-musica.sh` → `assets/pad.wav`): un pad lento sintetizado con ffmpeg,
