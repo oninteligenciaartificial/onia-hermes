@@ -128,7 +128,13 @@
 
 .kicker {
   display: inline-flex;
-  align-items: center;
+  /* `flex-start` y no `center`: cuando el rotulo parte en DOS lineas — pasa en
+     telefono con los kickers largos, y la portada centrada lo hizo visible en
+     la primera pantalla — `center` deja el punto flotando solo a la izquierda,
+     a media altura entre ambas lineas. Con flex-start + el margen de abajo
+     queda pegado a la primera linea, que es donde se lo espera. Con una sola
+     linea el resultado es el mismo de antes. */
+  align-items: flex-start;
   gap: 0.6em;
   font-family: var(--font-mono), monospace;
   font-size: 0.8em;
@@ -143,6 +149,9 @@
   content: "";
   width: 0.5em;
   height: 0.5em;
+  /* (altura de linea − alto del punto) / 2, para que quede centrado en la
+     PRIMERA linea en vez de en el bloque entero. */
+  margin-top: 0.35em;
   border-radius: 50%;
   background: var(--signal);
   flex: none;
