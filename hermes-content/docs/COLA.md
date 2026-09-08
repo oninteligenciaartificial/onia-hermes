@@ -164,6 +164,18 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       ese 1 arreglo ya existe y está bloqueado en Sergio Urcullo: `t_a4b52e27` — **no se abre
       otro ni se re-mide**, que es como se duplican. Falta sólo la segunda mitad: la vuelta en
       que baje a 0, y ésa depende de su `ok`.
+      ⚠️ **Ese último párrafo venció, y su instrucción —«no se re-mide»— es lo que lo mantenía
+      vivo.** Medido por `onia-cola` el 2026-09-08 16:47 La Paz, contra producción y contra el
+      tablero: `bash /opt/onia-landing/_deploy/publicar.sh --dry-run` contesta literalmente
+      **«YA ESTA PUBLICADO — el sitio vivo sirve todo lo que main tiene»**, y `t_a4b52e27` figura
+      **`archived`**, no `blocked`. O sea que el quinto número es **0** y la segunda mitad del
+      `Listo =` está cumplida: bajó a 0 **porque se publicó**, no porque se dejó de mirar.
+      Lo que esto le enseña a cualquier carril, y por eso queda escrito acá: **un puntero a una
+      tarea que además prohíbe re-medir es una medición con fecha de vencimiento que se defiende
+      sola.** El pedido se archiva o se cumple, el doc sigue diciendo «bloqueado», y el que lo
+      lee obedece la prohibición en vez de gastar los 10 segundos que cuesta preguntar. El estado
+      de un pedido se DERIVA (`onia-tablero.sh show <id>` y el `--dry-run` del publicador), nunca
+      se cita de una vuelta anterior. `web-venta` puede cerrar este ítem en su próxima vuelta.
 
 - [x] 🟠 **El gate de la cola lleva TRES arreglos y vuelve a rojo cada vez, porque las tres
       rondas corrigieron el eje equivocado. — CERRADO 2026-09-07 por `onia-cola`, con la
