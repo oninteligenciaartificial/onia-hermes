@@ -87,7 +87,22 @@ const pagina = await ctx.newPage();
 const fallos = [];
 pagina.on("response", (r) => { if (r.status() >= 400) fallos.push(`${r.status()} ${r.url()}`); });
 
-await pagina.goto(`https://${host}${RUTA}`, { waitUntil: "networkidle", timeout: 90000 });
+// `networkidle` da la pagina ASENTADA, que es lo que se quiere mirar — pero una pantalla con
+// conexion persistente (el asistente IA, realtime de Supabase, un widget que hace polling) no
+// se queda quieta NUNCA, asi que la espera vence y el script moria con TimeoutError. Eso se lee
+// como "la pantalla no carga", que es un defecto del producto: medido el 2026-09-08 sobre
+// /dashboard, mientras `curl` daba 200 en 1 s y la app estaba sana. La espera buena se conserva
+// y deja de ser fatal: si no llega, se cae a `load` y se DICE, porque una captura degradada no
+// se puede leer como una asentada.
+let asentada = "networkidle";
+try {
+  await pagina.goto(`https://${host}${RUTA}`, { waitUntil: "networkidle", timeout: 45000 });
+} catch (e) {
+  if (e?.name !== "TimeoutError") throw e;
+  asentada = "load (networkidle no llego: la pantalla tiene conexion persistente)";
+  await pagina.goto(`https://${host}${RUTA}`, { waitUntil: "load", timeout: 45000 });
+}
+console.log("espera:", asentada);
 await pagina.waitForTimeout(2500);
 // El scroll suave saca la foto a mitad de camino.
 await pagina.addStyleTag({ content: "*{scroll-behavior:auto !important}" });
