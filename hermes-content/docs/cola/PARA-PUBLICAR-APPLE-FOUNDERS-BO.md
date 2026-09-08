@@ -72,8 +72,33 @@ igual. No es una queja: es el contexto real en el que se construye acá.
 | Claude · Gemini | **icono oficial** del propio producto (claude.ai · gemini.google.com) |
 | ChatGPT · USDT | marca real de simple-icons (CC0), en el color oficial actual |
 | café · mate · Red Bull · efectivo | Unsplash y Pexels, licencia y autor en `objetos/CREDITOS.md` |
-| transferencia | dibujado — no existe un logo de "transferencia bancaria". El monto va **tapado**: cualquier cifra ahí sería inventada |
+| transferencia | **squircle** de app bancaria (azul, flechas de ida y vuelta). No existe logo de "transferencia bancaria" ni foto que la represente — ver abajo |
 
 ⚠️ **Las marcas se usan de forma nominativa** — la pieza nombra herramientas que existen,
 no sugiere que ninguna la patrocine. Red Bull aparece como objeto de cultura de founder,
 igual que en la referencia original.
+
+## ⚠️ La celda «Transferencia»: se intentó con foto y no hay
+
+Sergio Urcullo, 07-sep: *"las imágenes puedes usar simplemente pngs, mejor"*. Tenía razón
+en el diagnóstico: la versión anterior era un comprobante **dibujado a mano**, con un tilde
+verde, y se veía floja al lado de las ocho celdas restantes.
+
+Se buscaron tres fotos en Pexels y **las tres fallaron**. El motivo es de fondo: una
+transferencia bancaria no tiene objeto físico que fotografiar.
+
+| Consulta | Qué salió |
+|---|---|
+| "mobile banking app phone hand" | Una mano con **Google Wallet** en pantalla. Marca ajena que la pieza no nombra, y que **ni siquiera opera en Bolivia**: un error factual visual |
+| "smartphone isolated white background" | Un celular con la pantalla en blanco. No comunica nada |
+| "credit card isolated" | Monedas de **euro** sobre tarjetas, sin recortar |
+
+Las tres quedan archivadas como `RECHAZO-transferencia-*.png` en `objetos/`, con su crédito
+en `CREDITOS.md`, para que nadie repita la búsqueda.
+
+**La celda pasó a squircle**, y además de resolver el problema es más coherente: en su misma
+fila USDT ya es squircle, y en la de arriba lo son Claude, ChatGPT y Gemini. **Cuatro de las
+nueve celdas ya lo eran** — la que desentonaba era ésta.
+
+También se fue el verde: el tilde anterior usaba el `#00C661` de **Onia** en una celda que
+representa a la banca en general. El verde es el color de la casa y ahí no pintaba nada.
