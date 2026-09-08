@@ -1,7 +1,7 @@
 # Video 2 — "Configuración básica y skills"
 
 **La fuente de verdad es [`deck.html`](deck.html).** Autocontenido (logo y fuentes en
-base64), 11 láminas, 1920×1080. Los PNG salen de ahí; no se editan a mano.
+base64), 13 láminas, 1920×1080. Los PNG salen de ahí; no se editan a mano.
 
 Video 1 (qué es Claude y Claude Code): `../yt-claude-vs-claude-code/`.
 
@@ -23,21 +23,23 @@ no recordado. Un comando inventado acá le rompe el día a un desconocido.
 **Si pasa tiempo y se regraba, estos números se vuelven a contar.** Un número heredado
 en un tutorial envejece mal y nadie lo nota hasta que un comentario lo marca.
 
-## Las 11 láminas
+## Las 13 láminas
 
 | # | tramo | qué carga la explicación |
 |---|---|---|
-| 1 | Hook | terminal con el comando de instalación |
-| 2 | Lo que necesitás | Node + plan pago, **dicho de entrada** |
-| 3 | Instalar | los dos comandos, con la versión real de salida |
-| 4 | Entrar y pedirle algo | `cd` + `claude` + el permiso |
-| 5 | La memoria | `/init` y el CLAUDE.md que queda |
-| 6 | **CLAUDE.md vs skill** | comparativa de 4 filas — la lámina que se pausa |
-| 7 | Qué es una skill | el archivo real, con su frontmatter |
-| 8 | Tu primera skill | las dos formas de que aparezca |
-| 9 | Mi caso | 197 · 36 · 9 |
-| 10 | La parte honesta | los tres errores que cometió él |
-| 11 | Cierre | la plantilla vacía + CTA |
+| 1 | Hook | hay dos caminos, ninguno difícil |
+| 2 | Qué necesitás | plan pago **dicho de entrada**; Node solo para la terminal |
+| 3 | **Las dos formas** | comparativa app vs terminal — acá el espectador elige |
+| 4 | Opción A · la app | los 3 pasos, sin un solo comando |
+| 5 | Opción B · la terminal | los dos comandos, con la versión real de salida |
+| 6 | Entrar y pedirle algo | el permiso — igual por los dos caminos |
+| 7 | La memoria | `/init` y el CLAUDE.md que queda |
+| 8 | **CLAUDE.md vs skill** | comparativa de 4 filas — la lámina que se pausa |
+| 9 | Qué es una skill | el archivo real, con su frontmatter |
+| 10 | Tu primera skill | las dos formas de que aparezca |
+| 11 | Mi caso | 197 · 36 · 9 |
+| 12 | La parte honesta | los tres errores que cometió él |
+| 13 | Cierre | la plantilla vacía + CTA |
 
 ## Decisiones de contenido
 
@@ -49,7 +51,16 @@ en un tutorial envejece mal y nadie lo nota hasta que un comentario lo marca.
   se lo cobran en comentarios.
 - **La skill de ejemplo es `propuestas`**, con reglas reales suyas (precios de
   `pricing.ts`, nunca HTML a mano). Es corta, verdadera y se entiende sin contexto.
-- **La lámina 10 usa sus propias reglas** — un objetivo por sesión, revisar el diff, y
+- **Se muestran los DOS caminos, app y terminal.** Claude Code no es solo la terminal:
+  hay app de escritorio para Windows y Mac — de hecho es donde Sergio Urcullo trabaja.
+  Mostrar solo la terminal espanta a la mitad de la audiencia en el minuto uno.
+- **Node dejó de ser "requisito" a secas.** Lo es SOLO del camino por terminal. Dicho mal
+  manda a instalar algo a alguien que no lo necesita, que en un tutorial es peor que
+  callarlo.
+- **Las dos columnas de las comparativas pesan igual.** El gris del deck 1 marcaba un lado
+  menor (Claude frente a Claude Code); acá app y terminal son equivalentes, y pintar una
+  en gris decidía por el espectador sin que nadie lo hubiera decidido.
+- **La lámina 12 usa sus propias reglas** — un objetivo por sesión, revisar el diff, y
   "una regla sin su historia se desobedece" — que salieron de romper algo de verdad.
 
 ## Rehacer los PNG
