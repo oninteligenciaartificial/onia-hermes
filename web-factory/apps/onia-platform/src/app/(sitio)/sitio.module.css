@@ -128,7 +128,13 @@
 
 .kicker {
   display: inline-flex;
-  align-items: center;
+  /* `flex-start` y no `center`: cuando el rotulo parte en DOS lineas — pasa en
+     telefono con los kickers largos, y la portada centrada lo hizo visible en
+     la primera pantalla — `center` deja el punto flotando solo a la izquierda,
+     a media altura entre ambas lineas. Con flex-start + el margen de abajo
+     queda pegado a la primera linea, que es donde se lo espera. Con una sola
+     linea el resultado es el mismo de antes. */
+  align-items: flex-start;
   gap: 0.6em;
   font-family: var(--font-mono), monospace;
   font-size: 0.8em;
@@ -143,6 +149,9 @@
   content: "";
   width: 0.5em;
   height: 0.5em;
+  /* (altura de linea − alto del punto) / 2, para que quede centrado en la
+     PRIMERA linea en vez de en el bloque entero. */
+  margin-top: 0.35em;
   border-radius: 50%;
   background: var(--signal);
   flex: none;
@@ -1487,6 +1496,10 @@
   background: color-mix(in srgb, var(--bg) 97%, transparent);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--line-soft);
+  transition: background 220ms ease, border-color 220ms ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .header { transition: none; }
 }
 .headerInner {
   width: min(74rem, 100% - 2.4rem);
@@ -1496,16 +1509,50 @@
   align-items: center;
   gap: 1.5rem;
 }
+/* El wordmark es el SVG de marca, no texto dibujado a mano.
+   Hasta el 2026-09-07 la barra escribia «Onia» + un punto final en verde: dos
+   errores contra el manual (§4-bis de ONIA_MARCA_ESTRATEGIA_20260727.md) — la
+   marca se escribe «onia» en minuscula, y el punto verde es el de la i, no un
+   punto de oracion. El archivo correcto existia desde julio y nadie lo usaba. */
 .wordmark {
-  font-family: var(--font-display), sans-serif;
-  font-weight: 600;
-  font-size: 1.4rem;
-  letter-spacing: -0.03em;
-  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
   text-decoration: none;
+  /* el alto lo fija el <img>; esto solo evita el salto de linea base */
+  line-height: 0;
 }
-.wordmark b {
-  color: var(--signal);
+.logoImg {
+  display: block;
+  height: 26px;
+  width: auto;
+}
+/* Por defecto se ve el wordmark tinta (barra clara). */
+.logoClaro {
+  display: none;
+}
+/* Sobre el hero se invierte: wordmark claro, punto verde. */
+.headerSobreHero .logoTinta {
+  display: none;
+}
+.headerSobreHero .logoClaro {
+  display: block;
+}
+
+/* La barra al tope de la portada toma el color del hero, para que se lean como
+   una sola pieza. OPACA a proposito, no transparente: `barras-opacas.test.ts`
+   prohibe que el texto de atras se filtre por el nav. Al scrollear vuelve a la
+   barra clara de siempre. */
+.headerSobreHero {
+  background: var(--green-deep);
+  border-bottom-color: transparent;
+}
+.headerSobreHero .navLink,
+.headerSobreHero .headerLogin {
+  color: color-mix(in srgb, #eafaf1 86%, transparent);
+}
+.headerSobreHero .navLink:hover,
+.headerSobreHero .headerLogin:hover {
+  color: #fff;
 }
 .nav {
   display: none;

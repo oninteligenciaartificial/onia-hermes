@@ -33,6 +33,7 @@ import {
   emptyState,
   STOP_THRESHOLD,
   StopError,
+  TransitorioError,
   buildRunnerEnvelope,
   buildTar,
   buildTestInvoice,
@@ -1122,5 +1123,77 @@ describe("el CUFD se renueva en TODAS las etapas que lo usan, no solo en las que
     const r = runnerCufdVencido();
     await r.etapaIV(1);
     assert.equal(primeraOpDe(r.vistos, "IV"), "cufd_refresh");
+  });
+});
+
+describe("un prerequisito TRANSITORIO no se bloquea para siempre", () => {
+  // POR QUE EXISTE, medido el 2026-09-08 contra el piloto del SIN: las etapas VI y
+  // IX estuvieron clavadas en 20 casos desde el 6-ago. No fue solo el ensureCufd()
+  // que faltaba (a28b3689): al reintentarlas con el runner arreglado, VI freno con
+  //   "sin ventana valida para el evento significativo (CUFD o evento previo
+  //    demasiado frescos): esperar ~2 min y reintentar"
+  // y ese mensaje —que pide explicitamente reintentar— caia en la MISMA rama que un
+  // prerequisito determinista ("sin CUIS para el punto de venta 1"), asi que quedaba
+  // en blockedCases. Como loop() saltea todo caso ya bloqueado y run-fase1-volumen.sh
+  // nunca pasa --retry-blocked, un tropiezo de DOS MINUTOS congelaba la etapa para
+  // siempre. El comentario del catch lo justificaba: "un prerequisito faltante es
+  // DETERMINISTA". Es cierto para casi todos y falso para este.
+  it("el caso NO queda en blockedCases, asi la corrida siguiente lo toma sola", async () => {
+    const r = Object.create(Runner.prototype);
+    r.state = emptyState();
+    r.combo = { ...DEFAULT_COMBO };
+    r.log = () => {};
+    r.checkpoint = () => {};
+    let intentos = 0;
+    await r.loop(
+      "VI",
+      1,
+      async () => {
+        intentos += 1;
+        throw new TransitorioError("CUFD o evento previo demasiado frescos: esperar ~2 min");
+      },
+      { caseId: "pv0" },
+    );
+    assert.equal(intentos, 1, "un transitorio tampoco se martilla dentro de la misma corrida");
+    assert.deepEqual(
+      r.state.etapas.VI.blockedCases,
+      {},
+      "un prerequisito transitorio NO puede quedar en blockedCases: loop() saltea los bloqueados",
+    );
+  });
+
+  // El eslabon que ata las dos mitades: sin esto, `loop()` sabria tratar un
+  // TransitorioError que NADIE lanza, y el arreglo no se dispararia jamas en
+  // produccion. Es el caso que reproduce lo medido contra el piloto del SIN.
+  it("eventWindow lanza TransitorioError cuando el CUFD esta demasiado fresco", () => {
+    const ahora = Date.now();
+    assert.throws(
+      () => eventWindow({ nowSinMs: ahora, cufdDesdeMs: ahora, minInicioMs: ahora }),
+      (err) => {
+        assert.ok(
+          err instanceof TransitorioError,
+          `la ventana imposible tiene que ser transitoria, vino ${err.constructor.name}`,
+        );
+        assert.match(err.message, /esperar ~2 min y reintentar/);
+        return true;
+      },
+    );
+  });
+
+  it("un prerequisito determinista SIGUE bloqueandose (no se afloja la guarda)", async () => {
+    const r = Object.create(Runner.prototype);
+    r.state = emptyState();
+    r.combo = { ...DEFAULT_COMBO };
+    r.log = () => {};
+    r.checkpoint = () => {};
+    await r.loop(
+      "VI",
+      1,
+      async () => {
+        throw new Error("sin CUIS para el punto de venta 1: correr la etapa I antes");
+      },
+      { caseId: "pv1" },
+    );
+    assert.match(r.state.etapas.VI.blockedCases.pv1.mensaje.descripcion, /sin CUIS/);
   });
 });

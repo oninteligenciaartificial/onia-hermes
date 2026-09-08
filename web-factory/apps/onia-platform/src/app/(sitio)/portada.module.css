@@ -487,3 +487,33 @@
   line-height: 1.45;
   font-size: 0.94rem;
 }
+
+/* ── HERO SOBRE VERDE ───────────────────────────────────────────────────────
+   Pedido de Sergio Urcullo: «un fondo de color verde como este estilo»,
+   señalando Hostinger — que es fondo púrpura saturado con halos difusos y
+   texto blanco.
+
+   Se apoya en la superficie `green` que el sitio YA tiene (--green-deep =
+   verde-900, #013925). Eso NO contradice la regla «nunca texto claro sobre
+   verde»: esa regla nació del verde-500, donde el blanco da 3,68:1 y no pasa.
+   Sobre el verde-900 el blanco da 13,02:1 — medido, no estimado. El verde
+   claro sigue prohibido debajo de texto claro; el verde OSCURO es justo lo
+   contrario y por eso `.green` existe desde siempre con texto #eafaf1. */
+
+.heroVerde {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* La palabra destacada del titular: sobre fondo oscuro el acento (verde-500)
+   se apaga — 1,9:1 contra el verde-900. El verde-300 da 7,79:1 y mantiene la
+   idea de «una palabra en el color de la marca». */
+.heroVerde .heroTitulo em {
+  color: var(--verde-300);
+}
+
+.heroVerde .heroLead,
+.heroVerde .heroNota {
+  color: color-mix(in srgb, #eafaf1 82%, transparent);
+}

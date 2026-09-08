@@ -6,9 +6,9 @@
 
 import { Reveal } from "@/motion";
 
-import { Block, Kicker, PanelDibujado } from "../ui";
-import s from "../sitio.module.css";
-import v from "./v4.module.css";
+import { Block, Kicker, PanelDibujado } from "./ui";
+import s from "./sitio.module.css";
+import v from "./portada.module.css";
 
 /**
  * Lo que pasa mientras el negocio esta cerrado. Son los tres momentos que la

@@ -86,6 +86,52 @@ export function loopsDelCron(salidaCrontab) {
   return filas;
 }
 
+// --- la TERCERA copia: el instalador ----------------------------------------
+//
+// La cadencia no vive en dos lugares, vive en TRES: la tabla, el `crontab`, y el
+// heredoc `CATALOGO` de scripts/loops/instalar-homelab.sh — que es la PLANTILLA de
+// la que nace el crontab. Hasta el 2026-09-08 este gate miraba dos y el instalador
+// derivaba solo: alinear tabla+cron y dejarlo atrás significa que la próxima corrida
+// del instalador REVIERTE el cron, el gate se pone rojo otra vez y `main` traba a los
+// quince carriles — con la tabla ahora del lado equivocado. Es "arreglar la instancia
+// y no la plantilla" aplicado al registro de horarios.
+//
+// Sujeto derivado, no lista escrita a mano: se pregunta por cada loop que HOY corre
+// en esta máquina. El catálogo trae además loops congelados o de otro nodo, que no son
+// sujetos de nada — exigir el catálogo entero pondría rojo por filas que nadie usa.
+const INSTALADOR = 'scripts/loops/instalar-homelab.sh';
+
+export function loopsDelInstalador(texto) {
+  const abre = texto.indexOf("CATALOGO=$(cat <<'EOF'");
+  if (abre === -1) throw new Error(`no encuentro el heredoc CATALOGO en ${INSTALADOR}`);
+  const cuerpo = texto.slice(abre);
+  const cierra = cuerpo.indexOf('\nEOF');
+  if (cierra === -1) throw new Error(`el heredoc CATALOGO de ${INSTALADOR} no cierra`);
+
+  const filas = new Map();
+  for (const linea of cuerpo.slice(0, cierra).split('\n').slice(1)) {
+    if (linea.trimStart().startsWith('#') || !linea.trim()) continue;
+    // <id> <rama> <cron de 5 campos>
+    const m = linea.match(/^([a-z0-9-]+)\s+\S+\s+(.+?)\s*$/);
+    if (m) filas.set(m[1], m[2].trim());
+  }
+  return filas;
+}
+
+// Los sujetos son las filas VIVAS de la tabla, no las del catálogo: así un loop nuevo
+// nace cubierto y hay que excluirlo a mano, a la vista.
+export function compararInstalador(doc, instalador) {
+  const problemas = [];
+  for (const [id, horario] of doc) {
+    if (!instalador.has(id)) {
+      problemas.push(`${id}: corre acá y el catálogo de ${INSTALADOR} NO lo declara — una reinstalación lo borra`);
+    } else if (instalador.get(id) !== horario) {
+      problemas.push(`${id}: ${INSTALADOR} reinstalaría [${instalador.get(id)}] y lo vigente es [${horario}]`);
+    }
+  }
+  return problemas;
+}
+
 export function comparar(doc, cron) {
   const problemas = [];
   for (const id of cron.keys()) {
@@ -206,6 +252,41 @@ function selfCheck() {
   esperar(comparar(new Map([['a', '1 * * * *']]), new Map([['a', '1 * * * *']])).length === 0,
     'no inventa problemas cuando coinciden');
 
+  // --- la tercera copia: el instalador --------------------------------------
+  // Casos que NINGUN otro caso de este self-check puede ver: todo lo de arriba
+  // compara tabla contra cron, y el instalador no aparece en ninguno de los dos.
+  const inst = `# comentario suelto
+CATALOGO=$(cat <<'EOF'
+web-venta         claude/web-venta                    48 */2 * * *
+# los tres que no podian mudarse
+onia-cola         main                                33 * * * *
+recorrido-cliente claude/recorrido-cliente            9 * * * *
+EOF
+)
+ASIGNADOS="algo"
+`;
+  const i = loopsDelInstalador(inst);
+  esperar(i.size === 3, 'del catálogo salen las 3 filas y NO el comentario ni el ASIGNADOS');
+  esperar(i.get('recorrido-cliente') === '9 * * * *',
+    'la cadencia del catálogo se lee entera, sin comerse los campos con coma');
+  esperar(i.get('web-venta') === '48 */2 * * *', 'la rama no se cuela en el horario');
+
+  const vivos = new Map([['onia-cola', '33 * * * *'], ['recorrido-cliente', '9 * * * *']]);
+  esperar(compararInstalador(vivos, i).length === 0,
+    'catálogo alineado con lo vigente: no inventa problemas');
+  esperar(compararInstalador(new Map([['onia-cola', '33 */2 * * *']]), i)
+    .some((x) => /reinstalaría/.test(x)),
+    'DETECTA el catálogo que reinstalaría una cadencia distinta de la vigente');
+  esperar(compararInstalador(new Map([['loop-nuevo', '0 * * * *']]), i)
+    .some((x) => /NO lo declara/.test(x)),
+    'DETECTA el loop vivo que el catálogo no declara — una reinstalación lo borraría');
+  esperar(compararInstalador(new Map(), i).length === 0,
+    'un catálogo con filas de más (loops congelados) NO pone rojo: los sujetos son los vivos');
+
+  let cerroCerrado = false;
+  try { loopsDelInstalador('#!/bin/bash\nsin heredoc\n'); } catch { cerroCerrado = true; }
+  esperar(cerroCerrado, 'sin el heredoc TIRA: falla cerrado, no aprueba en silencio');
+
   const viejo = consejoDeArreglo({ tablaDesincronizada: true }).join('\n');
   const sano = consejoDeArreglo({ tablaDesincronizada: false }).join('\n');
   esperar(/origin\/main/.test(viejo) && /git merge origin\/main/.test(viejo),
@@ -248,6 +329,16 @@ function medir() {
   const doc = loopsDelDoc(readFileSync(DOC, 'utf8'), maquina);
   const cron = loopsDelCron(salida);
   const problemas = comparar(doc, cron);
+
+  // La tercera copia. Sólo aplica fuera del VPS: el catálogo es el del homelab.
+  // Falla CERRADO — si el archivo no está, se dice, no se aprueba en silencio.
+  if (maquina !== 'VPS') {
+    if (existsSync(INSTALADOR)) {
+      problemas.push(...compararInstalador(doc, loopsDelInstalador(readFileSync(INSTALADOR, 'utf8'))));
+    } else {
+      console.log(`aviso: no encuentro ${INSTALADOR} — la plantilla del cron queda SIN medir.`);
+    }
+  }
 
   console.log(`maquina: ${maquina} · loops en su cron: ${cron.size} · filas "${maquina}" en ${DOC}: ${doc.size}`);
   if (problemas.length === 0) {

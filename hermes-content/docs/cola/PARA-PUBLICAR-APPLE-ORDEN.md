@@ -10,7 +10,7 @@ Todas rendidas a 1080×1350 en `carousels/out/apple-<pieza>-inter/`.
 | # | Pieza | Láminas | Por qué va acá |
 |---|---|---|---|
 | 1 | **Mi stack** | 11 | Es la que define la cuenta: autoridad + guardable, y su CTA construye la lista de gente que pide cosas |
-| 2 | **Fable 5.1** | 9 | **Es lo único con fecha de vencimiento.** Es noticia: cada semana que pasa vale menos |
+| 2 | **Fable 5.1** | 8 | **Es lo único con fecha de vencimiento.** Es noticia: cada semana que pasa vale menos |
 | 3 | **Founders bolivianos** | 1 | Humor de pertenencia — la más compartible de las cinco, y descansa después de dos carruseles largos |
 | 4 | **Tu cuaderno no miente** | 1 | Nombra el problema del cliente sin nombrar el producto. Prepara el terreno |
 | 5 | **Necesito vitamina C** | 1 | Personal y liviana. Va al final porque no aporta valor de uso, aporta cercanía |
@@ -26,7 +26,7 @@ no caducan.
 | **Mi stack** | El DM de «STACK» tiene que estar a mano — está en `PARA-PUBLICAR-DM-STACK.md`, en dos mensajes | ✅ escrito |
 | **Mi stack** | "Todos los días posteo" (lámina 10) es un compromiso, no un dato medido | 🔴 depende de Sergio Urcullo |
 | **Mi stack** | "Próximamente" en la lámina 08 es una excepción a *La venta nunca exhibe obra*, ya ratificada | ✅ ratificada 06-sep |
-| **Fable** | Revisar la página de Anthropic si pasa más de un mes: cinco láminas cuelgan de su tabla | ⏳ vigente al 07-sep |
+| **Fable** | Revisar la página de Anthropic si pasa más de un mes: la pieza cuelga de su tabla | ⏳ vigente al 07-sep |
 | **Founders BO** | Nada. Cero cifras y cero promesas: no hay nada que sostener después | ✅ |
 | **Duelo cuaderno** | Nada. Los dos remates son propiedades verificables | ✅ |
 | **Vitamina C** | Las cifras del panel de clientes (**12 · +3**) están **inventadas** | 🔴 excepción pedida por Sergio Urcullo, marcada en su doc |

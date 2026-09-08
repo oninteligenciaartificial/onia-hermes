@@ -16,11 +16,11 @@ import { useState } from "react";
 
 import { PLANES, bs } from "@/lib/pricing";
 
-import { Btn } from "../ui";
-import { ctaAltaPlan } from "../alta";
-import { EMPEZAR_URL } from "../nav";
-import s from "../sitio.module.css";
-import v from "./v4.module.css";
+import { Btn } from "./ui";
+import { ctaAltaPlan } from "./alta";
+import { EMPEZAR_URL } from "./nav";
+import s from "./sitio.module.css";
+import v from "./portada.module.css";
 
 /** Cuanto se ahorra pagando el año entero, en %, redondeado hacia abajo. */
 function ahorroAnual(mensual: number, anual: number): number {
