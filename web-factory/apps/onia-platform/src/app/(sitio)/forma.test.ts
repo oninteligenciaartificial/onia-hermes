@@ -230,7 +230,18 @@ describe("cada ruta del sitio se comparte con su tarjeta social", () => {
     [join(AQUI, path), join(APP, path)].find((d) => existsSync(join(d, "page.tsx")));
 
   it("lee las rutas publicadas del sitemap", () => {
-    expect(paths.length).toBeGreaterThan(14);
+    // Ancla anti-lista-vacía: si el barrido de arriba se rompe (regex, archivo
+    // renombrado), el `it.each` correría sobre cero casos y pasaría en verde.
+    //
+    // El piso era 14 y baja a 9 el 2026-09-08: el sitemap pasó de 15 rutas a 12
+    // cuando `/servicios/webs`, `/marketing-ia` y `/consultoria` salieron del
+    // índice por decisión de Sergio Urcullo (`t_30b1711d` — la navegación pública
+    // es el sistema, no una agencia; ver `robots.ts`). O sea que lo que cayó no
+    // fue el barrido sino el sujeto. Queda en el mismo piso que sus hermanos
+    // (`alcance.test.ts`, y el ancla de arriba de este archivo), que es la
+    // distancia sana: cubre el barrido roto sin volver a caducar cada vez que el
+    // sitio publica una página menos.
+    expect(paths.length).toBeGreaterThan(9);
   });
 
   it.each(paths.map((p) => [p === "" ? "/" : p, p]))(

@@ -1,10 +1,10 @@
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 
-import { PAGINAS_PUBLICAS } from "./rutas";
+import { PAGINAS_PUBLICAS, moduloDe } from "./rutas";
 
 /**
  * Toda página publicada tiene que ser ALCANZABLE desde el sitio vivo.
@@ -60,18 +60,46 @@ function fuentesVivas(dir: string): string[] {
   });
 }
 
+/** Los destinos internos que escribe un archivo, en las dos formas que usa el
+ *  sitio: el `href="/x"` del JSX y el `href: "/x"` de `nav.ts`. */
+function destinosDe(archivo: string): string[] {
+  const texto = readFileSync(archivo, "utf8");
+  return [
+    ...[...texto.matchAll(/href=\{?"(\/[^"?#]*)"/g)].map((m) => m[1]),
+    ...[...texto.matchAll(/href:\s*"(\/[^"?#]*)"/g)].map((m) => m[1]),
+  ];
+}
+
 /**
- * Los destinos internos que escribe el árbol vivo. Dos formas, porque el sitio
- * usa las dos: el `href="/x"` del JSX y el `href: "/x"` de `nav.ts`.
+ * Los módulos `@/…` que importa el árbol vivo, resueltos a archivo.
+ *
+ * ⚠️ Sin esto el gate da ROJO FALSO, y en la dirección cara: la que manda a
+ * desindexar una página viva. Medido el 2026-09-08 con `/servicios/webs`, que la
+ * PORTADA ofrece en su cuerpo —«Web del negocio · desde Bs 2.000, pago único»—
+ * con el `href` viniendo de `ADDONS` en `lib/pricing.ts`. Como el enlace no está
+ * escrito en ningún `.tsx` de `(sitio)`, el barrido de texto no lo veía y el
+ * gate declaraba inalcanzable una página que un lead alcanza en un clic desde la
+ * home; obedecerlo la sacaba del sitemap y del índice.
+ *
+ * Es la misma familia que ya mordió a `header-camino-de-compra.test.ts`: un
+ * `grep` sobre el `page.tsx` es ciego a todo dato IMPORTADO, y en este sitio los
+ * datos de venta (precios, add-ons, stacks) viven todos en `lib/`. Un nivel
+ * alcanza —el dato lo importa la pantalla, no un intermediario— y mantiene el
+ * gate leyendo archivos en vez de construir el grafo entero.
  */
+function modulosImportados(fuentes: readonly string[]): string[] {
+  const specs = new Set(
+    fuentes.flatMap((archivo) => [
+      ...[...readFileSync(archivo, "utf8").matchAll(/from\s+"(@\/[^"]+)"/g)].map((m) => m[1]),
+    ]),
+  );
+  return [...specs].map(moduloDe).filter((f) => existsSync(f));
+}
+
+const FUENTES_VIVAS = fuentesVivas(VIVO);
+
 const DESTINOS_VIVOS: ReadonlySet<string> = new Set(
-  fuentesVivas(VIVO).flatMap((archivo) => {
-    const texto = readFileSync(archivo, "utf8");
-    return [
-      ...[...texto.matchAll(/href=\{?"(\/[^"?#]*)"/g)].map((m) => m[1]),
-      ...[...texto.matchAll(/href:\s*"(\/[^"?#]*)"/g)].map((m) => m[1]),
-    ];
-  }),
+  [...FUENTES_VIVAS, ...modulosImportados(FUENTES_VIVAS)].flatMap(destinosDe),
 );
 
 /**
