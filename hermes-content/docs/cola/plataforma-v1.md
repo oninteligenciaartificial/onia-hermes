@@ -1916,24 +1916,54 @@ y sin operar. Acá se opera, con verificación por ítem.
       carril, **no en `master`**. Si el `ok` de `t_daa8750c` llega antes de que el integrador
       mergee, este arreglo **no viaja en ese swap**. Anotado como comentario en ese pedido.
 
-- [ ] 🟡 **MEDIDO Y NO ARREGLADO (2026-09-08): la misma puerta pública crea clientes sin
-      contarlos contra el tope del plan.** En la misma vuelta que lo de arriba: `checkPatientLimit`
-      lo llaman **cinco** rutas y las cinco son del panel (`app/api/patients/route.ts`, `app/api/patients/import/route.ts`,
-      `app/api/v1/patients/route.ts`, `app/api/comercio/clientes/route.ts` + el medidor de `/settings`).
-      `app/api/booking/appointments/route.ts:258` hace `tx.patient.create(...)` y **no lo llama**,
-      así que el tope que `onia.com.bo/precios` vende —300 clientes en Básico, y es el gancho
-      para subir a Bs 750— **no se aplica por la agenda pública**. El propio `lib/plan-limits.ts`
-      declara la intención contraria: *«lo que la barra muestra es lo que el 403 aplica»*.
+- [x] 🟡 **CERRADO el 2026-09-08: la puerta pública crea clientes sin contarlos contra el tope
+      del plan — y la mitad que faltaba no era el corte, era el aviso.** `checkPatientLimit` lo
+      llaman **cinco** rutas y las cinco son del panel (`app/api/patients/route.ts`,
+      `app/api/patients/import/route.ts`, `app/api/v1/patients/route.ts`,
+      `app/api/comercio/clientes/route.ts` + el medidor de `/settings`).
+      `app/api/booking/appointments/route.ts` hace `tx.patient.create(...)` y **no lo llama**, así
+      que el tope que `onia.com.bo/precios` vende —300 clientes en Básico, y es el gancho para
+      subir a Bs 750— **no se aplica por la agenda pública**.
 
-      **Va sin arreglar a propósito, porque adentro hay una decisión de producto y no la invento:**
-      rechazarle la reserva a un desconocido porque el negocio llegó a su tope lo castiga a él por
-      algo que no controla, y el mensaje honesto es difícil de escribir sin exponerle el estado
-      comercial de nuestro cliente. Las dos salidas —cortar, o dejar pasar y avisarle al dueño que
-      se pasó del tope— son defendibles y cuestan parecido.
+      **La vuelta anterior lo dejó sin arreglar alegando «hay una decisión de producto y no la
+      invento». Eso estaba mal y por eso el ítem sobrevivió un día:** las decisiones técnicas las
+      toma la sesión y quedan escritas, a Sergio Urcullo se le piden plata, marca y contactar
+      personas. Tomada acá:
 
-      **Reproducción, 30 segundos:**
-      `grep -rn "checkPatientLimit" --include=*.ts app/ lib/ | grep -v test` → 5 usos, ninguno bajo
-      `app/api/booking`. Contrastar con `grep -n "patient.create" app/api/booking/appointments/route.ts`.
+      **La puerta pública NO rechaza, y ahora está fijado por un gate.** El que llega ahí es el
+      cliente DEL cliente: rechazarlo lo castiga por el estado comercial de un negocio que no
+      controla, el mensaje honesto no se puede escribir sin exponerle a un desconocido que su
+      dentista se pasó del plan que nos paga, y encima le cuesta al negocio una persona real —para
+      cobrarle Bs 430 más le sacamos un cliente, el upsell más caro posible. El tope sigue
+      mordiendo donde está el dueño: los cinco 403 del panel quedan intactos.
+
+      **El agujero de verdad era el otro, y ése sí se arregló:** la fila que crea la puerta pública
+      **sí** cuenta en `contarClientesDelRubro`, así que el dueño cruza el tope sin haber cargado a
+      nadie y se entera **chocando** contra un 403 por gente que él no agregó. Ahora se le avisa
+      —notificación in-app a los admins + web push, el mismo patrón que el cupo del chatbot—, como
+      mucho una vez por día, **en el idioma de su rubro** y sólo cuando el alta es de un cliente
+      **nuevo** (la ruta hace find-or-create por teléfono: reservar de nuevo no mueve el tope).
+      Es la misma forma que el cupo del chatbot cerrado hoy: el límite se aplica y el que paga se
+      entera chocando.
+
+      **Arreglo** (`e911638`, rama `claude/chatbots-platform-review-0d1d09`):
+      `lib/agenda/tope-en-la-puerta-publica.ts`. `rechazar: false` es un **campo** y no una
+      ausencia de código a propósito: una ausencia no se puede poner en rojo el día que alguien
+      la llene.
+
+      **Gate:** `lib/agenda/tope-en-la-puerta-publica.test.ts`, 8 casos, validado **por mutación en
+      6 direcciones** (`rechazar: true`; umbral `>` en vez de `>=`; ignorar `clienteNuevo`; texto
+      dental duro; esquivar el `await` en la ruta; y el llamador pasando un literal): las seis
+      `exit 1`, base `exit 0`. Incluye el caso que mira **al llamador** —sin él el módulo queda
+      impecable y no cambia nada en producción, que es la forma del parámetro opcional con
+      default— y lee la ruta **sin comentarios**, porque el comentario que dejé ahí nombra el
+      módulo y el gate se absolvería solo.
+
+      **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **4168 pasan / 333 archivos** ·
+      `npx eslint .` 0 errores.
+
+      🔴 **NO ESTÁ DESPLEGADO:** `e911638` está en la rama del carril, no en `master`. Viaja
+      cuando el integrador lo mergee y Sergio Urcullo apruebe el pedido de deploy vivo.
 
 - [x] 🔴 **CERRADO el 2026-09-08: la pantalla donde el dueño decide CUÁNTO PAGA le vendía a
       3 de los 5 rubros de la v1.0 cuatro pantallas que su rubro no tiene.** `/reports` y
