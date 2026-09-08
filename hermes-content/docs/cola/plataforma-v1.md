@@ -1804,6 +1804,42 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] **CERRADO el 2026-09-08: una capacidad de plan se decidía en CUATRO listas escritas a
+      mano, y una de ellas es la que la API usa para RECHAZAR.**
+
+      `canUseRecurringInvoices()` —con la que aplican `/api/recurring-invoices` y las dos
+      pantallas de `billing/recurring`— decidía con `plan === "professional" || "clinic" ||
+      "enterprise"`, mientras `app/(dashboard)/billing/new/page.tsx` —la pantalla que **muestra**
+      la opción de recurrencia— preguntaba `getLimits(plan).recurringInvoicesEnabled`. La misma
+      capacidad, en la misma feature, con dos fuentes. Lo mismo con `publicBookingIncluded`,
+      tipeado en tres lugares más, **incluido `/settings`, la pantalla donde el dueño decide
+      cuánto paga**.
+
+      **Hoy coincidían — por diligencia, no por construcción.** Producción corre 8 orgs en
+      `professional` y 1 en `free` (`docker exec supabase-db psql …`), así que los bordes ni se
+      ejercitan: nada podía ponerse rojo si se separaban. Es la clase que abre `CLAUDE.md`
+      (cuatro precios vivos del mismo producto) y la misma del cupo de clientes del 2026-09-08,
+      donde la mitad que muestra y la que aplica contaban de **tablas** distintas. Ningún
+      instrumento del proyecto puede verla: no sobra ni falta una palabra, `tsc` está contento y
+      los dos valores son reales.
+
+      **Arreglado** en `8c12eb1`: los cuatro sitios leen `getLimits()`. El gate
+      (`lib/plan-catalogo-es-la-fuente.test.ts`) deriva sus sujetos del **disco** (`app/`,
+      `components/`, `lib/`), así que una comparación nueva nace cubierta; las 14 exentas se
+      declaran por su **línea exacta** y se re-miden en cada corrida, de modo que una exención
+      huérfana pone el gate en rojo en vez de pudrirse.
+
+      ⚠️ **Lo que se aprendió escribiéndolo:** el quinto caso —comparar
+      `canUseRecurringInvoices(plan)` contra `getLimits(plan).recurringInvoicesEnabled`— es
+      **tautológico con el arreglo puesto**: los dos leen la misma fuente, así que mover el
+      catálogo mueve los dos lados, y **pasaba en verde con el gate roto** (mutación M3). Se
+      reemplazó por el invariante que sí puede romperse: que la mitad que muestra y la que aplica
+      le pidan al catálogo el **mismo campo**. Validado por mutación en cuatro direcciones, cada
+      una confirmada por su línea `Tests N failed`.
+
+      **Prueba:** `tsc` 0 · `eslint` 0 · `vitest` 3965 passed. **Commiteado y pusheado; NO
+      desplegado** — viaja en el pedido de deploy de `plataforma` que ya existe.
+
 - [x] **CERRADO el 2026-09-08: el gate que vigila el idioma del rubro en los correos veía 6 de
       los 10 remitentes que `lib/email.ts` exporta. Los 4 de afuera estaban sanos — el hueco no
       tapaba un bug, tapaba al PRÓXIMO.**
