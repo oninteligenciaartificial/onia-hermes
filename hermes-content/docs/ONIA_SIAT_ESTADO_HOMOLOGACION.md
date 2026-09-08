@@ -301,8 +301,53 @@ marcador del portal hay que leerlo después (login de Sergio).
 | Combo | Qué falta | Quién |
 |---|---|---|
 | `pv1-*` (3) | Crear el **Punto de Venta 1** en SIAT. El código ya los recorre; hoy cada uno bloquea con `sin CUIS para el punto de venta 1` | **Sergio** |
-| `pv0-ds17-tf1` | Nada: emite/anula/revierte (2026-09-03). Falta que la corrida de volumen cierre VII y XI en 125 | corriendo |
-| `pv0-ds24-tf3` | Nada: emite/anula/revierte (2026-09-03). Falta que la corrida de volumen llegue a 125 (~1,5 h a 36 s por nota) | corriendo |
+| `pv0-ds17-tf1` | **Nada. Cerró 125/125 en IV, VII y XI** | ✅ hecho |
+| `pv0-ds24-tf3` | **Nada. Cerró 125/125 en IV, VII y XI** | ✅ hecho |
+
+⚠️ **Las dos filas de arriba decían «corriendo» hasta el 2026-09-08 — y la corrida había
+terminado el 04-sep a las 04:12 UTC, cuatro días antes.** El log cierra con `fin` y no quedó
+ni un proceso vivo (`ps -eo pid,args | grep fase1-runner` → vacío). No es un detalle de
+redacción: mientras el doc dijo «corriendo», la conclusión natural era esperar, y lo que
+había que hacer era **leer el marcador y seguir**. Un estado que se escribe una vez y
+describe algo en vuelo hay que recontarlo, no citarlo.
+
+**Lo que dejó esa corrida** (medido del último resumen del propio runner, no deducido):
+
+| Etapa | Hechas | Total SIN | Avance | Por caso |
+|---|---:|---:|---:|---|
+| IV | 375 | 750 | 50% | los **3 combos del PdV 0 en 125/125** |
+| VII | 375 | 750 | 50% | los 3 combos del PdV 0 en 125/125 |
+| XI | 375 | 750 | 50% | los 3 combos del PdV 0 en 125/125 |
+
+O sea que **`pv0-ds17-tf1` y `pv0-ds24-tf3` son dos casos nuevos al 100%** — que es
+exactamente lo que pide el «Listo =» del ítem de la cola. Falta **leerlo del portal**, y eso
+necesita el login de Sergio Urcullo.
+
+### Por qué VI y IX quedaron atrás — arreglado el 2026-09-08
+
+El resto de las etapas del PdV 0 **no estaban bloqueadas por el SIN ni por el PdV 1**, y aun
+así llevaban desde el 6-ago clavadas en 20: **VI en 20/280 (3%) y IX en 20/80 (12%)**.
+
+La causa es una sola y explica los dos síntomas: **`ensureCufd()` se cableó sólo en las tres
+etapas que motivaron el arreglo** (IV, VII y XI, vía `emitirOne`/`anularOne`/`revertirOne`).
+VI y IX nunca lo llamaron. Nadie lo vio porque `run-fase1-volumen.sh` corre **únicamente
+IV → VII → XI**: el instrumento miraba las tres etapas que ya estaban sanas.
+
+Medido contra el piloto el 2026-09-08, cada una con su síntoma propio:
+
+| Etapa | Lo que respondió el SIN |
+|---|---|
+| IX | `123 · CODIGO UNICO DE FACTURACION DIARIA (CUFD) FUERA DE TOLERANCIA` |
+| VI | `EL EVENTO SIGNIFICATIVO NO CORRESPONDE AL CUFD DEL EVENTO REGISTRADO` |
+
+En IX el CUFD viaja **dentro del CUF de cada factura del lote**, no sólo en el request. En VI
+el paquete y su evento comparten CUFD, y `eventWindowNow()` deriva la ventana de
+`cufdVigenteDesde`: con uno vencido el evento nace fuera de vigencia y el SIN rechaza **el par
+entero**, por eso ahí el refresh va *antes* de calcular la ventana.
+
+Arreglado en `fase1-runner.mjs` (commit `a28b3689`), con los dos guardias validados por
+mutación: quitando cada `ensureCufd` se pone rojo su caso y sólo el suyo. **371/371 verdes.**
+Desbloquea **320 casos** (260 de VI + 60 de IX) sin depender del PdV 1.
 
 ---
 
