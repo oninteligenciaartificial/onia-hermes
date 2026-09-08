@@ -7,7 +7,9 @@ se rehacen con los `cutplan-*.json` y los HTML de `assets/`, que sí están acá
 | crudo | qué es | salida | dura |
 |---|---|---|---|
 | `clip 1 video 2.mp4` | intro a cámara | `final/clip-1-video-2-intro.mp4` | 33.8s → **13.0s** |
-| `clip 2 video 1.mp4` | screencast del deck | `final/clip-2-video-1-explicacion.mp4` | 511.5s → **444.1s** |
+| `clip 2 video 1.mp4` | screencast del deck | `final/clip-2-video-1-explicacion.mp4` | 511.5s → **416.6s** |
+
+También sale de acá `final/miniatura.png` (1280×720).
 
 ## Decisiones que no son obvias
 
@@ -18,6 +20,21 @@ la única que encadena el gancho con el cierre sin costura, así que el clip que
 solo bloque** — cero empalmes. El inicio se bajó de 18.49 a 18.35 porque el bloque que
 detecta `silencedetect` empieza 0.25s DESPUÉS de la palabra según el transcript, y a 18.49
 se comía la "C" de Claude.
+
+**Los retakes se cortan a mano: se deja SIEMPRE el último intento** (`scripts/retakes-main.json`,
+regla de Sergio Urcullo: repite porque el último es el que le sale bien). `cut-plan.mjs` no los
+detecta — compara segmentos consecutivos y el transcriptor devuelve textos parecidos pero no
+iguales. Diez cortes, 27.3s. El peor era el CTA final: **tres arranques** de "y ahora si te
+gustaría que en otro video", 10.7s de silencio en el medio y un "te enseñé cómo vídeo," trabado.
+Ningún intento estaba completo, así que se pegó el tercero con el remate. Se dejaron los énfasis
+("uno por uno, uno por uno, uno por uno") — son retórica, no errores.
+
+**El pase de deck a cámara al final estaba partido en tres saltos.** Entre el fin de la última
+lámina y el CTA quedaban dos bloques sin una sola palabra (0.42s y 0.45s: ruido de sala y el
+cambio de escena de OBS). Medido cuadro a cuadro, el peor salto daba delta 13.4 contra un promedio
+de 0.92. Tirándolos queda **un** corte de lámina a cámara — un cambio de escena, que se lee como
+tal — y el mayor salto restante bajó a 6.0. Por eso el explicativo NO lleva zoom ni transiciones:
+no hay jump cut que disimular.
 
 **El main se cortó con `--min-sil 0.6`, no con 0.45.** Medido sobre los mismos silencios:
 0.45 daba **102 costuras** en 8 minutos (una cada 4s) y −85s; 0.6 da **59** y −71.6s. En un

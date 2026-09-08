@@ -1,0 +1,71 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>miniatura</title>
+<!--
+  Miniatura de YouTube (1280x720). Formato comparativa: los dos productos enfrentados a la
+  izquierda, la cara a la derecha. Sergio Urcullo sale de un frame REAL del video (508.0s,
+  el unico tramo donde sonrie a camara), recortado con rembg. Nada generado con IA.
+  Se lee a 210x118 px, que es el tamaño real en el feed: por eso 3 palabras y nada mas.
+-->
+<style>
+:root{--bg:#F5F1E8;--ink:#1D1D1F;--muted:#6E6E73;--claude:#D97757;--naranja:#FF6A2B;
+      --tile:#EDE7D8;--term:#1D1D1F;--term-tx:#F0EDE6;--tr:-0.034em}
+@font-face{font-family:'Inter';src:url('fonts/Inter-var-latin.woff2')format('woff2');font-weight:100 900;font-display:block}
+@font-face{font-family:'Spline Sans Mono';src:url('fonts/SplineSansMono-var-latin.woff2')format('woff2');font-weight:300 700;font-display:block}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1280px;height:720px;overflow:hidden}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--bg);position:relative}
+
+/* halo detras de la cara: separa la silueta del fondo sin usar borde */
+#halo{position:absolute;right:-40px;bottom:-90px;width:880px;height:880px;border-radius:50%;
+      background:radial-gradient(circle,rgba(255,106,43,.30) 0%,rgba(255,106,43,.12) 45%,rgba(255,106,43,0) 70%)}
+/* retícula tenue: le da textura al crema, que si no queda plano */
+#grano{position:absolute;inset:0;opacity:.5;
+       background-image:radial-gradient(rgba(29,29,31,.10) 1px,transparent 1px);
+       background-size:14px 14px}
+
+#sergio{position:absolute;right:-40px;top:12px;height:800px;
+        filter:drop-shadow(-14px 0 26px rgba(0,0,0,.20))}
+
+#izq{position:absolute;left:62px;top:64px;width:660px}
+
+.duo{display:flex;align-items:center;gap:26px}
+.uno{display:flex;flex-direction:column;align-items:center;gap:12px;flex:none}
+.tile{width:152px;height:152px;border-radius:23%;background:var(--tile);overflow:hidden;
+      box-shadow:0 14px 30px rgba(0,0,0,.20)}
+.tile img{width:100%;height:100%;display:block}
+.term{width:186px;height:152px;border-radius:18px;background:var(--term);overflow:hidden;
+      box-shadow:0 14px 30px rgba(0,0,0,.26)}
+.term .barra{height:34px;display:flex;align-items:center;gap:8px;padding:0 15px;
+             border-bottom:1px solid rgba(255,255,255,.12)}
+.term .barra i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.24)}
+.term pre{font-family:'Spline Sans Mono',monospace;font-size:34px;padding:26px 0 0 20px;
+          color:var(--claude);font-weight:700}
+.uno b{font-size:26px;font-weight:700;letter-spacing:var(--tr);white-space:nowrap}
+.vs{font-size:70px;font-weight:800;letter-spacing:-.05em;color:var(--naranja);flex:none;
+    margin-bottom:34px;
+    filter:drop-shadow(0 0 16px rgba(255,106,43,.55)) drop-shadow(0 3px 6px rgba(60,20,4,.35))}
+
+h1{margin-top:52px;font-size:112px;font-weight:800;letter-spacing:-.045em;line-height:.92}
+h1 em{font-style:normal;color:var(--naranja);
+      filter:drop-shadow(0 0 18px rgba(255,106,43,.45)) drop-shadow(0 3px 7px rgba(60,20,4,.30))}
+</style>
+
+<div id="halo"></div>
+<div id="grano"></div>
+<img id="sergio" src="sergio-sonrisa.png" alt="">
+
+<div id="izq">
+  <div class="duo">
+    <div class="uno">
+      <div class="tile"><img src="claude.png" alt=""></div>
+      <b>Claude</b>
+    </div>
+    <div class="vs">VS</div>
+    <div class="uno">
+      <div class="term"><div class="barra"><i></i><i></i><i></i></div><pre>&gt; _</pre></div>
+      <b>Claude Code</b>
+    </div>
+  </div>
+  <h1>¿SON LO<br><em>MISMO?</em></h1>
+</div>

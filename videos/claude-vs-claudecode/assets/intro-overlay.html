@@ -10,7 +10,7 @@
 <style>
 :root{
   --ink:#12100E; --muted:#6E6E73; --hair:#D2D2D7;
-  --claude:#D97757; --naranja:#C9603A; --tile:#EDE7D8; --term:#1D1D1F; --term-tx:#F0EDE6;
+  --claude:#D97757; --naranja:#FF6A2B; --tile:#EDE7D8; --term:#1D1D1F; --term-tx:#F0EDE6;
   --onia:#00D26A;
   --tr:-0.032em;
 }
@@ -53,16 +53,16 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--ink)}
            background:linear-gradient(100deg,
              var(--naranja) 0%,
              var(--naranja) calc(var(--p) - 13%),
-             #DE8355      calc(var(--p) - 4%),
-             #EFA472      var(--p),
-             #DE8355      calc(var(--p) + 4%),
+             #FF9057      calc(var(--p) - 4%),
+             #FFC49E      var(--p),
+             #FF9057      calc(var(--p) + 4%),
              var(--naranja) calc(var(--p) + 13%),
              var(--naranja) 100%);
            -webkit-background-clip:text;background-clip:text;color:transparent;
-           filter:drop-shadow(0 0 26px rgba(217,119,87,.45))
-                  drop-shadow(0 0 9px rgba(201,96,58,.40))
-                  drop-shadow(0 3px 10px rgba(50,20,8,.50))
-                  drop-shadow(0 0 1.5px rgba(110,42,20,.55))}
+           filter:drop-shadow(0 0 22px rgba(255,106,43,.50))
+                  drop-shadow(0 0 8px rgba(255,106,43,.42))
+                  drop-shadow(0 3px 11px rgba(70,22,4,.55))
+                  drop-shadow(0 0 1.5px rgba(120,40,10,.60))}
 #titulo .vs{/* hereda el naranja: el titulo entero es de un color */}
                box-shadow:0 0 20px rgba(217,119,87,.85),0 1px 5px rgba(60,25,10,.35)}
 </style>
@@ -92,6 +92,8 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--ink)}
 // t = segundo del clip YA cortado. Un frame por carga: determinista.
 const t = parseFloat(new URLSearchParams(location.search).get('t') || '0');
 const only = new URLSearchParams(location.search).get("only") || "todo";
+const cOverride = new URLSearchParams(location.search).get("c");
+if (cOverride) document.documentElement.style.setProperty("--naranja", "#" + cOverride);
 // capas separadas: las tarjetas van ENCIMA de la persona, el titulo va DETRAS
 // (el matte de la persona se compone entre medio). Un render por capa.
 if (only === "cards")  document.getElementById("titulo").style.display = "none";

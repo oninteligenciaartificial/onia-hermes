@@ -5,7 +5,7 @@
   "minSil": 0.6,
   "pad": 0.08,
   "origDur": 511.5,
-  "finalDur": 439.88,
+  "finalDur": 412.55,
   "silences": [
     {
       "start": 2.212646,
@@ -343,14 +343,18 @@
     },
     {
       "start": 227.04549999999998,
-      "end": 238.619187
+      "end": 236.55
     },
     {
-      "start": 239.515167,
-      "end": 245.910479
+      "start": 240.55,
+      "end": 242.85
     },
     {
       "start": 246.492042,
+      "end": 249.55
+    },
+    {
+      "start": 251.22,
       "end": 251.81495800000002
     },
     {
@@ -399,10 +403,10 @@
     },
     {
       "start": 315.325417,
-      "end": 351.13485399999996
+      "end": 350.18
     },
     {
-      "start": 351.692792,
+      "start": 351.8,
       "end": 355.646438
     },
     {
@@ -439,7 +443,7 @@
     },
     {
       "start": 392.661604,
-      "end": 435.312729
+      "end": 433.3
     },
     {
       "start": 436.496167,
@@ -451,7 +455,7 @@
     },
     {
       "start": 448.72393700000003,
-      "end": 456.82235399999996
+      "end": 455.05
     },
     {
       "start": 457.36877100000004,
@@ -466,31 +470,15 @@
       "end": 473.030958
     },
     {
-      "start": 478.941167,
-      "end": 479.361646
+      "start": 488.6,
+      "end": 490.1
     },
     {
-      "start": 481.64718700000003,
-      "end": 484.599479
-    },
-    {
-      "start": 485.57131200000003,
-      "end": 487.390937
-    },
-    {
-      "start": 488.51666700000004,
-      "end": 494.182688
-    },
-    {
-      "start": 494.644521,
-      "end": 496.163146
-    },
-    {
-      "start": 498.076958,
+      "start": 501.85,
       "end": 507.480146
     }
   ],
-  "ffmpeg": "-vf \"select='between(t,0.00,2.29)+between(t,2.89,4.31)+between(t,5.08,20.75)+between(t,22.88,37.16)+between(t,40.59,42.50)+between(t,42.96,61.95)+between(t,62.48,71.28)+between(t,71.75,73.70)+between(t,75.66,90.56)+between(t,91.21,92.85)+between(t,93.41,127.21)+between(t,128.79,138.07)+between(t,139.37,149.73)+between(t,150.20,155.47)+between(t,157.69,162.96)+between(t,163.46,169.62)+between(t,170.11,177.23)+between(t,179.47,182.40)+between(t,183.06,190.21)+between(t,190.68,193.39)+between(t,193.89,206.14)+between(t,207.81,224.74)+between(t,227.05,238.62)+between(t,239.52,245.91)+between(t,246.49,251.81)+between(t,252.53,255.21)+between(t,256.60,258.19)+between(t,258.65,263.12)+between(t,264.07,266.56)+between(t,267.06,272.12)+between(t,272.90,276.81)+between(t,277.36,287.61)+between(t,289.66,298.42)+between(t,299.14,301.92)+between(t,302.42,305.28)+between(t,305.90,312.97)+between(t,315.33,351.13)+between(t,351.69,355.65)+between(t,356.55,359.34)+between(t,360.27,361.86)+between(t,362.32,370.11)+between(t,371.46,377.54)+between(t,379.22,380.28)+between(t,381.03,382.63)+between(t,383.39,390.21)+between(t,390.87,391.85)+between(t,392.66,435.31)+between(t,436.50,444.00)+between(t,445.09,447.58)+between(t,448.72,456.82)+between(t,457.37,460.75)+between(t,462.96,468.93)+between(t,469.75,473.03)+between(t,478.94,479.36)+between(t,481.65,484.60)+between(t,485.57,487.39)+between(t,488.52,494.18)+between(t,494.64,496.16)+between(t,498.08,507.48)',setpts=N/FRAME_RATE/TB\" -af \"aselect='between(t,0.00,2.29)+between(t,2.89,4.31)+between(t,5.08,20.75)+between(t,22.88,37.16)+between(t,40.59,42.50)+between(t,42.96,61.95)+between(t,62.48,71.28)+between(t,71.75,73.70)+between(t,75.66,90.56)+between(t,91.21,92.85)+between(t,93.41,127.21)+between(t,128.79,138.07)+between(t,139.37,149.73)+between(t,150.20,155.47)+between(t,157.69,162.96)+between(t,163.46,169.62)+between(t,170.11,177.23)+between(t,179.47,182.40)+between(t,183.06,190.21)+between(t,190.68,193.39)+between(t,193.89,206.14)+between(t,207.81,224.74)+between(t,227.05,238.62)+between(t,239.52,245.91)+between(t,246.49,251.81)+between(t,252.53,255.21)+between(t,256.60,258.19)+between(t,258.65,263.12)+between(t,264.07,266.56)+between(t,267.06,272.12)+between(t,272.90,276.81)+between(t,277.36,287.61)+between(t,289.66,298.42)+between(t,299.14,301.92)+between(t,302.42,305.28)+between(t,305.90,312.97)+between(t,315.33,351.13)+between(t,351.69,355.65)+between(t,356.55,359.34)+between(t,360.27,361.86)+between(t,362.32,370.11)+between(t,371.46,377.54)+between(t,379.22,380.28)+between(t,381.03,382.63)+between(t,383.39,390.21)+between(t,390.87,391.85)+between(t,392.66,435.31)+between(t,436.50,444.00)+between(t,445.09,447.58)+between(t,448.72,456.82)+between(t,457.37,460.75)+between(t,462.96,468.93)+between(t,469.75,473.03)+between(t,478.94,479.36)+between(t,481.65,484.60)+between(t,485.57,487.39)+between(t,488.52,494.18)+between(t,494.64,496.16)+between(t,498.08,507.48)',asetpts=N/SR/TB\"",
+  "ffmpeg": "-vf \"select='between(t,0.00,2.29)+between(t,2.89,4.31)+between(t,5.08,20.75)+between(t,22.88,37.16)+between(t,40.59,42.50)+between(t,42.96,61.95)+between(t,62.48,71.28)+between(t,71.75,73.70)+between(t,75.66,90.56)+between(t,91.21,92.85)+between(t,93.41,127.21)+between(t,128.79,138.07)+between(t,139.37,149.73)+between(t,150.20,155.47)+between(t,157.69,162.96)+between(t,163.46,169.62)+between(t,170.11,177.23)+between(t,179.47,182.40)+between(t,183.06,190.21)+between(t,190.68,193.39)+between(t,193.89,206.14)+between(t,207.81,224.74)+between(t,227.05,236.55)+between(t,240.55,242.85)+between(t,246.49,249.55)+between(t,251.22,251.81)+between(t,252.53,255.21)+between(t,256.60,258.19)+between(t,258.65,263.12)+between(t,264.07,266.56)+between(t,267.06,272.12)+between(t,272.90,276.81)+between(t,277.36,287.61)+between(t,289.66,298.42)+between(t,299.14,301.92)+between(t,302.42,305.28)+between(t,305.90,312.97)+between(t,315.33,350.18)+between(t,351.80,355.65)+between(t,356.55,359.34)+between(t,360.27,361.86)+between(t,362.32,370.11)+between(t,371.46,377.54)+between(t,379.22,380.28)+between(t,381.03,382.63)+between(t,383.39,390.21)+between(t,390.87,391.85)+between(t,392.66,433.30)+between(t,436.50,444.00)+between(t,445.09,447.58)+between(t,448.72,455.05)+between(t,457.37,460.75)+between(t,462.96,468.93)+between(t,469.75,473.03)+between(t,488.60,490.10)+between(t,501.85,507.48)',setpts=N/FRAME_RATE/TB\" -af \"aselect='between(t,0.00,2.29)+between(t,2.89,4.31)+between(t,5.08,20.75)+between(t,22.88,37.16)+between(t,40.59,42.50)+between(t,42.96,61.95)+between(t,62.48,71.28)+between(t,71.75,73.70)+between(t,75.66,90.56)+between(t,91.21,92.85)+between(t,93.41,127.21)+between(t,128.79,138.07)+between(t,139.37,149.73)+between(t,150.20,155.47)+between(t,157.69,162.96)+between(t,163.46,169.62)+between(t,170.11,177.23)+between(t,179.47,182.40)+between(t,183.06,190.21)+between(t,190.68,193.39)+between(t,193.89,206.14)+between(t,207.81,224.74)+between(t,227.05,236.55)+between(t,240.55,242.85)+between(t,246.49,249.55)+between(t,251.22,251.81)+between(t,252.53,255.21)+between(t,256.60,258.19)+between(t,258.65,263.12)+between(t,264.07,266.56)+between(t,267.06,272.12)+between(t,272.90,276.81)+between(t,277.36,287.61)+between(t,289.66,298.42)+between(t,299.14,301.92)+between(t,302.42,305.28)+between(t,305.90,312.97)+between(t,315.33,350.18)+between(t,351.80,355.65)+between(t,356.55,359.34)+between(t,360.27,361.86)+between(t,362.32,370.11)+between(t,371.46,377.54)+between(t,379.22,380.28)+between(t,381.03,382.63)+between(t,383.39,390.21)+between(t,390.87,391.85)+between(t,392.66,433.30)+between(t,436.50,444.00)+between(t,445.09,447.58)+between(t,448.72,455.05)+between(t,457.37,460.75)+between(t,462.96,468.93)+between(t,469.75,473.03)+between(t,488.60,490.10)+between(t,501.85,507.48)',asetpts=N/SR/TB\"",
   "rows": [
     {
       "i": 0,
@@ -1139,6 +1127,68 @@
       "text": "seguime y déjamelo en los comentarios.",
       "keep": true,
       "reason": "contenido"
+    }
+  ],
+  "retakes": [
+    {
+      "start": 236.55,
+      "end": 240.55,
+      "tiro": "arreglar el error del form... aqui vos le decis,",
+      "queda": "el 2do intento completo: 'arreglar el error del formulario'"
+    },
+    {
+      "start": 242.85,
+      "end": 246.45,
+      "tiro": "Entonces, podemos ver que el formulario esta basado en Java y",
+      "queda": "la correccion: '...basado en JavaScript'"
+    },
+    {
+      "start": 249.55,
+      "end": 251.22,
+      "tiro": "Por ejemplo, aqui podemos ver el archivo...",
+      "queda": "'aqui podemos ver el archivo formulario.js'"
+    },
+    {
+      "start": 350.18,
+      "end": 351.8,
+      "tiro": "el lee todo y (trabada)",
+      "queda": "'y el lee todo el proyecto'"
+    },
+    {
+      "start": 433.3,
+      "end": 435.75,
+      "tiro": "la verdad que me viene bastante bien para lo que es y",
+      "queda": "la 2da, que si cierra en 'programacion'"
+    },
+    {
+      "start": 455.05,
+      "end": 456.98,
+      "tiro": "Pero te ayuda a (intento abandonado)",
+      "queda": "'Pero te iba a sacarte lo que es repetitivo'"
+    },
+    {
+      "start": 478.8,
+      "end": 479.5,
+      "tiro": "bloque de 0.42s sin palabras (ruido de sala)",
+      "queda": "-"
+    },
+    {
+      "start": 481.55,
+      "end": 482.2,
+      "tiro": "bloque de 0.45s: cola de la lamina + 0.19s de camara, sin voz",
+      "queda": "-"
+    },
+    {
+      "start": 482.1,
+      "end": 488.6,
+      "tiro": "intentos 1 y 2 del CTA",
+      "queda": "el 3ro: 'si te gustaria que en otro video'"
+    },
+    {
+      "start": 490.1,
+      "end": 501.85,
+      "tiro": "10.7s de silencio + 'te enseñe como video,' trabado",
+      "queda": "'te enseñe como instalarlo y las skills...'"
     }
   ]
 }
