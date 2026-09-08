@@ -48,7 +48,7 @@ Medido el 2026-09-08 05:00-05:30 UTC.
 | Hermes gateway | ✅ `active` · 9 trabajos activos |
 | `onia-veredicto-sergio` | ✅ sin `drift_skip` — modelo fijado y trabajo reanudado |
 | `onia-vigia-aprobaciones.sh` | ✅ versionado (ya lo estaba: ver §5.3) |
-| Guarda anti-retrabajo en `onia-loop.sh` | ✅ cada loop sincroniza con `main` ANTES de medir |
+| Guarda anti-retrabajo en `onia-loop.sh` | ✅ cada loop sincroniza con **su rama base** ANTES de medir. ⚠️ Estuvo **muda en `onia-platform`** hasta el 8-sep: ese repo usa `master` y la guarda comparaba contra `origin/main` fijo — el `\|\| echo 0` convertía el `fatal` en CERO. Ese worktree estaba **12 commits atrás** sin avisar. Arreglado: ahora pregunta la base (`origin/HEAD`, con `main`/`master` de respaldo) y **avisa si no la encuentra**, en vez de callarse |
 | Disco del VPS | ✅ **65 %** (venía de 89 %) |
 | Workflow IG `1jS4jwmNmvcQpqqH` | ✅ activo, con capa por video y verificación de firma **en modo observar** |
 | 3 copias apagadas del workflow IG | ✅ archivadas, con respaldo crudo en `/root/n8n-copia-*.archivada.json` |

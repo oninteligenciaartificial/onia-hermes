@@ -342,18 +342,37 @@ cd "$WT" || { avisar "no se pudo entrar a $WT"; exit 2; }
 #     `add -A` convirtio 17 archivos con marcadores `<<<<<<<` en un "resuelto"
 #     que hizo fast-forward a main.
 git fetch origin --quiet 2>/dev/null || true
-ATRAS=$(git rev-list --count HEAD..origin/main 2>/dev/null || echo 0)
-if [ "${ATRAS:-0}" -gt 0 ]; then
-  if [ -n "$(git status --porcelain 2>/dev/null)" ]; then
-    log "AVISO: $ATRAS commit(s) atras de main y hay cambios sin commitear — NO sincronizo, mido sobre el arbol viejo"
-  elif git merge --no-edit origin/main >/dev/null 2>&1; then
-    log "sincronizado con main antes de medir: +$ATRAS commit(s)"
-  else
-    git merge --abort >/dev/null 2>&1
-    log "AVISO: conflicto al mergear main ($ATRAS atras) — abortado, mido sobre el arbol viejo"
-    avisar "⚠️ <b>$NOMBRE no pudo sincronizar con main</b>: conflicto a $ATRAS commit(s) de atraso.
+
+# 🔴 La rama base NO es siempre `main`. Medido el 2026-09-08 en nodo-casa:
+# `onia-platform` usa **master**, asi que `HEAD..origin/main` moria con
+# "unknown revision", el `|| echo 0` lo convertia en CERO, y la guarda quedaba
+# MUDA justo donde mas hacia falta: ese worktree estaba **12 commits atras** y
+# nunca sincronizaba. Una guarda que no puede fallar ruidosamente no es una
+# guarda: es un comentario. Se pregunta cual es la base en vez de suponerla.
+BASE=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null || true)
+if [ -z "$BASE" ]; then
+  for C in origin/main origin/master; do
+    git rev-parse --verify --quiet "$C" >/dev/null 2>&1 && { BASE="$C"; break; }
+  done
+fi
+
+if [ -z "$BASE" ]; then
+  # Sin base no se puede medir el atraso. Se DICE, no se pasa por alto en silencio.
+  log "AVISO: no encontre la rama base (ni origin/HEAD, ni origin/main, ni origin/master) — mido sin sincronizar"
+else
+  ATRAS=$(git rev-list --count "HEAD..$BASE" 2>/dev/null || echo 0)
+  if [ "${ATRAS:-0}" -gt 0 ]; then
+    if [ -n "$(git status --porcelain 2>/dev/null)" ]; then
+      log "AVISO: $ATRAS commit(s) atras de $BASE y hay cambios sin commitear — NO sincronizo, mido sobre el arbol viejo"
+    elif git merge --no-edit "$BASE" >/dev/null 2>&1; then
+      log "sincronizado con $BASE antes de medir: +$ATRAS commit(s)"
+    else
+      git merge --abort >/dev/null 2>&1
+      log "AVISO: conflicto al mergear $BASE ($ATRAS atras) — abortado, mido sobre el arbol viejo"
+      avisar "⚠️ <b>$NOMBRE no pudo sincronizar con $BASE</b>: conflicto a $ATRAS commit(s) de atraso.
 Va a medir sobre un arbol viejo, asi que sus hallazgos pueden ser de defectos YA arreglados.
-Se destraba en <code>$WT</code> con <code>git merge origin/main</code> y resolviendo a mano."
+Se destraba en <code>$WT</code> con <code>git merge $BASE</code> y resolviendo a mano."
+    fi
   fi
 fi
 
