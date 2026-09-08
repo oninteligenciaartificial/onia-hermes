@@ -12,6 +12,19 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## Reverificado el 2026-09-08 06:09 y 06:15 La Paz — dental (9/9) y comercio (8/8) siguen sanos, paso 9 confirmado también fuera de dental
+
+Dos corridas `--escribir` seguidas desde nodo-casa: **dental 9/9** (cita agendada y vista, factura
+`/billing/cmts9wtdp002i01rwb62n2kbb` con ítem visible, frenada sin pagar) y **comercio 8/8** (el
+paso 7 no aplica — comercio no vende agenda, y el producto es coherente: su nav tampoco la tiene).
+Cero filas `zz-qa-` propias al cerrar las dos veces (4 ajenas de otros carriles, sin tocar).
+
+Novedad real de esta vuelta: el paso 9 (panel/bandeja) ya se había probado en dental pero no en
+otro rubro — en comercio el dato del paso 6 (`zz-qa-...-paciente`, cargado en Catálogo) **sí
+aparece** en `/dashboard`. Nada roto. Dos vueltas seguidas sin hallazgo nuevo: el próximo paso es
+probar promesa-vs-entrega o el panel en un tercer rubro (estética/importadora/servicios), no
+repetir dental/comercio otra vez.
+
 ## Reverificado el 2026-09-08 05:09 La Paz — dental sigue 9/9, y la promesa de servicios profesionales ("...y contabilidad") se cruzó contra el código
 
 Corrida `--escribir` completa: **RECORRIDO COMPLETO en Clínica dental, 9/9 pasos OK**, cobro
