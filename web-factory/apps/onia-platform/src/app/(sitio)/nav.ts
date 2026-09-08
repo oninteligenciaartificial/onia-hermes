@@ -43,31 +43,28 @@ export const NAV_DECIDIR: readonly NavItem[] = [
   { href: "/empezar", label: "Empezar" },
 ];
 
-/**
- * Servicios: lo que Onia hace ADEMÁS del sistema, cada uno con su página.
+/*
+ * NO hay apartado «Servicios» — y no es un olvido.
  *
- * Entran acá el 2026-09-03, y es exactamente el bug de `/nosotros` de más
- * arriba sin terminar de barrer. `/servicios/marketing-ia` y
- * `/servicios/consultoria` siguen viviendo en el árbol viejo (`app/servicios/`,
- * con el `SiteFooter` archivado, el mismo cromo que `/v1`), así que ningún nav
- * del sitio v3 las nombraba. Medido sobre las 16 páginas servidas por
- * `onia.com.bo`: las enlazaban **4**, y las cuatro eran `/privacidad`,
- * `/terminos` y ellas dos entre sí. Desde la superficie de venta entera —la
- * portada, `/precios`, `/empezar`, `/rubros`, `/chatbot`, `/agentes`,
- * `/facturacion`, `/comparativa`, `/contacto`, `/nosotros`— no había **un solo
- * enlace**: para llegar a dos servicios que se cobran había que pasar por la
- * política de privacidad. Y el sitemap las pedía indexar igual, o sea que el
- * sitio se contradecía a sí mismo otra vez.
+ * Existió del 2026-09-03 al 2026-09-08 con Webs · Marketing IA · Consultoría en
+ * el pie y en el menú de teléfono. Lo sacó Sergio Urcullo (tarea `t_30b1711d`,
+ * con su `ok`): *«mantener en la navegación pública solo las entradas del
+ * sistema + Chatbot»*, porque **los leads confunden la web con una agencia**.
+ * Onia vende UN producto —Onia Platform, por rubro—; un menú que ofrece encargos
+ * al lado de «Precios» dice que esto es un estudio, no un sistema que se
+ * contrata.
  *
- * `/servicios/webs` ya era alcanzable (la linkean seis páginas por su cuerpo),
- * pero va con las otras dos: el apartado es el mismo y una lista partida en dos
- * lugares es la que se desincroniza. Lo mide `alcance.test.ts`.
+ * **Las páginas no se bajaron**: `/servicios/webs`, `/servicios/marketing-ia` y
+ * `/servicios/consultoria` siguen respondiendo 200, así que una URL que ya
+ * circula sigue abriendo y se puede mandar en una venta. Salen del CAMINO, no
+ * del sitio — igual que `/comparativa` cuando salió del header. Como ya no las
+ * enlaza ninguna pantalla viva, `robots.ts` las declara fuera del índice: es la
+ * salida que `alcance.test.ts` documenta para una página que deja el camino, y
+ * evita que el sitio pida indexar lo que él mismo no ofrece.
+ *
+ * Lo ancla `nav-sin-agencia.test.ts`, que barre el mapa Y el literal desnudo en
+ * el cromo: una ruta `/servicios/*` nueva en cualquier nav nace cubierta.
  */
-export const NAV_SERVICIOS: readonly NavItem[] = [
-  { href: "/servicios/webs", label: "Webs" },
-  { href: "/servicios/marketing-ia", label: "Marketing IA" },
-  { href: "/servicios/consultoria", label: "Consultoría" },
-];
 
 /**
  * Header de escritorio: el CAMINO DE COMPRA, y nada más. No entran los ocho —
