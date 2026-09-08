@@ -271,6 +271,68 @@ tercero, y con estos dos cortes el problema de gasto deja de ser urgente.
 
 ---
 
+## 7.b Los avisos: de 443 mensajes por día a uno
+
+Sergio Urcullo, 2026-09-08: *"solo quiero que hermes me escriba para preguntas de desarrollo,
+para terminar un enfoque o para poner una nueva tarea; si no, que no me escriba. Y si se friega
+el CI o los loops, que él lo arregle y que solo diga que está todo en orden"*.
+
+**El número que le da la razón**, del propio registro de `onia-tg.sh`:
+
+| día | mensajes que le llegaron |
+|---|---|
+| 2026-09-04 | **443** |
+| 2026-09-05 | 256 |
+| 2026-09-06 | 242 |
+| 2026-09-07 | 226 |
+
+**Dieciocho scripts** le escribían por ahí. Un aviso cada tres minutos no es un aviso: es ruido,
+y el ruido esconde justo el mensaje que sí importaba.
+
+### Cómo quedó
+
+`/root/bin/onia-tg.sh` dejó de ser un enviador y pasó a ser un **enrutador**:
+
+- **Por defecto un aviso NO se manda: se convierte en TAREA del tablero**, que es de donde los
+  loops sacan trabajo. Un CI roto o un loop caído ahora **se arregla**, no se avisa. Las tareas
+  llevan la marca `[auto:<clave>]` y se **deduplican**: el mismo aviso repetido no crea 144
+  tareas al día.
+- **Sólo con `ONIA_TG_DIRECTO=1` sale a Telegram.** Hoy lo usan el circuito de aprobaciones
+  (donde él TIENE que decidir, marcado en el crontab) y el parte diario.
+- **`onia-parte-diario.sh`, nuevo, `0 9 * * *`**: UN mensaje al día. *"Todo en orden"*, o la
+  lista corta de lo que el sistema no pudo arreglar solo. Sólo nombra lo que ya lleva más de
+  12 h abierto — reportar una tarea recién creada sería el mismo ruido con otro nombre, porque
+  el loop todavía no tuvo su vuelta.
+
+**Probado antes de dejarlo**, con reversión automática si fallaba: (1) un aviso crea tarea y no
+manda Telegram · (2) repetido no duplica · (3) el camino directo sigue llegando.
+
+### El error que casi lo arruina, y su lección
+
+La primera versión usaba `grep -q` dentro de una tubería, con `set -o pipefail`. **`grep -q`
+corta al primer match, el productor muere con SIGPIPE (141), y `pipefail` reporta la tubería
+entera como fallida aunque el match exista.** La prueba dijo *"no creó la tarea"* con la tarea
+creada y visible en el tablero.
+
+**Estaba en la deduplicación también**: habría dicho SIEMPRE "no existe" y este script crearía
+144 tareas iguales por día — **el mismo ruido, mudado de Telegram al tablero**. Se arregló con
+`grep -c`, que no corta al primer match. Es el mismo patrón de §5.4: un instrumento que da rojo
+con la cosa funcionando.
+
+### Lo que queda abierto de esto
+
+- **`onia-veredicto-sergio` corre, completa y sale a Telegram** (medido: mensaje de 1.347 bytes
+  el 7-sep 16:07 La Paz), pero él dice que no le llega. **La hipótesis más probable es que lo
+  enterraban los otros 226 mensajes del día.** No se forzó una corrida para probarlo porque
+  cuesta ~124k tokens y la consigna del día era gastar menos. **Se verifica gratis mirando el
+  Telegram a las 16:00 de hoy, ya sin ruido.**
+- **`onia-vigia-sin-respuesta.sh`** (alguien le escribió al bot y nadie contestó) ahora va al
+  tablero como todo lo demás. **Es el único que yo dejaría en directo**: un prospecto esperando
+  es urgente y una tarea puede quedarse horas. Se cambia con `ONIA_TG_DIRECTO=1` en su línea del
+  crontab, si él quiere.
+
+---
+
 ## 8. Próximos pasos, en orden
 
 1. **Sergio Urcullo hace el #1 de §6** (BIOS + arranque de Windows). *Listo* = corte de luz
