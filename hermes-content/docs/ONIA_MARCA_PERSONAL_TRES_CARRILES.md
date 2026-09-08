@@ -61,6 +61,43 @@ El DM que lleva a ella: [`cola/PARA-PUBLICAR-DM-STACK.md`](cola/PARA-PUBLICAR-DM
 tiempos honestos, y en cada herramienta un bloque de **«qué no hace»** — que es la parte que
 nadie más escribe y la que hace que se confíe en el resto.
 
+### 🎯 Dónde vive esto: `sergiourcullo.com`
+
+Sergio Urcullo, 07-sep: *"podemos empezar a postear este tipo de recursos a una página web
+que se llame sergiourcullo.com… y que quede como histórico ahí posteado"*. **Es la decisión
+correcta y hay tres razones, no una:**
+
+1. **El link de artifact no es suyo.** Hoy la guía vive en `claude.ai/code/artifact/…`. Un
+   dominio propio en el DM se lee distinto, y el activo queda del lado de él.
+2. **Se acumula.** Cada guía nueva suma al mismo lugar en vez de ser un link suelto que se
+   pierde en la conversación. Eso es lo que convierte contenido en biblioteca.
+3. **La que no dijo: SEO.** Alguien que busca "instalar n8n en una PC vieja" lo encuentra.
+   Es tráfico que no depende del algoritmo de Instagram — el único de los tres carriles que
+   no depende de que alguien scrollee.
+
+**Disponibilidad verificada el 07-sep** contra el registro de Verisign (RDAP): tanto
+`sergiourcullo.com` como `.net` responden **404 = libres**. `.dev` está tomado.
+
+**Dónde alojarla — Vercel, DNS en Cloudflare.** No en el VPS: ya sirve `onia.com.bo` en un
+contenedor, ya sufrió una penalidad de Hostinger por saturación
+([[vps-saturado-deploy-bloqueado]]), y un sitio de contenido estático no tiene por qué
+compartir suerte con producción. La zona DNS va a Cloudflare porque **la de Vercel es un
+fantasma** ([[onia-dns-cloudflare-no-vercel]]).
+
+🔴 **REGLA DURA: la web NO bloquea la publicación.** Hay cinco piezas rendidas y ninguna
+publicada. Si la web se vuelve un proyecto de dos semanas, retrasa todo lo que ya está
+listo — y ése es exactamente el patrón que `CLAUDE.md` §*Nada a medias* existe para evitar.
+El orden es:
+
+| Cuándo | Qué |
+|---|---|
+| **Ahora** | Comprar `sergiourcullo.com`. Son ~$12 al año y cinco minutos. Lo hace Sergio Urcullo: **ningún agente ejecuta compras** |
+| **Esta semana** | Publicar «Mi stack» con el link de artifact que ya existe. No esperar a la web |
+| **Después** | Armar el sitio con el contenido que ya está escrito, y redirigir el artifact hacia allá |
+
+**Qué va en el sitio:** este carril, el 2, y nada más. Los carruseles son de Instagram y lo
+de la comunidad es de la comunidad. Un sitio que intenta ser las tres cosas no es ninguna.
+
 **🔴 Qué NO va:**
 - **No se promete más de lo que la página entrega.** Si el carrusel dice "cómo instalarlo",
   la página instala. Si dijera "te armo el sistema", habría que armarlo.
