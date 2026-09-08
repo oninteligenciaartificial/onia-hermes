@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El homelab — Sergio Urcullo</title>
+<meta name="description" content="Un servidor en tu casa con una PC que ya no usás: qué es, cuánto gasta de luz, qué corre adentro y cómo armarlo. Con las preguntas que más me hicieron.">
+<meta property="og:title" content="El homelab">
+<meta property="og:description" content="Cuánto gasta de luz, qué corre adentro y cómo armarlo con una PC vieja.">
+<meta property="og:type" content="article">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%2300C661'/><text x='16' y='23' font-family='Arial,sans-serif' font-size='18' font-weight='bold' text-anchor='middle' fill='%230A2A18'>S</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/estilo.css">
+</head>
+<body>
+
+<div class="cinta">
+  <a href="https://www.instagram.com/sergiourcullo/">
+    <span>Esta guía salió antes en Onia Community · entrá gratis</span>
+    <span class="flecha">→</span>
+  </a>
+</div>
+
+<div class="barra">
+  <a class="marca" href="/">sergiourcullo<span class="punto">.</span></a>
+  <a class="vuelta" href="/">← todas las guías</a>
+</div>
+
+<div class="wrap">
+
+<header class="top">
+  <p class="eyebrow">Guía · actualizada 08·09·2026</p>
+  <h1>El <span class="num">homelab</span></h1>
+  <p class="bajada">Ésta es la guía que prometí en el video. Un servidor en tu casa, hecho
+  con una computadora que ya no usás: qué es, cuánto gasta de luz, qué corre adentro y cómo
+  armarlo de cero. Con las ocho preguntas que más me hicieron, contestadas.</p>
+
+  <div class="terminal">
+    <div class="cab">
+      <span class="luz"></span><span class="luz"></span><span class="luz viva"></span>
+      <span class="ruta">sergio@homelab:~</span>
+    </div>
+<pre><span class="p">$</span> docker ps --format "table {{.Names}}\t{{.Status}}"
+
+NOMBRE          ESTADO
+n8n             <span class="up">Up 34 days</span>      <span class="c">las automatizaciones</span>
+hermes          <span class="up">Up 12 days</span>      <span class="c">el agente que avisa</span>
+hyperframes     <span class="up">Up 34 days</span>      <span class="c">video desde HTML</span>
+
+<span class="p">$</span> uptime
+ 34 days,  <span class="c">carga: 0.14</span>
+
+<span class="c"># todo esto corre en una PC que estaba en un armario.</span></pre>
+  </div>
+
+  <div class="honesto">
+    <h2>Antes que nada: qué es y qué no es</h2>
+    <p><strong>Un homelab es una computadora tuya, prendida, que hace trabajo para vos.</strong>
+    Nada más que eso. El nombre suena a laboratorio de la NASA y es una PC en un rincón.</p>
+    <p><strong>No es "la nube gratis".</strong> Lo que ahorrás en alquiler lo pagás en luz,
+    en tiempo y en que si se rompe lo arreglás vos. Sale a cuenta cuando lo que corre
+    adentro te devuelve horas — no antes.</p>
+    <p><strong>Y no hace falta para empezar a automatizar.</strong> Si estás arrancando,
+    hay cosas que dan resultado el mismo día y no necesitan servidor. Eso está en la
+    <a href="/stack">guía del stack</a>.</p>
+  </div>
+</header>
+
+<!-- LAS PREGUNTAS -->
+<article class="paso">
+  <div class="paso-cab">
+    <div class="paso-num">01</div>
+    <div class="paso-tit">
+      <h2>Lo que más me preguntaron</h2>
+      <p class="autor">Las dudas que dejaron en el video, contestadas</p>
+    </div>
+  </div>
+  <div class="cuerpo">
+    <div class="faq">
+
+      <details open>
+        <summary>¿Cuánto gasta de luz?</summary>
+        <div class="resp">
+          <p>Es la primera pregunta siempre, y la respuesta honesta es: <strong>depende de tu
+          máquina y de tu tarifa</strong>, así que te dejo cómo calcularlo en vez de un número
+          que no es el tuyo.</p>
+          <table class="calculo">
+            <thead><tr><th>Paso</th><th>Cuenta</th></tr></thead>
+            <tbody>
+              <tr><td>Consumo</td><td>lo que tire la PC en reposo, en watts (W)</td></tr>
+              <tr><td>Al mes</td><td>W × 24 × 30 ÷ 1000 = <span class="destaca">kWh</span></td></tr>
+              <tr><td>Costo</td><td>kWh × el precio del kWh de tu factura</td></tr>
+            </tbody>
+          </table>
+          <p style="margin-top:14px">Una PC de escritorio vieja en reposo suele estar entre
+          <strong>40 y 80 W</strong>; una notebook, bastante menos. Pero no lo asumas:
+          <strong>medilo</strong>. Un medidor de consumo de enchufe cuesta poco y te da el
+          número real de <em>tu</em> máquina, que es el único que importa.</p>
+          <p>Ejemplo con la cuenta armada, para que se vea el tamaño: 60 W dan
+          <strong>43,2 kWh al mes</strong>. Multiplicá eso por lo que te cobran el kWh y ya
+          sabés si te conviene.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>¿De dónde salen los $300 al mes que digo en el video?</summary>
+        <div class="resp">
+          <p>De <strong>no alquilar</strong>. Todo lo que corre en mi homelab, contratado por
+          separado en la nube, se paga todos los meses — y son varias cosas, no una.</p>
+          <p>Hacé tu propia cuenta antes de creerme: <strong>sumá lo que pagarías al mes</strong>
+          por cada cosa que quieras correr, en su plan más barato que te sirva.</p>
+          <table class="calculo">
+            <thead><tr><th>Lo que corre</th><th>Alquilado</th><th>En casa</th></tr></thead>
+            <tbody>
+              <tr><td>El servidor</td><td>plan mensual del proveedor</td><td class="destaca">$0</td></tr>
+              <tr><td>Las automatizaciones</td><td>plan por ejecuciones</td><td class="destaca">$0</td></tr>
+              <tr><td>Almacenamiento</td><td>por GB al mes</td><td class="destaca">$0</td></tr>
+              <tr><td>Lo que sumes después</td><td>otro plan más</td><td class="destaca">$0</td></tr>
+            </tbody>
+          </table>
+          <p style="margin-top:14px"><strong>Ahí está el truco y es el que no se ve al
+          principio:</strong> alquilado, cada cosa nueva suma una factura. En casa, la décima
+          cosa que instalás cuesta lo mismo que la primera — nada. Por eso el número crece
+          con el tiempo en vez de quedarse quieto.</p>
+          <p><strong>Lo que sí pagás:</strong> la luz (la cuenta está acá abajo), y tu tiempo
+          cuando algo se rompe. Si tenés que <em>comprar</em> la computadora, metela en la
+          cuenta antes de decidir.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>¿Sirve cualquier computadora?</summary>
+        <div class="resp">
+          <p>Casi. Lo que importa de verdad es <strong>la memoria RAM</strong>, no el
+          procesador: cada cosa que corras se lleva un pedazo. Con <strong>4 GB</strong>
+          arrancás bien y con 8 GB estás cómodo.</p>
+          <p>Del disco, <strong>40 GB libres</strong> alcanzan para empezar. Si es SSD todo
+          va a ir más rápido, pero un disco común funciona.</p>
+          <p><strong>Una notebook vieja sirve igual de bien</strong> y tiene una ventaja que
+          casi nadie menciona: la batería es un respaldo de corriente incorporado. Si se
+          corta la luz, sigue andando.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>¿Tiene que estar prendida todo el tiempo?</summary>
+        <div class="resp">
+          <p>Sí. Si se apaga, se apaga todo lo que corre adentro — y lo que estaba
+          esperando un mensaje deja de esperarlo.</p>
+          <p>Eso no significa que tenga que estar con la pantalla encendida ni cerca tuyo.
+          La mía vive sin monitor, sin teclado y sin mouse: se entra desde otra computadora
+          por la red. Andá pensando dónde ponerla, porque va a quedar ahí.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>¿Y si se corta la luz?</summary>
+        <div class="resp">
+          <p>Se apaga, y cuando vuelve la corriente hay que asegurarse de que arranque sola.
+          Dos cosas para eso:</p>
+          <p><strong>1.</strong> En la BIOS de la máquina, buscá la opción que dice
+          <em>Restore on AC Power Loss</em> (o parecido) y ponela en <em>Power On</em>. Sin
+          eso, la PC vuelve la luz y se queda apagada esperándote.</p>
+          <p><strong>2.</strong> Que los contenedores arranquen solos, con
+          <code>--restart unless-stopped</code>. Está en el ejemplo del paso 3.</p>
+          <p>Con esas dos, un corte deja de ser un problema y pasa a ser un rato sin
+          servicio.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>¿Puedo entrar desde afuera de mi casa?</summary>
+        <div class="resp">
+          <p>Se puede, pero <strong>no lo hagas abriendo puertos en el router</strong>. Eso
+          deja tu servidor expuesto a internet entero, y a las pocas horas van a estar
+          probando contraseñas contra él. No es paranoia: es lo que pasa siempre.</p>
+          <p>La forma sana es una <strong>VPN</strong>: tu teléfono entra a tu red como si
+          estuviera en tu casa, y nada queda expuesto hacia afuera. <strong>Tailscale</strong>
+          y <strong>WireGuard</strong> son las dos opciones habituales y las dos tienen plan
+          gratis para uso personal.</p>
+          <p>Igual: <strong>esto no es para el primer día.</strong> Que funcione adentro de
+          tu casa primero.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>¿Hace ruido? ¿Calienta?</summary>
+        <div class="resp">
+          <p>Una PC de escritorio en reposo hace un zumbido bajo y constante. No molesta en
+          una sala; en un dormitorio sí se nota de noche.</p>
+          <p>Calienta poco cuando no está haciendo nada pesado, que es casi todo el tiempo.
+          Lo que sí conviene: <strong>sacarle el polvo de adentro antes de dejarla
+          encendida meses</strong>. Una máquina vieja llena de polvo es la forma más
+          aburrida de que se te queme.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>¿Es seguro tener eso en mi casa?</summary>
+        <div class="resp">
+          <p>Mientras no la abras a internet, el riesgo es parecido al de cualquier otra
+          computadora de tu casa. Tres cosas que sí o sí:</p>
+          <p><strong>Contraseña larga</strong> en el usuario del servidor. No la del wifi,
+          no la de siempre.</p>
+          <p><strong>Nada de contraseñas dentro de los archivos que compartís.</strong> Si
+          pegás una configuración en un grupo, revisá dos veces que no lleve una clave
+          adentro.</p>
+          <p><strong>Respaldo de lo que te importa.</strong> Si ese disco muere y no tenés
+          copia, se fue todo. Es lo que más gente aprende tarde.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>¿Por qué no usar la nube y listo?</summary>
+        <div class="resp">
+          <p>Podés, y para muchas cosas conviene. Un servidor alquilado no se apaga con la
+          luz, no hace ruido y no te ocupa lugar.</p>
+          <p>Elegí el homelab por dos motivos concretos: <strong>la máquina ya estaba</strong>
+          — no salió nada — y <strong>los datos se quedan en casa</strong>, que cuando lo que
+          corre adentro toca información de clientes deja de ser un detalle.</p>
+          <p>Lo que no voy a decirte es que sea más barato en todos los casos. Si tenés que
+          comprar la PC, hacé la cuenta antes.</p>
+        </div>
+      </details>
+
+    </div>
+  </div>
+</article>
+
+<!-- CÓMO SE ARMA -->
+<article class="paso">
+  <div class="paso-cab">
+    <div class="paso-num">02</div>
+    <div class="paso-tit">
+      <h2>Cómo se arma, de cero</h2>
+      <p class="autor">Una tarde la primera vez · Ubuntu Server + Docker</p>
+    </div>
+  </div>
+  <div class="meta">
+    <span class="chip gratis">$0 si ya tenés la máquina</span>
+    <span class="chip">una tarde</span>
+    <span class="chip">4 GB de RAM</span>
+    <span class="chip">40 GB libres</span>
+  </div>
+  <div class="cuerpo">
+    <p class="rotulo">Qué no hace</p>
+    <div class="nohace">
+      <p>Instalar el servidor no automatiza nada por sí solo: te deja la casa donde después
+      va a vivir lo que sí trabaja. El día que terminás este paso, todavía no cambió nada
+      en tu negocio.</p>
+    </div>
+
+    <p class="rotulo">Los cuatro pasos</p>
+    <ol class="pasitos">
+      <li><strong>Ubuntu Server.</strong> Bajalo de
+      <a href="https://ubuntu.com/download/server">ubuntu.com</a> y grabalo en un pendrive
+      con Rufus o BalenaEtcher.</li>
+      <li><strong>Instalá desde el pendrive.</strong> Cuando pregunte, marcá
+      <strong>OpenSSH server</strong>. Es lo que te va a dejar entrar desde tu computadora
+      normal, sin monitor ni teclado en el servidor.</li>
+      <li><strong>Anotá la IP</strong> apenas termine. <code>ip a</code> te la muestra. La
+      vas a necesitar en todo lo que sigue.</li>
+      <li><strong>Docker.</strong> Es lo que hace que cada cosa se instale con un comando y
+      no se peleen entre sí.</li>
+    </ol>
+<pre><span class="c"># Docker, con el instalador oficial de get.docker.com</span>
+<span class="k">curl</span> -fsSL https://get.docker.com -o get-docker.sh
+<span class="k">sudo</span> sh get-docker.sh
+
+<span class="c"># para no escribir "sudo" en cada comando</span>
+<span class="k">sudo</span> usermod -aG docker $USER
+<span class="c"># cerrá sesión y volvé a entrar</span>
+
+<span class="c"># que arranque solo cuando vuelve la luz</span>
+<span class="k">sudo</span> systemctl enable docker</pre>
+
+    <div class="nota"><strong>Desde acá ya no tocás más esa máquina.</strong> Todo lo que
+    sigue se hace desde tu computadora de siempre, escribiendo
+    <code>ssh tu-usuario@LA-IP</code>. Ése es el momento en que empieza a sentirse un
+    servidor de verdad.</div>
+  </div>
+</article>
+
+<!-- QUÉ CORRER -->
+<article class="paso">
+  <div class="paso-cab">
+    <div class="paso-num">03</div>
+    <div class="paso-tit">
+      <h2>Qué poner adentro</h2>
+      <p class="autor">En orden de utilidad, no de dificultad</p>
+    </div>
+  </div>
+  <div class="cuerpo">
+    <p>Un servidor vacío no sirve de nada, y llenarlo el primer día tampoco. Éste es el
+    orden que a mí me habría ahorrado tiempo:</p>
+
+    <div class="cuenta" style="margin-top:26px">
+      <div class="cuenta-fila">
+        <span class="n">01</span>
+        <span class="q">n8n <em>las automatizaciones — es lo único que te devuelve horas desde la primera semana</em></span>
+        <span class="p gratis">$0</span>
+      </div>
+      <div class="cuenta-fila">
+        <span class="n">02</span>
+        <span class="q">Respaldos automáticos <em>antes de que haya algo importante adentro, no después</em></span>
+        <span class="p gratis">$0</span>
+      </div>
+      <div class="cuenta-fila">
+        <span class="n">03</span>
+        <span class="q">Un panel para ver qué corre <em>Portainer o Dockge: los contenedores con botones en vez de comandos</em></span>
+        <span class="p gratis">$0</span>
+      </div>
+      <div class="cuenta-fila">
+        <span class="n">04</span>
+        <span class="q">Un agente que avise cuando algo se cae <em>si no te enterás, no sirve de nada que esté prendido</em></span>
+        <span class="p gratis">$0</span>
+      </div>
+    </div>
+
+<pre style="margin-top:24px"><span class="c"># n8n, el primero que conviene levantar</span>
+<span class="k">docker</span> run -d --restart unless-stopped \
+  --name n8n -p 5678:5678 \
+  -e GENERIC_TIMEZONE=America/La_Paz -e TZ=America/La_Paz \
+  -v n8n_data:/home/node/.n8n \
+  docker.n8n.io/n8nio/n8n</pre>
+
+    <div class="nota"><strong>La zona horaria no es un detalle.</strong> Si no la ponés, el
+    servidor trabaja en horario de Londres y tus automatizaciones salen corridas cuatro
+    horas. Es de los errores más molestos de encontrar, porque todo "funciona" — sólo que
+    a la hora equivocada.</div>
+  </div>
+</article>
+
+<!-- ERRORES -->
+<article class="paso">
+  <div class="paso-cab">
+    <div class="paso-num">04</div>
+    <div class="paso-tit">
+      <h2>Los cuatro errores que vas a querer evitar</h2>
+      <p class="autor">Tres los cometí yo</p>
+    </div>
+  </div>
+  <div class="cuerpo">
+    <ol class="pasitos">
+      <li><strong>Llenarlo el primer día.</strong> Diez servicios instalados y ninguno usado
+      es exactamente el mismo resultado que no tener servidor, pero con más luz gastada.</li>
+      <li><strong>Dejar el respaldo para después.</strong> "Después" llega el día que el
+      disco no arranca. Empezá por copiar a mano lo que te importa a otro lado, aunque sea
+      un pendrive: es mejor que nada, que es lo que la mayoría tiene.</li>
+      <li><strong>Abrir puertos en el router para entrar desde el celular.</strong> Es la
+      solución que aparece primero cuando buscás, y es la que te deja expuesto. VPN.</li>
+      <li><strong>No anotar lo que instalaste.</strong> En tres meses no vas a acordarte por
+      qué ese contenedor está ahí ni qué le cambiaste. Un archivo de texto con la fecha y
+      dos líneas por cosa alcanza.</li>
+    </ol>
+  </div>
+</article>
+
+<section class="cierre">
+  <h2>Lo que esta guía no cubre</h2>
+  <ul>
+    <li>Montar discos extra o armar un RAID. Con un disco alcanza para empezar.</li>
+    <li>Dominio propio y certificado para entrar por HTTPS desde afuera.</li>
+    <li>Configurar la VPN paso a paso — la nombro, pero merece su propia guía.</li>
+    <li>Un UPS para que aguante los cortes de luz. Es lo primero que compraría si tuviera
+    que gastar en algo.</li>
+  </ul>
+  <p>Si te trabás armando el tuyo, escribime y lo vemos. Contesto a todos.</p>
+</section>
+
+<section class="comunidad">
+  <p class="rot">Onia Community · WhatsApp · gratis</p>
+  <h2>Las guías salen acá primero</h2>
+  <p>Acá leíste cómo se arma uno. Adentro está <strong>el tuyo</strong>: me decís qué
+  máquina tenés y te digo qué le podés poner, en qué orden y con qué cuidados. Y están los
+  archivos listos para pegar, que es lo que ahorra la tarde de verdad.</p>
+  <a class="boton" href="https://www.instagram.com/sergiourcullo/">Escribime y te paso el enlace</a>
+  <span class="chico">Gratis · publico sólo yo en el canal · las preguntas van a General</span>
+</section>
+
+<p class="firma">
+  <a href="/">← Todas las guías</a>
+  <a href="https://www.instagram.com/sergiourcullo/">@sergiourcullo</a>
+</p>
+
+</div>
+</body>
+</html>

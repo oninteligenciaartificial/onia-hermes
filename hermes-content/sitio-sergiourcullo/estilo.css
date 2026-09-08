@@ -340,3 +340,126 @@ code{font-family:var(--mono);font-size:.9em;background:var(--line-soft);padding:
   font-family:var(--mono);font-size:12.5px;color:var(--onia-texto);margin:0 0 14px;
 }
 .archivo .desc{color:var(--muted);margin:0 0 18px;max-width:58ch}
+
+/* ---------- bloque de terminal (guía del homelab) ----------
+   Usa los MISMOS tokens de código del sistema (--code-bg / --onia), no una paleta propia.
+   Sergio Urcullo, 08-sep: de la referencia se toma "la estructura y lo que ofrece", no su
+   piel — el sitio tiene un solo lenguaje visual y este bloque entra dentro de él. */
+.terminal{
+  background:var(--code-bg);border-radius:6px;margin:30px 0 0;overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.terminal .cab{
+  display:flex;align-items:center;gap:8px;padding:11px 16px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+.terminal .luz{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.16)}
+.terminal .luz.viva{background:var(--onia)}
+.terminal .ruta{
+  font-family:var(--mono);font-size:12px;color:var(--code-dim);margin-left:6px;
+  letter-spacing:.02em;
+}
+.terminal pre{border-radius:0;padding:18px 16px 20px;font-size:13px;line-height:1.75}
+.terminal .p{color:var(--code-accent)}
+.terminal .up{color:var(--code-accent)}
+
+/* ---------- preguntas frecuentes ---------- */
+.faq{margin:14px 0 0;border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{
+  padding:17px 30px 17px 0;cursor:pointer;position:relative;list-style:none;
+  font-family:var(--display);font-weight:600;font-size:18.5px;letter-spacing:-.015em;
+  color:var(--ink);
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{
+  content:"+";position:absolute;right:2px;top:15px;
+  font-family:var(--mono);font-size:20px;color:var(--onia-texto);font-weight:500;
+}
+.faq details[open] summary::after{content:"\2212"}
+.faq summary:hover{color:var(--onia-texto)}
+.faq summary:focus-visible{outline:2px solid var(--onia-texto);outline-offset:3px;border-radius:3px}
+.faq .resp{padding:0 0 20px;color:var(--muted);max-width:60ch}
+.faq .resp p{margin:0 0 12px}
+.faq .resp p:last-child{margin-bottom:0}
+.faq .resp strong{color:var(--ink);font-weight:600}
+.faq .resp pre{margin:12px 0 0;font-size:12.5px}
+
+/* ---------- tabla de cálculo ---------- */
+.calculo{
+  margin:16px 0 0;width:100%;border-collapse:collapse;
+  font-family:var(--mono);font-size:13.5px;font-variant-numeric:tabular-nums;
+}
+.calculo th{
+  text-align:left;font-weight:500;font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--faint);padding:0 12px 9px 0;
+  border-bottom:1px solid var(--line);
+}
+.calculo td{padding:9px 12px 9px 0;border-bottom:1px solid var(--line-soft);color:var(--muted)}
+.calculo td:first-child{color:var(--ink)}
+.calculo tr:last-child td{border-bottom:none;font-weight:500;color:var(--ink)}
+.calculo .destaca{color:var(--onia-texto)}
+
+/* ---------- cifras del hero (estructura tomada de la referencia) ----------
+   Erik pone 10+ años / 150+ sistemas / 1.6k devs / $2M procesados. Sergio Urcullo NO tiene
+   esas cifras y fabricarlas está prohibido (CLAUDE.md §No fabricar: cero clientes pagando).
+   Se toma la ESTRUCTURA —cuatro datos duros arriba de todo— con los datos que sí son
+   verificables: la edad, el tamaño del stack y lo que cuesta. */
+.cifras{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin:40px 0 0;
+  background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;
+}
+@media (max-width:620px){.cifras{grid-template-columns:repeat(2,1fr)}}
+.cifra-celda{background:var(--ground);padding:20px 18px}
+.cifra-celda .n{
+  font-family:var(--display);font-weight:800;font-size:34px;line-height:1;
+  letter-spacing:-.04em;color:var(--onia-texto);font-variant-numeric:tabular-nums;
+}
+.cifra-celda .q{
+  font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--faint);margin:9px 0 0;line-height:1.4;
+}
+
+/* ---------- lo que hago (los "pilares" de la referencia) ---------- */
+.pilares{display:grid;grid-template-columns:1fr 1fr;gap:1px;margin:24px 0 0;
+  background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+@media (max-width:620px){.pilares{grid-template-columns:1fr}}
+.pilar{background:var(--ground);padding:26px 24px}
+.pilar h3{
+  font-family:var(--display);font-weight:700;font-size:19px;letter-spacing:-.02em;
+  margin:0 0 9px;color:var(--ink);
+}
+.pilar p{margin:0 0 14px;color:var(--muted);font-size:15.5px;line-height:1.55}
+.pilar .tags{display:flex;flex-wrap:wrap;gap:6px}
+.pilar .tag{
+  font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--onia-texto);
+  background:var(--onia-suave);padding:4px 9px;border-radius:3px;
+}
+.seccion{margin:60px 0 0}
+.seccion-rot{
+  font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--faint);margin:0 0 6px;
+  display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+}
+.seccion-rot .num{color:var(--onia-texto)}
+.seccion h2{
+  font-family:var(--display);font-weight:800;font-size:34px;line-height:1.08;
+  letter-spacing:-.032em;margin:0;text-wrap:balance;
+}
+.seccion .intro{margin:12px 0 0;color:var(--muted);max-width:58ch}
+
+/* ---------- ethos ---------- */
+.ethos{
+  margin:64px 0 0;padding:44px 0;border-top:2px solid var(--ink);
+  border-bottom:2px solid var(--ink);
+}
+.ethos p{
+  font-family:var(--display);font-weight:700;font-size:clamp(24px,4vw,34px);
+  line-height:1.18;letter-spacing:-.03em;margin:0;color:var(--ink);max-width:22ch;
+  text-wrap:balance;
+}
+.ethos .verde{color:var(--onia-texto)}
+.ethos .pie{
+  font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--faint);margin:22px 0 0;
+}
