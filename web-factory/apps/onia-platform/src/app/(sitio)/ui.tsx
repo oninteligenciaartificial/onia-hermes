@@ -8,6 +8,7 @@ import {
   LOGIN_URL,
 } from "./nav";
 import { CTA_ALTA } from "./alta";
+import { BarraSitio } from "./barra";
 import { MobileMenu } from "./menu";
 import s from "./sitio.module.css";
 
@@ -471,29 +472,17 @@ export function JsonLd({ data }: { data: unknown }) {
 
 /* ---------- chrome ------------------------------------------------------ */
 
+/**
+ * La barra del sitio. El markup y el estado viven en `barra.tsx` (cliente:
+ * necesita saber si la pagina esta scrolleada). Aca queda el CTA, que es el
+ * mismo <Btn> del resto del sitio y no necesita estado — se pasa como children
+ * para no arrastrar el boton entero al bundle del cliente.
+ */
 export function Header() {
   return (
-    <header className={s.header}>
-      <div className={s.headerInner}>
-        <a className={s.wordmark} href="/" aria-label="Onia — inicio">
-          Onia<b>.</b>
-        </a>
-        <nav className={s.nav} aria-label="Secciones">
-          {NAV_HEADER.map((item) => (
-            <a key={item.href} className={s.navLink} href={item.href}>
-              {item.label}
-            </a>
-          ))}
-        </nav>
-        <div className={s.headerCta}>
-          <a className={s.headerLogin} href={LOGIN_URL}>
-            Entrar
-          </a>
-          <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
-          <MobileMenu />
-        </div>
-      </div>
-    </header>
+    <BarraSitio>
+      <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
+    </BarraSitio>
   );
 }
 
@@ -502,8 +491,16 @@ export function Footer() {
     <footer className={s.footer}>
       <div className={s.footerInner}>
         <div className={s.footerBrand}>
-          <span className={s.wordmark} style={{ color: "#fff" }}>
-            Onia<b>.</b>
+          {/* Pie oscuro: wordmark claro + punto verde (§4-bis del manual de
+              marca). Antes decia «Onia» + punto final, que no es la marca. */}
+          <span className={s.wordmark}>
+            <img
+              className={s.logoImg}
+              src="/brand/v2/onia-logo-dark.svg"
+              alt="Onia"
+              width={65}
+              height={26}
+            />
           </span>
           <p className={s.footerTag}>Sistema de gestión con IA · Bolivia</p>
         </div>

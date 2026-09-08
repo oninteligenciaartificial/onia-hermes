@@ -1,4 +1,8 @@
 # OnIA — Espec del logo recibido (2026-07-26)
+> 🔴 **HISTÓRICO desde 2026-09-07.** Describe la recreación provisional del logo con el
+> verde viejo `#3EA639`, que ya no es el de la marca. Los assets que menciona están
+> archivados en `public/brand/_v1/`. Vigente: `ONIA_MARCA.md` + `ONIA_MARCA_ESTRATEGIA_20260727.md`.
+
 
 > Logo entregado por Sergio (raster, fondo blanco). Recreación vectorial provisional en
 > `web-factory/apps/onia-platform/public/brand/onia-logo.svg` — reemplazar cuando exista el vector original.
