@@ -98,6 +98,9 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       4), y `/comparativa` y `/nosotros` **ya no están en el nivel visible**. El trabajo es el
       segundo nivel.
 
+      **Dónde vive:** `web-factory/apps/onia-platform/src/app/(sitio)/nav.ts` (los dos niveles) y
+      `web-factory/apps/onia-platform/src/app/(sitio)/menu.tsx` (el de teléfono).
+
       **Listo =** abrir `onia.com.bo` renderizada y que
       `header a[href*=webs], [href*=marketing], [href*=consultoria], [href*=comparativa], [href*=nosotros]`
       dé **0**, con la captura como prueba. Un `grep` al código no alcanza: el menú tiene dos
@@ -113,8 +116,8 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Por qué es tuyo y no del que despliega:** sos el dueño de `onia.com.bo` y `/empezar`. Un
       arreglo que no se publica no existe para el lead, y hoy tu instrumento firma en verde
       igual. Es la misma familia que ya mordió tres veces este día —un gate que mide donde no
-      duele— y la que `deploy-vivo.mjs` resuelve para el producto: compara el **BUILD_ID vivo**
-      contra los commits de tu zona en `origin/main`.
+      duele— y la que `web-factory/apps/onia-platform/scripts/deploy-vivo.mjs` resuelve para el
+      producto: compara el **BUILD_ID vivo** contra los commits de tu zona en `origin/main`.
       ⚠️ **El favicon no sirve como termómetro** y ya está escrito por qué: una vez que un deploy
       lo trae, da 200 para siempre y queda clavado en verde sobre un sitio de días.
       **Listo =** tu objetivo incluye un quinto número —*arreglos de mi zona en `main` que el
