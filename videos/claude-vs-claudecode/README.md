@@ -9,7 +9,26 @@ se rehacen con los `cutplan-*.json` y los HTML de `assets/`, que sí están acá
 | `clip 1 video 2.mp4` | intro a cámara | `final/clip-1-video-2-intro.mp4` | 33.8s → **13.0s** |
 | `clip 2 video 1.mp4` | screencast del deck | `final/clip-2-video-1-explicacion.mp4` | 511.5s → **416.6s** |
 
+**El entregable es `final/claude-vs-claude-code-completo.mp4`** (7:10): intro + explicativo +
+endcard, con la cama de música. Los dos parciales quedan por si hay que rehacer una parte.
 También sale de acá `final/miniatura.png` (1280×720).
+
+**Música** (`scripts/pad-musica.sh` → `assets/pad.wav`): un pad lento sintetizado con ffmpeg,
+progresión de ocho acordes en La menor (Am F C G Am Dm F E), 14s cada uno con crossfade de 6s.
+El octavo resuelve al primero, así que el punto de loop es musical y no se oye. Se sintetiza y
+no se baja de librería porque las dos rutas de BGM de `media-use` piden lo que no hay (HeyGen
+necesita credencial; Lyria, `GEMINI_API_KEY`; MusicGen, ~2 GB de torch) y Pixabay no expone la
+URL del mp3 sin interactuar con la página.
+
+Dos correcciones que salieron de **mirar el espectrograma**, no de escuchar:
+- Los acordes **latían**: con un `afade` de 3,2s dentro de cada uno *más* el crossfade, en la
+  unión los dos estaban en su fade y la música casi se apagaba cada 8s. El fade interno pasó a
+  ser solo anti-clic (0,6s) y la transición la hace el crossfade.
+- Toda la energía caía en **100-1100 Hz**, justo donde vive la voz. Las notas bajaron **una
+  octava**: el pad ocupa 70-500 Hz, por debajo de la narración.
+
+Nivel verificado restando el audio con y sin música: la cama queda **17 dB por debajo de la
+voz**, y sube 8 dB en el endcard, que es el único tramo sin narración.
 
 ## Decisiones que no son obvias
 
