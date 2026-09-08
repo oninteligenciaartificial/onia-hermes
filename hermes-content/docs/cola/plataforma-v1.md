@@ -44,6 +44,91 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **Si al confirmar la reserva se cortaba la red, la pantalla se quedaba MUDA: ni cita ni
+      explicación — cerrado el 2026-09-08 (`592baa1` en `onia-platform`, publicado en la rama).**
+
+      **La clase, que es lo que importa:** los gates de esta casa recorren el camino FELIZ. El de
+      FALLO no lo mira nadie, y en producción el camino feliz suele andar, así que el defecto no
+      aparece ni mirando la pantalla ni con captura. `handleSubmit` de `/book/[orgSlug]` tenía
+      `try { … } finally {}` **sin `catch`**: cuando el `fetch` no llegaba a contestar —el celular
+      pierde señal a mitad del envío, se corta la conexión mientras se lee el cuerpo—, el
+      `finally` apagaba el «Agendando...», el botón volvía a su estado normal y **no aparecía
+      nada**. El que quería reservar apretaba, veía parpadear el botón y se quedaba sin saber si
+      tenía turno. Sin cita, y el negocio tampoco se enteraba.
+
+      Importa por **dónde vive**: `app/(public)` se abre desde un enlace de WhatsApp y casi
+      siempre en un celular en la calle, o sea que la red cortada es el caso **normal**, no el
+      raro.
+
+      **Por qué nadie lo vio, y esto es lo nuevo:** de los seis `fetch` de la superficie pública,
+      **cinco** atrapaban el rechazo y le decían algo a la persona («Error de conexión. Intentá de
+      nuevo.», «No se pudo entregar», «No se pudo subir el archivo»). El único que no era **el que
+      RESERVA**, que es el de más valor de toda la superficie. Cuando los hermanos de una familia
+      manejan el fallo, la familia se lee como cubierta y nadie sospecha del que falta.
+
+      **Arreglado sin `alert`:** el `else` del servidor usaba `alert()`; ahora las dos ramas
+      —servidor y red— salen por el mismo cartel en pantalla, arriba del botón, diciendo explícito
+      que **NO quedó agendada** para que nadie se vaya creyendo que sí.
+
+      **Gate `app/(public)/camino-de-fallo.test.ts`**, sujetos derivados del disco. El sujeto es la
+      **LLAMADA y no el archivo, a propósito**: este mismo `page.tsx` tiene cuatro `catch` (los dos
+      `useEffect` encadenan el suyo), así que un gate por archivo pasaba en **VERDE sobre el
+      defecto**. Rojo primero por el motivo correcto (`page.tsx:152 (POST)`) y validado por **4
+      mutaciones**: quitar el `catch`, **dejarlo vacío** (el esquive, que sólo aparece mutando
+      DESPUÉS de arreglar), quitar un `.catch` encadenado, y un sujeto nuevo con el defecto en
+      otro archivo; las cuatro caen en rojo nombrando archivo y línea, y restaurado vuelve a 10/10.
+
+      **Gates:** `tsc` exit 0 · `vitest` **3779 pasan / 310 archivos** · `eslint` 0 errores.
+      Cartel **MIRADO** renderizado con el CSS y la fuente subseteada del build vivo (430 px,
+      glifo real de 18×18 y no la palabra, cero respuestas ≥400).
+
+      ⚠️ **Commiteado y en la rama, NO desplegado:** el cliente todavía no lo ve.
+
+- [x] 🔴 **La reserva pública le decía al cliente del negocio «Sin horarios disponibles · Probá
+      con otra fecha» cuando en realidad NO había podido cargar los horarios — cerrado el
+      2026-09-08 (`e69736b` en `onia-platform`, publicado en la rama).**
+
+      **La clase, que es lo que importa:** `/book/[orgSlug]` es la única superficie del producto
+      que ve **el cliente del cliente** —un desconocido pidiendo turno, con la marca del negocio
+      delante—, y ningún gate de este proyecto la barre: todos miran `app/(dashboard)` y
+      `components/`. El paso 3 cargaba los horarios con
+      `.catch(() => { if (!cancelled) setSlots([]); })` y pintaba, para lista vacía, «Sin horarios
+      disponibles · Probá con otra fecha». O sea que un fallo —429 del límite por IP
+      (`publicApiLimiter`, 30/min; el propio `rate-limit.ts` ya documenta que una IP suele estar
+      compartida por NAT), un 403 o un 500— se le mostraba al que quería reservar **como si el
+      negocio no tuviera lugar**. Nadie podía enterarse: el dueño mira su panel, no esta pantalla,
+      y el fallo no dejaba ni un rastro. Y el consejo que daba —probá con otra fecha— es
+      justamente lo que consume el límite que produce el error, así que volvía a salir el mismo
+      cartel.
+
+      Es la misma clase que se cerró el 06-sep en el alta (`buscarNegocio()` devolvía `[]` tanto
+      por «busqué y no encontré» como por «no hay buscador»): **un retorno ambiguo confunde “no
+      pude preguntar” con “te contesté que no”.** De los cuatro `.catch` de `app/(public)`, los
+      otros tres ya distinguían — faltaba justo el del paso que decide la reserva.
+
+      **La superficie está VIVA:** 7 de las 9 orgs de producción están en `professional`, y
+      `professional` trae `publicBookingIncluded: true` (`lib/plan-catalogo.ts`). Medido con
+      `docker exec supabase-db psql`, no deducido.
+
+      **Arreglado sin borrar la promesa, condicionándola:** `lib/agenda/disponibilidad-publica.ts`
+      separa los dos casos y **el error gana sobre la lista vacía** —ese orden ES el arreglo,
+      porque cuando la carga falla la lista siempre queda vacía—; el 429 se dice como espera
+      («Fueron muchas consultas seguidas. Reintentá en unos segundos») y hay botón de reintentar.
+
+      **Gate `lib/agenda/disponibilidad-publica.test.ts`:** mide la decisión **y** que la PANTALLA
+      la use (un helper correcto que nadie llama es como esta familia vuelve). Validado en ROJO
+      primero por el motivo correcto —6 casos de lógica en verde, 3 de la pantalla en rojo— y por
+      **3 mutaciones**: invertir el orden error/cantidad, devolver el `catch` mudo y volver a
+      tipear el cartel a mano; las tres caen en rojo y restaurado vuelve a verde.
+
+      **Gates:** `tsc` exit 0 · `vitest` **3769 pasan / 309 archivos, 0 fallos** · `eslint` 0
+      errores. De paso, el gate de iconos cazó un `cloud_off` fuera de la fuente subseteada —se
+      habría visto **la palabra en letras gigantes**, el bug más caro del proyecto—: va `refresh`,
+      que ya está incluido.
+
+      ⚠️ **Commiteado y en la rama, NO desplegado:** viaja con el pedido `t_bf1607af`
+      (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo.
+
 - [x] 🔴 **El panel le negaba al cliente vencido exactamente lo que su propio correo le había
       prometido 24 h antes — cerrado el 2026-09-08 (`999f932` en `onia-platform`, publicado en la
       rama, falta que el integrador lo mergee a `master`).**
@@ -1506,6 +1591,42 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] **CERRADO el 2026-09-08: el cupo del chatbot avisaba que IBA a cortar, no que YA
+      cortó.** Commit `ccab1db`, rama `claude/chatbots-platform-review-0d1d09` de
+      `onia-platform`. ⚠️ **Commiteado y en la rama, NO desplegado**, y además **la migración
+      NO está aplicada en producción**: falta el merge a `master`, el `ALTER TABLE` a mano
+      (`prisma/migrations/20260908000000_chatbot_cupo_aviso_del_corte/migration.sql`) y el
+      swap. Sin la columna el aviso del corte no sale y todo lo demás sigue igual —
+      `registrarMensajeEntrante` cuelga del relay de Chatwoot y jamás tira.
+
+      **Qué estaba mal.** El add-on (Bs 390/mes) corta a las 500 conversaciones del mes:
+      desde ese instante el asistente deriva cada conversación nueva a una persona del equipo
+      del dueño. Había aviso al 80 % (`avisado80At`), que es una **predicción** — «al
+      agotarse, deriva…» — y **ninguno en el corte**, que es el hecho. O sea: el dueño paga
+      por un asistente que deja de contestar y se entera abriendo `/settings/chatbot`, o por
+      un cliente perdido. Del 80 % al 100 % puede pasar una tarde. Y hay una recarga que se
+      cobra, así que el silencio también se come el upsell.
+
+      De paso, el `return` que cortaba la función cuando no tocaba avisar el 80 % hacía que
+      una conversación que cruzaba los **dos** umbrales de una sola vez (un mes que arranca
+      con el cupo gastado, o un límite que baja al cambiar de plan) disparara sólo el primero.
+
+      **La clase: el producto aplica un límite y avisa ANTES, no CUANDO lo aplica.** Ningún
+      gate podía verla — no sobra ninguna palabra, el texto ya es neutro entre rubros, la
+      pantalla renderiza bien y el aviso del 80 % tenía su test en verde. El 06-sep se cerró
+      la mitad de venta de este mismo tema (`limite-que-corta.test.ts`: la web no nombraba el
+      cupo, el dueño se enteraba pagando); ésta es su hermana adentro del producto, y no la
+      cazó nadie porque cerrar una mitad de una familia hace dar la otra por cubierta.
+
+      **Prueba.** Test primero en ROJO por el motivo correcto (2 casos), verde después:
+      `npx vitest run lib/chatbot/cupo.test.ts` → 30/30. Suite completa 3.754 en verde,
+      `tsc --noEmit` y `eslint` en 0.
+
+      **Y un instrumento roto que apareció escribiéndolo:** el test usaba `clearAllMocks`, que
+      **no** vacía la cola de `mockResolvedValueOnce`. Un caso que encola dos respuestas y
+      consume una le deja la sobrante al siguiente, y el siguiente mide otra cosa que la que
+      dice medir — mi caso nuevo salió rojo por eso y no por el defecto. Va `resetAllMocks`.
+
 - [x] **CERRADO el 2026-09-08: el bot que el cliente PAGA se presentaba como «una clínica
       dental» ante los clientes de los otros cuatro rubros.** Commits `8009a9e` (arreglo) y
       `a13d3af` (gate), rama `claude/chatbots-platform-review-0d1d09` de `onia-platform`.
@@ -1964,6 +2085,65 @@ y sin operar. Acá se opera, con verificación por ítem.
       espera el `ok`** — el dry-run del publicador cuenta 4 arreglos sobre `HEAD 7c4ff18` y
       éste no es uno. Entra cuando `onia-cola` mergee la rama. Anotado en `t_deddf471`, sin
       abrir un pedido nuevo.
+
+- [x] 🔴 **CERRADO el 2026-09-08: agotado el cupo mensual de correos, la confirmación de la
+      cita no salía y NADIE se enteraba — ni el cliente, ni el negocio.**
+
+      **El defecto:** `avisarCitaCreada` (`lib/agenda/crear-cita.ts`) pedía permiso con
+      `checkEmailLimit` y envolvía el envío en `if (emailCheck.allowed) { … }` **sin `else`**.
+      Agotado el cupo (Básico: **200/mes**), la confirmación no salía, `confirmationSentAt`
+      quedaba en `null`, **no se reintentaba nunca** y no quedaba ni una línea en ningún lado:
+      el negocio veía «Nueva cita: Fulano» igual que siempre y daba por hecho que su cliente
+      estaba avisado. El cliente no recibía nada y el dueño se enteraba **cuando no se
+      presentaba**.
+
+      **Por qué sobrevivió a todos los gates:** no sobra ninguna palabra, no falta ningún rubro,
+      la pantalla renderiza perfecto y **la cita SÍ se crea**. El defecto sólo aparece
+      preguntando qué pasa en la rama que nadie mira. Y lo mantuvo vivo que **la mitad hermana ya
+      estaba resuelta**: el cron de recordatorios (`app/api/cron/appointment-reminders`) avisa a
+      los admins al cruzar el **80 %** y el **100 %** del MISMO cupo, y su encabezado lo dice con
+      todas las letras — *«un negocio no puede quedarse sin cupo sin enterarse»*. **Ver la mitad
+      sana hace dar la familia por cubierta.** Es la misma clase que se cerró esta madrugada para
+      el cupo del chatbot (`lib/chatbot/cupo.ts`), una instancia más abajo.
+
+      **Alcance real, medido y no supuesto** (`docker exec supabase-db psql`, 2026-09-08): las
+      **9** orgs de producción llevan **0** recordatorios este mes y 8 están en `professional`
+      (800/mes), así que **hoy no le pega a nadie**. Es un defecto **latente**: se dispara con el
+      primer cliente Básico con volumen — o sea, con el primer cliente que pague. `onia-interna`
+      está en `free` (`emailsPerMonth: 0`), y ahí el arreglo **no** avisa, a propósito.
+
+      **El arreglo:** `ea045d8` en `claude/chatbots-platform-review-0d1d09`. El corte ahora deja
+      **aviso in-app a los ADMINS** —los que pueden cambiar el plan, el mismo destinatario que
+      elige el cron— **nombrando al cliente** que quedó sin confirmación y diciendo qué hacer
+      («avisale por otro medio»). Un plan sin correo **no** genera aviso: no hay cupo que
+      agotarse y sería un aviso por cita, para siempre — la misma línea que traza el cron con su
+      `if (emailsPerMonth <= 0) return`. Dos reglas escritas por separado para el mismo cupo se
+      desincronizan sin que nada se ponga rojo.
+
+      **El gate:** `lib/agenda/cupo-de-correo-avisa.test.ts` — la instancia (5 casos sobre la
+      función pura, incluidos los dos bordes que NO deben avisar) y la **clase**: todo pedidor de
+      cupo en `lib/` —los envíos **automáticos**, donde no hay a quién devolverle la negativa por
+      HTTP— tiene que convertirla en aviso. Los sujetos se **derivan del disco**, así que un
+      archivo nuevo nace cubierto. **Validado por mutación:** corte mudo, esquive, borde del plan
+      sin cupo y aviso sin nombre → los **cuatro en rojo**.
+
+      ⚠️ **La PRIMERA versión de ese guard estaba HUECA y pasaba en verde con el corte mudo
+      puesto** — y sólo se vio mutando. Buscaba los símbolos en el **archivo entero**, así que
+      `avisoDeCupoDeCorreo(` matcheaba **su propia definición** y `notification.create`
+      matcheaba el aviso de «Nueva cita», que no tiene nada que ver. El sujeto es la **vecindad
+      de la llamada**, nunca el archivo. Gates: `tsc` 0 · `eslint` 0 errores · `vitest` **3760**
+      pasados / 308 archivos.
+
+      ⚠️ **NO llega al cliente todavía:** `ea045d8` **no es ancestro de `origin/master`**
+      (comprobado con `git merge-base --is-ancestor`, no supuesto), así que ningún swap de hoy lo
+      incluye. Entra cuando `onia-cola` mergee la rama, y recién ahí se publica.
+
+      ⚠️ **Y el pedido de deploy de `plataforma` NO está vivo: `t_deddf471` figura `done`**
+      (completada el 2026-09-08 03:40). Medido con el publicador en seco —que es el número
+      honesto, porque lo deriva al ejecutarse— quedan **7 arreglos mergeados que el cliente no
+      ve** (`HEAD f4d007e`, staged `NINGUNO`). No se abre pedido acá: `onia-cola` mide eso en
+      cada vuelta y es quien lo crea; un segundo aviso del mismo hecho es el ruido que hace que
+      Sergio Urcullo deje de creerle a los avisos.
 
 
 *(vacío — esta cola se abrió el 2026-09-05)*
