@@ -44,6 +44,70 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **CERRADO el 2026-09-08: once acciones del panel le confirmaban al dueño —con el
+      parpadeo de la pantalla— cosas que el servidor había rechazado.** Cancelar una cita,
+      reprogramarla, dar de baja a un empleado, borrar a alguien del equipo, guardar los
+      horarios de atención: `await fetch(...)` y en la línea siguiente `router.refresh()` /
+      `window.location.reload()`, sin mirar una sola vez qué contestó el servidor.
+
+      **La clase, que es lo que importa.** El 2026-09-08, más temprano, se cerró el camino de
+      fallo de `onia-platform-chatbot/app/(public)` —la superficie del cliente del cliente— y **su familia simétrica,
+      el panel donde trabaja el DUEÑO, quedó abierta**. Es la tercera vez que este carril paga
+      lo mismo: al cerrar el hueco de una familia hay que preguntar cuál es la simétrica.
+
+      Y la pregunta del gate del panel **no es la de allá**. Allá el `fetch` TIRA (se cortó la
+      red) y lo ataja un `try`/`catch`. Acá **la respuesta LLEGA**, con un `403 «Tu suscripción
+      ha vencido»`, y ningún `catch` la ve: para enterarse hay que leer `.ok`. Un archivo puede
+      tener sus cuatro `catch` en orden y estar ciego a todos los rechazos del servidor.
+
+      **El disparador no es raro:** `checkPlanExpiry` corta **todas** las escrituras de una
+      organización con la suscripción vencida (los `GET` siguen pasando). El día que vence, cada
+      uno de estos botones miente en vez de explicar por qué no funciona.
+
+      **Por qué era peor que quedarse mudo:** en cuatro de los once la pantalla además *actuaba*
+      el éxito. `settings` sacaba a la persona de la lista del equipo (`setTeamMembers(prev =>
+      prev.filter(...))`) — desaparecía de la pantalla y **seguía teniendo acceso al sistema**;
+      `treatments` la sacaba del catálogo; el interruptor de avisos por correo se movía y no
+      volvía nunca. El producto no callaba: **afirmaba lo contrario de lo que había pasado**.
+
+      | dónde | qué daba por hecho sin preguntar |
+      |---|---|
+      | `onia-platform-chatbot/app/(dashboard)/appointments/page.tsx` ×3 | cancelar · marcar completada · **cambiar la fecha** (cerraba el modal: el paciente seguía citado a la hora vieja) |
+      | `onia-platform-chatbot/app/(dashboard)/settings/SettingsClient.tsx` ×4 | borrar del equipo · borrar profesional · **guardar horarios** (de ahí sale la agenda) · avisos por correo |
+      | `onia-platform-chatbot/app/(dashboard)/empresa/EmpresaClient.tsx` | borrar un gasto y su crédito fiscal |
+      | `onia-platform-chatbot/app/(dashboard)/rrhh/RrhhClient.tsx` | dar de baja / reactivar a un empleado |
+      | `onia-platform-chatbot/app/(dashboard)/treatments/TreatmentsClient.tsx` | borrar un servicio del catálogo |
+      | `onia-platform-chatbot/app/(dashboard)/patients/[id]/prescriptions/PrescriptionsClient.tsx` | borrar una receta |
+
+      **Por qué ningún gate podía verlo:** no sobra ni falta una palabra —los barridos de copy,
+      obra, rubro y precios pasan verdes—, la pantalla renderiza perfecto (la captura también), y
+      `await fetch(...)` sin usar el resultado es TypeScript válido y `eslint` limpio. En los
+      seis archivos **el alta de al lado SÍ mira la respuesta y avisa**: cuando el hermano sano
+      está a diez líneas, el archivo se lee como cubierto.
+
+      **Atado en** `onia-platform-chatbot/app/(dashboard)/camino-de-fallo.test.ts` (12 casos), con el detector
+      `escriturasSinMirarLaRespuesta` en `onia-platform-chatbot/lib/superficie-publica/cobertura-de-fallo.ts` y el
+      helper `onia-platform-chatbot/lib/http/mensaje-de-error.ts`, que muestra el motivo que ya manda la ruta
+      («Tu suscripción ha vencido…») en vez de un «algo salió mal». Sujeto derivado del disco y
+      **un exento por literal exacto**, no por ruta: `onia-platform-chatbot/app/(dashboard)/profile/MfaSection.tsx:144`, limpieza
+      best-effort después de que el factor ya se borró, con un caso que se pone rojo si el
+      exento se pudre.
+
+      ⚠️ **Un agujero del gate lo encontró la MUTACIÓN, no la lectura:** la primera versión
+      buscaba `.ok` sobre el texto crudo, así que **un comentario que lo nombrara absolvía a la
+      llamada que ese mismo comentario describe** — el guard avalado por su propia bitácora. Se
+      arregló mirando sólo código real y quedó anclado en un caso.
+
+      **Validado por mutación en las dos direcciones**, cada una confirmada por su línea
+      `Tests N failed`: revertir un arreglo → rojo; esquivar poniendo `res.ok` en un comentario →
+      rojo; arreglar el exento (sobra) → rojo; **pantalla nueva con el defecto → rojo** (el
+      barrido la alcanza); detector siempre-vacío → 4 rojos. Base: 12 verdes.
+
+      **Gates:** `tsc` 0 · `vitest` 3885 verdes (315 archivos) · `eslint` 0 errores.
+      Commit `029c915` en `onia-platform`, rama `claude/chatbots-platform-review-0d1d09`.
+      ⚠️ **Commiteado y en la rama, NO desplegado**: falta que `onia-cola` lo mergee a `master`
+      y que el swap lo publique, así que **el cliente todavía ve los once botones mintiendo**.
+
 - [x] 🔴 **El enlace de reserva que el negocio manda por WhatsApp le vendía el panel a su cliente
       — cerrado el 2026-09-08 (`b4b2e34` en `onia-platform`, publicado en la rama, falta que el
       integrador lo mergee a `master`).**
@@ -2334,6 +2398,63 @@ y sin operar. Acá se opera, con verificación por ítem.
       ve** (`HEAD f4d007e`, staged `NINGUNO`). No se abre pedido acá: `onia-cola` mide eso en
       cada vuelta y es quien lo crea; un segundo aviso del mismo hecho es el ruido que hace que
       Sergio Urcullo deje de creerle a los avisos.
+
+- [x] 🔴 **CERRADO el 2026-09-08: el panel le avisaba «Cerca del límite — considera subir de
+      plan» a una ferretería, sobre una pared que el producto nunca levantaba.**
+
+      **El defecto, y va en las DOS direcciones a la vez.** El tope de clientes del plan tenía
+      **dos fuentes de conteo**: la que la pantalla MUESTRA y la que el producto APLICA.
+
+      · **Comercio e importadora** (2 de los 5 rubros de la v1.0): el medidor de `/settings`
+        contaba bien —`onia_core_business_partners`— y `checkPatientLimit` contaba `patient`,
+        tabla **vacía ahí por construcción**. La cuenta daba **0**, el tope **nunca cortaba**, y
+        encima `POST /api/comercio/clientes` no verificaba **ningún** cupo. O sea: la barra se
+        ponía roja al 80 %, aparecía *«Cerca del límite — considera subir de plan»*, y el tope
+        que `onia.com.bo/precios` vende (**300 clientes en Básico**) no se aplicaba nunca.
+        Empujar un upgrade por una pared inexistente es la dirección cara.
+
+      · **Servicios profesionales**: al revés. `contarClientesDelRubro` elegía la tabla con
+        `usaPanelComercio`, y ese rubro **usa el panel de comercio Y guarda a su gente en
+        `patients`** — así que el medidor le marcaba **«0 / 1.500» para siempre**, que es
+        exactamente el bug que ese arreglo vino a matar, reintroducido por el predicado.
+
+      **La causa de fondo:** el predicado contestaba *«¿qué panel usa?»* cuando la pregunta es
+      *«¿dónde guarda a su gente?»*. Son distintas y `gestios-servicios-profesionales` las
+      contesta distinto. `plan-catalogo.ts` ya había cerrado este mal para la **tabla** de topes
+      —*«Dos tablas del mismo número: una que se APLICA y otra que se MUESTRA, libres de
+      separarse»*— y quedó vivo un escalón más abajo, en el **conteo**.
+
+      **Por qué sobrevivió a todos los gates:** no sobra ni falta una palabra, la pantalla
+      renderiza perfecto y **los dos números son REALES, salen de la base**. Ningún barrido de
+      literales, precios, obra ni vocabulario puede verlo. Lo único que lo delata es preguntar
+      si el medidor y el corte cuentan la **misma tabla**.
+
+      **Alcance real, medido y no supuesto** (`docker exec supabase-db psql`, 2026-09-08): las
+      **9** orgs de producción tienen como máximo **3** clientes, así que aplicar el tope **no
+      bloquea a nadie hoy**. Es un defecto **latente**: se dispara con el primer cliente con
+      volumen.
+
+      **El arreglo:** `12a4a09` en `claude/chatbots-platform-review-0d1d09`.
+      `guardaClientesEnPatients(trackId)` se **deriva del pack** (mira si su menú ofrece
+      `/patients`), igual que sus hermanas `usaPanelComercio` / `fichaClinica`; las dos mitades
+      cuentan ahora con la **misma función**. De paso el 403 sale en el **idioma del rubro**: ese
+      mensaje lo lee ahora también una ferretería, y «pacientes activos» ahí no significa nada.
+
+      **El gate:** `__tests__/lib/cupo-de-clientes-por-rubro.test.ts` — la **clase**, no la
+      instancia. Para **cada** track de `VERTICAL_PACKS` exige que el medidor y el 403 cuenten la
+      misma tabla, y que esa tabla sea donde el rubro guarda a sus clientes; más la **cobertura**
+      de que el alta de cada rubro pasa por el tope, con los sujetos derivados del pack —un rubro
+      nuevo **nace cubierto**, y el que no ofrece pantalla de clientes lo re-mide en cada corrida
+      en vez de declararlo en prosa. **Validado por MUTACIÓN**, confirmando por el *exit* y por la
+      línea `Tests N failed` (no por ausencia de `FAIL`): revertir el conteo del 403 → **5 en
+      rojo**; revertir el predicado del medidor → **5 en rojo**; sacar el chequeo del alta de
+      comercio → **2 en rojo**; restaurado, **26 verdes**.
+
+      Gates: `tsc` **0** · `eslint` **0 errores** · `vitest` **3873** pasados / 314 archivos.
+
+      ⚠️ **NO llega al cliente todavía:** `12a4a09` está en la rama del carril, **no** en
+      `origin/master` (comprobado con `git merge-base --is-ancestor`, no supuesto). Entra cuando
+      `onia-cola` mergee, y recién ahí se publica.
 
 
 *(vacío — esta cola se abrió el 2026-09-05)*
