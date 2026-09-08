@@ -9,7 +9,37 @@ se rehacen con los `cutplan-*.json` y los HTML de `assets/`, que sí están acá
 | `clip 1 video 2.mp4` | intro a cámara | `final/clip-1-video-2-intro.mp4` | 33.8s → **13.0s** |
 | `clip 2 video 1.mp4` | screencast del deck | `final/clip-2-video-1-explicacion.mp4` | 511.5s → **416.6s** |
 
+**El entregable es `final/claude-vs-claude-code-completo.mp4`** (7:10, 80 MB): intro +
+explicativo + endcard, con la cama de música.
+
+**Cada pieza se rinde en UNA sola pasada.** La primera versión encadenaba re-encodes — el
+intro pasaba por cut → composición → zoom → master (tres generaciones) y el explicativo por
+cut → tapa → master (dos) — y terminaba en **0,78 Mbps** cuando el crudo del intro va a
+**10,3** y el del explicativo a **2,1**. Ahora el corte, los overlays y el zoom van en un solo
+`filter_complex` a CRF 13-15 preset slow: el intro subió a **8,3 Mbps** y el conjunto a **1,5**.
+Medido comparando el mismo cuadro de las dos versiones: en el tramo de **cámara** hay
+diferencia real (PSNR 40,8 dB entre ellas — se ven los pelos sueltos y la textura de la piel
+que antes eran manchas de compresión); en el **deck** no la hay (61,5 dB ≈ idénticos), porque
+un gráfico plano ya se comprimía perfecto. **El bitrate se gasta donde hay cámara, no donde
+hay láminas.** Los dos parciales quedan por si hay que rehacer una parte.
 También sale de acá `final/miniatura.png` (1280×720).
+
+**Música** (`scripts/pad-musica.sh` → `assets/pad.wav`): un pad lento sintetizado con ffmpeg,
+progresión de ocho acordes en La menor (Am F C G Am Dm F E), 14s cada uno con crossfade de 6s.
+El octavo resuelve al primero, así que el punto de loop es musical y no se oye. Se sintetiza y
+no se baja de librería porque las dos rutas de BGM de `media-use` piden lo que no hay (HeyGen
+necesita credencial; Lyria, `GEMINI_API_KEY`; MusicGen, ~2 GB de torch) y Pixabay no expone la
+URL del mp3 sin interactuar con la página.
+
+Dos correcciones que salieron de **mirar el espectrograma**, no de escuchar:
+- Los acordes **latían**: con un `afade` de 3,2s dentro de cada uno *más* el crossfade, en la
+  unión los dos estaban en su fade y la música casi se apagaba cada 8s. El fade interno pasó a
+  ser solo anti-clic (0,6s) y la transición la hace el crossfade.
+- Toda la energía caía en **100-1100 Hz**, justo donde vive la voz. Las notas bajaron **una
+  octava**: el pad ocupa 70-500 Hz, por debajo de la narración.
+
+Nivel verificado restando el audio con y sin música: la cama queda **17 dB por debajo de la
+voz**, y sube 8 dB en el endcard, que es el único tramo sin narración.
 
 ## Decisiones que no son obvias
 
