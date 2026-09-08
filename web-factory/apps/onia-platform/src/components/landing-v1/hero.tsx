@@ -1,5 +1,5 @@
 import { PressableCta, Reveal } from "@/motion";
-import { PLANES, bs } from "@/lib/pricing";
+import { PLANES, PRUEBA, bs } from "@/lib/pricing";
 import { Modules, Row, Shot } from "./shot";
 import { ParallaxSoft } from "./parallax";
 import styles from "./landing.module.css";
@@ -7,7 +7,13 @@ import styles from "./landing.module.css";
 // El "desde" sale del plan más barato de PLANES, no se escribe: es el primer
 // número que ve un lead en la home. Gate: `(sitio)/precios.test.ts`.
 const DESDE = Math.min(...PLANES.map((p) => p.mensual));
-const CHIPS = ["Sin tarjeta", "Migramos tus datos", `Desde Bs ${bs(DESDE)}/mes`] as const;
+// El chip del medio decía «Migramos tus datos»: una migración hecha por
+// nosotros, prometida en lo primero que lee un lead, sin nadie que la haga —a
+// Onia la vende y la opera Sergio Urcullo solo, y no hay circuito que la
+// arranque al registrarse—. Lo que existe de verdad es la importación por CSV
+// con asistente de columnas (app/api/patients/import, comercio/products/import).
+// Gate: `app/promesa-humana.test.ts`.
+const CHIPS = ["Sin tarjeta", "Importás por CSV", `Desde Bs ${bs(DESDE)}/mes`] as const;
 
 const MODULOS_HERO = [
   { label: "Gestión", on: true },
@@ -48,7 +54,7 @@ export function Hero() {
             <div className={styles.heroCta}>
               <PressableCta>
                 <a className={`${styles.btn} ${styles.btnPrimary}`} href="#precios">
-                  Probar gratis 14 días
+                  Probar gratis {PRUEBA.dias} días
                 </a>
               </PressableCta>
               <a className={`${styles.btn} ${styles.btnGhost}`} href="#como">

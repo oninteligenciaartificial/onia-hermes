@@ -141,14 +141,20 @@ const FAQ = [
     a: `No. La prueba de ${PRUEBA.dias} días no pide tarjeta ni pago: ${ALTA_VERBO_VOS}, elegís tu rubro y usás el sistema completo esos ${PRUEBA.dias} días.`,
   },
   {
-    // lib/pricing.ts:283 (CONDICIONES) + (sitio)/empezar/page.tsx:79 (paso 02).
+    // lib/pricing.ts:283 (CONDICIONES) + (sitio)/empezar/page.tsx (paso 02).
+    // La pregunta es "¿los cargo yo?" y la respuesta vieja no la contestaba:
+    // decía "alguien que te la explica" y seguía de largo. Se contesta que sí,
+    // con la herramienta que existe de verdad (app/api/patients/import y
+    // app/api/comercio/products/import: CSV con asistente de columnas).
     q: "¿Los datos del Excel o del cuaderno los cargo yo?",
-    a: "No arrancás con la pantalla vacía: te entregamos el sistema con la configuración de tu rubro puesta y alguien que te la explica. En los tres planes no cobramos implementación ni migración — el checkout cobra solo el plan. Grupo / Empresarial sí lleva implementación acompañada y se cotiza aparte.",
+    a: "Sí, los cargás vos, y no a mano uno por uno: hay importación por CSV con un asistente que te va diciendo qué columna es cada cosa. No arrancás con la pantalla vacía — la cuenta llega con la configuración de tu rubro puesta. En los tres planes no cobramos implementación ni migración: el checkout cobra solo el plan. Grupo / Empresarial sí lleva implementación acompañada y se cotiza aparte.",
   },
   {
-    // (sitio)/empezar/page.tsx:79 — "alguien que te la explica".
+    // Acá decía "alguien que te la explica", y ese alguien no existe: el alta es
+    // automática y no avisa a nadie que te llame. Lo cierto es el asistente de
+    // puesta en marcha del producto y el WhatsApp, que sí contesta.
     q: "¿Y si no sé de computación? ¿Quién me enseña?",
-    a: "Nadie instala nada ni arranca un proyecto de meses: te entregamos la cuenta con la configuración de tu rubro puesta y alguien que te la explica. Si te trabás después, escribinos por WhatsApp.",
+    a: "Nadie instala nada ni arranca un proyecto de meses: la cuenta llega con la configuración de tu rubro puesta y el sistema te lleva paso a paso por la puesta en marcha. Si te trabás después, escribinos por WhatsApp.",
   },
   {
     // content/legal/terminos.md:83 (sin permanencia) y §3.4 (mora: gracia →
@@ -439,10 +445,24 @@ export default function Portada() {
               <div className={s.trustNum}>5</div>
               <p className={s.trustLabel}>rubros vivos en producción hoy</p>
             </div>
+            {/* «Cada día» y no «24/7»: a los agentes los despierta un cron del
+                host UNA vez por día (`0 11 * * * run-onia-agents-cron.sh`, que
+                el propio crontab del VPS rotula «Corrida diaria agentes»).
+                Poner 24/7 acá exageraba 24 veces algo que se cobra —y en la
+                banda que promete hechos verificables—, contra lo que la propia
+                /agentes ya dice bien: «Corre cada 24 horas». Lo vigila
+                `cadencia-prometida.test.ts`. */}
             <div className={s.trustCell}>
-              <div className={s.trustNum}>24/7</div>
+              <div className={s.trustNum}>Cada día</div>
+              {/* «desde Pro» y no a secas: esta celda cae 147 caracteres
+                  DEBAJO del «Desde Bs 320 al mes» del hero, y el Básico —el
+                  plan que cuesta esos 320— no trae agentes (`PLANES[0].sinEsto`
+                  dice «Agentes de IA (vienen desde Pro)»). En una banda que
+                  promete hechos verificables, callar el plan es la forma más
+                  cara de decirlo: el lead paga y se le apagan. Lo vigila
+                  `capacidad-vs-precio.test.ts`. */}
               <p className={s.trustLabel}>
-                agentes que trabajan y esperan tu aprobación
+                agentes que revisan y esperan tu aprobación, desde {plan("pro").nombre}
               </p>
             </div>
             <div className={s.trustCell}>

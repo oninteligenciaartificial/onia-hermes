@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { PRUEBA } from "@/lib/pricing";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { APP_URL, WA_URL_LANDING } from "@/lib/site";
@@ -8,14 +9,14 @@ const REGISTRO_URL = `${APP_URL}/register`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(`${SITE_URL}/`),
-  title: "Prueba gratis de 14 días — Onia Platform, sin tarjeta",
+  title: `Prueba gratis de ${PRUEBA.dias} días — Onia Platform, sin tarjeta`,
   description:
-    "Registrate en minutos, elegí tu rubro y usá el sistema completo 14 días: agenda, clientes, caja, inventario, contabilidad Bolivia y agentes con IA. Sin tarjeta y sin permanencia.",
+    `Registrate en minutos, elegí tu rubro y usá el sistema completo ${PRUEBA.dias} días: agenda, clientes, caja, inventario, contabilidad Bolivia y agentes con IA. Sin tarjeta y sin permanencia.`,
   alternates: { canonical: "/prueba-gratis" },
   openGraph: {
     type: "website",
     locale: "es_BO",
-    title: "Probá Onia Platform gratis 14 días",
+    title: `Probá Onia Platform gratis ${PRUEBA.dias} días`,
     description:
       "Sistema completo, sin tarjeta. Elegís tu rubro y quedás andando en un día.",
     url: "/prueba-gratis",
@@ -44,10 +45,15 @@ const PASOS = [
   {
     titulo: "Tu cuenta queda lista",
     detalle:
-      "Sin instalación ni proyecto de meses. Le das el nombre de tu negocio y el sistema busca y carga tus datos.",
+      // La promesa dice el camino que CORRE: la persona pega el enlace y el
+      // motor lo lee (`traerHtml` cae a fetch nativo). Decía «le das el nombre
+      // y el sistema busca», que es el paso (3) del orquestador y depende de
+      // `SEARXNG_URL` — ausente en producción, así que devolvía el formulario
+      // vacío. Ver capacidad-degradada.test.ts.
+      "Sin instalación ni proyecto de meses. Pegás el enlace de tu web y el sistema lee la página y carga tus datos.",
   },
   {
-    titulo: "Usalo de verdad 14 días",
+    titulo: `Usalo de verdad ${PRUEBA.dias} días`,
     detalle:
       "Todo encendido: agenda, caja, inventario, contabilidad y la cola de agentes. Si te sirve, pagás por QR; si no, no pagás nada.",
   },
@@ -65,7 +71,7 @@ const JSON_LD = {
     },
     {
       "@type": "Offer",
-      name: "Prueba gratis de 14 días de Onia Platform",
+      name: `Prueba gratis de ${PRUEBA.dias} días de Onia Platform`,
       price: "0",
       priceCurrency: "BOB",
       url: `${SITE_URL}/prueba-gratis`,
@@ -86,7 +92,7 @@ export default function PruebaGratisPage() {
           <div className="container">
             <p className="kicker">Prueba gratis</p>
             <h1 className="h2">
-              14 días con el sistema completo. Sin tarjeta.
+              {PRUEBA.dias} días con el sistema completo. Sin tarjeta.
             </h1>
             <p className="lead">
               No es una demo recortada: es tu cuenta real, con todos los

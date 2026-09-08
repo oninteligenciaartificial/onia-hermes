@@ -5,12 +5,21 @@ import { describe, expect, it } from "vitest";
 import {
   CHATBOT_SITIO,
   CIFRAS,
+  CONSTANTES_CRUZADAS,
   PRECIOS_SITIO,
   cifrasDelProducto,
   cifrasDelSitio,
   comparar,
+  esPromesa,
+  excusasSinSujeto,
+  limitesDelProducto,
+  limitesDelSitio,
+  numerosPublicados,
+  planQueElSitioPrometeParaExportar,
   planesDelProducto,
   planesDelSitio,
+  primerPlanCon,
+  publicadosSinCruzar,
 } from "./precios-fuente.mjs";
 
 /**
@@ -47,7 +56,7 @@ describe("el cruce lee de verdad el lado del SITIO", () => {
     chatbot: readFileSync(CHATBOT_SITIO, "utf8"),
   });
 
-  it("encuentra las 18 cifras en los archivos vivos del sitio", () => {
+  it("encuentra todas las cifras en los archivos vivos del sitio", () => {
     const ilegibles = CIFRAS.filter((c) => delSitio[c] === null);
     expect(
       ilegibles,
@@ -90,6 +99,159 @@ export const DEFAULT_PLAN_AMOUNTS: Record<SubscriptionPlan, PlanPriceTable> = {
   });
 });
 
+describe("los TOPES y los TIERS del sitio (la mitad que no se cruzaba)", () => {
+  const precios = readFileSync(PRECIOS_SITIO, "utf8");
+  type Topes = Record<
+    string,
+    {
+      fichas: number | null;
+      usuarios: number | null;
+      recordatorios: number | null;
+      reservas: boolean | null;
+    }
+  >;
+
+  it("lee los tres topes del Básico, que están escritos en prosa", () => {
+    const l = limitesDelSitio(precios) as Topes;
+    expect(l.basico.fichas).toBeGreaterThan(0);
+    expect(l.basico.usuarios).toBeGreaterThan(0);
+    expect(l.basico.recordatorios).toBeGreaterThan(0);
+  });
+
+  it('"ilimitado" se lee como -1, que es como lo escribe el producto', () => {
+    // El Full no trae cifra ("Usuarios ilimitados"): sin este caso, el tope
+    // saldría `null`, el cruce lo llamaría ilegible y taparía a los otros dos.
+    const l = limitesDelSitio(precios) as Topes;
+    expect(l.full.fichas).toBe(-1);
+    expect(l.full.usuarios).toBe(-1);
+    expect(l.full.recordatorios).toBe(-1);
+  });
+
+  it("lo que el plan NIEGA no cuenta como que lo incluye", () => {
+    // La inversión que dejaría el gate verde al revés: un plan nombra la
+    // capacidad en su `sinEsto` justamente para decir que NO la trae. Si el
+    // parser leyera el plan entero, ese tier daría `true` y el cruce aprobaría
+    // un sitio que promete lo que el producto no da.
+    //
+    // Va con fixture y no con el archivo vivo A PROPÓSITO: hoy el Básico
+    // escribe "Reservas online — se agrega como add-on", sin la palabra
+    // "incluidas", así que el patrón no lo matchea ni leyendo el plan entero.
+    // Escrito contra el archivo vivo, este caso pasaba en VERDE con la guarda
+    // ROTA — medido el 2026-09-06. Un texto que hoy no dispara el patrón no
+    // prueba la guarda: lo que se prueba es el CORTE.
+    const planQueNiega = `
+      { id: "basico",
+        incluye: ["2 usuarios", "Hasta 300 fichas", "200 recordatorios por email al mes"],
+        sinEsto: ["Reservas online incluidas: no, eso viene desde Pro"] },
+    `;
+    const l = limitesDelSitio(planQueNiega) as Topes;
+    expect(l.basico.usuarios).toBe(2); // el `incluye` sí se leyó
+    expect(l.basico.reservas).not.toBe(true); // y el `sinEsto` no se contó
+  });
+});
+
+describe("el cruce lee la forma literal de PLAN_LIMITS", () => {
+  /** Copia textual de `onia-platform/lib/plan-catalogo.ts`. */
+  const LIMITES_FIXTURE = `
+export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
+  free: { patients: 30, users: 1, emailsPerMonth: 0, publicBookingIncluded: false, agentsIncluded: false, reportsEnabled: false },
+  basic: { patients: 300, users: 2, emailsPerMonth: 200, publicBookingIncluded: false, agentsIncluded: false, reportsEnabled: false },
+  professional: { patients: 1500, users: 5, emailsPerMonth: 800, publicBookingIncluded: true, agentsIncluded: true, reportsEnabled: true },
+  clinic: { patients: -1, users: -1, emailsPerMonth: -1, publicBookingIncluded: true, agentsIncluded: true, reportsEnabled: true },
+};
+`;
+
+  it("saca los topes, incluido el -1 de ilimitado", () => {
+    const l = limitesDelProducto(LIMITES_FIXTURE) as Record<
+      string,
+      { fichas: number; usuarios: number; recordatorios: number }
+    >;
+    expect(l.basic).toMatchObject({ fichas: 300, usuarios: 2, recordatorios: 200 });
+    expect(l.clinic).toMatchObject({ fichas: -1, usuarios: -1, recordatorios: -1 });
+  });
+
+  it("el tier es el plan más barato que enciende la capacidad", () => {
+    const l = limitesDelProducto(LIMITES_FIXTURE);
+    expect(primerPlanCon(l, "reservas")).toBe("professional");
+    expect(primerPlanCon(l, "agentes")).toBe("professional");
+  });
+
+  it("un tier ilegible no se adivina: devuelve null y el cruce lo canta", () => {
+    // Sin esto, una capacidad renombrada en el producto se leería como
+    // "ningún plan la tiene" y el gate compararía contra un dato inventado.
+    const sinLaClave = LIMITES_FIXTURE.replace(/publicBookingIncluded/g, "otraCosa");
+    expect(primerPlanCon(limitesDelProducto(sinLaClave), "reservas")).toBeNull();
+  });
+});
+
+describe("el tier que se promete en PROSA suelta, no en la tabla de planes", () => {
+  /**
+   * Los otros tres tiers (agentes, reservas, reportes) viven como una fila
+   * dentro del `incluye` de cada plan. La exportación de datos no: vive en
+   * `CONDICIONES`, la lista de frases que las dos pantallas de precio
+   * renderizan al pie. Por eso era el único tier publicado que nadie cruzaba.
+   */
+  const condiciones = (frase: string) => `
+export const CONDICIONES: readonly string[] = [
+  "Los precios están en bolivianos y no llevan IVA por encima.",
+  "${frase}",
+] as const;
+`;
+
+  it("«desde el plan más chico» es el más barato que el sitio VENDE", () => {
+    expect(
+      planQueElSitioPrometeParaExportar(
+        condiciones("Tus datos son tuyos: los exportás en CSV desde el plan más chico."),
+      ),
+    ).toBe("basic");
+  });
+
+  it("una promesa SIN condición de plan se le hace a todos: también el más barato", () => {
+    // Es la lectura estricta y la que puede desmentirla: si no dice "desde el
+    // Pro", el que paga el plan más chico la va a cobrar igual.
+    expect(
+      planQueElSitioPrometeParaExportar(condiciones("Tus datos son tuyos: los exportás en CSV.")),
+    ).toBe("basic");
+  });
+
+  it("si la frase nombra un plan, ése — y ahí el cruce lo compara contra el producto", () => {
+    expect(
+      planQueElSitioPrometeParaExportar(
+        condiciones("Tus datos son tuyos: los exportás en CSV desde el plan Pro."),
+      ),
+    ).toBe("professional");
+  });
+
+  it("sin promesa de exportación devuelve null: rojo de instrumento, NUNCA verde", () => {
+    // El modo de fallo de esta familia. Si la frase se saca o se reescribe y el
+    // patrón deja de matchear, callarse haría que el cruce apruebe cualquier
+    // tier del producto sin haber leído el lado del sitio.
+    expect(
+      planQueElSitioPrometeParaExportar(condiciones("Los planes se cobran por adelantado.")),
+    ).toBeNull();
+    expect(planQueElSitioPrometeParaExportar("")).toBeNull();
+  });
+
+  it("el producto contesta la misma pregunta desde csvExportEnabled", () => {
+    const fixture = `
+export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
+  free: { csvExportEnabled: false },
+  basic: { csvExportEnabled: true },
+  professional: { csvExportEnabled: true },
+  clinic: { csvExportEnabled: true },
+};
+`;
+    expect(primerPlanCon(limitesDelProducto(fixture), "exportaCsv")).toBe("basic");
+    // Y el día que el producto lo suba de plan, el cruce tiene que verlo.
+    expect(
+      primerPlanCon(
+        limitesDelProducto(fixture.replace("basic: { csvExportEnabled: true", "basic: { csvExportEnabled: false")),
+        "exportaCsv",
+      ),
+    ).toBe("professional");
+  });
+});
+
 describe("el veredicto", () => {
   const iguales = { "plan Básico · mensual": 320, "add-on chatbot · mensual": 390 };
 
@@ -106,6 +268,12 @@ describe("el veredicto", () => {
     });
   });
 
+  it("distingue el monto de la promesa, para no mandar al archivo equivocado", () => {
+    expect(esPromesa("plan Básico · mensual")).toBe(false);
+    expect(esPromesa("plan Básico · fichas")).toBe(true);
+    expect(esPromesa("primer plan con reservas online incluidas")).toBe(true);
+  });
+
   it("una cifra ilegible NO se cuenta como coincidencia", () => {
     // Es el modo de fallo caro: sin esto, un parser roto se lee como sitio sano.
     const { difieren, ilegibles } = comparar(
@@ -117,9 +285,93 @@ describe("el veredicto", () => {
   });
 
   it("con las dos fuentes vacías nada se declara coincidente", () => {
-    const vacio = cifrasDelProducto({ planes: "", addons: "", prueba: "" });
+    const vacio = cifrasDelProducto({
+      planes: "",
+      addons: "",
+      prueba: "",
+      limites: "",
+    });
     const { difieren, ilegibles } = comparar(vacio, vacio);
     expect(difieren).toEqual([]);
     expect(ilegibles).toEqual(CIFRAS);
+  });
+});
+
+/**
+ * La COBERTURA del cruce, que es distinta de su resultado.
+ *
+ * `CIFRAS` se deriva del lado PRODUCTO, así que el cruce es ciego a un número
+ * que el SITIO publique sin clave del otro lado: no entra en la comparación y
+ * el script imprime "VERDE: las N cifras" por encima. Medido el 2026-09-07
+ * inyectando "Hasta 7 sucursales conectadas" en el `incluye` del Básico —
+ * `ilegibles 0 · difieren 0`, verde.
+ *
+ * Estos casos exigen que un tope nuevo nazca NOMBRADO. Se validaron por
+ * mutación en las dos direcciones: con `publicadosSinCruzar` devolviendo `[]`
+ * los dos primeros caen, y con el filtro de ya-cruzados apagado cae el tercero
+ * (los 8 números vivos saldrían como huecos).
+ */
+describe("ningún tope que el sitio publica queda fuera del cruce", () => {
+  const real = readFileSync(PRECIOS_SITIO, "utf8");
+
+  it("hoy no hay ni una cifra publicada sin cruzar", () => {
+    expect(
+      publicadosSinCruzar(real),
+      "El `incluye` de un plan publica una cifra que este cruce no mira: no está " +
+        "verificada contra el producto. Cruzala, o excusala con su motivo en TOPES_SIN_CRUCE.",
+    ).toEqual([]);
+  });
+
+  it("un tope NUEVO tipeado a mano sale nombrado, no en silencio", () => {
+    const conTopeNuevo = real.replace(
+      '"Hasta 300 fichas de clientes o pacientes cargadas",',
+      '"Hasta 300 fichas de clientes o pacientes cargadas",\n      "Hasta 7 sucursales conectadas",',
+    );
+    expect(conTopeNuevo, "la inyección no se aplicó").not.toEqual(real);
+    expect(publicadosSinCruzar(conTopeNuevo)).toContainEqual({
+      plan: "basico",
+      clase: "número",
+      valor: 7,
+      linea: "Hasta 7 sucursales conectadas",
+    });
+  });
+
+  it("una constante NUEVA interpolada tampoco pasa por cruzada", () => {
+    // La interpolación es la forma cómoda y por eso la peligrosa: se lee como
+    // "sale de una constante, alguien la cuida" y no la cruza nadie.
+    const conConstante = real.replace(
+      '"Hasta 300 fichas de clientes o pacientes cargadas",',
+      '"Hasta 300 fichas de clientes o pacientes cargadas",\n      `Hasta ${SUCURSALES_MAX} sucursales`,',
+    );
+    expect(conConstante, "la inyección no se aplicó").not.toEqual(real);
+    expect(
+      publicadosSinCruzar(conConstante).map((n) => n.valor),
+    ).toContain("SUCURSALES_MAX");
+  });
+
+  it("el cruce sigue leyendo cifras del `incluye`: si deja de ver, esto cae", () => {
+    // Sin este caso, `publicadosSinCruzar` podría devolver `[]` por no encontrar
+    // NADA y los dos primeros seguirían verdes — el fallo mudo de esta familia.
+    expect(numerosPublicados(real).length).toBeGreaterThanOrEqual(6);
+  });
+
+  it("ninguna excusa de TOPES_SIN_CRUCE sobra", () => {
+    // Una entrada sin sujeto no la mide nadie y PRE-APRUEBA al próximo número
+    // que caiga en ese valor. Ya pasó en este carril con HOSTS_PERMITIDOS.
+    expect(
+      excusasSinSujeto(real),
+      "Sobra una excusa en TOPES_SIN_CRUCE: ningún número publicado la usa.",
+    ).toEqual([]);
+  });
+
+  it("CONSTANTES_CRUZADAS no bendice una constante que el cruce ya no lee", () => {
+    // Mismo riesgo que arriba, un nivel más arriba: si `cifrasDelSitio` deja de
+    // leer una de estas, la lista la seguiría dando por cruzada.
+    const cuerpo = cifrasDelSitio.toString();
+    for (const nombre of CONSTANTES_CRUZADAS) {
+      expect(cuerpo, `CONSTANTES_CRUZADAS declara ${nombre} y cifrasDelSitio no lo lee`).toContain(
+        nombre,
+      );
+    }
   });
 });

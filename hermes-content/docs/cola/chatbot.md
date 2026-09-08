@@ -178,6 +178,161 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-07: el gate de los avisos medía HANDOFF y daba por medida la DEMO —
+      la rama que lleva la plata.** El objetivo del carril dice «cada demo agendada **o** handoff le
+      llega a Sergio», y `avisos-vivo.mjs` manejaba el motor sólo hasta un pedido de humano. Su
+      propio encabezado lo declaraba (*«ante un pedido de humano»*), y aun así el veredicto se
+      leía como si cubriera las dos.
+
+      **Probado por MUTACIÓN antes de tocar nada, no por lectura:** borrando entero el
+      `notify_sergio` de la rama de agendar (`bot-engine.mjs`, el bloque `kind: "demo_agendada"`),
+      el gate viejo seguía dando **VERDE** — `{emite:true, accionable:true}`. O sea: el día que se
+      rompa el aviso de la demo, el único instrumento que mira este objetivo dice `circuito: ok`,
+      **ningún número se mueve**, y cada prospecto que YA eligió horario se pierde en silencio.
+
+      **Por qué probar una no dice nada de la otra:** son hermanas emitidas desde funciones
+      DISTINTAS del motor (`bot-engine.mjs:341` el handoff, `:729` la demo) y con payloads de
+      forma distinta — el handoff trae `reason`, la demo no. Es la misma familia de fallo que las
+      dos bienvenidas hermanas del 2026-09-04: se arregla una y la otra queda.
+
+      **Y la trampa que lo mantenía invisible:** `DEFAULT_CONFIG` trae los horarios en
+      `pending: true` (placeholders), así que elegir «A» cae en *«no tengo horarios libres»* y
+      **nunca** llega a agendar. Producción los carga de `ONIA_BOT_SLOTS`. El gate ahora inyecta
+      dos horarios reales y futuros, así la rama se maneja siempre — incluso el día que el
+      renovador no haya corrido.
+
+      **Arreglo:** `RAMAS_QUE_AVISAN = ["handoff", "demo_agendada"]` en `avisos-vivo.mjs`;
+      `motorProduceAviso()` recorre las dos, exige el `kind` esperado (no «algún notify»:
+      un `sin_horarios` en vez de la demo también es empalme roto), y `emite`/`accionable` son la
+      Y de todas. Una rama que no se puede manejar es **ROJO, nunca un salteo**. La salida nombra
+      cada rama SIEMPRE, no sólo cuando falla: un `motorEmiteNotify ok` sin decir sobre qué ramas
+      es justo la lectura que dejó pasar esto.
+
+      **Verificado en las dos direcciones contra el bot DESPLEGADO** (no contra el repo):
+      `npm run avisos:vivo` → exit 0 con `ok rama handoff` y `ok rama demo_agendada`; con el aviso
+      de la demo borrado → `demo_agendada {emite:false}` y el circuito entero en rojo **mientras el
+      handoff sigue verde**, que es el caso que ningún otro guardia puede ver. Anclado con 3 casos
+      en `avisos-vivo.test.mjs` (la mutación quedó permanente, con `assert.match` sobre el ancla
+      para que avise si cambia la forma). Suite del bot **877/877**, herméticos.
+
+      ⚠️ **De paso, un comentario vencido que empujaba en la dirección contraria:**
+      `aviso-telegram.mjs` decía *«APAGADO POR DEFECTO... una decisión de Sergio que está
+      preguntada y sin contestar»*. Sergio Urcullo la contestó el **2026-09-03** (opción **c**:
+      Telegram ya, Cal.com «cuando moleste anotar a mano») y desde entonces el default va en ON —
+      medido hoy en el proceso vivo: `ONIA_BOT_TG_AVISO=true` en `/proc/<pid>/environ` dentro de
+      `onia-center`. Un comentario que dice «esto está apagado esperando una decisión» hace que el
+      próximo lector lo deje apagado, que es exactamente cómo nació el bug que ese archivo vino a
+      arreglar.
+
+- [x] ✅ **CERRADO el 2026-09-07: el tercer número del objetivo (`avisos demo/handoff`) volvió a
+      medirse desde nodo-casa.** Medido, no leído: `npm run avisos:vivo` → **exit 0**, `circuito:
+      medido` con los cuatro eslabones en `ok` (`flagEncendido`, `credencialesOk`,
+      `motorEmiteNotify`, `textoAccionable`), en 12 s. El número dejó de ser `no_medido` y pasó a
+      leerse entero: **circuito sano · 0 eventos** = nadie pidió un humano todavía, que es la
+      lectura correcta y la que el gate existe para permitir.
+
+      **Arreglo:** `resolverBotDesplegado()` en `avisos-vivo.mjs`, con dos escalones. Si
+      `/opt/onia/bot` está en el disco (el VPS) se usa y **no se sale a la red**; si no está
+      (nodo-casa) se trae el artefacto del VPS por `ssh tar -cf -` a un temporal y se importa de
+      ahí. **No hay un tercer escalón que apunte al repo a propósito:** sería más fácil y
+      rompería lo único que este gate prueba — que las piezas que CORREN encajan entre sí.
+      `lineasDelLog()` sirve igual desde la copia porque su `logs` es un `docker exec`, y en
+      nodo-casa `docker` es un shim que delega en el VPS.
+
+      **Las dos direcciones, en el script real y no sólo en los tests:** con `ssh` funcionando →
+      `ok` / exit 0. Con un `ssh` falso que sale 255 al frente del `PATH` → `VEREDICTO: no_medido`
+      / **exit 2**, nunca `ok`. Suite del bot **874/874**.
+
+      ⚠️ **Dos guardias míos nacieron huecos y los cazó la MUTACIÓN, no la lectura** — el mismo
+      método que salvó al simulador ayer, y la razón de escribirlo acá:
+
+      1. **El chequeo del estado del `ssh` no lo sostenía ningún caso.** Quitándolo, los 12 tests
+         seguían verdes: con el VPS caído el destino queda vacío, así que la verificación del
+         artefacto ya lo tapaba. Lo que sólo ve el estado es la **transferencia cortada a la
+         mitad** — `tar` extrae lo que llegó, `bot-engine.mjs` puede estar y `config.mjs` no, y el
+         gate importaría un árbol truncado que falla *como si el bot estuviera roto*. Ése es el
+         caso que ahora lo sostiene.
+      2. **El espía devolvía un solo estado para todos los comandos**, así que el `tar` tapaba al
+         `ssh` y el caso pasaba por el motivo equivocado. Ahora el estado se da **por comando**.
+
+      Matriz final: rompiendo el guardia del artefacto, el del estado del `ssh` o el de la
+      hermeticidad, cada uno da **1 caso en rojo**; sin mutación, los **12 en verde**.
+
+      ⚠️ **Y una fuga que el test se hacía a sí mismo:** el caso feliz devuelve un temporal real y
+      el que limpia es `medir()`, así que cada corrida de la suite dejaba un directorio en `/tmp`
+      — que en WSL es un **tmpfs que vive en RAM**. Había 24 acumulados. El test ahora limpia el
+      suyo; los caminos que fallan ya se limpiaban solos. Verificado: 0 después de correr.
+
+- [x] ✅ **CERRADO el 2026-09-07: el «3 de 3» de este carril volvió a certificar un guion que ningún
+      lead ve — el mismo falso verde del 2026-09-04, resucitado por la mudanza de máquina.**
+      Medido al arrancar la vuelta, no leído: el simulador contestaba
+      *«Justo ahora no tengo horarios libres para ofrecerte»* (`M0_SIN_HORARIOS`) mientras
+      producción tenía **dos** horarios cargados — `ssh root@187.77.16.63 'grep ONIA_BOT_SLOTS
+      /opt/onia/bot/webhook.env'` → *«martes 8 de septiembre, 14:00@… | miércoles 9…»*.
+
+      **La causa es de clase, no de código:** el escalón que arregló esto el 2026-09-04 leía la
+      ruta absoluta `/opt/onia/bot/webhook.env`. El 2026-09-06 el carril se mudó a **nodo-casa**
+      (WSL), donde `/opt/onia/bot` **no existe** — así que el instrumento dejó de medir y el
+      número siguió saliendo verde. Es el ya conocido *«un gate atado a una ruta del VPS deja de
+      medir cuando su loop se muda»*; acá le tocó al instrumento que produce la cifra del carril.
+      Y **avisar no alcanzó**: el simulador ya imprimía `⚠️ sin horarios … esta es OTRA rama del
+      guion` en cada corrida, dos veces, y nadie cambió de rama.
+
+      **Arreglo:** cuarto escalón — si el disco local no tiene el archivo, se le pregunta al VPS
+      por SSH (nodo-casa lo tiene con `BatchMode`). Sólo sobre la ruta REAL de producción: pedirle
+      al VPS un archivo de prueba no significa nada, y así los casos que inyectan rutas falsas
+      siguen sin salir a la red. Cuando **ni el disco ni el VPS** contestan, cae al placeholder y
+      lo dice nombrando **los dos** intentos — si el aviso sólo nombrara el archivo, se lee como
+      «esta máquina no lo tiene» y manda a copiarlo a mano, que es el lugar equivocado.
+
+      **Prueba:** 3 casos nuevos en `simulate.test.mjs`, el primero **rojo por el motivo exacto**
+      (`expected 'sábado 5 de septiembre, 09:00'` / `actual 'HORARIO A (pendiente de definir)'`).
+      Suite del bot **857/857** en 5,2 s (sin cambio de duración: nada sale a la red de verdad).
+      Y la medición vuelve a ser la de producción: el simulador ahora sirve `M0` / `M0b` con
+      *«A) martes 8 de septiembre, 14:00 · B) miércoles 9 de septiembre, 14:00»*.
+
+      ⚠️ **Mi propio guardia era hueco y lo cazó la MUTACIÓN, no la lectura.** El caso *«una ruta
+      que NO es la desplegada nunca sale a la red»* — el que protege la hermeticidad de toda la
+      suite — hacía `spawnSync: () => assert.fail(...)`, y el lector remoto envuelve la llamada en
+      un `try` con `catch` (para sobrevivir a un `ssh` ausente): **se comía la excepción del assert**, así
+      que pasaba en verde incluso ensanchando el gate a propósito. Reescrito para **anotar** el
+      testigo en vez de tirarlo; verificado en las dos direcciones (con `esLaDesplegada = true`
+      da rojo, sin la mutación da verde). Un guardia que no puede fallar no es un guardia.
+
+- [x] ✅ **CERRADO el 2026-09-06: al lead que escribió por el chat de la web le decíamos al dueño
+      que había venido de WhatsApp.** Salió midiendo D1 en producción, no de una hipótesis: se
+      disparó el webhook REAL de Chatwoot contra `app.onia.com.bo` (inbox 7 de la org QA, la única
+      forma de ejercer el circuito entero) y el contacto quedó en la lista de Pacientes con
+      `notes = "Entró por WhatsApp el 2026-09-06."` — habiendo entrado por el widget web.
+
+      **Por qué importa más de lo que parece:** la procedencia se escribe **una sola vez, al crear**,
+      y el módulo nunca la pisa (`notes` es campo clínico: ahí vive *"Alérgica a la penicilina"*).
+      O sea que si miente, miente para siempre, y el dueño le contesta por WhatsApp a alguien que
+      escribió por la web.
+
+      **La causa, y la clase de bug:** `nombreDelCanal()` era una **segunda copia** de la decisión
+      que ya vive en `canalDeInbox()` (`lib/chatbot/inboxes-de-la-org.ts`), con el orden invertido.
+      Mientras dure el fallback de migración —`whatsapp = web` cuando la columna nueva está vacía,
+      que es el estado de **todas** las orgs de producción hoy— el mismo inbox es los dos canales y
+      **sólo el orden decide**. `canalDeInbox` le da el empate al web a propósito y está probado;
+      la copia preguntaba por WhatsApp primero. Es la hermana de `isWhatsAppAddonActive`: el helper
+      canónico existía y el que llamaba reimplementó la pregunta.
+
+      **Arreglo:** `onia-platform` `b2c25d4` (rama `claude/chatbots-platform-review-0d1d09`).
+      3 casos nuevos en `lib/chatbot/contacto-desde-chatwoot.test.ts`, el primero **rojo por el
+      motivo exacto** (`expected 'Entró por WhatsApp el 2026-09-06.' to match /el chat de la web/i`)
+      y los otros dos en la dirección inversa (con las dos columnas cargadas WhatsApp sigue siendo
+      WhatsApp, y Meta no se confunde con la web). Gates: `tsc` 0 · **3178** tests · `eslint` 0
+      errores. **NO DESPLEGADO** — llega al cliente con el swap de `plataforma` (`t_0268567b`).
+
+      ⚠️ **Y el instrumento falló primero, en la dirección cara:** `mirar_bandeja_dueno.mjs --ancla`
+      resuelve con `:text-is()`, que es match **exacto**, así que `--ancla "Tu asistente"` sobre el
+      título `"Tu asistente, estos 7 días"` salió con *"El ancla NO está en /settings/chatbot"* —
+      la misma cara que una tarjeta que no se renderiza. Casi se abre un bug sobre D4 estando vivo.
+      Se descartó midiendo por otro lado (la función devolvió `{3,3,0}` contra la base de
+      producción) y la captura salió con un ancla que **sí** es el texto completo de su nodo
+      (`"pasaron a vos"`). Al usarlo: el ancla se elige del texto **entero** de un elemento.
+
 - [x] ✅ **CERRADO el 2026-09-05: la promesa ya se cumple avisando.** El gate que este ítem
       construyó —`npm run demo:agendada`, el que mide el estado append-only y no el mensaje— sale
       **exit 0** medido hoy: *"SIN DEMOS HUECAS NUEVAS — desde que existe el aviso a Sergio, toda
@@ -1383,17 +1538,6 @@ decisión de Sergio, no código.
 
 ## Después
 
-- [ ] **El disco de la máquina de Sergio se llenó al 100% y bloqueó el build.**
-      No es una molestia: `next build` murió con `ENOSPC: no space left on device` y con
-      **0 bytes libres** de 465 GB no se puede mirar ninguna pantalla. Se liberó lo
-      inequívocamente muerto — la caché de npm, 308 carpetas `HeadlessChrome*` de Playwright en
-      `%TEMP%`, y los `.next` de los **12 worktrees de `onia-platform` que ni siquiera tienen
-      `node_modules`** (build sin con qué reconstruirse: basura por definición). Quedaron 5,9 GB
-      y el build pasó. **La causa de fondo sigue ahí y no la arregla este carril:**
-      `onia-platform` tiene **30 worktrees**, 13 con su propio `node_modules`. Cerrar los
-      worktrees de ramas ya mergeadas es de cada carril; el de plataforma es el que lleva la
-      cuenta.
-
 - [ ] **Limpieza de la data QA NUEVA.** La del 29-ago ya se ejecutó; después se generó más:
       las conversaciones QA 39, 43 y 44 (`Cliente Prueba Bandeja`, `Cliente Insistencia Tres`,
       `Cliente Comprobante`). **No borrar todavía**: son la evidencia de cuatro ítems cerrados,
@@ -1663,6 +1807,45 @@ archivos.**
 ---
 
 ## Cerrado — no rehacer
+
+- [x] **El disco que bloqueaba el build: el ítem describía una máquina que ya no es donde
+      corremos.** Cerrado el 2026-09-07 midiendo, no razonando. Decía «0 bytes libres de
+      465 GB» y «`onia-platform` tiene **30 worktrees**, 13 con su propio `node_modules`».
+      Medido hoy en la máquina donde de verdad corren los loops (nodo-casa, WSL): `df -h /`
+      da **1007 GB, 62 usados, 7%** — 895 GB libres; `/mnt/c` está al 58%; y hay **DOS**
+      carpetas `onia-platform*` en `/root/loops`, no 30, con un solo `.next` (221 MB) que sí
+      tiene `node_modules` al lado, o sea que puede reconstruirse: no es la basura que el
+      ítem mandaba a barrer.
+      **Por qué envejeció sin que nadie lo notara:** describía la máquina Windows de la app
+      de Claude Code, y los loops se mudaron al VPS el 01-sep y a nodo-casa el 05/06-sep. El
+      ítem no estaba mal cuando se escribió; dejó de tener sujeto.
+      **Lo que sí quedó cubierto:** esta máquina tiene el vigía `onia-vigia-disco.sh` en su
+      crontab (`41 * * * *`, umbral 85%) con el motivo escrito — si se llena, se caen los
+      cuatro loops, incluido `onia-cola`, que es el único camino a `main`.
+
+- [x] 🔴 **El bot adelantaba UN DÍA el plazo fiscal, y los DOS gates del tema exigían la fecha
+      equivocada.** Cerrado el 2026-09-06 (`85a3f41d2`). Archivos:
+      `hermes-content/deploy/vps-ops/bot/knowledge.onia.json`,
+      `hermes-content/docs/chatbot/campanas-onia.knowledge.json`,
+      `hermes-content/deploy/vps-ops/bot/fecha-que-caduca.test.mjs`, `evals/evals.test.mjs`.
+      **Cómo apareció:** midiendo el objetivo al arrancar. El simulador dio 3/3 y en la respuesta
+      del SIAT decía *"desde el 30 de septiembre es obligatoria"*. El plazo real es el **1 de
+      octubre de 2026** (RND 102600000007, grupos 9.º al 12.º), que es lo que
+      `onia.com.bo/facturacion` publica citando la resolución.
+      **Por qué sobrevivió, y es lo único que vale la pena recordar:** no faltaba un gate — había
+      **dos** y los dos pedían el dato equivocado (`fecha-que-caduca.test.mjs` con
+      `/30 de septiembre/`, y `evals` E04 igual). Los escribí el 05-sep mirando si el dato
+      **vencía**; ninguno miró si era **cierto**. Un gate que verifica la propiedad de al lado no
+      es neutral: protege el defecto y le pone cara de verde.
+      **Y estaban TRES copias** — el default de `config.mjs` ya estaba sano desde el 05-sep, así
+      que aquel arreglo tocó una variante y dejó las hermanas vivas. Es la misma familia que ya
+      mordió en este carril (M0/M0_SIN_HORARIOS).
+      **Prueba:** 7/7 en `fecha-que-caduca`, 12/12 en `evals` (E04 incluido), y el simulador
+      contra `knowledge.onia.json` —el artefacto que producción carga— sirviendo el texto nuevo.
+      `vigenteHasta` pasó a 2027-09-30: con la redacción durable, vencerlo el 30-sep callaba el
+      dato justo el día que entra en vigor.
+      ⚠️ **Commiteado, NO desplegado.** El bot vivo corre desde `/opt/onia/bot` (rsync, no
+      checkout): hasta que se despliegue, producción sigue diciendo la fecha vieja.
 
 - [x] **Las CUATRO cifras del carril daban en meta con el bot vivo sin el corte de anticipación:
       ninguna mira el proceso que corre.** Cerrado el 2026-09-05. Archivos:

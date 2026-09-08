@@ -1,4 +1,5 @@
 import { SplitTextReveal, StaggerGrid, StaggerItem } from "@/motion";
+import { PRUEBA } from "@/lib/pricing";
 import { WA_URL_LANDING } from "@/lib/site";
 import { precioStack } from "@/content/chatbot-precios";
 import styles from "./landing.module.css";
@@ -17,7 +18,7 @@ import styles from "./landing.module.css";
 export const FAQS: { q: string; a: string }[] = [
   {
     q: "¿Necesito tarjeta para probar?",
-    a: "No. La prueba de 14 días no pide tarjeta ni pago. Te registrás, elegís tu rubro y usás el sistema completo.",
+    a: `No. La prueba de ${PRUEBA.dias} días no pide tarjeta ni pago. Te registrás, elegís tu rubro y usás el sistema completo.`,
   },
   {
     q: "¿Qué pasa cuando termina la prueba?",
@@ -41,11 +42,16 @@ export const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "¿Cuánto tarda dejarlo andando?",
-    a: "Un día. Te registrás solo, el sistema busca tus datos (tu web o tus redes) y los carga por vos. Sin instalación ni proyecto de meses.",
+    // Esta respuesta viaja además al JSON-LD FAQPage que arma `page.tsx`, así
+    // que la promesa la publica también el buscador. Decía «el sistema busca
+    // tus datos (tu web o tus redes)»: eso es el paso (3) del motor de alta,
+    // que necesita `SEARXNG_URL` y en producción devuelve vacío. Lo que sí
+    // corre es leer el enlace que la persona pega. Ver capacidad-degradada.test.ts.
+    a: "Un día. Te registrás solo, pegás el enlace de tu web y el sistema carga tus datos por vos. Sin instalación ni proyecto de meses.",
   },
   {
     q: "¿Hay contrato de permanencia?",
-    a: "No. Pagás por adelantado el ciclo que elijas —semana, mes o año— y no renovás cuando quieras, sin penalidad. Lo pagado cubre el período en curso: por eso la prueba de 14 días va antes y sin tarjeta, para que decidas sin poner un peso.",
+    a: `No. Pagás por adelantado el ciclo que elijas —semana, mes o año— y no renovás cuando quieras, sin penalidad. Lo pagado cubre el período en curso: por eso la prueba de ${PRUEBA.dias} días va antes y sin tarjeta, para que decidas sin poner un peso.`,
   },
 ];
 

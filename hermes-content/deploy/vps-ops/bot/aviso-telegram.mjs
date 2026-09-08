@@ -18,11 +18,17 @@
 // (`TG_BOT_TOKEN`/`TG_CHAT_ID`, lo usa `webhook-watchdog.sh` cada 2 minutos por cron).
 // O sea: no falta ninguna credencial. Faltaba el codigo.
 //
-// APAGADO POR DEFECTO, A PROPOSITO. Que canal usar es una decision de Sergio que esta
-// preguntada y sin contestar (tablero `t_b18ca430`: (a) Telegram, (b) n8n, (c) las dos).
-// Este archivo es la opcion (a) construida HASTA EL BORDE: encenderla es una variable de
-// entorno, y si Sergio elige (b) el flag se queda en `false` y no cambia nada. No se decide
-// por el: se le saca el trabajo de encima para que su decision sea un `si`, no un proyecto.
+// ENCENDIDO. ⚠️ Acá decía "APAGADO POR DEFECTO, A PROPOSITO... una decision de Sergio que
+// esta preguntada y sin contestar" — y las dos mitades vencieron. Sergio Urcullo contestó el
+// 2026-09-03 (tablero `t_b18ca430`): opcion (c) = Telegram YA, y Cal.com "cuando moleste
+// anotar a mano". Desde entonces el default del lanzador va en ON y apagarlo es la linea
+// manual, no al reves. Verificado en el proceso vivo el 2026-09-07:
+// `ONIA_BOT_TG_AVISO=true` en `/proc/<pid>/environ` del webhook, dentro de `onia-center`.
+//
+// Se corrige acá y no en un doc aparte porque un comentario que dice "esto está apagado
+// esperando una decisión" hace que el proximo lector lo deje apagado — que es exactamente
+// como este mismo archivo llego a existir: `chatwoot-adapter.mjs:761` explicaba durante
+// semanas por que el token "no podia" vivir en el bot, y era falso.
 //
 // QUE NO HACE, y es deliberado: no redacta el texto. `n8n-event.mjs` redacta porque el evento
 // SALE del sistema hacia un tercero; esto va al Telegram privado del dueno de los datos, y es

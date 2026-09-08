@@ -64,6 +64,17 @@ investigacion     claude/investigacion                26 9 * * *
 supervisor        claude/supervisor                   29 6,18 * * *
 calidad-generado  claude/calidad-generado             5 3,9,15,21 * * *
 contenido-cola    claude/ads-creatividades-publicos   11 */3 * * *
+# Los tres que hasta el 2026-09-06 NO podian mudarse. Su traba era UNA: hablan con
+# contenedores del VPS (docker exec sobre onia-platform, supabase-db y la base de
+# Chatwoot). El shim de docker, mas abajo, la disuelve — es el mismo mecanismo que
+# ya usaban onia-tg.sh y el tablero, no un rodeo nuevo.
+# 🔴 onia-cola es el INTEGRADOR: el unico con permiso de push a main. Mudarlo
+# significa que el unico camino a produccion corre en una casa. Es una decision
+# tomada (Sergio Urcullo, 2026-09-06: la pc vieja es mucho mejor que el vps), con
+# su riesgo nombrado: sin luz o sin internet alla, nada llega a main.
+onia-cola         main                                33 * * * *
+chatbot-cola      claude/chatbots-platform-review-0d1d09  3 * * * *
+recorrido-cliente claude/recorrido-cliente            9 1,4,7,10,13,16,19,22 * * *
 EOF
 )
 ASIGNADOS="${ONIA_LOOPS_HOMELAB:-web-factory-dev web-venta tendencias lucia marca-personal}"
@@ -284,9 +295,19 @@ shim() { # shim <nombre> <comando remoto>
 #   · y onia-aprender.sh recibe TEXTO LIBRE escrito por un modelo. Un hecho con
 #     \$(...) o comillas invertidas se habria EJECUTADO como comando en el VPS de
 #     produccion. Eso es ejecucion remota de codigo, no un problema de formato.
-# Y se reenvia ONIA_LOOP_ID: `ssh` NO lleva variables de entorno. Sin esto todo
+# Y se reenvia ONIA_LOOP_ID: ssh NO lleva variables de entorno. Sin esto todo
 # hecho que este nodo deje en la memoria compartida aterriza firmado como
-# "desconocido" —lo hace `aprender.sh` con su ${ONIA_LOOP_ID:-...}— y el
+# "desconocido" —lo hace aprender.sh con su valor por defecto— y el
+#
+# 🔴 SIN COMILLAS INVERTIDAS NI \$(...) EN ESTE COMENTARIO, y no es estilo: el
+# heredoc de abajo es <<SHIM, o sea SIN comillas, asi que bash EJECUTA lo que
+# encuentre entre comillas invertidas mientras escribe el archivo. Medido el
+# 2026-09-06 en el nodo de casa: la instalacion escupio seis "usage: ssh" y seis
+# "aprender.sh: command not found" —uno por shim— porque este mismo comentario
+# tenia esas dos palabras entre comillas invertidas. Los shims salieron
+# funcionando pero con el comentario mutilado, y el ruido tapa un error real.
+# La ironia es el mejor recordatorio: era el comentario que advierte que un texto
+# con comillas invertidas "se habria EJECUTADO como comando".
 # supervisor, que cuenta por carril, no puede atribuir nada. Medido el 2026-09-04.
 exec ssh -i "$LLAVE" -o StrictHostKeyChecking=accept-new -o ConnectTimeout=20 -o BatchMode=yes "$VPS" "ONIA_LOOP_ID=\$(printf '%q' "\${ONIA_LOOP_ID:-}") $cmd \$(printf '%q ' "\$@")"
 SHIM
@@ -298,6 +319,40 @@ shim onia-aprender.sh          /root/bin/onia-aprender.sh
 shim onia-tg.sh                /root/bin/onia-tg.sh
 shim onia-consolidar-memoria.sh /root/bin/onia-consolidar-memoria.sh
 shim onia-tablero.sh           "export HOME=/root; /root/bin/onia-tablero.sh"
+
+# 🔴 EL SHIM QUE DESTRABA A LOS TRES ULTIMOS LOOPS (2026-09-06).
+# onia-cola, chatbot-cola y recorrido-cliente se quedaban en el VPS por UNA razon,
+# escrita en PLAN_HOMELAB §1: hablan con contenedores de esa maquina —
+#   docker exec onia-platform env | grep ALTA
+#   docker exec supabase-db psql ...      (filas zz-qa-% de prueba)
+#   docker exec -d ...                    (levanta el motor del bot)
+# Esas bases NO escuchan fuera de la red de Docker, asi que no alcanzaba con abrir
+# un puerto: habia que ejecutar EN el VPS. Con este shim, docker en el nodo corre
+# alla, con los argumentos citados por el mismo printf %q que protege a los otros.
+# Y eso importa mas aca que en ninguno: estos loops mandan SQL como argumento.
+#
+# ⚠️ No agrega privilegio: este nodo ya tenia SSH root al VPS para subir logs y
+# bajar memoria. Lo que agrega es alcance — un comando escrito por un modelo puede
+# correr contra produccion. El %q es lo que separa eso de una inyeccion.
+shim docker                    docker
+# Y el generico, para lo que no es docker: el stat sobre /opt/onia-landing que usa
+# onia-cola para saber si falta un deploy.
+shim onia-vps.sh               ""
+
+# 🔴 Y EL SHIM TIENE QUE ESTAR EN EL PATH DE **CRON**, no en el del que instala.
+# Medido el 2026-09-06: el shim quedo en /root/bin, funcionaba llamandolo por
+# ruta completa, y aun asi el chequeo daba rojo — porque ni onia-loop.sh ni el
+# bloque de cron definen PATH, y el de cron es /usr/bin:/bin. Los prompts escriben
+# "docker exec ..." pelado, asi que los loops habrian recibido "command not found"
+# con el shim instalado y andando. En el VPS nunca se noto porque alli docker vive
+# en /usr/bin. El enlace va a /usr/bin justamente porque es el unico directorio
+# que cron mira seguro.
+# ⚠️ Si algun dia se instala Docker de verdad en el nodo, este enlace choca con el
+# paquete y hay que decidir: o se saca el enlace y se arregla el PATH, o los loops
+# le van a preguntar a un Docker local vacio por contenedores de produccion.
+if [ "$SOLO_PRUEBA" = 0 ]; then
+  ln -sf "$BIN/docker" /usr/bin/docker && ok "/usr/bin/docker → $BIN/docker (para el PATH de cron)"
+fi
 
 # Bajada de la memoria: SOLO LECTURA. Es una copia; el original vive en el VPS.
 # Si el VPS no contesta, se deja la copia vieja y se sigue: un loop con memoria
@@ -419,6 +474,22 @@ probar "claude autenticado (sin API key)" "unset ANTHROPIC_API_KEY; echo 'respon
 probar_instalado "tablero legible (SQLite del VPS)" "$BIN/onia-tablero.sh list 2>&1 | head -1 | grep -qv 'Permission denied'"
 probar_instalado "memoria local presente"        "[ -s '$HERMES_DIR/memories/MEMORY.md' ]"
 probar_instalado "corredor ejecutable"           "[ -x '$BIN/onia-loop.sh' ]"
+# 🔴 Que el docker que encuentra un loop sea EL SHIM, no un docker local. Si WSL
+# tiene la integracion de Docker Desktop, /usr/bin/docker existe y TAPA al shim
+# segun el PATH — y entonces onia-cola y recorrido-cliente van a preguntarle a un
+# Docker vacio por contenedores de produccion. El fallo seria claro (no such
+# container), pero se descubre a las 3 de la manana en vez de ahora.
+# 🔴 DOS bugs en una linea, los dos medidos el 2026-09-06 con todo funcionando:
+#   1. `$(command -v docker)` iba SIN escapar, asi que se resolvia en el shell del
+#      instalador —que no tiene /root/bin en el PATH— y no en el del chequeo.
+#      Daba vacio siempre.
+#   2. Comparaba la cadena cruda contra $BIN/docker, pero al shim se llega por
+#      /usr/bin/docker, que es un ENLACE. Con las dos rutas correctas, distintas.
+# Resultado: rojo permanente con el shim andando, al lado de un verde que decia
+# que el shim llegaba al VPS. Un chequeo que miente es peor que no tenerlo:
+# ensena a ignorar el rojo. Ahora se comparan las rutas RESUELTAS, en su momento.
+probar_instalado "docker resuelve al shim del VPS" "[ \"\$(readlink -f \"\$(command -v docker)\" 2>/dev/null)\" = \"\$(readlink -f '$BIN/docker')\" ]"
+probar_instalado "el shim de docker llega al VPS"  "$BIN/docker ps --format '{{.Names}}' 2>/dev/null | grep -q supabase-db"
 # Los precios son fuente unica: un loop que no los puede leer escribe uno viejo.
 probar_instalado "precios del producto legibles" "[ -s '$PLATFORM/lib/subscription-plans.ts' ]"
 probar_instalado "producto sin push (este nodo no despliega)" "git -C '$PLATFORM' remote get-url --push origin | grep -q DESHABILITADO"

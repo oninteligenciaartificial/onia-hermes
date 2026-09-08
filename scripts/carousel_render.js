@@ -62,10 +62,14 @@ const ACCOUNTS = {
   // Handle IG real de ONIA, confirmado por Sergio 2026-08-13.
   onia: { handle: '@oniahq', name: 'Onia', personal: false },
   arthur: { handle: '@arthur', name: 'Arthur', personal: true },
-  // Handle REAL verificado por Graph API el 2026-08-23 (id 37718852144430113,
-  // MEDIA_CREATOR, 36 posts, 411 seguidores). Antes decia '@sergio', que no existe:
-  // cualquier pieza suya salia firmada con un handle inventado.
-  sergio: { handle: '@sergio_urcullo', name: 'Sergio Urcullo', personal: true },
+  // Handle actual, confirmado por Sergio Urcullo el 2026-09-06: SIN guion bajo.
+  // Historia, porque este campo ya estuvo mal dos veces: decia '@sergio' (inventado),
+  // se corrigio a '@sergio_urcullo' con verificacion de Graph API del 2026-08-23
+  // (id 37718852144430113, 411 seguidores), y despues el renombro la cuenta —
+  // el cambio se aplico en los 13 generadores de scripts/marca-personal/ pero
+  // NO aca, asi que este motor firmaba con un handle que ya no existe.
+  // Un handle mal puesto no rompe ningun build: sale publicado y ya.
+  sergio: { handle: '@sergiourcullo', name: 'Sergio Urcullo', personal: true },
   nuvia: { handle: '@nuvia.bo', name: 'Nuvia', personal: false },
   // Lucia va en el VERDE de Onia. Sergio, 2026-08-28: "usa color verde siempre".
   // Deroga el §1-quater de LUCIA.md, que prohibia el verde en sus piezas y por el que

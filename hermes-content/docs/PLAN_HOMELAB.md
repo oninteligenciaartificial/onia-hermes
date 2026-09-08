@@ -409,7 +409,7 @@ perdida se pierde; la siguiente llega a horario.
 | 7 | Llave SSH de GitHub **de `root`** | PC de casa | ✅ `homelab-onia-github` |
 | 8 | Instalador `--prueba`, y si está verde, sin `--prueba` | PC de casa | ✅ 14/14 verde |
 | 9 | Una vuelta a mano y **mirar el log** | PC de casa | ✅ 2 vueltas completas, exit 0 |
-| 10 | **Recién ahí**, sacar del `crontab` del VPS los loops mudados | VPS | ⬜ lo coordina la sesión de control |
+| 10 | **Recién ahí**, sacar del `crontab` del VPS los loops mudados | VPS + `nodo-casa` | 🟡 **`web-venta` en curso el 06-sep**: nodo ✅ y tabla ✅ pusheada; falta que el integrador la lleve a `main` y caiga la línea del VPS. Los otros 4 están pausados y se mudan sin coreografía |
 | 11 | Cerrar el puerto 22 público, con una sesión de respaldo abierta | VPS | ⬜ pendiente |
 
 ⚠️ **Dos correcciones al plan original, y las dos importan:**
@@ -426,6 +426,81 @@ perdida se pierde; la siguiente llega a horario.
 
 ⚠️ **El paso 10 va después del 9, nunca antes.** Un loop apagado en el VPS y roto en casa es un
 carril muerto que **no avisa** — el modo de falla que este sistema ya documentó tres veces.
+
+### El paso 10 para `web-venta`, ejecutado — 2026-09-06
+
+Es el primero de los cinco y el único de la primera tanda que **estaba corriendo**; los otros
+cuatro están pausados, así que se mudan sin nada de esto.
+
+🔴 **El orden correcto es NODO → TABLA → VPS, y no es el que parecía.** La primera versión de esta
+receta decía *"VPS primero, nodo último"*, razonando sobre el minuto `:48` compartido. Ese orden
+**se atasca solo**, y se descubrió al chocar con él.
+
+**Los dos estados intermedios son ROJOS, y no son igual de graves.** El gate compara, para cada
+máquina, sus filas de la tabla contra su `crontab`, en las dos direcciones:
+
+| estado intermedio | qué ve el gate del VPS | consecuencia |
+|---|---|---|
+| **Se saca la línea del VPS primero** | 3 líneas de cron contra **4 filas `VPS`** en la tabla de `main` | 🔴 **Candado permanente.** Rojo ⇒ falla `npm test` ⇒ **el integrador deja de mergear** ⇒ la fila corregida no llega nunca a `main`. Sólo se destraba a mano |
+| **La tabla llega a `main` primero** | 4 líneas de cron contra **3 filas `VPS`** | 🟡 Rojo también, **pero de segundos**: la línea sobrante se saca en cuanto la fila está en el checkout, y el integrador ya mergeó. La próxima corrida lo ve verde |
+
+**La tabla sólo llega a `main` por el integrador, y el integrador necesita el gate del VPS en
+verde.** De ahí sale todo: mientras la fila viaja, la línea del VPS **tiene que seguir puesta**.
+Por eso el VPS es siempre lo ÚLTIMO, y por eso no hay ningún orden que evite el rojo: lo único
+que se elige es cuál de los dos rojos, y cuánto dura.
+
+**Paso 1 — el nodo** (`DESKTOP-0GGGNMF`, se reconoce por `/root/.onia-nodo`; la laptop
+`DESKTOP-ENV6SDA` no lo tiene). Se teclea **en su propia terminal**, ya dentro de Ubuntu, con
+`sudo`: el crontab de los loops es el de `root`. Idempotente y con guarda de máquina:
+
+```
+sudo sh -c '[ -f /root/.onia-nodo ] || { echo "ESTA NO ES nodo-casa"; exit 1; }; crontab -l > /root/crontab.antes-de-web-venta.txt 2>/dev/null; { crontab -l 2>/dev/null | grep -v "onia-loop\.sh web-venta"; echo "48 */2 * * * /root/bin/onia-loop.sh web-venta"; } | crontab -; cat /root/.onia-nodo; ls -l /root/bin/onia-loop.sh; git -C /root/loops/onia-hermes-web-venta branch --show-current; crontab -l | grep onia-loop'
+```
+
+**Sin redirección de log a propósito**: `onia-loop.sh` escribe él mismo en
+`/var/log/onia-loop-<id>.log` (línea 255) y el rsync de los `*/10` lo sube a `/var/log/homelab/`
+del VPS. Un `>>` agregado duplica la salida. Y las dos comprobaciones del final —corredor
+ejecutable, worktree en su rama— no son adorno: sin ellas la línea queda puesta y el loop muere
+a las `:48` con `exit 64`, en silencio.
+
+**Paso 2 — la tabla**, sola: mover la fila de `web-venta` en [`cola/loops.md`](cola/loops.md) de
+`**VPS**` a `**casa**`, **sin tocar el horario**, y pushear. Después hay que esperar al integrador
+(`onia-cola`, `33 * * * *`, ~11 min de vuelta).
+
+**Paso 3 — el VPS, disparado por la CONDICIÓN y no por un reloj.** Entre que el integrador mergea
+y que se saca la línea, el VPS está en el rojo amarillo de la tabla de arriba: cuanto más corto,
+mejor, y a mano se falla. Este centinela espera a que la fila esté en el checkout que el gate
+lee, y recién ahí toca el `crontab`:
+
+```bash
+ssh -i ~/.ssh/onia_hermes_vps_ed25519 root@187.77.16.63 'bash -s' <<REMOTO
+DOC=/root/loops/onia-hermes/hermes-content/docs/cola/loops.md
+for i in $(seq 1 80); do
+  if grep -q "web-venta. | \*\*casa\*\*" "$DOC" 2>/dev/null; then
+    [ "$(crontab -l | grep -c "onia-loop\.sh web-venta")" = "1" ] || exit 3
+    crontab -l > /root/crontab.antes-de-mudar-web-venta.txt
+    crontab -l | grep -v "onia-loop\.sh web-venta" | crontab -
+    sed -i "s|^# web-venta |web-venta |" /root/.config/onia/loops-remotos.txt
+    cd /root/loops/onia-hermes && node scripts/loops_registrados.mjs; exit \$?
+  fi
+  sleep 30
+done
+echo "TIEMPO AGOTADO: no toque nada"; exit 1
+REMOTO
+```
+
+El `sed` del final es la otra mitad que se olvida: **descomenta la línea de `web-venta` en
+`/root/.config/onia/loops-remotos.txt`**, que es lo que hace que el vigía de loops remotos avise
+si el nodo se muere. Sin eso, el loop se muda y **queda sin nadie mirándolo** — el modo de falla
+más silencioso que tiene este sistema (§6).
+
+*Listo =* gate verde en las **dos** máquinas, un `TERMINA` con `exit 0` en
+`/var/log/onia-loop-web-venta.log` del nodo, y ese log llegando a `/var/log/homelab/` del VPS.
+
+⚠️ **Lo que se acepta a cambio:** entre el paso 1 y el paso 3 las dos máquinas tienen la línea a
+las `:48`. Si llegan a correr juntas, el segundo push a `claude/web-venta` se rechaza por
+non-fast-forward: ruidoso y recuperable. Un gate rojo bloquea a los quince carriles y **no se
+destraba solo**. Por eso se elige este riesgo y no el otro.
 
 ---
 

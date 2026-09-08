@@ -8,7 +8,6 @@ import { PressableCta, StaggerGrid, StaggerItem, easeOutExpo, springs } from "@/
 import {
   EQUIPO_OPTIONS,
   ESCAPE_WA_URL,
-  NOTA_PROXIMAMENTE,
   RUBRO_OPTIONS,
   TIENE_OPTIONS,
 } from "./data";
@@ -112,6 +111,11 @@ export function StepRubro({ rubro, onSelect, onNext, autoFocusH1 }: StepRubroPro
       <fieldset className={styles.fieldset}>
         <legend className={styles.srOnly}>¿De qué es tu negocio?</legend>
         <div className={styles.opts}>
+          {/* Todo lo que se lista se contrata hoy: el badge lo AFIRMA, no
+              elige entre dos estados. Acá vivía `o.disponible ? "DISPONIBLE" :
+              "PRÓXIMAMENTE"` con su nota de lista de espera debajo — obra a la
+              vista en la pantalla de venta, esperando un `false` que nadie
+              había puesto todavía. Ver la cabecera de RubroOption en data.ts. */}
           {RUBRO_OPTIONS.map((o) => (
             <div key={o.id}>
               <RadioCard
@@ -124,26 +128,10 @@ export function StepRubro({ rubro, onSelect, onNext, autoFocusH1 }: StepRubroPro
                   <span className={styles.optName}>{o.nombre}</span>
                   <span className={styles.optDesc}>{o.desc}</span>
                 </span>
-                <span
-                  className={`badge ${o.disponible ? "badge-on" : "badge-soon"} ${styles.optBadge}`}
-                >
-                  {o.disponible ? "DISPONIBLE" : "PRÓXIMAMENTE"}
+                <span className={`badge badge-on ${styles.optBadge}`}>
+                  DISPONIBLE
                 </span>
               </RadioCard>
-              <AnimatePresence initial={false}>
-                {rubro === o.id && !o.disponible ? (
-                  <m.p
-                    key="nota"
-                    className={styles.notaSoon}
-                    initial={{ clipPath: "inset(0 0 100% 0)", opacity: 0 }}
-                    animate={{ clipPath: "inset(0 0 0% 0)", opacity: 1 }}
-                    exit={{ clipPath: "inset(0 0 100% 0)", opacity: 0 }}
-                    transition={{ duration: 0.4, ease: easeOutExpo }}
-                  >
-                    {NOTA_PROXIMAMENTE}
-                  </m.p>
-                ) : null}
-              </AnimatePresence>
             </div>
           ))}
         </div>
@@ -328,9 +316,17 @@ export function StepTiene({
               value={webUrl}
               onChange={(e) => onWebUrl(e.target.value)}
             />
+            {/*
+              Acá decía «lo hace una persona del equipo, no un robot — te lo
+              mandamos por WhatsApp en el día»: se lucía contra el robot con un
+              equipo que no existe, y le ponía plazo a algo que ningún circuito
+              entrega. Este campo no viaja a ningún servidor nuestro: lo que se
+              escribe acá sólo sale en el mensaje de WhatsApp que abre el lead.
+              Decir eso es verdad y además explica por qué le pedimos el dato.
+            */}
             <p className={styles.urlMicro}>
-              El análisis lo hace una persona del equipo, no un robot — te lo
-              mandamos por WhatsApp en el día.
+              Viaja en el mensaje de WhatsApp que abrís al final: así la miramos
+              y te decimos qué le falta.
             </p>
           </m.div>
         ) : null}

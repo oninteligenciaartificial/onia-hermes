@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { PRUEBA } from "@/lib/pricing";
 import { Reveal } from "@/motion";
 import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
+import { SIAT_ESTADO_ONIA } from "@/lib/siat";
 import { EMPEZAR_URL } from "../nav";
 import { CTA_ALTA } from "../alta";
 import { Block, Btn, Kicker, JsonLd } from "../ui";
@@ -112,7 +114,7 @@ export default function Nosotros() {
             empresa grande — con inteligencia artificial de verdad, en
             bolivianos, y hablando su idioma. Somos OniaAgency, registrados en
             SEPREC y con NIT vigente, y el sistema ya corre en producción:
-            entrás, lo usás completo 14 días sin dejar una tarjeta, y recién
+            entrás, lo usás completo {PRUEBA.dias} días sin dejar una tarjeta, y recién
             después decidís.
           </p>
         </Reveal>
@@ -146,12 +148,11 @@ export default function Nosotros() {
           </h2>
           <p className={s.body} style={{ maxWidth: "48em" }}>
             Cinco rubros disponibles — clínicas dentales, comercios,
-            importadoras, estéticas y servicios profesionales — y
-            nuestro emisor de facturación está registrado ante el SIN con las
-            pruebas técnicas de la Fase 1 completadas. Lo probás tal como está
-            hoy: 14 días con el sistema completo, sin tarjeta y sin contrato de
-            permanencia. Si no te sirve, no pagás nada y tus datos te los llevás
-            en CSV cuando quieras.
+            importadoras, estéticas y servicios profesionales — y{" "}
+            {SIAT_ESTADO_ONIA}. Lo probás tal como está hoy: {PRUEBA.dias} días con el
+            sistema completo, sin tarjeta y sin contrato de permanencia. Si no
+            te sirve, no pagás nada y tus datos te los llevás en CSV cuando
+            quieras.
           </p>
           <div className={s.actions}>
             <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>

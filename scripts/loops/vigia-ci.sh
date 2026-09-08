@@ -1,0 +1,160 @@
+#!/usr/bin/env bash
+# ONIA — VIGIA DEL CI DE GITHUB.
+#
+# POR QUE EXISTE: el CI ataja `master` roto y NO se lo dice a nadie. Medido el
+# 2026-09-06 por la sesion de producto: un `.ico` guardado en RGB (Next lo exige
+# en RGBA) tumbo el build, GitHub Actions lo marco `failure`... y se enteraron
+# ~10 minutos despues, de casualidad, cuando el build del VPS fallo en sus manos.
+# Si en vez de una persona hubiera sido un loop a las 3 de la manana, `master`
+# quedaba roto hasta que alguien mirara.
+#
+# Y no era un agujero chico: `grep -rl "gh run\|actions/runs\|workflow_run"
+# /root/bin/*.sh` daba VACIO. Hay ~20 vigias en el crontab —embudo, leads, disco,
+# aprobaciones, loops remotos, sin-respuesta— y ninguno miraba el CI. La red
+# existia y funcionaba; lo que faltaba era que avisara.
+#
+# DELIBERADAMENTE TONTO, igual que `vigia-disco.sh`: lee, compara con el estado
+# anterior y avisa. No reintenta, no arregla, no revierte. Arreglar sin que nadie
+# mire es como se pierden cosas.
+#
+# AVISA POR CAMBIO, NO POR ESTADO. Un workflow que ya estaba rojo y sigue rojo
+# NO manda nada: treinta mensajes iguales logran que nadie lea el 31. Manda uno
+# al ponerse rojo y uno al recuperarse — el patron de `vigia-disco.sh`.
+#
+# 🔴 NO USA `gh`: no esta instalado en el VPS (verificado 2026-09-06). Va por la
+# API REST con curl.
+#
+# 🔴 EL TOKEN NO VIVE ACA. Se lee de $TOKEN_FILE, root-only. `onia-platform` es
+# privado, asi que hace falta uno con permiso **Actions: Read-only**. El
+# `GITHUB_TOKEN` que ya esta en el contenedor de n8n NO sirve: lee el repo (200)
+# pero da 403 "Resource not accessible by personal access token" en
+# `actions/runs`, `check-runs` y `status` — las tres puertas, probadas.
+# Sin el archivo, este script avisa UNA vez que le falta y sale 0. No grita.
+set -uo pipefail
+
+# Que se vigila. `<owner>/<repo>:<rama>`, separados por espacios.
+# Hoy solo `onia-platform`: es el repo con `ci.yml` y el que le llega al cliente.
+# `onia-hermes` no tiene CI de build —sus workflows son auditorias diarias— asi
+# que sumarlo hoy seria ruido. Agregarlo el dia que lo tenga es esta linea.
+OBJETIVOS="${ONIA_CI_OBJETIVOS:-oninteligenciaartificial/onia-platform:master}"
+
+TOKEN_FILE="${ONIA_CI_TOKEN_FILE:-/root/.config/onia/github-token}"
+MARCA_DIR="${ONIA_CI_MARCA_DIR:-/var/lib}"
+# Indirecto para poder PROBAR este script sin mandarle un Telegram falso a Sergio
+# Urcullo. Una guarda que no se puede ejercitar es una guarda que nadie sabe si anda.
+TG="${ONIA_TG:-/root/bin/onia-tg.sh}"
+# Para el autotest: si apunta a un archivo, se usa en vez de llamar a la API.
+FIXTURE="${ONIA_CI_FIXTURE:-}"
+
+avisar() { "$TG" "$1" >/dev/null 2>&1 || true; }
+
+# ── El token ────────────────────────────────────────────────────────────────
+if [ -z "$FIXTURE" ]; then
+  if [ ! -s "$TOKEN_FILE" ]; then
+    # Una sola vez. Con la instruccion exacta adentro: un aviso que no dice como
+    # arreglarlo obliga a reconstruir el diagnostico cada vez que aparece.
+    if [ ! -f "$MARCA_DIR/onia-ci-sin-token.avisado" ]; then
+      avisar "⚠️ <b>Vigia de CI sin token</b> — instalado y sin poder mirar nada.
+
+<code>onia-platform</code> es privado, asi que leer Actions pide un token propio.
+El de n8n no sirve: da 403 en <code>actions/runs</code>.
+
+Hace falta uno <b>fine-grained</b> con <b>Actions: Read-only</b> sobre
+<code>onia-platform</code>, en <code>$TOKEN_FILE</code> (chmod 600).
+Mientras tanto este vigia sale 0 y no vuelve a insistir."
+      touch "$MARCA_DIR/onia-ci-sin-token.avisado"
+    fi
+    exit 0
+  fi
+  rm -f "$MARCA_DIR/onia-ci-sin-token.avisado"
+  TOKEN=$(cat "$TOKEN_FILE")
+fi
+
+# ── Traer el estado de cada objetivo ────────────────────────────────────────
+# Salida normalizada, una linea por workflow:  <workflow>\t<conclusion>\t<sha>\t<url>
+estado_de() {  # estado_de <owner/repo> <rama>
+  local repo="$1" rama="$2" json
+  if [ -n "$FIXTURE" ]; then
+    json=$(cat "$FIXTURE")
+  else
+    json=$(curl -s --max-time 25 \
+      -H "Authorization: Bearer $TOKEN" \
+      -H "Accept: application/vnd.github+json" \
+      "https://api.github.com/repos/$repo/actions/runs?branch=$rama&per_page=30" 2>/dev/null)
+  fi
+  # Se parsea con `node`, no con python3: node es dependencia dura de este repo
+  # (el gate `loops_registrados.mjs` y media docena mas lo necesitan), asi que
+  # esta garantizado en toda maquina donde esto corra. python3 no lo esta.
+  printf '%s' "$json" | node -e '
+let e = ""; process.stdin.on("data", c => e += c); process.stdin.on("end", () => {
+  let d;
+  try { d = JSON.parse(e); } catch { process.exit(0); }   // API muda o HTML de error: no inventamos estado
+  if (!d || !Array.isArray(d.workflow_runs)) {
+    const m = String((d && d.message) || "respuesta inesperada").slice(0, 120);
+    console.log(["__ERROR__", m, "", ""].join("\t"));
+    return;
+  }
+  const visto = new Set();
+  for (const r of d.workflow_runs) {                      // vienen del mas nuevo al mas viejo
+    const n = r.name || "?";
+    if (visto.has(n)) continue;                           // solo la corrida COMPLETA mas reciente por workflow
+    if (r.status !== "completed") continue;               // en curso: todavia no dice nada
+    const c = r.conclusion;
+    if (!c || ["cancelled", "skipped", "neutral"].includes(c)) continue;  // no son veredictos sobre el codigo
+    visto.add(n);
+    console.log([n, c, (r.head_sha || "").slice(0, 7), r.html_url || ""].join("\t"));
+  }
+});
+' 2>/dev/null
+}
+
+# ── La maquina de estados ───────────────────────────────────────────────────
+for objetivo in $OBJETIVOS; do
+  REPO="${objetivo%%:*}"
+  RAMA="${objetivo##*:}"
+  SALIDA=$(estado_de "$REPO" "$RAMA")
+  [ -z "$SALIDA" ] && continue
+
+  while IFS=$'\t' read -r WF CONCL SHA URL; do
+    [ -n "${WF:-}" ] || continue
+
+    # La API contesto un error (token vencido, permiso quitado, repo movido). Es
+    # un fallo del vigia, no del CI: se avisa aparte y NO se toca ninguna marca,
+    # para no dar por "recuperado" algo que no se pudo mirar.
+    if [ "$WF" = "__ERROR__" ]; then
+      if [ ! -f "$MARCA_DIR/onia-ci-api.avisado" ]; then
+        avisar "⚠️ <b>Vigia de CI: la API de GitHub no contesta lo esperado</b>
+<code>$REPO</code> — <code>$(printf '%s' "$CONCL" | head -c 120)</code>
+No se toco ninguna marca: no se puede declarar verde lo que no se pudo mirar."
+        touch "$MARCA_DIR/onia-ci-api.avisado"
+      fi
+      continue
+    fi
+    rm -f "$MARCA_DIR/onia-ci-api.avisado"
+
+    # Una marca por repo+workflow. El nombre del workflow puede traer espacios.
+    CLAVE=$(printf '%s-%s' "$REPO" "$WF" | tr -c 'A-Za-z0-9._-' '-')
+    MARCA="$MARCA_DIR/onia-ci-$CLAVE.rojo"
+
+    if [ "$CONCL" = "success" ]; then
+      if [ -f "$MARCA" ]; then
+        avisar "🟢 <b>CI recuperado</b> — <code>$REPO</code> · <b>$WF</b>
+Verde en <code>$SHA</code>."
+        rm -f "$MARCA"
+      fi
+      continue
+    fi
+
+    # failure / timed_out / startup_failure / action_required
+    [ -f "$MARCA" ] && continue      # ya avisamos de este episodio
+
+    avisar "🔴 <b>CI en ROJO</b> — <code>$REPO</code> · <b>$WF</b>
+Resultado: <code>$CONCL</code> en <code>$SHA</code> (rama <code>$RAMA</code>).
+
+Mientras siga asi, <code>$RAMA</code> esta roto y el deploy va a fallar.
+$URL"
+    touch "$MARCA"
+  done <<< "$SALIDA"
+done
+
+exit 0

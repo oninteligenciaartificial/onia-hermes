@@ -110,20 +110,37 @@ Lo que tiene pantalla propia hoy. **Las tablas existen** (se aplicaron las migra
 | Cobros y facturación | `/billing` | sí | 🟡 fiscal en trámite (ver §7) |
 | Comercio (catálogo, caja, fiados, importar) | `/comercio/**` | sí | 🟡 |
 | Importadora (costeo, cotizaciones B2B) | `/importadora/cotizaciones` | sí | 🟡 |
-| Contabilidad | `/contabilidad`, `/accounting` | sí | 🟡 |
+| Contabilidad | `/contabilidad` | sí | 🟡 |
 | RRHH / planillas | `/rrhh` | sí | 🟡 |
 | Empresa (gastos, comisiones, colaboradores) | `/empresa` | sí | 🟡 |
-| Agentes de IA | `/agents` | sí | 🟡 **no corren solos** — ver §7 |
+| Agentes de IA | `/agents` | sí | 🟡 corren solos, una vez al día — ver §7 |
 | Comunicaciones | `/communications` | sí | 🟡 |
 | Reportes | `/reports` | sí | 🟡 |
-| Operaciones | `/operations` | sí | 🟡 |
-| Requerimientos al cliente | `/requerimientos` | sí | 🟡 **pantalla huérfana** — ver abajo |
+| Requerimientos al cliente | `/requerimientos` | sí | 🟡 |
 
-⚠️ **`/requerimientos` no está enlazada desde ningún lado.** Existe, tiene su portal
-público con token, sus endpoints y sus e2e propios, y está en la lista de segmentos
-comunes a todos los rubros — pero **cero `href` en todo el repo**: no figura en ninguna nav
-ni en ninguna acción rápida. Solo se llega tipeando la URL. Sirve para una demo guiada; no
-se le puede decir a un cliente "entrá y la ves".
+⚠️ **Corregido 2026-09-06 — esta tabla vendía un módulo que no existe y subvendía uno que
+sí funciona.** Los cuatro errores, medidos contra el árbol de rutas del producto y no contra
+un doc:
+
+- **«Operaciones» no es un módulo: se quitó la fila.** `app/(dashboard)/operations` **no
+  existe**, `next.config.ts:80` redirige `/operations` → `/dashboard`, y no aparece ni en
+  `route-access.ts` ni en `vertical-pack.ts`. (Lo único llamado `operaciones` en el código es
+  un **rol** de `vertical-pack.ts:237`, no una pantalla.) La redirección es justo lo que lo
+  hizo sobrevivir: quien tipeaba la URL no veía un 404, veía el panel.
+- **`/accounting` tampoco existe** — `next.config.ts:81` la manda a `/contabilidad`, que es la
+  pantalla viva. Se quita de la celda para que nadie la enlace.
+- **Los agentes SÍ corren solos.** La fila decía «no corren solos — ver §7» y **§7 dice lo
+  contrario desde el 2026-08-30**: cron del host `0 11 * * *`, 14 días de `http=200`. La
+  corrección se aplicó a §7 y no viajó a esta tabla, así que durante días el catálogo mandaba
+  a leer la sección que lo desmiente — subvendiendo una capacidad real.
+- **`/requerimientos` ya no es huérfana.** Acá decía «cero `href` en todo el repo»: hoy está en
+  `components/layout/navigation.ts:100` (grupo Automatización) y la tienen los **siete** packs.
+  Se le puede decir a un cliente "entrá y la ves".
+
+Lo sostiene un gate, para que la tabla no se vuelva a despegar del producto —
+cruza cada ruta declarada contra `app/(dashboard)/` y exige que §4 no contradiga a §7:
+
+    node scripts/catalogo_modulos_vivos.mjs
 
 ---
 
@@ -312,6 +329,16 @@ No es una lista de deseos, es el trabajo pendiente, en orden.
    `onia-platform`) — todo pack que ofrezca agenda tiene que poder abrir la pantalla de sus
    clientes, así que sacar la entrada siguiendo un doc viejo se pone **rojo**. Escrito el
    2026-09-05 en la rama del carril; entra a `master` con el merge.
+
+   ✅ **MIRADO el 2026-09-06, que es lo único que faltaba: todo este ítem se había discutido
+   leyendo código.** Se abrió `/appointments` de producción con la sesión del dueño y se
+   apretó «Nueva Cita»: el modal ofrece **«+ Nuevo paciente»** justo arriba del desplegable
+   —el rótulo sale del rubro, así que en servicios profesionales dice «+ Nuevo cliente»—.
+   Captura: `hermes-content/docs/recorrido/capturas/alta-inline-en-el-modal-de-cita.png`.
+   Se mira con `node scripts/mirar_bandeja_dueno.mjs --ruta /appointments --click "Nueva Cita"`.
+   **Lo que NO se probó, dicho de frente:** no existe ninguna organización de ese rubro en
+   producción (contado en `supabase-db`), así que el modal se miró en una dental; el botón
+   no depende del rubro ni de que ya haya clientes (`page.tsx:716-722`), el rótulo sí.
 
    ⚠️ **Las dos objeciones que esta celda usaba para justificar el «no» también vencieron**
    (§2, misma fecha): la ficha esconde alertas médicas, alergias, tipo de sangre, historia

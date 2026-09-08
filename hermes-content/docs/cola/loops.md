@@ -7,7 +7,57 @@ disco con un horario registrado en algún lado — y desde el 2026-09-05 ese "al
 |---|---|---|
 | `Windows` | `C:\Users\PC\.claude\scheduled-tasks\<id>\SKILL.md` | la app de Claude Code (`list_scheduled_tasks`) |
 | `VPS` | `/root/bin/loops/<id>.md` (fuente: [`scripts/loops/prompts/`](../../../scripts/loops/prompts/)) | `crontab -l` en `187.77.16.63` |
-| `casa` | `/root/bin/loops/<id>.md` dentro de WSL | `crontab -l` en la PC de casa (`DESKTOP-0GGGNMF`) |
+| `casa` | `/root/bin/loops/<id>.md` dentro de WSL | `crontab -l` en **nodo-casa** (`DESKTOP-0GGGNMF`) |
+
+🔴 **Los nombres de las máquinas, definidos el 2026-09-06 — y la ambigüedad ya costó.**
+Acá y en `PLAN_HOMELAB.md` se decía **«la PC de casa»**, y en la casa de Sergio Urcullo hay
+**dos** Windows detrás del mismo router (misma IP pública). Ese día corrió el instalador de
+arranque de WSL en la equivocada y Windows contestó *«el argumento … no existe»*, que no dice
+«máquina equivocada» en ningún lado. Un nombre ambiguo se paga en un error que no se explica
+solo.
+
+| nombre | máquina | qué es | cómo se reconoce |
+|---|---|---|---|
+| **laptop** | `DESKTOP-ENV6SDA` | HP Victus 16, 12 hilos, 23,6 GB, **con batería**, Win 11 Home. Donde Sergio Urcullo trabaja y habla con las sesiones. **No tiene nada del nodo** | su Ubuntu **no** tiene `/root/loops` ni `/root/.onia-nodo` |
+| **nodo-casa** | `DESKTOP-0GGGNMF` | El tercer nodo: `/root/loops`, los worktrees, y **los CUATRO loops vivos** — `web-venta`, `onia-cola`, `chatbot-cola`, `recorrido-cliente` | existe `/root/.onia-nodo` |
+| **VPS** | `srv1360183` · 187.77.16.63 | Producción: la app, Supabase, Chatwoot y los publicadores. **Ya no corre ningún loop** | existe `/usr/local/lib/hermes-agent/venv/bin/python` |
+
+⚠️ **Esas dos celdas decían otra cosa hasta el 2026-09-07 — corregidas contra la medición.**
+Decían que en casa *«`web-venta` [estaba] activa y las otras 4 comentadas»* y que el VPS corría
+*«los 3 loops que no pueden mudarse»*. Contado en vivo a las 05:40 UTC: casa tiene **cuatro**
+líneas activas y el VPS **cero** (`crontab -l | grep -c 'onia-loop\.sh'` da `0` allá). La tabla de
+*«Deben existir y estar activos»* de más abajo sí estaba al día — la que envejeció es esta, que es
+prosa y no la lee ningún gate. Se ve con: `crontab -l | grep onia-loop.sh` en cada máquina.
+
+🔴 **La mudanza dejó al integrador sin poder mergear uno de sus dos repos, y en silencio.**
+`onia-cola` es el único loop autorizado a mergear, y le tocan **dos** repos. En nodo-casa,
+`/root/loops/onia-platform` tiene la url de push puesta a mano en
+`DESHABILITADO-NODO-DE-DESARROLLO` (es un seguro, puesto a propósito), y la llave de deploy
+`/root/.ssh/deploy_onia-platform` **sólo existe en el VPS**. Con el VPS ya sin loops, ninguna
+máquina quedaba en condiciones de integrar ese repo.
+
+**Hoy no muerde porque `onia-platform` no tiene ni una rama de carril sin mergear — y por eso es
+peligroso: falla ABIERTO.** El día que un carril pushee allá, el `--no-merged` crece y nada se
+pone rojo; la única señal sería que las vueltas del integrador digan *«no puedo»*, que en el log
+se lee igual que *«no había nada que hacer»*.
+
+**No se arregla re-habilitando el push** (revierte un seguro ajeno, y sin la llave tampoco
+funcionaría). La vía que **sí** funciona ya estaba ahí y nadie la había medido: el clon del VPS
+está en `master`, limpio, y su `git push --dry-run` contesta *«Everything up-to-date»*. Se lo
+alcanza desde casa con el shim `/root/bin/onia-vps.sh`. La línea de abajo **la lee un gate**
+(`scripts/integrador_puede_mergear.mjs`): si se borra, `npm test` se pone rojo y nombra el repo.
+
+VIA-INTEGRADOR onia-platform casa: /root/bin/onia-vps.sh bash -lc 'cd /root/loops/onia-platform && git fetch origin --quiet && git merge --no-ff --no-edit origin/<rama> && npx tsc --noEmit && npx vitest run && npm run lint && git push origin master'
+
+El nombre `nodo-casa` no se inventó acá: es con el que **ese nodo ya firma** los hechos que
+escribe en la memoria compartida. ⚠️ El valor de la columna *dónde corre* sigue siendo `casa`
+a propósito — `loops_registrados.mjs` compara contra esa cadena exacta; cambiarla rompe el gate.
+
+> **Y sirve saber esto:** el 2026-09-06 se midió que **nodo-casa está despierto y su cron
+> dispara** (sube logs al VPS cada 10 min, baja memoria cada 15, sincroniza a los :44, sin
+> cortes desde el 2026-08-30). O sea que el arranque automático de WSL **no es el bloqueante
+> para encender un loop hoy**: es el seguro para que sobreviva un reinicio. Lo único que separa
+> a ese nodo de correr un loop es **descomentar su línea**, coordinado con el VPS y esta tabla.
 
 🔴 **La columna «dónde corre» no es informativa: la lee un gate.** Cada máquina se compara
 **sólo contra sus propias filas**, y para eso tiene que saber cuál es. Se resuelve preguntando
@@ -136,10 +186,10 @@ manda. Un loop se compara **sólo contra el registro de su propia máquina**:
 
 | id | dónde corre | cron | para qué sirve |
 |---|---|---|---|
-| `chatbot-cola` | **VPS** | `3 * * * *` (UTC) | **Carril `plataforma-v1` desde el 2026-09-05** (el id no se renombró: cambiarlo tocaría cron, worktrees, logs y gate sin ganar nada). Dos colas en orden: `cola/chatbot.md` mientras le queden 🔴, después `cola/plataforma-v1.md`. **Es el único loop que escribe en el repo `onia-platform`** |
-| `onia-cola` | **VPS** | `33 * * * *` (UTC) | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
-| `web-venta` | **VPS** | `48 */2 * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
-| `recorrido-cliente` | **VPS** | `9 1,4,7,10,13,16,19,22 * * *` (UTC) | Recorre el camino del cliente de punta a punta (rama `claude/recorrido-cliente`) y dice **en qué paso exacto se rompe**, con la captura como prueba |
+| `chatbot-cola` | **casa** | `3 * * * *` (UTC) | **Carril `plataforma-v1` desde el 2026-09-05** (el id no se renombró: cambiarlo tocaría cron, worktrees, logs y gate sin ganar nada). Dos colas en orden: `cola/chatbot.md` mientras le queden 🔴, después `cola/plataforma-v1.md`. **Es el único loop que escribe en el repo `onia-platform`** |
+| `onia-cola` | **casa** | `33 * * * *` (UTC) | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
+| `web-venta` | **casa** | `48 */2 * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
+| `recorrido-cliente` | **casa** | `9 1,4,7,10,13,16,19,22 * * *` (UTC) | Recorre el camino del cliente de punta a punta (rama `claude/recorrido-cliente`) y dice **en qué paso exacto se rompe**, con la captura como prueba |
 
 ⚡ **Cadencia subida a cada hora el 2026-09-05 para `chatbot-cola` y `onia-cola`** (eran
 `*/2`), por pedido de Sergio Urcullo y con el margen medido antes de tocar:
@@ -394,7 +444,9 @@ justamente lo que se pudre. El conteo vigente es la tabla de arriba, y se cuenta
 
 ## Pausados el 2026-09-04 (foco: vender; cuota escasa) — NO rearmar
 
-Su línea **sigue en `crontab -l`, comentada**, con el motivo escrito al principio
+⚠️ **Cuatro de estos ya NO están en el VPS: se mudaron a `nodo-casa` el 2026-09-06** — loop y
+worktree — y su línea salió de este `crontab`. Ver la sección *Mudados a `nodo-casa`* más abajo.
+Para los que quedan: su línea **sigue en `crontab -l`, comentada**, con el motivo escrito al principio
 (`# PAUSADO 2026-09-04 (foco: vender; cuota escasa) — …`). Descomentarla es revivirlos: es una
 decisión de la sesión de control, no un cron a medio registrar.
 
@@ -418,6 +470,40 @@ auto-cura es correcta; lo que no puede es curar hacia una tabla que miente.
 
 Tras esa pausa quedaron corriendo siete. El 2026-09-05 se congelaron tres más (sección
 siguiente) y **quedan cuatro**.
+
+### 🔴 `canario-visual`: la pausa pasa a ser una DECISIÓN — 2026-09-06
+
+Hasta hoy figuraba acá como *pausado por cuota*, que es una pausa que se revierte sola el día
+que sobre cuota. Se cerró: **queda congelado, y no se muda a `nodo-casa`.** Las tres cosas que
+lo deciden estaban medidas y ninguna es la cuota:
+
+1. **A `nodo-casa` NO va** (`PLAN_HOMELAB.md` §1, fila `canario-visual`). **Es un instrumento
+   calibrado**: mide peso y milisegundos de las pantallas contra umbrales tomados desde el
+   enlace del VPS — para eso nació, la fuente de iconos pesaba 3,9 MB y tardaba 117 s. Desde
+   una casa, cada umbral pasa a medir el WiFi de Sergio Urcullo. Mudarlo no lo revive: lo
+   convierte en un generador de alarmas falsas.
+2. **En el VPS tampoco se revive hoy**, y no por cuota: **produce ítems de cola, no los cierra**
+   (sección *"El sistema integraba y auditaba, y no construía nada"*). La cola de Sergio Urcullo
+   tiene **83 tareas esperándole**. Un productor de ítems con la cola llena resta, no suma.
+3. **Y arrancaría mintiendo.** Su worktree estaba **268 commits atrás de `main`** el 2026-09-03
+   —el segundo peor de los once medidos—, y este archivo ya lo dice con su nombre: *«MIRA
+   pantallas y las compara contra archivos del repo; 268 commits atrás puede reportar un
+   defecto ya arreglado»*.
+
+⚠️ **Lo que se pierde, dicho de frente: hoy NADIE mira una pantalla de cliente por horario.**
+Verificado el 2026-09-06, no recordado: la línea del VPS está comentada desde el 04-sep, y la
+tarea de Windows quedó `enabled:false` el 01-sep (último `lastRunAt` 2026-09-01T18:26Z). **Es
+el único canario visual que existe, y no corre en ninguna de las tres máquinas.**
+
+**Lo que sí queda cubierto, y lo que no.** `recorrido-cliente` (`9 1,4,7,…,22`) recorre el camino
+del cliente de punta a punta y dice en qué paso se rompe, **con la captura como prueba** — así
+que un cliente que no puede registrarse, agendar o pagar **sigue teniendo quién lo encuentre**.
+Lo que nadie mide mientras tanto es lo otro que el canario medía: **peso y milisegundos** de las
+pantallas. Una regresión de rendimiento hoy entra sin que nada la vea.
+
+**Se revive cuando** vuelva a haber un carril que cierre los ítems que produce —o sea, después
+de la v1.0—, y **el día que se revive va en el VPS, no en casa**, y con su worktree puesto al día
+antes de la primera vuelta.
 
 ## Congelados el 2026-09-05 (objetivo: terminar `onia-platform` y cerrar 5 clientes con la v1.0) — NO rearmar
 
@@ -465,6 +551,51 @@ Lo que se hizo, y lo que a propósito NO:
   logs, en los worktrees y en este gate: renombrarlo es superficie grande para una ganancia
   cosmética. **Queda como deuda anotada**, no como olvido: el nombre dice menos de lo que el
   carril hace.
+
+## Mudados a `nodo-casa` el 2026-09-06 — el loop Y su worktree
+
+> Sergio Urcullo, 2026-09-06: *"pero habíamos quedado que los loops iban a funcionar en la pc de
+> casa para que no se ahogue el vps"*. Tenía razón, y la medición corrigió **qué** se estaba
+> ahogando.
+
+🔴 **El VPS no se ahogaba por CPU: se ahogaba por DISCO.** Medido ese día, no recordado:
+`load 2.17` sobre 4 núcleos con **80,9% idle** y 10 GB de RAM libres — CPU y memoria sobraban.
+El disco estaba al **89%**, con 22 GB libres, y `/root/loops` pesaba **56 GB** contra los 27 de
+`/var/lib/docker`, que sí es producción. Con Docker en el mismo disco, llenarlo tumba
+`onia.com.bo`, `app.onia.com.bo`, la base y n8n **juntos**.
+
+🔴 **Y mudar un loop NO libera disco. Eso se midió con un caso, no se dedujo:** `web-venta` se
+mudó a `nodo-casa` esa misma mañana y **sus 3,1 GB siguieron en el VPS**. Mudar mueve dónde
+corre el trabajo; el árbol se queda donde estaba. **La mudanza no está hecha hasta que el
+worktree también se va.**
+
+| worktree sacado | rama | pesaba |
+|---|---|---|
+| `onia-hermes-lucia` | `claude/lucia-vps` | 5,7 GB |
+| `onia-hermes-marca-personal` | `claude/marca-personal-loop` | 5,7 GB |
+| `onia-hermes-webfactory` | `claude/web-factory-dev` | 3,1 GB |
+| `onia-hermes-web-venta` | `claude/web-venta` | 3,1 GB |
+
+Y `onia-hermes-canario` **no se sacó** —`canario-visual` se queda en el VPS por diseño, es un
+instrumento calibrado— pero se **achicó** con `sparse-checkout`: 5.595 MB → 1.683 MB. El árbol
+sigue ahí, sin los 3,9 GB de `hermes-content/references` que un carril congelado no lee.
+⚠️ **Se rehidrata al revivirlo**, y hay que hacerlo o corre sin sus referencias y falla mudo:
+`git -C /root/loops/onia-hermes-canario sparse-checkout disable`.
+
+**Resultado, medido antes y después: 89% → 79% de uso, de 22 a 41 GB libres.** `/root/loops`
+pasó de 56 GB a 36 GB.
+
+🔴 **El chequeo que evitó el daño, y que no es opcional.** Antes de sacar nada se preguntó por
+cada árbol: ¿está limpio, y tiene commits sin pushear? **`lucia-contenido` (10 GB) tenía DOS
+commits sin pushear** — parecía peso muerto y tenía trabajo adentro. No se tocó, y siguen ahí
+esperando a que alguien los suba. Los cuatro que sí se sacaron estaban limpios y con cero.
+
+**Se rehacen con un comando**, y el registro con rama y sha quedó en el VPS
+(`/root/worktrees-mudados-a-casa-2026-09-06.txt`):
+`git -C /root/loops/onia-hermes worktree add <ruta> <rama>`.
+
+**Sus líneas comentadas se sacaron del `crontab` del VPS**, reemplazadas por una nota. Su cron
+vive en `nodo-casa`, comentado hasta que se los reviva.
 
 ## Apagados a propósito el 2026-08-31 — NO rearmar
 
@@ -619,3 +750,21 @@ los rearma (apuntan a otro binario); si faltan, reponerlos a mano de esta lista.
 | `onia-drop-recordatorio.sh` | `45 22 * * *` | manda el drop del dia listo-para-pegar 15 min antes de las 19:00 La Paz |
 | `onia-vigia-embudo.sh` | `19 */6 * * *` | chequea landing, cal y Postiz; avisa SOLO al caerse o volver |
 | `onia-leads-vigia.sh` | `9 */2 * * *` | avisa solicitudes de acceso nuevas (access_requests) con datos de contacto |
+| `onia-vigia-ci.sh` | `*/10 * * * *` | avisa cuando un workflow de GitHub Actions pasa a rojo en `master` de `onia-platform`, y cuando se recupera. **Uno por episodio, no uno por vuelta.** Fuente: [`vigia-ci.sh`](../../../scripts/loops/vigia-ci.sh), probado por [`vigia-ci.test.sh`](../../../scripts/loops/vigia-ci.test.sh) (13 casos) |
+
+🔴 **El token del vigía de CI: dónde está y por qué es propio.** Vive en
+`/root/.config/onia/github-token` (root, `600`, fuera del repo y fuera de git). Es un
+**fine-grained PAT con `Actions: Read-only`** sobre `onia-platform`, que es privado.
+
+- **El `GITHUB_TOKEN` que ya está en el contenedor de n8n NO sirve**, y se probó: lee el repo
+  (200) pero devuelve **403 `Resource not accessible by personal access token`** en
+  `actions/runs`, en `check-runs` y en `status` — las tres puertas.
+- **Tampoco se copió el token de `gh` de la laptop.** `PLAN_HOMELAB.md` §5: una llave privada
+  que viaja entre máquinas deja de ser de una máquina, y revocarla te deja afuera a vos también.
+- ⚠️ **Trampa al instalarlo, pagada el 2026-09-06:** el comando usaba `read -s`, que **no muestra
+  nada al pegar**. Pareció que no había funcionado y el token quedó pegado **tres veces seguidas**
+  (279 bytes = 93 × 3), y la API contestó `Bad credentials`. Se detectó mirando la FORMA del
+  archivo (largo, saltos de línea, clases de caracteres) sin imprimir el valor. Un pedido de
+  credencial que no devuelve feedback se pega dos veces.
+- Si se pierde el VPS, se pierde con él: **no está versionado en ningún lado**, igual que
+  `loops-remotos.txt`.

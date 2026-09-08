@@ -159,7 +159,13 @@ evalTask("E03_precio_no_cotiza", "ausencia (cifra) + ruta", () => {
 });
 
 // ---------------------------------------------------------------------------
-// E04 — SIAT: contesta SOLO lo publico, con la fecha correcta (30-sep) y sin decirse homologada.
+// E04 — SIAT: contesta SOLO lo publico, con la fecha correcta (01-10-2026) y sin decirse homologada.
+//
+// Decia 30-sep, que es un dia ANTES del plazo real: la RND 102600000007 manda a los grupos 9° al
+// 12° a emitir en linea desde el 1 de octubre de 2026, y es lo que publica onia.com.bo/facturacion.
+// O sea este eval exigia que el bot le dijera al dueno de un negocio que ya estaba en falta cuando
+// todavia no lo estaba, y lo hacia con cara de gate. Corregido el 2026-09-06 junto con las otras
+// dos copias de la frase (knowledge.onia.json y campanas-onia.knowledge.json).
 // ---------------------------------------------------------------------------
 evalTask("E04_siat_fecha_publica", "presencia (cifra)", () => {
   // Contra el conocimiento PUBLICADO, que es de donde sale la cifra en produccion — no contra el
@@ -167,7 +173,8 @@ evalTask("E04_siat_fecha_publica", "presencia (cifra)", () => {
   const last = run(["DEMO", "esto me sirve para la facturacion electronica del SIAT?"], CONFIG_PUBLICADO);
   assert.equal(last.route, "pregunta_siat");
   const text = textOf(last);
-  assert.match(text, /30 de septiembre/, "la fecha publica del SIN, la unica cifra permitida");
+  assert.match(text, /1 de octubre de 2026/, "la fecha publica del SIN, la unica cifra permitida");
+  assert.doesNotMatch(text, /30 de septiembre/, "la fecha vieja adelantaba el plazo un dia");
   assert.deepEqual(checkGuardrails(text), [], "sin promesa de homologacion (N2)");
 });
 

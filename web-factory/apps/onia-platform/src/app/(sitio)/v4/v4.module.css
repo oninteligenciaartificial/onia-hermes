@@ -1,0 +1,489 @@
+/* Lo que la estructura de Fincash agrega y `sitio.module.css` no tenia.
+ *
+ * Archivo APARTE a proposito: la landing viva usa `sitio.module.css` y esta
+ * exploracion no puede romperla. Todo lo que ya existia (.plans, .plan, .trust,
+ * .faq, .footer, .display, .h2, .lead) se REUSA desde alli — aca solo esta lo
+ * nuevo: hero centrado, interruptor de ciclo, tarjetas grandes de capacidad y
+ * la escena flotante del hero.
+ *
+ * Los colores salen de las variables de globals.css (--verde-*, --ink, --bg).
+ * Cero valores sueltos: si manana cambia la paleta, esto la sigue. */
+
+/* ── HERO CENTRADO ──────────────────────────────────────────────────────── */
+
+.centro {
+  text-align: center;
+  display: grid;
+  justify-items: center;
+  gap: 1.1rem;
+}
+
+/* El titulo del hero, mas grande que el .display normal: en la referencia el
+   titulo ES la pagina hasta que scrolleas. Sigue con clamp para no romper en
+   telefono. */
+.heroTitulo {
+  font-size: clamp(2.6rem, 1.1rem + 6.2vw, 5.6rem);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  max-width: 16ch;
+  margin: 0;
+  text-wrap: balance;
+}
+
+/* La palabra en verde. Fincash pinta UNA palabra del titulo con su acento y es
+   el 90 % de su identidad visual. Va en <em> por semantica, sin cursiva. */
+.heroTitulo em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.heroLead {
+  max-width: 54ch;
+  font-size: clamp(1.02rem, 0.95rem + 0.35vw, 1.22rem);
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+.heroCtas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.heroNota {
+  font-size: 0.86rem;
+  color: var(--ink-faint);
+  margin: 0.2rem 0 0;
+}
+
+/* ── ESCENA DEL HERO ────────────────────────────────────────────────────────
+   La referencia flota mockups de su app con curvas y nodos. Nosotros NO usamos
+   capturas del sistema (decision propia), asi que flota el panel DIBUJADO que
+   ya existe en ui.tsx, con los mismos nodos y curvas alrededor. */
+
+.escena {
+  position: relative;
+  width: min(100%, 60rem);
+  margin-top: clamp(2rem, 1rem + 3vw, 3.5rem);
+  isolation: isolate;
+}
+
+.escenaPanel {
+  position: relative;
+  z-index: 1;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px -28px rgb(20 26 23 / 0.28);
+}
+
+/* Los nodos verdes de la referencia. Decorativos: aria-hidden en el markup. */
+.nodo {
+  position: absolute;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  color: var(--accent-ink);
+  z-index: 2;
+  box-shadow: 0 8px 20px -10px rgb(20 26 23 / 0.25);
+}
+
+/* Los tres van FUERA de la caja, nunca encima. `bottom: 8%` ponia el tercero
+   adentro y tapaba una palabra del pie del panel — medido mirandolo. */
+.nodoA { top: 12%; left: -1.3rem; }
+.nodoB { top: 46%; right: -1.3rem; }
+.nodoC { bottom: -1.3rem; left: 12%; }
+
+@media (max-width: 640px) {
+  /* En telefono los nodos se salen del ancho util y empujan scroll lateral. */
+  .nodo { display: none; }
+}
+
+/* ── INTERRUPTOR MENSUAL / ANUAL ────────────────────────────────────────── */
+
+.ciclo {
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  margin: 1.4rem auto 2rem;
+}
+
+.cicloBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.5rem;
+  padding: 0 1.1rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-soft);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.cicloOn {
+  background: var(--accent);
+  color: #fff;
+}
+
+.cicloTag {
+  font-size: 0.78em;
+  font-weight: 700;
+  padding: 0.1em 0.5em;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+
+.cicloOn .cicloTag {
+  background: rgb(255 255 255 / 0.22);
+  color: #fff;
+}
+
+.planEquivale {
+  margin: 0.35rem 0 0;
+  font-size: 0.84rem;
+  color: var(--ink-faint);
+}
+
+/* ── TARJETAS GRANDES DE CAPACIDAD ──────────────────────────────────────────
+   El patron de features de la referencia: dos por fila, cada una con su dibujo
+   arriba y UNA idea abajo. Reemplaza la lista de bullets. */
+
+.capacidades {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: 1.1rem;
+  margin-top: 2rem;
+}
+
+.capacidad {
+  border: 1px solid var(--line-soft);
+  border-radius: 18px;
+  background: var(--surface);
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.capacidadArte {
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg-deep);
+  padding: 1rem;
+}
+
+.capacidadNombre {
+  font-size: 1.16rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.capacidadTexto {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+/* ── FILA DE HECHOS (reemplaza «Our Journey in Numbers») ────────────────────
+   La referencia pone metricas de traccion. Con cero clientes pagando eso seria
+   inventado, asi que van CAPACIDADES verificables: lo que el sistema hace hoy,
+   cada una comprobable abriendo el producto. */
+
+.hechos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  gap: 1px;
+  background: var(--line-soft);
+  border: 1px solid var(--line-soft);
+  border-radius: 18px;
+  overflow: hidden;
+  margin-top: 2rem;
+}
+
+.hecho {
+  background: var(--surface);
+  padding: 1.5rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.hechoQue {
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.hechoComo {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ── LA NOCHE ───────────────────────────────────────────────────────────────
+   Pedido de Sergio Urcullo, 2026-09-01 y repetido el 09-07: «algo mas visual
+   que muestre como el duerme mientras genera ingresos». La banda de la home lo
+   cuenta con barras; esto lo cuenta con una persona dormida al lado de la
+   pantalla que sigue trabajando. Las dos mitades, no una. */
+
+.noche {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+  gap: 1.4rem;
+  align-items: stretch;
+  margin-top: 2rem;
+}
+
+.nocheFoto {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  min-height: 20rem;
+}
+
+.nocheFoto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* El rotulo va SOBRE la foto, abajo. La foto es oscura y calida, asi que acá
+   sí hay texto claro sobre oscuro — es el unico lugar de la pieza donde el
+   fondo lo permite, y lleva su propio degradado para garantizar contraste. */
+.nocheRotulo {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 2.6rem 1.4rem 1.3rem;
+  background: linear-gradient(to top, rgb(10 12 11 / 0.82), transparent);
+  color: #fff;
+}
+
+.nocheHora {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.86;
+  margin: 0 0 0.25rem;
+}
+
+.nocheFrase {
+  font-size: clamp(1.3rem, 1rem + 1.1vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.nocheLado {
+  border: 1px solid var(--line-soft);
+  border-radius: 18px;
+  background: var(--surface);
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.momentos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.momentos li {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  gap: 0.8rem;
+  align-items: baseline;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--line-soft);
+}
+
+.momentos li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.momentoHora {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--accent-ink);
+}
+
+.momentoQue {
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+/* «Vos los aprobás» — el limite del producto, en verde y en negrita. Los
+   agentes dejan el borrador en la cola: no avisan, no mandan y no cobran
+   solos (onia-core/contract.json). Tres disenadores se equivocaron en esto
+   antes de que la home lo dejara escrito; acá no se repite. */
+.momentoVos {
+  color: var(--accent-ink);
+  font-weight: 700;
+}
+
+/* ── LA NOCHE, variante B: burbujas ─────────────────────────────────────────
+   La mecánica de Hostinger (halos difusos detrás del contenido) con nuestra
+   paleta clara. Allá son manchas púrpura sobre fondo oscuro y se ven mucho;
+   acá son verdes sobre papel y apenas se insinúan — que es lo correcto: dan
+   profundidad sin competir con el texto. */
+
+.cielo {
+  position: relative;
+  margin-top: 2rem;
+  padding: clamp(1.4rem, 1rem + 2vw, 3rem) 0;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+.halo {
+  /* `display: block` no es decorativo: son <span>, y a un inline el navegador
+     le ignora width/height — se renderizaban a 0x0 y el fondo quedaba plano.
+     Medido en el DOM, no a ojo. */
+  display: block;
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(70px);
+  opacity: 0.9;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.haloA {
+  width: 32rem;
+  height: 32rem;
+  top: -12rem;
+  left: -8rem;
+  background: radial-gradient(circle, var(--verde-200), transparent 68%);
+}
+
+.haloB {
+  width: 26rem;
+  height: 26rem;
+  bottom: -10rem;
+  right: -6rem;
+  background: radial-gradient(circle, var(--verde-200), transparent 70%);
+}
+
+.haloC {
+  width: 20rem;
+  height: 20rem;
+  top: 30%;
+  left: 45%;
+  background: radial-gradient(circle, var(--verde-100), transparent 72%);
+}
+
+/* Sin `prefers-reduced-transparency`: se probó y hacía daño en vez de bien.
+   La media feature es nueva y varios entornos la resuelven como `reduce` por
+   defecto (Chromium headless entre ellos), así que la regla apagaba el fondo
+   para gente que nunca pidió nada. Y no protege nada real: los halos son
+   verdes casi del color del papel, van detrás de todo y no hay texto encima
+   — el contraste del contenido no depende de ellos. */
+
+.cieloGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+  gap: 1.2rem;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .cieloGrid { grid-template-columns: 1fr; }
+}
+
+/* La burbuja grande: las quince horas dichas con una cifra, no con una foto. */
+.burbujaHoras {
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: 0.4rem;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  padding: 2rem;
+  max-width: 20rem;
+  margin-inline: auto;
+}
+
+.horasNum {
+  font-size: clamp(3.4rem, 2rem + 5vw, 5.6rem);
+  line-height: 0.9;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--accent);
+  margin: 0;
+}
+
+.horasTxt {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.45;
+}
+
+.cieloPanel {
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  padding: 1rem;
+}
+
+.burbujas {
+  list-style: none;
+  margin: 1.2rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  grid-column: 1 / -1;
+}
+
+/* Cada momento en su propia burbuja alargada. Fondo verde MUY claro con texto
+   oscuro: el verde va en la forma, nunca debajo de texto claro. */
+.burbuja {
+  flex: 1 1 15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1rem 1.3rem;
+  border-radius: 999px 999px 18px 999px;
+  background: var(--accent-soft);
+  border: 1px solid var(--verde-200);
+}
+
+.burbujaHora {
+  font-weight: 700;
+  font-size: 0.86rem;
+  color: var(--accent-ink);
+}
+
+.burbujaQue {
+  color: var(--ink);
+  line-height: 1.45;
+  font-size: 0.94rem;
+}

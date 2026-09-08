@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { PRUEBA } from "@/lib/pricing";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { WA_URL_LANDING } from "@/lib/site";
@@ -114,7 +115,7 @@ export default function SiatPage() {
             </div>
             <p style={{ marginTop: "2rem", display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
               <a className="btn" href="/prueba-gratis">
-                Dejá tu operación lista — 14 días gratis
+                Dejá tu operación lista — {PRUEBA.dias} días gratis
               </a>
               <a className="btn btn-ghost" href={WA_URL_LANDING}>
                 Preguntanos tu caso por WhatsApp
