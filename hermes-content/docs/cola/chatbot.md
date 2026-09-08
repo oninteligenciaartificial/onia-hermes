@@ -178,6 +178,69 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-08: el bot de WhatsApp del cliente le pedía su catálogo a una tabla
+      que está VACÍA por construcción en 3 de los 5 rubros de la v1.0.**
+
+      El add-on de Bs 390/mes armaba el contexto de la IA con `prisma.treatment.findMany`
+      **siempre**. `treatments` sólo la llenan los packs clínicos: comercio, importadora y
+      servicios profesionales cargan lo que venden en `/comercio`
+      (`onia_commerce_products`). Como `buildSystemPrompt` omite la sección
+      «SERVICIOS DISPONIBLES» cuando la lista viene vacía, **el bot de una ferretería con su
+      catálogo cargado contestaba sin saber que existía**.
+
+      Medido en producción, no supuesto:
+
+      ```
+      docker exec supabase-db psql -U postgres -d postgres -tAF'|' -c "
+        select o.slug, o.\"verticalTrackId\",
+          (select count(*) from public.treatments t where t.\"organizationId\"=o.id and t.active),
+          (select count(*) from public.onia_commerce_products p where p.\"organizationId\"=o.id and p.active)
+        from public.organizations o;"
+      → zz-qa-ferreteria-tornillo-ommbt|gestios-general|0|1
+      ```
+
+      **Por qué ningún gate podía verlo**, que es lo que lo mantuvo vivo: `[]` es un valor
+      válido que no lanza; no sobra ni falta una palabra (el barrido de rubro × texto de este
+      bot vigila el VOCABULARIO, y derivaba bien); y la superficie es WhatsApp, así que no hay
+      pantalla que mirar ni HTML que grepear. **El defecto no estaba en el texto sino en DE QUÉ
+      TABLA sale el dato** — la instancia hermana de la que `contarClientesDelRubro` ya mató en
+      el contador de clientes. Peor: el comentario de `opcionesDelMenu` ya prometía que a los
+      rubros sin agenda «todo lo demás lo contesta la IA con el catálogo del negocio», y ese
+      catálogo nunca llegaba.
+
+      **Arreglado:** `12bdb28` — `catalogoEnTratamientos()` (derivado del nav, como sus
+      hermanas) + `lib/whatsapp/catalogo-del-negocio.ts`. No se reusó `fichaClinica` (pregunta
+      por la FICHA) ni `llevaInventario` (pregunta por STOCK, y servicios profesionales
+      contesta distinto a las dos). El gate deriva sujetos de `VERTICAL_PACKS`, **mira al
+      llamador** y se mide sobre el fuente sin comentarios; validado por mutación en 3
+      direcciones (5 rojos / 2 rojos / 2 rojos). Gates: tsc 0 · eslint 0 · vitest 3926.
+
+      ⚠️ **En la rama del carril, NO en `master`:** `git merge-base --is-ancestor 12bdb28
+      origin/master` dice que no. Falta el merge del integrador y después el deploy
+      (`t_bf1607af`) — **no está en producción**.
+
+- [ ] **HERMANO del anterior, en la MISMA expresión y sin arreglar: el bot no reconoce al
+      cliente que le escribe si su rubro guarda la gente en otra tabla.**
+
+      Dos líneas más arriba del catálogo, `lib/whatsapp-bot.ts` hace
+      `prisma.patient.findFirst({ where: { organizationId, phone: { contains: ... } } })`.
+      Comercio e importadora guardan a sus clientes en `onia_core_business_partners`
+      (`guardaClientesEnPatients()` da `false`), así que ahí **siempre** cae al genérico.
+
+      **Por qué NO se arregló en la misma vuelta, y no es pereza:** el teléfono de un business
+      partner no es una columna, vive dentro de `metadata` (JSON) — el modelo lo dice:
+      `primaryContactId String? // referencia suave (telefono/email en metadata)`. Buscar por
+      teléfono ahí es otra consulta y otra decisión (¿índice?, ¿qué clave dentro del JSON?),
+      no un renglón que se cuela en un arreglo de catálogo.
+
+      **Impacto real, para no inflarlo:** el fallback es `v.cliente`, que ya deriva del rubro
+      («cliente»), así que el bot **no miente** — sólo saluda sin nombre a alguien que el
+      negocio sí tiene cargado. Es peor en comercio, donde el cliente fiado es conocido.
+
+      **Reproducción:** `grep -n "prisma.patient.findFirst" lib/whatsapp-bot.ts` (1 uso, en el
+      camino de texto libre) y `lib/plan-limits.ts:190` `contarClientesDelRubro`, que ya
+      resuelve la MISMA pregunta bien y es el patrón a copiar.
+
 - [x] ✅ **CERRADO el 2026-09-08: el arreglo de ayer se aplicó a UNA instancia y sus tres hermanas
       quedaron ciegas — de los gates vivos de este carril, TRES no medían nada desde nodo-casa.**
 
