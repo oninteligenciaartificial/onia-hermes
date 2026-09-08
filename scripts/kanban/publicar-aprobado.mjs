@@ -87,6 +87,17 @@ export const DESTINOS = {
   landing: '/opt/onia-landing/_deploy/publicar.sh',
   plataforma: '/opt/onia-platform/_deploy/publicar.sh',
   bot: '/opt/onia/bot/_deploy/publicar.sh',
+  // El EMISOR SIAT, el cuarto y el que faltaba. Agregado el 2026-09-08: era el
+  // unico destino de produccion sin circuito, asi que `DESPLEGAR: siat` moria
+  // aca con "destino desconocido" y el `ok` de Sergio Urcullo devolvia tilde
+  // verde sin desplegar nada. Costo medido: el arreglo del CUFD (a28b3689)
+  // llevaba CUATRO DIAS en main sin llegar al archivo que el VPS ejecuta, y con
+  // el emisor viejo las etapas VI y IX de la Fase 1 vuelven a fallar.
+  // Las DOS listas blancas van juntas: esta y la del ejecutor
+  // (scripts/kanban/desplegar-en-segundo-plano.sh). Cablear solo esta deja el
+  // fallo peor de los dos — la primera contesta exito y la segunda rechaza
+  // despues, asi que el aviso dice "arranco el deploy" y no arranca nada.
+  siat: '/opt/onia-siat/_deploy/publicar.sh',
 };
 
 // El deploy corre en SEGUNDO PLANO a proposito. Un build de Next tarda minutos y
