@@ -38,6 +38,7 @@ import { Block, Btn, Kicker, PanelDibujado } from "../ui";
 import { Switcher } from "../switcher";
 import s from "../sitio.module.css";
 
+import { FAQ } from "../faq-datos";
 import { NocheFoto } from "./noche-foto";
 import { PreciosConCiclo } from "./precios-toggle";
 import v from "./v4.module.css";
@@ -100,7 +101,11 @@ export default function ExploracionPortada() {
           La referencia hace que el título SEA la página hasta que scrolleás.
           El texto es el aprobado el 1-sep; lo que cambia es la composición:
           de dos columnas a centrado, con «una» en el acento. */}
-      <Block surface="paper">
+      <Block surface="green" className={v.heroVerde}>
+        {/* Los halos de Hostinger. Van acá y no en el CSS del Block porque son
+            de ESTA pieza: el resto del sitio sigue siendo papel. */}
+        <span className={`${v.halo} ${v.haloA}`} aria-hidden="true" />
+        <span className={`${v.halo} ${v.haloB}`} aria-hidden="true" />
         <Reveal>
           <div className={v.centro}>
             <Kicker>Un solo sistema para todo el negocio</Kicker>
@@ -239,7 +244,33 @@ export default function ExploracionPortada() {
         </Reveal>
       </Block>
 
-      {/* ── 7 · CIERRE ───────────────────────────────────────────────────
+      {/* ── 7 · FAQ ──────────────────────────────────────────────────────
+          Las mismas ocho preguntas de la home, leidas de `faq-datos.ts`: son
+          las que frenan la compra y cada respuesta cita su fuente en el repo.
+          No se reescriben acá — una segunda lista con cifras se desincroniza
+          en la primera edicion. */}
+      <Block surface="paperDim" labelledBy="v4-faq">
+        <Reveal>
+          <div className={v.centro}>
+            <Kicker>Antes de empezar</Kicker>
+            <h2 id="v4-faq" className={s.h2}>
+              Lo que preguntan antes de empezar.
+            </h2>
+          </div>
+        </Reveal>
+        <Reveal delay={0.06}>
+          <div className={s.faq}>
+            {FAQ.map((item) => (
+              <details key={item.q} className={s.faqItem}>
+                <summary className={s.faqQ}>{item.q}</summary>
+                <p className={s.faqA}>{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </Reveal>
+      </Block>
+
+      {/* ── 8 · CIERRE ───────────────────────────────────────────────────
           El mismo CTA del hero, tercera y última vez. */}
       <Block surface="ink" labelledBy="v4-cierre">
         <Reveal>

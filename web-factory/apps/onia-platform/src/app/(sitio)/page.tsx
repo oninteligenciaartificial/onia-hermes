@@ -14,6 +14,7 @@ import { HUECO_PARTIDO, FECHA_CONSULTA } from "@/lib/proof";
 import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
 import { EMPEZAR_URL } from "./nav";
 import { ALTA_VERBO_VOS, CTA_ALTA, ctaAltaPlan } from "./alta";
+import { FAQ } from "./faq-datos";
 import { Block, Shape, Btn, Kicker, JsonLd } from "./ui";
 import { Switcher } from "./switcher";
 import s from "./sitio.module.css";
@@ -122,64 +123,6 @@ const ADDONS_RESTO = ADDONS.filter((addon) => addon.href !== "/chatbot");
  */
 const PCT_SALARIO = pctDelSalarioMinimo();
 
-/**
- * FAQ de la portada — respuestas con los números TRAÍDOS de las fuentes.
- *
- * El verbo del alta NO se escribe acá: sale de `./alta`. El 23-ago se barrió a
- * mano a "pedís tu acceso" (el alta estaba cerrada) y cuando el alta se reabrió
- * esta respuesta quedó atrás pidiendo permiso para entrar a un formulario que ya
- * crea la cuenta sola. La prueba de 14 días sin tarjeta es cierta en las dos
- * ramas y es lo que se promete.
- *
- * Las cuatro preguntas nuevas (carga de datos, aprender a usarlo, dejar de
- * pagar, rubro fuera de la lista) son las que frenan la compra. Ninguna
- * respuesta se redactó de cero — cada una cita su fuente en el repo.
- */
-const FAQ = [
-  {
-    q: "¿Necesito tarjeta para probar?",
-    a: `No. La prueba de ${PRUEBA.dias} días no pide tarjeta ni pago: ${ALTA_VERBO_VOS}, elegís tu rubro y usás el sistema completo esos ${PRUEBA.dias} días.`,
-  },
-  {
-    // lib/pricing.ts:283 (CONDICIONES) + (sitio)/empezar/page.tsx (paso 02).
-    // La pregunta es "¿los cargo yo?" y la respuesta vieja no la contestaba:
-    // decía "alguien que te la explica" y seguía de largo. Se contesta que sí,
-    // con la herramienta que existe de verdad (app/api/patients/import y
-    // app/api/comercio/products/import: CSV con asistente de columnas).
-    q: "¿Los datos del Excel o del cuaderno los cargo yo?",
-    a: "Sí, los cargás vos, y no a mano uno por uno: hay importación por CSV con un asistente que te va diciendo qué columna es cada cosa. No arrancás con la pantalla vacía — la cuenta llega con la configuración de tu rubro puesta. En los tres planes no cobramos implementación ni migración: el checkout cobra solo el plan. Grupo / Empresarial sí lleva implementación acompañada y se cotiza aparte.",
-  },
-  {
-    // Acá decía "alguien que te la explica", y ese alguien no existe: el alta es
-    // automática y no avisa a nadie que te llame. Lo cierto es el asistente de
-    // puesta en marcha del producto y el WhatsApp, que sí contesta.
-    q: "¿Y si no sé de computación? ¿Quién me enseña?",
-    a: "Nadie instala nada ni arranca un proyecto de meses: la cuenta llega con la configuración de tu rubro puesta y el sistema te lleva paso a paso por la puesta en marcha. Si te trabás después, escribinos por WhatsApp.",
-  },
-  {
-    // content/legal/terminos.md:83 (sin permanencia) y §3.4 (mora: gracia →
-    // suspensión con datos intactos, nunca borrado inmediato) + pricing.ts:284.
-    q: "¿Y si dejo de pagar, pierdo todo?",
-    a: "No. No hay contrato de permanencia: podés no renovar, sin penalidad. Si un pago no entra, primero hay un período de gracia con el servicio activo y avisos; después el acceso se suspende, pero tus datos se conservan intactos — la suspensión nunca implica borrarlos. Y los exportás en CSV desde el plan más chico.",
-  },
-  {
-    // (sitio)/rubros/page.tsx:78-80 y (sitio)/contacto/page.tsx:118-121.
-    q: "¿Sirve para mi rubro si no está en la lista?",
-    a: "Onia no es un software distinto por industria: es el mismo núcleo con módulos y vocabulario propios. Hoy la cuenta se arma sola para los cinco rubros que ves en Rubros. ¿El tuyo es otro? Escribinos por WhatsApp y lo vemos con tu caso.",
-  },
-  {
-    q: "¿La factura al SIN ya funciona?",
-    a: "Nuestro emisor está registrado ante el SIN y la homologación está en trámite. Mientras tanto cada venta queda lista y facturás en el Portal Web del SIN, gratis y legal. Te avisamos apenas concluya. Está contado entero, con las resoluciones y las fechas, en la página de facturación.",
-  },
-  {
-    q: "¿El chatbot de WhatsApp está incluido?",
-    a: `No: es un servicio aparte, ${precioStack(CHATBOT_PLAN)}. El botón de WhatsApp de tu web sí va gratis.`,
-  },
-  {
-    q: "¿Mis datos son míos?",
-    a: "Sí. Los exportás en CSV cuando quieras, en cualquier plan pago. No vendemos datos ni entrenamos modelos con ellos.",
-  },
-];
 
 /**
  * "Un día con Onia" — las tres escenas que acompañan al manifiesto.
