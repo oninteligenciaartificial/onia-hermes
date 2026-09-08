@@ -29,6 +29,7 @@ import {
   resolverBotDesplegado,
   motorProduceAviso,
   RAMAS_QUE_AVISAN,
+  asegurarTransporteQueAguanta,
   BOT_DIR,
 } from "./avisos-vivo.mjs";
 
@@ -279,4 +280,78 @@ test("si el motor deja de avisar la DEMO, el gate se pone ROJO y el handoff no l
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+// ---------------------------------------------------------------------------
+// "No pude preguntar" NO es "me contestaron que no" — 2026-09-08
+//
+// Nace de una medicion de este carril: el gate dio `roto` con el motivo
+// "credencialesOk: el token o el chat de Telegram no responden" y remato con
+// "EL PROXIMO QUE PIDA UN HUMANO SE PIERDE". El token y el chat estaban SANOS
+// (`getMe` -> aalfredhq_bot, `getChat` -> ok, los dos http 200): lo que fallaba
+// era el INSTRUMENTO. Desde nodo-casa, `fetch` a api.telegram.org muere en
+// ~350 ms con ETIMEDOUT porque Node corta cada intento de conexion a los 250 ms
+// (`autoSelectFamilyAttemptTimeout`), la ruta IPv6 es ENETUNREACH y la IPv4
+// tarda mas que eso. `curl` a la misma URL da 200.
+//
+// El defecto de fondo no es el timeout: es que `credencialesResponden`
+// devolvia un BOOLEANO, asi que "no pude preguntar" y "Telegram me dijo que no"
+// colapsaban en el mismo `false`. Es la ambiguedad de `buscarNegocio()` otra
+// vez, y va en la direccion cara: manda a rotar un token sano o —peor— entrena
+// a leer como falso el unico aviso que dice que alguien esta esperando.
+// ---------------------------------------------------------------------------
+
+test("credencialesOk en null es NO MEDIDO, no roto: nadie rota un token sano", () => {
+  const d = diagnosticar({
+    circuito: { ...CIRCUITO_SANO, credencialesOk: null },
+    eventos: contarEventos([]),
+  });
+
+  assert.equal(d.veredicto, "no_medido", "no poder preguntarle a Telegram no prueba que el token este muerto");
+  assert.ok(
+    d.motivos.some((m) => /no se pudo preguntar/i.test(m)),
+    `el motivo tiene que decir que no se pudo PREGUNTAR, no que "no responden": ${JSON.stringify(d.motivos)}`,
+  );
+});
+
+test("null y false dan veredictos DISTINTOS: es toda la invariante", () => {
+  const noSePudo = diagnosticar({ circuito: { ...CIRCUITO_SANO, credencialesOk: null }, eventos: contarEventos([]) });
+  const contestoQueNo = diagnosticar({ circuito: { ...CIRCUITO_SANO, credencialesOk: false }, eventos: contarEventos([]) });
+
+  assert.notEqual(noSePudo.veredicto, contestoQueNo.veredicto);
+  assert.equal(contestoQueNo.veredicto, "roto", "si Telegram contesta que el token no sirve, eso SI es rojo");
+});
+
+test("una rotura REAL manda sobre un eslabon que no se pudo medir", () => {
+  // Prioridad: evidencia de fallo > imposibilidad de preguntar. Si el flag esta apagado
+  // o hay un aviso FALLIDO en el log, el rojo no lo tapa un `no_medido`.
+  const conFlagApagado = diagnosticar({
+    circuito: { ...CIRCUITO_SANO, credencialesOk: null, flagEncendido: false },
+    eventos: contarEventos([]),
+  });
+  assert.equal(conFlagApagado.veredicto, "roto");
+
+  const conAvisoFallido = diagnosticar({
+    circuito: { ...CIRCUITO_SANO, credencialesOk: null },
+    eventos: contarEventos(["[aviso] failed conversacion 61"]),
+  });
+  assert.equal(conAvisoFallido.veredicto, "roto", "un aviso FALLIDO es una persona esperando: eso es rojo medido");
+});
+
+test("el transporte aguanta un host mas lento que el corte por defecto de Node", () => {
+  // Sin esto el gate no llega ni a preguntar: 250 ms no le alcanzan a api.telegram.org
+  // desde nodo-casa. Se sube el piso; nunca se baja lo que ya estaba mas alto.
+  const bajo = { valor: 250 };
+  asegurarTransporteQueAguanta({
+    getDefaultAutoSelectFamilyAttemptTimeout: () => bajo.valor,
+    setDefaultAutoSelectFamilyAttemptTimeout: (v) => (bajo.valor = v),
+  });
+  assert.ok(bajo.valor >= 2000, `250 ms es el corte que causo el falso rojo, quedo en ${bajo.valor}`);
+
+  const alto = { valor: 9000 };
+  asegurarTransporteQueAguanta({
+    getDefaultAutoSelectFamilyAttemptTimeout: () => alto.valor,
+    setDefaultAutoSelectFamilyAttemptTimeout: (v) => (alto.valor = v),
+  });
+  assert.equal(alto.valor, 9000, "no se pisa un timeout mas generoso que el nuestro");
 });
