@@ -1409,6 +1409,49 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] **CERRADO el 2026-09-08: el bot que el cliente PAGA se presentaba como «una clínica
+      dental» ante los clientes de los otros cuatro rubros.** Commits `8009a9e` (arreglo) y
+      `a13d3af` (gate), rama `claude/chatbots-platform-review-0d1d09` de `onia-platform`.
+      ⚠️ **Commiteado y en la rama, NO desplegado**: falta el merge a `master` y después el
+      swap — viaja con el pedido de deploy `t_bf1607af`.
+
+      **Qué estaba mal.** El add-on de WhatsApp (Bs 390/mes, `pricing.ts`) atiende a los
+      clientes DE la org. Su system prompt decía, literal:
+      `Eres el asistente virtual de ${clinicName}, una clínica dental.` — más «términos
+      dentales», «urgencias dentales o dolor severo», «INFORMACIÓN DE LA CLÍNICA»,
+      «INSTRUCCIONES ESPECIALES DE LA CLÍNICA» y «El paciente se llama X». En el menú del bot,
+      además: «llamando a **la clínica**», el fallback «tu **doctor**» y `patientName ??
+      "Paciente"`. Un comercio, una importadora, un estudio contable o un centro de estética
+      que contrataba el add-on tenía un bot que se presentaba ante SUS clientes como una
+      clínica dental: **4 de los 5 rubros de la v1.0**, en la superficie por la que paga.
+
+      **La clase, y por qué sobrevivió: es la superficie más invisible del producto.** No sale
+      en captura, no está en el HTML de ninguna url, no la ve un `curl`, no es un correo
+      nuestro —el eje «texto que SALE del sistema» se barrió el 06 y 07-sep y llegó hasta el
+      correo, la factura, el recibo, la receta, el CSV y los errores de API—, y **no la ve ni
+      el dueño**: la ven sus clientes, por WhatsApp, en un texto que además lo GENERA un LLM a
+      partir de este prompt. Ningún gate del proyecto podía expresar la pregunta.
+
+      **El arreglo deriva, no borra**: `buildSystemPrompt` toma `vocabularioDeTrack(
+      organization.verticalTrackId)` y el webhook se lo pasa. Sin ese segundo paso el default
+      dental seguía mandando en producción y el arreglo valía cero.
+
+      **El gate cruza (rubro × prompt), no el texto** — «paciente» es correcto en dental y en
+      veterinaria y sólo está mal en los otros—, con ancla anti-esquive: dental tiene que
+      SEGUIR diciendo «pacientes», así que borrar la palabra no lo satisface.
+
+      ⚠️ **Y el gate nació con un hueco que sólo apareció mutando: no veía el CABLEADO.**
+      `trackId` es opcional (para no romper a quien ya llamaba) y su default es dental, así
+      que sacar `trackId,` del webhook dejaba el bug intacto con **los 30 casos en verde y
+      `tsc` en 0**. Cubierto en `a13d3af`, derivando los llamadores de
+      `git grep generateBotReply(` —un llamador nuevo nace cubierto— y con el caso que se pone
+      rojo si la lista queda vacía, en vez de aprobar por lista vacía.
+
+      **Prueba.** Rojo antes por el motivo correcto (30/30). Cuatro mutaciones, todas en rojo:
+      revertir el prompt (24), el llamador sin `trackId` (1, nombrando el archivo), esquivar
+      borrando la palabra (9), detector sin sujetos (1). Gates: `tsc` 0 · `vitest` **3676**
+      verdes · `eslint` 0 errores. Ver `lib/whatsapp-ai-idioma-del-rubro.test.ts`.
+
 - [x] **CERRADO el 2026-09-08: nadie vigilaba el simétrico de «camino ausente» — el enlace
       que lleva a una pantalla que ese rubro tiene BLOQUEADA.** Commit `c3a2fda` (rama
       `claude/chatbots-platform-review-0d1d09` de `onia-platform`), **NO desplegado** — es un
