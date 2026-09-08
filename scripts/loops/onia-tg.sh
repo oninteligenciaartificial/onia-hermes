@@ -27,7 +27,7 @@
 set -uo pipefail
 
 MSG="${1:?uso: onia-tg.sh \"mensaje\"}"
-LOG=/var/log/onia-tg.log
+LOG="${ONIA_TG_LOG:-/var/log/onia-tg.log}"
 TABLERO="${ONIA_TABLERO:-/root/bin/onia-tablero.sh}"
 
 # ── Camino por defecto: no interrumpir, dar trabajo ──────────────────────────
@@ -38,7 +38,20 @@ if [ "${ONIA_TG_DIRECTO:-0}" != "1" ]; then
 
   # Clave estable para deduplicar: el mismo aviso repetido no crea 144 tareas al dia.
   # Va al PRINCIPIO del titulo a proposito: la lista del tablero recorta el final.
-  CLAVE=$(printf '%s' "$TITULO" | md5sum | cut -c1-6)
+  #
+  # 🔴 La clave se calcula sobre el titulo NORMALIZADO, nunca sobre el crudo. Medido el
+  # 2026-09-08, dos horas despues de que este enrutador entrara: de las 28 tareas [auto:]
+  # vivas, 19 eran el MISMO aviso repetido. El emisor dominante es el aviso de fin de
+  # vuelta de los loops, y lleva su duracion adentro del titulo:
+  #     "✅ chatbot-cola · 929s · 1 commit(s)"  -> clave 8d79f2
+  #     "✅ chatbot-cola · 954s · 1 commit(s)"  -> clave c3ad73
+  # Hashean distinto, asi que la dedup no los veia: 4 loops x ~24 vueltas = ~96 tareas
+  # al dia del mismo aviso — exactamente las "144 tareas al dia" que la linea de arriba
+  # dice querer evitar, mudadas de Telegram al tablero, que es de donde los carriles
+  # sacan trabajo y lo leen ANTES que su cola.
+  # Colapsar las corridas de digitos deja la clave estable entre vueltas. Lo que NO se
+  # toca es el TITULO: la tarea sigue mostrando el numero de la primera vez.
+  CLAVE=$(printf '%s' "$TITULO" | sed 's/[0-9][0-9]*/N/g' | md5sum | cut -c1-6)
   MARCA="[auto:$CLAVE]"
 
   # Si ya hay una tarea abierta con esta clave, no se duplica: se anota y se sale.
