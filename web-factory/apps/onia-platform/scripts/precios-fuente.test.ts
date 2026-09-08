@@ -7,10 +7,13 @@ import {
   CIFRAS,
   CONSTANTES_CRUZADAS,
   PRECIOS_SITIO,
+  CICLOS_EQUIVALENCIA,
+  ciclosCruzados,
   cifrasDelProducto,
   cifrasDelSitio,
   comparar,
   esPromesa,
+  excusaDeGrupoSigueValiendo,
   excusasSinSujeto,
   limitesDelProducto,
   limitesDelSitio,
@@ -373,5 +376,80 @@ describe("ningún tope que el sitio publica queda fuera del cruce", () => {
         nombre,
       );
     }
+  });
+});
+
+/**
+ * El segundo eje del cruce: QUE CICLOS se pueden pagar.
+ *
+ * `comparar` mira CIFRAS, un mapa de claves escritas a mano. Ese mapa OMITE
+ * `plan Full · semanal` y `Grupo / Empresarial · semanal`, y la omisión no es un
+ * olvido: codifica la creencia "esos dos no se fraccionan". Mientras la creencia
+ * sea cierta nadie lo nota; el día que deje de serlo no hay clave que comparar,
+ * nada entra en `ilegibles` ni en `difieren`, y el script imprime VERDE con el
+ * sitio publicando lo contrario.
+ *
+ * La disponibilidad es un BOOLEANO, no una cifra — por eso ningún cruce de
+ * números puede expresarla — y es lo que decide si el checkout acepta la venta
+ * (`isCycleAvailable`, y el "Solo mensual o anual" de CheckoutClient.tsx).
+ */
+describe("los ciclos que el sitio ofrece son los que el producto cobra", () => {
+  const real = readFileSync(PRECIOS_SITIO, "utf8");
+  const sitio = planesDelSitio(real) as Planes;
+
+  /** Copia la forma literal de `DEFAULT_PLAN_AMOUNTS`, que vive en el otro repo. */
+  const producto = (semanalDelFull: number | null): Planes => ({
+    basic: { mensual: 320, semanal: 89, anual: 3200 },
+    professional: { mensual: 750, semanal: 199, anual: 7500 },
+    clinic: { mensual: 1500, semanal: semanalDelFull, anual: 15000 },
+  });
+
+  it("hoy los tres planes comprables coinciden en los dos lados", () => {
+    expect(ciclosCruzados(producto(null), sitio)).toEqual({
+      ilegibles: [],
+      difieren: [],
+    });
+  });
+
+  it("si el producto le da semanal al Full, el sitio deja de ser cierto", () => {
+    // La dirección que hoy NO ve nadie: sin clave en CIFRAS, `comparar` sigue
+    // verde y el sitio le esconde al lead la forma más barata de entrar al Full.
+    const { difieren } = ciclosCruzados(producto(349), sitio);
+    expect(difieren).toEqual([{ plan: "Full", producto: true, sitio: false }]);
+  });
+
+  it("y al revés: si el producto deja de fraccionar el Pro, el sitio lo sigue ofreciendo", () => {
+    const p = producto(null);
+    p.professional.semanal = null;
+    const { difieren } = ciclosCruzados(p, sitio);
+    expect(difieren).toEqual([{ plan: "Pro", producto: false, sitio: true }]);
+  });
+
+  it("un plan que no se pudo LEER no se cuenta como «no tiene semanal»", () => {
+    // `semanal: null` sólo significa "no se fracciona" si de verdad leímos el
+    // plan. Con el patrón roto los dos lados dan null y el cruce coincidiría
+    // consigo mismo: el modo de fallo exacto que este archivo viene a evitar.
+    const p = producto(null) as Planes;
+    delete p.clinic;
+    const { ilegibles, difieren } = ciclosCruzados(p, sitio);
+    expect(ilegibles).toEqual([{ plan: "Full", lados: ["producto"] }]);
+    expect(difieren).toEqual([]);
+  });
+
+  it("cada plan comprable del sitio entra en el cruce", () => {
+    // Si mañana nace una cuarta tarjeta comprable, tiene que llegar acá: una
+    // equivalencia escrita a mano es lista de inclusión y falla ABIERTA.
+    expect(CICLOS_EQUIVALENCIA.map((p) => p.sitio).sort()).toEqual(
+      Object.keys(sitio).sort(),
+    );
+  });
+
+  it("la exención de Grupo se re-mide: vale mientras no afirme un ciclo", () => {
+    expect(excusaDeGrupoSigueValiendo(real).vale).toBe(true);
+    const conSemanal = real.replace(
+      "export const GRUPO = {",
+      'export const GRUPO = {\n  semanal: 799,',
+    );
+    expect(excusaDeGrupoSigueValiendo(conSemanal).vale).toBe(false);
   });
 });
