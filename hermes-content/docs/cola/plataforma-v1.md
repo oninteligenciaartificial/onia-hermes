@@ -44,6 +44,46 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **Si al confirmar la reserva se cortaba la red, la pantalla se quedaba MUDA: ni cita ni
+      explicación — cerrado el 2026-09-08 (`592baa1` en `onia-platform`, publicado en la rama).**
+
+      **La clase, que es lo que importa:** los gates de esta casa recorren el camino FELIZ. El de
+      FALLO no lo mira nadie, y en producción el camino feliz suele andar, así que el defecto no
+      aparece ni mirando la pantalla ni con captura. `handleSubmit` de `/book/[orgSlug]` tenía
+      `try { … } finally {}` **sin `catch`**: cuando el `fetch` no llegaba a contestar —el celular
+      pierde señal a mitad del envío, se corta la conexión mientras se lee el cuerpo—, el
+      `finally` apagaba el «Agendando...», el botón volvía a su estado normal y **no aparecía
+      nada**. El que quería reservar apretaba, veía parpadear el botón y se quedaba sin saber si
+      tenía turno. Sin cita, y el negocio tampoco se enteraba.
+
+      Importa por **dónde vive**: `app/(public)` se abre desde un enlace de WhatsApp y casi
+      siempre en un celular en la calle, o sea que la red cortada es el caso **normal**, no el
+      raro.
+
+      **Por qué nadie lo vio, y esto es lo nuevo:** de los seis `fetch` de la superficie pública,
+      **cinco** atrapaban el rechazo y le decían algo a la persona («Error de conexión. Intentá de
+      nuevo.», «No se pudo entregar», «No se pudo subir el archivo»). El único que no era **el que
+      RESERVA**, que es el de más valor de toda la superficie. Cuando los hermanos de una familia
+      manejan el fallo, la familia se lee como cubierta y nadie sospecha del que falta.
+
+      **Arreglado sin `alert`:** el `else` del servidor usaba `alert()`; ahora las dos ramas
+      —servidor y red— salen por el mismo cartel en pantalla, arriba del botón, diciendo explícito
+      que **NO quedó agendada** para que nadie se vaya creyendo que sí.
+
+      **Gate `app/(public)/camino-de-fallo.test.ts`**, sujetos derivados del disco. El sujeto es la
+      **LLAMADA y no el archivo, a propósito**: este mismo `page.tsx` tiene cuatro `catch` (los dos
+      `useEffect` encadenan el suyo), así que un gate por archivo pasaba en **VERDE sobre el
+      defecto**. Rojo primero por el motivo correcto (`page.tsx:152 (POST)`) y validado por **4
+      mutaciones**: quitar el `catch`, **dejarlo vacío** (el esquive, que sólo aparece mutando
+      DESPUÉS de arreglar), quitar un `.catch` encadenado, y un sujeto nuevo con el defecto en
+      otro archivo; las cuatro caen en rojo nombrando archivo y línea, y restaurado vuelve a 10/10.
+
+      **Gates:** `tsc` exit 0 · `vitest` **3779 pasan / 310 archivos** · `eslint` 0 errores.
+      Cartel **MIRADO** renderizado con el CSS y la fuente subseteada del build vivo (430 px,
+      glifo real de 18×18 y no la palabra, cero respuestas ≥400).
+
+      ⚠️ **Commiteado y en la rama, NO desplegado:** el cliente todavía no lo ve.
+
 - [x] 🔴 **La reserva pública le decía al cliente del negocio «Sin horarios disponibles · Probá
       con otra fecha» cuando en realidad NO había podido cargar los horarios — cerrado el
       2026-09-08 (`e69736b` en `onia-platform`, publicado en la rama).**
