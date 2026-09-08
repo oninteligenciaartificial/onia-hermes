@@ -1498,6 +1498,11 @@ class Runner {
             // ventana del evento como las fechas de las facturas offline deben caer
             // dentro de la vigencia de ese CUFD. eventWindowNow ya recorta la ventana;
             // el lote se fecha en el punto medio (siempre dentro).
+            // El refresh va ANTES de calcular la ventana: eventWindowNow la deriva de
+            // cufdVigenteDesde, asi que con el CUFD vencido el evento nace fuera de
+            // vigencia y el SIN rechaza el par entero con "EL EVENTO SIGNIFICATIVO NO
+            // CORRESPONDE AL CUFD DEL EVENTO REGISTRADO" (medido 2026-09-08).
+            await this.ensureCufd();
             const win = this.eventWindowNow();
             const evento = await this.registrarEvento(motivo, { ...win, etapa: "VI" });
             const codigoEvento =
@@ -1594,6 +1599,10 @@ class Runner {
           "IX",
           target,
           async (done) => {
+            // El CUFD viaja DENTRO del CUF de cada factura del lote, no solo en el
+            // request: con uno vencido el SIN devuelve 123 "CUFD FUERA DE TOLERANCIA"
+            // y la etapa queda clavada (medido 2026-09-08, 20/80 desde el 6-ago).
+            await this.ensureCufd();
             const lote = this.buildLote(2, { tipoEmision: 3, baseIndex: 1000 + done * 2 });
             const envelope = buildRunnerEnvelope("recepcionMasivaFactura", {
               ...this.recepcionBase(3),

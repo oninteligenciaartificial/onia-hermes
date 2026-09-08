@@ -441,8 +441,16 @@ fi
 # Lo que el loop escribio como `LECCION: ...` en ESTA vuelta va solo a la memoria
 # compartida: asi la leccion no depende de que el loop se acuerde de llamar a
 # onia-aprender.sh. Tope 5 por vuelta; el consolidador deduplica.
+#
+# 🔴 El `</dev/null` de adentro del bucle no es cosmetico: sin el, el tope real es UNO.
+# En nodo-casa `/root/bin/onia-aprender.sh` es un shim que hace `exec ssh`, y ssh SIN `-n`
+# consume el stdin que le queda al bucle — o sea se traga las lecciones 2 a 5, el `while`
+# termina normal y el exit es 0. Falla ABIERTO: no hay error, no hay log, y la vuelta
+# reporta que aprendio. Medido el 2026-09-07 con el bucle real: de 3 lecciones se envio 1.
+# Toca a todo bucle `while read` que adentro llame a un shim de este nodo (docker, tablero,
+# telegram, aprender, vps): la llamada va con `</dev/null` o el barrido pierde el resto.
 CUR_INI=$(grep -n "===== ARRANCA $NOMBRE" "$LOG" 2>/dev/null | tail -1 | cut -d: -f1)
-tail -n +"${CUR_INI:-1}" "$LOG" 2>/dev/null   | sed -E 's/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:]+Z //; s/^[*_#> -]*//'   | grep -E "^LECCI[OÓ]N: ." | cut -c1-600 | head -5   | while IFS= read -r LEC; do /root/bin/onia-aprender.sh "[$NOMBRE] ${LEC#LECCI*N: }" >/dev/null 2>&1 || true; done
+tail -n +"${CUR_INI:-1}" "$LOG" 2>/dev/null   | sed -E 's/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:]+Z //; s/^[*_#> -]*//'   | grep -E "^LECCI[OÓ]N: ." | cut -c1-600 | head -5   | while IFS= read -r LEC; do /root/bin/onia-aprender.sh "[$NOMBRE] ${LEC#LECCI*N: }" </dev/null >/dev/null 2>&1 || true; done
 /root/bin/onia-consolidar-memoria.sh >> "$LOG" 2>&1 || true
 
 T=$(( $(date +%s) - T0 ))

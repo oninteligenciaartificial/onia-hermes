@@ -185,6 +185,53 @@ export function clasificarPedido({ id, shas, publicado }) {
   return { id, estado, sinPublicar, indeterminados };
 }
 
+/**
+ * PURA: la dirección INVERSA de `clasificarPedido`, y la que ningún gate del proyecto medía.
+ *
+ * `clasificarPedido` caza el pedido que SOBRE-describe: promete arreglos que ya se publicaron.
+ * Éste caza el que SUB-describe: su `ok` publica commits que el pedido no le nombró a nadie.
+ * Los dos modos conviven en la misma tarea y el peligroso es éste, porque **la parte muda es
+ * justo la que se publica**: Sergio Urcullo aprueba código que el pedido nunca le mostró.
+ *
+ * 🔴 LO QUE LO HACE ESTRUCTURAL, medido el 2026-09-07 en esta misma vuelta: la brecha **la
+ * abre el integrador**. El pedido `t_deddf471` decía a las 22:09 UTC «eec06d7 NO viaja con el
+ * swap de HOY — está en `claude/chatbots-platform-review-0d1d09` y entra cuando el integrador
+ * la mergee». Una hora después la mergeé, y esa frase quedó falsa: el `ok` pasó a publicar
+ * SEIS arreglos donde el hilo nombraba cinco. No es un descuido de quien escribió el pedido —
+ * es la consecuencia mecánica de que `main`/`master` avancen mientras el pedido espera, y
+ * pasa en CADA vuelta de este carril.
+ *
+ * POR QUÉ NO LO VE NINGUNO DE LOS TRES INSTRUMENTOS QUE YA EXISTEN:
+ *
+ *   - `clasificarPedido` (acá arriba) mira sólo los shas que el pedido DECLARA. Un commit que
+ *     el pedido no nombra no es sujeto suyo: no puede ponerse rojo por algo que no enumera.
+ *   - `deploy_sin_pedido.mjs` pregunta si el destino TIENE pedido. Éste lo tiene, y vigente.
+ *   - `deploy-vivo.mjs` cuenta cuántos arreglos faltan publicar, no si alguien los nombró.
+ *
+ * El sujeto por lo tanto NO son los shas del pedido —recorrer lo que hay es exactamente lo que
+ * no puede ver al que falta—: es **lo que el `ok` publicaría**, derivado del build vivo contra
+ * la rama base. Misma regla que ya arregló a `deploy_sin_pedido.mjs`: el universo se deriva.
+ *
+ * Dirección del daño al fallar: sin `publicaria` sale NO_MEDIDO, nunca COMPLETA. Declarar
+ * completa una promesa que no se pudo comparar es la única salida que borra el problema.
+ */
+export function promesaCompleta({ shas, publicaria }) {
+  if (!Array.isArray(publicaria)) {
+    return { estado: 'NO_MEDIDO', motivo: 'no pude derivar que publicaria el ok', mudos: [] };
+  }
+  if (publicaria.length === 0) {
+    return { estado: 'NO_MEDIDO', motivo: 'el ok no publicaria nada: lo mide clasificarPedido', mudos: [] };
+  }
+  // Los shas se comparan por PREFIJO en las dos direcciones: el tablero escribe 7 caracteres
+  // y `git log` puede devolver 8 o más. Exigir igualdad los daría a todos por mudos.
+  const nombrado = (sha) =>
+    (shas || []).some((p) => sha.startsWith(p) || p.startsWith(sha));
+  const mudos = publicaria.filter((c) => !nombrado(c.sha));
+  return mudos.length === 0
+    ? { estado: 'COMPLETA', mudos: [] }
+    : { estado: 'SUB_DESCRIBE', mudos };
+}
+
 // ── medición viva ──────────────────────────────────────────────────────────────────────
 
 function sh(cmd, args, opts = {}) {
@@ -288,7 +335,24 @@ async function medirEnVivo() {
     }
   };
 
+  // Lo que el `ok` publicaría HOY, derivado: del build vivo a la rama base, sin merges (un
+  // merge no es un arreglo). Es el universo del que sale `promesaCompleta`, y por eso NO se
+  // arma con los shas del pedido: recorrer lo que el pedido enumera no puede ver al que falta.
+  const publicariaPlataforma = (() => {
+    if (!puedePlataforma) return null;
+    const salida = sh('git', ['-C', REPO_PLATAFORMA, 'log', '--no-merges', '--format=%h\t%s', `${vivo}..origin/master`]);
+    if (salida === null) return null;
+    return salida
+      .split('\n')
+      .filter(Boolean)
+      .map((l) => {
+        const [sha, ...resto] = l.split('\t');
+        return { sha, titulo: resto.join('\t') };
+      });
+  })();
+
   const entregados = [];
+  const incompletos = [];
   const noMedidos = [];
   for (const p of pedidos) {
     if (p.destino !== 'plataforma') {
@@ -302,7 +366,21 @@ async function medirEnVivo() {
     const r = clasificarPedido({ id: p.id, shas: shasPrometidos(p.texto), publicado: esPublicado });
     if (r.estado === 'ENTREGADO') entregados.push(r);
     else if (r.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (plataforma): ${r.motivo}`);
-    else console.log(`OK ${p.id} (plataforma): sigue VIGENTE — ${r.sinPublicar.length} sin publicar, ${r.indeterminados.length} sin resolver`);
+    else {
+      console.log(`OK ${p.id} (plataforma): sigue VIGENTE — ${r.sinPublicar.length} sin publicar, ${r.indeterminados.length} sin resolver`);
+      // Vigente no alcanza: un pedido puede estar vigente Y sub-describir lo que publica.
+      // OJO: acá va `shasDelTexto` (TODOS los shas del cuerpo y los comentarios), no
+      // `shasPrometidos` (sólo los de la marca `DEPLOY PEDIDO`). Son dos preguntas distintas
+      // y por eso el sujeto cambia: `clasificarPedido` pregunta «¿qué PROMETE?» —y ahí un sha
+      // suelto del texto lo daría por vencido en falso, que fue el bug del 2026-09-06—;
+      // ésta pregunta «¿lo MENCIONÓ en algún lado?», y Sergio Urcullo lee el texto, no la
+      // marca. Un recuento derivado en un comentario nombra los shas en prosa y cuenta.
+      // La dirección del error también manda: acá perdonar de más sólo calla un rojo, y un
+      // rojo falso haría comentar el pedido otra vez — el ruido que lo vuelve ilegible.
+      const c = promesaCompleta({ shas: shasDelTexto(p.texto), publicaria: publicariaPlataforma });
+      if (c.estado === 'SUB_DESCRIBE') incompletos.push({ id: p.id, mudos: c.mudos });
+      else if (c.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (plataforma, promesa completa): ${c.motivo}`);
+    }
   }
 
   for (const n of noMedidos) console.log(`NO MEDIDO ${n}`);
@@ -316,6 +394,18 @@ async function medirEnVivo() {
     }
     return 1;
   }
+
+  if (incompletos.length > 0) {
+    for (const i of incompletos) {
+      console.log(`\nROJO ${i.id}: su ok publica ${i.mudos.length} arreglo(s) que el pedido NO nombra.`);
+      for (const m of i.mudos) console.log(`    ${m.sha}  ${m.titulo}`);
+      console.log('  El cuerpo es lo unico que Sergio Urcullo lee: hoy aprobaria codigo que nadie');
+      console.log('  le mostro. Comenta el recuento DERIVADO (no rehagas la tarea: el comando ya');
+      console.log('  deriva el sha al ejecutarse y no caduca).');
+    }
+    return 1;
+  }
+
   return noMedidos.length === pedidos.length ? 2 : 0;
 }
 
@@ -333,6 +423,38 @@ function selfCheck() {
       clasificarPedido({ id: 'd', shas: ['1111111'], publicado: () => null }).estado === 'VIGENTE'],
     ['el sha se lee con limites', !shasDelTexto('38bcf8ab12cafe').includes('38bcf8a')],
     ['no confunde palabras con shas', shasDelTexto('deploy cadena decidida').length === 0],
+
+    // ── la direccion inversa: el pedido SUB-describe lo que su ok publica ──────────────
+    ['el ok publica un arreglo que el pedido no nombra -> SUB_DESCRIBE',
+      promesaCompleta({
+        shas: ['1111111'],
+        publicaria: [{ sha: '1111111', titulo: 'nombrado' }, { sha: '9999999', titulo: 'mudo' }],
+      }).estado === 'SUB_DESCRIBE'],
+    // ⚠️ Se lee con `.map(...).join()` y NO con `.mudos[0].titulo`: sobre una lista vacia el
+    // indexado lanza, y como los casos se evaluan al ARMAR el array, un throw mata el
+    // self-check entero antes de imprimir una sola linea — `grep -c FAIL` devuelve 0 y la
+    // mutacion se lee como «el gate aguanta». Medido: con el detector siempre-vacio esta
+    // misma tanda dio «0 casos en rojo» estando los tres rotos.
+    ['y lo NOMBRA, que es lo unico accionable',
+      promesaCompleta({
+        shas: ['1111111'],
+        publicaria: [{ sha: '1111111', titulo: 'nombrado' }, { sha: '9999999', titulo: 'mudo' }],
+      }).mudos.map((m) => m.titulo).join(',') === 'mudo'],
+    // El caso que YA cumple. Sin el, romper la comparacion pasa igual: todo daria rojo y el
+    // gate parece vivo. Es el que caza la mutacion «marcar mudo a todo».
+    ['el caso que YA cumple: nombra todo lo que publica -> COMPLETA',
+      promesaCompleta({
+        shas: ['1111111', '2222222'],
+        publicaria: [{ sha: '1111111', titulo: 'a' }, { sha: '2222222', titulo: 'b' }],
+      }).estado === 'COMPLETA'],
+    // El tablero escribe 7 caracteres y `git log` puede devolver mas. Exigir igualdad daria
+    // TODOS los commits por mudos y llenaria de rojos falsos un pedido bien escrito.
+    ['el sha corto del pedido casa con el largo de git log',
+      promesaCompleta({ shas: ['1111111'], publicaria: [{ sha: '1111111abc', titulo: 'a' }] }).estado === 'COMPLETA'],
+    ['sin poder derivar que publica -> NO_MEDIDO, nunca COMPLETA',
+      promesaCompleta({ shas: ['1111111'], publicaria: null }).estado === 'NO_MEDIDO'],
+    ['un pedido que no nombra NADA y publica algo -> SUB_DESCRIBE',
+      promesaCompleta({ shas: [], publicaria: [{ sha: '1111111', titulo: 'a' }] }).estado === 'SUB_DESCRIBE'],
   ];
   let malos = 0;
   for (const [nombre, ok] of casos) {

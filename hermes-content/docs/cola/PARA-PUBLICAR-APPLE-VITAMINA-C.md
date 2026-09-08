@@ -32,8 +32,8 @@ existe, sigue siendo un proyecto, no un negocio.
 
 Por eso esta semana estoy haciendo eso: menos construir, más hablar.
 
-¿Cuál de las cuatro te está costando más a vos? Escribí la letra —
-C de Claude, café, créditos o clientes— y te digo qué haría yo.
+¿Cuál de las cuatro te está costando más a vos? Escribí cuál —Claude,
+café, créditos o clientes— y te digo qué haría yo.
 
 ## Versión X / LinkedIn
 

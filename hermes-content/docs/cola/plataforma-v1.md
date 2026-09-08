@@ -44,6 +44,55 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **La receta que el paciente se lleva a la farmacia salía fechada al DÍA SIGUIENTE de
+      noche, y el pie del mismo papel decía la fecha correcta — cerrado el 2026-09-07
+      (`8bc5182` en `onia-platform`, publicado en la rama).**
+      Gate nuevo: `lib/platform/fecha-en-zona-del-negocio.test.ts` (8 casos).
+
+      El contenedor corre con `TZ` vacío — medido en vivo:
+      `docker exec onia-platform node -e "…"` devuelve `process.env.TZ` **undefined** e
+      `Intl.DateTimeFormat().resolvedOptions().timeZone` = **UTC**. Así que toda fecha que el
+      SERVIDOR formatea sin `timeZone` sale **4 h adelantada**, y entre las 20:00 y la medianoche
+      de La Paz **nombra el día siguiente** — justo la franja en la que atienden dental y estética.
+
+      ⚠️ **Esto es la CLASE del defecto que la vuelta anterior arregló como instancia.** El
+      2026-09-06 se arregló el aviso de cita al profesional (`lib/agenda/crear-cita.ts`), que iba
+      4 h adelantado mientras el correo de la misma cita iba bien. Quedaban **nueve** llamadas más,
+      todas de servidor, y la peor no era una pantalla sino **un documento que sale del sistema**:
+      `app/print/prescription/[id]/page.tsx` imprimía la fecha de emisión sin zona y, 90 líneas
+      más abajo, su pie de página **sí** la llevaba. Un mismo papel contradiciéndose. Arregladas
+      las nueve: la receta ahora lee `clinicSettings.timezone` (y el pie usa **la misma**, en vez
+      de la zona fija que tenía escrita, para que no se puedan volver a separar); las ocho del panel usan
+      `DEFAULT_TZ` de `lib/time.ts`, que ya era la fuente única.
+
+      **Por qué ningún gate podía verlo:** no sobra ninguna palabra (un barrido de literales
+      prohibidos no tiene qué buscar), el texto ya está en el idioma del rubro, la captura se ve
+      perfecta, y la fecha es un **dato real** — lo único mal es el huso en que se la calculó.
+      El sujeto del gate nuevo sale del **disco** (`app/`, `lib/`, `components/`), así que un
+      archivo nuevo nace cubierto; los `"use client"` quedan fuera a propósito, porque ahí formatea
+      el navegador del dueño, que ya está en su zona.
+
+      ⚠️ **Y el primer instrumento mentía en las dos direcciones, así que ninguna de las dos
+      listas servía.** `grep -v timeZone` por LÍNEA acusaba a `crear-cita.ts` y `whatsapp-bot.ts`,
+      que están **sanos** (la opción baja de renglón) — se resolvió recorriendo la llamada con
+      paréntesis balanceados. Y al revés: `toLocaleString` es **ambiguo** — `Number` tiene el suyo,
+      y las tres de `app/(dashboard)/communications/page.tsx` son **números** (`monthTotal.toLocaleString`).
+      Exigirles zona era mandar a romper código sano. Hoy `toLocaleDateString`/`toLocaleTimeString`
+      se exigen siempre y `toLocaleString` sólo cuando el receptor es reconociblemente una fecha;
+      el límite de esa heurística está escrito en la cabecera del gate, no escondido.
+
+      Validado **por mutación en las dos direcciones**: revertir el arreglo de la receta → rojo
+      nombrándola; recortar las raíces del barrido → rojo (sin ese caso, vaciar `RAICES` dejaba el
+      gate verde para siempre); restaurar → 8/8 verde. Gates: `tsc` 0 · `vitest` 3574 verdes (300
+      archivos) · `eslint` 0 errores.
+
+      ⚠️ **NO desplegado, y NO alcanza con el pedido de deploy que ya existe.** Medido al cerrar:
+      `git merge-base --is-ancestor 8bc5182 origin/master` da **NO**, y el pedido vivo
+      (`t_deddf471`) publicaría `69d95ad`, que es el HEAD de `master` — o sea que ejecutarlo hoy
+      **no incluye este arreglo**. Faltan DOS pasos, en este orden: que `onia-cola` mergee la rama
+      a `master`, y recién después el swap. Escribir «viaja con el pedido de deploy» sin
+      comprobarlo es lo que este carril corrigió el 2026-09-07 (`5eeac96f`).
+
 - [x] 🔴 **Abrir el enlace del correo CANCELABA la cita, sin que nadie decidiera nada —
       cerrado el 2026-09-07 (`bb0ba47` en `onia-platform`, publicado en la rama). Y estaba en
       DOS puertas, no en una.**
@@ -1295,6 +1344,29 @@ y sin operar. Acá se opera, con verificación por ítem.
       **Listo =** Porcentaje General del portal **> 0%** con al menos un caso nuevo al 100%, leído
       del portal y no deducido. Y el número de esta cola actualizado con la fecha de esa lectura.
 
+      ---
+
+      **Medido el 2026-09-08 (no heredado): la corrida que el doc daba por «corriendo» terminó
+      el 04-sep 04:12 UTC, cuatro días antes**, con el log cerrado en `fin` y cero procesos
+      vivos. Dejó **los tres combos del PdV 0 en 125/125 en las etapas IV, VII y XI** — o sea
+      `pv0-ds17-tf1` y `pv0-ds24-tf3` son **dos casos nuevos al 100%**, que es lo que este
+      «Listo =» pide. **Lo único que falta para cerrarlo es leer el portal**, y eso necesita el
+      login de Sergio Urcullo: no es trabajo de este carril.
+
+      **Y apareció trabajo que sí era de este carril, desbloqueado y sin hacer desde el 6-ago:**
+      las etapas **VI (20/280, 3%)** y **IX (20/80, 12%)** no dependían del PdV 1 ni de nadie.
+      Estaban frenadas porque `ensureCufd()` se cableó sólo en las tres etapas que motivaron su
+      arreglo (IV, VII, XI) y no en sus hermanas, y **nadie lo vio porque
+      `run-fase1-volumen.sh` corre únicamente IV → VII → XI**: el instrumento miraba justo las
+      tres que ya estaban sanas. Arreglado en `a28b3689` (`fase1-runner.mjs`), guardias
+      validados por mutación, 371/371 verdes. **Desbloquea 320 casos** (260 de VI + 60 de IX).
+      Detalle y los dos mensajes del SIN, en `ONIA_SIAT_ESTADO_HOMOLOGACION.md` §7.
+
+      **Lo que sigue, en orden:** correr VI y IX en volumen con el runner arreglado (no entró en
+      la vuelta del 08-sep, que se fue en encontrar y cerrar la causa) → releer el portal →
+      actualizar el número de acá. El PdV 1 (la otra mitad de la matriz) sigue siendo de Sergio
+      Urcullo.
+
 
 ## Lo que este carril NO hace
 
@@ -1305,6 +1377,50 @@ y sin operar. Acá se opera, con verificación por ítem.
 - **No le escribe a un prospecto.** Regla del [`README.md`](README.md) de esta carpeta.
 
 ## Cerrado
+
+- [x] 🔴 **CERRADO el 2026-09-07: el dueño ponía la fecha límite del 9 y su cliente leía el 8.**
+      Commit `9ad61aa` (rama `claude/chatbots-platform-review-0d1d09`), **NO desplegado** —
+      viaja con el pedido de deploy de `plataforma`.
+
+      **El defecto.** Un `<input type="date">` devuelve `"2026-09-09"`: un día del calendario,
+      sin hora y sin zona. `new Date("2026-09-09")` lo vuelve **medianoche UTC**, que en La Paz
+      (UTC-4) son las 20:00 del día ANTERIOR. Medido corriendo la cadena real:
+      `new Date("2026-09-09").toISOString()` → `2026-09-09T00:00:00.000Z` →
+      `toLocaleDateString("es-BO")` en La Paz → **`8/9/2026`**. Dos superficies lo mostraban:
+      el panel de requerimientos y —peor— el **portal público**, que es donde lo lee el cliente
+      del cliente, sin cuenta. Y no era sólo texto: en `recurring-invoices` de `startDate` sale
+      `computeNextRunAt`, o sea el día real en que se EMITE la factura.
+
+      **Por qué sobrevivió, que es lo único que vale recordar.** La clase ya se había arreglado
+      **dos veces** —`invoices.dueDate` y `payments.paidAt`— y el comentario de
+      `app/api/invoices/route.ts` la deja escrita con nombre y apellido: *«se guarda al mediodía
+      del negocio, no a medianoche UTC (que en La Paz se lee como el día anterior)»*. Las dos
+      veces se arregló la **instancia**. Sin gate, la pantalla siguiente nace rota — y nacieron
+      dos. Ningún gate podía verlo: no sobra ninguna palabra, el texto ya está en el idioma del
+      rubro, la captura se ve perfecta y la fecha es un dato REAL. El gate hermano
+      (`lib/platform/fecha-en-zona-del-negocio.test.ts`) exige `timeZone` al **formatear** — y
+      `formatDate` la pasa — así que **certificaba este defecto como correcto**: lo que estaba
+      mal no era el formateo sino el instante guardado.
+
+      **Qué entra.** El instante lo arma el servidor con `fechaSoloAInstante(campo, timezone)`
+      (mediodía del negocio), que es el único que sabe la zona; el panel manda el día tal cual
+      y ya no convierte en el navegador. Panel y portal muestran con `formatDate`, que fija la
+      zona del negocio. Y `lib/fechas-de-calendario.test.ts`, gate de cobertura con el sujeto
+      derivado del **disco**.
+
+      ⚠️ **El gate se escribió mal la primera vez y lo delató él mismo.** Con
+      `new Date(<campo>)` de sujeto —o sea, con la FORMA DEL DEFECTO— arreglar un campo lo borra
+      del disco y su declaración queda huérfana: el gate dejaba de cuidarlo justo después de
+      arreglarlo y no podía ver la vuelta atrás. Es la trampa de «medir la precondición del bug»
+      que ya está anotada, encontrada en vivo. Corregido: el sujeto es **todo campo del pedido
+      convertido a `Date`, por cualquiera de las dos vías**, así un campo arreglado sigue
+      vigilado. De paso quedaron cubiertas las tres instancias viejas (`invoices.dueDate`,
+      `patients.dob` ×2), que hasta hoy podían revertirse sin que nada se pusiera rojo.
+
+      **Validado por mutación**, no por que pase: revertir el arreglo, agregar una fecha nueva
+      sin declarar y dejar una declaración huérfana ponen rojo, cada una nombrando su sujeto.
+      Gates en `/root/loops/onia-platform-chatbot`: `tsc` 0, `vitest` 0 (3.588 pasados),
+      `eslint` 0 errores.
 
 - [x] 🔴 **CERRADO el 2026-09-07: la quinta pantalla de la ficha decía «pacientes» a una
       estética y a un estudio contable, y la ayuda mandaba al estudio a cargar sus clientes

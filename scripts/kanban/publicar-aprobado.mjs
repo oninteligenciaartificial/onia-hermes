@@ -28,7 +28,7 @@
 import { execFileSync, spawn } from 'node:child_process';
 import { existsSync, readFileSync, statSync, readdirSync } from 'node:fs';
 import { isAbsolute, dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const AQUI = dirname(fileURLToPath(import.meta.url));
 // Este archivo vive en DOS layouts: `scripts/kanban/` en el repo y, desplegado
@@ -79,7 +79,11 @@ const IMAGEN = /\.(png|jpe?g)$/i;
 // swap sobre un bot que le decia "en construccion" a 2 de los 5 rubros que se
 // venden. Los tres publicadores comparten la propiedad que los hace no caducar:
 // no reciben argumentos y derivan que desplegar al ejecutarse.
-const DESTINOS = {
+// Exportada a propósito: es la lista blanca de destinos, y `deploy_sin_pedido.mjs` deriva de
+// ella el universo de destinos que tiene que vigilar. Copiarla allá la volvería una segunda
+// fuente que coincide por diligencia y no por construcción — el día que entre un destino
+// nuevo acá, el otro gate no lo pediría y nadie se enteraría.
+export const DESTINOS = {
   landing: '/opt/onia-landing/_deploy/publicar.sh',
   plataforma: '/opt/onia-platform/_deploy/publicar.sh',
   bot: '/opt/onia/bot/_deploy/publicar.sh',
@@ -273,9 +277,17 @@ const main = () => {
   }));
 };
 
-try {
-  main();
-} catch (e) {
-  console.error(String(e?.message || e).slice(0, 800));
-  process.exit(1);
+// ⚠️ La guarda no es prolijidad: sin ella, IMPORTAR este archivo ejecuta `main()` con el
+// `process.argv` del que importa. `main()` lee `argv[2]` y sale a buscar esa tarea en el
+// tablero, así que un gate que sólo quería una constante exportada terminaba consultando
+// producción — y un importador arrancado como `node algo.mjs t_deddf471` habría corrido el
+// DEPLOY entero. Es la trampa que este proyecto ya pagó en `demo_agendada_real.mjs`, acá
+// sobre el script que ejecuta el `ok` de Sergio Urcullo, que es el peor lugar posible.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  try {
+    main();
+  } catch (e) {
+    console.error(String(e?.message || e).slice(0, 800));
+    process.exit(1);
+  }
 }
