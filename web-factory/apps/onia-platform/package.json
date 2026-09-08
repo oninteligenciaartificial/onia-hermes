@@ -18,6 +18,7 @@
     "deploy:vivo": "node scripts/deploy-vivo.mjs",
     "enlaces:vivos": "node scripts/enlaces-vivos.mjs",
     "rubros:vivos": "node scripts/rubros-vivos.mjs",
+    "recursos:vivos": "node scripts/recursos-vivos.mjs",
     "rutas:venta": "node scripts/rutas-de-venta.mjs",
     "guia:facturacion": "node scripts/verificar-guia-facturacion.mjs",
     "mirar:portada": "node scripts/mirar-primera-pantalla.mjs",
