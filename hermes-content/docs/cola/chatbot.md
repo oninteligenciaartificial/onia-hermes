@@ -178,6 +178,128 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-08: el bot de WhatsApp del cliente le pedía su catálogo a una tabla
+      que está VACÍA por construcción en 3 de los 5 rubros de la v1.0.**
+
+      El add-on de Bs 390/mes armaba el contexto de la IA con `prisma.treatment.findMany`
+      **siempre**. `treatments` sólo la llenan los packs clínicos: comercio, importadora y
+      servicios profesionales cargan lo que venden en `/comercio`
+      (`onia_commerce_products`). Como `buildSystemPrompt` omite la sección
+      «SERVICIOS DISPONIBLES» cuando la lista viene vacía, **el bot de una ferretería con su
+      catálogo cargado contestaba sin saber que existía**.
+
+      Medido en producción, no supuesto:
+
+      ```
+      docker exec supabase-db psql -U postgres -d postgres -tAF'|' -c "
+        select o.slug, o.\"verticalTrackId\",
+          (select count(*) from public.treatments t where t.\"organizationId\"=o.id and t.active),
+          (select count(*) from public.onia_commerce_products p where p.\"organizationId\"=o.id and p.active)
+        from public.organizations o;"
+      → zz-qa-ferreteria-tornillo-ommbt|gestios-general|0|1
+      ```
+
+      **Por qué ningún gate podía verlo**, que es lo que lo mantuvo vivo: `[]` es un valor
+      válido que no lanza; no sobra ni falta una palabra (el barrido de rubro × texto de este
+      bot vigila el VOCABULARIO, y derivaba bien); y la superficie es WhatsApp, así que no hay
+      pantalla que mirar ni HTML que grepear. **El defecto no estaba en el texto sino en DE QUÉ
+      TABLA sale el dato** — la instancia hermana de la que `contarClientesDelRubro` ya mató en
+      el contador de clientes. Peor: el comentario de `opcionesDelMenu` ya prometía que a los
+      rubros sin agenda «todo lo demás lo contesta la IA con el catálogo del negocio», y ese
+      catálogo nunca llegaba.
+
+      **Arreglado:** `12bdb28` — `catalogoEnTratamientos()` (derivado del nav, como sus
+      hermanas) + `lib/whatsapp/catalogo-del-negocio.ts`. No se reusó `fichaClinica` (pregunta
+      por la FICHA) ni `llevaInventario` (pregunta por STOCK, y servicios profesionales
+      contesta distinto a las dos). El gate deriva sujetos de `VERTICAL_PACKS`, **mira al
+      llamador** y se mide sobre el fuente sin comentarios; validado por mutación en 3
+      direcciones (5 rojos / 2 rojos / 2 rojos). Gates: tsc 0 · eslint 0 · vitest 3926.
+
+      ⚠️ **En la rama del carril, NO en `master`:** `git merge-base --is-ancestor 12bdb28
+      origin/master` dice que no. Falta el merge del integrador y después el deploy
+      (`t_bf1607af`) — **no está en producción**.
+
+- [ ] **HERMANO del anterior, en la MISMA expresión y sin arreglar: el bot no reconoce al
+      cliente que le escribe si su rubro guarda la gente en otra tabla.**
+
+      Dos líneas más arriba del catálogo, `lib/whatsapp-bot.ts` hace
+      `prisma.patient.findFirst({ where: { organizationId, phone: { contains: ... } } })`.
+      Comercio e importadora guardan a sus clientes en `onia_core_business_partners`
+      (`guardaClientesEnPatients()` da `false`), así que ahí **siempre** cae al genérico.
+
+      **Por qué NO se arregló en la misma vuelta, y no es pereza:** el teléfono de un business
+      partner no es una columna, vive dentro de `metadata` (JSON) — el modelo lo dice:
+      `primaryContactId String? // referencia suave (telefono/email en metadata)`. Buscar por
+      teléfono ahí es otra consulta y otra decisión (¿índice?, ¿qué clave dentro del JSON?),
+      no un renglón que se cuela en un arreglo de catálogo.
+
+      **Impacto real, para no inflarlo:** el fallback es `v.cliente`, que ya deriva del rubro
+      («cliente»), así que el bot **no miente** — sólo saluda sin nombre a alguien que el
+      negocio sí tiene cargado. Es peor en comercio, donde el cliente fiado es conocido.
+
+      **Reproducción:** `grep -n "prisma.patient.findFirst" lib/whatsapp-bot.ts` (1 uso, en el
+      camino de texto libre) y `lib/plan-limits.ts:190` `contarClientesDelRubro`, que ya
+      resuelve la MISMA pregunta bien y es el patrón a copiar.
+
+- [x] ✅ **CERRADO el 2026-09-08: el arreglo de ayer se aplicó a UNA instancia y sus tres hermanas
+      quedaron ciegas — de los gates vivos de este carril, TRES no medían nada desde nodo-casa.**
+
+      Ayer se arregló `avisos-vivo.mjs` (el ítem de acá abajo) trayéndose el artefacto del VPS por
+      SSH cuando `/opt/onia/bot` no está en el disco. **Ese arreglo no subió a la plantilla**, así
+      que hoy, corriendo los aliases vivos uno por uno desde casa, salieron tres en `NO MEDIDO` y
+      **los tres por lo mismo**: leen `/opt` del disco local.
+
+      | alias | qué decía | qué lee |
+      |---|---|---|
+      | `addon:canal-vivo` | «no pude leer las orgs de la base o el codigo del build vivo» | `/opt/onia-platform/build-*/` |
+      | `recordatorio:vivo` | «no pude leer /opt/onia-platform/app.env» | `/opt/onia-platform/app.env` |
+      | `deploy:plataforma-vivo` | «BUILD_ID vivo sin par en disco» | `/opt/onia-platform/build-*/` — **de `onia-cola`**, va en `t_5245e456` |
+
+      **Por qué nadie lo vio, que es lo que importa:** ninguno falla en verde. Los tres salen con
+      **exit 2** y dicen honestamente que no midieron — y por eso mismo no rompen nada, nadie los
+      mira, y la línea `OBJETIVO:` del carril se sigue firmando con las OTRAS cifras, que seguían
+      en meta. Es la misma forma que ya tiene esta memoria para `objetivo_visible.mjs`, pero
+      multiplicada: **el instrumento no miente, se calla, y callarse no deja rastro.**
+
+      **Y lo que lo disfrazaba:** la mitad BARATA de cada medición sí contestaba. `docker exec`
+      funciona desde casa porque es un shim que delega en el VPS, así que `addon:canal-vivo` leía
+      las orgs perfecto y se moría en el build. Un gate que contesta a medias se lee como un gate
+      que anda.
+
+      **Arreglo, en la plantilla y no en cada instancia:** `scripts/lib/vps-o-local.mjs` —
+      `leerDeProduccion(ruta)` y `listarDeProduccion(patrón)` preguntan al disco local y, si no
+      contesta, al VPS por SSH (`BatchMode`, sin colgarse pidiendo contraseña). Todo **tri-estado**:
+      `null` es «no pude preguntar» y nunca cadena vacía, porque un gate que recibe `""` no puede
+      distinguirlo de «lo medí y está vacío» — ahí es donde un `NO MEDIDO` se vuelve un falso
+      verde. Las dos vías se inyectan, así se valida por mutación sin tocar producción.
+
+      **Verificado en las DOS direcciones, que es la que importa:**
+
+      - `npm run addon:canal-vivo` → **exit 0**, `OK: el build vivo (3d1dabb) lee la capacidad y
+        ninguna org diverge`. Cruzado a mano antes de tocar el gate (BUILD_ID vivo
+        `J4LFta9YhYnlO3QAbJJZ8` → `build-3d1dabb` por SSH; `git show 3d1dabb:<ruta>` da 4 y 3 usos
+        de `isWhatsAppAddonActive` en las dos rutas): **el instrumento reparado y la medición
+        manual coinciden**, así que el defecto que vigila NO está vivo.
+      - `ONIA_VPS_SSH=root@203.0.113.9 npm run addon:canal-vivo` → **exit 2, `NO MEDIDO`**. Con el
+        VPS inalcanzable no puede salir «OK»: eso es lo único que hace que el verde signifique algo.
+      - `npm run recordatorio:vivo` → **exit 0** y, por primera vez desde casa, **entregó un
+        recordatorio real**: `status=sent (250 2.0.0 OK)`, `dsn=2.0.0`, `delay=1.3`, con su marca
+        `reminder24hSentAt` en la base. Con el SSH roto → `NO MEDIDO`.
+
+      **Anclado:** `scripts/lib/vps-o-local.test.mjs`, 7 casos, cableado a la cadena como
+      `test:vps-o-local` (un gate que no se declara en `package.json` le es invisible a
+      `guards-cableados`). Cada caso está escrito para que **ningún otro caso pueda taparlo** —
+      dos guardias hermanos que atajan el mismo escenario dan verde con uno roto, y eso ya pasó
+      acá. Validado por mutación, confirmando cada una por su línea `fail N` explícita y grepeando
+      que la mutación entró: `""` tratado como falsy → rojo; `null` devuelto como `""` → rojo;
+      lista vacía del VPS confundida con «no pude preguntar» → rojo. Las tres dieron
+      **`pass 6 · fail 1`**, o sea que cada guardia lo ve exactamente un caso. Cadena entera de
+      `onia-hermes`: **53 eslabones, EXIT 0**.
+
+      ⚠️ **Al mergear, `package.json` se resuelve por UNIÓN.** Esta rama suma un eslabón a la
+      cadena `test`; elegir un lado borra el gate del otro carril y su archivo de test entra igual
+      por su propio hunk, así que queda huérfano y `guards-cableados` pasa en verde.
+
 - [x] ✅ **CERRADO el 2026-09-07: el gate de los avisos medía HANDOFF y daba por medida la DEMO —
       la rama que lleva la plata.** El objetivo del carril dice «cada demo agendada **o** handoff le
       llega a Sergio», y `avisos-vivo.mjs` manejaba el motor sólo hasta un pedido de humano. Su

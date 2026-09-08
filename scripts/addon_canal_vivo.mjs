@@ -23,6 +23,7 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { existsSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
+import { leerDeProduccion, listarDeProduccion } from './lib/vps-o-local.mjs';
 
 const ejecutar = promisify(execFile);
 
@@ -168,20 +169,27 @@ async function medirAfectadas(leeCapacidad) {
   }
 }
 
-/** BUILD_ID vivo -> /opt/onia-platform/build-<sha> -> sha. */
+/**
+ * BUILD_ID vivo -> /opt/onia-platform/build-<sha> -> sha.
+ *
+ * Los builds viven en el disco del VPS. Cuando este loop se mudo a nodo-casa
+ * `/opt/onia-platform` dejo de existir acá, asi que el `ls` salia vacio y TODO el
+ * gate quedaba en `NO MEDIDO` — honesto, exit 2, y por eso nadie lo noto: la mitad
+ * barata (la base por `docker exec`) sí contestaba, porque `docker` es un shim que
+ * delega en el VPS. Medido el 2026-09-08. Ahora se le pregunta al disco local y,
+ * si no contesta, al VPS por SSH.
+ */
 async function medirShaVivo() {
   try {
     const buildId = (await salida('docker', ['exec', CONTENEDOR_APP, 'cat', '/app/.next/BUILD_ID'])).trim();
     if (!buildId) return null;
-    const dirs = (await salida('bash', ['-c', `ls -d ${DIR_BUILDS}/build-*/ 2>/dev/null || true`]))
-      .split('\n')
-      .map((l) => l.trim())
-      .filter(Boolean);
-    for (const d of dirs) {
+    const listado = listarDeProduccion(`${DIR_BUILDS}/build-*/`);
+    if (listado === null) return null;
+    for (const d of listado.dirs) {
       const f = `${d}.next/standalone/.next/BUILD_ID`;
-      if (!existsSync(f)) continue;
-      const b = (await salida('cat', [f])).trim();
-      if (b === buildId) {
+      const leido = leerDeProduccion(f);
+      if (leido === null) continue;
+      if (leido.contenido.trim() === buildId) {
         const m = d.match(/build-([0-9a-f]+)\/?$/);
         if (m) return m[1];
       }
