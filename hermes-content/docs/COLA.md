@@ -123,6 +123,14 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Listo =** tu objetivo incluye un quinto número —*arreglos de mi zona en `main` que el
       sitio vivo NO sirve*— que hoy daría **34** y no 0; y una vuelta en la que ese número baja
       a 0 porque se pidió el deploy, no porque se dejó de mirar.
+      **Medido de nuevo el 2026-09-08 08:50 UTC: el quinto número es 1, no 34** — hubo deploy el
+      08-sep 02:58 UTC. Los dos instrumentos coinciden y desde hoy la línea `OBJETIVO:` los
+      reporta: `node web-factory/apps/onia-platform/scripts/deploy-vivo.mjs` y
+      `ssh root@187.77.16.63 'bash /opt/onia-landing/_deploy/publicar.sh --dry-run'` (éste es el
+      que manda: deriva todo al ejecutarse y filtra lo que no viaja al navegador). El pedido por
+      ese 1 arreglo ya existe y está bloqueado en Sergio Urcullo: `t_a4b52e27` — **no se abre
+      otro ni se re-mide**, que es como se duplican. Falta sólo la segunda mitad: la vuelta en
+      que baje a 0, y ésa depende de su `ok`.
 
 - [x] 🟠 **El gate de la cola lleva TRES arreglos y vuelve a rojo cada vez, porque las tres
       rondas corrigieron el eje equivocado. — CERRADO 2026-09-07 por `onia-cola`, con la
