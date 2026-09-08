@@ -428,7 +428,7 @@ export default function Portada() {
         </Reveal>
       </Block>
 
-      {/* 3 · LA NOCHE (variante A, con foto) ── ver /v4/noche */}
+      {/* 3 · LA NOCHE — la variante con foto; su historia, en noche.tsx */}
       <NocheFoto />
 
       {/* 4 · CAPACIDADES EN TARJETAS GRANDES ──────────────────────────

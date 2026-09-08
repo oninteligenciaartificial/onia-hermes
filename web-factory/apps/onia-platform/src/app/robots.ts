@@ -3,10 +3,22 @@ import { SITE_URL } from "@/lib/site";
 
 /**
  * `/v1` es el archivo de la web anterior (mismo copy, otras URLs): fuera del
- * índice o compite consigo misma. `/patrones` es la demo interna de patrones,
- * y `/v4` la exploración de portada del 2026-09-07 (estructura de Fincash),
- * que se mira antes de decidir si reemplaza a `/` — hasta entonces no compite
- * con la home en ningún buscador.
+ * índice o compite consigo misma. `/patrones` es la demo interna de patrones.
+ *
+ * ⚠️ Acá había una tercera entrada, `/v4` —la exploración de portada del
+ * 2026-09-07—, descrita en PRESENTE como algo «que se mira antes de decidir si
+ * reemplaza a `/`». Esa decisión ya se tomó el mismo día: Sergio Urcullo dijo
+ * «reemplazá la home con la v4», la exploración PASÓ a ser la portada y su
+ * ruta se borró (`2c3ce027`). El commit que la borró dice, con todas las
+ * letras, que `/v4` «sale del disallow de robots» — y no salió: quedó acá un
+ * día entero prohibiéndole a los buscadores una URL que devuelve 404, y
+ * describiendo una decisión pendiente que ya estaba tomada. Sale el 2026-09-08
+ * con la barrida de citas de `/v4` (tarea `t_8e566d50`).
+ *
+ * Que el disallow sólo nombre rutas que EXISTEN lo verifica ahora
+ * `ruta-citada.test.ts`: un disallow es la lista de páginas que el sitio dice
+ * tener y no querer indexar, así que una entrada fantasma documenta una
+ * pantalla que no está.
  * `/servicios/marketing-ia` y `/servicios/consultoria` salen del índice el
  * 2026-09-08 por decisión de Sergio Urcullo (tarea `t_30b1711d`): la navegación
  * pública es el sistema + Chatbot, porque los leads confunden la web con una
@@ -33,7 +45,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: [
           "/patrones",
           "/v1",
-          "/v4",
           "/servicios/marketing-ia",
           "/servicios/consultoria",
         ],

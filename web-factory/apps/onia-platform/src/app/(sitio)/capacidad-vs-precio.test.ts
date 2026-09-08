@@ -9,7 +9,9 @@ import { PLANES } from "@/lib/pricing";
 /**
  * Lo que el precio anunciado COMPRA. El eje es el par (capacidad, precio).
  *
- * Medido el 2026-09-07 en `/v4`, servida por producción con 200. Su hero dice,
+ * Medido el 2026-09-07 en la que entonces era `/v4` —la exploración de portada
+ * que ESE MISMO DÍA pasó a ser `/` y dejó de existir como ruta propia, así que
+ * hoy lo medido vive en la home. Su hero decía,
  * en el mismo bloque y con dos líneas de por medio:
  *
  *   «…con agentes que trabajan de noche y te dejan las decisiones a vos.»
@@ -54,7 +56,8 @@ const SRC = join(AQUI, "..", "..");
 
 /**
  * Sujetos derivados del DISCO: una pantalla nueva nace cubierta y hay que
- * excluirla a la vista. `/v4` nació hoy y este gate la vio sin tocarlo.
+ * excluirla a la vista. La exploración de portada nació el 2026-09-07 (`/v4`,
+ * hoy absorbida por `/`) y este gate la vio sin tocarlo.
  */
 const EXENTOS = [
   join("lib", "pricing.ts"), // la fuente: acá viven las exclusiones, con su texto
@@ -91,7 +94,8 @@ function sinComentarios(texto: string): string {
  * Aproxima lo que se LEE. La ventana no se puede medir sobre el fuente: el
  * marcado infla la distancia con caracteres que nadie ve, y así una promesa y
  * su precio que están en el mismo bloque del hero quedan «lejos» por culpa de
- * tres `<Btn>` en el medio. Medido en `/v4`: 488 caracteres de fuente contra
+ * tres `<Btn>` en el medio. Medido en la portada de entonces (`/v4`, hoy `/`):
+ * 488 caracteres de fuente contra
  * 345 de texto. Se sacan etiquetas y atributos, y se colapsa el blanco.
  */
 function comoSeLee(fuente: string): string {

@@ -18,8 +18,9 @@ import { PLANES } from "@/lib/pricing";
  * «Facturación SIAT» al lado de Precios, Rubros y Agentes, y lo arregló ahí.
  *
  * POR QUÉ HACÍA FALTA, medido por mutación el 2026-09-07, que es lo que lo
- * vuelve un hecho y no un argumento: se inyectó en el hero de `/v4` —la portada
- * candidata a reemplazar a `/`, que producción ya sirve con 200—
+ * vuelve un hecho y no un argumento: se inyectó en el hero de la que entonces
+ * era `/v4` —la portada candidata, que producción servía con 200, y que ese
+ * mismo día pasó a ser `/`—
  *
  *   «Onia es el sistema con el que llevás tu negocio: agenda, clientes, caja,
  *    inventario, tu factura fiscal y cobros, con agentes que trabajan de noche…»
@@ -168,7 +169,9 @@ function comoSeLee(fuente: string): string {
  *
  * No se usa `PAGINAS_PUBLICAS`: restar el `disallow` de `robots.ts` haría
  * fallar ABIERTO —manda sobre rastreadores, no apaga la pantalla— y hoy ese
- * disallow tiene `/v4`, que es justo la portada candidata. Y no se recorre la
+ * disallow tiene `/servicios/marketing-ia` y `/servicios/consultoria`, que
+ * siguen respondiendo 200 y que el propio `robots.ts` marca como «no se
+ * bajan», porque su URL circula y se manda en una venta. Y no se recorre la
  * cadena de imports sino el árbol completo, que es más conservador: el copy de
  * venta casi nunca vive en el `page.tsx`, y un archivo de datos que todavía no
  * enlaza nadie entra igual (un texto de venta muerto es el que entra ya
