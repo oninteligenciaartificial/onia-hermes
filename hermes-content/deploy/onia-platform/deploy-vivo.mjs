@@ -45,8 +45,13 @@
  *   node hermes-content/deploy/onia-platform/deploy-vivo.mjs
  *   node hermes-content/deploy/onia-platform/deploy-vivo.mjs --json
  */
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
+
+// El mismo destino y los mismos flags que usan los demás gates vivos del sistema:
+// tenerlos en un solo lugar es lo que evita que uno se quede sin `BatchMode` y
+// cuelgue el cron pidiendo una contraseña que nadie va a escribir.
+import { VPS, SSH_ARGS } from '../../../scripts/lib/vps-o-local.mjs';
 
 // ── veredictos ──────────────────────────────────────────────────────────────
 export const AL_DIA = 0;
@@ -174,6 +179,59 @@ export function buildsEnDisco(base = BASE) {
   });
 }
 
+/**
+ * La salida del VPS (`sha|buildId|integro` por línea) con la MISMA forma que la
+ * del disco, para que `shaQueCorre` y `evaluarStaged` no sepan de dónde vino.
+ *
+ * `integro` se decide allá, donde están los archivos, y viaja como `si`/`no`.
+ * Traducirlo como «tiene BUILD_ID» sería el error caro: `evaluarStaged` diría
+ * CUBRE sobre un build a medio armar y el swap dejaría producción sin
+ * `server.js`. Un `buildId` vacío queda en `null` —nunca cadena vacía— porque
+ * `''` casaría por descuido contra un `buildIdVivo` también vacío.
+ */
+export function parsearBuildsSsh(salida, base = BASE) {
+  if (typeof salida !== 'string') return null;
+  return salida
+    .split('\n')
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((linea) => {
+      const [sha, buildId, integro] = linea.split('|');
+      return { sha, buildId: buildId || null, ruta: `${base}/build-${sha}`, integro: integro === 'si' };
+    })
+    .filter((b) => b.sha);
+}
+
+/** Los builds del VPS. `null` = no pude preguntar; `[]` = pregunté y no hay ninguno. */
+export function buildsPorSsh(base = BASE, destino = VPS) {
+  const guion = `for d in ${base}/build-*/; do [ -d "$d" ] || continue; n=$(basename "$d"); case "$n" in *.log|*.sh) continue;; esac; nb="$d.next/standalone"; id=$(tr -d "[:space:]" < "$nb/.next/BUILD_ID" 2>/dev/null); integro=no; if [ -n "$id" ] && [ -f "$nb/server.js" ] && [ -d "$nb/node_modules" ] && [ -d "$nb/.next/static" ]; then integro=si; fi; printf '%s|%s|%s\\n' "\${n#build-}" "$id" "$integro"; done`;
+  const r = spawnSync('ssh', [...SSH_ARGS, destino, guion], { encoding: 'utf8', timeout: 60_000 });
+  if (r.error || r.status !== 0) return null;
+  return parsearBuildsSsh(r.stdout, base);
+}
+
+/**
+ * Los builds de producción, del disco de esta máquina o del VPS.
+ *
+ * Devuelve `{ builds, origen }` o `null`. El `null` es el punto entero: un gate
+ * que reciba `[]` no puede distinguir «no hay ningún build armado» de «no llegué
+ * a preguntar», y ahí es donde un `NO PUDE MEDIR` se vuelve un falso «al día».
+ * Una lista local vacía SÍ es una respuesta (el directorio existe y está vacío),
+ * así que no se cae al VPS por ella: `buildsEnDisco` ya devuelve `null` —y sólo
+ * `null`— cuando la ruta no existe, que es el caso de nodo-casa.
+ *
+ * Las dos vías se inyectan para poder validar por mutación sin tocar producción.
+ */
+export function buildsDeProduccion(base = BASE, { local = buildsEnDisco, remoto = buildsPorSsh } = {}) {
+  const enDisco = local(base);
+  if (enDisco !== null && enDisco !== undefined) return { builds: enDisco, origen: 'local' };
+
+  const enVps = remoto(base);
+  if (enVps !== null && enVps !== undefined) return { builds: enVps, origen: 'remoto' };
+
+  return null;
+}
+
 export function headDeploy(repo = REPO) {
   corre('git', ['-C', repo, 'fetch', '--quiet', 'origin']);
   return corre('git', ['-C', repo, 'rev-parse', '--short', RAMA_DEPLOY]);
@@ -226,7 +284,7 @@ export function varadosDesde(shaVivo, repo = REPO) {
 }
 
 export function medir() {
-  const builds = buildsEnDisco();
+  const builds = buildsDeProduccion()?.builds ?? null;
   const shaVivo = shaQueCorre({ buildIdVivo: buildIdVivo(), builds });
   const headSha = headDeploy();
   const varados = varadosDesde(shaVivo);
