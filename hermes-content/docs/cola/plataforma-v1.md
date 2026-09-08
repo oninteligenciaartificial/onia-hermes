@@ -44,6 +44,42 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **CERRADO el 2026-09-08 (`f2237e8`, en la rama del carril — NO en `master` todavía):
+      la pantalla donde el dueño configura el asistente que PAGA le ponía ejemplos de otro
+      rubro.** `/settings/chatbot` (add-on de Bs 390/mes) tenía dos ejemplos tipeados en un
+      rubro para los ocho: el rótulo de la categoría decía **«Veterinaria»** y el nombre del
+      ítem decía **«Ortodoncia»** — que es literalmente el `ejemploServicio` dental. Un
+      comercio, una importadora o un estudio contable configuraban su bot leyendo ejemplos de
+      dos negocios ajenos, con los campos de al lado ya derivando bien de su rubro.
+
+      **Por qué ningún gate podía verlo, que es lo que valió la vuelta.** Los dos gates de copy
+      multi-rubro descartan los textos de **una sola palabra** —`if (!texto.includes(" "))
+      continue`, puesto para no ahogarse en identificadores y clases CSS— y un ejemplo de
+      formulario casi siempre *es* una palabra sola: la familia (rubro, texto) tenía una rendija
+      por la que pasa justo su caso más escondido. Ni el sujeto ni el patrón estaban mal; lo que
+      deja ciego al gate es un filtro puesto por un buen motivo, que se conserva. Y encima
+      `/settings/chatbot` es **subruta**: la fila de cobertura declara `/settings` cubierta por
+      `planes-en-el-idioma-del-rubro.test.ts`, un gate sobre PLANES que nunca la mira. Dos
+      motivos independientes, los dos cerrados.
+
+      Es la **cuarta** pasada por esta familia: `vocabulario.ts` ya documenta `ejemploServicio`
+      (01-sep, catálogo), `ejemploRegistro` (07-sep, ficha) y `ejemploPalabras` (esta misma
+      pantalla, tres campos) — y las tres veces el comentario dice *«arreglar la instancia y no
+      la clase»*. Por eso el gate nuevo (`lib/platform/ejemplo-de-formulario-por-rubro.test.ts`)
+      deriva su sujeto del **disco** — `app/(dashboard)` y `components/` enteros, 134
+      placeholders mirados—, no de una lista: un formulario nuevo nace cubierto y hay que
+      eximirlo a mano, a la vista. Las dos exenciones (`/admin`, panel interno de Onia) son por
+      literal exacto y se **re-miden**: si el texto eximido desaparece, su fila se pone roja en
+      vez de pre-aprobar el hueco.
+
+      **Prueba:** el gate en ROJO antes del arreglo nombrando los dos placeholders con su
+      archivo, y **validado por mutación en 4 direcciones, las 4 en rojo** — revertir cada mitad
+      del arreglo, devolverle al gate el filtro de una palabra, y recortarle el árbol
+      `components/`. `tsc` 0 · **4153 tests** (eran 4030) · eslint 0 errores.
+
+      ⚠️ **Commiteado, NO desplegado**: el cliente no lo ve hasta que Sergio Urcullo apruebe el
+      pedido de deploy vivo (`t_daa8750c`), que hoy publica 9 arreglos + éste.
+
 - [x] 🔴 **CERRADO el 2026-09-08 (`64279ff`, en la rama del carril — NO en `master` todavía):
       el Recall corría todos los días en tres rubros que no tienen a quién reactivar, y tres
       rubros pagaban agentes sin una pantalla donde verlos.**
