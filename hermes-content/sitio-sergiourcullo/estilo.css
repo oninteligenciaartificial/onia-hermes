@@ -463,3 +463,28 @@ code{font-family:var(--mono);font-size:.9em;background:var(--line-soft);padding:
   font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
   color:var(--faint);margin:22px 0 0;
 }
+
+/* ---------- foto en el hero de la home ----------
+   Va sobre un disco de verde de marca: el recorte de la foto tiene fondo transparente y
+   sin superficie detrás flota sobre el blanco y se ve como un sticker pegado. El verde
+   pleno aguanta el recorte y de paso es el único lugar de la home donde el color de marca
+   ocupa área grande. */
+.hero{display:flex;gap:38px;align-items:flex-end;margin:0}
+.hero .texto{flex:1;min-width:0}
+.hero .retrato{
+  flex:0 0 auto;width:210px;align-self:flex-end;position:relative;
+}
+.hero .disco{
+  position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+  width:186px;height:186px;border-radius:50%;background:var(--onia);
+}
+.hero .retrato img{
+  position:relative;width:210px;height:auto;display:block;
+  filter:drop-shadow(0 14px 26px rgba(20,22,26,.18));
+}
+@media (max-width:700px){
+  .hero{flex-direction:column;align-items:flex-start;gap:0}
+  .hero .retrato{width:150px;margin:26px 0 0;align-self:flex-start}
+  .hero .disco{width:132px;height:132px;left:75px}
+  .hero .retrato img{width:150px}
+}
