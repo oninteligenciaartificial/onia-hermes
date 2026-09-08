@@ -6,6 +6,10 @@
 > a la comunidad o cómo lo podemos hacer que sirva para los dos?"*
 >
 > Este documento contesta la segunda. Fuente única del **ritmo de producción**.
+>
+> 👉 **De dónde sale lo que se graba** —el backlog de temas, con cuáles dan para una
+> semana y cuáles para una sola pieza— en [`ONIA_MAPA_DE_TEMAS.md`](ONIA_MAPA_DE_TEMAS.md).
+> Ahí está también el papel de **YouTube**, que no estaba contemplado acá.
 
 ## La cuenta que hay que mirar primero
 
