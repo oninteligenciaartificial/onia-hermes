@@ -2542,5 +2542,49 @@ y sin operar. Acá se opera, con verificación por ítem.
       `origin/master` (comprobado con `git merge-base --is-ancestor`, no supuesto). Entra cuando
       `onia-cola` mergee, y recién ahí se publica.
 
+- [x] 🔴 **CERRADO el 2026-09-08: la PRIMERA pantalla de servicios profesionales le hablaba en
+      idioma de tienda de barrio.** `/dashboard` no es una pantalla: `dashboard/page.tsx`
+      devuelve **cuatro cuerpos** según el pack, y `comercio-hoy.tsx` lo comparten **comercio,
+      servicios profesionales y ganadería**. A los tres les decía «**Fiado** · en la calle»,
+      «Nadie te debe — los **fiados** se registran desde **la caja**», «**Producto(s)** sin
+      stock» y la tarjeta «**Stock crítico**». Un estudio contable no fía en el mostrador ni
+      tiene stock, y su propio menú llama a esa pantalla «**Por cobrar**». Son **2 de los 5
+      rubros** de la v1.0, en lo primero que ven al entrar.
+
+      **Lo que lo hacía invisible:** los dos helpers que lo resuelven —`idiomaDeCredito` e
+      `idiomaDeVenta`— ya existían, **probados**, a dos carpetas: se escribieron el 06-sep para
+      `/comercio/fiados` y `/comercio/caja` y **no viajaron** al panel que muestra el MISMO dato
+      primero. Y el gate de la familia, `lib/platform/pantalla-compartida-habla-su-idioma.test.ts`,
+      deriva sus sujetos del **desacuerdo de rótulo** (toda ruta que dos packs llamen distinto en
+      su menú) — y los siete packs llaman **igual** a `/dashboard`. Es la misma premisa que ya
+      falló tres veces en `pantallas-compartidas-cubiertas.test.ts` (`/appointments`,
+      `/comercio/caja`, `/inventory`): **el desacuerdo no está en el nombre de la ruta, está
+      adentro**.
+
+      **El arreglo:** el track viaja desde la página (que ya lo tenía en `account`) y los
+      sustantivos salen de los helpers. La tarjeta de stock y su celda cuelgan de
+      `venta.llevaStock`: a quien vende servicios no se le puede agotar uno, y mostrarle
+      «0 producto(s)» es un dato que para él no existe. Medido con las funciones del producto:
+      servicios profesionales → `rotulo: "Por cobrar"`, `que: "crédito"`, `llevaStock: false`.
+
+      **El gate:** `app/(dashboard)/dashboard/panel-habla-su-idioma.test.ts` — la **clase**.
+      Agrupa los packs con las **mismas** funciones que la página usa para elegir la rama
+      (`usaPanelInterno` / `usaPanelImportadora` / `usaPanelComercio`), así que **un panel nuevo
+      nace cubierto**, y exige **dos** cosas: que todo cuerpo compartido **lea el pack**, y que
+      no **tipee** el sustantivo de un solo rubro en su copy visible — el segundo existe porque
+      el primero se satisface importando el helper **sin usarlo**. Extrae sólo el texto entre
+      etiquetas JSX (los identificadores `fiado`/`fiadoVendidoHoy` no son copy: el propio
+      `dashboard/page.tsx` ya tiene un comentario avisando que eso confundió a otro trinquete) y
+      descarta comentarios en las dos direcciones. **Validado por MUTACIÓN en 5 direcciones**,
+      confirmando por la línea `Tests N failed`: rótulo fijo → **1 rojo**; **esquive** (importa el
+      helper y deja el texto de mostrador) → **1 rojo**; celda de stock fija → **1 rojo**; sin el
+      import → **1 rojo**; agrupador que reparte un panel por pack (ancla) → **rojo**;
+      restaurado, **5 verdes**.
+
+      Gates: `tsc` **0** · `vitest` **3913** pasados / 320 archivos · `eslint` **0**.
+
+      ⚠️ **NO llega al cliente todavía:** `7fb1143` está en la rama del carril, **no** en
+      `origin/master`. Entra cuando `onia-cola` mergee, y se publica con el pedido de deploy vivo
+      `t_bf1607af` (ya comentado con este sha) cuando Sergio Urcullo conteste `ok`.
 
 *(vacío — esta cola se abrió el 2026-09-05)*
