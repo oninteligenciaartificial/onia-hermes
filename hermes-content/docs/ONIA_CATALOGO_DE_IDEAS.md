@@ -431,3 +431,67 @@ Estructura y ritmo, que es donde la referencia realmente gana:
 🟡 **Anotado, esperando cuatro decisiones de Sergio Urcullo** (fondo claro vs oscuro; qué
 reemplaza a métricas/testimonios; página nueva vs. reforma de la viva; y si entra antes o después
 de lanzar la 1.0). Sin eso, cualquier cosa que se construya se rehace.
+
+---
+
+## 14. Revisión del guion del embudo y «que se configure desde la plataforma» — 2026-09-08
+
+Pedido de Sergio Urcullo: *«revisá el guion del embudo, y que sea configurable desde la
+plataforma, para eso está la plataforma»*.
+
+### 14.1 · El guion está bien. Con un agujero.
+
+Medido sobre `DEFAULT_CONFIG.script` del motor vivo: **47 mensajes**, y de esos **cero**
+exhiben obra («muy pronto», «en construcción», «beta») y **cero** sueltan cifras de plata
+fuera de la FAQ de precios. Tono honesto desde la primera línea («Sí, un bot»), y el embudo
+cierra: saludo → calificación → demo con horarios → recordatorio → seguimiento.
+
+🔴 **Lo que falta: hay UNA sola rama por rubro, y es dental.** `M1_RAMA_DENTAL` pregunta
+*«¿cuántos sillones tenés?»* — la pregunta que demuestra que entendés el negocio del otro.
+Los otros cuatro rubros que el alta vende (comercio, servicios profesionales, estética,
+veterinaria) caen en la calificación genérica. Es el MISMO defecto que los loops estuvieron
+arreglando toda la semana en la plataforma, pero en el bot: el dentista siente que le hablan
+a él, la ferretería siente que le hablan a otro.
+
+### 14.2 · Configurable desde la plataforma: por qué hoy no se puede, medido
+
+| Dato | Valor |
+|---|---|
+| Mensajes del guion | **47** |
+| Editables desde afuera | **3** (`siat`, `precios`, `negocio`) |
+| De dónde lee el bot de Onia | **archivo** (`/tmp/onia-bot/knowledge.json` en el VPS) |
+| De dónde lee el editor de la plataforma | **base** (fuente `"db"`, por organización) |
+
+Los 3 editables no son un olvido: son un **candado deliberado**. La capa editable «elige el
+TEXTO de una respuesta que YA EXISTE; no puede inventar un mensaje nuevo ni cambiar a qué
+rama del embudo se contesta» (`knowledge.mjs`, diseño §4 candado 1). Eso es lo que impide
+que una edición apurada haga que el bot prometa algo que el producto no hace.
+
+**El nudo real es otro, y es de arquitectura:** el modo se decide por la FUENTE del
+conocimiento. `bot-engine.mjs:504` — `if (config.modo === "recepcionista")` — y el modo
+recepcionista se activa **cuando el conocimiento viene de la base**. El comentario lo dice
+sin vueltas: *«todo el guion de leads de abajo queda EXCLUSIVO del modo venta»*.
+
+O sea, hoy:
+- **Fuente archivo** ⇒ modo VENTA ⇒ tiene el embudo (demo, horarios, seguimiento), **no se
+  edita desde la plataforma**.
+- **Fuente base** ⇒ modo RECEPCIONISTA ⇒ **se edita desde la plataforma**, pero *no hay demo
+  de Onia que agendar*: pierde el embudo entero.
+
+Pasar el bot de Onia a la plataforma tal como está hoy **le saca el embudo de venta**. No es
+un flag: hay que **desacoplar «fuente = base» de «modo = recepcionista»**, para que el modo
+venta pueda leer su conocimiento de la base como cualquier cliente.
+
+### 14.3 · Qué haría falta, en orden
+
+1. Separar el modo de la fuente: que el modo sea un campo explícito del documento publicado
+   (`modo: "venta" | "recepcionista"`) en vez de derivarse de dónde vino el dato.
+2. Dar de alta el bot de Onia como una organización más con su inbox, y publicar su
+   conocimiento desde `/settings/chatbot` como cualquier cliente — comiendo nuestra propia
+   comida, que es justo el argumento de Sergio Urcullo.
+3. Recién ahí, ampliar `FAQ_TEMPLATE` con las claves del guion que se quieran abrir. **No
+   las 47**: cada clave abierta es una promesa que alguien puede escribir sin revisión, y el
+   guardrail sólo atrapa cifras y ofertas, no una capacidad inventada.
+
+**Estado:** 🟡 anotado, no construido. El punto 1 toca el motor del bot y su suite de 503
+tests; no es trabajo de una vuelta y no se empieza sin decidir el punto 3 primero.
