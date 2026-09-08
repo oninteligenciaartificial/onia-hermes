@@ -44,6 +44,13 @@ const RAIZ = process.cwd();
 const OUT = process.env.RECORRIDO_OUT || join(RAIZ, 'hermes-content', 'docs', 'recorrido', 'capturas');
 const ESCRIBIR = process.argv.includes('--escribir');
 const SOLO_LIMPIAR = process.argv.includes('--solo-limpiar');
+// El recorrido corría SIEMPRE en 1440x900. Una pantalla mirada en un viewport queda mirada
+// para ESE viewport (aprendido por onia-cola el 2026-09-07 con el FAB de /billing en el
+// mismo icono duplicado que sólo se ve <sm): RECORRIDO_MOVIL=1 repite el camino completo en
+// un viewport de teléfono real, que es como la mayoría de los dueños de negocio en Bolivia
+// va a usar esto la primera vez.
+const MOVIL = process.env.RECORRIDO_MOVIL === '1';
+const VIEWPORT = MOVIL ? { width: 390, height: 844 } : { width: 1440, height: 900 };
 
 /**
  * La ruta con la que se REPORTA una captura en `resumen.json`, relativa a la raíz del repo.
@@ -194,7 +201,18 @@ async function queTapa(page) {
       if (st.position !== 'fixed') continue;
       if (st.visibility === 'hidden' || st.opacity === '0' || st.display === 'none') continue;
       const r = el.getBoundingClientRect();
-      const cubre = (r.width * r.height) / (innerWidth * innerHeight);
+      // 🔴 Acá se medía `r.width * r.height` sin cruzarlo contra el viewport, así que un
+      // drawer de MÓVIL escondido con `transform: translateX(-100%)` (fuera de pantalla,
+      // técnica normal para un sidebar de escritorio que un breakpoint angosto no muestra)
+      // contaba su ancho ENTERO como si tapara, aunque 0 px cayeran dentro de lo visible.
+      // Medido el 2026-09-08: el sidebar (`w-64 fixed left-0 top-0`) de onia-platform daba
+      // "cubre 66%" en los pasos 5/6/8/9 en viewport de 390px, y la CAPTURA de la misma
+      // corrida salía limpia las cuatro veces — la prueba que este script mismo guarda
+      // contradecía su propio veredicto. Se mide la INTERSECCIÓN con el viewport, no el
+      // rectángulo crudo.
+      const visX = Math.max(0, Math.min(r.right, innerWidth) - Math.max(r.left, 0));
+      const visY = Math.max(0, Math.min(r.bottom, innerHeight) - Math.max(r.top, 0));
+      const cubre = (visX * visY) / (innerWidth * innerHeight);
       if (cubre < 0.5) continue;
       tapas.push({
         cubre: Math.round(cubre * 100),
@@ -275,7 +293,20 @@ async function llegar(page, ruta, archivo) {
   // Primero se despeja lo que el producto puso encima, y RECIÉN entonces se fotografía. Al
   // revés, la foto es del modal y no de la pantalla que este paso dice haber visto.
   const despejo = await despejar(page);
-  const tapa = await queTapa(page);
+  let tapa = await queTapa(page);
+  // Una tapa detectada acá puede ser la hidratación de Next todavía en vuelo (el sidebar de
+  // escritorio se pinta primero en el server y el cliente recién después le aplica la clase
+  // responsive que lo esconde en un viewport angosto) y no un overlay real: medido el
+  // 2026-09-08 en móvil, `tapa` daba el sidebar (w-64 fixed) cubriendo 66 % en los pasos 5,
+  // 6, 8 y 9, y la CAPTURA tomada acto seguido salía LIMPIA las cuatro veces — la propia
+  // prueba que se guarda contradecía el veredicto. Se re-mide una vez tras una pausa antes de
+  // creerle a una tapa que la foto no sostiene.
+  if (tapa) {
+    await page.waitForTimeout(700);
+    const tapaDespues = await queTapa(page);
+    if (!tapaDespues) tapa = null;
+    else tapa = tapaDespues;
+  }
   const vista = await mirar(page, archivo);
   const destino = new URL(page.url()).pathname.replace(/\/$/, '');
   const pedida = ruta.replace(/\/$/, '');
@@ -1419,8 +1450,32 @@ const PASOS = [
       page.on('response', oir);
       const cerrar = (r) => { page.off('response', oir); return { ...r, agenda, red }; };
 
-      const boton = page.getByRole('button', { name: /nueva cita|agendar cita/i }).first();
-      if (!(await boton.count().catch(() => 0))) return cerrar({ estado: 'roto', detalle: `la agenda (${agenda.ruta}) no ofrece ningún botón para agendar`, ...v });
+      // El botón de la cabecera parte su texto en dos <span> por breakpoint
+      // (`app/(dashboard)/appointments/page.tsx:409-411`): "Nueva Cita" en escritorio,
+      // "Cita" a secas debajo de `sm`. Buscar sólo el nombre largo deja el botón invisible
+      // en móvil aunque esté ahí, clickeable, con el mismo handler — falso rojo del
+      // instrumento, no del producto: medido el 2026-09-08 en viewport de 390px.
+      // El botón de la cabecera (`app/(dashboard)/appointments/page.tsx:409`) es
+      // `<span aria-hidden="true">add</span> <span class="hidden sm:inline">Nueva Cita</span>`:
+      // en un viewport angosto (<sm) el ÚNICO texto queda oculto y el ícono está marcado
+      // aria-hidden, así que no le queda NINGÚN nombre accesible — medido en producción el
+      // 2026-09-08 (el `outerHTML` real sólo trae esos dos hijos, sin variante corta "Cita").
+      // Eso es un hueco de accesibilidad real, pero no prueba que el CAMINO esté roto para
+      // un usuario que ve: se cae al único botón "add" visible que vive dentro del <header>,
+      // y si ESE clic abre el modal de agendar, el camino visual funciona y lo que falta es
+      // el nombre accesible — dos hallazgos distintos, no uno.
+      let boton = page.getByRole('button', { name: /nueva cita|agendar cita|^cita$/i }).first();
+      let botonSinNombre = false;
+      if (!(await boton.count().catch(() => 0))) {
+        const fallback = page.locator('header button:has(span.material-symbols-outlined)', { hasText: 'add' }).last();
+        if (await fallback.count().catch(() => 0)) {
+          boton = fallback;
+          botonSinNombre = true;
+        } else {
+          const nombres = await page.getByRole('button').allInnerTexts().catch(() => []);
+          return cerrar({ estado: 'roto', detalle: `la agenda (${agenda.ruta}) no ofrece ningún botón para agendar — botones vistos: ${JSON.stringify(nombres)}`, ...v });
+        }
+      }
       await boton.click({ timeout: 10_000 }).catch(() => {});
       await page.waitForTimeout(1500);
       const dlg = page.locator('[role=dialog]').filter({ hasText: /agendar/i }).first();
@@ -1585,13 +1640,32 @@ const PASOS = [
         enLaAgenda = await buscar();
         await mirar(page, 'paso-07d-cita-en-agenda.png');
       }
+      // La grilla del mes en un viewport angosto sólo pinta un PUNTO de color en el día, sin
+      // texto (el nombre del paciente vive en el panel de detalle, que sólo se pinta con un
+      // día SELECCIONADO — `app/(dashboard)/appointments/page.tsx:527`). Buscar el nombre en
+      // `body.innerText` es la prueba correcta en escritorio y ciega en móvil: se hace lo que
+      // haría el cliente, tocar el día, antes de declarar que el producto "la guardó y no la
+      // muestra". Medido el 2026-09-08 en viewport de 390px.
+      let clickeoDia = null;
       if (!enLaAgenda) {
-        return cerrar({ estado: 'roto', detalle: `la cita se creó (201, id ${cita?.id || '?'}) para el ${fecha} ${elegido.hora} y NO aparece en la agenda de ${page.url()}: el producto la guardó y no la muestra`, elegido, fecha, ...agendaRecargada });
+        const dia = String(Number(fecha.slice(8, 10)));
+        const celda = page.locator('div.grid button, div.grid > div').filter({ hasText: new RegExp(`^${dia}$`) }).first();
+        if (await celda.count().catch(() => 0)) {
+          await celda.click({ timeout: 5000 }).catch((e) => { clickeoDia = String(e.message || e).split('\n')[0]; });
+          await page.waitForTimeout(600);
+          enLaAgenda = await buscar();
+          await mirar(page, 'paso-07d-cita-en-agenda.png');
+        } else {
+          clickeoDia = 'no encontré una celda con el número de día en la grilla';
+        }
+      }
+      if (!enLaAgenda) {
+        return cerrar({ estado: 'roto', detalle: `la cita se creó (201, id ${cita?.id || '?'}) para el ${fecha} ${elegido.hora} y NO aparece en la agenda de ${page.url()}: el producto la guardó y no la muestra${clickeoDia ? ` (tocar el día tampoco sirvió: ${clickeoDia})` : ''}`, elegido, fecha, ...agendaRecargada });
       }
       return cerrar({
         estado: 'ok',
-        detalle: `cita ${fecha} ${elegido.hora} con ${elegido.paciente} agendada (201, id ${cita?.id || '?'}) y VISTA en la agenda de ${page.url()}${altaInline?.seleccionoAlPaciente ? ' — el paciente se dio de alta INLINE, desde el propio modal' : ''}`,
-        elegido, fecha, altaInline, capturaFormulario: lleno.captura, ...agendaRecargada,
+        detalle: `cita ${fecha} ${elegido.hora} con ${elegido.paciente} agendada (201, id ${cita?.id || '?'}) y VISTA en la agenda de ${page.url()}${altaInline?.seleccionoAlPaciente ? ' — el paciente se dio de alta INLINE, desde el propio modal' : ''}${botonSinNombre ? ' — OJO: el botón que lo abrió no tiene NINGÚN nombre accesible en este viewport (ícono aria-hidden + el único texto queda oculto por CSS bajo "sm"), hallazgo aparte' : ''}`,
+        elegido, fecha, altaInline, botonSinNombre, capturaFormulario: lleno.captura, ...agendaRecargada,
       });
     },
   },
@@ -1768,7 +1842,7 @@ async function main() {
   const navegador = await chromium.launch(OPCIONES_CHROMIUM);
   // El reloj del cliente, no el del VPS: el VPS vive en UTC y la agenda calcula "hoy" y los
   // horarios con la hora del navegador. Sin esto, mañana a las 21:00 de La Paz ya es otro día.
-  const page = await (await navegador.newContext({ viewport: { width: 1440, height: 900 }, timezoneId: 'America/La_Paz', locale: 'es-BO' })).newPage();
+  const page = await (await navegador.newContext({ viewport: VIEWPORT, timezoneId: 'America/La_Paz', locale: 'es-BO' })).newPage();
 
   const ctx = {};
   const resultados = [];
