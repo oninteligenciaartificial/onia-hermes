@@ -178,6 +178,65 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-08: el arreglo de ayer se aplicó a UNA instancia y sus tres hermanas
+      quedaron ciegas — de los gates vivos de este carril, TRES no medían nada desde nodo-casa.**
+
+      Ayer se arregló `avisos-vivo.mjs` (el ítem de acá abajo) trayéndose el artefacto del VPS por
+      SSH cuando `/opt/onia/bot` no está en el disco. **Ese arreglo no subió a la plantilla**, así
+      que hoy, corriendo los aliases vivos uno por uno desde casa, salieron tres en `NO MEDIDO` y
+      **los tres por lo mismo**: leen `/opt` del disco local.
+
+      | alias | qué decía | qué lee |
+      |---|---|---|
+      | `addon:canal-vivo` | «no pude leer las orgs de la base o el codigo del build vivo» | `/opt/onia-platform/build-*/` |
+      | `recordatorio:vivo` | «no pude leer /opt/onia-platform/app.env» | `/opt/onia-platform/app.env` |
+      | `deploy:plataforma-vivo` | «BUILD_ID vivo sin par en disco» | `/opt/onia-platform/build-*/` — **de `onia-cola`**, va en `t_5245e456` |
+
+      **Por qué nadie lo vio, que es lo que importa:** ninguno falla en verde. Los tres salen con
+      **exit 2** y dicen honestamente que no midieron — y por eso mismo no rompen nada, nadie los
+      mira, y la línea `OBJETIVO:` del carril se sigue firmando con las OTRAS cifras, que seguían
+      en meta. Es la misma forma que ya tiene esta memoria para `objetivo_visible.mjs`, pero
+      multiplicada: **el instrumento no miente, se calla, y callarse no deja rastro.**
+
+      **Y lo que lo disfrazaba:** la mitad BARATA de cada medición sí contestaba. `docker exec`
+      funciona desde casa porque es un shim que delega en el VPS, así que `addon:canal-vivo` leía
+      las orgs perfecto y se moría en el build. Un gate que contesta a medias se lee como un gate
+      que anda.
+
+      **Arreglo, en la plantilla y no en cada instancia:** `scripts/lib/vps-o-local.mjs` —
+      `leerDeProduccion(ruta)` y `listarDeProduccion(patrón)` preguntan al disco local y, si no
+      contesta, al VPS por SSH (`BatchMode`, sin colgarse pidiendo contraseña). Todo **tri-estado**:
+      `null` es «no pude preguntar» y nunca cadena vacía, porque un gate que recibe `""` no puede
+      distinguirlo de «lo medí y está vacío» — ahí es donde un `NO MEDIDO` se vuelve un falso
+      verde. Las dos vías se inyectan, así se valida por mutación sin tocar producción.
+
+      **Verificado en las DOS direcciones, que es la que importa:**
+
+      - `npm run addon:canal-vivo` → **exit 0**, `OK: el build vivo (3d1dabb) lee la capacidad y
+        ninguna org diverge`. Cruzado a mano antes de tocar el gate (BUILD_ID vivo
+        `J4LFta9YhYnlO3QAbJJZ8` → `build-3d1dabb` por SSH; `git show 3d1dabb:<ruta>` da 4 y 3 usos
+        de `isWhatsAppAddonActive` en las dos rutas): **el instrumento reparado y la medición
+        manual coinciden**, así que el defecto que vigila NO está vivo.
+      - `ONIA_VPS_SSH=root@203.0.113.9 npm run addon:canal-vivo` → **exit 2, `NO MEDIDO`**. Con el
+        VPS inalcanzable no puede salir «OK»: eso es lo único que hace que el verde signifique algo.
+      - `npm run recordatorio:vivo` → **exit 0** y, por primera vez desde casa, **entregó un
+        recordatorio real**: `status=sent (250 2.0.0 OK)`, `dsn=2.0.0`, `delay=1.3`, con su marca
+        `reminder24hSentAt` en la base. Con el SSH roto → `NO MEDIDO`.
+
+      **Anclado:** `scripts/lib/vps-o-local.test.mjs`, 7 casos, cableado a la cadena como
+      `test:vps-o-local` (un gate que no se declara en `package.json` le es invisible a
+      `guards-cableados`). Cada caso está escrito para que **ningún otro caso pueda taparlo** —
+      dos guardias hermanos que atajan el mismo escenario dan verde con uno roto, y eso ya pasó
+      acá. Validado por mutación, confirmando cada una por su línea `fail N` explícita y grepeando
+      que la mutación entró: `""` tratado como falsy → rojo; `null` devuelto como `""` → rojo;
+      lista vacía del VPS confundida con «no pude preguntar» → rojo. Las tres dieron
+      **`pass 6 · fail 1`**, o sea que cada guardia lo ve exactamente un caso. Cadena entera de
+      `onia-hermes`: **53 eslabones, EXIT 0**.
+
+      ⚠️ **Al mergear, `package.json` se resuelve por UNIÓN.** Esta rama suma un eslabón a la
+      cadena `test`; elegir un lado borra el gate del otro carril y su archivo de test entra igual
+      por su propio hunk, así que queda huérfano y `guards-cableados` pasa en verde.
+
 - [x] ✅ **CERRADO el 2026-09-07: el gate de los avisos medía HANDOFF y daba por medida la DEMO —
       la rama que lleva la plata.** El objetivo del carril dice «cada demo agendada **o** handoff le
       llega a Sergio», y `avisos-vivo.mjs` manejaba el motor sólo hasta un pedido de humano. Su
