@@ -44,6 +44,63 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **CERRADO el 2026-09-08 (`f8d0fc2`, en la rama del carril — NO en `master` todavía):
+      la pantalla donde el dueño PAGA le cobraba a 3 de los 5 rubros de la v1.0 dos pantallas
+      a las que nunca iba a poder entrar.** La tarjeta del plan **Profesional** —el destacado,
+      el salto de Bs 320 a Bs 750— decía *«Reportes completos y facturas recurrentes»* a
+      **comercio, importadora y servicios profesionales**. Medido sobre `VERTICAL_PACKS`, no
+      deducido: ninguno de los tres declara `/reports` ni `/billing/recurring`, así que no hay
+      enlace **y** el layout los devuelve a `/dashboard`. La promesa no se podía cumplir ningún
+      día, y se cobra en `/checkout` y en la tab «Mi Plan».
+
+      **Por qué sobrevivió, que es lo reusable.** El 08-sep se cerró exactamente esto en la
+      **tabla comparativa** de `/settings` (filtrar `plan.features` por `f.pantalla` con
+      `entregaLaPantalla`), y la lista `enciende` de `lib/subscription/plan-display.ts` —texto
+      plano, sin metadato de pantalla— quedó afuera: **el arreglo curó la instancia y no la
+      clase, y la instancia que quedó sin curar es la que se cobra.** El gate hermano
+      (`plan-display.test.ts`) contrasta cada bullet contra **quién lo enciende por PLAN**
+      (`PLAN_LIMITS`), y esa pregunta no puede ver la otra mitad: una capacidad puede estar
+      encendida por plan y ser **inalcanzable por rubro** al mismo tiempo.
+
+      **El mismo barrido encontró sus hermanas, todas del mismo origen** — el copy preguntaba
+      «¿qué rubro es?» con listas de tracks escritas a mano (`esDental`, que es la negación de
+      otras dos) en vez de preguntarle al pack qué entrega:
+      · *«Agentes Recall y Cobrador»* seguía nombrando al Recall en comercio, importadora y
+        ganadería **un día después** de que `64279ff` lo acotara — la promesa no se barrió
+        donde se vende, sólo donde se apagó el motor;
+      · *«Reservas online»* se le ofrecía a **ganadería**, que no tiene agenda, y **no** a
+        **servicios profesionales**, que sí la tiene y la paga (promete de menos);
+      · *«Recordatorios automáticos por email»* a rubros sin agenda — el único correo
+        automático al cliente del cliente es el de **cita**;
+      · *«Kardex de inventario con costos»* a servicios profesionales, que vende un catálogo de
+        servicios y no declara ninguna pantalla de stock;
+      · el salto *«dejás de perder pacientes»* a una ganadería, por el mismo `esDental`.
+
+      **Arreglo:** cada bullet se le pregunta al **pack** con el predicado canónico
+      (`entregaLaPantalla` / `rolCorreEnTrack`). Y para que el Profesional de comercio e
+      importadora no quede vendiendo el aire que se le sacó, se nombra **lo que sí les
+      enciende y estaba sin decir**: contabilidad completa (IVA y Libro de Compras y Ventas) y
+      planilla del mes, que montan sobre `reportsEnabled` igual que `/reports`
+      (`canUseFullAccounting`, `canUseRrhhPlanilla`) pero viven en pantallas que esos packs sí
+      tienen.
+
+      **Prueba:** el gate nuevo (`lib/subscription/plan-promete-lo-que-el-rubro-alcanza.test.ts`)
+      en **ROJO antes del arreglo nombrando 28 promesas** con su rubro, su plan y su predicado,
+      y **validado por mutación en 4 direcciones, las 4 en rojo**. Su sujeto es el **universo**
+      —los 8 tracks de `VERTICAL_PACKS` × los 3 planes × salto y bullets—, no una lista: el
+      hermano mira 4 tracks escritos a mano y por eso el bullet de ganadería sobrevivió. Cubre
+      las **dos direcciones** (promete de más y promete de menos) y exige que ningún bullet
+      quede sin clasificar y que ninguna exención sobre. `tsc` 0 · **4174 tests** · eslint 0.
+
+      **Pendiente anotado, no hecho:** el bullet *«Fiados: quién te debe y cuánto»* usa esa
+      palabra para los cuatro rubros de comercio, y el menú de servicios profesionales llama a
+      esa pantalla **«Por cobrar»** y el de importadora **«Créditos»** (el helper ya existe:
+      `lib/comercio/idioma-de-credito.ts`). No es una promesa falsa —la pantalla está—, es
+      vocabulario.
+
+      ⚠️ **Commiteado, NO desplegado**: el cliente no lo ve hasta que Sergio Urcullo apruebe el
+      pedido de deploy vivo de la plataforma.
+
 - [x] 🔴 **CERRADO el 2026-09-08 (`f2237e8`, en la rama del carril — NO en `master` todavía):
       la pantalla donde el dueño configura el asistente que PAGA le ponía ejemplos de otro
       rubro.** `/settings/chatbot` (add-on de Bs 390/mes) tenía dos ejemplos tipeados en un
