@@ -60,8 +60,13 @@ export const RUTAS_DEL_SITEMAP: string[] = [
 ].map((m) => m[1]);
 
 /**
- * Lo que el sitio le prohíbe al rastreador, leído de `robots.ts` — hoy
- * `/patrones` (demo interna) y `/v1` (archivo de la web anterior).
+ * Lo que el sitio le prohíbe al rastreador, leído de `robots.ts`: hoy la demo
+ * interna, el archivo de la web anterior y las dos páginas de servicios que
+ * salieron del índice el 2026-09-08. La lista NO se enumera acá a propósito —
+ * este comentario decía «hoy `/patrones` y `/v1`» con cuatro entradas vivas, y
+ * una lista copiada al lado de su fuente envejece sola. El motivo de cada una
+ * vive en `robots.ts`, y que ninguna sea fantasma lo verifica
+ * `ruta-citada.test.ts`.
  *
  * Es la declaración que el propio sitio ya hace de qué NO publica, así que
  * ningún gate necesita mantener su propia lista de exclusiones a mano.

@@ -1,8 +1,18 @@
 // LA NOCHE, variante A — con la foto del dueno durmiendo.
 //
-// Vive en su propio archivo desde que existe la variante B (burbujas): asi las
-// dos se pueden poner una al lado de la otra en /v4/noche para elegir, sin que
-// ninguna sea "la del medio de page.tsx" y la otra la alternativa.
+// Vive en su propio archivo porque la portada la COMPONE en vez de escribirla
+// adentro: `page.tsx` la monta como <NocheFoto /> y es la que ve el cliente
+// en `/`.
+//
+// ⚠️ Hasta el 2026-09-08 estas lineas decian que existia una variante B
+// (burbujas) y que las dos se comparaban "una al lado de la otra en
+// /v4/noche". Las dos mitades son falsas: la variante B no esta en el arbol,
+// y `/v4` —la exploracion de portada del 07-sep— se borro ese mismo dia,
+// cuando Sergio Urcullo dijo "reemplaza la home con la v4" (2c3ce027). La
+// CITA sobrevivio a la ruta, otra sesion le creyo, y le ofrecio a Sergio
+// Urcullo abrir esa pantalla para elegir entre dos portadas: da 404, asi que
+// la decision quedo trabada por un comentario (tarea t_8e566d50).
+// Lo cuida ahora `src/app/ruta-citada.test.ts`.
 
 import { Reveal } from "@/motion";
 
