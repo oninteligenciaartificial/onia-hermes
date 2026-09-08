@@ -44,6 +44,54 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **CERRADO el 2026-09-08 (`64279ff`, en la rama del carril — NO en `master` todavía):
+      el Recall corría todos los días en tres rubros que no tienen a quién reactivar, y tres
+      rubros pagaban agentes sin una pantalla donde verlos.**
+
+      `AGENT_KINDS` gatea por **add-on** (`requiresFeature`) y **no por rubro**, mientras
+      `runAgentsForAllOrgs` enumera las orgs por **plan** (Pro+). De ahí salen dos defectos que
+      ningún gate del proyecto podía expresar: no sobra ni falta una palabra, la pantalla
+      renderiza bien, y el vocabulario por rubro ya estaba arreglado (`agents-rotulos.ts`,
+      06-sep) — así que el gate vecino estaba **verde sobre el defecto**.
+
+      1. **El Recall lee `patient` + `appointment`.** Comercio, importadora y ganadería no
+         guardan clientes en la ficha ni tienen agenda: corría a diario sobre una tabla vacía
+         por construcción y devolvía `[]` siempre. **Falla mudo** — la corrida cierra
+         `completed` con 0 propuestas, que es indistinguible de un día sin nadie a quien
+         reactivar. Y si hubiera producido algo, el borrador ofrece *«¿Te agendamos una cita?»*
+         a un negocio sin agenda.
+      2. **Al revés:** el runtime les corre agentes a rubros que **no tienen `/agents`** ni en
+         el menú ni permitido por el layout. Pagan plan Profesional por una función que el
+         motor **escribe** (corridas, acciones, aprobaciones) y que no pueden ver, pausar ni
+         configurar. Es la **quinta** de la familia «permiso concedido, CAMINO ausente»
+         (`/requerimientos`, `/empresa`, `/rrhh`, `/prescriptions`), y la primera en que el
+         motor escribe de verdad.
+
+      **Medido en la base de producción**, no razonado:
+      `zz-qa-ferreteria-tornillo-ommbt` **22 corridas**, `bolivian-electricidad-e6t21` **10**,
+      `qa-modulos-rj7tv` **2** — las tres con **0 acciones** producidas y sin `/agents` en su
+      menú. `gestios-servicios-profesionales` (v1.0) era el único con el Recall **útil** —
+      tiene ficha y agenda — y sin dónde verlo.
+
+      **El arreglo le pregunta al PACK**, con el predicado canónico
+      (`guardaClientesEnPatients`), nunca a una lista de tracks escrita al lado; y es
+      **fail-closed** ante un track desconocido, porque adivinar que sí tiene los datos es
+      exactamente como se coló esto. Cobrador y Captador **no** se acotan: el primero ya
+      ramifica por rubro (`COMERCIO_TRACKS`, fiados vs facturas) y el segundo lee los
+      `WorkItem` del intake, que existen en los siete packs — acotarlos sería apagar una
+      función que anda.
+
+      **Sujeto derivado del universo** (`VERTICAL_PACKS` × roles, y `RUBROS_ACTIVOS` para el
+      camino), así que un rubro o un rol nuevo nace cubierto. **Validado por mutación en 4
+      direcciones, las 4 en rojo**: sacar el acote (6 casos), romper el fail-closed (1),
+      revertir el camino de servicios profesionales (1), y recortar el sujeto a un subconjunto
+      cómodo (1). Archivos: `lib/onia-core/modules/agents-por-rubro.ts` (+ su test),
+      `agents-runtime.ts` (gate por rubro antes de `ensureAgentForOrg` ⇒ cero writes),
+      `vertical-pack.ts` (el camino en los 3 navs) y `agents-view.tsx`.
+      Gates: `tsc` 0 · `vitest` **4023** verdes · `eslint` 0.
+      ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido de deploy de
+      `plataforma` (`t_daa8750c`), donde quedó comentado el sha.
+
 - [x] 🔴 **CERRADO el 2026-09-08 (`cc383c1`, en la rama del carril — NO en `master` todavía):
       tres de las cuatro organizaciones que PAGARON el add-on de WhatsApp no lo tenían, según
       el producto — sin recordatorio de cita, sin intake, y con el cartel de venta encima.**
