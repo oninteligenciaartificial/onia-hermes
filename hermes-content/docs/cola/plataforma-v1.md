@@ -1804,6 +1804,50 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] 🔴 **CERRADO el 2026-09-08: `/book/<slug>` le ofrecía a una ferretería y a una importadora
+      que su cliente reservara una cita — y el dueño no tiene UNA sola pantalla donde verla.**
+
+      **Medido en producción, no deducido:** `curl` a `/api/booking/doctors` devolvió **HTTP 200
+      con un profesional** para `zz-qa-ferreteria-tornillo-ommbt` (`gestios-general`, plan
+      `professional`, 7 horarios activos) y para `qa-modulos-rj7tv` (`proveegest-electrico`, 5
+      horarios). Los dos packs tienen **cero rutas de citas** en su nav —ni `/agenda` ni
+      `/appointments`—, así que la cita se creaba y el layout del panel le bloqueaba el segmento
+      al dueño. **Cero citas creadas todavía**: estaba vivo pero nadie lo pisó.
+
+      **La clase:** la condición estaba escrita CUATRO veces (`api/booking/doctors`, `slots`,
+      `appointments` y el conocimiento que se le publica al bot del cliente) y las cuatro
+      preguntaban lo mismo —si el PLAN la incluye—, ninguna por el RUBRO. Como `professional`
+      trae `publicBookingIncluded`, alcanzaba con el plan para abrirla. Es la superficie que ve
+      el **cliente DEL cliente**: no la mira ningún instrumento del proyecto —la pantalla
+      renderiza perfecto, no sobra ni falta una palabra, y el dueño no entra nunca—. Misma clase
+      que el menú de citas que el bot de WhatsApp le abría a esos dos rubros (cerrado el mismo
+      día): **mismo `tieneAgenda`, la superficie hermana que había quedado abierta**.
+
+      **Arreglado:** `lib/agenda/reserva-publica.ts` deja la pregunta en un solo lugar y **separa
+      los dos motivos** —el del PLAN es comercial (se destraba comprando el add-on), el del RUBRO
+      es estructural (no se destraba con plata)—, cableado en las cuatro capas. De paso,
+      `/settings` dejó de mostrarle al dueño de un comercio la tarjeta que le vendía **«Activar
+      add-on»** de algo que su pack no puede usar.
+
+      **El gate (`lib/agenda/reserva-publica.test.ts`)** lleva el caso que mira a los
+      **LLAMADORES** —el helper puede quedar impecable y las rutas seguir preguntando sólo por el
+      plan, con `tsc` y el gate del módulo en verde— y un **anclaje** que se pone rojo si algún
+      día ningún pack queda sin agenda. Validado **en ROJO primero** (4 casos) y **por mutación en
+      dos direcciones**, confirmando por *exit code*.
+
+      ⚠️ **Un track desconocido sigue abriendo la agenda, a propósito:** cae a
+      `dentagest-clinical` en TODO el producto, así que su panel muestra `/appointments` — cortar
+      sólo acá le daría panel con agenda y agenda pública en 403, la contradicción que este carril
+      caza. Queda anclado con su caso; hoy hay **0 orgs sin track**.
+
+      **Y el fixture de `doctors/route.test.ts` era una ferretería**, o sea que desde este arreglo
+      medía otra cosa (403 en vez de 200): pasa a estética, que prueba lo mismo —que el track
+      viaja para no hablarle dental a quien no lo es— sin apoyarse en el defecto.
+
+      Gates: `tsc` 0 · `vitest` **3957 pasan / 0 fallos** · `eslint` 0 errores. Commit `2df57bf`
+      en `claude/chatbots-platform-review-0d1d09` de `onia-platform`.
+      ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido de deploy de `plataforma`.
+
 - [x] **CERRADO el 2026-09-08: el cliente confirmaba o cancelaba su cita desde el correo, se
       guardaba, y si el aviso al negocio fallaba le aparecía un error — así que se iba creyendo
       que NO había cancelado, y el negocio tampoco se enteraba.** Commit `9e579b2`, rama
