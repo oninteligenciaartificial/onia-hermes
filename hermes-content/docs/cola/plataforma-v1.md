@@ -2001,5 +2001,64 @@ y sin operar. Acá se opera, con verificación por ítem.
       éste no es uno. Entra cuando `onia-cola` mergee la rama. Anotado en `t_deddf471`, sin
       abrir un pedido nuevo.
 
+- [x] 🔴 **CERRADO el 2026-09-08: agotado el cupo mensual de correos, la confirmación de la
+      cita no salía y NADIE se enteraba — ni el cliente, ni el negocio.**
+
+      **El defecto:** `avisarCitaCreada` (`lib/agenda/crear-cita.ts`) pedía permiso con
+      `checkEmailLimit` y envolvía el envío en `if (emailCheck.allowed) { … }` **sin `else`**.
+      Agotado el cupo (Básico: **200/mes**), la confirmación no salía, `confirmationSentAt`
+      quedaba en `null`, **no se reintentaba nunca** y no quedaba ni una línea en ningún lado:
+      el negocio veía «Nueva cita: Fulano» igual que siempre y daba por hecho que su cliente
+      estaba avisado. El cliente no recibía nada y el dueño se enteraba **cuando no se
+      presentaba**.
+
+      **Por qué sobrevivió a todos los gates:** no sobra ninguna palabra, no falta ningún rubro,
+      la pantalla renderiza perfecto y **la cita SÍ se crea**. El defecto sólo aparece
+      preguntando qué pasa en la rama que nadie mira. Y lo mantuvo vivo que **la mitad hermana ya
+      estaba resuelta**: el cron de recordatorios (`app/api/cron/appointment-reminders`) avisa a
+      los admins al cruzar el **80 %** y el **100 %** del MISMO cupo, y su encabezado lo dice con
+      todas las letras — *«un negocio no puede quedarse sin cupo sin enterarse»*. **Ver la mitad
+      sana hace dar la familia por cubierta.** Es la misma clase que se cerró esta madrugada para
+      el cupo del chatbot (`lib/chatbot/cupo.ts`), una instancia más abajo.
+
+      **Alcance real, medido y no supuesto** (`docker exec supabase-db psql`, 2026-09-08): las
+      **9** orgs de producción llevan **0** recordatorios este mes y 8 están en `professional`
+      (800/mes), así que **hoy no le pega a nadie**. Es un defecto **latente**: se dispara con el
+      primer cliente Básico con volumen — o sea, con el primer cliente que pague. `onia-interna`
+      está en `free` (`emailsPerMonth: 0`), y ahí el arreglo **no** avisa, a propósito.
+
+      **El arreglo:** `ea045d8` en `claude/chatbots-platform-review-0d1d09`. El corte ahora deja
+      **aviso in-app a los ADMINS** —los que pueden cambiar el plan, el mismo destinatario que
+      elige el cron— **nombrando al cliente** que quedó sin confirmación y diciendo qué hacer
+      («avisale por otro medio»). Un plan sin correo **no** genera aviso: no hay cupo que
+      agotarse y sería un aviso por cita, para siempre — la misma línea que traza el cron con su
+      `if (emailsPerMonth <= 0) return`. Dos reglas escritas por separado para el mismo cupo se
+      desincronizan sin que nada se ponga rojo.
+
+      **El gate:** `lib/agenda/cupo-de-correo-avisa.test.ts` — la instancia (5 casos sobre la
+      función pura, incluidos los dos bordes que NO deben avisar) y la **clase**: todo pedidor de
+      cupo en `lib/` —los envíos **automáticos**, donde no hay a quién devolverle la negativa por
+      HTTP— tiene que convertirla en aviso. Los sujetos se **derivan del disco**, así que un
+      archivo nuevo nace cubierto. **Validado por mutación:** corte mudo, esquive, borde del plan
+      sin cupo y aviso sin nombre → los **cuatro en rojo**.
+
+      ⚠️ **La PRIMERA versión de ese guard estaba HUECA y pasaba en verde con el corte mudo
+      puesto** — y sólo se vio mutando. Buscaba los símbolos en el **archivo entero**, así que
+      `avisoDeCupoDeCorreo(` matcheaba **su propia definición** y `notification.create`
+      matcheaba el aviso de «Nueva cita», que no tiene nada que ver. El sujeto es la **vecindad
+      de la llamada**, nunca el archivo. Gates: `tsc` 0 · `eslint` 0 errores · `vitest` **3760**
+      pasados / 308 archivos.
+
+      ⚠️ **NO llega al cliente todavía:** `ea045d8` **no es ancestro de `origin/master`**
+      (comprobado con `git merge-base --is-ancestor`, no supuesto), así que ningún swap de hoy lo
+      incluye. Entra cuando `onia-cola` mergee la rama, y recién ahí se publica.
+
+      ⚠️ **Y el pedido de deploy de `plataforma` NO está vivo: `t_deddf471` figura `done`**
+      (completada el 2026-09-08 03:40). Medido con el publicador en seco —que es el número
+      honesto, porque lo deriva al ejecutarse— quedan **7 arreglos mergeados que el cliente no
+      ve** (`HEAD f4d007e`, staged `NINGUNO`). No se abre pedido acá: `onia-cola` mide eso en
+      cada vuelta y es quien lo crea; un segundo aviso del mismo hecho es el ruido que hace que
+      Sergio Urcullo deje de creerle a los avisos.
+
 
 *(vacío — esta cola se abrió el 2026-09-05)*
