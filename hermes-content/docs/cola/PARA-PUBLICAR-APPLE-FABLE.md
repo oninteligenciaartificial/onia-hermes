@@ -5,19 +5,48 @@ Hoja: `carousels/out/HOJA-apple-fable.png`. Patrón `apple-editorial`, layouts *
 
 Entra por **§2 de `BASE_CONTENIDO`** — herramientas y modelos que se cuentan.
 
-## Orden de las 9 láminas
+## Orden de las 8 láminas
 
 | # | Layout | Qué dice |
 |---|---|---|
-| 01 | D | icono de Claude · **El modelo más avanzado de Anthropic** · **FABLE 5.1** · adelanto **7 de 7 · casi 2× · −75%** |
-| 02 | D | Antes parchaba el síntoma, **ahora busca la causa** |
-| 03 | **G** | **Flujos de trabajo de un negocio** · barras · 31,4% vs 26,9 / 19,6 / 17,1 |
-| 04 | **G** | **Investigación científica, hecha sola** · barras · 52,6% vs 29,0 / 22,4 / 24,7 |
-| 05 | **G** | **Y programar, que es lo suyo** · barras · 73,4% vs 70,0 / 67,2 / 70,5 |
-| 06 | D | Y ahora **usa una computadora** · 77,9% |
-| 07 | E | Ficha: **Fable 5.1** · caché **$0,25** por millón (antes $1) |
-| 08 | D | Y encima **−75%** en caché |
-| 09 | D | **CTA**: ¿Claude, ChatGPT o Gemini? — pide un nombre en comentarios |
+| 01 | D | icono de Claude · **El modelo más avanzado de Anthropic** · **FABLE 5.1** · adelanto **7 de 7 · casi 2× · hasta −45%** |
+| 02 | **G** | **Le das el trabajo entero y lo termina** · 1 de cada 3 veces, antes 1 de cada 6 |
+| 03 | D | **Usa la computadora** — abre programas, hace clic, completa |
+| 04 | D | **Trabaja solo** — aguanta trabajos largos y sin supervisión |
+| 05 | D | Antes parchaba ~~el síntoma~~, **ahora busca la causa** |
+| 06 | **G** | **Y no es sólo trabajo de oficina** · 1 de cada 4 → más de la mitad |
+| 07 | E | **Y encima bajó** — hasta 45% menos tenerlo trabajando todo el día |
+| 08 | D | **CTA**: ¿Claude, ChatGPT o Gemini? — pide un nombre en comentarios |
+
+## 🔴 Tercera versión: se fue toda la jerga de benchmarks
+
+Sergio Urcullo, 07-sep: *"aún no me gusta la info que das en el de Fable… colocá info
+relevante que se entienda"*. Tenía razón, y el problema era de fondo, no de redacción: la
+pieza estaba escrita con **los nombres de las pruebas** —AutomationBench, CursorBench,
+Terminal-Bench-Science, OSWorld— y a un dueño de negocio boliviano eso no le dice nada.
+Un titular que hay que googlear no es información: es ruido con aspecto de dato.
+
+**La regla nueva de esta pieza: en la lámina no aparece ningún nombre de benchmark.** Cada
+número se dice por lo que **significa**, y el nombre de la prueba baja al pie chiquito del
+layout G, que es donde va la trazabilidad sin estorbar la lectura.
+
+| Antes | Ahora |
+|---|---|
+| "Flujos de trabajo de un negocio · 31,4%" | "**Le das el trabajo entero y lo termina.** Hoy lo logra 1 de cada 3 veces. Antes, 1 de cada 6" |
+| "Y ahora usa una computadora · 77,9%" | "**Usa la computadora.** Abre los programas, hace clic donde va y completa la tarea" |
+| "Investigación científica, hecha sola · 52,6%" | "**Y no es sólo trabajo de oficina.** Pasó de resolver 1 de cada 4 casos a más de la mitad" |
+| "Ficha: Fable 5.1 · $0,25 por millón · antes $1" | "**Y encima bajó.** Tener algo suyo trabajando todo el día cuesta hasta 45% menos" |
+| "Y programar, que es lo suyo · 73,4%" | *(se cayó: la carrera era pareja y no aportaba nada que las otras dos no dijeran mejor)* |
+
+**"1 de cada 3" en vez de "31,4%"** no es un adorno: es el mismo dato dicho de forma que no
+se lea como nota escolar. 31,4% suena a examen reprobado; 1 de cada 3 suena a lo que es —el
+mejor de la tabla en una prueba durísima—. La cifra exacta sigue en la barra, para quien la
+quiera.
+
+**Entró una lámina que no estaba: "Trabaja solo".** Anthropic lo publica como
+característica y no como puntaje (*"more comfortable with long, unattended work"*), y para
+el lector de esta cuenta es **la** diferencia práctica: algo que trabaja de noche sin que
+nadie lo mire. Es la diferencia entre una respuesta y un empleado.
 
 ## El color de Claude entra como acento, no como fondo
 
@@ -89,60 +118,57 @@ Urcullo. Es el dato más útil de la página y no estaba en la versión anterior
 ## Caption (IG · copiar tal cual)
 
 Anthropic sacó Fable 5.1 y lo llama el modelo más avanzado del mundo
-para programar y trabajar con conocimiento. Miré la tabla entera y
-estas son las tres cosas que de verdad cambiaron.
+para programar y trabajar con conocimiento. Dejo los benchmarks de
+lado y te cuento las tres cosas que cambian en la práctica.
 
-Uno. Dejó de parchar. Antes te arreglaba el síntoma con algo que
-funcionaba hoy y explotaba el martes; ahora va a la raíz en vez de
-tomar el atajo.
+Uno. Le das el trabajo entero y lo termina. No un pedacito: la tarea
+completa, de principio a fin, sin que se la vuelvas a explicar en el
+medio. Hoy lo logra 1 de cada 3 veces. Su versión anterior, 1 de
+cada 6.
 
-Dos. En flujos de trabajo de un negocio —tareas de oficina completas,
-de punta a punta— saca 31,4%. Su versión anterior sacaba 17,1%. Casi
-el doble, en una sola actualización, y arriba de Opus 5 y de GPT-5.6
-Sol. De toda la tabla, ésa es la prueba que más se parece a lo que
-hace un negocio de verdad.
+Dos. Usa la computadora. Abre los programas, hace clic donde va y
+completa la tarea en la pantalla, igual que lo harías vos. Ya no hay
+que dictarle todo.
 
-Tres. Y en investigación científica hecha sola, 52,6% contra el 29%
-del segundo. Ahí no está compitiendo: está en otra categoría.
+Tres. Aguanta el turno largo. Anthropic dice que se maneja mejor que
+la versión anterior en trabajos largos y sin supervisión. Ésa es la
+diferencia entre una respuesta y un empleado.
 
-Ah, y cuesta menos. Leer el caché bajó de $1 a $0,25 por millón: es
-justo lo que más se repite cuando algo trabaja solo. Hasta 45% menos
-si el agente corre todo el día.
+Y encima bajó de precio: tener algo suyo trabajando todo el día
+cuesta hasta 45% menos que hace un mes.
 
-Mejor y más barato el mismo mes. Eso no pasaba hace dos años.
+Mejor y más barato al mismo tiempo. Eso no pasaba hace dos años.
 
 ¿Cuál usás vos: Claude, ChatGPT o Gemini? Escribí el nombre abajo y te
 digo para qué me sirve mejor cada uno. Contesto a todos.
 
 ## Versión X / LinkedIn
 
-Salió Claude Fable 5.1. Anthropic lo llama el modelo más avanzado del mundo para
-programar y trabajar con conocimiento. Tres cosas de la tabla:
+Salió Claude Fable 5.1. Dejo los benchmarks de lado: esto es lo que cambia en la
+práctica.
 
-En AutomationBench —flujos de trabajo de oficina, de punta a punta— saca 31,4%
-contra 17,1% de su versión anterior. Casi el doble, y arriba de Opus 5 (26,9%) y
-de GPT-5.6 Sol (19,6%). Es la prueba que más se parece a lo que hace un negocio.
+Le das el trabajo entero y lo termina — la tarea completa, sin que se la vuelvas a
+explicar en el medio. Hoy lo logra 1 de cada 3 veces; su versión anterior, 1 de cada 6.
 
-En investigación científica autónoma, 52,6% contra 29,0% del segundo. Ahí no
-compite: está en otra categoría.
+Usa la computadora: abre los programas, hace clic y completa la tarea en la
+pantalla.
 
-Y leer el caché bajó de $1 a $0,25 por millón — hasta 45% menos de costo cuando
-algo trabaja solo todo el día.
+Y aguanta el turno largo, sin supervisión. Ésa es la diferencia entre una respuesta
+y un empleado.
 
-Mejor y más barato el mismo mes.
+Encima, tenerlo trabajando todo el día cuesta hasta 45% menos que hace un mes.
 
 ## Alt text
 
-> Carrusel de nueve láminas sobre fondo gris claro, con acentos en el coral de Claude. La
+> Carrusel de ocho láminas sobre fondo gris claro, con acentos en el coral de Claude. La
 > primera muestra el icono de Claude y anuncia Fable 5.1 como el modelo más avanzado de
 > Anthropic, con tres datos debajo: siete de siete pruebas ganadas, casi el doble en tareas
-> de oficina, y setenta y cinco por ciento menos de costo. La segunda dice que ahora busca
-> la causa en vez de parchar el síntoma, que aparece tachado. Las tres siguientes son gráficos de barras que comparan cuatro
-> modelos en flujos de trabajo de negocio, investigación científica y programación, con
-> Fable 5.1 en barra coral y primero en las tres. La sexta dice que ahora usa una
-> computadora, con un 77,9 por ciento. La séptima muestra el logo de Claude con el precio
-> de 0,25 dólares por millón de tokens de caché, y la octava un menos 75 por ciento.
-> Cierra preguntando qué modelo usa el lector.
+> de oficina y hasta cuarenta y cinco por ciento menos de costo. La segunda es un gráfico
+> de barras titulado "le das el trabajo entero y lo termina". Siguen tres láminas de texto:
+> usa la computadora, trabaja solo, y ahora busca la causa en vez de parchar el síntoma,
+> que aparece tachado. La sexta es otro gráfico de barras sobre investigación científica.
+> La séptima muestra el logo de Claude con una baja del setenta y cinco por ciento. Cierra
+> preguntando qué modelo usa el lector.
 
 ## De dónde sale cada cifra
 
@@ -152,36 +178,36 @@ de notas de prensa de terceros.
 
 | Lámina | Prueba | Fable 5.1 | Opus 5 | GPT-5.6 Sol | Fable 5 |
 |---|---|---|---|---|---|
+| 02 | AutomationBench — *"le das el trabajo entero"* | **31,4%** | 26,9% | 19,6% | 17,1% |
+| 03 | OSWorld 2.0 — *"usa la computadora"* (parcial) | **77,9%** | 75,4% | — | 72,9% |
+| 03 | OSWorld 2.0 (estricta) | **41,7%** | 39,6% | — | 36,1% |
+| 06 | Terminal-Bench-Science 0.1 | **52,6%** | 29,0% | 22,4% | 24,7% |
 | 01 | Terminal-Bench 4.0 | **55,8%** | 52,3% | 37,3% | 42,0% |
 | 01 | GDPval-AA v2 (trabajo de conocimiento) | **1853** | 1824 | 1711 | 1723 |
 | 01 | Humanity's Last Exam (con herramientas) | **65,0%** | 63,6% | — | 63,8% |
-| 03 | AutomationBench (flujos de negocio) | **31,4%** | 26,9% | 19,6% | 17,1% |
-| 04 | Terminal-Bench-Science 0.1 | **52,6%** | 29,0% | 22,4% | 24,7% |
-| 05 | CursorBench 3.2.0 | **73,4%** | 70,0% | 67,2% | 70,5% |
-| 06 | OSWorld 2.0 (uso de computadora, parcial) | **77,9%** | 75,4% | — | 72,9% |
-| 06 | OSWorld 2.0 (estricta) | **41,7%** | 39,6% | — | 36,1% |
+| 01 | CursorBench 3.2.0 | **73,4%** | 70,0% | 67,2% | 70,5% |
 
-Las tres primeras filas no tienen lámina propia: están para sostener el **"7 de 7"** de la
+Las cuatro últimas filas no tienen lámina propia: están para sostener el **"7 de 7"** de la
 portada. Fable 5.1 queda primero en las siete pruebas de la tabla, y las columnas vacías
 son filas donde Anthropic no publicó puntaje de GPT-5.6 Sol.
 
 | Lámina | Otra afirmación | Verificado (cita textual) |
 |---|---|---|
 | 01 | "el modelo más avanzado de Anthropic" | *"They're the world's most advanced models for coding and knowledge work"* |
-| 02 | arregla la raíz en vez de tomar atajos | descripción de comportamiento de la misma página |
-| 07 · 08 | caché **$0,25** por millón, antes **$1**, **−75%** | *"Cache reads: $0.25 per million tokens (75% reduction)"* |
-| 08 | **hasta 45%** menos en trabajo agéntico | *"up to approximately 45% for highly agentic work"* |
+| 04 | "trabajos largos y sin supervisión" | *"Claude Fable 5.1 is more comfortable with long, unattended work than Fable 5"* |
+| 05 | arregla la raíz en vez de tomar atajos | descripción de comportamiento de la misma página |
+| 07 | **−75%** en lo que más se repite | *"Cache reads: $0.25 per million tokens (75% reduction)"* |
+| 01 · 07 | **hasta 45%** menos si trabaja solo | *"up to approximately 45% for highly agentic work"* |
 
 ### ⚠️ Los dos matices que la pieza sí admite
 
-- **El 77,9% de la lámina 06 es la medición PERMISIVA de OSWorld.** La estricta da 41,7%.
-  Publicar sólo el número lindo sería elegir la vara que conviene, así que la lámina no
-  afirma el porcentaje a secas: dice lo que se sostiene **con las dos varas** —que le gana
-  a Opus 5 y a su versión anterior en ambas—. Las dos filas están en la tabla de arriba.
-- **En CursorBench la carrera es pareja** (67,2 a 73,4) y las barras salen casi iguales.
-  La lámina lo dice en voz alta: *"acá la carrera es pareja, y aun así queda arriba"*. Una
-  pieza que presume de datos pierde más por disimular un empate que por admitirlo — y
-  admitirlo es lo que hace creíbles a las otras dos.
+- **El 77,9% de OSWorld es su medición PERMISIVA.** La estricta da 41,7%.
+  La estricta da 41,7%. Publicar sólo el número lindo sería elegir la vara que conviene,
+  así que **la lámina 03 ya no muestra el porcentaje**: dice lo que se sostiene con las dos
+  varas —que le gana a Opus 5 y a su versión anterior en ambas—. Las dos filas están arriba.
+- **La lámina de CursorBench se cayó**, y por eso: la carrera ahí es pareja (67,2 a 73,4),
+  las barras salían casi iguales y no aportaba nada que las otras dos no dijeran mejor. Su
+  fila sigue en la tabla de arriba porque sostiene el "7 de 7" de la portada.
 
 ## Lo que NO dice, y por qué
 
