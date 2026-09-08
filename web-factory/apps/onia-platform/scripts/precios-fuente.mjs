@@ -214,6 +214,7 @@ export function limitesDelProducto(fuente) {
       reservas: booleano(m[2], "publicBookingIncluded"),
       reportes: booleano(m[2], "reportsEnabled"),
       exportaCsv: booleano(m[2], "csvExportEnabled"),
+      facturasRecurrentes: booleano(m[2], "recurringInvoicesEnabled"),
     };
   }
   return salida;
@@ -266,6 +267,10 @@ export function cifrasDelProducto({ planes, addons, prueba, limites }) {
     "primer plan con reservas online incluidas": primerPlanCon(l, "reservas"),
     "primer plan con reportes completos": primerPlanCon(l, "reportes"),
     "primer plan que exporta en CSV": primerPlanCon(l, "exportaCsv"),
+    "primer plan con facturas recurrentes": primerPlanCon(
+      l,
+      "facturasRecurrentes",
+    ),
     "plan Básico · mensual": p.basic?.mensual ?? null,
     "plan Básico · semanal": p.basic?.semanal ?? null,
     "plan Básico · anual": p.basic?.anual ?? null,
@@ -373,6 +378,14 @@ export function limitesDelSitio(fuente) {
       agentes: /\bAgente\s+[A-Z]/.test(inc ?? "") || null,
       reservas: /Reservas\s+online\s+incluidas/i.test(inc ?? "") || null,
       reportes: /Reportes\s+completos/i.test(inc ?? "") || null,
+      /**
+       * El Basico la nombra en su `sinEsto` («Reportes completos y facturas
+       * recurrentes») y el Pro en su `incluye`. Se lee del `incluye` porque
+       * `incluyeDelSitio` corta en `sinEsto:`: lo que el plan NIEGA no cuenta
+       * como que lo tiene, que es justo la confusion que haria dar `basico`.
+       */
+      facturasRecurrentes:
+        /facturas\s+recurrentes/i.test(inc ?? "") || null,
     };
   });
   return salida;
@@ -562,6 +575,10 @@ export function cifrasDelSitio({ precios, chatbot }) {
       "reservas",
     ),
     "primer plan con reportes completos": primerPlanDelSitioCon(ls, "reportes"),
+    "primer plan con facturas recurrentes": primerPlanDelSitioCon(
+      ls,
+      "facturasRecurrentes",
+    ),
     "primer plan que exporta en CSV":
       planQueElSitioPrometeParaExportar(precios ?? ""),
     "plan Básico · mensual": p.basico?.mensual ?? null,
