@@ -12,6 +12,16 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## Reverificado el 2026-09-08 08:09 y 08:14 La Paz — dental (9/9) y servicios profesionales (9/9) siguen sanos
+
+Dos corridas `--escribir` seguidas: **dental 9/9** (cita agendada y vista, factura
+`/billing/cmtse6njm005801rwuy6i43c6` con ítem visible, frenada sin pagar) y **servicios
+profesionales 9/9** (cita agendada y vista en `/appointments`, cobro en `/comercio/caja` —
+sigue siendo la misma pantalla compartida con comercio, como quedó cerrado en `t_2b03ea3d`).
+Cero filas `zz-qa-` propias al cerrar las dos veces (4 ajenas de otros carriles, sin tocar).
+Dos vueltas seguidas sin hallazgo nuevo en estos dos rubros: falta reverificar estética e
+importadora, que no se corren desde hace más de un día, o retomar promesa-vs-entrega.
+
 ## Reverificado el 2026-09-08 06:09 y 06:15 La Paz — dental (9/9) y comercio (8/8) siguen sanos, paso 9 confirmado también fuera de dental
 
 Dos corridas `--escribir` seguidas desde nodo-casa: **dental 9/9** (cita agendada y vista, factura
