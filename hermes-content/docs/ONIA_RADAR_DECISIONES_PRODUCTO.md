@@ -2700,10 +2700,16 @@ están fuera de su zona, y los 2 cr de la confirmación son permiso de gasto de 
 
 ## 43. Una rama tuya con un video terminado lleva horas sin llegar a `main` (2026-09-08) — decisión de Sergio Urcullo
 
-**Qué es.** `claude/video-editing-silence-removal-073acb` — 1 commit
-(`8bfeb8e7 feat: corte de silencios + intro animada para el video Claude vs Claude Code`),
-**20 archivos, +11.932 líneas, cero borrados**: el plan de cortes, la intro animada, las
-fuentes, el end-card y los scripts de transcripción y render bajo `videos/claude-vs-claudecode/`.
+**Qué es.** `claude/video-editing-silence-removal-073acb` — **4 commits**, **34 archivos,
++12.315 líneas, cero borrados**: el plan de cortes, la intro animada, las fuentes, el end-card,
+los SFX, la miniatura y los scripts de transcripción y render bajo `videos/claude-vs-claudecode/`.
+
+> **Recontado el 2026-09-08 11:47 La Paz.** Cuando se escribió este ítem la rama tenía **1 commit,
+> 20 archivos, +11.932**; siguió creciendo tres commits más (`4cd8282e` título centrado,
+> `2727c454` retakes fuera + CTA + SFX + miniatura, `18f541d7` miniatura rehecha). **La decisión
+> no cambia** —sigue siendo A o B— pero el número sí, y un ítem que te pide decidir con datos
+> muertos es exactamente lo que esta carpeta existe para evitar. Se ve con:
+> `git diff --shortstat origin/main...origin/claude/video-editing-silence-removal-073acb`
 
 **Por qué no la mergeé yo.** No es un carril de loop: no tiene `case` en el corredor, no tiene
 línea en `crontab -l` ni fila en `loops.md`. Es trabajo de una sesión interactiva tuya, igual
