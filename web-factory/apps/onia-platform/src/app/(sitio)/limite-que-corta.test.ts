@@ -1,5 +1,5 @@
 import { readFileSync, readdirSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { dirname, isAbsolute, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
@@ -184,12 +184,29 @@ describe("la venta dice el límite que el producto aplica", () => {
  */
 const APP = join(AQUI, "..", "..", "app");
 
-/** Todas las páginas del disco. Sujeto derivado: nada de lista escrita a mano. */
+/**
+ * Todas las páginas del disco, en ruta RELATIVA a `APP`. Sujeto derivado: nada
+ * de lista escrita a mano.
+ *
+ * Van relativas A PROPÓSITO, y no es cosmético. Mientras devolvió rutas
+ * absolutas, el caso de cobertura de más abajo filtraba `p.includes("chatbot")`
+ * sobre la ruta ENTERA, así que su veredicto quedó atado al NOMBRE DEL
+ * DIRECTORIO donde corre el gate: desde `/root/loops/onia-hermes-chatbot` las
+ * 25 páginas matcheaban, el caso exigía 2, y la cadena `npm test` de la raíz
+ * —la que corre el integrador antes de tocar `main`— cortaba ahí. Un rojo
+ * falso que trababa el merge de los quince carriles y que desde ESTE worktree
+ * era invisible, porque acá el path no dice "chatbot" y el filtro cuenta 2.
+ *
+ * Medido el 2026-09-08 (t_fed03aba, abierta por `chatbot-cola`, el único
+ * carril que podía verlo). Con la ruta relativa el nombre de la carpeta
+ * contenedora ya no puede entrar en ningún filtro de este archivo — el arreglo
+ * es la forma del dato, no un caso más.
+ */
 function paginasDelDisco(dir: string = APP): string[] {
   return readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
     const ruta = join(dir, e.name);
     if (e.isDirectory()) return paginasDelDisco(ruta);
-    return e.name === "page.tsx" ? [ruta] : [];
+    return e.name === "page.tsx" ? [relative(APP, ruta)] : [];
   });
 }
 
@@ -222,14 +239,16 @@ function metadataSinCupo(fuente: string): string[] {
 describe("el <head> dice el mismo límite que el cuerpo", () => {
   it("ninguna metadata promete atención sin tope sin nombrar el cupo", () => {
     const culpables = paginasDelDisco()
-      .flatMap((p) => metadataSinCupo(readFileSync(p, "utf8")).map((d) => `${p}\n    ${d}`))
+      .flatMap((p) =>
+        metadataSinCupo(readFileSync(join(APP, p), "utf8")).map((d) => `${p}\n    ${d}`),
+      )
       .sort();
     expect(culpables, "metadata con atención ilimitada y sin cupo").toEqual([]);
   });
 
   it("el cupo del <head> no se tipea a mano", () => {
     const aMano = paginasDelDisco()
-      .flatMap((p) => descripcionesDe(readFileSync(p, "utf8")).map((d) => `${p} → ${d}`))
+      .flatMap((p) => descripcionesDe(readFileSync(join(APP, p), "utf8")).map((d) => `${p} → ${d}`))
       .filter((d) => new RegExp(`\\b${CONVERSACIONES_INCLUIDAS}\\b\\s*conversaciones`, "i").test(d));
     expect(aMano, "el cupo se tipeó a mano en una metadata").toEqual([]);
   });
@@ -241,7 +260,29 @@ describe("el <head> dice el mismo límite que el cuerpo", () => {
     // familia, y ya mordió antes en este repo.
     const paginas = paginasDelDisco();
     expect(paginas.length).toBeGreaterThan(20);
+    // Y ninguna absoluta: es lo único que impide que el filtro de la línea
+    // siguiente vuelva a contar el nombre de la carpeta contenedora. Revertir
+    // el barrido a rutas absolutas pone ROJO este caso desde CUALQUIER
+    // worktree, que es justo lo que faltaba: el rojo falso sólo se veía desde
+    // uno con "chatbot" en el path.
+    expect(
+      paginas.filter(isAbsolute),
+      "las páginas tienen que venir relativas a APP (ver la cabecera de paginasDelDisco)",
+    ).toEqual([]);
     expect(paginas.filter((p) => p.includes("chatbot"))).toHaveLength(2);
+  });
+
+  it("el veredicto no depende de cómo se llame la carpeta del worktree", () => {
+    // La clase, hecha visible desde acá: con la ruta ABSOLUTA bajo un worktree
+    // que se llama "…-chatbot", el filtro se lleva puestas las 25 páginas; con
+    // la relativa devuelve las 2 de siempre. Es el rojo falso del 2026-09-08,
+    // reproducido sin depender de dónde corra el gate.
+    const RAIZ_QUE_MIENTE = join("/root/loops/onia-hermes-chatbot", "src", "app");
+    const absolutas = paginasDelDisco().map((p) => join(RAIZ_QUE_MIENTE, p));
+    expect(absolutas.filter((p) => p.includes("chatbot")).length).toBe(absolutas.length);
+    expect(absolutas.filter((p) => relative(RAIZ_QUE_MIENTE, p).includes("chatbot"))).toHaveLength(
+      2,
+    );
   });
 
   describe("el detector distingue el defecto de su arreglo", () => {
