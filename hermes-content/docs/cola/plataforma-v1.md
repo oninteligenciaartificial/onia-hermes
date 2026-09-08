@@ -1398,6 +1398,60 @@ y sin operar. Acá se opera, con verificación por ítem.
       matriz) también es suyo. Que `/opt/onia-siat` quede alineado con el repo es la tarea
       `t_7d2019bb`.
 
+- [x] 🔴 **CERRADO el 2026-09-08: en la pantalla donde el dueño PAGA Onia, el modal del QR le
+      pedía «Clínica registrada» a los cinco rubros — y el botón flotante le decía «Nuevo
+      paciente» a un centro de estética cuyo propio menú dice «Clientas».**
+
+      **La clase, que es lo que importa:** el gate de cobertura
+      (`lib/platform/pantallas-compartidas-cubiertas.test.ts`) declara las 25 pantallas que dos o
+      más packs comparten y barre, en cada corrida, **los fuentes DE LA RUTA**
+      (`app/(dashboard)/<href>/*`). El 07-sep ese barrido ya subió un escalón —antes leía sólo el
+      server component y el copy vivía en su client component hermano—, y el escalón siguiente
+      quedaba abierto: **una pantalla renderiza componentes de `components/`, y ésos no los mira
+      nadie.** Ni el sujeto ni el patrón estaban mal: los dos están bien, y el archivo con el
+      defecto queda FUERA del barrido. Por eso `/settings` figuraba **cubierta por su gate** y su
+      modal de pago decía «clínica» cinco veces.
+
+      **Lo que estaba vivo, medido barriendo `components/` entero (4 archivos de 55 nombraban un
+      rubro; 2 eran defecto y 2 legítimos):**
+
+      | dónde | qué leía quien no es dental |
+      |---|---|
+      | `components/billing/QRPaymentModal.tsx` (lo renderiza `/settings`) | rótulo «Clínica registrada \*», dos errores «Ingresá el nombre de quien paga y la clínica registrada.» y dos resúmenes «**Clínica:** …» |
+      | `components/layout/navigation.ts` (el FAB, que está en TODAS las pantallas) | «Nuevo paciente» — los tres packs clínicos tomaban `quickActionItems` **por referencia** del dental |
+
+      **Arreglado:** `vocabulario.ts` suma `negocioTitulo` (Clínica · Centro de estética · Empresa
+      · Negocio · Estudio · Estancia · Veterinaria · Onia) —campo propio y no un recorte de
+      `negocio`, porque `onia-interna` no lleva «tu» delante—; el modal recibe `negocio` y
+      `negocioTitulo` como props **requeridas** (un opcional con default es un hueco
+      indetectable) y `PlanClient` se los pasa del `vocab` que ya tenía; y `quickActionsClinicaDe`
+      —hermano de `navClinicaDe`, que faltaba— deriva el alta del FAB, así que estética pasó a
+      «Nueva clienta».
+
+      **Y de paso el hueco latente que lo hacía posible:** `QuickActionsFab` cae en
+      `items ?? quickActionItems`, así que ese seed es lo que ve quien no declara el suyo — y
+      decía «Nuevo paciente». Quedó **neutro** («Nuevo cliente»); dental deriva el suyo como los
+      demás. Los dos llamadores reales (`app/(dashboard)/layout.tsx`) sí pasan `quickActions`: el
+      fallback no estaba disparando, pero el default silencioso es la forma en que esta familia
+      vuelve.
+
+      **El gate nuevo, `lib/platform/componentes-compartidos-por-rubro.test.ts`:** deriva el
+      sujeto del **disco** (`components/` entero, 55 archivos) —así un componente nuevo nace
+      cubierto y hay que eximirlo a mano, a la vista—, exime por **literal exacto** y no por ruta
+      (mismo criterio que `/admin` en el gate hermano), y **vuelve a medir cada exención**: si el
+      texto eximido desaparece, esa fila se pone roja en vez de pre-aprobar. Más un caso que
+      prueba el detector contra las trampas ya medidas (el comentario, el identificador, lo
+      interpolado, «pen**diente**s») y otro que exige que cada pack declare el rótulo de su FAB.
+
+      **Validado en ROJO primero, por el motivo correcto:** 7 casos en rojo antes del arreglo
+      —`QRPaymentModal`, `navigation.ts`, `esteticagest-clinical: el alta de cliente usa su propia
+      palabra` («expected 'Nuevo paciente' to be 'Nueva clienta')— y 68/68 en verde después.
+      Gates: `tsc` 0 · `vitest` 3751 (0 fallos) · `eslint` 0. Commit `185d616` en
+      `claude/chatbots-platform-review-0d1d09` de `onia-platform`.
+
+      ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido de deploy de
+      `plataforma` (`t_bf1607af`), que sigue esperando el `ok` de Sergio Urcullo.
+
 
 ## Lo que este carril NO hace
 
