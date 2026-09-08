@@ -12,6 +12,18 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-08 21:06-21:26 La Paz — móvil (390x844) en LOS 5 RUBROS: cierre completo, sin hallazgos
+
+Dental (escritorio, reverificación) + `RECORRIDO_MOVIL=1` en Comercio, Estética, Importadora y
+Servicios profesionales — los 5 rubros de `RUBROS_ACTIVOS` quedan cubiertos en móvil, no sólo
+dental. Los 4 nuevos: cuenta creada, correo confirmado, onboarding en 6 pantallas, dato de rubro
+cargado y encontrado, cobro visto y frenado sin pagar. Comercio e Importadora: paso 7 (cita)
+NO-APLICA porque esos rubros no venden agenda (coherente con su pack, sin agenda en el menú) —no
+es un agujero. Estética y Servicios profesionales: 9/9 completo, cita agendada y vista. Cero filas
+`zz-qa-` propias al cerrar cada corrida (4 ajenas de otros carriles, sin tocar, ninguna). Nada
+roto en ningún rubro. Con esto se cierra el ítem "falta correr RECORRIDO_MOVIL en 4 rubros" de la
+cola.
+
 ## 2026-09-08 18:09-18:16 La Paz — móvil (390x844) en Importadora: 9/9, sin hallazgos
 
 `RECORRIDO_RUBRO=Importadora RECORRIDO_MOVIL=1`: recorrido completo salvo el paso 7 (cita), que
