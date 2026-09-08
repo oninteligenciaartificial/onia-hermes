@@ -22,10 +22,15 @@ con verificación de que los loops no se pisan entre sí**, **automatización co
 Instagram configurable por video**, **cerrar la firma del webhook** y **archivar las 3 copias
 apagadas del workflow**.
 
-🔴 **Y apareció un hallazgo que es más grande que el objetivo, y no está resuelto.** Está en §7
-y en §6: **Hermes consume 7 a 13 millones de tokens de OpenAI por día** y el tope del gateway
-son **US$ 50 cada 30 días**. Al ritmo medido eso es ~US$ 41/mes: **entra, pero raspando**, y si
-lo cruza, LiteLLM corta todo y Hermes se apaga sin avisar.
+🔴 **Y apareció un hallazgo que es más grande que el objetivo.** Está en §7: **Hermes consumía
+7 a 13 millones de tokens de OpenAI por día** (~US$ 41-47/mes) contra un tope de gateway de
+**US$ 50 cada 30 días**. Entraba raspando, y si lo cruzaba, LiteLLM corta todo y Hermes se
+apaga sin avisar.
+
+**✅ Decidido y aplicado el 2026-09-08 por Sergio Urcullo:** *"no subimos, acomodemos para que
+gaste lo menos posible; gastamos en cosas innecesarias, te lo digo siempre, mensajes a telegram
+que no tienen sentido"*. **No se subió ni el cupo ni el tope: se bajó el consumo.** Detalle y
+números en §7.
 
 ---
 
@@ -43,7 +48,7 @@ Medido el 2026-09-08 05:00-05:30 UTC.
 | Hermes gateway | ✅ `active` · 9 trabajos activos |
 | `onia-veredicto-sergio` | ✅ sin `drift_skip` — modelo fijado y trabajo reanudado |
 | `onia-vigia-aprobaciones.sh` | ✅ versionado (ya lo estaba: ver §5.3) |
-| Guarda anti-retrabajo en `onia-loop.sh` | ✅ cada loop sincroniza con `main` ANTES de medir |
+| Guarda anti-retrabajo en `onia-loop.sh` | ✅ cada loop sincroniza con **su rama base** ANTES de medir. ⚠️ Estuvo **muda en `onia-platform`** hasta el 8-sep: ese repo usa `master` y la guarda comparaba contra `origin/main` fijo — el `\|\| echo 0` convertía el `fatal` en CERO. Ese worktree estaba **12 commits atrás** sin avisar. Arreglado: ahora pregunta la base (`origin/HEAD`, con `main`/`master` de respaldo) y **avisa si no la encuentra**, en vez de callarse |
 | Disco del VPS | ✅ **65 %** (venía de 89 %) |
 | Workflow IG `1jS4jwmNmvcQpqqH` | ✅ activo, con capa por video y verificación de firma **en modo observar** |
 | 3 copias apagadas del workflow IG | ✅ archivadas, con respaldo crudo en `/root/n8n-copia-*.archivada.json` |
@@ -187,8 +192,8 @@ del programa. **Si el instrumento puede dar verde con la cosa rota, el instrumen
 | # | qué | por qué no lo puedo hacer yo | criterio de listo |
 |---|---|---|---|
 | 1 | 🔴 **BIOS: "Restore on AC Power Loss" = encendido**, y dejar `homelab-wsl-arranque.ps1` en el arranque de Windows | es la BIOS de su PC | corte de luz simulado → el nodo vuelve solo y el cron corre |
-| 2 | 🔴 **Subir el cupo (TPM) de OpenAI**, o aceptar por escrito el 44 % de vueltas perdidas | es su cuenta de OpenAI | `Limit` mayor a 500.000 en el mensaje de error, o decisión escrita |
-| 3 | 🔴 **Decidir sobre el tope de gasto del gateway**: hoy son US$ 50/30 días y el ritmo medido es ~US$ 41/mes | es gasto | tope subido, o consumo bajado, o aceptado por escrito |
+| ~~2~~ | ~~Subir el cupo (TPM) de OpenAI~~ | — | ✅ **RESUELTO 2026-09-08: dijo que NO se sube.** Se bajó el consumo (§7) |
+| ~~3~~ | ~~Decidir sobre el tope de gasto del gateway~~ | — | ✅ **RESUELTO 2026-09-08: el tope queda en US$ 50/30 días** (§7) |
 | 4 | **El link del reel, la palabra y el recurso** del primer video | es su contenido | los 3 datos, y el recurso responde 200 |
 | 5 | **Un comentario real** en un post de las cuentas conectadas | Meta sólo firma eventos reales | el veredicto dice cuál de los dos secretos coincide |
 
@@ -231,23 +236,110 @@ desactualizado por cuatro órdenes de magnitud** — y por eso el tope parecía 
 se cruza, **LiteLLM corta todo y Hermes se apaga en silencio**: el modo de falla que este
 proyecto ya conoce de memoria.
 
-### Los tres caminos, sin adornos
+### ✅ Qué se decidió y qué se aplicó (2026-09-08)
 
-1. **Subir el cupo de OpenAI** (de Sergio Urcullo, gratis, inmediato). El más barato.
-2. **Achicar el contexto de Hermes.** Es lo correcto de fondo, **pero Hermes no es nuestro**
-   (NousResearch): tocarlo es tocar un tercero.
-3. **Aceptar el 44 % de vueltas perdidas.** El tablero igual se llena, con la mitad de frecuencia.
+Sergio Urcullo: *"no subimos, acomodemos para que gaste lo menos posible; gastamos en cosas
+innecesarias, te lo digo siempre, mensajes a telegram que no tienen sentido"*.
 
-**No lo decidí yo**: es gasto y es su cuenta.
+**Tenía razón en la conexión que yo no había hecho: esos mensajes SON el gasto.** Antes de
+tocar nada, se atribuyó el consumo por paridad de hora (el ordenador corre `0 */2` = sólo horas
+pares; todo lo demás cae en otras horas):
+
+| quién | llamadas | tokens | US$ (7 días) |
+|---|---|---|---|
+| **horas pares** = `onia-ordenador-tablero` | 857 | 52.417.756 | **8,21 — el 74 %** |
+| resto (los 7 genéricos + ad-hoc) | 379 | 20.310.625 | 2,87 |
+
+**Dos cortes, aplicados y verificados:**
+
+1. **`onia-ordenador-tablero`: de `0 */2` a `0 */6`** — de 12 vueltas al día a 4. El tablero
+   tiene **56 tareas abiertas**: a los loops no les falta trabajo, les sobra. Corta dos tercios
+   del 74 %.
+2. **Los 7 trabajos genéricos de Hermes, PAUSADOS**: `daily-operational-status`,
+   `weekly-kickoff`, `weekday-work-agenda`, `tuesday-prospecting`, `wednesday-build-sprint`,
+   `friday-finance-ops-review`, `sunday-weekly-review`. Son plantillas de NousResearch que sólo
+   escupen Telegram, **y las había encendido yo ese mismo día**. Ese es el ruido que él señala.
+
+**Sigue vivo lo que sirve:** `onia-ordenador-tablero` (alimenta a los 15 loops) y
+`onia-veredicto-sergio`. **Nada se borró** — `hermes cron resume <id>` los devuelve.
+
+**Estimación, a confirmar con datos reales en unos días:** de ~US$ 47/mes a **~US$ 13/mes**.
+
+**Lo que NO se hizo, a propósito:** achicar el contexto de Hermes (110-180k tokens por llamada).
+Es lo correcto de fondo, **pero Hermes no es nuestro** (NousResearch): tocarlo es tocar a un
+tercero, y con estos dos cortes el problema de gasto deja de ser urgente.
+
+---
+
+## 7.b Los avisos: de 443 mensajes por día a uno
+
+Sergio Urcullo, 2026-09-08: *"solo quiero que hermes me escriba para preguntas de desarrollo,
+para terminar un enfoque o para poner una nueva tarea; si no, que no me escriba. Y si se friega
+el CI o los loops, que él lo arregle y que solo diga que está todo en orden"*.
+
+**El número que le da la razón**, del propio registro de `onia-tg.sh`:
+
+| día | mensajes que le llegaron |
+|---|---|
+| 2026-09-04 | **443** |
+| 2026-09-05 | 256 |
+| 2026-09-06 | 242 |
+| 2026-09-07 | 226 |
+
+**Dieciocho scripts** le escribían por ahí. Un aviso cada tres minutos no es un aviso: es ruido,
+y el ruido esconde justo el mensaje que sí importaba.
+
+### Cómo quedó
+
+`/root/bin/onia-tg.sh` dejó de ser un enviador y pasó a ser un **enrutador**:
+
+- **Por defecto un aviso NO se manda: se convierte en TAREA del tablero**, que es de donde los
+  loops sacan trabajo. Un CI roto o un loop caído ahora **se arregla**, no se avisa. Las tareas
+  llevan la marca `[auto:<clave>]` y se **deduplican**: el mismo aviso repetido no crea 144
+  tareas al día.
+- **Sólo con `ONIA_TG_DIRECTO=1` sale a Telegram.** Hoy lo usan el circuito de aprobaciones
+  (donde él TIENE que decidir, marcado en el crontab) y el parte diario.
+- **`onia-parte-diario.sh`, nuevo, `0 9 * * *`**: UN mensaje al día. *"Todo en orden"*, o la
+  lista corta de lo que el sistema no pudo arreglar solo. Sólo nombra lo que ya lleva más de
+  12 h abierto — reportar una tarea recién creada sería el mismo ruido con otro nombre, porque
+  el loop todavía no tuvo su vuelta.
+
+**Probado antes de dejarlo**, con reversión automática si fallaba: (1) un aviso crea tarea y no
+manda Telegram · (2) repetido no duplica · (3) el camino directo sigue llegando.
+
+### El error que casi lo arruina, y su lección
+
+La primera versión usaba `grep -q` dentro de una tubería, con `set -o pipefail`. **`grep -q`
+corta al primer match, el productor muere con SIGPIPE (141), y `pipefail` reporta la tubería
+entera como fallida aunque el match exista.** La prueba dijo *"no creó la tarea"* con la tarea
+creada y visible en el tablero.
+
+**Estaba en la deduplicación también**: habría dicho SIEMPRE "no existe" y este script crearía
+144 tareas iguales por día — **el mismo ruido, mudado de Telegram al tablero**. Se arregló con
+`grep -c`, que no corta al primer match. Es el mismo patrón de §5.4: un instrumento que da rojo
+con la cosa funcionando.
+
+### Lo que queda abierto de esto
+
+- **`onia-veredicto-sergio` corre, completa y sale a Telegram** (medido: mensaje de 1.347 bytes
+  el 7-sep 16:07 La Paz), pero él dice que no le llega. **La hipótesis más probable es que lo
+  enterraban los otros 226 mensajes del día.** No se forzó una corrida para probarlo porque
+  cuesta ~124k tokens y la consigna del día era gastar menos. **Se verifica gratis mirando el
+  Telegram a las 16:00 de hoy, ya sin ruido.**
+- **`onia-vigia-sin-respuesta.sh`** (alguien le escribió al bot y nadie contestó) ahora va al
+  tablero como todo lo demás. **Es el único que yo dejaría en directo**: un prospecto esperando
+  es urgente y una tarea puede quedarse horas. Se cambia con `ONIA_TG_DIRECTO=1` en su línea del
+  crontab, si él quiere.
 
 ---
 
 ## 8. Próximos pasos, en orden
 
-1. **Sergio Urcullo hace el #1 y el #2 de §6** (BIOS y cupo). *Listo* = corte simulado superado y
-   `Limit` mayor a 500.000.
-2. **Decidir el tope de gasto (§6 #3) y corregir el comentario de `litellm.config.yaml`**, que hoy
-   miente por cuatro órdenes de magnitud. *Listo* = el comentario dice la cifra medida.
+1. **Sergio Urcullo hace el #1 de §6** (BIOS + arranque de Windows). *Listo* = corte de luz
+   simulado y el nodo vuelve solo con su cron corriendo. **Es el único punto único de fallo.**
+2. **Confirmar el ahorro con datos reales** (3-4 días después del 2026-09-08). *Listo* = la
+   consulta de §7 sobre `LiteLLM_SpendLogs` da por debajo de US$ 4 semanales. Si no bajó, el
+   siguiente corte es `onia-ordenador-tablero` a `0 */12`.
 3. **Un comentario real en Instagram** → leer el veredicto → **pasar la firma a bloquear**.
    *Listo* = `Firma: veredicto` corta con `firma_ok: false`, y un evento inventado por `curl` ya
    no pasa.
