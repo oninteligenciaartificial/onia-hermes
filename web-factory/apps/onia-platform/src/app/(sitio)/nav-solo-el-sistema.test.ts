@@ -57,6 +57,20 @@ const APROBADAS: Readonly<Record<string, string>> = {
   "/empezar": "la salida del embudo (su URL circula en firmas y /prueba-gratis le redirige)",
 };
 
+/**
+ * La barra visible: el CAMINO DE COMPRA, en orden de embudo. Es un subconjunto
+ * de `APROBADAS` a propósito — `/chatbot` y `/empezar` no entran porque a 940px
+ * el header se desborda y el CTA se cae de la fila (medido, ver `nav.ts`).
+ *
+ * Va aparte de la unión, y no es un lujo: **la unión no puede ver una ausencia
+ * por nivel.** Medido por mutación el 2026-09-08 — sacar `/precios` de la barra
+ * dejaba los 868 casos en VERDE, porque `/precios` seguía en `NAV_PRODUCTO` y el
+ * conjunto unido no cambiaba. O sea que el precio podía desaparecer del camino
+ * de compra sin que nada se pusiera rojo, que es justo la mitad que el gate de
+ * lo prohibido tampoco ve.
+ */
+const CAMINO_DE_COMPRA = ["/rubros", "/precios", "/facturacion", "/contacto"];
+
 /** Legales: existen por obligación, no son oferta. Viven en `NAV_LEGAL`. */
 const LEGALES = NAV_LEGAL.map((i) => i.href);
 
@@ -118,6 +132,18 @@ describe("el menú público ofrece el sistema y nada más", () => {
         `camino de compra es una decisión, no una limpieza: si de verdad va, se saca de APROBADAS ` +
         `en el mismo cambio y se deja escrito por qué.`,
     ).toEqual([]);
+  });
+
+  it("la barra visible es EXACTAMENTE el camino de compra", () => {
+    // Se compara como conjunto y no como lista: reordenar el embudo es una
+    // decisión de copy legítima, perder o sumar una parada no lo es.
+    expect(
+      [...NAV_HEADER.map((i) => i.href)].sort(),
+      `La barra de arriba quedó en ${NAV_HEADER.map((i) => i.href).join(" · ")}. Es el camino de ` +
+        `compra y se mide APARTE de la unión, porque la unión no puede ver una ausencia por nivel: ` +
+        `con /precios sólo en el menú de teléfono, el precio desaparece de la barra y el conjunto ` +
+        `unido no cambia. /chatbot y /empezar no entran acá: a 940px el header se desborda.`,
+    ).toEqual([...CAMINO_DE_COMPRA].sort());
   });
 
   it.each(CROMO)("%s no escribe un destino de menú a mano", (archivo) => {
