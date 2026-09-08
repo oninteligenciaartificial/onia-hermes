@@ -44,6 +44,53 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **CERRADO el 2026-09-08 (`cc383c1`, en la rama del carril — NO en `master` todavía):
+      tres de las cuatro organizaciones que PAGARON el add-on de WhatsApp no lo tenían, según
+      el producto — sin recordatorio de cita, sin intake, y con el cartel de venta encima.**
+
+      El add-on tiene **dos fuentes** y sólo `isWhatsAppAddonActive` (`lib/plan-limits.ts`) mira
+      las dos: la columna vieja `organizations.whatsappAddon` **o** la capacidad
+      `addon.whatsapp` de `organization_entitlements`. Medido en producción ese día:
+
+      | org | `whatsappAddon` | `addon.whatsapp` |
+      |---|---|---|
+      | `clinica-sergio-p2ljs` | `t` | `active` |
+      | `onia-interna` | `f` | `active` |
+      | `zz-qa-clinica-chatbot-9k651` | `f` | `active` |
+      | `zz-qa-ferreteria-tornillo-ommbt` | `f` | `active` |
+
+      Para esas **tres**, cada punto que leía la columna cruda contestaba «no lo tenés»:
+      el cron **no le mandaba el recordatorio de cita al paciente** (y el paciente no se entera
+      de que le faltó un aviso); el intake de ONIA Core **descartaba la consulta** que entraba
+      por WhatsApp; `/api/n8n/whatsapp/send` daba 403; el canal de Instagram/Messenger daba 403
+      y su `GET` mandaba dibujar «contratalo» a quien ya lo tenía; `/settings`,
+      `/settings/addon-chatbot` y `/communications` le ofrecían **comprar lo que ya pagó**; y el
+      circuito de cobro le aceptaba **pagarlo de nuevo**.
+
+      **Por qué nadie lo veía, que es lo que se arregló de fondo:** el 2026-09-04 se cazó este
+      mismo defecto en `/settings/chatbot` y se lo ató con un gate cuyo sujeto es el `page.tsx`
+      **de esa carpeta**. Se arregló la instancia y la clase quedó abierta. No sobra ni falta una
+      palabra, la pantalla renderiza perfecto, no es un rubro, y `whatsappAddon` es una columna
+      real del schema: `tsc` está contento.
+
+      **El gate de clase** (`lib/platform/addon-whatsapp-un-solo-criterio.test.ts`) deriva los
+      sujetos del **disco**, así que un lector nuevo de la columna nace cubierto y hay que
+      excusarlo a la vista; y **cada excusa se re-mide**, porque una excusa que se pudre deja
+      entrar el defecto siguiente pre-aprobado. Validado por **5 mutaciones**, todas verificadas
+      de que entraron: revertir el arreglo del cron → rojo nombrándolo · excusa sobrante → rojo ·
+      barrido vacío → rojo · detector ciego → 3 casos en rojo · sin filtrar comentarios → rojo.
+
+      ⚠️ **La primera versión del gate enumeraba FORMAS de decidir** (`if`, `?:`, `&&`, `!`,
+      prop JSX) **y se le escapó la más silenciosa**, que estaba viva: el `GET` de
+      `/api/chatbot-canal-meta` hacía `addon: Boolean(org.whatsappAddon)` — la columna no decide
+      ahí, se le **manda al navegador para que decida allá**. La cazó un test hermano, no el
+      gate. Enumerar formas es una lista de inclusión y falla abierto; el sujeto correcto es
+      **leer la columna**, y quien de verdad tenga que hacerlo se declara.
+
+      **Gates:** `tsc` 0 · `vitest` **3971 pasan / 326 archivos** · `eslint` 0 errores.
+      ⚠️ **Commiteado y en la rama, NO mergeado a `master` ni desplegado** — no viaja con el
+      pedido `t_daa8750c`, que publica `master`. El merge es de `onia-cola`.
+
 - [x] 🔴 **CERRADO el 2026-09-08 (`c334440`, en la rama del carril — NO en `master` todavía):
       el correo del trial sólo sabía hablar en dental o en mostrador, y de los cinco rubros de
       la v1.0 los tres del medio caían del lado equivocado.**
