@@ -33,6 +33,7 @@ import {
   emptyState,
   STOP_THRESHOLD,
   StopError,
+  TransitorioError,
   buildRunnerEnvelope,
   buildTar,
   buildTestInvoice,
@@ -994,5 +995,205 @@ describe("cufdVencido — el CUFD del dia anterior no sirve", () => {
   it("null / indefinido cuentan como vencido", () => {
     assert.equal(cufdVencido(null, ahora), true);
     assert.equal(cufdVencido(undefined, ahora), true);
+  });
+});
+
+/*
+ * El CUFD caduca a las 24h y el estado sobrevive dias. `ensureCufd()` se escribio
+ * para eso, pero se cableo SOLO en las etapas que motivaron el arreglo (IV, VII, XI
+ * via emitirOne/anularOne/revertirOne). Sus hermanas VI y IX quedaron sin el, y por
+ * eso la corrida de volumen del 2026-09-04 dejo IV/VII/XI en 125/125 por combo y a
+ * VI clavada en 20/280 y IX en 20/80. Medido contra el piloto el 2026-09-08:
+ *   IX -> 123 "CODIGO UNICO DE FACTURACION DIARIA (CUFD) FUERA DE TOLERANCIA"
+ *   VI -> "EL EVENTO SIGNIFICATIVO NO CORRESPONDE AL CUFD DEL EVENTO REGISTRADO"
+ *         (el paquete y su evento comparten CUFD: con uno vencido, la ventana del
+ *          evento se calcula sobre un CUFD muerto y el SIN rechaza el par entero)
+ * La invariante es de la CLASE, no de cada etapa: toda etapa que hable con el SIN
+ * llevando el CUFD tiene que renovarlo antes de la primera operacion.
+ */
+describe("el CUFD se renueva en TODAS las etapas que lo usan, no solo en las que motivaron el arreglo", () => {
+  /** Espia con el CUFD YA VENCIDO: lo que se prueba es quien lo renueva. */
+  function runnerCufdVencido() {
+    const r = Object.create(Runner.prototype);
+    r.nit = "5371375010";
+    r.codigoSistema = "SIS";
+    r.pace = 0;
+    r.state = emptyState();
+    r.state.numeroFactura = 0;
+    r.state.catalogs = {
+      productos: [{ codigoProducto: 1, codigoActividad: "620100", descripcionProducto: "Software" }],
+      leyendas: [{ codigoActividad: "620100", descripcionLeyenda: "Ley 453" }],
+      unidadesMedida: [{ codigoClasificador: 58 }],
+      metodosPago: [{ codigoClasificador: 1 }],
+      tiposDocIdentidad: [{ codigoClasificador: 5, descripcion: "NIT" }],
+      motivosAnulacion: [{ codigoClasificador: 1 }],
+      // 1-4 son los de conectividad: los unicos que sirven para un paquete sin CAFC.
+      eventos: [{ codigoClasificador: 2, descripcion: "CORTE DEL SERVICIO DE INTERNET" }],
+    };
+    r.combo = { ...DEFAULT_COMBO };
+    r.vistos = [];
+    r.log = () => {};
+    r.checkpoint = () => {};
+    const vencido = Date.now() - CUFD_VIGENCIA_MS - 60_000;
+    for (const pv of PUNTOS_VENTA) {
+      r.state.cuisByPv[String(pv)] = `CUIS-${pv}`;
+      r.state.cufdByPv[String(pv)] = {
+        codigo: `CUFD-VIEJO-${pv}`,
+        codigoControl: "AB-12",
+        obtenidoEn: vencido,
+      };
+    }
+    r.post = async (service, envelope, meta) => {
+      r.vistos.push({ etapa: meta.etapa, op: meta.op, combo: comboId(r.combo) });
+      if (meta.op === "cufd_refresh") {
+        // El SIN devuelve un CUFD nuevo; sin `codigo` ensureCufd lanza.
+        return {
+          ok: true,
+          parsed: {
+            codigo: `CUFD-NUEVO-${r.combo.codigoPuntoVenta}`,
+            codigoControl: "CD-34",
+            // Como el del SIN: vence 24h despues de emitido, y se emitio hace un
+            // rato. eventWindowNow deriva la ventana del evento de cufdVigenteDesde,
+            // asi que un CUFD que vence EXACTO dentro de 24h deja ventana cero.
+            fechaVigencia: formatSinLocal(Date.now() + CUFD_VIGENCIA_MS - 10 * 60_000),
+          },
+        };
+      }
+      return {
+        ok: true,
+        parsed: {
+          transaccion: true,
+          codigoEstado: 908,
+          codigoRecepcion: "R1",
+          codigoRecepcionEventoSignificativo: "EV1",
+        },
+      };
+    };
+    return r;
+  }
+
+  /** La primera operacion contra el SIN de la etapa tiene que ser el refresh. */
+  function primeraOpDe(vistos, etapa) {
+    const i = vistos.findIndex((v) => v.etapa === etapa);
+    assert.ok(i >= 0, `la etapa ${etapa} no hizo ninguna operacion`);
+    return vistos[i - 1]?.op ?? null;
+  }
+
+  it("la etapa IX (masiva) renueva el CUFD vencido antes de mandar el lote", async () => {
+    const r = runnerCufdVencido();
+    await r.etapaIX(1);
+    assert.equal(
+      primeraOpDe(r.vistos, "IX"),
+      "cufd_refresh",
+      "la masiva viaja con el CUFD en el CUF de cada factura del lote: sin renovar, el SIN responde 123",
+    );
+  });
+
+  /*
+   * La VI se mide espiando ensureCufd en vez del orden de los posts: el paquete
+   * solo sale si eventWindowNow devuelve una ventana util, y esa ventana depende
+   * de la vigencia real que el SIN le ponga al CUFD nuevo. Fijarla en el espia
+   * probaria mi aritmetica, no la del runner. Lo que importa es la invariante:
+   * la etapa renueva ANTES de calcular la ventana del evento.
+   */
+  it("la etapa VI (paquetes) renueva el CUFD vencido antes de registrar el evento", async () => {
+    const r = runnerCufdVencido();
+    const orden = [];
+    const realEnsure = Runner.prototype.ensureCufd.bind(r);
+    r.ensureCufd = async () => {
+      orden.push("ensureCufd");
+      return realEnsure();
+    };
+    const realWindow = Runner.prototype.eventWindowNow.bind(r);
+    r.eventWindowNow = () => {
+      orden.push("eventWindowNow");
+      return realWindow();
+    };
+    await r.etapaVI(1).catch(() => {}); // la ventana puede agotarse; el orden ya quedo
+    assert.equal(
+      orden[0],
+      "ensureCufd",
+      "el evento y su paquete comparten CUFD: con uno vencido el par entero se rechaza " +
+        'con "EL EVENTO SIGNIFICATIVO NO CORRESPONDE AL CUFD DEL EVENTO REGISTRADO"',
+    );
+    assert.ok(orden.includes("eventWindowNow"), "la etapa tiene que llegar a calcular la ventana");
+  });
+
+  it("las tres que ya lo tenian siguen renovandolo (no se rompe lo que andaba)", async () => {
+    const r = runnerCufdVencido();
+    await r.etapaIV(1);
+    assert.equal(primeraOpDe(r.vistos, "IV"), "cufd_refresh");
+  });
+});
+
+describe("un prerequisito TRANSITORIO no se bloquea para siempre", () => {
+  // POR QUE EXISTE, medido el 2026-09-08 contra el piloto del SIN: las etapas VI y
+  // IX estuvieron clavadas en 20 casos desde el 6-ago. No fue solo el ensureCufd()
+  // que faltaba (a28b3689): al reintentarlas con el runner arreglado, VI freno con
+  //   "sin ventana valida para el evento significativo (CUFD o evento previo
+  //    demasiado frescos): esperar ~2 min y reintentar"
+  // y ese mensaje —que pide explicitamente reintentar— caia en la MISMA rama que un
+  // prerequisito determinista ("sin CUIS para el punto de venta 1"), asi que quedaba
+  // en blockedCases. Como loop() saltea todo caso ya bloqueado y run-fase1-volumen.sh
+  // nunca pasa --retry-blocked, un tropiezo de DOS MINUTOS congelaba la etapa para
+  // siempre. El comentario del catch lo justificaba: "un prerequisito faltante es
+  // DETERMINISTA". Es cierto para casi todos y falso para este.
+  it("el caso NO queda en blockedCases, asi la corrida siguiente lo toma sola", async () => {
+    const r = Object.create(Runner.prototype);
+    r.state = emptyState();
+    r.combo = { ...DEFAULT_COMBO };
+    r.log = () => {};
+    r.checkpoint = () => {};
+    let intentos = 0;
+    await r.loop(
+      "VI",
+      1,
+      async () => {
+        intentos += 1;
+        throw new TransitorioError("CUFD o evento previo demasiado frescos: esperar ~2 min");
+      },
+      { caseId: "pv0" },
+    );
+    assert.equal(intentos, 1, "un transitorio tampoco se martilla dentro de la misma corrida");
+    assert.deepEqual(
+      r.state.etapas.VI.blockedCases,
+      {},
+      "un prerequisito transitorio NO puede quedar en blockedCases: loop() saltea los bloqueados",
+    );
+  });
+
+  // El eslabon que ata las dos mitades: sin esto, `loop()` sabria tratar un
+  // TransitorioError que NADIE lanza, y el arreglo no se dispararia jamas en
+  // produccion. Es el caso que reproduce lo medido contra el piloto del SIN.
+  it("eventWindow lanza TransitorioError cuando el CUFD esta demasiado fresco", () => {
+    const ahora = Date.now();
+    assert.throws(
+      () => eventWindow({ nowSinMs: ahora, cufdDesdeMs: ahora, minInicioMs: ahora }),
+      (err) => {
+        assert.ok(
+          err instanceof TransitorioError,
+          `la ventana imposible tiene que ser transitoria, vino ${err.constructor.name}`,
+        );
+        assert.match(err.message, /esperar ~2 min y reintentar/);
+        return true;
+      },
+    );
+  });
+
+  it("un prerequisito determinista SIGUE bloqueandose (no se afloja la guarda)", async () => {
+    const r = Object.create(Runner.prototype);
+    r.state = emptyState();
+    r.combo = { ...DEFAULT_COMBO };
+    r.log = () => {};
+    r.checkpoint = () => {};
+    await r.loop(
+      "VI",
+      1,
+      async () => {
+        throw new Error("sin CUIS para el punto de venta 1: correr la etapa I antes");
+      },
+      { caseId: "pv1" },
+    );
+    assert.match(r.state.etapas.VI.blockedCases.pv1.mensaje.descripcion, /sin CUIS/);
   });
 });

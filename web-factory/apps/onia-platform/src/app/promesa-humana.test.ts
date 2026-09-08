@@ -97,14 +97,60 @@ function oracionCon(a: string, b: string): RegExp {
   );
 }
 
+/**
+ * Una persona SIN nombrar de quién es, haciéndole algo al lead. Es la forma que
+ * se escapaba: `GENTE_NUESTRA` pide la palabra «equipo» al lado («alguien DEL
+ * EQUIPO»), y el copy vivo decía «alguien que te la explica» —sin equipo, sin
+ * plazo y sin primera persona—, así que no entraba por ninguna de las dos
+ * puertas. Lo que la vuelve promesa NUESTRA no es el sustantivo: es que el verbo
+ * apunta al lead (`te` + acción), porque a esa persona la ponemos nosotros.
+ *
+ * Por eso NO alcanza con `\balguien\b`: el sitio lo usa bien cuatro veces —quien
+ * aprueba una propuesta en el panel, el que pregunta un sábado por WhatsApp, el
+ * que tiene el celular el día de activar Meta y «del otro lado hay alguien que
+ * conoce el sistema» en /contacto, que es una llamada agendada con Sergio
+ * Urcullo y sí ocurre—. Ninguna lleva `te` + verbo.
+ */
+const PERSONA_SIN_DUEÑO = "\\b(?:alguien|una persona)\\b";
+const TE_LO_HACE =
+  "\\bte (?:lo |la |los |las )?" +
+  "(?:explica|configura|instala|carga|migra|capacita|arma|ense[nñ]a)\\w*\\b";
+
+/**
+ * Trabajo MANUAL nuestro sobre las cosas del lead, en primera persona del plural.
+ * No necesita segundo ingrediente: «cargamos tus datos» ya no lo puede hacer una
+ * máquina ni el negocio del cliente.
+ *
+ * Deliberadamente NO incluye «te entregamos»: la cuenta sí llega con la
+ * configuración del rubro puesta, y eso lo hace el alta sola. Un gate que se come
+ * una promesa verdadera obliga a borrar copy sano, que es como se desactiva.
+ *
+ * Tampoco «acompañamos», y esto lo decidió el gate al ponerse rojo sobre
+ * `content/requisitos.ts`: «Dominio: lo comprás vos… te acompañamos en el
+ * trámite» es de los stacks de webs, que son un servicio PAGO y que Sergio
+ * Urcullo sí hace. Acompañar es estar al lado; el defecto de esta familia es
+ * decir que hacemos NOSOTROS el trabajo del lead. Firmar sobre la primera habría
+ * obligado a borrar el bloque más honesto del sitio, el que enumera lo que el
+ * cliente paga aparte.
+ */
+const SERVICIO_MANUAL_NUESTRO =
+  "\\b(?:te (?:lo |la |los |las )?(?:capacitamos|instalamos|configuramos|migramos|cargamos|explicamos)|" +
+  "(?:capacitamos|instalamos|configuramos|migramos|cargamos)\\s+(?:a\\s+)?(?:tus?|el|la|los|las)\\s+\\w+)\\b";
+
 /** A) Una persona nuestra le hace un trabajo al lead. */
 const TRABAJO_HUMANO = oracionCon(GENTE_NUESTRA, ACCION_AL_LEAD);
 /** B) Nos comprometemos nosotros, con plazo. */
 const PLAZO_COMPROMETIDO = oracionCon(COMPROMISO_NUESTRO, PLAZO);
+/** C) Una persona sin dueño que le hace algo al lead. */
+const PERSONA_PROMETIDA = oracionCon(PERSONA_SIN_DUEÑO, TE_LO_HACE);
+/** D) Nosotros, a mano, sobre lo del lead. */
+const MANO_DE_OBRA = new RegExp(SERVICIO_MANUAL_NUESTRO, "i");
 
 const PROMESA = [
   { patron: TRABAJO_HUMANO, que: "promete que una persona nuestra le hace un trabajo" },
   { patron: PLAZO_COMPROMETIDO, que: "le pone un plazo a algo que hacemos nosotros" },
+  { patron: PERSONA_PROMETIDA, que: "promete una persona que le explica o le arma algo" },
+  { patron: MANO_DE_OBRA, que: "promete mano de obra nuestra sobre los datos del lead" },
 ];
 
 describe("ninguna página promete trabajo humano que nadie va a hacer", () => {
@@ -129,6 +175,9 @@ describe("ninguna página promete trabajo humano que nadie va a hacer", () => {
       "Tu web: tunegocio.com.bo. Una persona del equipo la revisa y te manda el análisis gratis por WhatsApp en el día.",
       "Nuestro equipo te prepara la migración.",
       "Te lo mandamos en menos de 24 horas.",
+      // Las dos que este gate NO veía, tal como estaban servidas el 2026-09-07.
+      "Sin instalación ni proyecto de meses: te entregamos el sistema con la configuración de tu rubro puesta y alguien que te la explica.",
+      "Te lo dejamos andando nosotros: cargamos tus datos y capacitamos a tu equipo.",
     ]) {
       expect(
         PROMESA.some((p) => p.patron.test(vivo)),
@@ -158,6 +207,22 @@ describe("ninguna página promete trabajo humano que nadie va a hacer", () => {
       [
         "Alguien con el celular en la mano el día que lo activamos: Meta manda un código y hay que pasárnoslo en el momento.",
         "el plazo es para el CLIENTE, no una promesa nuestra",
+      ],
+      [
+        "Elegí el horario por WhatsApp y del otro lado hay alguien que conoce el sistema.",
+        "es una llamada AGENDADA con Sergio Urcullo, que sí ocurre: no es trabajo prometido de arrastre",
+      ],
+      [
+        "Cada propuesta espera en Pendientes hasta que alguien la aprueba.",
+        "quien aprueba es del negocio del cliente, y no le hacemos nada nosotros",
+      ],
+      [
+        "Te entregamos el sistema con la configuración de tu rubro puesta.",
+        "eso lo hace el alta sola: es verdad, y un gate que la come obliga a borrar copy sano",
+      ],
+      [
+        "Dominio: lo comprás vos con tu tarjeta, a tu nombre. Te acompañamos en el trámite pero nunca tocamos tu medio de pago.",
+        "es un servicio PAGO (los stacks de webs) que Sergio Urcullo sí hace, y acompañar no es hacerle el trabajo",
       ],
     ] as const) {
       expect(

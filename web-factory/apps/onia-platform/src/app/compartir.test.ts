@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { PAGINAS, PAGINAS_PUBLICAS, RUTAS_PROHIBIDAS, dentroDe, metadataDe } from "./rutas";
+import { PAGINAS, estaProhibida, dentroDe, metadataDe } from "./rutas";
 
 /**
  * Una ruta que el sitio PUBLICA se comparte con su URL.
@@ -17,9 +17,8 @@ import { PAGINAS, PAGINAS_PUBLICAS, RUTAS_PROHIBIDAS, dentroDe, metadataDe } fro
  * ella misma cuando llega con parámetros de campaña pegados. Sin ella la
  * tarjeta queda a merced de la URL exacta que el visitante haya copiado.
  *
- * ⚠️ **El corte es el disco menos el `disallow` de `robots.ts`** — o sea, lo
- * que el propio sitio declara que NO publica—, y las dos alternativas obvias
- * están mal:
+ * ⚠️ **El sujeto es el disco ENTERO menos `EXENTOS`**, y las tres alternativas
+ * obvias están mal:
  *  - Por carpeta: las rutas del sitio viven en dos lados (`(sitio)/` y `app/` a
  *    secas — `/terminos`, `/privacidad` y `/servicios/consultoria` son de las
  *    segundas). Mirar sólo `(sitio)` es el mismo punto ciego que ya se pagó dos
@@ -28,43 +27,108 @@ import { PAGINAS, PAGINAS_PUBLICAS, RUTAS_PROHIBIDAS, dentroDe, metadataDe } fro
  *    una de las dos páginas que estaban rotas. Compartir e indexar son cosas
  *    distintas: una página que no querés en Google se manda igual por WhatsApp.
  *    Con ese criterio el gate pasaba en verde sobre el defecto.
+ *  - Por el sitemap, aunque esta misma nota lo dijera hasta el 2026-09-03: ese
+ *    corte se rompió el día que `/terminos` salió del sitemap por declararse
+ *    `noindex` (ver `indexar.test.ts`). Un criterio de cobertura que se encoge
+ *    solo cuando cambia una política de indexación falla ABIERTO.
  *
- * ⚠️ **Y tampoco es el sitemap, aunque esta misma nota lo dijera hasta el
- * 2026-09-03.** Ese corte se rompió el día que `/terminos` salió del sitemap
- * por declararse `noindex` (ver `indexar.test.ts`): la página seguía publicada
- * y compartible, pero habría dejado de tener gate **sin que nada se pusiera en
- * rojo**. Un criterio de cobertura que se encoge solo cuando cambia una
- * política de indexación es un criterio que falla ABIERTO. Con el disco es al
- * revés: una página nueva nace cubierta y hay que excluirla a mano —en
- * `robots.ts`, a la vista— para que deje de estarlo.
+ * ⚠️ **Y hasta el 2026-09-08 el corte era el disco menos el `disallow` de
+ * `robots.ts`, que es la MISMA falla un escalón más abajo — se encogió solo, y
+ * justo sobre las páginas cuya única superficie que queda es compartirlas.**
+ * La justificación escrita acá era que el disallow es *«lo que el propio sitio
+ * declara que NO publica»*. Eso valía mientras el disallow tuviera sólo
+ * `/patrones` y `/v1`; dejó de valer ese día, cuando entraron
+ * `/servicios/marketing-ia` y `/servicios/consultoria` al sacarlas del menú
+ * (tarea `t_30b1711d`). El propio `robots.ts` dice de ellas, con todas las
+ * letras, que **no se bajan**: siguen respondiendo 200 «así que una URL que ya
+ * circula sigue abriendo y se puede mandar en una venta». O sea que la página
+ * que se manda por WhatsApp salió, en silencio y el mismo día, del único gate
+ * que revisa la tarjeta de WhatsApp. El disallow manda sobre RASTREADORES, no
+ * apaga la pantalla, y esta nota ya lo decía dos párrafos más arriba sobre el
+ * `noindex` — le faltaba aplicárselo a su propio corte.
+ *
+ * Medido ese día: el gate cubría **14 de 25** páginas del árbol. `obra.test.ts`,
+ * `obra-en-el-cuerpo.test.ts`, `obra-literal.test.ts` y
+ * `factura-en-la-oferta.test.ts` ya habían dejado de restar el disallow por
+ * esta misma razón —`factura-en-la-oferta.test.ts` la explica nombrando estas
+ * dos rutas—; éste se quedó atrás. Es el barrido a medias de siempre: se
+ * arregla la instancia donde el defecto saltó y el gate hermano queda con el
+ * agujero abierto.
+ *
+ * Con el disco es al revés: una página nueva nace cubierta y hay que sacarla a
+ * mano, acá y con su motivo, para que deje de estarlo.
  *
  * Corre en `prebuild` (`tsc --noEmit && vitest run`), el comando real del
  * deploy, no un script paralelo que no llama nadie.
  */
 
+/**
+ * Lo único que NO se comparte, con su motivo escrito.
+ *
+ * Es una lista de EXCLUSIÓN —un `page.tsx` nuevo nace cubierto y hay que
+ * sacarlo acá, a la vista— y a propósito no se deriva de `robots.ts`: no
+ * indexar y no compartir son decisiones distintas, y confundirlas es como este
+ * gate perdió once páginas.
+ */
+const EXENTOS: ReadonlyArray<{ ruta: string; motivo: string }> = [
+  {
+    ruta: "/patrones",
+    motivo:
+      "Galería interna de patrones de UI: no declara metadata ninguna, no la " +
+      "enlaza una sola pantalla y no es una dirección que se le mande a un " +
+      "lead. ⚠️ Si algún día se le cuelga una superficie que venda, se va.",
+  },
+];
+
+/** Las páginas que alguien puede mandar por WhatsApp: el disco menos `EXENTOS`. */
+const COMPARTIBLES = PAGINAS.filter((p) => !EXENTOS.some((e) => e.ruta === (p.ruta || "/")));
+
 describe("toda ruta publicada se comparte con su propia URL", () => {
-  it("encuentra las páginas y lo que el sitio no publica", () => {
+  it("encuentra las páginas, y ninguna exención sobra", () => {
     // Sin este ancla, romper el descubrimiento (carpeta movida, `page.tsx`
     // renombrado) dejaría los `it.each` de abajo corriendo sobre una lista
     // VACÍA: cero casos, verde, y el defecto suelto.
     expect(PAGINAS.length, "el barrido de page.tsx encontró casi nada").toBeGreaterThan(9);
+    expect(COMPARTIBLES.length, "las exenciones se comieron el sitio").toBeGreaterThan(9);
+
+    // Una exención que ya no apunta a una página del árbol es una creencia
+    // vieja que absuelve a nadie: se borra, o tapa a su sucesora.
+    const fantasmas = EXENTOS.filter((e) => !PAGINAS.some((p) => (p.ruta || "/") === e.ruta));
     expect(
-      PAGINAS_PUBLICAS.length,
-      "no quedó ninguna página pública: el disallow de robots.ts se comió el sitio",
-    ).toBeGreaterThan(9);
-    // Si `robots.ts` deja de excluir algo, `/patrones` y `/v1` entran al gate y
-    // lo ensucian. Que el barrido encoja tiene que doler acá, no allá.
+      fantasmas.map((e) => e.ruta),
+      "hay exenciones que no corresponden a ninguna página del disco",
+    ).toEqual([]);
     expect(
-      RUTAS_PROHIBIDAS.length,
-      "no se pudo leer el disallow de robots.ts",
-    ).toBeGreaterThan(0);
-    expect(
-      PAGINAS.length - PAGINAS_PUBLICAS.length,
-      "robots.ts prohíbe rutas que no existen en el disco, o dejó de prohibir las que sí",
-    ).toBeGreaterThan(0);
+      EXENTOS.every((e) => e.motivo.trim().length > 40),
+      "una exención sin motivo escrito es una lista de inclusión disfrazada",
+    ).toBe(true);
   });
 
-  it.each(PAGINAS_PUBLICAS.map((p) => [p.ruta || "/", p]))(
+  it("el sujeto incluye las páginas que robots.ts deshabilita", () => {
+    // El ancla del CORTE, no del patrón — el mismo que `obra.test.ts` tiene
+    // desde el 2026-09-04 y que a este gate le faltó hasta el 2026-09-08.
+    // Volver a restar el `disallow` dejaría este caso en rojo en vez de vaciar
+    // la cobertura en silencio, que es exactamente como se perdieron
+    // `/servicios/marketing-ia` y `/servicios/consultoria` el día que salieron
+    // del menú. Se afirma sobre páginas deshabilitadas REALES del árbol: si un
+    // día no queda ninguna, este caso avisa que se quedó sin sujeto en lugar
+    // de seguir midiendo nada.
+    const deshabilitadas = PAGINAS.filter((p) => estaProhibida(p.ruta));
+    expect(
+      deshabilitadas.length,
+      "no quedan páginas deshabilitadas en el árbol: este ancla ya no ancla nada",
+    ).toBeGreaterThan(0);
+    expect(
+      deshabilitadas
+        .filter((p) => !COMPARTIBLES.includes(p))
+        .map((p) => p.ruta)
+        .filter((r) => !EXENTOS.some((e) => e.ruta === (r || "/"))),
+      "el gate volvió a restar el disallow de robots.ts, y una página que " +
+        "responde 200 se quedó sin vigilancia sobre su tarjeta de WhatsApp",
+    ).toEqual([]);
+  });
+
+  it.each(COMPARTIBLES.map((p) => [p.ruta || "/", p]))(
     "%s trae og:url, y apunta a sí misma",
     (rotulo, pagina) => {
       const meta = metadataDe(pagina);

@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Archivos del stack — Onia Community</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Los archivos listos de la guía del stack. Sólo para Onia Community.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%2300C661'/><text x='16' y='23' font-family='Arial,sans-serif' font-size='18' font-weight='bold' text-anchor='middle' fill='%230A2A18'>S</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/estilo.css">
+</head>
+<body>
+
+<div class="barra">
+  <a class="marca" href="/">sergiourcullo<span class="punto">.</span></a>
+  <a class="vuelta" href="/stack">← volver a la guía</a>
+</div>
+
+<div class="wrap">
+
+<header class="top">
+  <p class="privado">Sólo Onia Community</p>
+  <h1>Los archivos del <span class="num">stack</span></h1>
+  <p class="bajada">La guía pública enseña cómo hacerlo. Acá está hecho: copiás, pegás y
+  funciona. Tres archivos, en el orden de la guía.</p>
+
+  <div class="honesto">
+    <h2>Cómo usar esto</h2>
+    <p>Ninguno de los tres reemplaza leer la guía — te ahorran escribirla. <strong>Si algo
+    no arranca, avisá en el grupo General</strong> y lo vemos: sirve más que quedarse
+    trabado en silencio, porque si te pasó a vos le va a pasar a otro.</p>
+    <p>Este link no está enlazado desde ninguna página. <strong>Es de la comunidad</strong>
+    — si lo reenviás, dejás de tener algo que los demás no tienen.</p>
+  </div>
+</header>
+
+<article class="archivo">
+  <h2>1 · n8n con Docker Compose</h2>
+  <p class="ruta">docker-compose.yml</p>
+  <p class="desc">El paso 3 de la guía, pero como archivo. Ventaja sobre el
+  <code>docker run</code> de la guía: se levanta y se actualiza sin recordar ningún
+  comando largo, y los datos quedan guardados aunque borres el contenedor.</p>
+<pre><span class="c"># guardalo como docker-compose.yml y corré:  docker compose up -d</span>
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - <span class="k">"5678:5678"</span>
+    environment:
+      <span class="c"># cambiá esto por la IP de TU servidor</span>
+      - N8N_HOST=192.168.0.100
+      - N8N_PORT=5678
+      - <span class="k">GENERIC_TIMEZONE=America/La_Paz</span>
+      - TZ=America/La_Paz
+      <span class="c"># pide usuario y contraseña al entrar</span>
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      <span class="c"># ⚠️ CAMBIÁ ESTO. Y no lo subas a ningún lado.</span>
+      - N8N_BASIC_AUTH_PASSWORD=poné-una-tuya-larga
+    volumes:
+      - n8n_data:/home/node/.n8n
+
+volumes:
+  n8n_data:</pre>
+  <div class="nota"><strong>Las dos líneas que hay que tocar sí o sí:</strong> la IP de tu
+  servidor y la contraseña. La zona horaria ya está en La Paz — si no la ponés, los
+  horarios de tus automatizaciones salen corridos cuatro horas y es de los errores más
+  molestos de encontrar.</div>
+</article>
+
+<article class="archivo">
+  <h2>2 · Las seis respuestas de WhatsApp</h2>
+  <p class="ruta">respuestas-rapidas.txt</p>
+  <p class="desc">El paso 1 de la guía. Éstas son las seis que casi todo negocio necesita,
+  con el atajo ya elegido. Cambiá lo que está entre corchetes por lo tuyo y cargalas en
+  <strong>Herramientas para la empresa → Respuestas rápidas</strong>.</p>
+<pre><span class="k">/precio</span>
+Hola! El [producto/servicio] está [precio].
+Incluye [qué incluye]. ¿Te paso los detalles?
+
+<span class="k">/horario</span>
+Atendemos de [días] de [hora] a [hora].
+Si me escribís fuera de ese horario te contesto apenas abro.
+
+<span class="k">/donde</span>
+Estamos en [dirección]. Te dejo la ubicación 👇
+[link de Google Maps]
+
+<span class="k">/pago</span>
+Podés pagar por [transferencia / QR / efectivo].
+Cuando confirmes te paso los datos.
+
+<span class="k">/demora</span>
+El tiempo de entrega es de [X días] desde que confirmás.
+Si necesitás antes, decime y vemos.
+
+<span class="c"># la más importante: la que cierra</span>
+<span class="k">/cierro</span>
+¿Querés que te lo reserve? Con eso ya lo dejo apartado a tu nombre.</pre>
+  <div class="nota"><strong>La sexta es la que más cambia el resultado.</strong> Las cinco
+  primeras informan; ésa pide la decisión. Casi nadie la tiene escrita y por eso casi
+  nadie la manda — la conversación se enfría sola.</div>
+</article>
+
+<article class="archivo">
+  <h2>3 · El alma del agente</h2>
+  <p class="ruta">SOUL.md — plantilla</p>
+  <p class="desc">El paso 6 de la guía. Hermes es de NousResearch y es abierto; esto no es
+  su código, es el archivo donde le escribís <strong>quién es y qué le importa</strong>.
+  Ésta es la estructura del mío, vaciada.</p>
+<pre><span class="c"># SOUL.md — quién sos</span>
+
+<span class="k">## Identidad</span>
+Sos el asistente de [tu nombre], que tiene [tipo de negocio] en [ciudad].
+Hablás en español rioplatense, directo y sin vueltas.
+Cuando algo no lo sabés, lo decís. No inventás.
+
+<span class="k">## Qué vigilás</span>
+- Que [servicio 1] siga respondiendo
+- Que [servicio 2] no se haya caído
+- Que los respaldos de anoche hayan corrido
+
+<span class="k">## A quién avisás, y cuándo</span>
+- Si algo se cayó         -> avisá YA a [tu canal: Telegram/WhatsApp]
+- Si algo está raro       -> anotalo y contámelo en el resumen del día
+- Si es a la madrugada    -> sólo si está caído de verdad. Dormir importa.
+
+<span class="k">## Cómo avisás</span>
+Una línea: QUÉ se rompió, DESDE CUÁNDO, y qué habría que mirar primero.
+Nada de disculpas ni de explicaciones largas. A esa hora nadie las lee.
+
+<span class="k">## Lo que NO hacés</span>
+- No arreglás nada solo. Avisás.
+- No tocás datos de clientes.
+- No mandás nada a nadie que no sea yo.</pre>
+  <div class="nota"><strong>La sección que parece de relleno es la más importante.</strong>
+  «Lo que NO hacés» es lo único que separa un asistente de un problema. Escribila primero,
+  antes que las otras cuatro.</div>
+</article>
+
+<section class="cierre">
+  <h2>Qué falta acá y va a ir apareciendo</h2>
+  <ul>
+    <li>El workflow de n8n exportado —el que manda el recordatorio— en <code>.json</code>
+    para importar directo.</li>
+    <li>El <code>docker-compose</code> con los seis servicios juntos, para el que ya tenga
+    el servidor andando.</li>
+    <li>Los prompts completos del D2, con los huecos marcados.</li>
+  </ul>
+  <p>Si hay uno que te sirve más que los otros, decilo en General y ése va primero.</p>
+</section>
+
+<p class="firma">
+  <a href="/stack">← Volver a la guía</a>
+  <span>Onia Community</span>
+</p>
+
+</div>
+</body>
+</html>

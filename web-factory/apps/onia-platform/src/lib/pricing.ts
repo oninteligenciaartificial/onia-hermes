@@ -3,8 +3,27 @@
  *
  * REGLA DURA (2026-08-08): cada numero de este archivo sale del CODIGO QUE
  * COBRA, no de un doc ni de una propuesta. Si el codigo no lo enforcea, no se
- * publica. Verificado contra `C:\dev\proyectos\onia-platform`, rama `master`,
- * tip `6b8f152` (solo lectura):
+ * publica.
+ *
+ * COMO SE VERIFICA HOY — con un comando, no a mano:
+ *
+ *     node scripts/precios-fuente.mjs      # 31 cifras, montos + topes + tiers
+ *
+ * Aca decia "Verificado contra `C:\dev\proyectos\onia-platform`, rama `master`,
+ * tip `6b8f152` (solo lectura)". Las dos mitades de esa frase caducaron y ni
+ * una avisaba: la ruta es de una laptop Windows —los loops corren en Linux, el
+ * producto esta en `/root/loops/onia-platform`— y el tip esta congelado, asi
+ * que la verificacion que este archivo declaraba NO se puede re-correr en
+ * ninguna maquina de hoy. Una procedencia que no se puede repetir se lee igual
+ * que una verificada, que es el modo en que un comentario "manda al reves":
+ * el 2026-09-06 mande media vuelta a cruzar estos topes A MANO contra el otro
+ * repo —leyendo `PLAN_LIMITS` linea por linea— antes de descubrir que
+ * `scripts/precios-fuente.mjs` ya lo hacia entero, cada vuelta, y salia VERDE.
+ *
+ * El mapa de abajo sigue vigente y es lo unico que hay que mantener a mano:
+ * dice QUE archivo del producto manda sobre CADA cosa. El cruce de los VALORES
+ * lo hace el script, y si una fuente no se puede leer sale con codigo 2
+ * (ROJO DE INSTRUMENTO), nunca en verde.
  *
  *  - montos y ciclos ......... lib/subscription-plans.ts → DEFAULT_PLAN_AMOUNTS
  *    (basic 320/89/3.200 · professional 750/199/7.500 · clinic 1.500/-/15.000 ·
@@ -314,7 +333,10 @@ export interface AddOn {
  * que el cliente ya tiene encendido: se cae en la primera pregunta del que ya lo
  * usa. El inventario ahora se cuenta donde corresponde, en el `incluye` del
  * Basico (y por herencia en Pro y Full). Guarda:
- * scripts/venta-honestidad.test.mjs. Detalle: ONIA_CATALOGO_DE_VENTA.md §5.
+ * onia-hermes/scripts/venta-honestidad.test.mjs (repo RAIZ, en su cadena
+ * `npm test` como `test:venta-honestidad` — esta app no tiene ese archivo, y
+ * escrito sin la raiz se lee como que lo vigila un gate de acá que no existe).
+ * Detalle: ONIA_CATALOGO_DE_VENTA.md §5.
  */
 export const ADDONS: readonly AddOn[] = [
   {
@@ -379,7 +401,12 @@ export const CONDICIONES: readonly string[] = [
     .join(" y en ")}. ${PLANES.filter((p) => p.semanal === null)
     .map((p) => p.nombre)
     .join(" y ")} se cobra mensual o anual.`,
-  "14 días de prueba sin tarjeta, con el Pro completo. Al vencer, la cuenta queda en solo lectura — nada se borra.",
+  // Mismo caso que la línea de arriba: tipeaba "14 días" y "Pro" a mano
+  // teniendo PRUEBA_DIAS y PRUEBA_PLAN dos pantallas más arriba, en este mismo
+  // archivo. El cruce contra el producto (scripts/precios-fuente.mjs) valida
+  // las CONSTANTES, no las copias, así que el día que el trial cambie esta
+  // frase sigue en verde diciendo el número viejo.
+  `${PRUEBA_DIAS} días de prueba sin tarjeta, con el ${PRUEBA_PLAN} completo. Al vencer, la cuenta queda en solo lectura — nada se borra.`,
   "En los tres planes de arriba no cobramos implementación ni migración: el checkout cobra solo el plan. Grupo / Empresarial sí lleva implementación acompañada y se cotiza aparte.",
   "Tus datos son tuyos: los exportás en CSV desde el plan más chico.",
 ] as const;

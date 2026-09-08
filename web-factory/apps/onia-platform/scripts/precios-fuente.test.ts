@@ -5,16 +5,24 @@ import { describe, expect, it } from "vitest";
 import {
   CHATBOT_SITIO,
   CIFRAS,
+  CONSTANTES_CRUZADAS,
   PRECIOS_SITIO,
+  CICLOS_EQUIVALENCIA,
+  ciclosCruzados,
   cifrasDelProducto,
   cifrasDelSitio,
   comparar,
   esPromesa,
+  excusaDeGrupoSigueValiendo,
+  excusasSinSujeto,
   limitesDelProducto,
   limitesDelSitio,
+  numerosPublicados,
+  planQueElSitioPrometeParaExportar,
   planesDelProducto,
   planesDelSitio,
   primerPlanCon,
+  publicadosSinCruzar,
 } from "./precios-fuente.mjs";
 
 /**
@@ -179,6 +187,74 @@ export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
   });
 });
 
+describe("el tier que se promete en PROSA suelta, no en la tabla de planes", () => {
+  /**
+   * Los otros tres tiers (agentes, reservas, reportes) viven como una fila
+   * dentro del `incluye` de cada plan. La exportación de datos no: vive en
+   * `CONDICIONES`, la lista de frases que las dos pantallas de precio
+   * renderizan al pie. Por eso era el único tier publicado que nadie cruzaba.
+   */
+  const condiciones = (frase: string) => `
+export const CONDICIONES: readonly string[] = [
+  "Los precios están en bolivianos y no llevan IVA por encima.",
+  "${frase}",
+] as const;
+`;
+
+  it("«desde el plan más chico» es el más barato que el sitio VENDE", () => {
+    expect(
+      planQueElSitioPrometeParaExportar(
+        condiciones("Tus datos son tuyos: los exportás en CSV desde el plan más chico."),
+      ),
+    ).toBe("basic");
+  });
+
+  it("una promesa SIN condición de plan se le hace a todos: también el más barato", () => {
+    // Es la lectura estricta y la que puede desmentirla: si no dice "desde el
+    // Pro", el que paga el plan más chico la va a cobrar igual.
+    expect(
+      planQueElSitioPrometeParaExportar(condiciones("Tus datos son tuyos: los exportás en CSV.")),
+    ).toBe("basic");
+  });
+
+  it("si la frase nombra un plan, ése — y ahí el cruce lo compara contra el producto", () => {
+    expect(
+      planQueElSitioPrometeParaExportar(
+        condiciones("Tus datos son tuyos: los exportás en CSV desde el plan Pro."),
+      ),
+    ).toBe("professional");
+  });
+
+  it("sin promesa de exportación devuelve null: rojo de instrumento, NUNCA verde", () => {
+    // El modo de fallo de esta familia. Si la frase se saca o se reescribe y el
+    // patrón deja de matchear, callarse haría que el cruce apruebe cualquier
+    // tier del producto sin haber leído el lado del sitio.
+    expect(
+      planQueElSitioPrometeParaExportar(condiciones("Los planes se cobran por adelantado.")),
+    ).toBeNull();
+    expect(planQueElSitioPrometeParaExportar("")).toBeNull();
+  });
+
+  it("el producto contesta la misma pregunta desde csvExportEnabled", () => {
+    const fixture = `
+export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
+  free: { csvExportEnabled: false },
+  basic: { csvExportEnabled: true },
+  professional: { csvExportEnabled: true },
+  clinic: { csvExportEnabled: true },
+};
+`;
+    expect(primerPlanCon(limitesDelProducto(fixture), "exportaCsv")).toBe("basic");
+    // Y el día que el producto lo suba de plan, el cruce tiene que verlo.
+    expect(
+      primerPlanCon(
+        limitesDelProducto(fixture.replace("basic: { csvExportEnabled: true", "basic: { csvExportEnabled: false")),
+        "exportaCsv",
+      ),
+    ).toBe("professional");
+  });
+});
+
 describe("el veredicto", () => {
   const iguales = { "plan Básico · mensual": 320, "add-on chatbot · mensual": 390 };
 
@@ -221,5 +297,159 @@ describe("el veredicto", () => {
     const { difieren, ilegibles } = comparar(vacio, vacio);
     expect(difieren).toEqual([]);
     expect(ilegibles).toEqual(CIFRAS);
+  });
+});
+
+/**
+ * La COBERTURA del cruce, que es distinta de su resultado.
+ *
+ * `CIFRAS` se deriva del lado PRODUCTO, así que el cruce es ciego a un número
+ * que el SITIO publique sin clave del otro lado: no entra en la comparación y
+ * el script imprime "VERDE: las N cifras" por encima. Medido el 2026-09-07
+ * inyectando "Hasta 7 sucursales conectadas" en el `incluye` del Básico —
+ * `ilegibles 0 · difieren 0`, verde.
+ *
+ * Estos casos exigen que un tope nuevo nazca NOMBRADO. Se validaron por
+ * mutación en las dos direcciones: con `publicadosSinCruzar` devolviendo `[]`
+ * los dos primeros caen, y con el filtro de ya-cruzados apagado cae el tercero
+ * (los 8 números vivos saldrían como huecos).
+ */
+describe("ningún tope que el sitio publica queda fuera del cruce", () => {
+  const real = readFileSync(PRECIOS_SITIO, "utf8");
+
+  it("hoy no hay ni una cifra publicada sin cruzar", () => {
+    expect(
+      publicadosSinCruzar(real),
+      "El `incluye` de un plan publica una cifra que este cruce no mira: no está " +
+        "verificada contra el producto. Cruzala, o excusala con su motivo en TOPES_SIN_CRUCE.",
+    ).toEqual([]);
+  });
+
+  it("un tope NUEVO tipeado a mano sale nombrado, no en silencio", () => {
+    const conTopeNuevo = real.replace(
+      '"Hasta 300 fichas de clientes o pacientes cargadas",',
+      '"Hasta 300 fichas de clientes o pacientes cargadas",\n      "Hasta 7 sucursales conectadas",',
+    );
+    expect(conTopeNuevo, "la inyección no se aplicó").not.toEqual(real);
+    expect(publicadosSinCruzar(conTopeNuevo)).toContainEqual({
+      plan: "basico",
+      clase: "número",
+      valor: 7,
+      linea: "Hasta 7 sucursales conectadas",
+    });
+  });
+
+  it("una constante NUEVA interpolada tampoco pasa por cruzada", () => {
+    // La interpolación es la forma cómoda y por eso la peligrosa: se lee como
+    // "sale de una constante, alguien la cuida" y no la cruza nadie.
+    const conConstante = real.replace(
+      '"Hasta 300 fichas de clientes o pacientes cargadas",',
+      '"Hasta 300 fichas de clientes o pacientes cargadas",\n      `Hasta ${SUCURSALES_MAX} sucursales`,',
+    );
+    expect(conConstante, "la inyección no se aplicó").not.toEqual(real);
+    expect(
+      publicadosSinCruzar(conConstante).map((n) => n.valor),
+    ).toContain("SUCURSALES_MAX");
+  });
+
+  it("el cruce sigue leyendo cifras del `incluye`: si deja de ver, esto cae", () => {
+    // Sin este caso, `publicadosSinCruzar` podría devolver `[]` por no encontrar
+    // NADA y los dos primeros seguirían verdes — el fallo mudo de esta familia.
+    expect(numerosPublicados(real).length).toBeGreaterThanOrEqual(6);
+  });
+
+  it("ninguna excusa de TOPES_SIN_CRUCE sobra", () => {
+    // Una entrada sin sujeto no la mide nadie y PRE-APRUEBA al próximo número
+    // que caiga en ese valor. Ya pasó en este carril con HOSTS_PERMITIDOS.
+    expect(
+      excusasSinSujeto(real),
+      "Sobra una excusa en TOPES_SIN_CRUCE: ningún número publicado la usa.",
+    ).toEqual([]);
+  });
+
+  it("CONSTANTES_CRUZADAS no bendice una constante que el cruce ya no lee", () => {
+    // Mismo riesgo que arriba, un nivel más arriba: si `cifrasDelSitio` deja de
+    // leer una de estas, la lista la seguiría dando por cruzada.
+    const cuerpo = cifrasDelSitio.toString();
+    for (const nombre of CONSTANTES_CRUZADAS) {
+      expect(cuerpo, `CONSTANTES_CRUZADAS declara ${nombre} y cifrasDelSitio no lo lee`).toContain(
+        nombre,
+      );
+    }
+  });
+});
+
+/**
+ * El segundo eje del cruce: QUE CICLOS se pueden pagar.
+ *
+ * `comparar` mira CIFRAS, un mapa de claves escritas a mano. Ese mapa OMITE
+ * `plan Full · semanal` y `Grupo / Empresarial · semanal`, y la omisión no es un
+ * olvido: codifica la creencia "esos dos no se fraccionan". Mientras la creencia
+ * sea cierta nadie lo nota; el día que deje de serlo no hay clave que comparar,
+ * nada entra en `ilegibles` ni en `difieren`, y el script imprime VERDE con el
+ * sitio publicando lo contrario.
+ *
+ * La disponibilidad es un BOOLEANO, no una cifra — por eso ningún cruce de
+ * números puede expresarla — y es lo que decide si el checkout acepta la venta
+ * (`isCycleAvailable`, y el "Solo mensual o anual" de CheckoutClient.tsx).
+ */
+describe("los ciclos que el sitio ofrece son los que el producto cobra", () => {
+  const real = readFileSync(PRECIOS_SITIO, "utf8");
+  const sitio = planesDelSitio(real) as Planes;
+
+  /** Copia la forma literal de `DEFAULT_PLAN_AMOUNTS`, que vive en el otro repo. */
+  const producto = (semanalDelFull: number | null): Planes => ({
+    basic: { mensual: 320, semanal: 89, anual: 3200 },
+    professional: { mensual: 750, semanal: 199, anual: 7500 },
+    clinic: { mensual: 1500, semanal: semanalDelFull, anual: 15000 },
+  });
+
+  it("hoy los tres planes comprables coinciden en los dos lados", () => {
+    expect(ciclosCruzados(producto(null), sitio)).toEqual({
+      ilegibles: [],
+      difieren: [],
+    });
+  });
+
+  it("si el producto le da semanal al Full, el sitio deja de ser cierto", () => {
+    // La dirección que hoy NO ve nadie: sin clave en CIFRAS, `comparar` sigue
+    // verde y el sitio le esconde al lead la forma más barata de entrar al Full.
+    const { difieren } = ciclosCruzados(producto(349), sitio);
+    expect(difieren).toEqual([{ plan: "Full", producto: true, sitio: false }]);
+  });
+
+  it("y al revés: si el producto deja de fraccionar el Pro, el sitio lo sigue ofreciendo", () => {
+    const p = producto(null);
+    p.professional.semanal = null;
+    const { difieren } = ciclosCruzados(p, sitio);
+    expect(difieren).toEqual([{ plan: "Pro", producto: false, sitio: true }]);
+  });
+
+  it("un plan que no se pudo LEER no se cuenta como «no tiene semanal»", () => {
+    // `semanal: null` sólo significa "no se fracciona" si de verdad leímos el
+    // plan. Con el patrón roto los dos lados dan null y el cruce coincidiría
+    // consigo mismo: el modo de fallo exacto que este archivo viene a evitar.
+    const p = producto(null) as Planes;
+    delete p.clinic;
+    const { ilegibles, difieren } = ciclosCruzados(p, sitio);
+    expect(ilegibles).toEqual([{ plan: "Full", lados: ["producto"] }]);
+    expect(difieren).toEqual([]);
+  });
+
+  it("cada plan comprable del sitio entra en el cruce", () => {
+    // Si mañana nace una cuarta tarjeta comprable, tiene que llegar acá: una
+    // equivalencia escrita a mano es lista de inclusión y falla ABIERTA.
+    expect(CICLOS_EQUIVALENCIA.map((p) => p.sitio).sort()).toEqual(
+      Object.keys(sitio).sort(),
+    );
+  });
+
+  it("la exención de Grupo se re-mide: vale mientras no afirme un ciclo", () => {
+    expect(excusaDeGrupoSigueValiendo(real).vale).toBe(true);
+    const conSemanal = real.replace(
+      "export const GRUPO = {",
+      'export const GRUPO = {\n  semanal: 799,',
+    );
+    expect(excusaDeGrupoSigueValiendo(conSemanal).vale).toBe(false);
   });
 });

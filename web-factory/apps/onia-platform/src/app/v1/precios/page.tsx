@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PLANES, bs, plan, semanalDesde } from "@/lib/pricing";
+import { PLANES, bs, plan, semanalDesde, PRUEBA } from "@/lib/pricing";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Pricing } from "@/components/landing-v1/pricing";
@@ -22,14 +22,14 @@ export const metadata: Metadata = {
   metadataBase: new URL(`${SITE_URL}/`),
   title: "Precios de Onia Platform — planes en bolivianos, publicados",
   description:
-    `${plan("basico").nombre} Bs ${bs(plan("basico").mensual)}, ${plan("pro").nombre} Bs ${bs(plan("pro").mensual)} y ${plan("full").nombre} Bs ${bs(plan("full").mensual)} al mes${DESDE_SEMANAL}. Sin tarjeta para probar, sin contratos de permanencia y con la letra chica publicada. 14 días gratis.`,
+    `${plan("basico").nombre} Bs ${bs(plan("basico").mensual)}, ${plan("pro").nombre} Bs ${bs(plan("pro").mensual)} y ${plan("full").nombre} Bs ${bs(plan("full").mensual)} al mes${DESDE_SEMANAL}. Sin tarjeta para probar, sin contratos de permanencia y con la letra chica publicada. ${PRUEBA.dias} días gratis.`,
   alternates: { canonical: "/precios" },
   openGraph: {
     type: "website",
     locale: "es_BO",
     title: "Precios de Onia Platform — en bolivianos, publicados",
     description:
-      `${plan("basico").nombre} ${bs(plan("basico").mensual)} · ${plan("pro").nombre} ${bs(plan("pro").mensual)} · ${plan("full").nombre} ${bs(plan("full").mensual)} Bs/mes. 14 días gratis sin tarjeta, sin permanencia.`,
+      `${plan("basico").nombre} ${bs(plan("basico").mensual)} · ${plan("pro").nombre} ${bs(plan("pro").mensual)} · ${plan("full").nombre} ${bs(plan("full").mensual)} Bs/mes. ${PRUEBA.dias} días gratis sin tarjeta, sin permanencia.`,
     url: "/precios",
   },
 };
@@ -124,7 +124,7 @@ export default function PreciosPage() {
                 </a>{" "}
                 — con el precio público de cada uno y su fecha de consulta.
                 ¿Preferís tocarlo antes que leer?{" "}
-                <a href="/prueba-gratis">Probalo gratis 14 días</a>.
+                <a href="/prueba-gratis">Probalo gratis {PRUEBA.dias} días</a>.
               </p>
             </Reveal>
           </div>

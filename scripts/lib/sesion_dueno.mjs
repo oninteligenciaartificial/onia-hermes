@@ -15,6 +15,9 @@
  */
 import { execFileSync } from "node:child_process";
 import { createRequire } from "node:module";
+// El navegador se elige por el que ARRANCA, no por el primer node_modules que exista: ver
+// playwright-que-arranca.mjs (nodo-casa quedó ciego un día entero por eso).
+import { cargarPlaywright } from "./playwright-que-arranca.mjs";
 
 /**
  * Ni playwright ni @supabase/ssr viven en el repo onia-hermes: se resuelven por lista de
@@ -147,7 +150,7 @@ export async function navegadorConSesion(email, { viewport = { width: 1440, heig
   console.log(
     `sesión emitida para ${confirmado} — ${cookies.length} cookie(s): ${cookies.map((c) => c.name).join(", ")}`
   );
-  const { chromium } = cargar("playwright");
+  const { chromium } = await cargarPlaywright();
   const navegador = await chromium.launch({ args: ["--no-sandbox"] });
   const ctx = await navegador.newContext({ viewport });
   await ctx.addCookies(

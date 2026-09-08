@@ -35,8 +35,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/comparativa", priority: 0.7 },
     { path: "/contacto", priority: 0.7 },
     { path: "/nosotros", priority: 0.6 },
-    { path: "/servicios/marketing-ia", priority: 0.6 },
-    { path: "/servicios/consultoria", priority: 0.6 },
     // `/privacidad` sí va: es indexable a propósito —el rastreador de Meta
     // valida esa URL al publicar la app del chatbot—. `/terminos` NO, porque
     // declara `noindex`; ver el aviso de arriba.

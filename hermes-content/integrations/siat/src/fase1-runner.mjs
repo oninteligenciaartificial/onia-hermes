@@ -460,6 +460,21 @@ export function normalizeCuisResult(result) {
   return { ...result, ok: true, parsed: { ...result.parsed, transaccion: true } };
 }
 
+/**
+ * Prerequisito que se cura SOLO con el paso del tiempo — no con reintentar en el
+ * acto ni con arreglar codigo. Existe para que `loop()` NO lo escriba en
+ * `blockedCases`: un caso bloqueado se saltea en toda corrida posterior, y
+ * `run-fase1-volumen.sh` no pasa `--retry-blocked`, asi que un tropiezo de dos
+ * minutos congelaba la etapa PARA SIEMPRE. Eso tuvo a VI y IX clavadas en 20
+ * casos desde el 6-ago hasta el 2026-09-08.
+ */
+export class TransitorioError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "TransitorioError";
+  }
+}
+
 export class StopError extends Error {
   constructor(etapa, streak, lastResult) {
     const mensaje = lastResult?.parsed?.mensajes?.[0] ?? null;
@@ -594,7 +609,7 @@ export function eventWindow({
     finMs = Math.min(inicioMs + margenMs, nowSinMs - 1000);
   }
   if (!(inicioMs < finMs)) {
-    throw new Error(
+    throw new TransitorioError(
       "sin ventana valida para el evento significativo (CUFD o evento previo demasiado frescos): esperar ~2 min y reintentar",
     );
   }
@@ -972,6 +987,15 @@ class Runner {
         result = await fn(doneOf());
       } catch (err) {
         if (err instanceof StopError) throw err;
+        // Un prerequisito TRANSITORIO se cura con el reloj (la ventana del evento
+        // significativo necesita ~2 min desde el CUFD). Se deja el caso SIN
+        // bloquear y se corta la corrida actual: la siguiente lo toma sola, sin
+        // depender de que alguien se acuerde de pasar --retry-blocked.
+        if (err instanceof TransitorioError) {
+          this.log({ etapa: etapaId, case: caseId, transitorio: err.message });
+          this.checkpoint();
+          return;
+        }
         // Un prerequisito faltante es DETERMINISTA (no hay servicio mapeado, no
         // hay CUFD para ese PdV): reintentarlo 3 veces es quemar tiempo. Se
         // bloquea el caso en el acto, con el motivo escrito en el checkpoint,
@@ -1498,6 +1522,11 @@ class Runner {
             // ventana del evento como las fechas de las facturas offline deben caer
             // dentro de la vigencia de ese CUFD. eventWindowNow ya recorta la ventana;
             // el lote se fecha en el punto medio (siempre dentro).
+            // El refresh va ANTES de calcular la ventana: eventWindowNow la deriva de
+            // cufdVigenteDesde, asi que con el CUFD vencido el evento nace fuera de
+            // vigencia y el SIN rechaza el par entero con "EL EVENTO SIGNIFICATIVO NO
+            // CORRESPONDE AL CUFD DEL EVENTO REGISTRADO" (medido 2026-09-08).
+            await this.ensureCufd();
             const win = this.eventWindowNow();
             const evento = await this.registrarEvento(motivo, { ...win, etapa: "VI" });
             const codigoEvento =
@@ -1594,6 +1623,10 @@ class Runner {
           "IX",
           target,
           async (done) => {
+            // El CUFD viaja DENTRO del CUF de cada factura del lote, no solo en el
+            // request: con uno vencido el SIN devuelve 123 "CUFD FUERA DE TOLERANCIA"
+            // y la etapa queda clavada (medido 2026-09-08, 20/80 desde el 6-ago).
+            await this.ensureCufd();
             const lote = this.buildLote(2, { tipoEmision: 3, baseIndex: 1000 + done * 2 });
             const envelope = buildRunnerEnvelope("recepcionMasivaFactura", {
               ...this.recepcionBase(3),

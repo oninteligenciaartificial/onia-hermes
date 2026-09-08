@@ -316,6 +316,47 @@ ACTUAL=$(git -C "$WT" branch --show-current 2>/dev/null || echo '?')
 [ "$ACTUAL" = "$RAMA" ] || { avisar "el worktree $WT esta en '$ACTUAL' y se esperaba '$RAMA'"; exit 2; }
 cd "$WT" || { avisar "no se pudo entrar a $WT"; exit 2; }
 
+# ── el arbol contra `main`: no medir una version vieja del producto ----------
+# Pedido textual de Sergio Urcullo, 2026-09-08, al subir las cadencias: *"que
+# revise si no esta sobreescribiendo o haciendo algo que ya esta hecho, se tiene
+# que verificar eso"*.
+#
+# EL MECANISMO, medido ese dia: `recorrido-cliente` estaba **251 commits atras de
+# main**. Ese loop recorre el producto y dice en que paso se rompe — con ese
+# atraso recorre una version vieja y reporta como roto lo que ya se arreglo. Es
+# el generador estructural de items fantasma, y encaja con el 25-46% de
+# pendientes que las colas declaraban y no existian. Y el riesgo no es solo
+# reportar de mas: un merge desde un arbol viejo puede DESHACER el arreglo ajeno.
+#
+# El prompt de cada loop ya le pide sincronizarse al arrancar. **No alcanza: es
+# una instruccion, y 251 commits dicen que no se cumplio.** Esto es el cerrojo.
+# Y subir la cadencia sin esto multiplica el problema: mas vueltas midiendo un
+# arbol viejo son mas hallazgos falsos por hora.
+#
+# Dos cosas que NO hace, y las dos por casos ya pagados:
+#   · si el arbol tiene cambios sin commitear, avisa y NO mergea. Cambiar el
+#     checkout debajo de trabajo sin guardar es como se pierden cosas (hoy mismo
+#     `onia-hermes-recorrido` tenia dos capturas sin commitear).
+#   · si el merge da conflicto, ABORTA y sigue con el arbol viejo. Un merge a
+#     medias que sobrevive al turno es peor que un arbol atrasado: el 2026-08-20
+#     `add -A` convirtio 17 archivos con marcadores `<<<<<<<` en un "resuelto"
+#     que hizo fast-forward a main.
+git fetch origin --quiet 2>/dev/null || true
+ATRAS=$(git rev-list --count HEAD..origin/main 2>/dev/null || echo 0)
+if [ "${ATRAS:-0}" -gt 0 ]; then
+  if [ -n "$(git status --porcelain 2>/dev/null)" ]; then
+    log "AVISO: $ATRAS commit(s) atras de main y hay cambios sin commitear — NO sincronizo, mido sobre el arbol viejo"
+  elif git merge --no-edit origin/main >/dev/null 2>&1; then
+    log "sincronizado con main antes de medir: +$ATRAS commit(s)"
+  else
+    git merge --abort >/dev/null 2>&1
+    log "AVISO: conflicto al mergear main ($ATRAS atras) — abortado, mido sobre el arbol viejo"
+    avisar "⚠️ <b>$NOMBRE no pudo sincronizar con main</b>: conflicto a $ATRAS commit(s) de atraso.
+Va a medir sobre un arbol viejo, asi que sus hallazgos pueden ser de defectos YA arreglados.
+Se destraba en <code>$WT</code> con <code>git merge origin/main</code> y resolviendo a mano."
+  fi
+fi
+
 # ── el prompt que corre vs el versionado en main -----------------------------
 # El prompt que se ejecuta vive en /root/bin/loops/; su fuente versionada vive
 # en el repo. Si divergen, el loop corre una version vieja y NADIE se entera:
@@ -441,8 +482,16 @@ fi
 # Lo que el loop escribio como `LECCION: ...` en ESTA vuelta va solo a la memoria
 # compartida: asi la leccion no depende de que el loop se acuerde de llamar a
 # onia-aprender.sh. Tope 5 por vuelta; el consolidador deduplica.
+#
+# 🔴 El `</dev/null` de adentro del bucle no es cosmetico: sin el, el tope real es UNO.
+# En nodo-casa `/root/bin/onia-aprender.sh` es un shim que hace `exec ssh`, y ssh SIN `-n`
+# consume el stdin que le queda al bucle — o sea se traga las lecciones 2 a 5, el `while`
+# termina normal y el exit es 0. Falla ABIERTO: no hay error, no hay log, y la vuelta
+# reporta que aprendio. Medido el 2026-09-07 con el bucle real: de 3 lecciones se envio 1.
+# Toca a todo bucle `while read` que adentro llame a un shim de este nodo (docker, tablero,
+# telegram, aprender, vps): la llamada va con `</dev/null` o el barrido pierde el resto.
 CUR_INI=$(grep -n "===== ARRANCA $NOMBRE" "$LOG" 2>/dev/null | tail -1 | cut -d: -f1)
-tail -n +"${CUR_INI:-1}" "$LOG" 2>/dev/null   | sed -E 's/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:]+Z //; s/^[*_#> -]*//'   | grep -E "^LECCI[OÓ]N: ." | cut -c1-600 | head -5   | while IFS= read -r LEC; do /root/bin/onia-aprender.sh "[$NOMBRE] ${LEC#LECCI*N: }" >/dev/null 2>&1 || true; done
+tail -n +"${CUR_INI:-1}" "$LOG" 2>/dev/null   | sed -E 's/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:]+Z //; s/^[*_#> -]*//'   | grep -E "^LECCI[OÓ]N: ." | cut -c1-600 | head -5   | while IFS= read -r LEC; do /root/bin/onia-aprender.sh "[$NOMBRE] ${LEC#LECCI*N: }" </dev/null >/dev/null 2>&1 || true; done
 /root/bin/onia-consolidar-memoria.sh >> "$LOG" 2>&1 || true
 
 T=$(( $(date +%s) - T0 ))

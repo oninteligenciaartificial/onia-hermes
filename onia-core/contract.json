@@ -824,18 +824,55 @@
         "rubro": "turismo_hoteleria",
         "vertical": "pack GestiOS reservas",
         "estado": "explorar"
+      },
+      {
+        "rubro": "onia_interna",
+        "vertical": "Onia (operacion propia)",
+        "estado": "interna"
       }
     ]
   },
   "moduleCapabilities": [
-    { "id": "accounting", "providedByModule": "accounting", "note": "contabilidad de doble partida (el core la deja afuera a proposito)" },
-    { "id": "tax_bolivia", "providedByModule": "accounting", "note": "IVA/IT/IUE/RC-IVA/RCV/retenciones/depreciacion, Bolivia vigente" },
-    { "id": "invoicing", "providedByModule": "invoicing", "note": "factura electronica Bolivia (CUF/QR); emision real = external_gate SIAT" },
-    { "id": "payroll", "providedByModule": "payroll", "note": "planilla Bolivia (Gestora, RC-IVA, aguinaldo, bono de antiguedad, finiquito)" },
-    { "id": "automation", "providedByModule": "automation", "note": "motor de reglas 'cuando X -> Y'; envio real = external_gate" },
-    { "id": "import_costing", "providedByModule": "imports", "note": "landed cost / costo de importacion Bolivia (DS 5646, NC2/NC6)" },
-    { "id": "dental_clinical", "providedByModule": "dental", "note": "config clinica odontologica (rubro dental)" },
-    { "id": "agents", "providedByModule": "agents", "note": "agentes 24/7 human-in-the-loop (ciclo de vida + ruteo a la cola de aprobacion + guardrails); ejecucion real (cron+LLM+scraping+envio) = external_gate (Hermes)" }
+    {
+      "id": "accounting",
+      "providedByModule": "accounting",
+      "note": "contabilidad de doble partida (el core la deja afuera a proposito)"
+    },
+    {
+      "id": "tax_bolivia",
+      "providedByModule": "accounting",
+      "note": "IVA/IT/IUE/RC-IVA/RCV/retenciones/depreciacion, Bolivia vigente"
+    },
+    {
+      "id": "invoicing",
+      "providedByModule": "invoicing",
+      "note": "factura electronica Bolivia (CUF/QR); emision real = external_gate SIAT"
+    },
+    {
+      "id": "payroll",
+      "providedByModule": "payroll",
+      "note": "planilla Bolivia (Gestora, RC-IVA, aguinaldo, bono de antiguedad, finiquito)"
+    },
+    {
+      "id": "automation",
+      "providedByModule": "automation",
+      "note": "motor de reglas 'cuando X -> Y'; envio real = external_gate"
+    },
+    {
+      "id": "import_costing",
+      "providedByModule": "imports",
+      "note": "landed cost / costo de importacion Bolivia (DS 5646, NC2/NC6)"
+    },
+    {
+      "id": "dental_clinical",
+      "providedByModule": "dental",
+      "note": "config clinica odontologica (rubro dental)"
+    },
+    {
+      "id": "agents",
+      "providedByModule": "agents",
+      "note": "agentes 24/7 human-in-the-loop (ciclo de vida + ruteo a la cola de aprobacion + guardrails); ejecucion real (cron+LLM+scraping+envio) = external_gate (Hermes)"
+    }
   ],
   "verticalTracks": [
     {
@@ -1094,6 +1131,31 @@
       "blockedCapabilityIds": [
         "whatsapp",
         "siat"
+      ]
+    },
+    {
+      "id": "onia-interna",
+      "familyId": "ONIA_CORE",
+      "name": "Onia Interna",
+      "status": "pending_adoption",
+      "requiredCapabilityIds": [
+        "tenant",
+        "team_roles",
+        "permissions",
+        "relationships",
+        "work_items",
+        "evidence_activity",
+        "alerts_reports",
+        "saved_reporting",
+        "data_ops",
+        "collaboration",
+        "approvals",
+        "channels",
+        "knowledge_base",
+        "whatsapp"
+      ],
+      "blockedCapabilityIds": [
+        "tr4_adapter"
       ]
     }
   ],
@@ -1576,6 +1638,44 @@
         "email_shared",
         "web_form",
         "phone_walkin"
+      ]
+    },
+    {
+      "id": "onia-interna-pack",
+      "trackId": "onia-interna",
+      "rubro": "onia_interna",
+      "vocabulary": {
+        "workItemTypes": [
+          "tarea",
+          "decision",
+          "incidente",
+          "seguimiento"
+        ],
+        "partnerTypes": [
+          "cliente",
+          "prospecto",
+          "proveedor"
+        ],
+        "areas": [
+          "producto",
+          "operaciones",
+          "comercial",
+          "gerencia"
+        ]
+      },
+      "checklists": [
+        "alta_cliente",
+        "seguimiento_prospecto"
+      ],
+      "kpis": [
+        "clientes pagando",
+        "altas del mes",
+        "conversaciones del bot"
+      ],
+      "intakeChannels": [
+        "whatsapp_chatwoot",
+        "web_form",
+        "email_shared"
       ]
     }
   ],

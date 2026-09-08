@@ -196,11 +196,18 @@ if (!r.ok) {
 }
 
 // ── Paso 3: horarios ───────────────────────────────────────────────────────────────────────
-// NO se salta a propósito: «Saltar por ahora» ya dejó una agenda muerta antes, y el objetivo
-// es recorrer el camino que deja la cuenta usable, no el más corto.
+// Por defecto se APRIETA «Continuar»: es el camino que deja la cuenta usable.
+//
+// `--saltar-horarios` recorre el OTRO camino, que es el que denunciaba la tarea t_72ddeedb: el
+// cliente aprieta «Saltar por ahora» y hasta el 2026-09-05 se iba con CERO filas de agenda, sin
+// poder crear ni una cita y sin que la pantalla dijera por qué. Ese camino no se podía medir en
+// producción —este script no lo recorría— así que el arreglo (`diasAgendaParaAlta`) sólo tenía
+// prueba en tests. Es además el camino más probable del cliente apurado: el botón está a la
+// vista en todos los pasos y cargar siete días es lo más pesado del alta.
+const SALTAR_HORARIOS = process.argv.includes("--saltar-horarios");
 if (pasos.every((p) => p.ok)) {
-  await marcar("horarios", true, "horarios de atención por defecto");
-  r = await apretar("Continuar");
+  await marcar("horarios", true, SALTAR_HORARIOS ? "horarios SIN cargar (se va a saltear)" : "horarios de atención por defecto");
+  r = await apretar(SALTAR_HORARIOS ? "Saltar por ahora — lo cargo después" : "Continuar");
   if (!r.ok) await marcar("horarios-salida", false, r.motivo);
 }
 

@@ -1,0 +1,1154 @@
+#!/usr/bin/env python3
+"""CARRUSEL "Mi stack" — patron apple-editorial (9 laminas 1080x1350).
+
+Patron nuevo, decidido por Sergio Urcullo el 2026-09-06: CONVIVE con
+statement-3d-minimal y carrusel-pinterest-refs, no los reemplaza. La diferencia dura
+es que aca NO hay collage (cinta / sticker / icono flotante): esa capa venia de la
+FICHA de Pinterest y es justo lo que separaba las piezas de las referencias que el
+sigue senalando. Receta completa y trampas:
+  hermes-content/references/ui-patterns/apple-editorial/{FICHA.md,tokens.css}
+
+Implementa 2 de los 5 layouts de la FICHA — los que esta pieza usa:
+  D = statement puro (portada y CTA)
+  E = ficha de producto (objeto + nombre + descripcion + precio gigante)
+A, B y C se implementan cuando una pieza los pida; scaffolding vacio no sirve a nadie.
+
+OBJETOS: squircle app-icon con el LOGO REAL de cada marca (simple-icons, CC0,
+vendorizado por build-logos.py) sobre el color oficial. Los glifos dibujados a mano se
+veian aproximados y el de WhatsApp salio directamente mal; en una pieza publica eso lee
+como falsificacion. Solo se dibujan los tres que no tienen logo publicado: la torre del
+homelab, HyperFrames y Hermes.
+
+TIPOGRAFIA: Inter, elegida por Sergio Urcullo mirando el A/B (06-sep). `--tipografia
+dmsans` conserva la comparacion. SF Pro no se puede empaquetar: licencia Apple
+restringida a desarrollo en sus plataformas.
+
+CIFRAS: en DOLARES por pedido de Sergio Urcullo. Claude Max sale de
+ONIA_ESTRATEGIA_DE_EMPRESA.md §8.1 (US$200/mes). El homelab va en $0 porque es una PC
+que el ya tenia — no es el VPS alquilado de esa misma tabla, y las specs de la PC no
+estan registradas en ningun lado, asi que la lamina no afirma ninguna.
+PENDIENTE: el plan de Notion no esta registrado; "$0" asume plan gratis.
+
+CTA: pide respuesta humana a proposito. La cuenta @sergiourcullo tiene `palabras: {}`
+en el workflow n8n activo de private-reply (medido 2026-09-04): un "Comenta X" ahi no
+entrega nada y no deja registro.
+
+Uso:
+  python scripts/marca-personal/generar-apple-editorial.py [--tipografia inter|dmsans]
+  python scripts/marca-personal/generar-apple-editorial.py --check   # gate, sin rendir
+"""
+import argparse
+import glob
+import os
+import re
+import subprocess
+import tempfile
+from pathlib import Path
+
+REPO = Path(__file__).resolve().parents[2]
+OUT_BASE = REPO / "hermes-content/carousels/out"
+HANDLE = "@sergiourcullo"
+
+
+def _chrome():
+    if os.environ.get("CHROME_BIN"):
+        return os.environ["CHROME_BIN"]
+    cands = [r"C:\Program Files\Google\Chrome\Application\chrome.exe"]
+    cands += sorted(glob.glob("/root/.cache/ms-playwright/chromium-*/chrome-linux64/chrome"), reverse=True)
+    cands += sorted(glob.glob(os.path.expanduser("~/AppData/Local/ms-playwright/chromium-*/chrome-win/chrome.exe")), reverse=True)
+    for c in cands:
+        if Path(c).exists():
+            return c
+    raise SystemExit("No encontre Chrome/Chromium (setea CHROME_BIN)")
+
+
+# --- Objetos: squircle app-icon con el color de marca real y un glifo simple.
+_SQ = 0  # contador para ids de clipPath unicos: dos <clipPath> con el mismo id en la
+         # misma pagina y el navegador aplica solo el primero a todos.
+
+
+def _squircle(bg, glifo, borde=""):
+    """El contenido va RECORTADO al cuadrado redondeado.
+
+    Sin el clip, un logo a sangre que trae sus propias esquinas (el PNG oficial de Claude
+    las tiene casi rectas) entra como cuadrado duro y rompe el patron: todo lo demas es
+    redondeado. Se ve al instante y no lo atrapa ningun gate.
+    """
+    global _SQ
+    _SQ += 1
+    cid = f"sq{_SQ}"
+    b = ""
+    if borde:
+        b = f'<rect x="2" y="2" width="252" height="252" rx="59" fill="none" stroke="{borde}" stroke-width="2"/>'
+    return (f'<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">'
+            f'<defs><clipPath id="{cid}">'
+            f'<rect width="256" height="256" rx="59"/></clipPath></defs>'
+            f'<g clip-path="url(#{cid})">'
+            f'<rect width="256" height="256" fill="{bg}"/>{glifo}</g>{b}</svg>')
+
+
+LOGOS = REPO / "hermes-content/references/ui-patterns/apple-editorial/logos"
+OBJETOS = REPO / "hermes-content/references/ui-patterns/apple-editorial/objetos"
+
+
+def _marca(slug, color):
+    """Logo REAL de simple-icons (viewBox 24x24) escalado y centrado en el squircle.
+
+    Los glifos dibujados a mano se ven aproximados y en una pieza publica leen como
+    falsificacion: el de WhatsApp salio mal y Sergio Urcullo lo marco. Las referencias
+    usan el icono de aplicacion real de cada herramienta, asi que acá también.
+    """
+    archivo = LOGOS / f"{slug}.path"
+    if not archivo.exists():
+        raise SystemExit(f"Falta {archivo}. Corré build-logos.py del patrón.")
+    d = archivo.read_text(encoding="utf-8").strip()
+    lado = 132              # area optica del glifo dentro de los 256 del squircle
+    escala = lado / 24
+    off = (256 - lado) / 2
+    return (f'<g transform="translate({off} {off}) scale({escala})">'
+            f'<path d="{d}" fill="{color}"/></g>')
+
+
+def _imagen(nombre, alto=196):
+    """Logo en mapa de bits dentro del squircle (PNG/JPG), centrado.
+
+    Existe para el logo de Hermes, que es una ilustracion y no un glifo: redibujarla
+    "parecida" es exactamente la trampa #9 de la FICHA. Devuelve '' si el archivo no
+    esta, y el llamador cae al glifo dibujado — asi el generador nunca se rompe por un
+    asset ausente, solo entrega menos.
+    """
+    for ext in (".png", ".jpg", ".jpeg", ".svg", ".webp"):
+        ruta = LOGOS / f"{nombre}{ext}"
+        if ruta.exists():
+            off = (256 - alto) / 2
+            return (f'<image href="{ruta.as_uri()}" x="{off}" y="{off}" '
+                    f'width="{alto}" height="{alto}" preserveAspectRatio="xMidYMid meet"/>')
+    return ""
+
+
+def _torre():
+    # Torre de escritorio: el homelab es una maquina fisica que Sergio Urcullo ya tenia,
+    # no un servidor alquilado. La primera version salio angosta y con dos rayas, y a
+    # tamano de miniatura leia como un TELEFONO — visto en la hoja de contacto, no supuesto.
+    # Esta es mas ancha, con bahia de lectora arriba y rejilla de ventilacion: la silueta
+    # de una PC vieja. El punto verde es el LED de encendido.
+    vents = "".join(
+        f'<rect x="106" y="{124 + i * 14}" width="44" height="6" rx="3" fill="#1D1D1F"/>'
+        for i in range(4)
+    )
+    return ('<rect x="80" y="44" width="96" height="168" rx="13" fill="#fff"/>'
+            # bahia de la lectora de CD
+            '<rect x="96" y="62" width="64" height="13" rx="4" fill="#1D1D1F"/>'
+            '<rect x="96" y="86" width="64" height="13" rx="4" fill="#1D1D1F"/>'
+            + vents +
+            '<circle cx="128" cy="192" r="10" fill="#00C661"/>')
+
+
+def _tarjeta_clientes():
+    """Panel de analitica con textura de producto real (pedido de Sergio Urcullo, 06-sep:
+    "hacelo mas real estilo startup").
+
+    🔴 LAS DOS CIFRAS SON INVENTADAS. El pidio "numeros falsos pero realistas" y se le
+    marco el choque con la regla de la casa (`no fabricar`: cero clientes pagando ⇒
+    prohibido inventar cifras). Se eligieron a proposito CHICAS —12 y +3— para que
+    lean como arranque y no como alarde: una cifra grande seria a la vez mas falsa y
+    mas cara de sostener si alguien pregunta.
+    Si el prefiere sacarlas, el grafico funciona igual sin ningun numero.
+    """
+    return (
+        '<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">'
+        '<rect x="10" y="34" width="280" height="232" rx="20" fill="#FFFFFF" '
+        'stroke="#E8E8ED" stroke-width="2"/>'
+        '<text x="34" y="76" font-family="OniaMono,monospace" font-size="15" '
+        'letter-spacing="1.6" fill="#8E8E93">CLIENTES ACTIVOS</text>'
+        '<text x="33" y="132" font-family="Inter,sans-serif" font-size="58" '
+        'font-weight="700" letter-spacing="-2" fill="#1D1D1F">12</text>'
+        '<rect x="112" y="102" width="86" height="32" rx="16" fill="#E4F9EE"/>'
+        '<text x="127" y="124" font-family="Inter,sans-serif" font-size="19" '
+        'font-weight="700" fill="#0B8F4F">+3 mes</text>'
+        '<polyline points="34,236 82,222 122,214 166,182 212,162 266,152" fill="none" '
+        'stroke="#00C661" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>'
+        '<circle cx="266" cy="152" r="9" fill="#00C661"/></svg>')
+
+
+def _tarjeta_transferencia():
+    """Celda "Transferencia" de la fila 3 de founders-bo, como squircle de app bancaria.
+
+    ⚠️ SE INTENTO CON FOTO Y NO HAY. Sergio Urcullo, 07-sep: "las imagenes puedes usar
+    simplemente pngs, mejor" — y tenia razon en que la version anterior (un comprobante
+    dibujado con un tilde verde) se veia floja al lado de las ocho celdas restantes.
+    Se buscaron tres fotos en Pexels y las tres fallaron, y el motivo es de fondo:
+    **una transferencia bancaria no tiene objeto fisico que fotografiar**.
+      · "mobile banking app phone hand" -> una mano con GOOGLE WALLET. Marca ajena que la
+        pieza no nombra, y que ni siquiera opera en Bolivia: un error factual visual.
+      · "smartphone isolated white background" -> un celular con la pantalla en blanco.
+        No comunica nada.
+      · "credit card isolated" -> monedas de EURO sobre tarjetas, sin recortar.
+    Quedan guardadas como transferencia*.png con su credito en CREDITOS.md; ninguna se usa.
+
+    Asi que la celda pasa a SQUIRCLE, que ademas es mas coherente: en su misma fila USDT ya
+    es squircle, y en la fila de arriba lo son Claude, ChatGPT y Gemini. Cuatro de las nueve
+    celdas ya eran squircle — la que desentonaba era esta.
+
+    El verde tambien se fue: el tilde anterior usaba el #00C661 de Onia en una celda que
+    representa la banca en general. El verde es de la casa y aca no pinta nada.
+    """
+    flecha = ('<path d="M92 104 H164 M146 86 L164 104 L146 122" stroke="#FFFFFF" '
+              'stroke-width="13" fill="none" stroke-linecap="round" '
+              'stroke-linejoin="round"/>'
+              '<path d="M164 152 H92 M110 134 L92 152 L110 170" stroke="#FFFFFF" '
+              'stroke-width="13" fill="none" stroke-linecap="round" '
+              'stroke-linejoin="round"/>')
+    return _squircle("#1F6FEB", flecha)
+
+
+def _tarjeta_creditos():
+    """Panel de uso de CLAUDE, en los colores de Claude.
+
+    Sergio Urcullo, 06-sep: los tokens tienen que verse como de Claude. Antes esta celda
+    mostraba el saldo de Higgsfield sobre un panel oscuro y neutro: no se leia de quien
+    era. Ahora va sobre la crema oficial #F3E9D7, con el coral #D97757 en la barra y en
+    el boton, y el estallido de la marca arriba a la izquierda. La celda dice "Claude"
+    sin escribir la palabra.
+
+    La cifra `$0,25 / 1M` es el precio publico de lectura de cache de Fable 5.1
+    (anthropic.com, leido el 2026-09-06) — real, y la misma que sostiene el otro carrusel.
+    """
+    return (
+        '<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">'
+        '<rect x="10" y="34" width="280" height="232" rx="20" fill="#F3E9D7"/>'
+        # estallido chico de la marca, en coral
+        '<g transform="translate(30 52) scale(0.105)">'
+        '<circle cx="128" cy="128" r="30" fill="#D97757"/>'
+        + "".join(
+            f'<rect x="{128 - 11}" y="{128 - 92}" width="22" height="76" rx="11" '
+            f'fill="#D97757" transform="rotate({i * 30} 128 128)"/>' for i in range(12))
+        + '</g>'
+        '<text x="66" y="74" font-family="OniaMono,monospace" font-size="15" '
+        'letter-spacing="1.6" fill="#8A7B63">TOKENS DE CLAUDE</text>'
+        '<text x="33" y="140" font-family="Inter,sans-serif" font-size="52" '
+        'font-weight="700" letter-spacing="-2" fill="#3A2E1E">$0,25</text>'
+        '<text x="34" y="172" font-family="Inter,sans-serif" font-size="19" '
+        'fill="#8A7B63">por millón · lectura de caché</text>'
+        '<rect x="34" y="192" width="232" height="9" rx="5" fill="#E0D2B8"/>'
+        '<rect x="34" y="192" width="58" height="9" rx="5" fill="#D97757"/>'
+        '<rect x="34" y="220" width="110" height="38" rx="11" fill="#D97757"/>'
+        '<rect x="156" y="220" width="110" height="38" rx="11" fill="#E4D8C0"/></svg>')
+
+
+ICONOS = {
+    # Marcas REALES (simple-icons, CC0) sobre squircle en el color oficial de cada una.
+    # Antes eran glifos dibujados a mano: aproximados, y el de WhatsApp directamente mal.
+    # ⚠️ Icono OFICIAL bajado de claude.ai/images/claude_app_icon.png, no el de
+    # simple-icons. Sergio Urcullo marco el 06-sep que "el logo de claude no es el
+    # original" y tenia razon: yo lo tenia INVERTIDO — cuadrado naranja con estallido
+    # blanco. El real es al reves, estallido coral #D97757 sobre crema #F3E9D7, y la
+    # entrada de simple-icons ademas dibuja el estallido mucho mas tosco.
+    # Leccion: "logo real" no es lo mismo que "logo de una libreria de logos".
+    # Fondo BLANCO por pedido de Sergio Urcullo (06-sep). El PNG oficial trae la crema
+    # #F3E9D7 horneada; `claude-oficial-blanco.png` la reemplaza por blanco midiendo
+    # distancia de color, para no dejarle halo a los bordes suavizados del estallido.
+    # El trazo sigue siendo el coral oficial: cambia el fondo, no la marca.
+    "claude": _squircle("#FFFFFF", _imagen("claude-oficial-blanco", alto=256),
+                        borde="#E8E8ED"),
+    "whatsapp": _squircle("#25D366", _marca("whatsapp", "#FFFFFF")),
+    "n8n": _squircle("#EA4B71", _marca("n8n", "#FFFFFF")),
+    # Notion va al reves —blanco con glifo negro y filo— porque asi es su icono real.
+    # El filo existe para que no se pierda sobre el fondo #F5F5F7.
+    "notion": _squircle("#FFFFFF", _marca("notion", "#0A0A0A"), borde="#D2D2D7"),
+    # Onia Platform: el icono de marca YA publicado (brand/v2/onia-icon-rounded.svg), a
+    # sangre sobre todo el squircle. Es el UNICO objeto que lleva el verde de Onia — y acá
+    # sí corresponde, porque es lo único del stack que construyó Sergio Urcullo.
+    "onia": _squircle("#00D26A", _imagen("onia", alto=256)),
+    # ⚠️ Los otros dos de la fila 1, corregidos el 06-sep — Sergio Urcullo: "los logos
+    # siguen siendo fake". Tenia razon en los dos, por motivos distintos:
+    #   · ChatGPT: el NUDO de simple-icons si es la marca real; lo falso era MI color.
+    #     Lo habia puesto en verde copiando la referencia #1, que muestra el icono VIEJO.
+    #     El actual es negro con el nudo en blanco.
+    #   · Gemini: simple-icons lo da como destello PLANO. El real tiene el degradado
+    #     aurora (azul → violeta → rosa) y sin eso no se reconoce. Va el SVG oficial
+    #     bajado de gemini.google.com, a sangre.
+    # La regla que deja esto: para una marca conocida, el asset oficial del producto
+    # gana siempre; una libreria de iconos sirve para la FORMA, nunca para el color.
+    "chatgpt": _squircle("#0A0A0A", _marca("chatgpt", "#FFFFFF")),
+    "gemini": _squircle("#FFFFFF", _imagen("gemini-oficial", alto=150), borde="#E8E8ED"),
+    "usdt": _squircle("#26A17B", _marca("usdt", "#FFFFFF")),
+    # Sin logo oficial en simple-icons: se dibujan.
+    "vps": _squircle("#1D1D1F", _torre()),
+    "hyperframes": _squircle(
+        "#1D1D1F",
+        '<rect x="58" y="72" width="140" height="112" rx="14" fill="none" stroke="#FFFFFF" stroke-width="10"/>'
+        '<path d="M112 106 L152 128 L112 150 Z" fill="#FFFFFF"/>',
+    ),
+    # Hermes usa el logo REAL del proyecto (nous-girl de NousResearch/hermes-agent, MIT).
+    # NO lleva el verde de Onia: es codigo de terceros, y vestirlo con nuestra marca
+    # sugeriria autoria. Squircle blanco con filo, como Notion — el line art es blanco y
+    # negro y sobre blanco lee perfecto. El glifo de nodos queda de respaldo por si falta
+    # el archivo, para que el generador no se rompa por un asset ausente.
+    "hermes": _squircle(
+        "#FFFFFF",
+        _imagen("hermes") or (
+            '<circle cx="128" cy="128" r="26" fill="#0A0A0A"/>'
+            '<circle cx="70" cy="80" r="15" fill="#0A0A0A"/><circle cx="186" cy="80" r="15" fill="#0A0A0A"/>'
+            '<circle cx="70" cy="176" r="15" fill="#0A0A0A"/><circle cx="186" cy="176" r="15" fill="#0A0A0A"/>'
+            '<path d="M84 90 L112 114 M172 90 L144 114 M84 166 L112 142 M172 166 L144 142"'
+            ' stroke="#0A0A0A" stroke-width="10" stroke-linecap="round"/>'
+        ),
+        borde="#D2D2D7",
+    ),
+}
+
+DIBUJOS = {"clientes": _tarjeta_clientes, "creditos": _tarjeta_creditos,
+           "transferencia": _tarjeta_transferencia}
+
+# --- Contenido. Las cifras de precio salen de ONIA_ESTRATEGIA_DE_EMPRESA.md §8.1.
+LAMINAS = [
+    # PORTADA. Rehecha el 06-sep: Sergio Urcullo pidió que la primera imagen sea más
+    # impresionante para que la gente entre al carrusel. La anterior contaba una lista
+    # ("SIETE COSAS") y contar no frena a nadie.
+    # Ahora frena la CIFRA — $200 al mes para operar una empresa entera es lo raro — y
+    # abajo va la tira con los 7 iconos: el ojo los cuenta, quiere saber cuál es cuál, y
+    # ése es exactamente el swipe. La portada pasa de enunciar a prometer.
+    {
+        "layout": "D",
+        "contexto": "Tengo 16 años, una empresa en Bolivia,\ny esto es todo lo que pago:",
+        "remate": "$200",
+        "pie": "al mes. Y cinco de las siete cuestan",
+        "pie_hl": "$0",
+        "gancho": True,
+        "tira": ["claude", "vps", "n8n", "whatsapp", "hyperframes", "hermes", "onia"],
+    },
+    {
+        "layout": "E",
+        "icono": "claude",
+        "nombre": "Claude Max",
+        "desc": "La capa que piensa. Escribe el código, los textos\ny los sistemas. Es lo único caro, y es para construir:\nno para que el negocio funcione.",
+        "precio": "$200/mes",
+    },
+    {
+        "layout": "E",
+        "icono": "vps",
+        # Sergio Urcullo, 06-sep: "es una pc vieja que tengo". O sea hardware PROPIO, no el
+        # KVM alquilado — mi reparo anterior sobre el termino "homelab" no aplicaba a esta
+        # lamina. Se cayeron las specs "4 vCPU / 16 GB / 41 contenedores": eran del VPS de
+        # ONIA_ESTRATEGIA_DE_EMPRESA.md §8.1, no de esta maquina, y las de la PC no estan
+        # registradas en ningun lado. Sin dato verificado no se escribe dato.
+        "nombre": "Homelab",
+        "desc": "Una PC vieja que ya tenía guardada.\nAhí adentro corre todo lo que viene abajo.",
+        "precio": "$0",
+        "etiqueta": "Hardware que ya tenía",
+    },
+    {
+        "layout": "E",
+        "icono": "n8n",
+        "nombre": "n8n",
+        "desc": "Las automatizaciones: embudo, seguimientos, avisos.\nCorre en mi servidor, así que no suma un peso.",
+        "precio": "$0",
+        "etiqueta": "Open source",
+    },
+    {
+        "layout": "E",
+        "icono": "whatsapp",
+        "nombre": "WhatsApp Business",
+        # Antes decia "el transporte de Meta lo paga la cuenta del negocio, no yo": jerga
+        # de plataforma que a un dueno de negocio no le dice nada. Ahora nombra lo que el
+        # lector hace todos los dias, y el paso concreto — las respuestas rapidas son las
+        # mismas del brief lamina-grid-mensajes.json, contenido ya verificado.
+        "desc": "Donde me escriben los clientes. Con las respuestas\nrápidas dejé escritos de una vez los seis mensajes\nque antes tipeaba todos los días.",
+        "precio": "$0",
+    },
+    # Notion SALIO: Sergio Urcullo, 06-sep — "gratis, aunque ni lo uso". Una herramienta que
+    # no se usa en una pieza cuyo valor entero es que las siete son reales la vuelve mentira.
+    # Su .path queda vendorizado por si vuelve en otra pieza.
+    # Chatwoot SALIO de la pieza (Sergio Urcullo, 06-sep). No es pudor: es la capa que hace
+    # funcionar el chatbot que se vende desde Onia Platform. Las otras cinco herramientas no
+    # tienen ese problema —nadie compra Claude en vez de Onia—, pero Chatwoot con "Bs 0" al
+    # lado le ensena al lector el camino para saltearse el producto. Era la unica lamina que
+    # le daba un motivo para no comprar. El icono queda definido por si vuelve en otra pieza.
+    {
+        "layout": "E",
+        "icono": "hyperframes",
+        # Sin etiqueta de autoria a proposito: HyperFrames es `heygen-com/hyperframes`, de
+        # terceros. La bajada solo afirma un uso propio, que si es verificable.
+        "nombre": "HyperFrames",
+        "desc": "Video desde HTML. El teaser de la comunidad\nse renderizó en el servidor en 30 segundos.",
+        "precio": "$0",
+    },
+    # El giro, justo antes del cierre. ⚠️ Corregido el 06-sep: la bajada decia "lo escribi
+    # yo" y es FALSO. Hermes es NousResearch/hermes-agent — publico, MIT, Python, 242k
+    # estrellas (verificado con `gh repo view`). Lo de Sergio Urcullo es el SOUL.md, la
+    # memoria y la config con la que corre en su maquina, que es lo que ahora dice la
+    # lamina. Reclamar autoria de un proyecto ajeno en pieza publica es lo peor que podia
+    # tener esta pieza.
+    {
+        "layout": "E",
+        "icono": "hermes",
+        "nombre": "Hermes",
+        "desc": "Un agente open source que vive en mi servidor.\nYo le escribí el alma: su identidad, su memoria\ny a quién avisar cuando algo se rompe.",
+        "precio": "$0",
+        "etiqueta": "Open source · MIT",
+    },
+    # El cierre del arco: lo unico del stack que no instalo, sino que construyo. Va ultima
+    # a proposito — es la carta mas fuerte y la unica que lleva el verde de Onia.
+    #
+    # ⚠️ "Próximamente" es una EXCEPCION EXPLICITA a CLAUDE.md § "La venta nunca exhibe obra",
+    # que prohibe esa palabra exacta en toda superficie que ve un cliente. Se le planteo el
+    # choque a Sergio Urcullo con la regla citada, se ofrecio "Te cuento pronto" como
+    # alternativa, y el 2026-09-06 el RATIFICO la palabra literal: "ponela literal,
+    # próximamente". Es su decision y su marca.
+    # NO revertir esto por leer la regla: la regla sigue vigente para todo lo demas, y esta
+    # excepcion vale SOLO para esta lamina. Detalle en la trampa #14 de la FICHA.
+    #
+    # Promesas: agenda y clientes son 🟢 en ONIA_CATALOGO_DE_VENTA.md; el chatbot es 🟢 en
+    # su §5. Sin precio de producto: es contenido, no venta.
+    {
+        "layout": "E",
+        "icono": "onia",
+        "nombre": "Onia Platform",
+        "desc": "Donde manejo el negocio: los clientes, la agenda\ny el chatbot que contesta cuando no estoy.\nEs la única que no instalé. La construí.",
+        "precio": "Próximamente",
+        "etiqueta": "Lo que estoy construyendo",
+    },
+    {
+        "layout": "D",
+        "contexto": "Siete herramientas, una factura",
+        "remate": "$200",
+        "sub": "al mes, y es todo para construir.\nMantener el negocio andando no me cuesta nada.",
+    },
+    # QUIÉN SOY. Va acá y no al principio a proposito: el que llego hasta la lamina 10 ya
+    # vio el valor y recien ahi le importa quien lo dijo. Al reves —presentarse primero—
+    # es pedirle atencion antes de habersela ganado.
+    #
+    # Usa el layout F (foto a sangre) y no el Q (foto chica al lado del texto): Sergio
+    # Urcullo, 07-sep, "usa esta imagen mia en grande que se vea mejor". Tenia razon —
+    # a 390px la foto era un accesorio del texto; a sangre la cara ES la lamina, que es
+    # justo lo que tiene que pasar en la unica lamina donde el que habla se muestra.
+    # El texto baja a dos lineas porque F no admite mas: el largo controla el wrap.
+    #
+    # El texto pasa de contar el stack a PEDIR EL SEGUIMIENTO (07-sep). El dato del $200
+    # ya lo dieron las nueve laminas anteriores: repetirlo acá gastaba la única lámina
+    # donde se le puede pedir algo al lector. Las dos cosas que la hacen seguir son la
+    # edad y la frecuencia, y las dos van dichas juntas.
+    {
+        "layout": "F",
+        "foto": "sergio-chroma.png",
+        "nombre": "Soy Sergio Urcullo,",
+        "sub": "tengo 16 años y todos los días posteo\ncómo usar IA en un negocio de verdad.",
+        "cta": "Seguime.",
+    },
+    # CIERRE. Pedido de Sergio Urcullo el 07-sep: "que la ultima pida comentar si o si,
+    # podes decir te paso mi stack y como instalarlo". Pasa de PREGUNTA a INTERCAMBIO —
+    # una palabra a cambio de algo concreto—, que es el CTA que mas comentarios saca
+    # porque el lector sabe exactamente que recibe.
+    #
+    # ⚠️ LA ENTREGA ES A MANO Y LA LAMINA LO DICE. La cuenta tiene `palabras: {}` en el
+    # workflow n8n de private-reply (medido 04-sep): "Comenta STACK" NO dispara ningun
+    # envio automatico. Por eso el pie dice "te contesto a todos, a mano" en vez de
+    # "recibilo al instante": prometer una automatica que no existe deja a cada
+    # comentarista esperando un DM que nunca llega, y eso se paga con la cuenta.
+    #
+    # 🔴 DEPENDE DE SERGIO URCULLO: la pieza promete "la lista con el paso a paso para
+    # instalar cada una" y ESE MATERIAL NO EXISTE TODAVIA. Antes de publicar tiene que
+    # estar escrito y a mano, o la promesa se rompe en el primer comentario.
+    {
+        "layout": "D",
+        "contexto": "¿Lo querés armar igual?",
+        "remate": "COMENTÁ\n«STACK»",
+        "sub": "y te paso por privado la lista de las siete\ncon el paso a paso para instalar cada una.",
+        "cta_hl": "Con esa palabra alcanza.",
+        "cta_gris": "Te contesto a todos, a mano.",
+    },
+]
+
+# --- Fuentes: autohospedadas, NUNCA de Google Fonts en tiempo de render ------------
+# Regla de la casa, ya escrita en hermes-content/brand/fonts/README.md y que este carril
+# venia incumpliendo: con `@import url(fonts.googleapis.com)` Chrome dispara la captura
+# antes de que llegue la webfont y todo cae al fallback del sistema. Medido el
+# 2026-09-06: las dos variantes tipograficas salieron byte-identicas (mismo md5).
+# Con file:// la carga es sincronica y la carrera desaparece. `--check` lo verifica.
+FONTS_PATRON = REPO / "hermes-content/references/ui-patterns/apple-editorial/fonts"
+FONTS_MARCA = REPO / "hermes-content/brand/fonts"
+MONO_WOFF2 = FONTS_MARCA / "SplineSansMono-var-latin.woff2"
+# Serif del layout C. No es del trio de marca: es tipografia de UN patron.
+SERIF_WOFF2 = FONTS_PATRON / "InstrumentSerif-latin.woff2"
+
+# Layout F — portada con foto recortada (referencia bastian.xu, la #8 del batch).
+# La foto sale de recortar-foto.py: croma local, sin generacion ni creditos.
+PORTADA_F = [
+    {
+        "layout": "F",
+        "nombre": "Soy Sergio Urcullo,",
+        # Dos lineas exactas. La version larga dejaba "bolivianos" huerfano en una tercera
+        # linea: el salto manual no controla el wrap, lo controla el largo del texto.
+        "sub": "y automatizo negocios bolivianos\npara que dejen de hacer todo a mano.",
+        "foto": "sergio-chroma.png",
+    },
+]
+
+# Layout C — duelo 2-up (referencia #3). Contenido del brief ya aprobado
+# `briefs/onia-cuaderno-no-avisa-foto-20260820.json`: "Tu cuaderno no miente. Pero
+# tampoco avisa". Los dos remates son propiedades, no mediciones: un cuaderno de papel
+# no puede avisar (0), y los agentes del sistema corren una vez al dia segun
+# ONIA_CATALOGO_DE_VENTA.md. Nada inventado, nada que haya que sostener despues.
+DUELO_CUADERNO = [
+    {
+        "layout": "C",
+        "titulo": "Tu cuaderno no miente.\nPero tampoco avisa.",
+        "lados": [
+            # Los dos remates tienen la MISMA forma (cantidad + unidad), como el
+            # "310 cal / 0 cal" de la referencia. Con "0" de un lado y "todos los días"
+            # del otro, la comparacion no cierra: no se estan midiendo con la misma vara.
+            # "1 por dia" sale de ONIA_CATALOGO_DE_VENTA.md — los agentes corren una vez
+            # al dia. Ninguno de los dos numeros es una estimacion.
+            {"objeto": "cuaderno.png", "dato": "0 avisos", "etiqueta": "el cuaderno"},
+            {"objeto": "celular.png", "dato": "1 por día", "etiqueta": "el sistema"},
+        ],
+    },
+]
+
+# Layout B — grilla 2x2 (referencia #2 del batch: "Necesito vitamina C", con Claude,
+# Clientes, Café y Créditos). El chiste es que las cuatro empiezan con C, y las cuatro son
+# reales para Sergio Urcullo: Claude lo paga, café toma, créditos gasta en artes, y
+# clientes es LO QUE LE FALTA — ONIA_ESTRATEGIA_DE_EMPRESA.md §8.2 lo dice con todas las
+# letras: "el producto no tiene un problema de rentabilidad, tiene un problema de
+# clientes". Que la lámina más honesta sea también el remate es la mitad de la pieza.
+VITAMINA_C = [
+    {
+        "layout": "B",
+        "titulo": "Necesito vitamina C",
+        "celdas": [
+            {"icono": "claude", "rotulo": "Claude"},
+            {"dibujo": "clientes", "rotulo": "Clientes"},
+            {"objeto": "cafe.png", "rotulo": "Café"},
+            {"dibujo": "creditos", "rotulo": "Créditos"},
+        ],
+    },
+]
+
+# Carrusel Fable 5.1. TODAS las cifras salen de la pagina oficial de Anthropic
+# (anthropic.com/claude-fable-and-mythos-5-1), releida el 2026-09-07.
+#
+# ⚠️ TERCERA VERSION. Sergio Urcullo, 07-sep: "aun no me gusta la info que das en el de
+# fable... coloca info relevante que se entienda". Tenia razon y el problema era de fondo:
+# la pieza estaba escrita con los NOMBRES DE LAS PRUEBAS —AutomationBench, CursorBench,
+# Terminal-Bench-Science, OSWorld— y a un dueño de negocio boliviano eso no le dice nada.
+# Un titular que hay que googlear no es informacion: es ruido con aspecto de dato.
+#
+# REGLA NUEVA DE ESTA PIEZA: en la lamina NO aparece ningun nombre de benchmark. Cada
+# numero se dice por lo que SIGNIFICA para el que lo lee ("termina 1 de cada 3 tareas
+# enteras", "abre programas y hace clic"), y el nombre de la prueba baja al pie chiquito
+# del layout G, que es donde va la trazabilidad sin estorbar la lectura.
+#
+# El angulo sigue siendo LO QUE HACE, no quien lo usa (pedido del 07-sep). Y lo que diga
+# "el mejor" se CITA, no se opina: la pagina dice textual "They're the world's most
+# advanced models for coding and knowledge work".
+FABLE = [
+    {
+        "layout": "D",
+        "marca": "claude",
+        "contexto": "El modelo más avanzado de Anthropic",
+        "remate": 'FABLE <span class="coral">5.1</span>',
+        "pie": "y esto es lo que hace",
+        "pie_hl": "mejor",
+        "gancho": True,
+        # ⚠️ "hasta −45%" lleva el "hasta" porque la pagina dice "up to approximately 45%".
+        # Sin esa palabra la cifra pasa de ser un techo a ser una promesa.
+        "adelanto": [
+            {"cifra": "7 de 7", "que": "pruebas\nganadas"},
+            {"cifra": "casi 2×", "que": "en tareas\nde oficina"},
+            {"cifra": "hasta −45%", "que": "de costo si\ntrabaja solo"},
+        ],
+    },
+    # LA MAS RELEVANTE PRIMERO: es la unica prueba de toda la tabla que mide una tarea de
+    # oficina de punta a punta, o sea lo que hace un negocio. La lamina la cuenta con
+    # ejemplos y con "1 de cada 3", no con el nombre de la prueba ni con el porcentaje
+    # crudo: 31,4% se lee como nota baja, "1 de cada 3" se lee como lo que es.
+    {
+        "layout": "G",
+        "titulo": "Le das el trabajo entero\ny lo termina",
+        "sub": "No un pedacito: la tarea completa, de principio a fin,\nsin que se la vuelvas a explicar en el medio.\nHoy lo logra 1 de cada 3 veces. Antes, 1 de cada 6.",
+        "fuente": "AutomationBench · Anthropic",
+        "barras": [
+            {"rotulo": "Fable 5.1", "valor": 31.4, "gana": True},
+            {"rotulo": "Opus 5", "valor": 26.9},
+            {"rotulo": "GPT-5.6\nSol", "valor": 19.6},
+            {"rotulo": "Fable 5", "valor": 17.1},
+        ],
+    },
+    # Capacidad pura, sin porcentaje en el titular: "usa la computadora" se entiende sin
+    # ninguna explicacion y es lo que mas sorprende a alguien que nunca vio un agente.
+    {
+        "layout": "D",
+        "contexto": "Y ya no hay que dictarle",
+        "remate": "USA LA\nCOMPUTADORA",
+        "largo": True,
+        "sub": "Abre los programas, hace clic donde va y completa\nla tarea en la pantalla, como lo harías vos.\nAhí también le gana a Opus 5 y a su versión anterior.",
+    },
+    # Anthropic lo publica como caracteristica, no como puntaje. Para el lector de esta
+    # cuenta es LA diferencia practica: algo que trabaja de noche sin que nadie lo mire.
+    {
+        "layout": "D",
+        "contexto": "Y aguanta el turno largo",
+        "remate": "TRABAJA SOLO",
+        "sub": "Anthropic dice que se maneja mejor que la versión\nanterior en trabajos largos y sin supervisión.\nEs la diferencia entre una respuesta y un empleado.",
+    },
+    # La ventaja mas relatable: cualquiera que le pidio codigo a una IA conoce el parche
+    # que funciona hoy y explota el martes. El tachado hace el trabajo sin gastar palabras.
+    {
+        "layout": "D",
+        "contexto": 'Antes parchaba <span class="tachado">el síntoma</span>',
+        "remate": "AHORA BUSCA\nLA CAUSA",
+        "sub": "Anthropic lo dice así: arregla la raíz del problema\nen vez de tomar atajos que dan peor trabajo.",
+    },
+    # La prueba de que el salto no es marketing. Va DESPUES de las ventajas: primero se
+    # entiende QUE cambio, despues se muestra CUANTO.
+    {
+        "layout": "G",
+        "titulo": "Y no es sólo trabajo\nde oficina",
+        "sub": "En investigación científica hecha sin nadie al lado\npasó de resolver 1 de cada 4 casos a más de la mitad.\nEl segundo de la lista no llega a 3 de cada 10.",
+        "fuente": "Terminal-Bench-Science 0.1 · Anthropic",
+        "barras": [
+            {"rotulo": "Fable 5.1", "valor": 52.6, "gana": True},
+            {"rotulo": "Opus 5", "valor": 29.0},
+            {"rotulo": "GPT-5.6\nSol", "valor": 22.4},
+            {"rotulo": "Fable 5", "valor": 24.7},
+        ],
+    },
+    # El precio, TRADUCIDO. "$0,25 por millon de tokens" no se entiende fuera del gremio;
+    # "lo que cuesta tenerlo trabajando" si. La ficha con el icono de Claude ademas cierra
+    # la identidad visual de la pieza.
+    {
+        "layout": "E",
+        "icono": "claude",
+        "nombre": "Y encima bajó",
+        "desc": "Tener algo suyo trabajando todo el día cuesta\nhasta 45% menos: lo que un agente más repite\nmientras trabaja solo ahora vale la cuarta parte.",
+        "precio": "−75%",
+        "etiqueta": "en lo que más se repite",
+    },
+    # CTA que obliga a comentar: pregunta cerrada, respuesta de una palabra, sobre algo
+    # que el lector ya tiene decidido.
+    {
+        "layout": "D",
+        "contexto": "Ahora te toca a vos",
+        "remate": "¿CUÁL USÁS?",
+        "sub": "Claude, ChatGPT o Gemini. Escribí el tuyo abajo\ny te digo para qué me sirve mejor cada uno.",
+        "cta_hl": "Un nombre alcanza.",
+        "cta_gris": "Te contesto a todos.",
+    },
+]
+# Layout A — grilla comparativa 3x3 (referencia #1 del batch). Es el meme de founders
+# LOCALIZADO, y el chiste vive en la tercera fila: el original pone Stripe / PayPal /
+# Hotmart, y en Bolivia ninguna de las tres te sirve — Stripe directamente no acepta el
+# pais ([[lety-cobra-tarjeta-antes-del-trial]]). Por eso la fila es transferencia, USDT y
+# efectivo: el que la ve se rie porque le pasa.
+# Sergio Urcullo sacó "QR del banco" el 06-sep y entró USDT en su lugar.
+# Cero cifras y cero promesas: la pieza no afirma nada que haya que sostener despues.
+FOUNDERS_BO = [
+    {
+        "layout": "A",
+        "titulo": "Los founders bolivianos\ntienen 3 grandes decisiones:",
+        "filas": [
+            [
+                {"icono": "claude", "rotulo": "Claude"},
+                {"icono": "chatgpt", "rotulo": "ChatGPT"},
+                {"icono": "gemini", "rotulo": "Gemini"},
+            ],
+            [
+                {"objeto": "cafe.png", "rotulo": "Café"},
+                {"objeto": "mate.png", "rotulo": "Mate"},
+                {"objeto": "energetica.png", "rotulo": "Energética"},
+            ],
+            [
+                {"dibujo": "transferencia", "rotulo": "Transferencia"},
+                {"icono": "usdt", "rotulo": "USDT"},
+                {"objeto": "efectivo.png", "rotulo": "Efectivo"},
+            ],
+        ],
+    },
+]
+
+PIEZAS = {
+    "mi-stack": None,
+    "fable": FABLE,
+    "founders-bo": FOUNDERS_BO,
+    "portada-f": PORTADA_F,
+    "duelo-cuaderno": DUELO_CUADERNO,
+    "vitamina-c": VITAMINA_C,
+}  # mi-stack se resuelve a LAMINAS abajo
+
+# Piel por pieza: una clase extra en el lienzo que habilita el acento de esa marca.
+# Sergio Urcullo, 07-sep: "coloca mas cosas de claude, mas visuales, mas colores, que
+# resalte, el inicio del carrusel se ve muy triste". El coral #D97757 NO es inventado:
+# sale SAMPLEADO del PNG oficial del icono de Claude ya vendorizado en logos/ (su color
+# mas frecuente despues del fondo).
+#
+# ⚠️ Esto llego a pintar tambien el FONDO de crema #F3E9D7, y el mismo dia lo rechazo:
+# "mejor que todos sean blancos nomas, pero esta bien que uses ahi los colores naranjas
+# de claude". La superficie es del patron; el color de marca entra como acento y nada mas.
+# `--claude-crema` queda definida en tokens pero HOY NO LA USA NADIE: si vuelve a hacer
+# falta, es esa. No reactivarla sin pedirselo.
+FONDO = {"fable": "claude"}
+
+FUENTES = {
+    # Maxima fidelidad con las referencias que mando Sergio Urcullo. Vendorizada aca,
+    # no adoptada como fuente de marca: esa decision no la toma un generador.
+    "inter": ("Inter", FONTS_PATRON / "Inter-var-latin.woff2", "700", "normal"),
+    # Del trio declarado en ONIA_BRAND_IDENTITY_2026.md §2. Geometrica y de bajo
+    # contraste: es la opcion legal-de-marca mas parecida a SF Pro que ya esta vendorizada.
+    "dmsans": ("DM Sans", FONTS_MARCA / "DMSans-var-latin.woff2", "500", "normal"),
+}
+
+
+def css(tipo):
+    nombre, woff2, peso, vf = FUENTES[tipo]
+    for ruta in (woff2, MONO_WOFF2, SERIF_WOFF2):
+        if not ruta.exists():
+            raise SystemExit(f"Falta la fuente {ruta}. Corré build-inter.py del patrón.")
+    return f"""@font-face{{font-family:'{nombre}';src:url('{woff2.as_uri()}') format('woff2');
+  font-weight:100 900;font-display:block}}
+@font-face{{font-family:'OniaMono';src:url('{MONO_WOFF2.as_uri()}') format('woff2');
+  font-weight:400 500;font-display:block}}
+@font-face{{font-family:'OniaSerif';src:url('{SERIF_WOFF2.as_uri()}') format('woff2');
+  font-weight:400;font-display:block}}
+*{{margin:0;padding:0;box-sizing:border-box}}
+:root{{--bg:#F5F5F7;--ink:#1D1D1F;--muted:#6E6E73;--verde:#00C661;--crema:#F5F1E8;--surface:#FFFFFF;--hairline:#D2D2D7;
+  /* Colores de Anthropic, SAMPLEADOS del PNG oficial del icono de Claude que ya estaba
+     vendorizado en logos/ — son sus dos colores mas frecuentes, no una aproximacion a ojo. */
+  --claude-crema:#F3E9D7;--claude-coral:#D97757;--claude-hairline:#E3D6BE}}
+html,body{{width:1080px;height:1350px}}
+body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;overflow:hidden;
+  -webkit-font-smoothing:antialiased}}
+/* padding-bottom extra: el handle va absolute y no ocupa flujo, asi que sin esto el
+   bloque queda visualmente bajo y el tercio inferior muerto. Las refs apoyan el bloque
+   apenas por encima del centro optico. */
+.lienzo{{width:1080px;height:1350px;padding:96px 96px 190px;display:flex;
+  flex-direction:column;align-items:center;justify-content:center;position:relative;
+  text-align:center}}
+.display{{font-weight:{peso};font-variation-settings:{vf};letter-spacing:-.032em;
+  line-height:.98;color:var(--ink)}}
+.contexto{{font-size:46px;font-weight:400;color:var(--muted);line-height:1.25;
+  letter-spacing:-.01em}}
+.remate{{font-size:126px;margin-top:22px}}
+/* La portada es la unica lamina cuyo trabajo es FRENAR el scroll: su cifra
+   va mas grande que cualquier otra del carrusel. */
+.remate.gancho{{font-size:196px;letter-spacing:-.045em;margin-top:14px}}
+/* Palabra larga: "COMPUTADORA" a 126px mide 934px y el util son 888. Baja el cuerpo
+   en vez de acortar la palabra — el copy manda sobre la tipografia, no al reves. */
+.remate.largo{{font-size:104px}}
+.pie{{font-size:44px;color:var(--muted);margin-top:40px;letter-spacing:-.01em}}
+.hl{{background:var(--verde);color:var(--ink);border-radius:10px;padding:2px 16px 8px;
+  font-weight:{peso};white-space:nowrap;-webkit-box-decoration-break:clone}}
+.obj{{width:260px;height:260px;filter:drop-shadow(0 24px 48px rgba(0,0,0,.14))}}
+.nombre{{font-size:96px;margin-top:52px}}
+.desc{{font-size:33px;color:var(--muted);line-height:1.42;margin-top:22px;
+  white-space:pre-line;letter-spacing:-.005em;max-width:800px}}
+/* Un solo tamano para todo el precio, unidad incluida: es como lo muestran las refs
+   5/6/7 ("$20/mes"). Con la unidad en otro cuerpo quedaba pegada y desalineada. */
+.precio{{font-size:92px;margin-top:58px}}
+/* Cuando el slot no lleva cifra sino una frase, 92px la vuelve un titular que compite con
+   el nombre. Baja a 60px y sigue siendo el segundo foco. */
+.precio.texto{{font-size:60px}}
+/* Etiqueta de procedencia (open source / plan gratis). Mismo tratamiento que el handle
+   —mono, mayuscula, gris— para que lea como dato tecnico y no compita con el precio. */
+.etiqueta{{font-family:'OniaMono',monospace;font-size:25px;font-weight:500;
+  letter-spacing:.08em;text-transform:uppercase;color:#A1A1A6;margin-top:24px}}
+.sub{{font-size:38px;color:var(--muted);line-height:1.4;margin-top:30px;
+  white-space:pre-line;letter-spacing:-.01em}}
+/* chip en su propia linea: en linea con el texto gris la frase se partia en dos y el
+   chip quedaba descentrado contra una segunda linea centrada. */
+/* Tira de iconos para la portada: muestra en la lámina 1 TODO lo que viene adentro.
+   Es lo que convierte una portada en una promesa — el ojo cuenta los objetos y quiere
+   saber cuál es cuál, y eso es exactamente el swipe. */
+.tira{{display:flex;gap:26px;justify-content:center;align-items:center;margin-top:64px;
+  flex-wrap:wrap}}
+.tira > *{{width:96px;height:96px;flex:0 0 auto;
+  filter:drop-shadow(0 10px 20px rgba(0,0,0,.13))}}
+.tira > * > svg{{width:100%;height:100%}}
+.cta{{margin-top:70px;font-size:40px;color:var(--muted);letter-spacing:-.01em}}
+.cta .hl{{display:inline-block;margin-bottom:22px}}
+.cta-gris{{display:block}}
+/* layout A — grilla comparativa 3xN (referencia #1 del batch: Claude/ChatGPT/Gemini,
+   DY/DWY/DFY, Stripe/Paypal/Hotmart). El divisor hairline entre filas es lo que la hace
+   leer como TABLA y no como collage: sin el, nueve objetos sueltos son ruido.
+   Es el layout mas caro del patron — pide 9 objetos con altura optica pareja. */
+/* Nueve objetos + tres filas de etiquetas + titulo NO entran a tamano de portada. La
+   primera version desbordo por abajo: la fila 3 quedaba cortada y su etiqueta chocaba
+   con el handle, y el titulo se iba a TRES lineas (la FICHA manda maximo dos). Todo el
+   bloque esta calibrado para cerrar dentro de los 1350px con aire. */
+.lienzo.a{{justify-content:center;padding:74px 88px 132px}}
+.titulo-a{{font-size:70px;font-weight:{peso};font-variation-settings:{vf};
+  letter-spacing:-.03em;line-height:1.06;color:var(--ink);white-space:pre-line;
+  margin-bottom:20px}}
+.fila-a{{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;width:100%;
+  padding:42px 0;border-top:1px solid var(--hairline)}}
+.fila-a.primera{{border-top:none}}
+.celda-a{{display:flex;flex-direction:column;align-items:center;gap:16px}}
+/* altura FIJA: nueve objetos de proporciones distintas solo leen parejos si comparten caja.
+   ⚠️ `object-fit` NO aplica a un <svg> en linea —solo a elementos reemplazados como <img>—
+   asi que los squircles desbordaban su caja, se comian las etiquetas de su fila y pisaban
+   la fila de abajo. El <svg> se acota con height/width propios, no con object-fit. */
+.celda-a .obj-a{{height:170px;width:100%;display:flex;align-items:center;
+  justify-content:center;filter:drop-shadow(0 14px 26px rgba(0,0,0,.13))}}
+.celda-a .obj-a > svg{{height:100%;width:auto;max-width:100%}}
+.celda-a img.obj-a{{object-fit:contain}}
+.celda-a .rotulo-a{{font-size:38px;font-weight:{peso};font-variation-settings:{vf};
+  letter-spacing:-.02em;color:var(--ink);text-align:center}}
+/* layout B — grilla 2x2 con el objeto encajonado (referencia #2 del batch). Cada celda
+   es una tarjeta blanca con filo: eso separa los objetos entre si sin dibujar divisores,
+   y hace que una foto y un icono dibujado convivan sin pelearse. */
+/* Piel de la pieza de Claude: SOLO el acento, el fondo queda en el gris del patron.
+   ⚠️ El 07-sep esto pinto ademas el fondo entero de crema #F3E9D7 y Sergio Urcullo lo
+   rechazo en el mismo dia: "mejor que todos sean blancos nomas, pero esta bien que uses
+   ahi los colores naranjas de claude". El color de marca entra como ACENTO, no como
+   superficie — que es como lo usa el patron con todo lo demas.
+   El coral reemplaza al verde de Onia SOLO en esta pieza: el verde es de la casa y este
+   carrusel habla de un producto ajeno. */
+.lienzo.claude .hl{{background:var(--claude-coral);color:#FFFFFF}}
+.lienzo.claude .barra.gana .cana{{background:var(--claude-coral)}}
+.lienzo.claude .barra.gana .val{{color:var(--claude-coral)}}
+.lienzo.claude .barra.gana .rot{{color:var(--ink)}}
+/* Remate en coral para las laminas de dato puro: sin esto quedaban tres pantallas
+   seguidas de tinta sobre crema y el color desaparecia del carrusel a la mitad. */
+.lienzo.claude .remate.acento{{color:var(--claude-coral)}}
+/* Portada: el icono de Claude arriba del titulo. Es la lamina que decide si alguien mira
+   el resto, y sin la marca era un cartel de texto que no decia de quien habla. */
+.marca-portada{{width:244px;height:244px;margin-bottom:40px;
+  filter:drop-shadow(0 22px 40px rgba(148,96,64,.24))}}
+.marca-portada svg{{width:100%;height:100%}}
+.coral{{color:var(--claude-coral)}}
+.tachado{{text-decoration:line-through;text-decoration-thickness:4px;
+  text-decoration-color:var(--claude-coral)}}
+/* Adelanto de cifras en la portada. Mismo truco que la tira de iconos de "Mi stack": la
+   portada deja de ENUNCIAR y pasa a PROMETER — el ojo ve tres numeros que no entiende
+   todavia y desliza para saber de que son. Ademas llena el tercio inferior, que con solo
+   titulo y chip quedaba muerto y era la mitad de lo que hacia ver "triste" la lamina. */
+.adelanto{{display:flex;gap:56px;justify-content:center;align-items:flex-start;
+  margin-top:66px;padding-top:44px;border-top:1px solid var(--hairline);width:100%}}
+.adelanto .celda{{flex:1;max-width:236px}}
+.adelanto .cifra{{font-size:70px;font-weight:{peso};font-variation-settings:{vf};
+  letter-spacing:-.035em;color:var(--claude-coral);line-height:1}}
+.adelanto .que{{font-family:'OniaMono',monospace;font-size:22px;font-weight:500;
+  letter-spacing:.06em;text-transform:uppercase;color:#A1A1A6;margin-top:14px;
+  line-height:1.3;white-space:pre-line}}
+/* layout G — barras comparativas. Nace el 07-sep de "el de claude siento que esta muy
+   pobre, intenta colocarles mas cosas de valor y mas visuales": el carrusel de Fable era
+   siete laminas y seis eran texto centrado. Un porcentaje escrito se lee; un porcentaje
+   dibujado se COMPARA, que es justo lo que la pieza necesita hacer.
+   ⚠️ La altura es proporcional al valor desde CERO (`v / max * 100%`). Recortar la base
+   para "que se note mas la diferencia" es el truco de grafico mentiroso mas comun que
+   existe, y en una pieza que presume de datos verificados seria el peor lugar para usarlo. */
+.lienzo.g{{justify-content:center;padding:96px 96px 150px}}
+.titulo-g{{font-size:62px;font-weight:{peso};font-variation-settings:{vf};
+  letter-spacing:-.03em;line-height:1.06;color:var(--ink);white-space:pre-line}}
+.sub-g{{font-size:34px;color:var(--muted);line-height:1.35;margin-top:18px;
+  letter-spacing:-.01em;white-space:pre-line}}
+.barras{{display:flex;align-items:flex-end;justify-content:center;gap:38px;
+  height:560px;width:100%;margin-top:56px}}
+.barra{{flex:1;max-width:180px;display:flex;flex-direction:column;
+  justify-content:flex-end;height:100%}}
+.barra .val{{font-size:50px;font-weight:{peso};font-variation-settings:{vf};
+  letter-spacing:-.03em;color:var(--muted);margin-bottom:18px}}
+.barra .cana{{width:100%;background:var(--hairline);border-radius:22px 22px 10px 10px}}
+.barra .rot{{font-family:'OniaMono',monospace;font-size:22px;font-weight:500;
+  letter-spacing:.04em;text-transform:uppercase;color:#A1A1A6;margin-top:22px;
+  line-height:1.3;white-space:pre-line}}
+/* El ganador en tinta plena. NO en verde: el verde es de la marca Onia y esta pieza
+   habla de un producto ajeno — pintar a Anthropic con el color de la casa confunde
+   de quien es el logro. */
+.barra.gana .val{{color:var(--ink);font-size:60px}}
+.barra.gana .cana{{background:var(--ink)}}
+.barra.gana .rot{{color:var(--ink)}}
+.pie-g{{font-family:'OniaMono',monospace;font-size:22px;font-weight:500;
+  letter-spacing:.06em;text-transform:uppercase;color:#A1A1A6;margin-top:44px}}
+.lienzo.b{{justify-content:center;padding:96px 96px 150px}}
+.titulo-b{{font-size:96px;font-weight:{peso};font-variation-settings:{vf};
+  letter-spacing:-.032em;line-height:1;color:var(--ink);margin-bottom:78px}}
+.grilla{{display:grid;grid-template-columns:1fr 1fr;gap:60px 56px;width:100%}}
+.celda{{display:flex;flex-direction:column;align-items:center;gap:26px}}
+.caja{{width:100%;height:300px;background:var(--surface);border:1px solid var(--hairline);
+  border-radius:26px;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}}
+.caja img,.caja svg{{max-width:88%;max-height:88%;object-fit:contain}}
+.rotulo{{font-size:52px;font-weight:{peso};font-variation-settings:{vf};
+  letter-spacing:-.02em;color:var(--ink)}}
+/* layout C — duelo 2-up (referencia #3 del batch: chocolate vs reloj, "310 cal / 0 cal").
+   Fondo crema y titulo SERIF: el aire editorial de esa referencia sale de esas dos cosas
+   juntas, no de una. Con el gris y la sans queda otra lamina mas del carrusel. */
+.lienzo.c{{background:var(--crema);justify-content:center;padding-top:120px}}
+.titulo-c{{font-family:'OniaSerif',Georgia,serif;font-size:82px;line-height:1.08;
+  color:var(--ink);white-space:pre-line;letter-spacing:-.01em}}
+.duelo{{display:flex;gap:70px;align-items:flex-end;justify-content:center;
+  margin-top:110px;width:100%}}
+.lado{{flex:1;display:flex;flex-direction:column;align-items:center;gap:44px}}
+/* Altura FIJA de caja para los dos objetos: es la unica forma de que dos fotos de
+   proporciones distintas lean con la misma presencia. Sin esto, el mas ancho domina. */
+.lado img{{height:380px;width:100%;object-fit:contain;object-position:bottom;
+  filter:drop-shadow(0 24px 48px rgba(0,0,0,.14))}}
+.dato{{font-size:64px;font-weight:{peso};font-variation-settings:{vf};
+  letter-spacing:-.03em;color:var(--ink);line-height:1}}
+.dato .chico{{display:block;font-family:'OniaMono',monospace;font-size:23px;font-weight:500;
+  letter-spacing:.08em;text-transform:uppercase;color:#A1A1A6;margin-top:18px}}
+/* layout F — portada con foto recortada (referencia bastian.xu). El texto va arriba y
+   alineado a la IZQUIERDA, no centrado: en la referencia el bloque de nombre ancla la
+   esquina y la foto entra por abajo a sangre. Centrarlo lo vuelve una placa cualquiera. */
+.lienzo.f{{justify-content:flex-start;text-align:left;align-items:stretch;padding:120px 96px 0}}
+.f .nombre-f{{font-size:92px;line-height:1.0}}
+.f .sub-f{{font-size:44px;color:var(--muted);line-height:1.22;margin-top:18px;
+  letter-spacing:-.01em;max-width:820px;white-space:pre-line}}
+/* Chip de accion bajo el subtitulo. Es la unica lamina del carrusel que le pide algo al
+   lector ademas del comentario, asi que lleva el verde de marca: acá sí es Onia hablando. */
+.f .cta-f{{margin-top:30px}}
+.f .cta-f .hl{{font-size:38px;display:inline-block}}
+/* La foto sale del flujo y se apoya en el borde inferior: a sangre, como la referencia. */
+.f .foto{{position:absolute;left:50%;transform:translateX(-50%);bottom:0;
+  max-height:72%;width:auto;object-fit:contain;object-position:bottom}}
+/* El handle centrado caia ENCIMA del polo azul marino y no se leia.
+   ⚠️ Mandarlo al margen derecho NO lo arreglo, solo lo movio: medido en el render del
+   07-sep, a la altura del handle la foto ocupa de x=94 a x=984, o sea TODO el ancho util
+   — no hay franja de fondo abajo, y el gris quedaba igual sobre el azul, encima pegado
+   al logo bordado del polo.
+   Se deja sobre la foto y se invierte el color: blanco sobre azul marino lee, y lee como
+   firma puesta a proposito. `left` en vez de `right` lo aleja del bordado del pecho. */
+.f .handle{{left:110px;right:auto;text-align:left;bottom:56px;color:#FFFFFF;opacity:.78}}
+.handle{{position:absolute;bottom:76px;left:0;right:0;font-family:'OniaMono',monospace;
+  font-size:23px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;
+  color:#A1A1A6}}"""
+
+
+def _clases(lamina):
+    """Clases del lienzo: el layout (los que traen grilla propia) y el fondo de la pieza."""
+    c = ["lienzo"]
+    if lamina["layout"] in ("A", "B", "C", "F", "G"):
+        c.append(lamina["layout"].lower())
+    if lamina.get("fondo"):
+        c.append(lamina["fondo"])
+    return " ".join(c)
+
+
+def markup(lamina):
+    if lamina["layout"] == "A":
+        filas = []
+        for n, fila in enumerate(lamina["filas"]):
+            celdas = []
+            for c in fila:
+                if c.get("icono"):
+                    cuerpo = f'<div class="obj-a">{ICONOS[c["icono"]]}</div>'
+                elif c.get("dibujo"):
+                    cuerpo = f'<div class="obj-a">{DIBUJOS[c["dibujo"]]()}</div>'
+                else:
+                    obj = OBJETOS / c["objeto"]
+                    if not obj.exists():
+                        raise SystemExit(f"Falta el objeto {obj}. Corré buscar-objetos.py.")
+                    cuerpo = f'<img class="obj-a" src="{obj.as_uri()}">'
+                celdas.append(f'<div class="celda-a">{cuerpo}'
+                              f'<div class="rotulo-a">{c["rotulo"]}</div></div>')
+            clase = "fila-a primera" if n == 0 else "fila-a"
+            filas.append(f'<div class="{clase}">{"".join(celdas)}</div>')
+        return (f'<div class="display titulo-a">{lamina["titulo"]}</div>'
+                f'{"".join(filas)}')
+    if lamina["layout"] == "G":          # barras comparativas
+        tope = max(b["valor"] for b in lamina["barras"])
+        cols = []
+        for b in lamina["barras"]:
+            gana = " gana" if b.get("gana") else ""
+            alto = b["valor"] / tope * 100
+            val = f'{b["valor"]:.1f}'.replace(".", ",") + lamina.get("unidad", "%")
+            cols.append(f'<div class="barra{gana}"><div class="val">{val}</div>'
+                        f'<div class="cana" style="height:{alto:.2f}%"></div>'
+                        f'<div class="rot">{b["rotulo"]}</div></div>')
+        sub = f'<div class="sub-g">{lamina["sub"]}</div>' if lamina.get("sub") else ""
+        return (f'<div class="titulo-g">{lamina["titulo"]}</div>{sub}'
+                f'<div class="barras">{"".join(cols)}</div>'
+                f'<div class="pie-g">{lamina["fuente"]}</div>')
+    if lamina["layout"] == "B":
+        celdas = []
+        for c in lamina["celdas"]:
+            if c.get("icono"):
+                cuerpo = ICONOS[c["icono"]]
+            elif c.get("dibujo"):
+                cuerpo = DIBUJOS[c["dibujo"]]()
+            else:
+                obj = OBJETOS / c["objeto"]
+                if not obj.exists():
+                    raise SystemExit(f"Falta el objeto {obj}. Corré buscar-objetos.py.")
+                cuerpo = f'<img src="{obj.as_uri()}">'
+            celdas.append(f'<div class="celda"><div class="caja">{cuerpo}</div>'
+                          f'<div class="rotulo">{c["rotulo"]}</div></div>')
+        return (f'<div class="titulo-b">{lamina["titulo"]}</div>'
+                f'<div class="grilla">{"".join(celdas)}</div>')
+    if lamina["layout"] == "C":
+        lados = []
+        for lado in lamina["lados"]:
+            obj = OBJETOS / lado["objeto"]
+            if not obj.exists():
+                raise SystemExit(f"Falta el objeto {obj}. Corré buscar-objetos.py.")
+            chico = f'<span class="chico">{lado["etiqueta"]}</span>' if lado.get("etiqueta") else ""
+            lados.append(f'<div class="lado"><img src="{obj.as_uri()}">'
+                         f'<div class="dato">{lado["dato"]}{chico}</div></div>')
+        return (f'<div class="titulo-c">{lamina["titulo"]}</div>'
+                f'<div class="duelo">{"".join(lados)}</div>')
+    if lamina["layout"] == "F":
+        foto = LOGOS / lamina["foto"]
+        if not foto.exists():
+            raise SystemExit(f"Falta la foto recortada {foto}. Corré recortar-foto.py.")
+        cta = (f'<div class="cta-f"><span class="hl">{lamina["cta"]}</span></div>'
+               if lamina.get("cta") else "")
+        return (f'<div class="display nombre-f">{lamina["nombre"]}</div>'
+                f'<div class="sub-f">{lamina["sub"]}</div>{cta}'
+                f'<img class="foto" src="{foto.as_uri()}">')
+    if lamina["layout"] == "D":
+        gancho = " gancho" if lamina.get("gancho") else ""
+        acento = " acento" if lamina.get("acento") else ""
+        acento += " largo" if lamina.get("largo") else ""
+        marca = (f'<div class="marca-portada">{ICONOS[lamina["marca"]]}</div>'
+                 if lamina.get("marca") else "")
+        cuerpo = (f'{marca}<div class="contexto">{lamina["contexto"]}</div>'
+                  f'<div class="display remate{gancho}{acento}">{lamina["remate"]}</div>')
+        if lamina.get("pie"):
+            cuerpo += f'<div class="pie">{lamina["pie"]} <span class="hl">{lamina["pie_hl"]}</span></div>'
+        if lamina.get("sub"):
+            cuerpo += f'<div class="sub">{lamina["sub"]}</div>'
+        if lamina.get("adelanto"):
+            celdas = "".join(
+                f'<div class="celda"><div class="cifra">{c["cifra"]}</div>'
+                f'<div class="que">{c["que"]}</div></div>' for c in lamina["adelanto"])
+            cuerpo += f'<div class="adelanto">{celdas}</div>'
+        if lamina.get("tira"):
+            iconos = "".join(ICONOS[i] for i in lamina["tira"])
+            cuerpo += f'<div class="tira">{iconos}</div>'
+        if lamina.get("cta_hl"):
+            cuerpo += (f'<div class="cta"><span class="hl">{lamina["cta_hl"]}</span>'
+                       f'<span class="cta-gris">{lamina["cta_gris"]}</span></div>')
+        return cuerpo
+    etiqueta = (f'<div class="etiqueta">{lamina["etiqueta"]}</div>'
+                if lamina.get("etiqueta") else "")
+    return (f'<div class="obj">{ICONOS[lamina["icono"]]}</div>'
+            f'<div class="display nombre">{lamina["nombre"]}</div>'
+            f'<div class="desc">{lamina["desc"]}</div>'
+            f'<div class="display precio{"" if lamina["precio"].startswith("$") else " texto"}">'
+            f'{lamina["precio"]}</div>{etiqueta}')
+
+
+def render(tipo, out_dir, laminas=None):
+    out_dir.mkdir(parents=True, exist_ok=True)
+    chrome = _chrome()
+    hoja = css(tipo)
+    for i, lamina in enumerate(laminas or LAMINAS, 1):
+        html = (f"<!doctype html><html><head><meta charset='utf-8'><style>{hoja}</style></head>"
+                f"<body><div class='{_clases(lamina)}'>{markup(lamina)}"
+                f"<div class='handle'>{HANDLE}</div></div></body></html>")
+        with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as fh:
+            fh.write(html)
+            tmp = fh.name
+        dest = out_dir / f"lamina-{i:02d}.png"
+        subprocess.run(
+            [chrome, "--headless", "--disable-gpu", "--no-sandbox", "--hide-scrollbars",
+             "--force-device-scale-factor=1", "--window-size=1080,1350",
+             f"--screenshot={dest}", Path(tmp).as_uri()],
+            check=True, capture_output=True, timeout=90,
+        )
+        os.unlink(tmp)
+        if not dest.exists() or dest.stat().st_size == 0:
+            raise SystemExit(f"PNG vacio o ausente: {dest}")
+        print(f"  {dest.name}  {dest.stat().st_size // 1024} KB")
+
+
+# --- Gate de desborde -------------------------------------------------------------
+# El texto que se sale del margen es la trampa que ya mordio dos veces en este repo
+# (trampa #2 de la FICHA de carrusel-pinterest-refs, y de nuevo en la primera corrida
+# de este generador con "6 HERRAMIENTAS"). No se ve en el peso del PNG y en miniatura
+# apenas se nota, asi que se mide: ancho real entintado vs ancho util del lienzo.
+UTIL = 1080 - 96 * 2
+
+def sonda_js(nombre):
+    return """
+<script>
+window.addEventListener('load', function(){
+  document.fonts.ready.then(function(){
+    // FUENTE: la asercion que impide que vuelva el fallback silencioso. Si la familia
+    // no cargo, el render sale con la del sistema y NADA lo delata: mismo peso de PNG,
+    // misma composicion, tipografia equivocada. Paso en la primera corrida de este
+    // generador y solo se descubrio comparando md5 entre las dos variantes.
+    var ok = document.fonts.check('700 126px "__FAM__"') ? 1 : 0;
+    function ancho(el){
+      var r = document.createRange(); r.selectNodeContents(el);
+      var rects = Array.prototype.slice.call(r.getClientRects());
+      return rects.length ? Math.max.apply(null, rects.map(function(x){return x.width})) : 0;
+    }
+    var out = ['FUENTE|' + ok];
+    document.querySelectorAll('.remate,.nombre,.precio,.desc,.contexto,.pie,.sub,.cta,.etiqueta,.nombre-f,.sub-f,.titulo-c,.dato,.titulo-b,.rotulo,.titulo-a,.rotulo-a,.nom,.bio,.titulo-g,.sub-g,.val,.rot,.pie-g,.cta-f,.cifra,.que')
+      .forEach(function(el){
+        out.push('SONDA|' + el.className.replace(/display /,'') + '|' + Math.round(ancho(el)));
+      });
+    var d = document.createElement('div'); d.id = 'sonda'; d.textContent = out.join(' ');
+    document.body.appendChild(d);
+  });
+});
+</script>
+""".replace("__FAM__", nombre)
+
+
+def check(tipo, laminas=None):
+    """Rinde cada lamina midiendo, y falla si algun texto pasa el ancho util."""
+    chrome = _chrome()
+    hoja = css(tipo)
+    sonda = sonda_js(FUENTES[tipo][0])
+    fallos = []
+    for i, lamina in enumerate(laminas or LAMINAS, 1):
+        html = (f"<!doctype html><html><head><meta charset='utf-8'><style>{hoja}</style>"
+                f"{sonda}</head><body><div class='{_clases(lamina)}'>{markup(lamina)}"
+                f"<div class='handle'>{HANDLE}</div></div></body></html>")
+        with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as fh:
+            fh.write(html)
+            tmp = fh.name
+        res = subprocess.run(
+            [chrome, "--headless", "--disable-gpu", "--no-sandbox", "--dump-dom",
+             "--virtual-time-budget=4000", "--window-size=1080,1350", Path(tmp).as_uri()],
+            capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=90,
+        )
+        os.unlink(tmp)
+        # regex y no split(): la ultima medida viene pegada al HTML de cierre del dump
+        cargada = re.search(r"FUENTE\|(\d)", res.stdout)
+        if not cargada or cargada.group(1) != "1":
+            fallos.append(f"lamina {i:02d} · la fuente '{FUENTES[tipo][0]}' NO cargo "
+                          f"(el render saldria con la del sistema, sin avisar)")
+        medidas = re.findall(r"SONDA\|([\w.-]+)\|(\d+)", res.stdout)
+        if not medidas:
+            fallos.append(f"lamina {i:02d}: la sonda no devolvio medidas")
+            continue
+        for clase, px in medidas:
+            if int(px) > UTIL:
+                fallos.append(f"lamina {i:02d} · .{clase} mide {px}px > {UTIL}px utiles")
+    return fallos
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--tipografia", choices=list(FUENTES), default="inter")
+    ap.add_argument("--pieza", choices=list(PIEZAS), default="mi-stack")
+    ap.add_argument("--out", default=None)
+    ap.add_argument("--check", action="store_true",
+                    help="solo mide desborde de texto, no rinde PNG")
+    args = ap.parse_args()
+    laminas = PIEZAS[args.pieza] or LAMINAS
+    if args.pieza in FONDO:      # copia, no mutacion: los dicts de arriba son la fuente
+        laminas = [{**l, "fondo": FONDO[args.pieza]} for l in laminas]
+
+    if args.check:
+        print(f"gate de desborde · {args.pieza} · tipografia={args.tipografia} · util={UTIL}px")
+        fallos = check(args.tipografia, laminas)
+        for f in fallos:
+            print(f"  DESBORDA  {f}")
+        if fallos:
+            raise SystemExit(f"{len(fallos)} desborde(s)")
+        print(f"  OK · {len(laminas)} laminas dentro del margen")
+        return
+
+    destino = Path(args.out) if args.out else OUT_BASE / f"apple-{args.pieza}-{args.tipografia}"
+    print(f"apple-editorial · {args.pieza} · tipografia={args.tipografia} · {len(laminas)} laminas")
+    render(args.tipografia, destino, laminas)
+    print(f"OK -> {destino}")
+
+
+if __name__ == "__main__":
+    main()

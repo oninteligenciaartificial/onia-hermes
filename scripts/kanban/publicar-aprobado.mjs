@@ -28,7 +28,7 @@
 import { execFileSync, spawn } from 'node:child_process';
 import { existsSync, readFileSync, statSync, readdirSync } from 'node:fs';
 import { isAbsolute, dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const AQUI = dirname(fileURLToPath(import.meta.url));
 // Este archivo vive en DOS layouts: `scripts/kanban/` en el repo y, desplegado
@@ -79,10 +79,25 @@ const IMAGEN = /\.(png|jpe?g)$/i;
 // swap sobre un bot que le decia "en construccion" a 2 de los 5 rubros que se
 // venden. Los tres publicadores comparten la propiedad que los hace no caducar:
 // no reciben argumentos y derivan que desplegar al ejecutarse.
-const DESTINOS = {
+// Exportada a propósito: es la lista blanca de destinos, y `deploy_sin_pedido.mjs` deriva de
+// ella el universo de destinos que tiene que vigilar. Copiarla allá la volvería una segunda
+// fuente que coincide por diligencia y no por construcción — el día que entre un destino
+// nuevo acá, el otro gate no lo pediría y nadie se enteraría.
+export const DESTINOS = {
   landing: '/opt/onia-landing/_deploy/publicar.sh',
   plataforma: '/opt/onia-platform/_deploy/publicar.sh',
   bot: '/opt/onia/bot/_deploy/publicar.sh',
+  // El EMISOR SIAT, el cuarto y el que faltaba. Agregado el 2026-09-08: era el
+  // unico destino de produccion sin circuito, asi que `DESPLEGAR: siat` moria
+  // aca con "destino desconocido" y el `ok` de Sergio Urcullo devolvia tilde
+  // verde sin desplegar nada. Costo medido: el arreglo del CUFD (a28b3689)
+  // llevaba CUATRO DIAS en main sin llegar al archivo que el VPS ejecuta, y con
+  // el emisor viejo las etapas VI y IX de la Fase 1 vuelven a fallar.
+  // Las DOS listas blancas van juntas: esta y la del ejecutor
+  // (scripts/kanban/desplegar-en-segundo-plano.sh). Cablear solo esta deja el
+  // fallo peor de los dos — la primera contesta exito y la segunda rechaza
+  // despues, asi que el aviso dice "arranco el deploy" y no arranca nada.
+  siat: '/opt/onia-siat/_deploy/publicar.sh',
 };
 
 // El deploy corre en SEGUNDO PLANO a proposito. Un build de Next tarda minutos y
@@ -273,9 +288,17 @@ const main = () => {
   }));
 };
 
-try {
-  main();
-} catch (e) {
-  console.error(String(e?.message || e).slice(0, 800));
-  process.exit(1);
+// ⚠️ La guarda no es prolijidad: sin ella, IMPORTAR este archivo ejecuta `main()` con el
+// `process.argv` del que importa. `main()` lee `argv[2]` y sale a buscar esa tarea en el
+// tablero, así que un gate que sólo quería una constante exportada terminaba consultando
+// producción — y un importador arrancado como `node algo.mjs t_deddf471` habría corrido el
+// DEPLOY entero. Es la trampa que este proyecto ya pagó en `demo_agendada_real.mjs`, acá
+// sobre el script que ejecuta el `ok` de Sergio Urcullo, que es el peor lugar posible.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  try {
+    main();
+  } catch (e) {
+    console.error(String(e?.message || e).slice(0, 800));
+    process.exit(1);
+  }
 }

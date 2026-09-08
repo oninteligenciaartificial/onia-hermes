@@ -268,6 +268,10 @@ poner "$FUENTE/vigia-disco.sh"             "$DESTINO_BIN/onia-vigia-disco.sh"
 # puede avisar de su propia muerte (PLAN_HOMELAB.md §6). Sin lista de loops
 # mudados no hace nada, asi que es seguro tenerlo desplegado desde antes.
 poner "$FUENTE/vigia-loops-remotos.sh"     "$DESTINO_BIN/onia-vigia-loops-remotos.sh"
+# El vigia del CI de GitHub. Sin el, un `master` roto por Actions no se lo dice
+# a nadie: el 2026-09-06 un .ico en RGB lo tumbo y se supo 10 min despues, de
+# casualidad. Sale 0 y avisa una sola vez mientras le falte el token.
+poner "$FUENTE/vigia-ci.sh"                "$DESTINO_BIN/onia-vigia-ci.sh"
 poner "$FUENTE/aligerar-worktrees.sh"      "$DESTINO_BIN/onia-aligerar-worktrees.sh"
 poner "$FUENTE/respaldar-memoria-hermes.sh" "$DESTINO_BIN/onia-respaldar-memoria.sh"
 poner "$FUENTE/renovar-slots-bot.py"       "$DESTINO_BIN/onia-renovar-slots.py"
@@ -333,6 +337,20 @@ fi
 if [ -d /opt/onia/bot ]; then
   mkdir -p /opt/onia/bot/_deploy
   poner "$RAIZ/hermes-content/deploy/vps-ops/bot/publicar.sh" /opt/onia/bot/_deploy/publicar.sh
+fi
+
+# El publicador del EMISOR SIAT, el cuarto destino. Es el que faltaba: hasta el
+# 2026-09-08 era el unico de los cuatro sin circuito — sin _deploy/, fuera de la
+# lista blanca del ejecutor y sin linea aca —, asi que un pedido
+# `DESPLEGAR: siat` nacia inejecutable y el `ok` de Sergio Urcullo daba tilde
+# verde sin desplegar nada. Por eso el arreglo del CUFD (a28b3689) llevaba
+# CUATRO DIAS en main sin llegar al archivo que el VPS ejecuta: con el emisor
+# viejo, las etapas VI y IX de la Fase 1 vuelven a fallar y queman la corrida.
+# Mismo caso que el bot: el directorio _deploy NO existe y hay que crearlo, o el
+# `poner` falla y el circuito queda cableado a una ruta que no esta.
+if [ -d /opt/onia-siat ]; then
+  mkdir -p /opt/onia-siat/_deploy
+  poner "$RAIZ/hermes-content/deploy/onia-siat/publicar.sh" /opt/onia-siat/_deploy/publicar.sh
 fi
 
 mkdir -p "$DESTINO_BIN/loops"

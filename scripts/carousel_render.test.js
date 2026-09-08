@@ -245,8 +245,14 @@ test('slide.bg vacio APAGA el fondo aunque haya --bg global', () => {
 });
 
 test('handle real de Sergio, no el placeholder', () => {
-  // Decia '@sergio', que no existe. Verificado por Graph API: @sergio_urcullo.
-  assert.strictEqual(ACCOUNTS.sergio.handle, '@sergio_urcullo');
+  // Confirmado por Sergio Urcullo el 2026-09-06: SIN guion bajo.
+  // Este campo ya estuvo mal dos veces y el test lo siguio la segunda: decia
+  // '@sergio' (inventado), se corrigio a '@sergio_urcullo' con Graph API del
+  // 2026-08-23 —cierto ENTONCES—, y despues el renombro la cuenta. El motor se
+  // arreglo (75 usos en 13 generadores contra 1) y este caso quedo afirmando el
+  // valor viejo: un gate escrito sobre un DATO ancla su valor a la fuente con
+  // respaldo y su fecha, no al valor que el codigo ya tenia, o lo cementa.
+  assert.strictEqual(ACCOUNTS.sergio.handle, '@sergiourcullo');
 });
 
 // --- 2026-08-24: marcador de serie en editorial-clean ---

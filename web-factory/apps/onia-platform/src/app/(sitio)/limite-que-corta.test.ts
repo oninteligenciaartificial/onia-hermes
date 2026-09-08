@@ -1,5 +1,5 @@
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { readFileSync, readdirSync } from "node:fs";
+import { dirname, isAbsolute, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
@@ -145,6 +145,171 @@ describe("la venta dice el límite que el producto aplica", () => {
       // «390» es el precio, no el cupo. Si el patrón se aflojara a /\d+/ el
       // gate quedaría satisfecho por el precio que ya estaba en la frase.
       expect(NOMBRA_EL_CUPO.test("Bs 390/mes, sin instalación")).toBe(false);
+    });
+  });
+});
+
+/* -------------------------------------------------------------------------
+ * El mismo límite, en el `<head>` — el gemelo que faltaba.
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Medido el 2026-09-07. El arreglo del cupo (54a7fa334) aterrizó en el DATO
+ * (`CHATBOT_STACKS[].incluye`) y por eso alcanzó a todo el CUERPO de las
+ * páginas que lo renderizan. Pero los `describe` de arriba tienen por sujeto
+ * `CHATBOT_STACKS`, no las páginas — y el `<head>` no sale de ahí: cada página
+ * escribe su `description` y su `openGraph.description` a mano. Los cuatro
+ * campos quedaron con la promesa vieja:
+ *
+ *   «Chatbot de WhatsApp que contesta 24/7 … Bs 390/mes»
+ *   «Contesta al instante a cualquier hora … Bs 390/mes»
+ *
+ * en `/chatbot` y en `/v1/chatbot`, las dos servidas con 200. Atención sin
+ * tope, pegada al precio, sobre un producto que corta a las
+ * `CONVERSACIONES_INCLUIDAS` del mes.
+ *
+ * POR QUÉ NO LO VEÍA NADIE, que es lo que hace nueva a esta vuelta de la
+ * clase: el `<head>` no se ve MIRANDO la pantalla (no es visible), no está en
+ * `CHATBOT_STACKS` (donde mira el gate del cupo) y no sobra ninguna palabra
+ * (invisible a todo barrido de prohibidos). Y el `og:description` es la
+ * superficie que se lee ANTES que el sitio: es la tarjeta que aparece cuando
+ * el enlace se manda por WhatsApp, o sea lo único que ve quien nunca abre la
+ * página. Ya está escrito en la memoria del proyecto que «todo guard de copy
+ * de venta necesita su gemelo sobre title/description/og»; éste es el guard
+ * al que le faltaba el suyo.
+ *
+ * EL SUJETO SE DERIVA DEL DISCO —todas las `page.tsx` de `src/app`— para que
+ * una página nueva nazca cubierta. La VECINDAD acá es el campo entero: una
+ * `description` se lee de corrido, no por partes.
+ */
+const APP = join(AQUI, "..", "..", "app");
+
+/**
+ * Todas las páginas del disco, en ruta RELATIVA a `APP`. Sujeto derivado: nada
+ * de lista escrita a mano.
+ *
+ * Van relativas A PROPÓSITO, y no es cosmético. Mientras devolvió rutas
+ * absolutas, el caso de cobertura de más abajo filtraba `p.includes("chatbot")`
+ * sobre la ruta ENTERA, así que su veredicto quedó atado al NOMBRE DEL
+ * DIRECTORIO donde corre el gate: desde `/root/loops/onia-hermes-chatbot` las
+ * 25 páginas matcheaban, el caso exigía 2, y la cadena `npm test` de la raíz
+ * —la que corre el integrador antes de tocar `main`— cortaba ahí. Un rojo
+ * falso que trababa el merge de los quince carriles y que desde ESTE worktree
+ * era invisible, porque acá el path no dice "chatbot" y el filtro cuenta 2.
+ *
+ * Medido el 2026-09-08 (t_fed03aba, abierta por `chatbot-cola`, el único
+ * carril que podía verlo). Con la ruta relativa el nombre de la carpeta
+ * contenedora ya no puede entrar en ningún filtro de este archivo — el arreglo
+ * es la forma del dato, no un caso más.
+ */
+function paginasDelDisco(dir: string = APP): string[] {
+  return readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+    const ruta = join(dir, e.name);
+    if (e.isDirectory()) return paginasDelDisco(ruta);
+    return e.name === "page.tsx" ? [relative(APP, ruta)] : [];
+  });
+}
+
+/**
+ * Los `description:` de la metadata (raíz y `openGraph`), con su literal
+ * entero. NO se les quitan las interpolaciones: `${CONVERSACIONES_INCLUIDAS}`
+ * es justamente la forma en que el cupo tiene que aparecer acá.
+ */
+function descripcionesDe(fuente: string): string[] {
+  return [...fuente.matchAll(/description:\s*(`[^`]*`|"[^"]*"|'[^']*')/g)].map((m) => m[1]);
+}
+
+/**
+ * En el `<head>` el cupo va INTERPOLADO desde la constante. Un número tipeado
+ * a mano se pudre igual que un precio a mano: el día que el producto cambie el
+ * cupo, la tarjeta que se comparte por WhatsApp sigue anunciando el viejo.
+ */
+const CUPO_INTERPOLADO = /\$\{\s*CONVERSACIONES_INCLUIDAS\s*\}\s*conversaciones/i;
+
+/** El campo habla del add-on, que es lo que el cupo limita. */
+const HABLA_DEL_BOT = /chatbot|asistente|\bbot\b/i;
+
+/** Campos de metadata que prometen atención sin tope y no dicen su cupo. */
+function metadataSinCupo(fuente: string): string[] {
+  return descripcionesDe(fuente).filter(
+    (d) => HABLA_DEL_BOT.test(d) && CLAMA_SIN_LIMITE.test(d) && !CUPO_INTERPOLADO.test(d),
+  );
+}
+
+describe("el <head> dice el mismo límite que el cuerpo", () => {
+  it("ninguna metadata promete atención sin tope sin nombrar el cupo", () => {
+    const culpables = paginasDelDisco()
+      .flatMap((p) =>
+        metadataSinCupo(readFileSync(join(APP, p), "utf8")).map((d) => `${p}\n    ${d}`),
+      )
+      .sort();
+    expect(culpables, "metadata con atención ilimitada y sin cupo").toEqual([]);
+  });
+
+  it("el cupo del <head> no se tipea a mano", () => {
+    const aMano = paginasDelDisco()
+      .flatMap((p) => descripcionesDe(readFileSync(join(APP, p), "utf8")).map((d) => `${p} → ${d}`))
+      .filter((d) => new RegExp(`\\b${CONVERSACIONES_INCLUIDAS}\\b\\s*conversaciones`, "i").test(d));
+    expect(aMano, "el cupo se tipeó a mano en una metadata").toEqual([]);
+  });
+
+  it("el barrido llega de verdad a las páginas del chatbot", () => {
+    // Sin este caso, un `paginasDelDisco()` que devolviera vacío —una raíz
+    // mal armada, un rename— dejaría los dos casos de arriba en verde sin
+    // haber mirado un solo archivo. Es el modo de falla ABIERTO de esta
+    // familia, y ya mordió antes en este repo.
+    const paginas = paginasDelDisco();
+    expect(paginas.length).toBeGreaterThan(20);
+    // Y ninguna absoluta: es lo único que impide que el filtro de la línea
+    // siguiente vuelva a contar el nombre de la carpeta contenedora. Revertir
+    // el barrido a rutas absolutas pone ROJO este caso desde CUALQUIER
+    // worktree, que es justo lo que faltaba: el rojo falso sólo se veía desde
+    // uno con "chatbot" en el path.
+    expect(
+      paginas.filter(isAbsolute),
+      "las páginas tienen que venir relativas a APP (ver la cabecera de paginasDelDisco)",
+    ).toEqual([]);
+    expect(paginas.filter((p) => p.includes("chatbot"))).toHaveLength(2);
+  });
+
+  it("el veredicto no depende de cómo se llame la carpeta del worktree", () => {
+    // La clase, hecha visible desde acá: con la ruta ABSOLUTA bajo un worktree
+    // que se llama "…-chatbot", el filtro se lleva puestas las 25 páginas; con
+    // la relativa devuelve las 2 de siempre. Es el rojo falso del 2026-09-08,
+    // reproducido sin depender de dónde corra el gate.
+    const RAIZ_QUE_MIENTE = join("/root/loops/onia-hermes-chatbot", "src", "app");
+    const absolutas = paginasDelDisco().map((p) => join(RAIZ_QUE_MIENTE, p));
+    expect(absolutas.filter((p) => p.includes("chatbot")).length).toBe(absolutas.length);
+    expect(absolutas.filter((p) => relative(RAIZ_QUE_MIENTE, p).includes("chatbot"))).toHaveLength(
+      2,
+    );
+  });
+
+  describe("el detector distingue el defecto de su arreglo", () => {
+    const CON_TOPE =
+      "description: `Contesta a cualquier hora, hasta ${CONVERSACIONES_INCLUIDAS} conversaciones por mes. Chatbot de WhatsApp.`";
+    const SIN_TOPE =
+      "description: `Chatbot de WhatsApp que contesta 24/7 con lo que cargaste. Bs 390/mes.`";
+
+    it("caza el campo sin tope (el que estaba vivo)", () => {
+      expect(metadataSinCupo(SIN_TOPE)).toHaveLength(1);
+    });
+
+    it("aprueba el mismo campo con su cupo interpolado", () => {
+      expect(metadataSinCupo(CON_TOPE)).toEqual([]);
+    });
+
+    it("no exige el cupo a lo que no es el bot", () => {
+      // «tu negocio abierto 24/7» habla del SISTEMA, que no tiene cupo de
+      // conversaciones. Sin este recorte el gate obligaría a meter el límite
+      // del add-on en la venta del producto que no lo tiene.
+      const sistema = "description: `Tu negocio ordenado y abierto 24/7 con el sistema de Onia.`";
+      expect(metadataSinCupo(sistema)).toEqual([]);
+    });
+
+    it("no acepta el número tipeado en vez de la constante", () => {
+      const aMano = "description: `Chatbot que contesta 24/7, hasta 500 conversaciones por mes.`";
+      expect(metadataSinCupo(aMano)).toHaveLength(1);
     });
   });
 });

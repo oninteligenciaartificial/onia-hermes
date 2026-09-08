@@ -1,4 +1,5 @@
 import { PressableCta, Reveal } from "@/motion";
+import { PRUEBA } from "@/lib/pricing";
 import { APP_URL, WA_URL_LANDING } from "@/lib/site";
 import styles from "./landing.module.css";
 
@@ -35,7 +36,7 @@ export function Closing() {
         </Reveal>
         <Reveal delay={0.06}>
           <h2 className={styles.display}>
-            Probá Onia Platform <em>14 días gratis</em>.
+            Probá Onia Platform <em>{PRUEBA.dias} días gratis</em>.
           </h2>
         </Reveal>
         <Reveal delay={0.12} className={styles.closeCta}>
@@ -44,7 +45,7 @@ export function Closing() {
               className={`${styles.btn} ${styles.btnPrimary}`}
               href={`${APP_URL}/register`}
             >
-              Probar gratis 14 días
+              Probar gratis {PRUEBA.dias} días
             </a>
           </PressableCta>
           <a
@@ -61,7 +62,7 @@ export function Closing() {
           <div>
             <h3>Sin tarjeta</h3>
             <p>
-              Entrás, elegís tu rubro y usás el sistema completo 14 días, sin
+              Entrás, elegís tu rubro y usás el sistema completo {PRUEBA.dias} días, sin
               poner un peso ni dejar una tarjeta.
             </p>
           </div>

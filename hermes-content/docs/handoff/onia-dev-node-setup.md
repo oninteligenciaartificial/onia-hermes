@@ -349,3 +349,18 @@ con la cosa funcionando.
    commits atrás de `main`. *Listo* = cero avisos de conflicto por Telegram.
 6. **Anotados, sin fecha:** Tailscale, versionar `loops-remotos.txt` / `loops-vps.txt`, y los
    puntos #5/#6/#7 del doc de producto.
+
+---
+
+## 9. Las tres máquinas
+
+| nombre | máquina | se reconoce por |
+|---|---|---|
+| **laptop** | `DESKTOP-ENV6SDA` — donde Sergio Urcullo trabaja | **no** tiene `/root/loops` ni `/root/.onia-nodo` |
+| **nodo-casa** | `DESKTOP-0GGGNMF` — i5-12400F, 12 hilos, 1 TB. **Los 4 loops** | existe `/root/.onia-nodo` con `casa` |
+| **VPS** | `srv1360183` · 187.77.16.63 — **solo la app** | existe el CLI de Hermes |
+
+Se reconocen por **archivo, nunca por hostname**. ⚠️ En `nodo-casa` ya estás **dentro** de WSL
+si el prompt dice `compu_pc_casa_sergio@DESKTOP-0GGGNMF`: `wsl` es un comando de Windows y ahí
+no existe. Y **se llega desde el VPS**, sin su teclado:
+`ssh -i /root/.ssh/vps-a-nodo -p 2222 root@127.0.0.1`.

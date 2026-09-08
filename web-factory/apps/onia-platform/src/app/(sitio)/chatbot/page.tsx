@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Reveal } from "@/motion";
 import {
   CHATBOT_PLAN,
+  CONVERSACIONES_INCLUIDAS,
   precioStack,
   precioAnual,
   META_NOTA,
@@ -16,13 +17,13 @@ import s from "../sitio.module.css";
 
 export const metadata: Metadata = {
   title: "Chatbot de WhatsApp — precio publicado | Onia",
-  description: `Chatbot de WhatsApp que contesta 24/7 con la información real de tu negocio y deriva a una persona lo que necesite decisión. Bs ${fmtBs(CHATBOT_PLAN.mensual)}/mes, sin instalación. Los requisitos, a la vista antes de contratar. Hecho en Bolivia.`,
+  description: `Chatbot de WhatsApp que contesta 24/7 con la información real de tu negocio: hasta ${CONVERSACIONES_INCLUIDAS} conversaciones por mes, y lo que necesite decisión pasa a una persona. Bs ${fmtBs(CHATBOT_PLAN.mensual)}/mes, sin instalación. Hecho en Bolivia.`,
   alternates: { canonical: "/chatbot" },
   openGraph: {
     type: "website",
     locale: "es_BO",
     title: "Chatbot de WhatsApp — precio publicado",
-    description: `Contesta al instante a cualquier hora con lo que vos cargaste, y deriva el resto. Bs ${fmtBs(CHATBOT_PLAN.mensual)}/mes, con los requisitos publicados.`,
+    description: `Contesta al instante a cualquier hora con lo que vos cargaste, hasta ${CONVERSACIONES_INCLUIDAS} conversaciones por mes; el resto pasa a una persona. Bs ${fmtBs(CHATBOT_PLAN.mensual)}/mes, con los requisitos publicados.`,
     url: "/chatbot",
   },
 };
@@ -42,8 +43,7 @@ const JSON_LD = {
       "@type": "Service",
       name: "Chatbot de WhatsApp para negocios",
       serviceType: "Automatización de WhatsApp con inteligencia artificial",
-      description:
-        "Chatbot de WhatsApp que contesta 24/7 con la información real que el negocio publicó y deriva a una persona lo que no sabe. Lo que salga del alcance se cotiza a medida.",
+      description: `Chatbot de WhatsApp que contesta 24/7 con la información real que el negocio publicó: hasta ${CONVERSACIONES_INCLUIDAS} conversaciones por mes, y lo que no sabe pasa a una persona. Lo que salga del alcance se cotiza a medida.`,
       provider: { "@type": "Organization", name: "Onia", url: `${SITE_URL}/` },
       areaServed: { "@type": "Country", name: "Bolivia" },
       url: `${SITE_URL}/chatbot`,

@@ -213,6 +213,7 @@ export function limitesDelProducto(fuente) {
       agentes: booleano(m[2], "agentsIncluded"),
       reservas: booleano(m[2], "publicBookingIncluded"),
       reportes: booleano(m[2], "reportsEnabled"),
+      exportaCsv: booleano(m[2], "csvExportEnabled"),
     };
   }
   return salida;
@@ -264,6 +265,7 @@ export function cifrasDelProducto({ planes, addons, prueba, limites }) {
     "primer plan con agentes de IA": primerPlanCon(l, "agentes"),
     "primer plan con reservas online incluidas": primerPlanCon(l, "reservas"),
     "primer plan con reportes completos": primerPlanCon(l, "reportes"),
+    "primer plan que exporta en CSV": primerPlanCon(l, "exportaCsv"),
     "plan Básico · mensual": p.basic?.mensual ?? null,
     "plan Básico · semanal": p.basic?.semanal ?? null,
     "plan Básico · anual": p.basic?.anual ?? null,
@@ -376,6 +378,118 @@ export function limitesDelSitio(fuente) {
   return salida;
 }
 
+/* ──────────  la COBERTURA: que un tope nuevo no nazca mudo  ────────── */
+
+/**
+ * QUE AGUJERO TAPA ESTO, y por que no se ve mirando el veredicto.
+ *
+ * `CIFRAS` sale de `Object.keys(cifrasDelProducto(...))`: el universo de este
+ * cruce lo define el lado PRODUCTO. Eso cubre bien una direccion —una cifra que
+ * el producto define y el sitio no publica cae en `ilegibles`— y es CIEGO a la
+ * contraria: un numero que el SITIO publica sin clave del lado producto no
+ * entra en `CIFRAS`, asi que no se compara, no se nombra, y el script imprime
+ * "VERDE: las N cifras" por encima.
+ *
+ * Medido el 2026-09-07 inyectando un tope nuevo en el `incluye` del Basico en
+ * su forma real ("Hasta 7 sucursales conectadas"): `ilegibles 0 · difieren 0`
+ * y verde. No es hipotetico — es como nace este defecto: alguien agrega una
+ * fila al `incluye` para vender mejor, nadie toca el producto, y el sitio queda
+ * publicando un tope que el sistema no aplica.
+ *
+ * Es la lista de inclusion de siempre, un escalon mas adentro: el gate DERIVA
+ * bien sus sujetos del disco (lee el `incluye` de cada plan) y despues los
+ * clasifica con un puñado de palabras conocidas —fichas, usuarios,
+ * recordatorios— tirando en SILENCIO lo que no sabe nombrar. Derivar el sujeto
+ * no alcanza si la clasificacion es una lista blanca.
+ *
+ * COMO SE CIERRA. Se enumera TODO numero que el `incluye` publica y se exige
+ * que cada uno lo consuma un cruce o lo excuse una entrada con su motivo. Asi
+ * el que viene manana nace NOMBRADO en vez de mudo, y el error posible pasa a
+ * ser "sobra un aviso" en vez de "falta el unico que importaba".
+ */
+
+/**
+ * Numeros del `incluye` que a proposito NO se cruzan, cada uno con su motivo.
+ *
+ * Hoy esta VACIA, que es el mejor estado posible: los seis numeros que el sitio
+ * publica (2/300/200, 5/1.500/800) los consumen los topes de `limitesDelSitio`.
+ * Una entrada que sobra es peor que ninguna — pre-aprueba al proximo numero que
+ * caiga en ese valor sin que nadie lo mire —, asi que `excusasSinSujeto()` la
+ * caza y el guard la pone roja.
+ *
+ * @type {ReadonlyArray<{plan: string, valor: number, motivo: string}>}
+ */
+export const TOPES_SIN_CRUCE = [];
+
+/**
+ * Las constantes del sitio que este cruce SI sabe leer: las lee `cifrasDelSitio`
+ * y por eso una cifra interpolada desde ellas ya viaja cruzada. Una constante
+ * NUEVA citada dentro de un `incluye` (`${SUCURSALES_MAX}`) no la lee nadie, y
+ * se reporta igual que un numero tipeado a mano.
+ */
+export const CONSTANTES_CRUZADAS = [
+  "GRUPO",
+  "AGENDA_ADDON",
+  "USUARIO_EXTRA_ADDON",
+  "PRUEBA",
+];
+
+/**
+ * Todo lo que el `incluye` de cada plan publica como cifra: los numeros
+ * LITERALES y las constantes citadas por interpolacion. Las dos formas, porque
+ * el defecto entra por las dos y una sola deja media puerta abierta.
+ */
+export function numerosPublicados(fuente) {
+  const marcas = [...(fuente ?? "").matchAll(/\bid:\s*"(basico|pro|full)"/g)];
+  const salida = [];
+  marcas.forEach((m, i) => {
+    const hasta = i + 1 < marcas.length ? marcas[i + 1].index : (fuente ?? "").length;
+    const inc = incluyeDelSitio((fuente ?? "").slice(m.index, hasta));
+    if (inc === null) return;
+    for (const cruda of inc.split("\n")) {
+      const linea = cruda.trim().replace(/^["`]|["`],?$/g, "");
+      for (const s of cruda.matchAll(/\$\{([^}]*)\}/g)) {
+        for (const c of s[1].matchAll(/\b([A-Z][A-Z0-9_]{2,})\b/g)) {
+          salida.push({ plan: m[1], clase: "constante", valor: c[1], linea });
+        }
+      }
+      /** La interpolacion ya se conto arriba por su nombre: aca estorbaria. */
+      for (const n of cruda.replace(/\$\{[^}]*\}/g, " ").matchAll(/\d[\d.]*\d|\d/g)) {
+        salida.push({
+          plan: m[1],
+          clase: "número",
+          valor: Number(String(n[0]).replace(/\./g, "")),
+          linea,
+        });
+      }
+    }
+  });
+  return salida;
+}
+
+/** Lo que el sitio publica en su `incluye` y este cruce no mira. Vacio = cubierto. */
+export function publicadosSinCruzar(fuente) {
+  const ls = limitesDelSitio(fuente ?? "");
+  return numerosPublicados(fuente).filter((n) => {
+    if (n.clase === "constante") return !CONSTANTES_CRUZADAS.includes(n.valor);
+    const t = ls[n.plan] ?? {};
+    if ([t.fichas, t.usuarios, t.recordatorios].some((v) => v === n.valor)) return false;
+    return !TOPES_SIN_CRUCE.some((e) => e.plan === n.plan && e.valor === n.valor);
+  });
+}
+
+/**
+ * Excusas que ya no tienen sujeto. Una entrada de lista blanca que ningun
+ * numero usa no la mide nadie y queda PRE-APROBADA: el dia que alguien publique
+ * ese mismo valor, entra en verde sin que nadie lo haya mirado.
+ */
+export function excusasSinSujeto(fuente) {
+  const publicados = numerosPublicados(fuente);
+  return TOPES_SIN_CRUCE.filter(
+    (e) => !publicados.some((n) => n.clase === "número" && n.plan === e.plan && n.valor === e.valor),
+  );
+}
+
 /**
  * El mismo `primerPlanCon` del lado producto, pero traduciendo los ids del
  * sitio a los del producto para que las dos respuestas sean comparables.
@@ -386,6 +500,44 @@ function primerPlanDelSitioCon(porPlan, capacidad) {
     if (porPlan[p.sitio]?.[capacidad] === true) return p.producto;
   }
   return null;
+}
+
+/**
+ * El tier que el sitio promete para la EXPORTACION DE DATOS, leido de la frase
+ * que lo promete y no de una tabla.
+ *
+ * POR QUE VA APARTE de los otros tres tiers. Agentes, reservas y reportes se
+ * cruzan por quien los NOMBRA primero dentro del `incluye` de cada plan: hay
+ * una fila por plan y el patron la encuentra. La exportacion no vive ahi — vive
+ * en `CONDICIONES`, una lista de frases sueltas que las DOS pantallas de precio
+ * renderizan al pie ("Tus datos son tuyos: los exportas en CSV desde el plan
+ * mas chico"). Sin fila por plan, `primerPlanDelSitioCon` no la ve, asi que era
+ * el unico tier que el sitio publica y nadie cruzaba: el dia que el producto
+ * mueva `csvExportEnabled` al Pro, esa frase sigue en pantalla prometiendolo
+ * desde el Basico y las 3 cifras de tier siguen en verde.
+ *
+ * COMO SE LEE EL TIER. Si la frase nombra un plan, ese; si dice "el plan mas
+ * chico" o no nombra ninguno, el mas barato que el sitio VENDE — una promesa
+ * sin condicion se le esta haciendo a todo el que puede pagar, y el mas barato
+ * es el que la puede desmentir.
+ *
+ * COMO NO FALLA EN VERDE. Si ninguna frase promete exportacion, devuelve `null`
+ * y el cruce sale ROJO DE INSTRUMENTO, no verde: que la promesa desaparezca es
+ * una decision de venta, y entonces este cruce se saca A LA VISTA. Callarse es
+ * como esta familia de gates deja de medir sin que nadie se entere.
+ */
+export function planQueElSitioPrometeParaExportar(fuente) {
+  const bloque = bloqueExportado(fuente ?? "", "CONDICIONES");
+  if (!bloque) return null;
+  const frase = bloque
+    .split(/",|`,/)
+    .find((f) => /export[áa]s?|exportar/i.test(f) && /\bCSV\b/i.test(f));
+  if (!frase) return null;
+  const nombrado = PLANES_EN_ORDEN.find((p) =>
+    new RegExp(`\\b${p.etiqueta}\\b`, "i").test(frase),
+  );
+  if (nombrado) return nombrado.producto;
+  return PLANES_EN_ORDEN[0].producto;
 }
 
 export function cifrasDelSitio({ precios, chatbot }) {
@@ -410,6 +562,8 @@ export function cifrasDelSitio({ precios, chatbot }) {
       "reservas",
     ),
     "primer plan con reportes completos": primerPlanDelSitioCon(ls, "reportes"),
+    "primer plan que exporta en CSV":
+      planQueElSitioPrometeParaExportar(precios ?? ""),
     "plan Básico · mensual": p.basico?.mensual ?? null,
     "plan Básico · semanal": p.basico?.semanal ?? null,
     "plan Básico · anual": p.basico?.anual ?? null,
@@ -482,6 +636,99 @@ export function comparar(delProducto, delSitio) {
   return { ilegibles, difieren };
 }
 
+/* ---------- el otro cruce: QUE CICLOS se pueden pagar ---------- */
+
+/**
+ * Los tres planes comprables, con su nombre en cada repo.
+ *
+ * Se declara la equivalencia en vez de derivarla porque los dos lados usan
+ * nombres distintos para el mismo plan (`basic`/`basico`, `professional`/`pro`,
+ * `clinic`/`full`) y ningun patron puede adivinar ese mapeo.
+ */
+export const CICLOS_EQUIVALENCIA = [
+  { nombre: "Básico", producto: "basic", sitio: "basico" },
+  { nombre: "Pro", producto: "professional", sitio: "pro" },
+  { nombre: "Full", producto: "clinic", sitio: "full" },
+];
+
+/**
+ * Cruza la DISPONIBILIDAD del ciclo semanal, que es cosa aparte del monto.
+ *
+ * Por que existe, y por que no alcanzaba con `comparar`: ese cruce mira CIFRAS,
+ * un mapa de claves escritas a mano que OMITE `plan Full · semanal` y
+ * `Grupo / Empresarial · semanal`. Esa omision no es un olvido: codifica la
+ * creencia "Full y Grupo no se fraccionan". El dia que el producto le agregue
+ * `weekly` al Full, no hay clave que comparar, nada entra en `ilegibles` ni en
+ * `difieren`, y el cruce imprime VERDE mientras el sitio sigue publicando la
+ * frase contraria — "El semanal existe en Básico y en Pro. Full se cobra
+ * mensual o anual." (CONDICIONES, derivada de `PLANES`).
+ *
+ * Y no es cosmetico: la disponibilidad es lo que decide si el checkout acepta
+ * la venta (`isCycleAvailable` en subscription-plans.ts, y el
+ * "Solo mensual o anual" de CheckoutClient.tsx). Publicar de menos esconde la
+ * forma mas barata de entrar al plan; publicar de mas manda al lead a un
+ * checkout que le rechaza el ciclo que eligio.
+ *
+ * Es un BOOLEANO, no una cifra: por eso ningun cruce de numeros puede
+ * expresarlo, y por eso va aparte y no como una clave mas de `CIFRAS`.
+ *
+ * Puro: sin red y sin disco.
+ */
+export function ciclosCruzados(planesProducto, planesSitio) {
+  const ilegibles = [];
+  const difieren = [];
+
+  for (const p of CICLOS_EQUIVALENCIA) {
+    const lado = {
+      producto: planesProducto?.[p.producto],
+      sitio: planesSitio?.[p.sitio],
+    };
+    // `semanal: null` solo significa "este plan no se fracciona" si de verdad
+    // leimos el plan. Si el patron no lo encontro, el objeto no esta o su
+    // `mensual` vino vacio — y ahi `null` significa "no se", que es lo contrario.
+    // Confundirlos convierte un parser roto en un verde.
+    const ciego = Object.entries(lado)
+      .filter(([, v]) => !v || falta(v.mensual))
+      .map(([k]) => k);
+    if (ciego.length > 0) {
+      ilegibles.push({ plan: p.nombre, lados: ciego });
+      continue;
+    }
+    const tiene = {
+      producto: !falta(lado.producto.semanal),
+      sitio: !falta(lado.sitio.semanal),
+    };
+    if (tiene.producto !== tiene.sitio) {
+      difieren.push({ plan: p.nombre, ...tiene });
+    }
+  }
+
+  return { ilegibles, difieren };
+}
+
+/**
+ * Grupo / Empresarial queda fuera de este cruce, y la excusa se VERIFICA.
+ *
+ * Motivo: no se compra en linea (`CHECKOUT_PLANS` no lo trae, y el sitio lo
+ * publica como "se cotiza"), asi que el sitio no hace ninguna afirmacion sobre
+ * como se paga — no hay promesa que pueda contradecir al producto.
+ *
+ * Una excusa escrita en prosa se pudre: nadie la vuelve a medir. Esta se
+ * re-mide en cada corrida — si alguien le pone un `semanal` a `GRUPO`, el sitio
+ * pasa a afirmar un ciclo y la exencion deja de valer.
+ */
+export function excusaDeGrupoSigueValiendo(fuenteSitio) {
+  const bloque = bloqueExportado(fuenteSitio, "GRUPO");
+  if (!bloque) return { vale: false, porque: "no encontre el bloque `GRUPO` en el sitio" };
+  if (/\bsemanal:/.test(bloque)) {
+    return {
+      vale: false,
+      porque: "`GRUPO` ya declara un `semanal`: el sitio afirma un ciclo y hay que cruzarlo",
+    };
+  }
+  return { vale: true, porque: "" };
+}
+
 const AQUI = dirname(fileURLToPath(import.meta.url));
 export const PRECIOS_SITIO = join(AQUI, "..", "src", "lib", "pricing.ts");
 export const CHATBOT_SITIO = join(
@@ -518,9 +765,10 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     process.exit(NO_PUDE_MEDIR);
   }
 
+  const preciosSitio = readFileSync(PRECIOS_SITIO, "utf8");
   const delProducto = cifrasDelProducto({ planes, addons, prueba, limites });
   const delSitio = cifrasDelSitio({
-    precios: readFileSync(PRECIOS_SITIO, "utf8"),
+    precios: preciosSitio,
     chatbot: readFileSync(CHATBOT_SITIO, "utf8"),
   });
   const { ilegibles, difieren } = comparar(delProducto, delSitio);
@@ -541,11 +789,58 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     process.exit(NO_PUDE_MEDIR);
   }
 
-  if (difieren.length === 0) {
+  const sinCruzar = publicadosSinCruzar(preciosSitio);
+  if (sinCruzar.length > 0) {
+    console.error(
+      `NO PUDE MEDIR: el sitio publica ${sinCruzar.length} cifra(s) en el \`incluye\` de un ` +
+        `plan que este cruce no mira, asi que NO estan verificadas contra el producto:\n` +
+        sinCruzar
+          .map((n) => `  · plan ${n.plan} — ${n.clase} ${n.valor} en "${n.linea}"`)
+          .join("\n") +
+        `\nUn tope que el sitio publica y el producto no aplica se paga DESPUES, cuando el ` +
+        `cliente ya entro. Cruzalo (una clave nueva en cifrasDelProducto/cifrasDelSitio) o, ` +
+        `si de verdad no es un tope del producto, excusalo con su motivo en TOPES_SIN_CRUCE.`,
+    );
+    process.exit(NO_PUDE_MEDIR);
+  }
+
+  const ciclos = ciclosCruzados(
+    planesDelProducto(planes),
+    planesDelSitio(preciosSitio),
+  );
+  const excusaGrupo = excusaDeGrupoSigueValiendo(preciosSitio);
+
+  if (ciclos.ilegibles.length > 0 || !excusaGrupo.vale) {
+    console.error(
+      `NO PUDE MEDIR: no pude leer de los dos lados que ciclos se pueden pagar:\n` +
+        ciclos.ilegibles
+          .map((i) => `  · plan ${i.plan} — no lo pude leer en: ${i.lados.join(" y ")}`)
+          .join("\n") +
+        (excusaGrupo.vale ? "" : `\n  · Grupo / Empresarial — ${excusaGrupo.porque}`) +
+        `\nSin eso no se puede decir si el sitio ofrece un ciclo que el checkout rechaza.`,
+    );
+    process.exit(NO_PUDE_MEDIR);
+  }
+
+  if (difieren.length === 0 && ciclos.difieren.length === 0) {
     console.log(
-      `VERDE: las ${CIFRAS.length} cifras que publica el sitio son las que cobra el producto.`,
+      `VERDE: las ${CIFRAS.length} cifras que publica el sitio son las que cobra el producto, ` +
+        `las ${numerosPublicados(preciosSitio).length} del \`incluye\` de los planes estan todas cruzadas, ` +
+        `y los ${CICLOS_EQUIVALENCIA.length} planes comprables ofrecen los mismos ciclos en los dos lados.`,
     );
     process.exit(COINCIDEN);
+  }
+
+  for (const c of ciclos.difieren) {
+    console.error(
+      c.producto
+        ? `ROJO: plan ${c.plan} — el producto lo cobra SEMANAL y el sitio dice que no se fracciona.\n` +
+          `  El sitio le esconde al lead la forma mas barata de entrar a ese plan. ` +
+          `Manda el producto (CLAUDE.md): se corrige el \`semanal\` del plan en src/lib/pricing.ts.`
+        : `ROJO: plan ${c.plan} — el sitio ofrece pago SEMANAL y el producto no lo cobra asi.\n` +
+          `  El lead elige semanal y el checkout se lo rechaza ("Solo mensual o anual"). ` +
+          `Manda el producto (CLAUDE.md): se corrige el \`semanal\` del plan en src/lib/pricing.ts.`,
+    );
   }
 
   for (const d of difieren) {
