@@ -44,6 +44,49 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **El panel le negaba al cliente vencido exactamente lo que su propio correo le había
+      prometido 24 h antes — cerrado el 2026-09-08 (`999f932` en `onia-platform`, publicado en la
+      rama, falta que el integrador lo mergee a `master`).**
+      Gate nuevo: `app/components/trial-vencido-cumple-la-promesa.test.ts` (6 casos).
+
+      El día 14 y el 15 el sistema le escribe al dueño, con su nombre y su negocio adentro:
+      *«tu cuenta pasa a **solo lectura**: no se borra nada y podés seguir consultando tus datos,
+      pero ya no registrar»* y *«todo lo que cargaste sigue ahí y podés **consultarlo y
+      exportarlo** cuando quieras»* (`lib/email.ts`, `trialDripCopy` pasos 14 y 15).
+      `lib/subscription/plan-state.ts` lo escribe como decisión de diseño: *«read_only NO borra ni
+      esconde datos: la cuenta sigue pudiendo leer todo y exportárselo. Solo se frena la
+      escritura»*.
+
+      **La capa de datos lo cumple**, y por eso el defecto era invisible: medido sobre las **151
+      rutas** de `app/api`, **ningún** handler `GET` corta por `checkPlanExpiry` — sólo cortan
+      `POST`/`PATCH`/`DELETE`. El lado que todo el mundo audita estaba bien.
+
+      **Lo anulaba la UI.** `TrialBlockedModal` se monta sobre TODA ruta del panel
+      (`app/(dashboard)/layout.tsx:191`), tapa la pantalla con `inset-0 z-[9999]`, se comía la
+      tecla `Escape` a propósito (`e.preventDefault()`) y **no tenía un solo control para
+      cerrarse**. El dueño que venía a mirar sus números para decidir si pagaba leía **«Acceso
+      Bloqueado»** — encima arriba de la frase «Tus datos siguen intactos», que era cierta y no le
+      servía de nada.
+
+      ⚠️ **La clase, que es lo que hay que llevarse:** *una capa cumple la promesa y la de arriba
+      la anula*. Ningún guardia del proyecto podía verla — no sobra ninguna palabra prohibida, no
+      falta ningún rubro, `/checkout` responde, la pantalla renderiza perfecto, y el único estado
+      que la dispara (trial vencido **más** gracia vencida) no lo crea ningún instrumento. El
+      sujeto del gate por eso no es la pantalla ni el correo: es el **CRUCE** de los dos.
+
+      **Arreglo:** el modal se puede cerrar («Ver mis datos (solo lectura)», y `Escape` ahora
+      cierra en vez de comerse la tecla), y el copy dice lo que de verdad pasa —«Tu cuenta quedó
+      en solo lectura»— con la MISMA palabra del correo, que es lo único que le deja al dueño atar
+      las dos cosas. **Cerrarlo no afloja nada:** la escritura la sigue frenando la API con su
+      motivo escrito (`403 «Tu suscripción ha vencido…»`).
+
+      **Validado por MUTACIÓN, no por lectura** — las tres en rojo con su línea `Tests N failed`:
+      volver al título viejo (1 rojo), borrar el botón (2 rojos) y el **esquive**, un botón que
+      existe y no apaga nada (1 rojo, lo caza el caso que ata el `onClick` al estado que decide si
+      el modal se dibuja). Suite **3751 passed**, `tsc` y `eslint` en 0.
+      **Mirada renderizada** con el CSS del build vivo, no en producción —que corre un build
+      anterior—: `ONIA_MIRAR=1 npx vitest run …` + Playwright, `/tmp/trial-vencido.png`.
+
 - [x] 🔴 **La receta que el paciente se lleva a la farmacia salía fechada al DÍA SIGUIENTE de
       noche, y el pie del mismo papel decía la fecha correcta — cerrado el 2026-09-07
       (`8bc5182` en `onia-platform`, publicado en la rama).**
