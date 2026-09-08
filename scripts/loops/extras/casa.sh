@@ -21,7 +21,7 @@ PUERTO=${ONIA_CASA_PUERTO:-2222}
 LLAVE=${ONIA_CASA_LLAVE:-/root/.ssh/nodo_casa_ed25519}
 # El usuario NO se asume root: en WSL la cuenta por defecto es de a pie, y ahi
 # fue donde esto fallo la primera vez (2026-09-08).
-USUARIO=${ONIA_CASA_USUARIO:-root}
+USUARIO=${ONIA_CASA_USUARIO:-compu_pc_casa_sergio}
 
 if ! ss -ltn 2>/dev/null | grep -q "127.0.0.1:${PUERTO}"; then
   echo "nodo-casa NO tiene el tunel abierto (nada escucha en 127.0.0.1:${PUERTO})." >&2
