@@ -7,6 +7,9 @@
 > La preocupación es correcta y hay que contestarla bien, porque **es la pregunta que
 > alguien va a hacer en voz alta adentro del grupo**. Complementa
 > [`ONIA_RECURSOS_UN_RECURSO_TRES_PUERTAS.md`](ONIA_RECURSOS_UN_RECURSO_TRES_PUERTAS.md).
+>
+> 👉 **El ritmo de producción** —un tema por semana, seis días, y la guía del domingo—
+> está en [`ONIA_MOTOR_SEMANAL_CONTENIDO.md`](ONIA_MOTOR_SEMANAL_CONTENIDO.md).
 
 ## El error de fondo, y por qué guardar contenido no es la salida
 

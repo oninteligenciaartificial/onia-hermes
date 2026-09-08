@@ -7,7 +7,9 @@
 > Fuente única de **cómo se produce y se distribuye un recurso**. El reparto de qué va en
 > cada carril está en [`ONIA_MARCA_PERSONAL_TRES_CARRILES.md`](ONIA_MARCA_PERSONAL_TRES_CARRILES.md);
 > **por qué la comunidad sigue valiendo aunque todo sea público, y el registro de videos**,
-> en [`ONIA_COMUNIDAD_QUE_LA_HACE_VALER.md`](ONIA_COMUNIDAD_QUE_LA_HACE_VALER.md).
+> en [`ONIA_COMUNIDAD_QUE_LA_HACE_VALER.md`](ONIA_COMUNIDAD_QUE_LA_HACE_VALER.md);
+> **el ritmo con que se produce todo eso**, en
+> [`ONIA_MOTOR_SEMANAL_CONTENIDO.md`](ONIA_MOTOR_SEMANAL_CONTENIDO.md).
 
 ## El problema, dicho sin vueltas
 
