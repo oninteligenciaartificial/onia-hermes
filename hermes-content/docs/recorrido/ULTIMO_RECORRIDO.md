@@ -12,6 +12,29 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-08 23:10-23:15 La Paz — dental escritorio: 9/9, y un huérfano de la vuelta ANTERIOR encontrado y limpiado
+
+Al arrancar había **1 organización `zz-qa-2026-09-08-2209-negocio` viva en producción**, con su
+perfil ADMIN y un profesional DOCTOR sin dato — la vuelta previa (commit `a6dd4646`, 22:11 UTC)
+llegó hasta el paso 05 (`elegir-rubro`, las capturas lo confirman) y **soltó el turno antes de
+`limpiarProduccion()`**: exactamente el escenario que `--solo-limpiar` existe para barrer (ver el
+comentario junto al guard de `main()`), pero esa vuelta no lo dejó corriendo y nadie lo invocó al
+empezar ésta. Se imprimió la fila, se confirmó que era mía por el patrón `zz-qa-<fecha>-<hora>-negocio`
+del propio script, y se borró por id exacto (perfiles → organización → `auth.users`) antes de
+correr nada nuevo. Verificado después: `count(*) LIKE 'zz-qa-%'` en `organizations` = 0.
+
+Con la base limpia, recorrido nuevo (dental, escritorio 1440x900): **9/9, sin hallazgos**. Cuenta
+`zz-qa-2026-09-08-2310@onia.com.bo`, correo confirmado con el enlace real, onboarding en 6
+pantallas, paciente cargado y encontrado, cita `2026-09-09 09:00` agendada y vista en
+`/appointments` (`cmttacrxm005w01rw7kzll8pe`), factura `/billing/cmttad3ik005y01rw4b9rh99c` con
+ítem visible, frenada sin pagar. Cero filas `zz-qa-` propias al cerrar (4 ajenas de otros
+carriles, sin tocar). Nada roto en el producto.
+
+**Lo que queda anotado para la próxima vuelta de este carril:** al arrancar, antes del recorrido
+completo, correr primero `node scripts/recorrido_cliente.mjs --solo-limpiar` — barre cualquier
+huérfano `zz-qa-AAAA-MM-DD-HHMM` que una vuelta anterior haya dejado por soltar el turno a mitad
+de camino, sin depender de que el recorrido entero termine para poder limpiarse solo.
+
 ## 2026-09-08 21:06-21:26 La Paz — móvil (390x844) en LOS 5 RUBROS: cierre completo, sin hallazgos
 
 Dental (escritorio, reverificación) + `RECORRIDO_MOVIL=1` en Comercio, Estética, Importadora y
