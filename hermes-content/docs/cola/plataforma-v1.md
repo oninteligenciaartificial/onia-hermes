@@ -1804,6 +1804,58 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] **CERRADO el 2026-09-08: el gate que vigila el idioma del rubro en los correos veía 6 de
+      los 10 remitentes que `lib/email.ts` exporta. Los 4 de afuera estaban sanos — el hueco no
+      tapaba un bug, tapaba al PRÓXIMO.**
+
+      **La clase, y por qué es la segunda vez.** El arreglo del 2026-09-07 (`2075cf7`) entró
+      porque `sendInvoiceEmailSafe` no cumplía la forma `send…Email(` con la que el detector
+      agrupaba, así que la factura nunca fue sujeto. Ese arreglo corrigió **la instancia**:
+      agregó `InvoiceEmail` a la lista y dejó escrito en el propio archivo *«los correos se
+      nombran de a uno, no por una forma que casualmente los agrupe»* — y a dos líneas siguió
+      habiendo una forma que los agrupa, sólo que más larga. Medido hoy: **10 remitentes
+      exportados, 6 vigilados**.
+
+      **Los 4 de afuera, verificados uno por uno (no deducidos):**
+      · `sendWelcomeEmail` — su único llamador (`app/api/auth/register/route.ts:333`) **sí** pasa
+        `trackId: verticalTrackId`. Sano. Ahora entra al detector, así que un llamador nuevo que
+        lo olvide se pone rojo.
+      · `sendTrialDripEmail` — no lleva `trackId`: lleva los sustantivos del rubro ya resueltos
+        (`negocio`, `catalogNoun`, `activityNoun`) y son **obligatorios en el tipo**, o sea que
+        `tsc` no deja llamarlo sin rubro. Sano.
+      · `sendDoctorAppointmentNotification` y su `Safe` — **cero llamadores en todo el repo.**
+        Nacieron en el primer commit (`ff8e104`) y **nunca estuvieron cableados**: no es una
+        regresión. Al profesional se le avisa in-app + push desde `avisarCitaCreada`, y ese texto
+        (`textoCitaParaElProfesional`) es neutro entre rubros.
+
+      **Por qué el remitente muerto importa igual:** está completo, exportado y es el único de
+      los tres que **ya deriva el rubro**. Es la clase que el proyecto documenta para el copy
+      muerto de la web — *el día que alguien lo cablea entra YA APROBADO, porque nadie audita lo
+      que «ya estaba»*. Ahora no: su excusa se **vuelve a medir**, así que cablearlo pone el gate
+      en rojo y obliga a meterlo bajo el detector.
+
+      **El gate:** `__tests__/lib/email-idioma-del-rubro.test.ts` — el sujeto ya no es una lista
+      de nombres, es **lo que `lib/email.ts` exporta, leído del disco en cada corrida**. Cada
+      remitente tiene que estar **vigilado** o **excusado con su motivo**, ninguna excusa puede
+      **sobrar**, y **cada excusa se re-mide**. Un remitente nuevo nace sin fila y lo pone en
+      rojo.
+
+      **Validado por MUTACIÓN en 4 direcciones**, confirmando por la línea `Tests N failed`:
+      detector viejo → **1 rojo** nombrando `sendWelcomeEmail`; cablear el remitente muerto (un
+      archivo temporal que lo llama) → **1 rojo** nombrando el archivo; excusa sobrante → **1
+      rojo**; `negocio` vuelto opcional en el tipo del drip → **1 rojo**. Restaurado: **20
+      verdes**.
+
+      Gates: `tsc` **0** · `vitest` **3962** pasados / 324 archivos · `eslint` **0**.
+
+      ⚠️ **Es cobertura, no un arreglo que el cliente vea:** ningún correo cambió y `lib/email.ts`
+      quedó sin tocar (`git diff` vacío). Lo que cambió es que el próximo remitente no puede
+      nacer sin vigilancia. Por eso **no** suma nada al pedido de deploy: no hay nada que
+      publicar.
+
+      Commit `08a5505` en `claude/chatbots-platform-review-0d1d09` de `onia-platform` (entra a
+      `master` cuando `onia-cola` mergee).
+
 - [x] 🔴 **CERRADO el 2026-09-08: `/book/<slug>` le ofrecía a una ferretería y a una importadora
       que su cliente reservara una cita — y el dueño no tiene UNA sola pantalla donde verla.**
 
