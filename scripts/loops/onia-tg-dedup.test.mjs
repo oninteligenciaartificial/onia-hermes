@@ -15,6 +15,19 @@
 //
 // El enrutador entro sin un solo test, asi que nada podia ponerlo en rojo.
 //
+// 🔴 REESCRITO el 2026-09-08 al integrar `claude/onia-infra-setup-09ca24`. DOS carriles
+// arreglaron el MISMO archivo el mismo dia y el merge salio SIN UN SOLO CONFLICTO:
+//   · main (chatbot-cola) hizo que la clave se hashee sobre el titulo NORMALIZADO;
+//   · la rama (infra) hizo que SOLO los problemas se vuelvan tarea — el exito se
+//     registra en el log y se calla, citando a Sergio Urcullo: "si se friega el CI
+//     o los loops, que el lo arregle".
+// Las dos son correctas y se conservan. Lo que quedo viejo son los FIXTURES de este
+// archivo: estaban escritos con avisos de EXITO ("✅ chatbot-cola · 929s"), y bajo la
+// regla nueva un exito ya no llega nunca a la dedup, asi que los 6 casos median 0 y
+// daban rojo. Las propiedades no cambiaron: se mudan a la unica forma que todavia
+// puede crear una tarea, la del PROBLEMA. Y se agregan los anclajes de la regla nueva,
+// que entro sin test propio — sin ellos, borrar el clasificador pasa en verde.
+//
 // Se corre con: node --test scripts/loops/onia-tg-dedup.test.mjs
 
 import { test } from "node:test";
@@ -80,35 +93,41 @@ exit 9
 
   const tareasCreadas = () => readFileSync(creados, "utf8").split("\n").filter(Boolean);
   const curlSalio = () => existsSync(curlLlamado);
-  return { avisar, tareasCreadas, curlSalio };
+  // El log es la prueba de que callarse NO es perder: el exito no ocupa el tablero,
+  // pero queda escrito. Sin este lector, "se calla" y "se pierde" se ven igual.
+  const log = () => {
+    const f = join(dir, "onia-tg.log");
+    return existsSync(f) ? readFileSync(f, "utf8") : "";
+  };
+  return { avisar, tareasCreadas, curlSalio, log };
 }
 
-test("dos avisos de fin de vuelta que sólo difieren en la duración son UNA tarea", () => {
+test("dos avisos del MISMO fallo que sólo difieren en la duración son UNA tarea", () => {
   const b = banco();
-  b.avisar("✅ chatbot-cola · 929s · 1 commit(s)");
-  b.avisar("✅ chatbot-cola · 954s · 1 commit(s)");
-  b.avisar("✅ chatbot-cola · 1203s · 1 commit(s)");
+  b.avisar("🔴 chatbot-cola FALLÓ tras 929s · 0 commit(s)");
+  b.avisar("🔴 chatbot-cola FALLÓ tras 954s · 0 commit(s)");
+  b.avisar("🔴 chatbot-cola FALLÓ tras 1203s · 0 commit(s)");
 
   const creadas = b.tareasCreadas();
   assert.equal(
     creadas.length,
     1,
-    `el mismo aviso de fin de vuelta creó ${creadas.length} tareas: ${creadas.join(" | ")}`,
+    `el mismo fallo creó ${creadas.length} tareas: ${creadas.join(" | ")}`,
   );
 });
 
 test("la hora dentro del título tampoco abre una tarea nueva cada vez", () => {
   const b = banco();
-  b.avisar("Integrador — 10:58 La Paz");
-  b.avisar("Integrador — 11:58 La Paz");
+  b.avisar("⚠️ Integrador — 10:58 La Paz: conflicto sin resolver");
+  b.avisar("⚠️ Integrador — 11:58 La Paz: conflicto sin resolver");
 
   assert.equal(b.tareasCreadas().length, 1);
 });
 
 test("un contador que crece no abre una tarea por cada valor", () => {
   const b = banco();
-  b.avisar("🧠 Memoria: MEMORY.md llegó a 431 entradas (tope 120).");
-  b.avisar("🧠 Memoria: MEMORY.md llegó a 437 entradas (tope 120).");
+  b.avisar("⚠️ Memoria: MEMORY.md llegó a 431 entradas (tope 120).");
+  b.avisar("⚠️ Memoria: MEMORY.md llegó a 437 entradas (tope 120).");
 
   assert.equal(b.tareasCreadas().length, 1);
 });
@@ -118,28 +137,70 @@ test("un contador que crece no abre una tarea por cada valor", () => {
 
 test("dos loops distintos con la misma duración son DOS tareas", () => {
   const b = banco();
-  b.avisar("✅ chatbot-cola · 929s · 1 commit(s)");
-  b.avisar("✅ web-venta · 929s · 1 commit(s)");
+  b.avisar("🔴 chatbot-cola FALLÓ tras 929s · 0 commit(s)");
+  b.avisar("🔴 web-venta FALLÓ tras 929s · 0 commit(s)");
 
   const creadas = b.tareasCreadas();
   assert.equal(creadas.length, 2, `se comió un aviso distinto: ${creadas.join(" | ")}`);
 });
 
-test("avisos con texto distinto siguen siendo tareas distintas", () => {
+test("dos problemas con texto distinto siguen siendo tareas distintas", () => {
   const b = banco();
   b.avisar("🔴 CI en ROJO — oninteligenciaartificial/onia-platform · Security");
-  b.avisar("🟢 CI recuperado — oninteligenciaartificial/onia-platform · Security");
+  b.avisar("❌ El deploy de la landing quedó abortado a mitad del swap");
 
   assert.equal(b.tareasCreadas().length, 2);
 });
 
 test("un aviso idéntico repetido sigue creando una sola tarea", () => {
   const b = banco();
-  b.avisar("🛟 Rescatado un mensaje perdido");
-  b.avisar("🛟 Rescatado un mensaje perdido");
-  b.avisar("🛟 Rescatado un mensaje perdido");
+  b.avisar("🔴 CI en ROJO — oninteligenciaartificial/onia-platform · Security");
+  b.avisar("🔴 CI en ROJO — oninteligenciaartificial/onia-platform · Security");
+  b.avisar("🔴 CI en ROJO — oninteligenciaartificial/onia-platform · Security");
 
   assert.equal(b.tareasCreadas().length, 1);
+});
+
+// ── La regla nueva: SOLO los problemas ocupan un lugar en el tablero ─────────
+// Sin estos casos, arrancar el clasificador entero pasa en verde y el tablero
+// vuelve a llenarse de loops diciendo que les fue bien (~96 tareas al día).
+
+test("un aviso de ÉXITO no ocupa un lugar en el tablero", () => {
+  const b = banco();
+  b.avisar("✅ chatbot-cola · 929s · 1 commit(s)");
+  b.avisar("🛟 Rescatado un mensaje perdido");
+  b.avisar("🟢 CI recuperado — oninteligenciaartificial/onia-platform · Security");
+
+  const creadas = b.tareasCreadas();
+  assert.equal(creadas.length, 0, `el éxito ocupó el tablero: ${creadas.join(" | ")}`);
+});
+
+test("callarse NO es perder: el éxito queda registrado en el log", () => {
+  const b = banco();
+  b.avisar("✅ chatbot-cola · 929s · 1 commit(s)");
+
+  assert.match(
+    b.log(),
+    /INFORMATIVO \(sin tarea\).*chatbot-cola/,
+    "el aviso informativo tiene que quedar escrito, o «se calla» y «se pierde» se ven igual",
+  );
+});
+
+test("se clasifica por la PRIMERA LÍNEA, no por el cuerpo", () => {
+  const b = banco();
+  // El titular dice que salió bien; el cuerpo NARRA un error ya resuelto.
+  // Mirar el mensaje entero convierte cada relato en tarea.
+  b.avisar("🛟 Rescatado un mensaje perdido\nEl envío anterior FALLÓ con error de timeout.");
+
+  const creadas = b.tareasCreadas();
+  assert.equal(creadas.length, 0, `clasificó por el cuerpo: ${creadas.join(" | ")}`);
+});
+
+test("un problema en la primera línea SÍ abre tarea aunque el cuerpo sea largo", () => {
+  const b = banco();
+  b.avisar("🔴 El emisor SIAT no pudo firmar la factura\nDetalle: reintentos 3, CUFD vigente.");
+
+  assert.equal(b.tareasCreadas().length, 1, "un problema real tiene que llegar al tablero");
 });
 
 // ── Hermeticidad: el camino directo es el de las aprobaciones y no pasa por el tablero ──
@@ -154,7 +215,10 @@ test("ONIA_TG_DIRECTO=1 va a Telegram y NO crea tareas", () => {
 
 test("el camino por defecto NO sale a Telegram", () => {
   const b = banco();
-  b.avisar("✅ chatbot-cola · 929s · 1 commit(s)");
+  // Va con un PROBLEMA a propósito: un éxito sale antes de llegar al tablero, así que
+  // este caso pasaría sin ejercitar nada — verde vacío en vez de verde.
+  b.avisar("🔴 CI en ROJO — oninteligenciaartificial/onia-platform · Security");
 
+  assert.equal(b.tareasCreadas().length, 1, "el problema tiene que haber creado su tarea");
   assert.equal(b.curlSalio(), false, "un aviso enrutado al tablero no puede además escribirle a Sergio");
 });
