@@ -1362,10 +1362,41 @@ y sin operar. Acá se opera, con verificación por ítem.
       validados por mutación, 371/371 verdes. **Desbloquea 320 casos** (260 de VI + 60 de IX).
       Detalle y los dos mensajes del SIN, en `ONIA_SIAT_ESTADO_HOMOLOGACION.md` §7.
 
-      **Lo que sigue, en orden:** correr VI y IX en volumen con el runner arreglado (no entró en
-      la vuelta del 08-sep, que se fue en encontrar y cerrar la causa) → releer el portal →
-      actualizar el número de acá. El PdV 1 (la otra mitad de la matriz) sigue siendo de Sergio
-      Urcullo.
+      **VI y IX CORRIDAS Y DESBLOQUEADAS el 2026-09-08 02:2x-02:4x UTC** contra el piloto
+      (`codigoAmbiente=2`), con el runner arreglado. Medido en el estado vivo del emisor en el VPS
+      (`/opt/onia-siat/fase1-state.json`), no deducido:
+
+      | etapa | antes | ahora | el error que la tenía frenada |
+      |---|---|---|---|
+      | VI | `pv0: 20` | **`pv0: 22`** (target) | `984 EL EVENTO SIGNIFICATIVO NO CORRESPONDE AL CUFD` — ya no aparece |
+      | IX | `pv0: 20` | **`pv0: 22`** (target) | `123 CUFD FUERA DE TOLERANCIA` — ya no aparece |
+
+      En las dos queda **sólo `pv1`**, que es el bloqueo legítimo: falta crear el Punto de Venta 1
+      en SIAT, y eso es de Sergio Urcullo.
+
+      ⚠️ **`a28b3689` era necesario pero NO suficiente, y esto es lo que valía la vuelta.** Al
+      reintentar con el runner arreglado, VI frenó con *«sin ventana válida para el evento
+      significativo (CUFD o evento previo demasiado frescos): esperar ~2 min y reintentar»*. Ese
+      mensaje —que pide textualmente reintentar— caía en la **misma rama del `catch`** que un
+      prerequisito determinista, así que quedaba escrito en `blockedCases`; `loop()` saltea todo
+      caso bloqueado y `run-fase1-volumen.sh` nunca pasa `--retry-blocked`. **Un tropiezo de dos
+      minutos congelaba la etapa para siempre**, y nada se ponía rojo. Eso —no el `ensureCufd`
+      solo— es lo que las tuvo un mes en 20. Arreglado en `95606460` (`TransitorioError`), con
+      las dos mitades validadas por mutación, 374/374 verdes.
+
+      ⚠️ **Cómo se corrieron, porque importa para repetirlo:** el emisor de `/opt/onia-siat`
+      **no tiene el arreglo** (`ensureCufd` → 4, contra 6 en el repo; su `mtime` es del 04-sep) y
+      su `run-fase1-volumen.sh` ni siquiera nombra a VI y IX (`for E in IV VII XI`). Se corrió el
+      runner **del clon de main del VPS** (`/root/loops/onia-hermes/…`, que sí tiene el arreglo)
+      con el `cwd` y el `.env` de `/opt/onia-siat`, así que el estado y las credenciales son las
+      de producción y **no se desplegó nada**. El emisor sólo usa módulos nativos de node: no
+      necesita `node_modules`. Backup previo:
+      `/opt/onia-siat/fase1-state.backup-20260908-0218.json`.
+
+      **Lo que sigue, en orden:** releer el portal → actualizar el número de acá. **Eso necesita
+      el login de Sergio Urcullo y no es trabajo de este carril.** El PdV 1 (la otra mitad de la
+      matriz) también es suyo. Que `/opt/onia-siat` quede alineado con el repo es la tarea
+      `t_7d2019bb`.
 
 
 ## Lo que este carril NO hace
