@@ -14,13 +14,42 @@ sostiene la promesa.
 
 ---
 
-## Va en DOS mensajes, no en uno
+## 🟢 La guía ya existe, y es un LINK
 
-⚠️ **Instagram corta el mensaje directo en 1.000 caracteres.** El texto completo son 1.931,
-así que pegado de una sola vez **llega cortado a la mitad de la lista** y el que lo recibe
-ve un mensaje que termina en cualquier parte. Van los dos, en orden, uno detrás del otro.
+`https://claude.ai/code/artifact/667b1ec5-e963-4f8d-b43c-268f4b4243c5`
 
-### Mensaje 1 — las cuatro primeras (≈ 950 caracteres)
+**«El stack de $200»** — las seis herramientas, qué hace cada una, **qué no hace**, y cómo
+instalarla, con checklist que recuerda dónde quedó el lector.
+
+Eso cambia el DM entero y para mejor: **el paso a paso ya no viaja como texto**. Instagram
+corta el mensaje directo en 1.000 caracteres, así que la lista completa —1.931 caracteres—
+llegaba partida a la mitad y había que mandarla en dos mensajes. Ahora es uno solo y corto.
+
+⚠️ **Antes de publicar el carrusel, abrí el link y leelo.** Es tu nombre el que va abajo.
+
+### El mensaje (uno solo · ≈ 480 caracteres)
+
+```
+Gracias por comentar.
+
+Acá está la guía completa: las seis herramientas, qué hace cada
+una, qué NO hace, y cómo instalar cada una paso a paso.
+
+[LINK]
+
+Un consejo antes de que la abras: no instales las seis. Hacé el
+paso 1 esta semana —son veinte minutos y no necesita
+computadora— y el 2 la que viene. Yo tardé meses en llegar acá y
+el error fue querer todo junto.
+
+Si te trabás en alguna, escribime y te ayudo.
+```
+
+### Y si alguna vez el link no sirve (versión de respaldo, en dos mensajes)
+
+Sólo si hay que mandar todo por texto. Instagram corta en 1.000 caracteres, así que van dos.
+
+#### Mensaje 1 — las cuatro primeras (≈ 950 caracteres)
 
 ```
 Gracias por comentar. Acá va la lista completa, en el orden en que
@@ -45,12 +74,12 @@ mandás con dos toques.
 Costo: $0.
 
 4) HYPERFRAMES — video desde HTML
-Escribís el diseño y sale un MP4, sin editar a mano. Corre en el
-mismo servidor.
+Escribís el diseño y sale un MP4, sin editar a mano. Es de HeyGen
+y es abierto.
 Costo: $0.
 ```
 
-### Mensaje 2 — el resto y el consejo (≈ 900 caracteres)
+#### Mensaje 2 — el resto y el consejo (≈ 820 caracteres)
 
 ```
 5) HERMES — el agente que avisa cuando algo se rompe
@@ -66,11 +95,7 @@ funcione. Arrancá con el plan más barato: no necesitás el mío
 para empezar. Desde unos $20/mes. Yo pago el de $200 porque
 construyo todo el día.
 
-7) EL SISTEMA DE GESTIÓN
-Es lo que estoy construyendo yo. Si querés que te avise cuando
-esté, decime.
-
-Un consejo, y es el que más importa: no instales las siete.
+Un consejo, y es el que más importa: no instales las seis.
 Instalá la 3 esta semana y la 2 la que viene. Yo tardé meses en
 llegar acá y el error fue querer todo junto.
 

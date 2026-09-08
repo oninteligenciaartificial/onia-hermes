@@ -3,6 +3,9 @@
 Índice de la tanda. Cada pieza tiene su propio doc con caption, alt text y la fuente de
 cada afirmación; esto dice **cuál va primero y qué falta antes de tocar publicar**.
 
+> Dónde encaja esta cola en el conjunto: [`../ONIA_MARCA_PERSONAL_TRES_CARRILES.md`](../ONIA_MARCA_PERSONAL_TRES_CARRILES.md)
+> — público, entregable y comunidad, con qué NO va en cada uno.
+
 Todas rendidas a 1080×1350 en `carousels/out/apple-<pieza>-inter/`.
 
 ## El orden, y por qué
@@ -23,7 +26,9 @@ no caducan.
 
 | Pieza | Bloqueante | Estado |
 |---|---|---|
-| **Mi stack** | El DM de «STACK» tiene que estar a mano — está en `PARA-PUBLICAR-DM-STACK.md`, en dos mensajes | ✅ escrito |
+| **Mi stack** | La guía que promete la lámina 11 tiene que existir | ✅ **publicada** — `claude.ai/code/artifact/667b1ec5-e963-4f8d-b43c-268f4b4243c5` |
+| **Mi stack** | El DM con el link, listo para pegar — `PARA-PUBLICAR-DM-STACK.md` | ✅ escrito, un solo mensaje |
+| **Mi stack** | 👀 Sergio Urcullo tiene que **leer la guía** antes de publicar: va con su nombre | 🔴 pendiente |
 | **Mi stack** | "Todos los días posteo" (lámina 10) es un compromiso, no un dato medido | 🔴 depende de Sergio Urcullo |
 | **Mi stack** | "Próximamente" en la lámina 08 es una excepción a *La venta nunca exhibe obra*, ya ratificada | ✅ ratificada 06-sep |
 | **Fable** | Revisar la página de Anthropic si pasa más de un mes: la pieza cuelga de su tabla | ⏳ vigente al 07-sep |
