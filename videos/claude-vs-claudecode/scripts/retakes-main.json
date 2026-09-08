@@ -1,0 +1,68 @@
+{
+  "_": "Repeticiones y trabadas del explicativo. Regla de Sergio Urcullo: se deja SIEMPRE el ultimo intento, que es el que mejor le salio. Tiempos del CRUDO (clip 2 video 1.mp4).",
+  "cortes": [
+    {
+      "start": 236.55,
+      "end": 240.55,
+      "tiro": "arreglar el error del form... aqui vos le decis,",
+      "queda": "el 2do intento completo: 'arreglar el error del formulario'"
+    },
+    {
+      "start": 242.85,
+      "end": 246.45,
+      "tiro": "Entonces, podemos ver que el formulario esta basado en Java y",
+      "queda": "la correccion: '...basado en JavaScript'"
+    },
+    {
+      "start": 249.55,
+      "end": 251.22,
+      "tiro": "Por ejemplo, aqui podemos ver el archivo...",
+      "queda": "'aqui podemos ver el archivo formulario.js'"
+    },
+    {
+      "start": 350.18,
+      "end": 351.8,
+      "tiro": "el lee todo y (trabada)",
+      "queda": "'y el lee todo el proyecto'"
+    },
+    {
+      "start": 433.3,
+      "end": 435.75,
+      "tiro": "la verdad que me viene bastante bien para lo que es y",
+      "queda": "la 2da, que si cierra en 'programacion'"
+    },
+    {
+      "start": 455.05,
+      "end": 456.98,
+      "tiro": "Pero te ayuda a (intento abandonado)",
+      "queda": "'Pero te iba a sacarte lo que es repetitivo'"
+    },
+    {
+      "start": 478.8,
+      "end": 479.5,
+      "tiro": "bloque de 0.42s sin palabras (ruido de sala)",
+      "queda": "-"
+    },
+    {
+      "start": 481.55,
+      "end": 482.2,
+      "tiro": "bloque de 0.45s: cola de la lamina + 0.19s de camara, sin voz",
+      "queda": "-"
+    },
+    {
+      "start": 482.1,
+      "end": 488.6,
+      "tiro": "intentos 1 y 2 del CTA",
+      "queda": "el 3ro: 'si te gustaria que en otro video'"
+    },
+    {
+      "start": 490.1,
+      "end": 501.85,
+      "tiro": "10.7s de silencio + 'te enseñe como video,' trabado",
+      "queda": "'te enseñe como instalarlo y las skills...'"
+    }
+  ],
+  "_no_tocados": [
+    "123.6 'uno por uno, uno por uno, uno por uno' y 360.8 'la otra cola, la otra cola y la otra cola': son enfasis retorico, no errores. Si los queres fuera, se agregan."
+  ]
+}

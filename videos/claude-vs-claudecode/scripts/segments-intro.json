@@ -1,0 +1,503 @@
+{
+ "segments": [
+  {
+   "start": 1.46,
+   "end": 7.0,
+   "text": "Cloud y Cloud Code, son lo mismo aunque me lo preguntan todo el tiempo no, no son iguales."
+  },
+  {
+   "start": 8.6,
+   "end": 13.34,
+   "text": "Cloud y Cloud Code, son lo mismo, me lo preguntan todo el tiempo y no, aunque tengan lo mismo."
+  },
+  {
+   "start": 14.48,
+   "end": 22.98,
+   "text": "Cloud y Cloud Code, son lo mismo aunque me… Cloud y Cloud Code, son lo mismo, me lo preguntan todo el tiempo y no, no son iguales."
+  },
+  {
+   "start": 23.14,
+   "end": 27.8,
+   "text": "Tienen el mismo nombre, pero son usados para diferentes cosas, así que déjame que en 10 minutos"
+  },
+  {
+   "start": 27.8,
+   "end": 31.26,
+   "text": "que enseñe sus usos prácticos y cuál es la diferencia entre cada uno."
+  }
+ ],
+ "words": [
+  {
+   "start": 1.46,
+   "end": 1.9,
+   "word": "Cloud"
+  },
+  {
+   "start": 1.9,
+   "end": 2.3,
+   "word": "y"
+  },
+  {
+   "start": 2.3,
+   "end": 2.52,
+   "word": "Cloud"
+  },
+  {
+   "start": 2.52,
+   "end": 2.9,
+   "word": "Code,"
+  },
+  {
+   "start": 3.1,
+   "end": 3.52,
+   "word": "son"
+  },
+  {
+   "start": 3.52,
+   "end": 3.64,
+   "word": "lo"
+  },
+  {
+   "start": 3.64,
+   "end": 3.92,
+   "word": "mismo"
+  },
+  {
+   "start": 3.92,
+   "end": 4.22,
+   "word": "aunque"
+  },
+  {
+   "start": 4.22,
+   "end": 4.44,
+   "word": "me"
+  },
+  {
+   "start": 4.44,
+   "end": 4.52,
+   "word": "lo"
+  },
+  {
+   "start": 4.52,
+   "end": 4.9,
+   "word": "preguntan"
+  },
+  {
+   "start": 4.9,
+   "end": 5.06,
+   "word": "todo"
+  },
+  {
+   "start": 5.06,
+   "end": 5.18,
+   "word": "el"
+  },
+  {
+   "start": 5.18,
+   "end": 5.38,
+   "word": "tiempo"
+  },
+  {
+   "start": 5.38,
+   "end": 5.66,
+   "word": "no,"
+  },
+  {
+   "start": 5.84,
+   "end": 6.0,
+   "word": "no"
+  },
+  {
+   "start": 6.0,
+   "end": 6.16,
+   "word": "son"
+  },
+  {
+   "start": 6.16,
+   "end": 7.0,
+   "word": "iguales."
+  },
+  {
+   "start": 8.6,
+   "end": 9.04,
+   "word": "Cloud"
+  },
+  {
+   "start": 9.04,
+   "end": 9.48,
+   "word": "y"
+  },
+  {
+   "start": 9.48,
+   "end": 9.7,
+   "word": "Cloud"
+  },
+  {
+   "start": 9.7,
+   "end": 9.98,
+   "word": "Code,"
+  },
+  {
+   "start": 10.28,
+   "end": 10.46,
+   "word": "son"
+  },
+  {
+   "start": 10.46,
+   "end": 10.58,
+   "word": "lo"
+  },
+  {
+   "start": 10.58,
+   "end": 10.82,
+   "word": "mismo,"
+  },
+  {
+   "start": 11.08,
+   "end": 11.16,
+   "word": "me"
+  },
+  {
+   "start": 11.16,
+   "end": 11.24,
+   "word": "lo"
+  },
+  {
+   "start": 11.24,
+   "end": 11.62,
+   "word": "preguntan"
+  },
+  {
+   "start": 11.62,
+   "end": 11.74,
+   "word": "todo"
+  },
+  {
+   "start": 11.74,
+   "end": 11.88,
+   "word": "el"
+  },
+  {
+   "start": 11.88,
+   "end": 12.08,
+   "word": "tiempo"
+  },
+  {
+   "start": 12.08,
+   "end": 12.24,
+   "word": "y"
+  },
+  {
+   "start": 12.24,
+   "end": 12.34,
+   "word": "no,"
+  },
+  {
+   "start": 12.52,
+   "end": 12.68,
+   "word": "aunque"
+  },
+  {
+   "start": 12.68,
+   "end": 12.92,
+   "word": "tengan"
+  },
+  {
+   "start": 12.92,
+   "end": 13.12,
+   "word": "lo"
+  },
+  {
+   "start": 13.12,
+   "end": 13.34,
+   "word": "mismo."
+  },
+  {
+   "start": 14.48,
+   "end": 14.82,
+   "word": "Cloud"
+  },
+  {
+   "start": 14.82,
+   "end": 15.2,
+   "word": "y"
+  },
+  {
+   "start": 15.2,
+   "end": 15.44,
+   "word": "Cloud"
+  },
+  {
+   "start": 15.44,
+   "end": 15.78,
+   "word": "Code,"
+  },
+  {
+   "start": 16.1,
+   "end": 16.2,
+   "word": "son"
+  },
+  {
+   "start": 16.2,
+   "end": 16.32,
+   "word": "lo"
+  },
+  {
+   "start": 16.32,
+   "end": 16.64,
+   "word": "mismo"
+  },
+  {
+   "start": 16.64,
+   "end": 17.1,
+   "word": "aunque"
+  },
+  {
+   "start": 17.1,
+   "end": 18.24,
+   "word": "me…"
+  },
+  {
+   "start": 18.24,
+   "end": 18.78,
+   "word": "Cloud"
+  },
+  {
+   "start": 18.78,
+   "end": 19.22,
+   "word": "y"
+  },
+  {
+   "start": 19.22,
+   "end": 19.44,
+   "word": "Cloud"
+  },
+  {
+   "start": 19.44,
+   "end": 19.76,
+   "word": "Code,"
+  },
+  {
+   "start": 20.02,
+   "end": 20.22,
+   "word": "son"
+  },
+  {
+   "start": 20.22,
+   "end": 20.34,
+   "word": "lo"
+  },
+  {
+   "start": 20.34,
+   "end": 20.56,
+   "word": "mismo,"
+  },
+  {
+   "start": 20.84,
+   "end": 20.9,
+   "word": "me"
+  },
+  {
+   "start": 20.9,
+   "end": 20.98,
+   "word": "lo"
+  },
+  {
+   "start": 20.98,
+   "end": 21.36,
+   "word": "preguntan"
+  },
+  {
+   "start": 21.36,
+   "end": 21.5,
+   "word": "todo"
+  },
+  {
+   "start": 21.5,
+   "end": 21.62,
+   "word": "el"
+  },
+  {
+   "start": 21.62,
+   "end": 21.82,
+   "word": "tiempo"
+  },
+  {
+   "start": 21.82,
+   "end": 22.0,
+   "word": "y"
+  },
+  {
+   "start": 22.0,
+   "end": 22.1,
+   "word": "no,"
+  },
+  {
+   "start": 22.26,
+   "end": 22.4,
+   "word": "no"
+  },
+  {
+   "start": 22.4,
+   "end": 22.56,
+   "word": "son"
+  },
+  {
+   "start": 22.56,
+   "end": 22.98,
+   "word": "iguales."
+  },
+  {
+   "start": 23.14,
+   "end": 23.36,
+   "word": "Tienen"
+  },
+  {
+   "start": 23.36,
+   "end": 23.52,
+   "word": "el"
+  },
+  {
+   "start": 23.52,
+   "end": 23.7,
+   "word": "mismo"
+  },
+  {
+   "start": 23.7,
+   "end": 23.98,
+   "word": "nombre,"
+  },
+  {
+   "start": 24.04,
+   "end": 24.18,
+   "word": "pero"
+  },
+  {
+   "start": 24.18,
+   "end": 24.36,
+   "word": "son"
+  },
+  {
+   "start": 24.36,
+   "end": 24.66,
+   "word": "usados"
+  },
+  {
+   "start": 24.66,
+   "end": 24.88,
+   "word": "para"
+  },
+  {
+   "start": 24.88,
+   "end": 25.3,
+   "word": "diferentes"
+  },
+  {
+   "start": 25.3,
+   "end": 25.68,
+   "word": "cosas,"
+  },
+  {
+   "start": 26.02,
+   "end": 26.24,
+   "word": "así"
+  },
+  {
+   "start": 26.24,
+   "end": 26.48,
+   "word": "que"
+  },
+  {
+   "start": 26.48,
+   "end": 27.02,
+   "word": "déjame"
+  },
+  {
+   "start": 27.02,
+   "end": 27.18,
+   "word": "que"
+  },
+  {
+   "start": 27.18,
+   "end": 27.3,
+   "word": "en"
+  },
+  {
+   "start": 27.3,
+   "end": 27.4,
+   "word": "10"
+  },
+  {
+   "start": 27.4,
+   "end": 27.8,
+   "word": "minutos"
+  },
+  {
+   "start": 27.8,
+   "end": 28.26,
+   "word": "que"
+  },
+  {
+   "start": 28.26,
+   "end": 28.58,
+   "word": "enseñe"
+  },
+  {
+   "start": 28.58,
+   "end": 28.72,
+   "word": "sus"
+  },
+  {
+   "start": 28.72,
+   "end": 28.96,
+   "word": "usos"
+  },
+  {
+   "start": 28.96,
+   "end": 29.48,
+   "word": "prácticos"
+  },
+  {
+   "start": 29.48,
+   "end": 29.9,
+   "word": "y"
+  },
+  {
+   "start": 29.9,
+   "end": 30.04,
+   "word": "cuál"
+  },
+  {
+   "start": 30.04,
+   "end": 30.18,
+   "word": "es"
+  },
+  {
+   "start": 30.18,
+   "end": 30.3,
+   "word": "la"
+  },
+  {
+   "start": 30.3,
+   "end": 30.64,
+   "word": "diferencia"
+  },
+  {
+   "start": 30.64,
+   "end": 30.84,
+   "word": "entre"
+  },
+  {
+   "start": 30.84,
+   "end": 31.06,
+   "word": "cada"
+  },
+  {
+   "start": 31.06,
+   "end": 31.26,
+   "word": "uno."
+  }
+ ],
+ "language": "es",
+ "duration": 33.7493125
+}

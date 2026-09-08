@@ -36,6 +36,30 @@ if [ "${ONIA_TG_DIRECTO:-0}" != "1" ]; then
   TITULO=$(printf '%s' "$MSG" | head -1 | sed 's/<[^>]*>//g; s/^[[:space:]]*//; s/[[:space:]]*$//' | cut -c1-90)
   [ -n "$TITULO" ] || TITULO="aviso sin titulo"
 
+  # 🔴 SOLO los PROBLEMAS se vuelven tarea. Lo demas se registra y se calla.
+  #
+  # Medido a la hora de encender esto (2026-09-08): el tablero se lleno de
+  # "✅ chatbot-cola · 980s · 1 commit(s)" y "🛟 Rescatado un mensaje perdido".
+  # Eso no es trabajo: es un loop diciendo que le fue bien. Convertirlo en tarea
+  # mudo el ruido de Telegram al tablero — que es de donde los loops sacan que
+  # hacer — y ahi molesta MAS, porque compite con el trabajo de verdad.
+  #
+  # Sergio Urcullo lo dijo asi: "si se friega el CI o los loops, que el lo
+  # arregle". Lo que no se frego, no hay que arreglarlo.
+  #
+  # El log guarda TODO igual (grep -a /var/log/onia-tg.log), asi que nada se
+  # pierde: lo que cambia es que solo lo roto ocupa un lugar en el tablero.
+  # 🔴 Se clasifica por la PRIMERA LINEA, no por el mensaje entero. Medido el
+  # 2026-09-08 16:37: "🛟 Rescatado un mensaje perdido" creo tarea igual, porque su
+  # CUERPO nombraba el error del que rescato. Un aviso que cuenta un problema ya
+  # resuelto no es un problema: mirar el cuerpo entero convierte cada relato en
+  # tarea. La primera linea es el titular — todos estos scripts ponen ahi su emoji.
+  PRIMERA=$(printf '%s' "$MSG" | head -1)
+  if ! printf '%s' "$PRIMERA" | grep -qaiE '⚠️|🔴|❌|🚨|\bFALL|\berror|\bno pud|\bcaido|\bcaida|\broto\b|\bconflicto|\btimeout|\babortad'; then
+    printf '%s INFORMATIVO (sin tarea) %s\n' "$(date -u +%FT%TZ)" "$(printf '%s' "$PRIMERA" | cut -c1-90)" >> "$LOG"
+    exit 0
+  fi
+
   # Clave estable para deduplicar: el mismo aviso repetido no crea 144 tareas al dia.
   # Va al PRINCIPIO del titulo a proposito: la lista del tablero recorta el final.
   #

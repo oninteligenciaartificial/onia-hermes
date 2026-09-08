@@ -1,0 +1,62 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>miniatura</title>
+<!--
+  Miniatura de YouTube (1280x720), en la gramatica de las de Adrian Saenz (miradas el
+  2026-09-08): fondo oscuro con luz calida, cara MUY grande pegada al borde derecho,
+  texto blanco enorme con sombra, y los objetos del tema flotando en el hueco libre.
+  El fondo+sujeto salen de scripts/mini-capa.py; aca van los logos y el texto.
+  La foto es un frame REAL del explicativo (508.0s), no hay nada generado con IA.
+-->
+<style>
+:root{--naranja:#FF6A2B;--claude:#D97757;--tile:#EDE7D8;--term:#161615;--tr:-0.04em}
+@font-face{font-family:'Inter';src:url('fonts/Inter-var-latin.woff2')format('woff2');font-weight:100 900;font-display:block}
+@font-face{font-family:'Spline Sans Mono';src:url('fonts/SplineSansMono-var-latin.woff2')format('woff2');font-weight:300 700;font-display:block}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1280px;height:720px;overflow:hidden}
+body{font-family:'Inter',system-ui,sans-serif;position:relative;
+     background:url('mini-fondo.png') center/cover no-repeat}
+
+/* --- los dos productos, flotando en el hueco libre --- */
+#duo{position:absolute;left:34px;top:58px;display:flex;align-items:center;gap:18px}
+.pieza{display:flex;flex-direction:column;align-items:center;gap:14px;flex:none}
+.tile{width:212px;height:212px;border-radius:23%;background:var(--tile);overflow:hidden;
+      box-shadow:0 24px 48px rgba(0,0,0,.60),0 0 44px rgba(255,138,62,.42)}
+.tile img{width:100%;height:100%;display:block}
+.term{width:262px;height:212px;border-radius:24px;background:var(--term);overflow:hidden;
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow:0 24px 48px rgba(0,0,0,.60),0 0 44px rgba(255,138,62,.36)}
+.term .barra{height:46px;display:flex;align-items:center;gap:11px;padding:0 19px;
+             border-bottom:1px solid rgba(255,255,255,.12)}
+.term .barra i{width:13px;height:13px;border-radius:50%;background:rgba(255,255,255,.26)}
+.term pre{font-family:'Spline Sans Mono',monospace;font-size:48px;padding:38px 0 0 26px;
+          color:var(--naranja);font-weight:700}
+.pieza b{font-size:31px;font-weight:700;letter-spacing:var(--tr);color:#fff;white-space:nowrap;
+         text-shadow:0 2px 10px rgba(0,0,0,.85)}
+#vs{font-size:76px;font-weight:800;letter-spacing:-.05em;color:var(--naranja);margin-bottom:42px;
+    text-shadow:0 3px 12px rgba(0,0,0,.7);
+    filter:drop-shadow(0 0 20px rgba(255,106,43,.75))}
+
+/* --- titular: blanco, enorme, delante del sujeto --- */
+#tit{position:absolute;left:34px;bottom:46px;color:#fff;font-weight:800;
+     font-size:104px;line-height:.94;letter-spacing:-.045em;
+     text-shadow:0 6px 26px rgba(0,0,0,.85),0 2px 6px rgba(0,0,0,.9)}
+#tit .dos{display:inline-block;position:relative}
+#tit .dos::after{content:'';position:absolute;left:0;right:-6px;bottom:-14px;height:9px;
+                 background:var(--naranja);border-radius:5px;
+                 box-shadow:0 0 20px rgba(255,106,43,.85)}
+</style>
+
+<div id="duo">
+  <div class="pieza">
+    <div class="tile"><img src="claude.png" alt=""></div>
+    <b>Claude</b>
+  </div>
+  <div id="vs">VS</div>
+  <div class="pieza">
+    <div class="term"><div class="barra"><i></i><i></i><i></i></div><pre>&gt; _</pre></div>
+    <b>Claude Code</b>
+  </div>
+</div>
+
+<div id="tit">¿SON LO<br><span class="dos">MISMO?</span></div>
