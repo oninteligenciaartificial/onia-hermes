@@ -11,10 +11,11 @@ from PIL import Image, ImageFilter, ImageEnhance, ImageChops
 import math
 
 W, H = 1280, 720
-# Frame 508.7s del crudo. Se probaron 507.3, 508.0 y 509.3: los tres traen una franja
-# de pared pegada al contorno del pelo que ningun filtro saca sin embarrar el borde.
-# El de 508.7 sale limpio de fabrica y ademas tiene la mejor sonrisa. Cambiar de
-# frame salio mas barato que pelear con la mascara.
+# Frame ONIA-YT-2026-09-08-00-22-06.mp4 @ 14.6s, elegido barriendo TODO el material a
+# camara con scripts/buscar-todos.py (3723 caras puntuadas). Mismo dia, misma ropa, mismo
+# set que el video. Trae dos cosas que los frames del explicativo no tenian: sonrisa
+# abierta de verdad y un contorno de pelo limpio, sin la franja de pared que obligaba a
+# elegir entre halo o borde embarrado.
 src = Image.open("renders/mini-src/f00001.png").convert("RGB")
 cut = Image.open("renders/mini-cut/f00001.png").convert("RGBA")
 
@@ -115,9 +116,20 @@ if _mal.any():
     print(f"fondo colado: {int(_mal.sum())} px limpiados del contorno")
 
 rgb = suj.convert("RGB")
-rgb = ImageEnhance.Brightness(rgb).enhance(1.14)
-rgb = ImageEnhance.Contrast(rgb).enhance(1.16)
-rgb = ImageEnhance.Color(rgb).enhance(1.10)
+rgb = ImageEnhance.Brightness(rgb).enhance(1.08)
+rgb = ImageEnhance.Contrast(rgb).enhance(1.07)
+rgb = ImageEnhance.Color(rgb).enhance(1.04)
+
+# --- mejora: el upscale ablanda la cara, hay que devolverle definicion ---------
+# CLAHE en la LUMINANCIA (no en RGB: en RGB vira el color de la piel) para contraste
+# local, y unsharp despues del resize. Valores bajos a proposito: subirlos deja la piel
+# con aspecto plastico, que es peor que la imagen blanda.
+import cv2
+_lab = cv2.cvtColor(np.asarray(rgb), cv2.COLOR_RGB2LAB)
+_lab[:, :, 0] = cv2.createCLAHE(clipLimit=1.15, tileGridSize=(8, 8)).apply(_lab[:, :, 0])
+rgb = Image.fromarray(cv2.cvtColor(_lab, cv2.COLOR_LAB2RGB))
+rgb = rgb.filter(ImageFilter.UnsharpMask(radius=1.6, percent=72, threshold=4))
+
 suj = Image.merge("RGBA", (*rgb.split(), a))
 
 # --- rim light: UN solo halo, naranja y difuso ---

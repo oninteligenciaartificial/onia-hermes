@@ -81,4 +81,25 @@ node scripts/render-overlay.mjs --html assets/intro-overlay.html --query "only=c
 node scripts/render-overlay.mjs --html assets/intro-overlay.html --query "only=titulo" --out-dir renders/ovl-titulo --dur 13.02
 # 4. master de audio (-14 LUFS) SIEMPRE al final
 node ../../.claude/skills/editor-videos/scripts/master.mjs --video renders/intro-comp.mp4 --out final/clip-1-video-2-intro.mp4
-```
+```**Miniatura** (`scripts/buscar-todos.py` → `hoja-caras.py` → `mini-capa.py` +
+`assets/miniatura.html` → `final/miniatura.png`). Gramática de las de Adrián Sáenz, miradas de
+verdad el 2026-09-08 (bajadas de su canal): fondo oscuro con luz cálida, cara **muy** grande
+pegada al borde derecho, texto blanco enorme con sombra y subrayado de acento, y los objetos
+del tema flotando en el hueco libre.
+
+**El frame se busca puntuando, no se elige a ojo.** `buscar-todos.py` barrió los 19 archivos de
+la carpeta y puntuó **3.723 caras** con YuNet (nitidez, frontalidad, sonrisa, boca cerrada); el
+elegido — `ONIA-YT-2026-09-08-00-22-06.mp4 @ 14.6s` — no está en el video editado sino en otra
+toma del mismo día, misma ropa y mismo set. Elegir a ojo del tramo "donde parece que sonríe"
+falló tres veces seguidas. El método completo y las siete trampas medidas están en la skill
+`editor-videos` § "Miniatura de YouTube"; las tres que más cuestan:
+
+- **El ancho de boca NO mide sonrisa: mide que está HABLANDO.** El primer scoring lo usaba y el
+  top 12 salió entero con la boca abierta a media palabra.
+- **El fondo es el mismo frame desenfocado, y eso es el arreglo del recorte, no decoración.**
+  `rembg` no separa camiseta negra de silla negra (probado con `u2net_human_seg` e
+  `isnet-general-use`); sobre su propia imagen el error desaparece. El sujeto se separa con luz.
+- **Cambiar de frame sale más barato que pelear con la máscara.** Dos veces se fue por filtros y
+  las dos veces el resultado fue peor.
+
+Se revisa a **210 px de ancho**, que es como se ve en el feed.
