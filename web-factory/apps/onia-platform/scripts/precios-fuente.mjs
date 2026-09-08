@@ -636,6 +636,99 @@ export function comparar(delProducto, delSitio) {
   return { ilegibles, difieren };
 }
 
+/* ---------- el otro cruce: QUE CICLOS se pueden pagar ---------- */
+
+/**
+ * Los tres planes comprables, con su nombre en cada repo.
+ *
+ * Se declara la equivalencia en vez de derivarla porque los dos lados usan
+ * nombres distintos para el mismo plan (`basic`/`basico`, `professional`/`pro`,
+ * `clinic`/`full`) y ningun patron puede adivinar ese mapeo.
+ */
+export const CICLOS_EQUIVALENCIA = [
+  { nombre: "Básico", producto: "basic", sitio: "basico" },
+  { nombre: "Pro", producto: "professional", sitio: "pro" },
+  { nombre: "Full", producto: "clinic", sitio: "full" },
+];
+
+/**
+ * Cruza la DISPONIBILIDAD del ciclo semanal, que es cosa aparte del monto.
+ *
+ * Por que existe, y por que no alcanzaba con `comparar`: ese cruce mira CIFRAS,
+ * un mapa de claves escritas a mano que OMITE `plan Full · semanal` y
+ * `Grupo / Empresarial · semanal`. Esa omision no es un olvido: codifica la
+ * creencia "Full y Grupo no se fraccionan". El dia que el producto le agregue
+ * `weekly` al Full, no hay clave que comparar, nada entra en `ilegibles` ni en
+ * `difieren`, y el cruce imprime VERDE mientras el sitio sigue publicando la
+ * frase contraria — "El semanal existe en Básico y en Pro. Full se cobra
+ * mensual o anual." (CONDICIONES, derivada de `PLANES`).
+ *
+ * Y no es cosmetico: la disponibilidad es lo que decide si el checkout acepta
+ * la venta (`isCycleAvailable` en subscription-plans.ts, y el
+ * "Solo mensual o anual" de CheckoutClient.tsx). Publicar de menos esconde la
+ * forma mas barata de entrar al plan; publicar de mas manda al lead a un
+ * checkout que le rechaza el ciclo que eligio.
+ *
+ * Es un BOOLEANO, no una cifra: por eso ningun cruce de numeros puede
+ * expresarlo, y por eso va aparte y no como una clave mas de `CIFRAS`.
+ *
+ * Puro: sin red y sin disco.
+ */
+export function ciclosCruzados(planesProducto, planesSitio) {
+  const ilegibles = [];
+  const difieren = [];
+
+  for (const p of CICLOS_EQUIVALENCIA) {
+    const lado = {
+      producto: planesProducto?.[p.producto],
+      sitio: planesSitio?.[p.sitio],
+    };
+    // `semanal: null` solo significa "este plan no se fracciona" si de verdad
+    // leimos el plan. Si el patron no lo encontro, el objeto no esta o su
+    // `mensual` vino vacio — y ahi `null` significa "no se", que es lo contrario.
+    // Confundirlos convierte un parser roto en un verde.
+    const ciego = Object.entries(lado)
+      .filter(([, v]) => !v || falta(v.mensual))
+      .map(([k]) => k);
+    if (ciego.length > 0) {
+      ilegibles.push({ plan: p.nombre, lados: ciego });
+      continue;
+    }
+    const tiene = {
+      producto: !falta(lado.producto.semanal),
+      sitio: !falta(lado.sitio.semanal),
+    };
+    if (tiene.producto !== tiene.sitio) {
+      difieren.push({ plan: p.nombre, ...tiene });
+    }
+  }
+
+  return { ilegibles, difieren };
+}
+
+/**
+ * Grupo / Empresarial queda fuera de este cruce, y la excusa se VERIFICA.
+ *
+ * Motivo: no se compra en linea (`CHECKOUT_PLANS` no lo trae, y el sitio lo
+ * publica como "se cotiza"), asi que el sitio no hace ninguna afirmacion sobre
+ * como se paga — no hay promesa que pueda contradecir al producto.
+ *
+ * Una excusa escrita en prosa se pudre: nadie la vuelve a medir. Esta se
+ * re-mide en cada corrida — si alguien le pone un `semanal` a `GRUPO`, el sitio
+ * pasa a afirmar un ciclo y la exencion deja de valer.
+ */
+export function excusaDeGrupoSigueValiendo(fuenteSitio) {
+  const bloque = bloqueExportado(fuenteSitio, "GRUPO");
+  if (!bloque) return { vale: false, porque: "no encontre el bloque `GRUPO` en el sitio" };
+  if (/\bsemanal:/.test(bloque)) {
+    return {
+      vale: false,
+      porque: "`GRUPO` ya declara un `semanal`: el sitio afirma un ciclo y hay que cruzarlo",
+    };
+  }
+  return { vale: true, porque: "" };
+}
+
 const AQUI = dirname(fileURLToPath(import.meta.url));
 export const PRECIOS_SITIO = join(AQUI, "..", "src", "lib", "pricing.ts");
 export const CHATBOT_SITIO = join(
@@ -711,12 +804,43 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     process.exit(NO_PUDE_MEDIR);
   }
 
-  if (difieren.length === 0) {
+  const ciclos = ciclosCruzados(
+    planesDelProducto(planes),
+    planesDelSitio(preciosSitio),
+  );
+  const excusaGrupo = excusaDeGrupoSigueValiendo(preciosSitio);
+
+  if (ciclos.ilegibles.length > 0 || !excusaGrupo.vale) {
+    console.error(
+      `NO PUDE MEDIR: no pude leer de los dos lados que ciclos se pueden pagar:\n` +
+        ciclos.ilegibles
+          .map((i) => `  · plan ${i.plan} — no lo pude leer en: ${i.lados.join(" y ")}`)
+          .join("\n") +
+        (excusaGrupo.vale ? "" : `\n  · Grupo / Empresarial — ${excusaGrupo.porque}`) +
+        `\nSin eso no se puede decir si el sitio ofrece un ciclo que el checkout rechaza.`,
+    );
+    process.exit(NO_PUDE_MEDIR);
+  }
+
+  if (difieren.length === 0 && ciclos.difieren.length === 0) {
     console.log(
       `VERDE: las ${CIFRAS.length} cifras que publica el sitio son las que cobra el producto, ` +
-        `y las ${numerosPublicados(preciosSitio).length} del \`incluye\` de los planes estan todas cruzadas.`,
+        `las ${numerosPublicados(preciosSitio).length} del \`incluye\` de los planes estan todas cruzadas, ` +
+        `y los ${CICLOS_EQUIVALENCIA.length} planes comprables ofrecen los mismos ciclos en los dos lados.`,
     );
     process.exit(COINCIDEN);
+  }
+
+  for (const c of ciclos.difieren) {
+    console.error(
+      c.producto
+        ? `ROJO: plan ${c.plan} — el producto lo cobra SEMANAL y el sitio dice que no se fracciona.\n` +
+          `  El sitio le esconde al lead la forma mas barata de entrar a ese plan. ` +
+          `Manda el producto (CLAUDE.md): se corrige el \`semanal\` del plan en src/lib/pricing.ts.`
+        : `ROJO: plan ${c.plan} — el sitio ofrece pago SEMANAL y el producto no lo cobra asi.\n` +
+          `  El lead elige semanal y el checkout se lo rechaza ("Solo mensual o anual"). ` +
+          `Manda el producto (CLAUDE.md): se corrige el \`semanal\` del plan en src/lib/pricing.ts.`,
+    );
   }
 
   for (const d of difieren) {
