@@ -104,3 +104,45 @@ La celda pasó a **squircle** (azul de banca, flechas de ida y vuelta), que adem
 coherente: en su misma fila USDT ya es squircle, y en la de arriba lo son Claude, ChatGPT y
 Gemini. Cuatro de las nueve celdas ya lo eran — la que desentonaba era ésta.
 Autoría de las tres: Pexels License — Tranmautritam, KATRIN BOLOVTSOVA, Marta Branco.
+| `cafe-b` | cup of black coffee white background | pexels | Pexels License | berna | https://www.pexels.com/photo/cup-of-black-coffee-18274979/ |
+| `mate-b` | yerba mate gourd bombilla | pexels | Pexels License | Tamara Mangold | https://www.pexels.com/photo/hand-holding-traditional-mate-gourd-outdoors-31547765/ |
+| `efectivo-b` | stack of banknotes cash | pexels | Pexels License | Andrey Red | https://www.pexels.com/photo/stacks-of-soviet-ruble-banknotes-in-plastic-wrap-34447592/ |
+| `mate-c` | mate gourd on white background | pexels | Pexels License | Gonzalo Acuña | https://www.pexels.com/photo/grined-grains-on-a-cup-10908708/ |
+| `efectivo-c` | dollar bills isolated white background | pexels | Pexels License | adrian vieriu | https://www.pexels.com/photo/close-up-photo-of-dollar-bills-11624907/ |
+| `mate-d` | mate tea gourd with metal straw | unsplash | Unsplash License | Yerba Mate Taragüi | https://unsplash.com/photos/persona-tomando-un-mate-con-yerba-mate-taragui-p3rf0U235y0 |
+| `mate-e` | mate infusion calabaza bombilla | pexels | Pexels License | Walter Spiess | https://www.pexels.com/photo/yerba-mate-in-bombilla-25436250/ |
+| `mate-f` | yerba mate drink cup straw side view | pexels | Pexels License | Egor Komarov | https://www.pexels.com/photo/yerba-mate-cup-15347184/ |
+
+## Reemplazo de café, mate y efectivo (07-sep)
+
+Sergio Urcullo: *"usa una imagen de un café normal, el mate usa otra, y el efectivo otra"*.
+Las tres celdas de la fila 2 y 3 de founders-bo cambiaron. **Los archivos vigentes son
+`cafe.png`, `mate.png` y `efectivo.png`**; los nombres con sufijo de la tabla de búsqueda
+de arriba son de trabajo y ya no existen con ese nombre.
+
+| Archivo vigente | Fuente | Licencia | Autor | Búsqueda |
+|---|---|---|---|---|
+| `cafe.png` | pexels | Pexels License | berna | "cup of black coffee white background" |
+| `mate.png` | pexels | Pexels License | Egor Komarov | "yerba mate drink cup straw side view" |
+| `efectivo.png` | pexels | Pexels License | adrian vieriu | "dollar bills isolated white background" |
+
+### Los descartados, y por qué
+
+Se guardan para que nadie repita la búsqueda. **El mate costó cinco intentos**: el objeto
+sólo se reconoce si se ve **de perfil y con la bombilla**; de frente o desde arriba es un
+cilindro oscuro que no dice nada.
+
+| Archivo | Por qué no |
+|---|---|
+| `RECHAZO-mate-con-mano.png` | Una mano sosteniéndolo. Las otras ocho celdas son objetos aislados |
+| `RECHAZO-mate-cilindro-sin-bombilla.png` | Casi cenital y sin bombilla: a tamaño de celda no se lee como mate |
+| `RECHAZO-mate-persona-taragui.png` | Una persona tomando mate, sin recortar, con la marca **Taragüí** visible |
+| `RECHAZO-efectivo-rublos.png` | Fajos de **rublos soviéticos** envueltos en plástico, sin recortar |
+
+### Los anteriores, por si hay que volver
+
+| Archivo | Qué era |
+|---|---|
+| `ANTERIOR-cafe-taza-roja.png` | Taza roja cenital con cortado. Se cambió por un café negro común |
+| `ANTERIOR-mate-marron.png` | Mate marrón oscuro. El nuevo se lee mejor a tamaño de celda |
+| `ANTERIOR-efectivo-abanico.png` | Billetes en abanico, con el recorte sucio en los bordes |
