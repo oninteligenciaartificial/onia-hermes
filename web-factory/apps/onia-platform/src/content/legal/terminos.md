@@ -3,7 +3,7 @@ title: "Términos y Condiciones"
 slug: "terminos"
 status: "vigente"
 version: "1.0"
-updatedAt: "2026-08-15"
+updatedAt: "2026-09-08"
 ---
 
 # Términos y Condiciones de Uso — Plataforma Onia
@@ -137,20 +137,30 @@ intelectual sobre el software.
 
 ## 6. Agentes de IA: proponen, vos aprobás
 
-6.1. **Nada sale solo.** Los agentes de IA de Onia operan con **aprobación humana
-previa**: toda comunicación saliente hacia tus pacientes, clientes o terceros
-queda en una **cola de pendientes** hasta que un usuario tuyo la revise y
-apruebe. Onia no envía comunicaciones en tu nombre sin esa aprobación.
+6.1. **Los agentes proponen, no envían.** Los agentes de IA de Onia operan con
+**aprobación humana previa**: lo que un agente redacta para tus pacientes,
+clientes o terceros queda en una **cola de pendientes** hasta que un usuario tuyo
+lo revise y apruebe. Ningún agente de IA envía en tu nombre sin esa aprobación.
 
-6.2. Si Onia llegara a ofrecer modos de envío automático para casos acotados
-(por ejemplo, recordatorios con plantilla fija), serán **opcionales**, se
-activarán solo con tu instrucción expresa y podrás desactivarlos en cualquier
-momento.
+6.2. **Envíos automáticos que la plataforma sí hace hoy.** Fuera de los agentes,
+y como parte de lo que contratás, la plataforma envía con **plantilla fija** y
+sin revisión mensaje por mensaje:
 
-6.3. **Sos responsable de lo que aprobás.** Al aprobar un borrador lo hacés
-tuyo: respondés por el contenido de toda comunicación aprobada y enviada desde tu
-cuenta, y por contar con el consentimiento o base legítima para contactar al
-destinatario.
+- **Confirmaciones y recordatorios de cita** a tu paciente o cliente: por correo
+  —dentro del tope mensual de tu plan— y también por WhatsApp si contrataste ese
+  add-on. Vienen **activos** en las cuentas nuevas; los **pausás cuando quieras**
+  desde **Configuración**, y el destinatario puede pedir que no le escribamos más.
+- **El asistente de WhatsApp** (add-on que se contrata aparte), que responde por
+  su cuenta a quien escriba al número que conectaste, con la información que vos
+  publicaste, y pasa el caso a una persona cuando no sabe.
+
+Estos envíos salen **a nombre de tu negocio**. Si no querés ninguno: no
+contratés el add-on y dejá los recordatorios pausados.
+
+6.3. **Sos responsable de lo que sale de tu cuenta.** Respondés por el contenido
+de las comunicaciones enviadas desde tu cuenta —tanto las que aprobás una por una
+como las de los canales automáticos del §6.2 que dejás activos— y por contar con
+el consentimiento o la base legítima para contactar al destinatario.
 
 6.4. **Límites de la IA.** La IA puede producir información incorrecta,
 incompleta o desactualizada. Los resultados de IA son asistencia, no decisiones:
