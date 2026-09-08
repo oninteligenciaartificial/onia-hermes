@@ -44,6 +44,51 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **La reserva pública le decía al cliente del negocio «Sin horarios disponibles · Probá
+      con otra fecha» cuando en realidad NO había podido cargar los horarios — cerrado el
+      2026-09-08 (`e69736b` en `onia-platform`, publicado en la rama).**
+
+      **La clase, que es lo que importa:** `/book/[orgSlug]` es la única superficie del producto
+      que ve **el cliente del cliente** —un desconocido pidiendo turno, con la marca del negocio
+      delante—, y ningún gate de este proyecto la barre: todos miran `app/(dashboard)` y
+      `components/`. El paso 3 cargaba los horarios con
+      `.catch(() => { if (!cancelled) setSlots([]); })` y pintaba, para lista vacía, «Sin horarios
+      disponibles · Probá con otra fecha». O sea que un fallo —429 del límite por IP
+      (`publicApiLimiter`, 30/min; el propio `rate-limit.ts` ya documenta que una IP suele estar
+      compartida por NAT), un 403 o un 500— se le mostraba al que quería reservar **como si el
+      negocio no tuviera lugar**. Nadie podía enterarse: el dueño mira su panel, no esta pantalla,
+      y el fallo no dejaba ni un rastro. Y el consejo que daba —probá con otra fecha— es
+      justamente lo que consume el límite que produce el error, así que volvía a salir el mismo
+      cartel.
+
+      Es la misma clase que se cerró el 06-sep en el alta (`buscarNegocio()` devolvía `[]` tanto
+      por «busqué y no encontré» como por «no hay buscador»): **un retorno ambiguo confunde “no
+      pude preguntar” con “te contesté que no”.** De los cuatro `.catch` de `app/(public)`, los
+      otros tres ya distinguían — faltaba justo el del paso que decide la reserva.
+
+      **La superficie está VIVA:** 7 de las 9 orgs de producción están en `professional`, y
+      `professional` trae `publicBookingIncluded: true` (`lib/plan-catalogo.ts`). Medido con
+      `docker exec supabase-db psql`, no deducido.
+
+      **Arreglado sin borrar la promesa, condicionándola:** `lib/agenda/disponibilidad-publica.ts`
+      separa los dos casos y **el error gana sobre la lista vacía** —ese orden ES el arreglo,
+      porque cuando la carga falla la lista siempre queda vacía—; el 429 se dice como espera
+      («Fueron muchas consultas seguidas. Reintentá en unos segundos») y hay botón de reintentar.
+
+      **Gate `lib/agenda/disponibilidad-publica.test.ts`:** mide la decisión **y** que la PANTALLA
+      la use (un helper correcto que nadie llama es como esta familia vuelve). Validado en ROJO
+      primero por el motivo correcto —6 casos de lógica en verde, 3 de la pantalla en rojo— y por
+      **3 mutaciones**: invertir el orden error/cantidad, devolver el `catch` mudo y volver a
+      tipear el cartel a mano; las tres caen en rojo y restaurado vuelve a verde.
+
+      **Gates:** `tsc` exit 0 · `vitest` **3769 pasan / 309 archivos, 0 fallos** · `eslint` 0
+      errores. De paso, el gate de iconos cazó un `cloud_off` fuera de la fuente subseteada —se
+      habría visto **la palabra en letras gigantes**, el bug más caro del proyecto—: va `refresh`,
+      que ya está incluido.
+
+      ⚠️ **Commiteado y en la rama, NO desplegado:** viaja con el pedido `t_bf1607af`
+      (`DESPLEGAR: plataforma`), que espera el `ok` de Sergio Urcullo.
+
 - [x] 🔴 **El panel le negaba al cliente vencido exactamente lo que su propio correo le había
       prometido 24 h antes — cerrado el 2026-09-08 (`999f932` en `onia-platform`, publicado en la
       rama, falta que el integrador lo mergee a `master`).**
