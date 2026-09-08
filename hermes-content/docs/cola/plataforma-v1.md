@@ -44,6 +44,70 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **CERRADO el 2026-09-08: once acciones del panel le confirmaban al dueño —con el
+      parpadeo de la pantalla— cosas que el servidor había rechazado.** Cancelar una cita,
+      reprogramarla, dar de baja a un empleado, borrar a alguien del equipo, guardar los
+      horarios de atención: `await fetch(...)` y en la línea siguiente `router.refresh()` /
+      `window.location.reload()`, sin mirar una sola vez qué contestó el servidor.
+
+      **La clase, que es lo que importa.** El 2026-09-08, más temprano, se cerró el camino de
+      fallo de `onia-platform-chatbot/app/(public)` —la superficie del cliente del cliente— y **su familia simétrica,
+      el panel donde trabaja el DUEÑO, quedó abierta**. Es la tercera vez que este carril paga
+      lo mismo: al cerrar el hueco de una familia hay que preguntar cuál es la simétrica.
+
+      Y la pregunta del gate del panel **no es la de allá**. Allá el `fetch` TIRA (se cortó la
+      red) y lo ataja un `try`/`catch`. Acá **la respuesta LLEGA**, con un `403 «Tu suscripción
+      ha vencido»`, y ningún `catch` la ve: para enterarse hay que leer `.ok`. Un archivo puede
+      tener sus cuatro `catch` en orden y estar ciego a todos los rechazos del servidor.
+
+      **El disparador no es raro:** `checkPlanExpiry` corta **todas** las escrituras de una
+      organización con la suscripción vencida (los `GET` siguen pasando). El día que vence, cada
+      uno de estos botones miente en vez de explicar por qué no funciona.
+
+      **Por qué era peor que quedarse mudo:** en cuatro de los once la pantalla además *actuaba*
+      el éxito. `settings` sacaba a la persona de la lista del equipo (`setTeamMembers(prev =>
+      prev.filter(...))`) — desaparecía de la pantalla y **seguía teniendo acceso al sistema**;
+      `treatments` la sacaba del catálogo; el interruptor de avisos por correo se movía y no
+      volvía nunca. El producto no callaba: **afirmaba lo contrario de lo que había pasado**.
+
+      | dónde | qué daba por hecho sin preguntar |
+      |---|---|
+      | `onia-platform-chatbot/app/(dashboard)/appointments/page.tsx` ×3 | cancelar · marcar completada · **cambiar la fecha** (cerraba el modal: el paciente seguía citado a la hora vieja) |
+      | `onia-platform-chatbot/app/(dashboard)/settings/SettingsClient.tsx` ×4 | borrar del equipo · borrar profesional · **guardar horarios** (de ahí sale la agenda) · avisos por correo |
+      | `onia-platform-chatbot/app/(dashboard)/empresa/EmpresaClient.tsx` | borrar un gasto y su crédito fiscal |
+      | `onia-platform-chatbot/app/(dashboard)/rrhh/RrhhClient.tsx` | dar de baja / reactivar a un empleado |
+      | `onia-platform-chatbot/app/(dashboard)/treatments/TreatmentsClient.tsx` | borrar un servicio del catálogo |
+      | `onia-platform-chatbot/app/(dashboard)/patients/[id]/prescriptions/PrescriptionsClient.tsx` | borrar una receta |
+
+      **Por qué ningún gate podía verlo:** no sobra ni falta una palabra —los barridos de copy,
+      obra, rubro y precios pasan verdes—, la pantalla renderiza perfecto (la captura también), y
+      `await fetch(...)` sin usar el resultado es TypeScript válido y `eslint` limpio. En los
+      seis archivos **el alta de al lado SÍ mira la respuesta y avisa**: cuando el hermano sano
+      está a diez líneas, el archivo se lee como cubierto.
+
+      **Atado en** `onia-platform-chatbot/app/(dashboard)/camino-de-fallo.test.ts` (12 casos), con el detector
+      `escriturasSinMirarLaRespuesta` en `onia-platform-chatbot/lib/superficie-publica/cobertura-de-fallo.ts` y el
+      helper `onia-platform-chatbot/lib/http/mensaje-de-error.ts`, que muestra el motivo que ya manda la ruta
+      («Tu suscripción ha vencido…») en vez de un «algo salió mal». Sujeto derivado del disco y
+      **un exento por literal exacto**, no por ruta: `onia-platform-chatbot/app/(dashboard)/profile/MfaSection.tsx:144`, limpieza
+      best-effort después de que el factor ya se borró, con un caso que se pone rojo si el
+      exento se pudre.
+
+      ⚠️ **Un agujero del gate lo encontró la MUTACIÓN, no la lectura:** la primera versión
+      buscaba `.ok` sobre el texto crudo, así que **un comentario que lo nombrara absolvía a la
+      llamada que ese mismo comentario describe** — el guard avalado por su propia bitácora. Se
+      arregló mirando sólo código real y quedó anclado en un caso.
+
+      **Validado por mutación en las dos direcciones**, cada una confirmada por su línea
+      `Tests N failed`: revertir un arreglo → rojo; esquivar poniendo `res.ok` en un comentario →
+      rojo; arreglar el exento (sobra) → rojo; **pantalla nueva con el defecto → rojo** (el
+      barrido la alcanza); detector siempre-vacío → 4 rojos. Base: 12 verdes.
+
+      **Gates:** `tsc` 0 · `vitest` 3885 verdes (315 archivos) · `eslint` 0 errores.
+      Commit `029c915` en `onia-platform`, rama `claude/chatbots-platform-review-0d1d09`.
+      ⚠️ **Commiteado y en la rama, NO desplegado**: falta que `onia-cola` lo mergee a `master`
+      y que el swap lo publique, así que **el cliente todavía ve los once botones mintiendo**.
+
 - [x] 🔴 **El enlace de reserva que el negocio manda por WhatsApp le vendía el panel a su cliente
       — cerrado el 2026-09-08 (`b4b2e34` en `onia-platform`, publicado en la rama, falta que el
       integrador lo mergee a `master`).**
