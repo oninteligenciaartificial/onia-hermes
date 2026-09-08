@@ -1409,6 +1409,60 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] **CERRADO el 2026-09-08: nadie vigilaba el simétrico de «camino ausente» — el enlace
+      que lleva a una pantalla que ese rubro tiene BLOQUEADA.** Commit `c3a2fda` (rama
+      `claude/chatbots-platform-review-0d1d09` de `onia-platform`), **NO desplegado** — es un
+      gate, no cambia lo que el cliente ve.
+
+      **La clase.** `caminos-transversales.test.ts` cubre una dirección: *permiso concedido,
+      camino ausente* — el tenant puede entrar y ningún menú la ofrece (`/requerimientos`,
+      `/empresa`, `/rrhh`, `/patients/[id]/prescriptions`: cuatro veces). La **simétrica** no
+      la vigilaba nadie: el panel PINTA un botón hacia un segmento que `route-access` le
+      bloquea a ese pack, el dueño hace clic y el layout lo devuelve a `/dashboard`.
+
+      Es la más silenciosa de las dos. No sobra ni falta una palabra —ningún barrido de copy
+      la ve—, la pantalla se ve perfecta, el enlace existe, y el redirect es **mudo**: sin
+      error, sin request fallida, sin cartel. Sólo aparece abriendo la pantalla con la sesión
+      del rubro equivocado, que es justo lo que un instrumento no hace solo.
+
+      **Lo medido, y por qué el hallazgo fue un gate y no un arreglo.** Barrido de los hrefs
+      de `app/(dashboard)` cruzados contra `allowedSegmentsForPack` de los siete packs: **UN**
+      enlace de esa clase, y **ya estaba guardado** — la ficha del cliente ofrece «Facturar» y
+      servicios profesionales no tiene `/billing` (su caja es `/comercio/caja`); lo tapa
+      `veFacturacion`, derivado de `pack.nav`. El guard existía; lo que no existía era algo
+      que impidiera que el próximo enlace **nazca sin él**.
+
+      **Tres hipótesis descartadas midiendo, antes de escribir una línea** — las tres se leían
+      como defecto vivo y ninguna lo era:
+      1. *Las tres acciones del panel están tipeadas a mano* (`/patients/new`, `/appointments`,
+         `/billing/new`, `dashboard/page.tsx:584`) **y las tres están bloqueadas para comercio
+         e importadora.** Falso: `page.tsx` hace **return temprano** por rubro (línea 118-124)
+         y esos packs ven `ComercioHoy` / `ImportadoraHoy`, cuyos enlaces sí derivan. Cruzados
+         los tres paneles contra los packs que de verdad los reciben: cero bloqueados.
+      2. *La tarjeta «Por pagar a proveedores» muestra `Bs 0` cuando la lectura falló*
+         (`comercio/fiados/page.tsx`: el `catch` deja `[]` y el aviso vive 100 líneas más
+         abajo; igual en `empresa/gastos` y `rrhh`). Es el patrón del retorno ambiguo, pero
+         **latente**: las tres tablas existen en producción
+         (`onia_commerce_purchases`, `onia_empresa_expenses`, `onia_payroll_employee_profiles`),
+         así que el `catch` no dispara hoy.
+      3. *Nombre del archivo descargado y `<title>` del panel por rubro.* Los nombres son
+         neutros (`onia-facturas`, `gastos`, `planilla`) y dentro del ZIP ya derivan
+         (`${nombreClientes}.csv`); sólo dos pantallas exportan `metadata.title`.
+
+      **El gate.** `lib/platform/enlaces-del-panel-alcanzables.test.ts`: sujetos del **disco**,
+      permisos de `allowedSegmentsForPack` —la MISMA función que usa el layout para bloquear,
+      no una lista de tracks al lado—, exento `dashboard/` **con su motivo** (rama por rubro),
+      y una tabla `COBERTURA` que no puede faltar ni sobrar. Tres anclas contra quedarse mudo.
+      Validado por **mutación en cuatro direcciones**, todas rojas y restauradas en verde:
+      enlace nuevo sin guard, fila de `COBERTURA` borrada, enlace real removido (la fila sobra)
+      y detector siempre-vacío.
+
+      **Su límite, dicho de frente:** es un gate de **cobertura**, no de comportamiento —
+      obliga a declarar el enlace, no comprueba que el guard funcione. Romper `veFacturacion`
+      sin tocar el `href` lo deja en verde.
+
+      Gates: `tsc` 0 · `eslint` 0 errores · `vitest` 3640/304.
+
 - [x] 🔴 **CERRADO el 2026-09-08: a un centro de estética el catálogo le ofrecía archivar
       «Limpieza facial profunda» bajo Endodoncia.** Commit `74879aa` (rama
       `claude/chatbots-platform-review-0d1d09`), **NO desplegado** — viaja con el pedido de
