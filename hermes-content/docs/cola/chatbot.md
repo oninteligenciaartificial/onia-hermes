@@ -219,8 +219,46 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       origin/master` dice que no. Falta el merge del integrador y después el deploy
       (`t_bf1607af`) — **no está en producción**.
 
-- [ ] **HERMANO del anterior, en la MISMA expresión y sin arreglar: el bot no reconoce al
-      cliente que le escribe si su rubro guarda la gente en otra tabla.**
+- [x] ✅ **CERRADO el 2026-09-08 (`af777cd`). HERMANO del anterior, en la MISMA expresión: el bot
+      no reconocía al cliente que le escribe si su rubro guarda la gente en otra tabla.**
+
+      **La cola decía «1 uso» y eran TRES.** El grep de la reproducción de acá abajo devuelve
+      `254`, `306` y `345`. Los dos que fallaban sólo querían el NOMBRE:
+
+      | uso | qué hacía mal | costo |
+      |---|---|---|
+      | 254 · saludo a la IA | `patientName: patient?.name ?? v.cliente` | saluda sin nombre — suave, es lo que decía la cola |
+      | 345 · `escalateToHuman` | `patientName = patient?.name ?? phoneNumber` | **la conversación aterriza en la bandeja del dueño rotulada con un número de teléfono** |
+      | 306 · `getNextAppointment` | nada: necesita el `id` para buscar la cita | queda como estaba, a propósito |
+
+      El de la escalación es el que valía la vuelta: esa bandeja es la superficie del objetivo de
+      este carril, y el negocio ve un número por un cliente que él mismo cargó.
+
+      **Arreglo:** `lib/whatsapp/cliente-del-negocio.ts` — hermano exacto de
+      `catalogo-del-negocio.ts`, base inyectada sin default. Busca en `patients` o en
+      `onia_core_business_partners` según `guardaClientesEnPatients(trackId)`, por
+      `metadata.phone` —la MISMA clave que escriben `lib/comercio/clientes.ts` y
+      `lib/comercio/ventas.ts`, con otra no encontraría nunca a nadie— y cortando por
+      `partnerType startsWith "cliente"`, porque los proveedores viven en esa tabla: sin ese
+      corte el bot saludaría al ferretero por el nombre de quien le VENDE. `trackId` pasó a ser
+      parámetro **obligatorio** de `escalateToHuman`; con default, un llamador que no lo pase es
+      indistinguible de uno correcto y `tsc` no lo ve.
+
+      **La premisa que deja sano al uso 306, anclada con un caso** en vez de con la suerte: hoy
+      todo rubro con agenda guarda en `patients` (medido sobre los 8 packs: `agenda ⟺ patients`).
+      Es una coincidencia del nav, no una ley — el día que un rubro tenga agenda y guarde en
+      partners, ese camino queda roto y el gate lo dice.
+
+      **Gate validado por mutación en 6 direcciones, las 6 en rojo**, incluida la de ESQUIVE
+      (llamar al helper y tirar el resultado, que es como este tipo de guard pasa en verde hueco).
+      `npx tsc --noEmit` exit 0 · `npx vitest run` **3948 pasan / 323 archivos** · `npx eslint .`
+      0 errores — corridos en el worktree del VPS, sobre el árbol que aterrizó.
+
+      ⚠️ **Commiteado y pusheado, NO desplegado.** Falta el merge del integrador a `master` y
+      después el swap; viaja en el pedido de deploy de plataforma que espera el `ok` de Sergio
+      Urcullo.
+
+      <details><summary>El ítem como estaba escrito</summary>
 
       Dos líneas más arriba del catálogo, `lib/whatsapp-bot.ts` hace
       `prisma.patient.findFirst({ where: { organizationId, phone: { contains: ... } } })`.
@@ -240,6 +278,8 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       **Reproducción:** `grep -n "prisma.patient.findFirst" lib/whatsapp-bot.ts` (1 uso, en el
       camino de texto libre) y `lib/plan-limits.ts:190` `contarClientesDelRubro`, que ya
       resuelve la MISMA pregunta bien y es el patrón a copiar.
+
+      </details>
 
 - [x] ✅ **CERRADO el 2026-09-08: el arreglo de ayer se aplicó a UNA instancia y sus tres hermanas
       quedaron ciegas — de los gates vivos de este carril, TRES no medían nada desde nodo-casa.**
