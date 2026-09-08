@@ -1409,6 +1409,48 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] 🔴 **CERRADO el 2026-09-08: a un centro de estética el catálogo le ofrecía archivar
+      «Limpieza facial profunda» bajo Endodoncia.** Commit `74879aa` (rama
+      `claude/chatbots-platform-review-0d1d09`), **NO desplegado** — viaja con el pedido de
+      deploy de `plataforma`.
+
+      **El defecto.** `/treatments` la tienen en su menú los TRES packs clínicos (dental,
+      estética, veterinaria: `sidebarNavItems` por referencia + `navClinicaDe()`). El
+      formulario de alta del catálogo pedía el nombre con el ejemplo **«Ej: Extracción dental
+      simple»** y su desplegable de Categoría eran las diez especialidades ODONTOLÓGICAS
+      —Preventivo, Restaurativo, Endodoncia, Periodoncia, Cirugía, Ortodoncia, Estética,
+      Prótesis, Implantología, Otro—, que además son los encabezados con los que agrupa la
+      lista. Estética es un rubro de la v1.0.
+
+      **Por qué sobrevivió, que es lo único que vale recordar.** El encabezado de esta pantalla
+      YA derivaba del rubro (se arregló el 2026-09-06 en `page.tsx`) y
+      `pantallas-compartidas-cubiertas.test.ts` la daba por **cubierta**, apuntando a
+      `copy-de-pantallas-compartidas.test.ts`. Pero ese gate lee `page.tsx`, y la pantalla la
+      pinta `TreatmentsClient.tsx`, un client component aparte que **ningún caso abría**: el
+      sujeto (los rubros) estaba bien derivado y lo que faltaba era **superficie**. Ningún
+      barrido de palabras prohibidas puede verlo — cada término es correcto en el rubro que lo
+      escribió; lo que está mal es el par (rubro, texto).
+
+      Es la misma familia que `ejemploServicio` y `ejemploRegistro`, un escalón más afuera: se
+      creó el campo por rubro, se migraron dos pantallas (`NewInvoiceClient`,
+      `paso-servicios`) y la tercera —la que se llama justamente como el concepto— quedó atrás.
+
+      **El arreglo.** `categoriasServicio` y `servicio` (singular) en
+      `lib/onboarding/vocabulario.ts` para los OCHO tracks; `TreatmentsClient` deriva ejemplo,
+      categorías y sustantivo con el mismo `useAccountContext()` que ya usa su pantalla
+      hermana de facturación. El singular va como campo aparte y no se saca quitándole la «s»
+      al plural, que rompe en `planes` → `plane`.
+
+      **Prueba.** Los 9 casos nuevos de `copy-de-pantallas-compartidas.test.ts` estaban en
+      ROJO antes del arreglo. Validado por MUTACIÓN en tres direcciones, y el árbol restaurado
+      vuelve a verde: devolver el placeholder dental → 1 rojo; devolver la lista tipeada en la
+      pantalla → 5 rojos; hacer que estética herede las categorías dentales → 3 rojos.
+      Gates: `tsc` 0 · `vitest` 3600/3606 · `eslint` 0 errores.
+
+      **Lo que NO alcanza este arreglo, dicho para que nadie lo dé por barrido:** sólo se miró
+      `/treatments`. Las demás pantallas compartidas cuyo copy vive en un client component
+      hermano siguen sin auditar por ese eje.
+
 - [x] 🔴 **CERRADO el 2026-09-07: el dueño ponía la fecha límite del 9 y su cliente leía el 8.**
       Commit `9ad61aa` (rama `claude/chatbots-platform-review-0d1d09`), **NO desplegado** —
       viaja con el pedido de deploy de `plataforma`.
