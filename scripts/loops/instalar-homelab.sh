@@ -73,8 +73,8 @@ contenido-cola    claude/ads-creatividades-publicos   11 */3 * * *
 # tomada (Sergio Urcullo, 2026-09-06: la pc vieja es mucho mejor que el vps), con
 # su riesgo nombrado: sin luz o sin internet alla, nada llega a main.
 onia-cola         main                                33 * * * *
-chatbot-cola      claude/chatbots-platform-review-0d1d09  3 * * * *
-recorrido-cliente claude/recorrido-cliente            9 1,4,7,10,13,16,19,22 * * *
+chatbot-cola      claude/chatbots-platform-review-0d1d09  13,43 * * * *
+recorrido-cliente claude/recorrido-cliente            9 * * * *
 EOF
 )
 ASIGNADOS="${ONIA_LOOPS_HOMELAB:-web-factory-dev web-venta tendencias lucia marca-personal}"

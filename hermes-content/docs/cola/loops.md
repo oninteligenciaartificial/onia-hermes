@@ -186,10 +186,10 @@ manda. Un loop se compara **sólo contra el registro de su propia máquina**:
 
 | id | dónde corre | cron | para qué sirve |
 |---|---|---|---|
-| `chatbot-cola` | **casa** | `3 * * * *` (UTC) | **Carril `plataforma-v1` desde el 2026-09-05** (el id no se renombró: cambiarlo tocaría cron, worktrees, logs y gate sin ganar nada). Dos colas en orden: `cola/chatbot.md` mientras le queden 🔴, después `cola/plataforma-v1.md`. **Es el único loop que escribe en el repo `onia-platform`** |
+| `chatbot-cola` | **casa** | `13,43 * * * *` (UTC) | **Carril `plataforma-v1` desde el 2026-09-05** (el id no se renombró: cambiarlo tocaría cron, worktrees, logs y gate sin ganar nada). Dos colas en orden: `cola/chatbot.md` mientras le queden 🔴, después `cola/plataforma-v1.md`. **Es el único loop que escribe en el repo `onia-platform`** |
 | `onia-cola` | **casa** | `33 * * * *` (UTC) | **El integrador**: mergea las ramas de carril a `main`; después su cola de plataforma |
 | `web-venta` | **casa** | `48 */2 * * *` (UTC) | **Dueño de `onia.com.bo/` y `/empezar`** (rama `claude/web-venta`, zona `web-factory/apps/onia-platform/`): la puerta de entrada del producto |
-| `recorrido-cliente` | **casa** | `9 1,4,7,10,13,16,19,22 * * *` (UTC) | Recorre el camino del cliente de punta a punta (rama `claude/recorrido-cliente`) y dice **en qué paso exacto se rompe**, con la captura como prueba |
+| `recorrido-cliente` | **casa** | `9 * * * *` (UTC) | Recorre el camino del cliente de punta a punta (rama `claude/recorrido-cliente`) y dice **en qué paso exacto se rompe**, con la captura como prueba |
 
 ⚡ **Cadencia subida a cada hora el 2026-09-05 para `chatbot-cola` y `onia-cola`** (eran
 `*/2`), por pedido de Sergio Urcullo y con el margen medido antes de tocar:
@@ -211,6 +211,18 @@ rojo, la cadena de `npm test` falla y **ningún carril mergea** — incluido el 
 es el único que podría arreglar la tabla. Es un candado sobre sí mismo. Por eso **la tabla va
 primero a `main`, y el `crontab` recién después**, en un hueco entre corridas. Al revés ya se
 revirtió sola una baja de cadencia el 2026-09-04 (5 loops, 23 vueltas/día de más).
+
+⚠️ **Corregido 2026-09-08 02:33 La Paz — y esta vez la deriva tenía TRES copias, no dos.** El
+`crontab` de casa se editó a mano a las 02:02 (`chatbot-cola` de `3 * * * *` a `13,43`,
+`recorrido-cliente` de `9 1,4,7,…` a `9 * * * *`) y el gate quedó rojo, o sea `main` rojo y
+**ningún carril mergeando**. Las dos filas se alinean al cron, por la regla de siempre.
+
+**Lo nuevo, y es lo que hace que esto vuelva:** la cadencia vive en un **tercer** lugar —el
+heredoc de `scripts/loops/instalar-homelab.sh` (líneas 75-77)— y `loops_registrados.mjs` **no lo
+mira**. Ese archivo es la **plantilla de la que nace el `crontab`**: alinear sólo la tabla deja al
+instalador escribiendo la cadencia vieja, así que la próxima corrida revierte el cron **y el rojo
+vuelve**, con la tabla ahora del lado equivocado. Los tres se tocan juntos o no se toca ninguno.
+Es "arreglar la instancia y no la plantilla" aplicado al registro de horarios.
 
 ⚠️ **Corregido 2026-09-03 21:10 UTC — cinco cadencias BAJADAS a propósito, y la tabla seguía con
 las viejas.** `canario-visual`, `marca-personal`, `docs-auditoria`, `investigacion` y `supervisor`
