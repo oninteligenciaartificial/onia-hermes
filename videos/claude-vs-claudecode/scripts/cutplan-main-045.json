@@ -1,0 +1,1452 @@
+{
+  "video": "E:/ONIA-YouTube/grabaciones/clip 2 video 1.mp4",
+  "modo": "audio",
+  "noise": "-32dB",
+  "minSil": 0.45,
+  "pad": 0.08,
+  "origDur": 511.5,
+  "finalDur": 424.44,
+  "silences": [
+    {
+      "start": 2.212646,
+      "end": 2.971792
+    },
+    {
+      "start": 4.228833,
+      "end": 5.162833
+    },
+    {
+      "start": 15.530896,
+      "end": 15.991542
+    },
+    {
+      "start": 20.668187,
+      "end": 22.959687
+    },
+    {
+      "start": 22.95975,
+      "end": 23.450937
+    },
+    {
+      "start": 31.243021,
+      "end": 31.722146
+    },
+    {
+      "start": 37.0815,
+      "end": 40.674125
+    },
+    {
+      "start": 42.424458,
+      "end": 43.040292
+    },
+    {
+      "start": 44.4175,
+      "end": 45.009271
+    },
+    {
+      "start": 56.865687,
+      "end": 57.399042
+    },
+    {
+      "start": 61.870958,
+      "end": 62.558312
+    },
+    {
+      "start": 71.202917,
+      "end": 71.830312
+    },
+    {
+      "start": 73.619812,
+      "end": 75.741021
+    },
+    {
+      "start": 77.858333,
+      "end": 78.340312
+    },
+    {
+      "start": 90.482146,
+      "end": 91.286583
+    },
+    {
+      "start": 91.678208,
+      "end": 92.181417
+    },
+    {
+      "start": 92.774333,
+      "end": 93.489958
+    },
+    {
+      "start": 96.395854,
+      "end": 96.912437
+    },
+    {
+      "start": 98.611937,
+      "end": 99.126292
+    },
+    {
+      "start": 104.787125,
+      "end": 105.354021
+    },
+    {
+      "start": 116.162417,
+      "end": 116.758646
+    },
+    {
+      "start": 118.268687,
+      "end": 118.805437
+    },
+    {
+      "start": 118.8305,
+      "end": 119.281771
+    },
+    {
+      "start": 127.127729,
+      "end": 128.87425
+    },
+    {
+      "start": 135.890062,
+      "end": 136.422646
+    },
+    {
+      "start": 137.991687,
+      "end": 139.454167
+    },
+    {
+      "start": 139.818875,
+      "end": 140.284521
+    },
+    {
+      "start": 142.95375,
+      "end": 143.520167
+    },
+    {
+      "start": 149.652938,
+      "end": 150.276229
+    },
+    {
+      "start": 155.387375,
+      "end": 157.765479
+    },
+    {
+      "start": 159.734979,
+      "end": 160.265083
+    },
+    {
+      "start": 162.881854,
+      "end": 163.542708
+    },
+    {
+      "start": 166.020021,
+      "end": 166.618292
+    },
+    {
+      "start": 167.121,
+      "end": 167.586687
+    },
+    {
+      "start": 169.537854,
+      "end": 170.191667
+    },
+    {
+      "start": 177.148354,
+      "end": 179.547979
+    },
+    {
+      "start": 181.682542,
+      "end": 182.265604
+    },
+    {
+      "start": 182.316563,
+      "end": 183.143958
+    },
+    {
+      "start": 187.204375,
+      "end": 187.747021
+    },
+    {
+      "start": 190.128667,
+      "end": 190.763833
+    },
+    {
+      "start": 191.422146,
+      "end": 191.906917
+    },
+    {
+      "start": 193.307063,
+      "end": 193.968396
+    },
+    {
+      "start": 206.063187,
+      "end": 207.893812
+    },
+    {
+      "start": 210.539417,
+      "end": 211.005604
+    },
+    {
+      "start": 219.787062,
+      "end": 220.339521
+    },
+    {
+      "start": 224.656021,
+      "end": 227.1255
+    },
+    {
+      "start": 228.582958,
+      "end": 229.063042
+    },
+    {
+      "start": 238.539187,
+      "end": 239.595167
+    },
+    {
+      "start": 245.830479,
+      "end": 246.572042
+    },
+    {
+      "start": 249.065604,
+      "end": 249.565979
+    },
+    {
+      "start": 251.734958,
+      "end": 252.612333
+    },
+    {
+      "start": 255.126354,
+      "end": 256.677583
+    },
+    {
+      "start": 258.110146,
+      "end": 258.729208
+    },
+    {
+      "start": 259.726604,
+      "end": 260.213521
+    },
+    {
+      "start": 261.971708,
+      "end": 262.459729
+    },
+    {
+      "start": 263.040458,
+      "end": 264.154604
+    },
+    {
+      "start": 266.480146,
+      "end": 267.144396
+    },
+    {
+      "start": 272.036187,
+      "end": 272.980187
+    },
+    {
+      "start": 276.731917,
+      "end": 277.435708
+    },
+    {
+      "start": 279.206833,
+      "end": 279.666063
+    },
+    {
+      "start": 287.525229,
+      "end": 289.735646
+    },
+    {
+      "start": 298.338437,
+      "end": 299.224187
+    },
+    {
+      "start": 301.838437,
+      "end": 302.497042
+    },
+    {
+      "start": 305.201729,
+      "end": 305.984292
+    },
+    {
+      "start": 312.887479,
+      "end": 315.405417
+    },
+    {
+      "start": 317.286417,
+      "end": 317.881667
+    },
+    {
+      "start": 322.060354,
+      "end": 322.561688
+    },
+    {
+      "start": 326.222646,
+      "end": 326.718271
+    },
+    {
+      "start": 329.039688,
+      "end": 329.50075
+    },
+    {
+      "start": 351.054854,
+      "end": 351.772792
+    },
+    {
+      "start": 355.566438,
+      "end": 356.632292
+    },
+    {
+      "start": 359.258812,
+      "end": 360.354958
+    },
+    {
+      "start": 361.776896,
+      "end": 362.401
+    },
+    {
+      "start": 370.028729,
+      "end": 370.745937
+    },
+    {
+      "start": 370.746042,
+      "end": 371.537688
+    },
+    {
+      "start": 377.456167,
+      "end": 379.296521
+    },
+    {
+      "start": 380.204792,
+      "end": 381.106417
+    },
+    {
+      "start": 382.546542,
+      "end": 383.46875
+    },
+    {
+      "start": 385.259187,
+      "end": 385.811187
+    },
+    {
+      "start": 390.125396,
+      "end": 390.954667
+    },
+    {
+      "start": 391.775,
+      "end": 392.741604
+    },
+    {
+      "start": 394.331167,
+      "end": 394.888729
+    },
+    {
+      "start": 417.638937,
+      "end": 418.092
+    },
+    {
+      "start": 418.099,
+      "end": 418.588188
+    },
+    {
+      "start": 424.450729,
+      "end": 424.940146
+    },
+    {
+      "start": 435.232729,
+      "end": 436.576167
+    },
+    {
+      "start": 439.020312,
+      "end": 439.521062
+    },
+    {
+      "start": 443.922062,
+      "end": 445.173083
+    },
+    {
+      "start": 447.501,
+      "end": 448.803937
+    },
+    {
+      "start": 456.742354,
+      "end": 457.448771
+    },
+    {
+      "start": 460.669375,
+      "end": 463.042083
+    },
+    {
+      "start": 468.847229,
+      "end": 469.827063
+    },
+    {
+      "start": 472.950958,
+      "end": 479.021167
+    },
+    {
+      "start": 479.281646,
+      "end": 479.890458
+    },
+    {
+      "start": 480.052687,
+      "end": 481.727187
+    },
+    {
+      "start": 481.741104,
+      "end": 482.275333
+    },
+    {
+      "start": 484.519479,
+      "end": 485.651312
+    },
+    {
+      "start": 487.310937,
+      "end": 488.596667
+    },
+    {
+      "start": 494.102688,
+      "end": 494.724521
+    },
+    {
+      "start": 496.083146,
+      "end": 498.156958
+    },
+    {
+      "start": 505.503958,
+      "end": 506.05175
+    },
+    {
+      "start": 507.400146,
+      "end": 511.445333
+    }
+  ],
+  "keep": [
+    {
+      "start": 0,
+      "end": 2.29
+    },
+    {
+      "start": 2.89,
+      "end": 4.31
+    },
+    {
+      "start": 5.08,
+      "end": 15.61
+    },
+    {
+      "start": 15.91,
+      "end": 20.75
+    },
+    {
+      "start": 23.37,
+      "end": 31.32
+    },
+    {
+      "start": 31.64,
+      "end": 37.16
+    },
+    {
+      "start": 40.59,
+      "end": 42.5
+    },
+    {
+      "start": 42.96,
+      "end": 44.5
+    },
+    {
+      "start": 44.93,
+      "end": 56.95
+    },
+    {
+      "start": 57.32,
+      "end": 61.95
+    },
+    {
+      "start": 62.48,
+      "end": 71.28
+    },
+    {
+      "start": 71.75,
+      "end": 73.7
+    },
+    {
+      "start": 75.66,
+      "end": 77.94
+    },
+    {
+      "start": 78.26,
+      "end": 90.56
+    },
+    {
+      "start": 91.21,
+      "end": 91.76
+    },
+    {
+      "start": 92.1,
+      "end": 92.85
+    },
+    {
+      "start": 93.41,
+      "end": 96.48
+    },
+    {
+      "start": 96.83,
+      "end": 98.69
+    },
+    {
+      "start": 99.05,
+      "end": 104.87
+    },
+    {
+      "start": 105.27,
+      "end": 116.24
+    },
+    {
+      "start": 116.68,
+      "end": 118.35
+    },
+    {
+      "start": 119.2,
+      "end": 127.21
+    },
+    {
+      "start": 128.79,
+      "end": 135.97
+    },
+    {
+      "start": 136.34,
+      "end": 138.07
+    },
+    {
+      "start": 139.37,
+      "end": 139.9
+    },
+    {
+      "start": 140.2,
+      "end": 143.03
+    },
+    {
+      "start": 143.44,
+      "end": 149.73
+    },
+    {
+      "start": 150.2,
+      "end": 155.47
+    },
+    {
+      "start": 157.69,
+      "end": 159.81
+    },
+    {
+      "start": 160.19,
+      "end": 162.96
+    },
+    {
+      "start": 163.46,
+      "end": 166.1
+    },
+    {
+      "start": 166.54,
+      "end": 167.2
+    },
+    {
+      "start": 167.51,
+      "end": 169.62
+    },
+    {
+      "start": 170.11,
+      "end": 177.23
+    },
+    {
+      "start": 179.47,
+      "end": 181.76
+    },
+    {
+      "start": 183.06,
+      "end": 187.28
+    },
+    {
+      "start": 187.67,
+      "end": 190.21
+    },
+    {
+      "start": 190.68,
+      "end": 191.5
+    },
+    {
+      "start": 191.83,
+      "end": 193.39
+    },
+    {
+      "start": 193.89,
+      "end": 206.14
+    },
+    {
+      "start": 207.81,
+      "end": 210.62
+    },
+    {
+      "start": 210.93,
+      "end": 219.87
+    },
+    {
+      "start": 220.26,
+      "end": 224.74
+    },
+    {
+      "start": 227.05,
+      "end": 228.66
+    },
+    {
+      "start": 228.98,
+      "end": 238.62
+    },
+    {
+      "start": 239.52,
+      "end": 245.91
+    },
+    {
+      "start": 246.49,
+      "end": 249.15
+    },
+    {
+      "start": 249.49,
+      "end": 251.81
+    },
+    {
+      "start": 252.53,
+      "end": 255.21
+    },
+    {
+      "start": 256.6,
+      "end": 258.19
+    },
+    {
+      "start": 258.65,
+      "end": 259.81
+    },
+    {
+      "start": 260.13,
+      "end": 262.05
+    },
+    {
+      "start": 262.38,
+      "end": 263.12
+    },
+    {
+      "start": 264.07,
+      "end": 266.56
+    },
+    {
+      "start": 267.06,
+      "end": 272.12
+    },
+    {
+      "start": 272.9,
+      "end": 276.81
+    },
+    {
+      "start": 277.36,
+      "end": 279.29
+    },
+    {
+      "start": 279.59,
+      "end": 287.61
+    },
+    {
+      "start": 289.66,
+      "end": 298.42
+    },
+    {
+      "start": 299.14,
+      "end": 301.92
+    },
+    {
+      "start": 302.42,
+      "end": 305.28
+    },
+    {
+      "start": 305.9,
+      "end": 312.97
+    },
+    {
+      "start": 315.33,
+      "end": 317.37
+    },
+    {
+      "start": 317.8,
+      "end": 322.14
+    },
+    {
+      "start": 322.48,
+      "end": 326.3
+    },
+    {
+      "start": 326.64,
+      "end": 329.12
+    },
+    {
+      "start": 329.42,
+      "end": 351.13
+    },
+    {
+      "start": 351.69,
+      "end": 355.65
+    },
+    {
+      "start": 356.55,
+      "end": 359.34
+    },
+    {
+      "start": 360.27,
+      "end": 361.86
+    },
+    {
+      "start": 362.32,
+      "end": 370.11
+    },
+    {
+      "start": 371.46,
+      "end": 377.54
+    },
+    {
+      "start": 379.22,
+      "end": 380.28
+    },
+    {
+      "start": 381.03,
+      "end": 382.63
+    },
+    {
+      "start": 383.39,
+      "end": 385.34
+    },
+    {
+      "start": 385.73,
+      "end": 390.21
+    },
+    {
+      "start": 390.87,
+      "end": 391.85
+    },
+    {
+      "start": 392.66,
+      "end": 394.41
+    },
+    {
+      "start": 394.81,
+      "end": 417.72
+    },
+    {
+      "start": 418.51,
+      "end": 424.53
+    },
+    {
+      "start": 424.86,
+      "end": 435.31
+    },
+    {
+      "start": 436.5,
+      "end": 439.1
+    },
+    {
+      "start": 439.44,
+      "end": 444
+    },
+    {
+      "start": 445.09,
+      "end": 447.58
+    },
+    {
+      "start": 448.72,
+      "end": 456.82
+    },
+    {
+      "start": 457.37,
+      "end": 460.75
+    },
+    {
+      "start": 462.96,
+      "end": 468.93
+    },
+    {
+      "start": 469.75,
+      "end": 473.03
+    },
+    {
+      "start": 478.94,
+      "end": 479.36
+    },
+    {
+      "start": 482.2,
+      "end": 484.6
+    },
+    {
+      "start": 485.57,
+      "end": 487.39
+    },
+    {
+      "start": 488.52,
+      "end": 494.18
+    },
+    {
+      "start": 494.64,
+      "end": 496.16
+    },
+    {
+      "start": 498.08,
+      "end": 505.58
+    },
+    {
+      "start": 505.97,
+      "end": 507.48
+    }
+  ],
+  "ffmpeg": "ffmpeg -y -i \"E:/ONIA-YouTube/grabaciones/clip 2 video 1.mp4\" -vf \"select='between(t,0,2.29)+between(t,2.89,4.31)+between(t,5.08,15.61)+between(t,15.91,20.75)+between(t,23.37,31.32)+between(t,31.64,37.16)+between(t,40.59,42.5)+between(t,42.96,44.5)+between(t,44.93,56.95)+between(t,57.32,61.95)+between(t,62.48,71.28)+between(t,71.75,73.7)+between(t,75.66,77.94)+between(t,78.26,90.56)+between(t,91.21,91.76)+between(t,92.1,92.85)+between(t,93.41,96.48)+between(t,96.83,98.69)+between(t,99.05,104.87)+between(t,105.27,116.24)+between(t,116.68,118.35)+between(t,119.2,127.21)+between(t,128.79,135.97)+between(t,136.34,138.07)+between(t,139.37,139.9)+between(t,140.2,143.03)+between(t,143.44,149.73)+between(t,150.2,155.47)+between(t,157.69,159.81)+between(t,160.19,162.96)+between(t,163.46,166.1)+between(t,166.54,167.2)+between(t,167.51,169.62)+between(t,170.11,177.23)+between(t,179.47,181.76)+between(t,183.06,187.28)+between(t,187.67,190.21)+between(t,190.68,191.5)+between(t,191.83,193.39)+between(t,193.89,206.14)+between(t,207.81,210.62)+between(t,210.93,219.87)+between(t,220.26,224.74)+between(t,227.05,228.66)+between(t,228.98,238.62)+between(t,239.52,245.91)+between(t,246.49,249.15)+between(t,249.49,251.81)+between(t,252.53,255.21)+between(t,256.6,258.19)+between(t,258.65,259.81)+between(t,260.13,262.05)+between(t,262.38,263.12)+between(t,264.07,266.56)+between(t,267.06,272.12)+between(t,272.9,276.81)+between(t,277.36,279.29)+between(t,279.59,287.61)+between(t,289.66,298.42)+between(t,299.14,301.92)+between(t,302.42,305.28)+between(t,305.9,312.97)+between(t,315.33,317.37)+between(t,317.8,322.14)+between(t,322.48,326.3)+between(t,326.64,329.12)+between(t,329.42,351.13)+between(t,351.69,355.65)+between(t,356.55,359.34)+between(t,360.27,361.86)+between(t,362.32,370.11)+between(t,371.46,377.54)+between(t,379.22,380.28)+between(t,381.03,382.63)+between(t,383.39,385.34)+between(t,385.73,390.21)+between(t,390.87,391.85)+between(t,392.66,394.41)+between(t,394.81,417.72)+between(t,418.51,424.53)+between(t,424.86,435.31)+between(t,436.5,439.1)+between(t,439.44,444)+between(t,445.09,447.58)+between(t,448.72,456.82)+between(t,457.37,460.75)+between(t,462.96,468.93)+between(t,469.75,473.03)+between(t,478.94,479.36)+between(t,482.2,484.6)+between(t,485.57,487.39)+between(t,488.52,494.18)+between(t,494.64,496.16)+between(t,498.08,505.58)+between(t,505.97,507.48)',setpts=N/FRAME_RATE/TB\" -af \"aselect='between(t,0,2.29)+between(t,2.89,4.31)+between(t,5.08,15.61)+between(t,15.91,20.75)+between(t,23.37,31.32)+between(t,31.64,37.16)+between(t,40.59,42.5)+between(t,42.96,44.5)+between(t,44.93,56.95)+between(t,57.32,61.95)+between(t,62.48,71.28)+between(t,71.75,73.7)+between(t,75.66,77.94)+between(t,78.26,90.56)+between(t,91.21,91.76)+between(t,92.1,92.85)+between(t,93.41,96.48)+between(t,96.83,98.69)+between(t,99.05,104.87)+between(t,105.27,116.24)+between(t,116.68,118.35)+between(t,119.2,127.21)+between(t,128.79,135.97)+between(t,136.34,138.07)+between(t,139.37,139.9)+between(t,140.2,143.03)+between(t,143.44,149.73)+between(t,150.2,155.47)+between(t,157.69,159.81)+between(t,160.19,162.96)+between(t,163.46,166.1)+between(t,166.54,167.2)+between(t,167.51,169.62)+between(t,170.11,177.23)+between(t,179.47,181.76)+between(t,183.06,187.28)+between(t,187.67,190.21)+between(t,190.68,191.5)+between(t,191.83,193.39)+between(t,193.89,206.14)+between(t,207.81,210.62)+between(t,210.93,219.87)+between(t,220.26,224.74)+between(t,227.05,228.66)+between(t,228.98,238.62)+between(t,239.52,245.91)+between(t,246.49,249.15)+between(t,249.49,251.81)+between(t,252.53,255.21)+between(t,256.6,258.19)+between(t,258.65,259.81)+between(t,260.13,262.05)+between(t,262.38,263.12)+between(t,264.07,266.56)+between(t,267.06,272.12)+between(t,272.9,276.81)+between(t,277.36,279.29)+between(t,279.59,287.61)+between(t,289.66,298.42)+between(t,299.14,301.92)+between(t,302.42,305.28)+between(t,305.9,312.97)+between(t,315.33,317.37)+between(t,317.8,322.14)+between(t,322.48,326.3)+between(t,326.64,329.12)+between(t,329.42,351.13)+between(t,351.69,355.65)+between(t,356.55,359.34)+between(t,360.27,361.86)+between(t,362.32,370.11)+between(t,371.46,377.54)+between(t,379.22,380.28)+between(t,381.03,382.63)+between(t,383.39,385.34)+between(t,385.73,390.21)+between(t,390.87,391.85)+between(t,392.66,394.41)+between(t,394.81,417.72)+between(t,418.51,424.53)+between(t,424.86,435.31)+between(t,436.5,439.1)+between(t,439.44,444)+between(t,445.09,447.58)+between(t,448.72,456.82)+between(t,457.37,460.75)+between(t,462.96,468.93)+between(t,469.75,473.03)+between(t,478.94,479.36)+between(t,482.2,484.6)+between(t,485.57,487.39)+between(t,488.52,494.18)+between(t,494.64,496.16)+between(t,498.08,505.58)+between(t,505.97,507.48)',asetpts=N/SR/TB\" \"renders/cut.mp4\"",
+  "rows": [
+    {
+      "i": 0,
+      "start": 0,
+      "end": 7.04,
+      "text": "Ahora sí, empecemos. ¿Son lo mismo? No. Uno es Cloud, que es una aplicación móvil",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 1,
+      "start": 7.04,
+      "end": 12.42,
+      "text": "como chat gpt que simplemente te entrega respuestas y otro es Cloud Code, que",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 2,
+      "start": 12.42,
+      "end": 17.52,
+      "text": "ejecuta las cosas por vos y ve en tu computadora o en tu servidor. Y la",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 3,
+      "start": 17.52,
+      "end": 20.48,
+      "text": "diferencia es mucho más simple de lo que parece. Empecemos.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 4,
+      "start": 22.92,
+      "end": 27.88,
+      "text": "¿Qué hace Cloud? Él simplemente te responde en base a la base de datos que",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 5,
+      "start": 27.96,
+      "end": 32.9,
+      "text": "tiene Anthropic, que son sus creadores, con los que lo alimentan. Si vos le preguntás,",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 6,
+      "start": 33.36,
+      "end": 36.92,
+      "text": "dame los cinco nombres más comunes en Bolivia, él simplemente te va a responder.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 7,
+      "start": 40.36,
+      "end": 44.42,
+      "text": "Ahora, ¿qué es Cloud Code? Si vos le decís a Cloud Code,",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 8,
+      "start": 45.6,
+      "end": 49.7,
+      "text": "hacerme una página web sobre los cinco nombres más comunes en Bolivia, en",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 9,
+      "start": 49.7,
+      "end": 54.62,
+      "text": "lugar de entrearte una respuesta con sólo los datos, él puede generarte una",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 10,
+      "start": 54.62,
+      "end": 60.04,
+      "text": "página web, cosa que Cloud no hace. Supongamos el ejemplo más simple es como que",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 11,
+      "start": 60.04,
+      "end": 67.44,
+      "text": "Cloud tiene boca y Cloud Code tiene manos y boca para hacer las cosas. Cloud sólo te",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 12,
+      "start": 67.44,
+      "end": 71.14,
+      "text": "puede dar una respuesta y Cloud Code lo puede ejecutar y decirte.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 13,
+      "start": 71.86,
+      "end": 77.76,
+      "text": "Esa es la única diferencia que le podemos dar. Ahora, ¿en dónde vive cada uno?",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 14,
+      "start": 78.24,
+      "end": 83.86,
+      "text": "Cloud vive en la aplicación móvil y en una página web. En cambio, Cloud Code vive adentro",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 15,
+      "start": 83.86,
+      "end": 88.62,
+      "text": "de tu computadora para que pueda leer los archivos y tener acceso a absolutamente todo",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 16,
+      "start": 88.62,
+      "end": 94.8,
+      "text": "que vamos a ver un poco más adelante. Luego, ¿qué ve Cloud? Cloud simplemente puede ver",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 17,
+      "start": 94.8,
+      "end": 100.68,
+      "text": "la información que vos le hagas llegar, si le decís, Cloud. Mi nombre es Ser Urcuyo,",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 18,
+      "start": 100.74,
+      "end": 104.54,
+      "text": "él sólo puede llegar hasta esos datos porque fue lo único que le entregaste. En cambio,",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 19,
+      "start": 105.2,
+      "end": 110.32,
+      "text": "Cloud Code, si le das acceso a una carpeta completa, él puede ver absolutamente todo",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 20,
+      "start": 110.32,
+      "end": 115.64,
+      "text": "sin que vos le tengas que estar diciendo a cada rato las diferentes cosas. Si le entreas una carpeta",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 21,
+      "start": 115.64,
+      "end": 123.6,
+      "text": "sobre, por ejemplo, las tareas del colegio que tenés en el mes, él puede ver absolutamente",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 22,
+      "start": 123.6,
+      "end": 129.82,
+      "text": "todo sin que vos le tengas que enviar uno por uno, uno por uno, uno por uno. Luego, ¿qué",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 23,
+      "start": 129.82,
+      "end": 135.42,
+      "text": "hace cada uno? Cloud te dice cómo hacerlo y Cloud Code te dice cómo hacerlo y lo ejecuta",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 24,
+      "start": 135.42,
+      "end": 141.94,
+      "text": "por vos, que lo vamos a ver en un ejemplo más adelante. Luego, en Cloud, ¿quién ejecuta",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 25,
+      "start": 141.94,
+      "end": 147.58,
+      "text": "los arreglas? Con Cloud, lo haces vos mismo ya que él no tiene las manos para hacerlo",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 26,
+      "start": 147.58,
+      "end": 153.6,
+      "text": "y Cloud Code lo puede hacer por vos, o también te da la oportunidad y la forma de cómo",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 27,
+      "start": 153.6,
+      "end": 160.96,
+      "text": "hacerlo vos mismo con tus propias manos. Ahora, veamos qué es Cloud. En Cloud vemos",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 28,
+      "start": 160.96,
+      "end": 166.92,
+      "text": "un ejemplo muy simple que sería. Vos le decís, metid un error y no entiendo por qué y Cloud",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 29,
+      "start": 167.52,
+      "end": 172.6,
+      "text": "te va a decir cómo solucionarlo. Probablemente sea el formato de la fecha, cambia esa línea",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 30,
+      "start": 172.6,
+      "end": 179.7,
+      "text": "por y ahí termina. El trabajo lo terminás haciendo vos, él no lo hace por vos. Aquí",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 31,
+      "start": 179.7,
+      "end": 185.92,
+      "text": "podemos ver un ejemplo muy simple también. Vos le envías el problema, él simplemente",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 32,
+      "start": 185.92,
+      "end": 194.72,
+      "text": "te contesta, le pegás las respuestas del problema, no funciona, le copias el error y se lo volvés",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 33,
+      "start": 194.72,
+      "end": 200.5,
+      "text": "a enviar y así sigue el ciclo porque él nunca vio el proyecto, no hizo las pruebas y no",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 34,
+      "start": 200.5,
+      "end": 206.02,
+      "text": "sabes realmente cuál es el problema dentro del proyecto o del error que le estás dando.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 35,
+      "start": 208.06,
+      "end": 213.8,
+      "text": "Ahora, aquí podemos verlo de una forma más visual. Cloud no está dentro de tu computadora,",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 36,
+      "start": 213.8,
+      "end": 219.72,
+      "text": "él simplemente es como chat gpt, solo le puedes enviar los problemas y él vive en su base de datos",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 37,
+      "start": 219.72,
+      "end": 228.22,
+      "text": "y no puede acceder a lo que realmente querés que lo vea, él vive fuera. Ahora, pasemos a Cloud",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 38,
+      "start": 228.22,
+      "end": 233.24,
+      "text": "Code. Él vive dentro de tu computadora y puede acceder a todos sin que vos se lo tengas que",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 39,
+      "start": 233.24,
+      "end": 240.04,
+      "text": "entregar. Aquí vemos un ejemplo como vos le decís, arreglar el error del form... aquí vos le",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 40,
+      "start": 240.04,
+      "end": 245.66,
+      "text": "decís, arreglar el error del formulario. Entonces, podemos ver que el formulario está basado en Java",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 41,
+      "start": 245.66,
+      "end": 250.5,
+      "text": "y aquí podemos ver que el formulario está basado en JavaScript. Por ejemplo, aquí podemos ver el",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 42,
+      "start": 250.5,
+      "end": 260.76,
+      "text": "archivo... aquí podemos ver el archivo formulario.js. Entonces, si le decís que hay un error en",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 43,
+      "start": 260.76,
+      "end": 268.12,
+      "text": "el formulario, él primero lo lee, lo cambia porque ya encontró el error, lo prueba con base",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 44,
+      "start": 268.12,
+      "end": 276.12,
+      "text": "npm para ver si realmente está funcionando eso y aquí lo podemos ver, falló, leo el error y",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 45,
+      "start": 276.12,
+      "end": 283.44,
+      "text": "reintento. Entonces, lo vuelve a intentar y vio que las 12 pruebas pasan y el error está solucionado.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 46,
+      "start": 284,
+      "end": 287.52,
+      "text": "Vos no copiaste ni pegaste nada, él lo hizo todo por vos y lo solucionó.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 47,
+      "start": 290.06,
+      "end": 295.14,
+      "text": "Y aquí podemos ver algo más de que si vos tenés miedo de que comete errores o que vos",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 48,
+      "start": 295.14,
+      "end": 301.44,
+      "text": "recosas que no son y que no debe, aquí podemos verlo. ¿Quieres cambiar configuración .js?",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 49,
+      "start": 302.44,
+      "end": 308.38,
+      "text": "Vos le decís, si querés que lo haga o que no lo haga. El que decís, seguir siendo vos, él simplemente te",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 50,
+      "start": 308.38,
+      "end": 312.92,
+      "text": "dice las instrucciones y vos le confirmás si querés que lo haga o que no lo haga.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 51,
+      "start": 315.5,
+      "end": 320.82,
+      "text": "Por ejemplo, un ejemplo mío, yo dejo que CloudCode me desarrolle absolutamente todo.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 52,
+      "start": 320.82,
+      "end": 326.14,
+      "text": "Obviamente que yo veo y reviso que haga para que no comete errores, pero aquí podemos ver un ejemplo.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 53,
+      "start": 326.78,
+      "end": 332.96,
+      "text": "Por ejemplo, yo estoy desarrollando un sistema y le dejo una cola de varias tareas para que lo haga por",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 54,
+      "start": 332.96,
+      "end": 341.38,
+      "text": "el mismo mientras yo me voy a dormir o me voy al gimnasio, aquí podemos verlo. La cola del sistema",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 55,
+      "start": 341.38,
+      "end": 347.36,
+      "text": "son todas estas tareas que él tiene que hacer y lo puede hacer solo porque no tiene que pedirme",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 56,
+      "start": 347.36,
+      "end": 353.5,
+      "text": "autorización en absolutamente todas las cosas y él lee todo y él lee todo el proyecto y puede ver",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 57,
+      "start": 353.5,
+      "end": 360.62,
+      "text": "mi computadora. Entonces aquí hemos todo. Así que aquí podemos ver la cola de tareas. Por ejemplo,",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 58,
+      "start": 360.76,
+      "end": 366.96,
+      "text": "la otra cola, la otra cola y la otra cola que la tiene que desarrollar dentro de 24 horas,",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 59,
+      "start": 367.3,
+      "end": 374.92,
+      "text": "de una hora, de dos horas y eso lo decís vos. Ninguno me pregunta nada, yo duermo,",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 60,
+      "start": 374.92,
+      "end": 380.08,
+      "text": "ellos trabajan, ese es el mejor ejemplo que te puedo dar. Lo que nadie te cuenta,",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 61,
+      "start": 380.88,
+      "end": 387.82,
+      "text": "puede cometer errores. Por ejemplo, aquí vemos un ejemplo práctico, en una sesión anotó 12",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 62,
+      "start": 387.82,
+      "end": 393.82,
+      "text": "errores propios, 11 los encontró él, uno lo encontré yo. Obviamente que puede cometer",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 63,
+      "start": 393.82,
+      "end": 399.62,
+      "text": "errores como cualquier inteligencia artificial, pero esta es una de las mejores porque tiene",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 64,
+      "start": 399.62,
+      "end": 404.74,
+      "text": "el mayor tipo de razonamiento y conocimiento que hay en el mercado actualmente de inteligencia",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 65,
+      "start": 404.74,
+      "end": 410.44,
+      "text": "artificial. Así que obviamente que cada uno tiene que tener un criterio y también algo de conocimiento",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 66,
+      "start": 410.44,
+      "end": 416.06,
+      "text": "para que la IAN no haga cualquier cosa y vos sepas qué está haciendo y puedas encontrar errores",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 67,
+      "start": 416.06,
+      "end": 422.4,
+      "text": "que tal vez él no encuentre. Luego obviamente que no es gratis. Existen inteligencias artificiales",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 68,
+      "start": 422.4,
+      "end": 428.72,
+      "text": "que son gratis pero están muy por debajo del nivel de lo que es Cloud y por debajo del nivel",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 69,
+      "start": 428.72,
+      "end": 433.38,
+      "text": "de razonamiento y conocimiento que él tiene. Por ejemplo, yo uso el plan de 200 dólares y",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 70,
+      "start": 433.38,
+      "end": 437.66,
+      "text": "la verdad que me viene bastante bien para lo que es y la verdad que me viene bastante bien",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 71,
+      "start": 437.66,
+      "end": 444.12,
+      "text": "para lo que es programación. Así que con el plan de 20 dólares del plan Pro es tareas perfectas.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 72,
+      "start": 444.88,
+      "end": 451.78,
+      "text": "Y ahora no te convierte en ningún programador. Te saca las tareas repetitivas, pero las decisiones",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 73,
+      "start": 451.78,
+      "end": 456.48,
+      "text": "siguen siendo tuyas y vos tenés que decidir qué hace y qué no vas. Pero te ayuda a",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 74,
+      "start": 457.04,
+      "end": 460.6,
+      "text": "Pero te iba a secarte lo que es repetitivo y lo hace por vos.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 75,
+      "start": 463.04,
+      "end": 468.74,
+      "text": "Y ahora para terminar el vídeo en una línea mucho más simple, Cloud te dice cómo hacerlo",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 76,
+      "start": 469.56,
+      "end": 473.02,
+      "text": "y Cloud Code lo puede hacer y ejecutar por vos.",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 77,
+      "start": 482.26,
+      "end": 484.36,
+      "text": "Y ahora si te gustaría que en otro vídeo",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 78,
+      "start": 485.32,
+      "end": 501.28,
+      "text": "y ahora si te gustaría que en otro vídeo y si te gustaría que en otro vídeo te enseñé cómo",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 79,
+      "start": 501.28,
+      "end": 505.38,
+      "text": "vídeo, te enseñe cómo instalarlo y las skills que hace que trabaje por vos,",
+      "keep": true,
+      "reason": "contenido"
+    },
+    {
+      "i": 80,
+      "start": 505.92,
+      "end": 507.36,
+      "text": "seguime y déjamelo en los comentarios.",
+      "keep": true,
+      "reason": "contenido"
+    }
+  ]
+}

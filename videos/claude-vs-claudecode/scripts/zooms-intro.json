@@ -1,0 +1,8 @@
+{
+  "_": "Arranca cerrado sobre el gesto (las tarjetas entran en primer plano) y se ABRE justo cuando salen: el zoom out es el que revela el titulo. Cierra con un push-in suave, ya sin titulo en cuadro. Maximo 1.13: arriba de eso se ve el pixel.",
+  "zooms": [
+    { "start": 0.00,  "end": 4.00,  "from": 1.09, "to": 1.13, "anchor": "center" },
+    { "start": 4.00,  "end": 5.00,  "from": 1.13, "to": 1.00, "anchor": "center" },
+    { "start": 12.20, "end": 13.02, "from": 1.00, "to": 1.05, "anchor": "center" }
+  ]
+}

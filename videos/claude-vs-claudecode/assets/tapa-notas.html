@@ -1,0 +1,20 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>tapa de las notas del presentador</title>
+<!--
+  El screencast se grabó con el teleprompter del deck VISIBLE en la franja inferior
+  ("LA COMPARATIVA. lámina que la gente pausa y guarda…"). Son notas internas: no pueden
+  salir publicadas. Esta capa tapa la franja con el crema del deck y REPONE el handle,
+  que quedaba justo encima y se perdía con la tapa. No toca el PiP (empieza en x=1440).
+-->
+<style>
+@font-face{font-family:'Spline Sans Mono';src:url('fonts/SplineSansMono-var-latin.woff2')format('woff2');font-weight:300 700;font-display:block}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;background:transparent;overflow:hidden}
+.tapa{position:absolute;left:0;top:984px;width:1438px;height:96px;background:#F4EFE8}
+.handle{position:absolute;left:112px;bottom:65px;
+        font-family:'Spline Sans Mono',monospace;font-size:20px;font-weight:500;
+        letter-spacing:.1em;color:#6E6E73;line-height:1}
+</style>
+<div class="tapa"></div>
+<div class="handle">@sergiourcullo</div>
