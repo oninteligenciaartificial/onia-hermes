@@ -12,6 +12,16 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-08 11:09-11:16 La Paz — reverificado dental: escritorio (1440x900) y móvil (390x844), 9/9 los dos
+
+Dos corridas `--escribir` seguidas, dental: **escritorio 9/9** (cita `cmtsklcpw00ai01rwwkhv0298`
+agendada y vista en `/appointments`, factura `/billing/cmtsklniz00ak01rwn7ek0bpm` con ítem
+visible, frenada sin pagar) y **`RECORRIDO_MOVIL=1` 9/9** (cita `cmtskqqri00b901rw2a444iqn`
+agendada y vista, factura `/billing/cmtskr2wk00bb01rwbi93fv62`). El arreglo del selector de
+agenda móvil de la vuelta anterior se sostiene. Cero filas `zz-qa-` propias al cerrar las dos
+veces (4 ajenas de otros carriles, sin tocar). Nada roto. Queda pendiente `RECORRIDO_MOVIL=1`
+en estética, importadora, servicios profesionales y comercio — hoy sólo se corrió en dental.
+
 ## 2026-09-08 10:09-10:27 La Paz — primer recorrido en MÓVIL (390x844): falso rojo del propio instrumento, arreglado
 
 `RECORRIDO_MOVIL=1` (agregado en la vuelta anterior, nunca corrido en vivo hasta ahora) repite el
