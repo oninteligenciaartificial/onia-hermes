@@ -10,7 +10,7 @@
 <style>
 :root{
   --ink:#12100E; --muted:#6E6E73; --hair:#D2D2D7;
-  --claude:#D97757; --tile:#EDE7D8; --term:#1D1D1F; --term-tx:#F0EDE6;
+  --claude:#D97757; --naranja:#C9603A; --tile:#EDE7D8; --term:#1D1D1F; --term-tx:#F0EDE6;
   --onia:#00D26A;
   --tr:-0.032em;
 }
@@ -39,15 +39,32 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--ink)}
         text-shadow:0 2px 18px rgba(245,241,232,.9),0 0 40px rgba(245,241,232,.75)}
 
 /* ---- título: pasa por DETRÁS (el matte de la persona se compone encima) ---- */
-#titulo{position:absolute;left:96px;top:186px;text-align:left;opacity:0}
+/* Centrado con el sujeto y ARRIBA: la linea 1 queda libre sobre la cabeza (el "vs"
+   se lee entero) y la 2 roza el pelo, que es donde se ve que el titulo pasa detras.
+   A la altura de la cara, cualquier titulo centrado pierde el medio. */
+#titulo{position:absolute;left:0;right:0;top:64px;text-align:center;opacity:0;--p:-25%}
 #titulo .eyebrow{font-family:'Spline Sans Mono',monospace;font-size:26px;font-weight:500;
                  letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
                  margin-bottom:26px}
-#titulo h1{font-size:128px;font-weight:700;letter-spacing:var(--tr);line-height:1.0;
+#titulo h1{font-size:112px;font-weight:700;letter-spacing:var(--tr);line-height:1.02;
            white-space:nowrap;
-           text-shadow:0 2px 30px rgba(245,241,232,.55),0 0 70px rgba(245,241,232,.45)}
-#titulo .vs{color:var(--onia)}
-#titulo .linea{height:4px;background:var(--onia);margin:30px 0 0;width:0}
+           /* el brillo es un gradiente que BARRE las letras (background-clip:text):
+              --p es la posicion del destello, la mueve el script por frame. */
+           background:linear-gradient(100deg,
+             var(--naranja) 0%,
+             var(--naranja) calc(var(--p) - 13%),
+             #DE8355      calc(var(--p) - 4%),
+             #EFA472      var(--p),
+             #DE8355      calc(var(--p) + 4%),
+             var(--naranja) calc(var(--p) + 13%),
+             var(--naranja) 100%);
+           -webkit-background-clip:text;background-clip:text;color:transparent;
+           filter:drop-shadow(0 0 26px rgba(217,119,87,.45))
+                  drop-shadow(0 0 9px rgba(201,96,58,.40))
+                  drop-shadow(0 3px 10px rgba(50,20,8,.50))
+                  drop-shadow(0 0 1.5px rgba(110,42,20,.55))}
+#titulo .vs{/* hereda el naranja: el titulo entero es de un color */}
+               box-shadow:0 0 20px rgba(217,119,87,.85),0 1px 5px rgba(60,25,10,.35)}
 </style>
 
 <div class="capa">
@@ -68,7 +85,6 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--ink)}
 
   <div id="titulo">
     <h1>Claude <span class="vs">vs</span><br>Claude Code</h1>
-    <div class="linea"></div>
   </div>
 </div>
 
@@ -101,15 +117,14 @@ card(document.getElementById('claude'), 0.05, 3.95,  34);
 card(document.getElementById('code'),   0.85, 4.05, -34);
 
 // --- título: entra cuando arranca "Tienen el mismo nombre" ---
-const T_IN = 4.85, T_OUT = 11.95;
+const T_IN = 4.95, T_OUT = 11.95;
 const ti = outExpo(ramp(T_IN, T_IN+0.55));
 const to = inOut(ramp(T_OUT, T_OUT+0.55));
 const tit = document.getElementById('titulo');
 tit.style.opacity = (ti*(1-to)).toFixed(4);
 tit.style.transform = `translateY(${((1-ti)*38 + to*-18).toFixed(2)}px) scale(${(0.965+0.035*ti).toFixed(4)})`;
-// la regla verde se dibuja después del texto
-document.querySelector('#titulo .linea').style.width =
-  (outExpo(ramp(T_IN+0.30, T_IN+1.05)) * 420).toFixed(1) + 'px';
+// el destello barre las letras una sola vez, ya con el titulo puesto
+tit.style.setProperty('--p', (-25 + 150 * ramp(T_IN+0.75, T_IN+2.05)).toFixed(2) + '%');
 // el cursor del terminal parpadea a 2 Hz, cuantizado al frame (determinista)
 document.querySelector('.caret').style.opacity = (Math.floor(t*2)%2 ? 0.15 : 1);
 </script>
