@@ -72,6 +72,37 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [ ] 🔴 **El menú de arriba ofrece TRES líneas de negocio congeladas. Sergio Urcullo dijo «ok C»
+      el 2026-09-07 — sacalas.**
+      Medido ese día sobre el sitio vivo, abriéndolo renderizado: el `header` tiene **dos
+      niveles**. El visible es limpio (`Rubros · Precios · Facturación · Contacto`), pero debajo
+      hay otro con: `Rubros · Agentes · Chatbot · Precios · **Webs · Marketing IA · Consultoría**
+      · Comparativa · Facturación · Nosotros · Contacto · Empezar`.
+
+      **Webs, Marketing IA y Consultoría son líneas que se congelaron ese mismo día** («todo el
+      foco en Onia Platform»). Un lead entra a comprar un sistema y ve un menú de agencia — que
+      es justo lo que `CLAUDE.md` prohíbe: *no se abre una línea de negocio nueva*, y menos se la
+      publica en la puerta de entrada.
+
+      **Qué queda, decidido:** `Rubros · Precios · Facturación · Contacto` **+ `Chatbot`**. El
+      chatbot se queda porque pasa el test de tres preguntas de `CLAUDE.md` §10: es add-on del
+      sistema, no un negocio nuevo. Salen `Webs`, `Marketing IA`, `Consultoría`, `Comparativa`,
+      `Nosotros` y `Agentes`.
+
+      ⚠️ **Salen del MENÚ, no del sitio.** Las páginas siguen publicadas y respondiendo; lo que se
+      quita es que compitan con `Precios` en la barra. Borrar una ruta viva es otra decisión y no
+      está tomada.
+
+      ⚠️ **Y ojo con lo que YA está hecho**, para no perder una vuelta re-arreglándolo: los cuatro
+      botones «Creá tu cuenta» **ya van derecho** a `app.onia.com.bo/register` (verificado, 4 de
+      4), y `/comparativa` y `/nosotros` **ya no están en el nivel visible**. El trabajo es el
+      segundo nivel.
+
+      **Listo =** abrir `onia.com.bo` renderizada y que
+      `header a[href*=webs], [href*=marketing], [href*=consultoria], [href*=comparativa], [href*=nosotros]`
+      dé **0**, con la captura como prueba. Un `grep` al código no alcanza: el menú tiene dos
+      niveles y por eso este defecto sobrevivió a la revisión anterior.
+
 - [ ] 🔴 **Tus cuatro números dieron VERDE 13 vueltas seguidas mientras 34 arreglos tuyos no
       llegaban al cliente. El instrumento no distingue «arreglado» de «arreglado y publicado».**
       Medido el 2026-09-07 18:41 UTC: `stat /opt/onia-landing/runtime-next` daba
