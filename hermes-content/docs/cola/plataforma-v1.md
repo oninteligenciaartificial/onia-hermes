@@ -2335,5 +2335,62 @@ y sin operar. Acá se opera, con verificación por ítem.
       cada vuelta y es quien lo crea; un segundo aviso del mismo hecho es el ruido que hace que
       Sergio Urcullo deje de creerle a los avisos.
 
+- [x] 🔴 **CERRADO el 2026-09-08: el panel le avisaba «Cerca del límite — considera subir de
+      plan» a una ferretería, sobre una pared que el producto nunca levantaba.**
+
+      **El defecto, y va en las DOS direcciones a la vez.** El tope de clientes del plan tenía
+      **dos fuentes de conteo**: la que la pantalla MUESTRA y la que el producto APLICA.
+
+      · **Comercio e importadora** (2 de los 5 rubros de la v1.0): el medidor de `/settings`
+        contaba bien —`onia_core_business_partners`— y `checkPatientLimit` contaba `patient`,
+        tabla **vacía ahí por construcción**. La cuenta daba **0**, el tope **nunca cortaba**, y
+        encima `POST /api/comercio/clientes` no verificaba **ningún** cupo. O sea: la barra se
+        ponía roja al 80 %, aparecía *«Cerca del límite — considera subir de plan»*, y el tope
+        que `onia.com.bo/precios` vende (**300 clientes en Básico**) no se aplicaba nunca.
+        Empujar un upgrade por una pared inexistente es la dirección cara.
+
+      · **Servicios profesionales**: al revés. `contarClientesDelRubro` elegía la tabla con
+        `usaPanelComercio`, y ese rubro **usa el panel de comercio Y guarda a su gente en
+        `patients`** — así que el medidor le marcaba **«0 / 1.500» para siempre**, que es
+        exactamente el bug que ese arreglo vino a matar, reintroducido por el predicado.
+
+      **La causa de fondo:** el predicado contestaba *«¿qué panel usa?»* cuando la pregunta es
+      *«¿dónde guarda a su gente?»*. Son distintas y `gestios-servicios-profesionales` las
+      contesta distinto. `plan-catalogo.ts` ya había cerrado este mal para la **tabla** de topes
+      —*«Dos tablas del mismo número: una que se APLICA y otra que se MUESTRA, libres de
+      separarse»*— y quedó vivo un escalón más abajo, en el **conteo**.
+
+      **Por qué sobrevivió a todos los gates:** no sobra ni falta una palabra, la pantalla
+      renderiza perfecto y **los dos números son REALES, salen de la base**. Ningún barrido de
+      literales, precios, obra ni vocabulario puede verlo. Lo único que lo delata es preguntar
+      si el medidor y el corte cuentan la **misma tabla**.
+
+      **Alcance real, medido y no supuesto** (`docker exec supabase-db psql`, 2026-09-08): las
+      **9** orgs de producción tienen como máximo **3** clientes, así que aplicar el tope **no
+      bloquea a nadie hoy**. Es un defecto **latente**: se dispara con el primer cliente con
+      volumen.
+
+      **El arreglo:** `12a4a09` en `claude/chatbots-platform-review-0d1d09`.
+      `guardaClientesEnPatients(trackId)` se **deriva del pack** (mira si su menú ofrece
+      `/patients`), igual que sus hermanas `usaPanelComercio` / `fichaClinica`; las dos mitades
+      cuentan ahora con la **misma función**. De paso el 403 sale en el **idioma del rubro**: ese
+      mensaje lo lee ahora también una ferretería, y «pacientes activos» ahí no significa nada.
+
+      **El gate:** `__tests__/lib/cupo-de-clientes-por-rubro.test.ts` — la **clase**, no la
+      instancia. Para **cada** track de `VERTICAL_PACKS` exige que el medidor y el 403 cuenten la
+      misma tabla, y que esa tabla sea donde el rubro guarda a sus clientes; más la **cobertura**
+      de que el alta de cada rubro pasa por el tope, con los sujetos derivados del pack —un rubro
+      nuevo **nace cubierto**, y el que no ofrece pantalla de clientes lo re-mide en cada corrida
+      en vez de declararlo en prosa. **Validado por MUTACIÓN**, confirmando por el *exit* y por la
+      línea `Tests N failed` (no por ausencia de `FAIL`): revertir el conteo del 403 → **5 en
+      rojo**; revertir el predicado del medidor → **5 en rojo**; sacar el chequeo del alta de
+      comercio → **2 en rojo**; restaurado, **26 verdes**.
+
+      Gates: `tsc` **0** · `eslint` **0 errores** · `vitest` **3873** pasados / 314 archivos.
+
+      ⚠️ **NO llega al cliente todavía:** `12a4a09` está en la rama del carril, **no** en
+      `origin/master` (comprobado con `git merge-base --is-ancestor`, no supuesto). Entra cuando
+      `onia-cola` mergee, y recién ahí se publica.
+
 
 *(vacío — esta cola se abrió el 2026-09-05)*
