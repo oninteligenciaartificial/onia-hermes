@@ -44,6 +44,63 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **CERRADO el 2026-09-08 (`f8d0fc2`, en la rama del carril — NO en `master` todavía):
+      la pantalla donde el dueño PAGA le cobraba a 3 de los 5 rubros de la v1.0 dos pantallas
+      a las que nunca iba a poder entrar.** La tarjeta del plan **Profesional** —el destacado,
+      el salto de Bs 320 a Bs 750— decía *«Reportes completos y facturas recurrentes»* a
+      **comercio, importadora y servicios profesionales**. Medido sobre `VERTICAL_PACKS`, no
+      deducido: ninguno de los tres declara `/reports` ni `/billing/recurring`, así que no hay
+      enlace **y** el layout los devuelve a `/dashboard`. La promesa no se podía cumplir ningún
+      día, y se cobra en `/checkout` y en la tab «Mi Plan».
+
+      **Por qué sobrevivió, que es lo reusable.** El 08-sep se cerró exactamente esto en la
+      **tabla comparativa** de `/settings` (filtrar `plan.features` por `f.pantalla` con
+      `entregaLaPantalla`), y la lista `enciende` de `lib/subscription/plan-display.ts` —texto
+      plano, sin metadato de pantalla— quedó afuera: **el arreglo curó la instancia y no la
+      clase, y la instancia que quedó sin curar es la que se cobra.** El gate hermano
+      (`plan-display.test.ts`) contrasta cada bullet contra **quién lo enciende por PLAN**
+      (`PLAN_LIMITS`), y esa pregunta no puede ver la otra mitad: una capacidad puede estar
+      encendida por plan y ser **inalcanzable por rubro** al mismo tiempo.
+
+      **El mismo barrido encontró sus hermanas, todas del mismo origen** — el copy preguntaba
+      «¿qué rubro es?» con listas de tracks escritas a mano (`esDental`, que es la negación de
+      otras dos) en vez de preguntarle al pack qué entrega:
+      · *«Agentes Recall y Cobrador»* seguía nombrando al Recall en comercio, importadora y
+        ganadería **un día después** de que `64279ff` lo acotara — la promesa no se barrió
+        donde se vende, sólo donde se apagó el motor;
+      · *«Reservas online»* se le ofrecía a **ganadería**, que no tiene agenda, y **no** a
+        **servicios profesionales**, que sí la tiene y la paga (promete de menos);
+      · *«Recordatorios automáticos por email»* a rubros sin agenda — el único correo
+        automático al cliente del cliente es el de **cita**;
+      · *«Kardex de inventario con costos»* a servicios profesionales, que vende un catálogo de
+        servicios y no declara ninguna pantalla de stock;
+      · el salto *«dejás de perder pacientes»* a una ganadería, por el mismo `esDental`.
+
+      **Arreglo:** cada bullet se le pregunta al **pack** con el predicado canónico
+      (`entregaLaPantalla` / `rolCorreEnTrack`). Y para que el Profesional de comercio e
+      importadora no quede vendiendo el aire que se le sacó, se nombra **lo que sí les
+      enciende y estaba sin decir**: contabilidad completa (IVA y Libro de Compras y Ventas) y
+      planilla del mes, que montan sobre `reportsEnabled` igual que `/reports`
+      (`canUseFullAccounting`, `canUseRrhhPlanilla`) pero viven en pantallas que esos packs sí
+      tienen.
+
+      **Prueba:** el gate nuevo (`lib/subscription/plan-promete-lo-que-el-rubro-alcanza.test.ts`)
+      en **ROJO antes del arreglo nombrando 28 promesas** con su rubro, su plan y su predicado,
+      y **validado por mutación en 4 direcciones, las 4 en rojo**. Su sujeto es el **universo**
+      —los 8 tracks de `VERTICAL_PACKS` × los 3 planes × salto y bullets—, no una lista: el
+      hermano mira 4 tracks escritos a mano y por eso el bullet de ganadería sobrevivió. Cubre
+      las **dos direcciones** (promete de más y promete de menos) y exige que ningún bullet
+      quede sin clasificar y que ninguna exención sobre. `tsc` 0 · **4174 tests** · eslint 0.
+
+      **Pendiente anotado, no hecho:** el bullet *«Fiados: quién te debe y cuánto»* usa esa
+      palabra para los cuatro rubros de comercio, y el menú de servicios profesionales llama a
+      esa pantalla **«Por cobrar»** y el de importadora **«Créditos»** (el helper ya existe:
+      `lib/comercio/idioma-de-credito.ts`). No es una promesa falsa —la pantalla está—, es
+      vocabulario.
+
+      ⚠️ **Commiteado, NO desplegado**: el cliente no lo ve hasta que Sergio Urcullo apruebe el
+      pedido de deploy vivo de la plataforma.
+
 - [x] 🔴 **CERRADO el 2026-09-08 (`f2237e8`, en la rama del carril — NO en `master` todavía):
       la pantalla donde el dueño configura el asistente que PAGA le ponía ejemplos de otro
       rubro.** `/settings/chatbot` (add-on de Bs 390/mes) tenía dos ejemplos tipeados en un
@@ -1916,24 +1973,54 @@ y sin operar. Acá se opera, con verificación por ítem.
       carril, **no en `master`**. Si el `ok` de `t_daa8750c` llega antes de que el integrador
       mergee, este arreglo **no viaja en ese swap**. Anotado como comentario en ese pedido.
 
-- [ ] 🟡 **MEDIDO Y NO ARREGLADO (2026-09-08): la misma puerta pública crea clientes sin
-      contarlos contra el tope del plan.** En la misma vuelta que lo de arriba: `checkPatientLimit`
-      lo llaman **cinco** rutas y las cinco son del panel (`app/api/patients/route.ts`, `app/api/patients/import/route.ts`,
-      `app/api/v1/patients/route.ts`, `app/api/comercio/clientes/route.ts` + el medidor de `/settings`).
-      `app/api/booking/appointments/route.ts:258` hace `tx.patient.create(...)` y **no lo llama**,
-      así que el tope que `onia.com.bo/precios` vende —300 clientes en Básico, y es el gancho
-      para subir a Bs 750— **no se aplica por la agenda pública**. El propio `lib/plan-limits.ts`
-      declara la intención contraria: *«lo que la barra muestra es lo que el 403 aplica»*.
+- [x] 🟡 **CERRADO el 2026-09-08: la puerta pública crea clientes sin contarlos contra el tope
+      del plan — y la mitad que faltaba no era el corte, era el aviso.** `checkPatientLimit` lo
+      llaman **cinco** rutas y las cinco son del panel (`app/api/patients/route.ts`,
+      `app/api/patients/import/route.ts`, `app/api/v1/patients/route.ts`,
+      `app/api/comercio/clientes/route.ts` + el medidor de `/settings`).
+      `app/api/booking/appointments/route.ts` hace `tx.patient.create(...)` y **no lo llama**, así
+      que el tope que `onia.com.bo/precios` vende —300 clientes en Básico, y es el gancho para
+      subir a Bs 750— **no se aplica por la agenda pública**.
 
-      **Va sin arreglar a propósito, porque adentro hay una decisión de producto y no la invento:**
-      rechazarle la reserva a un desconocido porque el negocio llegó a su tope lo castiga a él por
-      algo que no controla, y el mensaje honesto es difícil de escribir sin exponerle el estado
-      comercial de nuestro cliente. Las dos salidas —cortar, o dejar pasar y avisarle al dueño que
-      se pasó del tope— son defendibles y cuestan parecido.
+      **La vuelta anterior lo dejó sin arreglar alegando «hay una decisión de producto y no la
+      invento». Eso estaba mal y por eso el ítem sobrevivió un día:** las decisiones técnicas las
+      toma la sesión y quedan escritas, a Sergio Urcullo se le piden plata, marca y contactar
+      personas. Tomada acá:
 
-      **Reproducción, 30 segundos:**
-      `grep -rn "checkPatientLimit" --include=*.ts app/ lib/ | grep -v test` → 5 usos, ninguno bajo
-      `app/api/booking`. Contrastar con `grep -n "patient.create" app/api/booking/appointments/route.ts`.
+      **La puerta pública NO rechaza, y ahora está fijado por un gate.** El que llega ahí es el
+      cliente DEL cliente: rechazarlo lo castiga por el estado comercial de un negocio que no
+      controla, el mensaje honesto no se puede escribir sin exponerle a un desconocido que su
+      dentista se pasó del plan que nos paga, y encima le cuesta al negocio una persona real —para
+      cobrarle Bs 430 más le sacamos un cliente, el upsell más caro posible. El tope sigue
+      mordiendo donde está el dueño: los cinco 403 del panel quedan intactos.
+
+      **El agujero de verdad era el otro, y ése sí se arregló:** la fila que crea la puerta pública
+      **sí** cuenta en `contarClientesDelRubro`, así que el dueño cruza el tope sin haber cargado a
+      nadie y se entera **chocando** contra un 403 por gente que él no agregó. Ahora se le avisa
+      —notificación in-app a los admins + web push, el mismo patrón que el cupo del chatbot—, como
+      mucho una vez por día, **en el idioma de su rubro** y sólo cuando el alta es de un cliente
+      **nuevo** (la ruta hace find-or-create por teléfono: reservar de nuevo no mueve el tope).
+      Es la misma forma que el cupo del chatbot cerrado hoy: el límite se aplica y el que paga se
+      entera chocando.
+
+      **Arreglo** (`e911638`, rama `claude/chatbots-platform-review-0d1d09`):
+      `lib/agenda/tope-en-la-puerta-publica.ts`. `rechazar: false` es un **campo** y no una
+      ausencia de código a propósito: una ausencia no se puede poner en rojo el día que alguien
+      la llene.
+
+      **Gate:** `lib/agenda/tope-en-la-puerta-publica.test.ts`, 8 casos, validado **por mutación en
+      6 direcciones** (`rechazar: true`; umbral `>` en vez de `>=`; ignorar `clienteNuevo`; texto
+      dental duro; esquivar el `await` en la ruta; y el llamador pasando un literal): las seis
+      `exit 1`, base `exit 0`. Incluye el caso que mira **al llamador** —sin él el módulo queda
+      impecable y no cambia nada en producción, que es la forma del parámetro opcional con
+      default— y lee la ruta **sin comentarios**, porque el comentario que dejé ahí nombra el
+      módulo y el gate se absolvería solo.
+
+      **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **4168 pasan / 333 archivos** ·
+      `npx eslint .` 0 errores.
+
+      🔴 **NO ESTÁ DESPLEGADO:** `e911638` está en la rama del carril, no en `master`. Viaja
+      cuando el integrador lo mergee y Sergio Urcullo apruebe el pedido de deploy vivo.
 
 - [x] 🔴 **CERRADO el 2026-09-08: la pantalla donde el dueño decide CUÁNTO PAGA le vendía a
       3 de los 5 rubros de la v1.0 cuatro pantallas que su rubro no tiene.** `/reports` y
