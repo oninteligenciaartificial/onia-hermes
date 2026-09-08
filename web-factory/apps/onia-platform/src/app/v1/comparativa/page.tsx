@@ -23,6 +23,29 @@ export const metadata: Metadata = {
   description:
     "Qué cobra y qué resuelve cada sistema que se vende en Bolivia: Portal del SIN, facturadores y software dental de la región. Con precio público y fecha de consulta.",
   alternates: { canonical: "/comparativa" },
+  /**
+   * Sin este bloque la página NO declaraba una sola etiqueta Open Graph: las
+   * heredaba enteras del layout raíz, así que el enlace reenviado dibujaba la
+   * tarjeta de la PORTADA —«Onia — El sistema con IA que maneja tu negocio
+   * completo»— sobre una página de comparación, y sin `og:url` propia.
+   *
+   * Medido el 2026-09-08 contra producción, con el fetcher que arma la tarjeta:
+   *
+   *     curl -A "WhatsApp/2.23.20.0" https://onia.com.bo/v1/comparativa
+   *     → HTTP 200 · og:title "Onia — El sistema con IA…" · og:url ausente
+   *
+   * `url` apunta a `/comparativa` y no a sí misma, igual que el `canonical` y
+   * que sus hermanas de `/v1`: esta ruta es el archivo de la web anterior, así
+   * que quien reciba el enlace viejo tiene que aterrizar en la página viva.
+   */
+  openGraph: {
+    type: "website",
+    locale: "es_BO",
+    title: "Onia comparada con los sistemas que se venden en Bolivia",
+    description:
+      "Qué cobra y qué resuelve cada sistema que se vende en Bolivia: Portal del SIN, facturadores y software dental de la región. Con precio público y fecha de consulta.",
+    url: "/comparativa",
+  },
 };
 
 /**
