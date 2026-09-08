@@ -1644,6 +1644,48 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] **CERRADO el 2026-09-08: el bot de WhatsApp del CLIENTE le abría un menú de CITAS a
+      comercio e importadora, que no tienen agenda.** Commit `e4465c9`, rama
+      `claude/chatbots-platform-review-0d1d09` de `onia-platform`. ⚠️ **Commiteado y en la
+      rama, NO desplegado**: falta el merge a `master` y el swap.
+
+      **Qué estaba mal.** `menuText()` de `lib/whatsapp-bot.ts` estaba escrito para el dental
+      y salía igual en los siete rubros: `1️⃣ Ver próxima cita · 2️⃣ Confirmar cita ·
+      3️⃣ Cancelar cita · 4️⃣ Horarios`. `gestios-general` (comercio) y `proveegest-electrico`
+      (importadora) —**2 de los 5 rubros de la v1.0**— no declaran `/appointments` ni
+      `/agenda` en su nav, o sea que no agendan. Al cliente de una ferretería el bot que su
+      dueño paga a **Bs 390/mes** le ofrecía tres opciones imposibles **en el primer
+      mensaje**, se las **repetía después de cada respuesta libre**, y si elegía una le
+      contestaba *«No tienes citas programadas próximamente»*, que da a entender que podría
+      tenerlas. Y `buildSystemPrompt` (`lib/whatsapp-ai.ts`) le ordenaba a la IA, en regla
+      fija: *«Para agendar, confirmar o cancelar citas, indica que use el menú (opciones 1,
+      2, 3)»* — o sea el add-on prometía una capacidad que ese pack no tiene.
+
+      **La clase: el par (rubro, CAPACIDAD), no (rubro, palabra).** El gate hermano de este
+      mismo archivo —`whatsapp-ai-idioma-del-rubro.test.ts`— vigila que «clientes»/«cliente»
+      deriven del rubro, **y derivaban**: el prompt de una ferretería decía *«Hablas con sus
+      compradores»* y dos líneas más abajo la mandaba a un menú de citas. Ninguna palabra
+      sobra ni falta, así que ningún barrido de literales, de precios, de obra ni de
+      vocabulario puede verlo.
+
+      **Cómo se arregló.** `tieneAgenda(trackId)` en `lib/platform/vertical-pack.ts`,
+      **derivado del pack** (`nav` con `/appointments`), misma doctrina que sus hermanas
+      `fichaClinica` / `llevaInventario`; string-tolerante vía `resolveVerticalPack` porque su
+      llamador es el webhook, donde el track llega crudo de la base. `opcionesDelMenu()` es
+      ahora **una sola lista**: de ahí salen el texto impreso **y** el ruteo del número
+      (`switch` sobre la opción elegida, no sobre `case "1"`), así que no pueden divergir —
+      que es exactamente cómo nació el defecto. Sin agenda el menú queda con horarios y el
+      pase a un humano, y la regla 2 del prompt se da vuelta: *no ofrezcas ni prometas un
+      turno*. Los rubros con agenda quedan idénticos.
+
+      **Prueba.** Test primero en ROJO por el motivo correcto: **12 casos** de 33
+      (`lib/whatsapp-bot-menu-por-rubro.test.ts`), sujetos derivados de `VERTICAL_PACKS` —un
+      rubro nuevo nace medido—. Verde después: 33/33. **Validado por mutación, 4 de 4 en
+      rojo**, incluidas las dos de ESQUIVE que un gate ingenuo no ataja: menú **vacío** sin
+      agenda (mata las citas y deja al cliente mudo) → 4 rojos, y **numerar el texto distinto
+      del ruteo** → 8 rojos. Gates: `npx vitest run` 3.828 en verde, `tsc --noEmit` y
+      `eslint` en 0.
+
 - [x] **CERRADO el 2026-09-08: el cupo del chatbot avisaba que IBA a cortar, no que YA
       cortó.** Commit `ccab1db`, rama `claude/chatbots-platform-review-0d1d09` de
       `onia-platform`. ⚠️ **Commiteado y en la rama, NO desplegado**, y además **la migración
