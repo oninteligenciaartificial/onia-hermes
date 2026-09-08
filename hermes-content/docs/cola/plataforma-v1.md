@@ -44,6 +44,53 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **CERRADO el 2026-09-08 (`c334440`, en la rama del carril — NO en `master` todavía):
+      el correo del trial sólo sabía hablar en dental o en mostrador, y de los cinco rubros de
+      la v1.0 los tres del medio caían del lado equivocado.**
+
+      El drip es la **única superficie del producto que le escribe al dueño sin que él entre**:
+      cinco correos (días 3, 7, 12, 14 y 15) con **un solo botón**, en la semana en que decide
+      si paga. Partía a los rubros con `trackId === "dentagest-clinical"` — los **dos
+      extremos** — y todo lo que no era dental entraba como mostrador:
+
+      | rubro (v1.0) | lo que recibía | lo que es |
+      |---|---|---|
+      | Estética y spa | día 3: contaba `oniaCommerceProduct`, tabla **vacía por construcción** → «todavía no cargaste tus tratamientos» con 40 clientas adentro; el botón iba a `/comercio/inventario`, que su pack **ni tiene en el menú** → redirect mudo a `/dashboard`. Día 7: «no registraste ninguna venta» con la agenda llena | guarda a sus clientas en `patients` y vive de la **agenda** |
+      | Servicios profesionales | lo mismo | igual |
+      | Importadora y comercio | correcto | correcto (por eso nadie lo vio) |
+
+      **La clase, que es lo que importa:** un predicado de **dos extremos** no puede describir a
+      cinco rubros, y el del medio no lo delata ninguno de los dos que sí funcionan. Es la
+      misma firma que ya pagamos en `datos-negocio.test.ts` (un gate que probaba dental y un
+      comercio), pero acá el defecto no estaba en el gate: **estaba en el producto**, y en la
+      única superficie que sale a buscar al cliente. Ningún barrido de literales, precios, obra
+      ni vocabulario puede verla: no sobra ni falta una palabra — el número es real y sale de
+      la base, lo que está mal es **de qué tabla**.
+
+      **Arreglo:** los tres predicados se **derivan del pack**
+      (`onia-platform-chatbot/lib/subscription/drip-por-rubro.ts` →
+      `guardaClientesEnPatients`, `tieneAgenda`, y la ruta buscada **en el nav de ese pack**),
+      misma doctrina que sus hermanos de `vertical-pack.ts`: un rubro nuevo cae solo del lado
+      que le toca. La excepción de la importadora (cuenta cotizaciones además de ventas) queda
+      intacta. La decisión **salió del `route.ts`** porque un route de Next no puede exportar
+      helpers: mientras vivió ahí adentro **no había forma de gatearla**.
+
+      **Verificado midiendo, no leyendo:**
+      - El cron **está vivo**: `0 13 * * * /root/bin/run-onia-trial-drip.sh` (09:00 La Paz) y
+        `public.onia_trial_drip_sends` lleva **13 envíos reales**; hoy 13:00 UTC salió el paso 7
+        a `bolivian-electricidad-e6t21`. Hoy hay dos orgs en trial de los rubros afectados
+        (`zz-qa-estetica-modulos-6tzgb`, `qa-modulos-mrk0q`) que **todavía no recibieron** su
+        primer paso — o sea que esto se arregló antes de que saliera el primer correo torcido.
+      - **Mutación en las dos direcciones:** con el predicado viejo en el módulo caen **3**
+        casos; devolviéndolo al cron cae el **del llamador** — el caso que existe porque el
+        módulo puede quedar impecable y el cron seguir con su ternario, con el gate en verde y
+        `tsc` también.
+      - Gates sobre el árbol real: `tsc` 0 · `vitest` **3905/3905** · `eslint` 0 errores.
+
+      ⚠️ **Ambiental, para el que corra gates en el VPS:** allá `npx tsc --noEmit` daba 2
+      errores sobre `avisadoAgotadaAt` en `lib/chatbot/cupo.ts` — el schema lo declara y el
+      cliente Prisma generado no. **No era el cambio:** `npx prisma generate` y `tsc` pasó a 0.
+
 - [x] 🔴 **CERRADO el 2026-09-08: once acciones del panel le confirmaban al dueño —con el
       parpadeo de la pantalla— cosas que el servidor había rechazado.** Cancelar una cita,
       reprogramarla, dar de baja a un empleado, borrar a alguien del equipo, guardar los
@@ -2495,5 +2542,49 @@ y sin operar. Acá se opera, con verificación por ítem.
       `origin/master` (comprobado con `git merge-base --is-ancestor`, no supuesto). Entra cuando
       `onia-cola` mergee, y recién ahí se publica.
 
+- [x] 🔴 **CERRADO el 2026-09-08: la PRIMERA pantalla de servicios profesionales le hablaba en
+      idioma de tienda de barrio.** `/dashboard` no es una pantalla: `dashboard/page.tsx`
+      devuelve **cuatro cuerpos** según el pack, y `comercio-hoy.tsx` lo comparten **comercio,
+      servicios profesionales y ganadería**. A los tres les decía «**Fiado** · en la calle»,
+      «Nadie te debe — los **fiados** se registran desde **la caja**», «**Producto(s)** sin
+      stock» y la tarjeta «**Stock crítico**». Un estudio contable no fía en el mostrador ni
+      tiene stock, y su propio menú llama a esa pantalla «**Por cobrar**». Son **2 de los 5
+      rubros** de la v1.0, en lo primero que ven al entrar.
+
+      **Lo que lo hacía invisible:** los dos helpers que lo resuelven —`idiomaDeCredito` e
+      `idiomaDeVenta`— ya existían, **probados**, a dos carpetas: se escribieron el 06-sep para
+      `/comercio/fiados` y `/comercio/caja` y **no viajaron** al panel que muestra el MISMO dato
+      primero. Y el gate de la familia, `lib/platform/pantalla-compartida-habla-su-idioma.test.ts`,
+      deriva sus sujetos del **desacuerdo de rótulo** (toda ruta que dos packs llamen distinto en
+      su menú) — y los siete packs llaman **igual** a `/dashboard`. Es la misma premisa que ya
+      falló tres veces en `pantallas-compartidas-cubiertas.test.ts` (`/appointments`,
+      `/comercio/caja`, `/inventory`): **el desacuerdo no está en el nombre de la ruta, está
+      adentro**.
+
+      **El arreglo:** el track viaja desde la página (que ya lo tenía en `account`) y los
+      sustantivos salen de los helpers. La tarjeta de stock y su celda cuelgan de
+      `venta.llevaStock`: a quien vende servicios no se le puede agotar uno, y mostrarle
+      «0 producto(s)» es un dato que para él no existe. Medido con las funciones del producto:
+      servicios profesionales → `rotulo: "Por cobrar"`, `que: "crédito"`, `llevaStock: false`.
+
+      **El gate:** `app/(dashboard)/dashboard/panel-habla-su-idioma.test.ts` — la **clase**.
+      Agrupa los packs con las **mismas** funciones que la página usa para elegir la rama
+      (`usaPanelInterno` / `usaPanelImportadora` / `usaPanelComercio`), así que **un panel nuevo
+      nace cubierto**, y exige **dos** cosas: que todo cuerpo compartido **lea el pack**, y que
+      no **tipee** el sustantivo de un solo rubro en su copy visible — el segundo existe porque
+      el primero se satisface importando el helper **sin usarlo**. Extrae sólo el texto entre
+      etiquetas JSX (los identificadores `fiado`/`fiadoVendidoHoy` no son copy: el propio
+      `dashboard/page.tsx` ya tiene un comentario avisando que eso confundió a otro trinquete) y
+      descarta comentarios en las dos direcciones. **Validado por MUTACIÓN en 5 direcciones**,
+      confirmando por la línea `Tests N failed`: rótulo fijo → **1 rojo**; **esquive** (importa el
+      helper y deja el texto de mostrador) → **1 rojo**; celda de stock fija → **1 rojo**; sin el
+      import → **1 rojo**; agrupador que reparte un panel por pack (ancla) → **rojo**;
+      restaurado, **5 verdes**.
+
+      Gates: `tsc` **0** · `vitest` **3913** pasados / 320 archivos · `eslint` **0**.
+
+      ⚠️ **NO llega al cliente todavía:** `7fb1143` está en la rama del carril, **no** en
+      `origin/master`. Entra cuando `onia-cola` mergee, y se publica con el pedido de deploy vivo
+      `t_bf1607af` (ya comentado con este sha) cuando Sergio Urcullo conteste `ok`.
 
 *(vacío — esta cola se abrió el 2026-09-05)*
