@@ -12,6 +12,17 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-08 12:09-12:19 La Paz — móvil (390x844) también en Estética: 9/9, sin hallazgos
+
+`RECORRIDO_RUBRO=Estética RECORRIDO_MOVIL=1`: recorrido completo, 9/9. Cuenta creada, correo
+confirmado, onboarding en 6 pantallas, paciente `zz-qa-...-paciente` cargado en Clientas, cita
+2026-09-09 09:00 agendada y vista en `/appointments` (id `cmtsmr3xp00c001rwrt8glw26`), factura
+`/billing/cmtsmrggu00c201rweq5auxyv` con ítem visible, frenada sin pagar. El panel `/dashboard`
+no lista la ficha del paciente — confirmado que no es un fallo (esa pantalla no muestra Clientas,
+igual que en dental). Cero filas `zz-qa-` propias al cerrar (4 ajenas de otros carriles, sin
+tocar). Nada roto. Queda pendiente `RECORRIDO_MOVIL=1` en importadora, servicios profesionales y
+comercio.
+
 ## 2026-09-08 11:09-11:16 La Paz — reverificado dental: escritorio (1440x900) y móvil (390x844), 9/9 los dos
 
 Dos corridas `--escribir` seguidas, dental: **escritorio 9/9** (cita `cmtsklcpw00ai01rwwkhv0298`
