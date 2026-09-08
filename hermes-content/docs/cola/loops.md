@@ -212,17 +212,21 @@ es el único que podría arreglar la tabla. Es un candado sobre sí mismo. Por e
 primero a `main`, y el `crontab` recién después**, en un hueco entre corridas. Al revés ya se
 revirtió sola una baja de cadencia el 2026-09-04 (5 loops, 23 vueltas/día de más).
 
-⚠️ **Corregido 2026-09-08 02:33 La Paz — y esta vez la deriva tenía TRES copias, no dos.** El
-`crontab` de casa se editó a mano a las 02:02 (`chatbot-cola` de `3 * * * *` a `13,43`,
-`recorrido-cliente` de `9 1,4,7,…` a `9 * * * *`) y el gate quedó rojo, o sea `main` rojo y
-**ningún carril mergeando**. Las dos filas se alinean al cron, por la regla de siempre.
+⚠️ **2026-09-08 — la advertencia de acá arriba se cumplió, con el cambio bien hecho.** Sergio
+Urcullo pidió subir las cadencias (`chatbot-cola` a `13,43`, `recorrido-cliente` a `9 * * * *`),
+la sesión los midió y escribió las dos filas… **en una rama**, y tocó el `crontab` un minuto
+después. Es exactamente el orden que este archivo prohíbe: la tabla de `main` quedó con la
+cadencia vieja, `loops_registrados` en rojo, y con él **ningún carril podía mergear** — incluido
+el integrador, que era el único que podía destrabarlo. Duró ~30 min. **No alcanza con hacer el
+cambio completo: la tabla tiene que estar EN `main` antes de que el `crontab` se mueva.**
 
-**Lo nuevo, y es lo que hace que esto vuelva:** la cadencia vive en un **tercer** lugar —el
-heredoc de `scripts/loops/instalar-homelab.sh` (líneas 75-77)— y `loops_registrados.mjs` **no lo
-mira**. Ese archivo es la **plantilla de la que nace el `crontab`**: alinear sólo la tabla deja al
-instalador escribiendo la cadencia vieja, así que la próxima corrida revierte el cron **y el rojo
-vuelve**, con la tabla ahora del lado equivocado. Los tres se tocan juntos o no se toca ninguno.
-Es "arreglar la instancia y no la plantilla" aplicado al registro de horarios.
+**Y hay un tercer lugar que ninguna de las dos sesiones tocó:** la cadencia vive también en el
+heredoc `CATALOGO` de `scripts/loops/instalar-homelab.sh`, que es la **plantilla de la que nace el
+`crontab`**. Alinear tabla y cron y dejarlo atrás significa que la próxima corrida del instalador
+**revierte el cron y el rojo vuelve**, ahora con la tabla del lado equivocado — "arreglar la
+instancia y no la plantilla" aplicado al registro de horarios. **Los tres se tocan juntos.**
+Desde hoy `loops_registrados.mjs` mira las tres: si el catálogo reinstalaría una cadencia
+distinta de la vigente, o no declara un loop que corre, sale rojo nombrando la fila.
 
 ⚠️ **Corregido 2026-09-03 21:10 UTC — cinco cadencias BAJADAS a propósito, y la tabla seguía con
 las viejas.** `canario-visual`, `marca-personal`, `docs-auditoria`, `investigacion` y `supervisor`
