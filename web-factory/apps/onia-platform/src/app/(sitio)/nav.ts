@@ -17,10 +17,23 @@ export interface NavItem {
   label: string;
 }
 
-/** Producto: qué es y cuánto cuesta. */
+/**
+ * Producto: qué es y cuánto cuesta.
+ *
+ * `/agentes` SALE el 2026-09-08 (Sergio Urcullo, «ok C»): la navegación pública
+ * queda en el sistema + Chatbot. El chatbot se queda porque pasa el test de tres
+ * preguntas de `CLAUDE.md` §10 —es un add-on con precio propio en `pricing.ts`—;
+ * los agentes son una capacidad DENTRO de los planes, no una puerta de entrada,
+ * y ocupaban una ranura al lado de «Precios».
+ *
+ * **No pierde alcance**: la portada la ofrece en su cuerpo
+ * (`(sitio)/page.tsx`), así que sigue enlazada, en el sitemap y indexada. Por eso
+ * NO entra al disallow de `robots.ts` — es la misma línea que separa a
+ * `/servicios/webs` de sus hermanas: se desindexa lo que el sitio dejó de
+ * ofrecer, no lo que ofrece en otra pantalla.
+ */
 export const NAV_PRODUCTO: readonly NavItem[] = [
   { href: "/rubros", label: "Rubros" },
-  { href: "/agentes", label: "Agentes" },
   { href: "/chatbot", label: "Chatbot" },
   { href: "/precios", label: "Precios" },
 ];
@@ -28,17 +41,33 @@ export const NAV_PRODUCTO: readonly NavItem[] = [
 /**
  * Decidir: las pantallas que matan la objeción y la que arranca.
  *
- * `/nosotros` entra acá el 2026-08-23. Existía, estaba en el sitemap y no la
- * linkeaba NINGÚN nav de la v3 — solo el header/pie viejos, que ya no envuelven
- * al sitio: era inalcanzable. Con cero clientes pagando, "empresa boliviana,
- * SEPREC, NIT, Santa Cruz" es el sustituto legítimo del testimonio, y es una
- * objeción («¿quiénes son estos?»), no una hoja de producto: por eso Decidir y
- * no Producto.
+ * `/comparativa` y `/nosotros` SALEN el 2026-09-08 (Sergio Urcullo, «ok C»):
+ * el menú público queda en `Rubros · Chatbot · Precios · Facturación · Contacto`
+ * — el sistema y su add-on, nada más.
+ *
+ * ⚠️ **Salen del MENÚ, no del sitio, y las dos siguen indexadas** — que es más
+ * de lo que hizo falta con `/servicios/*`. La diferencia no es de criterio sino
+ * de hecho: aquéllas se quedaron sin UNA sola pantalla que las enlazara, y éstas
+ * conservan su enlace en el cuerpo de una pantalla viva (`/precios` ofrece la
+ * comparación al lado de la tabla; `/contacto` ofrece «quiénes somos» antes de
+ * pedir una cita). Un lead sigue llegando; lo que se quita es que compitan con
+ * «Precios» en la barra.
+ *
+ * **Y por qué el enlace del cuerpo se agregó en la misma vuelta, en vez de
+ * mandarlas al disallow:** desindexar `/nosotros` no es «sale del menú». Con
+ * cero clientes pagando, "empresa boliviana, SEPREC, NIT, Santa Cruz" es el
+ * sustituto legítimo del testimonio — es la única pantalla que contesta
+ * «¿quiénes son estos?», y esa objeción no la mata ningún precio.
+ *
+ * ⚠️ El comentario anterior afirmaba que `/comparativa` ya estaba «enlazada
+ * desde el cuerpo de `/precios`». **Era falso** y se verificó al sacarla:
+ * ningún `.tsx` del árbol vivo ni ningún módulo `@/` que él importe escribía ese
+ * `href`. Una afirmación de cobertura que nadie mide es la que deja pasar el
+ * defecto que el gate existe para cazar — acá habría desindexado la pantalla sin
+ * que nada se pusiera rojo.
  */
 export const NAV_DECIDIR: readonly NavItem[] = [
-  { href: "/comparativa", label: "Comparativa" },
   { href: "/facturacion", label: "Facturación" },
-  { href: "/nosotros", label: "Nosotros" },
   { href: "/contacto", label: "Contacto" },
   { href: "/empezar", label: "Empezar" },
 ];
