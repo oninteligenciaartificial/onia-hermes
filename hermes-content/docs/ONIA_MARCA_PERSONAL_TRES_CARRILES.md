@@ -130,22 +130,43 @@ que lo promete.** El 07-sep el carrusel «Mi stack» ya prometía la guía y la 
 encontrar afuera lo mismo que paga por ver adentro, la comunidad se muere sola — no de
 golpe, de a poco, que es peor.
 
-### ⚠️ Dos cosas sin resolver, y hay que decirlas
+### 🔴 Corrección del 07-sep: la comunidad SÍ existe
 
-1. **La comunidad no existe todavía.** No hay plataforma elegida, ni nombre, ni una sola
-   persona adentro. Todo lo de arriba es el diseño del carril, no su estado.
-2. **Si la comunidad se cobra, es una línea de negocio nueva** — y `CLAUDE.md` §*El objetivo
-   del NEGOCIO manda* lo prohíbe con nueve líneas ya abiertas y cero clientes pagando.
-   El test de tres preguntas (§10 de `ONIA_ESTRATEGIA_DE_EMPRESA.md`): ¿se le vende al mismo
-   cliente que ya paga? ¿deja de tener sentido sin el núcleo? ¿se entrega sin horas de
-   Sergio Urcullo por cliente? **Una comunidad de pago falla la tercera** — la comunidad es
-   horas suyas, por definición.
+**La primera versión de este documento decía que la comunidad "no existe todavía: no hay
+plataforma elegida, ni nombre, ni una sola persona adentro". Es falso, y lo escribí sin
+verificar.** Sergio Urcullo me mandó a leer el repo y ahí estaba, con cinco días de
+funcionamiento encima. Es exactamente el error que `CLAUDE.md` §*Verificar antes de decir
+que no existe* está escrito para evitar.
 
-   **Una comunidad gratis, en cambio, pasa**: es el lugar donde viven los que van a comprar
-   Onia, no un producto aparte. Ésa es la forma que no abre la décima línea.
+**Lo que hay, medido en el repo el 07-sep:**
 
-   La decisión es de Sergio Urcullo. Mientras no la tome, el carril 3 se diseña pero **no se
-   construye**, y el esfuerzo va a los carriles 1 y 2, que sí están andando.
+| | |
+|---|---|
+| **Plataforma** | Comunidad de **WhatsApp**: canal *Announcements* (publica sólo él) + grupo *General* |
+| **Nombre** | Onia Community |
+| **Arranque** | miércoles **2026-09-02** |
+| **Contenido** | serie **D0–D6**, un drop por día, guiones en `ONIA_COMUNIDAD_CONTENIDO.md` |
+| **Semana 2** | siete drops ya escritos, arranca **lunes 14-sep** |
+| **Biblioteca** | `ONIA_COMUNIDAD_BIBLIOTECA.md` + página Notion — 🔴 **en borrador privado**, falta que Sergio Urcullo la publique |
+| **Estado y piezas** | `docs/comunidad/ESTADO_COMUNIDAD.md` |
+| **Horarios** | lun-vie 14–17 y 20–22 · sáb 9–15 (La Paz), reuniones con 1 día de anticipación |
+
+**Fuentes del carril, por si otra sesión las busca:** `docs/comunidad/ESTADO_COMUNIDAD.md`
+(qué existe y qué se publicó) · `ONIA_COMUNIDAD_CONTENIDO.md` (los guiones y el calendario)
+· `ONIA_COMUNIDAD_BIBLIOTECA.md` · `cola/drops/AAAA-MM-DD.md` (cada drop listo para pegar).
+
+### ⚠️ Lo que sigue sin resolver
+
+1. **La comunidad es gratis hoy, y así pasa el test de tres preguntas** — es donde viven
+   los que van a comprar Onia, no un producto aparte. **Si algún día se cobra, se convierte
+   en línea de negocio nueva** y falla la tercera pregunta (§10 de
+   `ONIA_ESTRATEGIA_DE_EMPRESA.md`): una comunidad de pago son horas de Sergio Urcullo por
+   cliente. Mientras siga gratis, no hay conflicto.
+2. **La palabra clave sigue sin cablear.** `palabras: {}` en el workflow n8n activo de
+   private-reply: un "Comentá COMUNIDAD" hoy sale con `palabra=null` y **quien comenta no
+   recibe nada, sin dejar registro**. Por eso todos los CTA piden respuesta a mano.
+3. **La biblioteca de Notion está en borrador privado.** Es un link que la comunidad ya
+   tendría que tener y depende de un clic suyo: Compartir → Publicar en la web.
 
 ---
 
