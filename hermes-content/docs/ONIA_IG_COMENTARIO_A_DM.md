@@ -25,22 +25,54 @@ sola vez, y a Sergio Urcullo le llega el aviso por Telegram.
 Lo que sí banea —DM a quien no te escribió, volumen, automatizar por vías no
 oficiales— este circuito no lo hace.
 
-## 3. 🔴 Lo que falta antes de encender la primera palabra
+## 3. La firma del webhook — armada y en MODO OBSERVAR
 
-**El webhook no valida la firma de Meta.** Probado el 2026-09-08: se le mandó un
-comentario **inventado** desde el VPS con `curl` y lo procesó como real.
+**Estado al 2026-09-08:** el circuito **verifica la firma de Meta y todavía no rechaza
+nada**. Falta un solo dato, y sólo lo puede dar un comentario real.
 
-Hoy es inofensivo porque no hay palabras activas y ningún envío se dispara. **Con una
-palabra activa deja de serlo:** cualquiera que conozca la URL del webhook puede hacer
-que la cuenta le mande un DM a quien quiera. Eso no es sólo un agujero de seguridad —
-es exactamente el comportamiento por el que Meta cierra una cuenta.
+### Por qué se hizo así
 
-Meta firma cada evento con `x-hub-signature-256` (HMAC-SHA256 del cuerpo con el *App
-Secret*). El evento real de hoy la traía; nadie la mira. **Se valida antes de activar
-la primera palabra, no después.**
+El agujero era real y está medido: se le mandó al webhook un comentario **inventado**
+con `curl` y lo procesó como real. Hoy es inofensivo porque no hay palabras activas;
+con una palabra activa, cualquiera que conozca la URL puede hacer que la cuenta le
+mande un DM a quien quiera — que es el comportamiento por el que Meta cierra cuentas.
 
-⚠️ Es la misma clase que `calcom-booking`, que tiene la validación apagada por falta de
-`CALCOM_WEBHOOK_SECRET` (`CLAUDE.md`, tabla de secretos de n8n).
+### Cómo está armado
+
+| pieza | dónde corre | por qué ahí |
+|---|---|---|
+| `/opt/onia/ig-firma.sh` | **en el VPS** | el App Secret vive ahí y **nunca entra a n8n**. Sin esto habría que meter el secreto en n8n, que corre en Swarm: cambiar una variable es reiniciar el servicio |
+| `Firma: preparar` | n8n | saca los **bytes crudos** y los pasa a **base64** — sin caracteres que el shell interprete, que es la trampa de escapado de la skill `onia-infra` §1 |
+| `Firma: verificar` | nodo SSH | reusa la credencial que el circuito ya tenía |
+| `Firma: veredicto` | n8n | **anota y deja pasar** |
+
+🔴 **Se necesitan los bytes CRUDOS, no el JSON re-serializado.** Medido: el cuerpo
+parseado y vuelto a serializar daba **282 bytes contra los 306** que Meta declaró en
+`content-length`. Por eso el webhook pasó a `rawBody: true`.
+
+### Por qué observa y no bloquea todavía
+
+Hay **dos apps de Meta** en el sistema (`1562215408796050` en `.hermes/.env`, con su
+secreto; `1078962684709749` en `app.env`) y **no se sabe cuál firma este webhook**.
+
+**Activar el rechazo con el secreto equivocado tira TODOS los comentarios reales, y no
+se nota hasta que alguien pregunta por qué no le llegó nada.** El script prueba los dos
+candidatos y dice cuál sirvió; el veredicto queda anotado en cada ejecución.
+
+### Verificado el 2026-09-08, de punta a punta
+
+| prueba | resultado |
+|---|---|
+| Evento **firmado** con `META_APP_SECRET` | `firma_ok: true` · `crudo_confiable: true` · **282 bytes = 282 declarados** |
+| Evento **sin firma** | `firma_ok: false` · `sin_cabecera_de_firma` |
+| El parser, en ambos casos | sigue funcionando, sin regresión |
+| El secreto en la salida | **no aparece** |
+
+### Lo que falta (pasos 5 y 6)
+
+5. **Un comentario real de Meta** con su firma. El veredicto va a decir cuál secreto coincide.
+6. **Pasar a bloquear**: `Firma: veredicto` corta cuando `firma_ok` es falso. Recién ahí
+   se activa la primera palabra.
 
 ## 4. La regla que decide si una palabra existe
 
