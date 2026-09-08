@@ -1851,6 +1851,61 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] 🔴 **CERRADO el 2026-09-08: el bot de WhatsApp le afirmaba a la gente de un negocio un
+      horario de atención que NADIE había cargado.** Arreglado en `4ce8f88` (`onia-platform`).
+
+      Sin grilla, `horarioQueSeDice` caía en `openTime`/`closeTime`, y ese par **no es un dato
+      del negocio**: es el literal que el alta escribe para toda org nueva
+      (`app/api/auth/register/route.ts` → `initialSettings`, y el mismo par como `@default` de
+      `clinic_settings` en `prisma/schema.prisma`). Ninguna pantalla del producto lo escribe —
+      `SettingsClient` sólo lo muestra, y la única ruta que lo acepta
+      (`PATCH /api/clinic-settings`) está registrada sólo para dental y no la llama nadie—, así
+      que **sin grilla vale `08:00 - 18:00`, siempre**.
+
+      **Medido en producción, no deducido** (`docker exec supabase-db psql`, 2026-09-08): de las
+      **10** organizaciones, **CINCO** no tienen grilla — `bolivian-electricidad-e6t21`
+      (`proveegest-electrico`), `qa-modulos-rj7tv` (`proveegest-electrico`), `qa-modulos-mrk0q`
+      (servicios profesionales), `zz-qa-estetica-modulos-6tzgb` y `zz-qa-salteo-horarios-…` — y a
+      las cinco el bot les contestaba `08:00 - 18:00` como un hecho. Texto exacto que recibía la
+      persona, capturado antes de tocar nada:
+
+      | superficie | lo que decía |
+      |---|---|
+      | menú (`horariosText`) | `⏰ Horario de atención:\n*08:00 - 18:00*` |
+      | contexto de la IA (`buildSystemPrompt`) | `Horario de atención: 08:00 - 18:00` |
+
+      **Por qué duele más de lo que parece:** a comercio e importadora `opcionesDelMenu` les
+      ofrece **UNA sola** opción, «Horarios de atención». O sea que lo único que el bot sabía
+      hacer por **2 de los 5 rubros de la v1.0** era mandar a su gente a una puerta cerrada —
+      con el add-on cobrado a Bs 390/mes.
+
+      **Por qué no lo veía ningún gate:** el retorno era **ambiguo** — «la franja del negocio» y
+      «el default que nadie tocó» salían iguales—, así que el consumidor no podía distinguirlos
+      y afirmaba. Misma clase que `buscarNegocio()` devolviendo `[]` por dos motivos distintos.
+      No sobra ni falta una palabra, el texto ya deriva del rubro
+      (`whatsapp-ai-idioma-del-rubro.test.ts` en verde), no hay pantalla que fotografiar y el
+      valor es **REAL**: sale de la base. Peor: el caso *«sin grilla dice la franja sola»* de
+      `horario-que-se-dice.test.ts` lo daba por **BUENO** — el defecto tenía un gate en verde
+      defendiéndolo.
+
+      **El arreglo no borra la promesa, la CONDICIONA** (igual que `SEARXNG_URL` en el alta):
+      `horarioQueSeDice` devuelve `{ lineas, declarado }` y los dos consumidores dejan de
+      afirmar cuando no lo sabemos — el menú ofrece la persona que ya ofrecía, y a la IA se le
+      **prohíbe deducirlo**. El corte es «nadie la tocó», no «no hay grilla»: una franja distinta
+      del default sí está declarada, así que el error posible queda del lado seguro. Y `horario`
+      viaja como campo **requerido**: un opcional con default deja al llamador sin pasarlo con el
+      gate y `tsc` en verde.
+
+      **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **3978 pasan / 327 archivos** ·
+      `npx eslint .` 0 errores. Guardias validados **por mutación**: 4/4 en rojo, y el del menú y
+      el de la IA fallan **un caso cada uno** — cada guardia tiene el caso que ningún otro ve.
+      Lleva ancla contra `register/route.ts` y `schema.prisma`: si el alta cambia la franja, la
+      detección apuntaría al valor viejo y se apagaría sola. Gate:
+      `lib/agenda/horario-sin-declarar.test.ts`.
+
+      **No está terminado hasta que se publique:** viaja en el pedido de deploy vivo de
+      `plataforma`, que espera el `ok` de Sergio Urcullo.
+
 - [x] **CERRADO el 2026-09-08: una capacidad de plan se decidía en CUATRO listas escritas a
       mano, y una de ellas es la que la API usa para RECHAZAR.**
 
