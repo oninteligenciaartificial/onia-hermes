@@ -5,7 +5,9 @@
 > subimos, o cómo podemos administrarlo. Para eso sería crear la página. Organizalo"*.
 >
 > Fuente única de **cómo se produce y se distribuye un recurso**. El reparto de qué va en
-> cada carril está en [`ONIA_MARCA_PERSONAL_TRES_CARRILES.md`](ONIA_MARCA_PERSONAL_TRES_CARRILES.md).
+> cada carril está en [`ONIA_MARCA_PERSONAL_TRES_CARRILES.md`](ONIA_MARCA_PERSONAL_TRES_CARRILES.md);
+> **por qué la comunidad sigue valiendo aunque todo sea público, y el registro de videos**,
+> en [`ONIA_COMUNIDAD_QUE_LA_HACE_VALER.md`](ONIA_COMUNIDAD_QUE_LA_HACE_VALER.md).
 
 ## El problema, dicho sin vueltas
 
@@ -80,6 +82,7 @@ Eso se rompe en el primer comentario.
 
 | Slug | Recurso | Estado | Lo promete | Archivos para comunidad |
 |---|---|---|---|---|
+| [`/homelab`](https://sergiourcullo.vercel.app/homelab) | **El homelab** — qué es, cuánto gasta de luz, qué corre adentro, cómo armarlo. Ocho preguntas del video contestadas | 🟢 **público** | Reel del 07-sep (`HOMELAB`) — ⚠️ la promesa salió ANTES que el recurso | ⬜ falta la página de archivos |
 | [`/stack`](https://sergiourcullo.vercel.app/stack) | **El stack de $200** — las 6 herramientas, qué hace cada una, qué no hace, cómo instalarla | 🟡 **en comunidad** | Carrusel «Mi stack», lámina 11 (`COMENTÁ STACK`) | 🟢 [`/stack/archivos`](https://sergiourcullo.vercel.app/stack/archivos) — `docker-compose` de n8n, las 6 respuestas de WhatsApp, plantilla del `SOUL.md` |
 
 > 🟢 **La web está arriba desde el 08-sep: https://sergiourcullo.vercel.app**. Fuente en
