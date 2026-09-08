@@ -12,6 +12,33 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-08 10:09-10:27 La Paz — primer recorrido en MÓVIL (390x844): falso rojo del propio instrumento, arreglado
+
+`RECORRIDO_MOVIL=1` (agregado en la vuelta anterior, nunca corrido en vivo hasta ahora) repite el
+camino completo en viewport de teléfono (390x844), porque una pantalla mirada en 1440x900 queda
+mirada para ESE viewport y nada más.
+
+Primera corrida (dental, escritorio de referencia ya sano dos veces esta hora): **9/9 salvo el
+paso 7**, que dio ROJO — "la cita se creó (201) y NO aparece en la agenda: el producto la guardó
+y no la muestra (tocar el día tampoco sirvió: no encontré una celda con el número de día en la
+grilla)". La captura (`paso-07d-cita-en-agenda.png`) mostraba, sin embargo, un **punto naranja
+sobre el día 9** — el calendario en móvil SÍ marca la cita, sólo que con un punto de color en vez
+de texto (el nombre vive en el panel de detalle, que sólo se pinta con el día seleccionado —
+`app/(dashboard)/appointments/page.tsx:527`). El selector que debía tocar el día
+(`div.grid > div` filtrado por texto exacto) daba **0 coincidencias** contra una celda que se ve
+perfecta en la foto: instrumento roto, no producto.
+
+Se cambió el selector a `page.getByText(/^9$/, {exact:true})` (lo que un dedo real toca) en
+`facturarZzQa()`/el bloque de verificación de agenda de `scripts/recorrido_cliente.mjs`. Segunda
+corrida, dental en móvil: **9/9 completo**, con el click al día 9 revelando el panel "9 de
+septiembre · 1 cita(s) · 09:00 · 30 min" y el nombre del paciente — visto en
+`paso-07d-cita-en-agenda.png`. Cero filas `zz-qa-` propias al cerrar las dos corridas (4 ajenas
+sin tocar).
+
+**Nada roto en producto.** El hallazgo real de la vuelta fue del propio instrumento, y quedó
+arreglado y verificado en la misma vuelta. Queda pendiente correr `RECORRIDO_MOVIL=1` en los
+otros cuatro rubros — hoy sólo se probó dental.
+
 ## Reverificado el 2026-09-08 09:09 y 09:13 La Paz — dental (9/9) y Estética (9/9) siguen sanos
 
 Dos corridas `--escribir` seguidas desde nodo-casa: **dental 9/9** (cita agendada y vista,
