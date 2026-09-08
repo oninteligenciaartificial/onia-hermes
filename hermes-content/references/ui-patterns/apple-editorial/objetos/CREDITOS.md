@@ -83,3 +83,24 @@ la otra con `--fuente`.
 | `energetica` | red bull can white background studio | pexels | Pexels License | Rubaitul Azad | https://www.pexels.com/photo/red-bull-can-against-white-background-17220088/ |
 | `energetica` | red bull can | unsplash | Unsplash License | Emma Gasseau-Dryer | https://unsplash.com/photos/red-bull-neon-sign-glows-in-a-dark-interior-THWUVWsm0RE |
 | `energetica` | red bull can white background studio | pexels | Pexels License | Rubaitul Azad | https://www.pexels.com/photo/red-bull-can-against-white-background-17220088/ |
+| `transferencia` | mobile banking app phone hand | pexels | Pexels License | Tranmautritam | https://www.pexels.com/photo/digital-wallet-app-on-smartphone-6406691/ |
+| `transferencia-b` | smartphone isolated white background | pexels | Pexels License | KATRIN  BOLOVTSOVA | https://www.pexels.com/photo/a-smartphone-with-blank-screen-on-white-surface-6373160/ |
+| `transferencia-c` | credit card isolated | pexels | Pexels License | Marta Branco | https://www.pexels.com/photo/euro-coins-and-payment-cards-close-up-37125405/ |
+
+## Rechazados — la celda «Transferencia» de founders-bo (07-sep)
+
+Tres búsquedas en Pexels para reemplazar el dibujo por una foto, según el pedido de Sergio
+Urcullo (*"las imágenes puedes usar simplemente pngs, mejor"*). Las tres fallaron, y el
+motivo es de fondo: **una transferencia bancaria no tiene objeto físico que fotografiar**.
+Quedan guardadas como evidencia de que se intentó, para que nadie repita la búsqueda.
+
+| Archivo | Consulta | Por qué no sirve |
+|---|---|---|
+| `RECHAZO-transferencia-google-wallet.png` | "mobile banking app phone hand" | Una mano con **Google Wallet** en pantalla: marca ajena que la pieza no nombra, y que ni siquiera opera en Bolivia. Sería un error factual visual |
+| `RECHAZO-transferencia-celular-vacio.png` | "smartphone isolated white background" | Un celular con la pantalla en blanco. No comunica nada |
+| `RECHAZO-transferencia-monedas-euro.png` | "credit card isolated" | Monedas de **euro** sobre tarjetas, sin recortar y sobre fondo negro |
+
+La celda pasó a **squircle** (azul de banca, flechas de ida y vuelta), que además es más
+coherente: en su misma fila USDT ya es squircle, y en la de arriba lo son Claude, ChatGPT y
+Gemini. Cuatro de las nueve celdas ya lo eran — la que desentonaba era ésta.
+Autoría de las tres: Pexels License — Tranmautritam, KATRIN BOLOVTSOVA, Marta Branco.

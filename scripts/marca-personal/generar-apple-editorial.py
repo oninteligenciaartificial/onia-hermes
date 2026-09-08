@@ -172,18 +172,34 @@ def _tarjeta_clientes():
 
 
 def _tarjeta_transferencia():
-    """No existe un logo de "transferencia bancaria", asi que se dibuja: comprobante con
-    monto tapado. El monto va TAPADO a proposito — cualquier cifra ahi seria inventada."""
-    return (
-        '<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">'
-        '<rect x="34" y="26" width="188" height="204" rx="18" fill="#FFFFFF" '
-        'stroke="#D2D2D7" stroke-width="3"/>'
-        '<circle cx="128" cy="80" r="26" fill="#E4F9EE"/>'
-        '<path d="M116 80 L125 89 L141 71" stroke="#00C661" stroke-width="9" fill="none" '
-        'stroke-linecap="round" stroke-linejoin="round"/>'
-        '<rect x="66" y="126" width="124" height="14" rx="7" fill="#1D1D1F"/>'
-        '<rect x="82" y="154" width="92" height="10" rx="5" fill="#C9C9CE"/>'
-        '<rect x="66" y="186" width="124" height="26" rx="8" fill="#F0F0F3"/></svg>')
+    """Celda "Transferencia" de la fila 3 de founders-bo, como squircle de app bancaria.
+
+    ⚠️ SE INTENTO CON FOTO Y NO HAY. Sergio Urcullo, 07-sep: "las imagenes puedes usar
+    simplemente pngs, mejor" — y tenia razon en que la version anterior (un comprobante
+    dibujado con un tilde verde) se veia floja al lado de las ocho celdas restantes.
+    Se buscaron tres fotos en Pexels y las tres fallaron, y el motivo es de fondo:
+    **una transferencia bancaria no tiene objeto fisico que fotografiar**.
+      · "mobile banking app phone hand" -> una mano con GOOGLE WALLET. Marca ajena que la
+        pieza no nombra, y que ni siquiera opera en Bolivia: un error factual visual.
+      · "smartphone isolated white background" -> un celular con la pantalla en blanco.
+        No comunica nada.
+      · "credit card isolated" -> monedas de EURO sobre tarjetas, sin recortar.
+    Quedan guardadas como transferencia*.png con su credito en CREDITOS.md; ninguna se usa.
+
+    Asi que la celda pasa a SQUIRCLE, que ademas es mas coherente: en su misma fila USDT ya
+    es squircle, y en la fila de arriba lo son Claude, ChatGPT y Gemini. Cuatro de las nueve
+    celdas ya eran squircle — la que desentonaba era esta.
+
+    El verde tambien se fue: el tilde anterior usaba el #00C661 de Onia en una celda que
+    representa la banca en general. El verde es de la casa y aca no pinta nada.
+    """
+    flecha = ('<path d="M92 104 H164 M146 86 L164 104 L146 122" stroke="#FFFFFF" '
+              'stroke-width="13" fill="none" stroke-linecap="round" '
+              'stroke-linejoin="round"/>'
+              '<path d="M164 152 H92 M110 134 L92 152 L110 170" stroke="#FFFFFF" '
+              'stroke-width="13" fill="none" stroke-linecap="round" '
+              'stroke-linejoin="round"/>')
+    return _squircle("#1F6FEB", flecha)
 
 
 def _tarjeta_creditos():
