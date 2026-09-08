@@ -35,6 +35,7 @@
 // Uso:  node avisos-vivo.mjs          (exit 0 verde · 1 rojo · 2 no se pudo medir)
 
 import { execFileSync, spawnSync } from "node:child_process";
+import net from "node:net";
 import { existsSync, mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -139,13 +140,19 @@ export function diagnosticar({ circuito, eventos }) {
   }
 
   const motivos = [];
+  // Un eslabon que quedo en `null` no se pudo PREGUNTAR. No es lo mismo que haber recibido
+  // un no, y mezclarlos manda a arreglar lo que funciona: el 2026-09-08 este gate declaro
+  // "el token o el chat de Telegram no responden" con los dos sanos, porque el instrumento
+  // no llegaba a preguntar. La ignorancia se reporta como ignorancia.
+  const sinMedir = [];
   for (const [eslabon, etiqueta] of [
     ["flagEncendido", "flagEncendido: el proceso vivo no tiene ONIA_BOT_TG_AVISO en true"],
     ["credencialesOk", "credencialesOk: el token o el chat de Telegram no responden"],
     ["motorEmiteNotify", "motorEmiteNotify: el motor no emite notify_sergio ante un pedido de humano"],
     ["textoAccionable", "textoAccionable: el aviso no nombra la conversacion a la que contestar"],
   ]) {
-    if (!circuito[eslabon]) motivos.push(etiqueta);
+    if (circuito[eslabon] === null) sinMedir.push(`${eslabon}: no se pudo preguntar (¿hay red desde esta maquina?)`);
+    else if (!circuito[eslabon]) motivos.push(etiqueta);
   }
 
   // Un aviso que salio mal manda sobre cualquier chequeo de configuracion: es una persona
@@ -153,7 +160,11 @@ export function diagnosticar({ circuito, eventos }) {
   if (ev.fallidos > 0) motivos.push(`${ev.fallidos} aviso(s) FALLIDO(s) en el log`);
   if (ev.salteados > 0) motivos.push(`${ev.salteados} aviso(s) SALTEADO(s) en el log`);
 
-  return { veredicto: motivos.length ? "roto" : "ok", motivos, eventos: ev };
+  // Prioridad: evidencia de fallo > no haber podido preguntar > verde. Un rojo MEDIDO no lo
+  // tapa un eslabon sin medir, y un eslabon sin medir nunca se firma como verde.
+  if (motivos.length) return { veredicto: "roto", motivos: motivos.concat(sinMedir), eventos: ev };
+  if (sinMedir.length) return { veredicto: "no_medido", motivos: sinMedir, eventos: ev };
+  return { veredicto: "ok", motivos, eventos: ev };
 }
 
 // ---------------------------------------------------------------------------
@@ -185,20 +196,46 @@ function envDelProcesoVivo() {
   return env;
 }
 
+/**
+ * El piso de tiempo que necesita UN intento de conexion para que preguntar sea posible.
+ *
+ * Node corta cada intento a los 250 ms (`autoSelectFamilyAttemptTimeout`). Desde nodo-casa
+ * la ruta IPv6 a api.telegram.org es ENETUNREACH y la IPv4 tarda mas que ese corte, asi que
+ * `fetch` muere en ~350 ms con ETIMEDOUT sobre un host que `curl` atiende con 200. Medido el
+ * 2026-09-08: con el corte en 2000 ms, la misma llamada devuelve 200 en 2,0 s y 0,5 s.
+ */
+export const ATENCION_MINIMA_MS = 2000;
+
+/** Sube el piso del transporte si esta por debajo. Nunca baja uno mas generoso. */
+export function asegurarTransporteQueAguanta(red = net) {
+  if (red.getDefaultAutoSelectFamilyAttemptTimeout() < ATENCION_MINIMA_MS) {
+    red.setDefaultAutoSelectFamilyAttemptTimeout(ATENCION_MINIMA_MS);
+  }
+}
+
 /** `getMe` + `getChat`. No manda un solo mensaje: no se le grita al lobo para probar el grito. */
 async function credencialesResponden(token, chatId) {
+  // Que el proceso vivo no las tenga SI es una rotura real: sin token no hay aviso posible.
   if (!token || !chatId) return false;
+  asegurarTransporteQueAguanta();
+
+  // Tres estados, y la diferencia es el punto: `true` contesto que si, `false` contesto que
+  // no, `null` NO SE PUDO PREGUNTAR. Colapsar los dos ultimos en `false` es lo que hizo que
+  // este gate acusara a un token sano (2026-09-08).
   const pedir = async (metodo, qs = "") => {
     try {
       const r = await fetch(`https://api.telegram.org/bot${token}/${metodo}${qs}`, {
-        signal: AbortSignal.timeout(15000),
+        signal: AbortSignal.timeout(25000),
       });
       return (await r.json())?.ok === true;
     } catch {
-      return false;
+      return null;
     }
   };
-  return (await pedir("getMe")) && (await pedir("getChat", `?chat_id=${encodeURIComponent(chatId)}`));
+
+  const me = await pedir("getMe");
+  if (me !== true) return me; // null (no se pudo) o false (token rechazado): cada uno es lo suyo
+  return await pedir("getChat", `?chat_id=${encodeURIComponent(chatId)}`);
 }
 
 /**
@@ -348,7 +385,11 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
 
   console.log(`circuito: ${circuito ? (d.veredicto === "no_medido" ? "?" : "medido") : "NO SE PUDO MEDIR"}`);
   if (circuito) {
-    for (const [k, v] of Object.entries(circuito)) console.log(`  ${v ? "ok  " : "ROTO"} ${k}`);
+    // El tercer estado se imprime como tal: un `?` es "no pude preguntar", y leerlo como
+    // ROTO es exactamente el error que este gate cometio contra un token sano.
+    for (const [k, v] of Object.entries(circuito)) {
+      console.log(`  ${v === null ? "?   " : v ? "ok  " : "ROTO"} ${k}`);
+    }
   }
   // Las ramas van SIEMPRE, no sólo cuando fallan: un "motorEmiteNotify ok" sin decir sobre
   // qué ramas es justo la lectura que dejó pasar el agujero del 2026-09-07.
