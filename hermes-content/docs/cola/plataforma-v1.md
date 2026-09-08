@@ -44,6 +44,55 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **El enlace de reserva que el negocio manda por WhatsApp le vendía el panel a su cliente
+      — cerrado el 2026-09-08 (`b4b2e34` en `onia-platform`, publicado en la rama, falta que el
+      integrador lo mergee a `master`).**
+      Gates nuevos: `app/(public)/head-de-la-superficie-publica.test.ts` (5 casos, sujetos
+      derivados del disco) y `app/(public)/book/[orgSlug]/tarjeta-del-negocio.test.ts` (5 casos).
+
+      **Medido en producción**, `curl -A 'WhatsApp/2.23.20.0'` sobre el enlace de una clínica
+      real (`app.onia.com.bo/book/clinica-sergio-p2ljs`, HTTP 200, 28.336 B): el `<head>` era el
+      del layout **raíz**, o sea el del panel de gestión.
+
+      ```
+      <title>Onia | El sistema con IA que maneja tu negocio en Bolivia</title>
+      <meta property="og:url" content="https://app.onia.com.bo">
+      <meta name="robots" content="index, follow">        (+ max-snippet:-1)
+      ```
+
+      Al paciente que abre ese enlace le llegaba **la tarjeta del software** —dirigida al dueño,
+      que no es quien la recibe— y con la `og:url` apuntando a la raíz en vez de a su reserva.
+      La vista previa se lee **antes** de abrir la página: es lo único que ve el que no entra.
+
+      Y el agravante que no era de copy: las rutas que llevan un **token** en la URL
+      (`/portal/[token]`, `/book/my-appointments/[token]`, `/book/confirm/[token]`) muestran los
+      datos de **una** persona y se declaraban `index, follow` con snippet ilimitado. `robots.txt`
+      no las excluye — el de Cloudflare es `User-agent: * / Allow: /`, verificado el mismo día.
+
+      **Por qué sobrevivió, y es la clase:** `app/(public)` es la superficie que ve el **cliente
+      del cliente**, y su `<head>` no lo mira ningún instrumento del proyecto — no sale en
+      captura (no es visible), no sobra ninguna palabra (cada frase es correcta *para el panel*),
+      y los barridos de rubro y de copy derivan sus sujetos de `app/(dashboard)` y `components/`.
+      El gate de compartir/OG que sí existe vive en `web-venta` y mira `onia.com.bo`, otra app.
+
+      El arreglo condiciona la promesa en vez de borrarla: `/book/[orgSlug]` arma su `<head>` con
+      el nombre del **negocio** (`title: { absolute }`, o Next le pega el template `"%s | Onia"`
+      del layout raíz) y deriva su `og:url` y su `canonical` del slug; si el slug no existe o la
+      base no contesta cae a un título neutro y **no tira** —una excepción en `generateMetadata`
+      voltearía una página que funciona—. `/book/*` y `/portal/[token]` pasan a `noindex`: no
+      apaga nada (siguen sirviendo 200 y WhatsApp dibuja la tarjeta igual), y además evita que
+      el buscador reconstruya el índice central de `/book` que se retiró a propósito porque
+      exponía la cartera de clientes de Onia.
+
+      ⚠️ **Los dos gates pasaron en VERDE con el arreglo arrancado, y sólo se vio mutando.** La
+      bitácora que explica *por qué* va `index: false` contiene ese mismo texto, así que el gate
+      se absolvía con su propia explicación; y `openGraph` matcheaba dentro de `openGraphXX`. Se
+      mide sobre **código sin comentarios** y con límites en los patrones. Validados por mutación:
+      4 + 3 mutaciones, cada una **verificada de que entró** antes de leer el veredicto.
+
+      Gates: `tsc` 0 · `vitest` **3847** verdes · `eslint` 0 errores.
+      ⚠️ **Commiteado y en la rama, NO desplegado:** viaja con el pedido `DESPLEGAR: plataforma`.
+
 - [x] 🔴 **El `roles:` del menú no era una barrera: escondía el enlace y la URL abría la pantalla
       igual — cerrado el 2026-09-08 (`3e9cd3a` en `onia-platform`, publicado en la rama).**
 
@@ -1643,6 +1692,52 @@ y sin operar. Acá se opera, con verificación por ítem.
 - **No le escribe a un prospecto.** Regla del [`README.md`](README.md) de esta carpeta.
 
 ## Cerrado
+
+- [x] **CERRADO el 2026-09-08: el bot le decía al cliente la ENVOLVENTE de la semana como si
+      fuera el horario de atención — y lo mandaba a una puerta cerrada.** Commit `6b1ce7c`,
+      rama `claude/chatbots-platform-review-0d1d09` de `onia-platform`. ⚠️ **Commiteado y en
+      la rama, NO desplegado**: falta el merge a `master` (es de `onia-cola`) y después el
+      swap. Verificado: `git merge-base --is-ancestor 6b1ce7c origin/master` da NO, así que el
+      pedido `t_bf1607af` **todavía no lo publica** — comentado ahí.
+
+      **Qué estaba mal.** `clinicSettings.openTime/closeTime` es, **por construcción**, la
+      apertura más temprana y el cierre más tardío de *todos* los tramos de la semana —
+      `derivarHorarioClinica()` (`lib/onboarding/aplicar.ts:218`) lo dice en su propio
+      comentario. Sirve para lo que se escribió: acotar hasta dónde la agenda puede ofrecer
+      turnos. Es **falso** como respuesta a *«¿a qué hora abren?»*, y era exactamente eso lo
+      que el bot del cliente (add-on de **Bs 390/mes**) contestaba, en sus **dos** superficies:
+      el menú (`whatsapp-bot.ts`) y el contexto que recibe la IA (`whatsapp-ai.ts`), que lo
+      repetía en texto libre.
+
+      **Medido en producción, no deducido** (2026-09-08, org real `clinica-sergio-p2ljs`):
+
+      | | lo que el negocio hace | lo que el bot decía |
+      |---|---|---|
+      | lun–vie | 09:00–13:00 **y** 15:00–19:00 | `09:00 – 19:00` |
+      | sábado | 09:00–13:00 | `09:00 – 19:00` |
+      | domingo | cerrado | `09:00 – 19:00` |
+
+      O sea: dos horas por día, medio sábado y **todo el domingo** mandando pacientes a una
+      puerta cerrada. **La grilla verdadera ya estaba guardada al lado**, en
+      `perfilNegocio.horarios`, y `resumirHorarios()` ya sabía imprimirla.
+
+      **Por qué ningún gate podía verlo.** No sobra ninguna palabra (nada prohibido), el texto
+      ya deriva del rubro (`whatsapp-ai-idioma-del-rubro.test.ts` en verde), no hay pantalla
+      que fotografiar —es WhatsApp, la superficie del cliente DEL cliente— y **el número es
+      real**: sale de la base, así que ningún barrido de literales, precios ni vocabulario lo
+      alcanza. La clase es **un dato correcto para su propósito, reusado para otro**.
+
+      **Arreglo.** `lib/agenda/horario-que-se-dice.ts` (nuevo) resuelve la grilla real y cae a
+      la franja sola cuando no hay grilla — sin inventar días. `PatientContext` **pierde**
+      `openTime`/`closeTime` y **gana `horarioLineas` obligatorio**: un opcional con default
+      habría dejado el hueco mudo (gate del módulo en verde, llamador sin pasar nada);
+      haciéndolo obligatorio `tsc` nombró los 3 fixtures que lo construían. El par crudo ya no
+      es alcanzable desde ese contexto.
+
+      **Validado por mutación**, cada rojo confirmado por su línea `Tests N failed`: el módulo
+      ignorando la grilla → 6 rojos; el menú imprimiendo la envolvente (forma de *esquive*) →
+      1 rojo; la IA recibiéndola cruda → 1 rojo. Cada consumidor cae por **su propio** caso,
+      que ningún hermano tapa. Gates: `tsc` 0 · `vitest` **3837 verdes** · `eslint` 0 errores.
 
 - [x] **CERRADO el 2026-09-08: el bot de WhatsApp del CLIENTE le abría un menú de CITAS a
       comercio e importadora, que no tienen agenda.** Commit `e4465c9`, rama
