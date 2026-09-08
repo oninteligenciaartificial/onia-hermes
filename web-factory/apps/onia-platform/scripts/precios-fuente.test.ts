@@ -1,4 +1,5 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
@@ -15,6 +16,8 @@ import {
   esPromesa,
   excusaDeGrupoSigueValiendo,
   excusasSinSujeto,
+  constantesExcusadasSinSujeto,
+  CONSTANTES_VERIFICADAS_APARTE,
   limitesDelProducto,
   limitesDelSitio,
   numerosPublicados,
@@ -365,6 +368,30 @@ describe("ningún tope que el sitio publica queda fuera del cruce", () => {
       excusasSinSujeto(real),
       "Sobra una excusa en TOPES_SIN_CRUCE: ningún número publicado la usa.",
     ).toEqual([]);
+  });
+
+  it("ninguna excusa de CONSTANTES_VERIFICADAS_APARTE sobra", () => {
+    // Simétrico del de TOPES_SIN_CRUCE. Una constante excusada que el `incluye`
+    // ya no publica queda PRE-APROBADA: el día que alguien vuelva a interpolar
+    // ese nombre —con otro significado— entra en verde sin que nadie lo mire.
+    expect(
+      constantesExcusadasSinSujeto(real),
+      "Sobra una excusa en CONSTANTES_VERIFICADAS_APARTE: ningún `incluye` publica esa constante.",
+    ).toEqual([]);
+  });
+
+  it("cada constante excusada nombra un verificador que EXISTE", () => {
+    // La excusa dice «esto lo cruza otro». Si ese otro no existe, la constante
+    // no la mide nadie y la excusa es peor que no tenerla: detiene la auditoría.
+    for (const c of CONSTANTES_VERIFICADAS_APARTE) {
+      // La raíz de la app se DERIVA de PRECIOS_SITIO (…/src/lib/pricing.ts), no
+      // se escribe: una ruta a mano acopla el gate al nombre del worktree.
+      const raiz = join(dirname(PRECIOS_SITIO), "..", "..");
+      expect(
+        existsSync(join(raiz, c.cruzadaPor)),
+        `CONSTANTES_VERIFICADAS_APARTE excusa ${c.valor} citando ${c.cruzadaPor}, que no existe.`,
+      ).toBe(true);
+    }
   });
 
   it("CONSTANTES_CRUZADAS no bendice una constante que el cruce ya no lee", () => {

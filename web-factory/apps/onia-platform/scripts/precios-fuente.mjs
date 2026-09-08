@@ -448,6 +448,38 @@ export const CONSTANTES_CRUZADAS = [
 ];
 
 /**
+ * Constantes del `incluye` que NO publican una cifra y cuya verificacion contra
+ * el producto la hace OTRO cruce, que hay que nombrar.
+ *
+ * Nace el 2026-09-08: `ALCANCE_CLINICO` dice a que RUBROS llega una capacidad, y
+ * este cruce solo sabe de topes y montos, asi que la reportaba como "cifra sin
+ * cruzar". Las dos salidas obvias eran malas: meterla en CONSTANTES_CRUZADAS es
+ * MENTIR (nadie la lee aca) y `TOPES_SIN_CRUCE` es para numeros. Sin esta
+ * categoria, la unica forma de tener el gate en verde era tipear el alcance a
+ * mano en las dos lineas que lo dicen — o sea, el gate empujaba a duplicar el
+ * dato, que es exactamente el defecto que existe para evitar.
+ *
+ * Se re-mide en las DOS direcciones: la constante tiene que seguir publicandose
+ * (si no, la excusa sobra y queda PRE-APROBADA) y su verificador tiene que
+ * existir en el arbol.
+ */
+export const CONSTANTES_VERIFICADAS_APARTE = [
+  {
+    valor: "ALCANCE_CLINICO",
+    porque: "no es un tope ni un monto: es a que rubros llega la capacidad",
+    cruzadaPor: "scripts/capacidad-por-rubro.mjs",
+  },
+];
+
+/** Excusas de constante que ya no tienen sujeto: nadie las mide y quedan pre-aprobadas. */
+export function constantesExcusadasSinSujeto(fuente) {
+  const publicados = numerosPublicados(fuente);
+  return CONSTANTES_VERIFICADAS_APARTE.filter(
+    (e) => !publicados.some((n) => n.clase === "constante" && n.valor === e.valor),
+  );
+}
+
+/**
  * Todo lo que el `incluye` de cada plan publica como cifra: los numeros
  * LITERALES y las constantes citadas por interpolacion. Las dos formas, porque
  * el defecto entra por las dos y una sola deja media puerta abierta.
@@ -484,7 +516,12 @@ export function numerosPublicados(fuente) {
 export function publicadosSinCruzar(fuente) {
   const ls = limitesDelSitio(fuente ?? "");
   return numerosPublicados(fuente).filter((n) => {
-    if (n.clase === "constante") return !CONSTANTES_CRUZADAS.includes(n.valor);
+    if (n.clase === "constante") {
+      return (
+        !CONSTANTES_CRUZADAS.includes(n.valor) &&
+        !CONSTANTES_VERIFICADAS_APARTE.some((c) => c.valor === n.valor)
+      );
+    }
     const t = ls[n.plan] ?? {};
     if ([t.fichas, t.usuarios, t.recordatorios].some((v) => v === n.valor)) return false;
     return !TOPES_SIN_CRUCE.some((e) => e.plan === n.plan && e.valor === n.valor);

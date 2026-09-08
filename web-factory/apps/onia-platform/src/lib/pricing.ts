@@ -108,6 +108,61 @@ export const AGENDA_ADDON = {
   mensualAddon: 150,
 } as const;
 
+/**
+ * Capacidades que el plan enciende para TODOS y que el producto entrega solo a
+ * ALGUNOS RUBROS. La salvedad no es opcional: es la diferencia entre cobrar y
+ * cobrar de más.
+ *
+ * Medido el 2026-09-08 contra `origin/master` de `onia-platform`. `/reports` y
+ * `/billing/recurring` están encendidas por PLAN desde Pro para todo el mundo
+ * (`plan-catalogo.ts`: `reportsEnabled` / `recurringInvoicesEnabled`) y además
+ * por RUBRO: solo las declaran en su nav los packs clínicos, así que
+ * `allowedSegmentsForPack` no le da el segmento a comercio, importadora ni
+ * servicios profesionales —3 de los 5 rubros que el alta ofrece—. Con
+ * `PLATFORM_LAYER=1` (leído del contenedor vivo) el layout los devuelve a
+ * `/dashboard`, mudo: sin error, sin cartel, sin nada.
+ *
+ * Y esa línea es justo el gancho del salto de Bs 320 a Bs 750: estaba en el
+ * `incluye` del Pro y —de nuevo— en el `sinEsto` del Básico, así que a un
+ * comercio le cobraba el plan de arriba por dos pantallas a las que su rubro no
+ * llega, y de paso le decía que le faltaba algo que nunca iba a tener.
+ *
+ * POR QUÉ NINGÚN GATE LO VEÍA, que es lo que hace nueva a esta clase: no sobra
+ * ninguna palabra (invisible a `obra.test.ts` y `hueco-declarado.test.ts`), no
+ * promete gente nuestra (`promesa-humana.test.ts`), los montos salen de la
+ * fuente (`precios.test.ts`, `precios-fuente.mjs` en verde), la capacidad EXISTE
+ * de verdad en el producto y tiene su salvedad de PLAN, que es lo único que
+ * `capacidad-vs-precio.test.ts` mira. El eje que faltaba es (capacidad, RUBRO).
+ *
+ * El arreglo gemelo del PRODUCTO —`/settings/plan`, que listaba lo mismo plano—
+ * es `9c7031a` en `onia-platform`. Ahí se puede filtrar porque la pantalla sabe
+ * el rubro; acá la página es genérica, así que la salvedad se DICE. El alcance
+ * se lee de esta constante y nunca se tipea en el copy: dos copias del mismo
+ * hecho es como llegó a haber cuatro precios vivos del mismo chatbot.
+ *
+ * Lo vigila `app/(sitio)/capacidad-por-rubro.test.ts`, y el cruce contra el pack
+ * real del producto lo hace `scripts/capacidad-por-rubro.mjs` (alias
+ * `npm run capacidad:por-rubro`), que sale 2 = NO MEDIDO si no alcanza el repo
+ * hermano — un rubro nuevo que no llegue a estas pantallas lo caza ese script,
+ * no este dato.
+ */
+export const ALCANCE_POR_RUBRO = [
+  {
+    /** Cómo la nombra el copy de los planes. */
+    capacidad: "Reportes completos",
+    pantalla: "/reports",
+    rubros: ["Clínica dental", "Estética y spa"],
+  },
+  {
+    capacidad: "facturas recurrentes",
+    pantalla: "/billing/recurring",
+    rubros: ["Clínica dental", "Estética y spa"],
+  },
+] as const;
+
+/** Cómo se dice ese alcance en una línea de venta, derivado del dato de arriba. */
+export const ALCANCE_CLINICO = "solo en clínicas dentales y estética";
+
 export const USUARIO_EXTRA_ADDON = {
   nombre: "Usuario adicional",
   mensualAddon: 70,
@@ -138,7 +193,7 @@ export const PLANES: readonly Plan[] = [
     sinEsto: [
       "Agentes de IA (vienen desde Pro)",
       `Reservas online — se agrega como add-on a Bs ${bs(AGENDA_ADDON.mensualAddon)}/mes`,
-      "Reportes completos y facturas recurrentes",
+      `Reportes completos y facturas recurrentes (${ALCANCE_CLINICO})`,
     ],
     cuando: "Negocio de 1 o 2 personas que hoy trabaja con cuaderno o Excel.",
   },
@@ -160,7 +215,7 @@ export const PLANES: readonly Plan[] = [
       "Agente Recall: te propone a quién hace rato que no ves",
       "Agente Cobrador: te propone a quién reclamarle la deuda vencida",
       "Reservas online incluidas (link público para que te pidan cita)",
-      "Reportes completos y facturas recurrentes",
+      `Reportes completos y facturas recurrentes (${ALCANCE_CLINICO})`,
       "Contabilidad completa (RCV, balance y export) y planilla del mes",
     ],
     sinEsto: ["Nada del Básico se queda afuera: Pro es Básico más lo de arriba"],
