@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { PRUEBA } from "@/lib/pricing";
 import { Reveal } from "@/motion";
-import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
+import { WA_URL_LANDING, SITE_URL, CORREO_CONTACTO } from "@/lib/site";
 import { SIAT_ESTADO_ONIA } from "@/lib/siat";
 import { EMPEZAR_URL } from "../nav";
 import { CTA_ALTA } from "../alta";
@@ -86,7 +86,7 @@ const JSON_LD = {
         name: "Onia",
         legalName: "OniaAgency",
         url: `${SITE_URL}/`,
-        email: "business@onia.com.bo",
+        email: CORREO_CONTACTO,
         address: {
           "@type": "PostalAddress",
           addressLocality: "Santa Cruz de la Sierra",

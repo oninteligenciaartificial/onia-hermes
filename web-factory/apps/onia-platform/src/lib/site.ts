@@ -31,6 +31,20 @@ export const WA_PHONE =
   (process.env.NEXT_PUBLIC_WA_PHONE ?? "").replace(/\D/g, "") ||
   WA_PHONE_FALLBACK;
 
+/**
+ * Correo de contacto del negocio. Es el UNICO canal escrito del sitio y el que
+ * la politica de privacidad ofrece por obligacion legal ("solicitudes sobre
+ * datos personales"), asi que si queda viejo no es cosmetico: es la via de
+ * ejercicio de derechos apuntando a un buzon muerto.
+ *
+ * 2026-09-08: estaba tipeado a mano en CINCO superficies — el pie (visible en
+ * las 25 paginas), el JSON-LD de /nosotros (que ningun instrumento mira) y tres
+ * veces en el markdown legal. Como `content/legal/*.md` no puede importar TS,
+ * el markdown se ata por gate (`correo-de-contacto.test.ts`) en vez de por
+ * import: el dia que este valor cambie, los .md que no lo sigan salen en rojo.
+ */
+export const CORREO_CONTACTO = "business@onia.com.bo";
+
 export function waLink(text: string): string {
   return `https://wa.me/${WA_PHONE}?text=${encodeURIComponent(text)}`;
 }
