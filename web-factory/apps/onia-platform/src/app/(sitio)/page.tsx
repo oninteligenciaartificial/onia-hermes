@@ -14,9 +14,13 @@ import { HUECO_PARTIDO, FECHA_CONSULTA } from "@/lib/proof";
 import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
 import { EMPEZAR_URL } from "./nav";
 import { ALTA_VERBO_VOS, CTA_ALTA, ctaAltaPlan } from "./alta";
-import { Block, Shape, Btn, Kicker, JsonLd } from "./ui";
+import { FAQ } from "./faq-datos";
+import { Block, Shape, Btn, Kicker, JsonLd, PanelDibujado } from "./ui";
 import { Switcher } from "./switcher";
+import { NocheFoto } from "./noche";
+import { PreciosConCiclo } from "./precios-toggle";
 import s from "./sitio.module.css";
+import p from "./portada.module.css";
 
 /**
  * Portada del sitio (v3) — el ORDEN es el argumento (como Fanvue):
@@ -122,64 +126,6 @@ const ADDONS_RESTO = ADDONS.filter((addon) => addon.href !== "/chatbot");
  */
 const PCT_SALARIO = pctDelSalarioMinimo();
 
-/**
- * FAQ de la portada — respuestas con los números TRAÍDOS de las fuentes.
- *
- * El verbo del alta NO se escribe acá: sale de `./alta`. El 23-ago se barrió a
- * mano a "pedís tu acceso" (el alta estaba cerrada) y cuando el alta se reabrió
- * esta respuesta quedó atrás pidiendo permiso para entrar a un formulario que ya
- * crea la cuenta sola. La prueba de 14 días sin tarjeta es cierta en las dos
- * ramas y es lo que se promete.
- *
- * Las cuatro preguntas nuevas (carga de datos, aprender a usarlo, dejar de
- * pagar, rubro fuera de la lista) son las que frenan la compra. Ninguna
- * respuesta se redactó de cero — cada una cita su fuente en el repo.
- */
-const FAQ = [
-  {
-    q: "¿Necesito tarjeta para probar?",
-    a: `No. La prueba de ${PRUEBA.dias} días no pide tarjeta ni pago: ${ALTA_VERBO_VOS}, elegís tu rubro y usás el sistema completo esos ${PRUEBA.dias} días.`,
-  },
-  {
-    // lib/pricing.ts:283 (CONDICIONES) + (sitio)/empezar/page.tsx (paso 02).
-    // La pregunta es "¿los cargo yo?" y la respuesta vieja no la contestaba:
-    // decía "alguien que te la explica" y seguía de largo. Se contesta que sí,
-    // con la herramienta que existe de verdad (app/api/patients/import y
-    // app/api/comercio/products/import: CSV con asistente de columnas).
-    q: "¿Los datos del Excel o del cuaderno los cargo yo?",
-    a: "Sí, los cargás vos, y no a mano uno por uno: hay importación por CSV con un asistente que te va diciendo qué columna es cada cosa. No arrancás con la pantalla vacía — la cuenta llega con la configuración de tu rubro puesta. En los tres planes no cobramos implementación ni migración: el checkout cobra solo el plan. Grupo / Empresarial sí lleva implementación acompañada y se cotiza aparte.",
-  },
-  {
-    // Acá decía "alguien que te la explica", y ese alguien no existe: el alta es
-    // automática y no avisa a nadie que te llame. Lo cierto es el asistente de
-    // puesta en marcha del producto y el WhatsApp, que sí contesta.
-    q: "¿Y si no sé de computación? ¿Quién me enseña?",
-    a: "Nadie instala nada ni arranca un proyecto de meses: la cuenta llega con la configuración de tu rubro puesta y el sistema te lleva paso a paso por la puesta en marcha. Si te trabás después, escribinos por WhatsApp.",
-  },
-  {
-    // content/legal/terminos.md:83 (sin permanencia) y §3.4 (mora: gracia →
-    // suspensión con datos intactos, nunca borrado inmediato) + pricing.ts:284.
-    q: "¿Y si dejo de pagar, pierdo todo?",
-    a: "No. No hay contrato de permanencia: podés no renovar, sin penalidad. Si un pago no entra, primero hay un período de gracia con el servicio activo y avisos; después el acceso se suspende, pero tus datos se conservan intactos — la suspensión nunca implica borrarlos. Y los exportás en CSV desde el plan más chico.",
-  },
-  {
-    // (sitio)/rubros/page.tsx:78-80 y (sitio)/contacto/page.tsx:118-121.
-    q: "¿Sirve para mi rubro si no está en la lista?",
-    a: "Onia no es un software distinto por industria: es el mismo núcleo con módulos y vocabulario propios. Hoy la cuenta se arma sola para los cinco rubros que ves en Rubros. ¿El tuyo es otro? Escribinos por WhatsApp y lo vemos con tu caso.",
-  },
-  {
-    q: "¿La factura al SIN ya funciona?",
-    a: "Nuestro emisor está registrado ante el SIN y la homologación está en trámite. Mientras tanto cada venta queda lista y facturás en el Portal Web del SIN, gratis y legal. Te avisamos apenas concluya. Está contado entero, con las resoluciones y las fechas, en la página de facturación.",
-  },
-  {
-    q: "¿El chatbot de WhatsApp está incluido?",
-    a: `No: es un servicio aparte, ${precioStack(CHATBOT_PLAN)}. El botón de WhatsApp de tu web sí va gratis.`,
-  },
-  {
-    q: "¿Mis datos son míos?",
-    a: "Sí. Los exportás en CSV cuando quieras, en cualquier plan pago. No vendemos datos ni entrenamos modelos con ellos.",
-  },
-];
 
 /**
  * "Un día con Onia" — las tres escenas que acompañan al manifiesto.
@@ -359,182 +305,154 @@ function Lane({
   );
 }
 
+/** Lo que el sistema hace hoy. Cada línea se puede comprobar entrando. */
+const HECHOS = [
+  {
+    que: "Agenda, fichas, caja y cobros",
+    como: "En una sola pantalla, no en cuatro programas que no se hablan.",
+  },
+  {
+    que: "Inventario que avisa",
+    como: "Existencias, costo y proveedor, con aviso cuando algo baja del mínimo.",
+  },
+  {
+    que: "Contesta tu WhatsApp",
+    como: CHATBOT_PLAN.resuelve,
+  },
+  {
+    que: "Tus datos son tuyos",
+    como: "Los exportás en CSV cuando quieras. Sin permanencia y sin pedir permiso.",
+  },
+] as const;
+
+/** Las tres capacidades con peso de producto, cada una con su panel dibujado. */
+const CAPACIDADES = [
+  {
+    panel: "cuenta" as const,
+    nombre: "El día entero, en una pantalla",
+    texto:
+      "Lo que entró, lo que falta cobrar y lo que viene después. No hay que abrir un reporte para saber cómo va el negocio: es lo primero que ves al entrar.",
+  },
+  {
+    panel: "chat" as const,
+    nombre: "Los mensajes no se pierden",
+    texto:
+      "Lo que llega por WhatsApp entra al mismo lugar que el resto. El que atiende ve la ficha del cliente mientras le contesta, sin cambiar de app.",
+  },
+  {
+    panel: "agentes" as const,
+    nombre: "Trabajan de noche, no deciden solos",
+    texto:
+      "Los agentes preparan el mensaje, detectan al cliente que no volvió y arman el seguimiento. Vos aprobás. Nada sale sin que lo mires.",
+  },
+] as const;
+
 export default function Portada() {
   return (
     <>
       <JsonLd data={JSON_LD} />
-      {/* 1 · HERO — la OFERTA: el sistema de gestión, y qué cuesta.
 
-          El esqueleto (dos columnas de TEXTO, cero captura) es el que Sergio
-          aprobó el 2026-09-01. Lo que cambió el 2026-09-04 es QUÉ vende, y por
-          qué: el hero anterior vendía el add-on.
-
-          Kicker "Un negocio abre 9 horas", la banda del día partida en 9/15 —la
-          pieza más grande de la primera pantalla— y el cierre "El asistente es
-          la puerta": las tres cosas son la escena del ASISTENTE (Bs 390, add-on
-          de lib/pricing.ts). El sistema, que es lo que se vende, quedaba de
-          relleno y sin precio. Sergio, 2026-09-03, textual: "el sistema no
-          ofrece directamente el bot, ofrece solo el sistema… la referencia es
-          Lety y Dapta, mirá cómo venden". CLAUDE.md §3 lo fija como regla.
-
-          Entonces:
-           · el titular es el sistema y el beneficio (todo junto en un lugar),
-             no la hora a la que contesta el bot;
-           · el precio de entrada sube a la primera pantalla, INTERPOLADO de
-             lib/pricing.ts. Antes no podía estar —la escena del bot no la
-             compra el plan de Bs 320— y con el hero nuevo sí: lo que promete
-             esta pantalla es exactamente lo que trae el plan;
-           · la banda del día baja a la sección 6, al lado del add-on que la
-             hace. No se pierde el argumento: deja de ser el titular.
-
-          Lo que NO cambió: cero imagen (Sergio, 2026-09-01: "no coloques
-          capturas literales del sistema… coloca cosas referenciales") y cero
-          prueba social — no hay clientes pagando. Lo vigila `hero.test.ts`. */}
-      <Block surface="paper" className={s.heroBlock}>
+      {/* 1 · HERO ────────────────────────────────────────────
+          La referencia hace que el título SEA la página hasta que scrolleás.
+          El texto es el aprobado el 1-sep; lo que cambia es la composición:
+          de dos columnas a centrado, con «una» en el acento. */}
+      <Block surface="green" className={p.heroVerde}>
+        {/* Los halos de Hostinger. Van acá y no en el CSS del Block porque son
+            de ESTA pieza: el resto del sitio sigue siendo papel. */}
+        <span className={`${p.halo} ${p.haloA}`} aria-hidden="true" />
+        <span className={`${p.halo} ${p.haloB}`} aria-hidden="true" />
         <Reveal>
-          <div className={`${s.split} ${s.heroTop}`}>
-            <div>
-              <Kicker>Un solo sistema para todo el negocio</Kicker>
-              <h1 className={s.display}>
-                Todo el negocio,
-                <br />
-                en <em>una</em> pantalla.
-              </h1>
+          <div className={p.centro}>
+            <Kicker>Un solo sistema para todo el negocio</Kicker>
+            <h1 className={p.heroTitulo}>
+              Todo el negocio, en <em>una</em> pantalla.
+            </h1>
+            <p className={p.heroLead}>
+              Onia es el sistema con el que llevás tu negocio: agenda, clientes, caja,
+              inventario y cobros, con agentes que trabajan de noche y te dejan las
+              decisiones a vos.
+            </p>
+            <div className={p.heroCtas}>
+              <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
+              <Btn href={WA_URL_LANDING} variant="line" external>
+                Preguntar por WhatsApp
+              </Btn>
             </div>
-            <div>
-              <p className={s.lead}>
-                <b>Onia es el sistema con el que llevás tu negocio.</b> Agenda,
-                fichas de clientes, caja, cobros e inventario en un solo lugar,
-                y ya armado para tu rubro el día que entrás.
-              </p>
-              <p className={s.cost}>
-                Hoy la agenda está en un cuaderno, los clientes en el teléfono y
-                las cuentas en una planilla. <b>Nada se cruza</b>, y lo que no
-                se cruza se pierde.
-              </p>
-              <div className={s.actions}>
-                {/* El verbo tiene que ser el del destino, y el destino cambia:
-                    por eso sale de `./alta` y no se escribe acá. Prometer un
-                    botón que el producto no cumple —en cualquiera de los dos
-                    sentidos— pierde al lead en el último clic. */}
-                <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
-                <Btn href={WA_URL_LANDING} variant="line" external>
-                  Escribinos por WhatsApp
-                </Btn>
+            <p className={p.heroNota}>
+              {PRUEBA.dias} días de prueba con el plan {PRUEBA.planQueCorre}, sin tarjeta.
+              Después, desde Bs {bs(plan("basico").mensual)} al mes.
+            </p>
+
+            {/* La escena que la referencia arma con mockups de su app. Acá va
+                el panel DIBUJADO — nunca una captura del sistema. */}
+            <div className={p.escena}>
+              <div className={p.escenaPanel}>
+                <PanelDibujado panel="cuenta" />
               </div>
-              {/* El número sale de la fuente, jamás tipeado: es el mismo que
-                  cobra el checkout. Lo vigilan `precios.test.ts` (prohíbe el
-                  literal) y `hero.test.ts` (exige que acá esté). */}
-              <p className={s.desde}>
-                Desde <b>Bs {bs(plan("basico").mensual)} al mes</b>.{" "}
-                <em>{PRUEBA.dias} días gratis</em>, sin tarjeta.
-              </p>
-            </div>
-          </div>
-        </Reveal>
-
-        {/* pendiente: prueba real (cero clientes pagando ⇒ ni logos ni
-            testimonios; los hechos verificables van en la banda de abajo) */}
-      </Block>
-
-      {/* 2 · BANDA DE PRUEBA — solo hechos verificables, cero logos/testimonios */}
-      <Block surface="paperDim">
-        <Reveal>
-          <div className={s.trust}>
-            <div className={s.trustCell}>
-              <div className={s.trustNum}>5</div>
-              <p className={s.trustLabel}>rubros vivos en producción hoy</p>
-            </div>
-            {/* «Cada día» y no «24/7»: a los agentes los despierta un cron del
-                host UNA vez por día (`0 11 * * * run-onia-agents-cron.sh`, que
-                el propio crontab del VPS rotula «Corrida diaria agentes»).
-                Poner 24/7 acá exageraba 24 veces algo que se cobra —y en la
-                banda que promete hechos verificables—, contra lo que la propia
-                /agentes ya dice bien: «Corre cada 24 horas». Lo vigila
-                `cadencia-prometida.test.ts`. */}
-            <div className={s.trustCell}>
-              <div className={s.trustNum}>Cada día</div>
-              {/* «desde Pro» y no a secas: esta celda cae 147 caracteres
-                  DEBAJO del «Desde Bs 320 al mes» del hero, y el Básico —el
-                  plan que cuesta esos 320— no trae agentes (`PLANES[0].sinEsto`
-                  dice «Agentes de IA (vienen desde Pro)»). En una banda que
-                  promete hechos verificables, callar el plan es la forma más
-                  cara de decirlo: el lead paga y se le apagan. Lo vigila
-                  `capacidad-vs-precio.test.ts`. */}
-              <p className={s.trustLabel}>
-                agentes que revisan y esperan tu aprobación, desde {plan("pro").nombre}
-              </p>
-            </div>
-            <div className={s.trustCell}>
-              <div className={s.trustNum}>{PRUEBA.dias} días</div>
-              <p className={s.trustLabel}>de prueba, sin tarjeta</p>
-            </div>
-            <div className={s.trustCell}>
-              <div className={s.trustNum}>CSV</div>
-              <p className={s.trustLabel}>tus datos salen cuando quieras</p>
+              <span className={`${p.nodo} ${p.nodoA}`} aria-hidden="true">
+                ✓
+              </span>
+              <span className={`${p.nodo} ${p.nodoB}`} aria-hidden="true">
+                Bs
+              </span>
+              <span className={`${p.nodo} ${p.nodoC}`} aria-hidden="true">
+                ◷
+              </span>
             </div>
           </div>
         </Reveal>
       </Block>
 
-      {/* 3 · HECHO FUERTE — el hueco de mercado, sourced (proof.ts).
-          Va HUECO_PARTIDO y no HUECO: acá no entra la tabla, y sin la tabla la
-          forma larga nombra la factura SIAT —que tenemos en trámite— justo
-          antes de "Onia unifica…", así que promete que facturamos. Lo sostiene
-          promesa-en-el-cuerpo.test.ts; la forma larga vive en /comparativa. */}
-      <Block surface="green" labelledBy="hecho">
+      {/* 2 · LO QUE HACE (reemplaza «Our Journey in Numbers») ─────────
+          Fincash llena esta franja con métricas de tracción. Nosotros no
+          tenemos clientes pagando, así que no hay número honesto que poner:
+          va lo que el sistema hace, que se comprueba entrando. */}
+      <Block surface="paperDim" labelledBy="v4-hace">
         <Reveal>
-          <Kicker>El hueco</Kicker>
-          <p id="hecho" className={s.h2} style={{ maxWidth: "22ch" }}>
-            {HUECO_PARTIDO}
-          </p>
-          <p className={s.body} style={{ fontSize: "1.15em" }}>
-            Onia unifica la gestión y los agentes con IA en un solo sistema,
-            hecho para Bolivia.
-          </p>
-          <p className={s.note} style={{ marginTop: "1.6em" }}>
-            Comparación de precios y capacidades publicadas por la competencia,
-            consultadas el {FECHA_CONSULTA}.
-          </p>
-          <div className={s.actions}>
-            <a className={s.link} href="/comparativa">
-              Ver la comparación, con nombres y precios →
-            </a>
+          <div className={p.centro}>
+            <Kicker>Lo que hace, hoy</Kicker>
+            <h2 id="v4-hace" className={s.h2}>
+              No es una promesa: es lo que vas a encontrar adentro.
+            </h2>
+          </div>
+        </Reveal>
+        <Reveal delay={0.06}>
+          <div className={p.hechos}>
+            {HECHOS.map((h) => (
+              <div className={p.hecho} key={h.que}>
+                <p className={p.hechoQue}>{h.que}</p>
+                <p className={p.hechoComo}>{h.como}</p>
+              </div>
+            ))}
           </div>
         </Reveal>
       </Block>
 
-      {/* 4 · UN DÍA CON ONIA — el manifiesto deja de estar suspendido: la
-          frase que dice QUÉ ES queda arriba, y debajo van tres momentos del
-          día que muestran QUÉ PASA. Fotos de contexto (ver DIA, arriba); la
-          interfaz se DIBUJA y vive en los otros bloques. */}
-      <Block surface="paper" labelledBy="que-es">
+      {/* 3 · LA NOCHE (variante A, con foto) ── ver /v4/noche */}
+      <NocheFoto />
+
+      {/* 4 · CAPACIDADES EN TARJETAS GRANDES ──────────────────────────
+          El patrón de features de la referencia: una idea por tarjeta, con su
+          dibujo arriba, en vez de una lista de bullets. */}
+      <Block surface="paper" labelledBy="v4-capacidades">
         <Reveal>
-          <Kicker>Un día con Onia</Kicker>
-          <p id="que-es" className={s.h2} style={{ maxWidth: "24ch" }}>
-            Onia es un solo sistema de gestión con IA: agenda, clientes, cobros
-            y contabilidad, con agentes que esperan tu aprobación.
-          </p>
+          <div className={p.centro}>
+            <Kicker>Adentro</Kicker>
+            <h2 id="v4-capacidades" className={s.h2}>
+              Tres cosas que vas a usar todos los días.
+            </h2>
+          </div>
         </Reveal>
-        <Reveal delay={0.08}>
-          <div className={s.scenes}>
-            {DIA.map((escena) => (
-              <div key={escena.id}>
-                <div className={s.foto}>
-                  {/* eslint-disable-next-line @next/next/no-img-element -- standalone sin sharp: next/image no optimiza en el VPS */}
-                  <img
-                    src={`/contexto/${escena.id}.webp`}
-                    alt={escena.alt}
-                    width={FOTO_DIA.w}
-                    height={FOTO_DIA.h}
-                    loading="lazy"
-                    decoding="async"
-                    className={s.fotoImg}
-                  />
+        <Reveal delay={0.06}>
+          <div className={p.capacidades}>
+            {CAPACIDADES.map((c) => (
+              <article className={p.capacidad} key={c.panel}>
+                <div className={p.capacidadArte}>
+                  <PanelDibujado panel={c.panel} />
                 </div>
-                <p className={s.sceneHora}>{escena.momento}</p>
-                <p className={s.sceneTexto}>{escena.texto}</p>
-              </div>
+                <h3 className={p.capacidadNombre}>{c.nombre}</h3>
+                <p className={p.capacidadTexto}>{c.texto}</p>
+              </article>
             ))}
           </div>
         </Reveal>
@@ -680,90 +598,43 @@ export default function Portada() {
         </Reveal>
       </Block>
 
-      {/* 7 · SWITCHER DE RUBROS — la sección estrella */}
-      <Block surface="paper" labelledBy="rubros">
+      {/* 7 · RUBROS ───────────────────────────────────────────────────
+          Esto NO está en la referencia y es lo que más nos separa de ella:
+          el mismo núcleo cambia de vocabulario según el rubro. Se queda. */}
+      <Block surface="paperDim" labelledBy="v4-rubros">
         <Reveal>
-          <Kicker>Un solo sistema</Kicker>
-          <h2 id="rubros" className={s.h2}>
-            Elegís tu rubro y la cuenta ya viene armada.
-          </h2>
-          <p className={s.lead}>
-            No es un software distinto por industria: es el mismo núcleo con
-            módulos y vocabulario propios. Un dentista ve pacientes; una
-            ferretería ve productos y fiados.
-          </p>
-        </Reveal>
-        <Switcher />
-        <Reveal>
-          <p className={s.note}>Cinco rubros vivos y vendibles hoy.</p>
-          <div className={s.actions}>
-            <a className={s.link} href="/rubros">
-              Ver los rubros por dentro →
-            </a>
+          <div className={p.centro}>
+            <Kicker>Un solo sistema</Kicker>
+            <h2 id="v4-rubros" className={s.h2}>
+              Elegís tu rubro y la cuenta ya viene armada.
+            </h2>
+            <p className={p.heroLead}>
+              No es un software distinto por industria: es el mismo núcleo con módulos y
+              vocabulario propios. Un dentista ve pacientes; una ferretería ve productos y
+              fiados.
+            </p>
           </div>
         </Reveal>
+        <Switcher />
       </Block>
 
-      {/* 8 · PRECIOS — resumen (fuente: lib/pricing.ts) → apartado */}
-      <Block surface="paperDim" labelledBy="precios">
+      {/* 8 · PRECIOS EN LA LANDING ────────────────────────────────────
+          Lo mejor que tiene la referencia y que nosotros mandábamos a otra
+          página: el precio en el camino de lectura, con el ahorro anual a la
+          vista y un plan destacado. */}
+      <Block surface="paper" labelledBy="v4-precios">
         <Reveal>
-          <Kicker>Precios claros</Kicker>
-          <h2 id="precios" className={s.h2}>
-            Tres pasos. Sin implementación, sin permanencia.
-          </h2>
+          <div className={p.centro}>
+            <Kicker>Precios claros</Kicker>
+            <h2 id="v4-precios" className={s.h2}>
+              Tres pasos. Sin implementación, sin permanencia.
+            </h2>
+            <p className={p.heroLead}>{PRUEBA.copy}</p>
+          </div>
         </Reveal>
-        <Reveal>
-          <div className={s.plans}>
-            {PLANES.map((plan) => (
-              <div
-                key={plan.id}
-                className={`${s.plan} ${plan.destacado ? s.planStar : ""}`}
-              >
-                <span className={s.planStep}>
-                  {plan.paso} · {plan.salto}
-                </span>
-                <h3 className={s.planName}>{plan.nombre}</h3>
-                <div className={s.planPrice}>
-                  <span className={s.planNum}>{bs(plan.mensual)}</span>
-                  <span className={s.planUnit}>Bs / mes</span>
-                </div>
-                <p className={s.planResult}>{plan.resultado}</p>
-                <ul className={s.planList}>
-                  {plan.incluye.slice(0, 4).map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-                {/* Lo que el nivel NO trae, dicho acá y no en la letra chica
-                    (lib/pricing.ts:65 lo define y hasta hoy solo lo renderizaba
-                    la landing vieja /v1). No es una advertencia: es lo que hace
-                    entender por qué existe el escalón de arriba. Por eso va
-                    debajo, más chico y más apagado que `incluye` — mismo
-                    componente de lista, jerarquía menor. */}
-                <p className={s.planStep} style={{ marginTop: "1.1em" }}>
-                  Qué no lleva
-                </p>
-                {/* opacity 0.85 y no menos: .planList ya viene a 82% de
-                    currentColor, así que esto queda en ~70% efectivo — por
-                    encima del 62% que .planStep midió en 4,95:1. Bajar a 0.7
-                    daría ~57% y caería del 4,5:1. La jerarquía la hace el
-                    tamaño, no apagar el texto hasta que no se lea. */}
-                <ul
-                  className={s.planList}
-                  style={{
-                    marginTop: "0.35em",
-                    fontSize: "0.86em",
-                    opacity: 0.85,
-                  }}
-                >
-                  {plan.sinEsto.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-                <div className={s.planFoot}>
-                  <Btn href={EMPEZAR_URL}>{ctaAltaPlan(plan.nombre)}</Btn>
-                </div>
-              </div>
-            ))}
+        <Reveal delay={0.06}>
+          <div className={p.centro}>
+            <PreciosConCiclo />
           </div>
         </Reveal>
       </Block>
@@ -877,13 +748,21 @@ export default function Portada() {
         </Reveal>
       </Block>
 
-      {/* 10 · FAQ — objeciones reales, respuestas honestas */}
-      <Block surface="paperDim" labelledBy="faq">
+      {/* 10 · FAQ ──────────────────────────────────────────────────────
+          Las mismas ocho preguntas de la home, leidas de `faq-datos.ts`: son
+          las que frenan la compra y cada respuesta cita su fuente en el repo.
+          No se reescriben acá — una segunda lista con cifras se desincroniza
+          en la primera edicion. */}
+      <Block surface="paperDim" labelledBy="v4-faq">
         <Reveal>
-          <Kicker>Preguntas frecuentes</Kicker>
-          <h2 id="faq" className={s.h2}>
-            Lo que preguntan antes de empezar.
-          </h2>
+          <div className={p.centro}>
+            <Kicker>Antes de empezar</Kicker>
+            <h2 id="v4-faq" className={s.h2}>
+              Lo que preguntan antes de empezar.
+            </h2>
+          </div>
+        </Reveal>
+        <Reveal delay={0.06}>
           <div className={s.faq}>
             {FAQ.map((item) => (
               <details key={item.q} className={s.faqItem}>
@@ -895,22 +774,20 @@ export default function Portada() {
         </Reveal>
       </Block>
 
-      {/* 11 · CIERRE — una frase + el mismo CTA, en verde señal (texto oscuro) */}
-      <Block surface="signal" labelledBy="cierre">
+      {/* 11 · CIERRE ───────────────────────────────────────────────────
+          El mismo CTA del hero, tercera y última vez. */}
+      <Block surface="ink" labelledBy="v4-cierre">
         <Reveal>
-          <h2 id="cierre" className={s.display} style={{ maxWidth: "18ch" }}>
-            Probá Onia {PRUEBA.dias} días. Sin tarjeta.
-          </h2>
-          <div className={s.actions}>
-            <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
-            <Btn href={WA_URL_LANDING} variant="line" external>
-              Hablar por WhatsApp
-            </Btn>
-          </div>
-          <div className={s.actions} style={{ marginTop: "1.2em" }}>
-            <a className={s.link} href="/contacto">
-              O agendá una demo con horario →
-            </a>
+          <div className={p.centro}>
+            <h2 id="v4-cierre" className={s.display} style={{ maxWidth: "18ch" }}>
+              {ALTA_VERBO_VOS} hoy y probalo con tu propio negocio.
+            </h2>
+            <div className={p.heroCtas}>
+              <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
+              <Btn href={WA_URL_LANDING} variant="line" external>
+                Preguntar por WhatsApp
+              </Btn>
+            </div>
           </div>
         </Reveal>
       </Block>
