@@ -2168,6 +2168,37 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] **CERRADO el 2026-09-08: el cupo de WhatsApp cortaba MUDO — el dueño paga el add-on y se
+      quedaba sin canal sin enterarse.** Arreglado en `7756295` (`onia-platform`), rama
+      `claude/chatbots-platform-review-0d1d09`. ⚠️ **Commiteado, NO desplegado**: viaja con el
+      pedido de deploy de `plataforma`.
+
+      El cron de recordatorios (`app/api/cron/appointment-reminders/route.ts`) tiene **dos**
+      cupos hermanos. El de **correo** avisa al dueño al cruzar el 80 % y el 100 %
+      (`contarEmail` → notificación in-app `EMAIL_QUOTA_WARNING`, con su test desde siempre).
+      El de **WhatsApp** cortaba en silencio: `contarWhatsapp` sólo incrementaba el contador.
+
+      **Qué le pasaba al cliente.** El límite operativo son **200 mensajes/mes**
+      (`WHATSAPP_ADDON_MONTHLY_LIMIT` ← `pricing.ts:52`), y cada cita gasta **dos** (recordatorio
+      de 24 h + el de 2 h): **100 citas al mes lo agotan**. Al agotarse, los pacientes **con**
+      correo caen a correo — otro canal, sin decirle al dueño que el que **paga** dejó de usarse —
+      y los que **no** tienen correo (`!apt.patient.email` → `return "omitido"`) **no reciben
+      nada**. Nadie se entera de ninguna de las dos cosas.
+
+      **Por qué ningún gate podía verlo:** no sobra ni falta una palabra, no es un rubro, la
+      pantalla renderiza bien, y **el corte por cupo ya estaba probado y en verde** («el cupo
+      mensual de WhatsApp sube DENTRO de la corrida»). Lo que faltaba no era el corte: era el
+      **aviso**. Y el mismo cron ya sabe avisar por este canal (`WHATSAPP_FAILED`), así que el
+      hueco era exactamente esa mitad de la familia — cerrar una mitad hace dar la otra por
+      cubierta.
+
+      **Prueba.** Tres casos nuevos en `route.test.ts`, en ROJO antes del arreglo por el motivo
+      correcto (`expected [] to have a length of 1`). Validado **por mutación en 4 direcciones,
+      las 4 en rojo**: arrancar el aviso del 100 %; arrancar el del 80 %; **avisar SIEMPRE** sin
+      esperar el cruce (esquive — lo ataja el caso «lejos del techo no molesta»); y avisar con el
+      **tipo de su hermano de correo** (esquive). Gates: `tsc` 0 · `vitest` **4176 verdes** ·
+      `eslint` 0.
+
 - [x] 🔴 **CERRADO el 2026-09-08: el botón decía «Enviar» y el sistema no mandaba la cotización
       a nadie.** Arreglado en `9208d5c` (`onia-platform`), rama `claude/chatbots-platform-review-0d1d09`.
 
