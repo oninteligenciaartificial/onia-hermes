@@ -1335,6 +1335,50 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] 🔴 **CERRADO el 2026-09-07: el dueño ponía la fecha límite del 9 y su cliente leía el 8.**
+      Commit `9ad61aa` (rama `claude/chatbots-platform-review-0d1d09`), **NO desplegado** —
+      viaja con el pedido de deploy de `plataforma`.
+
+      **El defecto.** Un `<input type="date">` devuelve `"2026-09-09"`: un día del calendario,
+      sin hora y sin zona. `new Date("2026-09-09")` lo vuelve **medianoche UTC**, que en La Paz
+      (UTC-4) son las 20:00 del día ANTERIOR. Medido corriendo la cadena real:
+      `new Date("2026-09-09").toISOString()` → `2026-09-09T00:00:00.000Z` →
+      `toLocaleDateString("es-BO")` en La Paz → **`8/9/2026`**. Dos superficies lo mostraban:
+      el panel de requerimientos y —peor— el **portal público**, que es donde lo lee el cliente
+      del cliente, sin cuenta. Y no era sólo texto: en `recurring-invoices` de `startDate` sale
+      `computeNextRunAt`, o sea el día real en que se EMITE la factura.
+
+      **Por qué sobrevivió, que es lo único que vale recordar.** La clase ya se había arreglado
+      **dos veces** —`invoices.dueDate` y `payments.paidAt`— y el comentario de
+      `app/api/invoices/route.ts` la deja escrita con nombre y apellido: *«se guarda al mediodía
+      del negocio, no a medianoche UTC (que en La Paz se lee como el día anterior)»*. Las dos
+      veces se arregló la **instancia**. Sin gate, la pantalla siguiente nace rota — y nacieron
+      dos. Ningún gate podía verlo: no sobra ninguna palabra, el texto ya está en el idioma del
+      rubro, la captura se ve perfecta y la fecha es un dato REAL. El gate hermano
+      (`lib/platform/fecha-en-zona-del-negocio.test.ts`) exige `timeZone` al **formatear** — y
+      `formatDate` la pasa — así que **certificaba este defecto como correcto**: lo que estaba
+      mal no era el formateo sino el instante guardado.
+
+      **Qué entra.** El instante lo arma el servidor con `fechaSoloAInstante(campo, timezone)`
+      (mediodía del negocio), que es el único que sabe la zona; el panel manda el día tal cual
+      y ya no convierte en el navegador. Panel y portal muestran con `formatDate`, que fija la
+      zona del negocio. Y `lib/fechas-de-calendario.test.ts`, gate de cobertura con el sujeto
+      derivado del **disco**.
+
+      ⚠️ **El gate se escribió mal la primera vez y lo delató él mismo.** Con
+      `new Date(<campo>)` de sujeto —o sea, con la FORMA DEL DEFECTO— arreglar un campo lo borra
+      del disco y su declaración queda huérfana: el gate dejaba de cuidarlo justo después de
+      arreglarlo y no podía ver la vuelta atrás. Es la trampa de «medir la precondición del bug»
+      que ya está anotada, encontrada en vivo. Corregido: el sujeto es **todo campo del pedido
+      convertido a `Date`, por cualquiera de las dos vías**, así un campo arreglado sigue
+      vigilado. De paso quedaron cubiertas las tres instancias viejas (`invoices.dueDate`,
+      `patients.dob` ×2), que hasta hoy podían revertirse sin que nada se pusiera rojo.
+
+      **Validado por mutación**, no por que pase: revertir el arreglo, agregar una fecha nueva
+      sin declarar y dejar una declaración huérfana ponen rojo, cada una nombrando su sujeto.
+      Gates en `/root/loops/onia-platform-chatbot`: `tsc` 0, `vitest` 0 (3.588 pasados),
+      `eslint` 0 errores.
+
 - [x] 🔴 **CERRADO el 2026-09-07: la quinta pantalla de la ficha decía «pacientes» a una
       estética y a un estudio contable, y la ayuda mandaba al estudio a cargar sus clientes
       en el catálogo de servicios.** Commit `90b2a47` (rama `claude/chatbots-platform-review-0d1d09`),
