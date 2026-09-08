@@ -1,0 +1,115 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>intro overlay</title>
+<!--
+  Capa de gráficos de la intro (1920x1080, fondo TRANSPARENTE).
+  Hereda el sistema del deck grabado (yt-claude-vs-claude-code/deck.html): mismas fuentes,
+  mismo tracking, mismo terracota. Paleta base Onia; terracota SOLO en las dos tarjetas.
+  El tiempo entra por ?t=<segundos>: un frame por llamada. Determinista, sin Date.now.
+-->
+<style>
+:root{
+  --ink:#12100E; --muted:#6E6E73; --hair:#D2D2D7;
+  --claude:#D97757; --tile:#EDE7D8; --term:#1D1D1F; --term-tx:#F0EDE6;
+  --onia:#00D26A;
+  --tr:-0.032em;
+}
+@font-face{font-family:'Inter';src:url('fonts/Inter-var-latin.woff2')format('woff2');font-weight:100 900;font-display:block}
+@font-face{font-family:'Spline Sans Mono';src:url('fonts/SplineSansMono-var-latin.woff2')format('woff2');font-weight:300 700;font-display:block}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;background:transparent;overflow:hidden}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--ink)}
+.capa{position:absolute;inset:0}
+
+/* ---- tarjetas: van donde apunta el dedo ---- */
+.card{position:absolute;display:flex;flex-direction:column;align-items:center;gap:22px;
+      opacity:0;will-change:transform,opacity}
+.card .rot{filter:drop-shadow(0 26px 46px rgba(0,0,0,.28))}
+.tile{width:260px;height:260px;border-radius:23%;background:var(--tile);overflow:hidden}
+.tile img{width:100%;height:100%;display:block}
+.term{width:300px;height:212px;border-radius:22px;background:var(--term);overflow:hidden}
+.term .barra{height:46px;display:flex;align-items:center;gap:10px;padding:0 20px;
+             border-bottom:1px solid rgba(255,255,255,.1)}
+.term .barra i{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.22)}
+.term pre{font-family:'Spline Sans Mono',monospace;font-size:30px;line-height:1.5;
+          padding:22px 26px 0;color:var(--term-tx);white-space:pre}
+.term .p{color:var(--claude);font-weight:700}
+.caret{display:inline-block;width:18px;height:30px;vertical-align:-4px;background:var(--term-tx)}
+.card b{font-size:44px;font-weight:700;letter-spacing:var(--tr);color:var(--ink);
+        text-shadow:0 2px 18px rgba(245,241,232,.9),0 0 40px rgba(245,241,232,.75)}
+
+/* ---- título: pasa por DETRÁS (el matte de la persona se compone encima) ---- */
+#titulo{position:absolute;left:96px;top:186px;text-align:left;opacity:0}
+#titulo .eyebrow{font-family:'Spline Sans Mono',monospace;font-size:26px;font-weight:500;
+                 letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
+                 margin-bottom:26px}
+#titulo h1{font-size:128px;font-weight:700;letter-spacing:var(--tr);line-height:1.0;
+           white-space:nowrap;
+           text-shadow:0 2px 30px rgba(245,241,232,.55),0 0 70px rgba(245,241,232,.45)}
+#titulo .vs{color:var(--onia)}
+#titulo .linea{height:4px;background:var(--onia);margin:30px 0 0;width:0}
+</style>
+
+<div class="capa">
+  <!-- Claude Code: a la IZQUIERDA del espectador (adonde apunta al decirlo) -->
+  <div class="card" id="code" style="left:250px;top:150px;width:400px">
+    <div class="rot"><div class="term">
+      <div class="barra"><i></i><i></i><i></i></div>
+      <pre><span class="p">&gt;</span> <span class="caret"></span></pre>
+    </div></div>
+    <b>Claude Code</b>
+  </div>
+
+  <!-- Claude: a la DERECHA del espectador -->
+  <div class="card" id="claude" style="left:1270px;top:170px;width:400px">
+    <div class="rot"><div class="tile"><img src="claude.png" alt=""></div></div>
+    <b>Claude</b>
+  </div>
+
+  <div id="titulo">
+    <h1>Claude <span class="vs">vs</span><br>Claude Code</h1>
+    <div class="linea"></div>
+  </div>
+</div>
+
+<script>
+// t = segundo del clip YA cortado. Un frame por carga: determinista.
+const t = parseFloat(new URLSearchParams(location.search).get('t') || '0');
+const only = new URLSearchParams(location.search).get("only") || "todo";
+// capas separadas: las tarjetas van ENCIMA de la persona, el titulo va DETRAS
+// (el matte de la persona se compone entre medio). Un render por capa.
+if (only === "cards")  document.getElementById("titulo").style.display = "none";
+if (only === "titulo") { document.getElementById("claude").style.display = "none";
+                         document.getElementById("code").style.display = "none"; }
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const outExpo=x=>x>=1?1:1-Math.pow(2,-9*x);          // frenada Apple
+const inOut=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+// rampa 0->1 entre a y b
+const ramp=(a,b)=>clamp((t-a)/(b-a),0,1);
+
+// --- tarjetas: entran con el gesto, se van antes del título ---
+function card(el, tIn, tOut, dx){
+  const inn = outExpo(ramp(tIn, tIn+0.42));
+  const out = inOut(ramp(tOut, tOut+0.42));
+  const y   = (1-inn)*44 + out*-26;
+  const s   = (0.86 + 0.14*inn) * (1 - 0.10*out);
+  const x   = (1-inn)*dx;
+  el.style.opacity   = (inn*(1-out)).toFixed(4);
+  el.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${s.toFixed(4)})`;
+}
+card(document.getElementById('claude'), 0.05, 3.95,  34);
+card(document.getElementById('code'),   0.85, 4.05, -34);
+
+// --- título: entra cuando arranca "Tienen el mismo nombre" ---
+const T_IN = 4.85, T_OUT = 11.95;
+const ti = outExpo(ramp(T_IN, T_IN+0.55));
+const to = inOut(ramp(T_OUT, T_OUT+0.55));
+const tit = document.getElementById('titulo');
+tit.style.opacity = (ti*(1-to)).toFixed(4);
+tit.style.transform = `translateY(${((1-ti)*38 + to*-18).toFixed(2)}px) scale(${(0.965+0.035*ti).toFixed(4)})`;
+// la regla verde se dibuja después del texto
+document.querySelector('#titulo .linea').style.width =
+  (outExpo(ramp(T_IN+0.30, T_IN+1.05)) * 420).toFixed(1) + 'px';
+// el cursor del terminal parpadea a 2 Hz, cuantizado al frame (determinista)
+document.querySelector('.caret').style.opacity = (Math.floor(t*2)%2 ? 0.15 : 1);
+</script>

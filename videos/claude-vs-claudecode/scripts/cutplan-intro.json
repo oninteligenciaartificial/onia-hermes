@@ -1,0 +1,27 @@
+{
+  "video": "E:/ONIA-YouTube/grabaciones/clip 1 video 2.mp4",
+  "modo": "audio+tomas",
+  "noise": "-32dB",
+  "minSil": 0.45,
+  "pad": 0.08,
+  "origDur": 33.8,
+  "finalDur": 13.02,
+  "nota": "3 tomas del mismo gancho; se conserva la 3a (ultima, completa) + el cierre, en un solo bloque continuo",
+  "silences": [
+    {
+      "start": 0,
+      "end": 18.35
+    },
+    {
+      "start": 31.37,
+      "end": 33.8
+    }
+  ],
+  "keep": [
+    {
+      "start": 18.35,
+      "end": 31.37
+    }
+  ],
+  "ffmpeg": "-vf \"select='between(t,18.35,31.37)',setpts=N/FRAME_RATE/TB\" -af \"aselect='between(t,18.35,31.37)',asetpts=N/SR/TB\""
+}
