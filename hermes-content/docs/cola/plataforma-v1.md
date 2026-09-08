@@ -44,6 +44,59 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **El `roles:` del menú no era una barrera: escondía el enlace y la URL abría la pantalla
+      igual — cerrado el 2026-09-08 (`3e9cd3a` en `onia-platform`, publicado en la rama).**
+
+      **La clase, que es lo que importa:** `navigation.ts` declara `roles:` por item y el sidebar
+      lo respeta (`filterNavItems`), así que la Planilla o las facturas recurrentes no le
+      aparecen a una recepcionista. Pero el layout de `(dashboard)` resuelve el acceso con
+      `resolveRouteAccess(pathname, pack, features)` —**pack y features, nunca rol**— y le pasa
+      `role` al Sidebar sólo para RENDERIZAR. El propio layout tiene escrito el diagnóstico para
+      el otro eje y nadie lo trasladó a éste: *«la nav ya se filtra por pack, pero la URL no»*.
+
+      **Por qué no lo veía nadie.** No sobra ni falta una palabra (ningún barrido de copy la ve),
+      la pantalla renderiza perfecto, el menú está BIEN —esconde lo que debe— y `route-access`
+      también, porque su pregunta es otra. Los dos gates de caminos que ya existían
+      (`caminos-transversales`, `enlaces-del-panel-alcanzables`) cruzan nav × **PACK**; ninguno
+      cruzaba nav × **ROL**.
+
+      **Lo que estaba vivo**, medido sobre las 13 rutas que algún pack restringe más que su
+      propia línea base — **tres de trece**:
+
+      | ruta | lo que declara su menú | lo que hacía |
+      |---|---|---|
+      | `/billing/recurring` | `[SUPERADMIN, ADMIN]` | mostraba **todas** las facturas recurrentes del negocio (cliente, monto, próximo cobro) a un DOCTOR o a la recepción, más los botones de pausar y borrar — que la API sí rechaza con `requireAdmin`, o sea que además no funcionaban. La página hasta calculaba `isSuperAdmin`, pero sólo para saltear el corte por plan |
+      | `/agents` | `[SUPERADMIN, ADMIN]` | exigía `requireFeature("module.agents")` (el entitlement del add-on pago) y nunca el rol |
+      | `/requerimientos` | `[SUPERADMIN, ADMIN, STAFF]` | sólo `requireAuth()` |
+
+      **Dos que parecían agujeros y NO lo eran** — la dirección cara, la que manda a «arreglar» lo
+      que anda: `/admin` tiene su guarda en **su propio `layout.tsx`** y `/empresa` en su
+      **`access.ts`** (`requireEmpresaAccess`). Un detector que mirara sólo `page.tsx` acusaba a
+      los dos en falso; por eso el gate lee la **cadena** de la ruta, no la página.
+
+      **El gate nuevo, `lib/platform/rol-en-la-ruta.test.ts`:** deriva el universo del **dato**
+      (`VERTICAL_PACKS`) y —esto es lo que lo hace correcto— **relativo a la línea base de cada
+      pack**. Un item que excluye DOCTOR en un comercio no restringe nada: ese pack excluye DOCTOR
+      de **todo**, incluido su `/dashboard`. Sin ese recorte el universo sube a ~40 rutas y el gate
+      exigiría enforcement donde aplicarlo dejaría a alguien fuera de su propia home — **un bucle
+      de redirect**. Cada ruta declara CÓMO se cubre y la declaración **se re-mide en cada
+      corrida**: si el guard declarado desaparece, esa fila se pone roja en vez de pre-aprobar.
+
+      **Validado en ROJO primero por el motivo correcto** (3 casos, los mismos 3 medidos a mano,
+      con las otras 10 en verde) y **por mutación en las tres direcciones**: el *esquive*
+      —mencionar el rol sin `redirect`, que es como se ve un guardia hueco— da rojo; una ruta
+      restringida nueva sin fila da rojo **nombrándola** (`/agenda`); y el detector siempre-vacío
+      lo caza el ancla. Gates: `tsc` 0 · `vitest` 3795 · `eslint` 0 errores.
+
+      ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido de deploy de `plataforma`,
+      que sigue esperando el `ok` de Sergio Urcullo.
+
+      **Lo que queda anotado y NO se hizo, con su motivo:** el arreglo de fondo es que el layout
+      corte por rol en un solo punto, como ya hace por pack — pero eso toca las 40 pantallas para
+      los 4 roles y necesita una guarda explícita contra el bucle de redirect medido arriba
+      (nunca bloquear la home del propio rol). Con el gate puesto, una ruta restringida nueva no
+      puede nacer sin defensa, así que la deuda ya no crece.
+
 - [x] 🔴 **Si al confirmar la reserva se cortaba la red, la pantalla se quedaba MUDA: ni cita ni
       explicación — cerrado el 2026-09-08 (`592baa1` en `onia-platform`, publicado en la rama).**
 
