@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /stack/archivos
+
+# /stack/archivos es de Onia Community. No esta enlazada desde ninguna pagina
+# y ademas lleva noindex: no es seguridad, es higiene — quien tenga el link entra.
