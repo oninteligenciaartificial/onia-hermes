@@ -321,11 +321,16 @@ con la cosa funcionando.
 
 ### Lo que queda abierto de esto
 
-- **`onia-veredicto-sergio` corre, completa y sale a Telegram** (medido: mensaje de 1.347 bytes
-  el 7-sep 16:07 La Paz), pero él dice que no le llega. **La hipótesis más probable es que lo
-  enterraban los otros 226 mensajes del día.** No se forzó una corrida para probarlo porque
-  cuesta ~124k tokens y la consigna del día era gastar menos. **Se verifica gratis mirando el
-  Telegram a las 16:00 de hoy, ya sin ruido.**
+- ✅ **`onia-veredicto-sergio`: RESUELTO, y no estaba roto.** Se forzó una corrida: salió bien y
+  el propio planificador lo registró — `cron.scheduler: Job '94f352c07554': delivered to
+  telegram:<chat>`. Y ese chat es **el MISMO** que usan los vigías (comparado por hash, sin
+  imprimir ids). **Siempre le llegó: lo enterraban los otros 226 mensajes del día.** Con el
+  ruido apagado, se ve.
+- ⚠️ **El reloj del VPS es UTC, no La Paz** (`timedatectl` → `Etc/UTC`). Un script propio
+  rotulaba su salida como *"hora en el VPS (La Paz)"* y con eso llegué a decir que el veredicto
+  *"debió dispararse hace 37 minutos"*: eran las **12:39 La Paz**, no las 16:39, y faltaban más
+  de tres horas para su turno. **No había ningún bug de planificador.** Otro instrumento
+  midiendo un sustituto (§5.4) — esta vez, una etiqueta que yo mismo escribí mal.
 - **`onia-vigia-sin-respuesta.sh`** (alguien le escribió al bot y nadie contestó) ahora va al
   tablero como todo lo demás. **Es el único que yo dejaría en directo**: un prospecto esperando
   es urgente y una tarea puede quedarse horas. Se cambia con `ONIA_TG_DIRECTO=1` en su línea del
