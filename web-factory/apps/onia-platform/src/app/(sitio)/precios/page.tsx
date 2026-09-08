@@ -366,6 +366,27 @@ export default function Precios() {
               <li key={c}>{c}</li>
             ))}
           </ul>
+          {/* La comparación vive ACÁ y no en el menú de arriba.
+
+              `/comparativa` salió del nav el 2026-09-08 («ok C» de Sergio
+              Urcullo). El error no es comparar —`lety.ai`, la referencia que él
+              fijó, también compara con nombre— sino DÓNDE: pegada a «Precios» en
+              la barra, el camino de compra le ofrecía al que ya venía a pagar
+              una pantalla con seis competidores y su precio. Abajo de las
+              condiciones el sujeto es otro: el que ya leyó cuánto cuesta y está
+              decidiendo. Ver `header-camino-de-compra.test.ts`.
+
+              Y es el enlace que la mantiene ALCANZABLE: sin él queda sin una
+              sola pantalla que la ofrezca y `alcance.test.ts` la manda al
+              disallow de `robots.ts` — o sea, desindexada. Medido: sacarla del
+              nav sin esto pone el gate en rojo. */}
+          <p className={s.note} style={{ marginTop: "2em", maxWidth: "52em" }}>
+            ¿Lo estás comparando con otra opción?{" "}
+            <a className={s.link} href="/comparativa">
+              Mirá la comparación
+            </a>
+            .
+          </p>
         </Reveal>
       </Block>
 

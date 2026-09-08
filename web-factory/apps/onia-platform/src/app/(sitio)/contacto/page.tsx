@@ -125,6 +125,25 @@ export default function Contacto() {
             El mismo WhatsApp que atiende a los clientes. Si tu rubro es otro y
             querés saber si entra, este es el lugar para preguntarlo.
           </p>
+          {/* «¿Quiénes son estos?» se contesta ANTES de que escriba, no después.
+
+              `/nosotros` salió del nav el 2026-09-08 («ok C» de Sergio Urcullo):
+              el menú público es el sistema + Chatbot. Pero salir del menú no es
+              salir del sitio, y ésta es la única pantalla que mata esa objeción
+              —empresa boliviana, SEPREC, NIT, Santa Cruz—, que con cero clientes
+              pagando es el sustituto legítimo del testimonio que no tenemos.
+
+              Va acá y no en la portada porque el sujeto es el mismo que el de
+              esta página: el que no se registra sin hablar con alguien. Y es el
+              enlace que la mantiene alcanzable e indexada: sin él,
+              `alcance.test.ts` la manda al disallow de `robots.ts`. Medido. */}
+          <p className={s.note} style={{ maxWidth: "46em", marginTop: "1em" }}>
+            ¿Querés saber quién está del otro lado?{" "}
+            <a className={s.link} href="/nosotros">
+              Quiénes somos
+            </a>
+            .
+          </p>
           <div className={s.actions}>
             <Btn href={WA_URL_LANDING} external>
               Escribir por WhatsApp

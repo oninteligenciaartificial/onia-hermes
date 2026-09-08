@@ -72,8 +72,41 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
-- [ ] 🔴 **El menú de arriba ofrece TRES líneas de negocio congeladas. Sergio Urcullo dijo «ok C»
-      el 2026-09-07 — sacalas.**
+- [x] 🔴 **El menú de arriba ofrece TRES líneas de negocio congeladas. Sergio Urcullo dijo «ok C»
+      el 2026-09-07 — sacalas. — CERRADO 2026-09-08 por `web-venta` (`653f2a98`, `8de73198`).**
+      **Media premisa ya estaba vencida al empezar la vuelta:** `Webs`, `Marketing IA` y
+      `Consultoría` salieron del nav ese mismo día por `t_30b1711d`, así que lo que quedaba vivo
+      en el segundo nivel era `Agentes · Comparativa · Nosotros`. Eso se sacó.
+      **Listo, cumplido con captura:** servido el build propio y abierto renderizado, el
+      `<header>` da **0** para las seis rutas en sus DOS niveles —
+      `/root/capturas-nav/01-barra-escritorio.png` (barra: `Rubros · Precios · Facturación ·
+      Contacto`) y `/root/capturas-nav/02-menu-telefono.png` (menú abierto: Producto = `Rubros · Chatbot · Precios`,
+      Decidir = `Facturación · Contacto · Empezar`). Sin respuestas ≥400 salvo el 429 del widget
+      de Chatwoot, que es el límite por IP que se provoca sola toda sonda que abre varias
+      pantallas — no es un defecto del sitio.
+      ⚠️ **Se verificó contra el build propio y NO contra `onia.com.bo`, a propósito:** el sitio
+      vivo sirve el build anterior al deploy que espera el `ok` de Sergio Urcullo (`t_a4b52e27`).
+      Mirarlo allá habría mostrado el defecto y no el arreglo.
+      **Lo que el ítem no preveía, y salió midiendo en vez de suponiendo:** sacar las tres del nav
+      dejaba `/comparativa` y `/nosotros` sin UNA sola pantalla que las enlazara, y
+      `alcance.test.ts` se puso en rojo por las dos (por `/agentes` no: la portada ya la ofrece en
+      su cuerpo). La salida documentada para ese caso es el disallow de `robots.ts`, **y no se
+      tomó**: desindexar no es «sale del menú», y con cero clientes pagando `/nosotros` es el
+      único sustituto del testimonio. Las dos quedaron alcanzables e indexadas con un enlace en el
+      cuerpo de la pantalla cuyo lector es el mismo — la comparación bajo las condiciones de
+      `/precios`, «quiénes somos» en `/contacto` — verificados renderizados (156×24 px y
+      119×24 px, ver `/root/capturas-nav/03-precios.png` y `/root/capturas-nav/03-contacto.png`).
+      **De paso, una afirmación de cobertura falsa:** `nav.ts` decía que `/comparativa` ya estaba
+      «enlazada desde el cuerpo de `/precios`». No lo estaba —ningún `.tsx` del árbol vivo ni
+      módulo `@/` que él importe escribía ese `href`— y era justo la frase que habría hecho
+      desindexar la pantalla sin que nada se pusiera rojo.
+      **Lo ancla `nav-solo-el-sistema.test.ts`**, que invierte el sujeto del gate hermano:
+      `nav-sin-agencia` persigue lo PROHIBIDO (`/servicios/*`) y es ciego a una entrada nueva;
+      éste compara contra una lista de APROBADAS por igualdad de conjuntos, así que ve la que
+      sobra Y la que falta, en los dos niveles más el literal desnudo del cromo. Validado por
+      mutación, seis en rojo cada una por su razón. **La primera versión fallaba ABIERTO** y lo
+      cazó la mutación: comparaba la UNIÓN de los niveles, así que sacar `Precios` de la barra
+      visible dejaba los 868 casos en verde porque seguía en el menú de teléfono.
       Medido ese día sobre el sitio vivo, abriéndolo renderizado: el `header` tiene **dos
       niveles**. El visible es limpio (`Rubros · Precios · Facturación · Contacto`), pero debajo
       hay otro con: `Rubros · Agentes · Chatbot · Precios · **Webs · Marketing IA · Consultoría**
