@@ -12,6 +12,15 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-08 18:09-18:16 La Paz — móvil (390x844) en Importadora: 9/9, sin hallazgos
+
+`RECORRIDO_RUBRO=Importadora RECORRIDO_MOVIL=1`: recorrido completo salvo el paso 7 (cita), que
+este rubro no vende — no tiene agenda en su pack, así que no aplica y no cuenta como agujero.
+Cuenta `zz-qa-2026-09-08-1813@onia.com.bo` creada, correo confirmado, onboarding completo,
+producto/cliente `zz-qa-2026-09-08-1813-paciente` cargado, factura vista, frenada sin pagar.
+Cero filas `zz-qa-` propias al cerrar (4 ajenas de otros carriles, sin tocar). Nada roto. Queda
+pendiente `RECORRIDO_MOVIL=1` en servicios profesionales y comercio.
+
 ## 2026-09-08 13:09-13:26 La Paz — reverificado dental escritorio: 9/9, sin hallazgos
 
 `node scripts/recorrido_cliente.mjs --escribir` (dental, 1440x900): recorrido completo, 9/9.
