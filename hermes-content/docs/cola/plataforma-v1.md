@@ -1980,6 +1980,50 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] 🔴 **CERRADO el 2026-09-08: el botón decía «Enviar» y el sistema no mandaba la cotización
+      a nadie.** Arreglado en `9208d5c` (`onia-platform`), rama `claude/chatbots-platform-review-0d1d09`.
+
+      El dueño de una importadora apretaba **«Enviar»**, el chip quedaba en **«Enviada»**, y su
+      cliente no recibía nada: la acción sólo mueve la fila de `draft` a `sent`
+      (`transicionarCotizacion`, `PATCH /api/importadora/cotizaciones/[id]`). **Medido, no
+      supuesto:** el módulo no tiene correo, ni WhatsApp, ni PDF, ni link público (`grep` de
+      `pdf|whatsapp|mailto|sendEmail|share|link` sobre `app/(dashboard)/importadora/` y
+      `lib/importadora/cotizaciones.ts` → cero), y la cotización guarda **únicamente
+      `clienteNombre`** — no existe un dato de contacto al que enviarla, así que cumplir la
+      promesa era **estructuralmente imposible**. Una venta perdida en silencio, en un rubro de
+      la v1.0.
+
+      **Por qué ningún gate podía verlo, que es lo que vale para otras pantallas.** No sobra una
+      palabra prohibida, no falta un rubro, el precio sale de la fuente y la pantalla renderiza
+      perfecto: «Enviar/Enviada» es vocabulario **legítimo** de una cotización. Lo que estaba mal
+      era el par **(lo que el rótulo AFIRMA, lo que el módulo PUEDE hacer)**. Y hay un agujero
+      estructural detrás: derivando el universo de `VERTICAL_PACKS`, **estas tres pantallas
+      (`/importadora/cotizaciones`, `/costeo`, `/reprecio`) las declara UN SOLO pack**, así que
+      quedan fuera del gate de cobertura multi-rubro **por construcción** — no hay otro pack que
+      las nombre distinto, no son «compartidas», y por eso no las mira nadie. Son las **únicas
+      tres** en esa condición, y las tres son de la v1.0.
+
+      **Arreglo: se condiciona la promesa, no se borra la función** (mismo patrón que `SEARXNG` y
+      que el horario sin declarar): «Marcar como enviada» y «Enviada por vos». Llevar el estado
+      del pipeline comercial sigue sirviendo; deja de mentir. La acción interna sigue llamándose
+      `enviar` — es el contrato de la API y de la máquina de estados del core, no se toca.
+
+      **El gate cruza el rótulo contra la existencia de una vía de salida, no persigue la
+      palabra** (`promesa-de-envio.test.ts`): el día que se construya el envío real, «Enviar»
+      vuelve a estar permitido solo y el gate se apaga **por la razón correcta**, en vez de
+      quedar huérfano persiguiendo una forma que ya nadie escribe. Validado **por mutación en
+      tres direcciones** —revertir el chip, esquivar con «Enviar ahora», vaciar un rótulo
+      ajeno—: las tres en rojo, confirmadas por `Tests 1 failed` explícito y verificando que la
+      mutación entró.
+
+      **Mirado renderizado** con el CSS del build vivo de producción (el arreglo está detrás del
+      deploy, así que la pantalla real todavía muestra el texto viejo): la fila mide **50 px
+      igual que antes**, el texto más largo no la envuelve ni la rompe; chip 73→128 px, botón
+      67→169 px, cero respuestas ≥400 en el log de la misma corrida.
+
+      ⚠️ **Commiteado y pusheado, NO desplegado**: el cliente no lo ve hasta el swap. El pedido
+      de deploy vivo ya existe y no se duplica.
+
 - [x] 🔴 **CERRADO el 2026-09-08: el bot de WhatsApp le afirmaba a la gente de un negocio un
       horario de atención que NADIE había cargado.** Arreglado en `4ce8f88` (`onia-platform`).
 
