@@ -44,6 +44,42 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **CERRADO el 2026-09-08 (`f2237e8`, en la rama del carril — NO en `master` todavía):
+      la pantalla donde el dueño configura el asistente que PAGA le ponía ejemplos de otro
+      rubro.** `/settings/chatbot` (add-on de Bs 390/mes) tenía dos ejemplos tipeados en un
+      rubro para los ocho: el rótulo de la categoría decía **«Veterinaria»** y el nombre del
+      ítem decía **«Ortodoncia»** — que es literalmente el `ejemploServicio` dental. Un
+      comercio, una importadora o un estudio contable configuraban su bot leyendo ejemplos de
+      dos negocios ajenos, con los campos de al lado ya derivando bien de su rubro.
+
+      **Por qué ningún gate podía verlo, que es lo que valió la vuelta.** Los dos gates de copy
+      multi-rubro descartan los textos de **una sola palabra** —`if (!texto.includes(" "))
+      continue`, puesto para no ahogarse en identificadores y clases CSS— y un ejemplo de
+      formulario casi siempre *es* una palabra sola: la familia (rubro, texto) tenía una rendija
+      por la que pasa justo su caso más escondido. Ni el sujeto ni el patrón estaban mal; lo que
+      deja ciego al gate es un filtro puesto por un buen motivo, que se conserva. Y encima
+      `/settings/chatbot` es **subruta**: la fila de cobertura declara `/settings` cubierta por
+      `planes-en-el-idioma-del-rubro.test.ts`, un gate sobre PLANES que nunca la mira. Dos
+      motivos independientes, los dos cerrados.
+
+      Es la **cuarta** pasada por esta familia: `vocabulario.ts` ya documenta `ejemploServicio`
+      (01-sep, catálogo), `ejemploRegistro` (07-sep, ficha) y `ejemploPalabras` (esta misma
+      pantalla, tres campos) — y las tres veces el comentario dice *«arreglar la instancia y no
+      la clase»*. Por eso el gate nuevo (`lib/platform/ejemplo-de-formulario-por-rubro.test.ts`)
+      deriva su sujeto del **disco** — `app/(dashboard)` y `components/` enteros, 134
+      placeholders mirados—, no de una lista: un formulario nuevo nace cubierto y hay que
+      eximirlo a mano, a la vista. Las dos exenciones (`/admin`, panel interno de Onia) son por
+      literal exacto y se **re-miden**: si el texto eximido desaparece, su fila se pone roja en
+      vez de pre-aprobar el hueco.
+
+      **Prueba:** el gate en ROJO antes del arreglo nombrando los dos placeholders con su
+      archivo, y **validado por mutación en 4 direcciones, las 4 en rojo** — revertir cada mitad
+      del arreglo, devolverle al gate el filtro de una palabra, y recortarle el árbol
+      `components/`. `tsc` 0 · **4153 tests** (eran 4030) · eslint 0 errores.
+
+      ⚠️ **Commiteado, NO desplegado**: el cliente no lo ve hasta que Sergio Urcullo apruebe el
+      pedido de deploy vivo (`t_daa8750c`), que hoy publica 9 arreglos + éste.
+
 - [x] 🔴 **CERRADO el 2026-09-08 (`64279ff`, en la rama del carril — NO en `master` todavía):
       el Recall corría todos los días en tres rubros que no tienen a quién reactivar, y tres
       rubros pagaban agentes sin una pantalla donde verlos.**
@@ -1833,6 +1869,71 @@ y sin operar. Acá se opera, con verificación por ítem.
       el login de Sergio Urcullo y no es trabajo de este carril.** El PdV 1 (la otra mitad de la
       matriz) también es suyo. Que `/opt/onia-siat` quede alineado con el repo es la tarea
       `t_7d2019bb`.
+
+- [x] 🔴 **CERRADO el 2026-09-08: una cuenta APAGADA seguía tomando reservas por la puerta
+      pública, y el desconocido que reservaba se presentaba a un negocio que no lo esperaba.**
+      `POST /api/booking/appointments` crea un `patient` y una `appointment` en la base del
+      negocio: es una **escritura que inicia un tercero**. Las **35** rutas de `app/api` que
+      escriben cortan por `checkPlanExpiry` (contado, no estimado); las tres puertas de
+      `/api/booking` —y con ellas el conocimiento que se le publica al bot del cliente— **no
+      preguntaban nada**. Una org en `read_only` seguía recibiendo por la puerta de atrás el
+      servicio que dejó de pagar.
+
+      **Por qué sobrevivió, que es lo reusable:** `motivoSinReservaPublica` miraba `org.plan`,
+      que es el plan **contratado** y no el **estado**. Una org con el trial vencido hace meses
+      sigue diciendo `professional`, así que `publicBookingIncluded` daba `true` para siempre.
+      Ningún gate podía verlo: la pantalla renderiza perfecto, el rubro deriva bien, el plan la
+      incluye y la ruta responde 200 — no sobra ni falta una palabra. **Lo que falla es QUIÉN
+      pregunta.** Es la mitad hermana de `trial-vencido-cumple-la-promesa` (cerrado el 08-sep):
+      ahí se verificó que las escrituras **del panel** cortan, y eso hizo dar por cubierta la
+      familia entera con la puerta pública abierta.
+
+      **Arreglo** (`ba2270b`, rama `claude/chatbots-platform-review-0d1d09`): el corte va en el
+      **helper**, no en la ruta, así que cubre las tres puertas más el bot por construcción y
+      una cuarta nace cubierta. Pregunta con la **misma** función que el panel (`isWriteBlocked`),
+      de modo que la gracia del trial vale también acá: a quien paga un día tarde no se le cierra
+      la agenda. Y corta en las **tres**, no sólo en la que escribe, porque cortar al final
+      dejaría al visitante llenar los cuatro pasos para comerse el rechazo en el último clic.
+      El motivo nuevo es `"vencida"` y va **antes** que `"plan"`: decirle «te falta el add-on» a
+      quien lo tuvo y se le venció es mentira. Al cliente del cliente se le sigue diciendo lo
+      mismo y neutro («Agenda pública no disponible para este negocio»): el estado comercial de
+      nuestro cliente no se le cuenta a SU cliente.
+
+      **La defensa contra el hueco mudo es de TIPOS:** `NegocioParaReserva` extiende `PlanDates`
+      con los campos **requeridos**, así un llamador que no le pida las fechas a Prisma **no
+      compila**. Sin eso llegan `undefined`, `derivePlanStatus` las lee como «sin fecha» y
+      devuelve vigente — falla **abierto**, en silencio y con el gate del módulo en verde. `tsc`
+      lo confirmó: los únicos errores fueron los casos viejos del test, y **ninguno** de los 4
+      llamadores reales, que ya seleccionaban las fechas.
+
+      **Gate:** `lib/agenda/reserva-publica.test.ts` (15 casos), validado **por mutación en 3
+      direcciones** —helper sin el corte · un llamador sin `trialEnd` · la vigencia evaluada
+      DESPUÉS del plan (esquive)—: las tres `exit 1`, base y restaurado `exit 0`.
+      **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **4160 pasan / 332 archivos** ·
+      `npx eslint .` 0 errores.
+
+      🔴 **NO ESTÁ DESPLEGADO y además falta un paso antes:** `ba2270b` está en la rama del
+      carril, **no en `master`**. Si el `ok` de `t_daa8750c` llega antes de que el integrador
+      mergee, este arreglo **no viaja en ese swap**. Anotado como comentario en ese pedido.
+
+- [ ] 🟡 **MEDIDO Y NO ARREGLADO (2026-09-08): la misma puerta pública crea clientes sin
+      contarlos contra el tope del plan.** En la misma vuelta que lo de arriba: `checkPatientLimit`
+      lo llaman **cinco** rutas y las cinco son del panel (`app/api/patients/route.ts`, `app/api/patients/import/route.ts`,
+      `app/api/v1/patients/route.ts`, `app/api/comercio/clientes/route.ts` + el medidor de `/settings`).
+      `app/api/booking/appointments/route.ts:258` hace `tx.patient.create(...)` y **no lo llama**,
+      así que el tope que `onia.com.bo/precios` vende —300 clientes en Básico, y es el gancho
+      para subir a Bs 750— **no se aplica por la agenda pública**. El propio `lib/plan-limits.ts`
+      declara la intención contraria: *«lo que la barra muestra es lo que el 403 aplica»*.
+
+      **Va sin arreglar a propósito, porque adentro hay una decisión de producto y no la invento:**
+      rechazarle la reserva a un desconocido porque el negocio llegó a su tope lo castiga a él por
+      algo que no controla, y el mensaje honesto es difícil de escribir sin exponerle el estado
+      comercial de nuestro cliente. Las dos salidas —cortar, o dejar pasar y avisarle al dueño que
+      se pasó del tope— son defendibles y cuestan parecido.
+
+      **Reproducción, 30 segundos:**
+      `grep -rn "checkPatientLimit" --include=*.ts app/ lib/ | grep -v test` → 5 usos, ninguno bajo
+      `app/api/booking`. Contrastar con `grep -n "patient.create" app/api/booking/appointments/route.ts`.
 
 - [x] 🔴 **CERRADO el 2026-09-08: la pantalla donde el dueño decide CUÁNTO PAGA le vendía a
       3 de los 5 rubros de la v1.0 cuatro pantallas que su rubro no tiene.** `/reports` y
