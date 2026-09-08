@@ -44,6 +44,53 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **CERRADO el 2026-09-08 (`cc383c1`, en la rama del carril — NO en `master` todavía):
+      tres de las cuatro organizaciones que PAGARON el add-on de WhatsApp no lo tenían, según
+      el producto — sin recordatorio de cita, sin intake, y con el cartel de venta encima.**
+
+      El add-on tiene **dos fuentes** y sólo `isWhatsAppAddonActive` (`lib/plan-limits.ts`) mira
+      las dos: la columna vieja `organizations.whatsappAddon` **o** la capacidad
+      `addon.whatsapp` de `organization_entitlements`. Medido en producción ese día:
+
+      | org | `whatsappAddon` | `addon.whatsapp` |
+      |---|---|---|
+      | `clinica-sergio-p2ljs` | `t` | `active` |
+      | `onia-interna` | `f` | `active` |
+      | `zz-qa-clinica-chatbot-9k651` | `f` | `active` |
+      | `zz-qa-ferreteria-tornillo-ommbt` | `f` | `active` |
+
+      Para esas **tres**, cada punto que leía la columna cruda contestaba «no lo tenés»:
+      el cron **no le mandaba el recordatorio de cita al paciente** (y el paciente no se entera
+      de que le faltó un aviso); el intake de ONIA Core **descartaba la consulta** que entraba
+      por WhatsApp; `/api/n8n/whatsapp/send` daba 403; el canal de Instagram/Messenger daba 403
+      y su `GET` mandaba dibujar «contratalo» a quien ya lo tenía; `/settings`,
+      `/settings/addon-chatbot` y `/communications` le ofrecían **comprar lo que ya pagó**; y el
+      circuito de cobro le aceptaba **pagarlo de nuevo**.
+
+      **Por qué nadie lo veía, que es lo que se arregló de fondo:** el 2026-09-04 se cazó este
+      mismo defecto en `/settings/chatbot` y se lo ató con un gate cuyo sujeto es el `page.tsx`
+      **de esa carpeta**. Se arregló la instancia y la clase quedó abierta. No sobra ni falta una
+      palabra, la pantalla renderiza perfecto, no es un rubro, y `whatsappAddon` es una columna
+      real del schema: `tsc` está contento.
+
+      **El gate de clase** (`lib/platform/addon-whatsapp-un-solo-criterio.test.ts`) deriva los
+      sujetos del **disco**, así que un lector nuevo de la columna nace cubierto y hay que
+      excusarlo a la vista; y **cada excusa se re-mide**, porque una excusa que se pudre deja
+      entrar el defecto siguiente pre-aprobado. Validado por **5 mutaciones**, todas verificadas
+      de que entraron: revertir el arreglo del cron → rojo nombrándolo · excusa sobrante → rojo ·
+      barrido vacío → rojo · detector ciego → 3 casos en rojo · sin filtrar comentarios → rojo.
+
+      ⚠️ **La primera versión del gate enumeraba FORMAS de decidir** (`if`, `?:`, `&&`, `!`,
+      prop JSX) **y se le escapó la más silenciosa**, que estaba viva: el `GET` de
+      `/api/chatbot-canal-meta` hacía `addon: Boolean(org.whatsappAddon)` — la columna no decide
+      ahí, se le **manda al navegador para que decida allá**. La cazó un test hermano, no el
+      gate. Enumerar formas es una lista de inclusión y falla abierto; el sujeto correcto es
+      **leer la columna**, y quien de verdad tenga que hacerlo se declara.
+
+      **Gates:** `tsc` 0 · `vitest` **3971 pasan / 326 archivos** · `eslint` 0 errores.
+      ⚠️ **Commiteado y en la rama, NO mergeado a `master` ni desplegado** — no viaja con el
+      pedido `t_daa8750c`, que publica `master`. El merge es de `onia-cola`.
+
 - [x] 🔴 **CERRADO el 2026-09-08 (`c334440`, en la rama del carril — NO en `master` todavía):
       el correo del trial sólo sabía hablar en dental o en mostrador, y de los cinco rubros de
       la v1.0 los tres del medio caían del lado equivocado.**
@@ -1803,6 +1850,61 @@ y sin operar. Acá se opera, con verificación por ítem.
 - **No le escribe a un prospecto.** Regla del [`README.md`](README.md) de esta carpeta.
 
 ## Cerrado
+
+- [x] 🔴 **CERRADO el 2026-09-08: el bot de WhatsApp le afirmaba a la gente de un negocio un
+      horario de atención que NADIE había cargado.** Arreglado en `4ce8f88` (`onia-platform`).
+
+      Sin grilla, `horarioQueSeDice` caía en `openTime`/`closeTime`, y ese par **no es un dato
+      del negocio**: es el literal que el alta escribe para toda org nueva
+      (`app/api/auth/register/route.ts` → `initialSettings`, y el mismo par como `@default` de
+      `clinic_settings` en `prisma/schema.prisma`). Ninguna pantalla del producto lo escribe —
+      `SettingsClient` sólo lo muestra, y la única ruta que lo acepta
+      (`PATCH /api/clinic-settings`) está registrada sólo para dental y no la llama nadie—, así
+      que **sin grilla vale `08:00 - 18:00`, siempre**.
+
+      **Medido en producción, no deducido** (`docker exec supabase-db psql`, 2026-09-08): de las
+      **10** organizaciones, **CINCO** no tienen grilla — `bolivian-electricidad-e6t21`
+      (`proveegest-electrico`), `qa-modulos-rj7tv` (`proveegest-electrico`), `qa-modulos-mrk0q`
+      (servicios profesionales), `zz-qa-estetica-modulos-6tzgb` y `zz-qa-salteo-horarios-…` — y a
+      las cinco el bot les contestaba `08:00 - 18:00` como un hecho. Texto exacto que recibía la
+      persona, capturado antes de tocar nada:
+
+      | superficie | lo que decía |
+      |---|---|
+      | menú (`horariosText`) | `⏰ Horario de atención:\n*08:00 - 18:00*` |
+      | contexto de la IA (`buildSystemPrompt`) | `Horario de atención: 08:00 - 18:00` |
+
+      **Por qué duele más de lo que parece:** a comercio e importadora `opcionesDelMenu` les
+      ofrece **UNA sola** opción, «Horarios de atención». O sea que lo único que el bot sabía
+      hacer por **2 de los 5 rubros de la v1.0** era mandar a su gente a una puerta cerrada —
+      con el add-on cobrado a Bs 390/mes.
+
+      **Por qué no lo veía ningún gate:** el retorno era **ambiguo** — «la franja del negocio» y
+      «el default que nadie tocó» salían iguales—, así que el consumidor no podía distinguirlos
+      y afirmaba. Misma clase que `buscarNegocio()` devolviendo `[]` por dos motivos distintos.
+      No sobra ni falta una palabra, el texto ya deriva del rubro
+      (`whatsapp-ai-idioma-del-rubro.test.ts` en verde), no hay pantalla que fotografiar y el
+      valor es **REAL**: sale de la base. Peor: el caso *«sin grilla dice la franja sola»* de
+      `horario-que-se-dice.test.ts` lo daba por **BUENO** — el defecto tenía un gate en verde
+      defendiéndolo.
+
+      **El arreglo no borra la promesa, la CONDICIONA** (igual que `SEARXNG_URL` en el alta):
+      `horarioQueSeDice` devuelve `{ lineas, declarado }` y los dos consumidores dejan de
+      afirmar cuando no lo sabemos — el menú ofrece la persona que ya ofrecía, y a la IA se le
+      **prohíbe deducirlo**. El corte es «nadie la tocó», no «no hay grilla»: una franja distinta
+      del default sí está declarada, así que el error posible queda del lado seguro. Y `horario`
+      viaja como campo **requerido**: un opcional con default deja al llamador sin pasarlo con el
+      gate y `tsc` en verde.
+
+      **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **3978 pasan / 327 archivos** ·
+      `npx eslint .` 0 errores. Guardias validados **por mutación**: 4/4 en rojo, y el del menú y
+      el de la IA fallan **un caso cada uno** — cada guardia tiene el caso que ningún otro ve.
+      Lleva ancla contra `register/route.ts` y `schema.prisma`: si el alta cambia la franja, la
+      detección apuntaría al valor viejo y se apagaría sola. Gate:
+      `lib/agenda/horario-sin-declarar.test.ts`.
+
+      **No está terminado hasta que se publique:** viaja en el pedido de deploy vivo de
+      `plataforma`, que espera el `ok` de Sergio Urcullo.
 
 - [x] **CERRADO el 2026-09-08: una capacidad de plan se decidía en CUATRO listas escritas a
       mano, y una de ellas es la que la API usa para RECHAZAR.**
