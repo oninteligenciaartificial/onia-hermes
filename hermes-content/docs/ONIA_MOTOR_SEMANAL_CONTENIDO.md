@@ -92,6 +92,73 @@ Tema: **el panel del servidor** (lo que sigue naturalmente a la guía del homela
 | **Dom** | — | **`/panel` publicada en la web** |
 | Lun+1 | **«comentá PANEL y te la paso»** | ya existe: el link funciona |
 
+## Los tres tipos de pieza, y cuál puede prometer
+
+Sergio Urcullo, 08-sep: *"el contenido para la comunidad que quede fijado, el de los videos
+que yo improvise lo hacemos y lo subimos a la web, y decimos por historias que se unan a la
+comunidad"*. Eso cierra bien, con una condición.
+
+| Pieza | ¿Se planifica? | ¿Promete recurso? | CTA |
+|---|---|---|---|
+| **Video de la semana** | sí | **sí** — y ya está publicado | «comentá PALABRA» |
+| **Video improvisado** | no | 🔴 **NO** | «entrá a la comunidad» |
+| **Historia** | no | no | «entrá a la comunidad» |
+
+🔴 **Lo improvisado no puede prometer.** Si grabás algo sin planear y decís *"comentá X y te
+lo paso"*, el recurso no existe — que es exactamente lo que pasó con el homelab. Un video
+improvisado se puede hacer todos los días, pero su cierre es **la comunidad**, no una
+palabra.
+
+**Y el improvisado que funciona, asciende.** Si un video suelto explota, ése es el tema de
+la semana siguiente: se escriben los seis drops, sale la guía el domingo, y recién ahí se
+graba el video con palabra que la promete. El improvisado descubre el tema; el planificado
+lo cobra.
+
+## Al que comenta: el link Y la comunidad, en ese orden
+
+La duda de Sergio Urcullo: *"¿les envío el enlace de la comunidad, pero también les envío el
+link?"*. **Las dos cosas, en el mismo mensaje, y el orden no es un detalle.**
+
+> **Primero se paga la deuda, después se ofrece.**
+
+```
+1 · el link del recurso      ← es lo que prometiste. Va primero, sin condiciones.
+2 · la invitación            ← es lo que ofrecés. Va después, y es opcional.
+```
+
+🔴 **Lo que NUNCA hay que hacer: condicionar.** *"Entrá a la comunidad y ahí te paso la
+guía"* convierte algo ya prometido en un peaje. El que comentó cumplió su parte; cobrarle
+un paso más se lee como estafa chica, y esa persona no vuelve a comentar nunca.
+
+Dando el link primero, la invitación funciona **mejor**, no peor: ya recibió algo y ya sabe
+qué clase de material das.
+
+### El mensaje, listo para pegar
+
+```
+Gracias por comentar. Acá está la guía completa:
+
+[LINK]
+
+Está todo: qué hace cada cosa, qué NO hace, y el paso a paso
+para instalarla. Es gratis y no pido nada a cambio.
+
+Una sola cosa: las guías las subo primero a mi comunidad de
+WhatsApp, con los archivos ya armados y donde podés preguntar
+por tu caso. También es gratis. Si querés entrar, decime
+"comunidad" y te paso el enlace.
+```
+
+**Por qué "decime comunidad" y no el enlace directo:** un enlace de grupo que circula suelto
+termina en cualquier lado. Pedir una respuesta más filtra a quien de verdad quiere entrar —
+y son dos segundos, no una barrera.
+
+### En historias, al revés
+
+La historia **no está pagando ninguna deuda**, así que ahí sí el CTA es directo a la
+comunidad: *"respondé COMUNIDAD y te paso el enlace"*. Es el molde que ya usan las piezas
+verdes del lanzamiento (`comunidad/ESTADO_COMUNIDAD.md`, IMG-COM-002).
+
 ## Lo que hay que decidir antes de arrancar
 
 - **El tema de la semana se elige el domingo anterior**, no el lunes a la mañana. Sin tema
