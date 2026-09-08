@@ -1646,10 +1646,14 @@ const PASOS = [
       // `body.innerText` es la prueba correcta en escritorio y ciega en móvil: se hace lo que
       // haría el cliente, tocar el día, antes de declarar que el producto "la guardó y no la
       // muestra". Medido el 2026-09-08 en viewport de 390px.
+      // El selector por `div.grid > div` + texto exacto NUNCA matcheó en vivo (2026-09-08,
+      // 390px): la celda existe (el punto de color se VE en la captura) pero Playwright no la
+      // encontró — instrumento roto, no producto. Se cambia a `getByText` sobre el span visible
+      // del número, que es lo que un dedo real toca; el click burbujea al div.onClick igual.
       let clickeoDia = null;
       if (!enLaAgenda) {
         const dia = String(Number(fecha.slice(8, 10)));
-        const celda = page.locator('div.grid button, div.grid > div').filter({ hasText: new RegExp(`^${dia}$`) }).first();
+        const celda = page.getByText(new RegExp(`^${dia}$`), { exact: true }).first();
         if (await celda.count().catch(() => 0)) {
           await celda.click({ timeout: 5000 }).catch((e) => { clickeoDia = String(e.message || e).split('\n')[0]; });
           await page.waitForTimeout(600);
