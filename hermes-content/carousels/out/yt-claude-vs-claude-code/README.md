@@ -46,6 +46,17 @@ done
 | 9 | La parte honesta | 12 errores · 200 dólares · no te vuelve programador |
 | 10 | Cierre | la frase de una línea + anuncio del video 2 |
 
+## El logo de Claude
+
+`claude.png` es el logo **oficial**, copiado de
+`references/ui-patterns/apple-editorial/logos/claude-oficial.png`. Uso **nominativo** —
+"explico esta herramienta" — sin alterar las formas ni sugerir afiliación, igual que el
+resto de los logos del patrón (ver su `LICENCIA.md`).
+
+**Claude Code no tiene logo propio y NO se le inventa uno.** Se muestra como una ventana
+de terminal, que es literalmente donde vive. Un logo dibujado a mano en una pieza pública
+lee como falsificación — es la misma razón por la que existe `build-logos.py`.
+
 ## Reglas de esta pieza
 
 - **Las cifras van escritas en la lámina.** Se graba improvisando, y un número es lo
