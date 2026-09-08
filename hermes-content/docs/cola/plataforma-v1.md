@@ -44,6 +44,49 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **El panel le negaba al cliente vencido exactamente lo que su propio correo le había
+      prometido 24 h antes — cerrado el 2026-09-08 (`999f932` en `onia-platform`, publicado en la
+      rama, falta que el integrador lo mergee a `master`).**
+      Gate nuevo: `app/components/trial-vencido-cumple-la-promesa.test.ts` (6 casos).
+
+      El día 14 y el 15 el sistema le escribe al dueño, con su nombre y su negocio adentro:
+      *«tu cuenta pasa a **solo lectura**: no se borra nada y podés seguir consultando tus datos,
+      pero ya no registrar»* y *«todo lo que cargaste sigue ahí y podés **consultarlo y
+      exportarlo** cuando quieras»* (`lib/email.ts`, `trialDripCopy` pasos 14 y 15).
+      `lib/subscription/plan-state.ts` lo escribe como decisión de diseño: *«read_only NO borra ni
+      esconde datos: la cuenta sigue pudiendo leer todo y exportárselo. Solo se frena la
+      escritura»*.
+
+      **La capa de datos lo cumple**, y por eso el defecto era invisible: medido sobre las **151
+      rutas** de `app/api`, **ningún** handler `GET` corta por `checkPlanExpiry` — sólo cortan
+      `POST`/`PATCH`/`DELETE`. El lado que todo el mundo audita estaba bien.
+
+      **Lo anulaba la UI.** `TrialBlockedModal` se monta sobre TODA ruta del panel
+      (`app/(dashboard)/layout.tsx:191`), tapa la pantalla con `inset-0 z-[9999]`, se comía la
+      tecla `Escape` a propósito (`e.preventDefault()`) y **no tenía un solo control para
+      cerrarse**. El dueño que venía a mirar sus números para decidir si pagaba leía **«Acceso
+      Bloqueado»** — encima arriba de la frase «Tus datos siguen intactos», que era cierta y no le
+      servía de nada.
+
+      ⚠️ **La clase, que es lo que hay que llevarse:** *una capa cumple la promesa y la de arriba
+      la anula*. Ningún guardia del proyecto podía verla — no sobra ninguna palabra prohibida, no
+      falta ningún rubro, `/checkout` responde, la pantalla renderiza perfecto, y el único estado
+      que la dispara (trial vencido **más** gracia vencida) no lo crea ningún instrumento. El
+      sujeto del gate por eso no es la pantalla ni el correo: es el **CRUCE** de los dos.
+
+      **Arreglo:** el modal se puede cerrar («Ver mis datos (solo lectura)», y `Escape` ahora
+      cierra en vez de comerse la tecla), y el copy dice lo que de verdad pasa —«Tu cuenta quedó
+      en solo lectura»— con la MISMA palabra del correo, que es lo único que le deja al dueño atar
+      las dos cosas. **Cerrarlo no afloja nada:** la escritura la sigue frenando la API con su
+      motivo escrito (`403 «Tu suscripción ha vencido…»`).
+
+      **Validado por MUTACIÓN, no por lectura** — las tres en rojo con su línea `Tests N failed`:
+      volver al título viejo (1 rojo), borrar el botón (2 rojos) y el **esquive**, un botón que
+      existe y no apaga nada (1 rojo, lo caza el caso que ata el `onClick` al estado que decide si
+      el modal se dibuja). Suite **3751 passed**, `tsc` y `eslint` en 0.
+      **Mirada renderizada** con el CSS del build vivo, no en producción —que corre un build
+      anterior—: `ONIA_MIRAR=1 npx vitest run …` + Playwright, `/tmp/trial-vencido.png`.
+
 - [x] 🔴 **La receta que el paciente se lleva a la farmacia salía fechada al DÍA SIGUIENTE de
       noche, y el pie del mismo papel decía la fecha correcta — cerrado el 2026-09-07
       (`8bc5182` en `onia-platform`, publicado en la rama).**
@@ -1397,6 +1440,60 @@ y sin operar. Acá se opera, con verificación por ítem.
       el login de Sergio Urcullo y no es trabajo de este carril.** El PdV 1 (la otra mitad de la
       matriz) también es suyo. Que `/opt/onia-siat` quede alineado con el repo es la tarea
       `t_7d2019bb`.
+
+- [x] 🔴 **CERRADO el 2026-09-08: en la pantalla donde el dueño PAGA Onia, el modal del QR le
+      pedía «Clínica registrada» a los cinco rubros — y el botón flotante le decía «Nuevo
+      paciente» a un centro de estética cuyo propio menú dice «Clientas».**
+
+      **La clase, que es lo que importa:** el gate de cobertura
+      (`lib/platform/pantallas-compartidas-cubiertas.test.ts`) declara las 25 pantallas que dos o
+      más packs comparten y barre, en cada corrida, **los fuentes DE LA RUTA**
+      (`app/(dashboard)/<href>/*`). El 07-sep ese barrido ya subió un escalón —antes leía sólo el
+      server component y el copy vivía en su client component hermano—, y el escalón siguiente
+      quedaba abierto: **una pantalla renderiza componentes de `components/`, y ésos no los mira
+      nadie.** Ni el sujeto ni el patrón estaban mal: los dos están bien, y el archivo con el
+      defecto queda FUERA del barrido. Por eso `/settings` figuraba **cubierta por su gate** y su
+      modal de pago decía «clínica» cinco veces.
+
+      **Lo que estaba vivo, medido barriendo `components/` entero (4 archivos de 55 nombraban un
+      rubro; 2 eran defecto y 2 legítimos):**
+
+      | dónde | qué leía quien no es dental |
+      |---|---|
+      | `components/billing/QRPaymentModal.tsx` (lo renderiza `/settings`) | rótulo «Clínica registrada \*», dos errores «Ingresá el nombre de quien paga y la clínica registrada.» y dos resúmenes «**Clínica:** …» |
+      | `components/layout/navigation.ts` (el FAB, que está en TODAS las pantallas) | «Nuevo paciente» — los tres packs clínicos tomaban `quickActionItems` **por referencia** del dental |
+
+      **Arreglado:** `vocabulario.ts` suma `negocioTitulo` (Clínica · Centro de estética · Empresa
+      · Negocio · Estudio · Estancia · Veterinaria · Onia) —campo propio y no un recorte de
+      `negocio`, porque `onia-interna` no lleva «tu» delante—; el modal recibe `negocio` y
+      `negocioTitulo` como props **requeridas** (un opcional con default es un hueco
+      indetectable) y `PlanClient` se los pasa del `vocab` que ya tenía; y `quickActionsClinicaDe`
+      —hermano de `navClinicaDe`, que faltaba— deriva el alta del FAB, así que estética pasó a
+      «Nueva clienta».
+
+      **Y de paso el hueco latente que lo hacía posible:** `QuickActionsFab` cae en
+      `items ?? quickActionItems`, así que ese seed es lo que ve quien no declara el suyo — y
+      decía «Nuevo paciente». Quedó **neutro** («Nuevo cliente»); dental deriva el suyo como los
+      demás. Los dos llamadores reales (`app/(dashboard)/layout.tsx`) sí pasan `quickActions`: el
+      fallback no estaba disparando, pero el default silencioso es la forma en que esta familia
+      vuelve.
+
+      **El gate nuevo, `lib/platform/componentes-compartidos-por-rubro.test.ts`:** deriva el
+      sujeto del **disco** (`components/` entero, 55 archivos) —así un componente nuevo nace
+      cubierto y hay que eximirlo a mano, a la vista—, exime por **literal exacto** y no por ruta
+      (mismo criterio que `/admin` en el gate hermano), y **vuelve a medir cada exención**: si el
+      texto eximido desaparece, esa fila se pone roja en vez de pre-aprobar. Más un caso que
+      prueba el detector contra las trampas ya medidas (el comentario, el identificador, lo
+      interpolado, «pen**diente**s») y otro que exige que cada pack declare el rótulo de su FAB.
+
+      **Validado en ROJO primero, por el motivo correcto:** 7 casos en rojo antes del arreglo
+      —`QRPaymentModal`, `navigation.ts`, `esteticagest-clinical: el alta de cliente usa su propia
+      palabra` («expected 'Nuevo paciente' to be 'Nueva clienta')— y 68/68 en verde después.
+      Gates: `tsc` 0 · `vitest` 3751 (0 fallos) · `eslint` 0. Commit `185d616` en
+      `claude/chatbots-platform-review-0d1d09` de `onia-platform`.
+
+      ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido de deploy de
+      `plataforma` (`t_bf1607af`), que sigue esperando el `ok` de Sergio Urcullo.
 
 
 ## Lo que este carril NO hace

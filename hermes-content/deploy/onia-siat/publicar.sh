@@ -61,6 +61,24 @@ git fetch origin --quiet 2>/dev/null || echo "aviso: el fetch falló, comparo co
 
 SHA=$(git rev-parse --short origin/main 2>/dev/null) || { echo "ERR: no puedo leer origin/main"; exit 2; }
 
+# Estar ATRASADO no es motivo para no publicar. Desde que el integrador se mudó
+# al nodo de casa y pushea desde allá, nadie vuelve a tocar este clon: quedarse
+# atrás es su estado normal, no una anomalía. Al bot esto ya lo dejó inejecutable
+# tres días (2026-09-08); acá daba verde sólo porque el subárbol de SIAT no había
+# cambiado en los commits que faltaban — el defecto estaba igual de vivo.
+#
+# El fast-forward es la única forma de avanzar que no puede inventar contenido:
+# si el árbol tiene trabajo propio o cambios sin commitear, git se niega y cae en
+# la comparación de abajo, que corta igual que siempre. La guarda no se afloja —
+# deja de dispararse sobre el caso en el que no había nada que guardar.
+if [ "$(git rev-parse HEAD 2>/dev/null)" != "$(git rev-parse origin/main 2>/dev/null)" ]; then
+  if git merge --ff-only --quiet origin/main 2>/dev/null; then
+    echo "   (el árbol estaba atrasado: lo puse en origin/main $SHA)"
+  else
+    echo "aviso: no pude poner el árbol al día por fast-forward; lo comparo como está" >&2
+  fi
+fi
+
 DIFIEREN=$(git diff --name-only origin/main -- "$SUB"; git ls-files --others --exclude-standard -- "$SUB")
 if [ -n "$DIFIEREN" ]; then
   echo "ERR: el árbol de $REPO NO coincide con origin/main en $SUB." >&2

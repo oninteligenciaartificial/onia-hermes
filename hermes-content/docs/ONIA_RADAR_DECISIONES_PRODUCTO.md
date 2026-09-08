@@ -2695,3 +2695,28 @@ mismo, que es la causa por la que cada sesión nueva venía eligiendo mal.
 
 ⚠️ **Nada de esto lo ejecuta el loop de calidad**: `ORDEN-DE-DISPARO` y `ONIA_MODELOS_RAIZ.md`
 están fuera de su zona, y los 2 cr de la confirmación son permiso de gasto de Sergio.
+
+---
+
+## 43. Una rama tuya con un video terminado lleva horas sin llegar a `main` (2026-09-08) — decisión de Sergio Urcullo
+
+**Qué es.** `claude/video-editing-silence-removal-073acb` — 1 commit
+(`8bfeb8e7 feat: corte de silencios + intro animada para el video Claude vs Claude Code`),
+**20 archivos, +11.932 líneas, cero borrados**: el plan de cortes, la intro animada, las
+fuentes, el end-card y los scripts de transcripción y render bajo `videos/claude-vs-claudecode/`.
+
+**Por qué no la mergeé yo.** No es un carril de loop: no tiene `case` en el corredor, no tiene
+línea en `crontab -l` ni fila en `loops.md`. Es trabajo de una sesión interactiva tuya, igual
+que el carril de contenido — y el carril de contenido lo cerrás vos, por regla escrita.
+La guarda dura la pasa sin problema (cero archivos borrados), así que **no hay riesgo técnico
+en mergearla**: lo que falta es que vos digas que ese video ya está como querés.
+
+**Lo que cambia según qué elijas:**
+
+| | Qué se hace | Qué pasa después |
+|---|---|---|
+| **A** | La mergeo a `main` en la próxima vuelta | El video y sus scripts quedan respaldados en `main` y cualquier sesión los ve. Ojo: son ~12 mil líneas y assets, y `main` ya carga 761,7 MB de Lucía (ítem 38) |
+| **B** | La dejo donde está | Sigue viva y respaldada en GitHub (`origin/claude/video-editing-silence-removal-073acb`), pero fuera de `main`: ninguna otra sesión la encuentra sola |
+
+**No hay urgencia ni nada roto**: la rama está pusheada, así que no se pierde si muere una
+sesión. Se anota para que no quede invisible, que es como se varan las ramas.
