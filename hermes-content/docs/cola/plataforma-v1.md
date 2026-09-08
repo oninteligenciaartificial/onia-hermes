@@ -1344,6 +1344,29 @@ y sin operar. Acá se opera, con verificación por ítem.
       **Listo =** Porcentaje General del portal **> 0%** con al menos un caso nuevo al 100%, leído
       del portal y no deducido. Y el número de esta cola actualizado con la fecha de esa lectura.
 
+      ---
+
+      **Medido el 2026-09-08 (no heredado): la corrida que el doc daba por «corriendo» terminó
+      el 04-sep 04:12 UTC, cuatro días antes**, con el log cerrado en `fin` y cero procesos
+      vivos. Dejó **los tres combos del PdV 0 en 125/125 en las etapas IV, VII y XI** — o sea
+      `pv0-ds17-tf1` y `pv0-ds24-tf3` son **dos casos nuevos al 100%**, que es lo que este
+      «Listo =» pide. **Lo único que falta para cerrarlo es leer el portal**, y eso necesita el
+      login de Sergio Urcullo: no es trabajo de este carril.
+
+      **Y apareció trabajo que sí era de este carril, desbloqueado y sin hacer desde el 6-ago:**
+      las etapas **VI (20/280, 3%)** y **IX (20/80, 12%)** no dependían del PdV 1 ni de nadie.
+      Estaban frenadas porque `ensureCufd()` se cableó sólo en las tres etapas que motivaron su
+      arreglo (IV, VII, XI) y no en sus hermanas, y **nadie lo vio porque
+      `run-fase1-volumen.sh` corre únicamente IV → VII → XI**: el instrumento miraba justo las
+      tres que ya estaban sanas. Arreglado en `a28b3689` (`fase1-runner.mjs`), guardias
+      validados por mutación, 371/371 verdes. **Desbloquea 320 casos** (260 de VI + 60 de IX).
+      Detalle y los dos mensajes del SIN, en `ONIA_SIAT_ESTADO_HOMOLOGACION.md` §7.
+
+      **Lo que sigue, en orden:** correr VI y IX en volumen con el runner arreglado (no entró en
+      la vuelta del 08-sep, que se fue en encontrar y cerrar la causa) → releer el portal →
+      actualizar el número de acá. El PdV 1 (la otra mitad de la matriz) sigue siendo de Sergio
+      Urcullo.
+
 
 ## Lo que este carril NO hace
 
