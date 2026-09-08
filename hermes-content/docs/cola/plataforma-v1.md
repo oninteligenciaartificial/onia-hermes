@@ -1506,6 +1506,42 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] **CERRADO el 2026-09-08: el cupo del chatbot avisaba que IBA a cortar, no que YA
+      cortó.** Commit `ccab1db`, rama `claude/chatbots-platform-review-0d1d09` de
+      `onia-platform`. ⚠️ **Commiteado y en la rama, NO desplegado**, y además **la migración
+      NO está aplicada en producción**: falta el merge a `master`, el `ALTER TABLE` a mano
+      (`prisma/migrations/20260908000000_chatbot_cupo_aviso_del_corte/migration.sql`) y el
+      swap. Sin la columna el aviso del corte no sale y todo lo demás sigue igual —
+      `registrarMensajeEntrante` cuelga del relay de Chatwoot y jamás tira.
+
+      **Qué estaba mal.** El add-on (Bs 390/mes) corta a las 500 conversaciones del mes:
+      desde ese instante el asistente deriva cada conversación nueva a una persona del equipo
+      del dueño. Había aviso al 80 % (`avisado80At`), que es una **predicción** — «al
+      agotarse, deriva…» — y **ninguno en el corte**, que es el hecho. O sea: el dueño paga
+      por un asistente que deja de contestar y se entera abriendo `/settings/chatbot`, o por
+      un cliente perdido. Del 80 % al 100 % puede pasar una tarde. Y hay una recarga que se
+      cobra, así que el silencio también se come el upsell.
+
+      De paso, el `return` que cortaba la función cuando no tocaba avisar el 80 % hacía que
+      una conversación que cruzaba los **dos** umbrales de una sola vez (un mes que arranca
+      con el cupo gastado, o un límite que baja al cambiar de plan) disparara sólo el primero.
+
+      **La clase: el producto aplica un límite y avisa ANTES, no CUANDO lo aplica.** Ningún
+      gate podía verla — no sobra ninguna palabra, el texto ya es neutro entre rubros, la
+      pantalla renderiza bien y el aviso del 80 % tenía su test en verde. El 06-sep se cerró
+      la mitad de venta de este mismo tema (`limite-que-corta.test.ts`: la web no nombraba el
+      cupo, el dueño se enteraba pagando); ésta es su hermana adentro del producto, y no la
+      cazó nadie porque cerrar una mitad de una familia hace dar la otra por cubierta.
+
+      **Prueba.** Test primero en ROJO por el motivo correcto (2 casos), verde después:
+      `npx vitest run lib/chatbot/cupo.test.ts` → 30/30. Suite completa 3.754 en verde,
+      `tsc --noEmit` y `eslint` en 0.
+
+      **Y un instrumento roto que apareció escribiéndolo:** el test usaba `clearAllMocks`, que
+      **no** vacía la cola de `mockResolvedValueOnce`. Un caso que encola dos respuestas y
+      consume una le deja la sobrante al siguiente, y el siguiente mide otra cosa que la que
+      dice medir — mi caso nuevo salió rojo por eso y no por el defecto. Va `resetAllMocks`.
+
 - [x] **CERRADO el 2026-09-08: el bot que el cliente PAGA se presentaba como «una clínica
       dental» ante los clientes de los otros cuatro rubros.** Commits `8009a9e` (arreglo) y
       `a13d3af` (gate), rama `claude/chatbots-platform-review-0d1d09` de `onia-platform`.
