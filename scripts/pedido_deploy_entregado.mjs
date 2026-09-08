@@ -44,10 +44,24 @@
  * pedido de menos cuesta una vuelta; cerrarlo de más le borra a Sergio Urcullo un pedido
  * real y el arreglo no llega al cliente.
  *
- * QUÉ DEJA AFUERA, dicho para que no se lea como «revisé todo»: hoy sólo `plataforma` puede
- * medirse, porque es el único destino cuyo artefacto nombra su sha (`/opt/onia-platform/
- * build-<sha>`). `landing` sirve desde `runtime-next/` sin sha en el nombre y el `bot` se
- * despliega por copia de archivos. Los dos salen listados como NO_MEDIDO, con su motivo.
+ * QUÉ DEJA AFUERA, dicho para que no se lea como «revisé todo». Hasta el 2026-09-08 esto
+ * medía UN destino de tres y salía con código 0 igual: `landing` y `bot` caían en un
+ * NO_MEDIDO silencioso, así que el modo de falla que este gate existe para cazar —el pedido
+ * que pide un ok por trabajo hecho— era invisible en dos tercios de los pedidos vivos. Es la
+ * misma firma que ya está medida en `deploy_sin_pedido.mjs`: **el hueco no está en lo que el
+ * gate mira mal, está en el sujeto que no mira**, y un exit 0 lo tapa.
+ *
+ * Hoy:
+ *   - `plataforma`: completo. Su artefacto nombra el sha (`/opt/onia-platform/build-<sha>`),
+ *     así que se miden las DOS direcciones (sobre-describe y sub-describe).
+ *   - `landing`: sirve desde `runtime-next/` **sin sha en el nombre**, pero el `BUILD_ID` sí
+ *     tiene fecha, y con eso alcanza para la dirección cara: si TODO lo que el pedido promete
+ *     es anterior al build vivo, está pidiendo un ok por trabajo hecho. Ver
+ *     `publicadoPorFecha` — mide sólo eso; el sub-describe de landing sigue sin instrumento
+ *     porque exige decidir qué commit VIAJA al navegador (`deploy-vivo.mjs llegaAlCliente`).
+ *   - `bot`: se despliega por copia archivo-por-archivo y nada en `/opt/onia/bot` nombra un
+ *     sha ni una fecha de origen. Sigue sin instrumento, y ahora se DICE en el veredicto en
+ *     vez de esconderse en un exit 0.
  */
 
 import { execFileSync } from 'node:child_process';
@@ -186,6 +200,30 @@ export function clasificarPedido({ id, shas, publicado }) {
 }
 
 /**
+ * PURA: ¿el commit ya estaba cuando se armó el build que corre? Es el `publicado(sha)` de los
+ * destinos cuyo artefacto NO nombra su sha pero sí tiene fecha — hoy `landing`.
+ *
+ * Los dos instantes entran en EPOCH (segundos), nunca como texto: `stat` imprime
+ * `2026-09-08 02:58:08.061721697 +0000` y `git log` puede dar otro formato, y comparar eso
+ * como cadena —o parsearlo— es la familia de bugs de fecha que este proyecto ya pagó. Con
+ * `stat -c %Y` y `git log --format=%ct` no hay nada que interpretar.
+ *
+ * 🔴 LA VENTANA ES EL PUNTO, no un detalle de tolerancia. La fecha del `BUILD_ID` es cuándo
+ * TERMINÓ el build, y el build se armó de un commit ANTERIOR a eso. Un commit que cae en el
+ * medio (entró mientras compilaba) parece anterior al artefacto y NO viajó en él. Sin la
+ * ventana, ese caso devuelve `true` y `clasificarPedido` lo lee como ENTREGADO: cerraría un
+ * pedido vivo y el arreglo no llegaría nunca al cliente. Dentro de la ventana devuelve `null`
+ * —«no se sabe»—, que arrastra a VIGENTE. El error posible queda del lado barato: sostener un
+ * pedido de más cuesta una vuelta; cerrarlo de menos le borra a Sergio Urcullo el pedido real.
+ */
+export function publicadoPorFecha({ epochCommit, epochBuild, ventanaSegundos = 20 * 60 }) {
+  if (!Number.isFinite(epochCommit) || !Number.isFinite(epochBuild)) return null;
+  if (epochCommit >= epochBuild) return false;          // posterior al build: no viajó, seguro
+  if (epochCommit >= epochBuild - ventanaSegundos) return null;  // pudo entrar compilando
+  return true;
+}
+
+/**
  * PURA: la dirección INVERSA de `clasificarPedido`, y la que ningún gate del proyecto medía.
  *
  * `clasificarPedido` caza el pedido que SOBRE-describe: promete arreglos que ya se publicaron.
@@ -285,6 +323,29 @@ function shaVivoPlataforma() {
 }
 
 /**
+ * Cuándo terminó de armarse el build que sirve `onia.com.bo`, en epoch. Local si hay `/opt`,
+ * por SSH desde el nodo de casa si no — misma degradación que `shaVivoPlataforma`, y por el
+ * mismo motivo: el instrumento no puede quedar mudo justo en la máquina donde corre el carril
+ * que lo posee. Cualquier salida que no sea un entero es `null` (NO MEDIDO), nunca una fecha
+ * adivinada: con una fecha inventada el gate cerraría pedidos vivos.
+ */
+function epochBuildLanding() {
+  const ruta = '/opt/onia-landing/runtime-next/apps/onia-platform/.next/BUILD_ID';
+  const crudo = existsSync(ruta)
+    ? sh('stat', ['-c', '%Y', ruta])
+    : existsSync(VPS)
+      ? sh('ssh', ['-o', 'BatchMode=yes', '-o', 'ConnectTimeout=20', 'root@187.77.16.63', `stat -c %Y ${ruta}`], { timeout: 120_000 })
+      : null;
+  return crudo && /^\d+$/.test(crudo.trim()) ? Number(crudo.trim()) : null;
+}
+
+/** Fecha de un commit de `onia-hermes` en epoch, o `null` si el sha no resuelve. */
+function epochCommitHermes(sha) {
+  const crudo = sh('git', ['-C', RAIZ, 'log', '-1', '--format=%ct', sha]);
+  return crudo && /^\d+$/.test(crudo.trim()) ? Number(crudo.trim()) : null;
+}
+
+/**
  * Los pedidos vivos del tablero. Devuelve `null` si NO se pudo leer la lista, y el barrido
  * con sus `ilegibles` si se pudo — ver `barrerPedidos`: un `show` que no contesta se NOMBRA,
  * no se descarta.
@@ -354,9 +415,39 @@ async function medirEnVivo() {
   const entregados = [];
   const incompletos = [];
   const noMedidos = [];
+  // `noMedidos` y `sinCubrir` NO son lo mismo, y mezclarlos fue el bug: el primero es
+  // transitorio (el SSH no contestó, el sha no resuelve) y se cura solo en la vuelta
+  // siguiente; el segundo es un AGUJERO del gate, que no se cura nunca y hay que escribirle
+  // instrumento. Impresos juntos, el segundo se lee como ruido de ambiente y sobrevive.
+  const sinCubrir = [];
+  // `landing` no nombra su sha, pero su artefacto tiene FECHA: alcanza para la dirección cara
+  // (¿pide un ok por trabajo hecho?). Se deriva UNA vez, no por pedido: si el SSH no contesta
+  // queda `null` y todos los pedidos de landing salen NO MEDIDO con su motivo.
+  const buildLanding = pedidos.some((p) => p.destino === 'landing') ? epochBuildLanding() : null;
+
   for (const p of pedidos) {
+    if (p.destino === 'landing') {
+      if (buildLanding === null) {
+        noMedidos.push(`${p.id} (landing): no pude leer la fecha del build vivo (¿SSH al VPS?)`);
+        continue;
+      }
+      const r = clasificarPedido({
+        id: p.id,
+        shas: shasPrometidos(p.texto),
+        publicado: (s) => publicadoPorFecha({ epochCommit: epochCommitHermes(s), epochBuild: buildLanding }),
+      });
+      if (r.estado === 'ENTREGADO') entregados.push(r);
+      else if (r.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (landing): ${r.motivo}`);
+      else {
+        console.log(`OK ${p.id} (landing): sigue VIGENTE — ${r.sinPublicar.length} sin publicar, ${r.indeterminados.length} sin resolver`);
+        // El sub-describe de landing NO se mide todavía: exige decidir qué commit VIAJA al
+        // navegador. Se dice acá para que un OK de arriba no se lea como «revisado entero».
+        sinCubrir.push(`${p.id} (landing): falta medir si SUB-describe — sin instrumento`);
+      }
+      continue;
+    }
     if (p.destino !== 'plataforma') {
-      noMedidos.push(`${p.id} (${p.destino}): su artefacto no nombra el sha que corre — sin instrumento`);
+      sinCubrir.push(`${p.id} (${p.destino}): su artefacto no nombra sha ni fecha — sin instrumento`);
       continue;
     }
     if (!puedePlataforma) {
@@ -384,6 +475,7 @@ async function medirEnVivo() {
   }
 
   for (const n of noMedidos) console.log(`NO MEDIDO ${n}`);
+  for (const s of sinCubrir) console.log(`SIN INSTRUMENTO ${s}`);
 
   if (entregados.length > 0) {
     for (const e of entregados) {
@@ -406,7 +498,9 @@ async function medirEnVivo() {
     return 1;
   }
 
-  return noMedidos.length === pedidos.length ? 2 : 0;
+  // 2 = NO MEDIDO, y sólo cuando NINGÚN pedido se pudo juzgar. Un solo veredicto real vale
+  // más que la queja: con exit 2 el carril sabe que el gate no vio nada, y con 0 que sí.
+  return noMedidos.length + sinCubrir.length === pedidos.length ? 2 : 0;
 }
 
 // ── self-check: los mismos casos que el .test.mjs, para poder correrlo suelto ───────────
@@ -453,6 +547,30 @@ function selfCheck() {
       promesaCompleta({ shas: ['1111111'], publicaria: [{ sha: '1111111abc', titulo: 'a' }] }).estado === 'COMPLETA'],
     ['sin poder derivar que publica -> NO_MEDIDO, nunca COMPLETA',
       promesaCompleta({ shas: ['1111111'], publicaria: null }).estado === 'NO_MEDIDO'],
+
+    // ── landing: el destino sin sha en el artefacto, que se mide por FECHA ─────────────
+    // El caso que YA cumple. Sin él, romper la comparación (devolver siempre null) pasaría
+    // igual: todo quedaría VIGENTE y el gate parecería vivo sin poder cerrar nada nunca.
+    ['landing: un commit muy anterior al build ya viajo -> publicado',
+      publicadoPorFecha({ epochCommit: 1000, epochBuild: 100_000 }) === true],
+    ['landing: un commit POSTERIOR al build no viajo -> sin publicar',
+      publicadoPorFecha({ epochCommit: 100_001, epochBuild: 100_000 }) === false],
+    // Éste es el que protege el error caro: dentro de la ventana el build ya estaba
+    // compilando, así que el commit pudo NO viajar. Sin él, un commit de hace 5 minutos se
+    // daría por publicado y el pedido se cerraría estando vivo.
+    ['landing: un commit dentro de la ventana del build es INDETERMINADO, no publicado',
+      publicadoPorFecha({ epochCommit: 100_000 - 300, epochBuild: 100_000 }) === null],
+    ['landing: sin fecha de build no se decide nada',
+      publicadoPorFecha({ epochCommit: 1000, epochBuild: null }) === null],
+    ['landing: sin fecha de commit tampoco',
+      publicadoPorFecha({ epochCommit: null, epochBuild: 100_000 }) === null],
+    // El indeterminado tiene que ARRASTRAR: si `clasificarPedido` lo tratara como publicado,
+    // los tres casos de arriba serían decorativos.
+    ['landing: un indeterminado deja el pedido VIGENTE, nunca ENTREGADO',
+      clasificarPedido({
+        id: 'l', shas: ['1111111', '2222222'],
+        publicado: (s) => (s === '1111111' ? true : publicadoPorFecha({ epochCommit: 99_900, epochBuild: 100_000 })),
+      }).estado === 'VIGENTE'],
     ['un pedido que no nombra NADA y publica algo -> SUB_DESCRIBE',
       promesaCompleta({ shas: [], publicaria: [{ sha: '1111111', titulo: 'a' }] }).estado === 'SUB_DESCRIBE'],
   ];
