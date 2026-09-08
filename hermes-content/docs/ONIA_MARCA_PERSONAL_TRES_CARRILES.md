@@ -4,7 +4,12 @@
 > envío, prometemos algo como instalar y demás, hay que desarrollarlo… también eso puede ir
 > para mi comunidad, así que quiero que ordenes tus cosas"*.
 >
-> Fuente única del tema. Si otro doc contradice esto, gana éste.
+> Fuente única del **reparto**: qué va en cada carril y qué no. Si otro doc contradice
+> esto, gana éste.
+>
+> 👉 **Cómo se produce y se distribuye cada recurso** —una sola vez, tres puertas, con su
+> catálogo y sus estados— está en
+> [`ONIA_RECURSOS_UN_RECURSO_TRES_PUERTAS.md`](ONIA_RECURSOS_UN_RECURSO_TRES_PUERTAS.md).
 
 Los tres carriles no son tres tipos de contenido: son **tres momentos de una misma
 escalera**, y cada uno tiene un trabajo distinto. La decisión que importa no es qué va en
