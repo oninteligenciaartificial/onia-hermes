@@ -1757,6 +1757,45 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] **CERRADO el 2026-09-08: el cliente confirmaba o cancelaba su cita desde el correo, se
+      guardaba, y si el aviso al negocio fallaba le aparecía un error — así que se iba creyendo
+      que NO había cancelado, y el negocio tampoco se enteraba.** Commit `9e579b2`, rama
+      `claude/chatbots-platform-review-0d1d09` de `onia-platform`. ⚠️ **Commiteado y en la rama,
+      NO desplegado**: falta el merge a `master` (es de `onia-cola`) y después el swap.
+      Comentado en el pedido vivo `t_bf1607af`.
+
+      **Qué estaba mal, y por qué ningún instrumento podía verlo.** `responderCita`
+      (`app/cita/acciones.ts`) hace dos cosas en orden: guarda la decisión y después avisa al
+      negocio. El aviso corría pelado, después del `update`. En ese punto la escritura ya es
+      irreversible, así que cualquier tropiezo del aviso le muestra al cliente un error sobre
+      algo que **sí** quedó hecho. La ruta responde 200, la pantalla se ve perfecta, no sobra
+      ninguna palabra y el texto ya es neutro entre rubros: ningún barrido de literales, precios,
+      obra ni vocabulario lo alcanza. Se ve preguntando **qué pasa si el aviso falla**.
+
+      Y con él salieron dos hermanos del mismo camino:
+      · `recipientId: appointment.doctorId` con `doctorId String?` en el schema y `recipientId`
+        **NOT NULL** en `Notification`. Hoy no explota porque los dos creadores de cita exigen
+        profesional (`z.string().min(1)` en `crear-cita.ts` y en `api/booking/appointments`) —
+        es una bomba con la espoleta puesta. Ahora, sin profesional, el aviso va a los ADMIN.
+      · La zona horaria estaba clavada en `"America/La_Paz"` mientras el resto del sistema la
+        deriva de `clinicSettings.timezone` (`crear-cita.ts:203`). **El gate de zonas
+        (`fecha-en-zona-del-negocio.test.ts`) exige que se PASE `timeZone` y es ciego a que el
+        VALOR sea una constante**, así que pasaba en verde sobre el aviso que le muestra al
+        profesional una hora distinta de la que su propia agenda le da para la misma cita.
+        Latente hoy: las 10 orgs de producción están en `America/La_Paz` (medido con `psql`).
+
+      **Y el gate hermano quedaba hueco por este mismo arreglo**, que es lo que más vale de la
+      vuelta: `no-muta-en-get.test.ts` vigilaba `notification.create` y la acción pasó a
+      `createMany` — su `not.toHaveBeenCalled()` habría seguido en **verde** aunque el GET
+      volviera a escribir. Ahora mira las dos vías. Un arreglo puede apagar el guardia del
+      defecto vecino sin que nada se ponga rojo.
+
+      **Prueba:** `app/cita/aviso-no-tumba-la-respuesta.test.ts`, 6 casos, los tres guardias
+      validados **por mutación** (sacar el `try/catch` → 2 rojos; volver al destinatario único →
+      1 rojo; volver la zona a constante → 1 rojo; cada uno cae por su propio caso, ninguno
+      tapado por otro). Gates: `npx tsc --noEmit` exit 0 · `npx vitest run` **3897 pasan / 319
+      archivos** · `npx eslint .` 0 errores.
+
 - [x] **CERRADO el 2026-09-08: el bot le decía al cliente la ENVOLVENTE de la semana como si
       fuera el horario de atención — y lo mandaba a una puerta cerrada.** Commit `6b1ce7c`,
       rama `claude/chatbots-platform-review-0d1d09` de `onia-platform`. ⚠️ **Commiteado y en
