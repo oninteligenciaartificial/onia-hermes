@@ -66,7 +66,7 @@ en un tutorial envejece mal y nadie lo nota hasta que un comentario lo marca.
 ## Rehacer los PNG
 
 ```bash
-for n in $(seq 1 11); do
+for n in $(seq 1 13); do
   chrome --headless --window-size=1920,1080 \
     --screenshot="lamina-$(printf %02d $n).png" "deck.html?limpio#$n"
 done
