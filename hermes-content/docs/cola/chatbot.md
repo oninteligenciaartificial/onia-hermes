@@ -1538,17 +1538,6 @@ decisión de Sergio, no código.
 
 ## Después
 
-- [ ] **El disco de la máquina de Sergio se llenó al 100% y bloqueó el build.**
-      No es una molestia: `next build` murió con `ENOSPC: no space left on device` y con
-      **0 bytes libres** de 465 GB no se puede mirar ninguna pantalla. Se liberó lo
-      inequívocamente muerto — la caché de npm, 308 carpetas `HeadlessChrome*` de Playwright en
-      `%TEMP%`, y los `.next` de los **12 worktrees de `onia-platform` que ni siquiera tienen
-      `node_modules`** (build sin con qué reconstruirse: basura por definición). Quedaron 5,9 GB
-      y el build pasó. **La causa de fondo sigue ahí y no la arregla este carril:**
-      `onia-platform` tiene **30 worktrees**, 13 con su propio `node_modules`. Cerrar los
-      worktrees de ramas ya mergeadas es de cada carril; el de plataforma es el que lleva la
-      cuenta.
-
 - [ ] **Limpieza de la data QA NUEVA.** La del 29-ago ya se ejecutó; después se generó más:
       las conversaciones QA 39, 43 y 44 (`Cliente Prueba Bandeja`, `Cliente Insistencia Tres`,
       `Cliente Comprobante`). **No borrar todavía**: son la evidencia de cuatro ítems cerrados,
@@ -1818,6 +1807,21 @@ archivos.**
 ---
 
 ## Cerrado — no rehacer
+
+- [x] **El disco que bloqueaba el build: el ítem describía una máquina que ya no es donde
+      corremos.** Cerrado el 2026-09-07 midiendo, no razonando. Decía «0 bytes libres de
+      465 GB» y «`onia-platform` tiene **30 worktrees**, 13 con su propio `node_modules`».
+      Medido hoy en la máquina donde de verdad corren los loops (nodo-casa, WSL): `df -h /`
+      da **1007 GB, 62 usados, 7%** — 895 GB libres; `/mnt/c` está al 58%; y hay **DOS**
+      carpetas `onia-platform*` en `/root/loops`, no 30, con un solo `.next` (221 MB) que sí
+      tiene `node_modules` al lado, o sea que puede reconstruirse: no es la basura que el
+      ítem mandaba a barrer.
+      **Por qué envejeció sin que nadie lo notara:** describía la máquina Windows de la app
+      de Claude Code, y los loops se mudaron al VPS el 01-sep y a nodo-casa el 05/06-sep. El
+      ítem no estaba mal cuando se escribió; dejó de tener sujeto.
+      **Lo que sí quedó cubierto:** esta máquina tiene el vigía `onia-vigia-disco.sh` en su
+      crontab (`41 * * * *`, umbral 85%) con el motivo escrito — si se llena, se caen los
+      cuatro loops, incluido `onia-cola`, que es el único camino a `main`.
 
 - [x] 🔴 **El bot adelantaba UN DÍA el plazo fiscal, y los DOS gates del tema exigían la fecha
       equivocada.** Cerrado el 2026-09-06 (`85a3f41d2`). Archivos:
