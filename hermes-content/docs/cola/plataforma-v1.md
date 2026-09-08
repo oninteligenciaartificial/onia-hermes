@@ -1786,6 +1786,87 @@ y sin operar. Acá se opera, con verificación por ítem.
       matriz) también es suyo. Que `/opt/onia-siat` quede alineado con el repo es la tarea
       `t_7d2019bb`.
 
+- [x] 🔴 **CERRADO el 2026-09-08: la pantalla donde el dueño decide CUÁNTO PAGA le vendía a
+      3 de los 5 rubros de la v1.0 cuatro pantallas que su rubro no tiene.** `/reports` y
+      `/billing/recurring` están gateadas por PLAN (`reportsEnabled`, `recurringInvoicesEnabled`
+      en `lib/plan-catalogo.ts`: `true` desde Profesional para **todos** los planes) y **además
+      por RUBRO**: sólo dental, estética y veterinaria las declaran en su nav, así que
+      `allowedSegmentsForPack` no les da el segmento a comercio, importadora ni servicios
+      profesionales — con `PLATFORM_LAYER=1` (medido en el contenedor vivo, no deducido) el
+      layout los devuelve a `/dashboard`, mudo. Con la agenda pasa igual: comercio e importadora
+      no tienen `/appointments`.
+
+      Y `/settings/plan` las listaba plano para los siete rubros: **"Agenda y citas"**, **"Agenda
+      pública incluida"**, **"Facturas recurrentes"** y **"Reportes de ingresos y citas" /
+      "Reportes avanzados + exportación CSV"** — 22 promesas imposibles, contadas por el gate en
+      rojo antes de tocar el arreglo. Un dueño de ferretería en Básico leía *"Reportes avanzados
+      — no incluido"* como **motivo para subir de Bs 320 a Bs 750**, pagaba, y no recibía ninguna
+      de las cuatro. La ayuda ya lo sabía: `app/(dashboard)/help/page.tsx` dice *"ferretería no
+      puede leer «Facturación» ni «Reportes» (no las tiene)"*. La mano derecha lo sabía y la
+      izquierda lo cobraba.
+
+      **Por qué ningún gate podía verlo:** no sobra una palabra prohibida (el texto es legítimo
+      en dental), el monto sale de la fuente única (`monto-de-plan-a-mano.test.ts` verde), el
+      vocabulario deriva del rubro (`planes-en-el-idioma-del-rubro.test.ts` verde) y los gates de
+      caminos no alcanzan `/reports` porque **ningún** pack de esos tres la pinta: no es sujeto
+      de nadie. Por eso el sujeto del gate nuevo es el **universo derivado** (los 7 packs × las
+      features que declaran pantalla), no las filas que ya existen.
+
+      **Arreglo** (`9c7031a`, rama `claude/chatbots-platform-review-0d1d09`):
+      `entregaLaPantalla(track, href)` generaliza a `tieneAgenda` derivando del nav —la misma
+      fuente de `allowedSegmentsForPack`, así que un `false` significa las dos cosas a la vez—;
+      `PlanFeature` gana `pantalla` y `planesDe` descarta la que el pack no entrega, **incluida o
+      como gancho de upsell** (las dos cobran igual); y la comparativa del pie salió del JSX a
+      `filasComparativaDe()`, porque era otro render del mismo dato y ningún test podía mirarla
+      tipeada dentro del markup.
+
+      **Gate:** `app/(dashboard)/settings/planes-prometen-pantallas-del-rubro.test.ts`, validado
+      **por mutación en 3 direcciones** (sin filtro en cada mitad + una feature de pantalla sin
+      declarar): las tres `exit 1`, base `exit 0`. **Gates:** `npx tsc --noEmit` exit 0 ·
+      `npx vitest run` **3994 pasan / 331 archivos** · `npx eslint .` 0 errores.
+
+      🔴 **NO ESTÁ DESPLEGADO, y encima falta un paso antes:** `9c7031a` está en la rama del
+      carril, **no en `master`**. Si el `ok` de `t_daa8750c` llega antes de que el integrador
+      mergee, este arreglo no viaja en ese swap. Anotado como comentario en ese pedido.
+
+- [x] 🔴 **CERRADO el 2026-09-08: el dueño elegía pagar el AÑO y el mensaje con el que
+      contrataba pedía el MES.** En `/settings/plan` el selector Mensual/Anual cambia la tarjeta
+      entera —precio anual, «Bs 7.500 facturado anualmente», «Ahorras Bs 1.500 al año»
+      (`PlanClient.tsx:559-603`)— y el modal del QR cobra el total anual (`:942`). Lo único que
+      no cambiaba era el mensaje del botón **«Contratar por WhatsApp»**, que es lo que
+      efectivamente le llega a Sergio Urcullo: Profesional y Completo lo tenían escrito con
+      `mensual` fijo y su monto mensual. Quien lo lee cobra la modalidad equivocada, al precio
+      equivocado, en el único camino de contratación que tiene la pantalla.
+
+      **Por qué sobrevivió, que es lo reusable:** `waMsg` está tipado
+      `(orgName: string, cycle: BillingCycle) => string` y el llamador **sí** le pasa el ciclo
+      (`:909`), pero una implementación puede declararse `(org) => ...` e ignorarlo —TypeScript
+      acepta la aridad menor—, así que `tsc` queda en 0 y nada se pone rojo. El arreglo del ciclo
+      se había hecho en Básico y no viajó a sus hermanos: **la instancia, no la clase.** Por eso
+      el arreglo no copia el ternario tres veces: la frase de modalidad sale ahora de un solo
+      lugar (`modalidadContratada`), así un plan nuevo no la puede tipear.
+
+      **Ningún gate podía verlo, y los tres vecinos estaban en verde:** no sobra ni falta una
+      palabra prohibida; el monto sale de `DEFAULT_PLAN_AMOUNTS`, así que
+      `monto-de-plan-a-mano.test.ts` pasa; y el vocabulario deriva del rubro, así que
+      `planes-en-el-idioma-del-rubro.test.ts` pasa **y no mira `waMsg`**. El defecto sólo existe
+      en el CRUCE (ciclo elegido, texto del mensaje).
+
+      **Gate:** `app/(dashboard)/settings/modalidad-de-cobro-en-el-mensaje.test.ts`, que mide los
+      textos que la función **devuelve** —no el fuente, así no se absuelve con su propio
+      comentario ni con la aridad declarada—, incluye la **mitad simétrica** (con ciclo mensual
+      el mensaje tampoco puede ofrecer el año) y dos anclajes: que existan sujetos que prometan
+      modalidad, y que **Empresa quede exenta por lo que su texto dice** (pide una propuesta
+      formal) y no por llamarse Empresa. **Validado por mutación en 4 direcciones:** revertir el
+      arreglo en Profesional → rojo; el esquive que toma `cycle` y no lo usa → rojo; detector
+      siempre-vacío → rojo; Empresa prometiendo modalidad → rojo.
+
+      Commit `9bbf0a7`. Gates: `npx tsc --noEmit` exit 0 · `npx vitest run` **3983 pasan / 330
+      archivos** · `npx eslint .` 0 errores.
+      ⚠️ **Commiteado y pusheado a la rama del carril, NO está en `master` y NO viaja con el
+      pedido de deploy vivo** (`t_daa8750c`): `git merge-base --is-ancestor 9bbf0a7
+      origin/master` da NO. Entra al cliente cuando el integrador lo mergee y se publique.
+
 - [x] 🔴 **CERRADO el 2026-09-08: en la pantalla donde el dueño PAGA Onia, el modal del QR le
       pedía «Clínica registrada» a los cinco rubros — y el botón flotante le decía «Nuevo
       paciente» a un centro de estética cuyo propio menú dice «Clientas».**
