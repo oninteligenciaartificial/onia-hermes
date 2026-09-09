@@ -26,15 +26,18 @@
 
 ### Lo que hace Sergio Urcullo
 
-| Día | Qué | Cuánto |
-|---|---|---|
-| **hoy** | Mandar el link del homelab a los 3 que comentaron. Molde en `ONIA_MOTOR_SEMANAL_CONTENIDO.md` § «el mensaje listo para pegar» | 3 min |
-| **hoy** | Pegar **D6** en Announcements — cierra la serie (`cola/drops/2026-09-08.md`) | 1 min |
-| mié 09 | Publicar el carrusel **«Mi stack»** con su caption. Antes: leer la guía que promete | 10 min |
-| jue 10 | Contestar los `STACK` que lleguen, con el mismo molde | según lleguen |
-| vie 11 | **Elegir el tema de la semana** del [mapa](../ONIA_MAPA_DE_TEMAS.md), de las filas `S` | 2 min |
-| sáb 12 | **Grabar los 6 videos de una sentada** — mismo tema, misma ropa, misma pantalla | 1 h |
-| dom 13 | Pasarme el link del video de YouTube de Claude Code, si ya salió | 1 min |
+| Día | Qué | 📍 Dónde | Cuánto |
+|---|---|---|---|
+| **hoy** | Mandar el link del homelab a los 3 que comentaron | **DM de Instagram** | 3 min |
+| **hoy** | Pegar **D6** (`cola/drops/2026-09-08.md`) — cierra la serie | **comunidad**, canal Announcements | 1 min |
+| mié 09 | Publicar el carrusel **«Mi stack»**. Antes: leer la guía que promete | **Instagram**, feed | 10 min |
+| jue 10 | Contestar los `STACK` que lleguen | **DM de Instagram** | según lleguen |
+| vie 11 | **Elegir el tema de la semana** del [mapa](../ONIA_MAPA_DE_TEMAS.md), filas `S` | — (decisión) | 2 min |
+| sáb 12 | **Grabar los 6 videos de una sentada** | — (se publican de a uno) | 1 h |
+| dom 13 | Pasarme el link de YouTube de Claude Code, si ya salió | — | 1 min |
+
+📍 **Ante cualquier duda de dónde va algo:**
+[`ONIA_DONDE_VA_CADA_COSA.md`](../ONIA_DONDE_VA_CADA_COSA.md).
 
 ### Lo que hago yo
 
@@ -52,11 +55,13 @@ de 10 minutos y el caso real cuelgan todos de **«cómo saber qué automatizar p
 hay que reescribirlos — hay que ponerles el título común y el orden. Con eso la primera
 semana del motor casi no cuesta.
 
-| Día | Vos | Yo |
-|---|---|---|
-| lun-sáb | Publicás 1 video + pegás 1 drop, por día | Los drops escritos y en la cola |
-| **dom 20** | — | **La guía a la web**, armada con los seis drops |
-| **lun 21** | El video que la promete: «comentá PALABRA» | El mensaje de respuesta listo |
+| Día | Vos | 📍 Dónde | Yo |
+|---|---|---|---|
+| lun-sáb | 1 video por día | **Instagram** | — |
+| lun-sáb | 1 drop por día, **con su archivo** | **comunidad**, Announcements | los drops escritos |
+| **dom 20** | — | — | **la guía** → la web, pública |
+| **dom 20** | Pasás el link de los archivos | **comunidad**, Announcements | `/tema/archivos` → oculta |
+| **lun 21** | El video que promete: «comentá PALABRA» | **Instagram** | el mensaje de respuesta |
 
 **El domingo 20 no tenés que hacer nada.** Ése es el punto de todo esto: la guía se arma
 sola con lo que ya se contó de lunes a sábado.
