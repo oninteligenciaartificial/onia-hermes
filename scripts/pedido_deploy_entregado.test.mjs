@@ -7,7 +7,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { barrerPedidos, buildQueCorre, clasificarPedido, shasDelTexto, shasPrometidos } from './pedido_deploy_entregado.mjs';
+import { barrerPedidos, buildQueCorre, clasificarPedido, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
 
 // El caso que me costo la vuelta del 2026-09-06: los 13 shas prometidos por t_0268567b
 // estaban TODOS dentro del build vivo y el pedido seguia blocked pidiendo un ok por
@@ -166,4 +166,44 @@ test('sin BUILD_ID vivo no se elige ningun build', () => {
 test('si ningun candidato casa, no se elige ninguno', () => {
   const candidatos = [{ sha: 'aaaaaaa', buildId: 'viejo1' }];
   assert.equal(buildQueCorre({ buildIdVivo: 'otro', candidatos }), null);
+});
+
+// ── landing: de que se compone «lo que el ok publicaria» ───────────────────────────────
+//
+// POR QUE ESTAN ACA Y NO SOLO EN EL --self-check: esta cadena es la que corre el integrador
+// antes de tocar `main`. Un caso que vive unicamente en el self-check no lo corre nadie salvo
+// el dueno del carril, y el objetivo del gate —que ningun pedido publique algo que Sergio
+// Urcullo no leyo— no puede depender de que alguien se acuerde de invocarlo.
+//
+// La zona de landing (`web-factory/apps/onia-platform`) mezcla el sitio con sus PROPIAS
+// herramientas. Sin este filtro, el pedido tendria que nombrar cada gate y cada script, y un
+// pedido ilegible es un pedido que no se lee.
+test('landing: un commit que solo toca un gate no entra en lo que el ok publica', () => {
+  const viajan = soloLosQueViajan([
+    { sha: '1111111', titulo: 'copy', archivos: ['web-factory/apps/onia-platform/src/app/page.tsx'] },
+    { sha: '9999999', titulo: 'gate', archivos: ['web-factory/apps/onia-platform/src/app/x.test.ts'] },
+  ]);
+  assert.deepEqual(viajan.map((c) => c.sha), ['1111111']);
+});
+
+// El caso que YA cumple. Sin el, un filtro que devuelva SIEMPRE vacio pasa el de arriba por el
+// motivo equivocado: todo pedido saldria COMPLETA para siempre y el gate quedaria mudo.
+test('landing: el caso que YA cumple: un arreglo de copy si entra', () => {
+  const viajan = soloLosQueViajan([
+    { sha: '1111111', titulo: 'copy', archivos: ['web-factory/apps/onia-platform/src/lib/pricing.ts'] },
+  ]);
+  assert.equal(viajan.length, 1);
+});
+
+// Ausencia de dato NO es «no viaja»: `git log --name-only` pudo no contestar, y un merge NUNCA
+// lista archivos. Ante la duda el commit viaja, asi el error posible es pedir que se nombre uno
+// de mas —barato— y nunca callar un arreglo real.
+test('landing: un commit sin lista de archivos se cuenta como que viaja', () => {
+  assert.equal(soloLosQueViajan([{ sha: '1111111', titulo: 'sin datos' }]).length, 1);
+});
+
+// `null` entra y `null` sale: `promesaCompleta` lo traduce a NO_MEDIDO. Devolver `[]` diria
+// «el ok no publica nada» y cerraria la pregunta sin haberla podido hacer.
+test('landing: sin commits medidos no se inventa un universo vacio', () => {
+  assert.equal(soloLosQueViajan(null), null);
 });

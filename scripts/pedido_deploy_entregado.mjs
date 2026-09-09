@@ -68,8 +68,16 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, join } from 'node:path';
+// El criterio de «esto lo ve un lead» se IMPORTA del instrumento que ya lo tiene y que el
+// publicador de landing aplica. Reescribirlo acá sería una segunda copia del mismo juicio,
+// que es como el gate termina midiendo algo distinto de lo que el destino hace.
+import { llegaAlCliente } from '../web-factory/apps/onia-platform/scripts/deploy-vivo.mjs';
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..');
+/** La zona de `main` que arma el sitio de venta. Anclada con `:/` a propósito: un pathspec
+ *  relativo se resuelve contra el CWD y devuelve CERO commits desde cualquier subcarpeta —
+ *  un verde que no midió nada, ya cazado el 2026-09-04 en `deploy-vivo.mjs`. */
+const ZONA_LANDING = ':/web-factory/apps/onia-platform';
 const TABLERO = '/root/bin/onia-tablero.sh';
 const REPO_PLATAFORMA = '/root/loops/onia-platform';
 const DIR_BUILDS = '/opt/onia-platform';
@@ -270,6 +278,31 @@ export function promesaCompleta({ shas, publicaria }) {
     : { estado: 'SUB_DESCRIBE', mudos };
 }
 
+/**
+ * De todo lo que `main` tiene sin publicar, ¿qué puede cambiar algo que el cliente VE?
+ *
+ * POR QUÉ EXISTE. `promesaCompleta` necesita el universo de «lo que el ok publicaría», y para
+ * `plataforma` ese universo es directo: todo commit posterior al build vivo. Para `landing` no,
+ * porque su zona (`web-factory/apps/onia-platform`) mezcla el sitio con SUS PROPIAS
+ * herramientas —gates, scripts, tests— que no viajan al navegador. Contarlas obligaría a
+ * nombrarlas en el pedido, y un pedido lleno de commits que no cambian nada es exactamente el
+ * ruido que hace que Sergio Urcullo deje de leerlos.
+ *
+ * El filtro NO se reescribe acá: es `llegaAlCliente` de `deploy-vivo.mjs`, el mismo que ya usa
+ * el publicador para decir «2 arreglos» donde `git log` crudo dice 3. Dos copias del criterio
+ * es como nace el gate que mide una cosa distinta de la que el destino aplica.
+ *
+ * Dirección del error, heredada de ese archivo y a propósito: ante la duda el commit VIAJA
+ * (lista de exclusión, no de inclusión), así que se puede pedir nombrar de más —barato— y
+ * nunca callar un arreglo real. `null` entra y `null` sale: sin datos no se decide nada.
+ *
+ * @param {Array<{sha:string,titulo:string,archivos?:string[]}>|null} commits
+ */
+export function soloLosQueViajan(commits) {
+  if (!Array.isArray(commits)) return null;
+  return commits.filter((c) => llegaAlCliente(c.archivos));
+}
+
 // ── medición viva ──────────────────────────────────────────────────────────────────────
 
 function sh(cmd, args, opts = {}) {
@@ -337,6 +370,40 @@ function epochBuildLanding() {
       ? sh('ssh', ['-o', 'BatchMode=yes', '-o', 'ConnectTimeout=20', 'root@187.77.16.63', `stat -c %Y ${ruta}`], { timeout: 120_000 })
       : null;
   return crudo && /^\d+$/.test(crudo.trim()) ? Number(crudo.trim()) : null;
+}
+
+/**
+ * Lo que el `ok` de un pedido de `landing` publicaría de verdad: los commits de la zona del
+ * sitio posteriores al build vivo, ya filtrados por si le cambian algo al lead.
+ *
+ * Se lee en UNA sola llamada con separadores de control (RS entre commits, US entre campos)
+ * para no pagar un `git show` por commit. `--no-merges` no es cosmético: `git log --name-only`
+ * NO lista los archivos de un merge, así que un merge llegaría con `archivos: []` y —por la
+ * regla de «ausencia de dato = viaja»— se contaría como arreglo, inflando el pedido con los
+ * merges del propio integrador. Ya pasó: 7 de 43 commits, medido el 2026-09-06.
+ *
+ * @returns {Array<{sha:string,titulo:string,archivos:string[]}>|null} `null` si no se pudo medir.
+ */
+function publicariaLanding(epochBuild) {
+  if (typeof epochBuild !== 'number') return null;
+  const RS = '\x1e';
+  const salida = sh('git', [
+    '-C', RAIZ, 'log', '--no-merges', '--name-only',
+    `--format=${RS}%h%x1f%ct%x1f%s`, 'origin/main', '--', ZONA_LANDING,
+  ]);
+  if (salida === null) return null;
+  return salida
+    .split(RS)
+    .filter((b) => b.trim())
+    .map((bloque) => {
+      const [cabecera, ...archivos] = bloque.split('\n');
+      const [sha, ct, ...resto] = cabecera.split('\x1f');
+      return { sha, ct: Number(ct), titulo: resto.join('\x1f'), archivos: archivos.filter(Boolean) };
+    })
+    // Posteriores al build: los mismos que `deploy-vivo.mjs` llama «varados». Sin ventana de
+    // gracia acá a propósito — la de `publicadoPorFecha` existe para no CERRAR un pedido vivo;
+    // acá el error barato es pedir que se nombre uno de más.
+    .filter((c) => Number.isFinite(c.ct) && c.ct > epochBuild);
 }
 
 /** Fecha de un commit de `onia-hermes` en epoch, o `null` si el sha no resuelve. */
@@ -440,9 +507,17 @@ async function medirEnVivo() {
       else if (r.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (landing): ${r.motivo}`);
       else {
         console.log(`OK ${p.id} (landing): sigue VIGENTE — ${r.sinPublicar.length} sin publicar, ${r.indeterminados.length} sin resolver`);
-        // El sub-describe de landing NO se mide todavía: exige decidir qué commit VIAJA al
-        // navegador. Se dice acá para que un OK de arriba no se lea como «revisado entero».
-        sinCubrir.push(`${p.id} (landing): falta medir si SUB-describe — sin instrumento`);
+        // Vigente no alcanza, igual que en plataforma: un pedido puede estar vigente Y
+        // sub-describir lo que su `ok` publica — y ésa es la dirección cara, porque lo que
+        // se publica sin nombrar es justo lo que Sergio Urcullo no leyó. El universo se
+        // DERIVA (commits de la zona posteriores al build, los que le llegan al lead), nunca
+        // de los shas del pedido: recorrer lo que el pedido enumera no puede ver al que falta.
+        const c = promesaCompleta({
+          shas: shasDelTexto(p.texto),
+          publicaria: soloLosQueViajan(publicariaLanding(buildLanding)),
+        });
+        if (c.estado === 'SUB_DESCRIBE') incompletos.push({ id: p.id, mudos: c.mudos });
+        else if (c.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (landing, promesa completa): ${c.motivo}`);
       }
       continue;
     }
@@ -573,6 +648,28 @@ function selfCheck() {
       }).estado === 'VIGENTE'],
     ['un pedido que no nombra NADA y publica algo -> SUB_DESCRIBE',
       promesaCompleta({ shas: [], publicaria: [{ sha: '1111111', titulo: 'a' }] }).estado === 'SUB_DESCRIBE'],
+
+    // ── landing: QUÉ entra en el universo de «lo que el ok publicaría» ────────────────
+    // Sin este filtro, el pedido de landing tendría que nombrar sus propios gates y scripts,
+    // que no cambian un pixel de lo que ve un lead: un pedido ilegible es un pedido que no
+    // se lee. El criterio NO se reescribe acá, se importa del publicador.
+    ['landing: un commit que solo toca un gate NO entra en lo que el ok publica',
+      (soloLosQueViajan([
+        { sha: '1111111', titulo: 'copy', archivos: ['web-factory/apps/onia-platform/src/app/page.tsx'] },
+        { sha: '9999999', titulo: 'gate', archivos: ['web-factory/apps/onia-platform/src/app/x.test.ts'] },
+      ]) || []).map((c) => c.sha).join() === '1111111'],
+    // El caso que YA cumple. Sin él, un filtro que devuelva SIEMPRE vacío pasa el de arriba
+    // por el motivo equivocado: el pedido saldría COMPLETA para siempre y el gate, mudo.
+    ['landing: el caso que YA cumple: un arreglo de copy SI entra',
+      (soloLosQueViajan([
+        { sha: '1111111', titulo: 'copy', archivos: ['web-factory/apps/onia-platform/src/lib/pricing.ts'] },
+      ]) || []).length === 1],
+    // Ausencia de dato NO es «no viaja»: `git log --name-only` pudo no contestar. Misma
+    // regla que separa `[]` de `null` en el resto del archivo.
+    ['landing: un commit sin lista de archivos se cuenta como que viaja',
+      (soloLosQueViajan([{ sha: '1111111', titulo: 'sin datos' }]) || []).length === 1],
+    ['landing: sin commits medidos no se inventa un universo vacio',
+      soloLosQueViajan(null) === null],
   ];
   let malos = 0;
   for (const [nombre, ok] of casos) {
