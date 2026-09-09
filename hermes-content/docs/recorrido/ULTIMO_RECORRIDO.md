@@ -12,6 +12,15 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-09 00:32 La Paz — comercio escritorio (`RECORRIDO_RUBRO`): 8/8 que le corresponden, sin hallazgos
+
+Tras dos vueltas seguidas en dental con el mismo resultado, cambio de rubro: `RECORRIDO_RUBRO="Comercio / tienda"`.
+Cuenta `zz-qa-2026-09-09-0014@onia.com.bo`, onboarding en 6 pantallas, dato
+`zz-qa-2026-09-09-0014-paciente` cargado en `/comercio` (Catálogo) y encontrado, visible en el
+panel del paso 9. Paso 7 (cita) sale NO-APLICA correctamente: el pack de Comercio no vende
+agenda (coherente con su menú, sin ítem de citas) — no es un agujero. Cobro visto en
+`/comercio/caja`, frenado sin pagar. Cero filas `zz-qa-` propias al cerrar. Nada roto.
+
 ## 2026-09-09 00:09 La Paz — dental escritorio: 9/9, sin hallazgos, base limpia al arrancar
 
 Repetición del recorrido completo (dental, escritorio 1440x900), sin huérfanos previos esta vez
