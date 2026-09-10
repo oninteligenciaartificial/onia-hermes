@@ -1326,6 +1326,7 @@ const PASOS = [
       // Primero se ACOTA al formulario: fuera de él está el buscador de la lista, y llenarlo a
       // él manda el alta vacía (ver `acotarFormulario`).
       const forma = await acotarFormulario(page, GUARDAR.source);
+      if (process.env.DEBUG_FORM) console.error('DEBUG forma', JSON.stringify(forma));
       if (!forma.hayGuardar) {
         const vista = await mirar(page, 'paso-06b-alta-dato.png');
         return {
@@ -1336,6 +1337,7 @@ const PASOS = [
         };
       }
       const llenado = await llenarFormulario(page, QA.paciente);
+      if (process.env.DEBUG_FORM) console.error('DEBUG llenado', JSON.stringify(llenado));
       if (!llenado.nombreCargado) {
         const vista = await mirar(page, 'paso-06b-alta-dato.png');
         return {
