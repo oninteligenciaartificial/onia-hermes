@@ -77,7 +77,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       se juntaron las 7 — 4 eran de "modulos" del 06-sep, mismo patrón). El pedido de Sergio
       Urcullo ("solo una cuenta") no se sostiene si el loop la repuebla cada madrugada.
       **Fix:** el prompt/script del recorrido borra su org + `auth.users` al terminar (éxito o
-      fallo), protocolo de `onia-platform/.claude/skills/` (onia-db): email
+      fallo), protocolo de la skill onia-db (`onia-platform/.claude/skills/onia-db/SKILL.md`): email
       `oninteligenciaartificial+qa*` o `zz-qa-*@onia.com.bo`, borrado por slug exacto. Carril
       loops (`hermes-content/docs/cola/loops.md` es su cola natural). **LISTO =** dos corridas
       seguidas del recorrido dejan `public.organizations` con las mismas filas que antes.
