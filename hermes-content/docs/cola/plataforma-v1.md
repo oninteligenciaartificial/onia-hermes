@@ -66,6 +66,54 @@ y sin operar. Acá se opera, con verificación por ítem.
       (`status=sent` en logs de `onia-mail` + respuesta sin `not_configured`), sin tocar el
       circuito de confirmación de GoTrue que ya funciona.
 
+- [x] 🔴 **CERRADO el 2026-09-10 (`afa9da6`, en la rama del carril — NO en `master` todavía):
+      el botón «Agendar» que ve el cliente del cliente lo mandaba a un callejón, teniendo el
+      sistema el enlace bueno en la mano.** La pantalla **«Mis Citas»**
+      (`/book/my-appointments/<token>` — el enlace que el negocio le manda por WhatsApp a su
+      cliente) cerraba con *«¿Necesitás otra cita? · Reserva en segundos, sin registro»* y un
+      botón **Agendar** → `/book`. Y `/book` **no puede reservar**: se vació a propósito el
+      2026-08-19 porque listaba a todos los clientes de Onia con nombre, teléfono y correo, así
+      que hoy sólo dice *«Pedí su enlace directo de reserva o buscalo en sus redes sociales»*.
+      O sea: al que estaba mirando el nombre, la dirección y el teléfono de su negocio tres
+      tarjetas más arriba, lo mandábamos a conseguir el enlace por su cuenta. Segunda instancia
+      en el pie de `/contact`: *«Agenda pública»* → el mismo callejón.
+
+      **Por qué ningún gate podía verlo, que es lo reusable:** los que vigilan enlaces preguntan
+      si el destino **existe** —404, redirect, host muerto— y `/book` responde 200, renderiza
+      perfecto y su texto es honesto **para quien llega de afuera**. No sobra ni falta una
+      palabra, así que ningún barrido de literales, precios, obra ni vocabulario lo alcanza. Lo
+      que está mal es el **par**: de dónde viene el que aprieta y qué puede hacer al llegar. Es
+      el escalón inverso de *«una promesa que cambia se barre en toda la superficie»* — acá lo
+      que cambió fue la **capacidad del destino**, y por eso los textos de origen siguieron
+      siendo ciertos palabra por palabra.
+
+      **Arreglo:** el `GET` de `/api/booking/appointments` trae el `slug` y decide con
+      `puedeRecibirReservasPublicas` —el **mismo** helper que las tres puertas de `/api/booking`—,
+      y devuelve `reservaUrl`: **enlace o `null`**, nunca un slug pelado que obligue a la pantalla
+      a adivinar (ése es el retorno ambiguo que ya nos costó una promesa falsa en el alta). El CTA
+      cuelga de ese dato, así que a un negocio **vencido**, **sin el add-on** o de un **rubro sin
+      agenda** no se le ofrece «reserva en segundos» en lugar de mandarlo a una pantalla que lo
+      rechaza.
+
+      **Gate:** `app/(public)/book/agendar-lleva-a-agendar.test.ts`. El sujeto se deriva del disco
+      **en las dos puntas** y no hay lista negra: qué pantallas agendan sale de cuáles llaman al
+      POST que crea la cita —exigiendo `method: "POST"`, porque `confirm` y la propia «Mis citas»
+      también nombran esa URL y sólo **leen**—, así que `/book` vuelve a ser destino válido el día
+      que vuelva a reservar. El logo del encabezado **se exime solo** por no tener texto, y esa
+      exención se re-mide en cada corrida en vez de estar escrita.
+
+      ⚠️ **La primera versión del gate se apagó con su propio arreglo**: su sujeto era «href
+      literal a `/book`», y al pasar el CTA a `href={…reservaUrl}` esa forma desapareció del disco
+      y el gate se quedó sin nada que mirar. **Lo cazó el caso de anclaje**, no la lectura.
+      Validado **por mutación en 7 direcciones** (CTA al índice · «Agenda pública» de vuelta ·
+      condición quitada · sin `slug` · sin helper · dos esquives que borran el CTA entero): las
+      siete `exit 1`, base y restaurado `exit 0`. El esquive además destapó que buscar
+      `reservaUrl` suelto en el archivo pasaba con el CTA borrado —lo nombra la interfaz—, así
+      que ahora se exige **dentro del `href`**.
+
+      **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **4183 pasan / 335 archivos** ·
+      `npx eslint .` 0 errores.
+
 - [x] 🔴 **CERRADO el 2026-09-08 (`f8d0fc2`, en la rama del carril — NO en `master` todavía):
       la pantalla donde el dueño PAGA le cobraba a 3 de los 5 rubros de la v1.0 dos pantallas
       a las que nunca iba a poder entrar.** La tarjeta del plan **Profesional** —el destacado,
