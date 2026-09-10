@@ -45,7 +45,8 @@ El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, qu
 y sin operar. Acá se opera, con verificación por ítem.
 
 - [ ] 🔴 **Nadie probó que el correo de confirmación LLEGUE a una bandeja — y sin ese clic el
-      alta nueva muere.** Medido el 2026-09-10 con el circuito entero: GoTrue manda por Postfix
+      alta nueva muere** (`app/auth/confirm/route.ts` · `scripts/alta_correo_confirma.mjs`)**.**
+      Medido el 2026-09-10 con el circuito entero: GoTrue manda por Postfix
       (`onia-mail`), DKIM firmado, y Gmail aceptó con `250 OK` dos veces. Pero un 250 no es
       bandeja — "Gmail acepta y descarta" (skill `onia-verificacion`). El caso real que lo
       motiva: `sergio.urcullo.m@gmail.com` (alta del 31-ago, org Bolivian electricidad) pasó
@@ -56,12 +57,90 @@ y sin operar. Acá se opera, con verificación por ítem.
       abre DESDE el correo recibido en una bandeja real (no spam), el login entra, y el
       SPF/DMARC de `onia.com.bo` queda verificado con el resultado pegado.
 
-- [x] ~~El alta responde `emailDelivery: "not_configured"` con el correo andando~~ **FALSA
-      ALARMA, cerrada el mismo 2026-09-10 al leer el call site**: con
-      `ONIA_REGISTRO_CONFIRMA_CORREO=si` el welcome NO debe salir (mentiria "entra al
-      dashboard" antes de confirmar) y `register/route.ts:332` lo salta a proposito; la
-      etiqueta `not_configured` es fea pero el comportamiento es correcto. Queda de leccion:
-      el item se escribio desde el sintoma sin leer el `if` de al lado.
+      **MEDIDO EL 2026-09-10 (chatbot-cola): el enlace del correo SÍ deja entrar, y queda
+      UNA sola cosa sin probar — el veredicto de spam de Gmail, que no se puede mirar desde
+      acá.** Alta QA real contra producción (`POST /api/auth/register`, org
+      `zz-qa-correo-2026-09-10-0847`, correo `oninteligenciaartificial+zzqa09101247@gmail.com`,
+      HTTP 200 en 1,6 s) y el circuito entero, paso por paso:
+
+      - **Sale:** GoTrue registró `user_confirmation_requested` y Postfix lo relevó él mismo a
+        `gmail-smtp-in.l.google.com` — `dsn=2.0.0, status=sent (250 2.0.0 OK … gsmtp)`, con
+        `opendkim: DKIM-Signature field added (s=mail, d=onia.com.bo)` y
+        `from=<business@onia.com.bo>`.
+      - **Está autenticado, con el resultado pegado:**
+        `SPF: v=spf1 ip4:187.77.16.63 include:_spf.mx.cloudflare.net ~all` (el 187.77.16.63 es
+        el mismo IP desde el que Postfix entregó, o sea SPF alineado) ·
+        `DMARC: v=DMARC1; p=none; rua=mailto:business@onia.com.bo; fo=1` ·
+        `DKIM mail._domainkey.onia.com.bo: v=DKIM1;h=sha256;k=rsa;p=MIIBIjANBg…` (resuelve).
+      - **El enlace que VIAJA en el correo funciona, y en OTRO navegador.** La plantilla
+        (`app.onia.com.bo/correos-auth/confirmacion.html`, la que GoTrue descarga) arma
+        `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=signup`; el token real de
+        `auth.users.confirmation_token` era `pkce_f70615b…` — **el prefijo PKCE que mató al alta
+        del 31-ago sigue ahí**, y aun así `/auth/confirm` lo canjea bien: aterrizó en
+        `/onboarding` desde un contexto limpio, que es el caso normal (uno se registra en la
+        compu y abre el mail en el teléfono). Capturado y MIRADO.
+      - **El login entra** en un navegador que nunca vio el alta: `/login` con ese correo y su
+        clave → `/onboarding`, con el nombre del negocio ya cargado. Capturado y MIRADO.
+      - **Instrumento, para que esto no se vuelva a medir a mano:**
+        `node scripts/alta_correo_confirma.mjs --email <correo> --password <clave>`
+        (`npm run alta:correo-vivo`). Su `--self-check` (8 casos) va **cableado a la cadena
+        `npm test`** como `test:alta-correo` — un instrumento vivo que queda de alias suelto no
+        lo corre nadie —, y la medición viva queda aparte porque necesita producción. Validado
+        por mutación: con `veredictoDelEnlace` siempre en verde, `exit 1` y 4 casos en rojo.
+        Reconstruye la URL del correo desde la MISMA fuente
+        que GoTrue en vez de inventarla, y prueba el login en contexto limpio a propósito —
+        confirmar deja sesión en el navegador que abrió el enlace, así que probar ahí no
+        probaría nada del login. Sale `2` (no medido) si no puede leer el token: un instrumento
+        que no puede medir lo dice, no sale verde.
+      - **Producción quedó limpia:** la org, su perfil y el usuario de Auth borrados (0/0/0), y
+        las **5** organizaciones `zz-qa%` de otros carriles intactas.
+
+      🔴 **Lo único que falta, y no lo puede hacer este carril: mirar si Gmail lo puso en
+      Recibidos o en Spam.** El `250 OK` es aceptación, no bandeja, y el conector de Gmail pide
+      una autorización que una sesión de loop no puede dar. Es una MIRADA de 5 segundos, no una
+      investigación: el mensaje ya está en la cuenta, asunto **«Confirmá tu correo · Onia»**,
+      para `oninteligenciaartificial+zzqa09101247@gmail.com`, del 10-sep 12:47 UTC (08:47 La
+      Paz). Preguntado en el tablero: `t_040684cb`, `blocked` verificado con `show` (un `exit 0`
+      de `block` no prueba que haya quedado bloqueada). Si contesta **Spam**, el arreglo es
+      nuestro y no pide nada más de él: subir `DMARC` de `p=none` a `p=quarantine` y revisar el
+      remitente. Si contesta **Recibidos**, el punto se cierra.
+
+- [x] 🟡 **CERRADO el 2026-09-10 (`b25b2a3`, rama del carril — NO en `master` todavía): el
+      alta no mentía sobre el correo por una guarda equivocada, mentía sobre SÍ MISMA.** El
+      síntoma era cierto (`POST /api/auth/register` → `emailDelivery: "not_configured"`,
+      reproducido hoy) y **la causa escrita acá era falsa**, así que el LISTO pedía lo
+      contrario de lo correcto. Los dos errores, medidos:
+
+      - **`lib/email-governance.ts:47` (`isTransactionalEmailConfigured`) NO está en el camino
+        que corre.** Con `EMAIL_PROVIDER=smtp` —que es lo que tiene el contenedor—
+        `getTransactionalEmailConfig()` entra por su rama SMTP, valida `SMTP_HOST` (`onia-mail`)
+        y el puerto, y **devuelve `configured: true` sin tocar `RESEND_API_KEY` ni una vez**. La
+        configuración estaba sana; el guard acusado nunca se ejecutó.
+      - **El welcome no sale porque NO CORRESPONDE, y eso está bien.** La respuesta del alta
+        traía `confirmationPending: true` (el contenedor tiene `ONIA_REGISTRO_CONFIRMA_CORREO=si`
+        — no aparecía en el `grep` de arriba porque su nombre no dice «EMAIL» ni «ALTA»), y con
+        la confirmación pendiente el welcome se saltea a propósito: dice *«entrá al dashboard»* y
+        todavía no puede entrar. **Mandarlo, que es lo que pedía el LISTO viejo, era el bug.**
+
+      Lo roto era el LABEL: la variable arrancaba en `"not_configured"` y nadie la volvía a
+      tocar en ese camino, así que el alta reportaba *«no hay correo configurado»* sobre un SMTP
+      que en el mismo segundo estaba entregando el mail de confirmación. Un estado que se lee
+      como diagnóstico y dice otra cosa manda a arreglar lo que funciona — y ya lo hizo: escribió
+      este ítem.
+
+      **Arreglo:** estado nuevo `"no_corresponde"` (el welcome se salteó por diseño, no por
+      configuración rota), y el cuerpo del éxito se arma en **un solo lugar**. Eso de paso cierra
+      un agujero del honeypot: su éxito FALSO se armaba aparte y **le faltaba
+      `confirmationPending`**, o sea que un bot distinguía las dos respuestas comparándolas,
+      justo lo que el comentario del honeypot promete que no pasa.
+
+      **Gate:** dos casos en `app/api/auth/register/route.test.ts` — *«switch ENCENDIDO + correo
+      configurado: dice no_corresponde, nunca not_configured»* y *«el éxito falso es IDÉNTICO al
+      real, también con la config de producción»*. El mock de `email-governance` estaba clavado
+      en `configured: false` para toda la suite —el escenario **contrario** al de producción, por
+      eso el caso no se podía escribir— y ahora se prende por caso. Validado **por mutación en 2
+      direcciones** (honeypot con cuerpo propio · volver a `not_configured`): las dos `exit 1`, 2
+      casos en rojo cada una; base y restaurado, 17/17. Gates: `tsc` 0 · `vitest` 4185 · `eslint` 0.
 
 - [x] 🔴 **CERRADO el 2026-09-10 (`afa9da6`, en la rama del carril — NO en `master` todavía):
       el botón «Agendar» que ve el cliente del cliente lo mandaba a un callejón, teniendo el
@@ -2234,6 +2313,58 @@ y sin operar. Acá se opera, con verificación por ítem.
 - **No le escribe a un prospecto.** Regla del [`README.md`](README.md) de esta carpeta.
 
 ## Cerrado
+
+- [x] **CERRADO el 2026-09-10: dar de baja a alguien del equipo fallaba con un error MUDO, y
+      el dueño no tenía cómo saber por qué.** Arreglado en `ad1851f` (`onia-platform`), rama
+      `claude/chatbots-platform-review-0d1d09`. ⚠️ **Commiteado y pusheado, NO en `master` y NO
+      desplegado**: falta que el integrador lo mergee, y recién después viaja con el pedido de
+      deploy de `plataforma`.
+
+      Tres bajas **rutinarias** del producto chocan contra una foreign key `RESTRICT` y las tres
+      contestaban sin decir el motivo — rotación de personal en una clínica o un salón es lo más
+      normal del mundo, y el dueño quedaba en un callejón sin salida:
+
+      | ruta | lo que hacía | lo que veía el dueño |
+      |---|---|---|
+      | `app/api/team/[id]` | **sin `try/catch`** → Prisma lanza → 500 pelado | «No se pudo eliminar a esta persona.» (el fallback de la pantalla) |
+      | `app/api/patients/[id]` | `catch` genérico | «Error al eliminar el cliente» |
+      | `app/api/treatments/[id]` | `catch` genérico | «Error al eliminar tratamiento» |
+
+      **Reproducido contra la base de PRODUCCIÓN**, dentro de una transacción que revierte (0
+      residuo verificado con un `count` posterior):
+
+      ```
+      ERROR: update or delete on table "profiles" violates foreign key
+      constraint "appointments_doctorId_fkey" on table "appointments"
+      ```
+
+      Las siete FK `RESTRICT` de producción salieron de `information_schema`, no de un supuesto:
+      tres cuelgan de `profiles`, dos de `patients`, una de `treatments` y una de
+      `booking_sources` (esa queda afuera a propósito: el producto no ofrece darlas de baja).
+
+      **Ningún gate podía verlo**, y por eso sobrevivió: no sobra ni falta una palabra, la
+      pantalla renderiza perfecto, el rubro deriva bien, la ruta responde, y el camino **feliz**
+      —borrar algo que nadie referencia— funciona. El defecto vive sólo en el camino de **fallo**
+      de una operación rutinaria. Por qué importa para la v1.0: esto no rompe nada, genera
+      **llamadas a soporte**, que es el techo real del negocio (`CLAUDE.md` §9).
+
+      **Se pregunta ANTES de borrar** (`lib/platform/borrado-bloqueado.ts`) en vez de atrapar el
+      `P2003`: no ata el mensaje a la forma del `meta` de Prisma, se prueba sin base y permite
+      decir **cuántas** son. Ahora contesta `409` con
+      «No se puede eliminar a Ana Paz: tiene 3 citas y 1 receta en el sistema.» No promete
+      «reasignalo» ni «archivalo» mientras esas pantallas no existan: hay un caso que lo exige.
+
+      **El gate deriva su universo de `prisma/schema.prisma`** —toda relación obligatoria sin
+      `onDelete:` es `RESTRICT`—, así que una referencia nueva **nace cubierta** o pone rojo; y
+      exige las **dos direcciones**, para que la tabla declarada no se pudra.
+      **Validado por mutación, seis en rojo:** sacar una referencia viva, agregar una muerta,
+      devolver `[]` siempre, sacarle el filtro por `organizationId` al conteo, y las **dos de
+      esquive** en la ruta. ⚠️ Las de esquive **pasaron VERDES con la primera versión del
+      guardia**, que miraba que la ruta *llamara* al helper y no que *usara* su respuesta: una
+      ruta podía llamarlo y tirar el resultado. Se reescribió sobre la **vecindad** de la
+      llamada (la guarda `bloqueos.length > 0` y el `409` pegados a ella).
+
+      Gates: `tsc` 0 · `vitest` **4199 passed** (336 archivos) · `eslint` 0.
 
 - [x] **CERRADO el 2026-09-08: el cupo de WhatsApp cortaba MUDO — el dueño paga el add-on y se
       quedaba sin canal sin enterarse.** Arreglado en `7756295` (`onia-platform`), rama
