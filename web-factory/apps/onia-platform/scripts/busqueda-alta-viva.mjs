@@ -24,6 +24,7 @@
 
 import { execFileSync, spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
+import { pathToFileURL } from "node:url";
 
 import { VPS_SSH } from "./deploy-vivo.mjs";
 
@@ -188,4 +189,15 @@ function main() {
   return 0;
 }
 
-process.exit(main());
+/*
+ * La guarda, y no es cosmética. Sin ella `process.exit(main())` corre al ser
+ * IMPORTADO: quien quisiera reusar `estaConfigurada()` —la única definición de
+ * «configurada es además NO vacía» que hay en el carril— se llevaba de yapa dos
+ * `docker exec` contra producción y un `process.exit` que mata al importador
+ * antes de su primera línea. Se agregó el 2026-09-10, cuando `captura-viva.mjs`
+ * fue el primero en necesitar esa función: la alternativa era una segunda copia
+ * del corte, que es exactamente lo que este repo no quiere.
+ */
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  process.exit(main());
+}
