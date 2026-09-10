@@ -39,7 +39,7 @@ LISTO medible; el estado es del 10-sep y se re-mide, no se hereda:
 | 3 | Cobro | comprobante → APPROVED → plan activo solo | ✅ probado 10-sep con capturas |
 | 4 | El plan manda | trial vencido bloquea; topes se cumplen | ✅ modal + topes (`f05b2fc` «el tope que nadie aplicaba») + reservas de cuenta apagada cerradas (`ba2270b`) |
 | 5 | Factura SIAT | la suscripción cobrada emite factura | 🔴 Fase 1 ~24,8 %, PdV 1 = trámite de Sergio Urcullo; el código avanza sin él |
-| 6 | Chatbot atiende solo (web + WhatsApp) | responde, califica y agenda demo | ✅ web vivo (439 msgs/7d) · ✅ WhatsApp probado sintético 10-sep · 🔴 3 prospectos de agosto sin respuesta (aprobación `t_43868cdb`) |
+| 6 | Chatbot atiende solo (web + WhatsApp) | responde, califica y agenda demo | 🟡 corregido 10-sep tarde: responde conversaciones NUEVAS (web y WhatsApp); las conversaciones VIEJAS estancadas quedan MUDAS — Sergio Urcullo lo probó en carne ("hola" sin respuesta, rama MUDO en `esperando_calificacion`). Ítem urgente en `cola/chatbot.md` · 🔴 3 prospectos de agosto sin respuesta (`t_43868cdb`) |
 | 7 | Panel del dueño estilo Hostinger | pestañas agrupadas y cada sección cierra su flujo | ✅ estructura VIVA (grupos + Primeros pasos + fecha La Paz + 2FA); queda `feat/canal-meta` (App Review = Sergio Urcullo) |
 | 8 | Cero promesas falsas | lo que cada pantalla promete por rubro/plan se abre | 🟡 barridos 8-sep y 9-sep (`e843507` estética/dental) + 10-sep el NOMBRE del plan (`fe6eb65`, gate `nombre-de-plan-a-mano`); el recorrido caza el resto |
 | 9 | Opera sin Sergio | correos, avisos, backups, publicador corren solos | ✅ medido 10-sep (publicador «al día», watchdog del bot, correo entrega) |
