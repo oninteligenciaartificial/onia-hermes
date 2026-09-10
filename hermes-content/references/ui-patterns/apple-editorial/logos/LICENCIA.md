@@ -50,8 +50,8 @@ por si hace falta una versión monocroma.
 
 ## cloudflare.path · meta.path · github.path
 
-Agregados el 2026-09-10 para el deck del video 03 de la serie «Claude Code de cero»,
-donde la lámina de conectores muestra los que Sergio Urcullo tiene realmente conectados.
+Agregados el 2026-09-10 para los decks de la serie «Claude Code de cero»: cloudflare y
+meta en la lámina de conectores del 03, y github en el 05, donde se recomiendan repos.
 Misma fuente y misma licencia que el resto: simple-icons, CC0-1.0, uso nominativo.
 
 ⚠️ **Se bajaron SIN correr `build-logos.py`.** Ese script reescribe este archivo entero
