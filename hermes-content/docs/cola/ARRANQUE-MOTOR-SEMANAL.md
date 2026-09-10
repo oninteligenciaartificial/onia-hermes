@@ -41,10 +41,13 @@
 
 ### Lo que hago yo
 
-- Las **dos imágenes de compartir** de `/stack` y `/homelab` — hoy los links salen sin
-  imagen, y son los que estás repartiendo por DM.
-- **`/homelab/archivos`**, para que esa guía también tenga algo que sólo esté adentro.
-- Los **6 drops** del tema que elijas el viernes, listos antes del lunes.
+- ✅ **Las imágenes de compartir** — hechas el 10-sep, las tres (`/`, `/stack`, `/homelab`).
+  Antes los links salían pelados en WhatsApp, y son justo los que estás repartiendo por DM.
+  Se regeneran con `python scripts/marca-personal/generar-og.py`.
+- ✅ **[`/homelab/archivos`](https://sergiourcullo.vercel.app/homelab/archivos)** — tres archivos reales: el script de
+  primer arranque, el de respaldo automático y la lista de la BIOS. Es lo que le faltaba a
+  esa guía para tener algo que sólo esté adentro.
+- ⬜ Los **6 drops** del tema que elijas, listos antes del lunes.
 
 ---
 
