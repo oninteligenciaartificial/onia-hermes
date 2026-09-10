@@ -33,7 +33,7 @@
 | mié 09 | Publicar el carrusel **«Mi stack»**. Antes: leer la guía que promete | **Instagram**, feed | 10 min |
 | jue 10 | Contestar los `STACK` que lleguen | **DM de Instagram** | según lleguen |
 | vie 11 | **Elegir el tema de la semana** del [mapa](../ONIA_MAPA_DE_TEMAS.md), filas `S` | — (decisión) | 2 min |
-| sáb 12 | **Grabar los 6 videos de una sentada** | — (se publican de a uno) | 1 h |
+| sáb 12 | **Grabar los 6 videos de una sentada** — guiones listos en [`GUIONES-SEMANA-1-MI-STACK.md`](GUIONES-SEMANA-1-MI-STACK.md) | — (se publican de a uno) | 1 h |
 | dom 13 | Pasarme el link de YouTube de Claude Code, si ya salió | — | 1 min |
 
 📍 **Ante cualquier duda de dónde va algo:**
@@ -41,10 +41,24 @@
 
 ### Lo que hago yo
 
-- Las **dos imágenes de compartir** de `/stack` y `/homelab` — hoy los links salen sin
-  imagen, y son los que estás repartiendo por DM.
-- **`/homelab/archivos`**, para que esa guía también tenga algo que sólo esté adentro.
-- Los **6 drops** del tema que elijas el viernes, listos antes del lunes.
+- ✅ **Las imágenes de compartir** — hechas el 10-sep, las tres (`/`, `/stack`, `/homelab`).
+  Antes los links salían pelados en WhatsApp, y son justo los que estás repartiendo por DM.
+  Se regeneran con `python scripts/marca-personal/generar-og.py`.
+- ✅ **[`/homelab/archivos`](https://sergiourcullo.vercel.app/homelab/archivos)** — tres archivos reales: el script de
+  primer arranque, el de respaldo automático y la lista de la BIOS. Es lo que le faltaba a
+  esa guía para tener algo que sólo esté adentro.
+- ✅ **Los 6 drops de la semana 1**, escritos el 10-sep: `cola/drops/2026-09-14.md` a
+  `2026-09-19.md`. Tema **Mi stack**, una herramienta por día, cada uno con su archivo.
+- ✅ **Los 5 archivos** en [`/stack/archivos`](https://sergiourcullo.vercel.app/stack/archivos):
+  el `docker-compose` de n8n, las respuestas de WhatsApp, el `SOUL.md`, el `CLAUDE.md`
+  para un negocio y una composición de HyperFrames.
+- ✅ **Los 7 guiones** en [`GUIONES-SEMANA-1-MI-STACK.md`](GUIONES-SEMANA-1-MI-STACK.md):
+  los 6 cortos palabra por palabra con lo que va en pantalla, y la estructura del video
+  largo de YouTube con sus capítulos.
+- 🔴 **Corregido un error de la guía `/stack`**: decía que el plan gratis de Claude
+  alcanzaba para probar. Alcanza para el chat, **no para Claude Code** — la doc oficial
+  dice textual que el plan gratis no lo incluye. El paso 04 ahora lleva la instalación
+  real con sus comandos.
 
 ---
 

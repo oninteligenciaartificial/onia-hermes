@@ -25,11 +25,11 @@
   <p class="privado">Sólo Onia Community</p>
   <h1>Los archivos del <span class="num">stack</span></h1>
   <p class="bajada">La guía pública enseña cómo hacerlo. Acá está hecho: copiás, pegás y
-  funciona. Tres archivos, en el orden de la guía.</p>
+  funciona. Cinco archivos, en el orden de la guía.</p>
 
   <div class="honesto">
     <h2>Cómo usar esto</h2>
-    <p>Ninguno de los tres reemplaza leer la guía — te ahorran escribirla. <strong>Si algo
+    <p>Ninguno reemplaza leer la guía — te ahorran escribirla. <strong>Si algo
     no arranca, avisá en el grupo General</strong> y lo vemos: sirve más que quedarse
     trabado en silencio, porque si te pasó a vos le va a pasar a otro.</p>
     <p>Este link no está enlazado desde ninguna página. <strong>Es de la comunidad</strong>
@@ -141,6 +141,75 @@ Nada de disculpas ni de explicaciones largas. A esa hora nadie las lee.
   <div class="nota"><strong>La sección que parece de relleno es la más importante.</strong>
   «Lo que NO hacés» es lo único que separa un asistente de un problema. Escribila primero,
   antes que las otras cuatro.</div>
+</article>
+
+<article class="archivo">
+  <h2>4 · El archivo que le da contexto a Claude Code</h2>
+  <p class="ruta">CLAUDE.md — plantilla para un negocio</p>
+  <p class="desc">El paso 4 de la guía. Claude Code lee este archivo cada vez que arranca en
+  esa carpeta. Es la diferencia entre explicarle lo mismo veinte veces y que ya lo sepa.
+  Casi todos los ejemplos que hay dando vueltas son para proyectos de programación — éste
+  está escrito para un negocio.</p>
+<pre><span class="c"># CLAUDE.md — contexto de [tu negocio]</span>
+
+<span class="k">## Qué es esto</span>
+[Tu negocio] vende [qué] en [ciudad]. Mis clientes son [quiénes].
+Trabajo solo / somos [N] personas.
+
+<span class="k">## Cómo quiero que me hables</span>
+- En español, directo, sin vueltas.
+- Si algo no lo sabés, decilo. No inventes datos ni precios.
+- Antes de tocar un archivo, decime qué vas a cambiar.
+
+<span class="k">## Mis precios</span>
+<span class="c"># Poné los reales. Es lo que evita que invente números.</span>
+- [Producto/servicio 1]: [precio]
+- [Producto/servicio 2]: [precio]
+
+<span class="k">## Cómo escribo yo</span>
+<span class="c"># Pegá acá un mensaje TUYO de verdad, uno que ya mandaste</span>
+<span class="c"># y que te haya funcionado. Vale más que diez adjetivos.</span>
+"[ejemplo real de un mensaje tuyo]"
+
+<span class="k">## Lo que NO hacés</span>
+- No mandás nada a un cliente sin que yo lo lea antes.
+- No borrás archivos sin preguntar.
+- No inventás precios, plazos ni disponibilidad.</pre>
+  <div class="nota"><strong>La sección de «cómo escribo yo» es la que más cambia el
+  resultado</strong>, y es la que casi nadie completa. Un mensaje tuyo real le enseña tu tono
+  mejor que cualquier lista de adjetivos — «cercano pero profesional» no significa nada;
+  tu mensaje del martes sí.</div>
+</article>
+
+<article class="archivo">
+  <h2>5 · Una composición de HyperFrames que funciona</h2>
+  <p class="ruta">placa.html</p>
+  <p class="desc">El paso 5 de la guía. Es un video de 4 segundos: fondo, título y precio.
+  Cambiás las tres líneas de arriba y sale otro MP4. Sirve como molde para lo repetido —
+  la promo de la semana, el precio nuevo, el aviso de horario.</p>
+<pre><span class="c">&lt;!-- guardalo como placa.html --&gt;</span>
+<span class="c">&lt;!-- render:  npx hyperframes@latest render placa.html --&gt;</span>
+&lt;div class=<span class="k">"clip"</span> data-duration=<span class="k">"4s"</span>&gt;
+  &lt;div class=<span class="k">"fondo"</span>&gt;
+    &lt;h1 data-animate=<span class="k">"fade-up"</span>&gt;[TU TÍTULO]&lt;/h1&gt;
+    &lt;p  data-animate=<span class="k">"fade-up"</span> data-delay=<span class="k">"0.3s"</span>&gt;[TU PRECIO]&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;style&gt;
+.fondo{
+  width:1080px; height:1350px;          <span class="c">/* 4:5, el de Instagram */</span>
+  background:#F5F5F7;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  font-family:system-ui, sans-serif;
+}
+h1{ font-size:110px; font-weight:800; letter-spacing:-.03em; color:#1D1D1F; }
+p { font-size:150px; font-weight:800; color:#00C661; margin-top:24px; }
+&lt;/style&gt;</pre>
+  <div class="nota"><strong>Si nunca escribiste HTML, mirá sólo las dos líneas con
+  corchetes.</strong> El resto es el molde y no hace falta tocarlo. Cambiá esas dos, corré
+  el comando, y tenés el video.</div>
 </article>
 
 <section class="cierre">

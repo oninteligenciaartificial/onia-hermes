@@ -49,7 +49,7 @@ export const FAQ = [
     // content/legal/terminos.md:83 (sin permanencia) y §3.4 (mora: gracia →
     // suspensión con datos intactos, nunca borrado inmediato) + pricing.ts:284.
     q: "¿Y si dejo de pagar, pierdo todo?",
-    a: "No. No hay contrato de permanencia: podés no renovar, sin penalidad. Si un pago no entra, primero hay un período de gracia con el servicio activo y avisos; después el acceso se suspende, pero tus datos se conservan intactos — la suspensión nunca implica borrarlos. Y los exportás en CSV desde el plan más chico.",
+    a: "No. No hay contrato de permanencia: podés no renovar, sin penalidad. Si un pago no entra, primero hay un período de gracia con el servicio activo y avisos; después el acceso se suspende, pero tus datos se conservan intactos — la suspensión nunca implica borrarlos. Y los exportás en CSV cuando quieras, sin importar el plan.",
   },
   {
     // (sitio)/rubros/page.tsx:78-80 y (sitio)/contacto/page.tsx:118-121.
@@ -65,7 +65,13 @@ export const FAQ = [
     a: `No: es un servicio aparte, ${precioStack(CHATBOT_PLAN)}. El botón de WhatsApp de tu web sí va gratis.`,
   },
   {
+    // El export integral NO se gatea por plan: `onia-platform`
+    // `app/api/settings/export/route.ts:14` lo dice en su propio comentario
+    // («es un derecho del titular, no una feature del plan»), y la prueba corre
+    // con el plan Pro (`TRIAL_PLAN`). Acá decía «en cualquier plan pago»: una
+    // condición que el producto no impone, y que se la negaba justo a quien
+    // está probando, que es quien abre esta pregunta antes de decidir.
     q: "¿Mis datos son míos?",
-    a: "Sí. Los exportás en CSV cuando quieras, en cualquier plan pago. No vendemos datos ni entrenamos modelos con ellos.",
+    a: "Sí. Los exportás en CSV cuando quieras, también durante la prueba: llevarte tus datos es un derecho tuyo, no una función del plan. No vendemos datos ni entrenamos modelos con ellos.",
   },
 ];
