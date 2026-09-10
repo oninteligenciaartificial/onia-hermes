@@ -8,6 +8,32 @@ Los decks viven en `hermes-content/carousels/out/yt-*/`, uno por video, cada uno
 
 ---
 
+## Para qué existe esta serie — decidido por Sergio Urcullo
+
+**Levantar su marca personal como experto en IA. El curso viene después.**
+
+Esto se registra porque ya se discutió y no se reabre. La objeción que se planteó, con la
+cuenta delante, fue que la serie no le trae clientes a Onia Platform — y es cierta: el que
+mira un tutorial de Claude Code es un dev del mundo, y el que paga Onia es un dueño de
+negocio boliviano. Son audiencias casi disjuntas.
+
+**La respuesta del dueño fue que ése no es el objetivo de la serie.** Primero autoridad,
+después el curso. La etapa vigente de Onia (cinco clientes con la v1.0) sigue viva y
+sigue siendo otra cosa: esta serie no compite con ella ni la reemplaza.
+
+Consecuencias operativas de esa decisión:
+
+- **No hace falta embudo todavía.** Nada de pedir correos ni de armar página de venta:
+  eso es de la fase del curso. El CTA correcto de esta fase es **suscripción y comentario**,
+  que es exactamente lo que los seis decks ya tienen.
+- **Lo que se mide es alcance y constancia**, no conversión. Un video que no vende nada
+  pero que se ve, sirve; uno perfecto que nadie ve, no.
+- **La credencial tiene que estar arriba, no al final.** Lo que lo separa de los otros
+  cientos de canales de Claude Code no es lo que enseña: es que corre una empresa con
+  esto, desde Bolivia, a los 16. Eso hoy sólo aparece en el video 06.
+
+---
+
 ## La regla que ordena todo
 
 **Cada video entrega UNA capacidad nueva y verificable.** Si al terminar el espectador no
@@ -139,3 +165,44 @@ el trabajo**.
   la real. Un mockup aproximado en una pieza pública lee como falsificación.
 - **Un video que necesita dos horas está mal recortado.** Lo que sobra se anota en el «NO
   va» del siguiente, no se mete a presión.
+
+---
+
+## Títulos y miniaturas para YouTube
+
+El nombre interno del deck **no es** el título del video. El título decide el clic, y en
+YouTube el clic decide si el video existe.
+
+| # | Título | Por qué |
+|---|---|---|
+| 01 | **Claude y Claude Code no son lo mismo (y la diferencia te cambia todo)** | La confusión que ya tiene el que busca |
+| 02 | **Instalá Claude Code en 2 minutos — con app o con terminal** | Promesa concreta y con tiempo. "App o terminal" recoge a los dos públicos |
+| 03 | **Hago que la IA trabaje mientras duermo — así está armado** | Curiosidad + prueba. Es el más compartible de los seis |
+| 04 | **La IA te dice "listo" y te está mintiendo** | El único de la serie que nadie más hace |
+| 05 | **No escribas nada: casi todo ya está hecho y es gratis** | Contraintuitivo, y entrega valor inmediato |
+| 06 | **Tengo 16 años y mi empresa entera corre con IA** | El título más fuerte de la serie |
+
+⚠️ **El 06 tiene el mejor título y va último.** No se cambia el orden —está decidido— pero
+sí es el que conviene empujar más fuerte cuando salga: fijado en el canal, y cortado en
+vertical para IG, X y LinkedIn (los perfiles están listos desde el 30-ago).
+
+**Miniaturas:** el frame se busca puntuando todo el material, no se elige a ojo — método
+en la memoria `miniatura-youtube-metodo`. El ancho de boca mide hablar, no sonreír.
+
+### La descripción, misma forma en los seis
+
+```
+[Una línea que repite la promesa del título.]
+[Una línea con la credencial: qué corre él con esto.]
+
+00:00 [capítulos, uno por lámina]
+
+Serie «Claude Code de cero»:
+01 · … (link)  02 · … (link)  …
+
+Lo que menciono en el video:
+· [repos, con el nombre exacto verificado ese día]
+```
+
+**Los capítulos no son decoración**: YouTube los usa para posicionar, y son gratis porque
+el deck ya tiene los tramos y los tiempos.
