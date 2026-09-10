@@ -29,6 +29,30 @@ contra producción (SSH al VPS, las dos bases, el motor corrido de verdad), no c
 
 ---
 
+## 🔴 URGENTE — el motor enmudece en conversaciones viejas (probado por Sergio Urcullo en carne, 10-sep)
+
+Sergio Urcullo mandó "hola" al +591 75414930 y el bot NO contestó. La traza exacta
+(`/tmp/onia-bot-webhook.log` en `onia-center`):
+
+```
+19:28:50 conv=11 msg=873 rama=MUDO etapa=esperando_calificacion→esperando_calificacion
+enviados=0/0 motivo=el motor no produjo respuesta entrada="hola"
+```
+
+La cadena Meta→Chatwoot→bot funcionó ENTERA (el mensaje llegó y el turno corrió). El bug
+es del MOTOR: su número tenía una conversación vieja (pruebas del 15-ago) estancada en
+`esperando_calificacion`, y en ese estado un "hola" produce cero salida en vez de retomar
+o reiniciar el guion. El contraste que lo prueba: el mismo día 18:14, conversación NUEVA
+por el widget (conv=49, etapa `nuevo`) con "Hola, quiero información" → `respondio` 1/1.
+**Probable causa de los 3 silencios de agosto también.**
+
+FIX (motor `bot-engine.mjs`, repo onia-hermes, deploy `/opt/onia/bot`): ningún estado
+puede producir 0 mensajes ante un entrante real — conversación inactiva >N días se
+reinicia al guion desde el saludo, o el estado re-pregunta lo que esperaba. Test que fija:
+turno "hola" en cada etapa del guion con conversación vieja → SIEMPRE ≥1 mensaje de salida.
+LISTO = Sergio Urcullo manda "hola" desde su teléfono y el bot le contesta (su conv es la 11
+del inbox 5 — sirve de caso de prueba real).
+
 ## Objetivo único
 
 **Que un desconocido escriba y esa conversación se vea en la bandeja.**

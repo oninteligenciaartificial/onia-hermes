@@ -1,5 +1,41 @@
 # Handoff — cobro E2E y orquestación 1.0
 
+> ## CIERRE FINAL (10-sep noche) — leer esto primero
+>
+> Sergio Urcullo pidió: *"ordename todo, arma handoff, vamos punto por punto en la nueva
+> sesión, me das demasiados datos y no entiendo dónde estamos"*. **Dónde estamos, en 5
+> líneas:**
+>
+> 1. **El cobro FUNCIONA** (probado E2E con capturas) y **la cuenta bancaria YA EXISTE**:
+>    BCP de Leslie, guardada SOLO en el VPS (`/root/.config/onia/cuenta-bancaria-cobros.txt`,
+>    600) — jamás al repo ni a la página; se pasa al cliente por WhatsApp. Falta solo el
+>    primer cliente real.
+> 2. **El bot de WhatsApp recibe pero ENMUDECE en conversaciones viejas** — Sergio Urcullo
+>    mandó "hola" y no le contestó (rama `MUDO`, etapa `esperando_calificacion`, conv 11;
+>    diagnóstico completo y fix definido en `cola/chatbot.md` arriba de todo). Conversación
+>    NUEVA sí responde (probado mismo día). Probable causa de los 3 silencios de agosto.
+> 3. **Alta+login sanos**: reenvío de confirmación desde el login VIVO (E2E fotografiado);
+>    su cuenta gmail confirmada a mano; queda reputación de correo (fue a Spam — "spam
+>    check" solo significa: buscar "Confirmá tu correo · Onia" en Spam de su Gmail).
+> 4. **La máquina corre sola**: 4 loops desarrollando la cola, publicador cada 3h con
+>    guarda de precio, vigías a Telegram. Cero commits pendientes en los dos repos.
+> 5. **Espera SU decisión**: `ok/no t_43868cdb` (3 prospectos, en su Telegram) · trámite
+>    SIAT (PdV 1) · rotar la SUPABASE_SERVICE_ROLE_KEY.
+>
+> **Plan punto por punto para la sesión nueva (UN punto por vez, en este orden):**
+> 1. Arreglar el motor mudo (`cola/chatbot.md` ítem 🔴) y probarlo con el "hola" de
+>    Sergio Urcullo — su conversación (inbox 5, conv 11) es el caso de prueba real.
+> 2. Si dio `ok t_43868cdb`: mandar la plantilla a los 3 prospectos y atender lo que
+>    respondan.
+> 3. Primer cobro real: cliente real → transferencia a la cuenta BCP → aprobar en
+>    `/admin/payments` → captura.
+> 4. Entregabilidad del correo (ítem 🔴 en `plataforma-v1.md`).
+> 5. SIAT por donde el código permita sin el trámite.
+>
+> Reglas de la sesión nueva: UN objetivo, canario «Sergio Urcullo» estricto, modelos según
+> `ONIA_MODELOS_CLAUDE_Y_CUOTA.md`, reportes CORTOS (máx 5 líneas de estado — el exceso de
+> datos lo pierde, lo dijo él).
+
 > **Parte 2 (10-sep tarde), pedido nuevo de Sergio Urcullo:** *"orquestá tus loops… dame una
 > definición de todo lo que va a tener la 1.0… dejá de estancarte en documentación vieja"*.
 > Lo hecho: **Definición 1.0 de nueve puntos medibles escrita en
