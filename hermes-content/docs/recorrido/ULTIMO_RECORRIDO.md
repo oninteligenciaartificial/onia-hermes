@@ -12,6 +12,19 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-10 13:09-13:24 La Paz — dental, dos corridas seguidas: falso rojo intermitente en paso 6 (mi instrumento, no el producto)
+
+Primera corrida: `zz-qa-2026-09-10-1710`, llegó hasta el paso 5 (9/9). **Paso 6 "roto"**: el
+script reportó "el formulario de alta de Pacientes no tiene ni un campo de texto" en
+`/patients/new`. Antes de escalarlo (Gate 1) miré la captura `paso-06b-alta-dato.png` de esa
+corrida: el formulario SÍ tenía "Nombre completo" con placeholder visible. Agregué debug
+temporal (`DEBUG_FORM=1`) a `acotarFormulario`/`llenarFormulario` y corrí de nuevo:
+`zz-qa-2026-09-10-1718`, **9/9 completo** — el mismo formulario, el mismo código, `nombreCargado:
+true` con los 9 campos detectados bien. No reproduce: fue un fallo intermitente del instrumento
+(timing al hacer clic en "Nuevo Paciente" y acotar el formulario antes de que termine de
+renderizar), no un defecto del producto. Debug quitado del script tras confirmar. Cero filas
+`zz-qa-` propias al cerrar (0 organizaciones, 0 citas mías; 4 filas ajenas sin tocar).
+
 ## 2026-09-10 16:09-16:17 La Paz — dental y Estética, dos corridas seguidas: 9/9 los dos, sin hallazgos
 
 Reintento pedido por la vuelta anterior. Dental (`zz-qa-2026-09-10-1609`) 9/9 completo, cita
