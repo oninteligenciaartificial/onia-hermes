@@ -224,6 +224,37 @@ export function clasificarPedido({ id, shas, publicado }) {
  * —«no se sabe»—, que arrastra a VIGENTE. El error posible queda del lado barato: sostener un
  * pedido de más cuesta una vuelta; cerrarlo de menos le borra a Sergio Urcullo el pedido real.
  */
+/**
+ * PURA: ¿el commit ya está dentro del build que corre? Es el `publicado(sha)` de los destinos
+ * cuyo artefacto SÍ nombra su sha — hoy `plataforma`.
+ *
+ * 🔴 POR QUÉ EXISTE, medido el 2026-09-10 en este carril: `git merge-base --is-ancestor A B`
+ * sale con **1** cuando A no es ancestro de B, y con **128** cuando B **no existe en el repo**.
+ * Envueltos en el mismo `catch`, los dos se aplanan a `false` = «no publicado» — y ese es el
+ * veredicto INVERTIDO, no un «no sé». Ese día producción corría `eaa6703` y el clon de
+ * `onia-platform` del nodo de casa estaba atrasado y no conocía ese sha: los SEIS arreglos del
+ * pedido `t_c78d9fa8` salieron «sin publicar, 0 sin resolver» estando los seis **vivos** en
+ * producción. O sea el gate sostuvo un pedido que le pedía a Sergio Urcullo un ok por trabajo
+ * hecho, que es exactamente lo que el caso ENTREGADO existe para cazar: desde el nodo de casa
+ * ese caso **no podía dispararse nunca**.
+ *
+ * Es la misma clase que ya está anotada para los gates que se mudan de máquina —pierden una
+ * fuente y siguen concluyendo con las que quedan—, un escalón más abajo: acá no se calla, da
+ * el veredicto contrario. Y se escondía porque la mitad hermana (`publicaria`, que hace
+ * `git log vivo..origin/master`) falla por la MISMA causa y sí sale honesta con NO MEDIDO:
+ * leído junto, el NO MEDIDO se lee como el ruido de ambiente y el VIGENTE falso pasa por bueno.
+ *
+ * `null` («no se sabe») arrastra a VIGENTE igual que antes, así que el error posible queda del
+ * lado barato: sostener un pedido de más cuesta una vuelta, cerrarlo de menos le borra a Sergio
+ * Urcullo un pedido real.
+ */
+export function publicadoEnBuild({ vivoExiste, esAncestro }) {
+  if (vivoExiste !== true) return null;   // no conozco el build que corre: no se sabe
+  if (esAncestro === true) return true;
+  if (esAncestro === false) return false;
+  return null;
+}
+
 export function publicadoPorFecha({ epochCommit, epochBuild, ventanaSegundos = 20 * 60 }) {
   if (!Number.isFinite(epochCommit) || !Number.isFinite(epochBuild)) return null;
   if (epochCommit >= epochBuild) return false;          // posterior al build: no viajó, seguro
@@ -526,12 +557,25 @@ async function medirEnVivo() {
     } catch {
       return null; // el sha no existe en este repo: no se sabe
     }
+    // El build que corre tiene que existir EN ESTE repo antes de comparar contra él: si no,
+    // `merge-base --is-ancestor` sale 128 y el catch lo leería como «no es ancestro».
+    let vivoExiste = false;
     try {
-      execFileSync('git', ['-C', REPO_PLATAFORMA, 'merge-base', '--is-ancestor', sha, vivo], { stdio: 'ignore', timeout: 15_000 });
-      return true;
+      execFileSync('git', ['-C', REPO_PLATAFORMA, 'cat-file', '-e', `${vivo}^{commit}`], { stdio: 'ignore', timeout: 15_000 });
+      vivoExiste = true;
     } catch {
-      return false;
+      vivoExiste = false;
     }
+    let esAncestro = null;
+    if (vivoExiste) {
+      try {
+        execFileSync('git', ['-C', REPO_PLATAFORMA, 'merge-base', '--is-ancestor', sha, vivo], { stdio: 'ignore', timeout: 15_000 });
+        esAncestro = true;
+      } catch {
+        esAncestro = false;
+      }
+    }
+    return publicadoEnBuild({ vivoExiste, esAncestro });
   };
 
   // Lo que el `ok` publicaría HOY, derivado: del build vivo a la rama base, sin merges (un
@@ -717,6 +761,19 @@ function selfCheck() {
     // ── landing: el destino sin sha en el artefacto, que se mide por FECHA ─────────────
     // El caso que YA cumple. Sin él, romper la comparación (devolver siempre null) pasaría
     // igual: todo quedaría VIGENTE y el gate parecería vivo sin poder cerrar nada nunca.
+    // 🔴 El caso que faltaba y que dejó pasar un pedido CUMPLIDO el 2026-09-10: si el repo
+    // local no conoce el sha del build vivo, `merge-base --is-ancestor` sale 128 y antes se
+    // leía como «no es ancestro» = sin publicar. Es el veredicto INVERTIDO: sostiene un pedido
+    // que le pide un ok a Sergio Urcullo por trabajo hecho.
+    ['plataforma: si el repo NO conoce el build vivo es INDETERMINADO, nunca sin publicar',
+      publicadoEnBuild({ vivoExiste: false, esAncestro: false }) === null],
+    ['plataforma: sin saber si el build vivo existe tampoco se decide',
+      publicadoEnBuild({ vivoExiste: null, esAncestro: true }) === null],
+    // Los dos de anclaje: sin ellos, devolver `null` siempre pasaría los casos de arriba.
+    ['plataforma: con el build vivo conocido, ancestro -> publicado',
+      publicadoEnBuild({ vivoExiste: true, esAncestro: true }) === true],
+    ['plataforma: con el build vivo conocido, NO ancestro -> sin publicar',
+      publicadoEnBuild({ vivoExiste: true, esAncestro: false }) === false],
     ['landing: un commit muy anterior al build ya viajo -> publicado',
       publicadoPorFecha({ epochCommit: 1000, epochBuild: 100_000 }) === true],
     ['landing: un commit POSTERIOR al build no viajo -> sin publicar',
