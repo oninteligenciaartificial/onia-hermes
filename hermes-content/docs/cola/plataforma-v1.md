@@ -66,6 +66,40 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **CERRADO el 2026-09-10 (`d5ec6de`, rama del carril — NO en `master` todavía): la ayuda
+      del producto le negaba al dueño una exportación que su plan YA incluye.** Punto 8 de la
+      Definición 1.0 («cero promesas falsas»), en la dirección que casi nadie audita: prometer
+      de MENOS.
+
+      `/help` decía *«La exportación a CSV está en el plan Completo»* y la enumeración de planes
+      la ponía como lo que suma el Completo. Medido contra `lib/plan-catalogo.ts`:
+      `csvExportEnabled` es `true` **desde `basic`** y el propio catálogo fija por qué —*«el
+      export de SUS datos no puede ser rehén del plan»*, auditoría 2026-08-06—; el botón de
+      `/reports` cuelga de `canExportCsv`, no del plan de reportes (su `puedeExportarCsv`), así
+      que un Básico entra al reporte básico y **tiene el botón**. Y `onia.com.bo/precios` lo
+      vende como «los exportás desde el plan más chico». Al dueño de Bs 320 y al de Bs 750 se
+      les pedía saltar a Bs 1.500 por algo que ya pagaban, en la pantalla que consultan justo
+      cuando no encuentran algo. Eran **11 atribuciones falsas en los 7 packs**: la pregunta de
+      los planes no declara `ruta`, así que la ven todos.
+
+      **La CLASE, que es lo que vale:** la ayuda afirma **en qué plan vive cada capacidad** y el
+      plan va tipeado al lado del texto. Los tres gates hermanos miran otra cosa —
+      `monto-de-plan-a-mano` los montos, `nombre-de-plan-a-mano` que no se filtre la clave en
+      inglés, `plan-catalogo-es-la-fuente` que mostrar y aplicar pidan el mismo campo— y
+      **ninguno cruza la afirmación contra `PLAN_LIMITS`**. No sobra ni falta una palabra, el
+      rubro deriva bien y la pantalla renderiza perfecto: ningún barrido de literales podía
+      verlo. Es la familia simétrica, **dentro del producto**, del gate que web-venta cerró ese
+      mismo día en el sitio (`datos-que-se-llevan.test.ts`).
+
+      **Gate:** `lib/ayuda/capacidad-en-el-plan-correcto.test.ts`. Mide lo que `construirFaq`
+      **devuelve** para los 7 packs (no el fuente: así no hay comentario, interpolación ni
+      concatenación que confunda al patrón) y exige que el plan nombrado sea el **primero** que
+      trae la capacidad. Validado por mutación en tres direcciones: atribución correcta movida
+      de plan (`recurringInvoices` professional→clinic) → rojo nombrándola; la ayuda deja de
+      nombrar la capacidad (**esquive**) → rojo por el ancla; detector vacío → rojo por
+      cobertura. Gates: `tsc` 0 · **4.338** tests · `eslint` 0 errores. Árbol publicado idéntico
+      al medido (`tree 5563659`).
+
 - [x] 🔴 **CERRADO el 2026-09-10 (`7d3c050`, rama del carril — NO en `master` todavía): el panel
       le ofrecía a la recepción y al profesional dos enlaces que los rebotaban MUDO al inicio.**
       Punto 8 de la Definición 1.0 («cero promesas falsas»).
