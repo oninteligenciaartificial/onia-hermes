@@ -66,6 +66,22 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [ ] **Servicios profesionales fía contra una tabla que su pantalla de clientes no lee.**
+      Sale del arreglo de la importadora (`d634913`, 2026-09-10). Ese pack tiene
+      `/comercio/caja` **y** `/patients` (rotulada «Clientes»), y las dos guardan gente en
+      tablas distintas: fiar llama a `ensureClienteFiado`, que da de alta en
+      `onia_core_business_partners`, mientras `/patients` lee `patient`. O sea que quien fía
+      queda en un lugar que el dueño no abre nunca. **No se arregla con una entrada de menú**
+      —agregarle `/comercio/clientes` le pondría DOS «Clientes» apuntando a dos tablas, peor
+      que el hueco—: el arreglo es que su caja fíe contra la misma ficha, y eso es desarrollo.
+      Por eso está declarado como excusa NOMBRADA en
+      `lib/platform/administrar-lo-que-se-acumula.test.ts`, que la **re-mide cada corrida**:
+      el día que el pack gane la pantalla o pierda la caja, el gate dice que la excusa sobra.
+      Hoy no hay daño acumulado — medido el 2026-09-10, `qa-modulos-mrk0q` tiene 0 partners —,
+      así que es trabajo de antes-de-que-duela, no un incendio.
+      LISTO = una venta fiada desde la caja de ese rubro deja al cliente donde su dueño lo ve,
+      con la fila en la base como prueba.
+
 - [x] 🔴 **CERRADO el 2026-09-10 (`825f227`, rama del carril — falta el merge del integrador):
       el aviso del cupo del chatbot y el del tope de clientes le llegaban al teléfono de la
       recepción y del profesional, que no pueden abrir la pantalla a la que llevan.**
