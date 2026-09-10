@@ -66,7 +66,59 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
-- [x] 🔴 **CERRADO el 2026-09-10 (`d5ec6de`, rama del carril — NO en `master` todavía): la ayuda
+- [x] 🔴 **CERRADO el 2026-09-10 (`825f227`, rama del carril — falta el merge del integrador):
+      el aviso del cupo del chatbot y el del tope de clientes le llegaban al teléfono de la
+      recepción y del profesional, que no pueden abrir la pantalla a la que llevan.**
+
+      **La QUINTA pregunta sobre rol.** `lib/platform/ruta-por-rol.ts` enumera cuatro —el menú,
+      la ruta, la acción y el enlace que una pantalla pinta— y **las cuatro tienen por sujeto una
+      PANTALLA**. Un push no es ninguna: no es item de menú, no es un `redirect()`, no es una
+      acción de pantalla y no es un `.tsx` que pinte un `href`. Por eso ningún gate podía verlo.
+
+      **Estaba en DOS archivos a la vez, y con la mitad buena al lado:** en `lib/chatbot/cupo.ts`
+      y en `lib/agenda/tope-en-la-puerta-publica.ts`, la notificación in-app filtraba
+      destinatarios a `ADMIN`/`SUPERADMIN` y el push de **dos líneas más abajo** salía a TODOS
+      los suscritos de la org, hacia `/settings/chatbot` y `/settings`, que son `SOLO_ADMIN`. El
+      archivo ya sabía hacerlo bien; justo la mitad que viaja al teléfono no lo hacía.
+
+      **Son dos daños, no uno:** el **rebote mudo** —se toca el aviso y vuelve al inicio, sin
+      cartel ni error, que se lee como producto roto y termina en soporte— y que **se le cuenta a
+      un empleado el estado comercial del negocio**: que el cupo que su jefe paga se agotó, que
+      está por chocar el tope de su plan. Es la misma regla que ya se aplicó en la puerta pública
+      (el estado comercial no se le cuenta a quien no lo decide), del lado de adentro.
+
+      ⚠️ **Honestidad sobre el alcance: `public.push_subscriptions` tenía 0 filas al medirlo**
+      (contado, no deducido). Es un defecto de **código**, todavía no de datos: entra **ya
+      aprobado** el día que un doctor o la recepción active las notificaciones, que es
+      exactamente lo que el producto les ofrece — la misma forma que el texto de venta muerto o
+      la entrada de lista blanca pre-aprobada. Y hay 6 perfiles no-admin de 16 en producción.
+
+      **Arreglo** (`lib/platform/aviso-alcanzable-por-rol.ts`): el corte usa `puedeAbrirRuta`, la
+      **misma** función que el enlace, a propósito — copiar la lista de roles al lado del
+      `sendPushToUser` es exactamente como nació esto. Sin rol conocido no se manda nada
+      (fail-closed). **Trampa del modelo:** `PushSubscription.userId` referencia `Profile.id`, no
+      `Profile.userId` (ver el `@relation` del schema), así que el rol se pide por la relación
+      declarada y no cruzando ids a mano — un JOIN por `userId` devuelve vacío y parece que nadie
+      está suscrito.
+
+      **Gate:** `lib/platform/aviso-alcanzable-por-rol.test.ts` (8 casos), sujetos derivados del
+      disco y medidos sobre el fuente **sin comentarios**. Cubre las **dos** mitades: el aviso que
+      difunde a la org y el que va a una persona. Validado **por mutación en 6 direcciones**
+      —cupo crudo · tope crudo · **esquive** (importar el helper y dejar el `findMany` al lado) ·
+      un aviso puntual apuntado a una ruta admin · el filtro arrancado · el caso ancla del
+      módulo—: las 6 `exit 1`, base `exit 0`, y cada mutación verificada de que entró.
+
+      🔴 **Dos falsos positivos PROPIOS, corregidos antes de dar el gate por bueno, los dos en la
+      dirección cara:** `/appointments` declara `ALL_ROLES` y **no es un corte** (mi primera
+      versión acusaba a un aviso sano), y clasificar difunde/puntual por la presencia del
+      `findMany` **se rompía justo con el arreglo** —el arreglo borra la forma que el detector
+      perseguía—. Y el **esquive** no lo cazaba mi primera versión: sólo apareció mutando
+      DESPUÉS de arreglar.
+
+      **Gates:** `npx tsc --noEmit` 0 · `npx vitest run` **4347 pasan / 351 archivos** ·
+      `npx eslint .` 0 errores. Marca puesta en el pedido de deploy vivo `t_6f2e10b9`.
+
+- [x] 🔴 **CERRADO el 2026-09-10 (`d5ec6de`, ya en `master` — verificado el 2026-09-10): la ayuda
       del producto le negaba al dueño una exportación que su plan YA incluye.** Punto 8 de la
       Definición 1.0 («cero promesas falsas»), en la dirección que casi nadie audita: prometer
       de MENOS.
@@ -100,7 +152,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       cobertura. Gates: `tsc` 0 · **4.338** tests · `eslint` 0 errores. Árbol publicado idéntico
       al medido (`tree 5563659`).
 
-- [x] 🔴 **CERRADO el 2026-09-10 (`7d3c050`, rama del carril — NO en `master` todavía): el panel
+- [x] 🔴 **CERRADO el 2026-09-10 (`7d3c050`, ya en `master` — verificado el 2026-09-10): el panel
       le ofrecía a la recepción y al profesional dos enlaces que los rebotaban MUDO al inicio.**
       Punto 8 de la Definición 1.0 («cero promesas falsas»).
 
@@ -154,7 +206,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       **Listo =** `npx vitest run lib/platform/enlace-alcanzable-por-rol.test.ts` (5/5) y la
       suite entera: **4335 tests**, `tsc --noEmit` y `eslint` exit 0.
 
-- [x] 🔴 **CERRADO el 2026-09-10 (`a106f7e`, rama del carril — NO en `master` todavía):
+- [x] 🔴 **CERRADO el 2026-09-10 (`a106f7e`, ya en `master` — verificado el 2026-09-10):
       `/appointments` le ofrecía «Eliminar» a quien la API le contesta 403 por su rol, y el
       rechazo era MUDO.** Punto 8 de la Definición 1.0 («cero promesas falsas»).
 
@@ -206,7 +258,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       **Listo =** `npx vitest run lib/platform/accion-negada-por-rol.test.ts` (8/8) y la suite
       entera en verde: **4319 tests**, `tsc --noEmit` y `eslint` exit 0.
 
-- [x] 🔴 **CERRADO el 2026-09-10 (`057cc58`, rama del carril — NO en `master` todavía): el
+- [x] 🔴 **CERRADO el 2026-09-10 (`057cc58`, ya en `master` — verificado el 2026-09-10): el
       cliente que PAGÓ y se le venció el plan quedaba en solo lectura sin que NADA se lo
       dijera.** El único aviso del panel era `TrialBlockedModal`, y el layout lo mostraba con
       `getTrialStatus(...).isBlocked`. Esa función arranca con
@@ -259,11 +311,11 @@ y sin operar. Acá se opera, con verificación por ítem.
       **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **4292 pasan / 346 archivos** ·
       `npx eslint .` 0 errores.
 
-      🔴 **NO ESTÁ DESPLEGADO:** `057cc58` está en la rama del carril, **no en `master`**. Hay
+      🔴 **NO ESTÁ DESPLEGADO:** `057cc58` ya está en `master` (verificado el 2026-09-10). Hay
       pedido de deploy vivo para `plataforma` (`t_6e23cd1c`); el `ok` de Sergio Urcullo sólo
       publica esto si el integrador mergea antes. Anotado como comentario en ese pedido.
 
-- [x] 🔴 **CERRADO el 2026-09-10 (`31233cd`, rama del carril — NO en `master` todavía): el
+- [x] 🔴 **CERRADO el 2026-09-10 (`31233cd`, ya en `master` — verificado el 2026-09-10): el
       negocio cancelaba o movía una cita y al CLIENTE no le llegaba nada.** El sistema le habla
       dos veces —cuando la cita nace (correo de confirmación, `lib/agenda/crear-cita.ts:241`) y
       cuando se acerca (recordatorios de 24 h y 2 h)— y se callaba justo en el tercer momento,
@@ -301,7 +353,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       compartido — su rojo mandaba a duplicarlo. Ahora sigue el import un nivel, y la mutación
       que le saca el aviso al módulo nuevo lo vuelve a poner en rojo.
 
-- [x] 🔴 **CERRADO el 2026-09-10 (`f590421`, rama del carril — NO en `master` todavía): el
+- [x] 🔴 **CERRADO el 2026-09-10 (`f590421`, ya en `master` — verificado el 2026-09-10): el
       producto le ofrece al dueño configurar su zona horaria, la respeta en TODO el panel, y la
       ignoraba justo en las dos superficies que salen hacia el CLIENTE DEL CLIENTE.**
       `PATCH /api/clinic-settings` acepta `timezone` y `/settings` se la muestra como «Zona
@@ -328,7 +380,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       que es la dirección cara. Queda como límite conocido con su caso.
       Gates: `tsc` 0 · 4228 tests · `eslint` 0 errores.
 
-- [x] **CERRADO el 2026-09-10 (`969cc14`, rama del carril — NO en `master` todavía): los otros
+- [x] **CERRADO el 2026-09-10 (`969cc14`, ya en `master` — verificado el 2026-09-10): los otros
       dos sujetos de esa MISMA clase.** `app/(dashboard)/patients/[id]/page.tsx` trae ahora
       `clinicSettings: { select: { timezone: true } }` en el mismo `findUnique` que ya pedía el
       track, y `lib/export/datos-negocio.ts` cambió sus dos `Intl` de MÓDULO por
@@ -552,7 +604,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       nuestro y no pide nada más de él: subir `DMARC` de `p=none` a `p=quarantine` y revisar el
       remitente. Si contesta **Recibidos**, el punto se cierra.
 
-- [x] 🔴 **CERRADO el 2026-09-10 (`0735d5c`, rama del carril — NO en `master` todavía): el
+- [x] 🔴 **CERRADO el 2026-09-10 (`0735d5c`, ya en `master` — verificado el 2026-09-10): el
       recordatorio del add-on de WhatsApp salía hacia Meta con un número que WhatsApp no puede
       resolver, y lo tapaba un comentario que prometía justo lo que no hacía.**
       `lib/whatsapp.ts` decía *«Normalizar numero: quitar espacios, guiones, asegurarse de que
@@ -604,7 +656,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       `59170000001`, y el lead `+591 57400703` → `null` (el `5` no es prefijo boliviano), que
       ahora se muestra marcado en vez de abrir un chat que no existe.
 
-- [x] 🟡 **CERRADO el 2026-09-10 (`b25b2a3`, rama del carril — NO en `master` todavía): el
+- [x] 🟡 **CERRADO el 2026-09-10 (`b25b2a3`, ya en `master` — verificado el 2026-09-10): el
       alta no mentía sobre el correo por una guarda equivocada, mentía sobre SÍ MISMA.** El
       síntoma era cierto (`POST /api/auth/register` → `emailDelivery: "not_configured"`,
       reproducido hoy) y **la causa escrita acá era falsa**, así que el LISTO pedía lo
@@ -641,7 +693,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       direcciones** (honeypot con cuerpo propio · volver a `not_configured`): las dos `exit 1`, 2
       casos en rojo cada una; base y restaurado, 17/17. Gates: `tsc` 0 · `vitest` 4185 · `eslint` 0.
 
-- [x] 🔴 **CERRADO el 2026-09-10 (`afa9da6`, en la rama del carril — NO en `master` todavía):
+- [x] 🔴 **CERRADO el 2026-09-10 (`afa9da6`, ya en `master` — verificado el 2026-09-10):
       el botón «Agendar» que ve el cliente del cliente lo mandaba a un callejón, teniendo el
       sistema el enlace bueno en la mano.** La pantalla **«Mis Citas»**
       (`/book/my-appointments/<token>` — el enlace que el negocio le manda por WhatsApp a su
@@ -689,7 +741,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **4183 pasan / 335 archivos** ·
       `npx eslint .` 0 errores.
 
-- [x] 🔴 **CERRADO el 2026-09-08 (`f8d0fc2`, en la rama del carril — NO en `master` todavía):
+- [x] 🔴 **CERRADO el 2026-09-08 (`f8d0fc2`, ya en `master` — verificado el 2026-09-10):
       la pantalla donde el dueño PAGA le cobraba a 3 de los 5 rubros de la v1.0 dos pantallas
       a las que nunca iba a poder entrar.** La tarjeta del plan **Profesional** —el destacado,
       el salto de Bs 320 a Bs 750— decía *«Reportes completos y facturas recurrentes»* a
@@ -746,7 +798,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       ⚠️ **Commiteado, NO desplegado**: el cliente no lo ve hasta que Sergio Urcullo apruebe el
       pedido de deploy vivo de la plataforma.
 
-- [x] 🔴 **CERRADO el 2026-09-08 (`f2237e8`, en la rama del carril — NO en `master` todavía):
+- [x] 🔴 **CERRADO el 2026-09-08 (`f2237e8`, ya en `master` — verificado el 2026-09-10):
       la pantalla donde el dueño configura el asistente que PAGA le ponía ejemplos de otro
       rubro.** `/settings/chatbot` (add-on de Bs 390/mes) tenía dos ejemplos tipeados en un
       rubro para los ocho: el rótulo de la categoría decía **«Veterinaria»** y el nombre del
@@ -782,7 +834,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       ⚠️ **Commiteado, NO desplegado**: el cliente no lo ve hasta que Sergio Urcullo apruebe el
       pedido de deploy vivo (`t_daa8750c`), que hoy publica 9 arreglos + éste.
 
-- [x] 🔴 **CERRADO el 2026-09-08 (`64279ff`, en la rama del carril — NO en `master` todavía):
+- [x] 🔴 **CERRADO el 2026-09-08 (`64279ff`, ya en `master` — verificado el 2026-09-10):
       el Recall corría todos los días en tres rubros que no tienen a quién reactivar, y tres
       rubros pagaban agentes sin una pantalla donde verlos.**
 
@@ -830,7 +882,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido de deploy de
       `plataforma` (`t_daa8750c`), donde quedó comentado el sha.
 
-- [x] 🔴 **CERRADO el 2026-09-08 (`cc383c1`, en la rama del carril — NO en `master` todavía):
+- [x] 🔴 **CERRADO el 2026-09-08 (`cc383c1`, ya en `master` — verificado el 2026-09-10):
       tres de las cuatro organizaciones que PAGARON el add-on de WhatsApp no lo tenían, según
       el producto — sin recordatorio de cita, sin intake, y con el cartel de venta encima.**
 
@@ -877,7 +929,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       ⚠️ **Commiteado y en la rama, NO mergeado a `master` ni desplegado** — no viaja con el
       pedido `t_daa8750c`, que publica `master`. El merge es de `onia-cola`.
 
-- [x] 🔴 **CERRADO el 2026-09-08 (`c334440`, en la rama del carril — NO en `master` todavía):
+- [x] 🔴 **CERRADO el 2026-09-08 (`c334440`, ya en `master` — verificado el 2026-09-10):
       el correo del trial sólo sabía hablar en dental o en mostrador, y de los cinco rubros de
       la v1.0 los tres del medio caían del lado equivocado.**
 
@@ -2664,7 +2716,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **4168 pasan / 333 archivos** ·
       `npx eslint .` 0 errores.
 
-      🔴 **NO ESTÁ DESPLEGADO:** `e911638` está en la rama del carril, no en `master`. Viaja
+      🔴 **NO ESTÁ DESPLEGADO:** `e911638` ya está en `master` (verificado el 2026-09-10). Viaja
       cuando el integrador lo mergee y Sergio Urcullo apruebe el pedido de deploy vivo.
 
 - [x] 🔴 **CERRADO el 2026-09-08: la pantalla donde el dueño decide CUÁNTO PAGA le vendía a
@@ -4056,7 +4108,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       `origin/master`. Entra cuando `onia-cola` mergee, y se publica con el pedido de deploy vivo
       `t_bf1607af` (ya comentado con este sha) cuando Sergio Urcullo conteste `ok`.
 
-- [x] 🔴 **CERRADO el 2026-09-10 (`a6dee65`, rama del carril — NO en `master` todavía): al
+- [x] 🔴 **CERRADO el 2026-09-10 (`a6dee65`, ya en `master` — verificado el 2026-09-10): al
       agendar una cita, la respuesta que llegaba tarde le borraba al usuario la hora que
       acababa de elegir, y «Agendar Cita» quedaba deshabilitado sin decir por qué.**
       Tarea `t_645d123a`. Lo midió `recorrido-cliente` en vivo el 2026-09-10 15:13 La Paz
