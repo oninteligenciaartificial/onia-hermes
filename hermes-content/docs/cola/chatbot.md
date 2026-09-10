@@ -53,7 +53,12 @@ turno "hola" en cada etapa del guion con conversación vieja → SIEMPRE ≥1 me
 LISTO = Sergio Urcullo manda "hola" desde su teléfono y el bot le contesta (su conv es la 11
 del inbox 5 — sirve de caso de prueba real).
 
-✅ **FIX DEPLOYADO el 2026-09-10 (~19:54 UTC) — falta SOLO el "hola" real de Sergio Urcullo.**
+✅ **CERRADO el 2026-09-10 con el caso real.** Traza de producción: 20:11:45 UTC el "Hola"
+de Sergio Urcullo (msg 878) → `rama=respondio`, `esperando_calificacion→esperando_horario`,
+1/1 enviado; 20:12:09 su "A" (msg 880) → `esperando_horario→demo_agendada` + aviso a
+Telegram. El mismo mensaje que a las 19:28 daba `rama=MUDO` ahora recorre el guion entero.
+
+**FIX DEPLOYADO el 2026-09-10 (~19:54 UTC):**
 
 - **La causa NO era la rama `esperando_calificacion`** (esa ya migraba a la bienvenida desde
   antes): medido en la base, `chatwoot:11` tenía `human_took_over = t` desde el **13-ago** —
