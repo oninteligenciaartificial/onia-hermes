@@ -293,8 +293,8 @@ Si te trabás en algún paso, en mi comunidad contesto yo:
 [link de invitación]
 ```
 
-🔴 **Primero que nada: los 3 que comentaron el reel del 07-sep siguen esperando este
-mismo link desde hace 3 días.** Responderles antes de publicar nada nuevo.
+✅ **Resuelto el 10-sep:** Sergio Urcullo les mandó el link a los 3 que comentaron el
+reel del 07-sep. Este mismo DM queda como plantilla para los próximos.
 
 ## 8b · Promesa `/stack` — lunes 21, cierra la semana 1
 
