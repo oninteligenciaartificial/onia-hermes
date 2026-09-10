@@ -236,7 +236,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       (`const TZ = DEFAULT_TZ` usado como valor) sigue sin cazarse; resolverlo pide un parser,
       no un regex, y está escrito como caso para que el día que alguien lo cierre el gate avise.
 
-- [ ] 🔴 **El que no confirma queda en un 403 mudo: el login tiene que ofrecer reenviar el
+- [x] 🔴 **El que no confirma queda en un 403 mudo: el login tiene que ofrecer reenviar el
       enlace.** Caso real medido el 10-sep: la cuenta de Sergio Urcullo (alta 31-ago) estuvo
       10 días trabada — el correo fue a Spam/Promociones (dominio nuevo: SPF/DKIM/DMARC/PTR
       todos verdes, Gmail aceptó 250 sin rebote y lo escondió) y `/api/auth/login` devuelve
@@ -247,6 +247,49 @@ y sin operar. Acá se opera, con verificación por ítem.
       que abre en cualquier navegador; GoTrue rate-limita solo). LISTO = con una cuenta QA
       sin confirmar: login → aparece el botón → clic → correo reenviado (status=sent en
       logs de onia-mail) → clic en el enlace → sesión abierta; captura de cada paso.
+
+      **HECHO el 2026-09-10 (chatbot-cola) — `4d45f2f`, commiteado y pusheado, NO desplegado.**
+      El botón vive en `app/(auth)/login/ReenviarConfirmacion.tsx` y la decisión en
+      `lib/auth/reenviar-confirmacion.ts`. Medido contra producción con un alta QA
+      (`zz-qa-reenvio-2026-09-10-1852`, borrada al terminar: org/perfil/auth en **0/0/0**, y
+      las 7 `zz-qa%` de otros carriles intactas):
+
+      - **El 403 se reprodujo:** `POST /api/auth/login` sin confirmar → HTTP 403
+        `email_not_confirmed`.
+      - **El reenvío funciona, y su respuesta MÁS PROBABLE es un 429.** `POST
+        /supabase/auth/v1/resend` con anon key devolvió primero
+        `{"code":429,"error_code":"over_email_send_rate_limit","msg":"…after 43 seconds"}` y
+        después `200 {}`. Por eso el botón trata el corte por frecuencia aparte ("Ya mandamos
+        uno recién, esperá un minuto") y no como un error cualquiera.
+      - **Salió de verdad, y es el segundo correo, no el del alta:** Postfix entregó DOS con
+        **Queue ID distinto** — `E6AC01103710` (18:50:34, el del alta) y `EEB7E1103710`
+        (18:51:44, **la hora exacta del reenvío**) —, los dos `dsn=2.0.0, status=sent (250
+        2.0.0 OK … gsmtp)` con `opendkim … (s=mail, d=onia.com.bo)`. Se contó por Queue ID a
+        propósito: confirmar una entrega por el destinatario cuelga el verde del correo
+        anterior.
+      - **El enlace del correo REENVIADO abre sesión:** `node scripts/alta_correo_confirma.mjs`
+        → `[1] enlace → /onboarding · OK` y `[2] login → /onboarding · ENTRA`, exit 0, en un
+        navegador que nunca vio el alta. Su token (`7cc3f936…`) ya **no** trae el prefijo
+        `pkce_` que tenía el del alta del 31-ago.
+      - **MIRADO renderizado**, no supuesto: los tres estados (el 403 con su salida ·
+        "Reenviando…" deshabilitado · el cartel de mandado) con el CSS del build vivo, ya que
+        producción todavía corre el build anterior. `/tmp/reenvio.png`. El icono es `send`,
+        que ya está en la fuente subseteada — uno nuevo se vería como su NOMBRE en letras
+        gigantes, que es el bug que un cliente vio en este mismo `/login`.
+
+      **Lo que estaba escondido detrás:** `/verify-email` YA tenía un botón de reenvío y no
+      servía para este caso — arranca con `supabase.auth.getUser()` y rebota a `/login` si no
+      hay sesión, y el que no confirmó no tiene sesión **por definición**. La pantalla existía,
+      alcanzable, bien escrita, e inútil justo para quien la necesitaba: es la familia
+      «permiso concedido, CAMINO ausente» con el camino apuntando a una puerta que se cierra
+      sola. Ver un arreglo hermano ya hecho es lo que hace dar la familia por cubierta.
+
+      Gate: `lib/auth/reenviar-confirmacion.test.ts` (13 casos), validado por mutación en
+      **6 direcciones** — incluida la de **esquive** (llamar al helper y mostrar "listo" sin
+      mirar `.entregado`) y la de sacar el componente del JSX dejando el módulo intacto. Las 6
+      dan rojo. El ancla que exige que el LoginForm lo USE se mide sobre el código **sin
+      comentarios** y por **vecindad**: un gate se absuelve con su propia bitácora si busca en
+      el archivo entero.
 
 - [ ] 🔴 **Nadie probó que el correo de confirmación LLEGUE a una bandeja — y sin ese clic el
       alta nueva muere** (`app/auth/confirm/route.ts` · `scripts/alta_correo_confirma.mjs`)**.**
