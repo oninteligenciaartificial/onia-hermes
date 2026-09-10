@@ -38,11 +38,17 @@ siente que le da igual estar afuera.
 
 # La tabla, sin vueltas
 
-## Los cuatro lugares
+## Los lugares
+
+⚠️ **Corregido el 10-sep: faltaba `@oniahq`.** Esta tabla decía "los cuatro lugares" y no
+listaba la cuenta de la empresa — así que la pieza de producto («Cuatro cosas a mano») no
+tenía lugar definido en el doc que manda sobre lugares, y cada sesión lo resolvía de
+memoria.
 
 | Lugar | Qué es | Quién entra |
 |---|---|---|
-| **Instagram** `@sergiourcullo` | videos cortos, carruseles, historias | todos |
+| **Instagram** `@sergiourcullo` | videos cortos, carruseles, historias — la marca personal | todos |
+| **Instagram** `@oniahq` | la cuenta de la EMPRESA: piezas de producto. Sólo nombra módulos 🟢 del `ONIA_CATALOGO_DE_VENTA.md`, cero cifras inventadas, cero obra | todos |
 | **YouTube** | el tema entero en video | todos |
 | **La web** `sergiourcullo.vercel.app` | las guías escritas | todos |
 | **Onia Community** (WhatsApp) | drops diarios + los archivos | los que entran |
@@ -52,7 +58,8 @@ siente que le da igual estar afuera.
 | Cosa | Dónde se publica | ¿Exclusivo? |
 |---|---|---|
 | Video corto diario | **Instagram** | no |
-| Carrusel | **Instagram** | no |
+| Carrusel | **Instagram** (`@sergiourcullo`; si es pieza de producto, `@oniahq`) | no |
+| **Carrusel cuyo tema es la semana VIGENTE del motor** | **comunidad**, Announcements — abre la semana con el mapa entero | ✅ **sí** |
 | Historia | **Instagram** | no |
 | Video largo del tema | **YouTube** | no |
 | La guía escrita | **la web**, `/tema` | no |
@@ -61,6 +68,13 @@ siente que le da igual estar afuera.
 | **Lo que salió mal** | **comunidad** | ✅ **sí** |
 | **Responder tu caso** | **comunidad**, grupo General | ✅ **sí** |
 | El link del recurso al que comenta | **DM de Instagram** | no |
+
+> **La fila del carrusel de semana vigente nace del 10-sep**, con «Mi stack»: Sergio
+> Urcullo — *«'Mi stack' NO va al perfil público, va a la comunidad»*. La razón que la
+> vuelve regla: la semana del motor ya cuenta ese tema en Instagram con seis videos, uno
+> por día. Un carrusel del mismo tema en el perfil la spoilea (antes) o la resume
+> (después); en Announcements, en cambio, es el mapa de apertura que sólo ve el de
+> adentro. El detalle del caso: `cola/AUDITORIA-8-CARRUSELES.md`, «El reparto, cerrado».
 
 ⚠️ **Los archivos viven en la web pero NO son públicos.** `/tema/archivos` no está enlazada
 desde ninguna página, lleva `noindex` y está bloqueada en el `robots.txt`. Está ahí sólo

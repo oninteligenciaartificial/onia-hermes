@@ -12,6 +12,15 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-10 20:11-20:17 La Paz — Comercio / tienda, reverificado: 8/8, sin hallazgos
+
+`zz-qa-2026-09-10-2011` — primera corrida propia en este rubro desde el 2026-09-03 (con el
+instrumento actual, de 9 pasos). 9/9 con el paso 07 en NO-APLICA (coherente: la tarjeta de
+`/register` ofrece "Catálogo, inventario, caja y clientes", sin agenda, y el menú tampoco la
+tiene). El dato del paso 6 se guardó en storefront Catálogo y se encontró de vuelta; el paso 8
+frenó en `/comercio/caja` a propósito. Los cinco rubros de `RUBROS_ACTIVOS` siguen todos sanos.
+Cero filas `zz-qa-` propias al cerrar; 4 ajenas sin tocar.
+
 ## 2026-09-10 19:09-19:13 La Paz — Importadora / distribuidora, primera corrida con este instrumento: 9/9, sin hallazgos
 
 `zz-qa-2026-09-10-1909` — primera vez que este rubro pasa por el recorrido de 9 pasos (cubierto

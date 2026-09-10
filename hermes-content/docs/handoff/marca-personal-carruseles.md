@@ -1,14 +1,59 @@
 # Handoff — carril `marca-personal-carruseles`
 
 > Formato: `hermes-content/docs/handoff/README.md`. Se sobrescribe; es el estado ACTUAL.
-> Última escritura: **2026-09-10**, sesión larga (06-sep → 10-sep) en la rama
-> `claude/instagram-carousel-design-8b56e0`, worktree `.claude/worktrees/skills-setup-config-8d4674`.
-> Cierra por pedido de Sergio Urcullo: *"los carruseles no enseñan nada nuevo, creá tu
-> handoff y lanzamos nueva sesión para la creación de todo esto"*.
+> Última escritura: **2026-09-10**, sesión de reparto, rama
+> `claude/marca-personal-carruseles-dist-deadab`, worktree
+> `.claude/worktrees/laughing-hermann-30e79f`.
+> La sesión anterior (06-sep → 10-sep, rama `claude/instagram-carousel-design-8b56e0`)
+> dejó las 8 piezas rendidas; ésta decidió **qué se publica, dónde y por qué**.
 
 ---
 
-## 1 · Objetivo de la sesión
+## 0 · 🔵 LO ÚLTIMO — el reparto quedó cerrado (10-sep)
+
+**Objetivo de esta sesión:** ordenar qué pieza va a qué lugar y por qué, y dejar publicable
+sólo lo que vale. **Cumplido.** Las ocho se miraron una por una (8 lectores independientes
+leyendo los PNG, no los docs) y cada una tiene su lugar justificado.
+
+| Pieza | Lugar | Estado |
+|---|---|---|
+| **Fable 5.1** | `@sergiourcullo` | ✅ lista · **1ª de la cola, sale hasta el dom 14 o se tira** |
+| **Mi stack** | 🔒 **comunidad** (Announcements) | ✅ **recortada 11→5**, para el **lun 14** |
+| **Founders bolivianos** | `@sergiourcullo` | ✅ lista |
+| **Tu cuaderno no miente** | `@sergiourcullo` | ✅ lista |
+| **Las seis respuestas** | `@sergiourcullo` | ✅ **recortada 6→4** |
+| **Seis archivos esta semana** | `@sergiourcullo` | ⏸️ rehacer en 3 láminas, entregando un archivo |
+| **Cuatro cosas a mano** | `@oniahq` | ⏸️ rehacer con el ángulo del tiempo |
+| **Necesito vitamina C** | — | ⛔ no se publica |
+
+**El cambio que ordenó todo:** «Mi stack» pasó del perfil público a la comunidad. La
+semana 1 del motor (14–19 sep) ES ese tema con seis videos en Instagram: el carrusel en el
+perfil la spoilea antes o la resume después. Adentro, en cambio, **abre la semana con el
+mapa entero**. Eso se volvió regla en `ONIA_DONDE_VA_CADA_COSA.md`, que además **no listaba
+`@oniahq`** — el doc que manda sobre lugares no tenía el lugar de la pieza de producto.
+
+**Cinco paquetes listos, uno por pieza que sale**, numerados por orden y con el destino en
+el nombre: `carousels/out/1-IG-FABLE-para-publicar.zip` …
+`2-COMUNIDAD-MI-STACK-para-mandar.zip` … con su `HOJA-*.png` para mirar antes de subir.
+Los ZIP viejos se borraron: el de «Mi stack» tenía adentro las 11 láminas que ya no van, y
+el de Vitamina C decía «para-publicar» de algo que no se publica.
+
+🔴 **Tres defectos que el gate `--check` nunca iba a atrapar, encontrados MIRANDO** (y ya
+arreglados y re-rendidos):
+1. **El gráfico de Fable mentía**: la barra de 22,4% rendía más alta que la de 24,7%.
+2. **«RESPUESTAS» salía cortada** en los dos bordes del lienzo.
+3. **La tilde de «¿CUÁL» pisaba la E de «REPETÍS»**.
+
+Las tres llevaban cuatro días dadas por listas. Trampas **#17 y #18** de la FICHA.
+
+🔴 **Y un hallazgo que cambia cómo se publican dos piezas:** «Founders» y «Cuaderno»
+llevan su dato **en el caption, no en la lámina** — en la imagen no aparece que Stripe no
+acepte Bolivia, ni las tres preguntas del cuaderno. **Publicarlas sin caption las deja en
+meme.** Anotado en rojo en sus dos docs.
+
+---
+
+## 1 · Objetivo de la sesión anterior
 
 Diseñar carruseles de Instagram para la marca personal de Sergio Urcullo con un patrón
 Apple-editorial, **puro código y diseño, sin Higgsfield**. Se cumplió y se desbordó: terminó
@@ -57,23 +102,33 @@ reparte es el corto.
 Gate `--check` que mide desborde real con `Range.getClientRects()` y verifica
 `document.fonts.check` antes de capturar.
 
+⚠️ **Lo que el gate NO mide, y costó tres defectos publicables:** recorte del lienzo (mide
+el bloque, no la caja de texto que se sale), colisión entre líneas, y proporción de un
+gráfico. **`--check` verde no es «la pieza se ve bien»: eso se MIRA.**
+
+`scripts/marca-personal/empaquetar-carrusel.py` — **nuevo el 10-sep**: arma el ZIP y la
+hoja de contacto de una pieza ya rendida, desde sus PNG. Existe porque el ZIP es lo que
+Sergio Urcullo realmente abre para publicar y se armaba a mano: al recortar «Mi stack» de
+11 a 5, el ZIP seguía teniendo las 11 adentro. Rehace el paquete entero cada vez, así una
+lámina borrada también desaparece. `--todas` lista qué hay rendido y con cuántas láminas.
+
 `scripts/marca-personal/generar-og.py` — imágenes 1200×630 de la web.
 
-### Las 8 piezas de la cola
+### Las piezas y sus paquetes
 
-Todas en `hermes-content/carousels/out/apple-*-inter/`, con ZIP numerado por orden de
-publicación y hoja de contacto.
+Todas en `hermes-content/carousels/out/apple-*-inter/`. **Sólo las cinco que salen tienen
+paquete**, numerado por orden de publicación y con el destino en el nombre:
 
-| # | Pieza | Láminas | Cuenta |
+| # | Paquete | Láminas | Destino |
 |---|---|---|---|
-| 1 | Mi stack | 11 | `@sergiourcullo` |
-| 2 | Fable 5.1 | 8 | `@sergiourcullo` |
-| 3 | Founders bolivianos | 1 | `@sergiourcullo` |
-| 4 | Tu cuaderno no miente | 1 | `@sergiourcullo` |
-| 5 | Necesito vitamina C | 1 | `@sergiourcullo` |
-| 6 | Las seis respuestas | 6 | `@sergiourcullo` |
-| 7 | Seis archivos esta semana | 8 | `@sergiourcullo` |
-| 8 | Cuatro cosas a mano | 7 | **`@oniahq`** |
+| 1 | `1-IG-FABLE-para-publicar.zip` | 8 | `@sergiourcullo` |
+| 2 | `2-COMUNIDAD-MI-STACK-para-mandar.zip` | **5** | 🔒 Announcements |
+| 3 | `3-IG-FOUNDERS-BO-para-publicar.zip` | 1 | `@sergiourcullo` |
+| 4 | `4-IG-DUELO-CUADERNO-para-publicar.zip` | 1 | `@sergiourcullo` |
+| 5 | `5-IG-RESPUESTAS-para-publicar.zip` | **4** | `@sergiourcullo` |
+
+Las otras tres (comunidad-semana, onia-cuatro, vitamina-c) siguen rendidas en su carpeta
+pero **sin paquete a propósito**: dos hay que rehacerlas y una no se publica.
 
 ### La comunidad
 
@@ -105,7 +160,9 @@ Y en `cola/`: `ARRANQUE-MOTOR-SEMANAL.md` (vence el 21-sep),
 
 | Qué | Dónde | Estado |
 |---|---|---|
-| **Nada sin commitear** | — | El árbol está limpio. Los 7 commits de este carril están en la rama y **falta mergear a `main`** |
+| **Nada sin commitear** | — | Árbol limpio; la rama del 06→10-sep ya está en `main` |
+| **«Seis archivos esta semana»** | `apple-comunidad-semana-inter/` | rendida en 8 láminas · **rehacer en 3, entregando un archivo**; caduca el 14-sep |
+| **«Cuatro cosas a mano»** (`@oniahq`) | `apple-onia-cuatro-inter/` | rendida en 7 · **rehacer con el ángulo del tiempo**; verificar antes la alerta de stock bajo en producción |
 | Video de YouTube «qué es Claude Code» | — | Grabado por él, sin publicar. Falta el link para embeber en `/stack` paso 04 |
 | Página `/claude-code` | no existe | Se escribe cuando el video salga |
 | `[TU EJEMPLO]` del drop D5 | `cola/drops/2026-09-07.md` | Hueco marcado: falta una imagen real hecha con Higgsfield |
@@ -179,7 +236,8 @@ se hace.** Un resumen no es una pieza.
 
 | | Bloquea |
 |---|---|
-| 🔴 **Publicar.** 8 piezas rendidas, **0 publicadas** | todo el carril |
+| 🔴 **Publicar.** 5 paquetes listos con su caption, **0 publicados** | todo el carril |
+| 🔴 **Mirar las 5 láminas de «Mi stack»** antes de mandarla a Announcements | ese envío |
 | 🔴 Mandar el link de `/homelab` a los 3 que comentaron el reel del 07-sep | gente esperando desde hace 3 días |
 | 🔴 Elegir el tema de la semana y **grabar los 6 videos** | la semana del 14 |
 | 🔴 El link del video de YouTube | `/claude-code` y el paso 04 de `/stack` |
@@ -190,24 +248,32 @@ se hace.** Un resumen no es una pieza.
 
 ---
 
-## 7 · Próximos pasos para la sesión nueva
+## 7 · Próximos pasos
 
-🔴 **CORREGIDO el 10-sep.** Acá decía *"publicar las 8 piezas y correr la semana 1"*, y
-Sergio Urcullo lo marcó: *"está mal tu enfoque; si tenés carruseles que están horribles,
-primero perfeccionar y ver cuáles son los mejores"*. Tenía razón — ese objetivo asumía
-que las 8 estaban bien, cuando él acababa de decir lo contrario.
+> 🔴 **Dos correcciones de enfoque, en orden, y las dos vinieron de él.** Primero decía
+> *"publicar las 8 piezas"*, y Sergio Urcullo lo marcó: *"está mal tu enfoque; si tenés
+> carruseles que están horribles, primero perfeccionar"* — asumía que las 8 estaban bien.
+> Después la auditoría asignó lugares heredados, y lo marcó otra vez: *«"Mi stack" NO va
+> al perfil público — va a la comunidad»*. **La lección que queda: un lugar heredado se
+> justifica o se cambia; nunca se arrastra.** El reparto cerrado está en §0 y el detalle
+> en [`cola/AUDITORIA-8-CARRUSELES.md`](../cola/AUDITORIA-8-CARRUSELES.md).
 
-**El objetivo correcto:** *dejar publicables las piezas que valen la pena y publicarlas.*
-Los veredictos, uno por uno, en [`cola/AUDITORIA-8-CARRUSELES.md`](../cola/AUDITORIA-8-CARRUSELES.md):
-**2 listas · 2 para recortar · 1 que caduca · 3 sin dato**.
+**Lo único que falta es publicar, y no depende de un agente.** El material está: 5
+paquetes armados, sus captions escritos, los 6 drops de la semana listos.
 
-1. **Mergear esta rama a `main`.** 7 commits sin mergear.
-2. **Antes de escribir un carrusel nuevo**, leer §5: la regla del dato que el lector no
-   sabía. Si no lo tiene, no se hace.
-3. Los temas del backlog marcados `S` en `ONIA_MAPA_DE_TEMAS.md` son la fuente; los que
+1. 🔴 **PUBLICAR.** El orden y el cuándo, en
+   [`cola/PARA-PUBLICAR-APPLE-ORDEN.md`](../cola/PARA-PUBLICAR-APPLE-ORDEN.md). Fable es
+   lo primero **y vence el domingo 14**.
+2. 🔴 **Mandar el link de `/homelab`** a los 3 que comentaron el reel del 07-sep. Esperan
+   desde hace tres días y es un mensaje.
+3. **Las dos a rehacer no se tocan hasta tener su dato escrito en una línea.** Ésa es la
+   regla que salió de la auditoría, y es la que evita repetir el problema entero.
+4. **Antes de escribir un carrusel nuevo**, leer §5: la regla del dato que el lector no
+   sabía, y las trampas #17/#18 de la FICHA (el gate verde no alcanza: se mira).
+5. Los temas del backlog marcados `S` en `ONIA_MAPA_DE_TEMAS.md` son la fuente; los que
    salen de drops que ya funcionaron (`/prompts` del D2, `/que-automatizar` del D3,
    `/habilidades` del D4) son los más baratos porque el contenido ya está probado.
-4. **No abrir frentes nuevos.** Hay 8 piezas, 2 guías, 9 drops y 7 guiones sin publicar.
+6. **No abrir frentes nuevos.** Sigue habiendo más hecho que salido.
 
 ⚠️ **El patrón está en `references/ui-patterns/apple-editorial/FICHA.md`** con ~20 trampas
 numeradas, cada una con la historia que la originó. Leerlo antes de tocar el generador: una

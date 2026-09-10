@@ -330,68 +330,20 @@ LAMINAS = [
         "desc": "La capa que piensa. Escribe el código, los textos\ny los sistemas. Es lo único caro, y es para construir:\nno para que el negocio funcione.",
         "precio": "$200/mes",
     },
+    # ⚠️ RECORTE del 10-sep — veredictos en docs/cola/AUDITORIA-8-CARRUSELES.md. Sergio
+    # Urcullo: "si tenés carruseles que están horribles, primero perfeccionar y ver
+    # cuáles son los mejores". Cinco fichas seguidas con la misma estructura y el mismo
+    # $0: a partir de la tercera el lector ya entendió y desliza. Las cinco gratis
+    # (Homelab, n8n, WhatsApp Business, HyperFrames, Hermes) se juntan en UNA lámina.
+    # Las fichas individuales — con su historia: Notion y Chatwoot fuera el 06-sep, la
+    # corrección de autoría de Hermes (es de NousResearch, lo suyo es el SOUL.md) —
+    # quedan en git antes de este commit, por si alguna vuelve como pieza propia.
     {
-        "layout": "E",
-        "icono": "vps",
-        # Sergio Urcullo, 06-sep: "es una pc vieja que tengo". O sea hardware PROPIO, no el
-        # KVM alquilado — mi reparo anterior sobre el termino "homelab" no aplicaba a esta
-        # lamina. Se cayeron las specs "4 vCPU / 16 GB / 41 contenedores": eran del VPS de
-        # ONIA_ESTRATEGIA_DE_EMPRESA.md §8.1, no de esta maquina, y las de la PC no estan
-        # registradas en ningun lado. Sin dato verificado no se escribe dato.
-        "nombre": "Homelab",
-        "desc": "Una PC vieja que ya tenía guardada.\nAhí adentro corre todo lo que viene abajo.",
-        "precio": "$0",
-        "etiqueta": "Hardware que ya tenía",
-    },
-    {
-        "layout": "E",
-        "icono": "n8n",
-        "nombre": "n8n",
-        "desc": "Las automatizaciones: embudo, seguimientos, avisos.\nCorre en mi servidor, así que no suma un peso.",
-        "precio": "$0",
-        "etiqueta": "Open source",
-    },
-    {
-        "layout": "E",
-        "icono": "whatsapp",
-        "nombre": "WhatsApp Business",
-        # Antes decia "el transporte de Meta lo paga la cuenta del negocio, no yo": jerga
-        # de plataforma que a un dueno de negocio no le dice nada. Ahora nombra lo que el
-        # lector hace todos los dias, y el paso concreto — las respuestas rapidas son las
-        # mismas del brief lamina-grid-mensajes.json, contenido ya verificado.
-        "desc": "Donde me escriben los clientes. Con las respuestas\nrápidas dejé escritos de una vez los seis mensajes\nque antes tipeaba todos los días.",
-        "precio": "$0",
-    },
-    # Notion SALIO: Sergio Urcullo, 06-sep — "gratis, aunque ni lo uso". Una herramienta que
-    # no se usa en una pieza cuyo valor entero es que las siete son reales la vuelve mentira.
-    # Su .path queda vendorizado por si vuelve en otra pieza.
-    # Chatwoot SALIO de la pieza (Sergio Urcullo, 06-sep). No es pudor: es la capa que hace
-    # funcionar el chatbot que se vende desde Onia Platform. Las otras cinco herramientas no
-    # tienen ese problema —nadie compra Claude en vez de Onia—, pero Chatwoot con "Bs 0" al
-    # lado le ensena al lector el camino para saltearse el producto. Era la unica lamina que
-    # le daba un motivo para no comprar. El icono queda definido por si vuelve en otra pieza.
-    {
-        "layout": "E",
-        "icono": "hyperframes",
-        # Sin etiqueta de autoria a proposito: HyperFrames es `heygen-com/hyperframes`, de
-        # terceros. La bajada solo afirma un uso propio, que si es verificable.
-        "nombre": "HyperFrames",
-        "desc": "Video desde HTML. El teaser de la comunidad\nse renderizó en el servidor en 30 segundos.",
-        "precio": "$0",
-    },
-    # El giro, justo antes del cierre. ⚠️ Corregido el 06-sep: la bajada decia "lo escribi
-    # yo" y es FALSO. Hermes es NousResearch/hermes-agent — publico, MIT, Python, 242k
-    # estrellas (verificado con `gh repo view`). Lo de Sergio Urcullo es el SOUL.md, la
-    # memoria y la config con la que corre en su maquina, que es lo que ahora dice la
-    # lamina. Reclamar autoria de un proyecto ajeno en pieza publica es lo peor que podia
-    # tener esta pieza.
-    {
-        "layout": "E",
-        "icono": "hermes",
-        "nombre": "Hermes",
-        "desc": "Un agente open source que vive en mi servidor.\nYo le escribí el alma: su identidad, su memoria\ny a quién avisar cuando algo se rompe.",
-        "precio": "$0",
-        "etiqueta": "Open source · MIT",
+        "layout": "D",
+        "contexto": "Y las otras cinco cuestan",
+        "remate": "$0",
+        "sub": "Homelab · n8n · WhatsApp Business\nHyperFrames · Hermes\nCinco herramientas, cero mensualidades.",
+        "tira": ["vps", "n8n", "whatsapp", "hyperframes", "hermes"],
     },
     # El cierre del arco: lo unico del stack que no instalo, sino que construyo. Va ultima
     # a proposito — es la carta mas fuerte y la unica que lleva el verde de Onia.
@@ -414,55 +366,22 @@ LAMINAS = [
         "precio": "Próximamente",
         "etiqueta": "Lo que estoy construyendo",
     },
+    # CIERRE para ADENTRO (10-sep): la pieza cambió de destino — no va al perfil
+    # público, ABRE la semana «Mi stack» en Announcements (14-sep). El cierre deja de
+    # repetir la portada y anuncia lo único que el de adentro recibe y el de afuera no:
+    # el archivo diario de cada herramienta.
     {
         "layout": "D",
         "contexto": "Siete herramientas, una factura",
         "remate": "$200",
-        "sub": "al mes, y es todo para construir.\nMantener el negocio andando no me cuesta nada.",
+        "sub": "al mes, y es todo para construir.\nY esta semana, acá adentro:\nun archivo por día, listo para usar.",
     },
-    # QUIÉN SOY. Va acá y no al principio a proposito: el que llego hasta la lamina 10 ya
-    # vio el valor y recien ahi le importa quien lo dijo. Al reves —presentarse primero—
-    # es pedirle atencion antes de habersela ganado.
-    #
-    # Usa el layout F (foto a sangre) y no el Q (foto chica al lado del texto): Sergio
-    # Urcullo, 07-sep, "usa esta imagen mia en grande que se vea mejor". Tenia razon —
-    # a 390px la foto era un accesorio del texto; a sangre la cara ES la lamina, que es
-    # justo lo que tiene que pasar en la unica lamina donde el que habla se muestra.
-    # El texto baja a dos lineas porque F no admite mas: el largo controla el wrap.
-    #
-    # El texto pasa de contar el stack a PEDIR EL SEGUIMIENTO (07-sep). El dato del $200
-    # ya lo dieron las nueve laminas anteriores: repetirlo acá gastaba la única lámina
-    # donde se le puede pedir algo al lector. Las dos cosas que la hacen seguir son la
-    # edad y la frecuencia, y las dos van dichas juntas.
-    {
-        "layout": "F",
-        "foto": "sergio-chroma.png",
-        "nombre": "Soy Sergio Urcullo,",
-        "sub": "tengo 16 años y todos los días posteo\ncómo usar IA en un negocio de verdad.",
-        "cta": "Seguime.",
-    },
-    # CIERRE. Pedido de Sergio Urcullo el 07-sep: "que la ultima pida comentar si o si,
-    # podes decir te paso mi stack y como instalarlo". Pasa de PREGUNTA a INTERCAMBIO —
-    # una palabra a cambio de algo concreto—, que es el CTA que mas comentarios saca
-    # porque el lector sabe exactamente que recibe.
-    #
-    # ⚠️ LA ENTREGA ES A MANO Y LA LAMINA LO DICE. La cuenta tiene `palabras: {}` en el
-    # workflow n8n de private-reply (medido 04-sep): "Comenta STACK" NO dispara ningun
-    # envio automatico. Por eso el pie dice "te contesto a todos, a mano" en vez de
-    # "recibilo al instante": prometer una automatica que no existe deja a cada
-    # comentarista esperando un DM que nunca llega, y eso se paga con la cuenta.
-    #
-    # 🔴 DEPENDE DE SERGIO URCULLO: la pieza promete "la lista con el paso a paso para
-    # instalar cada una" y ESE MATERIAL NO EXISTE TODAVIA. Antes de publicar tiene que
-    # estar escrito y a mano, o la promesa se rompe en el primer comentario.
-    {
-        "layout": "D",
-        "contexto": "¿Lo querés armar igual?",
-        "remate": "COMENTÁ\n«STACK»",
-        "sub": "y te paso por privado la lista de las siete\ncon el paso a paso para instalar cada una.",
-        "cta_hl": "Con esa palabra alcanza.",
-        "cta_gris": "Te contesto a todos, a mano.",
-    },
+    # QUIÉN-SOY (F, sergio-chroma.png) y el CTA «COMENTÁ STACK» SALIERON el 10-sep con
+    # el cambio de destino: dentro de la comunidad ya lo conocen y ya comentaron —
+    # pedir seguimiento o una palabra clave ahí es ruido, y "la lista con el paso a
+    # paso" que prometía el CTA la reemplazan los seis drops de la semana, que entregan
+    # el archivo real. Si la pieza vuelve alguna vez al perfil público, las dos láminas
+    # están en git antes de este commit.
 ]
 
 # --- Fuentes: autohospedadas, NUNCA de Google Fonts en tiempo de render ------------
@@ -677,25 +596,19 @@ FOUNDERS_BO = [
 # ya publicado en /stack/archivos. Es la pieza mas "guardable" del carril: no cuenta lo que
 # el hizo, entrega algo que el lector usa hoy.
 #
-# El remate esta en la SEXTA. Las cinco primeras informan y cualquiera las tiene a medias
-# escritas en la cabeza; la que pide la decision casi nadie la tiene, y por eso casi nadie
-# la manda. Ese es el unico dato de la pieza que el lector no sabia.
+# ⚠️ RECORTADA de 6 a 4 el 10-sep (docs/cola/AUDITORIA-8-CARRUSELES.md): el remate
+# (/cierro) esperaba hasta la lamina 4 detras de dos de relleno. La ficha de WhatsApp
+# ademas traia la ruta de menu ("Herramientas para la empresa → …"), que es el COMO y
+# esta prohibido en el perfil publico — la ruta vive en la guia /stack y en el drop del
+# lunes. Y la portada perdio el gancho de 196px: "RESPUESTAS" a ese cuerpo salia CORTADA
+# en los dos bordes del lienzo, y el gate de ancho NO lo atrapo — se vio MIRANDO el PNG.
 RESPUESTAS = [
     {
         "layout": "D",
         "contexto": "Escribís lo mismo veinte veces por día",
         "remate": "SEIS\nRESPUESTAS",
-        "pie": "y no volvés a escribirlas",
-        "pie_hl": "nunca",
-        "gancho": True,
-    },
-    {
-        "layout": "E",
-        "icono": "whatsapp",
-        "nombre": "Respuestas rápidas",
-        "desc": "Están en la app gratis de WhatsApp Business.\nHerramientas para la empresa → Respuestas\nrápidas. Se escriben una vez.",
-        "precio": "$0",
-        "etiqueta": "20 minutos · sin computadora",
+        "pie": "y la sexta casi nadie la",
+        "pie_hl": "tiene",
     },
     {
         "layout": "D",
@@ -703,24 +616,23 @@ RESPUESTAS = [
         "remate": "/precio\n/horario\n/donde",
         "sub": "/pago  ·  /demora\nCon el atajo, salen con dos toques.",
     },
-    # El remate de la pieza. Va sola, en la lamina mas grande, porque es lo unico que el
-    # lector no sabia ya.
+    # El remate, ahora en la lamina 3: llega antes de que el lector se vaya. El "pide
+    # la decision" (ex lamina 5 entera) baja a una linea de contexto — era la
+    # explicacion del dato, no un dato aparte.
     {
         "layout": "D",
-        "contexto": "Y la sexta, que casi nadie tiene",
+        "contexto": "Las cinco informan. La sexta decide:",
         "remate": "/cierro",
         "sub": "«¿Querés que te lo reserve? Con eso ya te lo\ndejo apartado a tu nombre.»",
     },
-    {
-        "layout": "D",
-        "contexto": "Las cinco primeras informan",
-        "remate": "ÉSA PIDE\nLA DECISIÓN",
-        "sub": "Sin ella la conversación se enfría sola y el\ncliente se va a pensarlo. Que casi siempre\nsignifica que no vuelve.",
-    },
+    # "largo": una sola linea a 104px. A 126px el remate partia en dos y la tilde de
+    # ¿CUÁL caia sobre la E de REPETÍS (line-height .98 no deja aire para acentos
+    # apilados) — se leia "RÉPETÍS". Visto MIRANDO el render del 10-sep.
     {
         "layout": "D",
         "contexto": "Ahora te toca a vos",
         "remate": "¿CUÁL REPETÍS?",
+        "largo": True,
         "sub": "Escribí abajo la frase que más veces tipeaste\nesta semana y te la dejo lista para guardar.",
         "cta_hl": "Copiá y pegá, nomás.",
         "cta_gris": "Te contesto a todos.",
@@ -1046,11 +958,19 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 .barra{{flex:1;max-width:180px;display:flex;flex-direction:column;
   justify-content:flex-end;height:100%}}
 .barra .val{{font-size:50px;font-weight:{peso};font-variation-settings:{vf};
-  letter-spacing:-.03em;color:var(--muted);margin-bottom:18px}}
-.barra .cana{{width:100%;background:var(--hairline);border-radius:22px 22px 10px 10px}}
+  letter-spacing:-.03em;color:var(--muted);margin-bottom:18px;flex-shrink:0}}
+/* ⚠️ Corregido el 10-sep, encontrado MIRANDO el render (el gate no lo mide): la cana
+   iba con height:% dentro de una columna que tambien contiene el rotulo. Un rotulo de
+   DOS lineas (GPT-5.6/SOL) levantaba su barra ~29px — la de 22,4 rendia MAS ALTA que
+   la de 24,7 — y en la columna ganadora (val+560+rot > 560px) el flex ENCOGIA la cana:
+   ni las bases alineadas ni las alturas proporcionales, en la pieza que presume de
+   datos. Ahora: altura en PX desde Python (v/tope*390), cana sin shrink, y el rotulo
+   con min-height de dos lineas para que TODAS las barras apoyen en la misma base. */
+.barra .cana{{width:100%;background:var(--hairline);border-radius:22px 22px 10px 10px;
+  flex:0 0 auto}}
 .barra .rot{{font-family:'OniaMono',monospace;font-size:22px;font-weight:500;
   letter-spacing:.04em;text-transform:uppercase;color:#A1A1A6;margin-top:22px;
-  line-height:1.3;white-space:pre-line}}
+  line-height:1.3;white-space:pre-line;min-height:58px;flex-shrink:0}}
 /* El ganador en tinta plena. NO en verde: el verde es de la marca Onia y esta pieza
    habla de un producto ajeno — pintar a Anthropic con el color de la casa confunde
    de quien es el logro. */
@@ -1150,10 +1070,12 @@ def markup(lamina):
         cols = []
         for b in lamina["barras"]:
             gana = " gana" if b.get("gana") else ""
-            alto = b["valor"] / tope * 100
+            # px, no %: el % era relativo a la columna entera (val+cana+rot) y mentia.
+            # 390px es el techo del ganador: 90 (val) + 390 + 80 (rot) = 560 justos.
+            alto = b["valor"] / tope * 390
             val = f'{b["valor"]:.1f}'.replace(".", ",") + lamina.get("unidad", "%")
             cols.append(f'<div class="barra{gana}"><div class="val">{val}</div>'
-                        f'<div class="cana" style="height:{alto:.2f}%"></div>'
+                        f'<div class="cana" style="height:{alto:.0f}px"></div>'
                         f'<div class="rot">{b["rotulo"]}</div></div>')
         sub = f'<div class="sub-g">{lamina["sub"]}</div>' if lamina.get("sub") else ""
         return (f'<div class="titulo-g">{lamina["titulo"]}</div>{sub}'
