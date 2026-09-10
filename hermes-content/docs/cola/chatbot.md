@@ -178,6 +178,68 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-10 (`31cdfba`): quien pedía hablar con una PERSONA recibía siempre
+      «Te conecto con un agente, en unos momentos te atenderán» — y cuando la conversación no
+      llegaba a ninguna bandeja, el bot además se callaba. Sin bot y sin humano, con la promesa
+      hecha.**
+
+      Escalar son **dos** cosas, y las dos se hacían pasara lo que pasara del otro lado: dejar la
+      sesión en `ESCALATED` —que silencia al bot (`// While escalated, messages go to human agent
+      — no bot reply; return`)— y prometer que lo esperan. Si `chatwootConvId` quedaba `null`, esa
+      persona quedaba en un limbo: el único que estaba contestando enmudecía, nadie sabía que
+      existía, y la única salida era que adivinara escribir *bot*.
+
+      **Se cae por DOS caminos y los dos estaban vivos** (medido el 2026-09-10 contra
+      `supabase-db`, no heredado):
+
+      | org | rubro | `addon.whatsapp` | inbox web | inbox WhatsApp |
+      |---|---|---|---|---|
+      | `clinica-sergio-p2ljs` | dental | **active** | — | — |
+      | `zz-qa-ferreteria-tornillo-ommbt` | comercio | **active** | — | — |
+      | `zz-qa-clinica-chatbot-9k651` | dental | active | 7 | — (cae al 7 por el fallback) |
+      | `onia-interna` | interna | active | 4 | 5 |
+
+      **2 de las 4 orgs con la capacidad activa no tienen bandeja de WhatsApp, y una es una
+      clínica real, no QA.** Ahí `inboxesDeLaOrg().whatsapp` es `null`, así que ni siquiera se
+      entra al `try`: es una **ausencia**, no un error que registrar. El otro camino era el
+      `catch {}` vacío de Chatwoot, cuyo comentario —*«Chatwoot unavailable — still show
+      message»*— **declaraba la decisión, y por eso nadie la auditaba**.
+
+      **Por qué ningún gate podía verlo:** no sobra ni falta una palabra (el texto es legítimo
+      cuando la conversación SÍ se creó), no es un defecto de rubro, y la superficie es WhatsApp,
+      así que no hay pantalla que mirar ni HTML que grepear. **El sujeto no es el texto: es el par
+      (hubo bandeja, qué se le dice).** Es la mitad opuesta de la lectura que falla muda que se
+      cerró el 09-sep en `/appointments`: acá es una **escritura que falla muda y encima PROMETE
+      que ocurrió**.
+
+      **Y lo que lo hacía parecer cubierto:** el patrón de degradación honesta ya estaba **dos
+      funciones más arriba en el mismo archivo** —cuando la IA falla se llama `notifyBotError` y
+      el texto cae al teléfono del negocio—, y el correo de aviso hasta lo dice: *«el paciente
+      recibió un mensaje de fallback con el teléfono. No quedó sin respuesta»*. El archivo ya
+      sabía hacerlo bien; justo la rama más cara —una persona pidiendo una persona— no lo hacía.
+
+      **Arreglo** (`lib/whatsapp/escalacion-a-humano.ts`, puro, sin base ni red), condicionando la
+      promesa en vez de borrarla:
+      · **no se silencia al bot** sin bandeja — `ESCALATED` sin conversación no manda los mensajes
+        a ningún lado, sólo deja mudo al único que estaba contestando, así que queda en `MENU`;
+      · el texto degradado da un **camino real** (el teléfono del negocio) y es **neutro entre
+        rubros**; sin teléfono cargado no inventa uno ni deja al cliente sin salida;
+      · **`notifyEscalationFailed`** avisa al dueño, que es el único que puede rescatar a esa
+        persona, y va **aparte** de `notifyBotError` a propósito: acá el bot SÍ respondió, y
+        reusar aquel texto («El bot no pudo responder al mensaje») mandaría a revisar la IA
+        —que está sana— en vez del inbox, que es lo que hay que tocar.
+
+      **Gate:** `lib/whatsapp/escalacion-a-humano.test.ts` (13 casos), con el caso que mira al
+      **LLAMADOR** sobre el fuente **sin comentarios** —una bitácora no puede absolver a un gate—.
+      Validado **por mutación en 4 direcciones**: vuelve a prometer · silencia al bot · no avisa ·
+      **esquive** (el llamador importa el módulo y conserva su propio texto). Las 4 `exit 1`, base
+      y restaurado `exit 0`, y cada mutación verificada de que entró.
+      **Gates:** `npx tsc --noEmit` 0 · `npx vitest run` **4262 pasan / 341 archivos** ·
+      `npx eslint .` 0 errores.
+
+      🔴 **Commiteado y pusheado, NO desplegado — y falta un paso antes:** `31cdfba` está en la
+      rama del carril, **no en `master`**. Falta el merge del integrador y después el swap.
+
 - [x] ✅ **CERRADO el 2026-09-08: el bot de WhatsApp del cliente le pedía su catálogo a una tabla
       que está VACÍA por construcción en 3 de los 5 rubros de la v1.0.**
 
