@@ -279,6 +279,77 @@ export function promesaCompleta({ shas, publicaria }) {
 }
 
 /**
+ * PURA: parte el `show` de una tarea en su CUERPO y sus COMENTARIOS.
+ *
+ * POR QUÉ HACE FALTA SEPARARLOS. Los dos clasificadores de acá arriba reciben el `show`
+ * entero, así que para ellos una promesa escrita en el cuerpo y una escrita en un comentario
+ * de hoy valen lo mismo. Para Sergio Urcullo NO valen lo mismo: el TÍTULO es lo único que se
+ * ve en la lista del tablero y el CUERPO es lo primero que lee, mientras que los comentarios
+ * se apilan abajo — el de t_e51796c8 llevaba cuatro.
+ *
+ * Si el `show` no trae la marca, todo cuenta como cuerpo: eso deja al gate en su dirección
+ * barata (sin comentarios que puedan tapar nada, `cuerpoVencido` nunca dice VENCIDO).
+ */
+export function partirPedido(texto) {
+  const s = String(texto ?? '');
+  const m = s.match(/^Comments \(\d+\):/m);
+  if (!m) return { cuerpo: s, comentarios: '' };
+  return { cuerpo: s.slice(0, m.index), comentarios: s.slice(m.index) };
+}
+
+/**
+ * PURA: ¿el CUERPO del pedido describe trabajo que ya está publicado, mientras lo que su `ok`
+ * publicaría de verdad vive sólo en un comentario?
+ *
+ * LA TERCERA PREGUNTA, y el 2026-09-10 no tenía dueño. `clasificarPedido` caza el pedido que
+ * SOBRE-describe (promete lo ya publicado) y `promesaCompleta` el que SUB-describe (el ok
+ * publica algo que nadie nombró). Las dos leen cuerpo y comentarios como un solo texto, así
+ * que **los comentarios tapan al cuerpo**: basta que el comentario más nuevo nombre un sha
+ * pendiente para que el pedido salga VIGENTE con su cuerpo entero vencido.
+ *
+ * Medido ese día sobre t_e51796c8: prometía f8d0fc2, e911638 y 7756295 en el cuerpo y los TRES
+ * eran ancestros del build vivo (`build-335389f`); lo único que su ok publicaba era afa9da6,
+ * nombrado en un comentario. `npm run pedido:entregado` dijo «sigue VIGENTE — 1 sin publicar»,
+ * y tenía razón para SU pregunta. El costo es el de siempre: Sergio Urcullo aprueba leyendo un
+ * título y un cuerpo que describen otra cosa que la que se publica.
+ *
+ * La salida NO es el comentario N+1 —ese método ya se agotó, y el `edit` del tablero no cambia
+ * el cuerpo—: es rehacer el pedido con el cuerpo derivado del publicador en seco y archivar el
+ * viejo en la misma vuelta.
+ *
+ * DIRECCIÓN DEL ERROR, elegida: ante cualquier duda NO se dice VENCIDO. Sin shas en el cuerpo
+ * o con uno que no se pudo resolver sale NO_MEDIDO, porque un VENCIDO falso manda a rehacer —y
+ * a archivar— un pedido sano, que es la única salida que le borra a Sergio un pedido real.
+ *
+ * @param {{texto:string, publicado:(sha:string)=>boolean|null}} args
+ */
+export function cuerpoVencido({ texto, publicado }) {
+  const { cuerpo, comentarios } = partirPedido(texto);
+  const delCuerpo = shasPrometidos(cuerpo);
+  if (delCuerpo.length === 0) {
+    return { estado: 'NO_MEDIDO', motivo: 'el cuerpo no promete ningun sha con su marca', mudos: [] };
+  }
+  const estados = delCuerpo.map((s) => ({ sha: s, pub: publicado(s) }));
+  if (estados.some((e) => e.pub === null || e.pub === undefined)) {
+    return { estado: 'NO_MEDIDO', motivo: 'un sha del cuerpo no se pudo resolver', mudos: [] };
+  }
+  if (estados.some((e) => !e.pub)) {
+    return { estado: 'VIGENTE', motivo: 'el cuerpo todavia promete algo sin publicar', mudos: [] };
+  }
+  // El cuerpo entero ya está publicado. Sólo es VENCIDO si el `ok` todavía publicaría algo —y
+  // eso, por construcción, vive en un comentario. Si tampoco hay nada ahí, el pedido está
+  // cumplido y eso ya lo dice `clasificarPedido`: no se pisan.
+  // Sin descontar los que el cuerpo ya nombra: a esta altura TODOS los del cuerpo están
+  // publicados, así que `publicado(s) === false` no puede ser verdadero para ninguno de ellos
+  // y el filtro extra sería una guarda que ninguna entrada puede romper. Se probó: mutarla no
+  // ponía en rojo un solo caso, que es la firma de una guarda decorativa.
+  const mudos = shasPrometidos(comentarios).filter((s) => publicado(s) === false);
+  return mudos.length === 0
+    ? { estado: 'ENTREGADO', motivo: 'el cuerpo esta publicado y no queda nada pendiente', mudos: [] }
+    : { estado: 'VENCIDO', mudos };
+}
+
+/**
  * De todo lo que `main` tiene sin publicar, ¿qué puede cambiar algo que el cliente VE?
  *
  * POR QUÉ EXISTE. `promesaCompleta` necesita el universo de «lo que el ok publicaría», y para
@@ -481,6 +552,7 @@ async function medirEnVivo() {
 
   const entregados = [];
   const incompletos = [];
+  const vencidos = [];
   const noMedidos = [];
   // `noMedidos` y `sinCubrir` NO son lo mismo, y mezclarlos fue el bug: el primero es
   // transitorio (el SSH no contestó, el sha no resuelve) y se cura solo en la vuelta
@@ -546,6 +618,13 @@ async function medirEnVivo() {
       const c = promesaCompleta({ shas: shasDelTexto(p.texto), publicaria: publicariaPlataforma });
       if (c.estado === 'SUB_DESCRIBE') incompletos.push({ id: p.id, mudos: c.mudos });
       else if (c.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (plataforma, promesa completa): ${c.motivo}`);
+      // Y la tercera pregunta, que hasta el 2026-09-10 no tenia dueno: las dos de arriba leen
+      // cuerpo y comentarios como UN texto, asi que los comentarios TAPAN al cuerpo. Un pedido
+      // puede estar vigente, nombrar todo lo que publica, y aun asi tener el cuerpo entero
+      // vencido — que es lo que Sergio Urcullo lee para decidir.
+      const v = cuerpoVencido({ texto: p.texto, publicado: esPublicado });
+      if (v.estado === 'VENCIDO') vencidos.push({ id: p.id, mudos: v.mudos });
+      else if (v.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (plataforma, cuerpo vigente): ${v.motivo}`);
     }
   }
 
@@ -569,6 +648,18 @@ async function medirEnVivo() {
       console.log('  El cuerpo es lo unico que Sergio Urcullo lee: hoy aprobaria codigo que nadie');
       console.log('  le mostro. Comenta el recuento DERIVADO (no rehagas la tarea: el comando ya');
       console.log('  deriva el sha al ejecutarse y no caduca).');
+    }
+    return 1;
+  }
+
+  if (vencidos.length > 0) {
+    for (const v of vencidos) {
+      console.log(`\nROJO ${v.id}: su CUERPO esta entero publicado (produccion corre ${vivo}).`);
+      console.log(`  Lo unico que su ok publica de verdad vive en un comentario: ${v.mudos.join(', ')}.`);
+      console.log('  El titulo es lo unico que se ve en la lista y el cuerpo lo primero que lee:');
+      console.log('  hoy los dos describen trabajo hecho. El comentario N+1 no lo arregla y el');
+      console.log('  `edit` del tablero no cambia el cuerpo: rehace el pedido con el cuerpo');
+      console.log('  derivado de `publicar.sh --dry-run` y ARCHIVA el viejo en la misma vuelta.');
     }
     return 1;
   }
