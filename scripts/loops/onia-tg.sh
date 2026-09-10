@@ -55,7 +55,28 @@ if [ "${ONIA_TG_DIRECTO:-0}" != "1" ]; then
   # resuelto no es un problema: mirar el cuerpo entero convierte cada relato en
   # tarea. La primera linea es el titular — todos estos scripts ponen ahi su emoji.
   PRIMERA=$(printf '%s' "$MSG" | head -1)
-  if ! printf '%s' "$PRIMERA" | grep -qaiE '⚠️|🔴|❌|🚨|\bFALL|\berror|\bno pud|\bcaido|\bcaida|\broto\b|\bconflicto|\btimeout|\babortad'; then
+
+  # 🔴 «Nada roto» NO es un problema. Medido el 2026-09-10: el clasificador de arriba
+  # funciona —casi todo sale INFORMATIVO— y aun asi entraron 4 tareas de EXITO ese dia
+  # (t_7c1c0612, t_3ef94060, t_154ce16c, t_14cc85d0). La regla "se clasifica por la
+  # primera linea" SUPONE que el aviso tiene varias lineas; cuando es UN parrafo —que es
+  # como escriben recorrido-cliente y el integrador— la primera linea ES el mensaje
+  # entero y el filtro vuelve a mirar el cuerpo, sin que nada se ponga rojo.
+  #
+  # Ahi la palabra llega NEGADA, y la negacion es justo lo que escribe un carril al que
+  # le fue bien: "Nada roto", "sin nada roto", "sin errores". El resultado es una tarea
+  # que dice que algo esta roto porque el loop dijo que NO lo estaba.
+  #
+  # Se BORRA la negacion antes de buscar, nunca se saca la palabra del patron: un aviso
+  # que niega una cosa y reporta otra ("Nada roto en el recorrido, pero el emisor SIAT
+  # FALLO") tiene que seguir abriendo tarea. Ese es el caso que ancla el gate.
+  SIN_NEGACION=$(printf '%s' "$PRIMERA" | sed -E '
+    s/\b(nada|ning[uú]n[ao]?s?|cero|sin( nada)?)[[:space:]]+(m[aá]s[[:space:]]+)?(rot[oa]s?|errores?|fall[aoeáéó][a-z]*|conflictos?|problemas?|abortad[oa]s?)\b/ /gI
+    s/\bno[[:space:]]+(se[[:space:]]+)?(est[aá]|estaba|estuvo|hay|hubo|fue)[[:space:]]+(nada[[:space:]]+)?(rot[oa]s?|abortad[oa]s?)\b/ /gI
+    s/\bno[[:space:]]+fall[aoeáéó][a-z]*\b/ /gI
+  ')
+
+  if ! printf '%s' "$SIN_NEGACION" | grep -qaiE '⚠️|🔴|❌|🚨|\bFALL|\berror|\bno pud|\bcaido|\bcaida|\broto\b|\bconflicto|\btimeout|\babortad'; then
     printf '%s INFORMATIVO (sin tarea) %s\n' "$(date -u +%FT%TZ)" "$(printf '%s' "$PRIMERA" | cut -c1-90)" >> "$LOG"
     exit 0
   fi
