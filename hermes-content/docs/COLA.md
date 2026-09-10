@@ -28,13 +28,18 @@ bueno se quema una sola vez. Quiénes son, qué dijeron y dónde vive cada uno:
 **Era falso** —verificado el 2026-08-31: esa §8 habla de una rama de git y no hay cola del
 chatbot en el repo—, y es la peor clase de dato falso: hace creer que están guardados.)*
 
-**Estado (medido en la base de PRODUCCIÓN el 2026-09-01):** el circuito **ya corrió en producción**,
-no sólo en local. La organización `ZZ QA Circuito Completo` (`cmtj22i3q000001khaxefs8ft`) tiene
-`onboardingCompletedAt = 2026-09-01 19:31`, **1 cita**, **3 productos** y un `subscription_payments`
-en **`APPROVED` por Bs 320,00** (`TRX-20260901-QA01`, revisado 19:40 UTC).
-*(Acá decía "verificado de punta a punta **en local**". Quedó viejo el mismo día: hasta esta
-mañana los contadores de producción eran 0 citas / 0 productos / 0 pagos, y el LISTO del punto
-era justamente que dejaran de serlo.)*
+**Estado (medido en la base de PRODUCCIÓN el 2026-09-10):** el circuito de COBRO se recorrió
+entero por las pantallas reales y quedó fotografiado: org QA `zz-qa-cobro-e2e` dada de alta por
+`/api/auth/register`, comprobante subido en `/checkout` (fila `PENDING` en
+`subscription_payments`), aprobado en `/admin/payments` como superadmin, y la fila terminó
+`APPROVED` con la org pasando de trial a `basic` con `planEnd = 2026-10-10` **calculado solo**.
+La pantalla del cliente dice "Plan activo hasta el 10 de octubre de 2026". Capturas en el
+handoff [`handoff/cobro-e2e.md`](handoff/cobro-e2e.md).
+*(Acá decía que la org `ZZ QA Circuito Completo` del 2026-09-01 tenía el pago APPROVED. Esa
+corrida EXISTIÓ pero su org ya no está: la limpieza QA la borró y el FK en cascada se llevó la
+fila — el 2026-09-10 `subscription_payments` amaneció con CERO filas. Un pago REAL de un
+cliente REAL sigue sin pasar nunca; lo único que lo separa es la cuenta bancaria, que es de
+Sergio Urcullo, no de código.)*
 
 ---
 

@@ -44,6 +44,28 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [ ] 🔴 **Nadie probó que el correo de confirmación LLEGUE a una bandeja — y sin ese clic el
+      alta nueva muere.** Medido el 2026-09-10 con el circuito entero: GoTrue manda por Postfix
+      (`onia-mail`), DKIM firmado, y Gmail aceptó con `250 OK` dos veces. Pero un 250 no es
+      bandeja — "Gmail acepta y descarta" (skill `onia-verificacion`). El caso real que lo
+      motiva: `sergio.urcullo.m@gmail.com` (alta del 31-ago, org Bolivian electricidad) pasó
+      **10 días sin confirmar y sin poder entrar** — su enlace era del flujo PKCE viejo (el
+      arreglo `/auth/confirm` con `token_hash` nació el 1-sep, un día tarde para él) y el 403
+      del login (`email_not_confirmed`) no se lo contó nadie. Se le reenvió el 10-sep con el
+      flujo nuevo y Gmail lo aceptó. LISTO = una alta QA de punta a punta donde el enlace se
+      abre DESDE el correo recibido en una bandeja real (no spam), el login entra, y el
+      SPF/DMARC de `onia.com.bo` queda verificado con el resultado pegado.
+
+- [ ] 🟡 **El alta responde `emailDelivery: "not_configured"` con el correo andando.** Medido
+      el 2026-09-10 registrando la org QA del cobro: `POST /api/auth/register` devolvió 200
+      con ese aviso porque `lib/email-governance.ts:47` pregunta por `RESEND_API_KEY`
+      (ausente, largo 0), pero el contenedor tiene `EMAIL_PROVIDER=smtp` y ese camino SÍ
+      entrega — el aviso de pago al admin salió por Postfix y Gmail lo aceptó (250) el mismo
+      día. El cliente nuevo se queda sin correo de bienvenida por una guarda que mira al
+      proveedor equivocado. LISTO = registrar una org QA y que el welcome salga
+      (`status=sent` en logs de `onia-mail` + respuesta sin `not_configured`), sin tocar el
+      circuito de confirmación de GoTrue que ya funciona.
+
 - [x] 🔴 **CERRADO el 2026-09-08 (`f8d0fc2`, en la rama del carril — NO en `master` todavía):
       la pantalla donde el dueño PAGA le cobraba a 3 de los 5 rubros de la v1.0 dos pantallas
       a las que nunca iba a poder entrar.** La tarjeta del plan **Profesional** —el destacado,
