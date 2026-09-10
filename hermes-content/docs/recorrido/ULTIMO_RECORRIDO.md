@@ -12,6 +12,23 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-10 15:10-15:13 La Paz — Estética y spa escritorio: ROTO en paso 7 (agendar cita)
+
+Cambié de rubro tras tres vueltas seguidas en dental sin novedad. Cuenta
+`zz-qa-2026-09-10-1510@onia.com.bo`, onboarding en 6 pantallas (saltando "servicios", no es la
+causa), clienta `zz-qa-2026-09-10-1510-paciente` cargada y encontrada, factura vista en
+`/billing/cmtvo3wd1002601rwewfrht18`. **Se rompe en el paso 7**: con clienta, profesional, fecha
+y hora elegidos, el botón "Agendar Cita" sigue deshabilitado — nunca sale el POST a
+`/api/appointments`. Causa probable: un `useEffect` en `appointments/page.tsx:204-224` resetea
+`timeSlot` a `''` cada vez que resuelve el fetch de disponibilidad, sin condicionar por si es la
+respuesta más reciente — si se dispara dos veces (doctorId vacío → real al abrir el modal) el
+fetch lento puede pisar la selección del usuario después del click. Reportado en el tablero
+(`t_645d123a`, prioridad 1) y en `hermes-content/docs/cola/plataforma-v1.md`. Capturas
+`paso-07-cita.png` y `paso-07b-cita-formulario.png`. Cero filas `zz-qa-` propias al cerrar (4
+ajenas, sin tocar). **No reproducido hoy en dental ni antes en comercio** — puede ser
+intermitente por timing, no exclusivo del rubro; próxima vuelta debería reintentar Estética (o
+los otros rubros) para ver si se repite.
+
 ## 2026-09-10 14:09-14:17 La Paz — dental escritorio: 9/9, sin hallazgos
 
 Reverificado de nuevo (varias vueltas seguidas dental sin novedad). Cuenta

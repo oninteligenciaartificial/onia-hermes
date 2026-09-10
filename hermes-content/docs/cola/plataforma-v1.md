@@ -3606,4 +3606,15 @@ y sin operar. Acá se opera, con verificación por ítem.
       `origin/master`. Entra cuando `onia-cola` mergee, y se publica con el pedido de deploy vivo
       `t_bf1607af` (ya comentado con este sha) cuando Sergio Urcullo conteste `ok`.
 
+## 2026-09-10 15:13 La Paz — paso 7 (agendar cita): race condition pierde la hora elegida en Estética
+
+Tarea `t_645d123a` (prioridad 1). Medido en vivo por `recorrido-cliente`: con paciente,
+profesional, fecha y hora seleccionados, "Agendar Cita" queda deshabilitado. Causa probable en
+`app/(dashboard)/appointments/page.tsx:204-224` — el `useEffect` que carga `availableSlots`
+resetea `timeSlot: ''` de forma incondicional cada vez que el fetch de disponibilidad resuelve;
+si se dispara dos veces (p.ej. `doctorId` pasa de vacío a real al abrir el modal) el fetch más
+lento puede resolver DESPUÉS del click del usuario y borrarle la selección sin avisar. Repro y
+capturas en el cuerpo de la tarea. No reproducido hoy en dental ni comercio — puede ser
+intermitente por timing de red.
+
 *(vacío — esta cola se abrió el 2026-09-05)*
