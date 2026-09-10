@@ -2624,6 +2624,60 @@ y sin operar. Acá se opera, con verificación por ítem.
       matriz) también es suyo. Que `/opt/onia-siat` quede alineado con el repo es la tarea
       `t_7d2019bb`.
 
+      **2026-09-10 (chatbot-cola) — el bloqueo era REAL pero NADIE se lo había pedido, y además
+      el ok solo no alcanzaba.** Dos cosas medidas, ninguna heredada:
+
+      1. **El bloqueo estaba escrito acá y en ningún lado más.** Las tres tareas de SIAT del
+         tablero figuran `done`: no existía **ninguna** viva pidiéndole el PdV 1. Un bloqueo que
+         vive en un `.md` no le llega a Sergio Urcullo — sólo una tarea `needs_input` le llega
+         por Telegram. Lleva sin pedirse desde el **2026-08-27**, que es cuando el SIN contestó
+         `933 · EL PUNTO DE VENTA ES INEXISTENTE O INVALIDO` (`fase1-log.ndjson`, etapa I,
+         `pv:1`, tres intentos). Pedido en **`t_39a0c27c`**, `status: blocked` verificado con
+         `show` (no con el exit del `block`), con los pasos, el portal, el usuario y los 6 tipos
+         de PdV que ofrece el SIN ya resueltos: es una auditoría de 5 minutos, no una
+         investigación. Cuánto frena, contado del estado vivo y no estimado: **11 combos =
+         1.169 documentos de cobertura** (IV/VII/XI × 3 combos × 125, más VI y IX × 22). Todo
+         el lado `pv0` está **completo en las 9 etapas**.
+         Para re-derivar el pedido vivo sin citar un id que caduca:
+         `onia-tablero.sh list --status blocked | grep -i 'Punto de Venta'`.
+
+      2. 🔴 **Y el ok solo habría repetido el mes perdido.** `run-fase1-volumen.sh` **de
+         producción** seguía con `for E in IV VII XI` — el recorte original, todavía vivo: el
+         deploy del emisor alineó los módulos (`/opt/onia-siat/emisor/src`, hoy idénticos al
+         repo: `ensureCufd` 6=6, `TransitorioError` 4=4) y **no** el orquestador, que vive un
+         nivel más arriba y quedó afuera de la copia. Peor, la copia del repo
+         tampoco corría la **etapa I**, que es la que pide el CUIS por punto de venta. O sea que
+         el día que exista el PdV 1, correr ese script **no lo desbloquea**: los 11 combos
+         volverían a caer con `sin CUIS para el punto de venta 1: correr la etapa I antes`, y
+         VI y IX quedarían clavadas otra vez.
+
+         **Arreglado en la clase, no en la instancia.** Agregar las etapas que faltaban habría
+         sido reponer el mismo defecto un archivo más allá: la lista a mano **es** el defecto —
+         una lista de inclusión al lado de `STAGE_ORDER`, que es la fuente y ya está anclada por
+         test. Ahora el script las **deriva** del runner y **aborta** si no puede leerlas (caer
+         a una lista por defecto haría que una corrida a medias se lea igual que una entera).
+         Verificado ejecutando la derivación contra los módulos reales: devuelve
+         `I II III IV V VI VII IX XI`, las 9.
+
+         **Gate:** `test/fase1-runner.test.mjs` › «run-fase1-volumen.sh corre TODAS las etapas»,
+         validado **por mutación en 3 direcciones** — tipear la lista · el **esquive** (nombrar
+         `STAGE_ORDER` en un comentario y seguir tipeando) · derivar **filtrando la I**: las
+         tres en rojo, base y restaurado en verde.
+         ⚠️ **La tercera pasó en VERDE en la primera versión del gate** y sólo se vio mutando
+         *después* de arreglar: el caso resolvía por texto («si nombra `STAGE_ORDER`, corre
+         `STAGE_ORDER`»), o sea comparaba la fuente contra sí misma. Ahora **ejecuta** el
+         `node -e` del script en un sandbox con el layout del VPS y afirma sobre la salida.
+
+         **Y el gate no lo corría nadie:** los **92** tests del emisor —el módulo del que
+         depende la v1.0 por la decisión del 07-sep— **no estaban en la cadena `npm test`**.
+         Cableados como `test:siat-fase1` (puro, sin red ni repo hermano, 4,3 s): 92/92 verdes,
+         `test:guards-cableados` verde.
+
+         🔴 **Commiteado, NO desplegado:** `/opt/onia-siat/run-fase1-volumen.sh` sigue con las
+         tres etapas viejas. Desplegar no es de este carril — va por `DESPLEGAR: siat`. **Esto
+         tiene que llegar ANTES de que se corra la matriz de `pv1`**, o el ok de Sergio Urcullo
+         desbloquea 1.125 de los 1.169 y repite el bug de VI y IX.
+
 - [x] 🔴 **CERRADO el 2026-09-08: una cuenta APAGADA seguía tomando reservas por la puerta
       pública, y el desconocido que reservaba se presentaba a un negocio que no lo esperaba.**
       `POST /api/booking/appointments` crea un `patient` y una `appointment` en la base del
