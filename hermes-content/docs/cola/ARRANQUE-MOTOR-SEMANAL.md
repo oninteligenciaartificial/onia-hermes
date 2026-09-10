@@ -33,7 +33,7 @@
 | mié 09 | Publicar el carrusel **«Mi stack»**. Antes: leer la guía que promete | **Instagram**, feed | 10 min |
 | jue 10 | Contestar los `STACK` que lleguen | **DM de Instagram** | según lleguen |
 | vie 11 | **Elegir el tema de la semana** del [mapa](../ONIA_MAPA_DE_TEMAS.md), filas `S` | — (decisión) | 2 min |
-| sáb 12 | **Grabar los 6 videos de una sentada** | — (se publican de a uno) | 1 h |
+| sáb 12 | **Grabar los 6 videos de una sentada** — guiones listos en [`GUIONES-SEMANA-1-MI-STACK.md`](GUIONES-SEMANA-1-MI-STACK.md) | — (se publican de a uno) | 1 h |
 | dom 13 | Pasarme el link de YouTube de Claude Code, si ya salió | — | 1 min |
 
 📍 **Ante cualquier duda de dónde va algo:**
@@ -52,6 +52,9 @@
 - ✅ **Los 5 archivos** en [`/stack/archivos`](https://sergiourcullo.vercel.app/stack/archivos):
   el `docker-compose` de n8n, las respuestas de WhatsApp, el `SOUL.md`, el `CLAUDE.md`
   para un negocio y una composición de HyperFrames.
+- ✅ **Los 7 guiones** en [`GUIONES-SEMANA-1-MI-STACK.md`](GUIONES-SEMANA-1-MI-STACK.md):
+  los 6 cortos palabra por palabra con lo que va en pantalla, y la estructura del video
+  largo de YouTube con sus capítulos.
 - 🔴 **Corregido un error de la guía `/stack`**: decía que el plan gratis de Claude
   alcanzaba para probar. Alcanza para el chat, **no para Claude Code** — la doc oficial
   dice textual que el plan gratis no lo incluye. El paso 04 ahora lleva la instalación
