@@ -66,6 +66,63 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **CERRADO el 2026-09-10 (`057cc58`, rama del carril — NO en `master` todavía): el
+      cliente que PAGÓ y se le venció el plan quedaba en solo lectura sin que NADA se lo
+      dijera.** El único aviso del panel era `TrialBlockedModal`, y el layout lo mostraba con
+      `getTrialStatus(...).isBlocked`. Esa función arranca con
+      `const isActiveTrialContract = !org.planEnd; if (!isActiveTrialContract) return noTrial;`
+      — o sea devuelve `isBlocked: false` para **cualquier** organización con `planEnd`, que es,
+      por definición, **el que ya pagó**.
+
+      Mientras tanto las **32** rutas de `app/api` que escriben (contadas, no estimadas) cortan
+      por `checkPlanExpiry` → `isWriteBlocked`, que **sí** bloquea con el `planEnd` vencido. Y la
+      gracia es **sólo del trial** — `graceDeadline` lo dice con todas las letras: *«un contrato
+      pago corta el día que vence»* —, así que el que pagó corta **sin colchón** y encima era el
+      único mudo: se enteraba en el último clic, con un 403. **El que está en prueba sí veía el
+      modal. El único ciego era el único que ya había pagado.**
+
+      **Por qué sobrevivió, que es lo reusable:** la mitad que **MUESTRA** y la mitad que
+      **APLICA** leían fuentes distintas — la primera preguntaba por el **trial**, la segunda por
+      el estado del **plan**. Ningún gate podía verlo: no sobra ni falta una palabra, la pantalla
+      renderiza perfecto, el rubro deriva bien y las rutas responden. **Lo que falla es QUIÉN
+      pregunta.** Es la mitad hermana de `ba2270b` (cerrado el 08-sep): ahí se cerró que cortar
+      recién en la escritura deja al visitante llenar los cuatro pasos para comerse el rechazo en
+      el último clic — pero se aplicó a la puerta **pública**, y la puerta del **dueño** quedó
+      igual. Cerrar una mitad hizo dar la otra por cubierta, otra vez.
+
+      **Arreglo** (`lib/subscription/aviso-solo-lectura.ts` · `components/AvisoSoloLectura.tsx` ·
+      `app/(dashboard)/layout.tsx`):
+      - `avisoSoloLectura()` pregunta con **`isWriteBlocked`, la misma función que corta**, no una
+        copia al lado: las 32 quedan cubiertas por construcción y la 33.ª nace cubierta.
+      - El banner va **además** del modal, no en su lugar. El modal se cierra a propósito (el
+        dueño que viene a mirar sus números para decidir si paga tiene que poder mirarlos) y
+        después el panel no volvía a decir nada más.
+      - El texto respeta lo que el correo del día 14 y 15 **ya prometió** —*«podés consultarlo y
+        exportarlo cuando quieras»*—: lo que se frena es registrar, no mirar ni llevarse lo suyo.
+      - Las **8** rutas que decían *«Escribinos para renovar»* mandaban a una **persona** teniendo
+        `/checkout`, que cobra solo (Definición 1.0 §1: *«sin que intervenga un humano de Onia»*,
+        §3 probado el 10-sep). Un solo `MENSAJE_SUSCRIPCION_VENCIDA`, que nombra el camino.
+
+      **Gate:** `lib/subscription/aviso-solo-lectura.test.ts` (14 casos; los sujetos de las rutas
+      se **derivan del disco**, con un ancla que falla si el barrido se vacía). Validado **por
+      mutación en 3 direcciones** —reintroducir el corte por `planEnd` (6 rojos) · calcular el
+      aviso y no renderizarlo, que es el esquive (1 rojo) · devolver una ruta a «Escribinos»
+      (1 rojo)—; base en verde. Los casos de «NO ve el aviso» están escritos con su estado a
+      mano y **no** comparados contra `isWriteBlocked`: ese caso sería tautológico, porque es lo
+      que el módulo ya consulta.
+
+      ⚠️ **Un caso mío salió en rojo y el equivocado era el test, no el producto:** supuse que un
+      contrato pago vencido ayer estaba en gracia. `graceDeadline` dice lo contrario y está
+      documentado como decisión. Se corrigió el caso y se **ancló ese límite**, que es lo que
+      vuelve caro al defecto.
+
+      **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **4292 pasan / 346 archivos** ·
+      `npx eslint .` 0 errores.
+
+      🔴 **NO ESTÁ DESPLEGADO:** `057cc58` está en la rama del carril, **no en `master`**. Hay
+      pedido de deploy vivo para `plataforma` (`t_6e23cd1c`); el `ok` de Sergio Urcullo sólo
+      publica esto si el integrador mergea antes. Anotado como comentario en ese pedido.
+
 - [x] 🔴 **CERRADO el 2026-09-10 (`31233cd`, rama del carril — NO en `master` todavía): el
       negocio cancelaba o movía una cita y al CLIENTE no le llegaba nada.** El sistema le habla
       dos veces —cuando la cita nace (correo de confirmación, `lib/agenda/crear-cita.ts:241`) y
@@ -2500,6 +2557,54 @@ y sin operar. Acá se opera, con verificación por ítem.
 - **No le escribe a un prospecto.** Regla del [`README.md`](README.md) de esta carpeta.
 
 ## Cerrado
+
+- [x] **CERRADO el 2026-09-10: el panel le inventaba al dueño la causa de un fallo que el
+      servidor ya le había explicado.** El botón «Recordatorio» de cada cita llama a
+      `POST /api/email/appointment-reminder/[id]`, que contesta **siete** motivos distintos y
+      redactados para él —cupo del plan agotado (403), correo del producto sin configurar
+      (503), el cliente pidió no recibir correos (422), el cliente no tiene correo (422), el
+      envío falló (502), no autorizado (403), error interno (500)— y la pantalla los aplanaba
+      todos a la palabra **«Sin email»**. Quien agotó su cupo mensual leía que su cliente no
+      tenía correo, abría la ficha, lo veía ahí, y concluía que el sistema estaba roto: la
+      causa real —que se arregla subiendo de plan, o sea plata para Onia— no la veía nadie.
+      De paso, `handleSendReminder` no tenía `try`/`catch`: con la red cortada el botón quedaba
+      deshabilitado en «loading» **para siempre**, porque el `setTimeout` que lo libera tampoco
+      llegaba a programarse.
+
+      **La clase, no la instancia.** Sujetos derivados del disco (todo `.tsx` del panel que
+      llame a `fetch`), no una lista de pantallas: otras **tres** acciones descartaban el
+      motivo — aprobar un pago del admin, guardar el plan de una organización, y
+      activar/desactivar un servicio. Las cuatro arregladas con `mensajeDeError`, el helper que
+      ya existía y que tres funciones del MISMO archivo de citas ya usaban (el hermano sano al
+      lado del roto, otra vez).
+
+      **Por qué ningún gate podía verlo:** no sobra ni falta una palabra (los barridos de copy,
+      obra, rubro, precios y promesas pasan verdes), el rubro deriva bien —la API ya usa
+      `idioma-del-error`—, la pantalla renderiza perfecto, el camino feliz funciona, y la rama
+      **sí** mira `res.ok`, así que `camino-de-fallo.test.ts` la daba por cubierta. Ese gate
+      pregunta si la acción MIRA la respuesta; éste es un escalón más adentro: si USA el motivo
+      que la respuesta trae.
+
+      **Gate:** `app/(dashboard)/causa-del-fallo.test.ts` + `lib/http/causa-del-fallo.ts`.
+      Falla CERRADO (una rama nueva que invente su causa nace en rojo). Validado por mutación
+      en tres direcciones —revertir el arreglo, detector siempre-vacío, no reconocer el motivo—:
+      las tres en rojo, confirmadas por el `exit` del proceso y verificando que el reemplazo
+      entró. Gates: `tsc` 0 · `vitest` 345 archivos verdes · `eslint` 0 errores.
+
+      ⚠️ **El instrumento se validó ANTES que el producto, y hacía falta:** sus dos primeras
+      mediciones dieron **27** y **15** sujetos, las dos mal y en la dirección cara —la que
+      manda a arreglar código sano—. La primera metía el camino FELIZ (`if (res.ok) {`), que no
+      es sujeto de este gate sino del hermano; la segunda acusaba a un `motor.ok` que no es una
+      `Response` y a `messageFromPayload`, que **sí** lee el motivo. Los sujetos reales eran
+      **cuatro**. Y un tercer falso positivo enseñó algo reusable: contar la ventana en líneas
+      CRUDAS gasta el presupuesto en los renglones que dejó vacíos un comentario borrado, así
+      que **el comentario que explica una decisión empuja el motivo fuera del alcance y el gate
+      acusa al código que lo explica**. Se cuenta en líneas con contenido, y la rama se corta
+      en su bloque real.
+
+      `73350a1` (`onia-platform`), rama `claude/chatbots-platform-review-0d1d09`.
+      ⚠️ **Commiteado y pusheado, NO en `master` y NO desplegado.** Falta que el integrador lo
+      mergee; el pedido de deploy vivo es `t_c78d9fa8`, comentado ahí.
 
 - [x] **CERRADO el 2026-09-10: importadora tenía «Créditos» en su menú y NINGÚN camino para
       originar uno — la pantalla quedaba vacía de por vida prometiendo que se iba a llenar.**
