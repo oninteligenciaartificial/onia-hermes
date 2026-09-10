@@ -1,6 +1,6 @@
 # Patrón `apple-editorial` — las 5 piezas y en qué orden salen
 
-Índice de la tanda. Cada pieza tiene su propio doc con caption, alt text y la fuente de
+Índice de la tanda. **Ocho piezas**; las tres últimas se agregaron el 10-sep y tienen su propio doc: [`PARA-PUBLICAR-APPLE-TRES-CUENTAS.md`](PARA-PUBLICAR-APPLE-TRES-CUENTAS.md). Cada pieza tiene su propio doc con caption, alt text y la fuente de
 cada afirmación; esto dice **cuál va primero y qué falta antes de tocar publicar**.
 
 > Dónde encaja esta cola en el conjunto: [`../ONIA_MARCA_PERSONAL_TRES_CARRILES.md`](../ONIA_MARCA_PERSONAL_TRES_CARRILES.md)
@@ -17,6 +17,9 @@ Todas rendidas a 1080×1350 en `carousels/out/apple-<pieza>-inter/`.
 | 3 | **Founders bolivianos** | 1 | Humor de pertenencia — la más compartible de las cinco, y descansa después de dos carruseles largos |
 | 4 | **Tu cuaderno no miente** | 1 | Nombra el problema del cliente sin nombrar el producto. Prepara el terreno |
 | 5 | **Necesito vitamina C** | 1 | Personal y liviana. Va al final porque no aporta valor de uso, aporta cercanía |
+| 6 | **Las seis respuestas** | 6 | La más guardable: entrega algo que se usa hoy · `@sergiourcullo` |
+| 7 | **Seis archivos esta semana** | 8 | Invita a la comunidad mostrando lo que ya existe · **no antes del dom 13** |
+| 8 | **Cuatro cosas a mano** | 7 | 🔵 **`@oniahq`** — vende el sistema sin hablar de nosotros |
 
 ⚠️ **Fable se puede adelantar al puesto 1 si van a pasar más de dos semanas hasta el
 segundo post.** Es la única decisión de orden que depende del calendario: las otras cuatro
