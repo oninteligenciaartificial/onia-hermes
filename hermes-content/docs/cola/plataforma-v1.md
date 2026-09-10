@@ -2314,6 +2314,58 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] **CERRADO el 2026-09-10: dar de baja a alguien del equipo fallaba con un error MUDO, y
+      el dueño no tenía cómo saber por qué.** Arreglado en `ad1851f` (`onia-platform`), rama
+      `claude/chatbots-platform-review-0d1d09`. ⚠️ **Commiteado y pusheado, NO en `master` y NO
+      desplegado**: falta que el integrador lo mergee, y recién después viaja con el pedido de
+      deploy de `plataforma`.
+
+      Tres bajas **rutinarias** del producto chocan contra una foreign key `RESTRICT` y las tres
+      contestaban sin decir el motivo — rotación de personal en una clínica o un salón es lo más
+      normal del mundo, y el dueño quedaba en un callejón sin salida:
+
+      | ruta | lo que hacía | lo que veía el dueño |
+      |---|---|---|
+      | `app/api/team/[id]` | **sin `try/catch`** → Prisma lanza → 500 pelado | «No se pudo eliminar a esta persona.» (el fallback de la pantalla) |
+      | `app/api/patients/[id]` | `catch` genérico | «Error al eliminar el cliente» |
+      | `app/api/treatments/[id]` | `catch` genérico | «Error al eliminar tratamiento» |
+
+      **Reproducido contra la base de PRODUCCIÓN**, dentro de una transacción que revierte (0
+      residuo verificado con un `count` posterior):
+
+      ```
+      ERROR: update or delete on table "profiles" violates foreign key
+      constraint "appointments_doctorId_fkey" on table "appointments"
+      ```
+
+      Las siete FK `RESTRICT` de producción salieron de `information_schema`, no de un supuesto:
+      tres cuelgan de `profiles`, dos de `patients`, una de `treatments` y una de
+      `booking_sources` (esa queda afuera a propósito: el producto no ofrece darlas de baja).
+
+      **Ningún gate podía verlo**, y por eso sobrevivió: no sobra ni falta una palabra, la
+      pantalla renderiza perfecto, el rubro deriva bien, la ruta responde, y el camino **feliz**
+      —borrar algo que nadie referencia— funciona. El defecto vive sólo en el camino de **fallo**
+      de una operación rutinaria. Por qué importa para la v1.0: esto no rompe nada, genera
+      **llamadas a soporte**, que es el techo real del negocio (`CLAUDE.md` §9).
+
+      **Se pregunta ANTES de borrar** (`lib/platform/borrado-bloqueado.ts`) en vez de atrapar el
+      `P2003`: no ata el mensaje a la forma del `meta` de Prisma, se prueba sin base y permite
+      decir **cuántas** son. Ahora contesta `409` con
+      «No se puede eliminar a Ana Paz: tiene 3 citas y 1 receta en el sistema.» No promete
+      «reasignalo» ni «archivalo» mientras esas pantallas no existan: hay un caso que lo exige.
+
+      **El gate deriva su universo de `prisma/schema.prisma`** —toda relación obligatoria sin
+      `onDelete:` es `RESTRICT`—, así que una referencia nueva **nace cubierta** o pone rojo; y
+      exige las **dos direcciones**, para que la tabla declarada no se pudra.
+      **Validado por mutación, seis en rojo:** sacar una referencia viva, agregar una muerta,
+      devolver `[]` siempre, sacarle el filtro por `organizationId` al conteo, y las **dos de
+      esquive** en la ruta. ⚠️ Las de esquive **pasaron VERDES con la primera versión del
+      guardia**, que miraba que la ruta *llamara* al helper y no que *usara* su respuesta: una
+      ruta podía llamarlo y tirar el resultado. Se reescribió sobre la **vecindad** de la
+      llamada (la guarda `bloqueos.length > 0` y el `409` pegados a ella).
+
+      Gates: `tsc` 0 · `vitest` **4199 passed** (336 archivos) · `eslint` 0.
+
 - [x] **CERRADO el 2026-09-08: el cupo de WhatsApp cortaba MUDO — el dueño paga el add-on y se
       quedaba sin canal sin enterarse.** Arreglado en `7756295` (`onia-platform`), rama
       `claude/chatbots-platform-review-0d1d09`. ⚠️ **Commiteado, NO desplegado**: viaja con el
