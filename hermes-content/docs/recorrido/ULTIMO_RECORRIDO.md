@@ -12,6 +12,18 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-10 18:09-18:16 La Paz — dental y Servicios profesionales, dos corridas seguidas: 9/9 los dos, sin hallazgos
+
+Dental (`zz-qa-2026-09-10-1809`) tercera corrida seguida en 9/9: nada nuevo, confirma que el
+falso rojo intermitente de las 13:09 no reprodujo otra vez. Servicios profesionales
+(`zz-qa-2026-09-10-1814`) — **primera vez que este rubro pasa por el instrumento de 9 pasos**
+(antes sólo tenía cobertura del script viejo de 8 pasos). 9/9 completo: paciente cargado como
+"Clientes", cita agendada y vista en `/appointments`, y el paso 8 (cobro) frenó en
+`/comercio/caja` con lenguaje correcto — "Registrá ventas", "Todavía no hay servicios vendibles.
+Cargá el primero en Servicios" — sin rastro del defecto de idioma ("productos con stock") que
+`chatbot-cola` había cerrado el 06 y el 08-sep en esa misma pantalla. Cero filas `zz-qa-`
+propias al cerrar las dos veces; 4 filas ajenas sin tocar.
+
 ## 2026-09-10 13:09-13:24 La Paz — dental, dos corridas seguidas: falso rojo intermitente en paso 6 (mi instrumento, no el producto)
 
 Primera corrida: `zz-qa-2026-09-10-1710`, llegó hasta el paso 5 (9/9). **Paso 6 "roto"**: el
