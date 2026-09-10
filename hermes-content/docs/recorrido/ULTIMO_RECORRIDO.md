@@ -12,6 +12,16 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-10 14:09-14:17 La Paz — dental escritorio: 9/9, sin hallazgos
+
+Reverificado de nuevo (varias vueltas seguidas dental sin novedad). Cuenta
+`zz-qa-2026-09-10-1409@onia.com.bo`, onboarding en 6 pantallas, paciente
+`zz-qa-2026-09-10-1409-paciente` cargado y encontrado en `/patients`, cita `2026-09-11 09:00`
+agendada (201) y vista en `/appointments`, factura creada con el ítem visible en
+`/billing/<id>` y frenada sin cobrar. Panel del paso 9 no lista pacientes — es lo esperado, no
+un agujero. Cero filas `zz-qa-` propias al cerrar; 4 filas ajenas (de otras vueltas/carriles)
+detectadas y NO tocadas.
+
 ## 2026-09-09 00:32 La Paz — comercio escritorio (`RECORRIDO_RUBRO`): 8/8 que le corresponden, sin hallazgos
 
 Tras dos vueltas seguidas en dental con el mismo resultado, cambio de rubro: `RECORRIDO_RUBRO="Comercio / tienda"`.
