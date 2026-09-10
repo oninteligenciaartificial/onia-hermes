@@ -7,13 +7,13 @@ Video 1 (qué es Claude y Claude Code): `../yt-claude-vs-claude-code/`.
 
 ## 🔴 Esto es un tutorial: la gente va a copiar los comandos
 
-Todo lo que el deck afirma está **medido en la máquina de Sergio Urcullo el 2026-09-07**,
+Todo lo que el deck afirma está **medido en la máquina de Sergio Urcullo el 2026-09-10**,
 no recordado. Un comando inventado acá le rompe el día a un desconocido.
 
 | dato en pantalla | cómo se verificó |
 |---|---|
 | `npm install -g @anthropic-ai/claude-code` | `npm ls -g` → así está instalado |
-| `claude --version` → `2.1.221 (Claude Code)` | corrido en vivo |
+| `claude --version` → `2.1.267 (Claude Code)` | corrido en vivo |
 | Node v24 | `node --version` → v24.13.0 |
 | 197 skills personales | `ls -d ~/.claude/skills/*/` |
 | 36 skills del proyecto | `ls -d .claude/skills/*/` |
@@ -22,6 +22,10 @@ no recordado. Un comando inventado acá le rompe el día a un desconocido.
 
 **Si pasa tiempo y se regraba, estos números se vuelven a contar.** Un número heredado
 en un tutorial envejece mal y nadie lo nota hasta que un comentario lo marca.
+
+⚠️ **Ya pasó, y en tres días:** la versión era `2.1.221` el 07-sep y `2.1.267` el 10-sep.
+Por eso el guion dice en voz alta *"a vos te va a salir otro número, y está bien"* — la
+lámina muestra un número real, pero lo que se enseña es que salga **un** número, no cuál.
 
 ## Las 13 láminas
 
