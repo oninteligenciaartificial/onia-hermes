@@ -3606,15 +3606,61 @@ y sin operar. Acá se opera, con verificación por ítem.
       `origin/master`. Entra cuando `onia-cola` mergee, y se publica con el pedido de deploy vivo
       `t_bf1607af` (ya comentado con este sha) cuando Sergio Urcullo conteste `ok`.
 
-## 2026-09-10 15:13 La Paz — paso 7 (agendar cita): race condition pierde la hora elegida en Estética
+- [x] 🔴 **CERRADO el 2026-09-10 (`a6dee65`, rama del carril — NO en `master` todavía): al
+      agendar una cita, la respuesta que llegaba tarde le borraba al usuario la hora que
+      acababa de elegir, y «Agendar Cita» quedaba deshabilitado sin decir por qué.**
+      Tarea `t_645d123a`. Lo midió `recorrido-cliente` en vivo el 2026-09-10 15:13 La Paz
+      (rubro Estética, cuenta `zz-qa-2026-09-10-1510`); capturas en
+      `hermes-content/docs/recorrido/capturas/paso-07-cita.png`. Su diagnóstico era correcto y
+      había **dos defectos más** en el mismo `useEffect`:
 
-Tarea `t_645d123a` (prioridad 1). Medido en vivo por `recorrido-cliente`: con paciente,
-profesional, fecha y hora seleccionados, "Agendar Cita" queda deshabilitado. Causa probable en
-`app/(dashboard)/appointments/page.tsx:204-224` — el `useEffect` que carga `availableSlots`
-resetea `timeSlot: ''` de forma incondicional cada vez que el fetch de disponibilidad resuelve;
-si se dispara dos veces (p.ej. `doctorId` pasa de vacío a real al abrir el modal) el fetch más
-lento puede resolver DESPUÉS del click del usuario y borrarle la selección sin avisar. Repro y
-capturas en el cuerpo de la tarea. No reproducido hoy en dental ni comercio — puede ser
-intermitente por timing de red.
+      1. **La carrera.** El efecto depende de `[doctorId, date, durationMin]` y al resolver hacía
+         `setFormData(f => ({...f, timeSlot: ''}))` sin preguntar si su respuesta seguía siendo
+         la vigente. Dos `fetch` solapados y gana el más **lento**.
+      2. **La lista quedaba desincronizada del formulario** — no estaba en el reporte y es peor
+         que perder la selección: la corrida obsoleta también escribía sus `slots`, calculados
+         con el `durationMin` **viejo**. La pantalla podía ofrecer una hora que no entra en el
+         servicio elegido, y esa cita se agenda **pisando a la de al lado**.
+      3. **El camino de fallo mentía, y afirmaba una causa.** `try`/`finally` sin `catch` y el
+         resultado detrás de un `if (res.ok)` sin `else`: con un 429, un 403 o la red cortada,
+         `availableSlots` quedaba en `[]` y la pantalla afirmaba *«El profesional no trabaja este
+         día o no hay horarios configurados»* — un hecho **falso** sobre la agenda del dueño, que
+         encima lo manda a configurar lo que ya tiene. El 429 no es teórico: `availabilityLimiter`
+         da 120/min **por IP** y su propio comentario dice que lo usa *«una recepción que salta
+         entre fechas con el teléfono en la mano, muchas veces detrás de un NAT (una sola IP para
+         toda la clínica)»* (`lib/rate-limit.ts:92`).
+
+      **Por qué sobrevivió, que es lo reusable:** el gate hermano de este panel
+      (`app/(dashboard)/camino-de-fallo.test.ts`, 08-sep) persigue **escrituras** que no miran la
+      respuesta; su familia **simétrica —las lecturas—** quedaba abierta. Y ahí el daño es peor:
+      una escritura que falla en silencio no hace nada, pero **una lectura que falla en silencio
+      devuelve `[]`, y `[]` ya tiene un texto escrito para el caso vacío que afirma una causa.**
+      Mismo retorno ambiguo que `buscarNegocio()` y `horario-que-se-dice`. Además, la superficie
+      **pública** (`app/(public)/book`) ya tenía las dos cosas —guard `cancelled` y
+      `slotsRateLimit`— desde que se cerró su camino de fallo el 08-sep: **el hermano sano a dos
+      carpetas es lo que hacía leer la familia como cubierta.**
+
+      **Arreglo en el HELPER** (`lib/agenda/carga-de-horarios.ts`), no en la pantalla, para que la
+      próxima superficie que pregunte por disponibilidad nazca cubierta: `esRespuestaVigente()`
+      corta la corrida obsoleta antes de que escriba nada, y `leerDisponibilidad()` devuelve
+      `listos` | `no_se_pudo` en vez de `[]` para los dos casos. El reset de `timeSlot` al
+      resolver se fue: los tres disparadores ya lo limpian en su propio handler al **disparar**.
+
+      **Validado por mutación, 6 en rojo con `exit 1`, cada una verificada de que entró:** sin
+      guard · reset restituido · texto tipeado a mano · el helper leyendo un 429 como vacío · y
+      **las dos de esquive**. ⚠️ La primera versión del guard medía la **presencia** del símbolo,
+      y el esquive —llamarlo y tirar el resultado— pasaba en **VERDE** con el defecto entero de
+      vuelta; ahora se exige que el resultado **gobierne un `return`**. Sólo se ve mutando
+      **después** de arreglar.
+
+      Gates: `tsc` **0** · `vitest` **4249** pasados / 340 archivos · `eslint` **0** errores,
+      corridos **en el VPS sobre el árbol que se publicó** (`23a3d069`, idéntico byte a byte al
+      medido en casa) — entregar con `format-patch` entre máquinas publica otro árbol si el
+      gemelo está atrasado.
+
+      ⚠️ **NO llega al cliente todavía:** `a6dee65` está en la rama del carril, **no** en
+      `origin/master` (comprobado con `git merge-base --is-ancestor`). Por eso **no** se comentó
+      como `DEPLOY PEDIDO` en el pedido vivo: un sha que no está en `master` promete algo que el
+      `ok` de Sergio Urcullo no publicaría. Entra cuando `onia-cola` mergee.
 
 *(vacío — esta cola se abrió el 2026-09-05)*
