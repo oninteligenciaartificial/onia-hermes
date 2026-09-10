@@ -56,15 +56,12 @@ y sin operar. Acá se opera, con verificación por ítem.
       abre DESDE el correo recibido en una bandeja real (no spam), el login entra, y el
       SPF/DMARC de `onia.com.bo` queda verificado con el resultado pegado.
 
-- [ ] 🟡 **El alta responde `emailDelivery: "not_configured"` con el correo andando.** Medido
-      el 2026-09-10 registrando la org QA del cobro: `POST /api/auth/register` devolvió 200
-      con ese aviso porque `lib/email-governance.ts:47` pregunta por `RESEND_API_KEY`
-      (ausente, largo 0), pero el contenedor tiene `EMAIL_PROVIDER=smtp` y ese camino SÍ
-      entrega — el aviso de pago al admin salió por Postfix y Gmail lo aceptó (250) el mismo
-      día. El cliente nuevo se queda sin correo de bienvenida por una guarda que mira al
-      proveedor equivocado. LISTO = registrar una org QA y que el welcome salga
-      (`status=sent` en logs de `onia-mail` + respuesta sin `not_configured`), sin tocar el
-      circuito de confirmación de GoTrue que ya funciona.
+- [x] ~~El alta responde `emailDelivery: "not_configured"` con el correo andando~~ **FALSA
+      ALARMA, cerrada el mismo 2026-09-10 al leer el call site**: con
+      `ONIA_REGISTRO_CONFIRMA_CORREO=si` el welcome NO debe salir (mentiria "entra al
+      dashboard" antes de confirmar) y `register/route.ts:332` lo salta a proposito; la
+      etiqueta `not_configured` es fea pero el comportamiento es correcto. Queda de leccion:
+      el item se escribio desde el sintoma sin leer el `if` de al lado.
 
 - [x] 🔴 **CERRADO el 2026-09-10 (`afa9da6`, en la rama del carril — NO en `master` todavía):
       el botón «Agendar» que ve el cliente del cliente lo mandaba a un callejón, teniendo el
