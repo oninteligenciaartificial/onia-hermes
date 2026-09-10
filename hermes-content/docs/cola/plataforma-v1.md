@@ -90,8 +90,10 @@ y sin operar. Acá se opera, con verificación por ítem.
       una-vez-por-mes: el que recargaba y volvía a agotar quedaba mudo), `POST
       /api/admin/organizations/[id]/recarga-chatbot` (superadmin, 409 sin add-on) y botón en la
       ficha admin junto al toggle. Tests 35/35 (`onia-platform/lib/chatbot/cupo.test.ts`),
-      tsc/eslint 0. Falta solo la mirada final con una recarga aplicada (abajo, con las
-      capturas del cierre del lote).
+      tsc/eslint 0. **VERIFICADO MIRANDO el 2026-09-10 ~23:45 UTC**: recarga aplicada a
+      Clinica Sergio por el BOTON real de la ficha, y `/settings/chatbot` del cliente
+      renderiza "0 de 700" con el texto dinamico — capturado y enviado a Sergio Urcullo.
+      La recarga queda puesta en su org de pruebas (700 este mes, vuelve sola a 500 el 1-oct).
       Medido 10-sep: `CupoConversacionesCard` la ofrece desde el 80% del cupo (decisión de
       Sergio Urcullo del 05-sep), el cliente pagaría por WhatsApp… y `cuotaDe()`
       (`lib/chatbot/cupo.ts`) devuelve SIEMPRE el literal 500 de `pricing.ts`: no hay campo por
@@ -129,7 +131,18 @@ y sin operar. Acá se opera, con verificación por ítem.
       `auth.users` → anotar inbox 7 de Chatwoot huérfano. **LISTO =** `/admin/chatbots` lista
       solo las orgs vivas, mirado en prod.
 
-- [ ] 🟡 **T3 — UI rota del panel, medida en las capturas del 10-sep:** (a) la barra flotante
+- [x] 🟡 **T3 — CERRADO el 2026-09-10 (`363dfa4e` + `bc7a447a` en master, deployado y
+      MIRADO ~23:45 UTC).** La causa real de (b) NO era la fuente: era **flex-shrink** — en el
+      nav con `overflow-x-auto` los spans de icono se aplastaban a 0-16px (medido en el DOM
+      vivo con font-size 24) y el glifo desbordaba pisando el label. Fix de CLASE:
+      `flex-shrink: 0` en `.material-symbols-outlined` (globals.css) — un glifo es indivisible,
+      vale para todo el producto — + Links de AdminNav con `shrink-0 whitespace-nowrap`.
+      Re-medido en prod: los 8 spans en 24px, barra legible (captura enviada). De paso cayo un
+      bug de CLASE real de cache: la URL del woff2 era fija y Cloudflare/el navegador servian
+      subsets viejos tras cada deploy — ahora `subset-iconos.mjs` versiona `?v=<hash>` en
+      globals.css y en el preload de layout.tsx. (c) los CTA del addon estan vivos (captura).
+      (a) era ARTEFACTO de captura fullPage: con viewport real scrolleado al fondo la barra no
+      tapa nada (LayoutShell ya reservaba `pb-40`). Detalle original: (a) la barra flotante
       "Preguntá por tu negocio" (`onia-platform/components/ayuda/BarraAsistente.tsx`) se pinta
       ENCIMA del formulario del editor del bot (tapa "A quién deriva el bot") y de la última
       fila de la tabla de `/admin/chatbots` — falta reservar espacio (padding-bottom del
