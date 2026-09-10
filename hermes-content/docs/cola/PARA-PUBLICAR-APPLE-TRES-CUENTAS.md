@@ -5,29 +5,59 @@
 >
 > Los tres del patrón `apple-editorial`, tipografía Inter. Gates verdes.
 
-| Pieza | Láminas | Cuenta | Qué hace |
+| Pieza | Láminas | Cuenta | Estado (10-sep) |
 |---|---|---|---|
-| **Las seis respuestas** | 6 | `@sergiourcullo` | entrega algo que se usa hoy |
-| **Seis archivos esta semana** | 8 | `@sergiourcullo` | invita a la comunidad mostrando lo que ya existe |
-| **Cuatro cosas a mano** | 7 | **`@oniahq`** | vende el sistema sin hablar de nosotros |
+| **Las seis respuestas** | **4** *(era 6)* | `@sergiourcullo` | ✅ **recortada y re-rendida — lista** |
+| **Seis archivos esta semana** | 8 | `@sergiourcullo` | ⏸️ **NO se publica como está** — rehacer en 3 láminas |
+| **Cuatro cosas a mano** | 7 | **`@oniahq`** | ⏸️ **NO se publica como está** — rehacer con el ángulo del tiempo |
+
+> ⚠️ **Los tres veredictos son del 10-sep**, y este doc los llevaba como "gates verdes"
+> nomás: el gate mide desborde, no si la pieza enseña algo. Auditoría pieza por pieza en
+> [`AUDITORIA-8-CARRUSELES.md`](AUDITORIA-8-CARRUSELES.md); el reparto de las ocho y el
+> orden de salida, en [`PARA-PUBLICAR-APPLE-ORDEN.md`](PARA-PUBLICAR-APPLE-ORDEN.md).
 
 🔴 **El handle dejó de ser global.** Estaba fijo en `@sergiourcullo` para todo el generador:
 rendir una pieza de Onia firmada con el perfil personal la publica en la cuenta equivocada,
 y **eso no lo atrapa ningún gate** — se ve recién cuando ya está arriba. Ahora hay un
-`HANDLES` por pieza.
+`HANDLES` por pieza. ✅ **Verificado mirando las 7 láminas de Onia el 10-sep: dicen
+`@ONIAHQ`.**
 
 ---
 
-## 1 · Las seis respuestas · `@sergiourcullo` · 6 láminas
+## 1 · Las seis respuestas · `@sergiourcullo` · **4 láminas** ✅
 
-`carousels/out/apple-respuestas-inter/` · hoja: `HOJA-apple-respuestas.png`
+`carousels/out/apple-respuestas-inter/`
 
 Sale del drop del lunes 14 y del archivo ya publicado en `/stack/archivos`. Es la pieza más
 **guardable** del carril: no cuenta lo que él hizo, entrega algo que el lector usa hoy.
 
-**El remate está en la sexta.** Las cinco primeras informan y cualquiera las tiene a medias
-escritas en la cabeza; la que pide la decisión casi nadie la tiene, y por eso casi nadie la
-manda. Ése es el único dato de la pieza que el lector no sabía.
+**El remate está en la sexta respuesta.** Las cinco primeras informan y cualquiera las
+tiene a medias escritas en la cabeza; la que pide la decisión casi nadie la tiene, y por eso
+casi nadie la manda. Ése es el único dato de la pieza que el lector no sabía.
+
+### ✂️ Recortada de 6 láminas a 4 (10-sep)
+
+**El problema era el tiempo hasta el remate:** `/cierro` aparecía recién en la lámina 4,
+detrás de dos de relleno — nadie necesita que le expliquen qué es WhatsApp Business, y el
+"pide la decisión" era una lámina entera para explicar la anterior.
+
+| | Ahora |
+|---|---|
+| 01 | portada: seis respuestas, y **la sexta casi nadie la tiene** |
+| 02 | las cinco obvias, juntas |
+| 03 | **`/cierro`** — el remate, con la frase completa |
+| 04 | CTA |
+
+**El remate llega antes de que el lector se vaya**, que es todo el punto.
+
+🔴 **Se cayó la ruta de menú** («Herramientas para la empresa → Respuestas rápidas»). Es
+el CÓMO, y el CÓMO no va en el perfil público (`ONIA_MARCA_PERSONAL_TRES_CARRILES.md` §1).
+Vive donde corresponde: en la guía `/stack` y en el drop del lunes.
+
+⚠️ **Dos defectos de render arreglados el 10-sep, que el gate no atrapaba** — se vieron
+MIRANDO los PNG después de cuatro días de darlos por listos: «RESPUESTAS» salía **cortada
+en los dos bordes** del lienzo, y en el CTA la tilde de «¿CUÁL» **pisaba la E de
+«REPETÍS»**. Trampa #17 de la FICHA.
 
 ### Caption
 
@@ -55,20 +85,27 @@ abajo y te la dejo lista para guardar. Contesto a todos.
 
 ---
 
-## 2 · Seis archivos esta semana · `@sergiourcullo` · 8 láminas
+## 2 · Seis archivos esta semana · `@sergiourcullo` · ⏸️ **rehacer en 3 láminas**
 
-`carousels/out/apple-comunidad-semana-inter/` · hoja: `HOJA-apple-comunidad-semana.png`
+`carousels/out/apple-comunidad-semana-inter/` — **rendida, pero NO se publica como está.**
 
-Invita a la comunidad **mostrando lo que se entrega**, no prometiendo lo que se va a
-entregar: los seis archivos existen y están publicados. Es la diferencia entre *"unite que
-va a estar buenísimo"* y *"esto es lo que hay"*.
+La intención era buena: invitar a la comunidad **mostrando lo que se entrega**, no
+prometiendo lo que se va a entregar. Y la lámina 07 contesta de frente la pregunta
+incómoda —*si las guías son públicas, ¿para qué entro?*— sin esconder nada: «todo lo que
+enseño está afuera; adentro está hecho».
 
-La lámina 07 contesta de frente la pregunta que alguien va a hacer —*si las guías son
-públicas, ¿para qué entro?*— sin esconder nada: **«todo lo que enseño está afuera; adentro
-está hecho».**
+🔴 **Pero son ocho láminas de promoción, y una promo de ocho láminas se lee como aviso.**
+Es un índice de lo que va a haber: el lector no se lleva nada. (Lo más parecido a un dato
+es el jueves — que a Claude Code se le puede dar contexto de NEGOCIO y no de código — y
+está enterrado en una lámina de seis.)
 
-⚠️ **Sale el domingo 13 o el lunes 14**, no antes: los archivos que promete se entregan a
-partir del lunes.
+**Cómo se arregla, en 3 láminas:** que la pieza **entregue uno de los seis archivos** —el
+más chico— y recién ahí mencione que hay cinco más adentro. Se prueba el valor en vez de
+anunciarlo.
+
+⚠️ **Atada a fecha.** «Esta semana» y «arranca el lunes» caducan el 14-sep. Si no se rehace
+antes, se rehace apuntando a la semana 2. El caption de abajo sirve igual, recortando la
+lista de seis a la entrega de uno.
 
 ### Caption
 
@@ -97,9 +134,25 @@ Escribí «voy» abajo y te paso el enlace del canal.
 
 ---
 
-## 3 · Cuatro cosas a mano · `@oniahq` · 7 láminas
+## 3 · Cuatro cosas a mano · `@oniahq` · ⏸️ **rehacer con el ángulo del tiempo**
 
-`carousels/out/apple-onia-cuatro-inter/` · hoja: `HOJA-apple-onia-cuatro.png`
+`carousels/out/apple-onia-cuatro-inter/` — **rendida, pero NO se publica como está.**
+
+🔴 **Las siete láminas describen funciones del producto.** Quien tiene un negocio ya sabe
+que anota turnos a mano y que busca clientes en el cuaderno: no hay descubrimiento en
+ninguna lámina. Verificado mirándolas una por una el 10-sep — lo único que un lector no
+sabía es lo de la **reserva por link** (lámina 02), y está dicho de paso.
+
+**El dato existe y no se usó.** En vez de «tenemos agenda», la pieza tiene que decir
+**cuánto tiempo se va en esas cuatro cosas y qué queda cuando dejás de hacerlas**:
+*«contá cuántas veces por semana hacés cada una. Multiplicá por los minutos. Eso es lo que
+estás pagando.»* — la misma auditoría del drop D3, aplicada al rubro. Eso enseña algo
+aunque el lector nunca contrate nada.
+
+⚠️ **Una afirmación a verificar antes de rehacer:** la lámina 05 dice *«te avisa antes de
+que te quedes sin nada»*. El catálogo lista **Inventario simple** 🟢 y las alertas de stock
+bajo como función disponible — pero eso se mira encendido en producción antes de
+prometerlo, no se deduce de una tabla.
 
 ### Las tres reglas que cumple, y por qué importan
 
@@ -157,10 +210,10 @@ haya que sostener después.
 
 ## Alt text (los tres)
 
-> **Respuestas:** carrusel de seis láminas sobre fondo gris claro. La portada dice «seis
-> respuestas» y que no se vuelven a escribir nunca. Sigue el icono de WhatsApp con el
-> costo en cero, los cinco atajos, y una lámina dedicada al sexto, «/cierro», con la frase
-> que pide la decisión. Cierra preguntando qué frase repite el lector.
+> **Respuestas:** carrusel de cuatro láminas sobre fondo gris claro. La portada dice «seis
+> respuestas» y que la sexta casi nadie la tiene. Siguen los cinco atajos juntos, y una
+> lámina dedicada al sexto, «/cierro», con la frase que pide la decisión. Cierra
+> preguntando qué frase repite el lector.
 
 > **Seis archivos:** carrusel de ocho láminas sobre fondo gris claro. La portada dice «seis
 > archivos» con una tira de los seis iconos. Después, una lámina por día con la herramienta

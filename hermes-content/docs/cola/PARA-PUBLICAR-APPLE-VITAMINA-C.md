@@ -1,4 +1,20 @@
-# IMAGEN ÚNICA "Necesito vitamina C" — lista para pegar
+# IMAGEN ÚNICA "Necesito vitamina C" — ⛔ **NO SE PUBLICA**
+
+> **Decidido el 10-sep** con la auditoría de las ocho piezas
+> ([`AUDITORIA-8-CARRUSELES.md`](AUDITORIA-8-CARRUSELES.md)). **Dos razones, y la primera
+> sola ya alcanza:**
+>
+> 1. **No enseña nada.** La vara del carril es una sola: *¿qué cosa que el lector NO sabía
+>    se lleva?* Acá la respuesta es ninguna — es un chiste interno sin dato. Un carrusel
+>    que no deja nada gasta alcance y le enseña al lector que tu contenido se puede saltear.
+> 2. 🔴 **El panel dice «12 clientes activos · +3 este mes» y las dos cifras son
+>    inventadas** (§ más abajo, marcadas en rojo desde el 06-sep como excepción pedida).
+>    Es la única de las ocho piezas que afirma algo que no se puede sostener si alguien
+>    pregunta.
+>
+> **Si el chiste se quiere igual, se rehace SIN el panel de clientes:** el resto —Claude,
+> café, créditos— es cierto y no cuesta nada. Mientras tanto **su paquete se borró**: un
+> ZIP llamado «para-publicar» de algo que no se publica es cómo se publica por error.
 
 **Pieza:** `carousels/out/apple-vitamina-c-inter/lamina-01.png` (1 lámina, 1080×1350).
 Patrón `apple-editorial`, **layout B** (grilla 2×2 — referencia #2 del batch del 06-sep).

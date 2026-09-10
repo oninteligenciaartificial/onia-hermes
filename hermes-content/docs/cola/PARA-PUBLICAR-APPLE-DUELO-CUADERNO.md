@@ -1,10 +1,16 @@
 # IMAGEN ÚNICA "Tu cuaderno no miente" — lista para pegar
 
 **Pieza:** `carousels/out/apple-duelo-cuaderno-inter/lamina-01.png` (1 lámina, 1080×1350).
-Patrón `apple-editorial`, **layout C** (duelo 2-up — referencia #3 del batch).
+Paquete: `4-IG-DUELO-CUADERNO-para-publicar.zip`. Patrón `apple-editorial`, **layout C**
+(duelo 2-up — referencia #3 del batch). Cuenta: **`@sergiourcullo`**.
 
 Única pieza del patrón con **fondo crema y titular serif**. Ese cambio de superficie es
 deliberado: la separa del resto en la grilla del perfil y le da aire editorial.
+
+> 🔴 **El dato de esta pieza vive en el CAPTION, no en la lámina — publicarla sin él la
+> deja en eslogan.** Comprobado el 10-sep mirando el PNG a ciegas: **las tres preguntas
+> no están en la imagen**, y son ellas —no el «0 avisos»— lo que el lector se lleva. La
+> lámina es el gancho; el caption es la pieza. Se pega tal cual el de abajo.
 
 ## El duelo
 

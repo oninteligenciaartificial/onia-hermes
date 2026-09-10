@@ -1,9 +1,15 @@
 # IMAGEN ÚNICA "Los founders bolivianos" — lista para pegar
 
 **Pieza:** `carousels/out/apple-founders-bo-inter/lamina-01.png` (1 lámina, 1080×1350).
-Patrón `apple-editorial`, **layout A** (grilla comparativa 3×3 — referencia #1 del batch).
+Paquete: `3-IG-FOUNDERS-BO-para-publicar.zip`. Patrón `apple-editorial`, **layout A**
+(grilla comparativa 3×3 — referencia #1 del batch). Cuenta: **`@sergiourcullo`**.
 
 Es **una sola imagen**. Formato de humor de pertenencia: el que la ve se ríe porque le pasa.
+
+> 🔴 **El dato de esta pieza vive en el CAPTION, no en la lámina — publicarla sin él la
+> deja en meme.** Comprobado el 10-sep mirando el PNG a ciegas: en la imagen no aparece
+> por ningún lado que **Stripe no acepta Bolivia**, que es lo único que el lector no
+> sabía. La lámina es el gancho; el caption es la pieza. Se pega tal cual el de abajo.
 
 ## La grilla
 

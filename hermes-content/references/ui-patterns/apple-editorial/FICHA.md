@@ -243,3 +243,37 @@ aparte y deja el A/B mirable.
 16. **El slot de precio acepta una frase, pero no al mismo cuerpo.** A 92px "Te cuento
    pronto" competía con el nombre; `.precio.texto` lo baja a 60px y sigue siendo el segundo
    foco. Se aplica solo cuando el valor no empieza con `$`.
+
+17. 🔴 **`--check` mide ANCHO, no recorte ni colisión — y con el gate verde salieron dos
+   láminas rotas.** Encontradas el 10-sep MIRANDO los PNG de «Las seis respuestas», que
+   llevaban cuatro días rendidas y "verificadas":
+   - **Lám. 01: «RESPUESTAS» cortada en los dos bordes del lienzo.** A 196px
+     (`.remate.gancho`) la palabra no entra en 888px útiles y el navegador la desborda
+     hacia afuera. La sonda usa `Range.getClientRects()` sobre el elemento — mide el
+     ancho del BLOQUE, que sigue siendo 888, no el de la caja de texto que se sale. Un
+     remate de una sola palabra larga no va con `gancho`.
+   - **Lám. 06: la tilde de «¿CUÁL» pisando la E de «REPETÍS».** `.display` corre con
+     `line-height:.98`, o sea menos de una em: dos líneas con mayúscula acentuada abajo y
+     descendente arriba se tocan. Un remate de dos líneas con tilde en la segunda va con
+     `"largo": True` (104px, una línea) o se reescribe.
+
+   **La regla:** el gate descarta desborde de bloque; **no confirma que la lámina se vea
+   bien**. Toda pieza se MIRA lámina por lámina antes de darla por lista — es la regla de
+   la casa (`CLAUDE.md` §*Verificar es MIRAR*) aplicada acá, y estas dos son la prueba de
+   lo que cuesta saltearla.
+
+18. 🔴 **Barras de altura porcentual dentro de un flex = gráfico mentiroso.** En el layout
+   G la cana iba con `height:<v/max*100>%`, porcentaje **de la columna entera** (valor +
+   cana + rótulo). Dos consecuencias, las dos visibles en la lámina 06 de Fable del 10-sep
+   y ninguna medida por ningún gate:
+   - un rótulo de DOS líneas (`GPT-5.6\nSOL`) empujaba su cana hacia arriba: la barra de
+     **22,4% rendía MÁS ALTA que la de 24,7%**;
+   - en la columna ganadora la suma pasaba los 560px del contenedor y el flex **encogía**
+     la cana, achicando justo la barra que tiene que dominar.
+
+   Ahora la altura se calcula en **px desde Python** (`v/tope*390`), la cana lleva
+   `flex:0 0 auto` y el rótulo `min-height:58px` para que todas apoyen en la misma base.
+   El comentario de arriba del layout ya advertía "no recortar la base para que se note
+   más la diferencia" — y el bug hacía algo peor sin que nadie lo pidiera. **En una pieza
+   que presume de datos verificados, el gráfico es la afirmación más fácil de desmentir:
+   se compara con una regla en la pantalla.**

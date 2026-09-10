@@ -1,9 +1,24 @@
 # CARRUSEL "Fable 5.1" — listo para pegar
 
-**Piezas:** `carousels/out/apple-fable-inter/lamina-01..09.png` (9 láminas, 1080×1350).
-Hoja: `carousels/out/HOJA-apple-fable.png`. Patrón `apple-editorial`, layouts **D + E + G**.
+**Piezas:** `carousels/out/apple-fable-inter/lamina-01..08.png` (**8** láminas, 1080×1350).
+Paquete: `carousels/out/1-IG-FABLE-para-publicar.zip` · hoja:
+`carousels/out/HOJA-1-IG-FABLE-para-publicar.png`. Patrón `apple-editorial`, layouts
+**D + E + G**. Cuenta: **`@sergiourcullo`**.
 
 Entra por **§2 de `BASE_CONTENIDO`** — herramientas y modelos que se cuentan.
+
+> ⏰ **Es la PRIMERA de la cola y caduca.** Es noticia de un producto ajeno y ya lleva
+> cuatro días rendida: **sale hasta el domingo 14-sep o se tira.** Republicarla en un mes
+> es hablar de algo viejo, y peor: construye la autoridad de Anthropic, no la de él.
+> (Lección para el backlog, en `AUDITORIA-8-CARRUSELES.md`: en una cola con ocho piezas,
+> la de noticia va primera o no va.)
+
+> 🔴 **Corregido el 10-sep — el gráfico de la lámina 06 estaba MINTIENDO.** La barra de
+> **22,4% rendía más alta que la de 24,7%**: la altura iba en porcentaje de la columna
+> entera y un rótulo de dos líneas (`GPT-5.6 / SOL`) levantaba su barra. En la pieza que
+> presume de datos verificados, el gráfico es la afirmación más fácil de desmentir — se
+> compara con una regla en la pantalla. **Ya está arreglado y re-rendido** (altura en px,
+> bases alineadas). Trampa #18 de la FICHA. Ningún gate lo medía: se vio MIRANDO el PNG.
 
 ## Orden de las 8 láminas
 

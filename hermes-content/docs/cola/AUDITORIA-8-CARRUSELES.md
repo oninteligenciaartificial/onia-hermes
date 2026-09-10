@@ -166,3 +166,62 @@ Recortar **no es borrar láminas del PNG**: es editar la lista de la pieza en
 
 Las tres a rehacer **no se tocan hasta tener su dato escrito en una línea.** Ésa es la regla
 que salió de esta auditoría y es la que evita repetir el problema.
+
+---
+
+# El reparto, cerrado (10-sep)
+
+> Sergio Urcullo, 10-sep: *«'Mi stack' NO va al perfil público — va a la comunidad»*, y el
+> pedido de revisar las otras siete con el mismo criterio: **cada pieza con su lugar
+> justificado, no heredado**. Los lugares los define `../ONIA_DONDE_VA_CADA_COSA.md`.
+
+## Por qué «Mi stack» va a la comunidad, y no es capricho
+
+La auditoría de arriba la daba por `@sergiourcullo` y **estaba mal por el calendario, no
+por el contenido**: la semana 1 del motor (14–19 sep) ES el tema «Mi stack» — seis videos
+en Instagram, un drop con archivo por día adentro, la guía `/stack` ya pública en la web.
+Publicar el carrusel en el perfil **antes** de la semana la spoilea entera; publicarlo
+**después** es un resumen de lo que todos ya vieron — justo lo que la vara de esta
+auditoría prohíbe. Y su CTA («comentá STACK») prometía entrega a mano con `palabras: {}`
+sin cablear. En Announcements, en cambio, hace un trabajo que ninguna otra pieza hace:
+**abre la semana con el mapa entero** — el de adentro lo ve completo el lunes, el de
+afuera lo recibe dosificado en seis días. Exclusividad sin esconder conocimiento, porque
+la guía ya está afuera.
+
+## La tabla final
+
+| Pieza | Lugar | Por qué ahí | Estado |
+|---|---|---|---|
+| **Mi stack** | 🔒 **comunidad** (Announcements, lun 14-sep) | abre la semana «Mi stack» del motor; en el perfil pisaba sus 6 videos | ✅ **recortada 11→5 y re-rendida**: fichas $0 juntas en una lámina; fuera «quién soy» y el CTA STACK (ruido adentro) |
+| **Fable 5.1** | `@sergiourcullo` | noticia + dato que sorprende = carril público; nada que dar a comunidad ni a @oniahq | ✅ lista — **sale hasta el domingo 14-sep o se tira** (regla ya fijada) |
+| **Founders bolivianos** | `@sergiourcullo` | humor de pertenencia, compartible; cero promesas que sostener | ✅ lista tal cual |
+| **Tu cuaderno no miente** | `@sergiourcullo` | nombra el problema sin nombrar el producto; en @oniahq sería promo floja | ✅ lista tal cual |
+| **Las seis respuestas** | `@sergiourcullo` | entrega algo usable hoy (el QUÉ, sin el cómo) y cierra pidiendo comentario | ✅ **recortada 6→4 y re-rendida**: el remate /cierro llega en la lámina 3 |
+| **Seis archivos esta semana** | `@sergiourcullo` *(cuando se rehaga)* | es la pieza pública que invita a la comunidad — pero como está es una promo de 8 láminas | ⏸️ rehacer en 3 láminas entregando un archivo; **atada a fecha**: «arranca el lunes» caduca el 14-sep |
+| **Cuatro cosas a mano** | `@oniahq` *(cuando se rehaga)* | única pieza de producto; nombra SOLO módulos 🟢 (agenda, clientes, servicios, inventario + reserva por link) ✅ verificado mirando las 7 láminas | ⏸️ rehacer con el ángulo del tiempo (drop D3 aplicado al rubro) |
+| **Necesito vitamina C** | ninguno | regla fijada: no enseña nada y el panel «12 clientes · +3» es inventado | ⛔ no se publica |
+
+**Ninguna pieza va a la web**: la web es de guías, un carrusel no es su formato.
+
+## Lo que salió de MIRAR las ocho (8 lectores independientes, 10-sep)
+
+Tres defectos que el gate `--check` no mide, todos **arreglados y re-rendidos**:
+
+1. **Fable lám. 06 — gráfico que mentía.** La barra de 22,4% rendía MÁS ALTA que la de
+   24,7%: la cana usaba `height:%` dentro de una columna flex donde un rótulo de dos
+   líneas levantaba su barra, y la ganadora se encogía. Ahora la altura va en px desde
+   Python y todas las barras apoyan en la misma base. Trampa #18 de la FICHA.
+2. **Respuestas lám. 01 — «RESPUESTAS» cortada en ambos bordes** a 196px de gancho, con
+   gate verde. La portada recortada ya no usa gancho. Trampa #17.
+3. **Respuestas lám. 06 — la tilde de «¿CUÁL» caía sobre la E de «REPETÍS»** (line-height
+   .98). El CTA ahora va en una línea a 104px. Misma trampa #17.
+
+Y dos hallazgos que NO son bloqueo pero hay que saber:
+
+- **Las dos piezas 🟢 llevan su dato en el CAPTION, no en la lámina.** «Founders» no dice
+  en ninguna parte que Stripe no acepta Bolivia; «Cuaderno» no trae las 3 preguntas. La
+  lámina es el gancho y el caption es la pieza: **publicarlas sin su caption las deja en
+  meme**. Los captions viven en sus docs `PARA-PUBLICAR-APPLE-*`.
+- «Cuaderno» ilustra «el sistema» con un iPhone de stock lleno de apps de terceros y
+  «Founders» usa una lata real de Red Bull con texto deformado. Ninguna afirma nada falso;
+  se anotan por si alguna vez se rehacen los objetos.
