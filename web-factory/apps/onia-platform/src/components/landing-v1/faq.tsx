@@ -33,8 +33,10 @@ export const FAQS: { q: string; a: string }[] = [
     a: `No, y no viene incluido en ningún plan: es un servicio aparte, ${precioStack()}. El botón de WhatsApp de tu web sí va gratis. Antes de contratarlo publicamos los requisitos: necesitás un número dedicado, y los mensajes que tu negocio inicia se los pagás directo a Meta.`,
   },
   {
+    // Sin condición de plan a propósito: el export integral es un derecho del
+    // titular y el producto no lo gatea (ver `datos-que-se-llevan.test.ts`).
     q: "¿Mis datos son míos?",
-    a: "Sí. Los exportás en CSV cuando quieras en cualquier plan pago. No vendemos datos ni entrenamos modelos de IA con ellos; la política de privacidad está publicada.",
+    a: "Sí. Los exportás en CSV cuando quieras, también durante la prueba: llevarte tus datos es un derecho tuyo, no una función del plan. No vendemos datos ni entrenamos modelos de IA con ellos; la política de privacidad está publicada.",
   },
   {
     q: "¿Sirve para mi rubro?",

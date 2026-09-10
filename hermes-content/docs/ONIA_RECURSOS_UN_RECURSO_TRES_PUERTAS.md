@@ -1,5 +1,10 @@
 # Un recurso, tres puertas — cómo se administra lo que prometemos
 
+> 📍 **Índice del carril, con qué documento manda sobre qué:**
+> [`ONIA_CIRCUITO_DE_CONTENIDO.md`](ONIA_CIRCUITO_DE_CONTENIDO.md) — y la misma
+> estructura para consultar de un vistazo en
+> <https://claude.ai/code/artifact/fb52b4b9-4504-4b8a-afca-46cf2a8f9586>
+
 > Sergio Urcullo, 2026-09-07: *"a veces decimos al final comentá tal palabra y te paso tal
 > cosa… luego a la hora de que enviemos a la comunidad, podemos enviar lo mismo que
 > subimos, o cómo podemos administrarlo. Para eso sería crear la página. Organizalo"*.
@@ -84,7 +89,7 @@ Eso se rompe en el primer comentario.
 
 | Slug | Recurso | Estado | Lo promete | Archivos para comunidad |
 |---|---|---|---|---|
-| [`/homelab`](https://sergiourcullo.vercel.app/homelab) | **El homelab** — qué es, cuánto gasta de luz, qué corre adentro, cómo armarlo. Ocho preguntas del video contestadas | 🟢 **público** | Reel del 07-sep (`HOMELAB`) — ⚠️ la promesa salió ANTES que el recurso | ⬜ falta la página de archivos |
+| [`/homelab`](https://sergiourcullo.vercel.app/homelab) | **El homelab** — qué es, cuánto gasta de luz, qué corre adentro, cómo armarlo. Ocho preguntas del video contestadas | 🟢 **público** | Reel del 07-sep (`HOMELAB`) — ⚠️ la promesa salió ANTES que el recurso | 🟢 [`/homelab/archivos`](https://sergiourcullo.vercel.app/homelab/archivos) — primer arranque, respaldo automático, lista de la BIOS |
 | [`/stack`](https://sergiourcullo.vercel.app/stack) | **El stack de $200** — las 6 herramientas, qué hace cada una, qué no hace, cómo instalarla | 🟡 **en comunidad** | Carrusel «Mi stack», lámina 11 (`COMENTÁ STACK`) | 🟢 [`/stack/archivos`](https://sergiourcullo.vercel.app/stack/archivos) — `docker-compose` de n8n, las 6 respuestas de WhatsApp, plantilla del `SOUL.md` |
 
 > 🟢 **La web está arriba desde el 08-sep: https://sergiourcullo.vercel.app**. Fuente en

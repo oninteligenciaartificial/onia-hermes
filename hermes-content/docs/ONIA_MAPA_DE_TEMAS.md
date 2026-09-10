@@ -1,5 +1,10 @@
 # El mapa de temas — de dónde sale lo que se graba
 
+> 📍 **Índice del carril, con qué documento manda sobre qué:**
+> [`ONIA_CIRCUITO_DE_CONTENIDO.md`](ONIA_CIRCUITO_DE_CONTENIDO.md) — y la misma
+> estructura para consultar de un vistazo en
+> <https://claude.ai/code/artifact/fb52b4b9-4504-4b8a-afca-46cf2a8f9586>
+
 > Sergio Urcullo, 2026-09-08: *"hoy se me puede ocurrir que es un VPS y le hago un video,
 > ¿eso va a la comunidad o a la web? O mejor armemos una estructura de todo lo que queramos
 > hacer y de ahí ya veo qué puedo grabar. Por ejemplo ahorita hice un video para YT sobre
@@ -101,7 +106,7 @@ Estado: 🟢 recurso publicado · 🟡 en curso · ⬜ sin empezar.
 
 | | Tema | Estado |
 |---|---|---|
-| **S** | Qué es Claude y qué es Claude Code | 🟡 **video de YouTube grabado**, falta la página |
+| **S** | Qué es Claude y qué es Claude Code | 🟡 video de YouTube grabado · la instalación ya está en el paso 04 de [`/stack`](https://sergiourcullo.vercel.app/stack) · falta el link para embeber |
 | **S** | Escribí tu primera habilidad (skill) | ⬜ · sale del drop D4 |
 | **S** | Los cinco prompts que uso para vender | ⬜ · sale del drop D2 |
 | **S** | Un agente que te avisa cuando algo se rompe | ⬜ · Hermes |

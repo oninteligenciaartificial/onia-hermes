@@ -1,5 +1,10 @@
 # El motor semanal — un tema, seis días, tres puertas
 
+> 📍 **Índice del carril, con qué documento manda sobre qué:**
+> [`ONIA_CIRCUITO_DE_CONTENIDO.md`](ONIA_CIRCUITO_DE_CONTENIDO.md) — y la misma
+> estructura para consultar de un vistazo en
+> <https://claude.ai/code/artifact/fb52b4b9-4504-4b8a-afca-46cf2a8f9586>
+
 > Sergio Urcullo, 2026-09-08. Dos decisiones tomadas:
 > **1.** «La semana construye la guía».
 > **2.** *"Todos los días, un repo, una skill, una habilidad, curiosidades… ¿eso es aparte

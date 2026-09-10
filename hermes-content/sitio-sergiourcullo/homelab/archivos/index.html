@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Archivos del homelab — Onia Community</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%2300C661'/><text x='16' y='23' font-family='Arial,sans-serif' font-size='18' font-weight='bold' text-anchor='middle' fill='%230A2A18'>S</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/estilo.css">
+</head>
+<body>
+
+<div class="barra">
+  <a class="marca" href="/">sergiourcullo<span class="punto">.</span></a>
+  <a class="vuelta" href="/homelab">← volver a la guía</a>
+</div>
+
+<div class="wrap">
+
+<header class="top">
+  <p class="privado">Sólo Onia Community</p>
+  <h1>Los archivos del <span class="num">homelab</span></h1>
+  <p class="bajada">La guía pública explica qué hacer. Acá está hecho: tres archivos que
+  copiás, pegás y corren. Cubren lo que más tiempo cuesta la primera vez y lo que casi
+  nadie hace hasta que es tarde.</p>
+
+  <div class="honesto">
+    <h2>Leelos antes de correrlos</h2>
+    <p><strong>Los tres tocan tu máquina de verdad.</strong> Están comentados línea por
+    línea justamente para que sepas qué hace cada una — no pegues nada que no entiendas,
+    ni de acá ni de ningún lado.</p>
+    <p>Este link no está enlazado desde ninguna página. <strong>Es de la comunidad</strong> —
+    si lo reenviás, dejás de tener algo que los demás no tienen.</p>
+  </div>
+</header>
+
+<article class="archivo">
+  <h2>1 · Primer arranque del servidor</h2>
+  <p class="ruta">primer-arranque.sh</p>
+  <p class="desc">Todo lo que hay que hacer después de instalar Ubuntu y antes de instalar
+  nada más. Es el paso 2 de la guía, con las cuatro cosas que se olvidan siempre: la zona
+  horaria, que Docker arranque solo, el firewall y los parches de seguridad automáticos.</p>
+<pre><span class="c">#!/bin/bash</span>
+<span class="c"># Correlo UNA vez, recién instalado Ubuntu:  bash primer-arranque.sh</span>
+<span class="k">set</span> -e
+
+<span class="c"># 1. Zona horaria. Si no, el servidor trabaja en horario de Londres</span>
+<span class="c">#    y TODAS tus automatizaciones salen corridas cuatro horas.</span>
+<span class="k">sudo</span> timedatectl set-timezone America/La_Paz
+
+<span class="c"># 2. Actualizar todo lo que ya está instalado</span>
+<span class="k">sudo</span> apt update && <span class="k">sudo</span> apt upgrade -y
+
+<span class="c"># 3. Docker, con el instalador oficial de get.docker.com</span>
+<span class="k">curl</span> -fsSL https://get.docker.com -o /tmp/get-docker.sh
+<span class="k">sudo</span> sh /tmp/get-docker.sh
+<span class="k">sudo</span> usermod -aG docker $USER
+<span class="k">sudo</span> systemctl enable docker   <span class="c"># arranca solo cuando vuelve la luz</span>
+
+<span class="c"># 4. Firewall: sólo SSH desde tu red local. Nada abierto a internet.</span>
+<span class="c">#    ⚠️ Cambiá 192.168.0.0/24 por el rango de TU casa si es distinto.</span>
+<span class="k">sudo</span> ufw allow from 192.168.0.0/24 to any port 22
+<span class="k">sudo</span> ufw --force enable
+
+<span class="c"># 5. Parches de seguridad solos, sin que tengas que acordarte</span>
+<span class="k">sudo</span> apt install -y unattended-upgrades
+<span class="k">sudo</span> dpkg-reconfigure -plow unattended-upgrades
+
+<span class="k">echo</span> <span class="k">"Listo. Cerrá sesión y volvé a entrar para que Docker ande sin sudo."</span>
+<span class="k">ip</span> a | grep <span class="k">"inet "</span> | grep -v 127.0.0.1   <span class="c"># anotá esta IP</span></pre>
+  <div class="nota"><strong>La línea del firewall es la que hay que mirar dos veces.</strong>
+  Si el rango de tu casa no es <code>192.168.0.x</code>, cambiala antes de correr el script
+  — si no, te quedás afuera de tu propio servidor y hay que ir con monitor y teclado.
+  El comando de la última línea te dice cuál es tu rango.</div>
+</article>
+
+<article class="archivo">
+  <h2>2 · Respaldo automático</h2>
+  <p class="ruta">respaldo.sh</p>
+  <p class="desc">Lo que casi nadie hace hasta el día que el disco no arranca. Copia todos
+  los volúmenes de Docker —o sea, los datos de todo lo que tengas corriendo— a otro disco,
+  y borra los respaldos de más de un mes para no llenarlo.</p>
+<pre><span class="c">#!/bin/bash</span>
+<span class="c"># Respaldo de los volúmenes de Docker.</span>
+<span class="c"># ⚠️ DESTINO tiene que ser OTRO disco. Respaldar al mismo disco no</span>
+<span class="c">#    sirve de nada: si muere, se lleva el respaldo también.</span>
+<span class="k">set</span> -e
+DESTINO=<span class="k">"/mnt/respaldo"</span>
+FECHA=$(date +%Y-%m-%d)
+
+<span class="k">mkdir</span> -p <span class="k">"$DESTINO/$FECHA"</span>
+
+<span class="c"># Un .tar.gz por volumen</span>
+<span class="k">for</span> VOL <span class="k">in</span> $(docker volume ls -q); <span class="k">do</span>
+  <span class="k">echo</span> <span class="k">"respaldando $VOL"</span>
+  docker run --rm \
+    -v <span class="k">"$VOL"</span>:/origen:ro \
+    -v <span class="k">"$DESTINO/$FECHA"</span>:/destino \
+    alpine tar czf <span class="k">"/destino/$VOL.tar.gz"</span> -C /origen .
+<span class="k">done</span>
+
+<span class="c"># Borra lo de más de 30 días</span>
+<span class="k">find</span> <span class="k">"$DESTINO"</span> -maxdepth 1 -type d -mtime +30 -exec rm -rf {} \;
+
+<span class="k">echo</span> <span class="k">"Listo: $DESTINO/$FECHA"</span>
+<span class="k">du</span> -sh <span class="k">"$DESTINO/$FECHA"</span></pre>
+  <p style="margin:18px 0 0">Para que corra solo todas las noches a las 3:</p>
+<pre><span class="k">crontab</span> -e
+<span class="c"># y pegá esta línea al final:</span>
+0 3 * * * /bin/bash /home/TU-USUARIO/respaldo.sh >> /var/log/respaldo.log 2>&1</pre>
+  <div class="nota"><strong>Un respaldo que nunca probaste no es un respaldo.</strong> Una
+  vez al mes, agarrá un <code>.tar.gz</code> y descomprimilo en una carpeta cualquiera para
+  confirmar que adentro está lo que tiene que estar. Toma dos minutos y es la diferencia
+  entre tener copia y creer que tenés copia.</div>
+</article>
+
+<article class="archivo">
+  <h2>3 · La lista de la BIOS</h2>
+  <p class="ruta">checklist-bios.txt</p>
+  <p class="desc">No es un script: son las cuatro opciones que hay que cambiar en la BIOS
+  para que la máquina se comporte como servidor y no como computadora de escritorio. Se
+  entra apretando <code>Supr</code> o <code>F2</code> apenas prende.</p>
+<pre><span class="k">[ ]</span> Restore on AC Power Loss  ->  <span class="c">Power On</span>
+    La más importante. Sin esto, vuelve la luz y la máquina
+    se queda apagada esperando que alguien apriete el botón.
+
+<span class="k">[ ]</span> Wake on LAN               ->  <span class="c">Enabled</span>
+    Te deja prenderla desde el celular sin ir hasta donde está.
+
+<span class="k">[ ]</span> Halt on errors            ->  <span class="c">No errors</span>
+    Si no, un teclado desconectado la deja trabada en el
+    arranque. Y el servidor no va a tener teclado.
+
+<span class="k">[ ]</span> Boot order                ->  <span class="c">el disco primero</span>
+    Con el pendrive de instalación olvidado adentro, arranca
+    del pendrive y creés que se rompió todo.</pre>
+  <div class="nota"><strong>La segunda y la tercera parecen menores y son las que te hacen
+  bajar al sótano.</strong> Un servidor de verdad tiene que poder arrancar solo, sin
+  monitor, sin teclado y sin nadie mirando.</div>
+</article>
+
+<section class="cierre">
+  <h2>Qué falta acá y va a ir apareciendo</h2>
+  <ul>
+    <li>El <code>docker-compose</code> con los servicios juntos, para levantar todo de una.</li>
+    <li>La configuración de la VPN, cuando salga esa guía.</li>
+    <li>Un script que avise por Telegram si el respaldo falla — hoy escribe en un log que
+    nadie lee.</li>
+  </ul>
+  <p>Si alguno te sirve más que los otros, decilo en General y ése va primero.</p>
+</section>
+
+<p class="firma">
+  <a href="/homelab">← Volver a la guía</a>
+  <span>Onia Community</span>
+</p>
+
+</div>
+</body>
+</html>

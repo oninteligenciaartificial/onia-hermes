@@ -149,6 +149,55 @@ export function clearHumanTakeover(state) {
   };
 }
 
+/**
+ * ¿La conversacion esta VENCIDA? NUESTRO lado (bot o humano) no dio señales de vida en
+ * `config.reinicio.trasDiasSinActividad` dias. Se mide contra lastOutboundAt y
+ * humanTookOverAt — NUNCA contra lastInboundAt: cada "hola" del prospecto a una
+ * conversacion muda actualiza esa marca, asi que medirla rearmaria el reloj con cada
+ * intento fallido y el bot no reviviria jamas mientras la persona insista (le paso al
+ * "hola" real del 10-sep: el turno MUDO dejo lastInboundAt en ese mismo dia).
+ * Fallback: si nunca salio nada nuestro ni hubo takeover, cuenta desde lastInboundAt.
+ * Determinista: el "ahora" es el receivedAt del mensaje entrante.
+ * El opt-out la excluye SIEMPRE: esa barrera no caduca por tiempo (politica de Meta).
+ */
+export function conversacionVencida(state, receivedAt, config = DEFAULT_CONFIG) {
+  const dias = config.reinicio?.trasDiasSinActividad;
+  if (!Number.isFinite(dias) || dias <= 0) return false;
+  if (!receivedAt || state.optOutAt || state.botStage === "nuevo") return false;
+  const nuestras = [state.lastOutboundAt, state.humanTookOverAt]
+    .map((iso) => Date.parse(iso))
+    .filter(Number.isFinite);
+  const marcas = nuestras.length ? nuestras : [Date.parse(state.lastInboundAt)].filter(Number.isFinite);
+  if (!marcas.length) return false;
+  const inactiva = (Date.parse(receivedAt) - Math.max(...marcas)) / 86400000;
+  return Number.isFinite(inactiva) && inactiva > dias;
+}
+
+/**
+ * El reinicio de una conversacion vencida: vuelve al guion desde el saludo. Limpia TODOS los
+ * candados de silencio (humanTookOver, handoffAckAt) y los contadores del embudo; conserva
+ * la calificacion ya capturada (el rubro de hace un mes sigue siendo el rubro) y la
+ * atribucion. `slotsOffered`/`scheduledAt` se limpian: una demo de hace un mes no es un
+ * compromiso vigente.
+ */
+function reiniciarConversacionVencida(state) {
+  return {
+    ...state,
+    botStage: "nuevo",
+    humanTookOver: false,
+    humanTookOverAt: null,
+    handoffAckAt: null,
+    slotsOffered: [],
+    scheduledAt: null,
+    scheduledLabel: null,
+    calendarEventId: null,
+    offScriptCount: 0,
+    qualifyAsks: 0,
+    followupStep: 0,
+    branchAsked: false,
+  };
+}
+
 /** Fila lista para onia_center.bot_conversations. */
 export function toConversationRow(state) {
   return {
@@ -248,6 +297,9 @@ function summarize(state, msg, reason, config) {
 function finalize(ctx, next, replies, effects = [], notes = []) {
   const { config, msg, prev } = ctx;
   const allNotes = [...notes];
+  // El reinicio por vencimiento se anota SIEMPRE, en cualquier rama: es lo que explica por
+  // que una conversacion de hace un mes arranca de nuevo con la bienvenida.
+  if (ctx.vencida) allNotes.unshift("reinicio:conversacion_vencida");
   const out = replies.filter(Boolean);
 
   // M7 se APENDEA a la ultima respuesta con texto, no la reemplaza (spec §2.2 M7).
@@ -479,19 +531,27 @@ export function step(state, incoming, options = {}) {
   const config = options.config || DEFAULT_CONFIG;
   const msg = readIncoming(incoming);
   const prev = state;
-  const base = { ...state, lastInboundAt: msg.receivedAt || state.lastInboundAt };
-  const ctx = { config, prev, msg, options };
+
+  // --- Barrera 0: conversacion VENCIDA (>N dias sin actividad de nadie) => se reinicia al
+  // saludo ANTES de evaluar cualquier candado. Ningun estado puede producir 0 mensajes ante
+  // un entrante real de un contacto: el candado de una prueba vieja (conv 11, human_took_over
+  // del 13-ago) dejo mudo el "hola" real de Sergio el 10-sep. Solo para mensajes DEL contacto:
+  // un traspaso humano (author "human") jamas dispara la bienvenida encima del humano.
+  const vencida = msg.author === "contact" && conversacionVencida(state, msg.receivedAt, config);
+  const vivo = vencida ? reiniciarConversacionVencida(state) : state;
+  const base = { ...vivo, lastInboundAt: msg.receivedAt || vivo.lastInboundAt };
+  const ctx = { config, prev, msg, options, vencida };
 
   // --- Barrera 1: un humano tomo la conversacion. El bot NO habla. Falla hacia el SILENCIO.
-  if (state.humanTookOver) return finalize(ctx, base, [], [], ["silencio:humano_a_cargo"]);
+  if (vivo.humanTookOver) return finalize(ctx, base, [], [], ["silencio:humano_a_cargo"]);
 
   // --- Barrera 1b: CUOTA MENSUAL AGOTADA (la manda /published; null = seguir atendiendo).
   // Hasta hoy el bot se CALLABA al agotarse: el cliente del cliente escribia y nadie contestaba.
   // Ahora: texto fijo SIEMPRE (nunca LLM) y el handoff de siempre (review_queue + notify)
   // UNA sola vez por conversacion — en handoff_humano ya no se repiten los efectos.
   // Opt-out previo sigue mandando: a quien dijo basta no se le escribe ni para avisarle esto.
-  if (config.cuota?.agotada === true && !state.optOutAt) {
-    if (state.botStage === "handoff_humano") {
+  if (config.cuota?.agotada === true && !vivo.optOutAt) {
+    if (vivo.botStage === "handoff_humano") {
       return finalize(ctx, base, [say("R_CUOTA_AGOTADA", base, config)], [], ["cuota_agotada:ya_derivada"]);
     }
     return handoffResult(ctx, base, "cuota_agotada", [], "R_CUOTA_AGOTADA");
@@ -509,7 +569,7 @@ export function step(state, incoming, options = {}) {
   // El opt-out le gana SIEMPRE al disparador: "ya no me mandes mas info" trae la palabra "info"
   // (disparador de demo) pero esta REFORZANDO la baja. Reabrirle el guion es escribirle a quien
   // ya dijo basta dos veces — riesgo de politica de Meta, no un detalle de UX.
-  if (state.optOutAt) {
+  if (vivo.optOutAt) {
     if (intents.isOptOut(msg.norm) || !intents.isDemoTrigger(msg.norm, config)) {
       return finalize(ctx, base, [], [], ["silencio:opt_out"]);
     }
