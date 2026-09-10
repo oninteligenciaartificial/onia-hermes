@@ -12,7 +12,7 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
-## 2026-09-10 17:10-17:24 La Paz — dental, dos corridas seguidas: falso rojo intermitente en paso 6 (mi instrumento, no el producto)
+## 2026-09-10 13:09-13:24 La Paz — dental, dos corridas seguidas: falso rojo intermitente en paso 6 (mi instrumento, no el producto)
 
 Primera corrida: `zz-qa-2026-09-10-1710`, llegó hasta el paso 5 (9/9). **Paso 6 "roto"**: el
 script reportó "el formulario de alta de Pacientes no tiene ni un campo de texto" en
