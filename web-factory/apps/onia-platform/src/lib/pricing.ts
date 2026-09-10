@@ -510,7 +510,11 @@ export const CONDICIONES: readonly string[] = [
   // frase sigue en verde diciendo el número viejo.
   `${PRUEBA_DIAS} días de prueba sin tarjeta, con el ${PRUEBA_PLAN} completo. Al vencer, la cuenta queda en solo lectura — nada se borra.`,
   "En los tres planes de arriba no cobramos implementación ni migración: el checkout cobra solo el plan. Grupo / Empresarial sí lleva implementación acompañada y se cotiza aparte.",
-  "Tus datos son tuyos: los exportás en CSV desde el plan más chico.",
+  // Decía "desde el plan más chico", que ponía a la salida detrás de un pago:
+  // el export integral NO se gatea por plan (el producto lo llama "derecho del
+  // titular", `app/api/settings/export/route.ts:14`) y la prueba corre con Pro.
+  // La condición era de la venta, no del producto — ver `datos-que-se-llevan.test.ts`.
+  "Tus datos son tuyos: los exportás en CSV cuando quieras, sin importar el plan y también durante la prueba.",
 ] as const;
 
 /**
