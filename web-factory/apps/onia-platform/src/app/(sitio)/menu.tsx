@@ -3,7 +3,6 @@
 import { useRef } from "react";
 import {
   NAV_PRODUCTO,
-  NAV_SERVICIOS,
   NAV_DECIDIR,
   NAV_LEGAL,
   EMPEZAR_URL,
@@ -63,12 +62,6 @@ export function MobileMenu() {
           <nav className={s.sheetNav} aria-label="Secciones">
             <p className={s.sheetGroup}>Producto</p>
             {NAV_PRODUCTO.map((item) => (
-              <a key={item.href} className={s.sheetLink} href={item.href}>
-                {item.label}
-              </a>
-            ))}
-            <p className={s.sheetGroup}>Servicios</p>
-            {NAV_SERVICIOS.map((item) => (
               <a key={item.href} className={s.sheetLink} href={item.href}>
                 {item.label}
               </a>

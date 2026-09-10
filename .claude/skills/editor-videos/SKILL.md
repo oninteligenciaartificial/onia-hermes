@@ -311,6 +311,64 @@ el modelo la deforma.
 | Imágenes / b-roll / mascot | `image-gen` MCP / modelo barato | ~gratis |
 | Video generativo / avatar | Higgsfield | **pago → OK Sergio** |
 
+## 🖼 Miniatura de YouTube — el frame se BUSCA, no se elige a ojo
+
+Piezas: `videos/<proyecto>/scripts/buscar-cara.py` (puntúa) · `buscar-todos.py` (barre todo el
+material) · `hoja-caras.py` (hoja de contactos) · `mini-capa.py` (fondo + sujeto con luz) +
+un HTML para logos y titular. Todo local, costo cero, nada generado con IA.
+
+### El método (4 pasos)
+
+1. **Barrer TODO el material a cámara**, no solo el clip que se está editando. `buscar-todos.py`
+   corrió sobre 19 archivos y puntuó **3.723 caras**; el mejor frame no estaba en el video
+   editado sino en otra toma del mismo día — misma ropa, mismo set, sirve igual.
+2. **Puntuar, no decidir.** Se miden cuatro cosas con YuNet (el ONNX que ya usa `blur-faces`):
+   nitidez (varianza del laplaciano sobre la cara, descarta el motion blur), frontalidad (ojos
+   a la misma altura, nariz centrada), sonrisa y boca cerrada.
+3. **Hoja de contactos con dedup** (`hoja-caras.py`): un frame por MOMENTO. Sin dedup el top se
+   llena de seis frames del mismo gesto separados por 0,1 s.
+4. **Elige Sergio Urcullo mirando la hoja.** Es su cara: el score ordena, no decide.
+
+### ⚠ El ancho de boca NO mide sonrisa: mide que está HABLANDO
+
+El primer scoring usaba `ancho_boca / distancia_entre_ojos` y el top 12 salió **entero con la
+boca abierta a media palabra**. En un video hablado casi todo el material es boca abierta; lo
+escaso son las pausas. Con 5 landmarks lo que sí funciona:
+
+- **sonrisa** = comisuras ELEVADAS respecto a la nariz (`-(y_comisuras - y_nariz) / dist_ojos`).
+- **boca cerrada** = fracción de píxeles oscuros en el rectángulo de la boca. **Este es el peso
+  fuerte** (0.62 contra 0.30 de la sonrisa): cerrar la boca importa más que estirarla.
+
+### El fondo es el mismo frame — y eso es el arreglo del recorte, no decoración
+
+`rembg` **no puede** separar una camiseta negra del respaldo NEGRO de una silla: probado con
+`u2net_human_seg` y con `isnet-general-use`, los dos se la comen (`birefnet-portrait` pesa
+973 MB, no vale la pena). Sobre un fondo plano ese error se ve como una mancha. Sobre su propia
+imagen desenfocada, la silla del recorte cae encima de la silla del fondo y **desaparece**.
+El sujeto se separa con **luz**, no con un borde duro: rim light, más brillo y más contraste
+que el fondo. Es además la gramática de las miniaturas de referencia.
+
+### Trampas medidas (todas costaron una iteración)
+
+| Síntoma | Causa | Qué hacer |
+|---|---|---|
+| Borde blanco duro alrededor del pelo | un segundo glow casi blanco con blur 1.6 | un solo rim, naranja y con blur ≥ 9 |
+| Franja clara siguiendo el contorno | el matte se lleva 10-15 px de pared | estirar el color del interior con blur normalizado; si no alcanza, **cambiar de frame** |
+| Borde del pelo derretido | erosión del alpha a 7 px | máximo 4 px; erosionar más es peor que el problema |
+| Cara borrosa, escala 1.89× | el encuadre se calculó con el ALTO de la cabeza, que se confunde con el cuello | medir el **ancho** de la cabeza (y en las primeras ~280 px desde la coronilla, no en las primeras 48) |
+| Se ve otra persona en el fondo | blur 9 deja al propio sujeto reconocible | blur ≥ 30 |
+| Borde recto en el brazo | corte del busto | desvanecer el alpha en el último 20 % |
+| Piel plástica, con halos | CLAHE 1.7 + unsharp 118 % + brillo + contraste, acumulados | CLAHE ≤ 1.2 sobre la LUMINANCIA (en RGB vira la piel) y unsharp ≤ 75 % |
+
+**Cambiar de frame sale más barato que pelear con la máscara.** Dos veces se fue por el camino
+de los filtros y las dos veces el resultado fue peor que buscar otro frame.
+
+### Verificación obligatoria
+
+**Se mira a 210 px de ancho**, que es el tamaño real en el feed de YouTube — no a 1280. Ahí se
+cae lo que a tamaño completo parecía aceptable: un halo, una etiqueta chica, un texto de más.
+Tres palabras y nada más.
+
 ## ⚠ Censurar caras — lo que NO se puede prometer
 `blur-faces.mjs` protege identidad de terceros, así que **la seguridad va antes que la prolijidad**:
 mejor difuminar de más que destapar una cara un frame. Reglas de la casa:

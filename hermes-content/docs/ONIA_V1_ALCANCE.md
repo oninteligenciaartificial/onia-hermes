@@ -174,6 +174,29 @@ por cabeza), el chatbot a Bs 390 contra Xmart (Bs 177 QR / Bs 296 Meta API), y l
 contrato pago, que hoy es de CERO días** sobre un rail de cobro que exige una acción manual cada
 mes.
 
+### Las cuatro decisiones de precio — CERRADAS el 2026-09-06 por Sergio Urcullo
+
+| Decisión | Qué se resolvió | Por qué |
+|---|---|---|
+| **Cargo de Bs 70 por usuario** | ❌ **SE SACA.** Los usuarios van incluidos | Es el eje donde nos comportábamos como el software extranjero: ningún competidor local cobra por cabeza (Growing Cloud da ilimitados, Sintic no cobra asientos, Xmart cobra por canal). Y convertía un Bs 320 competitivo en un Bs 390 que se lee como letra chica. El techo del negocio son horas de soporte, no asientos: sacarlo no cambia el margen real |
+| **Chatbot Bs 390** | ✅ **Se mantiene**, y se va a poder **vender suelto** | El problema medido no era el precio del add-on sino que el ticket de ENTRADA es Bs 710 (obliga a contratar un plan antes). Contra Xmart (Bs 177 QR / Bs 296 Meta API) eso es 2,4×-4×. Soltarlo baja la entrada 45 % sin tocar ningún precio. Es trabajo de producto: **post-lanzamiento** |
+| **Gracia del contrato pago** | ✅ **7 días** (hoy son 0) | La política de 0 días está escrita para un cobro automático, donde no pagar = irse. Pero el QR del BCP es de un solo uso: cada mes el cliente tiene que ACTUAR, así que atrasarse unas horas es lo normal. Ninguno de los siete competidores relevados corta en seco |
+| **Recarga de Bs 190** | ⏸️ **En suspenso hasta que exista el 2º escalón del chatbot** | Ver abajo |
+
+**Por qué la recarga quedó en suspenso, y no confirmada.** Medido el 6-sep contra los logs
+reales de LiteLLM: el bot gasta **USD 0,000966 por llamada**, y con ~10,5 mensajes por
+conversación (40 conversaciones, 419 mensajes) el costo marginal por conversación es
+**≈ Bs 0,12**. Contra eso, lo incluido sale Bs 0,78 (margen 6,5×) y la recarga Bs 0,95 (8×).
+**El costo no funda Bs 190** — diría que puede valer una fracción.
+
+Y el argumento que decía fundarla —*«recargar dos veces tiene que costar más que subir de
+nivel»*— apunta a un nivel **que no existe**: el chatbot tiene un solo escalón (Bs 390 por 500).
+Sergio Urcullo eligió construir ese segundo escalón primero y recién ahí fijar la recarga.
+
+⚠️ **Consecuencia asumida:** hasta que ese escalón exista, **Bs 190 sigue publicado sin
+fundamento**. El riesgo es teórico por ahora: en 40 días hubo 40 conversaciones sumando TODAS
+las organizaciones, así que nadie está cerca de las 500.
+
 **La promesa que sostiene vender temprano:** *todo lo que agreguemos a tu plan durante el primer
 año entra sin costo extra.* Cuesta cero hoy, hace que el que compra ahora gane por comprar antes, y
 nos obliga a mejorar. **No se promete una función concreta ni una fecha**: se promete el plan.
@@ -187,18 +210,64 @@ Cerrado y sin desvíos. Cada paso se despliega y se verifica MIRÁNDOLO antes de
 
 1. ~~Configuración: de 7 pestañas a una página con «Configuración avanzada».~~ **Hecho, vivo el 4-sep.**
 2. ~~Que el rubro SERVICIOS entregue lo que promete su alta.~~ **Hecho, vivo el 4-sep.**
-3. ~~Que el rubro COMERCIO entregue lo que promete su alta.~~ **Desplegado el 5-sep; falta el
-   recorrido.** *Listo = el camino se hace solo EN PRODUCCIÓN, mirado con cuenta nueva: registrarse
-   → cargar un producto → cargar un cliente → caja → cobrar → recibo.*
+3. ~~Que el rubro COMERCIO entregue lo que promete su alta.~~ **✅ CAMINADO EN PRODUCCIÓN el
+   6-sep**, con la cuenta real de `ZZ QA Ferretería Tornillo` (plan Profesional), pantalla por
+   pantalla. **El camino se hace solo, de punta a punta:**
+
+   | Paso | Resultado |
+   |---|---|
+   | Cargar un producto | ✅ Catálogo → «Nuevo producto». Placeholders del rubro de verdad («Cemento IP-30 50kg», «CEM-IP30-50», bolsa/kg). Quedó «1 producto(s) en el catálogo» |
+   | Cargar un cliente | ✅ pero **sólo por el fiado** — ver el hueco 1 |
+   | Caja | ✅ busca por nombre o SKU, muestra precio y stock, arma el ticket |
+   | Cobrar | ✅ efectivo y fiado. «Fiado registrado a Marta Quispe: Bs 124,00 (saldo Bs 124,00)» |
+   | Recibo | ✅ `/print/recibo-venta/…` con encabezado del negocio, monto, método, detalle, y el límite dicho de frente: «Comprobante interno de pago. No reemplaza a la factura ni a la nota de venta» |
+   | El cliente aparece | ✅ «1 en total · 1 te debe(n) Bs 124,00 — Marta Quispe · 71234567 · 06/09/2026» |
+
+   ✅ **Hueco 1 — CERRADO el 6-sep** (`31b1586`, desplegado y probado en producción: se dio de
+   alta «Don Ramiro Ferretería» sin fiarle nada, y el duplicado rebota con
+   *«Ya tenés a Marta Quispe con ese teléfono»* — contra una clienta que había creado el
+   FIADO, o sea los dos caminos comparten el criterio). El encabezado ya no se contradice con
+   la tarjeta. Lo que decía antes:
+
+   🟠 ~~**Hueco 1 — no hay alta manual de cliente.**~~ La pantalla de Clientes no tiene ningún
+   «Nuevo cliente»: su única acción es «Ir a la caja». Un cliente existe **solo** si le fiaste
+   algo. Una ferretería que quiere anotar a un cliente habitual sin fiarle, no puede. Y la
+   pantalla **se contradice a sí misma**: el encabezado dice «Todavía no cargaste ninguno»
+   —que implica que los cargás vos— y la tarjeta de al lado dice «Tus clientes aparecen acá
+   solos». Las dos frases están en la misma pantalla.
+
+   ✅ **Hueco 2 — CERRADO el 6-sep** (`fe4026e`, desplegado y mirado en producción: la fila de
+   la venta en efectivo ofrece «Recibo · Anular» y la del fiado solo «Anular»). El dato ya
+   estaba en la consulta —traía el pago de cada orden, pero sólo su `method`— así que sólo
+   faltaba sacar su `id`. **El fiado sin anticipo no ofrece recibo a propósito:** un «recibo de
+   pago» sobre plata que no entró sería mentira; esa fila cobra por `/comercio/fiados`.
+   Lo que decía antes:
+
+   🟠 ~~**Hueco 2 — el recibo no se puede reimprimir.**~~ «Imprimir recibo» aparece sólo en el
+   instante posterior a cobrar; al recargar se pierde. Las filas de «Ventas del día» ofrecen
+   únicamente «Anular». Si el cliente vuelve una hora después, o la cajera cerró la pantalla,
+   el comprobante ya no se puede sacar.
+
+   Ninguno de los dos rompe el recorrido —por eso queda ✅— pero los dos se van a encontrar en
+   el primer negocio real.
 4. ~~Panel de inicio en tres renglones.~~ **CANCELADO.** Sergio Urcullo descartó
    `feat/panel-tres-renglones` **y** el mockup minimal de `claude/onia-minimal-dashboard-369bc4`:
    el panel es el que ya está vivo. Lo que sí se hizo y está en `master` es el rediseño sobre ESE
    panel — saludo por hora de la organización, lienzo, franja de estado con plan y vencimiento, y
    la barra del asistente. Este punto ya no espera ningún OK.
-5. Cobros: cliente, catálogo y total pegado al botón. **El recibo imprimible ya está en `master`**;
-   falta el resto del paso.
-6. Contabilidad: arriba, cuánto pagar y hasta cuándo.
-7. Velocidad: el panel abre en menos de 1,5 s.
+5. ~~Cobros: cliente, catálogo y total pegado al botón.~~ **Hecho y verificado el 6-sep** mirando
+   `/billing/new` en producción: selector de cliente, «Agregar tratamientos» con su vacío honesto
+   («podés cobrar igual con un ítem manual»), y el **Total pegado a «Crear Factura»** en la
+   tarjeta de resumen. El recibo imprimible entró el 5-sep.
+6. ~~Contabilidad: arriba, cuánto pagar y hasta cuándo.~~ **Hecho y desplegado el 6-sep**
+   (`e0de0f2`). Estaba al revés: tres líneas de letra chica —Ley 843, D.S. 25619, «no reemplaza
+   la declaración en el SIAT»— se metían entre el título y los dos números que el dueño viene a
+   buscar. La letra chica pasó al pie, entera y con el mismo texto: cambia dónde se lee, no que
+   se diga.
+7. ~~Velocidad: el panel abre en menos de 1,5 s.~~ **Cumplido, medido el 6-sep** con Navigation
+   Timing sobre producción: TTFB 410 ms, `domInteractive` 562 ms, **carga completa 567 ms**, 28
+   recursos. ⚠️ Es con caché tibia; una visita FRÍA no se pudo medir desde acá y queda sin
+   verificar.
 
 > Se insertó el paso 3 (comercio) el 4-sep, después de cerrar servicios: es el mismo defecto en
 > el otro rubro que vendemos, y una promesa falsa en `/register` cuesta el primer cliente que

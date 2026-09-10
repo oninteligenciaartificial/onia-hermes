@@ -7,7 +7,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { clasificarPedido, shasDelTexto, shasPrometidos } from './pedido_deploy_entregado.mjs';
+import { barrerPedidos, buildQueCorre, clasificarPedido, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
 
 // El caso que me costo la vuelta del 2026-09-06: los 13 shas prometidos por t_0268567b
 // estaban TODOS dentro del build vivo y el pedido seguia blocked pidiendo un ok por
@@ -93,4 +93,208 @@ test('el HEAD de un recuento tampoco es una promesa', () => {
 test('del rango del cuerpo se promete la punta derecha, no el punto de partida', () => {
   // «Son 6 commits en master (545dd28..8b420b6)»: 545dd28 es lo que YA corria.
   assert.deepEqual(shasPrometidos('Son 6 commits en master (545dd28..8b420b6), gates verdes.'), ['8b420b6']);
+});
+
+// ─────────────────────────────────────────────────────────────────────────────────────
+// EL BARRIDO. Distinto del sujeto: aca los shas y el patron estan bien, y lo que puede
+// fallar es que la lista de pedidos salga INCOMPLETA y se lea como completa.
+
+const LISTA = [
+  'Board: onia',
+  '⊘ t_340bd6e2  blocked   (unassigned)          Desplegar el bot',
+  '▶ t_8baa5891  ready     (unassigned)          Probar si el tablero sostiene un carril',
+  '⊘ t_deddf471  blocked   (unassigned)          Publicar app.onia.com.bo',
+  '✓ t_558eaec1  done      default               Ya cerrada',
+].join('\n');
+
+test('el barrido encuentra un pedido por cada tarea abierta que declara DESPLEGAR', () => {
+  const cuerpos = {
+    t_340bd6e2: 'DESPLEGAR: bot\nle dice en construccion a 2 rubros',
+    t_8baa5891: 'nada que ver con deploys',
+    t_deddf471: 'DESPLEGAR: plataforma\nDEPLOY PEDIDO 77d0867',
+  };
+  const { pedidos, ilegibles } = barrerPedidos({ lista: LISTA, leerCuerpo: (id) => cuerpos[id] });
+  assert.deepEqual(pedidos.map((p) => p.destino), ['bot', 'plataforma']);
+  assert.deepEqual(ilegibles, []);
+});
+
+// EL AGUJERO QUE ME COSTO ESTA VUELTA, en su forma de codigo. `pedidosVivos` hacia
+// `if (!cuerpo) continue`: un `show` que NO contesta se descartaba igual que una tarea sin
+// linea DESPLEGAR. Desde que el integrador corre en el nodo de casa cada `show` es una
+// llamada SSH — 88 en un barrido —, asi que un timeout suelto borra un pedido entero y el
+// gate sigue hablando como si hubiera mirado todo. Es la misma firma que me engano a mano:
+// una foto parcial no se distingue de un resultado completo.
+test('un cuerpo que NO se pudo leer no se descarta en silencio: queda como ilegible', () => {
+  const cuerpos = {
+    t_340bd6e2: 'DESPLEGAR: bot',
+    t_8baa5891: 'sin deploy',
+    t_deddf471: null, // el `show` no contesto
+  };
+  const { pedidos, ilegibles } = barrerPedidos({ lista: LISTA, leerCuerpo: (id) => cuerpos[id] });
+  assert.deepEqual(pedidos.map((p) => p.id), ['t_340bd6e2']);
+  assert.deepEqual(ilegibles, ['t_deddf471'], 'el pedido ilegible tiene que quedar NOMBRADO');
+});
+
+// La direccion cara: con TODOS los cuerpos ilegibles el barrido sale vacio, que es
+// exactamente lo que dice un tablero sin pedidos. Uno es «no hay nada que desplegar» y el
+// otro es «no vi nada». Sin esta distincion el gate firma verde sobre un tablero que no leyo.
+test('un barrido que no pudo leer NADA no se confunde con un tablero sin pedidos', () => {
+  const { pedidos, ilegibles } = barrerPedidos({ lista: LISTA, leerCuerpo: () => null });
+  assert.deepEqual(pedidos, []);
+  assert.equal(ilegibles.length, 3, 'las 3 tareas abiertas quedan nombradas como ilegibles');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────────────
+// EL BUILD VIVO. El sha que corre produccion se CASA contra el artefacto; no se adivina.
+
+test('el build que corre es el que casa su BUILD_ID, no el primero de la lista', () => {
+  const candidatos = [
+    { sha: 'aaaaaaa', buildId: 'viejo1' },
+    { sha: 'fe4026e', buildId: 'r3bGWN_19MBDFZ24EKDZi' },
+    { sha: 'bbbbbbb', buildId: 'viejo2' },
+  ];
+  assert.equal(buildQueCorre({ buildIdVivo: 'r3bGWN_19MBDFZ24EKDZi', candidatos }), 'fe4026e');
+});
+
+// Sin BUILD_ID vivo no hay con que casar. Devolver un sha igual —el mas nuevo, el primero—
+// haria que el gate declarara ENTREGADO contra un build inventado, que es cerrarle a Sergio
+// Urcullo un pedido real por un arreglo que el cliente nunca recibio.
+test('sin BUILD_ID vivo no se elige ningun build', () => {
+  assert.equal(buildQueCorre({ buildIdVivo: null, candidatos: [{ sha: 'fe4026e', buildId: 'x' }] }), null);
+});
+
+test('si ningun candidato casa, no se elige ninguno', () => {
+  const candidatos = [{ sha: 'aaaaaaa', buildId: 'viejo1' }];
+  assert.equal(buildQueCorre({ buildIdVivo: 'otro', candidatos }), null);
+});
+
+// ── landing: de que se compone «lo que el ok publicaria» ───────────────────────────────
+//
+// POR QUE ESTAN ACA Y NO SOLO EN EL --self-check: esta cadena es la que corre el integrador
+// antes de tocar `main`. Un caso que vive unicamente en el self-check no lo corre nadie salvo
+// el dueno del carril, y el objetivo del gate —que ningun pedido publique algo que Sergio
+// Urcullo no leyo— no puede depender de que alguien se acuerde de invocarlo.
+//
+// La zona de landing (`web-factory/apps/onia-platform`) mezcla el sitio con sus PROPIAS
+// herramientas. Sin este filtro, el pedido tendria que nombrar cada gate y cada script, y un
+// pedido ilegible es un pedido que no se lee.
+test('landing: un commit que solo toca un gate no entra en lo que el ok publica', () => {
+  const viajan = soloLosQueViajan([
+    { sha: '1111111', titulo: 'copy', archivos: ['web-factory/apps/onia-platform/src/app/page.tsx'] },
+    { sha: '9999999', titulo: 'gate', archivos: ['web-factory/apps/onia-platform/src/app/x.test.ts'] },
+  ]);
+  assert.deepEqual(viajan.map((c) => c.sha), ['1111111']);
+});
+
+// El caso que YA cumple. Sin el, un filtro que devuelva SIEMPRE vacio pasa el de arriba por el
+// motivo equivocado: todo pedido saldria COMPLETA para siempre y el gate quedaria mudo.
+test('landing: el caso que YA cumple: un arreglo de copy si entra', () => {
+  const viajan = soloLosQueViajan([
+    { sha: '1111111', titulo: 'copy', archivos: ['web-factory/apps/onia-platform/src/lib/pricing.ts'] },
+  ]);
+  assert.equal(viajan.length, 1);
+});
+
+// Ausencia de dato NO es «no viaja»: `git log --name-only` pudo no contestar, y un merge NUNCA
+// lista archivos. Ante la duda el commit viaja, asi el error posible es pedir que se nombre uno
+// de mas —barato— y nunca callar un arreglo real.
+test('landing: un commit sin lista de archivos se cuenta como que viaja', () => {
+  assert.equal(soloLosQueViajan([{ sha: '1111111', titulo: 'sin datos' }]).length, 1);
+});
+
+// `null` entra y `null` sale: `promesaCompleta` lo traduce a NO_MEDIDO. Devolver `[]` diria
+// «el ok no publica nada» y cerraria la pregunta sin haberla podido hacer.
+test('landing: sin commits medidos no se inventa un universo vacio', () => {
+  assert.equal(soloLosQueViajan(null), null);
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CUERPO VENCIDO — la tercera pregunta, la que el 2026-09-10 no tenia dueno.
+//
+// `clasificarPedido` pregunta «¿lo prometido ya se publico?» y `promesaCompleta`
+// «¿el ok publica algo que el pedido no nombra?». Las dos leen cuerpo Y comentarios
+// como UN SOLO texto, y por eso los comentarios TAPAN al cuerpo: alcanza que el
+// comentario mas nuevo nombre un sha sin publicar para que el pedido salga VIGENTE
+// mientras su CUERPO —y su TITULO, que es lo unico que se ve en la lista— describen
+// trabajo que ya esta en produccion.
+//
+// El caso real: t_e51796c8 prometia f8d0fc2, e911638 y 7756295 en el cuerpo; los TRES
+// eran ancestros del build vivo (build-335389f). Lo unico que su ok publicaba de verdad
+// era afa9da6, nombrado en un comentario de ese dia. `npm run pedido:entregado` dijo
+// «sigue VIGENTE — 1 sin publicar» y tenia razon para SU pregunta: nadie hacia esta.
+import { partirPedido, cuerpoVencido } from './pedido_deploy_entregado.mjs';
+
+const SHOW = [
+  'Task t_e51796c8: Publicar el sistema: la pantalla de pago le cobraba a 3 rubros',
+  '  status:    blocked',
+  '',
+  'Body:',
+  'DESPLEGAR: plataforma',
+  'DEPLOY PEDIDO f8d0fc2 — la pantalla de pago prometia dos pantallas que el rubro no abre',
+  'DEPLOY PEDIDO e911638 — la agenda publica rechazaba al desconocido al llegar al tope',
+  '',
+  'Comments (2):',
+  '  [2026-09-08 23:53] x: DEPLOY PEDIDO 7756295 — el cupo de WhatsApp cortaba MUDO',
+  '  [2026-09-10 12:32] x: DEPLOY PEDIDO afa9da6 — el boton Agendar lleva a un callejon',
+].join('\n');
+
+test('partirPedido separa el cuerpo de los comentarios', () => {
+  const { cuerpo, comentarios } = partirPedido(SHOW);
+  assert.ok(cuerpo.includes('f8d0fc2'), 'el cuerpo tiene lo suyo');
+  assert.ok(!cuerpo.includes('afa9da6'), 'el cuerpo NO se lleva los comentarios');
+  assert.ok(comentarios.includes('afa9da6'), 'los comentarios tienen lo suyo');
+  assert.ok(!comentarios.includes('f8d0fc2'), 'los comentarios NO se llevan el cuerpo');
+});
+
+test('el defecto del 2026-09-10: todo el CUERPO publicado y un comentario sin publicar -> VENCIDO', () => {
+  const publicados = new Set(['f8d0fc2', 'e911638', '7756295']);
+  const r = cuerpoVencido({ texto: SHOW, publicado: (s) => publicados.has(s) });
+  assert.equal(r.estado, 'VENCIDO');
+  assert.deepEqual(r.mudos, ['afa9da6'], 'nombra lo que el ok publica y el cuerpo no dice');
+});
+
+// EL CASO DE ANCLAJE, sin el cual el guardia daria rojo sobre todo pedido sano y lo apagarian.
+test('el caso que YA cumple: si el cuerpo todavia promete algo sin publicar -> VIGENTE', () => {
+  const r = cuerpoVencido({ texto: SHOW, publicado: (s) => s !== 'e911638' });
+  assert.equal(r.estado, 'VIGENTE');
+});
+
+test('un cuerpo sin shas no se puede juzgar: NO_MEDIDO, nunca VENCIDO', () => {
+  const sinShas = 'Body:\nDESPLEGAR: landing\nse publica lo de la tabla de precios\n\nComments (1):\n  [x] y: DEPLOY PEDIDO afa9da6 — algo';
+  assert.equal(cuerpoVencido({ texto: sinShas, publicado: () => false }).estado, 'NO_MEDIDO');
+});
+
+// Sin esto, un `publicado` que devuelve null (no se pudo resolver) se leeria como
+// «no publicado» y absolveria al cuerpo vencido, o al reves. La direccion barata es
+// callarse: NO_MEDIDO nunca hace rehacer una tarea sana.
+test('un sha irresoluble del cuerpo deja NO_MEDIDO, no VENCIDO', () => {
+  const r = cuerpoVencido({ texto: SHOW, publicado: (s) => (s === 'e911638' ? null : true) });
+  assert.equal(r.estado, 'NO_MEDIDO');
+});
+
+test('cuerpo entero publicado y NADA sin publicar en comentarios -> ENTREGADO, lo mide clasificarPedido', () => {
+  const r = cuerpoVencido({ texto: SHOW, publicado: () => true });
+  assert.equal(r.estado, 'ENTREGADO');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Que la funcion EXISTA y pase sus casos no la pone a medir: el `main` puede no
+// invocarla nunca. Es la trampa de «declarado pero no invocado», y en esta familia
+// no la caza nadie —`guards-cableados` ata los `test:*` de package.json, no los
+// clasificadores de adentro de un gate—. Probado el 2026-09-10: quitando el
+// `vencidos.push` del main, `--self-check` seguia saliendo con exit 0.
+//
+// Se mide sobre la VECINDAD del bloque de plataforma, no sobre el archivo entero:
+// preguntar «¿el fuente nombra cuerpoVencido?» se cumple con su propia definicion y
+// con el import del test. Y se le sacan los comentarios antes, o la bitacora que
+// explica por que existe el guardia lo absuelve sola.
+test('el main INVOCA cuerpoVencido en el bloque de plataforma, no solo lo declara', async () => {
+  const { readFileSync } = await import('node:fs');
+  const src = readFileSync(new URL('./pedido_deploy_entregado.mjs', import.meta.url), 'utf8')
+    .split('\n').filter((l) => !/^\s*(\/\/|\*|\/\*)/.test(l)).join('\n');
+  const desde = src.indexOf('clasificarPedido({ id: p.id');
+  assert.ok(desde > 0, 'no encontre el bloque de plataforma del main');
+  const vecindad = src.slice(desde, desde + 1400);
+  assert.match(vecindad, /cuerpoVencido\(\{/, 'el main tiene que llamar a cuerpoVencido');
+  assert.match(vecindad, /vencidos\.push\(/, 'y empujar el resultado, o el veredicto se tira');
 });

@@ -2695,3 +2695,95 @@ mismo, que es la causa por la que cada sesión nueva venía eligiendo mal.
 
 ⚠️ **Nada de esto lo ejecuta el loop de calidad**: `ORDEN-DE-DISPARO` y `ONIA_MODELOS_RAIZ.md`
 están fuera de su zona, y los 2 cr de la confirmación son permiso de gasto de Sergio.
+
+---
+
+## 43. Una rama tuya con un video terminado lleva horas sin llegar a `main` (2026-09-08) — decisión de Sergio Urcullo
+
+**Qué es.** `claude/video-editing-silence-removal-073acb` — **4 commits**, **34 archivos,
++12.315 líneas, cero borrados**: el plan de cortes, la intro animada, las fuentes, el end-card,
+los SFX, la miniatura y los scripts de transcripción y render bajo `videos/claude-vs-claudecode/`.
+
+> **Recontado el 2026-09-08 11:47 La Paz.** Cuando se escribió este ítem la rama tenía **1 commit,
+> 20 archivos, +11.932**; siguió creciendo tres commits más (`4cd8282e` título centrado,
+> `2727c454` retakes fuera + CTA + SFX + miniatura, `18f541d7` miniatura rehecha). **La decisión
+> no cambia** —sigue siendo A o B— pero el número sí, y un ítem que te pide decidir con datos
+> muertos es exactamente lo que esta carpeta existe para evitar. Se ve con:
+> `git diff --shortstat origin/main...origin/claude/video-editing-silence-removal-073acb`
+
+**Por qué no la mergeé yo.** No es un carril de loop: no tiene `case` en el corredor, no tiene
+línea en `crontab -l` ni fila en `loops.md`. Es trabajo de una sesión interactiva tuya, igual
+que el carril de contenido — y el carril de contenido lo cerrás vos, por regla escrita.
+La guarda dura la pasa sin problema (cero archivos borrados), así que **no hay riesgo técnico
+en mergearla**: lo que falta es que vos digas que ese video ya está como querés.
+
+**Lo que cambia según qué elijas:**
+
+| | Qué se hace | Qué pasa después |
+|---|---|---|
+| **A** | La mergeo a `main` en la próxima vuelta | El video y sus scripts quedan respaldados en `main` y cualquier sesión los ve. Ojo: son ~12 mil líneas y assets, y `main` ya carga 761,7 MB de Lucía (ítem 38) |
+| **B** | La dejo donde está | Sigue viva y respaldada en GitHub (`origin/claude/video-editing-silence-removal-073acb`), pero fuera de `main`: ninguna otra sesión la encuentra sola |
+
+**No hay urgencia ni nada roto**: la rama está pusheada, así que no se pierde si muere una
+sesión. Se anota para que no quede invisible, que es como se varan las ramas.
+
+---
+
+## 44. 23 ramas viejas con 131 commits que nunca llegaron a `main` — y mi propio objetivo las contaba como CERO (2026-09-10) — decisión de Sergio Urcullo
+
+**Lo primero es un error mío, no tuyo.** Mis tres vueltas anteriores cerraron con la línea
+`OBJETIVO: ramas varadas 0`, y una de ellas escribió textualmente **"(las dos repos vacías)"**.
+Eso era falso. El comando que este carril tiene mandado correr —el `--no-merged` de los dos
+repos— devuelve **23 ramas** en `onia-hermes`, y las devolvía también entonces: no apareció
+nada nuevo. Lo que hice fue leer esa salida, descartar a mano todo lo que no reconocía como
+carril activo, y reportar el resto como si fuera el total. **El instrumento estaba bien; el
+que falló fue el reporte** — y el falso verde tapaba justo a los sujetos que nadie mira.
+
+**Se descartó que fuera un clon ciego.** Los dos clones (casa y VPS) tienen el refspec completo
+`+refs/heads/*:refs/remotes/origin/*` y exactamente los mismos refs (94 en `onia-hermes`, 53 en
+`onia-platform`), así que ninguna de las dos máquinas ve de menos.
+
+**Y se descartó que fuera trabajo ya integrado por otra vía.** No se contó el vehículo (commits),
+se midió el efecto: `git cherry origin/main <rama>` marca **129 de los 131** como pendientes por
+patch-id, y en las tres ramas más grandes los archivos que tocan **no existen en `main`**
+(`git cat-file -e origin/main:<ruta>` falla). Ejemplos: `web-factory/WEB_FACTORY_DASHBOARD_SYSTEM.md`,
+`web-factory/WEB_FACTORY_HERO_VARIANTS.md`, `.../onia-center/components/views/hoy/TodayScheduleCard.tsx`,
+`.claude/skills/editor-videos/assets/html/captura-apoyo.html`. Es trabajo real que nunca llegó.
+
+**Por qué no las mergeo yo, y esta vez no es una traba inventada:** las 23 divergen entre
+**2.531 y 3.390 commits** de `main` —de 4 a 10 semanas—, así que no es un merge, es una
+reconstrucción archivo por archivo. Y son todas de tu cuenta: es trabajo de sesiones
+interactivas tuyas, igual que el carril de contenido.
+
+De los 131 commits, **32 son `chore: auto-sync`** (el hook commiteando lo que encontró en el
+árbol) y **99 tienen mensaje propio**. Cinco ramas son 100 % auto-sync y ninguna tiene un solo
+commit con mensaje real: `cool-lovelace-ad8d0e`, `clever-turing-39406c`,
+`blissful-sutherland-af44a7`, `lucid-kilby-35336b`, `chatbot-requirements-progress-73545f`.
+
+Las cuatro que concentran el trabajo:
+
+| Rama | Commits reales | Tamaño | Qué es |
+|---|---|---|---|
+| `sad-nash-373003` | 47 | 80 arch., +9.710 | Web Factory: sistema de diseño, variantes de hero, receta Apple |
+| `vibrant-ritchie-9304f8` | 23 | 51 arch., +6.261 | `onia-center`: shell y vistas del panel |
+| `cool-blackwell-7e66b2` | 4 | — | Handoff consolidado de pendientes |
+| `lucid-greider-6683fd` | 4 | — | Meta Ads: plan post-SEPREC |
+
+**Lo que cambia según qué elijas:**
+
+| | Qué se hace | Qué cuesta | Qué pasa después |
+|---|---|---|---|
+| **A** | Nada: se marcan como legado y salen del conteo del integrador con su motivo escrito | 0 | El objetivo de este carril vuelve a poder dar cero **de verdad**. Las ramas siguen respaldadas en GitHub; no se pierde nada. Ese trabajo no vuelve a `main` |
+| **B** | Rescato sólo `sad-nash` y `vibrant-ritchie` portando sus archivos a mano sobre `main` | 2-3 vueltas mías, sin gasto | Vuelve el sistema de diseño de Web Factory y el shell de `onia-center`. Ojo: son de julio y hay 3.200 commits encima — puede estar vencido contra el código de hoy |
+| **C** | Se borran las 23 del remoto | 0 | Irreversible. **No lo recomiendo**: no destraba nada que A no destrabe |
+
+**Recomiendo A**, y por un motivo concreto: el costo de tenerlas ahí no es el disco, es que
+**vuelven ciego al único instrumento que caza un carril varado de verdad**. Este archivo ya
+registra seis veces que un carril vivo se varó porque la lista escrita a mano no lo nombraba
+(ítems 23, 40 y los seis casos del prompt del integrador). Con 23 ramas de ruido permanente en
+esa salida, la 24ª —que sí puede ser un carril vivo— se pierde entre ellas, que es exactamente
+como se varó Web Factory doce commits.
+
+**Nada está roto y nada corre riesgo**: las 23 están pusheadas en GitHub, así que sobreviven
+aunque muera el disco. Se ve con:
+`git -C /root/loops/onia-hermes branch -r --list 'origin/claude/*' --no-merged origin/main`

@@ -12,6 +12,293 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-10 18:09-18:16 La Paz — dental y Servicios profesionales, dos corridas seguidas: 9/9 los dos, sin hallazgos
+
+Dental (`zz-qa-2026-09-10-1809`) tercera corrida seguida en 9/9: nada nuevo, confirma que el
+falso rojo intermitente de las 13:09 no reprodujo otra vez. Servicios profesionales
+(`zz-qa-2026-09-10-1814`) — **primera vez que este rubro pasa por el instrumento de 9 pasos**
+(antes sólo tenía cobertura del script viejo de 8 pasos). 9/9 completo: paciente cargado como
+"Clientes", cita agendada y vista en `/appointments`, y el paso 8 (cobro) frenó en
+`/comercio/caja` con lenguaje correcto — "Registrá ventas", "Todavía no hay servicios vendibles.
+Cargá el primero en Servicios" — sin rastro del defecto de idioma ("productos con stock") que
+`chatbot-cola` había cerrado el 06 y el 08-sep en esa misma pantalla. Cero filas `zz-qa-`
+propias al cerrar las dos veces; 4 filas ajenas sin tocar.
+
+## 2026-09-10 13:09-13:24 La Paz — dental, dos corridas seguidas: falso rojo intermitente en paso 6 (mi instrumento, no el producto)
+
+Primera corrida: `zz-qa-2026-09-10-1710`, llegó hasta el paso 5 (9/9). **Paso 6 "roto"**: el
+script reportó "el formulario de alta de Pacientes no tiene ni un campo de texto" en
+`/patients/new`. Antes de escalarlo (Gate 1) miré la captura `paso-06b-alta-dato.png` de esa
+corrida: el formulario SÍ tenía "Nombre completo" con placeholder visible. Agregué debug
+temporal (`DEBUG_FORM=1`) a `acotarFormulario`/`llenarFormulario` y corrí de nuevo:
+`zz-qa-2026-09-10-1718`, **9/9 completo** — el mismo formulario, el mismo código, `nombreCargado:
+true` con los 9 campos detectados bien. No reproduce: fue un fallo intermitente del instrumento
+(timing al hacer clic en "Nuevo Paciente" y acotar el formulario antes de que termine de
+renderizar), no un defecto del producto. Debug quitado del script tras confirmar. Cero filas
+`zz-qa-` propias al cerrar (0 organizaciones, 0 citas mías; 4 filas ajenas sin tocar).
+
+## 2026-09-10 16:09-16:17 La Paz — dental y Estética, dos corridas seguidas: 9/9 los dos, sin hallazgos
+
+Reintento pedido por la vuelta anterior. Dental (`zz-qa-2026-09-10-1609`) 9/9 completo, cita
+201 vista en `/appointments`, factura vista y frenada. Estética (`zz-qa-2026-09-10-1613`) 9/9
+completo — **el paso 7 (agendar cita) que se había roto a las 15:13 hoy mismo esta vez agendó
+bien** (cita `2026-09-11 12:30`, id `cmtvqcb69001901rwsn70fjtb`, vista en la agenda). El hallazgo
+de las 15:13 (`t_645d123a`) ya está `done`: arreglado en `a6dee65` sobre
+`claude/chatbots-platform-review-0d1d09` — confirma que era el bug de timing que ese commit
+corrige (el reset de `timeSlot` pisando la selección del usuario), no un defecto exclusivo del
+rubro. Esa rama todavía no está en `master`; si el fix ya llegó a producción lo dice esta misma
+corrida en verde. Cero filas `zz-qa-` propias al cerrar; 4 filas ajenas sin tocar.
+
+## 2026-09-10 15:10-15:13 La Paz — Estética y spa escritorio: ROTO en paso 7 (agendar cita)
+
+Cambié de rubro tras tres vueltas seguidas en dental sin novedad. Cuenta
+`zz-qa-2026-09-10-1510@onia.com.bo`, onboarding en 6 pantallas (saltando "servicios", no es la
+causa), clienta `zz-qa-2026-09-10-1510-paciente` cargada y encontrada, factura vista en
+`/billing/cmtvo3wd1002601rwewfrht18`. **Se rompe en el paso 7**: con clienta, profesional, fecha
+y hora elegidos, el botón "Agendar Cita" sigue deshabilitado — nunca sale el POST a
+`/api/appointments`. Causa probable: un `useEffect` en `appointments/page.tsx:204-224` resetea
+`timeSlot` a `''` cada vez que resuelve el fetch de disponibilidad, sin condicionar por si es la
+respuesta más reciente — si se dispara dos veces (doctorId vacío → real al abrir el modal) el
+fetch lento puede pisar la selección del usuario después del click. Reportado en el tablero
+(`t_645d123a`, prioridad 1) y en `hermes-content/docs/cola/plataforma-v1.md`. Capturas
+`paso-07-cita.png` y `paso-07b-cita-formulario.png`. Cero filas `zz-qa-` propias al cerrar (4
+ajenas, sin tocar). **No reproducido hoy en dental ni antes en comercio** — puede ser
+intermitente por timing, no exclusivo del rubro; próxima vuelta debería reintentar Estética (o
+los otros rubros) para ver si se repite.
+
+## 2026-09-10 14:09-14:17 La Paz — dental escritorio: 9/9, sin hallazgos
+
+Reverificado de nuevo (varias vueltas seguidas dental sin novedad). Cuenta
+`zz-qa-2026-09-10-1409@onia.com.bo`, onboarding en 6 pantallas, paciente
+`zz-qa-2026-09-10-1409-paciente` cargado y encontrado en `/patients`, cita `2026-09-11 09:00`
+agendada (201) y vista en `/appointments`, factura creada con el ítem visible en
+`/billing/<id>` y frenada sin cobrar. Panel del paso 9 no lista pacientes — es lo esperado, no
+un agujero. Cero filas `zz-qa-` propias al cerrar; 4 filas ajenas (de otras vueltas/carriles)
+detectadas y NO tocadas.
+
+## 2026-09-09 00:32 La Paz — comercio escritorio (`RECORRIDO_RUBRO`): 8/8 que le corresponden, sin hallazgos
+
+Tras dos vueltas seguidas en dental con el mismo resultado, cambio de rubro: `RECORRIDO_RUBRO="Comercio / tienda"`.
+Cuenta `zz-qa-2026-09-09-0014@onia.com.bo`, onboarding en 6 pantallas, dato
+`zz-qa-2026-09-09-0014-paciente` cargado en `/comercio` (Catálogo) y encontrado, visible en el
+panel del paso 9. Paso 7 (cita) sale NO-APLICA correctamente: el pack de Comercio no vende
+agenda (coherente con su menú, sin ítem de citas) — no es un agujero. Cobro visto en
+`/comercio/caja`, frenado sin pagar. Cero filas `zz-qa-` propias al cerrar. Nada roto.
+
+## 2026-09-09 00:09 La Paz — dental escritorio: 9/9, sin hallazgos, base limpia al arrancar
+
+Repetición del recorrido completo (dental, escritorio 1440x900), sin huérfanos previos esta vez
+(`count(*) LIKE 'zz-qa-%'` en `organizations` = 0 al arrancar). Cuenta `zz-qa-2026-09-09-0009@onia.com.bo`,
+onboarding en 6 pantallas, paciente `zz-qa-2026-09-09-0009-paciente` cargado y encontrado, cita
+`2026-09-09 09:00` agendada y vista en `/appointments` (`cmttcgv83000m01rwuq21nkw2`), factura
+`/billing/cmttch6mx000o01rwr2xerkk2` con ítem visible, frenada sin pagar. Cero filas `zz-qa-`
+propias al cerrar (4 ajenas de otros carriles, sin tocar). Nada roto en el producto — segunda
+vuelta seguida con el mismo resultado.
+
+## 2026-09-08 23:10-23:15 La Paz — dental escritorio: 9/9, y un huérfano de la vuelta ANTERIOR encontrado y limpiado
+
+Al arrancar había **1 organización `zz-qa-2026-09-08-2209-negocio` viva en producción**, con su
+perfil ADMIN y un profesional DOCTOR sin dato — la vuelta previa (commit `a6dd4646`, 22:11 UTC)
+llegó hasta el paso 05 (`elegir-rubro`, las capturas lo confirman) y **soltó el turno antes de
+`limpiarProduccion()`**: exactamente el escenario que `--solo-limpiar` existe para barrer (ver el
+comentario junto al guard de `main()`), pero esa vuelta no lo dejó corriendo y nadie lo invocó al
+empezar ésta. Se imprimió la fila, se confirmó que era mía por el patrón `zz-qa-<fecha>-<hora>-negocio`
+del propio script, y se borró por id exacto (perfiles → organización → `auth.users`) antes de
+correr nada nuevo. Verificado después: `count(*) LIKE 'zz-qa-%'` en `organizations` = 0.
+
+Con la base limpia, recorrido nuevo (dental, escritorio 1440x900): **9/9, sin hallazgos**. Cuenta
+`zz-qa-2026-09-08-2310@onia.com.bo`, correo confirmado con el enlace real, onboarding en 6
+pantallas, paciente cargado y encontrado, cita `2026-09-09 09:00` agendada y vista en
+`/appointments` (`cmttacrxm005w01rw7kzll8pe`), factura `/billing/cmttad3ik005y01rw4b9rh99c` con
+ítem visible, frenada sin pagar. Cero filas `zz-qa-` propias al cerrar (4 ajenas de otros
+carriles, sin tocar). Nada roto en el producto.
+
+**Lo que queda anotado para la próxima vuelta de este carril:** al arrancar, antes del recorrido
+completo, correr primero `node scripts/recorrido_cliente.mjs --solo-limpiar` — barre cualquier
+huérfano `zz-qa-AAAA-MM-DD-HHMM` que una vuelta anterior haya dejado por soltar el turno a mitad
+de camino, sin depender de que el recorrido entero termine para poder limpiarse solo.
+
+## 2026-09-08 21:06-21:26 La Paz — móvil (390x844) en LOS 5 RUBROS: cierre completo, sin hallazgos
+
+Dental (escritorio, reverificación) + `RECORRIDO_MOVIL=1` en Comercio, Estética, Importadora y
+Servicios profesionales — los 5 rubros de `RUBROS_ACTIVOS` quedan cubiertos en móvil, no sólo
+dental. Los 4 nuevos: cuenta creada, correo confirmado, onboarding en 6 pantallas, dato de rubro
+cargado y encontrado, cobro visto y frenado sin pagar. Comercio e Importadora: paso 7 (cita)
+NO-APLICA porque esos rubros no venden agenda (coherente con su pack, sin agenda en el menú) —no
+es un agujero. Estética y Servicios profesionales: 9/9 completo, cita agendada y vista. Cero filas
+`zz-qa-` propias al cerrar cada corrida (4 ajenas de otros carriles, sin tocar, ninguna). Nada
+roto en ningún rubro. Con esto se cierra el ítem "falta correr RECORRIDO_MOVIL en 4 rubros" de la
+cola.
+
+## 2026-09-08 18:09-18:16 La Paz — móvil (390x844) en Importadora: 9/9, sin hallazgos
+
+`RECORRIDO_RUBRO=Importadora RECORRIDO_MOVIL=1`: recorrido completo salvo el paso 7 (cita), que
+este rubro no vende — no tiene agenda en su pack, así que no aplica y no cuenta como agujero.
+Cuenta `zz-qa-2026-09-08-1813@onia.com.bo` creada, correo confirmado, onboarding completo,
+producto/cliente `zz-qa-2026-09-08-1813-paciente` cargado, factura vista, frenada sin pagar.
+Cero filas `zz-qa-` propias al cerrar (4 ajenas de otros carriles, sin tocar). Nada roto. Queda
+pendiente `RECORRIDO_MOVIL=1` en servicios profesionales y comercio.
+
+## 2026-09-08 13:09-13:26 La Paz — reverificado dental escritorio: 9/9, sin hallazgos
+
+`node scripts/recorrido_cliente.mjs --escribir` (dental, 1440x900): recorrido completo, 9/9.
+Cuenta `zz-qa-2026-09-08-1709@onia.com.bo` creada, correo confirmado, onboarding en 6 pantallas,
+paciente `zz-qa-2026-09-08-1709-paciente` cargado en Pacientes, cita 2026-09-09 09:00 agendada y
+vista en `/appointments` (id `cmtsxgsgs00fk01rw8slv6az7`), factura `/billing/cmtsxh4gc00fm01rw7lyvyrwi`
+con ítem visible, frenada sin pagar. El panel `/dashboard` no lista Pacientes — confirmado que no
+es un fallo (esa pantalla no muestra esa sección). Cero filas `zz-qa-` propias al cerrar (4 ajenas
+de otros carriles, sin tocar). Nada roto.
+
+## 2026-09-08 12:09-12:19 La Paz — móvil (390x844) también en Estética: 9/9, sin hallazgos
+
+`RECORRIDO_RUBRO=Estética RECORRIDO_MOVIL=1`: recorrido completo, 9/9. Cuenta creada, correo
+confirmado, onboarding en 6 pantallas, paciente `zz-qa-...-paciente` cargado en Clientas, cita
+2026-09-09 09:00 agendada y vista en `/appointments` (id `cmtsmr3xp00c001rwrt8glw26`), factura
+`/billing/cmtsmrggu00c201rweq5auxyv` con ítem visible, frenada sin pagar. El panel `/dashboard`
+no lista la ficha del paciente — confirmado que no es un fallo (esa pantalla no muestra Clientas,
+igual que en dental). Cero filas `zz-qa-` propias al cerrar (4 ajenas de otros carriles, sin
+tocar). Nada roto. Queda pendiente `RECORRIDO_MOVIL=1` en importadora, servicios profesionales y
+comercio.
+
+## 2026-09-08 11:09-11:16 La Paz — reverificado dental: escritorio (1440x900) y móvil (390x844), 9/9 los dos
+
+Dos corridas `--escribir` seguidas, dental: **escritorio 9/9** (cita `cmtsklcpw00ai01rwwkhv0298`
+agendada y vista en `/appointments`, factura `/billing/cmtsklniz00ak01rwn7ek0bpm` con ítem
+visible, frenada sin pagar) y **`RECORRIDO_MOVIL=1` 9/9** (cita `cmtskqqri00b901rw2a444iqn`
+agendada y vista, factura `/billing/cmtskr2wk00bb01rwbi93fv62`). El arreglo del selector de
+agenda móvil de la vuelta anterior se sostiene. Cero filas `zz-qa-` propias al cerrar las dos
+veces (4 ajenas de otros carriles, sin tocar). Nada roto. Queda pendiente `RECORRIDO_MOVIL=1`
+en estética, importadora, servicios profesionales y comercio — hoy sólo se corrió en dental.
+
+## 2026-09-08 10:09-10:27 La Paz — primer recorrido en MÓVIL (390x844): falso rojo del propio instrumento, arreglado
+
+`RECORRIDO_MOVIL=1` (agregado en la vuelta anterior, nunca corrido en vivo hasta ahora) repite el
+camino completo en viewport de teléfono (390x844), porque una pantalla mirada en 1440x900 queda
+mirada para ESE viewport y nada más.
+
+Primera corrida (dental, escritorio de referencia ya sano dos veces esta hora): **9/9 salvo el
+paso 7**, que dio ROJO — "la cita se creó (201) y NO aparece en la agenda: el producto la guardó
+y no la muestra (tocar el día tampoco sirvió: no encontré una celda con el número de día en la
+grilla)". La captura (`paso-07d-cita-en-agenda.png`) mostraba, sin embargo, un **punto naranja
+sobre el día 9** — el calendario en móvil SÍ marca la cita, sólo que con un punto de color en vez
+de texto (el nombre vive en el panel de detalle, que sólo se pinta con el día seleccionado —
+`app/(dashboard)/appointments/page.tsx:527`). El selector que debía tocar el día
+(`div.grid > div` filtrado por texto exacto) daba **0 coincidencias** contra una celda que se ve
+perfecta en la foto: instrumento roto, no producto.
+
+Se cambió el selector a `page.getByText(/^9$/, {exact:true})` (lo que un dedo real toca) en
+`facturarZzQa()`/el bloque de verificación de agenda de `scripts/recorrido_cliente.mjs`. Segunda
+corrida, dental en móvil: **9/9 completo**, con el click al día 9 revelando el panel "9 de
+septiembre · 1 cita(s) · 09:00 · 30 min" y el nombre del paciente — visto en
+`paso-07d-cita-en-agenda.png`. Cero filas `zz-qa-` propias al cerrar las dos corridas (4 ajenas
+sin tocar).
+
+**Nada roto en producto.** El hallazgo real de la vuelta fue del propio instrumento, y quedó
+arreglado y verificado en la misma vuelta. Queda pendiente correr `RECORRIDO_MOVIL=1` en los
+otros cuatro rubros — hoy sólo se probó dental.
+
+## Reverificado el 2026-09-08 09:09 y 09:13 La Paz — dental (9/9) y Estética (9/9) siguen sanos
+
+Dos corridas `--escribir` seguidas desde nodo-casa: **dental 9/9** (cita agendada y vista,
+factura `/billing/cmtsgbndg006i01rwrzk1piwf` con ítem visible, frenada sin pagar) y **Estética
+9/9** (`RECORRIDO_RUBRO=Estética`; cita agendada y vista en `/appointments`, cobro en
+`/billing/cmtsgh3js007701rwg00wre3e` con ítem visible). Estética no se reverificaba desde hacía
+más de un día. Cero filas `zz-qa-` propias al cerrar las dos veces (4 ajenas de otros carriles,
+sin tocar). Nada roto. Queda pendiente reverificar importadora, o retomar promesa-vs-entrega.
+
+## Reverificado el 2026-09-08 08:09 y 08:14 La Paz — dental (9/9) y servicios profesionales (9/9) siguen sanos
+
+Dos corridas `--escribir` seguidas: **dental 9/9** (cita agendada y vista, factura
+`/billing/cmtse6njm005801rwuy6i43c6` con ítem visible, frenada sin pagar) y **servicios
+profesionales 9/9** (cita agendada y vista en `/appointments`, cobro en `/comercio/caja` —
+sigue siendo la misma pantalla compartida con comercio, como quedó cerrado en `t_2b03ea3d`).
+Cero filas `zz-qa-` propias al cerrar las dos veces (4 ajenas de otros carriles, sin tocar).
+Dos vueltas seguidas sin hallazgo nuevo en estos dos rubros: falta reverificar estética e
+importadora, que no se corren desde hace más de un día, o retomar promesa-vs-entrega.
+
+## Reverificado el 2026-09-08 06:09 y 06:15 La Paz — dental (9/9) y comercio (8/8) siguen sanos, paso 9 confirmado también fuera de dental
+
+Dos corridas `--escribir` seguidas desde nodo-casa: **dental 9/9** (cita agendada y vista, factura
+`/billing/cmts9wtdp002i01rwb62n2kbb` con ítem visible, frenada sin pagar) y **comercio 8/8** (el
+paso 7 no aplica — comercio no vende agenda, y el producto es coherente: su nav tampoco la tiene).
+Cero filas `zz-qa-` propias al cerrar las dos veces (4 ajenas de otros carriles, sin tocar).
+
+Novedad real de esta vuelta: el paso 9 (panel/bandeja) ya se había probado en dental pero no en
+otro rubro — en comercio el dato del paso 6 (`zz-qa-...-paciente`, cargado en Catálogo) **sí
+aparece** en `/dashboard`. Nada roto. Dos vueltas seguidas sin hallazgo nuevo: el próximo paso es
+probar promesa-vs-entrega o el panel en un tercer rubro (estética/importadora/servicios), no
+repetir dental/comercio otra vez.
+
+## Reverificado el 2026-09-08 05:09 La Paz — dental sigue 9/9, y la promesa de servicios profesionales ("...y contabilidad") se cruzó contra el código
+
+Corrida `--escribir` completa: **RECORRIDO COMPLETO en Clínica dental, 9/9 pasos OK**, cobro
+incluido (`/billing/cmts7rid4001p01rwwpij8y8x`, ítem visible, frenado sin marcar pagada). Cero
+filas `zz-qa-` propias al cerrar (4 ajenas de otros carriles, sin tocar). Nada roto.
+
+Con el recorrido en verde y los cinco rubros ya confirmados frescos (ver entrada de abajo,
+2026-09-07), se probó el escalón "promesa contra entrega": las 5 tarjetas de `/register` se
+leyeron en vivo con Playwright y se cruzó cada promesa contra el nav real del pack en
+`vertical-pack.ts`. Las cinco cierran — incluida "Servicios profesionales: Agenda, citas, cobros
+y **contabilidad**", que tiene `/contabilidad` en `SERVICIOS_NAV_ITEMS` (línea 405). Nada para
+reportar.
+
+## Reverificado el 2026-09-07 21:09 y 21:14 La Paz — dental (9/9) y comercio (8/8) siguen sanos
+
+Dos corridas `--escribir` seguidas desde nodo-casa: **dental 9/9** (incluido cobro,
+`/billing/cmtrz6ejx001401rw9goqmilh`) y **comercio 8/8** (paso 7 no-aplica, coherente: ese
+rubro no vende agenda ni en su tarjeta de venta ni en su menú; cobro en `/comercio/caja`, y el
+paciente del paso 6 SÍ aparece en el panel esta vez). Comercio no se reverificaba desde el
+2026-09-03 (5 días). Nada roto. Cero filas `zz-qa-` propias al cerrar las dos veces (4 ajenas
+sin tocar).
+
+## Reverificado el 2026-09-07 19:13 La Paz — Servicios profesionales pasa a 9/9: el arreglo de `t_2b03ea3d` sostiene
+
+Corrida `--escribir` completa con `RECORRIDO_RUBRO='Servicios profesionales'`: **RECORRIDO
+COMPLETO, 9/9 pasos OK** — el paso 6 (cliente) y el paso 7 (agendar) que estaban rotos el
+2026-09-04 (6/9, desplegable de Cliente vacío) ahora entran solos: el modal de Nueva Cita ya
+ofrece el alta inline del cliente, la cita quedó vista en `/appointments`
+(`cmtrmgop9001501rwiwrmowq2`). El paso 8 (cobro) de este rubro aterriza en `/comercio/caja`, no
+en `/billing` — es la misma pantalla compartida que dental (`t_2b03ea3d` ya está `done` en el
+tablero, cerrada el 2026-09-06 05:11). Cero filas `zz-qa-` propias al cerrar (4 ajenas sin
+tocar). Con esto van **cuatro de los cinco rubros vendidos** confirmados 9/9 (dental, estética,
+importadora, servicios profesionales); comercio queda en 8/8 porque su rubro no promete agenda.
+
+## Reverificado el 2026-09-07 16:09 La Paz — dental sigue 9/9
+
+Corrida `--escribir` completa desde nodo-casa (VPS medido por SSH): **RECORRIDO COMPLETO en
+Clínica dental, 9/9 pasos OK**, paso 8 incluido (`/billing/cmtrfvum5004101rwr9gmjm33`, factura
+con el ítem visible, frenado sin marcar pagada). Cero filas `zz-qa-` propias al cerrar (4 ajenas
+de otros carriles, sin tocar). Nada nuevo que reportar: el producto sostiene el camino completo.
+
+## Reverificado el 2026-09-07 06:14 La Paz — dental vuelve a 9/9: el corte de abajo era el INSTRUMENTO, no el producto
+
+`t_daa76d62` (tablero, dueño `chatbot-cola`): `scripts/recorrido_cliente.mjs:345` esperaba la
+navegación con `waitForURL(/\/billing\/[^/]+$/)`, y `/billing/new` **ya cumple** ese patrón
+(`new` matchea `[^/]+`) — el `waitForURL` resolvía al instante, sin esperar nada, y la línea
+siguiente comparaba la URL de PARTIDA. El "ROTO" de abajo (04:13) no era un bug de `/billing`:
+era la foto tomada con el POST todavía en vuelo (el botón en "Guardando", sin cartel de error).
+Arreglado excluyendo la URL de origen del predicado de espera (línea 345-352). Corrida
+`--escribir` completa hoy: **RECORRIDO COMPLETO en Clínica dental, 9/9 pasos OK**, paso 8
+incluido (`/billing/cmtr31f2q002701rw5oa2gu1g`, factura con el ítem visible). Cero filas `zz-qa-`
+propias al cerrar (4 ajenas de otros carriles, sin tocar). Tarea `t_daa76d62` cerrada.
+
+## ROTO el 2026-09-07 04:13 La Paz — dental llega al paso 7/9, se corta en el cobro (FALSO — ver arriba)
+
+Corrida `--escribir` completa: pasos 1-7 **OK** (alta, onboarding de 6 pantallas, paciente
+cargado, cita agendada y VISTA en `/appointments`). El **paso 8 (cobro) sale ROTO**: en
+`/billing/new` se carga un ítem manual y se aprieta "Crear Factura" — la factura SÍ entra a la
+base (`invoices` id `cmtqq67wl000q01rwujm8y6lo`, folio `2026-0001`, Bs 10.00) pero la pantalla
+se queda en `/billing/new` sin redirigir, y volviendo a `/billing` (Cobros) la lista sigue
+diciendo "0 facturas / No hay facturas aún" — la factura recién creada no aparece ahí. El paso 9
+(bandeja) sale OK con nota: el dato del paso 6 no figura en `/dashboard` porque ese panel no
+lista pacientes, no es un fallo del panel.
+
+Es el primer corte real desde que el bug de la barra del asistente (abajo) se arregló. Reportado
+en el tablero `t_6359aa00`, prioridad 1, para el dueño de `onia-platform`, y anotado en
+`hermes-content/docs/cola/plataforma-v1.md`. Capturas: `paso-08-cobro.png` (Cobros vacío antes),
+`paso-08c-factura-creada.png` (formulario cargado, antes de crear). Cero filas `zz-qa-` propias
+al cerrar (quedan 4 filas ajenas de otros carriles, sin tocar).
+
 ## Reverificado el 2026-09-06 19:12 La Paz — dental 9/9 de nuevo, el bug de la barra ya está arreglado
 
 `t_6325e553` (la barra del asistente IA tapando el cierre de "Primeros pasos") está `done` desde

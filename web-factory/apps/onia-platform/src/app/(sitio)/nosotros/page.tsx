@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import { PRUEBA } from "@/lib/pricing";
 import { Reveal } from "@/motion";
-import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
+import { WA_URL_LANDING, SITE_URL, CORREO_CONTACTO } from "@/lib/site";
 import { SIAT_ESTADO_ONIA } from "@/lib/siat";
 import { EMPEZAR_URL } from "../nav";
 import { CTA_ALTA } from "../alta";
@@ -85,7 +86,7 @@ const JSON_LD = {
         name: "Onia",
         legalName: "OniaAgency",
         url: `${SITE_URL}/`,
-        email: "business@onia.com.bo",
+        email: CORREO_CONTACTO,
         address: {
           "@type": "PostalAddress",
           addressLocality: "Santa Cruz de la Sierra",
@@ -113,7 +114,7 @@ export default function Nosotros() {
             empresa grande — con inteligencia artificial de verdad, en
             bolivianos, y hablando su idioma. Somos OniaAgency, registrados en
             SEPREC y con NIT vigente, y el sistema ya corre en producción:
-            entrás, lo usás completo 14 días sin dejar una tarjeta, y recién
+            entrás, lo usás completo {PRUEBA.dias} días sin dejar una tarjeta, y recién
             después decidís.
           </p>
         </Reveal>
@@ -148,7 +149,7 @@ export default function Nosotros() {
           <p className={s.body} style={{ maxWidth: "48em" }}>
             Cinco rubros disponibles — clínicas dentales, comercios,
             importadoras, estéticas y servicios profesionales — y{" "}
-            {SIAT_ESTADO_ONIA}. Lo probás tal como está hoy: 14 días con el
+            {SIAT_ESTADO_ONIA}. Lo probás tal como está hoy: {PRUEBA.dias} días con el
             sistema completo, sin tarjeta y sin contrato de permanencia. Si no
             te sirve, no pagás nada y tus datos te los llevás en CSV cuando
             quieras.

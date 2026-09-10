@@ -17,6 +17,8 @@ import {
   diagnosticar,
   evaluarStaged,
   varadosDesde,
+  parsearBuildsSsh,
+  buildsDeProduccion,
   REPO,
   RAMA_DEPLOY,
 } from './deploy-vivo.mjs';
@@ -154,6 +156,91 @@ test('un staged del HEAD pero incompleto NO cubre: el swap dejaría producción 
 
 test('sin staged es NINGUNO, y hay que armar antes de publicar', () => {
   assert.equal(evaluarStaged({ staged: null, headSha: '0db6549' }).estado, NINGUNO);
+});
+
+// ── los builds, vengan del disco de acá o del VPS ───────────────────────────
+// Este gate mide PRODUCCIÓN, y producción vive en `/opt/onia-platform` del VPS.
+// Cuando el loop se mudó a nodo-casa esa ruta dejó de existir en el disco local
+// y el gate quedó CIEGO: salía `NO PUDE MEDIR` (exit 2, que es honesto) y nadie
+// lo notaba, porque el pedido de deploy que le llega a Sergio Urcullo se sostiene
+// con OTRAS cifras que seguían en meta. Lo tramposo es que la mitad barata sí
+// contestaba —`docker exec` es un shim que delega en el VPS—, y un gate que
+// contesta a medias se lee como un gate que anda.
+
+test('parsea los builds que contestó el VPS a la misma forma que los del disco', () => {
+  const builds = parsearBuildsSsh('b54a148|sNMW9rcT8D15GNP2qKYlm|si\n3d1dabb|J4LFta9YhYnlO3QAbJJZ8|si\n', '/opt/onia-platform');
+  assert.equal(builds.length, 2);
+  assert.deepEqual(builds[0], {
+    sha: 'b54a148',
+    buildId: 'sNMW9rcT8D15GNP2qKYlm',
+    ruta: '/opt/onia-platform/build-b54a148',
+    integro: true,
+  });
+  // Y sirve para lo único que importa: saber qué sha corre.
+  assert.equal(shaQueCorre({ buildIdVivo: 'sNMW9rcT8D15GNP2qKYlm', builds }), 'b54a148');
+});
+
+// El caso caro, y el único que ningún otro guardia puede ver: si el parseo
+// leyera «tiene BUILD_ID» como «está íntegro», `evaluarStaged` diría CUBRE sobre
+// un build a medio armar y el swap dejaría producción sin `server.js`.
+test('un build remoto a medio armar llega íntegro=false aunque tenga BUILD_ID', () => {
+  const [build] = parsearBuildsSsh('5a49a68|VI4689QnCLCVqolkhDrY|no\n', '/opt/onia-platform');
+  assert.equal(build.integro, false);
+  assert.notEqual(evaluarStaged({ staged: build, headSha: '5a49a68' }).estado, CUBRE);
+});
+
+test('una línea sin BUILD_ID no inventa uno: queda null y nunca casa con el vivo', () => {
+  const [build] = parsearBuildsSsh('5a49a68||no\n', '/opt/onia-platform');
+  assert.equal(build.buildId, null);
+  assert.equal(shaQueCorre({ buildIdVivo: 'sNMW9rcT8D15GNP2qKYlm', builds: [build] }), null);
+});
+
+test('el disco local contesta: no se le pregunta al VPS', () => {
+  let preguntas = 0;
+  const r = buildsDeProduccion('/opt/onia-platform', {
+    local: () => [{ sha: 'b54a148', buildId: 'X', ruta: '/opt/onia-platform/build-b54a148', integro: true }],
+    remoto: () => {
+      preguntas += 1;
+      return [];
+    },
+  });
+  assert.equal(preguntas, 0);
+  assert.equal(r.origen, 'local');
+});
+
+test('el disco local no está (null): cae al VPS y lo dice', () => {
+  const r = buildsDeProduccion('/opt/onia-platform', {
+    local: () => null,
+    remoto: () => [{ sha: 'b54a148', buildId: 'X', ruta: '/opt/onia-platform/build-b54a148', integro: true }],
+  });
+  assert.equal(r.origen, 'remoto');
+  assert.equal(r.builds[0].sha, 'b54a148');
+});
+
+// La distinción que cuesta cara, y va en las dos direcciones: una lista VACÍA es
+// una respuesta REAL («no hay ningún build armado») y `null` es «no pude
+// preguntar». Meterlas en la misma bolsa es exactamente cómo un gate declara
+// «al día» sobre algo que no midió.
+test('el VPS contesta que no hay builds: eso es [] (respuesta), no null', () => {
+  const r = buildsDeProduccion('/opt/onia-platform', { local: () => null, remoto: () => [] });
+  assert.notEqual(r, null);
+  assert.deepEqual(r.builds, []);
+});
+
+test('ninguna de las dos vías contestó: devuelve null, JAMÁS []', () => {
+  const r = buildsDeProduccion('/opt/onia-platform', { local: () => null, remoto: () => null });
+  assert.equal(r, null);
+});
+
+// La dirección que importa de verdad: con las dos vías mudas el gate no puede
+// decir «al día». Sin este caso, un arreglo que rompa la vía remota deja el gate
+// callado y el trabajo varado sin que nada se ponga rojo.
+test('con las dos vías mudas el veredicto es NO_PUDE_MEDIR, nunca AL_DIA', () => {
+  const r = buildsDeProduccion('/opt/onia-platform', { local: () => null, remoto: () => null });
+  const sha = shaQueCorre({ buildIdVivo: 'sNMW9rcT8D15GNP2qKYlm', builds: r?.builds });
+  const veredicto = diagnosticar({ shaVivo: sha, headSha: '5a49a68', varados: [], desciende: true });
+  assert.equal(veredicto.codigo, NO_PUDE_MEDIR);
+  assert.notEqual(veredicto.codigo, AL_DIA);
 });
 
 // ── un merge no es un arreglo ───────────────────────────────────────────────

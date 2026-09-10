@@ -1,0 +1,40 @@
+{
+  "_": "Un efecto por GESTO, no por corte: el clip no tiene empalmes. Ducking solo en el whoosh (el unico largo) -- meterlo en los cinco bajaria la voz cinco veces en 13s. Gains ajustados al nivel real de cada wav, no al default.",
+  "sfx": [
+    {
+      "asset": "assets/sfx/pop.wav",
+      "at": 0.1,
+      "gain": -6,
+      "duck": false,
+      "_": "entra la tarjeta de Claude"
+    },
+    {
+      "asset": "assets/sfx/pop.wav",
+      "at": 0.9,
+      "gain": -6,
+      "duck": false,
+      "_": "entra la de Claude Code"
+    },
+    {
+      "asset": "assets/sfx/whoosh.wav",
+      "at": 3.95,
+      "gain": 5,
+      "duck": true,
+      "_": "salen las tarjetas y el plano se abre"
+    },
+    {
+      "asset": "assets/sfx/thud.wav",
+      "at": 5.0,
+      "gain": 6,
+      "duck": false,
+      "_": "asienta el titulo"
+    },
+    {
+      "asset": "assets/sfx/ping.wav",
+      "at": 5.78,
+      "gain": -5,
+      "duck": false,
+      "_": "el destello barre las letras"
+    }
+  ]
+}

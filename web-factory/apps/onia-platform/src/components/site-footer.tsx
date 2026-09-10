@@ -1,4 +1,5 @@
 import { BrandLogo } from "@/components/brand-logo";
+import { CORREO_CONTACTO } from "@/lib/site";
 import styles from "./site-footer.module.css";
 
 /**
@@ -69,7 +70,7 @@ export function SiteFooter() {
             <span aria-hidden> · </span>NIT 5371375010
             <span aria-hidden> · </span>Santa Cruz de la Sierra, Bolivia
             <span aria-hidden> · </span>
-            <a href="mailto:business@onia.com.bo">business@onia.com.bo</a>
+            <a href={`mailto:${CORREO_CONTACTO}`}>{CORREO_CONTACTO}</a>
           </address>
         </div>
 

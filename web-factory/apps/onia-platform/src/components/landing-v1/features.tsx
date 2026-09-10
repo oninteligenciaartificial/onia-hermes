@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { ALCANCE_CON_FICHA, PRUEBA } from "@/lib/pricing";
 import { Row, Shot } from "./shot";
 import { Reveal, SplitTextReveal, StaggerGrid, StaggerItem } from "@/motion";
 import styles from "./landing.module.css";
@@ -73,8 +74,7 @@ const TILES: readonly Tile[] = [
     aria: "Cola de aprobación de Onia: el agente Recall redactó un recordatorio para un paciente que no vuelve hace meses, el agente Cobrador preparó el reclamo de una deuda vencida y hay un aviso de citas de mañana sin confirmar; los botones Aprobar y Descartar esperan el OK del dueño.",
     badge: "Nuevo",
     titulo: "Agentes con IA",
-    beneficio:
-      "Recall trae de vuelta al que se enfrió; Cobrador persigue la deuda vencida. Trabajan de noche y nada sale sin tu OK.",
+    beneficio: `Recall trae de vuelta al que se enfrió (${ALCANCE_CON_FICHA}); Cobrador persigue la deuda vencida en cualquier rubro. Trabajan de noche y nada sale sin tu OK.`,
     visual: (
       <Shot title="Cola de aprobación" tag="3 pendientes">
         {/* el agente detecta, redacta, y RECIÉN ENTONCES pide tu OK: los
@@ -329,7 +329,7 @@ export function Features() {
             Encendés lo que necesitás hoy y sumás el resto sin cambiar de sistema.
           </p>
           <a className={`${styles.btn} ${styles.btnPrimary}`} href="#precios">
-            Probar gratis 14 días
+            Probar gratis {PRUEBA.dias} días
           </a>
         </div>
       </div>

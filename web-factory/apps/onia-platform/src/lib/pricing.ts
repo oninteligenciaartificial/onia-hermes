@@ -3,8 +3,27 @@
  *
  * REGLA DURA (2026-08-08): cada numero de este archivo sale del CODIGO QUE
  * COBRA, no de un doc ni de una propuesta. Si el codigo no lo enforcea, no se
- * publica. Verificado contra `C:\dev\proyectos\onia-platform`, rama `master`,
- * tip `6b8f152` (solo lectura):
+ * publica.
+ *
+ * COMO SE VERIFICA HOY — con un comando, no a mano:
+ *
+ *     node scripts/precios-fuente.mjs      # 31 cifras, montos + topes + tiers
+ *
+ * Aca decia "Verificado contra `C:\dev\proyectos\onia-platform`, rama `master`,
+ * tip `6b8f152` (solo lectura)". Las dos mitades de esa frase caducaron y ni
+ * una avisaba: la ruta es de una laptop Windows —los loops corren en Linux, el
+ * producto esta en `/root/loops/onia-platform`— y el tip esta congelado, asi
+ * que la verificacion que este archivo declaraba NO se puede re-correr en
+ * ninguna maquina de hoy. Una procedencia que no se puede repetir se lee igual
+ * que una verificada, que es el modo en que un comentario "manda al reves":
+ * el 2026-09-06 mande media vuelta a cruzar estos topes A MANO contra el otro
+ * repo —leyendo `PLAN_LIMITS` linea por linea— antes de descubrir que
+ * `scripts/precios-fuente.mjs` ya lo hacia entero, cada vuelta, y salia VERDE.
+ *
+ * El mapa de abajo sigue vigente y es lo unico que hay que mantener a mano:
+ * dice QUE archivo del producto manda sobre CADA cosa. El cruce de los VALORES
+ * lo hace el script, y si una fuente no se puede leer sale con codigo 2
+ * (ROJO DE INSTRUMENTO), nunca en verde.
  *
  *  - montos y ciclos ......... lib/subscription-plans.ts → DEFAULT_PLAN_AMOUNTS
  *    (basic 320/89/3.200 · professional 750/199/7.500 · clinic 1.500/-/15.000 ·
@@ -89,6 +108,108 @@ export const AGENDA_ADDON = {
   mensualAddon: 150,
 } as const;
 
+/**
+ * Capacidades que el plan enciende para TODOS y que el producto entrega solo a
+ * ALGUNOS RUBROS. La salvedad no es opcional: es la diferencia entre cobrar y
+ * cobrar de más.
+ *
+ * Medido el 2026-09-08 contra `origin/master` de `onia-platform`. `/reports` y
+ * `/billing/recurring` están encendidas por PLAN desde Pro para todo el mundo
+ * (`plan-catalogo.ts`: `reportsEnabled` / `recurringInvoicesEnabled`) y además
+ * por RUBRO: solo las declaran en su nav los packs clínicos, así que
+ * `allowedSegmentsForPack` no le da el segmento a comercio, importadora ni
+ * servicios profesionales —3 de los 5 rubros que el alta ofrece—. Con
+ * `PLATFORM_LAYER=1` (leído del contenedor vivo) el layout los devuelve a
+ * `/dashboard`, mudo: sin error, sin cartel, sin nada.
+ *
+ * Y esa línea es justo el gancho del salto de Bs 320 a Bs 750: estaba en el
+ * `incluye` del Pro y —de nuevo— en el `sinEsto` del Básico, así que a un
+ * comercio le cobraba el plan de arriba por dos pantallas a las que su rubro no
+ * llega, y de paso le decía que le faltaba algo que nunca iba a tener.
+ *
+ * POR QUÉ NINGÚN GATE LO VEÍA, que es lo que hace nueva a esta clase: no sobra
+ * ninguna palabra (invisible a `obra.test.ts` y `hueco-declarado.test.ts`), no
+ * promete gente nuestra (`promesa-humana.test.ts`), los montos salen de la
+ * fuente (`precios.test.ts`, `precios-fuente.mjs` en verde), la capacidad EXISTE
+ * de verdad en el producto y tiene su salvedad de PLAN, que es lo único que
+ * `capacidad-vs-precio.test.ts` mira. El eje que faltaba es (capacidad, RUBRO).
+ *
+ * El arreglo gemelo del PRODUCTO —`/settings/plan`, que listaba lo mismo plano—
+ * es `9c7031a` en `onia-platform`. Ahí se puede filtrar porque la pantalla sabe
+ * el rubro; acá la página es genérica, así que la salvedad se DICE. El alcance
+ * se lee de esta constante y nunca se tipea en el copy: dos copias del mismo
+ * hecho es como llegó a haber cuatro precios vivos del mismo chatbot.
+ *
+ * Lo vigila `app/(sitio)/capacidad-por-rubro.test.ts`, y el cruce contra el pack
+ * real del producto lo hace `scripts/capacidad-por-rubro.mjs` (alias
+ * `npm run capacidad:por-rubro`), que sale 2 = NO MEDIDO si no alcanza el repo
+ * hermano — un rubro nuevo que no llegue a estas pantallas lo caza ese script,
+ * no este dato.
+ */
+export const ALCANCE_POR_RUBRO = [
+  {
+    /** Cómo la nombra el copy de los planes. */
+    capacidad: "Reportes completos",
+    pantalla: "/reports",
+    rubros: ["Clínica dental", "Estética y spa"],
+  },
+  {
+    capacidad: "facturas recurrentes",
+    pantalla: "/billing/recurring",
+    rubros: ["Clínica dental", "Estética y spa"],
+  },
+] as const;
+
+/** Cómo se dice ese alcance en una línea de venta, derivado del dato de arriba. */
+export const ALCANCE_CLINICO = "solo en clínicas dentales y estética";
+
+/** «a, b y c» — para que la frase del copy salga del dato y no al lado del dato. */
+const listar = (xs: readonly string[]) =>
+  xs.length < 2 ? (xs[0] ?? "") : `${xs.slice(0, -1).join(", ")} y ${xs[xs.length - 1]}`;
+
+/**
+ * El MISMO eje (capacidad, RUBRO), con el corte en otro lado: acá el rubro SÍ
+ * llega a la pantalla, y lo que le falta son los DATOS que la capacidad lee.
+ *
+ * Medido el 2026-09-10 contra `origin/master` de `onia-platform`. El agente
+ * Recall lee `patient` + `appointment`, así que desde `64279ff`
+ * (`lib/onia-core/modules/agents-por-rubro.ts`) el runtime lo acota con
+ * `rolCorreEnTrack('recall', track) = guardaClientesEnPatients(track)`, que es
+ * `pack.nav` con `/patients`: **falso para comercio (`gestios-general`) e
+ * importadora (`proveegest-electrico`)**, 2 de los 5 rubros que el alta ofrece.
+ * Antes de ese arreglo corría igual y fallaba MUDO —`[]` no lanza—: 34 corridas
+ * reales en tres orgs de esos rubros, todas con 0 acciones producidas. El
+ * Cobrador no se acota: ramifica por rubro y cobra fiados de mostrador.
+ *
+ * POR QUÉ NINGÚN GATE LO VEÍA, y por qué es una clase nueva y no otra instancia
+ * de la de arriba: los dos instrumentos de esta familia preguntan por la
+ * PANTALLA. `app/(sitio)/capacidad-por-rubro.test.ts` saca sus sujetos de las
+ * líneas de `PLANES` y sólo exige la salvedad a las que nombran una capacidad de
+ * `ALCANCE_POR_RUBRO`; `scripts/capacidad-por-rubro.mjs` cruza «¿el pack declara
+ * esta pantalla en su nav?» — y `/agents` está en el nav de los SIETE packs. Con
+ * el corte adentro de una pantalla que todos alcanzan, ninguno de los dos puede
+ * siquiera expresar la pregunta, y los dos daban verde.
+ *
+ * El arreglo gemelo del PRODUCTO ya existe (`lib/subscription/plan-display.ts`
+ * filtra el Recall por rubro en la pantalla donde el cliente paga); el de la
+ * VENTA es éste, cuatro días después. Lo vigila `app/capacidad-acotada.test.ts`,
+ * cuyos sujetos son las MENCIONES en todo `src/`, no las líneas de los planes:
+ * la página que vende la capacidad la describe rol por rol, fuera de `PLANES`.
+ */
+export const ALCANCE_POR_DATOS = [
+  {
+    /** Cómo la nombra el copy. */
+    capacidad: "Recall",
+    /** El predicado real del producto, en castellano. */
+    porque: "lee la ficha del cliente y la agenda",
+    /** Rubros del alta que sí tienen esos datos, como los nombra el copy. */
+    rubros: ["dentales", "estética", "servicios profesionales"],
+  },
+] as const;
+
+/** Cómo se dice ese alcance en una línea de venta, derivado del dato de arriba. */
+export const ALCANCE_CON_FICHA = `solo en ${listar(ALCANCE_POR_DATOS[0].rubros)}`;
+
 export const USUARIO_EXTRA_ADDON = {
   nombre: "Usuario adicional",
   mensualAddon: 70,
@@ -119,7 +240,7 @@ export const PLANES: readonly Plan[] = [
     sinEsto: [
       "Agentes de IA (vienen desde Pro)",
       `Reservas online — se agrega como add-on a Bs ${bs(AGENDA_ADDON.mensualAddon)}/mes`,
-      "Reportes completos y facturas recurrentes",
+      `Reportes completos y facturas recurrentes (${ALCANCE_CLINICO})`,
     ],
     cuando: "Negocio de 1 o 2 personas que hoy trabaja con cuaderno o Excel.",
   },
@@ -138,10 +259,10 @@ export const PLANES: readonly Plan[] = [
       "5 usuarios",
       "Hasta 1.500 fichas de clientes o pacientes",
       "800 recordatorios por email al mes",
-      "Agente Recall: te propone a quién hace rato que no ves",
+      `Agente Recall: te propone a quién hace rato que no ves (${ALCANCE_CON_FICHA})`,
       "Agente Cobrador: te propone a quién reclamarle la deuda vencida",
       "Reservas online incluidas (link público para que te pidan cita)",
-      "Reportes completos y facturas recurrentes",
+      `Reportes completos y facturas recurrentes (${ALCANCE_CLINICO})`,
       "Contabilidad completa (RCV, balance y export) y planilla del mes",
     ],
     sinEsto: ["Nada del Básico se queda afuera: Pro es Básico más lo de arriba"],
@@ -314,7 +435,10 @@ export interface AddOn {
  * que el cliente ya tiene encendido: se cae en la primera pregunta del que ya lo
  * usa. El inventario ahora se cuenta donde corresponde, en el `incluye` del
  * Basico (y por herencia en Pro y Full). Guarda:
- * scripts/venta-honestidad.test.mjs. Detalle: ONIA_CATALOGO_DE_VENTA.md §5.
+ * onia-hermes/scripts/venta-honestidad.test.mjs (repo RAIZ, en su cadena
+ * `npm test` como `test:venta-honestidad` — esta app no tiene ese archivo, y
+ * escrito sin la raiz se lee como que lo vigila un gate de acá que no existe).
+ * Detalle: ONIA_CATALOGO_DE_VENTA.md §5.
  */
 export const ADDONS: readonly AddOn[] = [
   {
@@ -379,7 +503,12 @@ export const CONDICIONES: readonly string[] = [
     .join(" y en ")}. ${PLANES.filter((p) => p.semanal === null)
     .map((p) => p.nombre)
     .join(" y ")} se cobra mensual o anual.`,
-  "14 días de prueba sin tarjeta, con el Pro completo. Al vencer, la cuenta queda en solo lectura — nada se borra.",
+  // Mismo caso que la línea de arriba: tipeaba "14 días" y "Pro" a mano
+  // teniendo PRUEBA_DIAS y PRUEBA_PLAN dos pantallas más arriba, en este mismo
+  // archivo. El cruce contra el producto (scripts/precios-fuente.mjs) valida
+  // las CONSTANTES, no las copias, así que el día que el trial cambie esta
+  // frase sigue en verde diciendo el número viejo.
+  `${PRUEBA_DIAS} días de prueba sin tarjeta, con el ${PRUEBA_PLAN} completo. Al vencer, la cuenta queda en solo lectura — nada se borra.`,
   "En los tres planes de arriba no cobramos implementación ni migración: el checkout cobra solo el plan. Grupo / Empresarial sí lleva implementación acompañada y se cotiza aparte.",
   "Tus datos son tuyos: los exportás en CSV desde el plan más chico.",
 ] as const;

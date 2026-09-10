@@ -9,10 +9,22 @@ Instrumento: `scripts/recorrido_cliente.mjs`.
 ## Abierto
 
 > Los cinco rubros que `RUBROS_ACTIVOS` ofrece hoy (`onia-platform/lib/platform/rubros-activos.ts`)
-> ya están recorridos: dental, comercio, estética, importadora y servicios profesionales (roto,
-> reportado). Ganadero y veterinaria **no están a la venta** (el propio archivo lo dice: ganadero
-> `pending_adoption`, veterinaria retirada el 2026-08-13 por el modelo de facturación) — no son un
-> rubro pendiente de este carril, medido el 2026-09-05.
+> ya están recorridos y confirmados 9/9 (o 8/8 cuando el paso 7 no le corresponde): dental,
+> comercio, estética, importadora y servicios profesionales — este último ya NO está roto: el
+> arreglo de `t_2b03ea3d` sostiene desde el 2026-09-06 y se reverificó 9/9 el 2026-09-07 19:13 y
+> otra vez con dental el 2026-09-08 05:09. Ganadero y veterinaria **no están a la venta** (el
+> propio archivo lo dice: ganadero `pending_adoption`, veterinaria retirada el 2026-08-13 por el
+> modelo de facturación) — no son un rubro pendiente de este carril, medido el 2026-09-05.
+>
+> Ítem nuevo, chico: verificado el 2026-09-08 que la tarjeta de "Servicios profesionales" en
+> `/register` promete «Agenda, citas, cobros y **contabilidad**» y esa pantalla SÍ está en el nav
+> del pack (`SERVICIOS_NAV_ITEMS`, `/contabilidad`, `vertical-pack.ts:405`) — no es un hallazgo,
+> queda anotado porque nadie lo había cruzado.
+
+> **Cerrado (2026-09-08 21:26):** `RECORRIDO_MOVIL=1` ya corrió en los 5 rubros de
+> `RUBROS_ACTIVOS` (dental, comercio, estética, importadora, servicios profesionales) — todos
+> limpios, ver `ULTIMO_RECORRIDO.md`. No apareció ningún selector del script que asumiera el
+> layout de escritorio.
 
 ## Cerrado
 

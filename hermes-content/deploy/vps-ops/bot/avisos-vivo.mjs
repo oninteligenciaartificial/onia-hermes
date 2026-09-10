@@ -20,8 +20,11 @@
 //  2. credencialesOk   — `getMe` + `getChat` contra la API de Telegram. No manda nada.
 //                        Un token vencido o un chat_id equivocado hace fallar TODO aviso
 //                        futuro sin dejar rastro hasta el dia que hay alguien esperando.
-//  3. motorEmiteNotify — el motor DESPLEGADO, ante un pedido de humano, tiene que emitir
-//                        `notify_sergio`. Se maneja el engine real, no un mock.
+//  3. motorEmiteNotify — el motor DESPLEGADO tiene que emitir `notify_sergio` en LAS DOS
+//                        ramas que el objetivo nombra (handoff Y demo agendada), no en una.
+//                        Se maneja el engine real, no un mock. Ver `RAMAS_QUE_AVISAN`:
+//                        hasta el 2026-09-07 esto medía sólo el handoff y el gate quedaba
+//                        VERDE con el aviso de la demo borrado del motor.
 //  4. textoAccionable  — el aviso tiene que nombrar la conversacion. Uno que no dice a
 //                        quien contestarle no sirve (lo dice el propio aviso-telegram.mjs).
 //
@@ -31,11 +34,82 @@
 //
 // Uso:  node avisos-vivo.mjs          (exit 0 verde · 1 rojo · 2 no se pudo medir)
 
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
+import net from "node:net";
+import { existsSync, mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 
 export const BOT_DIR = "/opt/onia/bot";
 export const CONTENEDOR = "onia-center";
+
+/** La maquina donde vive el bot desplegado. Se le pregunta cuando el disco local no lo tiene. */
+export const VPS_DEL_BOT = "root@187.77.16.63";
+const LLAVE_VPS = "/root/.ssh/onia_hermes_vps_ed25519";
+
+/** Sin esto no hay nada que medir: es el modulo que el gate maneja de verdad. */
+const MOTOR = "bot-engine.mjs";
+
+/**
+ * Devuelve el directorio del bot DESPLEGADO listo para importar, o `null` si no se puede.
+ *
+ * Por que existe: este gate importa el artefacto que CORRE, no el del repo — ahi esta todo su
+ * valor, porque cada pieza ya tiene su test y lo unico que nadie prueba es el empalme entre
+ * ellas. Eso lo ataba a `/opt/onia/bot`, que existe en el VPS y NO en nodo-casa, adonde se mudo
+ * este carril el 2026-09-06: desde entonces el tercer numero del objetivo salia `no_medido` en
+ * cada vuelta, con el circuito sano del otro lado.
+ *
+ * Los dos escalones, y por que NO hay un tercero que apunte al repo: traerse el artefacto
+ * cuesta un `tar` por vuelta; apuntar al repo seria mas facil y **romperia lo que el gate
+ * existe para probar** — mediria codigo commiteado y firmaria sobre produccion.
+ */
+export function resolverBotDesplegado(deps = {}) {
+  const existe = deps.existsSync || existsSync;
+  const correr = deps.spawnSync || spawnSync;
+
+  // 1. El artefacto en el disco de esta maquina. Es el caso del VPS, y no sale a la red.
+  if (existe(BOT_DIR)) return { dir: BOT_DIR, origen: "local" };
+
+  // 2. nodo-casa: se lo trae del VPS a un temporal.
+  const destino = mkdtempSync(join(tmpdir(), "onia-bot-desplegado-"));
+  const fallar = () => {
+    try {
+      rmSync(destino, { recursive: true, force: true });
+    } catch {
+      /* que no exista ya es el resultado buscado */
+    }
+    return null;
+  };
+
+  let bajado;
+  try {
+    bajado = correr(
+      "ssh",
+      ["-o", "BatchMode=yes", "-o", "ConnectTimeout=15", "-i", LLAVE_VPS, VPS_DEL_BOT, `tar -cf - -C ${BOT_DIR} .`],
+      { encoding: "buffer", maxBuffer: 64 * 1024 * 1024, timeout: 120_000 },
+    );
+  } catch {
+    return fallar();
+  }
+  // El estado del `ssh` se mira SOLO, sin tuberia: `ssh | tar` devuelve el del ultimo comando,
+  // asi que un VPS caido puede terminar en exit 0 con el destino vacio.
+  if (!bajado || bajado.status !== 0) return fallar();
+
+  let extraido;
+  try {
+    extraido = correr("tar", ["-xf", "-", "-C", destino], { input: bajado.stdout, timeout: 60_000 });
+  } catch {
+    return fallar();
+  }
+  if (!extraido || extraido.status !== 0) return fallar();
+
+  // Y aun con los dos en 0 se verifica el ARTEFACTO, no el codigo de salida: lo que hace falta
+  // es el motor en el destino, no que los comandos hayan dicho que si.
+  if (!existe(join(destino, MOTOR))) return fallar();
+
+  return { dir: destino, origen: "remoto" };
+}
 
 // ---------------------------------------------------------------------------
 // Nucleo puro — esto es lo que prueba el test, sin tocar produccion
@@ -66,13 +140,19 @@ export function diagnosticar({ circuito, eventos }) {
   }
 
   const motivos = [];
+  // Un eslabon que quedo en `null` no se pudo PREGUNTAR. No es lo mismo que haber recibido
+  // un no, y mezclarlos manda a arreglar lo que funciona: el 2026-09-08 este gate declaro
+  // "el token o el chat de Telegram no responden" con los dos sanos, porque el instrumento
+  // no llegaba a preguntar. La ignorancia se reporta como ignorancia.
+  const sinMedir = [];
   for (const [eslabon, etiqueta] of [
     ["flagEncendido", "flagEncendido: el proceso vivo no tiene ONIA_BOT_TG_AVISO en true"],
     ["credencialesOk", "credencialesOk: el token o el chat de Telegram no responden"],
     ["motorEmiteNotify", "motorEmiteNotify: el motor no emite notify_sergio ante un pedido de humano"],
     ["textoAccionable", "textoAccionable: el aviso no nombra la conversacion a la que contestar"],
   ]) {
-    if (!circuito[eslabon]) motivos.push(etiqueta);
+    if (circuito[eslabon] === null) sinMedir.push(`${eslabon}: no se pudo preguntar (¿hay red desde esta maquina?)`);
+    else if (!circuito[eslabon]) motivos.push(etiqueta);
   }
 
   // Un aviso que salio mal manda sobre cualquier chequeo de configuracion: es una persona
@@ -80,7 +160,11 @@ export function diagnosticar({ circuito, eventos }) {
   if (ev.fallidos > 0) motivos.push(`${ev.fallidos} aviso(s) FALLIDO(s) en el log`);
   if (ev.salteados > 0) motivos.push(`${ev.salteados} aviso(s) SALTEADO(s) en el log`);
 
-  return { veredicto: motivos.length ? "roto" : "ok", motivos, eventos: ev };
+  // Prioridad: evidencia de fallo > no haber podido preguntar > verde. Un rojo MEDIDO no lo
+  // tapa un eslabon sin medir, y un eslabon sin medir nunca se firma como verde.
+  if (motivos.length) return { veredicto: "roto", motivos: motivos.concat(sinMedir), eventos: ev };
+  if (sinMedir.length) return { veredicto: "no_medido", motivos: sinMedir, eventos: ev };
+  return { veredicto: "ok", motivos, eventos: ev };
 }
 
 // ---------------------------------------------------------------------------
@@ -112,64 +196,171 @@ function envDelProcesoVivo() {
   return env;
 }
 
+/**
+ * El piso de tiempo que necesita UN intento de conexion para que preguntar sea posible.
+ *
+ * Node corta cada intento a los 250 ms (`autoSelectFamilyAttemptTimeout`). Desde nodo-casa
+ * la ruta IPv6 a api.telegram.org es ENETUNREACH y la IPv4 tarda mas que ese corte, asi que
+ * `fetch` muere en ~350 ms con ETIMEDOUT sobre un host que `curl` atiende con 200. Medido el
+ * 2026-09-08: con el corte en 2000 ms, la misma llamada devuelve 200 en 2,0 s y 0,5 s.
+ */
+export const ATENCION_MINIMA_MS = 2000;
+
+/** Sube el piso del transporte si esta por debajo. Nunca baja uno mas generoso. */
+export function asegurarTransporteQueAguanta(red = net) {
+  if (red.getDefaultAutoSelectFamilyAttemptTimeout() < ATENCION_MINIMA_MS) {
+    red.setDefaultAutoSelectFamilyAttemptTimeout(ATENCION_MINIMA_MS);
+  }
+}
+
 /** `getMe` + `getChat`. No manda un solo mensaje: no se le grita al lobo para probar el grito. */
 async function credencialesResponden(token, chatId) {
+  // Que el proceso vivo no las tenga SI es una rotura real: sin token no hay aviso posible.
   if (!token || !chatId) return false;
+  asegurarTransporteQueAguanta();
+
+  // Tres estados, y la diferencia es el punto: `true` contesto que si, `false` contesto que
+  // no, `null` NO SE PUDO PREGUNTAR. Colapsar los dos ultimos en `false` es lo que hizo que
+  // este gate acusara a un token sano (2026-09-08).
   const pedir = async (metodo, qs = "") => {
     try {
       const r = await fetch(`https://api.telegram.org/bot${token}/${metodo}${qs}`, {
-        signal: AbortSignal.timeout(15000),
+        signal: AbortSignal.timeout(25000),
       });
       return (await r.json())?.ok === true;
     } catch {
-      return false;
+      return null;
     }
   };
-  return (await pedir("getMe")) && (await pedir("getChat", `?chat_id=${encodeURIComponent(chatId)}`));
+
+  const me = await pedir("getMe");
+  if (me !== true) return me; // null (no se pudo) o false (token rechazado): cada uno es lo suyo
+  return await pedir("getChat", `?chat_id=${encodeURIComponent(chatId)}`);
 }
 
 /**
- * Maneja el motor DESPLEGADO hasta un handoff y arma el aviso con el `construirAviso`
- * desplegado. Es el unico eslabon que prueba que las piezas encajan entre si: cada una
- * tiene su test, y aun asi el empalme puede estar cambiado de nombre.
+ * Las DOS ramas que el objetivo del carril nombra: "cada demo agendada O handoff le llega a
+ * Sergio". Son HERMANAS y se emiten desde funciones DISTINTAS del motor, con payloads de
+ * forma distinta (el handoff trae `reason`, la demo no), asi que probar una no dice nada de
+ * la otra.
+ *
+ * 🔴 POR QUE ESTA LISTA EXISTE, medido el 2026-09-07. Este gate manejaba el motor SOLO hasta
+ * un handoff, y su propio encabezado lo declaraba ("ante un pedido de humano"). Borrando
+ * entero el `notify_sergio` de la rama de agendar, el gate seguia dando VERDE — o sea que el
+ * dia que se rompa el aviso de la demo, el unico instrumento que mira este objetivo dice
+ * "circuito: ok" y ningun numero se mueve, mientras cada demo reservada se pierde en silencio.
+ * Es la rama que lleva la plata: un prospecto que YA eligio horario.
+ *
+ * Una rama que no se puede manejar es ROJO, nunca un salteo: ese es el modo de falla del que
+ * venimos.
  */
-async function motorProduceAviso() {
+export const RAMAS_QUE_AVISAN = Object.freeze(["handoff", "demo_agendada"]);
+
+/**
+ * Maneja el motor DESPLEGADO hasta CADA una de las ramas de `RAMAS_QUE_AVISAN` y arma el
+ * aviso con el `construirAviso` desplegado. Es el unico eslabon que prueba que las piezas
+ * encajan entre si: cada una tiene su test, y aun asi el empalme puede estar cambiado de
+ * nombre.
+ *
+ * `emite`/`accionable` son la Y de todas las ramas: basta que una falle para que el circuito
+ * este roto, porque cada una es un prospecto distinto que se pierde.
+ */
+export async function motorProduceAviso(dir) {
   try {
-    const engine = await import(`${BOT_DIR}/bot-engine.mjs`);
-    const { DEFAULT_CONFIG } = await import(`${BOT_DIR}/config.mjs`);
-    const { construirAviso } = await import(`${BOT_DIR}/aviso-telegram.mjs`);
+    const mod = (archivo) => pathToFileURL(join(dir, archivo)).href;
+    const engine = await import(mod(MOTOR));
+    const { DEFAULT_CONFIG, createBotConfig } = await import(mod("config.mjs"));
+    const { construirAviso } = await import(mod("aviso-telegram.mjs"));
 
     const ahora = () => new Date().toISOString();
-    let estado = engine.createState({ conversationKey: "chatwoot:0", leadKey: "gate", channel: "web" });
-    estado = engine.step(estado, { text: "Hola", receivedAt: ahora() }, { config: DEFAULT_CONFIG }).nextState;
-    const r = engine.step(
-      estado,
-      { text: "quiero hablar con un humano por favor", receivedAt: ahora() },
-      { config: DEFAULT_CONFIG },
-    );
 
-    const notify = (r.sideEffects || []).filter((e) => e.type === "notify_sergio").map((e) => e.payload);
-    if (notify.length === 0) return { emite: false, accionable: false };
+    // Los horarios de `DEFAULT_CONFIG` vienen `pending: true` (placeholders), y con esos el
+    // motor cae en "no tengo horarios libres" y NUNCA llega a agendar. Produccion los carga
+    // de `ONIA_BOT_SLOTS`; aca se inyectan dos reales y futuros para que la rama se maneje
+    // siempre, incluso el dia que el renovador no haya corrido.
+    const futuro = new Date(Date.now() + 72 * 3600 * 1000).toISOString();
+    const conHorarios = createBotConfig({
+      slots: [
+        { key: "A", label: "horario A del gate", startAt: futuro, pending: false },
+        { key: "B", label: "horario B del gate", startAt: futuro, pending: false },
+      ],
+    });
 
-    const aviso = construirAviso({ notify, conversationId: 4242, stageAfter: r.nextState?.botStage });
-    // "Accionable" = nombra la conversacion. Sin eso Sergio recibe un timbre sin puerta.
-    const accionable = Boolean(aviso?.texto?.includes("4242")) && aviso?.conversationId === 4242;
-    return { emite: true, accionable, ejemplo: aviso?.texto };
+    // Cada rama: el guion que la dispara y la config que hace falta para llegar.
+    const guiones = {
+      handoff: { config: DEFAULT_CONFIG, dice: "quiero hablar con un humano por favor" },
+      demo_agendada: { config: conHorarios, dice: "A" },
+    };
+
+    const ramas = {};
+    let ejemplo = null;
+
+    for (const kind of RAMAS_QUE_AVISAN) {
+      const { config, dice } = guiones[kind];
+      let estado = engine.createState({ conversationKey: "chatwoot:0", leadKey: "gate", channel: "web" });
+      estado = engine.step(estado, { text: "Hola", receivedAt: ahora() }, { config }).nextState;
+      const r = engine.step(estado, { text: dice, receivedAt: ahora() }, { config });
+
+      const notify = (r.sideEffects || []).filter((e) => e.type === "notify_sergio").map((e) => e.payload);
+      // Se exige el `kind` esperado, no "algun notify": si la rama emite otra cosa (un
+      // `sin_horarios` en vez de la demo) el empalme esta roto igual.
+      const deLaRama = notify.filter((p) => String(p?.kind) === kind);
+      if (deLaRama.length === 0) {
+        ramas[kind] = { emite: false, accionable: false };
+        continue;
+      }
+
+      const aviso = construirAviso({ notify: deLaRama, conversationId: 4242, stageAfter: r.nextState?.botStage });
+      // "Accionable" = nombra la conversacion. Sin eso Sergio recibe un timbre sin puerta.
+      const accionable = Boolean(aviso?.texto?.includes("4242")) && aviso?.conversationId === 4242;
+      ramas[kind] = { emite: true, accionable };
+      if (!ejemplo) ejemplo = aviso?.texto;
+    }
+
+    return {
+      emite: RAMAS_QUE_AVISAN.every((k) => ramas[k]?.emite),
+      accionable: RAMAS_QUE_AVISAN.every((k) => ramas[k]?.accionable),
+      ramas,
+      ejemplo,
+    };
   } catch {
     return null;
   }
 }
 
-function lineasDelLog() {
-  const out = sh("bash", [`${BOT_DIR}/webhook-server.sh`, "logs"], 30000);
+/**
+ * El log del proceso vivo. El `logs` de `webhook-server.sh` es un `docker exec` contra el
+ * contenedor, asi que sirve igual desde la copia traida del VPS: en nodo-casa `docker` es un
+ * shim que delega por SSH, o sea que el log sale de produccion en las dos maquinas.
+ */
+function lineasDelLog(dir) {
+  if (!dir) return [];
+  const out = sh("bash", [join(dir, "webhook-server.sh"), "logs"], 30000);
   return out ? out.split("\n") : [];
 }
 
 export async function medir() {
+  const bot = resolverBotDesplegado();
+  try {
+    return await medirCon(bot);
+  } finally {
+    // El temporal se borra siempre: en WSL `/tmp` es un tmpfs que vive EN RAM, y son 7 MB
+    // por vuelta con este loop corriendo cada hora.
+    if (bot?.origen === "remoto") {
+      try {
+        rmSync(bot.dir, { recursive: true, force: true });
+      } catch {
+        /* dejar basura en /tmp no justifica tumbar la medicion */
+      }
+    }
+  }
+}
+
+async function medirCon(bot) {
   const env = envDelProcesoVivo();
-  const motor = await motorProduceAviso();
+  const motor = bot ? await motorProduceAviso(bot.dir) : null;
   // Sin el proceso vivo o sin el codigo desplegado no hay nada que afirmar.
-  if (!env || !motor) return { circuito: null, eventos: contarEventos(lineasDelLog()), ejemplo: null };
+  if (!env || !motor) return { circuito: null, eventos: contarEventos(lineasDelLog(bot?.dir)), ejemplo: null };
 
   const credencialesOk = await credencialesResponden(env.TG_BOT_TOKEN, env.TG_CHAT_ID);
   return {
@@ -179,8 +370,9 @@ export async function medir() {
       motorEmiteNotify: motor.emite,
       textoAccionable: motor.accionable,
     },
-    eventos: contarEventos(lineasDelLog()),
+    eventos: contarEventos(lineasDelLog(bot.dir)),
     ejemplo: motor.ejemplo,
+    ramas: motor.ramas,
   };
 }
 
@@ -188,12 +380,24 @@ export async function medir() {
 // produccion y un process.exit() que mata al proceso importador (medido en este carril
 // el 2026-09-03 con demo_agendada_real.mjs).
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const { circuito, eventos, ejemplo } = await medir();
+  const { circuito, eventos, ejemplo, ramas } = await medir();
   const d = diagnosticar({ circuito, eventos });
 
   console.log(`circuito: ${circuito ? (d.veredicto === "no_medido" ? "?" : "medido") : "NO SE PUDO MEDIR"}`);
   if (circuito) {
-    for (const [k, v] of Object.entries(circuito)) console.log(`  ${v ? "ok  " : "ROTO"} ${k}`);
+    // El tercer estado se imprime como tal: un `?` es "no pude preguntar", y leerlo como
+    // ROTO es exactamente el error que este gate cometio contra un token sano.
+    for (const [k, v] of Object.entries(circuito)) {
+      console.log(`  ${v === null ? "?   " : v ? "ok  " : "ROTO"} ${k}`);
+    }
+  }
+  // Las ramas van SIEMPRE, no sólo cuando fallan: un "motorEmiteNotify ok" sin decir sobre
+  // qué ramas es justo la lectura que dejó pasar el agujero del 2026-09-07.
+  if (ramas) {
+    for (const kind of RAMAS_QUE_AVISAN) {
+      const r = ramas[kind];
+      console.log(`  ${r?.emite && r?.accionable ? "ok  " : "ROTO"} rama ${kind}`);
+    }
   }
   console.log(`eventos: ${eventos.total} avisos (enviados ${eventos.enviados} · salteados ${eventos.salteados} · fallidos ${eventos.fallidos})`);
   if (d.motivos.length) console.log("motivos:\n  - " + d.motivos.join("\n  - "));

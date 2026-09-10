@@ -15,6 +15,22 @@ export const metadata: Metadata = {
   description:
     "Respondé 3 preguntas y te decimos qué encenderíamos para tu negocio. Sin registro: no te pedimos nombre, correo ni teléfono.",
   alternates: { canonical: "/empezar" },
+  /**
+   * Mismo hueco que su hermana `/v1/comparativa`, y medido el mismo día: sin
+   * este bloque heredaba las etiquetas Open Graph del layout raíz, así que el
+   * enlace reenviado mostraba la tarjeta de la PORTADA y ninguna `og:url`
+   * propia (`curl -A "WhatsApp/2.23.20.0" …/v1/empezar` → HTTP 200, og:title
+   * "Onia — El sistema con IA…"). `url` apunta a `/empezar`, como el
+   * `canonical`: esto es el archivo, la página viva es la otra.
+   */
+  openGraph: {
+    type: "website",
+    locale: "es_BO",
+    title: "Empezá — Onia",
+    description:
+      "Respondé 3 preguntas y te decimos qué encenderíamos para tu negocio. Sin registro: no te pedimos nombre, correo ni teléfono.",
+    url: "/empezar",
+  },
 };
 
 export default function EmpezarPage() {

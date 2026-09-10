@@ -28,13 +28,18 @@ bueno se quema una sola vez. Quiénes son, qué dijeron y dónde vive cada uno:
 **Era falso** —verificado el 2026-08-31: esa §8 habla de una rama de git y no hay cola del
 chatbot en el repo—, y es la peor clase de dato falso: hace creer que están guardados.)*
 
-**Estado (medido en la base de PRODUCCIÓN el 2026-09-01):** el circuito **ya corrió en producción**,
-no sólo en local. La organización `ZZ QA Circuito Completo` (`cmtj22i3q000001khaxefs8ft`) tiene
-`onboardingCompletedAt = 2026-09-01 19:31`, **1 cita**, **3 productos** y un `subscription_payments`
-en **`APPROVED` por Bs 320,00** (`TRX-20260901-QA01`, revisado 19:40 UTC).
-*(Acá decía "verificado de punta a punta **en local**". Quedó viejo el mismo día: hasta esta
-mañana los contadores de producción eran 0 citas / 0 productos / 0 pagos, y el LISTO del punto
-era justamente que dejaran de serlo.)*
+**Estado (medido en la base de PRODUCCIÓN el 2026-09-10):** el circuito de COBRO se recorrió
+entero por las pantallas reales y quedó fotografiado: org QA `zz-qa-cobro-e2e` dada de alta por
+`/api/auth/register`, comprobante subido en `/checkout` (fila `PENDING` en
+`subscription_payments`), aprobado en `/admin/payments` como superadmin, y la fila terminó
+`APPROVED` con la org pasando de trial a `basic` con `planEnd = 2026-10-10` **calculado solo**.
+La pantalla del cliente dice "Plan activo hasta el 10 de octubre de 2026". Capturas en el
+handoff [`handoff/cobro-e2e.md`](handoff/cobro-e2e.md).
+*(Acá decía que la org `ZZ QA Circuito Completo` del 2026-09-01 tenía el pago APPROVED. Esa
+corrida EXISTIÓ pero su org ya no está: la limpieza QA la borró y el FK en cascada se llevó la
+fila — el 2026-09-10 `subscription_payments` amaneció con CERO filas. Un pago REAL de un
+cliente REAL sigue sin pasar nunca; lo único que lo separa es la cuenta bancaria, que es de
+Sergio Urcullo, no de código.)*
 
 ---
 
@@ -52,7 +57,16 @@ era justamente que dejaran de serlo.)*
    `react/no-children-prop`.
 5. Si toca pantalla, **se abre y se MIRA** con captura. Un 200 no es verificación.
 6. Se marca acá con `[x]` y una línea de qué quedó. **Lo tachado no se rehace.**
-7. Si algo se bloquea con una decisión de Sergio: `PushNotification` de una línea **y seguir con
+7. **La bitácora de una corrida NO va en "Ahora": va en `## Registro de corridas`.** "Ahora" es
+   lo que queda por hacer; un `### Del carril X — corrida del <fecha>` es una foto de un día y
+   por `CLAUDE.md` es historia, no fuente de verdad.
+   ⚠️ **No es prolijidad: es lo que rompe la cola y su gate.** Medido el 2026-09-07 — "Ahora"
+   había llegado a **2.481 líneas (66 % del archivo) con 59 registros cerrados y UN solo ítem
+   abierto**, así que el paso 1 («tomá el primer ítem no bloqueado») mandaba a leer una
+   bitácora entera, y `verificar_cola.js` daba **exit 1** con 14 errores que eran **todos**
+   sobre trabajo ya terminado. Tres rondas intentaron arreglarlo aflojando el gate y las tres
+   volvieron a rojo: el gate mide "Ahora" por diseño, y lo que sobraba era el sujeto.
+8. Si algo se bloquea con una decisión de Sergio: `PushNotification` de una línea **y seguir con
    lo desbloqueado**. Un ítem trabado no frena la cola.
 
 **Nunca:** desplegar al VPS, tocar worktrees o ramas de otras sesiones, gastar plata, ni bajar una
@@ -63,10 +77,178 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [x] 🔴 **El menú de arriba ofrece TRES líneas de negocio congeladas. Sergio Urcullo dijo «ok C»
+      el 2026-09-07 — sacalas. — CERRADO 2026-09-08 por `web-venta` (`653f2a98`, `8de73198`).**
+      **Media premisa ya estaba vencida al empezar la vuelta:** `Webs`, `Marketing IA` y
+      `Consultoría` salieron del nav ese mismo día por `t_30b1711d`, así que lo que quedaba vivo
+      en el segundo nivel era `Agentes · Comparativa · Nosotros`. Eso se sacó.
+      **Listo, cumplido con captura:** servido el build propio y abierto renderizado, el
+      `<header>` da **0** para las seis rutas en sus DOS niveles —
+      `/root/capturas-nav/01-barra-escritorio.png` (barra: `Rubros · Precios · Facturación ·
+      Contacto`) y `/root/capturas-nav/02-menu-telefono.png` (menú abierto: Producto = `Rubros · Chatbot · Precios`,
+      Decidir = `Facturación · Contacto · Empezar`). Sin respuestas ≥400 salvo el 429 del widget
+      de Chatwoot, que es el límite por IP que se provoca sola toda sonda que abre varias
+      pantallas — no es un defecto del sitio.
+      ⚠️ **Se verificó contra el build propio y NO contra `onia.com.bo`, a propósito:** el sitio
+      vivo sirve el build anterior al deploy que espera el `ok` de Sergio Urcullo (`t_a4b52e27`).
+      Mirarlo allá habría mostrado el defecto y no el arreglo.
+      **Lo que el ítem no preveía, y salió midiendo en vez de suponiendo:** sacar las tres del nav
+      dejaba `/comparativa` y `/nosotros` sin UNA sola pantalla que las enlazara, y
+      `alcance.test.ts` se puso en rojo por las dos (por `/agentes` no: la portada ya la ofrece en
+      su cuerpo). La salida documentada para ese caso es el disallow de `robots.ts`, **y no se
+      tomó**: desindexar no es «sale del menú», y con cero clientes pagando `/nosotros` es el
+      único sustituto del testimonio. Las dos quedaron alcanzables e indexadas con un enlace en el
+      cuerpo de la pantalla cuyo lector es el mismo — la comparación bajo las condiciones de
+      `/precios`, «quiénes somos» en `/contacto` — verificados renderizados (156×24 px y
+      119×24 px, ver `/root/capturas-nav/03-precios.png` y `/root/capturas-nav/03-contacto.png`).
+      **De paso, una afirmación de cobertura falsa:** `nav.ts` decía que `/comparativa` ya estaba
+      «enlazada desde el cuerpo de `/precios`». No lo estaba —ningún `.tsx` del árbol vivo ni
+      módulo `@/` que él importe escribía ese `href`— y era justo la frase que habría hecho
+      desindexar la pantalla sin que nada se pusiera rojo.
+      **Lo ancla `nav-solo-el-sistema.test.ts`**, que invierte el sujeto del gate hermano:
+      `nav-sin-agencia` persigue lo PROHIBIDO (`/servicios/*`) y es ciego a una entrada nueva;
+      éste compara contra una lista de APROBADAS por igualdad de conjuntos, así que ve la que
+      sobra Y la que falta, en los dos niveles más el literal desnudo del cromo. Validado por
+      mutación, seis en rojo cada una por su razón. **La primera versión fallaba ABIERTO** y lo
+      cazó la mutación: comparaba la UNIÓN de los niveles, así que sacar `Precios` de la barra
+      visible dejaba los 868 casos en verde porque seguía en el menú de teléfono.
+      Medido ese día sobre el sitio vivo, abriéndolo renderizado: el `header` tiene **dos
+      niveles**. El visible es limpio (`Rubros · Precios · Facturación · Contacto`), pero debajo
+      hay otro con: `Rubros · Agentes · Chatbot · Precios · **Webs · Marketing IA · Consultoría**
+      · Comparativa · Facturación · Nosotros · Contacto · Empezar`.
+
+      **Webs, Marketing IA y Consultoría son líneas que se congelaron ese mismo día** («todo el
+      foco en Onia Platform»). Un lead entra a comprar un sistema y ve un menú de agencia — que
+      es justo lo que `CLAUDE.md` prohíbe: *no se abre una línea de negocio nueva*, y menos se la
+      publica en la puerta de entrada.
+
+      **Qué queda, decidido:** `Rubros · Precios · Facturación · Contacto` **+ `Chatbot`**. El
+      chatbot se queda porque pasa el test de tres preguntas de `CLAUDE.md` §10: es add-on del
+      sistema, no un negocio nuevo. Salen `Webs`, `Marketing IA`, `Consultoría`, `Comparativa`,
+      `Nosotros` y `Agentes`.
+
+      ⚠️ **Salen del MENÚ, no del sitio.** Las páginas siguen publicadas y respondiendo; lo que se
+      quita es que compitan con `Precios` en la barra. Borrar una ruta viva es otra decisión y no
+      está tomada.
+
+      ⚠️ **Y ojo con lo que YA está hecho**, para no perder una vuelta re-arreglándolo: los cuatro
+      botones «Creá tu cuenta» **ya van derecho** a `app.onia.com.bo/register` (verificado, 4 de
+      4), y `/comparativa` y `/nosotros` **ya no están en el nivel visible**. El trabajo es el
+      segundo nivel.
+
+      **Dónde vive:** `web-factory/apps/onia-platform/src/app/(sitio)/nav.ts` (los dos niveles) y
+      `web-factory/apps/onia-platform/src/app/(sitio)/menu.tsx` (el de teléfono).
+
+      **Listo =** abrir `onia.com.bo` renderizada y que
+      `header a[href*=webs], [href*=marketing], [href*=consultoria], [href*=comparativa], [href*=nosotros]`
+      dé **0**, con la captura como prueba. Un `grep` al código no alcanza: el menú tiene dos
+      niveles y por eso este defecto sobrevivió a la revisión anterior.
+
+- [ ] 🔴 **Tus cuatro números dieron VERDE 13 vueltas seguidas mientras 34 arreglos tuyos no
+      llegaban al cliente. El instrumento no distingue «arreglado» de «arreglado y publicado».**
+      Medido el 2026-09-07 18:41 UTC: `stat /opt/onia-landing/runtime-next` daba
+      **2026-09-04 10:04** —tres días— y `publicar.sh` contó **34 arreglo(s) que el cliente no
+      ve**. En esas mismas horas tu objetivo se declaró *«prohibidos 0 · precios fuera de fuente
+      0 · CTA rotos 0 · favicon 200»*, vuelta tras vuelta, y tu propia lección de la vuelta 13
+      dice *«décimotercera vuelta midiendo el árbol»*. El árbol, no el sitio.
+      **Por qué es tuyo y no del que despliega:** sos el dueño de `onia.com.bo` y `/empezar`. Un
+      arreglo que no se publica no existe para el lead, y hoy tu instrumento firma en verde
+      igual. Es la misma familia que ya mordió tres veces este día —un gate que mide donde no
+      duele— y la que `web-factory/apps/onia-platform/scripts/deploy-vivo.mjs` resuelve para el
+      producto: compara el **BUILD_ID vivo** contra los commits de tu zona en `origin/main`.
+      ⚠️ **El favicon no sirve como termómetro** y ya está escrito por qué: una vez que un deploy
+      lo trae, da 200 para siempre y queda clavado en verde sobre un sitio de días.
+      **Listo =** tu objetivo incluye un quinto número —*arreglos de mi zona en `main` que el
+      sitio vivo NO sirve*— que hoy daría **34** y no 0; y una vuelta en la que ese número baja
+      a 0 porque se pidió el deploy, no porque se dejó de mirar.
+      **Medido de nuevo el 2026-09-08 08:50 UTC: el quinto número es 1, no 34** — hubo deploy el
+      08-sep 02:58 UTC. Los dos instrumentos coinciden y desde hoy la línea `OBJETIVO:` los
+      reporta: `node web-factory/apps/onia-platform/scripts/deploy-vivo.mjs` y
+      `ssh root@187.77.16.63 'bash /opt/onia-landing/_deploy/publicar.sh --dry-run'` (éste es el
+      que manda: deriva todo al ejecutarse y filtra lo que no viaja al navegador). El pedido por
+      ese 1 arreglo ya existe y está bloqueado en Sergio Urcullo: `t_a4b52e27` — **no se abre
+      otro ni se re-mide**, que es como se duplican. Falta sólo la segunda mitad: la vuelta en
+      que baje a 0, y ésa depende de su `ok`.
+      ⚠️ **Ese último párrafo venció, y su instrucción —«no se re-mide»— es lo que lo mantenía
+      vivo.** Medido por `onia-cola` el 2026-09-08 16:47 La Paz, contra producción y contra el
+      tablero: `bash /opt/onia-landing/_deploy/publicar.sh --dry-run` contesta literalmente
+      **«YA ESTA PUBLICADO — el sitio vivo sirve todo lo que main tiene»**, y `t_a4b52e27` figura
+      **`archived`**, no `blocked`. O sea que el quinto número es **0** y la segunda mitad del
+      `Listo =` está cumplida: bajó a 0 **porque se publicó**, no porque se dejó de mirar.
+      Lo que esto le enseña a cualquier carril, y por eso queda escrito acá: **un puntero a una
+      tarea que además prohíbe re-medir es una medición con fecha de vencimiento que se defiende
+      sola.** El pedido se archiva o se cumple, el doc sigue diciendo «bloqueado», y el que lo
+      lee obedece la prohibición en vez de gastar los 10 segundos que cuesta preguntar. El estado
+      de un pedido se DERIVA (`onia-tablero.sh show <id>` y el `--dry-run` del publicador), nunca
+      se cita de una vuelta anterior. `web-venta` puede cerrar este ítem en su próxima vuelta.
+
+- [x] 🟠 **El gate de la cola lleva TRES arreglos y vuelve a rojo cada vez, porque las tres
+      rondas corrigieron el eje equivocado. — CERRADO 2026-09-07 por `onia-cola`, con la
+      salida (b) y una corrección al diagnóstico.**
+      **Lo que estaba mal en este ítem: la clase no era del gate, era de la SECCIÓN.** Medido:
+      `## Ahora` tenía **2.481 líneas — el 66 % del archivo — con 59 registros cerrados y UN
+      solo ítem abierto** (éste), porque las 28 bitácoras `### … corrida del <fecha>` de
+      `canario-visual` y `web-venta` se venían escribiendo adentro. El gate mide "Ahora" **por
+      diseño** («el filtro es sobre lo que se declara accionable HOY»), así que los 14 errores
+      eran **todos** sobre trabajo ya terminado. Y la salida (a) no se podía tomar sin romper
+      un contrato ya escrito con su motivo: `scripts/verificar_cola.js:853` fija que *«un item
+      marcado hecho también se verifica, o la cola miente hacia atrás»*.
+      **Lo que se hizo:** se cerró "Ahora" con la sección `## Registro de corridas` justo antes
+      de la primera bitácora fechada — **cero texto movido**, verificado por multiset de líneas
+      (0 perdidas), no por conteo de ítems, que es como el corte por script ya borró un bloque
+      en silencio antes. Y se tildaron los **6 registros 🟢 terminados** que habían quedado en
+      `[ ]` — de ahí salía también el `duplicado` (dos corridas del mismo chequeo, ambas
+      abiertas). Resultado: `npm run cola:viva` → **exit 0, «10 items en Ahora, todos con
+      evidencia real»**. El paso 7 de "Cómo se trabaja esta cola" ahora fija dónde va una
+      bitácora, que es lo que impide que vuelva.
+      ⚠️ **Y por qué NO se cableó a `npm test`, que era lo que este ítem pedía para cerrarse:**
+      medido copiando `COLA.md` a un árbol pelado, la **misma** cola que acá sale verde sale
+      con decenas de `fantasma` allá — `existeEnAlgunRepo` le pregunta al disco y sube seis
+      padres buscando el repo hermano. Cablearlo es el rojo **por ambiente** que trabaría el
+      merge de los quince carriles (a `chatbot-cola` ya le faltó ese árbol al mudarse de
+      máquina). Va el patrón de la casa: el `--self-check` puro sigue en la cadena, la medición
+      viva queda como alias suelto (`npm run cola:viva`), y el gate ahora sale **2 = NO MEDIDO**
+      —nunca 1— cuando no ve el repo. Guardia probado por mutación en las dos direcciones:
+      apagarlo y dejarlo siempre encendido fallan cada uno por su propia razón.
+
+- [x] 🟠 **(diagnóstico anterior, conservado — era correcto salvo en el sujeto)** Medido el 2026-09-07 por `onia-cola`:
+      `node scripts/verificar_cola.js hermes-content/docs/COLA.md` sale **exit 1**. Cuatro
+      errores eran defectos de verdad y se cerraron en esa vuelta (ver la auditoría al pie del
+      ítem del gate, en "Después"); **los 14 que quedan son UNA sola clase** — 8
+      `sin-evidencia`, 5 `fantasma`, 1 `duplicado`.
+      **La clase, dicha entera:** el detector supone que *la evidencia de un ítem es un archivo
+      del repo*. Eso era cierto cuando la cola era sólo de producto. Dejó de serlo cuando
+      `web-venta` y `canario-visual` empezaron a escribir acá **ítems de medición**, cuya prueba
+      es una pantalla viva y un número, no un archivo: `contacto` (322 KB/104 ms), `register`
+      (705 KB/153 ms). De ahí salen los 8 `sin-evidencia`. De la misma raíz salen los 5
+      `fantasma` — sitemap.xml, home.json, home.png y .canario-out/ (sin backticks a propósito:
+      el gate los lee como evidencia) son **artefactos que se generan al correr**, no archivos
+      versionados — y el `duplicado`, que son **dos corridas
+      distintas del mismo chequeo en días distintos** compartiendo título (1844 y 2338 traen
+      mediciones distintas: 104 ms contra 158 ms).
+      **Método descartado, y es lo que se lleva el ítem:** agregar la carve-out N+1 de
+      **notación**. Van tres rondas (glob, elipsis, nombre de rama, ruta parcial, expansión de
+      llaves) y cada una convergió y volvió a divergir, porque ninguna toca el modelo. La
+      siguiente vuelta **no** empieza escribiendo un patrón nuevo.
+      **Las dos salidas, y hay que elegir UNA (no las dos):**
+      (a) enseñarle al gate la clase — una medición de pantalla cuenta como evidencia, y un
+      ítem fechado puede repetir título; o
+      (b) sacar los ítems de medición de este archivo y mandarlos a
+      `hermes-content/docs/historial/`, que es donde `CLAUDE.md` manda las fotos de un día.
+      (b) es más fiel a la regla de la casa, pero mueve contenido de otros dos carriles y el
+      corte por script ya borró un bloque en silencio antes: si se toma, se verifica por
+      **presencia del texto movido**, nunca por el número de ítems.
+      ⚠️ **Y lo que explica por qué esto se pudre sin que nadie lo note:** la cadena `npm test`
+      declara `test:cola-selfcheck`, que corre `--self-check` (el detector contra sus fixtures)
+      y **nunca** el gate contra `hermes-content/docs/COLA.md`. Por eso `guards-cableados` lo ve
+      cableado y verde mientras el sujeto real lleva días en rojo. Cablearlo tal cual **hoy no
+      se puede**: pondría rojo `main` y trabaría el merge de los 15 carriles por higiene de un
+      doc. Cablearlo es lo que cierra el ítem, y sólo después de (a) o (b).
+
 - [x] **`/nosotros` re-escribe a mano la promesa fiscal en vez de leerla de su fuente**
       (web-venta, 2026-09-06). `src/app/(sitio)/nosotros/page.tsx:151` dice *"nuestro emisor
       de facturación está registrado ante el SIN con las pruebas técnicas de la Fase 1
-      completadas"*, tipeado a mano. La fuente es `src/content/siat.ts:52`, que además
+      completadas"*, tipeado a mano. La fuente es `src/lib/siat.ts:52`, que además
       aclara lo que la página se come: *"Quedan las etapas formales del trámite (inspección
       del SIN)"*, y `lib/proof.ts:115` tiene el estado en `siat: "tramite"`. **No lo ve
       ningún gate**: `facturacion.test.ts` sólo vigila `textosDeMetadata()` (el `<head>` y el
@@ -75,7 +257,9 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       cuatro precios vivos: dos copias del mismo hecho, y la de la página no envejece con la
       fuente. **Arreglo:** que `/nosotros` lea de `siat.ts`, y extender el gate al cuerpo.
       **HECHO 2026-09-06** (`8db85fba8`). La ruta que citaba este ítem era
-      `src/content/siat.ts` y la fuente real es `src/lib/siat.ts`. Ahora `/nosotros`
+      src/content/siat.ts —sin backticks a propósito: no existe, y los backticks son
+      justamente lo que este gate lee como "acá hay evidencia"— y la fuente real es
+      `src/lib/siat.ts`. Ahora `/nosotros`
       lee `SIAT_ESTADO_ONIA`, que trae las dos mitades juntas. Gate nuevo:
       `(sitio)/promesa-fiscal.test.ts` — la mitad tipeada a mano que
       `promesa-en-el-cuerpo.test.ts` no puede ver (aquél sigue el grafo de imports).
@@ -353,6 +537,29 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       lineas del chatbot y no la palabra suelta.
       **Lo que NO se toco, a proposito:** las propuestas ya entregadas — queda anotado abajo en
       "Despues" porque tiene una trampa que no es de copy.
+
+---
+
+## Registro de corridas (2026-09-01 → 2026-09-03) — no rehacer
+
+> **Esto NO es cola: es la bitácora de lo ya corrido.** Cada `###` de abajo es una corrida
+> fechada de un carril (`canario-visual`, `web-venta`, `onia-cola`) con lo que midió ese día.
+> Se lee para no repetir un hallazgo; **no se toma trabajo de acá.**
+>
+> **Por qué existe esta sección, medido el 2026-09-07 por `onia-cola`:** estas 28 corridas
+> vivían dentro de `## Ahora`, que quedó con **2.481 líneas — el 66 % del archivo — y UN solo
+> ítem realmente abierto** contra 59 registros ya cerrados. Dos costos, y el segundo es el caro:
+> `node scripts/verificar_cola.js hermes-content/docs/COLA.md` daba **exit 1** con 14 errores
+> —8 `sin-evidencia`, 5 `fantasma`, 1 `duplicado`—, **todos** sobre registros de trabajo
+> terminado; y sobre todo, la instrucción que todos los carriles obedecen («tomá el primer ítem
+> no bloqueado de "Ahora"») mandaba a leer 2.481 líneas de bitácora para encontrar un ítem.
+>
+> ⚠️ **El gate NO estaba roto: la sección lo estaba.** Las tres rondas anteriores le agregaron
+> carve-outs de notación (glob, elipsis, nombre de rama, ruta parcial, expansión de llaves) y
+> las tres volvieron a divergir, porque el gate mide `## Ahora` **por diseño** —«el filtro es
+> sobre lo que se declara accionable HOY»— y lo que había ahí no era accionable. Y la salida
+> tampoco era aflojarlo: `verificar_cola.js:853` fija a propósito que *«un item marcado hecho
+> también se verifica, o la cola miente hacia atrás»*. Lo que sobraba era el sujeto.
 
 ### Del canario visual — corrida del 2026-09-01 (abiertas y MIRADAS, no un 200)
 
@@ -1248,7 +1455,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ### Del canario visual — corrida del 2026-09-02 04:41 UTC (diez pantallas, sin ítems nuevos)
 
-- [ ] 🟢 **Pasada completa de las diez pantallas, mirando cada captura. No encontré defecto
+- [x] 🟢 **Pasada completa de las diez pantallas, mirando cada captura. No encontré defecto
       nuevo.** Detalle de lo que sí toqué:
       - **Cinco baselines nuevas creadas** (no existían): `precios`, `rubros`,
         `chatbot-landing`, `contacto`, `register`. Es el punto de partida, no una verificación.
@@ -1491,7 +1698,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 </details>
 
-- [ ] 🟢 **Las otras nueve pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
+- [x] 🟢 **Las otras nueve pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
       Pesos/tiempos de hoy: home 2.857 KB/367 ms · precios 2.108 KB/803 ms · empezar 2.253 KB/464 ms ·
       rubros 2.587 KB/377 ms · contacto 322 KB/429 ms · register 704 KB/456 ms ·
       login-plataforma 699 KB/457 ms · login-chat 3.499 KB/1.249 ms.
@@ -1841,7 +2048,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       Arreglo `f0248601` en `main`, gate `cierre.test.ts` puesto, decisión ya cotizada en el
       radar. **Del lado del código no queda nada: falta sólo el deploy, que es de Sergio.**
 
-- [ ] 🟢 **Las otras cinco pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
+- [x] 🟢 **Las otras cinco pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
       Miradas una por una: `contacto` (322 KB/104 ms, formulario y CTAs completos),
       `register` (705 KB/153 ms, asistente de 2 pasos con 5 rubros, íconos legibles),
       `login-plataforma` (696 KB/128 ms, íconos legibles, "Pedí tu acceso" presente),
@@ -2228,13 +2435,13 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       `height` y `alt` real (son fotos de contexto, no capturas del sistema: cumplen la regla) ·
       los 19 enlaces internos y assets responden 200.
 
-- [ ] 🟢 **`/guia-facturacion` la enlaza UNA sola página (`/facturacion`) — no lo toqué, y el
+- [x] 🟢 **`/guia-facturacion` la enlaza UNA sola página (`/facturacion`) — no lo toqué, y el
       motivo importa.** Salió del mismo conteo. No es el mismo defecto que los servicios: está
       enlazada desde el árbol VIVO, así que un lead sí puede llegar. Parece deliberado (es el
       imán de la página de facturación). Queda anotado por si el dueño del contenido lo quiere
       también en el pie; el gate ya la cubre y hoy pasa.
 
-- [ ] 🟢 **Cloudflare ofusca el correo de contacto en `/privacidad` y `/terminos`, y para un
+- [x] 🟢 **Cloudflare ofusca el correo de contacto en `/privacidad` y `/terminos`, y para un
       rastreador sin JS el contacto legal dice `[email protected]`.** Medido: el HTML servido
       trae `<a href="/cdn-cgi/l/email-protection">` en 7 lugares de 4 páginas. **Mirado
       renderizado: para un humano NO hay defecto** — el decodificador de Cloudflare corre y la
@@ -2335,7 +2542,7 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Evidencia:** capturas de hoy en
       `hermes-content/docs/historial/canario-visual/2026-09-03-{home,precios,empezar,rubros,chatbot-landing}.png`.
 
-- [ ] 🟢 **Las otras cinco pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
+- [x] 🟢 **Las otras cinco pantallas: sin disparo mecánico y sin defecto nuevo a la vista.**
       `contacto` (322 KB/158 ms), `register` (707 KB/178 ms, 5 rubros con íconos legibles),
       `login-plataforma` (696 KB/98 ms, "Pedí tu acceso" presente), `login-chat`
       (3.500 KB/928 ms, formulario Chatwoot propio, no está caído), `panel-chatbot`
@@ -2891,6 +3098,35 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       en esa misma carpeta no se veía y el caso nuevo daba rojo con el detector ya correcto.
       Se le dio árbol propio al bloque, en vez de agregarle al script una API de reset que sólo
       usarían los tests.
+
+      **↑ Auditado el 2026-09-07 11:00 UTC por `onia-cola` (escalón 2). El `[x]` sigue siendo
+      cierto por lo que hizo —sus carve-outs de notación están vivos y probados—, pero su
+      medición de cierre («el gate sobre `COLA.md` **exit 0, 20 ítems**») venció: hoy sale
+      **exit 1 con 18 ERROR**. Lo abierto se sigue en el ítem nuevo de "Ahora", no acá.**
+      Lo que esta vuelta **sí** cerró, porque eran defectos de verdad y no ruido:
+      - **El sha `6d8b6b7`, citado 4 veces y fantasma en los dos repos** (`git cat-file -t`
+        dice *Not a valid object name*). No era una clase nueva: es el **cuarto** del mismo
+        conjunto que `COLA.md:285` lista junto a `6edfab6`, `a15c82f` y `e46e9ee` — los tres ya
+        estaban en `SHAS_SIN_REPO_A_PROPOSITO` y éste quedó afuera por descuido. Se usó el
+        mecanismo que ya existía, con su motivo, y su recíproco (`excepcion-sha-vencida`) lo
+        sigue cubriendo.
+      - **Y al agregarlo, el `--self-check` se cayó — hizo exactamente su trabajo.** Su fixture
+        de "sha que no existe" **era** `6d8b6b7`, o sea el caso compartía valor con la lista
+        blanca. Del lado en que se cayó no hay daño (rojo ruidoso); el peligroso es el otro:
+        con la lista absolviendo al fixture, el caso pasa en **VERDE sin medir nada**. Ahora el
+        fixture es imposible (`0ddbeef`) y tiene **guarda propia** que prohíbe la colisión.
+        Probada por mutación: metiendo el fixture en la lista, el self-check sale rojo
+        nombrándola, **antes** de llegar al caso que quedaría hueco.
+        *(Dos fixtures descartados en el camino, por si alguien repite: `f1x7ure` no es hex y
+        `deadbee` no tiene un solo dígito — las tres condiciones del extractor están en la
+        línea 99. Los dos hacían fallar el caso por "no es un sha", que es rojo por el motivo
+        equivocado y no mide la regla.)*
+      - **La cita muerta `src/content/siat.ts`** del ítem de `/nosotros`: ese archivo nunca
+        existió, la fuente real es `src/lib/siat.ts` y **el propio ítem ya lo decía** en su
+        nota de cierre. Corregida la cita del cuerpo y sacados los backticks de la mención
+        narrativa, que es lo que el gate lee como "acá hay evidencia".
+      **Medido:** `--self-check` **96 casos**, exit 0 · el gate sobre `COLA.md` bajó de **18 a
+      14** ERROR · `npm test` exit 0.
 
       *(Texto original del ítem, para que se vea contra qué se midió.)* Medido el 2026-09-02 corriendo
       `node scripts/verificar_cola.js hermes-content/docs/COLA.md`: sale con 4 ERROR y **los

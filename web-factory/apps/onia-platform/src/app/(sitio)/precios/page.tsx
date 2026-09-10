@@ -73,7 +73,7 @@ const DESC_SEMANAL = bs(
 
 export const metadata: Metadata = {
   title: "Precios de Onia — planes en bolivianos, publicados",
-  description: `${DESC_PLANES} al mes (o semanal desde Bs ${DESC_SEMANAL}). Sin tarjeta para probar, sin contratos de permanencia y con la letra chica publicada. 14 días gratis.`,
+  description: `${DESC_PLANES} al mes (o semanal desde Bs ${DESC_SEMANAL}). Sin tarjeta para probar, sin contratos de permanencia y con la letra chica publicada. ${PRUEBA.dias} días gratis.`,
   alternates: { canonical: "/precios" },
   openGraph: {
     type: "website",
@@ -84,7 +84,7 @@ export const metadata: Metadata = {
     // número y el patrón sólo buscaba "Bs 320". La `description` de arriba ya
     // se había atado a la tabla y su hermana de OpenGraph —la que se ve al
     // compartir el enlace— quedó con los tres precios congelados.
-    description: `${PLANES.map((p) => `${p.nombre} ${bs(p.mensual)}`).join(" · ")} Bs/mes. 14 días gratis sin tarjeta, sin permanencia.`,
+    description: `${PLANES.map((p) => `${p.nombre} ${bs(p.mensual)}`).join(" · ")} Bs/mes. ${PRUEBA.dias} días gratis sin tarjeta, sin permanencia.`,
     url: "/precios",
   },
 };
@@ -366,6 +366,27 @@ export default function Precios() {
               <li key={c}>{c}</li>
             ))}
           </ul>
+          {/* La comparación vive ACÁ y no en el menú de arriba.
+
+              `/comparativa` salió del nav el 2026-09-08 («ok C» de Sergio
+              Urcullo). El error no es comparar —`lety.ai`, la referencia que él
+              fijó, también compara con nombre— sino DÓNDE: pegada a «Precios» en
+              la barra, el camino de compra le ofrecía al que ya venía a pagar
+              una pantalla con seis competidores y su precio. Abajo de las
+              condiciones el sujeto es otro: el que ya leyó cuánto cuesta y está
+              decidiendo. Ver `header-camino-de-compra.test.ts`.
+
+              Y es el enlace que la mantiene ALCANZABLE: sin él queda sin una
+              sola pantalla que la ofrezca y `alcance.test.ts` la manda al
+              disallow de `robots.ts` — o sea, desindexada. Medido: sacarla del
+              nav sin esto pone el gate en rojo. */}
+          <p className={s.note} style={{ marginTop: "2em", maxWidth: "52em" }}>
+            ¿Lo estás comparando con otra opción?{" "}
+            <a className={s.link} href="/comparativa">
+              Mirá la comparación
+            </a>
+            .
+          </p>
         </Reveal>
       </Block>
 

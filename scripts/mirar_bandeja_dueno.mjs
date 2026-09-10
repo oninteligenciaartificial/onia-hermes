@@ -35,7 +35,8 @@
 // El mint de sesión vive en `scripts/lib/sesion_dueno.mjs` desde el 2026-09-06: apareció un
 // segundo consumidor (recorrer el onboarding por la UI) y dos copias de esto divergen sin
 // fallar — la que quede vieja entra igual y mide otra cosa.
-import { cargar, acunarSesion } from "./lib/sesion_dueno.mjs";
+import { acunarSesion } from "./lib/sesion_dueno.mjs";
+import { cargarPlaywright } from "./lib/playwright-que-arranca.mjs";
 
 function arg(nombre, porDefecto) {
   const i = process.argv.indexOf(`--${nombre}`);
@@ -59,13 +60,23 @@ const ANCLA = arg("ancla", "");
 // Nace del 2026-09-06: "servicios profesionales no puede agendar" llevaba dos dias sin poder
 // resolverse porque el bloqueo esta dentro del modal de Nueva Cita, y nadie lo habia MIRADO.
 const CLICK = arg("click", "");
+// --movil: el viewport era 1440x900 fijo, así que TODA pantalla mirada con este instrumento
+// quedaba mirada sólo en escritorio. No es un detalle de comodidad: el panel esconde la
+// botonera superior en móvil y deja el FAB flotante como única acción, o sea que las dos
+// mitades del mismo defecto ("la misma acción tres veces") viven en viewports distintos y
+// una captura de escritorio no puede ver la otra. Nace de t_4f185df8, cuya definición de
+// hecho pide escritorio Y móvil y no se podía cumplir con este script.
+const MOVIL = process.argv.includes("--movil");
+const VIEWPORT = MOVIL ? { width: 390, height: 844 } : { width: 1440, height: 900 };
 
 const { host, cookies, email } = await acunarSesion(EMAIL);
 console.log(`sesión emitida para ${email} — ${cookies.length} cookie(s): ${cookies.map((c) => c.name).join(", ")}`);
 
-const { chromium } = cargar("playwright");
+const { chromium, raiz: raizPw } = await cargarPlaywright();
+console.log(`playwright: ${raizPw}`);
 const navegador = await chromium.launch({ args: ["--no-sandbox"] });
-const ctx = await navegador.newContext({ viewport: { width: 1440, height: 900 } });
+const ctx = await navegador.newContext({ viewport: VIEWPORT, isMobile: MOVIL, hasTouch: MOVIL });
+console.log(`viewport: ${VIEWPORT.width}x${VIEWPORT.height}${MOVIL ? " (móvil)" : " (escritorio)"}`);
 await ctx.addCookies(
   cookies.map((c) => ({ ...c, domain: host, path: "/", httpOnly: false, secure: true, sameSite: "Lax" }))
 );
@@ -76,7 +87,22 @@ const pagina = await ctx.newPage();
 const fallos = [];
 pagina.on("response", (r) => { if (r.status() >= 400) fallos.push(`${r.status()} ${r.url()}`); });
 
-await pagina.goto(`https://${host}${RUTA}`, { waitUntil: "networkidle", timeout: 90000 });
+// `networkidle` da la pagina ASENTADA, que es lo que se quiere mirar — pero una pantalla con
+// conexion persistente (el asistente IA, realtime de Supabase, un widget que hace polling) no
+// se queda quieta NUNCA, asi que la espera vence y el script moria con TimeoutError. Eso se lee
+// como "la pantalla no carga", que es un defecto del producto: medido el 2026-09-08 sobre
+// /dashboard, mientras `curl` daba 200 en 1 s y la app estaba sana. La espera buena se conserva
+// y deja de ser fatal: si no llega, se cae a `load` y se DICE, porque una captura degradada no
+// se puede leer como una asentada.
+let asentada = "networkidle";
+try {
+  await pagina.goto(`https://${host}${RUTA}`, { waitUntil: "networkidle", timeout: 45000 });
+} catch (e) {
+  if (e?.name !== "TimeoutError") throw e;
+  asentada = "load (networkidle no llego: la pantalla tiene conexion persistente)";
+  await pagina.goto(`https://${host}${RUTA}`, { waitUntil: "load", timeout: 45000 });
+}
+console.log("espera:", asentada);
 await pagina.waitForTimeout(2500);
 // El scroll suave saca la foto a mitad de camino.
 await pagina.addStyleTag({ content: "*{scroll-behavior:auto !important}" });

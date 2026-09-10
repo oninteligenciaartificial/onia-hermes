@@ -218,8 +218,31 @@ poner "$FUENTE/sincronizar.sh" "$DESTINO_BIN/onia-loops-sync.sh"
 # El corredor no mergea `main` hacia las ramas de carril (a proposito: le arrancaria
 # el arbol de abajo a un loop en curso), asi que una herramienta compartida NO puede
 # vivir en una rama — llega solo a quien casualmente este actualizado. Va a /root/bin
-# junto a onia-tg.sh, que es exactamente el mismo caso y por eso nunca fallo.
+# junto a onia-tg.sh, que es exactamente el mismo caso.
 poner "$RAIZ/scripts/kanban/tablero.sh" "$DESTINO_BIN/onia-tablero.sh"
+
+# El ENRUTADOR de avisos, que es como un carril le habla a Sergio Urcullo y como
+# nacen las tareas [auto:] del tablero.
+#
+# ⚠️ Aca arriba decia "junto a onia-tg.sh, que es exactamente el mismo caso y por eso
+# nunca fallo" — y era FALSO: onia-tg.sh NO tenia linea `poner`. Corregido el
+# 2026-09-10. Su copia de /root/bin del VPS estaba puesta a mano (mtime 08-sep 16:39)
+# y se atraso: el 2026-09-08 chatbot-cola arreglo la dedup para que la clave se
+# calcule sobre el titulo NORMALIZADO —sin eso, dos avisos que solo difieren en la
+# duracion ("chatbot-cola · 433s" y "· 7s") hashean distinto y el aviso se duplica—,
+# el arreglo entro a main con su gate verde (test:tg-dedup) y la maquina que lo corre
+# siguio con `CLAVE=$(printf '%s' "$TITULO" | md5sum ...)`. Dos dias despues habia 22
+# tareas [auto:] vivas que eran el MISMO aviso, sobre el tablero del que los cuatro
+# carriles sacan trabajo.
+#
+# La frase importa porque manda al revés: quien la lee da el caso por cubierto y no
+# mira las lineas `poner`. Un comentario que explica por que algo no hace falta es una
+# hipotesis con fecha, no un hecho.
+#
+# En el nodo de casa esto es un SHIM que sale por SSH (el token vive en el VPS), y la
+# guarda de `poner` lo conserva por su marca de la linea 2. Lo cubre
+# `npm run test:herramientas-desplegadas`, que deriva el universo del disco.
+poner "$FUENTE/onia-tg.sh" "$DESTINO_BIN/onia-tg.sh"
 
 # El lector de Telegram de RESPALDO, por la misma razon que el tablero: es una
 # herramienta del VPS, no un archivo de carril.
@@ -268,6 +291,10 @@ poner "$FUENTE/vigia-disco.sh"             "$DESTINO_BIN/onia-vigia-disco.sh"
 # puede avisar de su propia muerte (PLAN_HOMELAB.md §6). Sin lista de loops
 # mudados no hace nada, asi que es seguro tenerlo desplegado desde antes.
 poner "$FUENTE/vigia-loops-remotos.sh"     "$DESTINO_BIN/onia-vigia-loops-remotos.sh"
+# El vigia del CI de GitHub. Sin el, un `master` roto por Actions no se lo dice
+# a nadie: el 2026-09-06 un .ico en RGB lo tumbo y se supo 10 min despues, de
+# casualidad. Sale 0 y avisa una sola vez mientras le falte el token.
+poner "$FUENTE/vigia-ci.sh"                "$DESTINO_BIN/onia-vigia-ci.sh"
 poner "$FUENTE/aligerar-worktrees.sh"      "$DESTINO_BIN/onia-aligerar-worktrees.sh"
 poner "$FUENTE/respaldar-memoria-hermes.sh" "$DESTINO_BIN/onia-respaldar-memoria.sh"
 poner "$FUENTE/renovar-slots-bot.py"       "$DESTINO_BIN/onia-renovar-slots.py"
@@ -333,6 +360,20 @@ fi
 if [ -d /opt/onia/bot ]; then
   mkdir -p /opt/onia/bot/_deploy
   poner "$RAIZ/hermes-content/deploy/vps-ops/bot/publicar.sh" /opt/onia/bot/_deploy/publicar.sh
+fi
+
+# El publicador del EMISOR SIAT, el cuarto destino. Es el que faltaba: hasta el
+# 2026-09-08 era el unico de los cuatro sin circuito — sin _deploy/, fuera de la
+# lista blanca del ejecutor y sin linea aca —, asi que un pedido
+# `DESPLEGAR: siat` nacia inejecutable y el `ok` de Sergio Urcullo daba tilde
+# verde sin desplegar nada. Por eso el arreglo del CUFD (a28b3689) llevaba
+# CUATRO DIAS en main sin llegar al archivo que el VPS ejecuta: con el emisor
+# viejo, las etapas VI y IX de la Fase 1 vuelven a fallar y queman la corrida.
+# Mismo caso que el bot: el directorio _deploy NO existe y hay que crearlo, o el
+# `poner` falla y el circuito queda cableado a una ruta que no esta.
+if [ -d /opt/onia-siat ]; then
+  mkdir -p /opt/onia-siat/_deploy
+  poner "$RAIZ/hermes-content/deploy/onia-siat/publicar.sh" /opt/onia-siat/_deploy/publicar.sh
 fi
 
 mkdir -p "$DESTINO_BIN/loops"

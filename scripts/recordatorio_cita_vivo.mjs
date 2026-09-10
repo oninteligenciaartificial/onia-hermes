@@ -33,8 +33,8 @@
 // Salidas: 0 verde · 1 rojo · 2 NO MEDIDO (nunca verde cuando no pudo mirar).
 
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
+import { leerDeProduccion, VPS } from "./lib/vps-o-local.mjs";
 
 /** Org y doctor del banco de pruebas dental (zz-qa-clinica-chatbot). */
 const ORG_QA = "cmsvyguui000001ril9vhxbn2";
@@ -118,13 +118,15 @@ async function medirEnProduccion() {
   const idCita = `zz-qa-recordatorio-${sello}-cit`;
   const casilla = casillaDe(sello);
 
+  // Del disco local si está, y si no se lo preguntamos al VPS por SSH: este gate se
+  // quedó ciego el día que el loop se mudó a nodo-casa, donde `/opt` no existe.
   let secret;
-  try {
-    secret = /^CRON_SECRET=(.*)$/m.exec(readFileSync(APP_ENV, "utf8"))?.[1]?.replace(/["\r]/g, "");
-  } catch {
-    console.log(`NO MEDIDO: no pude leer ${APP_ENV} (¿estás fuera del VPS?)`);
+  const appEnv = leerDeProduccion(APP_ENV);
+  if (appEnv === null) {
+    console.log(`NO MEDIDO: no pude leer ${APP_ENV} ni en el disco ni en ${VPS}`);
     return 2;
   }
+  secret = /^CRON_SECRET=(.*)$/m.exec(appEnv.contenido)?.[1]?.replace(/["\r]/g, "");
   if (!secret) {
     console.log(`NO MEDIDO: ${APP_ENV} no tiene CRON_SECRET`);
     return 2;

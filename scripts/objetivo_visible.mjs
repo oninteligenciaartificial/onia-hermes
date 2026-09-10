@@ -123,6 +123,25 @@ export const SSR_SUBRUTA = 'node_modules/@supabase/ssr/dist/main/index.js';
  * sin disco. Si ninguno lo tiene explota nombrandolos a todos: un `Cannot find module` con una
  * ruta sola manda a instalar justo donde no hace falta.
  */
+/**
+ * De los candidatos, los que son un checkout INSTALADO — o sea, con `node_modules/`.
+ *
+ * ⚠️ Nace del 2026-09-07, y es un rojo FALSO que trabo la cadena entera. El guardia de mas
+ * abajo custodiaba "el directorio existe", y desde que el integrador corre en nodo-casa ahi
+ * existe `/root/loops/onia-platform` como clon PELADO, sin `npm ci`: el guardia exigia el
+ * modulo en un arbol que nunca lo tuvo, `npm test` salia 1 y con la cadena roja no se mergea
+ * NINGUN carril. Un clon sin `node_modules` no es un arbol al que se le perdio la dependencia:
+ * es un arbol que no se instalo, y no hay nada que custodiar ahi. El caso que el guardia SI
+ * tiene que seguir cazando —un arbol instalado del que `@supabase/ssr` desaparecio— queda
+ * intacto, porque ese si tiene `node_modules/`.
+ */
+export function arbolesCustodiables(candidatos = SSR_CANDIDATOS, existe = existsSync) {
+  return (candidatos ?? [])
+    .filter(Boolean)
+    .map((d) => String(d).replace(/\/+$/, ''))
+    .filter((d) => existe(`${d}/node_modules`));
+}
+
 export function elegirSsrDir(candidatos = SSR_CANDIDATOS, existe = existsSync) {
   const probados = (candidatos ?? []).filter(Boolean).map((d) => String(d).replace(/\/+$/, ''));
   const elegido = probados.find((d) => existe(`${d}/${SSR_SUBRUTA}`));
@@ -469,21 +488,38 @@ function selfCheck() {
   );
   afirmar(/npm ci/.test(exploto ?? ''), 'y dice como arreglarlo (npm ci), no solo que fallo');
 
+  // A QUE ARBOL SE LE EXIGE LA DEPENDENCIA. La linea de abajo decia `existe el directorio`, y
+  // desde que el integrador corre en nodo-casa eso da un rojo falso: alla el clon de
+  // `onia-platform` esta pelado. Se prueba sin disco, en las DOS direcciones — sin el segundo
+  // caso, "no custodiar nada nunca" tambien pasaria.
+  const conNodeModules = (...rutas) => (r) => rutas.some((x) => r === `${x}/node_modules`);
+  afirmar(
+    arbolesCustodiables(['/clon/pelado'], conNodeModules()).length === 0,
+    'un candidato que existe pero SIN node_modules no se custodia (el clon pelado de nodo-casa)',
+  );
+  afirmar(
+    arbolesCustodiables(['/clon/pelado', '/arbol/instalado'], conNodeModules('/arbol/instalado'))
+      .join() === '/arbol/instalado',
+    'y un arbol instalado SI se custodia: al que perdio la dependencia hay que seguir cazandolo',
+  );
+
   // ⚠️ El guardia contra disco REAL. Sin este caso, los cuatro de arriba pasan verdes con el
   // modulo ausente de la maquina y el gate vuelve a morir recien en produccion — que es
-  // exactamente como se perdio esta medicion. Solo corre donde hay algun candidato en disco:
-  // fuera del VPS no hay nada que custodiar y un rojo ahi seria falso.
-  const candidatosEnDisco = SSR_CANDIDATOS.filter((d) => existsSync(d));
+  // exactamente como se perdio esta medicion. Solo corre donde hay un arbol INSTALADO:
+  // sobre un clon pelado no hay nada que custodiar y un rojo ahi seria falso.
+  const candidatosEnDisco = arbolesCustodiables();
   if (candidatosEnDisco.length) {
     let vivo = true;
     try {
-      elegirSsrDir(SSR_CANDIDATOS);
+      elegirSsrDir(candidatosEnDisco);
     } catch {
       vivo = false;
     }
-    afirmar(vivo, `\`@supabase/ssr\` sigue instalado en alguno de: ${SSR_CANDIDATOS.join(', ')}`);
+    afirmar(vivo, `\`@supabase/ssr\` sigue instalado en alguno de: ${candidatosEnDisco.join(', ')}`);
   } else {
-    console.log('  (salteado: ningun candidato de `@supabase/ssr` en disco — no es el VPS)');
+    console.log(
+      '  (salteado: ningun checkout de `onia-platform` INSTALADO en disco — nada que custodiar aca)',
+    );
   }
 
   // A QUIEN LE PREGUNTA POR LA BANDEJA. Sin estos casos, `SQL_DUEÑO` no tenia NI UNO: los 30 de

@@ -3,7 +3,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { PressableCta, Reveal, SplitTextReveal, StaggerGrid, StaggerItem } from "@/motion";
 import { APP_URL, WA_URL_LANDING } from "@/lib/site";
-import { bs, plan } from "@/lib/pricing";
+import { bs, plan, PRUEBA } from "@/lib/pricing";
 
 const SITE_URL = "https://onia.com.bo";
 const REGISTRO_URL = `${APP_URL}/register`;
@@ -11,15 +11,21 @@ const REGISTRO_URL = `${APP_URL}/register`;
 export const metadata: Metadata = {
   metadataBase: new URL(`${SITE_URL}/`),
   title: "Software para clínicas dentales en Bolivia — Onia Platform",
+  // El plan que cuesta este «desde» NO trae los agentes: `PLANES[0].sinEsto`
+  // dice «Agentes de IA (vienen desde Pro)». Prometerlos en la misma frase que
+  // el precio más bajo hace que el lead pague creyendo que los compró y se
+  // entere cuando se le apagan — el daño que `lib/pricing.ts` ya describe. Por
+  // eso el plan va nombrado, y va AL FINAL: si Google trunca la descripción, se
+  // lleva la promesa junto con su salvedad en vez de dejar la promesa sola.
   description:
-    `Agenda, ficha del paciente con odontograma, recordatorios automáticos, caja, contabilidad con IVA/IT y agentes con IA que recuperan pacientes. Desde Bs ${bs(plan("basico").mensual)}/mes, 14 días gratis.`,
+    `Agenda, ficha del paciente con odontograma, recordatorios automáticos, caja y contabilidad con IVA/IT. Desde Bs ${bs(plan("basico").mensual)}/mes, ${PRUEBA.dias} días gratis. Agentes con IA que recuperan pacientes, desde el plan ${plan("pro").nombre}.`,
   alternates: { canonical: "/modulos/dental" },
   openGraph: {
     type: "website",
     locale: "es_BO",
     title: "Software para clínicas dentales en Bolivia",
     description:
-      "La agenda llena y los impuestos al día — sin cuaderno ni planillas. 14 días gratis.",
+      `La agenda llena y los impuestos al día — sin cuaderno ni planillas. ${PRUEBA.dias} días gratis.`,
     url: "/modulos/dental",
   },
 };
@@ -95,8 +101,11 @@ const JSON_LD = {
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
       url: `${SITE_URL}/modulos/dental`,
-      description:
-        "Software de gestión para clínicas dentales en Bolivia: agenda, odontograma, recordatorios, caja, contabilidad y agentes con IA.",
+      // La `offers` de abajo cotiza el plan más barato, y ese plan no trae los
+      // agentes. Describir la oferta con ellos es la misma promesa sin precio
+      // que la `description` de arriba, pero en el lugar donde ningún gate de
+      // literales ni captura llega — y del que Google saca lo que publica.
+      description: `Software de gestión para clínicas dentales en Bolivia: agenda, odontograma, recordatorios, caja y contabilidad. Agentes con IA desde el plan ${plan("pro").nombre}.`,
       // El monto se LEE de la tabla: acá estaba tipeado "320", dos líneas
       // debajo de un `plan("basico").mensual` bien leído en la `description`.
       // En el JSON-LD el precio viaja desnudo y con la moneda en otra clave,
@@ -151,7 +160,7 @@ export default function ModuloDentalPage() {
             <Reveal delay={0.18} className="actions">
               <PressableCta>
                 <a className="btn" href={REGISTRO_URL}>
-                  Probar gratis 14 días
+                  Probar gratis {PRUEBA.dias} días
                 </a>
               </PressableCta>
               <a className="btn btn-ghost" href="/precios">

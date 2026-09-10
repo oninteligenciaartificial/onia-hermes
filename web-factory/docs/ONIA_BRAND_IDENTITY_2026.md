@@ -1,4 +1,10 @@
 # ONIA — Brand System oficial 2026
+> ⚠️ **Corregido 2026-09-07 — este doc NO manda sobre color ni logo.** Se declara
+> «canónico», y para tipografía, retícula y tono lo sigue siendo. Pero su paleta es
+> ANTERIOR al 27-jul y no contiene los tres colores que están DENTRO de los SVG que el
+> sitio sirve (`#12100E`, `#F4F6F4`, `#00D26A`). Sobre color del logo manda
+> `ONIA_MARCA_ESTRATEGIA_20260727.md` §4-bis. Índice: `ONIA_MARCA.md`.
+
 
 > **Doc canonico de la identidad Onia.** Blanco, negro y verde. Minimalista, agencia seria.
 > Supersede a `ONIA_BRAND_2026.md` (v1, queda de archivo) y **reconcilia** el conflicto con

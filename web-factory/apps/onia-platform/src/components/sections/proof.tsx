@@ -2,6 +2,7 @@
 
 import * as m from "motion/react-m";
 import { Reveal, easeOutExpo, viewportOnce } from "@/motion";
+import { PRUEBA } from "@/lib/pricing";
 import { CONTENDIENTES, EJES, FECHA_CONSULTA, HUECO, TC_NOTA } from "@/lib/proof";
 import type { Contendiente, Estado } from "@/lib/proof";
 import styles from "./proof.module.css";
@@ -103,7 +104,7 @@ export function Proof() {
                 precios y capacidades publicados por cada proveedor
               </strong>
               , con nombre y fecha de consulta. Y si querés probar el nuestro
-              en vez de leerlo, son 14 días con el sistema completo, sin
+              en vez de leerlo, son {PRUEBA.dias} días con el sistema completo, sin
               tarjeta y sin permanencia.
             </p>
           </Reveal>

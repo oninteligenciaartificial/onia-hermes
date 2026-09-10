@@ -12,7 +12,21 @@
     "start": "next start",
     "test": "node scripts/test-con-dependencias.mjs",
     "typecheck": "tsc --noEmit",
-    "busqueda:viva": "node scripts/busqueda-alta-viva.mjs"
+    "busqueda:viva": "node scripts/busqueda-alta-viva.mjs",
+    "captura:viva": "node scripts/captura-viva.mjs",
+    "precios:fuente": "node scripts/precios-fuente.mjs",
+    "precios:vivos": "node scripts/precios-vivos.mjs",
+    "deploy:vivo": "node scripts/deploy-vivo.mjs",
+    "enlaces:vivos": "node scripts/enlaces-vivos.mjs",
+    "rubros:vivos": "node scripts/rubros-vivos.mjs",
+    "recursos:vivos": "node scripts/recursos-vivos.mjs",
+    "capacidad:por-rubro": "node scripts/capacidad-por-rubro.mjs",
+    "rutas:venta": "node scripts/rutas-de-venta.mjs",
+    "guia:facturacion": "node scripts/verificar-guia-facturacion.mjs",
+    "mirar:portada": "node scripts/mirar-primera-pantalla.mjs",
+    "mirar:venta": "node scripts/mirar-venta.mjs",
+    "recorrer:portada": "node scripts/recorrer-portada.mjs",
+    "iconos:generar": "node scripts/generate-brand-icons.mjs"
   },
   "dependencies": {
     "motion": "^12.23.26",

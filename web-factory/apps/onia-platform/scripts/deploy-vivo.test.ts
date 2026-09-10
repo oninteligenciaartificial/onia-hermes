@@ -279,6 +279,51 @@ describe("deploy-vivo: un merge no es un arreglo", () => {
   const DIAS = 60;
   const desdeMs = Date.now() - DIAS * 24 * 60 * 60 * 1000;
 
+  /**
+   * Los tres casos de este bloque son los únicos del archivo que salen a `git`
+   * de verdad; el resto se prueba con datos inyectados. Y `onia-hermes` pesa
+   * varios GB, así que el PRIMER `git log` del proceso paga la caché fría del
+   * disco: medido el 2026-09-07 en nodo-casa (WSL), tardó más de los 5 s que
+   * vitest da por defecto y el caso murió por `Test timed out`, no por su
+   * afirmación. Verde en la corrida siguiente, con la caché tibia.
+   *
+   * Eso deja roja la cadena `npm test` de la raíz, que el integrador corre
+   * antes de tocar `main`: un timeout que depende de qué tenga cacheado el
+   * sistema operativo traba el merge de los quince carriles y no dice por qué.
+   * El tope se sube donde el trabajo es de disco; ninguna afirmación cambia.
+   */
+  const TOPE_GIT_MS = 60_000;
+
+  /**
+   * ¿Hay un repo git donde corre esto?
+   *
+   * EL CASO REAL, medido el 2026-09-07: `publicar.sh` construye la landing sobre
+   * un TARBALL extraído en `/opt/onia-landing/_deploy/build-<fecha>/`, que no
+   * tiene `.git`. Ahí `git log` sale distinto de cero, `shasDeMerges()` devuelve
+   * `null`, y los tres casos de este bloque fallan con "expected null not to be
+   * null". El build se frenó en su propio gate y **34 arreglos verdes no
+   * llegaron al cliente** — con `tsc` limpio y los otros 813 tests en verde.
+   *
+   * Es la misma familia que el timeout de arriba: el caso no muere por su
+   * afirmación, muere por dónde lo corrieron.
+   *
+   * Se SALTEAN, no se ablandan. Es la doctrina que este repo ya aplica en
+   * `loops_registrados.mjs`: *"el gate no falla donde no puede medir — un gate
+   * que miente es peor que uno ausente"*. Donde SÍ hay repo (desarrollo, CI, y
+   * el árbol del integrador antes de tocar `main`) corren enteros y siguen
+   * siendo el único que verifica que el pedido no cuente dos veces el mismo
+   * arreglo.
+   *
+   * ⚠️ Y se saltean RUIDOSO, no en silencio: el propio comentario de abajo avisa
+   * que "un gate que se queda sin sujetos firma en verde". Un `skipIf` aparece
+   * como salteado en la salida de vitest; un `return` temprano, no.
+   */
+  const HAY_GIT =
+    spawnSync("git", ["rev-parse", "--is-inside-work-tree"], {
+      encoding: "utf8",
+      cwd: dirname(fileURLToPath(import.meta.url)),
+    }).status === 0;
+
   const shasDeMerges = () => {
     const r = spawnSync(
       "git",
@@ -306,13 +351,13 @@ describe("deploy-vivo: un merge no es un arreglo", () => {
    * exacta de esta familia —un gate que se queda sin sujetos firma en verde—,
    * así que la premisa se afirma explícitamente.
    */
-  it("la ventana elegida CONTIENE merges (si no, lo de abajo no probaría nada)", () => {
+  it.skipIf(!HAY_GIT)("la ventana elegida CONTIENE merges (si no, lo de abajo no probaría nada)", () => {
     const merges = shasDeMerges();
     expect(merges, "git no contestó: el caso siguiente no puede concluir").not.toBeNull();
     expect(merges!.length).toBeGreaterThan(0);
-  });
+  }, TOPE_GIT_MS);
 
-  it("no devuelve ni un merge, así que el pedido no cuenta el mismo arreglo dos veces", () => {
+  it.skipIf(!HAY_GIT)("no devuelve ni un merge, así que el pedido no cuenta el mismo arreglo dos veces", () => {
     const commits = commitsDesde(desdeMs);
     const merges = shasDeMerges();
     expect(commits).not.toBeNull();
@@ -326,7 +371,7 @@ describe("deploy-vivo: un merge no es un arreglo", () => {
       colados,
       `se colaron ${colados.length} merge(s) en el conteo de arreglos varados`,
     ).toEqual([]);
-  });
+  }, TOPE_GIT_MS);
 
   /**
    * La otra dirección: que el filtro no se haya llevado puesto el trabajo real.
@@ -334,11 +379,11 @@ describe("deploy-vivo: un merge no es un arreglo", () => {
    * gate fallaría ABIERTO declarando «al día» un sitio atrasado, que es
    * justamente lo que `deploy-vivo` existe para impedir.
    */
-  it("sigue contando los commits normales de la zona", () => {
+  it.skipIf(!HAY_GIT)("sigue contando los commits normales de la zona", () => {
     const commits = commitsDesde(desdeMs);
     expect(commits).not.toBeNull();
     expect(commits!.length).toBeGreaterThan(0);
-  });
+  }, TOPE_GIT_MS);
 });
 
 /**

@@ -288,6 +288,34 @@ Instrucciones de proyecto. Override sobre defaults.
 - `main` alimenta el deploy del VPS y el de Vercel: roto, rompe ambos.
 - Ojo con el **casing de imports**: Linux distingue mayúsculas, Windows no.
 
+## `main` se mueve DEBAJO tuyo mientras medís (REGLA)
+
+> Sergio Urcullo / sesión de producto, 2026-09-06: tres pushes rechazados en un día. Entre
+> las 22:15 de la noche y las 21:37 del día siguiente el integrador metió **28 commits** a
+> `master`, y entre ellos tocó `Sidebar.tsx`, `LayoutShell.tsx` y `QuickActionsFab.tsx` —
+> **los tres elementos cuya geometría esa sesión estaba midiendo** para arreglar la barra del
+> asistente. La medición quedó inválida y nadie se enteró hasta el `git push`.
+
+- **Antes de medir algo que otro puede mover** —geometría de UI, tamaño de un bundle, tiempos,
+  cantidad de nada— **anotá el punto de partida**: `BASE=$(git rev-parse origin/main)`.
+- **Antes de sacar la conclusión, preguntá si se movió el piso.** No hace falta construir
+  nada: el dato ya está en `git`, y la respuesta son dos líneas.
+
+  ```bash
+  git fetch origin --quiet
+  git rev-list --count "$BASE"..origin/main        # cuántos commits entraron mientras tanto
+  git diff --name-only "$BASE"..origin/main        # y QUÉ archivos tocaron
+  ```
+
+  Si sabés qué archivos entran en tu medición, filtralos:
+  `git diff --name-only "$BASE"..origin/main | grep -E 'Sidebar|LayoutShell|QuickActionsFab'`
+
+- Si tocaron un archivo que entra en tu medición, **la medición se rehace**, no se corrige.
+- ⚠️ **Un aviso por Telegram en cada merge NO es la solución**, aunque se pida así: el
+  integrador mergea ~28 commits por día y ese canal ya le llega a Sergio Urcullo con 83
+  tareas de a una. **La señal existe y es consultable; lo que faltaba era mirarla.**
+  Sumar un notificador a un canal saturado es apagarlo.
+
 ## Git — auto-sync (REGLA)
 
 - Commits conventional (`feat:`, `fix:`, `docs:`, `chore:`). El mensaje explica el **POR

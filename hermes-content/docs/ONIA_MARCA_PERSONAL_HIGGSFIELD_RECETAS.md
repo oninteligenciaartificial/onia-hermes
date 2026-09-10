@@ -112,3 +112,23 @@ las 09:00. Reintentar dentro del mismo dia **no sirve**: cuesta una llamada y de
 exactamente el mismo error. La mascota se reintenta **en la primera corrida de un dia
 nuevo**, no en la siguiente vuelta. Lo unico que cambia el resultado es que pase la
 medianoche del reset o que se resuelva el periodo de gracia de la cuenta.
+
+## Lote 2026-09-07 · foto «el dueño duerme» para la landing /v4
+
+| Dato | Valor |
+|---|---|
+| Job type | `text2image_soul_v2` (tomado de `higgsfield model list`, no de memoria) |
+| Cotizado ANTES | `generate cost` → **0,12 créditos** |
+| Job id | `5e110877-8627-4804-ba00-1c79ca8a8392` |
+| Parámetros | `--aspect-ratio 16:9 --quality 2k` |
+| Salida | 2048×1152 PNG → `public/fotos/dueno-duerme.webp` (1600×900, 104 KB) |
+| Para qué | Sección «Cerrás vos. El negocio no.» de `/v4` — pedido de Sergio Urcullo del 1-sep repetido el 7-sep |
+
+Prompt (inglés, para igualar el estilo cálido y cinematográfico de `public/fotos/`):
+
+> Warm cinematic photograph, shallow depth of field, soft golden lamp light. A middle-aged
+> Latin American small business owner sleeping peacefully in bed at night, seen from the side,
+> calm face, soft blanket. Blurred bedroom background in muted earth tones, dark teal and warm
+> amber. Natural skin texture, subtle film grain, documentary feel. No text, no logos, no screens.
+
+Se generó desde el **VPS**: el CLI de Windows está sin sesión (`Not authenticated`).
