@@ -35,7 +35,7 @@ y nosotros tenemos skills reales corriendo: ventaja injusta.
 |---|---|
 | mié 02 → mar 08 | ✅ **serie D0-D6 completa**, un drop por día — cumplida |
 | mié 09 → vie 12 | **puente**: sin pieza nueva; a lo sumo recordatorio de lo que más reaccionó |
-| **sáb 13, 19:00** | 🟢 **el carrusel «Mi stack»** (5 láminas, EXCLUSIVO — no está en redes) + el anuncio de la semana. Texto listo abajo, §El envío del sábado 13 |
+| ~~sáb 13~~ **jue 10** | ✅ **el carrusel «Mi stack» YA ENVIADO** por Sergio Urcullo el 10-sep (se adelantó al plan del sábado). El sáb 13 queda libre; opcional un recordatorio corto "el lunes arranca" |
 | lun 14 → sáb 19 | **semana Mi stack**: 1 drop por día con su archivo — ya escritos en `cola/drops/` |
 | **dom 20, 19:00** | cierre: los **5 archivos juntos** → link `/stack/archivos` (sólo acá) + qué viene |
 | lun 21 | en Instagram sale la promesa «comentá STACK» — **la comunidad ya lo tuvo todo antes**: ésa es la ventaja visible de estar adentro |
