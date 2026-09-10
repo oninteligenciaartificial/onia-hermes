@@ -2558,6 +2558,54 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] **CERRADO el 2026-09-10: el panel le inventaba al dueño la causa de un fallo que el
+      servidor ya le había explicado.** El botón «Recordatorio» de cada cita llama a
+      `POST /api/email/appointment-reminder/[id]`, que contesta **siete** motivos distintos y
+      redactados para él —cupo del plan agotado (403), correo del producto sin configurar
+      (503), el cliente pidió no recibir correos (422), el cliente no tiene correo (422), el
+      envío falló (502), no autorizado (403), error interno (500)— y la pantalla los aplanaba
+      todos a la palabra **«Sin email»**. Quien agotó su cupo mensual leía que su cliente no
+      tenía correo, abría la ficha, lo veía ahí, y concluía que el sistema estaba roto: la
+      causa real —que se arregla subiendo de plan, o sea plata para Onia— no la veía nadie.
+      De paso, `handleSendReminder` no tenía `try`/`catch`: con la red cortada el botón quedaba
+      deshabilitado en «loading» **para siempre**, porque el `setTimeout` que lo libera tampoco
+      llegaba a programarse.
+
+      **La clase, no la instancia.** Sujetos derivados del disco (todo `.tsx` del panel que
+      llame a `fetch`), no una lista de pantallas: otras **tres** acciones descartaban el
+      motivo — aprobar un pago del admin, guardar el plan de una organización, y
+      activar/desactivar un servicio. Las cuatro arregladas con `mensajeDeError`, el helper que
+      ya existía y que tres funciones del MISMO archivo de citas ya usaban (el hermano sano al
+      lado del roto, otra vez).
+
+      **Por qué ningún gate podía verlo:** no sobra ni falta una palabra (los barridos de copy,
+      obra, rubro, precios y promesas pasan verdes), el rubro deriva bien —la API ya usa
+      `idioma-del-error`—, la pantalla renderiza perfecto, el camino feliz funciona, y la rama
+      **sí** mira `res.ok`, así que `camino-de-fallo.test.ts` la daba por cubierta. Ese gate
+      pregunta si la acción MIRA la respuesta; éste es un escalón más adentro: si USA el motivo
+      que la respuesta trae.
+
+      **Gate:** `app/(dashboard)/causa-del-fallo.test.ts` + `lib/http/causa-del-fallo.ts`.
+      Falla CERRADO (una rama nueva que invente su causa nace en rojo). Validado por mutación
+      en tres direcciones —revertir el arreglo, detector siempre-vacío, no reconocer el motivo—:
+      las tres en rojo, confirmadas por el `exit` del proceso y verificando que el reemplazo
+      entró. Gates: `tsc` 0 · `vitest` 345 archivos verdes · `eslint` 0 errores.
+
+      ⚠️ **El instrumento se validó ANTES que el producto, y hacía falta:** sus dos primeras
+      mediciones dieron **27** y **15** sujetos, las dos mal y en la dirección cara —la que
+      manda a arreglar código sano—. La primera metía el camino FELIZ (`if (res.ok) {`), que no
+      es sujeto de este gate sino del hermano; la segunda acusaba a un `motor.ok` que no es una
+      `Response` y a `messageFromPayload`, que **sí** lee el motivo. Los sujetos reales eran
+      **cuatro**. Y un tercer falso positivo enseñó algo reusable: contar la ventana en líneas
+      CRUDAS gasta el presupuesto en los renglones que dejó vacíos un comentario borrado, así
+      que **el comentario que explica una decisión empuja el motivo fuera del alcance y el gate
+      acusa al código que lo explica**. Se cuenta en líneas con contenido, y la rama se corta
+      en su bloque real.
+
+      `73350a1` (`onia-platform`), rama `claude/chatbots-platform-review-0d1d09`.
+      ⚠️ **Commiteado y pusheado, NO en `master` y NO desplegado.** Falta que el integrador lo
+      mergee; el pedido de deploy vivo es `t_c78d9fa8`, comentado ahí.
+
 - [x] **CERRADO el 2026-09-10: importadora tenía «Créditos» en su menú y NINGÚN camino para
       originar uno — la pantalla quedaba vacía de por vida prometiendo que se iba a llenar.**
       Arreglado en `3e0491b` (`onia-platform`), rama `claude/chatbots-platform-review-0d1d09`.
