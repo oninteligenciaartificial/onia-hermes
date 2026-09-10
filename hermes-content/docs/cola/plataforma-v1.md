@@ -2501,6 +2501,58 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] **CERRADO el 2026-09-10: importadora tenía «Créditos» en su menú y NINGÚN camino para
+      originar uno — la pantalla quedaba vacía de por vida prometiendo que se iba a llenar.**
+      Arreglado en `3e0491b` (`onia-platform`), rama `claude/chatbots-platform-review-0d1d09`.
+      ⚠️ **Commiteado y pusheado, NO en `master` y NO desplegado**: falta que el integrador lo
+      mergee, y recién después viaja con el pedido de deploy de `plataforma` (`t_6e23cd1c`,
+      comentado ahí como *sin mergear todavía* para que nadie lo lea como publicable).
+
+      **Lo medido, sobre los 8 packs, no deducido.** `proveegest-electrico` —importadora, rubro
+      de la v1.0— declara `/comercio/fiados` como **«Créditos»**, y su propio pack escribe la
+      intención al lado: *«Reusa el modulo comercio: CxC (ventas a credito B2B)»*. Pero
+      `/comercio/caja` **no estaba ni en su nav ni en sus acciones rápidas**, y la caja es el
+      único origen: `VentaForm` es el **único** llamador de `POST /api/comercio/ventas`, que es
+      lo que escribe la orden con `metadata.fiado=true`. O sea que sus tarjetas «Por cobrar»,
+      «Cliente(s) que deben» y «Vencido» quedaban en cero para siempre, bajo un vacío que dice
+      *«Nadie te debe todavía»*. Los otros **tres** packs con esa pantalla sí tenían el origen
+      (comercio y ganadería como «Caja», servicios profesionales como «Nuevo cobro») — y ese
+      hermano sano al lado es justo lo que hacía leer la familia como cubierta.
+
+      **La clase, que es lo que vale.** La familia «permiso concedido, CAMINO ausente»
+      (`caminos-transversales`, `camino-a-recetas`, `enlaces-del-panel-alcanzables`) pregunta si
+      se puede **llegar** a la pantalla. Ésta es su hermana y pregunta otra cosa: llegando
+      perfecto, **¿de dónde sale lo que la pantalla promete mostrar?** Ningún gate podía verla —
+      no sobra ni falta una palabra, la pantalla renderiza bien, el rubro ya derivaba su idioma
+      (`idioma-de-credito.ts`) y la API ya se lo permitía (`comercio/ventas` es `CON_COMERCIO`,
+      que incluye a importadora). **Faltaba el camino, no el permiso ni el código.**
+
+      - **Gate nuevo:** `lib/platform/origen-del-dato-en-el-menu.test.ts`. Sujetos derivados de
+        `VERTICAL_PACKS` —un pack nuevo nace **cubierto**— y el par (pantalla, origen) **no se
+        cree a sí mismo**: se re-mide contra el disco que el origen siga siendo el único llamador
+        de la API creadora, porque una excusa escrita en prosa se pudre y nadie la vuelve a
+        mirar. Validado por **3 mutaciones, 3 rojos** (sacar la entrada del menú · declarar un
+        origen equivocado · declarar una API que no existe), y verde al restaurar.
+      - **El arreglo:** entrada **«Ventas»** en el menú de importadora, grupo `dinero`, junto a
+        «Créditos». Rótulo propio porque un importador no atiende un mostrador: registra ventas,
+        algunas a crédito. Icono `point_of_sale`, que ya está en el subset de la fuente.
+
+      **Dos gates hermanos se pusieron rojos con el cambio, y los dos decían algo cierto** — el
+      sistema funcionando, no ruido:
+
+      - `idioma-de-credito.ts` armaba el texto con `` `la ${caja}` ``, así que apenas un pack le
+        puso a esa pantalla un rótulo distinto de «Caja» salía **«se registran desde la Ventas»**.
+        El artículo no se deduce del rótulo: ahora se **nombra el ítem del menú entre comillas**,
+        y sirve igual para «Caja», «Ventas» o «Nuevo cobro».
+      - con cuatro packs y rótulos que no coinciden, `/comercio/caja` entró al gate de pantalla
+        compartida con el título **«Caja» tipeado fijo**. Ahora lo deriva del pack
+        (`idiomaDeVenta().rotulo`). Y ese gate **leía sólo `page.tsx`**, ciego al componente
+        hermano que pinta de verdad (`CajaPantalla.tsx`): pasa a leer la **carpeta entera**, que
+        es la trampa del client component hermano ya medida en los gates de copy.
+
+      Snapshot del pack eléctrico actualizado **a propósito** (+11 líneas: sólo la entrada nueva).
+      Gates: `tsc` 0 · `vitest` **4.277 passed** · `eslint` 0 errores.
+
 - [x] **CERRADO el 2026-09-10: el producto le mostraba al cliente el NOMBRE del plan en inglés
       —la clave interna— en las tres pantallas donde decide y donde paga.** Arreglado en
       `fe6eb65` (`onia-platform`), rama `claude/chatbots-platform-review-0d1d09`.
