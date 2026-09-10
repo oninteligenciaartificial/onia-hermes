@@ -3,7 +3,8 @@
 **La fuente de verdad es [`deck.html`](deck.html).** Autocontenido (logo y fuentes en
 base64), 11 láminas, 1920×1080. Los PNG salen de ahí; no se editan a mano.
 
-Cierra la serie: video 1 = qué es · video 2 = cómo se usa · **video 3 = cómo se suelta**.
+Tercero de la serie **Claude Code de cero**: qué es · cómo se usa · **cómo se suelta**.
+No la cierra — el mapa completo está en `hermes-content/docs/SERIE_CLAUDE_CODE.md`.
 Y cobra la promesa literal del cierre del video 2: *"lo que hace que trabaje solo"*.
 
 - Video 1: `../yt-claude-vs-claude-code/`
