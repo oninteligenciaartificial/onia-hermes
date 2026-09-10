@@ -66,6 +66,44 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **CERRADO el 2026-09-10 (`31233cd`, rama del carril — NO en `master` todavía): el
+      negocio cancelaba o movía una cita y al CLIENTE no le llegaba nada.** El sistema le habla
+      dos veces —cuando la cita nace (correo de confirmación, `lib/agenda/crear-cita.ts:241`) y
+      cuando se acerca (recordatorios de 24 h y 2 h)— y se callaba justo en el tercer momento,
+      el único en que el aviso le ahorra el viaje. Medido en `app/api/appointments/[id]/route.ts`:
+      el `PATCH` (por donde entra «Cancelar» del panel, `app/(dashboard)/appointments/page.tsx:307`) y el
+      `DELETE` escribían la auditoría y publicaban el realtime, y **ningún envío al cliente**.
+      Peor: el cron de recordatorios filtra `status: { in: ["CONFIRMADA","PENDIENTE"] }`
+      (`app/api/cron/appointment-reminders/route.ts:459`), así que a la cita cancelada se le apagan también
+      los recordatorios — lo último que el sistema le dijo queda siendo la confirmación con una
+      hora que ya no existe, y se presenta igual.
+
+      **Por qué ningún gate podía verlo:** no sobra ni falta una palabra, la pantalla renderiza
+      perfecto, el rubro deriva bien y el camino feliz funciona. Lo que lo mantenía invisible es
+      que la mitad SIMÉTRICA sí estaba —cuando el CLIENTE cancela desde su enlace, el negocio
+      recibe su notificación (`/api/appointments/respond`)—, y una mitad sana hace leer la
+      familia entera como cubierta.
+
+      **Hecho:** `lib/agenda/aviso-de-cambio-de-cita.ts` (decisión pura `cambioQueMereceAviso` +
+      envío) y `sendAppointmentChange(Safe)` en `lib/email.ts`. Correo al cliente con la fecha
+      anterior tachada en el reprogramado (sin eso tiene que comparar dos correos), e in-app +
+      push al profesional cuando el cambio lo hizo otra persona. Respeta lo que ya respetaba el
+      alta: `emailOptOut`, `emailNotifications`, emisor configurado, zona del negocio, rubro y
+      **cupo mensual con su aviso al dueño** si corta (si no, el corte sería mudo otra vez).
+      Cancelar lo ya cancelado y marcar COMPLETADA/NO_ASISTIO no avisan, a propósito.
+      **Prueba:** 9 casos nuevos —incluido uno que mira al LLAMADOR, porque el módulo puede
+      quedar impecable y el aviso no salir nunca— validados por mutación en 3 direcciones
+      (PATCH sin llamada → 1 rojo, DELETE sin llamada → 1 rojo, decisión siempre `null` → 3
+      rojos). Gates verdes sobre el árbol real: `tsc` 0, **4271 tests**, `eslint` 0 errores.
+
+      **Dos hermanos de la misma familia, en el mismo commit:** el rótulo del motivo derivaba
+      del rubro en el HTML de la confirmación y del recordatorio y en su versión de **texto
+      plano** seguía diciendo «Tratamiento» en dental duro para los siete rubros; y el guard del
+      cupo (`lib/agenda/cupo-de-correo-avisa.test.ts`) resolvía el aviso sólo si la función
+      estaba definida en el MISMO archivo, así que fallaba **CERRADO** al reusar el helper
+      compartido — su rojo mandaba a duplicarlo. Ahora sigue el import un nivel, y la mutación
+      que le saca el aviso al módulo nuevo lo vuelve a poner en rojo.
+
 - [x] 🔴 **CERRADO el 2026-09-10 (`f590421`, rama del carril — NO en `master` todavía): el
       producto le ofrece al dueño configurar su zona horaria, la respeta en TODO el panel, y la
       ignoraba justo en las dos superficies que salen hacia el CLIENTE DEL CLIENTE.**
