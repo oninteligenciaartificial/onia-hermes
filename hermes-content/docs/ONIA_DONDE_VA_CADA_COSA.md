@@ -1,5 +1,10 @@
 # Dónde va cada cosa
 
+> 📍 **Índice del carril, con qué documento manda sobre qué:**
+> [`ONIA_CIRCUITO_DE_CONTENIDO.md`](ONIA_CIRCUITO_DE_CONTENIDO.md) — y la misma
+> estructura para consultar de un vistazo en
+> <https://claude.ai/code/artifact/fb52b4b9-4504-4b8a-afca-46cf2a8f9586>
+
 > Sergio Urcullo, 2026-09-08: *"¿pero dónde publico eso? Separá la comunidad y mi marca
 > personal, se supone que lo de la comunidad tiene que ser exclusivo"*.
 >

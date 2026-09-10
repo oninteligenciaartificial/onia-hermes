@@ -1,5 +1,10 @@
 # Marca personal — los tres carriles y qué NO va en cada uno
 
+> 📍 **Índice del carril, con qué documento manda sobre qué:**
+> [`ONIA_CIRCUITO_DE_CONTENIDO.md`](ONIA_CIRCUITO_DE_CONTENIDO.md) — y la misma
+> estructura para consultar de un vistazo en
+> <https://claude.ai/code/artifact/fb52b4b9-4504-4b8a-afca-46cf2a8f9586>
+
 > Pedido de Sergio Urcullo, 2026-09-07: *"a la hora de que decimos comentá algo y te lo
 > envío, prometemos algo como instalar y demás, hay que desarrollarlo… también eso puede ir
 > para mi comunidad, así que quiero que ordenes tus cosas"*.

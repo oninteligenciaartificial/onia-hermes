@@ -1,5 +1,10 @@
 # Un recurso, tres puertas — cómo se administra lo que prometemos
 
+> 📍 **Índice del carril, con qué documento manda sobre qué:**
+> [`ONIA_CIRCUITO_DE_CONTENIDO.md`](ONIA_CIRCUITO_DE_CONTENIDO.md) — y la misma
+> estructura para consultar de un vistazo en
+> <https://claude.ai/code/artifact/fb52b4b9-4504-4b8a-afca-46cf2a8f9586>
+
 > Sergio Urcullo, 2026-09-07: *"a veces decimos al final comentá tal palabra y te paso tal
 > cosa… luego a la hora de que enviemos a la comunidad, podemos enviar lo mismo que
 > subimos, o cómo podemos administrarlo. Para eso sería crear la página. Organizalo"*.
