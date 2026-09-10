@@ -12,6 +12,18 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-10 16:09-16:17 La Paz — dental y Estética, dos corridas seguidas: 9/9 los dos, sin hallazgos
+
+Reintento pedido por la vuelta anterior. Dental (`zz-qa-2026-09-10-1609`) 9/9 completo, cita
+201 vista en `/appointments`, factura vista y frenada. Estética (`zz-qa-2026-09-10-1613`) 9/9
+completo — **el paso 7 (agendar cita) que se había roto a las 15:13 hoy mismo esta vez agendó
+bien** (cita `2026-09-11 12:30`, id `cmtvqcb69001901rwsn70fjtb`, vista en la agenda). El hallazgo
+de las 15:13 (`t_645d123a`) ya está `done`: arreglado en `a6dee65` sobre
+`claude/chatbots-platform-review-0d1d09` — confirma que era el bug de timing que ese commit
+corrige (el reset de `timeSlot` pisando la selección del usuario), no un defecto exclusivo del
+rubro. Esa rama todavía no está en `master`; si el fix ya llegó a producción lo dice esta misma
+corrida en verde. Cero filas `zz-qa-` propias al cerrar; 4 filas ajenas sin tocar.
+
 ## 2026-09-10 15:10-15:13 La Paz — Estética y spa escritorio: ROTO en paso 7 (agendar cita)
 
 Cambié de rubro tras tres vueltas seguidas en dental sin novedad. Cuenta
