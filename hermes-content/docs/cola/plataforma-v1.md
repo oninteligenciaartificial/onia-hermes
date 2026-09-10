@@ -254,6 +254,61 @@ y sin operar. Acá se opera, con verificación por ítem.
       en el alta es la peor primera impresión. LISTO = registrar dos veces el mismo nombre
       devuelve 400 con mensaje claro y el formulario lo muestra; test que lo fija.
 
+      **HECHO el 2026-09-10 (chatbot-cola) — `4d45f2f`, MERGEADO a `master` en `2f344e5` (integrador, 2026-09-10 15:5x La Paz).** ⚠️ Lo de «NO desplegado» venció el mismo día: el arreglo GEMELO de la sesión de control (`eaa6703`) ya está **vivo en producción** —`docker exec onia-platform grep -rl Reenviarme /app/.next/server` da un chunk—, así que el 403 mudo ya tiene salida para un cliente real. `4d45f2f` **no** es ancestro de `eaa6703`: son dos escrituras del mismo arreglo, y la rama resolvió el choque a favor del lado medible (`10952417`). Lo que falta desplegar de este ítem es sólo el reemplazo por la versión con gate.
+      El botón vive en `app/(auth)/login/ReenviarConfirmacion.tsx` y la decisión en
+      `lib/auth/reenviar-confirmacion.ts`. Medido contra producción con un alta QA
+      (`zz-qa-reenvio-2026-09-10-1852`, borrada al terminar: org/perfil/auth en **0/0/0**, y
+      las 7 `zz-qa%` de otros carriles intactas):
+
+      - **El 403 se reprodujo:** `POST /api/auth/login` sin confirmar → HTTP 403
+        `email_not_confirmed`.
+      - **El reenvío funciona, y su respuesta MÁS PROBABLE es un 429.** `POST
+        /supabase/auth/v1/resend` con anon key devolvió primero
+        `{"code":429,"error_code":"over_email_send_rate_limit","msg":"…after 43 seconds"}` y
+        después `200 {}`. Por eso el botón trata el corte por frecuencia aparte ("Ya mandamos
+        uno recién, esperá un minuto") y no como un error cualquiera.
+      - **Salió de verdad, y es el segundo correo, no el del alta:** Postfix entregó DOS con
+        **Queue ID distinto** — `E6AC01103710` (18:50:34, el del alta) y `EEB7E1103710`
+        (18:51:44, **la hora exacta del reenvío**) —, los dos `dsn=2.0.0, status=sent (250
+        2.0.0 OK … gsmtp)` con `opendkim … (s=mail, d=onia.com.bo)`. Se contó por Queue ID a
+        propósito: confirmar una entrega por el destinatario cuelga el verde del correo
+        anterior.
+      - **El enlace del correo REENVIADO abre sesión:** `node scripts/alta_correo_confirma.mjs`
+        → `[1] enlace → /onboarding · OK` y `[2] login → /onboarding · ENTRA`, exit 0, en un
+        navegador que nunca vio el alta. Su token (`7cc3f936…`) ya **no** trae el prefijo
+        `pkce_` que tenía el del alta del 31-ago.
+      - **MIRADO renderizado**, no supuesto: los tres estados (el 403 con su salida ·
+        "Reenviando…" deshabilitado · el cartel de mandado) con el CSS del build vivo, ya que
+        producción todavía corre el build anterior. `/tmp/reenvio.png`. El icono es `send`,
+        que ya está en la fuente subseteada — uno nuevo se vería como su NOMBRE en letras
+        gigantes, que es el bug que un cliente vio en este mismo `/login`.
+
+      **Lo que estaba escondido detrás:** `/verify-email` YA tenía un botón de reenvío y no
+      servía para este caso — arranca con `supabase.auth.getUser()` y rebota a `/login` si no
+      hay sesión, y el que no confirmó no tiene sesión **por definición**. La pantalla existía,
+      alcanzable, bien escrita, e inútil justo para quien la necesitaba: es la familia
+      «permiso concedido, CAMINO ausente» con el camino apuntando a una puerta que se cierra
+      sola. Ver un arreglo hermano ya hecho es lo que hace dar la familia por cubierta.
+
+      Gate: `lib/auth/reenviar-confirmacion.test.ts` (13 casos), validado por mutación en
+      **6 direcciones** — incluida la de **esquive** (llamar al helper y mostrar "listo" sin
+      mirar `.entregado`) y la de sacar el componente del JSX dejando el módulo intacto. Las 6
+      dan rojo. El ancla que exige que el LoginForm lo USE se mide sobre el código **sin
+      comentarios** y por **vecindad**: un gate se absuelve con su propia bitácora si busca en
+      el archivo entero.
+
+      ⚠️ **`master` traía el MISMO arreglo escrito por otra sesión, y el merge salió en
+      conflicto — resuelto el 2026-09-10 en `86b0fe7`.** Las dos versiones guardan el correo
+      que falló y ofrecen reenviar; la de `master` lo hace inline (`isEmailNotConfirmed`,
+      `confirmEmail`) y **sin test**, y la de esta rama con el helper extraído. Se resolvió a
+      favor del lado **medible** (13 casos + 6 mutaciones), y no se perdió nada: `diff` de la
+      BASE contra `master` sobre ese archivo devuelve **sólo** fragmentos del mismo arreglo
+      duplicado — `master` no tocó otra cosa ahí. Lo que el lado de `master` **no** tenía y se
+      habría perdido eligiéndolo: la traducción del **429 `over_email_send_rate_limit`** de
+      GoTrue, que es lo más probable que vea quien aprieta el botón, y el `entregado` que
+      impide cantar "listo" sin que GoTrue lo acepte. Árbol publicado idéntico al medido
+      (`tree 0a5e033d`, tsc 0 · 4.311 tests · eslint 0).
+
 - [ ] 🔴 **Nadie probó que el correo de confirmación LLEGUE a una bandeja — y sin ese clic el
       alta nueva muere** (`app/auth/confirm/route.ts` · `scripts/alta_correo_confirma.mjs`)**.**
       Medido el 2026-09-10 con el circuito entero: GoTrue manda por Postfix
