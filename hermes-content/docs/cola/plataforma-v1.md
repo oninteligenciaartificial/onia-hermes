@@ -290,6 +290,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 - [x] 🔴 **CERRADO el 2026-09-10 mismo día (`eaa67038` en master, PUBLICADO por el
       publicador 14:45 La Paz): el 403 mudo del login ahora ofrece reenviar el enlace.**
+      Vive en `app/(auth)/login/ReenviarConfirmacion.tsx` y `lib/auth/reenviar-confirmacion.ts`.
       E2E completo contra producción con cuenta QA sin confirmar, fotografiado: login →
       cartel + botón "Reenviarme el correo de confirmación" → clic → aviso con tip de
       Spam/Promociones → reenvío real (`status=sent` 250 de Gmail 18:54:20Z) → el enlace
@@ -299,12 +300,53 @@ y sin operar. Acá se opera, con verificación por ítem.
       match exacto). Lo que NO prueba: la bandeja física (Gmail MCP caído) — eso sigue en
       el ítem de entregabilidad de arriba.
 
-- [ ] 🟡 **El alta con nombre de negocio repetido revienta en 500 "Error interno" en vez
-      de decir "ese nombre ya está usado".** Medido el 2026-09-10 registrando por API dos
-      veces el mismo `orgSlug`: choque de único en la base → 500 crudo. El wizard de
-      /register genera slugs con sufijo y casi nunca choca, pero el error existe y un 500
-      en el alta es la peor primera impresión. LISTO = registrar dos veces el mismo nombre
-      devuelve 400 con mensaje claro y el formulario lo muestra; test que lo fija.
+- [x] 🟡 **CERRADO el 2026-09-10 (chatbot-cola) — `bc48959`, rama del carril, PENDIENTE de
+      merge a `master` y de deploy: el alta con nombre de negocio repetido decía "Error
+      interno" (500) en vez de decir que ese nombre ya está usado.** Medido el 2026-09-10
+      registrando por API dos veces el mismo `orgSlug`: choque de único en la base → 500
+      crudo. El wizard de /register genera slugs con sufijo y casi nunca choca, pero el
+      error existe y un 500 en el alta es la peor primera impresión. LISTO = registrar dos
+      veces el mismo nombre devuelve un mensaje claro y el formulario lo muestra; test que
+      lo fija.
+
+      **La causa, leída en el código:** el choque de un `UNIQUE` lo tira Prisma como
+      `P2002`, que **no** es `ProvisioningError`, así que se escapaba del `catch` tipado de
+      `app/api/auth/register/route.ts` y caía en el 500 genérico "Error interno al crear la
+      cuenta" — que no le dice al dueño **qué cambiar**.
+
+      - **El arreglo va en `provisionOrganization`** (`lib/platform/provisioning.ts`), que es
+        la puerta **única** del alta: así el alta manual del operador queda curada por la
+        misma línea. Es la plantilla, no la instancia.
+      - **El sujeto no es "el slug": es cualquier `P2002` del provisioning.** El mensaje se
+        especializa por campo (`slug`/`name` → el nombre; `userId`/`email` → ya tiene cuenta)
+        y el **default es honesto, no mudo**, así que un `@unique` nuevo nace cubierto en vez
+        de volver al 500. Enumerar sólo los campos conocidos sería una lista de inclusión que
+        falla **abierta** justo en la puerta de entrada del producto.
+      - **Lo que NO es `P2002` se propaga tal cual.** La dirección cara del arreglo era
+        tragarse una caída de la base y culparle el nombre al dueño; hay dos casos que lo
+        fijan (error genérico y `P2003`).
+      - **Sale 409, no 400** — por consistencia con el correo repetido, que ya salía así dos
+        capas más arriba **en el mismo route**. El formulario muestra `result.error` para
+        cualquier respuesta no-OK, así que el texto llega igual: verificado en el fuente y
+        atado con un gate.
+      - **Gate:** `lib/platform/alta-con-nombre-repetido.test.ts` (10 casos) +
+        `app/api/auth/register/route.test.ts`. **Validado por mutación en 7 direcciones**, las
+        7 en rojo: sin el `.catch` que traduce (6 casos) · traducir cualquier error y no sólo
+        `P2002` (2) · campo desconocido de vuelta al 500 (1) · el route de vuelta a 400 fijo
+        (1) · y las dos de **esquive del formulario** — pintar un texto fijo en lugar del
+        mensaje del servidor (1) y arrancar el JSX del aviso (1).
+      - ⚠️ **La primera versión del ancla del JSX pasaba en VERDE con el aviso arrancado.**
+        Buscaba `{error}` en el archivo entero y la absolvía el
+        `const { error } = await supabase.auth…` del alta con Google — una **desestructuración**,
+        no un render. Se midió por **vecindad** del bloque `{error && (`. Sólo apareció
+        mutando: el caso hueco no se ve leyéndolo.
+      - Gates verdes sobre el árbol publicado: `tsc` 0 · **4.330** tests · `eslint` 0 errores.
+        Árbol entregado idéntico al medido (`tree 701e194d`).
+
+      ⚠️ **El párrafo de acá abajo NO es de este ítem: es el registro del botón de reenviar
+      el correo, que se cierra en el `[x]` de arriba** (`eaa67038`, ya publicado). Quedó
+      pegado bajo el bullet equivocado por una vuelta anterior; se conserva porque tiene
+      detalle que el otro no (el conflicto de merge y por qué `/verify-email` no servía).
 
       **HECHO el 2026-09-10 (chatbot-cola) — `4d45f2f`, MERGEADO a `master` en `2f344e5` (integrador, 2026-09-10 15:5x La Paz).** ⚠️ Lo de «NO desplegado» venció el mismo día: el arreglo GEMELO de la sesión de control (`eaa6703`) ya está **vivo en producción** —`docker exec onia-platform grep -rl Reenviarme /app/.next/server` da un chunk—, así que el 403 mudo ya tiene salida para un cliente real. `4d45f2f` **no** es ancestro de `eaa6703`: son dos escrituras del mismo arreglo, y la rama resolvió el choque a favor del lado medible (`10952417`). Lo que falta desplegar de este ítem es sólo el reemplazo por la versión con gate.
       El botón vive en `app/(auth)/login/ReenviarConfirmacion.tsx` y la decisión en
