@@ -55,7 +55,7 @@ nuevo. `branchAsked` tiene el mismo agujero DOBLE: `saveConversation` no lo guar
 por `deploy-bot.sh`. **LISTO =** en conv real en handoff, segundo mensaje del prospecto produce
 SILENCIO (traza `silencio:handoff_en_curso`), mirado en el log.
 
-## 🔴 URGENTE — el motor enmudece en conversaciones viejas (probado por Sergio Urcullo en carne, 10-sep)
+## ✅ CERRADO 10-sep — el motor enmudecía en conversaciones viejas (lo probó Sergio Urcullo en carne)
 
 Sergio Urcullo mandó "hola" al +591 75414930 y el bot NO contestó. La traza exacta
 (`/tmp/onia-bot-webhook.log` en `onia-center`):

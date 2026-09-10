@@ -71,7 +71,23 @@ y sin operar. Acá se opera, con verificación por ítem.
 > (5 lectores de código + 4 capturas de producción). Orden de ejecución acordado: recarga →
 > cuentas → bot repetido (vive en `cola/chatbot.md`) → UI.
 
-- [ ] 🟡 **T-nueva — `recorrido-cliente` crea una org QA por día y NUNCA la borra.** Medido
+- [x] ✅ **T-nueva — CERRADO el 2026-09-10 23:45 UTC: su LISTO se cumple hoy.** Contado en
+      `supabase-db`, no deducido: `public.organizations` tiene **3 filas** (`onia-interna`,
+      `bolivian-electricidad-e6t21`, `clinica-sergio-p2ljs`) — las mismas tres que dejó la purga
+      de T2 — y `auth.users` con `%qa%` = **0**. Entre la purga (22:54) y esa cuenta el recorrido
+      corrió **dos veces** (22:09→22:11 y 23:09→23:15, en `/var/log/onia-loop-recorrido-cliente.log`),
+      que es exactamente el LISTO pedido: *dos corridas seguidas dejan `organizations` con las
+      mismas filas que antes*.
+
+      El mecanismo ya está en el script y no hacía falta escribirlo: `--solo-limpiar`
+      (`scripts/recorrido_cliente.mjs`) barre lo `zz-qa-AAAA-MM-DD-HHMM` **al arrancar la
+      vuelta**, sin depender de que el recorrido entero termine — que era el agujero real (una
+      vuelta cortada por tope de tiempo nunca llegaba a `limpiarProduccion()`). Así un huérfano
+      no sobrevive ni un ciclo. Queda anotado el límite honesto: entre dos corridas la org puede
+      vivir hasta una hora, y eso es lo que el LISTO acepta.
+
+      **Diagnóstico original, que sigue siendo la explicación correcta de por qué se juntaron
+      las 7:** Medido
       durante la purga del 10-sep: mientras se borraban las 7 QA acumuladas apareció
       `zz-qa-2026-09-10-2209-negocio-wxbwh`, creada por el patrullaje diario a las 22:09 (así
       se juntaron las 7 — 4 eran de "modulos" del 06-sep, mismo patrón). El pedido de Sergio
@@ -129,7 +145,57 @@ y sin operar. Acá se opera, con verificación por ítem.
       `auth.users` → anotar inbox 7 de Chatwoot huérfano. **LISTO =** `/admin/chatbots` lista
       solo las orgs vivas, mirado en prod.
 
-- [ ] 🟡 **T3 — UI rota del panel, medida en las capturas del 10-sep:** (a) la barra flotante
+- [x] ✅ **T3 — CERRADO el 2026-09-10 23:50 UTC. Las tres partes, y la (a) por refutación
+      medida: su causa escrita era falsa.**
+
+      **(b) — ya lo había arreglado otro carril**, `363dfa4` en master: el defecto de la
+      `AdminNav` encimada no era la fuente sino `flex-shrink` — dentro del nav con
+      `overflow-x-auto` los spans de icono se comprimían a 0-16 px con `font-size: 24` y el
+      glifo desbordaba pisando el label. `flex-shrink: 0` en `.material-symbols-outlined` los
+      devolvió a 24 px.
+
+      **(c) — arreglado**: `AddonChatbotClient.tsx:193-208` ya pinta los dos CTA en la rama del
+      add-on ACTIVO — «Configurar mi asistente» → `/settings/chatbot` y «Ver conversaciones» →
+      `/inbox` —, con el comentario que cita la captura del 10-sep que lo motivó.
+
+      **(a) — la causa que decía este ítem («falta reservar espacio, padding-bottom del
+      contenedor scrolleable») es FALSA hoy, contado en px del disco:**
+
+      | | colchón | lo más alto que flota | despeja por |
+      |---|---|---|---|
+      | móvil | `pb-40` = **160 px** | FAB 152 · asistente 124 · BottomNav 64 | **8 px** |
+      | escritorio | `md:pb-28` = **112 px** | asistente 96 · FAB 96 · franja de estado 30 | **16 px** |
+
+      Y las dos pantallas que nombraba **no tienen contenedor de scroll propio** (`grep` de
+      `overflow-y` y `h-screen` en las carpetas del editor del bot y de la tabla de chatbots del
+      panel admin: sólo un `aside` con `lg:sticky` y una lista interna), así que heredan el
+      colchón de `LayoutShell` y éste las
+      despeja. La captura del 10-sep probablemente se sacó a mitad de scroll, donde una barra
+      flotante tapa algo **por diseño**.
+
+      **Lo que sí faltaba, y es la clase:** ese colchón es un número tipeado a mano que tiene
+      que dominar a TODO el mobiliario flotante, y no lo re-medía nadie. `capas.ts` contesta
+      *qué capa va arriba*; nadie contestaba *cuánto espacio necesita el contenido para
+      despejarlas*. Ya falló una vez —el propio `LayoutShell.tsx` lo cuenta: con el colchón
+      anterior (`pb-32`, y `pb-12` en escritorio) el FAB se comía el borde de «Guardar» en
+      Configuración— y se arregló **a mano contra el
+      FAB**, el único mobiliario de entonces. Después entraron la barra del asistente y la
+      franja del plan, y el margen quedó en 8 px: un retoque de diseño de volver a taparlo.
+
+      **Gate** (`components/layout/colchon-despeja-lo-que-flota.test.ts`, `2d87ae1`): el sujeto
+      es `CAPAS_FLOTANTES` —la tabla que ya manda sobre los z—, así que una capa nueva que entre
+      ahí y no declare cuánto ocupa **se nombra** en vez de entrar ya aprobada; los números se
+      leen del disco, no se copian. Validado **por mutación en 5 direcciones** (colchón
+      encogido · capa que crece · capa nueva sin declarar · excusa del velo que caduca · lector
+      roto), las 5 `exit 1` nombrando la capa, base y restaurado `exit 0`, cada mutación
+      verificada de que entró. Gates: `tsc` 0 · `vitest` **4385** pasan / 354 archivos ·
+      `eslint` 0 errores.
+
+      🔴 **Commiteado y pusheado, NO desplegado:** `2d87ae1` está en la rama del carril, no en
+      `master`. Es un test, así que no cambia lo que ve el cliente — pero el merge del
+      integrador es lo que lo pone a cuidar.
+
+      **Texto original del ítem, para no perder qué se había visto:** (a) la barra flotante
       "Preguntá por tu negocio" (`onia-platform/components/ayuda/BarraAsistente.tsx`) se pinta
       ENCIMA del formulario del editor del bot (tapa "A quién deriva el bot") y de la última
       fila de la tabla de `/admin/chatbots` — falta reservar espacio (padding-bottom del
