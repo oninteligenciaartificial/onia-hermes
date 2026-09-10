@@ -7,6 +7,10 @@
 >
 > Este documento contesta la segunda. Fuente única del **ritmo de producción**.
 >
+> 🔴 **Dónde se publica cada cosa y qué queda exclusivo de la comunidad manda desde**
+> [`ONIA_DONDE_VA_CADA_COSA.md`](ONIA_DONDE_VA_CADA_COSA.md). Si algo de acá lo
+> contradice, gana ése.
+>
 > 👉 **De dónde sale lo que se graba** —el backlog de temas, con cuáles dan para una
 > semana y cuáles para una sola pieza— en [`ONIA_MAPA_DE_TEMAS.md`](ONIA_MAPA_DE_TEMAS.md).
 > Ahí está también el papel de **YouTube**, que no estaba contemplado acá.
@@ -65,9 +69,13 @@ Porque **son la misma cosa a dos profundidades**, y la de abajo no entra en un v
 
 | El video muestra | El drop entrega |
 |---|---|
-| «este repo te arma un panel del servidor» | el comando exacto, dónde pegarlo, y qué mirar si falla |
-| «Claude puede armar PDFs solo» | la habilidad escrita entera, para copiar |
-| «casi rompo todo con esto» | qué hice mal, cómo se ve el error, cómo se sale |
+| «este repo te arma un panel del servidor» | **el `docker-compose` armado**, para pegar |
+| «Claude puede armar PDFs solo» | **la habilidad escrita entera**, para copiar |
+| «casi rompo todo con esto» | qué salió mal, cómo se ve el error y cómo se sale |
+
+🔴 **El drop entrega el ARCHIVO, no un resumen.** Ésa es la parte que no va nunca a la web
+abierta y es lo que hace que estar adentro valga. Un drop que sólo explica es un video con
+más letras. Ver [`ONIA_DONDE_VA_CADA_COSA.md`](ONIA_DONDE_VA_CADA_COSA.md).
 
 Un video de treinta segundos no puede dar un comando: nadie lo tipea del video. El drop sí.
 **Nadie tiene que producir dos contenidos — hay que contar lo mismo dos veces, a distinta
@@ -78,6 +86,11 @@ profundidad**, y eso es media hora, no otro día de trabajo.
 **Es el pegado de los seis drops, ordenados y limpiados.** El trabajo duro ya está hecho de
 lunes a sábado; el domingo se junta, se le agrega el bloque de «qué no hace» de cada cosa y
 se publica.
+
+⚠️ **Con una diferencia, y es la que sostiene a la comunidad:** a la guía pública le entran
+el qué, el porqué y el orden — **no los archivos armados**. Ésos se juntan en
+`/tema/archivos`, cuyo link se pasa sólo en Announcements. La guía enseña a hacerlo; los
+archivos lo tienen hecho.
 
 Ésa es la razón de que los seis días sean del mismo tema. Seis temas sueltos no se pegan.
 
