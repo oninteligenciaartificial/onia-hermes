@@ -1,5 +1,21 @@
 # Handoff — cobro E2E y orquestación 1.0
 
+> **Parte 2 (10-sep tarde), pedido nuevo de Sergio Urcullo:** *"orquestá tus loops… dame una
+> definición de todo lo que va a tener la 1.0… dejá de estancarte en documentación vieja"*.
+> Lo hecho: **Definición 1.0 de nueve puntos medibles escrita en
+> [`cola/plataforma-v1.md`](../cola/plataforma-v1.md)** (sección «Definición 1.0») con estados
+> medidos ese día. **WhatsApp del bot: FUNCIONA** — probado con evento sintético al inbox 5
+> (turno completo, respuesta de venta, 404 esperado al postear a una conversación inventada);
+> los silencios de agosto eran las caídas viejas del webhook. **3 prospectos de agosto sin
+> respuesta** → tarea de aprobación `t_43868cdb` (kanban onia, needs_input → Telegram; >24h de
+> Meta = solo plantilla aprobada). **Panel Hostinger: la estructura está VIVA en prod**
+> (grupos colapsables + guía Primeros pasos + fecha La Paz + banner 2FA, capturado con la org
+> QA onboardeada); los lotes 1-4 del 3-sep ya estaban deployados y el loop `chatbot-cola`
+> viene cerrando la punch-list solo (`f05b2fc` topes, `ba2270b` reservas de cuenta apagada,
+> `e843507` estética/dental). Falsa alarma propia cerrada en la cola: el welcome que "no sale"
+> es un skip deliberado con confirmación pendiente. Los 4 loops vivos volvieron solos tras el
+> límite semanal (recorrido 13:12 exit 0).
+
 > Rama `claude/onia-payment-approval-e2e-40d70a`, worktree
 > `.claude/worktrees/bolivian-community-manager-search-d2ffb2`. Sesión 2026-09-08 → 2026-09-10
 > (cortada 36 h en el medio por el límite semanal de la suscripción — el mismo que tumbó a los

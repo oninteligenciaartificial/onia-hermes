@@ -25,6 +25,28 @@
 [`ONIA_CATALOGO_DE_VENTA.md`](../ONIA_CATALOGO_DE_VENTA.md) §2; meterlos es desarrollo nuevo, no
 pulido, y aleja el cierre.
 
+## Definición 1.0 — pedida por Sergio Urcullo el 2026-09-10, medida ese día
+
+**1.0 = un cliente de los 5 rubros puede DESCUBRIR, PROBAR, USAR y PAGAR Onia sin que
+intervenga un humano de Onia, y sin encontrar una sola promesa falsa.** Vara de calidad:
+Lety/Dapta/SendyPro (titular claro, un precio, pocos clics). Nueve puntos, cada uno con su
+LISTO medible; el estado es del 10-sep y se re-mide, no se hereda:
+
+| # | Punto | LISTO = | Estado 10-sep |
+|---|---|---|---|
+| 1 | Alta sola | registro → correo EN BANDEJA → clic → panel | 🟡 todo verificado hasta el 250 de Gmail; falta UNA bandeja real |
+| 2 | Recorrido de los 5 rubros | cada rubro cierra su flujo core sin romperse | 🟡 `recorrido-cliente` patrulla diario (hoy 13:12 exit 0) |
+| 3 | Cobro | comprobante → APPROVED → plan activo solo | ✅ probado 10-sep con capturas |
+| 4 | El plan manda | trial vencido bloquea; topes se cumplen | ✅ modal + topes (`f05b2fc` «el tope que nadie aplicaba») + reservas de cuenta apagada cerradas (`ba2270b`) |
+| 5 | Factura SIAT | la suscripción cobrada emite factura | 🔴 Fase 1 ~24,8 %, PdV 1 = trámite de Sergio Urcullo; el código avanza sin él |
+| 6 | Chatbot atiende solo (web + WhatsApp) | responde, califica y agenda demo | ✅ web vivo (439 msgs/7d) · ✅ WhatsApp probado sintético 10-sep · 🔴 3 prospectos de agosto sin respuesta (aprobación `t_43868cdb`) |
+| 7 | Panel del dueño estilo Hostinger | pestañas agrupadas y cada sección cierra su flujo | ✅ estructura VIVA (grupos + Primeros pasos + fecha La Paz + 2FA); queda `feat/canal-meta` (App Review = Sergio Urcullo) |
+| 8 | Cero promesas falsas | lo que cada pantalla promete por rubro/plan se abre | 🟡 barridos 8-sep y 9-sep (`e843507` estética/dental); el recorrido caza el resto |
+| 9 | Opera sin Sergio | correos, avisos, backups, publicador corren solos | ✅ medido 10-sep (publicador «al día», watchdog del bot, correo entrega) |
+
+**Fuera de la 1.0 (decidido, no se reabre):** veterinaria/ganadería, offline ganadero,
+pasarela automática QR, apps móviles, contenido/influencers/marketing (congelados 5-sep).
+
 ## 🔴 Lo que este carril NO debe malinterpretar: `🟡` no es «a medias»
 
 El catálogo lo dice explícito y hay que leerlo antes de tocar nada:
