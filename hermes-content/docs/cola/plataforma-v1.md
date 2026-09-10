@@ -66,6 +66,81 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **CERRADO el 2026-09-10 (`f590421`, rama del carril — NO en `master` todavía): el
+      producto le ofrece al dueño configurar su zona horaria, la respeta en TODO el panel, y la
+      ignoraba justo en las dos superficies que salen hacia el CLIENTE DEL CLIENTE.**
+      `PATCH /api/clinic-settings` acepta `timezone` y `/settings` se la muestra como «Zona
+      horaria» (`modelo-por-rubro.ts:47`); `/agenda`, `/dashboard`, `/billing` y los pagos leen
+      `clinicSettings?.timezone`. Pero: `app/cita/page.tsx` —la pantalla que el paciente abre
+      desde el correo para confirmar o cancelar— formateaba con `const tz = "America/La_Paz"`
+      mientras su **propia acción hermana**, `app/cita/acciones.ts:50`, sí leía la del negocio:
+      **la misma cita, dos horas distintas**, una en la pantalla del paciente y otra en el aviso
+      que le llega al negocio. Y `app/api/cron/appointment-reminders/route.ts` mandaba el
+      recordatorio diario con la constante, sin siquiera traer la columna
+      (`clinicSettings: { select: { id: true } }`). Ahora la zona se resuelve **una vez por
+      cita**, así el WhatsApp y el correo —que hablan de la misma cita— no pueden discrepar.
+
+      **Por qué no lo veía ningún gate:** `lib/platform/fecha-en-zona-del-negocio.test.ts` exige
+      que el formateo **pase** `timeZone`, y los dos lo pasaban — el valor era la constante. El
+      gate miraba la PRESENCIA del parámetro y nunca el ORIGEN de su valor. Es la clase «la capa
+      que todos auditan está sana»: como el panel entero deriva bien, nadie mira la pública.
+
+      Gate nuevo: `lib/agenda/hora-de-la-cita-en-zona-del-negocio.test.ts`, sujetos derivados del
+      DISCO (un archivo nace cubierto), 10 casos. Falló en rojo nombrando los dos.
+      **Dos hallazgos de la validación por mutación, escritos y NO tapados:** revertir el cron a
+      `formatDateTime(dt, TZ_POR_DEFECTO)` dejaba el gate VERDE (alias de alias), y ampliar el
+      regex para cubrirlo **acusaba al arreglo correcto** (`?? "America/La_Paz"` es la cascada),
+      que es la dirección cara. Queda como límite conocido con su caso.
+      Gates: `tsc` 0 · 4228 tests · `eslint` 0 errores.
+
+- [x] **CERRADO el 2026-09-10 (`969cc14`, rama del carril — NO en `master` todavía): los otros
+      dos sujetos de esa MISMA clase.** `app/(dashboard)/patients/[id]/page.tsx` trae ahora
+      `clinicSettings: { select: { timezone: true } }` en el mismo `findUnique` que ya pedía el
+      track, y `lib/export/datos-negocio.ts` cambió sus dos `Intl` de MÓDULO por
+      `formateadoresEn(zona)` —construidos una vez por export, no por fila— alimentado desde
+      `OpcionesExport.timezone`; su único llamador (`app/api/settings/export/route.ts`) se la
+      pasa. Los dos salieron de `EXENTOS`: el gate falló en rojo nombrándolos antes del arreglo.
+
+      **Tres agujeros del gate, medidos en esta vuelta y cerrados con su caso:**
+      1. **Forma corta `{ timeZone }` — fallaba ABIERTO.** Sin `:` el patrón no matchea, así que
+         el archivo dejaba de ser sujeto: con `const timeZone = "America/La_Paz"` los 10 casos
+         daban VERDE sobre el defecto. Antes de ampliar se midió **a quién más acusa** (la
+         lección de la vuelta anterior): de los 2 formateos con forma corta que hay en `app/` y
+         `lib/`, los dos son sanos —reciben la zona por PARÁMETRO— y la ampliación los perdona.
+      2. **Todo LLAMADOR del export pasa la zona.** `timezone` es opcional a propósito (sin ella
+         se cae en `DEFAULT_TZ`, no en UTC), y eso abre el hueco que este proyecto ya pagó: el
+         módulo impecable, sus gates verdes y `tsc` callado mientras el llamador no la pasa.
+      3. **Ese caso mira la LLAMADA, no el archivo.** Preguntarlo sobre el archivo entero pasaba
+         en VERDE con el argumento arrancado, porque el `timezone: true` del `select` que TRAE
+         el dato lo absolvía: la línea que existe para arreglar el bug era la que lo tapaba.
+
+      Y dos casos de **comportamiento** en el export, que es lo que ningún gate de forma ve: con
+      otra zona la celda cambia (`08:30` en Ciudad de México contra `10:30` en La Paz, misma
+      cita), y sin zona declarada cae en la cascada del producto.
+
+      **El hueco simétrico de la ficha no necesita gate:** sacar `clinicSettings` del `select`
+      lo caza `tsc` con `TS2339` —Prisma tipa el select— medido, no supuesto.
+
+      Validado por mutación en **7 direcciones**, cada una confirmada por el veredicto impreso y
+      no por ausencia de `FAIL`. Gates: `tsc` 0 · 4235 tests · `eslint` 0 errores.
+
+      **Tropiezo de la entrega, que casi publica un árbol sin medir:** desde el nodo de casa el
+      push de `onia-platform` está deshabilitado y la vía es
+      `git format-patch | ssh … git am && git push`. El `am` aplicó el parche sobre el HEAD que
+      tenía el VPS, que estaba **2 commits atrás de `origin/master`** — así que el árbol
+      publicado NO era el árbol sobre el que corrieron los gates, y el push salió con exit 0
+      igual. Se vio comparando `git rev-parse HEAD^{tree}` en las dos
+      máquinas, que es el chequeo que la memoria compartida ya manda hacer y que acá encontró
+      algo. Se corrigió mergeando `origin/master` **allá**, con lo que los dos árboles quedaron
+      idénticos, y se **volvieron a correr los gates en el VPS sobre el árbol que aterrizó**
+      (`tsc` 0, gate y export verdes) antes de alinear el local con `reset --hard`.
+      ⚠️ **No le pasaba a ningún cliente todavía, y por eso no era 🔴:** las 10 orgs de
+      producción están en La Paz, el `@default` de la columna — coincidían por casualidad, no
+      por construcción.
+      **Queda vivo el límite conocido del gate:** un alias de alias
+      (`const TZ = DEFAULT_TZ` usado como valor) sigue sin cazarse; resolverlo pide un parser,
+      no un regex, y está escrito como caso para que el día que alguien lo cierre el gate avise.
+
 - [ ] 🔴 **Nadie probó que el correo de confirmación LLEGUE a una bandeja — y sin ese clic el
       alta nueva muere** (`app/auth/confirm/route.ts` · `scripts/alta_correo_confirma.mjs`)**.**
       Medido el 2026-09-10 con el circuito entero: GoTrue manda por Postfix
