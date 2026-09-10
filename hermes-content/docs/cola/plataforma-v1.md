@@ -66,6 +66,58 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **CERRADO el 2026-09-10 (`a106f7e`, rama del carril — NO en `master` todavía):
+      `/appointments` le ofrecía «Eliminar» a quien la API le contesta 403 por su rol, y el
+      rechazo era MUDO.** Punto 8 de la Definición 1.0 («cero promesas falsas»).
+
+      `/appointments` es `ALL_ROLES` **a propósito** —cada uno tiene que ver sus citas— y aun
+      así pintaba el botón a los cuatro roles. `DELETE /api/appointments/[id]` contesta 403
+      *«Solo admins pueden eliminar citas»* a DOCTOR y STAFF, que en producción son **6 de los
+      16 perfiles** (medido: `select role, count(*) from public.profiles` → ADMIN 9, STAFF 3,
+      DOCTOR 3, SUPERADMIN 1). Y `handleDelete` era el **único de los seis handlers del
+      archivo** sin rama de fallo (`if (res.ok)` pelado, sin `else`): sus cinco hermanos ya
+      usan `mensajeDeError` y uno hasta lleva el comentario del arreglo anterior.
+
+      **Lo que veía el que no es admin:** confirmaba un diálogo que le afirmaba
+      *«permanentemente, no se puede deshacer»* y no pasaba **nada** — ni cambio, ni cartel, ni
+      error. Un fallo mudo se lee como producto roto y termina en soporte, que es el techo real
+      del negocio.
+
+      **Por qué ningún gate podía verlo, que es lo reusable.** Hay TRES preguntas sobre rol y
+      sólo había dos: `navigation.ts` filtra el **menú** y `rol-en-la-ruta.test.ts` defiende la
+      **ruta** — las dos sobre la ruta. La tercera vive un nivel más adentro: la **acción**. Y
+      `rol-en-la-ruta` no puede alcanzarla *por construcción*: deriva su universo de los items
+      que el nav restringe MÁS que la línea base de su pack, así que una ruta `ALL_ROLES` nunca
+      es sujeto suyo. No sobra ni falta una palabra, la pantalla renderiza perfecto, el rubro
+      deriva bien, el plan la incluye y el menú está BIEN.
+
+      **Van las dos capas:** la acción no se ofrece, y si el servidor la rechaza igual (plan
+      vencido, módulo apagado) el rechazo **se dice**. El criterio es UNO y lo comparten API y
+      pantalla (`lib/platform/acciones-por-rol.ts`) — copiar la lista de roles al lado del botón
+      es exactamente como nació esto.
+
+      **El gate cierra la CLASE:** `lib/platform/accion-negada-por-rol.test.ts` deriva del disco
+      los cruces *pantalla → API que niega por rol* (**10 vivos**), cada uno declara CÓMO se
+      cubre y la declaración se **re-mide**; un cruce nuevo sin fila sale rojo con su nombre.
+      Validado por mutación en 5 direcciones, incluido el esquive (llamar al helper y tirar el
+      resultado) y un cruce nuevo inyectado.
+
+      ⚠️ **Tres correcciones del instrumento, las tres en la dirección cara** (acusar a código
+      sano): (1) sólo cuenta el rechazo **incondicional** — `role === "DOCTOR" && doctorId !==
+      profile.id` en `POST /api/appointments` *acota*, no niega, y la pantalla ya lo respeta;
+      (2) no cuenta `target.role` (`/api/team/[id]`), que describe a quién se borra y no a quién
+      llama; (3) el detector reconoce **también la vía buena** (el helper), porque si sólo
+      persiguiera la lista escrita a mano, el arreglo sacaba la acción del universo y su fila
+      quedaba huérfana — el gate dejaría de cuidar al sujeto justo después de arreglarlo.
+
+      **Queda anotado, no cerrado:** `DELETE`/`PATCH /api/doctors/[id]` cortan con
+      `role !== "ADMIN"`, o sea le niegan también a **SUPERADMIN**, que sí llega a `/settings`.
+      Es la cuenta interna de Onia (1 perfil), no un rol que un negocio reparta, así que queda
+      fuera del universo del gate **con su motivo escrito** — no es un cruce sin declarar.
+
+      **Listo =** `npx vitest run lib/platform/accion-negada-por-rol.test.ts` (8/8) y la suite
+      entera en verde: **4319 tests**, `tsc --noEmit` y `eslint` exit 0.
+
 - [x] 🔴 **CERRADO el 2026-09-10 (`057cc58`, rama del carril — NO en `master` todavía): el
       cliente que PAGÓ y se le venció el plan quedaba en solo lectura sin que NADA se lo
       dijera.** El único aviso del panel era `TrialBlockedModal`, y el layout lo mostraba con
@@ -238,6 +290,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 - [x] 🔴 **CERRADO el 2026-09-10 mismo día (`eaa67038` en master, PUBLICADO por el
       publicador 14:45 La Paz): el 403 mudo del login ahora ofrece reenviar el enlace.**
+      Vive en `app/(auth)/login/ReenviarConfirmacion.tsx` y `lib/auth/reenviar-confirmacion.ts`.
       E2E completo contra producción con cuenta QA sin confirmar, fotografiado: login →
       cartel + botón "Reenviarme el correo de confirmación" → clic → aviso con tip de
       Spam/Promociones → reenvío real (`status=sent` 250 de Gmail 18:54:20Z) → el enlace
@@ -247,12 +300,53 @@ y sin operar. Acá se opera, con verificación por ítem.
       match exacto). Lo que NO prueba: la bandeja física (Gmail MCP caído) — eso sigue en
       el ítem de entregabilidad de arriba.
 
-- [ ] 🟡 **El alta con nombre de negocio repetido revienta en 500 "Error interno" en vez
-      de decir "ese nombre ya está usado".** Medido el 2026-09-10 registrando por API dos
-      veces el mismo `orgSlug`: choque de único en la base → 500 crudo. El wizard de
-      /register genera slugs con sufijo y casi nunca choca, pero el error existe y un 500
-      en el alta es la peor primera impresión. LISTO = registrar dos veces el mismo nombre
-      devuelve 400 con mensaje claro y el formulario lo muestra; test que lo fija.
+- [x] 🟡 **CERRADO el 2026-09-10 (chatbot-cola) — `bc48959`, rama del carril, PENDIENTE de
+      merge a `master` y de deploy: el alta con nombre de negocio repetido decía "Error
+      interno" (500) en vez de decir que ese nombre ya está usado.** Medido el 2026-09-10
+      registrando por API dos veces el mismo `orgSlug`: choque de único en la base → 500
+      crudo. El wizard de /register genera slugs con sufijo y casi nunca choca, pero el
+      error existe y un 500 en el alta es la peor primera impresión. LISTO = registrar dos
+      veces el mismo nombre devuelve un mensaje claro y el formulario lo muestra; test que
+      lo fija.
+
+      **La causa, leída en el código:** el choque de un `UNIQUE` lo tira Prisma como
+      `P2002`, que **no** es `ProvisioningError`, así que se escapaba del `catch` tipado de
+      `app/api/auth/register/route.ts` y caía en el 500 genérico "Error interno al crear la
+      cuenta" — que no le dice al dueño **qué cambiar**.
+
+      - **El arreglo va en `provisionOrganization`** (`lib/platform/provisioning.ts`), que es
+        la puerta **única** del alta: así el alta manual del operador queda curada por la
+        misma línea. Es la plantilla, no la instancia.
+      - **El sujeto no es "el slug": es cualquier `P2002` del provisioning.** El mensaje se
+        especializa por campo (`slug`/`name` → el nombre; `userId`/`email` → ya tiene cuenta)
+        y el **default es honesto, no mudo**, así que un `@unique` nuevo nace cubierto en vez
+        de volver al 500. Enumerar sólo los campos conocidos sería una lista de inclusión que
+        falla **abierta** justo en la puerta de entrada del producto.
+      - **Lo que NO es `P2002` se propaga tal cual.** La dirección cara del arreglo era
+        tragarse una caída de la base y culparle el nombre al dueño; hay dos casos que lo
+        fijan (error genérico y `P2003`).
+      - **Sale 409, no 400** — por consistencia con el correo repetido, que ya salía así dos
+        capas más arriba **en el mismo route**. El formulario muestra `result.error` para
+        cualquier respuesta no-OK, así que el texto llega igual: verificado en el fuente y
+        atado con un gate.
+      - **Gate:** `lib/platform/alta-con-nombre-repetido.test.ts` (10 casos) +
+        `app/api/auth/register/route.test.ts`. **Validado por mutación en 7 direcciones**, las
+        7 en rojo: sin el `.catch` que traduce (6 casos) · traducir cualquier error y no sólo
+        `P2002` (2) · campo desconocido de vuelta al 500 (1) · el route de vuelta a 400 fijo
+        (1) · y las dos de **esquive del formulario** — pintar un texto fijo en lugar del
+        mensaje del servidor (1) y arrancar el JSX del aviso (1).
+      - ⚠️ **La primera versión del ancla del JSX pasaba en VERDE con el aviso arrancado.**
+        Buscaba `{error}` en el archivo entero y la absolvía el
+        `const { error } = await supabase.auth…` del alta con Google — una **desestructuración**,
+        no un render. Se midió por **vecindad** del bloque `{error && (`. Sólo apareció
+        mutando: el caso hueco no se ve leyéndolo.
+      - Gates verdes sobre el árbol publicado: `tsc` 0 · **4.330** tests · `eslint` 0 errores.
+        Árbol entregado idéntico al medido (`tree 701e194d`).
+
+      ⚠️ **El párrafo de acá abajo NO es de este ítem: es el registro del botón de reenviar
+      el correo, que se cierra en el `[x]` de arriba** (`eaa67038`, ya publicado). Quedó
+      pegado bajo el bullet equivocado por una vuelta anterior; se conserva porque tiene
+      detalle que el otro no (el conflicto de merge y por qué `/verify-email` no servía).
 
       **HECHO el 2026-09-10 (chatbot-cola) — `4d45f2f`, MERGEADO a `master` en `2f344e5` (integrador, 2026-09-10 15:5x La Paz).** ⚠️ Lo de «NO desplegado» venció el mismo día: el arreglo GEMELO de la sesión de control (`eaa6703`) ya está **vivo en producción** —`docker exec onia-platform grep -rl Reenviarme /app/.next/server` da un chunk—, así que el 403 mudo ya tiene salida para un cliente real. `4d45f2f` **no** es ancestro de `eaa6703`: son dos escrituras del mismo arreglo, y la rama resolvió el choque a favor del lado medible (`10952417`). Lo que falta desplegar de este ítem es sólo el reemplazo por la versión con gate.
       El botón vive en `app/(auth)/login/ReenviarConfirmacion.tsx` y la decisión en
