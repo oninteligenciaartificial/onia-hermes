@@ -48,6 +48,11 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[2]
 OUT_BASE = REPO / "hermes-content/carousels/out"
 HANDLE = "@sergiourcullo"
+# ⚠️ El handle NO es global: hay piezas que van en la cuenta de la empresa. Rendir una
+# pieza de Onia firmada @sergiourcullo la publica en la cuenta equivocada, y eso no lo
+# atrapa ningun gate — se ve recien cuando ya esta arriba.
+HANDLES = {"onia-cuatro": "@oniahq"}
+_handle_actual = HANDLE
 
 
 def _chrome():
@@ -667,6 +672,197 @@ FOUNDERS_BO = [
     },
 ]
 
+# ---------------------------------------------------------------------------------------
+# LAS SEIS RESPUESTAS (cuenta @sergiourcullo). Sale del drop del lunes 14-sep y del archivo
+# ya publicado en /stack/archivos. Es la pieza mas "guardable" del carril: no cuenta lo que
+# el hizo, entrega algo que el lector usa hoy.
+#
+# El remate esta en la SEXTA. Las cinco primeras informan y cualquiera las tiene a medias
+# escritas en la cabeza; la que pide la decision casi nadie la tiene, y por eso casi nadie
+# la manda. Ese es el unico dato de la pieza que el lector no sabia.
+RESPUESTAS = [
+    {
+        "layout": "D",
+        "contexto": "Escribís lo mismo veinte veces por día",
+        "remate": "SEIS\nRESPUESTAS",
+        "pie": "y no volvés a escribirlas",
+        "pie_hl": "nunca",
+        "gancho": True,
+    },
+    {
+        "layout": "E",
+        "icono": "whatsapp",
+        "nombre": "Respuestas rápidas",
+        "desc": "Están en la app gratis de WhatsApp Business.\nHerramientas para la empresa → Respuestas\nrápidas. Se escriben una vez.",
+        "precio": "$0",
+        "etiqueta": "20 minutos · sin computadora",
+    },
+    {
+        "layout": "D",
+        "contexto": "Las cinco que todos necesitan",
+        "remate": "/precio\n/horario\n/donde",
+        "sub": "/pago  ·  /demora\nCon el atajo, salen con dos toques.",
+    },
+    # El remate de la pieza. Va sola, en la lamina mas grande, porque es lo unico que el
+    # lector no sabia ya.
+    {
+        "layout": "D",
+        "contexto": "Y la sexta, que casi nadie tiene",
+        "remate": "/cierro",
+        "sub": "«¿Querés que te lo reserve? Con eso ya te lo\ndejo apartado a tu nombre.»",
+    },
+    {
+        "layout": "D",
+        "contexto": "Las cinco primeras informan",
+        "remate": "ÉSA PIDE\nLA DECISIÓN",
+        "sub": "Sin ella la conversación se enfría sola y el\ncliente se va a pensarlo. Que casi siempre\nsignifica que no vuelve.",
+    },
+    {
+        "layout": "D",
+        "contexto": "Ahora te toca a vos",
+        "remate": "¿CUÁL REPETÍS?",
+        "sub": "Escribí abajo la frase que más veces tipeaste\nesta semana y te la dejo lista para guardar.",
+        "cta_hl": "Copiá y pegá, nomás.",
+        "cta_gris": "Te contesto a todos.",
+    },
+]
+
+# ---------------------------------------------------------------------------------------
+# LO QUE ESTA SEMANA VA A LA COMUNIDAD (cuenta @sergiourcullo). Invita mostrando lo que se
+# entrega, no prometiendo lo que se va a entregar: los seis archivos existen y estan
+# publicados. Es la diferencia entre "unite que va a estar buenisimo" y "esto es lo que hay".
+#
+# ⚠️ SIN PALABRA CLAVE. La cuenta tiene `palabras: {}` en el workflow n8n activo de
+# private-reply: un "Comenta X" sale con palabra=null y quien comenta no recibe nada.
+COMUNIDAD_SEMANA = [
+    {
+        "layout": "D",
+        "contexto": "Esta semana en mi comunidad",
+        "remate": "SEIS\nARCHIVOS",
+        "pie": "uno por día, y son",
+        "pie_hl": "gratis",
+        "gancho": True,
+        "tira": ["whatsapp", "vps", "n8n", "claude", "hyperframes", "hermes"],
+    },
+    {
+        "layout": "E",
+        "icono": "whatsapp",
+        "nombre": "Lunes",
+        "desc": "Las seis respuestas de WhatsApp escritas,\ncon su atajo. Copiás y pegás.",
+        "precio": "$0",
+        "etiqueta": "respuestas-rapidas.txt",
+    },
+    {
+        "layout": "E",
+        "icono": "vps",
+        "nombre": "Martes",
+        "desc": "El script que deja tu PC vieja lista como\nservidor: zona horaria, Docker, firewall.",
+        "precio": "$0",
+        "etiqueta": "primer-arranque.sh",
+    },
+    {
+        "layout": "E",
+        "icono": "n8n",
+        "nombre": "Miércoles",
+        "desc": "El archivo que levanta n8n con la\nconfiguración ya puesta. Un comando.",
+        "precio": "$0",
+        "etiqueta": "docker-compose.yml",
+    },
+    {
+        "layout": "E",
+        "icono": "claude",
+        "nombre": "Jueves",
+        "desc": "El archivo que le da contexto a Claude Code,\nescrito para un negocio y no para código.",
+        "precio": "$0",
+        "etiqueta": "CLAUDE.md",
+    },
+    {
+        "layout": "E",
+        "icono": "hermes",
+        "nombre": "Viernes y sábado",
+        "desc": "Una plantilla de video desde HTML y el alma\ndel agente que avisa cuando algo se rompe.",
+        "precio": "$0",
+        "etiqueta": "placa.html · SOUL.md",
+    },
+    # La pieza tiene que contestar por que entrar si las guias son publicas. Se contesta
+    # sin esconder nada, que es lo unico que se sostiene.
+    {
+        "layout": "D",
+        "contexto": "Todo lo que enseño está afuera",
+        "remate": "ADENTRO\nESTÁ HECHO",
+        "sub": "La guía te dice qué escribir.\nAdentro está escrito, y si te trabás preguntás.",
+    },
+    {
+        "layout": "D",
+        "contexto": "Arranca el lunes",
+        "remate": "¿TE SUMÁS?",
+        "sub": "Escribí abajo «voy» y te paso el enlace del\ncanal. Es gratis y no vendo nada adentro.",
+        "cta_hl": "Una palabra alcanza.",
+        "cta_gris": "Te contesto a todos.",
+    },
+]
+
+# ---------------------------------------------------------------------------------------
+# ONIA — CUATRO COSAS QUE DEJAS DE HACER A MANO (cuenta @oniahq).
+#
+# ⚠️ TRES REGLAS DURAS DE ESTA PIEZA, de CLAUDE.md:
+# 1. "Se vende el SISTEMA, el bot es add-on" + CERO AUTOBOMBO: no se habla de nosotros, del
+#    equipo ni de nuestras competencias. Se habla del dia del dueño del negocio.
+# 2. "La venta nunca exhibe obra": prohibido "proximamente", "beta", "muy pronto".
+# 3. SOLO MODULOS 🟢 de ONIA_CATALOGO_DE_VENTA.md — los que un cliente real ya uso:
+#    agenda y citas, clientes, servicios y inventario. Los 🟡 estan completos pero sin
+#    kilometraje y esta pieza no los nombra.
+# Sin precio: los precios los fija subscription-plans.ts / pricing.ts y esto es contenido.
+ONIA_CUATRO = [
+    {
+        "layout": "D",
+        "marca": "onia",
+        "contexto": "Tu negocio ya funciona",
+        "remate": "CUATRO COSAS\nA MANO",
+        "pie": "y ninguna hace falta que",
+        "pie_hl": "lo sigan",
+        "gancho": True,
+    },
+    {
+        "layout": "D",
+        "contexto": "Anotar cada turno en un cuaderno",
+        "remate": "LA AGENDA",
+        "sub": "Los turnos entran solos, el cliente reserva\ndesde un link y nadie llama para preguntar\nsi hay lugar.",
+    },
+    {
+        "layout": "D",
+        "contexto": "Buscar quién era el del martes",
+        "remate": "LOS CLIENTES",
+        "sub": "Cada uno con su ficha, su historial y lo que\nte compró. Se busca escribiendo el nombre.",
+    },
+    {
+        "layout": "D",
+        "contexto": "Repetir el precio de memoria",
+        "remate": "LOS SERVICIOS",
+        "sub": "Lo que vendés, con su precio y su duración,\nen un solo lugar. Cambiás uno y cambia en\ntodos lados.",
+    },
+    {
+        "layout": "D",
+        "contexto": "Contar el stock a ojo",
+        "remate": "EL INVENTARIO",
+        "sub": "Lo que entra y lo que sale, sin planilla.\nY te avisa antes de que te quedes sin nada.",
+    },
+    {
+        "layout": "D",
+        "contexto": "Cuatro cosas menos por día",
+        "remate": "EL MISMO\nNEGOCIO",
+        "sub": "Sin que el dueño esté encima de cada una.\nEso es todo lo que hace el sistema.",
+    },
+    {
+        "layout": "D",
+        "contexto": "¿Cuál te come más tiempo?",
+        "remate": "CONTAME",
+        "sub": "Agenda, clientes, servicios o inventario.\nEscribí abajo cuál y te digo por dónde\nempezaría en tu rubro.",
+        "cta_hl": "Una palabra alcanza.",
+        "cta_gris": "Contesto a todos.",
+    },
+]
+
 PIEZAS = {
     "mi-stack": None,
     "fable": FABLE,
@@ -674,6 +870,9 @@ PIEZAS = {
     "portada-f": PORTADA_F,
     "duelo-cuaderno": DUELO_CUADERNO,
     "vitamina-c": VITAMINA_C,
+    "respuestas": RESPUESTAS,
+    "comunidad-semana": COMUNIDAD_SEMANA,
+    "onia-cuatro": ONIA_CUATRO,
 }  # mi-stack se resuelve a LAMINAS abajo
 
 # Piel por pieza: una clase extra en el lienzo que habilita el acento de esa marca.
@@ -1036,7 +1235,7 @@ def render(tipo, out_dir, laminas=None):
     for i, lamina in enumerate(laminas or LAMINAS, 1):
         html = (f"<!doctype html><html><head><meta charset='utf-8'><style>{hoja}</style></head>"
                 f"<body><div class='{_clases(lamina)}'>{markup(lamina)}"
-                f"<div class='handle'>{HANDLE}</div></div></body></html>")
+                f"<div class='handle'>{_handle_actual}</div></div></body></html>")
         with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as fh:
             fh.write(html)
             tmp = fh.name
@@ -1097,7 +1296,7 @@ def check(tipo, laminas=None):
     for i, lamina in enumerate(laminas or LAMINAS, 1):
         html = (f"<!doctype html><html><head><meta charset='utf-8'><style>{hoja}</style>"
                 f"{sonda}</head><body><div class='{_clases(lamina)}'>{markup(lamina)}"
-                f"<div class='handle'>{HANDLE}</div></div></body></html>")
+                f"<div class='handle'>{_handle_actual}</div></div></body></html>")
         with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as fh:
             fh.write(html)
             tmp = fh.name
@@ -1133,6 +1332,9 @@ def main():
     laminas = PIEZAS[args.pieza] or LAMINAS
     if args.pieza in FONDO:      # copia, no mutacion: los dicts de arriba son la fuente
         laminas = [{**l, "fondo": FONDO[args.pieza]} for l in laminas]
+
+    global _handle_actual
+    _handle_actual = HANDLES.get(args.pieza, HANDLE)
 
     if args.check:
         print(f"gate de desborde · {args.pieza} · tipografia={args.tipografia} · util={UTIL}px")

@@ -1,5 +1,10 @@
 # Qué hace valer la comunidad si el contenido es público
 
+> 📍 **Índice del carril, con qué documento manda sobre qué:**
+> [`ONIA_CIRCUITO_DE_CONTENIDO.md`](ONIA_CIRCUITO_DE_CONTENIDO.md) — y la misma
+> estructura para consultar de un vistazo en
+> <https://claude.ai/code/artifact/fb52b4b9-4504-4b8a-afca-46cf2a8f9586>
+
 > Sergio Urcullo, 2026-09-08: *"necesito que diferenciemos el valor que damos a la
 > comunidad porque si subimos todo a la web, no se va a ver el valor… y también los videos
 > que no se pierdan los recursos"*.
