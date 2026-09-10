@@ -469,6 +469,12 @@ export const CONSTANTES_VERIFICADAS_APARTE = [
     porque: "no es un tope ni un monto: es a que rubros llega la capacidad",
     cruzadaPor: "scripts/capacidad-por-rubro.mjs",
   },
+  {
+    valor: "ALCANCE_CON_FICHA",
+    porque:
+      "tampoco es un tope: es a que rubros llega el agente Recall, acotado por los DATOS que lee (patient + appointment) y no por la pantalla",
+    cruzadaPor: "src/app/capacidad-acotada.test.ts",
+  },
 ];
 
 /** Excusas de constante que ya no tienen sujeto: nadie las mide y quedan pre-aprobadas. */

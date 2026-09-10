@@ -163,6 +163,53 @@ export const ALCANCE_POR_RUBRO = [
 /** Cómo se dice ese alcance en una línea de venta, derivado del dato de arriba. */
 export const ALCANCE_CLINICO = "solo en clínicas dentales y estética";
 
+/** «a, b y c» — para que la frase del copy salga del dato y no al lado del dato. */
+const listar = (xs: readonly string[]) =>
+  xs.length < 2 ? (xs[0] ?? "") : `${xs.slice(0, -1).join(", ")} y ${xs[xs.length - 1]}`;
+
+/**
+ * El MISMO eje (capacidad, RUBRO), con el corte en otro lado: acá el rubro SÍ
+ * llega a la pantalla, y lo que le falta son los DATOS que la capacidad lee.
+ *
+ * Medido el 2026-09-10 contra `origin/master` de `onia-platform`. El agente
+ * Recall lee `patient` + `appointment`, así que desde `64279ff`
+ * (`lib/onia-core/modules/agents-por-rubro.ts`) el runtime lo acota con
+ * `rolCorreEnTrack('recall', track) = guardaClientesEnPatients(track)`, que es
+ * `pack.nav` con `/patients`: **falso para comercio (`gestios-general`) e
+ * importadora (`proveegest-electrico`)**, 2 de los 5 rubros que el alta ofrece.
+ * Antes de ese arreglo corría igual y fallaba MUDO —`[]` no lanza—: 34 corridas
+ * reales en tres orgs de esos rubros, todas con 0 acciones producidas. El
+ * Cobrador no se acota: ramifica por rubro y cobra fiados de mostrador.
+ *
+ * POR QUÉ NINGÚN GATE LO VEÍA, y por qué es una clase nueva y no otra instancia
+ * de la de arriba: los dos instrumentos de esta familia preguntan por la
+ * PANTALLA. `app/(sitio)/capacidad-por-rubro.test.ts` saca sus sujetos de las
+ * líneas de `PLANES` y sólo exige la salvedad a las que nombran una capacidad de
+ * `ALCANCE_POR_RUBRO`; `scripts/capacidad-por-rubro.mjs` cruza «¿el pack declara
+ * esta pantalla en su nav?» — y `/agents` está en el nav de los SIETE packs. Con
+ * el corte adentro de una pantalla que todos alcanzan, ninguno de los dos puede
+ * siquiera expresar la pregunta, y los dos daban verde.
+ *
+ * El arreglo gemelo del PRODUCTO ya existe (`lib/subscription/plan-display.ts`
+ * filtra el Recall por rubro en la pantalla donde el cliente paga); el de la
+ * VENTA es éste, cuatro días después. Lo vigila `app/capacidad-acotada.test.ts`,
+ * cuyos sujetos son las MENCIONES en todo `src/`, no las líneas de los planes:
+ * la página que vende la capacidad la describe rol por rol, fuera de `PLANES`.
+ */
+export const ALCANCE_POR_DATOS = [
+  {
+    /** Cómo la nombra el copy. */
+    capacidad: "Recall",
+    /** El predicado real del producto, en castellano. */
+    porque: "lee la ficha del cliente y la agenda",
+    /** Rubros del alta que sí tienen esos datos, como los nombra el copy. */
+    rubros: ["dentales", "estética", "servicios profesionales"],
+  },
+] as const;
+
+/** Cómo se dice ese alcance en una línea de venta, derivado del dato de arriba. */
+export const ALCANCE_CON_FICHA = `solo en ${listar(ALCANCE_POR_DATOS[0].rubros)}`;
+
 export const USUARIO_EXTRA_ADDON = {
   nombre: "Usuario adicional",
   mensualAddon: 70,
@@ -212,7 +259,7 @@ export const PLANES: readonly Plan[] = [
       "5 usuarios",
       "Hasta 1.500 fichas de clientes o pacientes",
       "800 recordatorios por email al mes",
-      "Agente Recall: te propone a quién hace rato que no ves",
+      `Agente Recall: te propone a quién hace rato que no ves (${ALCANCE_CON_FICHA})`,
       "Agente Cobrador: te propone a quién reclamarle la deuda vencida",
       "Reservas online incluidas (link público para que te pidan cita)",
       `Reportes completos y facturas recurrentes (${ALCANCE_CLINICO})`,
