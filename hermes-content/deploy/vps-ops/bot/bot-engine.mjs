@@ -150,18 +150,24 @@ export function clearHumanTakeover(state) {
 }
 
 /**
- * ¿La conversacion esta VENCIDA? Nadie escribio en `config.reinicio.trasDiasSinActividad`
- * dias — se cuenta desde la ULTIMA actividad de cualquiera de los tres lados (prospecto,
- * bot, humano). Determinista: el "ahora" es el receivedAt del mensaje entrante.
+ * ¿La conversacion esta VENCIDA? NUESTRO lado (bot o humano) no dio señales de vida en
+ * `config.reinicio.trasDiasSinActividad` dias. Se mide contra lastOutboundAt y
+ * humanTookOverAt — NUNCA contra lastInboundAt: cada "hola" del prospecto a una
+ * conversacion muda actualiza esa marca, asi que medirla rearmaria el reloj con cada
+ * intento fallido y el bot no reviviria jamas mientras la persona insista (le paso al
+ * "hola" real del 10-sep: el turno MUDO dejo lastInboundAt en ese mismo dia).
+ * Fallback: si nunca salio nada nuestro ni hubo takeover, cuenta desde lastInboundAt.
+ * Determinista: el "ahora" es el receivedAt del mensaje entrante.
  * El opt-out la excluye SIEMPRE: esa barrera no caduca por tiempo (politica de Meta).
  */
 export function conversacionVencida(state, receivedAt, config = DEFAULT_CONFIG) {
   const dias = config.reinicio?.trasDiasSinActividad;
   if (!Number.isFinite(dias) || dias <= 0) return false;
   if (!receivedAt || state.optOutAt || state.botStage === "nuevo") return false;
-  const marcas = [state.lastInboundAt, state.lastOutboundAt, state.humanTookOverAt]
+  const nuestras = [state.lastOutboundAt, state.humanTookOverAt]
     .map((iso) => Date.parse(iso))
     .filter(Number.isFinite);
+  const marcas = nuestras.length ? nuestras : [Date.parse(state.lastInboundAt)].filter(Number.isFinite);
   if (!marcas.length) return false;
   const inactiva = (Date.parse(receivedAt) - Math.max(...marcas)) / 86400000;
   return Number.isFinite(inactiva) && inactiva > dias;

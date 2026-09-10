@@ -1150,12 +1150,43 @@ test("un traspaso humano en conversacion vencida NO dispara la bienvenida encima
   assert.equal(result.nextState.humanTookOver, true, "y el candado sigue puesto");
 });
 
+test("insistir a una conversacion muda NO rearma el reloj: el reloj es NUESTRO, no del prospecto", () => {
+  // El caso real medido en la base el 10-sep: el "hola" MUDO ya habia actualizado
+  // lastInboundAt a ese mismo dia. Si el reloj mirara esa marca, el bot no reviviria jamas
+  // mientras la persona siga intentando.
+  const insistio = markHumanTakeover(
+    {
+      ...createState({ channel: "chatwoot", contactRef: "11" }),
+      botStage: "esperando_calificacion",
+      lastInboundAt: new Date(Date.parse(UN_MES_DESPUES) - 60000).toISOString(), // escribio hace 1 min
+      lastOutboundAt: T0, // lo nuestro: hace un mes
+    },
+    T0,
+  );
+  const result = step(insistio, { text: "hola", receivedAt: UN_MES_DESPUES }, { config: CONFIG });
+  assert.ok(result.replies.length >= 1, "insistir tiene que REFORZAR el reinicio, no aplazarlo");
+});
+
 test("conversacionVencida: bordes deterministas", () => {
-  const base = { ...createState({ channel: "chatwoot", contactRef: "x" }), botStage: "esperando_horario", lastInboundAt: T0 };
+  const base = { ...createState({ channel: "chatwoot", contactRef: "x" }), botStage: "esperando_horario", lastInboundAt: T0, lastOutboundAt: T0 };
   assert.equal(conversacionVencida(base, UN_MES_DESPUES, CONFIG), true);
   assert.equal(conversacionVencida(base, at(60), CONFIG), false, "una hora no es un mes");
   assert.equal(conversacionVencida(base, null, CONFIG), false, "sin receivedAt no se juzga (determinismo)");
   assert.equal(conversacionVencida({ ...base, optOutAt: T0 }, UN_MES_DESPUES, CONFIG), false, "opt-out nunca vence");
-  assert.equal(conversacionVencida({ ...base, lastInboundAt: null }, UN_MES_DESPUES, CONFIG), false, "sin marcas de actividad no hay desde cuando contar");
+  assert.equal(
+    conversacionVencida({ ...base, lastOutboundAt: null }, UN_MES_DESPUES, CONFIG),
+    true,
+    "sin marcas nuestras cuenta desde el ultimo inbound (el bot nunca hablo y la charla es vieja)",
+  );
+  assert.equal(
+    conversacionVencida({ ...base, lastInboundAt: null, lastOutboundAt: null }, UN_MES_DESPUES, CONFIG),
+    false,
+    "sin ninguna marca no hay desde cuando contar",
+  );
+  assert.equal(
+    conversacionVencida({ ...base, lastInboundAt: T0, lastOutboundAt: new Date(Date.parse(UN_MES_DESPUES) - 3600000).toISOString() }, UN_MES_DESPUES, CONFIG),
+    false,
+    "nuestro lado hablo hace una hora: la charla esta viva aunque el prospecto haya callado un mes",
+  );
   assert.equal(conversacionVencida({ ...base, botStage: "nuevo" }, UN_MES_DESPUES, CONFIG), false, "en 'nuevo' no hay nada que reiniciar");
 });

@@ -337,6 +337,13 @@ export async function runTurn(input, deps = {}) {
   let state = fillFromSeed(loaded || createState(seed), seed);
   if (!loaded && store.enabled) store.warnings.push("estado en memoria: la conversación no se pudo cargar");
   if (input.human_takeover === true && !state.humanTookOver) state = markHumanTakeover(state, nowIso);
+  // CADA mensaje del humano refresca lastOutboundAt (el traspaso se guarda como outbound
+  // nuestro): es la marca con la que conversacionVencida decide si nuestro lado esta vivo.
+  // Sin esto, un humano chateando hace un mes con humanTookOverAt viejo contaria como
+  // conversacion muerta y el proximo mensaje del prospecto reiniciaria el guion en plena charla.
+  if (input.human_takeover === true) {
+    state = { ...state, lastOutboundAt: input.received_at || input.receivedAt || nowIso };
+  }
 
   // El DESARME (conversacion resuelta desde la bandeja): limpiar el candado,
   // guardar y salir. No es un mensaje — no corre step, no crea filas, no manda.
