@@ -51,6 +51,11 @@ const SOLO_LIMPIAR = process.argv.includes('--solo-limpiar');
 // va a usar esto la primera vez.
 const MOVIL = process.env.RECORRIDO_MOVIL === '1';
 const VIEWPORT = MOVIL ? { width: 390, height: 844 } : { width: 1440, height: 900 };
+// Pregunta abierta desde 2026-09-04 (ver ULTIMO_RECORRIDO.md, "próximo escalón del carril"):
+// si el dueño aprieta "Saltar por ahora" en la pantalla de equipo (sin cargar ningún
+// profesional), nadie comprobó si puede agendar después. RECORRIDO_SALTAR_EQUIPO=1 reproduce
+// exactamente ese camino incluso con --escribir, para que el paso 7 (agenda) mida la verdad.
+const SALTAR_EQUIPO = process.env.RECORRIDO_SALTAR_EQUIPO === '1';
 
 /**
  * La ruta con la que se REPORTA una captura en `resumen.json`, relativa a la raíz del repo.
@@ -747,7 +752,9 @@ async function completarOnboarding(page) {
         // El último paso es el que CIERRA el alta (manda el POST). Con --escribir se carga un
         // profesional zz-qa- —"con al menos una persona cargada ya podés agendar", dice la propia
         // pantalla—; sin él se salta, y el POST va sin miembro de equipo.
-        if (ESCRIBIR) {
+        if (ESCRIBIR && SALTAR_EQUIPO) {
+          traza.push({ pantalla: 'equipo', vio: donde.h1, apreto: await apretar(/saltar por ahora/i, 'Saltar por ahora — SIN cargar profesional (cierra el alta)') });
+        } else if (ESCRIBIR) {
           const nombre = page.getByLabel(/^Nombre/).first();
           await nombre.fill(QA.profesional).catch(() => {});
           await page.getByRole('button', { name: /profesional|veterinari/i }).first().click({ timeout: 5000 }).catch(() => {});
@@ -1917,6 +1924,7 @@ async function main() {
     rubro: ctx.rubroElegido || process.env.RECORRIDO_RUBRO || 'Clínica dental',
     rubroPromesa: ctx.rubroPromesa || null,
     escribio: ESCRIBIR,
+    saltoEquipo: SALTAR_EQUIPO,
     borrado,
     zzQaRestantes: borrado ? (borrado.restantes ?? null) : 0,
     // Filas con el prefijo `zz-qa-` que NO son de este carril. Van al resumen para que el

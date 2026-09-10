@@ -12,6 +12,25 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-09 00:32 La Paz — comercio escritorio (`RECORRIDO_RUBRO`): 8/8 que le corresponden, sin hallazgos
+
+Tras dos vueltas seguidas en dental con el mismo resultado, cambio de rubro: `RECORRIDO_RUBRO="Comercio / tienda"`.
+Cuenta `zz-qa-2026-09-09-0014@onia.com.bo`, onboarding en 6 pantallas, dato
+`zz-qa-2026-09-09-0014-paciente` cargado en `/comercio` (Catálogo) y encontrado, visible en el
+panel del paso 9. Paso 7 (cita) sale NO-APLICA correctamente: el pack de Comercio no vende
+agenda (coherente con su menú, sin ítem de citas) — no es un agujero. Cobro visto en
+`/comercio/caja`, frenado sin pagar. Cero filas `zz-qa-` propias al cerrar. Nada roto.
+
+## 2026-09-09 00:09 La Paz — dental escritorio: 9/9, sin hallazgos, base limpia al arrancar
+
+Repetición del recorrido completo (dental, escritorio 1440x900), sin huérfanos previos esta vez
+(`count(*) LIKE 'zz-qa-%'` en `organizations` = 0 al arrancar). Cuenta `zz-qa-2026-09-09-0009@onia.com.bo`,
+onboarding en 6 pantallas, paciente `zz-qa-2026-09-09-0009-paciente` cargado y encontrado, cita
+`2026-09-09 09:00` agendada y vista en `/appointments` (`cmttcgv83000m01rwuq21nkw2`), factura
+`/billing/cmttch6mx000o01rwr2xerkk2` con ítem visible, frenada sin pagar. Cero filas `zz-qa-`
+propias al cerrar (4 ajenas de otros carriles, sin tocar). Nada roto en el producto — segunda
+vuelta seguida con el mismo resultado.
+
 ## 2026-09-08 23:10-23:15 La Paz — dental escritorio: 9/9, y un huérfano de la vuelta ANTERIOR encontrado y limpiado
 
 Al arrancar había **1 organización `zz-qa-2026-09-08-2209-negocio` viva en producción**, con su
