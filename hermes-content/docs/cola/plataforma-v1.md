@@ -66,6 +66,60 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **CERRADO el 2026-09-10 (`7d3c050`, rama del carril — NO en `master` todavía): el panel
+      le ofrecía a la recepción y al profesional dos enlaces que los rebotaban MUDO al inicio.**
+      Punto 8 de la Definición 1.0 («cero promesas falsas»).
+
+      **Es la CUARTA pregunta sobre rol, y no la veía ningún gate.** Había tres:
+      `filterNavItems` filtra el **menú**, `rol-en-la-ruta.test.ts` defiende la **ruta**, y
+      `accion-negada-por-rol.test.ts` (ayer) mira la **acción** contra la API. Las dos primeras
+      preguntan por la ruta, así que un enlace pintado **dentro** de una pantalla —o en el
+      layout— no es item de menú de nadie y no era sujeto de ninguno. `enlaces-del-panel-
+      alcanzables.test.ts` sí cruza href, pero contra el **pack**: otro eje.
+
+      **Lo que veía el que no es admin:** apretaba y volvía a `/dashboard`. Sin cartel, sin
+      error, sin request fallida. Un rebote mudo se lee como producto roto y termina en
+      soporte, que es el techo real del negocio. Los dos casos pegan a **6 de los 16 perfiles**
+      de producción (STAFF 3, DOCTOR 3):
+
+      - **`components/layout/BarraEstado.tsx`** vive en `LayoutShell`, o sea **todas** las
+        pantallas: *«vence en N días · Ver mi plan»* → `/settings`. El **dato** le importa a
+        todo el que trabaja adentro y el **CTA** sólo a quien puede abrirlo, así que queda el
+        aviso y se va el botón muerto.
+      - **`app/(dashboard)/inbox/InboxClient.tsx`** — el más caro: `/inbox` es la pantalla de
+        la **recepción**, y con el canal apagado le decía *«Encendé tu asistente»* con un botón
+        a `/settings/chatbot`. Ahora al que no puede se le dice la acción que **sí** puede
+        hacer (pedírselo a quien administra); el aviso no se le borra.
+
+      El criterio es **uno** (`lib/platform/ruta-por-rol.ts`), derivado de `sidebarNavItems` —la
+      fuente que `rol-en-la-ruta` ya enforza— más los cortes que no son item de menú. Copiar la
+      lista de roles al lado del botón es exactamente como nació esto.
+
+      **El gate cierra la CLASE** (`lib/platform/enlace-alcanzable-por-rol.test.ts`): deriva del
+      disco los cruces *(pantalla, enlace)*, cruza los roles que alcanzan el **origen** contra
+      los que abren el **destino**, y cada cruce vivo declara CÓMO se cubre con la declaración
+      **re-medida** — uno nuevo nace rojo con su nombre, y una fila que sobra también.
+
+      ⚠️ **Tres correcciones del instrumento, las tres en la dirección cara** (acusar a código
+      sano), que la primera medición tenía mal: (1) el origen sale del **nav**, no de los
+      `redirect()` — `/empresa` y `/team` cortan con `requireEmpresaAccess()`/`requireAdmin()` y
+      figuraban abiertos a los cuatro roles, con 7 falsos positivos; (2) `/team` lo abre
+      **SUPERADMIN** (`requireAdmin`) aunque su item del menú declare sólo `ADMIN`: manda lo que
+      la ruta **aplica**; (3) la guarda se pide en la **vecindad** del enlace y resolviendo la
+      variable derivada, no por presencia del símbolo en el archivo — eso se satisface
+      importando el helper y tirando el resultado.
+
+      **Validado por mutación:** revertir cada arreglo da rojo, y el **esquive** también. Los
+      comentarios se blanquean conservando saltos, o el gate reporta la línea corrida.
+
+      **Anotado, no cerrado:** `/patients` fue la primera de esta clase en resolverse bien, pero
+      su guarda copia la lista de roles (`role === "ADMIN" || role === "SUPERADMIN"`) en vez de
+      preguntarle a `puedeAbrirRuta`. Hoy coinciden; migrarla al criterio único es trabajo
+      aparte y queda declarado en la tabla del gate, no suelto.
+
+      **Listo =** `npx vitest run lib/platform/enlace-alcanzable-por-rol.test.ts` (5/5) y la
+      suite entera: **4335 tests**, `tsc --noEmit` y `eslint` exit 0.
+
 - [x] 🔴 **CERRADO el 2026-09-10 (`a106f7e`, rama del carril — NO en `master` todavía):
       `/appointments` le ofrecía «Eliminar» a quien la API le contesta 403 por su rol, y el
       rechazo era MUDO.** Punto 8 de la Definición 1.0 («cero promesas falsas»).
