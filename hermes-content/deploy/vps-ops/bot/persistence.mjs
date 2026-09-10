@@ -101,6 +101,7 @@ export function stateFromRow(row) {
     // produccion para dejar de guardar el id de conversacion como telefono del CRM.
     publicContact: raw.publicContact || null,
     handoffAckAt: raw.handoffAckAt || null,
+    branchAsked: Boolean(raw.branchAsked),
     inboxId: raw.inboxId || null,
     displayName: row.display_name,
     botStage: STAGES.includes(row.bot_stage) ? row.bot_stage : "nuevo",
@@ -381,6 +382,13 @@ export function createStore(options = {}) {
       off_script_count: state.offScriptCount || 0,
       last_inbound_at: state.lastInboundAt || null,
       last_outbound_at: state.lastOutboundAt || null,
+      // ⚠️ Esta lista es la HERMANA de toConversationRow (bot-engine.mjs) y de
+      // stateFromRow (arriba): un campo de estado que viva en `raw` tiene que estar
+      // en LAS TRES o se pierde en silencio. El 2026-09-10 `handoffAckAt` faltaba
+      // acá: el motor lo seteaba, la base nunca lo recibía, y el acuse del handoff
+      // ("Te leo, y esto también se lo paso a Sergio") salió TRES veces seguidas en
+      // la conversación real de Sergio (conv 11, msgs 890/892/894). `branchAsked`
+      // tenía el mismo agujero, doble: tampoco lo restauraba stateFromRow.
       raw: {
         ...(previousRaw && typeof previousRaw === "object" ? previousRaw : {}),
         qualifyAsks: state.qualifyAsks || 0,
@@ -388,6 +396,8 @@ export function createStore(options = {}) {
         scheduledLabel: state.scheduledLabel || null,
         publicContact: state.publicContact || null,
         inboxId: state.inboxId || null,
+        handoffAckAt: state.handoffAckAt || null,
+        branchAsked: Boolean(state.branchAsked),
       },
     };
     const rows = await rest("saveConversation", `bot_conversations?conversation_key=${eq(state.conversationKey)}`, {
