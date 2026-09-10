@@ -131,6 +131,7 @@ Un espectador tiene que reconocer un video de la serie sin leer el título.
 |---|---|
 | Eyebrow de portada | `Claude Code de cero · 0N` |
 | Firma | `@sergiourcullo`, abajo a la izquierda, en todas las láminas |
+| Handle | **`@sergiourcullo` en los cuatro lados**: YouTube, Instagram, X y LinkedIn |
 | Penúltima lámina | **«La parte honesta»** — siempre, sin excepción |
 | Última lámina | eyebrow **«En una línea»**, y el remate anuncia el próximo video |
 | Sección de prueba | **«Mi caso»**, con cifras medidas ese día |
@@ -190,6 +191,8 @@ vertical para IG, X y LinkedIn (los perfiles están listos desde el 30-ago).
 en la memoria `miniatura-youtube-metodo`. El ancho de boca mide hablar, no sonreír.
 
 ### La descripción, misma forma en los seis
+
+Las seis, escritas y listas para pegar: [`SERIE_CLAUDE_CODE_DESCRIPCIONES.md`](SERIE_CLAUDE_CODE_DESCRIPCIONES.md).
 
 ```
 [Una línea que repite la promesa del título.]
