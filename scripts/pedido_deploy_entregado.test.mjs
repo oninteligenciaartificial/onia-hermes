@@ -207,3 +207,94 @@ test('landing: un commit sin lista de archivos se cuenta como que viaja', () => 
 test('landing: sin commits medidos no se inventa un universo vacio', () => {
   assert.equal(soloLosQueViajan(null), null);
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CUERPO VENCIDO — la tercera pregunta, la que el 2026-09-10 no tenia dueno.
+//
+// `clasificarPedido` pregunta «¿lo prometido ya se publico?» y `promesaCompleta`
+// «¿el ok publica algo que el pedido no nombra?». Las dos leen cuerpo Y comentarios
+// como UN SOLO texto, y por eso los comentarios TAPAN al cuerpo: alcanza que el
+// comentario mas nuevo nombre un sha sin publicar para que el pedido salga VIGENTE
+// mientras su CUERPO —y su TITULO, que es lo unico que se ve en la lista— describen
+// trabajo que ya esta en produccion.
+//
+// El caso real: t_e51796c8 prometia f8d0fc2, e911638 y 7756295 en el cuerpo; los TRES
+// eran ancestros del build vivo (build-335389f). Lo unico que su ok publicaba de verdad
+// era afa9da6, nombrado en un comentario de ese dia. `npm run pedido:entregado` dijo
+// «sigue VIGENTE — 1 sin publicar» y tenia razon para SU pregunta: nadie hacia esta.
+import { partirPedido, cuerpoVencido } from './pedido_deploy_entregado.mjs';
+
+const SHOW = [
+  'Task t_e51796c8: Publicar el sistema: la pantalla de pago le cobraba a 3 rubros',
+  '  status:    blocked',
+  '',
+  'Body:',
+  'DESPLEGAR: plataforma',
+  'DEPLOY PEDIDO f8d0fc2 — la pantalla de pago prometia dos pantallas que el rubro no abre',
+  'DEPLOY PEDIDO e911638 — la agenda publica rechazaba al desconocido al llegar al tope',
+  '',
+  'Comments (2):',
+  '  [2026-09-08 23:53] x: DEPLOY PEDIDO 7756295 — el cupo de WhatsApp cortaba MUDO',
+  '  [2026-09-10 12:32] x: DEPLOY PEDIDO afa9da6 — el boton Agendar lleva a un callejon',
+].join('\n');
+
+test('partirPedido separa el cuerpo de los comentarios', () => {
+  const { cuerpo, comentarios } = partirPedido(SHOW);
+  assert.ok(cuerpo.includes('f8d0fc2'), 'el cuerpo tiene lo suyo');
+  assert.ok(!cuerpo.includes('afa9da6'), 'el cuerpo NO se lleva los comentarios');
+  assert.ok(comentarios.includes('afa9da6'), 'los comentarios tienen lo suyo');
+  assert.ok(!comentarios.includes('f8d0fc2'), 'los comentarios NO se llevan el cuerpo');
+});
+
+test('el defecto del 2026-09-10: todo el CUERPO publicado y un comentario sin publicar -> VENCIDO', () => {
+  const publicados = new Set(['f8d0fc2', 'e911638', '7756295']);
+  const r = cuerpoVencido({ texto: SHOW, publicado: (s) => publicados.has(s) });
+  assert.equal(r.estado, 'VENCIDO');
+  assert.deepEqual(r.mudos, ['afa9da6'], 'nombra lo que el ok publica y el cuerpo no dice');
+});
+
+// EL CASO DE ANCLAJE, sin el cual el guardia daria rojo sobre todo pedido sano y lo apagarian.
+test('el caso que YA cumple: si el cuerpo todavia promete algo sin publicar -> VIGENTE', () => {
+  const r = cuerpoVencido({ texto: SHOW, publicado: (s) => s !== 'e911638' });
+  assert.equal(r.estado, 'VIGENTE');
+});
+
+test('un cuerpo sin shas no se puede juzgar: NO_MEDIDO, nunca VENCIDO', () => {
+  const sinShas = 'Body:\nDESPLEGAR: landing\nse publica lo de la tabla de precios\n\nComments (1):\n  [x] y: DEPLOY PEDIDO afa9da6 — algo';
+  assert.equal(cuerpoVencido({ texto: sinShas, publicado: () => false }).estado, 'NO_MEDIDO');
+});
+
+// Sin esto, un `publicado` que devuelve null (no se pudo resolver) se leeria como
+// «no publicado» y absolveria al cuerpo vencido, o al reves. La direccion barata es
+// callarse: NO_MEDIDO nunca hace rehacer una tarea sana.
+test('un sha irresoluble del cuerpo deja NO_MEDIDO, no VENCIDO', () => {
+  const r = cuerpoVencido({ texto: SHOW, publicado: (s) => (s === 'e911638' ? null : true) });
+  assert.equal(r.estado, 'NO_MEDIDO');
+});
+
+test('cuerpo entero publicado y NADA sin publicar en comentarios -> ENTREGADO, lo mide clasificarPedido', () => {
+  const r = cuerpoVencido({ texto: SHOW, publicado: () => true });
+  assert.equal(r.estado, 'ENTREGADO');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Que la funcion EXISTA y pase sus casos no la pone a medir: el `main` puede no
+// invocarla nunca. Es la trampa de «declarado pero no invocado», y en esta familia
+// no la caza nadie —`guards-cableados` ata los `test:*` de package.json, no los
+// clasificadores de adentro de un gate—. Probado el 2026-09-10: quitando el
+// `vencidos.push` del main, `--self-check` seguia saliendo con exit 0.
+//
+// Se mide sobre la VECINDAD del bloque de plataforma, no sobre el archivo entero:
+// preguntar «¿el fuente nombra cuerpoVencido?» se cumple con su propia definicion y
+// con el import del test. Y se le sacan los comentarios antes, o la bitacora que
+// explica por que existe el guardia lo absuelve sola.
+test('el main INVOCA cuerpoVencido en el bloque de plataforma, no solo lo declara', async () => {
+  const { readFileSync } = await import('node:fs');
+  const src = readFileSync(new URL('./pedido_deploy_entregado.mjs', import.meta.url), 'utf8')
+    .split('\n').filter((l) => !/^\s*(\/\/|\*|\/\*)/.test(l)).join('\n');
+  const desde = src.indexOf('clasificarPedido({ id: p.id');
+  assert.ok(desde > 0, 'no encontre el bloque de plataforma del main');
+  const vecindad = src.slice(desde, desde + 1400);
+  assert.match(vecindad, /cuerpoVencido\(\{/, 'el main tiene que llamar a cuerpoVencido');
+  assert.match(vecindad, /vencidos\.push\(/, 'y empujar el resultado, o el veredicto se tira');
+});
