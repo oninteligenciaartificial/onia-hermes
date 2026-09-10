@@ -192,8 +192,14 @@ se hace.** Un resumen no es una pieza.
 
 ## 7 · Próximos pasos para la sesión nueva
 
-**El objetivo que le pondría, en una frase:** *publicar las 8 piezas y correr la semana 1
-completa* — no producir más.
+🔴 **CORREGIDO el 10-sep.** Acá decía *"publicar las 8 piezas y correr la semana 1"*, y
+Sergio Urcullo lo marcó: *"está mal tu enfoque; si tenés carruseles que están horribles,
+primero perfeccionar y ver cuáles son los mejores"*. Tenía razón — ese objetivo asumía
+que las 8 estaban bien, cuando él acababa de decir lo contrario.
+
+**El objetivo correcto:** *dejar publicables las piezas que valen la pena y publicarlas.*
+Los veredictos, uno por uno, en [`cola/AUDITORIA-8-CARRUSELES.md`](../cola/AUDITORIA-8-CARRUSELES.md):
+**2 listas · 2 para recortar · 1 que caduca · 3 sin dato**.
 
 1. **Mergear esta rama a `main`.** 7 commits sin mergear.
 2. **Antes de escribir un carrusel nuevo**, leer §5: la regla del dato que el lector no
