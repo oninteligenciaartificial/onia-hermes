@@ -66,6 +66,52 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+- [x] 🔴 **CERRADO el 2026-09-10 (`f590421`, rama del carril — NO en `master` todavía): el
+      producto le ofrece al dueño configurar su zona horaria, la respeta en TODO el panel, y la
+      ignoraba justo en las dos superficies que salen hacia el CLIENTE DEL CLIENTE.**
+      `PATCH /api/clinic-settings` acepta `timezone` y `/settings` se la muestra como «Zona
+      horaria» (`modelo-por-rubro.ts:47`); `/agenda`, `/dashboard`, `/billing` y los pagos leen
+      `clinicSettings?.timezone`. Pero: `app/cita/page.tsx` —la pantalla que el paciente abre
+      desde el correo para confirmar o cancelar— formateaba con `const tz = "America/La_Paz"`
+      mientras su **propia acción hermana**, `app/cita/acciones.ts:50`, sí leía la del negocio:
+      **la misma cita, dos horas distintas**, una en la pantalla del paciente y otra en el aviso
+      que le llega al negocio. Y `app/api/cron/appointment-reminders/route.ts` mandaba el
+      recordatorio diario con la constante, sin siquiera traer la columna
+      (`clinicSettings: { select: { id: true } }`). Ahora la zona se resuelve **una vez por
+      cita**, así el WhatsApp y el correo —que hablan de la misma cita— no pueden discrepar.
+
+      **Por qué no lo veía ningún gate:** `lib/platform/fecha-en-zona-del-negocio.test.ts` exige
+      que el formateo **pase** `timeZone`, y los dos lo pasaban — el valor era la constante. El
+      gate miraba la PRESENCIA del parámetro y nunca el ORIGEN de su valor. Es la clase «la capa
+      que todos auditan está sana»: como el panel entero deriva bien, nadie mira la pública.
+
+      Gate nuevo: `lib/agenda/hora-de-la-cita-en-zona-del-negocio.test.ts`, sujetos derivados del
+      DISCO (un archivo nace cubierto), 10 casos. Falló en rojo nombrando los dos.
+      **Dos hallazgos de la validación por mutación, escritos y NO tapados:** revertir el cron a
+      `formatDateTime(dt, TZ_POR_DEFECTO)` dejaba el gate VERDE (alias de alias), y ampliar el
+      regex para cubrirlo **acusaba al arreglo correcto** (`?? "America/La_Paz"` es la cascada),
+      que es la dirección cara. Queda como límite conocido con su caso.
+      Gates: `tsc` 0 · 4228 tests · `eslint` 0 errores.
+
+- [ ] **Los otros dos sujetos de esa MISMA clase, que quedaron fuera por tiempo y no por
+      criterio** (`lib/agenda/hora-de-la-cita-en-zona-del-negocio.test.ts`, lista `EXENTOS`).
+      Los dos son del panel del dueño, no del cliente del cliente, y por eso fueron después:
+      `app/(dashboard)/patients/[id]/page.tsx` muestra las citas de la ficha con zona fija
+      mientras `/agenda` y `/dashboard`, a dos carpetas, ya leen `clinicSettings.timezone`; y
+      `lib/export/datos-negocio.ts` —el CSV que el dueño se lleva— formatea con dos `Intl` a
+      nivel de MÓDULO, así que arreglarlo pide pasar la zona por `OpcionesExport` y tocar sus
+      llamadores. El caso «ningún exento sobra» los re-mide en cada corrida, así que el día que
+      se arreglen el gate avisa que hay que borrar su fila.
+      Va junto el **límite del gate**: resolver un alias de alias pide un parser, no un regex.
+      **Listo =** los dos leyendo la zona del negocio, sus filas fuera de `EXENTOS`, y el gate
+      verde sin ellas.
+      ⚠️ **Hoy no le pasa a ningún cliente y por eso no es 🔴:** las 10 orgs de producción están
+      en la zona de La Paz, que es el `@default` de `clinic_settings.timezone` en el schema
+      — medido el 2026-09-10 con
+      `select o.slug, cs.timezone from organizations o left join clinic_settings cs …`.
+      Coinciden por casualidad, no por construcción: muerde el día que una org cambie su zona,
+      y el producto se lo ofrece.
+
 - [ ] 🔴 **Nadie probó que el correo de confirmación LLEGUE a una bandeja — y sin ese clic el
       alta nueva muere** (`app/auth/confirm/route.ts` · `scripts/alta_correo_confirma.mjs`)**.**
       Medido el 2026-09-10 con el circuito entero: GoTrue manda por Postfix
