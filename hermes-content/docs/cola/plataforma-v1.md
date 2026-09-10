@@ -66,6 +66,53 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+> **Lote del 2026-09-10 (pedido de Sergio Urcullo: "arregla los 4… ve dejando en la cola las
+> tareas y vas una por una").** Los cuatro salen del mapa del panel del chatbot medido ese día
+> (5 lectores de código + 4 capturas de producción). Orden de ejecución acordado: recarga →
+> cuentas → bot repetido (vive en `cola/chatbot.md`) → UI.
+
+- [ ] 🔴 **T1 — La recarga "+200 conversaciones por Bs 190" se VENDE pero no se puede APLICAR.**
+      Medido 10-sep: `CupoConversacionesCard` la ofrece desde el 80% del cupo (decisión de
+      Sergio Urcullo del 05-sep), el cliente pagaría por WhatsApp… y `cuotaDe()`
+      (`lib/chatbot/cupo.ts`) devuelve SIEMPRE el literal 500 de `pricing.ts`: no hay campo por
+      org ni acción de admin que sume las 200. Si alguien paga hoy, no hay cómo dárselas.
+      **Plan:** campo `recargadas` en la fila mensual `chatbotUsoMensual` (la recarga es del mes
+      en curso) + `cuotaDe()` = incluidas + recargadas + botón superadmin "Aplicar recarga
+      pagada (+200)" junto a donde vive el toggle del add-on + migración en prod por el runbook
+      (INSERT en `_prisma_migrations`, prisma no llega desde el host). **LISTO =** en prod, org
+      con recarga aplicada muestra "x de 700" en `/settings/chatbot` y el motor recibe
+      `limite: 700` por `/api/chatbot-knowledge/published`, mirado, no supuesto.
+
+- [ ] 🔴 **T2 — Purga de cuentas QA: el panel central tiene que ser UNO** (pedido Sergio Urcullo
+      10-sep: "solo tenemos una cuenta… borra las demás"). Medido en la base ese día: 10 orgs,
+      de las cuales **7 son QA** (`zz-qa-clinica-chatbot`, `zz-qa-ferreteria-tornillo`,
+      `zz-qa-estetica-modulos`, `qa-modulos-mrk0q`, `qa-modulos-rj7tv`,
+      `zz-qa-salteo-horarios-20260906`, `zz-qa-cobro-e2e`) con sus usuarios `+qa*@gmail.com` /
+      `zz-qa-*@onia.com.bo`. **Se quedan:** `onia-interna` (superadmin, LA cuenta central),
+      `bolivian-electricidad` (cliente real, gmail de Sergio Urcullo). **Pregunta abierta:**
+      `clinica-sergio-p2ljs` (sergio@onia.com.bo) es la org de PRUEBAS de Sergio Urcullo con el
+      add-on activo y el bot configurado — borrarla mata su banco de pruebas del panel; no se
+      borra sin su palabra. **Plan:** backup de filas → DELETE de las 7 (cascada) → borrar sus
+      `auth.users` → anotar inbox 7 de Chatwoot huérfano. **LISTO =** `/admin/chatbots` lista
+      solo las orgs vivas, mirado en prod.
+
+- [ ] 🟡 **T3 — UI rota del panel, medida en las capturas del 10-sep:** (a) la barra flotante
+      "Preguntá por tu negocio" se pinta ENCIMA del formulario del editor del bot (tapa "A quién
+      deriva el bot") y de la última fila de la tabla de `/admin/chatbots` — falta reservar
+      espacio (padding-bottom del contenedor scrolleable) o bajar su z/altura; (b) en la barra
+      PANEL ADMIN los iconos pisan el texto de las pestañas (Clínicas, Pagos, Planes, Usuarios,
+      Auditoría se leen encimadas); (c) `/settings/addon-chatbot` activa queda media pantalla
+      vacía sin un solo enlace al editor (`/settings/chatbot`) ni a la bandeja (`/inbox`) — lo
+      pagado no tiene camino de uso desde ahí. **LISTO =** las tres pantallas re-capturadas en
+      prod sin solaparse y con los CTA, mirado.
+
+- [ ] 🟡 **T5 — "quiero comprar el sistema" en handoff recibe el acuse genérico.** Medido en la
+      conversación real de Sergio Urcullo (conv 11, 10-sep 20:17 UTC): una señal de COMPRA en
+      etapa `handoff_humano` responde "Te leo, y esto también se lo paso a Sergio" — cierto pero
+      frío para el mensaje más caliente que existe. Mejora de guion: detectar intención de
+      compra y avisar a Sergio Urcullo como URGENTE (el aviso normal del handoff ya salió antes,
+      no se repite). No bloquea venta; va después de T1-T4.
+
 - [x] 🔴 **CERRADO el 2026-09-10 (`057cc58`, rama del carril — NO en `master` todavía): el
       cliente que PAGÓ y se le venció el plan quedaba en solo lectura sin que NADA se lo
       dijera.** El único aviso del panel era `TrialBlockedModal`, y el layout lo mostraba con
