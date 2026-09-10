@@ -664,6 +664,16 @@ export const DEFAULT_CONFIG = Object.freeze({
     quietBeforeHour: 8,
   }),
 
+  // Conversacion VENCIDA: si nadie (ni el prospecto, ni el bot, ni un humano) escribio en
+  // N dias y llega un mensaje real, la conversacion se reinicia al guion desde el saludo —
+  // incluido el candado de humanTookOver. Sin esto, el candado de una prueba vieja calla al
+  // bot para siempre: el 2026-09-10 Sergio mando "hola" a su conversacion del 15-ago
+  // (human_took_over desde el 13-ago) y recibio NADA (rama=MUDO, conv 11). 14 dias y no
+  // menos: un humano puede estar negociando con una semana de silencio en el medio, y que
+  // el bot se le meta con la bienvenida en esa charla es peor que el candado.
+  // El opt-out NUNCA se reinicia por tiempo: a quien dijo basta solo lo reabre "DEMO" (M6).
+  reinicio: Object.freeze({ trasDiasSinActividad: 14 }),
+
   // Arranca en true (patron de Bolivian Electric): corre todo el pipeline y registra
   // delivery_status='skipped' sin mandar un solo mensaje.
   dryRun: true,
