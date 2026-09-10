@@ -291,6 +291,18 @@ y sin operar. Acá se opera, con verificación por ítem.
       comentarios** y por **vecindad**: un gate se absuelve con su propia bitácora si busca en
       el archivo entero.
 
+      ⚠️ **`master` traía el MISMO arreglo escrito por otra sesión, y el merge salió en
+      conflicto — resuelto el 2026-09-10 en `86b0fe7`.** Las dos versiones guardan el correo
+      que falló y ofrecen reenviar; la de `master` lo hace inline (`isEmailNotConfirmed`,
+      `confirmEmail`) y **sin test**, y la de esta rama con el helper extraído. Se resolvió a
+      favor del lado **medible** (13 casos + 6 mutaciones), y no se perdió nada: `diff` de la
+      BASE contra `master` sobre ese archivo devuelve **sólo** fragmentos del mismo arreglo
+      duplicado — `master` no tocó otra cosa ahí. Lo que el lado de `master` **no** tenía y se
+      habría perdido eligiéndolo: la traducción del **429 `over_email_send_rate_limit`** de
+      GoTrue, que es lo más probable que vea quien aprieta el botón, y el `entregado` que
+      impide cantar "listo" sin que GoTrue lo acepte. Árbol publicado idéntico al medido
+      (`tree 0a5e033d`, tsc 0 · 4.311 tests · eslint 0).
+
 - [ ] 🔴 **Nadie probó que el correo de confirmación LLEGUE a una bandeja — y sin ese clic el
       alta nueva muere** (`app/auth/confirm/route.ts` · `scripts/alta_correo_confirma.mjs`)**.**
       Medido el 2026-09-10 con el circuito entero: GoTrue manda por Postfix
