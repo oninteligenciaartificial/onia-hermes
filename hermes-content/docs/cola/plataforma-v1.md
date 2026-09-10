@@ -41,7 +41,7 @@ LISTO medible; el estado es del 10-sep y se re-mide, no se hereda:
 | 5 | Factura SIAT | la suscripción cobrada emite factura | 🔴 Fase 1 ~24,8 %, PdV 1 = trámite de Sergio Urcullo; el código avanza sin él |
 | 6 | Chatbot atiende solo (web + WhatsApp) | responde, califica y agenda demo | ✅ web vivo (439 msgs/7d) · ✅ WhatsApp probado sintético 10-sep · 🔴 3 prospectos de agosto sin respuesta (aprobación `t_43868cdb`) |
 | 7 | Panel del dueño estilo Hostinger | pestañas agrupadas y cada sección cierra su flujo | ✅ estructura VIVA (grupos + Primeros pasos + fecha La Paz + 2FA); queda `feat/canal-meta` (App Review = Sergio Urcullo) |
-| 8 | Cero promesas falsas | lo que cada pantalla promete por rubro/plan se abre | 🟡 barridos 8-sep y 9-sep (`e843507` estética/dental); el recorrido caza el resto |
+| 8 | Cero promesas falsas | lo que cada pantalla promete por rubro/plan se abre | 🟡 barridos 8-sep y 9-sep (`e843507` estética/dental) + 10-sep el NOMBRE del plan (`fe6eb65`, gate `nombre-de-plan-a-mano`); el recorrido caza el resto |
 | 9 | Opera sin Sergio | correos, avisos, backups, publicador corren solos | ✅ medido 10-sep (publicador «al día», watchdog del bot, correo entrega) |
 
 **Fuera de la 1.0 (decidido, no se reabre):** veterinaria/ganadería, offline ganadero,
@@ -2387,6 +2387,52 @@ y sin operar. Acá se opera, con verificación por ítem.
 - **No le escribe a un prospecto.** Regla del [`README.md`](README.md) de esta carpeta.
 
 ## Cerrado
+
+- [x] **CERRADO el 2026-09-10: el producto le mostraba al cliente el NOMBRE del plan en inglés
+      —la clave interna— en las tres pantallas donde decide y donde paga.** Arreglado en
+      `fe6eb65` (`onia-platform`), rama `claude/chatbots-platform-review-0d1d09`.
+      ⚠️ **Commiteado y pusheado, NO en `master` y NO desplegado**: falta que el integrador lo
+      mergee, y recién después viaja con el pedido de deploy de `plataforma`.
+
+      `lib/pricing.ts` declara `PLAN_LABELS` como «UN solo lugar» y su propio comentario
+      registra que esta clase **ya explotó una vez**: el plan top se mostraba como «Clinica» o
+      «Grupo Clinico» en cinco archivos, así que un comerciante leía que contrataba algo para
+      clínicas. Se escribió `nombreDePlan()` para cerrarlo — y se cerraron las **instancias** de
+      entonces, no la clase. Medido hoy, tres superficies seguían esquivando el helper:
+
+      - **`/billing/recurring`** ofrecía subir a los planes **«Professional»** y **«Clinic»**.
+        Onia vende **Profesional** y **Completo**: el dueño iba a `/settings` a buscar dos planes
+        que no existen con ese nombre. Y «Clinic» es exactamente el caso que el comentario de
+        `PLAN_LABELS` decía haber arreglado — a una ferretería, a una importadora o a un estudio
+        contable les ofrecía un plan «de clínicas».
+      - **`POST /api/recurring-invoices`** repetía el mismo texto en su 403, que es lo que el
+        cliente lee cuando el producto le dice que no.
+      - **`/settings`** tenía `badge: "Enterprise"` **una línea debajo** de
+        `name: PLAN_LABELS.enterprise`, que dice «Empresa» bien, y otra píldora «Enterprise» en
+        el add-on self-hosted. Derivar en un campo no prueba que la pantalla derive. El badge se
+        **saca** en vez de derivarlo: flotaba justo encima de un título que ya dice «Empresa».
+
+      **Gate nuevo:** `lib/platform/nombre-de-plan-a-mano.test.ts`, hermano simétrico del que
+      vigila el MONTO. Ningún gate existente podía hacer la pregunta: `monto-de-plan-a-mano` mira
+      el número; `plan-catalogo-es-la-fuente` mira qué capacidad enciende cada plan;
+      `planes-en-el-idioma-del-rubro` mira el par (rubro, palabra) y acá la palabra está mal para
+      los **cinco** rubros; los barridos de obra y de promesa persiguen lo que sobra o lo que
+      falta, y acá **no sobra ni falta una palabra: el nombre es de otro idioma**. `tsc` y
+      `eslint` no tienen nada que decir sobre un literal.
+
+      Deriva las claves de `PLAN_LABELS` (un plan nuevo nace vigilado) y los sujetos del DISCO
+      —`.tsx` y también `.ts`, porque el error de un `route.ts` es superficie de cliente—: 399
+      archivos barridos. Sólo mira lo que el cliente LEE; sin ese recorte acusaba a
+      `interface Clinic` y `useState<Clinic>` de `/book/[orgSlug]`, que son **tipos**, y un rojo
+      falso manda a romper código sano.
+
+      **Validado por mutación en las dos direcciones, 6 de 6 en rojo:** revertir cada una de las
+      tres instancias (M1-M3), detector siempre vacío (M4), recorte del recorrido del disco (M5),
+      y sacar el filtro que separa tipo de copy (M6, **2** casos en rojo — el ancla y el barrido,
+      o sea que el filtro carga en los dos sentidos). Cada mutación se confirmó que ENTRÓ con
+      `grep` y se leyó por la línea `Tests N failed`, nunca por ausencia de `FAIL`.
+
+      Gates: `tsc` 0 · `vitest` 4218 pass / 338 archivos · `eslint` 0 errores.
 
 - [x] **CERRADO el 2026-09-10: dar de baja a alguien del equipo fallaba con un error MUDO, y
       el dueño no tenía cómo saber por qué.** Arreglado en `ad1851f` (`onia-platform`), rama
