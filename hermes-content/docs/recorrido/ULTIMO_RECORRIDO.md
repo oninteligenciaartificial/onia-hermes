@@ -12,6 +12,19 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-10 19:09-19:13 La Paz — Importadora / distribuidora, primera corrida con este instrumento: 9/9, sin hallazgos
+
+`zz-qa-2026-09-10-1909` — primera vez que este rubro pasa por el recorrido de 9 pasos (cubierto
+antes solo por veterinaria e importadora quedaban sin corrida propia). 9/9 completo, sin
+agujeros. El paso 07 (agendar cita) salió **NO-APLICA**, y es coherente: la tarjeta de
+`/register` para este rubro dice "Catálogo, cotizaciones B2B y costeo de importación" — sin
+agenda — y su menú tampoco la ofrece (Conversaciones, Catálogo, Cotizaciones, Inventario, Costeo
+de importación, Alerta de reprecio, Ventas, Créditos, Gastos, Contabilidad, Planilla, Agentes,
+Requerimientos, Equipo, Configuración). El dato del paso 6 (`-paciente`) se guardó en storefront
+Catálogo, no en Pacientes — otra señal de que el rubro no maneja agenda clínica. El paso 8 frenó
+en `/comercio/fiados` (Créditos) a propósito. Cero filas `zz-qa-` propias al cerrar; 4 ajenas sin
+tocar.
+
 ## 2026-09-10 18:09-18:16 La Paz — dental y Servicios profesionales, dos corridas seguidas: 9/9 los dos, sin hallazgos
 
 Dental (`zz-qa-2026-09-10-1809`) tercera corrida seguida en 9/9: nada nuevo, confirma que el
