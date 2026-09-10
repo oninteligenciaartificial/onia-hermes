@@ -31,7 +31,39 @@ web. Es la regla que existe porque ya falló una vez.
 
 ---
 
-# 1 · Lunes — WhatsApp Business
+# 0 · Lunes — El resumido del stack (abre la semana)
+
+> Pedido de Sergio Urcullo, 10-sep: *"grabo esos menos whatsapp, pero hagamos uno resumido
+> para tiktok y uno extenso para youtube"*. El extenso de YouTube ya está: es el **#7** de
+> este doc. Éste es el resumido, y ocupa el lunes que dejó libre el corte de WhatsApp.
+
+**Gancho (0-3 s)**
+> «Mi empresa entera corre con seis herramientas. Cinco no me cuestan nada.»
+
+**Lo concreto (3-25 s)** · *en pantalla: 2-3 segundos de cada una, real, sin explicar*
+> «WhatsApp Business para contestar sin escribir veinte veces lo mismo. Una PC vieja que
+> hace de servidor. n8n, que trabaja mientras duermo. Claude Code — lo único que pago.
+> HyperFrames, que hace mis videos desde texto. Y Hermes, que me avisa si algo se cae.
+>
+> Esta semana te muestro una por día: qué hace, qué **no** hace, y cuánto cuesta de
+> verdad.»
+
+**El cierre (25-35 s)**
+> «Seguime, que arranca mañana. Y los archivos listos de cada una los voy dejando gratis
+> en mi comunidad — link en el perfil.»
+
+**Qué se ve:** ráfaga de pantallas reales — una respuesta rápida saliendo, la máquina con
+el LED, un flujo de n8n, la terminal, un render, el aviso en el teléfono. Nada de logos:
+**tus pantallas**. Este video es el índice de la semana; si una toma no la tenés hoy, la
+sacás cuando grabes el video de ese día.
+
+---
+
+# 1 · ~~Lunes~~ — WhatsApp Business · 🔴 NO SE GRABA
+
+> **Cortado por Sergio Urcullo el 10-sep** (*"grabo esos menos whatsapp"*). El **drop** del
+> lunes 14 sale igual con su archivo — la regla 5 del circuito recorta videos, nunca drops.
+> Se deja el guion escrito por si el tema asciende después.
 
 **Gancho (0-3 s)**
 > «Escribís lo mismo veinte veces por día. Esto lo arregla en veinte minutos.»
