@@ -23,19 +23,54 @@ y nosotros tenemos skills reales corriendo: ventaja injusta.
 - Cada drop: útil en <2 min, aplicable HOY, cierra con una pregunta o mini-tarea.
 - Los drops alimentan los videos (lo que más reaccione en la comunidad = próximo reel).
 
-### Calendario vigente — decidido 2026-09-03 (opción B, tarea `t_f5b868da`)
+### Calendario vigente — corregido 2026-09-10 tras el reparto de piezas
 
-**D0 arrancó el miércoles 2026-09-02**, no un lunes. La serie D0-D6 va corrida y **termina
-completa el martes 2026-09-08**; no se pisa ningún día para forzar el ritmo lun-dom.
+> ⚠️ La versión anterior (03-sep, opción B, `t_f5b868da`) decía que el lunes 14 arrancaba
+> la "SEMANA 2" con los drops de n8n/automatizar de abajo. **Quedó vieja el 10-sep**: la
+> semana del 14 es la **semana 1 del motor, tema Mi stack**, con sus 6 drops ya escritos
+> en `cola/drops/2026-09-14.md` … `2026-09-19.md` — cada uno entrega un archivo real de
+> `/stack/archivos`. Los drops genéricos de abajo NO se tiran: se reusan (ver su nota).
 
-| días | qué va |
+| días | qué va a Announcements |
 |---|---|
-| mié 02 → mar 08-sep | **serie D0-D6 completa**, un drop por día (D3 = sáb 05, D4 = dom 06, D5 = lun 07, D6 = mar 08) |
-| mié 09 → dom 13-sep | **puente**: recordatorios y repost de lo que más reaccionó — **sin pieza nueva** |
-| lun 14-sep | arranca **SEMANA 2** (la sección de abajo, ya con ritmo lun-dom que engancha) |
+| mié 02 → mar 08 | ✅ **serie D0-D6 completa**, un drop por día — cumplida |
+| mié 09 → vie 12 | **puente**: sin pieza nueva; a lo sumo recordatorio de lo que más reaccionó |
+| **sáb 13, 19:00** | 🟢 **el carrusel «Mi stack»** (5 láminas, EXCLUSIVO — no está en redes) + el anuncio de la semana. Texto listo abajo, §El envío del sábado 13 |
+| lun 14 → sáb 19 | **semana Mi stack**: 1 drop por día con su archivo — ya escritos en `cola/drops/` |
+| **dom 20, 19:00** | cierre: los **5 archivos juntos** → link `/stack/archivos` (sólo acá) + qué viene |
+| lun 21 | en Instagram sale la promesa «comentá STACK» — **la comunidad ya lo tuvo todo antes**: ésa es la ventaja visible de estar adentro |
 
-Se descartó la opción A (arrancar la semana 2 el lunes 07) porque pisaba D5 y D6: costaba
-los dos últimos drops de la serie para ganar sólo la prolijidad del calendario.
+### El envío del sábado 13 (copiar y pegar, con las 5 imágenes del ZIP `2-COMUNIDAD-MI-STACK`)
+
+> El lunes arranca una semana entera sobre mi stack: las seis herramientas que hacen
+> andar mi empresa. Una por día, cada una con su archivo listo para copiar.
+>
+> Acá va el mapa completo, antes que nadie. Este carrusel no está en mis redes — es de acá.
+>
+> Lunes 19:00: WhatsApp Business, con las seis respuestas ya escritas para que las
+> cargues en 20 minutos.
+
+## El ciclo TikTok → YouTube → comunidad (el motor permanente)
+
+> Sergio Urcullo, 2026-09-10: *"tenemos que hacer TikTok y luego saltamos a videos de YT
+> más largos sobre los temas, así tenemos siempre cosas en la comunidad"*. Así encaja
+> cada pieza — la comunidad recibe algo en CADA fase, y siempre antes o más profundo:
+
+| Fase | Afuera (público) | Lo que recibe la comunidad (exclusivo) |
+|---|---|---|
+| **Cada día** de una semana-tema | 1 TikTok/reel (30-45 s: qué es y por qué importa) | el **drop** con el cómo + **el archivo** listo para pegar |
+| **Domingo** | la guía escrita → la web | el link de `/tema/archivos` con todo junto — sólo en Announcements |
+| **Lunes siguiente** | el video-promesa «comentá PALABRA» | nada que recibir: ya lo tienen entero hace una semana |
+| **YouTube largo** (1 por tema, cuando el tema madura) | el tema entero en video; se embebe arriba de su guía en la web | aviso primero + un drop con **lo que quedó fuera del video y lo que salió mal grabándolo** — lo único que no se puede googlear |
+| **Siempre** | — | las preguntas en General; la más repetida elige el próximo tema |
+
+**Las tres reglas que lo sostienen:** el drop entrega, nunca sólo anuncia · el archivo
+jamás sale afuera (la guía enseña el cómo; el archivo hecho es de la comunidad) · el
+video de YouTube ES el recurso, así que no promete — pero su detrás de escena es drop.
+
+**Con esto la comunidad nunca queda muda:** 6 drops por semana + el envío del domingo +
+un drop extra por cada video largo de YouTube. Producirlo no cuesta aparte: todo sale de
+lo que ya se grabó y escribió para afuera, más lo que afuera no se cuenta.
 
 ## Los primeros 7 drops (copy-paste)
 
@@ -115,10 +150,12 @@ los dos últimos drops de la serie para ganar sólo la prolijidad del calendario
 3. **Interactivo (18K en TikTok):** "Decime tu negocio en los comentarios y te digo
    qué automatizaría primero" — genera comentarios masivos y alimenta D6.
 
-## Drops SEMANA 2 (ritmo fijo lun-dom, listos para pegar)
+## Drops de reserva: «qué automatizar primero» (ritmo lun-dom, listos para pegar)
 
-> **Arranca el lunes 2026-09-14**, no el 07 — ver "Calendario vigente" arriba. Entre el D6
-> (martes 08) y este lunes van cinco días de puente sin pieza nueva.
+> ⚠️ **Corregido el 10-sep: éstos NO son la semana del 14.** La semana del 14 es Mi stack
+> (`cola/drops/2026-09-14.md` en adelante). Éstos se **reusan** como candidatos para la
+> semana del **21**, si el viernes 19 Sergio Urcullo elige el tema «cómo saber qué
+> automatizar primero» del mapa — cuelgan todos de ese tema y ya están escritos.
 
 ### Lun — Herramienta de la semana: n8n
 
