@@ -66,6 +66,60 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
+> **Lote del 2026-09-10 (pedido de Sergio Urcullo: "arregla los 4… ve dejando en la cola las
+> tareas y vas una por una").** Los cuatro salen del mapa del panel del chatbot medido ese día
+> (5 lectores de código + 4 capturas de producción). Orden de ejecución acordado: recarga →
+> cuentas → bot repetido (vive en `cola/chatbot.md`) → UI.
+
+- [ ] 🔴 **T1 — La recarga "+200 conversaciones por Bs 190" se VENDE pero no se puede APLICAR.**
+      Medido 10-sep: `CupoConversacionesCard` la ofrece desde el 80% del cupo (decisión de
+      Sergio Urcullo del 05-sep), el cliente pagaría por WhatsApp… y `cuotaDe()`
+      (`lib/chatbot/cupo.ts`) devuelve SIEMPRE el literal 500 de `pricing.ts`: no hay campo por
+      org ni acción de admin que sume las 200. Si alguien paga hoy, no hay cómo dárselas.
+      **Plan:** campo `recargadas` en la fila mensual `chatbotUsoMensual` (la recarga es del mes
+      en curso) + `cuotaDe()` = incluidas + recargadas + botón superadmin "Aplicar recarga
+      pagada (+200)" junto a donde vive el toggle del add-on + migración en prod por el runbook
+      (INSERT en `_prisma_migrations`, prisma no llega desde el host). **LISTO =** en prod, org
+      con recarga aplicada muestra "x de 700" en `/settings/chatbot` y el motor recibe
+      `limite: 700` por `/api/chatbot-knowledge/published`, mirado, no supuesto.
+
+- [ ] 🔴 **T2 — Purga de cuentas QA: el panel central tiene que ser UNO** (pedido Sergio Urcullo
+      10-sep: "solo tenemos una cuenta… borra las demás"). Medido en la base ese día: 10 orgs,
+      de las cuales **7 son QA** (`zz-qa-clinica-chatbot`, `zz-qa-ferreteria-tornillo`,
+      `zz-qa-estetica-modulos`, `qa-modulos-mrk0q`, `qa-modulos-rj7tv`,
+      `zz-qa-salteo-horarios-20260906`, `zz-qa-cobro-e2e`) con sus usuarios `+qa*@gmail.com` /
+      `zz-qa-*@onia.com.bo` (receta de limpieza en `hermes-content/docs/handoff/cobro-e2e.md`;
+      verificación mirando con `scripts/onia-mirar.js`). **Se quedan:** `onia-interna`
+      (superadmin, LA cuenta central),
+      `bolivian-electricidad` (cliente real, gmail de Sergio Urcullo). **Pregunta abierta:**
+      `clinica-sergio-p2ljs` (sergio@onia.com.bo) es la org de PRUEBAS de Sergio Urcullo con el
+      add-on activo y el bot configurado — borrarla mata su banco de pruebas del panel; no se
+      borra sin su palabra. **Plan:** backup de filas → DELETE de las 7 (cascada) → borrar sus
+      `auth.users` → anotar inbox 7 de Chatwoot huérfano. **LISTO =** `/admin/chatbots` lista
+      solo las orgs vivas, mirado en prod.
+
+- [ ] 🟡 **T3 — UI rota del panel, medida en las capturas del 10-sep:** (a) la barra flotante
+      "Preguntá por tu negocio" (`onia-platform/components/ayuda/BarraAsistente.tsx`) se pinta
+      ENCIMA del formulario del editor del bot (tapa "A quién deriva el bot") y de la última
+      fila de la tabla de `/admin/chatbots` — falta reservar espacio (padding-bottom del
+      contenedor scrolleable) o bajar su z/altura; (b) en la barra PANEL ADMIN
+      (`onia-platform/app/(dashboard)/admin/AdminNav.tsx`) los iconos pisan el texto de las
+      pestañas (Clínicas, Pagos, Planes, Usuarios, Auditoría se leen encimadas); (c)
+      `/settings/addon-chatbot` activa
+      (`onia-platform/app/(dashboard)/settings/addon-chatbot/AddonChatbotClient.tsx`) queda
+      media pantalla vacía sin un solo enlace al editor (`/settings/chatbot`) ni a la bandeja
+      (`/inbox`) — lo pagado no tiene camino de uso desde ahí. **LISTO =** las tres pantallas
+      re-capturadas en prod sin solaparse y con los CTA, mirado.
+
+- [ ] 🟡 **T5 — "quiero comprar el sistema" en handoff recibe el acuse genérico.** Medido en la
+      conversación real de Sergio Urcullo (conv 11, 10-sep 20:17 UTC): una señal de COMPRA en
+      etapa `handoff_humano` responde "Te leo, y esto también se lo paso a Sergio" — cierto pero
+      frío para el mensaje más caliente que existe. Mejora de guion: detectar intención de
+      compra (`hermes-content/deploy/vps-ops/bot/intents.mjs`) y avisar a Sergio Urcullo como
+      URGENTE desde la rama `handoff_humano` de
+      `hermes-content/deploy/vps-ops/bot/bot-engine.mjs` (el aviso normal del handoff ya salió
+      antes, no se repite). No bloquea venta; va después de T1-T4.
+
 - [x] 🔴 **CERRADO el 2026-09-10 (`825f227`, rama del carril — falta el merge del integrador):
       el aviso del cupo del chatbot y el del tope de clientes le llegaban al teléfono de la
       recepción y del profesional, que no pueden abrir la pantalla a la que llevan.**
@@ -430,7 +484,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 - [x] 🔴 **CERRADO el 2026-09-10 mismo día (`eaa67038` en master, PUBLICADO por el
       publicador 14:45 La Paz): el 403 mudo del login ahora ofrece reenviar el enlace.**
-      Vive en `app/(auth)/login/ReenviarConfirmacion.tsx` y `lib/auth/reenviar-confirmacion.ts`.
+      Vive en `onia-platform/app/(auth)/login/LoginForm.tsx` (⚠️ corregido 2026-09-10: el cierre real `6e0b2905` metió todo en LoginForm, no en los archivos separados que planeaba este ítem).
       E2E completo contra producción con cuenta QA sin confirmar, fotografiado: login →
       cartel + botón "Reenviarme el correo de confirmación" → clic → aviso con tip de
       Spam/Promociones → reenvío real (`status=sent` 250 de Gmail 18:54:20Z) → el enlace
@@ -489,8 +543,8 @@ y sin operar. Acá se opera, con verificación por ítem.
       detalle que el otro no (el conflicto de merge y por qué `/verify-email` no servía).
 
       **HECHO el 2026-09-10 (chatbot-cola) — `4d45f2f`, MERGEADO a `master` en `2f344e5` (integrador, 2026-09-10 15:5x La Paz).** ⚠️ Lo de «NO desplegado» venció el mismo día: el arreglo GEMELO de la sesión de control (`eaa6703`) ya está **vivo en producción** —`docker exec onia-platform grep -rl Reenviarme /app/.next/server` da un chunk—, así que el 403 mudo ya tiene salida para un cliente real. `4d45f2f` **no** es ancestro de `eaa6703`: son dos escrituras del mismo arreglo, y la rama resolvió el choque a favor del lado medible (`10952417`). Lo que falta desplegar de este ítem es sólo el reemplazo por la versión con gate.
-      El botón vive en `app/(auth)/login/ReenviarConfirmacion.tsx` y la decisión en
-      `lib/auth/reenviar-confirmacion.ts`. Medido contra producción con un alta QA
+      El botón y la decisión viven en `onia-platform/app/(auth)/login/LoginForm.tsx` (corregido: no en
+      archivos separados — cierre real `6e0b2905`). Medido contra producción con un alta QA
       (`zz-qa-reenvio-2026-09-10-1852`, borrada al terminar: org/perfil/auth en **0/0/0**, y
       las 7 `zz-qa%` de otros carriles intactas):
 
@@ -524,7 +578,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       «permiso concedido, CAMINO ausente» con el camino apuntando a una puerta que se cierra
       sola. Ver un arreglo hermano ya hecho es lo que hace dar la familia por cubierta.
 
-      Gate: `lib/auth/reenviar-confirmacion.test.ts` (13 casos), validado por mutación en
+      Gate real: `onia-platform/app/(auth)/login/LoginForm.test.ts` (3 casos del cierre `6e0b2905`; los 13 planeados no existen), validado en
       **6 direcciones** — incluida la de **esquive** (llamar al helper y mostrar "listo" sin
       mirar `.entregado`) y la de sacar el componente del JSX dejando el módulo intacto. Las 6
       dan rojo. El ancla que exige que el LoginForm lo USE se mide sobre el código **sin
@@ -953,7 +1007,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       la base, lo que está mal es **de qué tabla**.
 
       **Arreglo:** los tres predicados se **derivan del pack**
-      (`onia-platform-chatbot/lib/subscription/drip-por-rubro.ts` →
+      (`onia-platform/lib/subscription/drip-por-rubro.ts` →
       `guardaClientesEnPatients`, `tieneAgenda`, y la ruta buscada **en el nav de ese pack**),
       misma doctrina que sus hermanos de `vertical-pack.ts`: un rubro nuevo cae solo del lado
       que le toca. La excepción de la importadora (cuenta cotizaciones además de ventas) queda
@@ -983,7 +1037,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       `window.location.reload()`, sin mirar una sola vez qué contestó el servidor.
 
       **La clase, que es lo que importa.** El 2026-09-08, más temprano, se cerró el camino de
-      fallo de `onia-platform-chatbot/app/(public)` —la superficie del cliente del cliente— y **su familia simétrica,
+      fallo de `onia-platform/app/(public)` —la superficie del cliente del cliente— y **su familia simétrica,
       el panel donde trabaja el DUEÑO, quedó abierta**. Es la tercera vez que este carril paga
       lo mismo: al cerrar el hueco de una familia hay que preguntar cuál es la simétrica.
 
@@ -1004,12 +1058,12 @@ y sin operar. Acá se opera, con verificación por ítem.
 
       | dónde | qué daba por hecho sin preguntar |
       |---|---|
-      | `onia-platform-chatbot/app/(dashboard)/appointments/page.tsx` ×3 | cancelar · marcar completada · **cambiar la fecha** (cerraba el modal: el paciente seguía citado a la hora vieja) |
-      | `onia-platform-chatbot/app/(dashboard)/settings/SettingsClient.tsx` ×4 | borrar del equipo · borrar profesional · **guardar horarios** (de ahí sale la agenda) · avisos por correo |
-      | `onia-platform-chatbot/app/(dashboard)/empresa/EmpresaClient.tsx` | borrar un gasto y su crédito fiscal |
-      | `onia-platform-chatbot/app/(dashboard)/rrhh/RrhhClient.tsx` | dar de baja / reactivar a un empleado |
-      | `onia-platform-chatbot/app/(dashboard)/treatments/TreatmentsClient.tsx` | borrar un servicio del catálogo |
-      | `onia-platform-chatbot/app/(dashboard)/patients/[id]/prescriptions/PrescriptionsClient.tsx` | borrar una receta |
+      | `onia-platform/app/(dashboard)/appointments/page.tsx` ×3 | cancelar · marcar completada · **cambiar la fecha** (cerraba el modal: el paciente seguía citado a la hora vieja) |
+      | `onia-platform/app/(dashboard)/settings/SettingsClient.tsx` ×4 | borrar del equipo · borrar profesional · **guardar horarios** (de ahí sale la agenda) · avisos por correo |
+      | `onia-platform/app/(dashboard)/empresa/EmpresaClient.tsx` | borrar un gasto y su crédito fiscal |
+      | `onia-platform/app/(dashboard)/rrhh/RrhhClient.tsx` | dar de baja / reactivar a un empleado |
+      | `onia-platform/app/(dashboard)/treatments/TreatmentsClient.tsx` | borrar un servicio del catálogo |
+      | `onia-platform/app/(dashboard)/patients/[id]/prescriptions/PrescriptionsClient.tsx` | borrar una receta |
 
       **Por qué ningún gate podía verlo:** no sobra ni falta una palabra —los barridos de copy,
       obra, rubro y precios pasan verdes—, la pantalla renderiza perfecto (la captura también), y
@@ -1017,11 +1071,11 @@ y sin operar. Acá se opera, con verificación por ítem.
       seis archivos **el alta de al lado SÍ mira la respuesta y avisa**: cuando el hermano sano
       está a diez líneas, el archivo se lee como cubierto.
 
-      **Atado en** `onia-platform-chatbot/app/(dashboard)/camino-de-fallo.test.ts` (12 casos), con el detector
-      `escriturasSinMirarLaRespuesta` en `onia-platform-chatbot/lib/superficie-publica/cobertura-de-fallo.ts` y el
-      helper `onia-platform-chatbot/lib/http/mensaje-de-error.ts`, que muestra el motivo que ya manda la ruta
+      **Atado en** `onia-platform/app/(dashboard)/camino-de-fallo.test.ts` (12 casos), con el detector
+      `escriturasSinMirarLaRespuesta` en `onia-platform/lib/superficie-publica/cobertura-de-fallo.ts` y el
+      helper `onia-platform/lib/http/mensaje-de-error.ts`, que muestra el motivo que ya manda la ruta
       («Tu suscripción ha vencido…») en vez de un «algo salió mal». Sujeto derivado del disco y
-      **un exento por literal exacto**, no por ruta: `onia-platform-chatbot/app/(dashboard)/profile/MfaSection.tsx:144`, limpieza
+      **un exento por literal exacto**, no por ruta: `onia-platform/app/(dashboard)/profile/MfaSection.tsx:144`, limpieza
       best-effort después de que el factor ya se borró, con un caso que se pone rojo si el
       exento se pudre.
 
@@ -1372,10 +1426,10 @@ y sin operar. Acá se opera, con verificación por ítem.
 - [x] 🔴 **La ficha clínica le pedía «Caries dentinaria en pieza 46» a un centro de estética —
       cerrado el 2026-09-07 (`3a4977d` en `onia-platform`, publicado en la rama). Y lo que lo
       dejó vivo es que NINGÚN gate mira las subrutas.**
-      Gate: `onia-platform-chatbot/lib/platform/pantallas-compartidas-cubiertas.test.ts`, bloque *«las subrutas de una
+      Gate: `onia-platform/lib/platform/pantallas-compartidas-cubiertas.test.ts`, bloque *«las subrutas de una
       pantalla compartida»* (89 casos).
 
-      El panel enlaza `onia-platform-chatbot/app/(dashboard)/patients/[id]/records/new/page.tsx` con el guard `esClinico`, o sea los **tres**
+      El panel enlaza `onia-platform/app/(dashboard)/patients/[id]/records/new/page.tsx` con el guard `esClinico`, o sea los **tres**
       rubros clínicos, y sus tres placeholders estaban tipeados en dental: «Dolor en el diente
       46», «Caries dentinaria en pieza 46», «Restauración con resina compuesta». Un centro de
       estética —uno de los cinco rubros que la v1.0 vende— cargaba el historial de su clienta
@@ -1387,15 +1441,15 @@ y sin operar. Acá se opera, con verificación por ítem.
       de caminos enumera ítems de menú, y una subruta no es ítem de menú de nadie. Entre los dos
       quedaba un árbol entero —la ficha, el detalle, los formularios de alta— sin un solo sujeto.
       Barriéndolo aparecieron **tres** archivos sirviendo copy de un rubro a todos:
-      `onia-platform-chatbot/app/(dashboard)/patients/[id]/records/new/page.tsx` (dental),
-      `onia-platform-chatbot/app/(dashboard)/reports/clinical-balance/page.tsx` («Tratamientos
+      `onia-platform/app/(dashboard)/patients/[id]/records/new/page.tsx` (dental),
+      `onia-platform/app/(dashboard)/reports/clinical-balance/page.tsx` («Tratamientos
       completados», que en una veterinaria son «Servicios») y
-      `onia-platform-chatbot/app/(dashboard)/settings/chatbot/ChatbotClient.tsx`, con tres placeholders
+      `onia-platform/app/(dashboard)/settings/chatbot/ChatbotClient.tsx`, con tres placeholders
       de **veterinaria** fijos —«mascota, perro, gato»— para los siete rubros, en un archivo cuyo
       propio prop `ejemplos` dice «nunca dental fijo»: el arreglo cubrió tres campos y dejó estos.
 
       Arreglados derivando del pack con el mecanismo que ya existía (`ejemploRegistro` y
-      `ejemploPalabras` en `onia-platform-chatbot/lib/onboarding/vocabulario.ts`, al lado de
+      `ejemploPalabras` en `onia-platform/lib/onboarding/vocabulario.ts`, al lado de
       `ejemploServicio`, cuyo
       comentario documenta **este mismo error** resuelto para el catálogo el 01-sep — nunca viajó
       a la ficha).
@@ -1416,7 +1470,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 - [x] 🔴 **A un estudio contable le pedíamos el género y el cumpleaños de su cliente —
       cerrado el 2026-09-07 (`e9b857a` en `onia-platform`, publicado en la rama).**
-      Gate: `onia-platform-chatbot/app/(dashboard)/patients/ficha-por-rubro.test.ts`.
+      Gate: `onia-platform/app/(dashboard)/patients/ficha-por-rubro.test.ts`.
       La ficha la comparten los tres rubros clínicos y **servicios profesionales**, uno de
       los cinco que la v1.0 vende. Lo clínico ya se había separado (tipo de sangre, emergencia,
       alergias, historia, tratamientos) pero **cumpleaños y género quedaron afuera de ese
@@ -1424,7 +1478,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       un bloque que sí distingue el rubro. El cliente de un estudio contable puede ser una
       EMPRESA, así que el sistema le pedía el género de una razón social, y la lista le ofrecía
       **filtrar por género** y le calculaba la edad.
-      **Cuatro superficies**, todas bajo `onia-platform-chatbot/app/(dashboard)/patients`: el alta, la
+      **Cuatro superficies**, todas bajo `onia-platform/app/(dashboard)/patients`: el alta, la
       edición, la ficha y **la lista**, que entró al gate por primera vez — el
       filtro por género vivía justo en la pantalla que ninguno de los tres casos miraba.
       **El gate dejó de CONTAR bloques** `{esClinico && (` y ahora pregunta, por literal, si
@@ -1912,7 +1966,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       vive sólo en la rama. **El gate ya salía en exit 1 antes de esta vuelta** por el mismo
       motivo (`app/(dashboard)/patients/ficha-por-rubro.test.ts`, línea 185); no es una regresión de este
       cambio y se apaga solo cuando `onia-cola` mergee. Se confirma con
-      `ls /root/loops/onia-platform-chatbot/lib/platform/caminos-transversales.test.ts`.
+      `ls /root/loops/onia-platform/lib/platform/caminos-transversales.test.ts`.
 
       Recorrer `/requerimientos` con datos reales sigue vivo, y cae en ese mismo ítem.
       Está listada como módulo en `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` §4.
@@ -2350,7 +2404,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       investigarlo de cero la próxima vuelta: el verificador resuelve el repo hermano contra
       `/root/loops/onia-platform`, que es el clon de `master`, y el archivo todavía vive sólo en
       `claude/chatbots-platform-review-0d1d09`. Se apaga solo cuando `onia-cola` mergee. Se
-      confirma con `ls /root/loops/onia-platform-chatbot/lib/onia-core/modules/agents-cadencia.ts`.
+      confirma con `ls /root/loops/onia-platform/lib/onia-core/modules/agents-cadencia.ts`.
 
       Las dos correcciones sucesivas del catálogo están en
       `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` §7.
