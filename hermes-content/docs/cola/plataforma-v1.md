@@ -105,6 +105,58 @@ y sin operar. Acá se opera, con verificación por ítem.
       nuestro y no pide nada más de él: subir `DMARC` de `p=none` a `p=quarantine` y revisar el
       remitente. Si contesta **Recibidos**, el punto se cierra.
 
+- [x] 🔴 **CERRADO el 2026-09-10 (`0735d5c`, rama del carril — NO en `master` todavía): el
+      recordatorio del add-on de WhatsApp salía hacia Meta con un número que WhatsApp no puede
+      resolver, y lo tapaba un comentario que prometía justo lo que no hacía.**
+      `lib/whatsapp.ts` decía *«Normalizar numero: quitar espacios, guiones, asegurarse de que
+      empiece con codigo de pais»* y el código sólo hacía lo primero. **Un comentario que afirma
+      una garantía que no cumple es peor que ninguno: desactiva la auditoría**, porque el que lo
+      lee da el tema por resuelto.
+
+      **Por qué es un defecto vivo y no teórico:** el propio producto pide el teléfono en dos
+      formatos según el rubro — `placeholder="70000000"` en el alta de clientes de comercio y en
+      la caja (8 dígitos), `"+591 70000000"` en los clínicos — y ni `wa.me` ni la Cloud API
+      resuelven un número sin código de país. En producción ya hay un cliente cargado así
+      (`patients.phone = 70000001`, contado el 2026-09-10). El resultado no es un error: el
+      mensaje no llega, o llega a otra persona.
+
+      **Y el repo YA lo sabía por escrito, desde el lado que RECIBE:**
+      `lib/whatsapp/cliente-del-negocio.ts:44` documenta que *«el número llega de WhatsApp con
+      código de país (`59171234567`) y el negocio suele haberlo guardado sin él (`71234567`)»*.
+      Lo que faltaba era aplicarlo del lado que **ENVÍA**.
+
+      **Cuatro superficies lo mandaban crudo y UNA normalizaba** —la pantalla de confirmación de reserva, con su copia
+      local y su comentario explicando por qué—: el patrón *«arreglar la instancia y no la
+      clase»*, con el hermano sano haciendo que la familia pareciera cubierta. Ahora las cinco
+      comparten `numeroParaWhatsapp()`: `lib/whatsapp.ts` (recordatorio de cita y texto libre),
+      `lib/onia-core/dispatch/channels.ts` (el link que el dueño toca tras aprobar una acción del
+      agente), `app/api/n8n/whatsapp/send`, `/admin/solicitudes` (contactar a un lead del alta) y
+      `app/(public)/book/confirm/[token]/page.tsx`, que entregó su copia.
+
+      **`null` en vez de mandarlo igual.** Un número que no se resuelve NO se envía: entregar el
+      recordatorio a un número mal formado no es intentarlo, es darle a un desconocido el nombre
+      del paciente, su profesional y la hora de su cita. El llamador decide qué hacer con el
+      `null` — no enviar, o pintar el dato sin enlace — en vez de heredar una decisión que el
+      helper no puede tomar. Al unificar **no se amplió la semántica**: sólo móviles (6/7), el
+      criterio que ya tenía la superficie que funcionaba; un fijo no recibe WhatsApp.
+
+      ⚠️ **El gate nació HUECO dos veces, y las dos sólo se vieron mutando DESPUÉS de arreglar.**
+      (1) Preguntar si el archivo *menciona* el helper deja pasar el esquive. (2) Corregido a
+      variable→origen, seguía verde: `lib/whatsapp.ts` tiene dos funciones hermanas y **las dos
+      llaman `phone` a su variable**, así que la sana absolvía a la rota por colisión de nombre.
+      El sujeto tiene que ser **cada punto de salida** con la asignación que manda en ESE punto.
+      Validado por mutación en cuatro direcciones (romper el arreglo con esquive · el exento que
+      deja de cumplir su motivo · un consumidor nuevo, que el gate nombra · romper el prefijo).
+
+      ⚠️ **Cuatro tests cementaban el defecto**: dos afirmaban el link `wa.me` sin el 591 como
+      resultado correcto, uno el `+` en el body de Meta, y uno usaba `"123"` de fixture — con lo
+      que probaba otra cosa que la que decía. Se corrigieron con su porqué al lado.
+
+      **Verificación:** `npx vitest run` → 4213 pasan · `npx tsc --noEmit` → 0 ·
+      `npx eslint .` → 0 errores. Contra los teléfonos REALES de producción: `70000001` →
+      `59170000001`, y el lead `+591 57400703` → `null` (el `5` no es prefijo boliviano), que
+      ahora se muestra marcado en vez de abrir un chat que no existe.
+
 - [x] 🟡 **CERRADO el 2026-09-10 (`b25b2a3`, rama del carril — NO en `master` todavía): el
       alta no mentía sobre el correo por una guarda equivocada, mentía sobre SÍ MISMA.** El
       síntoma era cierto (`POST /api/auth/register` → `emailDelivery: "not_configured"`,
