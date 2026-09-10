@@ -71,7 +71,27 @@ y sin operar. Acá se opera, con verificación por ítem.
 > (5 lectores de código + 4 capturas de producción). Orden de ejecución acordado: recarga →
 > cuentas → bot repetido (vive en `cola/chatbot.md`) → UI.
 
-- [ ] 🔴 **T1 — La recarga "+200 conversaciones por Bs 190" se VENDE pero no se puede APLICAR.**
+- [ ] 🟡 **T-nueva — `recorrido-cliente` crea una org QA por día y NUNCA la borra.** Medido
+      durante la purga del 10-sep: mientras se borraban las 7 QA acumuladas apareció
+      `zz-qa-2026-09-10-2209-negocio-wxbwh`, creada por el patrullaje diario a las 22:09 (así
+      se juntaron las 7 — 4 eran de "modulos" del 06-sep, mismo patrón). El pedido de Sergio
+      Urcullo ("solo una cuenta") no se sostiene si el loop la repuebla cada madrugada.
+      **Fix:** el prompt/script del recorrido borra su org + `auth.users` al terminar (éxito o
+      fallo), protocolo de `onia-platform/.claude/skills/` (onia-db): email
+      `oninteligenciaartificial+qa*` o `zz-qa-*@onia.com.bo`, borrado por slug exacto. Carril
+      loops (`hermes-content/docs/cola/loops.md` es su cola natural). **LISTO =** dos corridas
+      seguidas del recorrido dejan `public.organizations` con las mismas filas que antes.
+
+- [x] 🔴 **T1 — La recarga "+200 conversaciones por Bs 190" se VENDE pero no se puede APLICAR.**
+      **CERRADO el 2026-09-10** (`6183fb02` en master de onia-platform, DEPLOYADO 22:56 UTC con
+      gates 5/5): columna `recargadas` en `chatbot_uso_mensual` (migración
+      `20260910230000_chatbot_recargadas` aplicada en prod con backup), `cuotaDe(addon,
+      recargadas)`, `aplicarRecarga()` que además destraba los avisos del 80 %/corte (eran
+      una-vez-por-mes: el que recargaba y volvía a agotar quedaba mudo), `POST
+      /api/admin/organizations/[id]/recarga-chatbot` (superadmin, 409 sin add-on) y botón en la
+      ficha admin junto al toggle. Tests 35/35 (`onia-platform/lib/chatbot/cupo.test.ts`),
+      tsc/eslint 0. Falta solo la mirada final con una recarga aplicada (abajo, con las
+      capturas del cierre del lote).
       Medido 10-sep: `CupoConversacionesCard` la ofrece desde el 80% del cupo (decisión de
       Sergio Urcullo del 05-sep), el cliente pagaría por WhatsApp… y `cuotaDe()`
       (`lib/chatbot/cupo.ts`) devuelve SIEMPRE el literal 500 de `pricing.ts`: no hay campo por
@@ -83,7 +103,18 @@ y sin operar. Acá se opera, con verificación por ítem.
       con recarga aplicada muestra "x de 700" en `/settings/chatbot` y el motor recibe
       `limite: 700` por `/api/chatbot-knowledge/published`, mirado, no supuesto.
 
-- [ ] 🔴 **T2 — Purga de cuentas QA: el panel central tiene que ser UNO** (pedido Sergio Urcullo
+- [x] 🔴 **T2 — CERRADO el 2026-09-10 en la base** (falta solo la mirada en `/admin/chatbots`,
+      va con las capturas del cierre): backup pre-purga-qa-20260910-2254.sql (public+auth,
+      805 KB, en `/root/backups-chatbot/` del VPS) → DELETE de las 7 orgs QA por slug exacto +
+      la octava que el recorrido creó a las 22:09 → DELETE de sus 8 `auth.users` por email
+      exacto. Quedan 3 orgs / 3 usuarios: `onia-interna` (superadmin), `bolivian-electricidad`
+      (cliente real), `clinica-sergio` (ver pregunta abajo). `auth.users` con `%qa%` = 0.
+      Anotado: el inbox 7 de Chatwoot (era de zz-qa-clinica-chatbot) quedó huérfano, inofensivo.
+      **Pregunta ABIERTA a Sergio Urcullo:** ¿`clinica-sergio-p2ljs` (sergio@onia.com.bo) se
+      borra también? Es su banco de pruebas con el add-on activo y el bot configurado —
+      borrarla mata las pruebas del panel; no se toca sin su palabra.
+
+      Purga original (pedido Sergio Urcullo
       10-sep: "solo tenemos una cuenta… borra las demás"). Medido en la base ese día: 10 orgs,
       de las cuales **7 son QA** (`zz-qa-clinica-chatbot`, `zz-qa-ferreteria-tornillo`,
       `zz-qa-estetica-modulos`, `qa-modulos-mrk0q`, `qa-modulos-rj7tv`,

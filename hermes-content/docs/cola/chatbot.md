@@ -29,7 +29,13 @@ contra producción (SSH al VPS, las dos bases, el motor corrido de verdad), no c
 
 ---
 
-## 🔴 T4 — el acuse del handoff se repite en CADA mensaje (probado por Sergio Urcullo, 10-sep 20:16)
+## ✅ T4 — CERRADO el 2026-09-10 23:00: el acuse del handoff se repetia en CADA mensaje
+
+**Deployado y probado en prod** (backup deploy-20260910T225929Z): conversacion QA en
+`handoff_humano`, turno 1 acusa (1 mensaje), turno 2 → `silencio:handoff_en_curso`, 0
+mensajes — el candado por fin PERSISTE entre turnos. Test nuevo en
+`hermes-content/deploy/vps-ops/bot/persistence.test.mjs` fija la CLASE (las tres listas
+hermanas del raw no pueden volver a desincronizarse). Diagnostico original:
 
 Sergio Urcullo le escribió al bot de ventas (conv 11) en etapa `handoff_humano` y recibió
 **tres veces seguidas** el mismo "Te leo, y esto también se lo paso a Sergio…" (msgs 890, 892,
