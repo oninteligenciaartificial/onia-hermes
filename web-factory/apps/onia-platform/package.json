@@ -13,6 +13,7 @@
     "test": "node scripts/test-con-dependencias.mjs",
     "typecheck": "tsc --noEmit",
     "busqueda:viva": "node scripts/busqueda-alta-viva.mjs",
+    "captura:viva": "node scripts/captura-viva.mjs",
     "precios:fuente": "node scripts/precios-fuente.mjs",
     "precios:vivos": "node scripts/precios-vivos.mjs",
     "deploy:vivo": "node scripts/deploy-vivo.mjs",
