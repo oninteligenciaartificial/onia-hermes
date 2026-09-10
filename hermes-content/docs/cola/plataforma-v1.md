@@ -236,17 +236,23 @@ y sin operar. Acá se opera, con verificación por ítem.
       (`const TZ = DEFAULT_TZ` usado como valor) sigue sin cazarse; resolverlo pide un parser,
       no un regex, y está escrito como caso para que el día que alguien lo cierre el gate avise.
 
-- [ ] 🔴 **El que no confirma queda en un 403 mudo: el login tiene que ofrecer reenviar el
-      enlace.** Caso real medido el 10-sep: la cuenta de Sergio Urcullo (alta 31-ago) estuvo
-      10 días trabada — el correo fue a Spam/Promociones (dominio nuevo: SPF/DKIM/DMARC/PTR
-      todos verdes, Gmail aceptó 250 sin rebote y lo escondió) y `/api/auth/login` devuelve
-      403 `email_not_confirmed` con "Revisá tu bandeja"… sin ningún botón para reenviar.
-      El próximo cliente al que le pase queda igual de muerto. Fix: en el login, ante ese
-      código, botón "Reenviar el correo de confirmación" → GoTrue `/auth/v1/resend`
-      (probado el 10-sep: funciona con anon key y el enlace nuevo va por `/auth/confirm`,
-      que abre en cualquier navegador; GoTrue rate-limita solo). LISTO = con una cuenta QA
-      sin confirmar: login → aparece el botón → clic → correo reenviado (status=sent en
-      logs de onia-mail) → clic en el enlace → sesión abierta; captura de cada paso.
+- [x] 🔴 **CERRADO el 2026-09-10 mismo día (`eaa67038` en master, PUBLICADO por el
+      publicador 14:45 La Paz): el 403 mudo del login ahora ofrece reenviar el enlace.**
+      E2E completo contra producción con cuenta QA sin confirmar, fotografiado: login →
+      cartel + botón "Reenviarme el correo de confirmación" → clic → aviso con tip de
+      Spam/Promociones → reenvío real (`status=sent` 250 de Gmail 18:54:20Z) → el enlace
+      (`/auth/confirm` con el mismo `token_hash` del correo) abre sesión y aterriza en
+      `/onboarding`. El cooldown de GoTrue (~60s tras el correo del alta) responde 429 y la
+      UI lo traduce a "esperá un minuto" — probado también. QA limpiado (2 orgs + 2 users,
+      match exacto). Lo que NO prueba: la bandeja física (Gmail MCP caído) — eso sigue en
+      el ítem de entregabilidad de arriba.
+
+- [ ] 🟡 **El alta con nombre de negocio repetido revienta en 500 "Error interno" en vez
+      de decir "ese nombre ya está usado".** Medido el 2026-09-10 registrando por API dos
+      veces el mismo `orgSlug`: choque de único en la base → 500 crudo. El wizard de
+      /register genera slugs con sufijo y casi nunca choca, pero el error existe y un 500
+      en el alta es la peor primera impresión. LISTO = registrar dos veces el mismo nombre
+      devuelve 400 con mensaje claro y el formulario lo muestra; test que lo fija.
 
 - [ ] 🔴 **Nadie probó que el correo de confirmación LLEGUE a una bandeja — y sin ese clic el
       alta nueva muere** (`app/auth/confirm/route.ts` · `scripts/alta_correo_confirma.mjs`)**.**
