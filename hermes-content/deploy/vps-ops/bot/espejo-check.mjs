@@ -82,6 +82,67 @@ export function parsearMd5sum(texto) {
  * pisarlo nunca. Por eso el veredicto mira solo `.mjs` y `.sh`; el resto se lista en
  * `ignorados` para que se vea, sin poner rojo un gate que entonces alguien apagaria.
  */
+/**
+ * PURA: ¿este espejo puede opinar sobre el deploy del bot, o está mirando su propio atraso?
+ *
+ * Nace del 2026-09-10. El clon `/root/loops/onia-hermes` del VPS se atrasa solo desde que el
+ * integrador se mudó al nodo de casa y pushea desde allá. Ese día el clon estaba en
+ * `acd34a6d4`, `origin/main` ya tenía `4bc1c97e` —que toca `persistence.mjs` de este mismo
+ * subárbol— y producción YA lo corría. Así que este script comparó el `persistence.mjs` VIEJO
+ * del clon contra el NUEVO de `/opt/onia/bot` y cantó DESINCRONIZADO: producción estaba
+ * ADELANTE, no atrás. `deploy_sin_pedido.mjs`, que le pregunta a este script, tradujo eso a
+ * «el bot tiene arreglos sin publicar» y mandaba a abrir un pedido de deploy a Sergio Urcullo.
+ *
+ * El costo no es el ruido: es que obedecerlo copiaba el clon atrasado ENCIMA de producción y
+ * REVERTÍA el arreglo del acuse del handoff. Su hermano `publicar.sh` ya se cuida de esto
+ * (pone el árbol en `origin/main` antes de comparar); este no, y es el que consultan los gates.
+ *
+ * No se arregla poniendo el árbol al día: este script declara en su encabezado que lee y no
+ * escribe, y un instrumento que muta lo que mide deja de ser instrumento. Se arregla
+ * NEGÁNDOSE A CONCLUIR: si el espejo no es `origin/main`, la diferencia que ve puede ser suya,
+ * y «no sé» es la única respuesta honesta. La dirección importa — de los dos errores posibles,
+ * el que cuesta plata es declarar un deploy pendiente que no existe.
+ *
+ * @param difieren archivos del subárbol que no coinciden con `origin/main` (o sin versionar).
+ * @param error    texto si ni siquiera se pudo preguntar (no es repo, no hay `origin/main`).
+ */
+export function frescuraDelEspejo({ difieren = [], error = null } = {}) {
+  if (error) {
+    return { fresco: false, motivo: `no pude preguntarle a git si el espejo es origin/main: ${error}` };
+  }
+  if (difieren.length) {
+    return {
+      fresco: false,
+      motivo:
+        `el espejo NO es origin/main — difieren ${difieren.join(", ")}. Lo que este script vería ` +
+        `puede ser su propio atraso y no un deploy pendiente.`,
+    };
+  }
+  return { fresco: true, motivo: null };
+}
+
+/** Lee del disco lo que `frescuraDelEspejo` necesita. Un `fetch` que falla no es motivo para */
+/** callarse: se compara contra el `origin/main` que haya, igual que hace `publicar.sh`. */
+function frescuraEnVivo(espejo) {
+  const git = (args) => execFileSync("git", args, { cwd: espejo, encoding: "utf8", timeout: 60_000, stdio: ["ignore", "pipe", "ignore"] });
+  try {
+    try {
+      git(["fetch", "origin", "--quiet"]);
+    } catch {
+      /* sin red se compara contra el origin/main de disco: peor es no comparar */
+    }
+    const difieren = [
+      ...git(["diff", "--name-only", "origin/main", "--", "."]).split("\n"),
+      ...git(["ls-files", "--others", "--exclude-standard", "--", "."]).split("\n"),
+    ]
+      .map((s) => s.trim())
+      .filter(Boolean);
+    return frescuraDelEspejo({ difieren: [...new Set(difieren)] });
+  } catch (e) {
+    return frescuraDelEspejo({ error: String(e?.message || e).split("\n")[0] });
+  }
+}
+
 export function compararEspejo(repo, vps) {
   const nombres = [...new Set([...Object.keys(repo), ...Object.keys(vps)])].sort();
   const distintos = [];
@@ -261,6 +322,18 @@ function main() {
   const host = process.env.ONIA_VPS_HOST || "root@187.77.16.63";
   const dir = process.env.ONIA_VPS_BOT_DIR || "/opt/onia/bot";
   const key = process.env.ONIA_VPS_KEY || path.join(process.env.HOME || "", ".ssh/onia_hermes_vps_ed25519");
+
+  // Antes de comparar nada: ¿este espejo es `origin/main`? Si no, se calla — ver
+  // `frescuraDelEspejo`. Sale 2 (NO MEDIDO) y no 1, para que quien lo consulte distinga
+  // «no sé» de «hay drift»: el 1 hace abrir un pedido de deploy.
+  const frescura = frescuraEnVivo(espejo);
+  if (!frescura.fresco) {
+    console.log(`ESPEJO SIN VEREDICTO — ${frescura.motivo}`);
+    console.log(`  No es un drift: es que ${espejo} no está en origin/main, así que cualquier`);
+    console.log("  diferencia contra el VPS puede ser su propio atraso. Poné el árbol al día");
+    console.log("  (git merge --ff-only origin/main) o commiteá lo tuyo, y volvé a correrlo.");
+    return 2;
+  }
 
   const r = compararEspejo(md5Local(espejo), ladoVps({ host, key, dir }));
 
