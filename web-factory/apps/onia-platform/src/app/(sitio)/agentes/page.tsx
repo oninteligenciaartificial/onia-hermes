@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Reveal } from "@/motion";
-import { PRUEBA } from "@/lib/pricing";
+import { ALCANCE_CON_FICHA, PRUEBA } from "@/lib/pricing";
 import { EMPEZAR_URL } from "../nav";
 import { CTA_ALTA } from "../alta";
 import { Block, Shape, Btn, Kicker } from "../ui";
@@ -8,8 +8,7 @@ import s from "../sitio.module.css";
 
 export const metadata: Metadata = {
   title: "Agentes con IA que proponen y esperan tu aprobación | Onia",
-  description:
-    "Recall detecta al cliente que no vuelve y Cobrador detecta la deuda vencida: los dos redactan el mensaje y lo dejan en Pendientes. Nada sale sin tu OK. Incluidos desde el plan Pro.",
+  description: `Recall detecta al cliente que no vuelve (${ALCANCE_CON_FICHA}) y Cobrador detecta la deuda vencida, en todos los rubros: los dos redactan el mensaje y lo dejan en Pendientes. Nada sale sin tu OK. Incluidos desde el plan Pro.`,
   alternates: { canonical: "/agentes" },
   openGraph: {
     type: "website",
@@ -26,12 +25,19 @@ export const metadata: Metadata = {
  * producto (Recall y Cobrador, cada 24h, PROPONEN y nunca envían solos). Nada
  * de esto es promesa: existe. Los agentes vienen desde el plan Pro
  * (lib/pricing.ts → Pro.incluye). Sin imágenes.
+ *
+ * El alcance del Recall NO se tipea acá: sale de `ALCANCE_CON_FICHA`, que se
+ * deriva de `ALCANCE_POR_DATOS` (lib/pricing.ts, con la medición contra el
+ * producto). Esta página describía la capacidad ROL POR ROL, fuera de `PLANES`,
+ * y por eso los dos gates del eje (capacidad, rubro) —que sacan sus sujetos de
+ * las líneas de los planes y de la nav de los packs— pasaban en verde sobre
+ * ella. Lo vigila `app/capacidad-acotada.test.ts`.
  */
 
 const CELDAS: readonly [string, string][] = [
   [
     "Recall",
-    "Detecta clientes que no vuelven hace meses y no tienen próxima cita, y redacta el mensaje para traerlos. Corre cada 24 horas.",
+    `Detecta clientes que no vuelven hace meses y no tienen próxima cita, y redacta el mensaje para traerlos. Corre cada 24 horas, ${ALCANCE_CON_FICHA} — son los rubros que guardan ficha del cliente y agenda.`,
   ],
   [
     "Cobrador",
