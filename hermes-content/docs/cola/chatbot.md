@@ -53,6 +53,30 @@ turno "hola" en cada etapa del guion con conversación vieja → SIEMPRE ≥1 me
 LISTO = Sergio Urcullo manda "hola" desde su teléfono y el bot le contesta (su conv es la 11
 del inbox 5 — sirve de caso de prueba real).
 
+✅ **FIX DEPLOYADO el 2026-09-10 (~19:54 UTC) — falta SOLO el "hola" real de Sergio Urcullo.**
+
+- **La causa NO era la rama `esperando_calificacion`** (esa ya migraba a la bienvenida desde
+  antes): medido en la base, `chatwoot:11` tenía `human_took_over = t` desde el **13-ago** —
+  la Barrera 1 ("humano a cargo = silencio para siempre") se comía el "hola". La traza decía
+  "el motor no produjo respuesta" porque los `notes` del motor nunca llegan al campo que la
+  traza lee (lee `warnings`); el motor sí anotaba `silencio:humano_a_cargo`.
+- **Fix**: Barrera 0 nueva en `step()` — entrante real de un contacto en conversación donde
+  NUESTRO lado (bot o humano) no habla hace >14 días (`config.reinicio.trasDiasSinActividad`)
+  → se reinicia al guion desde el saludo (limpia `humanTookOver`, `handoffAckAt`, contadores
+  y agenda; conserva calificación). El **opt-out nunca vence** (solo DEMO reabre, M6). Un
+  traspaso humano entra como `author: "human"`: jamás dispara la bienvenida encima del humano
+  y refresca `lastOutboundAt` (charla humana viva no cuenta como muerta).
+- **Trampa que salió al probar**: el reloj NO puede mirar `lastInboundAt` — el propio "hola"
+  mudo del 10-sep la había actualizado, así que cada intento del prospecto rearmaba los 14
+  días y el bot no revivía jamás. El reloj mide `lastOutboundAt`/`humanTookOverAt`.
+- **Probado en producción** con un clon exacto del estado de conv 11
+  (`sim:qa-reinicio-vencida`, borrado después): `stageBefore esperando_calificacion` →
+  `esperando_horario`, 1 mensaje M0, `notes: [reinicio:conversacion_vencida, bienvenida]`,
+  `humanTookOver: false`. Conv 11 real quedó INTACTA a propósito: es el caso de prueba.
+- Gate del deploy: 893/893 tests verdes en el VPS. Backup: `/opt/onia/bot/backups/deploy-20260910T195349Z`.
+  Commits `55e669a6` + `22546797` (rama `claude/cobro-e2e-punto-1-25ba65`). Tarea en el
+  tablero pidiéndole a Sergio Urcullo el "hola" de cierre.
+
 ## Objetivo único
 
 **Que un desconocido escriba y esa conversación se vea en la bandeja.**
