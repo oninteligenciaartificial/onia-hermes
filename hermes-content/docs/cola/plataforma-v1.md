@@ -41,7 +41,7 @@ LISTO medible; el estado es del 10-sep y se re-mide, no se hereda:
 | 5 | Factura SIAT | la suscripción cobrada emite factura | 🔴 Fase 1 ~24,8 %, PdV 1 = trámite de Sergio Urcullo; el código avanza sin él |
 | 6 | Chatbot atiende solo (web + WhatsApp) | responde, califica y agenda demo | ✅ web vivo (439 msgs/7d) · ✅ WhatsApp probado sintético 10-sep · 🔴 3 prospectos de agosto sin respuesta (aprobación `t_43868cdb`) |
 | 7 | Panel del dueño estilo Hostinger | pestañas agrupadas y cada sección cierra su flujo | ✅ estructura VIVA (grupos + Primeros pasos + fecha La Paz + 2FA); queda `feat/canal-meta` (App Review = Sergio Urcullo) |
-| 8 | Cero promesas falsas | lo que cada pantalla promete por rubro/plan se abre | 🟡 barridos 8-sep y 9-sep (`e843507` estética/dental); el recorrido caza el resto |
+| 8 | Cero promesas falsas | lo que cada pantalla promete por rubro/plan se abre | 🟡 barridos 8-sep y 9-sep (`e843507` estética/dental) + 10-sep el NOMBRE del plan (`fe6eb65`, gate `nombre-de-plan-a-mano`); el recorrido caza el resto |
 | 9 | Opera sin Sergio | correos, avisos, backups, publicador corren solos | ✅ medido 10-sep (publicador «al día», watchdog del bot, correo entrega) |
 
 **Fuera de la 1.0 (decidido, no se reabre):** veterinaria/ganadería, offline ganadero,
@@ -126,6 +126,58 @@ y sin operar. Acá se opera, con verificación por ítem.
       de `block` no prueba que haya quedado bloqueada). Si contesta **Spam**, el arreglo es
       nuestro y no pide nada más de él: subir `DMARC` de `p=none` a `p=quarantine` y revisar el
       remitente. Si contesta **Recibidos**, el punto se cierra.
+
+- [x] 🔴 **CERRADO el 2026-09-10 (`0735d5c`, rama del carril — NO en `master` todavía): el
+      recordatorio del add-on de WhatsApp salía hacia Meta con un número que WhatsApp no puede
+      resolver, y lo tapaba un comentario que prometía justo lo que no hacía.**
+      `lib/whatsapp.ts` decía *«Normalizar numero: quitar espacios, guiones, asegurarse de que
+      empiece con codigo de pais»* y el código sólo hacía lo primero. **Un comentario que afirma
+      una garantía que no cumple es peor que ninguno: desactiva la auditoría**, porque el que lo
+      lee da el tema por resuelto.
+
+      **Por qué es un defecto vivo y no teórico:** el propio producto pide el teléfono en dos
+      formatos según el rubro — `placeholder="70000000"` en el alta de clientes de comercio y en
+      la caja (8 dígitos), `"+591 70000000"` en los clínicos — y ni `wa.me` ni la Cloud API
+      resuelven un número sin código de país. En producción ya hay un cliente cargado así
+      (`patients.phone = 70000001`, contado el 2026-09-10). El resultado no es un error: el
+      mensaje no llega, o llega a otra persona.
+
+      **Y el repo YA lo sabía por escrito, desde el lado que RECIBE:**
+      `lib/whatsapp/cliente-del-negocio.ts:44` documenta que *«el número llega de WhatsApp con
+      código de país (`59171234567`) y el negocio suele haberlo guardado sin él (`71234567`)»*.
+      Lo que faltaba era aplicarlo del lado que **ENVÍA**.
+
+      **Cuatro superficies lo mandaban crudo y UNA normalizaba** —la pantalla de confirmación de reserva, con su copia
+      local y su comentario explicando por qué—: el patrón *«arreglar la instancia y no la
+      clase»*, con el hermano sano haciendo que la familia pareciera cubierta. Ahora las cinco
+      comparten `numeroParaWhatsapp()`: `lib/whatsapp.ts` (recordatorio de cita y texto libre),
+      `lib/onia-core/dispatch/channels.ts` (el link que el dueño toca tras aprobar una acción del
+      agente), `app/api/n8n/whatsapp/send`, `/admin/solicitudes` (contactar a un lead del alta) y
+      `app/(public)/book/confirm/[token]/page.tsx`, que entregó su copia.
+
+      **`null` en vez de mandarlo igual.** Un número que no se resuelve NO se envía: entregar el
+      recordatorio a un número mal formado no es intentarlo, es darle a un desconocido el nombre
+      del paciente, su profesional y la hora de su cita. El llamador decide qué hacer con el
+      `null` — no enviar, o pintar el dato sin enlace — en vez de heredar una decisión que el
+      helper no puede tomar. Al unificar **no se amplió la semántica**: sólo móviles (6/7), el
+      criterio que ya tenía la superficie que funcionaba; un fijo no recibe WhatsApp.
+
+      ⚠️ **El gate nació HUECO dos veces, y las dos sólo se vieron mutando DESPUÉS de arreglar.**
+      (1) Preguntar si el archivo *menciona* el helper deja pasar el esquive. (2) Corregido a
+      variable→origen, seguía verde: `lib/whatsapp.ts` tiene dos funciones hermanas y **las dos
+      llaman `phone` a su variable**, así que la sana absolvía a la rota por colisión de nombre.
+      El sujeto tiene que ser **cada punto de salida** con la asignación que manda en ESE punto.
+      Validado por mutación en cuatro direcciones (romper el arreglo con esquive · el exento que
+      deja de cumplir su motivo · un consumidor nuevo, que el gate nombra · romper el prefijo).
+
+      ⚠️ **Cuatro tests cementaban el defecto**: dos afirmaban el link `wa.me` sin el 591 como
+      resultado correcto, uno el `+` en el body de Meta, y uno usaba `"123"` de fixture — con lo
+      que probaba otra cosa que la que decía. Se corrigieron con su porqué al lado.
+
+      **Verificación:** `npx vitest run` → 4213 pasan · `npx tsc --noEmit` → 0 ·
+      `npx eslint .` → 0 errores. Contra los teléfonos REALES de producción: `70000001` →
+      `59170000001`, y el lead `+591 57400703` → `null` (el `5` no es prefijo boliviano), que
+      ahora se muestra marcado en vez de abrir un chat que no existe.
 
 - [x] 🟡 **CERRADO el 2026-09-10 (`b25b2a3`, rama del carril — NO en `master` todavía): el
       alta no mentía sobre el correo por una guarda equivocada, mentía sobre SÍ MISMA.** El
@@ -2335,6 +2387,52 @@ y sin operar. Acá se opera, con verificación por ítem.
 - **No le escribe a un prospecto.** Regla del [`README.md`](README.md) de esta carpeta.
 
 ## Cerrado
+
+- [x] **CERRADO el 2026-09-10: el producto le mostraba al cliente el NOMBRE del plan en inglés
+      —la clave interna— en las tres pantallas donde decide y donde paga.** Arreglado en
+      `fe6eb65` (`onia-platform`), rama `claude/chatbots-platform-review-0d1d09`.
+      ⚠️ **Commiteado y pusheado, NO en `master` y NO desplegado**: falta que el integrador lo
+      mergee, y recién después viaja con el pedido de deploy de `plataforma`.
+
+      `lib/pricing.ts` declara `PLAN_LABELS` como «UN solo lugar» y su propio comentario
+      registra que esta clase **ya explotó una vez**: el plan top se mostraba como «Clinica» o
+      «Grupo Clinico» en cinco archivos, así que un comerciante leía que contrataba algo para
+      clínicas. Se escribió `nombreDePlan()` para cerrarlo — y se cerraron las **instancias** de
+      entonces, no la clase. Medido hoy, tres superficies seguían esquivando el helper:
+
+      - **`/billing/recurring`** ofrecía subir a los planes **«Professional»** y **«Clinic»**.
+        Onia vende **Profesional** y **Completo**: el dueño iba a `/settings` a buscar dos planes
+        que no existen con ese nombre. Y «Clinic» es exactamente el caso que el comentario de
+        `PLAN_LABELS` decía haber arreglado — a una ferretería, a una importadora o a un estudio
+        contable les ofrecía un plan «de clínicas».
+      - **`POST /api/recurring-invoices`** repetía el mismo texto en su 403, que es lo que el
+        cliente lee cuando el producto le dice que no.
+      - **`/settings`** tenía `badge: "Enterprise"` **una línea debajo** de
+        `name: PLAN_LABELS.enterprise`, que dice «Empresa» bien, y otra píldora «Enterprise» en
+        el add-on self-hosted. Derivar en un campo no prueba que la pantalla derive. El badge se
+        **saca** en vez de derivarlo: flotaba justo encima de un título que ya dice «Empresa».
+
+      **Gate nuevo:** `lib/platform/nombre-de-plan-a-mano.test.ts`, hermano simétrico del que
+      vigila el MONTO. Ningún gate existente podía hacer la pregunta: `monto-de-plan-a-mano` mira
+      el número; `plan-catalogo-es-la-fuente` mira qué capacidad enciende cada plan;
+      `planes-en-el-idioma-del-rubro` mira el par (rubro, palabra) y acá la palabra está mal para
+      los **cinco** rubros; los barridos de obra y de promesa persiguen lo que sobra o lo que
+      falta, y acá **no sobra ni falta una palabra: el nombre es de otro idioma**. `tsc` y
+      `eslint` no tienen nada que decir sobre un literal.
+
+      Deriva las claves de `PLAN_LABELS` (un plan nuevo nace vigilado) y los sujetos del DISCO
+      —`.tsx` y también `.ts`, porque el error de un `route.ts` es superficie de cliente—: 399
+      archivos barridos. Sólo mira lo que el cliente LEE; sin ese recorte acusaba a
+      `interface Clinic` y `useState<Clinic>` de `/book/[orgSlug]`, que son **tipos**, y un rojo
+      falso manda a romper código sano.
+
+      **Validado por mutación en las dos direcciones, 6 de 6 en rojo:** revertir cada una de las
+      tres instancias (M1-M3), detector siempre vacío (M4), recorte del recorrido del disco (M5),
+      y sacar el filtro que separa tipo de copy (M6, **2** casos en rojo — el ancla y el barrido,
+      o sea que el filtro carga en los dos sentidos). Cada mutación se confirmó que ENTRÓ con
+      `grep` y se leyó por la línea `Tests N failed`, nunca por ausencia de `FAIL`.
+
+      Gates: `tsc` 0 · `vitest` 4218 pass / 338 archivos · `eslint` 0 errores.
 
 - [x] **CERRADO el 2026-09-10: dar de baja a alguien del equipo fallaba con un error MUDO, y
       el dueño no tenía cómo saber por qué.** Arreglado en `ad1851f` (`onia-platform`), rama
