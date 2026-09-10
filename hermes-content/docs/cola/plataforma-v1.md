@@ -83,7 +83,11 @@ y sin operar. Acá se opera, con verificación por ítem.
         clave → `/onboarding`, con el nombre del negocio ya cargado. Capturado y MIRADO.
       - **Instrumento, para que esto no se vuelva a medir a mano:**
         `node scripts/alta_correo_confirma.mjs --email <correo> --password <clave>`
-        (`--self-check`: 8 casos en verde). Reconstruye la URL del correo desde la MISMA fuente
+        (`npm run alta:correo-vivo`). Su `--self-check` (8 casos) va **cableado a la cadena
+        `npm test`** como `test:alta-correo` — un instrumento vivo que queda de alias suelto no
+        lo corre nadie —, y la medición viva queda aparte porque necesita producción. Validado
+        por mutación: con `veredictoDelEnlace` siempre en verde, `exit 1` y 4 casos en rojo.
+        Reconstruye la URL del correo desde la MISMA fuente
         que GoTrue en vez de inventarla, y prueba el login en contexto limpio a propósito —
         confirmar deja sesión en el navegador que abrió el enlace, así que probar ahí no
         probaría nada del login. Sale `2` (no medido) si no puede leer el token: un instrumento
