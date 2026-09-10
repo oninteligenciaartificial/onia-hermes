@@ -14,7 +14,9 @@ import {
   markHumanTakeover,
   followUpDue,
   buildFollowUp,
+  conversacionVencida,
   LLM_PENDING,
+  STAGES,
 } from "./bot-engine.mjs";
 import {
   GUARDRAIL_RULES,
@@ -276,7 +278,9 @@ test("si un humano contesta, el bot se calla para siempre", () => {
   const after = run(["hola? me decias?", "tengo una ferreteria, somos 5, santa cruz"], { state: taken });
   assert.equal(after.turns[0].replies.length, 0);
   assert.equal(after.turns[1].replies.length, 0);
-  assert.equal(after.state.humanTookOver, true, "nunca vuelve solo a false");
+  // "Para siempre" mientras la charla este VIVA: la unica salida automatica es el reinicio
+  // por vencimiento (>N dias sin actividad de nadie, ver la seccion Conversacion VENCIDA).
+  assert.equal(after.state.humanTookOver, true, "no vuelve solo a false con la charla activa");
 });
 
 // ---------------------------------------------------------------------------
@@ -1066,4 +1070,92 @@ test("HORARIO VENCIDO: la etiqueta del que ya no da un dia de aviso no sale por 
     !todo.includes("sábado 5 de septiembre, 09:00"),
     `se ofrecio un horario que no da un dia de aviso:\n${todo}`,
   );
+});
+
+// ---------------------------------------------------------------------------
+// Conversacion VENCIDA (Barrera 0). El caso real: conv 11, 2026-09-10 — Sergio mando "hola"
+// a su conversacion de pruebas del 15-ago (human_took_over desde el 13-ago) y el motor
+// produjo CERO salida (rama=MUDO). Regla que fija esta seccion: ningun estado puede producir
+// 0 mensajes ante un entrante real de un contacto en una conversacion sin actividad >N dias.
+// La UNICA excepcion es el opt-out, que no caduca por tiempo (politica de Meta, M6).
+// ---------------------------------------------------------------------------
+
+const UN_MES_DESPUES = new Date(Date.parse(T0) + 30 * 86400000).toISOString();
+
+test("CONV 11: takeover viejo + 'hola' un mes despues -> bienvenida, no silencio", () => {
+  const viejo = markHumanTakeover(
+    { ...createState({ channel: "chatwoot", contactRef: "11" }), botStage: "esperando_calificacion", lastInboundAt: T0, lastOutboundAt: T0 },
+    T0,
+  );
+  const result = step(viejo, { text: "hola", receivedAt: UN_MES_DESPUES }, { config: CONFIG });
+  assert.ok(result.replies.length >= 1, "un entrante real en conversacion vencida NUNCA produce 0 mensajes");
+  assert.deepEqual(keysOf({ replies: result.replies }), ["M0"], "arranca el guion desde el saludo");
+  assert.equal(result.nextState.humanTookOver, false, "el candado de una charla muerta hace un mes no vale mas");
+  assert.ok(result.notes.includes("reinicio:conversacion_vencida"), "el reinicio queda en la bitacora");
+});
+
+test("'hola' en CADA etapa con conversacion vencida -> SIEMPRE >=1 mensaje (menos opt_out)", () => {
+  for (const stage of STAGES) {
+    if (stage === "opt_out") continue;
+    const state = { ...createState({ channel: "chatwoot", contactRef: "x" }), botStage: stage, lastInboundAt: T0, lastOutboundAt: T0 };
+    const result = step(state, { text: "hola", receivedAt: UN_MES_DESPUES }, { config: CONFIG });
+    assert.ok(result.replies.length >= 1, `etapa ${stage}: el bot se quedo mudo ante un "hola" real`);
+  }
+});
+
+test("handoff acusado y vencido tambien revive: el acuse de hace un mes no calla al que vuelve", () => {
+  const state = {
+    ...createState({ channel: "chatwoot", contactRef: "x" }),
+    botStage: "handoff_humano",
+    handoffAckAt: T0,
+    lastInboundAt: T0,
+    lastOutboundAt: T0,
+  };
+  const result = step(state, { text: "hola", receivedAt: UN_MES_DESPUES }, { config: CONFIG });
+  assert.ok(result.replies.length >= 1);
+  assert.equal(result.nextState.handoffAckAt, null);
+});
+
+test("con actividad reciente NADA se reinicia: el takeover sigue mandando", () => {
+  const taken = markHumanTakeover(
+    { ...createState({ channel: "chatwoot", contactRef: "x" }), botStage: "esperando_horario", lastInboundAt: T0, lastOutboundAt: T0 },
+    T0,
+  );
+  const result = step(taken, { text: "hola", receivedAt: at(60) }, { config: CONFIG });
+  assert.equal(result.replies.length, 0, "el humano esta a cargo hace una hora, no hace un mes");
+  assert.deepEqual(result.notes, ["silencio:humano_a_cargo"]);
+});
+
+test("el opt-out NO caduca por tiempo: 'hola' un mes despues sigue en silencio, DEMO reabre", () => {
+  const state = {
+    ...createState({ channel: "chatwoot", contactRef: "x" }),
+    botStage: "opt_out",
+    optOutAt: T0,
+    lastInboundAt: T0,
+    lastOutboundAt: T0,
+  };
+  const hola = step(state, { text: "hola", receivedAt: UN_MES_DESPUES }, { config: CONFIG });
+  assert.equal(hola.replies.length, 0, "a quien dijo basta no lo reabre el calendario");
+  const demo = step(state, { text: "DEMO", receivedAt: UN_MES_DESPUES }, { config: CONFIG });
+  assert.ok(demo.replies.length >= 1, "el disparador DEMO sigue reabriendo, como dice M6");
+});
+
+test("un traspaso humano en conversacion vencida NO dispara la bienvenida encima del humano", () => {
+  const taken = markHumanTakeover(
+    { ...createState({ channel: "chatwoot", contactRef: "x" }), botStage: "esperando_horario", lastInboundAt: T0, lastOutboundAt: T0 },
+    T0,
+  );
+  const result = step(taken, { text: "hola! te retomo lo del sistema", author: "human", receivedAt: UN_MES_DESPUES }, { config: CONFIG });
+  assert.equal(result.replies.length, 0, "el mensaje es DEL humano: el bot no se le mete en la charla");
+  assert.equal(result.nextState.humanTookOver, true, "y el candado sigue puesto");
+});
+
+test("conversacionVencida: bordes deterministas", () => {
+  const base = { ...createState({ channel: "chatwoot", contactRef: "x" }), botStage: "esperando_horario", lastInboundAt: T0 };
+  assert.equal(conversacionVencida(base, UN_MES_DESPUES, CONFIG), true);
+  assert.equal(conversacionVencida(base, at(60), CONFIG), false, "una hora no es un mes");
+  assert.equal(conversacionVencida(base, null, CONFIG), false, "sin receivedAt no se juzga (determinismo)");
+  assert.equal(conversacionVencida({ ...base, optOutAt: T0 }, UN_MES_DESPUES, CONFIG), false, "opt-out nunca vence");
+  assert.equal(conversacionVencida({ ...base, lastInboundAt: null }, UN_MES_DESPUES, CONFIG), false, "sin marcas de actividad no hay desde cuando contar");
+  assert.equal(conversacionVencida({ ...base, botStage: "nuevo" }, UN_MES_DESPUES, CONFIG), false, "en 'nuevo' no hay nada que reiniciar");
 });

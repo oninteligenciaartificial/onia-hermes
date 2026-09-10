@@ -247,7 +247,10 @@ export function incomingFrom(input, nowIso) {
       : input.imageReceipt && typeof input.imageReceipt === "object" ? input.imageReceipt : null,
     externalMessageId,
     receivedAt: input.received_at || input.receivedAt || nowIso,
-    author: "contact",
+    // El traspaso (un humano NUESTRO contesta desde la bandeja) entra al motor como "human":
+    // sin esto, un humano escribiendo en una conversacion vencida (>N dias) disparaba el
+    // reinicio de la Barrera 0 y el bot le mandaba la bienvenida ENCIMA al humano.
+    author: input.human_takeover === true ? "human" : "contact",
   };
 }
 
