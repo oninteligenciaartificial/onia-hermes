@@ -106,7 +106,7 @@ Estado: 🟢 recurso publicado · 🟡 en curso · ⬜ sin empezar.
 
 | | Tema | Estado |
 |---|---|---|
-| **S** | Qué es Claude y qué es Claude Code | 🟡 **video de YouTube grabado**, falta la página |
+| **S** | Qué es Claude y qué es Claude Code | 🟡 video de YouTube grabado · la instalación ya está en el paso 04 de [`/stack`](https://sergiourcullo.vercel.app/stack) · falta el link para embeber |
 | **S** | Escribí tu primera habilidad (skill) | ⬜ · sale del drop D4 |
 | **S** | Los cinco prompts que uso para vender | ⬜ · sale del drop D2 |
 | **S** | Un agente que te avisa cuando algo se rompe | ⬜ · Hermes |

@@ -47,7 +47,15 @@
 - ✅ **[`/homelab/archivos`](https://sergiourcullo.vercel.app/homelab/archivos)** — tres archivos reales: el script de
   primer arranque, el de respaldo automático y la lista de la BIOS. Es lo que le faltaba a
   esa guía para tener algo que sólo esté adentro.
-- ⬜ Los **6 drops** del tema que elijas, listos antes del lunes.
+- ✅ **Los 6 drops de la semana 1**, escritos el 10-sep: `cola/drops/2026-09-14.md` a
+  `2026-09-19.md`. Tema **Mi stack**, una herramienta por día, cada uno con su archivo.
+- ✅ **Los 5 archivos** en [`/stack/archivos`](https://sergiourcullo.vercel.app/stack/archivos):
+  el `docker-compose` de n8n, las respuestas de WhatsApp, el `SOUL.md`, el `CLAUDE.md`
+  para un negocio y una composición de HyperFrames.
+- 🔴 **Corregido un error de la guía `/stack`**: decía que el plan gratis de Claude
+  alcanzaba para probar. Alcanza para el chat, **no para Claude Code** — la doc oficial
+  dice textual que el plan gratis no lo incluye. El paso 04 ahora lleva la instalación
+  real con sus comandos.
 
 ---
 
