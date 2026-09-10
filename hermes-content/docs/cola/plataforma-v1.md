@@ -236,6 +236,18 @@ y sin operar. Acá se opera, con verificación por ítem.
       (`const TZ = DEFAULT_TZ` usado como valor) sigue sin cazarse; resolverlo pide un parser,
       no un regex, y está escrito como caso para que el día que alguien lo cierre el gate avise.
 
+- [ ] 🔴 **El que no confirma queda en un 403 mudo: el login tiene que ofrecer reenviar el
+      enlace.** Caso real medido el 10-sep: la cuenta de Sergio Urcullo (alta 31-ago) estuvo
+      10 días trabada — el correo fue a Spam/Promociones (dominio nuevo: SPF/DKIM/DMARC/PTR
+      todos verdes, Gmail aceptó 250 sin rebote y lo escondió) y `/api/auth/login` devuelve
+      403 `email_not_confirmed` con "Revisá tu bandeja"… sin ningún botón para reenviar.
+      El próximo cliente al que le pase queda igual de muerto. Fix: en el login, ante ese
+      código, botón "Reenviar el correo de confirmación" → GoTrue `/auth/v1/resend`
+      (probado el 10-sep: funciona con anon key y el enlace nuevo va por `/auth/confirm`,
+      que abre en cualquier navegador; GoTrue rate-limita solo). LISTO = con una cuenta QA
+      sin confirmar: login → aparece el botón → clic → correo reenviado (status=sent en
+      logs de onia-mail) → clic en el enlace → sesión abierta; captura de cada paso.
+
 - [ ] 🔴 **Nadie probó que el correo de confirmación LLEGUE a una bandeja — y sin ese clic el
       alta nueva muere** (`app/auth/confirm/route.ts` · `scripts/alta_correo_confirma.mjs`)**.**
       Medido el 2026-09-10 con el circuito entero: GoTrue manda por Postfix
