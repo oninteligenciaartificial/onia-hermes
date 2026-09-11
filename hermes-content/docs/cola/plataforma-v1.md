@@ -3463,11 +3463,12 @@ y sin operar. Acá se opera, con verificación por ítem.
       `plataforma` (`t_bf1607af`), que sigue esperando el `ok` de Sergio Urcullo.
 
 
-- [ ] **El gate de camino de fallo cubre 2 de los 15 árboles de `app/`, y los huérfanos con
-      escritura son el embudo del cliente nuevo.** Medido el 2026-09-11 al cerrar el defecto de
+- [x] **CERRADO el 2026-09-11 (`ef69e9b`): el gate de camino de fallo cubría 2 de los 17
+      árboles de `app/`, y los huérfanos con escritura son el embudo del cliente nuevo.**
+      Medido al cerrar el defecto de
       `/cita`: `app/(dashboard)/camino-de-fallo.test.ts` y `app/(public)/camino-de-fallo.test.ts`
       derivan sus sujetos del disco —bien— pero sus raíces están escritas a mano
-      (`app/(dashboard)` y `app/(public)`), así que **13 árboles no son sujeto de nadie**.
+      (`app/(dashboard)` y `app/(public)`), así que **15 árboles no son sujeto de nadie**.
 
       Los que escriben hoy y quedan afuera: `app/(auth)` (registro, login, 2FA), `app/onboarding`
       (aplicar y extraer) y `app/checkout` (el comprobante de pago). Sus **seis** `fetch` están
@@ -3486,6 +3487,41 @@ y sin operar. Acá se opera, con verificación por ítem.
       las dos formas de escribir (`fetch` y server action), y validado por mutación agregando un
       árbol nuevo: tiene que **nombrarlo**, no ignorarlo.
 
+      **CÓMO QUEDÓ** (`app/camino-de-fallo-cubierto.test.ts`, 17 casos). El universo son los
+      **17 árboles derivados del disco**; lo que queda afuera va nombrado con su motivo **y el
+      motivo se vuelve a medir en cada corrida**. Hoy hay un solo exento —`app/api`, porque no
+      dibuja ninguna pantalla: cero `.tsx` y cero `"use client"`— y los dos que delegan
+      (`(dashboard)` y `(public)`) se re-miden exigiendo que su gate **exista y siga nombrando
+      su árbol**, porque allá la pregunta es más profunda y tienen exentos propios que no
+      conviene mantener en dos lugares. Los otros **catorce los barre este gate**.
+
+      La segunda mitad, `salidasMudasDeServerAction` en el módulo compartido: un `return;`
+      desnudo antes de la escritura, en una función **exportada** de un archivo `"use server"`,
+      devuelve la misma pantalla que si no se hubiera apretado. Las internas quedan afuera a
+      propósito — el aviso best-effort de `app/cita/acciones.ts` corre DESPUÉS de que la
+      decisión ya se guardó y ahí cortar callado es correcto.
+
+      **Validado por mutación, las cinco:** árbol nuevo con escritura ciega → **lo nombra**
+      (`app/facturacion/EmisorClient.tsx:4 (DELETE)`); el mismo árbol sano → verde, sin falso
+      positivo; server action con salida muda → rojo (`acciones.ts:36 (responderCita)`); gate
+      propio borrado → rojo; exención de `app/api` caducada (un `.tsx` ahí) → rojo.
+
+      **Un caso propio nació TAUTOLÓGICO y lo cazó leerlo, no correrlo:** preguntaba «¿está en
+      barridos o en declarados?» con `barridos` definido como «los que no están declarados», así
+      que no podía fallar nunca. Reescrito contra el EFECTO: los archivos del árbol tienen que
+      terminar en la lista que se barre.
+
+      **No había defecto vivo, y ése era el punto:** los cuatro árboles descubiertos que
+      escriben —`(auth)`, `checkout`, `onboarding`, `dev`— salieron limpios con los dos
+      detectores. Estaban sanos por diligencia, no por construcción.
+
+      Gates verdes en casa (`tsc` 0 · `vitest` 4503 · `eslint` 0 errores) y el gate nuevo
+      verde también en el VPS, sobre un árbol idéntico byte a byte — se comparó
+      `git rev-parse HEAD^{tree}` en las dos máquinas antes de pushear, porque `git am` aplica
+      sobre el HEAD de allá y publicaría otro árbol si el gemelo estuviera atrasado.
+
+      ⚠️ **Es un gate: no cambia nada que el cliente vea, así que no pide deploy.**
+
 ## Lo que este carril NO hace
 
 - **No toca los dos rubros bloqueados** (veterinaria, ganadería). Están fuera de la v1.0.
@@ -3495,6 +3531,60 @@ y sin operar. Acá se opera, con verificación por ítem.
 - **No le escribe a un prospecto.** Regla del [`README.md`](README.md) de esta carpeta.
 
 ## Cerrado
+
+- [x] **CERRADO el 2026-09-11: el recordatorio de renovación le reclamaba pagar a quien YA
+      había pagado — y a un cliente anual le cotizaba el mensual**
+      (`app/api/cron/renewal-reminders/route.ts` · `lib/subscription/cobro-del-plan.ts`,
+      commit `f2962df`).
+
+      Auditando lo recién entrado a `master` (el ciclo de renovación por QR, `26212f5`, con
+      ocho fixes encima en un día). El cron le preguntaba mal a `subscription_payments`, de
+      dos formas:
+
+      **1. La tabla es COMPARTIDA.** El add-on del chatbot cobra por la misma tabla, marcado
+      con `plan = "whatsapp_addon"`. El cron tomaba el `cycle` del último pago aprobado **sin
+      excluirlo**, así que a un cliente **anual** que compró el add-on **mensual** el
+      recordatorio le cotizaba **Bs 750 por una renovación de Bs 7.500**. La consecuencia la
+      describe el propio módulo de recordatorios: *«el dueño transfiere lo que el correo dice
+      y el cobro se rechaza por Monto declarado inválido: paga de menos y el plan no se
+      renueva»*. `app/checkout/page.tsx` **ya** excluía el add-on, con su motivo escrito al
+      lado (*«o un pago del add-on taparía el estado real de la suscripción»*); el cron nació
+      sin ese filtro. Por la misma puerta se colaba la cadencia: un plan semanal volvía a
+      recibir «vence en una semana» el día que lo pagó, que es lo que `887b3ea` cerró el día
+      anterior.
+
+      **2. De quién es la pelota.** Todo pago va a **revisión humana** (`activation.ts`: *una
+      captura de pantalla no es prueba de pago*), así que `PENDING` no es un caso raro: es el
+      camino **normal** entre que el cliente transfiere y que nosotros aprobamos. En ese hueco
+      el cron seguía mandando **«Tu plan venció — Renovar mi plan»** por correo, in-app y push
+      a quien ya había pagado. No es sólo mala cara: **lo invita a transferir dos veces.**
+
+      **Por qué no lo veía ningún gate:** no sobra ni falta una palabra, el monto sale de la
+      fuente única, el rol filtra bien, la fecha va en la zona del negocio y el rubro no entra.
+      Lo que estaba mal era **a quién se le preguntaba** y **qué estado se ignoraba**. Y el
+      hermano sano al lado —`estadoDelCheckout`, que **sí** sabe decir «en revisión»— hacía
+      leer la familia como cubierta.
+
+      **El corte va ANTES de reclamar el paso, a propósito:** si el comprobante se RECHAZA,
+      `planEnd` no se movió y mañana sale el recordatorio que corresponde (la pelota volvió a
+      ser suya); si se APRUEBA, `planEnd` avanza y el ciclo nuevo nace con sus pasos libres. El
+      silencio queda **medido** en la respuesta del cron (`enRevision`), porque un cero no se
+      distingue de la calma.
+
+      **De paso, el guardia hermano del monto estaba HUECO:** `monto-del-ciclo-que-paga.test.ts`
+      exigía `toContain("terminoDeRenovacion")` y **el `import` lo absolvía** — reemplacé la
+      llamada por un monto a mano y sus 6 casos siguieron en VERDE. Anclado a la asignación.
+      Sólo se ve mutando; leerlo no alcanza.
+
+      **Prueba:** 11 casos nuevos en `lib/subscription/cobro-del-plan.test.ts`, **en rojo
+      primero** por el motivo correcto (los 2 que miran al LLAMADOR). Seis mutaciones, seis
+      rojos: filtro fuera de la consulta · guarda muerta con `false &&` (literal intacto) ·
+      corte movido después del reclamo · el módulo contando el `PENDING` del add-on (callar de
+      más) · el ciclo sin filtrar · el monto armado a mano. Gates sobre el árbol real:
+      **4514 tests, `tsc` 0, `eslint` 0**.
+
+      ⏳ **Entregado, esperando merge a `master` y publicación** — el integrador lo toma de
+      `claude/chatbots-platform-review-0d1d09`; el pedido de deploy vivo es `t_0e451a15`.
 
 - [x] **CERRADO el 2026-09-11: el gate que prueba que el recordatorio de cita LLEGA llevaba
       días REVENTANDO EN ROJO, o sea acusando al producto de no entregar**
