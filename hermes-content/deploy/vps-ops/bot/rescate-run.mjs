@@ -46,6 +46,20 @@ export const MAX_EDAD_MS = 12 * 60 * 60 * 1000;
 /** Inboxes donde atiende el bot: 4 = Onia Web (widget), 5 = Onia WhatsApp. */
 export const INBOXES_BOT = [4, 5];
 
+/**
+ * Los motivos por los que NO salir nada es correcto — y por lo tanto no es un rescate fallido.
+ *
+ * Es una excusa, asi que va nombrada y con dueno: en `handoff_humano` el bot se calla A
+ * PROPOSITO porque la conversacion paso a una persona. Que esa persona tampoco haya
+ * contestado es real y es de `onia-vigia-sin-respuesta.sh` (cron 39 de cada 2 h); repetirlo
+ * aca cada 10 min duplicaria su aviso, que es como se entrena a no leer los avisos.
+ *
+ * Todo lo demas que no emite ES un fallo: `seleccionarHuerfanos` ya probo que en esa
+ * conversacion no hay ningun saliente. Enumerar motivos MALOS seria una lista de inclusion y
+ * fallaria abierto con el motivo nuevo que nadie previo; enumerar la excusa falla cerrado.
+ */
+export const MOTIVOS_SIN_RESCATE_AJENO = new Set(["handoff_humano"]);
+
 const ENTRANTE = 0;
 const SALIENTE = 1;
 
@@ -288,19 +302,188 @@ export function armarAvisoRescate(resultado) {
   ].join("\n");
 }
 
+/**
+ * El aviso del mensaje que NO se pudo rescatar — la mala noticia, y va en su PROPIO mensaje.
+ *
+ * No se mezcla con el de arriba a proposito: `onia-tg.sh` clasifica por la primera linea para
+ * decidir si el aviso es informativo o abre una tarea. Un mensaje que empiece con 🛟 y remate
+ * con un fallo se rutea como buena noticia y el lead perdido no le llega a nadie.
+ */
+export function armarAvisoPerdido(perdidos) {
+  const lista = (perdidos || []).filter(Boolean);
+  if (!lista.length) return null;
+  const cabeza =
+    lista.length === 1
+      ? "🔴 <b>Un mensaje quedo SIN contestar</b>"
+      : `🔴 <b>${lista.length} mensajes quedaron SIN contestar</b>`;
+  const lineas = lista.map(
+    (d) =>
+      `· conv ${d.conversationId}: espera hace ${d.edadMin} min — «${escaparHtml(d.texto)}» (${escaparHtml(d.motivo)})`,
+  );
+  return [
+    cabeza,
+    "El barrido lo reinyecto y el bot no emitio nada. Hay una persona esperando en la bandeja.",
+    ...lineas,
+  ].join("\n");
+}
+
+// ---------------------------------------------------------------------------
+// LA MEMORIA DEL AVISO — una sola vez por mensaje, y durable entre corridas.
+// ---------------------------------------------------------------------------
+
+/**
+ * Cuanto vive una marca. La ventana del huerfano es `MAX_EDAD_MS`; el doble deja margen para
+ * un reloj corrido y garantiza que una marca no pueda silenciar a un mensaje que TODAVIA es
+ * huerfano. Pasado eso se borra: sin purga el directorio crece para siempre.
+ */
+export const VIDA_MARCA_MS = MAX_EDAD_MS * 2;
+
+/** Donde viven las marcas en el VPS. Mismo patron que `/var/lib/onia-vigia-remotos/<id>`. */
+export const DIR_MARCAS_POR_DEFECTO = "/var/lib/onia-rescate-avisado";
+
+/**
+ * NINGUN TEST TOCA PRODUCCION. Medido el 2026-09-11: los casos que llamaban al barrido con
+ * `emitir: true` sin inyectar `deps.avisar` ni `deps.marcas` caian a los defaults REALES y
+ * (a) le crearon a Sergio Urcullo una tarea en el tablero afirmando que habia una persona
+ * esperando —era la sonda de QA, ya contestada— y (b), lo caro, escribieron la marca
+ * `chatwoot-11-873` en `/var/lib/onia-rescate-avisado/`: el lead REAL del 10-sep que motivo
+ * todo este archivo. Esa marca existe para no repetir un aviso ya entregado, asi que con
+ * ella puesta el aviso de ese mensaje deja de salir. El instrumento que existe para no
+ * perder un lead lo silencia su propio test, en verde.
+ *
+ * TIRA en vez de no-operar, y es la diferencia entre una baranda y un placebo: un no-op
+ * silencioso deja en verde a un caso que cree estar probando el aviso. Asi falla CERRADO —
+ * un caso futuro con `emitir: true` que no inyecte explota solo y con el nombre de lo que le
+ * falta—, y por eso no hace falta ademas un gate que parsee el archivo de tests buscando la
+ * forma del descuido: enumerar formas es una lista de inclusion y se le escapa la siguiente.
+ *
+ * `NODE_TEST_CONTEXT` lo define el runner de Node y NADIE mas (medido: `"child-v8"` adentro,
+ * `undefined` afuera). El cron corre `node rescate-run.mjs --emit` sin runner, asi que en
+ * produccion esta guarda no existe.
+ */
+export function guardaDeEfectoReal(que) {
+  if (!process.env.NODE_TEST_CONTEXT) return;
+  const error = new Error(
+    `hermetismo: un test llego al ${que} REAL del rescate. Inyectale deps.${que} al barrido ` +
+      `(o pasale un directorio propio a crearMarcasEnDisco): tocar produccion desde la suite ` +
+      `manda avisos falsos y, peor, deja marcas que silencian el aviso de un lead de verdad.`,
+  );
+  // Marcado para que el `try/catch` del aviso —que existe para que un Telegram caido no
+  // tumbe un rescate ya hecho— no se lo trague. Sin esto la baranda falla ABIERTA justo en
+  // el caso que viene a cuidar: el aviso queda silenciado y el test pasa en VERDE creyendo
+  // que lo probo. Un fallo de Telegram se aguanta; un test escrito mal, no.
+  error.hermetismo = true;
+  throw error;
+}
+
+/**
+ * El aviso de verdad: Telegram por `onia-tg.sh`, que desde el 08-sep enruta los 🔴 al tablero.
+ * Vive aca arriba y con nombre —en vez de ser un closure adentro del barrido— para que la
+ * guarda sea visible y para que un test pueda afirmar sobre ella sin ejecutarla.
+ */
+export async function avisarPorTelegram(texto) {
+  guardaDeEfectoReal("avisar");
+  const { execFile } = await import("node:child_process");
+  const { promisify } = await import("node:util");
+  await promisify(execFile)("/root/bin/onia-tg.sh", [texto]);
+}
+
+/**
+ * La clave es por MENSAJE, no por conversacion ni por vuelta: dos mensajes perdidos de la
+ * misma persona son dos leads distintos.
+ *
+ * Sin `conv` o sin `msg` devuelve `null` y NO se inventa una clave parcial: una clave
+ * compartida silenciaria mensajes que nadie miro. Y el id se valida entero en vez de
+ * sanearse, porque un id contaminado que "se limpia" produce una clave que colisiona con otra
+ * legitima — es mas seguro no tener marca (y avisar de mas) que tener la marca equivocada.
+ */
+export function claveDeMarca({ conversationId, messageId } = {}) {
+  const conv = String(conversationId ?? "");
+  const msg = String(messageId ?? "");
+  if (!/^[0-9A-Za-z_-]+$/.test(conv) || !/^[0-9A-Za-z_-]+$/.test(msg)) return null;
+  return `chatwoot-${conv}-${msg}`;
+}
+
+/**
+ * POR QUE UN ARCHIVO Y NO `bot_messages.message_key`, que ya es unique y ya existe.
+ *
+ * Se midio primero contra produccion el 2026-09-11, que era lo que pedia el item, y la tabla
+ * NO sirve — por dos razones independientes:
+ *
+ *   1. FK. `bot_messages.conversation_key` REFERENCES `bot_conversations(conversation_key)`.
+ *      El insert de la marca falla justo cuando el webhook nunca creo la conversacion, que es
+ *      EL peor modo de falla (401, puerto muerto, 500): no se puede recordar exactamente al
+ *      mensaje que mas hay que recordar, y el aviso volveria cada 10 min.
+ *   2. CONTABILIDAD. `direction` solo acepta `inbound|outbound` (CHECK), y `usage-run.mjs`
+ *      cuenta `direction=eq.outbound` para el uso que se le COBRA al cliente. Una marca ahi
+ *      es una conversacion facturada que nunca existio. Y `inbound` seria mentir sobre un
+ *      mensaje que no entro.
+ *
+ * El archivo no tiene ninguno de los dos problemas y la reserva es atomica: `wx` falla con
+ * EEXIST si ya estaba, asi que dos barridos simultaneos no pueden avisar los dos.
+ *
+ * `reservar` devuelve `true` (es nueva, avisar) · `false` (ya se aviso) · `null` (no pude
+ * preguntar). El `null` NO es `false`: se dice aparte, porque "no pude recordar" y "ya avise"
+ * llevan a decisiones distintas.
+ */
+export function crearMarcasEnDisco(dir) {
+  const elegido = dir || process.env.ONIA_RESCATE_MARCAS;
+  // Un directorio propio (o `ONIA_RESCATE_MARCAS`) es hermetico y se deja pasar: la baranda
+  // no puede volver intesteable a la parte que SI hay que probar. Lo que no se deja pasar es
+  // caer al directorio de produccion desde la suite.
+  if (!elegido) guardaDeEfectoReal("marcas");
+  const destino = elegido || DIR_MARCAS_POR_DEFECTO;
+  const fs = () => import("node:fs");
+  return {
+    async reservar(clave) {
+      if (!clave) return null;
+      try {
+        const { mkdirSync, openSync, closeSync } = await fs();
+        const { join } = await import("node:path");
+        mkdirSync(destino, { recursive: true });
+        closeSync(openSync(join(destino, clave), "wx"));
+        return true;
+      } catch (error) {
+        if (error && error.code === "EEXIST") return false;
+        return null;
+      }
+    },
+    async liberar(clave) {
+      if (!clave) return;
+      try {
+        const { rmSync } = await fs();
+        const { join } = await import("node:path");
+        rmSync(join(destino, clave), { force: true });
+      } catch {
+        // Soltar la marca es best-effort: si falla, el peor caso es un aviso que no se repite.
+      }
+    },
+    async purgar(antesDeMs) {
+      try {
+        const { readdirSync, statSync, rmSync } = await fs();
+        const { join } = await import("node:path");
+        for (const nombre of readdirSync(destino)) {
+          const ruta = join(destino, nombre);
+          if (statSync(ruta).mtimeMs < antesDeMs) rmSync(ruta, { force: true });
+        }
+      } catch {
+        // Que no se pueda limpiar no puede tumbar un barrido: a lo sumo queda un archivo de
+        // mas. Lo que no se hace es tratar el fallo como "no habia marcas".
+      }
+    },
+  };
+}
+
 export async function runRescateSweep(options = {}, deps = {}) {
   const ahoraMs = Number.isFinite(options.ahoraMs) ? options.ahoraMs : Date.now();
   const emitir = options.emitir === true;
   const limite = Number.isFinite(options.limit) && options.limit > 0 ? Math.floor(options.limit) : 20;
   const leerFilas = deps.leerFilas || leerFilasDeChatwoot;
   const postWebhook = deps.postWebhook || postAlWebhook;
-  const avisar =
-    deps.avisar ||
-    (async (texto) => {
-      const { execFile } = await import("node:child_process");
-      const { promisify } = await import("node:util");
-      await promisify(execFile)("/root/bin/onia-tg.sh", [texto]);
-    });
+  const avisar = deps.avisar || avisarPorTelegram;
+  // Perezoso: en seco no se avisa ni se marca nada, asi que construir el almacen real seria
+  // pedirle permiso de escritura a produccion para no usarlo.
+  const marcas = deps.marcas || (emitir ? crearMarcasEnDisco() : null);
 
   const filas = await leerFilas({ desdeMs: ahoraMs - MAX_EDAD_MS - MIN_EDAD_MS, ahoraMs });
   const huerfanos = seleccionarHuerfanos(filas, { ahoraMs }).slice(0, limite);
@@ -321,11 +504,15 @@ export async function runRescateSweep(options = {}, deps = {}) {
       const veredicto = clasificarRespuesta(enviado?.respuesta);
       linea.resultado = veredicto.motivo;
       if (veredicto.contestado) resultado.contestados += 1;
-      // No poder LEER el resultado no es "no paso nada": es un desconocido que quiza quedo
-      // sin contestar y nadie lo sabe. Salia con exit 0 y "0 CONTESTADOS", igual que una
-      // vuelta sin trabajo — asi el testigo roto del 3-sep vivio doce corridas en silencio.
-      else if (veredicto.motivo === "respuesta_ilegible") {
-        resultado.fallidos.push({ ...linea, motivo: "respuesta_ilegible del webhook" });
+      // NO EMITIR ES FALLAR, y no hace falta opinar sobre el motivo para saberlo:
+      // `seleccionarHuerfanos` ya probo que esta conversacion no tiene NINGUN saliente, asi
+      // que una reinyeccion sin `sent` dejo a la persona tan muda como estaba. Antes solo
+      // caia aca `respuesta_ilegible` —la mitad de la familia—, y el resto salia con exit 0
+      // y "0 CONTESTADOS", identico a una vuelta sin trabajo: asi el testigo roto del 3-sep
+      // vivio doce corridas en silencio, y el "hola" del 10-sep (conv 11 msg 873, inbox 5)
+      // cuatro mas, hasta que la persona volvio a escribir sola.
+      else if (!MOTIVOS_SIN_RESCATE_AJENO.has(veredicto.motivo)) {
+        resultado.fallidos.push({ ...linea, motivo: `reinyectado y sin respuesta (${veredicto.motivo})` });
       }
     } catch (error) {
       // El fallo de uno no puede cancelar el rescate de los otros: son leads distintos.
@@ -333,15 +520,44 @@ export async function runRescateSweep(options = {}, deps = {}) {
     }
   }
 
+  // LO PERDIDO TAMBIEN SE AVISA, pero UNA SOLA VEZ POR MENSAJE. La ventana del huerfano son
+  // 12 h y el cron corre cada 10 min: avisar por vuelta serian hasta 72 mensajes identicos por
+  // el MISMO lead, que es como se entrena a no leer los avisos. La marca se reserva ANTES de
+  // mandar —igual que el recordatorio (M9)—, asi que si no se puede reservar no se manda: el
+  // fallo ya vive en el log y en el `exit 1`, y repetirlo 72 veces seria peor que no decirlo.
+  const perdidos = [];
+  if (emitir) {
+    await marcas.purgar(ahoraMs - VIDA_MARCA_MS);
+    for (const f of resultado.fallidos) {
+      const reserva = await marcas.reservar(claveDeMarca(f));
+      if (reserva === true) perdidos.push(f);
+      else if (reserva === null) {
+        (resultado.marcasFallidas ||= []).push(
+          `conv ${f.conversationId} msg ${f.messageId}: no se pudo recordar el aviso, no se manda`,
+        );
+      }
+    }
+  }
+
   // Telegram es el TESTIGO del rescate, no el rescate. Si el aviso falla, la persona ya fue
   // contestada igual: tirar aca convertiria un exito en un exit 2 y el proximo barrido
   // reinyectaria de gusto.
-  const aviso = emitir ? armarAvisoRescate(resultado) : null;
-  if (aviso) {
+  const avisos = emitir
+    ? [
+        { texto: armarAvisoRescate(resultado), reservados: [] },
+        { texto: armarAvisoPerdido(perdidos), reservados: perdidos },
+      ].filter((a) => a.texto)
+    : [];
+  for (const { texto, reservados } of avisos) {
     try {
-      await avisar(aviso);
+      await avisar(texto);
     } catch (error) {
+      if (error?.hermetismo) throw error; // un test sin `deps.avisar` se entera, no se silencia
       resultado.avisoFallido = String(error?.message || error);
+      // La marca existe para no repetir un aviso ENTREGADO. Si Telegram se cayo, ese lead no
+      // se anuncio nunca: se suelta para que el barrido siguiente lo reintente, o la reserva
+      // dejaria de evitar ruido y pasaria a tragarse al unico aviso que importaba.
+      for (const f of reservados) await marcas.liberar?.(claveDeMarca(f));
     }
   }
   return resultado;
@@ -366,7 +582,9 @@ if (esCLI) {
         const veredicto = d.resultado ? ` -> ${d.resultado}` : "";
         console.log(`conv ${d.conversationId} msg ${d.messageId} — ${d.edadMin} min sin respuesta — "${d.texto}"${veredicto}`);
       }
-      for (const f of r.fallidos) console.log(`FALLO conv ${f.conversationId}: ${f.motivo}`);
+      for (const f of r.fallidos) console.log(`FALLO conv ${f.conversationId} msg ${f.messageId}: ${f.motivo}`);
+      for (const m of r.marcasFallidas || []) console.log(`SIN MARCA ${m}`);
+      if (r.avisoFallido) console.log(`AVISO NO ENTREGADO: ${r.avisoFallido}`);
       console.log(
         `${r.huerfanos} sin respuesta · ${r.reinyectados} reinyectados · ${r.contestados} CONTESTADOS${opciones.emitir ? "" : " (SECO — agregar --emit)"}`,
       );

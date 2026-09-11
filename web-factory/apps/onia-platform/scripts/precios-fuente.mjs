@@ -342,6 +342,7 @@ export function cifrasDelProducto({ planes, addons, prueba, limites }) {
   const chatbot = bloqueExportado(addons ?? "", "WHATSAPP_ADDON");
   const reservas = bloqueExportado(addons ?? "", "BOOKING_ADDON_PRICE");
   const usuario = bloqueExportado(addons ?? "", "EXTRA_USER_ADDON_PRICE");
+  const recarga = bloqueExportado(addons ?? "", "RECARGA_CONVERSACIONES");
   const grupo = bloqueExportado(addons ?? "", "ENTERPRISE_PLAN_PRICE");
   const trial = prueba?.match(/TRIAL_PLAN\s*=\s*"([a-z]+)"/);
   const l = limitesDelProducto(limites ?? "");
@@ -377,6 +378,15 @@ export function cifrasDelProducto({ planes, addons, prueba, limites }) {
      * enteraba pagando, cuando sus clientes recibían «se agotaron».
      */
     "add-on chatbot · conversaciones por mes": num(chatbot, "includedConversations"),
+    /**
+     * La recarga: el extra que se COBRA cuando el cupo se agota. Entró a este
+     * cruce el 2026-09-11, con el mismo argumento que el cupo un lustro de
+     * vueltas antes — el sitio lo ofrecía («podés sumar más») sin nombrar el
+     * precio, así que no había cifra publicada que pudiera compararse y el
+     * hueco no era visible desde ninguno de los dos lados.
+     */
+    "recarga del chatbot · conversaciones": num(recarga, "conversaciones"),
+    "recarga del chatbot · precio": num(recarga, "precio"),
     "add-on reservas online · mensual": num(reservas, "monthly"),
     "add-on usuario extra · mensual": num(usuario, "monthly"),
     "add-on usuario extra · máximo en Básico": num(usuario, "basicMaxSeats"),
@@ -560,6 +570,12 @@ export const CONSTANTES_VERIFICADAS_APARTE = [
       "tampoco es un tope: es a que rubros llega el agente Recall, acotado por los DATOS que lee (patient + appointment) y no por la pantalla",
     cruzadaPor: "src/app/capacidad-acotada.test.ts",
   },
+  {
+    valor: "ALCANCE_CON_AGENDA",
+    porque:
+      "tampoco es un tope: es a que rubros les llega la agenda, y con ella la reserva publica — comercio e importadora no tienen una sola ruta de citas en su pack",
+    cruzadaPor: "src/app/capacidad-en-la-enumeracion.test.ts",
+  },
 ];
 
 /** Excusas de constante que ya no tienen sujeto: nadie las mide y quedan pre-aprobadas. */
@@ -689,6 +705,7 @@ export function cifrasDelSitio({ precios, chatbot }) {
   const prueba = bloqueExportado(precios ?? "", "PRUEBA");
   const planPrueba = valorResuelto(prueba, "planQueCorre", precios ?? "", { texto: true });
   const stacks = bloqueExportado(chatbot ?? "", "CHATBOT_STACKS");
+  const recarga = bloqueExportado(chatbot ?? "", "RECARGA");
   const ls = limitesDelSitio(precios ?? "");
   /** Re-llavado al id del producto para que las claves salgan identicas. */
   const lsPorProducto = Object.fromEntries(
@@ -728,6 +745,8 @@ export function cifrasDelSitio({ precios, chatbot }) {
     /** `export const X = N`, no una clave de objeto — como los del trial. */
     "add-on chatbot · conversaciones por mes":
       Number(chatbot?.match(/CONVERSACIONES_INCLUIDAS\s*=\s*(\d+)/)?.[1] ?? NaN) || null,
+    "recarga del chatbot · conversaciones": num(recarga, "conversaciones"),
+    "recarga del chatbot · precio": num(recarga, "precio"),
     "add-on reservas online · mensual": num(agenda, "mensualAddon"),
     "add-on usuario extra · mensual": num(usuario, "mensualAddon"),
     "add-on usuario extra · máximo en Básico": num(usuario, "maxEnBasico"),

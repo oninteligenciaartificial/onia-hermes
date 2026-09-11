@@ -1,21 +1,18 @@
 import type { ReactNode } from "react";
 import { ALCANCE_CON_FICHA, PRUEBA } from "@/lib/pricing";
+import { RUBROS_EN_PROSA, RUBROS_VIVOS } from "@/content/rubros";
 import { Row, Shot } from "./shot";
 import { Reveal, SplitTextReveal, StaggerGrid, StaggerItem } from "@/motion";
 import styles from "./landing.module.css";
 
-/**
- * Los rubros NO se tocan: los seis vivos van con el punto de encendido y los
- * que vienen quedan a la vista en punteado (mismos nombres que publica la
- * pantalla real de registro y la FAQ — nada inventado).
+/*
+ * Los rubros NO se tipean acá: salen de `@/content/rubros`, que es la única
+ * lista, y el título de la sección se DERIVA de ella. Hasta el 2026-09-11 el
+ * título enumeraba cuatro ("clínicas, comercios, importadoras y profesionales")
+ * y la banda de abajo listaba cinco: faltaba Estética, un rubro vivo, así que
+ * su dueño leía el encabezado de la sección de módulos y concluía que Onia no
+ * era para él. El motivo y por qué ningún gate podía verlo están en ese archivo.
  */
-const RUBROS_VIVOS = [
-  "Dental",
-  "Comercio",
-  "Importadora",
-  "Estética",
-  "Servicios",
-] as const;
 
 // REGLA de Sergio (2026-08-20): en la venta NUNCA se muestra lo que esta en
 // construccion — "muy pronto" le dice al cliente "esto no esta listo" y un solo
@@ -274,15 +271,15 @@ export function Features() {
           <SplitTextReveal
             as="h2"
             className={styles.sectionTitle}
-            text="Módulos para clínicas, comercios, importadoras y profesionales."
+            text={`Módulos para ${RUBROS_EN_PROSA}.`}
           />
         </div>
 
         <Reveal className={styles.rubrosBand}>
           <span className={styles.rubrosLabel}>Andando hoy</span>
           {RUBROS_VIVOS.map((rubro) => (
-            <span key={rubro} className={styles.rubroLive}>
-              {rubro}
+            <span key={rubro.chip} className={styles.rubroLive}>
+              {rubro.chip}
             </span>
           ))}
           <a className={styles.rubroSoon} href="/prueba-gratis">

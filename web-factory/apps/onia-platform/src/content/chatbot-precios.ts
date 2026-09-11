@@ -71,6 +71,33 @@ export type StackId = "whatsapp";
  */
 export const CONVERSACIONES_INCLUIDAS = 500;
 
+/**
+ * El EXTRA que se compra cuando el cupo se agota — ESPEJO de
+ * `RECARGA_CONVERSACIONES` (`onia-platform/lib/pricing.ts`), cruzado por
+ * `scripts/precios-fuente.mjs` igual que `CONVERSACIONES_INCLUIDAS`.
+ *
+ * ⚠️ Nace de un hueco medido el 2026-09-11. El cupo ya se nombraba (06-sep) y
+ * su salida terminaba en «y podés sumar más»: un extra PAGO ofrecido sin decir
+ * **cuánto cuesta** ni **cuánto dura**. Las dos mitades le cuestan plata al
+ * dueño y ninguna era visible para un barrido de este proyecto — no sobra una
+ * palabra prohibida, la cifra publicada salía de la fuente y el precio del
+ * extra no aparecía en ninguna página (medido: `Bs 190` daba 0 en la home,
+ * `/chatbot` y `/precios`), así que no había número que pudiera estar mal.
+ *
+ * La caducidad es la mitad que más engaña, porque lo natural es suponer que lo
+ * comprado se acumula: `aplicarRecarga()` escribe `recargadas` en la fila del
+ * MES en curso (`chatbot_uso_mensual`, clave `organizationId_mes`), así que el
+ * 1 empieza una fila nueva en cero y **lo que se pagó no viaja**. Es el mismo
+ * escalón que el cupo, un paso más abajo: ahí se callaba cuánto te dan, acá
+ * cuánto te dura. Guarda: `(sitio)/extra-que-caduca.test.ts`.
+ */
+export const RECARGA = {
+  /** Conversaciones que suma una recarga. */
+  conversaciones: 200,
+  /** Bs que cuesta esa recarga. */
+  precio: 190,
+} as const;
+
 export interface ChatbotStack {
   readonly id: StackId;
   /** Etiqueta corta de la celda. No hay escalera: es un solo servicio. */
@@ -103,7 +130,11 @@ export const CHATBOT_STACKS: readonly ChatbotStack[] = [
       // cualquier hora» — no al pie ni en una FAQ. Y con su salida: al
       // agotarse la conversación NO se pierde, pasa a una persona. Es lo que
       // el producto hace de verdad (`cupo.ts` → textoDeCupo).
-      `Atiende hasta ${CONVERSACIONES_INCLUIDAS} conversaciones por mes; si se agotan, las nuevas pasan a una persona de tu equipo y podés sumar más`,
+      //
+      // El extra va con su PRECIO y su VIGENCIA en la misma frase: ofrecerlo
+      // como «podés sumar más» callaba que se cobra y que muere el 1 (ver
+      // `RECARGA`). Una salvedad en la oración siguiente es de otra promesa.
+      `Atiende hasta ${CONVERSACIONES_INCLUIDAS} conversaciones por mes; si se agotan, las nuevas pasan a una persona de tu equipo, y podés sumar ${RECARGA.conversaciones} más por Bs ${fmtBs(RECARGA.precio)}, que valen hasta fin de mes y no se acumulan`,
       "Responde con la información real que vos publicaste: horarios, servicios y los datos de la cita",
       "No inventa ni cotiza por su cuenta: solo dice lo que vos cargaste",
       "Lo que no sabe se lo pasa a una persona, con la conversación completa",
@@ -135,12 +166,59 @@ export const A_MEDIDA =
   "¿Necesitás flujos propios, integraciones o más volumen? Se cotiza a medida.";
 
 /**
+ * La ventana de 24 h de WhatsApp — el dato AJENO que le cotizamos al lead y que
+ * **Meta cambia por su cuenta en una fecha ya anunciada**.
+ *
+ * Vive acá, declarado, porque es la clase de afirmación que no se puede vigilar
+ * mirando la pantalla: hasta el 30-sep-2026 *«responder dentro de las 24 horas
+ * no lo cobra Meta»* es **verdad**, así que ningún barrido de este proyecto
+ * podía verla — no sobra una palabra prohibida, no hay cifra fuera de fuente,
+ * no promete trabajo humano, no es rubro ni plan ni rol, y está escrita en
+ * PRESENTE, así que `plazo-que-vence.test.ts` (que persigue el futuro) tampoco
+ * la alcanza. El defecto **nace el 1 de octubre**, sobre un sitio estático que
+ * se hornea en el build y se queda quieto hasta un swap manual.
+ *
+ * Y es plata del cliente: le prometemos que responder no le cuesta, y el día
+ * que deje de ser cierto se entera **por su propia factura de Meta**. El aviso
+ * estaba escrito en dos lados y en ninguno podía ejecutarse solo —
+ * `onia-platform/lib/pricing.ts` («⚠️ REVISAR ANTES DEL 1-OCT-2026 … hay que
+ * avisárselo antes de que le llegue») y la fila de `ONIA_FECHAS_CRITICAS_PLAN.md`,
+ * que nombra este archivo y a quien lo edite—: un comentario que declara una
+ * acción pendiente desactiva la auditoría, porque el que lo lee da el tema por
+ * atendido.
+ *
+ * ⚠️ **El arreglo NO es sacar la frase** (eso pierde un dato que al lead le
+ * importa) **ni atarla al reloj** (en una página estática el valor se congela
+ * en el build: la trampa que la casa ya pagó). Va la redacción que **no
+ * caduca** — la condición con su fecha, verdadera antes y después del 1-oct —,
+ * el mismo criterio con el que se resolvió el plazo del SIN.
+ *
+ * Fuente primaria (Meta, verificada 2026-08-17), con el cálculo en Bs:
+ * `hermes-content/docs/ONIA_FECHAS_CRITICAS_PLAN.md` §3.
+ */
+export const META_VENTANA_24H = {
+  /** Último día en que Meta no cobra las respuestas dentro de la ventana. */
+  hasta: "30 de septiembre de 2026",
+  /** El día que empieza a cobrarlas: la fecha que la frase DEBE nombrar. */
+  desde: "1 de octubre de 2026",
+  /** Dónde está verificado. Un dato ajeno sin fuente es una cifra inventada. */
+  fuente: "ONIA_FECHAS_CRITICAS_PLAN.md §3 — Meta, Upcoming pricing updates",
+} as const;
+
+/**
  * Meta: el cliente le paga a Meta DIRECTO, en su propia cuenta. Nosotros no
  * facturamos esos mensajes ni les sumamos nada encima (decisión 2026-08-21:
  * se cae el +20 %). Una sola redacción para todas las pantallas.
+ *
+ * La ventana de 24 h se DERIVA de `META_VENTANA_24H`: así la promesa no se
+ * puede escribir sin su fecha. Ver `(sitio)/condicion-de-tercero.test.ts`.
  */
 export const META_NOTA =
-  "Los mensajes que Meta cobra los pagás vos, directo a Meta y en tu propia cuenta: no pasan por nuestra factura y no les sumamos nada encima. Responder dentro de las 24 horas desde que el cliente escribe no lo cobra Meta.";
+  "Los mensajes que Meta cobra los pagás vos, directo a Meta y en tu propia cuenta: " +
+  "no pasan por nuestra factura y no les sumamos nada encima. Meta fija esas tarifas y " +
+  "las cambia por su cuenta: responder dentro de las 24 horas desde que el cliente " +
+  `escribe no te cuesta hasta el ${META_VENTANA_24H.hasta}, y desde el ` +
+  `${META_VENTANA_24H.desde} Meta también cobra esas respuestas.`;
 
 export function fmtBs(v: number): string {
   return Math.round(v).toLocaleString("es-BO");

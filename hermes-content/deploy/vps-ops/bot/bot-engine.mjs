@@ -89,6 +89,10 @@ export function createState(input = {}) {
     // que un humano haya llegado, solo que el bot derivo; sin esta marca la persona escribe al
     // vacio. Se persiste en `bot_conversations.raw`, no en columna: no hace falta DDL.
     handoffAckAt: input.handoffAckAt || null,
+    // Cuando se MARCO como urgente (dijo "urgente" — la palabra que M5 le pidio — o dijo que
+    // quiere comprar). Una sola vez por conversacion: el aviso ya le llega a Sergio Urcullo por
+    // un canal saturado, y repetirlo es apagarlo. Vive en `raw`, como handoffAckAt: sin DDL.
+    urgenteAvisadoAt: input.urgenteAvisadoAt || null,
     optInAt: input.optInAt || null,
     optInSource: input.optInSource || null,
     optOutAt: input.optOutAt || null,
@@ -187,6 +191,7 @@ function reiniciarConversacionVencida(state) {
     humanTookOver: false,
     humanTookOverAt: null,
     handoffAckAt: null,
+    urgenteAvisadoAt: null,
     slotsOffered: [],
     scheduledAt: null,
     scheduledLabel: null,
@@ -230,6 +235,7 @@ export function toConversationRow(state) {
       scheduledLabel: state.scheduledLabel,
       branchAsked: state.branchAsked,
       handoffAckAt: state.handoffAckAt,
+      urgenteAvisadoAt: state.urgenteAvisadoAt,
     },
   };
 }
@@ -699,6 +705,28 @@ export function step(state, incoming, options = {}) {
       // que ver Sergio") dejaba mudo al mensaje siguiente. Del otro lado hay una persona que ve
       // su mensaje entregado y ninguna respuesta, nunca.
       //
+      // LO QUE EL GUION PIDIO SE ESCUCHA, Y SE ESCUCHA SIEMPRE — no solo en el primer turno.
+      // M5 cierra con «Si es urgente, decime "urgente" y lo marco» (y M8_SOPORTE igual). Hasta
+      // el 2026-09-10 esa palabra no existia en ningun .mjs: caia en el acuse generico la
+      // primera vez y en el `silencio` de abajo las siguientes. Lo mismo le pasaba a la senal
+      // mas cara que existe — "quiero comprar el sistema, cuando puedo pagar" — que es el T5 de
+      // la cola de la v1.0. Va ANTES del candado del acuse a proposito: el acuse se gasta con
+      // el primer inbound y la compra casi siempre llega despues.
+      //
+      // UNA sola vez por conversacion, igual que el acuse: el aviso viaja a un canal que ya le
+      // llega saturado a Sergio Urcullo, y repetirlo es apagarlo. El aviso del handoff ya salio
+      // antes con `handoffResult`; este es OTRO, y por eso lleva kind propio.
+      if (!base.urgenteAvisadoAt && intents.needsHumanNow(msg.norm)) {
+        const razon = intents.wantsToBuy(msg.norm) ? "quiere_comprar" : "lo_marco_urgente";
+        const marcado = { ...base, urgenteAvisadoAt: msg.receivedAt || new Date().toISOString() };
+        return finalize(
+          ctx,
+          marcado,
+          [say("M5_URGENTE", marcado, config)],
+          [{ type: "notify_sergio", payload: { kind: "handoff_urgente", reason: razon, conversationKey: marcado.conversationKey, text: summarize(marcado, msg, razon, config) } }],
+          [`handoff:${razon}`],
+        );
+      }
       // UNA sola vez: acusar cada mensaje seria spam, y encima taparia a Sergio cuando entre.
       if (base.handoffAckAt) return finalize(ctx, base, [], [], ["silencio:handoff_en_curso"]);
       const acusado = { ...base, handoffAckAt: msg.receivedAt || new Date().toISOString() };

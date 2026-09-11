@@ -1,164 +1,195 @@
 # Plan de videos día por día · vie 11 → dom 20 sep
 
-> Sergio Urcullo, 2026-09-10: estructura de contenido decidida por él:
+> Estructura de contenido de Sergio Urcullo (10-sep) + corrección del 11-sep:
 >
-> - **Feed** (3/día): pilar (edita Samuel) · b-roll (Sergio-Samuel) · video normal (Sergio).
->   **Un carrusel reemplaza al b-roll** el día que toca carrusel.
-> - **Trial** (4/día): los 3 del feed re-subidos como trial + 1 **yap** — un video del
->   día **replicado por Samuel con OTRA edición** (otro gancho, otro corte, otros
->   subtítulos): mismo material, segunda chance en el algoritmo.
->   **El yap es carril de Samuel**: él elige qué video replicar y cómo — las filas "Yap"
->   de abajo son sugerencias, no órdenes.
-> - **Trial v2** (3-5/día): Sergio hablando a cámara sobre IA, cero o mínima edición.
-> - Total: **10-13 videos/día**.
+> - **Feed** (3/día): pilar · b-roll (o carrusel, cuando toca) · video normal.
+> - **Trial** (4/día): los 3 del feed + 1 yap (replicar un video del día con otra edición).
+> - **Trial v2** (3-5/día): Sergio a cámara, temas de IA, cero o mínima edición.
 >
-> Vence el dom 20. La semana del 21 se planifica el **vie 18** (regla: el tema se elige
-> el viernes).
+> **Reparto corregido el 11-sep:** los **pilares los define Samuel** (se hicieron el día
+> de grabación) y los **yaps son carril de Samuel**. Este doc lleva SOLO lo de Sergio:
+> **el b-roll/carrusel de cada día y los temas a cámara** — serios, de IA, que generen
+> valor por sí solos y que puedan madurar a **video largo de YouTube**.
+>
+> El **video normal** del feed sale de acá mismo: el mejor de los 3 temas del día, con
+> edición mínima. No es una cuarta cosa que grabar.
+>
+> Vence el dom 20. El tema de la semana del 21 se elige el **vie 18**.
 
-## Reglas que aplican a todo el plan
+## Reglas
 
-1. **Fable caduca:** su carrusel sale MAÑANA vie 11 o se tira. Va primero.
-2. Los videos diarios cierran a la **comunidad** (link en perfil). **Sólo** el dom 20 y
-   el lun 21 prometen la guía — el recurso existe (`/stack`).
-3. **Nada de Higgsfield** como tema (cobro anual en reclamo) y **nada de Onia producto**.
-4. Los "a cámara" salen del mapa de temas (filas `P`): temas que Sergio tiene andando.
-5. **Grabar en lote:** el sáb 12 se graban los 6 de la semana (guiones listos) y de una
-   vez **15 a cámara** (la lista de abajo) — 3 se publican por día, sin editar.
-6. Guiones palabra por palabra de los pilares de la semana:
-   [`GUIONES-SEMANA-1-MI-STACK.md`](GUIONES-SEMANA-1-MI-STACK.md).
+1. **Fable caduca:** su carrusel sale HOY vie 11 o se tira.
+2. Los videos cierran a la **comunidad**. Sólo dom 20 / lun 21 prometen la guía (existe).
+3. **Nada de Higgsfield** (cobro en reclamo) y **nada de Onia como producto**.
+4. Todos los temas salen de lo que Sergio **tiene andando y puede mostrar en pantalla**.
+5. Lo que salió mal con detalle es de la **comunidad** — a cámara se cuenta la tesis, no
+   el archivo del fracaso.
+6. **Grabar en lote:** sáb 12, los 30 temas de una sentada (misma ropa, un tema por toma).
+   Publicar 3/día es trivial; grabar 3/día te mata.
 
-## Los 4 carruseles de IG, repartidos
+## Los 4 carruseles (reemplazan al b-roll ese día)
 
-| Día | Carrusel (reemplaza al b-roll) | Por qué ese día |
+| Día | Carrusel | Por qué |
 |---|---|---|
-| vie 11 | **FABLE** (8 lám.) | caduca — hoy o nunca |
-| dom 13 | **FOUNDERS BO** (1 lám.) | domingo = humor compartible |
-| lun 14 | **RESPUESTAS** (4 lám.) | el día WhatsApp de la semana — cubre el video que se cortó |
-| jue 17 | **DUELO CUADERNO** (1 lám.) | día fuerte de la semana; pega con dueños |
+| vie 11 | **FABLE** | caduca hoy |
+| dom 13 | **FOUNDERS BO** | domingo compartible |
+| lun 14 | **RESPUESTAS** | el día WhatsApp — cubre el video cortado |
+| jue 17 | **DUELO CUADERNO** | día fuerte, pega con dueños |
 
 ---
 
-## VIE 11
+## Los temas del día — IA seria, cada uno con salida a YouTube
 
-| Slot | Idea |
-|---|---|
-| Pilar (Samuel) | **«Guardá esto antes de pagarle a una agencia»** — 3 cosas que un negocio hace solo con IA, y cuándo SÍ pagar (formato validado: 47K en TikTok). CTA: comunidad |
-| ~~B-roll~~ → Carrusel | **FABLE** |
-| Normal (Sergio) | El dato de Fable hablado en 30 s: «1 de cada 3 tareas de oficina, de punta a punta» → «el detalle está en el carrusel de hoy» |
-| Yap (Samuel) | El pilar anti-agencia, re-editado: otro gancho en los primeros 3 s («esto una agencia te lo cobra $500») y corte más rápido |
-| A cámara ×3 | Qué es un VPS y cuándo conviene contra tu propia PC · Qué NO le delegaría nunca a una IA · La diferencia entre pedirle algo a la IA y que lo haga sola |
+> Formato a cámara: gancho de una frase · la tesis con TU ejemplo real · cierre a
+> comunidad. El marcado 🎥 es el candidato natural del día a video largo de YT.
 
-## SÁB 12 — día de grabación en lote
+> 🔴 **Regla nueva del 11-sep** (corrección de Sergio Urcullo: *"esta por ejemplo no
+> explica agente de qué o qué"*): ningún a-cámara habla en abstracto. **Cada uno ancla en
+> UNA cosa suya, con nombre y pantalla** — y cada uno es el **trailer de un video de la
+> serie de YT**, para que el corto que pegue ya tenga su video largo esperando.
 
-| Slot | Idea |
-|---|---|
-| Pilar (Samuel) | **Interactivo:** «Decime qué negocio tenés en los comentarios y te digo qué automatizaría primero» (validado: 18K) — alimenta General y el D6 |
-| B-roll | Detrás de escena de la grabación: trípode, mate, 6 guiones impresos. Texto: «así se graba una semana entera en una tarde» |
-| Normal (Sergio) | «Por qué grabo los 6 videos de la semana en una sola tarde» — sistema, no motivación |
-| Yap (Samuel) | El interactivo, re-editado: gancho invertido — arranca por un ejemplo de respuesta («a una ferretería le automatizaría esto») y recién ahí pregunta |
-| A cámara ×3 | Por qué una notebook vieja es mejor servidor que una PC · Cuánta luz gasta un servidor prendido (la cuenta W×24×30) · Qué es Docker, sin jerga |
+### VIE 11 · B-roll → carrusel FABLE
 
-📌 **Además hoy:** grabar los 6 de la semana + el lote de 15 a cámara de abajo.
+1. 🎥 **«Tengo un programa que vigila mi empresa. Si algo se rompe, me escribe.»**
+   — Gancho: eso. Concreto: «Eso es un agente, y no es el chat que usás. El chat contesta:
+   le preguntás, te dice cómo. Un agente ACTÚA solo. El mío vive en una PC en mi casa,
+   revisa que todo siga andando y cuando un servicio se cayó a las 3 AM, me enteré a las
+   3:01 por un mensaje — sin que yo hiciera nada. Otro guarda y respalda mi trabajo cada
+   vez que termino, porque yo nunca me acuerdo. El chat te ayuda a pensar; el agente te
+   reemplaza en lo repetido.» Cierre: «La serie de cómo armé esto ya está en mi canal de
+   YouTube — link en el perfil.» *(trailer del video 03)*
+2. **«Mi IA tiene prohibido tocar plata. No es desconfianza — es diseño.»**
+   — Concreto: «Tres reglas escritas en mi sistema. Una: ningún agente mío paga,
+   transfiere ni cambia un precio — el agente PREPARA el cobro, el botón lo aprieto yo.
+   Dos: un cliente enojado nunca habla con un bot — el bot detecta el tono y me lo pasa.
+   Tres: nada que no sepa explicar — si no entiendo lo que hizo, no puedo revisar si lo
+   hizo bien. La IA ejecuta; la responsabilidad no se delega.» Cierre: comunidad.
+   *(trailer del video 04 — verificar en vez de creerle)*
+3. **«¿La IA es carísima? Mi empresa corre con UNA suscripción. La cuenta:»**
+   — Concreto: «Pago una sola herramienta: la que piensa. Las automatizaciones, el que
+   vigila, el que publica — software libre en una PC vieja en mi casa, gratis. El peligro
+   real no es la suscripción: es el gasto por uso mal configurado. Un día el mío se
+   disparó y el 74% era UN solo proceso mal armado. Desde entonces: techo de gasto, y si
+   se toca el techo se baja el consumo — no se sube el tope.» Cierre: comunidad.
+   *(trailer del video 06 — mi empresa entera, con su costo)*
 
-## DOM 13
+### SÁB 12 · B-roll: detrás de escena de la grabación en lote
 
-| Slot | Idea |
-|---|---|
-| Pilar (Samuel) | **«Lo que gasto por mes para que mi empresa funcione»** — cifras honestas, sin drama. Calienta la semana sin quemar el resumido del lunes |
-| ~~B-roll~~ → Carrusel | **FOUNDERS BO** |
-| Normal (Sergio) | «Stripe no acepta Bolivia — y nunca la aceptó» hablado, 30 s → empuja al carrusel |
-| Yap (Samuel) | «Lo que gasto por mes», re-editado: las cifras en pantalla, grandes, casi sin habla |
-| A cámara ×3 | Qué cambió cuando dejé de hacer todo a mano · Por qué escribo «qué NO hace» en todo lo que recomiendo · Cuánto cuesta de verdad tener un agente corriendo |
+1. **«La IA se equivoca» — sí, y la uso igual**: el método de verificar antes de confiar,
+   que es el mismo que usás con un empleado nuevo.
+2. 🎥 **Pedirle a la IA que te explique vs pedirle que lo HAGA** — el salto que separa a
+   los que juegan de los que producen. *(YT: enlaza con el video de Claude Code ya
+   grabado)*
+3. **La IA no te reemplaza; el que la usa, sí** — versión seria, con lo que cambió en mi
+   semana real.
 
-## LUN 14 — arranca la semana Mi stack (drop D1: WhatsApp + archivo)
+### DOM 13 · B-roll → carrusel FOUNDERS BO
 
-| Slot | Idea |
-|---|---|
-| Pilar | **El resumido del stack** — guion **#0**, ya escrito. Abre la semana |
-| ~~B-roll~~ → Carrusel | **RESPUESTAS** (4 lám.) — el tema WhatsApp del día, en feed |
-| Normal | La sexta respuesta, hablada: «la respuesta que casi nadie tiene» — `/cierro` pide la decisión |
-| Yap (Samuel) | El resumido #0, re-editado: otro orden — arranca por Hermes y las 3 AM en vez del total |
-| A cámara ×3 | Contestar rápido vende más que bajar el precio · La respuesta que cierra, y por qué casi nadie la tiene · Las 5 preguntas que más te hacen tus clientes (y cómo dejarlas escritas) |
+1. 🎥 **Cómo decido QUÉ automatizar con IA y qué dejar a mano** — la cuenta veces ×
+   minutos, en pantalla. *(YT: «Qué automatizar primero» — candidato a semana del 21)*
+2. **La IA que trabaja de noche** — qué le dejo corriendo y qué me encuentro a la mañana.
+3. **Por qué escribo prompts de una página** — contexto, restricciones y formato: lo que
+   cambia entre un juguete y una herramienta (con pantalla).
 
-## MAR 15 — servidor (drop D2)
+### LUN 14 · Carrusel RESPUESTAS · drop D1 (WhatsApp)
 
-| Slot | Idea |
-|---|---|
-| Pilar | Guion **#2**: la PC del armario (listo) |
-| B-roll | La máquina real: sin monitor, un cable de red, LED prendido. Texto: «esto era basura hace un mes» |
-| Normal | «¿Y si se corta la luz?» — la pregunta más hecha del homelab, contestada en 30 s |
-| Yap (Samuel) | El pilar del servidor, re-editado: gancho por la luz («¿cuánta luz gasta esto? menos que tu heladera») |
-| A cámara ×3 | VPS vs homelab: cuándo conviene cada uno · El error de llenar el servidor el primer día · ¿Hace ruido? ¿Calienta? ¿Es seguro? — las tres seguidas |
+1. **IA en atención al cliente: hasta dónde SÍ** — responder rápido no es responder solo;
+   dónde una IA suma y desde dónde te quema clientes.
+2. **Cuándo NO usar IA: la respuesta guardada le gana** — lo aburrido bien hecho vence a
+   lo inteligente a medias.
+3. **Contestar en 5 minutos vs 5 horas** — el dato que mueve ventas y qué parte automatizo
+   yo de eso.
 
-## MIÉ 16 — n8n (drop D3)
+### MAR 15 · B-roll: la máquina real, LED prendido · drop D2 (servidor)
 
-| Slot | Idea |
-|---|---|
-| Pilar | Guion **#3**: n8n (listo) |
-| B-roll | El flujo real corriendo en pantalla. Texto: «esto trabajó mientras yo dormía» |
-| Normal | «Empezá con UN flujo» — por qué la gente abandona n8n la primera semana |
-| Yap (Samuel) | El pilar de n8n, re-editado: arranca por el resultado (el aviso que llegó solo) y recién después muestra la herramienta |
-| A cámara ×3 | Qué es un webhook, en un minuto · El flujo más simple que le sirve a cualquier negocio · Automatizar no es magia: si el flujo está mal dibujado, no anda nada |
+1. 🎥 **Tu IA en tu propia máquina** — qué significa que los datos de tus clientes no
+   salgan de tu casa, y por qué eso importa más que el ahorro. *(YT: «IA local»)*
+2. **Qué necesita de verdad una máquina para correr IA en casa** — sin humo: qué alcanza
+   y qué no.
+3. **Nube vs local para IA** — la cuenta honesta de cuándo conviene cada una.
 
-## JUE 17 — Claude Code (drop D4)
+### MIÉ 16 · B-roll: el flujo corriendo solo · drop D3 (n8n)
 
-| Slot | Idea |
-|---|---|
-| Pilar | Guion **#4**: Claude Code (listo) — el único que manda a YouTube |
-| ~~B-roll~~ → Carrusel | **DUELO CUADERNO** |
-| Normal | «El plan gratis NO incluye Claude Code» — la advertencia que nadie te dice antes de instalar, 20 s |
-| Yap (Samuel) | El pilar de Claude Code, re-editado: gancho por la advertencia («antes de instalar esto, dos cosas que nadie te dice») |
-| A cámara ×3 | Si no sabés explicarlo, no vas a saber arreglarlo · Esta misma semana de contenido la armó Claude Code (meta, con pantalla) · Chat vs terminal: no son la misma cosa |
+1. 🎥 **El 80% de lo que te ahorra tiempo NO necesita IA** — automatización simple
+   primero, modelo después. *(YT-able: la tesis anti-humo)*
+2. **Dónde meto la IA dentro de un flujo y dónde no** — el modelo decide UN paso, no el
+   proceso entero (con mi flujo real en pantalla).
+3. **Un mensaje que dispara una decisión automática** — webhook + modelo, explicado en un
+   minuto con un caso mío.
 
-## VIE 18 — HyperFrames (drop D5) · 📌 HOY SE ELIGE el tema de la semana del 21
+### JUE 17 · Carrusel DUELO CUADERNO · drop D4 (Claude Code)
 
-| Slot | Idea |
-|---|---|
-| Pilar | Guion **#5**: HyperFrames (listo) |
-| B-roll | Pantalla dividida: el HTML a la izquierda, el MP4 saliendo a la derecha |
-| Normal | «Los carruseles que ves en mi feed los genera un script — no los diseño» |
-| Yap (Samuel) | El pilar de HyperFrames, re-editado: arranca mostrando el MP4 terminado y recién después revela el HTML |
-| A cámara ×3 | Video desde HTML: cómo funciona en 40 s · «Si no publicás video todas las semanas, salteálo» — honestidad que se comparte · Lo repetido se automatiza; lo especial se edita |
+1. 🎥 **Claude Code por dentro** — qué pasa cuando le pido algo: los archivos, las
+   aprobaciones, el control. Serio y con pantalla. *(YT: el video ya grabado — este corto
+   le manda tráfico)*
+2. 🎥 **Skills: enseñarle a la IA TU forma de trabajar, una vez** — qué es una skill y
+   por qué es el apalancamiento real. *(YT: «Escribí tu primera skill» — S del mapa)*
+3. **Por qué una IA que toca tus archivos necesita reglas escritas** — mi archivo de
+   reglas de negocio, explicado.
 
-📌 Candidato ya escrito para la semana del 21: **«cómo saber qué automatizar primero»**
-(los 7 drops de reserva de `ONIA_COMUNIDAD_CONTENIDO.md` cuelgan de ese tema).
+### VIE 18 · B-roll: HTML → MP4 en pantalla dividida · drop D5 · 📌 elegir tema del 21
 
-## SÁB 19 — Hermes (drop D6)
+1. **Mi feed lo produce un sistema, no una persona** — código + IA + criterio humano:
+   cómo se reparte de verdad.
+2. **Dónde la IA genera valor en video y dónde lo destruye** — guion, subtítulos y cortes
+   sí; cara falsa y voz clonada para MI marca, no. Con el porqué.
+3. **La IA como empleado: cuánto rinde y cómo lo mido** — lo que produce por mes contra
+   lo que cuesta.
 
-| Slot | Idea |
-|---|---|
-| Pilar | Guion **#6**: Hermes (listo) — el aviso real de las 3 AM |
-| B-roll | El teléfono con el aviso real, la hora visible. Texto: «3:00 AM» |
-| Normal | «No arregla nada: avisa. Y por qué con eso alcanza» |
-| Yap (Samuel) | El pilar de Hermes, re-editado: versión sin música — el aviso, la hora y silencio |
-| A cámara ×3 | Cuánto cuesta un agente corriendo (la cuenta real) · Qué vigilo y qué no vale la pena vigilar · Por qué el agente va último de todo |
+### SÁB 19 · B-roll: el aviso real, 3:00 AM · drop D6 (Hermes)
 
-## DOM 20 — cierre de semana · a la noche: envío de archivos a la comunidad
+1. 🎥 **Agentes que vigilan: cómo un modelo decide que algo está roto** — y por qué avisa
+   en vez de arreglar. *(YT: «Un agente que te avisa» — S del mapa)*
+2. **El alma de un agente** — el archivo donde le escribís quién es, qué le importa y a
+   quién avisar. Leído en cámara.
+3. **Cuánto cuesta un agente corriendo 24/7** — la cuenta real, por mes, sin redondear
+   para arriba ni para abajo.
 
-| Slot | Idea |
-|---|---|
-| Pilar (Samuel) | **La semana entera en 40 segundos**: las 6 herramientas, un corte por cada una, remate «mañana te digo cómo tener todo esto junto» |
-| B-roll | La guía `/stack` scrolleando en el teléfono |
-| Normal | «Todo lo que mostré esta semana está escrito, con los comandos, gratis en mi web» — la promesa acá SÍ vale: el recurso existe |
-| Yap (Samuel) | El video que MEJOR funcionó en la semana (por números), re-editado con otro gancho |
-| A cámara ×3 | Qué haría yo en tu lugar: instalá UNA sola · Lo que me enseñó publicar 10 videos por día durante una semana · Interactivo: «¿qué tema querés a fondo?» (alimenta la semana del 21) |
+### DOM 20 · B-roll: la guía `/stack` scrolleando · cierre de semana
 
-**LUN 21:** el video-promesa **«comentá STACK»** — guion **8b**, ya escrito. Los DM se
-contestan a mano (la palabra clave sigue sin cablear en n8n).
+1. **La IA multiplica lo que ya sabés hacer** — no te salva de no saber; la regla que
+   ordena todo lo anterior.
+2. **Lo que aprendí publicando 10 videos por día con un sistema** — números honestos de
+   la semana.
+3. **Interactivo serio:** «contame UN proceso de tu negocio y te digo si se automatiza,
+   con qué, y si necesita IA o no» — alimenta General y la semana del 21.
 
 ---
 
-## El lote de 15 «a cámara» (grabar el sáb 12 de una sentada)
+## Capa YouTube — consolidada en este carril el 11-sep
 
-Uno atrás de otro, misma ropa, cero edición. Son los de la columna "A cámara" de arriba,
-juntos para grabar:
+> Sergio Urcullo, 11-sep: la agenda de YouTube se maneja ACÁ, junto al resto del
+> contenido, para no perderse entre sesiones. La **fuente de la serie** sigue siendo
+> [`SERIE_CLAUDE_CODE.md`](../SERIE_CLAUDE_CODE.md) (reglas, concordancia, repos
+> verificados) y cada deck+guion vive en `hermes-content/carousels/out/yt-*/`.
 
-1. Qué es un VPS y cuándo conviene · 2. Qué NO le delegaría a una IA · 3. Pedirle vs que
-lo haga sola · 4. Notebook vieja > PC de escritorio · 5. Cuánta luz gasta · 6. Qué es
-Docker sin jerga · 7. Qué cambió sin trabajo manual · 8. Por qué escribo «qué NO hace» ·
-9. Cuánto cuesta un agente · 10. Contestar rápido vende más · 11. La respuesta que
-cierra · 12. Las 5 preguntas de tus clientes · 13. VPS vs homelab · 14. No llenes el
-servidor el día uno · 15. Ruido/calor/seguridad del homelab.
+Estado 11-sep: 🟢 **01 y 02 PUBLICADOS**
+([01](https://www.youtube.com/watch?v=kAsAhGe6zyA) 09-sep ·
+[02](https://www.youtube.com/watch?v=oXaqV-HDufA) 10-sep) · **03 se graba HOY** (deck +
+guion listos) · 04 deck+guion listos · 05 y 06 deck listo. **La web ya tiene
+`/claude-code`** con los dos videos embebidos y los comandos para copiar.
 
-Los de la semana (webhook, UN flujo, plan gratis, script de carruseles, 3 AM…) salen
-solos al grabar cada día del tema — o se suman al lote si hay cuerda.
+| Cuándo | Qué pasa con YouTube |
+|---|---|
+| **vie 11** | se **graba el 03** acapela mirando el deck (≈8:10). Antes: recontar los números del README — regla de la serie |
+| **jue 17** | se **publica el 03** — el jueves es el día Claude Code de la semana: el corto del día le manda tráfico, y da 6 días para editarlo |
+| después | **uno por semana**: 04 en la semana del 21, 05 en la del 28, 06 cierra — la cadencia del mapa de temas |
+| siempre | cada video publicado se **embebe en `/claude-code`** el mismo día y genera un **drop exclusivo** en la comunidad (lo que quedó fuera + lo que salió mal grabándolo) |
+
+## La escalera a YouTube (por qué estos temas y no otros)
+
+Cada 🎥 es un tema que aguanta 12-15 minutos sin relleno. La regla del mapa de temas
+aplica: **el corto que pegue fuerte asciende a video largo** — se mueve de fila y se le
+arma la semana. Candidatos ya visibles, en orden de madurez:
+
+1. **Claude Code** — el largo YA está grabado; falta publicarlo (bloquea `/claude-code`)
+2. **Qué automatizar primero** — 7 drops de reserva escritos; candidato a semana del 21
+3. **Qué es un agente de IA** / **un agente que te avisa** — Hermes andando como prueba
+4. **Escribí tu primera skill** — S del mapa, sale del drop D4 que ya funcionó
+5. **IA local: tus datos en tu casa** — diferenciador que casi nadie hace en español
+
+## El lote del sábado 12 (30 temas de una sentada)
+
+Los 30 de arriba, uno por toma, misma ropa. Orden sugerido: primero los 🎥 (los más
+densos, con energía fresca), después el resto. El «normal» de cada día del feed se
+elige entre los 3 del día ya grabados — no se graba aparte.

@@ -2787,3 +2787,32 @@ como se varó Web Factory doce commits.
 **Nada está roto y nada corre riesgo**: las 23 están pusheadas en GitHub, así que sobreviven
 aunque muera el disco. Se ve con:
 `git -C /root/loops/onia-hermes branch -r --list 'origin/claude/*' --no-merged origin/main`
+
+---
+
+## La recarga del chatbot caduca a fin de mes: ¿se arrastra lo no usado?
+
+**Decidido el 2026-09-11 lo que era técnico; esto es lo que queda y es plata.** El add-on del
+chatbot trae 500 conversaciones/mes y la recarga suma 200 por Bs 190. Lo comprado **caduca el
+día 1**: `ChatbotUsoMensual.recargadas` es por `(organizationId, mes)`. Hasta hoy la venta no lo
+decía en ninguna de sus tres superficies — ya está arreglado (`e6adb19`), así que **el cliente
+ya no se entera después de pagar**. Lo que sigue abierto es si esa regla es la que queremos.
+
+**Por qué importa ahora y no antes:** el bloque de compra aparece **recién al 80 % del cupo**,
+que naturalmente cae avanzado el mes. El que cruza el umbral un 28 paga Bs 190 y tiene dos días
+para usar 200 conversaciones. Es el cliente que MÁS usa el producto, y es al que peor le sale.
+
+| | Qué se hace | Qué cuesta | Qué pasa después |
+|---|---|---|---|
+| **A** | Nada: caduca, y la venta ya lo dice claro | 0 — hecho | Honesto y simple. El que recarga tarde paga casi en vano y lo sabe de antemano; puede elegir subir de nivel, que sí queda |
+| **B** | Lo no usado se arrastra al mes siguiente (una sola vez) | ~1 vuelta mía: `recargadas` deja de leerse sólo de la fila del mes y arrastra el saldo | Desaparece el castigo por recargar tarde. Margen intacto (la conversación nos cuesta Bs 0,002-0,011: el 99 % es margen). Hace la recarga más atractiva que subir de nivel, que es lo contrario de lo que busca el precio |
+| **C** | La recarga se prorratea: si quedan N días del mes, cuesta proporcional | ~2 vueltas + explicarlo en la venta | Lo más justo y lo más difícil de entender. Con 0 clientes pagando, complejidad sin evidencia |
+
+**Recomiendo A por ahora, y revisarlo con el primer cliente que recargue.** El precio está
+puesto a propósito para que recargar dos veces en el mismo mes salga más caro que subir de
+nivel (`pricing.ts`: Bs 0,95 contra Bs 0,78 por conversación), y **B rompe ese incentivo**
+justo cuando todavía no sabemos si alguien llega a 500. La objeción real —el que recarga un 28—
+hoy queda cubierta porque la pantalla se lo dice antes de que gaste.
+
+**No bloquea nada ni corre prisa:** con cero clientes pagando, nadie ha recargado nunca.
+Se ve con: `docker exec supabase-db psql -U postgres -d postgres -tAc "select \"organizationId\", mes, recargadas from public.chatbot_uso_mensual where recargadas > 0;"`

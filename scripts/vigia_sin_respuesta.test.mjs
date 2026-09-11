@@ -2,7 +2,7 @@
 // decide vive en funciones puras y se prueba aca.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, rmSync } from 'node:fs';
 import {
   seleccionarColgados,
   seleccionarEsperandoHumano,
@@ -12,6 +12,7 @@ import {
   armarEstado,
   armarAviso,
   UMBRAL_MS,
+  correrVigia,
 } from './vigia_sin_respuesta.mjs';
 
 const AHORA = Date.parse('2026-09-03T12:00:00Z');
@@ -229,4 +230,83 @@ test('GUARDIA: el guion REAL en disco todavia trae la promesa de M5', () => {
   assert.equal(typeof frase, 'string', 'no encontre M5 en el guion del bot');
   assert.equal(frase.length >= 30, true, `la frase de M5 quedo demasiado corta: ${frase}`);
   assert.match(frase, /consulta/);
+});
+
+// ───────────────────────────────────────────────────────────────────────────────────────────
+// HERMETICIDAD DE `correrVigia`. Hasta el 2026-09-11 esta funcion —la que decide si Sergio
+// Urcullo se entera de que un lead quedo colgado— no tenia UN SOLO caso, y sus cuatro
+// dependencias caian por defecto a produccion: Telegram real, el JSON de estado real, y dos
+// `docker exec` contra las bases. La cabecera de este archivo declaraba «sin docker, sin red,
+// sin Telegram» y era cierto sólo porque nadie la llamaba: una hipotesis, no una garantia.
+//
+// Ese mismo dia, a las 05:16 y otra vez a las 06:05 UTC, el modulo HERMANO (`rescate-run.mjs`)
+// pago la factura de esta misma forma: doce casos sin inyectar `avisar` mandaron 18 Telegram,
+// crearon una tarea 🔴 falsa en el tablero y dejaron tres marcas de produccion — una,
+// `chatwoot-11-873`, silencio el aviso de un lead REAL de WhatsApp.
+//
+// Estos casos NO prueban el efecto: prueban que el efecto es inalcanzable desde la suite.
+const colgadoDeVerdad = [fila({ conversationId: 777, messageId: 7 })];
+const enriquecerNoOp = async (c) => c;
+
+test('sin inyectar `avisar`, el vigia NO puede llegar al canal de Sergio Urcullo', async () => {
+  await assert.rejects(
+    () => correrVigia(
+      { emitir: true, ahoraMs: AHORA, estado: `/tmp/vigia-estado-${process.pid}.json` },
+      { leerFilas: async () => colgadoDeVerdad, enriquecer: enriquecerNoOp },
+    ),
+    (error) => {
+      assert.equal(error.hermetismo, true, 'la baranda tiene que ir MARCADA o un catch se la traga');
+      assert.match(error.message, /deps\.avisar/, 'el error tiene que decir como inyectarla');
+      return true;
+    },
+  );
+});
+
+test('sin inyectar `estado`, el vigia NO puede pisar el JSON que apaga los avisos pendientes', async () => {
+  await assert.rejects(
+    () => correrVigia(
+      { emitir: true, ahoraMs: AHORA },
+      { leerFilas: async () => colgadoDeVerdad, enriquecer: enriquecerNoOp, avisar: async () => {} },
+    ),
+    (error) => error.hermetismo === true && /opciones\.estado/.test(error.message),
+  );
+});
+
+test('sin inyectar `leerFilas`, el vigia NO puede hacer psql contra Chatwoot', async () => {
+  await assert.rejects(
+    () => correrVigia({ ahoraMs: AHORA, estado: `/tmp/vigia-estado-${process.pid}.json` }, { enriquecer: enriquecerNoOp }),
+    (error) => error.hermetismo === true && /deps\.leerFilas/.test(error.message),
+  );
+});
+
+test('sin inyectar `enriquecer`, el vigia NO puede hacer docker exec contra el motor', async () => {
+  await assert.rejects(
+    () => correrVigia(
+      { ahoraMs: AHORA, estado: `/tmp/vigia-estado-${process.pid}.json` },
+      { leerFilas: async () => colgadoDeVerdad, avisar: async () => {} },
+    ),
+    (error) => error.hermetismo === true && /deps\.enriquecer/.test(error.message),
+  );
+});
+
+test('ANCLA: con todo inyectado el vigia SI avisa, y no repite en la segunda corrida', async () => {
+  // La baranda no puede volver intesteable a la parte que hay que probar. Este caso es la
+  // primera cobertura que tuvo `correrVigia` y es el que se rompe si alguien la sobre-guarda.
+  const estado = `/tmp/vigia-ancla-${process.pid}.json`;
+  rmSync(estado, { force: true });
+  const avisos = [];
+  const deps = {
+    leerFilas: async () => colgadoDeVerdad,
+    enriquecer: enriquecerNoOp,
+    avisar: async (texto) => { avisos.push(texto); },
+  };
+  const primera = await correrVigia({ emitir: true, ahoraMs: AHORA, estado }, deps);
+  assert.equal(primera.nuevos.length, 1, 'el colgado tiene que salir como nuevo');
+  assert.equal(avisos.length, 1, 'y tiene que avisarse');
+  assert.match(avisos[0], /777/, 'el aviso nombra la conversacion');
+
+  const segunda = await correrVigia({ emitir: true, ahoraMs: AHORA, estado }, deps);
+  assert.equal(segunda.nuevos.length, 0, 'ya avisado: no se repite');
+  assert.equal(avisos.length, 1, 'y no manda un segundo Telegram');
+  rmSync(estado, { force: true });
 });

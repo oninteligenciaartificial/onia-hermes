@@ -2,6 +2,8 @@ import { SplitTextReveal, StaggerGrid, StaggerItem } from "@/motion";
 import { PRUEBA } from "@/lib/pricing";
 import { WA_URL_LANDING } from "@/lib/site";
 import { precioStack } from "@/content/chatbot-precios";
+import { MEDIO_DE_PAGO } from "@/content/medio-de-pago";
+import { DE_DONDE_LLEGA_EL_ENLACE, PASO_CONFIRMAR_CORREO } from "@/app/(sitio)/alta";
 import styles from "./landing.module.css";
 
 /**
@@ -18,11 +20,16 @@ import styles from "./landing.module.css";
 export const FAQS: { q: string; a: string }[] = [
   {
     q: "¿Necesito tarjeta para probar?",
-    a: `No. La prueba de ${PRUEBA.dias} días no pide tarjeta ni pago. Te registrás, elegís tu rubro y usás el sistema completo.`,
+    // El paso del medio sale de `alta.ts`, no se tipea: el alta exige confirmar
+    // el correo y esta enumeración lo salteaba, igual que su gemela de la home.
+    a: `No. La prueba de ${PRUEBA.dias} días no pide tarjeta ni pago. Te registrás, ${PASO_CONFIRMAR_CORREO} ${DE_DONDE_LLEGA_EL_ENLACE}, elegís tu rubro y usás el sistema completo.`,
   },
   {
     q: "¿Qué pasa cuando termina la prueba?",
-    a: "Elegís un plan y pagás por QR desde tu app bancaria, mensual o semanal. Si no pagás, tu cuenta se pausa pero tus datos no se borran de entrada: podés exportarlos o volver cuando quieras.",
+    // El medio de pago NO se tipea: lo dice `@/content/medio-de-pago`, que sigue
+    // a la capacidad que producción tiene encendida. Acá decía «pagás por QR» y
+    // no existe ningún QR — ver el encabezado de ese módulo.
+    a: `${MEDIO_DE_PAGO.alTerminarLaPrueba} Si no pagás, tu cuenta se pausa pero tus datos no se borran de entrada: podés exportarlos o volver cuando quieras.`,
   },
   {
     q: "¿La factura al SIN ya funciona?",
@@ -49,7 +56,7 @@ export const FAQS: { q: string; a: string }[] = [
     // tus datos (tu web o tus redes)»: eso es el paso (3) del motor de alta,
     // que necesita `SEARXNG_URL` y en producción devuelve vacío. Lo que sí
     // corre es leer el enlace que la persona pega. Ver capacidad-degradada.test.ts.
-    a: "Un día. Te registrás solo, pegás el enlace de tu web y el sistema carga tus datos por vos. Sin instalación ni proyecto de meses.",
+    a: `Un día. Te registrás solo, ${PASO_CONFIRMAR_CORREO} ${DE_DONDE_LLEGA_EL_ENLACE}, pegás el enlace de tu web y el sistema carga tus datos por vos. Sin instalación ni proyecto de meses.`,
   },
   {
     q: "¿Hay contrato de permanencia?",

@@ -12,6 +12,174 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-11 19:1x La Paz — 9/9 dental completo (rutina) + confirmación QR en `/empezar`
+
+Corrida completa con `--escribir` en dental: los 9 pasos OK, `completo: true`, 0 filas `zz-qa-`
+al cerrar (cuenta, org, paciente, cita, factura — todo creado y borrado en la vuelta). Sin
+hallazgos nuevos ahí: dental sigue sano, ya son varias corridas seguidas.
+
+Miré también `onia.com.bo/empezar`, paso "03 Usalo de verdad 14 días": producción sigue
+sirviendo **"Si te sirve, pagás por QR; si no, no pagás nada"**, y `docker exec onia-platform
+env | grep -c '^BCP_QR_'` sigue dando **0** — no hay QR. El código YA está arreglado
+(`src/content/medio-de-pago.ts`, commit `b438f587`, en `origin/main`, deriva el texto de
+`QR_PARA_PAGARLE_A_ONIA=false` y dice "por transferencia"), y el pedido de deploy de landing
+que lo incluye ya existe en el tablero (`t_0d401da3`, blocked). No es un hallazgo nuevo, es
+confirmación de que ese pendiente sigue vigente — no abrí tarea duplicada.
+
+Próxima vuelta: seguir con promesa-vs-entrega en `/comparativa` o `/servicios`, que no tienen
+auditoría reciente.
+
+---
+
+## 2026-09-11 15:1x La Paz — Promesa vs entrega en `/agentes`, `/comparativa` y `/v1` (comercio)
+
+Siguiendo el plan de la vuelta anterior: creé una org QA real de **Comercio / tienda**
+(`qa-modulos-ublr4`, borrada al cerrar) con `alta_qa_rubro.mjs` + `onboarding_por_la_ui.mjs`
+(onboarding completo, 5 filas de horario) y miré `/agents` y `/appointments` como lo haría el
+dueño.
+
+- **`/agents` para comercio ya está bien acotado**: sólo muestra el agente "Cobrador — saldos
+  vencidos" (facturas con saldo vencido), **no** "Recall" (que es de clientes/citas). Coincide
+  con lo que promete `onia.com.bo/agentes` de forma genérica y con `rolCorreEnTrack` ya
+  verificado el 2026-09-11 por la vuelta anterior. Captura: `/tmp/agents-comercio.png` (no
+  versionada, sólo para esta nota).
+- **`/appointments` redirige a `/dashboard`** para comercio (confirmado en vivo: no hay agenda
+  para este rubro) — esperado, `gestios-general` no tiene `tieneAgenda`.
+- **PERO `onia.com.bo/v1` sigue sirviendo la promesa vieja en producción**: el paso "02 Tu cuenta
+  queda lista" dice **"Agenda, clientes y caja ya adentro"**, tres líneas después de enumerar
+  "Dental, comercio, importadora, estética o servicios profesionales" como los 5 rubros — y
+  comercio/importadora no tienen agenda. **Ya está arreglado en el código** (`how-it-works.tsx`
+  ahora dice "Clientes, caja y cobros ya adentro, y agenda {ALCANCE_CON_AGENDA}", con guard
+  `capacidad-en-la-enumeracion.test.ts`) y **ya está en la cola de deploy vigente**: `t_f737839c`
+  (plataforma, 23 arreglos sin publicar) — no es un hallazgo nuevo, es confirmación de que ese
+  pedido de deploy sigue siendo real y de que el arreglo es correcto. No abrí tarea duplicada.
+
+Cero filas `zz-qa-` propias al cerrar (verificado: `organizations`, `profiles`, `auth.users`,
+`auth.identities`, `doctor_schedules`, `organization_entitlements` — los 6 borrados a mano por id
+exacto, script `alta_qa_rubro.mjs` no trae limpieza propia).
+
+## 2026-09-11 14:0x-14:1x La Paz — Clínica dental, reverificado: 9/9, sin hallazgos
+
+`zz-qa-2026-09-11-1409` — recorrido completo de punta a punta: alta (confirmar correo primero),
+onboarding 6 pantallas, paciente cargado en `/patients` y encontrado de vuelta, cita
+`2026-09-14 09:00` agendada (201, id `cmtx1cmqj009m01rwdw6mxp56`) y vista en `/appointments`,
+factura con ítem visible en `/billing/cmtx1cxuh009o01rwbltui0zq` (frenado ahí, sin pagar). Cero
+filas `zz-qa-` propias al cerrar. Octava corrida seguida en dental sin novedad — este rubro está
+agotado como fuente de hallazgos nuevos con este instrumento. **Próxima vuelta: NO repetir
+ningún rubro** — ir directo al escalón de promesa-vs-entrega en `/comparativa` y `/agentes`
+(botones y ledger de esas páginas, no la home) o auditar un formulario de un rubro que aún no
+tiene corrida con `--movil` reciente.
+
+## 2026-09-11 12:1x La Paz — Servicios profesionales, reverificado: 9/9, sin hallazgos
+
+`zz-qa-2026-09-11-1211` — recorrido completo de punta a punta: alta (confirmar correo primero),
+onboarding 6 pantallas (pregunta → negocio → horarios → servicios → equipo → listo, horarios
+lun-vie 09-13 y 15-19 cargados, 5 filas de agenda), cliente cargado en `/patients` y encontrado
+de vuelta, cita `2026-09-14 09:00` agendada (201, id `cmtwx4kmz008f01rwb9kgpqaq`) y vista en
+`/appointments`, pantalla de cobro mirada en `/comercio/caja` (frenado ahí). Cero filas `zz-qa-`
+propias al cerrar.
+
+Aparte, auditado en código (sin escribir nada): la promesa de `onia.com.bo/agentes` sobre
+Recall ("Detecta clientes que no vuelven hace meses y no tienen próxima cita") ya está acotada
+por rubro donde corresponde — `rolCorreEnTrack("recall", trackId)` en
+`lib/onia-core/modules/agents-por-rubro.ts` sólo lo enciende para tracks que guardan clientes
+en `patients` (dental, estética, veterinaria, servicios profesionales), y el panel `/agents`
+(`agents-view.tsx:99`) ya filtra la tarjeta con el mismo helper — comercio e importadora no ven
+ni corren Recall. Sin hallazgo: esto ya lo cerró chatbot-cola (commit `64279ff`, memoria
+compartida 2026-09-08).
+
+Los 5 rubros activos están reverificados en las últimas 24h sin un solo hallazgo nuevo. Próximo
+escalón: seguir con promesa-vs-entrega en superficies que no sean la home (p. ej. `/agentes`,
+`/comparativa`), no repetir un rubro más.
+
+## 2026-09-11 09:1x-10:1x La Paz — Comercio / tienda, reverificado: 9/9 (paso 7 no-aplica por diseño), sin hallazgos
+
+`zz-qa-2026-09-11-1009` — tercera reverificación de Comercio en 24h, mismo resultado que la
+`zz-qa-2026-09-11-0709`: alta (confirmar correo primero), onboarding 6 pantallas, cliente
+cargado en storefront `/comercio` y encontrado de vuelta, cobro mirado en `/comercio/caja`
+(frenado ahí), dato visible en `/dashboard`. Paso 7 sigue NO-APLICA por diseño (Comercio no
+vende agenda). Cero filas `zz-qa-` propias al cerrar. Los 5 rubros activos (dental, comercio,
+importadora, estética, servicios profesionales) están reverificados en las últimas 24-48h sin
+un solo hallazgo nuevo — veterinaria no está en `RUBROS_ACTIVOS` y este instrumento no la cubre
+a propósito. Próximo escalón de valor: promesa-vs-entrega en la home (qué promete cada botón
+contra lo que la pantalla siguiente entrega), no repetir rubro.
+
+## 2026-09-11 09:09-09:1x La Paz — Clínica dental, reverificado: 9/9, sin hallazgos
+
+`zz-qa-2026-09-11-0909` — recorrido completo de punta a punta: alta (confirmar correo primero),
+onboarding 6 pantallas, paciente cargado en `/patients`, cita `2026-09-14 09:00` agendada (201,
+id `cmtwqmpdx006k01rwbmpltxfg`) y vista en `/appointments`, factura con ítem visible en
+`/billing/cmtwqn04l006m01rw2qc7ev1f` (frenado ahí, sin pagar). Cero filas `zz-qa-` propias al
+cerrar. Séptima corrida seguida en dental sin novedad — próxima vuelta rota a comercio o
+importadora, que llevan más de un día sin reverificar.
+
+## 2026-09-11 — Comercio / tienda, reverificado: 9/9 (paso 7 no-aplica por diseño), sin hallazgos
+
+`zz-qa-2026-09-11-0709` — recorrido completo de punta a punta: alta (confirmar correo primero),
+onboarding 6 pantallas, cliente cargado en storefront `/comercio` (Catálogo) y encontrado de
+vuelta en la lista, pantalla de cobro mirada en `/comercio/caja` (frenado ahí, sin cobrar), y el
+dato visible en `/dashboard`. Paso 7 (agendar cita) sale NO-APLICA de forma coherente: el pack de
+Comercio no tiene agenda ni en su tarjeta de venta ni en su menú (Conversaciones, Catálogo,
+Inventario, Caja, Fiados, Clientes, Gastos, Contabilidad, Planilla, Agentes, Requerimientos,
+Equipo, Configuración, Ayuda — ninguna es agenda/citas). Cero filas `zz-qa-` propias al cerrar.
+
+## 2026-09-11 02:09-02:13 La Paz — Clínica dental, reverificado: 9/9, sin hallazgos
+
+`zz-qa-2026-09-11-0609` — recorrido completo de punta a punta: alta (confirmar correo primero),
+onboarding 6 pantallas, paciente cargado en `/patients`, cita `2026-09-14 09:00` agendada (201,
+id `cmtwk774j004u01rwt69orc9q`) y vista en `/appointments`, factura con ítem visible en
+`/billing/cmtwk7i6a004w01rw463lxvbt` (frenado ahí, sin pagar). Cero filas `zz-qa-` propias al
+cerrar. Sexta corrida seguida en dental sin novedad — próxima vuelta rota a comercio o
+importadora, que llevan más de un día sin reverificar.
+
+## 2026-09-11 00:14-00:18 La Paz — Servicios profesionales, reverificado: 9/9, sin hallazgos
+
+`zz-qa-2026-09-11-0414` — recorrido completo de punta a punta: alta (confirmar correo primero),
+onboarding 6 pantallas, cliente cargado en `/patients` (group Clientes), cita `2026-09-14 09:00`
+agendada (201, id `cmtwg3ly8003j01rwg7u7zbf6`) y vista en `/appointments`, pantalla de cobro
+mirada en `/comercio/caja` (frenado ahí, sin cobrar). Cero filas `zz-qa-` propias al cerrar. Los
+cinco rubros activos (dental, estética, comercio, importadora, servicios profesionales) están
+todos reverificados en las últimas 24 h, todos sanos.
+
+## 2026-09-11 00:09-00:12 La Paz — Clínica dental, reverificado: 9/9, sin hallazgos
+
+`zz-qa-2026-09-11-0409` — recorrido completo de punta a punta: alta, onboarding 6 pantallas,
+paciente cargado en `/patients`, cita `2026-09-14 09:00` agendada (201, id
+`cmtwfxivw002z01rwz6qkn8a5`) y vista en `/appointments`, factura con ítem visible en
+`/billing/cmtwfxu3f003101rwbsgjwbgl` (frenado ahí, sin pagar). Cero filas `zz-qa-` propias al
+cerrar. Quinta corrida seguida en dental sin novedad — rotado a servicios profesionales en la
+misma vuelta (ver entrada de arriba).
+
+## 2026-09-11 02:14-02:17 La Paz — Estética y spa, reverificado: 9/9, sin hallazgos
+
+`zz-qa-2026-09-11-0214` — recorrido completo de punta a punta: alta, onboarding 6 pantallas,
+clienta cargada en `/patients` (group Clientas), cita `2026-09-11 09:00` agendada (201, id
+`cmtwbsiq4001j01rwosnfl9rz`) y vista en `/appointments`, factura con ítem visible en
+`/billing/cmtwbstv5001l01rwud8doruo` (frenado ahí, sin pagar). Cero filas `zz-qa-` propias al
+cerrar. Segundo rubro seguido sin novedad hoy (dental + estética); próxima vuelta debería
+probar comercio, importadora o servicios profesionales, que llevan más de un día sin
+reverificarse.
+
+## 2026-09-11 02:09-02:12 La Paz — Clínica dental, reverificado: 9/9, sin hallazgos
+
+`zz-qa-2026-09-11-0209` — recorrido completo de punta a punta en dental: alta (confirmar correo
+primero), onboarding 6 pantallas, paciente cargado en `/patients`, cita `2026-09-11 09:00`
+agendada (201, id `cmtwbmqsn000u01rwdwxhweaf`) y vista en `/appointments`, factura con ítem
+visible en `/billing/cmtwbn2es000w01rwy589dweh` (frenado ahí, sin pagar). El panel `/dashboard`
+no lista pacientes — sigue siendo lo esperado, no un fallo. Cero filas `zz-qa-` propias al
+cerrar (confirmado en `appointments` y `organizations`). Cuarta corrida seguida en dental sin
+novedad: próxima vuelta debería rotar a otro rubro o auditar promesa-vs-entrega en vez de repetir
+dental de nuevo.
+
+## 2026-09-10 23:10-23:17 La Paz — Clínica dental, reverificado: 9/9, sin hallazgos
+
+`zz-qa-2026-09-10-2310` — recorrido completo de punta a punta en dental: alta (confirmar
+correo primero, como el cliente real), onboarding 6 pantallas, paciente cargado en
+`/patients`, cita `zz-qa-` agendada y vista en `/appointments`, factura con ítem visible en
+`/billing/<id>` (frenado ahí, sin pagar). El panel `/dashboard` no lista pacientes — es lo que
+muestra, no un fallo. Cero filas `zz-qa-` propias al cerrar (confirmado en `appointments` y
+`organizations`).
+
 ## 2026-09-10 20:11-20:17 La Paz — Comercio / tienda, reverificado: 8/8, sin hallazgos
 
 `zz-qa-2026-09-10-2011` — primera corrida propia en este rubro desde el 2026-09-03 (con el
@@ -976,3 +1144,47 @@ pero un **producto + su variante** en comercio (`onia_commerce_products`,
 **Lo que le falta, y es lo próximo:** correr el mismo recorrido con **otro rubro** (el alta
 ofrece cinco; el script ya acepta `RECORRIDO_RUBRO="Comercio / tienda"`, pero nunca se probó — un
 rubro encendido que rompe el onboarding es exactamente el fallo que nadie ve).
+
+## Cobertura por rubro (2026-09-10/11)
+
+El alta ofrece **cinco** rubros hoy (medido en vivo, no de memoria — probar "Veterinaria" da paso
+3 ROTO con la lista real: Clínica dental · Comercio / tienda · Importadora / distribuidora ·
+Estética y spa · Servicios profesionales. Veterinaria existe como pack en el código pero no está
+encendida en el alta — eso es alcance de v1.0, no un bug).
+
+Los cinco están corridos con el instrumento de 9 pasos, todos `completo: true` con 0 filas
+`zz-qa-` al cerrar:
+
+- **Importadora / distribuidora** — 2026-09-11: los 8 pasos que le corresponden. El paso 7 sale
+  `NO-APLICA` de forma coherente (su propia tarjeta de venta dice "Catálogo, cotizaciones B2B y
+  costeo de importación", sin agenda, y el menú no la tiene). El dato del paso 6 se cargó en
+  Catálogo y no aparece en `/dashboard` — correcto, el panel no lista storefront.
+- Dental, Comercio, Estética, Servicios profesionales — corridos en vueltas anteriores, ver más
+  arriba y en la cola.
+
+**Los cinco rubros activos ya están cubiertos con este instrumento.** Repetir uno más no suma
+cobertura nueva — la próxima vuelta que llegue acá con el objetivo en meta debe ir directo al
+escalón 3 (promesa vs. entrega en la home / otras superficies), no repetir dental otra vez.
+
+## Verificado 2026-09-11 03:13 La Paz — promesa "14 días gratis, sin tarjeta" (home)
+
+`(sitio)/page.tsx` promete `PRUEBA.dias` días gratis sin tarjeta; `PRUEBA_DIAS = 14` en
+`src/lib/pricing.ts` y `TRIAL_DAYS = 14` en `onia-platform/lib/subscription/plan-state.ts`
+coinciden. Confirmado contra la base real (no solo el código): `trialEnd - createdAt` da
+exactamente 14 días en las dos orgs vivas con trial (`clinica-sergio-p2ljs`,
+`bolivian-electricidad-e6t21`). Y el alta de esta misma vuelta no pidió tarjeta en ningún
+paso. La promesa se cumple. Sin hallazgo.
+
+## Verificado 2026-09-11 12:13 La Paz — `/guia-facturacion` (formulario fuera de los 9 pasos)
+
+Submit real (`POST /api/agenda-intake` con correo `zz-qa-`) da **204**: el lead SÍ quedó
+registrado en `onia_center.leads` — la promesa en pantalla ("tu contacto quedó con nosotros")
+es verdadera. Fila borrada al cerrar (`id 72342f4f`, filtrada por `zz-qa-` en `raw`).
+
+**Hallazgo aparte, reportado en el tablero (`t_62aa450c`, prioridad 2, para el dueño de
+`web-factory/apps/site`):** el intake (`api/onia-center/leads/intake/route.ts:98-99`) marca
+TODO lead con `nextAction: "Confirmar demo"` y `meetingStatus: "solicitada"`, sin mirar el
+`src`. `/guia-facturacion` nunca ofrece una demo — pide un correo por una hoja imprimible.
+El endpoint se escribió para el `agenda-form` (que sí pide una reunión) y quedó compartido
+tal cual: el pipeline de Sergio Urcullo mezcla gente que pidió una demo con gente que sólo
+quiso el PDF, las dos con la misma etiqueta "Confirmar demo".

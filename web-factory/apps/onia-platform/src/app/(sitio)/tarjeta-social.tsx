@@ -61,7 +61,7 @@ import { bs, plan, PRUEBA } from "@/lib/pricing";
  */
 
 export const alt =
-  "Onia — Todo el negocio, en una pantalla. Agenda, clientes, caja, cobros e inventario dibujados como cinco piezas sueltas que entran en un solo sistema.";
+  "Onia — Todo el negocio, en una pantalla. Clientes, caja, cobros, inventario y contabilidad dibujados como cinco piezas sueltas que entran en un solo sistema.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -77,7 +77,7 @@ const LINEA = "#D4D9D6";
  * hero y la `description`: si acá dijeran otra cosa, la tarjeta prometería un
  * sistema distinto del que abre al hacer clic.
  */
-const PIEZAS = ["Agenda", "Clientes", "Caja", "Cobros", "Inventario"];
+const PIEZAS = ["Clientes", "Caja", "Cobros", "Inventario", "Contabilidad"];
 
 /**
  * La bajada se arma como UN string y no se interpola dentro del JSX.

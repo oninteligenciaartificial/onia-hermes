@@ -77,6 +77,124 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [ ] 🟡 **`app/cobertura-citada.test.ts` no puede ver una afirmación de cobertura FALSA escrita
+      dentro de un `.test.ts`, y así sobrevivió una cuatro días.** Abierto por `web-venta` el
+      2026-09-11. El gate existe para cazar el puntero muerto —un comentario que dice «esto lo
+      cruza `scripts/X.mjs`» sobre un archivo que nunca se escribió, que **detiene la auditoría**
+      porque quien lo lee le cree— y deja los `.test.ts` fuera **a propósito y con razón**: una
+      bitácora que narra el defecto tiene que poder nombrar el archivo inexistente sin que el
+      gate obligue a borrar el registro (`cobertura-citada.test.ts:53`).
+      **El hueco:** esa exención no distingue la PROSA que narra de la AFIRMACIÓN viva. El
+      2026-09-07 se corrigió el puntero `scripts/limites-vivos.mjs` en `chatbot-precios.ts` y
+      quedó **idéntico y vivo** en `(sitio)/limite-que-corta.test.ts:51` («Va como script aparte:
+      `scripts/limites-vivos.mjs`»), invisible para el gate por ser `.test.ts`.
+      **Reproducción, 10 s:** `ls web-factory/apps/onia-platform/scripts/limites-vivos.mjs`
+      → `No such file`, y `npm test` verde. El puntero ya se reparó (apunta a
+      `scripts/precios-fuente.mjs`, que es el cruce real); **lo que sigue abierto es el gate**.
+      **Cómo se cierra:** separar por CONTEXTO y no por tipo de archivo — el mismo criterio con
+      el que `lucia/palabras-cableadas.py` separó pieza de prosa. Una cita cuya vecindad la
+      declara inexistente («nunca se escribió», `MODULE_NOT_FOUND`) es bitácora; el resto es
+      afirmación y se exige. Validar por mutación en las DOS direcciones: la bitácora de
+      `cobertura-citada.test.ts:26-27` **tiene que seguir en verde** (si se pone roja, el gate
+      obliga a borrar el registro y el remedio es peor), y una cita directiva nueva en un
+      `.test.ts` tiene que salir ROJA.
+
+- [x] 🔴 **`npm run cola:viva` está en ROJO y sus 4 errores son FALSOS: el gate hermano de la
+      raíz tiene el mismo hueco que el ítem de arriba, y hoy muerde.** Abierto por `onia-cola`
+      el 2026-09-11. **CERRADO el 2026-09-11 14:20 La Paz por `onia-cola`**: `cola:viva` en
+      verde (`EXIT_REAL=0`, leído de archivo y no de un pipe) y el self-check de 100 → **110
+      casos**. Las cuatro causas se cerraron con **tres** curas, no con un carve-out: **(a)** el
+      nombre de una ruta no puede empezar con punto, así que una extensión COMPUESTA
+      (`.test.ts`, `.d.ts`) citada como sustantivo deja de ser ruta — la regla del `.tsx` sólo
+      cubría las simples; **(b)** una metavariable de un carácter en mayúscula (`scripts/X.mjs`)
+      es un molde, como el glob; **(d)** una cita ABREVIADA CON HUECO resuelve si el nombre es
+      único y sus segmentos van en orden (`lucia/palabras-cableadas.py` →
+      `…/lucia/scripts/palabras-cableadas.py`), que es resolución, no indulto; y **(c)** la cura
+      central: `citadaComoBitacora()` separa **bitácora de afirmación por la VECINDAD** —la
+      ORACIÓN de cada aparición, nunca el ítem— y la bitácora sale por un canal nuevo de
+      **AVISO** que se imprime y no cuenta para el exit. Mutado en las dos direcciones: el ítem
+      de arriba queda verde y una cita directiva nueva a un archivo inexistente sale ROJA
+      (`exit 1`, probado inyectándola en una copia de `COLA.md`).
+      ⚠️ **Lo que enseñó la validación, y no estaba escrito:** mutar (a) y (b) **contra el
+      corpus real da VERDE con la guarda arrancada**, porque la cura de contexto las tapa (la
+      vecindad de `.test.ts` en ese ítem dice «el archivo inexistente»). Dos guardias hermanos
+      atajando el mismo caso hacen pasar la mutación **por el motivo equivocado** — por eso cada
+      cura lleva su caso propio en el self-check, con su recíproco, y no se dio por validada con
+      la mutación sobre `COLA.md`. Segunda trampa: `indiceDe` **cachea** el árbol por directorio,
+      así que un fixture creado a mitad del self-check no existe para el índice y su caso falla
+      por el motivo equivocado; va en el bloque de setup. **Reproducción, 10 s:** `npm run cola:viva` → `EXIT_REAL=1`, cuatro
+      `ERROR fantasma [linea 80]`. Ojo al medirlo: `npm run cola:viva | tail; echo $?` da **0**
+      porque ese exit es el de `tail` — hay que redirigir a archivo y leer `$?`.
+      **Las cuatro salen del ítem de arriba**, que es prosa narrando punteros muertos, y
+      **ninguna es trabajo fantasma**: ese ítem sí tiene dónde trabajar
+      (`cobertura-citada.test.ts` y `(sitio)/limite-que-corta.test.ts` existen los dos).
+      **No es una causa, son CUATRO, y por eso el carve-out de notación número N no cierra**
+      (`scripts/verificar_cola.js` ya lleva seis y el ciclo volvió a divergir cada vez):
+      **(a)** una extensión suelta citada como sustantivo («escrita dentro de un archivo de
+      test») se toma como ruta, sin nombre ni barra; **(b)** un placeholder con forma de ruta
+      —la equis mayúscula usada como metavariable dentro de una cita— se busca en disco;
+      **(c)** la cita del puntero muerto que el ítem DENUNCIA, cuya vecindad ya declara que no
+      existe; **(d)** una ruta abreviada de un archivo que **SÍ existe** —el separador de pieza
+      y prosa de Lucía vive en
+      `hermes-content/references/modelos/lucia/scripts/palabras-cableadas.py` y el ítem lo
+      nombra por sus dos últimos segmentos—, o sea que el carve-out de «ruta parcial» que el
+      gate ya tiene no la resuelve.
+      **Cómo se cierra:** mismo criterio que el ítem de arriba —separar por CONTEXTO, no
+      agregar el carve-out siguiente—: la ruta que el ítem cita como OBJETO de lo que narra es
+      bitácora y sale como AVISO; la que dice dónde ir a trabajar es afirmación y se exige.
+      Validar por mutación en las DOS direcciones: **este mismo ítem tiene que quedar en verde**
+      (si se pone rojo, el gate obliga a borrar su propio diagnóstico), y un ítem nuevo que
+      mande a trabajar a un archivo inexistente tiene que salir **ROJO**.
+      **Por qué no se arregló en la vuelta que lo encontró:** entraba el diagnóstico pero no la
+      mutación en las dos direcciones, y un gate de esta familia validado a medias es el que
+      después manda a borrar bitácora. El diagnóstico —que es lo caro— ya está hecho.
+
+- [x] 🔴 **El CUERPO del pedido de deploy de plataforma describe MENOS arreglos de los que su
+      `ok` publica.** Abierto por `onia-cola` el 2026-09-11 con el control recién escrito
+      en `scripts/pedido_deploy_entregado.mjs` (`ab1635a1`), que es el que lo ve:
+      **`npm run pedido:entregado` → `ROJO <id>: su CUERPO no nombra N arreglo(s) que su
+      ok publica`**, y los nombra uno por uno.
+      **No es que el pedido esté roto:** su comando deriva el sha al ejecutarse, así que no
+      caduca. Lo que queda corto es el cuerpo, que es lo primero que lee Sergio Urcullo —
+      y el `edit` del tablero **no cambia el cuerpo**, por eso comentar no lo cierra.
+      **Cómo se cierra:** crear el pedido de nuevo con el cuerpo derivado de
+      `bash /opt/onia-platform/_deploy/publicar.sh --dry-run`, bloquearlo con
+      `--kind needs_input`, y **archivar el viejo en la misma vuelta** (si no, quedan dos
+      pidiendo el mismo ok, que es el ruido que hace que deje de creerles).
+      **CERRADO el 2026-09-11 06:55 La Paz.** El id que citaba este ítem (`t_5511da55`) ya
+      había caducado dos veces por lo mismo (`t_92d71bf3` → `t_6da5553d` → `t_0e451a15`): el
+      sujeto se **deriva**, no se copia. Al arrancar la vuelta el vivo era `t_0e451a15` con
+      ONCE arreglos en el cuerpo, y los merges de esta misma vuelta (`f2962df`, `ef69e9b`)
+      lo dejaron describiendo 11 sobre 13 — **el integrador es quien los envejece**. Rehecho
+      como **`t_173dd283`** con el cuerpo derivado del publicador en seco sobre `master`
+      `0d11806`, bloqueado `needs_input` (status verificado, no sólo el exit) y `t_0e451a15`
+      archivada con su motivo en el mismo turno. Gate en verde:
+      `node scripts/pedido_deploy_entregado.mjs` → exit 0, `t_173dd283 ... 13 sin publicar,
+      0 sin resolver`, sin un solo ROJO.
+      ⚠️ **Lo que aprendió esta vuelta, y no estaba escrito:** los cinco controles del gate se
+      imprimen en **cadena de prioridad con `return 1`**, así que `incompletos` (que lee cuerpo
+      **y** comentarios) **tapa** a `cortos` (que lee sólo el cuerpo). Por eso el consejo que
+      salió impreso fue *«comentá el recuento, no rehagas la tarea»* — que es el del control de
+      arriba, y **deja rojo al de abajo**. El remedio que cierra los dos es el de este ítem.
+
+- [x] ⚠️ **El test de cableado de `cuerpoVencido` tenía el agujero que se le cerró a su hermano.
+      — CERRADO 2026-09-11 por `onia-cola`.**
+      `scripts/pedido_deploy_entregado.test.mjs` exigía `/vencidos\.push\(/` en la vecindad del
+      `main`, y eso se esquiva cambiando la **condición** que lo dispara: el push queda en el
+      fuente y el veredicto se tira.
+      **El agujero estaba vivo y se reprodujo antes de tocar nada:** con
+      `v.estado === 'ESTADO_QUE_NO_EXISTE'` en la línea 883 del gate —el push intacto, `grep -c
+      'vencidos\.push('` da 1— los **44 casos pasaron en VERDE con exit 0**, o sea que el control
+      que caza el pedido de deploy que le pide a Sergio Urcullo un ok por trabajo **ya publicado**
+      podía quedar mudo sin que nada se pusiera rojo.
+      **Atado igual que sus dos hermanos** (`cortos.push(` y `cortosSiat.push(`), con
+      `/VENCIDO'\s*\)\s*vencidos\.push\(/`.
+      **Validado por mutación en las dos direcciones**, restaurando con `cp` y nunca con `git
+      checkout`: con la condición mutada da **exit 1 (43 pass, 1 fail)** donde antes daba verde;
+      restaurado, **44 pass exit 0**; y borrando el push entero sigue dando **exit 1**, así que la
+      aserción vieja no se perdió. Se ve con
+      `node --test scripts/pedido_deploy_entregado.test.mjs`.
+
 - [x] 🔴 **El menú de arriba ofrece TRES líneas de negocio congeladas. Sergio Urcullo dijo «ok C»
       el 2026-09-07 — sacalas. — CERRADO 2026-09-08 por `web-venta` (`653f2a98`, `8de73198`).**
       **Media premisa ya estaba vencida al empezar la vuelta:** `Webs`, `Marketing IA` y

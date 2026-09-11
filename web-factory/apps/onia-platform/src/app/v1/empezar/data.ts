@@ -182,7 +182,7 @@ export const PLAN_INCLUYE: Record<Rubro, readonly string[]> = {
   ],
 } as const;
 
-export const NOTA_DOWNSELL = `Si te queda grande, hay un plan de entrada de Bs ${bs(plan("basico").mensual)}/mes (2 usuarios, hasta 300 fichas) que ordena la agenda y las fichas — los agentes de IA no vienen ahí.`;
+export const NOTA_DOWNSELL = `Si te queda grande, hay un plan de entrada de Bs ${bs(plan("basico").mensual)}/mes (2 usuarios, hasta 300 fichas) que ordena las fichas y los cobros — los agentes de IA no vienen ahí.`;
 
 export const NOTA_CUADERNO =
   "El cuaderno se jubila: agenda digital con recordatorios, sin pasar nada en limpio.";

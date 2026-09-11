@@ -4,6 +4,7 @@ import {
   isOniaCenterConfigured,
   type RuntimeLead,
 } from "@/lib/onia-center-store";
+import { intencionDelLead } from "@/lib/intencion-del-lead.mjs";
 
 export const dynamic = "force-dynamic";
 
@@ -69,6 +70,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "missing_fields" }, { status: 422 });
   }
 
+  /*
+   * Quién pidió una reunión lo dice el llamador, y nadie más. Este endpoint se
+   * escribió para un agenda-form que sí la pedía, y hoy su único llamador vivo
+   * es `/guia-facturacion`: el imán de leads del SIN, que entrega una hoja
+   * imprimible y no ofrece ninguna reunión. Hasta el 2026-09-11 todo lead que
+   * entraba por acá quedaba en el pipeline de Sergio Urcullo como demo pedida.
+   * El porqué de que la excusa sea explícita está en el módulo.
+   */
+  const intencion = intencionDelLead({ pidioDemo: body.pidioDemo, rubro });
+
   const lead: RuntimeLead = {
     id: "",
     company: business || name || email,
@@ -76,10 +87,10 @@ export async function POST(request: Request) {
     source: src || "landing",
     serviceId: "",
     status: "nuevo",
-    nextAction: rubro ? `Confirmar demo (${rubro})` : "Confirmar demo",
+    nextAction: intencion.nextAction,
     owner: "sergio",
     meetingOwner: "sergio",
-    meetingStatus: "solicitada",
+    meetingStatus: intencion.meetingStatus,
     createdAt: new Date().toISOString(),
   };
 

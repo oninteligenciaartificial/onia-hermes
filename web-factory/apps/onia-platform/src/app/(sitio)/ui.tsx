@@ -68,7 +68,7 @@ const panelLabel: Record<PanelId, string> = {
   chat:
     "Conversación de WhatsApp a las 23:40: alguien pregunta si atienden el sábado y ya tiene la respuesta con el horario que el negocio publicó.",
   cuenta:
-    "Una cuenta recién creada, con agenda, clientes, caja, inventario, contabilidad y agentes ya encendidos.",
+    "Una cuenta recién creada, con clientes, caja, inventario, contabilidad y agentes ya encendidos.",
   dental:
     "Agenda del día de una clínica dental: cada paciente con su hora y su tratamiento, dos citas ya confirmadas y una marcada para llamar.",
   comercio:
@@ -96,7 +96,6 @@ const panelLabel: Record<PanelId, string> = {
  * ilustración prometía lo que el texto del mismo sitio tiene que desmentir.
  */
 const MODULOS = [
-  "Agenda",
   "Clientes",
   "Caja",
   "Inventario",

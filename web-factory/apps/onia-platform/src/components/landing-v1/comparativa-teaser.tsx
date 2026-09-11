@@ -22,6 +22,10 @@ const ESTADO_TXT: Record<Estado, string> = {
  */
 export function ComparativaTeaser() {
   const onia = CONTENDIENTES.find((c) => c.esOnia);
+  /** Los ejes que NUESTRA fila afirma y que no llegan a los cinco rubros. */
+  const alcancesDeOnia = EJES.filter(
+    (e) => onia?.estados[e.id] === "si" && e.alcanceOnia,
+  );
   return (
     <section
       className={`${styles.section} ${styles.secTinta} ${styles.onDark}`}
@@ -74,6 +78,9 @@ export function ComparativaTeaser() {
                     </span>
                     <span className={styles.srOnly}>
                       {eje.label}: {ESTADO_TXT[c.estados[eje.id]]}
+                      {c.esOnia && c.estados[eje.id] === "si" && eje.alcanceOnia
+                        ? ` — ${eje.alcanceOnia}`
+                        : ""}
                     </span>
                   </div>
                 ))}
@@ -89,6 +96,17 @@ export function ComparativaTeaser() {
         <Reveal className={styles.cmpFoot}>
           {/* la fila punteada de Onia, explicada con nuestras palabras */}
           <p>{onia?.veredicto}</p>
+          {/* Hasta dónde llega cada «●» NUESTRO. La grilla es de puntos, así que
+              el alcance no entra en la celda: va acá, donde sí se lee. Sin esto
+              el punto verde se lo promete igual a los rubros sin agenda. */}
+          {alcancesDeOnia.length > 0 ? (
+            <p className={styles.cmpAlcance}>
+              {alcancesDeOnia
+                .map((e) => `${e.label}: ${e.alcanceOnia}`)
+                .join(" · ")}
+              .
+            </p>
+          ) : null}
           <a className={`${styles.btn} ${styles.btnGhost}`} href="/comparativa">
             Ver la comparación completa, con fuentes
           </a>

@@ -186,11 +186,21 @@ export function CapturaGuia() {
         tiene una sola biblioteca de correo, y ningún cron vigila al SIN. Lo
         que el dato SÍ hace es quedar como contacto, así que eso es lo que se
         declara. Lo vigila `proposito-del-dato.test.ts`.
+
+        Y el 2026-09-11 la misma frase resultó tener un SEGUNDO defecto que
+        aquel arreglo no podía ver, porque miró el PARA QUÉ y no el QUÉ: decía
+        «Un correo, nada más» con el campo de WhatsApp a quince líneas y la
+        clave `whatsapp` viajando en el `body`. La nota que existe para decir
+        con qué nos quedamos negaba el dato más caro de los dos. Ahora nombra
+        los dos, y lo vigila `dato-que-se-pide.test.ts`, que además exige que
+        `content/legal/privacidad.md` tenga un sujeto para quien deja el
+        contacto sin tener cuenta — hasta ese día la política distinguía dos y
+        el visitante no era ninguno.
       */}
       <p className={g.formNota}>
-        Un correo, nada más. La guía completa está acá abajo y se lee sin dejar
-        nada: el correo queda como contacto para hablar de tu caso, y no se usa
-        para otra cosa.
+        Tu correo y, si querés, tu WhatsApp: nada más. La guía completa está acá
+        abajo y se lee sin dejar nada; el contacto queda para hablar de tu caso,
+        y no se usa para otra cosa.
       </p>
     </form>
   );

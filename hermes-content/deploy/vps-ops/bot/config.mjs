@@ -306,6 +306,16 @@ export const SCRIPT = Object.freeze({
     "Ya está todo en su bandeja. Te responde desde acá mismo en horario de oficina ({{horario_frase}}).",
   ].join("\n"),
 
+  // M5_URGENTE — la respuesta a la palabra que M5 y M8_SOPORTE le PIDIERON al prospecto, y a
+  // quien dice que quiere comprar. No reemplaza al acuse: es lo que se contesta cuando de verdad
+  // se marcó, y por eso afirma en pasado ("lo marqué"). Decirlo sin que salga el aviso sería la
+  // segunda promesa rota encima de la primera.
+  M5_URGENTE: [
+    "Listo, lo marqué como urgente y {{humano}} ya lo tiene arriba de todo.",
+    "",
+    "Te escribe él desde este mismo número. Si es fuera de horario de oficina ({{horario_frase}}), es lo primero que ve al abrir.",
+  ].join("\n"),
+
   // M8_SOPORTE — SEGUNDO CAMINO: el que escribe YA es cliente (o dice que ya tiene el sistema, o
   // que algo no le anda, o pregunta como configurarlo). Ofrecerle la demo COMERCIAL a alguien que
   // pide ayuda es el peor error posible del bot: le dice "comprame" a quien ya compro. Este texto
