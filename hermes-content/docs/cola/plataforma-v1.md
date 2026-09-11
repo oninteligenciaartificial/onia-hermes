@@ -63,31 +63,96 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
-- [ ] **El add-on del chatbot ya puede vencer, y nadie avisa que va a vencer**
-      (`app/api/cron/renewal-reminders/route.ts` · `lib/subscription/renewal-reminders.ts` ·
-      `lib/subscription/addon-vigencia.ts`, en `onia-platform`). Abierto el
-      2026-09-11 al cerrar su hermano (`5011003`, ver Cerrado): el add-on pasó de ser un
-      booleano para siempre a tener vigencia real en `organization_entitlements.validUntil`.
-      El lado del plan avisa **cuatro veces** (D-7/D-3/D-1/vencido) por **tres** canales
-      (correo, in-app, push); el add-on no avisa **ninguna** — `renewal-reminders` ni lo
-      nombra (`grep -ci addon lib/subscription/renewal-reminders.ts` → **0**).
+- [ ] **El add-on del chatbot vence y avisa por el PANEL, pero no por correo**
+      (`app/api/cron/renewal-reminders/route.ts` · `lib/email.ts`, en `onia-platform`).
+      Abierto el 2026-09-11 al cerrar su hermano (`53227ab`, ver Cerrado), y **se anota con
+      su nombre en vez de dejarlo tapado**: el plan tiene TRES canales (correo, in-app,
+      push) y el add-on tiene DOS. Media familia cubierta se lee como familia cubierta —
+      que es exactamente cómo nació el agujero que acaba de cerrarse.
 
-      **No muerde hoy, y por eso no se cerró en la misma vuelta:** medido en producción, hay
-      **cero** pagos de add-on aprobados y las dos capacidades vivas
-      (`clinica-sergio-p2ljs`, `onia-interna`) son otorgamientos con `validUntil` NULL, que no
-      vencen. Y al pagar, el aviso ya dice hasta cuándo. El día que haya un add-on pago, sin
-      recordatorio el bot del cliente **se apaga sin una palabra**: deja de contestar el chat
-      web y el intake de WhatsApp descarta lo que entra.
+      **Por qué no entró en la misma vuelta, con su motivo:** el correo de renovación del
+      plan promete *«pasa a solo lectura (tus datos quedan intactos y podés mirarlos y
+      exportarlos)»*, y eso es **falso** para el add-on — vencerlo no toca los datos ni
+      corta la escritura: apaga el asistente. Reusar esa plantilla publica una promesa
+      falsa; escribir una nueva mete un sujeto más en dos gates que **derivan** sus sujetos
+      de `lib/email.ts` (`email-idioma-del-rubro.test.ts` y
+      `trial-vencido-cumple-la-promesa.test.ts`), así que la plantilla nueva tiene que
+      nacer declarada en los dos o los pone en rojo.
 
-      **Cuidado con el atajo:** `renewal-reminders` cuelga sus pasos de `planEnd` y su cadencia
-      se compara contra el **largo del ciclo** (`887b3ea`). El add-on tiene su propia fecha y
-      su propio ciclo, así que copiar la escalera al lado es una lista paralela que se
-      desincroniza; lo que corresponde es que el recorrido tome los dos vencimientos de la
-      misma org y mande **un** aviso por cada uno, con su propio `tag` para que no se pisen en
-      el teléfono.
+      **No muerde hoy:** medido en producción, **cero** pagos de add-on aprobados y las dos
+      capacidades vivas (`clinica-sergio-p2ljs`, `onia-interna`) son otorgamientos con
+      `validUntil` NULL, que no vencen.
 
-      **Listo =** con un add-on venciendo en 3 días, el cron deja el aviso (in-app + push) que
-      nombra al add-on y no al plan, con un caso en rojo primero y validado por mutación.
+      **Listo =** el add-on tiene su propio correo, con la promesa que le corresponde (el
+      asistente deja de contestar, el resto del sistema sigue igual), declarado en los dos
+      gates derivados, con un caso en rojo primero y validado por mutación.
+
+- [ ] **La migración del `concepto` está commiteada y NO aplicada en producción**
+      (`prisma/migrations/20260911120000_renewal_reminder_concepto/migration.sql`, en
+      `onia-platform`). Es aditiva y el código es fail-soft —
+      sin la columna el cron responde `migracion_pendiente` y no manda nada, ni del plan ni
+      del add-on (`53227ab` + `7b0a154`, este último justamente para que P2022 no reviente
+      el circuito del plan). **Mientras no se aplique, el add-on que venza no avisa.**
+
+      No la aplica este carril: va por `docker exec` contra `supabase-db`, en el mismo
+      movimiento que el swap que `onia-cola` ejecuta cuando Sergio Urcullo aprueba el
+      pedido de deploy de plataforma.
+
+      **Listo =** `docker exec supabase-db psql -U postgres -d postgres -tAc "select
+      column_name from information_schema.columns where table_name='onia_renewal_reminder_sends'"`
+      incluye `concepto`, y el cron deja de responder `migracion_pendiente`.
+
+- [x] ✅ **CERRADO el 2026-09-11 (`53227ab` + `7b0a154`, onia-platform): el add-on del
+      chatbot podía vencer y nadie avisaba que iba a vencer.**
+
+      El plan avisa **cuatro veces** (D-7/D-3/D-1/vencido) por **tres** canales; el add-on
+      —que desde el día anterior tiene vigencia real en
+      `organization_entitlements.validUntil` (`5011003`)— no avisaba **ninguna**:
+      `grep -ci addon lib/subscription/renewal-reminders.ts` daba **0**. Sin recordatorio,
+      el día que haya un add-on pago el asistente del cliente **se apaga sin una palabra**
+      — `app/api/chatbot-knowledge/published/route.ts` corta con `isWhatsAppAddonActive` antes de leer la
+      fila, así que deja de contestar el chat de la web **y** el WhatsApp a la vez.
+
+      **Por qué ningún gate podía verlo, y es la parte reusable:** no sobra ni falta una
+      palabra, el monto sale de la fuente única, el rol filtra bien y el rubro no entra. Lo
+      que estaba mal era una **asimetría entre dos cobros hermanos**, y la mitad sana —la
+      del plan— es justo lo que la hacía parecer cubierta.
+
+      **No se copió la escalera al lado**, que era el atajo que la propia cola advertía:
+      una lista paralela se desincroniza el día que se toque un umbral y deja una mitad con
+      el defecto. El recorrido es **uno** y el concepto es un **dato**
+      (`lib/subscription/vencimientos.ts`): un concepto nuevo entra agregando una fila a
+      `CONCEPTOS_QUE_VENCEN`, y el gate de cobertura lo obliga a declarar su copy **y** a
+      que el cron le arme su reloj.
+
+      Lo que trae el arreglo: `concepto` en la clave del reclamo (migración aditiva, default
+      `plan`) — sin él, un plan y un add-on que vencen el **mismo día** comparten
+      `(org, venceEl, step)` y el segundo aviso se pierde contado como duplicado; aviso
+      propio que nombra al chatbot y **no** promete «solo lectura»; destino
+      `/settings/addon-chatbot` porque `/checkout` excluye a propósito los pagos del add-on;
+      `tag` propio, o el push del add-on reemplaza al del plan en el teléfono; el medio de
+      pago sigue saliendo de `lib/checkout/textos.ts` (`enElPanelDelAddon`); y el ciclo y la
+      «pelota» (comprobante en revisión) derivados **por concepto** de la tabla compartida.
+
+      **Dos gates del plan cambiaron de ANCLA conservando su propiedad**, y eso se dice
+      porque es el movimiento que más fácil se hace mal: la garantía de que un add-on
+      mensual no le cambie el ciclo a un plan anual ya no es un filtro escondido en el
+      `where` (el cron necesita los dos conceptos) sino la **partición**; y el corte por
+      `enRevision` vive ahora en `avisosDeHoy`, del que el reclamo está excluido por
+      construcción. `SOLO_PAGOS_DEL_PLAN` se borró en el mismo movimiento: sin consumidor
+      era una constante muerta, y una constante muerta vuelve el día que alguien la cablea,
+      **ya aprobada porque «ya estaba»**.
+
+      Validado por **mutación en 9 direcciones** y cada una cae en SU caso: el add-on fuera
+      del recorrido, su texto copiado del plan, su tag pisado con el del plan, los envíos
+      previos sin filtrar por concepto, el esquive de prometer solo lectura, el cron sin
+      leer el concepto de `priorSends`, la clave del reclamo sin concepto, el cron sin armar
+      el reloj del add-on, y la guarda sin P2022. Gates: `tsc` 0 · **4552** tests · `eslint`
+      0 errores.
+
+      ⚠️ **Commiteado y pusheado a la rama, NO desplegado ni migrado**: el swap y la
+      migración los hace `onia-cola` cuando Sergio Urcullo aprueba el pedido de deploy. Los
+      dos huecos que quedan van arriba como ítems propios (el correo, y la migración).
 
 - [x] ✅ **CERRADO el 2026-09-11 (`54c987a`, onia-platform): el paciente confirmaba su cita, no
       se guardaba, y la pantalla se veía IGUAL que antes de apretar.**
