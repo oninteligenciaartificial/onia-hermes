@@ -17,7 +17,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import { createBotConfig } from "./config.mjs";
-import { createState } from "./bot-engine.mjs";
+import { createState, toConversationRow } from "./bot-engine.mjs";
 import { runTurn } from "./run-turn.mjs";
 import { RUBRO_SIN_DEFINIR,
   DELIVERY_STATUSES,
@@ -695,4 +695,47 @@ test("stateFromRow reconstruye el estado del motor, contadores incluidos", () =>
 test("un bot_stage desconocido en la base no rompe: cae a 'nuevo'", () => {
   const state = stateFromRow({ conversation_key: "sim:x", channel: "sim", contact_ref: "x", bot_stage: "inventado" });
   assert.equal(state.botStage, "nuevo");
+});
+
+test("TODO campo que el motor guarda en raw sobrevive el viaje completo (la clase del acuse triple)", async () => {
+  // 2026-09-10, conv 11: el acuse del handoff salio TRES veces porque
+  // `handoffAckAt` vivia en toConversationRow (el motor) pero NO en el raw que
+  // escribe saveConversation — la base nunca lo recibia y cada turno lo cargaba
+  // en null. `branchAsked` tenia el agujero doble (tampoco en stateFromRow).
+  // Este test fija la CLASE: la lista canonica es la de toConversationRow(state).raw,
+  // y cada clave tiene que (1) salir en el PATCH real de saveConversation y
+  // (2) volver intacta por stateFromRow. Un campo nuevo que falte en una de las
+  // tres listas se pone rojo solo.
+  const state = {
+    ...createState({ channel: "chatwoot", contactRef: "11" }),
+    botStage: "handoff_humano",
+    qualifyAsks: 2,
+    outboundSeq: 7,
+    scheduledLabel: "jueves 15:00",
+    publicContact: "+59175414930",
+    inboxId: "5",
+    handoffAckAt: "2026-09-10T20:16:49.000Z",
+    branchAsked: true,
+  };
+  const canon = toConversationRow(state).raw;
+
+  const { requests, store } = recorder([{ status: 200, body: [{ conversation_key: state.conversationKey }] }]);
+  await store.saveConversation(state);
+  const patch = requests[0].body;
+
+  for (const [campo, valor] of Object.entries(canon)) {
+    assert.ok(campo in patch.raw, `saveConversation NO escribe raw.${campo}: se pierde en silencio (la clase de handoffAckAt)`);
+    assert.deepEqual(patch.raw[campo], valor, `raw.${campo} viaja distinto de lo que el motor guardo`);
+  }
+
+  const vuelto = stateFromRow({
+    conversation_key: state.conversationKey,
+    channel: state.channel,
+    contact_ref: state.contactRef,
+    bot_stage: state.botStage,
+    raw: patch.raw,
+  });
+  for (const campo of Object.keys(canon)) {
+    assert.deepEqual(vuelto[campo], state[campo], `stateFromRow NO restaura ${campo} (la mitad de branchAsked)`);
+  }
 });

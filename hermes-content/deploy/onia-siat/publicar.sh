@@ -31,6 +31,20 @@
 # 2026-09-04. Verificado antes de escribir esto: dentro de `emisor/` NO hay un
 # solo archivo que exista sólo en producción (35 en el VPS, los 35 versionados).
 #
+# SON DOS DESTINOS, NO UNO (2026-09-10). El emisor va a `emisor/` y el
+# orquestador de la corrida de volumen vive un nivel más arriba, en
+# /opt/onia-siat/, porque es el que lee el estado. Hasta hoy eso estaba escrito
+# acá como una EXENCIÓN — «run-fase1-volumen.sh → vive un nivel más arriba» —, y
+# es cierto dónde vive: lo que no lo saca es de necesitar deploy. Efecto medido:
+# el VPS corría la versión del 4-sep (633 B) con `origin/main` en la del 10-sep
+# (3023 B, commit 2e9230c5), la que deriva sus etapas de STAGE_ORDER en vez de
+# tipearlas — o sea la que corre la etapa I, la que pide el CUIS por punto de
+# venta. Sin ella, el día que exista el Punto de Venta 1 este script NO lo
+# desbloquea y los 11 combos pv1 (1.169 documentos de cobertura) no se emiten.
+# Una exención con su motivo escrito se lee como decidida y nadie la re-audita:
+# por eso ahora el archivo tiene destino y `scripts/publicador-siat-cubre.test.mjs`
+# exige que NINGÚN ejecutable del subárbol pueda quedar exento.
+#
 # POR QUÉ SE NIEGA CON UNA CORRIDA VIVA. Cambiar el código bajo un runner en
 # curso deja la corrida a mitad con dos versiones del emisor, y el estado que
 # escribe es el insumo de las etapas siguientes.
@@ -97,19 +111,35 @@ SRC="$REPO/$SUB"
 # Se copia código, tests y esquemas. Quedan fuera a propósito, con su motivo:
 #   .env.example / .gitignore  → del repo, no del despliegue
 #   ONBOARDING_CLIENTE.md      → documentación de cliente, no la ejecuta nadie
-#   run-fase1-volumen.sh       → vive en /opt/onia-siat/, un nivel más arriba
 ARCHIVOS=$(cd "$SRC" && git ls-files . | grep -E '^(src|test|xsd)/|^(README\.md|package\.json)$')
 [ -n "$ARCHIVOS" ] || { echo "ERR: no encontré archivos del emisor en $SRC"; exit 2; }
+
+# Lo que va un nivel más arriba (/opt/onia-siat/), donde vive el estado que lee.
+ARRIBA=$(cd "$SRC" && git ls-files . | grep -E '^run-fase1-volumen\.sh$')
+[ -n "$ARRIBA" ] || { echo "ERR: no encontré el orquestador de volumen en $SRC"; exit 2; }
+DEST_ARRIBA=$(dirname "$DEST")
 
 # El diff se hace SIN los retornos de carro: la copia de /opt llegó por scp desde
 # Windows y tiene CRLF, así que md5 y `diff` la marcan entera como distinta
 # aunque no cambie un solo byte útil. Ese falso positivo ya hizo copiar a mano
 # encima de producción para "arreglar" algo que estaba bien (2026-09-08).
+#
+# El destino se pregunta UNA vez, acá, y lo usan los tres pasos (comparar,
+# copiar, verificar). Tener la regla escrita tres veces es como se desincronizan.
+destino_de() {
+  case " $ARRIBA " in
+    *" $1 "*) echo "$DEST_ARRIBA/$1" ;;
+    *)        echo "$DEST/$1" ;;
+  esac
+}
+TODOS="$ARCHIVOS $ARRIBA"
+
 CAMBIAN=""
-for f in $ARCHIVOS; do
-  if [ ! -f "$DEST/$f" ]; then
+for f in $TODOS; do
+  d=$(destino_de "$f")
+  if [ ! -f "$d" ]; then
     CAMBIAN="$CAMBIAN$f (NUEVO)\n"
-  elif ! diff -q <(tr -d '\r' < "$SRC/$f") <(tr -d '\r' < "$DEST/$f") >/dev/null 2>&1; then
+  elif ! diff -q <(tr -d '\r' < "$SRC/$f") <(tr -d '\r' < "$d") >/dev/null 2>&1; then
     CAMBIAN="$CAMBIAN$f\n"
   fi
 done
@@ -169,15 +199,21 @@ BACKUP="$(dirname "$DEST")/emisor.backup-$TS"
 cp -a "$DEST" "$BACKUP" || { echo "ERR: no pude hacer el backup en $BACKUP"; exit 1; }
 echo "backup: $BACKUP"
 
-for f in $ARCHIVOS; do
-  mkdir -p "$DEST/$(dirname "$f")" || { echo "ERR: no pude crear $DEST/$(dirname "$f")"; exit 1; }
-  cp "$SRC/$f" "$DEST/$f" || { echo "ERR: no pude copiar $f"; exit 1; }
+for f in $TODOS; do
+  d=$(destino_de "$f")
+  mkdir -p "$(dirname "$d")" || { echo "ERR: no pude crear $(dirname "$d")"; exit 1; }
+  cp "$SRC/$f" "$d" || { echo "ERR: no pude copiar $f"; exit 1; }
+  # El bit de ejecución no viaja con `cp` a un archivo que ya existía: sin esto,
+  # el orquestador se despliega y deja de poder correrse.
+  [ -x "$SRC/$f" ] && chmod +x "$d"
 done
 
 # ── verificar que lo copiado es lo que hay en main ──────────────────────────
 FALLA=""
-for f in $ARCHIVOS; do
-  diff -q <(tr -d '\r' < "$SRC/$f") <(tr -d '\r' < "$DEST/$f") >/dev/null 2>&1 || FALLA="$FALLA $f"
+for f in $TODOS; do
+  d=$(destino_de "$f")
+  diff -q <(tr -d '\r' < "$SRC/$f") <(tr -d '\r' < "$d") >/dev/null 2>&1 || FALLA="$FALLA $f"
+  [ -x "$SRC/$f" ] && [ ! -x "$d" ] && FALLA="$FALLA $f(sin-permiso-de-ejecucion)"
 done
 if [ -n "$FALLA" ]; then
   echo "ERR: después de copiar, estos archivos siguen difiriendo:$FALLA" >&2

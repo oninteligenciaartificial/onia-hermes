@@ -71,7 +71,45 @@ y sin operar. Acá se opera, con verificación por ítem.
 > (5 lectores de código + 4 capturas de producción). Orden de ejecución acordado: recarga →
 > cuentas → bot repetido (vive en `cola/chatbot.md`) → UI.
 
-- [ ] 🔴 **T1 — La recarga "+200 conversaciones por Bs 190" se VENDE pero no se puede APLICAR.**
+- [ ] 🔴 **T-plata — dos bloqueos que solo Sergio Urcullo puede pagar** (detectados el
+      10-sep midiendo el precio de la recarga; avisados por el tablero):
+      (1) **OpenAI sin crédito desde el 9-sep ~04-06 UTC** (medido en LiteLLM_SpendLogs: 38
+      failures 429): la rama off-guion del bot cae al texto de respaldo (no muda, pero no
+      reformula) y **Hermes está caído entero** (misma cuenta). Recargar en
+      platform.openai.com. El gasto del bot es ruido: USD 0,00085 en toda su historia.
+      (2) **Método de pago en Meta antes del 1-oct-2026**: la hoja oficial "effective
+      October 1, 2026" ya salió — service USD 0,0113/mensaje (Rest of Latin America, cubre
+      Bolivia) tras 1.000 mensajes de servicio gratis/mes por número; **sin tarjeta cargada
+      Meta DEJA DE ENTREGAR desde el mensaje 1.001** — bot mudo a mitad de mes. Vale para
+      nuestro número y para cada cliente con número propio (anotarlo en el onboarding del
+      canal WhatsApp). Fundamento completo en el comentario de RECARGA_CONVERSACIONES de
+      `onia-platform/lib/pricing.ts` y memoria meta-whatsapp-clientes actualizada.
+      **LISTO =** crédito OpenAI >0 (el off-guion vuelve a reformular, Hermes contesta) y
+      método de pago visible en el billing de Meta.
+
+- [ ] 🟡 **T-nueva — `recorrido-cliente` crea una org QA por día y NUNCA la borra.** Medido
+      durante la purga del 10-sep: mientras se borraban las 7 QA acumuladas apareció
+      `zz-qa-2026-09-10-2209-negocio-wxbwh`, creada por el patrullaje diario a las 22:09 (así
+      se juntaron las 7 — 4 eran de "modulos" del 06-sep, mismo patrón). El pedido de Sergio
+      Urcullo ("solo una cuenta") no se sostiene si el loop la repuebla cada madrugada.
+      **Fix:** el prompt/script del recorrido borra su org + `auth.users` al terminar (éxito o
+      fallo), protocolo de la skill onia-db (`onia-platform/.claude/skills/onia-db/SKILL.md`): email
+      `oninteligenciaartificial+qa*` o `zz-qa-*@onia.com.bo`, borrado por slug exacto. Carril
+      loops (`hermes-content/docs/cola/loops.md` es su cola natural). **LISTO =** dos corridas
+      seguidas del recorrido dejan `public.organizations` con las mismas filas que antes.
+
+- [x] 🔴 **T1 — La recarga "+200 conversaciones por Bs 190" se VENDE pero no se puede APLICAR.**
+      **CERRADO el 2026-09-10** (`6183fb02` en master de onia-platform, DEPLOYADO 22:56 UTC con
+      gates 5/5): columna `recargadas` en `chatbot_uso_mensual` (migración
+      `20260910230000_chatbot_recargadas` aplicada en prod con backup), `cuotaDe(addon,
+      recargadas)`, `aplicarRecarga()` que además destraba los avisos del 80 %/corte (eran
+      una-vez-por-mes: el que recargaba y volvía a agotar quedaba mudo), `POST
+      /api/admin/organizations/[id]/recarga-chatbot` (superadmin, 409 sin add-on) y botón en la
+      ficha admin junto al toggle. Tests 35/35 (`onia-platform/lib/chatbot/cupo.test.ts`),
+      tsc/eslint 0. **VERIFICADO MIRANDO el 2026-09-10 ~23:45 UTC**: recarga aplicada a
+      Clinica Sergio por el BOTON real de la ficha, y `/settings/chatbot` del cliente
+      renderiza "0 de 700" con el texto dinamico — capturado y enviado a Sergio Urcullo.
+      La recarga queda puesta en su org de pruebas (700 este mes, vuelve sola a 500 el 1-oct).
       Medido 10-sep: `CupoConversacionesCard` la ofrece desde el 80% del cupo (decisión de
       Sergio Urcullo del 05-sep), el cliente pagaría por WhatsApp… y `cuotaDe()`
       (`lib/chatbot/cupo.ts`) devuelve SIEMPRE el literal 500 de `pricing.ts`: no hay campo por
@@ -83,7 +121,18 @@ y sin operar. Acá se opera, con verificación por ítem.
       con recarga aplicada muestra "x de 700" en `/settings/chatbot` y el motor recibe
       `limite: 700` por `/api/chatbot-knowledge/published`, mirado, no supuesto.
 
-- [ ] 🔴 **T2 — Purga de cuentas QA: el panel central tiene que ser UNO** (pedido Sergio Urcullo
+- [x] 🔴 **T2 — CERRADO el 2026-09-10 en la base** (falta solo la mirada en `/admin/chatbots`,
+      va con las capturas del cierre): backup pre-purga-qa-20260910-2254.sql (public+auth,
+      805 KB, en `/root/backups-chatbot/` del VPS) → DELETE de las 7 orgs QA por slug exacto +
+      la octava que el recorrido creó a las 22:09 → DELETE de sus 8 `auth.users` por email
+      exacto. Quedan 3 orgs / 3 usuarios: `onia-interna` (superadmin), `bolivian-electricidad`
+      (cliente real), `clinica-sergio` (ver pregunta abajo). `auth.users` con `%qa%` = 0.
+      Anotado: el inbox 7 de Chatwoot (era de zz-qa-clinica-chatbot) quedó huérfano, inofensivo.
+      **Pregunta ABIERTA a Sergio Urcullo:** ¿`clinica-sergio-p2ljs` (sergio@onia.com.bo) se
+      borra también? Es su banco de pruebas con el add-on activo y el bot configurado —
+      borrarla mata las pruebas del panel; no se toca sin su palabra.
+
+      Purga original (pedido Sergio Urcullo
       10-sep: "solo tenemos una cuenta… borra las demás"). Medido en la base ese día: 10 orgs,
       de las cuales **7 son QA** (`zz-qa-clinica-chatbot`, `zz-qa-ferreteria-tornillo`,
       `zz-qa-estetica-modulos`, `qa-modulos-mrk0q`, `qa-modulos-rj7tv`,
@@ -98,7 +147,18 @@ y sin operar. Acá se opera, con verificación por ítem.
       `auth.users` → anotar inbox 7 de Chatwoot huérfano. **LISTO =** `/admin/chatbots` lista
       solo las orgs vivas, mirado en prod.
 
-- [ ] 🟡 **T3 — UI rota del panel, medida en las capturas del 10-sep:** (a) la barra flotante
+- [x] 🟡 **T3 — CERRADO el 2026-09-10 (`363dfa4e` + `bc7a447a` en master, deployado y
+      MIRADO ~23:45 UTC).** La causa real de (b) NO era la fuente: era **flex-shrink** — en el
+      nav con `overflow-x-auto` los spans de icono se aplastaban a 0-16px (medido en el DOM
+      vivo con font-size 24) y el glifo desbordaba pisando el label. Fix de CLASE:
+      `flex-shrink: 0` en `.material-symbols-outlined` (globals.css) — un glifo es indivisible,
+      vale para todo el producto — + Links de AdminNav con `shrink-0 whitespace-nowrap`.
+      Re-medido en prod: los 8 spans en 24px, barra legible (captura enviada). De paso cayo un
+      bug de CLASE real de cache: la URL del woff2 era fija y Cloudflare/el navegador servian
+      subsets viejos tras cada deploy — ahora `subset-iconos.mjs` versiona `?v=<hash>` en
+      globals.css y en el preload de layout.tsx. (c) los CTA del addon estan vivos (captura).
+      (a) era ARTEFACTO de captura fullPage: con viewport real scrolleado al fondo la barra no
+      tapa nada (LayoutShell ya reservaba `pb-40`). Detalle original: (a) la barra flotante
       "Preguntá por tu negocio" (`onia-platform/components/ayuda/BarraAsistente.tsx`) se pinta
       ENCIMA del formulario del editor del bot (tapa "A quién deriva el bot") y de la última
       fila de la tabla de `/admin/chatbots` — falta reservar espacio (padding-bottom del
@@ -119,6 +179,22 @@ y sin operar. Acá se opera, con verificación por ítem.
       URGENTE desde la rama `handoff_humano` de
       `hermes-content/deploy/vps-ops/bot/bot-engine.mjs` (el aviso normal del handoff ya salió
       antes, no se repite). No bloquea venta; va después de T1-T4.
+
+- [ ] **Servicios profesionales fía contra una tabla que su pantalla de clientes no lee.**
+      Sale del arreglo de la importadora (`d634913`, 2026-09-10). Ese pack tiene
+      `/comercio/caja` **y** `/patients` (rotulada «Clientes»), y las dos guardan gente en
+      tablas distintas: fiar llama a `ensureClienteFiado`, que da de alta en
+      `onia_core_business_partners`, mientras `/patients` lee `patient`. O sea que quien fía
+      queda en un lugar que el dueño no abre nunca. **No se arregla con una entrada de menú**
+      —agregarle `/comercio/clientes` le pondría DOS «Clientes» apuntando a dos tablas, peor
+      que el hueco—: el arreglo es que su caja fíe contra la misma ficha, y eso es desarrollo.
+      Por eso está declarado como excusa NOMBRADA en
+      `lib/platform/administrar-lo-que-se-acumula.test.ts`, que la **re-mide cada corrida**:
+      el día que el pack gane la pantalla o pierda la caja, el gate dice que la excusa sobra.
+      Hoy no hay daño acumulado — medido el 2026-09-10, `qa-modulos-mrk0q` tiene 0 partners —,
+      así que es trabajo de antes-de-que-duela, no un incendio.
+      LISTO = una venta fiada desde la caja de ese rubro deja al cliente donde su dueño lo ve,
+      con la fila en la base como prueba.
 
 - [x] 🔴 **CERRADO el 2026-09-10 (`825f227`, rama del carril — falta el merge del integrador):
       el aviso del cupo del chatbot y el del tope de clientes le llegaban al teléfono de la

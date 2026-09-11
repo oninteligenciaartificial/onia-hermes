@@ -18,7 +18,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdtempSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
@@ -26,6 +26,7 @@ import path from "node:path";
 import {
   acoplesDeCopia,
   compararEspejo,
+  frescuraDelEspejo,
   fuentesLocales,
   ladoVps,
   md5Archivo,
@@ -353,4 +354,67 @@ test("todo archivo VIVO en /opt/onia/bot que el deploy pisaria esta versionado e
     `viven SOLO en ${DIR_VPS} y se perderian con el proximo deploy: ${sinVersionar.join(", ")}. ` +
       `Rescatalos al espejo con cp -p, o agregalos a EXENTOS_DEL_VPS con su motivo.`,
   );
+});
+
+// ── el espejo no puede opinar sobre el deploy si el atrasado es él ────────────────────────
+//
+// 2026-09-10: tercera desincronizacion, y la primera que NO era drift. El clon del VPS estaba
+// un commit atras de origin/main; ese commit (`4bc1c97e`) toca `persistence.mjs` de este
+// subarbol y produccion YA lo corria. Este script comparo el archivo VIEJO del clon contra el
+// NUEVO del VPS y canto DESINCRONIZADO — o sea acuso de "falta desplegar" a una produccion que
+// estaba ADELANTE. `deploy_sin_pedido.mjs` lo tradujo a un pedido de deploy para Sergio
+// Urcullo, y ejecutarlo habria copiado el clon atrasado encima y revertido el arreglo.
+//
+// De los dos errores posibles el caro es declarar pendiente lo que no lo esta, asi que el
+// veredicto sin frescura es "no se" (exit 2), nunca "hay drift" (exit 1).
+
+test("con el espejo en origin/main, el veredicto se puede dar", () => {
+  assert.equal(frescuraDelEspejo({ difieren: [] }).fresco, true);
+});
+
+test("si el espejo difiere de origin/main NO se concluye, y el motivo nombra el archivo", () => {
+  const r = frescuraDelEspejo({ difieren: ["hermes-content/deploy/vps-ops/bot/persistence.mjs"] });
+  assert.equal(r.fresco, false, "un espejo atrasado no puede distinguir su atraso de un drift");
+  assert.match(r.motivo, /persistence\.mjs/, "sin nombrar el archivo nadie sabe que poner al dia");
+});
+
+test("si no se le pudo preguntar a git tampoco se concluye", () => {
+  const r = frescuraDelEspejo({ error: "not a git repository" });
+  assert.equal(r.fresco, false);
+  assert.match(r.motivo, /not a git repository/);
+});
+
+// EL ANCLA: el que consume este script es `leerPendienteDelEspejo` de `deploy_sin_pedido.mjs`,
+// que decide por el TEXTO. Un veredicto sin frescura que dijera "ESPEJO OK" haria dar por al
+// dia un bot con drift real, y uno que dijera "DESINCRONIZADO" abriria el pedido falso que
+// esto vino a matar. Tiene que leerse `null` = NO MEDIDO. Se cruza contra la funcion de
+// verdad, no contra una copia del regex: una copia se desincroniza y el gate queda de adorno.
+test("el texto del veredicto sin frescura le llega al gate como NO MEDIDO", async () => {
+  const { leerPendienteDelEspejo } = await import("../../../../scripts/deploy_sin_pedido.mjs");
+
+  // El texto se le pide al SCRIPT, no se copia aca: un test que trae su propia copia del
+  // mensaje sigue verde el dia que el mensaje cambia, que es cuando el gate se rompe.
+  // Se lo corre desde una copia en un directorio que NO es un repo: ahi `frescuraEnVivo`
+  // falla, sale por esta rama y ni llega a tocar el VPS, asi que el caso no usa red.
+  const espejo = fileURLToPath(new URL(".", import.meta.url));
+  const fuera = mkdtempSync(path.join(tmpdir(), "espejo-sin-repo-"));
+  let salida;
+  let codigo = 0;
+  try {
+    const copia = path.join(fuera, "espejo-check.mjs");
+    writeFileSync(copia, readFileSync(path.join(espejo, "espejo-check.mjs")));
+    try {
+      salida = execFileSync(process.execPath, [copia], { encoding: "utf8", timeout: 60_000, stdio: ["ignore", "pipe", "ignore"] });
+    } catch (e) {
+      salida = String(e.stdout || "");
+      codigo = e.status;
+    }
+  } finally {
+    rmSync(fuera, { recursive: true, force: true });
+  }
+
+  assert.equal(codigo, 2, `sin poder medir tiene que salir 2 (no se), no 1 (hay drift). Dijo: ${salida}`);
+  assert.equal(leerPendienteDelEspejo(salida), null, `no es ni al dia ni pendiente: es no se. Dijo: ${salida}`);
+  assert.equal(leerPendienteDelEspejo("ESPEJO OK — coincide"), false);
+  assert.equal(leerPendienteDelEspejo("ESPEJO DESINCRONIZADO — vs el VPS"), true);
 });
