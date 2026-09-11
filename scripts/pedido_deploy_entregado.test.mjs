@@ -298,3 +298,81 @@ test('el main INVOCA cuerpoVencido en el bloque de plataforma, no solo lo declar
   assert.match(vecindad, /cuerpoVencido\(\{/, 'el main tiene que llamar a cuerpoVencido');
   assert.match(vecindad, /vencidos\.push\(/, 'y empujar el resultado, o el veredicto se tira');
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// LA FAMILIA SIMETRICA DE `cuerpoVencido`, abierta hasta el 2026-09-11: el cuerpo que
+// quedo CORTO. Esa caza el cuerpo que SOBRE-describe; esta el que SUB-describe.
+//
+// El caso real: t_5511da55 describia DOS arreglos en prosa, medidos contra «master 42ed1e2»,
+// y para cuando se leyo master era 18b1feb con 6 commits mas — el ok publicaba SIETE. Los
+// cinco que faltaban vivian en comentarios, asi que `promesaCompleta` decia «0 sin resolver»
+// con razon para SU pregunta (lee cuerpo y comentarios juntos), y `cuerpoVencido` salia
+// NO_MEDIDO porque el cuerpo describe en prosa y no lleva la marca. Nadie hacia esta.
+import { cuerpoCorto } from './pedido_deploy_entregado.mjs';
+
+const SHOW_PROSA = [
+  'Task t_5511da55: Publicar app.onia.com.bo: el aviso de que tu plan vence',
+  '  status:    blocked',
+  '',
+  'Body:',
+  'DESPLEGAR: plataforma',
+  'Recuento derivado del publicador en seco (master 42ed1e2; produccion corre build-cd1629a):',
+  '1) El interruptor de correos a SUS clientes le apagaba el aviso de que SU plan vence.',
+  '2) El cliente al que le fian quedaba en una tabla que su dueno no abre.',
+  '',
+  'Comments (1):',
+  '  [2026-09-11 04:57] x: DEPLOY PEDIDO 887b3ea — el plan SEMANAL recibia el aviso el dia que pagaba',
+].join('\n');
+
+const PUBLICARIA = [
+  { sha: '859fd05', titulo: 'el interruptor apagaba el aviso del plan' },
+  { sha: '887b3ea', titulo: 'el plan semanal recibia el aviso el dia que pagaba' },
+];
+
+test('el defecto del 2026-09-11: el cuerpo describe en prosa y su ok publica mas -> SUB_DESCRIBE', () => {
+  const r = cuerpoCorto({ texto: SHOW_PROSA, publicaria: PUBLICARIA });
+  assert.equal(r.estado, 'SUB_DESCRIBE');
+  // Se lee con `.map().join()` y NO con `.mudos[0]`: sobre una lista vacia el indexado lanza,
+  // y un throw mata el reporter entero antes de imprimir una linea — la mutacion se leeria
+  // como «el gate aguanta».
+  assert.equal(r.mudos.map((m) => m.sha).join(','), '859fd05,887b3ea',
+    'los dos son mudos PARA EL CUERPO: uno no esta en ningun lado y el otro solo en un comentario');
+});
+
+// EL CASO DE ANCLAJE. Sin el, marcar mudo a todo pasaria igual y el gate pareceria vivo.
+test('el caso que YA cumple: el cuerpo nombra todo lo que publica -> COMPLETA', () => {
+  const cuerpoCompleto = SHOW_PROSA.replace(
+    '1) El interruptor',
+    '1) DEPLOY PEDIDO 859fd05 y 887b3ea — El interruptor');
+  assert.equal(cuerpoCorto({ texto: cuerpoCompleto, publicaria: PUBLICARIA }).estado, 'COMPLETA');
+});
+
+// La otra mitad del anclaje: el comentario NO puede tapar al cuerpo, que es el bug entero.
+// Si alguien vuelve a leer el `show` completo, este caso se pone en rojo.
+test('un sha nombrado SOLO en un comentario no absuelve al cuerpo', () => {
+  const r = cuerpoCorto({ texto: SHOW_PROSA, publicaria: [{ sha: '887b3ea', titulo: 'solo en comentario' }] });
+  assert.equal(r.estado, 'SUB_DESCRIBE', 'el comentario lo nombra, el cuerpo no');
+});
+
+test('sin poder derivar que publica -> NO_MEDIDO, nunca COMPLETA', () => {
+  assert.equal(cuerpoCorto({ texto: SHOW_PROSA, publicaria: null }).estado, 'NO_MEDIDO');
+});
+
+// Declarado no es invocado: misma trampa que la de `cuerpoVencido` de arriba.
+test('el main INVOCA cuerpoCorto en el bloque de plataforma, no solo lo declara', async () => {
+  const { readFileSync } = await import('node:fs');
+  const src = readFileSync(new URL('./pedido_deploy_entregado.mjs', import.meta.url), 'utf8')
+    .split('\n').filter((l) => !/^\s*(\/\/|\*|\/\*)/.test(l)).join('\n');
+  const desde = src.indexOf('clasificarPedido({ id: p.id');
+  assert.ok(desde > 0, 'no encontre el bloque de plataforma del main');
+  const vecindad = src.slice(desde, desde + 1800);
+  assert.match(vecindad, /cuerpoCorto\(\{/, 'el main tiene que llamar a cuerpoCorto');
+  assert.match(vecindad, /cortos\.push\(/, 'y empujar el resultado, o el veredicto se tira');
+  // 🔴 Y el push tiene que colgar de la comparacion CORRECTA. Pedir solo que `cortos.push(`
+  // aparezca se satisface con el ESQUIVE: cambiar la condicion a una que nunca se cumple deja
+  // el push en el fuente y el veredicto en la basura. Medido el 2026-09-11 validando este
+  // mismo gate: de cuatro mutaciones, las tres de la funcion pura cayeron en rojo y esta paso
+  // en VERDE con el main ya incapaz de reportar un solo pedido corto.
+  assert.match(vecindad, /SUB_DESCRIBE'\s*\)\s*cortos\.push\(/,
+    'el push tiene que dispararlo el estado SUB_DESCRIBE, no una condicion cualquiera');
+});
