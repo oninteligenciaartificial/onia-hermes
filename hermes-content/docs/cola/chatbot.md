@@ -257,6 +257,117 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-11 (`e6adb19`, onia-platform): la recarga del chatbot CADUCA a fin
+      de mes y ninguna de las tres superficies que la vende lo decía.** Bs 190 por 200
+      conversaciones que se evaporan el día 1.
+
+      No es copy: el producto lo aplica. `ChatbotUsoMensual.recargadas` es por
+      `(organizationId, mes)` y `estadoCupo` lee la fila del mes en curso, así que el 1 vuelve
+      a 0. Y el bloque de compra aparece **recién al 80 % del cupo**, que cae avanzado el mes:
+      el dueño que cruza el umbral un 28 paga y tiene dos días para usar lo que compró.
+
+      Las tres superficies mudas, medidas con el gate derivado del disco antes de tocar nada:
+      `CupoConversacionesCard.tsx:70` (el botón), `lib/chatbot/cupo.ts:278` (el aviso del corte)
+      y `lib/pricing.ts:202` (el mensaje de WhatsApp con el que el dueño la pide). Peor, el
+      estado agotado remataba con *«si no hacés nada, se renueva el 1 del mes que viene»* al
+      lado de *«podés sumar más»*: se lee como que lo comprado sobrevive a esa renovación.
+
+      **Lo que lo delata, y es la firma para buscar más de esta clase:** el aviso que sale
+      **después** de cobrar (`CHATBOT_RECARGA_APLICADA`) ya decía *«de este mes»*. La salvedad
+      estaba escrita, pero donde no la lee quien decide. Ningún gate podía verla — no sobra una
+      palabra prohibida, el precio sale de la fuente única, no es un rubro, ni un plan, ni un
+      rol, y el camino de fallo del botón ya estaba cubierto. Es el escalón siguiente de
+      `limite-que-corta.test.ts` (06-sep): ahí la venta callaba **cuánto te dan**; acá,
+      **cuánto te dura**.
+
+      Arreglo: no se borra la promesa, se condiciona (mismo patrón que `SEARXNG_URL` y el
+      importe del QR). `RECARGA_CONVERSACIONES.vigencia` vive una sola vez en `pricing.ts` y la
+      nombran las tres. Se quitó el párrafo que había agregado en la tarjeta: `textoDeCupo` ya
+      lo dice ahí y duplicaba la advertencia en la misma pantalla.
+
+      Gates: `lib/chatbot/recarga-dice-su-vigencia.test.ts` (mide lo que las funciones
+      DEVUELVEN + deriva del disco las superficies que ofrecen sumar, para que una nueva nazca
+      vigilada) y `CupoConversacionesCard.render.test.ts` (prueba que la pantalla lo PINTE —su
+      caso propio, el que el otro no puede ver). **Validados por mutación en 7 direcciones**,
+      incluido el esquive (salvedad lejos de la oferta) y un sujeto nuevo sin cubrir. Tres
+      gates de `onia-platform` verdes: `tsc` 0, 4438 tests, `lint` 0 errores.
+
+      ⚠️ **Commiteado y pusheado, NO desplegado**: el swap lo hace `onia-cola` cuando Sergio
+      Urcullo aprueba el pedido de deploy de plataforma. Hasta entonces el dueño sigue viendo
+      la versión muda.
+
+      **Queda una decisión de plata, anotada y no tomada acá** (radar, §recarga): arrastrar lo
+      no usado al mes siguiente. Hoy caduca; decirlo es honesto, pero la alternativa cambia lo
+      que el cliente recibe por Bs 190.
+
+- [x] ✅ **CERRADO el 2026-09-11 (`7a9e10c0`): el barrido de rescate intentó salvar un «hola»
+      real CUATRO veces, falló las cuatro, y salió con `exit 0` — la misma cara que una vuelta
+      sin trabajo. Nadie se enteró.**
+
+      Medido en el log de producción, no heredado. Inbox 5 (Onia WhatsApp), conversación 11:
+
+      ```
+      messages id=873  message_type=0  2026-09-10 19:28:49Z  "hola"
+      19:34  conv 11 msg 873 —  5 min sin respuesta -> mensaje_ya_procesado
+      19:44  conv 11 msg 873 — 15 min sin respuesta -> sin_respuesta
+      19:54  conv 11 msg 873 — 25 min sin respuesta -> sin_respuesta
+      20:04  conv 11 msg 873 — 35 min sin respuesta -> sin_respuesta
+      ```
+
+      El bot **nunca** le contestó. Dejó de figurar como huérfano a las 20:11 y no porque lo
+      rescataran: porque **la persona volvió a escribir sola**. Las cuatro vueltas cerraron con
+      `0 CONTESTADOS`, y `armarAvisoRescate()` sólo mira `contestado`, así que tampoco salió un
+      aviso. Un lead perdido, en silencio, con el instrumento que existe para verlo mirándolo.
+
+      **La causa:** `runRescateSweep` tenía **tres** salidas y contabilizaba **dos**. `contestado`
+      sumaba y avisaba; `respuesta_ilegible` y el error caían en `fallidos` (exit 1); y un cuerpo
+      **legible** que dice *no emití nada* no caía en ninguna. El propio archivo ya había escrito
+      la regla correcta para el hermano ilegible —*«no poder LEER el resultado no es 'no pasó
+      nada'»*— y no la aplicó al caso en que sí se puede leer. Media familia cubierta se lee como
+      familia cubierta.
+
+      **Por qué es demostrable y no una opinión sobre motivos:** `seleccionarHuerfanos` ya probó
+      que esa conversación no tiene **ningún** saliente. Entonces una reinyección sin `sent` dejó
+      a la persona tan muda como estaba, se llame como se llame el motivo — no hay que enumerar
+      motivos malos (lista de inclusión: falla abierto con el motivo nuevo que nadie previó). Se
+      enumera la **excusa**, que falla cerrado: `MOTIVOS_SIN_RESCATE_AJENO = {handoff_humano}`,
+      donde el bot se calla a propósito y el que espera es de `onia-vigia-sin-respuesta.sh`.
+
+      Reproducción (30 s) · 4 casos nuevos, validados por mutación en las dos direcciones —
+      ensanchar la excusa para tapar el tercer estado (el esquive) cae en 3 rojos, vaciarla en 2:
+
+      ```
+      cd hermes-content/deploy/vps-ops/bot && node --test rescate-run.test.mjs
+      ```
+
+      911/911 en `npm run test:bot`, que es el eslabón de la cadena que recoge ese archivo.
+
+      ⚠️ **COMMITEADO, NO DESPLEGADO.** El cron (`4,14,24,34,44,54 * * * *`) corre la copia de
+      `/root/loops/onia-hermes`, no la de `/opt/onia/bot` — así que esto se enciende solo cuando
+      el integrador lleve la rama a `main` (ese clon del VPS estaba al día al medirlo). **No
+      necesita pedido de deploy.**
+
+      **La mitad que queda abierta, dicha con su nombre:** ahora el fallo se VE en el log y el
+      barrido sale con `exit 1`, pero a Sergio Urcullo no le llega. Avisarle en cada vuelta serían
+      hasta 72 mensajes por el mismo mensaje (12 h de ventana ÷ 10 min de cron) — exactamente el
+      ruido que `t_7362c865` reclama. Falta avisar **una sola vez por mensaje**, y eso pide estado
+      durable que hoy el barrido no tiene. Va abajo como ítem propio.
+
+- [ ] **El rescate fallido se ve en el log y no le llega a nadie: falta avisar UNA vez por
+      mensaje.** En `hermes-content/deploy/vps-ops/bot/rescate-run.mjs`, función
+      `armarAvisoRescate()`. Es la mitad que dejó abierta `7a9e10c0` (arriba), y no es lo mismo
+      que el ruido de `t_7362c865`: aquél avisa de más sobre lo que salvó, éste no avisa nada
+      sobre lo que perdió.
+
+      El aviso no puede ser por vuelta: la ventana del huérfano es `MAX_EDAD_MS` = 12 h y el cron
+      corre cada 10 min, así que un solo mensaje sin rescatar daría hasta 72 avisos idénticos.
+      Hace falta recordar a quién ya se avisó, y `runRescateSweep` hoy no guarda nada entre
+      corridas.
+
+      Antes de elegir cómo: `bot_messages.message_key` ya es `chatwoot:<conv>:<msgId>` y ya tiene
+      unique — hay que medir si sirve de marca sin ensuciar el dedup del motor, en vez de inventar
+      un archivo de estado al lado. **Medir primero, decidir después.**
+
 - [x] ✅ **CERRADO el 2026-09-10 (`31cdfba`): quien pedía hablar con una PERSONA recibía siempre
       «Te conecto con un agente, en unos momentos te atenderán» — y cuando la conversación no
       llegaba a ninguna bandeja, el bot además se callaba. Sin bot y sin humano, con la promesa
