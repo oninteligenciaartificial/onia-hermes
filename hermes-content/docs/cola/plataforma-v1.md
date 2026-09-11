@@ -63,6 +63,45 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-11 (`8d9e467`, onia-platform — falta mergear y desplegar): el
+      que pidió la baja perdía la escritura sin un solo aviso previo, y no tenía cómo
+      verificar que su baja había quedado registrada.**
+
+      La baja nació el 10-sep (`409ae11`) con sus **dos** mitades bien hechas: la fecha
+      efectiva al final del período pago —el contrato concede no renovar, no reembolsa por
+      adelantado— y el cron de renovación filtrando `planCanceledAt: null`, que es correcto:
+      al que pidió irse no se le cobra cuatro veces más.
+
+      **Pero ese filtro era lo ÚNICO que le avisaba CUÁNDO pierde la escritura**, porque los
+      pasos D-7 / D-3 / D-1 / vencido salen de ese mismo cron. Apagar el canal **comercial**
+      apagó también el aviso **operativo** que viajaba por ahí.
+
+      Medido sobre el árbol entero: `planCanceledAt` no aparecía en ninguna superficie del
+      dueño salvo `avisoSoloLectura`, que pregunta por `isWriteBlocked` y por lo tanto
+      aparece recién **después** del corte. `/admin/plans` sí muestra «De baja», pero es
+      backoffice SUPERADMIN: lo ve el operador, no el cliente. Consecuencias, las dos mudas:
+      el día `planEnd` la cuenta pasa a `canceled` → `read_only` **sin gracia** (la gracia es
+      sólo del trial) sin un aviso previo por ningún canal; y «ya lo hablé» y «no se anotó»
+      eran indistinguibles desde el panel.
+
+      Ningún gate podía verlo: no sobra ni falta una palabra, el rubro, el rol y el monto
+      derivan bien, y la pantalla renderiza perfecto. `baja.test.ts` cubre la FECHA y
+      `aviso-solo-lectura.test.ts` cubre que el aviso use la misma función que corta — las
+      dos verdes, con razón, sobre este defecto.
+
+      Repone la mitad operativa **sin** reponer la comercial: el banner dice que quedó
+      anotada y qué pasa el día del corte, y **no lleva botón de pagar** — ponerlo devolvería
+      por la ventana lo que el filtro del cron echó por la puerta.
+      `lib/subscription/baja-programada.ts` + `components/AvisoBajaProgramada.tsx`, cableado
+      en `app/(dashboard)/layout.tsx`.
+
+      **Validado por mutación: 7 en rojo, base verde.** La 3.ª encontró que el guard del
+      llamador **nacía hueco** — el ancla aceptaba `= false && bajaProgramada ?`, así que
+      bastaba anteponer `false &&` para dejar el banner muerto con el caso en VERDE. Sólo lo
+      delató la mutación, no leerlo. Gates: `tsc` 0 · `vitest` 4636 passed · `lint` 0 errores.
+      **Mirado** renderizado con el CSS del build vivo: el icono `event_busy` (ya en la fuente
+      subseteada) dibuja el glifo, no la palabra.
+
 - [x] ✅ **CERRADO el 2026-09-11 (`f231555`, onia-platform — falta mergear y desplegar):
       reprogramar una cita podía pisar el turno de otro paciente, y el sistema le mandaba
       al cliente el correo confirmándoselo.**
