@@ -100,8 +100,9 @@ export default function PreciosPage() {
                 Tres planes que se distinguen por el salto de valor — ordenar,
                 recuperar, crecer sin techo. Cada uno dice exactamente qué lleva
                 y qué no, con los números que el sistema aplica de verdad:
-                usuarios, fichas de clientes y recordatorios. Pagás mensual,
-                semanal o anual, y cancelás cuando quieras.
+                usuarios, fichas de clientes y recordatorios. Pagás por
+                adelantado el ciclo que elijas y no renovás cuando quieras: sin
+                permanencia y sin penalidad.
               </p>
             </Reveal>
           </div>
