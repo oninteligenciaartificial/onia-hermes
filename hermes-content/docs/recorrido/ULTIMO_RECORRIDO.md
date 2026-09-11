@@ -985,3 +985,20 @@ pero un **producto + su variante** en comercio (`onia_commerce_products`,
 **Lo que le falta, y es lo próximo:** correr el mismo recorrido con **otro rubro** (el alta
 ofrece cinco; el script ya acepta `RECORRIDO_RUBRO="Comercio / tienda"`, pero nunca se probó — un
 rubro encendido que rompe el onboarding es exactamente el fallo que nadie ve).
+
+## Cobertura por rubro (2026-09-10/11)
+
+El alta ofrece **cinco** rubros hoy (medido en vivo, no de memoria — probar "Veterinaria" da paso
+3 ROTO con la lista real: Clínica dental · Comercio / tienda · Importadora / distribuidora ·
+Estética y spa · Servicios profesionales. Veterinaria existe como pack en el código pero no está
+encendida en el alta — eso es alcance de v1.0, no un bug).
+
+Los cinco están corridos con el instrumento de 9 pasos, todos `completo: true` con 0 filas
+`zz-qa-` al cerrar:
+
+- **Importadora / distribuidora** — 2026-09-11: los 8 pasos que le corresponden. El paso 7 sale
+  `NO-APLICA` de forma coherente (su propia tarjeta de venta dice "Catálogo, cotizaciones B2B y
+  costeo de importación", sin agenda, y el menú no la tiene). El dato del paso 6 se cargó en
+  Catálogo y no aparece en `/dashboard` — correcto, el panel no lista storefront.
+- Dental, Comercio, Estética, Servicios profesionales — corridos en vueltas anteriores, ver más
+  arriba y en la cola.
