@@ -1927,6 +1927,11 @@
 .ejeOff .ejeMark {
   color: color-mix(in srgb, currentColor 70%, transparent);
 }
+/* Hasta dónde llega ESE eje en Onia. Se lee, no grita: la salvedad acompaña al
+   «Sí», no lo tapa. */
+.ejeAlcance {
+  color: color-mix(in srgb, currentColor 62%, transparent);
+}
 
 /* dos tarjetas en vez de tres (contacto) */
 @media (min-width: 900px) {

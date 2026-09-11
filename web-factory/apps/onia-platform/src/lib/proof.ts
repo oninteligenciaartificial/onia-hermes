@@ -29,7 +29,12 @@
  * cambia en el doc fuente, se cambia aca y no al reves.
  */
 
-import { PLANES, bs } from "@/lib/pricing";
+import {
+  ALCANCE_CON_AGENDA,
+  ALCANCE_CON_FICHA,
+  PLANES,
+  bs,
+} from "@/lib/pricing";
 
 /** Fecha en que se consultaron todos los precios de la comparacion. */
 export const FECHA_CONSULTA = "30 de julio de 2026";
@@ -45,11 +50,49 @@ export const TC_NOTA = "Bs 11,89 = USD 1 (tipo de cambio oficial del BCB al 29-j
  */
 export type Estado = "si" | "no" | "tramite";
 
-/** Las tres capacidades que definen la categoria. Ni una mas: es un eje, no una tabla de features. */
+/**
+ * Las tres capacidades que definen la categoria. Ni una mas: es un eje, no una
+ * tabla de features.
+ *
+ * `alcanceOnia` — hasta donde llega ESA capacidad **en Onia**, o `null` si llega
+ * a los cinco rubros que el alta entrega. Solo se pinta en nuestra fila: de la
+ * competencia publicamos lo que ellos publican, y sus cortes internos no los
+ * conocemos.
+ *
+ * 🔴 **Por que ningun gate podia ver que faltaba.** Los tres instrumentos del
+ * eje (capacidad, RUBRO) persiguen la MENCION de la capacidad como TEXTO:
+ * `app/capacidad-acotada.test.ts` la busca por su nombre en todo `src/`,
+ * `app/capacidad-en-la-enumeracion.test.ts` la busca dentro de una enumeracion y
+ * `(sitio)/capacidad-por-rubro.test.ts` sale de las lineas de `PLANES`. Aca la
+ * afirmacion **no es texto**: es el dato `estados: { gestion: "si" }`, y el
+ * nombre de la capacidad vive en OTRO objeto —este— unido por una clave. La
+ * palabra «agenda» no aparece ni una vez al lado del «si», asi que ningun patron
+ * de texto puede juntar las dos mitades, por bien escrito que este.
+ *
+ * Medido el 2026-09-11 contra `origin/master` de `onia-platform`, recorriendo
+ * `VERTICAL_PACKS` de los 5 rubros de `RUBROS_ACTIVOS`: `tieneAgenda` y
+ * `guardaClientesEnPatients` —el corte del Recall desde `64279ff`— son los dos
+ * **false** para `gestios-general` (comercio) y `proveegest-electrico`
+ * (importadora). O sea que la tabla les decia «Si» a las dos capacidades a 2 de
+ * los 5 rubros donde ninguna existe, en las TRES superficies vivas que la
+ * renderizan (`/comparativa`, `/v1/comparativa` y la portada de `/v1`) — y
+ * justamente en la pantalla que existe para que nos crean.
+ *
+ * El alcance se LEE de `lib/pricing.ts`: dos copias de la misma salvedad es como
+ * llegaron a convivir cuatro precios del mismo chatbot.
+ */
 export const EJES = [
-  { id: "gestion", label: "Agenda y ficha del cliente" },
-  { id: "siat", label: "Factura SIAT boliviana" },
-  { id: "agentes", label: "Agentes que trabajan solos" },
+  {
+    id: "gestion",
+    label: "Agenda y ficha del cliente",
+    alcanceOnia: ALCANCE_CON_AGENDA,
+  },
+  { id: "siat", label: "Factura SIAT boliviana", alcanceOnia: null },
+  {
+    id: "agentes",
+    label: "Agentes que trabajan solos",
+    alcanceOnia: ALCANCE_CON_FICHA,
+  },
 ] as const;
 
 export type EjeId = (typeof EJES)[number]["id"];

@@ -198,6 +198,11 @@
   flex: 1;
 }
 
+/* Hasta dónde llega ESE eje en Onia: acompaña al «sí», no lo tapa. */
+.marcaAlcance {
+  opacity: 0.62;
+}
+
 .marcaEstado {
   font-size: max(0.76rem, var(--fs-label-min));
   letter-spacing: 0.06em;
