@@ -71,9 +71,10 @@ y sin operar. Acá se opera, con verificación por ítem.
 > (5 lectores de código + 4 capturas de producción). Orden de ejecución acordado: recarga →
 > cuentas → bot repetido (vive en `cola/chatbot.md`) → UI.
 
-- [x] 🔴 **CERRADO el 2026-09-11 (`63de4ff`, pusheado — NO mergeado a `master` ni desplegado):
-      el recordatorio de renovación le cotizaba a TODOS el precio MENSUAL, y el que paga anual
-      iba a transferir Bs 1.500 por una renovación de Bs 15.000.**
+- [x] 🔴 **CERRADO el 2026-09-11 (`63de4ff`, **ya en `master`** — medido el 2026-09-11 01:05 La Paz
+      con `git merge-base --is-ancestor 63de4ff origin/master` → SÍ): el recordatorio de
+      renovación le cotizaba a TODOS el precio MENSUAL, y el que paga anual iba a transferir
+      Bs 1.500 por una renovación de Bs 15.000.**
 
       Sale de auditar `26212f5`, que entró a `master` esa misma madrugada (el ciclo de
       renovación por QR). `organizations` **no guarda el ciclo** —sólo `plan` y `planEnd`—; el
@@ -1337,8 +1338,13 @@ y sin operar. Acá se opera, con verificación por ítem.
       **leer la columna**, y quien de verdad tenga que hacerlo se declara.
 
       **Gates:** `tsc` 0 · `vitest` **3971 pasan / 326 archivos** · `eslint` 0 errores.
-      ⚠️ **Commiteado y en la rama, NO mergeado a `master` ni desplegado** — no viaja con el
-      pedido `t_daa8750c`, que publica `master`. El merge es de `onia-cola`.
+      ✅ **Ya está en `master`** — medido el 2026-09-11 01:05 La Paz. Este pie decía «NO mergeado
+      a `master`» mientras el encabezado del MISMO ítem ya decía «ya en `master`»: el ítem se
+      contradecía solo, porque al actualizar el encabezado nadie barrió su pie. Y citaba el
+      pedido `t_daa8750c`, que hoy figura **archived** — un puntero a una tarea escrito a mano
+      caduca cuando el pedido se rehace. El pedido vivo **se deriva, no se copia**:
+      `node scripts/deploy_sin_pedido.mjs` lo nombra; `bash /opt/onia-platform/_deploy/publicar.sh --dry-run`
+      da la cifra honesta de lo que falta publicar.
 
 - [x] 🔴 **CERRADO el 2026-09-08 (`c334440`, ya en `master` — verificado el 2026-09-10):
       el correo del trial sólo sabía hablar en dental o en mostrador, y de los cinco rubros de
@@ -3261,9 +3267,13 @@ y sin operar. Acá se opera, con verificación por ítem.
 
       Commit `9bbf0a7`. Gates: `npx tsc --noEmit` exit 0 · `npx vitest run` **3983 pasan / 330
       archivos** · `npx eslint .` 0 errores.
-      ⚠️ **Commiteado y pusheado a la rama del carril, NO está en `master` y NO viaja con el
-      pedido de deploy vivo** (`t_daa8750c`): `git merge-base --is-ancestor 9bbf0a7
-      origin/master` da NO. Entra al cliente cuando el integrador lo mergee y se publique.
+      ✅ **Ya está en `master`**: `git merge-base --is-ancestor 9bbf0a7 origin/master` da **SÍ**,
+      medido el 2026-09-11 01:05 La Paz. El texto anterior decía lo contrario citando ese mismo
+      comando — era cierto cuando se escribió y venció cuando el integrador mergeó, que es el
+      modo en que un pendiente de merge/deploy escrito en una cola caduca: **el que escribe el
+      rojo no es el que lo resuelve, así que no tiene motivo para volver a medirlo.** También
+      citaba el pedido `t_daa8750c`, hoy **archived**. El pedido vivo se deriva con
+      `node scripts/deploy_sin_pedido.mjs`, nunca se copia.
 
 - [x] 🔴 **CERRADO el 2026-09-08: en la pantalla donde el dueño PAGA Onia, el modal del QR le
       pedía «Clínica registrada» a los cinco rubros — y el botón flotante le decía «Nuevo
