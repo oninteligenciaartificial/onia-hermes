@@ -763,17 +763,32 @@ async function medirEnVivo() {
   // Lo que el `ok` publicaría HOY, derivado: del build vivo a la rama base, sin merges (un
   // merge no es un arreglo). Es el universo del que sale `promesaCompleta`, y por eso NO se
   // arma con los shas del pedido: recorrer lo que el pedido enumera no puede ver al que falta.
+  //
+  // ⚠️ Y pasa por `soloLosQueViajan`, igual que su hermano `publicariaLanding`. Hasta el
+  // 2026-09-11 no lo hacía —ni siquiera pedía los archivos—, así que un commit que sólo toca
+  // un `.test.ts` entraba al universo y el gate exigía nombrarlo en el pedido. Ese día contó
+  // 23 donde `publicar.sh --dry-run` contaba 20, y los 3 de más eran tests puros. El costo no
+  // es cosmético: obedecerlo mete en el cuerpo que lee Sergio Urcullo arreglos que no cambian
+  // NADA de lo que él puede ver, y además el pedido no se estabiliza nunca —cada commit de
+  // herramientas de cualquier carril lo vuelve a poner corto—. Es el mismo defecto que
+  // `deploy-vivo.mjs` ya había curado el 2026-09-04; acá estaba curada la mitad `landing` y
+  // cruda la mitad `plataforma`, en el mismo archivo.
   const publicariaPlataforma = (() => {
     if (!puedePlataforma) return null;
     const salida = sh('git', ['-C', REPO_PLATAFORMA, 'log', '--no-merges', '--format=%h\t%s', `${vivo}..origin/master`]);
     if (salida === null) return null;
-    return salida
+    const commits = salida
       .split('\n')
       .filter(Boolean)
       .map((l) => {
         const [sha, ...resto] = l.split('\t');
-        return { sha, titulo: resto.join('\t') };
+        // `null` es «no pude preguntar», y `llegaAlCliente` lo cuenta como que VIAJA: se
+        // prefiere pedir nombrar de más antes que callar un arreglo real.
+        const crudo = sh('git', ['-C', REPO_PLATAFORMA, 'show', '--pretty=', '--name-only', sha]);
+        const archivos = crudo === null ? null : crudo.split('\n').filter(Boolean);
+        return { sha, titulo: resto.join('\t'), archivos };
       });
+    return soloLosQueViajan(commits);
   })();
 
   const entregados = [];

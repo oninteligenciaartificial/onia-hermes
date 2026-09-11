@@ -7,6 +7,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { archivosDelDryRun, archivosNombrados, secoDeProduccion, barrerPedidos, buildQueCorre, clasificarPedido, cuerpoCortoArchivos, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
 
 // El caso que me costo la vuelta del 2026-09-06: los 13 shas prometidos por t_0268567b
@@ -568,4 +569,31 @@ test('siat: con las DOS vias caidas -> null, y de ahi NO MEDIDO', () => {
   assert.equal(archivosDelDryRun(salida), null);
   assert.equal(archivosNombrados({ texto: 'cualquier cosa', publicaria: archivosDelDryRun(salida) }).estado,
     'NO_MEDIDO', 'un SSH caido no puede dar por completo un pedido');
+});
+
+// ── el universo de plataforma pasa por el filtro, igual que el de landing ──────────────
+//
+// El 2026-09-11 `soloLosQueViajan` existia, estaba documentado con el criterio correcto e
+// importado del lugar correcto... y se aplicaba SOLO a landing. La mitad `plataforma` ni
+// siquiera pedia los archivos, asi que tres commits de puro `.test.ts` entraron al universo
+// y el gate exigio nombrarlos: conto 23 donde `publicar.sh --dry-run` contaba 20. Es
+// «declarado pero no invocado», y ningun caso sobre la funcion pura lo puede ver — por eso
+// este mira el CABLEADO, y ancla la ASIGNACION, no la mencion del simbolo (llamarlo y tirar
+// el resultado es el esquive barato de esta familia).
+test('cableado: el universo de plataforma se arma con los archivos y sale por soloLosQueViajan', () => {
+  const fuente = readFileSync(new URL('./pedido_deploy_entregado.mjs', import.meta.url), 'utf8');
+  const i = fuente.indexOf('const publicariaPlataforma');
+  assert.ok(i > -1, 'no encontre el bloque publicariaPlataforma');
+  const bloque = fuente.slice(i, fuente.indexOf('\n  const entregados', i));
+  assert.ok(/'--name-only'/.test(bloque),
+    'sin --name-only no hay archivos, y sin archivos el filtro cuenta TODO commit como que viaja');
+  assert.ok(/return\s+soloLosQueViajan\(/.test(bloque),
+    'el universo tiene que SALIR por el filtro: mencionarlo y tirar el resultado deja el gate igual de crudo');
+});
+
+// La direccion contraria, que es la que sostiene el sesgo de la casa: sin datos, VIAJA.
+// Aflojar esto haria callar un arreglo real, que es el unico error que este gate no puede
+// permitirse (pedir nombrar de mas es barato).
+test('un commit sin archivos sigue contando como que viaja', () => {
+  assert.equal(soloLosQueViajan([{ sha: '2222222', titulo: 'merge o no pude preguntar', archivos: null }]).length, 1);
 });
