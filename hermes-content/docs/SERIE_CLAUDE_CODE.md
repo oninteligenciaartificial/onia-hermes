@@ -56,8 +56,8 @@ herramienta que no sabe verificar.
 |---|---|---|---|---|
 | 01 | Qué es Claude y Claude Code | **0 · Entender** | sabe cuál de los dos necesita | ✅ **grabado** |
 | 02 | Instalarlo y tu primera skill | **1 · Usarlo** | lo tiene andando y escribió una skill | ✅ **grabado** |
-| 03 | Que trabaje sin vos | **1 · Usarlo** | sabe qué es un hook, un subagente y un conector | ✅ deck listo |
-| 04 | Cómo saber que no te mintió | **2 · Confiar** | verifica en vez de creerle, y escribe reglas que se cumplen | ✅ deck listo |
+| 03 | Que trabaje sin vos | **1 · Usarlo** | sabe qué es un hook, un subagente y un conector | ✅ deck + guion — **se graba el 11-sep** |
+| 04 | Cómo saber que no te mintió | **2 · Confiar** | verifica en vez de creerle, y escribe reglas que se cumplen | ✅ deck + guion listos |
 | 05 | No construyas lo que ya existe | **3 · Escalar** | instala cosas hechas y le conecta lo que ya usa | ✅ deck listo |
 | 06 | Mi empresa entera corre con esto | **Cierre** | ve el sistema completo, con su costo | ✅ deck listo |
 

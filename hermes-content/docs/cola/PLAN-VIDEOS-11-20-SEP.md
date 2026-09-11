@@ -136,6 +136,22 @@
 
 ---
 
+## Capa YouTube — consolidada en este carril el 11-sep
+
+> Sergio Urcullo, 11-sep: la agenda de YouTube se maneja ACÁ, junto al resto del
+> contenido, para no perderse entre sesiones. La **fuente de la serie** sigue siendo
+> [`SERIE_CLAUDE_CODE.md`](../SERIE_CLAUDE_CODE.md) (reglas, concordancia, repos
+> verificados) y cada deck+guion vive en `hermes-content/carousels/out/yt-*/`.
+
+Estado hoy: **01 y 02 grabados** (sin publicar) · **03 se graba HOY** (deck de 11 láminas
++ guion hablado listos) · 04 deck+guion listos · 05 y 06 deck listo.
+
+| Cuándo | Qué pasa con YouTube |
+|---|---|
+| **vie 11** | se **graba el 03** acapela mirando el deck (≈8:10). Antes: recontar los números del README — regla de la serie |
+| **a más tardar jue 17** | se **publica el 01** — el jueves es el día Claude Code de la semana: el pilar #4 ya dice «el paso a paso está en mi canal» y el corto del día le manda tráfico. Publicar el 01 destraba además `/claude-code` en la web |
+| después | **uno por semana**: 02 en la semana del 21, 03 en la del 28, y así — la cadencia del mapa de temas |
+
 ## La escalera a YouTube (por qué estos temas y no otros)
 
 Cada 🎥 es un tema que aguanta 12-15 minutos sin relleno. La regla del mapa de temas
