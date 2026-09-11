@@ -71,6 +71,57 @@ y sin operar. Acá se opera, con verificación por ítem.
 > (5 lectores de código + 4 capturas de producción). Orden de ejecución acordado: recarga →
 > cuentas → bot repetido (vive en `cola/chatbot.md`) → UI.
 
+- [x] 🔴 **CERRADO el 2026-09-11 (`c5e422d`, **commiteado y pusheado, NO en `master` todavía** —
+      medido con `git merge-base --is-ancestor c5e422d origin/master` → NO; lo mergea el
+      integrador): el cliente pagaba y NADIE le decía cómo terminó.**
+
+      Sale de seguir auditando `26212f5` (el ciclo de renovación por QR, que ya dio cinco
+      arreglos). El circuito le avisa al dueño **cuatro veces** que su plan va a vencer
+      (D-7/D-3/D-1/vencido) y por **tres canales** (correo, aviso in-app y push), y después
+      enmudece justo en el desenlace: las tres puertas que resuelven un pago —el `PATCH` del
+      superadmin, el callback de n8n y el webhook del BCP— escribían el resultado en la base sin
+      contárselo a nadie.
+
+      **El caso caro es el RECHAZO.** `adminNotes` es el motivo, y ya es texto de cliente
+      (`/settings` lo pinta como *«Comprobante observado: …»*), pero sólo lo ve el que vuelve a
+      entrar a esa pantalla por su cuenta. El que transfirió y espera tiene la cuenta en solo
+      lectura, cree que pagó, y nadie le dice que su comprobante no se pudo validar ni qué
+      corregir.
+
+      **Por qué ningún gate podía verlo:** no sobra ni falta una palabra, no es un rubro, ni un
+      plan, ni un rol; la pantalla renderiza bien, el camino feliz funciona, y las tres puertas
+      tienen idempotencia y lock impecables (`claimPendingPayment`, `lockOrganizationPlan`). **Un
+      aviso AUSENTE no se ve leyendo lo que hay** — sólo derivando quién debería hablar y
+      preguntándole a cada uno.
+
+      **Arreglado en la CLASE, no en la instancia.** El gate
+      (`lib/subscription/pago-resuelto-avisa.test.ts`) deriva sus sujetos del **disco**: las
+      rutas que llaman a `claimPendingPayment`, que es la única transición `PENDING → resuelto`.
+      Una cuarta puerta nace cubierta y hay que excusarla a mano, a la vista. Quién lo recibe
+      sale de `rolesQueAbren("/settings")`, **no** de una lista de roles al lado del envío —
+      copiarla es exactamente como nació el defecto que `aviso-alcanzable-por-rol.ts` cierra; el
+      in-app y el push usan el MISMO criterio, así que nadie recibe un enlace que le rebote mudo.
+
+      **Lo que se midió ANTES de escribir, y descartó dos falsos positivos:**
+      · `app/api/subscription-payment/bcp-qr/route.ts` **no** es sujeto — está apagado (`503` sin credenciales del banco) y su
+      fila la concilia el webhook, no una revisión humana. · En el callback de n8n, *«no
+      aprobado»* vuelve a `PENDING` —sigue esperando revisión— y ahí **no hay desenlace que
+      contar**: avisar sería prometer un final que no ocurrió. · Mi primer barrido dio «cero
+      avisos» también en la ruta que **sí** avisa (`/api/subscription-payment` manda correo a
+      `ADMIN_EMAIL`): el `grep` no cubría `emailClient.emails.send`. Un `grep` sirve para
+      descartar, nunca para confirmar.
+
+      **Dos trampas del propio arreglo:** el `planEnd` se captura de la activación y **no** se
+      relee de la org (releerlo puede traer el de otro pago concurrente); y `fechaLegibleBolivia`
+      vive en `lib/` y no en el `route.ts` —que no puede exportar helpers—, porque el contenedor
+      corre con `TZ` vacío y sin `timeZone` la fecha sale 4 h adelantada y de noche cambia el día.
+
+      **Validado por mutación en 5 direcciones**, todas en rojo y restaurado en 143/143: sacar el
+      aviso de una puerta (el gate la **nombra**) · el **esquive** (importar y no llamar) · sacar
+      `timeZone` · inventar la causa de un rechazo sin motivo · cegar el detector. **Gates:**
+      `tsc` 0 · `vitest` 4457 · `eslint` 0 errores — corridos **en el VPS**, sobre el árbol que se
+      publica, no sólo en casa.
+
 - [x] 🔴 **CERRADO el 2026-09-11 (`63de4ff`, **ya en `master`** — medido el 2026-09-11 01:05 La Paz
       con `git merge-base --is-ancestor 63de4ff origin/master` → SÍ): el recordatorio de
       renovación le cotizaba a TODOS el precio MENSUAL, y el que paga anual iba a transferir
