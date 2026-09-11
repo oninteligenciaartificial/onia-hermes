@@ -257,6 +257,67 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-11 (`93256eab`, onia-hermes — pusheado a la rama, falta mergear):
+      el intake de leads le afirmaba a Sergio Urcullo que TODO contacto había pedido una demo.**
+      Tablero `t_62aa450c`, encontrado por otro carril midiendo en vivo.
+
+      `web-factory/apps/site/src/app/api/onia-center/leads/intake/route.ts` clavaba
+      `nextAction: "Confirmar demo"` y `meetingStatus: "solicitada"` para todo lead, sin mirar de
+      dónde venía. El endpoint se escribió para un agenda-form que **sí** pedía reunión; hoy su
+      **único llamador vivo** es `/guia-facturacion` —el imán de leads del SIN, que entrega una
+      hoja imprimible y no ofrece ninguna reunión—, así que el defecto alcanza al **100 %** de
+      los leads que entran por ahí, no a una minoría.
+
+      **No es cosmético: `"solicitada"` es lo que el panel LEE para decir que alguien pidió
+      reunión.** Medido sobre los consumidores: el contador de reuniones y su lista en
+      `web-factory/apps/site/src/app/onia-center/equipo/page.tsx` (líneas 254 y 559) y el filtro
+      de la vista de hoy en
+      `web-factory/apps/site/src/app/onia-center/next/hoy/page.tsx` (línea 118).
+      Cada descarga de la hoja aterrizaba en la vista diaria de Sergio Urcullo como
+      una demo pedida, revuelta con las que sí lo son — el pipeline donde tiene que elegir a
+      quién le escribe.
+
+      **LA CLASE, para buscarla en otro lado:** un endpoint reusado para un segundo caso de uso
+      conserva las AFIRMACIONES del primero, y ninguna de ellas es mentira *en el caso para el
+      que se escribió*. Ningún gate podía verlo — el lead se guarda bien, la ruta responde, no
+      sobra ni falta una palabra, no es un rubro ni un plan ni un rol. Lo que estaba mal es el
+      par (de dónde vino, qué se afirma que pidió). Y lo escondía el hermano sano: el alta
+      manual del panel (`NewLeadForm.tsx:87`) ya escribía `"pendiente"`, que es exactamente lo
+      correcto; mirar ese camino confirmaba en falso que el tema estaba cubierto.
+
+      Arreglo: la decisión sale a `web-factory/apps/site/src/lib/intencion-del-lead.mjs`. **Se
+      enumera la EXCUSA (`pidioDemo: true`), no los orígenes que no son demo** — una lista de
+      orígenes falla ABIERTA el día que nace un imán de leads nuevo, y falla en la dirección
+      cara (contamina el pipeline y nada se pone en rojo). `"pendiente"` y no `undefined` a
+      propósito, para quedar igual que el alta manual. `=== true` y no truthy: el body llega de
+      la red y un `"false"` de texto no puede valer por un pedido de reunión.
+
+      El módulo va en `.mjs` y no en `.ts` **a propósito**: el integrador corre la cadena
+      `npm test` también desde el VPS, que tiene Node 20 — un `import` de `.ts` la pondría roja
+      ahí y eso traba el merge de todos los carriles. Verificado en las dos direcciones que
+      `tsc` resuelve y **tipa** el import por el alias `@/` (control negativo: pedirle
+      `"cancelada"` da `TS2322`, o sea que no está pasando como `any`).
+
+      Gate `intencion-del-lead.test.mjs` (`npm run test:intencion-lead`, cableado a la cadena),
+      en **dos mitades porque ninguna ve lo de la otra**: comportamiento (lo que la función
+      DEVUELVE) y cableado (que el route lo USE, anclando la **asignación** — el esquive barato
+      es llamarlo y tirar el resultado). **Validado por mutación en seis direcciones**, las seis
+      en rojo, y las del módulo cayendo cada una en SU caso: revertir el arreglo, el esquive, la
+      media cura (`nextAction` derivado y `meetingStatus` clavado), el default que vuelve a
+      afirmar la reunión, `truthy` en vez de `=== true`, y el rubro sin `trim`. El código se
+      mide con los **comentarios en blanco**: si no, esta misma bitácora —que cita
+      `"solicitada"` para explicar el defecto— absuelve al gate.
+
+      Medido contra el sistema correcto, no heredado: `docker exec onia-landing env` muestra
+      que `ONIA_CENTER_INTAKE_URL` apunta al contenedor `onia-center` en el puerto 3012, a la
+      ruta del intake — o sea, a este archivo y no a otra copia.
+      ⚠️ **Commiteado, NO desplegado, y por un camino que no es el de siempre:**
+      `onia-center` tiene runbook y scripts (`hermes-content/deploy/onia-center/`) pero **no es
+      uno de los tres destinos que ejecuta el `ok <id>` de Sergio Urcullo** (landing, plataforma,
+      bot), así que ningún pedido de deploy lo cubre y el contenedor —`node:20-alpine`, arriba
+      hace 5 días— sigue sirviendo la versión vieja hasta que alguien lo reconstruya a mano.
+      `web-factory/apps/site` tampoco tiene `node_modules` acá ni CI que lo buildee.
+
 - [x] ✅ **CERRADO el 2026-09-11 (`9b9cde4`, onia-platform — pusheado a la rama, falta mergear y
       desplegar): el add-on vigente no decía hasta cuándo, y no dejaba renovar antes del corte.**
 
