@@ -95,13 +95,37 @@
   </div>
 </section>
 
+<section class="mapa" aria-label="Quién hace qué">
+  <p class="mapa-rot">El mapa · quién hace qué</p>
+  <div class="mapa-fila">
+    <span class="da">Te escribe un cliente</span><span class="fle">→</span>
+    <span class="hace"><span class="nro">01</span><b>WhatsApp</b> contesta con dos toques</span>
+  </div>
+  <div class="mapa-fila">
+    <span class="da">El trabajo repetido de todos los días</span><span class="fle">→</span>
+    <span class="hace"><span class="nro">03</span><b>n8n</b> lo hace solo, dentro de <span class="nro">02</span><b>el servidor</b></span>
+  </div>
+  <div class="mapa-fila">
+    <span class="da">Hay que construir o cambiar algo</span><span class="fle">→</span>
+    <span class="hace"><span class="nro">04</span><b>Claude Code</b> lo hace con vos</span>
+  </div>
+  <div class="mapa-fila">
+    <span class="da">El aviso en video de cada semana</span><span class="fle">→</span>
+    <span class="hace"><span class="nro">05</span><b>HyperFrames</b> lo rinde desde texto</span>
+  </div>
+  <div class="mapa-fila">
+    <span class="da">Algo se cae a las 3 de la mañana</span><span class="fle">→</span>
+    <span class="hace"><span class="nro">06</span><b>Hermes</b> te avisa</span>
+  </div>
+</section>
+
 <!-- 01 -->
 <article class="paso">
   <div class="paso-cab">
     <div class="paso-num">01</div>
     <div class="paso-tit">
       <h2>WhatsApp Business</h2>
-      <p class="autor">Meta · app gratis · Android y iPhone</p>
+      <p class="autor">Meta · app gratis · Android y iPhone · <a href="https://business.whatsapp.com/products/business-app">business.whatsapp.com</a></p>
     </div>
   </div>
   <div class="meta">
@@ -180,11 +204,14 @@
 
 <span class="c"># para no tener que escribir "sudo" cada vez</span>
 <span class="k">sudo</span> usermod -aG docker $USER
-<span class="c"># cerrá sesión y volvé a entrar para que tome efecto</span></pre>
+<span class="c"># cerrá sesión y volvé a entrar para que tome efecto</span>
+
+<span class="c"># que Docker arranque solo cuando vuelve la luz</span>
+<span class="k">sudo</span> systemctl enable docker</pre>
 
     <div class="nota"><strong>Un consejo que me habría ahorrado un fin de semana:</strong>
-    anotá la dirección IP de esa máquina apenas termines. La vas a necesitar en todos los
-    pasos siguientes y no es obvia de encontrar después.</div>
+    anotá la dirección IP de esa máquina apenas termines — la ves con <code>ip a</code>.
+    La vas a necesitar en todos los pasos siguientes y no es obvia de encontrar después.</div>
 
     <label class="check"><input type="checkbox" data-paso="2"> Listo, ya lo tengo</label>
   </div>
@@ -196,7 +223,7 @@
     <div class="paso-num">03</div>
     <div class="paso-tit">
       <h2>n8n</h2>
-      <p class="autor">n8n GmbH · código abierto · corre en tu servidor</p>
+      <p class="autor">n8n GmbH · código abierto · corre en tu servidor · <a href="https://n8n.io">n8n.io</a></p>
     </div>
   </div>
   <div class="meta">
@@ -217,8 +244,10 @@
 
     <p class="rotulo">Cómo</p>
 <pre><span class="c"># un solo comando, en el servidor del paso 02</span>
+<span class="c"># la zona horaria importa: sin ella los flujos corren en hora de Londres</span>
 <span class="k">docker</span> run -d --restart unless-stopped \
   --name n8n -p 5678:5678 \
+  -e GENERIC_TIMEZONE=America/La_Paz -e TZ=America/La_Paz \
   -v n8n_data:/home/node/.n8n \
   docker.n8n.io/n8nio/n8n</pre>
     <p style="margin-top:14px">Después entrá desde tu computadora normal a
@@ -238,7 +267,7 @@
     <div class="paso-num">04</div>
     <div class="paso-tit">
       <h2>Claude Code</h2>
-      <p class="autor">Anthropic · lo único de la lista que se paga</p>
+      <p class="autor">Anthropic · lo único de la lista que se paga · <a href="https://claude.com/claude-code">claude.com/claude-code</a></p>
     </div>
   </div>
   <div class="meta">
@@ -370,11 +399,75 @@
   </div>
 </article>
 
+<!-- EXTRAS -->
+<article class="paso">
+  <div class="paso-cab">
+    <div class="paso-num">+</div>
+    <div class="paso-tit">
+      <h2>Dos extras, para cuando el servidor ya anda</h2>
+      <p class="autor">Opcionales · los dos corren en el servidor del paso 02 · los dos gratis</p>
+    </div>
+  </div>
+  <div class="meta">
+    <span class="chip gratis">$0</span>
+    <span class="chip">no son parte del stack</span>
+    <span class="chip">necesitan el paso 02</span>
+  </div>
+  <div class="cuerpo">
+    <p>No entran en la cuenta de las seis: son mejoras del servidor. Instalalos cuando los
+    pasos 02 y 03 ya lleven un tiempo andando — antes sólo suman ruido.</p>
+
+    <p class="rotulo">Portainer · ver qué corre, con botones</p>
+    <p>Tus contenedores de Docker en una página con botones: prender, apagar, y leer el
+    registro de cada uno cuando algo anda raro — sin terminal.
+    <a href="https://docs.portainer.io/start/install-ce">Documentación oficial</a>.</p>
+    <div class="nohace">
+      <p>No instala nada por vos: muestra y controla lo que ya está corriendo.</p>
+    </div>
+<pre style="margin-top:14px"><span class="c"># en el servidor</span>
+<span class="k">docker</span> volume create portainer_data
+<span class="k">docker</span> run -d --restart unless-stopped \
+  --name portainer -p 9443:9443 \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v portainer_data:/data \
+  portainer/portainer-ce:latest
+
+<span class="c"># después, desde tu computadora: https://LA-IP-DEL-SERVIDOR:9443</span></pre>
+    <div class="nota"><strong>La primera vez el navegador avisa que la conexión no es
+    privada.</strong> Es normal: el certificado es de tu propio servidor, no de una web
+    pública. Continuá. Y si Portainer te parece mucho,
+    <a href="https://github.com/louislam/dockge">Dockge</a> hace menos y se entiende más
+    rápido — cualquiera de los dos, no los dos.</div>
+    <label class="check"><input type="checkbox" data-paso="7"> Listo, ya lo tengo</label>
+
+    <p class="rotulo" style="margin-top:34px">Tailscale · entrar desde afuera, sin abrir puertos</p>
+    <p>Tu teléfono y tu computadora entran a la red de tu casa como si estuvieran ahí,
+    estés donde estés. Es la forma sana de llegar al servidor desde afuera: <strong>nada
+    queda expuesto a internet</strong>. Plan gratis para uso personal.
+    <a href="https://tailscale.com/download/linux">tailscale.com</a>.</p>
+    <div class="nohace">
+      <p>No publica nada: es acceso privado para vos. Una página visible para tus clientes
+      es otra cosa, con otros riesgos.</p>
+    </div>
+<pre style="margin-top:14px"><span class="c"># en el servidor, con el instalador oficial de tailscale.com</span>
+<span class="k">curl</span> -fsSL https://tailscale.com/install.sh | sh
+<span class="k">sudo</span> tailscale up
+<span class="c"># te da un link para entrar con tu cuenta</span>
+
+<span class="c"># y en tu teléfono: la app de Tailscale, con la misma cuenta</span></pre>
+    <div class="nota"><strong>Esto no es para el primer día.</strong> Que todo funcione
+    adentro de tu casa primero; salir afuera es después. Y nunca lo hagas abriendo puertos
+    en el router — eso deja el servidor expuesto a internet entero.</div>
+    <label class="check"><input type="checkbox" data-paso="8"> Listo, ya lo tengo</label>
+  </div>
+</article>
+
 <section class="cierre">
   <h2>Lo que esta guía no cubre</h2>
   <ul>
-    <li>Abrir tu servidor a internet, con dominio y certificado. Es el paso siguiente y
-    tiene sus propios riesgos.</li>
+    <li>Publicar algo de tu servidor a internet, con dominio y certificado — Tailscale te
+    da acceso privado, no una página pública. Es el paso siguiente y tiene sus propios
+    riesgos.</li>
     <li>Copias de seguridad. Si el disco de esa PC muere, se va todo. Andá pensándolo.</li>
     <li>Conectar WhatsApp a n8n para que conteste solo. Es otro tema y otra guía.</li>
     <li>El sistema de gestión con el que manejo clientes y agenda. Eso lo estoy
@@ -411,6 +504,35 @@
       estado[caja.dataset.paso] = caja.checked;
       try { localStorage.setItem(KEY, JSON.stringify(estado)); } catch(e){}
     });
+  });
+
+  // botón "copiar" en cada bloque de comandos
+  document.querySelectorAll('pre').forEach(function(pre){
+    var caja = document.createElement('div');
+    caja.className = 'prebox';
+    if (pre.style.marginTop){ caja.style.marginTop = pre.style.marginTop; pre.style.marginTop = ''; }
+    pre.parentNode.insertBefore(caja, pre);
+    caja.appendChild(pre);
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'copiar'; b.textContent = 'copiar';
+    b.setAttribute('aria-label', 'Copiar los comandos');
+    b.addEventListener('click', function(){
+      var texto = pre.textContent;
+      function listo(){
+        b.textContent = 'copiado ✓'; b.classList.add('ok');
+        setTimeout(function(){ b.textContent = 'copiar'; b.classList.remove('ok'); }, 1600);
+      }
+      function respaldo(){
+        var ta = document.createElement('textarea');
+        ta.value = texto; document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); listo(); } catch(e){}
+        document.body.removeChild(ta);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(texto).then(listo, respaldo);
+      } else { respaldo(); }
+    });
+    caja.appendChild(b);
   });
 })();
 </script>

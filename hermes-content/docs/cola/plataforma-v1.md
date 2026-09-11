@@ -71,6 +71,22 @@ y sin operar. Acá se opera, con verificación por ítem.
 > (5 lectores de código + 4 capturas de producción). Orden de ejecución acordado: recarga →
 > cuentas → bot repetido (vive en `cola/chatbot.md`) → UI.
 
+- [ ] 🔴 **T-plata — dos bloqueos que solo Sergio Urcullo puede pagar** (detectados el
+      10-sep midiendo el precio de la recarga; avisados por el tablero):
+      (1) **OpenAI sin crédito desde el 9-sep ~04-06 UTC** (medido en LiteLLM_SpendLogs: 38
+      failures 429): la rama off-guion del bot cae al texto de respaldo (no muda, pero no
+      reformula) y **Hermes está caído entero** (misma cuenta). Recargar en
+      platform.openai.com. El gasto del bot es ruido: USD 0,00085 en toda su historia.
+      (2) **Método de pago en Meta antes del 1-oct-2026**: la hoja oficial "effective
+      October 1, 2026" ya salió — service USD 0,0113/mensaje (Rest of Latin America, cubre
+      Bolivia) tras 1.000 mensajes de servicio gratis/mes por número; **sin tarjeta cargada
+      Meta DEJA DE ENTREGAR desde el mensaje 1.001** — bot mudo a mitad de mes. Vale para
+      nuestro número y para cada cliente con número propio (anotarlo en el onboarding del
+      canal WhatsApp). Fundamento completo en el comentario de RECARGA_CONVERSACIONES de
+      `onia-platform/lib/pricing.ts` y memoria meta-whatsapp-clientes actualizada.
+      **LISTO =** crédito OpenAI >0 (el off-guion vuelve a reformular, Hermes contesta) y
+      método de pago visible en el billing de Meta.
+
 - [x] ✅ **T-nueva — CERRADO el 2026-09-10 23:45 UTC: su LISTO se cumple hoy.** Contado en
       `supabase-db`, no deducido: `public.organizations` tiene **3 filas** (`onia-interna`,
       `bolivian-electricidad-e6t21`, `clinica-sergio-p2ljs`) — las mismas tres que dejó la purga
@@ -106,8 +122,10 @@ y sin operar. Acá se opera, con verificación por ítem.
       una-vez-por-mes: el que recargaba y volvía a agotar quedaba mudo), `POST
       /api/admin/organizations/[id]/recarga-chatbot` (superadmin, 409 sin add-on) y botón en la
       ficha admin junto al toggle. Tests 35/35 (`onia-platform/lib/chatbot/cupo.test.ts`),
-      tsc/eslint 0. Falta solo la mirada final con una recarga aplicada (abajo, con las
-      capturas del cierre del lote).
+      tsc/eslint 0. **VERIFICADO MIRANDO el 2026-09-10 ~23:45 UTC**: recarga aplicada a
+      Clinica Sergio por el BOTON real de la ficha, y `/settings/chatbot` del cliente
+      renderiza "0 de 700" con el texto dinamico — capturado y enviado a Sergio Urcullo.
+      La recarga queda puesta en su org de pruebas (700 este mes, vuelve sola a 500 el 1-oct).
       Medido 10-sep: `CupoConversacionesCard` la ofrece desde el 80% del cupo (decisión de
       Sergio Urcullo del 05-sep), el cliente pagaría por WhatsApp… y `cuotaDe()`
       (`lib/chatbot/cupo.ts`) devuelve SIEMPRE el literal 500 de `pricing.ts`: no hay campo por
@@ -145,21 +163,30 @@ y sin operar. Acá se opera, con verificación por ítem.
       `auth.users` → anotar inbox 7 de Chatwoot huérfano. **LISTO =** `/admin/chatbots` lista
       solo las orgs vivas, mirado en prod.
 
-- [x] ✅ **T3 — CERRADO el 2026-09-10 23:50 UTC. Las tres partes, y la (a) por refutación
-      medida: su causa escrita era falsa.**
+- [x] ✅ **T3 — CERRADO el 2026-09-10. Las tres partes, y la (a) por refutación medida: su
+      causa escrita era falsa.**
 
-      **(b) — ya lo había arreglado otro carril**, `363dfa4` en master: el defecto de la
-      `AdminNav` encimada no era la fuente sino `flex-shrink` — dentro del nav con
-      `overflow-x-auto` los spans de icono se comprimían a 0-16 px con `font-size: 24` y el
-      glifo desbordaba pisando el label. `flex-shrink: 0` en `.material-symbols-outlined` los
-      devolvió a 24 px.
+      **(b) — arreglado por otro carril y YA DESPLEGADO** (`363dfa4e` + `bc7a447a` en `master`,
+      mirado en producción ~23:45 UTC): la causa real no era la fuente sino **`flex-shrink`** —
+      dentro del nav con `overflow-x-auto` los spans de icono se comprimían a 0-16 px con
+      `font-size: 24` y el glifo desbordaba pisando el label. Fix de CLASE: `flex-shrink: 0` en
+      `.material-symbols-outlined` (`globals.css`) —un glifo es indivisible, vale para todo el
+      producto— más los `Link` de `AdminNav` con `shrink-0 whitespace-nowrap`. Re-medido en
+      prod: los 8 spans en 24 px, barra legible (captura enviada). De paso cayó otro bug de
+      CLASE: la URL del `woff2` era fija y Cloudflare/el navegador servían subsets viejos tras
+      cada deploy — ahora `subset-iconos.mjs` versiona `?v=<hash>` en `globals.css` y en el
+      preload de `layout.tsx`.
 
       **(c) — arreglado**: `AddonChatbotClient.tsx:193-208` ya pinta los dos CTA en la rama del
       add-on ACTIVO — «Configurar mi asistente» → `/settings/chatbot` y «Ver conversaciones» →
-      `/inbox` —, con el comentario que cita la captura del 10-sep que lo motivó.
+      `/inbox` —, con el comentario que cita la captura del 10-sep que lo motivó (verificado
+      también con captura de producción).
 
       **(a) — la causa que decía este ítem («falta reservar espacio, padding-bottom del
-      contenedor scrolleable») es FALSA hoy, contado en px del disco:**
+      contenedor scrolleable») es FALSA hoy.** Los dos carriles llegaron a lo mismo por caminos
+      distintos: con viewport real scrolleado al fondo la barra no tapa nada (la captura del
+      10-sep era `fullPage`, congelada a mitad de scroll), y contado en px del disco el colchón
+      de `LayoutShell` despeja todo el mobiliario flotante:
 
       | | colchón | lo más alto que flota | despeja por |
       |---|---|---|---|
@@ -169,18 +196,16 @@ y sin operar. Acá se opera, con verificación por ítem.
       Y las dos pantallas que nombraba **no tienen contenedor de scroll propio** (`grep` de
       `overflow-y` y `h-screen` en las carpetas del editor del bot y de la tabla de chatbots del
       panel admin: sólo un `aside` con `lg:sticky` y una lista interna), así que heredan el
-      colchón de `LayoutShell` y éste las
-      despeja. La captura del 10-sep probablemente se sacó a mitad de scroll, donde una barra
-      flotante tapa algo **por diseño**.
+      colchón de `LayoutShell` y éste las despeja.
 
       **Lo que sí faltaba, y es la clase:** ese colchón es un número tipeado a mano que tiene
       que dominar a TODO el mobiliario flotante, y no lo re-medía nadie. `capas.ts` contesta
       *qué capa va arriba*; nadie contestaba *cuánto espacio necesita el contenido para
       despejarlas*. Ya falló una vez —el propio `LayoutShell.tsx` lo cuenta: con el colchón
       anterior (`pb-32`, y `pb-12` en escritorio) el FAB se comía el borde de «Guardar» en
-      Configuración— y se arregló **a mano contra el
-      FAB**, el único mobiliario de entonces. Después entraron la barra del asistente y la
-      franja del plan, y el margen quedó en 8 px: un retoque de diseño de volver a taparlo.
+      Configuración— y se arregló **a mano contra el FAB**, el único mobiliario de entonces.
+      Después entraron la barra del asistente y la franja del plan, y el margen quedó en 8 px:
+      un retoque de diseño de volver a taparlo.
 
       **Gate** (`components/layout/colchon-despeja-lo-que-flota.test.ts`, `2d87ae1`): el sujeto
       es `CAPAS_FLOTANTES` —la tabla que ya manda sobre los z—, así que una capa nueva que entre
@@ -191,9 +216,10 @@ y sin operar. Acá se opera, con verificación por ítem.
       verificada de que entró. Gates: `tsc` 0 · `vitest` **4385** pasan / 354 archivos ·
       `eslint` 0 errores.
 
-      🔴 **Commiteado y pusheado, NO desplegado:** `2d87ae1` está en la rama del carril, no en
-      `master`. Es un test, así que no cambia lo que ve el cliente — pero el merge del
-      integrador es lo que lo pone a cuidar.
+      🔴 **Ese gate está commiteado y pusheado, pero NO mergeado** — medido el 2026-09-11:
+      `git merge-base --is-ancestor 2d87ae1 origin/master` dice que no. Es un test, así que no
+      cambia lo que ve el cliente; lo que falta es el merge del integrador para que empiece a
+      cuidar. Lo de (b) y (c), en cambio, ya está en `master` y desplegado.
 
       **Texto original del ítem, para no perder qué se había visto:** (a) la barra flotante
       "Preguntá por tu negocio" (`onia-platform/components/ayuda/BarraAsistente.tsx`) se pinta
