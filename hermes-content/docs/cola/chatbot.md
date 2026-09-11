@@ -316,8 +316,14 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       **Gates:** `npx tsc --noEmit` 0 · `npx vitest run` **4262 pasan / 341 archivos** ·
       `npx eslint .` 0 errores.
 
-      🔴 **Commiteado y pusheado, NO desplegado — y falta un paso antes:** `31cdfba` está en la
-      rama del carril, **no en `master`**. Falta el merge del integrador y después el swap.
+      ✅ **VIVO en producción — verificado el 2026-09-10 22:46 La Paz con las TRES medidas.**
+      El texto anterior decía *"`31cdfba` está en la rama del carril, no en `master`; falta el
+      merge y después el swap"*, y las tres dan verde:
+      `git merge-base --is-ancestor 31cdfba origin/master` → **sí**;
+      `docker exec onia-platform cat /app/.next/BUILD_ID` → `w_JrYQKMrWy8GyDuBNnOk` (corre);
+      `docker exec onia-platform grep -rl decidirEscalacion /app/.next/server` → devuelve un
+      chunk del servidor (una línea, no vacío). El que pide un humano ya no recibe
+      *"te conecto con un agente"* cuando no hay inbox del otro lado.
 
 - [x] ✅ **CERRADO el 2026-09-08: el bot de WhatsApp del cliente le pedía su catálogo a una tabla
       que está VACÍA por construcción en 3 de los 5 rubros de la v1.0.**
@@ -908,9 +914,14 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       un 200 de Telegram que descartó el mensaje se lee como enviado — los dos falsos verdes que
       harían que el aviso muera igual que ahora, pero con mejor cara. **772 casos verdes** en
       `node --test` (754 → 772).
-      🔴 **NO DESPLEGADO** — `hermes-content/deploy/vps-ops/bot/espejo-check.mjs` lo dice:
-      el archivo nuevo falta en el VPS y `hermes-content/deploy/vps-ops/bot/webhook-server.mjs` difiere. El deploy es de `onia-cola`. Y sigue pendiente la decisión de
-      Sergio (`t_b18ca430`), que ahora es sólo encender un flag.
+      ✅ **DESPLEGADO — verificado el 2026-09-10 22:46 La Paz.** Las dos afirmaciones del texto
+      anterior (*"el archivo nuevo falta en el VPS"* y *"`webhook-server.mjs` difiere"*) son las
+      dos falsas hoy: `ls -l /opt/onia/bot/aviso-telegram.mjs` → existe (10.055 B, 7-sep), y el
+      `md5sum` de `/opt/onia/bot/webhook-server.mjs` y el del repo dan la MISMA suma, byte a byte
+      (se reproduce corriendo los dos `md5sum` y comparando). Lo único que `espejo-check.mjs`
+      marca ausente hoy es
+      `urgencia-en-el-handoff.test.mjs`, que es un test: no viaja al runtime ni lo ve un cliente.
+      Sigue pendiente la decisión de Sergio Urcullo (`t_b18ca430`), que es sólo encender un flag.
 
 - [x] 🔴 **El que ESPERA a un humano prometido era invisible para todo el sistema: el único vigía
       que mira la bandeja lo descartaba con un `// ya le contestaron` que en un handoff es
@@ -971,11 +982,11 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       con sus saltos de línea, y el parseo corta por `\n`. Un mensaje multilínea —M5 lo es— se
       partía en filas de menos de 9 columnas que el `.filter()` tiraba **en silencio**: el saliente
       desaparecía y su conversación podía contarse como colgada. Ahora el `\n` se aplana en el SQL.
-      🔴 **NO ESTÁ ENCENDIDO — y esto no es una formalidad.** El cron
-      (`39 */2 * * * /root/bin/onia-vigia-sin-respuesta.sh`) elige el script de una lista y toma
-      **el primero que existe**: `/root/loops/onia-hermes/scripts/vigia_sin_respuesta.mjs`, o sea
-      el clon de `main`. Medido: ahí `grep -c seleccionarEsperandoHumano` → **0**. Hasta que
-      `onia-cola` mergee esta rama, el que corre cada 2 h es el vigía viejo, ciego a este caso.
+      ✅ **ENCENDIDO — verificado el 2026-09-10 22:46 La Paz.** El texto anterior media el clon
+      de `main` del VPS y daba **0**; el MISMO comando hoy da **2**:
+      `ssh root@187.77.16.63 'grep -c seleccionarEsperandoHumano /root/loops/onia-hermes/scripts/vigia_sin_respuesta.mjs'`.
+      O sea el que corre cada 2 h ya es el vigía nuevo, y el que espera a un humano prometido
+      dejó de ser invisible.
       **Reproducción en 30 s:** `node scripts/vigia_sin_respuesta.mjs` → la última línea dice
       cuántos hay de cada tipo (`N sin respuesta · M esperando a un humano prometido`).
 
@@ -1491,8 +1502,10 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       **Y probado que MUERDE:** dos mutaciones, las dos rojas — `MUDO`→`respondio` (2 casos) y el
       servidor volviendo a **no** loguear, que es el estado de hoy en producción (1 caso).
       **Gates:** `npm run test:bot` **704/704** en verde (31 en este archivo, 7 nuevos).
-      🔴 **COMMITEADO, NO DESPLEGADO.** `/opt/onia/bot` no es un checkout de git y el deploy no es
-      de este carril. **Hasta que alguien copie el archivo y reinicie el bot, el log sigue ciego.**
+      ✅ **DESPLEGADO — verificado el 2026-09-10 22:46 La Paz: el log ya NO está ciego.**
+      `ssh root@187.77.16.63 'grep -c "trazaWebhook\|respondio\|MUDO" /opt/onia/bot/webhook-server.mjs'`
+      → **5**. El texto anterior (*"hasta que alguien copie el archivo y reinicie el bot, el log
+      sigue ciego"*) describía el estado del 02-sep, no el de hoy.
 
 - [x] 🔴 **El arreglo que hoy hace que el bot conteste dos veces está VIVO en producción y NO
       está en el repo: un `rsync` desde Windows lo borra y el bug de la semana vuelve.**
@@ -2172,11 +2185,12 @@ archivos.**
       `npm test` **sólo el `--self-check`** (el modo vivo necesita docker: en la cadena sería el
       rojo falso que traba el merge de los 15 carriles). Los 8 gates posteriores a `test:sitio-venta`
       corridos uno por uno, los 8 en verde.
-      🔴 **Commiteado, NO desplegado — y el gate da 1 a propósito hasta que se despliegue.** El
-      diagnóstico va con el lugar del arreglo: *"el código ya está arreglado en la rama, FALTA
-      DESPLEGAR"*, para no repetir la vuelta en que este carril "arregló" un archivo que ya estaba
-      bien. Pedido consolidado en la tarea de deploy del bot que ya existe, **t_7340fb5b**, junto
-      con los rubros: es el mismo `deploy-bot.sh` y los mismos dos archivos.
+      ✅ **DESPLEGADO — verificado el 2026-09-10 22:46 La Paz con su propio gate.**
+      `node hermes-content/deploy/vps-ops/bot/rubros-vivos.mjs` → **exit 0**, *"el bot ofrece
+      exactamente lo que se vende"*: producción vende 5 (`dentagest-clinical`, `gestios-general`,
+      `proveegest-electrico`, `esteticagest-clinical`, `gestios-servicios-profesionales`) y el bot
+      ofrece 5 (dental, comercio, proveedores, servicios, estética). El gate ya no da 1: daba 1
+      **a propósito** hasta el swap, y el swap ocurrió.
 
 - [x] **El bot decía "no tengo horarios libres" y dos turnos después ofrecía el que acababa de
       descartar.** Cerrado el 2026-09-05, en la misma vuelta en que se encontró. Commit
@@ -2199,12 +2213,13 @@ archivos.**
       (`followUpTemplate:186`, `.some(pending) → null`). El único agujero era `hayHorarioReal`.
       **Prueba:** test `"HORARIO VENCIDO"` en rojo primero por el motivo correcto (ofrecía el
       sábado), verde después; **834** del bot y la cadena `npm test` en verde.
-      🔴 **Commiteado, NO desplegado.** El bot vivo corre `/tmp/onia-bot/` y su `config.mjs` no
-      tiene el corte (`docker exec onia-center grep -c ANTICIPACION_MINIMA_MS /tmp/onia-bot/config.mjs`
-      → **0**). Medido en producción el 06:12 La Paz por el widget real (conversación 49): el bot
-      ofreció *"sábado 5 de septiembre, 09:00"* dos veces, a 2 h 48 min. Pedido en la tarea de
-      deploy que ya existe, **t_43e4b9ec**, con los dos SHA: desplegar sólo `375b8af08` deja al bot
-      contradiciéndose.
+      ✅ **DESPLEGADO — verificado el 2026-09-10 22:46 La Paz.** El MISMO comando que el texto
+      anterior citaba en **0** hoy da **2**:
+      `docker exec onia-center grep -c ANTICIPACION_MINIMA_MS /tmp/onia-bot/config.mjs`.
+      Y el gate vivo lo confirma del lado de la promesa:
+      `node hermes-content/deploy/vps-ops/bot/anticipacion-viva.mjs` → *"sábado 12 de septiembre,
+      09:00 — 34.2 h de aviso · lunes 14, 14:00 — 87.2 h · corte de 24 h en el código vivo: sí"*.
+      Ya no hay forma de repetir la demo a 2 h 48 min de la conversación 49.
 
 - [x] **La guarda de entrada de `espejo-check.mjs` reventaba al importarlo, y el molde ya se había
       copiado a otro gate.** Hecho el 2026-09-02, en la misma vuelta en que se encontró.
