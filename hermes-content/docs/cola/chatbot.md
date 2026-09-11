@@ -257,6 +257,49 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-11 (`278f030`, onia-platform — falta mergear y desplegar): el cron
+      de recordatorios le escribía a los pacientes en nombre de una cuenta vencida.**
+
+      **La CUARTA puerta que escribe sin sesión del dueño**, y la encontré preguntando por la
+      hermana del arreglo de ayer. Las otras tres ya preguntan si la cuenta sigue viva: el panel
+      corta sus 35 rutas con `checkPlanExpiry`, la reserva pública se cerró el 08-sep
+      (`lib/agenda/reserva-publica.ts`) y el bot de WhatsApp ayer (`atiende-el-bot.ts`). Ésta no
+      preguntaba nada.
+
+      Medido sobre `app/api/cron/appointment-reminders/route.ts`: su `SELECT_CITA` traía `plan`
+      —el plan **CONTRATADO**, no el estado— y ni `planEnd` ni `trialEnd`, y las dos `findMany`
+      filtran sólo por fecha de la cita. Así que el negocio en solo lectura le seguía escribiendo
+      a sus pacientes por correo **y por WhatsApp**, firmando con su nombre, y cada mensaje de
+      WhatsApp gasta plata real de Meta.
+
+      **Lo urgente no es el gasto: desde que el bot corta, este recordatorio CONTRADICE a su
+      puerta hermana.** Le dice al paciente *«tu cita es mañana»*, lo invita a responder, y del
+      otro lado ya no atiende nadie. La lección conocida es que cerrar media familia deja la otra
+      mitad abierta; acá es peor y es nueva: **la mitad cerrada ROMPE a la abierta**.
+
+      Ningún gate podía verlo — no sobra ni falta una palabra, el rubro deriva bien (ese eje se
+      cerró el 07-sep), el vocabulario es el correcto y el camino feliz funciona. Falla **quién
+      pregunta**.
+
+      **Hoy no muerde de casualidad y muerde esta semana:** contadas en `supabase-db`, las citas
+      futuras son 0, y las dos orgs reales (`bolivian-electricidad-e6t21`, `clinica-sergio-p2ljs`)
+      están en trial y vencen el **14** y el **17-sep**. La segunda tiene `addon.whatsapp` activo.
+
+      Arreglo: se pregunta con `isWriteBlocked` —el MISMO corte del panel y del bot, no una
+      prima—, así la gracia del trial vale igual y a quien paga un día tarde no se le apagan los
+      recordatorios que compró; un alta manual sin fechas sigue andando. El corte va **ANTES de
+      `reclamarVentana`**, que es un CAS de un solo uso: puesto después quemaría la marca y el
+      paciente se quedaría sin recordatorio también el día que el dueño renueve. Desenlace propio
+      (`"cuenta-vencida"`) para que una corrida saltada no se lea como un día sin citas. Las
+      fechas van **requeridas en el tipo**: `derivePlanStatus` lee un `undefined` como «sin fecha»
+      y devuelve vigente, así que un llamador que no se las pida a Prisma haría que el corte no
+      corte nunca, en silencio.
+
+      Gate `app/api/cron/appointment-reminders/cuenta-viva.test.ts`, validado por mutación en
+      **cuatro** direcciones y cada una cae en SU caso —ningún guardia tapa a otro—: sin corte
+      (3 casos), **esquive** llamando y tirando el resultado (1), corte después del CAS (1), y
+      `SELECT` sin las fechas (1). Gates verdes: `tsc` 0 · **4482** tests · `eslint` 0.
+
 - [x] ✅ **CERRADO el 2026-09-11 (`e6adb19`, onia-platform): la recarga del chatbot CADUCA a fin
       de mes y ninguna de las tres superficies que la vende lo decía.** Bs 190 por 200
       conversaciones que se evaporan el día 1.
@@ -2356,6 +2399,30 @@ archivos.**
 ---
 
 ## Cerrado — no rehacer
+
+- [x] **La cuenta vencida seguía cancelando citas por WhatsApp.** Cerrado el 2026-09-11,
+      `6aba5bc` (rama del carril — **falta que el integrador lo mergee y falta desplegar**).
+      No estaba en la cola: salió de auditar la puerta pública que es de este carril.
+      El panel corta sus 35 escrituras con `checkPlanExpiry` y la reserva pública se cerró
+      el 08-sep con ese mismo motivo; `lib/agenda/reserva-publica.ts` **nombra al bot de
+      WhatsApp como la superficie hermana**, pero sólo cerró el eje RUBRO. El eje VENCIDA
+      quedó abierto acá — media familia cubierta se lee como familia cubierta.
+      Medido sobre `lib/whatsapp-bot.ts` (415 líneas, el motor detrás del webhook): **cero**
+      menciones de `isWriteBlocked`, `checkPlanExpiry`, `planEnd` o `trialEnd`. Su único
+      corte —el paso rotulado «Check plan limits»— es `checkWhatsAppAddon`, que pregunta por
+      el add-on y por el cupo del mes, nunca por si la suscripción está viva (`plan` es el
+      plan CONTRATADO, no el estado). Y esta puerta **escribe**: cancela citas
+      (`status: "CANCELADA"`), las confirma, abre sesiones y escala a un humano. Al dueño con
+      el panel en solo lectura le seguían cancelando citas que él no puede gestionar, y cada
+      respuesta gastaba Meta y OpenAI en una cuenta que dejó de pagar.
+      Hoy **no muerde** —ninguna org de producción tiene `whatsappPhoneNumberId`, medido en
+      `supabase-db`— pero es un arma cargada: `clinica-sergio-p2ljs` tiene el add-on activo y
+      su trial vence el **17-sep**.
+      Arreglo: `lib/whatsapp/atiende-el-bot.ts`, que pregunta con `isWriteBlocked` —el MISMO
+      corte del panel, así la gracia del trial vale igual y un alta manual sin fechas sigue
+      atendiendo—. El gate trae el caso del **llamador** y se validó por mutación en tres
+      direcciones; la del esquive pasaba en VERDE (ver la lección, abajo).
+      Reproducción: `npx vitest run lib/whatsapp/atiende-el-bot.test.ts` (11 casos).
 
 - [x] **El disco que bloqueaba el build: el ítem describía una máquina que ya no es donde
       corremos.** Cerrado el 2026-09-07 midiendo, no razonando. Decía «0 bytes libres de
