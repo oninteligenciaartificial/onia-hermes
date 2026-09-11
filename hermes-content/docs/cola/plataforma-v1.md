@@ -63,6 +63,58 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-11 (`f231555`, onia-platform — falta mergear y desplegar):
+      reprogramar una cita podía pisar el turno de otro paciente, y el sistema le mandaba
+      al cliente el correo confirmándoselo.**
+
+      Las **dos** puertas que CREAN una cita —el panel (`lib/agenda/crear-cita.ts`) y la
+      reserva pública que usa el cliente del cliente— toman el candado del día del
+      profesional y rechazan el solapamiento. La que la **MUEVE**,
+      `PATCH /api/appointments/[id]`, aceptaba `dateTime` y hacía el `update` pelado: sin
+      candado y sin mirar si a esa hora ya hay alguien.
+
+      La recepción arrastra la cita de las 10:00 a las 11:00, a las 11:00 ya hay otro
+      paciente, y el sistema guardaba **las dos** — mismo profesional, misma hora. Y no
+      queda en un dato feo: `avisarCambioDeCita` le manda acto seguido el correo con la hora
+      nueva, así que el producto le **confirma** a un cliente un turno que acaba de
+      sobrevender, y los dos se presentan. Toca a los cuatro rubros con agenda, tres de
+      ellos de la v1.0.
+
+      **Por qué ningún gate podía verlo, que es la parte reusable:** la pantalla renderiza
+      bien, no sobra ni falta una palabra, no es rubro, ni rol, ni plan, y el camino feliz
+      funciona. Es la familia de siempre —la mitad sana hace leer la familia como cubierta—:
+      con la CREACIÓN blindada, nadie volvió a preguntar por la EDICIÓN. **La firma que lo
+      delata sin leer una línea de producto:** `hasAppointmentConflict` ya traía
+      `excludeAppointmentId` —un parámetro que sólo sirve para reprogramar, porque la propia
+      cita siempre choca consigo misma— y tenía **cero llamadores**. Un parámetro escrito
+      para un caso que nunca se implementó.
+
+      El chequeo y la escritura van en la **misma** transacción y detrás del **mismo**
+      candado que el alta (`lib/agenda/reprogramar-cita.ts`): preguntar «¿está libre?» y
+      guardar en dos pasos sueltos deja la ventana en la que dos recepciones mueven dos
+      citas a la misma hora y las dos leen «libre». Un cambio que no toca la hora —una nota,
+      un estado, o re-mandar la misma hora— no paga el candado. Y el rechazo sale con el
+      **mismo 409 y el mismo texto** que da el alta: quien mueve una cita necesita saber que
+      el turno está tomado, no leer «error al actualizar» y volver a intentarlo.
+
+      **Prueba:** `lib/agenda/reprogramar-cita.test.ts` (11 casos), en ROJO primero por el
+      motivo correcto —«`app/api/appointments/[id]/route.ts` hace el update pelado»— y
+      validado por mutación en **tres** direcciones, cada una en su caso: el **esquive** de
+      llamar al helper con `null` en vez de la reprogramación derivada, el corte arrancado
+      del helper, y el detector ciego (se queda sin sujetos). Los sujetos se derivan del
+      **disco** —toda ruta que escriba `dateTime` en el `data` de un `update` de cita—, así
+      que una ruta nueva nace cubierta. Suite `4582 passed`, `tsc` y `eslint` en 0, y el
+      árbol publicado es byte a byte el que midieron los gates: `git rev-parse HEAD^{tree}`
+      da el mismo valor en las dos máquinas.
+
+      ⚠️ **El detector nació con un falso positivo en la dirección cara** —la que manda a
+      romper lo que funciona—: recortaba el bloque del `update` «hasta el próximo `});`»,
+      que depende de la indentación y se pasaba de largo, así que acusaba al cron de
+      recordatorios (que sólo marca `whatsapp24hSentAt`) por un `dateTime:` que vivía 40
+      líneas más abajo. Se arregló recortando con **paréntesis balanceados** y mirando sólo
+      dentro del `data:`, y quedó anclado con su caso: el cron y el portal público **tocan**
+      una cita sin moverle la hora y no son sujetos de este gate.
+
 - [x] ✅ **CERRADO el 2026-09-11 (`e887e8e`, onia-platform — falta mergear y desplegar): el
       add-on del chatbot avisaba por el PANEL y no por correo.**
 
@@ -116,20 +168,72 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       capacidades vivas (`clinica-sergio-p2ljs`, `onia-interna`) son otorgamientos con
       `validUntil` NULL, que no vencen.
 
-- [ ] **La migración del `concepto` está commiteada y NO aplicada en producción**
-      (`prisma/migrations/20260911120000_renewal_reminder_concepto/migration.sql`, en
-      `onia-platform`). Es aditiva y el código es fail-soft —
-      sin la columna el cron responde `migracion_pendiente` y no manda nada, ni del plan ni
-      del add-on (`53227ab` + `7b0a154`, este último justamente para que P2022 no reviente
-      el circuito del plan). **Mientras no se aplique, el add-on que venza no avisa.**
+- [x] ✅ **CERRADO el 2026-09-11 — la migración del `concepto` YA ESTÁ APLICADA en
+      producción.** Lo pedía este mismo ítem
+      (`prisma/migrations/20260911120000_renewal_reminder_concepto/migration.sql`,
+      `onia-platform`) y quedó escrito antes de medirlo.
 
-      No la aplica este carril: va por `docker exec` contra `supabase-db`, en el mismo
-      movimiento que el swap que `onia-cola` ejecuta cuando Sergio Urcullo aprueba el
-      pedido de deploy de plataforma.
+      **Medido, no supuesto** — `docker exec supabase-db psql -U postgres -d postgres -tAc
+      "select column_name from information_schema.columns where
+      table_name='onia_renewal_reminder_sends'"` devuelve
+      `concepto createdAt id organizationId sentOk step venceEl`, y el conteo cierra:
+      33 filas en `_prisma_migrations` contra 32 carpetas en `prisma/migrations`.
 
-      **Listo =** `docker exec supabase-db psql -U postgres -d postgres -tAc "select
-      column_name from information_schema.columns where table_name='onia_renewal_reminder_sends'"`
-      incluye `concepto`, y el cron deja de responder `migracion_pendiente`.
+      ⚠️ **Lo que sí era falso y se corrige acá, porque manda al revés:** este ítem decía
+      que la migración *«va en el mismo movimiento que el swap»*. **No es cierto** — el
+      publicador no aplica migraciones (`grep -ciE 'migrate|prisma'
+      /opt/onia-platform/_deploy/publicar.sh` da `0`, medido por `onia-cola` el mismo día).
+      Un swap **no** cierra esta clase de brecha. La próxima migración hay que aplicarla a
+      mano o el ítem espera para siempre a un movimiento que no la incluye.
+
+- [x] ✅ **CERRADO el 2026-09-11 (`f46a049`, onia-platform): el aviso del add-on
+      amenazaba con apagar algo que no se apaga.**
+
+      La mitad que **AVISA** y la que **APLICA** no hacían la misma pregunta. El cron
+      (`app/api/cron/renewal-reminders`) armaba el vencimiento del add-on con
+      `entitlements[0].validUntil` **pelado**, y la habilitación
+      (`isWhatsAppAddonActive`) es `organizations.whatsappAddon || capacidad vigente`.
+      El booleano viejo es un otorgamiento **a mano y sin fecha** — lo dice el propio
+      `addon-vigencia.ts`, que por eso no vuelve a encenderlo al cobrar. Para una org que
+      ya lo tiene en `true`, ese `||` sostiene el add-on para siempre y el cron igual le
+      mandaba los cuatro pasos (D-7/D-3/D-1/vencido) por in-app, push y correo diciéndole
+      que el `<fecha>` su asistente deja de contestar. **No deja.**
+
+      **No es hipotético:** medido contra `supabase-db`, de las cuatro organizaciones de
+      producción `clinica-sergio-p2ljs` —una clínica **real**, no QA— tiene la columna en
+      `t`. El día que pague el add-on, la aprobación le escribe `validUntil` y desde ahí
+      recibe la amenaza mes a mes, por tres canales, sobre un corte que el producto no va
+      a hacer. Una amenaza que no se cumple no es un detalle de copy: es lo que hace que
+      el cliente deje de creerle al aviso siguiente, que sí es cierto.
+
+      **Por qué ningún gate podía verlo, que es la parte reusable:** no sobra ni falta una
+      palabra (el copy es correcto cuando el add-on **sí** vence), el monto sale de la
+      fuente única, el rol filtra bien y el rubro no entra.
+      `addon-whatsapp-un-solo-criterio` obliga a preguntar «¿está activo?» con el helper
+      canónico y estaba **verde con razón**: el cron no pregunta eso, pregunta «¿cuándo
+      termina?» — y esa pregunta no tenía dueño. Encima
+      `onia-platform-chatbot/app/api/cron/renewal-reminders/route.ts` era el único
+      archivo de su carpeta: cero tests.
+
+      **La regla:** un aviso que anuncia un EFECTO deriva su fecha de las **mismas fuentes
+      que producen ese efecto**. Una fuente sin fecha no es una fecha más: es la ausencia
+      de vencimiento, y gana.
+
+      Lo que trae: `vencimientoDelAddon` en `lib/subscription/addon-vigencia.ts` (la
+      pregunta con nombre, no una condición suelta en el cron); el cron le pide la columna
+      a la base y decide con el helper; y la excusa **nombrada** en
+      `addon-whatsapp-un-solo-criterio`, que ese gate re-mide en cada corrida.
+
+      Validado por mutación, **las 7 en rojo** y restaurado en verde: revertir el arreglo,
+      el esquive de llamar al helper y tirar el resultado, romper el helper en sus **dos**
+      direcciones, sacar la columna del `select`, `false &&` en la guarda, y romper la
+      premisa. ⚠️ **La última pasó en VERDE en la primera versión**: el corte del cuerpo de
+      `isWhatsAppAddonActive` llegaba hasta el final del archivo y lo absolvía su hermano
+      `checkWhatsAppAddon`, que tiene el **mismo** `org.whatsappAddon ||` dos líneas abajo.
+
+      **Listo =** `npx vitest run lib/subscription/addon-que-no-vence-no-avisa.test.ts`
+      (8/8). Gates sobre el árbol: tsc 0, vitest 4590/4597 (7 skipped), eslint 0 errores.
+      **Commiteado y pusheado; todavía NO desplegado.**
 
 - [x] ✅ **CERRADO el 2026-09-11 (`53227ab` + `7b0a154`, onia-platform): el add-on del
       chatbot podía vencer y nadie avisaba que iba a vencer.**
