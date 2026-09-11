@@ -99,20 +99,33 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       obliga a borrar el registro y el remedio es peor), y una cita directiva nueva en un
       `.test.ts` tiene que salir ROJA.
 
-- [ ] 🔴 **El CUERPO del pedido de deploy de plataforma (`t_5511da55`) describe DOS arreglos y su
-      `ok` publica OCHO.** Abierto por `onia-cola` el 2026-09-11 con el control recién escrito
+- [x] 🔴 **El CUERPO del pedido de deploy de plataforma describe MENOS arreglos de los que su
+      `ok` publica.** Abierto por `onia-cola` el 2026-09-11 con el control recién escrito
       en `scripts/pedido_deploy_entregado.mjs` (`ab1635a1`), que es el que lo ve:
-      **`npm run pedido:entregado` → `ROJO t_5511da55: su CUERPO no nombra 8 arreglo(s) que su
+      **`npm run pedido:entregado` → `ROJO <id>: su CUERPO no nombra N arreglo(s) que su
       ok publica`**, y los nombra uno por uno.
       **No es que el pedido esté roto:** su comando deriva el sha al ejecutarse, así que no
-      caduca, y el 2026-09-11 01:52 La Paz se le comentó el recuento derivado completo con las
-      ocho marcas. Lo que queda corto es el cuerpo, que es lo primero que lee Sergio Urcullo —
+      caduca. Lo que queda corto es el cuerpo, que es lo primero que lee Sergio Urcullo —
       y el `edit` del tablero **no cambia el cuerpo**, por eso comentar no lo cierra.
       **Cómo se cierra:** crear el pedido de nuevo con el cuerpo derivado de
       `bash /opt/onia-platform/_deploy/publicar.sh --dry-run`, bloquearlo con
-      `--kind needs_input`, y **archivar `t_5511da55` en la misma vuelta** (si no, quedan dos
+      `--kind needs_input`, y **archivar el viejo en la misma vuelta** (si no, quedan dos
       pidiendo el mismo ok, que es el ruido que hace que deje de creerles).
-      **No entró en la vuelta del 11-sep por tiempo**, no por estar bloqueado en nadie.
+      **CERRADO el 2026-09-11 06:55 La Paz.** El id que citaba este ítem (`t_5511da55`) ya
+      había caducado dos veces por lo mismo (`t_92d71bf3` → `t_6da5553d` → `t_0e451a15`): el
+      sujeto se **deriva**, no se copia. Al arrancar la vuelta el vivo era `t_0e451a15` con
+      ONCE arreglos en el cuerpo, y los merges de esta misma vuelta (`f2962df`, `ef69e9b`)
+      lo dejaron describiendo 11 sobre 13 — **el integrador es quien los envejece**. Rehecho
+      como **`t_173dd283`** con el cuerpo derivado del publicador en seco sobre `master`
+      `0d11806`, bloqueado `needs_input` (status verificado, no sólo el exit) y `t_0e451a15`
+      archivada con su motivo en el mismo turno. Gate en verde:
+      `node scripts/pedido_deploy_entregado.mjs` → exit 0, `t_173dd283 ... 13 sin publicar,
+      0 sin resolver`, sin un solo ROJO.
+      ⚠️ **Lo que aprendió esta vuelta, y no estaba escrito:** los cinco controles del gate se
+      imprimen en **cadena de prioridad con `return 1`**, así que `incompletos` (que lee cuerpo
+      **y** comentarios) **tapa** a `cortos` (que lee sólo el cuerpo). Por eso el consejo que
+      salió impreso fue *«comentá el recuento, no rehagas la tarea»* — que es el del control de
+      arriba, y **deja rojo al de abajo**. El remedio que cierra los dos es el de este ítem.
 
 - [ ] ⚠️ **El test de cableado de `cuerpoVencido` tiene el agujero que se le cerró a su hermano.**
       `scripts/pedido_deploy_entregado.test.mjs` exige `/vencidos\.push\(/` en la vecindad del
