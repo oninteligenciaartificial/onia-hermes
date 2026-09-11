@@ -3532,6 +3532,60 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] **CERRADO el 2026-09-11: el recordatorio de renovación le reclamaba pagar a quien YA
+      había pagado — y a un cliente anual le cotizaba el mensual**
+      (`app/api/cron/renewal-reminders/route.ts` · `lib/subscription/cobro-del-plan.ts`,
+      commit `f2962df`).
+
+      Auditando lo recién entrado a `master` (el ciclo de renovación por QR, `26212f5`, con
+      ocho fixes encima en un día). El cron le preguntaba mal a `subscription_payments`, de
+      dos formas:
+
+      **1. La tabla es COMPARTIDA.** El add-on del chatbot cobra por la misma tabla, marcado
+      con `plan = "whatsapp_addon"`. El cron tomaba el `cycle` del último pago aprobado **sin
+      excluirlo**, así que a un cliente **anual** que compró el add-on **mensual** el
+      recordatorio le cotizaba **Bs 750 por una renovación de Bs 7.500**. La consecuencia la
+      describe el propio módulo de recordatorios: *«el dueño transfiere lo que el correo dice
+      y el cobro se rechaza por Monto declarado inválido: paga de menos y el plan no se
+      renueva»*. `app/checkout/page.tsx` **ya** excluía el add-on, con su motivo escrito al
+      lado (*«o un pago del add-on taparía el estado real de la suscripción»*); el cron nació
+      sin ese filtro. Por la misma puerta se colaba la cadencia: un plan semanal volvía a
+      recibir «vence en una semana» el día que lo pagó, que es lo que `887b3ea` cerró el día
+      anterior.
+
+      **2. De quién es la pelota.** Todo pago va a **revisión humana** (`activation.ts`: *una
+      captura de pantalla no es prueba de pago*), así que `PENDING` no es un caso raro: es el
+      camino **normal** entre que el cliente transfiere y que nosotros aprobamos. En ese hueco
+      el cron seguía mandando **«Tu plan venció — Renovar mi plan»** por correo, in-app y push
+      a quien ya había pagado. No es sólo mala cara: **lo invita a transferir dos veces.**
+
+      **Por qué no lo veía ningún gate:** no sobra ni falta una palabra, el monto sale de la
+      fuente única, el rol filtra bien, la fecha va en la zona del negocio y el rubro no entra.
+      Lo que estaba mal era **a quién se le preguntaba** y **qué estado se ignoraba**. Y el
+      hermano sano al lado —`estadoDelCheckout`, que **sí** sabe decir «en revisión»— hacía
+      leer la familia como cubierta.
+
+      **El corte va ANTES de reclamar el paso, a propósito:** si el comprobante se RECHAZA,
+      `planEnd` no se movió y mañana sale el recordatorio que corresponde (la pelota volvió a
+      ser suya); si se APRUEBA, `planEnd` avanza y el ciclo nuevo nace con sus pasos libres. El
+      silencio queda **medido** en la respuesta del cron (`enRevision`), porque un cero no se
+      distingue de la calma.
+
+      **De paso, el guardia hermano del monto estaba HUECO:** `monto-del-ciclo-que-paga.test.ts`
+      exigía `toContain("terminoDeRenovacion")` y **el `import` lo absolvía** — reemplacé la
+      llamada por un monto a mano y sus 6 casos siguieron en VERDE. Anclado a la asignación.
+      Sólo se ve mutando; leerlo no alcanza.
+
+      **Prueba:** 11 casos nuevos en `lib/subscription/cobro-del-plan.test.ts`, **en rojo
+      primero** por el motivo correcto (los 2 que miran al LLAMADOR). Seis mutaciones, seis
+      rojos: filtro fuera de la consulta · guarda muerta con `false &&` (literal intacto) ·
+      corte movido después del reclamo · el módulo contando el `PENDING` del add-on (callar de
+      más) · el ciclo sin filtrar · el monto armado a mano. Gates sobre el árbol real:
+      **4514 tests, `tsc` 0, `eslint` 0**.
+
+      ⏳ **Entregado, esperando merge a `master` y publicación** — el integrador lo toma de
+      `claude/chatbots-platform-review-0d1d09`; el pedido de deploy vivo es `t_0e451a15`.
+
 - [x] **CERRADO el 2026-09-11: el gate que prueba que el recordatorio de cita LLEGA llevaba
       días REVENTANDO EN ROJO, o sea acusando al producto de no entregar**
       (`scripts/recordatorio_cita_vivo.mjs` · `npm run recordatorio:vivo`)**.** Corriendo los
