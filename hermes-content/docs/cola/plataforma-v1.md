@@ -71,6 +71,57 @@ y sin operar. Acá se opera, con verificación por ítem.
 > (5 lectores de código + 4 capturas de producción). Orden de ejecución acordado: recarga →
 > cuentas → bot repetido (vive en `cola/chatbot.md`) → UI.
 
+- [x] 🔴 **CERRADO el 2026-09-11 (`859fd05`): el aviso de que TU plan vence lo apagaba el
+      interruptor de los correos a TUS clientes — o sea el ítem de acá abajo nació con el
+      agujero adentro.**
+
+      `emailNotifications` gobierna lo que el NEGOCIO le manda a SUS clientes. Lo dice el
+      schema (*«controla si la clínica envía emails automáticos a pacientes»*,
+      `schema.prisma:35`) y lo dice el interruptor de `/settings` que lo apaga:
+      **«Envía confirmaciones y recordatorios por email al agendar citas»** — ni una palabra
+      sobre su cuenta, su plan ni su factura.
+
+      **Dos crons lo usaban para decidir si Onia le habla al DUEÑO sobre SU cuenta**
+      (`onia-platform-chatbot/app/api/cron/renewal-reminders/route.ts` y su hermano
+      `onia-platform-chatbot/app/api/cron/trial-drip/route.ts`), los dos en el `where`. Así
+      que un dueño que apagara ese toggle —un clic, pensando en sus pacientes— **dejaba de
+      enterarse de que su plan vence y de que la cuenta pasa a solo lectura**. Y como el aviso
+      in-app y el push cuelgan de la misma query, **los tres canales se apagaban juntos**. El
+      drip encima lo llamaba *«opt-out»*, que es exactamente el malentendido: el opt-out real
+      de la relación comercial es `planCanceledAt`, que los dos ya respetaban.
+
+      **Hoy no muerde a nadie, y por eso mismo importa:** las 4 orgs de producción lo tienen
+      en `true` (medido en `supabase-db`, no heredado), así que es un **botón cargado** — el
+      día que alguien lo toque, el defecto entra ya aprobado porque nadie audita un toggle que
+      «ya estaba». Misma familia que la entrada de lista blanca que ningún sujeto usa.
+
+      **Por qué ningún gate podía verlo:** no sobra ni falta una palabra, el rubro deriva bien,
+      el monto sale de la fuente única y la fecha ya lleva la zona del negocio — los cuatro
+      ejes que este carril barrió estaban limpios. **El defecto vive en el par (lo que el
+      interruptor DICE que apaga, lo que realmente apaga)**, que es un dato correcto para su
+      propósito reusado para otro.
+
+      **Gate:** `lib/platform/aviso-al-dueno-no-lo-apaga-el-cliente.test.ts`, con el sujeto
+      derivado en las **dos** direcciones —las funciones que escriben al dueño salen de
+      `lib/email.ts` (las que hacen `to: [data.adminEmail]`) y sus llamadores del disco—, así
+      un cron nuevo que le escriba al dueño **nace cubierto**. Medido sobre el fuente sin
+      comentarios. Validado **por mutación en 4 direcciones**: reponer el filtro en cada cron ·
+      el **esquive** (`{ equals: true }`, otra forma del mismo filtro) · detector siempre-vacío.
+      Las 4 `exit 1`, cada una verificada de que entró; base y restaurado `exit 0`.
+
+      ⚠️ **Y `master` estaba ROJO por su cuenta**, desde el merge del cron nuevo y antes de
+      tocar nada — verificado sobre `origin/master` **puro**, en un worktree aparte. Lo cazaron
+      dos gates de cobertura de este carril y nadie los había atendido: la ruta sin clasificar
+      (`api-route-registry`) y el remitente sin vigilar (`email-idioma-del-rubro`). Los dos
+      cerrados en este commit; la excusa del remitente **re-mide su motivo** sobre la plantilla
+      (hoy no nombra a la gente del negocio), también validada por mutación.
+
+      **Gates:** `npx tsc --noEmit` 0 · `npx vitest run` **4407 pasan / 357 archivos** ·
+      `npx eslint .` 0 errores. Corridos **dos veces**: en casa y en el VPS sobre el árbol
+      exacto que se publicó (`git rev-parse HEAD^{tree}` idéntico en las dos máquinas).
+
+      🔴 **Commiteado y pusheado a la rama del carril, NO desplegado ni mergeado a `master`.**
+
 - [x] 🔴 **CERRADO el 2026-09-11 (~01:00 UTC): la recurrencia de los cobros por QR — el
       cliente PAGO no recibía NI UN aviso antes del corte.** Medido antes de construir: todo
       lo existente (AvisoSoloLectura, 403, drip) dispara DESPUÉS del vencimiento o es del
