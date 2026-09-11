@@ -12,6 +12,16 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-11 02:14-02:17 La Paz — Estética y spa, reverificado: 9/9, sin hallazgos
+
+`zz-qa-2026-09-11-0214` — recorrido completo de punta a punta: alta, onboarding 6 pantallas,
+clienta cargada en `/patients` (group Clientas), cita `2026-09-11 09:00` agendada (201, id
+`cmtwbsiq4001j01rwosnfl9rz`) y vista en `/appointments`, factura con ítem visible en
+`/billing/cmtwbstv5001l01rwud8doruo` (frenado ahí, sin pagar). Cero filas `zz-qa-` propias al
+cerrar. Segundo rubro seguido sin novedad hoy (dental + estética); próxima vuelta debería
+probar comercio, importadora o servicios profesionales, que llevan más de un día sin
+reverificarse.
+
 ## 2026-09-11 02:09-02:12 La Paz — Clínica dental, reverificado: 9/9, sin hallazgos
 
 `zz-qa-2026-09-11-0209` — recorrido completo de punta a punta en dental: alta (confirmar correo
