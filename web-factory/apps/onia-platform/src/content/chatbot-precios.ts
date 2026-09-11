@@ -71,6 +71,33 @@ export type StackId = "whatsapp";
  */
 export const CONVERSACIONES_INCLUIDAS = 500;
 
+/**
+ * El EXTRA que se compra cuando el cupo se agota — ESPEJO de
+ * `RECARGA_CONVERSACIONES` (`onia-platform/lib/pricing.ts`), cruzado por
+ * `scripts/precios-fuente.mjs` igual que `CONVERSACIONES_INCLUIDAS`.
+ *
+ * ⚠️ Nace de un hueco medido el 2026-09-11. El cupo ya se nombraba (06-sep) y
+ * su salida terminaba en «y podés sumar más»: un extra PAGO ofrecido sin decir
+ * **cuánto cuesta** ni **cuánto dura**. Las dos mitades le cuestan plata al
+ * dueño y ninguna era visible para un barrido de este proyecto — no sobra una
+ * palabra prohibida, la cifra publicada salía de la fuente y el precio del
+ * extra no aparecía en ninguna página (medido: `Bs 190` daba 0 en la home,
+ * `/chatbot` y `/precios`), así que no había número que pudiera estar mal.
+ *
+ * La caducidad es la mitad que más engaña, porque lo natural es suponer que lo
+ * comprado se acumula: `aplicarRecarga()` escribe `recargadas` en la fila del
+ * MES en curso (`chatbot_uso_mensual`, clave `organizationId_mes`), así que el
+ * 1 empieza una fila nueva en cero y **lo que se pagó no viaja**. Es el mismo
+ * escalón que el cupo, un paso más abajo: ahí se callaba cuánto te dan, acá
+ * cuánto te dura. Guarda: `(sitio)/extra-que-caduca.test.ts`.
+ */
+export const RECARGA = {
+  /** Conversaciones que suma una recarga. */
+  conversaciones: 200,
+  /** Bs que cuesta esa recarga. */
+  precio: 190,
+} as const;
+
 export interface ChatbotStack {
   readonly id: StackId;
   /** Etiqueta corta de la celda. No hay escalera: es un solo servicio. */
@@ -103,7 +130,11 @@ export const CHATBOT_STACKS: readonly ChatbotStack[] = [
       // cualquier hora» — no al pie ni en una FAQ. Y con su salida: al
       // agotarse la conversación NO se pierde, pasa a una persona. Es lo que
       // el producto hace de verdad (`cupo.ts` → textoDeCupo).
-      `Atiende hasta ${CONVERSACIONES_INCLUIDAS} conversaciones por mes; si se agotan, las nuevas pasan a una persona de tu equipo y podés sumar más`,
+      //
+      // El extra va con su PRECIO y su VIGENCIA en la misma frase: ofrecerlo
+      // como «podés sumar más» callaba que se cobra y que muere el 1 (ver
+      // `RECARGA`). Una salvedad en la oración siguiente es de otra promesa.
+      `Atiende hasta ${CONVERSACIONES_INCLUIDAS} conversaciones por mes; si se agotan, las nuevas pasan a una persona de tu equipo, y podés sumar ${RECARGA.conversaciones} más por Bs ${fmtBs(RECARGA.precio)}, que valen hasta fin de mes y no se acumulan`,
       "Responde con la información real que vos publicaste: horarios, servicios y los datos de la cita",
       "No inventa ni cotiza por su cuenta: solo dice lo que vos cargaste",
       "Lo que no sabe se lo pasa a una persona, con la conversación completa",

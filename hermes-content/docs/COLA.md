@@ -77,6 +77,28 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [ ] 🟡 **`app/cobertura-citada.test.ts` no puede ver una afirmación de cobertura FALSA escrita
+      dentro de un `.test.ts`, y así sobrevivió una cuatro días.** Abierto por `web-venta` el
+      2026-09-11. El gate existe para cazar el puntero muerto —un comentario que dice «esto lo
+      cruza `scripts/X.mjs`» sobre un archivo que nunca se escribió, que **detiene la auditoría**
+      porque quien lo lee le cree— y deja los `.test.ts` fuera **a propósito y con razón**: una
+      bitácora que narra el defecto tiene que poder nombrar el archivo inexistente sin que el
+      gate obligue a borrar el registro (`cobertura-citada.test.ts:53`).
+      **El hueco:** esa exención no distingue la PROSA que narra de la AFIRMACIÓN viva. El
+      2026-09-07 se corrigió el puntero `scripts/limites-vivos.mjs` en `chatbot-precios.ts` y
+      quedó **idéntico y vivo** en `(sitio)/limite-que-corta.test.ts:51` («Va como script aparte:
+      `scripts/limites-vivos.mjs`»), invisible para el gate por ser `.test.ts`.
+      **Reproducción, 10 s:** `ls web-factory/apps/onia-platform/scripts/limites-vivos.mjs`
+      → `No such file`, y `npm test` verde. El puntero ya se reparó (apunta a
+      `scripts/precios-fuente.mjs`, que es el cruce real); **lo que sigue abierto es el gate**.
+      **Cómo se cierra:** separar por CONTEXTO y no por tipo de archivo — el mismo criterio con
+      el que `lucia/palabras-cableadas.py` separó pieza de prosa. Una cita cuya vecindad la
+      declara inexistente («nunca se escribió», `MODULE_NOT_FOUND`) es bitácora; el resto es
+      afirmación y se exige. Validar por mutación en las DOS direcciones: la bitácora de
+      `cobertura-citada.test.ts:26-27` **tiene que seguir en verde** (si se pone roja, el gate
+      obliga a borrar el registro y el remedio es peor), y una cita directiva nueva en un
+      `.test.ts` tiene que salir ROJA.
+
 - [ ] 🔴 **El CUERPO del pedido de deploy de plataforma (`t_5511da55`) describe DOS arreglos y su
       `ok` publica OCHO.** Abierto por `onia-cola` el 2026-09-11 con el control recién escrito
       en `scripts/pedido_deploy_entregado.mjs` (`ab1635a1`), que es el que lo ve:
