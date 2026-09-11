@@ -7,7 +7,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { barrerPedidos, buildQueCorre, clasificarPedido, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
+import { archivosDelDryRun, archivosNombrados, secoDeProduccion, barrerPedidos, buildQueCorre, clasificarPedido, cuerpoCortoArchivos, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
 
 // El caso que me costo la vuelta del 2026-09-06: los 13 shas prometidos por t_0268567b
 // estaban TODOS dentro del build vivo y el pedido seguia blocked pidiendo un ok por
@@ -375,4 +375,188 @@ test('el main INVOCA cuerpoCorto en el bloque de plataforma, no solo lo declara'
   // en VERDE con el main ya incapaz de reportar un solo pedido corto.
   assert.match(vecindad, /SUB_DESCRIBE'\s*\)\s*cortos\.push\(/,
     'el push tiene que dispararlo el estado SUB_DESCRIBE, no una condicion cualquiera');
+});
+
+// ── siat: el tercer destino, que se publica por COPIA DE ARCHIVOS ──────────────────────
+// Hasta el 2026-09-11 todo destino que no fuera `plataforma` ni `landing` caia en
+// `sinCubrir` («su artefacto no nombra sha ni fecha»), asi que el pedido de `siat` podia
+// derivar a «su ok publica lo que nadie leyo» sin que nada se pusiera rojo. El invariante
+// no cambia: cambia el artefacto contra el que se mide.
+
+/** La salida REAL del publicador en seco, medida el 2026-09-11 contra el VPS. */
+const SECO_SIAT = [
+  '== publicar el emisor SIAT ==',
+  '   desde:   /root/loops/onia-hermes/hermes-content/integrations/siat (idéntico a origin/main b80a4984b)',
+  '   destino: /opt/onia-siat/emisor',
+  '',
+  'hay que publicar: 2 arreglo(s) que el emisor del VPS no tiene',
+  'Cambia:',
+  '   test/fase1-runner.test.mjs',
+  '   run-fase1-volumen.sh',
+  '',
+  '== gate: tests del emisor ==',
+  '   verde: 97 casos',
+].join('\n');
+
+test('siat: del dry-run salen los archivos que el ok publicaria', () => {
+  assert.deepEqual(archivosDelDryRun(SECO_SIAT), ['test/fase1-runner.test.mjs', 'run-fase1-volumen.sh']);
+});
+
+// `[]` y `null` NO son lo mismo, y mezclarlos es como un NO MEDIDO se vuelve un falso verde:
+// el primero es una respuesta real del publicador, el segundo es «no llegue a preguntar».
+test('siat: «YA ESTA PUBLICADO» es al dia ([]), no «no pude medir» (null)', () => {
+  const alDia = '== publicar el emisor SIAT ==\n\nYA ESTA PUBLICADO — el emisor del VPS corre todo lo que main tiene.';
+  assert.deepEqual(archivosDelDryRun(alDia), []);
+});
+
+test('siat: sin salida, o con un formato que no entiendo -> null, nunca []', () => {
+  assert.equal(archivosDelDryRun(null), null, 'el SSH no contesto');
+  assert.equal(archivosDelDryRun(''), null, 'salida vacia');
+  assert.equal(archivosDelDryRun('ERR: no existe el destino (/opt/onia-siat/emisor)'), null, 'el publicador fallo');
+  assert.equal(
+    archivosDelDryRun('hay que publicar: 2 arreglo(s)\n(el formato cambio y ya no lista nada)'),
+    null,
+    'si el publicador cambia su formato el gate se calla, no adivina',
+  );
+  assert.equal(archivosDelDryRun('Cambia:\n\n'), null, '«Cambia:» sin lista no es «al dia»');
+});
+
+// EL CASO QUE IMPORTA: el que EXIGE un rojo. Uno que solo pruebe el verde pasa igual con el
+// guardia arrancado. Es el defecto REAL que este instrumento cazo en su primera corrida.
+test('siat: un archivo que el cuerpo NO nombra -> SUB_DESCRIBE', () => {
+  const r = archivosNombrados({
+    texto: 'DESPLEGAR: siat\nEl arreglo esta en run-fase1-volumen.sh.',
+    publicaria: ['test/fase1-runner.test.mjs', 'run-fase1-volumen.sh'],
+  });
+  assert.equal(r.estado, 'SUB_DESCRIBE');
+  assert.deepEqual(r.mudos, ['test/fase1-runner.test.mjs']);
+});
+
+// Describirlo en prosa NO alcanza, y es la vara que el gate ya usa con los shas: sin un
+// identificador literal nadie puede verificar que lo descrito sea lo publicado, y el dia que
+// el publicador arrastre OTRO archivo de pruebas la misma frase lo seguiria dando por
+// cubierto. Ese es el texto real del cuerpo de t_86874107.
+test('siat: «el archivo de pruebas» no es nombrar un archivo', () => {
+  const r = archivosNombrados({
+    texto: 'El segundo arreglo es el archivo de pruebas que fija lo de arriba.',
+    publicaria: ['test/fase1-runner.test.mjs'],
+  });
+  assert.equal(r.estado, 'SUB_DESCRIBE');
+});
+
+// La direccion inversa, la que hace util al gate: sin ella da rojo sobre pedidos sanos y se
+// lo termina apagando. Las DOS formas valen, igual que los shas se casan por prefijo.
+test('el caso que YA cumple: nombrado por ruta o por nombre de archivo -> COMPLETA', () => {
+  const publicaria = ['test/fase1-runner.test.mjs', 'run-fase1-volumen.sh'];
+  assert.equal(
+    archivosNombrados({ texto: 'Cambia test/fase1-runner.test.mjs y run-fase1-volumen.sh.', publicaria }).estado,
+    'COMPLETA',
+    'por ruta',
+  );
+  assert.equal(
+    archivosNombrados({ texto: 'Toca fase1-runner.test.mjs y tambien run-fase1-volumen.sh.', publicaria }).estado,
+    'COMPLETA',
+    'por nombre de archivo: el pedido puede escribir la ruta del repo y el publicador la suya',
+  );
+});
+
+test('siat: sin poder derivar que publica -> NO_MEDIDO, nunca COMPLETA', () => {
+  assert.equal(archivosNombrados({ texto: 'lo que sea', publicaria: null }).estado, 'NO_MEDIDO');
+  assert.equal(
+    archivosNombrados({ texto: 'lo que sea', publicaria: [] }).estado,
+    'NO_MEDIDO',
+    '«el ok no publicaria nada» es la pregunta del caso ENTREGADO, no de esta',
+  );
+});
+
+// Los comentarios se apilan abajo y TAPAN al cuerpo, que es lo unico que Sergio Urcullo lee
+// para decidir. Misma relacion que `cuerpoCorto` tiene con `promesaCompleta`.
+test('siat: nombrado SOLO en un comentario -> el CUERPO sigue corto', () => {
+  const show = [
+    'Body:',
+    'DESPLEGAR: siat',
+    'El arreglo esta en run-fase1-volumen.sh.',
+    '',
+    'Comments (1):',
+    '  [2026-09-11 10:00] onia-cola: ademas viaja test/fase1-runner.test.mjs',
+  ].join('\n');
+  assert.equal(cuerpoCortoArchivos({ texto: show, publicaria: ['test/fase1-runner.test.mjs', 'run-fase1-volumen.sh'] }).estado,
+    'SUB_DESCRIBE', 'el comentario lo nombra, el cuerpo no');
+  const enElCuerpo = show.replace('El arreglo esta en run-fase1-volumen.sh.',
+    'Cambian run-fase1-volumen.sh y test/fase1-runner.test.mjs.');
+  assert.equal(cuerpoCortoArchivos({ texto: enElCuerpo, publicaria: ['test/fase1-runner.test.mjs', 'run-fase1-volumen.sh'] }).estado,
+    'COMPLETA', 'y el caso que YA cumple: nombrado en el cuerpo, verde');
+});
+
+// Declarado no es invocado, y el push tiene que colgar de la comparacion CORRECTA: pedir solo
+// que `cortosSiat.push(` aparezca se satisface con el ESQUIVE de cambiarle la condicion.
+test('el main INVOCA el instrumento de siat, no solo lo declara', async () => {
+  const { readFileSync } = await import('node:fs');
+  const src = readFileSync(new URL('./pedido_deploy_entregado.mjs', import.meta.url), 'utf8')
+    .split('\n').filter((l) => !/^\s*(\/\/|\*|\/\*)/.test(l)).join('\n');
+  const desde = src.indexOf("p.destino === 'siat'");
+  assert.ok(desde > 0, 'no encontre el bloque de siat del main');
+  const vecindad = src.slice(desde, desde + 1800);
+  // 🔴 Pedir que `publicariaSiat()` APAREZCA se satisface con el ESQUIVE de llamarlo y tirar
+  // el resultado (`publicariaSiat(); const publicaria = null;`): medido el 2026-09-11, esa
+  // mutacion pasaba 44/44 en VERDE. Tiene que estar ASIGNADO a lo que el resto usa.
+  assert.match(vecindad, /const\s+publicaria\s*=\s*publicariaSiat\(\)/,
+    'el universo se deriva del publicador Y se usa, no se llama para tirarlo');
+  assert.match(vecindad, /cuerpoCortoArchivos\(\{[^}]*texto:\s*p\.texto/,
+    'y se le pregunta al CUERPO del pedido');
+  assert.match(vecindad, /SUB_DESCRIBE'\s*\)\s*\{?\s*cortosSiat\.push\(/,
+    'el push tiene que dispararlo el estado SUB_DESCRIBE, no una condicion cualquiera');
+  // Y las dos guardas de direccion: sin poder medir NO se concluye, y el «al dia» es rojo
+  // (le pide un ok por trabajo hecho), no un verde silencioso.
+  // 🔴 Anclado al `if (` por el mismo motivo: `if (false && publicaria === null)` deja el
+  // literal intacto con la guarda muerta, y tambien pasaba 44/44.
+  assert.match(vecindad, /if\s*\(\s*publicaria === null\s*\)/, 'sin medicion -> NO MEDIDO');
+  assert.match(vecindad, /if\s*\(\s*publicaria\.length === 0\s*\)\s*\{[^}]*entregadosSiat\.push\(/,
+    'y al dia -> ROJO por pedir un ok por trabajo hecho');
+});
+
+// El destino ya NO puede caer en `sinCubrir`: es la condicion de hecho de la tarea t_7836e91f.
+test('siat ya no cae en la rama «sin instrumento»', async () => {
+  const { readFileSync } = await import('node:fs');
+  const src = readFileSync(new URL('./pedido_deploy_entregado.mjs', import.meta.url), 'utf8');
+  const iSiat = src.indexOf("p.destino === 'siat'");
+  const iSinCubrir = src.indexOf("p.destino !== 'plataforma'");
+  assert.ok(iSiat > 0 && iSinCubrir > 0, 'faltan las dos ramas');
+  assert.ok(iSiat < iSinCubrir, 'la rama de siat tiene que ir ANTES del cajon de «sin instrumento»');
+});
+
+// El caso que cuesta caro y que ya dejo ciegos a otros tres gates vivos al mudarse de
+// maquina: este gate corre hoy desde el nodo de casa, donde `/opt` NO existe. Si la lectura
+// no sale por SSH el destino queda sin medir y NADA se pone rojo.
+// Las vias se inyectan: un test que salga a la red de verdad es lento y mide otra cosa.
+test('siat: sin /opt local, la medicion sale por el VPS', () => {
+  const llamadas = [];
+  const salida = secoDeProduccion('/opt/onia-siat/_deploy/publicar.sh', {
+    local: (r) => { llamadas.push(`local:${r}`); return null; },        // el nodo de casa
+    remoto: (r) => { llamadas.push(`remoto:${r}`); return 'Cambia:\n   x.sh\n'; },
+  });
+  assert.equal(salida, 'Cambia:\n   x.sh\n');
+  assert.deepEqual(llamadas, ['local:/opt/onia-siat/_deploy/publicar.sh', 'remoto:/opt/onia-siat/_deploy/publicar.sh']);
+});
+
+test('siat: con /opt local NO se sale a la red', () => {
+  let remotos = 0;
+  const salida = secoDeProduccion('/opt/onia-siat/_deploy/publicar.sh', {
+    local: () => 'YA ESTA PUBLICADO — el emisor del VPS corre todo lo que main tiene.',
+    remoto: () => { remotos += 1; return 'no deberia llamarse'; },
+  });
+  assert.match(salida, /^YA ESTA PUBLICADO/);
+  assert.equal(remotos, 0, 'si el disco contesta, no se pregunta dos veces');
+});
+
+// La direccion que decide todo: con el SSH caido tiene que salir NO MEDIDO, nunca «ok».
+test('siat: con las DOS vias caidas -> null, y de ahi NO MEDIDO', () => {
+  const salida = secoDeProduccion('/opt/onia-siat/_deploy/publicar.sh', {
+    local: () => null,
+    remoto: () => null,
+  });
+  assert.equal(salida, null, 'no llegue a preguntar no es una respuesta');
+  assert.equal(archivosDelDryRun(salida), null);
+  assert.equal(archivosNombrados({ texto: 'cualquier cosa', publicaria: archivosDelDryRun(salida) }).estado,
+    'NO_MEDIDO', 'un SSH caido no puede dar por completo un pedido');
 });
