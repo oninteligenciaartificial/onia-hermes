@@ -12,6 +12,28 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-11 12:1x La Paz — Servicios profesionales, reverificado: 9/9, sin hallazgos
+
+`zz-qa-2026-09-11-1211` — recorrido completo de punta a punta: alta (confirmar correo primero),
+onboarding 6 pantallas (pregunta → negocio → horarios → servicios → equipo → listo, horarios
+lun-vie 09-13 y 15-19 cargados, 5 filas de agenda), cliente cargado en `/patients` y encontrado
+de vuelta, cita `2026-09-14 09:00` agendada (201, id `cmtwx4kmz008f01rwb9kgpqaq`) y vista en
+`/appointments`, pantalla de cobro mirada en `/comercio/caja` (frenado ahí). Cero filas `zz-qa-`
+propias al cerrar.
+
+Aparte, auditado en código (sin escribir nada): la promesa de `onia.com.bo/agentes` sobre
+Recall ("Detecta clientes que no vuelven hace meses y no tienen próxima cita") ya está acotada
+por rubro donde corresponde — `rolCorreEnTrack("recall", trackId)` en
+`lib/onia-core/modules/agents-por-rubro.ts` sólo lo enciende para tracks que guardan clientes
+en `patients` (dental, estética, veterinaria, servicios profesionales), y el panel `/agents`
+(`agents-view.tsx:99`) ya filtra la tarjeta con el mismo helper — comercio e importadora no ven
+ni corren Recall. Sin hallazgo: esto ya lo cerró chatbot-cola (commit `64279ff`, memoria
+compartida 2026-09-08).
+
+Los 5 rubros activos están reverificados en las últimas 24h sin un solo hallazgo nuevo. Próximo
+escalón: seguir con promesa-vs-entrega en superficies que no sean la home (p. ej. `/agentes`,
+`/comparativa`), no repetir un rubro más.
+
 ## 2026-09-11 09:1x-10:1x La Paz — Comercio / tienda, reverificado: 9/9 (paso 7 no-aplica por diseño), sin hallazgos
 
 `zz-qa-2026-09-11-1009` — tercera reverificación de Comercio en 24h, mismo resultado que la
