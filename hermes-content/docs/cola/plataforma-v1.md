@@ -71,6 +71,57 @@ y sin operar. Acá se opera, con verificación por ítem.
 > (5 lectores de código + 4 capturas de producción). Orden de ejecución acordado: recarga →
 > cuentas → bot repetido (vive en `cola/chatbot.md`) → UI.
 
+- [x] 🔴 **CERRADO el 2026-09-11 (`859fd05`): el aviso de que TU plan vence lo apagaba el
+      interruptor de los correos a TUS clientes — o sea el ítem de acá abajo nació con el
+      agujero adentro.**
+
+      `emailNotifications` gobierna lo que el NEGOCIO le manda a SUS clientes. Lo dice el
+      schema (*«controla si la clínica envía emails automáticos a pacientes»*,
+      `schema.prisma:35`) y lo dice el interruptor de `/settings` que lo apaga:
+      **«Envía confirmaciones y recordatorios por email al agendar citas»** — ni una palabra
+      sobre su cuenta, su plan ni su factura.
+
+      **Dos crons lo usaban para decidir si Onia le habla al DUEÑO sobre SU cuenta**
+      (`onia-platform-chatbot/app/api/cron/renewal-reminders/route.ts` y su hermano
+      `onia-platform-chatbot/app/api/cron/trial-drip/route.ts`), los dos en el `where`. Así
+      que un dueño que apagara ese toggle —un clic, pensando en sus pacientes— **dejaba de
+      enterarse de que su plan vence y de que la cuenta pasa a solo lectura**. Y como el aviso
+      in-app y el push cuelgan de la misma query, **los tres canales se apagaban juntos**. El
+      drip encima lo llamaba *«opt-out»*, que es exactamente el malentendido: el opt-out real
+      de la relación comercial es `planCanceledAt`, que los dos ya respetaban.
+
+      **Hoy no muerde a nadie, y por eso mismo importa:** las 4 orgs de producción lo tienen
+      en `true` (medido en `supabase-db`, no heredado), así que es un **botón cargado** — el
+      día que alguien lo toque, el defecto entra ya aprobado porque nadie audita un toggle que
+      «ya estaba». Misma familia que la entrada de lista blanca que ningún sujeto usa.
+
+      **Por qué ningún gate podía verlo:** no sobra ni falta una palabra, el rubro deriva bien,
+      el monto sale de la fuente única y la fecha ya lleva la zona del negocio — los cuatro
+      ejes que este carril barrió estaban limpios. **El defecto vive en el par (lo que el
+      interruptor DICE que apaga, lo que realmente apaga)**, que es un dato correcto para su
+      propósito reusado para otro.
+
+      **Gate:** `lib/platform/aviso-al-dueno-no-lo-apaga-el-cliente.test.ts`, con el sujeto
+      derivado en las **dos** direcciones —las funciones que escriben al dueño salen de
+      `lib/email.ts` (las que hacen `to: [data.adminEmail]`) y sus llamadores del disco—, así
+      un cron nuevo que le escriba al dueño **nace cubierto**. Medido sobre el fuente sin
+      comentarios. Validado **por mutación en 4 direcciones**: reponer el filtro en cada cron ·
+      el **esquive** (`{ equals: true }`, otra forma del mismo filtro) · detector siempre-vacío.
+      Las 4 `exit 1`, cada una verificada de que entró; base y restaurado `exit 0`.
+
+      ⚠️ **Y `master` estaba ROJO por su cuenta**, desde el merge del cron nuevo y antes de
+      tocar nada — verificado sobre `origin/master` **puro**, en un worktree aparte. Lo cazaron
+      dos gates de cobertura de este carril y nadie los había atendido: la ruta sin clasificar
+      (`api-route-registry`) y el remitente sin vigilar (`email-idioma-del-rubro`). Los dos
+      cerrados en este commit; la excusa del remitente **re-mide su motivo** sobre la plantilla
+      (hoy no nombra a la gente del negocio), también validada por mutación.
+
+      **Gates:** `npx tsc --noEmit` 0 · `npx vitest run` **4407 pasan / 357 archivos** ·
+      `npx eslint .` 0 errores. Corridos **dos veces**: en casa y en el VPS sobre el árbol
+      exacto que se publicó (`git rev-parse HEAD^{tree}` idéntico en las dos máquinas).
+
+      🔴 **Commiteado y pusheado a la rama del carril, NO desplegado ni mergeado a `master`.**
+
 - [x] 🔴 **CERRADO el 2026-09-11 (~01:00 UTC): la recurrencia de los cobros por QR — el
       cliente PAGO no recibía NI UN aviso antes del corte.** Medido antes de construir: todo
       lo existente (AvisoSoloLectura, 403, drip) dispara DESPUÉS del vencimiento o es del
@@ -113,7 +164,23 @@ y sin operar. Acá se opera, con verificación por ítem.
       **LISTO =** crédito OpenAI >0 (el off-guion vuelve a reformular, Hermes contesta) y
       método de pago visible en el billing de Meta.
 
-- [ ] 🟡 **T-nueva — `recorrido-cliente` crea una org QA por día y NUNCA la borra.** Medido
+- [x] ✅ **T-nueva — CERRADO el 2026-09-10 23:45 UTC: su LISTO se cumple hoy.** Contado en
+      `supabase-db`, no deducido: `public.organizations` tiene **3 filas** (`onia-interna`,
+      `bolivian-electricidad-e6t21`, `clinica-sergio-p2ljs`) — las mismas tres que dejó la purga
+      de T2 — y `auth.users` con `%qa%` = **0**. Entre la purga (22:54) y esa cuenta el recorrido
+      corrió **dos veces** (22:09→22:11 y 23:09→23:15, en `/var/log/onia-loop-recorrido-cliente.log`),
+      que es exactamente el LISTO pedido: *dos corridas seguidas dejan `organizations` con las
+      mismas filas que antes*.
+
+      El mecanismo ya está en el script y no hacía falta escribirlo: `--solo-limpiar`
+      (`scripts/recorrido_cliente.mjs`) barre lo `zz-qa-AAAA-MM-DD-HHMM` **al arrancar la
+      vuelta**, sin depender de que el recorrido entero termine — que era el agujero real (una
+      vuelta cortada por tope de tiempo nunca llegaba a `limpiarProduccion()`). Así un huérfano
+      no sobrevive ni un ciclo. Queda anotado el límite honesto: entre dos corridas la org puede
+      vivir hasta una hora, y eso es lo que el LISTO acepta.
+
+      **Diagnóstico original, que sigue siendo la explicación correcta de por qué se juntaron
+      las 7:** Medido
       durante la purga del 10-sep: mientras se borraban las 7 QA acumuladas apareció
       `zz-qa-2026-09-10-2209-negocio-wxbwh`, creada por el patrullaje diario a las 22:09 (así
       se juntaron las 7 — 4 eran de "modulos" del 06-sep, mismo patrón). El pedido de Sergio
@@ -173,18 +240,65 @@ y sin operar. Acá se opera, con verificación por ítem.
       `auth.users` → anotar inbox 7 de Chatwoot huérfano. **LISTO =** `/admin/chatbots` lista
       solo las orgs vivas, mirado en prod.
 
-- [x] 🟡 **T3 — CERRADO el 2026-09-10 (`363dfa4e` + `bc7a447a` en master, deployado y
-      MIRADO ~23:45 UTC).** La causa real de (b) NO era la fuente: era **flex-shrink** — en el
-      nav con `overflow-x-auto` los spans de icono se aplastaban a 0-16px (medido en el DOM
-      vivo con font-size 24) y el glifo desbordaba pisando el label. Fix de CLASE:
-      `flex-shrink: 0` en `.material-symbols-outlined` (globals.css) — un glifo es indivisible,
-      vale para todo el producto — + Links de AdminNav con `shrink-0 whitespace-nowrap`.
-      Re-medido en prod: los 8 spans en 24px, barra legible (captura enviada). De paso cayo un
-      bug de CLASE real de cache: la URL del woff2 era fija y Cloudflare/el navegador servian
-      subsets viejos tras cada deploy — ahora `subset-iconos.mjs` versiona `?v=<hash>` en
-      globals.css y en el preload de layout.tsx. (c) los CTA del addon estan vivos (captura).
-      (a) era ARTEFACTO de captura fullPage: con viewport real scrolleado al fondo la barra no
-      tapa nada (LayoutShell ya reservaba `pb-40`). Detalle original: (a) la barra flotante
+- [x] ✅ **T3 — CERRADO el 2026-09-10. Las tres partes, y la (a) por refutación medida: su
+      causa escrita era falsa.**
+
+      **(b) — arreglado por otro carril y YA DESPLEGADO** (`363dfa4e` + `bc7a447a` en `master`,
+      mirado en producción ~23:45 UTC): la causa real no era la fuente sino **`flex-shrink`** —
+      dentro del nav con `overflow-x-auto` los spans de icono se comprimían a 0-16 px con
+      `font-size: 24` y el glifo desbordaba pisando el label. Fix de CLASE: `flex-shrink: 0` en
+      `.material-symbols-outlined` (`globals.css`) —un glifo es indivisible, vale para todo el
+      producto— más los `Link` de `AdminNav` con `shrink-0 whitespace-nowrap`. Re-medido en
+      prod: los 8 spans en 24 px, barra legible (captura enviada). De paso cayó otro bug de
+      CLASE: la URL del `woff2` era fija y Cloudflare/el navegador servían subsets viejos tras
+      cada deploy — ahora `subset-iconos.mjs` versiona `?v=<hash>` en `globals.css` y en el
+      preload de `layout.tsx`.
+
+      **(c) — arreglado**: `AddonChatbotClient.tsx:193-208` ya pinta los dos CTA en la rama del
+      add-on ACTIVO — «Configurar mi asistente» → `/settings/chatbot` y «Ver conversaciones» →
+      `/inbox` —, con el comentario que cita la captura del 10-sep que lo motivó (verificado
+      también con captura de producción).
+
+      **(a) — la causa que decía este ítem («falta reservar espacio, padding-bottom del
+      contenedor scrolleable») es FALSA hoy.** Los dos carriles llegaron a lo mismo por caminos
+      distintos: con viewport real scrolleado al fondo la barra no tapa nada (la captura del
+      10-sep era `fullPage`, congelada a mitad de scroll), y contado en px del disco el colchón
+      de `LayoutShell` despeja todo el mobiliario flotante:
+
+      | | colchón | lo más alto que flota | despeja por |
+      |---|---|---|---|
+      | móvil | `pb-40` = **160 px** | FAB 152 · asistente 124 · BottomNav 64 | **8 px** |
+      | escritorio | `md:pb-28` = **112 px** | asistente 96 · FAB 96 · franja de estado 30 | **16 px** |
+
+      Y las dos pantallas que nombraba **no tienen contenedor de scroll propio** (`grep` de
+      `overflow-y` y `h-screen` en las carpetas del editor del bot y de la tabla de chatbots del
+      panel admin: sólo un `aside` con `lg:sticky` y una lista interna), así que heredan el
+      colchón de `LayoutShell` y éste las despeja.
+
+      **Lo que sí faltaba, y es la clase:** ese colchón es un número tipeado a mano que tiene
+      que dominar a TODO el mobiliario flotante, y no lo re-medía nadie. `capas.ts` contesta
+      *qué capa va arriba*; nadie contestaba *cuánto espacio necesita el contenido para
+      despejarlas*. Ya falló una vez —el propio `LayoutShell.tsx` lo cuenta: con el colchón
+      anterior (`pb-32`, y `pb-12` en escritorio) el FAB se comía el borde de «Guardar» en
+      Configuración— y se arregló **a mano contra el FAB**, el único mobiliario de entonces.
+      Después entraron la barra del asistente y la franja del plan, y el margen quedó en 8 px:
+      un retoque de diseño de volver a taparlo.
+
+      **Gate** (`components/layout/colchon-despeja-lo-que-flota.test.ts`, `2d87ae1`): el sujeto
+      es `CAPAS_FLOTANTES` —la tabla que ya manda sobre los z—, así que una capa nueva que entre
+      ahí y no declare cuánto ocupa **se nombra** en vez de entrar ya aprobada; los números se
+      leen del disco, no se copian. Validado **por mutación en 5 direcciones** (colchón
+      encogido · capa que crece · capa nueva sin declarar · excusa del velo que caduca · lector
+      roto), las 5 `exit 1` nombrando la capa, base y restaurado `exit 0`, cada mutación
+      verificada de que entró. Gates: `tsc` 0 · `vitest` **4385** pasan / 354 archivos ·
+      `eslint` 0 errores.
+
+      🔴 **Ese gate está commiteado y pusheado, pero NO mergeado** — medido el 2026-09-11:
+      `git merge-base --is-ancestor 2d87ae1 origin/master` dice que no. Es un test, así que no
+      cambia lo que ve el cliente; lo que falta es el merge del integrador para que empiece a
+      cuidar. Lo de (b) y (c), en cambio, ya está en `master` y desplegado.
+
+      **Texto original del ítem, para no perder qué se había visto:** (a) la barra flotante
       "Preguntá por tu negocio" (`onia-platform/components/ayuda/BarraAsistente.tsx`) se pinta
       ENCIMA del formulario del editor del bot (tapa "A quién deriva el bot") y de la última
       fila de la tabla de `/admin/chatbots` — falta reservar espacio (padding-bottom del
@@ -197,17 +311,106 @@ y sin operar. Acá se opera, con verificación por ítem.
       (`/inbox`) — lo pagado no tiene camino de uso desde ahí. **LISTO =** las tres pantallas
       re-capturadas en prod sin solaparse y con los CTA, mirado.
 
-- [ ] 🟡 **T5 — "quiero comprar el sistema" en handoff recibe el acuse genérico.** Medido en la
-      conversación real de Sergio Urcullo (conv 11, 10-sep 20:17 UTC): una señal de COMPRA en
-      etapa `handoff_humano` responde "Te leo, y esto también se lo paso a Sergio" — cierto pero
-      frío para el mensaje más caliente que existe. Mejora de guion: detectar intención de
-      compra (`hermes-content/deploy/vps-ops/bot/intents.mjs`) y avisar a Sergio Urcullo como
-      URGENTE desde la rama `handoff_humano` de
-      `hermes-content/deploy/vps-ops/bot/bot-engine.mjs` (el aviso normal del handoff ya salió
-      antes, no se repite). No bloquea venta; va después de T1-T4.
+- [x] 🟡 **CERRADO el 2026-09-10 — y al medirlo apareció que T5 era la mitad chica de algo
+      peor: el guion le PIDE al prospecto una palabra y el motor no la escuchaba.**
 
-- [ ] **Servicios profesionales fía contra una tabla que su pantalla de clientes no lee.**
-      Sale del arreglo de la importadora (`d634913`, 2026-09-10). Ese pack tiene
+      **Lo que decía T5** (sigue siendo cierto): una señal de COMPRA en `handoff_humano`
+      recibía el acuse genérico "Te leo, y esto también se lo paso a Sergio" — frío para el
+      mensaje más caliente que existe.
+
+      **Lo que apareció al reproducirlo en el simulador, y no estaba escrito:** `M5` cierra
+      con «Si es urgente, decime "urgente" y lo marco» — y `M8_SOPORTE`, su hermana, con la
+      misma promesa. `grep -rn "urgente" hermes-content/deploy/vps-ops/bot/*.mjs` devolvía
+      **sólo los dos literales del guion**: la detección no existía en ninguna parte. O sea
+      que el bot le decía al prospecto exactamente qué escribir y después no lo escuchaba.
+
+      **Y era peor que "acuse genérico": el segundo mensaje caía en SILENCIO TOTAL.** El
+      acuse se gasta con el primer inbound (`handoffAckAt`), así que todo lo que llegaba
+      después salía por `silencio:handoff_en_curso` — y una señal de compra casi siempre
+      llega después de un "gracias, quedo atento". Medido tal cual:
+
+          vos > quiero hablar con una persona
+            [M5] "... Si es urgente, decime "urgente" y lo marco."
+          vos > quiero comprar el sistema, cuando puedo pagar
+            [M5_ACUSE] "Te leo, y esto también se lo paso a Sergio"
+          vos > en serio, quiero pagar hoy mismo
+            (el bot NO responde)          [notas] silencio:handoff_en_curso
+
+      **LA CLASE**, que es lo que quedó cuidado y no la instancia: *el guion le pide al
+      prospecto una acción y el motor no la escucha*. Ningún gate del carril podía verla —
+      no sobra ninguna palabra (el texto es correcto y amable), no falta un rubro, el precio
+      sale de la fuente y el camino feliz anda. Lo que está mal es el par **(lo que el guion
+      PIDE, lo que el motor HACE con eso)**.
+
+      **Arreglo** (`intents.needsHumanNow` + rama `handoff_humano` de `bot-engine.mjs`):
+      "urgente" **o** intención de comprar el sistema emiten un `notify_sergio` con `kind`
+      propio `handoff_urgente` y contestan `M5_URGENTE` ("Listo, lo marqué como urgente").
+      **Una sola vez por conversación** (`urgenteAvisadoAt`, en `raw` — sin DDL): el canal de
+      Telegram ya le llega saturado a Sergio Urcullo y repetirlo es apagarlo. Va **antes** del
+      candado del acuse, que es lo que lo hace funcionar en el 2.º turno. La etiqueta
+      `handoff_urgente` se agregó a `ETIQUETAS` de `aviso-telegram.mjs`, o el aviso habría
+      llegado con el slug interno crudo en vez de "🔥 URGENTE — contestá esto primero".
+
+      **Las tres listas de `raw`.** `urgenteAvisadoAt` entró en `createState`,
+      `toConversationRow` **y** `stateFromRow` + el patch de `persistence.mjs`. Es la trampa
+      que ya mordió dos veces (`handoffAckAt` y `branchAsked`): el motor lo setea, la base no
+      lo recibe, y el aviso sale de nuevo en cada turno. Tiene caso propio.
+
+      **PRUEBA.** `hermes-content/deploy/vps-ops/bot/urgencia-en-el-handoff.test.mjs`, 8 casos,
+      en ROJO primero (7 de 8) por el motivo correcto. Suite del bot **895/895**. El caso
+      `promesa` **deriva sus sujetos del `SCRIPT` leído del disco** (`decime "X"`), así que
+      cubre las DOS hermanas —`M5` y `M8_SOPORTE`— y un texto nuevo con la misma promesa nace
+      cubierto. Validado por **5 mutaciones**, todas en rojo y el control de vuelta en 8/0:
+      arrancar la detección (6 rojos) · **el esquive**: contestar "lo marqué" y NO avisar
+      (6 rojos, que es la promesa rota encima de la promesa rota) · sacar el campo de
+      `toConversationRow` (1) · dejar de escuchar la palabra del guion (4) · sacar el
+      anti-spam (1). Reproducido en el simulador: hoy contesta `M5_URGENTE` con
+      `[notas] handoff:quiere_comprar`, y `construirAviso` lo entrega como
+      **🔥 URGENTE — contestá esto primero**.
+
+      🔴 **Commiteado y pusheado, NO desplegado.** El bot vivo corre `/opt/onia/bot`, que es
+      un rsync y no un checkout: hasta el swap, un prospecto que escriba "urgente" sigue
+      recibiendo el acuse genérico. Pedido de deploy: `t_fab8ad4d` (destino `bot`).
+
+- [x] 🔴 **CERRADO el 2026-09-11 (`52fb146`, rama del carril — falta el merge del
+      integrador y el deploy): su caja ya fía contra la MISMA ficha, y está probado contra
+      la base de producción.**
+
+      **El arreglo:** `lib/comercio/ficha-del-fiado.ts` — `ensureFichaDelFiado` deriva del
+      pack (`guardaClientesEnPatients`, o sea de la pantalla que el rubro OFRECE, nunca de
+      una lista de tracks al lado), busca por TELÉFONO —la clave estable que ya usaba el
+      partner, porque el nombre se tipea distinto cada vez— y deja la fila en `patient`.
+      `ensureClienteFiado` lo llama primero y cuelga el partner de esa ficha: la orden lo
+      sigue necesitando como FK, pero queda enganchado por `metadata.patientId`. Cuando la
+      ficha ya existe **gana su nombre**: el dueño lo escribió a propósito, lo tipeado en
+      el mostrador es de apuro, y las dos pantallas tienen que decir lo mismo. Un partner
+      de antes del arreglo se engancha solo en su próxima venta fiada.
+
+      **Probado contra PRODUCCIÓN, no sólo con `tx` mockeada** (`scripts/fiado-en-la-ficha-vivo.ts`):
+      corre dentro de una transacción que termina en `throw`, así que el rollback lo hace
+      el motor y no un `DELETE` que puede quedar a medias. Salida del 2026-09-11:
+      `patientId cmtw8nqtg00010qkvrvjm7nm4`, la fila **leída de la tabla** con el nombre
+      correcto, y `residuo tras el rollback: organizations=0 patients=0`. Eso es
+      exactamente el LISTO que pedía este ítem.
+
+      **El caso que mira al LLAMADOR va aparte a propósito** (`lib/comercio/ventas.test.ts`):
+      el gate del módulo seguiría VERDE si alguien saca la llamada de `ensureClienteFiado`
+      —el arreglo quedaría escrito y sin efecto—, que es la trampa del parámetro opcional
+      un escalón más arriba. Validado **por mutación en 6 direcciones** (sin la llamada ·
+      predicado siempre `true` · siempre `false` · no reusa la ficha · sin el enganche del
+      partner viejo · el partner no toma el nombre de la ficha): las 6 en rojo, cada una
+      verificada de que entró, base restaurada en verde. Gates: `tsc` 0 · `vitest` **4396**
+      pasan / 355 archivos · `eslint` 0 errores, corridos sobre el árbol que aterriza —
+      `git rev-parse HEAD^{tree}` da el mismo valor en casa y en el gemelo del VPS, que es
+      lo único que prueba que lo publicado es lo medido cuando se entrega por `git am`.
+
+      **La excusa nombrada se actualizó, no se borró** (`administrar-lo-que-se-acumula.test.ts`):
+      el pack sigue sin `/comercio/clientes` —dos entradas «Clientes» a dos tablas son
+      peores que el hueco—, pero ahora el motivo es completo en vez de una postergación.
+      **La clase que deja:** una excusa nombrada puede ser correcta sobre el MENÚ y falsa
+      sobre el DATO; el gate re-medía el menú y nadie re-medía la tabla.
+
+      **Texto original del ítem:** Sale del arreglo de la importadora (`d634913`, 2026-09-10). Ese pack tiene
       `/comercio/caja` **y** `/patients` (rotulada «Clientes»), y las dos guardan gente en
       tablas distintas: fiar llama a `ensureClienteFiado`, que da de alta en
       `onia_core_business_partners`, mientras `/patients` lee `patient`. O sea que quien fía
