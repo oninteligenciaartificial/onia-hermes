@@ -505,6 +505,7 @@ code{font-family:var(--mono);font-size:.9em;background:var(--line-soft);padding:
 }
 .red:hover{border-color:var(--onia-texto);color:var(--onia-texto)}
 .red .arroba{font-family:var(--mono);font-size:12px;color:var(--faint);font-weight:400}
+.red svg{width:26px;height:26px;margin-bottom:3px}
 
 /* ---------- video de YouTube embebido (guías) ---------- */
 .video{
