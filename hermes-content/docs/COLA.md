@@ -99,9 +99,30 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       obliga a borrar el registro y el remedio es peor), y una cita directiva nueva en un
       `.test.ts` tiene que salir ROJA.
 
-- [ ] 🔴 **`npm run cola:viva` está en ROJO y sus 4 errores son FALSOS: el gate hermano de la
+- [x] 🔴 **`npm run cola:viva` está en ROJO y sus 4 errores son FALSOS: el gate hermano de la
       raíz tiene el mismo hueco que el ítem de arriba, y hoy muerde.** Abierto por `onia-cola`
-      el 2026-09-11. **Reproducción, 10 s:** `npm run cola:viva` → `EXIT_REAL=1`, cuatro
+      el 2026-09-11. **CERRADO el 2026-09-11 14:20 La Paz por `onia-cola`**: `cola:viva` en
+      verde (`EXIT_REAL=0`, leído de archivo y no de un pipe) y el self-check de 100 → **110
+      casos**. Las cuatro causas se cerraron con **tres** curas, no con un carve-out: **(a)** el
+      nombre de una ruta no puede empezar con punto, así que una extensión COMPUESTA
+      (`.test.ts`, `.d.ts`) citada como sustantivo deja de ser ruta — la regla del `.tsx` sólo
+      cubría las simples; **(b)** una metavariable de un carácter en mayúscula (`scripts/X.mjs`)
+      es un molde, como el glob; **(d)** una cita ABREVIADA CON HUECO resuelve si el nombre es
+      único y sus segmentos van en orden (`lucia/palabras-cableadas.py` →
+      `…/lucia/scripts/palabras-cableadas.py`), que es resolución, no indulto; y **(c)** la cura
+      central: `citadaComoBitacora()` separa **bitácora de afirmación por la VECINDAD** —la
+      ORACIÓN de cada aparición, nunca el ítem— y la bitácora sale por un canal nuevo de
+      **AVISO** que se imprime y no cuenta para el exit. Mutado en las dos direcciones: el ítem
+      de arriba queda verde y una cita directiva nueva a un archivo inexistente sale ROJA
+      (`exit 1`, probado inyectándola en una copia de `COLA.md`).
+      ⚠️ **Lo que enseñó la validación, y no estaba escrito:** mutar (a) y (b) **contra el
+      corpus real da VERDE con la guarda arrancada**, porque la cura de contexto las tapa (la
+      vecindad de `.test.ts` en ese ítem dice «el archivo inexistente»). Dos guardias hermanos
+      atajando el mismo caso hacen pasar la mutación **por el motivo equivocado** — por eso cada
+      cura lleva su caso propio en el self-check, con su recíproco, y no se dio por validada con
+      la mutación sobre `COLA.md`. Segunda trampa: `indiceDe` **cachea** el árbol por directorio,
+      así que un fixture creado a mitad del self-check no existe para el índice y su caso falla
+      por el motivo equivocado; va en el bloque de setup. **Reproducción, 10 s:** `npm run cola:viva` → `EXIT_REAL=1`, cuatro
       `ERROR fantasma [linea 80]`. Ojo al medirlo: `npm run cola:viva | tail; echo $?` da **0**
       porque ese exit es el de `tail` — hay que redirigir a archivo y leer `$?`.
       **Las cuatro salen del ítem de arriba**, que es prosa narrando punteros muertos, y
