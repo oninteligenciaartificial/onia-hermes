@@ -1155,3 +1155,17 @@ coinciden. Confirmado contra la base real (no solo el código): `trialEnd - crea
 exactamente 14 días en las dos orgs vivas con trial (`clinica-sergio-p2ljs`,
 `bolivian-electricidad-e6t21`). Y el alta de esta misma vuelta no pidió tarjeta en ningún
 paso. La promesa se cumple. Sin hallazgo.
+
+## Verificado 2026-09-11 12:13 La Paz — `/guia-facturacion` (formulario fuera de los 9 pasos)
+
+Submit real (`POST /api/agenda-intake` con correo `zz-qa-`) da **204**: el lead SÍ quedó
+registrado en `onia_center.leads` — la promesa en pantalla ("tu contacto quedó con nosotros")
+es verdadera. Fila borrada al cerrar (`id 72342f4f`, filtrada por `zz-qa-` en `raw`).
+
+**Hallazgo aparte, reportado en el tablero (`t_62aa450c`, prioridad 2, para el dueño de
+`web-factory/apps/site`):** el intake (`api/onia-center/leads/intake/route.ts:98-99`) marca
+TODO lead con `nextAction: "Confirmar demo"` y `meetingStatus: "solicitada"`, sin mirar el
+`src`. `/guia-facturacion` nunca ofrece una demo — pide un correo por una hoja imprimible.
+El endpoint se escribió para el `agenda-form` (que sí pide una reunión) y quedó compartido
+tal cual: el pipeline de Sergio Urcullo mezcla gente que pidió una demo con gente que sólo
+quiso el PDF, las dos con la misma etiqueta "Confirmar demo".
