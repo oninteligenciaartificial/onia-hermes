@@ -295,8 +295,45 @@ y sin operar. Acá se opera, con verificación por ítem.
       un rsync y no un checkout: hasta el swap, un prospecto que escriba "urgente" sigue
       recibiendo el acuse genérico. Pedido de deploy: `t_fab8ad4d` (destino `bot`).
 
-- [ ] **Servicios profesionales fía contra una tabla que su pantalla de clientes no lee.**
-      Sale del arreglo de la importadora (`d634913`, 2026-09-10). Ese pack tiene
+- [x] 🔴 **CERRADO el 2026-09-11 (`52fb146`, rama del carril — falta el merge del
+      integrador y el deploy): su caja ya fía contra la MISMA ficha, y está probado contra
+      la base de producción.**
+
+      **El arreglo:** `lib/comercio/ficha-del-fiado.ts` — `ensureFichaDelFiado` deriva del
+      pack (`guardaClientesEnPatients`, o sea de la pantalla que el rubro OFRECE, nunca de
+      una lista de tracks al lado), busca por TELÉFONO —la clave estable que ya usaba el
+      partner, porque el nombre se tipea distinto cada vez— y deja la fila en `patient`.
+      `ensureClienteFiado` lo llama primero y cuelga el partner de esa ficha: la orden lo
+      sigue necesitando como FK, pero queda enganchado por `metadata.patientId`. Cuando la
+      ficha ya existe **gana su nombre**: el dueño lo escribió a propósito, lo tipeado en
+      el mostrador es de apuro, y las dos pantallas tienen que decir lo mismo. Un partner
+      de antes del arreglo se engancha solo en su próxima venta fiada.
+
+      **Probado contra PRODUCCIÓN, no sólo con `tx` mockeada** (`scripts/fiado-en-la-ficha-vivo.ts`):
+      corre dentro de una transacción que termina en `throw`, así que el rollback lo hace
+      el motor y no un `DELETE` que puede quedar a medias. Salida del 2026-09-11:
+      `patientId cmtw8nqtg00010qkvrvjm7nm4`, la fila **leída de la tabla** con el nombre
+      correcto, y `residuo tras el rollback: organizations=0 patients=0`. Eso es
+      exactamente el LISTO que pedía este ítem.
+
+      **El caso que mira al LLAMADOR va aparte a propósito** (`lib/comercio/ventas.test.ts`):
+      el gate del módulo seguiría VERDE si alguien saca la llamada de `ensureClienteFiado`
+      —el arreglo quedaría escrito y sin efecto—, que es la trampa del parámetro opcional
+      un escalón más arriba. Validado **por mutación en 6 direcciones** (sin la llamada ·
+      predicado siempre `true` · siempre `false` · no reusa la ficha · sin el enganche del
+      partner viejo · el partner no toma el nombre de la ficha): las 6 en rojo, cada una
+      verificada de que entró, base restaurada en verde. Gates: `tsc` 0 · `vitest` **4396**
+      pasan / 355 archivos · `eslint` 0 errores, corridos sobre el árbol que aterriza —
+      `git rev-parse HEAD^{tree}` da el mismo valor en casa y en el gemelo del VPS, que es
+      lo único que prueba que lo publicado es lo medido cuando se entrega por `git am`.
+
+      **La excusa nombrada se actualizó, no se borró** (`administrar-lo-que-se-acumula.test.ts`):
+      el pack sigue sin `/comercio/clientes` —dos entradas «Clientes» a dos tablas son
+      peores que el hueco—, pero ahora el motivo es completo en vez de una postergación.
+      **La clase que deja:** una excusa nombrada puede ser correcta sobre el MENÚ y falsa
+      sobre el DATO; el gate re-medía el menú y nadie re-medía la tabla.
+
+      **Texto original del ítem:** Sale del arreglo de la importadora (`d634913`, 2026-09-10). Ese pack tiene
       `/comercio/caja` **y** `/patients` (rotulada «Clientes»), y las dos guardan gente en
       tablas distintas: fiar llama a `ensureClienteFiado`, que da de alta en
       `onia_core_business_partners`, mientras `/patients` lee `patient`. O sea que quien fía
