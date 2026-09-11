@@ -29,6 +29,32 @@ contra producción (SSH al VPS, las dos bases, el motor corrido de verdad), no c
 
 ---
 
+## ✅ T4 — CERRADO el 2026-09-10 23:00: el acuse del handoff se repetia en CADA mensaje
+
+**Deployado y probado en prod** (backup deploy-20260910T225929Z): conversacion QA en
+`handoff_humano`, turno 1 acusa (1 mensaje), turno 2 → `silencio:handoff_en_curso`, 0
+mensajes — el candado por fin PERSISTE entre turnos. Test nuevo en
+`hermes-content/deploy/vps-ops/bot/persistence.test.mjs` fija la CLASE (las tres listas
+hermanas del raw no pueden volver a desincronizarse). Diagnostico original:
+
+Sergio Urcullo le escribió al bot de ventas (conv 11) en etapa `handoff_humano` y recibió
+**tres veces seguidas** el mismo "Te leo, y esto también se lo paso a Sergio…" (msgs 890, 892,
+894 — traza `respondio etapa=handoff_humano->handoff_humano` las tres). El acuse está diseñado
+para salir UNA vez (`handoffAckAt`, bot-engine.mjs) y después silencio.
+
+**Causa raíz, leída en el código:** `saveConversation` (persistence.mjs:384-391) arma el `raw`
+con una lista propia — `qualifyAsks, outboundSeq, scheduledLabel, publicContact, inboxId` — y
+**nunca escribe `handoffAckAt` ni `branchAsked`**. `toConversationRow` (bot-engine) sí los
+incluye, pero el que corre en producción es `saveConversation`. El motor los setea, la base
+nunca los recibe, el turno siguiente los carga en `null` (`stateFromRow` sí los lee) → acusa de
+nuevo. `branchAsked` tiene el mismo agujero DOBLE: `saveConversation` no lo guarda y
+`stateFromRow` tampoco lo restaura — la pregunta extra del rubro se repetiría igual.
+
+**FIX:** agregar los dos campos al `raw` de `saveConversation` + `branchAsked` a `stateFromRow`
++ test de ida-y-vuelta (estado → fila → estado conserva `handoffAckAt`/`branchAsked`) + deploy
+por `deploy-bot.sh`. **LISTO =** en conv real en handoff, segundo mensaje del prospecto produce
+SILENCIO (traza `silencio:handoff_en_curso`), mirado en el log.
+
 ## 🔴 URGENTE — el motor enmudece en conversaciones viejas (probado por Sergio Urcullo en carne, 10-sep)
 
 Sergio Urcullo mandó "hola" al +591 75414930 y el bot NO contestó. La traza exacta

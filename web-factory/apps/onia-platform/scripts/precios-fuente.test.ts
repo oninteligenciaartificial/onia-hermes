@@ -18,6 +18,8 @@ import {
   excusasSinSujeto,
   constantesExcusadasSinSujeto,
   CONSTANTES_VERIFICADAS_APARTE,
+  leerDelProducto,
+  leerDelSitio,
   limitesDelProducto,
   limitesDelSitio,
   numerosPublicados,
@@ -255,6 +257,125 @@ export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
         "exportaCsv",
       ),
     ).toBe("professional");
+  });
+});
+
+describe("un comentario no le puede mentir al cruce (las dos puertas de lectura)", () => {
+  /**
+   * QUÉ AGUJERO TAPA, y por qué no se ve en el veredicto.
+   *
+   * Todo este cruce parsea con expresiones regulares sobre el TEXTO del
+   * archivo, y para una expresión regular un comentario es codigo. Rompe en las
+   * DOS direcciones y la cara ya mordió: el 2026-09-10 este gate salió ROJO
+   * diciendo «el producto cobra basic y el sitio publica professional» sobre un
+   * sitio que decía exactamente lo correcto. Lo que leyó fue el comentario que
+   * explicaba el arreglo del día anterior —«…y la prueba corre con Pro»—, que
+   * queda pegado a la frase dentro del trozo que el gate juzga.
+   *
+   * Y el mensaje del rojo manda a «corregir el sitio»: obedecerlo era volver a
+   * poner la condición que le niega al cliente sus propios datos. Un gate que
+   * acusa a código sano no es ruido, es una instrucción equivocada.
+   *
+   * Los casos entran por `leerDelSitio` / `leerDelProducto` y NO llamando a
+   * `sinComentarios`: lo que hay que sostener es el CABLEADO. Un self-check
+   * puro de la función pasaría igual el día que alguien vuelva a leer con
+   * `readFileSync` directo, que es como nació este agujero.
+   */
+  const conComentario = `
+export const CONDICIONES: readonly string[] = [
+  // El export no se gatea por plan; la prueba corre con Pro.
+  "Tus datos son tuyos: los exportás en CSV cuando quieras, sin importar el plan.",
+] as const;
+`;
+
+  it("un comentario que NOMBRA un plan no cambia el tier que el sitio promete", () => {
+    // El bug del 2026-09-10, exacto. Sin limpiar, el trozo juzgado trae «Pro».
+    expect(
+      planQueElSitioPrometeParaExportar(leerDelSitio("x", { leer: () => conComentario })!),
+    ).toBe("basic");
+  });
+
+  it("un comentario tampoco ABSUELVE: no alcanza para dar un tier por incluido", () => {
+    // La dirección simétrica, la que nadie audita porque el verde no molesta.
+    // `limitesDelSitio` decide el tier por quien lo NOMBRA primero.
+    const basicoConComentario = `
+  { id: "basico", incluye: [
+      // ojo: Reportes completos y Agente Recall vienen aparte
+      "2 usuarios",
+    ], sinEsto: [] },
+  { id: "pro", incluye: ["Reportes completos", "Agente Recall"], sinEsto: [] },
+  { id: "full", incluye: ["Todo lo del Pro"], sinEsto: [] },
+`;
+    const limpio = leerDelSitio("x", { leer: () => basicoConComentario })!;
+    const l = limitesDelSitio(limpio) as Record<
+      string,
+      { reportes: boolean | null }
+    >;
+    expect(l.basico.reportes).toBeNull();
+    expect(l.pro.reportes).toBe(true);
+  });
+
+  it("un número escrito en un comentario no cuenta como publicado", () => {
+    // Si contara, `publicadosSinCruzar` pediría cruzar una cifra que no existe
+    // en la pantalla: rojo eterno sobre un sitio sano.
+    const conCifra = `
+  { id: "basico", incluye: [
+      // antes eran 500 fichas
+      "Hasta 300 fichas de clientes o pacientes cargadas",
+    ], sinEsto: [] },
+`;
+    const publicados = numerosPublicados(leerDelSitio("x", { leer: () => conCifra })!);
+    expect(publicados.map((n) => n.valor)).toEqual([300]);
+  });
+
+  it("`https://` no es un comentario: la limpieza respeta las comillas", () => {
+    // La dirección cara de la limpieza. Comerse medio string rompería patrones
+    // que hoy leen bien y el gate acusaría al sitio por su propio filtro.
+    const conUrl = 'const u = "https://onia.com.bo/precios"; // fuera';
+    expect(leerDelSitio("x", { leer: () => conUrl })).toBe(
+      'const u = "https://onia.com.bo/precios"; ',
+    );
+  });
+
+  it("la puerta del PRODUCTO limpia igual que la del sitio", () => {
+    // El lado producto entra por otra función y tiene el mismo problema: un
+    // comentario en `PLAN_LIMITS` que diga `csvExportEnabled: true` movería el
+    // tier que se le exige al sitio.
+    // El comentario va DESPUÉS del `basic:` real a propósito: `limitesDelProducto`
+    // sobrescribe por clave, así que puesto ANTES lo pisa la línea buena y el
+    // caso pasa con la limpieza arrancada — medido, estaba hueco así.
+    const fuente = `
+export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
+  basic: { csvExportEnabled: false },
+  // basic: { csvExportEnabled: true },
+  professional: { csvExportEnabled: true },
+  clinic: { csvExportEnabled: true },
+};
+`;
+    const limpio = leerDelProducto("x", { repo: "/y", local: () => fuente })!;
+    expect(primerPlanCon(limitesDelProducto(limpio), "exportaCsv")).toBe("professional");
+  });
+
+  it("el main entra por las puertas: no vuelve a leer el sitio en crudo", () => {
+    // Los casos de arriba llaman a `leerDelSitio` y por eso no pueden ver el
+    // modo de falla que ORIGINÓ esto: leer con `readFileSync` directo. Es el
+    // caso que mira al LLAMADOR — sin él, la limpieza queda impecable y sin uso.
+    const main = readFileSync(
+      join(dirname(PRECIOS_SITIO), "..", "..", "scripts", "precios-fuente.mjs"),
+      "utf8",
+    );
+    const bloque = main.slice(main.indexOf("if (process.argv[1]"));
+    expect(bloque).not.toBe("");
+    expect(bloque).not.toMatch(/readFileSync\(\s*(PRECIOS_SITIO|CHATBOT_SITIO)/);
+    expect(bloque).toMatch(/leerDelSitio\(\s*PRECIOS_SITIO/);
+    expect(bloque).toMatch(/leerDelSitio\(\s*CHATBOT_SITIO/);
+  });
+
+  it("una fuente ausente sigue siendo `null`: no se convierte en texto vacío", () => {
+    // Un `""` se leería como "leí el archivo y no dice nada" y el cruce saldría
+    // VERDE sin haber medido. Tiene que llegar `null` para que salga NO PUDE MEDIR.
+    expect(leerDelSitio("x", { leer: () => null })).toBeNull();
+    expect(leerDelProducto("x", { repo: "/y", local: () => null, remoto: () => null })).toBeNull();
   });
 });
 

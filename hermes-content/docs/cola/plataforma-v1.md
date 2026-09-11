@@ -66,7 +66,277 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
-- [x] 🔴 **CERRADO el 2026-09-10 (`a106f7e`, rama del carril — NO en `master` todavía):
+> **Lote del 2026-09-10 (pedido de Sergio Urcullo: "arregla los 4… ve dejando en la cola las
+> tareas y vas una por una").** Los cuatro salen del mapa del panel del chatbot medido ese día
+> (5 lectores de código + 4 capturas de producción). Orden de ejecución acordado: recarga →
+> cuentas → bot repetido (vive en `cola/chatbot.md`) → UI.
+
+- [ ] 🔴 **T-plata — dos bloqueos que solo Sergio Urcullo puede pagar** (detectados el
+      10-sep midiendo el precio de la recarga; avisados por el tablero):
+      (1) **OpenAI sin crédito desde el 9-sep ~04-06 UTC** (medido en LiteLLM_SpendLogs: 38
+      failures 429): la rama off-guion del bot cae al texto de respaldo (no muda, pero no
+      reformula) y **Hermes está caído entero** (misma cuenta). Recargar en
+      platform.openai.com. El gasto del bot es ruido: USD 0,00085 en toda su historia.
+      (2) **Método de pago en Meta antes del 1-oct-2026**: la hoja oficial "effective
+      October 1, 2026" ya salió — service USD 0,0113/mensaje (Rest of Latin America, cubre
+      Bolivia) tras 1.000 mensajes de servicio gratis/mes por número; **sin tarjeta cargada
+      Meta DEJA DE ENTREGAR desde el mensaje 1.001** — bot mudo a mitad de mes. Vale para
+      nuestro número y para cada cliente con número propio (anotarlo en el onboarding del
+      canal WhatsApp). Fundamento completo en el comentario de RECARGA_CONVERSACIONES de
+      `onia-platform/lib/pricing.ts` y memoria meta-whatsapp-clientes actualizada.
+      **LISTO =** crédito OpenAI >0 (el off-guion vuelve a reformular, Hermes contesta) y
+      método de pago visible en el billing de Meta.
+
+- [ ] 🟡 **T-nueva — `recorrido-cliente` crea una org QA por día y NUNCA la borra.** Medido
+      durante la purga del 10-sep: mientras se borraban las 7 QA acumuladas apareció
+      `zz-qa-2026-09-10-2209-negocio-wxbwh`, creada por el patrullaje diario a las 22:09 (así
+      se juntaron las 7 — 4 eran de "modulos" del 06-sep, mismo patrón). El pedido de Sergio
+      Urcullo ("solo una cuenta") no se sostiene si el loop la repuebla cada madrugada.
+      **Fix:** el prompt/script del recorrido borra su org + `auth.users` al terminar (éxito o
+      fallo), protocolo de la skill onia-db (`onia-platform/.claude/skills/onia-db/SKILL.md`): email
+      `oninteligenciaartificial+qa*` o `zz-qa-*@onia.com.bo`, borrado por slug exacto. Carril
+      loops (`hermes-content/docs/cola/loops.md` es su cola natural). **LISTO =** dos corridas
+      seguidas del recorrido dejan `public.organizations` con las mismas filas que antes.
+
+- [x] 🔴 **T1 — La recarga "+200 conversaciones por Bs 190" se VENDE pero no se puede APLICAR.**
+      **CERRADO el 2026-09-10** (`6183fb02` en master de onia-platform, DEPLOYADO 22:56 UTC con
+      gates 5/5): columna `recargadas` en `chatbot_uso_mensual` (migración
+      `20260910230000_chatbot_recargadas` aplicada en prod con backup), `cuotaDe(addon,
+      recargadas)`, `aplicarRecarga()` que además destraba los avisos del 80 %/corte (eran
+      una-vez-por-mes: el que recargaba y volvía a agotar quedaba mudo), `POST
+      /api/admin/organizations/[id]/recarga-chatbot` (superadmin, 409 sin add-on) y botón en la
+      ficha admin junto al toggle. Tests 35/35 (`onia-platform/lib/chatbot/cupo.test.ts`),
+      tsc/eslint 0. **VERIFICADO MIRANDO el 2026-09-10 ~23:45 UTC**: recarga aplicada a
+      Clinica Sergio por el BOTON real de la ficha, y `/settings/chatbot` del cliente
+      renderiza "0 de 700" con el texto dinamico — capturado y enviado a Sergio Urcullo.
+      La recarga queda puesta en su org de pruebas (700 este mes, vuelve sola a 500 el 1-oct).
+      Medido 10-sep: `CupoConversacionesCard` la ofrece desde el 80% del cupo (decisión de
+      Sergio Urcullo del 05-sep), el cliente pagaría por WhatsApp… y `cuotaDe()`
+      (`lib/chatbot/cupo.ts`) devuelve SIEMPRE el literal 500 de `pricing.ts`: no hay campo por
+      org ni acción de admin que sume las 200. Si alguien paga hoy, no hay cómo dárselas.
+      **Plan:** campo `recargadas` en la fila mensual `chatbotUsoMensual` (la recarga es del mes
+      en curso) + `cuotaDe()` = incluidas + recargadas + botón superadmin "Aplicar recarga
+      pagada (+200)" junto a donde vive el toggle del add-on + migración en prod por el runbook
+      (INSERT en `_prisma_migrations`, prisma no llega desde el host). **LISTO =** en prod, org
+      con recarga aplicada muestra "x de 700" en `/settings/chatbot` y el motor recibe
+      `limite: 700` por `/api/chatbot-knowledge/published`, mirado, no supuesto.
+
+- [x] 🔴 **T2 — CERRADO el 2026-09-10 en la base** (falta solo la mirada en `/admin/chatbots`,
+      va con las capturas del cierre): backup pre-purga-qa-20260910-2254.sql (public+auth,
+      805 KB, en `/root/backups-chatbot/` del VPS) → DELETE de las 7 orgs QA por slug exacto +
+      la octava que el recorrido creó a las 22:09 → DELETE de sus 8 `auth.users` por email
+      exacto. Quedan 3 orgs / 3 usuarios: `onia-interna` (superadmin), `bolivian-electricidad`
+      (cliente real), `clinica-sergio` (ver pregunta abajo). `auth.users` con `%qa%` = 0.
+      Anotado: el inbox 7 de Chatwoot (era de zz-qa-clinica-chatbot) quedó huérfano, inofensivo.
+      **Pregunta ABIERTA a Sergio Urcullo:** ¿`clinica-sergio-p2ljs` (sergio@onia.com.bo) se
+      borra también? Es su banco de pruebas con el add-on activo y el bot configurado —
+      borrarla mata las pruebas del panel; no se toca sin su palabra.
+
+      Purga original (pedido Sergio Urcullo
+      10-sep: "solo tenemos una cuenta… borra las demás"). Medido en la base ese día: 10 orgs,
+      de las cuales **7 son QA** (`zz-qa-clinica-chatbot`, `zz-qa-ferreteria-tornillo`,
+      `zz-qa-estetica-modulos`, `qa-modulos-mrk0q`, `qa-modulos-rj7tv`,
+      `zz-qa-salteo-horarios-20260906`, `zz-qa-cobro-e2e`) con sus usuarios `+qa*@gmail.com` /
+      `zz-qa-*@onia.com.bo` (receta de limpieza en `hermes-content/docs/handoff/cobro-e2e.md`;
+      verificación mirando con `scripts/onia-mirar.js`). **Se quedan:** `onia-interna`
+      (superadmin, LA cuenta central),
+      `bolivian-electricidad` (cliente real, gmail de Sergio Urcullo). **Pregunta abierta:**
+      `clinica-sergio-p2ljs` (sergio@onia.com.bo) es la org de PRUEBAS de Sergio Urcullo con el
+      add-on activo y el bot configurado — borrarla mata su banco de pruebas del panel; no se
+      borra sin su palabra. **Plan:** backup de filas → DELETE de las 7 (cascada) → borrar sus
+      `auth.users` → anotar inbox 7 de Chatwoot huérfano. **LISTO =** `/admin/chatbots` lista
+      solo las orgs vivas, mirado en prod.
+
+- [x] 🟡 **T3 — CERRADO el 2026-09-10 (`363dfa4e` + `bc7a447a` en master, deployado y
+      MIRADO ~23:45 UTC).** La causa real de (b) NO era la fuente: era **flex-shrink** — en el
+      nav con `overflow-x-auto` los spans de icono se aplastaban a 0-16px (medido en el DOM
+      vivo con font-size 24) y el glifo desbordaba pisando el label. Fix de CLASE:
+      `flex-shrink: 0` en `.material-symbols-outlined` (globals.css) — un glifo es indivisible,
+      vale para todo el producto — + Links de AdminNav con `shrink-0 whitespace-nowrap`.
+      Re-medido en prod: los 8 spans en 24px, barra legible (captura enviada). De paso cayo un
+      bug de CLASE real de cache: la URL del woff2 era fija y Cloudflare/el navegador servian
+      subsets viejos tras cada deploy — ahora `subset-iconos.mjs` versiona `?v=<hash>` en
+      globals.css y en el preload de layout.tsx. (c) los CTA del addon estan vivos (captura).
+      (a) era ARTEFACTO de captura fullPage: con viewport real scrolleado al fondo la barra no
+      tapa nada (LayoutShell ya reservaba `pb-40`). Detalle original: (a) la barra flotante
+      "Preguntá por tu negocio" (`onia-platform/components/ayuda/BarraAsistente.tsx`) se pinta
+      ENCIMA del formulario del editor del bot (tapa "A quién deriva el bot") y de la última
+      fila de la tabla de `/admin/chatbots` — falta reservar espacio (padding-bottom del
+      contenedor scrolleable) o bajar su z/altura; (b) en la barra PANEL ADMIN
+      (`onia-platform/app/(dashboard)/admin/AdminNav.tsx`) los iconos pisan el texto de las
+      pestañas (Clínicas, Pagos, Planes, Usuarios, Auditoría se leen encimadas); (c)
+      `/settings/addon-chatbot` activa
+      (`onia-platform/app/(dashboard)/settings/addon-chatbot/AddonChatbotClient.tsx`) queda
+      media pantalla vacía sin un solo enlace al editor (`/settings/chatbot`) ni a la bandeja
+      (`/inbox`) — lo pagado no tiene camino de uso desde ahí. **LISTO =** las tres pantallas
+      re-capturadas en prod sin solaparse y con los CTA, mirado.
+
+- [ ] 🟡 **T5 — "quiero comprar el sistema" en handoff recibe el acuse genérico.** Medido en la
+      conversación real de Sergio Urcullo (conv 11, 10-sep 20:17 UTC): una señal de COMPRA en
+      etapa `handoff_humano` responde "Te leo, y esto también se lo paso a Sergio" — cierto pero
+      frío para el mensaje más caliente que existe. Mejora de guion: detectar intención de
+      compra (`hermes-content/deploy/vps-ops/bot/intents.mjs`) y avisar a Sergio Urcullo como
+      URGENTE desde la rama `handoff_humano` de
+      `hermes-content/deploy/vps-ops/bot/bot-engine.mjs` (el aviso normal del handoff ya salió
+      antes, no se repite). No bloquea venta; va después de T1-T4.
+
+- [ ] **Servicios profesionales fía contra una tabla que su pantalla de clientes no lee.**
+      Sale del arreglo de la importadora (`d634913`, 2026-09-10). Ese pack tiene
+      `/comercio/caja` **y** `/patients` (rotulada «Clientes»), y las dos guardan gente en
+      tablas distintas: fiar llama a `ensureClienteFiado`, que da de alta en
+      `onia_core_business_partners`, mientras `/patients` lee `patient`. O sea que quien fía
+      queda en un lugar que el dueño no abre nunca. **No se arregla con una entrada de menú**
+      —agregarle `/comercio/clientes` le pondría DOS «Clientes» apuntando a dos tablas, peor
+      que el hueco—: el arreglo es que su caja fíe contra la misma ficha, y eso es desarrollo.
+      Por eso está declarado como excusa NOMBRADA en
+      `lib/platform/administrar-lo-que-se-acumula.test.ts`, que la **re-mide cada corrida**:
+      el día que el pack gane la pantalla o pierda la caja, el gate dice que la excusa sobra.
+      Hoy no hay daño acumulado — medido el 2026-09-10, `qa-modulos-mrk0q` tiene 0 partners —,
+      así que es trabajo de antes-de-que-duela, no un incendio.
+      LISTO = una venta fiada desde la caja de ese rubro deja al cliente donde su dueño lo ve,
+      con la fila en la base como prueba.
+
+- [x] 🔴 **CERRADO el 2026-09-10 (`825f227`, rama del carril — falta el merge del integrador):
+      el aviso del cupo del chatbot y el del tope de clientes le llegaban al teléfono de la
+      recepción y del profesional, que no pueden abrir la pantalla a la que llevan.**
+
+      **La QUINTA pregunta sobre rol.** `lib/platform/ruta-por-rol.ts` enumera cuatro —el menú,
+      la ruta, la acción y el enlace que una pantalla pinta— y **las cuatro tienen por sujeto una
+      PANTALLA**. Un push no es ninguna: no es item de menú, no es un `redirect()`, no es una
+      acción de pantalla y no es un `.tsx` que pinte un `href`. Por eso ningún gate podía verlo.
+
+      **Estaba en DOS archivos a la vez, y con la mitad buena al lado:** en `lib/chatbot/cupo.ts`
+      y en `lib/agenda/tope-en-la-puerta-publica.ts`, la notificación in-app filtraba
+      destinatarios a `ADMIN`/`SUPERADMIN` y el push de **dos líneas más abajo** salía a TODOS
+      los suscritos de la org, hacia `/settings/chatbot` y `/settings`, que son `SOLO_ADMIN`. El
+      archivo ya sabía hacerlo bien; justo la mitad que viaja al teléfono no lo hacía.
+
+      **Son dos daños, no uno:** el **rebote mudo** —se toca el aviso y vuelve al inicio, sin
+      cartel ni error, que se lee como producto roto y termina en soporte— y que **se le cuenta a
+      un empleado el estado comercial del negocio**: que el cupo que su jefe paga se agotó, que
+      está por chocar el tope de su plan. Es la misma regla que ya se aplicó en la puerta pública
+      (el estado comercial no se le cuenta a quien no lo decide), del lado de adentro.
+
+      ⚠️ **Honestidad sobre el alcance: `public.push_subscriptions` tenía 0 filas al medirlo**
+      (contado, no deducido). Es un defecto de **código**, todavía no de datos: entra **ya
+      aprobado** el día que un doctor o la recepción active las notificaciones, que es
+      exactamente lo que el producto les ofrece — la misma forma que el texto de venta muerto o
+      la entrada de lista blanca pre-aprobada. Y hay 6 perfiles no-admin de 16 en producción.
+
+      **Arreglo** (`lib/platform/aviso-alcanzable-por-rol.ts`): el corte usa `puedeAbrirRuta`, la
+      **misma** función que el enlace, a propósito — copiar la lista de roles al lado del
+      `sendPushToUser` es exactamente como nació esto. Sin rol conocido no se manda nada
+      (fail-closed). **Trampa del modelo:** `PushSubscription.userId` referencia `Profile.id`, no
+      `Profile.userId` (ver el `@relation` del schema), así que el rol se pide por la relación
+      declarada y no cruzando ids a mano — un JOIN por `userId` devuelve vacío y parece que nadie
+      está suscrito.
+
+      **Gate:** `lib/platform/aviso-alcanzable-por-rol.test.ts` (8 casos), sujetos derivados del
+      disco y medidos sobre el fuente **sin comentarios**. Cubre las **dos** mitades: el aviso que
+      difunde a la org y el que va a una persona. Validado **por mutación en 6 direcciones**
+      —cupo crudo · tope crudo · **esquive** (importar el helper y dejar el `findMany` al lado) ·
+      un aviso puntual apuntado a una ruta admin · el filtro arrancado · el caso ancla del
+      módulo—: las 6 `exit 1`, base `exit 0`, y cada mutación verificada de que entró.
+
+      🔴 **Dos falsos positivos PROPIOS, corregidos antes de dar el gate por bueno, los dos en la
+      dirección cara:** `/appointments` declara `ALL_ROLES` y **no es un corte** (mi primera
+      versión acusaba a un aviso sano), y clasificar difunde/puntual por la presencia del
+      `findMany` **se rompía justo con el arreglo** —el arreglo borra la forma que el detector
+      perseguía—. Y el **esquive** no lo cazaba mi primera versión: sólo apareció mutando
+      DESPUÉS de arreglar.
+
+      **Gates:** `npx tsc --noEmit` 0 · `npx vitest run` **4347 pasan / 351 archivos** ·
+      `npx eslint .` 0 errores. Marca puesta en el pedido de deploy vivo `t_6f2e10b9`.
+
+- [x] 🔴 **CERRADO el 2026-09-10 (`d5ec6de`, ya en `master` — verificado el 2026-09-10): la ayuda
+      del producto le negaba al dueño una exportación que su plan YA incluye.** Punto 8 de la
+      Definición 1.0 («cero promesas falsas»), en la dirección que casi nadie audita: prometer
+      de MENOS.
+
+      `/help` decía *«La exportación a CSV está en el plan Completo»* y la enumeración de planes
+      la ponía como lo que suma el Completo. Medido contra `lib/plan-catalogo.ts`:
+      `csvExportEnabled` es `true` **desde `basic`** y el propio catálogo fija por qué —*«el
+      export de SUS datos no puede ser rehén del plan»*, auditoría 2026-08-06—; el botón de
+      `/reports` cuelga de `canExportCsv`, no del plan de reportes (su `puedeExportarCsv`), así
+      que un Básico entra al reporte básico y **tiene el botón**. Y `onia.com.bo/precios` lo
+      vende como «los exportás desde el plan más chico». Al dueño de Bs 320 y al de Bs 750 se
+      les pedía saltar a Bs 1.500 por algo que ya pagaban, en la pantalla que consultan justo
+      cuando no encuentran algo. Eran **11 atribuciones falsas en los 7 packs**: la pregunta de
+      los planes no declara `ruta`, así que la ven todos.
+
+      **La CLASE, que es lo que vale:** la ayuda afirma **en qué plan vive cada capacidad** y el
+      plan va tipeado al lado del texto. Los tres gates hermanos miran otra cosa —
+      `monto-de-plan-a-mano` los montos, `nombre-de-plan-a-mano` que no se filtre la clave en
+      inglés, `plan-catalogo-es-la-fuente` que mostrar y aplicar pidan el mismo campo— y
+      **ninguno cruza la afirmación contra `PLAN_LIMITS`**. No sobra ni falta una palabra, el
+      rubro deriva bien y la pantalla renderiza perfecto: ningún barrido de literales podía
+      verlo. Es la familia simétrica, **dentro del producto**, del gate que web-venta cerró ese
+      mismo día en el sitio (`datos-que-se-llevan.test.ts`).
+
+      **Gate:** `lib/ayuda/capacidad-en-el-plan-correcto.test.ts`. Mide lo que `construirFaq`
+      **devuelve** para los 7 packs (no el fuente: así no hay comentario, interpolación ni
+      concatenación que confunda al patrón) y exige que el plan nombrado sea el **primero** que
+      trae la capacidad. Validado por mutación en tres direcciones: atribución correcta movida
+      de plan (`recurringInvoices` professional→clinic) → rojo nombrándola; la ayuda deja de
+      nombrar la capacidad (**esquive**) → rojo por el ancla; detector vacío → rojo por
+      cobertura. Gates: `tsc` 0 · **4.338** tests · `eslint` 0 errores. Árbol publicado idéntico
+      al medido (`tree 5563659`).
+
+- [x] 🔴 **CERRADO el 2026-09-10 (`7d3c050`, ya en `master` — verificado el 2026-09-10): el panel
+      le ofrecía a la recepción y al profesional dos enlaces que los rebotaban MUDO al inicio.**
+      Punto 8 de la Definición 1.0 («cero promesas falsas»).
+
+      **Es la CUARTA pregunta sobre rol, y no la veía ningún gate.** Había tres:
+      `filterNavItems` filtra el **menú**, `rol-en-la-ruta.test.ts` defiende la **ruta**, y
+      `accion-negada-por-rol.test.ts` (ayer) mira la **acción** contra la API. Las dos primeras
+      preguntan por la ruta, así que un enlace pintado **dentro** de una pantalla —o en el
+      layout— no es item de menú de nadie y no era sujeto de ninguno. `enlaces-del-panel-
+      alcanzables.test.ts` sí cruza href, pero contra el **pack**: otro eje.
+
+      **Lo que veía el que no es admin:** apretaba y volvía a `/dashboard`. Sin cartel, sin
+      error, sin request fallida. Un rebote mudo se lee como producto roto y termina en
+      soporte, que es el techo real del negocio. Los dos casos pegan a **6 de los 16 perfiles**
+      de producción (STAFF 3, DOCTOR 3):
+
+      - **`components/layout/BarraEstado.tsx`** vive en `LayoutShell`, o sea **todas** las
+        pantallas: *«vence en N días · Ver mi plan»* → `/settings`. El **dato** le importa a
+        todo el que trabaja adentro y el **CTA** sólo a quien puede abrirlo, así que queda el
+        aviso y se va el botón muerto.
+      - **`app/(dashboard)/inbox/InboxClient.tsx`** — el más caro: `/inbox` es la pantalla de
+        la **recepción**, y con el canal apagado le decía *«Encendé tu asistente»* con un botón
+        a `/settings/chatbot`. Ahora al que no puede se le dice la acción que **sí** puede
+        hacer (pedírselo a quien administra); el aviso no se le borra.
+
+      El criterio es **uno** (`lib/platform/ruta-por-rol.ts`), derivado de `sidebarNavItems` —la
+      fuente que `rol-en-la-ruta` ya enforza— más los cortes que no son item de menú. Copiar la
+      lista de roles al lado del botón es exactamente como nació esto.
+
+      **El gate cierra la CLASE** (`lib/platform/enlace-alcanzable-por-rol.test.ts`): deriva del
+      disco los cruces *(pantalla, enlace)*, cruza los roles que alcanzan el **origen** contra
+      los que abren el **destino**, y cada cruce vivo declara CÓMO se cubre con la declaración
+      **re-medida** — uno nuevo nace rojo con su nombre, y una fila que sobra también.
+
+      ⚠️ **Tres correcciones del instrumento, las tres en la dirección cara** (acusar a código
+      sano), que la primera medición tenía mal: (1) el origen sale del **nav**, no de los
+      `redirect()` — `/empresa` y `/team` cortan con `requireEmpresaAccess()`/`requireAdmin()` y
+      figuraban abiertos a los cuatro roles, con 7 falsos positivos; (2) `/team` lo abre
+      **SUPERADMIN** (`requireAdmin`) aunque su item del menú declare sólo `ADMIN`: manda lo que
+      la ruta **aplica**; (3) la guarda se pide en la **vecindad** del enlace y resolviendo la
+      variable derivada, no por presencia del símbolo en el archivo — eso se satisface
+      importando el helper y tirando el resultado.
+
+      **Validado por mutación:** revertir cada arreglo da rojo, y el **esquive** también. Los
+      comentarios se blanquean conservando saltos, o el gate reporta la línea corrida.
+
+      **Anotado, no cerrado:** `/patients` fue la primera de esta clase en resolverse bien, pero
+      su guarda copia la lista de roles (`role === "ADMIN" || role === "SUPERADMIN"`) en vez de
+      preguntarle a `puedeAbrirRuta`. Hoy coinciden; migrarla al criterio único es trabajo
+      aparte y queda declarado en la tabla del gate, no suelto.
+
+      **Listo =** `npx vitest run lib/platform/enlace-alcanzable-por-rol.test.ts` (5/5) y la
+      suite entera: **4335 tests**, `tsc --noEmit` y `eslint` exit 0.
+
+- [x] 🔴 **CERRADO el 2026-09-10 (`a106f7e`, ya en `master` — verificado el 2026-09-10):
       `/appointments` le ofrecía «Eliminar» a quien la API le contesta 403 por su rol, y el
       rechazo era MUDO.** Punto 8 de la Definición 1.0 («cero promesas falsas»).
 
@@ -118,7 +388,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       **Listo =** `npx vitest run lib/platform/accion-negada-por-rol.test.ts` (8/8) y la suite
       entera en verde: **4319 tests**, `tsc --noEmit` y `eslint` exit 0.
 
-- [x] 🔴 **CERRADO el 2026-09-10 (`057cc58`, rama del carril — NO en `master` todavía): el
+- [x] 🔴 **CERRADO el 2026-09-10 (`057cc58`, ya en `master` — verificado el 2026-09-10): el
       cliente que PAGÓ y se le venció el plan quedaba en solo lectura sin que NADA se lo
       dijera.** El único aviso del panel era `TrialBlockedModal`, y el layout lo mostraba con
       `getTrialStatus(...).isBlocked`. Esa función arranca con
@@ -171,11 +441,11 @@ y sin operar. Acá se opera, con verificación por ítem.
       **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **4292 pasan / 346 archivos** ·
       `npx eslint .` 0 errores.
 
-      🔴 **NO ESTÁ DESPLEGADO:** `057cc58` está en la rama del carril, **no en `master`**. Hay
+      🔴 **NO ESTÁ DESPLEGADO:** `057cc58` ya está en `master` (verificado el 2026-09-10). Hay
       pedido de deploy vivo para `plataforma` (`t_6e23cd1c`); el `ok` de Sergio Urcullo sólo
       publica esto si el integrador mergea antes. Anotado como comentario en ese pedido.
 
-- [x] 🔴 **CERRADO el 2026-09-10 (`31233cd`, rama del carril — NO en `master` todavía): el
+- [x] 🔴 **CERRADO el 2026-09-10 (`31233cd`, ya en `master` — verificado el 2026-09-10): el
       negocio cancelaba o movía una cita y al CLIENTE no le llegaba nada.** El sistema le habla
       dos veces —cuando la cita nace (correo de confirmación, `lib/agenda/crear-cita.ts:241`) y
       cuando se acerca (recordatorios de 24 h y 2 h)— y se callaba justo en el tercer momento,
@@ -213,7 +483,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       compartido — su rojo mandaba a duplicarlo. Ahora sigue el import un nivel, y la mutación
       que le saca el aviso al módulo nuevo lo vuelve a poner en rojo.
 
-- [x] 🔴 **CERRADO el 2026-09-10 (`f590421`, rama del carril — NO en `master` todavía): el
+- [x] 🔴 **CERRADO el 2026-09-10 (`f590421`, ya en `master` — verificado el 2026-09-10): el
       producto le ofrece al dueño configurar su zona horaria, la respeta en TODO el panel, y la
       ignoraba justo en las dos superficies que salen hacia el CLIENTE DEL CLIENTE.**
       `PATCH /api/clinic-settings` acepta `timezone` y `/settings` se la muestra como «Zona
@@ -240,7 +510,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       que es la dirección cara. Queda como límite conocido con su caso.
       Gates: `tsc` 0 · 4228 tests · `eslint` 0 errores.
 
-- [x] **CERRADO el 2026-09-10 (`969cc14`, rama del carril — NO en `master` todavía): los otros
+- [x] **CERRADO el 2026-09-10 (`969cc14`, ya en `master` — verificado el 2026-09-10): los otros
       dos sujetos de esa MISMA clase.** `app/(dashboard)/patients/[id]/page.tsx` trae ahora
       `clinicSettings: { select: { timezone: true } }` en el mismo `findUnique` que ya pedía el
       track, y `lib/export/datos-negocio.ts` cambió sus dos `Intl` de MÓDULO por
@@ -290,7 +560,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 - [x] 🔴 **CERRADO el 2026-09-10 mismo día (`eaa67038` en master, PUBLICADO por el
       publicador 14:45 La Paz): el 403 mudo del login ahora ofrece reenviar el enlace.**
-      Vive en `app/(auth)/login/ReenviarConfirmacion.tsx` y `lib/auth/reenviar-confirmacion.ts`.
+      Vive en `onia-platform/app/(auth)/login/LoginForm.tsx` (⚠️ corregido 2026-09-10: el cierre real `6e0b2905` metió todo en LoginForm, no en los archivos separados que planeaba este ítem).
       E2E completo contra producción con cuenta QA sin confirmar, fotografiado: login →
       cartel + botón "Reenviarme el correo de confirmación" → clic → aviso con tip de
       Spam/Promociones → reenvío real (`status=sent` 250 de Gmail 18:54:20Z) → el enlace
@@ -349,8 +619,8 @@ y sin operar. Acá se opera, con verificación por ítem.
       detalle que el otro no (el conflicto de merge y por qué `/verify-email` no servía).
 
       **HECHO el 2026-09-10 (chatbot-cola) — `4d45f2f`, MERGEADO a `master` en `2f344e5` (integrador, 2026-09-10 15:5x La Paz).** ⚠️ Lo de «NO desplegado» venció el mismo día: el arreglo GEMELO de la sesión de control (`eaa6703`) ya está **vivo en producción** —`docker exec onia-platform grep -rl Reenviarme /app/.next/server` da un chunk—, así que el 403 mudo ya tiene salida para un cliente real. `4d45f2f` **no** es ancestro de `eaa6703`: son dos escrituras del mismo arreglo, y la rama resolvió el choque a favor del lado medible (`10952417`). Lo que falta desplegar de este ítem es sólo el reemplazo por la versión con gate.
-      El botón vive en `app/(auth)/login/ReenviarConfirmacion.tsx` y la decisión en
-      `lib/auth/reenviar-confirmacion.ts`. Medido contra producción con un alta QA
+      El botón y la decisión viven en `onia-platform/app/(auth)/login/LoginForm.tsx` (corregido: no en
+      archivos separados — cierre real `6e0b2905`). Medido contra producción con un alta QA
       (`zz-qa-reenvio-2026-09-10-1852`, borrada al terminar: org/perfil/auth en **0/0/0**, y
       las 7 `zz-qa%` de otros carriles intactas):
 
@@ -384,7 +654,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       «permiso concedido, CAMINO ausente» con el camino apuntando a una puerta que se cierra
       sola. Ver un arreglo hermano ya hecho es lo que hace dar la familia por cubierta.
 
-      Gate: `lib/auth/reenviar-confirmacion.test.ts` (13 casos), validado por mutación en
+      Gate real: `onia-platform/app/(auth)/login/LoginForm.test.ts` (3 casos del cierre `6e0b2905`; los 13 planeados no existen), validado en
       **6 direcciones** — incluida la de **esquive** (llamar al helper y mostrar "listo" sin
       mirar `.entregado`) y la de sacar el componente del JSX dejando el módulo intacto. Las 6
       dan rojo. El ancla que exige que el LoginForm lo USE se mide sobre el código **sin
@@ -464,7 +734,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       nuestro y no pide nada más de él: subir `DMARC` de `p=none` a `p=quarantine` y revisar el
       remitente. Si contesta **Recibidos**, el punto se cierra.
 
-- [x] 🔴 **CERRADO el 2026-09-10 (`0735d5c`, rama del carril — NO en `master` todavía): el
+- [x] 🔴 **CERRADO el 2026-09-10 (`0735d5c`, ya en `master` — verificado el 2026-09-10): el
       recordatorio del add-on de WhatsApp salía hacia Meta con un número que WhatsApp no puede
       resolver, y lo tapaba un comentario que prometía justo lo que no hacía.**
       `lib/whatsapp.ts` decía *«Normalizar numero: quitar espacios, guiones, asegurarse de que
@@ -516,7 +786,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       `59170000001`, y el lead `+591 57400703` → `null` (el `5` no es prefijo boliviano), que
       ahora se muestra marcado en vez de abrir un chat que no existe.
 
-- [x] 🟡 **CERRADO el 2026-09-10 (`b25b2a3`, rama del carril — NO en `master` todavía): el
+- [x] 🟡 **CERRADO el 2026-09-10 (`b25b2a3`, ya en `master` — verificado el 2026-09-10): el
       alta no mentía sobre el correo por una guarda equivocada, mentía sobre SÍ MISMA.** El
       síntoma era cierto (`POST /api/auth/register` → `emailDelivery: "not_configured"`,
       reproducido hoy) y **la causa escrita acá era falsa**, así que el LISTO pedía lo
@@ -553,7 +823,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       direcciones** (honeypot con cuerpo propio · volver a `not_configured`): las dos `exit 1`, 2
       casos en rojo cada una; base y restaurado, 17/17. Gates: `tsc` 0 · `vitest` 4185 · `eslint` 0.
 
-- [x] 🔴 **CERRADO el 2026-09-10 (`afa9da6`, en la rama del carril — NO en `master` todavía):
+- [x] 🔴 **CERRADO el 2026-09-10 (`afa9da6`, ya en `master` — verificado el 2026-09-10):
       el botón «Agendar» que ve el cliente del cliente lo mandaba a un callejón, teniendo el
       sistema el enlace bueno en la mano.** La pantalla **«Mis Citas»**
       (`/book/my-appointments/<token>` — el enlace que el negocio le manda por WhatsApp a su
@@ -601,7 +871,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **4183 pasan / 335 archivos** ·
       `npx eslint .` 0 errores.
 
-- [x] 🔴 **CERRADO el 2026-09-08 (`f8d0fc2`, en la rama del carril — NO en `master` todavía):
+- [x] 🔴 **CERRADO el 2026-09-08 (`f8d0fc2`, ya en `master` — verificado el 2026-09-10):
       la pantalla donde el dueño PAGA le cobraba a 3 de los 5 rubros de la v1.0 dos pantallas
       a las que nunca iba a poder entrar.** La tarjeta del plan **Profesional** —el destacado,
       el salto de Bs 320 a Bs 750— decía *«Reportes completos y facturas recurrentes»* a
@@ -658,7 +928,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       ⚠️ **Commiteado, NO desplegado**: el cliente no lo ve hasta que Sergio Urcullo apruebe el
       pedido de deploy vivo de la plataforma.
 
-- [x] 🔴 **CERRADO el 2026-09-08 (`f2237e8`, en la rama del carril — NO en `master` todavía):
+- [x] 🔴 **CERRADO el 2026-09-08 (`f2237e8`, ya en `master` — verificado el 2026-09-10):
       la pantalla donde el dueño configura el asistente que PAGA le ponía ejemplos de otro
       rubro.** `/settings/chatbot` (add-on de Bs 390/mes) tenía dos ejemplos tipeados en un
       rubro para los ocho: el rótulo de la categoría decía **«Veterinaria»** y el nombre del
@@ -694,7 +964,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       ⚠️ **Commiteado, NO desplegado**: el cliente no lo ve hasta que Sergio Urcullo apruebe el
       pedido de deploy vivo (`t_daa8750c`), que hoy publica 9 arreglos + éste.
 
-- [x] 🔴 **CERRADO el 2026-09-08 (`64279ff`, en la rama del carril — NO en `master` todavía):
+- [x] 🔴 **CERRADO el 2026-09-08 (`64279ff`, ya en `master` — verificado el 2026-09-10):
       el Recall corría todos los días en tres rubros que no tienen a quién reactivar, y tres
       rubros pagaban agentes sin una pantalla donde verlos.**
 
@@ -742,7 +1012,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido de deploy de
       `plataforma` (`t_daa8750c`), donde quedó comentado el sha.
 
-- [x] 🔴 **CERRADO el 2026-09-08 (`cc383c1`, en la rama del carril — NO en `master` todavía):
+- [x] 🔴 **CERRADO el 2026-09-08 (`cc383c1`, ya en `master` — verificado el 2026-09-10):
       tres de las cuatro organizaciones que PAGARON el add-on de WhatsApp no lo tenían, según
       el producto — sin recordatorio de cita, sin intake, y con el cartel de venta encima.**
 
@@ -789,7 +1059,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       ⚠️ **Commiteado y en la rama, NO mergeado a `master` ni desplegado** — no viaja con el
       pedido `t_daa8750c`, que publica `master`. El merge es de `onia-cola`.
 
-- [x] 🔴 **CERRADO el 2026-09-08 (`c334440`, en la rama del carril — NO en `master` todavía):
+- [x] 🔴 **CERRADO el 2026-09-08 (`c334440`, ya en `master` — verificado el 2026-09-10):
       el correo del trial sólo sabía hablar en dental o en mostrador, y de los cinco rubros de
       la v1.0 los tres del medio caían del lado equivocado.**
 
@@ -813,7 +1083,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       la base, lo que está mal es **de qué tabla**.
 
       **Arreglo:** los tres predicados se **derivan del pack**
-      (`onia-platform-chatbot/lib/subscription/drip-por-rubro.ts` →
+      (`onia-platform/lib/subscription/drip-por-rubro.ts` →
       `guardaClientesEnPatients`, `tieneAgenda`, y la ruta buscada **en el nav de ese pack**),
       misma doctrina que sus hermanos de `vertical-pack.ts`: un rubro nuevo cae solo del lado
       que le toca. La excepción de la importadora (cuenta cotizaciones además de ventas) queda
@@ -843,7 +1113,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       `window.location.reload()`, sin mirar una sola vez qué contestó el servidor.
 
       **La clase, que es lo que importa.** El 2026-09-08, más temprano, se cerró el camino de
-      fallo de `onia-platform-chatbot/app/(public)` —la superficie del cliente del cliente— y **su familia simétrica,
+      fallo de `onia-platform/app/(public)` —la superficie del cliente del cliente— y **su familia simétrica,
       el panel donde trabaja el DUEÑO, quedó abierta**. Es la tercera vez que este carril paga
       lo mismo: al cerrar el hueco de una familia hay que preguntar cuál es la simétrica.
 
@@ -864,12 +1134,12 @@ y sin operar. Acá se opera, con verificación por ítem.
 
       | dónde | qué daba por hecho sin preguntar |
       |---|---|
-      | `onia-platform-chatbot/app/(dashboard)/appointments/page.tsx` ×3 | cancelar · marcar completada · **cambiar la fecha** (cerraba el modal: el paciente seguía citado a la hora vieja) |
-      | `onia-platform-chatbot/app/(dashboard)/settings/SettingsClient.tsx` ×4 | borrar del equipo · borrar profesional · **guardar horarios** (de ahí sale la agenda) · avisos por correo |
-      | `onia-platform-chatbot/app/(dashboard)/empresa/EmpresaClient.tsx` | borrar un gasto y su crédito fiscal |
-      | `onia-platform-chatbot/app/(dashboard)/rrhh/RrhhClient.tsx` | dar de baja / reactivar a un empleado |
-      | `onia-platform-chatbot/app/(dashboard)/treatments/TreatmentsClient.tsx` | borrar un servicio del catálogo |
-      | `onia-platform-chatbot/app/(dashboard)/patients/[id]/prescriptions/PrescriptionsClient.tsx` | borrar una receta |
+      | `onia-platform/app/(dashboard)/appointments/page.tsx` ×3 | cancelar · marcar completada · **cambiar la fecha** (cerraba el modal: el paciente seguía citado a la hora vieja) |
+      | `onia-platform/app/(dashboard)/settings/SettingsClient.tsx` ×4 | borrar del equipo · borrar profesional · **guardar horarios** (de ahí sale la agenda) · avisos por correo |
+      | `onia-platform/app/(dashboard)/empresa/EmpresaClient.tsx` | borrar un gasto y su crédito fiscal |
+      | `onia-platform/app/(dashboard)/rrhh/RrhhClient.tsx` | dar de baja / reactivar a un empleado |
+      | `onia-platform/app/(dashboard)/treatments/TreatmentsClient.tsx` | borrar un servicio del catálogo |
+      | `onia-platform/app/(dashboard)/patients/[id]/prescriptions/PrescriptionsClient.tsx` | borrar una receta |
 
       **Por qué ningún gate podía verlo:** no sobra ni falta una palabra —los barridos de copy,
       obra, rubro y precios pasan verdes—, la pantalla renderiza perfecto (la captura también), y
@@ -877,11 +1147,11 @@ y sin operar. Acá se opera, con verificación por ítem.
       seis archivos **el alta de al lado SÍ mira la respuesta y avisa**: cuando el hermano sano
       está a diez líneas, el archivo se lee como cubierto.
 
-      **Atado en** `onia-platform-chatbot/app/(dashboard)/camino-de-fallo.test.ts` (12 casos), con el detector
-      `escriturasSinMirarLaRespuesta` en `onia-platform-chatbot/lib/superficie-publica/cobertura-de-fallo.ts` y el
-      helper `onia-platform-chatbot/lib/http/mensaje-de-error.ts`, que muestra el motivo que ya manda la ruta
+      **Atado en** `onia-platform/app/(dashboard)/camino-de-fallo.test.ts` (12 casos), con el detector
+      `escriturasSinMirarLaRespuesta` en `onia-platform/lib/superficie-publica/cobertura-de-fallo.ts` y el
+      helper `onia-platform/lib/http/mensaje-de-error.ts`, que muestra el motivo que ya manda la ruta
       («Tu suscripción ha vencido…») en vez de un «algo salió mal». Sujeto derivado del disco y
-      **un exento por literal exacto**, no por ruta: `onia-platform-chatbot/app/(dashboard)/profile/MfaSection.tsx:144`, limpieza
+      **un exento por literal exacto**, no por ruta: `onia-platform/app/(dashboard)/profile/MfaSection.tsx:144`, limpieza
       best-effort después de que el factor ya se borró, con un caso que se pone rojo si el
       exento se pudre.
 
@@ -1232,10 +1502,10 @@ y sin operar. Acá se opera, con verificación por ítem.
 - [x] 🔴 **La ficha clínica le pedía «Caries dentinaria en pieza 46» a un centro de estética —
       cerrado el 2026-09-07 (`3a4977d` en `onia-platform`, publicado en la rama). Y lo que lo
       dejó vivo es que NINGÚN gate mira las subrutas.**
-      Gate: `onia-platform-chatbot/lib/platform/pantallas-compartidas-cubiertas.test.ts`, bloque *«las subrutas de una
+      Gate: `onia-platform/lib/platform/pantallas-compartidas-cubiertas.test.ts`, bloque *«las subrutas de una
       pantalla compartida»* (89 casos).
 
-      El panel enlaza `onia-platform-chatbot/app/(dashboard)/patients/[id]/records/new/page.tsx` con el guard `esClinico`, o sea los **tres**
+      El panel enlaza `onia-platform/app/(dashboard)/patients/[id]/records/new/page.tsx` con el guard `esClinico`, o sea los **tres**
       rubros clínicos, y sus tres placeholders estaban tipeados en dental: «Dolor en el diente
       46», «Caries dentinaria en pieza 46», «Restauración con resina compuesta». Un centro de
       estética —uno de los cinco rubros que la v1.0 vende— cargaba el historial de su clienta
@@ -1247,15 +1517,15 @@ y sin operar. Acá se opera, con verificación por ítem.
       de caminos enumera ítems de menú, y una subruta no es ítem de menú de nadie. Entre los dos
       quedaba un árbol entero —la ficha, el detalle, los formularios de alta— sin un solo sujeto.
       Barriéndolo aparecieron **tres** archivos sirviendo copy de un rubro a todos:
-      `onia-platform-chatbot/app/(dashboard)/patients/[id]/records/new/page.tsx` (dental),
-      `onia-platform-chatbot/app/(dashboard)/reports/clinical-balance/page.tsx` («Tratamientos
+      `onia-platform/app/(dashboard)/patients/[id]/records/new/page.tsx` (dental),
+      `onia-platform/app/(dashboard)/reports/clinical-balance/page.tsx` («Tratamientos
       completados», que en una veterinaria son «Servicios») y
-      `onia-platform-chatbot/app/(dashboard)/settings/chatbot/ChatbotClient.tsx`, con tres placeholders
+      `onia-platform/app/(dashboard)/settings/chatbot/ChatbotClient.tsx`, con tres placeholders
       de **veterinaria** fijos —«mascota, perro, gato»— para los siete rubros, en un archivo cuyo
       propio prop `ejemplos` dice «nunca dental fijo»: el arreglo cubrió tres campos y dejó estos.
 
       Arreglados derivando del pack con el mecanismo que ya existía (`ejemploRegistro` y
-      `ejemploPalabras` en `onia-platform-chatbot/lib/onboarding/vocabulario.ts`, al lado de
+      `ejemploPalabras` en `onia-platform/lib/onboarding/vocabulario.ts`, al lado de
       `ejemploServicio`, cuyo
       comentario documenta **este mismo error** resuelto para el catálogo el 01-sep — nunca viajó
       a la ficha).
@@ -1276,7 +1546,7 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 - [x] 🔴 **A un estudio contable le pedíamos el género y el cumpleaños de su cliente —
       cerrado el 2026-09-07 (`e9b857a` en `onia-platform`, publicado en la rama).**
-      Gate: `onia-platform-chatbot/app/(dashboard)/patients/ficha-por-rubro.test.ts`.
+      Gate: `onia-platform/app/(dashboard)/patients/ficha-por-rubro.test.ts`.
       La ficha la comparten los tres rubros clínicos y **servicios profesionales**, uno de
       los cinco que la v1.0 vende. Lo clínico ya se había separado (tipo de sangre, emergencia,
       alergias, historia, tratamientos) pero **cumpleaños y género quedaron afuera de ese
@@ -1284,7 +1554,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       un bloque que sí distingue el rubro. El cliente de un estudio contable puede ser una
       EMPRESA, así que el sistema le pedía el género de una razón social, y la lista le ofrecía
       **filtrar por género** y le calculaba la edad.
-      **Cuatro superficies**, todas bajo `onia-platform-chatbot/app/(dashboard)/patients`: el alta, la
+      **Cuatro superficies**, todas bajo `onia-platform/app/(dashboard)/patients`: el alta, la
       edición, la ficha y **la lista**, que entró al gate por primera vez — el
       filtro por género vivía justo en la pantalla que ninguno de los tres casos miraba.
       **El gate dejó de CONTAR bloques** `{esClinico && (` y ahora pregunta, por literal, si
@@ -1772,7 +2042,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       vive sólo en la rama. **El gate ya salía en exit 1 antes de esta vuelta** por el mismo
       motivo (`app/(dashboard)/patients/ficha-por-rubro.test.ts`, línea 185); no es una regresión de este
       cambio y se apaga solo cuando `onia-cola` mergee. Se confirma con
-      `ls /root/loops/onia-platform-chatbot/lib/platform/caminos-transversales.test.ts`.
+      `ls /root/loops/onia-platform/lib/platform/caminos-transversales.test.ts`.
 
       Recorrer `/requerimientos` con datos reales sigue vivo, y cae en ese mismo ítem.
       Está listada como módulo en `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` §4.
@@ -2210,7 +2480,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       investigarlo de cero la próxima vuelta: el verificador resuelve el repo hermano contra
       `/root/loops/onia-platform`, que es el clon de `master`, y el archivo todavía vive sólo en
       `claude/chatbots-platform-review-0d1d09`. Se apaga solo cuando `onia-cola` mergee. Se
-      confirma con `ls /root/loops/onia-platform-chatbot/lib/onia-core/modules/agents-cadencia.ts`.
+      confirma con `ls /root/loops/onia-platform/lib/onia-core/modules/agents-cadencia.ts`.
 
       Las dos correcciones sucesivas del catálogo están en
       `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md` §7.
@@ -2484,6 +2754,60 @@ y sin operar. Acá se opera, con verificación por ítem.
       matriz) también es suyo. Que `/opt/onia-siat` quede alineado con el repo es la tarea
       `t_7d2019bb`.
 
+      **2026-09-10 (chatbot-cola) — el bloqueo era REAL pero NADIE se lo había pedido, y además
+      el ok solo no alcanzaba.** Dos cosas medidas, ninguna heredada:
+
+      1. **El bloqueo estaba escrito acá y en ningún lado más.** Las tres tareas de SIAT del
+         tablero figuran `done`: no existía **ninguna** viva pidiéndole el PdV 1. Un bloqueo que
+         vive en un `.md` no le llega a Sergio Urcullo — sólo una tarea `needs_input` le llega
+         por Telegram. Lleva sin pedirse desde el **2026-08-27**, que es cuando el SIN contestó
+         `933 · EL PUNTO DE VENTA ES INEXISTENTE O INVALIDO` (`fase1-log.ndjson`, etapa I,
+         `pv:1`, tres intentos). Pedido en **`t_39a0c27c`**, `status: blocked` verificado con
+         `show` (no con el exit del `block`), con los pasos, el portal, el usuario y los 6 tipos
+         de PdV que ofrece el SIN ya resueltos: es una auditoría de 5 minutos, no una
+         investigación. Cuánto frena, contado del estado vivo y no estimado: **11 combos =
+         1.169 documentos de cobertura** (IV/VII/XI × 3 combos × 125, más VI y IX × 22). Todo
+         el lado `pv0` está **completo en las 9 etapas**.
+         Para re-derivar el pedido vivo sin citar un id que caduca:
+         `onia-tablero.sh list --status blocked | grep -i 'Punto de Venta'`.
+
+      2. 🔴 **Y el ok solo habría repetido el mes perdido.** `run-fase1-volumen.sh` **de
+         producción** seguía con `for E in IV VII XI` — el recorte original, todavía vivo: el
+         deploy del emisor alineó los módulos (`/opt/onia-siat/emisor/src`, hoy idénticos al
+         repo: `ensureCufd` 6=6, `TransitorioError` 4=4) y **no** el orquestador, que vive un
+         nivel más arriba y quedó afuera de la copia. Peor, la copia del repo
+         tampoco corría la **etapa I**, que es la que pide el CUIS por punto de venta. O sea que
+         el día que exista el PdV 1, correr ese script **no lo desbloquea**: los 11 combos
+         volverían a caer con `sin CUIS para el punto de venta 1: correr la etapa I antes`, y
+         VI y IX quedarían clavadas otra vez.
+
+         **Arreglado en la clase, no en la instancia.** Agregar las etapas que faltaban habría
+         sido reponer el mismo defecto un archivo más allá: la lista a mano **es** el defecto —
+         una lista de inclusión al lado de `STAGE_ORDER`, que es la fuente y ya está anclada por
+         test. Ahora el script las **deriva** del runner y **aborta** si no puede leerlas (caer
+         a una lista por defecto haría que una corrida a medias se lea igual que una entera).
+         Verificado ejecutando la derivación contra los módulos reales: devuelve
+         `I II III IV V VI VII IX XI`, las 9.
+
+         **Gate:** `test/fase1-runner.test.mjs` › «run-fase1-volumen.sh corre TODAS las etapas»,
+         validado **por mutación en 3 direcciones** — tipear la lista · el **esquive** (nombrar
+         `STAGE_ORDER` en un comentario y seguir tipeando) · derivar **filtrando la I**: las
+         tres en rojo, base y restaurado en verde.
+         ⚠️ **La tercera pasó en VERDE en la primera versión del gate** y sólo se vio mutando
+         *después* de arreglar: el caso resolvía por texto («si nombra `STAGE_ORDER`, corre
+         `STAGE_ORDER`»), o sea comparaba la fuente contra sí misma. Ahora **ejecuta** el
+         `node -e` del script en un sandbox con el layout del VPS y afirma sobre la salida.
+
+         **Y el gate no lo corría nadie:** los **92** tests del emisor —el módulo del que
+         depende la v1.0 por la decisión del 07-sep— **no estaban en la cadena `npm test`**.
+         Cableados como `test:siat-fase1` (puro, sin red ni repo hermano, 4,3 s): 92/92 verdes,
+         `test:guards-cableados` verde.
+
+         🔴 **Commiteado, NO desplegado:** `/opt/onia-siat/run-fase1-volumen.sh` sigue con las
+         tres etapas viejas. Desplegar no es de este carril — va por `DESPLEGAR: siat`. **Esto
+         tiene que llegar ANTES de que se corra la matriz de `pv1`**, o el ok de Sergio Urcullo
+         desbloquea 1.125 de los 1.169 y repite el bug de VI y IX.
+
 - [x] 🔴 **CERRADO el 2026-09-08: una cuenta APAGADA seguía tomando reservas por la puerta
       pública, y el desconocido que reservaba se presentaba a un negocio que no lo esperaba.**
       `POST /api/booking/appointments` crea un `patient` y una `appointment` en la base del
@@ -2576,7 +2900,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       **Gates:** `npx tsc --noEmit` exit 0 · `npx vitest run` **4168 pasan / 333 archivos** ·
       `npx eslint .` 0 errores.
 
-      🔴 **NO ESTÁ DESPLEGADO:** `e911638` está en la rama del carril, no en `master`. Viaja
+      🔴 **NO ESTÁ DESPLEGADO:** `e911638` ya está en `master` (verificado el 2026-09-10). Viaja
       cuando el integrador lo mergee y Sergio Urcullo apruebe el pedido de deploy vivo.
 
 - [x] 🔴 **CERRADO el 2026-09-08: la pantalla donde el dueño decide CUÁNTO PAGA le vendía a
@@ -3968,7 +4292,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       `origin/master`. Entra cuando `onia-cola` mergee, y se publica con el pedido de deploy vivo
       `t_bf1607af` (ya comentado con este sha) cuando Sergio Urcullo conteste `ok`.
 
-- [x] 🔴 **CERRADO el 2026-09-10 (`a6dee65`, rama del carril — NO en `master` todavía): al
+- [x] 🔴 **CERRADO el 2026-09-10 (`a6dee65`, ya en `master` — verificado el 2026-09-10): al
       agendar una cita, la respuesta que llegaba tarde le borraba al usuario la hora que
       acababa de elegir, y «Agendar Cita» quedaba deshabilitado sin decir por qué.**
       Tarea `t_645d123a`. Lo midió `recorrido-cliente` en vivo el 2026-09-10 15:13 La Paz
