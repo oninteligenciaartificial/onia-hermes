@@ -111,7 +111,9 @@ def publicar(tid):
     incluso habian aprendido a pedirle a Sergio que publicara a mano desde el
     telefono. Resultado medido: 1.196 imagenes en 3 dias, 0 publicadas.
 
-    Devuelve (estado, detalle) con estado en publicado | no-publicable | fallo.
+    Devuelve (estado, detalle) con estado en publicado | no-publicable | vencido
+    | fallo. 'vencido' = la tarea esta archivada o cerrada y el publicador no
+    ejecuto nada: es correcto, no un fallo.
     'no-publicable' es lo NORMAL: la mayoria de las tareas del tablero no son
     piezas, y para esas el mensaje de siempre esta bien.
     """
@@ -128,6 +130,18 @@ def publicar(tid):
         return ("fallo", "no pude correr el publicador: " + str(e))
     if p.returncode == 2:
         return ("no-publicable", "")
+    # 3 = la tarea esta cerrada/archivada, asi que el publicador NO ejecuto nada.
+    # No es un fallo: es la respuesta correcta, y decirle "NO se publico" a secas
+    # se lee como sistema roto. Se traduce a una linea que dice que apretar.
+    if p.returncode == 3:
+        detalle = (p.stdout or "").strip()
+        try:
+            d = json.loads(detalle)
+            msg = d.get("motivo", "la tarea ya no esta viva")
+            vivo = d.get("pedidoVivo")
+            return ("vencido", msg + ((". El pedido vivo es " + str(vivo)) if vivo else ""))
+        except Exception:  # noqa: BLE001 - si cambia el formato, se muestra crudo
+            return ("vencido", detalle[:400] or "la tarea ya no esta viva")
     if p.returncode != 0:
         return ("fallo", (p.stderr or p.stdout or "sin detalle").strip())
     return ("publicado", (p.stdout or "").strip())
@@ -171,6 +185,8 @@ def manejar(texto):
         base = "✅ <b>" + escapar(tid) + "</b> desbloqueada"
         if estado == "publicado":
             return base + " y <b>PUBLICADA</b>\n<pre>" + escapar(detalle[:800]) + "</pre>"
+        if estado == "vencido":
+            return "⌛ <b>" + escapar(tid) + "</b> — no ejecute nada: " + escapar(detalle[:400])
         if estado == "fallo":
             # Un fallo al publicar NO se calla: sin esto Sergio ve el tilde verde
             # y da por publicada una pieza que nunca salio -- peor que no avisar.
