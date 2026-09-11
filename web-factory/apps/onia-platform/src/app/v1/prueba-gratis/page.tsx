@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PRUEBA } from "@/lib/pricing";
+import { PRUEBA, ALCANCE_CON_AGENDA } from "@/lib/pricing";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { APP_URL, WA_URL_LANDING } from "@/lib/site";
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(`${SITE_URL}/`),
   title: `Prueba gratis de ${PRUEBA.dias} días — Onia Platform, sin tarjeta`,
   description:
-    `Registrate en minutos, elegí tu rubro y usá el sistema completo ${PRUEBA.dias} días: agenda, clientes, caja, inventario, contabilidad Bolivia y agentes con IA. Sin tarjeta y sin permanencia.`,
+    `Registrate en minutos, elegí tu rubro y usá el sistema completo ${PRUEBA.dias} días: clientes, caja, inventario, contabilidad Bolivia y agentes con IA —y agenda ${ALCANCE_CON_AGENDA}—. Sin tarjeta y sin permanencia.`,
   alternates: { canonical: "/prueba-gratis" },
   openGraph: {
     type: "website",
@@ -57,7 +57,7 @@ const PASOS = [
     titulo: `Usalo de verdad ${PRUEBA.dias} días`,
     // El medio de pago lo dice `@/content/medio-de-pago`, no esta pantalla: acá
     // decía «pagás por QR» y no existe ningún QR.
-    detalle: `Todo encendido: agenda, caja, inventario, contabilidad y la cola de agentes. ${MEDIO_DE_PAGO.siTeSirve}`,
+    detalle: `Todo encendido: caja, inventario, contabilidad, la cola de agentes y la agenda ${ALCANCE_CON_AGENDA}. ${MEDIO_DE_PAGO.siTeSirve}`,
   },
 ] as const;
 

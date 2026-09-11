@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Reveal } from "@/motion";
-import { PRUEBA } from "@/lib/pricing";
+import { PRUEBA, ALCANCE_CON_AGENDA } from "@/lib/pricing";
 import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
 import { MEDIO_DE_PAGO } from "@/content/medio-de-pago";
 import { REGISTRO_URL } from "../nav";
@@ -35,7 +35,7 @@ import s from "../sitio.module.css";
 
 export const metadata: Metadata = {
   title: `Prueba gratis de ${PRUEBA.dias} días — Onia, sin tarjeta`,
-  description: `${CTA_ALTA}, elegí tu rubro y usá el sistema completo ${PRUEBA.dias} días: agenda, clientes, caja, inventario, contabilidad Bolivia y agentes con IA. Sin tarjeta y sin permanencia.`,
+  description: `${CTA_ALTA}, elegí tu rubro y usá el sistema completo ${PRUEBA.dias} días: clientes, caja, inventario, contabilidad Bolivia y agentes con IA —y agenda ${ALCANCE_CON_AGENDA}—. Sin tarjeta y sin permanencia.`,
   alternates: { canonical: "/empezar" },
   openGraph: {
     type: "website",
@@ -89,7 +89,7 @@ const PASOS: readonly { titulo: string; detalle: string }[] = [
     titulo: `Usalo de verdad ${PRUEBA.dias} días`,
     // El medio de pago lo dice `@/content/medio-de-pago`, no esta pantalla: acá
     // decía «pagás por QR» y no existe ningún QR.
-    detalle: `Todo encendido: agenda, caja, inventario, contabilidad y la cola de agentes. ${MEDIO_DE_PAGO.siTeSirve}`,
+    detalle: `Todo encendido: caja, inventario, contabilidad, la cola de agentes y la agenda ${ALCANCE_CON_AGENDA}. ${MEDIO_DE_PAGO.siTeSirve}`,
   },
 ];
 

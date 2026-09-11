@@ -16,6 +16,7 @@
 
 import { Reveal } from "@/motion";
 
+import { ALCANCE_CON_AGENDA } from "@/lib/pricing";
 import { Block, Kicker, PanelDibujado } from "./ui";
 import s from "./sitio.module.css";
 import v from "./portada.module.css";
@@ -31,7 +32,7 @@ import v from "./portada.module.css";
  */
 const MOMENTOS_NOCHE = [
   { hora: "23:40", que: "Preguntan el precio. Contesta el asistente.", vos: null },
-  { hora: "Domingo", que: "Reservan la cita solos, por tu agenda pública.", vos: null },
+  { hora: "Domingo", que: `Reservan solos por tu agenda pública, ${ALCANCE_CON_AGENDA}.`, vos: null },
   {
     hora: "07:00",
     que: "Los recordatorios y los avisos de pago quedan escritos.",

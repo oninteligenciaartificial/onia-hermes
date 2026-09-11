@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { Archivo, Geist_Mono } from "next/font/google";
 import { MotionProvider } from "@/motion";
 import { SITE_URL } from "@/lib/site";
+import { ALCANCE_CON_AGENDA } from "@/lib/pricing";
 import "./globals.css";
 
 /*
@@ -49,7 +50,7 @@ const SITE_TITLE = "Onia — El sistema con IA que maneja tu negocio completo";
  * ninguna captura. Vuelve cuando la homologación concluya.
  */
 const SITE_DESCRIPTION =
-  "Elegís tu rubro, te entregamos el sistema configurado y encendés módulos cuando los necesités: agenda, clientes, caja e inventario, agentes con IA que esperan tu aprobación y chatbot de WhatsApp. Hecho en Bolivia.";
+  `Elegís tu rubro, te entregamos el sistema configurado y encendés módulos cuando los necesités: clientes, caja e inventario, agentes con IA que esperan tu aprobación, chatbot de WhatsApp y agenda ${ALCANCE_CON_AGENDA}. Hecho en Bolivia.`;
 
 export const metadata: Metadata = {
   /*
