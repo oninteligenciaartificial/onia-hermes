@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude Code, de cero — Sergio Urcullo</title>
+<meta name="description" content="La serie en video: qué es Claude Code (y qué no), cómo instalarlo en 10 minutos y tu primera skill. Con los comandos listos para copiar.">
+<meta property="og:title" content="Claude Code, de cero">
+<meta property="og:description" content="Qué es (y qué no), cómo instalarlo y tu primera skill. En video y con los comandos para copiar.">
+<meta property="og:image" content="https://sergiourcullo.vercel.app/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Claude Code, de cero">
+<meta property="og:url" content="https://sergiourcullo.vercel.app/claude-code">
+<meta property="og:site_name" content="sergiourcullo">
+<meta property="og:locale" content="es_BO">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://sergiourcullo.vercel.app/og.png">
+<meta property="og:type" content="article">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%2300C661'/><text x='16' y='23' font-family='Arial,sans-serif' font-size='18' font-weight='bold' text-anchor='middle' fill='%230A2A18'>S</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/estilo.css">
+</head>
+<body>
+
+<div class="cinta">
+  <a href="https://www.instagram.com/sergiourcullo/">
+    <span>Esta serie sale con archivos en Onia Community · entrá gratis</span>
+    <span class="flecha">→</span>
+  </a>
+</div>
+
+<div class="barra">
+  <a class="marca" href="/">sergiourcullo<span class="punto">.</span></a>
+  <a class="vuelta" href="/">← todas las guías</a>
+</div>
+
+<div class="wrap">
+
+<header class="top">
+  <p class="eyebrow">Serie en video · actualizada 11·09·2026</p>
+  <h1>Claude Code, <span class="num">de cero</span></h1>
+  <p class="bajada">La herramienta con la que construyo todo lo que ves en este sitio.
+  Esta serie la explica desde cero, en orden: primero entender qué es, después instalarla,
+  y recién después soltarle trabajo. Cada video te deja pudiendo hacer algo que antes no
+  podías.</p>
+
+  <div class="honesto">
+    <h2>Antes de empezar, lo que nadie te dice</h2>
+    <p><strong>El plan gratis de Claude NO incluye Claude Code.</strong> Alcanza para el
+    chat, no para esto. Hace falta un plan pago — lo digo acá arriba y no al final, para
+    que no pierdas la tarde.</p>
+    <p><strong>Y no reemplaza entender lo que estás haciendo.</strong> Si le pedís algo
+    que no sabés explicar, te devuelve algo que no vas a saber arreglar.</p>
+  </div>
+</header>
+
+<!-- VIDEO 01 -->
+<article class="paso">
+  <div class="paso-cab">
+    <div class="paso-num">01</div>
+    <div class="paso-tit">
+      <h2>Claude y Claude Code no son lo mismo</h2>
+      <p class="autor">Entender · 7 minutos · al terminar sabés cuál de los dos necesitás</p>
+    </div>
+  </div>
+  <div class="cuerpo">
+    <div class="video">
+      <iframe src="https://www.youtube-nocookie.com/embed/kAsAhGe6zyA"
+        title="Claude y Claude Code no son lo mismo"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen loading="lazy"></iframe>
+    </div>
+    <p style="margin-top:18px"><strong>En una línea:</strong> Claude te dice <em>cómo</em>
+    hacerlo; Claude Code <em>lo hace</em>, en tu computadora, tocando tus archivos. Uno es
+    un consejero, el otro es un empleado. La mayoría de la gente paga el consejero
+    creyendo que contrató al empleado.</p>
+  </div>
+</article>
+
+<!-- VIDEO 02 -->
+<article class="paso">
+  <div class="paso-cab">
+    <div class="paso-num">02</div>
+    <div class="paso-tit">
+      <h2>Instalarlo, y tu primera skill</h2>
+      <p class="autor">Usarlo · 10 minutos · al terminar lo tenés andando</p>
+    </div>
+  </div>
+  <div class="meta">
+    <span class="chip paga">requiere plan pago</span>
+    <span class="chip">macOS · Windows · Linux</span>
+  </div>
+  <div class="cuerpo">
+    <div class="video">
+      <iframe src="https://www.youtube-nocookie.com/embed/oXaqV-HDufA"
+        title="Cómo instalar Claude Code desde cero, y tu primera skill"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen loading="lazy"></iframe>
+    </div>
+
+    <p class="rotulo" style="margin-top:24px">Los comandos del video, para copiar</p>
+<pre><span class="c"># macOS, Linux o WSL</span>
+<span class="k">curl</span> -fsSL https://claude.ai/install.sh | bash
+
+<span class="c"># Windows, en PowerShell</span>
+<span class="k">irm</span> https://claude.ai/install.ps1 | iex</pre>
+<pre style="margin-top:14px"><span class="k">claude</span> --version   <span class="c"># imprime el número de versión</span>
+<span class="k">claude</span> doctor      <span class="c"># revisa la instalación entera</span>
+
+<span class="c"># abrí la terminal EN LA CARPETA de tu proyecto y:</span>
+<span class="k">claude</span></pre>
+
+    <div class="nota"><strong>En Windows instalá antes
+    <a href="https://git-scm.com/downloads/win">Git for Windows</a>.</strong> Sin eso
+    varias cosas se comportan distinto. Y si la terminal te da miedo, hay app de
+    escritorio: hace lo mismo con ventanas.</div>
+  </div>
+</article>
+
+<section class="cierre">
+  <h2>Lo que esta página no cubre</h2>
+  <ul>
+    <li>Dónde encaja Claude Code entre las demás herramientas que uso — eso está en
+    <a href="/stack">la guía del stack</a>, paso 04.</li>
+    <li>El servidor donde corre lo que Claude Code construye —
+    <a href="/homelab">la guía del homelab</a>.</li>
+    <li>Los archivos de configuración ya armados: ésos van por la comunidad.</li>
+  </ul>
+  <p>La serie sigue: cada video nuevo aparece acá y avisa primero en la comunidad.</p>
+</section>
+
+<section class="comunidad">
+  <p class="rot">Onia Community · WhatsApp · gratis</p>
+  <h2>Los archivos de esta serie están en la comunidad</h2>
+  <p>Acá está el video. Adentro está el trabajo hecho: mi archivo de reglas para un
+  negocio, la plantilla de la primera skill, y las preguntas se contestan con tu caso
+  delante.</p>
+  <a class="boton" href="https://www.instagram.com/sergiourcullo/">Escribime y te paso el enlace</a>
+  <span class="chico">Gratis · publico sólo yo en el canal · las preguntas van a General</span>
+</section>
+
+<p class="firma">
+  <a href="/">← Todas las guías</a>
+  <a href="https://www.instagram.com/sergiourcullo/">@sergiourcullo</a>
+</p>
+
+</div>
+
+<script>
+(function(){
+  document.querySelectorAll('pre').forEach(function(pre){
+    var caja = document.createElement('div');
+    caja.className = 'prebox';
+    if (pre.style.marginTop){ caja.style.marginTop = pre.style.marginTop; pre.style.marginTop = ''; }
+    pre.parentNode.insertBefore(caja, pre);
+    caja.appendChild(pre);
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'copiar'; b.textContent = 'copiar';
+    b.setAttribute('aria-label', 'Copiar los comandos');
+    b.addEventListener('click', function(){
+      var texto = pre.textContent;
+      function listo(){
+        b.textContent = 'copiado ✓'; b.classList.add('ok');
+        setTimeout(function(){ b.textContent = 'copiar'; b.classList.remove('ok'); }, 1600);
+      }
+      function respaldo(){
+        var ta = document.createElement('textarea');
+        ta.value = texto; document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); listo(); } catch(e){}
+        document.body.removeChild(ta);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(texto).then(listo, respaldo);
+      } else { respaldo(); }
+    });
+    caja.appendChild(b);
+  });
+})();
+</script>
+</body>
+</html>

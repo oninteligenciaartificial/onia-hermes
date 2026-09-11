@@ -43,15 +43,35 @@
 > Formato a cámara: gancho de una frase · la tesis con TU ejemplo real · cierre a
 > comunidad. El marcado 🎥 es el candidato natural del día a video largo de YT.
 
+> 🔴 **Regla nueva del 11-sep** (corrección de Sergio Urcullo: *"esta por ejemplo no
+> explica agente de qué o qué"*): ningún a-cámara habla en abstracto. **Cada uno ancla en
+> UNA cosa suya, con nombre y pantalla** — y cada uno es el **trailer de un video de la
+> serie de YT**, para que el corto que pegue ya tenga su video largo esperando.
+
 ### VIE 11 · B-roll → carrusel FABLE
 
-1. 🎥 **Chat de IA vs agente de IA** — la diferencia real: uno te contesta, el otro
-   trabaja. Por qué tu negocio necesita lo segundo. *(YT: «Qué es un agente de IA, sin
-   humo»)*
-2. **Qué NO le delego nunca a la IA en mi empresa** — decisiones de plata, clientes
-   enojados, y por qué esa línea es la que te salva.
-3. **El costo real de la IA en mi empresa** — qué pago, qué es gratis, y qué no vale lo
-   que cuesta.
+1. 🎥 **«Tengo un programa que vigila mi empresa. Si algo se rompe, me escribe.»**
+   — Gancho: eso. Concreto: «Eso es un agente, y no es el chat que usás. El chat contesta:
+   le preguntás, te dice cómo. Un agente ACTÚA solo. El mío vive en una PC en mi casa,
+   revisa que todo siga andando y cuando un servicio se cayó a las 3 AM, me enteré a las
+   3:01 por un mensaje — sin que yo hiciera nada. Otro guarda y respalda mi trabajo cada
+   vez que termino, porque yo nunca me acuerdo. El chat te ayuda a pensar; el agente te
+   reemplaza en lo repetido.» Cierre: «La serie de cómo armé esto ya está en mi canal de
+   YouTube — link en el perfil.» *(trailer del video 03)*
+2. **«Mi IA tiene prohibido tocar plata. No es desconfianza — es diseño.»**
+   — Concreto: «Tres reglas escritas en mi sistema. Una: ningún agente mío paga,
+   transfiere ni cambia un precio — el agente PREPARA el cobro, el botón lo aprieto yo.
+   Dos: un cliente enojado nunca habla con un bot — el bot detecta el tono y me lo pasa.
+   Tres: nada que no sepa explicar — si no entiendo lo que hizo, no puedo revisar si lo
+   hizo bien. La IA ejecuta; la responsabilidad no se delega.» Cierre: comunidad.
+   *(trailer del video 04 — verificar en vez de creerle)*
+3. **«¿La IA es carísima? Mi empresa corre con UNA suscripción. La cuenta:»**
+   — Concreto: «Pago una sola herramienta: la que piensa. Las automatizaciones, el que
+   vigila, el que publica — software libre en una PC vieja en mi casa, gratis. El peligro
+   real no es la suscripción: es el gasto por uso mal configurado. Un día el mío se
+   disparó y el 74% era UN solo proceso mal armado. Desde entonces: techo de gasto, y si
+   se toca el techo se baja el consumo — no se sube el tope.» Cierre: comunidad.
+   *(trailer del video 06 — mi empresa entera, con su costo)*
 
 ### SÁB 12 · B-roll: detrás de escena de la grabación en lote
 
@@ -143,14 +163,18 @@
 > [`SERIE_CLAUDE_CODE.md`](../SERIE_CLAUDE_CODE.md) (reglas, concordancia, repos
 > verificados) y cada deck+guion vive en `hermes-content/carousels/out/yt-*/`.
 
-Estado hoy: **01 y 02 grabados** (sin publicar) · **03 se graba HOY** (deck de 11 láminas
-+ guion hablado listos) · 04 deck+guion listos · 05 y 06 deck listo.
+Estado 11-sep: 🟢 **01 y 02 PUBLICADOS**
+([01](https://www.youtube.com/watch?v=kAsAhGe6zyA) 09-sep ·
+[02](https://www.youtube.com/watch?v=oXaqV-HDufA) 10-sep) · **03 se graba HOY** (deck +
+guion listos) · 04 deck+guion listos · 05 y 06 deck listo. **La web ya tiene
+`/claude-code`** con los dos videos embebidos y los comandos para copiar.
 
 | Cuándo | Qué pasa con YouTube |
 |---|---|
 | **vie 11** | se **graba el 03** acapela mirando el deck (≈8:10). Antes: recontar los números del README — regla de la serie |
-| **a más tardar jue 17** | se **publica el 01** — el jueves es el día Claude Code de la semana: el pilar #4 ya dice «el paso a paso está en mi canal» y el corto del día le manda tráfico. Publicar el 01 destraba además `/claude-code` en la web |
-| después | **uno por semana**: 02 en la semana del 21, 03 en la del 28, y así — la cadencia del mapa de temas |
+| **jue 17** | se **publica el 03** — el jueves es el día Claude Code de la semana: el corto del día le manda tráfico, y da 6 días para editarlo |
+| después | **uno por semana**: 04 en la semana del 21, 05 en la del 28, 06 cierra — la cadencia del mapa de temas |
+| siempre | cada video publicado se **embebe en `/claude-code`** el mismo día y genera un **drop exclusivo** en la comunidad (lo que quedó fuera + lo que salió mal grabándolo) |
 
 ## La escalera a YouTube (por qué estos temas y no otros)
 
