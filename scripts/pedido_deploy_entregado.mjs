@@ -438,6 +438,111 @@ export function soloLosQueViajan(commits) {
   return commits.filter((c) => llegaAlCliente(c.archivos));
 }
 
+// ── destinos que despliegan por COPIA DE ARCHIVOS (hoy: siat) ──────────────────────────
+
+/**
+ * PURA: de la salida del publicador en seco de un destino que copia archivos, ¿qué
+ * publicaría su `ok`?
+ *
+ * POR QUÉ EXISTE. Hasta el 2026-09-11 este gate daba por sentado que un deploy se
+ * identifica por SHA (`plataforma`, `/opt/onia-platform/build-<sha>`) o por FECHA de build
+ * (`landing`), y todo destino que no fuera `plataforma` ni `landing` caía en `sinCubrir`
+ * con «su artefacto no nombra sha ni fecha». `siat` es de una tercera especie: se publica
+ * copiando archivos del repo a `/opt/onia-siat/emisor`, así que no hay build, no hay sha y
+ * no hay fecha que comparar — y por eso su pedido podía derivar a «su ok publica lo que
+ * nadie leyó» sin que nada se pusiera rojo.
+ *
+ * El invariante NO cambia (el cuerpo describe lo que su `ok` publica): cambia el artefacto
+ * contra el que se mide. El universo NO se reescribe acá — lo imprime el propio publicador,
+ * que es el mismo programa que hace el deploy. Reescribir su criterio en JS sería la
+ * segunda copia del juicio, que es como nace el gate que mide algo distinto de lo que el
+ * destino aplica.
+ *
+ * TRI-ESTADO, y es el punto entero: `null` = no pude leer, `[]` = al día, lista = lo que
+ * publicaría. Confundir `[]` con `null` es lo que vuelve un NO MEDIDO en un falso verde, así
+ * que cualquier salida que no traiga una de las DOS marcas conocidas sale `null` en vez de
+ * adivinar — si el publicador cambia su formato, este gate se calla, no miente.
+ *
+ * @param {string|null} salida  stdout del publicador corrido con `--dry-run`
+ * @returns {string[]|null}
+ */
+export function archivosDelDryRun(salida) {
+  const s = String(salida ?? '');
+  if (!s.trim()) return null;
+  // «al día» es una respuesta REAL y tiene su propia marca: sin ella, un dry-run que no
+  // lista nada sería indistinguible de uno que no se pudo leer.
+  if (/^YA ESTA PUBLICADO/m.test(s)) return [];
+  const lineas = s.split('\n');
+  const i = lineas.findIndex((l) => /^Cambia:\s*$/.test(l));
+  if (i === -1) return null;
+  const archivos = [];
+  for (const l of lineas.slice(i + 1)) {
+    if (!l.trim()) break; // el publicador cierra la lista con una línea vacía
+    archivos.push(l.trim());
+  }
+  // «Cambia:» con la lista vacía no es «al día» —para eso está la marca de arriba—: es un
+  // formato que no entiendo, y adivinar acá sería declarar al día lo que no medí.
+  return archivos.length > 0 ? archivos : null;
+}
+
+/**
+ * PURA: ¿el texto nombra todos los ARCHIVOS que su `ok` publica?
+ *
+ * La gemela de `promesaCompleta` para los destinos que se publican por copia. Mismas dos
+ * guardas y por los mismos motivos: sin poder derivar qué publica sale NO_MEDIDO (nunca
+ * COMPLETA — declarar completa una promesa que no se pudo comparar es la única salida que
+ * borra el problema), y con `[]` también, porque «el ok no publicaría nada» es la pregunta
+ * de otro caso (ENTREGADO), no de éste.
+ *
+ * QUÉ CUENTA COMO NOMBRAR, y por qué así. Vale la RUTA (`test/fase1-runner.test.mjs`) o el
+ * NOMBRE del archivo (`fase1-runner.test.mjs`); NO vale describirlo en prosa («el archivo de
+ * pruebas»). Es la misma vara que el gate ya usa con los shas —donde «arreglé la cita» no
+ * cuenta y `54c987a` sí—, y por el mismo motivo: sin un identificador literal nadie puede
+ * verificar que lo descrito sea lo publicado, y el día que el publicador arrastre OTRO
+ * archivo de pruebas la misma frase lo seguiría dando por cubierto. Eso es exactamente la
+ * lista de inclusión que falla abierto.
+ *
+ * Aceptar el basename además de la ruta es deliberado y va en la dirección barata, igual
+ * que casar shas por prefijo: el pedido puede escribir la ruta del repo y el publicador la
+ * suya, y perdonar de más sólo calla un rojo, mientras que un rojo falso hace rehacer —y
+ * archivar— un pedido sano, que es la única salida que le borra a Sergio Urcullo un pedido
+ * real.
+ *
+ * @param {{texto:string, publicaria:string[]|null}} args
+ */
+export function archivosNombrados({ texto, publicaria }) {
+  if (!Array.isArray(publicaria)) {
+    return { estado: 'NO_MEDIDO', motivo: 'no pude derivar que archivos publicaria el ok', mudos: [] };
+  }
+  if (publicaria.length === 0) {
+    return { estado: 'NO_MEDIDO', motivo: 'el ok no publicaria nada: lo mide el caso ENTREGADO', mudos: [] };
+  }
+  const t = String(texto ?? '');
+  const nombrado = (ruta) => {
+    if (t.includes(ruta)) return true;
+    const base = String(ruta).split('/').pop();
+    return Boolean(base) && t.includes(base);
+  };
+  const mudos = publicaria.filter((r) => !nombrado(r));
+  return mudos.length === 0
+    ? { estado: 'COMPLETA', mudos: [] }
+    : { estado: 'SUB_DESCRIBE', mudos };
+}
+
+/**
+ * PURA: ¿el CUERPO del pedido nombra todos los archivos que su `ok` publica?
+ *
+ * La misma relación que `cuerpoCorto` tiene con `promesaCompleta`, y por el mismo motivo: el
+ * cuerpo es lo que Sergio Urcullo lee para decidir, y los comentarios se apilan abajo y lo
+ * tapan. Un recuento comentado deja satisfecha a la pregunta del texto entero y el cuerpo
+ * puede seguir describiendo menos de lo que su `ok` publica.
+ *
+ * @param {{texto:string, publicaria:string[]|null}} args
+ */
+export function cuerpoCortoArchivos({ texto, publicaria }) {
+  return archivosNombrados({ texto: partirPedido(texto).cuerpo, publicaria });
+}
+
 // ── medición viva ──────────────────────────────────────────────────────────────────────
 
 function sh(cmd, args, opts = {}) {
@@ -547,6 +652,50 @@ function epochCommitHermes(sha) {
   return crudo && /^\d+$/.test(crudo.trim()) ? Number(crudo.trim()) : null;
 }
 
+/** El publicador en seco de un destino que copia archivos. Ruta en el VPS, fija por destino. */
+const SECO_SIAT = '/opt/onia-siat/_deploy/publicar.sh';
+
+/**
+ * Corre un publicador en seco y devuelve su stdout, del disco local o del VPS. `null` = no
+ * pude preguntar.
+ *
+ * POR QUÉ LAS DOS VÍAS. Este gate corre hoy desde el nodo de casa, donde `/opt` NO existe: un
+ * lector que sólo mire el disco local devuelve vacío siempre y el destino queda sin medir sin
+ * que nada se ponga rojo — es la misma degradación muda que ya dejó ciegos a otros tres gates
+ * vivos al mudarse de máquina. Se pregunta al disco y, si no está, por SSH.
+ *
+ * Las dos vías se inyectan para poder validar por mutación sin salir a la red, y el `null` es
+ * el punto entero: `''` se leería como «el publicador no dijo nada», que es una respuesta, y
+ * acá la verdad es «no llegué a preguntar».
+ */
+export function secoDeProduccion(ruta, { local = secoLocal, remoto = secoPorSsh } = {}) {
+  const enDisco = local(ruta);
+  if (enDisco !== null && enDisco !== undefined) return enDisco;
+  const enVps = remoto(ruta);
+  if (enVps !== null && enVps !== undefined) return enVps;
+  return null;
+}
+
+function secoLocal(ruta) {
+  if (!existsSync(ruta)) return null;
+  return sh('bash', [ruta, '--dry-run'], { timeout: 180_000 });
+}
+
+/** Por el MISMO shim que ya usa `shaVivoPlataforma`: un segundo camino al VPS es una segunda
+ *  respuesta posible a «a qué máquina le pregunto». */
+function secoPorSsh(ruta, shim = VPS) {
+  if (!existsSync(shim)) return null;
+  return sh('bash', [shim, 'bash', '-lc', `bash ${ruta} --dry-run`], { timeout: 180_000 });
+}
+
+/**
+ * Lo que el `ok` de un pedido de `siat` publicaría: la lista de archivos que su propio
+ * publicador en seco enumera. `null` = no se pudo medir, `[]` = ya está al día.
+ */
+function publicariaSiat(io = {}) {
+  return archivosDelDryRun(secoDeProduccion(SECO_SIAT, io));
+}
+
 /**
  * Los pedidos vivos del tablero. Devuelve `null` si NO se pudo leer la lista, y el barrido
  * con sus `ilegibles` si se pudo — ver `barrerPedidos`: un `show` que no contesta se NOMBRA,
@@ -637,6 +786,10 @@ async function medirEnVivo() {
   // siguiente; el segundo es un AGUJERO del gate, que no se cura nunca y hay que escribirle
   // instrumento. Impresos juntos, el segundo se lee como ruido de ambiente y sobrevive.
   const sinCubrir = [];
+  // Los de `siat` van aparte porque su veredicto se dice con ARCHIVOS, no con shas: meterlos
+  // en las mismas listas obligaría a que el reporte adivine de qué especie es cada entrada.
+  const entregadosSiat = [];
+  const cortosSiat = [];
   // `landing` no nombra su sha, pero su artefacto tiene FECHA: alcanza para la dirección cara
   // (¿pide un ok por trabajo hecho?). Se deriva UNA vez, no por pedido: si el SSH no contesta
   // queda `null` y todos los pedidos de landing salen NO MEDIDO con su motivo.
@@ -668,6 +821,32 @@ async function medirEnVivo() {
         });
         if (c.estado === 'SUB_DESCRIBE') incompletos.push({ id: p.id, mudos: c.mudos });
         else if (c.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (landing, promesa completa): ${c.motivo}`);
+      }
+      continue;
+    }
+    if (p.destino === 'siat') {
+      // `siat` no se identifica por sha ni por fecha: se publica copiando archivos, así que su
+      // universo son los ARCHIVOS que su propio publicador en seco enumera. Mismo invariante
+      // que los otros dos destinos (el cuerpo describe lo que su ok publica), otro artefacto.
+      const publicaria = publicariaSiat();
+      if (publicaria === null) {
+        noMedidos.push(`${p.id} (siat): no pude correr el publicador en seco (¿SSH al VPS?)`);
+        continue;
+      }
+      if (publicaria.length === 0) {
+        // La dirección cara, la misma que `clasificarPedido` caza en los otros destinos: el
+        // pedido sigue bloqueado pidiendo un ok por trabajo que ya está publicado.
+        entregadosSiat.push(p.id);
+        continue;
+      }
+      console.log(`OK ${p.id} (siat): sigue VIGENTE — ${publicaria.length} archivo(s) sin publicar`);
+      // El cuerpo, no el texto entero: los comentarios se apilan abajo y lo tapan. Es la misma
+      // pregunta que `cuerpoCorto` le hace a `plataforma`.
+      const k = cuerpoCortoArchivos({ texto: p.texto, publicaria });
+      if (k.estado === 'SUB_DESCRIBE') {
+        cortosSiat.push({ id: p.id, mudos: k.mudos });
+      } else if (k.estado === 'NO_MEDIDO') {
+        noMedidos.push(`${p.id} (siat, cuerpo completo): ${k.motivo}`);
       }
       continue;
     }
@@ -723,6 +902,29 @@ async function medirEnVivo() {
       console.log('  Le esta pidiendo un ok a Sergio Urcullo por trabajo hecho. Cerralo con su');
       console.log('  evidencia y, si quedo algo sin publicar despues, hace un pedido NUEVO: el');
       console.log('  cuerpo del viejo no lo describe, y el cuerpo es lo unico que el lee.');
+    }
+    return 1;
+  }
+
+  if (entregadosSiat.length > 0) {
+    for (const id of entregadosSiat) {
+      console.log(`\nROJO ${id}: su publicador en seco dice que YA ESTA PUBLICADO.`);
+      console.log('  Le esta pidiendo un ok a Sergio Urcullo por trabajo hecho. Cerralo con su');
+      console.log('  evidencia y, si quedo algo sin publicar despues, hace un pedido NUEVO: el');
+      console.log('  cuerpo del viejo no lo describe, y el cuerpo es lo unico que el lee.');
+    }
+    return 1;
+  }
+
+  if (cortosSiat.length > 0) {
+    for (const c of cortosSiat) {
+      console.log(`\nROJO ${c.id}: su CUERPO no nombra ${c.mudos.length} archivo(s) que su ok publica.`);
+      for (const m of c.mudos) console.log(`    ${m}`);
+      console.log('  El cuerpo es lo unico que Sergio Urcullo lee para decidir, y hoy describe');
+      console.log('  menos de lo que su ok publica. Nombralos comentando el recuento DERIVADO de');
+      console.log('  `bash /opt/onia-siat/_deploy/publicar.sh --dry-run`; si ya se comento y el');
+      console.log('  cuerpo sigue corto, rehace el pedido y ARCHIVA el viejo en la misma vuelta');
+      console.log('  (el `edit` del tablero no cambia el cuerpo).');
     }
     return 1;
   }
