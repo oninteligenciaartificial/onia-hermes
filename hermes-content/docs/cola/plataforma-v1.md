@@ -788,6 +788,16 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 - [ ] 🔴 **LOTE AUDITORÍA 11-sep (velocidad + diseño vs Lety/Dapta, pedido de Sergio
       Urcullo) — medido con Lighthouse + Playwright + curl, capturas en el chat de la sesión.**
+      ⚠️ **DERIVADO el 2026-09-11: no lo ejecuta este carril, y por eso no se puede cerrar acá.**
+      Los nueve puntos viven en `web-factory/apps/onia-platform/src/app/(sitio)/`, que es zona de
+      `web-venta` — medido, no supuesto: los últimos 12 commits de esa carpeta en `origin/main`
+      son todos suyos (`fix(venta):`). Quedó repartido así, y este carril no lo vuelve a mirar:
+      · **(a)-(d), velocidad** → tarea `t_c38481ac` del tablero, asignada a `carril-web-venta`,
+        `ready` (verificado con `show`, no con el exit de `assign`). Es mecánica invisible: no
+        cambia lo que el cliente LEE, así que va sin que Sergio Urcullo mire nada.
+      · **(e)-(i), diseño** → ya estaban preguntadas: `t_54ff72b5`, `t_781090e0` y `t_a0644214`,
+        las dos últimas `blocked` esperándolo a él. Crear una cuarta era repetirle una decisión
+        que ya tiene sobre la mesa.
       Lo bueno medido: Onia carga MÁS RÁPIDO que ambas referencias (load 494 ms vs Lety
       12.913 ms y Dapta 9.493 ms desktop), precio visible en el fold (ninguna referencia lo
       tiene), 1 clic a /register, 0 render-blocking, 0 imágenes sin dimensiones. Lo que
