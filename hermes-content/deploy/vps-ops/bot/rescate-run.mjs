@@ -46,6 +46,20 @@ export const MAX_EDAD_MS = 12 * 60 * 60 * 1000;
 /** Inboxes donde atiende el bot: 4 = Onia Web (widget), 5 = Onia WhatsApp. */
 export const INBOXES_BOT = [4, 5];
 
+/**
+ * Los motivos por los que NO salir nada es correcto — y por lo tanto no es un rescate fallido.
+ *
+ * Es una excusa, asi que va nombrada y con dueno: en `handoff_humano` el bot se calla A
+ * PROPOSITO porque la conversacion paso a una persona. Que esa persona tampoco haya
+ * contestado es real y es de `onia-vigia-sin-respuesta.sh` (cron 39 de cada 2 h); repetirlo
+ * aca cada 10 min duplicaria su aviso, que es como se entrena a no leer los avisos.
+ *
+ * Todo lo demas que no emite ES un fallo: `seleccionarHuerfanos` ya probo que en esa
+ * conversacion no hay ningun saliente. Enumerar motivos MALOS seria una lista de inclusion y
+ * fallaria abierto con el motivo nuevo que nadie previo; enumerar la excusa falla cerrado.
+ */
+export const MOTIVOS_SIN_RESCATE_AJENO = new Set(["handoff_humano"]);
+
 const ENTRANTE = 0;
 const SALIENTE = 1;
 
@@ -321,11 +335,15 @@ export async function runRescateSweep(options = {}, deps = {}) {
       const veredicto = clasificarRespuesta(enviado?.respuesta);
       linea.resultado = veredicto.motivo;
       if (veredicto.contestado) resultado.contestados += 1;
-      // No poder LEER el resultado no es "no paso nada": es un desconocido que quiza quedo
-      // sin contestar y nadie lo sabe. Salia con exit 0 y "0 CONTESTADOS", igual que una
-      // vuelta sin trabajo — asi el testigo roto del 3-sep vivio doce corridas en silencio.
-      else if (veredicto.motivo === "respuesta_ilegible") {
-        resultado.fallidos.push({ ...linea, motivo: "respuesta_ilegible del webhook" });
+      // NO EMITIR ES FALLAR, y no hace falta opinar sobre el motivo para saberlo:
+      // `seleccionarHuerfanos` ya probo que esta conversacion no tiene NINGUN saliente, asi
+      // que una reinyeccion sin `sent` dejo a la persona tan muda como estaba. Antes solo
+      // caia aca `respuesta_ilegible` —la mitad de la familia—, y el resto salia con exit 0
+      // y "0 CONTESTADOS", identico a una vuelta sin trabajo: asi el testigo roto del 3-sep
+      // vivio doce corridas en silencio, y el "hola" del 10-sep (conv 11 msg 873, inbox 5)
+      // cuatro mas, hasta que la persona volvio a escribir sola.
+      else if (!MOTIVOS_SIN_RESCATE_AJENO.has(veredicto.motivo)) {
+        resultado.fallidos.push({ ...linea, motivo: `reinyectado y sin respuesta (${veredicto.motivo})` });
       }
     } catch (error) {
       // El fallo de uno no puede cancelar el rescate de los otros: son leads distintos.
@@ -366,7 +384,7 @@ if (esCLI) {
         const veredicto = d.resultado ? ` -> ${d.resultado}` : "";
         console.log(`conv ${d.conversationId} msg ${d.messageId} — ${d.edadMin} min sin respuesta — "${d.texto}"${veredicto}`);
       }
-      for (const f of r.fallidos) console.log(`FALLO conv ${f.conversationId}: ${f.motivo}`);
+      for (const f of r.fallidos) console.log(`FALLO conv ${f.conversationId} msg ${f.messageId}: ${f.motivo}`);
       console.log(
         `${r.huerfanos} sin respuesta · ${r.reinyectados} reinyectados · ${r.contestados} CONTESTADOS${opciones.emitir ? "" : " (SECO — agregar --emit)"}`,
       );

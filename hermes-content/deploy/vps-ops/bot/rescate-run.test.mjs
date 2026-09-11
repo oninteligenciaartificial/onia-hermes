@@ -20,6 +20,7 @@ import {
   postAlWebhook,
   clasificarRespuesta,
   armarAvisoRescate,
+  MOTIVOS_SIN_RESCATE_AJENO,
 } from "./rescate-run.mjs";
 
 const T0 = Date.parse("2026-09-03T00:00:00Z");
@@ -409,6 +410,93 @@ test("una respuesta que el barrido no puede leer es un FALLO ruidoso, no un sile
   assert.equal(r.contestados, 0);
   assert.equal(r.fallidos.length, 1, "una respuesta ilegible tiene que salir por fallidos (exit 1)");
   assert.match(r.fallidos[0].motivo, /ilegible/);
+});
+
+// ---------------------------------------------------------------------------
+// EL TERCER ESTADO, medido en vivo el 2026-09-10 sobre el inbox 5 (Onia WhatsApp):
+//
+//   messages id=873  message_type=0  19:28:49Z  "hola"     <- una persona, no una sonda
+//   19:34  conv 11 msg 873 —  5 min sin respuesta -> mensaje_ya_procesado
+//   19:44  conv 11 msg 873 — 15 min sin respuesta -> sin_respuesta
+//   19:54  conv 11 msg 873 — 25 min sin respuesta -> sin_respuesta
+//   20:04  conv 11 msg 873 — 35 min sin respuesta -> sin_respuesta
+//   ...y las cuatro vueltas cerraron con "0 sin respuesta"? No: con **0 CONTESTADOS**.
+//
+// El barrido lo intento CUATRO veces, fallo las cuatro, y salio con exit 0 y una linea
+// identica a la de una vuelta sin trabajo. `armarAvisoRescate` solo mira `contestado`, asi
+// que tampoco aviso. El mensaje dejo de ser huerfano recien a las 20:11, y no porque lo
+// rescataran: porque la persona volvio a escribir sola. Nadie se entero nunca.
+//
+// La causa es que `runRescateSweep` tenia TRES salidas y contabilizaba DOS: `contestado`
+// sumaba y avisaba, `respuesta_ilegible` y el error caian en `fallidos` (exit 1), y todo lo
+// demas —un cuerpo legible que dice "no emiti nada"— no caia en ninguna. El archivo ya habia
+// escrito la regla correcta para su hermano ilegible ("no poder LEER el resultado no es 'no
+// paso nada'"), y no la aplico al caso en que SI se puede leer y lo que dice es que no salio
+// nada. Media familia cubierta se lee como familia cubierta.
+//
+// LO QUE LO HACE DEMOSTRABLE, y no una opinion sobre motivos: `seleccionarHuerfanos` ya
+// probo que en esa conversacion NO hay ningun saliente despues del entrante. Entonces una
+// reinyeccion que no produce `sent` es, por construccion, un rescate que fallo — sin
+// importar como se llame el motivo. No hace falta enumerar motivos malos (eso seria una
+// lista de inclusion, que falla abierto con el motivo nuevo que nadie previo).
+// ---------------------------------------------------------------------------
+
+test("EL TERCER ESTADO: reinyectar y que NO salga nada es un FALLO, no un silencio", async () => {
+  const r = await runRescateSweep(
+    { emitir: true, ahoraMs: T0 + min(35) },
+    {
+      leerFilas: async () => [fila({ conversationId: 11, messageId: 873, content: "hola", inboxId: 5 })],
+      postWebhook: async () => ({ ok: true, respuesta: '{"ok":true,"sent":[],"reason":"sin_respuesta"}' }),
+      avisar: async () => {},
+    },
+  );
+  assert.equal(r.reinyectados, 1, "se mando");
+  assert.equal(r.contestados, 0, "y no salvo a nadie");
+  assert.equal(r.fallidos.length, 1, "un rescate que fallo tiene que salir por fallidos (exit 1)");
+  assert.equal(r.fallidos[0].conversationId, 11);
+  assert.equal(r.fallidos[0].messageId, 873);
+  assert.match(r.fallidos[0].motivo, /sin_respuesta/, "y el FALLO dice POR QUE no salio nada");
+});
+
+test("el dedup tampoco absuelve: el huerfano ya probo que nadie le contesto", async () => {
+  // Era la coartada escrita en el propio archivo ("los que salieron deduplicados no salvaron
+  // a nadie"). Cierto — y por eso mismo la persona sigue esperando: que la clave ya estuviera
+  // reclamada significa que el motor la tomo y no emitio, no que alguien le contesto.
+  const r = await runRescateSweep(
+    { emitir: true, ahoraMs: T0 + min(5) },
+    {
+      leerFilas: async () => [fila({ conversationId: 11, messageId: 873 })],
+      postWebhook: async () => ({
+        ok: true,
+        respuesta: '{"ok":true,"deduped":true,"sent":[],"reason":"mensaje_ya_procesado"}',
+      }),
+      avisar: async () => {},
+    },
+  );
+  assert.equal(r.fallidos.length, 1, "reinyectado, sin salida y sin saliente en la conversacion");
+  assert.match(r.fallidos[0].motivo, /mensaje_ya_procesado/);
+});
+
+test("el handoff es la UNICA excusa, y tiene dueno: lo mira onia-vigia-sin-respuesta", async () => {
+  // No es un rescate fallido: el bot se calla a proposito porque la conversacion paso a una
+  // persona. Que esa persona tampoco haya contestado es real, y es de OTRO vigia — avisarlo
+  // aca duplicaria su aviso cada 10 min, que es como se entrena a no leer los avisos.
+  const r = await runRescateSweep(
+    { emitir: true, ahoraMs: T0 + min(5) },
+    {
+      leerFilas: async () => [fila({ conversationId: 11, messageId: 873 })],
+      postWebhook: async () => ({ ok: true, respuesta: '{"ok":true,"sent":[],"reason":"handoff_humano"}' }),
+      avisar: async () => {},
+    },
+  );
+  assert.equal(r.fallidos.length, 0, "el handoff no se cuenta como rescate fallido");
+  assert.equal(r.detalle[0].resultado, "handoff_humano", "pero el barrido igual dice que paso");
+});
+
+test("la excusa no puede crecer sola: un motivo nuevo NACE cubierto", () => {
+  // Sin este caso, el dia que alguien agregue un motivo a la exencion nada se pone rojo y el
+  // tercer estado vuelve a ser silencio — con otro nombre.
+  assert.deepEqual([...MOTIVOS_SIN_RESCATE_AJENO], ["handoff_humano"]);
 });
 
 test("el barrido separa lo mandado de lo CONTESTADO, que es lo unico que salva un lead", async () => {
