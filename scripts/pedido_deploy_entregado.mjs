@@ -65,7 +65,7 @@
  */
 
 import { execFileSync } from 'node:child_process';
-import { existsSync, readdirSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, join } from 'node:path';
 // El criterio de «esto lo ve un lead» se IMPORTA del instrumento que ya lo tiene y que el
@@ -543,6 +543,41 @@ export function cuerpoCortoArchivos({ texto, publicaria }) {
   return archivosNombrados({ texto: partirPedido(texto).cuerpo, publicaria });
 }
 
+/**
+ * PURA: ¿se pudieron poner al día los refs con los que se va a medir?
+ *
+ * POR QUÉ EXISTE, Y POR QUÉ ESTE GATE FALLABA EN VERDE SIN ELLO. Todo lo que este archivo
+ * deriva —`publicariaPlataforma`, `publicariaLanding`, `esPublicado`— se calcula contra
+ * `origin/master` y `origin/main` **del clon en disco**, y hasta el 2026-09-11 no había una
+ * sola llamada a `git fetch` en las 1.105 líneas. Con el clon atrasado, los commits que
+ * faltan por nombrar no entran en el universo, así que `promesaCompleta` los da por
+ * COMPLETA: un pedido que SUB-DESCRIBE sale **OK**.
+ *
+ * No es teórico y muerde justo al dueño del gate. El integrador se mudó al nodo de casa, y
+ * desde ahí `onia-platform` **no se puede pushear**: el merge se hace en el clon gemelo del
+ * VPS por SSH. O sea que el clon local de casa NUNCA ve el push del propio integrador salvo
+ * que otro proceso fetchee por casualidad. Medido ese día sobre `t_e0f3b3b7`: mergeé dos
+ * arreglos a `master`, corrí el gate y dijo `OK ... sigue VIGENTE`; algo fetcheó en el medio
+ * y la corrida siguiente —sin que nada del producto cambiara— sacó el `ROJO`. Un gate cuyo
+ * veredicto depende de si otro proceso fetcheó no es un gate.
+ *
+ * Es la misma cura que `espejo-check.mjs` ya escribió el 2026-09-10 para su clon viejo, que
+ * no viajó hasta acá. Allá el clon atrasado producía un rojo falso —ruidoso, se investiga—;
+ * acá produce un **verde** falso, que es la dirección que nadie audita.
+ *
+ * Dirección del daño al fallar: sin poder fetchear se sale NO_MEDIDO, nunca OK. Concluir con
+ * refs que no se pudieron actualizar es exactamente el modo de falla que esto viene a cerrar.
+ *
+ * @param {{repos:string[], fetchear:(repo:string)=>boolean}} args
+ */
+export function refsAlDia({ repos, fetchear }) {
+  const fallaron = [];
+  for (const repo of repos || []) {
+    if (fetchear(repo) !== true) fallaron.push(repo);
+  }
+  return { ok: fallaron.length === 0, fallaron };
+}
+
 // ── medición viva ──────────────────────────────────────────────────────────────────────
 
 function sh(cmd, args, opts = {}) {
@@ -551,6 +586,17 @@ function sh(cmd, args, opts = {}) {
   } catch {
     return null;
   }
+}
+
+/**
+ * Trae los refs del remoto de un clon. `true` = quedó al día.
+ *
+ * `sh` devuelve `''` cuando el comando anduvo (un fetch silencioso no imprime nada) y `null`
+ * cuando falló, así que la distinción es exactamente la que hace falta: `'' !== null`.
+ * No toca el árbol de trabajo — un carril con cambios sin commitear no corre riesgo.
+ */
+function fetchearRepo(repo) {
+  return sh('git', ['-C', repo, 'fetch', '--quiet', '--prune', 'origin'], { timeout: 120_000 }) !== null;
 }
 
 /**
@@ -729,6 +775,18 @@ async function medirEnVivo() {
   if (pedidos.length === 0) {
     console.log('OK: no hay pedidos de deploy vivos.');
     return 0;
+  }
+
+  // Los refs ANTES de derivar nada: todo lo que sigue mide contra `origin/*` del disco, y con
+  // un clon atrasado un pedido que SUB-DESCRIBE sale OK. Ver `refsAlDia`.
+  const frescura = refsAlDia({
+    repos: [RAIZ, REPO_PLATAFORMA].filter((r) => existsSync(r)),
+    fetchear: fetchearRepo,
+  });
+  if (!frescura.ok) {
+    console.log(`NO MEDIDO: no pude actualizar los refs de ${frescura.fallaron.join(', ')}`);
+    console.log('  Medir contra refs viejos hace que un pedido que SUB-DESCRIBE salga OK.');
+    return 2;
   }
 
   const vivo = shaVivoPlataforma();
@@ -1090,6 +1148,34 @@ function selfCheck() {
       (soloLosQueViajan([{ sha: '1111111', titulo: 'sin datos' }]) || []).length === 1],
     ['landing: sin commits medidos no se inventa un universo vacio',
       soloLosQueViajan(null) === null],
+
+    // ── los refs con los que se mide, que hasta hoy nadie actualizaba ─────────────────
+    // El caso que YA cumple, primero: sin él, un detector que marque SIEMPRE fallo pasaría
+    // el de abajo y el gate saldría NO_MEDIDO para siempre — mudo en vez de falso, pero
+    // igual de inútil.
+    ['refs: los dos clones al dia -> se puede medir',
+      refsAlDia({ repos: ['/a', '/b'], fetchear: () => true }).ok === true],
+    ['refs: si un clon no se pudo actualizar NO se mide',
+      refsAlDia({ repos: ['/a', '/b'], fetchear: (r) => r === '/a' }).ok === false],
+    // Nombrarlo es lo único accionable: «no pude medir» sin decir cuál manda a adivinar.
+    ['refs: y NOMBRA al que fallo',
+      refsAlDia({ repos: ['/a', '/b'], fetchear: (r) => r === '/a' }).fallaron.join() === '/b'],
+    // Estricto contra `true` a propósito: `sh` devuelve `''` o `null`, y un `!== true`
+    // flojo (`!fetchear(...)`) leería cualquier cadena como éxito.
+    ['refs: una respuesta que no es `true` cuenta como que NO se pudo',
+      refsAlDia({ repos: ['/a'], fetchear: () => 'quizas' }).ok === false],
+
+    // CABLEADO. Los casos de arriba prueban la función; éste prueba que `medirEnVivo` la
+    // use y CORTE. Ancla la ASIGNACIÓN y el `if (` de apertura porque los dos esquives
+    // baratos —llamarla y tirar el resultado, o anteponer `false &&` a la guarda— dejan el
+    // literal intacto y pasan en verde con el gate muerto.
+    ['refs: `medirEnVivo` los pone al dia y CORTA si no pudo',
+      (() => {
+        const fuente = readFileSync(fileURLToPath(import.meta.url), 'utf8');
+        return /const\s+frescura\s*=\s*refsAlDia\(/.test(fuente)
+          && /if\s*\(\s*!frescura\.ok\s*\)/.test(fuente)
+          && /fetchear:\s*fetchearRepo/.test(fuente);
+      })()],
   ];
   let malos = 0;
   for (const [nombre, ok] of casos) {
