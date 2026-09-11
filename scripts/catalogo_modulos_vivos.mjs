@@ -72,9 +72,39 @@ export function estadoGit(ruta) {
   }
 }
 
-/** Un arbol sirve de referencia si esta en la rama base y no le falta ningun commit de ella. */
-function esConfiable(estado) {
-  return estado !== null && estado.rama === RAMA_BASE && estado.atras === 0;
+/**
+ * Trae los refs del remoto de un arbol. `true` = el `origin/<base>` de abajo esta al dia.
+ *
+ * Sin esto, `estadoGit` mide contra el ref que el clon tiene EN DISCO y un clon atrasado se
+ * declara "al dia": el ref viejo esconde justo lo NUEVO, que es lo unico que puede faltar.
+ * Medido el 2026-09-11 con un remoto de juguete — `atras: 0` con el remoto un commit adelante.
+ *
+ * La cura no es nueva: es `refsAlDia()` de `scripts/pedido_deploy_entregado.mjs`, escrita el
+ * mismo dia para este mismo agujero. Alla el clon viejo daba un rojo falso (ruidoso, se
+ * investiga); aca da un VERDE falso, que es la direccion que nadie audita.
+ *
+ * No toca el arbol de trabajo — un carril con cambios sin commitear no corre riesgo. `git -C`
+ * acepta una subcarpeta, asi que se le pasa la misma ruta que se va a medir.
+ */
+function fetchearRepo(ruta) {
+  try {
+    execFileSync("git", ["-C", ruta, "fetch", "--quiet", "--prune", "origin"], {
+      encoding: "utf8",
+      timeout: 120_000,
+      stdio: ["ignore", "pipe", "ignore"],
+    });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Un arbol sirve de referencia si esta en la rama base, no le falta ningun commit de ella, y el
+ * atraso se midio con refs RECIEN TRAIDOS. Las tres: `atras: 0` contra un ref viejo no dice nada.
+ */
+function esConfiable(estado, refFresco) {
+  return refFresco === true && estado !== null && estado.rama === RAMA_BASE && estado.atras === 0;
 }
 
 /**
@@ -82,26 +112,35 @@ function esConfiable(estado) {
  * `estadoDe` inyectado: sin eso el caso dependeria del estado real de los worktrees del VPS, que
  * cambia solo, y un test que cambia solo no prueba nada.
  */
-export function elegirArbol(candidatos = CANDIDATOS, estadoDe = estadoGit) {
+export function elegirArbol(candidatos = CANDIDATOS, estadoDe = estadoGit, fetchear = fetchearRepo) {
   const existentes = candidatos.filter((ruta) => existsSync(ruta));
   if (existentes.length === 0) return { ruta: null, aviso: null, descartados: [] };
 
-  const conEstado = existentes.map((ruta) => ({ ruta, estado: estadoDe(ruta) }));
-  const bueno = conEstado.find((c) => esConfiable(c.estado));
+  // El fetch va ANTES de medir: `estadoDe` lee `origin/<base>` del disco, asi que preguntarle
+  // sin refrescar es preguntarle por el pasado.
+  const conEstado = existentes.map((ruta) => {
+    const refFresco = fetchear(ruta) === true;
+    return { ruta, estado: estadoDe(ruta), refFresco };
+  });
+  const bueno = conEstado.find((c) => esConfiable(c.estado, c.refFresco));
   const elegido = bueno || conEstado[0];
   const descartados = conEstado.filter((c) => c.ruta !== elegido.ruta).map((c) => describir(c));
 
   return {
     ruta: elegido.ruta,
     // Sin arbol confiable el veredicto puede no valer para la rama base: se dice, no se calla.
-    aviso: bueno ? null : `el arbol medido NO es de ${RAMA_BASE} al dia (${describir(elegido)}) — el veredicto puede no valer para la rama base`,
+    // Se mide igual (un veredicto vale mas que ninguno), pero nunca en silencio.
+    aviso: bueno ? null : `el arbol medido no se puede dar por ${RAMA_BASE} al dia (${describir(elegido)}) — el veredicto puede no valer para la rama base`,
     descartados,
   };
 }
 
-function describir({ ruta, estado }) {
+function describir({ ruta, estado, refFresco }) {
   if (!estado) return `${ruta} (no pude preguntarle a git)`;
-  return `${ruta} (rama ${estado.rama}, ${estado.atras} commit(s) atras de ${RAMA_BASE})`;
+  // El atraso se nombra junto a la confianza que merece: "0 commit(s) atras" medido contra un
+  // ref que no se pudo actualizar es exactamente el dato que hacia fallar este gate en verde.
+  const refs = refFresco === false ? ", refs sin actualizar: ese atraso puede ser viejo" : "";
+  return `${ruta} (rama ${estado.rama}, ${estado.atras} commit(s) atras de ${RAMA_BASE}${refs})`;
 }
 
 /** La carpeta de rutas del producto, o null si este arbol no tiene el otro repo. */
@@ -279,6 +318,32 @@ function selfCheck() {
   // Y que git no conteste no puede tumbar el gate: degrada a "no confiable", nunca a excepción.
   const sinGit = elegirArbol(dos, () => null);
   ok(sinGit.ruta === dos[0] && sinGit.aviso !== null, "no degrada con gracia cuando git no contesta");
+
+  // ── El ref viejo, que es como este gate fallaba EN VERDE ────────────────────────────────
+  //
+  // `estadoGit` mide el atraso contra `origin/<base>` TAL COMO ESTÁ EN DISCO. Si nadie fetcheó
+  // desde el último push, un clon atrasado se declara "al día" y `esConfiable` lo bendice sin
+  // una palabra. Reproducido el 2026-09-11 con un remoto de juguete: el clon dijo `atras: 0`
+  // teniendo el remoto un commit más, y `elegirArbol` devolvió `aviso: null`.
+  //
+  // Por qué el `atras: 0` no alcanza para confiar: el ref viejo esconde justo lo NUEVO, que es
+  // lo único que puede faltar. Así que la confianza pide DOS cosas — rama base al día Y refs
+  // recién traídos — y cuando el fetch no contesta se mide igual pero DICIÉNDOLO.
+  const alDia = () => ({ rama: RAMA_BASE, atras: 0 });
+  const refViejo = elegirArbol([dos[0]], alDia, () => false);
+  ok(refViejo.aviso !== null, "bendice un árbol 'al día' cuyos refs NO se pudieron actualizar");
+  ok(/refs/i.test(refViejo.aviso || ""), "el aviso no dice que el atraso se midió con refs viejos");
+
+  // El cableado: si `elegirArbol` no LLAMA al fetch, no hay refs nuevos que medir. Se ancla la
+  // llamada con un espía — sin este caso, quitar el fetch deja los de arriba en verde.
+  const fetcheados = [];
+  elegirArbol([dos[0]], alDia, (r) => { fetcheados.push(r); return true; });
+  ok(fetcheados.length === 1, "no fetchea antes de medir el atraso");
+
+  // Y el caso que YA cumple: con los refs frescos y la rama base al día, sigue sin aviso. Sin
+  // él, un `aviso` siempre-no-null pasaría los dos casos de arriba sin medir nada.
+  ok(elegirArbol([dos[0]], alDia, () => true).aviso === null,
+    "avisa aunque los refs estén frescos y el árbol sea de la rama base al día");
 
   // contradiceASiete: dispara con el texto real que tenía la tabla, y calla cuando ya está corregido.
   const conSiete = "## 7. Lo que NO se puede prometer\nlos agentes SÍ corren solos\n";
