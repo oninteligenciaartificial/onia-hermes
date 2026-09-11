@@ -381,6 +381,39 @@ export function cuerpoVencido({ texto, publicado }) {
 }
 
 /**
+ * PURA: ¿el CUERPO del pedido nombra todo lo que su `ok` publica, o quedó corto?
+ *
+ * LA FAMILIA SIMÉTRICA DE `cuerpoVencido`, y estaba abierta. Esa caza el cuerpo que
+ * SOBRE-describe (habla de trabajo ya publicado); ésta caza el que SUB-describe. Las dos
+ * preguntas ya existían para el pedido ENTERO (`clasificarPedido` y `promesaCompleta`), pero
+ * las dos leen cuerpo y comentarios como UN texto, así que **los comentarios tapan al cuerpo**
+ * en las dos direcciones — y sólo una de las dos tenía su versión sobre el cuerpo solo.
+ *
+ * Medido el 2026-09-11 sobre t_5511da55: su cuerpo describía DOS arreglos, medidos contra
+ * `master 42ed1e2`, y para entonces master era `18b1feb` con 6 commits más — el `ok` publicaba
+ * SIETE. Los cinco que faltaban estaban nombrados en comentarios, así que `promesaCompleta`
+ * decía «0 sin resolver» con razón para su pregunta, y `cuerpoVencido` salía NO_MEDIDO porque
+ * el cuerpo describe en prosa y no lleva la marca. Nadie podía decir que el cuerpo quedó corto.
+ * El costo es el de siempre y es el peor de la familia: Sergio Urcullo aprueba leyendo un
+ * cuerpo que describe DOS cosas, y su `ok` publica SIETE que nunca le mostraron.
+ *
+ * POR QUÉ EL SUJETO ES `shasDelTexto` Y NO `shasPrometidos`. La pregunta no es «¿qué promete
+ * el cuerpo con su marca?» sino «¿lo MENCIONÓ en algún lado del cuerpo?» — Sergio Urcullo lee
+ * el texto, no la marca, y un cuerpo que nombra el sha en prosa ya se lo mostró. Mismo criterio
+ * que el cableado de `promesaCompleta` en `main`, y por el mismo motivo: acá perdonar de más
+ * sólo calla un rojo, mientras que un rojo falso hace rehacer un pedido sano.
+ *
+ * Hereda las guardas de `promesaCompleta`: sin poder derivar qué publica sale NO_MEDIDO, nunca
+ * COMPLETA, y los shas se casan por prefijo en las dos direcciones.
+ *
+ * @param {{texto:string, publicaria:{sha:string,titulo:string}[]|null}} args
+ */
+export function cuerpoCorto({ texto, publicaria }) {
+  const { cuerpo } = partirPedido(texto);
+  return promesaCompleta({ shas: shasDelTexto(cuerpo), publicaria });
+}
+
+/**
  * De todo lo que `main` tiene sin publicar, ¿qué puede cambiar algo que el cliente VE?
  *
  * POR QUÉ EXISTE. `promesaCompleta` necesita el universo de «lo que el ok publicaría», y para
@@ -597,6 +630,7 @@ async function medirEnVivo() {
   const entregados = [];
   const incompletos = [];
   const vencidos = [];
+  const cortos = [];
   const noMedidos = [];
   // `noMedidos` y `sinCubrir` NO son lo mismo, y mezclarlos fue el bug: el primero es
   // transitorio (el SSH no contestó, el sha no resuelve) y se cura solo en la vuelta
@@ -669,6 +703,14 @@ async function medirEnVivo() {
       const v = cuerpoVencido({ texto: p.texto, publicado: esPublicado });
       if (v.estado === 'VENCIDO') vencidos.push({ id: p.id, mudos: v.mudos });
       else if (v.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (plataforma, cuerpo vigente): ${v.motivo}`);
+
+      // Y la simétrica de esa, que hasta el 2026-09-11 tampoco tenía dueño: el cuerpo puede
+      // quedar CORTO. `promesaCompleta` ya pregunta esto para el pedido entero, y por eso un
+      // comentario con el recuento derivado la deja satisfecha — pero el cuerpo es lo que él
+      // lee para decidir. Ver `cuerpoCorto`.
+      const k = cuerpoCorto({ texto: p.texto, publicaria: publicariaPlataforma });
+      if (k.estado === 'SUB_DESCRIBE') cortos.push({ id: p.id, mudos: k.mudos });
+      else if (k.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (plataforma, cuerpo completo): ${k.motivo}`);
     }
   }
 
@@ -704,6 +746,19 @@ async function medirEnVivo() {
       console.log('  hoy los dos describen trabajo hecho. El comentario N+1 no lo arregla y el');
       console.log('  `edit` del tablero no cambia el cuerpo: rehace el pedido con el cuerpo');
       console.log('  derivado de `publicar.sh --dry-run` y ARCHIVA el viejo en la misma vuelta.');
+    }
+    return 1;
+  }
+
+  if (cortos.length > 0) {
+    for (const c of cortos) {
+      console.log(`\nROJO ${c.id}: su CUERPO no nombra ${c.mudos.length} arreglo(s) que su ok publica.`);
+      for (const m of c.mudos) console.log(`    ${m.sha}  ${m.titulo}`);
+      console.log('  Los comentarios pueden nombrarlos —por eso el pedido sale VIGENTE y completo—');
+      console.log('  pero el cuerpo es lo que Sergio Urcullo lee para decidir, y hoy describe menos');
+      console.log('  de lo que su ok publica. Comenta el recuento DERIVADO de `publicar.sh --dry-run`;');
+      console.log('  si ya se comento y el cuerpo sigue quedando corto, rehace el pedido y ARCHIVA');
+      console.log('  el viejo en la misma vuelta (el `edit` del tablero no cambia el cuerpo).');
     }
     return 1;
   }

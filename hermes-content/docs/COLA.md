@@ -77,6 +77,29 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [ ] 🔴 **El CUERPO del pedido de deploy de plataforma (`t_5511da55`) describe DOS arreglos y su
+      `ok` publica OCHO.** Abierto por `onia-cola` el 2026-09-11 con el control recién escrito
+      en `scripts/pedido_deploy_entregado.mjs` (`ab1635a1`), que es el que lo ve:
+      **`npm run pedido:entregado` → `ROJO t_5511da55: su CUERPO no nombra 8 arreglo(s) que su
+      ok publica`**, y los nombra uno por uno.
+      **No es que el pedido esté roto:** su comando deriva el sha al ejecutarse, así que no
+      caduca, y el 2026-09-11 01:52 La Paz se le comentó el recuento derivado completo con las
+      ocho marcas. Lo que queda corto es el cuerpo, que es lo primero que lee Sergio Urcullo —
+      y el `edit` del tablero **no cambia el cuerpo**, por eso comentar no lo cierra.
+      **Cómo se cierra:** crear el pedido de nuevo con el cuerpo derivado de
+      `bash /opt/onia-platform/_deploy/publicar.sh --dry-run`, bloquearlo con
+      `--kind needs_input`, y **archivar `t_5511da55` en la misma vuelta** (si no, quedan dos
+      pidiendo el mismo ok, que es el ruido que hace que deje de creerles).
+      **No entró en la vuelta del 11-sep por tiempo**, no por estar bloqueado en nadie.
+
+- [ ] ⚠️ **El test de cableado de `cuerpoVencido` tiene el agujero que se le cerró a su hermano.**
+      `scripts/pedido_deploy_entregado.test.mjs` exige `/vencidos\.push\(/` en la vecindad del
+      `main`, y eso se esquiva cambiando la **condición** que lo dispara: el push queda en el
+      fuente y el veredicto se tira. Medido el 2026-09-11 sobre el gemelo `cortos.push(`: esa
+      mutación pasó en **VERDE**. Se ata igual que el otro, con
+      `/VENCIDO'\s*\)\s*vencidos\.push\(/`, y **se valida mutando la condición, no borrando el
+      push**.
+
 - [x] 🔴 **El menú de arriba ofrece TRES líneas de negocio congeladas. Sergio Urcullo dijo «ok C»
       el 2026-09-07 — sacalas. — CERRADO 2026-09-08 por `web-venta` (`653f2a98`, `8de73198`).**
       **Media premisa ya estaba vencida al empezar la vuelta:** `Webs`, `Marketing IA` y
