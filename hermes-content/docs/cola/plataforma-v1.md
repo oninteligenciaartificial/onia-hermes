@@ -63,6 +63,74 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-11 (`44fa680`, rama `claude/chatbots-platform-review-0d1d09`
+      de onia-platform — falta mergear a `master` y desplegar): la baja del add-on del
+      chatbot estaba construida ENTERA y no se podía ordenar desde ningún lado.**
+
+      El add-on ganó su baja ese mismo día (`7057748`): el módulo con la regla del contrato
+      (`lib/subscription/baja-del-addon.ts`), sus tests, la columna `canceledAt`, el acuse
+      que ve el dueño (`avisoDeBajaDelAddon`, cableado en `AddonChatbotClient`) y el cron que
+      lo respeta (`reclamaSuRenovacion`). El `PATCH /api/admin/clinics` acepta
+      `darDeBajaAddon` y lo escribe bien.
+
+      **Y ninguna pantalla lo mandaba.** Medido sobre el árbol entero:
+      `grep -rn darDeBajaAddon --include=*.ts --include=*.tsx` devolvía **sólo** líneas de
+      adentro de la ruta. O sea una capacidad completa, con todos sus tests en verde y `tsc`
+      contento, que **no existía para nadie**: al cliente que quería soltar el asistente y
+      seguir con el sistema le quedaban las dos salidas que el propio módulo declara malas —
+      que el operador lo APAGUE (cobrar y no entregar, contra `terminos.md` §3.3) o no hacer
+      nada (cuatro reclamos por período por algo que ya rechazó).
+
+      **La FIRMA que lo delata, y por eso el gate mira al LLAMADOR y no al módulo:**
+      `explicarBajaDelAddon` —el texto escrito para que el operador sepa qué va a pasar
+      cuando apriete— tenía **cero llamadores**, mientras su gemelo del plan (`explicarBaja`)
+      se usaba en `PlansClient`. *Un helper hecho para una pantalla que nadie llama es la
+      sombra de una pantalla que no se hizo.*
+
+      **Qué entró.** `/admin/plans` trae la capacidad `addon.whatsapp` (`validUntil`,
+      `canceledAt`) y ofrece la baja **sólo si la org la tiene** —el PATCH contesta 422 sin
+      ella, y mandarlo a ciegas voltearía también la edición del plan del mismo guardado—; el
+      texto del operador sale de `explicarBajaDelAddon`; y la ruta devuelve `addonCanceledAt`
+      para que la fecha efectiva la calcule el servidor y el panel la LEA, en vez de
+      recalcularla (una segunda escalera de la misma regla se desincroniza).
+
+      **El gate de la CLASE:** `lib/subscription/orden-del-backoffice-tiene-camino.test.ts` —
+      *toda orden que el PATCH del backoffice acepta tiene que tener quién la mande*, con el
+      sujeto derivado del disco. Es «permiso concedido, CAMINO ausente» un escalón más
+      adentro: ahí el sujeto es una pantalla a la que no se llega; acá, una **orden** que la
+      API entiende y que ninguna pantalla emite. Validado por mutación en tres direcciones,
+      las tres en rojo: quitar el envío · el **ESQUIVE** de clavar el valor
+      (`darDeBajaAddon: false` satisface el cruce sin darle al operador ninguna decisión) ·
+      la excusa vencida.
+
+      ⚠️ **Dos bugs del propio instrumento, los dos en la dirección cara** (acusar a código
+      sano), corregidos antes de creerle: leía el destructuring del **POST** en vez del PATCH
+      —el primer `= body;` del archivo— y no entendía el **spread condicional**, así que
+      acusaba a la pantalla que SÍ manda la orden.
+
+      🔴 **OJO AL DESPLEGAR, y no lo ve ningún gate de deploy:** la migración
+      `20260911170000_addon_canceled_at` sigue **pendiente** en producción (33 de 34
+      aplicadas, medido con `docker exec supabase-db psql`). Sin ella este botón tira `P2022`
+      **después** de que el `update` de la org ya se aplicó. El swap no corre
+      `prisma migrate`: se ve con `node scripts/migraciones_pendientes.mjs`.
+
+- [ ] 🔴 **Segunda instancia de la misma clase, que encontró ese gate: extender un trial es
+      una orden que la API entiende y que el panel no ofrece**
+      (`app/api/admin/clinics/route.ts` · `app/(dashboard)/admin/plans/PlansClient.tsx`)**.**
+      El PATCH acepta `trialDays` (escribe `trialStart = now`, `trialEnd = now + trialDays`) y ninguna
+      pantalla lo manda: hoy se hace por `curl` o tocando la base — ya pasó, el 2026-09-04
+      hubo que extenderle el trial a dos orgs QA para que el motor de agentes dejara de
+      devolver `agents_runtime_disabled`.
+      Va aparte y no se coló en el arreglo de arriba porque pide **datos que `/admin/plans`
+      todavía no trae** (`trialStart` / `trialEnd`) y semántica propia: el trial no es el
+      período pago, así que no alcanza con reusar el control de `planEnd`.
+      Queda **NOMBRADA y no escondida**: está declarada en `SIN_CAMINO_A_PROPOSITO` del gate
+      con su motivo, y esa declaración se **re-mide** —el día que alguien le cablee el
+      control, el gate dice que la excusa sobra—.
+      **Listo =** el operador puede fijar los días de trial desde `/admin/plans`, la pantalla
+      muestra el `trialEnd` vigente, y `trialDays` sale de `SIN_CAMINO_A_PROPOSITO`.
+      Se ve con: `npx vitest run lib/subscription/orden-del-backoffice-tiene-camino.test.ts`
+
 - [x] ✅ **CERRADO el 2026-09-11 (`8d9e467`, onia-platform — falta mergear y desplegar): el
       que pidió la baja perdía la escritura sin un solo aviso previo, y no tenía cómo
       verificar que su baja había quedado registrada.**
