@@ -63,6 +63,32 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [ ] **El add-on del chatbot ya puede vencer, y nadie avisa que va a vencer**
+      (`app/api/cron/renewal-reminders/route.ts` · `lib/subscription/renewal-reminders.ts` ·
+      `lib/subscription/addon-vigencia.ts`, en `onia-platform`). Abierto el
+      2026-09-11 al cerrar su hermano (`5011003`, ver Cerrado): el add-on pasó de ser un
+      booleano para siempre a tener vigencia real en `organization_entitlements.validUntil`.
+      El lado del plan avisa **cuatro veces** (D-7/D-3/D-1/vencido) por **tres** canales
+      (correo, in-app, push); el add-on no avisa **ninguna** — `renewal-reminders` ni lo
+      nombra (`grep -ci addon lib/subscription/renewal-reminders.ts` → **0**).
+
+      **No muerde hoy, y por eso no se cerró en la misma vuelta:** medido en producción, hay
+      **cero** pagos de add-on aprobados y las dos capacidades vivas
+      (`clinica-sergio-p2ljs`, `onia-interna`) son otorgamientos con `validUntil` NULL, que no
+      vencen. Y al pagar, el aviso ya dice hasta cuándo. El día que haya un add-on pago, sin
+      recordatorio el bot del cliente **se apaga sin una palabra**: deja de contestar el chat
+      web y el intake de WhatsApp descarta lo que entra.
+
+      **Cuidado con el atajo:** `renewal-reminders` cuelga sus pasos de `planEnd` y su cadencia
+      se compara contra el **largo del ciclo** (`887b3ea`). El add-on tiene su propia fecha y
+      su propio ciclo, así que copiar la escalera al lado es una lista paralela que se
+      desincroniza; lo que corresponde es que el recorrido tome los dos vencimientos de la
+      misma org y mande **un** aviso por cada uno, con su propio `tag` para que no se pisen en
+      el teléfono.
+
+      **Listo =** con un add-on venciendo en 3 días, el cron deja el aviso (in-app + push) que
+      nombra al add-on y no al plan, con un caso en rojo primero y validado por mutación.
+
 - [x] ✅ **CERRADO el 2026-09-11 (`54c987a`, onia-platform): el paciente confirmaba su cita, no
       se guardaba, y la pantalla se veía IGUAL que antes de apretar.**
 
@@ -3531,6 +3557,77 @@ y sin operar. Acá se opera, con verificación por ítem.
 - **No le escribe a un prospecto.** Regla del [`README.md`](README.md) de esta carpeta.
 
 ## Cerrado
+
+- [x] **CERRADO el 2026-09-11: un mes pago del add-on del chatbot valía PARA SIEMPRE**
+      (`app/api/admin/subscription-payments/route.ts` · `lib/subscription/addon-vigencia.ts`,
+      commit `5011003`).
+
+      El add-on se cobra por período —**Bs 390 al mes**, o su anual— y aprobarlo escribía
+      `organizations.whatsappAddon = true`: un booleano **sin fecha**. Nada lo apaga nunca:
+      ningún cron lo vence (`grep -c "whatsappAddon: false"` en `app/api/cron` y `lib/` da
+      **0**), `renewal-reminders` ni lo nombra (`grep -ci addon` da **0**), y
+      `isWhatsAppAddonActive` devuelve `true` mientras la columna esté encendida. **El primer
+      cliente que pagara un mes se lo quedaba para siempre.**
+
+      **Por qué no lo veía nadie: el lado hermano está SANO.** El plan tiene `planEnd`, aviso
+      D-7/D-3/D-1, gracia y solo lectura — y todo eso se escribió mirando la **misma tabla**
+      (`subscription_payments`) y la **misma cola del superadmin**. Media familia cubierta se
+      lee como familia cubierta. Ningún gate podía **expresar** la pregunta: no sobra ni falta
+      una palabra, la pantalla renderiza perfecto, no es un rubro ni un rol, el monto sale de
+      la fuente única, y `whatsappAddon` es una columna real, así que `tsc` está contento. Y el
+      comentario del propio código afirmaba que la fecha *«queda en `reviewedAt` del pago»* —
+      un campo que **nadie lee** para decidir nada: un comentario afirmativo desactiva la
+      auditoría igual que uno que explica por qué algo no se puede.
+
+      **Dónde va la fecha, y por qué no en una columna nueva:** la capacidad `addon.whatsapp`
+      de `organization_entitlements` **ya** tiene `validUntil`, y el helper canónico ya lo
+      respeta (`hasActiveWhatsAppEntitlement` filtra `null | > now`). Una columna nueva sería
+      una segunda fuente de verdad del mismo hecho. Activar **deja de encender el booleano** a
+      propósito: es justamente el que no caduca, y como el criterio es `columna || capacidad
+      vigente`, escribir las dos dejaría el add-on encendido para siempre con la fecha al lado
+      sin poder apagar nada.
+
+      **Tres agujeros más de la misma puerta, cerrados en el mismo cambio:**
+      · **El ciclo del add-on no se validaba al aprobar.** La rama del add-on se saltaba toda
+        validación de catálogo; un pago con `cycle: "contratacion"` —ciclo **eliminado** el
+        2026-08-21 con el cobro de instalación— se aprobaba igual, y hoy no tendría de dónde
+        sacar el vencimiento. Ahora es **422**, fail-closed: caer a un default es exactamente
+        como se regala tiempo pago.
+      · **Sin lock propio.** Dos pagos del add-on de la misma org aprobados a la vez leían la
+        misma fecha y el segundo pisaba al primero: el cliente paga dos meses y recibe uno.
+        Mismo TOCTOU que ya se había cerrado en `planEnd`, con su **propio** recurso
+        (`addon-whatsapp:<org>`) porque el add-on no compite con el plan.
+      · **El aviso callaba la fecha.** Ahora dice *«Está activo hasta el …»*. Su caso de test
+        afirmaba lo contrario —*«el add-on no mueve `planEnd`: prometer un vencimiento sería
+        mentir»*—, cierto **mientras** el add-on fuera para siempre: **el gate cementaba el
+        defecto**.
+
+      La vigencia y su extensión salen de `extendPlanEnd`, la **misma** función que mueve
+      `planEnd`, no de una aritmética paralela: renovar antes de vencer **suma** sobre lo ya
+      pagado, renovar después arranca de hoy.
+
+      **Medido en producción ANTES de tocar** (`docker exec supabase-db psql`): las dos
+      capacidades activas —`clinica-sergio-p2ljs` y `onia-interna`— son otorgamientos con
+      `validUntil` **NULL** y hay **cero** pagos de add-on aprobados. O sea **esto no le corta
+      el add-on a nadie** que hoy lo tenga: aplica desde el próximo cobro.
+
+      **Prueba:** `lib/subscription/addon-vigencia.test.ts` (6 casos) y 6 casos nuevos en
+      `app/api/admin/subscription-payments/route.test.ts`, **en rojo primero** por el motivo
+      correcto (7 fallas). **Cinco mutaciones, cinco rojos:** volver al booleano (7 casos) ·
+      el **esquive** de activar y tirar la fecha (1) · ignorar el ciclo (3) · no leer la
+      vigencia vigente (1) · sacar el lock (1). ⚠️ **La cuarta pasó en VERDE en la primera
+      versión:** *«mayor que la vigencia vigente»* no distingue **sumar** de **pisar**, porque
+      un mes desde hoy también es mayor que una vigencia a quince días — ahora se exige el
+      período entero **después** de lo ya pagado. Sólo se ve mutando, nunca leyendo.
+      Gates sobre el árbol con `origin/master` mergeado: `tsc` 0 · `vitest` **4527/4534**
+      (7 skipped) · `eslint` 0 errores.
+
+      **Lo que sigue, de la misma familia y NO hecho acá:** el add-on ahora puede vencer y
+      **nadie avisa que va a vencer** — el plan tiene D-7/D-3/D-1 por tres canales y el add-on
+      no tiene ninguno. Hoy no muerde (cero add-ons pagos vivos, y las dos capacidades
+      otorgadas no vencen), y el dueño se entera de la fecha al pagar; el día que haya un
+      add-on pago, sin recordatorio el bot se apaga sin aviso. Está anotado como el próximo
+      ítem de esta familia, no como una deuda oculta.
 
 - [x] **CERRADO el 2026-09-11: el recordatorio de renovación le reclamaba pagar a quien YA
       había pagado — y a un cliente anual le cotizaba el mensual**
