@@ -1023,3 +1023,16 @@ Los cinco están corridos con el instrumento de 9 pasos, todos `completo: true` 
   Catálogo y no aparece en `/dashboard` — correcto, el panel no lista storefront.
 - Dental, Comercio, Estética, Servicios profesionales — corridos en vueltas anteriores, ver más
   arriba y en la cola.
+
+**Los cinco rubros activos ya están cubiertos con este instrumento.** Repetir uno más no suma
+cobertura nueva — la próxima vuelta que llegue acá con el objetivo en meta debe ir directo al
+escalón 3 (promesa vs. entrega en la home / otras superficies), no repetir dental otra vez.
+
+## Verificado 2026-09-11 03:13 La Paz — promesa "14 días gratis, sin tarjeta" (home)
+
+`(sitio)/page.tsx` promete `PRUEBA.dias` días gratis sin tarjeta; `PRUEBA_DIAS = 14` en
+`src/lib/pricing.ts` y `TRIAL_DAYS = 14` en `onia-platform/lib/subscription/plan-state.ts`
+coinciden. Confirmado contra la base real (no solo el código): `trialEnd - createdAt` da
+exactamente 14 días en las dos orgs vivas con trial (`clinica-sergio-p2ljs`,
+`bolivian-electricidad-e6t21`). Y el alta de esta misma vuelta no pidió tarjeta en ningún
+paso. La promesa se cumple. Sin hallazgo.
