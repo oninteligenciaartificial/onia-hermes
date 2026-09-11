@@ -12,6 +12,25 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-11 19:1x La Paz — 9/9 dental completo (rutina) + confirmación QR en `/empezar`
+
+Corrida completa con `--escribir` en dental: los 9 pasos OK, `completo: true`, 0 filas `zz-qa-`
+al cerrar (cuenta, org, paciente, cita, factura — todo creado y borrado en la vuelta). Sin
+hallazgos nuevos ahí: dental sigue sano, ya son varias corridas seguidas.
+
+Miré también `onia.com.bo/empezar`, paso "03 Usalo de verdad 14 días": producción sigue
+sirviendo **"Si te sirve, pagás por QR; si no, no pagás nada"**, y `docker exec onia-platform
+env | grep -c '^BCP_QR_'` sigue dando **0** — no hay QR. El código YA está arreglado
+(`src/content/medio-de-pago.ts`, commit `b438f587`, en `origin/main`, deriva el texto de
+`QR_PARA_PAGARLE_A_ONIA=false` y dice "por transferencia"), y el pedido de deploy de landing
+que lo incluye ya existe en el tablero (`t_0d401da3`, blocked). No es un hallazgo nuevo, es
+confirmación de que ese pendiente sigue vigente — no abrí tarea duplicada.
+
+Próxima vuelta: seguir con promesa-vs-entrega en `/comparativa` o `/servicios`, que no tienen
+auditoría reciente.
+
+---
+
 ## 2026-09-11 15:1x La Paz — Promesa vs entrega en `/agentes`, `/comparativa` y `/v1` (comercio)
 
 Siguiendo el plan de la vuelta anterior: creé una org QA real de **Comercio / tienda**
