@@ -3430,6 +3430,58 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] **CERRADO el 2026-09-11: el gate que prueba que el recordatorio de cita LLEGA llevaba
+      días REVENTANDO EN ROJO, o sea acusando al producto de no entregar**
+      (`scripts/recordatorio_cita_vivo.mjs` · `npm run recordatorio:vivo`)**.** Corriendo los
+      gates vivos uno por uno salió con un stack de Node y `exit 1`:
+      `insert or update on table "patients" violates foreign key constraint
+      "patients_organizationId_fkey" — Key (organizationId)=(cmsvyguui…) is not present`.
+
+      **La causa: el gate pedía prestado su sujeto.** Tenía la org y el doctor escritos a mano
+      como dos ids de producción. Esa org figuraba **«borrable»** en
+      `ONIA_INFRA_LIMPIEZA_Y_ORDEN.md` §5.1 y alguien la borró, con razón. Desde entonces el
+      `insert` moría, la excepción salía **sin `catch`** y el proceso terminaba en **código 1 —
+      ROJO**, que se lee «la plataforma no le avisa al paciente». El falso rojo va en la
+      dirección cara: manda a depurar un circuito sano.
+
+      **Y nadie lo vio, por la trampa que este repo ya tiene anotada:** lo único cableado a
+      `npm test` es su `--self-check` **puro** (`test:recordatorio-instrumento`), que no toca
+      producción y seguía en verde; la medición **viva** quedó de alias suelto y no la corría
+      nadie.
+
+      **Pedir prestada una fila tiene una segunda muerte, más silenciosa:** que siga existiendo
+      y deje de CALIFICAR. El cron corta con `isWriteBlocked(org)` — corte que entró **ayer**
+      (`278f030`) — así que el día que a la org prestada se le venza el plan, el gate se pone
+      rojo sobre un circuito que hace exactamente lo correcto.
+
+      **El arreglo: el gate es DUEÑO de su sujeto.** Crea org + profesional + paciente + cita
+      sellados con la corrida, mide, y el `finally` borra las cuatro filas en orden de
+      dependencia (acotado al sello, nunca a `zz-qa-%` suelto, que es de dos carriles).
+      Ninguna limpieza ajena puede volver a matarlo. Además, **sembrar es preparar, no medir**:
+      si el `insert` falla ahora sale `2` — NO MEDIDO —, nunca rojo.
+
+      **Dos precondiciones se preguntan en vez de suponerse, y las dos salen NO MEDIDO:**
+      · que la org sembrada esté viva **según la regla del producto** (`cuentaViva`, espejo de
+      `planAccessLevel(...)==="full"`), así un endurecimiento del corte se reporta como
+      «fixture viejo» y no como rojo;
+      · que el cupo mensual de correo no esté agotado — `sinCupo` descarta la cita **antes** de
+      intentar entregar, así que cobrarlo como rojo acusa al producto de algo que no se pudo
+      ni ejercer.
+
+      **El fixture con los defaults de la tabla ya mordió, en la primera corrida del arreglo:**
+      sin `plan`, la org nace `free`, y `free` trae `emailsPerMonth: 0`
+      (`lib/plan-catalogo.ts`) → `evaluadas:1, sinCupo:1`. Un sujeto tiene que parecerse a un
+      cliente REAL: `/api/auth/register` crea toda org con `TRIAL_PLAN` (`professional`), y las
+      tres orgs vivas de producción lo tienen.
+
+      **Prueba, medida hoy contra producción — el circuito estaba SANO todo este tiempo:**
+      `{"evaluadas":1,"enviados24Email":1,"sinCupo":0}` · `reminder24hSentAt` escrito ·
+      entrega real en el log de `onia-mail`: `status=sent (250 2.0.0 OK … gsmtp)` · **exit 0**.
+      Producción quedó **limpia** (0 filas del sello; la única `zz-qa-%` que queda es de
+      `recorrido-cliente` y no se tocó). Self-check: **21 casos**, validados con **5
+      mutaciones** que caen en rojo — incluida la que repone un id a mano, que es el ancla
+      para que el arreglo no se deshaga en silencio.
+
 - [x] **CERRADO el 2026-09-11: el plan SEMANAL recibía «tu plan vence en una semana» el día
       que lo pagaba** (`lib/subscription/renewal-reminders.ts` · `plan-state.ts` ·
       `app/api/cron/renewal-reminders/route.ts`)**.** La escalera D-7/D-3/D-1/vencido que
