@@ -297,6 +297,15 @@ test('el main INVOCA cuerpoVencido en el bloque de plataforma, no solo lo declar
   const vecindad = src.slice(desde, desde + 1400);
   assert.match(vecindad, /cuerpoVencido\(\{/, 'el main tiene que llamar a cuerpoVencido');
   assert.match(vecindad, /vencidos\.push\(/, 'y empujar el resultado, o el veredicto se tira');
+  // 🔴 Y el push tiene que colgar de la comparacion CORRECTA — el mismo agujero que su hermano
+  // `cortos.push(` ya tenia atado y a este se le quedo abierto. Pedir solo que `vencidos.push(`
+  // aparezca se satisface con el ESQUIVE: cambiar la condicion a una que nunca se cumple deja el
+  // push intacto en el fuente y el veredicto en la basura. Medido el 2026-09-11 sobre este mismo
+  // archivo: con `v.estado === 'ESTADO_QUE_NO_EXISTE'` los 44 casos pasaron en VERDE, o sea que
+  // el control que caza el pedido de deploy que le pide a Sergio Urcullo un ok por trabajo YA
+  // publicado podia quedar mudo sin que nada se pusiera rojo.
+  assert.match(vecindad, /VENCIDO'\s*\)\s*vencidos\.push\(/,
+    'el push tiene que dispararlo el estado VENCIDO, no una condicion cualquiera');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

@@ -127,13 +127,23 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       salió impreso fue *«comentá el recuento, no rehagas la tarea»* — que es el del control de
       arriba, y **deja rojo al de abajo**. El remedio que cierra los dos es el de este ítem.
 
-- [ ] ⚠️ **El test de cableado de `cuerpoVencido` tiene el agujero que se le cerró a su hermano.**
-      `scripts/pedido_deploy_entregado.test.mjs` exige `/vencidos\.push\(/` en la vecindad del
+- [x] ⚠️ **El test de cableado de `cuerpoVencido` tenía el agujero que se le cerró a su hermano.
+      — CERRADO 2026-09-11 por `onia-cola`.**
+      `scripts/pedido_deploy_entregado.test.mjs` exigía `/vencidos\.push\(/` en la vecindad del
       `main`, y eso se esquiva cambiando la **condición** que lo dispara: el push queda en el
-      fuente y el veredicto se tira. Medido el 2026-09-11 sobre el gemelo `cortos.push(`: esa
-      mutación pasó en **VERDE**. Se ata igual que el otro, con
-      `/VENCIDO'\s*\)\s*vencidos\.push\(/`, y **se valida mutando la condición, no borrando el
-      push**.
+      fuente y el veredicto se tira.
+      **El agujero estaba vivo y se reprodujo antes de tocar nada:** con
+      `v.estado === 'ESTADO_QUE_NO_EXISTE'` en la línea 883 del gate —el push intacto, `grep -c
+      'vencidos\.push('` da 1— los **44 casos pasaron en VERDE con exit 0**, o sea que el control
+      que caza el pedido de deploy que le pide a Sergio Urcullo un ok por trabajo **ya publicado**
+      podía quedar mudo sin que nada se pusiera rojo.
+      **Atado igual que sus dos hermanos** (`cortos.push(` y `cortosSiat.push(`), con
+      `/VENCIDO'\s*\)\s*vencidos\.push\(/`.
+      **Validado por mutación en las dos direcciones**, restaurando con `cp` y nunca con `git
+      checkout`: con la condición mutada da **exit 1 (43 pass, 1 fail)** donde antes daba verde;
+      restaurado, **44 pass exit 0**; y borrando el push entero sigue dando **exit 1**, así que la
+      aserción vieja no se perdió. Se ve con
+      `node --test scripts/pedido_deploy_entregado.test.mjs`.
 
 - [x] 🔴 **El menú de arriba ofrece TRES líneas de negocio congeladas. Sergio Urcullo dijo «ok C»
       el 2026-09-07 — sacalas. — CERRADO 2026-09-08 por `web-venta` (`653f2a98`, `8de73198`).**
