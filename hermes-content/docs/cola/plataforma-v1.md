@@ -71,6 +71,32 @@ y sin operar. Acá se opera, con verificación por ítem.
 > (5 lectores de código + 4 capturas de producción). Orden de ejecución acordado: recarga →
 > cuentas → bot repetido (vive en `cola/chatbot.md`) → UI.
 
+- [x] 🔴 **CERRADO el 2026-09-11 (~01:00 UTC): la recurrencia de los cobros por QR — el
+      cliente PAGO no recibía NI UN aviso antes del corte.** Medido antes de construir: todo
+      lo existente (AvisoSoloLectura, 403, drip) dispara DESPUÉS del vencimiento o es del
+      trial; con pago por QR manual no hay débito automático, así que la recurrencia ES el
+      recordatorio + la fricción mínima. Las dos mitades que ya existían: `/checkout` acepta
+      renovar con plan activo, y `extendPlanEnd` arranca de max(planEnd, hoy) — pagar antes no
+      quita días. Lo construido (commit `26212f54` en master de onia-platform, deployado):
+      cron diario `/api/cron/renewal-reminders` (D-7/D-3/D-1/vencido; correo + campanita +
+      push; UNA vez POR CICLO — la clave única lleva el planEnd del ciclo, renovar abre los
+      pasos del ciclo nuevo solos), tabla `onia_renewal_reminder_sends` (RLS, migración
+      aplicada en prod con registro), plantilla `sendRenewalReminderEmail` (sin datos
+      bancarios a propósito), script `onia-platform/scripts/cron/run-onia-renewal-reminders.sh`
+      instalado en el crontab del VPS (08:05 La Paz). **PROBADO E2E en prod**: org QA con
+      vencimiento a 3 días → corrida 1 `sent:1 paso 3` (correo real entregado a
+      sergio@onia.com.bo), corrida 2 `sent:0` (idempotencia); revertido después. Tests 6/6
+      (`onia-platform/lib/subscription/renewal-reminders.test.ts`) + suite subscription
+      172/172. **La otra mitad del futuro**: cuando el banco entregue las credenciales BCP
+      (trámite de Sergio Urcullo), `/checkout` ya muestra QR dinámico con aprobación
+      automática por callback — el ciclo queda 100% sin humanos.
+
+- [x] 🟡 **CERRADO el 2026-09-11: precios de venta con referencia en dólares** (pedido de
+      Sergio Urcullo). `TIPO_CAMBIO_REFERENCIA_BS_POR_USD = 11,37` en
+      `onia-platform/lib/pricing.ts` (única fuente, informativo — se cobra SIEMPRE en Bs; NO
+      confundir con el TCO del BCB de importadora) + `formatUsdAprox()`, pintado en las
+      tarjetas de plan del checkout, el "Monto a pagar"/QR, el add-on chatbot y PlanClient.
+
 - [ ] 🔴 **T-plata — dos bloqueos que solo Sergio Urcullo puede pagar** (detectados el
       10-sep midiendo el precio de la recarga; avisados por el tablero):
       (1) **OpenAI sin crédito desde el 9-sep ~04-06 UTC** (medido en LiteLLM_SpendLogs: 38
