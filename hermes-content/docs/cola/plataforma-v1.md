@@ -114,22 +114,41 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       **después** de que el `update` de la org ya se aplicó. El swap no corre
       `prisma migrate`: se ve con `node scripts/migraciones_pendientes.mjs`.
 
-- [ ] 🔴 **Segunda instancia de la misma clase, que encontró ese gate: extender un trial es
-      una orden que la API entiende y que el panel no ofrece**
-      (`app/api/admin/clinics/route.ts` · `app/(dashboard)/admin/plans/PlansClient.tsx`)**.**
-      El PATCH acepta `trialDays` (escribe `trialStart = now`, `trialEnd = now + trialDays`) y ninguna
-      pantalla lo manda: hoy se hace por `curl` o tocando la base — ya pasó, el 2026-09-04
-      hubo que extenderle el trial a dos orgs QA para que el motor de agentes dejara de
-      devolver `agents_runtime_disabled`.
-      Va aparte y no se coló en el arreglo de arriba porque pide **datos que `/admin/plans`
-      todavía no trae** (`trialStart` / `trialEnd`) y semántica propia: el trial no es el
-      período pago, así que no alcanza con reusar el control de `planEnd`.
-      Queda **NOMBRADA y no escondida**: está declarada en `SIN_CAMINO_A_PROPOSITO` del gate
-      con su motivo, y esa declaración se **re-mide** —el día que alguien le cablee el
-      control, el gate dice que la excusa sobra—.
-      **Listo =** el operador puede fijar los días de trial desde `/admin/plans`, la pantalla
-      muestra el `trialEnd` vigente, y `trialDays` sale de `SIN_CAMINO_A_PROPOSITO`.
-      Se ve con: `npx vitest run lib/subscription/orden-del-backoffice-tiene-camino.test.ts`
+- [x] ✅ **CERRADO el 2026-09-11 (`588d2fa`, onia-platform — falta mergear a `master` y
+      desplegar): extender un trial era una orden que la API entiende y que el panel no
+      ofrecía, así que se hacía por `curl` o tocando la base.**
+
+      El PATCH acepta `trialDays` desde siempre y ninguna pantalla lo mandaba — ya había
+      costado: el 2026-09-04 hubo que extenderle el trial a dos orgs QA para que el motor de
+      agentes dejara de devolver `agents_runtime_disabled`. Segunda instancia de la clase
+      «una orden que la API entiende y que ninguna pantalla emite»; `trialDays` salió de
+      `SIN_CAMINO_A_PROPOSITO`, que ahora queda **vacía**.
+
+      **Lo que no era obvio, y por eso el arreglo no es sólo un input:** la prueba no decide
+      sola. `derivePlanStatus` pone al contrato por encima —«quien pagó ya es cliente, aunque
+      le sobren días de prueba»—, así que sobre una org con `planEnd` los días **se guardan y
+      no cambian nada** de lo que esa cuenta puede hacer. Sin decirlo, el operador cierra el
+      formulario creyendo que le devolvió el acceso a alguien. Y el conteo arranca **hoy**,
+      no se suma a lo que quedaba: un número más chico que los días restantes **acorta** la
+      prueba. Las dos cosas se avisan antes de apretar, no después.
+
+      El campo vacío no manda la orden y un valor `<= 0` tampoco: la ruta lo descarta en
+      silencio, así que mandarlo era pedir algo que no pasa y ver «Guardado» igual. La fecha
+      sale del **mismo** helper en la ruta y en el aviso (`lib/subscription/trial-del-operador.ts`)
+      — dos cuentas iguales en dos archivos distintos es como la pantalla termina prometiendo
+      una fecha y el servidor escribiendo otra.
+
+      **Validado por mutación: 7 en rojo, base verde.** La 3.ª es el esquive que importa
+      —dejar la llamada como guard y borrar el nodo que la pinta—, y sólo la caza el caso que
+      exige el **render**, medido sobre el código sin comentarios (si no, la bitácora que
+      explica el aviso absuelve al archivo de tenerlo). La 7.ª invierte la prioridad de
+      `derivePlanStatus` y cae: sin ese anclaje el aviso podría afirmar una regla que el
+      producto ya no aplica.
+
+      Gates: `tsc` 0 · `vitest` 4681 passed · `eslint` 0 errores. **Mirado** renderizado con
+      el CSS del build vivo en los tres estados (en prueba / con contrato / valor inválido):
+      el aviso entra sin desbordar.
+      Se ve con: `npx vitest run lib/subscription/orden-del-backoffice-tiene-camino.test.ts lib/subscription/trial-del-operador.test.ts`
 
 - [x] ✅ **CERRADO el 2026-09-11 (`8d9e467`, onia-platform — falta mergear y desplegar): el
       que pidió la baja perdía la escritura sin un solo aviso previo, y no tenía cómo
