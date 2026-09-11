@@ -2,6 +2,7 @@ import { SplitTextReveal, StaggerGrid, StaggerItem } from "@/motion";
 import { PRUEBA } from "@/lib/pricing";
 import { WA_URL_LANDING } from "@/lib/site";
 import { precioStack } from "@/content/chatbot-precios";
+import { MEDIO_DE_PAGO } from "@/content/medio-de-pago";
 import styles from "./landing.module.css";
 
 /**
@@ -22,7 +23,10 @@ export const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "¿Qué pasa cuando termina la prueba?",
-    a: "Elegís un plan y pagás por QR desde tu app bancaria, mensual o semanal. Si no pagás, tu cuenta se pausa pero tus datos no se borran de entrada: podés exportarlos o volver cuando quieras.",
+    // El medio de pago NO se tipea: lo dice `@/content/medio-de-pago`, que sigue
+    // a la capacidad que producción tiene encendida. Acá decía «pagás por QR» y
+    // no existe ningún QR — ver el encabezado de ese módulo.
+    a: `${MEDIO_DE_PAGO.alTerminarLaPrueba} Si no pagás, tu cuenta se pausa pero tus datos no se borran de entrada: podés exportarlos o volver cuando quieras.`,
   },
   {
     q: "¿La factura al SIN ya funciona?",

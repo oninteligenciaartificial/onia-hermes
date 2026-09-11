@@ -3,6 +3,7 @@ import { PRUEBA } from "@/lib/pricing";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { APP_URL, WA_URL_LANDING } from "@/lib/site";
+import { MEDIO_DE_PAGO } from "@/content/medio-de-pago";
 
 const SITE_URL = "https://onia.com.bo";
 const REGISTRO_URL = `${APP_URL}/register`;
@@ -54,8 +55,9 @@ const PASOS = [
   },
   {
     titulo: `Usalo de verdad ${PRUEBA.dias} días`,
-    detalle:
-      "Todo encendido: agenda, caja, inventario, contabilidad y la cola de agentes. Si te sirve, pagás por QR; si no, no pagás nada.",
+    // El medio de pago lo dice `@/content/medio-de-pago`, no esta pantalla: acá
+    // decía «pagás por QR» y no existe ningún QR.
+    detalle: `Todo encendido: agenda, caja, inventario, contabilidad y la cola de agentes. ${MEDIO_DE_PAGO.siTeSirve}`,
   },
 ] as const;
 
