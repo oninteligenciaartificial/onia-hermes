@@ -12,6 +12,16 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-11 — Comercio / tienda, reverificado: 9/9 (paso 7 no-aplica por diseño), sin hallazgos
+
+`zz-qa-2026-09-11-0709` — recorrido completo de punta a punta: alta (confirmar correo primero),
+onboarding 6 pantallas, cliente cargado en storefront `/comercio` (Catálogo) y encontrado de
+vuelta en la lista, pantalla de cobro mirada en `/comercio/caja` (frenado ahí, sin cobrar), y el
+dato visible en `/dashboard`. Paso 7 (agendar cita) sale NO-APLICA de forma coherente: el pack de
+Comercio no tiene agenda ni en su tarjeta de venta ni en su menú (Conversaciones, Catálogo,
+Inventario, Caja, Fiados, Clientes, Gastos, Contabilidad, Planilla, Agentes, Requerimientos,
+Equipo, Configuración, Ayuda — ninguna es agenda/citas). Cero filas `zz-qa-` propias al cerrar.
+
 ## 2026-09-11 02:09-02:13 La Paz — Clínica dental, reverificado: 9/9, sin hallazgos
 
 `zz-qa-2026-09-11-0609` — recorrido completo de punta a punta: alta (confirmar correo primero),
