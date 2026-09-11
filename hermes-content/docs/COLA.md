@@ -99,6 +99,35 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       obliga a borrar el registro y el remedio es peor), y una cita directiva nueva en un
       `.test.ts` tiene que salir ROJA.
 
+- [ ] 🔴 **`npm run cola:viva` está en ROJO y sus 4 errores son FALSOS: el gate hermano de la
+      raíz tiene el mismo hueco que el ítem de arriba, y hoy muerde.** Abierto por `onia-cola`
+      el 2026-09-11. **Reproducción, 10 s:** `npm run cola:viva` → `EXIT_REAL=1`, cuatro
+      `ERROR fantasma [linea 80]`. Ojo al medirlo: `npm run cola:viva | tail; echo $?` da **0**
+      porque ese exit es el de `tail` — hay que redirigir a archivo y leer `$?`.
+      **Las cuatro salen del ítem de arriba**, que es prosa narrando punteros muertos, y
+      **ninguna es trabajo fantasma**: ese ítem sí tiene dónde trabajar
+      (`cobertura-citada.test.ts` y `(sitio)/limite-que-corta.test.ts` existen los dos).
+      **No es una causa, son CUATRO, y por eso el carve-out de notación número N no cierra**
+      (`scripts/verificar_cola.js` ya lleva seis y el ciclo volvió a divergir cada vez):
+      **(a)** una extensión suelta citada como sustantivo («escrita dentro de un archivo de
+      test») se toma como ruta, sin nombre ni barra; **(b)** un placeholder con forma de ruta
+      —la equis mayúscula usada como metavariable dentro de una cita— se busca en disco;
+      **(c)** la cita del puntero muerto que el ítem DENUNCIA, cuya vecindad ya declara que no
+      existe; **(d)** una ruta abreviada de un archivo que **SÍ existe** —el separador de pieza
+      y prosa de Lucía vive en
+      `hermes-content/references/modelos/lucia/scripts/palabras-cableadas.py` y el ítem lo
+      nombra por sus dos últimos segmentos—, o sea que el carve-out de «ruta parcial» que el
+      gate ya tiene no la resuelve.
+      **Cómo se cierra:** mismo criterio que el ítem de arriba —separar por CONTEXTO, no
+      agregar el carve-out siguiente—: la ruta que el ítem cita como OBJETO de lo que narra es
+      bitácora y sale como AVISO; la que dice dónde ir a trabajar es afirmación y se exige.
+      Validar por mutación en las DOS direcciones: **este mismo ítem tiene que quedar en verde**
+      (si se pone rojo, el gate obliga a borrar su propio diagnóstico), y un ítem nuevo que
+      mande a trabajar a un archivo inexistente tiene que salir **ROJO**.
+      **Por qué no se arregló en la vuelta que lo encontró:** entraba el diagnóstico pero no la
+      mutación en las dos direcciones, y un gate de esta familia validado a medias es el que
+      después manda a borrar bitácora. El diagnóstico —que es lo caro— ya está hecho.
+
 - [x] 🔴 **El CUERPO del pedido de deploy de plataforma describe MENOS arreglos de los que su
       `ok` publica.** Abierto por `onia-cola` el 2026-09-11 con el control recién escrito
       en `scripts/pedido_deploy_entregado.mjs` (`ab1635a1`), que es el que lo ve:
