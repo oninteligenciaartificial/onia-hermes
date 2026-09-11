@@ -7,6 +7,8 @@
 > - **Trial** (4/día): los 3 del feed re-subidos como trial + 1 **yap** — un video del
 >   día **replicado por Samuel con OTRA edición** (otro gancho, otro corte, otros
 >   subtítulos): mismo material, segunda chance en el algoritmo.
+>   **El yap es carril de Samuel**: él elige qué video replicar y cómo — las filas "Yap"
+>   de abajo son sugerencias, no órdenes.
 > - **Trial v2** (3-5/día): Sergio hablando a cámara sobre IA, cero o mínima edición.
 > - Total: **10-13 videos/día**.
 >
