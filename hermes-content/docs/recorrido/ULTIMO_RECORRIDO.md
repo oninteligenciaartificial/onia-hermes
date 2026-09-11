@@ -12,6 +12,15 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-10 23:10-23:17 La Paz — Clínica dental, reverificado: 9/9, sin hallazgos
+
+`zz-qa-2026-09-10-2310` — recorrido completo de punta a punta en dental: alta (confirmar
+correo primero, como el cliente real), onboarding 6 pantallas, paciente cargado en
+`/patients`, cita `zz-qa-` agendada y vista en `/appointments`, factura con ítem visible en
+`/billing/<id>` (frenado ahí, sin pagar). El panel `/dashboard` no lista pacientes — es lo que
+muestra, no un fallo. Cero filas `zz-qa-` propias al cerrar (confirmado en `appointments` y
+`organizations`).
+
 ## 2026-09-10 20:11-20:17 La Paz — Comercio / tienda, reverificado: 8/8, sin hallazgos
 
 `zz-qa-2026-09-10-2011` — primera corrida propia en este rubro desde el 2026-09-03 (con el
@@ -976,3 +985,20 @@ pero un **producto + su variante** en comercio (`onia_commerce_products`,
 **Lo que le falta, y es lo próximo:** correr el mismo recorrido con **otro rubro** (el alta
 ofrece cinco; el script ya acepta `RECORRIDO_RUBRO="Comercio / tienda"`, pero nunca se probó — un
 rubro encendido que rompe el onboarding es exactamente el fallo que nadie ve).
+
+## Cobertura por rubro (2026-09-10/11)
+
+El alta ofrece **cinco** rubros hoy (medido en vivo, no de memoria — probar "Veterinaria" da paso
+3 ROTO con la lista real: Clínica dental · Comercio / tienda · Importadora / distribuidora ·
+Estética y spa · Servicios profesionales. Veterinaria existe como pack en el código pero no está
+encendida en el alta — eso es alcance de v1.0, no un bug).
+
+Los cinco están corridos con el instrumento de 9 pasos, todos `completo: true` con 0 filas
+`zz-qa-` al cerrar:
+
+- **Importadora / distribuidora** — 2026-09-11: los 8 pasos que le corresponden. El paso 7 sale
+  `NO-APLICA` de forma coherente (su propia tarjeta de venta dice "Catálogo, cotizaciones B2B y
+  costeo de importación", sin agenda, y el menú no la tiene). El dato del paso 6 se cargó en
+  Catálogo y no aparece en `/dashboard` — correcto, el panel no lista storefront.
+- Dental, Comercio, Estética, Servicios profesionales — corridos en vueltas anteriores, ver más
+  arriba y en la cola.
