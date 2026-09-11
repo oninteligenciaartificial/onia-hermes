@@ -63,29 +63,58 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
-- [ ] **El add-on del chatbot vence y avisa por el PANEL, pero no por correo**
-      (`app/api/cron/renewal-reminders/route.ts` · `lib/email.ts`, en `onia-platform`).
-      Abierto el 2026-09-11 al cerrar su hermano (`53227ab`, ver Cerrado), y **se anota con
-      su nombre en vez de dejarlo tapado**: el plan tiene TRES canales (correo, in-app,
-      push) y el add-on tiene DOS. Media familia cubierta se lee como familia cubierta —
-      que es exactamente cómo nació el agujero que acaba de cerrarse.
+- [x] ✅ **CERRADO el 2026-09-11 (`e887e8e`, onia-platform — falta mergear y desplegar): el
+      add-on del chatbot avisaba por el PANEL y no por correo.**
 
-      **Por qué no entró en la misma vuelta, con su motivo:** el correo de renovación del
-      plan promete *«pasa a solo lectura (tus datos quedan intactos y podés mirarlos y
-      exportarlos)»*, y eso es **falso** para el add-on — vencerlo no toca los datos ni
-      corta la escritura: apaga el asistente. Reusar esa plantilla publica una promesa
-      falsa; escribir una nueva mete un sujeto más en dos gates que **derivan** sus sujetos
-      de `lib/email.ts` (`email-idioma-del-rubro.test.ts` y
-      `trial-vencido-cumple-la-promesa.test.ts`), así que la plantilla nueva tiene que
-      nacer declarada en los dos o los pone en rojo.
+      El plan avisa por TRES canales (correo, in-app, push) y el add-on tenía DOS. Media
+      familia cubierta se lee como familia cubierta — que es exactamente cómo nació el
+      agujero que `53227ab` cerró el día anterior.
+
+      **El motivo por el que quedó a medias era REAL y sigue en pie:** el correo del plan
+      promete *«pasa a solo lectura (tus datos quedan intactos y podés mirarlos y
+      exportarlos)»*, y eso es **falso** para el add-on — vencerlo no toca un dato ni corta
+      una escritura: apaga el asistente. **Lo correcto no era callarse el canal, era
+      escribir la plantilla que le corresponde:** el aviso in-app sólo lo ve quien ENTRA al
+      panel, y el que está por perder el asistente puede no entrar en una semana.
+
+      Lo que trae: `sendAddonReminderEmail` nombra los **dos** canales que se apagan en los
+      cuatro pasos —`app/api/chatbot-knowledge/published/route.ts` corta con
+      `isWhatsAppAddonActive` ANTES de leer la fila, así que el chat de la web y el WhatsApp
+      mueren juntos y decir uno solo le hace creer al dueño que el otro sigue— y aclara que
+      el resto del sistema no se toca. `terminoDelAddon` cotiza con `getWhatsappAddonAmount`, la **misma** función con
+      la que `validateWhatsappAddonPaymentDetails` acepta el comprobante: si el correo
+      dijera otra cosa, el dueño transfiere lo que el correo dice y el cobro se rechaza por
+      «Monto inválido». Sin ciclo conocido NO cotiza, y el `throw` de esa función se degrada
+      a «no se sabe» porque una excepción ahí mataría también el aviso del PLAN de esa org.
+      La CTA va a `/settings/addon-chatbot`: `/checkout` excluye a propósito los pagos del
+      add-on. El cron queda con **un** recorrido —correo garantizado, panel mejor-esfuerzo
+      para los dos conceptos—; antes el panel podía tirar abajo un aviso del add-on que el
+      correo ya había entregado.
+
+      **Dos defectos de INSTRUMENTO aparecieron escribiéndolo, los dos en la dirección
+      cara** (mandan a romper lo que funciona): `copysQuePrometen` leía los COMENTARIOS y
+      atribuía la promesa al último `function` de arriba, así que la bitácora que **cita**
+      «solo lectura» para explicar por qué el add-on no la reusa se la cargaba a
+      `sendRenewalReminderEmail` — obedecer ese rojo era borrar el registro de por qué
+      existe la plantilla nueva. Y el recorte del caso del plan en
+      `email-idioma-del-rubro.test.ts` cortaba en la próxima función exportada, así que se
+      tragaba el bloque del add-on entero y un sustantivo escrito allá habría salido con el
+      mensaje del plan.
+
+      **Prueba:** gate `lib/subscription/correo-del-addon.test.ts` (16 casos), en ROJO
+      primero (15 casos por el motivo correcto) y validado por mutación en **seis**
+      direcciones, cada una cayendo en SU caso y ninguna tapada por otra: el cron deja de
+      mandarlo (1 rojo), **esquive** mandándolo con la CTA del plan (1), el copy reusa la
+      promesa del plan (6 — incluido el gate del comentario, que prueba que arreglarlo no lo
+      dejó ciego), cotiza siempre el mensual (1), inventa monto sin ciclo (1), y nombra un
+      solo canal (4). Suite `4571 passed`, `tsc` y `eslint` en 0. Y el árbol publicado es
+      byte a byte el que midieron los gates: `git rev-parse HEAD^{tree}` da lo mismo en las
+      dos máquinas — entregar desde el nodo de casa con `git am` sobre un gemelo atrasado
+      publica un árbol que nadie midió.
 
       **No muerde hoy:** medido en producción, **cero** pagos de add-on aprobados y las dos
       capacidades vivas (`clinica-sergio-p2ljs`, `onia-interna`) son otorgamientos con
       `validUntil` NULL, que no vencen.
-
-      **Listo =** el add-on tiene su propio correo, con la promesa que le corresponde (el
-      asistente deja de contestar, el resto del sistema sigue igual), declarado en los dos
-      gates derivados, con un caso en rojo primero y validado por mutación.
 
 - [ ] **La migración del `concepto` está commiteada y NO aplicada en producción**
       (`prisma/migrations/20260911120000_renewal_reminder_concepto/migration.sql`, en
