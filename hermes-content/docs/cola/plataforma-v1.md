@@ -208,14 +208,66 @@ y sin operar. Acá se opera, con verificación por ítem.
       (`/inbox`) — lo pagado no tiene camino de uso desde ahí. **LISTO =** las tres pantallas
       re-capturadas en prod sin solaparse y con los CTA, mirado.
 
-- [ ] 🟡 **T5 — "quiero comprar el sistema" en handoff recibe el acuse genérico.** Medido en la
-      conversación real de Sergio Urcullo (conv 11, 10-sep 20:17 UTC): una señal de COMPRA en
-      etapa `handoff_humano` responde "Te leo, y esto también se lo paso a Sergio" — cierto pero
-      frío para el mensaje más caliente que existe. Mejora de guion: detectar intención de
-      compra (`hermes-content/deploy/vps-ops/bot/intents.mjs`) y avisar a Sergio Urcullo como
-      URGENTE desde la rama `handoff_humano` de
-      `hermes-content/deploy/vps-ops/bot/bot-engine.mjs` (el aviso normal del handoff ya salió
-      antes, no se repite). No bloquea venta; va después de T1-T4.
+- [x] 🟡 **CERRADO el 2026-09-10 — y al medirlo apareció que T5 era la mitad chica de algo
+      peor: el guion le PIDE al prospecto una palabra y el motor no la escuchaba.**
+
+      **Lo que decía T5** (sigue siendo cierto): una señal de COMPRA en `handoff_humano`
+      recibía el acuse genérico "Te leo, y esto también se lo paso a Sergio" — frío para el
+      mensaje más caliente que existe.
+
+      **Lo que apareció al reproducirlo en el simulador, y no estaba escrito:** `M5` cierra
+      con «Si es urgente, decime "urgente" y lo marco» — y `M8_SOPORTE`, su hermana, con la
+      misma promesa. `grep -rn "urgente" hermes-content/deploy/vps-ops/bot/*.mjs` devolvía
+      **sólo los dos literales del guion**: la detección no existía en ninguna parte. O sea
+      que el bot le decía al prospecto exactamente qué escribir y después no lo escuchaba.
+
+      **Y era peor que "acuse genérico": el segundo mensaje caía en SILENCIO TOTAL.** El
+      acuse se gasta con el primer inbound (`handoffAckAt`), así que todo lo que llegaba
+      después salía por `silencio:handoff_en_curso` — y una señal de compra casi siempre
+      llega después de un "gracias, quedo atento". Medido tal cual:
+
+          vos > quiero hablar con una persona
+            [M5] "... Si es urgente, decime "urgente" y lo marco."
+          vos > quiero comprar el sistema, cuando puedo pagar
+            [M5_ACUSE] "Te leo, y esto también se lo paso a Sergio"
+          vos > en serio, quiero pagar hoy mismo
+            (el bot NO responde)          [notas] silencio:handoff_en_curso
+
+      **LA CLASE**, que es lo que quedó cuidado y no la instancia: *el guion le pide al
+      prospecto una acción y el motor no la escucha*. Ningún gate del carril podía verla —
+      no sobra ninguna palabra (el texto es correcto y amable), no falta un rubro, el precio
+      sale de la fuente y el camino feliz anda. Lo que está mal es el par **(lo que el guion
+      PIDE, lo que el motor HACE con eso)**.
+
+      **Arreglo** (`intents.needsHumanNow` + rama `handoff_humano` de `bot-engine.mjs`):
+      "urgente" **o** intención de comprar el sistema emiten un `notify_sergio` con `kind`
+      propio `handoff_urgente` y contestan `M5_URGENTE` ("Listo, lo marqué como urgente").
+      **Una sola vez por conversación** (`urgenteAvisadoAt`, en `raw` — sin DDL): el canal de
+      Telegram ya le llega saturado a Sergio Urcullo y repetirlo es apagarlo. Va **antes** del
+      candado del acuse, que es lo que lo hace funcionar en el 2.º turno. La etiqueta
+      `handoff_urgente` se agregó a `ETIQUETAS` de `aviso-telegram.mjs`, o el aviso habría
+      llegado con el slug interno crudo en vez de "🔥 URGENTE — contestá esto primero".
+
+      **Las tres listas de `raw`.** `urgenteAvisadoAt` entró en `createState`,
+      `toConversationRow` **y** `stateFromRow` + el patch de `persistence.mjs`. Es la trampa
+      que ya mordió dos veces (`handoffAckAt` y `branchAsked`): el motor lo setea, la base no
+      lo recibe, y el aviso sale de nuevo en cada turno. Tiene caso propio.
+
+      **PRUEBA.** `hermes-content/deploy/vps-ops/bot/urgencia-en-el-handoff.test.mjs`, 8 casos,
+      en ROJO primero (7 de 8) por el motivo correcto. Suite del bot **895/895**. El caso
+      `promesa` **deriva sus sujetos del `SCRIPT` leído del disco** (`decime "X"`), así que
+      cubre las DOS hermanas —`M5` y `M8_SOPORTE`— y un texto nuevo con la misma promesa nace
+      cubierto. Validado por **5 mutaciones**, todas en rojo y el control de vuelta en 8/0:
+      arrancar la detección (6 rojos) · **el esquive**: contestar "lo marqué" y NO avisar
+      (6 rojos, que es la promesa rota encima de la promesa rota) · sacar el campo de
+      `toConversationRow` (1) · dejar de escuchar la palabra del guion (4) · sacar el
+      anti-spam (1). Reproducido en el simulador: hoy contesta `M5_URGENTE` con
+      `[notas] handoff:quiere_comprar`, y `construirAviso` lo entrega como
+      **🔥 URGENTE — contestá esto primero**.
+
+      🔴 **Commiteado y pusheado, NO desplegado.** El bot vivo corre `/opt/onia/bot`, que es
+      un rsync y no un checkout: hasta el swap, un prospecto que escriba "urgente" sigue
+      recibiendo el acuse genérico. Pedido de deploy: `t_fab8ad4d` (destino `bot`).
 
 - [ ] **Servicios profesionales fía contra una tabla que su pantalla de clientes no lee.**
       Sale del arreglo de la importadora (`d634913`, 2026-09-10). Ese pack tiene

@@ -101,6 +101,7 @@ export function stateFromRow(row) {
     // produccion para dejar de guardar el id de conversacion como telefono del CRM.
     publicContact: raw.publicContact || null,
     handoffAckAt: raw.handoffAckAt || null,
+    urgenteAvisadoAt: raw.urgenteAvisadoAt || null,
     branchAsked: Boolean(raw.branchAsked),
     inboxId: raw.inboxId || null,
     displayName: row.display_name,
@@ -397,6 +398,7 @@ export function createStore(options = {}) {
         publicContact: state.publicContact || null,
         inboxId: state.inboxId || null,
         handoffAckAt: state.handoffAckAt || null,
+        urgenteAvisadoAt: state.urgenteAvisadoAt || null,
         branchAsked: Boolean(state.branchAsked),
       },
     };
