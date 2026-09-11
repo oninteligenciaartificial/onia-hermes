@@ -113,6 +113,34 @@ y sin operar. Acá se opera, con verificación por ítem.
       **LISTO =** crédito OpenAI >0 (el off-guion vuelve a reformular, Hermes contesta) y
       método de pago visible en el billing de Meta.
 
+- [x] 🔴 **CERRADO el 2026-09-11: el gasto de Hermes bajado ~10x** (pedido de Sergio
+      Urcullo: "no puedo permitirme gastar mucho"). Atribuido ANTES de cortar (regla
+      hermes-gasto-bajar-no-subir): 98% del gasto era gpt-5-mini con ~100K tokens de prompt
+      POR LLAMADA, y el 93% del prompt era la MEMORIA de Hermes inflada a 500 KB — los loops del sistema (`scripts/loops/README.md`) la appendean via onia-aprender y nadie compactaba (663
+      entradas §, los loops la appendean y nadie compactaba). Lo hecho: memoria compactada
+      500 KB → 60 KB / 663 → 109 entradas (backup en
+      /root/.hermes/backups/MEMORY-pre-compactacion-20260911.md; datos operativos textuales
+      conservados) — prompt total 523 KB → 96 KB medido con `hermes prompt-size`; y el job
+      mas caro (onia-ordenador-tablero) de cada 6 h a 2/dia (13:00 y 23:00 UTC). Proyeccion:
+      de ~$25-30/mes a ~$2-4/mes. ⚠️ Pendiente estructural anotado abajo: la memoria vuelve
+      a crecer si nadie la compacta — tope automatico.
+
+- [ ] 🟡 **La memoria de Hermes necesita TOPE automatico de compactacion.** La de 500 KB se
+      compacto a mano el 11-sep, pero onia-aprender.sh y el supervisor siguen appendeando:
+      sin tope vuelve a inflarse en semanas. Fix: cron semanal (o en el propio sync) que si
+      /root/.hermes/memories/MEMORY.md supera ~100 KB dispara compactacion con backup; engancharlo al sync de loops que ya corre cada hora (fuente en el repo: `scripts/loops/README.md`)
+      (mismo criterio del 11-sep: regla + 1 linea de porque, datos operativos textuales).
+      Carril loops. **LISTO =** dos semanas seguidas con MEMORY.md < 100 KB sin mano humana.
+
+- [x] 🟡 **CERRADO el 2026-09-11: banda GRANDE de renovacion en el panel** (pedido de Sergio
+      Urcullo: "un apartado grande en la pantalla que avise con opcion de generar el QR").
+      `onia-platform/components/AvisoRenovacion.tsx` + `onia-platform/lib/subscription/aviso-renovacion.ts`
+      (3/3 tests): D-7 a D-1, solo ADMIN, tono urgente en D-1, boton "Renovar ahora" a
+      /checkout; el texto del medio de pago sale de medioDePagoOnia(isBcpQrConfigured()) — sin
+      credenciales del banco NO promete QR (pagos manuales hasta que el banco entregue,
+      confirmado por Sergio Urcullo 11-sep); con credenciales, el MISMO boton termina en el
+      QR dinamico. Commit `6e8ae641`, viaja en el deploy de esta noche.
+
 - [ ] 🟡 **T-nueva — `recorrido-cliente` crea una org QA por día y NUNCA la borra.** Medido
       durante la purga del 10-sep: mientras se borraban las 7 QA acumuladas apareció
       `zz-qa-2026-09-10-2209-negocio-wxbwh`, creada por el patrullaje diario a las 22:09 (así
