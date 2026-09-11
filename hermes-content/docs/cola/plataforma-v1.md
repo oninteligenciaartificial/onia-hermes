@@ -772,6 +772,41 @@ y sin operar. Acá se opera, con verificación por ítem.
       confirmado por Sergio Urcullo 11-sep); con credenciales, el MISMO boton termina en el
       QR dinamico. Commit `6e8ae641`, viaja en el deploy de esta noche.
 
+- [ ] 🔴 **LOTE AUDITORÍA 11-sep (velocidad + diseño vs Lety/Dapta, pedido de Sergio
+      Urcullo) — medido con Lighthouse + Playwright + curl, capturas en el chat de la sesión.**
+      Lo bueno medido: Onia carga MÁS RÁPIDO que ambas referencias (load 494 ms vs Lety
+      12.913 ms y Dapta 9.493 ms desktop), precio visible en el fold (ninguna referencia lo
+      tiene), 1 clic a /register, 0 render-blocking, 0 imágenes sin dimensiones. Lo que
+      falla, por impacto:
+      (a) 🔴 VELOCIDAD — el widget de Chatwoot es el **71% del peso** de la landing (1.062 KB
+      de 1.491 KB, 18 requests): diferirlo a primera interacción o idle 3-5 s con un launcher
+      estático (~1 KB) en el layout del route group `web-factory/apps/onia-platform/src/app/(sitio)/`;
+      (b) 🔴 LCP móvil 3,1 s (> presupuesto 2,5 s): `dueno-duerme.webp` (107 KB, 1600×900) está
+      lazy — pasar a fetchpriority=high + srcset 800w para móvil;
+      (c) 🟡 JS propio 197,7 KB gz (> presupuesto 150): el chunk de polyfills legacy (39,6 KB gz)
+      se elimina fijando browserslist moderno;
+      (d) 🟡 TTFB 0,5-1,05 s en páginas estáticas de venta: cache de HTML en Cloudflare/ISR
+      (Lety: 0,36 s);
+      (e) 🔴 DISEÑO — el h1 "Todo el negocio, en una pantalla." describe la UI; el de Lety
+      ("Sell AI. To dentists. Get paid every month.") nombra comprador y resultado. Rotar el
+      rubro en el titular con el vocabulario que ya existe (`web-factory/apps/onia-platform/src/app/(sitio)/page.tsx`
+      h1 + TITULO/DESCRIPCION/OG + guard `hero.test.ts`);
+      (f) 🔴 el panel del hero vende SUSTANTIVOS (6 pastillas sin un número); Lety vende
+      NÚMEROS ($13.300/mo con curva). Dibujar un "día simulado" en Bs (14 citas · Bs 2.340
+      cobrados · 9 recordatorios) — sigue siendo panel dibujado (regla 1-sep), etiquetado
+      "ejemplo"; archivos `(sitio)/ui.tsx` PanelDibujado;
+      (g) 🟡 cero señal de confianza en el fold (sin inventar: integraciones reales WhatsApp/
+      QR bancos/SIAT + "Hecho en Bolivia" + "14 días sin tarjeta" como fila compacta);
+      (h) 🟡 hero centrado deja el fold sin evidencia: split copy-izquierda/panel-derecha
+      (patrón Lety) en `(sitio)/portada.module.css`;
+      (i) 🟡 CTA verde sobre hero verde (tres verdes idénticos compitiendo) + burbuja de chat
+      tapa el panel en móvil + eyebrow duplica el claim del h1.
+      ⚠️ (e)-(i) tocan la pieza APROBADA del 1-sep: el rediseño se muestra renderizado a
+      Sergio Urcullo ANTES de publicar (regla "una superficie viva no se reemplaza sin que la
+      VEA"). (a)-(d) son mecánica invisible: van directo.
+      **LISTO =** LCP < 2,5 s y peso total < 500 KB medidos con Lighthouse, y el hero nuevo
+      aprobado por Sergio Urcullo mirándolo.
+
 - [x] ✅ **T-nueva — CERRADO el 2026-09-10 23:45 UTC: su LISTO se cumple hoy.** Contado en
       `supabase-db`, no deducido: `public.organizations` tiene **3 filas** (`onia-interna`,
       `bolivian-electricidad-e6t21`, `clinica-sergio-p2ljs`) — las mismas tres que dejó la purga
