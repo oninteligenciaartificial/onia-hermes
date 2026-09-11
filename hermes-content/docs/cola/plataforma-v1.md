@@ -792,9 +792,15 @@ y sin operar. Acá se opera, con verificación por ítem.
       12.913 ms y Dapta 9.493 ms desktop), precio visible en el fold (ninguna referencia lo
       tiene), 1 clic a /register, 0 render-blocking, 0 imágenes sin dimensiones. Lo que
       falla, por impacto:
-      (a) 🔴 VELOCIDAD — el widget de Chatwoot es el **71% del peso** de la landing (1.062 KB
-      de 1.491 KB, 18 requests): diferirlo a primera interacción o idle 3-5 s con un launcher
-      estático (~1 KB) en el layout del route group `web-factory/apps/onia-platform/src/app/(sitio)/`;
+      (a) ✅ **CERRADO 2026-09-11 (`3927d847`)** VELOCIDAD — el widget de Chatwoot era el
+      **71% del peso** de la landing (1.062 KB de 1.491 KB, 18 requests) y lo descargaba toda
+      visita. Ahora espera al primer gesto de una persona o 12 s (`src/lib/chat-diferido.ts`,
+      gate `chat-diferido.test.ts`, medición viva `scripts/chat-diferido-vivo.mjs`). Medido
+      sobre la portada buildeada: **0 pedidos y 0 KB al chat sin tocar nada**. Sin launcher
+      propio: la burbuja es la misma y no hubo cambio visual que aprobar. ⚠️ Y la trampa que
+      costó la vuelta: con `scroll` y `mousemove` en la lista de gestos el SDK salía pedido a
+      los **176 ms** sin que nadie tocara nada —la página dispara `scroll` sola— con el gate
+      de unidad en verde. Sólo lo vio abrir la página y escuchar lo que pide;
       (b) 🔴 LCP móvil 3,1 s (> presupuesto 2,5 s): `dueno-duerme.webp` (107 KB, 1600×900) está
       lazy — pasar a fetchpriority=high + srcset 800w para móvil;
       (c) 🟡 JS propio 197,7 KB gz (> presupuesto 150): el chunk de polyfills legacy (39,6 KB gz)
