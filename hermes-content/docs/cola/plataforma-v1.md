@@ -3463,11 +3463,12 @@ y sin operar. Acá se opera, con verificación por ítem.
       `plataforma` (`t_bf1607af`), que sigue esperando el `ok` de Sergio Urcullo.
 
 
-- [ ] **El gate de camino de fallo cubre 2 de los 15 árboles de `app/`, y los huérfanos con
-      escritura son el embudo del cliente nuevo.** Medido el 2026-09-11 al cerrar el defecto de
+- [x] **CERRADO el 2026-09-11 (`ef69e9b`): el gate de camino de fallo cubría 2 de los 17
+      árboles de `app/`, y los huérfanos con escritura son el embudo del cliente nuevo.**
+      Medido al cerrar el defecto de
       `/cita`: `app/(dashboard)/camino-de-fallo.test.ts` y `app/(public)/camino-de-fallo.test.ts`
       derivan sus sujetos del disco —bien— pero sus raíces están escritas a mano
-      (`app/(dashboard)` y `app/(public)`), así que **13 árboles no son sujeto de nadie**.
+      (`app/(dashboard)` y `app/(public)`), así que **15 árboles no son sujeto de nadie**.
 
       Los que escriben hoy y quedan afuera: `app/(auth)` (registro, login, 2FA), `app/onboarding`
       (aplicar y extraer) y `app/checkout` (el comprobante de pago). Sus **seis** `fetch` están
@@ -3485,6 +3486,41 @@ y sin operar. Acá se opera, con verificación por ítem.
       **nombrados y re-medidos** en cada corrida (no una lista de raíces que se pudre), que cubra
       las dos formas de escribir (`fetch` y server action), y validado por mutación agregando un
       árbol nuevo: tiene que **nombrarlo**, no ignorarlo.
+
+      **CÓMO QUEDÓ** (`app/camino-de-fallo-cubierto.test.ts`, 17 casos). El universo son los
+      **17 árboles derivados del disco**; lo que queda afuera va nombrado con su motivo **y el
+      motivo se vuelve a medir en cada corrida**. Hoy hay un solo exento —`app/api`, porque no
+      dibuja ninguna pantalla: cero `.tsx` y cero `"use client"`— y los dos que delegan
+      (`(dashboard)` y `(public)`) se re-miden exigiendo que su gate **exista y siga nombrando
+      su árbol**, porque allá la pregunta es más profunda y tienen exentos propios que no
+      conviene mantener en dos lugares. Los otros **catorce los barre este gate**.
+
+      La segunda mitad, `salidasMudasDeServerAction` en el módulo compartido: un `return;`
+      desnudo antes de la escritura, en una función **exportada** de un archivo `"use server"`,
+      devuelve la misma pantalla que si no se hubiera apretado. Las internas quedan afuera a
+      propósito — el aviso best-effort de `app/cita/acciones.ts` corre DESPUÉS de que la
+      decisión ya se guardó y ahí cortar callado es correcto.
+
+      **Validado por mutación, las cinco:** árbol nuevo con escritura ciega → **lo nombra**
+      (`app/facturacion/EmisorClient.tsx:4 (DELETE)`); el mismo árbol sano → verde, sin falso
+      positivo; server action con salida muda → rojo (`acciones.ts:36 (responderCita)`); gate
+      propio borrado → rojo; exención de `app/api` caducada (un `.tsx` ahí) → rojo.
+
+      **Un caso propio nació TAUTOLÓGICO y lo cazó leerlo, no correrlo:** preguntaba «¿está en
+      barridos o en declarados?» con `barridos` definido como «los que no están declarados», así
+      que no podía fallar nunca. Reescrito contra el EFECTO: los archivos del árbol tienen que
+      terminar en la lista que se barre.
+
+      **No había defecto vivo, y ése era el punto:** los cuatro árboles descubiertos que
+      escriben —`(auth)`, `checkout`, `onboarding`, `dev`— salieron limpios con los dos
+      detectores. Estaban sanos por diligencia, no por construcción.
+
+      Gates verdes en casa (`tsc` 0 · `vitest` 4503 · `eslint` 0 errores) y el gate nuevo
+      verde también en el VPS, sobre un árbol idéntico byte a byte — se comparó
+      `git rev-parse HEAD^{tree}` en las dos máquinas antes de pushear, porque `git am` aplica
+      sobre el HEAD de allá y publicaría otro árbol si el gemelo estuviera atrasado.
+
+      ⚠️ **Es un gate: no cambia nada que el cliente vea, así que no pide deploy.**
 
 ## Lo que este carril NO hace
 
