@@ -12,6 +12,24 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-11 00:14-00:18 La Paz — Servicios profesionales, reverificado: 9/9, sin hallazgos
+
+`zz-qa-2026-09-11-0414` — recorrido completo de punta a punta: alta (confirmar correo primero),
+onboarding 6 pantallas, cliente cargado en `/patients` (group Clientes), cita `2026-09-14 09:00`
+agendada (201, id `cmtwg3ly8003j01rwg7u7zbf6`) y vista en `/appointments`, pantalla de cobro
+mirada en `/comercio/caja` (frenado ahí, sin cobrar). Cero filas `zz-qa-` propias al cerrar. Los
+cinco rubros activos (dental, estética, comercio, importadora, servicios profesionales) están
+todos reverificados en las últimas 24 h, todos sanos.
+
+## 2026-09-11 00:09-00:12 La Paz — Clínica dental, reverificado: 9/9, sin hallazgos
+
+`zz-qa-2026-09-11-0409` — recorrido completo de punta a punta: alta, onboarding 6 pantallas,
+paciente cargado en `/patients`, cita `2026-09-14 09:00` agendada (201, id
+`cmtwfxivw002z01rwz6qkn8a5`) y vista en `/appointments`, factura con ítem visible en
+`/billing/cmtwfxu3f003101rwbsgjwbgl` (frenado ahí, sin pagar). Cero filas `zz-qa-` propias al
+cerrar. Quinta corrida seguida en dental sin novedad — rotado a servicios profesionales en la
+misma vuelta (ver entrada de arriba).
+
 ## 2026-09-11 02:14-02:17 La Paz — Estética y spa, reverificado: 9/9, sin hallazgos
 
 `zz-qa-2026-09-11-0214` — recorrido completo de punta a punta: alta, onboarding 6 pantallas,
