@@ -79,8 +79,9 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 - [ ] 🔴 **El CUERPO del pedido de deploy de plataforma (`t_5511da55`) describe DOS arreglos y su
       `ok` publica OCHO.** Abierto por `onia-cola` el 2026-09-11 con el control recién escrito
-      (`ab1635a1`), que es el que lo ve: **`npm run pedido:entregado` → `ROJO t_5511da55: su
-      CUERPO no nombra 8 arreglo(s) que su ok publica`**, y los nombra uno por uno.
+      en `scripts/pedido_deploy_entregado.mjs` (`ab1635a1`), que es el que lo ve:
+      **`npm run pedido:entregado` → `ROJO t_5511da55: su CUERPO no nombra 8 arreglo(s) que su
+      ok publica`**, y los nombra uno por uno.
       **No es que el pedido esté roto:** su comando deriva el sha al ejecutarse, así que no
       caduca, y el 2026-09-11 01:52 La Paz se le comentó el recuento derivado completo con las
       ocho marcas. Lo que queda corto es el cuerpo, que es lo primero que lee Sergio Urcullo —
