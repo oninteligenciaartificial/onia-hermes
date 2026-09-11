@@ -2357,6 +2357,30 @@ archivos.**
 
 ## Cerrado — no rehacer
 
+- [x] **La cuenta vencida seguía cancelando citas por WhatsApp.** Cerrado el 2026-09-11,
+      `6aba5bc` (rama del carril — **falta que el integrador lo mergee y falta desplegar**).
+      No estaba en la cola: salió de auditar la puerta pública que es de este carril.
+      El panel corta sus 35 escrituras con `checkPlanExpiry` y la reserva pública se cerró
+      el 08-sep con ese mismo motivo; `lib/agenda/reserva-publica.ts` **nombra al bot de
+      WhatsApp como la superficie hermana**, pero sólo cerró el eje RUBRO. El eje VENCIDA
+      quedó abierto acá — media familia cubierta se lee como familia cubierta.
+      Medido sobre `lib/whatsapp-bot.ts` (415 líneas, el motor detrás del webhook): **cero**
+      menciones de `isWriteBlocked`, `checkPlanExpiry`, `planEnd` o `trialEnd`. Su único
+      corte —el paso rotulado «Check plan limits»— es `checkWhatsAppAddon`, que pregunta por
+      el add-on y por el cupo del mes, nunca por si la suscripción está viva (`plan` es el
+      plan CONTRATADO, no el estado). Y esta puerta **escribe**: cancela citas
+      (`status: "CANCELADA"`), las confirma, abre sesiones y escala a un humano. Al dueño con
+      el panel en solo lectura le seguían cancelando citas que él no puede gestionar, y cada
+      respuesta gastaba Meta y OpenAI en una cuenta que dejó de pagar.
+      Hoy **no muerde** —ninguna org de producción tiene `whatsappPhoneNumberId`, medido en
+      `supabase-db`— pero es un arma cargada: `clinica-sergio-p2ljs` tiene el add-on activo y
+      su trial vence el **17-sep**.
+      Arreglo: `lib/whatsapp/atiende-el-bot.ts`, que pregunta con `isWriteBlocked` —el MISMO
+      corte del panel, así la gracia del trial vale igual y un alta manual sin fechas sigue
+      atendiendo—. El gate trae el caso del **llamador** y se validó por mutación en tres
+      direcciones; la del esquive pasaba en VERDE (ver la lección, abajo).
+      Reproducción: `npx vitest run lib/whatsapp/atiende-el-bot.test.ts` (11 casos).
+
 - [x] **El disco que bloqueaba el build: el ítem describía una máquina que ya no es donde
       corremos.** Cerrado el 2026-09-07 midiendo, no razonando. Decía «0 bytes libres de
       465 GB» y «`onia-platform` tiene **30 worktrees**, 13 con su propio `node_modules`».
