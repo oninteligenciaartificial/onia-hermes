@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Claude Code, de cero — Sergio Urcullo</title>
-<meta name="description" content="La serie en video: qué es Claude Code (y qué no), cómo instalarlo en 10 minutos y tu primera skill. Con los comandos listos para copiar.">
+<meta name="description" content="La serie en video: qué es Claude Code (y qué no), cómo instalarlo con Node.js y tu primera skill. Con los comandos listos para copiar y una llamada 1 a 1 si te trabás.">
 <meta property="og:title" content="Claude Code, de cero">
 <meta property="og:description" content="Qué es (y qué no), cómo instalarlo y tu primera skill. En video y con los comandos para copiar.">
 <meta property="og:image" content="https://sergiourcullo.vercel.app/og.png">
@@ -42,10 +42,9 @@
 <header class="top">
   <p class="eyebrow">Serie en video · actualizada 11·09·2026</p>
   <h1>Claude Code, <span class="num">de cero</span></h1>
-  <p class="bajada">La herramienta con la que construyo todo lo que ves en este sitio.
-  Esta serie la explica desde cero, en orden: primero entender qué es, después instalarla,
-  y recién después soltarle trabajo. Cada video te deja pudiendo hacer algo que antes no
-  podías.</p>
+  <p class="bajada">La herramienta con la que construyo todo lo que ves en este sitio,
+  explicada desde cero y en orden: primero entender qué es, después instalarla, recién
+  después soltarle trabajo.</p>
 
   <div class="honesto">
     <h2>Antes de empezar, lo que nadie te dice</h2>
@@ -75,8 +74,15 @@
     </div>
     <p style="margin-top:18px"><strong>En una línea:</strong> Claude te dice <em>cómo</em>
     hacerlo; Claude Code <em>lo hace</em>, en tu computadora, tocando tus archivos. Uno es
-    un consejero, el otro es un empleado. La mayoría de la gente paga el consejero
-    creyendo que contrató al empleado.</p>
+    un consejero, el otro es un empleado.</p>
+    <p><strong>¿Cuál necesitás vos?</strong> Si lo que querés es preguntar, redactar y
+    pensar decisiones, con el chat te alcanza y no gastes más. Claude Code se justifica
+    cuando hay <em>trabajo</em> que hacer sobre archivos reales: armar una página, ordenar
+    datos, escribir y ejecutar automatizaciones. En el video te muestro los dos lado a
+    lado haciendo la misma tarea, para que la diferencia se vea en vez de creerme.</p>
+    <p><strong>Y una cosa que confunde a todos:</strong> se paga una sola suscripción para
+    ambos. No son dos productos que comprás — son dos formas de usar lo mismo, y la
+    mayoría paga creyendo que contrató al empleado cuando sólo está usando al consejero.</p>
   </div>
 </article>
 
@@ -91,6 +97,7 @@
   </div>
   <div class="meta">
     <span class="chip paga">requiere plan pago</span>
+    <span class="chip">necesita Node.js</span>
     <span class="chip">macOS · Windows · Linux</span>
   </div>
   <div class="cuerpo">
@@ -101,35 +108,75 @@
         allowfullscreen loading="lazy"></iframe>
     </div>
 
-    <p class="rotulo" style="margin-top:24px">Los comandos del video, para copiar</p>
-<pre><span class="c"># macOS, Linux o WSL</span>
-<span class="k">curl</span> -fsSL https://claude.ai/install.sh | bash
+    <p class="rotulo" style="margin-top:24px">Los tres pasos del video</p>
+    <ol class="pasitos">
+      <li><strong>Bajá Node.js</strong> de <a href="https://nodejs.org/es">nodejs.org</a>
+      (botón verde, versión LTS, siguiente-siguiente). Es lo que le da a tu terminal el
+      comando <code>npm</code> — sin esto, el paso 2 no existe.</li>
+      <li><strong>Abrí la terminal e instalá Claude Code</strong> con el comando de abajo.
+      En Windows, la terminal es PowerShell; en Mac, la app Terminal.</li>
+      <li><strong>Entrá y comprobá.</strong> Escribís <code>claude</code>, iniciás sesión
+      con tu cuenta paga, y listo.</li>
+    </ol>
+<pre><span class="c"># 2 · instalar (después de Node.js)</span>
+<span class="k">npm</span> install -g @anthropic-ai/claude-code
 
-<span class="c"># Windows, en PowerShell</span>
-<span class="k">irm</span> https://claude.ai/install.ps1 | iex</pre>
-<pre style="margin-top:14px"><span class="k">claude</span> --version   <span class="c"># imprime el número de versión</span>
+<span class="c"># 3 · comprobar que quedó bien</span>
+<span class="k">claude</span> --version   <span class="c"># imprime el número de versión</span>
 <span class="k">claude</span> doctor      <span class="c"># revisa la instalación entera</span>
 
 <span class="c"># abrí la terminal EN LA CARPETA de tu proyecto y:</span>
 <span class="k">claude</span></pre>
 
-    <div class="nota"><strong>En Windows instalá antes
+    <p class="rotulo">¿Y dónde lo instalo? ¿En qué computadora?</p>
+    <p><strong>En la tuya de todos los días</strong> — la que usás para trabajar. Claude
+    Code trabaja donde estás vos, sobre tus carpetas y tus archivos. No hace falta ninguna
+    máquina especial.</p>
+    <p>El <strong>servidor</strong> (esa PC vieja que capaz me viste mostrar — el homelab)
+    es otra cosa: ahí <em>corre</em> lo que Claude Code te ayuda a construir, las
+    automatizaciones que quedan trabajando solas día y noche. Primero instalás Claude Code
+    en tu compu; el servidor viene después, cuando ya tengas algo que dejar corriendo.</p>
+
+    <p class="rotulo">Tu primera skill — qué es eso</p>
+    <p>Una skill es <strong>una carpeta con un archivo de texto</strong> donde le escribís
+    a Claude Code cómo hacés VOS una tarea: tu formato de cotización, tu forma de
+    responder, tus reglas. Se la escribís una vez y la usa siempre — es la diferencia
+    entre repetirle las instrucciones cada día y tener un empleado que ya conoce la casa.
+    En el video escribimos la primera, juntos, en unos minutos.</p>
+
+    <div class="nota"><strong>En Windows instalá también
     <a href="https://git-scm.com/downloads/win">Git for Windows</a>.</strong> Sin eso
-    varias cosas se comportan distinto. Y si la terminal te da miedo, hay app de
+    varias cosas se comportan distinto. Y si la terminal te da miedo, existe la app de
     escritorio: hace lo mismo con ventanas.</div>
   </div>
 </article>
 
+<!-- LLAMADA 1 A 1 -->
 <section class="cierre">
-  <h2>Lo que esta página no cubre</h2>
-  <ul>
-    <li>Dónde encaja Claude Code entre las demás herramientas que uso — eso está en
-    <a href="/stack">la guía del stack</a>, paso 04.</li>
-    <li>El servidor donde corre lo que Claude Code construye —
-    <a href="/homelab">la guía del homelab</a>.</li>
-    <li>Los archivos de configuración ya armados: ésos van por la comunidad.</li>
-  </ul>
-  <p>La serie sigue: cada video nuevo aparece acá y avisa primero en la comunidad.</p>
+  <h2>¿Te trabaste? Hablemos, uno a uno</h2>
+  <p style="margin:0 0 14px">Una llamada con tu caso delante: qué instalar primero en TU
+  negocio, dónde te trabaste, qué no vale la pena. Sin costo y sin venta.</p>
+  <table class="calculo">
+    <thead><tr><th>Día</th><th>Horario (Bolivia)</th></tr></thead>
+    <tbody>
+      <tr><td>Lunes a viernes</td><td>14:00–17:00 · 20:00–22:00</td></tr>
+      <tr><td>Sábado</td><td>09:00–15:00</td></tr>
+    </tbody>
+  </table>
+  <p style="margin:16px 0 0">Escribime <strong>AGENDA</strong> por
+  <a href="https://www.instagram.com/sergiourcullo/">DM de Instagram</a> y coordinamos —
+  las llamadas se agendan con un día de anticipación. Contesto yo.</p>
+</section>
+
+<!-- REDES -->
+<section class="seccion">
+  <p class="seccion-rot"><span>Seguime donde estés</span></p>
+  <h2>Todos los días publico algo</h2>
+  <div class="redes">
+    <a class="red" href="https://www.youtube.com/@sergiourcullo">YouTube<span class="arroba">@sergiourcullo</span></a>
+    <a class="red" href="https://www.instagram.com/sergiourcullo/">Instagram<span class="arroba">@sergiourcullo</span></a>
+    <a class="red" href="https://www.tiktok.com/@sergiourcullo">TikTok<span class="arroba">@sergiourcullo</span></a>
+  </div>
 </section>
 
 <section class="comunidad">
