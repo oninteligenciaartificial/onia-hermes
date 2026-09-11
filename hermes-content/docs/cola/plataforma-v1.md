@@ -63,6 +63,58 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-11 (`f231555`, onia-platform — falta mergear y desplegar):
+      reprogramar una cita podía pisar el turno de otro paciente, y el sistema le mandaba
+      al cliente el correo confirmándoselo.**
+
+      Las **dos** puertas que CREAN una cita —el panel (`lib/agenda/crear-cita.ts`) y la
+      reserva pública que usa el cliente del cliente— toman el candado del día del
+      profesional y rechazan el solapamiento. La que la **MUEVE**,
+      `PATCH /api/appointments/[id]`, aceptaba `dateTime` y hacía el `update` pelado: sin
+      candado y sin mirar si a esa hora ya hay alguien.
+
+      La recepción arrastra la cita de las 10:00 a las 11:00, a las 11:00 ya hay otro
+      paciente, y el sistema guardaba **las dos** — mismo profesional, misma hora. Y no
+      queda en un dato feo: `avisarCambioDeCita` le manda acto seguido el correo con la hora
+      nueva, así que el producto le **confirma** a un cliente un turno que acaba de
+      sobrevender, y los dos se presentan. Toca a los cuatro rubros con agenda, tres de
+      ellos de la v1.0.
+
+      **Por qué ningún gate podía verlo, que es la parte reusable:** la pantalla renderiza
+      bien, no sobra ni falta una palabra, no es rubro, ni rol, ni plan, y el camino feliz
+      funciona. Es la familia de siempre —la mitad sana hace leer la familia como cubierta—:
+      con la CREACIÓN blindada, nadie volvió a preguntar por la EDICIÓN. **La firma que lo
+      delata sin leer una línea de producto:** `hasAppointmentConflict` ya traía
+      `excludeAppointmentId` —un parámetro que sólo sirve para reprogramar, porque la propia
+      cita siempre choca consigo misma— y tenía **cero llamadores**. Un parámetro escrito
+      para un caso que nunca se implementó.
+
+      El chequeo y la escritura van en la **misma** transacción y detrás del **mismo**
+      candado que el alta (`lib/agenda/reprogramar-cita.ts`): preguntar «¿está libre?» y
+      guardar en dos pasos sueltos deja la ventana en la que dos recepciones mueven dos
+      citas a la misma hora y las dos leen «libre». Un cambio que no toca la hora —una nota,
+      un estado, o re-mandar la misma hora— no paga el candado. Y el rechazo sale con el
+      **mismo 409 y el mismo texto** que da el alta: quien mueve una cita necesita saber que
+      el turno está tomado, no leer «error al actualizar» y volver a intentarlo.
+
+      **Prueba:** `lib/agenda/reprogramar-cita.test.ts` (11 casos), en ROJO primero por el
+      motivo correcto —«`app/api/appointments/[id]/route.ts` hace el update pelado»— y
+      validado por mutación en **tres** direcciones, cada una en su caso: el **esquive** de
+      llamar al helper con `null` en vez de la reprogramación derivada, el corte arrancado
+      del helper, y el detector ciego (se queda sin sujetos). Los sujetos se derivan del
+      **disco** —toda ruta que escriba `dateTime` en el `data` de un `update` de cita—, así
+      que una ruta nueva nace cubierta. Suite `4582 passed`, `tsc` y `eslint` en 0, y el
+      árbol publicado es byte a byte el que midieron los gates: `git rev-parse HEAD^{tree}`
+      da el mismo valor en las dos máquinas.
+
+      ⚠️ **El detector nació con un falso positivo en la dirección cara** —la que manda a
+      romper lo que funciona—: recortaba el bloque del `update` «hasta el próximo `});`»,
+      que depende de la indentación y se pasaba de largo, así que acusaba al cron de
+      recordatorios (que sólo marca `whatsapp24hSentAt`) por un `dateTime:` que vivía 40
+      líneas más abajo. Se arregló recortando con **paréntesis balanceados** y mirando sólo
+      dentro del `data:`, y quedó anclado con su caso: el cron y el portal público **tocan**
+      una cita sin moverle la hora y no son sujetos de este gate.
+
 - [x] ✅ **CERRADO el 2026-09-11 (`e887e8e`, onia-platform — falta mergear y desplegar): el
       add-on del chatbot avisaba por el PANEL y no por correo.**
 
