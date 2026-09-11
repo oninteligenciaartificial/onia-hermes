@@ -58,7 +58,7 @@ const CITAS = [
     salto: "Ver el sistema",
     nombre: "Demo y diagnóstico",
     resultado:
-      "Recorremos el sistema con tu caso adelante: tu agenda, tus cobros, tus agentes. Salís sabiendo qué se enciende primero.",
+      "Recorremos el sistema con tu caso adelante: tus clientes, tus cobros, tus agentes. Salís sabiendo qué se enciende primero.",
     para: "Para el que ya vio los precios y quiere verlo funcionando.",
     href: AGENDA_DEMO_URL,
     cta: "Agendar la demo",

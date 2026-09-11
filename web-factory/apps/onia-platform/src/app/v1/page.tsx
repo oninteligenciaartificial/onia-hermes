@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PLANES, bs, plan, PRUEBA } from "@/lib/pricing";
+import { PLANES, bs, plan, PRUEBA, ALCANCE_CON_AGENDA } from "@/lib/pricing";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Hero } from "@/components/landing-v1/hero";
@@ -22,7 +22,7 @@ const TITLE = "Onia · Tu negocio no pierde citas ni cobros | Bolivia";
 // lo que hace que el lead se entere al pagar. Al final, además, viajan junto a
 // su salvedad si Google trunca la descripción.
 const DESCRIPTION =
-  `Onia Platform es el sistema de gestión con inteligencia artificial para negocios en Bolivia: agenda, clientes y cobros. Desde Bs ${bs(plan("basico").mensual)} al mes. Probalo ${PRUEBA.dias} días gratis, sin tarjeta. Agentes que revisan tu negocio cada día y esperan tu aprobación, desde el plan ${plan("pro").nombre}.`;
+  `Onia Platform es el sistema de gestión con inteligencia artificial para negocios en Bolivia: clientes, cobros y agenda ${ALCANCE_CON_AGENDA}. Desde Bs ${bs(plan("basico").mensual)} al mes. Probalo ${PRUEBA.dias} días gratis, sin tarjeta. Agentes que revisan tu negocio cada día y esperan tu aprobación, desde el plan ${plan("pro").nombre}.`;
 
 /*
  * La tarjeta social NO se declara acá: la dibuja `opengraph-image.tsx` de este
@@ -90,7 +90,7 @@ const JSON_LD = {
       // Misma corrección que en la portada de `(sitio)`: la factura sale de la
       // enumeración mientras el emisor esté en trámite ante el SIN.
       description:
-        "Sistema de gestión con IA para negocios en Bolivia: agenda, clientes, cobros, inventario y agentes con aprobación humana.",
+        `Sistema de gestión con IA para negocios en Bolivia: clientes, cobros, inventario y agentes con aprobación humana —y agenda ${ALCANCE_CON_AGENDA}—.`,
       // Los montos NO se escriben acá. Estaban tipeados a mano ("320", "750",
       // "1500") y el gate de precios no los veía: busca el número pegado a
       // «Bs», y en el JSON-LD el precio viaja desnudo, con la moneda en otra

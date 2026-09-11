@@ -570,6 +570,12 @@ export const CONSTANTES_VERIFICADAS_APARTE = [
       "tampoco es un tope: es a que rubros llega el agente Recall, acotado por los DATOS que lee (patient + appointment) y no por la pantalla",
     cruzadaPor: "src/app/capacidad-acotada.test.ts",
   },
+  {
+    valor: "ALCANCE_CON_AGENDA",
+    porque:
+      "tampoco es un tope: es a que rubros les llega la agenda, y con ella la reserva publica — comercio e importadora no tienen una sola ruta de citas en su pack",
+    cruzadaPor: "src/app/capacidad-en-la-enumeracion.test.ts",
+  },
 ];
 
 /** Excusas de constante que ya no tienen sujeto: nadie las mide y quedan pre-aprobadas. */

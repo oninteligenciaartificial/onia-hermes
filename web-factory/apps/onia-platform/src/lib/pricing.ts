@@ -210,6 +210,58 @@ export const ALCANCE_POR_DATOS = [
 /** Cómo se dice ese alcance en una línea de venta, derivado del dato de arriba. */
 export const ALCANCE_CON_FICHA = `solo en ${listar(ALCANCE_POR_DATOS[0].rubros)}`;
 
+/**
+ * El MISMO eje (capacidad, RUBRO), con el corte en la capacidad más BÁSICA que
+ * tiene el producto: la agenda.
+ *
+ * 🔴 **Por qué las dos listas de arriba no podían verlo.** `ALCANCE_POR_RUBRO` y
+ * `ALCANCE_POR_DATOS` las escribió alguien que ya sospechaba de esa capacidad —
+ * el Recall, los reportes, las facturas recurrentes: lo caro, lo de los planes
+ * altos, lo que suena a clínica. **La agenda no la sospechó nadie**, porque es
+ * lo primero que uno da por hecho que trae un sistema de gestión. Y es justo la
+ * que la venta repite en CADA superficie: la descripción de la home, su tarjeta
+ * de OpenGraph, el `incluye` del plan más barato, los tres pasos de «cómo
+ * funciona», la página de la prueba gratis y su gemela de `/v1`.
+ *
+ * Medido el 2026-09-11 contra `origin/master` de `onia-platform` recorriendo
+ * `VERTICAL_PACKS` de los 5 rubros que el alta entrega: `gestios-general`
+ * (comercio) y `proveegest-electrico` (importadora) **no tienen una sola ruta de
+ * citas en su nav**. No es que la llamen distinto —como «Cobros» y «Caja», que
+ * sí son la misma función con dos nombres—: no existe. El producto ya lo dice de
+ * sí mismo con `tieneAgenda(track) = entregaLaPantalla(track, "/appointments")`,
+ * y un `false` ahí significa las dos cosas a la vez: no hay enlace Y el layout
+ * devuelve a `/dashboard`.
+ *
+ * La reserva online cuelga de la misma condición: `lib/agenda/reserva-publica.ts`
+ * declara `MotivoSinReservaPublica = "plan" | "rubro" | "vencida"`, y el motivo
+ * `rubro` es ese mismo `tieneAgenda`. Por eso las dos van juntas acá.
+ */
+export const ALCANCE_POR_AGENDA = [
+  {
+    /** Cómo la nombra el copy. */
+    capacidad: "agenda",
+    /** El predicado real del producto. */
+    porque: "el pack del rubro entrega la pantalla de citas (`tieneAgenda`)",
+  },
+  {
+    capacidad: "reservas online",
+    porque: "la reserva pública corta por `rubro` con el mismo `tieneAgenda`",
+  },
+] as const;
+
+/** Los rubros del alta que trabajan con citas, como los nombra el copy. */
+export const RUBROS_CON_AGENDA = ["dental", "estética", "servicios profesionales"] as const;
+
+/**
+ * Cómo se dice ese alcance en una línea de venta, derivado del dato de arriba.
+ *
+ * Se dice por lo que el rubro HACE («si trabajás con citas») y no por la lista
+ * de rubros, porque la enumeración es la forma que ya se pudrió una vez: el
+ * 2026-09-11 la portada enumeraba cuatro rubros y el alta entregaba cinco. La
+ * lista queda igual en `RUBROS_CON_AGENDA` para el que necesite nombrarlos.
+ */
+export const ALCANCE_CON_AGENDA = "si trabajás con citas";
+
 export const USUARIO_EXTRA_ADDON = {
   nombre: "Usuario adicional",
   mensualAddon: 70,
@@ -231,7 +283,7 @@ export const PLANES: readonly Plan[] = [
       `2 usuarios (podés sumar hasta ${USUARIO_EXTRA_ADDON.maxEnBasico} más a Bs ${bs(USUARIO_EXTRA_ADDON.mensualAddon)}/mes cada uno)`,
       "Hasta 300 fichas de clientes o pacientes cargadas",
       "200 recordatorios por email al mes",
-      "Agenda, fichas, caja y cobros en un solo lugar",
+      `Fichas, caja y cobros en un solo lugar, y agenda ${ALCANCE_CON_AGENDA}`,
       "Inventario con existencias, costo, proveedor y aviso de stock mínimo",
       "Reporte básico y contabilidad básica de compras y ventas",
       "Lista de empleados",
@@ -261,7 +313,7 @@ export const PLANES: readonly Plan[] = [
       "800 recordatorios por email al mes",
       `Agente Recall: te propone a quién hace rato que no ves (${ALCANCE_CON_FICHA})`,
       "Agente Cobrador: te propone a quién reclamarle la deuda vencida",
-      "Reservas online incluidas (link público para que te pidan cita)",
+      `Reservas online incluidas, ${ALCANCE_CON_AGENDA}: link público para que te pidan cita`,
       `Reportes completos y facturas recurrentes (${ALCANCE_CLINICO})`,
       "Contabilidad completa (RCV, balance y export) y planilla del mes",
     ],
@@ -449,7 +501,7 @@ export const ADDONS: readonly AddOn[] = [
   },
   {
     nombre: AGENDA_ADDON.nombre,
-    copy: "Link público para que te pidan cita sin llamadas ni mensajes. Ya viene incluida en Pro y en Full.",
+    copy: `Link público para que te pidan cita sin llamadas ni mensajes, ${ALCANCE_CON_AGENDA}. Ya viene incluida en Pro y en Full.`,
     precio: `Bs ${bs(AGENDA_ADDON.mensualAddon)}/mes en Básico`,
   },
   {
