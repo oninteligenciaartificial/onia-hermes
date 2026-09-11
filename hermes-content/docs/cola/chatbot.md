@@ -257,6 +257,49 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-11 (`e6adb19`, onia-platform): la recarga del chatbot CADUCA a fin
+      de mes y ninguna de las tres superficies que la vende lo decía.** Bs 190 por 200
+      conversaciones que se evaporan el día 1.
+
+      No es copy: el producto lo aplica. `ChatbotUsoMensual.recargadas` es por
+      `(organizationId, mes)` y `estadoCupo` lee la fila del mes en curso, así que el 1 vuelve
+      a 0. Y el bloque de compra aparece **recién al 80 % del cupo**, que cae avanzado el mes:
+      el dueño que cruza el umbral un 28 paga y tiene dos días para usar lo que compró.
+
+      Las tres superficies mudas, medidas con el gate derivado del disco antes de tocar nada:
+      `CupoConversacionesCard.tsx:70` (el botón), `lib/chatbot/cupo.ts:278` (el aviso del corte)
+      y `lib/pricing.ts:202` (el mensaje de WhatsApp con el que el dueño la pide). Peor, el
+      estado agotado remataba con *«si no hacés nada, se renueva el 1 del mes que viene»* al
+      lado de *«podés sumar más»*: se lee como que lo comprado sobrevive a esa renovación.
+
+      **Lo que lo delata, y es la firma para buscar más de esta clase:** el aviso que sale
+      **después** de cobrar (`CHATBOT_RECARGA_APLICADA`) ya decía *«de este mes»*. La salvedad
+      estaba escrita, pero donde no la lee quien decide. Ningún gate podía verla — no sobra una
+      palabra prohibida, el precio sale de la fuente única, no es un rubro, ni un plan, ni un
+      rol, y el camino de fallo del botón ya estaba cubierto. Es el escalón siguiente de
+      `limite-que-corta.test.ts` (06-sep): ahí la venta callaba **cuánto te dan**; acá,
+      **cuánto te dura**.
+
+      Arreglo: no se borra la promesa, se condiciona (mismo patrón que `SEARXNG_URL` y el
+      importe del QR). `RECARGA_CONVERSACIONES.vigencia` vive una sola vez en `pricing.ts` y la
+      nombran las tres. Se quitó el párrafo que había agregado en la tarjeta: `textoDeCupo` ya
+      lo dice ahí y duplicaba la advertencia en la misma pantalla.
+
+      Gates: `lib/chatbot/recarga-dice-su-vigencia.test.ts` (mide lo que las funciones
+      DEVUELVEN + deriva del disco las superficies que ofrecen sumar, para que una nueva nazca
+      vigilada) y `CupoConversacionesCard.render.test.ts` (prueba que la pantalla lo PINTE —su
+      caso propio, el que el otro no puede ver). **Validados por mutación en 7 direcciones**,
+      incluido el esquive (salvedad lejos de la oferta) y un sujeto nuevo sin cubrir. Tres
+      gates de `onia-platform` verdes: `tsc` 0, 4438 tests, `lint` 0 errores.
+
+      ⚠️ **Commiteado y pusheado, NO desplegado**: el swap lo hace `onia-cola` cuando Sergio
+      Urcullo aprueba el pedido de deploy de plataforma. Hasta entonces el dueño sigue viendo
+      la versión muda.
+
+      **Queda una decisión de plata, anotada y no tomada acá** (radar, §recarga): arrastrar lo
+      no usado al mes siguiente. Hoy caduca; decirlo es honesto, pero la alternativa cambia lo
+      que el cliente recibe por Bs 190.
+
 - [x] ✅ **CERRADO el 2026-09-11 (`7a9e10c0`): el barrido de rescate intentó salvar un «hola»
       real CUATRO veces, falló las cuatro, y salió con `exit 0` — la misma cara que una vuelta
       sin trabajo. Nadie se enteró.**
