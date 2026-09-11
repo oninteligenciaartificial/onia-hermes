@@ -109,6 +109,15 @@ export default function Comparativa() {
                         >
                           <span className={s.ejeMark}>{MARCA[estado]}</span>
                           {eje.label}
+                          {/* Nuestra fila dice hasta dónde llega: un «Sí» pelado
+                              en la tabla que existe para que nos crean se lo
+                              promete también a los rubros que no la tienen. */}
+                          {c.esOnia && estado === "si" && eje.alcanceOnia ? (
+                            <span className={s.ejeAlcance}>
+                              {" "}
+                              — {eje.alcanceOnia}
+                            </span>
+                          ) : null}
                         </li>
                       );
                     })}

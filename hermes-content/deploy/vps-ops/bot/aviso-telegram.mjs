@@ -49,6 +49,9 @@ export const AVISO_MAX_CHARS = 3500;
  */
 export const ETIQUETAS = Object.freeze({
   handoff: "te esperan a vos",
+  // Sin etiqueta propia, `construirAviso` cae al motivo crudo y Sergio Urcullo recibe el slug
+  // interno ("quiere_comprar") en vez de una linea que le diga que hacer.
+  handoff_urgente: "🔥 URGENTE — contestá esto primero",
   demo_agendada: "DEMO AGENDADA — anotala",
   descarte_tras_agendar: "se cayo una demo ya agendada — liberá el horario",
   sin_horarios: "no habia horario que ofrecerle",

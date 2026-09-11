@@ -172,14 +172,78 @@ export function validarEnDisco(pieza) {
   return { modo: '--image', laminas: 1, caption: brief.caption };
 }
 
-function cuerpoDeTarea(tid) {
+// Estados en los que una tarea sigue VIVA y su `ok` puede ejecutar algo.
+//
+// 🔴 LISTA BLANCA A PROPOSITO, y la direccion importa. Enumerar los estados
+// CERRADOS (archived, done) falla ABIERTO: el dia que el tablero agregue
+// "cancelled" o "expired", el boton del telefono de Sergio Urcullo lo trataria
+// como vivo y desplegaria. Enumerando los VIVOS, un estado que no conozco se
+// RECHAZA — y ese fallo es visible (sale un motivo por pantalla) en vez de mudo.
+// Sacados del propio tablero el 2026-09-11:
+//   grep -rhoE 'status *(==|in) *[^)]*' plugins/kanban/ | grep -oE '"[a-z_]+"'
+export const ESTADOS_VIVOS = new Set([
+  'ready', 'blocked', 'todo', 'triage', 'review', 'running', 'scheduled',
+]);
+
+// Devuelve null si la tarea puede ejecutar, o el MOTIVO si no.
+// Pura a proposito: es lo unico que el autotest puede clavar sin tocar el tablero.
+export function motivoParaNoEjecutar(estado) {
+  const e = String(estado ?? '').trim().toLowerCase();
+  // Sin estado no es "seguí": es "no pude preguntar". Un deploy a produccion no
+  // se dispara sobre una duda.
+  if (!e) return 'la tarea no dice en que estado esta (no pude leer "status" del tablero)';
+  if (ESTADOS_VIVOS.has(e)) return null;
+  if (e === 'archived' || e === 'done') {
+    return `la tarea esta ${e === 'archived' ? 'ARCHIVADA' : 'CERRADA'} (status=${e}): su "ok" ya no vale`;
+  }
+  return `no conozco el estado "${e}", asi que no ejecuto nada (estados vivos: ${[...ESTADOS_VIVOS].join(', ')})`;
+}
+
+function tareaDelTablero(tid) {
   const py = process.env.PY_HERMES || '/usr/local/lib/hermes-agent/venv/bin/python';
   const salida = execFileSync(
     py,
     ['-m', 'hermes_cli.main', 'kanban', '--board', process.env.ONIA_TABLERO || 'onia', 'show', tid, '--json'],
     { encoding: 'utf8', env: { ...process.env, HOME: '/root' }, timeout: 120000 },
   );
-  return JSON.parse(salida).task?.body || '';
+  const t = JSON.parse(salida).task || {};
+  return { cuerpo: t.body || '', estado: t.status };
+}
+
+// Busca el pedido VIVO de un destino, para que el rechazo diga que apretar en vez
+// de dejar a Sergio Urcullo con un "no" y nada mas.
+//
+// TRI-ESTADO a proposito: `null` es "no pude preguntar" y NO se puede leer como
+// "no hay ninguno" — son respuestas opuestas y confundirlas manda a abrir un
+// pedido duplicado, que es el ruido que hace que el deje de creerle a los avisos.
+// La seleccion, aparte de la consulta, para que el autotest la pueda clavar sin
+// tocar el tablero. Devuelve null = "no pude leer la lista", [] = "la lei y no
+// hay ninguno": son respuestas OPUESTAS y el llamador las dice distinto.
+export function pedidosVivosEn(lista, destino) {
+  // El `list --json` del tablero devuelve un ARRAY PELADO. Se acepta tambien
+  // `{tasks:[...]}` porque la primera version dio por hecho esa forma, salio
+  // siempre "no pude consultar" y el consejo quedo mudo sin que nada fallara:
+  // un lector que solo entiende UNA forma degrada en silencio.
+  const tareas = Array.isArray(lista) ? lista : (Array.isArray(lista?.tasks) ? lista.tasks : null);
+  if (!tareas) return null;
+  const re = new RegExp(`^DESPLEGAR:\\s*${destino}\\b`, 'im');
+  return tareas
+    .filter((t) => ESTADOS_VIVOS.has(String(t?.status || '').toLowerCase()) && re.test(String(t?.body || '')))
+    .map((t) => t.id);
+}
+
+function pedidoVivoDe(destino) {
+  try {
+    const py = process.env.PY_HERMES || '/usr/local/lib/hermes-agent/venv/bin/python';
+    const salida = execFileSync(
+      py,
+      ['-m', 'hermes_cli.main', 'kanban', '--board', process.env.ONIA_TABLERO || 'onia', 'list', '--json'],
+      { encoding: 'utf8', env: { ...process.env, HOME: '/root' }, timeout: 120000 },
+    );
+    return pedidosVivosEn(JSON.parse(salida), destino);
+  } catch {
+    return null;
+  }
 }
 
 function autotest() {
@@ -232,6 +296,62 @@ function autotest() {
   // PUBLICAR y CON DESPLEGAR ya no se cae al codigo 2.
   ok(parsearLinea('DESPLEGAR: landing') === null, 'DESPLEGAR no es una pieza');
   ok(parsearDespliegue('DESPLEGAR: landing') !== null, 'DESPLEGAR: landing tenia que parsear');
+
+  // ── GUARDA DE ESTADO: el `ok` de una tarea CERRADA no ejecuta nada ─────────
+  // El caso que importa: una tarea archivada cuyo Telegram sigue en el telefono.
+  ok(motivoParaNoEjecutar('archived') !== null, 'una tarea ARCHIVADA no puede ejecutar su ok');
+  ok(/ARCHIVADA/.test(motivoParaNoEjecutar('archived')), 'el motivo tiene que decir que esta archivada');
+  ok(motivoParaNoEjecutar('done') !== null, 'una tarea CERRADA no puede ejecutar su ok');
+
+  // Los vivos siguen pasando. Sin estos, la guarda se "arregla" rechazando todo
+  // y rompe el unico camino por el que Sergio Urcullo aprueba algo.
+  ok(motivoParaNoEjecutar('blocked') === null, 'blocked es como NACE un pedido: tiene que poder ejecutar');
+  ok(motivoParaNoEjecutar('ready') === null, 'ready tiene que poder ejecutar');
+  ok(motivoParaNoEjecutar('running') === null, 'running tiene que poder ejecutar');
+  ok(motivoParaNoEjecutar('BLOCKED') === null, 'el estado tiene que ser insensible a mayusculas');
+  ok(motivoParaNoEjecutar(' ready ') === null, 'el estado tiene que tolerar espacios');
+
+  // Direccion de la falla: lo que NO conozco se rechaza (cerrado), nunca se deja
+  // pasar. Si esto se invierte, un estado nuevo del tablero vuelve a abrir el
+  // agujero sin que nada se ponga rojo.
+  ok(motivoParaNoEjecutar('cancelled') !== null, 'un estado desconocido tiene que RECHAZAR, no dejar pasar');
+  ok(motivoParaNoEjecutar('') !== null, 'sin estado NO se ejecuta: es "no pude preguntar", no "seguí"');
+  ok(motivoParaNoEjecutar(undefined) !== null, 'un status ausente tiene que rechazar');
+  ok(motivoParaNoEjecutar(null) !== null, 'un status null tiene que rechazar');
+  ok(/no conozco/.test(motivoParaNoEjecutar('cancelled')), 'el motivo de un estado nuevo tiene que distinguirse del archivado');
+
+  // El consejo que acompana al rechazo: cual es el pedido VIVO de ese destino.
+  const lista = [
+    { id: 't_vivo', status: 'blocked', body: 'bla\nDESPLEGAR: plataforma\nbla' },
+    { id: 't_viejo', status: 'archived', body: 'DESPLEGAR: plataforma' },
+    { id: 't_otro', status: 'ready', body: 'DESPLEGAR: landing' },
+  ];
+  ok(JSON.stringify(pedidosVivosEn(lista, 'plataforma')) === '["t_vivo"]', 'tenia que dar solo el pedido VIVO de plataforma');
+  ok(JSON.stringify(pedidosVivosEn(lista, 'landing')) === '["t_otro"]', 'no separo por destino');
+  ok(JSON.stringify(pedidosVivosEn(lista, 'bot')) === '[]', 'un destino sin pedido vivo es [], no null');
+  // El tablero devuelve un ARRAY PELADO; `{tasks:[...]}` se acepta igual. Sin
+  // este caso el lector volvia a decir "no pude consultar" para siempre.
+  ok(JSON.stringify(pedidosVivosEn({ tasks: lista }, 'plataforma')) === '["t_vivo"]', 'tiene que leer tambien {tasks:[...]}');
+  // null = "no pude leer" y [] = "no hay". Confundirlos manda a abrir un pedido duplicado.
+  ok(pedidosVivosEn(null, 'plataforma') === null, 'lo ilegible tiene que dar null, nunca []');
+  ok(pedidosVivosEn('{"roto":', 'plataforma') === null, 'una respuesta que no es lista tiene que dar null');
+
+  // ANCLA DE CABLEADO. Los casos de arriba prueban la funcion pura; este prueba
+  // que `main()` la USE y que su resultado CORTE. Sin el, la guarda se esquiva
+  // con un `motivoParaNoEjecutar(estado);` suelto —llamarla y tirar el
+  // resultado— y los 13 casos anteriores siguen en verde con el agujero abierto.
+  const fuente = readFileSync(fileURLToPath(import.meta.url), 'utf8');
+  const cuerpoMain = fuente.slice(fuente.indexOf('const main = ()'));
+  ok(/const\s+motivo\s*=\s*motivoParaNoEjecutar\(\s*estado\s*\)/.test(cuerpoMain),
+    'main() tiene que ASIGNAR el resultado de motivoParaNoEjecutar, no llamarla suelta');
+  ok(/if\s*\(\s*motivo\s*\)/.test(cuerpoMain), 'main() tiene que CORTAR con ese motivo');
+  // Y que corte ANTES de ejecutar: si la guarda queda debajo del spawn, el deploy
+  // ya salio cuando el motivo se mira.
+  const iGuarda = cuerpoMain.search(/if\s*\(\s*motivo\s*\)/);
+  const iSpawn = cuerpoMain.search(/spawn\(/);
+  const iExec = cuerpoMain.search(/execFileSync\(/);
+  ok(iGuarda > -1 && iSpawn > -1 && iGuarda < iSpawn, 'la guarda tiene que estar ANTES del spawn del deploy');
+  ok(iGuarda > -1 && iExec > -1 && iGuarda < iExec, 'la guarda tiene que estar ANTES de publicar la pieza');
   console.log('autotest OK');
 }
 
@@ -240,7 +360,44 @@ const main = () => {
   if (arg === '--autotest') return autotest();
   if (!arg) throw new Error('uso: publicar-aprobado.mjs <id-de-tarea>');
 
-  const cuerpo = cuerpoDeTarea(arg);
+  const { cuerpo, estado } = tareaDelTablero(arg);
+
+  // 🔴 GUARDA DE ESTADO — va ACA, antes de parsear y antes de cualquier spawn o
+  // execFile, porque lo unico que la hace valer es que ninguna rama pueda
+  // ejecutar sin pasar por ella.
+  //
+  // POR QUE. El vigia de aprobaciones (*/30) le manda a Sergio Urcullo un
+  // Telegram por cada pedido que se bloquea, y ese mensaje queda en su telefono
+  // PARA SIEMPRE. Cuando el pedido se archiva —cosa que pasa cada vez que su
+  // cuerpo queda corto y hay que rehacerlo— el boton viejo seguia funcionando:
+  // medido el 2026-09-11, `ok t_cba4fa74` sobre una tarea `status=archived`
+  // contestaba {"desplegando":true} con exit 0. No publicaba algo viejo (el
+  // comando deriva el sha al ejecutarse), pero aprobaba lo que ese pedido NUNCA
+  // le mostro: describia 24 arreglos y su ok publicaba 31.
+  //
+  // Y era un camino ciego POR CONSTRUCCION: `npm run pedido:entregado` enumera
+  // los pedidos VIVOS para comprobar que su cuerpo alcance, asi que una tarea
+  // archivada deja de ser sujeto del gate y sigue siendo un boton en el telefono.
+  //
+  // Cubre los DOS caminos (pieza y deploy) a proposito: cablear solo el que
+  // motivo el arreglo es como nacio este agujero — el circuito supo publicar
+  // PIEZAS antes que DEPLOYS, y la hermana quedo muda cuatro dias.
+  const motivo = motivoParaNoEjecutar(estado);
+  if (motivo) {
+    const salida = { publicable: false, desplegando: false, ejecutado: false, estado: estado ?? null, motivo };
+    let deploy = null;
+    try { deploy = parsearDespliegue(cuerpo); } catch { /* destino invalido: el motivo del estado alcanza */ }
+    if (deploy) {
+      const vivos = pedidoVivoDe(deploy.destino);
+      salida.destino = deploy.destino;
+      salida.pedidoVivo = vivos === null
+        ? 'no pude consultar el tablero para decirte cual es el pedido vivo'
+        : (vivos.length ? vivos.join(', ') : `no hay ningun pedido vivo de ${deploy.destino} ahora mismo`);
+    }
+    console.log(JSON.stringify(salida));
+    process.exit(3); // 3 = "no ejecuto porque la tarea esta cerrada". Distinto del 2 ("no habia nada que hacer").
+  }
+
   const pieza = parsearLinea(cuerpo);
   if (!pieza) {
     // Antes de rendirse: la otra cosa que Sergio aprueba por Telegram es un

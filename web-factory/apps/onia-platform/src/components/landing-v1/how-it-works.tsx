@@ -1,5 +1,5 @@
 import { Reveal, SplitTextReveal } from "@/motion";
-import { PRUEBA } from "@/lib/pricing";
+import { PRUEBA, ALCANCE_CON_AGENDA } from "@/lib/pricing";
 import { WA_URL_LANDING } from "@/lib/site";
 import { Row, Shot, ShotImage } from "./shot";
 import { ModulesDemo } from "./modules-demo";
@@ -55,7 +55,10 @@ export function HowItWorks() {
               02
             </span>
             <h3>Tu cuenta queda lista.</h3>
-            <p>Sin instalación ni proyecto de meses. Agenda, clientes y caja ya adentro.</p>
+            <p>
+              Sin instalación ni proyecto de meses. Clientes, caja y cobros ya
+              adentro, y agenda {ALCANCE_CON_AGENDA}.
+            </p>
           </Reveal>
           <Reveal delay={0.1} className={styles.stepVisual}>
             <div

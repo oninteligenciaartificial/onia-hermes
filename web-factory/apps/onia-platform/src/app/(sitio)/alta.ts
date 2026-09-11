@@ -56,6 +56,59 @@ export const ALTA_VERBO_VOS = ALTA_ABIERTA
   : "pedís tu acceso";
 
 /**
+ * ¿Entre crear la cuenta y usar el sistema hay un paso obligatorio?
+ *
+ * true — el alta exige CONFIRMAR EL CORREO. Es la misma decisión del 29-ago que
+ * reabrió el alta ("encender junto con la apertura", `lib/registration.ts` del
+ * producto), y este espejo copió esa mitad y no ésta: durante trece días el
+ * sitio enumeró la puesta en marcha como si fueran dos pasos.
+ *
+ * Importa porque es el ÚLTIMO clic del embudo y falla hacia afuera: quien hace
+ * exactamente lo que el sitio dice se come un 403 que nadie le anticipó, y si el
+ * correo tarda o cae en spam no tiene forma de saber que eso era lo que faltaba.
+ *
+ * Medido en producción el 2026-09-11, las tres capas que lo deciden —una sola no
+ * alcanza, el propio producto lo advierte: el flip de la app no sirve si GoTrue
+ * autoconfirma—:
+ *
+ *   docker exec onia-platform env | grep ONIA_REGISTRO_CONFIRMA_CORREO   # =si
+ *   docker exec supabase-auth2 env | grep GOTRUE_MAILER_AUTOCONFIRM      # =false
+ *   docker exec supabase-db psql -U postgres -d postgres \
+ *     -tAc "select count(*) from auth.users where email_confirmed_at is null"
+ *
+ * Ese último dio 1 de 8 el día que se escribió esto: no es hipotético, hay
+ * alguien parado ahí. El corte es `app/api/auth/login/route.ts`, que contesta
+ * 403 `email_not_confirmed`.
+ *
+ * Igual que `ALTA_ABIERTA`, ESTE ARCHIVO ES UN ESPEJO: la verdad vive en el
+ * contenedor. `npm run alta:confirma-vivo` compara las tres capas contra
+ * producción y sale 2 (NO MEDIDO) si no las alcanza, nunca en verde.
+ */
+export const ALTA_CONFIRMA_CORREO = true;
+
+/**
+ * El paso, dicho para intercalar en una enumeración corrida.
+ *
+ * No se tipea en cada página por lo mismo que el verbo del alta: escrito a mano
+ * en cuatro archivos, "cambiar el alta" son cuatro ediciones y basta olvidar una.
+ */
+export const PASO_CONFIRMAR_CORREO = "confirmás tu correo";
+
+/** La misma frase donde la página habla de vos en imperativo ("elegí", "usá"). */
+export const PASO_CONFIRMAR_CORREO_IMPERATIVO = "confirmá tu correo";
+
+/** De dónde sale el enlace, para que el lead sepa dónde mirar si no lo ve. */
+export const DE_DONDE_LLEGA_EL_ENLACE = "desde el enlace que te mandamos";
+
+/**
+ * Que una oración NOMBRE el paso. Deliberadamente ancho: lo que el guard exige
+ * es que el lead se entere, no una redacción. Vale "confirmás tu correo",
+ * "confirmá el correo", "revisá tu bandeja" o "el enlace que te mandamos".
+ */
+export const FRASE_CONFIRMACION =
+  /confirm[aá](?:s|r|ción|cion)?\s+(?:tu|el|su)\s+(?:correo|mail|email)|confirm[aá]s?\s+el\s+enlace|revis[aá]s?\s+tu\s+(?:correo|bandeja|casilla)|enlace\s+que\s+te\s+(?:mandamos|enviamos|llega)/i;
+
+/**
  * El vocabulario de cada rama, para el guard.
  *
  * Se declara acá y no en el test a propósito: es el mismo `ALTA_ABIERTA` el que

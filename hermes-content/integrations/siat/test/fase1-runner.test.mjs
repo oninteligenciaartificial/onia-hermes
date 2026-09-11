@@ -6,6 +6,11 @@
  * Run: node --test hermes-content/integrations/siat/test/fase1-runner.test.mjs
  */
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, it } from "node:test";
 import { gunzipSync } from "node:zlib";
 
@@ -1197,3 +1202,108 @@ describe("un prerequisito TRANSITORIO no se bloquea para siempre", () => {
     assert.match(r.state.etapas.VI.blockedCases.pv1.mensaje.descripcion, /sin CUIS/);
   });
 });
+
+describe("run-fase1-volumen.sh corre TODAS las etapas del plan", () => {
+  // Por que existe este gate, con su costo medido:
+  //
+  // El script orquestador tipeaba su propia lista de etapas ("for E in IV VII XI").
+  // Eso es una lista de INCLUSION escrita a mano al lado de STAGE_ORDER, que es la
+  // fuente real — y una lista asi solo cubre los casos que YA fallaron: ninguna
+  // etapa nueva nace cubierta.
+  //
+  // Ya costo un mes: cuando ensureCufd() se cableo en IV, VII y XI, las etapas VI y
+  // IX quedaron clavadas en 20 desde el 6-ago y NADA se puso rojo, porque el
+  // instrumento corria justo las tres que ya estaban sanas.
+  //
+  // Y el 2026-09-10 se midio la segunda mitad del mismo defecto, todavia viva: la
+  // lista omitia la etapa I, que es la que pide el CUIS por punto de venta. O sea
+  // que el dia que exista el Punto de Venta 1, correr este script NO lo desbloquea:
+  // los 11 combos pv1 (1.169 documentos de cobertura) seguirian cayendo con
+  // "sin CUIS para el punto de venta 1: correr la etapa I antes".
+  //
+  // La invariante no es "que esten estas etapas" (eso seria la misma lista de
+  // nuevo, un archivo mas alla): es que el script DERIVE las etapas del runner.
+  const script = readFileSync(
+    new URL("../run-fase1-volumen.sh", import.meta.url),
+    "utf8",
+  );
+  // El shell no tiene comentarios de bloque: se filtran por linea, si no la
+  // bitacora que explica el defecto absuelve al gate que lo persigue.
+  const codigo = script
+    .split("\n")
+    .filter((l) => !l.trimStart().startsWith("#"))
+    .join("\n");
+
+  it("no tipea la lista de etapas a mano", () => {
+    const aMano = codigo.match(/for\s+\w+\s+in\s+([IVX][IVX\s]*)\s*;?\s*do/);
+    assert.equal(
+      aMano,
+      null,
+      `run-fase1-volumen.sh tipea sus etapas ("${aMano?.[1].trim()}") en vez de ` +
+        `derivarlas de STAGE_ORDER. Una lista a mano se desincroniza en silencio: ` +
+        `hoy STAGE_ORDER tiene ${STAGE_ORDER.length} etapas.`,
+    );
+  });
+
+  it("deriva las etapas del runner, que es la fuente", () => {
+    assert.match(
+      codigo,
+      /STAGE_ORDER/,
+      "el script tiene que pedirle las etapas al runner (STAGE_ORDER), no repetirlas",
+    );
+  });
+
+  it("corre la etapa I, que es la que desbloquea un punto de venta nuevo", () => {
+    // Sin CUIS por PdV, TODO combo de ese punto de venta queda bloqueado.
+    //
+    // Este caso EJECUTA la derivacion del script, no la lee. La primera version
+    // resolvia por texto ("si nombra STAGE_ORDER, entonces corre STAGE_ORDER") y
+    // era TAUTOLOGICA: comparaba la fuente contra si misma, asi que un script que
+    // derivara filtrando la I (.filter(s => s !== "I")) pasaba en VERDE. Se vio
+    // mutando DESPUES de arreglar, nunca antes.
+    const etapas = etapasQueCorreElScript(codigo);
+    assert.ok(
+      etapas.includes("I"),
+      `las etapas que el script REALMENTE corre (${etapas.join(" ")}) no incluyen ` +
+        `la I: un punto de venta nuevo se quedaria sin CUIS y todos sus combos ` +
+        `bloqueados`,
+    );
+    assert.deepEqual(etapas, STAGE_ORDER);
+  });
+});
+
+/**
+ * Que etapas termina corriendo el script, DE VERDAD: se le extrae el `node -e` y
+ * se lo corre contra los modulos reales, en un cwd que imita el layout del VPS
+ * (emisor/src/). Si no deriva, se cae a leer la lista que tipeo.
+ *
+ * Ejecutar es el punto: cualquier atajo que resuelva por texto vuelve el caso
+ * tautologico y lo deja pasando en verde sobre un script recortado.
+ */
+function etapasQueCorreElScript(codigo) {
+  const expr = codigo.match(/node -e "([\s\S]*?)"\s*\)/);
+  if (!expr) {
+    const m = codigo.match(/for\s+\w+\s+in\s+([IVX][IVX\s]*)\s*;?\s*do/);
+    return m ? m[1].trim().split(/\s+/) : [];
+  }
+  // El shell expande sus variables antes de que node vea el codigo: si no se
+  // hace lo mismo aca, `$RUNNER` llega literal y el caso falla por el motivo
+  // equivocado (que se lee como el defecto, y manda a arreglar un script sano).
+  const runner = codigo.match(/^RUNNER=(\S+)/m);
+  assert.ok(runner, "no encontre la asignacion RUNNER= en el script");
+  const rutaRunner = join("emisor/src", runner[1].split("/").pop());
+  const codigoNode = expr[1].replaceAll("$RUNNER", rutaRunner);
+
+  const dir = mkdtempSync(join(tmpdir(), "siat-etapas-"));
+  try {
+    mkdirSync(join(dir, "emisor"), { recursive: true });
+    symlinkSync(fileURLToPath(new URL("../src", import.meta.url)), join(dir, "emisor/src"));
+    const salida = execFileSync(process.execPath, ["-e", codigoNode], {
+      cwd: dir,
+      encoding: "utf8",
+    });
+    return salida.trim().split(/\s+/).filter(Boolean);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+}

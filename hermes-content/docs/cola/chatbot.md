@@ -29,7 +29,33 @@ contra producción (SSH al VPS, las dos bases, el motor corrido de verdad), no c
 
 ---
 
-## 🔴 URGENTE — el motor enmudece en conversaciones viejas (probado por Sergio Urcullo en carne, 10-sep)
+## ✅ T4 — CERRADO el 2026-09-10 23:00: el acuse del handoff se repetia en CADA mensaje
+
+**Deployado y probado en prod** (backup deploy-20260910T225929Z): conversacion QA en
+`handoff_humano`, turno 1 acusa (1 mensaje), turno 2 → `silencio:handoff_en_curso`, 0
+mensajes — el candado por fin PERSISTE entre turnos. Test nuevo en
+`hermes-content/deploy/vps-ops/bot/persistence.test.mjs` fija la CLASE (las tres listas
+hermanas del raw no pueden volver a desincronizarse). Diagnostico original:
+
+Sergio Urcullo le escribió al bot de ventas (conv 11) en etapa `handoff_humano` y recibió
+**tres veces seguidas** el mismo "Te leo, y esto también se lo paso a Sergio…" (msgs 890, 892,
+894 — traza `respondio etapa=handoff_humano->handoff_humano` las tres). El acuse está diseñado
+para salir UNA vez (`handoffAckAt`, bot-engine.mjs) y después silencio.
+
+**Causa raíz, leída en el código:** `saveConversation` (persistence.mjs:384-391) arma el `raw`
+con una lista propia — `qualifyAsks, outboundSeq, scheduledLabel, publicContact, inboxId` — y
+**nunca escribe `handoffAckAt` ni `branchAsked`**. `toConversationRow` (bot-engine) sí los
+incluye, pero el que corre en producción es `saveConversation`. El motor los setea, la base
+nunca los recibe, el turno siguiente los carga en `null` (`stateFromRow` sí los lee) → acusa de
+nuevo. `branchAsked` tiene el mismo agujero DOBLE: `saveConversation` no lo guarda y
+`stateFromRow` tampoco lo restaura — la pregunta extra del rubro se repetiría igual.
+
+**FIX:** agregar los dos campos al `raw` de `saveConversation` + `branchAsked` a `stateFromRow`
++ test de ida-y-vuelta (estado → fila → estado conserva `handoffAckAt`/`branchAsked`) + deploy
+por `deploy-bot.sh`. **LISTO =** en conv real en handoff, segundo mensaje del prospecto produce
+SILENCIO (traza `silencio:handoff_en_curso`), mirado en el log.
+
+## ✅ CERRADO 10-sep — el motor enmudecía en conversaciones viejas (lo probó Sergio Urcullo en carne)
 
 Sergio Urcullo mandó "hola" al +591 75414930 y el bot NO contestó. La traza exacta
 (`/tmp/onia-bot-webhook.log` en `onia-center`):
@@ -231,6 +257,388 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-11 (`93256eab`, onia-hermes — pusheado a la rama, falta mergear):
+      el intake de leads le afirmaba a Sergio Urcullo que TODO contacto había pedido una demo.**
+      Tablero `t_62aa450c`, encontrado por otro carril midiendo en vivo.
+
+      `web-factory/apps/site/src/app/api/onia-center/leads/intake/route.ts` clavaba
+      `nextAction: "Confirmar demo"` y `meetingStatus: "solicitada"` para todo lead, sin mirar de
+      dónde venía. El endpoint se escribió para un agenda-form que **sí** pedía reunión; hoy su
+      **único llamador vivo** es `/guia-facturacion` —el imán de leads del SIN, que entrega una
+      hoja imprimible y no ofrece ninguna reunión—, así que el defecto alcanza al **100 %** de
+      los leads que entran por ahí, no a una minoría.
+
+      **No es cosmético: `"solicitada"` es lo que el panel LEE para decir que alguien pidió
+      reunión.** Medido sobre los consumidores: el contador de reuniones y su lista en
+      `web-factory/apps/site/src/app/onia-center/equipo/page.tsx` (líneas 254 y 559) y el filtro
+      de la vista de hoy en
+      `web-factory/apps/site/src/app/onia-center/next/hoy/page.tsx` (línea 118).
+      Cada descarga de la hoja aterrizaba en la vista diaria de Sergio Urcullo como
+      una demo pedida, revuelta con las que sí lo son — el pipeline donde tiene que elegir a
+      quién le escribe.
+
+      **LA CLASE, para buscarla en otro lado:** un endpoint reusado para un segundo caso de uso
+      conserva las AFIRMACIONES del primero, y ninguna de ellas es mentira *en el caso para el
+      que se escribió*. Ningún gate podía verlo — el lead se guarda bien, la ruta responde, no
+      sobra ni falta una palabra, no es un rubro ni un plan ni un rol. Lo que estaba mal es el
+      par (de dónde vino, qué se afirma que pidió). Y lo escondía el hermano sano: el alta
+      manual del panel (`NewLeadForm.tsx:87`) ya escribía `"pendiente"`, que es exactamente lo
+      correcto; mirar ese camino confirmaba en falso que el tema estaba cubierto.
+
+      Arreglo: la decisión sale a `web-factory/apps/site/src/lib/intencion-del-lead.mjs`. **Se
+      enumera la EXCUSA (`pidioDemo: true`), no los orígenes que no son demo** — una lista de
+      orígenes falla ABIERTA el día que nace un imán de leads nuevo, y falla en la dirección
+      cara (contamina el pipeline y nada se pone en rojo). `"pendiente"` y no `undefined` a
+      propósito, para quedar igual que el alta manual. `=== true` y no truthy: el body llega de
+      la red y un `"false"` de texto no puede valer por un pedido de reunión.
+
+      El módulo va en `.mjs` y no en `.ts` **a propósito**: el integrador corre la cadena
+      `npm test` también desde el VPS, que tiene Node 20 — un `import` de `.ts` la pondría roja
+      ahí y eso traba el merge de todos los carriles. Verificado en las dos direcciones que
+      `tsc` resuelve y **tipa** el import por el alias `@/` (control negativo: pedirle
+      `"cancelada"` da `TS2322`, o sea que no está pasando como `any`).
+
+      Gate `intencion-del-lead.test.mjs` (`npm run test:intencion-lead`, cableado a la cadena),
+      en **dos mitades porque ninguna ve lo de la otra**: comportamiento (lo que la función
+      DEVUELVE) y cableado (que el route lo USE, anclando la **asignación** — el esquive barato
+      es llamarlo y tirar el resultado). **Validado por mutación en seis direcciones**, las seis
+      en rojo, y las del módulo cayendo cada una en SU caso: revertir el arreglo, el esquive, la
+      media cura (`nextAction` derivado y `meetingStatus` clavado), el default que vuelve a
+      afirmar la reunión, `truthy` en vez de `=== true`, y el rubro sin `trim`. El código se
+      mide con los **comentarios en blanco**: si no, esta misma bitácora —que cita
+      `"solicitada"` para explicar el defecto— absuelve al gate.
+
+      Medido contra el sistema correcto, no heredado: `docker exec onia-landing env` muestra
+      que `ONIA_CENTER_INTAKE_URL` apunta al contenedor `onia-center` en el puerto 3012, a la
+      ruta del intake — o sea, a este archivo y no a otra copia.
+      ⚠️ **Commiteado, NO desplegado, y por un camino que no es el de siempre:**
+      `onia-center` tiene runbook y scripts (`hermes-content/deploy/onia-center/`) pero **no es
+      uno de los tres destinos que ejecuta el `ok <id>` de Sergio Urcullo** (landing, plataforma,
+      bot), así que ningún pedido de deploy lo cubre y el contenedor —`node:20-alpine`, arriba
+      hace 5 días— sigue sirviendo la versión vieja hasta que alguien lo reconstruya a mano.
+      `web-factory/apps/site` tampoco tiene `node_modules` acá ni CI que lo buildee.
+
+- [x] ✅ **CERRADO el 2026-09-11 (`9b9cde4`, onia-platform — pusheado a la rama, falta mergear y
+      desplegar): el add-on vigente no decía hasta cuándo, y no dejaba renovar antes del corte.**
+
+      Ayer el add-on ganó vigencia de verdad (`5011003`) y ese mismo día empezó a avisar
+      D-7/D-3/D-1/vencido por correo, in-app y push, con el botón apuntando a
+      `/settings/addon-chatbot`. **Esa pantalla quedó como estaba.**
+
+      Medido sobre `AddonChatbotClient.tsx`: sus tres ramas eran excluyentes y el formulario de
+      comprobante vivía en la última, la de contratar. Mientras el add-on sigue **vigente** —que
+      es justo cuando el aviso llega— `isWhatsAppAddonActive` da `true`, la pantalla cae en la
+      rama ACTIVO, y esa rama **no tiene la fecha y no tiene dónde pagar**. El dueño que recibe
+      *«tu asistente deja de contestar el 14»* abre el link, lee **«Add-on activo · Activado el
+      25 de agosto»** —la fecha de ALTA, que se lee como permanente— y no encuentra ni cuándo
+      vence ni cómo renovar. El único camino para pagar era esperar a que se **apague**: perder
+      el servicio primero, con sus clientes escribiéndole a un bot mudo.
+
+      **LA CLASE, para buscarla en otro lado:** cuando un concepto gana una dimensión, los
+      AVISOS la adoptan primero —sin ella no se pueden redactar— y la pantalla que lo
+      **administra** se queda sin ella, siendo adonde los avisos mandan. Es la firma conocida
+      «cerrar una mitad rompe a la otra» aplicada a una pantalla: el arreglo convirtió una rama
+      terminal en una rama transitoria y nadie volvió a mirar la rama.
+
+      Ningún gate podía verlo: no sobra ni falta una palabra, el monto sale de la fuente única,
+      el rubro deriva bien, el rol filtra bien (`SOLO_ADMIN`), la ruta existe y responde, y
+      `addon-vigencia.ts` y el cron están verdes **con razón** — cada uno tiene razón por
+      separado. El defecto vive en el par (estado del add-on, lo que la pantalla deja hacer).
+
+      Arreglo: la decisión sale a `lib/subscription/addon-en-pantalla.ts` (un `page.tsx` no puede
+      exportar helpers, y como ternario anidado en el TSX lo único medible es el texto del
+      archivo, que se absuelve solo). La fecha se deriva con `vencimientoDelAddon` —la MISMA
+      función que redacta el aviso, no una prima—, así que el correo y la pantalla a la que ese
+      correo manda no pueden decir fechas distintas. Sin vigencia (otorgado a mano) no se inventa
+      fecha ni se ofrece renovar, que sería cobrar dos veces lo mismo. Y un comprobante en
+      revisión tapa al pago **también** con el add-on activo: si no, el que ya pagó su renovación
+      no ve acuse de nada y vuelve a pagar.
+
+      Gate `lib/subscription/addon-en-pantalla.test.ts`, validado por mutación en **cinco**
+      direcciones y cada una cae en SU caso: el activo sin camino de pago (el defecto original),
+      la revisión que deja de tapar, el esquive en `page.tsx` (llamar al helper y tirar el
+      resultado), el esquive en el cliente (decidir con un ternario propio) y recibir la fecha
+      sin pintarla. El prop va **requerido**: opcional con default es el hueco que `tsc` no ve.
+      **Mirado renderizado** con el CSS del build vivo (`/root/addon-pantalla.png`): dice «Activo
+      hasta el 25 de septiembre de 2026» y abre «Renovación» con su formulario.
+      Gates: `tsc` 0 · **4599** tests · `eslint` 0 errores.
+
+- [x] ✅ **CERRADO el 2026-09-11 (`278f030`, onia-platform — falta mergear y desplegar): el cron
+      de recordatorios le escribía a los pacientes en nombre de una cuenta vencida.**
+
+      **La CUARTA puerta que escribe sin sesión del dueño**, y la encontré preguntando por la
+      hermana del arreglo de ayer. Las otras tres ya preguntan si la cuenta sigue viva: el panel
+      corta sus 35 rutas con `checkPlanExpiry`, la reserva pública se cerró el 08-sep
+      (`lib/agenda/reserva-publica.ts`) y el bot de WhatsApp ayer (`atiende-el-bot.ts`). Ésta no
+      preguntaba nada.
+
+      Medido sobre `app/api/cron/appointment-reminders/route.ts`: su `SELECT_CITA` traía `plan`
+      —el plan **CONTRATADO**, no el estado— y ni `planEnd` ni `trialEnd`, y las dos `findMany`
+      filtran sólo por fecha de la cita. Así que el negocio en solo lectura le seguía escribiendo
+      a sus pacientes por correo **y por WhatsApp**, firmando con su nombre, y cada mensaje de
+      WhatsApp gasta plata real de Meta.
+
+      **Lo urgente no es el gasto: desde que el bot corta, este recordatorio CONTRADICE a su
+      puerta hermana.** Le dice al paciente *«tu cita es mañana»*, lo invita a responder, y del
+      otro lado ya no atiende nadie. La lección conocida es que cerrar media familia deja la otra
+      mitad abierta; acá es peor y es nueva: **la mitad cerrada ROMPE a la abierta**.
+
+      Ningún gate podía verlo — no sobra ni falta una palabra, el rubro deriva bien (ese eje se
+      cerró el 07-sep), el vocabulario es el correcto y el camino feliz funciona. Falla **quién
+      pregunta**.
+
+      **Hoy no muerde de casualidad y muerde esta semana:** contadas en `supabase-db`, las citas
+      futuras son 0, y las dos orgs reales (`bolivian-electricidad-e6t21`, `clinica-sergio-p2ljs`)
+      están en trial y vencen el **14** y el **17-sep**. La segunda tiene `addon.whatsapp` activo.
+
+      Arreglo: se pregunta con `isWriteBlocked` —el MISMO corte del panel y del bot, no una
+      prima—, así la gracia del trial vale igual y a quien paga un día tarde no se le apagan los
+      recordatorios que compró; un alta manual sin fechas sigue andando. El corte va **ANTES de
+      `reclamarVentana`**, que es un CAS de un solo uso: puesto después quemaría la marca y el
+      paciente se quedaría sin recordatorio también el día que el dueño renueve. Desenlace propio
+      (`"cuenta-vencida"`) para que una corrida saltada no se lea como un día sin citas. Las
+      fechas van **requeridas en el tipo**: `derivePlanStatus` lee un `undefined` como «sin fecha»
+      y devuelve vigente, así que un llamador que no se las pida a Prisma haría que el corte no
+      corte nunca, en silencio.
+
+      Gate `app/api/cron/appointment-reminders/cuenta-viva.test.ts`, validado por mutación en
+      **cuatro** direcciones y cada una cae en SU caso —ningún guardia tapa a otro—: sin corte
+      (3 casos), **esquive** llamando y tirando el resultado (1), corte después del CAS (1), y
+      `SELECT` sin las fechas (1). Gates verdes: `tsc` 0 · **4482** tests · `eslint` 0.
+
+- [x] ✅ **CERRADO el 2026-09-11 (`e6adb19`, onia-platform): la recarga del chatbot CADUCA a fin
+      de mes y ninguna de las tres superficies que la vende lo decía.** Bs 190 por 200
+      conversaciones que se evaporan el día 1.
+
+      No es copy: el producto lo aplica. `ChatbotUsoMensual.recargadas` es por
+      `(organizationId, mes)` y `estadoCupo` lee la fila del mes en curso, así que el 1 vuelve
+      a 0. Y el bloque de compra aparece **recién al 80 % del cupo**, que cae avanzado el mes:
+      el dueño que cruza el umbral un 28 paga y tiene dos días para usar lo que compró.
+
+      Las tres superficies mudas, medidas con el gate derivado del disco antes de tocar nada:
+      `CupoConversacionesCard.tsx:70` (el botón), `lib/chatbot/cupo.ts:278` (el aviso del corte)
+      y `lib/pricing.ts:202` (el mensaje de WhatsApp con el que el dueño la pide). Peor, el
+      estado agotado remataba con *«si no hacés nada, se renueva el 1 del mes que viene»* al
+      lado de *«podés sumar más»*: se lee como que lo comprado sobrevive a esa renovación.
+
+      **Lo que lo delata, y es la firma para buscar más de esta clase:** el aviso que sale
+      **después** de cobrar (`CHATBOT_RECARGA_APLICADA`) ya decía *«de este mes»*. La salvedad
+      estaba escrita, pero donde no la lee quien decide. Ningún gate podía verla — no sobra una
+      palabra prohibida, el precio sale de la fuente única, no es un rubro, ni un plan, ni un
+      rol, y el camino de fallo del botón ya estaba cubierto. Es el escalón siguiente de
+      `limite-que-corta.test.ts` (06-sep): ahí la venta callaba **cuánto te dan**; acá,
+      **cuánto te dura**.
+
+      Arreglo: no se borra la promesa, se condiciona (mismo patrón que `SEARXNG_URL` y el
+      importe del QR). `RECARGA_CONVERSACIONES.vigencia` vive una sola vez en `pricing.ts` y la
+      nombran las tres. Se quitó el párrafo que había agregado en la tarjeta: `textoDeCupo` ya
+      lo dice ahí y duplicaba la advertencia en la misma pantalla.
+
+      Gates: `lib/chatbot/recarga-dice-su-vigencia.test.ts` (mide lo que las funciones
+      DEVUELVEN + deriva del disco las superficies que ofrecen sumar, para que una nueva nazca
+      vigilada) y `CupoConversacionesCard.render.test.ts` (prueba que la pantalla lo PINTE —su
+      caso propio, el que el otro no puede ver). **Validados por mutación en 7 direcciones**,
+      incluido el esquive (salvedad lejos de la oferta) y un sujeto nuevo sin cubrir. Tres
+      gates de `onia-platform` verdes: `tsc` 0, 4438 tests, `lint` 0 errores.
+
+      ⚠️ **Commiteado y pusheado, NO desplegado**: el swap lo hace `onia-cola` cuando Sergio
+      Urcullo aprueba el pedido de deploy de plataforma. Hasta entonces el dueño sigue viendo
+      la versión muda.
+
+      **Queda una decisión de plata, anotada y no tomada acá** (radar, §recarga): arrastrar lo
+      no usado al mes siguiente. Hoy caduca; decirlo es honesto, pero la alternativa cambia lo
+      que el cliente recibe por Bs 190.
+
+- [x] ✅ **CERRADO el 2026-09-11 (`7a9e10c0`): el barrido de rescate intentó salvar un «hola»
+      real CUATRO veces, falló las cuatro, y salió con `exit 0` — la misma cara que una vuelta
+      sin trabajo. Nadie se enteró.**
+
+      Medido en el log de producción, no heredado. Inbox 5 (Onia WhatsApp), conversación 11:
+
+      ```
+      messages id=873  message_type=0  2026-09-10 19:28:49Z  "hola"
+      19:34  conv 11 msg 873 —  5 min sin respuesta -> mensaje_ya_procesado
+      19:44  conv 11 msg 873 — 15 min sin respuesta -> sin_respuesta
+      19:54  conv 11 msg 873 — 25 min sin respuesta -> sin_respuesta
+      20:04  conv 11 msg 873 — 35 min sin respuesta -> sin_respuesta
+      ```
+
+      El bot **nunca** le contestó. Dejó de figurar como huérfano a las 20:11 y no porque lo
+      rescataran: porque **la persona volvió a escribir sola**. Las cuatro vueltas cerraron con
+      `0 CONTESTADOS`, y `armarAvisoRescate()` sólo mira `contestado`, así que tampoco salió un
+      aviso. Un lead perdido, en silencio, con el instrumento que existe para verlo mirándolo.
+
+      **La causa:** `runRescateSweep` tenía **tres** salidas y contabilizaba **dos**. `contestado`
+      sumaba y avisaba; `respuesta_ilegible` y el error caían en `fallidos` (exit 1); y un cuerpo
+      **legible** que dice *no emití nada* no caía en ninguna. El propio archivo ya había escrito
+      la regla correcta para el hermano ilegible —*«no poder LEER el resultado no es 'no pasó
+      nada'»*— y no la aplicó al caso en que sí se puede leer. Media familia cubierta se lee como
+      familia cubierta.
+
+      **Por qué es demostrable y no una opinión sobre motivos:** `seleccionarHuerfanos` ya probó
+      que esa conversación no tiene **ningún** saliente. Entonces una reinyección sin `sent` dejó
+      a la persona tan muda como estaba, se llame como se llame el motivo — no hay que enumerar
+      motivos malos (lista de inclusión: falla abierto con el motivo nuevo que nadie previó). Se
+      enumera la **excusa**, que falla cerrado: `MOTIVOS_SIN_RESCATE_AJENO = {handoff_humano}`,
+      donde el bot se calla a propósito y el que espera es de `onia-vigia-sin-respuesta.sh`.
+
+      Reproducción (30 s) · 4 casos nuevos, validados por mutación en las dos direcciones —
+      ensanchar la excusa para tapar el tercer estado (el esquive) cae en 3 rojos, vaciarla en 2:
+
+      ```
+      cd hermes-content/deploy/vps-ops/bot && node --test rescate-run.test.mjs
+      ```
+
+      911/911 en `npm run test:bot`, que es el eslabón de la cadena que recoge ese archivo.
+
+      ⚠️ **COMMITEADO, NO DESPLEGADO.** El cron (`4,14,24,34,44,54 * * * *`) corre la copia de
+      `/root/loops/onia-hermes`, no la de `/opt/onia/bot` — así que esto se enciende solo cuando
+      el integrador lleve la rama a `main` (ese clon del VPS estaba al día al medirlo). **No
+      necesita pedido de deploy.**
+
+      **La mitad que queda abierta, dicha con su nombre:** ahora el fallo se VE en el log y el
+      barrido sale con `exit 1`, pero a Sergio Urcullo no le llega. Avisarle en cada vuelta serían
+      hasta 72 mensajes por el mismo mensaje (12 h de ventana ÷ 10 min de cron) — exactamente el
+      ruido que `t_7362c865` reclama. Falta avisar **una sola vez por mensaje**, y eso pide estado
+      durable que hoy el barrido no tiene. Va abajo como ítem propio.
+
+- [x] ✅ **CERRADO el 2026-09-11: la SUITE del bot le mandaba avisos a Sergio Urcullo y dejaba
+      marcas en producción. Una de ellas silenciaba el aviso del lead real del 10-sep.**
+      Lo causó el ítem de acá abajo, el mismo día.
+
+      **Cómo apareció:** el tablero amaneció con `t_3cd88596` — «🔴 Un mensaje quedo SIN
+      contestar · conv 49: espera hace 5 min». Se midió antes de creerle, y era falso en las dos
+      mitades: el bot **había contestado los dos** mensajes de la conv 49 (936→937 y 938→939) y
+      el barrido real informaba `0 sin respuesta` en **todas** sus corridas de esa hora. La conv
+      49 tampoco es un lead: es la sonda de QA del carril.
+
+      El log del enrutador dio la firma exacta — **8 avisos en 50 segundos**, dentro de la vuelta
+      anterior de este loop:
+
+      ```
+      05:16:01  TAREA t_3cd88596 clave=876bcd  🔴 Un mensaje quedo SIN contestar
+      05:16:09  TAREA-YA-EXISTE clave=876bcd   (y 6 más hasta 05:16:51)
+      ```
+
+      **La causa:** los casos que llamaban a `runRescateSweep` con `emitir: true` **no
+      inyectaban** `deps.avisar` ni `deps.marcas`, y los defaults son los REALES — `onia-tg.sh`
+      y `/var/lib/onia-rescate-avisado/`. Se estimaron 3 casos; la baranda encontró **12**.
+
+      **Lo caro no fue el aviso falso, fue la MARCA.** Quedaron en disco `chatwoot-49-282`,
+      `chatwoot-47-249` y **`chatwoot-11-873`** — el lead real del 10-sep que motivó todo el
+      ítem de abajo. Esa marca existe para no repetir un aviso ya entregado: con ella puesta, el
+      día que ese mensaje vuelva a quedar huérfano **el aviso no sale**. El instrumento que
+      existe para no perder un lead lo silenciaba su propio test, en verde y sin una línea.
+      Liberadas las 6 al cerrar (`ls -A` → 0); soltar una marca sólo puede causar un aviso de
+      más, nunca de menos.
+
+      **Un caso pasaba en verde por una razón falsa, y lo destapó el directorio limpio.**
+      «avisa SOLO cuando salvó a alguien» afirmaba `deepEqual(avisos, [])`, y eso era cierto
+      únicamente porque su **corrida anterior** había dejado `chatwoot-47-249` en producción:
+      la reserva devolvía `false` y el 🔴 no salía. Con marcas propias muestra la verdad — un
+      reinyectado deduplicado **sí** avisa de perdido, que es deliberado. Ahora mira el aviso de
+      rescate (🛟), no la bandeja entera.
+
+      **El arreglo va en el producto y TIRA, no no-opera:** `guardaDeEfectoReal(que)` explota si
+      `NODE_TEST_CONTEXT` está definido —lo pone el runner de Node y nadie más: `"child-v8"`
+      adentro, `undefined` afuera—. Un no-op silencioso dejaría en verde a un caso que cree
+      estar probando el aviso, que es el guardia hueco de siempre. Falla **cerrado**: un caso
+      futuro con `emitir: true` que no inyecte explota solo y nombrando lo que le falta, así que
+      **no hace falta además un gate que parsee el archivo de tests** buscando la forma del
+      descuido — enumerar formas es una lista de inclusión y se le escapa la siguiente.
+
+      ⚠️ **El `catch` del aviso se tragaba la baranda**, y ahí fallaba ABIERTA justo en el
+      caso que viene a cuidar: el aviso quedaba silenciado y el test pasaba en verde creyendo
+      que lo probó. El error va marcado (`.hermetismo`) y el catch lo re-tira. Ese catch existe
+      para que un Telegram caído no tumbe un rescate ya hecho — un fallo de red se aguanta, un
+      test escrito mal no. **Con eso aparecieron 3 casos más** que estaban mudos.
+
+      ⚠️ **Una baranda anti-efecto es el único gate que NO se valida quitándole la protección.**
+      Corrí esa mutación creyéndola segura y **mandó un aviso real** (05:47:39). Lo contuvo de
+      casualidad la dedup del enrutador, que ya tenía la clave. Queda escrito arriba de los
+      casos cuál no se corre y cuál es la equivalente segura (tragar el `.hermetismo`, que
+      prueba lo mismo sin desarmar nada). Las otras 4 mutaciones caen en rojo, cada una en su
+      caso, y ninguna ejecuta el efecto.
+
+      ```
+      cd hermes-content/deploy/vps-ops/bot && node --test rescate-run.test.mjs   # 51/51
+      npm run test:bot                                                          # 926/926
+      npm test                                                                  # cadena, exit 0
+      node rescate-run.mjs                                                       # seco: 0 huérfanos
+      ```
+
+      ⚠️ **COMMITEADO, NO DESPLEGADO — y no necesita pedido de deploy**, por lo mismo que el
+      ítem de abajo: el daño lo causa la **suite**, que corre desde el repo. Se apaga solo
+      cuando el integrador lleve la rama a `main`.
+
+- [x] ✅ **CERRADO el 2026-09-11: el rescate fallido se veía en un log que nadie mira. Ahora
+      sale, y sale UNA sola vez por mensaje.** Era la mitad que dejó abierta `7a9e10c0`.
+
+      El barrido ya salía con `exit 1` cuando reinyectaba y el bot no emitía nada — pero eso
+      vive en `/var/log/onia-rescate-mensaje-perdido.log`. El «hola» del 10-sep (conv 11 msg
+      873, inbox 5) falló cuatro veces ahí adentro y dejó de figurar como huérfano **porque la
+      persona volvió a escribir sola**, no porque alguien la atendiera.
+
+      **Por qué no alcanzaba con avisar y ya:** la ventana del huérfano es `MAX_EDAD_MS` = 12 h
+      y el cron corre cada 10 min → hasta **72 avisos idénticos por el mismo lead**. Eso no es
+      avisar de más, es apagar el canal — el vigía que grita mal no molesta, inutiliza. Así que
+      el aviso necesitaba memoria por mensaje, durable entre corridas.
+
+      **Se midió primero si servía `bot_messages.message_key`, como pedía el ítem, y NO sirve.**
+      Dos razones independientes, medidas contra `supabase-db`, no supuestas:
+
+      | | por qué descarta la tabla |
+      |---|---|
+      | **FK** | `bot_messages.conversation_key` → `bot_conversations`. El insert falla justo cuando el webhook nunca creó la conversación (401, puerto muerto, 500) — **el peor modo de falla es el que no se puede recordar**, y el aviso volvería cada 10 min |
+      | **Contabilidad** | `direction` sólo acepta `inbound\|outbound` (CHECK) y `usage-run.mjs` cuenta `direction=eq.outbound` para el uso que se le **cobra** al cliente. Una marca ahí es una conversación facturada que nunca existió |
+
+      Va entonces un archivo por mensaje en `/var/lib/onia-rescate-avisado/` — mismo patrón que
+      `/var/lib/onia-vigia-remotos/<id>`, que ya es el de la casa. La reserva es atómica (`wx`
+      falla con `EEXIST`), así que dos barridos simultáneos no avisan los dos, y se reserva
+      **antes** de mandar, igual que el recordatorio M9.
+
+      Las cuatro decisiones que no son obvias, con su motivo:
+
+      - **La marca es por MENSAJE**, no por conversación ni por vuelta: dos mensajes perdidos de
+        la misma persona son dos leads.
+      - **«No pude recordar» (`null`) no es «ya avisé» (`false`)**: si la marca no se puede
+        reservar **no se manda**, porque 72 idénticos es peor que el log. Se dice aparte
+        (`marcasFallidas`, línea `SIN MARCA` en el log) en vez de tragarse.
+      - **Si Telegram se cae, la marca se SUELTA.** La reserva existe para no repetir un aviso
+        *entregado*; si no se entregó, ese lead no se anunció nunca y el barrido siguiente
+        reintenta.
+      - **Dos avisos separados, no uno mezclado.** `onia-tg.sh` clasifica por la **primera
+        línea**: un mensaje que empiece con 🛟 y remate con un fallo se rutea como buena noticia
+        y el lead perdido no le llega a nadie.
+
+      Y una purga: `VIDA_MARCA_MS` = 2 × la ventana del huérfano. Sin ella el directorio crece
+      para siempre; con ella una marca vencida no puede silenciar nada, porque pasada la ventana
+      ese mensaje ya no es huérfano.
+
+      **11 casos nuevos, validados por MUTACIÓN en 9 direcciones** (sin reserva · marca por
+      conversación · tratar `null` como avisar · un solo mensaje mezclado · sin escapar HTML ·
+      marcar también en seco · no soltar la marca · sin purga · el **esquive**: reservar y no
+      armar nunca el aviso). Las 9 caen en rojo.
+
+      ⚠️ **La primera versión del caso «en seco» pasaba VERDE con el guardia arrancado** —
+      lo tapaba que en modo seco `fallidos` está vacío, así que había dos guardias atajando el
+      mismo caso. Reescrito sobre lo único que ese guardia protege de verdad: `purgar` **BORRA**
+      archivos, y un `node rescate-run.mjs` sin `--emit` —lo que uno tipea para mirar— no puede
+      pasar la escoba por las marcas de producción.
+
+      ```
+      cd hermes-content/deploy/vps-ops/bot && node --test rescate-run.test.mjs   # 47/47
+      npm run test:bot                                                          # 922/922
+      node rescate-run.mjs                                                       # seco, contra prod
+      ```
+
+      Seco contra producción al cerrar: `0 sin respuesta · 0 reinyectados · 0 CONTESTADOS` — hoy
+      no hay ningún huérfano, el circuito está sano.
+
+      ⚠️ **COMMITEADO, NO DESPLEGADO — y NO necesita pedido de deploy.** El cron
+      (`4,14,24,34,44,54 * * * *`) corre la copia de `/root/loops/onia-hermes`, no la de
+      `/opt/onia/bot`: esto se enciende solo cuando el integrador lleve la rama a `main`.
+
 - [x] ✅ **CERRADO el 2026-09-10 (`31cdfba`): quien pedía hablar con una PERSONA recibía siempre
       «Te conecto con un agente, en unos momentos te atenderán» — y cuando la conversación no
       llegaba a ninguna bandeja, el bot además se callaba. Sin bot y sin humano, con la promesa
@@ -290,8 +698,14 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       **Gates:** `npx tsc --noEmit` 0 · `npx vitest run` **4262 pasan / 341 archivos** ·
       `npx eslint .` 0 errores.
 
-      🔴 **Commiteado y pusheado, NO desplegado — y falta un paso antes:** `31cdfba` está en la
-      rama del carril, **no en `master`**. Falta el merge del integrador y después el swap.
+      ✅ **VIVO en producción — verificado el 2026-09-10 22:46 La Paz con las TRES medidas.**
+      El texto anterior decía *"`31cdfba` está en la rama del carril, no en `master`; falta el
+      merge y después el swap"*, y las tres dan verde:
+      `git merge-base --is-ancestor 31cdfba origin/master` → **sí**;
+      `docker exec onia-platform cat /app/.next/BUILD_ID` → `w_JrYQKMrWy8GyDuBNnOk` (corre);
+      `docker exec onia-platform grep -rl decidirEscalacion /app/.next/server` → devuelve un
+      chunk del servidor (una línea, no vacío). El que pide un humano ya no recibe
+      *"te conecto con un agente"* cuando no hay inbox del otro lado.
 
 - [x] ✅ **CERRADO el 2026-09-08: el bot de WhatsApp del cliente le pedía su catálogo a una tabla
       que está VACÍA por construcción en 3 de los 5 rubros de la v1.0.**
@@ -882,9 +1296,14 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       un 200 de Telegram que descartó el mensaje se lee como enviado — los dos falsos verdes que
       harían que el aviso muera igual que ahora, pero con mejor cara. **772 casos verdes** en
       `node --test` (754 → 772).
-      🔴 **NO DESPLEGADO** — `hermes-content/deploy/vps-ops/bot/espejo-check.mjs` lo dice:
-      el archivo nuevo falta en el VPS y `hermes-content/deploy/vps-ops/bot/webhook-server.mjs` difiere. El deploy es de `onia-cola`. Y sigue pendiente la decisión de
-      Sergio (`t_b18ca430`), que ahora es sólo encender un flag.
+      ✅ **DESPLEGADO — verificado el 2026-09-10 22:46 La Paz.** Las dos afirmaciones del texto
+      anterior (*"el archivo nuevo falta en el VPS"* y *"`webhook-server.mjs` difiere"*) son las
+      dos falsas hoy: `ls -l /opt/onia/bot/aviso-telegram.mjs` → existe (10.055 B, 7-sep), y el
+      `md5sum` de `/opt/onia/bot/webhook-server.mjs` y el del repo dan la MISMA suma, byte a byte
+      (se reproduce corriendo los dos `md5sum` y comparando). Lo único que `espejo-check.mjs`
+      marca ausente hoy es
+      `urgencia-en-el-handoff.test.mjs`, que es un test: no viaja al runtime ni lo ve un cliente.
+      Sigue pendiente la decisión de Sergio Urcullo (`t_b18ca430`), que es sólo encender un flag.
 
 - [x] 🔴 **El que ESPERA a un humano prometido era invisible para todo el sistema: el único vigía
       que mira la bandeja lo descartaba con un `// ya le contestaron` que en un handoff es
@@ -945,11 +1364,11 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       con sus saltos de línea, y el parseo corta por `\n`. Un mensaje multilínea —M5 lo es— se
       partía en filas de menos de 9 columnas que el `.filter()` tiraba **en silencio**: el saliente
       desaparecía y su conversación podía contarse como colgada. Ahora el `\n` se aplana en el SQL.
-      🔴 **NO ESTÁ ENCENDIDO — y esto no es una formalidad.** El cron
-      (`39 */2 * * * /root/bin/onia-vigia-sin-respuesta.sh`) elige el script de una lista y toma
-      **el primero que existe**: `/root/loops/onia-hermes/scripts/vigia_sin_respuesta.mjs`, o sea
-      el clon de `main`. Medido: ahí `grep -c seleccionarEsperandoHumano` → **0**. Hasta que
-      `onia-cola` mergee esta rama, el que corre cada 2 h es el vigía viejo, ciego a este caso.
+      ✅ **ENCENDIDO — verificado el 2026-09-10 22:46 La Paz.** El texto anterior media el clon
+      de `main` del VPS y daba **0**; el MISMO comando hoy da **2**:
+      `ssh root@187.77.16.63 'grep -c seleccionarEsperandoHumano /root/loops/onia-hermes/scripts/vigia_sin_respuesta.mjs'`.
+      O sea el que corre cada 2 h ya es el vigía nuevo, y el que espera a un humano prometido
+      dejó de ser invisible.
       **Reproducción en 30 s:** `node scripts/vigia_sin_respuesta.mjs` → la última línea dice
       cuántos hay de cada tipo (`N sin respuesta · M esperando a un humano prometido`).
 
@@ -1465,8 +1884,10 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       **Y probado que MUERDE:** dos mutaciones, las dos rojas — `MUDO`→`respondio` (2 casos) y el
       servidor volviendo a **no** loguear, que es el estado de hoy en producción (1 caso).
       **Gates:** `npm run test:bot` **704/704** en verde (31 en este archivo, 7 nuevos).
-      🔴 **COMMITEADO, NO DESPLEGADO.** `/opt/onia/bot` no es un checkout de git y el deploy no es
-      de este carril. **Hasta que alguien copie el archivo y reinicie el bot, el log sigue ciego.**
+      ✅ **DESPLEGADO — verificado el 2026-09-10 22:46 La Paz: el log ya NO está ciego.**
+      `ssh root@187.77.16.63 'grep -c "trazaWebhook\|respondio\|MUDO" /opt/onia/bot/webhook-server.mjs'`
+      → **5**. El texto anterior (*"hasta que alguien copie el archivo y reinicie el bot, el log
+      sigue ciego"*) describía el estado del 02-sep, no el de hoy.
 
 - [x] 🔴 **El arreglo que hoy hace que el bot conteste dos veces está VIVO en producción y NO
       está en el repo: un `rsync` desde Windows lo borra y el bug de la semana vuelve.**
@@ -2085,6 +2506,30 @@ archivos.**
 
 ## Cerrado — no rehacer
 
+- [x] **La cuenta vencida seguía cancelando citas por WhatsApp.** Cerrado el 2026-09-11,
+      `6aba5bc` (rama del carril — **falta que el integrador lo mergee y falta desplegar**).
+      No estaba en la cola: salió de auditar la puerta pública que es de este carril.
+      El panel corta sus 35 escrituras con `checkPlanExpiry` y la reserva pública se cerró
+      el 08-sep con ese mismo motivo; `lib/agenda/reserva-publica.ts` **nombra al bot de
+      WhatsApp como la superficie hermana**, pero sólo cerró el eje RUBRO. El eje VENCIDA
+      quedó abierto acá — media familia cubierta se lee como familia cubierta.
+      Medido sobre `lib/whatsapp-bot.ts` (415 líneas, el motor detrás del webhook): **cero**
+      menciones de `isWriteBlocked`, `checkPlanExpiry`, `planEnd` o `trialEnd`. Su único
+      corte —el paso rotulado «Check plan limits»— es `checkWhatsAppAddon`, que pregunta por
+      el add-on y por el cupo del mes, nunca por si la suscripción está viva (`plan` es el
+      plan CONTRATADO, no el estado). Y esta puerta **escribe**: cancela citas
+      (`status: "CANCELADA"`), las confirma, abre sesiones y escala a un humano. Al dueño con
+      el panel en solo lectura le seguían cancelando citas que él no puede gestionar, y cada
+      respuesta gastaba Meta y OpenAI en una cuenta que dejó de pagar.
+      Hoy **no muerde** —ninguna org de producción tiene `whatsappPhoneNumberId`, medido en
+      `supabase-db`— pero es un arma cargada: `clinica-sergio-p2ljs` tiene el add-on activo y
+      su trial vence el **17-sep**.
+      Arreglo: `lib/whatsapp/atiende-el-bot.ts`, que pregunta con `isWriteBlocked` —el MISMO
+      corte del panel, así la gracia del trial vale igual y un alta manual sin fechas sigue
+      atendiendo—. El gate trae el caso del **llamador** y se validó por mutación en tres
+      direcciones; la del esquive pasaba en VERDE (ver la lección, abajo).
+      Reproducción: `npx vitest run lib/whatsapp/atiende-el-bot.test.ts` (11 casos).
+
 - [x] **El disco que bloqueaba el build: el ítem describía una máquina que ya no es donde
       corremos.** Cerrado el 2026-09-07 midiendo, no razonando. Decía «0 bytes libres de
       465 GB» y «`onia-platform` tiene **30 worktrees**, 13 con su propio `node_modules`».
@@ -2146,11 +2591,12 @@ archivos.**
       `npm test` **sólo el `--self-check`** (el modo vivo necesita docker: en la cadena sería el
       rojo falso que traba el merge de los 15 carriles). Los 8 gates posteriores a `test:sitio-venta`
       corridos uno por uno, los 8 en verde.
-      🔴 **Commiteado, NO desplegado — y el gate da 1 a propósito hasta que se despliegue.** El
-      diagnóstico va con el lugar del arreglo: *"el código ya está arreglado en la rama, FALTA
-      DESPLEGAR"*, para no repetir la vuelta en que este carril "arregló" un archivo que ya estaba
-      bien. Pedido consolidado en la tarea de deploy del bot que ya existe, **t_7340fb5b**, junto
-      con los rubros: es el mismo `deploy-bot.sh` y los mismos dos archivos.
+      ✅ **DESPLEGADO — verificado el 2026-09-10 22:46 La Paz con su propio gate.**
+      `node hermes-content/deploy/vps-ops/bot/rubros-vivos.mjs` → **exit 0**, *"el bot ofrece
+      exactamente lo que se vende"*: producción vende 5 (`dentagest-clinical`, `gestios-general`,
+      `proveegest-electrico`, `esteticagest-clinical`, `gestios-servicios-profesionales`) y el bot
+      ofrece 5 (dental, comercio, proveedores, servicios, estética). El gate ya no da 1: daba 1
+      **a propósito** hasta el swap, y el swap ocurrió.
 
 - [x] **El bot decía "no tengo horarios libres" y dos turnos después ofrecía el que acababa de
       descartar.** Cerrado el 2026-09-05, en la misma vuelta en que se encontró. Commit
@@ -2173,12 +2619,13 @@ archivos.**
       (`followUpTemplate:186`, `.some(pending) → null`). El único agujero era `hayHorarioReal`.
       **Prueba:** test `"HORARIO VENCIDO"` en rojo primero por el motivo correcto (ofrecía el
       sábado), verde después; **834** del bot y la cadena `npm test` en verde.
-      🔴 **Commiteado, NO desplegado.** El bot vivo corre `/tmp/onia-bot/` y su `config.mjs` no
-      tiene el corte (`docker exec onia-center grep -c ANTICIPACION_MINIMA_MS /tmp/onia-bot/config.mjs`
-      → **0**). Medido en producción el 06:12 La Paz por el widget real (conversación 49): el bot
-      ofreció *"sábado 5 de septiembre, 09:00"* dos veces, a 2 h 48 min. Pedido en la tarea de
-      deploy que ya existe, **t_43e4b9ec**, con los dos SHA: desplegar sólo `375b8af08` deja al bot
-      contradiciéndose.
+      ✅ **DESPLEGADO — verificado el 2026-09-10 22:46 La Paz.** El MISMO comando que el texto
+      anterior citaba en **0** hoy da **2**:
+      `docker exec onia-center grep -c ANTICIPACION_MINIMA_MS /tmp/onia-bot/config.mjs`.
+      Y el gate vivo lo confirma del lado de la promesa:
+      `node hermes-content/deploy/vps-ops/bot/anticipacion-viva.mjs` → *"sábado 12 de septiembre,
+      09:00 — 34.2 h de aviso · lunes 14, 14:00 — 87.2 h · corte de 24 h en el código vivo: sí"*.
+      Ya no hay forma de repetir la demo a 2 h 48 min de la conversación 49.
 
 - [x] **La guarda de entrada de `espejo-check.mjs` reventaba al importarlo, y el molde ya se había
       copiado a otro gate.** Hecho el 2026-09-02, en la misma vuelta en que se encontró.

@@ -203,6 +203,71 @@ test("un problema en la primera línea SÍ abre tarea aunque el cuerpo sea largo
   assert.equal(b.tareasCreadas().length, 1, "un problema real tiene que llegar al tablero");
 });
 
+// ── «Nada roto» NO es un problema ────────────────────────────────────────────
+// Medido el 2026-09-10: el clasificador funciona (casi todo sale INFORMATIVO) y aun
+// asi entraron 4 tareas de EXITO ese dia. La causa es que la regla «se clasifica por
+// la primera linea» supone que el aviso TIENE varias lineas: cuando el aviso es UN
+// parrafo —que es como escriben recorrido-cliente y el integrador— la primera linea
+// ES el mensaje entero, y el filtro vuelve a mirar el cuerpo sin que nada avise.
+//
+// Ahi la palabra llega NEGADA, que es justo lo que un carril sano escribe cuando su
+// vuelta salio bien: «Nada roto», «sin nada roto», «no falló». El resultado es una
+// tarea que dice que algo esta roto porque el loop dijo que NO lo estaba.
+//
+// Los tres fixtures son textuales de tareas reales de ese dia (t_7c1c0612,
+// t_3ef94060, t_154ce16c).
+
+test("«nada roto» no abre tarea: la negación es lo que escribe un carril sano", () => {
+  const b = banco();
+  b.avisar(
+    "Probé el camino completo en Importadora/distribuidora, primera vez con este " +
+      "instrumento: se completó entero (9/9). El paso de agendar cita no aplica en este " +
+      "rubro y es correcto -- vende catálogo, cotizaciones e importación, no tiene agenda. " +
+      "Nada roto.",
+  );
+  b.avisar(
+    "Recorrido de cliente: probé el camino completo dos veces más (dental y, por primera " +
+      "vez con el instrumento nuevo, servicios profesionales). Los 9 pasos se completaron " +
+      "sin nada roto en las dos.",
+  );
+  b.avisar(
+    "Hice el camino completo de un cliente nuevo (dental) y terminó entero: cuenta, rubro, " +
+      "un paciente de prueba guardado, una cita agendada y vista en la agenda, y llegué a " +
+      "la pantalla de cobro. Nada roto en el producto hoy.",
+  );
+
+  const creadas = b.tareasCreadas();
+  assert.equal(creadas.length, 0, `una vuelta sana ocupó el tablero: ${creadas.join(" | ")}`);
+});
+
+// ANCLA en la dirección cara. Sin este caso, la salida barata es borrar del patrón las
+// palabras que aparecen negadas, y ahí el clasificador deja de ver el problema REAL.
+test("negar una cosa no absuelve al problema que el MISMO aviso reporta", () => {
+  const b = banco();
+  b.avisar("Nada roto en el recorrido, pero el emisor SIAT FALLÓ al firmar la factura.");
+  b.avisar("Sin errores en los gates; el deploy quedó abortado por falta de espacio.");
+
+  assert.equal(
+    b.tareasCreadas().length,
+    2,
+    "descartar la negación no puede llevarse puesto el problema que viene después",
+  );
+});
+
+// El ancla de arriba NO alcanza y esto se vio mutando: sus dos avisos abren tarea por
+// «FALLÓ» y por «abortado», así que borrar «roto» del patrón —la salida barata— pasaba
+// en VERDE con los 14 casos. Hace falta uno donde la ÚNICA señal sea esa palabra.
+test("«roto» sin negar sigue siendo un problema, y es la única señal del aviso", () => {
+  const b = banco();
+  b.avisar("El deploy dejó el sitio roto: la home devuelve 500.");
+
+  assert.equal(
+    b.tareasCreadas().length,
+    1,
+    "sacar la palabra del patrón en vez de descartar la negación deja ciego al clasificador",
+  );
+});
+
 // ── Hermeticidad: el camino directo es el de las aprobaciones y no pasa por el tablero ──
 
 test("ONIA_TG_DIRECTO=1 va a Telegram y NO crea tareas", () => {

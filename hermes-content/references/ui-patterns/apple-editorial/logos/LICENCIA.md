@@ -47,3 +47,14 @@ rayos irregulares que se cruzan.
 **Lección:** "logo real" no es lo mismo que "logo de una librería de logos". Para una
 marca conocida, el icono oficial del propio producto gana siempre. `claude.path` queda
 por si hace falta una versión monocroma.
+
+## cloudflare.path · meta.path · github.path
+
+Agregados el 2026-09-10 para los decks de la serie «Claude Code de cero»: cloudflare y
+meta en la lámina de conectores del 03, y github en el 05, donde se recomiendan repos.
+Misma fuente y misma licencia que el resto: simple-icons, CC0-1.0, uso nominativo.
+
+⚠️ **Se bajaron SIN correr `build-logos.py`.** Ese script reescribe este archivo entero
+desde una plantilla, y se habría llevado puestas las notas de `hermes.jpg` y `onia.svg`.
+Si algún día se agregan más marcas, o se suman al `MARCAS` del script **y** se rescatan
+estas secciones a mano, o se bajan aparte como se hizo acá.

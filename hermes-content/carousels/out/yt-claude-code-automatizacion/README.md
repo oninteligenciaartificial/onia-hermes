@@ -21,7 +21,7 @@ Contado en la máquina de Sergio Urcullo el **2026-09-10**:
 | 7 conectores MCP | nombres leídos de la config local, sin tocar ningún token |
 | 9 plugins | `ls -d ~/.claude/plugins/cache/*/` |
 | 4 trabajos por horario | los cron de `nodo-casa` (handoff `onia-dev-node-setup.md`) |
-| **3 conectores caídos hoy** | el aviso de arranque de esta misma sesión |
+| **4 conectores sin andar hoy** | 2 caídos (image-gen, postiz) + 2 sin autorización (cloudflare, meta) |
 
 **Los números se recuentan antes de grabar.** Ya pasó con el video 2: la versión de
 Claude Code cambió en tres días.

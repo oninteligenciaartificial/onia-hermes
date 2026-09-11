@@ -229,6 +229,48 @@ export function wantsToBook(norm) {
 }
 
 // ---------------------------------------------------------------------------
+// LO QUE EL GUION LE PIDE AL PROSPECTO — y el motor tiene que escuchar
+// ---------------------------------------------------------------------------
+// M5 y M8_SOPORTE cierran los dos con: «Si es urgente, decime "urgente" y lo marco». Hasta el
+// 2026-09-10 esa palabra no existia en NINGUN .mjs del bot: quien la escribia recibia el acuse
+// generico la primera vez y silencio total las siguientes. El bot le decia exactamente que
+// escribir y despues no lo escuchaba.
+//
+// El sujeto se escribe en PRESENTE de lo que el guion promete, no de la palabra suelta: si
+// manana el texto pide otra palabra, el ancla de urgencia-en-el-handoff.test.mjs la deriva del
+// SCRIPT y se pone roja sola.
+const RE_URGENTE = /\burgent\w*\b|\burge\b|\bes para (?:hoy|ya|ahora)\b|\blo antes posible\b|\bcuanto antes\b|\bapura\w*\b/;
+
+// Comprar EL SISTEMA, que es otra cosa que "comprar 100 tornillos" (eso es un pedido del
+// recepcionista de un cliente, RE_COMPRA_PEDIDO). Aca lo que pasa es que alguien quiere pagarnos:
+// es el mensaje mas caro que puede entrar y hasta hoy recibia el acuse generico.
+const RE_QUIERE_COMPRAR = new RegExp(
+  [
+    "\\b(?:quiero|queremos|necesito|deseo|me gustaria|quisiera)\\s+(?:ya\\s+)?(?:comprar|contratar|pagar|adquirir|suscribirme|arrancar|empezar)\\b",
+    "\\bcomo (?:pago|compro|contrato|hago para (?:pagar|contratar|comprar))\\b",
+    "\\bdonde (?:pago|deposito|transfiero)\\b",
+    "\\b(?:mandame|pasame|enviame) (?:el|los) (?:qr|datos de pago|numero de cuenta)\\b",
+    "\\bvoy a (?:comprar|contratar|pagar)\\b",
+    "\\blo (?:compro|contrato|tomo)\\b",
+    "\\bcuanto (?:te|les|hay que) (?:pago|deposito|transfiero)\\b",
+  ].join("|"),
+);
+
+/**
+ * El prospecto usa la palabra que el guion le pidio ("urgente"), o dice que quiere COMPRAR.
+ * Las dos van juntas a proposito: las dos significan lo mismo para el que tiene que atender
+ * —esto no puede esperar al proximo barrido— y las dos salian por el mismo agujero.
+ */
+export function needsHumanNow(norm) {
+  return RE_URGENTE.test(norm) || RE_QUIERE_COMPRAR.test(norm);
+}
+
+/** Solo la senal de compra, para que el aviso diga POR QUE es urgente. */
+export function wantsToBuy(norm) {
+  return RE_QUIERE_COMPRAR.test(norm);
+}
+
+// ---------------------------------------------------------------------------
 // SEGUNDO CAMINO: soporte (no venta)
 // ---------------------------------------------------------------------------
 // Quien YA es cliente no viene a comprar: viene a que algo funcione. Ofrecerle la demo comercial

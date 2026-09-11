@@ -10,8 +10,12 @@
  *    (un número activo en WhatsApp o WhatsApp Business NO se puede registrar;
  *    el código llega por SMS o llamada), migración de un número existente (se
  *    pierde el historial de forma permanente), plantillas (revisión de hasta
- *    24 h) y pricing (la ventana de servicio de 24 h que abre el cliente es
- *    gratis; fuera de ella se cobra por plantilla entregada).
+ *    24 h) y pricing (la ventana de servicio de 24 h que abre el cliente **no
+ *    se cobra hasta el 30-sep-2026**; fuera de ella se cobra por plantilla
+ *    entregada). ⚠️ Esa gratuidad tiene fecha de vencimiento anunciada por
+ *    Meta y por eso NO se escribe a mano: se deriva de `META_VENTANA_24H`
+ *    (`@/content/chatbot-precios`), que es la única fuente de las dos fechas.
+ *    Lo vigila `(sitio)/condicion-de-tercero.test.ts`.
  *  - ⚠️ 2026-08-21: se sacaron de acá el cupo de 200 mensajes salientes y el
  *    markup del 20% sobre Meta. El markup se cae por decisión de Sergio (el
  *    cliente le paga a Meta DIRECTO, en su propia cuenta), y el cupo no se
@@ -27,6 +31,8 @@
  * NO se publica acá ninguna tarifa por mensaje de Meta: el CSV oficial no se
  * pudo verificar y el número que hay en el código está mal calculado.
  */
+
+import { META_VENTANA_24H } from "@/content/chatbot-precios";
 
 export interface BloqueRequisitos {
   titulo: string;
@@ -73,7 +79,7 @@ export const REQUISITOS_CHATBOT: Requisitos = {
       intro:
         "Meta cobra por cada mensaje que TU negocio le manda primero al cliente: un aviso, una promoción. Ese cobro va directo entre vos y Meta.",
       items: [
-        "Cuando el cliente te escribe a vos, responder es gratis durante las 24 horas siguientes (es regla de Meta). Toda la atención del bot entra ahí: no te cuesta.",
+        `Cuando el cliente te escribe a vos, responder dentro de las 24 horas siguientes no te cuesta hasta el ${META_VENTANA_24H.hasta} (es regla de Meta, y Meta la cambia por su cuenta). Toda la atención del bot entra en esa ventana; desde el ${META_VENTANA_24H.desde} Meta también cobra esas respuestas.`,
         "Lo que tu negocio inicia lo pagás vos, en tu propia cuenta de Meta: no pasa por nuestra factura y no le sumamos nada encima.",
         "Los mensajes promocionales cuestan bastante más. No se mandan sin tu autorización expresa y te avisamos el costo antes.",
       ],

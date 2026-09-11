@@ -48,7 +48,19 @@ import { CHATBOT_STACKS, CONVERSACIONES_INCLUIDAS } from "@/content/chatbot-prec
  * El cruce del NÚMERO contra el producto (`WHATSAPP_ADDON.includedConversations`
  * del repo `onia-platform`) no puede vivir en esta cadena: ese repo no está en
  * el worktree y exigirlo pondría rojo por AMBIENTE, trabando el merge de los
- * quince carriles. Va como script aparte: `scripts/limites-vivos.mjs`.
+ * quince carriles. Va como script aparte: `scripts/precios-fuente.mjs`
+ * (`npm run precios:fuente`), que cruza también la RECARGA.
+ *
+ * ⚠️ Esta línea nombró hasta el 2026-09-11 un `limites-vivos` que nunca se
+ * escribió — el cruce existía con otro nombre, así que el dato estaba sano y lo
+ * único roto era la forma de comprobarlo. Es el mismo puntero muerto que el
+ * 2026-09-07 se corrigió en `chatbot-precios.ts`, y sobrevivió acá cuatro días
+ * porque `app/cobertura-citada.test.ts` deja los `.test.ts` FUERA de su barrido
+ * a propósito (una bitácora tiene que poder nombrar el archivo que no existe
+ * sin que el gate obligue a borrar el registro). Esa exención es correcta para
+ * la PROSA que narra el defecto y no distingue la AFIRMACIÓN de cobertura viva,
+ * que es esta línea: se repara el puntero, y el hueco del gate queda anotado en
+ * `COLA.md` con su reproducción.
  */
 
 const AQUI = dirname(fileURLToPath(import.meta.url));

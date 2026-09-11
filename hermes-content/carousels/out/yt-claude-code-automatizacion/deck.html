@@ -12,8 +12,8 @@
 
   ⚠️ TODO MEDIDO EN LA MÁQUINA DE SERGIO URCULLO EL 2026-09-10, no recordado:
   4 hooks (3 personales + el autosync del repo) · 4 subagentes activos (+7 retirados) ·
-  7 servidores MCP · 9 plugins · 4 loops en nodo-casa. Y 3 de los 7 conectores están
-  CAÍDOS hoy, que es la prueba en vivo de la lámina 9.
+  7 servidores MCP · 9 plugins · 4 trabajos por horario. Y 4 de los 7 conectores no andan:
+  2 caídos y 2 sin autorización — la prueba en vivo de la lámina 9.
 
   La parte honesta no es genérica: son fallas suyas, con su commit y su consecuencia.
   Un video sobre automatización que no muestra cómo falla la automatización es publicidad.
@@ -87,6 +87,32 @@ h1.chico{font-size:82px}
 .cifra b{font-size:140px;font-weight:700;letter-spacing:-.04em;line-height:.9}
 .cifra span{font-size:28px;color:var(--muted);text-align:center;max-width:14ch;line-height:1.3}
 
+/* Marcador de posición: cuatro puntos, el activo en terracota. Sin esto, cuatro
+   tramos seguidos se sienten iguales y el espectador pierde dónde está. */
+.pasos{position:absolute;top:78px;right:112px;display:flex;align-items:center;gap:14px}
+.pasos i{width:12px;height:12px;border-radius:50%;background:var(--hair);display:block}
+.pasos i.on{background:var(--claude);transform:scale(1.35)}
+.pasos span{font-family:'Spline Sans Mono',monospace;font-size:19px;letter-spacing:.12em;
+            text-transform:uppercase;color:var(--muted);margin-right:6px}
+
+.logos{display:flex;gap:56px;align-items:stretch;flex:none;width:100%}
+.logo-card{flex:1;display:flex;flex-direction:column;align-items:center;gap:26px;
+           padding:44px 30px;border:1px solid var(--hair);border-radius:22px;background:#fff;
+           box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.logo-card svg{width:78px;height:78px;flex:none}
+.logo-card b{font-size:36px;font-weight:700;letter-spacing:var(--tr);text-align:center}
+.logo-card span{font-size:26px;color:var(--muted);text-align:center;line-height:1.4;max-width:15ch}
+
+.escalones{display:flex;gap:34px;align-items:flex-end;flex:none;width:100%}
+.esc{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:20px;
+     padding:34px 30px;border-radius:22px;border:1px solid var(--hair)}
+.esc .n{font-family:'Spline Sans Mono',monospace;font-size:22px;letter-spacing:.14em;
+        color:var(--claude)}
+.esc b{font-size:44px;font-weight:700;letter-spacing:var(--tr);line-height:1}
+.esc span{font-size:25px;color:var(--muted);line-height:1.35}
+.esc.a{min-height:190px} .esc.b{min-height:255px}
+.esc.c{min-height:320px} .esc.d{min-height:385px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+
 .svg-ink{fill:var(--ink)} .svg-muted{fill:var(--muted)} .svg-claude{fill:var(--claude)}
 svg text{font-family:'Inter',sans-serif;letter-spacing:-.02em}
 .trazo{fill:none;stroke:var(--ink);stroke-width:3}
@@ -132,26 +158,12 @@ body.limpio #chrome{display:none}
   <div class="eyebrow">El mapa &middot; Cuatro escalones</div>
   <h1 class="chico">Cada uno le saca una atadura</h1>
   <div class="arte">
-    <svg viewBox="0 0 1520 430" width="1520" role="img" aria-label="Cuatro escalones de autonomía">
-      <g class="trazo-fino">
-        <rect x="20" y="270" width="330" height="120" rx="16"/>
-        <rect x="400" y="200" width="330" height="190" rx="16"/>
-        <rect x="780" y="130" width="330" height="260" rx="16"/>
-        <rect x="1160" y="60" width="330" height="330" rx="16"/>
-      </g>
-      <g font-size="42" font-weight="700" text-anchor="middle" class="svg-ink" letter-spacing="-0.03em">
-        <text x="185" y="245">Hooks</text>
-        <text x="565" y="175">Subagentes</text>
-        <text x="945" y="105">Conectores</text>
-        <text x="1325" y="35">Horario</text>
-      </g>
-      <g font-size="27" text-anchor="middle" class="svg-muted">
-        <text x="185" y="325">no espera</text><text x="185" y="360">que le pidas</text>
-        <text x="565" y="285">no espera</text><text x="565" y="320">a estar libre</text>
-        <text x="945" y="245">no se queda</text><text x="945" y="280">en tu compu</text>
-        <text x="1325" y="205">no espera</text><text x="1325" y="240">que despiertes</text>
-      </g>
-    </svg>
+    <div class="escalones">
+      <div class="esc a"><span class="n">01</span><b>Hooks</b><span>no espera que le pidas</span></div>
+      <div class="esc b"><span class="n">02</span><b>Subagentes</b><span>no espera a estar libre</span></div>
+      <div class="esc c"><span class="n">03</span><b>Conectores</b><span>no se queda en tu compu</span></div>
+      <div class="esc d"><span class="n">04</span><b>Horario</b><span>no espera que despiertes</span></div>
+    </div>
   </div>
   <div class="remate">Las cuatro se configuran escribiendo texto.</div>
   <div class="handle">@sergiourcullo</div>
@@ -159,6 +171,7 @@ body.limpio #chrome{display:none}
 
 <!-- 03 · HOOKS ─────────────────────────────────────────────────── -->
 <section class="lamina" data-nota="<b>ESCALÓN 1 — HOOKS.</b> La idea en una frase: 'cada vez que pase X, hacé Y', y lo ejecuta la máquina, no Claude. Mostrá los tuyos de verdad en pantalla; el de abajo es el que más se entiende.">
+  <div class="pasos"><span>Escalón 1 de 4</span><i class="on"></i><i></i><i></i><i></i></div>
   <div class="eyebrow"><b>Escalón 1</b> &middot; Hooks</div>
   <h1 class="chico">Cada vez que pase esto, hacé aquello</h1>
   <div class="arte">
@@ -176,6 +189,7 @@ body.limpio #chrome{display:none}
 
 <!-- 04 · SUBAGENTES ────────────────────────────────────────────── -->
 <section class="lamina" data-nota="<b>ESCALÓN 2 — SUBAGENTES.</b> Lo que engancha: cada uno arranca con la cabeza limpia y trabajan al mismo tiempo. La segunda fila es la que importa — el que revisa NO es el mismo que escribió.">
+  <div class="pasos"><span>Escalón 2 de 4</span><i></i><i class="on"></i><i></i><i></i></div>
   <div class="eyebrow"><b>Escalón 2</b> &middot; Subagentes</div>
   <h1 class="chico">Le delega a otro</h1>
   <div class="items">
@@ -197,34 +211,27 @@ body.limpio #chrome{display:none}
 </section>
 
 <!-- 05 · CONECTORES / MCP ──────────────────────────────────────── -->
-<section class="lamina" data-nota="<b>ESCALÓN 3 — CONECTORES.</b> Hasta acá solo tocaba archivos de tu compu. Con esto le das manos afuera. No te enredes con la sigla MCP: decila una vez y seguí con ejemplos.">
+<section class="lamina" data-nota="<b>ESCALÓN 3 — CONECTORES.</b> Hasta acá sólo tocaba archivos de tu compu. Con esto le das manos afuera. Estos tres los tenés conectados de verdad: nombralos como tuyos, no como ejemplos.">
+  <div class="pasos"><span>Escalón 3 de 4</span><i></i><i></i><i class="on"></i><i></i></div>
   <div class="eyebrow"><b>Escalón 3</b> &middot; Conectores</div>
   <h1 class="chico">Manos fuera de tu computadora</h1>
   <div class="arte">
-    <svg viewBox="0 0 1420 380" width="1420" role="img" aria-label="Claude conectado a servicios externos">
-      <rect x="20" y="130" width="330" height="120" rx="20" class="trazo"/>
-      <text x="185" y="205" text-anchor="middle" font-size="40" font-weight="700" class="svg-ink">Claude Code</text>
-      <g class="trazo">
-        <path d="M360 190 H520"/><path d="M520 190 l-16 -10 M520 190 l-16 10"/>
-      </g>
-      <g class="trazo-fino">
-        <rect x="560" y="20" width="380" height="100" rx="16"/>
-        <rect x="560" y="140" width="380" height="100" rx="16"/>
-        <rect x="560" y="260" width="380" height="100" rx="16"/>
-      </g>
-      <g font-size="34" font-weight="600" class="svg-ink">
-        <text x="600" y="83">tus automatizaciones</text>
-        <text x="600" y="203">tu servidor</text>
-        <text x="600" y="323">tus anuncios</text>
-      </g>
-      <g font-size="27" class="svg-muted">
-        <text x="990" y="83">crea y edita workflows</text>
-        <text x="990" y="203">mira si algo se cayó</text>
-        <text x="990" y="323">lee cómo rindieron</text>
-      </g>
-    </svg>
+    <div class="logos">
+      <div class="logo-card">
+        <svg viewBox="0 0 24 24" fill="#EA4B71"><path d="M21.4737 5.6842c-1.1772 0-2.1663.8051-2.4468 1.8947h-2.8955c-1.235 0-2.289.893-2.492 2.111l-.1038.623a1.263 1.263 0 0 1-1.246 1.0555H11.289c-.2805-1.0896-1.2696-1.8947-2.4468-1.8947s-2.1663.8051-2.4467 1.8947H4.973c-.2805-1.0896-1.2696-1.8947-2.4468-1.8947C1.1311 9.4737 0 10.6047 0 12s1.131 2.5263 2.5263 2.5263c1.1772 0 2.1663-.8051 2.4468-1.8947h1.4223c.2804 1.0896 1.2696 1.8947 2.4467 1.8947 1.1772 0 2.1663-.8051 2.4468-1.8947h1.0008a1.263 1.263 0 0 1 1.2459 1.0555l.1038.623c.203 1.218 1.257 2.111 2.492 2.111h.3692c.2804 1.0895 1.2696 1.8947 2.4468 1.8947 1.3952 0 2.5263-1.131 2.5263-2.5263s-1.131-2.5263-2.5263-2.5263c-1.1772 0-2.1664.805-2.4468 1.8947h-.3692a1.263 1.263 0 0 1-1.246-1.0555l-.1037-.623A2.52 2.52 0 0 0 13.9607 12a2.52 2.52 0 0 0 .821-1.4794l.1038-.623a1.263 1.263 0 0 1 1.2459-1.0555h2.8955c.2805 1.0896 1.2696 1.8947 2.4468 1.8947 1.3952 0 2.5263-1.131 2.5263-2.5263s-1.131-2.5263-2.5263-2.5263m0 1.2632a1.263 1.263 0 0 1 1.2631 1.2631 1.263 1.263 0 0 1-1.2631 1.2632 1.263 1.263 0 0 1-1.2632-1.2632 1.263 1.263 0 0 1 1.2632-1.2631M2.5263 10.7368A1.263 1.263 0 0 1 3.7895 12a1.263 1.263 0 0 1-1.2632 1.2632A1.263 1.263 0 0 1 1.2632 12a1.263 1.263 0 0 1 1.2631-1.2632m6.3158 0A1.263 1.263 0 0 1 10.1053 12a1.263 1.263 0 0 1-1.2632 1.2632A1.263 1.263 0 0 1 7.579 12a1.263 1.263 0 0 1 1.2632-1.2632m10.1053 3.7895a1.263 1.263 0 0 1 1.2631 1.2632 1.263 1.263 0 0 1-1.2631 1.2631 1.263 1.263 0 0 1-1.2632-1.2631 1.263 1.263 0 0 1 1.2632-1.2632"/></svg>
+        <b>n8n</b><span>mis automatizaciones</span>
+      </div>
+      <div class="logo-card">
+        <svg viewBox="0 0 24 24" fill="#F38020"><path d="M16.5088 16.8447c.1475-.5068.0908-.9707-.1553-1.3154-.2246-.3164-.6045-.499-1.0615-.5205l-8.6592-.1123a.1559.1559 0 0 1-.1333-.0713c-.0283-.042-.0351-.0986-.021-.1553.0278-.084.1123-.1484.2036-.1562l8.7359-.1123c1.0351-.0489 2.1601-.8868 2.5537-1.9136l.499-1.3013c.0215-.0561.0293-.1128.0147-.168-.5625-2.5463-2.835-4.4453-5.5499-4.4453-2.5039 0-4.6284 1.6177-5.3876 3.8614-.4927-.3658-1.1187-.5625-1.794-.499-1.2026.119-2.1665 1.083-2.2861 2.2856-.0283.31-.0069.6128.0635.894C1.5683 13.171 0 14.7754 0 16.752c0 .1748.0142.3515.0352.5273.0141.083.0844.1475.1689.1475h15.9814c.0909 0 .1758-.0645.2032-.1553l.12-.4268zm2.7568-5.5634c-.0771 0-.1611 0-.2383.0112-.0566 0-.1054.0415-.127.0976l-.3378 1.1744c-.1475.5068-.0918.9707.1543 1.3164.2256.3164.6055.498 1.0625.5195l1.8437.1133c.0557 0 .1055.0263.1329.0703.0283.043.0351.1074.0214.1562-.0283.084-.1132.1485-.204.1553l-1.921.1123c-1.041.0488-2.1582.8867-2.5527 1.914l-.1406.3585c-.0283.0713.0215.1416.0986.1416h6.5977c.0771 0 .1474-.0489.169-.126.1122-.4082.1757-.837.1757-1.2803 0-2.6025-2.125-4.727-4.7344-4.727"/></svg>
+        <b>Cloudflare</b><span>donde viven mis dominios</span>
+      </div>
+      <div class="logo-card">
+        <svg viewBox="0 0 24 24" fill="#0081FB"><path d="M6.915 4.03c-1.968 0-3.683 1.28-4.871 3.113C.704 9.208 0 11.883 0 14.449c0 .706.07 1.369.21 1.973a6.624 6.624 0 0 0 .265.86 5.297 5.297 0 0 0 .371.761c.696 1.159 1.818 1.927 3.593 1.927 1.497 0 2.633-.671 3.965-2.444.76-1.012 1.144-1.626 2.663-4.32l.756-1.339.186-.325c.061.1.121.196.183.3l2.152 3.595c.724 1.21 1.665 2.556 2.47 3.314 1.046.987 1.992 1.22 3.06 1.22 1.075 0 1.876-.355 2.455-.843a3.743 3.743 0 0 0 .81-.973c.542-.939.861-2.127.861-3.745 0-2.72-.681-5.357-2.084-7.45-1.282-1.912-2.957-2.93-4.716-2.93-1.047 0-2.088.467-3.053 1.308-.652.57-1.257 1.29-1.82 2.05-.69-.875-1.335-1.547-1.958-2.056-1.182-.966-2.315-1.303-3.454-1.303zm10.16 2.053c1.147 0 2.188.758 2.992 1.999 1.132 1.748 1.647 4.195 1.647 6.4 0 1.548-.368 2.9-1.839 2.9-.58 0-1.027-.23-1.664-1.004-.496-.601-1.343-1.878-2.832-4.358l-.617-1.028a44.908 44.908 0 0 0-1.255-1.98c.07-.109.141-.224.211-.327 1.12-1.667 2.118-2.602 3.358-2.602zm-10.201.553c1.265 0 2.058.791 2.675 1.446.307.327.737.871 1.234 1.579l-1.02 1.566c-.757 1.163-1.882 3.017-2.837 4.338-1.191 1.649-1.81 1.817-2.486 1.817-.524 0-1.038-.237-1.383-.794-.263-.426-.464-1.13-.464-2.046 0-2.221.63-4.535 1.66-6.088.454-.687.964-1.226 1.533-1.533a2.264 2.264 0 0 1 1.088-.285z"/></svg>
+        <b>Meta</b><span>mis anuncios y mensajes</span>
+      </div>
+    </div>
   </div>
-  <div class="remate">Deja de ser un programa encerrado en una carpeta.</div>
+  <div class="remate">Le preguntás por tu negocio y va a mirar de verdad.</div>
   <div class="handle">@sergiourcullo</div>
 </section>
 
@@ -252,6 +259,7 @@ body.limpio #chrome{display:none}
 
 <!-- 07 · HORARIO ───────────────────────────────────────────────── -->
 <section class="lamina" data-nota="<b>ESCALÓN 4 — EL SALTO DE VERDAD.</b> Los tres anteriores siguen necesitando que vos abras el programa. Este no. Es una línea de horario en la computadora, y ahí deja de depender de vos. Marcá bien esa diferencia.">
+  <div class="pasos"><span>Escalón 4 de 4</span><i></i><i></i><i></i><i class="on"></i></div>
   <div class="eyebrow"><b>Escalón 4</b> &middot; Horario</div>
   <h1 class="chico">El único que no te necesita</h1>
   <div class="arte">
@@ -285,7 +293,7 @@ body.limpio #chrome{display:none}
 </section>
 
 <!-- 09 · LA PARTE HONESTA ──────────────────────────────────────── -->
-<section class="lamina" data-nota="<b>LA MÁS IMPORTANTE DEL VIDEO.</b> Son fallas TUYAS, contalas en primera persona y sin suavizar. Y la tercera la podés mostrar EN VIVO: abrí tu lista de conectores y señalá los tres caídos.">
+<section class="lamina" data-nota="<b>LA MÁS IMPORTANTE DEL VIDEO.</b> Son fallas TUYAS, contalas en primera persona y sin suavizar. Y la tercera la podés mostrar EN VIVO: abrí tu lista de conectores y señalá los cuatro que no andan.">
   <div class="eyebrow">La parte honesta</div>
   <h1 class="chico">Lo que corre solo, falla solo</h1>
   <div class="items">
@@ -299,7 +307,7 @@ body.limpio #chrome{display:none}
     </div>
     <div class="item">
       <div class="k">Hoy, mientras grabo esto.</div>
-      <div class="v">Tres de mis siete conectores están caídos. No me avisó nadie: me enteré porque fui a mirar.</div>
+      <div class="v">Cuatro de mis siete conectores no andan: dos se cayeron y dos perdieron el permiso. No me avisó ninguno.</div>
     </div>
   </div>
   <div class="remate">Lo que se rompe en silencio es peor que lo que se rompe fuerte.</div>

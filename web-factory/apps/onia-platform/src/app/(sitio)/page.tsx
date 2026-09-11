@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import { Reveal } from "@/motion";
-import { PLANES, ADDONS, GRUPO, PRUEBA, bs, plan } from "@/lib/pricing";
+import { PLANES, ADDONS, GRUPO, PRUEBA, ALCANCE_CON_AGENDA, bs, plan } from "@/lib/pricing";
 import {
   CHATBOT_PLAN,
   precioStack,
@@ -72,9 +72,9 @@ import p from "./portada.module.css";
 const DESDE_MES = `Bs ${bs(plan("basico").mensual)}`;
 const TITULO =
   "Onia · Todo el negocio en una pantalla | Software de gestión Bolivia";
-const DESCRIPCION = `Onia es el sistema con el que llevás tu negocio en Bolivia: agenda, fichas de clientes, caja, cobros e inventario en un solo lugar, ya armado para tu rubro. Desde ${DESDE_MES} al mes. ${PRUEBA.dias} días gratis, sin tarjeta.`;
+const DESCRIPCION = `Onia es el sistema con el que llevás tu negocio en Bolivia: fichas de clientes, caja, cobros e inventario en un solo lugar —y agenda ${ALCANCE_CON_AGENDA}—, ya armado para tu rubro. Desde ${DESDE_MES} al mes. ${PRUEBA.dias} días gratis, sin tarjeta.`;
 const OG_TITULO = "Todo el negocio, en una pantalla. — Onia, Bolivia";
-const OG_DESCRIPCION = `La agenda en un cuaderno, los clientes en el teléfono y las cuentas en una planilla: nada se cruza, y lo que no se cruza se pierde. Onia junta agenda, clientes, caja, cobros e inventario en un solo sistema, armado para tu rubro. Desde ${DESDE_MES} al mes, ${PRUEBA.dias} días gratis y sin tarjeta.`;
+const OG_DESCRIPCION = `Los clientes en el teléfono, el stock en la cabeza y las cuentas en una planilla: nada se cruza, y lo que no se cruza se pierde. Onia junta clientes, caja, cobros e inventario en un solo sistema —y agenda ${ALCANCE_CON_AGENDA}—, armado para tu rubro. Desde ${DESDE_MES} al mes, ${PRUEBA.dias} días gratis y sin tarjeta.`;
 
 export const metadata: Metadata = {
   title: TITULO,
@@ -210,7 +210,7 @@ const JSON_LD = {
       // igual que el pie (198cca363) y que el cuerpo de esta misma página
       // (5423e2f50). Cuando la homologación concluya, vuelve — con evidencia.
       description:
-        "Sistema de gestión con IA para negocios en Bolivia: agenda, clientes, cobros, inventario y agentes con aprobación humana.",
+        `Sistema de gestión con IA para negocios en Bolivia: clientes, cobros, inventario y agentes con aprobación humana —y agenda ${ALCANCE_CON_AGENDA}—.`,
       offers: PLANES.map((plan) => ({
         "@type": "Offer",
         name: plan.nombre,
@@ -257,7 +257,7 @@ const HORAS_ONIA = 15;
  */
 const MOMENTOS = [
   { hora: "23:40", que: "Preguntan el precio. Contesta el asistente." },
-  { hora: "Domingo", que: "Reservan la cita solos, por tu agenda pública." },
+  { hora: "Domingo", que: `Reservan solos por tu agenda pública, ${ALCANCE_CON_AGENDA}.` },
   {
     hora: "07:00",
     que: (
@@ -308,7 +308,7 @@ function Lane({
 /** Lo que el sistema hace hoy. Cada línea se puede comprobar entrando. */
 const HECHOS = [
   {
-    que: "Agenda, fichas, caja y cobros",
+    que: `Fichas, caja y cobros, y agenda ${ALCANCE_CON_AGENDA}`,
     como: "En una sola pantalla, no en cuatro programas que no se hablan.",
   },
   {
@@ -368,7 +368,7 @@ export default function Portada() {
               Todo el negocio, en <em>una</em> pantalla.
             </h1>
             <p className={p.heroLead}>
-              Onia es el sistema con el que llevás tu negocio: agenda, clientes, caja,
+              Onia es el sistema con el que llevás tu negocio: clientes, caja,
               inventario y cobros, con agentes que trabajan de noche y te dejan las
               decisiones a vos.
             </p>
