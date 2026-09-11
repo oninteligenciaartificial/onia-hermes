@@ -353,6 +353,75 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       ruido que `t_7362c865` reclama. Falta avisar **una sola vez por mensaje**, y eso pide estado
       durable que hoy el barrido no tiene. Va abajo como ítem propio.
 
+- [x] ✅ **CERRADO el 2026-09-11: la SUITE del bot le mandaba avisos a Sergio Urcullo y dejaba
+      marcas en producción. Una de ellas silenciaba el aviso del lead real del 10-sep.**
+      Lo causó el ítem de acá abajo, el mismo día.
+
+      **Cómo apareció:** el tablero amaneció con `t_3cd88596` — «🔴 Un mensaje quedo SIN
+      contestar · conv 49: espera hace 5 min». Se midió antes de creerle, y era falso en las dos
+      mitades: el bot **había contestado los dos** mensajes de la conv 49 (936→937 y 938→939) y
+      el barrido real informaba `0 sin respuesta` en **todas** sus corridas de esa hora. La conv
+      49 tampoco es un lead: es la sonda de QA del carril.
+
+      El log del enrutador dio la firma exacta — **8 avisos en 50 segundos**, dentro de la vuelta
+      anterior de este loop:
+
+      ```
+      05:16:01  TAREA t_3cd88596 clave=876bcd  🔴 Un mensaje quedo SIN contestar
+      05:16:09  TAREA-YA-EXISTE clave=876bcd   (y 6 más hasta 05:16:51)
+      ```
+
+      **La causa:** los casos que llamaban a `runRescateSweep` con `emitir: true` **no
+      inyectaban** `deps.avisar` ni `deps.marcas`, y los defaults son los REALES — `onia-tg.sh`
+      y `/var/lib/onia-rescate-avisado/`. Se estimaron 3 casos; la baranda encontró **12**.
+
+      **Lo caro no fue el aviso falso, fue la MARCA.** Quedaron en disco `chatwoot-49-282`,
+      `chatwoot-47-249` y **`chatwoot-11-873`** — el lead real del 10-sep que motivó todo el
+      ítem de abajo. Esa marca existe para no repetir un aviso ya entregado: con ella puesta, el
+      día que ese mensaje vuelva a quedar huérfano **el aviso no sale**. El instrumento que
+      existe para no perder un lead lo silenciaba su propio test, en verde y sin una línea.
+      Liberadas las 6 al cerrar (`ls -A` → 0); soltar una marca sólo puede causar un aviso de
+      más, nunca de menos.
+
+      **Un caso pasaba en verde por una razón falsa, y lo destapó el directorio limpio.**
+      «avisa SOLO cuando salvó a alguien» afirmaba `deepEqual(avisos, [])`, y eso era cierto
+      únicamente porque su **corrida anterior** había dejado `chatwoot-47-249` en producción:
+      la reserva devolvía `false` y el 🔴 no salía. Con marcas propias muestra la verdad — un
+      reinyectado deduplicado **sí** avisa de perdido, que es deliberado. Ahora mira el aviso de
+      rescate (🛟), no la bandeja entera.
+
+      **El arreglo va en el producto y TIRA, no no-opera:** `guardaDeEfectoReal(que)` explota si
+      `NODE_TEST_CONTEXT` está definido —lo pone el runner de Node y nadie más: `"child-v8"`
+      adentro, `undefined` afuera—. Un no-op silencioso dejaría en verde a un caso que cree
+      estar probando el aviso, que es el guardia hueco de siempre. Falla **cerrado**: un caso
+      futuro con `emitir: true` que no inyecte explota solo y nombrando lo que le falta, así que
+      **no hace falta además un gate que parsee el archivo de tests** buscando la forma del
+      descuido — enumerar formas es una lista de inclusión y se le escapa la siguiente.
+
+      ⚠️ **El `catch` del aviso se tragaba la baranda**, y ahí fallaba ABIERTA justo en el
+      caso que viene a cuidar: el aviso quedaba silenciado y el test pasaba en verde creyendo
+      que lo probó. El error va marcado (`.hermetismo`) y el catch lo re-tira. Ese catch existe
+      para que un Telegram caído no tumbe un rescate ya hecho — un fallo de red se aguanta, un
+      test escrito mal no. **Con eso aparecieron 3 casos más** que estaban mudos.
+
+      ⚠️ **Una baranda anti-efecto es el único gate que NO se valida quitándole la protección.**
+      Corrí esa mutación creyéndola segura y **mandó un aviso real** (05:47:39). Lo contuvo de
+      casualidad la dedup del enrutador, que ya tenía la clave. Queda escrito arriba de los
+      casos cuál no se corre y cuál es la equivalente segura (tragar el `.hermetismo`, que
+      prueba lo mismo sin desarmar nada). Las otras 4 mutaciones caen en rojo, cada una en su
+      caso, y ninguna ejecuta el efecto.
+
+      ```
+      cd hermes-content/deploy/vps-ops/bot && node --test rescate-run.test.mjs   # 51/51
+      npm run test:bot                                                          # 926/926
+      npm test                                                                  # cadena, exit 0
+      node rescate-run.mjs                                                       # seco: 0 huérfanos
+      ```
+
+      ⚠️ **COMMITEADO, NO DESPLEGADO — y no necesita pedido de deploy**, por lo mismo que el
+      ítem de abajo: el daño lo causa la **suite**, que corre desde el repo. Se apaga solo
+      cuando el integrador lleve la rama a `main`.
+
 - [x] ✅ **CERRADO el 2026-09-11: el rescate fallido se veía en un log que nadie mira. Ahora
       sale, y sale UNA sola vez por mensaje.** Era la mitad que dejó abierta `7a9e10c0`.
 

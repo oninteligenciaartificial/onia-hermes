@@ -342,6 +342,53 @@ export const VIDA_MARCA_MS = MAX_EDAD_MS * 2;
 export const DIR_MARCAS_POR_DEFECTO = "/var/lib/onia-rescate-avisado";
 
 /**
+ * NINGUN TEST TOCA PRODUCCION. Medido el 2026-09-11: los casos que llamaban al barrido con
+ * `emitir: true` sin inyectar `deps.avisar` ni `deps.marcas` caian a los defaults REALES y
+ * (a) le crearon a Sergio Urcullo una tarea en el tablero afirmando que habia una persona
+ * esperando —era la sonda de QA, ya contestada— y (b), lo caro, escribieron la marca
+ * `chatwoot-11-873` en `/var/lib/onia-rescate-avisado/`: el lead REAL del 10-sep que motivo
+ * todo este archivo. Esa marca existe para no repetir un aviso ya entregado, asi que con
+ * ella puesta el aviso de ese mensaje deja de salir. El instrumento que existe para no
+ * perder un lead lo silencia su propio test, en verde.
+ *
+ * TIRA en vez de no-operar, y es la diferencia entre una baranda y un placebo: un no-op
+ * silencioso deja en verde a un caso que cree estar probando el aviso. Asi falla CERRADO —
+ * un caso futuro con `emitir: true` que no inyecte explota solo y con el nombre de lo que le
+ * falta—, y por eso no hace falta ademas un gate que parsee el archivo de tests buscando la
+ * forma del descuido: enumerar formas es una lista de inclusion y se le escapa la siguiente.
+ *
+ * `NODE_TEST_CONTEXT` lo define el runner de Node y NADIE mas (medido: `"child-v8"` adentro,
+ * `undefined` afuera). El cron corre `node rescate-run.mjs --emit` sin runner, asi que en
+ * produccion esta guarda no existe.
+ */
+export function guardaDeEfectoReal(que) {
+  if (!process.env.NODE_TEST_CONTEXT) return;
+  const error = new Error(
+    `hermetismo: un test llego al ${que} REAL del rescate. Inyectale deps.${que} al barrido ` +
+      `(o pasale un directorio propio a crearMarcasEnDisco): tocar produccion desde la suite ` +
+      `manda avisos falsos y, peor, deja marcas que silencian el aviso de un lead de verdad.`,
+  );
+  // Marcado para que el `try/catch` del aviso —que existe para que un Telegram caido no
+  // tumbe un rescate ya hecho— no se lo trague. Sin esto la baranda falla ABIERTA justo en
+  // el caso que viene a cuidar: el aviso queda silenciado y el test pasa en VERDE creyendo
+  // que lo probo. Un fallo de Telegram se aguanta; un test escrito mal, no.
+  error.hermetismo = true;
+  throw error;
+}
+
+/**
+ * El aviso de verdad: Telegram por `onia-tg.sh`, que desde el 08-sep enruta los 🔴 al tablero.
+ * Vive aca arriba y con nombre —en vez de ser un closure adentro del barrido— para que la
+ * guarda sea visible y para que un test pueda afirmar sobre ella sin ejecutarla.
+ */
+export async function avisarPorTelegram(texto) {
+  guardaDeEfectoReal("avisar");
+  const { execFile } = await import("node:child_process");
+  const { promisify } = await import("node:util");
+  await promisify(execFile)("/root/bin/onia-tg.sh", [texto]);
+}
+
+/**
  * La clave es por MENSAJE, no por conversacion ni por vuelta: dos mensajes perdidos de la
  * misma persona son dos leads distintos.
  *
@@ -380,7 +427,12 @@ export function claveDeMarca({ conversationId, messageId } = {}) {
  * llevan a decisiones distintas.
  */
 export function crearMarcasEnDisco(dir) {
-  const destino = dir || process.env.ONIA_RESCATE_MARCAS || DIR_MARCAS_POR_DEFECTO;
+  const elegido = dir || process.env.ONIA_RESCATE_MARCAS;
+  // Un directorio propio (o `ONIA_RESCATE_MARCAS`) es hermetico y se deja pasar: la baranda
+  // no puede volver intesteable a la parte que SI hay que probar. Lo que no se deja pasar es
+  // caer al directorio de produccion desde la suite.
+  if (!elegido) guardaDeEfectoReal("marcas");
+  const destino = elegido || DIR_MARCAS_POR_DEFECTO;
   const fs = () => import("node:fs");
   return {
     async reservar(clave) {
@@ -428,14 +480,10 @@ export async function runRescateSweep(options = {}, deps = {}) {
   const limite = Number.isFinite(options.limit) && options.limit > 0 ? Math.floor(options.limit) : 20;
   const leerFilas = deps.leerFilas || leerFilasDeChatwoot;
   const postWebhook = deps.postWebhook || postAlWebhook;
-  const avisar =
-    deps.avisar ||
-    (async (texto) => {
-      const { execFile } = await import("node:child_process");
-      const { promisify } = await import("node:util");
-      await promisify(execFile)("/root/bin/onia-tg.sh", [texto]);
-    });
-  const marcas = deps.marcas || crearMarcasEnDisco();
+  const avisar = deps.avisar || avisarPorTelegram;
+  // Perezoso: en seco no se avisa ni se marca nada, asi que construir el almacen real seria
+  // pedirle permiso de escritura a produccion para no usarlo.
+  const marcas = deps.marcas || (emitir ? crearMarcasEnDisco() : null);
 
   const filas = await leerFilas({ desdeMs: ahoraMs - MAX_EDAD_MS - MIN_EDAD_MS, ahoraMs });
   const huerfanos = seleccionarHuerfanos(filas, { ahoraMs }).slice(0, limite);
@@ -504,6 +552,7 @@ export async function runRescateSweep(options = {}, deps = {}) {
     try {
       await avisar(texto);
     } catch (error) {
+      if (error?.hermetismo) throw error; // un test sin `deps.avisar` se entera, no se silencia
       resultado.avisoFallido = String(error?.message || error);
       // La marca existe para no repetir un aviso ENTREGADO. Si Telegram se cayo, ese lead no
       // se anuncio nunca: se suelta para que el barrido siguiente lo reintente, o la reserva

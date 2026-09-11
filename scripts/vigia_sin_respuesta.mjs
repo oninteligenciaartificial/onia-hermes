@@ -43,6 +43,7 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { esNuestra } from './objetivo_visible.mjs';
+import { guardaDeEfectoReal } from './lib/guarda-efecto-real.mjs';
 
 const run = promisify(execFile);
 
@@ -258,6 +259,7 @@ export function armarAviso(colgados) {
  * Va por `docker exec psql` porque la base de Chatwoot no esta expuesta al host.
  */
 export async function leerFilasDeChatwoot() {
+  guardaDeEfectoReal('psql contra la base de Chatwoot', 'Inyectale deps.leerFilas al vigia');
   const contenedor = process.env.ONIA_CHATWOOT_DB_CONTAINER
     || (await run('sh', ['-c', "docker ps --format '{{.Names}}' | grep chatwoot-db | head -1"])).stdout.trim();
   if (!contenedor) throw new Error('no encontre el contenedor de la base de Chatwoot');
@@ -304,6 +306,9 @@ export async function leerFilasDeChatwoot() {
  */
 async function enriquecerConEstadoDelBot(colgados) {
   if (!colgados.length) return colgados;
+  // ANTES del `try`, no adentro: ese catch es pelado y existe para que la falta del motor no
+  // tumbe un aviso que ya es cierto. Adentro, se tragaria la baranda y la haria fallar ABIERTA.
+  guardaDeEfectoReal('motor en supabase-db', 'Inyectale deps.enriquecer al vigia');
   const claves = colgados.map((c) => `'chatwoot:${Number(c.conversationId)}'`).join(',');
   try {
     const { stdout } = await run('docker', [
@@ -327,11 +332,37 @@ function leerEstado(ruta) {
   }
 }
 
+/**
+ * El aviso de verdad: Telegram por `onia-tg.sh`, que desde el 08-sep enruta los 🔴 al tablero
+ * de donde los cuatro carriles sacan trabajo. Vive aca arriba y CON NOMBRE —en vez de ser un
+ * closure adentro de `correrVigia`— para que la baranda se vea y para que un caso pueda
+ * afirmar sobre ella sin ejecutarla.
+ */
+export async function avisarPorTelegramReal(texto) {
+  guardaDeEfectoReal('canal de avisos de Sergio Urcullo', 'Inyectale deps.avisar al vigia');
+  await run('/root/bin/onia-tg.sh', [texto]);
+}
+
+/**
+ * El estado dice a quien ya se le aviso. Escribirlo desde la suite es PEOR que mandar un
+ * Telegram de mas: es UN solo JSON con todas las conversaciones, asi que una corrida de test
+ * puede marcar como «ya avisado» a cada lead que estaba esperando y apagar el vigia entero
+ * sin dejar rastro. Por eso el default se guarda igual que el canal.
+ *
+ * Una ruta explicita —o `ONIA_VIGIA_ESTADO`— es hermetica y se deja pasar: la baranda no puede
+ * volver intesteable a la parte que SI hay que probar.
+ */
+export function rutaDeEstado(explicita) {
+  const elegida = explicita || process.env.ONIA_VIGIA_ESTADO;
+  if (!elegida) guardaDeEfectoReal('estado de produccion del vigia', 'Pasale opciones.estado (o ONIA_VIGIA_ESTADO)');
+  return elegida || ESTADO_POR_DEFECTO;
+}
+
 export async function correrVigia(opciones = {}, deps = {}) {
   const ahoraMs = Number.isFinite(opciones.ahoraMs) ? opciones.ahoraMs : Date.now();
-  const rutaEstado = opciones.estado || process.env.ONIA_VIGIA_ESTADO || ESTADO_POR_DEFECTO;
+  const rutaEstado = rutaDeEstado(opciones.estado);
   const leerFilas = deps.leerFilas || leerFilasDeChatwoot;
-  const avisar = deps.avisar || (async (texto) => { await run('/root/bin/onia-tg.sh', [texto]); });
+  const avisar = deps.avisar || avisarPorTelegramReal;
 
   const filas = await leerFilas();
   // Si el guion no se puede leer, el vigia sigue mirando a los que nadie contesto: perder una

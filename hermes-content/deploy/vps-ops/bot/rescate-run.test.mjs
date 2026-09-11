@@ -24,6 +24,7 @@ import {
   crearMarcasEnDisco,
   claveDeMarca,
   VIDA_MARCA_MS,
+  guardaDeEfectoReal,
 } from "./rescate-run.mjs";
 
 const T0 = Date.parse("2026-09-03T00:00:00Z");
@@ -164,6 +165,8 @@ test("con --emit reinyecta por el webhook y cuenta lo que salio", async () => {
   const res = await runRescateSweep(
     { ahoraMs: T0 + min(5), emitir: true },
     {
+      avisar: async () => {},
+      marcas: crearMarcasEnDisco(dirDeMarcas()),
       leerFilas: async () => [fila()],
       postWebhook: async (p) => {
         enviados.push(p);
@@ -180,6 +183,8 @@ test("si el webhook rechaza uno, el barrido sigue con los demas y lo reporta", a
   const res = await runRescateSweep(
     { ahoraMs: T0 + min(5), emitir: true },
     {
+      avisar: async () => {},
+      marcas: crearMarcasEnDisco(dirDeMarcas()),
       leerFilas: async () => [
         fila({ conversationId: 49, messageId: 282 }),
         fila({ conversationId: 50, messageId: 290 }),
@@ -404,6 +409,7 @@ test("una respuesta que el barrido no puede leer es un FALLO ruidoso, no un sile
   const r = await runRescateSweep(
     { emitir: true, ahoraMs: T0 + min(10) },
     {
+      marcas: crearMarcasEnDisco(dirDeMarcas()),
       leerFilas: async () => [fila({ createdAtMs: T0 })],
       postWebhook: async () => ({ ok: true, respuesta: "<html>502 Bad Gateway</html>" }),
       avisar: async () => {},
@@ -448,6 +454,7 @@ test("EL TERCER ESTADO: reinyectar y que NO salga nada es un FALLO, no un silenc
   const r = await runRescateSweep(
     { emitir: true, ahoraMs: T0 + min(35) },
     {
+      marcas: crearMarcasEnDisco(dirDeMarcas()),
       leerFilas: async () => [fila({ conversationId: 11, messageId: 873, content: "hola", inboxId: 5 })],
       postWebhook: async () => ({ ok: true, respuesta: '{"ok":true,"sent":[],"reason":"sin_respuesta"}' }),
       avisar: async () => {},
@@ -468,6 +475,7 @@ test("el dedup tampoco absuelve: el huerfano ya probo que nadie le contesto", as
   const r = await runRescateSweep(
     { emitir: true, ahoraMs: T0 + min(5) },
     {
+      marcas: crearMarcasEnDisco(dirDeMarcas()),
       leerFilas: async () => [fila({ conversationId: 11, messageId: 873 })],
       postWebhook: async () => ({
         ok: true,
@@ -487,6 +495,7 @@ test("el handoff es la UNICA excusa, y tiene dueno: lo mira onia-vigia-sin-respu
   const r = await runRescateSweep(
     { emitir: true, ahoraMs: T0 + min(5) },
     {
+      marcas: crearMarcasEnDisco(dirDeMarcas()),
       leerFilas: async () => [fila({ conversationId: 11, messageId: 873 })],
       postWebhook: async () => ({ ok: true, respuesta: '{"ok":true,"sent":[],"reason":"handoff_humano"}' }),
       avisar: async () => {},
@@ -506,6 +515,8 @@ test("el barrido separa lo mandado de lo CONTESTADO, que es lo unico que salva u
   const res = await runRescateSweep(
     { ahoraMs: T0 + min(5), emitir: true },
     {
+      avisar: async () => {},
+      marcas: crearMarcasEnDisco(dirDeMarcas()),
       leerFilas: async () => [
         fila({ conversationId: 49, messageId: 282 }),
         fila({ conversationId: 47, messageId: 249 }),
@@ -534,6 +545,7 @@ test("avisa SOLO cuando salvo a alguien de verdad, no cuando solo mando", async 
   await runRescateSweep(
     { ahoraMs: T0 + min(5), emitir: true },
     {
+      marcas: crearMarcasEnDisco(dirDeMarcas()),
       leerFilas: async () => [fila({ conversationId: 47, messageId: 249 })],
       postWebhook: async () => ({
         ok: true,
@@ -542,19 +554,31 @@ test("avisa SOLO cuando salvo a alguien de verdad, no cuando solo mando", async 
       avisar: async (texto) => avisos.push(texto),
     },
   );
-  assert.deepEqual(avisos, [], "reinyectar sin contestar no salva a nadie: no se avisa");
+  // Se mira el aviso de RESCATE (🛟), no la bandeja entera: un reinyectado deduplicado que
+  // sigue sin saliente SI manda el aviso de perdido (🔴) — es deliberado y lo fija el caso
+  // "el dedup tampoco absuelve". Hasta hoy esto decia `deepEqual(avisos, [])` y pasaba en
+  // verde por una razon falsa: sin `marcas` propias, la corrida ANTERIOR habia dejado
+  // `chatwoot-47-249` en el directorio de produccion, asi que la reserva devolvia `false` y
+  // el 🔴 no salia. El caso estaba colgado de un archivo dejado por su propia corrida previa.
+  assert.deepEqual(
+    avisos.filter((a) => a.includes("🛟")),
+    [],
+    "reinyectar sin contestar no salva a nadie: no se avisa un rescate",
+  );
 
   await runRescateSweep(
     { ahoraMs: T0 + min(7), emitir: true },
     {
+      marcas: crearMarcasEnDisco(dirDeMarcas()),
       leerFilas: async () => [fila({ conversationId: 49, messageId: 282 })],
       postWebhook: async () => ({ ok: true, respuesta: '{"ok":true,"sent":[{"id":1}]}' }),
       avisar: async (texto) => avisos.push(texto),
     },
   );
-  assert.equal(avisos.length, 1, "un lead rescatado SI se avisa");
-  assert.match(avisos[0], /conv(ersacion)? 49/i, "el aviso dice cual conversacion mirar");
-  assert.match(avisos[0], /7 min/, "y cuanto tiempo estuvo esperando esa persona");
+  const rescates = avisos.filter((a) => a.includes("🛟"));
+  assert.equal(rescates.length, 1, "un lead rescatado SI se avisa");
+  assert.match(rescates[0], /conv(ersacion)? 49/i, "el aviso dice cual conversacion mirar");
+  assert.match(rescates[0], /7 min/, "y cuanto tiempo estuvo esperando esa persona");
 });
 
 test("en seco no avisa nunca, aunque haya huerfanos", async () => {
@@ -594,6 +618,7 @@ test("si un aviso falla, el barrido no pierde el rescate que ya hizo", async () 
   const res = await runRescateSweep(
     { ahoraMs: T0 + min(5), emitir: true },
     {
+      marcas: crearMarcasEnDisco(dirDeMarcas()),
       leerFilas: async () => [fila({ conversationId: 49, messageId: 282 })],
       postWebhook: async () => ({ ok: true, respuesta: '{"ok":true,"sent":[{"id":1}]}' }),
       avisar: async () => {
@@ -675,6 +700,7 @@ test("cada mensaje perdido es un lead distinto: el segundo tambien avisa", async
     runRescateSweep(
       { ahoraMs: ahora, emitir: true },
       {
+      marcas: crearMarcasEnDisco(dirDeMarcas()),
         leerFilas: async () => [fila(over)],
         postWebhook: async () => PERDIDO,
         avisar: async (texto) => avisos.push(texto),
@@ -837,4 +863,98 @@ test("si Telegram se cae, la marca se SUELTA: ese lead no se anuncio nunca", asy
   primeraVuelta = false;
   await runRescateSweep({ ahoraMs: T0 + min(20), emitir: true }, deps);
   assert.equal(avisos.length, 1, "la vuelta siguiente si lo anuncia");
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HERMETISMO: la suite no puede tocar produccion. Medido el 2026-09-11 y no supuesto.
+//
+// Estos casos nacen de un dano real causado por ESTA MISMA suite. Los tres casos que
+// llamaban a `runRescateSweep` con `emitir: true` sin inyectar `deps.avisar` ni `deps.marcas`
+// caian a los defaults, que son los REALES:
+//
+//   05:16:01  TAREA t_3cd88596 clave=876bcd "🔴 Un mensaje quedo SIN contestar"
+//   05:16:09  TAREA-YA-EXISTE ... (y 6 mas en 50 s)
+//
+// O sea: la suite le creo a Sergio Urcullo una tarea en el tablero —de donde los cuatro
+// carriles sacan trabajo— afirmando "Hay una persona esperando en la bandeja" sobre la sonda
+// de QA (conv 49), con el bot habiendole contestado los dos mensajes (936->937, 938->939) y
+// el barrido real informando `0 sin respuesta` en todas sus corridas de esa hora.
+//
+// Y lo caro no fue el aviso falso sino la MARCA: quedaron escritos en
+// `/var/lib/onia-rescate-avisado/` los archivos `chatwoot-49-282`, `chatwoot-47-249` y
+// `chatwoot-11-873`. El ultimo es el lead REAL del 10-sep que motivo todo el arreglo. La
+// marca existe para no repetir un aviso ya entregado: con ella puesta por un test, el dia
+// que ese mensaje vuelva a quedar huerfano el aviso NO sale. El instrumento que existe para
+// no perder un lead quedaba silenciado por su propio test, en verde y sin una sola linea.
+//
+// La baranda va en el PRODUCTO y TIRA en vez de no-operar: un no-op silencioso dejaria en
+// verde a un caso que cree estar probando el aviso, que es el guardia hueco de siempre.
+// Y falla CERRADO: un caso futuro con `emitir: true` que no inyecte explota solo, con el
+// nombre de lo que falta. Por eso no hace falta ademas un gate que parsee este archivo.
+
+// ⚠️ COMO SE VALIDAN ESTOS CASOS POR MUTACION — y cual NO se corre, medido el 2026-09-11.
+//
+// Una baranda contra un efecto externo es el unico gate que NO se puede validar quitandole la
+// proteccion: la mutacion "que el default de `avisar` no llame a la guarda" deja al caso de
+// abajo ejecutando `onia-tg.sh` DE VERDAD. La corri creyendola segura y mando un aviso real
+// (05:47:39 en /var/log/onia-tg.log); lo contuvo de casualidad la dedup del enrutador, que ya
+// tenia esa clave de la vuelta anterior. O sea: validar la baranda la rompio.
+//
+// Las cuatro que SI valen, y ninguna ejecuta el efecto:
+//   · la guarda tira sin decir "hermetismo"        -> caen los 3 casos que esperan ese texto
+//   · el catch del aviso se traga el `.hermetismo` -> cae el caso del aviso (equivale a la
+//                                                     peligrosa, sin desarmar la guarda)
+//   · las marcas por defecto no llaman a la guarda -> cae el caso de las marcas
+//   · la guarda tira SIEMPRE (tambien en prod)     -> cae el caso de "fuera de node --test"
+test("hermetismo: bajo `node --test` la guarda de efecto real TIRA y nombra que falta", () => {
+  assert.ok(process.env.NODE_TEST_CONTEXT, "precondicion: estos casos corren bajo node --test");
+  assert.throws(() => guardaDeEfectoReal("avisar"), /hermetismo/i);
+  assert.throws(() => guardaDeEfectoReal("avisar"), /deps\.avisar/);
+});
+
+test("hermetismo: el aviso por defecto no puede llegar a Telegram desde un test", async () => {
+  await assert.rejects(
+    runRescateSweep(
+      { ahoraMs: T0 + min(5), emitir: true },
+      {
+        leerFilas: async () => [fila()],
+        postWebhook: async () => PERDIDO,
+        marcas: crearMarcasEnDisco(dirDeMarcas()),
+        // avisar: A PROPOSITO sin inyectar — es el defecto que se esta cazando.
+      },
+    ),
+    /hermetismo/i,
+    "sin `deps.avisar`, el barrido tiene que explotar antes de ejecutar onia-tg.sh",
+  );
+});
+
+test("hermetismo: las marcas por defecto no pueden escribir en el directorio de produccion", () => {
+  const previo = process.env.ONIA_RESCATE_MARCAS;
+  delete process.env.ONIA_RESCATE_MARCAS;
+  try {
+    assert.throws(() => crearMarcasEnDisco(), /hermetismo/i);
+    // Con un directorio propio es hermetico y tiene que seguir funcionando: la baranda no
+    // puede volver intesteable a la parte que SI se prueba.
+    assert.ok(crearMarcasEnDisco(dirDeMarcas()));
+    // Y la variable de entorno tambien alcanza: asi corre el caso de la purga.
+    process.env.ONIA_RESCATE_MARCAS = dirDeMarcas();
+    assert.ok(crearMarcasEnDisco());
+  } finally {
+    if (previo === undefined) delete process.env.ONIA_RESCATE_MARCAS;
+    else process.env.ONIA_RESCATE_MARCAS = previo;
+  }
+});
+
+test("hermetismo: fuera de `node --test` la guarda deja pasar — produccion no se toca", () => {
+  const previo = process.env.NODE_TEST_CONTEXT;
+  delete process.env.NODE_TEST_CONTEXT;
+  try {
+    // El cron corre `node rescate-run.mjs --emit` sin runner: ahi la guarda NO existe, o la
+    // baranda del test se comeria el unico aviso que importa.
+    assert.doesNotThrow(() => guardaDeEfectoReal("avisar"));
+    assert.ok(crearMarcasEnDisco(), "y las marcas de verdad se construyen igual");
+  } finally {
+    if (previo === undefined) delete process.env.NODE_TEST_CONTEXT;
+    else process.env.NODE_TEST_CONTEXT = previo;
+  }
 });
