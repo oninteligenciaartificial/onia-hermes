@@ -63,6 +63,49 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-11 (`54c987a`, onia-platform): el paciente confirmaba su cita, no
+      se guardaba, y la pantalla se veía IGUAL que antes de apretar.**
+
+      `/cita` es la pantalla del cliente **del** cliente: llega el recordatorio por WhatsApp o
+      correo, abre el enlace en el celular y aprieta «Sí, voy a asistir». La server action
+      (`app/cita/acciones.ts`) tiene tres vueltas sin `hecho=1`, y **dos las explica la pantalla
+      sola** porque el estado de la cita cambió: enlace vencido → «Enlace expirado», cita ya
+      cerrada → «Esta cita ya está cerrada».
+
+      **La tercera no.** Cuando corta el limitador (`respuestaCitaLimiter`, 5/min **por token**,
+      medido en `lib/rate-limit.ts:80`) la cita queda **intacta**, así que la pantalla cae al
+      render final y repinta «¿Confirmás tu asistencia?» con el mismo botón — idéntica, byte por
+      byte, a la de antes de apretar. Quien responde no tiene forma de distinguir *«no se
+      guardó»* de *«todavía no apreté»*, y el negocio tampoco se entera.
+
+      **Por qué ningún gate podía verlo, y es la parte reusable:** la ruta responde 200, la
+      pantalla renderiza perfecta, no sobra ni falta una palabra, el texto ya es neutro entre
+      rubros y el camino feliz funciona. Los dos gates de camino de fallo que existen no la
+      alcanzan **por partida doble**: `app/cita` no está bajo `app/(dashboard)` ni bajo
+      `app/(public)` —sus dos raíces— y además el sujeto de los dos es `fetch(`, y esta pantalla
+      escribe por **server action**. Enumerado el universo: `app/` tiene **15 árboles** y los
+      gates cubren **2**. Los huérfanos con escritura son justo el embudo del cliente nuevo —
+      `(auth)` (entrar), `onboarding` (configurar), `checkout` (pagar)— y los seis `fetch` de
+      esos tres **están sanos por diligencia, no por construcción**: nadie los custodia.
+
+      **Arreglo:** la rama que no pudo escribir se **marca** (`sinGuardar=1`) y la pantalla la
+      pinta, conservando el botón, que es la salida. **No se tocó el limitador**: el tope está
+      bien, lo que faltaba era decirlo.
+
+      Gate `app/cita/respuesta-que-no-se-guardo.test.ts`, validado por mutación en **cuatro**
+      direcciones y cada una cae en SU caso: sin marca en la acción (1), sin el aviso en la
+      pantalla (2), el esquive de pintarlo **siempre** (2) y el de pintar un aviso que no avisa
+      (1). El nombre del parámetro se **deriva** de la pantalla —un rename lo sigue en vez de dar
+      rojo falso— y se mide sobre el código **sin comentarios**, para que el gate no se absuelva
+      con su propia bitácora. Gates: `tsc` 0 · **4486** tests · `eslint` 0 errores.
+
+      ⚠️ **Commiteado y pusheado a la rama, NO desplegado**: el swap lo hace `onia-cola` cuando
+      Sergio Urcullo aprueba el pedido de deploy de plataforma.
+
+      **Lo que queda abierto y se anota con su nombre:** el hueco de cobertura de arriba. Los 3
+      árboles huérfanos con escritura están sanos hoy, así que el día que alguien agregue un
+      `fetch` ahí entra **pre-aprobado**. Va abajo como ítem propio.
+
 - [x] ✅ **CERRADO el 2026-09-11 (`6527b84`, onia-platform): la promesa de «solo lectura,
       podés mirar y exportar» que el sistema le manda al cliente que PAGA no la verificaba
       nadie.**
@@ -3420,6 +3463,29 @@ y sin operar. Acá se opera, con verificación por ítem.
       `plataforma` (`t_bf1607af`), que sigue esperando el `ok` de Sergio Urcullo.
 
 
+- [ ] **El gate de camino de fallo cubre 2 de los 15 árboles de `app/`, y los huérfanos con
+      escritura son el embudo del cliente nuevo.** Medido el 2026-09-11 al cerrar el defecto de
+      `/cita`: `app/(dashboard)/camino-de-fallo.test.ts` y `app/(public)/camino-de-fallo.test.ts`
+      derivan sus sujetos del disco —bien— pero sus raíces están escritas a mano
+      (`app/(dashboard)` y `app/(public)`), así que **13 árboles no son sujeto de nadie**.
+
+      Los que escriben hoy y quedan afuera: `app/(auth)` (registro, login, 2FA), `app/onboarding`
+      (aplicar y extraer) y `app/checkout` (el comprobante de pago). Sus **seis** `fetch` están
+      sanos —los seis manejan `!res.ok` y el `catch`, verificado uno por uno—, o sea que esto
+      **no es un defecto vivo: es que están sanos por diligencia y no por construcción**. El día
+      que alguien agregue un `fetch` ahí entra pre-aprobado, y es la pantalla donde entra la
+      plata.
+
+      Y hay una segunda mitad, que es la que hizo falta para cazar `/cita`: el **sujeto** de los
+      dos gates es `fetch(`, así que una pantalla que escribe por **server action** les es
+      invisible aunque su árbol sí estuviera cubierto. Ampliar la raíz sin ampliar el sujeto deja
+      esa mitad abierta.
+
+      **Listo =** un solo gate que derive sus sujetos de `app/` entero con los árboles exentos
+      **nombrados y re-medidos** en cada corrida (no una lista de raíces que se pudre), que cubra
+      las dos formas de escribir (`fetch` y server action), y validado por mutación agregando un
+      árbol nuevo: tiene que **nombrarlo**, no ignorarlo.
+
 ## Lo que este carril NO hace
 
 - **No toca los dos rubros bloqueados** (veterinaria, ganadería). Están fuera de la v1.0.
@@ -3429,6 +3495,58 @@ y sin operar. Acá se opera, con verificación por ítem.
 - **No le escribe a un prospecto.** Regla del [`README.md`](README.md) de esta carpeta.
 
 ## Cerrado
+
+- [x] **CERRADO el 2026-09-11: el gate que prueba que el recordatorio de cita LLEGA llevaba
+      días REVENTANDO EN ROJO, o sea acusando al producto de no entregar**
+      (`scripts/recordatorio_cita_vivo.mjs` · `npm run recordatorio:vivo`)**.** Corriendo los
+      gates vivos uno por uno salió con un stack de Node y `exit 1`:
+      `insert or update on table "patients" violates foreign key constraint
+      "patients_organizationId_fkey" — Key (organizationId)=(cmsvyguui…) is not present`.
+
+      **La causa: el gate pedía prestado su sujeto.** Tenía la org y el doctor escritos a mano
+      como dos ids de producción. Esa org figuraba **«borrable»** en
+      `ONIA_INFRA_LIMPIEZA_Y_ORDEN.md` §5.1 y alguien la borró, con razón. Desde entonces el
+      `insert` moría, la excepción salía **sin `catch`** y el proceso terminaba en **código 1 —
+      ROJO**, que se lee «la plataforma no le avisa al paciente». El falso rojo va en la
+      dirección cara: manda a depurar un circuito sano.
+
+      **Y nadie lo vio, por la trampa que este repo ya tiene anotada:** lo único cableado a
+      `npm test` es su `--self-check` **puro** (`test:recordatorio-instrumento`), que no toca
+      producción y seguía en verde; la medición **viva** quedó de alias suelto y no la corría
+      nadie.
+
+      **Pedir prestada una fila tiene una segunda muerte, más silenciosa:** que siga existiendo
+      y deje de CALIFICAR. El cron corta con `isWriteBlocked(org)` — corte que entró **ayer**
+      (`278f030`) — así que el día que a la org prestada se le venza el plan, el gate se pone
+      rojo sobre un circuito que hace exactamente lo correcto.
+
+      **El arreglo: el gate es DUEÑO de su sujeto.** Crea org + profesional + paciente + cita
+      sellados con la corrida, mide, y el `finally` borra las cuatro filas en orden de
+      dependencia (acotado al sello, nunca a `zz-qa-%` suelto, que es de dos carriles).
+      Ninguna limpieza ajena puede volver a matarlo. Además, **sembrar es preparar, no medir**:
+      si el `insert` falla ahora sale `2` — NO MEDIDO —, nunca rojo.
+
+      **Dos precondiciones se preguntan en vez de suponerse, y las dos salen NO MEDIDO:**
+      · que la org sembrada esté viva **según la regla del producto** (`cuentaViva`, espejo de
+      `planAccessLevel(...)==="full"`), así un endurecimiento del corte se reporta como
+      «fixture viejo» y no como rojo;
+      · que el cupo mensual de correo no esté agotado — `sinCupo` descarta la cita **antes** de
+      intentar entregar, así que cobrarlo como rojo acusa al producto de algo que no se pudo
+      ni ejercer.
+
+      **El fixture con los defaults de la tabla ya mordió, en la primera corrida del arreglo:**
+      sin `plan`, la org nace `free`, y `free` trae `emailsPerMonth: 0`
+      (`lib/plan-catalogo.ts`) → `evaluadas:1, sinCupo:1`. Un sujeto tiene que parecerse a un
+      cliente REAL: `/api/auth/register` crea toda org con `TRIAL_PLAN` (`professional`), y las
+      tres orgs vivas de producción lo tienen.
+
+      **Prueba, medida hoy contra producción — el circuito estaba SANO todo este tiempo:**
+      `{"evaluadas":1,"enviados24Email":1,"sinCupo":0}` · `reminder24hSentAt` escrito ·
+      entrega real en el log de `onia-mail`: `status=sent (250 2.0.0 OK … gsmtp)` · **exit 0**.
+      Producción quedó **limpia** (0 filas del sello; la única `zz-qa-%` que queda es de
+      `recorrido-cliente` y no se tocó). Self-check: **21 casos**, validados con **5
+      mutaciones** que caen en rojo — incluida la que repone un id a mano, que es el ancla
+      para que el arreglo no se deshaga en silencio.
 
 - [x] **CERRADO el 2026-09-11: el plan SEMANAL recibía «tu plan vence en una semana» el día
       que lo pagaba** (`lib/subscription/renewal-reminders.ts` · `plan-state.ts` ·
