@@ -12,6 +12,18 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-11 09:1x-10:1x La Paz — Comercio / tienda, reverificado: 9/9 (paso 7 no-aplica por diseño), sin hallazgos
+
+`zz-qa-2026-09-11-1009` — tercera reverificación de Comercio en 24h, mismo resultado que la
+`zz-qa-2026-09-11-0709`: alta (confirmar correo primero), onboarding 6 pantallas, cliente
+cargado en storefront `/comercio` y encontrado de vuelta, cobro mirado en `/comercio/caja`
+(frenado ahí), dato visible en `/dashboard`. Paso 7 sigue NO-APLICA por diseño (Comercio no
+vende agenda). Cero filas `zz-qa-` propias al cerrar. Los 5 rubros activos (dental, comercio,
+importadora, estética, servicios profesionales) están reverificados en las últimas 24-48h sin
+un solo hallazgo nuevo — veterinaria no está en `RUBROS_ACTIVOS` y este instrumento no la cubre
+a propósito. Próximo escalón de valor: promesa-vs-entrega en la home (qué promete cada botón
+contra lo que la pantalla siguiente entrega), no repetir rubro.
+
 ## 2026-09-11 09:09-09:1x La Paz — Clínica dental, reverificado: 9/9, sin hallazgos
 
 `zz-qa-2026-09-11-0909` — recorrido completo de punta a punta: alta (confirmar correo primero),
