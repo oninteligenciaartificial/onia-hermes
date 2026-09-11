@@ -161,7 +161,8 @@ export default function Empezar() {
         <Reveal>
           <Kicker>Cuando se termina</Kicker>
           <p id="al-final" className={s.h2} style={{ maxWidth: "24ch" }}>
-            Al vencer, la cuenta queda en solo lectura. No se borra nada.
+            Al vencer, la cuenta queda en solo lectura. Nada se borra de
+            inmediato.
           </p>
           <p className={s.body} style={{ maxWidth: "48em" }}>
             {PRUEBA.copy}

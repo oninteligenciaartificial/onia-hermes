@@ -388,10 +388,31 @@ const NOTA_PRUEBA_POR_PLAN: Record<string, string> = {
   full: `${PRUEBA_DIAS} días de prueba sin tarjeta, con el plan ${PRUEBA_PLAN}. Al pasar a Full se van los topes.`,
 };
 
+/**
+ * La VENTANA que el contrato le pone a «tus datos son tuyos».
+ *
+ * No es un detalle legal: es el plazo que la venta tiene que decir en voz alta
+ * cuando habla de irse. `content/legal/privacidad.md` §8 (status vigente, la
+ * misma política que el lead acepta al crear la cuenta) fija los dos números, y
+ * `salida-con-fecha.test.ts` los cruza contra ese archivo — si el contrato
+ * cambia, el gate se pone rojo en vez de dejar el copy diciendo el viejo.
+ *
+ * `diasParaExportar` es el que le impone una ACCIÓN al cliente, así que es el
+ * que va en el copy; `diasHastaEliminar` es cuándo desaparecen. Decir 90 sería
+ * prometer de más: a los 31 los datos todavía existen pero el derecho a pedirlos
+ * ya venció.
+ */
+export const RETENCION = {
+  /** Días posteriores a la terminación para pedir la exportación (§8). */
+  diasParaExportar: 30,
+  /** Días tras los que Onia elimina los datos de sus sistemas activos (§8). */
+  diasHastaEliminar: 90,
+} as const;
+
 export const PRUEBA = {
   dias: PRUEBA_DIAS,
   planQueCorre: PRUEBA_PLAN,
-  copy: `${PRUEBA_DIAS} días de prueba sin poner tarjeta, corriendo con el plan ${PRUEBA_PLAN} completo. Al terminar, la cuenta queda en solo lectura: no se borra nada y podés exportar tus datos.`,
+  copy: `${PRUEBA_DIAS} días de prueba sin poner tarjeta, corriendo con el plan ${PRUEBA_PLAN} completo. Al terminar, la cuenta queda en solo lectura: nada se borra de inmediato y tenés ${RETENCION.diasParaExportar} días para exportar tus datos.`,
   notaPorPlan: NOTA_PRUEBA_POR_PLAN,
 } as const;
 
@@ -560,7 +581,7 @@ export const CONDICIONES: readonly string[] = [
   // archivo. El cruce contra el producto (scripts/precios-fuente.mjs) valida
   // las CONSTANTES, no las copias, así que el día que el trial cambie esta
   // frase sigue en verde diciendo el número viejo.
-  `${PRUEBA_DIAS} días de prueba sin tarjeta, con el ${PRUEBA_PLAN} completo. Al vencer, la cuenta queda en solo lectura — nada se borra.`,
+  `${PRUEBA_DIAS} días de prueba sin tarjeta, con el ${PRUEBA_PLAN} completo. Al vencer, la cuenta queda en solo lectura: nada se borra de inmediato y tenés ${RETENCION.diasParaExportar} días para exportar tus datos.`,
   "En los tres planes de arriba no cobramos implementación ni migración: el checkout cobra solo el plan. Grupo / Empresarial sí lleva implementación acompañada y se cotiza aparte.",
   // Decía "desde el plan más chico", que ponía a la salida detrás de un pago:
   // el export integral NO se gatea por plan (el producto lo llama "derecho del
