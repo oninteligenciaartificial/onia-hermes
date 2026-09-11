@@ -63,6 +63,49 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-11 (`54c987a`, onia-platform): el paciente confirmaba su cita, no
+      se guardaba, y la pantalla se veía IGUAL que antes de apretar.**
+
+      `/cita` es la pantalla del cliente **del** cliente: llega el recordatorio por WhatsApp o
+      correo, abre el enlace en el celular y aprieta «Sí, voy a asistir». La server action
+      (`app/cita/acciones.ts`) tiene tres vueltas sin `hecho=1`, y **dos las explica la pantalla
+      sola** porque el estado de la cita cambió: enlace vencido → «Enlace expirado», cita ya
+      cerrada → «Esta cita ya está cerrada».
+
+      **La tercera no.** Cuando corta el limitador (`respuestaCitaLimiter`, 5/min **por token**,
+      medido en `lib/rate-limit.ts:80`) la cita queda **intacta**, así que la pantalla cae al
+      render final y repinta «¿Confirmás tu asistencia?» con el mismo botón — idéntica, byte por
+      byte, a la de antes de apretar. Quien responde no tiene forma de distinguir *«no se
+      guardó»* de *«todavía no apreté»*, y el negocio tampoco se entera.
+
+      **Por qué ningún gate podía verlo, y es la parte reusable:** la ruta responde 200, la
+      pantalla renderiza perfecta, no sobra ni falta una palabra, el texto ya es neutro entre
+      rubros y el camino feliz funciona. Los dos gates de camino de fallo que existen no la
+      alcanzan **por partida doble**: `app/cita` no está bajo `app/(dashboard)` ni bajo
+      `app/(public)` —sus dos raíces— y además el sujeto de los dos es `fetch(`, y esta pantalla
+      escribe por **server action**. Enumerado el universo: `app/` tiene **15 árboles** y los
+      gates cubren **2**. Los huérfanos con escritura son justo el embudo del cliente nuevo —
+      `(auth)` (entrar), `onboarding` (configurar), `checkout` (pagar)— y los seis `fetch` de
+      esos tres **están sanos por diligencia, no por construcción**: nadie los custodia.
+
+      **Arreglo:** la rama que no pudo escribir se **marca** (`sinGuardar=1`) y la pantalla la
+      pinta, conservando el botón, que es la salida. **No se tocó el limitador**: el tope está
+      bien, lo que faltaba era decirlo.
+
+      Gate `app/cita/respuesta-que-no-se-guardo.test.ts`, validado por mutación en **cuatro**
+      direcciones y cada una cae en SU caso: sin marca en la acción (1), sin el aviso en la
+      pantalla (2), el esquive de pintarlo **siempre** (2) y el de pintar un aviso que no avisa
+      (1). El nombre del parámetro se **deriva** de la pantalla —un rename lo sigue en vez de dar
+      rojo falso— y se mide sobre el código **sin comentarios**, para que el gate no se absuelva
+      con su propia bitácora. Gates: `tsc` 0 · **4486** tests · `eslint` 0 errores.
+
+      ⚠️ **Commiteado y pusheado a la rama, NO desplegado**: el swap lo hace `onia-cola` cuando
+      Sergio Urcullo aprueba el pedido de deploy de plataforma.
+
+      **Lo que queda abierto y se anota con su nombre:** el hueco de cobertura de arriba. Los 3
+      árboles huérfanos con escritura están sanos hoy, así que el día que alguien agregue un
+      `fetch` ahí entra **pre-aprobado**. Va abajo como ítem propio.
+
 - [x] ✅ **CERRADO el 2026-09-11 (`6527b84`, onia-platform): la promesa de «solo lectura,
       podés mirar y exportar» que el sistema le manda al cliente que PAGA no la verificaba
       nadie.**
@@ -3419,6 +3462,29 @@ y sin operar. Acá se opera, con verificación por ítem.
       ⚠️ **Commiteado y en la rama, NO desplegado**: viaja con el pedido de deploy de
       `plataforma` (`t_bf1607af`), que sigue esperando el `ok` de Sergio Urcullo.
 
+
+- [ ] **El gate de camino de fallo cubre 2 de los 15 árboles de `app/`, y los huérfanos con
+      escritura son el embudo del cliente nuevo.** Medido el 2026-09-11 al cerrar el defecto de
+      `/cita`: `app/(dashboard)/camino-de-fallo.test.ts` y `app/(public)/camino-de-fallo.test.ts`
+      derivan sus sujetos del disco —bien— pero sus raíces están escritas a mano
+      (`app/(dashboard)` y `app/(public)`), así que **13 árboles no son sujeto de nadie**.
+
+      Los que escriben hoy y quedan afuera: `app/(auth)` (registro, login, 2FA), `app/onboarding`
+      (aplicar y extraer) y `app/checkout` (el comprobante de pago). Sus **seis** `fetch` están
+      sanos —los seis manejan `!res.ok` y el `catch`, verificado uno por uno—, o sea que esto
+      **no es un defecto vivo: es que están sanos por diligencia y no por construcción**. El día
+      que alguien agregue un `fetch` ahí entra pre-aprobado, y es la pantalla donde entra la
+      plata.
+
+      Y hay una segunda mitad, que es la que hizo falta para cazar `/cita`: el **sujeto** de los
+      dos gates es `fetch(`, así que una pantalla que escribe por **server action** les es
+      invisible aunque su árbol sí estuviera cubierto. Ampliar la raíz sin ampliar el sujeto deja
+      esa mitad abierta.
+
+      **Listo =** un solo gate que derive sus sujetos de `app/` entero con los árboles exentos
+      **nombrados y re-medidos** en cada corrida (no una lista de raíces que se pudre), que cubra
+      las dos formas de escribir (`fetch` y server action), y validado por mutación agregando un
+      árbol nuevo: tiene que **nombrarlo**, no ignorarlo.
 
 ## Lo que este carril NO hace
 
