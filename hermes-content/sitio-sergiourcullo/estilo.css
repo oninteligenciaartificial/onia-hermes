@@ -464,6 +464,49 @@ code{font-family:var(--mono);font-size:.9em;background:var(--line-soft);padding:
   color:var(--faint);margin:22px 0 0;
 }
 
+/* ---------- mapa del stack (guía del stack) ----------
+   "Quién hace qué": la vista que le falta al que llega y ve seis nombres sueltos.
+   Mismos tokens del sistema; nada de paleta propia. */
+.mapa{
+  margin:44px 0 0;background:var(--raise);border:1px solid var(--line);
+  border-radius:6px;box-shadow:var(--shadow);padding:22px 24px 10px;
+}
+.mapa-rot{
+  font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--faint);margin:0 0 4px;
+}
+.mapa-fila{
+  display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1.35fr);
+  gap:12px;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--line-soft);
+}
+.mapa-fila:last-child{border-bottom:none}
+.mapa .da{color:var(--muted);font-size:15px}
+.mapa .fle{color:var(--onia-texto);font-family:var(--mono);font-size:13px}
+.mapa .hace{font-size:15px}
+.mapa .hace b{font-weight:600}
+.mapa .nro{
+  font-family:var(--mono);font-size:12px;color:var(--onia-texto);
+  font-weight:600;margin-right:3px;
+}
+@media (max-width:560px){
+  .mapa-fila{grid-template-columns:1fr;gap:3px}
+  .mapa .fle{display:none}
+  .mapa .da{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+}
+
+/* ---------- botón copiar en bloques de código ---------- */
+.prebox{position:relative}
+.copiar{
+  position:absolute;top:8px;right:8px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.04em;
+  padding:5px 11px;border-radius:3px;cursor:pointer;
+  border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);
+  color:var(--code-dim);
+}
+.copiar:hover{color:var(--code-ink);border-color:rgba(255,255,255,.3)}
+.copiar.ok{color:var(--code-accent);border-color:var(--code-accent)}
+.copiar:focus-visible{outline:2px solid var(--code-accent);outline-offset:2px}
+
 /* ---------- foto en el hero de la home ----------
    Va sobre un disco de verde de marca: el recorte de la foto tiene fondo transparente y
    sin superficie detrás flota sobre el blanco y se ve como un sticker pegado. El verde

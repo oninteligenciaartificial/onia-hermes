@@ -31,7 +31,39 @@ web. Es la regla que existe porque ya falló una vez.
 
 ---
 
-# 1 · Lunes — WhatsApp Business
+# 0 · Lunes — El resumido del stack (abre la semana)
+
+> Pedido de Sergio Urcullo, 10-sep: *"grabo esos menos whatsapp, pero hagamos uno resumido
+> para tiktok y uno extenso para youtube"*. El extenso de YouTube ya está: es el **#7** de
+> este doc. Éste es el resumido, y ocupa el lunes que dejó libre el corte de WhatsApp.
+
+**Gancho (0-3 s)**
+> «Mi empresa entera corre con seis herramientas. Cinco no me cuestan nada.»
+
+**Lo concreto (3-25 s)** · *en pantalla: 2-3 segundos de cada una, real, sin explicar*
+> «WhatsApp Business para contestar sin escribir veinte veces lo mismo. Una PC vieja que
+> hace de servidor. n8n, que trabaja mientras duermo. Claude Code — lo único que pago.
+> HyperFrames, que hace mis videos desde texto. Y Hermes, que me avisa si algo se cae.
+>
+> Esta semana te muestro una por día: qué hace, qué **no** hace, y cuánto cuesta de
+> verdad.»
+
+**El cierre (25-35 s)**
+> «Seguime, que arranca mañana. Y los archivos listos de cada una los voy dejando gratis
+> en mi comunidad — link en el perfil.»
+
+**Qué se ve:** ráfaga de pantallas reales — una respuesta rápida saliendo, la máquina con
+el LED, un flujo de n8n, la terminal, un render, el aviso en el teléfono. Nada de logos:
+**tus pantallas**. Este video es el índice de la semana; si una toma no la tenés hoy, la
+sacás cuando grabes el video de ese día.
+
+---
+
+# 1 · ~~Lunes~~ — WhatsApp Business · 🔴 NO SE GRABA
+
+> **Cortado por Sergio Urcullo el 10-sep** (*"grabo esos menos whatsapp"*). El **drop** del
+> lunes 14 sale igual con su archivo — la regla 5 del circuito recorta videos, nunca drops.
+> Se deja el guion escrito por si el tema asciende después.
 
 **Gancho (0-3 s)**
 > «Escribís lo mismo veinte veces por día. Esto lo arregla en veinte minutos.»
@@ -218,6 +250,73 @@ Capítulos:
 
 ⚠️ **Los capítulos hacen que YouTube muestre el video por partes en la búsqueda.** Sin
 ellos, el video compite por una sola consulta; con ellos, por ocho.
+
+---
+
+# 8 · Los dos que SÍ prometen — «comentá y te lo mando»
+
+> Sergio Urcullo, pedido del 10-sep: *"hacer que la gente comente y moverlas a la comunidad
+> o a la página web donde están todos los recursos"*.
+>
+> **Sólo pueden pedir comentario los videos cuyo recurso YA existe** (regla del circuito:
+> la promesa va después del recurso). Hoy hay dos recursos 🟢 vivos: `/homelab` y `/stack`.
+> Éstos son sus guiones. Ningún otro video pide palabra clave.
+>
+> ⚠️ **La palabra clave NO está cableada en n8n** (`palabras: {}` en private-reply): cada
+> comentario se responde **a mano** por DM. Prometer "te llega al toque" sería falso —
+> los cierres dicen "te lo mando", sin plazo.
+
+## 8a · Promesa `/homelab` — grabable HOY
+
+Mismo formato que los seis: 9:16, 30-45 s.
+
+**Gancho (0-3 s)**
+> «¿Tenés una computadora vieja juntando polvo? Es un servidor, y no lo sabés.»
+
+**Lo concreto (3-25 s)** · *en pantalla: la máquina real sin monitor, LED prendido*
+> «Con 4 GB de RAM y 40 de disco alcanza. Le ponés Ubuntu Server y queda prendida en un
+> rincón trabajando para vos: automatizaciones, respaldos, lo que le pidas.
+>
+> Escribí la guía completa, gratis: qué máquina sirve, qué instalar y en qué orden, y qué
+> **no** esperes de esto — no reemplaza tu compu y sin luz no anda.»
+
+**El cierre (25-35 s)**
+> «Comentá **HOMELAB** y te mando la guía por mensaje. Y si querés los archivos ya
+> armados, están en mi comunidad — gratis, link en el perfil.»
+
+**El DM que se manda (a mano):**
+```
+Acá está la guía completa del servidor con una PC vieja:
+https://sergiourcullo.vercel.app/homelab
+
+Si te trabás en algún paso, en mi comunidad contesto yo:
+[link de invitación]
+```
+
+✅ **Resuelto el 10-sep:** Sergio Urcullo les mandó el link a los 3 que comentaron el
+reel del 07-sep. Este mismo DM queda como plantilla para los próximos.
+
+## 8b · Promesa `/stack` — lunes 21, cierra la semana 1
+
+**Gancho (0-3 s)**
+> «Toda la semana te mostré las herramientas con las que opero mi empresa. Acá está todo
+> junto, en orden.»
+
+**Lo concreto (3-25 s)** · *en pantalla: la guía scrolleando en el teléfono*
+> «Una guía escrita con las seis: qué hace cada una, qué **no** hace, cómo se instala y en
+> qué orden. Una sola se paga; el resto es gratis.
+>
+> No es un curso ni te pide el mail. Es la página, abierta.»
+
+**El cierre (25-35 s)**
+> «Comentá **STACK** y te la mando. Los archivos listos para pegar — las respuestas, el
+> script del servidor, los flujos — están en mi comunidad, gratis, link en el perfil.»
+
+**El DM:** ya está escrito en [`PARA-PUBLICAR-DM-STACK.md`](PARA-PUBLICAR-DM-STACK.md).
+Usar ése, no improvisar otro.
+
+⚠️ **Este video NO se adelanta.** Si sale antes del 21 quema el tema de la semana: los
+seis diarios pierden novedad. El orden del motor manda.
 
 ---
 
