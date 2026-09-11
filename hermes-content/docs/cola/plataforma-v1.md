@@ -168,20 +168,72 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       capacidades vivas (`clinica-sergio-p2ljs`, `onia-interna`) son otorgamientos con
       `validUntil` NULL, que no vencen.
 
-- [ ] **La migración del `concepto` está commiteada y NO aplicada en producción**
-      (`prisma/migrations/20260911120000_renewal_reminder_concepto/migration.sql`, en
-      `onia-platform`). Es aditiva y el código es fail-soft —
-      sin la columna el cron responde `migracion_pendiente` y no manda nada, ni del plan ni
-      del add-on (`53227ab` + `7b0a154`, este último justamente para que P2022 no reviente
-      el circuito del plan). **Mientras no se aplique, el add-on que venza no avisa.**
+- [x] ✅ **CERRADO el 2026-09-11 — la migración del `concepto` YA ESTÁ APLICADA en
+      producción.** Lo pedía este mismo ítem
+      (`prisma/migrations/20260911120000_renewal_reminder_concepto/migration.sql`,
+      `onia-platform`) y quedó escrito antes de medirlo.
 
-      No la aplica este carril: va por `docker exec` contra `supabase-db`, en el mismo
-      movimiento que el swap que `onia-cola` ejecuta cuando Sergio Urcullo aprueba el
-      pedido de deploy de plataforma.
+      **Medido, no supuesto** — `docker exec supabase-db psql -U postgres -d postgres -tAc
+      "select column_name from information_schema.columns where
+      table_name='onia_renewal_reminder_sends'"` devuelve
+      `concepto createdAt id organizationId sentOk step venceEl`, y el conteo cierra:
+      33 filas en `_prisma_migrations` contra 32 carpetas en `prisma/migrations`.
 
-      **Listo =** `docker exec supabase-db psql -U postgres -d postgres -tAc "select
-      column_name from information_schema.columns where table_name='onia_renewal_reminder_sends'"`
-      incluye `concepto`, y el cron deja de responder `migracion_pendiente`.
+      ⚠️ **Lo que sí era falso y se corrige acá, porque manda al revés:** este ítem decía
+      que la migración *«va en el mismo movimiento que el swap»*. **No es cierto** — el
+      publicador no aplica migraciones (`grep -ciE 'migrate|prisma'
+      /opt/onia-platform/_deploy/publicar.sh` da `0`, medido por `onia-cola` el mismo día).
+      Un swap **no** cierra esta clase de brecha. La próxima migración hay que aplicarla a
+      mano o el ítem espera para siempre a un movimiento que no la incluye.
+
+- [x] ✅ **CERRADO el 2026-09-11 (`f46a049`, onia-platform): el aviso del add-on
+      amenazaba con apagar algo que no se apaga.**
+
+      La mitad que **AVISA** y la que **APLICA** no hacían la misma pregunta. El cron
+      (`app/api/cron/renewal-reminders`) armaba el vencimiento del add-on con
+      `entitlements[0].validUntil` **pelado**, y la habilitación
+      (`isWhatsAppAddonActive`) es `organizations.whatsappAddon || capacidad vigente`.
+      El booleano viejo es un otorgamiento **a mano y sin fecha** — lo dice el propio
+      `addon-vigencia.ts`, que por eso no vuelve a encenderlo al cobrar. Para una org que
+      ya lo tiene en `true`, ese `||` sostiene el add-on para siempre y el cron igual le
+      mandaba los cuatro pasos (D-7/D-3/D-1/vencido) por in-app, push y correo diciéndole
+      que el `<fecha>` su asistente deja de contestar. **No deja.**
+
+      **No es hipotético:** medido contra `supabase-db`, de las cuatro organizaciones de
+      producción `clinica-sergio-p2ljs` —una clínica **real**, no QA— tiene la columna en
+      `t`. El día que pague el add-on, la aprobación le escribe `validUntil` y desde ahí
+      recibe la amenaza mes a mes, por tres canales, sobre un corte que el producto no va
+      a hacer. Una amenaza que no se cumple no es un detalle de copy: es lo que hace que
+      el cliente deje de creerle al aviso siguiente, que sí es cierto.
+
+      **Por qué ningún gate podía verlo, que es la parte reusable:** no sobra ni falta una
+      palabra (el copy es correcto cuando el add-on **sí** vence), el monto sale de la
+      fuente única, el rol filtra bien y el rubro no entra.
+      `addon-whatsapp-un-solo-criterio` obliga a preguntar «¿está activo?» con el helper
+      canónico y estaba **verde con razón**: el cron no pregunta eso, pregunta «¿cuándo
+      termina?» — y esa pregunta no tenía dueño. Encima
+      `onia-platform-chatbot/app/api/cron/renewal-reminders/route.ts` era el único
+      archivo de su carpeta: cero tests.
+
+      **La regla:** un aviso que anuncia un EFECTO deriva su fecha de las **mismas fuentes
+      que producen ese efecto**. Una fuente sin fecha no es una fecha más: es la ausencia
+      de vencimiento, y gana.
+
+      Lo que trae: `vencimientoDelAddon` en `lib/subscription/addon-vigencia.ts` (la
+      pregunta con nombre, no una condición suelta en el cron); el cron le pide la columna
+      a la base y decide con el helper; y la excusa **nombrada** en
+      `addon-whatsapp-un-solo-criterio`, que ese gate re-mide en cada corrida.
+
+      Validado por mutación, **las 7 en rojo** y restaurado en verde: revertir el arreglo,
+      el esquive de llamar al helper y tirar el resultado, romper el helper en sus **dos**
+      direcciones, sacar la columna del `select`, `false &&` en la guarda, y romper la
+      premisa. ⚠️ **La última pasó en VERDE en la primera versión**: el corte del cuerpo de
+      `isWhatsAppAddonActive` llegaba hasta el final del archivo y lo absolvía su hermano
+      `checkWhatsAppAddon`, que tiene el **mismo** `org.whatsappAddon ||` dos líneas abajo.
+
+      **Listo =** `npx vitest run lib/subscription/addon-que-no-vence-no-avisa.test.ts`
+      (8/8). Gates sobre el árbol: tsc 0, vitest 4590/4597 (7 skipped), eslint 0 errores.
+      **Commiteado y pusheado; todavía NO desplegado.**
 
 - [x] ✅ **CERRADO el 2026-09-11 (`53227ab` + `7b0a154`, onia-platform): el add-on del
       chatbot podía vencer y nadie avisaba que iba a vencer.**
