@@ -13,7 +13,7 @@ con domicilio en Santa Cruz de la Sierra, Estado Plurinacional de Bolivia) trata
 cuando presta su software de gestión. Documento complementario: los
 [Términos y Condiciones](/terminos).
 
-## 1. Dos tipos de datos, dos roles
+## 1. De quién son los datos, y qué rol tiene Onia
 
 Distinguimos según de quién sean los datos:
 
@@ -21,6 +21,7 @@ Distinguimos según de quién sean los datos:
 |---|---|---|
 | Datos de tu cuenta (titular del negocio, tus usuarios, facturación, soporte) | **Onia** | Responsable del tratamiento |
 | Datos que vos cargás en la plataforma — en especial **datos de TUS clientes o pacientes** | **Tu negocio** | Encargado: Onia solo los trata por tu instrucción y para prestarte el servicio |
+| Contacto que nos dejás en el sitio **sin tener cuenta** (por ejemplo al bajar una guía) | **Onia** | Responsable del tratamiento |
 
 En la práctica: **tu cliente es tu cliente, no de Onia**. Vos decidís qué
 registrás, a quién contactás y con qué consentimiento; Onia pone la herramienta y
@@ -49,6 +50,14 @@ deber de confidencialidad.
 2.4. Onia no solicita ni necesita datos como creencias religiosas, afiliación
 política o biometría. Si un cliente los carga en campos libres, es bajo su
 responsabilidad.
+
+2.5. **Contacto de quien todavía no es cliente:** si dejás tu correo y —si
+querés— tu WhatsApp en un formulario del sitio (por ejemplo para bajar una
+guía), guardamos esos dos datos y de dónde llegaste. Es lo único que se
+guarda: no hace falta crear una cuenta y no se pide ningún otro dato. Lo
+usamos para escribirte sobre eso y nada más; no se vende, no se cede y no
+entra en ninguna lista de publicidad de terceros. Podés pedirnos que lo
+borremos cuando quieras por los canales del §12, sin explicar por qué.
 
 ## 3. Para qué los usamos
 
@@ -144,6 +153,9 @@ lo que se sepa del alcance y las medidas tomadas.
 - **Al terminar el contrato:** podés exportar tus datos (formato CSV/JSON)
   dentro de los **30 días** posteriores a la terminación. Transcurridos **90
   días** desde la terminación, Onia elimina tus datos de los sistemas activos.
+- **Contacto de quien todavía no es cliente (§2.5):** se conserva mientras la
+  conversación siga viva, y se elimina si pasan **12 meses** sin que haya
+  ninguna. Si pedís el borrado antes, se hace y no se vuelve a contactar.
 - **Backups:** las copias de seguridad rotan en un ciclo de **7 días**; los datos
   eliminados desaparecen de los respaldos al completarse la rotación.
 - **Excepciones:** se conserva lo que la normativa boliviana aplicable exija
@@ -158,6 +170,10 @@ lo que se sepa del alcance y las medidas tomadas.
 pedir a Onia **acceso, rectificación, actualización, eliminación o exportación**
 de sus datos, por los canales del §12. Onia responderá en un plazo objetivo de
 **15 días hábiles**.
+
+9.1.b. **Si dejaste tu contacto sin tener cuenta** (§2.5): valen los mismos
+derechos y el mismo plazo, y no hace falta que seas cliente para ejercerlos.
+Alcanza con escribir por los canales del §12 pidiendo el borrado.
 
 9.2. **Sobre datos de tus clientes** (Onia encargado): tus clientes o pacientes
 deben dirigir sus solicitudes **a tu negocio**, que es quien decide sobre esos
