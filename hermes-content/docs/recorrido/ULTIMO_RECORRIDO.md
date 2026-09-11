@@ -12,6 +12,18 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-11 14:0x-14:1x La Paz — Clínica dental, reverificado: 9/9, sin hallazgos
+
+`zz-qa-2026-09-11-1409` — recorrido completo de punta a punta: alta (confirmar correo primero),
+onboarding 6 pantallas, paciente cargado en `/patients` y encontrado de vuelta, cita
+`2026-09-14 09:00` agendada (201, id `cmtx1cmqj009m01rwdw6mxp56`) y vista en `/appointments`,
+factura con ítem visible en `/billing/cmtx1cxuh009o01rwbltui0zq` (frenado ahí, sin pagar). Cero
+filas `zz-qa-` propias al cerrar. Octava corrida seguida en dental sin novedad — este rubro está
+agotado como fuente de hallazgos nuevos con este instrumento. **Próxima vuelta: NO repetir
+ningún rubro** — ir directo al escalón de promesa-vs-entrega en `/comparativa` y `/agentes`
+(botones y ledger de esas páginas, no la home) o auditar un formulario de un rubro que aún no
+tiene corrida con `--movil` reciente.
+
 ## 2026-09-11 12:1x La Paz — Servicios profesionales, reverificado: 9/9, sin hallazgos
 
 `zz-qa-2026-09-11-1211` — recorrido completo de punta a punta: alta (confirmar correo primero),
