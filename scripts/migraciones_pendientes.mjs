@@ -65,6 +65,48 @@ export function enDisco(dir) {
 }
 
 /**
+ * Las migraciones que están en el REF `origin/master`, por nombre de carpeta.
+ *
+ * POR QUE EL REF Y NO EL DISCO (2026-09-11): leer el working tree ata el veredicto a que
+ * un clon esté sincronizado, y en el nodo de casa —donde corren los cuatro loops— NINGUNO
+ * lo está: el clon de onia-platform tiene el push deshabilitado a propósito y se atrasa
+ * solo, y el del carril vive en su rama. Así que la guarda del árbol dudoso cortaba SIEMPRE
+ * y este gate salía NO MEDIDO en cada corrida: honesto, y mudo para siempre. Un instrumento
+ * que nunca puede concluir no cuida nada — es la misma forma de fallar que tenía el gate de
+ * `avisos-vivo` antes de que le pusieran salida por SSH.
+ *
+ * El ref no tiene ese problema: `main()` lo trae con `fetchear()` antes de preguntar, así
+ * que está fresco aunque el working tree esté meses atrás. Y además es la pregunta CORRECTA
+ * — lo que el ok de Sergio Urcullo publica es `origin/master`, no lo que alguien tenga
+ * desplegado en su carpeta.
+ *
+ * `null` = no pude preguntarle a git (no es «el ref no tiene ninguna»).
+ */
+export function enElRef(repo, leer = lsTree) {
+  const salida = leer(repo);
+  if (salida === null) return null;
+  const nombres = new Set();
+  for (const linea of salida.split("\n")) {
+    // prisma/migrations/<nombre>/<archivo> — una migración puede traer varios archivos.
+    const m = linea.trim().match(/^prisma\/migrations\/(\d[^/]*)\//);
+    if (m) nombres.add(m[1]);
+  }
+  return [...nombres].sort();
+}
+
+function lsTree(repo) {
+  try {
+    return execFileSync(
+      "git",
+      ["-C", repo, "ls-tree", "-r", "--name-only", "origin/master", "--", "prisma/migrations"],
+      { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"], timeout: 60_000 },
+    );
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Las migraciones que producción declara TERMINADAS.
  * `null` = no pude preguntar. Una migración a medio aplicar (`finished_at` nulo) no cuenta
  * como aplicada a propósito: es justo el estado que deja la columna sin existir.
@@ -154,24 +196,18 @@ function main() {
   }
   for (const d of elegido.descartados) console.log(`  (descartado: ${d})`);
 
-  // Un árbol atrasado NO PUEDE decir «al día», y esta guarda nació de la primera corrida
-  // viva de este gate: el clon local estaba 19 commits atrás de master, así que veía 32
-  // migraciones en vez de 34 — le faltaban justo las dos NUEVAS, que son las únicas que
-  // pueden estar pendientes — y cantó OK con exit 0 mientras imprimía el aviso al lado.
-  // Un gate que declara su límite y sale con código 0 igual falla ABIERTO: el aviso no lo
-  // lee nadie, el exit sí. Con el árbol dudoso el único veredicto honesto es NO MEDIDO.
-  if (elegido.aviso) {
-    console.log(`VEREDICTO: NO MEDIDO — ${elegido.aviso}`);
-    console.log("  Un clon atrasado no ve las migraciones nuevas, que son las que pueden faltar.");
-    return 2;
-  }
+  // El clon sólo hace de puerta a git: se lee su REF, no su carpeta, así que da igual cuán
+  // atrasado esté su working tree. Que lo esté se dice —importa para cualquier otra cosa
+  // que se mida en ese árbol— pero ya no puede callar a este gate.
+  const repo = resolve(elegido.ruta, "../..");
+  if (elegido.aviso) console.log(`  (aviso: ${elegido.aviso} — se lee su ref, no su carpeta)`);
 
-  const disco = enDisco(elegido.ruta);
+  const enRepo = enElRef(repo);
   const produccion = enProduccion();
-  const r = comparar(disco, produccion);
+  const r = comparar(enRepo, produccion);
 
   if (!r.medido) {
-    const lado = disco === null ? `no pude leer ${elegido.ruta}` : `no pude preguntarle a ${CONTENEDOR}`;
+    const lado = enRepo === null ? `no pude leer origin/master en ${repo}` : `no pude preguntarle a ${CONTENEDOR}`;
     console.log(`VEREDICTO: NO MEDIDO — ${lado}.`);
     console.log("  Ojo: esto NO significa que estén al día, y tampoco que falten todas.");
     return 2;
@@ -182,7 +218,7 @@ function main() {
   }
 
   if (r.pendientes.length === 0) {
-    console.log(`OK: las ${disco.length} migraciones del repo están aplicadas en producción.`);
+    console.log(`OK: las ${enRepo.length} migraciones de origin/master están aplicadas en producción.`);
     return 0;
   }
 
@@ -232,6 +268,19 @@ function selfCheck() {
   // `enDisco` filtra lo que no es migración y degrada con null.
   ok(enDisco("/no/existe/por/suerte") === null, "un directorio ausente da null, no []");
 
+  // `enElRef` es la fuente que reemplazó al working tree. Mismo tri-estado.
+  const LS_TREE = [
+    "prisma/migrations/20260101000000_a/migration.sql",
+    "prisma/migrations/20260202000000_b/migration.sql",
+    "prisma/migrations/migration_lock.toml",
+  ].join("\n");
+  ok(enElRef("/da/igual", () => LS_TREE)?.join() === "20260101000000_a,20260202000000_b", "lee los nombres del ref y descarta lo que no es migración");
+  ok(enElRef("/da/igual", () => null) === null, "si git no contesta, null y no []");
+  ok(enElRef("/da/igual", () => "\n")?.length === 0, "un ref sin migraciones es [], no null");
+  // Una migración con varios archivos aparece varias veces en ls-tree: se cuenta UNA.
+  const REPETIDA = ["prisma/migrations/20260101000000_a/migration.sql", "prisma/migrations/20260101000000_a/README.md"].join("\n");
+  ok(enElRef("/da/igual", () => REPETIDA)?.length === 1, "una migración con dos archivos se cuenta una sola vez");
+
   // Cableado: que el main USE el cruce y su veredicto, no que lo mencione. Anclado a la
   // ASIGNACIÓN y al `if` de apertura porque llamar-y-tirar, y anteponer `false &&`, son
   // los dos esquives que pasan en verde con el guardia muerto.
@@ -239,20 +288,14 @@ function selfCheck() {
     ? execFileSync("cat", [resolve(AQUI, "migraciones_pendientes.mjs")], { encoding: "utf8" })
     : "";
   const codigo = fuente.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, " ")).replace(/^\s*\/\/.*$/gm, "");
-  ok(/const\s+r\s*=\s*comparar\(disco,\s*produccion\)/.test(codigo), "el main asigna el resultado de comparar()");
-  ok(/if\s*\(\s*!r\.medido\s*\)/.test(codigo), "y corta por !r.medido con una guarda viva");
+  ok(/if\s*\(\s*!r\.medido\s*\)/.test(codigo), "el main corta por !r.medido con una guarda viva");
   ok(/const\s+produccion\s*=\s*enProduccion\(\)/.test(codigo), "el main le pregunta a producción de verdad");
-  // La guarda del árbol dudoso: tiene que CORTAR, no sólo avisar. Se exige el `if` de
-  // apertura y su `return 2` en la vecindad, porque imprimir el aviso y seguir es
-  // exactamente el bug que esta guarda vino a cerrar.
-  // Ojo con recortar el bloque por la primera `}`: el cuerpo tiene un template string y su
-  // `${elegido.aviso}` cierra antes, así que el match lazy acusaba a una guarda sana — la
-  // dirección cara. Va por VENTANA desde el `if`, y el largo lo fija la mutación: con 320
-  // no alcanza el `return 2` del bloque siguiente, así que sacarle el suyo la pone en rojo.
-  const abre = codigo.search(/if\s*\(\s*elegido\.aviso\s*\)/);
-  const guarda = abre === -1 ? null : codigo.slice(abre, abre + 320);
-  ok(guarda !== null, "el main tiene una guarda viva sobre elegido.aviso");
-  ok(guarda !== null && /return 2/.test(guarda), "y esa guarda CORTA con NO MEDIDO, no sólo avisa");
+  // El main tiene que leer del REF, no del working tree: ésa es la diferencia entre medir
+  // siempre y quedar mudo en la máquina donde corren los loops. Anclado a la ASIGNACIÓN,
+  // porque llamar-y-tirar es el esquive que pasa en verde con el guardia muerto.
+  ok(/const\s+enRepo\s*=\s*enElRef\(/.test(codigo), "el main lee las migraciones del REF origin/master");
+  ok(!/const\s+\w+\s*=\s*enDisco\(elegido\.ruta\)/.test(codigo), "y NO del working tree, que puede estar atrasado");
+  ok(/const\s+r\s*=\s*comparar\(enRepo,\s*produccion\)/.test(codigo), "y cruza lo del ref contra lo de producción");
 
   console.log(`\n${fallos === 0 ? "SELF-CHECK OK" : `SELF-CHECK: ${fallos} FAIL`}`);
   return fallos === 0 ? 0 : 1;
