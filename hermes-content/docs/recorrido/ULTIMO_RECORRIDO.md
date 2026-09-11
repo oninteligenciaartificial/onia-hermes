@@ -12,6 +12,33 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-11 15:1x La Paz — Promesa vs entrega en `/agentes`, `/comparativa` y `/v1` (comercio)
+
+Siguiendo el plan de la vuelta anterior: creé una org QA real de **Comercio / tienda**
+(`qa-modulos-ublr4`, borrada al cerrar) con `alta_qa_rubro.mjs` + `onboarding_por_la_ui.mjs`
+(onboarding completo, 5 filas de horario) y miré `/agents` y `/appointments` como lo haría el
+dueño.
+
+- **`/agents` para comercio ya está bien acotado**: sólo muestra el agente "Cobrador — saldos
+  vencidos" (facturas con saldo vencido), **no** "Recall" (que es de clientes/citas). Coincide
+  con lo que promete `onia.com.bo/agentes` de forma genérica y con `rolCorreEnTrack` ya
+  verificado el 2026-09-11 por la vuelta anterior. Captura: `/tmp/agents-comercio.png` (no
+  versionada, sólo para esta nota).
+- **`/appointments` redirige a `/dashboard`** para comercio (confirmado en vivo: no hay agenda
+  para este rubro) — esperado, `gestios-general` no tiene `tieneAgenda`.
+- **PERO `onia.com.bo/v1` sigue sirviendo la promesa vieja en producción**: el paso "02 Tu cuenta
+  queda lista" dice **"Agenda, clientes y caja ya adentro"**, tres líneas después de enumerar
+  "Dental, comercio, importadora, estética o servicios profesionales" como los 5 rubros — y
+  comercio/importadora no tienen agenda. **Ya está arreglado en el código** (`how-it-works.tsx`
+  ahora dice "Clientes, caja y cobros ya adentro, y agenda {ALCANCE_CON_AGENDA}", con guard
+  `capacidad-en-la-enumeracion.test.ts`) y **ya está en la cola de deploy vigente**: `t_f737839c`
+  (plataforma, 23 arreglos sin publicar) — no es un hallazgo nuevo, es confirmación de que ese
+  pedido de deploy sigue siendo real y de que el arreglo es correcto. No abrí tarea duplicada.
+
+Cero filas `zz-qa-` propias al cerrar (verificado: `organizations`, `profiles`, `auth.users`,
+`auth.identities`, `doctor_schedules`, `organization_entitlements` — los 6 borrados a mano por id
+exacto, script `alta_qa_rubro.mjs` no trae limpieza propia).
+
 ## 2026-09-11 14:0x-14:1x La Paz — Clínica dental, reverificado: 9/9, sin hallazgos
 
 `zz-qa-2026-09-11-1409` — recorrido completo de punta a punta: alta (confirmar correo primero),
