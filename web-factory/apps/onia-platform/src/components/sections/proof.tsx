@@ -37,7 +37,16 @@ import styles from "./proof.module.css";
  * apagadas — el verde ya es, en este sistema, el color de lo que esta vivo.
  */
 
-function Marca({ estado, label }: { estado: Estado; label: string }) {
+function Marca({
+  estado,
+  label,
+  alcance,
+}: {
+  estado: Estado;
+  label: string;
+  /** Hasta dónde llega en Onia. Sólo se pasa en nuestra fila (ver `EJES`). */
+  alcance?: string | null;
+}) {
   const texto =
     estado === "si" ? "sí" : estado === "tramite" ? "en trámite" : "no";
   return (
@@ -51,7 +60,12 @@ function Marca({ estado, label }: { estado: Estado; label: string }) {
       }`}
     >
       <span className={styles.marcaSenal} aria-hidden />
-      <span className={styles.marcaLabel}>{label}</span>
+      <span className={styles.marcaLabel}>
+        {label}
+        {estado === "si" && alcance ? (
+          <span className={styles.marcaAlcance}> — {alcance}</span>
+        ) : null}
+      </span>
       <span className={`mono ${styles.marcaEstado}`}>{texto}</span>
     </span>
   );
@@ -78,7 +92,12 @@ function Fila({ c, i }: { c: Contendiente; i: number }) {
 
       <div className={styles.marcas}>
         {EJES.map((e) => (
-          <Marca key={e.id} estado={c.estados[e.id]} label={e.label} />
+          <Marca
+            key={e.id}
+            estado={c.estados[e.id]}
+            label={e.label}
+            alcance={c.esOnia ? e.alcanceOnia : null}
+          />
         ))}
       </div>
 

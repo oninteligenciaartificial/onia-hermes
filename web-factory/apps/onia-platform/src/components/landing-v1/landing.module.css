@@ -1780,6 +1780,12 @@
   font-size: max(0.9rem, var(--fs-micro-min));
 }
 
+/* Hasta dónde llega cada «●» nuestro: la grilla es de puntos y el alcance no
+   entra en la celda, así que se dice acá — pero se dice. */
+.cmpAlcance {
+  color: rgb(237 241 239 / 0.62);
+}
+
 .cmpFecha {
   font-family: var(--font-mono), monospace;
   font-size: max(0.68rem, var(--fs-label-min));
