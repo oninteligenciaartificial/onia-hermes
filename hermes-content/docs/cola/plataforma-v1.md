@@ -63,6 +63,45 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-11 (`6527b84`, onia-platform): la promesa de «solo lectura,
+      podés mirar y exportar» que el sistema le manda al cliente que PAGA no la verificaba
+      nadie.**
+
+      El gate `app/components/trial-vencido-cumple-la-promesa.test.ts` nació el 10-sep con el
+      sujeto **enumerado a mano**: dos casos sobre `sendTrialDripEmail`. Esa misma noche entró
+      `sendRenewalReminderEmail` (`26212f5`) haciéndole al que ya paga *la misma* promesa
+      —«pasa a solo lectura (tus datos quedan intactos y podés mirarlos y exportarlos)»— y no
+      era sujeto de nadie: ni de ese gate ni de los de copy, precio, rubro o rol. **La mitad
+      sin vigilar volvió a ser la del que paga.**
+
+      **Medido ANTES de tocar nada, y por eso esto es vigilancia y no un arreglo:** los cinco
+      endpoints de exportación son todos `GET` (ninguno lo corta `checkPlanExpiry`), el `POST`
+      que registra el pago **no** corta por vencimiento —o sea renovar funciona vencido— y
+      ninguna org de producción tiene `planEnd` (las 3 medidas con `psql`: dos en trial
+      `professional`, una `free`). La promesa hoy **se cumple**; lo que faltaba era que algo
+      se pusiera rojo el día que deje de cumplirse.
+
+      El arreglo no fue agregarle dos casos: el sujeto ahora **se deriva del disco**. Cada
+      aparición de la promesa en `lib/email.ts` se atribuye a la función que la escribe
+      (`trialDripCopy`, `renewalCopy`) y esa función tiene que estar declarada, **re-medido en
+      las dos direcciones** — no puede faltar ninguna ni sobrar una. Un copy nuevo que prometa
+      la lectura nace vigilado.
+
+      Y se fija lo que hace CIERTA la promesa para el que pagó: a él **no** se le monta el
+      modal de pantalla completa, porque `getTrialStatus` devuelve `noTrial` en cuanto la org
+      tiene `planEnd`. Hoy eso lo sostiene una línea escrita para otra cosa (separar el trial
+      del contrato pago), así que nada avisaría si alguien uniformara el corte. Se mide lo que
+      la función **devuelve**, no su fuente: un grep pasaría igual.
+
+      **Validado por mutación en 5 direcciones, las 5 en rojo:** sacar la fila declarada,
+      declarar una fila fantasma, borrar la promesa de los dos copys del pago, uniformar
+      `getTrialStatus` para que bloquee también al que pagó, y el esquive de `isBlocked`
+      siempre `false`. Gates: `tsc` 0 · **4462** tests · `lint` 0.
+
+      ⚠️ **Commiteado y pusheado, NO desplegado** — es un gate, así que no cambia nada de lo
+      que el cliente ve; entra a producción con el próximo swap.
+
+
 El orden sale de `ONIA_CATALOGO_DE_VENTA.md` §8 *«Lo que hay que cerrar»*, que ya estaba escrito
 y sin operar. Acá se opera, con verificación por ítem.
 
@@ -70,6 +109,57 @@ y sin operar. Acá se opera, con verificación por ítem.
 > tareas y vas una por una").** Los cuatro salen del mapa del panel del chatbot medido ese día
 > (5 lectores de código + 4 capturas de producción). Orden de ejecución acordado: recarga →
 > cuentas → bot repetido (vive en `cola/chatbot.md`) → UI.
+
+- [x] 🔴 **CERRADO el 2026-09-11 (`c5e422d`, **commiteado y pusheado, NO en `master` todavía** —
+      medido con `git merge-base --is-ancestor c5e422d origin/master` → NO; lo mergea el
+      integrador): el cliente pagaba y NADIE le decía cómo terminó.**
+
+      Sale de seguir auditando `26212f5` (el ciclo de renovación por QR, que ya dio cinco
+      arreglos). El circuito le avisa al dueño **cuatro veces** que su plan va a vencer
+      (D-7/D-3/D-1/vencido) y por **tres canales** (correo, aviso in-app y push), y después
+      enmudece justo en el desenlace: las tres puertas que resuelven un pago —el `PATCH` del
+      superadmin, el callback de n8n y el webhook del BCP— escribían el resultado en la base sin
+      contárselo a nadie.
+
+      **El caso caro es el RECHAZO.** `adminNotes` es el motivo, y ya es texto de cliente
+      (`/settings` lo pinta como *«Comprobante observado: …»*), pero sólo lo ve el que vuelve a
+      entrar a esa pantalla por su cuenta. El que transfirió y espera tiene la cuenta en solo
+      lectura, cree que pagó, y nadie le dice que su comprobante no se pudo validar ni qué
+      corregir.
+
+      **Por qué ningún gate podía verlo:** no sobra ni falta una palabra, no es un rubro, ni un
+      plan, ni un rol; la pantalla renderiza bien, el camino feliz funciona, y las tres puertas
+      tienen idempotencia y lock impecables (`claimPendingPayment`, `lockOrganizationPlan`). **Un
+      aviso AUSENTE no se ve leyendo lo que hay** — sólo derivando quién debería hablar y
+      preguntándole a cada uno.
+
+      **Arreglado en la CLASE, no en la instancia.** El gate
+      (`lib/subscription/pago-resuelto-avisa.test.ts`) deriva sus sujetos del **disco**: las
+      rutas que llaman a `claimPendingPayment`, que es la única transición `PENDING → resuelto`.
+      Una cuarta puerta nace cubierta y hay que excusarla a mano, a la vista. Quién lo recibe
+      sale de `rolesQueAbren("/settings")`, **no** de una lista de roles al lado del envío —
+      copiarla es exactamente como nació el defecto que `aviso-alcanzable-por-rol.ts` cierra; el
+      in-app y el push usan el MISMO criterio, así que nadie recibe un enlace que le rebote mudo.
+
+      **Lo que se midió ANTES de escribir, y descartó dos falsos positivos:**
+      · `app/api/subscription-payment/bcp-qr/route.ts` **no** es sujeto — está apagado (`503` sin credenciales del banco) y su
+      fila la concilia el webhook, no una revisión humana. · En el callback de n8n, *«no
+      aprobado»* vuelve a `PENDING` —sigue esperando revisión— y ahí **no hay desenlace que
+      contar**: avisar sería prometer un final que no ocurrió. · Mi primer barrido dio «cero
+      avisos» también en la ruta que **sí** avisa (`/api/subscription-payment` manda correo a
+      `ADMIN_EMAIL`): el `grep` no cubría `emailClient.emails.send`. Un `grep` sirve para
+      descartar, nunca para confirmar.
+
+      **Dos trampas del propio arreglo:** el `planEnd` se captura de la activación y **no** se
+      relee de la org (releerlo puede traer el de otro pago concurrente); y `fechaLegibleBolivia`
+      vive en `lib/` y no en el `route.ts` —que no puede exportar helpers—, porque el contenedor
+      corre con `TZ` vacío y sin `timeZone` la fecha sale 4 h adelantada y de noche cambia el día.
+
+      **Validado por mutación en 5 direcciones**, todas en rojo y restaurado en 143/143: sacar el
+      aviso de una puerta (el gate la **nombra**) · el **esquive** (importar y no llamar) · sacar
+      `timeZone` · inventar la causa de un rechazo sin motivo · cegar el detector. **Gates:**
+      `tsc` 0 · `vitest` 4457 · `eslint` 0 errores — corridos **en el VPS**, sobre el árbol que se
+      publica, no sólo en casa.
 
 - [x] 🔴 **CERRADO el 2026-09-11 (`63de4ff`, **ya en `master`** — medido el 2026-09-11 01:05 La Paz
       con `git merge-base --is-ancestor 63de4ff origin/master` → SÍ): el recordatorio de
