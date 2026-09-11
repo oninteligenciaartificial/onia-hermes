@@ -63,6 +63,50 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-11 (`c14db84`, rama `claude/chatbots-platform-review-0d1d09`
+      de onia-platform — falta mergear a `master` y desplegar; pedido `t_cba4fa74`): el
+      cliente que se arrepintió de la baja del asistente y VOLVIÓ A PAGAR no recibía un solo
+      aviso, y la pantalla le seguía diciendo que no se renovaba.**
+
+      El add-on del chatbot ganó vigencia, aviso y baja en dos días, todo calcado del PLAN —
+      menos una cosa. El plan declara *"activar siempre levanta una baja previa"* y escribe
+      `planCanceledAt: null` en **cada** activación (`lib/subscription/activation.ts:47`);
+      `activarAddonPagado` no tocaba `canceledAt`, así que la baja del add-on sólo se
+      deshacía por **orden del operador** (`addonCanceledAtTrasOrden({darDeBaja:false})`), que
+      es el camino que un cliente no recorre: **el que se arrepiente vuelve a pagar.**
+
+      **Lo que costaba, las dos en la dirección cara.** `reclamaSuRenovacion` lee `canceledAt`
+      y devolvía `false` para siempre, así que el que volvió a pagar no recibía **ni uno** de
+      los cuatro avisos de vencimiento del add-on (D-7/D-3/D-1/vencido, in-app y push) y su
+      asistente se apagaba en silencio — el mismo defecto que el plan cerró **un día antes**
+      (`8d9e467`) en el cobro hermano. Y `/settings/addon-chatbot` le seguía diciendo *"Pediste
+      dar de baja el asistente… no se renueva, sigue contestando hasta el `<fecha vieja>`"*
+      sobre un período que ya había vuelto a pagar.
+
+      **Medido antes de tocar nada:** `activarAddonPagado` es la **única** puerta que activa
+      el add-on. Las otras dos (`app/api/n8n/callback/subscription-approve` y
+      `app/api/webhooks/bcp`) usan `buildPlanActivation`, y `evaluateAutoApproval` las corta
+      en su primera línea con *"Plan invalido"* porque `whatsapp_addon` no está en el
+      catálogo (`activation.ts:160`). No quedó media familia.
+
+      **Qué entró.** `camposDeActivacionDelAddon` — función pura, paralelo exacto de
+      `buildPlanActivation` — y el `upsert` la usa en `create` **y** en `update`. Va `null`
+      explícito, no `undefined`: en Prisma `undefined` significa *"no toques esa columna"*,
+      que es literalmente el defecto.
+
+      **Validado por mutación, 4 en rojo:** `canceledAt` a `undefined` (5 casos), `create` sin
+      el campo (1), el **esquive** de declarar el helper y no cablearlo (2), y el ancla de la
+      CLASE quitándole `planCanceledAt: null` al PLAN (1, y nombra cuál de los dos cobros
+      dejó de levantarla). Gates verdes sobre el árbol con `master` ya mergeado: `tsc` 0,
+      `vitest` 4687, `eslint` 0. Ver `lib/subscription/addon-activar-levanta-la-baja.test.ts`.
+
+      **LA CLASE, para buscarla en otro lado:** cuando dos cobros comparten circuito, la
+      asimetría no se busca sólo en *«¿el hermano tiene la capacidad?»* sino en *«¿la DESHACE
+      por los mismos caminos?»*. La baja del plan se levanta por **dos** vías —orden del
+      operador y pago aprobado— y la del add-on tenía una. Ningún gate podía verlo: no sobra
+      ni falta una palabra, el monto sale de la fuente única, no es rubro ni rol ni plan, y la
+      columna existe así que `tsc` está contento.
+
 - [x] ✅ **CERRADO el 2026-09-11 (`44fa680`, rama `claude/chatbots-platform-review-0d1d09`
       de onia-platform — falta mergear a `master` y desplegar): la baja del add-on del
       chatbot estaba construida ENTERA y no se podía ordenar desde ningún lado.**
