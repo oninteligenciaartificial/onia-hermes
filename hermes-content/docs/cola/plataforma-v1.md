@@ -772,6 +772,20 @@ y sin operar. Acá se opera, con verificación por ítem.
       confirmado por Sergio Urcullo 11-sep); con credenciales, el MISMO boton termina en el
       QR dinamico. Commit `6e8ae641`, viaja en el deploy de esta noche.
 
+- [x] 🟡 **CERRADO el 2026-09-11: el editor del bot queda SIMPLE por defecto** (lema de
+      Sergio Urcullo: "todo súper fácil y ya configurado; opciones avanzadas para mayor
+      settings"). Arriba: plantilla armada + Enséñale conversando + Identidad y horario +
+      Publicar + probador; Seguimiento/cita/palabras clave/catálogo/FAQ plegados en un
+      `<details>` "Opciones avanzadas" que se abre solo ante un error del validador
+      (`onia-platform/app/(dashboard)/settings/chatbot/ChatbotClient.tsx`, 242 tests verdes).
+
+- [ ] 🟡 **BYOK (clave de IA propia) como opción avanzada — hoy NO existe y está bien.** El
+      LLM del bot de cada cliente es el LiteLLM central de Onia (clave nuestra, cero
+      configuración del cliente = el lema). Cuando un cliente grande lo pida: campo "Clave de
+      OpenAI propia (opcional)" en Opciones avanzadas del editor, que el motor use por-inbox
+      (`hermes-content/deploy/vps-ops/bot/run-turn.mjs` askLiteLLM lee env; pasaría a leer
+      del knowledge de la org). No construir antes de que exista el pedido real.
+
 - [ ] 🔴 **LOTE AUDITORÍA 11-sep (velocidad + diseño vs Lety/Dapta, pedido de Sergio
       Urcullo) — medido con Lighthouse + Playwright + curl, capturas en el chat de la sesión.**
       Lo bueno medido: Onia carga MÁS RÁPIDO que ambas referencias (load 494 ms vs Lety
