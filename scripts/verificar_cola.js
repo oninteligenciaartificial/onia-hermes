@@ -195,6 +195,15 @@ function evidenciaDe(textoCrudo) {
     // nombre, asi que esto no puede tapar uno de verdad.
     if (/[<>]/.test(ruta)) continue;
 
+    // Una METAVARIABLE tampoco: la cola cita «esto lo cruza `scripts/X.mjs`» para nombrar la
+    // FORMA de un puntero, no un archivo. Es el mismo caso que el glob y la expansion de
+    // llaves —un molde, no una ruta— escrito con otra notacion. Se pide que el nombre, sin
+    // extension, sea UNA sola letra mayuscula: ningun archivo de estos repos se llama asi
+    // (medido el 2026-09-11 sobre los dos arboles), y una de dos letras o en minuscula se
+    // sigue verificando. Sin esto el gate acusaba de inexistente un archivo que nadie afirmo
+    // que existiera.
+    if (/(?:^|\/)[A-Z]\.[a-z0-9]{1,5}$/.test(ruta)) continue;
+
     // Un TIPO MIME tampoco: `image/x-icon`, `text/html`. La cola los cita porque son la
     // respuesta de un `curl -I` (medido el 2026-09-06: el item del favicon, linea 1856, pegaba
     // su Content-Type y salia fantasma). Tienen barra, asi que caian en "esto parece una ruta".
@@ -216,8 +225,17 @@ function evidenciaDe(textoCrudo) {
     // archivo NO existe" sobre una frase que solo decia "todos los archivos de ese tipo".
     // Un dotfile de verdad (`.env`, `.gitignore`) se nombra CON su carpeta y lo resuelve la
     // rama de arriba, asi que exigir nombre aca no puede tapar ninguno.
+    //
+    // Y el nombre no puede EMPEZAR con punto, o una extension COMPUESTA se cuela: `.test.ts`
+    // partia en nombre `.test` + extension `ts`, el `(.+)` quedaba satisfecho, y el gate
+    // acusaba "apunta a .test.ts y ese archivo NO existe" sobre una frase que solo decia «una
+    // afirmacion escrita dentro de un `.test.ts`» (medido el 2026-09-11: 1 de los 4 errores
+    // falsos que tenian `npm run cola:viva` en rojo). Es el MISMO caso que el `.tsx` de arriba
+    // —una extension citada como sustantivo— y la regla de entonces solo cubria las simples.
+    // Vale igual para `.d.ts` y `.spec.mjs`. Un dotfile de verdad se sigue nombrando CON su
+    // carpeta y lo resuelve la rama del separador, asi que esto no puede tapar ninguno.
     const ext = ruta.match(/^(.+)\.([a-z0-9]{1,5})$/i);
-    if (ext && EXTENSIONES.has(ext[2].toLowerCase())) rutas.push(ruta);
+    if (ext && !ext[1].startsWith('.') && EXTENSIONES.has(ext[2].toLowerCase())) rutas.push(ruta);
   }
 
   // La misma ruta citada dos veces en un item es UN problema, no dos. El gate reportaba el
@@ -320,7 +338,9 @@ function existeEnAlgunRepo(ruta, baseDir) {
   // archivo del repo TERMINA en esa ruta, en limite de segmento. No afloja el gate: sigue
   // exigiendo que el archivo exista de verdad; solo deja de exigir el prefijo entero.
   // Se aplica solo CON barra: `page.tsx` suelto matchearia cualquiera de los cientos que hay.
-  if (ruta.includes('/')) return existeComoSufijo(ruta, baseDir);
+  if (ruta.includes('/')) {
+    return existeComoSufijo(ruta, baseDir) || existeComoRutaAbreviada(ruta, baseDir);
+  }
 
   // Sin barra se resuelve por sufijo SOLO si el nombre es unico en el arbol. El motivo por el
   // que esto estuvo prohibido durante meses era, textual, que "un `page.tsx` suelto matchearia
@@ -444,6 +464,33 @@ function existeComoCarpeta(ruta, baseDir) {
   }
   for (const lista of indiceDe(baseDir).values()) {
     if (lista.some((p) => p.startsWith(zona + '/') || p.includes('/' + zona + '/'))) return true;
+  }
+  return false;
+}
+
+// Una cita ABREVIADA CON HUECO: primer segmento y nombre, saltandose los del medio. La cola
+// escribe `lucia/palabras-cableadas.py` para el archivo que vive en
+// `hermes-content/references/modelos/lucia/scripts/palabras-cableadas.py` — no es sufijo (falta
+// `scripts/` en el medio), asi que `existeComoSufijo` se niega y el gate acusaba de inexistente
+// un archivo VIVO. Medido el 2026-09-11: 1 de los 4 errores falsos que tenian `cola:viva` en rojo.
+//
+// No afloja el gate, y este es el motivo: se exige que el NOMBRE sea UNICO en el arbol (una sola
+// coincidencia, igual que el tramo de nombre suelto de `existeEnAlgunRepo`) y que los segmentos
+// citados aparezcan EN ORDEN dentro de la ruta real. Con cero coincidencias sigue siendo fantasma
+// de verdad; con dos o mas no se resuelve, porque ahi la abreviacion es ambigua y adivinar es
+// justo como un gate empieza a fallar abierto.
+function existeComoRutaAbreviada(ruta, baseDir) {
+  const partes = ruta.split('/').filter(Boolean);
+  if (partes.length < 2) return false;
+  const nombre = partes[partes.length - 1];
+  const candidatos = [];
+  for (const d of dirsDeBusqueda(baseDir)) candidatos.push(...(indiceDe(d).get(nombre) || []));
+  if (candidatos.length !== 1) return false;
+  const reales = candidatos[0].split('/').filter(Boolean);
+  let i = 0;
+  for (const seg of reales) {
+    if (seg === partes[i]) i += 1;
+    if (i === partes.length) return true;
   }
   return false;
 }
@@ -622,15 +669,60 @@ function seccionesDuplicadas(texto) {
   return problemas;
 }
 
+// --- Bitacora contra afirmacion: el criterio que reemplaza al carve-out numero N ---
+//
+// Este archivo lleva SEIS carve-outs de notacion (glob, llaves, elipsis, rama, etiqueta, MIME) y
+// el ciclo volvio a divergir cada vez, porque todos preguntan COMO esta escrita la ruta y el
+// problema es OTRO: para que la cita es. Un item que DENUNCIA un puntero muerto tiene que poder
+// nombrarlo —«el gate existe para cazar el puntero muerto, un comentario que dice esto lo cruza
+// `scripts/limites-vivos.mjs` sobre un archivo que nunca se escribio»— sin que el gate lo obligue
+// a borrar su propio diagnostico. Esa cita no manda a nadie a trabajar ahi: es el OBJETO de lo
+// que el item narra. Es el mismo criterio con el que `palabras-cableadas.py` separo pieza de
+// prosa en el carril de Lucia.
+//
+// La ventana es la ORACION de la aparicion, no el item: con el item entero, un parrafo que narra
+// un puntero muerto absolveria a la ruta de trabajo del parrafo siguiente, que es exactamente
+// como esta familia de gates empieza a fallar ABIERTO. Alcanza con que UNA aparicion este en
+// vecindad de bitacora: si el item declara en algun lado que ese archivo no existe, citarlo no es
+// mandar a trabajar ahi.
+//
+// Los marcadores salen de los casos REALES medidos el 2026-09-11, no de lo que a uno se le ocurre
+// que alguien podria escribir.
+const MARCAS_DE_BITACORA = [
+  /nunca (?:se |lo )?(?:escribi|cre|existi)/i,
+  /\bno existe\b/i, /\bya no existe\b/i, /\binexistente\b/i,
+  /No such file/i, /MODULE_NOT_FOUND/,
+  /puntero muerto/i, /corrigi[oó] el puntero/i,
+];
+
+function citadaComoBitacora(texto, ruta) {
+  let desde = 0;
+  for (;;) {
+    const i = texto.indexOf(ruta, desde);
+    if (i === -1) return false;
+    desde = i + ruta.length;
+    // La oracion: hacia atras hasta un punto seguido de espacio o un salto de parrafo, y hacia
+    // adelante igual. El punto de una extension no corta porque se exige el espacio detras.
+    const izq = Math.max(
+      texto.lastIndexOf('. ', i), texto.lastIndexOf('.\n', i), texto.lastIndexOf('\n\n', i),
+    );
+    const der = [texto.indexOf('. ', desde), texto.indexOf('.\n', desde), texto.indexOf('\n\n', desde)]
+      .filter((n) => n !== -1);
+    const oracion = texto.slice(izq === -1 ? 0 : izq + 1, der.length ? Math.min(...der) : texto.length);
+    if (MARCAS_DE_BITACORA.some((re) => re.test(oracion))) return true;
+  }
+}
+
 function revisarCola(texto, baseDir = process.cwd(), resolverShas = null) {
   const problemas = [...seccionesDuplicadas(texto), ...duplicados(texto)];
+  const avisos = [];
   const items = itemsDeAhora(texto);
   const resolver = resolverShas || resolvedorGit(baseDir);
 
   if (!items.length) {
     problemas.push({ regla: 'cola-vacia', linea: 0,
       msg: 'la seccion "## Ahora" no tiene items: o no existe, o el carril esta parado' });
-    return { problemas, items };
+    return { problemas, avisos, items };
   }
 
   // Todos los shas de la seccion, en UNA sola pasada de git. Se resuelven antes del bucle para
@@ -674,12 +766,14 @@ function revisarCola(texto, baseDir = process.cwd(), resolverShas = null) {
 
     // El punto de todo el archivo: la ruta tiene que ESTAR.
     for (const r of rutas) {
-      if (!existeEnAlgunRepo(r, baseDir)) {
-        problemas.push({
-          regla: 'fantasma', linea: it.linea,
-          msg: `"${it.texto.slice(0, 50)}" apunta a ${r} y ese archivo NO existe`,
-        });
-      }
+      if (existeEnAlgunRepo(r, baseDir)) continue;
+      const destino = citadaComoBitacora(it.texto, r) ? avisos : problemas;
+      destino.push({
+        regla: citadaComoBitacora(it.texto, r) ? 'fantasma-narrado' : 'fantasma', linea: it.linea,
+        msg: citadaComoBitacora(it.texto, r)
+          ? `"${it.texto.slice(0, 50)}" nombra ${r}, que no existe — su vecindad lo declara asi, es bitacora`
+          : `"${it.texto.slice(0, 50)}" apunta a ${r} y ese archivo NO existe`,
+      });
     }
 
     // La otra mitad: el commit citado como prueba de que el trabajo llego tiene que EXISTIR.
@@ -691,7 +785,7 @@ function revisarCola(texto, baseDir = process.cwd(), resolverShas = null) {
       });
     }
   }
-  return { problemas, items };
+  return { problemas, avisos, items };
 }
 
 function selfCheck() {
@@ -714,6 +808,12 @@ function selfCheck() {
   // Para el caso de ZONA: una carpeta existe si algun archivo la tiene de prefijo.
   fs.mkdirSync(path.join(tmp, 'sub'), { recursive: true });
   fs.writeFileSync(path.join(tmp, 'sub', 'algo.txt'), 'x');
+  // Para la cita ABREVIADA CON HUECO (`lucia/solo-uno.py` -> .../lucia/scripts/solo-uno.py).
+  // Va ACA y no al lado de su caso: `indiceDe` cachea el arbol por directorio la primera vez
+  // que algun sufijo lo necesita, asi que un archivo creado a mitad del self-check no existe
+  // para el indice y el caso falla por el motivo equivocado.
+  fs.mkdirSync(path.join(tmp, 'modelos', 'lucia', 'scripts'), { recursive: true });
+  fs.writeFileSync(path.join(tmp, 'modelos', 'lucia', 'scripts', 'solo-uno.py'), 'x');
 
   // El caso que da nombre al archivo: 4 de 6 eran fantasma.
   let r = revisarCola('## Ahora\n- [ ] Publicar algo · `existe.png` · 10 min\n', tmp);
@@ -945,6 +1045,59 @@ function selfCheck() {
   // Ni el prefijo del repo hermano vuelve verde un archivo que no existe ahi.
   r = revisarCola('## Ahora\n- [ ] Algo · `onia-platform/lib/tampoco-existe.ts`\n', path.join(tmp, 'onia-hermes'));
   ok(r.problemas.some((p) => p.regla === 'fantasma'), 'el prefijo del hermano no absuelve una ruta inventada');
+
+  // --- Los cuatro falsos positivos medidos el 2026-09-11 (`cola:viva` en rojo, exit 1) ---
+  // Los cuatro salian del MISMO item —prosa narrando punteros muertos— y por eso el carve-out
+  // de notacion numero N no cerraba: no eran una causa, eran cuatro, y de tres naturalezas.
+  // Cada uno va con su reciproco, que es lo que impide que el arreglo afloje el gate.
+  //
+  // OJO, y es la razon por la que estos casos existen y no alcanzaba con mutar contra COLA.md:
+  // (a) y (b) dan VERDE al mutarlos sobre el corpus real, porque la cura de CONTEXTO los tapa
+  // (la vecindad de `.test.ts` en ese item dice «el archivo inexistente»). Dos guardias hermanos
+  // atajando el mismo caso hacen pasar la mutacion por el motivo equivocado: cada cura necesita
+  // el caso que NINGUNA otra puede ver.
+
+  // (a) Una extension COMPUESTA citada como sustantivo no es una ruta. `.test.ts` partia en
+  // nombre `.test` + extension `ts`, satisfacia el `(.+)` de la regla del `.tsx`, y el gate
+  // acusaba "apunta a .test.ts y ese archivo NO existe" sobre una frase que solo decia
+  // «una afirmacion escrita dentro de un `.test.ts`».
+  r = revisarCola('## Ahora\n- [ ] Una afirmacion dentro de un `.test.ts` · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'una extension compuesta citada como sustantivo no es una ruta');
+  r = revisarCola('## Ahora\n- [ ] Arreglar `sub/no-esta.test.ts` · `existe.png`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'),
+    'pero un .test.ts CON nombre y que no existe sigue siendo fantasma');
+
+  // (b) Una METAVARIABLE no es un archivo: la cola escribe «esto lo cruza `scripts/X.mjs`» para
+  // nombrar la FORMA de un puntero. Es el glob con otra notacion.
+  r = revisarCola('## Ahora\n- [ ] Un comentario que dice «lo cruza `scripts/X.mjs`» · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'una metavariable de un solo caracter en mayuscula no es una ruta');
+  r = revisarCola('## Ahora\n- [ ] Arreglar `scripts/Xa.mjs` · `existe.png`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'),
+    'pero un nombre de DOS letras se sigue verificando: el recorte es de un caracter');
+
+  // (c) La cura central: bitacora contra afirmacion, por la VECINDAD de la cita. Un item que
+  // DENUNCIA un puntero muerto tiene que poder nombrarlo sin que el gate lo obligue a borrar su
+  // propio diagnostico; uno que manda a trabajar ahi tiene que salir rojo.
+  r = revisarCola('## Ahora\n- [ ] El puntero `scripts/fantasmita.mjs` nunca se escribio · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'una cita cuya vecindad la declara inexistente es bitacora, no error');
+  ok(r.avisos.some((a) => a.regla === 'fantasma-narrado'), 'y sale como AVISO, no en silencio');
+  r = revisarCola('## Ahora\n- [ ] Arreglar el cruce en `scripts/fantasmita.mjs` · `existe.png`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'),
+    'la MISMA ruta sin esa vecindad sigue siendo fantasma: separa el contexto, no la notacion');
+  // Y la ventana es la ORACION, no el item: sin esto, un parrafo que narra un puntero muerto
+  // absolveria a la ruta de trabajo del parrafo siguiente — asi falla ABIERTA esta familia.
+  r = revisarCola('## Ahora\n- [ ] `scripts/viejo.mjs` nunca se escribio. Hay que editar `scripts/otro-que-falta.mjs` · `existe.png`\n', tmp);
+  ok(r.problemas.some((p) => p.msg.includes('otro-que-falta.mjs')),
+    'la bitacora de una oracion no absuelve a la ruta de trabajo de la oracion siguiente');
+
+  // (d) Una cita ABREVIADA CON HUECO —primer segmento y nombre, sin los del medio— sobre un
+  // archivo que SI existe. No es sufijo, asi que `existeComoSufijo` se negaba y el gate acusaba
+  // de inexistente un archivo vivo. Se exige nombre UNICO y segmentos en orden.
+  r = revisarCola('## Ahora\n- [ ] Ver `lucia/solo-uno.py` · `existe.png`\n', tmp);
+  ok(!r.problemas.length, 'una cita abreviada con hueco resuelve si el nombre es unico y los segmentos van en orden');
+  r = revisarCola('## Ahora\n- [ ] Ver `inventado/solo-uno.py` · `existe.png`\n', tmp);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'),
+    'pero un segmento que NO esta en la ruta real no resuelve: no alcanza con que el nombre exista');
 
 
   // --- Los cuatro falsos positivos medidos el 2026-09-02 sobre la propia COLA.md ---
@@ -1304,8 +1457,11 @@ function main() {
     process.exit(2);
   }
 
-  const { problemas, items } = revisarCola(fs.readFileSync(archivo, 'utf8'), process.cwd());
+  const { problemas, avisos, items } = revisarCola(fs.readFileSync(archivo, 'utf8'), process.cwd());
   for (const p of problemas) console.log(`ERROR ${p.regla} [linea ${p.linea}]: ${p.msg}`);
+  // Los avisos se IMPRIMEN y no cuentan para el exit: callarlos seria como esta familia de
+  // gates falla abierto, y ponerlos en rojo es lo que obliga a borrar la bitacora.
+  for (const a of avisos || []) console.log(`AVISO ${a.regla} [linea ${a.linea}]: ${a.msg}`);
 
   if (!problemas.length) console.log(`cola ok: ${items.length} items en Ahora, todos con evidencia real`);
   process.exit(problemas.length ? 1 : 0);
