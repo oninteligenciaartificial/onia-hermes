@@ -238,7 +238,7 @@ se hace.** Un resumen no es una pieza.
 |---|---|
 | 🔴 **Publicar.** 5 paquetes listos con su caption, **0 publicados** | todo el carril |
 | 🔴 **Mirar las 5 láminas de «Mi stack»** antes de mandarla a Announcements | ese envío |
-| 🔴 Mandar el link de `/homelab` a los 3 que comentaron el reel del 07-sep | gente esperando desde hace 3 días |
+| ✅ ~~Mandar el link de `/homelab` a los 3 que comentaron el reel del 07-sep~~ **enviado el 10-sep** | resuelto |
 | 🔴 Elegir el tema de la semana y **grabar los 6 videos** | la semana del 14 |
 | 🔴 El link del video de YouTube | `/claude-code` y el paso 04 de `/stack` |
 | 🔴 Cablear `palabras` en el workflow n8n de private-reply | toda palabra clave automática |
