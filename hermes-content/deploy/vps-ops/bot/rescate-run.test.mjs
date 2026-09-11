@@ -21,6 +21,9 @@ import {
   clasificarRespuesta,
   armarAvisoRescate,
   MOTIVOS_SIN_RESCATE_AJENO,
+  crearMarcasEnDisco,
+  claveDeMarca,
+  VIDA_MARCA_MS,
 } from "./rescate-run.mjs";
 
 const T0 = Date.parse("2026-09-03T00:00:00Z");
@@ -599,4 +602,239 @@ test("si un aviso falla, el barrido no pierde el rescate que ya hizo", async () 
     },
   );
   assert.equal(res.contestados, 1, "el lead se salvo igual: Telegram es el testigo, no el trabajo");
+});
+
+// ---------------------------------------------------------------------------
+// LA MITAD QUE QUEDABA ABIERTA DE `7a9e10c0`: el fallo se VE en el log y no le llega a nadie.
+//
+// El barrido ya sale con `exit 1` cuando reinyecta y no sale nada — pero eso vive en
+// `/var/log/onia-rescate-mensaje-perdido.log`, que nadie mira. El "hola" del 10-sep (conv 11
+// msg 873, inbox 5) fallo cuatro veces y dejo de figurar como huerfano porque la persona
+// volvio a escribir sola, no porque alguien la atendiera.
+//
+// Y NO SE PUEDE AVISAR POR VUELTA: la ventana del huerfano es MAX_EDAD_MS = 12 h y el cron
+// corre cada 10 min, asi que UN mensaje perdido daria hasta 72 avisos identicos. Eso no es
+// avisar de mas, es apagar el canal — el vigia que grita mal no molesta, inutiliza.
+//
+// Asi que el aviso necesita MEMORIA por mensaje, durable entre corridas. Se midio primero si
+// servia `bot_messages.message_key` (unique, ya existe) y NO sirve, por dos razones medidas
+// contra produccion el 2026-09-11 — las dos estan en la cabecera de `crearMarcasEnDisco`.
+// ---------------------------------------------------------------------------
+
+import { mkdtempSync, rmSync, existsSync, utimesSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+
+/** Un directorio de marcas propio por caso: dos casos no pueden pisarse. */
+function dirDeMarcas() {
+  const dir = mkdtempSync(join(tmpdir(), "onia-rescate-marcas-"));
+  test.after?.(() => rmSync(dir, { recursive: true, force: true }));
+  return dir;
+}
+
+/** Un huerfano que se reinyecta y el webhook contesta que no emitio nada: fallo. */
+const PERDIDO = { ok: true, respuesta: '{"ok":true,"sent":[],"reason":"sin_respuesta"}' };
+
+test("EL MENSAJE PERDIDO AVISA: reinyectar y que no salga nada le llega a Sergio Urcullo", async () => {
+  const avisos = [];
+  const r = await runRescateSweep(
+    { ahoraMs: T0 + min(35), emitir: true },
+    {
+      leerFilas: async () => [fila({ conversationId: 11, messageId: 873, content: "hola" })],
+      postWebhook: async () => PERDIDO,
+      avisar: async (texto) => avisos.push(texto),
+      marcas: crearMarcasEnDisco(dirDeMarcas()),
+    },
+  );
+  assert.equal(r.fallidos.length, 1, "sigue siendo un fallo ruidoso");
+  assert.equal(avisos.length, 1, "y ahora ademas SALE del log");
+  assert.match(avisos[0], /conv(ersacion)? 11/i, "dice cual conversacion abrir");
+  assert.match(avisos[0], /35 min/, "y cuanto lleva esperando esa persona");
+});
+
+test("UNA SOLA VEZ POR MENSAJE: el cron pasa 72 veces y el aviso sale uno", async () => {
+  const avisos = [];
+  const marcas = crearMarcasEnDisco(dirDeMarcas());
+  const deps = {
+    leerFilas: async () => [fila({ conversationId: 11, messageId: 873, content: "hola" })],
+    postWebhook: async () => PERDIDO,
+    avisar: async (texto) => avisos.push(texto),
+    marcas,
+  };
+  for (let vuelta = 0; vuelta < 5; vuelta += 1) {
+    const r = await runRescateSweep({ ahoraMs: T0 + min(10 + vuelta * 10), emitir: true }, deps);
+    assert.equal(r.fallidos.length, 1, "el fallo NO se tapa: el log y el exit 1 siguen");
+  }
+  assert.equal(avisos.length, 1, "cinco vueltas, un aviso — 72 identicos apagan el canal");
+});
+
+test("cada mensaje perdido es un lead distinto: el segundo tambien avisa", async () => {
+  const avisos = [];
+  const marcas = crearMarcasEnDisco(dirDeMarcas());
+  const corrida = (over, ahora) =>
+    runRescateSweep(
+      { ahoraMs: ahora, emitir: true },
+      {
+        leerFilas: async () => [fila(over)],
+        postWebhook: async () => PERDIDO,
+        avisar: async (texto) => avisos.push(texto),
+        marcas,
+      },
+    );
+  await corrida({ conversationId: 11, messageId: 873 }, T0 + min(10));
+  await corrida({ conversationId: 11, messageId: 874 }, T0 + min(20));
+  await corrida({ conversationId: 12, messageId: 873 }, T0 + min(30));
+  assert.equal(avisos.length, 3, "la marca es por MENSAJE, no por conversacion ni por vuelta");
+});
+
+test("el handoff no avisa ni deja marca: su dueno es onia-vigia-sin-respuesta", async () => {
+  const avisos = [];
+  const dir = dirDeMarcas();
+  const r = await runRescateSweep(
+    { ahoraMs: T0 + min(10), emitir: true },
+    {
+      leerFilas: async () => [fila({ conversationId: 55, messageId: 900 })],
+      postWebhook: async () => ({ ok: true, respuesta: '{"ok":true,"sent":[],"reason":"handoff_humano"}' }),
+      avisar: async (texto) => avisos.push(texto),
+      marcas: crearMarcasEnDisco(dir),
+    },
+  );
+  assert.equal(r.fallidos.length, 0, "la excusa sigue excusando");
+  assert.deepEqual(avisos, [], "y no duplica el aviso del vigia que ya lo mira");
+  assert.ok(!existsSync(join(dir, "chatwoot-55-900")), "tampoco quema la marca del mensaje");
+});
+
+test("SI NO PUEDO RECORDAR, NO AVISO: 72 mensajes identicos es peor que el log", async () => {
+  const avisos = [];
+  const r = await runRescateSweep(
+    { ahoraMs: T0 + min(10), emitir: true },
+    {
+      leerFilas: async () => [fila({ conversationId: 11, messageId: 873 })],
+      postWebhook: async () => PERDIDO,
+      avisar: async (texto) => avisos.push(texto),
+      marcas: { reservar: () => null, purgar: () => {} },
+    },
+  );
+  assert.deepEqual(avisos, [], "sin memoria no se puede avisar una sola vez");
+  assert.equal(r.fallidos.length, 1, "pero el fallo sigue en el log y el exit sigue en 1");
+  assert.ok(r.marcasFallidas?.length, "y que NO se pudo recordar tambien se dice, no se traga");
+});
+
+test("el aviso del perdido va en HTML y escapa lo que escribio la persona", async () => {
+  const avisos = [];
+  await runRescateSweep(
+    { ahoraMs: T0 + min(10), emitir: true },
+    {
+      leerFilas: async () => [fila({ conversationId: 11, messageId: 873, content: 'soy <dra> & "4"' })],
+      postWebhook: async () => PERDIDO,
+      avisar: async (texto) => avisos.push(texto),
+      marcas: crearMarcasEnDisco(dirDeMarcas()),
+    },
+  );
+  assert.ok(!/<dra>/.test(avisos[0]), "un < crudo hace que el mensaje NO llegue a Telegram");
+  assert.match(avisos[0], /&lt;dra&gt;/);
+  assert.match(avisos[0], /<b>/, "el formato propio del aviso si es HTML");
+});
+
+test("rescatado y perdido son avisos SEPARADOS: el enrutador clasifica por la primera linea", async () => {
+  const avisos = [];
+  await runRescateSweep(
+    { ahoraMs: T0 + min(10), emitir: true },
+    {
+      leerFilas: async () => [
+        fila({ conversationId: 49, messageId: 282 }),
+        fila({ conversationId: 11, messageId: 873 }),
+      ],
+      postWebhook: async (payload) =>
+        payload?.id === 282 ? { ok: true, respuesta: '{"ok":true,"sent":[{"id":1}]}' } : PERDIDO,
+      avisar: async (texto) => avisos.push(texto),
+      marcas: crearMarcasEnDisco(dirDeMarcas()),
+    },
+  );
+  assert.equal(avisos.length, 2, "una buena noticia y una mala no viajan en el mismo mensaje");
+  assert.ok(
+    avisos.some((a) => /🛟/.test(a)) && avisos.some((a) => /🔴/.test(a)),
+    "y cada una arranca con su propia cara",
+  );
+});
+
+test("la marca se limpia sola: pasada la ventana del huerfano deja de bloquear", async () => {
+  const avisos = [];
+  const dir = dirDeMarcas();
+  const marcas = crearMarcasEnDisco(dir);
+  const deps = {
+    leerFilas: async () => [fila({ conversationId: 11, messageId: 873 })],
+    postWebhook: async () => PERDIDO,
+    avisar: async (texto) => avisos.push(texto),
+    marcas,
+  };
+  await runRescateSweep({ ahoraMs: T0 + min(10), emitir: true }, deps);
+  assert.equal(avisos.length, 1);
+
+  // Envejecer la marca a mano es lo unico que puede pasar en produccion: el archivo queda y
+  // nadie lo borra. Sin purga el directorio crece para siempre.
+  const despues = T0 + min(20);
+  const vencida = (despues - VIDA_MARCA_MS - 60_000) / 1000;
+  utimesSync(join(dir, "chatwoot-11-873"), vencida, vencida);
+  await runRescateSweep({ ahoraMs: despues, emitir: true }, deps);
+  assert.equal(avisos.length, 2, "una marca vencida no puede silenciar un mensaje para siempre");
+
+  // Y la que TODAVIA esta dentro de la ventana no se toca: purgar de mas devuelve los 72.
+  await runRescateSweep({ ahoraMs: despues + min(10), emitir: true }, deps);
+  assert.equal(avisos.length, 2, "la marca fresca sigue en pie");
+});
+
+test("sin conv o sin msg no hay clave, y sin clave no se inventa una marca compartida", () => {
+  assert.equal(claveDeMarca({ conversationId: 11, messageId: 873 }), "chatwoot-11-873");
+  assert.equal(claveDeMarca({ conversationId: 11 }), null);
+  assert.equal(claveDeMarca({ messageId: 873 }), null);
+  // Un id que viniera contaminado no puede escaparse del directorio de marcas.
+  assert.equal(claveDeMarca({ conversationId: "../../etc", messageId: "passwd" }), null);
+});
+
+test("EN SECO NO TOCA LAS MARCAS: mirar el barrido a mano no puede borrar estado real", async () => {
+  // Este caso existe por una razon que ningun otro puede ver: `purgar` BORRA archivos. Un
+  // `node rescate-run.mjs` sin `--emit` —lo que uno tipea para mirar— no puede pasar la
+  // escoba por las marcas de produccion; si lo hiciera, el aviso del lead perdido volveria a
+  // salir. Que ademas no deje marca nueva ya lo garantiza que en seco no se reinyecta nada.
+  const dir = dirDeMarcas();
+  const llamadas = [];
+  await runRescateSweep(
+    { ahoraMs: T0 + min(10), emitir: false },
+    {
+      leerFilas: async () => [fila({ conversationId: 11, messageId: 873 })],
+      postWebhook: async () => PERDIDO,
+      avisar: async () => {},
+      marcas: {
+        reservar: async (c) => (llamadas.push(`reservar:${c}`), true),
+        liberar: async (c) => llamadas.push(`liberar:${c}`),
+        purgar: async () => llamadas.push("purgar"),
+      },
+    },
+  );
+  assert.deepEqual(llamadas, [], "el modo seco no lee ni escribe ni borra una sola marca");
+  assert.ok(!existsSync(join(dir, "chatwoot-11-873")), "y no deja huella");
+});
+
+test("si Telegram se cae, la marca se SUELTA: ese lead no se anuncio nunca", async () => {
+  const dir = dirDeMarcas();
+  const marcas = crearMarcasEnDisco(dir);
+  const avisos = [];
+  let primeraVuelta = true;
+  const deps = {
+    leerFilas: async () => [fila({ conversationId: 11, messageId: 873 })],
+    postWebhook: async () => PERDIDO,
+    avisar: async (texto) => {
+      if (primeraVuelta) throw new Error("telegram caido");
+      avisos.push(texto);
+    },
+    marcas,
+  };
+  const r = await runRescateSweep({ ahoraMs: T0 + min(10), emitir: true }, deps);
+  assert.ok(r.avisoFallido, "el fallo de entrega se dice");
+  assert.ok(!existsSync(join(dir, "chatwoot-11-873")), "y la reserva no se queda con el aviso");
+
+  primeraVuelta = false;
+  await runRescateSweep({ ahoraMs: T0 + min(20), emitir: true }, deps);
+  assert.equal(avisos.length, 1, "la vuelta siguiente si lo anuncia");
 });

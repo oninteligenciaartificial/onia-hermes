@@ -353,20 +353,73 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       ruido que `t_7362c865` reclama. Falta avisar **una sola vez por mensaje**, y eso pide estado
       durable que hoy el barrido no tiene. Va abajo como ítem propio.
 
-- [ ] **El rescate fallido se ve en el log y no le llega a nadie: falta avisar UNA vez por
-      mensaje.** En `hermes-content/deploy/vps-ops/bot/rescate-run.mjs`, función
-      `armarAvisoRescate()`. Es la mitad que dejó abierta `7a9e10c0` (arriba), y no es lo mismo
-      que el ruido de `t_7362c865`: aquél avisa de más sobre lo que salvó, éste no avisa nada
-      sobre lo que perdió.
+- [x] ✅ **CERRADO el 2026-09-11: el rescate fallido se veía en un log que nadie mira. Ahora
+      sale, y sale UNA sola vez por mensaje.** Era la mitad que dejó abierta `7a9e10c0`.
 
-      El aviso no puede ser por vuelta: la ventana del huérfano es `MAX_EDAD_MS` = 12 h y el cron
-      corre cada 10 min, así que un solo mensaje sin rescatar daría hasta 72 avisos idénticos.
-      Hace falta recordar a quién ya se avisó, y `runRescateSweep` hoy no guarda nada entre
-      corridas.
+      El barrido ya salía con `exit 1` cuando reinyectaba y el bot no emitía nada — pero eso
+      vive en `/var/log/onia-rescate-mensaje-perdido.log`. El «hola» del 10-sep (conv 11 msg
+      873, inbox 5) falló cuatro veces ahí adentro y dejó de figurar como huérfano **porque la
+      persona volvió a escribir sola**, no porque alguien la atendiera.
 
-      Antes de elegir cómo: `bot_messages.message_key` ya es `chatwoot:<conv>:<msgId>` y ya tiene
-      unique — hay que medir si sirve de marca sin ensuciar el dedup del motor, en vez de inventar
-      un archivo de estado al lado. **Medir primero, decidir después.**
+      **Por qué no alcanzaba con avisar y ya:** la ventana del huérfano es `MAX_EDAD_MS` = 12 h
+      y el cron corre cada 10 min → hasta **72 avisos idénticos por el mismo lead**. Eso no es
+      avisar de más, es apagar el canal — el vigía que grita mal no molesta, inutiliza. Así que
+      el aviso necesitaba memoria por mensaje, durable entre corridas.
+
+      **Se midió primero si servía `bot_messages.message_key`, como pedía el ítem, y NO sirve.**
+      Dos razones independientes, medidas contra `supabase-db`, no supuestas:
+
+      | | por qué descarta la tabla |
+      |---|---|
+      | **FK** | `bot_messages.conversation_key` → `bot_conversations`. El insert falla justo cuando el webhook nunca creó la conversación (401, puerto muerto, 500) — **el peor modo de falla es el que no se puede recordar**, y el aviso volvería cada 10 min |
+      | **Contabilidad** | `direction` sólo acepta `inbound\|outbound` (CHECK) y `usage-run.mjs` cuenta `direction=eq.outbound` para el uso que se le **cobra** al cliente. Una marca ahí es una conversación facturada que nunca existió |
+
+      Va entonces un archivo por mensaje en `/var/lib/onia-rescate-avisado/` — mismo patrón que
+      `/var/lib/onia-vigia-remotos/<id>`, que ya es el de la casa. La reserva es atómica (`wx`
+      falla con `EEXIST`), así que dos barridos simultáneos no avisan los dos, y se reserva
+      **antes** de mandar, igual que el recordatorio M9.
+
+      Las cuatro decisiones que no son obvias, con su motivo:
+
+      - **La marca es por MENSAJE**, no por conversación ni por vuelta: dos mensajes perdidos de
+        la misma persona son dos leads.
+      - **«No pude recordar» (`null`) no es «ya avisé» (`false`)**: si la marca no se puede
+        reservar **no se manda**, porque 72 idénticos es peor que el log. Se dice aparte
+        (`marcasFallidas`, línea `SIN MARCA` en el log) en vez de tragarse.
+      - **Si Telegram se cae, la marca se SUELTA.** La reserva existe para no repetir un aviso
+        *entregado*; si no se entregó, ese lead no se anunció nunca y el barrido siguiente
+        reintenta.
+      - **Dos avisos separados, no uno mezclado.** `onia-tg.sh` clasifica por la **primera
+        línea**: un mensaje que empiece con 🛟 y remate con un fallo se rutea como buena noticia
+        y el lead perdido no le llega a nadie.
+
+      Y una purga: `VIDA_MARCA_MS` = 2 × la ventana del huérfano. Sin ella el directorio crece
+      para siempre; con ella una marca vencida no puede silenciar nada, porque pasada la ventana
+      ese mensaje ya no es huérfano.
+
+      **11 casos nuevos, validados por MUTACIÓN en 9 direcciones** (sin reserva · marca por
+      conversación · tratar `null` como avisar · un solo mensaje mezclado · sin escapar HTML ·
+      marcar también en seco · no soltar la marca · sin purga · el **esquive**: reservar y no
+      armar nunca el aviso). Las 9 caen en rojo.
+
+      ⚠️ **La primera versión del caso «en seco» pasaba VERDE con el guardia arrancado** —
+      lo tapaba que en modo seco `fallidos` está vacío, así que había dos guardias atajando el
+      mismo caso. Reescrito sobre lo único que ese guardia protege de verdad: `purgar` **BORRA**
+      archivos, y un `node rescate-run.mjs` sin `--emit` —lo que uno tipea para mirar— no puede
+      pasar la escoba por las marcas de producción.
+
+      ```
+      cd hermes-content/deploy/vps-ops/bot && node --test rescate-run.test.mjs   # 47/47
+      npm run test:bot                                                          # 922/922
+      node rescate-run.mjs                                                       # seco, contra prod
+      ```
+
+      Seco contra producción al cerrar: `0 sin respuesta · 0 reinyectados · 0 CONTESTADOS` — hoy
+      no hay ningún huérfano, el circuito está sano.
+
+      ⚠️ **COMMITEADO, NO DESPLEGADO — y NO necesita pedido de deploy.** El cron
+      (`4,14,24,34,44,54 * * * *`) corre la copia de `/root/loops/onia-hermes`, no la de
+      `/opt/onia/bot`: esto se enciende solo cuando el integrador lleve la rama a `main`.
 
 - [x] ✅ **CERRADO el 2026-09-10 (`31cdfba`): quien pedía hablar con una PERSONA recibía siempre
       «Te conecto con un agente, en unos momentos te atenderán» — y cuando la conversación no

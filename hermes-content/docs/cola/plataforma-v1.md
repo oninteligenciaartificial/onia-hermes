@@ -3340,6 +3340,49 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] **CERRADO el 2026-09-11: el plan SEMANAL recibía «tu plan vence en una semana» el día
+      que lo pagaba** (`lib/subscription/renewal-reminders.ts` · `plan-state.ts` ·
+      `app/api/cron/renewal-reminders/route.ts`)**.** La escalera D-7/D-3/D-1/vencido que
+      entró el 10-sep (`26212f5`) se calibró para el ciclo **mensual** y se aplicaba igual al
+      semanal, que dura **7 días exactos** (`addCycle`). Medido con el código vivo: un cliente
+      paga su semana, `extendPlanEnd` le pone `planEnd = hoy + 7 d`, y el cron del día
+      siguiente calcula `diasRestantes = 7` → dispara el paso 7. **Cuatro avisos de cobro en
+      siete días, el primero a horas de haber pagado.** El Básico semanal son **Bs 89**, la
+      forma más barata de entrar: el primer cliente pago es el más probable que lo sufra.
+      Hoy hay **0 orgs con `planEnd`** en producción, así que el defecto estaba **latente** —
+      entraba ya aprobado con el primer cobro semanal, porque nadie audita lo que «ya estaba».
+
+      **Por qué no lo veía ningún gate:** el monto sale de la fuente única y es el del ciclo
+      correcto (`63de4ff`), el rol filtra bien (`825f227`), `planCanceledAt` se respeta, el
+      rubro no entra y **no sobra ni falta una palabra**. Lo que estaba mal es el par
+      *(cadencia, largo del ciclo)*, que no era sujeto de nadie.
+
+      **Se cerró la CLASE, no la instancia:** un paso sólo corresponde si su umbral es MENOR
+      que el largo del ciclo, y el largo se **deriva de `addCycle`** —la misma función que
+      mueve `planEnd` al cobrar— en vez de una tabla al lado que se desincronice. Un ciclo
+      nuevo más corto (quincenal) queda cubierto solo. `cycle` va **requerido** en
+      `selectRenewalStep`: un opcional con default deja el hueco en el LLAMADOR y no lo ve ni
+      `tsc` ni el gate del módulo. Ciclo desconocido (plan otorgado a mano) = `null` y no se
+      recorta nada — mismo criterio que ya usa el monto: ante la duda no se inventa.
+
+      **PRUEBA.** Rojo primero por el motivo correcto: `AssertionError: expected 7 to be null`.
+      Verde después, y las **tres mutaciones en rojo**: guardia arrancado (exit 1) · el helper
+      del largo a una constante (exit 1) · el llamador sin `cycle` (**exit 2 en `tsc`**,
+      TS2345 — ésa es la que justifica el parámetro requerido). Gates corridos **en el VPS**,
+      sobre el árbol exacto que se publicó: `tsc` 0 · `vitest` **4444** · `eslint` 0 errores.
+      Commits `887b3ea` + `99c5178` en `claude/chatbots-platform-review-0d1d09`.
+
+      ⚠️ **Está en la RAMA, no en `master`, y por lo tanto NO llegó al cliente.** Falta que el
+      integrador la mergee y después el swap. No se cuenta como entregado hasta eso.
+
+      🔎 **De paso, y vale para todo carril: el gate que escribí para esto nació TAUTOLÓGICO.**
+      Pasaba los 5 casos en verde con el esquive puesto (mutar `largoDelCicloEnDias` a la
+      constante `30`), porque derivaba el vencimiento esperado de la MISMA función que el
+      código bajo prueba consulta: la mutación movía a la vez el sujeto y la expectativa. Sólo
+      apareció **mutando después de arreglar**. Corregido en `99c5178` cruzando dos funciones
+      distintas (`extendPlanEnd`, la del cobro, contra la cadencia) y **afirmando** el largo
+      del semanal contra el literal `7` en vez de derivarlo.
+
 - [x] **CERRADO el 2026-09-10: el panel le inventaba al dueño la causa de un fallo que el
       servidor ya le había explicado.** El botón «Recordatorio» de cada cita llama a
       `POST /api/email/appointment-reminder/[id]`, que contesta **siete** motivos distintos y

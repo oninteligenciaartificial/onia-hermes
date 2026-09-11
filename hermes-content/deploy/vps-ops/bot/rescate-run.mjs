@@ -302,6 +302,126 @@ export function armarAvisoRescate(resultado) {
   ].join("\n");
 }
 
+/**
+ * El aviso del mensaje que NO se pudo rescatar — la mala noticia, y va en su PROPIO mensaje.
+ *
+ * No se mezcla con el de arriba a proposito: `onia-tg.sh` clasifica por la primera linea para
+ * decidir si el aviso es informativo o abre una tarea. Un mensaje que empiece con 🛟 y remate
+ * con un fallo se rutea como buena noticia y el lead perdido no le llega a nadie.
+ */
+export function armarAvisoPerdido(perdidos) {
+  const lista = (perdidos || []).filter(Boolean);
+  if (!lista.length) return null;
+  const cabeza =
+    lista.length === 1
+      ? "🔴 <b>Un mensaje quedo SIN contestar</b>"
+      : `🔴 <b>${lista.length} mensajes quedaron SIN contestar</b>`;
+  const lineas = lista.map(
+    (d) =>
+      `· conv ${d.conversationId}: espera hace ${d.edadMin} min — «${escaparHtml(d.texto)}» (${escaparHtml(d.motivo)})`,
+  );
+  return [
+    cabeza,
+    "El barrido lo reinyecto y el bot no emitio nada. Hay una persona esperando en la bandeja.",
+    ...lineas,
+  ].join("\n");
+}
+
+// ---------------------------------------------------------------------------
+// LA MEMORIA DEL AVISO — una sola vez por mensaje, y durable entre corridas.
+// ---------------------------------------------------------------------------
+
+/**
+ * Cuanto vive una marca. La ventana del huerfano es `MAX_EDAD_MS`; el doble deja margen para
+ * un reloj corrido y garantiza que una marca no pueda silenciar a un mensaje que TODAVIA es
+ * huerfano. Pasado eso se borra: sin purga el directorio crece para siempre.
+ */
+export const VIDA_MARCA_MS = MAX_EDAD_MS * 2;
+
+/** Donde viven las marcas en el VPS. Mismo patron que `/var/lib/onia-vigia-remotos/<id>`. */
+export const DIR_MARCAS_POR_DEFECTO = "/var/lib/onia-rescate-avisado";
+
+/**
+ * La clave es por MENSAJE, no por conversacion ni por vuelta: dos mensajes perdidos de la
+ * misma persona son dos leads distintos.
+ *
+ * Sin `conv` o sin `msg` devuelve `null` y NO se inventa una clave parcial: una clave
+ * compartida silenciaria mensajes que nadie miro. Y el id se valida entero en vez de
+ * sanearse, porque un id contaminado que "se limpia" produce una clave que colisiona con otra
+ * legitima — es mas seguro no tener marca (y avisar de mas) que tener la marca equivocada.
+ */
+export function claveDeMarca({ conversationId, messageId } = {}) {
+  const conv = String(conversationId ?? "");
+  const msg = String(messageId ?? "");
+  if (!/^[0-9A-Za-z_-]+$/.test(conv) || !/^[0-9A-Za-z_-]+$/.test(msg)) return null;
+  return `chatwoot-${conv}-${msg}`;
+}
+
+/**
+ * POR QUE UN ARCHIVO Y NO `bot_messages.message_key`, que ya es unique y ya existe.
+ *
+ * Se midio primero contra produccion el 2026-09-11, que era lo que pedia el item, y la tabla
+ * NO sirve — por dos razones independientes:
+ *
+ *   1. FK. `bot_messages.conversation_key` REFERENCES `bot_conversations(conversation_key)`.
+ *      El insert de la marca falla justo cuando el webhook nunca creo la conversacion, que es
+ *      EL peor modo de falla (401, puerto muerto, 500): no se puede recordar exactamente al
+ *      mensaje que mas hay que recordar, y el aviso volveria cada 10 min.
+ *   2. CONTABILIDAD. `direction` solo acepta `inbound|outbound` (CHECK), y `usage-run.mjs`
+ *      cuenta `direction=eq.outbound` para el uso que se le COBRA al cliente. Una marca ahi
+ *      es una conversacion facturada que nunca existio. Y `inbound` seria mentir sobre un
+ *      mensaje que no entro.
+ *
+ * El archivo no tiene ninguno de los dos problemas y la reserva es atomica: `wx` falla con
+ * EEXIST si ya estaba, asi que dos barridos simultaneos no pueden avisar los dos.
+ *
+ * `reservar` devuelve `true` (es nueva, avisar) · `false` (ya se aviso) · `null` (no pude
+ * preguntar). El `null` NO es `false`: se dice aparte, porque "no pude recordar" y "ya avise"
+ * llevan a decisiones distintas.
+ */
+export function crearMarcasEnDisco(dir) {
+  const destino = dir || process.env.ONIA_RESCATE_MARCAS || DIR_MARCAS_POR_DEFECTO;
+  const fs = () => import("node:fs");
+  return {
+    async reservar(clave) {
+      if (!clave) return null;
+      try {
+        const { mkdirSync, openSync, closeSync } = await fs();
+        const { join } = await import("node:path");
+        mkdirSync(destino, { recursive: true });
+        closeSync(openSync(join(destino, clave), "wx"));
+        return true;
+      } catch (error) {
+        if (error && error.code === "EEXIST") return false;
+        return null;
+      }
+    },
+    async liberar(clave) {
+      if (!clave) return;
+      try {
+        const { rmSync } = await fs();
+        const { join } = await import("node:path");
+        rmSync(join(destino, clave), { force: true });
+      } catch {
+        // Soltar la marca es best-effort: si falla, el peor caso es un aviso que no se repite.
+      }
+    },
+    async purgar(antesDeMs) {
+      try {
+        const { readdirSync, statSync, rmSync } = await fs();
+        const { join } = await import("node:path");
+        for (const nombre of readdirSync(destino)) {
+          const ruta = join(destino, nombre);
+          if (statSync(ruta).mtimeMs < antesDeMs) rmSync(ruta, { force: true });
+        }
+      } catch {
+        // Que no se pueda limpiar no puede tumbar un barrido: a lo sumo queda un archivo de
+        // mas. Lo que no se hace es tratar el fallo como "no habia marcas".
+      }
+    },
+  };
+}
+
 export async function runRescateSweep(options = {}, deps = {}) {
   const ahoraMs = Number.isFinite(options.ahoraMs) ? options.ahoraMs : Date.now();
   const emitir = options.emitir === true;
@@ -315,6 +435,7 @@ export async function runRescateSweep(options = {}, deps = {}) {
       const { promisify } = await import("node:util");
       await promisify(execFile)("/root/bin/onia-tg.sh", [texto]);
     });
+  const marcas = deps.marcas || crearMarcasEnDisco();
 
   const filas = await leerFilas({ desdeMs: ahoraMs - MAX_EDAD_MS - MIN_EDAD_MS, ahoraMs });
   const huerfanos = seleccionarHuerfanos(filas, { ahoraMs }).slice(0, limite);
@@ -351,15 +472,43 @@ export async function runRescateSweep(options = {}, deps = {}) {
     }
   }
 
+  // LO PERDIDO TAMBIEN SE AVISA, pero UNA SOLA VEZ POR MENSAJE. La ventana del huerfano son
+  // 12 h y el cron corre cada 10 min: avisar por vuelta serian hasta 72 mensajes identicos por
+  // el MISMO lead, que es como se entrena a no leer los avisos. La marca se reserva ANTES de
+  // mandar —igual que el recordatorio (M9)—, asi que si no se puede reservar no se manda: el
+  // fallo ya vive en el log y en el `exit 1`, y repetirlo 72 veces seria peor que no decirlo.
+  const perdidos = [];
+  if (emitir) {
+    await marcas.purgar(ahoraMs - VIDA_MARCA_MS);
+    for (const f of resultado.fallidos) {
+      const reserva = await marcas.reservar(claveDeMarca(f));
+      if (reserva === true) perdidos.push(f);
+      else if (reserva === null) {
+        (resultado.marcasFallidas ||= []).push(
+          `conv ${f.conversationId} msg ${f.messageId}: no se pudo recordar el aviso, no se manda`,
+        );
+      }
+    }
+  }
+
   // Telegram es el TESTIGO del rescate, no el rescate. Si el aviso falla, la persona ya fue
   // contestada igual: tirar aca convertiria un exito en un exit 2 y el proximo barrido
   // reinyectaria de gusto.
-  const aviso = emitir ? armarAvisoRescate(resultado) : null;
-  if (aviso) {
+  const avisos = emitir
+    ? [
+        { texto: armarAvisoRescate(resultado), reservados: [] },
+        { texto: armarAvisoPerdido(perdidos), reservados: perdidos },
+      ].filter((a) => a.texto)
+    : [];
+  for (const { texto, reservados } of avisos) {
     try {
-      await avisar(aviso);
+      await avisar(texto);
     } catch (error) {
       resultado.avisoFallido = String(error?.message || error);
+      // La marca existe para no repetir un aviso ENTREGADO. Si Telegram se cayo, ese lead no
+      // se anuncio nunca: se suelta para que el barrido siguiente lo reintente, o la reserva
+      // dejaria de evitar ruido y pasaria a tragarse al unico aviso que importaba.
+      for (const f of reservados) await marcas.liberar?.(claveDeMarca(f));
     }
   }
   return resultado;
@@ -385,6 +534,8 @@ if (esCLI) {
         console.log(`conv ${d.conversationId} msg ${d.messageId} — ${d.edadMin} min sin respuesta — "${d.texto}"${veredicto}`);
       }
       for (const f of r.fallidos) console.log(`FALLO conv ${f.conversationId} msg ${f.messageId}: ${f.motivo}`);
+      for (const m of r.marcasFallidas || []) console.log(`SIN MARCA ${m}`);
+      if (r.avisoFallido) console.log(`AVISO NO ENTREGADO: ${r.avisoFallido}`);
       console.log(
         `${r.huerfanos} sin respuesta · ${r.reinyectados} reinyectados · ${r.contestados} CONTESTADOS${opciones.emitir ? "" : " (SECO — agregar --emit)"}`,
       );
