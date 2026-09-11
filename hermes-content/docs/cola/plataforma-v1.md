@@ -71,6 +71,58 @@ y sin operar. Acá se opera, con verificación por ítem.
 > (5 lectores de código + 4 capturas de producción). Orden de ejecución acordado: recarga →
 > cuentas → bot repetido (vive en `cola/chatbot.md`) → UI.
 
+- [x] 🔴 **CERRADO el 2026-09-11 (`63de4ff`, pusheado — NO mergeado a `master` ni desplegado):
+      el recordatorio de renovación le cotizaba a TODOS el precio MENSUAL, y el que paga anual
+      iba a transferir Bs 1.500 por una renovación de Bs 15.000.**
+
+      Sale de auditar `26212f5`, que entró a `master` esa misma madrugada (el ciclo de
+      renovación por QR). `organizations` **no guarda el ciclo** —sólo `plan` y `planEnd`—; el
+      ciclo vive en el último pago aprobado (`subscription_payments.cycle`). El cron armaba el
+      monto con `DEFAULT_PLAN_AMOUNTS[plan].monthly` y el correo lo pegaba dentro de una
+      instrucción de pago: *«pagás por QR o transferencia (Bs 1.500,00)»*. El semanal leía
+      Bs 320 por una renovación de Bs 89, y el segundo párrafo afirmaba *«El mes nuevo se suma
+      al final»* a quien compró un año.
+
+      🔴 **No era cosmético: la mitad que MUESTRA y la que APLICA leían fuentes distintas.**
+      `evaluateAutoApproval` (`lib/subscription/activation.ts:163`) compara contra
+      `getPlanAmount(plan, cycle)` y rechaza con *«Monto declarado inválido»* si difiere más de
+      0,01. El cliente que hacía **exactamente lo que el correo le decía** pagaba de menos, su
+      pago no se aprobaba solo, y su plan no se renovaba. De paso, `DEFAULT_PLAN_AMOUNTS`
+      directo se saltea el override por env que `getPlanAmount` sí respeta.
+
+      **Por qué ningún gate podía verlo:** el número sale de la fuente única (así que
+      `monto-de-plan-a-mano.test.ts` estaba verde), el plan sale de `nombreDePlan` (así que
+      `nombre-de-plan-a-mano.test.ts` estaba verde), no sobra ninguna palabra prohibida y no hay
+      rubro de por medio. **El monto es REAL: lo que estaba mal es de qué CICLO es.** La
+      interfaz ya documentaba `montoLabel` como *«monto del ciclo»* — el único llamador violaba
+      el contrato de su propio tipo.
+
+      **El arreglo:** `terminoDeRenovacion(plan, cycle)` en
+      `lib/subscription/renewal-reminders.ts` cotiza con `getPlanAmount` —el MISMO que valida
+      el cobro— y nombra el plazo por el ciclo. Devuelve **`null` cuando no se sabe** (org con
+      el plan otorgado a mano, sin pago aprobado) y ahí el correo **no cotiza ningún número**:
+      mismo patrón que `buscarNegocio()` y `horario-que-se-dice` — retorno ambiguo separado y
+      promesa CONDICIONADA, no borrada. `montoLabel` pasa a `string | null` a propósito, para
+      que `tsc` no deje caer a otro llamador en el mensual sin decidirlo.
+
+      **Prueba:** `lib/subscription/monto-del-ciclo-que-paga.test.ts`, sujetos derivados del
+      catálogo (un plan o un ciclo nuevo nace vigilado) y **con el caso que mira al LLAMADOR** —
+      sin él el módulo queda impecable y el cron sigue con su atajo. Validado por mutación en
+      4 direcciones (ignorar el ciclo · default silencioso · plazo fijo en «mes» · el cron
+      volviendo a la tabla cruda): las 4 en rojo con su línea `Tests N failed` y `exit 1`.
+      Gates sobre el árbol real: `tsc` 0 · `vitest` **4413 pasados** · `eslint` 0 errores ·
+      `check:onia-core` OK (ese último no lo corre el integrador y sí el CI).
+
+      ⚠️ **Todavía no lo ve nadie:** está en `claude/chatbots-platform-review-0d1d09`, **no**
+      en `master`. `git merge-base --is-ancestor 63de4ff origin/master` da falso, así que
+      **no** se le escribió `DEPLOY PEDIDO` a `t_5511da55`: el integrador lo mergea en su
+      vuelta y ahí recién la promesa del pedido sería cierta.
+
+      **Hoy no hay víctima, y por eso convenía arreglarlo hoy:** producción tiene 4 orgs, las 4
+      con `planEnd` NULL y **cero pagos aprobados** (contado el 2026-09-11 en `supabase-db`).
+      El cron evalúa cero orgs. Este código corre por primera vez **el día que paga el primer
+      cliente**, que es justo el objetivo de la v1.0.
+
 - [x] 🔴 **CERRADO el 2026-09-11 (`859fd05`): el aviso de que TU plan vence lo apagaba el
       interruptor de los correos a TUS clientes — o sea el ítem de acá abajo nació con el
       agujero adentro.**

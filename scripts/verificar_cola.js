@@ -294,10 +294,19 @@ function existeEnAlgunRepo(ruta, baseDir) {
       // fuente de verdad de precios. Sin este renglon el prefijo se unia al repo hermano
       // —que se llama igual— y quedaba `onia-platform/onia-platform/lib/...`: fantasma
       // garantizado sobre el archivo mas citado del carril. No afloja nada: se sigue
-      // exigiendo que exista DENTRO del hermano, solo se deja de contar el nombre dos veces.
+      // exigiendo que exista DENTRO de algun hermano, solo se deja de contar el nombre dos veces.
+      //
+      // El resto se busca en TODOS los hermanos, no solo en el que dio el prefijo. `master` y
+      // el worktree del carril se llaman distinto pero son el MISMO repo: pedirle a quien
+      // escribe la cola que adivine en cual de los dos aterrizo su archivo es pedir que el gate
+      // se ignore. Medido el 2026-09-11: `onia-platform/scripts/cron/run-onia-renewal-reminders.sh`
+      // salia fantasma con el archivo vivo en el worktree y el clon `onia-platform` atrasado —
+      // el rojo caro, el que manda a borrar de la cola una referencia cierta.
       if (ruta.startsWith(repo + '/')) {
         const sinPrefijo = ruta.slice(repo.length + 1);
-        if (fs.existsSync(path.join(path.dirname(dir), repo, sinPrefijo))) return true;
+        for (const hermano of REPOS_HERMANOS) {
+          if (fs.existsSync(path.join(path.dirname(dir), hermano, sinPrefijo))) return true;
+        }
       }
     }
     const padre = path.dirname(dir);
@@ -1222,6 +1231,29 @@ function selfCheck() {
   // El sha va entre backticks y entero: `753718f` cuenta, pero no un pedazo de otra palabra.
   ok(evidenciaDe('commit `753718f` y `no-es-sha`').shas.join() === '753718f',
     'se extrae el sha del trozo entero, no un pedazo');
+
+  // --- La ruta CON el nombre del repo adelante se busca en TODOS los hermanos ---
+  // Medido el 2026-09-11: `onia-platform/scripts/cron/run-onia-renewal-reminders.sh` salia
+  // fantasma con el archivo vivo en el WORKTREE del carril, porque al sacar el prefijo se
+  // buscaba el resto SOLO dentro del repo cuyo nombre habia matcheado — nunca en el worktree.
+  // Es el falso rojo que el comentario de `REPOS_HERMANOS` ya describe, arreglado entonces solo
+  // para la forma SIN prefijo: la instancia curada y la clase abierta. Y es el rojo caro, el que
+  // manda a BORRAR de la cola una referencia cierta al archivo que uno acaba de escribir.
+  const hnos = path.join(tmp, 'hermanos');
+  const base = path.join(hnos, 'onia-hermes-carril');
+  fs.mkdirSync(base, { recursive: true });
+  fs.mkdirSync(path.join(hnos, 'onia-platform'), { recursive: true });           // clon, atrasado
+  fs.mkdirSync(path.join(hnos, 'onia-platform-chatbot', 'scripts'), { recursive: true });
+  fs.writeFileSync(path.join(hnos, 'onia-platform-chatbot', 'scripts', 'zz-solo-en-el-worktree.sh'), 'x');
+
+  r = revisarCola('## Ahora\n- [ ] Medido · `onia-platform/scripts/zz-solo-en-el-worktree.sh` · 10 min\n', base);
+  ok(!r.problemas.some((p) => p.regla === 'fantasma'),
+    'una ruta con el prefijo del repo se resuelve en el WORKTREE hermano, no solo en el clon');
+
+  // Y no afloja: si no esta en NINGUN hermano sigue siendo fantasma.
+  r = revisarCola('## Ahora\n- [ ] Medido · `onia-platform/scripts/zz-no-esta-en-ningun-lado.sh` · 10 min\n', base);
+  ok(r.problemas.some((p) => p.regla === 'fantasma'),
+    'con el prefijo del repo, lo que no existe en ningun hermano sigue siendo fantasma');
 
   // --- El guardia que impide que este gate se lea como rojo cuando es el ARBOL ---
   // Se prueba en las DOS direcciones a proposito: un guardia que solo prueba el caso malo pasa
