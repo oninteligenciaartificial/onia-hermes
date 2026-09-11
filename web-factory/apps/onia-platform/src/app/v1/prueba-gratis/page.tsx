@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { APP_URL, WA_URL_LANDING } from "@/lib/site";
 import { MEDIO_DE_PAGO } from "@/content/medio-de-pago";
+import { PASO_CONFIRMAR_CORREO_IMPERATIVO } from "@/app/(sitio)/alta";
 
 const SITE_URL = "https://onia.com.bo";
 const REGISTRO_URL = `${APP_URL}/register`;
@@ -11,8 +12,11 @@ const REGISTRO_URL = `${APP_URL}/register`;
 export const metadata: Metadata = {
   metadataBase: new URL(`${SITE_URL}/`),
   title: `Prueba gratis de ${PRUEBA.dias} días — Onia Platform, sin tarjeta`,
+  // El paso del medio sale de `alta.ts`: esta description enumeraba el alta y el
+  // uso del sistema como si fueran seguidos, y el producto exige confirmar el
+  // correo en el medio. Es la copia que además se lee en el buscador.
   description:
-    `Registrate en minutos, elegí tu rubro y usá el sistema completo ${PRUEBA.dias} días: clientes, caja, inventario, contabilidad Bolivia y agentes con IA —y agenda ${ALCANCE_CON_AGENDA}—. Sin tarjeta y sin permanencia.`,
+    `Registrate en minutos, ${PASO_CONFIRMAR_CORREO_IMPERATIVO}, elegí tu rubro y usá el sistema completo ${PRUEBA.dias} días: clientes, caja, inventario, contabilidad Bolivia y agentes con IA —y agenda ${ALCANCE_CON_AGENDA}—. Sin tarjeta y sin permanencia.`,
   alternates: { canonical: "/prueba-gratis" },
   openGraph: {
     type: "website",

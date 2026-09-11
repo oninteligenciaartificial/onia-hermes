@@ -9,7 +9,11 @@ import { PRUEBA, bs } from "@/lib/pricing";
 
 import { CHATBOT_PLAN, precioStack } from "@/content/chatbot-precios";
 
-import { ALTA_VERBO_VOS } from "./alta";
+import {
+  ALTA_VERBO_VOS,
+  DE_DONDE_LLEGA_EL_ENLACE,
+  PASO_CONFIRMAR_CORREO,
+} from "./alta";
 
 /**
  * FAQ de la portada — respuestas con los números TRAÍDOS de las fuentes.
@@ -27,7 +31,10 @@ import { ALTA_VERBO_VOS } from "./alta";
 export const FAQ = [
   {
     q: "¿Necesito tarjeta para probar?",
-    a: `No. La prueba de ${PRUEBA.dias} días no pide tarjeta ni pago: ${ALTA_VERBO_VOS}, elegís tu rubro y usás el sistema completo esos ${PRUEBA.dias} días.`,
+    // El paso del medio NO se tipea: sale de `alta.ts`, que sigue a lo que el
+    // producto exige. Faltaba, y es el último clic del embudo: sin confirmar, el
+    // login contesta 403 y el lead no tiene cómo saber qué le faltó.
+    a: `No. La prueba de ${PRUEBA.dias} días no pide tarjeta ni pago: ${ALTA_VERBO_VOS}, ${PASO_CONFIRMAR_CORREO} ${DE_DONDE_LLEGA_EL_ENLACE}, elegís tu rubro y usás el sistema completo esos ${PRUEBA.dias} días.`,
   },
   {
     // lib/pricing.ts:283 (CONDICIONES) + (sitio)/empezar/page.tsx (paso 02).
