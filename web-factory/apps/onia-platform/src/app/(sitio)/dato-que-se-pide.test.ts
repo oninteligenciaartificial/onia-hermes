@@ -204,27 +204,47 @@ describe("lo que declaramos cubre lo que pedimos", () => {
     ).toEqual([]);
   });
 
-  it("la política publicada tiene un sujeto para quien deja el dato sin ser cliente", () => {
+  it("la política declara, donde dice qué recoge, el dato de quien no es cliente", () => {
     const politica = readFileSync(
       join(RAIZ, "content", "legal", "privacidad.md"),
       "utf8",
     );
 
-    // No alcanza con que la palabra aparezca: tiene que declarar QUÉ se recoge
-    // de esa persona. Se piden los dos datos que el formulario manda.
-    const declaraElSujeto =
-      /todav[íi]a no (?:sos|es) cliente|sin tener (?:una )?cuenta|no ten[ée]s (?:una )?cuenta|a[úu]n no (?:sos|es) cliente/i.test(
-        politica,
-      );
+    // La ventana es el PÁRRAFO que declara al sujeto, dentro de la sección que
+    // dice qué recogemos. Las dos acotaciones se pagaron mutando, el mismo día
+    // y con el mismo error un nivel más adentro cada vez:
+    //   · sobre el documento entero, borrar el §2.5 seguía VERDE por la línea
+    //     de retención del §8 —que habla de por cuánto tiempo, no de qué—;
+    //   · sobre la sección §2 entera, sacarle el WhatsApp al §2.5 seguía VERDE
+    //     por el §2.1, que nombra el «número de WhatsApp»… del titular CON
+    //     cuenta. Otro sujeto, en la sección de al lado, absolviendo a éste.
+    const seccion = /^##\s*2\.[^\n]*\n([\s\S]*?)(?=^##\s)/m.exec(politica);
+    const queRecogemos = seccion?.[1] ?? "";
+
+    const SUJETO_SIN_CUENTA =
+      /todav[íi]a no (?:sos|es) cliente|sin tener (?:una )?cuenta|no ten[ée]s (?:una )?cuenta|a[úu]n no (?:sos|es) cliente/i;
+
+    const parrafoDelSujeto =
+      queRecogemos.split(/\n\s*\n/).find((p) => SUJETO_SIN_CUENTA.test(p)) ?? "";
+    const declara = parrafoDelSujeto !== "";
+
+    // Y los datos se derivan del formulario, no de una lista acá: el día que
+    // pida uno más, la política tiene que nombrarlo o esto se pone rojo.
+    const pedidos = SUJETOS.flatMap(({ txt }) =>
+      CAMPOS_DE_CONTACTO.filter(({ patron }) => patron.test(txt)),
+    );
+    const sinNombrar = pedidos
+      .filter(({ dice }) => !dice.test(parrafoDelSujeto))
+      .map((c) => c.nombre);
 
     expect(
-      declaraElSujeto,
+      { declara, sinNombrar },
       "El sitio le pide el contacto a gente que NO tiene cuenta (" +
         SUJETOS.map(({ ruta }) => relative(APP, ruta)).join(", ") +
-        ") y lo guarda. `content/legal/privacidad.md` distingue sólo dos " +
-        "sujetos —datos de tu cuenta y datos que vos cargás— y ninguno es ése: " +
-        "quien entrega su correo y su WhatsApp no encuentra en la política qué " +
-        "hacemos con ellos.",
-    ).toBe(true);
+        ") y lo guarda. El §2 de `content/legal/privacidad.md` —el que dice qué " +
+        "recogemos— tiene que declarar ese sujeto y nombrar cada dato que el " +
+        "formulario manda; si no, quien entrega su correo y su WhatsApp no " +
+        "encuentra en la política qué hacemos con ellos.",
+    ).toEqual({ declara: true, sinNombrar: [] });
   });
 });
