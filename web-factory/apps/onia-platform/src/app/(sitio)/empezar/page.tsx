@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Reveal } from "@/motion";
 import { PRUEBA } from "@/lib/pricing";
 import { WA_URL_LANDING, SITE_URL } from "@/lib/site";
+import { MEDIO_DE_PAGO } from "@/content/medio-de-pago";
 import { REGISTRO_URL } from "../nav";
 import { CTA_ALTA } from "../alta";
 import { Block, Shape, Btn, Kicker, JsonLd } from "../ui";
@@ -86,8 +87,9 @@ const PASOS: readonly { titulo: string; detalle: string }[] = [
   },
   {
     titulo: `Usalo de verdad ${PRUEBA.dias} días`,
-    detalle:
-      "Todo encendido: agenda, caja, inventario, contabilidad y la cola de agentes. Si te sirve, pagás por QR; si no, no pagás nada.",
+    // El medio de pago lo dice `@/content/medio-de-pago`, no esta pantalla: acá
+    // decía «pagás por QR» y no existe ningún QR.
+    detalle: `Todo encendido: agenda, caja, inventario, contabilidad y la cola de agentes. ${MEDIO_DE_PAGO.siTeSirve}`,
   },
 ];
 
