@@ -257,6 +257,51 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-11 (`9b9cde4`, onia-platform — pusheado a la rama, falta mergear y
+      desplegar): el add-on vigente no decía hasta cuándo, y no dejaba renovar antes del corte.**
+
+      Ayer el add-on ganó vigencia de verdad (`5011003`) y ese mismo día empezó a avisar
+      D-7/D-3/D-1/vencido por correo, in-app y push, con el botón apuntando a
+      `/settings/addon-chatbot`. **Esa pantalla quedó como estaba.**
+
+      Medido sobre `AddonChatbotClient.tsx`: sus tres ramas eran excluyentes y el formulario de
+      comprobante vivía en la última, la de contratar. Mientras el add-on sigue **vigente** —que
+      es justo cuando el aviso llega— `isWhatsAppAddonActive` da `true`, la pantalla cae en la
+      rama ACTIVO, y esa rama **no tiene la fecha y no tiene dónde pagar**. El dueño que recibe
+      *«tu asistente deja de contestar el 14»* abre el link, lee **«Add-on activo · Activado el
+      25 de agosto»** —la fecha de ALTA, que se lee como permanente— y no encuentra ni cuándo
+      vence ni cómo renovar. El único camino para pagar era esperar a que se **apague**: perder
+      el servicio primero, con sus clientes escribiéndole a un bot mudo.
+
+      **LA CLASE, para buscarla en otro lado:** cuando un concepto gana una dimensión, los
+      AVISOS la adoptan primero —sin ella no se pueden redactar— y la pantalla que lo
+      **administra** se queda sin ella, siendo adonde los avisos mandan. Es la firma conocida
+      «cerrar una mitad rompe a la otra» aplicada a una pantalla: el arreglo convirtió una rama
+      terminal en una rama transitoria y nadie volvió a mirar la rama.
+
+      Ningún gate podía verlo: no sobra ni falta una palabra, el monto sale de la fuente única,
+      el rubro deriva bien, el rol filtra bien (`SOLO_ADMIN`), la ruta existe y responde, y
+      `addon-vigencia.ts` y el cron están verdes **con razón** — cada uno tiene razón por
+      separado. El defecto vive en el par (estado del add-on, lo que la pantalla deja hacer).
+
+      Arreglo: la decisión sale a `lib/subscription/addon-en-pantalla.ts` (un `page.tsx` no puede
+      exportar helpers, y como ternario anidado en el TSX lo único medible es el texto del
+      archivo, que se absuelve solo). La fecha se deriva con `vencimientoDelAddon` —la MISMA
+      función que redacta el aviso, no una prima—, así que el correo y la pantalla a la que ese
+      correo manda no pueden decir fechas distintas. Sin vigencia (otorgado a mano) no se inventa
+      fecha ni se ofrece renovar, que sería cobrar dos veces lo mismo. Y un comprobante en
+      revisión tapa al pago **también** con el add-on activo: si no, el que ya pagó su renovación
+      no ve acuse de nada y vuelve a pagar.
+
+      Gate `lib/subscription/addon-en-pantalla.test.ts`, validado por mutación en **cinco**
+      direcciones y cada una cae en SU caso: el activo sin camino de pago (el defecto original),
+      la revisión que deja de tapar, el esquive en `page.tsx` (llamar al helper y tirar el
+      resultado), el esquive en el cliente (decidir con un ternario propio) y recibir la fecha
+      sin pintarla. El prop va **requerido**: opcional con default es el hueco que `tsc` no ve.
+      **Mirado renderizado** con el CSS del build vivo (`/root/addon-pantalla.png`): dice «Activo
+      hasta el 25 de septiembre de 2026» y abre «Renovación» con su formulario.
+      Gates: `tsc` 0 · **4599** tests · `eslint` 0 errores.
+
 - [x] ✅ **CERRADO el 2026-09-11 (`278f030`, onia-platform — falta mergear y desplegar): el cron
       de recordatorios le escribía a los pacientes en nombre de una cuenta vencida.**
 
