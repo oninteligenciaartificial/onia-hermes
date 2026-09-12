@@ -522,7 +522,7 @@ export const ADDONS: readonly AddOn[] = [
   },
   {
     nombre: AGENDA_ADDON.nombre,
-    copy: `Link público para que te pidan cita sin llamadas ni mensajes, ${ALCANCE_CON_AGENDA}. Ya viene incluida en Pro y en Full.`,
+    copy: `Te piden cita solos por tu link público, ${ALCANCE_CON_AGENDA}. Incluida en Pro y Full.`,
     precio: `Bs ${bs(AGENDA_ADDON.mensualAddon)}/mes en Básico`,
   },
   {
@@ -532,7 +532,7 @@ export const ADDONS: readonly AddOn[] = [
   },
   {
     nombre: "Web del negocio",
-    copy: "Tu sitio hecho por nosotros y publicado en tu dominio, con el botón de WhatsApp ya cableado. Es un proyecto que se cotiza y se paga una vez, no una suscripción más.",
+    copy: "Tu sitio hecho y publicado por nosotros, con el botón de WhatsApp cableado. Se cotiza y se paga una vez.",
     precio: `Desde Bs ${bs(WEB_DESDE)} · pago único`,
     href: "/servicios/webs",
   },

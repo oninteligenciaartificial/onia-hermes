@@ -589,14 +589,11 @@ export default function Portada() {
               <p className={s.offerNote}>
                 Sin instalación. O {precioAnual(CHATBOT_PLAN)}.
               </p>
+              {/* El ancla completa (monto del salario, DS, aguinaldo) vive en
+                  /chatbot y /precios. Acá una línea: Sergio, 11-sep, sobre esta
+                  sección: "demasiado texto". El % sigue DERIVADO de la fuente. */}
               <p className={s.offerAnchor}>
-                Es el{" "}
-                <b>
-                  {PCT_SALARIO} % del salario mínimo nacional{" "}
-                  {SALARIO_MINIMO.anio}
-                </b>{" "}
-                (Bs {fmtBs(SALARIO_MINIMO.monto)}, según el{" "}
-                {SALARIO_MINIMO.norma}), sin aguinaldo ni domingos, por algo que
+                El <b>{PCT_SALARIO} % de un salario mínimo</b>, por algo que
                 atiende las 24 horas.
               </p>
             </div>
@@ -625,10 +622,12 @@ export default function Portada() {
             ))}
           </div>
           <div className={s.offerFoot}>
+            {/* Una línea, no el párrafo entero de GRUPO.copy: el detalle vive
+                en /precios ("demasiado texto", Sergio 11-sep). */}
             <p className={s.body} style={{ maxWidth: "46em" }}>
-              <strong>{GRUPO.nombre}:</strong> {bs(GRUPO.mensual)} Bs/mes, con
-              implementación desde {bs(GRUPO.implementacionDesde)} Bs.{" "}
-              {GRUPO.copy}
+              <strong>{GRUPO.nombre}:</strong> Bs {bs(GRUPO.mensual)}/mes +
+              implementación desde Bs {bs(GRUPO.implementacionDesde)}. Para
+              varias razones sociales — se cotiza.
             </p>
             <div className={s.actions}>
               <a className={s.link} href="/precios">
