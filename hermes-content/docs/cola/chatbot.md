@@ -278,10 +278,12 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
-➡️ **MOVIDO a «Bloqueado en Sergio» como S17 el 2026-09-12 05:50** — lo único que le falta es
+➡️ **MOVIDO a «Bloqueado en Sergio» como S17 el 2026-09-12 05:50** — lo único que le faltaba era
 el `ok` del pedido de deploy `t_4f08f5d1`, que es suyo. **El bloqueo se reverificó antes de
-mover, no se heredó:** `npm run precios:vivos` sigue en **exit 1** y nombra los dos montos que
-el bot vivo cotiza hoy. La historia completa queda acá abajo para no perderla.
+mover, no se heredó:** a esa hora `npm run precios:vivos` seguía en **exit 1** y nombraba los dos
+montos que el bot vivo cotizaba. La historia completa queda acá abajo para no perderla.
+✅ **Y VENCIÓ el mismo día: Sergio Urcullo publicó a las 06:44 UTC** — `precios:vivos` sale **0**
+y la fila ~~S17~~ está cerrada abajo con la evidencia medida en el VPS.
 
 <details><summary>Diagnóstico completo del 2026-09-12 (tablero `t_e45a24ff`, instrumento `97e466fa`)</summary>
 
@@ -314,6 +316,40 @@ el bot vivo cotiza hoy. La historia completa queda acá abajo para no perderla.
       **publicar**, y eso es el `ok` de Sergio Urcullo.
 
 </details>
+
+- [x] ✅ **CERRADO el 2026-09-12 23:23 UTC (`851eddff`): los gates del carril estaban CIEGOS en
+      el nodo-casa — cinco tests rojos, el self-check de la sonda en 41/42, y `bloqueos:vencidos`
+      diciendo «no-medido» sobre un bloqueo YA satisfecho.** Todos por el mismo molde: código
+      escrito para POSIX corrido en Windows, que es donde trabajan las sesiones de este carril.
+
+      **Lo que estaba roto, medido corriendo (no leyendo):**
+      - `scripts/sonda_widget.mjs` — `CONFIG_DEL_BOT` con `URL.pathname` arma `C:\C:\…` (ENOENT):
+        el caso «las frases de derivación siguen existiendo en el config» llevaba rojo sin que
+        nadie lo viera. Fix: `fileURLToPath`. Self-check **41/42 → 42/42**.
+      - `lanzador-pasa-env.test.mjs` — `/bin/sh` hardcodeado no existe en win32; cae al `sh` de
+        Git en PATH. El test «el aviso a Sergio viene ENCENDIDO de fábrica» vuelve a medir.
+      - `precios-publicos.test.mjs` — `repoPlataforma()` no encontraba `onia-platform` desde un
+        worktree (`.claude/worktrees/…`): fallaba CERRADO (correcto) pero fallaba SIEMPRE acá,
+        o sea que la correa con la fuente única no corría nunca en el nodo-casa. Candidato nuevo
+        derivado de `git rev-parse --git-common-dir` → vecino del checkout principal.
+      - `avisos-vivo.test.mjs` — los 2 tests del lector inyectan un `docker` falso (script bash
+        por PATH con `:`), inejecutable en win32 por construcción; y re-simularlo en `.cmd`
+        mediría MI copia del comando, que el propio test prohíbe. **Skip explícito y contado**
+        (`skipped 2` en el resumen), siguen corriendo en VPS/WSL donde vive el sujeto.
+      - `scripts/bloqueos_vencidos.mjs` — spawneaba `npm` pelado; en win32 npm es `.cmd` y Node
+        no lo spawnea sin shell (CVE-2024-27980) → **TODOS los verificadores `npm run` salían
+        `no-medido`**, el molde exacto por el que S16 venció en silencio. Traducido a
+        `node npm-cli.js` (sin shell, guarda intacta) + 5 casos nuevos en su self-check (32).
+
+      **Y el gate arreglado MORDIÓ en la primera corrida:** `bloqueos:vencidos` destapó
+      **S17 VENCIDO** — `precios:vivos` sale 0 desde que el bot se publicó a las 06:44 UTC,
+      y la fila seguía pidiéndole el deploy a Sergio Urcullo. Cerrada abajo con la evidencia.
+
+      **Gates:** suite del bot **949 pass / 0 fail / 2 skip** (los dos skips son los explícitos
+      de arriba; el conteo anterior «951/951» se midió con `ONIA_PLATFORM_DIR` o en POSIX —
+      pelado en este nodo eran 946/5) · sonda `--self-check` 42/42 · `bloqueos_vencidos.mjs
+      --self-check` 32/32 · `verificar_cola` 0. **No toca el motor ni nada desplegado: son los
+      instrumentos.**
 
 - [x] ✅ **CERRADO el 2026-09-12 17:5x: el SIMULADOR prometía más que el bot — imprimía «Listo,
       agendado» pelado mientras el prospecto recibe una salvedad.** La vuelta anterior lo midió y
@@ -2529,6 +2565,12 @@ decisión de Sergio, no código.
       anterior pero **su LISTO exigía dos corridas seguidas y nadie las había corrido**: eso es
       lo que se hizo acá.
 
+      🔁 **Re-verificado en vivo el 2026-09-12 23:22 UTC**, ~20 h y ~40 vueltas del cron
+      (`13,43 * * * *`) después del cierre: conv 49 sigue `status=1` (resolved) y las ABIERTAS
+      del inbox 4 siguen siendo exactamente los 4 desconocidos reales (34, 36, 40, 48), ni una
+      «Sonda QA». El cierre en `finally` aguanta en producción, no sólo en las dos corridas
+      del LISTO.
+
       **La prueba, releyendo la base después de cada corrida** (`conversations` del inbox 4,
       por `docker exec … psql`): corrida 1 → `EL BOT CONTESTO LOS 2 — conversacion 49`, y la
       conv 49 quedó `status=1` (resolved); la lista de ABIERTAS del inbox 4 quedó en **los 4
@@ -2641,7 +2683,7 @@ decisión de Sergio, no código.
 | S14 | **De quién es la bandeja del widget (inbox 4)** — hoy no tiene org, y por ahí entraron **SEIS** conversaciones de desconocidos (34, 36, 38, 40, 45, 46), dos de ellas del 01-sep. **Cinco de las seis no dejaron teléfono ni correo**: sólo se les puede contestar desde adentro del widget, que es exactamente lo que el inbox huérfano impide — o sea que un inbox sin dueño no es una demora, es una pérdida. ⚠️ **A diferencia de S8, no alcanza con dos clicks:** está cerrado en esta cola que **una org sólo puede tener UN inbox** (`clinic_settings.chatwootInboxId`, `prisma/schema.prisma:1002`), y `Onia (interna)` ya gastó el suyo en el 5. ⚠️ **Corregido el 2026-09-02:** acá decía que esa columna era *"un `Int?` **único**"* y es falso — medido, no leído: no tiene `@unique` ni hay `@@unique` en `ClinicSettings`. Lo cierto de la frase es la mitad que importa para esta decisión (una org tiene UN inbox, porque es una columna escalar); lo que NO garantiza nadie es el otro sentido — **la base acepta que dos orgs reclamen el mismo inbox**, y el 409 que lo impide vive sólo en el PATCH de superadmin. No cambia las tres opciones de abajo, pero sí descarta "la base no me deja" como argumento. Desde hoy lo vigila `npm run inbox:tenencia`. **Opciones ya cotizadas en `ONIA_RADAR_DECISIONES_PRODUCTO.md` §9:** (a) darle el inbox 4 a otra org existente — cero código, pero mezcla el widget de Onia con una org que no es Onia; (b) crear una org `Onia (web)` sólo para el widget — cero código, ~10 min, agrega una org fantasma; (c) extender `clinic_settings` a N inboxes, que es código del producto y de otro carril. Recomendación: **(b)**. 🔁 **Fusionada el 2026-09-02 con la fila que la tabla listaba aparte bajo un SEGUNDO `S12`** (*"¿sigue en pie la opción 1 de §9?"*): era la **misma decisión preguntada dos veces**, con dos números distintos y uno de ellos ya usado por los horarios de demo. Lo destapó `npm run bloqueos:vencidos` al imprimir `S12, S12` — el gate nombra las filas por su id, así que un id repetido lo vuelve ambiguo. El dato fresco que aportaba esa fila (seis conversaciones, cinco sin contacto) es justo el que le faltaba a la condición de §9 *"hasta que la limitación moleste"*, y ya vive acá. **Y el `5 de las 9` que esta fila decía estaba viejo**: eran seis. | Es decidir en qué bandeja aterrizan los desconocidos de la web | **La otra mitad del objetivo del carril.** Hecho = se abre `/inbox` y se ve la conversación 45 (*"tengo una ferreteria"*) |
 | S15 | **Una credencial de sólo lectura para que el canario ENTRE al panel del chatbot** — un usuario del producto (correo + contraseña) que sólo mire. Se enchufa como `ONIA_CANARIO_USER` / `ONIA_CANARIO_PASS` en el entorno del loop `canario-visual`; **no hay una línea de código pendiente**: `requiereSesion` y `iniciarSesion()` ya están en `scripts/canario_visual.mjs` y entran por el formulario real de `/login`. Sin ella el canario NO miente (desde hoy dice `NO MEDIDA` con el motivo), pero **la pantalla que un cliente usa para editar su conocimiento sigue sin que nadie la mire nunca**. ⚠️ La otra opción que el ítem original proponía —una ruta de vista previa pública— **se descarta**: expone configuración de cliente sin sesión, y es agregar una superficie viva | Es un alta de usuario en producción, y una contraseña | Que `/settings/chatbot` entre a la ronda del canario como las otras diez. Hecho = el canario imprime `panel-chatbot … sin disparo mecanico` y su baseline se crea con `urlFinal` = `/settings/chatbot` |
 | ~~S16~~ | ✅ **VENCIDO el 2026-09-02 — Sergio no decide nada: la decisión ya se tomó y el trabajo ya llegó.** Pedía elegir entre cambiar el procedimiento del integrador, mergear a mano, o dejarlo. Pasaron **las dos primeras**: el integrador arregló su Paso 1 (`d26444c1` de `onia-hermes`, *"contaba las ramas contra el repo equivocado"*) y mergeó el carril a `master` de `onia-platform` (`503af44`, 12:38 UTC). Verificado con `git fetch` fresco y `merge-base --is-ancestor`: **los cuatro** commits declarados (`22fd088`, `675541b`, `d62beeb`, `e644c85`) llegan a `origin/master`; `npm run deploy:alcanzable` sale **0**. El radar §23 ya figuraba **RESUELTO** — sólo esta fila seguía pidiendo la decisión. Detalle en el primer ítem de "Cerrado". | — | — |
-| S17 | **Publicar el texto del bot: le cotiza Bs 750 y Bs 1.500 a leads reales, montos que ya no existen.** Pedido de deploy vivo el 2026-09-12 05:54: **`t_2baef483`** — ⚠️ **el id se DERIVA, no se copia**: el pedido anterior (`t_4f08f5d1`) se archivó a las 09:47 UTC y se rehizo con el recuento nuevo **mientras esta vuelta corría**, así que citarlo de memoria habría dejado esta fila apuntando a una tarea muerta. Se deriva con `onia-tablero.sh list --status blocked | grep -i 'Publicar el bot'`. (`DESPLEGAR: bot`, con `DESPUES-DE: plataforma` — si el bot sale primero cotiza 890 mientras la caja cobra 750). ⚠️ `DESPLEGAR: bot` publica el CÓDIGO pero **no el texto**: `publicar.sh` preserva `knowledge.json` a propósito, así que el brazo corre además `ONIA_BOT_KNOWLEDGE_FILE=/opt/onia/bot/knowledge.onia.json /opt/onia/bot/webhook-server.sh knowledge`. La causa raíz (que el conocimiento no viajara con el deploy) ya está cerrada en el repo — `deploy-bot.sh` paso 7, gate `conocimiento-viaja-con-el-deploy.test.mjs`. **Verificador:** `npm run precios:vivos` → 0. Re-medido el 2026-09-12 05:50: sigue **exit 1**, nombrando Bs 750 y Bs 1.500 | Es un deploy, y ningún deploy sale sin su `ok` | Que el bot deje de cotizarle a un lead un precio que el checkout no cobra. Es el último 🔴 abierto de esta cola |
+| ~~S17~~ | ✅ **VENCIDO el 2026-09-12 23:23 UTC — el texto YA se publicó y el bot dejó de cotizar los montos muertos.** Medido en el VPS, no deducido: `/opt/onia/bot/knowledge.json` y `knowledge.onia.json` son del **12-sep 06:44 UTC** (idénticos al doc del repo, `ee247780`), la copia que el PROCESO lee (`/tmp/onia-bot/knowledge.json`) tiene **cero** ocurrencias de 750/1.500, `npm run precios:vivos` sale **0** (a las 05:50 salía 1) y el `/health` da `db.ok` con el knowledge cargado sin error. ⚠️ **El campo `version` sigue diciendo `2026-09-02.2`**: `ee247780` corrigió los montos sin subir el sello, así que la versión NO distingue el texto viejo del nuevo — la prueba es el contenido (`precios:vivos`), no el sello. **El próximo que edite el knowledge sube `version` en el MISMO commit.** Lo destapó `bloqueos:vencidos` recién arreglado (en win32 spawneaba `npm` pelado y todos los verificadores `npm run` salían `no-medido` — ítem `851eddff` de Ahora): la fila llevaba ~17 h pidiéndole a Sergio Urcullo un deploy que ya había hecho. **Verificador:** `npm run precios:vivos` → 0 | — | — |
 | S6 | **Proyecto Supabase cloud `Dental-gest` (`kvepqgikokjlacxngkiw`) sigue ACTIVE_HEALTHY** — decidir pausar o borrar. Y si algún día se reactiva `Gesti-Os` (`jafxylfocvvlflpqfsix`), **rotar su `service_role` primero**: estuvo expuesto en los JSON de n8n que se redactaron el 29-ago | Es plata y es borrado de datos | Cerrar la cola del saneamiento de secretos |
 
 ### S9 — el ítem completo, movido de "Ahora" el 2026-08-31
