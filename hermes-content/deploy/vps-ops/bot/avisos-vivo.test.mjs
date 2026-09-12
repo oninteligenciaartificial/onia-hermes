@@ -91,6 +91,68 @@ test("un aviso SALTEADO tambien es rojo: es una persona esperando que nadie aten
   assert.equal(d.veredicto, "roto");
 });
 
+// ---------------------------------------------------------------------------
+// Vigencia del salteo — el log es append-only y NUNCA se rota (51.774 lineas el
+// 2026-09-12). Contar todos los salteos de la historia deja este gate en rojo PARA
+// SIEMPRE por dos lineas del 4-sep, y un rojo que no puede volver a verde deja de
+// mirarse: el dia que el circuito se rompa de verdad, su rojo va a ser identico al
+// rojo de siempre. La cura NO es dejar de contarlos —eso apaga al detector— es
+// preguntar si la causa SIGUE VIVA.
+// ---------------------------------------------------------------------------
+
+test("un salteo por el flag apagado queda CURADO si el circuito volvio a mandar despues", () => {
+  // Medido en produccion el 2026-09-12: los dos `skipped` estan en las lineas 50803 y
+  // 50819 del log, y el primer `sent` en la 50851. O sea el flag se encendio DESPUES y
+  // el circuito ya demostro que manda. Seguir rojo por eso es reportar un fallo viejo
+  // como activo.
+  const lineas = [
+    "[aviso] skipped (cuota_agotada): aviso por Telegram apagado (ONIA_BOT_TG_AVISO)",
+    "[aviso] sent conv=57 (pidio_humano_recepcion): aviso enviado",
+  ];
+  const d = diagnosticar({ circuito: CIRCUITO_SANO, eventos: contarEventos(lineas) });
+  assert.equal(d.eventos.salteados, 1, "el total historico se sigue informando");
+  assert.equal(d.eventos.salteadosVigentes, 0);
+  assert.equal(d.veredicto, "ok");
+});
+
+test("el ORDEN manda: un salteo POSTERIOR al ultimo envio sigue siendo rojo", () => {
+  // La baranda anti-apagon del detector. Si el flag se apaga hoy, el salteo es posterior
+  // al ultimo envio y nada lo desmiente: rojo hasta que el circuito vuelva a mandar.
+  const lineas = [
+    "[aviso] sent conv=57 (pidio_humano_recepcion): aviso enviado",
+    "[aviso] skipped conv=61 (handoff): aviso por Telegram apagado (ONIA_BOT_TG_AVISO)",
+  ];
+  const d = diagnosticar({ circuito: CIRCUITO_SANO, eventos: contarEventos(lineas) });
+  assert.equal(d.eventos.salteadosVigentes, 1);
+  assert.equal(d.veredicto, "roto");
+});
+
+test("un salteo que NO es del flag global no lo cura un envio posterior", () => {
+  // La curacion vale solo para una causa GLOBAL del circuito (el flag apagado apaga TODOS
+  // los avisos, asi que un envio posterior prueba que ya no esta). Un salteo por cualquier
+  // otro motivo es propio de ESE aviso: que otro haya salido despues no dice nada de el.
+  const lineas = [
+    "[aviso] skipped conv=61 (handoff): sin chat para esta conversacion",
+    "[aviso] sent conv=57 (pidio_humano_recepcion): aviso enviado",
+  ];
+  const d = diagnosticar({ circuito: CIRCUITO_SANO, eventos: contarEventos(lineas) });
+  assert.equal(d.eventos.salteadosVigentes, 1);
+  assert.equal(d.veredicto, "roto");
+});
+
+test("el motivo cita lo que dice el log, no inventa un pedido de humano", () => {
+  // El 2026-09-12 este gate firmaba "alguien pidio un humano y nadie se entero" con sus
+  // propios datos refutandolo: los dos salteados eran `cuota_agotada` y
+  // `pregunta_precio_recepcion`, y el UNICO `pidio_humano_recepcion` del log salio bien.
+  // Un instrumento que acusa con una causa falsa manda a arreglar lo que no esta roto.
+  const lineas = ["[aviso] skipped (cuota_agotada): aviso por Telegram apagado (ONIA_BOT_TG_AVISO)"];
+  const d = diagnosticar({ circuito: CIRCUITO_SANO, eventos: contarEventos(lineas) });
+  assert.equal(d.veredicto, "roto");
+  const texto = d.motivos.join(" | ");
+  assert.match(texto, /cuota_agotada/, "el motivo real del log tiene que aparecer");
+  assert.doesNotMatch(texto, /pidio un humano/);
+});
+
 test("avisos enviados con el circuito sano es verde, y cuenta los eventos", () => {
   const lineas = [
     "[aviso] sent conv=57 (handoff): ok",

@@ -116,17 +116,54 @@ export function resolverBotDesplegado(deps = {}) {
 // ---------------------------------------------------------------------------
 
 /**
+ * La UNICA causa de salteo que es global al circuito: con el flag apagado no sale NINGUN
+ * aviso, de ninguna conversacion. Por eso —y solo por eso— un envio posterior la desmiente.
+ * Cualquier otro salteo es propio de su aviso y no lo cura que otro haya salido despues.
+ * La escribe `aviso-telegram.mjs` (`reason: "aviso por Telegram apagado (ONIA_BOT_TG_AVISO)"`).
+ */
+export const CAUSA_GLOBAL_DE_SALTEO = "ONIA_BOT_TG_AVISO";
+
+/** El `(motivo)` con el que el motor pidio el aviso: `[aviso] skipped (cuota_agotada): ...`. */
+function motivoDelAviso(linea) {
+  return /\[aviso\]\s+\w+\s+(?:conv=\d+\s+)?\(([^)]+)\)/.exec(String(linea))?.[1] || "sin motivo en el log";
+}
+
+/**
  * Cuenta los avisos del log por su resultado real. Sólo mira lineas `[aviso]`: el log del
  * webhook mezcla `[n8n]` y una linea por mensaje, y contar de mas inventa avisos.
+ *
+ * Y separa los salteos VIGENTES de los ya curados. El log del webhook es append-only y no
+ * se rota (51.774 lineas el 2026-09-12): contar la historia entera dejaba este gate en rojo
+ * para siempre por dos lineas del 4-sep, anteriores al dia en que se encendio el flag. Un
+ * rojo que no puede volver a verde deja de mirarse, y entonces el rojo de verdad llega
+ * indistinguible del de siempre. La pregunta no es "¿hubo un salteo alguna vez?" sino
+ * "¿la causa sigue viva?".
  */
 export function contarEventos(lineas = []) {
   const avisos = (Array.isArray(lineas) ? lineas : []).filter((l) => String(l).includes("[aviso]"));
   const conEstado = (estado) => avisos.filter((l) => new RegExp(`\\[aviso\\]\\s+${estado}\\b`).test(l)).length;
+
+  // Posicion del ultimo envio exitoso: todo lo anterior a el ya fue desmentido POR EL
+  // CIRCUITO, que volvio a mandar. Se compara por orden en el log, que es el orden real.
+  let ultimoEnvio = -1;
+  avisos.forEach((l, i) => {
+    if (/\[aviso\]\s+sent\b/.test(String(l))) ultimoEnvio = i;
+  });
+
+  const vigentes = [];
+  avisos.forEach((l, i) => {
+    if (!/\[aviso\]\s+skipped\b/.test(String(l))) return;
+    const curado = String(l).includes(CAUSA_GLOBAL_DE_SALTEO) && ultimoEnvio > i;
+    if (!curado) vigentes.push(motivoDelAviso(l));
+  });
+
   return {
     total: avisos.length,
     enviados: conEstado("sent"),
     salteados: conEstado("skipped"),
     fallidos: conEstado("failed"),
+    salteadosVigentes: vigentes.length,
+    motivosVigentes: vigentes,
   };
 }
 
@@ -158,7 +195,18 @@ export function diagnosticar({ circuito, eventos }) {
   // Un aviso que salio mal manda sobre cualquier chequeo de configuracion: es una persona
   // esperando que Sergio le escriba, y el circuito "bien configurado" no la atendio.
   if (ev.fallidos > 0) motivos.push(`${ev.fallidos} aviso(s) FALLIDO(s) en el log`);
-  if (ev.salteados > 0) motivos.push(`${ev.salteados} aviso(s) SALTEADO(s) en el log`);
+  // `?? ev.salteados`: si llega un objeto de eventos sin el campo nuevo, se cae del lado
+  // seguro —cuenta todos— en vez de firmar verde por una propiedad ausente.
+  const salteadosVivos = ev.salteadosVigentes ?? ev.salteados;
+  if (salteadosVivos > 0) {
+    // El motivo se CITA del log. Hasta el 2026-09-12 este gate decia "alguien pidio un
+    // humano" sobre dos salteos que eran `cuota_agotada` y `pregunta_precio_recepcion`:
+    // acusar con una causa inventada manda a arreglar lo que no esta roto.
+    const cuales = (ev.motivosVigentes || []).join(", ");
+    motivos.push(
+      `${salteadosVivos} aviso(s) SALTEADO(s) sin un envio posterior que los desmienta${cuales ? `: ${cuales}` : ""}`,
+    );
+  }
 
   // Prioridad: evidencia de fallo > no haber podido preguntar > verde. Un rojo MEDIDO no lo
   // tapa un eslabon sin medir, y un eslabon sin medir nunca se firma como verde.
@@ -431,7 +479,13 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       console.log(`  ${r?.emite && r?.accionable ? "ok  " : "ROTO"} rama ${kind}`);
     }
   }
-  console.log(`eventos: ${eventos.total} avisos (enviados ${eventos.enviados} · salteados ${eventos.salteados} · fallidos ${eventos.fallidos})`);
+  // Los curados se NOMBRAN aunque no pongan rojo: si no, un verde con salteos adentro se
+  // lee como "nunca paso nada" y nadie puede auditar por que este gate dejo de gritar.
+  const curados = eventos.salteados - (eventos.salteadosVigentes ?? eventos.salteados);
+  const detalleSalteados = `${eventos.salteados}${curados > 0 ? ` (${curados} ya desmentido(s) por un envio posterior)` : ""}`;
+  console.log(
+    `eventos: ${eventos.total} avisos (enviados ${eventos.enviados} · salteados ${detalleSalteados} · fallidos ${eventos.fallidos})`,
+  );
   if (d.motivos.length) console.log("motivos:\n  - " + d.motivos.join("\n  - "));
   if (ejemplo && d.veredicto === "ok") console.log(`\nlo que recibiria Sergio:\n${ejemplo.replace(/^/gm, "  ")}`);
 
@@ -442,7 +496,11 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   // es ir a buscar a esas personas, no arreglar el circuito. Medido el 2026-09-12, que es la
   // primera vez que este gate pudo ver sus propios avisos salteados.
   const circuitoSano = circuito && Object.values(circuito).every((v) => v === true);
-  const noSalieron = eventos.salteados + eventos.fallidos;
+  const noSalieron = (eventos.salteadosVigentes ?? eventos.salteados) + eventos.fallidos;
+  // El motivo se CITA, no se supone. El 2026-09-12 esta linea decia "alguien pidio un humano
+  // y nadie se entero" sobre dos salteos que el propio log desmentia (`cuota_agotada` y
+  // `pregunta_precio_recepcion`), mientras el unico `pidio_humano_recepcion` habia salido bien.
+  const cuales = (eventos.motivosVigentes || []).join(", ");
   const lectura =
     d.veredicto === "ok"
       ? eventos.enviados === 0
@@ -450,7 +508,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
         : "circuito sano y avisando"
       : d.veredicto === "roto"
         ? circuitoSano
-          ? `el circuito responde, pero ${noSalieron} aviso(s) NO salieron: alguien pidio un humano y nadie se entero`
+          ? `el circuito responde, pero ${noSalieron} aviso(s) NO salieron${cuales ? ` (${cuales})` : ""} y nada posterior lo desmiente`
           : "EL PROXIMO QUE PIDA UN HUMANO SE PIERDE"
         : "no se pudo medir contra produccion";
   console.log(`\nVEREDICTO: ${d.veredicto} · avisos enviados ${eventos.enviados} — ${lectura}`);

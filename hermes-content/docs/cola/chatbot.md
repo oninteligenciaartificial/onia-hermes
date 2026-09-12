@@ -357,10 +357,23 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       ver el comentario de `webhook-server.test.mjs:762-764` sobre los dos callbacks asíncronos.
       **Un aviso que no salió y no dice a quién no se puede reparar.**
 
-      **Además el gate queda rojo para siempre por esto**, porque el log es append-only y las
+      ~~**Además el gate queda rojo para siempre por esto**, porque el log es append-only y las
       líneas `[aviso]` **no llevan fecha** (las de mensaje sí): no hay forma de acotar
-      «salteados recientes». Las dos cosas se arreglan en el mismo lugar —estampar fecha y
-      `conv` en la línea del aviso— y recién entonces el rojo puede volver a verde.
+      «salteados recientes».~~ ⚠️ **Esa hipótesis era falsa y ya está cerrada (2026-09-12).**
+      Sí hay forma, y no hace falta la fecha: el log **está en orden**, así que alcanza con
+      preguntar si hubo un `sent` **posterior** al salteo. Un salteo por el flag apagado es la
+      única causa **global** del circuito (apaga TODOS los avisos), así que un envío posterior
+      la desmiente; cualquier otro motivo de salteo es propio de su aviso y **no** se cura así.
+      `contarEventos` ahora devuelve `salteadosVigentes` y el gate volvió a verde **sin dejar de
+      ver**: la línea de eventos nombra los curados (`salteados 2 (2 ya desmentido(s) por un
+      envío posterior)`), y si el flag se apaga hoy el salteo queda después del último envío y
+      vuelve a rojo. Probado por mutación: apagar la curación rompe 5 tests.
+
+      **Y el gate acusaba con una causa que sus propios datos refutan:** imprimía *"alguien pidió
+      un humano y nadie se enteró"* cuando el único `pidio_humano_recepcion` del log **sí salió**;
+      los dos salteados son `cuota_agotada` y `pregunta_precio_recepcion`. Ahora el motivo se
+      **cita** del log. (`cuota_agotada` igual deriva a un humano — `bot-engine.mjs:563` —, así
+      que la deuda con esas personas sigue abierta: es lo único que queda de este ítem.)
 
 - [x] ✅ **CERRADO el 2026-09-12: el conocimiento del bot no viajaba con el deploy, y el remedio
       a mano se deshacía solo en el deploy siguiente.** Dos mitades que se tapaban entre sí.
