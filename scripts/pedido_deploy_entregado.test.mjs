@@ -7,7 +7,8 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { archivosDelDryRun, archivosDelDryRunBot, archivosNombrados, secoDeProduccion, barrerPedidos, buildQueCorre, clasificarPedido, cuerpoCortoArchivos, inmediblesSinDeclarar, publicariaPorCopia, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
 import { DESTINOS } from './kanban/publicar-aprobado.mjs';
 
@@ -848,4 +849,55 @@ test('un control que lee SOLO el cuerpo no manda a comentar', () => {
     // si no queda el bueno escrito.
     assert.match(bloque, /rehac(e|iendo)/i, `el remedio de ${acc} no dice como se cura`);
   }
+});
+
+// ── un publicador que CONTESTA y sale !=0 no es «no pude preguntar» ────────────────────
+//
+// Medido el 2026-09-12 desde el nodo de casa, con el unico pedido de deploy vivo (t_053da636,
+// siat): `publicar.sh --dry-run` imprimio su recuento entero —«hay que publicar: 2 arreglo(s)»
+// con los dos nombres— y despues salio 1, porque hay una corrida de Fase 1 en curso y el
+// publicador se niega a pisar codigo bajo un runner vivo. Esa negativa es una condicion
+// OPERATIVA del destino, no un fallo de la medicion: el recuento ya estaba dicho.
+//
+// `sh()` devuelve null ante cualquier status !=0, asi que el gate tiro esa salida entera y
+// firmo «NO MEDIDO: no pude correr el publicador en seco (¿SSH al VPS?)» — mandando a
+// diagnosticar una red que andaba perfecto. El archivo se documenta a si mismo diciendo que
+// `null` significa «no llegue a preguntar»; con exit!=0 violaba su propio contrato.
+//
+// La distincion que se prueba: corrio y dijo algo -> se lee; no se pudo ejecutar -> null.
+test('siat: un publicador que imprime su recuento y sale 1 SE LEE, no es NO MEDIDO', () => {
+  const guion = `${tmpdir()}/zz-qa-pedido-${process.pid}-${Date.now()}.sh`;
+  writeFileSync(guion, [
+    '#!/bin/sh',
+    'echo "hay que publicar: 2 arreglo(s) que el emisor del VPS no tiene"',
+    'echo "Cambia:"',
+    'echo "   test/fase1-runner.test.mjs"',
+    'echo "   run-fase1-volumen.sh"',
+    'echo ""',
+    'echo "ERR: hay una corrida de Fase 1 EN CURSO. No se pisa el codigo bajo un runner vivo"',
+    'exit 1',
+  ].join('\n') + '\n', { mode: 0o755 });
+  try {
+    const salida = secoDeProduccion(guion);
+    assert.ok(salida !== null, 'un publicador que ya imprimio su recuento no es «no llegue a preguntar»');
+    assert.deepEqual(archivosDelDryRun(salida), ['test/fase1-runner.test.mjs', 'run-fase1-volumen.sh']);
+  } finally {
+    rmSync(guion, { force: true });
+  }
+});
+
+// La simetrica, que es la que sostiene el tri-estado: si NO se pudo ejecutar, sigue siendo
+// null. Sin este caso, «devolver siempre la stdout» pasaria el test de arriba convirtiendo
+// todo fallo en `''`, que se lee como «el publicador no dijo nada» = una respuesta.
+test('siat: un publicador que NO existe sigue siendo null (no medido)', () => {
+  assert.equal(secoDeProduccion(`${tmpdir()}/zz-qa-no-existe-${process.pid}.sh`), null);
+});
+
+// Y la linea `ERR:` no es un archivo aunque el publicador no deje la linea en blanco de por
+// medio: los archivos vienen SANGRADOS y los mensajes arrancan en la columna 0. Sin este
+// corte, el gate le exige al pedido que nombre «ERR: hay una corrida de Fase 1 EN CURSO».
+test('siat: un mensaje pegado a la lista no se cuenta como archivo', () => {
+  const salida = ['hay que publicar: 1 arreglo(s)', 'Cambia:', '   run-fase1-pdv1.sh',
+    'ERR: hay una corrida de Fase 1 EN CURSO. No se pisa el codigo bajo un runner vivo'].join('\n');
+  assert.deepEqual(archivosDelDryRun(salida), ['run-fase1-pdv1.sh']);
 });
