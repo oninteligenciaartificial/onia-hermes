@@ -344,7 +344,43 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       lugares opuestos —el circuito falla, o el circuito anda y hubo avisos que no salieron— y
       hasta hoy se leían igual.
 
-- [ ] 🔴 **Dos personas pidieron un humano, el aviso NO salió, y no se puede saber quiénes son.**
+- [x] 🔴 **~~Dos personas pidieron un humano~~ — NO eran personas: las dos son sondas nuestras,
+      y el gate no sabía distinguirlas.** Cerrado 2026-09-12. Las dos hipótesis de este ítem
+      —«no se puede saber quiénes son» y «hay una deuda con dos personas»— eran **falsas**, y se
+      refutaron con el log vivo más la base de Chatwoot:
+
+      | conv | inbox | contacto | evento |
+      |---|---|---|---|
+      | 53 | 7 · ZZ QA Clinica Chatbot | `wandering-water-74` | skipped |
+      | 55 | 7 · ZZ QA Clinica Chatbot | `dry-cherry-292` | skipped |
+      | 57 | 7 · ZZ QA Clinica Chatbot | `zz-qa-deploy-2026-09-04-1438` | sent |
+      | 11 | 5 · Onia WhatsApp | **Sergio** (+59171654992) | sent ×2 |
+
+      **Sí se podía saber quiénes eran**, y con el método que este mismo archivo ya usaba para
+      curar salteos: el log está **en orden**, así que la línea de webhook inmediatamente
+      anterior al `[aviso]` es la suya y **sí** trae `conv=`. Es la segunda vez que este ítem
+      declaraba algo imposible y era falso.
+
+      🔴 **Lo que destapó, que era el bug de verdad:** los **cinco** eventos que ponían al gate
+      en verde son **tres del banco de pruebas y dos de Sergio Urcullo probando su propio bot**.
+      **Cero desconocidos** — y `avisos-vivo.mjs` firmaba *«circuito sano y avisando»*. La frase
+      es cierta sobre el circuito y falsa sobre lo que este carril tiene que saber, porque su
+      definición de hecho es *"que un **desconocido** escriba"*. Es la misma familia que el `0`
+      que no distinguía «roto» de «sin eventos», que es por lo que ese archivo existe.
+
+      **Arreglado**: `conversacionesDeAvisos` atribuye cada aviso a su conversación (de la
+      propia línea o de la vecina, nunca inventa), `clasificarEventos` separa banco de pruebas
+      de leads **por conversación, no por evento**, y es tri-estado (sin base, nadie es «lead
+      real»). El gate ahora imprime `de quien: leads 1 (conv 11 · Sergio) · banco de pruebas 3`.
+      **No se pone rojo por no haber leads** —no hay tráfico, y un rojo incurable se deja de
+      mirar—: se pone honesto. Probado por mutación: sacar la atribución, la deduplicación o el
+      `-B 1` del lector rompe un test cada uno (ese último quedaba **verde** hasta que se le
+      escribió su gate).
+
+      ⚠️ **Sigue abierto lo que esto reveló:** el circuito de avisos **nunca se probó con una
+      persona de afuera**. No es un bug del circuito; es que todavía no llegó ninguna.
+
+      <details><summary>Lo que decía este ítem antes de medirlo (histórico)</summary>
       Lo destapó el ítem de arriba: las dos líneas son `[aviso] skipped (cuota_agotada)` y
       `[aviso] skipped (pregunta_precio_recepcion)`, las dos con el motivo *"aviso por Telegram
       apagado (ONIA_BOT_TG_AVISO)"* — o sea que el bot decidió avisar y la variable estaba en
@@ -374,6 +410,8 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       los dos salteados son `cuota_agotada` y `pregunta_precio_recepcion`. Ahora el motivo se
       **cita** del log. (`cuota_agotada` igual deriva a un humano — `bot-engine.mjs:563` —, así
       que la deuda con esas personas sigue abierta: es lo único que queda de este ítem.)
+
+      </details>
 
 - [ ] 🟡 **El log del bot marca `rama=MUDO … motivo=el motor no produjo respuesta` en eventos
       que se repiten solos — el MISMO texto que dejaría el bug real.** Medido el 2026-09-12
