@@ -279,13 +279,18 @@ export function formatearTraza(traza = {}) {
     motivo = cuerpo.reason;
   } else if (enviados.length === 0) {
     rama = "MUDO";
-    // El primer aviso del motor explica el silencio mejor que cualquier texto nuestro. Si no
-    // hay, la etapa lo dice: `handoff_humano` es una barrera y significa "no habla nunca más".
+    // El primer aviso del motor explica el silencio mejor que cualquier texto nuestro. Si no hay,
+    // manda la razón MÁS PRECISA: sin mensaje del prospecto no había nada que contestar, y eso
+    // vale cualquiera sea la etapa. Recién después la etapa: `handoff_humano` es una barrera y
+    // significa "no habla nunca más" — pero eso explica un silencio ante ALGUIEN QUE HABLÓ, que
+    // es justo el caso que hay que poder distinguir. El genérico queda para el bug de verdad.
     motivo =
       avisos[0] ||
-      (cuerpo.stageAfter === "handoff_humano"
-        ? "etapa handoff_humano: el bot ya no vuelve a hablar en esta conversacion"
-        : "el motor no produjo respuesta");
+      (traza.eventoSinMensaje
+        ? `evento sin mensaje (${unaSolaLinea(traza.eventoSinMensaje, 40)}): no hay nada que contestar`
+        : cuerpo.stageAfter === "handoff_humano"
+          ? "etapa handoff_humano: el bot ya no vuelve a hablar en esta conversacion"
+          : "el motor no produjo respuesta");
   } else if (publicados === 0) {
     rama = "NO_ENTREGADO";
     motivo = avisos[0] || enviados[0]?.reason || "chatwoot no acepto la respuesta";
@@ -296,7 +301,10 @@ export function formatearTraza(traza = {}) {
   const campos = [
     `[onia-webhook] ${traza.iso || new Date().toISOString()}`,
     `conv=${traza.conversacion || "?"}`,
-    `msg=${traza.mensaje || "?"}`,
+    // `-` es "no hay mensaje" y `?` es "no sé cuál": en un evento sin mensaje el payload ES la
+    // conversación, así que `traza.mensaje` trae su id y la línea afirmaba un mensaje inexistente
+    // (`msg=49 conv=49`) que manda a buscar a la base algo que no está.
+    `msg=${traza.eventoSinMensaje ? "-" : traza.mensaje || "?"}`,
     `estado=${traza.estado ?? "?"}`,
     `rama=${rama}`,
   ];
@@ -398,6 +406,17 @@ async function procesarWebhook(request, deps, datos) {
   if (parsed.meta?.conversationId) datos.conversacion = String(parsed.meta.conversationId);
   if (parsed.meta?.messageId) datos.mensaje = String(parsed.meta.messageId);
   if (parsed.turn?.text) datos.entrada = parsed.turn.text;
+  // Un turno que entra SIN mensaje del prospecto no tiene nada que contestar: su silencio es
+  // correcto. Hoy es sólo `conversation_resolved`, que nada más desarma el takeover. Se anota acá
+  // —donde todavía se ve el evento— porque abajo la traza no lo puede deducir, y sin esto su línea
+  // sale IDÉNTICA a la del bug que este log existe para cazar ("una persona escribió y el bot se
+  // calló"): medido el 2026-09-12, 9 de las últimas 24 `rama=MUDO` eran esto.
+  // `messageId` vacío es la marca estructural, no una lista de eventos: las tres ramas que traen
+  // mensaje lo EXIGEN (sin él, el parser devuelve el skip `sin_message_id`), así que una persona
+  // no puede caer acá — y un evento sin mensaje que se agregue mañana queda nombrado solo.
+  if (!parsed.skip && !parsed.meta?.messageId) {
+    datos.eventoSinMensaje = String(payload?.event || "evento_desconocido");
+  }
   if (parsed.skip) {
     // Ojo: NO se consume el dedup en un skip. Marcar como "visto" un mensaje que nunca se
     // procesó haría que una reentrega legítima se descarte.

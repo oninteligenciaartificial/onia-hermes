@@ -97,6 +97,37 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       además (fase 2): avisos al 70/90/100 % del cupo con la cuenta "recargar vs subir" y la
       recarga de recordatorios (la de conversaciones ya existe).
 
+      ⚠️ **La cuenta "recargar vs subir" NO SE PUEDE ESCRIBIR TODAVÍA, y al medirlo apareció un
+      defecto vivo que ya se arregló** (2026-09-12, `310bae6` en `onia-platform`, rama
+      `claude/chatbots-platform-review-0d1d09` — pusheado, falta mergear y desplegar).
+      **"Subir" no es una opción del cupo del chatbot: no existe un nivel con más cupo.**
+      Medido: `cuotaDe` (`lib/chatbot/cupo.ts`) devuelve `WHATSAPP_ADDON.includedConversations`
+      = **500** sin mirar el plan, `PlanLimits` (`lib/plan-catalogo.ts`) no declara un solo
+      campo de conversaciones, y `whatsappIncluded` de la escalera C decide si el chatbot viene
+      pagado **adentro** del plan — no cuántas conversaciones trae. Los **seis** planes dan 500.
+
+      **Lo que el producto le decía al cliente**, en los tres textos del cupo y en un botón
+      "Ver niveles": *"o pasar a un nivel con más cupo"*. Sale en el peor momento —cupo agotado,
+      el asistente ya derivando a una persona— y manda a gastar: un cliente en Básico (Bs 320)
+      que obedece y sube a Full (Bs 1.290) paga **Bs 970 más por mes por exactamente el mismo
+      cupo**. La salida real es la recarga, que el mismo texto ya ofrecía al lado.
+
+      **Arreglado condicionando la promesa, no borrándola** (`hayNivelConMasCupo()`): el día que
+      un plan traiga su propio cupo, los textos y el botón vuelven solos. El botón fue en la
+      misma vuelta a propósito — arreglar el párrafo y dejar el CTA deja la misma salida
+      inexistente invitando. Gate `lib/chatbot/cupo-no-ofrece-un-nivel-que-no-existe.test.ts`:
+      cruza el **catálogo** (la capacidad) contra el **texto emitido** (la promesa), dos fuentes
+      distintas; deriva los planes del disco y las ramas ejercitando el módulo; validado por
+      mutación en el aviso del corte. Gates en el VPS: `tsc` limpio, **4.737 tests verdes**.
+      De paso, `cupo.test.ts` exigía la palabra "nivel" y con eso **defendía la promesa falsa**:
+      re-anclado a la salida que sí existe, con el motivo escrito al lado.
+
+      **Lo que esto deja decidido para la fase 2:** la cuenta en pantalla sólo puede comparar
+      **recarga vs recarga** (Bs 190 / 200 conversaciones, caducan con el mes), no "recargar vs
+      subir". Para que "subir" sea verdad hace falta que la escalera C le dé cupo de
+      conversaciones DISTINTO a cada plan — y eso es ratificar montos, que la propia letra chica
+      de arriba marca como pendiente de Sergio Urcullo.
+
       Historia: **ESCALERA C ELEGIDA por Sergio Urcullo (11-sep): 4 escalones con cupos estilo
       Higgsfield.** Su decisión,
       textual: *"la C pero que tenga restricciones y que tengan que estar pagando si quieren

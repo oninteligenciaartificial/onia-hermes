@@ -617,6 +617,65 @@ test("TRAZA: el motor proceso el mensaje y NO produjo respuesta -> rama MUDO con
   assert.match(linea, /handoff_humano/, "la etapa ES el motivo: en handoff_humano el bot no vuelve a hablar");
 });
 
+test("TRAZA: un evento SIN MENSAJE no puede dejar la MISMA linea que una persona sin respuesta", async () => {
+  // Medido el 2026-09-12 sobre el log vivo (51.774 lineas): de las 24 `rama=MUDO`, las ultimas 9
+  // eran todas `conv=49` —una conversacion de sonda, no una persona— repitiendose cada 30-60 min
+  // con `motivo=el motor no produjo respuesta`, que es EXACTAMENTE el motivo que dejaria el bug
+  // por el que este log existe: "una persona escribio y el bot se callo". Indistinguibles.
+  //
+  // La causa, reproducida con el parser real: `conversation_resolved` entra sin `messageId` y sin
+  // texto (solo desarma el takeover), corre el turno y no manda nada. Cae al motivo por DEFECTO,
+  // el que se escribe cuando ninguna rama supo decir algo mas preciso.
+  //
+  // Por eso el pipeline va ENTERO y no se le pasa una traza a mano: la propiedad depende de lo que
+  // el PARSER entrega (un `messageId` vacio), no de como se formatea despues.
+  const resuelto = JSON.stringify({ event: "conversation_resolved", id: 49, status: "resolved", timestamp: 1757661326 });
+  const evento = await handleChatwootWebhook(pedido(resuelto, sign(resuelto)), {
+    config: CONFIG,
+    runChatwootTurn: motorMock({ sent: [], stageBefore: "esperando_horario", stageAfter: "esperando_horario" }),
+    nowMs: NOW_MS,
+  });
+  const lineaEvento = formatearTraza(evento.traza);
+
+  // La persona: MISMA rama, MISMO cuerpo vacio, misma etapa. Lo unico distinto es que hubo un
+  // mensaje del otro lado — y es lo unico que el log tiene que poder distinguir.
+  const persona = mensajeEntrante({ id: 9042, content: "hola, sigo esperando", conversation: { id: 49 } });
+  const mudo = await handleChatwootWebhook(pedido(persona, sign(persona)), {
+    config: CONFIG,
+    runChatwootTurn: motorMock({ sent: [], stageBefore: "esperando_horario", stageAfter: "esperando_horario" }),
+    nowMs: NOW_MS,
+  });
+  const lineaPersona = formatearTraza(mudo.traza);
+
+  assert.match(lineaEvento, /rama=MUDO/, "la rama sigue siendo MUDO: el turno corrio y no mando nada");
+  assert.match(lineaPersona, /rama=MUDO/);
+
+  const motivoDe = (linea) => (linea.match(/motivo=(.*?)(?: entrada=|$)/) || [])[1];
+  assert.notEqual(
+    motivoDe(lineaEvento),
+    motivoDe(lineaPersona),
+    `si los dos motivos son iguales el bug real es indistinguible del ruido: ${motivoDe(lineaEvento)}`,
+  );
+  assert.match(
+    lineaEvento,
+    /conversation_resolved/,
+    "el motivo tiene que NOMBRAR el evento, como ya hacen sus hermanos (mensaje_no_entrante:outgoing, update_sin_botones)",
+  );
+  assert.match(
+    lineaPersona,
+    /motivo=el motor no produjo respuesta/,
+    "el bug real CONSERVA su motivo: cerrar el ruido no puede apagar la senal",
+  );
+
+  // La misma linea mentia en un segundo campo: `msg=49 conv=49`. No es un id de mensaje — es el de
+  // la CONVERSACION repetido, porque el payload de `conversation_resolved` ES la conversacion y
+  // `meta.messageId` viene vacio, asi que no lo pisa. Un id inventado manda a buscar a la base un
+  // mensaje que no existe. `-` es "no hay"; `?` sigue siendo "no se".
+  assert.match(lineaEvento, /msg=-/, "sin mensaje, `msg` no puede afirmar un id");
+  assert.doesNotMatch(lineaEvento, /msg=49/, "repetir el id de conversacion en `msg` es un dato falso");
+  assert.match(lineaPersona, /msg=9042/, "cuando SI hay mensaje, su id tiene que seguir viajando");
+});
+
 test("TRAZA: el motor respondio y Chatwoot lo RECHAZO -> NO_ENTREGADO, no 'respondio'", () => {
   // Modo de falla real: en agosto el bot paso CUATRO DIAS calculando respuestas que Chatwoot
   // nunca recibio. `sent` tiene texto, `posted` es false. Si esto se loguea como "respondio",

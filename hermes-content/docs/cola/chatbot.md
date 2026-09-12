@@ -413,35 +413,50 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
       </details>
 
-- [ ] 🟡 **El log del bot marca `rama=MUDO … motivo=el motor no produjo respuesta` en eventos
-      que se repiten solos — el MISMO texto que dejaría el bug real.** Medido el 2026-09-12
-      04:00 La Paz sobre el log vivo (51.774 líneas): hay **24** líneas `rama=MUDO`, y las
-      **últimas 9 son todas `conv=49`**, cada ~30-60 min (02:47, 03:15, 03:45, 03:46, 04:15,
-      05:19, 06:14, 07:15 UTC), siempre en `etapa=esperando_horario->esperando_horario`,
-      siempre sin un solo mensaje enviado y con el motivo genérico.
+- [x] ✅ **CERRADO el 2026-09-12: el log del bot marcaba `rama=MUDO … motivo=el motor no produjo
+      respuesta` en eventos sin mensaje — el MISMO texto, carácter por carácter, que dejaría el
+      bug que este log existe para cazar.** (Commiteado; **NO desplegado** — el bot vivo corre
+      `/tmp/onia-bot/`. Viaja con el pedido `t_4f08f5d1`, que ya esperaba el `ok`.)
 
-      **Por qué importa aunque no sea un bug:** ese motivo es exactamente el que dejaría *"una
-      persona escribió y el bot se calló"*, que es el fallo que costó una semana y por el que
-      existe este log. Si el bot enmudece mañana ante un lead real, su línea va a ser
-      **indistinguible** de estas 9. Las ramas que YA distinguen bien están al lado y lo
-      demuestran: `motivo=mensaje_no_entrante:outgoing`, `motivo=update_sin_botones`,
-      `motivo=etapa handoff_humano: el bot ya no vuelve a hablar en esta conversacion`.
+      **La pregunta que el ítem dejó abierta, contestada: es un evento SIN MENSAJE, no una
+      persona.** No se dedujo — se reprodujo con el parser y el pipeline reales
+      (`conversation_resolved` sobre `conv=49`), y la línea salió idéntica a la del log vivo:
 
-      **Lo que NO está medido, y es lo primero que hay que mirar:** en estas 9 líneas
-      `msg` es **igual** al id de conversación (`conv=49 msg=49`), mientras en las líneas
-      normales es un id de mensaje real (`msg=1048`). Eso apunta a un evento **sin mensaje**
-      (un `conversation_updated`), no a una persona escribiendo — pero **no lo verifiqué**, y
-      la diferencia decide el arreglo: si es un evento sin mensaje, el motivo tiene que
-      nombrarlo (como ya hacen sus hermanos); si es una persona, es el bug abierto.
-
-      **Dónde se arregla:** `hermes-content/deploy/vps-ops/bot/webhook-server.mjs` línea 288 —
-      ahí está el `: "el motor no produjo respuesta"`, que es el motivo por DEFECTO: se escribe
-      cuando ninguna rama supo decir algo más preciso.
-
-      **Reproducción (30 s):**
       ```
-      /root/bin/docker exec onia-center sh -c "grep 'rama=MUDO' /tmp/onia-bot-webhook.log | tail -10"
+      conv=49 msg=49 estado=200 rama=MUDO etapa=esperando_horario->esperando_horario enviados=0/0 motivo=el motor no produjo respuesta
       ```
+
+      `fromConversationResolved` (`chatwoot-adapter.mjs`) devuelve `meta.messageId: ""` y
+      `text: ""` — el turno sólo desarma el takeover. Con `messageId` vacío el servidor no pisa
+      `datos.mensaje`, que queda en `payload.id`, y como en ese evento **el payload ES la
+      conversación**, `msg` terminaba repitiendo el id de la charla. Y `conv=49` no es nadie:
+      es `Sonda QA carril chatbot` (inbox 4, `status=resolved`), cuyo `updated_at` en la base
+      —`2026-09-12 07:15:26`— da al segundo con la última línea `MUDO`.
+
+      **Dos campos mentían en la misma línea**, y los dos se arreglaron en `webhook-server.mjs`:
+      - el **motivo** ahora nombra el evento, como ya hacían sus hermanos:
+        `motivo=evento sin mensaje (conversation_resolved): no hay nada que contestar`;
+      - **`msg=-`** en vez de un id inventado (`-` es "no hay", `?` sigue siendo "no sé").
+
+      La marca es **estructural, no una lista de eventos**: `!parsed.meta?.messageId`. Las tres
+      ramas que traen mensaje lo EXIGEN (sin él el parser devuelve el skip `sin_message_id`), así
+      que una persona no puede caer ahí — y el evento sin mensaje que se agregue mañana queda
+      nombrado solo, sin tocar nada.
+
+      **Lo que NO se tocó, a propósito: el bug real conserva su motivo.** Una persona que escribe
+      y no obtiene respuesta sigue dejando `motivo=el motor no produjo respuesta`. El test lo
+      afirma: cerrar el ruido no puede apagar la señal.
+
+      **Test en rojo primero, por el motivo correcto** (`notStrictEqual` con los dos motivos en
+      `el motor no produjo respuesta`): corre el pipeline ENTERO con los dos payloads —el evento y
+      la persona— y exige que sus motivos **difieran**. No se le pasa una traza a mano porque la
+      propiedad depende de lo que entrega el PARSER, no del formateo. Validado por mutación en
+      los dos arreglos (esquive de la asignación y del campo `msg`): rojo las dos veces.
+      `npm run test:bot` → **947/947**.
+
+      **Queda anotado, sin abrir frente:** algo vuelve a resolver la conv 49 cada 30-60 min. Es
+      ruido de una sonda nuestra, no del producto, y ahora el log lo dice con todas las letras —
+      que era lo que faltaba para poder mirarlo sin confundirlo con un lead perdido.
 
 - [x] ✅ **CERRADO el 2026-09-12: el conocimiento del bot no viajaba con el deploy, y el remedio
       a mano se deshacía solo en el deploy siguiente.** Dos mitades que se tapaban entre sí.
