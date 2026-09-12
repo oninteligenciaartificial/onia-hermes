@@ -36,7 +36,7 @@
 
 import { execFileSync, spawnSync } from "node:child_process";
 import net from "node:net";
-import { existsSync, mkdtempSync, rmSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -329,14 +329,46 @@ export async function motorProduceAviso(dir) {
 }
 
 /**
- * El log del proceso vivo. El `logs` de `webhook-server.sh` es un `docker exec` contra el
- * contenedor, asi que sirve igual desde la copia traida del VPS: en nodo-casa `docker` es un
- * shim que delega por SSH, o sea que el log sale de produccion en las dos maquinas.
+ * La ruta del log DENTRO del contenedor, derivada del propio `webhook-server.sh`. Se DERIVA
+ * y no se escribe aca: el dueño de esa ruta es el script, y una copia mia se desincroniza
+ * sin que nada se ponga rojo. Si la linea deja de existir devuelve `null`, nunca una ruta
+ * inventada que leeria vacio para siempre.
  */
-function lineasDelLog(dir) {
+function archivoDeLog(dir) {
+  try {
+    return /^LOGFILE="([^"]+)"/m.exec(readFileSync(join(dir, "webhook-server.sh"), "utf8"))?.[1] || null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Las lineas de AVISO del log del proceso vivo.
+ *
+ * Por que NO usa `webhook-server.sh logs`, que era lo natural y es lo que hacia: ese
+ * subcomando es `tail -n ${2:-50}`, o sea que llamarlo sin argumento mira 50 lineas y nada
+ * mas. Medido el 2026-09-12 contra produccion: el log vivo pesaba 2,7 MB con CINCO lineas
+ * `[aviso]` entre cientos por mensaje, y este gate informaba `eventos: 0 avisos — circuito
+ * sano, sin eventos reales todavia` teniendo DOS avisos salteados adentro, que son dos
+ * personas que pidieron un humano y a Sergio Urcullo nunca le llego nada. `diagnosticar` ya
+ * sabia ponerse rojo con un salteado: la ventana le tapaba la evidencia.
+ *
+ * Y pedir el log ENTERO tampoco alcanza, que fue el primer arreglo y salia verde igual:
+ * `execFileSync` corta en 1 MB por defecto, asi que 2,7 MB devuelven `null` y el gate vuelve
+ * a decir 0, ahora por el otro lado. Por eso el filtro va DONDE VIVE EL LOG: la salida queda
+ * acotada por construccion y no tiene techo que alcanzar cuando el log crezca. `docker` es el
+ * mismo shim que usa el resto del archivo, asi que se sigue midiendo produccion desde las dos
+ * maquinas.
+ */
+export function lineasDelLog(dir) {
   if (!dir) return [];
-  const out = sh("bash", [join(dir, "webhook-server.sh"), "logs"], 30000);
-  return out ? out.split("\n") : [];
+  const archivo = archivoDeLog(dir);
+  if (!archivo) return [];
+  // El `|| true` es para que un log SIN avisos no se lea como error: `grep` sale 1 cuando no
+  // encuentra nada, y `sh()` convierte cualquier salida distinta de 0 en `null`.
+  const cmd = `grep -F '[aviso]' ${archivo} 2>/dev/null || true`;
+  const out = sh("docker", ["exec", CONTENEDOR, "sh", "-c", cmd], 30000);
+  return out ? out.split("\n").filter(Boolean) : [];
 }
 
 export async function medir() {
@@ -404,13 +436,22 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   if (ejemplo && d.veredicto === "ok") console.log(`\nlo que recibiria Sergio:\n${ejemplo.replace(/^/gm, "  ")}`);
 
   // La linea que le sirve al objetivo del carril: dice el numero Y como leerlo.
+  // Un rojo tiene DOS causas que se arreglan en lugares opuestos y hasta hoy se leian igual.
+  // Si el circuito contesta que si a las cuatro preguntas, "el proximo se pierde" es una
+  // afirmacion FALSA sobre el futuro: lo que se perdio ya se perdio, y lo que queda por hacer
+  // es ir a buscar a esas personas, no arreglar el circuito. Medido el 2026-09-12, que es la
+  // primera vez que este gate pudo ver sus propios avisos salteados.
+  const circuitoSano = circuito && Object.values(circuito).every((v) => v === true);
+  const noSalieron = eventos.salteados + eventos.fallidos;
   const lectura =
     d.veredicto === "ok"
       ? eventos.enviados === 0
         ? "circuito sano, sin eventos reales todavia"
         : "circuito sano y avisando"
       : d.veredicto === "roto"
-        ? "EL PROXIMO QUE PIDA UN HUMANO SE PIERDE"
+        ? circuitoSano
+          ? `el circuito responde, pero ${noSalieron} aviso(s) NO salieron: alguien pidio un humano y nadie se entero`
+          : "EL PROXIMO QUE PIDA UN HUMANO SE PIERDE"
         : "no se pudo medir contra produccion";
   console.log(`\nVEREDICTO: ${d.veredicto} · avisos enviados ${eventos.enviados} — ${lectura}`);
 

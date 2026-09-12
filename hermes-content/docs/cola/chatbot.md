@@ -305,12 +305,103 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       `ONIA_BOT_KNOWLEDGE_FILE=/opt/onia/bot/knowledge.onia.json /opt/onia/bot/webhook-server.sh knowledge`.
       Va `DESPUES-DE: plataforma`: si el bot sale primero cotiza 890 mientras la caja cobra 750.
 
-      **Lo que queda como próximo ítem** (no se hizo acá para no abrir dos frentes): que el
-      publicador del bot **lleve el conocimiento**, para que «se publica a mano» deje de ser la
-      causa raíz — es la misma que dejó el knowledge en agosto sin precios. Toca
-      `hermes-content/deploy/vps-ops/bot/publicar.sh`, que es infraestructura compartida con
-      `onia-cola` (gate `test:publicadores`, desplegado por `sincronizar.sh`): se coordina, no se
-      toca de costado.
+      **Su causa raíz ya está cerrada en el repo** — ítem de abajo, `deploy-bot.sh` +
+      `webhook-server.sh`. No tocó `publicar.sh` (el compartido con `onia-cola`): el agujero
+      estaba un nivel más adentro. Este ítem sigue abierto igual porque lo que falta es
+      **publicar**, y eso es el `ok` de Sergio Urcullo.
+
+- [x] ✅ **CERRADO el 2026-09-12: el gate del AVISO miraba 50 líneas de un log de 2,7 MB, y por
+      eso firmaba «circuito sano, sin eventos reales todavía» con DOS avisos salteados adentro.**
+
+      **Lo medido, en este orden.** `npm run avisos:vivo` imprimía `eventos: 0 avisos
+      (enviados 0 · salteados 0 · fallidos 0)` y `VEREDICTO: ok`. El log vivo, contado aparte:
+      `docker exec onia-center grep -c '\[aviso\]' /tmp/onia-bot-webhook.log` → **5** (3 `sent`,
+      2 `skipped`). El gate y el log del mismo bot decían cosas distintas, así que el
+      instrumento era el sospechoso, no el producto.
+
+      **El núcleo estaba sano.** `diagnosticar` YA se pone rojo con un salteado (`if
+      (ev.salteados > 0)`), y hay un test que lo prueba desde el 4-sep. El agujero estaba en el
+      **lector**, que no probaba nadie: `webhook-server.sh logs` es `tail -n ${2:-50}` y
+      `lineasDelLog` lo llamaba **sin ese argumento**. Los avisos son raros por definición —5
+      entre cientos de líneas por mensaje— así que caían **siempre** fuera de la ventana. Todos
+      los tests del archivo le pasaban las líneas a mano: el núcleo cubierto, la fuente ciega.
+
+      **Y el arreglo obvio también salía verde.** Pedir el log entero rompe por el otro lado:
+      `execFileSync` corta en **1 MB** por defecto, 2,7 MB devuelven `null`, y `lineasDelLog`
+      volvía a contar 0. Por eso el filtro va **donde vive el log** (`grep -F '[aviso]'` por
+      `docker exec`): sale acotado por construcción y no tiene techo que alcanzar cuando crezca.
+      La ruta del log se **deriva** de `webhook-server.sh` (`LOGFILE=`), no se copia.
+
+      **Test en rojo primero, por el motivo correcto** (`expected 1, actual 0`): corre el
+      `webhook-server.sh` **real** con un `docker` falso en el PATH —no una copia del `tail`,
+      que se desincronizaría sin ponerse roja— sobre un log con el aviso sepultado bajo 200
+      líneas. Suite del bot **933/933**.
+
+      **Lo que el gate dice ahora, y es la verdad:** `eventos: 5 avisos (enviados 3 · salteados
+      2 · fallidos 0)` · `VEREDICTO: roto`. De paso se corrigió su lectura final: con el
+      circuito contestando a las cuatro preguntas, *«EL PRÓXIMO QUE PIDA UN HUMANO SE PIERDE»*
+      es una afirmación **falsa sobre el futuro**. Un rojo tiene dos causas que se arreglan en
+      lugares opuestos —el circuito falla, o el circuito anda y hubo avisos que no salieron— y
+      hasta hoy se leían igual.
+
+- [ ] 🔴 **Dos personas pidieron un humano, el aviso NO salió, y no se puede saber quiénes son.**
+      Lo destapó el ítem de arriba: las dos líneas son `[aviso] skipped (cuota_agotada)` y
+      `[aviso] skipped (pregunta_precio_recepcion)`, las dos con el motivo *"aviso por Telegram
+      apagado (ONIA_BOT_TG_AVISO)"* — o sea que el bot decidió avisar y la variable estaba en
+      falso. **El flag hoy está encendido** (`flagEncendido ok` en `avisos:vivo`), así que esto
+      no se repite; lo que queda abierto es la deuda con esas dos personas.
+
+      **Y por qué no se las puede nombrar:** esas dos líneas salieron **sin `conv=`**, mientras
+      las tres `sent` sí lo traen. El formato es uno solo (`webhook-server.mjs:689`,
+      `[aviso] ${result?.status} conv=${conv} (${motivos})`), así que el `conv` llegó vacío —
+      ver el comentario de `webhook-server.test.mjs:762-764` sobre los dos callbacks asíncronos.
+      **Un aviso que no salió y no dice a quién no se puede reparar.**
+
+      **Además el gate queda rojo para siempre por esto**, porque el log es append-only y las
+      líneas `[aviso]` **no llevan fecha** (las de mensaje sí): no hay forma de acotar
+      «salteados recientes». Las dos cosas se arreglan en el mismo lugar —estampar fecha y
+      `conv` en la línea del aviso— y recién entonces el rojo puede volver a verde.
+
+- [x] ✅ **CERRADO el 2026-09-12: el conocimiento del bot no viajaba con el deploy, y el remedio
+      a mano se deshacía solo en el deploy siguiente.** Dos mitades que se tapaban entre sí.
+
+      **(A) El deploy copiaba la fuente y nunca la instalaba.** `knowledge.onia.json` está en git
+      y viaja en `PATRONES`, pero el archivo que el bot LEE es `knowledge.json`. Pasar de uno al
+      otro era un segundo comando a mano que nadie corría.
+
+      **(B) Y ese comando a mano escribía SÓLO adentro del contenedor.** `webhook-server.sh
+      knowledge` hace `docker cp` a `/tmp/onia-bot` y dejaba intacto el `knowledge.json` del
+      host. El sync de `restart` calcula un stamp sobre `$BOT_DIR/*.mjs` y `*.json` **del host**
+      y, si cambió, hace `rm -rf $DEST` y recopia el host entero: **el primer deploy que toque un
+      `.mjs` devuelve el conocimiento viejo**, sin una línea en ningún lado. Quien lo aplicó lo
+      vio aplicarse y nada le avisa cuando se deshace.
+
+      **La prueba de que pasó, y no es la de los precios** (medido 2026-09-12 02:55 La Paz,
+      `diff` en `/opt/onia/bot`): `knowledge.onia.json` del 6-sep decía *"desde el 1 de octubre de
+      2026 … (RND 102600000007)"*; el `knowledge.json` vivo, del 4-sep, decía *"desde el **30 de
+      septiembre** es obligatoria"*. **Seis días diciéndole a leads reales el plazo fiscal que
+      `CLAUDE.md` prohíbe por nombre**, con la corrección en el mismo directorio. El
+      `vigenteHasta` de esa entrada era `2026-09-30`: el dato encima caducaba solo.
+
+      **Arreglo.** `deploy-bot.sh` aplica el conocimiento como paso 7, después del `/health`
+      (antes fallaría con un error que no es el de fondo) y cortando en rojo si no se aplicó —
+      es seguro porque la compuerta de validación sigue siendo la de `webhook-server.sh`, que
+      con un archivo malo no aplica nada y deja al bot con lo anterior. Y `webhook-server.sh
+      knowledge` ahora persiste **también al host**, después de validar, con guarda `-ef` para el
+      caso en que la fuente ya ES el archivo vivo (`cp a a` aborta, y un deploy sano reportado
+      como fallido invita a revertirlo — la trampa que ya pagó `deploy-bot.test.mjs`).
+
+      **Gate:** `conocimiento-viaja-con-el-deploy.test.mjs`, 5 casos. **Ejecuta**, no lee texto:
+      monta host + contenedor + un `docker` falso en el `PATH` y corre el script de verdad —
+      porque lo que falla acá es un efecto (qué archivo queda escrito y dónde), y un assert sobre
+      el texto no distingue «copia al host» de «nombra el host en un comentario». Validado por
+      mutación en las dos direcciones: sacar el `cp` al host → rojo sólo el caso 2; sacar la
+      invocación de `deploy-bot.sh` → rojo sólo el caso 5. Entra solo a la cadena (`test:bot` es
+      `node --test` sobre la carpeta) y por eso **también gatea el deploy**, que corre ese mismo
+      comando. Suite del bot: **932/932**.
+
+      ⚠️ **Commiteado, NO desplegado** — y el orden importa: mientras esto no esté en `main`, el
+      `ok` de `t_e45a24ff` **sigue necesitando** el comando a mano que su cuerpo nombra.
 
 - [x] ✅ **CERRADO el 2026-09-11 (`93256eab`, onia-hermes — pusheado a la rama, falta mergear):
       el intake de leads le afirmaba a Sergio Urcullo que TODO contacto había pedido una demo.**
