@@ -63,6 +63,49 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [ ] 🔴 **PORTADA reordenada por veredicto de Sergio Urcullo (11-sep, sobre capturas del
+      preview y de producción) — HECHA en `main` (`a847d9aa`), FALTA su OK mirándola y el
+      deploy.** Sus palabras: *"esto no vende nada… coloca algo que impacte que se vea más el
+      sistema, y el tema de los chatbots es principal, que sea más protagonista, está al final
+      eso, quita esas cajitas que son solo texto… el inicio me gustaba más así como estaba puro
+      texto estilo hostinger… que sea lo principal llevarlos a probar el sistema"*. Qué entró:
+      hero v4 DESCARTADO (vuelve el hero de producción que él aprobó), sección HECHOS retirada,
+      chatbot a la posición 2 con conversación dibujada
+      (`web-factory/apps/onia-platform/src/app/(sitio)/conversacion.tsx`) + CTA al alta.
+      Pendiente de ESTE ítem: (a) OK de Sergio sobre el preview → deploy con
+      `/opt/onia-landing/_deploy/publicar.sh`; (b) probar un video HyperFrames como pieza del
+      bloque chatbot ("puedes generar videos con hyperframes también, intentá") — arrancamos
+      con la conversación CSS porque pesa cero.
+
+- [ ] 🔴 **Estrategia de precios: que la opción cara sea SIEMPRE la mejor compra** (Sergio
+      Urcullo, 11-sep: *"armar una estrategia de psicología para que la opción cara siempre sea
+      la mejor para el usuario, para que por aumentar un poco más tenga más beneficios"* +
+      *"somos manychat… paga por algo que él puede hacer"*). Revisar cómo está armada hoy la
+      escalera en `onia-platform/lib/subscription-plans.ts` y `onia-platform/lib/pricing.ts` y
+      cómo la muestra `/precios`: saltos de precio vs saltos de valor, plan ancla/decoy, qué
+      capacidad se reserva al plan alto. Entregable: propuesta medida contra Lety/Dapta/ManyChat
+      de HOY, con la cuenta delante — los montos los decide Sergio.
+
+- [ ] 🔴 **Funciones que las empresas usan DE VERDAD — recorte de superficie** (Sergio Urcullo,
+      11-sep: *"mirar qué funciones vamos a usar realmente para las empresas"*). Medir contra
+      las 3 orgs vivas y el catálogo (`hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md`): qué
+      módulo se usa, cuál nadie tocó, y qué se esconde/simplifica para que la 1.0 sea corta.
+      El techo son horas de soporte, no features (estrategia §9).
+
+- [ ] 🔴 **Estado real de los agentes IA del producto** (Sergio Urcullo, 11-sep: *"mira también
+      cómo están los agentes ai"*). Medir en producción: qué agentes corren, qué borradores
+      dejaron esta semana, si el circuito aprobar→enviar funciona de punta a punta. La
+      pantalla vive en `onia-platform/app/(dashboard)/agents/` — y recordar que los agentes
+      del producto NO llaman a ningún modelo (costo de API cero).
+
+- [ ] 🔴 **Dos propuestas de diseño para el dashboard del producto** (Sergio Urcullo, 11-sep:
+      *"ese color que hay ahorita no es nada intuitivo y no hay botones que resalten, que se
+      diferencien para que la experiencia sea más fácil"*). Dos direcciones renderizadas
+      (maquetas sobre el shell real: `onia-platform/app/(dashboard)/layout.tsx` y
+      `onia-platform/app/globals.css`, no dibujos sueltos), con jerarquía de botones
+      primario/secundario y color semántico; se le MUESTRAN y él elige. Nada se aplica al
+      producto sin su OK.
+
 - [x] ✅ **CERRADO el 2026-09-11 (`c14db84`, rama `claude/chatbots-platform-review-0d1d09`
       de onia-platform — falta mergear a `master` y desplegar; pedido `t_cba4fa74`): el
       cliente que se arrepintió de la baja del asistente y VOLVIÓ A PAGAR no recibía un solo
