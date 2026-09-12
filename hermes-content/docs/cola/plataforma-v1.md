@@ -34,12 +34,12 @@ LISTO medible; el estado es del 10-sep y se re-mide, no se hereda:
 
 | # | Punto | LISTO = | Estado 10-sep |
 |---|---|---|---|
-| 1 | Alta sola | registro → correo EN BANDEJA → clic → panel | 🟡 todo verificado hasta el 250 de Gmail; falta UNA bandeja real |
+| 1 | Alta sola | registro → correo EN BANDEJA → clic → panel | 🟡 12-sep: alta real +prueba10 → Postfix→Gmail `250 OK status=sent` (1,1 s). Falta SOLO la carpeta (ojo de Sergio o conector Gmail reconectado) |
 | 2 | Recorrido de los 5 rubros | cada rubro cierra su flujo core sin romperse | 🟡 `recorrido-cliente` patrulla diario (hoy 13:12 exit 0) |
-| 3 | Cobro | comprobante → APPROVED → plan activo solo | ✅ probado 10-sep con capturas |
+| 3 | Cobro | comprobante → APPROVED → plan activo solo | ✅ probado 10-sep; 12-sep: escalera C (320/550/890/1.290, bot en Full) DESPLEGADA — el checkout valida los montos nuevos |
 | 4 | El plan manda | trial vencido bloquea; topes se cumplen | ✅ modal + topes (`f05b2fc` «el tope que nadie aplicaba») + reservas de cuenta apagada cerradas (`ba2270b`) |
-| 5 | Factura SIAT | la suscripción cobrada emite factura | 🔴 Fase 1 ~24,8 %, PdV 1 = trámite de Sergio Urcullo; el código avanza sin él |
-| 6 | Chatbot atiende solo (web + WhatsApp) | responde, califica y agenda demo | 🟡 corregido 10-sep tarde: responde conversaciones NUEVAS (web y WhatsApp); las conversaciones VIEJAS estancadas quedan MUDAS — Sergio Urcullo lo probó en carne ("hola" sin respuesta, rama MUDO en `esperando_calificacion`). Ítem urgente en `cola/chatbot.md` · 🔴 3 prospectos de agosto sin respuesta (`t_43868cdb`) |
+| 5 | Factura SIAT | la suscripción cobrada emite factura | 🔴 DENTRO de 1.0 por orden de Sergio (12-sep). 2 de 3 bloqueos ya resueltos por código (SOAP por sector, CUFD 24h); su parte exacta en `hermes-content/docs/ONIA_SIAT_TU_PARTE_DEL_TRAMITE.md` (PdV 1 + decidir etapa VIII) |
+| 6 | Chatbot atiende solo (web + WhatsApp) | responde, califica y agenda demo | 🟢 12-sep: reinicio-por-vencimiento DESPLEGADO (deploy-bot 16 archivos, backup 224551Z) — las conversaciones viejas reviven; conocimiento con escalera C vivo (951 tests). Los 3 prospectos de agosto: ORDEN de Sergio 12-sep — se escriben SOLO con el chatbot perfeccionado y la 1.0 lista; si no, no |
 | 7 | Panel del dueño estilo Hostinger | pestañas agrupadas y cada sección cierra su flujo | ✅ estructura VIVA (grupos + Primeros pasos + fecha La Paz + 2FA); queda `feat/canal-meta` (App Review = Sergio Urcullo) |
 | 8 | Cero promesas falsas | lo que cada pantalla promete por rubro/plan se abre | 🟡 barridos 8-sep y 9-sep (`e843507` estética/dental) + 10-sep el NOMBRE del plan (`fe6eb65`, gate `nombre-de-plan-a-mano`); el recorrido caza el resto |
 | 9 | Opera sin Sergio | correos, avisos, backups, publicador corren solos | ✅ medido 10-sep (publicador «al día», watchdog del bot, correo entrega) |
