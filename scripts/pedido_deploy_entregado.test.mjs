@@ -8,7 +8,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { archivosDelDryRun, archivosNombrados, secoDeProduccion, barrerPedidos, buildQueCorre, clasificarPedido, cuerpoCortoArchivos, inmediblesSinDeclarar, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
+import { archivosDelDryRun, archivosDelDryRunBot, archivosNombrados, secoDeProduccion, barrerPedidos, buildQueCorre, clasificarPedido, cuerpoCortoArchivos, inmediblesSinDeclarar, publicariaPorCopia, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
+import { DESTINOS } from './kanban/publicar-aprobado.mjs';
 
 // El caso que me costo la vuelta del 2026-09-06: los 13 shas prometidos por t_0268567b
 // estaban TODOS dentro del build vivo y el pedido seguia blocked pidiendo un ok por
@@ -500,18 +501,23 @@ test('siat: nombrado SOLO en un comentario -> el CUERPO sigue corto', () => {
 
 // Declarado no es invocado, y el push tiene que colgar de la comparacion CORRECTA: pedir solo
 // que `cortosSiat.push(` aparezca se satisface con el ESQUIVE de cambiarle la condicion.
-test('el main INVOCA el instrumento de siat, no solo lo declara', async () => {
+//
+// ⚠️ El ancla dejo de ser `p.destino === 'siat'` el 2026-09-12: la rama pasó a ser de la
+// ESPECIE (los que publican por copia, hoy siat y bot) en vez de una rama por destino. Es el
+// mismo invariante sobre un sujeto mas grande — y el motivo del cambio es que la version por
+// destino ya habia dejado afuera al hermano una vez.
+test('el main INVOCA el instrumento de los destinos por copia, no solo lo declara', async () => {
   const { readFileSync } = await import('node:fs');
   const src = readFileSync(new URL('./pedido_deploy_entregado.mjs', import.meta.url), 'utf8')
     .split('\n').filter((l) => !/^\s*(\/\/|\*|\/\*)/.test(l)).join('\n');
-  const desde = src.indexOf("p.destino === 'siat'");
-  assert.ok(desde > 0, 'no encontre el bloque de siat del main');
+  const desde = src.indexOf('DESTINOS_POR_COPIA[p.destino] !== undefined');
+  assert.ok(desde > 0, 'no encontre el bloque de los destinos por copia del main');
   const vecindad = src.slice(desde, desde + 1800);
-  // 🔴 Pedir que `publicariaSiat()` APAREZCA se satisface con el ESQUIVE de llamarlo y tirar
-  // el resultado (`publicariaSiat(); const publicaria = null;`): medido el 2026-09-11, esa
-  // mutacion pasaba 44/44 en VERDE. Tiene que estar ASIGNADO a lo que el resto usa.
-  assert.match(vecindad, /const\s+publicaria\s*=\s*publicariaSiat\(\)/,
-    'el universo se deriva del publicador Y se usa, no se llama para tirarlo');
+  // 🔴 Pedir que `publicariaPorCopia()` APAREZCA se satisface con el ESQUIVE de llamarlo y
+  // tirar el resultado (`publicariaPorCopia(p.destino); const publicaria = null;`): medido el
+  // 2026-09-11, esa mutacion pasaba 44/44 en VERDE. Tiene que estar ASIGNADO a lo que se usa.
+  assert.match(vecindad, /const\s+publicaria\s*=\s*publicariaPorCopia\(p\.destino\)/,
+    'el universo se deriva del publicador DEL DESTINO Y se usa, no se llama para tirarlo');
   assert.match(vecindad, /cuerpoCortoArchivos\(\{[^}]*texto:\s*p\.texto/,
     'y se le pregunta al CUERPO del pedido');
   assert.match(vecindad, /SUB_DESCRIBE'\s*\)\s*\{?\s*cortosSiat\.push\(/,
@@ -526,13 +532,13 @@ test('el main INVOCA el instrumento de siat, no solo lo declara', async () => {
 });
 
 // El destino ya NO puede caer en `sinCubrir`: es la condicion de hecho de la tarea t_7836e91f.
-test('siat ya no cae en la rama «sin instrumento»', async () => {
+test('los destinos por copia ya no caen en la rama «sin instrumento»', async () => {
   const { readFileSync } = await import('node:fs');
   const src = readFileSync(new URL('./pedido_deploy_entregado.mjs', import.meta.url), 'utf8');
-  const iSiat = src.indexOf("p.destino === 'siat'");
+  const iCopia = src.indexOf('DESTINOS_POR_COPIA[p.destino] !== undefined');
   const iSinCubrir = src.indexOf("p.destino !== 'plataforma'");
-  assert.ok(iSiat > 0 && iSinCubrir > 0, 'faltan las dos ramas');
-  assert.ok(iSiat < iSinCubrir, 'la rama de siat tiene que ir ANTES del cajon de «sin instrumento»');
+  assert.ok(iCopia > 0 && iSinCubrir > 0, 'faltan las dos ramas');
+  assert.ok(iCopia < iSinCubrir, 'la rama por copia tiene que ir ANTES del cajon de «sin instrumento»');
 });
 
 // El caso que cuesta caro y que ya dejo ciegos a otros tres gates vivos al mudarse de
@@ -662,4 +668,134 @@ test('cableado: un pedido inmedible hace salir al gate con codigo 1', () => {
   assert.ok(i > 0, 'el main tiene que tener un control propio para los pedidos inmedibles');
   assert.match(src.slice(i, i + 900), /return 1;/,
     'sin return 1 el control es decorativo: imprime y pasa en verde');
+});
+
+// ── el bot: el ultimo destino que salia «sin instrumento» ──────────────────────────────
+//
+// Hasta el 2026-09-12 `bot` caia en `sinCubrir` y el gate lo DECIA («su artefacto no nombra
+// sha ni fecha») — cierto, y a la vez irrelevante: su publicador ya enumera lo que copiaria.
+// Mientras tanto el pedido t_e45a24ff pedia publicar el bot porque le esta diciendo precios
+// muertos a leads reales, y era el unico de los cuatro que nadie podia juzgar.
+
+/** La salida REAL del publicador en seco del bot, medida el 2026-09-12 contra el VPS. */
+const SECO_BOT = [
+  '   (el árbol estaba atrasado: lo puse en origin/main 547c91283)',
+  '== publicar el bot ==',
+  '   desde:   /root/loops/onia-hermes/hermes-content/deploy/vps-ops/bot (idéntico a origin/main 547c91283)',
+  '   destino: /opt/onia/bot',
+  '',
+  '[dry-run] producción NO se toca.',
+  '== deploy del bot ==',
+  '   repo:   /root/loops/onia-hermes/hermes-content/deploy/vps-ops/bot',
+  '   destino: /opt/onia/bot',
+  '   modo:   DRY-RUN (agrega --aplicar para desplegar de verdad)',
+  '',
+  '-- gate: node --test sobre el arbol del repo',
+  '   # pass 933 # fail 0 ',
+  '',
+  '-- diferencias repo -> produccion',
+  '   CAMBIA   avisos-vivo.mjs  (57 lineas)',
+  '   NUEVO    precios-vivos.mjs',
+  '   CAMBIA   knowledge.onia.json  (2 lineas)',
+  '   total: 3 archivo(s)',
+  '',
+  'DRY-RUN: no se toco nada. Para desplegar: /root/.../deploy-bot.sh --aplicar',
+  '',
+  '[dry-run] hasta acá llegó el simulacro: NO se desplegó nada.',
+].join('\n');
+
+test('bot: del dry-run salen los archivos que el ok publicaria, NUEVO y CAMBIA por igual', () => {
+  assert.deepEqual(archivosDelDryRunBot(SECO_BOT),
+    ['avisos-vivo.mjs', 'precios-vivos.mjs', 'knowledge.onia.json']);
+});
+
+// `[]` y `null` NO son lo mismo: el primero es una respuesta real del publicador, el segundo
+// es «no llegue a preguntar». Es la misma guarda que ya tiene su gemelo de siat.
+test('bot: «nada que desplegar» es al dia ([]), no «no pude medir» (null)', () => {
+  const alDia = '-- diferencias repo -> produccion\n   (nada que desplegar: produccion ya coincide con el repo)';
+  assert.deepEqual(archivosDelDryRunBot(alDia), []);
+});
+
+test('bot: sin salida, o con un formato que no entiendo -> null, nunca []', () => {
+  assert.equal(archivosDelDryRunBot(null), null, 'el SSH no contesto');
+  assert.equal(archivosDelDryRunBot(''), null, 'salida vacia');
+  assert.equal(archivosDelDryRunBot('ERR: no existe el destino (/opt/onia/bot)'), null, 'el publicador fallo');
+  assert.equal(
+    archivosDelDryRunBot('-- diferencias repo -> produccion\n   CAMBIA   simulate.mjs  (2 lineas)'),
+    null,
+    'sin el recuento del publicador no puedo saber si vi la lista entera',
+  );
+});
+
+// EL CASO QUE IMPORTA, y el unico modo en que este lector fallaria EN VERDE: una lista CORTA.
+// Si el publicador cambia la forma de una linea (o agrega un tercer verbo junto a NUEVO y
+// CAMBIA), el parseo devuelve menos archivos de los que el ok copia — y una lista corta hace
+// que `cuerpoCortoArchivos` declare completo un cuerpo que no nombra lo que falta. El propio
+// publicador imprime su recuento: si no coincide, me callo.
+test('bot: si el recuento del publicador no coincide con lo que parsee -> null', () => {
+  const tercerVerbo = [
+    '-- diferencias repo -> produccion',
+    '   CAMBIA   avisos-vivo.mjs  (57 lineas)',
+    '   BORRA    viejo.mjs',
+    '   total: 2 archivo(s)',
+  ].join('\n');
+  assert.equal(archivosDelDryRunBot(tercerVerbo), null,
+    'una lista corta declara completo un cuerpo que no nombra lo que falta');
+});
+
+// La direccion que decide todo: con las dos vias caidas sale NO MEDIDO, nunca «al dia».
+test('bot: con las DOS vias caidas -> null, y de ahi NO_MEDIDO', () => {
+  const publicaria = publicariaPorCopia('bot', { local: () => null, remoto: () => null });
+  assert.equal(publicaria, null, 'no llegue a preguntar no es una respuesta');
+  assert.equal(archivosNombrados({ texto: 'cualquier cosa', publicaria }).estado, 'NO_MEDIDO');
+});
+
+// Un destino que no es de esta especie no puede salir `[]`: eso lo declararia al dia.
+test('bot: un destino que no esta en la tabla sale null, nunca []', () => {
+  assert.equal(publicariaPorCopia('plataforma', { local: () => 'lo que sea', remoto: () => null }), null);
+});
+
+// ── el gate que CIERRA la clase, y el motivo por el que esto no se enumera a mano ───────
+//
+// `siat` se cableo el 2026-09-11 copiando la forma de `plataforma`, y el hermano `bot` —misma
+// especie, mismo invariante, la fila de al lado en la MISMA lista blanca— quedo afuera otro
+// dia entero. Enumerar los destinos a mano acá seria repetir el defecto: una lista de
+// inclusion falla abierto justo en el sujeto nuevo. El universo se DERIVA de la lista blanca
+// del ejecutor, que es la que decide que puede publicar el `ok` de Sergio Urcullo.
+test('todo destino que el ok sabe ejecutar tiene instrumento en este gate', () => {
+  const src = readFileSync(new URL('./pedido_deploy_entregado.mjs', import.meta.url), 'utf8')
+    .split('\n').filter((l) => !/^\s*(\/\/|\*|\/\*)/.test(l)).join('\n');
+  const porCopia = src.slice(src.indexOf('const DESTINOS_POR_COPIA'));
+  // Los dos que NO son por copia se miden por sha (plataforma) y por fecha (landing): tienen
+  // su propia rama, nombrada con su literal, y por eso se los excusa por NOMBRE y no por
+  // forma — una excusa por patron absolveria al destino nuevo que todavia no existe.
+  const conRamaPropia = ['plataforma', 'landing'];
+  const sinInstrumento = Object.keys(DESTINOS).filter((d) =>
+    !conRamaPropia.includes(d) && !new RegExp(`^\\s*${d}:\\s*\\{`, 'm').test(porCopia));
+  assert.deepEqual(sinInstrumento, [],
+    `el ok publica estos destinos y este gate no los sabe juzgar: ${sinInstrumento.join(', ')}`);
+  // Y la simetrica, que es la que se olvida: las dos excusas por nombre tienen que SEGUIR
+  // teniendo su rama. Borrar la de landing dejaria el gate verde con un destino mudo.
+  // `plataforma` la nombra por NEGACION (es el que cae despues del cajon de «sin
+  // instrumento»), asi que se aceptan las dos comparaciones: lo que se exige es que el main
+  // nombre el destino con su literal, no la forma en que lo compara.
+  for (const d of conRamaPropia) {
+    assert.match(src, new RegExp(`p\\.destino [!=]== '${d}'`),
+      `${d} esta excusado de la tabla porque tiene rama propia, y ya no la tiene`);
+  }
+});
+
+// El veredicto tiene que mandar al publicador del destino que quedo corto. Antes la ruta de
+// `siat` estaba escrita a mano en el mensaje: con el bot adentro, eso mandaba al carril del
+// bot a correr el publicador del emisor fiscal, que no publica nada suyo.
+test('cableado: el comando de cura de un cuerpo corto se DERIVA del destino', () => {
+  const src = readFileSync(new URL('./pedido_deploy_entregado.mjs', import.meta.url), 'utf8')
+    .split('\n').filter((l) => !/^\s*(\/\/|\*|\/\*)/.test(l)).join('\n');
+  const i = src.indexOf('if (cortosSiat.length > 0)');
+  assert.ok(i > 0, 'el main tiene que tener un control para los cuerpos cortos por copia');
+  const bloque = src.slice(i, i + 900);
+  assert.match(bloque, /DESTINOS_POR_COPIA\[c\.destino\]\.seco/,
+    'la ruta del publicador sale de la tabla, no de un literal');
+  assert.doesNotMatch(bloque, /onia-siat\/_deploy/,
+    'una ruta a mano manda al carril equivocado en cuanto hay mas de un destino por copia');
 });

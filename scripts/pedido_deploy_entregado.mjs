@@ -59,9 +59,15 @@
  *     es anterior al build vivo, está pidiendo un ok por trabajo hecho. Ver
  *     `publicadoPorFecha` — mide sólo eso; el sub-describe de landing sigue sin instrumento
  *     porque exige decidir qué commit VIAJA al navegador (`deploy-vivo.mjs llegaAlCliente`).
- *   - `bot`: se despliega por copia archivo-por-archivo y nada en `/opt/onia/bot` nombra un
- *     sha ni una fecha de origen. Sigue sin instrumento, y ahora se DICE en el veredicto en
- *     vez de esconderse en un exit 0.
+ *   - `bot` y `siat`: se despliegan por copia archivo-por-archivo, así que no hay sha ni
+ *     fecha que comparar — pero su publicador en seco ENUMERA lo que copiaría, y con eso se
+ *     miden las dos direcciones (ya publicado / el cuerpo queda corto). Ver
+ *     `DESTINOS_POR_COPIA`.
+ *
+ * Desde el 2026-09-12 no queda ningún destino del `ok` sin instrumento, y eso lo exige un
+ * gate que DERIVA el universo de la lista blanca del ejecutor (`publicar-aprobado.mjs
+ * DESTINOS`) en vez de enumerarlo a mano: el día que entre un quinto destino, el rojo sale
+ * acá y no en un pedido que nadie pudo juzgar.
  */
 
 import { execFileSync } from 'node:child_process';
@@ -514,6 +520,56 @@ export function archivosDelDryRun(salida) {
 }
 
 /**
+ * PURA: lo mismo que `archivosDelDryRun`, para el OTRO publicador por copia — el del bot.
+ *
+ * POR QUÉ HAY DOS LECTORES Y NO UNO. El invariante es el mismo (el cuerpo describe lo que
+ * su `ok` publica) y el artefacto es de la misma especie (copia de archivos), pero el
+ * FORMATO lo imprime cada publicador y no coinciden: `siat` cierra con `Cambia:` + lista,
+ * y el bot escribe una línea `NUEVO`/`CAMBIA` por archivo y la cierra con su propio
+ * recuento. Reescribir uno para que se parezca al otro sería tocar el programa que hace el
+ * deploy para que le quede cómodo a su medidor; y un lector solo que acepte las dos formas
+ * es el que, el día que una cambie, sigue entendiendo la otra y declara «al día» lo que no
+ * midió. Dos lectores, cada uno atado al literal de SU publicador.
+ *
+ * POR QUÉ EXISTE AHORA. Hasta el 2026-09-12 `bot` era el último destino en `sinCubrir`:
+ * el gate imprimía «su artefacto no nombra sha ni fecha — sin instrumento» y seguía. Cierto
+ * y a la vez irrelevante — el bot tampoco necesita sha: su publicador ya deriva y ENUMERA
+ * lo que copiaría, igual que el de `siat`. Con el pedido `t_e45a24ff` vivo pidiendo publicar
+ * precios que el bot le está diciendo mal a leads reales, el único destino que no se podía
+ * juzgar era justo el que estaba mintiendo en producción.
+ *
+ * EL RECUENTO DEL PROPIO PUBLICADOR ES LA GUARDA. `deploy-bot.sh` imprime `total: N
+ * archivo(s)` derivado del MISMO arreglo con el que escribió las líneas de arriba: si lo que
+ * parseo no da N, lo que cambió es el formato y el lector se calla (`null`) en vez de
+ * devolver una lista corta, que es la forma en que este lector fallaría EN VERDE — una lista
+ * a la que le falta un archivo declara «el cuerpo lo nombra todo» sobre algo que nadie leyó.
+ *
+ * TRI-ESTADO igual que su gemelo: `null` = no pude leer · `[]` = al día · lista = lo que
+ * publicaría.
+ *
+ * @param {string|null} salida  stdout de `/opt/onia/bot/_deploy/publicar.sh --dry-run`
+ * @returns {string[]|null}
+ */
+export function archivosDelDryRunBot(salida) {
+  const s = String(salida ?? '');
+  if (!s.trim()) return null;
+  // «al día» es una respuesta REAL y tiene su propia marca, y es la línea con la que
+  // `deploy-bot.sh` corta antes de imprimir ningún recuento.
+  if (/^\s*\(nada que desplegar/m.test(s)) return [];
+  const archivos = [];
+  for (const l of s.split('\n')) {
+    const m = /^\s+(?:NUEVO|CAMBIA)\s+(\S+)/.exec(l);
+    if (m) archivos.push(m[1]);
+  }
+  const t = /^\s*total:\s*(\d+)\s+archivo/m.exec(s);
+  if (t === null) return null;
+  if (Number(t[1]) !== archivos.length) return null;
+  // `total: 0` no lo imprime nunca (el publicador sale antes, por la marca de arriba), así
+  // que una lista vacía acá es un formato que no entiendo — no «al día».
+  return archivos.length > 0 ? archivos : null;
+}
+
+/**
  * PURA: ¿el texto nombra todos los ARCHIVOS que su `ok` publica?
  *
  * La gemela de `promesaCompleta` para los destinos que se publican por copia. Mismas dos
@@ -726,8 +782,17 @@ function epochCommitHermes(sha) {
   return crudo && /^\d+$/.test(crudo.trim()) ? Number(crudo.trim()) : null;
 }
 
-/** El publicador en seco de un destino que copia archivos. Ruta en el VPS, fija por destino. */
-const SECO_SIAT = '/opt/onia-siat/_deploy/publicar.sh';
+/**
+ * Los destinos que se publican COPIANDO ARCHIVOS, con su publicador en seco y el lector de
+ * SU formato. Es una tabla y no dos ramas gemelas a propósito: el 2026-09-11 se cableó
+ * `siat` copiando la forma de `plataforma`, y el hermano `bot` —misma especie, mismo
+ * invariante— quedó afuera otro día entero. Un destino nuevo de esta especie tiene que ser
+ * una fila acá, no una rama nueva; y el gate de abajo exige que no falte ninguno.
+ */
+const DESTINOS_POR_COPIA = {
+  siat: { seco: '/opt/onia-siat/_deploy/publicar.sh', lector: archivosDelDryRun },
+  bot: { seco: '/opt/onia/bot/_deploy/publicar.sh', lector: archivosDelDryRunBot },
+};
 
 /**
  * Corre un publicador en seco y devuelve su stdout, del disco local o del VPS. `null` = no
@@ -763,11 +828,17 @@ function secoPorSsh(ruta, shim = VPS) {
 }
 
 /**
- * Lo que el `ok` de un pedido de `siat` publicaría: la lista de archivos que su propio
+ * Lo que el `ok` de un pedido por COPIA publicaría: la lista de archivos que su propio
  * publicador en seco enumera. `null` = no se pudo medir, `[]` = ya está al día.
+ *
+ * Un destino que no esté en la tabla sale `null` (no medido), nunca `[]`: «no sé
+ * preguntarle» y «no tiene nada que publicar» son la distinción que este archivo entero
+ * defiende.
  */
-function publicariaSiat(io = {}) {
-  return archivosDelDryRun(secoDeProduccion(SECO_SIAT, io));
+export function publicariaPorCopia(destino, io = {}) {
+  const d = DESTINOS_POR_COPIA[destino];
+  if (d === undefined) return null;
+  return d.lector(secoDeProduccion(d.seco, io));
 }
 
 /**
@@ -894,8 +965,10 @@ async function medirEnVivo() {
   // siguiente; el segundo es un AGUJERO del gate, que no se cura nunca y hay que escribirle
   // instrumento. Impresos juntos, el segundo se lee como ruido de ambiente y sobrevive.
   const sinCubrir = [];
-  // Los de `siat` van aparte porque su veredicto se dice con ARCHIVOS, no con shas: meterlos
-  // en las mismas listas obligaría a que el reporte adivine de qué especie es cada entrada.
+  // Los que se publican por COPIA (`siat`, `bot`) van aparte porque su veredicto se dice con
+  // ARCHIVOS, no con shas: meterlos en las mismas listas obligaría a que el reporte adivine de
+  // qué especie es cada entrada. Cada entrada lleva su `destino` para poder imprimir el
+  // comando de cura del publicador que le toca.
   const entregadosSiat = [];
   const cortosSiat = [];
   // `landing` no nombra su sha, pero su artefacto tiene FECHA: alcanza para la dirección cara
@@ -933,29 +1006,30 @@ async function medirEnVivo() {
       }
       continue;
     }
-    if (p.destino === 'siat') {
-      // `siat` no se identifica por sha ni por fecha: se publica copiando archivos, así que su
-      // universo son los ARCHIVOS que su propio publicador en seco enumera. Mismo invariante
-      // que los otros dos destinos (el cuerpo describe lo que su ok publica), otro artefacto.
-      const publicaria = publicariaSiat();
+    if (DESTINOS_POR_COPIA[p.destino] !== undefined) {
+      // Ni `siat` ni `bot` se identifican por sha ni por fecha: se publican copiando archivos,
+      // así que su universo son los ARCHIVOS que su propio publicador en seco enumera. Mismo
+      // invariante que los otros dos destinos (el cuerpo describe lo que su ok publica), otro
+      // artefacto.
+      const publicaria = publicariaPorCopia(p.destino);
       if (publicaria === null) {
-        noMedidos.push(`${p.id} (siat): no pude correr el publicador en seco (¿SSH al VPS?)`);
+        noMedidos.push(`${p.id} (${p.destino}): no pude correr el publicador en seco (¿SSH al VPS?)`);
         continue;
       }
       if (publicaria.length === 0) {
         // La dirección cara, la misma que `clasificarPedido` caza en los otros destinos: el
         // pedido sigue bloqueado pidiendo un ok por trabajo que ya está publicado.
-        entregadosSiat.push(p.id);
+        entregadosSiat.push({ id: p.id, destino: p.destino });
         continue;
       }
-      console.log(`OK ${p.id} (siat): sigue VIGENTE — ${publicaria.length} archivo(s) sin publicar`);
+      console.log(`OK ${p.id} (${p.destino}): sigue VIGENTE — ${publicaria.length} archivo(s) sin publicar`);
       // El cuerpo, no el texto entero: los comentarios se apilan abajo y lo tapan. Es la misma
       // pregunta que `cuerpoCorto` le hace a `plataforma`.
       const k = cuerpoCortoArchivos({ texto: p.texto, publicaria });
       if (k.estado === 'SUB_DESCRIBE') {
-        cortosSiat.push({ id: p.id, mudos: k.mudos });
+        cortosSiat.push({ id: p.id, destino: p.destino, mudos: k.mudos });
       } else if (k.estado === 'NO_MEDIDO') {
-        noMedidos.push(`${p.id} (siat, cuerpo completo): ${k.motivo}`);
+        noMedidos.push(`${p.id} (${p.destino}, cuerpo completo): ${k.motivo}`);
       }
       continue;
     }
@@ -1017,8 +1091,8 @@ async function medirEnVivo() {
   }
 
   if (entregadosSiat.length > 0) {
-    for (const id of entregadosSiat) {
-      console.log(`\nROJO ${id}: su publicador en seco dice que YA ESTA PUBLICADO.`);
+    for (const e of entregadosSiat) {
+      console.log(`\nROJO ${e.id}: su publicador en seco dice que YA ESTA PUBLICADO (${e.destino}).`);
       console.log('  Le esta pidiendo un ok a Sergio Urcullo por trabajo hecho. Cerralo con su');
       console.log('  evidencia y, si quedo algo sin publicar despues, hace un pedido NUEVO: el');
       console.log('  cuerpo del viejo no lo describe, y el cuerpo es lo unico que el lee.');
@@ -1032,7 +1106,9 @@ async function medirEnVivo() {
       for (const m of c.mudos) console.log(`    ${m}`);
       console.log('  El cuerpo es lo unico que Sergio Urcullo lee para decidir, y hoy describe');
       console.log('  menos de lo que su ok publica. Nombralos comentando el recuento DERIVADO de');
-      console.log('  `bash /opt/onia-siat/_deploy/publicar.sh --dry-run`; si ya se comento y el');
+      // El comando lo DERIVA la tabla: escribir acá la ruta de `siat` mandaba al carril del
+      // bot a correr el publicador del emisor fiscal, que no publica nada suyo.
+      console.log(`  \`bash ${DESTINOS_POR_COPIA[c.destino].seco} --dry-run\`; si ya se comento y el`);
       console.log('  cuerpo sigue corto, rehace el pedido y ARCHIVA el viejo en la misma vuelta');
       console.log('  (el `edit` del tablero no cambia el cuerpo).');
     }
