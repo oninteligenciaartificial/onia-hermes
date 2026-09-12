@@ -257,18 +257,23 @@ export const CONDICIONES: readonly string[] = [
 export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
   free: { csvExportEnabled: false },
   basic: { csvExportEnabled: true },
+  crece: { csvExportEnabled: true },
   professional: { csvExportEnabled: true },
   clinic: { csvExportEnabled: true },
 };
 `;
     expect(primerPlanCon(limitesDelProducto(fixture), "exportaCsv")).toBe("basic");
-    // Y el día que el producto lo suba de plan, el cruce tiene que verlo.
+    // Y el día que el producto lo suba de plan, el cruce tiene que verlo: el
+    // siguiente escalón es `crece`, no `professional` — el fixture lleva los
+    // MISMOS planes que `PLANES_EN_ORDEN` porque `primerPlanCon` se planta en
+    // el primero que no puede leer, y uno al que le falte un plan contesta
+    // `null` (verde imposible, pero también ciego).
     expect(
       primerPlanCon(
         limitesDelProducto(fixture.replace("basic: { csvExportEnabled: true", "basic: { csvExportEnabled: false")),
         "exportaCsv",
       ),
-    ).toBe("professional");
+    ).toBe("crece");
   });
 });
 
@@ -360,6 +365,7 @@ export const CONDICIONES: readonly string[] = [
 export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
   basic: { csvExportEnabled: false },
   // basic: { csvExportEnabled: true },
+  crece: { csvExportEnabled: false },
   professional: { csvExportEnabled: true },
   clinic: { csvExportEnabled: true },
 };
@@ -387,7 +393,44 @@ export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
     // Un `""` se leería como "leí el archivo y no dice nada" y el cruce saldría
     // VERDE sin haber medido. Tiene que llegar `null` para que salga NO PUDE MEDIR.
     expect(leerDelSitio("x", { leer: () => null })).toBeNull();
-    expect(leerDelProducto("x", { repo: "/y", local: () => null, remoto: () => null })).toBeNull();
+    expect(
+      leerDelProducto("x", {
+        repo: "/y",
+        ref: () => null,
+        local: () => null,
+        remoto: () => null,
+      }),
+    ).toBeNull();
+  });
+
+  it("el lado producto se lee del REF, no de la carpeta del clon", () => {
+    // Medido el 2026-09-12: `/root/loops/onia-platform` estaba 15 commits atrás
+    // de `origin/master`, sin el plan `crece` y con los montos viejos. Leer la
+    // CARPETA hacía que el cruce acusara al sitio de publicar mal un precio que
+    // era el correcto — y ese rojo manda a "arreglar" hacia atrás, que es peor
+    // que no medir. El ref lo refresca un `fetch`; la carpeta no la refresca
+    // nadie. Si alguien invierte este orden, esto cae.
+    expect(
+      leerDelProducto("x", {
+        repo: "/y",
+        ref: () => "const DEL_REF = 1;",
+        local: () => "const DE_LA_CARPETA = 1;",
+      }),
+    ).toContain("DEL_REF");
+  });
+
+  it("...pero si el ref no contesta, la carpeta y el SSH siguen sirviendo", () => {
+    // La dirección opuesta: una máquina sin el clon (o sin ese ref) tiene que
+    // poder medir igual. Sin este caso, "preferir el ref" podría implementarse
+    // como "leer SÓLO el ref" y el carril se quedaría sin cruce al mudarse.
+    expect(
+      leerDelProducto("x", {
+        repo: "/y",
+        ref: () => null,
+        local: () => null,
+        remoto: () => "const POR_SSH = 1;",
+      }),
+    ).toContain("POR_SSH");
   });
 });
 
@@ -453,6 +496,18 @@ describe("el veredicto", () => {
 describe("ningún tope que el sitio publica queda fuera del cruce", () => {
   const real = readFileSync(PRECIOS_SITIO, "utf8");
 
+  /**
+   * Ancla ESTRUCTURAL (el `incluye: [` del primer plan), no una frase. Las dos
+   * inyecciones de abajo estaban pegadas al literal "Hasta 300 fichas de
+   * clientes o pacientes cargadas", que la escalera C reescribió a "Topes: 300
+   * fichas · 2 usuarios · …": el `replace` dejó de aplicar y los dos casos
+   * pasaron a medir el archivo SIN mutar. Los salvó el `not.toEqual(real)` de
+   * la línea siguiente — sin esa guarda habrían quedado verdes y mudos, que es
+   * el modo de fallo que este archivo entero viene a evitar.
+   */
+  const inyectarEnIncluye = (fuente: string, linea: string) =>
+    fuente.replace(/(id: "basico"[\s\S]*?incluye: \[\n)/, `$1      ${linea}\n`);
+
   it("hoy no hay ni una cifra publicada sin cruzar", () => {
     expect(
       publicadosSinCruzar(real),
@@ -462,10 +517,7 @@ describe("ningún tope que el sitio publica queda fuera del cruce", () => {
   });
 
   it("un tope NUEVO tipeado a mano sale nombrado, no en silencio", () => {
-    const conTopeNuevo = real.replace(
-      '"Hasta 300 fichas de clientes o pacientes cargadas",',
-      '"Hasta 300 fichas de clientes o pacientes cargadas",\n      "Hasta 7 sucursales conectadas",',
-    );
+    const conTopeNuevo = inyectarEnIncluye(real, '"Hasta 7 sucursales conectadas",');
     expect(conTopeNuevo, "la inyección no se aplicó").not.toEqual(real);
     expect(publicadosSinCruzar(conTopeNuevo)).toContainEqual({
       plan: "basico",
@@ -478,10 +530,7 @@ describe("ningún tope que el sitio publica queda fuera del cruce", () => {
   it("una constante NUEVA interpolada tampoco pasa por cruzada", () => {
     // La interpolación es la forma cómoda y por eso la peligrosa: se lee como
     // "sale de una constante, alguien la cuida" y no la cruza nadie.
-    const conConstante = real.replace(
-      '"Hasta 300 fichas de clientes o pacientes cargadas",',
-      '"Hasta 300 fichas de clientes o pacientes cargadas",\n      `Hasta ${SUCURSALES_MAX} sucursales`,',
-    );
+    const conConstante = inyectarEnIncluye(real, "`Hasta ${SUCURSALES_MAX} sucursales`,");
     expect(conConstante, "la inyección no se aplicó").not.toEqual(real);
     expect(
       publicadosSinCruzar(conConstante).map((n) => n.valor),
@@ -557,14 +606,19 @@ describe("los ciclos que el sitio ofrece son los que el producto cobra", () => {
   const real = readFileSync(PRECIOS_SITIO, "utf8");
   const sitio = planesDelSitio(real) as Planes;
 
-  /** Copia la forma literal de `DEFAULT_PLAN_AMOUNTS`, que vive en el otro repo. */
+  /**
+   * Copia la forma literal de `DEFAULT_PLAN_AMOUNTS`, que vive en el otro repo
+   * (medido contra `origin/master` el 2026-09-12, no contra el clon de disco:
+   * estaba 15 commits atrás y todavía decía 750/1500).
+   */
   const producto = (semanalDelFull: number | null): Planes => ({
     basic: { mensual: 320, semanal: 89, anual: 3200 },
-    professional: { mensual: 750, semanal: 199, anual: 7500 },
-    clinic: { mensual: 1500, semanal: semanalDelFull, anual: 15000 },
+    crece: { mensual: 550, semanal: 145, anual: 5500 },
+    professional: { mensual: 890, semanal: 229, anual: 8900 },
+    clinic: { mensual: 1290, semanal: semanalDelFull, anual: 12900 },
   });
 
-  it("hoy los tres planes comprables coinciden en los dos lados", () => {
+  it("hoy los cuatro planes comprables coinciden en los dos lados", () => {
     expect(ciclosCruzados(producto(null), sitio)).toEqual({
       ilegibles: [],
       difieren: [],

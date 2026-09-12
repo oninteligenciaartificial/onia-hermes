@@ -124,6 +124,21 @@ export const PLANES_EN_ORDEN = [
 export const IDS_DEL_SITIO = () =>
   new RegExp(`\\bid:\\s*"(${PLANES_EN_ORDEN.map((p) => p.sitio).join("|")})"`, "g");
 
+/**
+ * Cada `plan: { ... }` que un bloque del PRODUCTO declara, sin filtrar por una
+ * lista de ids. Nace de la escalera C (2026-09-12): la lista de inclusion se
+ * habia sacado de tres regex, pero quedaban DOS mas escritas a mano aca
+ * (`basic|professional|clinic`), asi que `crece` se leia como "ese plan no
+ * existe" y `primerPlanCon` devolvia `null` — o sea el cruce quedaba CIEGO
+ * justo en el plan nuevo, que es como nacen estos huecos. Filtrar por PLANES_EN_ORDEN
+ * tampoco sirve: el producto tiene planes que el sitio no vende (`enterprise`)
+ * y perderlos aca los borraria del cruce. El universo se deriva del bloque;
+ * quien elige a quien se le pregunta es `primerPlanCon`, mas abajo.
+ * Instancia nueva por llamada: un `RegExp` con `g` guarda `lastIndex`.
+ */
+export const PLANES_QUE_DECLARA_EL_BLOQUE = () =>
+  /\b([A-Za-z_$][\w$]*):\s*\{([^}]*)\}/g;
+
 export function leerLocal(ruta) {
   return existsSync(ruta) ? readFileSync(ruta, "utf8") : null;
 }
@@ -133,6 +148,46 @@ export function leerPorSsh(ruta, destino = VPS_SSH) {
     encoding: "utf8",
   });
   return r.status === 0 && r.stdout ? r.stdout : null;
+}
+
+/**
+ * La rama del PRODUCTO contra la que se cruza. Es `master`, no `main`.
+ */
+export const REF_PRODUCTO = process.env.ONIA_PLATFORM_REF ?? "origin/master";
+
+/**
+ * El archivo leido del REF, no del arbol de trabajo.
+ *
+ * POR QUE. Hasta el 2026-09-12 el cruce leia `join(repo, relativa)` — la
+ * CARPETA del clon — y nadie la mantiene al dia: medida ese dia, estaba 15
+ * commits atras de `origin/master`, sin el plan `crece` y con los montos
+ * viejos (750/1.500 en vez de 890/1.290). Las dos direcciones en que eso
+ * miente son distintas y la segunda es la cara:
+ *  · el clon NO tiene el dato -> "no la encontre" -> NO PUDE MEDIR (honesto,
+ *    pero el cruce queda ciego para siempre y nadie se entera);
+ *  · el clon tiene el dato VIEJO -> DESALINEADO acusando al SITIO de publicar
+ *    mal un precio que es el correcto, y manda a "arreglarlo" hacia atras.
+ * Un `git fetch` garantiza el ref fresco aunque la carpeta lleve meses quieta,
+ * asi que se pregunta al ref y el arbol queda de respaldo.
+ */
+export function leerDelRef(relativa, { repo = REPO_PRODUCTO, ref = REF_PRODUCTO } = {}) {
+  const r = spawnSync("git", ["-C", repo, "show", `${ref}:${relativa}`], {
+    encoding: "utf8",
+  });
+  return r.status === 0 && r.stdout ? r.stdout : null;
+}
+
+/**
+ * Pone el ref al dia. Si no se puede, se DICE: un cruce contra un ref viejo se
+ * ve identico a uno contra el ref fresco, y esa es justo la falla que este
+ * archivo no se puede permitir.
+ */
+export function refreshRef({ repo = REPO_PRODUCTO } = {}) {
+  const r = spawnSync("git", ["-C", repo, "fetch", "origin", "--quiet"], {
+    encoding: "utf8",
+    timeout: 60_000,
+  });
+  return r.status === 0;
 }
 
 /**
@@ -215,10 +270,13 @@ export function sinComentarios(fuente) {
 
 export function leerDelProducto(
   relativa,
-  { repo = REPO_PRODUCTO, local = leerLocal, remoto = leerPorSsh } = {},
+  { repo = REPO_PRODUCTO, ref = leerDelRef, local = leerLocal, remoto = leerPorSsh } = {},
 ) {
   const ruta = join(repo, relativa);
-  const crudo = local(ruta) ?? remoto(ruta);
+  // El REF primero: es el unico de los tres que no depende de que alguien haya
+  // actualizado una carpeta a mano. El arbol local y el SSH quedan de respaldo
+  // para la maquina que no tenga el clon.
+  const crudo = ref(relativa, { repo }) ?? local(ruta) ?? remoto(ruta);
   return crudo === null || crudo === undefined ? crudo : sinComentarios(crudo);
 }
 
@@ -279,9 +337,7 @@ export function planesDelProducto(fuente) {
   const bloque = bloqueExportado(fuente, "DEFAULT_PLAN_AMOUNTS");
   if (!bloque) return {};
   const salida = {};
-  for (const m of bloque.matchAll(
-    /\b(basic|professional|clinic|enterprise):\s*\{([^}]*)\}/g,
-  )) {
+  for (const m of bloque.matchAll(PLANES_QUE_DECLARA_EL_BLOQUE())) {
     salida[m[1]] = {
       mensual: num(m[2], "monthly"),
       semanal: num(m[2], "weekly"),
@@ -311,9 +367,7 @@ export function limitesDelProducto(fuente) {
   const bloque = bloqueExportado(fuente ?? "", "PLAN_LIMITS");
   if (!bloque) return {};
   const salida = {};
-  for (const m of bloque.matchAll(
-    /\b(basic|professional|clinic):\s*\{([^}]*)\}/g,
-  )) {
+  for (const m of bloque.matchAll(PLANES_QUE_DECLARA_EL_BLOQUE())) {
     salida[m[1]] = {
       fichas: entero(m[2], "patients"),
       usuarios: entero(m[2], "users"),
@@ -789,9 +843,13 @@ export function cifrasDelSitio({ precios, chatbot }) {
     "add-on usuario extra · mensual": num(usuario, "mensualAddon"),
     "add-on usuario extra · máximo en Básico": num(usuario, "maxEnBasico"),
     "prueba gratis · días": valorResuelto(prueba, "dias", precios),
-    /** El producto lo nombra `professional`; el sitio, por su etiqueta. */
+    /**
+     * El producto lo nombra `professional`; el sitio, por su etiqueta. La
+     * equivalencia se DERIVA de `PLANES_EN_ORDEN`: escrita a mano se quedaba
+     * sin la etiqueta del plan que entrara manana (le paso a `Crece`).
+     */
     "prueba gratis · plan que corre":
-      { Pro: "professional", Básico: "basic", Full: "clinic" }[planPrueba] ??
+      PLANES_EN_ORDEN.find((p) => p.etiqueta === planPrueba)?.producto ??
       planPrueba ??
       null,
   };
@@ -956,6 +1014,16 @@ export const CHATBOT_SITIO = join(
  * medido el 2026-09-03 en otro gate de este sistema.
  */
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  // Antes de leer nada: el ref al dia. Sin esto se cruza contra lo que el clon
+  // tenia la ultima vez que alguien lo toco, y el veredicto sale con la misma
+  // cara de siempre.
+  if (!refreshRef()) {
+    console.error(
+      `AVISO: no pude actualizar ${REF_PRODUCTO} en ${REPO_PRODUCTO}. ` +
+        `Lo que sigue se cruza contra el ref que ya estaba en disco.`,
+    );
+  }
+
   const planes = leerDelProducto(FUENTE_PLANES);
   const addons = leerDelProducto(FUENTE_ADDONS);
   const prueba = leerDelProducto(FUENTE_PRUEBA);
