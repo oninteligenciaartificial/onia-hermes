@@ -95,7 +95,7 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 - [ ] 🔴 **Estado real de los agentes IA del producto** (Sergio Urcullo, 11-sep: *"mira también
       cómo están los agentes ai"*). Medir en producción: qué agentes corren, qué borradores
       dejaron esta semana, si el circuito aprobar→enviar funciona de punta a punta. La
-      pantalla vive en `onia-platform/app/(dashboard)/agents/` — y recordar que los agentes
+      pantalla vive en `onia-platform/app/(dashboard)/agents/page.tsx` — y recordar que los agentes
       del producto NO llaman a ningún modelo (costo de API cero).
 
 - [ ] 🔴 **Dos propuestas de diseño para el dashboard del producto** (Sergio Urcullo, 11-sep:
