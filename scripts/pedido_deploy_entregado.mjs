@@ -1413,6 +1413,32 @@ function selfCheck() {
         idPropio: 't_fd5b30c4',
         idsVivos: new Set(['t_fd5b30c4']),
       }).estado === 'SIN_PUNTEROS'],
+    // 🔴 SIN EXCEPCION PARA LA CITA, y no es una postura: lo encontro este mismo gate, en
+    // vivo, sobre el PRIMER pedido que se escribio para curar el defecto. Ese cuerpo explicaba
+    // el cambio diciendo «aquel cuerpo te mandaba a apretar "ok t_bd62e5a0", y esa tarea esta
+    // ARCHIVADA» — una cita, correcta y util, que el control acuso igual. La tentacion es
+    // perdonar lo que esta entre comillas; la respuesta es NO, por dos motivos. Uno: la cadena
+    // es TECLEABLE tal cual esta escrita, y Sergio Urcullo lee rapido — ve un `ok t_xxx` y lo
+    // escribe. Dos: perdonar por comillas es el carve-out de notacion que esta familia de
+    // gates ya aprendio a no hacer (se cita sin comillas, en mayusculas, con backticks...).
+    // La regla que queda es simple y se puede obedecer: el cuerpo de un pedido no escribe la
+    // forma `ok <id>` sobre algo que no esta abierto, ni para explicar. Se dice «el ok de esa
+    // tarea» y el gate no tiene nada que acusar.
+    ['citar la instruccion muerta entre comillas TAMBIEN se acusa: es tecleable tal cual',
+      cuerpoPunteroMuerto({
+        texto: 'Aquel cuerpo mandaba a apretar "ok t_bd62e5a0", y esa tarea esta archivada.',
+        idPropio: 't_9ad5049f',
+        idsVivos: new Set(['t_9ad5049f', 't_8a8a4e94']),
+      }).estado === 'PUNTERO_MUERTO'],
+    // Y su simetrica, que es la salida: nombrar la tarea SIN la forma tecleable no se acusa.
+    // Sin este caso, la regla de arriba no tendria como cumplirse y el rojo no tendria cura.
+    ['nombrar la tarea sin la forma tecleable es la salida, y no se acusa',
+      cuerpoPunteroMuerto({
+        texto: 'Aquel cuerpo mandaba a apretar el ok de t_bd62e5a0, que ya esta archivada.',
+        idPropio: 't_9ad5049f',
+        idsVivos: new Set(['t_9ad5049f', 't_8a8a4e94']),
+      }).estado === 'SIN_PUNTEROS'],
+
     // Todo pedido dice «apreta este ok». Sin excluir el propio id, el pedido se acusaria a si
     // mismo en cuanto alguien lo escribiera con su id a la vista.
     ['el pedido no se acusa a si mismo',
