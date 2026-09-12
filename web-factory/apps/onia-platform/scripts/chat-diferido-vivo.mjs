@@ -9,14 +9,31 @@
  * sirve el servidor la lleve. Este script mide el resultado — es la diferencia
  * entre "el código está bien" y "el cliente lo recibe".
  *
- *   node scripts/chat-diferido-vivo.mjs [url]      (default: http://localhost:3311)
+ *   node scripts/chat-diferido-vivo.mjs                 (contra onia.com.bo)
+ *   node scripts/chat-diferido-vivo.mjs --base=http://localhost:3311
+ *
+ * **Por qué el destino por defecto es producción.** Nació apuntando a un
+ * `next dev` local, y eso contradecía su propio párrafo de arriba: un servidor
+ * local mide el CÓDIGO, no lo que el cliente recibe. Nadie levanta ese
+ * servidor, así que `npm run chat-diferido:vivo` contestaba `NO MEDIDO:
+ * ERR_CONNECTION_REFUSED` — el único instrumento que protege el 71 % del peso
+ * de la portada no medía nada, y salía sin ruido. Sus hermanos
+ * (`enlaces-vivos`, `precios-vivos`, `mirar-venta`) ya usaban `--base=` con
+ * onia.com.bo; este es el que se quedó afuera de la convención.
+ * Lo sostiene `medidores-vivos-miran-produccion.test.ts`, para la clase entera.
  *
  * Salidas: 0 = el chat espera al visitante · 1 = viaja sin pedirlo · 2 = NO
  * MEDIDO (no hubo navegador o la página no cargó; nunca se aplana a verde).
  */
 import { chromium } from "playwright";
 
-const URL_BASE = process.argv[2] ?? "http://localhost:3311";
+const arg = (n, d) => {
+  const m = process.argv.find((a) => a.startsWith(`--${n}=`));
+  return m ? m.slice(n.length + 3) : d;
+};
+// El posicional sigue vivo: lo usa quien ya lo tenía en un comando a mano.
+const POSICIONAL = process.argv.slice(2).find((a) => /^https?:\/\//.test(a));
+const URL_BASE = arg("base", POSICIONAL ?? "https://onia.com.bo");
 const HOST_CHAT = "onia-chatbot-chatwoot";
 const ESPERA_SIN_GESTO_MS = 3000;
 const ESPERA_TRAS_GESTO_MS = 6000;
