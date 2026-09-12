@@ -93,10 +93,16 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       El techo son horas de soporte, no features (estrategia §9).
 
 - [ ] 🔴 **Estado real de los agentes IA del producto** (Sergio Urcullo, 11-sep: *"mira también
-      cómo están los agentes ai"*). Medir en producción: qué agentes corren, qué borradores
-      dejaron esta semana, si el circuito aprobar→enviar funciona de punta a punta. La
-      pantalla vive en `onia-platform/app/(dashboard)/agents/page.tsx` — y recordar que los agentes
-      del producto NO llaman a ningún modelo (costo de API cero).
+      cómo están los agentes ai"*). **MEDIDO el 2026-09-11 en la base de prod** (supabase-db,
+      tablas `onia_agents_*`): 4 agentes definidos, el cron corre y completa (22 corridas
+      `completed`, 14 en los últimos 7 días, última hoy 11:00 UTC) — pero
+      **`onia_agents_actions` tiene CERO filas en toda la historia**: los agentes corren en
+      vacío, jamás dejaron un borrador. La portada y el panel venden exactamente ese borrador
+      ("Para aprobar: avisar los pagos vencidos…"). Falta la mitad que importa: SEMBRAR un caso
+      real en `clinica-sergio-p2ljs` (deuda vencida + paciente sin volver), correr el cron, ver
+      el borrador aparecer en `onia-platform/app/(dashboard)/agents/page.tsx`, aprobarlo y
+      verificar el efecto. Si con datos no propone nada, el generador está mudo y eso es un 🔴
+      de venta. Los agentes NO llaman a ningún modelo (costo de API cero).
 
 - [ ] 🔴 **Dos propuestas de diseño para el dashboard del producto** (Sergio Urcullo, 11-sep:
       *"ese color que hay ahorita no es nada intuitivo y no hay botones que resalten, que se
