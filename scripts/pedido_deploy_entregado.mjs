@@ -158,11 +158,34 @@ export function shasPrometidos(texto) {
  * creerle a los avisos. Medido a mano el 2026-09-07: un barrido leído a mitad de camino
  * reportó 2 pedidos de 3 y ocultó justo el de `plataforma`.
  */
+/**
+ * Las tareas ABIERTAS del tablero, por su símbolo de estado. `list` NO imprime las
+ * archivadas —medido el 2026-09-12: `list | grep -c t_bd62e5a0` da 0 estando la tarea ahí—,
+ * así que «no está en esta lista» significa archivada o inexistente, y «está con ✓ done»
+ * significa terminada: en los tres casos un `ok` sobre ella no ejecuta nada.
+ */
+const ABIERTA = /^[⊘▶◻]/;
+
+/**
+ * PURA: los ids de las tareas abiertas. Es el MISMO universo que recorre `barrerPedidos`,
+ * y comparten la constante a propósito: dos nociones distintas de «vivo» dentro del mismo
+ * archivo se desincronizan, y la que quedara atrás acusaría a un pedido sano.
+ */
+export function idsAbiertos(lista) {
+  const out = new Set();
+  for (const linea of String(lista).split('\n')) {
+    if (!ABIERTA.test(linea)) continue;
+    const id = linea.trim().split(/\s+/)[1];
+    if (id) out.add(id);
+  }
+  return out;
+}
+
 export function barrerPedidos({ lista, leerCuerpo }) {
   const pedidos = [];
   const ilegibles = [];
   for (const linea of String(lista).split('\n')) {
-    if (!/^[⊘▶◻]/.test(linea)) continue;
+    if (!ABIERTA.test(linea)) continue;
     const id = linea.trim().split(/\s+/)[1];
     if (!id) continue;
     const cuerpo = leerCuerpo(id);
@@ -628,6 +651,50 @@ export function cuerpoCortoArchivos({ texto, publicaria }) {
 }
 
 /**
+ * PURA: ¿el CUERPO manda a apretar un `ok` sobre una tarea que ya no existe?
+ *
+ * 🔴 EL DEFECTO, medido el 2026-09-12 sobre `t_fd5b30c4` (la landing). Su cuerpo cierra con
+ * «Orden: ok t_bd62e5a0 (el sistema) -> ... -> ok de este (la web)», y `t_bd62e5a0` está
+ * ARCHIVADA desde esa madrugada: el pedido vivo de plataforma pasó a ser `t_8a8a4e94` cuando
+ * se rehízo. O sea que el texto le da a Sergio Urcullo una instrucción que no ejecuta nada
+ * (el brazo tiene lista blanca de estados vivos y sale 3 sobre una archivada), y encima se la
+ * da como PRERREQUISITO: aprieta, no pasa nada, y queda esperando a que «el sistema» se
+ * publique para recién soltar la web. Los dos deploys quedan trabados por un puntero.
+ *
+ * Es la familia que esta memoria ya nombró —«los IDs de tarea y punteros en colas/handoffs
+ * caducan en ambas direcciones: el pedido vivo se DERIVA, nunca se copia»—, y ningún control
+ * de este archivo la podía ver: todos preguntan por shas o por archivos, y éste es el único
+ * dato del cuerpo que apunta a OTRA tarea.
+ *
+ * EL SUJETO ES LA INSTRUCCIÓN TECLEABLE, no la mención. `ok <id>` es literalmente lo que
+ * Sergio Urcullo escribe, así que un cuerpo que quiera mandarlo a apretar algo lo escribe
+ * así. Citar un id sin `ok` es historia y NO se acusa — el mismo `t_fd5b30c4` dice «REEMPLAZA
+ * a t_33406907 (archivado)», que es cierto, útil y no le pide nada a nadie. Preguntar PARA
+ * QUÉ se cita el id, en vez de CÓMO está escrito, es lo que evita la lista de verbos que
+ * falla abierta en el sinónimo siguiente.
+ *
+ * DIRECCIÓN DEL ERROR: ante cualquier duda NO se acusa. Con la lista vacía —un `list` que no
+ * contestó, o truncado— TODO id se vería muerto y el gate mandaría a rehacer pedidos sanos,
+ * que es el daño caro de este control.
+ *
+ * @param {{texto:string, idPropio:string, idsVivos:Set<string>|null}} args
+ */
+export function cuerpoPunteroMuerto({ texto, idPropio, idsVivos }) {
+  const { cuerpo } = partirPedido(texto);
+  const citados = [...new Set(
+    [...String(cuerpo).matchAll(/\bok\s+(t_[0-9a-f]{6,})\b/gi)].map((m) => m[1]),
+  )].filter((id) => id !== idPropio);
+  if (citados.length === 0) return { estado: 'SIN_PUNTEROS', muertos: [] };
+  if (!idsVivos || idsVivos.size === 0) {
+    return { estado: 'NO_MEDIDO', motivo: 'no pude derivar que tareas siguen abiertas', muertos: [] };
+  }
+  const muertos = citados.filter((id) => !idsVivos.has(id));
+  return muertos.length > 0
+    ? { estado: 'PUNTERO_MUERTO', muertos }
+    : { estado: 'VIVOS', muertos: [] };
+}
+
+/**
  * PURA: ¿se pudieron poner al día los refs con los que se va a medir?
  *
  * POR QUÉ EXISTE, Y POR QUÉ ESTE GATE FALLABA EN VERDE SIN ELLO. Todo lo que este archivo
@@ -849,10 +916,16 @@ export function publicariaPorCopia(destino, io = {}) {
 function pedidosVivos() {
   const lista = sh('bash', [TABLERO, 'list'], { timeout: 180_000 });
   if (lista === null) return null;
-  return barrerPedidos({
-    lista,
-    leerCuerpo: (id) => sh('bash', [TABLERO, 'show', id], { timeout: 60_000 }),
-  });
+  return {
+    ...barrerPedidos({
+      lista,
+      leerCuerpo: (id) => sh('bash', [TABLERO, 'show', id], { timeout: 60_000 }),
+    }),
+    // De la MISMA lectura de la lista: pedirla dos veces abriría una ventana en la que una
+    // tarea se archiva entre las dos llamadas y el gate acusaría un puntero que estaba vivo
+    // cuando se leyó el cuerpo.
+    abiertos: idsAbiertos(lista),
+  };
 }
 
 async function medirEnVivo() {
@@ -861,7 +934,7 @@ async function medirEnVivo() {
     console.log('NO MEDIDO: no pude leer el tablero (' + TABLERO + ')');
     return 2;
   }
-  const { pedidos, ilegibles } = barrido;
+  const { pedidos, ilegibles, abiertos } = barrido;
 
   // Un barrido incompleto NO puede concluir nada, ni siquiera «no hay pedidos»: las dos cosas
   // se ven igual. Se dice cuántas tareas quedaron sin leer y con cuáles.
@@ -971,6 +1044,15 @@ async function medirEnVivo() {
   // comando de cura del publicador que le toca.
   const entregadosSiat = [];
   const cortosSiat = [];
+  // Transversal a TODOS los destinos: cualquier cuerpo puede mandar a apretar el `ok` de otra
+  // tarea, y el daño no depende de si se publica por sha, por fecha o por copia. Por eso se
+  // barre aparte del `for` de destinos, y no adentro de una de sus ramas.
+  const punteros = [];
+  for (const p of pedidos) {
+    const r = cuerpoPunteroMuerto({ texto: p.texto, idPropio: p.id, idsVivos: abiertos });
+    if (r.estado === 'PUNTERO_MUERTO') punteros.push({ id: p.id, destino: p.destino, muertos: r.muertos });
+    else if (r.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (${p.destino}, punteros): ${r.motivo}`);
+  }
   // `landing` no nombra su sha, pero su artefacto tiene FECHA: alcanza para la dirección cara
   // (¿pide un ok por trabajo hecho?). Se deriva UNA vez, no por pedido: si el SSH no contesta
   // queda `null` y todos los pedidos de landing salen NO MEDIDO con su motivo.
@@ -1096,6 +1178,23 @@ async function medirEnVivo() {
       console.log('  Le esta pidiendo un ok a Sergio Urcullo por trabajo hecho. Cerralo con su');
       console.log('  evidencia y, si quedo algo sin publicar despues, hace un pedido NUEVO: el');
       console.log('  cuerpo del viejo no lo describe, y el cuerpo es lo unico que el lee.');
+    }
+    return 1;
+  }
+
+  // Tercero en la cadena, y arriba de los que describen de menos: un cuerpo corto le muestra a
+  // Sergio Urcullo menos de lo que publica, pero su `ok` PUBLICA. Éste no: lo manda a apretar
+  // algo que no ejecuta nada, y como lo pide como prerrequisito, deja los DOS deploys trabados
+  // esperando un paso que él ya dio.
+  if (punteros.length > 0) {
+    for (const p of punteros) {
+      console.log(`\nROJO ${p.id}: su cuerpo manda a apretar un ok sobre ${p.muertos.join(', ')}, que ya no esta abierta (${p.destino}).`);
+      console.log('  Una tarea archivada o terminada NO ejecuta: el brazo la rechaza y no publica');
+      console.log('  nada. Sergio Urcullo aprieta, no pasa nada, y se queda esperando ese paso.');
+      console.log('  El pedido vivo del otro destino se DERIVA, nunca se copia:');
+      console.log("    /root/bin/onia-tablero.sh list | grep -E '^[⊘▶]' | grep -iE 'deploy|publicar'");
+      console.log('  Se cura rehaciendo el pedido con el id vigente y ARCHIVANDO el viejo en la');
+      console.log('  misma vuelta. El cuerpo no se puede editar, y el cuerpo es lo que el lee.');
     }
     return 1;
   }
@@ -1279,6 +1378,81 @@ function selfCheck() {
       (soloLosQueViajan([{ sha: '1111111', titulo: 'sin datos' }]) || []).length === 1],
     ['landing: sin commits medidos no se inventa un universo vacio',
       soloLosQueViajan(null) === null],
+
+    // ── el puntero a OTRA tarea: el unico dato del cuerpo que no es un sha ni un archivo ──
+    // EL BUG REAL, tal como estaba escrito en t_fd5b30c4 el 2026-09-12.
+    ['el cuerpo manda a apretar un ok sobre una tarea archivada -> PUNTERO_MUERTO',
+      cuerpoPunteroMuerto({
+        texto: 'DESPLEGAR: landing\nOrden: ok t_bd62e5a0 (el sistema) -> ok de este (la web).',
+        idPropio: 't_fd5b30c4',
+        idsVivos: new Set(['t_fd5b30c4', 't_8a8a4e94']),
+      }).estado === 'PUNTERO_MUERTO'],
+    // Nombrarlo es lo unico accionable: «hay un puntero muerto» sin decir cual manda a releer
+    // el cuerpo entero a mano.
+    ['y NOMBRA al muerto',
+      cuerpoPunteroMuerto({
+        texto: 'ok t_bd62e5a0 primero',
+        idPropio: 't_fd5b30c4',
+        idsVivos: new Set(['t_8a8a4e94']),
+      }).muertos.join() === 't_bd62e5a0'],
+    // El caso que YA cumple. Sin el, un detector que acuse SIEMPRE pasa el de arriba y deja
+    // en rojo permanente a todo pedido que coordine con otro — que es la forma correcta de
+    // escribirlos.
+    ['el caso que YA cumple: el id citado sigue abierto -> VIVOS',
+      cuerpoPunteroMuerto({
+        texto: 'Orden: ok t_8a8a4e94 (el sistema) -> ok de este.',
+        idPropio: 't_fd5b30c4',
+        idsVivos: new Set(['t_fd5b30c4', 't_8a8a4e94']),
+      }).estado === 'VIVOS'],
+    // La MENCION no es la instruccion. El mismo t_fd5b30c4 dice «REEMPLAZA a t_33406907
+    // (archivado)»: es cierto, es util, y no le pide nada a nadie. Acusarlo obligaria a
+    // borrar la historia del pedido para poner el gate en verde.
+    ['citar un id sin `ok` es historia, no se acusa',
+      cuerpoPunteroMuerto({
+        texto: 'REEMPLAZA a t_33406907 (archivado). Mismo trabajo, mismo destino.',
+        idPropio: 't_fd5b30c4',
+        idsVivos: new Set(['t_fd5b30c4']),
+      }).estado === 'SIN_PUNTEROS'],
+    // Todo pedido dice «apreta este ok». Sin excluir el propio id, el pedido se acusaria a si
+    // mismo en cuanto alguien lo escribiera con su id a la vista.
+    ['el pedido no se acusa a si mismo',
+      cuerpoPunteroMuerto({
+        texto: 'Para publicar: ok t_fd5b30c4',
+        idPropio: 't_fd5b30c4',
+        idsVivos: new Set(['t_fd5b30c4']),
+      }).estado === 'SIN_PUNTEROS'],
+    // La direccion cara del error: con la lista sin leer, TODO id se ve muerto y el gate
+    // mandaria a rehacer pedidos sanos.
+    ['sin poder derivar las abiertas -> NO_MEDIDO, nunca acusar',
+      cuerpoPunteroMuerto({
+        texto: 'ok t_bd62e5a0',
+        idPropio: 't_fd5b30c4',
+        idsVivos: new Set(),
+      }).estado === 'NO_MEDIDO'],
+    // `idsAbiertos` es el otro lado del control: si contara las terminadas, un `ok` sobre una
+    // tarea `done` —que tampoco ejecuta— pasaria por vivo.
+    ['idsAbiertos toma las abiertas y NO las terminadas',
+      [...idsAbiertos('▶ t_aaaaaaaa  ready     x\n⊘ t_bbbbbbbb  blocked   y\n✓ t_cccccccc  done      z')].join() === 't_aaaaaaaa,t_bbbbbbbb'],
+    ['idsAbiertos sobre una lista vacia no inventa nada',
+      idsAbiertos('').size === 0],
+
+    // CABLEADO, por el mismo motivo que el de `refsAlDia`: los casos de arriba prueban la
+    // funcion, y los esquives baratos dejan los literales intactos y pasan en verde con el
+    // control muerto.
+    //
+    // ⚠️ ANCLA LA CONDICION ENTERA, no el `push` suelto — y no es teorico: la primera version
+    // de este caso pedia `/punteros\.push\(/` y `/if \(punteros\.length > 0\)/` por separado, y
+    // con eso `if (false && r.estado === 'PUNTERO_MUERTO') punteros.push(...)` pasaba en
+    // VERDE con el control apagado (medido acá mismo, mutando el archivo). El `push` tiene
+    // que estar gobernado por ESA comparacion y por nada antes.
+    ['punteros: `medirEnVivo` lo llama, acumula y CORTA',
+      (() => {
+        const fuente = readFileSync(fileURLToPath(import.meta.url), 'utf8');
+        return /const\s+r\s*=\s*cuerpoPunteroMuerto\(\{/.test(fuente)
+          && /if\s*\(r\.estado === 'PUNTERO_MUERTO'\)\s*punteros\.push\(/.test(fuente)
+          && /if\s*\(\s*punteros\.length\s*>\s*0\s*\)/.test(fuente)
+          && /idsVivos:\s*abiertos/.test(fuente);
+      })()],
 
     // ── los refs con los que se mide, que hasta hoy nadie actualizaba ─────────────────
     // El caso que YA cumple, primero: sin él, un detector que marque SIEMPRE fallo pasaría
