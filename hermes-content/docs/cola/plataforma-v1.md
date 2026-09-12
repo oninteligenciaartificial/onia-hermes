@@ -193,11 +193,41 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       los TRES agentes nuevos** (nota del merge del 12-sep: dos carriles reescribieron este
       ítem a la vez — la parte MEDIDA es sucesora, la DECISIÓN de los tres no se pierde).
       Sobre el mismo patrón de `onia-platform/lib/onia-core/modules/agents-runtime.ts`:
-      (1) **Confirmador de citas de mañana** (`draft_message`: cada tarde, citas de mañana sin
-      confirmar → mensaje listo para aprobar),
+      (1) ✅ **Confirmador de citas de mañana** (`draft_message`: citas de mañana sin
+      confirmar → mensaje listo para aprobar) — **CONSTRUIDO el 2026-09-12**, ver abajo,
       (2) **Seguimiento de cotizaciones** sin respuesta en N días (`draft_message` —
       importadora), (3) ✅ **Stock bajo mínimo → tarea de pedido** al proveedor de la ficha
       (`create_task`: no depende del envío externo) — **CONSTRUIDO el 2026-09-12**, ver abajo.
+
+      ✅ **(1) HECHO: agente `confirmador`** (`onia-platform`, rama
+      `claude/chatbots-platform-review-0d1d09`, `82d34b5` — **falta mergear y desplegar**). Gate nuevo
+      `lib/onia-core/modules/agents-confirmador.test.ts` (17 casos), validado **por mutación en
+      dos puntos**: contar «mañana» en UTC en vez de la zona del negocio → rojo; sacarle la
+      puerta de rubro → rojo.
+
+      **El hallazgo, que es por qué el gate más largo del archivo es el de la zona horaria.**
+      El contenedor `onia-platform` corre con `TZ` vacío (UTC) y La Paz es UTC−4: entre las
+      20:00 y la medianoche **local** el servidor ya está en el día siguiente. Un
+      «mañana = ahora + 24 h» leído en UTC le manda al dueño los borradores de **pasado
+      mañana** durante cuatro horas por día, y se saltea los de mañana — sin fallar nunca del
+      todo. El día se lee con `Intl` en la zona de la org (`clinic_settings.timezone`, con
+      cascada al default) y la suma se hace sobre el **calendario** local, no sobre el
+      instante; el recorte fino lo hace el evaluador puro y el `where` de Prisma trae un
+      superconjunto de 48 h a propósito.
+
+      **Lo que NO se hizo, y por qué.** No cuelga de `reminder24hSentAt` como el seguimiento de
+      visitas del captador: ese campo lo escribe **otro** circuito (el cron de
+      `appointment-reminders`) y puede no haber salido nunca — medido hoy, producción tiene
+      **cero citas** (`select count(*) from appointments` → 0), así que cero recordatorios.
+      Colgarlo de esa precondición lo dejaría mudo por una razón que no tiene nada que ver con
+      lo que decide. Y comparte `targetType: "visita"` con el captador **a propósito**: el
+      cooldown del runtime se lleva por `(org, targetType, targetId)`, así que es lo único que
+      impide que los dos agentes le escriban al mismo paciente por la misma cita.
+
+      ⚠️ **La decisión decía «cada tarde» y el producto no puede prometer eso**: la cadencia de
+      todos los agentes la marca **un** cron del host, 1 vez por día (11:00 UTC = 07:00 La
+      Paz). El agente mira las citas de mañana una vez al día; cambiar la hora es tocar un cron
+      del VPS, que no es de este carril.
 
       ✅ **(3) HECHO: agente `reponedor`** (`onia-platform` `42ab871`, rama
       `claude/chatbots-platform-review-0d1d09` — pusheado, **falta mergear y desplegar**).
