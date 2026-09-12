@@ -193,11 +193,113 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       los TRES agentes nuevos** (nota del merge del 12-sep: dos carriles reescribieron este
       ítem a la vez — la parte MEDIDA es sucesora, la DECISIÓN de los tres no se pierde).
       Sobre el mismo patrón de `onia-platform/lib/onia-core/modules/agents-runtime.ts`:
-      (1) **Confirmador de citas de mañana** (`draft_message`: cada tarde, citas de mañana sin
-      confirmar → mensaje listo para aprobar),
-      (2) **Seguimiento de cotizaciones** sin respuesta en N días (`draft_message` —
-      importadora), (3) **Stock bajo mínimo → tarea de pedido** al proveedor de la ficha
-      (`create_task`: no depende del envío externo). Restricción vigente: el ENVÍO externo (S6) no
+      (1) ✅ **Confirmador de citas de mañana** (`draft_message`: citas de mañana sin
+      confirmar → mensaje listo para aprobar) — **CONSTRUIDO el 2026-09-12**, ver abajo,
+      (2) ✅ **Seguimiento de cotizaciones** sin respuesta en N días (`draft_message` —
+      importadora) — **CONSTRUIDO el 2026-09-12**, ver abajo, (3) ✅ **Stock bajo mínimo →
+      tarea de pedido** al proveedor de la ficha
+      (`create_task`: no depende del envío externo) — **CONSTRUIDO el 2026-09-12**, ver abajo.
+      **Los TRES quedaron construidos; lo único que les falta a los tres es el mismo paso:
+      mergear y desplegar.**
+
+      ✅ **(1) HECHO: agente `confirmador`** (`onia-platform`, rama
+      `claude/chatbots-platform-review-0d1d09`, `82d34b5` — **falta mergear y desplegar**). Gate nuevo
+      `lib/onia-core/modules/agents-confirmador.test.ts` (17 casos), validado **por mutación en
+      dos puntos**: contar «mañana» en UTC en vez de la zona del negocio → rojo; sacarle la
+      puerta de rubro → rojo.
+
+      **El hallazgo, que es por qué el gate más largo del archivo es el de la zona horaria.**
+      El contenedor `onia-platform` corre con `TZ` vacío (UTC) y La Paz es UTC−4: entre las
+      20:00 y la medianoche **local** el servidor ya está en el día siguiente. Un
+      «mañana = ahora + 24 h» leído en UTC le manda al dueño los borradores de **pasado
+      mañana** durante cuatro horas por día, y se saltea los de mañana — sin fallar nunca del
+      todo. El día se lee con `Intl` en la zona de la org (`clinic_settings.timezone`, con
+      cascada al default) y la suma se hace sobre el **calendario** local, no sobre el
+      instante; el recorte fino lo hace el evaluador puro y el `where` de Prisma trae un
+      superconjunto de 48 h a propósito.
+
+      **Lo que NO se hizo, y por qué.** No cuelga de `reminder24hSentAt` como el seguimiento de
+      visitas del captador: ese campo lo escribe **otro** circuito (el cron de
+      `appointment-reminders`) y puede no haber salido nunca — medido hoy, producción tiene
+      **cero citas** (`select count(*) from appointments` → 0), así que cero recordatorios.
+      Colgarlo de esa precondición lo dejaría mudo por una razón que no tiene nada que ver con
+      lo que decide. Y comparte `targetType: "visita"` con el captador **a propósito**: el
+      cooldown del runtime se lleva por `(org, targetType, targetId)`, así que es lo único que
+      impide que los dos agentes le escriban al mismo paciente por la misma cita.
+
+      ⚠️ **La decisión decía «cada tarde» y el producto no puede prometer eso**: la cadencia de
+      todos los agentes la marca **un** cron del host, 1 vez por día (11:00 UTC = 07:00 La
+      Paz). El agente mira las citas de mañana una vez al día; cambiar la hora es tocar un cron
+      del VPS, que no es de este carril.
+
+      ✅ **(2) HECHO: agente `seguidor`** (`onia-platform` `0376b07`, rama
+      `claude/chatbots-platform-review-0d1d09` — pusheado, **falta mergear y desplegar**).
+      ⚠️ El sha se DERIVA de `origin`, no del clon de casa: desde el nodo de casa no se pushea
+      `onia-platform`, la entrega va por `format-patch | ssh … git am`, y **`git am` regenera el
+      sha** — el local decía `4d94cdf`, que no existe en ningún remoto. Gates re-corridos **en
+      el VPS** sobre el árbol que se publicó, no sobre el de casa: `tsc` limpio, **393 archivos
+      de test verdes** (4.791 casos), `eslint` limpio, `check:onia-core` OK.
+      Gate nuevo `lib/onia-core/modules/agents-seguidor.test.ts` (21 casos), **validado por
+      mutación en cuatro puntos**: sin puerta de validez → rojo; sin puerta de estado → 4
+      rojos; sin puerta de rubro → 2 rojos; sin plazo de espera → rojo.
+
+      **Las dos decisiones que costaron pensarlas, porque las dos tenían una versión obvia y
+      equivocada.** (a) **La fecha del envío sale de `metadata.sentAt`, que ya la escribe la
+      transición del rubro (`transicionarCotizacion`) — NO de `updatedAt`.** Parecen lo mismo y
+      no lo son: editar una línea después de mandarla mueve `updatedAt`, así que la cotización
+      que se está negociando activamente sería justo la que el agente deja de perseguir. El dato
+      ya existía en el producto; inventarlo habría sido la segunda fuente.
+      (b) **Una cotización VENCIDA no se persigue, y ése es el caso NORMAL, no el raro:** pasar
+      a `expired` es una transición **manual** que nadie ejecuta, así que la base tiene `sent`
+      con la validez cumplida. Un borrador que pregunta "¿la viste?" sobre un precio que ya no
+      vale le promete al cliente un monto que el negocio no va a sostener. Sin `validUntil`
+      cargado **sí** se persigue: ahí el precio nunca se declaró vencido.
+
+      **Y una tercera, sobre qué NO dice el mensaje:** el texto al cliente **no repite el
+      monto**, aunque el feed lo tenga y el resumen del panel sí lo muestre. Son dos lectores
+      distintos — el resumen lo lee el dueño, que prioriza por plata; el mensaje lo lee el
+      cliente, que ya tiene la cotización. Repetirle la cifra suelta por WhatsApp, sin las
+      líneas ni las condiciones, convierte un seguimiento en una segunda oferta que puede no
+      coincidir con el documento.
+
+      ⚠️ **Hoy no tendría a quién perseguir, y se midió antes de decir lo contrario:**
+      `select ... from onia_commerce_quotes` en producción devuelve **cero filas** en todas las
+      orgs. Es el mismo estado que el Confirmador (cero citas) y por el mismo motivo — no hay
+      clientes usando el producto todavía, no es que el agente esté mudo. Lo que prueba que
+      produce es el gate, no la base.
+
+      ✅ **(3) HECHO: agente `reponedor`** (`onia-platform` `42ab871`, rama
+      `claude/chatbots-platform-review-0d1d09` — pusheado, **falta mergear y desplegar**).
+      Gates en el VPS: `tsc` limpio, **4.749 tests verdes**, `eslint` limpio, `check:onia-core`
+      OK. Gate nuevo `lib/onia-core/modules/agents-reponedor.test.ts` (10 casos), **validado por
+      mutación en tres puntos**: predicado propio en vez de `isBelowReorder` → rojo en el borde
+      `quantity === reorderPoint`; sin puerta de rubro → rojo; sin rótulo → rojo.
+
+      **Lo que apareció al construirlo y es el hallazgo:** el predicado ya existía
+      —`isBelowReorder` en `lib/onia-core/modules/commerce-logic.ts`, port fiel del core, con
+      sus tests— y tenía **CERO llamadores en producción**: sus únicas referencias eran su
+      propio archivo de test. Un módulo que nadie llama vale cero. El agente no lo reescribe,
+      lo llama; y el `<=` tampoco se duplica en el `where` de Prisma (el SQL acota a lo que el
+      dueño curó, `reorderPoint` cargado, y el evaluador puro decide) — así la regla que
+      decide si el negocio se queda sin mercadería vive en **un solo lugar**.
+
+      Las cuatro puertas que un agente nuevo tiene que cruzar, cada una con el bug que la
+      originó: **rubro** (`agents-por-rubro`: corre sólo donde hay inventario, preguntándole al
+      pack con `llevaInventario` y no a una lista de tracks escrita al lado — así fue como el
+      Recall terminó corriendo mudo en tres rubros); **rótulo** (`agents-rotulos`, o la pantalla
+      renderiza un hueco); **tipo de work item** (`reponer_insumo`, que el vocabulario del core
+      ya tenía — sin eso caía al default `seguimiento_paciente` y las tareas de pedido de una
+      ferretería aterrizaban en la bandeja de recepción clínica); y **entidad relacionada**
+      (`stock_item` → `OniaCommerceStockItem`). De paso, `isAgentKind` pasó a derivarse de
+      `AGENT_KINDS`: con la lista escrita a mano, un kind nuevo entraba al cron y el endpoint
+      externo lo rechazaba.
+
+      Es `create_task` y `autonomyLevel: "auto"` a propósito: **no contacta a nadie**, así que
+      no ocupa la cola de aprobaciones —que es para lo que SALE del negocio— y no depende del
+      envío externo (S6), que sigue sin existir. Cooldown de 7 días por existencia: el proveedor
+      tarda, y repetir la tarea a diario hasta que llegue la mercadería entierra la cola.
+      El guard 15b del propio producto cazó mi copy en tuteo («Revisa») antes de que lo viera
+      un cliente — el gate de rubro×texto funcionando sobre trabajo nuevo. Restricción vigente: el ENVÍO externo (S6) no
       existe — aprobar registra la acción; el WhatsApp real es obra aparte y no se promete hasta
       que exista. Las dos precondiciones que Sergio Urcullo puso antes de estos tres (E2E de los 2
       vivos, y la cadencia) **ya están cerradas** en los dos ítems de abajo.
