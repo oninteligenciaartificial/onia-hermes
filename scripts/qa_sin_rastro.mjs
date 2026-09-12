@@ -44,6 +44,37 @@ import { execFileSync } from 'node:child_process';
 /** La marca que dejan los carriles en sus datos de prueba: `zz-qa-…` o `zzqa…`. */
 export const MARCA = 'zz-?qa';
 
+/**
+ * Los generadores de `id` que usa el PRODUCTO. Todo lo demás lo escribió una persona o un script.
+ *
+ * Esta es la pregunta que no depende de que el carril se acuerde de la marca acordada, y por eso
+ * existe: el 2026-09-12 el detector por marca dio "limpio" con doce filas `e2e-agentes-…` vivas
+ * dentro de `clinica-sergio-p2ljs`. Medido contra la base entera ese día: de 74 tablas con
+ * `organizationId`, sólo SIETE filas tenían un id fuera de estos formatos, y cuatro eran la
+ * siembra de QA.
+ */
+const GENERADORES_DEL_PRODUCTO = [
+  /^c[a-z0-9]{20,}$/, // cuid — el de Prisma, el que genera casi todo
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i, // uuid (clinic_settings)
+  /^[0-9a-f]{24,32}$/i, // hex suelto (organization_entitlements de la migración)
+];
+
+/**
+ * Filas cuyo id se escribió a mano y NO son basura de QA. Se nombran de a una, por su literal
+ * exacto, y se re-miden en cada corrida: una excusa por forma (`^sergio…`) absolvería de entrada
+ * a la siguiente fila que alguien inserte con ese prefijo.
+ */
+const IDS_A_MANO_LEGITIMOS = new Set([
+  'sergio20260904addonwa001', // add-on de WhatsApp otorgado a mano a la org de Sergio Urcullo el 4-sep
+]);
+
+/** ¿Este id lo generó el producto? `false` = lo escribió una persona o un script de prueba. */
+export function esIdAjenoAlProducto(id) {
+  if (typeof id !== 'string' || id === '') return false;
+  if (IDS_A_MANO_LEGITIMOS.has(id)) return false;
+  return !GENERADORES_DEL_PRODUCTO.some((re) => re.test(id));
+}
+
 /** Tipos de columna donde puede esconderse la marca. `jsonb` importa: `audit_logs` la guarda ahí. */
 const TIPOS_CON_TEXTO = new Set(['text', 'character varying', 'character', 'jsonb', 'json']);
 
@@ -100,6 +131,37 @@ export function consultaDeRastro(catalogo) {
   return tramos.join('\nUNION ALL\n');
 }
 
+/**
+ * La segunda pregunta, la que no pasa por la marca: ¿hay filas cuyo `id` no lo generó el producto?
+ *
+ * El filtro grueso (no-cuid) va en SQL porque es el que descarta la base entera; el fino
+ * —incluida la excusa nombrada— lo hace `esIdAjenoAlProducto`, así vive en un solo lugar.
+ * Devuelve `null` si ninguna tabla califica, para no confundir "no hay nada" con "no pregunté".
+ */
+export function consultaDeIdsAjenos(catalogo) {
+  const porTabla = new Map();
+  for (const col of catalogo) {
+    if (!porTabla.has(col.table_name)) porTabla.set(col.table_name, []);
+    porTabla.get(col.table_name).push(col);
+  }
+
+  const tramos = [];
+  for (const [tabla, columnas] of porTabla) {
+    const nombres = new Set(columnas.map((c) => c.column_name));
+    if (tabla !== 'organizations' && !nombres.has('organizationId')) continue;
+    const id = columnas.find((c) => c.column_name === 'id');
+    if (!id || !TIPOS_CON_TEXTO.has(id.data_type)) continue;
+    const org = tabla === 'organizations' ? '"id"' : '"organizationId"';
+    tramos.push(
+      `SELECT 'id-ajeno' AS detector, '${tabla}' AS tabla, 'id' AS columna, "id" AS fila, ` +
+      `${org} AS org, left("id", 140) AS muestra ` +
+      `FROM "${tabla}" WHERE "id" !~ '^c[a-z0-9]{20,}$'`,
+    );
+  }
+  if (tramos.length === 0) return null;
+  return tramos.join('\nUNION ALL\n');
+}
+
 /** Separa los hallazgos que caen en una organización real de los que caen en una de prueba. */
 export function clasificar(hallazgos, organizaciones) {
   const porId = new Map(organizaciones.map((o) => [o.id, o]));
@@ -131,9 +193,17 @@ export function auditar({ psql }) {
   const sql = consultaDeRastro(catalogo);
   if (sql === null) return { estado: 'no-medido', motivo: 'ninguna tabla con organizationId tiene columnas de texto' };
 
+  const sqlIds = consultaDeIdsAjenos(catalogo);
+  if (sqlIds === null) return { estado: 'no-medido', motivo: 'ninguna tabla con organizationId tiene id de texto' };
+
   let hallazgos;
   try {
-    hallazgos = filas(psql(sql)).map(([tabla, columna, fila, org, muestra]) => ({ tabla, columna, fila, org, muestra }));
+    hallazgos = filas(psql(sql)).map(([tabla, columna, fila, org, muestra]) => ({ tabla, columna, fila, org, muestra, detector: 'marca' }));
+    // Media auditoría no es una auditoría limpia: si esta pregunta falla, el veredicto entero cae.
+    const porId = filas(psql(sqlIds))
+      .map(([, tabla, columna, fila, org, muestra]) => ({ tabla, columna, fila, org, muestra, detector: 'id-ajeno' }))
+      .filter((h) => esIdAjenoAlProducto(h.fila));
+    hallazgos = [...hallazgos, ...porId];
   } catch (err) {
     return { estado: 'no-medido', motivo: `no pude buscar el rastro: ${err.message}` };
   }
@@ -169,7 +239,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     console.log(`Miré ${r.tablasMiradas} tablas con organizationId.`);
     console.log(`En organizaciones REALES: ${r.enReales.length}`);
     for (const h of r.enReales) {
-      console.log(`  🔴 ${h.tabla}.${h.columna} fila=${h.fila} org=${h.org?.slug || h.org || '(huérfana)'} → ${h.muestra}`);
+      console.log(`  🔴 [${h.detector}] ${h.tabla}.${h.columna} fila=${h.fila} org=${h.org?.slug || h.org || '(huérfana)'} → ${h.muestra}`);
     }
     console.log(`En organizaciones de prueba (normal, las barre su dueño): ${r.enPrueba.length}`);
     for (const h of r.enPrueba) console.log(`  · ${h.tabla}.${h.columna} org=${h.org?.slug}`);

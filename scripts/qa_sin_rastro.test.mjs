@@ -8,7 +8,7 @@
  */
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { auditar, clasificar, consultaDeRastro, esOrganizacionDePrueba } from './qa_sin_rastro.mjs';
+import { auditar, clasificar, consultaDeIdsAjenos, consultaDeRastro, esIdAjenoAlProducto, esOrganizacionDePrueba } from './qa_sin_rastro.mjs';
 
 const CATALOGO = [
   { table_name: 'organizations', column_name: 'id', data_type: 'text' },
@@ -24,10 +24,11 @@ const CATALOGO = [
 ];
 
 /** Un psql de mentira: contesta según qué le preguntan. */
-function psqlFalso({ catalogo = CATALOGO, organizaciones = [], hallazgos = [] } = {}) {
+function psqlFalso({ catalogo = CATALOGO, organizaciones = [], hallazgos = [], idsAjenos = [] } = {}) {
   return (q) => {
     if (q.includes('information_schema')) return catalogo.map((c) => `${c.table_name}|${c.column_name}|${c.data_type}`).join('\n');
     if (q.startsWith('SELECT id, slug, name FROM organizations')) return organizaciones.map((o) => `${o.id}|${o.slug}|${o.name}`).join('\n');
+    if (q.includes('AS detector')) return idsAjenos.map((h) => `id-ajeno|${h.tabla}|${h.columna}|${h.fila}|${h.org}|${h.muestra}`).join('\n');
     return hallazgos.map((h) => `${h.tabla}|${h.columna}|${h.fila}|${h.org}|${h.muestra}`).join('\n');
   };
 }
@@ -112,4 +113,66 @@ test('una organización es de prueba sólo si ELLA lleva la marca', () => {
   assert.equal(esOrganizacionDePrueba({ slug: 'zzqa-loquesea', name: 'x' }), true);
   assert.equal(esOrganizacionDePrueba({ slug: 'clinica-sergio-p2ljs', name: 'Clínica Sergio' }), false);
   assert.equal(esOrganizacionDePrueba(null), false);
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// El segundo detector: el que NO depende de que el carril use la marca acordada.
+//
+// Nace de que el auditor de arriba dio "limpio" el 2026-09-12 con DOCE filas de prueba dentro
+// de `clinica-sergio-p2ljs` — la cuenta real de Sergio Urcullo — porque el carril que las sembró
+// las llamó `e2e-agentes-…` y la marca escrita acá era `zz-?qa`. Derivar el universo de TABLAS
+// de la base no sirve de nada si después se lo filtra por una lista de marcas escrita a mano:
+// la lista falla abierto en la marca nueva, que es justo la que nadie previó.
+// ─────────────────────────────────────────────────────────────────────────────
+
+test('una marca que este archivo NO conoce igual aparece: el id no lo generó el producto', () => {
+  const r = auditar({
+    psql: psqlFalso({
+      organizaciones: [{ id: 'org-real', slug: 'clinica-sergio-p2ljs', name: 'Clínica Sergio' }],
+      hallazgos: [],
+      idsAjenos: [{ tabla: 'invoices', columna: 'id', fila: 'e2e-agentes-factura-1', org: 'org-real', muestra: 'e2e-agentes-factura-1' }],
+    }),
+  });
+  assert.equal(r.estado, 'sucio', 'el caso real del 2026-09-12: 12 filas e2e-agentes-* y el auditor decía limpio');
+  assert.equal(r.enReales.length, 1);
+  assert.equal(r.enReales[0].detector, 'id-ajeno');
+});
+
+test('un id que SÍ generó el producto no es sujeto: el detector no puede gritar por toda la base', () => {
+  const sql = consultaDeIdsAjenos(CATALOGO);
+  assert.match(sql, /FROM "patients"/);
+  for (const idSano of ['cmtxwgzof002d01rwq76hw6sy', 'ab6e629f-f798-4a7f-87df-12ec1c7fac0b', '4f9603d8358efe973f6c0a7ad']) {
+    assert.equal(esIdAjenoAlProducto(idSano), false, `${idSano} lo generó un generador conocido (cuid / uuid / hex)`);
+  }
+  for (const idAMano of ['e2e-agentes-factura-1', 'zzqa20260912pac1', 'prueba-1']) {
+    assert.equal(esIdAjenoAlProducto(idAMano), true, `${idAMano} lo escribió una persona o un script`);
+  }
+});
+
+test('la excusa nombrada absuelve su literal EXACTO y nada más', () => {
+  assert.equal(esIdAjenoAlProducto('sergio20260904addonwa001'), false, 'el add-on de WhatsApp otorgado a mano el 4-sep es real, no basura de QA');
+  assert.equal(esIdAjenoAlProducto('sergio20260904addonwa002'), true, 'un id parecido NO queda pre-aprobado por la excusa del vecino');
+});
+
+test('el detector de ids no mira tablas sin organizationId ni columnas id que no sean texto', () => {
+  const sql = consultaDeIdsAjenos([
+    ...CATALOGO,
+    { table_name: 'tabla_global', column_name: 'id', data_type: 'text' },
+    { table_name: 'numerada', column_name: 'id', data_type: 'integer' },
+    { table_name: 'numerada', column_name: 'organizationId', data_type: 'text' },
+  ]);
+  assert.doesNotMatch(sql, /FROM "tabla_global"/);
+  assert.doesNotMatch(sql, /FROM "numerada"/);
+});
+
+test('si el detector de ids no puede preguntar, el auditor entero sale no-medido', () => {
+  const r = auditar({
+    psql: (q) => {
+      if (q.includes('information_schema')) return CATALOGO.map((c) => `${c.table_name}|${c.column_name}|${c.data_type}`).join('\n');
+      if (q.startsWith('SELECT id, slug, name FROM organizations')) return 'org-real|clinica-sergio-p2ljs|Clínica Sergio';
+      if (q.includes('AS detector')) throw new Error('connection reset');
+      return '';
+    },
+  });
+  assert.equal(r.estado, 'no-medido', 'media auditoría no es una auditoría limpia');
 });
