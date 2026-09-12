@@ -5,32 +5,27 @@ import { PanelDibujado } from "./ui";
 import s from "./sitio.module.css";
 
 /**
- * Conmutador de rubros v2 — SCROLLYTELLING (pedido de Sergio Urcullo, 11-sep,
- * sobre captura de producción: "texto a la izquierda, imágenes a la derecha,
- * que se muevan mediante scroll y se vean uno por uno").
+ * Conmutador de rubros v3 — TODO FIJO (segunda vuelta de Sergio Urcullo,
+ * 11-sep, sobre el v2 en el preview: "aquí que los textos estén fijos y sigue
+ * las tipografías de la marca onia, no cambies y haz que se vea más bonito").
  *
- * Layout: los cinco bloques de texto scrollean a la izquierda; el panel
- * DIBUJADO del rubro activo queda pegado (sticky) a la derecha y cambia con
- * crossfade cuando el bloque de texto siguiente cruza el centro del viewport.
+ * El v2 scrolleaba los bloques de texto (70vh cada uno): en pantalla era un
+ * título, un hueco gigante y el siguiente rubro flotando en gris. En el v3 la
+ * sección queda CLAVADA a pantalla completa y el scroll solo avanza el rubro:
+ * texto e imagen cambian en el lugar, uno por uno, sin huecos.
  *
- * La MECÁNICA de detección se hereda del conmutador v1, batallada y medida:
- *  · UN entero (activo) decidido por un scroll handler rAF-throttled que RELEE
- *    getBoundingClientRect() de TODOS los bloques en cada aviso — acumular
- *    estado por centinela se queda viejo en un salto de scroll (bug medido:
- *    saltando hacia atrás el índice quedaba clavado en el último).
- *  · El umbral es el CENTRO del viewport, no el borde: con texto de altura
- *    real (no bandas invisibles) el rubro se activa cuando SU texto es el que
- *    se está leyendo.
+ * Mecánica: el contenedor mide --n × 90vh (el "recorrido"); un handler
+ * rAF-throttled RELEE getBoundingClientRect() del contenedor en cada aviso
+ * (lección del v1: acumular estado se queda viejo en un salto de scroll) y
+ * convierte el avance [0..1] en el índice del rubro.
  *
- * APILADO (móvil y reduced-motion): cada rubro muestra su texto y SU panel
- * juntos, en orden. ⚠️ La versión anterior apilaba LAS CINCO PALABRAS gigantes
- * primero y los cinco paneles después — eso es lo que Sergio vio en producción
- * (su Windows tiene "reducir movimiento" activado, así que él SIEMPRE ve el
- * fallback) y lo que motivó este rediseño: el fallback también es la página.
+ * APILADO (móvil): cada rubro con su texto y SU panel juntos, en orden.
+ * Reduced-motion NO degrada el layout de escritorio — Sergio lo tiene activo
+ * en Windows y el fallback es lo que él ve; solo se apagan las transiciones.
  *
  * El rodillo lleva el PANEL DIBUJADO de cada rubro, nunca una captura
- * (Sergio, 2026-09-01; guard forma.test.ts). El copy de cada bloque repite lo
- * que este mismo sitio ya publica por rubro — acá no nace ninguna promesa.
+ * (Sergio, 2026-09-01; guard forma.test.ts). El copy repite lo que este mismo
+ * sitio ya publica por rubro — acá no nace ninguna promesa.
  */
 
 type Rubro = {
@@ -83,27 +78,24 @@ const RUBROS: readonly Rubro[] = [
 ];
 
 export function Switcher() {
-  const listaRef = useRef<HTMLDivElement | null>(null);
+  const contRef = useRef<HTMLDivElement | null>(null);
   const [activo, setActivo] = useState(0);
 
   useEffect(() => {
-    const lista = listaRef.current;
-    if (!lista) return;
-    const bloques = Array.from(lista.querySelectorAll<HTMLElement>("[data-rubro]"));
-    if (bloques.length < 2) return;
+    const cont = contRef.current;
+    if (!cont) return;
 
     let raf = 0;
     const medir = () => {
       raf = 0;
-      // Gana el último bloque cuyo tope cruzó el centro del viewport. Se relee
-      // TODA la geometría en cada aviso (la lección del v1). En apilado los
-      // bloques siguen visibles, así que el índice es inofensivo ahí: el panel
-      // sticky está display:none.
-      const centro = window.innerHeight / 2;
-      let i = 0;
-      for (let k = 0; k < bloques.length; k += 1) {
-        if (bloques[k].getBoundingClientRect().top < centro) i = k;
-      }
+      // Avance = cuánto del recorrido del contenedor ya cruzó el tope del
+      // viewport. En móvil (sin recorrido: height auto) no hay nada que medir
+      // y el índice queda inofensivo — el pin está display:none.
+      const r = cont.getBoundingClientRect();
+      const recorrido = r.height - window.innerHeight;
+      if (recorrido <= 0) return;
+      const avance = Math.min(Math.max(-r.top / recorrido, 0), 1);
+      const i = Math.min(RUBROS.length - 1, Math.floor(avance * RUBROS.length));
       setActivo((prev) => (prev === i ? prev : i));
     };
     const onScroll = () => {
@@ -121,31 +113,39 @@ export function Switcher() {
   }, []);
 
   return (
-    <div className={s.swy} ref={listaRef}>
-      {/* Columna de TEXTO: los cinco bloques scrollean. En apilado, cada
-          bloque trae su propio panel debajo. */}
-      <div className={s.swyTextos}>
-        {RUBROS.map((r, k) => (
-          <article
-            key={r.id}
-            data-rubro
-            className={s.swyBloque}
-            aria-current={k === activo ? "true" : "false"}
-          >
-            <h3 className={s.swyPalabra}>{r.palabra}</h3>
-            <p className={s.swyLinea}>{r.linea}</p>
-            {/* El panel INLINE del apilado (móvil / reduced-motion). En el
-                scrolly de escritorio va display:none y manda el sticky. */}
-            <div className={s.swyPanelInline} style={{ background: r.bg } as CSSProperties}>
-              <PanelDibujado panel={r.id} />
-            </div>
-          </article>
-        ))}
-      </div>
+    <div
+      className={s.swy}
+      ref={contRef}
+      style={{ "--n": RUBROS.length } as CSSProperties}
+    >
+      {/* Escritorio: la escena FIJA. Texto e imagen cambian en el lugar. */}
+      <div className={s.swyPin}>
+        <div>
+          <div className={s.swyTexto}>
+            {RUBROS.map((r, k) => (
+              <div
+                key={r.id}
+                className={k === activo ? `${s.swyTx} ${s.swyTxActivo}` : s.swyTx}
+                aria-hidden={k === activo ? undefined : "true"}
+              >
+                <h3 className={s.swyPalabra}>{r.palabra}</h3>
+                <p className={s.swyLinea}>{r.linea}</p>
+              </div>
+            ))}
+          </div>
+          <div className={s.swyPuntos} aria-hidden="true">
+            {RUBROS.map((r, k) => (
+              <span
+                key={r.id}
+                className={
+                  k === activo ? `${s.swyPunto} ${s.swyPuntoActivo}` : s.swyPunto
+                }
+              />
+            ))}
+          </div>
+        </div>
 
-      {/* Columna STICKY: un solo panel visible por vez, crossfade al cambiar. */}
-      <div className={s.swyEscenario} aria-hidden="true">
-        <div className={s.swySticky}>
+        <div className={s.swyEscenario} aria-hidden="true">
           {RUBROS.map((r, k) => (
             <div
               key={r.id}
@@ -156,6 +156,22 @@ export function Switcher() {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Apilado (móvil): cada rubro con su panel, en orden. */}
+      <div className={s.swyApilado}>
+        {RUBROS.map((r) => (
+          <article key={r.id} className={s.swyPar}>
+            <h3 className={s.swyPalabra}>{r.palabra}</h3>
+            <p className={s.swyLinea}>{r.linea}</p>
+            <div
+              className={s.swyPanelInline}
+              style={{ background: r.bg } as CSSProperties}
+            >
+              <PanelDibujado panel={r.id} />
+            </div>
+          </article>
+        ))}
       </div>
     </div>
   );
