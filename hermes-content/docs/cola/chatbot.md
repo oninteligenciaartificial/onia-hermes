@@ -278,6 +278,40 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [ ] 🔴 **El bot VIVO le cotiza Bs 750 y Bs 1.500 a los leads — montos que ya no existen — y
+      los DOS instrumentos del carril estaban en verde** (medido 2026-09-12, tablero
+      `t_e45a24ff`, instrumento `97e466fa`).
+
+      **Lo que el bot MANDÓ**, no lo que podría mandar — `messages` de Chatwoot, textual:
+      *"el sistema arranca en Bs 320 al mes con el plan Básico, Bs 750 el Profesional y Bs 1.500
+      el Completo. El chatbot de WhatsApp va aparte, Bs 390 al mes."* Tres defectos en una
+      oración: dos montos muertos, el plan **Crece** no existe para el bot, y cobra aparte un
+      chatbot que el plan Completo ahora **incluye**.
+
+      **Por qué sobrevivió a la escalera C.** El simulador (`simulate.mjs`) y el gate
+      (`test:precios-bot`) leen el **repo**, y el repo está bien. El bot lee
+      `/tmp/onia-bot/knowledge.json`, que está en `.gitignore` **a propósito** porque se publica
+      a mano. Arreglar el repo no toca producción, y ningún gate miraba la copia viva: la
+      escalera C barrió landing y plataforma —los dos con pedido de deploy— y dejó al bot afuera,
+      callado. Mi propia línea de arranque decía `simulador 3/3` mientras pasaba esto.
+
+      **Cerrado de este carril:** `npm run precios:vivos` — mide la copia que el PROCESO lee y la
+      ata a la fuente única. Deriva los sujetos del artefacto (todo string, a cualquier
+      profundidad) y es tri-estado. Hoy sale **exit 1**; cuando esté publicado, exit 0.
+
+      🔴 **FALTA, y NO lo puede hacer este carril: publicar.** `DESPLEGAR: bot` publica el
+      código pero **no el texto** (`publicar.sh` preserva `knowledge.json` a propósito), así que
+      hace falta además un comando:
+      `ONIA_BOT_KNOWLEDGE_FILE=/opt/onia/bot/knowledge.onia.json /opt/onia/bot/webhook-server.sh knowledge`.
+      Va `DESPUES-DE: plataforma`: si el bot sale primero cotiza 890 mientras la caja cobra 750.
+
+      **Lo que queda como próximo ítem** (no se hizo acá para no abrir dos frentes): que el
+      publicador del bot **lleve el conocimiento**, para que «se publica a mano» deje de ser la
+      causa raíz — es la misma que dejó el knowledge en agosto sin precios. Toca
+      `hermes-content/deploy/vps-ops/bot/publicar.sh`, que es infraestructura compartida con
+      `onia-cola` (gate `test:publicadores`, desplegado por `sincronizar.sh`): se coordina, no se
+      toca de costado.
+
 - [x] ✅ **CERRADO el 2026-09-11 (`93256eab`, onia-hermes — pusheado a la rama, falta mergear):
       el intake de leads le afirmaba a Sergio Urcullo que TODO contacto había pedido una demo.**
       Tablero `t_62aa450c`, encontrado por otro carril midiendo en vivo.
