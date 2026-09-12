@@ -26,6 +26,9 @@ import { fileURLToPath } from "node:url";
 import {
   diagnosticar,
   contarEventos,
+  conversacionesDeAvisos,
+  clasificarEventos,
+  lecturaDeEventos,
   resolverBotDesplegado,
   motorProduceAviso,
   RAMAS_QUE_AVISAN,
@@ -89,6 +92,68 @@ test("un aviso SALTEADO tambien es rojo: es una persona esperando que nadie aten
   const d = diagnosticar({ circuito: CIRCUITO_SANO, eventos: contarEventos(lineas) });
   assert.equal(d.eventos.salteados, 1);
   assert.equal(d.veredicto, "roto");
+});
+
+// ---------------------------------------------------------------------------
+// Vigencia del salteo — el log es append-only y NUNCA se rota (51.774 lineas el
+// 2026-09-12). Contar todos los salteos de la historia deja este gate en rojo PARA
+// SIEMPRE por dos lineas del 4-sep, y un rojo que no puede volver a verde deja de
+// mirarse: el dia que el circuito se rompa de verdad, su rojo va a ser identico al
+// rojo de siempre. La cura NO es dejar de contarlos —eso apaga al detector— es
+// preguntar si la causa SIGUE VIVA.
+// ---------------------------------------------------------------------------
+
+test("un salteo por el flag apagado queda CURADO si el circuito volvio a mandar despues", () => {
+  // Medido en produccion el 2026-09-12: los dos `skipped` estan en las lineas 50803 y
+  // 50819 del log, y el primer `sent` en la 50851. O sea el flag se encendio DESPUES y
+  // el circuito ya demostro que manda. Seguir rojo por eso es reportar un fallo viejo
+  // como activo.
+  const lineas = [
+    "[aviso] skipped (cuota_agotada): aviso por Telegram apagado (ONIA_BOT_TG_AVISO)",
+    "[aviso] sent conv=57 (pidio_humano_recepcion): aviso enviado",
+  ];
+  const d = diagnosticar({ circuito: CIRCUITO_SANO, eventos: contarEventos(lineas) });
+  assert.equal(d.eventos.salteados, 1, "el total historico se sigue informando");
+  assert.equal(d.eventos.salteadosVigentes, 0);
+  assert.equal(d.veredicto, "ok");
+});
+
+test("el ORDEN manda: un salteo POSTERIOR al ultimo envio sigue siendo rojo", () => {
+  // La baranda anti-apagon del detector. Si el flag se apaga hoy, el salteo es posterior
+  // al ultimo envio y nada lo desmiente: rojo hasta que el circuito vuelva a mandar.
+  const lineas = [
+    "[aviso] sent conv=57 (pidio_humano_recepcion): aviso enviado",
+    "[aviso] skipped conv=61 (handoff): aviso por Telegram apagado (ONIA_BOT_TG_AVISO)",
+  ];
+  const d = diagnosticar({ circuito: CIRCUITO_SANO, eventos: contarEventos(lineas) });
+  assert.equal(d.eventos.salteadosVigentes, 1);
+  assert.equal(d.veredicto, "roto");
+});
+
+test("un salteo que NO es del flag global no lo cura un envio posterior", () => {
+  // La curacion vale solo para una causa GLOBAL del circuito (el flag apagado apaga TODOS
+  // los avisos, asi que un envio posterior prueba que ya no esta). Un salteo por cualquier
+  // otro motivo es propio de ESE aviso: que otro haya salido despues no dice nada de el.
+  const lineas = [
+    "[aviso] skipped conv=61 (handoff): sin chat para esta conversacion",
+    "[aviso] sent conv=57 (pidio_humano_recepcion): aviso enviado",
+  ];
+  const d = diagnosticar({ circuito: CIRCUITO_SANO, eventos: contarEventos(lineas) });
+  assert.equal(d.eventos.salteadosVigentes, 1);
+  assert.equal(d.veredicto, "roto");
+});
+
+test("el motivo cita lo que dice el log, no inventa un pedido de humano", () => {
+  // El 2026-09-12 este gate firmaba "alguien pidio un humano y nadie se entero" con sus
+  // propios datos refutandolo: los dos salteados eran `cuota_agotada` y
+  // `pregunta_precio_recepcion`, y el UNICO `pidio_humano_recepcion` del log salio bien.
+  // Un instrumento que acusa con una causa falsa manda a arreglar lo que no esta roto.
+  const lineas = ["[aviso] skipped (cuota_agotada): aviso por Telegram apagado (ONIA_BOT_TG_AVISO)"];
+  const d = diagnosticar({ circuito: CIRCUITO_SANO, eventos: contarEventos(lineas) });
+  assert.equal(d.veredicto, "roto");
+  const texto = d.motivos.join(" | ");
+  assert.match(texto, /cuota_agotada/, "el motivo real del log tiene que aparecer");
+  assert.doesNotMatch(texto, /pidio un humano/);
 });
 
 test("avisos enviados con el circuito sano es verde, y cuenta los eventos", () => {
@@ -410,6 +475,152 @@ test("el log se lee ENTERO: un aviso mas viejo que las ultimas 50 lineas tiene q
       "roto",
       "con un salteado en el log el veredicto es rojo; si sale ok, el lector se lo comio",
     );
+  } finally {
+    process.env.PATH = PATH_ORIGINAL;
+    rmSync(tmp, { recursive: true, force: true });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// De QUIEN es cada aviso. Nace del 2026-09-12, midiendo el objetivo del carril
+// contra el log vivo: los CINCO eventos que este gate contaba eran conv 53, 55 y 57
+// —inbox 7, `ZZ QA Clinica Chatbot`, el banco de pruebas, contactos `wandering-water-74`,
+// `dry-cherry-292` y `zz-qa-deploy-2026-09-04-1438`— y conv 11, inbox 5, contacto
+// `Sergio` (+59171654992), o sea Sergio Urcullo probando su propio bot. CERO desconocidos.
+//
+// Y el gate firmaba `VEREDICTO: ok · avisos enviados 3 — circuito sano y avisando`.
+// Esa frase es cierta sobre el circuito y FALSA sobre lo que el carril tiene que saber:
+// su definicion de hecho es "que un DESCONOCIDO escriba y esa conversacion se vea".
+// Un instrumento que vigila si un lead real queda sin atender y nunca vio uno tiene que
+// DECIRLO, no firmar verde — es la misma familia que el 0 que no distinguia "roto" de
+// "sin eventos", que es justo por lo que este archivo existe.
+//
+// No se pone rojo por no haber leads: no hay trafico, y un rojo que nadie puede curar
+// se deja de mirar. Se pone HONESTO.
+
+test("conversacionesDeAvisos atribuye el aviso sin conv= a la linea que lo produjo", () => {
+  // Asi salieron las dos del 4-sep: el `[aviso]` no traia `conv=` (lo trae desde que se
+  // arreglo el formato), pero el log esta EN ORDEN y la linea de arriba es la suya.
+  const lineas = [
+    '[onia-webhook] 2026-09-04T03:41:45.953Z conv=53 msg=423 estado=200 rama=respondio etapa=nuevo->handoff_humano enviados=1/1 entrada="hola, quiero una limpieza dental"',
+    "[aviso] skipped (cuota_agotada): aviso por Telegram apagado (ONIA_BOT_TG_AVISO)",
+  ];
+  const ev = conversacionesDeAvisos(lineas);
+  assert.equal(ev.length, 1);
+  assert.equal(ev[0].conv, 53, "sin este numero no se puede ir a buscar a la persona: era todo el problema del item");
+  assert.equal(ev[0].estado, "skipped");
+});
+
+test("conversacionesDeAvisos prefiere el conv= de la propia linea, no el de la anterior", () => {
+  const lineas = [
+    "[onia-webhook] 2026-09-10T20:12:09.990Z conv=99 msg=881 estado=200 rama=ignorado",
+    "[aviso] sent conv=11 (demo_agendada): aviso enviado",
+  ];
+  assert.equal(conversacionesDeAvisos(lineas)[0].conv, 11, "la linea propia manda sobre la vecina");
+});
+
+test("conversacionesDeAvisos deja conv en null cuando no hay de donde sacarlo, nunca inventa", () => {
+  const ev = conversacionesDeAvisos(["[aviso] skipped (cuota_agotada): aviso por Telegram apagado (ONIA_BOT_TG_AVISO)"]);
+  assert.equal(ev[0].conv, null, "atribuir un aviso a la conversacion equivocada es peor que no atribuirlo");
+});
+
+test("clasificarEventos separa el banco de pruebas de los leads, y no adivina el que no puede ubicar", () => {
+  const eventos = [{ conv: 53 }, { conv: 11 }, { conv: 777 }];
+  // inbox 7 es `ZZ QA Clinica Chatbot`; 5 es `Onia WhatsApp`, por donde entran los leads.
+  const c = clasificarEventos(eventos, new Map([[53, 7], [11, 5]]));
+  assert.deepEqual(c.prueba, [53]);
+  assert.deepEqual(c.reales, [11]);
+  assert.deepEqual(c.sinUbicar, [777], "un conv que la base no conoce no es un lead: es no medido");
+});
+
+test("clasificarEventos sin mapa no puede afirmar que haya leads reales", () => {
+  const c = clasificarEventos([{ conv: 53 }, { conv: 11 }], null);
+  assert.deepEqual(c.reales, [], "sin poder preguntarle a la base, 'es un lead real' es una suposicion");
+  assert.equal(c.medido, false, "tri-estado: no medido no es cero");
+});
+
+test("la lectura del veredicto no dice 'avisando' cuando todos los avisos son del banco de pruebas", () => {
+  const eventos = contarEventos([
+    "[aviso] sent conv=57 (pidio_humano_recepcion): aviso enviado",
+    "[aviso] sent conv=11 (demo_agendada): aviso enviado",
+  ]);
+  const soloPruebas = lecturaDeEventos({
+    veredicto: "ok",
+    eventos,
+    circuitoSano: true,
+    origen: { medido: true, prueba: [57, 11], reales: [], sinUbicar: [] },
+  });
+  assert.match(
+    soloPruebas,
+    /banco de pruebas|ningun lead|sin leads/i,
+    "con 2 envios y 0 leads reales, 'circuito sano y avisando' esconde que nunca se probo con un desconocido",
+  );
+
+  const conLeadReal = lecturaDeEventos({
+    veredicto: "ok",
+    eventos,
+    circuitoSano: true,
+    origen: { medido: true, prueba: [57], reales: [11], sinUbicar: [] },
+  });
+  assert.match(conLeadReal, /avisando/, "con un lead real de verdad, el gate si puede decir que esta avisando");
+});
+
+test("clasificarEventos cuenta CONVERSACIONES, no eventos: dos avisos de la misma no son dos leads", () => {
+  // Medido el 2026-09-12: la primera version imprimio `leads 2 (conv 11, 11)` — un solo
+  // interesado, que ademas era Sergio Urcullo probando su bot, contado dos veces.
+  const c = clasificarEventos([{ conv: 11 }, { conv: 11 }, { conv: 53 }, { conv: 53 }], new Map([[11, 5], [53, 7]]));
+  assert.deepEqual(c.reales, [11]);
+  assert.deepEqual(c.prueba, [53]);
+});
+
+test("clasificarEventos entiende el mapa con contacto y lo conserva para que se pueda leer de quien es", () => {
+  // El inbox dice si es del banco de pruebas; el NOMBRE dice si es un desconocido. Conv 11
+  // es `Sergio` (+59171654992) y sin el nombre la linea dice "1 lead" sobre el propio dueño.
+  const c = clasificarEventos([{ conv: 11 }], new Map([[11, { inbox: 5, contacto: "Sergio" }]]));
+  assert.deepEqual(c.reales, [11]);
+  assert.equal(c.contactos.get(11), "Sergio", "el nombre viaja: es lo unico que distingue un lead de una prueba propia");
+});
+
+test("lineasDelLog trae la linea que produjo cada aviso, o el conv no se puede recuperar", () => {
+  // El gate del CABLEADO. `conversacionesDeAvisos` sabe leer el `conv` de la linea vecina,
+  // pero si el lector filtra solo `[aviso]` esa linea nunca llega y la atribucion vuelve a
+  // ser imposible EN VERDE: medido el 2026-09-12, sacarle el `-B 1` al grep dejaba los 32
+  // tests pasando. El nucleo puro y su lector se prueban juntos o el cableado no existe.
+  const tmp = mkdtempSync(join(tmpdir(), "avisos-origen-"));
+  const PATH_ORIGINAL = process.env.PATH;
+  try {
+    copyFileSync(join(DIR_BOT, "webhook-server.sh"), join(tmp, "webhook-server.sh"));
+    writeFileSync(join(tmp, "webhook-server.mjs"), "// vacio: el script solo exige que exista\n");
+
+    const log = join(tmp, "webhook.log");
+    writeFileSync(
+      log,
+      [
+        "[onia-webhook] 2026-09-04T03:41:44.000Z conv=53 msg=422 estado=200 rama=ignorado",
+        '[onia-webhook] 2026-09-04T03:41:45.953Z conv=53 msg=423 estado=200 rama=respondio etapa=nuevo->handoff_humano entrada="hola, quiero una limpieza dental"',
+        // Sin `conv=`: asi salieron los dos del 4-sep, que es el caso que hay que recuperar.
+        "[aviso] skipped (cuota_agotada): aviso por Telegram apagado (ONIA_BOT_TG_AVISO)",
+      ].join("\n") + "\n",
+    );
+
+    const bin = join(tmp, "bin");
+    mkdirSync(bin);
+    const falso = [
+      "#!/usr/bin/env bash",
+      '[ "$1" = exec ] || exit 0',
+      "shift 2",
+      '[ "$1" = sh ] && shift',
+      '[ "$1" = -c ] && shift',
+      `cmd=$(printf '%s' "$1" | sed "s#/tmp/onia-bot-webhook.log#RUTA_DEL_LOG#g")`,
+      'exec sh -c "$cmd"',
+      "",
+    ].join("\n").replace("RUTA_DEL_LOG", log);
+    writeFileSync(join(bin, "docker"), falso, { mode: 0o755 });
+    process.env.PATH = `${bin}:${PATH_ORIGINAL}`;
+
+    const eventos = conversacionesDeAvisos(lineasDelLog(tmp));
+    assert.equal(eventos.length, 1, "el lector se comio el aviso");
+    assert.equal(eventos[0].conv, 53, "el lector no trajo la linea vecina: el aviso queda sin dueño");
   } finally {
     process.env.PATH = PATH_ORIGINAL;
     rmSync(tmp, { recursive: true, force: true });

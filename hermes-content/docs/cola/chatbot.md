@@ -344,7 +344,43 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       lugares opuestos —el circuito falla, o el circuito anda y hubo avisos que no salieron— y
       hasta hoy se leían igual.
 
-- [ ] 🔴 **Dos personas pidieron un humano, el aviso NO salió, y no se puede saber quiénes son.**
+- [x] 🔴 **~~Dos personas pidieron un humano~~ — NO eran personas: las dos son sondas nuestras,
+      y el gate no sabía distinguirlas.** Cerrado 2026-09-12. Las dos hipótesis de este ítem
+      —«no se puede saber quiénes son» y «hay una deuda con dos personas»— eran **falsas**, y se
+      refutaron con el log vivo más la base de Chatwoot:
+
+      | conv | inbox | contacto | evento |
+      |---|---|---|---|
+      | 53 | 7 · ZZ QA Clinica Chatbot | `wandering-water-74` | skipped |
+      | 55 | 7 · ZZ QA Clinica Chatbot | `dry-cherry-292` | skipped |
+      | 57 | 7 · ZZ QA Clinica Chatbot | `zz-qa-deploy-2026-09-04-1438` | sent |
+      | 11 | 5 · Onia WhatsApp | **Sergio** (+59171654992) | sent ×2 |
+
+      **Sí se podía saber quiénes eran**, y con el método que este mismo archivo ya usaba para
+      curar salteos: el log está **en orden**, así que la línea de webhook inmediatamente
+      anterior al `[aviso]` es la suya y **sí** trae `conv=`. Es la segunda vez que este ítem
+      declaraba algo imposible y era falso.
+
+      🔴 **Lo que destapó, que era el bug de verdad:** los **cinco** eventos que ponían al gate
+      en verde son **tres del banco de pruebas y dos de Sergio Urcullo probando su propio bot**.
+      **Cero desconocidos** — y `avisos-vivo.mjs` firmaba *«circuito sano y avisando»*. La frase
+      es cierta sobre el circuito y falsa sobre lo que este carril tiene que saber, porque su
+      definición de hecho es *"que un **desconocido** escriba"*. Es la misma familia que el `0`
+      que no distinguía «roto» de «sin eventos», que es por lo que ese archivo existe.
+
+      **Arreglado**: `conversacionesDeAvisos` atribuye cada aviso a su conversación (de la
+      propia línea o de la vecina, nunca inventa), `clasificarEventos` separa banco de pruebas
+      de leads **por conversación, no por evento**, y es tri-estado (sin base, nadie es «lead
+      real»). El gate ahora imprime `de quien: leads 1 (conv 11 · Sergio) · banco de pruebas 3`.
+      **No se pone rojo por no haber leads** —no hay tráfico, y un rojo incurable se deja de
+      mirar—: se pone honesto. Probado por mutación: sacar la atribución, la deduplicación o el
+      `-B 1` del lector rompe un test cada uno (ese último quedaba **verde** hasta que se le
+      escribió su gate).
+
+      ⚠️ **Sigue abierto lo que esto reveló:** el circuito de avisos **nunca se probó con una
+      persona de afuera**. No es un bug del circuito; es que todavía no llegó ninguna.
+
+      <details><summary>Lo que decía este ítem antes de medirlo (histórico)</summary>
       Lo destapó el ítem de arriba: las dos líneas son `[aviso] skipped (cuota_agotada)` y
       `[aviso] skipped (pregunta_precio_recepcion)`, las dos con el motivo *"aviso por Telegram
       apagado (ONIA_BOT_TG_AVISO)"* — o sea que el bot decidió avisar y la variable estaba en
@@ -357,10 +393,55 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       ver el comentario de `webhook-server.test.mjs:762-764` sobre los dos callbacks asíncronos.
       **Un aviso que no salió y no dice a quién no se puede reparar.**
 
-      **Además el gate queda rojo para siempre por esto**, porque el log es append-only y las
+      ~~**Además el gate queda rojo para siempre por esto**, porque el log es append-only y las
       líneas `[aviso]` **no llevan fecha** (las de mensaje sí): no hay forma de acotar
-      «salteados recientes». Las dos cosas se arreglan en el mismo lugar —estampar fecha y
-      `conv` en la línea del aviso— y recién entonces el rojo puede volver a verde.
+      «salteados recientes».~~ ⚠️ **Esa hipótesis era falsa y ya está cerrada (2026-09-12).**
+      Sí hay forma, y no hace falta la fecha: el log **está en orden**, así que alcanza con
+      preguntar si hubo un `sent` **posterior** al salteo. Un salteo por el flag apagado es la
+      única causa **global** del circuito (apaga TODOS los avisos), así que un envío posterior
+      la desmiente; cualquier otro motivo de salteo es propio de su aviso y **no** se cura así.
+      `contarEventos` ahora devuelve `salteadosVigentes` y el gate volvió a verde **sin dejar de
+      ver**: la línea de eventos nombra los curados (`salteados 2 (2 ya desmentido(s) por un
+      envío posterior)`), y si el flag se apaga hoy el salteo queda después del último envío y
+      vuelve a rojo. Probado por mutación: apagar la curación rompe 5 tests.
+
+      **Y el gate acusaba con una causa que sus propios datos refutan:** imprimía *"alguien pidió
+      un humano y nadie se enteró"* cuando el único `pidio_humano_recepcion` del log **sí salió**;
+      los dos salteados son `cuota_agotada` y `pregunta_precio_recepcion`. Ahora el motivo se
+      **cita** del log. (`cuota_agotada` igual deriva a un humano — `bot-engine.mjs:563` —, así
+      que la deuda con esas personas sigue abierta: es lo único que queda de este ítem.)
+
+      </details>
+
+- [ ] 🟡 **El log del bot marca `rama=MUDO … motivo=el motor no produjo respuesta` en eventos
+      que se repiten solos — el MISMO texto que dejaría el bug real.** Medido el 2026-09-12
+      04:00 La Paz sobre el log vivo (51.774 líneas): hay **24** líneas `rama=MUDO`, y las
+      **últimas 9 son todas `conv=49`**, cada ~30-60 min (02:47, 03:15, 03:45, 03:46, 04:15,
+      05:19, 06:14, 07:15 UTC), siempre en `etapa=esperando_horario->esperando_horario`,
+      siempre sin un solo mensaje enviado y con el motivo genérico.
+
+      **Por qué importa aunque no sea un bug:** ese motivo es exactamente el que dejaría *"una
+      persona escribió y el bot se calló"*, que es el fallo que costó una semana y por el que
+      existe este log. Si el bot enmudece mañana ante un lead real, su línea va a ser
+      **indistinguible** de estas 9. Las ramas que YA distinguen bien están al lado y lo
+      demuestran: `motivo=mensaje_no_entrante:outgoing`, `motivo=update_sin_botones`,
+      `motivo=etapa handoff_humano: el bot ya no vuelve a hablar en esta conversacion`.
+
+      **Lo que NO está medido, y es lo primero que hay que mirar:** en estas 9 líneas
+      `msg` es **igual** al id de conversación (`conv=49 msg=49`), mientras en las líneas
+      normales es un id de mensaje real (`msg=1048`). Eso apunta a un evento **sin mensaje**
+      (un `conversation_updated`), no a una persona escribiendo — pero **no lo verifiqué**, y
+      la diferencia decide el arreglo: si es un evento sin mensaje, el motivo tiene que
+      nombrarlo (como ya hacen sus hermanos); si es una persona, es el bug abierto.
+
+      **Dónde se arregla:** `hermes-content/deploy/vps-ops/bot/webhook-server.mjs` línea 288 —
+      ahí está el `: "el motor no produjo respuesta"`, que es el motivo por DEFECTO: se escribe
+      cuando ninguna rama supo decir algo más preciso.
+
+      **Reproducción (30 s):**
+      ```
+      /root/bin/docker exec onia-center sh -c "grep 'rama=MUDO' /tmp/onia-bot-webhook.log | tail -10"
+      ```
 
 - [x] ✅ **CERRADO el 2026-09-12: el conocimiento del bot no viajaba con el deploy, y el remedio
       a mano se deshacía solo en el deploy siguiente.** Dos mitades que se tapaban entre sí.
