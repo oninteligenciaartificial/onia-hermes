@@ -53,6 +53,9 @@ const EXENTOS: Record<string, string> = {
   "montos-en-pantalla.mjs":
     "modulo puro sin medicion propia: lo importa precios-vivos.mjs y lo cubre montos-en-pantalla.test.ts. " +
     "Correrlo solo no mide nada — un alias suyo seria decorativo.",
+  "monto-en-el-codigo.mjs":
+    "modulo puro sin medicion propia: lo importa precios-vivos.mjs y lo cubre monto-en-el-codigo.test.ts. " +
+    "Correrlo solo no mide nada — un alias suyo seria decorativo.",
 };
 
 /**
@@ -84,6 +87,25 @@ export function exentosPodridos(
 ): string[] {
   return Object.keys(exentos)
     .filter((f) => !archivosMjs.includes(f))
+    .sort();
+}
+
+/**
+ * Exentos que nadie importa. El motivo de las dos exenciones vivas es el mismo —«lo
+ * importa precios-vivos.mjs»— y hasta hoy nadie lo verificaba: una entrada en una
+ * lista blanca cuyo motivo dejo de ser cierto queda PRE-APROBADA, y el archivo pasa a
+ * ser codigo muerto que ningun gate ve. El motivo se re-mide cada corrida.
+ */
+export function exentosSinConsumidor(
+  exentos: Record<string, string>,
+  fuentes: Record<string, string>,
+): string[] {
+  return Object.keys(exentos)
+    .filter((f) =>
+      !Object.entries(fuentes).some(
+        ([nombre, txt]) => nombre !== f && txt.includes(`./${f}`),
+      ),
+    )
     .sort();
 }
 
@@ -126,6 +148,26 @@ describe("la logica de la guarda, contra fixtures", () => {
       "borrado.mjs",
     ]);
   });
+
+  it("delata al exento que ya nadie importa, y no al importado", () => {
+    const fuentes = {
+      "medidor.mjs": "import { x } from './usado.mjs';",
+      "usado.mjs": "export const x = 1;",
+      "nadie.mjs": "export const y = 2;",
+    };
+    expect(
+      exentosSinConsumidor({ "usado.mjs": "m", "nadie.mjs": "m" }, fuentes),
+    ).toEqual(["nadie.mjs"]);
+  });
+
+  it("importarse a si mismo no cuenta como consumidor", () => {
+    expect(
+      exentosSinConsumidor(
+        { "solo.mjs": "m" },
+        { "solo.mjs": "// ver ./solo.mjs" },
+      ),
+    ).toEqual(["solo.mjs"]);
+  });
 });
 
 describe("los gates de este carril se pueden invocar", () => {
@@ -140,6 +182,13 @@ describe("los gates de este carril se pueden invocar", () => {
 
   it("no hay exenciones que ya no correspondan a un archivo", () => {
     expect(exentosPodridos(MJS, EXENTOS)).toEqual([]);
+  });
+
+  it("cada exento lo importa de verdad algun .mjs de scripts/", () => {
+    const fuentes = Object.fromEntries(
+      MJS.map((f) => [f, readFileSync(join(APP, "scripts", f), "utf8")]),
+    );
+    expect(exentosSinConsumidor(EXENTOS, fuentes)).toEqual([]);
   });
 
   it("el cruce contra la fuente del producto tiene nombre propio", () => {
