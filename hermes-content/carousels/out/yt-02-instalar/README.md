@@ -3,7 +3,7 @@
 **La fuente de verdad es [`deck.html`](deck.html).** Autocontenido (logo y fuentes en
 base64), 13 láminas, 1920×1080. Los PNG salen de ahí; no se editan a mano.
 
-Video 1 (qué es Claude y Claude Code): `../yt-claude-vs-claude-code/`.
+Video 1 (qué es Claude y Claude Code): `../yt-01-que-es/`.
 
 ## 🔴 Esto es un tutorial: la gente va a copiar los comandos
 
