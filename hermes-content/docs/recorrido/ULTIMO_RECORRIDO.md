@@ -12,6 +12,22 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-12 06:0x-06:1x UTC — dental 9/9 completo (rutina), tras un crash de navegador transitorio
+
+Corrida anterior (04:20 UTC, quedó sin commitear en el árbol) explotó en el paso 2 con el
+navegador cerrándose solo (`Target page, context or browser has been closed`, errores de dbus
+al lanzar Chromium). Repetida ahora sin tocar nada: corrió limpio, 9/9, `completo: true`, 0 filas
+`zz-qa-` al cerrar (confirmado con `SELECT` en `appointments` y `organizations`). No hay RAM bajo
+presión (`free -h`: 8,4G libres) — el crash anterior parece transitorio del lanzador de Chromium,
+no un problema del sitio ni de este instrumento. Si se repite seguido, ahí sí investigar el
+lanzador; una sola vez no alcanza para diagnosticar nada.
+
+Cuenta `zz-qa-2026-09-12-0609@onia.com.bo`: alta → confirmar correo → onboarding (6 pantallas) →
+paciente → cita 2026-09-14 09:00 vista en `/appointments` → factura vista en `/billing` (frenada
+sin pagar) → todo borrado en la misma corrida.
+
+---
+
 ## 🔴 2026-09-12 04:09-04:19 UTC — dental 9/9 sin hallazgos; Importadora 8/8 pero con un CRUCE DE TENANT en el paso 6
 
 **Dental** (`zz-qa-2026-09-12-0409`): recorrido completo de punta a punta, 9/9, 0 filas al cerrar.
