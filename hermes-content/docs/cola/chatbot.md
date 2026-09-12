@@ -315,6 +315,46 @@ el bot vivo cotiza hoy. La historia completa queda acá abajo para no perderla.
 
 </details>
 
+- [x] ✅ **CERRADO el 2026-09-12 17:5x: el SIMULADOR prometía más que el bot — imprimía «Listo,
+      agendado» pelado mientras el prospecto recibe una salvedad.** La vuelta anterior lo midió y
+      lo dejó anotado en la memoria compartida **sin arreglarlo**; escribirlo no lo cierra.
+
+      **Lo medido, contra lo que el bot MANDÓ.** Los dos mensajes reales de agendamiento
+      (convs 11 y 49 de Chatwoot) terminan los dos en *«(Estoy confirmando ese horario con
+      Sergio; si hubiera un cruce te aviso enseguida.)»*. El simulador terminaba en *«(Con una
+      palabra en cada una alcanza…)»* y nada más. Hoy **el 100 % de los prospectos** recibe esa
+      salvedad: no hay Cal.com en el VPS, así que `createBooking` devuelve `sin_config` siempre.
+
+      **La causa era más profunda que lo anotado.** La lección decía «`config.dryRun` saltea el
+      bloque». Es cierto para `runTurn`, pero `simulate.mjs` **ni siquiera pasa por `runTurn`**:
+      llama a `step()` directo, o sea que el cierre no lo veía por otro camino. Eran **dos**
+      agujeros, no uno, y arreglar sólo el del `dryRun` habría dejado el instrumento igual de
+      ciego con los tests en verde.
+
+      **Por qué importa más que un detalle de texto:** el simulador es el instrumento con el que
+      este carril mide `simulador 3/3` **al arrancar cada vuelta**. Un instrumento más optimista
+      que el producto es ciego justo a la regresión que mide — la misma familia del `simulador
+      3/3` que convivió con el bot vivo cotizando Bs 750.
+
+      **Arreglado con UNA fuente para la promesa** (`cierreDeReservaFallida` y `cierreSinReservar`
+      en `calcom-booking.mjs`, la casa del dominio): el texto **y la decisión** de cuándo va se
+      importan, nunca se copian — tener dos copias es exactamente como nació esto. Tri-estado:
+      `sin_config` se **deriva** del entorno sin tocar la red (ahí el desenlace se sabe con
+      certeza y se aplica el mismo cierre); con Cal.com configurado **no se sabe**, y eso se
+      reporta como ignorancia en un warning en vez de inventar un final. El modo seco sigue sin
+      hacer I/O: se deriva, no se reserva.
+
+      **Tres gates, los tres validados por mutación**, porque son tres caminos distintos:
+      `persistence.test.mjs` cruza el seco contra el vivo (dos caminos del mismo código, no una
+      tautología) y `simulate.test.mjs` corre el simulador **de verdad en un proceso hijo** en
+      sus DOS modos — `--script` y el **interactivo**, que es el que usa la línea de medición del
+      carril (`printf … | node simulate.mjs`). Sin ese segundo caso, sacarle el cableado al modo
+      interactivo pasaba en verde. Suite del bot **951/951**.
+
+      ⚠️ **Commiteado, NO desplegado.** El bot vivo corre desde `/tmp/onia-bot/` en el contenedor
+      `onia-center`; publicar es el `ok` de Sergio Urcullo. Esto no cambia lo que recibe el
+      prospecto (que ya era el texto correcto): cambia lo que **ve quien mide**.
+
 - [x] ✅ **CERRADO el 2026-09-12: el gate del AVISO miraba 50 líneas de un log de 2,7 MB, y por
       eso firmaba «circuito sano, sin eventos reales todavía» con DOS avisos salteados adentro.**
 

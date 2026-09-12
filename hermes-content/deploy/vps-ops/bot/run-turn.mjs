@@ -50,7 +50,13 @@ import { createState, step, markHumanTakeover,
   clearHumanTakeover, LLM_PENDING } from "./bot-engine.mjs";
 import { createStore } from "./persistence.mjs";
 import { getAvailableSlots as getAvailableSlotsFromCalcom } from "./calcom-availability.mjs";
-import { createBooking, buildBookingNotes, meetingLink } from "./calcom-booking.mjs";
+import {
+  createBooking,
+  buildBookingNotes,
+  meetingLink,
+  cierreDeReservaFallida,
+  cierreSinReservar,
+} from "./calcom-booking.mjs";
 
 // ---------------------------------------------------------------------------
 // Entrada
@@ -428,7 +434,32 @@ export async function runTurn(input, deps = {}) {
     if (config.dryRun) {
       // En seco NO se reserva: escribir en el calendario real es un efecto externo, y el sentido
       // del modo seco es que no salga NADA del sistema.
-      bookingWarnings.push("calcom: no se reservo (dry run)");
+      //
+      // Pero "no reservar" NO autoriza a mostrar un texto mas optimista que el que recibe el
+      // prospecto, y hasta el 2026-09-12 eso era exactamente lo que pasaba: el simulador
+      // imprimia "Listo, agendado" pelado mientras los mensajes reales (convs 11 y 49 de
+      // Chatwoot) llevaban la salvedad. `sin_config` se DERIVA del entorno sin tocar la red,
+      // asi que cuando el desenlace se puede saber sin I/O, se aplica el MISMO cierre que en
+      // vivo; cuando no se puede saber, se dice — no se inventa.
+      const cierre = cierreSinReservar({
+        stageBefore,
+        stageAfter: nextState.botStage,
+        scheduledAt: nextState.scheduledAt,
+        calendarEventId: nextState.calendarEventId,
+        env: deps.env || process.env,
+        duracionMinutos: config.demo?.duracionMinutos,
+      });
+      if (cierre.texto) {
+        const ultima = replies[replies.length - 1];
+        if (ultima && ultima.text) ultima.text += cierre.texto;
+        bookingWarnings.push(
+          "calcom: no se reservo (dry run) — sin CALCOM_BASE_URL tampoco saldria en vivo: el texto lleva la misma salvedad",
+        );
+      } else {
+        bookingWarnings.push(
+          "calcom: no se reservo (dry run) — hay config, asi que el cierre final depende de la reserva y en seco no se puede saber",
+        );
+      }
     } else {
       const bookFn = typeof deps.createBooking === "function" ? deps.createBooking : createBooking;
       const booking = await bookFn({
@@ -457,14 +488,9 @@ export async function runTurn(input, deps = {}) {
       } else {
         // No se puede desdecir el "Listo, agendado" que el motor ya redacto, asi que se le agrega
         // una linea honesta y se deja el aviso: sin esto el prospecto se presenta a una reunion
-        // que no existe. `horario_tomado` (409) es el caso real de carrera: alguien gano el
-        // horario entre que se ofrecio y que el prospecto contesto.
+        // que no existe.
         const ultima = replies[replies.length - 1];
-        if (ultima && ultima.text) {
-          ultima.text += booking.reason === "horario_tomado"
-            ? "\n\n_(Ojo: justo se me ocupó ese horario. Sergio te escribe ahora para acomodarlo.)_"
-            : "\n\n_(Estoy confirmando ese horario con Sergio; si hubiera un cruce te aviso enseguida.)_";
-        }
+        if (ultima && ultima.text) ultima.text += cierreDeReservaFallida(booking.reason);
         bookingWarnings.push(`calcom: la demo NO quedo reservada (${booking.reason})`);
       }
     }
