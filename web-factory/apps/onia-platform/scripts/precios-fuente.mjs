@@ -94,12 +94,50 @@ export const FUENTE_PRUEBA = "lib/subscription/plan-state.ts";
  */
 export const FUENTE_LIMITES = "lib/plan-catalogo.ts";
 
-/** Los tres planes comprables, con el nombre que les da cada lado. */
+/**
+ * Los planes comprables, con el nombre que les da cada lado, DE BARATO A CARO
+ * (el orden es el que contestan los tiers: "primer plan con X").
+ *
+ * `crece` entro el 2026-09-12 con la escalera C. Su alta dejo ver que esta
+ * lista NO era la unica: los mismos ids estaban tipeados a mano en tres
+ * regex `id:"(basico|pro|full)"` mas abajo, asi que el plan nuevo nacio MUDO —
+ * `planesDelSitio`, `limitesDelSitio` y `numerosPublicados` lo saltaban sin
+ * decir nada, y un escalon entero (Bs 550/145/5.500 y sus tres topes) quedo
+ * publicado sin cruzar contra el producto. Es la lista de inclusion de
+ * siempre: no basta con derivar el universo del disco si despues se lo filtra
+ * con ids escritos a dedo. Por eso los tres regex ahora SALEN de aca
+ * (`IDS_DEL_SITIO`) y el plan que entre manana entra solo.
+ */
 export const PLANES_EN_ORDEN = [
   { producto: "basic", sitio: "basico", etiqueta: "Básico" },
+  { producto: "crece", sitio: "crece", etiqueta: "Crece" },
   { producto: "professional", sitio: "pro", etiqueta: "Pro" },
   { producto: "clinic", sitio: "full", etiqueta: "Full" },
 ];
+
+/**
+ * El `id:"..."` con que `src/lib/pricing.ts` abre cada plan, derivado de la
+ * lista de arriba. Se construye uno nuevo en cada llamada: un `RegExp` con `g`
+ * guarda `lastIndex`, y compartir la instancia entre `matchAll` haria que la
+ * segunda lectura empiece donde termino la primera.
+ */
+export const IDS_DEL_SITIO = () =>
+  new RegExp(`\\bid:\\s*"(${PLANES_EN_ORDEN.map((p) => p.sitio).join("|")})"`, "g");
+
+/**
+ * Cada `plan: { ... }` que un bloque del PRODUCTO declara, sin filtrar por una
+ * lista de ids. Nace de la escalera C (2026-09-12): la lista de inclusion se
+ * habia sacado de tres regex, pero quedaban DOS mas escritas a mano aca
+ * (`basic|professional|clinic`), asi que `crece` se leia como "ese plan no
+ * existe" y `primerPlanCon` devolvia `null` — o sea el cruce quedaba CIEGO
+ * justo en el plan nuevo, que es como nacen estos huecos. Filtrar por PLANES_EN_ORDEN
+ * tampoco sirve: el producto tiene planes que el sitio no vende (`enterprise`)
+ * y perderlos aca los borraria del cruce. El universo se deriva del bloque;
+ * quien elige a quien se le pregunta es `primerPlanCon`, mas abajo.
+ * Instancia nueva por llamada: un `RegExp` con `g` guarda `lastIndex`.
+ */
+export const PLANES_QUE_DECLARA_EL_BLOQUE = () =>
+  /\b([A-Za-z_$][\w$]*):\s*\{([^}]*)\}/g;
 
 export function leerLocal(ruta) {
   return existsSync(ruta) ? readFileSync(ruta, "utf8") : null;
@@ -110,6 +148,46 @@ export function leerPorSsh(ruta, destino = VPS_SSH) {
     encoding: "utf8",
   });
   return r.status === 0 && r.stdout ? r.stdout : null;
+}
+
+/**
+ * La rama del PRODUCTO contra la que se cruza. Es `master`, no `main`.
+ */
+export const REF_PRODUCTO = process.env.ONIA_PLATFORM_REF ?? "origin/master";
+
+/**
+ * El archivo leido del REF, no del arbol de trabajo.
+ *
+ * POR QUE. Hasta el 2026-09-12 el cruce leia `join(repo, relativa)` — la
+ * CARPETA del clon — y nadie la mantiene al dia: medida ese dia, estaba 15
+ * commits atras de `origin/master`, sin el plan `crece` y con los montos
+ * viejos (750/1.500 en vez de 890/1.290). Las dos direcciones en que eso
+ * miente son distintas y la segunda es la cara:
+ *  · el clon NO tiene el dato -> "no la encontre" -> NO PUDE MEDIR (honesto,
+ *    pero el cruce queda ciego para siempre y nadie se entera);
+ *  · el clon tiene el dato VIEJO -> DESALINEADO acusando al SITIO de publicar
+ *    mal un precio que es el correcto, y manda a "arreglarlo" hacia atras.
+ * Un `git fetch` garantiza el ref fresco aunque la carpeta lleve meses quieta,
+ * asi que se pregunta al ref y el arbol queda de respaldo.
+ */
+export function leerDelRef(relativa, { repo = REPO_PRODUCTO, ref = REF_PRODUCTO } = {}) {
+  const r = spawnSync("git", ["-C", repo, "show", `${ref}:${relativa}`], {
+    encoding: "utf8",
+  });
+  return r.status === 0 && r.stdout ? r.stdout : null;
+}
+
+/**
+ * Pone el ref al dia. Si no se puede, se DICE: un cruce contra un ref viejo se
+ * ve identico a uno contra el ref fresco, y esa es justo la falla que este
+ * archivo no se puede permitir.
+ */
+export function refreshRef({ repo = REPO_PRODUCTO } = {}) {
+  const r = spawnSync("git", ["-C", repo, "fetch", "origin", "--quiet"], {
+    encoding: "utf8",
+    timeout: 60_000,
+  });
+  return r.status === 0;
 }
 
 /**
@@ -192,10 +270,13 @@ export function sinComentarios(fuente) {
 
 export function leerDelProducto(
   relativa,
-  { repo = REPO_PRODUCTO, local = leerLocal, remoto = leerPorSsh } = {},
+  { repo = REPO_PRODUCTO, ref = leerDelRef, local = leerLocal, remoto = leerPorSsh } = {},
 ) {
   const ruta = join(repo, relativa);
-  const crudo = local(ruta) ?? remoto(ruta);
+  // El REF primero: es el unico de los tres que no depende de que alguien haya
+  // actualizado una carpeta a mano. El arbol local y el SSH quedan de respaldo
+  // para la maquina que no tenga el clon.
+  const crudo = ref(relativa, { repo }) ?? local(ruta) ?? remoto(ruta);
   return crudo === null || crudo === undefined ? crudo : sinComentarios(crudo);
 }
 
@@ -256,9 +337,7 @@ export function planesDelProducto(fuente) {
   const bloque = bloqueExportado(fuente, "DEFAULT_PLAN_AMOUNTS");
   if (!bloque) return {};
   const salida = {};
-  for (const m of bloque.matchAll(
-    /\b(basic|professional|clinic|enterprise):\s*\{([^}]*)\}/g,
-  )) {
+  for (const m of bloque.matchAll(PLANES_QUE_DECLARA_EL_BLOQUE())) {
     salida[m[1]] = {
       mensual: num(m[2], "monthly"),
       semanal: num(m[2], "weekly"),
@@ -288,9 +367,7 @@ export function limitesDelProducto(fuente) {
   const bloque = bloqueExportado(fuente ?? "", "PLAN_LIMITS");
   if (!bloque) return {};
   const salida = {};
-  for (const m of bloque.matchAll(
-    /\b(basic|professional|clinic):\s*\{([^}]*)\}/g,
-  )) {
+  for (const m of bloque.matchAll(PLANES_QUE_DECLARA_EL_BLOQUE())) {
     salida[m[1]] = {
       fichas: entero(m[2], "patients"),
       usuarios: entero(m[2], "users"),
@@ -406,7 +483,7 @@ export function cifrasDelProducto({ planes, addons, prueba, limites }) {
  * `id:` del plan siguiente.
  */
 export function planesDelSitio(fuente) {
-  const marcas = [...fuente.matchAll(/\bid:\s*"(basico|pro|full)"/g)];
+  const marcas = [...fuente.matchAll(IDS_DEL_SITIO())];
   const salida = {};
   marcas.forEach((m, i) => {
     const hasta = i + 1 < marcas.length ? marcas[i + 1].index : fuente.length;
@@ -449,18 +526,27 @@ function topeEnProsa(texto, { ilimitado, conNumero }) {
 
 /** Los topes que el sitio PUBLICA, leidos del `incluye` de cada plan. */
 export function limitesDelSitio(fuente) {
-  const marcas = [...fuente.matchAll(/\bid:\s*"(basico|pro|full)"/g)];
+  const marcas = [...fuente.matchAll(IDS_DEL_SITIO())];
   const salida = {};
   marcas.forEach((m, i) => {
     const hasta = i + 1 < marcas.length ? marcas[i + 1].index : fuente.length;
     const inc = incluyeDelSitio(fuente.slice(m.index, hasta));
     salida[m[1]] = {
+      /**
+       * "sin tope" es la OTRA forma de decir ilimitado, y entro el 2026-09-12:
+       * el Full paso de "Fichas ilimitadas" a "Fichas y usuarios sin tope".
+       * Con solo `ilimitad` esos dos topes salian `null` — ilegibles, no
+       * infinitos— y el cruce quedaba ciego justo en el plan caro. El `[^"]*`
+       * es lo que evita el falso positivo: los planes con tope escriben su
+       * cifra DENTRO de su propia comilla ("Topes: 800 fichas · 3 usuarios"),
+       * asi que la negacion de otra linea no se les derrama.
+       */
       fichas: topeEnProsa(inc, {
-        ilimitado: /fichas[^"]*ilimitad/i,
+        ilimitado: /fichas[^"]*(?:ilimitad|sin\s+tope)/i,
         conNumero: /([\d.]+)\s+fichas/i,
       }),
       usuarios: topeEnProsa(inc, {
-        ilimitado: /usuarios\s+ilimitad/i,
+        ilimitado: /usuarios[^"]*(?:ilimitad|sin\s+tope)/i,
         /** El Básico escribe su linea como plantilla, asi que abre con backtick. */
         conNumero: /(?:^|["`\s])(\d[\d.]*)\s+usuarios/i,
       }),
@@ -571,6 +657,12 @@ export const CONSTANTES_VERIFICADAS_APARTE = [
     cruzadaPor: "src/app/capacidad-acotada.test.ts",
   },
   {
+    valor: "CHATBOT_MENSUAL",
+    porque:
+      "no es un tope del plan: es el precio del add-on chatbot citado dentro del `incluye` del Full para mostrar la cuenta «Pro + add-on vs Full». No lo tipea pricing.ts — es un alias de CHATBOT_PLAN.mensual, y ESE archivo ya entra a este mismo cruce por la clave `add-on chatbot · mensual`",
+    cruzadaPor: "src/content/chatbot-precios.ts",
+  },
+  {
     valor: "ALCANCE_CON_AGENDA",
     porque:
       "tampoco es un tope: es a que rubros les llega la agenda, y con ella la reserva publica — comercio e importadora no tienen una sola ruta de citas en su pack",
@@ -592,7 +684,7 @@ export function constantesExcusadasSinSujeto(fuente) {
  * el defecto entra por las dos y una sola deja media puerta abierta.
  */
 export function numerosPublicados(fuente) {
-  const marcas = [...(fuente ?? "").matchAll(/\bid:\s*"(basico|pro|full)"/g)];
+  const marcas = [...(fuente ?? "").matchAll(IDS_DEL_SITIO())];
   const salida = [];
   marcas.forEach((m, i) => {
     const hasta = i + 1 < marcas.length ? marcas[i + 1].index : (fuente ?? "").length;
@@ -751,9 +843,13 @@ export function cifrasDelSitio({ precios, chatbot }) {
     "add-on usuario extra · mensual": num(usuario, "mensualAddon"),
     "add-on usuario extra · máximo en Básico": num(usuario, "maxEnBasico"),
     "prueba gratis · días": valorResuelto(prueba, "dias", precios),
-    /** El producto lo nombra `professional`; el sitio, por su etiqueta. */
+    /**
+     * El producto lo nombra `professional`; el sitio, por su etiqueta. La
+     * equivalencia se DERIVA de `PLANES_EN_ORDEN`: escrita a mano se quedaba
+     * sin la etiqueta del plan que entrara manana (le paso a `Crece`).
+     */
     "prueba gratis · plan que corre":
-      { Pro: "professional", Básico: "basic", Full: "clinic" }[planPrueba] ??
+      PLANES_EN_ORDEN.find((p) => p.etiqueta === planPrueba)?.producto ??
       planPrueba ??
       null,
   };
@@ -809,11 +905,20 @@ export function comparar(delProducto, delSitio) {
  * nombres distintos para el mismo plan (`basic`/`basico`, `professional`/`pro`,
  * `clinic`/`full`) y ningun patron puede adivinar ese mapeo.
  */
-export const CICLOS_EQUIVALENCIA = [
-  { nombre: "Básico", producto: "basic", sitio: "basico" },
-  { nombre: "Pro", producto: "professional", sitio: "pro" },
-  { nombre: "Full", producto: "clinic", sitio: "full" },
-];
+/**
+ * La QUINTA copia de la misma lista, ahora derivada. Era la cuarta equivalencia
+ * plan-sitio escrita a mano y se descubrio el 2026-09-12 al dar de alta `crece`:
+ * las otras tres ya leian el plan nuevo y esta seguia con tres filas, asi que el
+ * ciclo semanal del escalon nuevo (Bs 145, que el checkout acepta) no lo cruzaba
+ * nadie. Su propio test lo dice: "si mañana nace una cuarta tarjeta comprable,
+ * tiene que llegar aca" — una equivalencia escrita a mano es lista de inclusion
+ * y falla ABIERTA.
+ */
+export const CICLOS_EQUIVALENCIA = PLANES_EN_ORDEN.map((p) => ({
+  nombre: p.etiqueta,
+  producto: p.producto,
+  sitio: p.sitio,
+}));
 
 /**
  * Cruza la DISPONIBILIDAD del ciclo semanal, que es cosa aparte del monto.
@@ -909,6 +1014,16 @@ export const CHATBOT_SITIO = join(
  * medido el 2026-09-03 en otro gate de este sistema.
  */
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  // Antes de leer nada: el ref al dia. Sin esto se cruza contra lo que el clon
+  // tenia la ultima vez que alguien lo toco, y el veredicto sale con la misma
+  // cara de siempre.
+  if (!refreshRef()) {
+    console.error(
+      `AVISO: no pude actualizar ${REF_PRODUCTO} en ${REPO_PRODUCTO}. ` +
+        `Lo que sigue se cruza contra el ref que ya estaba en disco.`,
+    );
+  }
+
   const planes = leerDelProducto(FUENTE_PLANES);
   const addons = leerDelProducto(FUENTE_ADDONS);
   const prueba = leerDelProducto(FUENTE_PRUEBA);

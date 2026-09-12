@@ -31,20 +31,20 @@ const GUION = [
   },
   {
     de: "cliente" as const,
-    texto: "Buenísimo. ¿Me pueden guardar uno?",
+    texto: "Perfecto. ¿Pueden reservarme uno?",
     hora: "23:48",
   },
   {
     de: "onia" as const,
     texto:
-      "Eso te lo confirma el dueño apenas abra: ya le dejé tu pedido con esta conversación completa.",
+      "Con gusto: su pedido ya quedó registrado con esta conversación, y el encargado se lo confirma apenas abra el negocio.",
     hora: "23:48",
   },
 ];
 
 export function ConversacionNocturna() {
   return (
-    <div className={s.waCard} role="img" aria-label="Conversación de WhatsApp contestada por Onia a las 23:47: el chatbot responde stock y horario con la información publicada, y el pedido queda para que el dueño lo confirme a la mañana.">
+    <div className={s.waCard} role="img" aria-label="Conversación de WhatsApp respondida por Onia a las 23:47: el asistente contesta stock y horario con la información publicada, y el pedido queda registrado para que el encargado lo confirme al abrir.">
       <div className={s.waHead}>
         <span className={s.waDot} aria-hidden="true" />
         <span className={s.waQuien}>WhatsApp del negocio</span>
@@ -64,7 +64,7 @@ export function ConversacionNocturna() {
       </div>
       <Reveal delay={0.55}>
         <p className={s.waPie}>
-          Contestado a las 23:47. El que preguntó no se fue a otro lado.
+          Respondido a las 23:47. La consulta no se perdió.
         </p>
       </Reveal>
     </div>

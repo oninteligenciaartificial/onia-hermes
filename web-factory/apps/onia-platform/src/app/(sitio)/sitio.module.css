@@ -952,9 +952,14 @@
   font-weight: 650;
 }
 
+/* v2 (12-sep, "no me gusta el diseño, cambialo"): UNA pista continua en vez
+   de dos píldoras sueltas — las 24 horas son un solo día, y el corte de las
+   18:00 es un corte ADENTRO de la pista, no un hueco entre dos formas. */
 .diaBarra {
   display: flex;
-  gap: 4px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
 }
 
 .diaVos,
@@ -964,8 +969,7 @@
   align-items: center;
   gap: 0.7em;
   min-width: 0;
-  padding: 0.8em 1.1em;
-  border-radius: 999px;
+  padding: 0.85em 1.2em;
   font-size: 0.95em;
   font-weight: 550;
   white-space: nowrap;
@@ -1018,13 +1022,20 @@
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 0.9em;
+  gap: 0.8em;
 }
 
+/* Tarjetas y no texto flotante (12-sep): la misma carta que los add-ons —
+   borde, radio, hora arriba — para que las tres se lean como piezas y no
+   como párrafos sueltos debajo de la barra. */
 .diaMomentos li {
   font-size: 0.95em;
   line-height: 1.45;
   text-wrap: pretty;
+  padding: 1em 1.2em;
+  border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+  border-radius: 14px;
+  background: var(--bg);
 }
 
 .diaMomentos b {
@@ -1148,9 +1159,17 @@
   margin-top: 3em;
   align-items: stretch;
 }
-@media (min-width: 900px) {
+/* 2×2 en tablet y 4 en fila en ancho: la escalera C (12-sep) tiene CUATRO
+   escalones — con 3 columnas la cuarta tarjeta (Full, justo la que carga la
+   cuenta del chatbot incluido) caía sola a una segunda fila. */
+@media (min-width: 700px) {
   .plans {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1100px) {
+  .plans {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 .plan {
@@ -2275,43 +2294,31 @@
   margin: 3.4em 0 0;
 }
 
+/* Tarjetas y no filas (Sergio, 11-sep, sobre esta sección: "demasiado texto,
+   más visual, mejor orden"): cada add-on es una carta con borde y su precio
+   en píldora — el ojo barre nombre+precio sin leer párrafos. La última impar
+   sigue tomando la fila entera para no dejar el hueco. */
 .offerList {
   display: grid;
-  gap: 0;
+  gap: 0.8em;
   margin-top: 1.2em;
-  border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent);
 }
 @media (min-width: 760px) {
   .offerList {
-    /* dos columnas y no cuatro: cuatro celdas iguales en fila es la grilla de
-       tarjetas que este archivo evita en todas partes. En dos columnas cada
-       entrada conserva ancho de lectura y el bloque no se vuelve un menú. */
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 3.5em;
+    gap: 1em;
   }
-  /* El filete vive en la CELDA, no en la fila: con una cantidad IMPAR de
-     entradas la última fila deja la celda derecha vacía y la regla horizontal
-     queda CORTADA a mitad de ancho. Pasó al retirar "Inventario avanzado"
-     (2026-08-27): la lista bajó de 4 (2x2, cerraba) a 3 y el bloque quedó con
-     media línea colgando, en la portada y en /precios.
-     Se arregla por la PARIDAD y no por el número 3: la última entrada toma la
-     fila entera cuando sobra, y su filete vuelve a llegar de punta a punta.
-     Sirve para 3, 5 o 7 — y con un número par ni se aplica. */
   .offerItem:last-child:nth-child(odd) {
     grid-column: 1 / -1;
   }
-  /* ...pero solo se estira el FILETE. El encabezado se queda del ancho de una
-     columna (la mitad menos medio `column-gap`) para que el precio caiga en la
-     misma x que los de la columna izquierda de arriba. Sin esto, el precio de
-     la última fila se iría al borde derecho y la carta perdería su columna de
-     precios, que es lo único que la hace leerse como carta. */
   .offerItem:last-child:nth-child(odd) .offerItemHead {
     max-width: calc(50% - 1.75em);
   }
 }
 .offerItem {
-  padding: 1.5em 0;
-  border-bottom: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+  padding: 1.2em 1.3em;
+  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  border-radius: 14px;
 }
 .offerItemHead {
   display: flex;
@@ -2349,11 +2356,14 @@
 .offerItemPrice {
   font-family: var(--font-mono), monospace;
   font-variant-numeric: tabular-nums;
-  font-size: 0.98em;
+  font-size: 0.85em;
   font-weight: 500;
   letter-spacing: 0.01em;
   white-space: nowrap;
   color: var(--signal);
+  background: color-mix(in srgb, var(--signal) 14%, transparent);
+  padding: 0.3em 0.75em;
+  border-radius: 999px;
 }
 .offerItemText {
   margin: 0.6em 0 0;

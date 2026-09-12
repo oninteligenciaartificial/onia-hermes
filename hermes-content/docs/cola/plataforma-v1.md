@@ -72,25 +72,101 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       hero v4 DESCARTADO (vuelve el hero de producción que él aprobó), sección HECHOS retirada,
       chatbot a la posición 2 con conversación dibujada
       (`web-factory/apps/onia-platform/src/app/(sitio)/conversacion.tsx`) + CTA al alta.
-      Pendiente de ESTE ítem: (a) OK de Sergio sobre el preview → deploy con
-      `/opt/onia-landing/_deploy/publicar.sh`; (b) probar un video HyperFrames como pieza del
-      bloque chatbot ("puedes generar videos con hyperframes también, intentá") — arrancamos
-      con la conversación CSS porque pesa cero.
+      Pendiente de ESTE ítem: (a) **AUDITORÍA PRE-PUBLICACIÓN pedida por Sergio Urcullo antes
+      del deploy** (11-sep, textual: *"verificamos los precios de los add-ons y las pestañas
+      secundarias que no es el hero que estén bien hechas, también verificamos cibersecurity,
+      fallos de estructura de la web, información mal colocada, docs viejos, política de
+      privacidad"*) — dos subagentes barriendo seguridad y contenido de
+      `web-factory/apps/onia-platform/src/`; los hallazgos se arreglan ANTES del deploy;
+      (b) tras la auditoría limpia, su OK → deploy con `/opt/onia-landing/_deploy/publicar.sh`;
+      (c) probar un video HyperFrames como pieza del bloque chatbot ("puedes generar videos con
+      hyperframes también, intentá") — arrancamos con la conversación CSS porque pesa cero.
+      El 11-sep también entró la dieta de la sección de add-ons (`e12b740f`: tarjetas con
+      precio en píldora, ancla del salario en una línea, copys cortos en la fuente única).
 
-- [ ] 🔴 **Estrategia de precios: que la opción cara sea SIEMPRE la mejor compra** (Sergio
-      Urcullo, 11-sep: *"armar una estrategia de psicología para que la opción cara siempre sea
-      la mejor para el usuario, para que por aumentar un poco más tenga más beneficios"* +
-      *"somos manychat… paga por algo que él puede hacer"*). Revisar cómo está armada hoy la
-      escalera en `onia-platform/lib/subscription-plans.ts` y `onia-platform/lib/pricing.ts` y
-      cómo la muestra `/precios`: saltos de precio vs saltos de valor, plan ancla/decoy, qué
-      capacidad se reserva al plan alto. Entregable: propuesta medida contra Lety/Dapta/ManyChat
-      de HOY, con la cuenta delante — los montos los decide Sergio.
+- [ ] 🔴 **ESCALERA C IMPLEMENTADA el 2026-09-12 ("tenés permiso de los precios") — REGLA DE
+      DESPLIEGUE: los DOS deploys salen JUNTOS o ninguno.** Producto en `master`
+      (`4bff903d`): plan `crece` 550/145/5.500, Pro 890/229/8.900, Full 1.290/12.900 CON
+      chatbot incluido (`whatsappIncluded` en `onia-platform/lib/plan-catalogo.ts`, ejecutado
+      por `onia-platform/lib/plan-limits.ts` como cuarta fuente de `addonHabilitado` con la
+      vigencia del PLAN), Crece en `CHECKOUT_PLANS`, tests re-anclados (suite 4.687 verdes;
+      los 13 rojos son artefactos Windows idénticos en master limpio, medidos en worktree).
+      Landing en `main` (`a9e11c47`): 4 tarjetas con topes visibles y "Cuatro escalones".
+      ⚠️ **Hasta que el PRODUCTO se despliegue, el checkout vivo valida los montos viejos
+      (750/1500): si la landing sale sola, muestra 890 y el pago exige otra cifra.** Falta
+      además (fase 2): avisos al 70/90/100 % del cupo con la cuenta "recargar vs subir" y la
+      recarga de recordatorios (la de conversaciones ya existe).
+
+      Historia: **ESCALERA C ELEGIDA por Sergio Urcullo (11-sep): 4 escalones con cupos estilo
+      Higgsfield.** Su decisión,
+      textual: *"la C pero que tenga restricciones y que tengan que estar pagando si quieren
+      mejorar su plan, mira higgsfield te cobra por todo y si no usás tus créditos dentro del
+      mes igual se te quitan; necesitamos ser la mejor opción por ser la más simple pero que
+      igual paguen siempre pero que no sea exagerado"*. Investigación previa medida EN VIVO:
+      ManyChat 2026 (5 escalones chicos, overage que factura en vez de bloquear, aviso al
+      70/90/100 %), Alegra Perú (4 planes pegados, "Más popular" en el 3º), Dapta, Lety.
+
+      **Letra chica PROPUESTA (ratificar montos de cupos antes de tocar la fuente única):**
+      | Plan | Bs/mes | Cupos mensuales (NO acumulan) | Qué lo hace querer subir |
+      |---|---|---|---|
+      | Básico | 320 | 2 usuarios · 300 fichas · 200 recordatorios | sin agentes, sin reservas |
+      | Crece (NUEVO) | 550 | 3 usuarios · 800 fichas · 400 recordatorios | agentes Recall+Cobrador, reservas incluidas; sin reportes/contabilidad completa |
+      | Pro (destacado) | 890 | 5 usuarios · 1.500 fichas · 800 recordatorios | todo lo operativo: reportes, contabilidad completa, facturas recurrentes, todos los agentes |
+      | Full | 1.290 | sin límites | **chatbot de WhatsApp INCLUIDO** + te lo entregamos configurado |
+      Semanal: 89 / 145 / 229 / — · Anual: 10× (2 meses gratis) · Grupo 2.900 queda cotizado.
+      Mecánica Higgsfield: el cupo del mes muere con el mes; recargas pagas (conversaciones del
+      bot ya existe a Bs 190; sumar recarga de recordatorios); aviso al 70/90/100 % del cupo con
+      la cuenta en pantalla ("dos recargas > subir de plan"). Implementación toca:
+      `onia-platform/lib/subscription-plans.ts` (nuevo id de plan + montos),
+      `onia-platform/lib/pricing.ts`, espejo de la landing
+      `web-factory/apps/onia-platform/src/lib/pricing.ts`, `/precios`, checkout y validación de
+      pago, y las tarjetas de plan con las LIMITACIONES visibles (pedido explícito: *"que se
+      noten las limitaciones para que quieran subir el plan y ordená las funciones dependiendo
+      del plan"*).
 
 - [ ] 🔴 **Funciones que las empresas usan DE VERDAD — recorte de superficie** (Sergio Urcullo,
       11-sep: *"mirar qué funciones vamos a usar realmente para las empresas"*). Medir contra
       las 3 orgs vivas y el catálogo (`hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md`): qué
       módulo se usa, cuál nadie tocó, y qué se esconde/simplifica para que la 1.0 sea corta.
       El techo son horas de soporte, no features (estrategia §9).
+
+- [ ] 🔴 **Estado real de los agentes IA del producto** (Sergio Urcullo, 11-sep: *"mira también
+      cómo están los agentes ai"*). **MEDIDO el 2026-09-11 en la base de prod** (supabase-db,
+      tablas `onia_agents_*`): 4 agentes definidos, el cron corre y completa (22 corridas
+      `completed`, 14 en los últimos 7 días, última hoy 11:00 UTC) — pero
+      **`onia_agents_actions` tiene CERO filas en toda la historia**: los agentes corren en
+      vacío, jamás dejaron un borrador. La portada y el panel venden exactamente ese borrador
+      ("Para aprobar: avisar los pagos vencidos…"). Falta la mitad que importa: SEMBRAR un caso
+      real en `clinica-sergio-p2ljs` (deuda vencida + paciente sin volver), correr el cron, ver
+      el borrador aparecer en `onia-platform/app/(dashboard)/agents/page.tsx`, aprobarlo y
+      verificar el efecto. Si con datos no propone nada, el generador está mudo y eso es un 🔴
+      de venta. Los agentes NO llaman a ningún modelo (costo de API cero).
+
+      **E2E EJECUTADO el 2026-09-12 (madrugada): EL MOTOR PRODUCE.** Sembrado en
+      `clinica-sergio-p2ljs` (ids `e2e-agentes-*`: paciente sin volver hace 200 días + factura
+      `VENCIDA` de Bs 370 hace 12 días), cadencia destrabada (las runs de hoy se borraron para
+      esa org) y relanzado `/root/bin/run-onia-agents-cron.sh` → `ran:2, proposed:2`:
+      el Cobrador redactó el reclamo ("saldo vencido Bs 370,00 hace 12 días") y el Recall el
+      mensaje de reactivación con `suggestedMessage` completo — los DOS en `pending_approval`
+      en `onia_agents_actions`, visibles en la pantalla Agentes de la clínica de Sergio para
+      que él apruebe. **El misterio del "0 acciones en la historia" quedó explicado: motor
+      sano + cadencia diaria + orgs sin datos disparadores** (`not_due` / feeds vacíos).
+      Pendiente de este ítem: (a) Sergio mira y APRUEBA un borrador en pantalla (la aprobación
+      registra; el envío externo S6 sigue sin existir); (b) purgar las semillas
+      `e2e-agentes-*` cuando termine la prueba; (c) construir los 3 agentes nuevos de abajo.
+
+      **DECIDIDO por Sergio Urcullo (11-sep, eligió las 4 opciones) y TODAVÍA SIN CONSTRUIR:
+      los TRES agentes nuevos** (nota del merge del 12-sep: dos carriles reescribieron este
+      ítem a la vez — la parte MEDIDA es sucesora, la DECISIÓN de los tres no se pierde).
+      Sobre el mismo patrón de `onia-platform/lib/onia-core/modules/agents-runtime.ts`:
+      (1) **Confirmador de citas de mañana** (`draft_message`: cada tarde, citas de mañana sin
+      confirmar → mensaje listo para aprobar),
+      (2) **Seguimiento de cotizaciones** sin respuesta en N días (`draft_message` —
+      importadora), (3) **Stock bajo mínimo → tarea de pedido** al proveedor de la ficha
+      (`create_task`: no depende del envío externo). Restricción vigente: el ENVÍO externo (S6) no
+      existe — aprobar registra la acción; el WhatsApp real es obra aparte y no se promete hasta
+      que exista. Las dos precondiciones que Sergio Urcullo puso antes de estos tres (E2E de los 2
+      vivos, y la cadencia) **ya están cerradas** en los dos ítems de abajo.
 
 - [x] 🔴 **La cuenta REAL de Sergio Urcullo tenía 7 filas de datos de prueba adentro, y una de
       ellas hizo que otro carril abriera una tarea CRÍTICA por un cruce de tenant que NUNCA

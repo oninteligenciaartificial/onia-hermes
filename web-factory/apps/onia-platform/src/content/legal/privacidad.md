@@ -2,8 +2,8 @@
 title: "Política de Privacidad"
 slug: "privacidad"
 status: "vigente"
-version: "1.0"
-updatedAt: "2026-08-13"
+version: "1.1"
+updatedAt: "2026-09-11"
 ---
 
 # Política de Privacidad — Plataforma Onia
@@ -181,7 +181,7 @@ datos. Onia te da las herramientas para atenderlas (buscar, corregir, exportar o
 eliminar un registro). Si una persona contacta a Onia directamente, la
 derivaremos a tu negocio y te avisaremos.
 
-9.3. **El marco boliviano, con honestidad.** A la fecha de este borrador,
+9.3. **El marco boliviano, con honestidad.** A la fecha de esta versión,
 Bolivia **no cuenta con una ley integral y específica de protección de datos
 personales**. La protección vigente nace de la Constitución Política del
 Estado — que reconoce el derecho a la privacidad (art. 21) y la **Acción de
@@ -226,7 +226,7 @@ sea o no cliente de Onia:
 - **Qué recogemos:** tu número de WhatsApp y el nombre de tu perfil; el
   contenido de los mensajes que envías; y, si nos lo contás durante la
   conversación, el rubro de tu negocio, el tamaño de tu equipo, tu ciudad y qué
-  tareas te consumen tiempo. Si agendás una reunión, también el horario elegido.
+  tareas te consumen tiempo. Si pedís una reunión, también el horario que propongas.
 - **Notas de voz:** si enviás un audio, se transcribe a texto con un servicio
   propio alojado en el servidor de Onia — el audio no se envía a servicios de
   transcripción de terceros.
@@ -239,9 +239,10 @@ sea o no cliente de Onia:
   externo —, y los datos de contacto y calificación se guardan en la base de
   datos descrita en el §4 (Supabase).
 - **Terceros que necesariamente participan:** **Meta (WhatsApp)** transporta
-  los mensajes por su infraestructura y bajo sus propios términos; **Supabase**
-  aloja la base de datos; **Cal.com** gestiona la reserva cuando agendás una
-  reunión. Nadie más recibe estos datos.
+  los mensajes por su infraestructura y bajo sus propios términos, y
+  **Supabase** aloja la base de datos. Nadie más recibe estos datos: la
+  coordinación de una reunión la hace una persona de Onia por este mismo
+  canal, sin pasar tus datos a un servicio de calendarios de terceros.
 - **Cuánto los guardamos:** las conversaciones y los datos del contacto se
   conservan hasta **24 meses después de tu última interacción**, o hasta que
   pidas su eliminación (§14) — lo que ocurra primero. El registro de una baja
