@@ -92,11 +92,73 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       módulo se usa, cuál nadie tocó, y qué se esconde/simplifica para que la 1.0 sea corta.
       El techo son horas de soporte, no features (estrategia §9).
 
-- [ ] 🔴 **Estado real de los agentes IA del producto** (Sergio Urcullo, 11-sep: *"mira también
-      cómo están los agentes ai"*). Medir en producción: qué agentes corren, qué borradores
-      dejaron esta semana, si el circuito aprobar→enviar funciona de punta a punta. La
-      pantalla vive en `onia-platform/app/(dashboard)/agents/page.tsx` — y recordar que los agentes
-      del producto NO llaman a ningún modelo (costo de API cero).
+- [x] ✅ **MEDIDO Y ARREGLADO el 2026-09-12 (`ea80ada`, onia-platform — pusheado a la rama,
+      falta mergear y desplegar): los agentes corrían DÍA POR MEDIO, y la pantalla promete
+      «corre todos los días».** (Sergio Urcullo, 11-sep: *"mira también cómo están los agentes
+      ai"*.)
+
+      **Lo que se midió en producción**, no heredado — `supabase-db` + `/var/log/onia-agents-cron.log`:
+
+      | | |
+      |---|---|
+      | Agentes vivos | **4**: Recall y Cobrador en las dos orgs con plan vigente (`clinica-sergio-p2ljs`, `bolivian-electricidad-e6t21`). El **Captador nunca corrió**: `kind_not_enabled` — vive detrás de `addon.captador` y nadie lo compró |
+      | Corridas | 22, **todas `completed`, sin un solo `error`**, todas con `propuestas 0` |
+      | Borradores esta semana | **CERO.** `onia_agents_actions` = 0 filas en toda la base; `onia_core_approval_requests` = 0 |
+      | Circuito aprobar→enviar | **Construido entero y JAMÁS ejecutado en producción** — 0 aprobaciones desde que existe |
+
+      **Por qué 0 propuestas, contado hoy y no en septiembre:** las dos orgs con agentes tienen
+      **0 citas y 0 facturas** (la dental tiene 1 paciente y ninguna cita). Recall exige una cita
+      completada hace ≥180 días sin cita futura; Cobrador, una factura emitida y vencida. Con esos
+      datos, `propuestas 0` es la respuesta **correcta** del motor, no un fallo. El diagnóstico del
+      04-sep decía lo mismo y **se volvió a contar** en vez de heredarse.
+
+      🔴 **El defecto real estaba en otro lado, y ningún gate podía verlo: el disparador.** El cron
+      `0 11 * * *` disparó los 11 días del mes, pero las corridas quedaron los días **04, 05, 07,
+      09 y 11** — los días **06, 08 y 10** todos los agentes contestaron `skippedReason: "not_due"`.
+      La causa es aritmética: `intervalMinutes` vale **1440**, exactamente la cadencia del
+      disparador, y `shouldRunAgent` exigía `elapsed >= interval` contra el `startedAt` de la
+      corrida anterior. El cron nunca arranca en el mismo milisegundo (11:00:01 un día, 11:00:02
+      el otro) y la fila se sella **después** de la llamada HTTP, así que el disparo siguiente
+      llega unos segundos **antes** de cumplir las 24 h → no corre, y recién al otro día (48 h)
+      vuelve a entrar. **El producto entregaba la mitad de la frecuencia que promete.**
+
+      **LA CLASE, para buscarla en otro lado:** cuando la cadencia declarada de un trabajo IGUALA
+      la del reloj que lo despierta, el jitter del reloj se come un disparo de cada dos. No falla
+      nunca del todo —lo que lo hace invisible—, sólo entrega la mitad. Cada pieza tenía razón por
+      separado: el cron corrió, el runtime contestó 200, la corrida cerró `completed`, y
+      `agents-cadencia.ts` ya topeaba lo que la pantalla **dice** contra el disparador real. Lo que
+      faltaba era que el **scheduler cumpliera esa misma promesa**. Vale para todo cron con
+      intervalo propio: barridos del bot, drips, recordatorios.
+
+      Arreglo: `margenDeJitter()` en `lib/onia-core/modules/agents-logic.ts` — 5 % del intervalo,
+      **topeado a 60 min**. Proporcional para que valga igual en media hora que en un día; topeado
+      para que no se vuelva «corre cuando quiera» (un agente mensual no puede adelantarse día y
+      medio). Gate `lib/onia-core/modules/agents-corre-en-cada-disparo.test.ts`: el sujeto es el
+      **cruce** de los dos módulos (lo que se promete y lo que el runtime deja correr), con el
+      universo derivado de `AGENT_KINDS` — el rol que se agregue mañana entra solo. Validado por
+      mutación en **cuatro** direcciones y cada una cae en SU caso: revertir el arreglo (7 rojos),
+      margen 0 (7), quitar el tope (1) y frontera estricta `>` (1).
+      Gates verdes en las dos máquinas: `tsc` 0 · **4727** tests · `eslint` 0 errores.
+
+      ⚠️ **Lo que queda abierto y NO es de este ítem:** el circuito aprobar→enviar está entero
+      (CAS anti-doble-clic, `approvalId` UNIQUE, no finge entrega, y `/pending` ofrece «enviar» y
+      «preparar link para mandarlo yo»), pero **nunca se ejecutó con un caso real** porque nunca
+      hubo una propuesta que aprobar. Probarlo de punta a punta exige sembrar una cita vieja en
+      una org de QA y mirar el despacho — ítem propio, no una línea de éste.
+
+- [ ] 🔴 **Probar aprobar→enviar de punta a punta, con un caso real.** Es la mitad del pedido
+      de Sergio Urcullo del 11-sep que quedó sin cumplir: el circuito está construido entero y
+      **nunca se ejecutó** (0 aprobaciones en producción desde que existe). Sembrar en una org
+      **zz-qa** una cita completada hace ≥180 días sin cita futura (el trial de esa org hay que
+      extenderlo primero o el runtime sale `agents_runtime_disabled` sin hacer una sola query),
+      correr `/root/bin/run-onia-agents-cron.sh`, aprobar la propuesta en `/pending` eligiendo
+      **«preparar link»** —WhatsApp no está configurado para esas orgs, así que el envío real
+      fallaría por credencial, que es el camino honesto— y **mirar** que el despacho quede
+      asentado con su `waLink` y la acción pase a `executed`. El botón vive en
+      `onia-platform/app/(dashboard)/pending/pending-client.tsx` y el envío en
+      `onia-platform/lib/onia-core/dispatch/dispatcher.ts`. Borrar el dato sembrado por id
+      EXACTO al terminar (el prefijo `zz-qa-` lo usan DOS carriles) y devolver el `trialEnd`
+      anotado. **HECHO =** la captura del despacho + la fila de `onia_core_dispatches`.
 
 - [ ] 🔴 **Dos propuestas de diseño para el dashboard del producto** (Sergio Urcullo, 11-sep:
       *"ese color que hay ahorita no es nada intuitivo y no hay botones que resalten, que se
