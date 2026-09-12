@@ -92,6 +92,60 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       módulo se usa, cuál nadie tocó, y qué se esconde/simplifica para que la 1.0 sea corta.
       El techo son horas de soporte, no features (estrategia §9).
 
+- [x] 🔴 **La cuenta REAL de Sergio Urcullo tenía 7 filas de datos de prueba adentro, y una de
+      ellas hizo que otro carril abriera una tarea CRÍTICA por un cruce de tenant que NUNCA
+      EXISTIÓ. Limpiada y verificada en producción el 2026-09-12; el auditor que la encontró
+      queda cableado (`npm test`).**
+
+      **Lo que se creía:** `recorrido-cliente` midió que el paso 6 de Importadora, con la sesión
+      de una cuenta de prueba recién creada, había escrito un paciente **dentro de
+      `clinica-sergio-p2ljs`** — la cuenta real de Sergio Urcullo. Tarea `t_3f352044`, prioridad
+      crítica: un fallo de aislamiento multi-tenant es lo más grave que puede tener este producto.
+
+      **Lo que pasó, medido, no razonado.** La ruta que crea pacientes escribe auditoría SIEMPRE
+      (`app/api/patients/route.ts`: `prisma.patient.create` y acto seguido `logAudit`). En
+      `audit_logs` **no hay ni un `PATIENT_CREATED` en 48 h** — así que esa fila no la creó
+      ninguna sesión web. La creé **yo**, este carril, con un `INSERT` directo, en la vuelta
+      anterior (`2e034412`), para poder probar aprobar→enviar sobre una org con onboarding hecho.
+      El id que declara ese commit —`zzqa20260912pac1`— es exactamente el que la tarea reporta.
+      **El producto no tiene cruce de tenant. Lo tenía el instrumento, y era mío.**
+
+      🔴 **Por qué el otro carril no podía saberlo, y esto es la lección que importa:** al
+      paciente le puse un nombre con la **forma sellada de ESE carril**
+      (`zz-qa-AAAA-MM-DD-HHMM …`). Su barredor borra por esa forma —correctamente, es la suya—,
+      así que se llevó mi fila, la contó como propia y concluyó que su paso 6 había escrito en
+      una cuenta ajena. **Un sello de QA sin el nombre del carril que siembra hace que el
+      instrumento del vecino acuse al producto de un bug que es tuyo.**
+
+      🔴 **Y la limpieza de esa vuelta, declarada "verificada contra la base", estaba
+      incompleta:** el inventario era una lista a mano (paciente · cita · acciones · aprobaciones
+      · despachos · corridas) y la escritura **derivada** no estaba en la lista. Quedaron **4
+      filas en `audit_logs` de la cuenta real** con el nombre del paciente de prueba y el texto
+      de un WhatsApp que nunca se mandó — y el dueño las ve: `/admin/audit` existe
+      (`app/(dashboard)/admin/audit/page.tsx`). Borradas por id exacto, con respaldo previo en
+      `/root/backups-qa/audit-logs-zzqa-20260912.json`: 61 → 57 filas, 0 contaminadas.
+
+      **El arreglo NO es acordarse mejor: es preguntarle a la base.**
+      `scripts/qa_sin_rastro.mjs` **deriva el universo de `information_schema`** —toda tabla real
+      con `organizationId` (más `organizations` por su `id`) y todas sus columnas de texto y
+      JSON— y busca la marca `zz-?qa` en cada una. Una tabla nueva entra sola; `jsonb` entra
+      (es donde sobrevivió el rastro); es **tri-estado** (exit 2 = no pude preguntar, nunca
+      "limpio"); y una fila cuya organización no existe **no se absuelve**, cuenta como real.
+
+      **Lo que encontró en su primera corrida viva, que ninguna lista a mano habría visto: 74
+      tablas miradas y 3 filas MÁS de basura de QA dentro de la cuenta real**, de otras corridas
+      y con una semana de antigüedad — 2 recordatorios en `notifications.message`
+      (`zz-qa-verif-4a`, del 5-sep) y un proveedor `zz-qa-proveedor` en
+      `onia_core_business_partners`. Respaldadas en
+      `/root/backups-qa/basura-qa-cuenta-real-20260912.json` y borradas en una transacción.
+      **Re-auditado: `En organizaciones REALES: 0`, exit 0.**
+
+      Gate: `scripts/qa_sin_rastro.test.mjs`, 8 casos, en la cadena (`npm run test:qa-sin-rastro`).
+      Validado por mutación DESPUÉS de estar verde — sacarle `jsonb` al universo, absolver a la
+      fila huérfana, y hacer que el catch devuelva "limpio" ponen 1 caso en rojo cada uno.
+      Medición viva: `npm run qa:sin-rastro` (~7 s). **Este carril la corre al cerrar toda vuelta
+      que siembre en producción**, que es la única forma de que un alias suelto no valga cero.
+
 - [x] ✅ **MEDIDO Y ARREGLADO el 2026-09-12 (`ea80ada`, onia-platform — pusheado a la rama,
       falta mergear y desplegar): los agentes corrían DÍA POR MEDIO, y la pantalla promete
       «corre todos los días».** (Sergio Urcullo, 11-sep: *"mira también cómo están los agentes
