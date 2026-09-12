@@ -63,6 +63,25 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [ ] 🔴 **Punto nuevo de Sergio Urcullo (12-sep): ¿Onia Platform personalizable POR CLIENTE
+      para empresas grandes?** Textual: *"que se pueda hacer in-house su trabajo y no ellos
+      moldearse al sistema sino el sistema a ellos — analizá"*. Análisis en curso con medición
+      real: qué se moldea HOY (packs por rubro en
+      `onia-platform/lib/platform/vertical-pack.ts`, vocabulario, entitlements por org, límites
+      por plan), qué está hardcodeado (campos y estados fijos), cómo lo venden Odoo/Salesforce
+      (config vs código vs partner) y la trampa de servicios que rompería el techo de horas.
+      Entregable: veredicto en 3 niveles + oferta concreta a empresa grande anclada en Grupo
+      (Bs 2.900 + impl. 3.500) e instancia privada. **ANÁLISIS TERMINADO el 12-sep** —
+      veredicto completo en `hermes-content/docs/ONIA_PERSONALIZACION_POR_CLIENTE.md`:
+      N1 (configuración self-service: campos custom + estados por org + overlay de pack,
+      ~18-28 días UNA vez) es el único nivel compatible con el techo de horas; N2 solo como
+      implementación acotada ya existente; N3 (fork por cliente) = NO con el número delante.
+      Hallazgo bonus: `limits` Json de entitlements se escribe y nadie lo lee (perilla muerta,
+      1-2 días revivirla). DECISIÓN DE SERGIO: construir N1 sí/no — y la regla de la casa
+      recuerda que el problema es de CLIENTES, no de features: se justifica con un prospecto
+      enterprise concreto delante.
+
+
 - [ ] 🔴 **PORTADA reordenada por veredicto de Sergio Urcullo (11-sep, sobre capturas del
       preview y de producción) — HECHA en `main` (`a847d9aa`), FALTA su OK mirándola y el
       deploy.** Sus palabras: *"esto no vende nada… coloca algo que impacte que se vea más el
