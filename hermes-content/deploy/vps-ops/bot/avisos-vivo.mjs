@@ -36,7 +36,7 @@
 
 import { execFileSync, spawnSync } from "node:child_process";
 import net from "node:net";
-import { existsSync, mkdtempSync, rmSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -116,18 +116,170 @@ export function resolverBotDesplegado(deps = {}) {
 // ---------------------------------------------------------------------------
 
 /**
+ * La UNICA causa de salteo que es global al circuito: con el flag apagado no sale NINGUN
+ * aviso, de ninguna conversacion. Por eso —y solo por eso— un envio posterior la desmiente.
+ * Cualquier otro salteo es propio de su aviso y no lo cura que otro haya salido despues.
+ * La escribe `aviso-telegram.mjs` (`reason: "aviso por Telegram apagado (ONIA_BOT_TG_AVISO)"`).
+ */
+export const CAUSA_GLOBAL_DE_SALTEO = "ONIA_BOT_TG_AVISO";
+
+/** El `(motivo)` con el que el motor pidio el aviso: `[aviso] skipped (cuota_agotada): ...`. */
+function motivoDelAviso(linea) {
+  return /\[aviso\]\s+\w+\s+(?:conv=\d+\s+)?\(([^)]+)\)/.exec(String(linea))?.[1] || "sin motivo en el log";
+}
+
+/**
  * Cuenta los avisos del log por su resultado real. Sólo mira lineas `[aviso]`: el log del
  * webhook mezcla `[n8n]` y una linea por mensaje, y contar de mas inventa avisos.
+ *
+ * Y separa los salteos VIGENTES de los ya curados. El log del webhook es append-only y no
+ * se rota (51.774 lineas el 2026-09-12): contar la historia entera dejaba este gate en rojo
+ * para siempre por dos lineas del 4-sep, anteriores al dia en que se encendio el flag. Un
+ * rojo que no puede volver a verde deja de mirarse, y entonces el rojo de verdad llega
+ * indistinguible del de siempre. La pregunta no es "¿hubo un salteo alguna vez?" sino
+ * "¿la causa sigue viva?".
  */
 export function contarEventos(lineas = []) {
   const avisos = (Array.isArray(lineas) ? lineas : []).filter((l) => String(l).includes("[aviso]"));
   const conEstado = (estado) => avisos.filter((l) => new RegExp(`\\[aviso\\]\\s+${estado}\\b`).test(l)).length;
+
+  // Posicion del ultimo envio exitoso: todo lo anterior a el ya fue desmentido POR EL
+  // CIRCUITO, que volvio a mandar. Se compara por orden en el log, que es el orden real.
+  let ultimoEnvio = -1;
+  avisos.forEach((l, i) => {
+    if (/\[aviso\]\s+sent\b/.test(String(l))) ultimoEnvio = i;
+  });
+
+  const vigentes = [];
+  avisos.forEach((l, i) => {
+    if (!/\[aviso\]\s+skipped\b/.test(String(l))) return;
+    const curado = String(l).includes(CAUSA_GLOBAL_DE_SALTEO) && ultimoEnvio > i;
+    if (!curado) vigentes.push(motivoDelAviso(l));
+  });
+
   return {
     total: avisos.length,
     enviados: conEstado("sent"),
     salteados: conEstado("skipped"),
     fallidos: conEstado("failed"),
+    salteadosVigentes: vigentes.length,
+    motivosVigentes: vigentes,
   };
+}
+
+/**
+ * De QUIEN es cada aviso, en el orden del log.
+ *
+ * POR QUE EXISTE. El 2026-09-12 este gate firmaba `avisos enviados 3 — circuito sano y
+ * avisando` sobre CINCO eventos que eran, todos, nuestros: conv 53, 55 y 57 del inbox 7
+ * (`ZZ QA Clinica Chatbot`, el banco de pruebas) y conv 11 del inbox 5, contacto `Sergio`
+ * — o sea Sergio Urcullo probando su propio bot. Cero desconocidos. La frase es cierta
+ * sobre el circuito y falsa sobre lo que el carril tiene que saber, que es si un LEAD real
+ * llega a Sergio Urcullo. Un instrumento que nunca vio a su sujeto tiene que decirlo.
+ *
+ * El `conv` sale de la propia linea cuando esta (`[aviso] sent conv=11 (...)`), y si no —las
+ * del 4-sep salieron sin el— de la linea INMEDIATAMENTE anterior, que es la del webhook que
+ * lo produjo. No es una suposicion: el log es append-only y esta en orden, la misma
+ * propiedad con la que `contarEventos` cura los salteos. El item de la cola daba esto por
+ * imposible ("un aviso que no salio y no dice a quien no se puede reparar") y era falso:
+ * asi se identificaron las dos conversaciones del 4-sep.
+ *
+ * Nunca inventa: si no hay `conv` en ninguna de las dos, queda `null`. Atribuirle un aviso
+ * a la conversacion equivocada manda a buscar a la persona que no es.
+ */
+export function conversacionesDeAvisos(lineas = []) {
+  const todas = Array.isArray(lineas) ? lineas.map(String) : [];
+  const eventos = [];
+  todas.forEach((l, i) => {
+    if (!l.includes("[aviso]")) return;
+    const propio = /\[aviso\]\s+\w+\s+conv=(\d+)/.exec(l)?.[1];
+    // Solo la vecina INMEDIATA, y solo si es una linea de webhook: el aviso se loguea en el
+    // callback del mismo turno, asi que cualquier otra distancia ya es adivinar.
+    const previa = todas[i - 1] || "";
+    const vecino = !propio && previa.includes("[onia-webhook]") ? /\bconv=(\d+)/.exec(previa)?.[1] : null;
+    const conv = propio ?? vecino ?? null;
+    eventos.push({
+      estado: /\[aviso\]\s+(\w+)/.exec(l)?.[1] || null,
+      motivo: motivoDelAviso(l),
+      conv: conv === null ? null : Number(conv),
+    });
+  });
+  return eventos;
+}
+
+/**
+ * El inbox del banco de pruebas. Sus conversaciones NO son leads: las siembran nuestras
+ * propias sondas (`sonda_widget.mjs` y los deploys), y contarlas como gente esperando fue
+ * exactamente lo que mando a este carril a buscar "dos personas" que no existian.
+ */
+export const INBOX_BANCO_DE_PRUEBAS = 7;
+
+/**
+ * Separa los avisos del banco de pruebas de los que vienen de afuera.
+ *
+ * `inboxPorConv` es un Map conv->inbox, o `null` cuando no se pudo preguntar. Es TRI-ESTADO
+ * a proposito: sin poder consultar la base, "esto es un lead real" es una suposicion, y la
+ * suposicion optimista es justo la que dejo pasar el agujero. Un conv que la base no conoce
+ * queda en `sinUbicar`, nunca en `reales`.
+ */
+export function clasificarEventos(eventos = [], inboxPorConv = null) {
+  const lista = Array.isArray(eventos) ? eventos : [];
+  const medido = inboxPorConv instanceof Map;
+  const prueba = [];
+  const reales = [];
+  const sinUbicar = [];
+  const contactos = new Map();
+  // Se cuentan CONVERSACIONES, no eventos: dos avisos de la misma persona son una persona.
+  // La primera version imprimio `leads 2 (conv 11, 11)` sobre un solo interesado.
+  const vistas = new Set();
+  for (const ev of lista) {
+    const conv = ev?.conv ?? null;
+    if (conv === null || vistas.has(conv)) continue;
+    vistas.add(conv);
+    if (!medido) {
+      sinUbicar.push(conv);
+      continue;
+    }
+    // El mapa acepta el inbox pelado o `{inbox, contacto}`: el NOMBRE es lo unico que
+    // distingue un lead de nosotros mismos probando, y adivinarlo por heuristica falla
+    // abierto en las dos direcciones (un lead real tambien puede llamarse Sergio).
+    const dato = inboxPorConv.get(conv);
+    const inbox = dato && typeof dato === "object" ? dato.inbox : dato;
+    if (dato && typeof dato === "object" && dato.contacto) contactos.set(conv, dato.contacto);
+    if (inbox === undefined || inbox === null) sinUbicar.push(conv);
+    else if (inbox === INBOX_BANCO_DE_PRUEBAS) prueba.push(conv);
+    else reales.push(conv);
+  }
+  return { medido, prueba, reales, sinUbicar, contactos };
+}
+
+/**
+ * La linea que le sirve al objetivo del carril. Vive aparte del reporte para que se pueda
+ * probar: es una AFIRMACION sobre produccion, y hasta hoy no tenia ni un caso.
+ */
+export function lecturaDeEventos({ veredicto, eventos, circuitoSano, origen } = {}) {
+  const ev = eventos || contarEventos([]);
+  const noSalieron = (ev.salteadosVigentes ?? ev.salteados) + ev.fallidos;
+  // El motivo se CITA, no se supone. El 2026-09-12 esta linea decia "alguien pidio un humano
+  // y nadie se entero" sobre dos salteos que el propio log desmentia (`cuota_agotada` y
+  // `pregunta_precio_recepcion`), mientras el unico `pidio_humano_recepcion` habia salido bien.
+  const cuales = (ev.motivosVigentes || []).join(", ");
+  if (veredicto !== "ok") {
+    if (veredicto !== "roto") return "no se pudo medir contra produccion";
+    return circuitoSano
+      ? `el circuito responde, pero ${noSalieron} aviso(s) NO salieron${cuales ? ` (${cuales})` : ""} y nada posterior lo desmiente`
+      : "EL PROXIMO QUE PIDA UN HUMANO SE PIERDE";
+  }
+  if (ev.enviados === 0) return "circuito sano, sin eventos reales todavia";
+  // Hay envios. La pregunta que faltaba: ¿alguno fue de alguien de AFUERA?
+  if (origen?.medido && origen.reales.length === 0) {
+    const delBanco = origen.prueba.length;
+    return `circuito sano, pero NINGUN aviso es de un lead: ${delBanco} del banco de pruebas${
+      origen.sinUbicar.length ? ` y ${origen.sinUbicar.length} sin ubicar` : ""
+    } — nunca se probo con un desconocido`;
+  }
+  if (origen && !origen.medido) return "circuito sano y avisando (no se pudo ubicar de quien son los avisos)";
+  return "circuito sano y avisando";
 }
 
 /**
@@ -158,7 +310,18 @@ export function diagnosticar({ circuito, eventos }) {
   // Un aviso que salio mal manda sobre cualquier chequeo de configuracion: es una persona
   // esperando que Sergio le escriba, y el circuito "bien configurado" no la atendio.
   if (ev.fallidos > 0) motivos.push(`${ev.fallidos} aviso(s) FALLIDO(s) en el log`);
-  if (ev.salteados > 0) motivos.push(`${ev.salteados} aviso(s) SALTEADO(s) en el log`);
+  // `?? ev.salteados`: si llega un objeto de eventos sin el campo nuevo, se cae del lado
+  // seguro —cuenta todos— en vez de firmar verde por una propiedad ausente.
+  const salteadosVivos = ev.salteadosVigentes ?? ev.salteados;
+  if (salteadosVivos > 0) {
+    // El motivo se CITA del log. Hasta el 2026-09-12 este gate decia "alguien pidio un
+    // humano" sobre dos salteos que eran `cuota_agotada` y `pregunta_precio_recepcion`:
+    // acusar con una causa inventada manda a arreglar lo que no esta roto.
+    const cuales = (ev.motivosVigentes || []).join(", ");
+    motivos.push(
+      `${salteadosVivos} aviso(s) SALTEADO(s) sin un envio posterior que los desmienta${cuales ? `: ${cuales}` : ""}`,
+    );
+  }
 
   // Prioridad: evidencia de fallo > no haber podido preguntar > verde. Un rojo MEDIDO no lo
   // tapa un eslabon sin medir, y un eslabon sin medir nunca se firma como verde.
@@ -329,14 +492,81 @@ export async function motorProduceAviso(dir) {
 }
 
 /**
- * El log del proceso vivo. El `logs` de `webhook-server.sh` es un `docker exec` contra el
- * contenedor, asi que sirve igual desde la copia traida del VPS: en nodo-casa `docker` es un
- * shim que delega por SSH, o sea que el log sale de produccion en las dos maquinas.
+ * La ruta del log DENTRO del contenedor, derivada del propio `webhook-server.sh`. Se DERIVA
+ * y no se escribe aca: el dueño de esa ruta es el script, y una copia mia se desincroniza
+ * sin que nada se ponga rojo. Si la linea deja de existir devuelve `null`, nunca una ruta
+ * inventada que leeria vacio para siempre.
  */
-function lineasDelLog(dir) {
+function archivoDeLog(dir) {
+  try {
+    return /^LOGFILE="([^"]+)"/m.exec(readFileSync(join(dir, "webhook-server.sh"), "utf8"))?.[1] || null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Las lineas de AVISO del log del proceso vivo.
+ *
+ * Por que NO usa `webhook-server.sh logs`, que era lo natural y es lo que hacia: ese
+ * subcomando es `tail -n ${2:-50}`, o sea que llamarlo sin argumento mira 50 lineas y nada
+ * mas. Medido el 2026-09-12 contra produccion: el log vivo pesaba 2,7 MB con CINCO lineas
+ * `[aviso]` entre cientos por mensaje, y este gate informaba `eventos: 0 avisos — circuito
+ * sano, sin eventos reales todavia` teniendo DOS avisos salteados adentro, que son dos
+ * personas que pidieron un humano y a Sergio Urcullo nunca le llego nada. `diagnosticar` ya
+ * sabia ponerse rojo con un salteado: la ventana le tapaba la evidencia.
+ *
+ * Y pedir el log ENTERO tampoco alcanza, que fue el primer arreglo y salia verde igual:
+ * `execFileSync` corta en 1 MB por defecto, asi que 2,7 MB devuelven `null` y el gate vuelve
+ * a decir 0, ahora por el otro lado. Por eso el filtro va DONDE VIVE EL LOG: la salida queda
+ * acotada por construccion y no tiene techo que alcanzar cuando el log crezca. `docker` es el
+ * mismo shim que usa el resto del archivo, asi que se sigue midiendo produccion desde las dos
+ * maquinas.
+ */
+export function lineasDelLog(dir) {
   if (!dir) return [];
-  const out = sh("bash", [join(dir, "webhook-server.sh"), "logs"], 30000);
-  return out ? out.split("\n") : [];
+  const archivo = archivoDeLog(dir);
+  if (!archivo) return [];
+  // El `|| true` es para que un log SIN avisos no se lea como error: `grep` sale 1 cuando no
+  // encuentra nada, y `sh()` convierte cualquier salida distinta de 0 en `null`.
+  // `-B 1` trae la linea del webhook que produjo cada aviso: es de donde sale el `conv` de
+  // los avisos viejos, que salieron sin el (ver `conversacionesDeAvisos`). Sigue acotado por
+  // construccion —dos lineas por evento, no el log— que es la propiedad por la que el filtro
+  // vive aca adentro y no en el lector. `grep` separa los grupos no contiguos con `--`, que
+  // no contiene `[aviso]` ni `[onia-webhook]`: los dos consumidores lo ignoran solos.
+  const cmd = `grep -B 1 -F '[aviso]' ${archivo} 2>/dev/null || true`;
+  const out = sh("docker", ["exec", CONTENEDOR, "sh", "-c", cmd], 30000);
+  return out ? out.split("\n").filter(Boolean) : [];
+}
+
+/**
+ * El inbox de cada conversacion, preguntandole a la base de Chatwoot. `null` cuando no se
+ * pudo preguntar — de ahi sale el tri-estado de `clasificarEventos`.
+ *
+ * El nombre del contenedor se DERIVA (`docker ps`), nunca se clava: Swarm le pega un sufijo
+ * distinto en cada re-deploy (`onia-chatbot_chatwoot-db.1.sddet2j4f4gvnrozj4t5b1850`), asi
+ * que un nombre escrito a mano se rompe solo y el gate se quedaria ciego en verde.
+ */
+export function inboxPorConversacion(convs = []) {
+  // Enteros y nada mas: estos numeros salen del log y viajan a un SQL.
+  const ids = [...new Set((convs || []).filter((n) => Number.isInteger(n) && n > 0))];
+  if (!ids.length) return new Map();
+  const nombres = sh("docker", ["ps", "--format", "{{.Names}}"], 20000);
+  const db = (nombres || "").split("\n").find((n) => n.includes("chatwoot-db"));
+  if (!db) return null;
+  // El nombre del contacto viaja con el inbox: el inbox dice si es el banco de pruebas, el
+  // nombre dice si el "lead" somos nosotros. Aplanado por si trae saltos de linea.
+  const sql =
+    "select c.id, c.inbox_id, replace(coalesce(ct.name,'-'), E'\\n', ' ') from conversations c " +
+    `left join contacts ct on ct.id = c.contact_id where c.id in (${ids.join(",")});`;
+  const out = sh("docker", ["exec", db, "psql", "-U", "postgres", "-d", "onia-chatbot", "-tAc", sql], 30000);
+  if (out === null) return null;
+  const mapa = new Map();
+  for (const linea of out.split("\n")) {
+    const [id, inbox, contacto] = linea.trim().split("|");
+    if (id && inbox) mapa.set(Number(id), { inbox: Number(inbox), contacto: contacto || null });
+  }
+  return mapa;
 }
 
 export async function medir() {
@@ -359,8 +589,16 @@ export async function medir() {
 async function medirCon(bot) {
   const env = envDelProcesoVivo();
   const motor = bot ? await motorProduceAviso(bot.dir) : null;
-  // Sin el proceso vivo o sin el codigo desplegado no hay nada que afirmar.
-  if (!env || !motor) return { circuito: null, eventos: contarEventos(lineasDelLog(bot?.dir)), ejemplo: null };
+  // El log se lee UNA vez: cada llamada es un `docker exec` contra produccion.
+  const lineas = lineasDelLog(bot?.dir);
+  const eventos = contarEventos(lineas);
+  // De quien son esos avisos. Va aunque el circuito no se pueda medir: son preguntas
+  // independientes, y "hubo avisos pero ninguno de un lead" se responde con el log y la base.
+  const deQuien = conversacionesDeAvisos(lineas);
+  const origen = clasificarEventos(deQuien, inboxPorConversacion(deQuien.map((e) => e.conv)));
+
+  // Sin el proceso vivo o sin el codigo desplegado no hay nada que afirmar del circuito.
+  if (!env || !motor) return { circuito: null, eventos, origen, ejemplo: null };
 
   const credencialesOk = await credencialesResponden(env.TG_BOT_TOKEN, env.TG_CHAT_ID);
   return {
@@ -370,7 +608,8 @@ async function medirCon(bot) {
       motorEmiteNotify: motor.emite,
       textoAccionable: motor.accionable,
     },
-    eventos: contarEventos(lineasDelLog(bot.dir)),
+    eventos,
+    origen,
     ejemplo: motor.ejemplo,
     ramas: motor.ramas,
   };
@@ -380,7 +619,7 @@ async function medirCon(bot) {
 // produccion y un process.exit() que mata al proceso importador (medido en este carril
 // el 2026-09-03 con demo_agendada_real.mjs).
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const { circuito, eventos, ejemplo, ramas } = await medir();
+  const { circuito, eventos, origen, ejemplo, ramas } = await medir();
   const d = diagnosticar({ circuito, eventos });
 
   console.log(`circuito: ${circuito ? (d.veredicto === "no_medido" ? "?" : "medido") : "NO SE PUDO MEDIR"}`);
@@ -399,19 +638,38 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       console.log(`  ${r?.emite && r?.accionable ? "ok  " : "ROTO"} rama ${kind}`);
     }
   }
-  console.log(`eventos: ${eventos.total} avisos (enviados ${eventos.enviados} · salteados ${eventos.salteados} · fallidos ${eventos.fallidos})`);
+  // Los curados se NOMBRAN aunque no pongan rojo: si no, un verde con salteos adentro se
+  // lee como "nunca paso nada" y nadie puede auditar por que este gate dejo de gritar.
+  const curados = eventos.salteados - (eventos.salteadosVigentes ?? eventos.salteados);
+  const detalleSalteados = `${eventos.salteados}${curados > 0 ? ` (${curados} ya desmentido(s) por un envio posterior)` : ""}`;
+  console.log(
+    `eventos: ${eventos.total} avisos (enviados ${eventos.enviados} · salteados ${detalleSalteados} · fallidos ${eventos.fallidos})`,
+  );
+  // De quien son. Se imprime SIEMPRE que haya avisos: el dia que aparezca el primer lead de
+  // verdad, esta linea es la que lo dice — y hasta entonces dice que todavia no paso.
+  if (eventos.total > 0) {
+    const o = origen || { medido: false, prueba: [], reales: [], sinUbicar: [] };
+    console.log(
+      o.medido
+        ? `de quien: leads ${o.reales.length}${
+            o.reales.length
+              ? ` (${o.reales.map((c) => `conv ${c}${o.contactos?.get(c) ? ` · ${o.contactos.get(c)}` : ""}`).join(", ")})`
+              : ""
+          } · banco de pruebas ${o.prueba.length}${o.sinUbicar.length ? ` · sin ubicar ${o.sinUbicar.length}` : ""}`
+        : "de quien: no se pudo preguntar a la base de Chatwoot (no medido, NO es cero)",
+    );
+  }
   if (d.motivos.length) console.log("motivos:\n  - " + d.motivos.join("\n  - "));
   if (ejemplo && d.veredicto === "ok") console.log(`\nlo que recibiria Sergio:\n${ejemplo.replace(/^/gm, "  ")}`);
 
   // La linea que le sirve al objetivo del carril: dice el numero Y como leerlo.
-  const lectura =
-    d.veredicto === "ok"
-      ? eventos.enviados === 0
-        ? "circuito sano, sin eventos reales todavia"
-        : "circuito sano y avisando"
-      : d.veredicto === "roto"
-        ? "EL PROXIMO QUE PIDA UN HUMANO SE PIERDE"
-        : "no se pudo medir contra produccion";
+  // Un rojo tiene DOS causas que se arreglan en lugares opuestos y hasta hoy se leian igual.
+  // Si el circuito contesta que si a las cuatro preguntas, "el proximo se pierde" es una
+  // afirmacion FALSA sobre el futuro: lo que se perdio ya se perdio, y lo que queda por hacer
+  // es ir a buscar a esas personas, no arreglar el circuito. Medido el 2026-09-12, que es la
+  // primera vez que este gate pudo ver sus propios avisos salteados.
+  const circuitoSano = circuito && Object.values(circuito).every((v) => v === true);
+  const lectura = lecturaDeEventos({ veredicto: d.veredicto, eventos, circuitoSano, origen });
   console.log(`\nVEREDICTO: ${d.veredicto} · avisos enviados ${eventos.enviados} — ${lectura}`);
 
   process.exit(d.veredicto === "ok" ? 0 : d.veredicto === "roto" ? 1 : 2);

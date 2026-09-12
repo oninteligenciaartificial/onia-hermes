@@ -18,6 +18,10 @@ import test from "node:test";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+
+import { cierreDeReservaFallida } from "./calcom-booking.mjs";
 
 import { DEFAULT_CONFIG } from "./config.mjs";
 import { createState, step } from "./bot-engine.mjs";
@@ -335,4 +339,75 @@ test("una ruta que NO es la desplegada nunca sale a la red", () => {
   );
 
   assert.equal(salioALaRed, false, "salio a la red por una ruta que produccion no usa");
+});
+
+// ---------------------------------------------------------------------------
+// EL SIMULADOR NO PUEDE PROMETER MAS QUE EL BOT
+//
+// Medido el 2026-09-12: el simulador imprimia "Listo, agendado: lunes 14, 14:00" PELADO,
+// mientras los dos mensajes que el bot MANDO de verdad (convs 11 y 49 de Chatwoot) llevaban
+// los dos "(Estoy confirmando ese horario con Sergio...)". La causa: el simulador llama a
+// `step()` directo y NUNCA pasa por `runTurn`, que es donde el producto pega ese cierre
+// cuando la reserva no sale — y hoy no sale nunca, porque no hay Cal.com en el VPS.
+//
+// Por que es peor que un detalle de texto: el simulador es el instrumento con el que este
+// carril mide "simulador 3/3" AL ARRANCAR CADA VUELTA. Un instrumento mas optimista que el
+// producto es ciego justo a la regresion que mide. Misma familia que el "simulador 3/3" que
+// convivio con el bot vivo cotizando Bs 750.
+//
+// El caso corre el simulador DE VERDAD en un proceso hijo (no la funcion suelta): asi se pone
+// rojo tambien si alguien saca el cableado de uno de los dos llamadores de `step()`.
+// ---------------------------------------------------------------------------
+
+test("el guion feliz del simulador cierra con la MISMA salvedad que recibe el prospecto", () => {
+  const simulador = fileURLToPath(new URL("./simulate.mjs", import.meta.url));
+  // Ambiente explicito: sin Cal.com configurado, que es produccion HOY. Si alguna vez se
+  // configura, este caso sigue midiendo lo suyo en vez de volverse intermitente.
+  const env = { ...process.env };
+  delete env.CALCOM_BASE_URL;
+  delete env.CALCOM_BOT_EVENT_TYPE_ID;
+  env.ONIA_BOT_SLOTS = "lun 14:00@2026-09-14T18:00:00Z|mar 14:00@2026-09-15T18:00:00Z";
+
+  const corrida = spawnSync(process.execPath, [simulador, "--script", "1-feliz"], {
+    encoding: "utf8",
+    env,
+    timeout: 60000,
+  });
+
+  assert.equal(corrida.status, 0, `el simulador no corrio: ${corrida.stderr}`);
+  assert.match(corrida.stdout, /Listo, agendado/, "el guion feliz tiene que llegar a agendar (si no, el caso no mide nada)");
+  // El texto se IMPORTA del modulo que lo emite: escribirlo aca seria una segunda copia, que
+  // es exactamente el defecto que este caso existe para impedir.
+  const salvedad = cierreDeReservaFallida("sin_config").trim().replace(/^_\(|\)_$/g, "");
+  assert.ok(
+    corrida.stdout.includes(salvedad),
+    "el simulador imprimio el 'Listo, agendado' sin la salvedad que el bot SI le manda al prospecto",
+  );
+});
+
+test("y el modo INTERACTIVO tambien — es el que usa la medicion de arranque del carril", () => {
+  // Los dos llamadores de `step()` son caminos distintos: el gate de arriba cubre `--script`,
+  // pero la linea que este carril corre cada vuelta es `printf ... | node simulate.mjs`. Sin
+  // este caso, sacarle el cierre al modo interactivo pasa en verde — y justamente ahi es donde
+  // se lee el "simulador 3/3" que se reporta.
+  const simulador = fileURLToPath(new URL("./simulate.mjs", import.meta.url));
+  const env = { ...process.env };
+  delete env.CALCOM_BASE_URL;
+  delete env.CALCOM_BOT_EVENT_TYPE_ID;
+  env.ONIA_BOT_SLOTS = "lun 14:00@2026-09-14T18:00:00Z|mar 14:00@2026-09-15T18:00:00Z";
+
+  const corrida = spawnSync(process.execPath, [simulador], {
+    encoding: "utf8",
+    env,
+    timeout: 60000,
+    input: "quiero una demo\nA\n/salir\n",
+  });
+
+  assert.equal(corrida.status, 0, `el simulador no corrio: ${corrida.stderr}`);
+  assert.match(corrida.stdout, /Listo, agendado/, "el camino tiene que llegar a agendar (si no, el caso no mide nada)");
+  const salvedad = cierreDeReservaFallida("sin_config").trim().replace(/^_\(|\)_$/g, "");
+  assert.ok(
+    corrida.stdout.includes(salvedad),
+    "el modo interactivo imprimio el 'Listo, agendado' sin la salvedad que el bot SI le manda al prospecto",
+  );
 });

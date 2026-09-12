@@ -28,6 +28,14 @@ Instrumento: `scripts/recorrido_cliente.mjs`.
 
 ## Cerrado
 
+- **`t_3f352044` (cruce de tenant en Importadora) — REFUTADO, no era del producto.** Verificado el
+  2026-09-12: `/api/patients` escribe `audit_logs` siempre y no hubo ningún `PATIENT_CREATED` en
+  48h para esa fila — nadie la creó por UI. La sembró otro carril (chatbot-cola) con un `INSERT`
+  directo usando la MISMA forma sellada de este carril (`zz-qa-AAAA-MM-DD-HHMM`), así que mi
+  barredor se la llevó y la reportó como propia. El producto quedó re-auditado con
+  `npm run qa:sin-rastro` (74 tablas, 0 rastros en orgs reales). Comentario completo en la tarea.
+  No repetir esta alarma sin evidencia nueva: la forma del prefijo no basta para atribuir un dato.
+
 - **El paso 8 ya factura de verdad, no mira más el cobro vacío** — cerrado el 2026-09-05. Antes
   llegaba a `/billing` y esa pantalla siempre dice "0 facturas · Cobrado Bs 0,00": "OK" sólo
   probaba que la pantalla abra, nunca que cobrar funcione. Ahora, si hay un paciente `zz-qa-` del

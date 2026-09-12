@@ -116,6 +116,37 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       además (fase 2): avisos al 70/90/100 % del cupo con la cuenta "recargar vs subir" y la
       recarga de recordatorios (la de conversaciones ya existe).
 
+      ⚠️ **La cuenta "recargar vs subir" NO SE PUEDE ESCRIBIR TODAVÍA, y al medirlo apareció un
+      defecto vivo que ya se arregló** (2026-09-12, `310bae6` en `onia-platform`, rama
+      `claude/chatbots-platform-review-0d1d09` — pusheado, falta mergear y desplegar).
+      **"Subir" no es una opción del cupo del chatbot: no existe un nivel con más cupo.**
+      Medido: `cuotaDe` (`lib/chatbot/cupo.ts`) devuelve `WHATSAPP_ADDON.includedConversations`
+      = **500** sin mirar el plan, `PlanLimits` (`lib/plan-catalogo.ts`) no declara un solo
+      campo de conversaciones, y `whatsappIncluded` de la escalera C decide si el chatbot viene
+      pagado **adentro** del plan — no cuántas conversaciones trae. Los **seis** planes dan 500.
+
+      **Lo que el producto le decía al cliente**, en los tres textos del cupo y en un botón
+      "Ver niveles": *"o pasar a un nivel con más cupo"*. Sale en el peor momento —cupo agotado,
+      el asistente ya derivando a una persona— y manda a gastar: un cliente en Básico (Bs 320)
+      que obedece y sube a Full (Bs 1.290) paga **Bs 970 más por mes por exactamente el mismo
+      cupo**. La salida real es la recarga, que el mismo texto ya ofrecía al lado.
+
+      **Arreglado condicionando la promesa, no borrándola** (`hayNivelConMasCupo()`): el día que
+      un plan traiga su propio cupo, los textos y el botón vuelven solos. El botón fue en la
+      misma vuelta a propósito — arreglar el párrafo y dejar el CTA deja la misma salida
+      inexistente invitando. Gate `lib/chatbot/cupo-no-ofrece-un-nivel-que-no-existe.test.ts`:
+      cruza el **catálogo** (la capacidad) contra el **texto emitido** (la promesa), dos fuentes
+      distintas; deriva los planes del disco y las ramas ejercitando el módulo; validado por
+      mutación en el aviso del corte. Gates en el VPS: `tsc` limpio, **4.737 tests verdes**.
+      De paso, `cupo.test.ts` exigía la palabra "nivel" y con eso **defendía la promesa falsa**:
+      re-anclado a la salida que sí existe, con el motivo escrito al lado.
+
+      **Lo que esto deja decidido para la fase 2:** la cuenta en pantalla sólo puede comparar
+      **recarga vs recarga** (Bs 190 / 200 conversaciones, caducan con el mes), no "recargar vs
+      subir". Para que "subir" sea verdad hace falta que la escalera C le dé cupo de
+      conversaciones DISTINTO a cada plan — y eso es ratificar montos, que la propia letra chica
+      de arriba marca como pendiente de Sergio Urcullo.
+
       Historia: **ESCALERA C ELEGIDA por Sergio Urcullo (11-sep): 4 escalones con cupos estilo
       Higgsfield.** Su decisión,
       textual: *"la C pero que tenga restricciones y que tengan que estar pagando si quieren
@@ -170,22 +201,223 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       en `onia_agents_actions`, visibles en la pantalla Agentes de la clínica de Sergio para
       que él apruebe. **El misterio del "0 acciones en la historia" quedó explicado: motor
       sano + cadencia diaria + orgs sin datos disparadores** (`not_due` / feeds vacíos).
-      Pendiente de este ítem: (a) Sergio mira y APRUEBA un borrador en pantalla (la aprobación
-      registra; el envío externo S6 sigue sin existir); (b) purgar las semillas
-      `e2e-agentes-*` cuando termine la prueba; (c) construir los 3 agentes nuevos de abajo.
+      Pendiente de este ítem: (a) la demostración para Sergio Urcullo se hace **sobre datos
+      reales de su clínica o sobre una org de prueba, NO sembrando en su cuenta** — ver el ítem
+      de abajo: los dos borradores sembrados se le mostraban como reclamos de cobro a pacientes
+      que no existen, y aprobarlos habría intentado escribirle a un teléfono inventado;
+      (b) ✅ **purgadas el 2026-09-12**, las 12 filas, con respaldo y re-auditoría en cero;
+      (c) construir los 3 agentes nuevos de abajo.
 
       **DECIDIDO por Sergio Urcullo (11-sep, eligió las 4 opciones) y TODAVÍA SIN CONSTRUIR:
       los TRES agentes nuevos** (nota del merge del 12-sep: dos carriles reescribieron este
       ítem a la vez — la parte MEDIDA es sucesora, la DECISIÓN de los tres no se pierde).
       Sobre el mismo patrón de `onia-platform/lib/onia-core/modules/agents-runtime.ts`:
-      (1) **Confirmador de citas de mañana** (`draft_message`: cada tarde, citas de mañana sin
-      confirmar → mensaje listo para aprobar),
-      (2) **Seguimiento de cotizaciones** sin respuesta en N días (`draft_message` —
-      importadora), (3) **Stock bajo mínimo → tarea de pedido** al proveedor de la ficha
-      (`create_task`: no depende del envío externo). Restricción vigente: el ENVÍO externo (S6) no
+      (1) ✅ **Confirmador de citas de mañana** (`draft_message`: citas de mañana sin
+      confirmar → mensaje listo para aprobar) — **CONSTRUIDO el 2026-09-12**, ver abajo,
+      (2) ✅ **Seguimiento de cotizaciones** sin respuesta en N días (`draft_message` —
+      importadora) — **CONSTRUIDO el 2026-09-12**, ver abajo, (3) ✅ **Stock bajo mínimo →
+      tarea de pedido** al proveedor de la ficha
+      (`create_task`: no depende del envío externo) — **CONSTRUIDO el 2026-09-12**, ver abajo.
+      **Los TRES quedaron construidos; lo único que les falta a los tres es el mismo paso:
+      mergear y desplegar.**
+
+      ✅ **(1) HECHO: agente `confirmador`** (`onia-platform`, rama
+      `claude/chatbots-platform-review-0d1d09`, `82d34b5` — **falta mergear y desplegar**). Gate nuevo
+      `lib/onia-core/modules/agents-confirmador.test.ts` (17 casos), validado **por mutación en
+      dos puntos**: contar «mañana» en UTC en vez de la zona del negocio → rojo; sacarle la
+      puerta de rubro → rojo.
+
+      **El hallazgo, que es por qué el gate más largo del archivo es el de la zona horaria.**
+      El contenedor `onia-platform` corre con `TZ` vacío (UTC) y La Paz es UTC−4: entre las
+      20:00 y la medianoche **local** el servidor ya está en el día siguiente. Un
+      «mañana = ahora + 24 h» leído en UTC le manda al dueño los borradores de **pasado
+      mañana** durante cuatro horas por día, y se saltea los de mañana — sin fallar nunca del
+      todo. El día se lee con `Intl` en la zona de la org (`clinic_settings.timezone`, con
+      cascada al default) y la suma se hace sobre el **calendario** local, no sobre el
+      instante; el recorte fino lo hace el evaluador puro y el `where` de Prisma trae un
+      superconjunto de 48 h a propósito.
+
+      **Lo que NO se hizo, y por qué.** No cuelga de `reminder24hSentAt` como el seguimiento de
+      visitas del captador: ese campo lo escribe **otro** circuito (el cron de
+      `appointment-reminders`) y puede no haber salido nunca — medido hoy, producción tiene
+      **cero citas** (`select count(*) from appointments` → 0), así que cero recordatorios.
+      Colgarlo de esa precondición lo dejaría mudo por una razón que no tiene nada que ver con
+      lo que decide. Y comparte `targetType: "visita"` con el captador **a propósito**: el
+      cooldown del runtime se lleva por `(org, targetType, targetId)`, así que es lo único que
+      impide que los dos agentes le escriban al mismo paciente por la misma cita.
+
+      ⚠️ **La decisión decía «cada tarde» y el producto no puede prometer eso**: la cadencia de
+      todos los agentes la marca **un** cron del host, 1 vez por día (11:00 UTC = 07:00 La
+      Paz). El agente mira las citas de mañana una vez al día; cambiar la hora es tocar un cron
+      del VPS, que no es de este carril.
+
+      ✅ **(2) HECHO: agente `seguidor`** (`onia-platform` `0376b07`, rama
+      `claude/chatbots-platform-review-0d1d09` — pusheado, **falta mergear y desplegar**).
+      ⚠️ El sha se DERIVA de `origin`, no del clon de casa: desde el nodo de casa no se pushea
+      `onia-platform`, la entrega va por `format-patch | ssh … git am`, y **`git am` regenera el
+      sha** — el local decía `4d94cdf`, que no existe en ningún remoto. Gates re-corridos **en
+      el VPS** sobre el árbol que se publicó, no sobre el de casa: `tsc` limpio, **393 archivos
+      de test verdes** (4.791 casos), `eslint` limpio, `check:onia-core` OK.
+      Gate nuevo `lib/onia-core/modules/agents-seguidor.test.ts` (21 casos), **validado por
+      mutación en cuatro puntos**: sin puerta de validez → rojo; sin puerta de estado → 4
+      rojos; sin puerta de rubro → 2 rojos; sin plazo de espera → rojo.
+
+      **Las dos decisiones que costaron pensarlas, porque las dos tenían una versión obvia y
+      equivocada.** (a) **La fecha del envío sale de `metadata.sentAt`, que ya la escribe la
+      transición del rubro (`transicionarCotizacion`) — NO de `updatedAt`.** Parecen lo mismo y
+      no lo son: editar una línea después de mandarla mueve `updatedAt`, así que la cotización
+      que se está negociando activamente sería justo la que el agente deja de perseguir. El dato
+      ya existía en el producto; inventarlo habría sido la segunda fuente.
+      (b) **Una cotización VENCIDA no se persigue, y ése es el caso NORMAL, no el raro:** pasar
+      a `expired` es una transición **manual** que nadie ejecuta, así que la base tiene `sent`
+      con la validez cumplida. Un borrador que pregunta "¿la viste?" sobre un precio que ya no
+      vale le promete al cliente un monto que el negocio no va a sostener. Sin `validUntil`
+      cargado **sí** se persigue: ahí el precio nunca se declaró vencido.
+
+      **Y una tercera, sobre qué NO dice el mensaje:** el texto al cliente **no repite el
+      monto**, aunque el feed lo tenga y el resumen del panel sí lo muestre. Son dos lectores
+      distintos — el resumen lo lee el dueño, que prioriza por plata; el mensaje lo lee el
+      cliente, que ya tiene la cotización. Repetirle la cifra suelta por WhatsApp, sin las
+      líneas ni las condiciones, convierte un seguimiento en una segunda oferta que puede no
+      coincidir con el documento.
+
+      ⚠️ **Hoy no tendría a quién perseguir, y se midió antes de decir lo contrario:**
+      `select ... from onia_commerce_quotes` en producción devuelve **cero filas** en todas las
+      orgs. Es el mismo estado que el Confirmador (cero citas) y por el mismo motivo — no hay
+      clientes usando el producto todavía, no es que el agente esté mudo. Lo que prueba que
+      produce es el gate, no la base.
+
+      ✅ **(3) HECHO: agente `reponedor`** (`onia-platform` `42ab871`, rama
+      `claude/chatbots-platform-review-0d1d09` — pusheado, **falta mergear y desplegar**).
+      Gates en el VPS: `tsc` limpio, **4.749 tests verdes**, `eslint` limpio, `check:onia-core`
+      OK. Gate nuevo `lib/onia-core/modules/agents-reponedor.test.ts` (10 casos), **validado por
+      mutación en tres puntos**: predicado propio en vez de `isBelowReorder` → rojo en el borde
+      `quantity === reorderPoint`; sin puerta de rubro → rojo; sin rótulo → rojo.
+
+      **Lo que apareció al construirlo y es el hallazgo:** el predicado ya existía
+      —`isBelowReorder` en `lib/onia-core/modules/commerce-logic.ts`, port fiel del core, con
+      sus tests— y tenía **CERO llamadores en producción**: sus únicas referencias eran su
+      propio archivo de test. Un módulo que nadie llama vale cero. El agente no lo reescribe,
+      lo llama; y el `<=` tampoco se duplica en el `where` de Prisma (el SQL acota a lo que el
+      dueño curó, `reorderPoint` cargado, y el evaluador puro decide) — así la regla que
+      decide si el negocio se queda sin mercadería vive en **un solo lugar**.
+
+      Las cuatro puertas que un agente nuevo tiene que cruzar, cada una con el bug que la
+      originó: **rubro** (`agents-por-rubro`: corre sólo donde hay inventario, preguntándole al
+      pack con `llevaInventario` y no a una lista de tracks escrita al lado — así fue como el
+      Recall terminó corriendo mudo en tres rubros); **rótulo** (`agents-rotulos`, o la pantalla
+      renderiza un hueco); **tipo de work item** (`reponer_insumo`, que el vocabulario del core
+      ya tenía — sin eso caía al default `seguimiento_paciente` y las tareas de pedido de una
+      ferretería aterrizaban en la bandeja de recepción clínica); y **entidad relacionada**
+      (`stock_item` → `OniaCommerceStockItem`). De paso, `isAgentKind` pasó a derivarse de
+      `AGENT_KINDS`: con la lista escrita a mano, un kind nuevo entraba al cron y el endpoint
+      externo lo rechazaba.
+
+      Es `create_task` y `autonomyLevel: "auto"` a propósito: **no contacta a nadie**, así que
+      no ocupa la cola de aprobaciones —que es para lo que SALE del negocio— y no depende del
+      envío externo (S6), que sigue sin existir. Cooldown de 7 días por existencia: el proveedor
+      tarda, y repetir la tarea a diario hasta que llegue la mercadería entierra la cola.
+      El guard 15b del propio producto cazó mi copy en tuteo («Revisa») antes de que lo viera
+      un cliente — el gate de rubro×texto funcionando sobre trabajo nuevo. Restricción vigente: el ENVÍO externo (S6) no
       existe — aprobar registra la acción; el WhatsApp real es obra aparte y no se promete hasta
       que exista. Las dos precondiciones que Sergio Urcullo puso antes de estos tres (E2E de los 2
       vivos, y la cadencia) **ya están cerradas** en los dos ítems de abajo.
+
+- [x] 🔴 **El auditor que escribí AYER para esto dio «limpio» con DOCE filas de prueba vivas
+      dentro de la cuenta de Sergio Urcullo — porque su marca era una lista escrita a mano.
+      Filas borradas y segundo detector, el que no depende de la marca, cableado (2026-09-12).**
+
+      **Lo medido, no razonado.** `npm run qa:sin-rastro` salía `En organizaciones REALES: 0`,
+      exit 0. Preguntándole a la misma base por `e2e-agentes` en vez de por `zz-?qa`:
+      **12 filas dentro de `clinica-sergio-p2ljs`** — 2 pacientes, 1 cita, 1 factura vencida de
+      Bs 370, 2 `onia_agents_actions` y 2 `onia_core_approval_requests`. Las sembró este mismo
+      carril en la vuelta anterior para probar el E2E de los agentes, y el ítem de arriba las
+      declaraba "pendiente de purgar".
+
+      🔴 **Lo peor no era la basura: eran DOS borradores en `pending_approval` en la pantalla
+      Agentes de Sergio Urcullo** — un reclamo de cobro por "saldo vencido Bs 370,00 hace 12
+      días" y un mensaje de reactivación, los dos dirigidos a pacientes que no existen. El
+      producto se los ofrecía para aprobar; aprobarlos habría intentado escribir a `+59170000001`.
+
+      **La lección, que es de método y por eso vale para todos:** el auditor derivaba el universo
+      de TABLAS de `information_schema` —eso estaba bien y encontró `audit_logs`— pero después
+      filtraba con **una marca escrita a dedo** (`MARCA = 'zz-?qa'`). Derivar los sujetos del
+      disco no sirve de nada si el predicado que los juzga es una lista blanca: falla abierto
+      exactamente en el sujeto nuevo, y el sujeto nuevo lo sembró **el mismo carril que escribió
+      el auditor, dos horas después**.
+
+      **El arreglo es una segunda pregunta que no pasa por la marca:** ¿hay filas en una
+      organización real cuyo `id` **no lo generó el producto**? Los generadores conocidos son
+      tres (cuid de Prisma, uuid, hex de la migración) y se leen de la base, no de una creencia:
+      medido ese día, de **74 tablas** con `organizationId` sólo **7 filas** en TODA la base
+      tenían un id fuera de esos formatos, y **4 eran la siembra**. La única excepción legítima
+      —`sergio20260904addonwa001`, el add-on de WhatsApp otorgado a mano el 4-sep— se nombra por
+      su **literal exacto** y se re-mide en cada corrida: una excusa por forma (`^sergio…`)
+      dejaría pre-aprobada a la próxima fila que alguien inserte con ese prefijo.
+
+      **Validación viva, el mismo comando, antes y después:** con las filas puestas
+      `npm run qa:sin-rastro` pasó a `En organizaciones REALES: 4` (exit 1) nombrando las cuatro
+      raíces; borradas en transacción con respaldo en
+      `/root/backups-qa/e2e-agentes-cuenta-real-20260912.json` (7 KB, 12 filas), volvió a
+      `REALES: 0` **y la búsqueda por la marca `e2e-agentes` también da 0**.
+      Gate: `scripts/qa_sin_rastro.test.mjs`, 13 casos (5 nuevos), en la cadena
+      (`npm run test:qa-sin-rastro`). Validado por mutación DESPUÉS de estar verde: agregarle
+      `e2e-` a los generadores conocidos (2 rojos), volver la excusa por forma (1 rojo) y tirar
+      el resultado del segundo detector (1 rojo).
+
+- [x] 🔴 **La cuenta REAL de Sergio Urcullo tenía 7 filas de datos de prueba adentro, y una de
+      ellas hizo que otro carril abriera una tarea CRÍTICA por un cruce de tenant que NUNCA
+      EXISTIÓ. Limpiada y verificada en producción el 2026-09-12; el auditor que la encontró
+      queda cableado (`npm test`).**
+
+      **Lo que se creía:** `recorrido-cliente` midió que el paso 6 de Importadora, con la sesión
+      de una cuenta de prueba recién creada, había escrito un paciente **dentro de
+      `clinica-sergio-p2ljs`** — la cuenta real de Sergio Urcullo. Tarea `t_3f352044`, prioridad
+      crítica: un fallo de aislamiento multi-tenant es lo más grave que puede tener este producto.
+
+      **Lo que pasó, medido, no razonado.** La ruta que crea pacientes escribe auditoría SIEMPRE
+      (`app/api/patients/route.ts`: `prisma.patient.create` y acto seguido `logAudit`). En
+      `audit_logs` **no hay ni un `PATIENT_CREATED` en 48 h** — así que esa fila no la creó
+      ninguna sesión web. La creé **yo**, este carril, con un `INSERT` directo, en la vuelta
+      anterior (`2e034412`), para poder probar aprobar→enviar sobre una org con onboarding hecho.
+      El id que declara ese commit —`zzqa20260912pac1`— es exactamente el que la tarea reporta.
+      **El producto no tiene cruce de tenant. Lo tenía el instrumento, y era mío.**
+
+      🔴 **Por qué el otro carril no podía saberlo, y esto es la lección que importa:** al
+      paciente le puse un nombre con la **forma sellada de ESE carril**
+      (`zz-qa-AAAA-MM-DD-HHMM …`). Su barredor borra por esa forma —correctamente, es la suya—,
+      así que se llevó mi fila, la contó como propia y concluyó que su paso 6 había escrito en
+      una cuenta ajena. **Un sello de QA sin el nombre del carril que siembra hace que el
+      instrumento del vecino acuse al producto de un bug que es tuyo.**
+
+      🔴 **Y la limpieza de esa vuelta, declarada "verificada contra la base", estaba
+      incompleta:** el inventario era una lista a mano (paciente · cita · acciones · aprobaciones
+      · despachos · corridas) y la escritura **derivada** no estaba en la lista. Quedaron **4
+      filas en `audit_logs` de la cuenta real** con el nombre del paciente de prueba y el texto
+      de un WhatsApp que nunca se mandó — y el dueño las ve: `/admin/audit` existe
+      (`app/(dashboard)/admin/audit/page.tsx`). Borradas por id exacto, con respaldo previo en
+      `/root/backups-qa/audit-logs-zzqa-20260912.json`: 61 → 57 filas, 0 contaminadas.
+
+      **El arreglo NO es acordarse mejor: es preguntarle a la base.**
+      `scripts/qa_sin_rastro.mjs` **deriva el universo de `information_schema`** —toda tabla real
+      con `organizationId` (más `organizations` por su `id`) y todas sus columnas de texto y
+      JSON— y busca la marca `zz-?qa` en cada una. Una tabla nueva entra sola; `jsonb` entra
+      (es donde sobrevivió el rastro); es **tri-estado** (exit 2 = no pude preguntar, nunca
+      "limpio"); y una fila cuya organización no existe **no se absuelve**, cuenta como real.
+
+      **Lo que encontró en su primera corrida viva, que ninguna lista a mano habría visto: 74
+      tablas miradas y 3 filas MÁS de basura de QA dentro de la cuenta real**, de otras corridas
+      y con una semana de antigüedad — 2 recordatorios en `notifications.message`
+      (`zz-qa-verif-4a`, del 5-sep) y un proveedor `zz-qa-proveedor` en
+      `onia_core_business_partners`. Respaldadas en
+      `/root/backups-qa/basura-qa-cuenta-real-20260912.json` y borradas en una transacción.
+      **Re-auditado: `En organizaciones REALES: 0`, exit 0.**
+
+      Gate: `scripts/qa_sin_rastro.test.mjs`, 8 casos, en la cadena (`npm run test:qa-sin-rastro`).
+      Validado por mutación DESPUÉS de estar verde — sacarle `jsonb` al universo, absolver a la
+      fila huérfana, y hacer que el catch devuelva "limpio" ponen 1 caso en rojo cada uno.
+      Medición viva: `npm run qa:sin-rastro` (~7 s). **Este carril la corre al cerrar toda vuelta
+      que siembre en producción**, que es la única forma de que un alias suelto no valga cero.
 
 - [x] ✅ **MEDIDO Y ARREGLADO el 2026-09-12 (`ea80ada`, onia-platform — pusheado a la rama,
       falta mergear y desplegar): los agentes corrían DÍA POR MEDIO, y la pantalla promete

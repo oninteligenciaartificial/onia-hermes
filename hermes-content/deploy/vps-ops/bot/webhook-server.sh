@@ -71,6 +71,31 @@ case "$ACTION" in
     fi
     if docker exec "$CONTAINER" node "$DEST/knowledge.mjs" --check "$DEST/knowledge.json.new"; then
       docker exec "$CONTAINER" mv "$DEST/knowledge.json.new" "$DEST/knowledge.json"
+
+      # Y ADEMAS se deja en el HOST, que no es redundante: aplicar solo adentro del contenedor
+      # es REVERSIBLE EN SILENCIO. El sync de mas abajo calcula un stamp sobre `$BOT_DIR/*.mjs`
+      # y `$BOT_DIR/*.json` del host y, si cambio, hace `rm -rf $DEST` y vuelve a copiar el host
+      # entero — o sea que el primer deploy que toque un .mjs devuelve el conocimiento VIEJO, sin
+      # una linea en ningun lado. Quien corrio este comando lo vio aplicarse y nada le avisa
+      # cuando se deshace.
+      #
+      # Medido el 2026-09-12 en /opt/onia/bot: knowledge.json era del 4-sep y knowledge.onia.json
+      # del 6-sep. Seis dias contestandole a desconocidos que la facturacion en linea es
+      # obligatoria "desde el 30 de septiembre" -la fecha que CLAUDE.md prohibe por nombre- con
+      # la correccion ("1 de octubre de 2026, RND 102600000007") en el mismo directorio.
+      #
+      # Va DESPUES de la validacion a proposito: un conocimiento rechazado no puede tocar ni el
+      # contenedor ni el host.
+      VIVO="$BOT_DIR/knowledge.json"
+      if [ "$SRC" -ef "$VIVO" ]; then
+        : # SRC ya ES el archivo vivo (el default): copiarlo sobre si mismo aborta con
+          # "are the same file" y convertiria un deploy sano en uno reportado como fallido.
+      elif ! cp -p "$SRC" "$VIVO"; then
+        echo "ERROR: se aplico en el contenedor pero NO se pudo escribir $VIVO." >&2
+        echo "       El proximo deploy lo revierte: arreglalo antes de darlo por publicado." >&2
+        exit 1
+      fi
+
       echo "conocimiento aplicado — el bot lo toma en <= 5 min (TTL). Para ya mismo: $0 restart"
       exit 0
     fi

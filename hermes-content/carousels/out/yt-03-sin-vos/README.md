@@ -7,8 +7,8 @@ Tercero de la serie **Claude Code de cero**: qué es · cómo se usa · **cómo 
 No la cierra — el mapa completo está en `hermes-content/docs/SERIE_CLAUDE_CODE.md`.
 Y cobra la promesa literal del cierre del video 2: *"lo que hace que trabaje solo"*.
 
-- Video 1: `../yt-claude-vs-claude-code/`
-- Video 2: `../yt-claude-code-configuracion/`
+- Video 1: `../yt-01-que-es/`
+- Video 2: `../yt-02-instalar/`
 
 ## 🔴 Todo medido, nada recordado
 

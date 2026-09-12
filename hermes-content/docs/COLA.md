@@ -77,6 +77,26 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [ ] 🟡 **`precios-vivos.mjs` acusa al CÓDIGO por un precio que sólo está en producción:
+      `apareceEnElCodigo()` no distingue un precio de un milisegundo.** Abierto por `web-venta`
+      el 2026-09-12, en la misma vuelta que le dio vista al barrido. El script diagnostica bien
+      la mitad cara —si el monto no está en el árbol, falta DESPLEGAR— pero busca el NÚMERO
+      pelado en todo `.ts`/`.tsx`, así que cualquier constante que valga lo mismo lo invierte.
+      **El caso vivo:** `Bs 1.500` (escalera retirada, hoy en producción por build viejo) sale
+      reportado como «el defecto es del CODIGO, arreglarlo aca: `src/app/v1/empezar/data.ts`,
+      `src/lib/pricing.ts`, `src/motion/agent-scene.tsx`». Los tres son falsos: en
+      `agent-scene.tsx` es `STEP_HOLD_MS = [900, 1500, …]` —milisegundos de animación— y en los
+      otros dos es el límite de **1.500 fichas** del plan, no un precio.
+      **Por qué importa:** manda la vuelta siguiente a «arreglar» tres archivos sanos, que es
+      exactamente la vuelta perdida que ese diagnóstico existe para evitar. Y en la dirección
+      contraria hace ruido sobre el único ítem que sí depende de Sergio (publicar).
+      **Reproducción, 40 s:** `cd web-factory/apps/onia-platform && node scripts/precios-vivos.mjs`
+      → mirar el bloque de `Bs 1.500`. Contraste: `Bs 750` y `Bs 15.000`, que no coinciden con
+      ninguna constante, salen bien clasificados como «falta DESPLEGAR».
+      **Camino:** el sujeto no es el número suelto sino el número **en posición de precio** —
+      pedir el monto pegado a su moneda (`Bs`) o dentro de un campo de las fuentes declaradas,
+      igual que `montos-en-pantalla.mjs` ya hace del lado de la pantalla.
+
 - [ ] 🟡 **`app/cobertura-citada.test.ts` no puede ver una afirmación de cobertura FALSA escrita
       dentro de un `.test.ts`, y así sobrevivió una cuatro días.** Abierto por `web-venta` el
       2026-09-11. El gate existe para cazar el puntero muerto —un comentario que dice «esto lo

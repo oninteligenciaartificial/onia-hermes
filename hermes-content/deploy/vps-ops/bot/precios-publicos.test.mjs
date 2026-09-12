@@ -16,6 +16,7 @@
 //   1. el candado: fuera del allowlist no pasa NADA, y un monto correcto tampoco habilita ofertas;
 //   2. la correa: cada cifra del allowlist se vuelve a leer de onia-platform y salta si cambio.
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { test } from "node:test";
@@ -39,7 +40,7 @@ import {
 
 test("los precios PUBLICOS pasan, en las dos formas de escribirlos", () => {
   const permitidos = [
-    "los planes van de bs 320/mes el basico a bs 1.500/mes el completo",
+    "los planes van de bs 320/mes el basico a bs 1.290/mes el completo",
     "el chatbot de whatsapp es un add-on de bs 390/mes",
     "el plan basico son 320 bs por mes",
     "bs 3.900 al año si lo pagas anual",
@@ -119,12 +120,12 @@ test("mezclar un precio real con uno inventado cae por el inventado", () => {
 });
 
 test("los separadores bolivianos se leen bien (el punto es de miles, no decimal)", () => {
-  assert.equal(parsearMonto("1.500"), 1500);
+  assert.equal(parsearMonto("1.290"), 1290);
   assert.equal(parsearMonto("29.000"), 29000);
   assert.equal(parsearMonto("0,11"), 0.11);
   assert.equal(parsearMonto("320"), 320);
-  // Si "1.500" se leyera como 1,5 el allowlist lo tomaria por intruso y el bot se quedaria mudo.
-  assert.deepEqual(montosEnTexto("bs 1.500 y bs 3.900"), [1500, 3900]);
+  // Si "1.290" se leyera como 1,29 el allowlist lo tomaria por intruso y el bot se quedaria mudo.
+  assert.deepEqual(montosEnTexto("bs 1.290 y bs 3.900"), [1290, 3900]);
 });
 
 test("el guardrail no se rompe con texto raro ni es stateful", () => {
@@ -144,6 +145,9 @@ test("el guardrail no se rompe con texto raro ni es stateful", () => {
  * onia-platform es OTRO repo. Se busca por env var y despues en las rutas del VPS.
  * Si no aparece, este test FALLA — no se saltea. Un gate que se apaga solo cuando no encuentra a
  * su sujeto falla ABIERTO, y el dia que alguien cambie un precio nadie se entera.
+ *
+ * Esto devuelve la CARPETA. Lo que se lee de adentro sale de `fuenteDePlataforma`, nunca del
+ * working tree — ver el porque ahi abajo.
  */
 function repoPlataforma() {
   const candidatos = [
@@ -159,6 +163,43 @@ function repoPlataforma() {
       "Pasa ONIA_PLATFORM_DIR=<ruta>. NO se saltea: sin leer la fuente, este gate no vale nada.",
   );
   return encontrado;
+}
+
+/**
+ * Lee un archivo de onia-platform desde `origin/master`. NO del working tree, y esa es toda la
+ * diferencia entre un gate y un adorno.
+ *
+ * POR QUE, medido el 2026-09-12: este gate paso VERDE mientras el bot le cotizaba a los leads
+ * "Bs 750 el Profesional y Bs 1.500 el Completo" y la fuente ya decia 890 y 1.290 (escalera C,
+ * commit 4bff903). La causa no fue el gate en si: leia `<repo>/lib/subscription-plans.ts` del
+ * disco, y los DOS clones del nodo estaban atras de origin/master (1 y 15 commits). O sea
+ * comparaba la copia del bot contra un FOSIL del mismo dia en que se copio — y dos fotos del
+ * mismo pasado coinciden siempre.
+ *
+ * Un worktree atrasado es el estado NORMAL de un carril, no una anomalia que se pueda pedir que
+ * no ocurra: por eso el sujeto es el ref publicado y no la carpeta donde uno esta parado.
+ */
+function fuenteDePlataforma(repo, archivo) {
+  try {
+    execFileSync("git", ["fetch", "origin", "--quiet"], { cwd: repo, stdio: "ignore", timeout: 60_000 });
+  } catch {
+    // Sin red se sigue con el ref que ya este en disco: refrescar es deseable, no imprescindible,
+    // y este gate corre en la cadena `npm test` de todos los carriles. Lo que NO se hace nunca es
+    // caer al working tree — que es, exactamente, el bug que este bloque existe para no repetir.
+  }
+  try {
+    return execFileSync("git", ["show", `origin/master:lib/${archivo}`], {
+      cwd: repo,
+      encoding: "utf8",
+      maxBuffer: 8 * 1024 * 1024,
+    });
+  } catch (error) {
+    assert.fail(
+      `no pude leer lib/${archivo} desde origin/master en ${repo}: ${error.message}. ` +
+        "Sin la fuente publicada este gate no vale nada, asi que cae en ROJO en vez de mirar el " +
+        "archivo del disco (que es el fosil que dejo pasar la escalera C).",
+    );
+  }
 }
 
 /** Lee un simbolo tipo "DEFAULT_PLAN_AMOUNTS.basic.monthly" del texto de un .ts. */
@@ -184,8 +225,8 @@ function leerSimbolo(fuente, simbolo) {
 test("cada monto del allowlist sigue siendo el que dice onia-platform", () => {
   const repo = repoPlataforma();
   const fuentes = {
-    "subscription-plans.ts": readFileSync(path.join(repo, "lib", "subscription-plans.ts"), "utf8"),
-    "pricing.ts": readFileSync(path.join(repo, "lib", "pricing.ts"), "utf8"),
+    "subscription-plans.ts": fuenteDePlataforma(repo, "subscription-plans.ts"),
+    "pricing.ts": fuenteDePlataforma(repo, "pricing.ts"),
   };
   for (const precio of PRECIOS_PUBLICOS) {
     const enElCodigo = leerSimbolo(fuentes[precio.fuente], precio.simbolo);
@@ -241,11 +282,34 @@ test("las formas naturales de preguntar por plata llegan al precio, no al LLM", 
   }
 });
 
+test("la correa lee la fuente PUBLICADA, no el archivo del disco", () => {
+  // La baranda del instrumento, no del producto. Sin esto, el arreglo del 2026-09-12 dura hasta
+  // que alguien vuelva a poner un readFileSync "porque es mas simple" — y el gate se apaga en
+  // verde otra vez, que es como un worktree 15 commits atras dejo al bot cotizando Bs 750.
+  // Se mide sobre el codigo con los comentarios EN BLANCO: este mismo archivo NOMBRA la ruta
+  // prohibida varias veces al explicar el bug, y un detector que lea prosa se acusa solo.
+  const propio = readFileSync(new URL(import.meta.url), "utf8")
+    .replace(/\/\*[\s\S]*?\*\//g, (bloque) => bloque.replace(/[^\n]/g, " "))
+    .replace(/\/\/[^\n]*/g, (linea) => linea.replace(/./g, " "));
+
+  assert.equal(
+    /readFileSync\s*\(\s*path\.join\s*\(\s*repo/.test(propio),
+    false,
+    "este gate volvio a leer lib/ del working tree: ahi es donde vive el fosil. Va por " +
+      "fuenteDePlataforma(), que lee de origin/master.",
+  );
+  assert.match(
+    propio,
+    /execFileSync\([^)]*"git"[\s\S]{0,200}origin\/master:lib\//,
+    "fuenteDePlataforma tiene que sacar el texto de origin/master con git show",
+  );
+});
+
 test("un plan nuevo en el catalogo no puede quedar fuera del allowlist", () => {
   // La direccion que casi nadie chequea. Sin esto, agregar un plan deja al bot citando una lista
   // incompleta y el gate en verde: el allowlist envejece en silencio.
   const repo = repoPlataforma();
-  const fuente = readFileSync(path.join(repo, "lib", "subscription-plans.ts"), "utf8");
+  const fuente = fuenteDePlataforma(repo, "subscription-plans.ts");
   const desde = fuente.indexOf("export const DEFAULT_PLAN_AMOUNTS");
   const bloque = fuente.slice(desde, fuente.indexOf("};", desde));
   const faltantes = [];

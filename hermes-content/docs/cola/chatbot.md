@@ -278,6 +278,272 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+➡️ **MOVIDO a «Bloqueado en Sergio» como S17 el 2026-09-12 05:50** — lo único que le falta es
+el `ok` del pedido de deploy `t_4f08f5d1`, que es suyo. **El bloqueo se reverificó antes de
+mover, no se heredó:** `npm run precios:vivos` sigue en **exit 1** y nombra los dos montos que
+el bot vivo cotiza hoy. La historia completa queda acá abajo para no perderla.
+
+<details><summary>Diagnóstico completo del 2026-09-12 (tablero `t_e45a24ff`, instrumento `97e466fa`)</summary>
+
+      **Lo que el bot MANDÓ**, no lo que podría mandar — `messages` de Chatwoot, textual:
+      *"el sistema arranca en Bs 320 al mes con el plan Básico, Bs 750 el Profesional y Bs 1.500
+      el Completo. El chatbot de WhatsApp va aparte, Bs 390 al mes."* Tres defectos en una
+      oración: dos montos muertos, el plan **Crece** no existe para el bot, y cobra aparte un
+      chatbot que el plan Completo ahora **incluye**.
+
+      **Por qué sobrevivió a la escalera C.** El simulador (`simulate.mjs`) y el gate
+      (`test:precios-bot`) leen el **repo**, y el repo está bien. El bot lee
+      `/tmp/onia-bot/knowledge.json`, que está en `.gitignore` **a propósito** porque se publica
+      a mano. Arreglar el repo no toca producción, y ningún gate miraba la copia viva: la
+      escalera C barrió landing y plataforma —los dos con pedido de deploy— y dejó al bot afuera,
+      callado. Mi propia línea de arranque decía `simulador 3/3` mientras pasaba esto.
+
+      **Cerrado de este carril:** `npm run precios:vivos` — mide la copia que el PROCESO lee y la
+      ata a la fuente única. Deriva los sujetos del artefacto (todo string, a cualquier
+      profundidad) y es tri-estado. Hoy sale **exit 1**; cuando esté publicado, exit 0.
+
+      🔴 **FALTA, y NO lo puede hacer este carril: publicar.** `DESPLEGAR: bot` publica el
+      código pero **no el texto** (`publicar.sh` preserva `knowledge.json` a propósito), así que
+      hace falta además un comando:
+      `ONIA_BOT_KNOWLEDGE_FILE=/opt/onia/bot/knowledge.onia.json /opt/onia/bot/webhook-server.sh knowledge`.
+      Va `DESPUES-DE: plataforma`: si el bot sale primero cotiza 890 mientras la caja cobra 750.
+
+      **Su causa raíz ya está cerrada en el repo** — ítem de abajo, `deploy-bot.sh` +
+      `webhook-server.sh`. No tocó `publicar.sh` (el compartido con `onia-cola`): el agujero
+      estaba un nivel más adentro. Este ítem sigue abierto igual porque lo que falta es
+      **publicar**, y eso es el `ok` de Sergio Urcullo.
+
+</details>
+
+- [x] ✅ **CERRADO el 2026-09-12 17:5x: el SIMULADOR prometía más que el bot — imprimía «Listo,
+      agendado» pelado mientras el prospecto recibe una salvedad.** La vuelta anterior lo midió y
+      lo dejó anotado en la memoria compartida **sin arreglarlo**; escribirlo no lo cierra.
+
+      **Lo medido, contra lo que el bot MANDÓ.** Los dos mensajes reales de agendamiento
+      (convs 11 y 49 de Chatwoot) terminan los dos en *«(Estoy confirmando ese horario con
+      Sergio; si hubiera un cruce te aviso enseguida.)»*. El simulador terminaba en *«(Con una
+      palabra en cada una alcanza…)»* y nada más. Hoy **el 100 % de los prospectos** recibe esa
+      salvedad: no hay Cal.com en el VPS, así que `createBooking` devuelve `sin_config` siempre.
+
+      **La causa era más profunda que lo anotado.** La lección decía «`config.dryRun` saltea el
+      bloque». Es cierto para `runTurn`, pero `simulate.mjs` **ni siquiera pasa por `runTurn`**:
+      llama a `step()` directo, o sea que el cierre no lo veía por otro camino. Eran **dos**
+      agujeros, no uno, y arreglar sólo el del `dryRun` habría dejado el instrumento igual de
+      ciego con los tests en verde.
+
+      **Por qué importa más que un detalle de texto:** el simulador es el instrumento con el que
+      este carril mide `simulador 3/3` **al arrancar cada vuelta**. Un instrumento más optimista
+      que el producto es ciego justo a la regresión que mide — la misma familia del `simulador
+      3/3` que convivió con el bot vivo cotizando Bs 750.
+
+      **Arreglado con UNA fuente para la promesa** (`cierreDeReservaFallida` y `cierreSinReservar`
+      en `calcom-booking.mjs`, la casa del dominio): el texto **y la decisión** de cuándo va se
+      importan, nunca se copian — tener dos copias es exactamente como nació esto. Tri-estado:
+      `sin_config` se **deriva** del entorno sin tocar la red (ahí el desenlace se sabe con
+      certeza y se aplica el mismo cierre); con Cal.com configurado **no se sabe**, y eso se
+      reporta como ignorancia en un warning en vez de inventar un final. El modo seco sigue sin
+      hacer I/O: se deriva, no se reserva.
+
+      **Tres gates, los tres validados por mutación**, porque son tres caminos distintos:
+      `persistence.test.mjs` cruza el seco contra el vivo (dos caminos del mismo código, no una
+      tautología) y `simulate.test.mjs` corre el simulador **de verdad en un proceso hijo** en
+      sus DOS modos — `--script` y el **interactivo**, que es el que usa la línea de medición del
+      carril (`printf … | node simulate.mjs`). Sin ese segundo caso, sacarle el cableado al modo
+      interactivo pasaba en verde. Suite del bot **951/951**.
+
+      ⚠️ **Commiteado, NO desplegado.** El bot vivo corre desde `/tmp/onia-bot/` en el contenedor
+      `onia-center`; publicar es el `ok` de Sergio Urcullo. Esto no cambia lo que recibe el
+      prospecto (que ya era el texto correcto): cambia lo que **ve quien mide**.
+
+- [x] ✅ **CERRADO el 2026-09-12: el gate del AVISO miraba 50 líneas de un log de 2,7 MB, y por
+      eso firmaba «circuito sano, sin eventos reales todavía» con DOS avisos salteados adentro.**
+
+      **Lo medido, en este orden.** `npm run avisos:vivo` imprimía `eventos: 0 avisos
+      (enviados 0 · salteados 0 · fallidos 0)` y `VEREDICTO: ok`. El log vivo, contado aparte:
+      `docker exec onia-center grep -c '\[aviso\]' /tmp/onia-bot-webhook.log` → **5** (3 `sent`,
+      2 `skipped`). El gate y el log del mismo bot decían cosas distintas, así que el
+      instrumento era el sospechoso, no el producto.
+
+      **El núcleo estaba sano.** `diagnosticar` YA se pone rojo con un salteado (`if
+      (ev.salteados > 0)`), y hay un test que lo prueba desde el 4-sep. El agujero estaba en el
+      **lector**, que no probaba nadie: `webhook-server.sh logs` es `tail -n ${2:-50}` y
+      `lineasDelLog` lo llamaba **sin ese argumento**. Los avisos son raros por definición —5
+      entre cientos de líneas por mensaje— así que caían **siempre** fuera de la ventana. Todos
+      los tests del archivo le pasaban las líneas a mano: el núcleo cubierto, la fuente ciega.
+
+      **Y el arreglo obvio también salía verde.** Pedir el log entero rompe por el otro lado:
+      `execFileSync` corta en **1 MB** por defecto, 2,7 MB devuelven `null`, y `lineasDelLog`
+      volvía a contar 0. Por eso el filtro va **donde vive el log** (`grep -F '[aviso]'` por
+      `docker exec`): sale acotado por construcción y no tiene techo que alcanzar cuando crezca.
+      La ruta del log se **deriva** de `webhook-server.sh` (`LOGFILE=`), no se copia.
+
+      **Test en rojo primero, por el motivo correcto** (`expected 1, actual 0`): corre el
+      `webhook-server.sh` **real** con un `docker` falso en el PATH —no una copia del `tail`,
+      que se desincronizaría sin ponerse roja— sobre un log con el aviso sepultado bajo 200
+      líneas. Suite del bot **933/933**.
+
+      **Lo que el gate dice ahora, y es la verdad:** `eventos: 5 avisos (enviados 3 · salteados
+      2 · fallidos 0)` · `VEREDICTO: roto`. De paso se corrigió su lectura final: con el
+      circuito contestando a las cuatro preguntas, *«EL PRÓXIMO QUE PIDA UN HUMANO SE PIERDE»*
+      es una afirmación **falsa sobre el futuro**. Un rojo tiene dos causas que se arreglan en
+      lugares opuestos —el circuito falla, o el circuito anda y hubo avisos que no salieron— y
+      hasta hoy se leían igual.
+
+- [x] 🔴 **~~Dos personas pidieron un humano~~ — NO eran personas: las dos son sondas nuestras,
+      y el gate no sabía distinguirlas.** Cerrado 2026-09-12. Las dos hipótesis de este ítem
+      —«no se puede saber quiénes son» y «hay una deuda con dos personas»— eran **falsas**, y se
+      refutaron con el log vivo más la base de Chatwoot:
+
+      | conv | inbox | contacto | evento |
+      |---|---|---|---|
+      | 53 | 7 · ZZ QA Clinica Chatbot | `wandering-water-74` | skipped |
+      | 55 | 7 · ZZ QA Clinica Chatbot | `dry-cherry-292` | skipped |
+      | 57 | 7 · ZZ QA Clinica Chatbot | `zz-qa-deploy-2026-09-04-1438` | sent |
+      | 11 | 5 · Onia WhatsApp | **Sergio** (+59171654992) | sent ×2 |
+
+      **Sí se podía saber quiénes eran**, y con el método que este mismo archivo ya usaba para
+      curar salteos: el log está **en orden**, así que la línea de webhook inmediatamente
+      anterior al `[aviso]` es la suya y **sí** trae `conv=`. Es la segunda vez que este ítem
+      declaraba algo imposible y era falso.
+
+      🔴 **Lo que destapó, que era el bug de verdad:** los **cinco** eventos que ponían al gate
+      en verde son **tres del banco de pruebas y dos de Sergio Urcullo probando su propio bot**.
+      **Cero desconocidos** — y `avisos-vivo.mjs` firmaba *«circuito sano y avisando»*. La frase
+      es cierta sobre el circuito y falsa sobre lo que este carril tiene que saber, porque su
+      definición de hecho es *"que un **desconocido** escriba"*. Es la misma familia que el `0`
+      que no distinguía «roto» de «sin eventos», que es por lo que ese archivo existe.
+
+      **Arreglado**: `conversacionesDeAvisos` atribuye cada aviso a su conversación (de la
+      propia línea o de la vecina, nunca inventa), `clasificarEventos` separa banco de pruebas
+      de leads **por conversación, no por evento**, y es tri-estado (sin base, nadie es «lead
+      real»). El gate ahora imprime `de quien: leads 1 (conv 11 · Sergio) · banco de pruebas 3`.
+      **No se pone rojo por no haber leads** —no hay tráfico, y un rojo incurable se deja de
+      mirar—: se pone honesto. Probado por mutación: sacar la atribución, la deduplicación o el
+      `-B 1` del lector rompe un test cada uno (ese último quedaba **verde** hasta que se le
+      escribió su gate).
+
+      ⚠️ **Sigue abierto lo que esto reveló:** el circuito de avisos **nunca se probó con una
+      persona de afuera**. No es un bug del circuito; es que todavía no llegó ninguna.
+
+      <details><summary>Lo que decía este ítem antes de medirlo (histórico)</summary>
+      Lo destapó el ítem de arriba: las dos líneas son `[aviso] skipped (cuota_agotada)` y
+      `[aviso] skipped (pregunta_precio_recepcion)`, las dos con el motivo *"aviso por Telegram
+      apagado (ONIA_BOT_TG_AVISO)"* — o sea que el bot decidió avisar y la variable estaba en
+      falso. **El flag hoy está encendido** (`flagEncendido ok` en `avisos:vivo`), así que esto
+      no se repite; lo que queda abierto es la deuda con esas dos personas.
+
+      **Y por qué no se las puede nombrar:** esas dos líneas salieron **sin `conv=`**, mientras
+      las tres `sent` sí lo traen. El formato es uno solo (`webhook-server.mjs:689`,
+      `[aviso] ${result?.status} conv=${conv} (${motivos})`), así que el `conv` llegó vacío —
+      ver el comentario de `webhook-server.test.mjs:762-764` sobre los dos callbacks asíncronos.
+      **Un aviso que no salió y no dice a quién no se puede reparar.**
+
+      ~~**Además el gate queda rojo para siempre por esto**, porque el log es append-only y las
+      líneas `[aviso]` **no llevan fecha** (las de mensaje sí): no hay forma de acotar
+      «salteados recientes».~~ ⚠️ **Esa hipótesis era falsa y ya está cerrada (2026-09-12).**
+      Sí hay forma, y no hace falta la fecha: el log **está en orden**, así que alcanza con
+      preguntar si hubo un `sent` **posterior** al salteo. Un salteo por el flag apagado es la
+      única causa **global** del circuito (apaga TODOS los avisos), así que un envío posterior
+      la desmiente; cualquier otro motivo de salteo es propio de su aviso y **no** se cura así.
+      `contarEventos` ahora devuelve `salteadosVigentes` y el gate volvió a verde **sin dejar de
+      ver**: la línea de eventos nombra los curados (`salteados 2 (2 ya desmentido(s) por un
+      envío posterior)`), y si el flag se apaga hoy el salteo queda después del último envío y
+      vuelve a rojo. Probado por mutación: apagar la curación rompe 5 tests.
+
+      **Y el gate acusaba con una causa que sus propios datos refutan:** imprimía *"alguien pidió
+      un humano y nadie se enteró"* cuando el único `pidio_humano_recepcion` del log **sí salió**;
+      los dos salteados son `cuota_agotada` y `pregunta_precio_recepcion`. Ahora el motivo se
+      **cita** del log. (`cuota_agotada` igual deriva a un humano — `bot-engine.mjs:563` —, así
+      que la deuda con esas personas sigue abierta: es lo único que queda de este ítem.)
+
+      </details>
+
+- [x] ✅ **CERRADO el 2026-09-12: el log del bot marcaba `rama=MUDO … motivo=el motor no produjo
+      respuesta` en eventos sin mensaje — el MISMO texto, carácter por carácter, que dejaría el
+      bug que este log existe para cazar.** (Commiteado; **NO desplegado** — el bot vivo corre
+      `/tmp/onia-bot/`. Viaja con el pedido `t_4f08f5d1`, que ya esperaba el `ok`.)
+
+      **La pregunta que el ítem dejó abierta, contestada: es un evento SIN MENSAJE, no una
+      persona.** No se dedujo — se reprodujo con el parser y el pipeline reales
+      (`conversation_resolved` sobre `conv=49`), y la línea salió idéntica a la del log vivo:
+
+      ```
+      conv=49 msg=49 estado=200 rama=MUDO etapa=esperando_horario->esperando_horario enviados=0/0 motivo=el motor no produjo respuesta
+      ```
+
+      `fromConversationResolved` (`chatwoot-adapter.mjs`) devuelve `meta.messageId: ""` y
+      `text: ""` — el turno sólo desarma el takeover. Con `messageId` vacío el servidor no pisa
+      `datos.mensaje`, que queda en `payload.id`, y como en ese evento **el payload ES la
+      conversación**, `msg` terminaba repitiendo el id de la charla. Y `conv=49` no es nadie:
+      es `Sonda QA carril chatbot` (inbox 4, `status=resolved`), cuyo `updated_at` en la base
+      —`2026-09-12 07:15:26`— da al segundo con la última línea `MUDO`.
+
+      **Dos campos mentían en la misma línea**, y los dos se arreglaron en `webhook-server.mjs`:
+      - el **motivo** ahora nombra el evento, como ya hacían sus hermanos:
+        `motivo=evento sin mensaje (conversation_resolved): no hay nada que contestar`;
+      - **`msg=-`** en vez de un id inventado (`-` es "no hay", `?` sigue siendo "no sé").
+
+      La marca es **estructural, no una lista de eventos**: `!parsed.meta?.messageId`. Las tres
+      ramas que traen mensaje lo EXIGEN (sin él el parser devuelve el skip `sin_message_id`), así
+      que una persona no puede caer ahí — y el evento sin mensaje que se agregue mañana queda
+      nombrado solo, sin tocar nada.
+
+      **Lo que NO se tocó, a propósito: el bug real conserva su motivo.** Una persona que escribe
+      y no obtiene respuesta sigue dejando `motivo=el motor no produjo respuesta`. El test lo
+      afirma: cerrar el ruido no puede apagar la señal.
+
+      **Test en rojo primero, por el motivo correcto** (`notStrictEqual` con los dos motivos en
+      `el motor no produjo respuesta`): corre el pipeline ENTERO con los dos payloads —el evento y
+      la persona— y exige que sus motivos **difieran**. No se le pasa una traza a mano porque la
+      propiedad depende de lo que entrega el PARSER, no del formateo. Validado por mutación en
+      los dos arreglos (esquive de la asignación y del campo `msg`): rojo las dos veces.
+      `npm run test:bot` → **947/947**.
+
+      **Queda anotado, sin abrir frente:** algo vuelve a resolver la conv 49 cada 30-60 min. Es
+      ruido de una sonda nuestra, no del producto, y ahora el log lo dice con todas las letras —
+      que era lo que faltaba para poder mirarlo sin confundirlo con un lead perdido.
+
+- [x] ✅ **CERRADO el 2026-09-12: el conocimiento del bot no viajaba con el deploy, y el remedio
+      a mano se deshacía solo en el deploy siguiente.** Dos mitades que se tapaban entre sí.
+
+      **(A) El deploy copiaba la fuente y nunca la instalaba.** `knowledge.onia.json` está en git
+      y viaja en `PATRONES`, pero el archivo que el bot LEE es `knowledge.json`. Pasar de uno al
+      otro era un segundo comando a mano que nadie corría.
+
+      **(B) Y ese comando a mano escribía SÓLO adentro del contenedor.** `webhook-server.sh
+      knowledge` hace `docker cp` a `/tmp/onia-bot` y dejaba intacto el `knowledge.json` del
+      host. El sync de `restart` calcula un stamp sobre `$BOT_DIR/*.mjs` y `*.json` **del host**
+      y, si cambió, hace `rm -rf $DEST` y recopia el host entero: **el primer deploy que toque un
+      `.mjs` devuelve el conocimiento viejo**, sin una línea en ningún lado. Quien lo aplicó lo
+      vio aplicarse y nada le avisa cuando se deshace.
+
+      **La prueba de que pasó, y no es la de los precios** (medido 2026-09-12 02:55 La Paz,
+      `diff` en `/opt/onia/bot`): `knowledge.onia.json` del 6-sep decía *"desde el 1 de octubre de
+      2026 … (RND 102600000007)"*; el `knowledge.json` vivo, del 4-sep, decía *"desde el **30 de
+      septiembre** es obligatoria"*. **Seis días diciéndole a leads reales el plazo fiscal que
+      `CLAUDE.md` prohíbe por nombre**, con la corrección en el mismo directorio. El
+      `vigenteHasta` de esa entrada era `2026-09-30`: el dato encima caducaba solo.
+
+      **Arreglo.** `deploy-bot.sh` aplica el conocimiento como paso 7, después del `/health`
+      (antes fallaría con un error que no es el de fondo) y cortando en rojo si no se aplicó —
+      es seguro porque la compuerta de validación sigue siendo la de `webhook-server.sh`, que
+      con un archivo malo no aplica nada y deja al bot con lo anterior. Y `webhook-server.sh
+      knowledge` ahora persiste **también al host**, después de validar, con guarda `-ef` para el
+      caso en que la fuente ya ES el archivo vivo (`cp a a` aborta, y un deploy sano reportado
+      como fallido invita a revertirlo — la trampa que ya pagó `deploy-bot.test.mjs`).
+
+      **Gate:** `conocimiento-viaja-con-el-deploy.test.mjs`, 5 casos. **Ejecuta**, no lee texto:
+      monta host + contenedor + un `docker` falso en el `PATH` y corre el script de verdad —
+      porque lo que falla acá es un efecto (qué archivo queda escrito y dónde), y un assert sobre
+      el texto no distingue «copia al host» de «nombra el host en un comentario». Validado por
+      mutación en las dos direcciones: sacar el `cp` al host → rojo sólo el caso 2; sacar la
+      invocación de `deploy-bot.sh` → rojo sólo el caso 5. Entra solo a la cadena (`test:bot` es
+      `node --test` sobre la carpeta) y por eso **también gatea el deploy**, que corre ese mismo
+      comando. Suite del bot: **932/932**.
+
+      ⚠️ **Commiteado, NO desplegado** — y el orden importa: mientras esto no esté en `main`, el
+      `ok` de `t_e45a24ff` **sigue necesitando** el comando a mano que su cuerpo nombra.
+
 - [x] ✅ **CERRADO el 2026-09-11 (`93256eab`, onia-hermes — pusheado a la rama, falta mergear):
       el intake de leads le afirmaba a Sergio Urcullo que TODO contacto había pedido una demo.**
       Tablero `t_62aa450c`, encontrado por otro carril midiendo en vivo.
@@ -2375,6 +2641,7 @@ decisión de Sergio, no código.
 | S14 | **De quién es la bandeja del widget (inbox 4)** — hoy no tiene org, y por ahí entraron **SEIS** conversaciones de desconocidos (34, 36, 38, 40, 45, 46), dos de ellas del 01-sep. **Cinco de las seis no dejaron teléfono ni correo**: sólo se les puede contestar desde adentro del widget, que es exactamente lo que el inbox huérfano impide — o sea que un inbox sin dueño no es una demora, es una pérdida. ⚠️ **A diferencia de S8, no alcanza con dos clicks:** está cerrado en esta cola que **una org sólo puede tener UN inbox** (`clinic_settings.chatwootInboxId`, `prisma/schema.prisma:1002`), y `Onia (interna)` ya gastó el suyo en el 5. ⚠️ **Corregido el 2026-09-02:** acá decía que esa columna era *"un `Int?` **único**"* y es falso — medido, no leído: no tiene `@unique` ni hay `@@unique` en `ClinicSettings`. Lo cierto de la frase es la mitad que importa para esta decisión (una org tiene UN inbox, porque es una columna escalar); lo que NO garantiza nadie es el otro sentido — **la base acepta que dos orgs reclamen el mismo inbox**, y el 409 que lo impide vive sólo en el PATCH de superadmin. No cambia las tres opciones de abajo, pero sí descarta "la base no me deja" como argumento. Desde hoy lo vigila `npm run inbox:tenencia`. **Opciones ya cotizadas en `ONIA_RADAR_DECISIONES_PRODUCTO.md` §9:** (a) darle el inbox 4 a otra org existente — cero código, pero mezcla el widget de Onia con una org que no es Onia; (b) crear una org `Onia (web)` sólo para el widget — cero código, ~10 min, agrega una org fantasma; (c) extender `clinic_settings` a N inboxes, que es código del producto y de otro carril. Recomendación: **(b)**. 🔁 **Fusionada el 2026-09-02 con la fila que la tabla listaba aparte bajo un SEGUNDO `S12`** (*"¿sigue en pie la opción 1 de §9?"*): era la **misma decisión preguntada dos veces**, con dos números distintos y uno de ellos ya usado por los horarios de demo. Lo destapó `npm run bloqueos:vencidos` al imprimir `S12, S12` — el gate nombra las filas por su id, así que un id repetido lo vuelve ambiguo. El dato fresco que aportaba esa fila (seis conversaciones, cinco sin contacto) es justo el que le faltaba a la condición de §9 *"hasta que la limitación moleste"*, y ya vive acá. **Y el `5 de las 9` que esta fila decía estaba viejo**: eran seis. | Es decidir en qué bandeja aterrizan los desconocidos de la web | **La otra mitad del objetivo del carril.** Hecho = se abre `/inbox` y se ve la conversación 45 (*"tengo una ferreteria"*) |
 | S15 | **Una credencial de sólo lectura para que el canario ENTRE al panel del chatbot** — un usuario del producto (correo + contraseña) que sólo mire. Se enchufa como `ONIA_CANARIO_USER` / `ONIA_CANARIO_PASS` en el entorno del loop `canario-visual`; **no hay una línea de código pendiente**: `requiereSesion` y `iniciarSesion()` ya están en `scripts/canario_visual.mjs` y entran por el formulario real de `/login`. Sin ella el canario NO miente (desde hoy dice `NO MEDIDA` con el motivo), pero **la pantalla que un cliente usa para editar su conocimiento sigue sin que nadie la mire nunca**. ⚠️ La otra opción que el ítem original proponía —una ruta de vista previa pública— **se descarta**: expone configuración de cliente sin sesión, y es agregar una superficie viva | Es un alta de usuario en producción, y una contraseña | Que `/settings/chatbot` entre a la ronda del canario como las otras diez. Hecho = el canario imprime `panel-chatbot … sin disparo mecanico` y su baseline se crea con `urlFinal` = `/settings/chatbot` |
 | ~~S16~~ | ✅ **VENCIDO el 2026-09-02 — Sergio no decide nada: la decisión ya se tomó y el trabajo ya llegó.** Pedía elegir entre cambiar el procedimiento del integrador, mergear a mano, o dejarlo. Pasaron **las dos primeras**: el integrador arregló su Paso 1 (`d26444c1` de `onia-hermes`, *"contaba las ramas contra el repo equivocado"*) y mergeó el carril a `master` de `onia-platform` (`503af44`, 12:38 UTC). Verificado con `git fetch` fresco y `merge-base --is-ancestor`: **los cuatro** commits declarados (`22fd088`, `675541b`, `d62beeb`, `e644c85`) llegan a `origin/master`; `npm run deploy:alcanzable` sale **0**. El radar §23 ya figuraba **RESUELTO** — sólo esta fila seguía pidiendo la decisión. Detalle en el primer ítem de "Cerrado". | — | — |
+| S17 | **Publicar el texto del bot: le cotiza Bs 750 y Bs 1.500 a leads reales, montos que ya no existen.** Pedido de deploy vivo el 2026-09-12 05:54: **`t_2baef483`** — ⚠️ **el id se DERIVA, no se copia**: el pedido anterior (`t_4f08f5d1`) se archivó a las 09:47 UTC y se rehizo con el recuento nuevo **mientras esta vuelta corría**, así que citarlo de memoria habría dejado esta fila apuntando a una tarea muerta. Se deriva con `onia-tablero.sh list --status blocked | grep -i 'Publicar el bot'`. (`DESPLEGAR: bot`, con `DESPUES-DE: plataforma` — si el bot sale primero cotiza 890 mientras la caja cobra 750). ⚠️ `DESPLEGAR: bot` publica el CÓDIGO pero **no el texto**: `publicar.sh` preserva `knowledge.json` a propósito, así que el brazo corre además `ONIA_BOT_KNOWLEDGE_FILE=/opt/onia/bot/knowledge.onia.json /opt/onia/bot/webhook-server.sh knowledge`. La causa raíz (que el conocimiento no viajara con el deploy) ya está cerrada en el repo — `deploy-bot.sh` paso 7, gate `conocimiento-viaja-con-el-deploy.test.mjs`. **Verificador:** `npm run precios:vivos` → 0. Re-medido el 2026-09-12 05:50: sigue **exit 1**, nombrando Bs 750 y Bs 1.500 | Es un deploy, y ningún deploy sale sin su `ok` | Que el bot deje de cotizarle a un lead un precio que el checkout no cobra. Es el último 🔴 abierto de esta cola |
 | S6 | **Proyecto Supabase cloud `Dental-gest` (`kvepqgikokjlacxngkiw`) sigue ACTIVE_HEALTHY** — decidir pausar o borrar. Y si algún día se reactiva `Gesti-Os` (`jafxylfocvvlflpqfsix`), **rotar su `service_role` primero**: estuvo expuesto en los JSON de n8n que se redactaron el 29-ago | Es plata y es borrado de datos | Cerrar la cola del saneamiento de secretos |
 
 ### S9 — el ítem completo, movido de "Ahora" el 2026-08-31
@@ -2585,6 +2852,42 @@ archivos.**
 ---
 
 ## Cerrado — no rehacer
+
+- [x] **El bot le cotizaba a los leads dos precios que ya no existen, y su gate estaba en VERDE.**
+      Cerrado el 2026-09-12, commit `ee247780` (`precios-publicos.mjs`, `precios-publicos.test.mjs`,
+      `knowledge.onia.json`, `simulate.mjs`). Tampoco estaba en la cola: salió de medir el objetivo
+      al arrancar, comparando lo que el bot contesta contra la fuente de CLAUDE.md.
+
+      Lo que recibía un lead que preguntaba el precio: *"Bs 320 el Básico, **Bs 750** el Profesional
+      y **Bs 1.500** el Completo. El chatbot de WhatsApp va aparte, Bs 390"*. Contra
+      `lib/subscription-plans.ts` de hoy (escalera C, `onia-platform` `4bff903`): Profesional **890**,
+      Completo **1.290**, existe un plan **Crece** en **550** que el bot no nombraba, y el Completo
+      **ya trae el chatbot adentro** — o sea la última frase también era falsa.
+
+      **Por qué sobrevivió: el gate leía el archivo del disco.** `repoPlataforma()` devolvía el primer
+      clon que existiera y de ahí se hacía `readFileSync`. Los dos clones del nodo estaban atrás de
+      `origin/master` (**1 y 15 commits**), así que el gate comparaba la copia del bot contra un fósil
+      del mismo día en que se copió. Dos fotos del mismo pasado coinciden siempre. Un worktree
+      atrasado es el estado **normal** de un carril, no una anomalía que se pueda pedir que no
+      ocurra: por eso ahora el sujeto es el ref publicado.
+
+      ```
+      git show origin/master:lib/subscription-plans.ts   ← la correa lee de acá, no de la carpeta
+      node --test precios-publicos.test.mjs              ← 13/13; antes del arreglo, 2 en rojo
+        not ok 9  - DEFAULT_PLAN_AMOUNTS.professional.monthly vale 890 y el bot dice 750
+        not ok 12 - montos que el bot no puede decir: crece.monthly = 550, ... clinic.annual = 12900
+      ```
+
+      **Baranda, validada por mutación:** un caso exige que la correa siga leyendo de `origin/master`
+      y cae si vuelve un `readFileSync` sobre el repo hermano — se le metió la mutación y dio rojo
+      con el motivo correcto, verde al restaurar. Se mide sobre el código con los comentarios **en
+      blanco**: el archivo nombra la ruta prohibida al explicar el bug y un detector que leyera prosa
+      se acusaría solo.
+
+      **NO desplegado, y es a propósito.** Medido el mismo día: `onia.com.bo/precios` muestra la
+      escalera vieja y el build vivo cobra `monthly` 320/750/1500/2900. Publicar el bot solo lo dejaría
+      cotizando un precio que el checkout todavía no cobra. El acople quedó escrito en el pedido de
+      deploy vivo `t_33406907`, que es donde se da el ok — landing, plataforma y bot van juntos.
 
 - [x] **La sonda tapaba a los cuatro leads reales que este carril existe para que se vean.**
       Cerrado el 2026-09-12, `scripts/sonda_widget.mjs` (rama del carril — falta que el

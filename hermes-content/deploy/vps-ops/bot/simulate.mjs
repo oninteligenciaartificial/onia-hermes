@@ -32,6 +32,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { createBotConfig, DEFAULT_CONFIG, parseSlotsSpec } from "./config.mjs";
 import { createState, step, markHumanTakeover, buildFollowUp, LLM_PENDING } from "./bot-engine.mjs";
 import { applyKnowledge, asRecepcionista, readKnowledgeFile } from "./knowledge.mjs";
+import { cierreSinReservar } from "./calcom-booking.mjs";
 
 /**
  * El documento PUBLICADO del bot de venta de Onia — el mismo `knowledge.onia.json` que se instala
@@ -83,7 +84,7 @@ const SCRIPTS = {
     turns: [
       { text: "hola, cuanto cuesta?" },
       { text: "tengo un restaurante, somos 8, cochabamba" },
-      { text: "y el precio final cual es? vi los 750 bs" },
+      { text: "y el precio final cual es? vi los 890 bs" },
       { text: "B" },
     ],
   },
@@ -359,6 +360,27 @@ export function configParaGuion(name, config, configPelado = config) {
   return asRecepcionista(applyKnowledge(configPelado, script.conocimiento), script.conocimiento);
 }
 
+/**
+ * El simulador llama a `step()` directo: NO pasa por `runTurn`, que es donde el producto le
+ * pega el cierre honesto al "Listo, agendado" cuando la reserva no sale. Sin esto el simulador
+ * promete MAS que el bot (medido el 2026-09-12 contra los mensajes reales de Chatwoot), y es el
+ * instrumento con el que este carril mide su objetivo cada vuelta.
+ *
+ * Se importa la MISMA decision y el MISMO texto que usa el camino vivo — nunca una copia.
+ */
+function conElCierreDelProducto(replies, stageBefore, nextState) {
+  const { texto } = cierreSinReservar({
+    stageBefore,
+    stageAfter: nextState.botStage,
+    scheduledAt: nextState.scheduledAt,
+    calendarEventId: nextState.calendarEventId,
+  });
+  if (!texto) return replies;
+  const ultima = replies[replies.length - 1];
+  if (ultima && ultima.text) ultima.text += texto;
+  return replies;
+}
+
 function runScript(name, baseConfig, basePelada) {
   const script = SCRIPTS[name];
   const config = configParaGuion(name, baseConfig, basePelada);
@@ -380,7 +402,7 @@ function runScript(name, baseConfig, basePelada) {
       turn: describeTurn(turn),
       stageBefore,
       stageAfter: state.botStage,
-      replies: result.replies,
+      replies: conElCierreDelProducto(result.replies, stageBefore, state),
       notes: result.notes,
       sideEffects: result.sideEffects.map((effect) => effect.type),
     });
@@ -444,8 +466,10 @@ async function interactive(config, contactRef) {
       rl.prompt();
       continue;
     }
+    const stageBefore = state.botStage;
     const result = step(state, { text, receivedAt: clock }, { config });
     state = result.nextState;
+    conElCierreDelProducto(result.replies, stageBefore, state);
     clock = plusMinutes(clock, 2);
     if (result.replies.length === 0) console.log("  (el bot NO responde)");
     for (const reply of result.replies) {

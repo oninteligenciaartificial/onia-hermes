@@ -12,6 +12,113 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-12 22:09-22:14 La Paz — dental 9/9 y Comercio 8/8, dos corridas seguidas, sin hallazgos
+
+Rotando como quedó anotado la vuelta pasada (dental venía sano corrida tras corrida). Dental
+(`zz-qa-2026-09-12-2209`): recorrido completo, 9/9, cita 2026-09-14 09:00 vista en
+`/appointments` (`cmtyxy1um008a01rw9ndxxasu`), factura con ítem visible en
+`/billing/cmtyxycp2008c01rw3vmvsru2` (frenada sin pagar). Comercio (`zz-qa-2026-09-12-2214`):
+8/8 los que le corresponden — paso 7 sigue NO-APLICA por diseño (ese rubro no vende agenda,
+coherente con su menú), dato del paso 6 cargado en storefront Catálogo y esta vez SÍ aparece
+en `/dashboard`. Las dos corridas con `completo: true`, 0 filas `zz-qa-` en `appointments` ni
+`organizations` al cerrar cada una (confirmado con `SELECT`). Sin hallazgo nuevo del producto.
+Próxima vuelta: seguir rotando — importadora, estética o servicios profesionales llevan más
+tiempo sin reverificar, o retomar promesa-vs-entrega en una superficie sin auditoría reciente.
+
+---
+
+## 2026-09-12 21:10 La Paz — dental 9/9 completo (rutina), y una basura huérfana de una corrida anterior limpiada
+
+Al arrancar la vuelta, antes de correr el recorrido, `select count(*) from organizations where
+name like 'zz-qa-%'` dio **1**, no 0: quedaba `zz-qa-2026-09-12-1009` (org, 2 `profiles` —uno
+ADMIN con cuenta real en `auth.users`/`auth.identities`, otro DOCTOR "pendiente-..." del paso
+equipo del onboarding—, 1 `organization_entitlements`), sin `patients` ni `appointments`. No
+tiene entrada en este archivo ni en el tablero: una vuelta anterior la creó y no llegó a
+borrarla (o murió antes de intentarlo). Se imprimió cada fila antes de borrar y se borró por
+`id`/`organizationId` exacto, nunca por rango — quedó en 0 antes de correr nada nuevo.
+
+Cuenta `zz-qa-2026-09-12-2110@onia.com.bo`: alta → confirmar correo → onboarding (6 pantallas,
+"Clínica dental") → paciente `zz-qa-2026-09-12-2110-paciente` cargado en `/patients` y
+encontrado de vuelta → cita 2026-09-14 09:00 agendada (201, `cmtyvtvkt007h01rw3uzfp7ji`) y
+**vista** en `/appointments` → factura `/billing/cmtyvu6he007j01rwwegic7ed` con el ítem visible
+(frenada sin pagar) → panel revisado (no lista pacientes, es lo esperado). `completo: true`, 0
+filas `zz-qa-` en `appointments` ni `organizations` al cerrar (confirmado con `SELECT`, antes y
+después). Sin hallazgo nuevo del producto — dental sigue sano corrida tras corrida; lo único de
+esta vuelta fue la basura huérfana encontrada y limpiada al arrancar.
+
+---
+
+## 2026-09-12 09:09 La Paz — dental 9/9 completo (rutina)
+
+Cuenta `zz-qa-2026-09-12-0909@onia.com.bo`: alta → confirmar correo → onboarding (6 pantallas,
+"Clínica dental") → paciente `zz-qa-2026-09-12-0909-paciente` cargado en `/patients` y
+encontrado de vuelta → cita 2026-09-14 09:00 agendada (201, `cmty62rvp006001rwmi44a3xh`) y
+**vista** en `/appointments` (captura `paso-07d-cita-en-agenda.png` mirada: aparece en el día 14
+de septiembre) → factura `/billing/cmty632jp006201rwj586giaj` con el ítem visible (frenada sin
+pagar) → panel revisado (no lista pacientes, es lo esperado). `completo: true`, 0 filas `zz-qa-`
+en `appointments` ni `organizations` al cerrar (confirmado con `SELECT`, tanto antes como
+después de la corrida). Sin novedad, rutina sana — dental sigue confirmándose corrida tras
+corrida sin hallazgos nuevos; próxima vuelta debería rotar a otro rubro o a promesa-vs-entrega.
+
+---
+
+## 2026-09-12 07:09 UTC — dental 9/9 completo (rutina)
+
+Cuenta `zz-qa-2026-09-12-0709@onia.com.bo`: alta → confirmar correo → onboarding (6 pantallas,
+"Clínica dental") → paciente `zz-qa-2026-09-12-0709-paciente` → cita 2026-09-14 09:00 vista en
+`/appointments` → factura vista en `/billing/<id>` (frenada sin pagar) → panel revisado (no lista
+pacientes, es lo esperado, no un fallo). `completo: true`, 0 filas `zz-qa-` en `appointments` ni
+`organizations` al cerrar (confirmado con `SELECT`). Sin novedad, rutina sana.
+
+---
+
+## 2026-09-12 06:0x-06:1x UTC — dental 9/9 completo (rutina), tras un crash de navegador transitorio
+
+Corrida anterior (04:20 UTC, quedó sin commitear en el árbol) explotó en el paso 2 con el
+navegador cerrándose solo (`Target page, context or browser has been closed`, errores de dbus
+al lanzar Chromium). Repetida ahora sin tocar nada: corrió limpio, 9/9, `completo: true`, 0 filas
+`zz-qa-` al cerrar (confirmado con `SELECT` en `appointments` y `organizations`). No hay RAM bajo
+presión (`free -h`: 8,4G libres) — el crash anterior parece transitorio del lanzador de Chromium,
+no un problema del sitio ni de este instrumento. Si se repite seguido, ahí sí investigar el
+lanzador; una sola vez no alcanza para diagnosticar nada.
+
+Cuenta `zz-qa-2026-09-12-0609@onia.com.bo`: alta → confirmar correo → onboarding (6 pantallas) →
+paciente → cita 2026-09-14 09:00 vista en `/appointments` → factura vista en `/billing` (frenada
+sin pagar) → todo borrado en la misma corrida.
+
+---
+
+## 🔴 2026-09-12 04:09-04:19 UTC — dental 9/9 sin hallazgos; Importadora 8/8 pero con un CRUCE DE TENANT en el paso 6
+
+**Dental** (`zz-qa-2026-09-12-0409`): recorrido completo de punta a punta, 9/9, 0 filas al cerrar.
+Sin novedad, rutina sana.
+
+**Importadora / distribuidora** (`zz-qa-2026-09-12-0413`): 8/8 los que le corresponden (paso 7
+no-aplica, coherente, ese rubro no vende agenda). **Pero el paso 6 (cargar dato en `/comercio`)
+escribió la fila `patients` en la organización REAL de Sergio Urcullo** (`Clínica Sergio`,
+`organizationId cmtlyz6y9000001nw2934n3cw`, slug `clinica-sergio-p2ljs`, dueño
+`sergio@onia.com.bo`) — **no** en la org de prueba que este mismo run acababa de crear
+(`cmtxvf61d001i01rw6b2t6k99`). Verificado con `SELECT` directo en `supabase-db`, dos veces: la
+primera consulta mostró la fila viva ahí; para la segunda ya no estaba — la borró mi propia
+limpieza por patrón de nombre, que no filtra por `organizationId` (borra `LIKE 'zz-qa-%'` en toda
+la tabla, a propósito, para barrer huérfanos de corridas caídas). Eso evitó que quedara basura,
+pero también significa que **si el nombre no hubiera llevado el prefijo `zz-qa-`, un dato de
+prueba se habría quedado mezclado con los pacientes reales de Sergio para siempre**, sin que nadie
+lo notara.
+
+No sé la causa (no toco el producto): puede ser un caché de organización compartido entre
+requests concurrentes — varios loops corren contra `app.onia.com.bo` al mismo tiempo — o un
+fallback a una organización por defecto. Reportado prioridad 1: `t_3f352044`. Capturas:
+`paso-06-cargar-dato.png`, `paso-06-menu.png`, `paso-06b-alta-dato.png`,
+`paso-06c-dato-en-la-lista.png` (de esta corrida, sobreescriben las anteriores — sin fecha en el
+nombre de archivo, como manda la regla del proyecto; el `resumen.json` de esta corrida es la
+prueba con los ids exactos).
+
+Cero filas `zz-qa-` propias en la base al cerrar la vuelta (confirmado en las 4 tablas:
+`organizations`, `patients`, `appointments`, `auth.users`).
+
+---
+
 ## 2026-09-11 19:1x La Paz — 9/9 dental completo (rutina) + confirmación QR en `/empezar`
 
 Corrida completa con `--escribir` en dental: los 9 pasos OK, `completo: true`, 0 filas `zz-qa-`

@@ -59,9 +59,15 @@
  *     es anterior al build vivo, está pidiendo un ok por trabajo hecho. Ver
  *     `publicadoPorFecha` — mide sólo eso; el sub-describe de landing sigue sin instrumento
  *     porque exige decidir qué commit VIAJA al navegador (`deploy-vivo.mjs llegaAlCliente`).
- *   - `bot`: se despliega por copia archivo-por-archivo y nada en `/opt/onia/bot` nombra un
- *     sha ni una fecha de origen. Sigue sin instrumento, y ahora se DICE en el veredicto en
- *     vez de esconderse en un exit 0.
+ *   - `bot` y `siat`: se despliegan por copia archivo-por-archivo, así que no hay sha ni
+ *     fecha que comparar — pero su publicador en seco ENUMERA lo que copiaría, y con eso se
+ *     miden las dos direcciones (ya publicado / el cuerpo queda corto). Ver
+ *     `DESTINOS_POR_COPIA`.
+ *
+ * Desde el 2026-09-12 no queda ningún destino del `ok` sin instrumento, y eso lo exige un
+ * gate que DERIVA el universo de la lista blanca del ejecutor (`publicar-aprobado.mjs
+ * DESTINOS`) en vez de enumerarlo a mano: el día que entre un quinto destino, el rojo sale
+ * acá y no en un pedido que nadie pudo juzgar.
  */
 
 import { execFileSync } from 'node:child_process';
@@ -152,11 +158,34 @@ export function shasPrometidos(texto) {
  * creerle a los avisos. Medido a mano el 2026-09-07: un barrido leído a mitad de camino
  * reportó 2 pedidos de 3 y ocultó justo el de `plataforma`.
  */
+/**
+ * Las tareas ABIERTAS del tablero, por su símbolo de estado. `list` NO imprime las
+ * archivadas —medido el 2026-09-12: `list | grep -c t_bd62e5a0` da 0 estando la tarea ahí—,
+ * así que «no está en esta lista» significa archivada o inexistente, y «está con ✓ done»
+ * significa terminada: en los tres casos un `ok` sobre ella no ejecuta nada.
+ */
+const ABIERTA = /^[⊘▶◻]/;
+
+/**
+ * PURA: los ids de las tareas abiertas. Es el MISMO universo que recorre `barrerPedidos`,
+ * y comparten la constante a propósito: dos nociones distintas de «vivo» dentro del mismo
+ * archivo se desincronizan, y la que quedara atrás acusaría a un pedido sano.
+ */
+export function idsAbiertos(lista) {
+  const out = new Set();
+  for (const linea of String(lista).split('\n')) {
+    if (!ABIERTA.test(linea)) continue;
+    const id = linea.trim().split(/\s+/)[1];
+    if (id) out.add(id);
+  }
+  return out;
+}
+
 export function barrerPedidos({ lista, leerCuerpo }) {
   const pedidos = [];
   const ilegibles = [];
   for (const linea of String(lista).split('\n')) {
-    if (!/^[⊘▶◻]/.test(linea)) continue;
+    if (!ABIERTA.test(linea)) continue;
     const id = linea.trim().split(/\s+/)[1];
     if (!id) continue;
     const cuerpo = leerCuerpo(id);
@@ -193,7 +222,18 @@ export function buildQueCorre({ buildIdVivo, candidatos }) {
  */
 export function clasificarPedido({ id, shas, publicado }) {
   if (!shas || shas.length === 0) {
-    return { id, estado: 'NO_MEDIDO', motivo: 'el pedido no nombra un solo sha', sinPublicar: [], indeterminados: [] };
+    // `causa` y no sólo `motivo`: el reporte tiene que poder separar este caso —el pedido
+    // está mal escrito, y se arregla con un comentario— de los otros NO_MEDIDO, que son
+    // AMBIENTALES (no pude fetchear, no pude derivar el build vivo). Distinguirlos comparando
+    // la prosa del motivo ata el control a una cadena que cualquiera reescribe sin saberlo.
+    return {
+      id,
+      estado: 'NO_MEDIDO',
+      causa: 'SIN_DECLARAR',
+      motivo: 'el pedido no nombra un solo sha',
+      sinPublicar: [],
+      indeterminados: [],
+    };
   }
   const sinPublicar = [];
   const indeterminados = [];
@@ -205,6 +245,23 @@ export function clasificarPedido({ id, shas, publicado }) {
   }
   const estado = sinPublicar.length === 0 && indeterminados.length === 0 ? 'ENTREGADO' : 'VIGENTE';
   return { id, estado, sinPublicar, indeterminados };
+}
+
+/**
+ * PURA: los pedidos que NO SE PUEDEN JUZGAR porque no declaran ni un sha con su marca.
+ *
+ * Medido el 2026-09-12 sobre los pedidos vivos: `t_bd62e5a0` (plataforma) y `t_fd5b30c4`
+ * (landing) nombraban su sha en PROSA —«1) 4bff903 - la escalera de precios NUEVA»— y salían
+ * `NO MEDIDO` con el gate en código 0. O sea que el modo de falla que este archivo existe
+ * para cazar —pedirle un `ok` a Sergio Urcullo por trabajo ya publicado— era inalcanzable en
+ * la mitad de los pedidos vivos, en silencio.
+ *
+ * ⚠️ La cura NO es aflojar `shasPrometidos` para que adivine el sha de la prosa: deducir el
+ * sujeto del texto libre es lo que rompió a este gate el 2026-09-06 y está medido arriba. La
+ * cura es que un pedido inmedible sea un ROJO accionable — declararlo cuesta un comentario.
+ */
+export function inmediblesSinDeclarar({ resultados }) {
+  return (resultados || []).filter((r) => r && r.causa === 'SIN_DECLARAR').map((r) => r.id);
 }
 
 /**
@@ -486,6 +543,56 @@ export function archivosDelDryRun(salida) {
 }
 
 /**
+ * PURA: lo mismo que `archivosDelDryRun`, para el OTRO publicador por copia — el del bot.
+ *
+ * POR QUÉ HAY DOS LECTORES Y NO UNO. El invariante es el mismo (el cuerpo describe lo que
+ * su `ok` publica) y el artefacto es de la misma especie (copia de archivos), pero el
+ * FORMATO lo imprime cada publicador y no coinciden: `siat` cierra con `Cambia:` + lista,
+ * y el bot escribe una línea `NUEVO`/`CAMBIA` por archivo y la cierra con su propio
+ * recuento. Reescribir uno para que se parezca al otro sería tocar el programa que hace el
+ * deploy para que le quede cómodo a su medidor; y un lector solo que acepte las dos formas
+ * es el que, el día que una cambie, sigue entendiendo la otra y declara «al día» lo que no
+ * midió. Dos lectores, cada uno atado al literal de SU publicador.
+ *
+ * POR QUÉ EXISTE AHORA. Hasta el 2026-09-12 `bot` era el último destino en `sinCubrir`:
+ * el gate imprimía «su artefacto no nombra sha ni fecha — sin instrumento» y seguía. Cierto
+ * y a la vez irrelevante — el bot tampoco necesita sha: su publicador ya deriva y ENUMERA
+ * lo que copiaría, igual que el de `siat`. Con el pedido `t_e45a24ff` vivo pidiendo publicar
+ * precios que el bot le está diciendo mal a leads reales, el único destino que no se podía
+ * juzgar era justo el que estaba mintiendo en producción.
+ *
+ * EL RECUENTO DEL PROPIO PUBLICADOR ES LA GUARDA. `deploy-bot.sh` imprime `total: N
+ * archivo(s)` derivado del MISMO arreglo con el que escribió las líneas de arriba: si lo que
+ * parseo no da N, lo que cambió es el formato y el lector se calla (`null`) en vez de
+ * devolver una lista corta, que es la forma en que este lector fallaría EN VERDE — una lista
+ * a la que le falta un archivo declara «el cuerpo lo nombra todo» sobre algo que nadie leyó.
+ *
+ * TRI-ESTADO igual que su gemelo: `null` = no pude leer · `[]` = al día · lista = lo que
+ * publicaría.
+ *
+ * @param {string|null} salida  stdout de `/opt/onia/bot/_deploy/publicar.sh --dry-run`
+ * @returns {string[]|null}
+ */
+export function archivosDelDryRunBot(salida) {
+  const s = String(salida ?? '');
+  if (!s.trim()) return null;
+  // «al día» es una respuesta REAL y tiene su propia marca, y es la línea con la que
+  // `deploy-bot.sh` corta antes de imprimir ningún recuento.
+  if (/^\s*\(nada que desplegar/m.test(s)) return [];
+  const archivos = [];
+  for (const l of s.split('\n')) {
+    const m = /^\s+(?:NUEVO|CAMBIA)\s+(\S+)/.exec(l);
+    if (m) archivos.push(m[1]);
+  }
+  const t = /^\s*total:\s*(\d+)\s+archivo/m.exec(s);
+  if (t === null) return null;
+  if (Number(t[1]) !== archivos.length) return null;
+  // `total: 0` no lo imprime nunca (el publicador sale antes, por la marca de arriba), así
+  // que una lista vacía acá es un formato que no entiendo — no «al día».
+  return archivos.length > 0 ? archivos : null;
+}
+
+/**
  * PURA: ¿el texto nombra todos los ARCHIVOS que su `ok` publica?
  *
  * La gemela de `promesaCompleta` para los destinos que se publican por copia. Mismas dos
@@ -541,6 +648,50 @@ export function archivosNombrados({ texto, publicaria }) {
  */
 export function cuerpoCortoArchivos({ texto, publicaria }) {
   return archivosNombrados({ texto: partirPedido(texto).cuerpo, publicaria });
+}
+
+/**
+ * PURA: ¿el CUERPO manda a apretar un `ok` sobre una tarea que ya no existe?
+ *
+ * 🔴 EL DEFECTO, medido el 2026-09-12 sobre `t_fd5b30c4` (la landing). Su cuerpo cierra con
+ * «Orden: ok t_bd62e5a0 (el sistema) -> ... -> ok de este (la web)», y `t_bd62e5a0` está
+ * ARCHIVADA desde esa madrugada: el pedido vivo de plataforma pasó a ser `t_8a8a4e94` cuando
+ * se rehízo. O sea que el texto le da a Sergio Urcullo una instrucción que no ejecuta nada
+ * (el brazo tiene lista blanca de estados vivos y sale 3 sobre una archivada), y encima se la
+ * da como PRERREQUISITO: aprieta, no pasa nada, y queda esperando a que «el sistema» se
+ * publique para recién soltar la web. Los dos deploys quedan trabados por un puntero.
+ *
+ * Es la familia que esta memoria ya nombró —«los IDs de tarea y punteros en colas/handoffs
+ * caducan en ambas direcciones: el pedido vivo se DERIVA, nunca se copia»—, y ningún control
+ * de este archivo la podía ver: todos preguntan por shas o por archivos, y éste es el único
+ * dato del cuerpo que apunta a OTRA tarea.
+ *
+ * EL SUJETO ES LA INSTRUCCIÓN TECLEABLE, no la mención. `ok <id>` es literalmente lo que
+ * Sergio Urcullo escribe, así que un cuerpo que quiera mandarlo a apretar algo lo escribe
+ * así. Citar un id sin `ok` es historia y NO se acusa — el mismo `t_fd5b30c4` dice «REEMPLAZA
+ * a t_33406907 (archivado)», que es cierto, útil y no le pide nada a nadie. Preguntar PARA
+ * QUÉ se cita el id, en vez de CÓMO está escrito, es lo que evita la lista de verbos que
+ * falla abierta en el sinónimo siguiente.
+ *
+ * DIRECCIÓN DEL ERROR: ante cualquier duda NO se acusa. Con la lista vacía —un `list` que no
+ * contestó, o truncado— TODO id se vería muerto y el gate mandaría a rehacer pedidos sanos,
+ * que es el daño caro de este control.
+ *
+ * @param {{texto:string, idPropio:string, idsVivos:Set<string>|null}} args
+ */
+export function cuerpoPunteroMuerto({ texto, idPropio, idsVivos }) {
+  const { cuerpo } = partirPedido(texto);
+  const citados = [...new Set(
+    [...String(cuerpo).matchAll(/\bok\s+(t_[0-9a-f]{6,})\b/gi)].map((m) => m[1]),
+  )].filter((id) => id !== idPropio);
+  if (citados.length === 0) return { estado: 'SIN_PUNTEROS', muertos: [] };
+  if (!idsVivos || idsVivos.size === 0) {
+    return { estado: 'NO_MEDIDO', motivo: 'no pude derivar que tareas siguen abiertas', muertos: [] };
+  }
+  const muertos = citados.filter((id) => !idsVivos.has(id));
+  return muertos.length > 0
+    ? { estado: 'PUNTERO_MUERTO', muertos }
+    : { estado: 'VIVOS', muertos: [] };
 }
 
 /**
@@ -698,8 +849,17 @@ function epochCommitHermes(sha) {
   return crudo && /^\d+$/.test(crudo.trim()) ? Number(crudo.trim()) : null;
 }
 
-/** El publicador en seco de un destino que copia archivos. Ruta en el VPS, fija por destino. */
-const SECO_SIAT = '/opt/onia-siat/_deploy/publicar.sh';
+/**
+ * Los destinos que se publican COPIANDO ARCHIVOS, con su publicador en seco y el lector de
+ * SU formato. Es una tabla y no dos ramas gemelas a propósito: el 2026-09-11 se cableó
+ * `siat` copiando la forma de `plataforma`, y el hermano `bot` —misma especie, mismo
+ * invariante— quedó afuera otro día entero. Un destino nuevo de esta especie tiene que ser
+ * una fila acá, no una rama nueva; y el gate de abajo exige que no falte ninguno.
+ */
+const DESTINOS_POR_COPIA = {
+  siat: { seco: '/opt/onia-siat/_deploy/publicar.sh', lector: archivosDelDryRun },
+  bot: { seco: '/opt/onia/bot/_deploy/publicar.sh', lector: archivosDelDryRunBot },
+};
 
 /**
  * Corre un publicador en seco y devuelve su stdout, del disco local o del VPS. `null` = no
@@ -735,11 +895,17 @@ function secoPorSsh(ruta, shim = VPS) {
 }
 
 /**
- * Lo que el `ok` de un pedido de `siat` publicaría: la lista de archivos que su propio
+ * Lo que el `ok` de un pedido por COPIA publicaría: la lista de archivos que su propio
  * publicador en seco enumera. `null` = no se pudo medir, `[]` = ya está al día.
+ *
+ * Un destino que no esté en la tabla sale `null` (no medido), nunca `[]`: «no sé
+ * preguntarle» y «no tiene nada que publicar» son la distinción que este archivo entero
+ * defiende.
  */
-function publicariaSiat(io = {}) {
-  return archivosDelDryRun(secoDeProduccion(SECO_SIAT, io));
+export function publicariaPorCopia(destino, io = {}) {
+  const d = DESTINOS_POR_COPIA[destino];
+  if (d === undefined) return null;
+  return d.lector(secoDeProduccion(d.seco, io));
 }
 
 /**
@@ -750,10 +916,16 @@ function publicariaSiat(io = {}) {
 function pedidosVivos() {
   const lista = sh('bash', [TABLERO, 'list'], { timeout: 180_000 });
   if (lista === null) return null;
-  return barrerPedidos({
-    lista,
-    leerCuerpo: (id) => sh('bash', [TABLERO, 'show', id], { timeout: 60_000 }),
-  });
+  return {
+    ...barrerPedidos({
+      lista,
+      leerCuerpo: (id) => sh('bash', [TABLERO, 'show', id], { timeout: 60_000 }),
+    }),
+    // De la MISMA lectura de la lista: pedirla dos veces abriría una ventana en la que una
+    // tarea se archiva entre las dos llamadas y el gate acusaría un puntero que estaba vivo
+    // cuando se leyó el cuerpo.
+    abiertos: idsAbiertos(lista),
+  };
 }
 
 async function medirEnVivo() {
@@ -762,7 +934,7 @@ async function medirEnVivo() {
     console.log('NO MEDIDO: no pude leer el tablero (' + TABLERO + ')');
     return 2;
   }
-  const { pedidos, ilegibles } = barrido;
+  const { pedidos, ilegibles, abiertos } = barrido;
 
   // Un barrido incompleto NO puede concluir nada, ni siquiera «no hay pedidos»: las dos cosas
   // se ven igual. Se dice cuántas tareas quedaron sin leer y con cuáles.
@@ -854,15 +1026,33 @@ async function medirEnVivo() {
   const vencidos = [];
   const cortos = [];
   const noMedidos = [];
+  // Y la TERCERA especie, que hasta el 2026-09-12 vivía escondida adentro de `noMedidos`: el
+  // pedido cuyo destino SÍ tiene instrumento pero que no declara ni un sha con su marca. No es
+  // transitorio como un `noMedidos` ni un agujero del gate como un `sinCubrir`: es un pedido
+  // MAL ESCRITO, que se cura con un comentario y que mientras tanto vuelve inalcanzable al
+  // único modo de falla que este archivo existe para cazar. Impreso como no-medido se lee
+  // como ruido de ambiente, y por eso sobrevivió con el gate en verde. Ver `inmediblesSinDeclarar`.
+  const inmedibles = [];
   // `noMedidos` y `sinCubrir` NO son lo mismo, y mezclarlos fue el bug: el primero es
   // transitorio (el SSH no contestó, el sha no resuelve) y se cura solo en la vuelta
   // siguiente; el segundo es un AGUJERO del gate, que no se cura nunca y hay que escribirle
   // instrumento. Impresos juntos, el segundo se lee como ruido de ambiente y sobrevive.
   const sinCubrir = [];
-  // Los de `siat` van aparte porque su veredicto se dice con ARCHIVOS, no con shas: meterlos
-  // en las mismas listas obligaría a que el reporte adivine de qué especie es cada entrada.
+  // Los que se publican por COPIA (`siat`, `bot`) van aparte porque su veredicto se dice con
+  // ARCHIVOS, no con shas: meterlos en las mismas listas obligaría a que el reporte adivine de
+  // qué especie es cada entrada. Cada entrada lleva su `destino` para poder imprimir el
+  // comando de cura del publicador que le toca.
   const entregadosSiat = [];
   const cortosSiat = [];
+  // Transversal a TODOS los destinos: cualquier cuerpo puede mandar a apretar el `ok` de otra
+  // tarea, y el daño no depende de si se publica por sha, por fecha o por copia. Por eso se
+  // barre aparte del `for` de destinos, y no adentro de una de sus ramas.
+  const punteros = [];
+  for (const p of pedidos) {
+    const r = cuerpoPunteroMuerto({ texto: p.texto, idPropio: p.id, idsVivos: abiertos });
+    if (r.estado === 'PUNTERO_MUERTO') punteros.push({ id: p.id, destino: p.destino, muertos: r.muertos });
+    else if (r.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (${p.destino}, punteros): ${r.motivo}`);
+  }
   // `landing` no nombra su sha, pero su artefacto tiene FECHA: alcanza para la dirección cara
   // (¿pide un ok por trabajo hecho?). Se deriva UNA vez, no por pedido: si el SSH no contesta
   // queda `null` y todos los pedidos de landing salen NO MEDIDO con su motivo.
@@ -880,6 +1070,7 @@ async function medirEnVivo() {
         publicado: (s) => publicadoPorFecha({ epochCommit: epochCommitHermes(s), epochBuild: buildLanding }),
       });
       if (r.estado === 'ENTREGADO') entregados.push(r);
+      else if (r.causa === 'SIN_DECLARAR') inmedibles.push({ id: p.id, destino: 'landing' });
       else if (r.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (landing): ${r.motivo}`);
       else {
         console.log(`OK ${p.id} (landing): sigue VIGENTE — ${r.sinPublicar.length} sin publicar, ${r.indeterminados.length} sin resolver`);
@@ -897,29 +1088,30 @@ async function medirEnVivo() {
       }
       continue;
     }
-    if (p.destino === 'siat') {
-      // `siat` no se identifica por sha ni por fecha: se publica copiando archivos, así que su
-      // universo son los ARCHIVOS que su propio publicador en seco enumera. Mismo invariante
-      // que los otros dos destinos (el cuerpo describe lo que su ok publica), otro artefacto.
-      const publicaria = publicariaSiat();
+    if (DESTINOS_POR_COPIA[p.destino] !== undefined) {
+      // Ni `siat` ni `bot` se identifican por sha ni por fecha: se publican copiando archivos,
+      // así que su universo son los ARCHIVOS que su propio publicador en seco enumera. Mismo
+      // invariante que los otros dos destinos (el cuerpo describe lo que su ok publica), otro
+      // artefacto.
+      const publicaria = publicariaPorCopia(p.destino);
       if (publicaria === null) {
-        noMedidos.push(`${p.id} (siat): no pude correr el publicador en seco (¿SSH al VPS?)`);
+        noMedidos.push(`${p.id} (${p.destino}): no pude correr el publicador en seco (¿SSH al VPS?)`);
         continue;
       }
       if (publicaria.length === 0) {
         // La dirección cara, la misma que `clasificarPedido` caza en los otros destinos: el
         // pedido sigue bloqueado pidiendo un ok por trabajo que ya está publicado.
-        entregadosSiat.push(p.id);
+        entregadosSiat.push({ id: p.id, destino: p.destino });
         continue;
       }
-      console.log(`OK ${p.id} (siat): sigue VIGENTE — ${publicaria.length} archivo(s) sin publicar`);
+      console.log(`OK ${p.id} (${p.destino}): sigue VIGENTE — ${publicaria.length} archivo(s) sin publicar`);
       // El cuerpo, no el texto entero: los comentarios se apilan abajo y lo tapan. Es la misma
       // pregunta que `cuerpoCorto` le hace a `plataforma`.
       const k = cuerpoCortoArchivos({ texto: p.texto, publicaria });
       if (k.estado === 'SUB_DESCRIBE') {
-        cortosSiat.push({ id: p.id, mudos: k.mudos });
+        cortosSiat.push({ id: p.id, destino: p.destino, mudos: k.mudos });
       } else if (k.estado === 'NO_MEDIDO') {
-        noMedidos.push(`${p.id} (siat, cuerpo completo): ${k.motivo}`);
+        noMedidos.push(`${p.id} (${p.destino}, cuerpo completo): ${k.motivo}`);
       }
       continue;
     }
@@ -933,6 +1125,7 @@ async function medirEnVivo() {
     }
     const r = clasificarPedido({ id: p.id, shas: shasPrometidos(p.texto), publicado: esPublicado });
     if (r.estado === 'ENTREGADO') entregados.push(r);
+    else if (r.causa === 'SIN_DECLARAR') inmedibles.push({ id: p.id, destino: 'plataforma' });
     else if (r.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (plataforma): ${r.motivo}`);
     else {
       console.log(`OK ${p.id} (plataforma): sigue VIGENTE — ${r.sinPublicar.length} sin publicar, ${r.indeterminados.length} sin resolver`);
@@ -980,11 +1173,28 @@ async function medirEnVivo() {
   }
 
   if (entregadosSiat.length > 0) {
-    for (const id of entregadosSiat) {
-      console.log(`\nROJO ${id}: su publicador en seco dice que YA ESTA PUBLICADO.`);
+    for (const e of entregadosSiat) {
+      console.log(`\nROJO ${e.id}: su publicador en seco dice que YA ESTA PUBLICADO (${e.destino}).`);
       console.log('  Le esta pidiendo un ok a Sergio Urcullo por trabajo hecho. Cerralo con su');
       console.log('  evidencia y, si quedo algo sin publicar despues, hace un pedido NUEVO: el');
       console.log('  cuerpo del viejo no lo describe, y el cuerpo es lo unico que el lee.');
+    }
+    return 1;
+  }
+
+  // Tercero en la cadena, y arriba de los que describen de menos: un cuerpo corto le muestra a
+  // Sergio Urcullo menos de lo que publica, pero su `ok` PUBLICA. Éste no: lo manda a apretar
+  // algo que no ejecuta nada, y como lo pide como prerrequisito, deja los DOS deploys trabados
+  // esperando un paso que él ya dio.
+  if (punteros.length > 0) {
+    for (const p of punteros) {
+      console.log(`\nROJO ${p.id}: su cuerpo manda a apretar un ok sobre ${p.muertos.join(', ')}, que ya no esta abierta (${p.destino}).`);
+      console.log('  Una tarea archivada o terminada NO ejecuta: el brazo la rechaza y no publica');
+      console.log('  nada. Sergio Urcullo aprieta, no pasa nada, y se queda esperando ese paso.');
+      console.log('  El pedido vivo del otro destino se DERIVA, nunca se copia:');
+      console.log("    /root/bin/onia-tablero.sh list | grep -E '^[⊘▶]' | grep -iE 'deploy|publicar'");
+      console.log('  Se cura rehaciendo el pedido con el id vigente y ARCHIVANDO el viejo en la');
+      console.log('  misma vuelta. El cuerpo no se puede editar, y el cuerpo es lo que el lee.');
     }
     return 1;
   }
@@ -994,10 +1204,13 @@ async function medirEnVivo() {
       console.log(`\nROJO ${c.id}: su CUERPO no nombra ${c.mudos.length} archivo(s) que su ok publica.`);
       for (const m of c.mudos) console.log(`    ${m}`);
       console.log('  El cuerpo es lo unico que Sergio Urcullo lee para decidir, y hoy describe');
-      console.log('  menos de lo que su ok publica. Nombralos comentando el recuento DERIVADO de');
-      console.log('  `bash /opt/onia-siat/_deploy/publicar.sh --dry-run`; si ya se comento y el');
-      console.log('  cuerpo sigue corto, rehace el pedido y ARCHIVA el viejo en la misma vuelta');
-      console.log('  (el `edit` del tablero no cambia el cuerpo).');
+      console.log('  menos de lo que su ok publica. COMENTAR NO LO LIMPIA: este control lee el');
+      console.log('  cuerpo y nada mas, y el `edit` del tablero no cambia el cuerpo. Se cura');
+      console.log('  rehaciendo el pedido con el cuerpo derivado de');
+      // El comando lo DERIVA la tabla: escribir acá la ruta de `siat` mandaba al carril del
+      // bot a correr el publicador del emisor fiscal, que no publica nada suyo.
+      console.log(`    bash ${DESTINOS_POR_COPIA[c.destino].seco} --dry-run`);
+      console.log('  y ARCHIVANDO el viejo en la misma vuelta.');
     }
     return 1;
   }
@@ -1031,9 +1244,26 @@ async function medirEnVivo() {
       for (const m of c.mudos) console.log(`    ${m.sha}  ${m.titulo}`);
       console.log('  Los comentarios pueden nombrarlos —por eso el pedido sale VIGENTE y completo—');
       console.log('  pero el cuerpo es lo que Sergio Urcullo lee para decidir, y hoy describe menos');
-      console.log('  de lo que su ok publica. Comenta el recuento DERIVADO de `publicar.sh --dry-run`;');
-      console.log('  si ya se comento y el cuerpo sigue quedando corto, rehace el pedido y ARCHIVA');
-      console.log('  el viejo en la misma vuelta (el `edit` del tablero no cambia el cuerpo).');
+      console.log('  de lo que su ok publica. COMENTAR NO LO LIMPIA: este control lee el cuerpo y');
+      console.log('  nada mas, y el `edit` del tablero no cambia el cuerpo. Se cura rehaciendo el');
+      console.log('  pedido con el cuerpo derivado de');
+      console.log('    bash /opt/onia-platform/_deploy/publicar.sh --dry-run');
+      console.log('  y ARCHIVANDO el viejo en la misma vuelta.');
+    }
+    return 1;
+  }
+
+  // Va ÚLTIMO en la cadena a propósito: los rojos de arriba son de pedidos que SÍ se pudieron
+  // juzgar, y son más caros (uno le está pidiendo un `ok` por trabajo hecho ahora mismo). Este
+  // dice que a otro pedido ni siquiera se le pudo preguntar — importa, pero después.
+  if (inmedibles.length > 0) {
+    for (const m of inmedibles) {
+      console.log(`\nROJO ${m.id}: no declara ni un sha, asi que NO SE PUEDE JUZGAR (destino ${m.destino}).`);
+      console.log('  Su destino tiene instrumento; lo que falta es la marca. Mientras siga asi, si');
+      console.log('  produccion publica sola este pedido va a seguir pidiendo un ok por trabajo');
+      console.log('  hecho y nada se va a poner rojo — que es el unico caso que este gate caza.');
+      console.log(`  Se cura con un comentario, sin rehacer la tarea ni tocar el cuerpo que el lee:`);
+      console.log(`    /root/bin/onia-tablero.sh comment ${m.id} "DEPLOY PEDIDO <sha> — <que arregla>"`);
     }
     return 1;
   }
@@ -1148,6 +1378,107 @@ function selfCheck() {
       (soloLosQueViajan([{ sha: '1111111', titulo: 'sin datos' }]) || []).length === 1],
     ['landing: sin commits medidos no se inventa un universo vacio',
       soloLosQueViajan(null) === null],
+
+    // ── el puntero a OTRA tarea: el unico dato del cuerpo que no es un sha ni un archivo ──
+    // EL BUG REAL, tal como estaba escrito en t_fd5b30c4 el 2026-09-12.
+    ['el cuerpo manda a apretar un ok sobre una tarea archivada -> PUNTERO_MUERTO',
+      cuerpoPunteroMuerto({
+        texto: 'DESPLEGAR: landing\nOrden: ok t_bd62e5a0 (el sistema) -> ok de este (la web).',
+        idPropio: 't_fd5b30c4',
+        idsVivos: new Set(['t_fd5b30c4', 't_8a8a4e94']),
+      }).estado === 'PUNTERO_MUERTO'],
+    // Nombrarlo es lo unico accionable: «hay un puntero muerto» sin decir cual manda a releer
+    // el cuerpo entero a mano.
+    ['y NOMBRA al muerto',
+      cuerpoPunteroMuerto({
+        texto: 'ok t_bd62e5a0 primero',
+        idPropio: 't_fd5b30c4',
+        idsVivos: new Set(['t_8a8a4e94']),
+      }).muertos.join() === 't_bd62e5a0'],
+    // El caso que YA cumple. Sin el, un detector que acuse SIEMPRE pasa el de arriba y deja
+    // en rojo permanente a todo pedido que coordine con otro — que es la forma correcta de
+    // escribirlos.
+    ['el caso que YA cumple: el id citado sigue abierto -> VIVOS',
+      cuerpoPunteroMuerto({
+        texto: 'Orden: ok t_8a8a4e94 (el sistema) -> ok de este.',
+        idPropio: 't_fd5b30c4',
+        idsVivos: new Set(['t_fd5b30c4', 't_8a8a4e94']),
+      }).estado === 'VIVOS'],
+    // La MENCION no es la instruccion. El mismo t_fd5b30c4 dice «REEMPLAZA a t_33406907
+    // (archivado)»: es cierto, es util, y no le pide nada a nadie. Acusarlo obligaria a
+    // borrar la historia del pedido para poner el gate en verde.
+    ['citar un id sin `ok` es historia, no se acusa',
+      cuerpoPunteroMuerto({
+        texto: 'REEMPLAZA a t_33406907 (archivado). Mismo trabajo, mismo destino.',
+        idPropio: 't_fd5b30c4',
+        idsVivos: new Set(['t_fd5b30c4']),
+      }).estado === 'SIN_PUNTEROS'],
+    // 🔴 SIN EXCEPCION PARA LA CITA, y no es una postura: lo encontro este mismo gate, en
+    // vivo, sobre el PRIMER pedido que se escribio para curar el defecto. Ese cuerpo explicaba
+    // el cambio diciendo «aquel cuerpo te mandaba a apretar "ok t_bd62e5a0", y esa tarea esta
+    // ARCHIVADA» — una cita, correcta y util, que el control acuso igual. La tentacion es
+    // perdonar lo que esta entre comillas; la respuesta es NO, por dos motivos. Uno: la cadena
+    // es TECLEABLE tal cual esta escrita, y Sergio Urcullo lee rapido — ve un `ok t_xxx` y lo
+    // escribe. Dos: perdonar por comillas es el carve-out de notacion que esta familia de
+    // gates ya aprendio a no hacer (se cita sin comillas, en mayusculas, con backticks...).
+    // La regla que queda es simple y se puede obedecer: el cuerpo de un pedido no escribe la
+    // forma `ok <id>` sobre algo que no esta abierto, ni para explicar. Se dice «el ok de esa
+    // tarea» y el gate no tiene nada que acusar.
+    ['citar la instruccion muerta entre comillas TAMBIEN se acusa: es tecleable tal cual',
+      cuerpoPunteroMuerto({
+        texto: 'Aquel cuerpo mandaba a apretar "ok t_bd62e5a0", y esa tarea esta archivada.',
+        idPropio: 't_9ad5049f',
+        idsVivos: new Set(['t_9ad5049f', 't_8a8a4e94']),
+      }).estado === 'PUNTERO_MUERTO'],
+    // Y su simetrica, que es la salida: nombrar la tarea SIN la forma tecleable no se acusa.
+    // Sin este caso, la regla de arriba no tendria como cumplirse y el rojo no tendria cura.
+    ['nombrar la tarea sin la forma tecleable es la salida, y no se acusa',
+      cuerpoPunteroMuerto({
+        texto: 'Aquel cuerpo mandaba a apretar el ok de t_bd62e5a0, que ya esta archivada.',
+        idPropio: 't_9ad5049f',
+        idsVivos: new Set(['t_9ad5049f', 't_8a8a4e94']),
+      }).estado === 'SIN_PUNTEROS'],
+
+    // Todo pedido dice «apreta este ok». Sin excluir el propio id, el pedido se acusaria a si
+    // mismo en cuanto alguien lo escribiera con su id a la vista.
+    ['el pedido no se acusa a si mismo',
+      cuerpoPunteroMuerto({
+        texto: 'Para publicar: ok t_fd5b30c4',
+        idPropio: 't_fd5b30c4',
+        idsVivos: new Set(['t_fd5b30c4']),
+      }).estado === 'SIN_PUNTEROS'],
+    // La direccion cara del error: con la lista sin leer, TODO id se ve muerto y el gate
+    // mandaria a rehacer pedidos sanos.
+    ['sin poder derivar las abiertas -> NO_MEDIDO, nunca acusar',
+      cuerpoPunteroMuerto({
+        texto: 'ok t_bd62e5a0',
+        idPropio: 't_fd5b30c4',
+        idsVivos: new Set(),
+      }).estado === 'NO_MEDIDO'],
+    // `idsAbiertos` es el otro lado del control: si contara las terminadas, un `ok` sobre una
+    // tarea `done` —que tampoco ejecuta— pasaria por vivo.
+    ['idsAbiertos toma las abiertas y NO las terminadas',
+      [...idsAbiertos('▶ t_aaaaaaaa  ready     x\n⊘ t_bbbbbbbb  blocked   y\n✓ t_cccccccc  done      z')].join() === 't_aaaaaaaa,t_bbbbbbbb'],
+    ['idsAbiertos sobre una lista vacia no inventa nada',
+      idsAbiertos('').size === 0],
+
+    // CABLEADO, por el mismo motivo que el de `refsAlDia`: los casos de arriba prueban la
+    // funcion, y los esquives baratos dejan los literales intactos y pasan en verde con el
+    // control muerto.
+    //
+    // ⚠️ ANCLA LA CONDICION ENTERA, no el `push` suelto — y no es teorico: la primera version
+    // de este caso pedia `/punteros\.push\(/` y `/if \(punteros\.length > 0\)/` por separado, y
+    // con eso `if (false && r.estado === 'PUNTERO_MUERTO') punteros.push(...)` pasaba en
+    // VERDE con el control apagado (medido acá mismo, mutando el archivo). El `push` tiene
+    // que estar gobernado por ESA comparacion y por nada antes.
+    ['punteros: `medirEnVivo` lo llama, acumula y CORTA',
+      (() => {
+        const fuente = readFileSync(fileURLToPath(import.meta.url), 'utf8');
+        return /const\s+r\s*=\s*cuerpoPunteroMuerto\(\{/.test(fuente)
+          && /if\s*\(r\.estado === 'PUNTERO_MUERTO'\)\s*punteros\.push\(/.test(fuente)
+          && /if\s*\(\s*punteros\.length\s*>\s*0\s*\)/.test(fuente)
+          && /idsVivos:\s*abiertos/.test(fuente);
+      })()],
 
     // ── los refs con los que se mide, que hasta hoy nadie actualizaba ─────────────────
     // El caso que YA cumple, primero: sin él, un detector que marque SIEMPRE fallo pasaría

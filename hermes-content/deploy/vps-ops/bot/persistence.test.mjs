@@ -320,6 +320,98 @@ test("si la reserva NO sale, no se manda un link inventado: solo el aviso honest
   assert.equal(fake.state.calendarEventId, null);
 });
 
+// ---------------------------------------------------------------------------
+// EL MODO SECO NO PUEDE PROMETER MAS QUE EL VIVO
+//
+// Medido el 2026-09-12: `simulate.mjs` imprimia "Listo, agendado: lunes 14, 14:00" PELADO,
+// mientras los dos mensajes que el bot mando de verdad (convs 11 y 49 de Chatwoot) llevaban
+// los dos "(Estoy confirmando ese horario con Sergio...)". La causa: el bloque de reserva
+// entero vive detras de `if (config.dryRun)`, asi que en seco no se agregaba el cierre.
+//
+// Por que importa mas que un detalle de texto: el simulador es el instrumento con el que este
+// carril mide "simulador 3/3" AL ARRANCAR CADA VUELTA. Un instrumento mas optimista que el
+// producto es ciego justo a la regresion que mide — la misma familia del "simulador 3/3"
+// que conviviro con el bot vivo cotizando Bs 750.
+//
+// El invariante NO es tautologico: compara DOS CAMINOS DISTINTOS del mismo codigo (el seco,
+// que no hace I/O, y el vivo con `createBooking` real sin configurar) y exige que prometan lo
+// mismo. Hoy Cal.com no existe en el VPS (sin CALCOM_BASE_URL), asi que ese "sin_config" es
+// el 100% del trafico real, no un caso de borde.
+// ---------------------------------------------------------------------------
+
+test("en seco y sin Cal.com configurado, el texto es el MISMO que recibe el prospecto (con la salvedad)", async () => {
+  const sinCalcom = {}; // el env de produccion HOY: ni CALCOM_BASE_URL ni EVENT_TYPE_ID
+
+  // Camino VIVO: `createBooking` de verdad (no un doble), que sin config contesta sin_config
+  // sin tocar la red. Es lo que le llega al prospecto.
+  const vivo = memoryStore();
+  const depsVivo = {
+    store: vivo.store,
+    config: createBotConfig({ slots: CONFIG.slots, dryRun: false }),
+    nowIso: T0,
+    llm: async () => "",
+    env: sinCalcom,
+  };
+  await runTurn(turn(), depsVivo);
+  const agendadaVivo = await runTurn(turn({ text: "A", message_key: "telegram:2" }), depsVivo);
+
+  // Camino SECO: el que imprime el simulador. No puede salir NADA del sistema.
+  const seco = memoryStore();
+  let llamoAfuera = false;
+  const depsSeco = {
+    store: seco.store,
+    config: createBotConfig({ slots: CONFIG.slots, dryRun: true }),
+    nowIso: T0,
+    llm: async () => "",
+    env: sinCalcom,
+    createBooking: async () => {
+      llamoAfuera = true;
+      return { ok: false, uid: null, reason: "sin_config", warnings: [] };
+    },
+  };
+  await runTurn(turn(), depsSeco);
+  const agendadaSeco = await runTurn(turn({ text: "A", message_key: "telegram:2" }), depsSeco);
+
+  assert.equal(llamoAfuera, false, "el modo seco sigue sin hacer I/O: se deriva, no se reserva");
+  assert.equal(agendadaVivo.stageAfter, "demo_agendada");
+  assert.equal(agendadaSeco.stageAfter, "demo_agendada");
+  assert.match(agendadaVivo.send[0].text, /Estoy confirmando ese horario con Sergio/, "el prospecto real lee la salvedad");
+  assert.equal(
+    agendadaSeco.send[0].text,
+    agendadaVivo.send[0].text,
+    "el simulador tiene que imprimir el MISMO texto que recibe el prospecto, no uno mas optimista",
+  );
+});
+
+test("en seco CON Cal.com configurado no se inventa el desenlace: se dice que el cierre depende de la reserva", async () => {
+  const conCalcom = { CALCOM_BASE_URL: "https://cal.test/api", CALCOM_BOT_EVENT_TYPE_ID: "7" };
+  const fake = memoryStore();
+  let llamoAfuera = false;
+  const deps = {
+    store: fake.store,
+    config: createBotConfig({ slots: CONFIG.slots, dryRun: true }),
+    nowIso: T0,
+    llm: async () => "",
+    env: conCalcom,
+    createBooking: async () => {
+      llamoAfuera = true;
+      return { ok: true, uid: "uid-abc", reason: "reservado", warnings: [] };
+    },
+  };
+
+  await runTurn(turn(), deps);
+  const agendada = await runTurn(turn({ text: "A", message_key: "telegram:2" }), deps);
+
+  assert.equal(llamoAfuera, false, "con config o sin ella, el seco NO reserva");
+  assert.ok(!/Estoy confirmando ese horario con Sergio/.test(agendada.send[0].text),
+    "con Cal.com configurado la reserva PUEDE salir bien: agregar la salvedad seria el error simetrico");
+  assert.ok(!/booking\//.test(agendada.send[0].text), "y tampoco se fabrica un link de una reserva que no se hizo");
+  assert.ok(
+    (agendada.warnings || []).some((w) => /dry run/.test(w) && /depende de la reserva/.test(w)),
+    "la ignorancia se reporta como ignorancia: el seco dice que el cierre real no lo puede saber",
+  );
+});
+
 test("un humano tomo la conversacion: el ejecutor no devuelve nada para enviar", async () => {
   const fake = memoryStore();
   const deps = { store: fake.store, config: CONFIG, nowIso: T0, llm: async () => "" };

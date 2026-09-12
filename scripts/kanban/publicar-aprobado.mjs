@@ -232,6 +232,52 @@ export function pedidosVivosEn(lista, destino) {
     .map((t) => t.id);
 }
 
+// DEPLOYS ACOPLADOS: `DESPUES-DE: <destino>` en el cuerpo dice "no ejecutes este
+// deploy mientras el hermano siga esperando un ok". El caso que lo motivo esta
+// contado en el autotest; la forma corta es que dos destinos pueden publicar
+// mitades de UNA sola promesa —la vidriera y la caja— y publicar una sola deja
+// al cliente mirando un precio que el sistema no le va a cobrar.
+//
+// Mide una cosa y dice esa: que el pedido hermano sigue VIVO. No afirma "el
+// hermano ya esta publicado en produccion" — para saberlo habria que correr su
+// publicador en seco, que tarda y vive del otro lado del SSH. La aproximacion es
+// honesta porque el acople se rompe en el momento del ok, que es justo lo que
+// esto mira.
+//
+// `lista` se recibe (no se consulta acá) para que el autotest la pueda clavar
+// sin tocar el tablero, igual que `pedidosVivosEn`.
+export function precondicionPendiente(cuerpo, lista) {
+  const linea = String(cuerpo || '')
+    .split('\n')
+    .map((l) => l.trim())
+    .find((l) => /^DESPUES-DE:/i.test(l));
+  if (!linea) return null;
+
+  const destino = (linea.slice(linea.indexOf(':') + 1).trim().split(/\s+/)[0] || '').toLowerCase();
+  if (!DESTINOS[destino]) {
+    throw new Error(`destino desconocido "${destino}" (validos: ${Object.keys(DESTINOS).join(', ')})`);
+  }
+  const pedidos = pedidosVivosEn(lista, destino);
+  // null = no pude leer el tablero. Se CORTA igual: ante un deploy acoplado, la
+  // equivocacion barata es no publicar, y la cara es publicar media promesa.
+  if (pedidos === null) return { destino, pedidos: null };
+  return pedidos.length ? { destino, pedidos } : null;
+}
+
+function listaDelTablero() {
+  try {
+    const py = process.env.PY_HERMES || '/usr/local/lib/hermes-agent/venv/bin/python';
+    const salida = execFileSync(
+      py,
+      ['-m', 'hermes_cli.main', 'kanban', '--board', process.env.ONIA_TABLERO || 'onia', 'list', '--json'],
+      { encoding: 'utf8', env: { ...process.env, HOME: '/root' }, timeout: 120000 },
+    );
+    return JSON.parse(salida);
+  } catch {
+    return null;
+  }
+}
+
 function pedidoVivoDe(destino) {
   try {
     const py = process.env.PY_HERMES || '/usr/local/lib/hermes-agent/venv/bin/python';
@@ -336,6 +382,40 @@ function autotest() {
   ok(pedidosVivosEn(null, 'plataforma') === null, 'lo ilegible tiene que dar null, nunca []');
   ok(pedidosVivosEn('{"roto":', 'plataforma') === null, 'una respuesta que no es lista tiene que dar null');
 
+  // DEPLOYS ACOPLADOS. Nace del 2026-09-12: main traia la escalera C de precios
+  // en los DOS repos (320/550/890/1290 + el plan Crece) y produccion seguia
+  // consistente en la vieja. El pedido vivo de la landing publicaba SOLO la
+  // vidriera: el lead habria visto 550/890/1290 y elegido "Crece", un plan que
+  // el checkout no conoce, mientras el sistema le cobraba 750/1500. DOS carriles
+  // lo midieron y avisaron en COMENTARIOS de la tarea — que el ejecutor no lee:
+  // lee el cuerpo, y el cuerpo decia `DESPLEGAR: landing` a secas. Una regla de
+  // "los dos en la misma tanda" que el brazo no sabe ejecutar es una regla que
+  // solo existe en la cabeza del que la escribio.
+  //
+  // `DESPUES-DE:` dice lo que MIDE, ni una palabra mas: no afirma que el hermano
+  // este publicado —eso no lo sabe—, afirma que su pedido sigue esperando el ok.
+  // Por eso no se llama REQUIERE-PUBLICADO.
+  ok(precondicionPendiente('DESPLEGAR: landing', lista) === null, 'sin linea DESPUES-DE no hay precondicion');
+  const bloqueo = precondicionPendiente('DESPLEGAR: landing\nDESPUES-DE: plataforma', lista);
+  ok(bloqueo && bloqueo.destino === 'plataforma', 'no leyo el destino de la precondicion');
+  ok(JSON.stringify(bloqueo.pedidos) === '["t_vivo"]', 'tenia que nombrar el pedido hermano que falta apretar');
+  // Cumplida = el hermano ya no tiene pedido vivo. Ahi este deploy sale solo.
+  ok(precondicionPendiente('DESPLEGAR: landing\nDESPUES-DE: bot', lista) === null,
+    'sin pedido vivo del hermano la precondicion esta cumplida y no corta');
+  // FAIL-CLOSED. "No pude preguntarle al tablero" NO es "el hermano ya salio":
+  // son opuestas, y con un deploy acoplado la barata es negarse. Este es el caso
+  // que un `catch { return null }` —la forma natural de escribirlo— invierte.
+  const ciego = precondicionPendiente('DESPLEGAR: landing\nDESPUES-DE: plataforma', null);
+  ok(ciego && ciego.pedidos === null, 'sin poder leer el tablero tiene que CORTAR, no dejar pasar');
+  // Mismo criterio que DESPLEGAR: el destino sale de la lista blanca, nunca del cuerpo.
+  const caeP = (t) => {
+    try { precondicionPendiente(t, lista); } catch (e) { ok(/destino desconocido/.test(e.message), `dio "${e.message}"`); return; }
+    throw new Error(`AUTOTEST: "${t}" tenia que fallar por destino desconocido`);
+  };
+  caeP('DESPUES-DE: produccion');
+  caeP('DESPUES-DE: /opt/loquesea/publicar.sh');
+  caeP('DESPUES-DE:');
+
   // ANCLA DE CABLEADO. Los casos de arriba prueban la funcion pura; este prueba
   // que `main()` la USE y que su resultado CORTE. Sin el, la guarda se esquiva
   // con un `motivoParaNoEjecutar(estado);` suelto —llamarla y tirar el
@@ -352,6 +432,13 @@ function autotest() {
   const iExec = cuerpoMain.search(/execFileSync\(/);
   ok(iGuarda > -1 && iSpawn > -1 && iGuarda < iSpawn, 'la guarda tiene que estar ANTES del spawn del deploy');
   ok(iGuarda > -1 && iExec > -1 && iGuarda < iExec, 'la guarda tiene que estar ANTES de publicar la pieza');
+  // Y la misma ancla para la precondicion: los ocho casos de arriba siguen en
+  // verde si `main()` nunca la llama, o si la llama DESPUES de lanzar el deploy.
+  ok(/const\s+pendiente\s*=\s*precondicionPendiente\(/.test(cuerpoMain),
+    'main() tiene que ASIGNAR el resultado de precondicionPendiente, no llamarla suelta');
+  const iPre = cuerpoMain.search(/if\s*\(\s*pendiente\s*\)/);
+  ok(iPre > -1, 'main() tiene que CORTAR con esa precondicion');
+  ok(iPre < iSpawn, 'la precondicion tiene que cortar ANTES del spawn del deploy');
   console.log('autotest OK');
 }
 
@@ -405,6 +492,20 @@ const main = () => {
     // la tarea y no despliega nada.
     const deploy = parsearDespliegue(cuerpo);
     if (deploy) {
+      // Acople: si este pedido declara ir DESPUES de otro destino y ese hermano
+      // sigue esperando su ok, no se despliega nada. Va ANTES del spawn a
+      // proposito — despues del spawn el deploy ya salio y el aviso llega tarde.
+      const pendiente = precondicionPendiente(cuerpo, listaDelTablero());
+      if (pendiente) {
+        console.log(JSON.stringify({
+          publicable: false, desplegando: false, destino: deploy.destino,
+          motivo: pendiente.pedidos === null
+            ? `este deploy va DESPUES de ${pendiente.destino} y no pude consultar el tablero para saber si ya salio: no despliego nada`
+            : `este deploy va DESPUES de ${pendiente.destino}, que todavia espera tu ok (${pendiente.pedidos.join(', ')}): apreta ese primero`,
+          primero: pendiente.pedidos || undefined,
+        }));
+        process.exit(2);
+      }
       if (!RUNNER) throw new Error('falta desplegar-en-segundo-plano.sh (lo despliega sincronizar.sh)');
       if (!existsSync(deploy.script)) throw new Error(`no existe el publicador ${deploy.script}`);
       const seco = process.env.ONIA_DESPLEGAR_DRY === '1';
