@@ -283,6 +283,25 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 da **exit 0** contra el contenedor. No le queda ningún `ok` pendiente a Sergio Urcullo.
 La historia completa queda acá abajo para no perderla.
 
+- [ ] 🔴 **`/health` contesta sobre el ARCHIVO y el lead recibe la fila POR INBOX: el gate de
+      precios puede fallar en verde.** Medido el 2026-09-12 19:50 La Paz. Toda conversación pasa
+      por `ensureKnowledge({ inboxId })` (`run-turn.mjs:147`) y `getKnowledge` devuelve la copia
+      `db` de esa clave apenas exista (`cacheKeyOf` keyea `inbox:<id>`). Pero `/health` llama
+      `knowledgeHealth()` **sin inbox** (`webhook-server.mjs:189`), así que reporta el archivo.
+      La fuente está **encendida**: el proceso vivo declara `ONIA_BOT_KNOWLEDGE_URL` y
+      `BOT_KNOWLEDGE_SECRET`. Hoy `/published?inboxId=N` da **404 en los 4 inboxes (3, 4, 5, 7)**,
+      así que el lead cae al archivo — **el agujero está a UNA fila publicada de distancia**.
+      **Hecho la mitad (commit `30c27165`, sin deploy):** `precios-vivos.mjs` ahora mide las DOS
+      fuentes — deriva los inboxes de Chatwoot (`select id from inboxes`, por eso apareció el 3,
+      que la lista a mano "4 y 5" salteaba), pide cada fila con la URL y el secreto **del proceso
+      vivo**, y la juzga con el mismo `montosVencidos` que el archivo. Tri-estado: 404 = el lead
+      cae al archivo; 500 o timeout = NO MEDIDO, nunca verde.
+      **Falta (necesita deploy del bot):** que `/health` acepte `?inboxId=N` y conteste con
+      `ensureKnowledge({inboxId})` — o sea, con la MISMA resolución que el camino de respuesta.
+      Mientras no esté, el gate compensa desde afuera preguntándole al producto directo.
+      Reproducción: `npm run precios:vivos` (hoy exit 0, imprime la línea «filas publicadas por
+      inbox»).
+
 - [ ] 🟡 **El bot tuvo una ventana sirviendo el M4_BODY SIN precios, y no sé por qué.**
       Medido el 2026-09-12: a las **22:48:35 UTC** la conv 49 preguntó *"Cuanto cuesta el sistema?
       pasame los precios"* y el bot contestó *"el número exacto te lo pasa Sergio en la demo…
@@ -305,11 +324,22 @@ La historia completa queda acá abajo para no perderla.
       el texto sin precios durante ~5 min **después de cada reinicio**, y se cura solo. No se
       anuncia como causa hasta reproducirlo.
 
-      **Reproducción, ~2 min:** reiniciar el webhook y preguntar el precio dentro del primer
-      minuto, mirando `docker exec onia-center wget -qO- http://127.0.0.1:3020/health` — si
-      `knowledge.source` dice `"code"` en esa ventana, la hipótesis queda probada y el arreglo es
-      cargar el archivo en el arranque (hoy `main()` no lo toca). El gate ya sabe verlo: con
-      `source:"code"` `npm run precios:vivos` da **exit 1**.
+      ⚠️ **Esa hipótesis la REFUTA el código, leído el 2026-09-12 19:35 La Paz** — no gastar la
+      vuelta en reproducirla. En caché fría `getKnowledge` **no** espera al TTL: la rama
+      `CACHE.checkedAt === null` hace `readKnowledgeFile(path)` **sincrónico** antes de contestar
+      (`knowledge.mjs:788`). O sea que el primer mensaje después de un reinicio YA lee el archivo,
+      y el TTL de 5 min sólo gobierna las **re**lecturas, que además sirven la copia vieja
+      mientras refrescan. Una ventana de 5 min tras el arranque no puede existir por esta vía.
+
+      **Hipótesis que queda en pie, NO probada:** lo que faltó no fue el lector sino **el
+      archivo**. `webhook-server.sh` hace `rm -rf` del destino y recopia entero cuando cambia el
+      stamp; durante esa ventana `/tmp/onia-bot/knowledge.json` **no existe**, `readKnowledgeFile`
+      vuelve `missing`, y el motor sirve el `M4_BODY` — sin `lastError`, porque un archivo ausente
+      «no es un error que haya que gritar» (`knowledge.mjs:533`). Encaja con que el `mtime` siga
+      diciendo 06:44: `rsync`/`cp -a` **preservan mtime**, así que un archivo recopiado parece
+      intacto. **Lo que la probaría:** una línea por recopia en el log de `webhook-server.sh`, o
+      un `stat` del archivo durante un `knowledge`/deploy. Si es eso, el arreglo es que la recopia
+      sea atómica (escribir al lado y `mv`), no que el motor reintente.
 
 <details><summary>Diagnóstico completo del 2026-09-12 (tablero `t_e45a24ff`, instrumento `97e466fa`)</summary>
 
