@@ -63,6 +63,18 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [ ] 🔴 **Punto nuevo de Sergio Urcullo (12-sep): ¿Onia Platform personalizable POR CLIENTE
+      para empresas grandes?** Textual: *"que se pueda hacer in-house su trabajo y no ellos
+      moldearse al sistema sino el sistema a ellos — analizá"*. Análisis en curso con medición
+      real: qué se moldea HOY (packs por rubro en
+      `onia-platform/lib/platform/vertical-pack.ts`, vocabulario, entitlements por org, límites
+      por plan), qué está hardcodeado (campos y estados fijos), cómo lo venden Odoo/Salesforce
+      (config vs código vs partner) y la trampa de servicios que rompería el techo de horas.
+      Entregable: veredicto en 3 niveles + oferta concreta a empresa grande anclada en Grupo
+      (Bs 2.900 + impl. 3.500) e instancia privada. ES ANÁLISIS: nada se construye ni se
+      promete en venta hasta el veredicto y su OK.
+
+
 - [ ] 🔴 **PORTADA reordenada por veredicto de Sergio Urcullo (11-sep, sobre capturas del
       preview y de producción) — HECHA en `main` (`a847d9aa`), FALTA su OK mirándola y el
       deploy.** Sus palabras: *"esto no vende nada… coloca algo que impacte que se vea más el
