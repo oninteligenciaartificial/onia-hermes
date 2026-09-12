@@ -370,14 +370,18 @@ export default function Portada() {
         <div className={`${s.split} ${s.splitFlip}`}>
           <Reveal>
             <div>
+              {/* Copy FORMAL (Sergio, 12-sep, sobre esta caption: "mejorá la
+                  caption, no hables informalmente"): registro profesional,
+                  mismo voseo de la marca, sin coloquialismos. */}
               <Kicker>Chatbot de WhatsApp</Kicker>
               <h2 id="chatbot" className={s.h2}>
-                El que escribe a las once ya tiene respuesta.
+                Tu WhatsApp responde las 24 horas.
               </h2>
               <p className={s.body}>
-                Contesta al instante con la información real que vos publicaste.
-                No inventa ni cotiza por su cuenta: lo que no sabe te lo pasa
-                con la conversación entera. Se suma a cualquier plan.
+                El asistente contesta al instante con la información que tu
+                negocio publicó. No improvisa precios ni promesas: lo que
+                requiere una decisión te llega con la conversación completa.
+                Se suma a cualquier plan.
               </p>
               <div className={s.actions}>
                 <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
@@ -400,9 +404,9 @@ export default function Portada() {
             cero relojería. */}
         <Reveal delay={0.08} className={s.dia}>
           <p className={s.diaFrase}>
-            Vos atendés <b>{HORAS_VOS} horas</b>. Las otras <b>{HORAS_ONIA}</b>{" "}
-            — la noche, el feriado, el domingo — el que escribe igual recibe
-            respuesta.
+            Tu negocio atiende <b>{HORAS_VOS} horas</b>. Las otras{" "}
+            <b>{HORAS_ONIA}</b>, el asistente responde por vos — feriados y
+            domingos incluidos.
           </p>
           <div
             className={s.diaBarra}
@@ -518,7 +522,7 @@ export default function Portada() {
           <div className={p.centro}>
             <Kicker>Precios claros</Kicker>
             <h2 id="v4-precios" className={s.h2}>
-              Tres pasos. Sin implementación, sin permanencia.
+              Cuatro escalones. Sin implementación, sin permanencia.
             </h2>
             <p className={p.heroLead}>{PRUEBA.copy}</p>
           </div>

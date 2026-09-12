@@ -26,13 +26,15 @@
  * (ROJO DE INSTRUMENTO), nunca en verde.
  *
  *  - montos y ciclos ......... lib/subscription-plans.ts → DEFAULT_PLAN_AMOUNTS
- *    (basic 320/89/3.200 · professional 750/199/7.500 · clinic 1.500/-/15.000 ·
- *    enterprise 2.900/-/29.000; Full y Grupo NO tienen semanal)
- *  - limites y features ...... lib/plan-limits.ts → PLAN_LIMITS
- *    (usuarios 2/5/ilimitado · clientes 300/1.500/ilimitado · emails 200/800/
- *    ilimitado · agentsIncluded desde professional · publicBookingIncluded
- *    desde professional · csvExportEnabled desde basic · reportsEnabled y
- *    recurringInvoicesEnabled desde professional · inventoryIncluded en todos)
+ *    Escalera C (ratificada por Sergio Urcullo 2026-09-12): basic 320/89/3.200 ·
+ *    crece 550/145/5.500 · professional 890/229/8.900 · clinic 1.290/-/12.900 ·
+ *    enterprise 2.900/-/29.000; Full y Grupo NO tienen semanal.
+ *  - limites y features ...... lib/plan-catalogo.ts → PLAN_LIMITS
+ *    (usuarios 2/3/5/ilimitado · clientes 300/800/1.500/ilimitado · emails
+ *    200/400/800/ilimitado · agentsIncluded y publicBookingIncluded desde
+ *    crece · csvExportEnabled desde basic · reportsEnabled y
+ *    recurringInvoicesEnabled desde professional · inventoryIncluded en todos ·
+ *    whatsappIncluded SOLO clinic/enterprise — el chatbot va con Full)
  *  - contabilidad y RRHH ..... lib/plan-limits.ts:416-435 (basico desde Basico,
  *    completa desde Profesional — montan sobre los mismos umbrales de reportes)
  *  - add-ons ................. lib/pricing.ts (agenda publica 150 · usuario
@@ -59,10 +61,19 @@
  * cobro (`gatewayEnabled: false` en los cinco planes).
  */
 
-import { precioAddonChatbot } from "@/content/chatbot-precios";
+import { CHATBOT_PLAN, precioAddonChatbot } from "@/content/chatbot-precios";
+
+/**
+ * El mensual del chatbot para las tarjetas de plan (la cuenta "Pro + add-on
+ * vs Full"). Sale de SU fuente única — nunca tipeado acá.
+ */
+const CHATBOT_MENSUAL = CHATBOT_PLAN.mensual;
 import { precioWebDesde } from "@/content/webs";
 
-export type PlanId = "basico" | "pro" | "full";
+// "crece" entra el 2026-09-12: escalera C ratificada por Sergio Urcullo
+// (320/550/890/1.290, chatbot incluido en Full). Espejo de
+// onia-platform/lib/subscription-plans.ts — el producto es la fuente.
+export type PlanId = "basico" | "crece" | "pro" | "full";
 
 export interface Plan {
   id: PlanId;
@@ -269,6 +280,16 @@ export const USUARIO_EXTRA_ADDON = {
   maxEnBasico: 3,
 } as const;
 
+/**
+ * Escalera C — ratificada por Sergio Urcullo el 2026-09-12 ("la C pero que
+ * tenga restricciones y que tengan que estar pagando si quieren mejorar su
+ * plan... que se noten las limitaciones para que quieran subir"). Cuatro
+ * escalones con saltos chicos (+230/+340/+400), cada tarjeta con sus TOPES a
+ * la vista y las funciones ordenadas por plan; el chatbot va INCLUIDO solo en
+ * Full — Pro + chatbot por separado cuesta más que Full, y esa cuenta se
+ * muestra. Los topes mensuales (recordatorios) se renuevan cada mes y no se
+ * acumulan. Espejo de onia-platform/lib/subscription-plans.ts.
+ */
 export const PLANES: readonly Plan[] = [
   {
     id: "basico",
@@ -280,66 +301,80 @@ export const PLANES: readonly Plan[] = [
     semanal: 89,
     anual: 3200,
     incluye: [
-      `2 usuarios (podés sumar hasta ${USUARIO_EXTRA_ADDON.maxEnBasico} más a Bs ${bs(USUARIO_EXTRA_ADDON.mensualAddon)}/mes cada uno)`,
-      "Hasta 300 fichas de clientes o pacientes cargadas",
-      "200 recordatorios por email al mes",
       `Fichas, caja y cobros en un solo lugar, y agenda ${ALCANCE_CON_AGENDA}`,
       "Inventario con existencias, costo, proveedor y aviso de stock mínimo",
       "Reporte básico y contabilidad básica de compras y ventas",
-      "Lista de empleados",
       "Exportás tus datos en CSV cuando quieras",
+      `Topes: 300 fichas · 2 usuarios (hasta ${USUARIO_EXTRA_ADDON.maxEnBasico} más a Bs ${bs(USUARIO_EXTRA_ADDON.mensualAddon)}/mes) · 200 recordatorios por email/mes`,
     ],
     sinEsto: [
-      "Agentes de IA (vienen desde Pro)",
-      `Reservas online — se agrega como add-on a Bs ${bs(AGENDA_ADDON.mensualAddon)}/mes`,
-      `Reportes completos y facturas recurrentes (${ALCANCE_CLINICO})`,
+      "Agentes de IA (vienen desde Crece)",
+      `Reservas online — como add-on a Bs ${bs(AGENDA_ADDON.mensualAddon)}/mes, o incluidas desde Crece`,
     ],
     cuando: "Negocio de 1 o 2 personas que hoy trabaja con cuaderno o Excel.",
   },
   {
-    id: "pro",
+    id: "crece",
     paso: "02",
-    nombre: "Pro",
+    nombre: "Crece",
     salto: "Recuperar",
     resultado:
-      "No se te escapa un cliente: los agentes te proponen a quién contactar y vos aprobás con un toque.",
-    mensual: 750,
-    semanal: 199,
-    anual: 7500,
+      "Los agentes te devuelven clientes que se estaban yendo: proponen a quién contactar y vos aprobás.",
+    mensual: 550,
+    semanal: 145,
+    anual: 5500,
     incluye: [
       "Todo lo del Básico",
-      "5 usuarios",
-      "Hasta 1.500 fichas de clientes o pacientes",
-      "800 recordatorios por email al mes",
       `Agente Recall: te propone a quién hace rato que no ves (${ALCANCE_CON_FICHA})`,
       "Agente Cobrador: te propone a quién reclamarle la deuda vencida",
       `Reservas online incluidas, ${ALCANCE_CON_AGENDA}: link público para que te pidan cita`,
-      `Reportes completos y facturas recurrentes (${ALCANCE_CLINICO})`,
-      "Contabilidad completa (RCV, balance y export) y planilla del mes",
+      "Topes: 800 fichas · 3 usuarios · 400 recordatorios por email/mes",
     ],
-    sinEsto: ["Nada del Básico se queda afuera: Pro es Básico más lo de arriba"],
-    destacado: true,
+    sinEsto: [
+      `Reportes completos, facturas recurrentes y contabilidad completa (${ALCANCE_CLINICO}) — vienen en Pro`,
+    ],
     cuando: "Ya tenés movimiento y se te escapan clientes por falta de seguimiento.",
   },
   {
-    id: "full",
+    id: "pro",
     paso: "03",
-    nombre: "Full",
-    salto: "Sin techo",
-    resultado: "Los mismos agentes del Pro, pero sin ningún límite para crecer.",
-    mensual: 1500,
-    semanal: null,
-    anual: 15000,
+    nombre: "Pro",
+    salto: "Operar completo",
+    resultado:
+      "El negocio entero en el sistema: reportes, contabilidad completa y planilla, sin planillas aparte.",
+    mensual: 890,
+    semanal: 229,
+    anual: 8900,
     incluye: [
-      "Todo lo del Pro, sin límites",
-      "Usuarios ilimitados",
-      "Fichas de clientes o pacientes ilimitadas",
-      "Recordatorios por email sin tope mensual",
+      "Todo lo del Crece",
+      `Reportes completos y facturas recurrentes (${ALCANCE_CLINICO})`,
+      "Contabilidad completa (RCV, balance y export) y planilla del mes",
+      "Topes: 1.500 fichas · 5 usuarios · 800 recordatorios por email/mes",
     ],
     sinEsto: [
-      "No enciende funciones nuevas sobre el Pro: lo que saca es el techo",
+      `El chatbot de WhatsApp — incluido solo en Full, o aparte a Bs ${bs(CHATBOT_MENSUAL)}/mes`,
     ],
-    cuando: "Equipo grande o base de clientes que ya no entra en 1.500 fichas.",
+    destacado: true,
+    cuando: "El negocio ya factura todos los días y querés los números al día.",
+  },
+  {
+    id: "full",
+    paso: "04",
+    nombre: "Full",
+    salto: "Todo incluido",
+    resultado:
+      "Sin techos y con el chatbot de WhatsApp incluido: la cuenta gana comparada con Pro más el add-on.",
+    mensual: 1290,
+    semanal: null,
+    anual: 12900,
+    incluye: [
+      `Chatbot de WhatsApp incluido (aparte vale Bs ${bs(CHATBOT_MENSUAL)}/mes)`,
+      "Todo lo del Pro, sin límites",
+      "Fichas y usuarios sin tope; recordatorios por email sin tope mensual",
+      "Te lo entregamos configurado para tu rubro",
+    ],
+    sinEsto: [],
+    cuando: "Equipo grande, base de clientes que no entra en 1.500 fichas, o WhatsApp con movimiento.",
   },
 ] as const;
 
@@ -384,6 +419,7 @@ const PRUEBA_PLAN = "Pro";
  */
 const NOTA_PRUEBA_POR_PLAN: Record<string, string> = {
   basico: `${PRUEBA_DIAS} días de prueba sin tarjeta, con el plan ${PRUEBA_PLAN} completo. Al pasar a Básico quedás con lo de esta tarjeta.`,
+  crece: `${PRUEBA_DIAS} días de prueba sin tarjeta, con el plan ${PRUEBA_PLAN} completo. Al pasar a Crece quedás con lo de esta tarjeta.`,
   pro: `${PRUEBA_DIAS} días de prueba sin tarjeta, corriendo con este mismo plan.`,
   full: `${PRUEBA_DIAS} días de prueba sin tarjeta, con el plan ${PRUEBA_PLAN}. Al pasar a Full se van los topes.`,
 };

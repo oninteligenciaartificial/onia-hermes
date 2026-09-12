@@ -952,9 +952,14 @@
   font-weight: 650;
 }
 
+/* v2 (12-sep, "no me gusta el diseño, cambialo"): UNA pista continua en vez
+   de dos píldoras sueltas — las 24 horas son un solo día, y el corte de las
+   18:00 es un corte ADENTRO de la pista, no un hueco entre dos formas. */
 .diaBarra {
   display: flex;
-  gap: 4px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
 }
 
 .diaVos,
@@ -964,8 +969,7 @@
   align-items: center;
   gap: 0.7em;
   min-width: 0;
-  padding: 0.8em 1.1em;
-  border-radius: 999px;
+  padding: 0.85em 1.2em;
   font-size: 0.95em;
   font-weight: 550;
   white-space: nowrap;
@@ -1018,13 +1022,20 @@
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 0.9em;
+  gap: 0.8em;
 }
 
+/* Tarjetas y no texto flotante (12-sep): la misma carta que los add-ons —
+   borde, radio, hora arriba — para que las tres se lean como piezas y no
+   como párrafos sueltos debajo de la barra. */
 .diaMomentos li {
   font-size: 0.95em;
   line-height: 1.45;
   text-wrap: pretty;
+  padding: 1em 1.2em;
+  border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+  border-radius: 14px;
+  background: var(--bg);
 }
 
 .diaMomentos b {
@@ -1148,9 +1159,17 @@
   margin-top: 3em;
   align-items: stretch;
 }
-@media (min-width: 900px) {
+/* 2×2 en tablet y 4 en fila en ancho: la escalera C (12-sep) tiene CUATRO
+   escalones — con 3 columnas la cuarta tarjeta (Full, justo la que carga la
+   cuenta del chatbot incluido) caía sola a una segunda fila. */
+@media (min-width: 700px) {
   .plans {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1100px) {
+  .plans {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 .plan {

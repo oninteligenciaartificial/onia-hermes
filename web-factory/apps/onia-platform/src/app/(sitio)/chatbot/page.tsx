@@ -95,14 +95,15 @@ export default function Chatbot() {
           <Reveal>
             <div>
               <Kicker>Chatbot de WhatsApp</Kicker>
+              {/* Copy formal (Sergio, 12-sep): la misma promesa que la portada,
+                  sin coloquialismos. */}
               <h1 className={s.display}>
-                El que escribe a las once ya tiene <em>respuesta</em>.
+                Tu WhatsApp responde las <em>24 horas</em>.
               </h1>
               <p className={s.lead}>
-                Contesta al instante a cualquier hora —también el domingo y el
-                feriado— con la información real que vos publicaste. Y cuando
-                el caso necesita una persona, te lo pasa con la conversación
-                entera.
+                El asistente contesta al instante, también domingos y feriados,
+                con la información que tu negocio publicó. Cuando el caso
+                requiere una persona, te llega con la conversación completa.
               </p>
               <div className={s.actions}>
                 <Btn href={WA_URL_LANDING} external>
