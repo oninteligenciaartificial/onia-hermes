@@ -193,7 +193,18 @@ export function buildQueCorre({ buildIdVivo, candidatos }) {
  */
 export function clasificarPedido({ id, shas, publicado }) {
   if (!shas || shas.length === 0) {
-    return { id, estado: 'NO_MEDIDO', motivo: 'el pedido no nombra un solo sha', sinPublicar: [], indeterminados: [] };
+    // `causa` y no sólo `motivo`: el reporte tiene que poder separar este caso —el pedido
+    // está mal escrito, y se arregla con un comentario— de los otros NO_MEDIDO, que son
+    // AMBIENTALES (no pude fetchear, no pude derivar el build vivo). Distinguirlos comparando
+    // la prosa del motivo ata el control a una cadena que cualquiera reescribe sin saberlo.
+    return {
+      id,
+      estado: 'NO_MEDIDO',
+      causa: 'SIN_DECLARAR',
+      motivo: 'el pedido no nombra un solo sha',
+      sinPublicar: [],
+      indeterminados: [],
+    };
   }
   const sinPublicar = [];
   const indeterminados = [];
@@ -205,6 +216,23 @@ export function clasificarPedido({ id, shas, publicado }) {
   }
   const estado = sinPublicar.length === 0 && indeterminados.length === 0 ? 'ENTREGADO' : 'VIGENTE';
   return { id, estado, sinPublicar, indeterminados };
+}
+
+/**
+ * PURA: los pedidos que NO SE PUEDEN JUZGAR porque no declaran ni un sha con su marca.
+ *
+ * Medido el 2026-09-12 sobre los pedidos vivos: `t_bd62e5a0` (plataforma) y `t_fd5b30c4`
+ * (landing) nombraban su sha en PROSA —«1) 4bff903 - la escalera de precios NUEVA»— y salían
+ * `NO MEDIDO` con el gate en código 0. O sea que el modo de falla que este archivo existe
+ * para cazar —pedirle un `ok` a Sergio Urcullo por trabajo ya publicado— era inalcanzable en
+ * la mitad de los pedidos vivos, en silencio.
+ *
+ * ⚠️ La cura NO es aflojar `shasPrometidos` para que adivine el sha de la prosa: deducir el
+ * sujeto del texto libre es lo que rompió a este gate el 2026-09-06 y está medido arriba. La
+ * cura es que un pedido inmedible sea un ROJO accionable — declararlo cuesta un comentario.
+ */
+export function inmediblesSinDeclarar({ resultados }) {
+  return (resultados || []).filter((r) => r && r.causa === 'SIN_DECLARAR').map((r) => r.id);
 }
 
 /**
@@ -854,6 +882,13 @@ async function medirEnVivo() {
   const vencidos = [];
   const cortos = [];
   const noMedidos = [];
+  // Y la TERCERA especie, que hasta el 2026-09-12 vivía escondida adentro de `noMedidos`: el
+  // pedido cuyo destino SÍ tiene instrumento pero que no declara ni un sha con su marca. No es
+  // transitorio como un `noMedidos` ni un agujero del gate como un `sinCubrir`: es un pedido
+  // MAL ESCRITO, que se cura con un comentario y que mientras tanto vuelve inalcanzable al
+  // único modo de falla que este archivo existe para cazar. Impreso como no-medido se lee
+  // como ruido de ambiente, y por eso sobrevivió con el gate en verde. Ver `inmediblesSinDeclarar`.
+  const inmedibles = [];
   // `noMedidos` y `sinCubrir` NO son lo mismo, y mezclarlos fue el bug: el primero es
   // transitorio (el SSH no contestó, el sha no resuelve) y se cura solo en la vuelta
   // siguiente; el segundo es un AGUJERO del gate, que no se cura nunca y hay que escribirle
@@ -880,6 +915,7 @@ async function medirEnVivo() {
         publicado: (s) => publicadoPorFecha({ epochCommit: epochCommitHermes(s), epochBuild: buildLanding }),
       });
       if (r.estado === 'ENTREGADO') entregados.push(r);
+      else if (r.causa === 'SIN_DECLARAR') inmedibles.push({ id: p.id, destino: 'landing' });
       else if (r.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (landing): ${r.motivo}`);
       else {
         console.log(`OK ${p.id} (landing): sigue VIGENTE — ${r.sinPublicar.length} sin publicar, ${r.indeterminados.length} sin resolver`);
@@ -933,6 +969,7 @@ async function medirEnVivo() {
     }
     const r = clasificarPedido({ id: p.id, shas: shasPrometidos(p.texto), publicado: esPublicado });
     if (r.estado === 'ENTREGADO') entregados.push(r);
+    else if (r.causa === 'SIN_DECLARAR') inmedibles.push({ id: p.id, destino: 'plataforma' });
     else if (r.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (plataforma): ${r.motivo}`);
     else {
       console.log(`OK ${p.id} (plataforma): sigue VIGENTE — ${r.sinPublicar.length} sin publicar, ${r.indeterminados.length} sin resolver`);
@@ -1034,6 +1071,21 @@ async function medirEnVivo() {
       console.log('  de lo que su ok publica. Comenta el recuento DERIVADO de `publicar.sh --dry-run`;');
       console.log('  si ya se comento y el cuerpo sigue quedando corto, rehace el pedido y ARCHIVA');
       console.log('  el viejo en la misma vuelta (el `edit` del tablero no cambia el cuerpo).');
+    }
+    return 1;
+  }
+
+  // Va ÚLTIMO en la cadena a propósito: los rojos de arriba son de pedidos que SÍ se pudieron
+  // juzgar, y son más caros (uno le está pidiendo un `ok` por trabajo hecho ahora mismo). Este
+  // dice que a otro pedido ni siquiera se le pudo preguntar — importa, pero después.
+  if (inmedibles.length > 0) {
+    for (const m of inmedibles) {
+      console.log(`\nROJO ${m.id}: no declara ni un sha, asi que NO SE PUEDE JUZGAR (destino ${m.destino}).`);
+      console.log('  Su destino tiene instrumento; lo que falta es la marca. Mientras siga asi, si');
+      console.log('  produccion publica sola este pedido va a seguir pidiendo un ok por trabajo');
+      console.log('  hecho y nada se va a poner rojo — que es el unico caso que este gate caza.');
+      console.log(`  Se cura con un comentario, sin rehacer la tarea ni tocar el cuerpo que el lee:`);
+      console.log(`    /root/bin/onia-tablero.sh comment ${m.id} "DEPLOY PEDIDO <sha> — <que arregla>"`);
     }
     return 1;
   }

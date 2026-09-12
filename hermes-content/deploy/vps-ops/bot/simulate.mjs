@@ -83,7 +83,7 @@ const SCRIPTS = {
     turns: [
       { text: "hola, cuanto cuesta?" },
       { text: "tengo un restaurante, somos 8, cochabamba" },
-      { text: "y el precio final cual es? vi los 750 bs" },
+      { text: "y el precio final cual es? vi los 890 bs" },
       { text: "B" },
     ],
   },
