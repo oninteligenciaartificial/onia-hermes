@@ -37,14 +37,13 @@
  *
  * Sale 0 si no hay ningun enlace roto, 1 si hay al menos uno.
  */
-import { readdirSync, writeFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 
 const AQUI = dirname(fileURLToPath(import.meta.url));
 const APP = dirname(AQUI);
-const SRC = join(APP, 'src');
 
 const arg = (n, d) => {
   const m = process.argv.find((a) => a.startsWith(`--${n}=`));
@@ -53,32 +52,13 @@ const arg = (n, d) => {
 const BASE = arg('base', 'https://onia.com.bo').replace(/\/$/, '');
 
 /**
- * Rutas servidas, derivadas del disco. `(sitio)` y demas grupos de Next no son
- * segmentos de URL: se borran. `page.tsx` -> la carpeta que lo contiene.
- */
-function rutasDelDisco(dir = join(SRC, 'app'), prefijo = '') {
-  const salida = [];
-  for (const e of readdirSync(dir, { withFileTypes: true })) {
-    if (!e.isDirectory()) {
-      if (/^page\.tsx?$/.test(e.name)) salida.push(prefijo || '/');
-      continue;
-    }
-    // Rutas dinamicas ([slug]) no se pueden visitar sin un valor: se saltan.
-    if (e.name.startsWith('[') || e.name.startsWith('_') || e.name === 'api') continue;
-    const grupo = e.name.startsWith('(') && e.name.endsWith(')');
-    salida.push(...rutasDelDisco(join(dir, e.name), grupo ? prefijo : `${prefijo}/${e.name}`));
-  }
-  return [...new Set(salida)];
-}
-
-/**
  * Que rutas se barren y cuales no vive en `rutas-de-venta.mjs`, con su motivo y su
  * test. Hasta el 2026-09-05 estaba aca y eximia `/v1/**` entero por llevar noindex
  * y estar en el Disallow de robots.txt — un corte que este mismo carril ya habia
  * medido FALSO el dia anterior: robots manda sobre rastreadores, no apaga la
  * pantalla, y esas ocho paginas responden 200 y se comparten por WhatsApp.
  */
-import { FUERA_DE_VENTA } from './rutas-de-venta.mjs';
+import { superficiesDeVenta } from './rutas-de-venta.mjs';
 
 const pedir = (url, seguir = false) => {
   // `curl` y no `fetch`: hace falta el codigo y el destino del redirect SIN seguirlo,
@@ -132,10 +112,10 @@ const html = (url) => {
   }
 };
 
-const rutas = rutasDelDisco().filter((r) => !FUERA_DE_VENTA(r)).sort();
+const rutas = superficiesDeVenta();
 if (rutas.length < 10) {
   console.error(`RESCATE: solo ${rutas.length} rutas descubiertas. El descubrimiento se rompio;`);
-  console.error('un gate que mira 0 sujetos pasa en verde sobre nada. Reviso rutasDelDisco().');
+  console.error('un gate que mira 0 sujetos pasa en verde sobre nada. Reviso superficiesDeVenta().');
   process.exit(2);
 }
 

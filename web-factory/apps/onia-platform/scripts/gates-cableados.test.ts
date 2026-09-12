@@ -45,12 +45,15 @@ const AQUI = dirname(fileURLToPath(import.meta.url));
 const APP = dirname(AQUI);
 
 /**
- * Lo que NO necesita alias propio, con su motivo. Vacia a proposito: hoy los 13
- * tienen nombre. Se conserva el mecanismo —y su test— para que el dia que haga
- * falta eximir uno, eximirlo sea una linea VISIBLE en el diff y no un borrado
- * silencioso del sujeto.
+ * Lo que NO necesita alias propio, con su motivo. Se exime de a UNO y por nombre:
+ * eximir por categoria ("los modulos puros") tapa un arbol entero la proxima vez, y
+ * el gate sale verde igual.
  */
-const EXENTOS: Record<string, string> = {};
+const EXENTOS: Record<string, string> = {
+  "montos-en-pantalla.mjs":
+    "modulo puro sin medicion propia: lo importa precios-vivos.mjs y lo cubre montos-en-pantalla.test.ts. " +
+    "Correrlo solo no mide nada — un alias suyo seria decorativo.",
+};
 
 /**
  * El corazon, puro: dado el listado de `.mjs` y el texto del `package.json`,

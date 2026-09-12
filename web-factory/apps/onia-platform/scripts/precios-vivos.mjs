@@ -50,6 +50,8 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { superficiesDeVenta } from './rutas-de-venta.mjs';
+import { montosVisibles } from './montos-en-pantalla.mjs';
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = join(RAIZ, 'src');
@@ -197,14 +199,8 @@ async function abrirNavegador() {
 
 /* ── El recorrido ─────────────────────────────────────────────────────────────────── */
 
-const RE_MONTO = /Bs\.?\s?(\d{1,3}(?:\.\d{3})*|\d+)/g;
-
-/** Todo monto pintado en la pantalla, como numero. */
-function montosVisibles(texto) {
-  const out = new Set();
-  for (const m of texto.matchAll(RE_MONTO)) out.add(Number(m[1].replace(/\./g, '')));
-  return out;
-}
+/** Solo para saber si una pantalla del cuestionario ya pinta plata. */
+const RE_MONTO = /(?:Bs\.?\s*\d|\d\s*Bs\b)/;
 
 /**
  * Responde el cuestionario eligiendo, en cada paso, la opcion `cual` (0 = la primera,
@@ -251,37 +247,128 @@ async function recorrer(nav, cual, etiqueta) {
   mkdirSync(OUT, { recursive: true });
   await pag.screenshot({ path: join(OUT, `wizard-${etiqueta}.png`) });
   await pag.close();
-  return { llego, texto, montos: montosVisibles(texto), rotos };
+  return { llego, texto, ...montosVisibles(texto), rotos };
+}
+
+/**
+ * Abre una pantalla del sitio y devuelve los montos que quedaron PINTADOS.
+ *
+ * Con navegador y no con `curl`, aunque estas paginas se sirven enteras desde el
+ * servidor: React parte el texto con `<!-- -->`, el dato y su unidad viven en spans
+ * distintos, y los acentos salen escapados en el build. `innerText` resuelve los
+ * tres de una; el HTML crudo obliga a normalizar a mano y ahi es donde un monto se
+ * escapa. Medido en esta misma familia de gates.
+ */
+async function mirarPantalla(nav, ruta) {
+  const pag = await nav.newPage({ viewport: { width: 1280, height: 1000 } });
+  const rotos = [];
+  pag.on('response', (r) => {
+    if (r.status() >= 400) rotos.push(`${r.status()} ${r.url()}`);
+  });
+  try {
+    // `load` y no `networkidle`: la portada trae el asistente y realtime, y con
+    // networkidle el recorrido se cuelga hasta el timeout sin ver nunca la pantalla.
+    await pag.goto(`${BASE}${ruta}`, { waitUntil: 'load', timeout: 45000 });
+    await pag.waitForTimeout(600);
+    const texto = await pag.locator('body').innerText();
+    return { ruta, ok: true, ...montosVisibles(texto), rotos };
+  } catch (e) {
+    return { ruta, ok: false, todos: new Set(), periodicos: new Set(), rotos, error: String(e).split('\n')[0] };
+  } finally {
+    await pag.close();
+  }
 }
 
 /* ── Veredicto ────────────────────────────────────────────────────────────────────── */
+
+/**
+ * Las pantallas que se barren salen del DISCO, no de una lista.
+ *
+ * Hasta el 2026-09-12 este script miraba UNA sola superficie —el resultado del
+ * cuestionario de `/v1/empezar`— y ese dia `onia.com.bo/precios` servia Bs 750 y
+ * Bs 1.500 (la escalera retirada esa misma jornada) y la portada Bs 15.000, sin que
+ * este gate los viera nunca. El rojo que daba, por otro monto, se leia como el
+ * diagnostico completo del sitio y no lo era.
+ */
+const SUPERFICIES = superficiesDeVenta();
+
+if (process.argv.includes('--solo-listar')) {
+  // Sin red y sin navegador: es lo que permite a un test preguntarle al medidor QUE
+  // va a mirar. Un gate que no puede enumerar sus sujetos no se puede auditar.
+  console.log(`superficies que se barren (${SUPERFICIES.length}), mas el recorrido de /v1/empezar:`);
+  for (const r of SUPERFICIES) console.log(r);
+  process.exit(0);
+}
 
 const { set: declarados, detalle } = montosDeclarados();
 console.log(`fuentes leidas → ${detalle.join(' · ')} · ${declarados.size} montos declarados`);
 console.log(`base: ${BASE}`);
 
+if (SUPERFICIES.length === 0) {
+  console.error('ROJO (instrumento): cero superficies derivadas del disco. Reviso superficiesDeVenta().');
+  process.exit(1);
+}
+
 const nav = await abrirNavegador();
 const recorridos = [];
+const pantallas = [];
 try {
   recorridos.push(await recorrer(nav, 0, 'primera-opcion'));
   recorridos.push(await recorrer(nav, -1, 'ultima-opcion'));
+  for (const ruta of SUPERFICIES) pantallas.push(await mirarPantalla(nav, ruta));
 } finally {
   await nav.close();
 }
 
 const vistos = new Set();
+/**
+ * Los montos que el sitio presenta como PRECIO —con su periodicidad al lado—, que son
+ * los unicos que el objetivo del carril nombra. Un monto citado en prosa (un ahorro,
+ * el costo de un tercero) es cierto y no sale de `pricing.ts`: tratarlo como precio
+ * convertia el rojo en ruido. Ver `montos-en-pantalla.mjs`.
+ */
+const vistosPeriodicos = new Set();
+/** En que pantalla se vio cada monto: sin esto, un rojo no dice donde arreglar. */
+const dondeSeVio = new Map();
 let alguienLlego = false;
 const rotos = [];
+const anotar = (m, donde) => {
+  vistos.add(m);
+  dondeSeVio.set(m, [...(dondeSeVio.get(m) ?? []), donde]);
+};
 for (const r of recorridos) {
   if (r.llego) alguienLlego = true;
-  r.montos.forEach((m) => vistos.add(m));
+  r.todos.forEach((m) => anotar(m, '/v1/empezar (resultado)'));
+  // El resultado del cuestionario es una cotizacion entera: ahi TODO monto es un
+  // precio nuestro, lleve o no la periodicidad pegada al numero.
+  if (r.llego) r.todos.forEach((m) => vistosPeriodicos.add(m));
   rotos.push(...r.rotos);
 }
+for (const p of pantallas) {
+  p.todos.forEach((m) => anotar(m, p.ruta));
+  p.periodicos.forEach((m) => vistosPeriodicos.add(m));
+  rotos.push(...p.rotos);
+}
 
-const sobran = [...vistos].filter((m) => !declarados.has(m)).sort((a, b) => a - b);
+const noAbrieron = pantallas.filter((p) => !p.ok);
+console.log(`pantallas barridas: ${pantallas.length - noAbrieron.length}/${pantallas.length}`);
+// Una pantalla que no abre no aporta montos, y "no vi precios fuera de fuente" sobre
+// una pantalla que nunca se vio es el falso verde de esta familia.
+if (noAbrieron.length) {
+  console.error(
+    `\nROJO (instrumento): ${noAbrieron.length} pantalla(s) no abrieron y quedaron sin medir:\n  ` +
+      noAbrieron.map((p) => `${p.ruta} → ${p.error}`).join('\n  '),
+  );
+  process.exit(1);
+}
+
+const sobran = [...vistosPeriodicos].filter((m) => !declarados.has(m)).sort((a, b) => a - b);
+/** Montos que sobran pero NO se presentan como precio: se nombran, no tumban el gate. */
+const citados = [...vistos].filter((m) => !declarados.has(m) && !vistosPeriodicos.has(m)).sort((a, b) => a - b);
 
 console.log(`recorridos que llegaron al resultado: ${recorridos.filter((r) => r.llego).length}/${recorridos.length}`);
 console.log(`montos vistos: ${[...vistos].sort((a, b) => a - b).join(', ') || '(ninguno)'}`);
+console.log(`de ellos, presentados como precio: ${[...vistosPeriodicos].sort((a, b) => a - b).join(', ') || '(ninguno)'}`);
 if (rotos.length) console.log(`respuestas >=400 durante el recorrido: ${[...new Set(rotos)].slice(0, 5).join(' · ')}`);
 
 // Instrumento roto ANTES que veredicto: un recorrido que no llego no puede decir nada
@@ -295,8 +382,18 @@ if (!alguienLlego || vistos.size < MINIMO_MONTOS) {
   process.exit(1);
 }
 
+for (const m of citados) {
+  console.log(
+    `AVISO  Bs ${m.toLocaleString('es-BO')} en ${[...new Set(dondeSeVio.get(m) ?? [])].join(', ')} ` +
+      `— citado en prosa, sin periodicidad: no se juzga contra pricing.ts.`,
+  );
+}
+
 if (sobran.length === 0) {
-  console.log(`\nVERDE: los ${vistos.size} montos que ve un lead salen de la fuente.`);
+  console.log(
+    `\nVERDE: los ${vistosPeriodicos.size} precios que ve un lead salen de la fuente ` +
+      `(${vistos.size} montos en total, ${citados.length} citados en prosa).`,
+  );
   process.exit(0);
 }
 
@@ -305,14 +402,15 @@ let soloFaltaDesplegar = true;
 for (const monto of sobran) {
   const donde = apareceEnElCodigo(monto);
   if (donde.length) soloFaltaDesplegar = false;
-  informe.push({ monto, enElCodigo: donde });
+  const pantallas = [...new Set(dondeSeVio.get(monto) ?? [])];
+  informe.push({ monto, pantallas, enElCodigo: donde });
   console.error(
-    `\nROJO: Bs ${monto.toLocaleString('es-BO')} pintado en el resultado y NO declarado por ninguna fuente.` +
+    `\nROJO: Bs ${monto.toLocaleString('es-BO')} pintado en ${pantallas.join(', ') || '(?)'} y NO declarado por ninguna fuente.` +
       (donde.length
         ? `\n  Escrito a mano en: ${donde.join(', ')} → el defecto es del CODIGO, arreglarlo aca.`
         : `\n  No esta en el codigo de esta rama → produccion corre un build viejo. Falta DESPLEGAR.`),
   );
 }
 
-writeFileSync(join(OUT, 'informe.json'), JSON.stringify({ base: BASE, vistos: [...vistos], sobran: informe }, null, 2));
+writeFileSync(join(OUT, 'informe.json'), JSON.stringify({ base: BASE, vistos: [...vistos], precios: [...vistosPeriodicos], citados, sobran: informe }, null, 2));
 process.exit(soloFaltaDesplegar ? 3 : 1);
