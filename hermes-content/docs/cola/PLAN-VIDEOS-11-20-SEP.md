@@ -30,6 +30,11 @@
    **empuja a UN recurso de la web**, cerrando con pedido de comentario O invitación a la
    comunidad (alternar). **Al feed va SIEMPRE uno serio de IA** (el "normal"). Los trial
    v2 son variados: **Bolivia · IA · negocio**, no todo IA.
+8. **Los de IA hablan ESPECÍFICO** (Sergio Urcullo, 11-sep): se nombra la herramienta y
+   el término — **Claude, Claude Code, loop, agente, skill, hook, subagente** — nada de
+   "la IA" genérica. "Loop" es vocabulario propio de él (técnicamente un cron): se usa
+   presentándolo como suyo — *"un loop, así le digo yo a una tarea por horario"* — para
+   ser específico sin mentirle al que después googlea.
 
 ## Los 4 carruseles (reemplazan al b-roll ese día)
 
