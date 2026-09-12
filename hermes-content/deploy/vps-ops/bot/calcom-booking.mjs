@@ -138,6 +138,48 @@ export function buildBookingNotes(qualification = {}) {
 }
 
 /**
+ * El cierre honesto que se le pega al "Listo, agendado" que el motor ya redacto, cuando la
+ * reserva NO salio. `horario_tomado` (409) es el caso de carrera: alguien gano el horario entre
+ * que se ofrecio y que el prospecto contesto.
+ *
+ * Vive aca, y no en quien lo usa, porque lo pegan TRES caminos distintos (el vivo, el seco de
+ * `runTurn` y `simulate.mjs`). Tener dos copias del texto es literalmente como nacio el bug que
+ * lo trajo: el simulador no agregaba nada y prometia mas que el producto.
+ */
+export function cierreDeReservaFallida(reason) {
+  return reason === "horario_tomado"
+    ? "\n\n_(Ojo: justo se me ocupó ese horario. Sergio te escribe ahora para acomodarlo.)_"
+    : "\n\n_(Estoy confirmando ese horario con Sergio; si hubiera un cruce te aviso enseguida.)_";
+}
+
+/**
+ * QUE le agrega al texto un camino que NO reserva, y por que.
+ *
+ * La comparten los dos consumidores del modo seco, que son caminos distintos del mismo
+ * producto: `runTurn` con `dryRun`, y `simulate.mjs`, que ni siquiera pasa por `runTurn` (llama
+ * a `step()` directo). Si cada uno decide por su cuenta cuando va el cierre, divergen — que es
+ * exactamente lo que se midio el 2026-09-12: el simulador imprimia "Listo, agendado" pelado
+ * mientras los dos mensajes que el bot MANDO de verdad (convs 11 y 49 de Chatwoot) llevaban la
+ * salvedad. El instrumento con el que el carril mide "simulador 3/3" cada vuelta era ciego a la
+ * regresion que mas le importa.
+ *
+ * Tri-estado a proposito: `sin_config` se DERIVA del entorno sin tocar la red, asi que ahi el
+ * desenlace se sabe con certeza (y hoy es el 100% del trafico: no hay Cal.com en el VPS); con
+ * Cal.com configurado NO se sabe, y eso se reporta como ignorancia en vez de inventar un final.
+ *
+ * @returns {{texto: string, motivo: "sin_config"|"depende_de_la_reserva"|null}}
+ */
+export function cierreSinReservar({ stageBefore, stageAfter, scheduledAt, calendarEventId, env, duracionMinutos } = {}) {
+  const recienAgendada = stageBefore !== "demo_agendada" && stageAfter === "demo_agendada";
+  if (!recienAgendada || !scheduledAt || calendarEventId) return { texto: "", motivo: null };
+  const config = getBookingConfig(env || process.env, duracionMinutos);
+  if (!config.baseUrl || !config.eventTypeId) {
+    return { texto: cierreDeReservaFallida("sin_config"), motivo: "sin_config" };
+  }
+  return { texto: "", motivo: "depende_de_la_reserva" };
+}
+
+/**
  * Crea la reserva.
  *
  * @returns {Promise<{ok: boolean, uid: string|null, reason: string, warnings: string[]}>}
