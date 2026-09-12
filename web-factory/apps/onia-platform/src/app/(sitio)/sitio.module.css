@@ -695,26 +695,95 @@
 /* ---- el remate ---- */
 /* Va con peso y a tamaño pleno a propósito: es lo SEGUNDO que se lee del
    panel, no el pie de foto. En gris chico el gráfico se quedaba sin frase. */
-/* KPIs del panel del hero: números primero (la crítica vs Lety, 11-sep). */
-.panelKpis {
+/* ---- la conversación del chatbot (bloque protagonista, Sergio 11-sep) ----
+   Dibujada con tokens, nunca una captura. Los pares claro/oscuro salen de los
+   tokens que ya cambian por tema (--bg, --bg-deep, --accent-soft): la pieza
+   no define un color por tema en ningún lado. */
+.waCard {
+  width: min(29rem, 100%);
+  margin-inline: auto;
+  border-radius: 1.15rem;
+  background: var(--bg);
+  border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+  box-shadow: 0 28px 60px -34px color-mix(in srgb, var(--tinta) 45%, transparent);
+  overflow: hidden;
+}
+
+.waHead {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem 1.2rem;
-  margin: 0.15rem 0 0.65rem;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.75rem 1rem;
+  background: var(--verde-900);
+  color: #f4faf7;
 }
 
-.panelKpi {
+.waDot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--verde-300);
+  flex-shrink: 0;
+}
+
+.waQuien {
+  font-size: 0.85rem;
+  font-weight: 650;
+}
+
+.waHead .waHora {
+  margin-left: auto;
+}
+
+.waHora {
+  font-size: 0.75rem;
+  opacity: 0.65;
+  font-variant-numeric: tabular-nums;
+}
+
+.waHilo {
+  display: grid;
+  gap: 0.6rem;
+  padding: 1.1rem 1rem 0.9rem;
+}
+
+.waMsg {
+  justify-self: start;
+  max-width: 86%;
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.9rem 0.9rem 0.9rem 0.25rem;
+  background: var(--bg-deep);
+}
+
+.waMsgOnia {
+  justify-self: end;
+  border-radius: 0.9rem 0.9rem 0.25rem 0.9rem;
+  background: var(--accent-soft);
+}
+
+.waTexto {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.waMeta {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.7rem;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.waPie {
+  margin: 0;
+  padding: 0.75rem 1rem 0.95rem;
+  border-top: 1px solid color-mix(in srgb, var(--ink) 8%, transparent);
   font-size: 0.82rem;
-  color: var(--ink-soft, #4e5651);
-  white-space: nowrap;
-}
-
-.panelKpi b {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: var(--ink, #141a17);
-  margin-right: 0.28rem;
-  letter-spacing: -0.01em;
+  font-weight: 600;
+  color: var(--accent-ink);
 }
 
 .panelFoot {

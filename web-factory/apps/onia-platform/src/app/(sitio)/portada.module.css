@@ -199,43 +199,9 @@
   line-height: 1.55;
 }
 
-/* ── FILA DE HECHOS (reemplaza «Our Journey in Numbers») ────────────────────
-   La referencia pone metricas de traccion. Con cero clientes pagando eso seria
-   inventado, asi que van CAPACIDADES verificables: lo que el sistema hace hoy,
-   cada una comprobable abriendo el producto. */
-
-.hechos {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
-  gap: 1px;
-  background: var(--line-soft);
-  border: 1px solid var(--line-soft);
-  border-radius: 18px;
-  overflow: hidden;
-  margin-top: 2rem;
-}
-
-.hecho {
-  background: var(--surface);
-  padding: 1.5rem 1.2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.hechoQue {
-  font-size: 1.02rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  margin: 0;
-}
-
-.hechoComo {
-  font-size: 0.9rem;
-  color: var(--ink-soft);
-  line-height: 1.5;
-  margin: 0;
-}
+/* La FILA DE HECHOS que vivía acá se retiró el 2026-09-11 — Sergio, textual:
+   "quita esas cajitas que son solo texto que no enseñan nada". Su lugar en la
+   página lo ocupa el bloque protagonista del chatbot (conversacion.tsx). */
 
 /* ── LA NOCHE ───────────────────────────────────────────────────────────────
    Pedido de Sergio Urcullo, 2026-09-01 y repetido el 09-07: «algo mas visual
@@ -518,23 +484,21 @@
   color: color-mix(in srgb, #eafaf1 82%, transparent);
 }
 
-/* Entrada del hero SIN JS y SIN fade. Dos lecciones medidas el 11-sep:
-   1) El <Reveal> de motion arranca en opacity 0 y el titular esperaba la
-      hidratación (788 ms de render delay sobre el LCP).
-   2) La primera versión de esta animación hacía fade (from opacity 0) y el
-      render delay VOLVIÓ (~744 ms): para el navegador un texto en opacity 0
-      no está pintado — el fade de entrada en el fold SIEMPRE cuesta LCP,
-      venga de JS o de CSS. Por eso acá solo hay deslizamiento: el texto es
-      visible desde el primer frame y la entrada se percibe igual. */
+/* Entrada del hero SIN JS. El <Reveal> de motion arranca en opacity 0 y el
+   titular esperaba la hidratación (788 ms de render delay medidos sobre el
+   LCP). Misma curva y distancia que el sistema de motion (riseDistance 24,
+   spring gentle aproximado), pero pintada por el navegador con el HTML. */
 .heroEntrada {
   animation: heroAparece 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @keyframes heroAparece {
   from {
+    opacity: 0;
     transform: translateY(24px);
   }
   to {
+    opacity: 1;
     transform: none;
   }
 }
@@ -543,104 +507,4 @@
   .heroEntrada {
     animation: none;
   }
-}
-
-
-/* ── HERO v4 (11-sep): split + rotor + sellos ──────────────────────────── */
-
-/* Móvil: apilado y centrado como siempre. Desktop: copy izquierda / panel
-   derecha (patrón de la referencia), para que la evidencia entre en el fold. */
-.heroSplit {
-  display: grid;
-  gap: 1.5rem;
-  justify-items: center;
-  text-align: center;
-}
-
-.heroCopy {
-  display: grid;
-  gap: 1.1rem;
-  justify-items: center;
-}
-
-@media (min-width: 64rem) {
-  .heroSplit {
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-    align-items: center;
-    gap: 3rem;
-    text-align: left;
-  }
-
-  .heroCopy {
-    justify-items: start;
-  }
-
-  .heroSplit .heroCtas {
-    justify-content: flex-start;
-  }
-
-  .heroSplit .heroTitulo {
-    font-size: clamp(2.6rem, 1rem + 3.6vw, 4.2rem);
-    max-width: 14ch;
-  }
-
-  .heroSplit .escena {
-    margin-top: 0;
-  }
-}
-
-/* El rubro que rota. CSS puro: la primera palabra llega pintada del servidor
-   (el LCP no espera nada) y las demás entran por keyframes. Cada palabra dura
-   3 s; el grid apila las cuatro en la misma celda. Reduced motion: se queda
-   la primera. */
-.rotor {
-  display: inline-grid;
-  justify-items: start;
-  text-align: left;
-  color: var(--verde-300);
-}
-
-.rotor > span {
-  grid-area: 1 / 1;
-  opacity: 0;
-  animation: rotorPalabra 12s infinite;
-}
-
-/* Delay NEGATIVO: la primera palabra arranca ya dentro de su ventana visible —
-   sin esto el titular pintaba 0,5 s con un hueco donde va el rubro. */
-.rotor > span:nth-child(1) { animation-delay: -0.48s; }
-.rotor > span:nth-child(2) { animation-delay: 3s; }
-.rotor > span:nth-child(3) { animation-delay: 6s; }
-.rotor > span:nth-child(4) { animation-delay: 9s; }
-
-@keyframes rotorPalabra {
-  0% { opacity: 0; transform: translateY(0.35em); }
-  4%, 23% { opacity: 1; transform: none; }
-  27%, 100% { opacity: 0; transform: translateY(-0.3em); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .rotor > span { animation: none; }
-  .rotor > span:first-child { opacity: 1; }
-}
-
-/* Sellos de confianza honesta: integraciones reales, sin testimonios. */
-.heroSellos {
-  font-size: 0.8rem;
-  letter-spacing: 0.02em;
-  color: color-mix(in srgb, #eafaf1 62%, transparent);
-  margin: 0.35rem 0 0;
-}
-
-/* El CTA primario del hero se desempata del fondo: pill CLARA sobre el verde
-   oscuro (tres verdes idénticos competían en el mismo viewport — crítica
-   11-sep). Solo dentro del hero verde; en el resto del sitio el botón sigue
-   siendo verde sobre claro. */
-.heroVerde .heroCtas a:first-child {
-  background: #f6f8f7;
-  color: #013925;
-}
-
-.heroVerde .heroCtas a:first-child:hover {
-  background: #ffffff;
 }

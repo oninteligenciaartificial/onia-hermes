@@ -109,11 +109,6 @@ const SIN_DIRECCION_DECLARADAS: { literal: string; porque: string }[] = [
     porque:
       "/nosotros lo lista como capacidad contable boliviana que el sistema maneja para el negocio.",
   },
-  {
-    literal: "WhatsApp Business · Cobros con QR",
-    porque:
-      "Fila de sellos del hero (hero v4): enumera lo que el sistema le RESUELVE al negocio — él cobra con QR a SUS clientes. No es un camino para pagarle a Onia.",
-  },
 ];
 
 /**

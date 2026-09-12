@@ -16,6 +16,7 @@ import { EMPEZAR_URL } from "./nav";
 import { ALTA_VERBO_VOS, CTA_ALTA, ctaAltaPlan } from "./alta";
 import { FAQ } from "./faq-datos";
 import { Block, Shape, Btn, Kicker, JsonLd, PanelDibujado } from "./ui";
+import { ConversacionNocturna } from "./conversacion";
 import { Switcher } from "./switcher";
 import { NocheFoto } from "./noche";
 import { PreciosConCiclo } from "./precios-toggle";
@@ -23,10 +24,13 @@ import s from "./sitio.module.css";
 import p from "./portada.module.css";
 
 /**
- * Portada del sitio (v3) — el ORDEN es el argumento (como Fanvue):
- *   hero (promesa de resultado) → banda de prueba verificable → hecho fuerte →
- *   manifiesto → agentes → chatbot → SWITCHER de rubros (estrella) →
- *   precios → FAQ → cierre.
+ * Portada del sitio (v3) — el ORDEN es el argumento. Reordenada el 2026-09-11
+ * por veredicto de Sergio ("el tema de los chatbots es principal... quita esas
+ * cajitas que son solo texto"):
+ *   hero (puro texto, el que él aprobó) → CHATBOT protagonista (conversación
+ *   dibujada + el día) → la noche → capacidades → agentes → SWITCHER de
+ *   rubros → precios → add-ons → FAQ → cierre.
+ * Las «cajitas» de HECHOS (solo texto) se retiraron ese día.
  *
  * Ninguna pantalla de esta página es una captura del producto: las de agentes,
  * chatbot y el conmutador de rubros son PANELES DIBUJADOS (<Shape> en ui.tsx),
@@ -305,26 +309,6 @@ function Lane({
   );
 }
 
-/** Lo que el sistema hace hoy. Cada línea se puede comprobar entrando. */
-const HECHOS = [
-  {
-    que: `Fichas, caja y cobros, y agenda ${ALCANCE_CON_AGENDA}`,
-    como: "En una sola pantalla, no en cuatro programas que no se hablan.",
-  },
-  {
-    que: "Inventario que avisa",
-    como: "Existencias, costo y proveedor, con aviso cuando algo baja del mínimo.",
-  },
-  {
-    que: "Contesta tu WhatsApp",
-    como: CHATBOT_PLAN.resuelve,
-  },
-  {
-    que: "Tus datos son tuyos",
-    como: "Los exportás en CSV cuando quieras. Sin permanencia y sin pedir permiso.",
-  },
-] as const;
-
 /** Las tres capacidades con peso de producto, cada una con su panel dibujado. */
 const CAPACIDADES = [
   {
@@ -367,46 +351,27 @@ export default function Portada() {
             entrada acá es CSS puro (misma curva y distancia que el sistema de
             motion), así el fold pinta con el HTML. El resto del sitio sigue con
             Reveal: debajo del pliegue la hidratación no le cuesta al LCP. */}
-        {/* HERO v4 (11-sep, crítica medida vs Lety/Dapta): el titular nombra al
-            COMPRADOR (el rubro, rotando con CSS puro — la primera palabra viene
-            del servidor, así el LCP no espera nada), el eyebrow deja de duplicar
-            el claim del h1 y nombra los rubros, y el layout parte en dos en
-            desktop para que el panel CON NÚMEROS entre completo en el fold —
-            antes toda la evidencia quedaba debajo del pliegue. */}
         <div className={p.heroEntrada}>
-          <div className={p.heroSplit}>
-            <div className={p.heroCopy}>
-              <Kicker>Para clínicas, tiendas, ferreterías y 4 rubros más</Kicker>
-              <h1 className={p.heroTitulo}>
-                Toda tu{" "}
-                <span className={p.rotor} aria-label="clínica, tienda, ferretería o empresa">
-                  <span aria-hidden="true">clínica</span>
-                  <span aria-hidden="true">tienda</span>
-                  <span aria-hidden="true">ferretería</span>
-                  <span aria-hidden="true">empresa</span>
-                </span>{" "}
-                en <em>una</em> pantalla.
-              </h1>
-              <p className={p.heroLead}>
-                Clientes, caja, inventario y cobros — con agentes que trabajan de
-                noche y te dejan las decisiones a vos.
-              </p>
-              <div className={p.heroCtas}>
-                <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
-                <Btn href={WA_URL_LANDING} variant="line" external>
-                  Preguntar por WhatsApp
-                </Btn>
-              </div>
-              <p className={p.heroNota}>
-                {PRUEBA.dias} días de prueba con el plan {PRUEBA.planQueCorre}, sin tarjeta.
-                Después, desde Bs {bs(plan("basico").mensual)} al mes.
-              </p>
-              {/* Confianza HONESTA sin clientes: lo que el producto ya integra de
-                  verdad. Nada de testimonios ni logos — cero clientes pagando. */}
-              <p className={p.heroSellos}>
-                WhatsApp Business · Cobros con QR · Facturación SIAT · Hecho en Bolivia
-              </p>
+          <div className={p.centro}>
+            <Kicker>Un solo sistema para todo el negocio</Kicker>
+            <h1 className={p.heroTitulo}>
+              Todo el negocio, en <em>una</em> pantalla.
+            </h1>
+            <p className={p.heroLead}>
+              Onia es el sistema con el que llevás tu negocio: clientes, caja,
+              inventario y cobros, con agentes que trabajan de noche y te dejan las
+              decisiones a vos.
+            </p>
+            <div className={p.heroCtas}>
+              <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
+              <Btn href={WA_URL_LANDING} variant="line" external>
+                Preguntar por WhatsApp
+              </Btn>
             </div>
+            <p className={p.heroNota}>
+              {PRUEBA.dias} días de prueba con el plan {PRUEBA.planQueCorre}, sin tarjeta.
+              Después, desde Bs {bs(plan("basico").mensual)} al mes.
+            </p>
 
             {/* La escena que la referencia arma con mockups de su app. Acá va
                 el panel DIBUJADO — nunca una captura del sistema. */}
@@ -428,27 +393,114 @@ export default function Portada() {
         </div>
       </Block>
 
-      {/* 2 · LO QUE HACE (reemplaza «Our Journey in Numbers») ─────────
-          Fincash llena esta franja con métricas de tracción. Nosotros no
-          tenemos clientes pagando, así que no hay número honesto que poner:
-          va lo que el sistema hace, que se comprueba entrando. */}
-      <Block surface="paperDim" labelledBy="v4-hace">
-        <Reveal>
-          <div className={p.centro}>
-            <Kicker>Lo que hace, hoy</Kicker>
-            <h2 id="v4-hace" className={s.h2}>
-              No es una promesa: es lo que vas a encontrar adentro.
-            </h2>
-          </div>
-        </Reveal>
-        <Reveal delay={0.06}>
-          <div className={p.hechos}>
-            {HECHOS.map((h) => (
-              <div className={p.hecho} key={h.que}>
-                <p className={p.hechoQue}>{h.que}</p>
-                <p className={p.hechoComo}>{h.como}</p>
+      {/* 2 · CHATBOT — PROTAGONISTA ─────────────────────────────────
+          Sergio, 2026-09-11, sobre la portada entera: "el tema de los chatbots
+          es principal, que sea más protagonista, está al final eso" + "quita
+          esas cajitas que son solo texto que no enseñan nada". Las cajitas
+          (HECHOS) se fueron; el chatbot sube de la posición 6 a acá, pegado al
+          hero, y su pieza visual deja de ser un Shape chico: es la
+          conversación dibujada contestando de noche (conversacion.tsx). El
+          argumento de las horas (EL DÍA) viaja con él. */}
+      <Block surface="paper" labelledBy="chatbot">
+        <div className={`${s.split} ${s.splitFlip}`}>
+          <Reveal>
+            <div>
+              <Kicker>Chatbot de WhatsApp</Kicker>
+              <h2 id="chatbot" className={s.h2}>
+                El que escribe a las once ya tiene respuesta.
+              </h2>
+              <p className={s.body}>
+                Contesta al instante con la información real que vos publicaste.
+                No inventa ni cotiza por su cuenta: lo que no sabe te lo pasa
+                con la conversación entera. Se suma a cualquier plan.
+              </p>
+              <div className={s.actions}>
+                <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
+                <a className={s.link} href="/chatbot">
+                  Ver el chatbot y sus requisitos →
+                </a>
               </div>
+            </div>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <ConversacionNocturna />
+          </Reveal>
+        </div>
+
+        {/* EL DÍA — las 9 horas que atendés vos y las 15 que no atiende nadie. */}
+        <Reveal delay={0.08} className={s.day}>
+          <div className={s.ruler} aria-hidden="true">
+            {Array.from({ length: HORAS_VOS + HORAS_ONIA }, (_, i) => (
+              <span
+                key={i}
+                className={i < HORAS_VOS ? s.tick : `${s.tick} ${s.tickOn}`}
+              />
             ))}
+          </div>
+
+          <div
+            className={`${s.slab} ${s.slabVos}`}
+            style={{ "--span": HORAS_VOS } as CSSProperties}
+          >
+            {/* El rótulo y la banda van EN UN GRUPO: así las lanes arrancan a
+                la misma altura a los dos lados del corte de las 18:00. */}
+            <div>
+              <p className={s.hrs}>
+                <span>09:00 → 18:00</span>
+              </p>
+              <div className={s.band}>
+                <Lane quien="Vos" que="Atendés" marcas={HORAS_VOS} tono="vos" />
+                <Lane
+                  quien="Onia"
+                  que="Con vos"
+                  marcas={HORAS_VOS}
+                  tono="onia"
+                />
+              </div>
+            </div>
+
+            <div>
+              <p className={s.amount}>{HORAS_VOS} horas</p>
+              <p className={s.who}>Abrís vos.</p>
+            </div>
+          </div>
+
+          <div
+            className={`${s.slab} ${s.slabOnia}`}
+            style={{ "--span": HORAS_ONIA } as CSSProperties}
+          >
+            <div>
+              <p className={s.hrs}>
+                <span>18:00 → 09:00</span>
+                <span>Todos los días · también domingo</span>
+              </p>
+              {/* Las dos lanes JUNTAS: "Vos dormís / Onia por vos". */}
+              <div className={s.band}>
+                <Lane
+                  quien="Vos"
+                  que="Dormís"
+                  marcas={HORAS_ONIA}
+                  tono="duerme"
+                />
+                <Lane
+                  quien="Onia"
+                  que="Por vos"
+                  marcas={HORAS_ONIA}
+                  tono="onia"
+                />
+              </div>
+            </div>
+
+            <div>
+              <p className={s.amount}>{HORAS_ONIA} horas</p>
+              <ul className={s.moments}>
+                {MOMENTOS.map((momento) => (
+                  <li key={momento.hora}>
+                    <b>{momento.hora}</b> <span>{momento.que}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </Reveal>
       </Block>
@@ -510,120 +562,7 @@ export default function Portada() {
         </div>
       </Block>
 
-      {/* 6 · CHATBOT — bloque de resultado → apartado */}
-      <Block surface="paper" labelledBy="chatbot">
-        <div className={`${s.split} ${s.splitFlip}`}>
-          <Reveal>
-            <div>
-              <Kicker>Chatbot de WhatsApp</Kicker>
-              <h2 id="chatbot" className={s.h2}>
-                El que escribe a las once ya tiene respuesta.
-              </h2>
-              <p className={s.body}>
-                Contesta al instante con la información real que vos publicaste.
-                No inventa ni cotiza por su cuenta: lo que no sabe te lo pasa
-                con la conversación entera. Se suma a cualquier plan.
-              </p>
-              <div className={s.actions}>
-                <a className={s.link} href="/chatbot">
-                  Ver el chatbot y sus requisitos →
-                </a>
-              </div>
-            </div>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <Shape tone="green" panel="chat" />
-          </Reveal>
-        </div>
-
-        {/* EL DÍA — las 9 horas que atendés vos y las 15 que no atiende nadie.
-
-            Vivía en el hero y era la pieza más grande de la primera pantalla:
-            con eso la portada vendía el add-on. Acá abajo hace lo que le toca —
-            es el argumento del asistente, al lado del asistente. */}
-        <Reveal delay={0.08} className={s.day}>
-          <div className={s.ruler} aria-hidden="true">
-            {Array.from({ length: HORAS_VOS + HORAS_ONIA }, (_, i) => (
-              <span
-                key={i}
-                className={i < HORAS_VOS ? s.tick : `${s.tick} ${s.tickOn}`}
-              />
-            ))}
-          </div>
-
-          <div
-            className={`${s.slab} ${s.slabVos}`}
-            style={{ "--span": HORAS_VOS } as CSSProperties}
-          >
-            {/* El rótulo y la banda van EN UN GRUPO, igual que en el bloque
-                verde: así las lanes arrancan a la misma altura a los dos lados
-                del corte de las 18:00 y se leen como UNA banda que cruza la
-                pieza. Sueltas, con space-between repartiendo tres hijos, la
-                del negro caía 95px más abajo y el contraste había que
-                buscarlo. */}
-            <div>
-              <p className={s.hrs}>
-                <span>09:00 → 18:00</span>
-              </p>
-              <div className={s.band}>
-                <Lane quien="Vos" que="Atendés" marcas={HORAS_VOS} tono="vos" />
-                <Lane
-                  quien="Onia"
-                  que="Con vos"
-                  marcas={HORAS_VOS}
-                  tono="onia"
-                />
-              </div>
-            </div>
-
-            <div>
-              <p className={s.amount}>{HORAS_VOS} horas</p>
-              <p className={s.who}>Abrís vos.</p>
-            </div>
-          </div>
-
-          <div
-            className={`${s.slab} ${s.slabOnia}`}
-            style={{ "--span": HORAS_ONIA } as CSSProperties}
-          >
-            <div>
-              <p className={s.hrs}>
-                <span>18:00 → 09:00</span>
-                <span>Todos los días · también domingo</span>
-              </p>
-              {/* Las dos lanes JUNTAS: la misma forma, aplastada arriba y de
-                  pie abajo. Leído de corrido: "Vos dormís / Onia por vos". */}
-              <div className={s.band}>
-                <Lane
-                  quien="Vos"
-                  que="Dormís"
-                  marcas={HORAS_ONIA}
-                  tono="duerme"
-                />
-                <Lane
-                  quien="Onia"
-                  que="Por vos"
-                  marcas={HORAS_ONIA}
-                  tono="onia"
-                />
-              </div>
-            </div>
-
-            <div>
-              <p className={s.amount}>{HORAS_ONIA} horas</p>
-              <ul className={s.moments}>
-                {MOMENTOS.map((momento) => (
-                  <li key={momento.hora}>
-                    <b>{momento.hora}</b> <span>{momento.que}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </Reveal>
-      </Block>
-
-      {/* 7 · RUBROS ───────────────────────────────────────────────────
+      {/* 6 · RUBROS ───────────────────────────────────────────────────
           Esto NO está en la referencia y es lo que más nos separa de ella:
           el mismo núcleo cambia de vocabulario según el rubro. Se queda. */}
       <Block surface="paperDim" labelledBy="v4-rubros">
@@ -643,7 +582,7 @@ export default function Portada() {
         <Switcher />
       </Block>
 
-      {/* 8 · PRECIOS EN LA LANDING ────────────────────────────────────
+      {/* 7 · PRECIOS EN LA LANDING ────────────────────────────────────
           Lo mejor que tiene la referencia y que nosotros mandábamos a otra
           página: el precio en el camino de lectura, con el ahorro anual a la
           vista y un plan destacado. */}
@@ -664,7 +603,7 @@ export default function Portada() {
         </Reveal>
       </Block>
 
-      {/* 9 · LO QUE SE SUMA AL PLAN — add-ons con peso de PRODUCTO.
+      {/* 8 · LO QUE SE SUMA AL PLAN — add-ons con peso de PRODUCTO.
 
           Dos pedidos de Sergio, en orden. 2026-08-22: "solo veo 3 precios, hay
           que mostrar todo lo que ofrecemos" — por eso la sección existe.
@@ -773,7 +712,7 @@ export default function Portada() {
         </Reveal>
       </Block>
 
-      {/* 10 · FAQ ──────────────────────────────────────────────────────
+      {/* 9 · FAQ ──────────────────────────────────────────────────────
           Las mismas ocho preguntas de la home, leidas de `faq-datos.ts`: son
           las que frenan la compra y cada respuesta cita su fuente en el repo.
           No se reescriben acá — una segunda lista con cifras se desincroniza
@@ -799,7 +738,7 @@ export default function Portada() {
         </Reveal>
       </Block>
 
-      {/* 11 · CIERRE ───────────────────────────────────────────────────
+      {/* 10 · CIERRE ───────────────────────────────────────────────────
           El mismo CTA del hero, tercera y última vez. */}
       <Block surface="ink" labelledBy="v4-cierre">
         <Reveal>
