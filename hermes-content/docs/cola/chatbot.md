@@ -2564,6 +2564,41 @@ archivos.**
 
 ## Cerrado — no rehacer
 
+- [x] **La sonda tapaba a los cuatro leads reales que este carril existe para que se vean.**
+      Cerrado el 2026-09-12, `scripts/sonda_widget.mjs` (rama del carril — falta que el
+      integrador lo mergee; **no necesita deploy**: la sonda corre desde el repo).
+      No estaba en la cola: salió del chequeo de "hecho" del arranque, que es de donde tiene
+      que salir. Medido en el inbox 4 —el de los leads REALES— antes del arreglo:
+
+      ```
+      49 | 2026-09-12 | Sonda QA carril chatbot   ← nosotros, status=0 (abierta)
+      48 | 2026-09-02 | cold-pond-731             ← desconocido de verdad
+      40 | 2026-08-29 | lively-night-474
+      36 | 2026-08-27 | icy-lake-546
+      34 | 2026-08-24 | delicate-glitter-674
+      ```
+
+      La sonda corre cada 30 min y Chatwoot ordena por actividad: su conversación encabezaba
+      la bandeja **para siempre**. El objetivo del carril es *"que un desconocido escriba y esa
+      conversación SE VEA en la bandeja"* — el instrumento estaba tapando justo lo que mide.
+      **Había limpieza, pero sólo al ARRANCAR y sólo a medias**: `dejarComoExtrano` resolvía por
+      Rails únicamente si `necesitaDesarme` daba true, o sea si el bot había quedado en
+      `handoff_humano`. En la vuelta normal el bot queda en `nuevo`, eso da false, y no se
+      resolvía nada. Preparar el sujeto no es lo mismo que devolverlo — y la entrada que dejé en
+      la memoria compartida el 11-sep decía la regla correcta con el código a medio arreglar.
+      Arreglo: `cerrarSujeto()` + `correrConCierre()`, con el cierre en un `finally` para que
+      corra con veredicto 0, con veredicto 1 (bot mudo) y también si la medición TIRA — en los
+      tres casos la sonda ya reabrió su conversación. Las dos deps van **inyectadas y sin
+      default**: el default de una dep inyectable es el efecto real, y un caso distraído habría
+      corrido el `rails runner` contra la Chatwoot viva pasando en verde.
+      Seis casos nuevos en el self-check (`npm run test:sonda-widget`, que está en la cadena).
+      De paso, el runner del self-check no hacía `await`: un caso `async` devolvía una promesa
+      que su `try` no podía atrapar e imprimía `ok` con el assert perdido — tres de los casos
+      nuevos habrían sido decorativos.
+      Validado por mutación: sacar el `cerrar()` del `finally` → 2 FALLA; que el cierre no
+      resuelva → 4 FALLA. **Efecto en vivo**: la 49 pasó a `status=1` y la bandeja abierta del
+      inbox 4 quedó con los cuatro desconocidos reales y nada nuestro encima.
+
 - [x] **La cuenta vencida seguía cancelando citas por WhatsApp.** Cerrado el 2026-09-11,
       `6aba5bc` (rama del carril — **falta que el integrador lo mergee y falta desplegar**).
       No estaba en la cola: salió de auditar la puerta pública que es de este carril.
