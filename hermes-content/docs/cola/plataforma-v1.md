@@ -146,19 +146,57 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       hubo una propuesta que aprobar. Probarlo de punta a punta exige sembrar una cita vieja en
       una org de QA y mirar el despacho — ítem propio, no una línea de éste.
 
-- [ ] 🔴 **Probar aprobar→enviar de punta a punta, con un caso real.** Es la mitad del pedido
-      de Sergio Urcullo del 11-sep que quedó sin cumplir: el circuito está construido entero y
-      **nunca se ejecutó** (0 aprobaciones en producción desde que existe). Sembrar en una org
-      **zz-qa** una cita completada hace ≥180 días sin cita futura (el trial de esa org hay que
-      extenderlo primero o el runtime sale `agents_runtime_disabled` sin hacer una sola query),
-      correr `/root/bin/run-onia-agents-cron.sh`, aprobar la propuesta en `/pending` eligiendo
-      **«preparar link»** —WhatsApp no está configurado para esas orgs, así que el envío real
-      fallaría por credencial, que es el camino honesto— y **mirar** que el despacho quede
-      asentado con su `waLink` y la acción pase a `executed`. El botón vive en
-      `onia-platform/app/(dashboard)/pending/pending-client.tsx` y el envío en
-      `onia-platform/lib/onia-core/dispatch/dispatcher.ts`. Borrar el dato sembrado por id
-      EXACTO al terminar (el prefijo `zz-qa-` lo usan DOS carriles) y devolver el `trialEnd`
-      anotado. **HECHO =** la captura del despacho + la fila de `onia_core_dispatches`.
+- [x] ✅ **EJECUTADO EN PRODUCCIÓN el 2026-09-12 04:15-04:17 UTC: aprobar→enviar funciona de
+      punta a punta. Es la PRIMERA aprobación de la historia del producto.** Era la mitad del
+      pedido de Sergio Urcullo del 11-sep que quedaba sin cumplir: el circuito estaba construido
+      entero y **nunca se había ejecutado** (0 aprobaciones desde que existe).
+
+      **Estado de partida, contado, no heredado:** `onia_agents_actions` 0 · `onia_core_approval_requests` 0
+      · `onia_core_dispatches` 0 · 4 agentes · 22 corridas.
+
+      **Lo que se hizo, y por qué NO en una org `zz-qa` como decía este ítem.** Crear una org de
+      QA funcional exige pasar por el alta real (usuario de Supabase Auth + perfil + onboarding),
+      porque sin perfil no hay magic link y sin onboarding completo la app redirige a `/onboarding`
+      y **ninguna pantalla se puede mirar**. Eso es media vuelta para poder apretar UN botón. Se
+      sembró en `clinica-sergio-p2ljs` (dental, `professional` vigente, onboarding hecho) sólo
+      **dos filas**, selladas por corrida: paciente `zzqa20260912pac1` y cita `zzqa20260912cit1`
+      COMPLETADA hace 200 días. Todo borrado por id EXACTO al terminar.
+
+      🔴 **La trampa que casi invalida la prueba, y que este ítem no preveía: la CADENCIA.** El
+      cron dispara `0 11 * * *` y `shouldRunAgent` exige 1440 min contra el `startedAt` anterior;
+      la última corrida era de las 11:00 del 11-sep, así que a las 04:15 faltaban ~2 h 40 y el
+      agente contestaba `not_due` — no hay parámetro para forzar (`app/api/cron/onia-agents/route.ts`
+      no acepta ninguno). Se movió el `startedAt` de la corrida `cmtwuh6a5007801rwcgx3q7lo`, **anotado
+      antes de tocarlo** (`2026-09-11 11:00:04.202+00`) y devuelto al cerrar. Es la misma clase que
+      arregló `ea80ada` un rato antes, vista desde el otro lado: mientras ese arreglo no esté
+      desplegado, **producción sigue con la regla estricta**.
+
+      **Las dos corridas, y las dos importan:**
+
+      | | teléfono | resultado |
+      |---|---|---|
+      | 1.ª | `+59100000000` | **rechazado**: `numeroParaWhatsapp` exige móvil boliviano (8 dígitos que empiezan en 6 o 7). Despacho `failed`, la pantalla dijo *"Aprobado, pero el envío NO salió… Reintentalo abajo, en «Envíos fallidos»"* y ofreció **Reintentar** con el texto a la vista |
+      | 2.ª | `70000000` | **`sent`** con `waLink` `https://wa.me/59170000000?text=…`, `entregaManual: true`, `pendienteDeEnvioHumano: true`, `providerMessageId` NULL |
+
+      El camino de fallo **no era un accidente de la prueba: es la mitad que casi nadie mira**, y
+      salió honesta — no fingió entrega, nombró la causa exacta con el valor recibido, y dejó el
+      reintento a mano. Se probó sin querer y por eso vale.
+
+      **HECHO, mirado renderizado y contado en la base:** acción `cmtxvii5t002701rwd4xhey4y` →
+      `executed` (`executedAt` 04:17:06), aprobación → `approved`, despacho
+      `cmtxvis9y002a01rw3zom8z9j` → `sent`. La pantalla dice *"Mensaje listo para … El sistema NO
+      lo envió: abrí el link y envialo desde TU WhatsApp"* con **Abrir WhatsApp con el mensaje** y
+      **Copiar link**, y la cola de aprobaciones queda vacía. Captura:
+      `hermes-content/docs/historial/2026-09-12-aprobar-enviar-punta-a-punta.png`.
+
+      ⚠️ **El botón NO se llama «preparar link»** —como decía este ítem— sino **«Enviar yo mismo
+      por WhatsApp»** (`app/(dashboard)/pending/pending-client.tsx:263`). Un texto de botón citado
+      de memoria en una cola manda a buscar un ancla que no existe.
+
+      **Limpieza verificada, no declarada:** `onia_agents_actions` 0 · `onia_core_approval_requests` 0
+      · `onia_core_dispatches` 0 · paciente 0 · cita 0 · corridas **22** (las mismas que al arrancar:
+      se borraron las 3 que generó esta prueba) · 4 agentes intactos · `startedAt` devuelto a
+      `2026-09-11 11:00:04.202+00`.
 
 - [ ] 🔴 **Dos propuestas de diseño para el dashboard del producto** (Sergio Urcullo, 11-sep:
       *"ese color que hay ahorita no es nada intuitivo y no hay botones que resalten, que se
