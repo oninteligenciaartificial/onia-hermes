@@ -126,7 +126,7 @@ export default function Precios() {
         <Reveal>
           <Kicker>Precios claros</Kicker>
           <h1 className={s.display}>
-            Tres pasos. Sin implementación, sin <em>permanencia</em>.
+            Cuatro escalones. Sin implementación, sin <em>permanencia</em>.
           </h1>
           <p className={s.lead}>
             {PRUEBA.copy}

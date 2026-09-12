@@ -35,7 +35,8 @@ y nosotros tenemos skills reales corriendo: ventaja injusta.
 |---|---|
 | mié 02 → mar 08 | ✅ **serie D0-D6 completa**, un drop por día — cumplida |
 | mié 09 → vie 12 | **puente**: sin pieza nueva; a lo sumo recordatorio de lo que más reaccionó |
-| ~~sáb 13~~ **jue 10** | ✅ **el carrusel «Mi stack» YA ENVIADO** por Sergio Urcullo el 10-sep (se adelantó al plan del sábado). El sáb 13 queda libre; opcional un recordatorio corto "el lunes arranca" |
+| ~~sáb 13~~ **jue 10** | ✅ **el carrusel «Mi stack» YA ENVIADO** por Sergio Urcullo el 10-sep (se adelantó al plan del sábado) |
+| **dom 13, 19:00** | 🟢 **drop del beneficio nuevo**: los 15 minutos 1-a-1 con el link EXCLUSIVO `cal.com/sergiourcullo/15min` (oculto de la página pública; sólo vive acá) + recordatorio de que el lunes arranca la semana. Texto listo: `cola/drops/2026-09-13.md` |
 | lun 14 → sáb 19 | **semana Mi stack**: 1 drop por día con su archivo — ya escritos en `cola/drops/` |
 | **dom 20, 19:00** | cierre: los **5 archivos juntos** → link `/stack/archivos` (sólo acá) + qué viene |
 | lun 21 | en Instagram sale la promesa «comentá STACK» — **la comunidad ya lo tuvo todo antes**: ésa es la ventaja visible de estar adentro |

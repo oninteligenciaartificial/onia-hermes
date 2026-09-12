@@ -695,26 +695,95 @@
 /* ---- el remate ---- */
 /* Va con peso y a tamaño pleno a propósito: es lo SEGUNDO que se lee del
    panel, no el pie de foto. En gris chico el gráfico se quedaba sin frase. */
-/* KPIs del panel del hero: números primero (la crítica vs Lety, 11-sep). */
-.panelKpis {
+/* ---- la conversación del chatbot (bloque protagonista, Sergio 11-sep) ----
+   Dibujada con tokens, nunca una captura. Los pares claro/oscuro salen de los
+   tokens que ya cambian por tema (--bg, --bg-deep, --accent-soft): la pieza
+   no define un color por tema en ningún lado. */
+.waCard {
+  width: min(29rem, 100%);
+  margin-inline: auto;
+  border-radius: 1.15rem;
+  background: var(--bg);
+  border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+  box-shadow: 0 28px 60px -34px color-mix(in srgb, var(--tinta) 45%, transparent);
+  overflow: hidden;
+}
+
+.waHead {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem 1.2rem;
-  margin: 0.15rem 0 0.65rem;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.75rem 1rem;
+  background: var(--verde-900);
+  color: #f4faf7;
 }
 
-.panelKpi {
+.waDot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--verde-300);
+  flex-shrink: 0;
+}
+
+.waQuien {
+  font-size: 0.85rem;
+  font-weight: 650;
+}
+
+.waHead .waHora {
+  margin-left: auto;
+}
+
+.waHora {
+  font-size: 0.75rem;
+  opacity: 0.65;
+  font-variant-numeric: tabular-nums;
+}
+
+.waHilo {
+  display: grid;
+  gap: 0.6rem;
+  padding: 1.1rem 1rem 0.9rem;
+}
+
+.waMsg {
+  justify-self: start;
+  max-width: 86%;
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.9rem 0.9rem 0.9rem 0.25rem;
+  background: var(--bg-deep);
+}
+
+.waMsgOnia {
+  justify-self: end;
+  border-radius: 0.9rem 0.9rem 0.25rem 0.9rem;
+  background: var(--accent-soft);
+}
+
+.waTexto {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.waMeta {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.7rem;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.waPie {
+  margin: 0;
+  padding: 0.75rem 1rem 0.95rem;
+  border-top: 1px solid color-mix(in srgb, var(--ink) 8%, transparent);
   font-size: 0.82rem;
-  color: var(--ink-soft, #4e5651);
-  white-space: nowrap;
-}
-
-.panelKpi b {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: var(--ink, #141a17);
-  margin-right: 0.28rem;
-  letter-spacing: -0.01em;
+  font-weight: 600;
+  color: var(--accent-ink);
 }
 
 .panelFoot {
@@ -855,129 +924,142 @@
 }
 
 /* ---------------------------------------------------------------------- */
-/* EL DÍA — UNA sola rejilla de 24                                          */
+/* EL DÍA — la línea del día (v2, 11-sep)                                   */
 /*                                                                         */
-/* La primera fila son las 24 marcas de hora; la segunda, los dos bloques   */
-/* de color plano, que abarcan 9 y 15 columnas de ESA MISMA rejilla. El     */
-/* corte de las 18:00 cae exacto en los dos porque es la misma línea, no    */
-/* dos que coinciden. El 9 y el 15 los pone el TSX (HORAS_VOS/HORAS_ONIA)   */
-/* en `--span`: la proporción sale de un solo lugar.                        */
+/* Sergio, sobre los slabs negro/verde con cuadraditos, textual: "esto no   */
+/* me gusta para nada... mirá cómo están hechas las webs de las             */
+/* competencias, mejoranos". Ahora: una frase, UNA barra con las 24 horas   */
+/* repartidas (el 9 y el 15 los pone el TSX vía --span, un solo lugar) y    */
+/* los tres momentos en columnas. Base clara, cero sombras (lenguaje del    */
+/* 1-sep), tipografía de marca — nada de relojería dibujada.                */
 /* ---------------------------------------------------------------------- */
-.day {
+.dia {
   margin-top: 3.4em;
-  /* se escapa por la derecha: el único gesto de profundidad de la pieza —
-     nunca una sombra. Lo recorta el `overflow-x: clip` de .page. */
-  margin-right: calc(0px - var(--bleed));
   display: grid;
-  grid-template-columns: repeat(24, minmax(0, 1fr));
-  gap: 0.34em 0.22em;
-  align-items: stretch;
-}
-/* `display: contents` deja las marcas como hijas directas de la rejilla
-   (alineación estructural) sin perder el aria-hidden del envoltorio. */
-.ruler {
-  display: contents;
-}
-.tick {
-  height: 1.15em;
-  border-radius: calc(var(--r-block) * 0.28);
-  background: var(--ink-block);
-}
-.tickOn {
-  background: var(--signal);
+  gap: 1.5em;
 }
 
-.slab {
-  grid-column: span var(--span);
-  border-radius: var(--r-block);
-  padding: 1.4em 1.5em 1.3em;
-  min-height: 9.5em;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.slabVos {
-  background: var(--ink-block);
-  color: #edf1ef; /* 16,66:1 */
-}
-.slabOnia {
-  background: var(--signal);
-  color: var(--tinta); /* 9,43:1 — jamás blanco sobre verde */
-}
-
-.hrs {
-  font-family: var(--font-mono), monospace;
-  font-size: 0.75em;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+.diaFrase {
   margin: 0;
+  font-size: clamp(1.05rem, 1rem + 0.35vw, 1.25rem);
+  line-height: 1.5;
+  color: var(--ink-soft);
+  max-width: 44em;
+}
+
+.diaFrase b {
+  color: var(--ink);
+  font-weight: 650;
+}
+
+/* v2 (12-sep, "no me gusta el diseño, cambialo"): UNA pista continua en vez
+   de dos píldoras sueltas — las 24 horas son un solo día, y el corte de las
+   18:00 es un corte ADENTRO de la pista, no un hueco entre dos formas. */
+.diaBarra {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 1.4em;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
 }
-/* El secundario del rótulo sólo cabe en una línea cuando el bloque verde
-   pasa de ~940px. Debajo partía "18:00 → / 09:00" y encima "TODOS LOS /
-   DÍAS": dos rótulos rotos por decir algo que la lista de abajo ya dice. */
-.hrs span:last-child:not(:first-child) {
-  display: none;
+
+.diaVos,
+.diaOnia {
+  flex: var(--span, 1) 1 0;
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  min-width: 0;
+  padding: 0.85em 1.2em;
+  font-size: 0.95em;
+  font-weight: 550;
+  white-space: nowrap;
+  overflow: hidden;
 }
-@media (min-width: 940px) {
-  .hrs span:last-child:not(:first-child) {
-    display: block;
-    text-align: right;
+
+.diaVos {
+  background: var(--bg-deep);
+  color: var(--ink);
+}
+
+.diaOnia {
+  background: var(--signal);
+  color: var(--tinta); /* jamás blanco sobre señal */
+}
+
+.diaVos i,
+.diaOnia i {
+  font-style: normal;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.diaVos i {
+  color: var(--ink-faint);
+}
+
+.diaOnia i {
+  color: var(--green-deep); /* 8,7:1 sobre señal */
+}
+
+/* En angosto la etiqueta mono no entra en la píldora corta (9/24 del ancho):
+   queda la palabra, que es la que argumenta. */
+@media (max-width: 767px) {
+  .diaVos i {
+    display: none;
+  }
+
+  .diaVos,
+  .diaOnia {
+    font-size: 0.85em;
+    padding: 0.7em 0.85em;
   }
 }
-/* Cero hex inventados: el sistema no declara un "secundario sobre bloque
-   oscuro", así que se reusa --line (~12:1 sobre tinta) en vez de fabricar un
-   gris nuevo. Sobre señal el secundario es --green-deep (8,7:1). */
-.slabVos .hrs {
-  color: var(--line);
-}
-.slabOnia .hrs {
-  color: var(--green-deep);
-}
 
-/* La escala ES el argumento: el número grande es el de las horas que hoy
-   nadie cubre. Ninguno alcanza al display, para no partir la pantalla en dos
-   titulares. */
-.amount {
-  font-family: var(--font-display), sans-serif;
-  font-weight: 550;
-  line-height: 0.9;
-  letter-spacing: -0.02em;
-  margin: 0.6em 0 0;
-}
-.slabVos .amount {
-  font-size: 2.1em;
-}
-.slabOnia .amount {
-  font-size: 3.2em;
-}
-.who {
-  font-size: 1em;
-  line-height: 1.35;
-  font-weight: 500;
-  margin: 0.5em 0 0;
-  max-width: 26ch;
-}
-
-/* Las tres cosas que de verdad pasan en esas 15 horas. Van DENTRO del verde
-   porque son el contenido de esas horas: sin ellas el bloque era un campo de
-   color esperando algo. */
-.moments {
+.diaMomentos {
   list-style: none;
-  margin: 0.8em 0 0;
+  margin: 0;
   padding: 0;
   display: grid;
-  gap: 0.5em;
-  max-width: 40em;
+  gap: 0.8em;
 }
-.moments li {
+
+/* Tarjetas y no texto flotante (12-sep): la misma carta que los add-ons —
+   borde, radio, hora arriba — para que las tres se lean como piezas y no
+   como párrafos sueltos debajo de la barra. */
+.diaMomentos li {
   font-size: 0.95em;
-  line-height: 1.35;
+  line-height: 1.45;
   text-wrap: pretty;
+  padding: 1em 1.2em;
+  border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+  border-radius: 14px;
+  background: var(--bg);
 }
+
+.diaMomentos b {
+  display: block;
+  font-family: var(--font-mono), monospace;
+  font-weight: 500;
+  font-size: 0.78em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  margin-bottom: 0.15em;
+}
+
+.diaMomentos span {
+  color: var(--ink-soft);
+}
+
+@media (min-width: 768px) {
+  .diaMomentos {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.6em;
+  }
+}
+
 /* "Vos los aprobás" corrige la promesa falsa (los agentes NO mandan solos:
    dejan el borrador en la cola y lo aprueba una persona). No se puede partir
    en dos líneas; 16 caracteres entran a cualquier ancho, así que el nowrap
@@ -985,236 +1067,7 @@
 .cierre {
   white-space: nowrap;
 }
-.moments b {
-  font-family: var(--font-mono), monospace;
-  font-weight: 500;
-  font-size: 0.8em;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--green-deep); /* 8,7:1 sobre señal */
-}
 
-/* ---------------------------------------------------------------------- */
-/* LA BANDA — lo único que la pieza DIBUJA                                  */
-/*                                                                         */
-/* Sergio, 2026-09-01: "talvez algo mas visual dentro de los cuadros que    */
-/* muestren como el duerme o mas abajo mientras genera ingresos".           */
-/*                                                                         */
-/* Una sola forma. Dos actores, una lane cada uno, a los dos lados del      */
-/* corte de las 18:00 — y las cuatro alineadas, así que se leen de corrido  */
-/* como una banda que cruza la pieza:                                       */
-/*                                                                         */
-/*   negro · VOS  → 9 marcas paradas ....  ATENDÉS  ┐ la línea de VOS       */
-/*   verde · VOS  → 15 aplastadas .......  DORMÍS   ┘ MUERE a las 18:00     */
-/*   negro · ONIA → 9 marcas paradas ....  CON VOS  ┐ la de ONIA cruza      */
-/*   verde · ONIA → 15 paradas ..........  POR VOS  ┘ las 24 SIN CORTE      */
-/*                                                                         */
-/* Ahí está el argumento entero, dibujado: una línea se apaga, la otra no.  */
-/* Y la de ONIA está de pie también en el bloque negro porque es cierto —   */
-/* el sistema no se enciende a las 18:00, ya estaba trabajando con él.      */
-/*                                                                         */
-/* ONIA siempre va del color CONTRARIO al de su bloque (señal sobre tinta,  */
-/* tinta sobre señal): es el que no es dueño de ese bloque, y así la banda   */
-/* se sigue con el ojo aunque el fondo cambie.                              */
-/*                                                                         */
-/* Congelado FUNCIONA: con reduced-motion o en una captura las marcas ya    */
-/* están paradas y aplastadas — la historia entera está en el primer        */
-/* fotograma. La animación sólo agrega "está pasando ahora".                */
-/*                                                                         */
-/* Las marcas NO son un gráfico de nada: son las horas (9 y 15), las mismas */
-/* que cuenta la regla de arriba. Acá es donde otros ponen su facturación   */
-/* con un contador que sube; nosotros no podemos: cero clientes pagando ⇒   */
-/* cualquier cifra adentro sería fabricada.                                 */
-/* ---------------------------------------------------------------------- */
-.band {
-  display: grid;
-  gap: 0.5em;
-  margin: 0.9em 0 0;
-}
-.lane {
-  /* "ONIA" mide ~2,1em: 2,6 alcanza y le devuelve ancho al track */
-  grid-template-columns: 2.6em 1fr auto;
-  display: grid;
-  align-items: center;
-  gap: 0 0.8em;
-}
-/* mismo tratamiento que .hrs: mono, versalita, tracking. Cero recurso nuevo. */
-.laneQ,
-.laneS {
-  font-family: var(--font-mono), monospace;
-  font-size: 0.72em;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-.laneS {
-  text-align: right;
-}
-.slabVos .laneQ,
-.slabVos .laneS {
-  color: var(--line); /* ~12:1 sobre tinta */
-}
-.slabOnia .laneQ,
-.slabOnia .laneS {
-  color: var(--green-deep); /* 8,7:1 sobre señal */
-}
-
-.track {
-  display: flex;
-  align-items: flex-end;
-  gap: 0.18em;
-  height: 1.5em;
-}
-.track span {
-  flex: 1;
-  border-radius: calc(var(--r-block) * 0.14);
-}
-
-/* VOS de día: lleno, y QUIETO a propósito — él no es una máquina. */
-.laneVos .track span {
-  height: 100%;
-  background: #edf1ef; /* 16,66:1 */
-}
-/* VOS de noche: la MISMA marca, aplastada. Queda una línea muerta. */
-.laneDuerme .track span {
-  height: 0.18em;
-  background: var(--green-deep);
-}
-/* ONIA: de pie a las 24 horas, a los dos lados del corte. La onda la recorre
-   de izquierda a derecha una vez cada 5s — es el TIEMPO pasando, no un dato
-   subiendo (un dato subiendo sería una cifra inventada). El escalonado sale
-   de `--i`, que pone el TSX: 15 reglas nth-child para decir lo mismo. */
-.laneOnia .track span {
-  height: 100%;
-  transform-origin: bottom;
-  animation: onda 5s var(--ease) infinite;
-  animation-delay: calc(var(--i, 0) * 0.17s);
-}
-.slabVos .laneOnia .track span {
-  background: var(--signal); /* 9,43:1 sobre tinta */
-}
-.slabOnia .laneOnia .track span {
-  background: var(--ink-block); /* 9,43:1 sobre señal */
-}
-@keyframes onda {
-  0%,
-  62%,
-  100% {
-    transform: scaleY(0.6);
-  }
-  10% {
-    transform: scaleY(1);
-  }
-}
-
-/* 768–1279: el bloque negro son 9/24 de un ancho chico, y los dos rótulos
-   que flanquean el track le comen casi todo. Sin esto su marca cae a 6px
-   contra los 14px del verde, y se pierde justo lo que hace funcionar la
-   banda: que sea LA MISMA marca en dos estados. Achicar el rótulo la devuelve
-   a ~9px. Arriba de 1280 no hace falta: ahí miden 28 y 30. */
-@media (min-width: 768px) and (max-width: 1279px) {
-  .lane {
-    grid-template-columns: 2.3em 1fr auto;
-    gap: 0 0.5em;
-  }
-  .laneQ,
-  .laneS {
-    font-size: 0.62em;
-    letter-spacing: 0.08em;
-  }
-}
-
-@media (min-width: 768px) {
-  .slab {
-    min-height: 12em;
-    padding: 1.7em 1.9em 1.6em;
-  }
-  /* el bloque que se escapa por el borde recupera su margen derecho: la
-     etiqueta cae en el espejo exacto del margen del titular */
-  .slabOnia {
-    padding-right: calc(1.9em + var(--bleed));
-  }
-  .slabVos .amount {
-    font-size: 2.4em;
-  }
-  .slabOnia .amount {
-    font-size: 3.4em;
-  }
-  /* la hora en columna propia: la lista se lee como un horario, no como tres
-     frases sueltas */
-  .moments li {
-    display: grid;
-    grid-template-columns: 5.4em 1fr;
-    gap: 0 0.6em;
-  }
-}
-
-/* ---------------------------------------------------------------------- */
-/* MÓVIL: el día GIRA, no se apila.                                         */
-/*                                                                         */
-/* La misma rejilla de 24 pasa de 24 columnas a 24 FILAS; la regla se para  */
-/* en vertical al costado y los bloques abarcan 9 y 15 filas de esa misma   */
-/* rejilla. La proporción 9:15 sigue siendo espacial y exacta, y la regla    */
-/* sigue explicándola — que es lo que se perdía apilando los bloques        */
-/* sueltos. Acá mira el 70% del lead que llega por Instagram.                */
-/* ---------------------------------------------------------------------- */
-@media (max-width: 700px) {
-  /* escaparse por la derecha con 1,2rem de margen se lee como error, no como
-     gesto: en teléfono el día se queda dentro del `.inner`. */
-  .day {
-    margin-top: 2.6em;
-    margin-right: 0;
-    grid-template-columns: 1.5em minmax(0, 1fr);
-    grid-template-rows: repeat(24, minmax(0, 1fr));
-    grid-auto-flow: column;
-    gap: 0.16em 0.7em;
-  }
-  .tick {
-    height: auto; /* la marca la estira la fila */
-    border-radius: calc(var(--r-block) * 0.14);
-  }
-  /* Sin min-height, y a propósito: las 24 filas son `1fr`, así que el alto lo
-     pide el bloque que más necesita —el verde, con sus tres momentos— y el
-     negro sale de la proporción 9:15 sin negociar. Con un alto decretado el
-     negro quedaba con más de un cuarto de aire adentro. */
-  .slab {
-    grid-column: auto;
-    grid-row: span var(--span);
-    min-height: 0;
-    padding: 1.15em 1.2em;
-  }
-  .slabVos .amount {
-    font-size: 2.2em;
-  }
-  .slabOnia .amount {
-    font-size: 2.9em;
-  }
-  .moments li {
-    font-size: 0.88em;
-  }
-  .moments b {
-    margin-inline-end: 0.2em; /* sin columna propia, la hora necesita su aire */
-  }
-  /* la banda encoge, no desaparece: es lo que Sergio pidió VER, y el 70% del
-     lead mira acá. Las 15 marcas siguen siendo 15. */
-  .lane {
-    grid-template-columns: 2.4em 1fr auto;
-    gap: 0 0.6em;
-  }
-  .laneQ,
-  .laneS {
-    font-size: 0.66em;
-    letter-spacing: 0.1em;
-  }
-  .track {
-    height: 1em;
-    gap: 0.13em;
-  }
-  .band {
-    gap: 0.34em;
-    margin-top: 0.7em;
-  }
-}
 
 /* ---------------------------------------------------------------------- */
 /* Banda de prueba — solo hechos verificables, sin logos ni testimonios    */
@@ -1306,9 +1159,17 @@
   margin-top: 3em;
   align-items: stretch;
 }
-@media (min-width: 900px) {
+/* 2×2 en tablet y 4 en fila en ancho: la escalera C (12-sep) tiene CUATRO
+   escalones — con 3 columnas la cuarta tarjeta (Full, justo la que carga la
+   cuenta del chatbot incluido) caía sola a una segunda fila. */
+@media (min-width: 700px) {
   .plans {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1100px) {
+  .plans {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 .plan {
@@ -2175,11 +2036,7 @@
   .burger,
   .sheetClose,
   .sheetLink,
-  .faqQ::after,
-  /* la onda del hero: congelada la banda sigue contando la historia entera
-     —marcas paradas contra marcas aplastadas—, así que apagarla no cuesta
-     nada. Es el mismo cuadro que sale en una captura de pantalla. */
-  .laneOnia .track span {
+  .faqQ::after {
     transition: none;
     animation: none;
   }
@@ -2437,43 +2294,31 @@
   margin: 3.4em 0 0;
 }
 
+/* Tarjetas y no filas (Sergio, 11-sep, sobre esta sección: "demasiado texto,
+   más visual, mejor orden"): cada add-on es una carta con borde y su precio
+   en píldora — el ojo barre nombre+precio sin leer párrafos. La última impar
+   sigue tomando la fila entera para no dejar el hueco. */
 .offerList {
   display: grid;
-  gap: 0;
+  gap: 0.8em;
   margin-top: 1.2em;
-  border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent);
 }
 @media (min-width: 760px) {
   .offerList {
-    /* dos columnas y no cuatro: cuatro celdas iguales en fila es la grilla de
-       tarjetas que este archivo evita en todas partes. En dos columnas cada
-       entrada conserva ancho de lectura y el bloque no se vuelve un menú. */
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 3.5em;
+    gap: 1em;
   }
-  /* El filete vive en la CELDA, no en la fila: con una cantidad IMPAR de
-     entradas la última fila deja la celda derecha vacía y la regla horizontal
-     queda CORTADA a mitad de ancho. Pasó al retirar "Inventario avanzado"
-     (2026-08-27): la lista bajó de 4 (2x2, cerraba) a 3 y el bloque quedó con
-     media línea colgando, en la portada y en /precios.
-     Se arregla por la PARIDAD y no por el número 3: la última entrada toma la
-     fila entera cuando sobra, y su filete vuelve a llegar de punta a punta.
-     Sirve para 3, 5 o 7 — y con un número par ni se aplica. */
   .offerItem:last-child:nth-child(odd) {
     grid-column: 1 / -1;
   }
-  /* ...pero solo se estira el FILETE. El encabezado se queda del ancho de una
-     columna (la mitad menos medio `column-gap`) para que el precio caiga en la
-     misma x que los de la columna izquierda de arriba. Sin esto, el precio de
-     la última fila se iría al borde derecho y la carta perdería su columna de
-     precios, que es lo único que la hace leerse como carta. */
   .offerItem:last-child:nth-child(odd) .offerItemHead {
     max-width: calc(50% - 1.75em);
   }
 }
 .offerItem {
-  padding: 1.5em 0;
-  border-bottom: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+  padding: 1.2em 1.3em;
+  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  border-radius: 14px;
 }
 .offerItemHead {
   display: flex;
@@ -2511,11 +2356,14 @@
 .offerItemPrice {
   font-family: var(--font-mono), monospace;
   font-variant-numeric: tabular-nums;
-  font-size: 0.98em;
+  font-size: 0.85em;
   font-weight: 500;
   letter-spacing: 0.01em;
   white-space: nowrap;
   color: var(--signal);
+  background: color-mix(in srgb, var(--signal) 14%, transparent);
+  padding: 0.3em 0.75em;
+  border-radius: 999px;
 }
 .offerItemText {
   margin: 0.6em 0 0;
@@ -2552,31 +2400,43 @@
   font-weight: 400;
 }
 
-/* ── SCROLLY DE RUBROS v2 (11-sep): texto izq, panel sticky der ─────────── */
+/* ── SCROLLY DE RUBROS v3 (11-sep, segunda vuelta de Sergio): TODO FIJO ────
+   Su veredicto sobre el v2, textual: "aquí que los textos estén fijos y sigue
+   las tipografías de la marca onia". El v2 scrolleaba los textos con bloques
+   de 70vh: en pantalla eso era un título, un hueco gigante y el rubro
+   siguiente flotando en gris. En el v3 la sección entera queda CLAVADA
+   (sticky a pantalla completa) y el scroll solo avanza el rubro: texto a la
+   izquierda e imagen a la derecha cambian EN EL LUGAR, uno por uno, sin
+   huecos. El alto del contenedor (--n × 90vh) es el recorrido del scroll.
 
-.swy {
-  display: grid;
-  gap: 2rem;
-}
+   Tipografía: la palabra del rubro va en la MISMA voz que todo titular del
+   sitio (--font-display, peso 550 como .h2 — el tope de la marca es 650).
+   El v2 pedía `--font-headline`, un token que NO existe en globals.css: la
+   palabra se renderizaba en la fuente heredada. Eso es lo que Sergio vio
+   como "no siguió la tipografía".
 
-.swyTextos {
+   Reduced-motion NO degrada el layout (Sergio lo tiene activo en Windows y
+   el fallback es lo que él ve): solo vuelve el cambio instantáneo. Un sticky
+   con cambio discreto es navegación, no animación. En móvil: pares
+   texto+panel apilados, en orden. */
+
+.swyApilado {
   display: grid;
   gap: 2.5rem;
 }
 
-.swyBloque {
+.swyPar {
   margin: 0;
 }
 
 .swyPalabra {
-  font-family: var(--font-headline);
-  font-weight: 800;
-  font-size: clamp(2rem, 1.2rem + 2.6vw, 3.4rem);
+  font-family: var(--font-display), sans-serif;
+  font-weight: 550;
+  font-size: clamp(2rem, 1.2rem + 2.6vw, 3.2rem);
   letter-spacing: -0.02em;
   line-height: 1;
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.6rem;
   color: var(--ink);
-  transition: opacity 0.25s ease;
 }
 
 .swyLinea {
@@ -2585,10 +2445,9 @@
   color: var(--ink-soft);
   max-width: 38ch;
   margin: 0;
-  transition: opacity 0.25s ease;
 }
 
-/* Panel inline: SOLO en apilado (móvil / reduced-motion). */
+/* Panel inline: SOLO en el apilado del móvil. */
 .swyPanelInline {
   display: block;
   margin-top: 1.1rem;
@@ -2596,59 +2455,71 @@
   padding: clamp(0.9rem, 4vw, 1.6rem);
 }
 
-.swyEscenario {
+.swyPin {
   display: none;
 }
 
-/* Escritorio: el scrolly SIEMPRE — reduced-motion no lo degrada a apilado,
-   solo apaga las transiciones (más abajo): el cambio queda instantáneo. La
-   lección del 11-sep: Sergio tiene "reducir movimiento" en Windows y el v1
-   lo mandaba al fallback apilado — nunca vio la sección estrella. Un layout
-   sticky con cambio discreto NO es una animación: es navegación. */
 @media (min-width: 64rem) {
   .swy {
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    gap: 3.5rem;
-    align-items: start;
+    /* El recorrido: una pantalla ~90vh por rubro. Sin esto no hay scroll que
+       repartir y el pin no tendría dónde viajar. */
+    height: calc(var(--n) * 90vh);
   }
 
-  /* Cada bloque de texto ocupa una pantalla de lectura: es lo que hace que
-     el panel cambie "uno por uno" al ritmo del scroll. */
-  .swyTextos {
-    gap: 0;
-  }
-
-  .swyBloque {
-    min-height: 70vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  /* El texto no-activo se atenúa: el ojo sabe qué rubro está sonando. */
-  .swyBloque:not([aria-current="true"]) .swyPalabra,
-  .swyBloque:not([aria-current="true"]) .swyLinea {
-    opacity: 0.28;
-  }
-
-  .swyPanelInline {
+  .swyApilado {
     display: none;
   }
 
-  .swyEscenario {
-    display: block;
-    /* Ocupa TODO el alto del grid: sin esto el sticky viaja solo lo que mide
-       un panel y desaparece al segundo rubro (visto en el preview). */
-    height: 100%;
+  .swyPin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 3.5rem;
+    align-items: center;
   }
 
-  .swySticky {
-    position: sticky;
-    top: clamp(4rem, 12vh, 7rem);
+  /* Los cinco textos apilados en la misma celda; visible solo el activo. */
+  .swyTexto {
     display: grid;
   }
 
-  /* Los cinco paneles apilados en la misma celda; visible solo el activo. */
+  .swyTx {
+    grid-area: 1 / 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .swyTxActivo {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Progreso: cinco puntos, el activo en el verde de acento. */
+  .swyPuntos {
+    display: flex;
+    gap: 0.55rem;
+    margin-top: 1.8rem;
+  }
+
+  .swyPunto {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--ink) 18%, transparent);
+    transition: background 0.2s ease;
+  }
+
+  .swyPuntoActivo {
+    background: var(--accent-strong);
+  }
+
+  .swyEscenario {
+    display: grid;
+  }
+
   .swyPanel {
     grid-area: 1 / 1;
     border-radius: 18px;
@@ -2665,15 +2536,15 @@
   }
 }
 
-/* Reduced motion: mismo scrolly, cambio instantáneo y sin desplazamientos. */
+/* Reduced motion: mismo layout, cambio instantáneo y sin desplazamientos. */
 @media (prefers-reduced-motion: reduce) {
-  .swyPanel {
+  .swyTx,
+  .swyPanel,
+  .swyPunto {
     transition: none;
-    transform: none;
   }
 
-  .swyPalabra,
-  .swyLinea {
-    transition: none;
+  .swyPanel {
+    transform: none;
   }
 }

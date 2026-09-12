@@ -540,6 +540,78 @@ function desarmar(conversacionId) {
   return false;
 }
 
+/**
+ * Cierra la conversacion de la sonda AL TERMINAR. Siempre, gane o pierda la medicion.
+ *
+ * POR QUE EXISTE (medido el 2026-09-12 sobre el inbox 4, el de los leads REALES):
+ *
+ *     49 | 2026-09-12 | Sonda QA carril chatbot   ← nosotros, status=0 (abierta)
+ *     48 | 2026-09-02 | cold-pond-731             ← desconocido de verdad
+ *     40 | 2026-08-29 | lively-night-474
+ *     36 | 2026-08-27 | icy-lake-546
+ *     34 | 2026-08-24 | delicate-glitter-674
+ *
+ * La sonda corre cada 30 min y Chatwoot ordena por actividad, asi que su conversacion
+ * encabezaba la bandeja **para siempre**, empujando abajo a los cuatro desconocidos que este
+ * carril existe para que se vean. El objetivo del carril es "que un desconocido escriba y esa
+ * conversacion SE VEA en la bandeja": el instrumento estaba tapando justo lo que mide.
+ *
+ * Habia limpieza, pero solo al ARRANCAR y solo a medias: `dejarComoExtrano` resolvia por Rails
+ * unicamente si `necesitaDesarme` era true, o sea si el bot habia quedado en `handoff_humano`.
+ * En la vuelta normal el bot queda en `nuevo`, `necesitaDesarme` da false, no se resolvia nada
+ * y la conversacion quedaba abierta. Preparar el sujeto no es lo mismo que devolverlo.
+ *
+ * `resolver` va INYECTADO y sin default: el default de una dep inyectable es el efecto real, y
+ * un caso que se lo olvide correria el `docker exec … rails runner` contra produccion y pasaria
+ * verde. Sin la dep, esto tira.
+ */
+export function cerrarSujeto({ resolver, conversacion, avisar = console.error } = {}) {
+  if (typeof resolver !== 'function' || typeof conversacion !== 'function') {
+    throw new TypeError(
+      'cerrarSujeto() exige `resolver` y `conversacion` inyectados: un default al efecto real ' +
+        'haria que un caso distraido escriba en la Chatwoot de produccion y pase en verde.',
+    );
+  }
+  let id;
+  try {
+    id = conversacion();
+  } catch (e) {
+    avisar(`AVISO — no se pudo saber cual conversacion cerrar: ${e.message}`);
+    return false;
+  }
+  // Sin conversacion todavia (primerisima vuelta que murio antes del bootstrap) no hay nada que
+  // devolver. Cerrar "por las dudas" con un id adivinado resolveria la conversacion de un lead.
+  if (!id) return false;
+  try {
+    resolver(id);
+    return true;
+  } catch (e) {
+    // Un fallo de limpieza NO puede convertir un veredicto valido en un crash: la medicion ya
+    // esta hecha y es lo que el carril necesita. Pero tampoco se traga en silencio, porque el
+    // sintoma de tragarselo es exactamente el bug que esto arregla.
+    avisar(`AVISO — la conversacion ${id} quedo ABIERTA en la bandeja de leads reales: ${e.message}`);
+    return false;
+  }
+}
+
+/**
+ * Mide y despues devuelve la bandeja como estaba. El cierre va en `finally` a proposito: tiene
+ * que correr con veredicto 0, con veredicto 1 (bot mudo) y tambien si la medicion TIRA — en los
+ * tres casos la sonda ya escribio en el inbox de leads reales y ya reabrio su conversacion.
+ *
+ * Las dos deps son obligatorias por el mismo motivo que en `cerrarSujeto`.
+ */
+export async function correrConCierre({ medir, cerrar } = {}) {
+  if (typeof medir !== 'function' || typeof cerrar !== 'function') {
+    throw new TypeError('correrConCierre() exige `medir` y `cerrar` inyectados.');
+  }
+  try {
+    return await medir();
+  } finally {
+    cerrar();
+  }
+}
+
 function leerEstado() {
   try {
     return JSON.parse(readFileSync(ESTADO, 'utf8'));
@@ -731,7 +803,7 @@ async function correr() {
 
 // ────────────────────────────────────── self-check ──────────────────────────────────────
 
-function selfCheck() {
+async function selfCheck() {
   const assert = require('node:assert');
   const casos = [];
   const caso = (nombre, fn) => casos.push([nombre, fn]);
@@ -1102,10 +1174,95 @@ function selfCheck() {
     assert.strictEqual(v.codigo, 0, `deberia ser 0 y fue ${v.codigo}: ${v.texto}`);
   });
 
+  // ── devolver la bandeja: la sonda no puede quedarse arriba de los leads reales ──
+  //
+  // El bug que fijan estos casos se midio el 2026-09-12 en el inbox 4: la conversacion 49 de la
+  // sonda, abierta y con la actividad mas fresca, encima de CUATRO desconocidos reales. Ver el
+  // comentario largo de `cerrarSujeto`.
+
+  const sonda = (extra = {}) => {
+    const resueltas = [];
+    const avisos = [];
+    return {
+      resueltas,
+      avisos,
+      deps: {
+        resolver: (id) => resueltas.push(id),
+        conversacion: () => 49,
+        avisar: (m) => avisos.push(m),
+        ...extra,
+      },
+    };
+  };
+
+  caso('EL BUG: con el bot en `nuevo` no habia NINGUN camino que cerrara', () => {
+    // `dejarComoExtrano` solo resolvia por Rails cuando `necesitaDesarme` daba true. Esta es la
+    // fila de una vuelta normal — la del 99% de las corridas — y da false: no se cerraba nada.
+    assert.strictEqual(necesitaDesarme({ botStage: 'nuevo', humanTookOver: false }), false);
+    const s = sonda();
+    cerrarSujeto(s.deps);
+    assert.deepStrictEqual(s.resueltas, [49], 'el cierre no puede depender del estado del embudo');
+  });
+
+  caso('cierra aunque el veredicto sea 1 (bot mudo)', async () => {
+    const s = sonda();
+    const v = await correrConCierre({
+      medir: async () => ({ codigo: 1, texto: 'EL BOT NO CONTESTO' }),
+      cerrar: () => cerrarSujeto(s.deps),
+    });
+    assert.strictEqual(v.codigo, 1, 'el cierre no puede cambiar el veredicto');
+    assert.deepStrictEqual(s.resueltas, [49], 'un rojo tambien dejo la conversacion abierta');
+  });
+
+  caso('cierra aunque la medicion TIRE, y la excepcion sigue viajando', async () => {
+    const s = sonda();
+    await assert.rejects(
+      () =>
+        correrConCierre({
+          medir: async () => {
+            throw new Error('Chromium murio');
+          },
+          cerrar: () => cerrarSujeto(s.deps),
+        }),
+      /Chromium murio/,
+      'tragarse el error de medicion seria peor que no cerrar',
+    );
+    assert.deepStrictEqual(s.resueltas, [49], 'si reventó despues de mandar, la conversacion quedo abierta igual');
+  });
+
+  caso('sin conversacion todavia no se cierra nada', () => {
+    // Adivinar un id aca resolveria la conversacion de un lead de verdad.
+    const s = sonda({ conversacion: () => null });
+    assert.strictEqual(cerrarSujeto(s.deps), false);
+    assert.deepStrictEqual(s.resueltas, []);
+  });
+
+  caso('si el cierre falla, avisa y NO tira: la medicion ya vale', () => {
+    const s = sonda({
+      resolver: () => {
+        throw new Error('rails runner se cayo');
+      },
+    });
+    assert.strictEqual(cerrarSujeto(s.deps), false);
+    assert.strictEqual(s.avisos.length, 1, 'tragarselo en silencio es el bug que esto arregla');
+    assert.match(s.avisos[0], /ABIERTA/, `el aviso tiene que decir que quedo abierta; dijo: ${s.avisos[0]}`);
+  });
+
+  caso('sin deps inyectadas TIRA, en vez de escribir en produccion', () => {
+    // Un default al efecto real hace que un caso distraido corra `docker exec … rails runner`
+    // contra la Chatwoot viva y pase en verde.
+    assert.throws(() => cerrarSujeto(), /exige/);
+    assert.throws(() => cerrarSujeto({ resolver: () => {} }), /exige/);
+    assert.rejects(() => correrConCierre({ medir: async () => ({}) }), /exige/);
+  });
+
   let fallados = 0;
   for (const [nombre, fn] of casos) {
     try {
-      fn();
+      // `await` aunque el caso sea sincrono: sin el, un caso `async` devuelve una promesa que
+      // este try NO puede atrapar, imprime "ok" y su assert se pierde. Un caso que no puede
+      // fallar es peor que uno ausente, porque cuenta como cobertura.
+      await fn();
       console.log(`  ok  ${nombre}`);
     } catch (e) {
       fallados += 1;
@@ -1122,9 +1279,21 @@ import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 
 if (process.argv.includes('--self-check')) {
-  process.exit(selfCheck());
+  process.exit(await selfCheck());
 } else {
-  const v = await correr();
+  const v = await correrConCierre({
+    medir: correr,
+    // `desarmar` es el que hace el `resolved!` por Rails — el camino del producto, no un UPDATE
+    // a mano. Con el bot ya en `nuevo` su espera del efecto sale en la primera pasada.
+    cerrar: () =>
+      cerrarSujeto({
+        resolver: desarmar,
+        conversacion: () => {
+          const token = leerEstado().cw_conversation;
+          return token ? conversacionDelToken(token) : null;
+        },
+      }),
+  });
   console.log(v.texto);
   process.exit(v.codigo);
 }
