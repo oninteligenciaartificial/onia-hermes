@@ -104,20 +104,25 @@
 
 ### SÁB 12 · B-roll: detrás de escena de la grabación en lote · guiones completos abajo
 
-**Feed — normal (el serio de IA obligatorio):** 🎥 «Pedirle a la IA que te explique vs
-pedirle que lo HAGA» → empuja a `/claude-code` + pide comentario. *(semilla: los YT 01-02
-ya publicados)*
+> 🔴 **Doble corrección de Sergio Urcullo (12-sep):** (1) *"que los videos ENSEÑEN algo —
+> una app, una función, un repo"*: una tesis u opinión no es un video, misma regla que
+> mató los carruseles-resumen. (2) *"explicá literal qué textos se ponen — más
+> interesante"*: el guion se entrega en formato rodaje — HABLA / EN PANTALLA / TEXTO
+> overlay, segundo a segundo, con gancho de «no sabía que se podía».
 
-**Trial v2 (variado):**
-1. **Bolivia** · «Emprender con el dólar a 11: por qué mi empresa gasta MENOS que antes»
-   → empuja a `/stack`. *(semilla YT: «negocio digital en Bolivia con el dólar a 11»)*
-2. **IA** · «La IA que trabaja de noche: qué le dejo corriendo y qué encuentro a la
-   mañana» → cierra a comunidad. *(semilla: el YT 03 que se graba hoy)*
-3. **Negocio** · «Contestar rápido vende más que bajar el precio» → cierra a comunidad
-   (las 6 respuestas ya viven en `/stack/archivos`). *(semilla YT: «WhatsApp de punta a
-   punta»; calienta el lunes 14)*
+**Los 7 finales del sábado** (guiones de rodaje completos en el mensaje de la sesión):
+1. **«Tu WhatsApp contesta solo y no lo sabías»** — los 3 automáticos gratis de WhatsApp
+   Business (saludo · ausencia · respuestas rápidas) → comunidad
+2. **claude-mem** — repo: tu IA con memoria, demo real → link fijado en comentarios
+3. **FEED 🎥 «Le pedí una página web y la hizo delante mío»** — demo Claude Code en vivo,
+   prompt literal en pantalla → `/claude-code` + comentario
+4. **B-roll**: una tarde = la semana + el script generando las placas en pantalla
+5. **Tu primer loop en n8n** — Schedule + mensaje, armado en 30 s → `/stack` + comunidad
+6. **Cal.com** — la agenda que se llena sola, demo → agendá en mi web
+7. **«Foto al cuaderno → Excel»** — Claude transcribe tu letra y suma el fiado, con su
+   «qué NO hace» → comunidad (los 5 prompts del D2)
 
-Los que estaban acá («la IA se equivoca», «no te reemplaza la IA») pasan al pool general.
+Los descartados («la IA se equivoca», «dólar a 11», tesis varias) pasan al pool general.
 
 ### DOM 13 · B-roll → carrusel FOUNDERS BO
 
