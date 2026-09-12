@@ -422,7 +422,15 @@ test("el transporte aguanta un host mas lento que el corte por defecto de Node",
   assert.equal(alto.valor, 9000, "no se pisa un timeout mas generoso que el nuestro");
 });
 
-test("el log se lee ENTERO: un aviso mas viejo que las ultimas 50 lineas tiene que contarse", () => {
+// Los dos tests del LECTOR inyectan un `docker` falso — un script bash sin extension, metido
+// por PATH con `:` — y eso es inejecutable en win32 por construccion (spawn de Windows no corre
+// shebangs, y un `.cmd` intermedio mediria MI copia del comando, que es justo lo que el propio
+// test prohibe). El sujeto (docker + grep sobre el log vivo) solo existe en el VPS/WSL: alla
+// corren SIEMPRE. El skip es explicito y sale contado en el resumen, no es un gate apagado.
+const SOLO_POSIX =
+  process.platform === "win32" ? "shim bash por PATH: inejecutable en win32; corre en VPS/WSL" : false;
+
+test("el log se lee ENTERO: un aviso mas viejo que las ultimas 50 lineas tiene que contarse", { skip: SOLO_POSIX }, () => {
   // Medido el 2026-09-12 contra produccion: el log vivo tenia CINCO lineas `[aviso]` —tres
   // `sent` y dos `skipped`— y este gate imprimio `eventos: 0 avisos` con el veredicto
   // "circuito sano, sin eventos reales todavia". Los dos salteados son dos personas que
@@ -581,7 +589,7 @@ test("clasificarEventos entiende el mapa con contacto y lo conserva para que se 
   assert.equal(c.contactos.get(11), "Sergio", "el nombre viaja: es lo unico que distingue un lead de una prueba propia");
 });
 
-test("lineasDelLog trae la linea que produjo cada aviso, o el conv no se puede recuperar", () => {
+test("lineasDelLog trae la linea que produjo cada aviso, o el conv no se puede recuperar", { skip: SOLO_POSIX }, () => {
   // El gate del CABLEADO. `conversacionesDeAvisos` sabe leer el `conv` de la linea vecina,
   // pero si el lector filtra solo `[aviso]` esa linea nunca llega y la atribucion vuelve a
   // ser imposible EN VERDE: medido el 2026-09-12, sacarle el `-B 1` al grep dejaba los 32

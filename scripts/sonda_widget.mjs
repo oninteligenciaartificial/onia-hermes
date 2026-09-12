@@ -80,6 +80,7 @@
 import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const HOST = process.env.ONIA_WIDGET_URL || 'https://onia-chatbot-chatwoot.hqdqgh.easypanel.host';
 const WEBSITE_TOKEN = process.env.ONIA_WIDGET_TOKEN || '9k5i7xnAgCbSse1EZwVChZLw';
@@ -313,7 +314,10 @@ export function guionBlanqueo(conversacionId) {
  * nada que derivar. En el segundo puede ser exactamente lo correcto y por eso no se mira.
  */
 export const CONFIG_DEL_BOT =
-  process.env.ONIA_BOT_CONFIG || new URL('../hermes-content/deploy/vps-ops/bot/config.mjs', import.meta.url).pathname;
+  // `fileURLToPath`, no `.pathname`: en Windows `.pathname` da `/C:/...` y leerlo termina en
+  // `C:\C:\...` (ENOENT) — el self-check estuvo rojo en el nodo-casa por esto.
+  process.env.ONIA_BOT_CONFIG ||
+  fileURLToPath(new URL('../hermes-content/deploy/vps-ops/bot/config.mjs', import.meta.url));
 
 export const FRASES_DE_DERIVACION = [
   'no yo - soy un bot',

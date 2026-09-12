@@ -24,7 +24,7 @@
 
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
@@ -94,7 +94,10 @@ test("el aviso a Sergio: el flag y las credenciales llegan al proceso", () => {
 export function defectoEfectivo(lanzador, asignacion) {
   const m = lanzador.match(new RegExp(`^\\s*(${asignacion}=.*)$`, "m"));
   assert.ok(m, `no encontre la asignacion ${asignacion}= en webhook-server.sh`);
-  return execFileSync("/bin/sh", ["-c", `${m[1]}; printf %s "$${asignacion}"`], {
+  // En Windows no hay `/bin/sh`; el `sh` de Git (en PATH) evalua el mismo POSIX. Sin esto el
+  // test moria con ENOENT en el nodo-casa y el gate quedaba rojo por el entorno, no por el bot.
+  const sh = existsSync("/bin/sh") ? "/bin/sh" : "sh";
+  return execFileSync(sh, ["-c", `${m[1]}; printf %s "$${asignacion}"`], {
     env: {},
     encoding: "utf8",
   });

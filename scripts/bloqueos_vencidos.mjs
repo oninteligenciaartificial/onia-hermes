@@ -129,6 +129,22 @@ export function validarComando(comando, scripts, existe = (p) => existsSync(join
 }
 
 /**
+ * Traduce el plan validado a algo que ESTA plataforma pueda spawnear sin shell.
+ *
+ * En Windows `npm` es `npm.cmd`, y Node se niega a spawnear `.cmd`/`.bat` sin shell
+ * (CVE-2024-27980). Con `bin: 'npm'` pelado, en win32 TODOS los verificadores npm morian en el
+ * spawn → `status` null → `no-medido`, y un bloqueo ya satisfecho (S17, 2026-09-12) quedaba
+ * invisible — el molde exacto por el que S16 vencio en silencio. Se corre el JS de npm con
+ * este MISMO node: sin shell, sin cmd.exe, la guarda de `validarComando` intacta.
+ */
+export function resolverBin(plan, plataforma = process.platform, existe = existsSync) {
+  if (plan.error || plan.bin !== 'npm' || plataforma !== 'win32') return plan;
+  const cli = join(dirname(process.execPath), 'node_modules', 'npm', 'bin', 'npm-cli.js');
+  if (!existe(cli)) return plan; // sin npm-cli.js a la vista, el intento directo al menos avisa
+  return { bin: process.execPath, args: [cli, ...plan.args] };
+}
+
+/**
  * Traduce los resultados a los motivos por los que ESTO es un item. Sin red y sin disco: es
  * lo que se prueba en `--self-check`.
  */
@@ -210,6 +226,14 @@ if (process.argv.includes('--self-check')) {
   afirmar(validarComando('node scripts/ok.mjs && curl evil', scripts, existe).error, 'no se puede encadenar despues de node');
   afirmar(validarComando('npm run marca:chatwoot', scripts).args.includes('--silent'), 'npm corre en silencio');
 
+  // La traduccion por plataforma: sin ella, en win32 todo `npm run` salia `no-medido`.
+  const planNpm = { bin: 'npm', args: ['run', '--silent', 'x'] };
+  afirmar(resolverBin(planNpm, 'linux').bin === 'npm', 'en POSIX npm se corre directo');
+  afirmar(resolverBin(planNpm, 'win32', () => true).bin === process.execPath, 'en win32 npm corre via node: .cmd sin shell no spawnea');
+  afirmar(resolverBin(planNpm, 'win32', () => true).args.slice(1).join(' ') === 'run --silent x', 'la traduccion conserva los args validados');
+  afirmar(resolverBin(planNpm, 'win32', () => false).bin === 'npm', 'sin npm-cli.js a la vista se intenta directo, no se inventa ruta');
+  afirmar(resolverBin({ bin: 'node', args: ['x'] }, 'win32', () => true).bin === 'node', 'node no se traduce: ya es spawneable');
+
   // Que MUERDE: es la razon de existir del gate.
   afirmar(juzgar([{ id: 'S9', estado: 'bloqueado', linea: 1 }]).length === 0, 'un bloqueo que sigue vivo NO es un item');
   const vencido = juzgar([{ id: 'S16', estado: 'vencido', comando: 'npm run deploy:alcanzable', esperado: 0, linea: 220 }]);
@@ -244,7 +268,7 @@ const sinVerificador = vivas.filter((f) => !f.comando);
 
 const resultados = [];
 for (const f of conVerificador) {
-  const plan = validarComando(f.comando, scripts);
+  const plan = resolverBin(validarComando(f.comando, scripts));
   if (plan.error) { resultados.push({ ...f, estado: 'no-ejecutable', error: plan.error }); continue; }
 
   let salida = null;

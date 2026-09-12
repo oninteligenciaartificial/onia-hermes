@@ -149,12 +149,28 @@ test("el guardrail no se rompe con texto raro ni es stateful", () => {
  * Esto devuelve la CARPETA. Lo que se lee de adentro sale de `fuenteDePlataforma`, nunca del
  * working tree — ver el porque ahi abajo.
  */
+function vecinoDelCheckoutPrincipal() {
+  // En el nodo-casa este repo corre en un WORKTREE (`.claude/worktrees/...`), asi que ni cwd ni
+  // la ruta del test llevan al vecino `onia-platform`. Se le pregunta a git por el checkout
+  // primario (`--git-common-dir` apunta al `.git` del principal aun desde un worktree) y se
+  // prueba su hermano. Si git no esta o no es repo, es un candidato menos, no un error.
+  try {
+    const gitDir = execFileSync("git", ["rev-parse", "--path-format=absolute", "--git-common-dir"], {
+      encoding: "utf8",
+    }).trim();
+    return path.join(path.dirname(gitDir), "..", "onia-platform");
+  } catch {
+    return null;
+  }
+}
+
 function repoPlataforma() {
   const candidatos = [
     process.env.ONIA_PLATFORM_DIR,
     "/root/loops/onia-platform-chatbot",
     "/root/loops/onia-platform",
     path.join(process.cwd(), "..", "onia-platform"),
+    vecinoDelCheckoutPrincipal(),
   ].filter(Boolean);
   const encontrado = candidatos.find((dir) => existsSync(path.join(dir, "lib", "subscription-plans.ts")));
   assert.ok(
