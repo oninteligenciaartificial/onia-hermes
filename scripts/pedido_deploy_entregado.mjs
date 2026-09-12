@@ -1105,12 +1105,13 @@ async function medirEnVivo() {
       console.log(`\nROJO ${c.id}: su CUERPO no nombra ${c.mudos.length} archivo(s) que su ok publica.`);
       for (const m of c.mudos) console.log(`    ${m}`);
       console.log('  El cuerpo es lo unico que Sergio Urcullo lee para decidir, y hoy describe');
-      console.log('  menos de lo que su ok publica. Nombralos comentando el recuento DERIVADO de');
+      console.log('  menos de lo que su ok publica. COMENTAR NO LO LIMPIA: este control lee el');
+      console.log('  cuerpo y nada mas, y el `edit` del tablero no cambia el cuerpo. Se cura');
+      console.log('  rehaciendo el pedido con el cuerpo derivado de');
       // El comando lo DERIVA la tabla: escribir acá la ruta de `siat` mandaba al carril del
       // bot a correr el publicador del emisor fiscal, que no publica nada suyo.
-      console.log(`  \`bash ${DESTINOS_POR_COPIA[c.destino].seco} --dry-run\`; si ya se comento y el`);
-      console.log('  cuerpo sigue corto, rehace el pedido y ARCHIVA el viejo en la misma vuelta');
-      console.log('  (el `edit` del tablero no cambia el cuerpo).');
+      console.log(`    bash ${DESTINOS_POR_COPIA[c.destino].seco} --dry-run`);
+      console.log('  y ARCHIVANDO el viejo en la misma vuelta.');
     }
     return 1;
   }
@@ -1144,9 +1145,11 @@ async function medirEnVivo() {
       for (const m of c.mudos) console.log(`    ${m.sha}  ${m.titulo}`);
       console.log('  Los comentarios pueden nombrarlos —por eso el pedido sale VIGENTE y completo—');
       console.log('  pero el cuerpo es lo que Sergio Urcullo lee para decidir, y hoy describe menos');
-      console.log('  de lo que su ok publica. Comenta el recuento DERIVADO de `publicar.sh --dry-run`;');
-      console.log('  si ya se comento y el cuerpo sigue quedando corto, rehace el pedido y ARCHIVA');
-      console.log('  el viejo en la misma vuelta (el `edit` del tablero no cambia el cuerpo).');
+      console.log('  de lo que su ok publica. COMENTAR NO LO LIMPIA: este control lee el cuerpo y');
+      console.log('  nada mas, y el `edit` del tablero no cambia el cuerpo. Se cura rehaciendo el');
+      console.log('  pedido con el cuerpo derivado de');
+      console.log('    bash /opt/onia-platform/_deploy/publicar.sh --dry-run');
+      console.log('  y ARCHIVANDO el viejo en la misma vuelta.');
     }
     return 1;
   }
