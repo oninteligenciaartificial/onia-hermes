@@ -232,9 +232,13 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       Paz). El agente mira las citas de mañana una vez al día; cambiar la hora es tocar un cron
       del VPS, que no es de este carril.
 
-      ✅ **(2) HECHO: agente `seguidor`** (`onia-platform` `4d94cdf`, rama
-      `claude/chatbots-platform-review-0d1d09` — **falta mergear y desplegar**). Gates en el
-      nodo de casa: `tsc` limpio, **4.791 tests verdes**, `eslint` limpio, `check:onia-core` OK.
+      ✅ **(2) HECHO: agente `seguidor`** (`onia-platform` `0376b07`, rama
+      `claude/chatbots-platform-review-0d1d09` — pusheado, **falta mergear y desplegar**).
+      ⚠️ El sha se DERIVA de `origin`, no del clon de casa: desde el nodo de casa no se pushea
+      `onia-platform`, la entrega va por `format-patch | ssh … git am`, y **`git am` regenera el
+      sha** — el local decía `4d94cdf`, que no existe en ningún remoto. Gates re-corridos **en
+      el VPS** sobre el árbol que se publicó, no sobre el de casa: `tsc` limpio, **393 archivos
+      de test verdes** (4.791 casos), `eslint` limpio, `check:onia-core` OK.
       Gate nuevo `lib/onia-core/modules/agents-seguidor.test.ts` (21 casos), **validado por
       mutación en cuatro puntos**: sin puerta de validez → rojo; sin puerta de estado → 4
       rojos; sin puerta de rubro → 2 rojos; sin plazo de espera → rojo.
