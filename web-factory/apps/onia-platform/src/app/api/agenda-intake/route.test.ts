@@ -100,3 +100,76 @@ describe("agenda-intake dice si el lead quedó registrado", () => {
     await expect(POST(pedido())).resolves.toBeInstanceOf(Response);
   });
 });
+
+/**
+ * El BLINDAJE (auditoría 2026-09-11): el endpoint era un passthrough — body
+ * sin tope, sin forma, sin rate limit, reenviado tal cual a Onia Center con
+ * NUESTRO secreto puesto. Cada test usa una IP propia (cf-connecting-ip) para
+ * no pisarse con el presupuesto del rate limit, que es por IP.
+ */
+function pedidoDesdeIp(ip: string, body: string): Request {
+  return new Request("https://onia.com.bo/api/agenda-intake", {
+    method: "POST",
+    headers: { "content-type": "application/json", "cf-connecting-ip": ip },
+    body,
+  });
+}
+
+describe("agenda-intake no es un passthrough", () => {
+  it("un body gigante muere acá (202) sin tocar Onia Center", async () => {
+    vi.stubEnv("ONIA_CENTER_INTAKE_URL", "http://onia-center:3012/x");
+    vi.stubEnv("ONIA_CENTER_INTAKE_SECRET", "secreto");
+    const espia = vi.fn(() => Promise.resolve(new Response(null, { status: 201 })));
+    vi.stubGlobal("fetch", espia);
+
+    const respuesta = await POST(pedidoDesdeIp("10.0.0.1", "x".repeat(5_000)));
+
+    expect(respuesta.status).toBe(202);
+    expect(espia).not.toHaveBeenCalled();
+  });
+
+  it("JSON inválido o sin ningún contacto: 202, nada viaja", async () => {
+    vi.stubEnv("ONIA_CENTER_INTAKE_URL", "http://onia-center:3012/x");
+    vi.stubEnv("ONIA_CENTER_INTAKE_SECRET", "secreto");
+    const espia = vi.fn(() => Promise.resolve(new Response(null, { status: 201 })));
+    vi.stubGlobal("fetch", espia);
+
+    expect((await POST(pedidoDesdeIp("10.0.0.2", "esto no es json"))).status).toBe(202);
+    expect((await POST(pedidoDesdeIp("10.0.0.2", JSON.stringify({ src: "solo-src" })))).status).toBe(202);
+    expect(espia).not.toHaveBeenCalled();
+  });
+
+  it("el body se RECONSTRUYE: campos extra no llegan a Onia Center", async () => {
+    vi.stubEnv("ONIA_CENTER_INTAKE_URL", "http://onia-center:3012/x");
+    vi.stubEnv("ONIA_CENTER_INTAKE_SECRET", "secreto");
+    const espia = vi.fn(() => Promise.resolve(new Response(null, { status: 201 })));
+    vi.stubGlobal("fetch", espia);
+
+    const respuesta = await POST(
+      pedidoDesdeIp(
+        "10.0.0.3",
+        JSON.stringify({ email: "a@b.co", whatsapp: "591", src: "bio", admin: true, rol: "superadmin" }),
+      ),
+    );
+
+    expect(respuesta.status).toBe(204);
+    const [, init] = espia.mock.calls[0] as unknown as [string, { body: string }];
+    expect(JSON.parse(init.body)).toEqual({ email: "a@b.co", whatsapp: "591", src: "bio" });
+  });
+
+  it("la misma IP no puede martillar: pasado el cupo del minuto, 202 sin fetch", async () => {
+    vi.stubEnv("ONIA_CENTER_INTAKE_URL", "http://onia-center:3012/x");
+    vi.stubEnv("ONIA_CENTER_INTAKE_SECRET", "secreto");
+    const espia = vi.fn(() => Promise.resolve(new Response(null, { status: 201 })));
+    vi.stubGlobal("fetch", espia);
+
+    const body = JSON.stringify({ email: "flood@x.co" });
+    let ultima: Response | null = null;
+    for (let i = 0; i < 11; i += 1) {
+      ultima = await POST(pedidoDesdeIp("10.9.9.9", body));
+    }
+
+    expect(ultima?.status).toBe(202);
+    expect(espia.mock.calls.length).toBeLessThanOrEqual(10);
+  });
+});

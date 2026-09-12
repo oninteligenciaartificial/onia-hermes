@@ -26,6 +26,49 @@ const NO_REGISTRADO = new Response(null, { status: 202 });
 /** Registrado en Onia Center: la promesa de seguimiento es verdadera. */
 const REGISTRADO = new Response(null, { status: 204 });
 
+/**
+ * Blindaje del único endpoint público del sitio (auditoría 2026-09-11: era un
+ * passthrough sin tope ni forma — cualquiera podía floodearlo o meter JSON
+ * arbitrario en onia_center.leads con el secreto compartido puesto por
+ * NOSOTROS).
+ *
+ * · Tope de tamaño ANTES de parsear.
+ * · El body se RECONSTRUYE con los tres campos que el único formulario manda
+ *   (CapturaGuia.tsx: email/whatsapp/src) — lo que no es eso no viaja.
+ * · Rate limit por IP en memoria: 10/min por IP, mapa acotado. Es por
+ *   instancia (un solo contenedor sirve la landing) y es la primera capa; la
+ *   capa fuerte es una regla de rate limiting en Cloudflare (pendiente de
+ *   Sergio Urcullo, ya anotada con la de caché).
+ * Todo rechazo responde NO_REGISTRADO (202): la pantalla no promete nada y a
+ * un flooder no le contamos qué filtro lo paró.
+ */
+const BODY_MAX = 4_096;
+const CAMPO_MAX = 320;
+const RATE_MAX = 10;
+const RATE_VENTANA_MS = 60_000;
+const RATE_MAPA_MAX = 5_000; // ponytail: se vacía entero al llenarse; LRU si algún día importa
+const porIp = new Map<string, { n: number; hasta: number }>();
+
+function pasaRateLimit(request: Request): boolean {
+  const ip =
+    request.headers.get("cf-connecting-ip") ||
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    "sin-ip";
+  const ahora = Date.now();
+  const fila = porIp.get(ip);
+  if (!fila || ahora > fila.hasta) {
+    if (porIp.size >= RATE_MAPA_MAX) porIp.clear();
+    porIp.set(ip, { n: 1, hasta: ahora + RATE_VENTANA_MS });
+    return true;
+  }
+  fila.n += 1;
+  return fila.n <= RATE_MAX;
+}
+
+function campo(valor: unknown): string {
+  return typeof valor === "string" ? valor.slice(0, CAMPO_MAX) : "";
+}
+
 export async function POST(request: Request) {
   const url = process.env.ONIA_CENTER_INTAKE_URL || "";
   const secret = process.env.ONIA_CENTER_INTAKE_SECRET || "";
@@ -34,12 +77,38 @@ export async function POST(request: Request) {
     return NO_REGISTRADO.clone();
   }
 
-  let body = "";
+  if (!pasaRateLimit(request)) {
+    return NO_REGISTRADO.clone();
+  }
+
+  let crudo = "";
   try {
-    body = await request.text();
+    crudo = await request.text();
   } catch {
     return NO_REGISTRADO.clone();
   }
+  if (crudo.length > BODY_MAX) {
+    return NO_REGISTRADO.clone();
+  }
+
+  let entrada: unknown;
+  try {
+    entrada = JSON.parse(crudo);
+  } catch {
+    return NO_REGISTRADO.clone();
+  }
+  if (typeof entrada !== "object" || entrada === null) {
+    return NO_REGISTRADO.clone();
+  }
+  const lead = entrada as Record<string, unknown>;
+  const email = campo(lead.email);
+  const whatsapp = campo(lead.whatsapp);
+  const src = campo(lead.src);
+  // Sin al menos un dato de contacto no hay lead que registrar.
+  if (!email && !whatsapp) {
+    return NO_REGISTRADO.clone();
+  }
+  const body = JSON.stringify({ email, whatsapp, src });
 
   try {
     const respuesta = await fetch(url, {
