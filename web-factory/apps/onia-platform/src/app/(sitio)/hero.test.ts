@@ -138,26 +138,45 @@ describe("el hero de la portada se DIBUJA, no se captura", () => {
    * La banda del día (9 h / 15 h) es el argumento del ASISTENTE, así que vive
    * en su sección y no en la portada de la oferta. Si vuelve al hero, vuelve
    * el problema entero: es la pieza más grande de la primera pantalla.
+   *
+   * ⚠️ Los dos guards de abajo citaban `s.day` y `repeat(24, minmax(0, 1fr))`.
+   * El 11-sep la banda se rehizo —los slabs con cuadraditos salieron, entró la
+   * línea del día con una barra flex— y esa clase dejó de existir: la primera
+   * mitad del guard pasó a cumplirse sola (nadie puede poner una clase que no
+   * está en la hoja) y la otra mitad quedó ROJA en `main`, trabando el merge de
+   * todos los carriles. Un guard anclado al NOMBRE de la implementación muere
+   * así: o se apaga en silencio, o acusa al producto por cambiar.
+   *
+   * Ahora se ancla a la PROPIEDAD (dónde vive la barra, y que dibuje las horas
+   * en proporción), y lo primero que pregunta es si la clase que vigila sigue
+   * existiendo — para que el próximo rediseño lo deje rojo diciendo qué pasó.
    */
-  it("la línea del día ya no está en el hero", () => {
-    // s.dia y no s.day: el 2026-09-11 los slabs con 24 cuadraditos se
-    // reemplazaron por la línea del día (veredicto de Sergio: "esto no me
-    // gusta para nada"). El invariante es el mismo: el argumento del
-    // asistente vive en SU sección, nunca en la primera pantalla.
-    expect(seccionHero(PORTADA)).not.toMatch(/className=\{s\.dia\}/);
-    // pero sigue viva en la página, con el add-on que la explica
-    expect(PORTADA).toMatch(/className=\{s\.dia\}/);
+  const BARRA_DEL_DIA = "diaBarra";
+
+  it("la clase que vigilan estos guards sigue existiendo en la hoja", () => {
+    expect(CSS).toContain(`.${BARRA_DEL_DIA} {`);
   });
 
-  it("las 9 horas y las 15 suman el día entero", () => {
+  it("la banda del día ya no está en el hero", () => {
+    const enLaPagina = new RegExp(`className=\\{s\\.${BARRA_DEL_DIA}\\}`);
+    expect(seccionHero(PORTADA)).not.toMatch(enLaPagina);
+    // pero sigue viva en la página, con el add-on que la explica
+    expect(PORTADA).toMatch(enLaPagina);
+  });
+
+  it("las 9 horas y las 15 se DIBUJAN repartiendo el día entero", () => {
     const vos = Number(/const HORAS_VOS = (\d+)/.exec(PORTADA)?.[1]);
     const onia = Number(/const HORAS_ONIA = (\d+)/.exec(PORTADA)?.[1]);
-    // la barra reparte las 24 horas por `--span` (flex proporcional): si no
-    // suman 24, la proporción 9:15 que la frase afirma deja de ser la que se
-    // dibuja. Antes era una rejilla de 24 columnas; la mecánica cambió, el
-    // invariante no.
+    // si no suman 24, el corte de las 18:00 deja de caer donde la regla dice
     expect(vos + onia).toBe(24);
-    expect(CSS).toContain("flex: var(--span, 1) 1 0");
+
+    // ...y el ANCHO de cada franja tiene que ser esa hora, no una mitad y
+    // mitad decorativa: el TSX pasa las horas por `--span` y la hoja las
+    // reparte con `flex-grow` sobre base 0, que da 9/24 y 15/24 exactos.
+    // Con cualquier otra base el dibujo deja de decir lo que dice el texto.
+    expect(PORTADA).toMatch(/"--span": HORAS_VOS/);
+    expect(PORTADA).toMatch(/"--span": HORAS_ONIA/);
+    expect(CSS).toMatch(/flex:\s*var\(--span[^)]*\)\s+1\s+0/);
   });
 
   it("los agentes no mandan nada solos", () => {
