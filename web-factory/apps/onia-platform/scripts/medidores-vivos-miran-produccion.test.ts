@@ -5,7 +5,7 @@
  * POR QUE EXISTE. `chat-diferido-vivo.mjs` nacio con `http://localhost:3311` de
  * destino por defecto mientras sus hermanos (`enlaces-vivos`, `precios-vivos`,
  * `mirar-venta`) ya usaban `https://onia.com.bo`. Su propia cabecera prometia
- * medir *"que el cliente lo recibe"* — y medido el 2026-09-12, `npm run
+ * medir *"que el cliente lo recibe"* — y medido el 2026-09-11 22:50 La Paz, `npm run
  * chat-diferido:vivo` contestaba `NO MEDIDO: ERR_CONNECTION_REFUSED`. El unico
  * instrumento que protege el 71 % del peso de la portada llevaba un dia sin
  * poder medir, y salia sin ruido.

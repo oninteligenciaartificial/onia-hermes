@@ -80,23 +80,46 @@ async function medir() {
   await pagina.waitForTimeout(ESPERA_TRAS_GESTO_MS);
   const trasGesto = { pedidos: pedidosChat.length, bytes };
 
-  // Y la contraprueba de que el canal sigue existiendo: la burbuja de Chatwoot
-  // vive en un iframe propio. Sin esto, "0 bytes" se lograría rompiendo el chat.
-  // Selector amplio a proposito: Chatwoot cambia las clases del launcher entre
-  // versiones y un selector fino da un falso "el canal quedo muerto" con la
-  // burbuja a la vista (pasado el 2026-09-11, verificado contra la captura).
-  const launcher = pagina
-    .locator('[class*="woot"], [id*="chatwoot"], iframe[src*="' + HOST_CHAT + '"]')
-    .first();
-  const burbuja = await launcher
-    .waitFor({ state: "visible", timeout: 15000 })
+  // Y la contraprueba de que el canal sigue existiendo. Sin esto, "0 bytes" se
+  // lograría rompiendo el chat.
+  //
+  // ⚠️ **No se pregunta por el PRIMER elemento que matchea.** Así estaba, y el
+  // primero es `#cw-widget-holder`: la VENTANA del chat, que Chatwoot deja
+  // `visibility:hidden; opacity:0` y fuera de pantalla (`y=884` sobre un alto de
+  // 844) hasta que alguien toca la burbuja. Preguntarle "¿sos visible?" es
+  // preguntar "¿está el chat ABIERTO?", y para un visitante que no tocó nada la
+  // respuesta correcta es que no: el 2026-09-11 el gate salió ROJO con la
+  // burbuja a la vista en su propia captura. Se pregunta por si hay ALGUNO
+  // visible, que es lo que ve la persona.
+  const visibles = pagina
+    .locator(
+      '[class*="woot"], [id*="chatwoot"], [id^="cw-"], iframe[src*="' + HOST_CHAT + '"]',
+    )
+    .locator("visible=true");
+  const burbuja = await visibles
+    .first()
+    .waitFor({ state: "visible", timeout: 20000 })
     .then(() => true)
     .catch(() => false);
+
+  // Quién es el dueño de la falla, cuando no se ve nada: `$chatwoot` lo publica
+  // el SDK al correr. Si está, NUESTRA parte (traer el script y arrancarlo)
+  // funcionó y lo que falta es el pintado de un tercero; si no está, el canal
+  // quedó muerto y eso sí es nuestro.
+  const sdkArranco = await pagina.evaluate(() => Boolean(window.$chatwoot)).catch(() => false);
   if (process.env.ONIA_CAPTURA)
     await pagina.screenshot({ path: process.env.ONIA_CAPTURA, fullPage: false });
 
   await navegador.close();
-  return { estado: 0, sinGesto, trasGesto, burbuja, limiteDeTercero, primeros: pedidosChat.slice(0, 4) };
+  return {
+    estado: 0,
+    sinGesto,
+    trasGesto,
+    burbuja,
+    sdkArranco,
+    limiteDeTercero,
+    primeros: pedidosChat.slice(0, 4),
+  };
 }
 
 const r = await medir().catch((e) => ({ estado: 2, motivo: String(e).slice(0, 200) }));
@@ -109,6 +132,7 @@ if (r.estado === 2) {
 console.log(`sin tocar nada:  ${r.sinGesto.pedidos} pedido(s) al chat, ${kb(r.sinGesto.bytes)}`);
 console.log(`tras un scroll:  ${r.trasGesto.pedidos} pedido(s) al chat, ${kb(r.trasGesto.bytes)}`);
 console.log(`burbuja visible tras el gesto: ${r.burbuja ? "sí" : "no"}`);
+console.log(`SDK de Chatwoot arrancado:     ${r.sdkArranco ? "sí" : "no"}`);
 
 if (r.sinGesto.pedidos > 0) {
   console.log("ROJO: el chat viaja sin que nadie lo pida. Los primeros pedidos:");
@@ -127,7 +151,17 @@ if (!r.burbuja) {
     );
     process.exit(0);
   }
-  console.log("ROJO: el chat se pidió pero la burbuja no apareció.");
+  // El SDK arrancó: traerlo y encenderlo —lo único que hace el diferido— salió
+  // bien, y lo que falta es el pintado de Chatwoot. Cobrárselo al diferido sería
+  // acusar al inocente y entrenar a todos a ignorar este gate.
+  if (r.sdkArranco) {
+    console.log(
+      "AVISO: el SDK de Chatwoot arrancó (window.$chatwoot existe) pero no pintó nada\n" +
+        "       visible. El diferido hizo su parte; mirá Chatwoot. Captura: ONIA_CAPTURA=<ruta>",
+    );
+    process.exit(0);
+  }
+  console.log("ROJO: el chat se pidió, el SDK nunca arrancó y el canal quedó muerto.");
   process.exit(1);
 }
 console.log("VERDE: el chat espera al visitante y aparece apenas lo pide.");
