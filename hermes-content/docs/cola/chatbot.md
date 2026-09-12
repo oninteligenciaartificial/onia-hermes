@@ -108,6 +108,27 @@ Telegram. El mismo mensaje que a las 19:28 daba `rama=MUDO` ahora recorre el gui
   Commits `55e669a6` + `22546797` (rama `claude/cobro-e2e-punto-1-25ba65`). Tarea en el
   tablero pidiéndole a Sergio Urcullo el "hola" de cierre.
 
+## 🔴 Cal.com NO EXISTE — las demos del bot no entran a ningún calendario (medido 11-sep)
+
+Pregunta directa de Sergio Urcullo ("¿está funcionando el cal de onia?"). Medido en vivo:
+**cero contenedores de Cal.com en el VPS** (`docker ps` completo, ninguno), cal.onia.com.bo
+redirige a onia.com.bo/empezar, y el env del bot no tiene `CALCOM_BASE_URL` — por eso
+`createBooking` (`hermes-content/deploy/vps-ops/bot/calcom-booking.mjs`) devuelve
+`sin_config` SIEMPRE y la demo de prueba del 10-sep quedó con `calendar_event_id` VACÍO.
+
+**Lo que SÍ funciona (flujo degradado honesto, por diseño):** el bot ofrece los horarios de
+`ONIA_BOT_SLOTS` (los renueva el cron python diario, independiente de Cal), el prospecto
+elige, la fila queda en la base, el aviso de `demo_agendada` LLEGA al Telegram de Sergio
+Urcullo, y el texto agrega "(Estoy confirmando ese horario con Sergio…)". Lo que NO pasa:
+evento en calendario ni link de videollamada (M2_LINK solo sale con booking ok — diseñado).
+
+**Decisión de Sergio Urcullo (opciones cotizadas):**
+(a) redesplegar Cal.com self-hosted (investigar por qué desapareció el contenedor);
+(b) cuenta Cal.com cloud gratis + adaptar `calcom-booking.mjs` a su API;
+(c) seguir sin calendario mientras el volumen sea ~1 demo/semana — el aviso por Telegram +
+confirmación por WhatsApp alcanza y el bot ya es honesto. Recomendada HOY: (c), y (a/b)
+cuando haya volumen real.
+
 ## Objetivo único
 
 **Que un desconocido escriba y esa conversación se vea en la bandeja.**
