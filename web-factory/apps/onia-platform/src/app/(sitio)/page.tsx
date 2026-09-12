@@ -273,41 +273,6 @@ const MOMENTOS = [
   },
 ] as const;
 
-/**
- * Una lane de la banda: rótulo · track de marcas · palabra.
- *
- * Las marcas son las HORAS del bloque (9 o 15), las mismas que cuenta la regla
- * de arriba — no son un gráfico de ningún dato. El track es decorativo
- * (aria-hidden); lo que se lee es la frase que forman los dos rótulos.
- *
- * `--i` escalona la onda de ONIA: una sola regla CSS en vez de quince
- * `nth-child`.
- */
-function Lane({
-  quien,
-  que,
-  marcas,
-  tono,
-}: {
-  quien: string;
-  que: string;
-  marcas: number;
-  /** vos = lleno y quieto · duerme = la misma marca aplastada · onia = de pie, con onda */
-  tono: "vos" | "duerme" | "onia";
-}) {
-  const tonoClass = { vos: s.laneVos, duerme: s.laneDuerme, onia: s.laneOnia };
-  return (
-    <div className={`${s.lane} ${tonoClass[tono]}`}>
-      <span className={s.laneQ}>{quien}</span>
-      <span className={s.track} aria-hidden="true">
-        {Array.from({ length: marcas }, (_, i) => (
-          <span key={i} style={{ "--i": i } as CSSProperties} />
-        ))}
-      </span>
-      <span className={s.laneS}>{que}</span>
-    </div>
-  );
-}
 
 /** Las tres capacidades con peso de producto, cada una con su panel dibujado. */
 const CAPACIDADES = [
@@ -427,81 +392,43 @@ export default function Portada() {
           </Reveal>
         </div>
 
-        {/* EL DÍA — las 9 horas que atendés vos y las 15 que no atiende nadie. */}
-        <Reveal delay={0.08} className={s.day}>
-          <div className={s.ruler} aria-hidden="true">
-            {Array.from({ length: HORAS_VOS + HORAS_ONIA }, (_, i) => (
-              <span
-                key={i}
-                className={i < HORAS_VOS ? s.tick : `${s.tick} ${s.tickOn}`}
-              />
+        {/* EL DÍA — rehecho el 11-sep. Sergio, sobre los slabs negro/verde con
+            cuadraditos, textual: "esto no me gusta para nada... mirá cómo
+            están hechas las webs de las competencias, mejoranos". Entra la
+            línea del día: una frase, UNA barra limpia con las 24 horas
+            repartidas y los tres momentos — base clara, tipografía de marca,
+            cero relojería. */}
+        <Reveal delay={0.08} className={s.dia}>
+          <p className={s.diaFrase}>
+            Vos atendés <b>{HORAS_VOS} horas</b>. Las otras <b>{HORAS_ONIA}</b>{" "}
+            — la noche, el feriado, el domingo — el que escribe igual recibe
+            respuesta.
+          </p>
+          <div
+            className={s.diaBarra}
+            role="img"
+            aria-label={`De las 24 horas del día atendés ${HORAS_VOS}; las otras ${HORAS_ONIA} contesta Onia, también el domingo.`}
+          >
+            <span
+              className={s.diaVos}
+              style={{ "--span": HORAS_VOS } as CSSProperties}
+            >
+              <i>09:00 → 18:00</i> Atendés vos
+            </span>
+            <span
+              className={s.diaOnia}
+              style={{ "--span": HORAS_ONIA } as CSSProperties}
+            >
+              <i>18:00 → 09:00</i> Contesta Onia
+            </span>
+          </div>
+          <ul className={s.diaMomentos}>
+            {MOMENTOS.map((momento) => (
+              <li key={momento.hora}>
+                <b>{momento.hora}</b> <span>{momento.que}</span>
+              </li>
             ))}
-          </div>
-
-          <div
-            className={`${s.slab} ${s.slabVos}`}
-            style={{ "--span": HORAS_VOS } as CSSProperties}
-          >
-            {/* El rótulo y la banda van EN UN GRUPO: así las lanes arrancan a
-                la misma altura a los dos lados del corte de las 18:00. */}
-            <div>
-              <p className={s.hrs}>
-                <span>09:00 → 18:00</span>
-              </p>
-              <div className={s.band}>
-                <Lane quien="Vos" que="Atendés" marcas={HORAS_VOS} tono="vos" />
-                <Lane
-                  quien="Onia"
-                  que="Con vos"
-                  marcas={HORAS_VOS}
-                  tono="onia"
-                />
-              </div>
-            </div>
-
-            <div>
-              <p className={s.amount}>{HORAS_VOS} horas</p>
-              <p className={s.who}>Abrís vos.</p>
-            </div>
-          </div>
-
-          <div
-            className={`${s.slab} ${s.slabOnia}`}
-            style={{ "--span": HORAS_ONIA } as CSSProperties}
-          >
-            <div>
-              <p className={s.hrs}>
-                <span>18:00 → 09:00</span>
-                <span>Todos los días · también domingo</span>
-              </p>
-              {/* Las dos lanes JUNTAS: "Vos dormís / Onia por vos". */}
-              <div className={s.band}>
-                <Lane
-                  quien="Vos"
-                  que="Dormís"
-                  marcas={HORAS_ONIA}
-                  tono="duerme"
-                />
-                <Lane
-                  quien="Onia"
-                  que="Por vos"
-                  marcas={HORAS_ONIA}
-                  tono="onia"
-                />
-              </div>
-            </div>
-
-            <div>
-              <p className={s.amount}>{HORAS_ONIA} horas</p>
-              <ul className={s.moments}>
-                {MOMENTOS.map((momento) => (
-                  <li key={momento.hora}>
-                    <b>{momento.hora}</b> <span>{momento.que}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+          </ul>
         </Reveal>
       </Block>
 
