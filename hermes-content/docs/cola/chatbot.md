@@ -2586,6 +2586,42 @@ archivos.**
 
 ## Cerrado — no rehacer
 
+- [x] **El bot le cotizaba a los leads dos precios que ya no existen, y su gate estaba en VERDE.**
+      Cerrado el 2026-09-12, commit `ee247780` (`precios-publicos.mjs`, `precios-publicos.test.mjs`,
+      `knowledge.onia.json`, `simulate.mjs`). Tampoco estaba en la cola: salió de medir el objetivo
+      al arrancar, comparando lo que el bot contesta contra la fuente de CLAUDE.md.
+
+      Lo que recibía un lead que preguntaba el precio: *"Bs 320 el Básico, **Bs 750** el Profesional
+      y **Bs 1.500** el Completo. El chatbot de WhatsApp va aparte, Bs 390"*. Contra
+      `lib/subscription-plans.ts` de hoy (escalera C, `onia-platform` `4bff903`): Profesional **890**,
+      Completo **1.290**, existe un plan **Crece** en **550** que el bot no nombraba, y el Completo
+      **ya trae el chatbot adentro** — o sea la última frase también era falsa.
+
+      **Por qué sobrevivió: el gate leía el archivo del disco.** `repoPlataforma()` devolvía el primer
+      clon que existiera y de ahí se hacía `readFileSync`. Los dos clones del nodo estaban atrás de
+      `origin/master` (**1 y 15 commits**), así que el gate comparaba la copia del bot contra un fósil
+      del mismo día en que se copió. Dos fotos del mismo pasado coinciden siempre. Un worktree
+      atrasado es el estado **normal** de un carril, no una anomalía que se pueda pedir que no
+      ocurra: por eso ahora el sujeto es el ref publicado.
+
+      ```
+      git show origin/master:lib/subscription-plans.ts   ← la correa lee de acá, no de la carpeta
+      node --test precios-publicos.test.mjs              ← 13/13; antes del arreglo, 2 en rojo
+        not ok 9  - DEFAULT_PLAN_AMOUNTS.professional.monthly vale 890 y el bot dice 750
+        not ok 12 - montos que el bot no puede decir: crece.monthly = 550, ... clinic.annual = 12900
+      ```
+
+      **Baranda, validada por mutación:** un caso exige que la correa siga leyendo de `origin/master`
+      y cae si vuelve un `readFileSync` sobre el repo hermano — se le metió la mutación y dio rojo
+      con el motivo correcto, verde al restaurar. Se mide sobre el código con los comentarios **en
+      blanco**: el archivo nombra la ruta prohibida al explicar el bug y un detector que leyera prosa
+      se acusaría solo.
+
+      **NO desplegado, y es a propósito.** Medido el mismo día: `onia.com.bo/precios` muestra la
+      escalera vieja y el build vivo cobra `monthly` 320/750/1500/2900. Publicar el bot solo lo dejaría
+      cotizando un precio que el checkout todavía no cobra. El acople quedó escrito en el pedido de
+      deploy vivo `t_33406907`, que es donde se da el ok — landing, plataforma y bot van juntos.
+
 - [x] **La sonda tapaba a los cuatro leads reales que este carril existe para que se vean.**
       Cerrado el 2026-09-12, `scripts/sonda_widget.mjs` (rama del carril — falta que el
       integrador lo mergee; **no necesita deploy**: la sonda corre desde el repo).
