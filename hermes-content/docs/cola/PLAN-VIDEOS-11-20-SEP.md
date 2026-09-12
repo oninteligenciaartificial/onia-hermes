@@ -35,6 +35,26 @@
    "la IA" genérica. "Loop" es vocabulario propio de él (técnicamente un cron): se usa
    presentándolo como suyo — *"un loop, así le digo yo a una tarea por horario"* — para
    ser específico sin mentirle al que después googlea.
+9. **Contenido de valor de IA incluye** (Sergio Urcullo, 11-sep): **repos de GitHub,
+   noticias de IA y apps/herramientas nuevas** — con tres reglas:
+   - **Repos**: sólo los que tiene instalados y usa (los 10 verificados están en
+     `SERIE_CLAUDE_CODE.md`). Sin estrellas en pantalla (envejecen). Cada corto de repo
+     es trailer del **YT 05 «No construyas lo que ya existe»**.
+   - **Noticias**: formato Fable validado — fuente oficial releída EL DÍA de grabar,
+     el dato traducido («1 de cada 3», no «31,4%»), y **caducan: salen en 48 h o se
+     tiran**. En la cola siempre van primeras.
+   - **Apps nuevas**: sólo probadas por él, y siempre con su «qué NO hace».
+
+## Pool IA-descubrimiento (1 slot por día en los trial v2, rotando)
+
+| Tema | Gancho semilla | Va a |
+|---|---|---|
+| `anthropics/skills` | «Anthropic regala las skills oficiales en GitHub — gratis y las podés leer antes de instalar» | YT 05 |
+| `claude-mem` | «Mi Claude Code se acuerda de lo que hicimos ayer. No viene así: se lo instalé» | YT 05 |
+| `Understand-Anything` | «Le das un proyecto entero y te lo convierte en un mapa que podés recorrer» | YT 05 |
+| `ponytail` + `caveman` | «Dos plugins que le cambian la personalidad a tu IA: uno la vuelve un senior vago, el otro la hace hablar como cavernícola. Los uso los dos» | YT 05 |
+| Plugins oficiales | «Casi todo lo que ibas a construir ya está escrito, gratis, en el directorio oficial» | YT 05 |
+| Noticia de la semana | la que caiga — con la regla de Fable | — |
 
 ## Los 4 carruseles (reemplazan al b-roll ese día)
 
