@@ -380,7 +380,7 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       04:00 La Paz sobre el log vivo (51.774 líneas): hay **24** líneas `rama=MUDO`, y las
       **últimas 9 son todas `conv=49`**, cada ~30-60 min (02:47, 03:15, 03:45, 03:46, 04:15,
       05:19, 06:14, 07:15 UTC), siempre en `etapa=esperando_horario->esperando_horario`,
-      siempre con `enviados=0/0` y el motivo genérico.
+      siempre sin un solo mensaje enviado y con el motivo genérico.
 
       **Por qué importa aunque no sea un bug:** ese motivo es exactamente el que dejaría *"una
       persona escribió y el bot se calló"*, que es el fallo que costó una semana y por el que
@@ -395,6 +395,10 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       (un `conversation_updated`), no a una persona escribiendo — pero **no lo verifiqué**, y
       la diferencia decide el arreglo: si es un evento sin mensaje, el motivo tiene que
       nombrarlo (como ya hacen sus hermanos); si es una persona, es el bug abierto.
+
+      **Dónde se arregla:** `hermes-content/deploy/vps-ops/bot/webhook-server.mjs` línea 288 —
+      ahí está el `: "el motor no produjo respuesta"`, que es el motivo por DEFECTO: se escribe
+      cuando ninguna rama supo decir algo más preciso.
 
       **Reproducción (30 s):**
       ```
