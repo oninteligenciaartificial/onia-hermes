@@ -8,16 +8,6 @@ Instrumento: `scripts/recorrido_cliente.mjs`.
 
 ## Abierto
 
-> 🔴 **2026-09-12 04:1x UTC — CRÍTICO, reportado `t_3f352044`.** Corrida en Importadora / distribuidora:
-> el paso 6 (cargar dato en `/comercio`) escribió una fila `patients` con `organizationId` de
-> **`Clínica Sergio`** (org REAL de `sergio@onia.com.bo`, `clinica-sergio-p2ljs`) — no la org de
-> prueba `zz-qa-` que este mismo run acababa de crear. La fila (`zzqa20260912pac1`) se autolimpió
-> porque mi borrado por patrón de nombre no filtra por organización (ver "Abierto" más abajo, es
-> justo la trampa que evita que quede basura, pero también evita que se note un cruce de tenant).
-> Si el nombre no hubiera llevado `zz-qa-`, esa fila se habría quedado mezclada con los pacientes
-> reales de Sergio para siempre. No toco el producto: reportado a `onia-cola` con reproducción y
-> capturas. **No repetir el paso hasta que esto se entienda** — puede repetirse en cualquier rubro.
-
 > Los cinco rubros que `RUBROS_ACTIVOS` ofrece hoy (`onia-platform/lib/platform/rubros-activos.ts`)
 > ya están recorridos y confirmados 9/9 (o 8/8 cuando el paso 7 no le corresponde): dental,
 > comercio, estética, importadora y servicios profesionales — este último ya NO está roto: el
@@ -37,6 +27,14 @@ Instrumento: `scripts/recorrido_cliente.mjs`.
 > layout de escritorio.
 
 ## Cerrado
+
+- **`t_3f352044` (cruce de tenant en Importadora) — REFUTADO, no era del producto.** Verificado el
+  2026-09-12: `/api/patients` escribe `audit_logs` siempre y no hubo ningún `PATIENT_CREATED` en
+  48h para esa fila — nadie la creó por UI. La sembró otro carril (chatbot-cola) con un `INSERT`
+  directo usando la MISMA forma sellada de este carril (`zz-qa-AAAA-MM-DD-HHMM`), así que mi
+  barredor se la llevó y la reportó como propia. El producto quedó re-auditado con
+  `npm run qa:sin-rastro` (74 tablas, 0 rastros en orgs reales). Comentario completo en la tarea.
+  No repetir esta alarma sin evidencia nueva: la forma del prefijo no basta para atribuir un dato.
 
 - **El paso 8 ya factura de verdad, no mira más el cobro vacío** — cerrado el 2026-09-05. Antes
   llegaba a `/billing` y esa pantalla siempre dice "0 facturas · Cobrado Bs 0,00": "OK" sólo

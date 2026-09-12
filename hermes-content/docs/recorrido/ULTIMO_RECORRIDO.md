@@ -12,6 +12,16 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-12 07:09 UTC — dental 9/9 completo (rutina)
+
+Cuenta `zz-qa-2026-09-12-0709@onia.com.bo`: alta → confirmar correo → onboarding (6 pantallas,
+"Clínica dental") → paciente `zz-qa-2026-09-12-0709-paciente` → cita 2026-09-14 09:00 vista en
+`/appointments` → factura vista en `/billing/<id>` (frenada sin pagar) → panel revisado (no lista
+pacientes, es lo esperado, no un fallo). `completo: true`, 0 filas `zz-qa-` en `appointments` ni
+`organizations` al cerrar (confirmado con `SELECT`). Sin novedad, rutina sana.
+
+---
+
 ## 2026-09-12 06:0x-06:1x UTC — dental 9/9 completo (rutina), tras un crash de navegador transitorio
 
 Corrida anterior (04:20 UTC, quedó sin commitear en el árbol) explotó en el paso 2 con el
