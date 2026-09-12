@@ -68,7 +68,7 @@ const panelLabel: Record<PanelId, string> = {
   chat:
     "Conversación de WhatsApp a las 23:40: alguien pregunta si atienden el sábado y ya tiene la respuesta con el horario que el negocio publicó.",
   cuenta:
-    "Una cuenta recién creada, con clientes, caja, inventario, contabilidad y agentes ya encendidos.",
+    "Un día de ejemplo en el panel: 14 citas, Bs 2.340 cobrados y 9 recordatorios que el agente dejó listos de madrugada, esperando aprobación.",
   dental:
     "Agenda del día de una clínica dental: cada paciente con su hora y su tratamiento, dos citas ya confirmadas y una marcada para llamar.",
   comercio:
@@ -95,13 +95,9 @@ const panelLabel: Record<PanelId, string> = {
  * sigue en trámite y que por ahora se factura en el Portal Web del SIN. La
  * ilustración prometía lo que el texto del mismo sitio tiene que desmentir.
  */
-const MODULOS = [
-  "Clientes",
-  "Caja",
-  "Inventario",
-  "Contabilidad",
-  "Agentes",
-] as const;
+/* MODULOS se retiró el 2026-09-11: el panel del hero pasó de listar módulos a
+   mostrar un día con números (ver case "cuenta"). El comentario de arriba sobre
+   Facturación queda como historia de por qué la lista no la incluía. */
 
 /** Lo que los agentes dejan escrito. Sin números ni nombres de cliente: un
  *  conteo inventado dentro de una interfaz creíble se lee como dato real, y no
@@ -246,19 +242,33 @@ function PanelCuerpo({ panel }: { panel: PanelId }) {
         </>
       );
 
+    /* El panel del HERO vende un DÍA, no un índice de módulos (crítica medida
+       vs Lety el 11-sep: su tarjeta muestra "$13,300/mo" con filas de plata;
+       la nuestra eran 6 sustantivos sin un número). Sigue siendo un panel
+       DIBUJADO con datos de MUESTRA — el sello "Ejemplo" lo declara, así que
+       no fabrica clientes ni cifras del negocio (cero clientes = cero
+       testimonios; un ejemplo etiquetado no es un testimonio). */
     case "cuenta":
       return (
         <>
-          <Head titulo="Tu cuenta" />
-          <div className={s.panelGrid}>
-            {MODULOS.map((m) => (
-              <span key={m} className={s.panelPill}>
-                <span className={s.panelSq} />
-                <span className={s.panelPillTxt}>{m}</span>
-              </span>
-            ))}
+          <Head titulo="Hoy en tu negocio" sello="Ejemplo" />
+          <div className={s.panelKpis}>
+            <span className={s.panelKpi}>
+              <b>14</b> citas de hoy
+            </span>
+            <span className={s.panelKpi}>
+              <b>Bs 2.340</b> cobrados
+            </span>
+            <span className={s.panelKpi}>
+              <b>9</b> recordatorios
+            </span>
           </div>
-          <p className={s.panelFoot}>Encendidos desde el primer día.</p>
+          <ul className={s.panelRows}>
+            <Fila hora="09:10" txt="Cobro registrado — Bs 380" pill="Hecho" hecho />
+            <Fila hora="11:32" txt="Cliente nuevo desde WhatsApp" pill="Hecho" hecho />
+            <Fila hora="02:14" txt="El agente dejó 9 recordatorios listos" pill="Aprobar" />
+          </ul>
+          <p className={s.panelFoot}>Un día cualquiera — con las decisiones en tus manos.</p>
         </>
       );
 

@@ -544,3 +544,103 @@
     animation: none;
   }
 }
+
+
+/* ── HERO v4 (11-sep): split + rotor + sellos ──────────────────────────── */
+
+/* Móvil: apilado y centrado como siempre. Desktop: copy izquierda / panel
+   derecha (patrón de la referencia), para que la evidencia entre en el fold. */
+.heroSplit {
+  display: grid;
+  gap: 1.5rem;
+  justify-items: center;
+  text-align: center;
+}
+
+.heroCopy {
+  display: grid;
+  gap: 1.1rem;
+  justify-items: center;
+}
+
+@media (min-width: 64rem) {
+  .heroSplit {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 3rem;
+    text-align: left;
+  }
+
+  .heroCopy {
+    justify-items: start;
+  }
+
+  .heroSplit .heroCtas {
+    justify-content: flex-start;
+  }
+
+  .heroSplit .heroTitulo {
+    font-size: clamp(2.6rem, 1rem + 3.6vw, 4.2rem);
+    max-width: 14ch;
+  }
+
+  .heroSplit .escena {
+    margin-top: 0;
+  }
+}
+
+/* El rubro que rota. CSS puro: la primera palabra llega pintada del servidor
+   (el LCP no espera nada) y las demás entran por keyframes. Cada palabra dura
+   3 s; el grid apila las cuatro en la misma celda. Reduced motion: se queda
+   la primera. */
+.rotor {
+  display: inline-grid;
+  justify-items: start;
+  text-align: left;
+  color: var(--verde-300);
+}
+
+.rotor > span {
+  grid-area: 1 / 1;
+  opacity: 0;
+  animation: rotorPalabra 12s infinite;
+}
+
+/* Delay NEGATIVO: la primera palabra arranca ya dentro de su ventana visible —
+   sin esto el titular pintaba 0,5 s con un hueco donde va el rubro. */
+.rotor > span:nth-child(1) { animation-delay: -0.48s; }
+.rotor > span:nth-child(2) { animation-delay: 3s; }
+.rotor > span:nth-child(3) { animation-delay: 6s; }
+.rotor > span:nth-child(4) { animation-delay: 9s; }
+
+@keyframes rotorPalabra {
+  0% { opacity: 0; transform: translateY(0.35em); }
+  4%, 23% { opacity: 1; transform: none; }
+  27%, 100% { opacity: 0; transform: translateY(-0.3em); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rotor > span { animation: none; }
+  .rotor > span:first-child { opacity: 1; }
+}
+
+/* Sellos de confianza honesta: integraciones reales, sin testimonios. */
+.heroSellos {
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  color: color-mix(in srgb, #eafaf1 62%, transparent);
+  margin: 0.35rem 0 0;
+}
+
+/* El CTA primario del hero se desempata del fondo: pill CLARA sobre el verde
+   oscuro (tres verdes idénticos competían en el mismo viewport — crítica
+   11-sep). Solo dentro del hero verde; en el resto del sitio el botón sigue
+   siendo verde sobre claro. */
+.heroVerde .heroCtas a:first-child {
+  background: #f6f8f7;
+  color: #013925;
+}
+
+.heroVerde .heroCtas a:first-child:hover {
+  background: #ffffff;
+}

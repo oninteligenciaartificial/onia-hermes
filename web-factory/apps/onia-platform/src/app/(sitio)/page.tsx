@@ -367,27 +367,46 @@ export default function Portada() {
             entrada acá es CSS puro (misma curva y distancia que el sistema de
             motion), así el fold pinta con el HTML. El resto del sitio sigue con
             Reveal: debajo del pliegue la hidratación no le cuesta al LCP. */}
+        {/* HERO v4 (11-sep, crítica medida vs Lety/Dapta): el titular nombra al
+            COMPRADOR (el rubro, rotando con CSS puro — la primera palabra viene
+            del servidor, así el LCP no espera nada), el eyebrow deja de duplicar
+            el claim del h1 y nombra los rubros, y el layout parte en dos en
+            desktop para que el panel CON NÚMEROS entre completo en el fold —
+            antes toda la evidencia quedaba debajo del pliegue. */}
         <div className={p.heroEntrada}>
-          <div className={p.centro}>
-            <Kicker>Un solo sistema para todo el negocio</Kicker>
-            <h1 className={p.heroTitulo}>
-              Todo el negocio, en <em>una</em> pantalla.
-            </h1>
-            <p className={p.heroLead}>
-              Onia es el sistema con el que llevás tu negocio: clientes, caja,
-              inventario y cobros, con agentes que trabajan de noche y te dejan las
-              decisiones a vos.
-            </p>
-            <div className={p.heroCtas}>
-              <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
-              <Btn href={WA_URL_LANDING} variant="line" external>
-                Preguntar por WhatsApp
-              </Btn>
+          <div className={p.heroSplit}>
+            <div className={p.heroCopy}>
+              <Kicker>Para clínicas, tiendas, ferreterías y 4 rubros más</Kicker>
+              <h1 className={p.heroTitulo}>
+                Toda tu{" "}
+                <span className={p.rotor} aria-label="clínica, tienda, ferretería o empresa">
+                  <span aria-hidden="true">clínica</span>
+                  <span aria-hidden="true">tienda</span>
+                  <span aria-hidden="true">ferretería</span>
+                  <span aria-hidden="true">empresa</span>
+                </span>{" "}
+                en <em>una</em> pantalla.
+              </h1>
+              <p className={p.heroLead}>
+                Clientes, caja, inventario y cobros — con agentes que trabajan de
+                noche y te dejan las decisiones a vos.
+              </p>
+              <div className={p.heroCtas}>
+                <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
+                <Btn href={WA_URL_LANDING} variant="line" external>
+                  Preguntar por WhatsApp
+                </Btn>
+              </div>
+              <p className={p.heroNota}>
+                {PRUEBA.dias} días de prueba con el plan {PRUEBA.planQueCorre}, sin tarjeta.
+                Después, desde Bs {bs(plan("basico").mensual)} al mes.
+              </p>
+              {/* Confianza HONESTA sin clientes: lo que el producto ya integra de
+                  verdad. Nada de testimonios ni logos — cero clientes pagando. */}
+              <p className={p.heroSellos}>
+                WhatsApp Business · Cobros con QR · Facturación SIAT · Hecho en Bolivia
+              </p>
             </div>
-            <p className={p.heroNota}>
-              {PRUEBA.dias} días de prueba con el plan {PRUEBA.planQueCorre}, sin tarjeta.
-              Después, desde Bs {bs(plan("basico").mensual)} al mes.
-            </p>
 
             {/* La escena que la referencia arma con mockups de su app. Acá va
                 el panel DIBUJADO — nunca una captura del sistema. */}
