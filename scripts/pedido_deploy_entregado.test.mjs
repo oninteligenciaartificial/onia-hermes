@@ -8,7 +8,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { archivosDelDryRun, archivosNombrados, secoDeProduccion, barrerPedidos, buildQueCorre, clasificarPedido, cuerpoCortoArchivos, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
+import { archivosDelDryRun, archivosNombrados, secoDeProduccion, barrerPedidos, buildQueCorre, clasificarPedido, cuerpoCortoArchivos, inmediblesSinDeclarar, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
 
 // El caso que me costo la vuelta del 2026-09-06: los 13 shas prometidos por t_0268567b
 // estaban TODOS dentro del build vivo y el pedido seguia blocked pidiendo un ok por
@@ -596,4 +596,70 @@ test('cableado: el universo de plataforma se arma con los archivos y sale por so
 // permitirse (pedir nombrar de mas es barato).
 test('un commit sin archivos sigue contando como que viaja', () => {
   assert.equal(soloLosQueViajan([{ sha: '2222222', titulo: 'merge o no pude preguntar', archivos: null }]).length, 1);
+});
+
+// ─────────────────────────────────────────────────────────────────────────────────────
+// EL PEDIDO QUE NO SE PUEDE JUZGAR. Medido el 2026-09-12 sobre los pedidos vivos: de los
+// cuatro, `t_bd62e5a0` (plataforma) y `t_fd5b30c4` (landing) nombraban su sha EN PROSA
+// —«1) 4bff903 - la escalera de precios NUEVA»— y no con la marca `DEPLOY PEDIDO`. Los dos
+// salian `NO MEDIDO: el pedido no nombra un solo sha`, y el gate salia con codigo 0.
+//
+// O sea: el modo de falla que este archivo existe para cazar —el pedido que le pide un ok a
+// Sergio Urcullo por trabajo ya publicado— no se podia cazar en la MITAD de los pedidos
+// vivos, y nada se ponia rojo. Es la misma firma que su encabezado ya documenta para
+// `landing` y `bot` («el hueco esta en el sujeto que no mira, y un exit 0 lo tapa»), solo
+// que un nivel mas adentro: aca el destino SI tiene instrumento, el que falta es el sha.
+//
+// La cura NO es aflojar `shasPrometidos` para que adivine el sha de la prosa: deducir el
+// sujeto del texto libre es lo que rompe a esta familia, y esta escrito arriba con su
+// medicion. La cura es que un pedido INMEDIBLE sea un rojo accionable —declarar el sha
+// cuesta un comentario— en vez de una linea informativa que pasa en verde.
+test('un pedido sin shas declarados queda marcado como INMEDIBLE, no como un no-medido cualquiera', () => {
+  const r = clasificarPedido({ id: 't_bd62e5a0', shas: [], publicado: () => true });
+  assert.equal(r.estado, 'NO_MEDIDO');
+  assert.equal(r.causa, 'SIN_DECLARAR',
+    'sin una causa legible, el reporte tiene que distinguirlo comparando prosa');
+});
+
+// La direccion que sostiene el sesgo: un NO_MEDIDO por AMBIENTE (no pude fetchear, no pude
+// derivar el build vivo) NO es sujeto de este rojo. Confundirlos pondria rojo al carril por
+// un SSH caido y trabaria a los quince — el rojo ambiental que esta casa ya prohibio.
+test('un pedido que SI declara no es inmedible aunque no se pueda resolver el sha', () => {
+  const r = clasificarPedido({ id: 't_x', shas: ['4bff903'], publicado: () => null });
+  assert.equal(r.estado, 'VIGENTE');
+  assert.equal(inmediblesSinDeclarar({ resultados: [r] }).length, 0);
+});
+
+test('inmediblesSinDeclarar junta SOLO a los que no declararon', () => {
+  const sinDeclarar = clasificarPedido({ id: 't_1', shas: [], publicado: () => true });
+  const vigente = clasificarPedido({ id: 't_2', shas: ['4bff903'], publicado: () => false });
+  const entregado = clasificarPedido({ id: 't_3', shas: ['4bff903'], publicado: () => true });
+  assert.deepEqual(inmediblesSinDeclarar({ resultados: [sinDeclarar, vigente, entregado] }), ['t_1']);
+});
+
+// Y el cableado, que es donde esta familia se escapa: la funcion pura puede estar perfecta y
+// el main seguir empujando el caso a `noMedidos`, que sale en verde. Se mide sobre los DOS
+// bloques —landing y plataforma— porque los dos llaman a `clasificarPedido` y arreglar uno
+// solo deja la clase abierta, que es exactamente como nacio este bug.
+test('cableado: los DOS destinos con sha mandan el caso SIN_DECLARAR a inmedibles, no a noMedidos', () => {
+  const src = readFileSync(new URL('./pedido_deploy_entregado.mjs', import.meta.url), 'utf8')
+    .split('\n').filter((l) => !/^\s*(\/\/|\*|\/\*)/.test(l)).join('\n');
+  for (const ancla of ["clasificarPedido({\n        id: p.id", 'clasificarPedido({ id: p.id']) {
+    const desde = src.indexOf(ancla);
+    assert.ok(desde > 0, `no encontre el bloque que ancla en ${JSON.stringify(ancla)}`);
+    const vecindad = src.slice(desde, desde + 700);
+    assert.match(vecindad, /causa === 'SIN_DECLARAR'\s*\)\s*inmedibles\.push\(/,
+      'el push tiene que colgar de la causa, no de una condicion cualquiera');
+  }
+});
+
+// El rojo tiene que EXISTIR y cortar. Un `inmedibles.push()` sin su `return 1` deja el
+// veredicto en la basura: el gate imprimiria el aviso y saldria 0, que es el estado de hoy.
+test('cableado: un pedido inmedible hace salir al gate con codigo 1', () => {
+  const src = readFileSync(new URL('./pedido_deploy_entregado.mjs', import.meta.url), 'utf8')
+    .split('\n').filter((l) => !/^\s*(\/\/|\*|\/\*)/.test(l)).join('\n');
+  const i = src.indexOf('if (inmedibles.length > 0)');
+  assert.ok(i > 0, 'el main tiene que tener un control propio para los pedidos inmedibles');
+  assert.match(src.slice(i, i + 900), /return 1;/,
+    'sin return 1 el control es decorativo: imprime y pasa en verde');
 });
