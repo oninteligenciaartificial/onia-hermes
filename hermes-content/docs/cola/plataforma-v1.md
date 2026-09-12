@@ -195,9 +195,12 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       Sobre el mismo patrón de `onia-platform/lib/onia-core/modules/agents-runtime.ts`:
       (1) ✅ **Confirmador de citas de mañana** (`draft_message`: citas de mañana sin
       confirmar → mensaje listo para aprobar) — **CONSTRUIDO el 2026-09-12**, ver abajo,
-      (2) **Seguimiento de cotizaciones** sin respuesta en N días (`draft_message` —
-      importadora), (3) ✅ **Stock bajo mínimo → tarea de pedido** al proveedor de la ficha
+      (2) ✅ **Seguimiento de cotizaciones** sin respuesta en N días (`draft_message` —
+      importadora) — **CONSTRUIDO el 2026-09-12**, ver abajo, (3) ✅ **Stock bajo mínimo →
+      tarea de pedido** al proveedor de la ficha
       (`create_task`: no depende del envío externo) — **CONSTRUIDO el 2026-09-12**, ver abajo.
+      **Los TRES quedaron construidos; lo único que les falta a los tres es el mismo paso:
+      mergear y desplegar.**
 
       ✅ **(1) HECHO: agente `confirmador`** (`onia-platform`, rama
       `claude/chatbots-platform-review-0d1d09`, `82d34b5` — **falta mergear y desplegar**). Gate nuevo
@@ -228,6 +231,38 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       todos los agentes la marca **un** cron del host, 1 vez por día (11:00 UTC = 07:00 La
       Paz). El agente mira las citas de mañana una vez al día; cambiar la hora es tocar un cron
       del VPS, que no es de este carril.
+
+      ✅ **(2) HECHO: agente `seguidor`** (`onia-platform` `4d94cdf`, rama
+      `claude/chatbots-platform-review-0d1d09` — **falta mergear y desplegar**). Gates en el
+      nodo de casa: `tsc` limpio, **4.791 tests verdes**, `eslint` limpio, `check:onia-core` OK.
+      Gate nuevo `lib/onia-core/modules/agents-seguidor.test.ts` (21 casos), **validado por
+      mutación en cuatro puntos**: sin puerta de validez → rojo; sin puerta de estado → 4
+      rojos; sin puerta de rubro → 2 rojos; sin plazo de espera → rojo.
+
+      **Las dos decisiones que costaron pensarlas, porque las dos tenían una versión obvia y
+      equivocada.** (a) **La fecha del envío sale de `metadata.sentAt`, que ya la escribe la
+      transición del rubro (`transicionarCotizacion`) — NO de `updatedAt`.** Parecen lo mismo y
+      no lo son: editar una línea después de mandarla mueve `updatedAt`, así que la cotización
+      que se está negociando activamente sería justo la que el agente deja de perseguir. El dato
+      ya existía en el producto; inventarlo habría sido la segunda fuente.
+      (b) **Una cotización VENCIDA no se persigue, y ése es el caso NORMAL, no el raro:** pasar
+      a `expired` es una transición **manual** que nadie ejecuta, así que la base tiene `sent`
+      con la validez cumplida. Un borrador que pregunta "¿la viste?" sobre un precio que ya no
+      vale le promete al cliente un monto que el negocio no va a sostener. Sin `validUntil`
+      cargado **sí** se persigue: ahí el precio nunca se declaró vencido.
+
+      **Y una tercera, sobre qué NO dice el mensaje:** el texto al cliente **no repite el
+      monto**, aunque el feed lo tenga y el resumen del panel sí lo muestre. Son dos lectores
+      distintos — el resumen lo lee el dueño, que prioriza por plata; el mensaje lo lee el
+      cliente, que ya tiene la cotización. Repetirle la cifra suelta por WhatsApp, sin las
+      líneas ni las condiciones, convierte un seguimiento en una segunda oferta que puede no
+      coincidir con el documento.
+
+      ⚠️ **Hoy no tendría a quién perseguir, y se midió antes de decir lo contrario:**
+      `select ... from onia_commerce_quotes` en producción devuelve **cero filas** en todas las
+      orgs. Es el mismo estado que el Confirmador (cero citas) y por el mismo motivo — no hay
+      clientes usando el producto todavía, no es que el agente esté mudo. Lo que prueba que
+      produce es el gate, no la base.
 
       ✅ **(3) HECHO: agente `reponedor`** (`onia-platform` `42ab871`, rama
       `claude/chatbots-platform-review-0d1d09` — pusheado, **falta mergear y desplegar**).
