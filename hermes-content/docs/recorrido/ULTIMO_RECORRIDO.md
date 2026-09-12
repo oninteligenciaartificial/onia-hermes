@@ -12,6 +12,21 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-12 22:09-22:14 La Paz — dental 9/9 y Comercio 8/8, dos corridas seguidas, sin hallazgos
+
+Rotando como quedó anotado la vuelta pasada (dental venía sano corrida tras corrida). Dental
+(`zz-qa-2026-09-12-2209`): recorrido completo, 9/9, cita 2026-09-14 09:00 vista en
+`/appointments` (`cmtyxy1um008a01rw9ndxxasu`), factura con ítem visible en
+`/billing/cmtyxycp2008c01rw3vmvsru2` (frenada sin pagar). Comercio (`zz-qa-2026-09-12-2214`):
+8/8 los que le corresponden — paso 7 sigue NO-APLICA por diseño (ese rubro no vende agenda,
+coherente con su menú), dato del paso 6 cargado en storefront Catálogo y esta vez SÍ aparece
+en `/dashboard`. Las dos corridas con `completo: true`, 0 filas `zz-qa-` en `appointments` ni
+`organizations` al cerrar cada una (confirmado con `SELECT`). Sin hallazgo nuevo del producto.
+Próxima vuelta: seguir rotando — importadora, estética o servicios profesionales llevan más
+tiempo sin reverificar, o retomar promesa-vs-entrega en una superficie sin auditoría reciente.
+
+---
+
 ## 2026-09-12 21:10 La Paz — dental 9/9 completo (rutina), y una basura huérfana de una corrida anterior limpiada
 
 Al arrancar la vuelta, antes de correr el recorrido, `select count(*) from organizations where
