@@ -2257,6 +2257,43 @@ decisión de Sergio, no código.
 
 ## Después
 
+- [ ] 🔴 **La sonda NO cierra su propia conversación, y por eso encabezaba la bandeja de leads
+      reales cada 30 minutos.** Medido el 2026-09-11 en `conversations` del inbox **4** (el de los
+      desconocidos de la web), no deducido: la conv **49** («Sonda QA carril chatbot») llevaba
+      **338 mensajes entrantes / 333 salientes** —la sonda reusa la misma conversación desde el
+      2-sep— y estaba **`status=0` (open) con el `last_activity_at` más reciente de todo el
+      inbox**. Chatwoot ordena por esa columna: cada corrida del loop (`13,43 * * * *`) la
+      devolvía al tope, y los cuatro desconocidos reales quedaban debajo de **cinco** sondas —
+      entre ellos la **34** (1 mensaje, 0 respuestas, 24-ago) y la **36** (2 mensajes, 0
+      respuestas, 27-ago), que son justo los que S7 dice que Sergio Urcullo tiene que contestar.
+      Un carril cuyo objetivo es *«que un desconocido escriba y esa conversación SE VEA en la
+      bandeja»* se estaba tapando a sí mismo la bandeja con su propio instrumento.
+
+      **La causa está localizada:** `scripts/sonda_widget.mjs` resuelve la conversación **al
+      arrancar** y sólo si hace falta (`dejarComoExtrano` → `desarmar`, y `necesitaDesarme()`
+      devuelve `false` salvo handoff). En el camino feliz —el bot contesta los dos— **nadie la
+      cierra al terminar**, así que la sonda siempre termina dejándola abierta.
+
+      ✅ **Barrido ya hecho (2026-09-11 20:48 UTC), sólo lo propio y por id exacto:** resueltas
+      las 6 que ensucian —45, 46, 47, 49, 50 y la 10 («Visitante Prueba Web»)— por `rails runner`
+      con guarda `inbox_id == 4`. **Verificado releyendo la base:** la lista de ABIERTAS del
+      inbox 4 quedó en **los 4 desconocidos reales y nada más** (48, 40, 36, 34). No se tocó
+      ninguna conversación de persona real.
+
+      🔴 **Lo que FALTA y es el arreglo de fondo (no entró en la vuelta del 11-sep por tope de
+      tiempo, y se dice en vez de maquillarse):** que la sonda resuelva su conversación **al
+      terminar**, o el barrido de arriba hay que repetirlo a mano para siempre. El punto de
+      inserción es el veredicto de éxito (`codigo: 0`, `scripts/sonda_widget.mjs:197`) y el
+      mecanismo ya existe y ya está probado: `desarmar(conversacionId)`. No cambia lo que la
+      sonda MIDE —la corrida siguiente la blanquea igual al arrancar— pero sí exige test en rojo
+      primero: el riesgo es romper el único instrumento que dice si el bot sigue vivo.
+      ⚠️ Al tocarlo, respetar lo ya pagado: esa línea es la que deja el rastro *«marked resolved
+      by system due to 0 minutes of inactivity»*, que **lo escribimos nosotros** — no configurar
+      `auto_resolve_after` para «arreglarlo», porque eso ENCIENDE un barrendero que hoy no corre
+      y se llevaría puestos los leads reales. **LISTO =** dos corridas seguidas de
+      `npm run sonda:widget` dejan la conv de sonda en `resolved` y la bandeja de abiertas del
+      inbox 4 sin una sola «Sonda QA».
+
 - [ ] **Limpieza de la data QA NUEVA.** La del 29-ago ya se ejecutó; después se generó más:
       las conversaciones QA 39, 43 y 44 (`Cliente Prueba Bandeja`, `Cliente Insistencia Tres`,
       `Cliente Comprobante`). **No borrar todavía**: son la evidencia de cuatro ítems cerrados,
