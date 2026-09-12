@@ -2551,3 +2551,129 @@
   margin-right: 0.2em;
   font-weight: 400;
 }
+
+/* ── SCROLLY DE RUBROS v2 (11-sep): texto izq, panel sticky der ─────────── */
+
+.swy {
+  display: grid;
+  gap: 2rem;
+}
+
+.swyTextos {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.swyBloque {
+  margin: 0;
+}
+
+.swyPalabra {
+  font-family: var(--font-headline);
+  font-weight: 800;
+  font-size: clamp(2rem, 1.2rem + 2.6vw, 3.4rem);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin: 0 0 0.5rem;
+  color: var(--ink);
+  transition: opacity 0.25s ease;
+}
+
+.swyLinea {
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 38ch;
+  margin: 0;
+  transition: opacity 0.25s ease;
+}
+
+/* Panel inline: SOLO en apilado (móvil / reduced-motion). */
+.swyPanelInline {
+  display: block;
+  margin-top: 1.1rem;
+  border-radius: 16px;
+  padding: clamp(0.9rem, 4vw, 1.6rem);
+}
+
+.swyEscenario {
+  display: none;
+}
+
+/* Escritorio: el scrolly SIEMPRE — reduced-motion no lo degrada a apilado,
+   solo apaga las transiciones (más abajo): el cambio queda instantáneo. La
+   lección del 11-sep: Sergio tiene "reducir movimiento" en Windows y el v1
+   lo mandaba al fallback apilado — nunca vio la sección estrella. Un layout
+   sticky con cambio discreto NO es una animación: es navegación. */
+@media (min-width: 64rem) {
+  .swy {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 3.5rem;
+    align-items: start;
+  }
+
+  /* Cada bloque de texto ocupa una pantalla de lectura: es lo que hace que
+     el panel cambie "uno por uno" al ritmo del scroll. */
+  .swyTextos {
+    gap: 0;
+  }
+
+  .swyBloque {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* El texto no-activo se atenúa: el ojo sabe qué rubro está sonando. */
+  .swyBloque:not([aria-current="true"]) .swyPalabra,
+  .swyBloque:not([aria-current="true"]) .swyLinea {
+    opacity: 0.28;
+  }
+
+  .swyPanelInline {
+    display: none;
+  }
+
+  .swyEscenario {
+    display: block;
+    /* Ocupa TODO el alto del grid: sin esto el sticky viaja solo lo que mide
+       un panel y desaparece al segundo rubro (visto en el preview). */
+    height: 100%;
+  }
+
+  .swySticky {
+    position: sticky;
+    top: clamp(4rem, 12vh, 7rem);
+    display: grid;
+  }
+
+  /* Los cinco paneles apilados en la misma celda; visible solo el activo. */
+  .swyPanel {
+    grid-area: 1 / 1;
+    border-radius: 18px;
+    padding: clamp(1rem, 1.8vw, 1.8rem);
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    pointer-events: none;
+  }
+
+  .swyPanelActivo {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Reduced motion: mismo scrolly, cambio instantáneo y sin desplazamientos. */
+@media (prefers-reduced-motion: reduce) {
+  .swyPanel {
+    transition: none;
+    transform: none;
+  }
+
+  .swyPalabra,
+  .swyLinea {
+    transition: none;
+  }
+}

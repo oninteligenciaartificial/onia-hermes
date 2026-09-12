@@ -5,39 +5,32 @@ import { PanelDibujado } from "./ui";
 import s from "./sitio.module.css";
 
 /**
- * Conmutador de rubros — LA sección estrella (Fanvue le da 6 pantallas de alto
- * a su switcher de nichos). Mecánica MEDIDA, portada del bloque vanilla
- * packages/blocks/src/sticky-niche-switcher.ts y de la versión React verificada
- * components/landing-v2/rubros.tsx:
+ * Conmutador de rubros v2 — SCROLLYTELLING (pedido de Sergio Urcullo, 11-sep,
+ * sobre captura de producción: "texto a la izquierda, imágenes a la derecha,
+ * que se muevan mediante scroll y se vean uno por uno").
  *
- *  · El JS decide UN entero (--niche-i) con un scroll handler rAF-throttled que
- *    RELEE getBoundingClientRect() de TODAS las bandas en cada aviso — acumular
+ * Layout: los cinco bloques de texto scrollean a la izquierda; el panel
+ * DIBUJADO del rubro activo queda pegado (sticky) a la derecha y cambia con
+ * crossfade cuando el bloque de texto siguiente cruza el centro del viewport.
+ *
+ * La MECÁNICA de detección se hereda del conmutador v1, batallada y medida:
+ *  · UN entero (activo) decidido por un scroll handler rAF-throttled que RELEE
+ *    getBoundingClientRect() de TODOS los bloques en cada aviso — acumular
  *    estado por centinela se queda viejo en un salto de scroll (bug medido:
  *    saltando hacia atrás el índice quedaba clavado en el último).
- *  · Las bandas miden un rubro de alto, no 1px: un punto se saltea entre dos
- *    frames y el observador nunca despierta.
- *  · El CSS deriva del entero el rodillo y la opacidad de las palabras (1 /
- *    .25). Conmutador DISCRETO por umbral (sin scrub, sin pin, sin GSAP).
- *  · Apilado (móvil / reduced-motion) las palabras van ANTES de las formas.
+ *  · El umbral es el CENTRO del viewport, no el borde: con texto de altura
+ *    real (no bandas invisibles) el rubro se activa cuando SU texto es el que
+ *    se está leyendo.
  *
- * El rodillo lleva el PANEL DIBUJADO de cada rubro (<PanelDibujado>, el mismo
- * de <Shape>), no una captura. Hasta el 2026-09-01 llevó cinco .webp del
- * producto y era la peor superficie del sitio: el recorte estaba horneado en el
- * archivo, así que el texto salía cortado a mitad de palabra ("Borrador → e"),
- * las capturas traían su propia sombra —contra el lenguaje aprobado, cero
- * sombras— y una fecha vieja quemada adentro. Sergio, 2026-09-01, textual: "no
- * coloques capturas literales del sistema, se ve mal, coloca cosas
- * referenciales". El guard forma.test.ts impide volver a cablearlas.
+ * APILADO (móvil y reduced-motion): cada rubro muestra su texto y SU panel
+ * juntos, en orden. ⚠️ La versión anterior apilaba LAS CINCO PALABRAS gigantes
+ * primero y los cinco paneles después — eso es lo que Sergio vio en producción
+ * (su Windows tiene "reducir movimiento" activado, así que él SIEMPRE ve el
+ * fallback) y lo que motivó este rediseño: el fallback también es la página.
  *
- * El color del rubro pasó de ser el fondo DE la captura a ser el mat sobre el
- * que se apoya el panel: misma composición que <Shape> en el resto del sitio
- * (tarjeta clara sobre color, profundidad por solape y escala, cero sombra).
- *
- * Cada rubro muestra la pantalla que cuenta SU historia —agenda, caja,
- * cotizaciones, sesiones, cierre de mes—: en un conmutador que existe para
- * probar que el sistema cambia por rubro, cinco paneles iguales prueban lo
- * contrario. El contenido de cada uno vive en ui.tsx, al lado de su rótulo
- * accesible.
+ * El rodillo lleva el PANEL DIBUJADO de cada rubro, nunca una captura
+ * (Sergio, 2026-09-01; guard forma.test.ts). El copy de cada bloque repite lo
+ * que este mismo sitio ya publica por rubro — acá no nace ninguna promesa.
  */
 
 type Rubro = {
@@ -46,54 +39,70 @@ type Rubro = {
   palabra: string;
   /** color del mat del rubro (tokens de marca, nunca un hex suelto) */
   bg: string;
+  /** una línea del RESULTADO, la misma historia que dibuja su panel */
+  linea: string;
 };
 
 /**
- * Los cinco mats se alternan a propósito: dos rubros seguidos del mismo verde
- * hacían que el rodillo pareciera no haber cambiado de panel.
- *
- * ⚠️ Eso se decía acá y NO se cumplía en el último paso. Estética era
- * --verde-700 (#016141) y Servicios --verde-900 (#013925): 1,73:1 de contraste
- * entre un mat y el siguiente — calculado, no estimado. Los dos paneles tienen
- * además la misma silueta (cabecera + tres filas con pastilla + remate), así
- * que el paso final de LA sección estrella no cambiaba ni de color ni de forma:
- * el rodillo parecía trabado justo donde tiene que rematar. Estética pasa a
- * --verde-500 y la serie queda oscuro → señal → tinta → medio → hondo, sin dos
- * valores vecinos parecidos:
- *   dental → comercio  : verde-800  → señal      (salto máximo)
- *   comercio → importadora : señal  → tinta      (salto máximo)
- *   importadora → estética : tinta  → verde-500  (5,15:1)
- *   estética → servicios   : v-500  → verde-900  (3,53:1)
- * El orden de los rubros NO se toca: dental primero es la regla del proyecto
- * (dental vivo → comercio → importadora), y las palabras leen en ese orden.
+ * Los cinco mats se alternan a propósito (dos verdes vecinos parecidos hacían
+ * que el rodillo pareciera trabado — medido en v1): oscuro → señal → tinta →
+ * medio → hondo. El orden de los rubros NO se toca: dental primero es la
+ * regla del proyecto (dental vivo → comercio → importadora).
  */
 const RUBROS: readonly Rubro[] = [
-  { id: "dental", palabra: "Dental", bg: "var(--verde-800)" },
-  { id: "comercio", palabra: "Comercio", bg: "var(--signal)" },
-  { id: "importadora", palabra: "Importadora", bg: "var(--tinta)" },
-  { id: "estetica", palabra: "Estética", bg: "var(--verde-500)" },
-  { id: "servicios", palabra: "Servicios", bg: "var(--verde-900)" },
+  {
+    id: "dental",
+    palabra: "Dental",
+    bg: "var(--verde-800)",
+    linea: "La agenda del día con cada paciente, su hora, su tratamiento y su teléfono.",
+  },
+  {
+    id: "comercio",
+    palabra: "Comercio",
+    bg: "var(--signal)",
+    linea: "La caja del día cortada por método de pago — y el fiado fuera del cuaderno.",
+  },
+  {
+    id: "importadora",
+    palabra: "Importadora",
+    bg: "var(--tinta)",
+    linea: "Tus cotizaciones vivas: cuál se aprobó, cuál se envió y cuál espera respuesta.",
+  },
+  {
+    id: "estetica",
+    palabra: "Estética",
+    bg: "var(--verde-500)",
+    linea: "Cada paquete con las sesiones ya hechas y las que faltan, control incluido.",
+  },
+  {
+    id: "servicios",
+    palabra: "Servicios",
+    bg: "var(--verde-900)",
+    linea: "Ventas y compras del mes al día, para llegar al cierre sin arqueología.",
+  },
 ];
 
 export function Switcher() {
-  const runwayRef = useRef<HTMLDivElement | null>(null);
+  const listaRef = useRef<HTMLDivElement | null>(null);
   const [activo, setActivo] = useState(0);
 
   useEffect(() => {
-    const runway = runwayRef.current;
-    if (!runway) return;
-    const marcas = Array.from(runway.querySelectorAll<HTMLElement>("[data-mark]"));
-    if (marcas.length < 2) return;
+    const lista = listaRef.current;
+    if (!lista) return;
+    const bloques = Array.from(lista.querySelectorAll<HTMLElement>("[data-rubro]"));
+    if (bloques.length < 2) return;
 
     let raf = 0;
     const medir = () => {
       raf = 0;
-      // se relee la geometría de TODAS las bandas: gana la última cruzada.
-      // en móvil/reduced-motion van display:none, sus rects son cero y el
-      // índice vuelve solo a 0 — sin guardas de matchMedia.
+      // Gana el último bloque cuyo tope cruzó el centro del viewport. Se relee
+      // TODA la geometría en cada aviso (la lección del v1). En apilado los
+      // bloques siguen visibles, así que el índice es inofensivo ahí: el panel
+      // sticky está display:none.
+      const centro = window.innerHeight / 2;
       let i = 0;
-      for (let k = 0; k < marcas.length; k += 1) {
-        if (marcas[k].getBoundingClientRect().top < 0) i = k;
+      for (let k = 0; k < bloques.length; k += 1) {
+        if (bloques[k].getBoundingClientRect().top < centro) i = k;
       }
       setActivo((prev) => (prev === i ? prev : i));
     };
@@ -101,7 +110,7 @@ export function Switcher() {
       if (!raf) raf = requestAnimationFrame(medir);
     };
 
-    medir(); // recarga a mitad del runway: arranca en el rubro correcto
+    medir(); // recarga a mitad de la sección: arranca en el rubro correcto
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll, { passive: true });
     return () => {
@@ -112,50 +121,40 @@ export function Switcher() {
   }, []);
 
   return (
-    <div
-      ref={runwayRef}
-      className={s.runway}
-      style={{ "--niche-i": activo, "--niche-run": RUBROS.length + 1 } as CSSProperties}
-    >
-      <div className={s.marks} aria-hidden="true">
+    <div className={s.swy} ref={listaRef}>
+      {/* Columna de TEXTO: los cinco bloques scrollean. En apilado, cada
+          bloque trae su propio panel debajo. */}
+      <div className={s.swyTextos}>
         {RUBROS.map((r, k) => (
-          <i
+          <article
             key={r.id}
-            data-mark
-            className={s.mark}
-            style={{ top: `calc(var(--niche-step) * ${k})` }}
-          />
+            data-rubro
+            className={s.swyBloque}
+            aria-current={k === activo ? "true" : "false"}
+          >
+            <h3 className={s.swyPalabra}>{r.palabra}</h3>
+            <p className={s.swyLinea}>{r.linea}</p>
+            {/* El panel INLINE del apilado (móvil / reduced-motion). En el
+                scrolly de escritorio va display:none y manda el sticky. */}
+            <div className={s.swyPanelInline} style={{ background: r.bg } as CSSProperties}>
+              <PanelDibujado panel={r.id} />
+            </div>
+          </article>
         ))}
       </div>
 
-      <div className={s.stage}>
-        <div className={s.card}>
-          <div className={s.roll}>
-            {RUBROS.map((r) => (
-              <div
-                key={r.id}
-                className={s.slot}
-                style={{ background: r.bg } as CSSProperties}
-              >
-                <PanelDibujado panel={r.id} />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className={s.stageMid}>
-          <ol className={s.words} aria-label="Rubros vivos hoy">
-            {RUBROS.map((r, k) => (
-              <li key={r.id}>
-                <span
-                  className={s.word}
-                  aria-current={k === activo ? "true" : "false"}
-                >
-                  {r.palabra}
-                </span>
-              </li>
-            ))}
-          </ol>
+      {/* Columna STICKY: un solo panel visible por vez, crossfade al cambiar. */}
+      <div className={s.swyEscenario} aria-hidden="true">
+        <div className={s.swySticky}>
+          {RUBROS.map((r, k) => (
+            <div
+              key={r.id}
+              className={`${s.swyPanel}${k === activo ? ` ${s.swyPanelActivo}` : ""}`}
+              style={{ background: r.bg } as CSSProperties}
+            >
+              <PanelDibujado panel={r.id} />
+            </div>
+          ))}
         </div>
       </div>
     </div>
