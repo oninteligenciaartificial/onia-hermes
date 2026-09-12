@@ -799,3 +799,53 @@ test('cableado: el comando de cura de un cuerpo corto se DERIVA del destino', ()
   assert.doesNotMatch(bloque, /onia-siat\/_deploy/,
     'una ruta a mano manda al carril equivocado en cuanto hay mas de un destino por copia');
 });
+
+// ── el remedio impreso tiene que poder limpiar el rojo ─────────────────────────────────
+//
+// Medido el 2026-09-12, en la primera corrida del instrumento del bot: el gate dio ROJO
+// porque el cuerpo de t_e45a24ff no nombraba 8 de los 10 archivos que su ok publica, y el
+// remedio decia «Nombralos comentando el recuento DERIVADO». Ese control lee
+// `partirPedido(texto).cuerpo` y NADA MAS — un comentario no lo puede limpiar nunca. O sea
+// que el gate mandaba al carril a hacer algo que no funciona, y recien despues («si ya se
+// comento y el cuerpo sigue corto») al remedio que si. Una vuelta entera por un texto.
+//
+// El universo se DERIVA: funciones que parten el pedido y se quedan con el cuerpo ->
+// acumulador al que empujan en el main -> bloque que imprime su veredicto. Escribir los tres
+// nombres a mano dejaria afuera al cuarto control del dia que se escriba, que es exactamente
+// como el hermano `bot` quedo sin instrumento.
+test('un control que lee SOLO el cuerpo no manda a comentar', () => {
+  const src = readFileSync(new URL('./pedido_deploy_entregado.mjs', import.meta.url), 'utf8')
+    .split('\n').filter((l) => !/^\s*(\/\/|\*|\/\*)/.test(l)).join('\n');
+
+  const soloCuerpo = [...src.matchAll(/export function (\w+)\(/g)]
+    .map((m) => ({ nombre: m[1], cuerpo: src.slice(m.index, m.index + 400) }))
+    .filter((f) => f.cuerpo.includes('partirPedido(') && f.nombre !== 'partirPedido')
+    .map((f) => f.nombre);
+  assert.ok(soloCuerpo.length >= 3,
+    `esperaba al menos los 3 controles de cuerpo, derive ${soloCuerpo.length}: ${soloCuerpo}`);
+
+  const acumuladores = new Set();
+  for (const nombre of soloCuerpo) {
+    for (const m of src.matchAll(new RegExp(`=\\s*${nombre}\\(\\{`, 'g'))) {
+      const vecindad = src.slice(m.index, m.index + 500);
+      const push = /(\w+)\.push\(/.exec(vecindad);
+      assert.ok(push, `${nombre} se llama y su resultado no empuja a ningun acumulador`);
+      acumuladores.add(push[1]);
+    }
+  }
+  assert.ok(acumuladores.size >= 3, `derive ${acumuladores.size} acumuladores: ${[...acumuladores]}`);
+
+  for (const acc of acumuladores) {
+    const i = src.indexOf(`if (${acc}.length > 0)`);
+    assert.ok(i > 0, `${acc} se llena y nadie imprime su veredicto`);
+    const bloque = src.slice(i, src.indexOf('return 1;', i));
+    // 🔴 El defecto exacto: la INSTRUCCION de comentar. Hablar de los comentarios para
+    // explicar por que el pedido salio VIGENTE si vale («Los comentarios pueden nombrarlos»),
+    // y por eso el patron pide el imperativo/gerundio y no la palabra suelta.
+    assert.doesNotMatch(bloque, /coment(a|ando)\b/i,
+      `el remedio de ${acc} manda a comentar, y comentar no puede limpiar un control que solo lee el cuerpo`);
+    // Y la simetrica, que es la que deja el rojo sin salida: sacar el remedio malo no alcanza
+    // si no queda el bueno escrito.
+    assert.match(bloque, /rehac(e|iendo)/i, `el remedio de ${acc} no dice como se cura`);
+  }
+});
