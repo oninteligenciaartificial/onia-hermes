@@ -792,7 +792,17 @@ y sin operar. Acá se opera, con verificación por ítem.
       12.913 ms y Dapta 9.493 ms desktop), precio visible en el fold (ninguna referencia lo
       tiene), 1 clic a /register, 0 render-blocking, 0 imágenes sin dimensiones. Lo que
       falla, por impacto:
-      (a) 🔴 VELOCIDAD — el widget de Chatwoot es el **71% del peso** de la landing (1.062 KB
+      ✅ (a)+(b)+(c) CERRADOS el 2026-09-11 (commits `b1004df6` + sin-fade, PUBLICADOS en
+      onia.com.bo y re-medidos con Lighthouse desde el VPS — instrumento estable para
+      futuras mediciones): peso total **1.491 → 434 KB (−71%)**, requests 43 → 26, Chatwoot
+      **0 KB** en carga inicial (difiere a primera interacción o 5 s), hero pinta sin esperar
+      JS y SIN fade (lección medida: un texto en opacity 0 no cuenta como pintado — el fade
+      de entrada en el fold cuesta LCP venga de JS o de CSS), polyfills eliminados por
+      browserslist moderno. Score 86, FCP 2,1 s, **LCP 3,8 s — mejor pero aún > 2,5**: lo que
+      queda es (d) TTFB ~740 ms (regla de caché de HTML en Cloudflare — la decide Sergio
+      Urcullo en su panel CF o autorizando el conector) y ~680 ms de render delay del h1
+      (revisar font-display de la fuente de titulares). El detalle original:
+      (a-original) el widget de Chatwoot era el **71% del peso** de la landing (1.062 KB
       de 1.491 KB, 18 requests): diferirlo a primera interacción o idle 3-5 s con un launcher
       estático (~1 KB) en el layout del route group `web-factory/apps/onia-platform/src/app/(sitio)/`;
       (b) 🔴 LCP móvil 3,1 s (> presupuesto 2,5 s): `dueno-duerme.webp` (107 KB, 1600×900) está
