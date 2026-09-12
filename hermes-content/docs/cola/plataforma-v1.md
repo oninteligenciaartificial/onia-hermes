@@ -196,8 +196,41 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       (1) **Confirmador de citas de mañana** (`draft_message`: cada tarde, citas de mañana sin
       confirmar → mensaje listo para aprobar),
       (2) **Seguimiento de cotizaciones** sin respuesta en N días (`draft_message` —
-      importadora), (3) **Stock bajo mínimo → tarea de pedido** al proveedor de la ficha
-      (`create_task`: no depende del envío externo). Restricción vigente: el ENVÍO externo (S6) no
+      importadora), (3) ✅ **Stock bajo mínimo → tarea de pedido** al proveedor de la ficha
+      (`create_task`: no depende del envío externo) — **CONSTRUIDO el 2026-09-12**, ver abajo.
+
+      ✅ **(3) HECHO: agente `reponedor`** (`onia-platform` `42ab871`, rama
+      `claude/chatbots-platform-review-0d1d09` — pusheado, **falta mergear y desplegar**).
+      Gates en el VPS: `tsc` limpio, **4.749 tests verdes**, `eslint` limpio, `check:onia-core`
+      OK. Gate nuevo `lib/onia-core/modules/agents-reponedor.test.ts` (10 casos), **validado por
+      mutación en tres puntos**: predicado propio en vez de `isBelowReorder` → rojo en el borde
+      `quantity === reorderPoint`; sin puerta de rubro → rojo; sin rótulo → rojo.
+
+      **Lo que apareció al construirlo y es el hallazgo:** el predicado ya existía
+      —`isBelowReorder` en `lib/onia-core/modules/commerce-logic.ts`, port fiel del core, con
+      sus tests— y tenía **CERO llamadores en producción**: sus únicas referencias eran su
+      propio archivo de test. Un módulo que nadie llama vale cero. El agente no lo reescribe,
+      lo llama; y el `<=` tampoco se duplica en el `where` de Prisma (el SQL acota a lo que el
+      dueño curó, `reorderPoint` cargado, y el evaluador puro decide) — así la regla que
+      decide si el negocio se queda sin mercadería vive en **un solo lugar**.
+
+      Las cuatro puertas que un agente nuevo tiene que cruzar, cada una con el bug que la
+      originó: **rubro** (`agents-por-rubro`: corre sólo donde hay inventario, preguntándole al
+      pack con `llevaInventario` y no a una lista de tracks escrita al lado — así fue como el
+      Recall terminó corriendo mudo en tres rubros); **rótulo** (`agents-rotulos`, o la pantalla
+      renderiza un hueco); **tipo de work item** (`reponer_insumo`, que el vocabulario del core
+      ya tenía — sin eso caía al default `seguimiento_paciente` y las tareas de pedido de una
+      ferretería aterrizaban en la bandeja de recepción clínica); y **entidad relacionada**
+      (`stock_item` → `OniaCommerceStockItem`). De paso, `isAgentKind` pasó a derivarse de
+      `AGENT_KINDS`: con la lista escrita a mano, un kind nuevo entraba al cron y el endpoint
+      externo lo rechazaba.
+
+      Es `create_task` y `autonomyLevel: "auto"` a propósito: **no contacta a nadie**, así que
+      no ocupa la cola de aprobaciones —que es para lo que SALE del negocio— y no depende del
+      envío externo (S6), que sigue sin existir. Cooldown de 7 días por existencia: el proveedor
+      tarda, y repetir la tarea a diario hasta que llegue la mercadería entierra la cola.
+      El guard 15b del propio producto cazó mi copy en tuteo («Revisa») antes de que lo viera
+      un cliente — el gate de rubro×texto funcionando sobre trabajo nuevo. Restricción vigente: el ENVÍO externo (S6) no
       existe — aprobar registra la acción; el WhatsApp real es obra aparte y no se promete hasta
       que exista. Las dos precondiciones que Sergio Urcullo puso antes de estos tres (E2E de los 2
       vivos, y la cadencia) **ya están cerradas** en los dos ítems de abajo.
