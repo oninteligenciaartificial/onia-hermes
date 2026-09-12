@@ -151,9 +151,12 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       en `onia_agents_actions`, visibles en la pantalla Agentes de la clínica de Sergio para
       que él apruebe. **El misterio del "0 acciones en la historia" quedó explicado: motor
       sano + cadencia diaria + orgs sin datos disparadores** (`not_due` / feeds vacíos).
-      Pendiente de este ítem: (a) Sergio mira y APRUEBA un borrador en pantalla (la aprobación
-      registra; el envío externo S6 sigue sin existir); (b) purgar las semillas
-      `e2e-agentes-*` cuando termine la prueba; (c) construir los 3 agentes nuevos de abajo.
+      Pendiente de este ítem: (a) la demostración para Sergio Urcullo se hace **sobre datos
+      reales de su clínica o sobre una org de prueba, NO sembrando en su cuenta** — ver el ítem
+      de abajo: los dos borradores sembrados se le mostraban como reclamos de cobro a pacientes
+      que no existen, y aprobarlos habría intentado escribirle a un teléfono inventado;
+      (b) ✅ **purgadas el 2026-09-12**, las 12 filas, con respaldo y re-auditoría en cero;
+      (c) construir los 3 agentes nuevos de abajo.
 
       **DECIDIDO por Sergio Urcullo (11-sep, eligió las 4 opciones) y TODAVÍA SIN CONSTRUIR:
       los TRES agentes nuevos** (nota del merge del 12-sep: dos carriles reescribieron este
@@ -167,6 +170,102 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       existe — aprobar registra la acción; el WhatsApp real es obra aparte y no se promete hasta
       que exista. Las dos precondiciones que Sergio Urcullo puso antes de estos tres (E2E de los 2
       vivos, y la cadencia) **ya están cerradas** en los dos ítems de abajo.
+
+- [x] 🔴 **El auditor que escribí AYER para esto dio «limpio» con DOCE filas de prueba vivas
+      dentro de la cuenta de Sergio Urcullo — porque su marca era una lista escrita a mano.
+      Filas borradas y segundo detector, el que no depende de la marca, cableado (2026-09-12).**
+
+      **Lo medido, no razonado.** `npm run qa:sin-rastro` salía `En organizaciones REALES: 0`,
+      exit 0. Preguntándole a la misma base por `e2e-agentes` en vez de por `zz-?qa`:
+      **12 filas dentro de `clinica-sergio-p2ljs`** — 2 pacientes, 1 cita, 1 factura vencida de
+      Bs 370, 2 `onia_agents_actions` y 2 `onia_core_approval_requests`. Las sembró este mismo
+      carril en la vuelta anterior para probar el E2E de los agentes, y el ítem de arriba las
+      declaraba "pendiente de purgar".
+
+      🔴 **Lo peor no era la basura: eran DOS borradores en `pending_approval` en la pantalla
+      Agentes de Sergio Urcullo** — un reclamo de cobro por "saldo vencido Bs 370,00 hace 12
+      días" y un mensaje de reactivación, los dos dirigidos a pacientes que no existen. El
+      producto se los ofrecía para aprobar; aprobarlos habría intentado escribir a `+59170000001`.
+
+      **La lección, que es de método y por eso vale para todos:** el auditor derivaba el universo
+      de TABLAS de `information_schema` —eso estaba bien y encontró `audit_logs`— pero después
+      filtraba con **una marca escrita a dedo** (`MARCA = 'zz-?qa'`). Derivar los sujetos del
+      disco no sirve de nada si el predicado que los juzga es una lista blanca: falla abierto
+      exactamente en el sujeto nuevo, y el sujeto nuevo lo sembró **el mismo carril que escribió
+      el auditor, dos horas después**.
+
+      **El arreglo es una segunda pregunta que no pasa por la marca:** ¿hay filas en una
+      organización real cuyo `id` **no lo generó el producto**? Los generadores conocidos son
+      tres (cuid de Prisma, uuid, hex de la migración) y se leen de la base, no de una creencia:
+      medido ese día, de **74 tablas** con `organizationId` sólo **7 filas** en TODA la base
+      tenían un id fuera de esos formatos, y **4 eran la siembra**. La única excepción legítima
+      —`sergio20260904addonwa001`, el add-on de WhatsApp otorgado a mano el 4-sep— se nombra por
+      su **literal exacto** y se re-mide en cada corrida: una excusa por forma (`^sergio…`)
+      dejaría pre-aprobada a la próxima fila que alguien inserte con ese prefijo.
+
+      **Validación viva, el mismo comando, antes y después:** con las filas puestas
+      `npm run qa:sin-rastro` pasó a `En organizaciones REALES: 4` (exit 1) nombrando las cuatro
+      raíces; borradas en transacción con respaldo en
+      `/root/backups-qa/e2e-agentes-cuenta-real-20260912.json` (7 KB, 12 filas), volvió a
+      `REALES: 0` **y la búsqueda por la marca `e2e-agentes` también da 0**.
+      Gate: `scripts/qa_sin_rastro.test.mjs`, 13 casos (5 nuevos), en la cadena
+      (`npm run test:qa-sin-rastro`). Validado por mutación DESPUÉS de estar verde: agregarle
+      `e2e-` a los generadores conocidos (2 rojos), volver la excusa por forma (1 rojo) y tirar
+      el resultado del segundo detector (1 rojo).
+
+- [x] 🔴 **La cuenta REAL de Sergio Urcullo tenía 7 filas de datos de prueba adentro, y una de
+      ellas hizo que otro carril abriera una tarea CRÍTICA por un cruce de tenant que NUNCA
+      EXISTIÓ. Limpiada y verificada en producción el 2026-09-12; el auditor que la encontró
+      queda cableado (`npm test`).**
+
+      **Lo que se creía:** `recorrido-cliente` midió que el paso 6 de Importadora, con la sesión
+      de una cuenta de prueba recién creada, había escrito un paciente **dentro de
+      `clinica-sergio-p2ljs`** — la cuenta real de Sergio Urcullo. Tarea `t_3f352044`, prioridad
+      crítica: un fallo de aislamiento multi-tenant es lo más grave que puede tener este producto.
+
+      **Lo que pasó, medido, no razonado.** La ruta que crea pacientes escribe auditoría SIEMPRE
+      (`app/api/patients/route.ts`: `prisma.patient.create` y acto seguido `logAudit`). En
+      `audit_logs` **no hay ni un `PATIENT_CREATED` en 48 h** — así que esa fila no la creó
+      ninguna sesión web. La creé **yo**, este carril, con un `INSERT` directo, en la vuelta
+      anterior (`2e034412`), para poder probar aprobar→enviar sobre una org con onboarding hecho.
+      El id que declara ese commit —`zzqa20260912pac1`— es exactamente el que la tarea reporta.
+      **El producto no tiene cruce de tenant. Lo tenía el instrumento, y era mío.**
+
+      🔴 **Por qué el otro carril no podía saberlo, y esto es la lección que importa:** al
+      paciente le puse un nombre con la **forma sellada de ESE carril**
+      (`zz-qa-AAAA-MM-DD-HHMM …`). Su barredor borra por esa forma —correctamente, es la suya—,
+      así que se llevó mi fila, la contó como propia y concluyó que su paso 6 había escrito en
+      una cuenta ajena. **Un sello de QA sin el nombre del carril que siembra hace que el
+      instrumento del vecino acuse al producto de un bug que es tuyo.**
+
+      🔴 **Y la limpieza de esa vuelta, declarada "verificada contra la base", estaba
+      incompleta:** el inventario era una lista a mano (paciente · cita · acciones · aprobaciones
+      · despachos · corridas) y la escritura **derivada** no estaba en la lista. Quedaron **4
+      filas en `audit_logs` de la cuenta real** con el nombre del paciente de prueba y el texto
+      de un WhatsApp que nunca se mandó — y el dueño las ve: `/admin/audit` existe
+      (`app/(dashboard)/admin/audit/page.tsx`). Borradas por id exacto, con respaldo previo en
+      `/root/backups-qa/audit-logs-zzqa-20260912.json`: 61 → 57 filas, 0 contaminadas.
+
+      **El arreglo NO es acordarse mejor: es preguntarle a la base.**
+      `scripts/qa_sin_rastro.mjs` **deriva el universo de `information_schema`** —toda tabla real
+      con `organizationId` (más `organizations` por su `id`) y todas sus columnas de texto y
+      JSON— y busca la marca `zz-?qa` en cada una. Una tabla nueva entra sola; `jsonb` entra
+      (es donde sobrevivió el rastro); es **tri-estado** (exit 2 = no pude preguntar, nunca
+      "limpio"); y una fila cuya organización no existe **no se absuelve**, cuenta como real.
+
+      **Lo que encontró en su primera corrida viva, que ninguna lista a mano habría visto: 74
+      tablas miradas y 3 filas MÁS de basura de QA dentro de la cuenta real**, de otras corridas
+      y con una semana de antigüedad — 2 recordatorios en `notifications.message`
+      (`zz-qa-verif-4a`, del 5-sep) y un proveedor `zz-qa-proveedor` en
+      `onia_core_business_partners`. Respaldadas en
+      `/root/backups-qa/basura-qa-cuenta-real-20260912.json` y borradas en una transacción.
+      **Re-auditado: `En organizaciones REALES: 0`, exit 0.**
+
+      Gate: `scripts/qa_sin_rastro.test.mjs`, 8 casos, en la cadena (`npm run test:qa-sin-rastro`).
+      Validado por mutación DESPUÉS de estar verde — sacarle `jsonb` al universo, absolver a la
+      fila huérfana, y hacer que el catch devuelva "limpio" ponen 1 caso en rojo cada uno.
+      Medición viva: `npm run qa:sin-rastro` (~7 s). **Este carril la corre al cerrar toda vuelta
+      que siembre en producción**, que es la única forma de que un alias suelto no valga cero.
 
 - [x] ✅ **MEDIDO Y ARREGLADO el 2026-09-12 (`ea80ada`, onia-platform — pusheado a la rama,
       falta mergear y desplegar): los agentes corrían DÍA POR MEDIO, y la pantalla promete
