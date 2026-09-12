@@ -32,11 +32,15 @@
 
 ### 1.3. Horarios de atención / reuniones
 
-- Horarios para el bot / agenda:
-  - **Lunes a viernes:** 14:00–17:00 y 20:00–22:00 (hora La Paz)
-  - **Sábado:** 09:00–15:00 (hora La Paz)
+- Horarios para el bot / agenda — **actualizados por Sergio Urcullo el 11-sep-2026**:
+  - **Lunes a viernes:** 14:00–16:00 y 19:00–22:00 (hora La Paz)
+  - **Sábado:** 10:00–17:00 (hora La Paz)
 - Regla de agenda:
-  - Las reuniones se agendan **con al menos 1 día de anticipación**.
+  - Las reuniones se agendan **con al menos 3 horas de anticipación (bajado de 1 día el 11-sep)**.
+- Agenda en vivo: **cal.com/sergiourcullo** (Cal.com cloud, zona America/La_Paz, aviso
+  mínimo 3 h). Eventos: `/30min` **Llamada 1 a 1** (público, botón en la web) y
+  `/15min` **Pregunta puntual** (el link se comparte SÓLO en Announcements — beneficio
+  de comunidad). El evento `/secret` está oculto y apagado.
 
 ---
 
