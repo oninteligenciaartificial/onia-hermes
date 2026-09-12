@@ -375,6 +375,32 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       **cita** del log. (`cuota_agotada` igual deriva a un humano — `bot-engine.mjs:563` —, así
       que la deuda con esas personas sigue abierta: es lo único que queda de este ítem.)
 
+- [ ] 🟡 **El log del bot marca `rama=MUDO … motivo=el motor no produjo respuesta` en eventos
+      que se repiten solos — el MISMO texto que dejaría el bug real.** Medido el 2026-09-12
+      04:00 La Paz sobre el log vivo (51.774 líneas): hay **24** líneas `rama=MUDO`, y las
+      **últimas 9 son todas `conv=49`**, cada ~30-60 min (02:47, 03:15, 03:45, 03:46, 04:15,
+      05:19, 06:14, 07:15 UTC), siempre en `etapa=esperando_horario->esperando_horario`,
+      siempre con `enviados=0/0` y el motivo genérico.
+
+      **Por qué importa aunque no sea un bug:** ese motivo es exactamente el que dejaría *"una
+      persona escribió y el bot se calló"*, que es el fallo que costó una semana y por el que
+      existe este log. Si el bot enmudece mañana ante un lead real, su línea va a ser
+      **indistinguible** de estas 9. Las ramas que YA distinguen bien están al lado y lo
+      demuestran: `motivo=mensaje_no_entrante:outgoing`, `motivo=update_sin_botones`,
+      `motivo=etapa handoff_humano: el bot ya no vuelve a hablar en esta conversacion`.
+
+      **Lo que NO está medido, y es lo primero que hay que mirar:** en estas 9 líneas
+      `msg` es **igual** al id de conversación (`conv=49 msg=49`), mientras en las líneas
+      normales es un id de mensaje real (`msg=1048`). Eso apunta a un evento **sin mensaje**
+      (un `conversation_updated`), no a una persona escribiendo — pero **no lo verifiqué**, y
+      la diferencia decide el arreglo: si es un evento sin mensaje, el motivo tiene que
+      nombrarlo (como ya hacen sus hermanos); si es una persona, es el bug abierto.
+
+      **Reproducción (30 s):**
+      ```
+      /root/bin/docker exec onia-center sh -c "grep 'rama=MUDO' /tmp/onia-bot-webhook.log | tail -10"
+      ```
+
 - [x] ✅ **CERRADO el 2026-09-12: el conocimiento del bot no viajaba con el deploy, y el remedio
       a mano se deshacía solo en el deploy siguiente.** Dos mitades que se tapaban entre sí.
 
