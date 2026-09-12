@@ -305,12 +305,51 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       `ONIA_BOT_KNOWLEDGE_FILE=/opt/onia/bot/knowledge.onia.json /opt/onia/bot/webhook-server.sh knowledge`.
       Va `DESPUES-DE: plataforma`: si el bot sale primero cotiza 890 mientras la caja cobra 750.
 
-      **Lo que queda como próximo ítem** (no se hizo acá para no abrir dos frentes): que el
-      publicador del bot **lleve el conocimiento**, para que «se publica a mano» deje de ser la
-      causa raíz — es la misma que dejó el knowledge en agosto sin precios. Toca
-      `hermes-content/deploy/vps-ops/bot/publicar.sh`, que es infraestructura compartida con
-      `onia-cola` (gate `test:publicadores`, desplegado por `sincronizar.sh`): se coordina, no se
-      toca de costado.
+      **Su causa raíz ya está cerrada en el repo** — ítem de abajo, `deploy-bot.sh` +
+      `webhook-server.sh`. No tocó `publicar.sh` (el compartido con `onia-cola`): el agujero
+      estaba un nivel más adentro. Este ítem sigue abierto igual porque lo que falta es
+      **publicar**, y eso es el `ok` de Sergio Urcullo.
+
+- [x] ✅ **CERRADO el 2026-09-12: el conocimiento del bot no viajaba con el deploy, y el remedio
+      a mano se deshacía solo en el deploy siguiente.** Dos mitades que se tapaban entre sí.
+
+      **(A) El deploy copiaba la fuente y nunca la instalaba.** `knowledge.onia.json` está en git
+      y viaja en `PATRONES`, pero el archivo que el bot LEE es `knowledge.json`. Pasar de uno al
+      otro era un segundo comando a mano que nadie corría.
+
+      **(B) Y ese comando a mano escribía SÓLO adentro del contenedor.** `webhook-server.sh
+      knowledge` hace `docker cp` a `/tmp/onia-bot` y dejaba intacto el `knowledge.json` del
+      host. El sync de `restart` calcula un stamp sobre `$BOT_DIR/*.mjs` y `*.json` **del host**
+      y, si cambió, hace `rm -rf $DEST` y recopia el host entero: **el primer deploy que toque un
+      `.mjs` devuelve el conocimiento viejo**, sin una línea en ningún lado. Quien lo aplicó lo
+      vio aplicarse y nada le avisa cuando se deshace.
+
+      **La prueba de que pasó, y no es la de los precios** (medido 2026-09-12 02:55 La Paz,
+      `diff` en `/opt/onia/bot`): `knowledge.onia.json` del 6-sep decía *"desde el 1 de octubre de
+      2026 … (RND 102600000007)"*; el `knowledge.json` vivo, del 4-sep, decía *"desde el **30 de
+      septiembre** es obligatoria"*. **Seis días diciéndole a leads reales el plazo fiscal que
+      `CLAUDE.md` prohíbe por nombre**, con la corrección en el mismo directorio. El
+      `vigenteHasta` de esa entrada era `2026-09-30`: el dato encima caducaba solo.
+
+      **Arreglo.** `deploy-bot.sh` aplica el conocimiento como paso 7, después del `/health`
+      (antes fallaría con un error que no es el de fondo) y cortando en rojo si no se aplicó —
+      es seguro porque la compuerta de validación sigue siendo la de `webhook-server.sh`, que
+      con un archivo malo no aplica nada y deja al bot con lo anterior. Y `webhook-server.sh
+      knowledge` ahora persiste **también al host**, después de validar, con guarda `-ef` para el
+      caso en que la fuente ya ES el archivo vivo (`cp a a` aborta, y un deploy sano reportado
+      como fallido invita a revertirlo — la trampa que ya pagó `deploy-bot.test.mjs`).
+
+      **Gate:** `conocimiento-viaja-con-el-deploy.test.mjs`, 5 casos. **Ejecuta**, no lee texto:
+      monta host + contenedor + un `docker` falso en el `PATH` y corre el script de verdad —
+      porque lo que falla acá es un efecto (qué archivo queda escrito y dónde), y un assert sobre
+      el texto no distingue «copia al host» de «nombra el host en un comentario». Validado por
+      mutación en las dos direcciones: sacar el `cp` al host → rojo sólo el caso 2; sacar la
+      invocación de `deploy-bot.sh` → rojo sólo el caso 5. Entra solo a la cadena (`test:bot` es
+      `node --test` sobre la carpeta) y por eso **también gatea el deploy**, que corre ese mismo
+      comando. Suite del bot: **932/932**.
+
+      ⚠️ **Commiteado, NO desplegado** — y el orden importa: mientras esto no esté en `main`, el
+      `ok` de `t_e45a24ff` **sigue necesitando** el comando a mano que su cuerpo nombra.
 
 - [x] ✅ **CERRADO el 2026-09-11 (`93256eab`, onia-hermes — pusheado a la rama, falta mergear):
       el intake de leads le afirmaba a Sergio Urcullo que TODO contacto había pedido una demo.**

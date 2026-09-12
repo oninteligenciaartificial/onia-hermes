@@ -124,5 +124,30 @@ if ! printf '%s' "$SALUD" | grep -q '"ok":true'; then
   exit 1
 fi
 
+# --- 7. Aplicar el CONOCIMIENTO. Desplegar el codigo NO alcanza -------------------------------
+#
+# `knowledge.onia.json` esta en git y viaja con la copia de arriba, pero el archivo que el bot LEE
+# es `knowledge.json`, y pasar de uno al otro era un SEGUNDO comando a mano. Nadie lo corria.
+#
+# Medido el 2026-09-12 en /opt/onia/bot: la fuente era del 6-sep y el conocimiento vivo del 4-sep.
+# Seis dias contestandole a desconocidos que la facturacion en linea es obligatoria "desde el 30
+# de septiembre" -la fecha que CLAUDE.md prohibe por nombre- teniendo la correccion ("1 de octubre
+# de 2026, RND 102600000007") en el mismo directorio. Es la misma causa que dejo el conocimiento
+# de agosto sin precios, y la que hizo que la escalera C barriera landing y plataforma y dejara al
+# bot cotizando Bs 750 y Bs 1.500.
+#
+# VA DESPUES DEL /health a proposito: el subcomando entra al contenedor por `docker cp`, asi que
+# corrido sobre un bot caido falla con un error que no es el de fondo y manda a diagnosticar mal.
+#
+# CORTAR EN ROJO ACA ES SEGURO: la compuerta de publicacion vive en webhook-server.sh, que valida
+# adentro del contenedor y, si el archivo esta mal, NO lo aplica y el bot sigue con lo anterior.
 echo
-echo "OK: ${#CAMBIOS[@]} archivo(s) desplegados y el bot responde. Backup: $BACKUP"
+echo "-- conocimiento"
+if ! ONIA_BOT_KNOWLEDGE_FILE="$DEST/knowledge.onia.json" "$DEST/webhook-server.sh" knowledge; then
+  echo "ERROR: el codigo se desplego pero el CONOCIMIENTO no." >&2
+  echo "       El bot responde, con el texto anterior: precios y plazos viejos. Backup: $BACKUP" >&2
+  exit 1
+fi
+
+echo
+echo "OK: ${#CAMBIOS[@]} archivo(s) desplegados, conocimiento aplicado y el bot responde. Backup: $BACKUP"
