@@ -72,19 +72,44 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       hero v4 DESCARTADO (vuelve el hero de producción que él aprobó), sección HECHOS retirada,
       chatbot a la posición 2 con conversación dibujada
       (`web-factory/apps/onia-platform/src/app/(sitio)/conversacion.tsx`) + CTA al alta.
-      Pendiente de ESTE ítem: (a) OK de Sergio sobre el preview → deploy con
-      `/opt/onia-landing/_deploy/publicar.sh`; (b) probar un video HyperFrames como pieza del
-      bloque chatbot ("puedes generar videos con hyperframes también, intentá") — arrancamos
-      con la conversación CSS porque pesa cero.
+      Pendiente de ESTE ítem: (a) **AUDITORÍA PRE-PUBLICACIÓN pedida por Sergio Urcullo antes
+      del deploy** (11-sep, textual: *"verificamos los precios de los add-ons y las pestañas
+      secundarias que no es el hero que estén bien hechas, también verificamos cibersecurity,
+      fallos de estructura de la web, información mal colocada, docs viejos, política de
+      privacidad"*) — dos subagentes barriendo seguridad y contenido de
+      `web-factory/apps/onia-platform/src/`; los hallazgos se arreglan ANTES del deploy;
+      (b) tras la auditoría limpia, su OK → deploy con `/opt/onia-landing/_deploy/publicar.sh`;
+      (c) probar un video HyperFrames como pieza del bloque chatbot ("puedes generar videos con
+      hyperframes también, intentá") — arrancamos con la conversación CSS porque pesa cero.
+      El 11-sep también entró la dieta de la sección de add-ons (`e12b740f`: tarjetas con
+      precio en píldora, ancla del salario en una línea, copys cortos en la fuente única).
 
-- [ ] 🔴 **Estrategia de precios: que la opción cara sea SIEMPRE la mejor compra** (Sergio
-      Urcullo, 11-sep: *"armar una estrategia de psicología para que la opción cara siempre sea
-      la mejor para el usuario, para que por aumentar un poco más tenga más beneficios"* +
-      *"somos manychat… paga por algo que él puede hacer"*). Revisar cómo está armada hoy la
-      escalera en `onia-platform/lib/subscription-plans.ts` y `onia-platform/lib/pricing.ts` y
-      cómo la muestra `/precios`: saltos de precio vs saltos de valor, plan ancla/decoy, qué
-      capacidad se reserva al plan alto. Entregable: propuesta medida contra Lety/Dapta/ManyChat
-      de HOY, con la cuenta delante — los montos los decide Sergio.
+- [ ] 🔴 **ESCALERA C ELEGIDA por Sergio Urcullo (11-sep): 4 escalones con cupos estilo
+      Higgsfield — falta su "dale" a la letra chica y la implementación.** Su decisión,
+      textual: *"la C pero que tenga restricciones y que tengan que estar pagando si quieren
+      mejorar su plan, mira higgsfield te cobra por todo y si no usás tus créditos dentro del
+      mes igual se te quitan; necesitamos ser la mejor opción por ser la más simple pero que
+      igual paguen siempre pero que no sea exagerado"*. Investigación previa medida EN VIVO:
+      ManyChat 2026 (5 escalones chicos, overage que factura en vez de bloquear, aviso al
+      70/90/100 %), Alegra Perú (4 planes pegados, "Más popular" en el 3º), Dapta, Lety.
+
+      **Letra chica PROPUESTA (ratificar montos de cupos antes de tocar la fuente única):**
+      | Plan | Bs/mes | Cupos mensuales (NO acumulan) | Qué lo hace querer subir |
+      |---|---|---|---|
+      | Básico | 320 | 2 usuarios · 300 fichas · 200 recordatorios | sin agentes, sin reservas |
+      | Crece (NUEVO) | 550 | 3 usuarios · 800 fichas · 400 recordatorios | agentes Recall+Cobrador, reservas incluidas; sin reportes/contabilidad completa |
+      | Pro (destacado) | 890 | 5 usuarios · 1.500 fichas · 800 recordatorios | todo lo operativo: reportes, contabilidad completa, facturas recurrentes, todos los agentes |
+      | Full | 1.290 | sin límites | **chatbot de WhatsApp INCLUIDO** + te lo entregamos configurado |
+      Semanal: 89 / 145 / 229 / — · Anual: 10× (2 meses gratis) · Grupo 2.900 queda cotizado.
+      Mecánica Higgsfield: el cupo del mes muere con el mes; recargas pagas (conversaciones del
+      bot ya existe a Bs 190; sumar recarga de recordatorios); aviso al 70/90/100 % del cupo con
+      la cuenta en pantalla ("dos recargas > subir de plan"). Implementación toca:
+      `onia-platform/lib/subscription-plans.ts` (nuevo id de plan + montos),
+      `onia-platform/lib/pricing.ts`, espejo de la landing
+      `web-factory/apps/onia-platform/src/lib/pricing.ts`, `/precios`, checkout y validación de
+      pago, y las tarjetas de plan con las LIMITACIONES visibles (pedido explícito: *"que se
+      noten las limitaciones para que quieran subir el plan y ordená las funciones dependiendo
+      del plan"*).
 
 - [ ] 🔴 **Funciones que las empresas usan DE VERDAD — recorte de superficie** (Sergio Urcullo,
       11-sep: *"mirar qué funciones vamos a usar realmente para las empresas"*). Medir contra
@@ -103,6 +128,16 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       el borrador aparecer en `onia-platform/app/(dashboard)/agents/page.tsx`, aprobarlo y
       verificar el efecto. Si con datos no propone nada, el generador está mudo y eso es un 🔴
       de venta. Los agentes NO llaman a ningún modelo (costo de API cero).
+
+      **DECIDIDO por Sergio Urcullo (11-sep, eligió las 4 opciones): primero el E2E de los 2
+      vivos, y después se construyen TRES agentes nuevos** sobre el mismo patrón de
+      `onia-platform/lib/onia-core/modules/agents-runtime.ts`: (1) **Confirmador de citas de
+      mañana** (draft_message: cada tarde, citas de mañana sin confirmar → mensaje listo para
+      aprobar), (2) **Seguimiento de cotizaciones** sin respuesta en N días (draft_message —
+      importadora), (3) **Stock bajo mínimo → tarea de pedido** al proveedor de la ficha
+      (create_task: no depende del envío externo). Restricción vigente: el ENVÍO externo (S6)
+      no existe — aprobar registra la acción; el WhatsApp real es obra aparte y no se promete
+      hasta que exista.
 
 - [ ] 🔴 **Dos propuestas de diseño para el dashboard del producto** (Sergio Urcullo, 11-sep:
       *"ese color que hay ahorita no es nada intuitivo y no hay botones que resalten, que se
