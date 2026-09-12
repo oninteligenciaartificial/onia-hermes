@@ -12,6 +12,27 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-12 21:10 La Paz — dental 9/9 completo (rutina), y una basura huérfana de una corrida anterior limpiada
+
+Al arrancar la vuelta, antes de correr el recorrido, `select count(*) from organizations where
+name like 'zz-qa-%'` dio **1**, no 0: quedaba `zz-qa-2026-09-12-1009` (org, 2 `profiles` —uno
+ADMIN con cuenta real en `auth.users`/`auth.identities`, otro DOCTOR "pendiente-..." del paso
+equipo del onboarding—, 1 `organization_entitlements`), sin `patients` ni `appointments`. No
+tiene entrada en este archivo ni en el tablero: una vuelta anterior la creó y no llegó a
+borrarla (o murió antes de intentarlo). Se imprimió cada fila antes de borrar y se borró por
+`id`/`organizationId` exacto, nunca por rango — quedó en 0 antes de correr nada nuevo.
+
+Cuenta `zz-qa-2026-09-12-2110@onia.com.bo`: alta → confirmar correo → onboarding (6 pantallas,
+"Clínica dental") → paciente `zz-qa-2026-09-12-2110-paciente` cargado en `/patients` y
+encontrado de vuelta → cita 2026-09-14 09:00 agendada (201, `cmtyvtvkt007h01rw3uzfp7ji`) y
+**vista** en `/appointments` → factura `/billing/cmtyvu6he007j01rwwegic7ed` con el ítem visible
+(frenada sin pagar) → panel revisado (no lista pacientes, es lo esperado). `completo: true`, 0
+filas `zz-qa-` en `appointments` ni `organizations` al cerrar (confirmado con `SELECT`, antes y
+después). Sin hallazgo nuevo del producto — dental sigue sano corrida tras corrida; lo único de
+esta vuelta fue la basura huérfana encontrada y limpiada al arrancar.
+
+---
+
 ## 2026-09-12 09:09 La Paz — dental 9/9 completo (rutina)
 
 Cuenta `zz-qa-2026-09-12-0909@onia.com.bo`: alta → confirmar correo → onboarding (6 pantallas,
