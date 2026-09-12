@@ -361,7 +361,13 @@ export default function Portada() {
             de ESTA pieza: el resto del sitio sigue siendo papel. */}
         <span className={`${p.halo} ${p.haloA}`} aria-hidden="true" />
         <span className={`${p.halo} ${p.haloB}`} aria-hidden="true" />
-        <Reveal>
+        {/* El HERO no usa <Reveal>: motion arranca en opacity 0 y el titular
+            queda invisible hasta que hidrata el JS — Lighthouse midió 788 ms de
+            "element render delay" sobre el LCP (p.heroLead) por esa espera. La
+            entrada acá es CSS puro (misma curva y distancia que el sistema de
+            motion), así el fold pinta con el HTML. El resto del sitio sigue con
+            Reveal: debajo del pliegue la hidratación no le cuesta al LCP. */}
+        <div className={p.heroEntrada}>
           <div className={p.centro}>
             <Kicker>Un solo sistema para todo el negocio</Kicker>
             <h1 className={p.heroTitulo}>
@@ -400,7 +406,7 @@ export default function Portada() {
               </span>
             </div>
           </div>
-        </Reveal>
+        </div>
       </Block>
 
       {/* 2 · LO QUE HACE (reemplaza «Our Journey in Numbers») ─────────

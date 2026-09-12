@@ -111,7 +111,13 @@ const themeInit = `(function(){try{var t=localStorage.getItem("onia-theme");if(t
  * deriva a humano — expuesto como inbox web (id 4). Carga async despues del load para no
  * tocar LCP; si Chatwoot esta caido, el sitio ni se entera.
  */
-const chatwootInit = `window.addEventListener("load",function(){var BASE_URL="https://onia-chatbot-chatwoot.hqdqgh.easypanel.host";var g=document.createElement("script");g.src=BASE_URL+"/packs/js/sdk.js";g.defer=true;g.async=true;g.onload=function(){window.chatwootSDK.run({websiteToken:"9k5i7xnAgCbSse1EZwVChZLw",baseUrl:BASE_URL})};document.body.appendChild(g);});`;
+// DIFERIDO A PRIMERA INTERACCION (o 5 s de idle post-load, lo que llegue
+// primero). Medido con Lighthouse el 2026-09-11: el widget era el 71% del peso
+// de la landing (1.062 KB de 1.491 KB, 18 requests) y cargaba en el `load` —
+// o sea SIEMPRE, lo mire alguien o no. Con esto la visita que solo lee no lo
+// baja nunca, y la que scrollea lo tiene al primer gesto; a los 5 s carga
+// igual para que la burbuja exista aunque nadie se mueva.
+const chatwootInit = `window.addEventListener("load",function(){var BASE_URL="https://onia-chatbot-chatwoot.hqdqgh.easypanel.host";var cargado=false;function cargar(){if(cargado)return;cargado=true;["scroll","pointerdown","touchstart","keydown"].forEach(function(e){window.removeEventListener(e,cargar)});var g=document.createElement("script");g.src=BASE_URL+"/packs/js/sdk.js";g.defer=true;g.async=true;g.onload=function(){window.chatwootSDK.run({websiteToken:"9k5i7xnAgCbSse1EZwVChZLw",baseUrl:BASE_URL})};document.body.appendChild(g);}["scroll","pointerdown","touchstart","keydown"].forEach(function(e){window.addEventListener(e,cargar,{once:false,passive:true})});setTimeout(cargar,5000);});`;
 
 export default function RootLayout({
   children,

@@ -517,3 +517,28 @@
 .heroVerde .heroNota {
   color: color-mix(in srgb, #eafaf1 82%, transparent);
 }
+
+/* Entrada del hero SIN JS. El <Reveal> de motion arranca en opacity 0 y el
+   titular esperaba la hidratación (788 ms de render delay medidos sobre el
+   LCP). Misma curva y distancia que el sistema de motion (riseDistance 24,
+   spring gentle aproximado), pero pintada por el navegador con el HTML. */
+.heroEntrada {
+  animation: heroAparece 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes heroAparece {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroEntrada {
+    animation: none;
+  }
+}
