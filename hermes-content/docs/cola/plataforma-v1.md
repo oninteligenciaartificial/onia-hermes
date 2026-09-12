@@ -84,8 +84,21 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       El 11-sep también entró la dieta de la sección de add-ons (`e12b740f`: tarjetas con
       precio en píldora, ancla del salario en una línea, copys cortos en la fuente única).
 
-- [ ] 🔴 **ESCALERA C ELEGIDA por Sergio Urcullo (11-sep): 4 escalones con cupos estilo
-      Higgsfield — falta su "dale" a la letra chica y la implementación.** Su decisión,
+- [ ] 🔴 **ESCALERA C IMPLEMENTADA el 2026-09-12 ("tenés permiso de los precios") — REGLA DE
+      DESPLIEGUE: los DOS deploys salen JUNTOS o ninguno.** Producto en `master`
+      (`4bff903d`): plan `crece` 550/145/5.500, Pro 890/229/8.900, Full 1.290/12.900 CON
+      chatbot incluido (`whatsappIncluded` en `onia-platform/lib/plan-catalogo.ts`, ejecutado
+      por `onia-platform/lib/plan-limits.ts` como cuarta fuente de `addonHabilitado` con la
+      vigencia del PLAN), Crece en `CHECKOUT_PLANS`, tests re-anclados (suite 4.687 verdes;
+      los 13 rojos son artefactos Windows idénticos en master limpio, medidos en worktree).
+      Landing en `main` (`a9e11c47`): 4 tarjetas con topes visibles y "Cuatro escalones".
+      ⚠️ **Hasta que el PRODUCTO se despliegue, el checkout vivo valida los montos viejos
+      (750/1500): si la landing sale sola, muestra 890 y el pago exige otra cifra.** Falta
+      además (fase 2): avisos al 70/90/100 % del cupo con la cuenta "recargar vs subir" y la
+      recarga de recordatorios (la de conversaciones ya existe).
+
+      Historia: **ESCALERA C ELEGIDA por Sergio Urcullo (11-sep): 4 escalones con cupos estilo
+      Higgsfield.** Su decisión,
       textual: *"la C pero que tenga restricciones y que tengan que estar pagando si quieren
       mejorar su plan, mira higgsfield te cobra por todo y si no usás tus créditos dentro del
       mes igual se te quitan; necesitamos ser la mejor opción por ser la más simple pero que
@@ -128,6 +141,19 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       el borrador aparecer en `onia-platform/app/(dashboard)/agents/page.tsx`, aprobarlo y
       verificar el efecto. Si con datos no propone nada, el generador está mudo y eso es un 🔴
       de venta. Los agentes NO llaman a ningún modelo (costo de API cero).
+
+      **E2E EJECUTADO el 2026-09-12 (madrugada): EL MOTOR PRODUCE.** Sembrado en
+      `clinica-sergio-p2ljs` (ids `e2e-agentes-*`: paciente sin volver hace 200 días + factura
+      `VENCIDA` de Bs 370 hace 12 días), cadencia destrabada (las runs de hoy se borraron para
+      esa org) y relanzado `/root/bin/run-onia-agents-cron.sh` → `ran:2, proposed:2`:
+      el Cobrador redactó el reclamo ("saldo vencido Bs 370,00 hace 12 días") y el Recall el
+      mensaje de reactivación con `suggestedMessage` completo — los DOS en `pending_approval`
+      en `onia_agents_actions`, visibles en la pantalla Agentes de la clínica de Sergio para
+      que él apruebe. **El misterio del "0 acciones en la historia" quedó explicado: motor
+      sano + cadencia diaria + orgs sin datos disparadores** (`not_due` / feeds vacíos).
+      Pendiente de este ítem: (a) Sergio mira y APRUEBA un borrador en pantalla (la aprobación
+      registra; el envío externo S6 sigue sin existir); (b) purgar las semillas
+      `e2e-agentes-*` cuando termine la prueba; (c) construir los 3 agentes nuevos de abajo.
 
       **DECIDIDO por Sergio Urcullo (11-sep, eligió las 4 opciones): primero el E2E de los 2
       vivos, y después se construyen TRES agentes nuevos** sobre el mismo patrón de
