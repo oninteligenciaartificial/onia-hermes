@@ -51,6 +51,35 @@ const nextConfig: NextConfig = {
    * Ninguna choca con una pagina real: los archivos de esas rutas viven ahora
    * bajo /v1/... y siguen sirviendose desde ahi (noindex).
    */
+  /**
+   * Headers de seguridad EN LA APP (auditoría 2026-09-11: no había ninguno; si
+   * Cloudflare agrega los suyos, eso no vive en este repo y no se ve en
+   * local/staging). CSP queda a propósito para una pasada MEDIDA aparte: hay
+   * dos scripts inline y el SDK de Chatwoot, y una CSP escrita a ciegas rompe
+   * el sitio en silencio.
+   */
+  async headers() {
+    return [
+      {
+        source: "/:ruta*",
+        headers: [
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=31536000; includeSubDomains",
+          },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          // DENY y no SAMEORIGIN: nada del sitio se embebe en iframes, ni propios.
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(), geolocation=()",
+          },
+        ],
+      },
+    ];
+  },
+
   async redirects() {
     return [
       { source: "/prueba-gratis", destination: "/empezar", permanent: true },
