@@ -18,7 +18,7 @@
 
 import test from "node:test";
 import assert from "node:assert/strict";
-import { copyFileSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { copyFileSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -30,6 +30,7 @@ import {
   motorProduceAviso,
   RAMAS_QUE_AVISAN,
   asegurarTransporteQueAguanta,
+  lineasDelLog,
   BOT_DIR,
 } from "./avisos-vivo.mjs";
 
@@ -354,4 +355,63 @@ test("el transporte aguanta un host mas lento que el corte por defecto de Node",
     setDefaultAutoSelectFamilyAttemptTimeout: (v) => (alto.valor = v),
   });
   assert.equal(alto.valor, 9000, "no se pisa un timeout mas generoso que el nuestro");
+});
+
+test("el log se lee ENTERO: un aviso mas viejo que las ultimas 50 lineas tiene que contarse", () => {
+  // Medido el 2026-09-12 contra produccion: el log vivo tenia CINCO lineas `[aviso]` —tres
+  // `sent` y dos `skipped`— y este gate imprimio `eventos: 0 avisos` con el veredicto
+  // "circuito sano, sin eventos reales todavia". Los dos salteados son dos personas que
+  // pidieron un humano y a Sergio Urcullo nunca le llego nada; `diagnosticar` YA se pone
+  // rojo con un salteado (el test de arriba lo prueba), asi que el nucleo estaba sano.
+  //
+  // El agujero estaba en el LECTOR, que hasta hoy no probaba nadie: `webhook-server.sh
+  // logs` hace `tail -n ${2:-50}` y `lineasDelLog` lo llamaba sin ese argumento. O sea que
+  // el gate miraba las ultimas 50 lineas de un log de 2,7 MB y los avisos —que son raros
+  // por definicion, 5 entre cientos de lineas por mensaje— caian siempre fuera. Una
+  // ventana tapando un rojo medido, que es la forma mas cara de verde.
+  //
+  // Se corre el `webhook-server.sh` REAL con un `docker` falso en el PATH, no una copia del
+  // `tail`: lo que se mide tiene que ser el contrato de produccion, y una copia mia del
+  // comando se desincroniza sin que nada se ponga rojo.
+  const tmp = mkdtempSync(join(tmpdir(), "avisos-log-"));
+  const PATH_ORIGINAL = process.env.PATH;
+  try {
+    copyFileSync(join(DIR_BOT, "webhook-server.sh"), join(tmp, "webhook-server.sh"));
+    writeFileSync(join(tmp, "webhook-server.mjs"), "// vacio: el script solo exige que exista\n");
+
+    // El log con la forma del vivo: el aviso viejo, sepultado bajo lineas por mensaje.
+    const log = join(tmp, "webhook.log");
+    const lineas = ["[aviso] skipped conv=53 (handoff): aviso por Telegram apagado (ONIA_BOT_TG_AVISO)"];
+    for (let i = 0; i < 200; i += 1) lineas.push(`[onia-webhook] conv=49 msg=${i} estado=200 rama=respondio`);
+    writeFileSync(log, lineas.join("\n") + "\n");
+
+    // `docker exec <contenedor> sh -c "<cmd>"` corrido aca, con el log del contenedor
+    // apuntado al temporal. No toca produccion ni la red.
+    const bin = join(tmp, "bin");
+    mkdirSync(bin);
+    const falso = [
+      "#!/usr/bin/env bash",
+      '[ "$1" = exec ] || exit 0',
+      "shift 2",
+      '[ "$1" = sh ] && shift',
+      '[ "$1" = -c ] && shift',
+      `cmd=$(printf '%s' "$1" | sed "s#/tmp/onia-bot-webhook.log#RUTA_DEL_LOG#g")`,
+      'exec sh -c "$cmd"',
+      "",
+    ].join("\n").replace("RUTA_DEL_LOG", log);
+    writeFileSync(join(bin, "docker"), falso, { mode: 0o755 });
+    process.env.PATH = `${bin}:${PATH_ORIGINAL}`;
+
+    const leidas = lineasDelLog(tmp);
+    const ev = contarEventos(leidas);
+    assert.equal(ev.salteados, 1, "el aviso salteado quedo fuera de la ventana del log: el gate no puede verlo");
+    assert.equal(
+      diagnosticar({ circuito: CIRCUITO_SANO, eventos: ev }).veredicto,
+      "roto",
+      "con un salteado en el log el veredicto es rojo; si sale ok, el lector se lo comio",
+    );
+  } finally {
+    process.env.PATH = PATH_ORIGINAL;
+    rmSync(tmp, { recursive: true, force: true });
+  }
 });

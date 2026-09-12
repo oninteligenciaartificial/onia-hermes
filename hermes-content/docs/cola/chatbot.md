@@ -310,6 +310,58 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       estaba un nivel más adentro. Este ítem sigue abierto igual porque lo que falta es
       **publicar**, y eso es el `ok` de Sergio Urcullo.
 
+- [x] ✅ **CERRADO el 2026-09-12: el gate del AVISO miraba 50 líneas de un log de 2,7 MB, y por
+      eso firmaba «circuito sano, sin eventos reales todavía» con DOS avisos salteados adentro.**
+
+      **Lo medido, en este orden.** `npm run avisos:vivo` imprimía `eventos: 0 avisos
+      (enviados 0 · salteados 0 · fallidos 0)` y `VEREDICTO: ok`. El log vivo, contado aparte:
+      `docker exec onia-center grep -c '\[aviso\]' /tmp/onia-bot-webhook.log` → **5** (3 `sent`,
+      2 `skipped`). El gate y el log del mismo bot decían cosas distintas, así que el
+      instrumento era el sospechoso, no el producto.
+
+      **El núcleo estaba sano.** `diagnosticar` YA se pone rojo con un salteado (`if
+      (ev.salteados > 0)`), y hay un test que lo prueba desde el 4-sep. El agujero estaba en el
+      **lector**, que no probaba nadie: `webhook-server.sh logs` es `tail -n ${2:-50}` y
+      `lineasDelLog` lo llamaba **sin ese argumento**. Los avisos son raros por definición —5
+      entre cientos de líneas por mensaje— así que caían **siempre** fuera de la ventana. Todos
+      los tests del archivo le pasaban las líneas a mano: el núcleo cubierto, la fuente ciega.
+
+      **Y el arreglo obvio también salía verde.** Pedir el log entero rompe por el otro lado:
+      `execFileSync` corta en **1 MB** por defecto, 2,7 MB devuelven `null`, y `lineasDelLog`
+      volvía a contar 0. Por eso el filtro va **donde vive el log** (`grep -F '[aviso]'` por
+      `docker exec`): sale acotado por construcción y no tiene techo que alcanzar cuando crezca.
+      La ruta del log se **deriva** de `webhook-server.sh` (`LOGFILE=`), no se copia.
+
+      **Test en rojo primero, por el motivo correcto** (`expected 1, actual 0`): corre el
+      `webhook-server.sh` **real** con un `docker` falso en el PATH —no una copia del `tail`,
+      que se desincronizaría sin ponerse roja— sobre un log con el aviso sepultado bajo 200
+      líneas. Suite del bot **933/933**.
+
+      **Lo que el gate dice ahora, y es la verdad:** `eventos: 5 avisos (enviados 3 · salteados
+      2 · fallidos 0)` · `VEREDICTO: roto`. De paso se corrigió su lectura final: con el
+      circuito contestando a las cuatro preguntas, *«EL PRÓXIMO QUE PIDA UN HUMANO SE PIERDE»*
+      es una afirmación **falsa sobre el futuro**. Un rojo tiene dos causas que se arreglan en
+      lugares opuestos —el circuito falla, o el circuito anda y hubo avisos que no salieron— y
+      hasta hoy se leían igual.
+
+- [ ] 🔴 **Dos personas pidieron un humano, el aviso NO salió, y no se puede saber quiénes son.**
+      Lo destapó el ítem de arriba: las dos líneas son `[aviso] skipped (cuota_agotada)` y
+      `[aviso] skipped (pregunta_precio_recepcion)`, las dos con el motivo *"aviso por Telegram
+      apagado (ONIA_BOT_TG_AVISO)"* — o sea que el bot decidió avisar y la variable estaba en
+      falso. **El flag hoy está encendido** (`flagEncendido ok` en `avisos:vivo`), así que esto
+      no se repite; lo que queda abierto es la deuda con esas dos personas.
+
+      **Y por qué no se las puede nombrar:** esas dos líneas salieron **sin `conv=`**, mientras
+      las tres `sent` sí lo traen. El formato es uno solo (`webhook-server.mjs:689`,
+      `[aviso] ${result?.status} conv=${conv} (${motivos})`), así que el `conv` llegó vacío —
+      ver el comentario de `webhook-server.test.mjs:762-764` sobre los dos callbacks asíncronos.
+      **Un aviso que no salió y no dice a quién no se puede reparar.**
+
+      **Además el gate queda rojo para siempre por esto**, porque el log es append-only y las
+      líneas `[aviso]` **no llevan fecha** (las de mensaje sí): no hay forma de acotar
+      «salteados recientes». Las dos cosas se arreglan en el mismo lugar —estampar fecha y
+      `conv` en la línea del aviso— y recién entonces el rojo puede volver a verde.
+
 - [x] ✅ **CERRADO el 2026-09-12: el conocimiento del bot no viajaba con el deploy, y el remedio
       a mano se deshacía solo en el deploy siguiente.** Dos mitades que se tapaban entre sí.
 
