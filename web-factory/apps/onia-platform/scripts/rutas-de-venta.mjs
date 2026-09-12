@@ -23,6 +23,10 @@
  * árbol entero la próxima vez, y el gate sale verde igual.
  */
 
+import { readdirSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
 /** Las únicas exentas, cada una con el motivo por el que no vende nada. */
 export const EXENTAS = new Map([
   [
@@ -33,3 +37,41 @@ export const EXENTAS = new Map([
 
 /** `true` si la ruta NO es superficie de venta y un barrido puede saltearla. */
 export const FUERA_DE_VENTA = (r) => EXENTAS.has(r);
+
+/**
+ * Rutas servidas, derivadas del DISCO (`src/app/**./page.tsx`) y no de una lista ni
+ * del sitemap. `(sitio)` y demás grupos de Next no son segmentos de URL: se borran.
+ *
+ * Vive acá, y no dentro de un medidor, porque la tenían DOS: `enlaces-vivos.mjs`
+ * barría el sitio entero con ella mientras `precios-vivos.mjs` miraba una sola
+ * pantalla. El 2026-09-12 eso dejó a `/precios` —con Bs 750 y Bs 1.500 vivos, la
+ * escalera retirada ese mismo día— fuera del único gate que cruza precios contra
+ * producción. Una cura que no viaja al gemelo deja la clase abierta.
+ */
+export function rutasDelDisco(dirApp, prefijo = "") {
+  const salida = [];
+  for (const e of readdirSync(dirApp, { withFileTypes: true })) {
+    if (!e.isDirectory()) {
+      if (/^page\.tsx?$/.test(e.name)) salida.push(prefijo || "/");
+      continue;
+    }
+    // Rutas dinamicas ([slug]) no se pueden visitar sin un valor: se saltan.
+    if (e.name.startsWith("[") || e.name.startsWith("_") || e.name === "api") continue;
+    const grupo = e.name.startsWith("(") && e.name.endsWith(")");
+    salida.push(...rutasDelDisco(join(dirApp, e.name), grupo ? prefijo : `${prefijo}/${e.name}`));
+  }
+  return [...new Set(salida)];
+}
+
+/**
+ * El universo que cualquier gate del sitio tiene que barrer: todo lo que producción
+ * sirve, menos lo eximido por NOMBRE arriba.
+ *
+ * El default de `dirApp` apunta a `src/app` de esta app y no al cwd: un gate que se
+ * corre desde otra carpeta mediría un árbol vacío y "cero rutas rotas" saldría verde.
+ */
+export function superficiesDeVenta(dirApp = join(dirname(fileURLToPath(import.meta.url)), "..", "src", "app")) {
+  return rutasDelDisco(dirApp)
+    .filter((r) => !FUERA_DE_VENTA(r))
+    .sort();
+}
