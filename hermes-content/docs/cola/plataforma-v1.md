@@ -63,6 +63,225 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [ ] 🔴 **PORTADA reordenada por veredicto de Sergio Urcullo (11-sep, sobre capturas del
+      preview y de producción) — HECHA en `main` (`a847d9aa`), FALTA su OK mirándola y el
+      deploy.** Sus palabras: *"esto no vende nada… coloca algo que impacte que se vea más el
+      sistema, y el tema de los chatbots es principal, que sea más protagonista, está al final
+      eso, quita esas cajitas que son solo texto… el inicio me gustaba más así como estaba puro
+      texto estilo hostinger… que sea lo principal llevarlos a probar el sistema"*. Qué entró:
+      hero v4 DESCARTADO (vuelve el hero de producción que él aprobó), sección HECHOS retirada,
+      chatbot a la posición 2 con conversación dibujada
+      (`web-factory/apps/onia-platform/src/app/(sitio)/conversacion.tsx`) + CTA al alta.
+      Pendiente de ESTE ítem: (a) **AUDITORÍA PRE-PUBLICACIÓN pedida por Sergio Urcullo antes
+      del deploy** (11-sep, textual: *"verificamos los precios de los add-ons y las pestañas
+      secundarias que no es el hero que estén bien hechas, también verificamos cibersecurity,
+      fallos de estructura de la web, información mal colocada, docs viejos, política de
+      privacidad"*) — dos subagentes barriendo seguridad y contenido de
+      `web-factory/apps/onia-platform/src/`; los hallazgos se arreglan ANTES del deploy;
+      (b) tras la auditoría limpia, su OK → deploy con `/opt/onia-landing/_deploy/publicar.sh`;
+      (c) probar un video HyperFrames como pieza del bloque chatbot ("puedes generar videos con
+      hyperframes también, intentá") — arrancamos con la conversación CSS porque pesa cero.
+      El 11-sep también entró la dieta de la sección de add-ons (`e12b740f`: tarjetas con
+      precio en píldora, ancla del salario en una línea, copys cortos en la fuente única).
+
+- [ ] 🔴 **ESCALERA C IMPLEMENTADA el 2026-09-12 ("tenés permiso de los precios") — REGLA DE
+      DESPLIEGUE: los DOS deploys salen JUNTOS o ninguno.** Producto en `master`
+      (`4bff903d`): plan `crece` 550/145/5.500, Pro 890/229/8.900, Full 1.290/12.900 CON
+      chatbot incluido (`whatsappIncluded` en `onia-platform/lib/plan-catalogo.ts`, ejecutado
+      por `onia-platform/lib/plan-limits.ts` como cuarta fuente de `addonHabilitado` con la
+      vigencia del PLAN), Crece en `CHECKOUT_PLANS`, tests re-anclados (suite 4.687 verdes;
+      los 13 rojos son artefactos Windows idénticos en master limpio, medidos en worktree).
+      Landing en `main` (`a9e11c47`): 4 tarjetas con topes visibles y "Cuatro escalones".
+      ⚠️ **Hasta que el PRODUCTO se despliegue, el checkout vivo valida los montos viejos
+      (750/1500): si la landing sale sola, muestra 890 y el pago exige otra cifra.** Falta
+      además (fase 2): avisos al 70/90/100 % del cupo con la cuenta "recargar vs subir" y la
+      recarga de recordatorios (la de conversaciones ya existe).
+
+      Historia: **ESCALERA C ELEGIDA por Sergio Urcullo (11-sep): 4 escalones con cupos estilo
+      Higgsfield.** Su decisión,
+      textual: *"la C pero que tenga restricciones y que tengan que estar pagando si quieren
+      mejorar su plan, mira higgsfield te cobra por todo y si no usás tus créditos dentro del
+      mes igual se te quitan; necesitamos ser la mejor opción por ser la más simple pero que
+      igual paguen siempre pero que no sea exagerado"*. Investigación previa medida EN VIVO:
+      ManyChat 2026 (5 escalones chicos, overage que factura en vez de bloquear, aviso al
+      70/90/100 %), Alegra Perú (4 planes pegados, "Más popular" en el 3º), Dapta, Lety.
+
+      **Letra chica PROPUESTA (ratificar montos de cupos antes de tocar la fuente única):**
+      | Plan | Bs/mes | Cupos mensuales (NO acumulan) | Qué lo hace querer subir |
+      |---|---|---|---|
+      | Básico | 320 | 2 usuarios · 300 fichas · 200 recordatorios | sin agentes, sin reservas |
+      | Crece (NUEVO) | 550 | 3 usuarios · 800 fichas · 400 recordatorios | agentes Recall+Cobrador, reservas incluidas; sin reportes/contabilidad completa |
+      | Pro (destacado) | 890 | 5 usuarios · 1.500 fichas · 800 recordatorios | todo lo operativo: reportes, contabilidad completa, facturas recurrentes, todos los agentes |
+      | Full | 1.290 | sin límites | **chatbot de WhatsApp INCLUIDO** + te lo entregamos configurado |
+      Semanal: 89 / 145 / 229 / — · Anual: 10× (2 meses gratis) · Grupo 2.900 queda cotizado.
+      Mecánica Higgsfield: el cupo del mes muere con el mes; recargas pagas (conversaciones del
+      bot ya existe a Bs 190; sumar recarga de recordatorios); aviso al 70/90/100 % del cupo con
+      la cuenta en pantalla ("dos recargas > subir de plan"). Implementación toca:
+      `onia-platform/lib/subscription-plans.ts` (nuevo id de plan + montos),
+      `onia-platform/lib/pricing.ts`, espejo de la landing
+      `web-factory/apps/onia-platform/src/lib/pricing.ts`, `/precios`, checkout y validación de
+      pago, y las tarjetas de plan con las LIMITACIONES visibles (pedido explícito: *"que se
+      noten las limitaciones para que quieran subir el plan y ordená las funciones dependiendo
+      del plan"*).
+
+- [ ] 🔴 **Funciones que las empresas usan DE VERDAD — recorte de superficie** (Sergio Urcullo,
+      11-sep: *"mirar qué funciones vamos a usar realmente para las empresas"*). Medir contra
+      las 3 orgs vivas y el catálogo (`hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md`): qué
+      módulo se usa, cuál nadie tocó, y qué se esconde/simplifica para que la 1.0 sea corta.
+      El techo son horas de soporte, no features (estrategia §9).
+
+- [ ] 🔴 **Estado real de los agentes IA del producto** (Sergio Urcullo, 11-sep: *"mira también
+      cómo están los agentes ai"*). **MEDIDO el 2026-09-11 en la base de prod** (supabase-db,
+      tablas `onia_agents_*`): 4 agentes definidos, el cron corre y completa (22 corridas
+      `completed`, 14 en los últimos 7 días, última hoy 11:00 UTC) — pero
+      **`onia_agents_actions` tiene CERO filas en toda la historia**: los agentes corren en
+      vacío, jamás dejaron un borrador. La portada y el panel venden exactamente ese borrador
+      ("Para aprobar: avisar los pagos vencidos…"). Falta la mitad que importa: SEMBRAR un caso
+      real en `clinica-sergio-p2ljs` (deuda vencida + paciente sin volver), correr el cron, ver
+      el borrador aparecer en `onia-platform/app/(dashboard)/agents/page.tsx`, aprobarlo y
+      verificar el efecto. Si con datos no propone nada, el generador está mudo y eso es un 🔴
+      de venta. Los agentes NO llaman a ningún modelo (costo de API cero).
+
+      **E2E EJECUTADO el 2026-09-12 (madrugada): EL MOTOR PRODUCE.** Sembrado en
+      `clinica-sergio-p2ljs` (ids `e2e-agentes-*`: paciente sin volver hace 200 días + factura
+      `VENCIDA` de Bs 370 hace 12 días), cadencia destrabada (las runs de hoy se borraron para
+      esa org) y relanzado `/root/bin/run-onia-agents-cron.sh` → `ran:2, proposed:2`:
+      el Cobrador redactó el reclamo ("saldo vencido Bs 370,00 hace 12 días") y el Recall el
+      mensaje de reactivación con `suggestedMessage` completo — los DOS en `pending_approval`
+      en `onia_agents_actions`, visibles en la pantalla Agentes de la clínica de Sergio para
+      que él apruebe. **El misterio del "0 acciones en la historia" quedó explicado: motor
+      sano + cadencia diaria + orgs sin datos disparadores** (`not_due` / feeds vacíos).
+      Pendiente de este ítem: (a) Sergio mira y APRUEBA un borrador en pantalla (la aprobación
+      registra; el envío externo S6 sigue sin existir); (b) purgar las semillas
+      `e2e-agentes-*` cuando termine la prueba; (c) construir los 3 agentes nuevos de abajo.
+
+      **DECIDIDO por Sergio Urcullo (11-sep, eligió las 4 opciones) y TODAVÍA SIN CONSTRUIR:
+      los TRES agentes nuevos** (nota del merge del 12-sep: dos carriles reescribieron este
+      ítem a la vez — la parte MEDIDA es sucesora, la DECISIÓN de los tres no se pierde).
+      Sobre el mismo patrón de `onia-platform/lib/onia-core/modules/agents-runtime.ts`:
+      (1) **Confirmador de citas de mañana** (`draft_message`: cada tarde, citas de mañana sin
+      confirmar → mensaje listo para aprobar),
+      (2) **Seguimiento de cotizaciones** sin respuesta en N días (`draft_message` —
+      importadora), (3) **Stock bajo mínimo → tarea de pedido** al proveedor de la ficha
+      (`create_task`: no depende del envío externo). Restricción vigente: el ENVÍO externo (S6) no
+      existe — aprobar registra la acción; el WhatsApp real es obra aparte y no se promete hasta
+      que exista. Las dos precondiciones que Sergio Urcullo puso antes de estos tres (E2E de los 2
+      vivos, y la cadencia) **ya están cerradas** en los dos ítems de abajo.
+
+- [x] ✅ **MEDIDO Y ARREGLADO el 2026-09-12 (`ea80ada`, onia-platform — pusheado a la rama,
+      falta mergear y desplegar): los agentes corrían DÍA POR MEDIO, y la pantalla promete
+      «corre todos los días».** (Sergio Urcullo, 11-sep: *"mira también cómo están los agentes
+      ai"*.)
+
+      **Lo que se midió en producción**, no heredado — `supabase-db` + `/var/log/onia-agents-cron.log`:
+
+      | | |
+      |---|---|
+      | Agentes vivos | **4**: Recall y Cobrador en las dos orgs con plan vigente (`clinica-sergio-p2ljs`, `bolivian-electricidad-e6t21`). El **Captador nunca corrió**: `kind_not_enabled` — vive detrás de `addon.captador` y nadie lo compró |
+      | Corridas | 22, **todas `completed`, sin un solo `error`**, todas con `propuestas 0` |
+      | Borradores esta semana | **CERO.** `onia_agents_actions` = 0 filas en toda la base; `onia_core_approval_requests` = 0 |
+      | Circuito aprobar→enviar | **Construido entero y JAMÁS ejecutado en producción** — 0 aprobaciones desde que existe |
+
+      **Por qué 0 propuestas, contado hoy y no en septiembre:** las dos orgs con agentes tienen
+      **0 citas y 0 facturas** (la dental tiene 1 paciente y ninguna cita). Recall exige una cita
+      completada hace ≥180 días sin cita futura; Cobrador, una factura emitida y vencida. Con esos
+      datos, `propuestas 0` es la respuesta **correcta** del motor, no un fallo. El diagnóstico del
+      04-sep decía lo mismo y **se volvió a contar** en vez de heredarse.
+
+      🔴 **El defecto real estaba en otro lado, y ningún gate podía verlo: el disparador.** El cron
+      `0 11 * * *` disparó los 11 días del mes, pero las corridas quedaron los días **04, 05, 07,
+      09 y 11** — los días **06, 08 y 10** todos los agentes contestaron `skippedReason: "not_due"`.
+      La causa es aritmética: `intervalMinutes` vale **1440**, exactamente la cadencia del
+      disparador, y `shouldRunAgent` exigía `elapsed >= interval` contra el `startedAt` de la
+      corrida anterior. El cron nunca arranca en el mismo milisegundo (11:00:01 un día, 11:00:02
+      el otro) y la fila se sella **después** de la llamada HTTP, así que el disparo siguiente
+      llega unos segundos **antes** de cumplir las 24 h → no corre, y recién al otro día (48 h)
+      vuelve a entrar. **El producto entregaba la mitad de la frecuencia que promete.**
+
+      **LA CLASE, para buscarla en otro lado:** cuando la cadencia declarada de un trabajo IGUALA
+      la del reloj que lo despierta, el jitter del reloj se come un disparo de cada dos. No falla
+      nunca del todo —lo que lo hace invisible—, sólo entrega la mitad. Cada pieza tenía razón por
+      separado: el cron corrió, el runtime contestó 200, la corrida cerró `completed`, y
+      `agents-cadencia.ts` ya topeaba lo que la pantalla **dice** contra el disparador real. Lo que
+      faltaba era que el **scheduler cumpliera esa misma promesa**. Vale para todo cron con
+      intervalo propio: barridos del bot, drips, recordatorios.
+
+      Arreglo: `margenDeJitter()` en `lib/onia-core/modules/agents-logic.ts` — 5 % del intervalo,
+      **topeado a 60 min**. Proporcional para que valga igual en media hora que en un día; topeado
+      para que no se vuelva «corre cuando quiera» (un agente mensual no puede adelantarse día y
+      medio). Gate `lib/onia-core/modules/agents-corre-en-cada-disparo.test.ts`: el sujeto es el
+      **cruce** de los dos módulos (lo que se promete y lo que el runtime deja correr), con el
+      universo derivado de `AGENT_KINDS` — el rol que se agregue mañana entra solo. Validado por
+      mutación en **cuatro** direcciones y cada una cae en SU caso: revertir el arreglo (7 rojos),
+      margen 0 (7), quitar el tope (1) y frontera estricta `>` (1).
+      Gates verdes en las dos máquinas: `tsc` 0 · **4727** tests · `eslint` 0 errores.
+
+      ⚠️ **Lo que queda abierto y NO es de este ítem:** el circuito aprobar→enviar está entero
+      (CAS anti-doble-clic, `approvalId` UNIQUE, no finge entrega, y `/pending` ofrece «enviar» y
+      «preparar link para mandarlo yo»), pero **nunca se ejecutó con un caso real** porque nunca
+      hubo una propuesta que aprobar. Probarlo de punta a punta exige sembrar una cita vieja en
+      una org de QA y mirar el despacho — ítem propio, no una línea de éste.
+
+- [x] ✅ **EJECUTADO EN PRODUCCIÓN el 2026-09-12 04:15-04:17 UTC: aprobar→enviar funciona de
+      punta a punta. Es la PRIMERA aprobación de la historia del producto.** Era la mitad del
+      pedido de Sergio Urcullo del 11-sep que quedaba sin cumplir: el circuito estaba construido
+      entero y **nunca se había ejecutado** (0 aprobaciones desde que existe).
+
+      **Estado de partida, contado, no heredado:** `onia_agents_actions` 0 · `onia_core_approval_requests` 0
+      · `onia_core_dispatches` 0 · 4 agentes · 22 corridas.
+
+      **Lo que se hizo, y por qué NO en una org `zz-qa` como decía este ítem.** Crear una org de
+      QA funcional exige pasar por el alta real (usuario de Supabase Auth + perfil + onboarding),
+      porque sin perfil no hay magic link y sin onboarding completo la app redirige a `/onboarding`
+      y **ninguna pantalla se puede mirar**. Eso es media vuelta para poder apretar UN botón. Se
+      sembró en `clinica-sergio-p2ljs` (dental, `professional` vigente, onboarding hecho) sólo
+      **dos filas**, selladas por corrida: paciente `zzqa20260912pac1` y cita `zzqa20260912cit1`
+      COMPLETADA hace 200 días. Todo borrado por id EXACTO al terminar.
+
+      🔴 **La trampa que casi invalida la prueba, y que este ítem no preveía: la CADENCIA.** El
+      cron dispara `0 11 * * *` y `shouldRunAgent` exige 1440 min contra el `startedAt` anterior;
+      la última corrida era de las 11:00 del 11-sep, así que a las 04:15 faltaban ~2 h 40 y el
+      agente contestaba `not_due` — no hay parámetro para forzar (`app/api/cron/onia-agents/route.ts`
+      no acepta ninguno). Se movió el `startedAt` de la corrida `cmtwuh6a5007801rwcgx3q7lo`, **anotado
+      antes de tocarlo** (`2026-09-11 11:00:04.202+00`) y devuelto al cerrar. Es la misma clase que
+      arregló `ea80ada` un rato antes, vista desde el otro lado: mientras ese arreglo no esté
+      desplegado, **producción sigue con la regla estricta**.
+
+      **Las dos corridas, y las dos importan:**
+
+      | | teléfono | resultado |
+      |---|---|---|
+      | 1.ª | `+59100000000` | **rechazado**: `numeroParaWhatsapp` exige móvil boliviano (8 dígitos que empiezan en 6 o 7). Despacho `failed`, la pantalla dijo *"Aprobado, pero el envío NO salió… Reintentalo abajo, en «Envíos fallidos»"* y ofreció **Reintentar** con el texto a la vista |
+      | 2.ª | `70000000` | **`sent`** con `waLink` `https://wa.me/59170000000?text=…`, `entregaManual: true`, `pendienteDeEnvioHumano: true`, `providerMessageId` NULL |
+
+      El camino de fallo **no era un accidente de la prueba: es la mitad que casi nadie mira**, y
+      salió honesta — no fingió entrega, nombró la causa exacta con el valor recibido, y dejó el
+      reintento a mano. Se probó sin querer y por eso vale.
+
+      **HECHO, mirado renderizado y contado en la base:** acción `cmtxvii5t002701rwd4xhey4y` →
+      `executed` (`executedAt` 04:17:06), aprobación → `approved`, despacho
+      `cmtxvis9y002a01rw3zom8z9j` → `sent`. La pantalla dice *"Mensaje listo para … El sistema NO
+      lo envió: abrí el link y envialo desde TU WhatsApp"* con **Abrir WhatsApp con el mensaje** y
+      **Copiar link**, y la cola de aprobaciones queda vacía. Captura:
+      `hermes-content/docs/historial/2026-09-12-aprobar-enviar-punta-a-punta.png`.
+
+      ⚠️ **El botón NO se llama «preparar link»** —como decía este ítem— sino **«Enviar yo mismo
+      por WhatsApp»** (`app/(dashboard)/pending/pending-client.tsx:263`). Un texto de botón citado
+      de memoria en una cola manda a buscar un ancla que no existe.
+
+      **Limpieza verificada, no declarada:** `onia_agents_actions` 0 · `onia_core_approval_requests` 0
+      · `onia_core_dispatches` 0 · paciente 0 · cita 0 · corridas **22** (las mismas que al arrancar:
+      se borraron las 3 que generó esta prueba) · 4 agentes intactos · `startedAt` devuelto a
+      `2026-09-11 11:00:04.202+00`.
+
+- [ ] 🔴 **Dos propuestas de diseño para el dashboard del producto** (Sergio Urcullo, 11-sep:
+      *"ese color que hay ahorita no es nada intuitivo y no hay botones que resalten, que se
+      diferencien para que la experiencia sea más fácil"*). Dos direcciones renderizadas
+      (maquetas sobre el shell real: `onia-platform/app/(dashboard)/layout.tsx` y
+      `onia-platform/app/globals.css`, no dibujos sueltos), con jerarquía de botones
+      primario/secundario y color semántico; se le MUESTRAN y él elige. Nada se aplica al
+      producto sin su OK.
+
 - [x] ✅ **CERRADO el 2026-09-11 (`c14db84`, rama `claude/chatbots-platform-review-0d1d09`
       de onia-platform — falta mergear a `master` y desplegar; pedido `t_cba4fa74`): el
       cliente que se arrepintió de la baja del asistente y VOLVIÓ A PAGAR no recibía un solo
@@ -743,6 +962,114 @@ y sin operar. Acá se opera, con verificación por ítem.
       `onia-platform/lib/pricing.ts` y memoria meta-whatsapp-clientes actualizada.
       **LISTO =** crédito OpenAI >0 (el off-guion vuelve a reformular, Hermes contesta) y
       método de pago visible en el billing de Meta.
+
+- [x] 🔴 **CERRADO el 2026-09-11: el gasto de Hermes bajado ~10x** (pedido de Sergio
+      Urcullo: "no puedo permitirme gastar mucho"). Atribuido ANTES de cortar (regla
+      hermes-gasto-bajar-no-subir): 98% del gasto era gpt-5-mini con ~100K tokens de prompt
+      POR LLAMADA, y el 93% del prompt era la MEMORIA de Hermes inflada a 500 KB — los loops del sistema (`scripts/loops/README.md`) la appendean via onia-aprender y nadie compactaba (663
+      entradas §, los loops la appendean y nadie compactaba). Lo hecho: memoria compactada
+      500 KB → 60 KB / 663 → 109 entradas (backup en
+      /root/.hermes/backups/MEMORY-pre-compactacion-20260911.md; datos operativos textuales
+      conservados) — prompt total 523 KB → 96 KB medido con `hermes prompt-size`; y el job
+      mas caro (onia-ordenador-tablero) de cada 6 h a 2/dia (13:00 y 23:00 UTC). Proyeccion:
+      de ~$25-30/mes a ~$2-4/mes. ⚠️ Pendiente estructural anotado abajo: la memoria vuelve
+      a crecer si nadie la compacta — tope automatico.
+
+- [ ] 🟡 **La memoria de Hermes necesita TOPE automatico de compactacion.** La de 500 KB se
+      compacto a mano el 11-sep, pero onia-aprender.sh y el supervisor siguen appendeando:
+      sin tope vuelve a inflarse en semanas. Fix: cron semanal (o en el propio sync) que si
+      /root/.hermes/memories/MEMORY.md supera ~100 KB dispara compactacion con backup; engancharlo al sync de loops que ya corre cada hora (fuente en el repo: `scripts/loops/README.md`)
+      (mismo criterio del 11-sep: regla + 1 linea de porque, datos operativos textuales).
+      Carril loops. **LISTO =** dos semanas seguidas con MEMORY.md < 100 KB sin mano humana.
+
+- [x] 🟡 **CERRADO el 2026-09-11: banda GRANDE de renovacion en el panel** (pedido de Sergio
+      Urcullo: "un apartado grande en la pantalla que avise con opcion de generar el QR").
+      `onia-platform/components/AvisoRenovacion.tsx` + `onia-platform/lib/subscription/aviso-renovacion.ts`
+      (3/3 tests): D-7 a D-1, solo ADMIN, tono urgente en D-1, boton "Renovar ahora" a
+      /checkout; el texto del medio de pago sale de medioDePagoOnia(isBcpQrConfigured()) — sin
+      credenciales del banco NO promete QR (pagos manuales hasta que el banco entregue,
+      confirmado por Sergio Urcullo 11-sep); con credenciales, el MISMO boton termina en el
+      QR dinamico. Commit `6e8ae641`, viaja en el deploy de esta noche.
+
+- [x] 🟡 **CERRADO el 2026-09-11: el editor del bot queda SIMPLE por defecto** (lema de
+      Sergio Urcullo: "todo súper fácil y ya configurado; opciones avanzadas para mayor
+      settings"). Arriba: plantilla armada + Enséñale conversando + Identidad y horario +
+      Publicar + probador; Seguimiento/cita/palabras clave/catálogo/FAQ plegados en un
+      `<details>` "Opciones avanzadas" que se abre solo ante un error del validador
+      (`onia-platform/app/(dashboard)/settings/chatbot/ChatbotClient.tsx`, 242 tests verdes).
+
+- [ ] 🟡 **BYOK (clave de IA propia) como opción avanzada — hoy NO existe y está bien.** El
+      LLM del bot de cada cliente es el LiteLLM central de Onia (clave nuestra, cero
+      configuración del cliente = el lema). Cuando un cliente grande lo pida: campo "Clave de
+      OpenAI propia (opcional)" en Opciones avanzadas del editor, que el motor use por-inbox
+      (`hermes-content/deploy/vps-ops/bot/run-turn.mjs` askLiteLLM lee env; pasaría a leer
+      del knowledge de la org). No construir antes de que exista el pedido real.
+
+- [ ] 🔴 **LOTE AUDITORÍA 11-sep (velocidad + diseño vs Lety/Dapta, pedido de Sergio
+      Urcullo) — medido con Lighthouse + Playwright + curl, capturas en el chat de la sesión.**
+      ⚠️ **DERIVADO el 2026-09-11: no lo ejecuta este carril, y por eso no se puede cerrar acá.**
+      Los nueve puntos viven en `web-factory/apps/onia-platform/src/app/(sitio)/`, que es zona de
+      `web-venta` — medido, no supuesto: los últimos 12 commits de esa carpeta en `origin/main`
+      son todos suyos (`fix(venta):`). Quedó repartido así, y este carril no lo vuelve a mirar:
+      · **(a)-(d), velocidad** → tarea `t_c38481ac` del tablero, asignada a `carril-web-venta`,
+        `ready` (verificado con `show`, no con el exit de `assign`). Es mecánica invisible: no
+        cambia lo que el cliente LEE, así que va sin que Sergio Urcullo mire nada.
+      · **(e)-(i), diseño** → ya estaban preguntadas: `t_54ff72b5`, `t_781090e0` y `t_a0644214`,
+        las dos últimas `blocked` esperándolo a él. Crear una cuarta era repetirle una decisión
+        que ya tiene sobre la mesa.
+      Lo bueno medido: Onia carga MÁS RÁPIDO que ambas referencias (load 494 ms vs Lety
+      12.913 ms y Dapta 9.493 ms desktop), precio visible en el fold (ninguna referencia lo
+      tiene), 1 clic a /register, 0 render-blocking, 0 imágenes sin dimensiones. Lo que
+      falla, por impacto:
+      ✅ (a)+(b)+(c) CERRADOS el 2026-09-11 (commits `b1004df6` + sin-fade, PUBLICADOS en
+      onia.com.bo y re-medidos con Lighthouse desde el VPS — instrumento estable para
+      futuras mediciones): peso total **1.491 → 434 KB (−71%)**, requests 43 → 26, Chatwoot
+      **0 KB** en carga inicial, hero pinta sin esperar
+      JS y SIN fade (lección medida: un texto en opacity 0 no cuenta como pintado — el fade
+      de entrada en el fold cuesta LCP venga de JS o de CSS), polyfills eliminados por
+      browserslist moderno. Score 86, FCP 2,1 s, **LCP 3,8 s — mejor pero aún > 2,5**: lo que
+      queda es (d) TTFB ~740 ms (regla de caché de HTML en Cloudflare — la decide Sergio
+      Urcullo en su panel CF o autorizando el conector) y ~680 ms de render delay del h1
+      (revisar font-display de la fuente de titulares). El detalle de (a), que es el que
+      trajo el ahorro y la lección:
+      (a) ✅ **CERRADO 2026-09-11 (`3927d847`)** VELOCIDAD — el widget de Chatwoot era el
+      **71% del peso** de la landing (1.062 KB de 1.491 KB, 18 requests) y lo descargaba toda
+      visita. Ahora espera al primer gesto de una persona o 12 s (`src/lib/chat-diferido.ts`,
+      gate `chat-diferido.test.ts`, medición viva `scripts/chat-diferido-vivo.mjs`). Medido
+      sobre la portada buildeada: **0 pedidos y 0 KB al chat sin tocar nada**. Sin launcher
+      propio: la burbuja es la misma y no hubo cambio visual que aprobar. ⚠️ Y la trampa que
+      costó la vuelta: con `scroll` y `mousemove` en la lista de gestos el SDK salía pedido a
+      los **176 ms** sin que nadie tocara nada —la página dispara `scroll` sola— con el gate
+      de unidad en verde. Sólo lo vio abrir la página y escuchar lo que pide;
+      ⚠️ **El «o 5 s» que decía el resumen del lote era del snippet VIEJO** (inline en
+      `layout.tsx`, con `scroll` adentro): lo reemplazó este módulo al integrar, y la espera
+      vigente es **12 s**. Se corrigió acá al mergear para que el resumen no contradiga al
+      código que corre;
+      (b) 🔴 LCP móvil 3,1 s (> presupuesto 2,5 s): `dueno-duerme.webp` (107 KB, 1600×900) está
+      lazy — pasar a fetchpriority=high + srcset 800w para móvil;
+      (c) 🟡 JS propio 197,7 KB gz (> presupuesto 150): el chunk de polyfills legacy (39,6 KB gz)
+      se elimina fijando browserslist moderno;
+      (d) 🟡 TTFB 0,5-1,05 s en páginas estáticas de venta: cache de HTML en Cloudflare/ISR
+      (Lety: 0,36 s);
+      (e) 🔴 DISEÑO — el h1 "Todo el negocio, en una pantalla." describe la UI; el de Lety
+      ("Sell AI. To dentists. Get paid every month.") nombra comprador y resultado. Rotar el
+      rubro en el titular con el vocabulario que ya existe (`web-factory/apps/onia-platform/src/app/(sitio)/page.tsx`
+      h1 + TITULO/DESCRIPCION/OG + guard `hero.test.ts`);
+      (f) 🔴 el panel del hero vende SUSTANTIVOS (6 pastillas sin un número); Lety vende
+      NÚMEROS ($13.300/mo con curva). Dibujar un "día simulado" en Bs (14 citas · Bs 2.340
+      cobrados · 9 recordatorios) — sigue siendo panel dibujado (regla 1-sep), etiquetado
+      "ejemplo"; archivos `(sitio)/ui.tsx` PanelDibujado;
+      (g) 🟡 cero señal de confianza en el fold (sin inventar: integraciones reales WhatsApp/
+      QR bancos/SIAT + "Hecho en Bolivia" + "14 días sin tarjeta" como fila compacta);
+      (h) 🟡 hero centrado deja el fold sin evidencia: split copy-izquierda/panel-derecha
+      (patrón Lety) en `(sitio)/portada.module.css`;
+      (i) 🟡 CTA verde sobre hero verde (tres verdes idénticos compitiendo) + burbuja de chat
+      tapa el panel en móvil + eyebrow duplica el claim del h1.
+      ⚠️ (e)-(i) tocan la pieza APROBADA del 1-sep: el rediseño se muestra renderizado a
+      Sergio Urcullo ANTES de publicar (regla "una superficie viva no se reemplaza sin que la
+      VEA"). (a)-(d) son mecánica invisible: van directo.
+      **LISTO =** LCP < 2,5 s y peso total < 500 KB medidos con Lighthouse, y el hero nuevo
+      aprobado por Sergio Urcullo mirándolo.
 
 - [x] ✅ **T-nueva — CERRADO el 2026-09-10 23:45 UTC: su LISTO se cumple hoy.** Contado en
       `supabase-db`, no deducido: `public.organizations` tiene **3 filas** (`onia-interna`,

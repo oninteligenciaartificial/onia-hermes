@@ -4,6 +4,7 @@ import { Archivo, Geist_Mono } from "next/font/google";
 import { MotionProvider } from "@/motion";
 import { SITE_URL } from "@/lib/site";
 import { ALCANCE_CON_AGENDA } from "@/lib/pricing";
+import { chatDiferidoInit } from "@/lib/chat-diferido";
 import "./globals.css";
 
 /*
@@ -105,13 +106,16 @@ export const viewport: Viewport = {
 /** Aplica el tema guardado antes del primer paint (toggle manual sobre prefers-color-scheme). */
 const themeInit = `(function(){try{var t=localStorage.getItem("onia-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);}}catch(e){}})();`;
 
-/**
+/*
  * Chatbot de Onia: widget de Chatwoot (self-hosted en el VPS). Es el MISMO motor que atiende
  * WhatsApp — califica (rubro/equipo/ciudad), agenda la demo con reserva real en Cal.com y
- * deriva a humano — expuesto como inbox web (id 4). Carga async despues del load para no
- * tocar LCP; si Chatwoot esta caido, el sitio ni se entera.
+ * deriva a humano — expuesto como inbox web (id 4). Sigue cargando async despues del load
+ * para no tocar LCP; si Chatwoot esta caido, el sitio ni se entera.
+ *
+ * Desde el 2026-09-11 ademas espera a que el visitante de señal de quererlo: era el 71 % del
+ * peso de la portada y se lo llevaba hasta el que rebotaba a los tres segundos. El snippet y
+ * su porque viven en `@/lib/chat-diferido`, que es donde el gate puede EJECUTARLO.
  */
-const chatwootInit = `window.addEventListener("load",function(){var BASE_URL="https://onia-chatbot-chatwoot.hqdqgh.easypanel.host";var g=document.createElement("script");g.src=BASE_URL+"/packs/js/sdk.js";g.defer=true;g.async=true;g.onload=function(){window.chatwootSDK.run({websiteToken:"9k5i7xnAgCbSse1EZwVChZLw",baseUrl:BASE_URL})};document.body.appendChild(g);});`;
 
 export default function RootLayout({
   children,
@@ -125,7 +129,7 @@ export default function RootLayout({
       <body>
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
         <MotionProvider>{children}</MotionProvider>
-        <script dangerouslySetInnerHTML={{ __html: chatwootInit }} />
+        <script dangerouslySetInnerHTML={{ __html: chatDiferidoInit }} />
       </body>
     </html>
   );

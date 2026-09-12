@@ -138,20 +138,45 @@ describe("el hero de la portada se DIBUJA, no se captura", () => {
    * La banda del día (9 h / 15 h) es el argumento del ASISTENTE, así que vive
    * en su sección y no en la portada de la oferta. Si vuelve al hero, vuelve
    * el problema entero: es la pieza más grande de la primera pantalla.
+   *
+   * ⚠️ Los dos guards de abajo citaban `s.day` y `repeat(24, minmax(0, 1fr))`.
+   * El 11-sep la banda se rehizo —los slabs con cuadraditos salieron, entró la
+   * línea del día con una barra flex— y esa clase dejó de existir: la primera
+   * mitad del guard pasó a cumplirse sola (nadie puede poner una clase que no
+   * está en la hoja) y la otra mitad quedó ROJA en `main`, trabando el merge de
+   * todos los carriles. Un guard anclado al NOMBRE de la implementación muere
+   * así: o se apaga en silencio, o acusa al producto por cambiar.
+   *
+   * Ahora se ancla a la PROPIEDAD (dónde vive la barra, y que dibuje las horas
+   * en proporción), y lo primero que pregunta es si la clase que vigila sigue
+   * existiendo — para que el próximo rediseño lo deje rojo diciendo qué pasó.
    */
-  it("la banda del día ya no está en el hero", () => {
-    expect(seccionHero(PORTADA)).not.toMatch(/className=\{s\.day\}/);
-    // pero sigue viva en la página, con el add-on que la explica
-    expect(PORTADA).toMatch(/className=\{s\.day\}/);
+  const BARRA_DEL_DIA = "diaBarra";
+
+  it("la clase que vigilan estos guards sigue existiendo en la hoja", () => {
+    expect(CSS).toContain(`.${BARRA_DEL_DIA} {`);
   });
 
-  it("las 9 horas y las 15 suman el día entero", () => {
+  it("la banda del día ya no está en el hero", () => {
+    const enLaPagina = new RegExp(`className=\\{s\\.${BARRA_DEL_DIA}\\}`);
+    expect(seccionHero(PORTADA)).not.toMatch(enLaPagina);
+    // pero sigue viva en la página, con el add-on que la explica
+    expect(PORTADA).toMatch(enLaPagina);
+  });
+
+  it("las 9 horas y las 15 se DIBUJAN repartiendo el día entero", () => {
     const vos = Number(/const HORAS_VOS = (\d+)/.exec(PORTADA)?.[1]);
     const onia = Number(/const HORAS_ONIA = (\d+)/.exec(PORTADA)?.[1]);
-    // la rejilla del día son 24 columnas: si no suman 24, el corte de las
-    // 18:00 deja de caer donde la regla dice que cae
+    // si no suman 24, el corte de las 18:00 deja de caer donde la regla dice
     expect(vos + onia).toBe(24);
-    expect(CSS).toContain("repeat(24, minmax(0, 1fr))");
+
+    // ...y el ANCHO de cada franja tiene que ser esa hora, no una mitad y
+    // mitad decorativa: el TSX pasa las horas por `--span` y la hoja las
+    // reparte con `flex-grow` sobre base 0, que da 9/24 y 15/24 exactos.
+    // Con cualquier otra base el dibujo deja de decir lo que dice el texto.
+    expect(PORTADA).toMatch(/"--span": HORAS_VOS/);
+    expect(PORTADA).toMatch(/"--span": HORAS_ONIA/);
+    expect(CSS).toMatch(/flex:\s*var\(--span[^)]*\)\s+1\s+0/);
   });
 
   it("los agentes no mandan nada solos", () => {
@@ -159,9 +184,13 @@ describe("el hero de la portada se DIBUJA, no se captura", () => {
     // que contacta a un cliente queda en la cola de aprobación. Tres
     // diseñadores prometieron lo contrario acá antes de que existiera el guard.
     // Los tres momentos del bloque verde viven en MOMENTOS, arriba del JSX.
+    // El tope era "function Lane"; Lane se retiró con los slabs (11-sep) y un
+    // indexOf que no encuentra devuelve -1, que como fin de slice recorta el
+    // final del archivo en silencio. El tope nuevo es el componente, que no
+    // se va a ninguna parte.
     const momentos = PORTADA.slice(
       PORTADA.indexOf("const MOMENTOS"),
-      PORTADA.indexOf("function Lane"),
+      PORTADA.indexOf("export default function Portada"),
     );
     expect(momentos).toContain("Vos los aprobás");
     expect(momentos).not.toMatch(

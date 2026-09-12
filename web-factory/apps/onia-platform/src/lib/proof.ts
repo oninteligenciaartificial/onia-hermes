@@ -147,14 +147,20 @@ export const CONTENDIENTES: readonly Contendiente[] = [
   {
     id: "onia",
     quien: "Onia",
-    ejemplos: "una plataforma, el rubro dental andando hoy",
+    // «cinco rubros» y no «el rubro dental»: /rubros y /nosotros publican
+    // cinco vivos; tres páginas indexables no pueden contestar distinto a la
+    // pregunta que decide la compra (auditoría 2026-09-11, R3).
+    ejemplos: "una plataforma, cinco rubros andando hoy",
     // Nuestra propia fila de la comparativa: el rango sale de PLANES. Escrito a
     // mano quedaba viejo el día que cambia un plan, justo en la tabla que un
     // lead usa para compararnos con la competencia.
     precio: `Bs ${bs(Math.min(...PLANES.map((p) => p.mensual)))} – ${bs(
       Math.max(...PLANES.map((p) => p.mensual)),
     )} / mes`,
-    precioNota: "precio de lanzamiento, publicado más abajo",
+    // «en /precios» y no «más abajo»: la nota viene del landing viejo donde la
+    // tabla de precios seguía a la comparación; en /comparativa no hay nada
+    // más abajo (auditoría 2026-09-11, A1).
+    precioNota: "precio de lanzamiento, publicado en /precios",
     estados: { gestion: "si", siat: "tramite", agentes: "si" },
     veredicto:
       "Cruza los dos lados — y la factura fiscal todavía no: nuestro emisor está en trámite de homologación ante el SIN. Preferimos que lo leas acá antes de que lo descubras vos.",
@@ -233,9 +239,9 @@ export const TODAVIA_NO: readonly Pendiente[] = [
     detalle:
       "Onia vive en la nube. Si te quedás sin ninguna conexión, en ese rato no trabajás — igual que con el Portal del SIN. Lo que sí: seguís desde el celular con datos y no perdés nada.",
   },
-  {
-    que: "Comercio y servicios no tienen pantallas propias.",
-    detalle:
-      "La base común da de alta la cuenta, pero el pack del rubro se está construyendo. Por eso no tienen precio publicado: no le ponemos tarifa a lo que no podemos entregar.",
-  },
+  // La tercera línea («comercio y servicios no tienen pantallas propias… se
+  // está construyendo») se retiró el 2026-09-11: quedó FALSA — /rubros publica
+  // cinco rubros vivos y vendibles con precio. Era además la mina exacta que
+  // este ledger advierte: el día que alguien la cableara, metía «en
+  // construcción» a la venta contradiciendo a /rubros.
 ] as const;

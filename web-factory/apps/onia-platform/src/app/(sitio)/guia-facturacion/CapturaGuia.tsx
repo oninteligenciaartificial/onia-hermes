@@ -197,10 +197,14 @@ export function CapturaGuia() {
         contacto sin tener cuenta — hasta ese día la política distinguía dos y
         el visitante no era ninguno.
       */}
+      {/* El link a la política no es cortesía: el formulario pide datos
+          personales y la propia política cita el DS 1793 (consentimiento).
+          La nota explicaba el uso pero no ofrecía el documento (A3,
+          auditoría 2026-09-11). */}
       <p className={g.formNota}>
         Tu correo y, si querés, tu WhatsApp: nada más. La guía completa está acá
         abajo y se lee sin dejar nada; el contacto queda para hablar de tu caso,
-        y no se usa para otra cosa.
+        y no se usa para otra cosa (<a href="/privacidad">política de privacidad</a>).
       </p>
     </form>
   );

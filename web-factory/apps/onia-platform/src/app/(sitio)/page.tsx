@@ -16,6 +16,7 @@ import { EMPEZAR_URL } from "./nav";
 import { ALTA_VERBO_VOS, CTA_ALTA, ctaAltaPlan } from "./alta";
 import { FAQ } from "./faq-datos";
 import { Block, Shape, Btn, Kicker, JsonLd, PanelDibujado } from "./ui";
+import { ConversacionNocturna } from "./conversacion";
 import { Switcher } from "./switcher";
 import { NocheFoto } from "./noche";
 import { PreciosConCiclo } from "./precios-toggle";
@@ -23,10 +24,13 @@ import s from "./sitio.module.css";
 import p from "./portada.module.css";
 
 /**
- * Portada del sitio (v3) — el ORDEN es el argumento (como Fanvue):
- *   hero (promesa de resultado) → banda de prueba verificable → hecho fuerte →
- *   manifiesto → agentes → chatbot → SWITCHER de rubros (estrella) →
- *   precios → FAQ → cierre.
+ * Portada del sitio (v3) — el ORDEN es el argumento. Reordenada el 2026-09-11
+ * por veredicto de Sergio ("el tema de los chatbots es principal... quita esas
+ * cajitas que son solo texto"):
+ *   hero (puro texto, el que él aprobó) → CHATBOT protagonista (conversación
+ *   dibujada + el día) → la noche → capacidades → agentes → SWITCHER de
+ *   rubros → precios → add-ons → FAQ → cierre.
+ * Las «cajitas» de HECHOS (solo texto) se retiraron ese día.
  *
  * Ninguna pantalla de esta página es una captura del producto: las de agentes,
  * chatbot y el conmutador de rubros son PANELES DIBUJADOS (<Shape> en ui.tsx),
@@ -269,61 +273,6 @@ const MOMENTOS = [
   },
 ] as const;
 
-/**
- * Una lane de la banda: rótulo · track de marcas · palabra.
- *
- * Las marcas son las HORAS del bloque (9 o 15), las mismas que cuenta la regla
- * de arriba — no son un gráfico de ningún dato. El track es decorativo
- * (aria-hidden); lo que se lee es la frase que forman los dos rótulos.
- *
- * `--i` escalona la onda de ONIA: una sola regla CSS en vez de quince
- * `nth-child`.
- */
-function Lane({
-  quien,
-  que,
-  marcas,
-  tono,
-}: {
-  quien: string;
-  que: string;
-  marcas: number;
-  /** vos = lleno y quieto · duerme = la misma marca aplastada · onia = de pie, con onda */
-  tono: "vos" | "duerme" | "onia";
-}) {
-  const tonoClass = { vos: s.laneVos, duerme: s.laneDuerme, onia: s.laneOnia };
-  return (
-    <div className={`${s.lane} ${tonoClass[tono]}`}>
-      <span className={s.laneQ}>{quien}</span>
-      <span className={s.track} aria-hidden="true">
-        {Array.from({ length: marcas }, (_, i) => (
-          <span key={i} style={{ "--i": i } as CSSProperties} />
-        ))}
-      </span>
-      <span className={s.laneS}>{que}</span>
-    </div>
-  );
-}
-
-/** Lo que el sistema hace hoy. Cada línea se puede comprobar entrando. */
-const HECHOS = [
-  {
-    que: `Fichas, caja y cobros, y agenda ${ALCANCE_CON_AGENDA}`,
-    como: "En una sola pantalla, no en cuatro programas que no se hablan.",
-  },
-  {
-    que: "Inventario que avisa",
-    como: "Existencias, costo y proveedor, con aviso cuando algo baja del mínimo.",
-  },
-  {
-    que: "Contesta tu WhatsApp",
-    como: CHATBOT_PLAN.resuelve,
-  },
-  {
-    que: "Tus datos son tuyos",
-    como: "Los exportás en CSV cuando quieras. Sin permanencia y sin pedir permiso.",
-  },
-] as const;
 
 /** Las tres capacidades con peso de producto, cada una con su panel dibujado. */
 const CAPACIDADES = [
@@ -361,7 +310,13 @@ export default function Portada() {
             de ESTA pieza: el resto del sitio sigue siendo papel. */}
         <span className={`${p.halo} ${p.haloA}`} aria-hidden="true" />
         <span className={`${p.halo} ${p.haloB}`} aria-hidden="true" />
-        <Reveal>
+        {/* El HERO no usa <Reveal>: motion arranca en opacity 0 y el titular
+            queda invisible hasta que hidrata el JS — Lighthouse midió 788 ms de
+            "element render delay" sobre el LCP (p.heroLead) por esa espera. La
+            entrada acá es CSS puro (misma curva y distancia que el sistema de
+            motion), así el fold pinta con el HTML. El resto del sitio sigue con
+            Reveal: debajo del pliegue la hidratación no le cuesta al LCP. */}
+        <div className={p.heroEntrada}>
           <div className={p.centro}>
             <Kicker>Un solo sistema para todo el negocio</Kicker>
             <h1 className={p.heroTitulo}>
@@ -400,31 +355,84 @@ export default function Portada() {
               </span>
             </div>
           </div>
-        </Reveal>
+        </div>
       </Block>
 
-      {/* 2 · LO QUE HACE (reemplaza «Our Journey in Numbers») ─────────
-          Fincash llena esta franja con métricas de tracción. Nosotros no
-          tenemos clientes pagando, así que no hay número honesto que poner:
-          va lo que el sistema hace, que se comprueba entrando. */}
-      <Block surface="paperDim" labelledBy="v4-hace">
-        <Reveal>
-          <div className={p.centro}>
-            <Kicker>Lo que hace, hoy</Kicker>
-            <h2 id="v4-hace" className={s.h2}>
-              No es una promesa: es lo que vas a encontrar adentro.
-            </h2>
-          </div>
-        </Reveal>
-        <Reveal delay={0.06}>
-          <div className={p.hechos}>
-            {HECHOS.map((h) => (
-              <div className={p.hecho} key={h.que}>
-                <p className={p.hechoQue}>{h.que}</p>
-                <p className={p.hechoComo}>{h.como}</p>
+      {/* 2 · CHATBOT — PROTAGONISTA ─────────────────────────────────
+          Sergio, 2026-09-11, sobre la portada entera: "el tema de los chatbots
+          es principal, que sea más protagonista, está al final eso" + "quita
+          esas cajitas que son solo texto que no enseñan nada". Las cajitas
+          (HECHOS) se fueron; el chatbot sube de la posición 6 a acá, pegado al
+          hero, y su pieza visual deja de ser un Shape chico: es la
+          conversación dibujada contestando de noche (conversacion.tsx). El
+          argumento de las horas (EL DÍA) viaja con él. */}
+      <Block surface="paper" labelledBy="chatbot">
+        <div className={`${s.split} ${s.splitFlip}`}>
+          <Reveal>
+            <div>
+              {/* Copy FORMAL (Sergio, 12-sep, sobre esta caption: "mejorá la
+                  caption, no hables informalmente"): registro profesional,
+                  mismo voseo de la marca, sin coloquialismos. */}
+              <Kicker>Chatbot de WhatsApp</Kicker>
+              <h2 id="chatbot" className={s.h2}>
+                Tu WhatsApp responde las 24 horas.
+              </h2>
+              <p className={s.body}>
+                El asistente contesta al instante con la información que tu
+                negocio publicó. No improvisa precios ni promesas: lo que
+                requiere una decisión te llega con la conversación completa.
+                Se suma a cualquier plan.
+              </p>
+              <div className={s.actions}>
+                <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
+                <a className={s.link} href="/chatbot">
+                  Ver el chatbot y sus requisitos →
+                </a>
               </div>
-            ))}
+            </div>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <ConversacionNocturna />
+          </Reveal>
+        </div>
+
+        {/* EL DÍA — rehecho el 11-sep. Sergio, sobre los slabs negro/verde con
+            cuadraditos, textual: "esto no me gusta para nada... mirá cómo
+            están hechas las webs de las competencias, mejoranos". Entra la
+            línea del día: una frase, UNA barra limpia con las 24 horas
+            repartidas y los tres momentos — base clara, tipografía de marca,
+            cero relojería. */}
+        <Reveal delay={0.08} className={s.dia}>
+          <p className={s.diaFrase}>
+            Tu negocio atiende <b>{HORAS_VOS} horas</b>. Las otras{" "}
+            <b>{HORAS_ONIA}</b>, el asistente responde por vos — feriados y
+            domingos incluidos.
+          </p>
+          <div
+            className={s.diaBarra}
+            role="img"
+            aria-label={`De las 24 horas del día atendés ${HORAS_VOS}; las otras ${HORAS_ONIA} contesta Onia, también el domingo.`}
+          >
+            <span
+              className={s.diaVos}
+              style={{ "--span": HORAS_VOS } as CSSProperties}
+            >
+              <i>09:00 → 18:00</i> Atendés vos
+            </span>
+            <span
+              className={s.diaOnia}
+              style={{ "--span": HORAS_ONIA } as CSSProperties}
+            >
+              <i>18:00 → 09:00</i> Contesta Onia
+            </span>
           </div>
+          <ul className={s.diaMomentos}>
+            {MOMENTOS.map((momento) => (
+              <li key={momento.hora}>
+                <b>{momento.hora}</b> <span>{momento.que}</span>
+              </li>
+            ))}
+          </ul>
         </Reveal>
       </Block>
 
@@ -485,120 +493,7 @@ export default function Portada() {
         </div>
       </Block>
 
-      {/* 6 · CHATBOT — bloque de resultado → apartado */}
-      <Block surface="paper" labelledBy="chatbot">
-        <div className={`${s.split} ${s.splitFlip}`}>
-          <Reveal>
-            <div>
-              <Kicker>Chatbot de WhatsApp</Kicker>
-              <h2 id="chatbot" className={s.h2}>
-                El que escribe a las once ya tiene respuesta.
-              </h2>
-              <p className={s.body}>
-                Contesta al instante con la información real que vos publicaste.
-                No inventa ni cotiza por su cuenta: lo que no sabe te lo pasa
-                con la conversación entera. Se suma a cualquier plan.
-              </p>
-              <div className={s.actions}>
-                <a className={s.link} href="/chatbot">
-                  Ver el chatbot y sus requisitos →
-                </a>
-              </div>
-            </div>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <Shape tone="green" panel="chat" />
-          </Reveal>
-        </div>
-
-        {/* EL DÍA — las 9 horas que atendés vos y las 15 que no atiende nadie.
-
-            Vivía en el hero y era la pieza más grande de la primera pantalla:
-            con eso la portada vendía el add-on. Acá abajo hace lo que le toca —
-            es el argumento del asistente, al lado del asistente. */}
-        <Reveal delay={0.08} className={s.day}>
-          <div className={s.ruler} aria-hidden="true">
-            {Array.from({ length: HORAS_VOS + HORAS_ONIA }, (_, i) => (
-              <span
-                key={i}
-                className={i < HORAS_VOS ? s.tick : `${s.tick} ${s.tickOn}`}
-              />
-            ))}
-          </div>
-
-          <div
-            className={`${s.slab} ${s.slabVos}`}
-            style={{ "--span": HORAS_VOS } as CSSProperties}
-          >
-            {/* El rótulo y la banda van EN UN GRUPO, igual que en el bloque
-                verde: así las lanes arrancan a la misma altura a los dos lados
-                del corte de las 18:00 y se leen como UNA banda que cruza la
-                pieza. Sueltas, con space-between repartiendo tres hijos, la
-                del negro caía 95px más abajo y el contraste había que
-                buscarlo. */}
-            <div>
-              <p className={s.hrs}>
-                <span>09:00 → 18:00</span>
-              </p>
-              <div className={s.band}>
-                <Lane quien="Vos" que="Atendés" marcas={HORAS_VOS} tono="vos" />
-                <Lane
-                  quien="Onia"
-                  que="Con vos"
-                  marcas={HORAS_VOS}
-                  tono="onia"
-                />
-              </div>
-            </div>
-
-            <div>
-              <p className={s.amount}>{HORAS_VOS} horas</p>
-              <p className={s.who}>Abrís vos.</p>
-            </div>
-          </div>
-
-          <div
-            className={`${s.slab} ${s.slabOnia}`}
-            style={{ "--span": HORAS_ONIA } as CSSProperties}
-          >
-            <div>
-              <p className={s.hrs}>
-                <span>18:00 → 09:00</span>
-                <span>Todos los días · también domingo</span>
-              </p>
-              {/* Las dos lanes JUNTAS: la misma forma, aplastada arriba y de
-                  pie abajo. Leído de corrido: "Vos dormís / Onia por vos". */}
-              <div className={s.band}>
-                <Lane
-                  quien="Vos"
-                  que="Dormís"
-                  marcas={HORAS_ONIA}
-                  tono="duerme"
-                />
-                <Lane
-                  quien="Onia"
-                  que="Por vos"
-                  marcas={HORAS_ONIA}
-                  tono="onia"
-                />
-              </div>
-            </div>
-
-            <div>
-              <p className={s.amount}>{HORAS_ONIA} horas</p>
-              <ul className={s.moments}>
-                {MOMENTOS.map((momento) => (
-                  <li key={momento.hora}>
-                    <b>{momento.hora}</b> <span>{momento.que}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </Reveal>
-      </Block>
-
-      {/* 7 · RUBROS ───────────────────────────────────────────────────
+      {/* 6 · RUBROS ───────────────────────────────────────────────────
           Esto NO está en la referencia y es lo que más nos separa de ella:
           el mismo núcleo cambia de vocabulario según el rubro. Se queda. */}
       <Block surface="paperDim" labelledBy="v4-rubros">
@@ -618,7 +513,7 @@ export default function Portada() {
         <Switcher />
       </Block>
 
-      {/* 8 · PRECIOS EN LA LANDING ────────────────────────────────────
+      {/* 7 · PRECIOS EN LA LANDING ────────────────────────────────────
           Lo mejor que tiene la referencia y que nosotros mandábamos a otra
           página: el precio en el camino de lectura, con el ahorro anual a la
           vista y un plan destacado. */}
@@ -627,7 +522,7 @@ export default function Portada() {
           <div className={p.centro}>
             <Kicker>Precios claros</Kicker>
             <h2 id="v4-precios" className={s.h2}>
-              Tres pasos. Sin implementación, sin permanencia.
+              Cuatro escalones. Sin implementación, sin permanencia.
             </h2>
             <p className={p.heroLead}>{PRUEBA.copy}</p>
           </div>
@@ -639,7 +534,7 @@ export default function Portada() {
         </Reveal>
       </Block>
 
-      {/* 9 · LO QUE SE SUMA AL PLAN — add-ons con peso de PRODUCTO.
+      {/* 8 · LO QUE SE SUMA AL PLAN — add-ons con peso de PRODUCTO.
 
           Dos pedidos de Sergio, en orden. 2026-08-22: "solo veo 3 precios, hay
           que mostrar todo lo que ofrecemos" — por eso la sección existe.
@@ -698,14 +593,11 @@ export default function Portada() {
               <p className={s.offerNote}>
                 Sin instalación. O {precioAnual(CHATBOT_PLAN)}.
               </p>
+              {/* El ancla completa (monto del salario, DS, aguinaldo) vive en
+                  /chatbot y /precios. Acá una línea: Sergio, 11-sep, sobre esta
+                  sección: "demasiado texto". El % sigue DERIVADO de la fuente. */}
               <p className={s.offerAnchor}>
-                Es el{" "}
-                <b>
-                  {PCT_SALARIO} % del salario mínimo nacional{" "}
-                  {SALARIO_MINIMO.anio}
-                </b>{" "}
-                (Bs {fmtBs(SALARIO_MINIMO.monto)}, según el{" "}
-                {SALARIO_MINIMO.norma}), sin aguinaldo ni domingos, por algo que
+                El <b>{PCT_SALARIO} % de un salario mínimo</b>, por algo que
                 atiende las 24 horas.
               </p>
             </div>
@@ -734,10 +626,12 @@ export default function Portada() {
             ))}
           </div>
           <div className={s.offerFoot}>
+            {/* Una línea, no el párrafo entero de GRUPO.copy: el detalle vive
+                en /precios ("demasiado texto", Sergio 11-sep). */}
             <p className={s.body} style={{ maxWidth: "46em" }}>
-              <strong>{GRUPO.nombre}:</strong> {bs(GRUPO.mensual)} Bs/mes, con
-              implementación desde {bs(GRUPO.implementacionDesde)} Bs.{" "}
-              {GRUPO.copy}
+              <strong>{GRUPO.nombre}:</strong> Bs {bs(GRUPO.mensual)}/mes +
+              implementación desde Bs {bs(GRUPO.implementacionDesde)}. Para
+              varias razones sociales — se cotiza.
             </p>
             <div className={s.actions}>
               <a className={s.link} href="/precios">
@@ -748,7 +642,7 @@ export default function Portada() {
         </Reveal>
       </Block>
 
-      {/* 10 · FAQ ──────────────────────────────────────────────────────
+      {/* 9 · FAQ ──────────────────────────────────────────────────────
           Las mismas ocho preguntas de la home, leidas de `faq-datos.ts`: son
           las que frenan la compra y cada respuesta cita su fuente en el repo.
           No se reescriben acá — una segunda lista con cifras se desincroniza
@@ -774,7 +668,7 @@ export default function Portada() {
         </Reveal>
       </Block>
 
-      {/* 11 · CIERRE ───────────────────────────────────────────────────
+      {/* 10 · CIERRE ───────────────────────────────────────────────────
           El mismo CTA del hero, tercera y última vez. */}
       <Block surface="ink" labelledBy="v4-cierre">
         <Reveal>

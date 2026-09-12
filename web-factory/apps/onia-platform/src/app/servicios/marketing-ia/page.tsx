@@ -14,7 +14,10 @@ export const metadata: Metadata = {
   title: "Marketing con IA para tu negocio — contenido, pauta e influencers IA | Onia",
   description:
     "Producimos tu contenido con IA (reels, carruseles, piezas de marca), gestionamos tu pauta en Meta y hacemos publicidad con influencers IA — propias o construida para tu marca. Sin métricas infladas: te mostramos el método y decidís.",
-  alternates: { canonical: "/servicios/marketing-ia" },
+  // NOINDEX (2026-09-11, R4) — mismo motivo y misma mecánica que su gemela
+  // /servicios/consultoria: fuera del nav por decisión de Sergio (08-09),
+  // `disallow` solo no desindexa, y canonical+noindex se contradicen.
+  robots: { index: false, follow: false },
   openGraph: {
     type: "website",
     locale: "es_BO",

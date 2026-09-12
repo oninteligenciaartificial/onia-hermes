@@ -196,7 +196,8 @@ function VarianteDental({
           <p className={styles.planNote}>{NOTA_DOWNSELL}</p>
         ) : null}
         <p className={styles.planNote}>
-          <a href="/#precios">Ver los tres planes con todo lo que incluyen</a> —
+          {/* /#v4-precios: la portada nueva no tiene id="precios" (A6). */}
+          <a href="/#v4-precios">Ver los tres planes con todo lo que incluyen</a> —
           los precios están publicados, no hay que pedirlos.
         </p>
       </m.section>
