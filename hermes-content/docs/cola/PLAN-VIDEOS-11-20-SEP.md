@@ -26,6 +26,10 @@
    el archivo del fracaso.
 6. **Grabar en lote:** sáb 12, los 30 temas de una sentada (misma ropa, un tema por toma).
    Publicar 3/día es trivial; grabar 3/día te mata.
+7. **Regla de Sergio Urcullo (11-sep):** cada video de IG es semilla de un futuro YT y
+   **empuja a UN recurso de la web**, cerrando con pedido de comentario O invitación a la
+   comunidad (alternar). **Al feed va SIEMPRE uno serio de IA** (el "normal"). Los trial
+   v2 son variados: **Bolivia · IA · negocio**, no todo IA.
 
 ## Los 4 carruseles (reemplazan al b-roll ese día)
 
@@ -73,15 +77,22 @@
    se toca el techo se baja el consumo — no se sube el tope.» Cierre: comunidad.
    *(trailer del video 06 — mi empresa entera, con su costo)*
 
-### SÁB 12 · B-roll: detrás de escena de la grabación en lote
+### SÁB 12 · B-roll: detrás de escena de la grabación en lote · guiones completos abajo
 
-1. **«La IA se equivoca» — sí, y la uso igual**: el método de verificar antes de confiar,
-   que es el mismo que usás con un empleado nuevo.
-2. 🎥 **Pedirle a la IA que te explique vs pedirle que lo HAGA** — el salto que separa a
-   los que juegan de los que producen. *(YT: enlaza con el video de Claude Code ya
-   grabado)*
-3. **La IA no te reemplaza; el que la usa, sí** — versión seria, con lo que cambió en mi
-   semana real.
+**Feed — normal (el serio de IA obligatorio):** 🎥 «Pedirle a la IA que te explique vs
+pedirle que lo HAGA» → empuja a `/claude-code` + pide comentario. *(semilla: los YT 01-02
+ya publicados)*
+
+**Trial v2 (variado):**
+1. **Bolivia** · «Emprender con el dólar a 11: por qué mi empresa gasta MENOS que antes»
+   → empuja a `/stack`. *(semilla YT: «negocio digital en Bolivia con el dólar a 11»)*
+2. **IA** · «La IA que trabaja de noche: qué le dejo corriendo y qué encuentro a la
+   mañana» → cierra a comunidad. *(semilla: el YT 03 que se graba hoy)*
+3. **Negocio** · «Contestar rápido vende más que bajar el precio» → cierra a comunidad
+   (las 6 respuestas ya viven en `/stack/archivos`). *(semilla YT: «WhatsApp de punta a
+   punta»; calienta el lunes 14)*
+
+Los que estaban acá («la IA se equivoca», «no te reemplaza la IA») pasan al pool general.
 
 ### DOM 13 · B-roll → carrusel FOUNDERS BO
 
