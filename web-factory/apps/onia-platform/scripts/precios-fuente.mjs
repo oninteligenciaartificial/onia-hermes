@@ -94,12 +94,35 @@ export const FUENTE_PRUEBA = "lib/subscription/plan-state.ts";
  */
 export const FUENTE_LIMITES = "lib/plan-catalogo.ts";
 
-/** Los tres planes comprables, con el nombre que les da cada lado. */
+/**
+ * Los planes comprables, con el nombre que les da cada lado, DE BARATO A CARO
+ * (el orden es el que contestan los tiers: "primer plan con X").
+ *
+ * `crece` entro el 2026-09-12 con la escalera C. Su alta dejo ver que esta
+ * lista NO era la unica: los mismos ids estaban tipeados a mano en tres
+ * regex `id:"(basico|pro|full)"` mas abajo, asi que el plan nuevo nacio MUDO —
+ * `planesDelSitio`, `limitesDelSitio` y `numerosPublicados` lo saltaban sin
+ * decir nada, y un escalon entero (Bs 550/145/5.500 y sus tres topes) quedo
+ * publicado sin cruzar contra el producto. Es la lista de inclusion de
+ * siempre: no basta con derivar el universo del disco si despues se lo filtra
+ * con ids escritos a dedo. Por eso los tres regex ahora SALEN de aca
+ * (`IDS_DEL_SITIO`) y el plan que entre manana entra solo.
+ */
 export const PLANES_EN_ORDEN = [
   { producto: "basic", sitio: "basico", etiqueta: "Básico" },
+  { producto: "crece", sitio: "crece", etiqueta: "Crece" },
   { producto: "professional", sitio: "pro", etiqueta: "Pro" },
   { producto: "clinic", sitio: "full", etiqueta: "Full" },
 ];
+
+/**
+ * El `id:"..."` con que `src/lib/pricing.ts` abre cada plan, derivado de la
+ * lista de arriba. Se construye uno nuevo en cada llamada: un `RegExp` con `g`
+ * guarda `lastIndex`, y compartir la instancia entre `matchAll` haria que la
+ * segunda lectura empiece donde termino la primera.
+ */
+export const IDS_DEL_SITIO = () =>
+  new RegExp(`\\bid:\\s*"(${PLANES_EN_ORDEN.map((p) => p.sitio).join("|")})"`, "g");
 
 export function leerLocal(ruta) {
   return existsSync(ruta) ? readFileSync(ruta, "utf8") : null;
@@ -406,7 +429,7 @@ export function cifrasDelProducto({ planes, addons, prueba, limites }) {
  * `id:` del plan siguiente.
  */
 export function planesDelSitio(fuente) {
-  const marcas = [...fuente.matchAll(/\bid:\s*"(basico|pro|full)"/g)];
+  const marcas = [...fuente.matchAll(IDS_DEL_SITIO())];
   const salida = {};
   marcas.forEach((m, i) => {
     const hasta = i + 1 < marcas.length ? marcas[i + 1].index : fuente.length;
@@ -449,18 +472,27 @@ function topeEnProsa(texto, { ilimitado, conNumero }) {
 
 /** Los topes que el sitio PUBLICA, leidos del `incluye` de cada plan. */
 export function limitesDelSitio(fuente) {
-  const marcas = [...fuente.matchAll(/\bid:\s*"(basico|pro|full)"/g)];
+  const marcas = [...fuente.matchAll(IDS_DEL_SITIO())];
   const salida = {};
   marcas.forEach((m, i) => {
     const hasta = i + 1 < marcas.length ? marcas[i + 1].index : fuente.length;
     const inc = incluyeDelSitio(fuente.slice(m.index, hasta));
     salida[m[1]] = {
+      /**
+       * "sin tope" es la OTRA forma de decir ilimitado, y entro el 2026-09-12:
+       * el Full paso de "Fichas ilimitadas" a "Fichas y usuarios sin tope".
+       * Con solo `ilimitad` esos dos topes salian `null` — ilegibles, no
+       * infinitos— y el cruce quedaba ciego justo en el plan caro. El `[^"]*`
+       * es lo que evita el falso positivo: los planes con tope escriben su
+       * cifra DENTRO de su propia comilla ("Topes: 800 fichas · 3 usuarios"),
+       * asi que la negacion de otra linea no se les derrama.
+       */
       fichas: topeEnProsa(inc, {
-        ilimitado: /fichas[^"]*ilimitad/i,
+        ilimitado: /fichas[^"]*(?:ilimitad|sin\s+tope)/i,
         conNumero: /([\d.]+)\s+fichas/i,
       }),
       usuarios: topeEnProsa(inc, {
-        ilimitado: /usuarios\s+ilimitad/i,
+        ilimitado: /usuarios[^"]*(?:ilimitad|sin\s+tope)/i,
         /** El Básico escribe su linea como plantilla, asi que abre con backtick. */
         conNumero: /(?:^|["`\s])(\d[\d.]*)\s+usuarios/i,
       }),
@@ -571,6 +603,12 @@ export const CONSTANTES_VERIFICADAS_APARTE = [
     cruzadaPor: "src/app/capacidad-acotada.test.ts",
   },
   {
+    valor: "CHATBOT_MENSUAL",
+    porque:
+      "no es un tope del plan: es el precio del add-on chatbot citado dentro del `incluye` del Full para mostrar la cuenta «Pro + add-on vs Full». No lo tipea pricing.ts — es un alias de CHATBOT_PLAN.mensual, y ESE archivo ya entra a este mismo cruce por la clave `add-on chatbot · mensual`",
+    cruzadaPor: "src/content/chatbot-precios.ts",
+  },
+  {
     valor: "ALCANCE_CON_AGENDA",
     porque:
       "tampoco es un tope: es a que rubros les llega la agenda, y con ella la reserva publica — comercio e importadora no tienen una sola ruta de citas en su pack",
@@ -592,7 +630,7 @@ export function constantesExcusadasSinSujeto(fuente) {
  * el defecto entra por las dos y una sola deja media puerta abierta.
  */
 export function numerosPublicados(fuente) {
-  const marcas = [...(fuente ?? "").matchAll(/\bid:\s*"(basico|pro|full)"/g)];
+  const marcas = [...(fuente ?? "").matchAll(IDS_DEL_SITIO())];
   const salida = [];
   marcas.forEach((m, i) => {
     const hasta = i + 1 < marcas.length ? marcas[i + 1].index : (fuente ?? "").length;
@@ -809,11 +847,20 @@ export function comparar(delProducto, delSitio) {
  * nombres distintos para el mismo plan (`basic`/`basico`, `professional`/`pro`,
  * `clinic`/`full`) y ningun patron puede adivinar ese mapeo.
  */
-export const CICLOS_EQUIVALENCIA = [
-  { nombre: "Básico", producto: "basic", sitio: "basico" },
-  { nombre: "Pro", producto: "professional", sitio: "pro" },
-  { nombre: "Full", producto: "clinic", sitio: "full" },
-];
+/**
+ * La QUINTA copia de la misma lista, ahora derivada. Era la cuarta equivalencia
+ * plan-sitio escrita a mano y se descubrio el 2026-09-12 al dar de alta `crece`:
+ * las otras tres ya leian el plan nuevo y esta seguia con tres filas, asi que el
+ * ciclo semanal del escalon nuevo (Bs 145, que el checkout acepta) no lo cruzaba
+ * nadie. Su propio test lo dice: "si mañana nace una cuarta tarjeta comprable,
+ * tiene que llegar aca" — una equivalencia escrita a mano es lista de inclusion
+ * y falla ABIERTA.
+ */
+export const CICLOS_EQUIVALENCIA = PLANES_EN_ORDEN.map((p) => ({
+  nombre: p.etiqueta,
+  producto: p.producto,
+  sitio: p.sitio,
+}));
 
 /**
  * Cruza la DISPONIBILIDAD del ciclo semanal, que es cosa aparte del monto.

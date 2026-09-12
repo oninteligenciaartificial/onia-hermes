@@ -7,6 +7,7 @@ import {
   CHATBOT_SITIO,
   CIFRAS,
   CONSTANTES_CRUZADAS,
+  PLANES_EN_ORDEN,
   PRECIOS_SITIO,
   CICLOS_EQUIVALENCIA,
   ciclosCruzados,
@@ -75,9 +76,15 @@ describe("el cruce lee de verdad el lado del SITIO", () => {
     ).toEqual([]);
   });
 
-  it("los tres planes salen del array PLANES, no de un literal suelto", () => {
+  it("los planes salen del array PLANES, no de un literal suelto", () => {
     const planes = planesDelSitio(readFileSync(PRECIOS_SITIO, "utf8")) as Planes;
-    expect(Object.keys(planes).sort()).toEqual(["basico", "full", "pro"]);
+    // La expectativa se DERIVA de PLANES_EN_ORDEN, no se tipea: cuando entró
+    // `crece` (2026-09-12) esta línea decía `["basico","full","pro"]` y se puso
+    // roja acusando al sitio de publicar un plan de más. El plan nuevo ya venía
+    // alineado con el producto; la que estaba vieja era la expectativa.
+    expect(Object.keys(planes).sort()).toEqual(
+      PLANES_EN_ORDEN.map((p) => p.sitio).sort(),
+    );
     // El Full no se fracciona: si algún día tuviera semanal, el cruce lo compara igual.
     expect(planes.full.semanal).toBeNull();
     for (const p of Object.values(planes)) {
@@ -164,6 +171,7 @@ describe("el cruce lee la forma literal de PLAN_LIMITS", () => {
 export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
   free: { patients: 30, users: 1, emailsPerMonth: 0, publicBookingIncluded: false, agentsIncluded: false, reportsEnabled: false },
   basic: { patients: 300, users: 2, emailsPerMonth: 200, publicBookingIncluded: false, agentsIncluded: false, reportsEnabled: false },
+  crece: { patients: 800, users: 3, emailsPerMonth: 400, publicBookingIncluded: true, agentsIncluded: true, reportsEnabled: false },
   professional: { patients: 1500, users: 5, emailsPerMonth: 800, publicBookingIncluded: true, agentsIncluded: true, reportsEnabled: true },
   clinic: { patients: -1, users: -1, emailsPerMonth: -1, publicBookingIncluded: true, agentsIncluded: true, reportsEnabled: true },
 };
@@ -180,8 +188,12 @@ export const PLAN_LIMITS: Record<PlanId, PlanLimits> = {
 
   it("el tier es el plan más barato que enciende la capacidad", () => {
     const l = limitesDelProducto(LIMITES_FIXTURE);
-    expect(primerPlanCon(l, "reservas")).toBe("professional");
-    expect(primerPlanCon(l, "agentes")).toBe("professional");
+    // Desde la escalera C (2026-09-12) el más barato que los enciende es
+    // `crece`, no `professional`: es justo el dato que el sitio publica en la
+    // tarjeta nueva, y si este tier se quedara en `professional` el cruce
+    // acusaría al sitio por decir la verdad.
+    expect(primerPlanCon(l, "reservas")).toBe("crece");
+    expect(primerPlanCon(l, "agentes")).toBe("crece");
   });
 
   it("un tier ilegible no se adivina: devuelve null y el cruce lo canta", () => {
