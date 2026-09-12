@@ -12,6 +12,20 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-12 09:09 La Paz — dental 9/9 completo (rutina)
+
+Cuenta `zz-qa-2026-09-12-0909@onia.com.bo`: alta → confirmar correo → onboarding (6 pantallas,
+"Clínica dental") → paciente `zz-qa-2026-09-12-0909-paciente` cargado en `/patients` y
+encontrado de vuelta → cita 2026-09-14 09:00 agendada (201, `cmty62rvp006001rwmi44a3xh`) y
+**vista** en `/appointments` (captura `paso-07d-cita-en-agenda.png` mirada: aparece en el día 14
+de septiembre) → factura `/billing/cmty632jp006201rwj586giaj` con el ítem visible (frenada sin
+pagar) → panel revisado (no lista pacientes, es lo esperado). `completo: true`, 0 filas `zz-qa-`
+en `appointments` ni `organizations` al cerrar (confirmado con `SELECT`, tanto antes como
+después de la corrida). Sin novedad, rutina sana — dental sigue confirmándose corrida tras
+corrida sin hallazgos nuevos; próxima vuelta debería rotar a otro rubro o a promesa-vs-entrega.
+
+---
+
 ## 2026-09-12 07:09 UTC — dental 9/9 completo (rutina)
 
 Cuenta `zz-qa-2026-09-12-0709@onia.com.bo`: alta → confirmar correo → onboarding (6 pantallas,
