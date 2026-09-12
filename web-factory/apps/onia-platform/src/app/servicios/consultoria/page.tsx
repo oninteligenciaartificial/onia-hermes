@@ -11,7 +11,15 @@ export const metadata: Metadata = {
   title: "Consultoría y capacitación en IA y automatización | Onia",
   description:
     "Diagnóstico de procesos, implementación de automatizaciones y capacitación de equipos en IA — para empresas bolivianas. Te decimos de frente qué conviene automatizar y qué no.",
-  alternates: { canonical: "/servicios/consultoria" },
+  /**
+   * NOINDEX (2026-09-11, R4): Sergio sacó esta página del nav el 08-09 ("los
+   * leads confunden la web con una agencia"), pero robots.ts solo la tenía en
+   * `disallow` — eso impide RASTREAR, no DESINDEXAR, y con el rastreo
+   * bloqueado Google nunca llega a leer un noindex del HTML... salvo este,
+   * que viaja en el header/metadata. Canonical fuera: un canonical sobre una
+   * página noindex es una contradicción que los buscadores ignoran a gusto.
+   */
+  robots: { index: false, follow: false },
   openGraph: {
     type: "website",
     locale: "es_BO",

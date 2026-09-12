@@ -5,19 +5,20 @@ import styles from "./site-header.module.css";
 
 /*
  * Cromo LEGADO. Desde el 2026-08-21 la venta corre bajo el layout de
- * src/app/(sitio); este header sobrevive solo en las paginas que no se
- * rediseñaron: /nosotros, /servicios/*, los legales y el 404.
+ * src/app/(sitio); este header sobrevive en los legales, /servicios/
+ * consultoria y marketing-ia, el 404, error.tsx y las paginas de /v1
+ * (/nosotros ya usa el cromo nuevo — el comentario viejo mentia, A7).
  *
- * Sus destinos SI se actualizaron a las rutas de la v3. Antes apuntaba a
- * "/#como" y "/#modulos" — dos anclas de la portada vieja que en la nueva no
- * existen: el visitante hacia clic y caia arriba de todo sin entender por que.
+ * 2026-09-11 (R2): publicaba un MAPA DISTINTO del sitio (Rubros · Agentes ·
+ * Chatbot · Precios · Nosotros) contra el nav real de (sitio)/nav.ts (Rubros ·
+ * Precios · Facturacion · Contacto). Dos navs en el mismo dominio confunden;
+ * este queda calcado del real.
  */
 const NAV = [
   { href: "/rubros", label: "Rubros" },
-  { href: "/agentes", label: "Agentes" },
-  { href: "/chatbot", label: "Chatbot" },
   { href: "/precios", label: "Precios" },
-  { href: "/nosotros", label: "Nosotros" },
+  { href: "/facturacion", label: "Facturación" },
+  { href: "/contacto", label: "Contacto" },
 ] as const;
 
 /**

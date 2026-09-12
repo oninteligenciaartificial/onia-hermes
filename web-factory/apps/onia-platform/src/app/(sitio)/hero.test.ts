@@ -139,19 +139,25 @@ describe("el hero de la portada se DIBUJA, no se captura", () => {
    * en su sección y no en la portada de la oferta. Si vuelve al hero, vuelve
    * el problema entero: es la pieza más grande de la primera pantalla.
    */
-  it("la banda del día ya no está en el hero", () => {
-    expect(seccionHero(PORTADA)).not.toMatch(/className=\{s\.day\}/);
+  it("la línea del día ya no está en el hero", () => {
+    // s.dia y no s.day: el 2026-09-11 los slabs con 24 cuadraditos se
+    // reemplazaron por la línea del día (veredicto de Sergio: "esto no me
+    // gusta para nada"). El invariante es el mismo: el argumento del
+    // asistente vive en SU sección, nunca en la primera pantalla.
+    expect(seccionHero(PORTADA)).not.toMatch(/className=\{s\.dia\}/);
     // pero sigue viva en la página, con el add-on que la explica
-    expect(PORTADA).toMatch(/className=\{s\.day\}/);
+    expect(PORTADA).toMatch(/className=\{s\.dia\}/);
   });
 
   it("las 9 horas y las 15 suman el día entero", () => {
     const vos = Number(/const HORAS_VOS = (\d+)/.exec(PORTADA)?.[1]);
     const onia = Number(/const HORAS_ONIA = (\d+)/.exec(PORTADA)?.[1]);
-    // la rejilla del día son 24 columnas: si no suman 24, el corte de las
-    // 18:00 deja de caer donde la regla dice que cae
+    // la barra reparte las 24 horas por `--span` (flex proporcional): si no
+    // suman 24, la proporción 9:15 que la frase afirma deja de ser la que se
+    // dibuja. Antes era una rejilla de 24 columnas; la mecánica cambió, el
+    // invariante no.
     expect(vos + onia).toBe(24);
-    expect(CSS).toContain("repeat(24, minmax(0, 1fr))");
+    expect(CSS).toContain("flex: var(--span, 1) 1 0");
   });
 
   it("los agentes no mandan nada solos", () => {
@@ -159,9 +165,13 @@ describe("el hero de la portada se DIBUJA, no se captura", () => {
     // que contacta a un cliente queda en la cola de aprobación. Tres
     // diseñadores prometieron lo contrario acá antes de que existiera el guard.
     // Los tres momentos del bloque verde viven en MOMENTOS, arriba del JSX.
+    // El tope era "function Lane"; Lane se retiró con los slabs (11-sep) y un
+    // indexOf que no encuentra devuelve -1, que como fin de slice recorta el
+    // final del archivo en silencio. El tope nuevo es el componente, que no
+    // se va a ninguna parte.
     const momentos = PORTADA.slice(
       PORTADA.indexOf("const MOMENTOS"),
-      PORTADA.indexOf("function Lane"),
+      PORTADA.indexOf("export default function Portada"),
     );
     expect(momentos).toContain("Vos los aprobás");
     expect(momentos).not.toMatch(

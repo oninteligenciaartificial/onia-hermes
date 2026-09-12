@@ -7,10 +7,18 @@ import styles from "./site-footer.module.css";
  * grupos con etiqueta, no una fila plana de 13 links que quebraba raro).
  * Toda pagina publica del sitio conserva su destino aca.
  *
- * Cromo LEGADO (ver site-header.tsx): solo lo usan /nosotros, /servicios/*,
- * los legales y el 404. Sus destinos se actualizaron a las rutas de la v3 el
- * 2026-08-21 — /prueba-gratis, /modulos/dental y
- * /funciones/facturacion-electronica-siat ya no existen como paginas.
+ * Cromo LEGADO (ver site-header.tsx): lo usan los legales (/privacidad,
+ * /terminos), /servicios/consultoria y /servicios/marketing-ia, el 404,
+ * error.tsx/global-error.tsx y las ocho paginas de /v1 — /nosotros ya se mudo
+ * a (sitio) y usa el cromo nuevo (la lista vieja de este comentario mentia:
+ * auditoria 2026-09-11, A7). Sus destinos se actualizaron a las rutas de la
+ * v3 el 2026-08-21.
+ *
+ * ⚠️ 2026-09-11 (R2 de la auditoria): las entradas /servicios/marketing-ia y
+ * /servicios/consultoria las saco Sergio del nav el 2026-09-08 ("los leads
+ * confunden la web con una agencia") pero SOLO se quitaron de (sitio)/nav.ts —
+ * este pie las siguio publicando en /privacidad (indexable y en el sitemap) y
+ * en el 404. Fuera de aca tambien.
  *
  * La identidad legal NO se toca: la verificacion de negocio de Meta cruza el
  * sitio contra el documento del SEPREC, y el numero es el mismo que figura
@@ -35,8 +43,6 @@ const GRUPOS: readonly {
     links: [
       { href: "/chatbot", label: "Chatbot de WhatsApp" },
       { href: "/servicios/webs", label: "Webs" },
-      { href: "/servicios/marketing-ia", label: "Marketing IA" },
-      { href: "/servicios/consultoria", label: "Consultoría" },
     ],
   },
   {
