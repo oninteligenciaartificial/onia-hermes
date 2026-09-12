@@ -8,6 +8,16 @@ Instrumento: `scripts/recorrido_cliente.mjs`.
 
 ## Abierto
 
+> 🔴 **2026-09-12 04:1x UTC — CRÍTICO, reportado `t_3f352044`.** Corrida en Importadora / distribuidora:
+> el paso 6 (cargar dato en `/comercio`) escribió una fila `patients` con `organizationId` de
+> **`Clínica Sergio`** (org REAL de `sergio@onia.com.bo`, `clinica-sergio-p2ljs`) — no la org de
+> prueba `zz-qa-` que este mismo run acababa de crear. La fila (`zzqa20260912pac1`) se autolimpió
+> porque mi borrado por patrón de nombre no filtra por organización (ver "Abierto" más abajo, es
+> justo la trampa que evita que quede basura, pero también evita que se note un cruce de tenant).
+> Si el nombre no hubiera llevado `zz-qa-`, esa fila se habría quedado mezclada con los pacientes
+> reales de Sergio para siempre. No toco el producto: reportado a `onia-cola` con reproducción y
+> capturas. **No repetir el paso hasta que esto se entienda** — puede repetirse en cualquier rubro.
+
 > Los cinco rubros que `RUBROS_ACTIVOS` ofrece hoy (`onia-platform/lib/platform/rubros-activos.ts`)
 > ya están recorridos y confirmados 9/9 (o 8/8 cuando el paso 7 no le corresponde): dental,
 > comercio, estética, importadora y servicios profesionales — este último ya NO está roto: el

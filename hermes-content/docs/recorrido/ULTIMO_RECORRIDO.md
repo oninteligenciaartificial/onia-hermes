@@ -12,6 +12,37 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 🔴 2026-09-12 04:09-04:19 UTC — dental 9/9 sin hallazgos; Importadora 8/8 pero con un CRUCE DE TENANT en el paso 6
+
+**Dental** (`zz-qa-2026-09-12-0409`): recorrido completo de punta a punta, 9/9, 0 filas al cerrar.
+Sin novedad, rutina sana.
+
+**Importadora / distribuidora** (`zz-qa-2026-09-12-0413`): 8/8 los que le corresponden (paso 7
+no-aplica, coherente, ese rubro no vende agenda). **Pero el paso 6 (cargar dato en `/comercio`)
+escribió la fila `patients` en la organización REAL de Sergio Urcullo** (`Clínica Sergio`,
+`organizationId cmtlyz6y9000001nw2934n3cw`, slug `clinica-sergio-p2ljs`, dueño
+`sergio@onia.com.bo`) — **no** en la org de prueba que este mismo run acababa de crear
+(`cmtxvf61d001i01rw6b2t6k99`). Verificado con `SELECT` directo en `supabase-db`, dos veces: la
+primera consulta mostró la fila viva ahí; para la segunda ya no estaba — la borró mi propia
+limpieza por patrón de nombre, que no filtra por `organizationId` (borra `LIKE 'zz-qa-%'` en toda
+la tabla, a propósito, para barrer huérfanos de corridas caídas). Eso evitó que quedara basura,
+pero también significa que **si el nombre no hubiera llevado el prefijo `zz-qa-`, un dato de
+prueba se habría quedado mezclado con los pacientes reales de Sergio para siempre**, sin que nadie
+lo notara.
+
+No sé la causa (no toco el producto): puede ser un caché de organización compartido entre
+requests concurrentes — varios loops corren contra `app.onia.com.bo` al mismo tiempo — o un
+fallback a una organización por defecto. Reportado prioridad 1: `t_3f352044`. Capturas:
+`paso-06-cargar-dato.png`, `paso-06-menu.png`, `paso-06b-alta-dato.png`,
+`paso-06c-dato-en-la-lista.png` (de esta corrida, sobreescriben las anteriores — sin fecha en el
+nombre de archivo, como manda la regla del proyecto; el `resumen.json` de esta corrida es la
+prueba con los ids exactos).
+
+Cero filas `zz-qa-` propias en la base al cerrar la vuelta (confirmado en las 4 tablas:
+`organizations`, `patients`, `appointments`, `auth.users`).
+
+---
+
 ## 2026-09-11 19:1x La Paz — 9/9 dental completo (rutina) + confirmación QR en `/empezar`
 
 Corrida completa con `--escribir` en dental: los 9 pasos OK, `completo: true`, 0 filas `zz-qa-`
