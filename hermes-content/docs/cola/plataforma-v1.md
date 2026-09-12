@@ -117,27 +117,124 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       módulo se usa, cuál nadie tocó, y qué se esconde/simplifica para que la 1.0 sea corta.
       El techo son horas de soporte, no features (estrategia §9).
 
-- [ ] 🔴 **Estado real de los agentes IA del producto** (Sergio Urcullo, 11-sep: *"mira también
-      cómo están los agentes ai"*). **MEDIDO el 2026-09-11 en la base de prod** (supabase-db,
-      tablas `onia_agents_*`): 4 agentes definidos, el cron corre y completa (22 corridas
-      `completed`, 14 en los últimos 7 días, última hoy 11:00 UTC) — pero
-      **`onia_agents_actions` tiene CERO filas en toda la historia**: los agentes corren en
-      vacío, jamás dejaron un borrador. La portada y el panel venden exactamente ese borrador
-      ("Para aprobar: avisar los pagos vencidos…"). Falta la mitad que importa: SEMBRAR un caso
-      real en `clinica-sergio-p2ljs` (deuda vencida + paciente sin volver), correr el cron, ver
-      el borrador aparecer en `onia-platform/app/(dashboard)/agents/page.tsx`, aprobarlo y
-      verificar el efecto. Si con datos no propone nada, el generador está mudo y eso es un 🔴
-      de venta. Los agentes NO llaman a ningún modelo (costo de API cero).
-
-      **DECIDIDO por Sergio Urcullo (11-sep, eligió las 4 opciones): primero el E2E de los 2
-      vivos, y después se construyen TRES agentes nuevos** sobre el mismo patrón de
-      `onia-platform/lib/onia-core/modules/agents-runtime.ts`: (1) **Confirmador de citas de
-      mañana** (draft_message: cada tarde, citas de mañana sin confirmar → mensaje listo para
-      aprobar), (2) **Seguimiento de cotizaciones** sin respuesta en N días (draft_message —
+- [ ] 🔴 **Los TRES agentes nuevos que Sergio Urcullo ya eligió el 11-sep — siguen sin construirse.**
+      Se conserva acá porque el merge del 12-sep casi lo borra: el carril del chatbot reescribió
+      este ítem entero para contar que arregló la cadencia y ejecutó el E2E, y **su versión no
+      nombraba los tres agentes** — la parte MEDIDA es sucesora, la DECISIÓN no. Sobre el mismo
+      patrón de `onia-platform/lib/onia-core/modules/agents-runtime.ts`: (1) **Confirmador de citas
+      de mañana** (`draft_message`: cada tarde, citas de mañana sin confirmar → mensaje listo para
+      aprobar), (2) **Seguimiento de cotizaciones** sin respuesta en N días (`draft_message` —
       importadora), (3) **Stock bajo mínimo → tarea de pedido** al proveedor de la ficha
-      (create_task: no depende del envío externo). Restricción vigente: el ENVÍO externo (S6)
-      no existe — aprobar registra la acción; el WhatsApp real es obra aparte y no se promete
-      hasta que exista.
+      (`create_task`: no depende del envío externo). Restricción vigente: el ENVÍO externo (S6) no
+      existe — aprobar registra la acción; el WhatsApp real es obra aparte y no se promete hasta
+      que exista. Las dos precondiciones que Sergio Urcullo puso antes de estos tres (E2E de los 2
+      vivos, y la cadencia) **ya están cerradas** en los dos ítems de abajo.
+
+- [x] ✅ **MEDIDO Y ARREGLADO el 2026-09-12 (`ea80ada`, onia-platform — pusheado a la rama,
+      falta mergear y desplegar): los agentes corrían DÍA POR MEDIO, y la pantalla promete
+      «corre todos los días».** (Sergio Urcullo, 11-sep: *"mira también cómo están los agentes
+      ai"*.)
+
+      **Lo que se midió en producción**, no heredado — `supabase-db` + `/var/log/onia-agents-cron.log`:
+
+      | | |
+      |---|---|
+      | Agentes vivos | **4**: Recall y Cobrador en las dos orgs con plan vigente (`clinica-sergio-p2ljs`, `bolivian-electricidad-e6t21`). El **Captador nunca corrió**: `kind_not_enabled` — vive detrás de `addon.captador` y nadie lo compró |
+      | Corridas | 22, **todas `completed`, sin un solo `error`**, todas con `propuestas 0` |
+      | Borradores esta semana | **CERO.** `onia_agents_actions` = 0 filas en toda la base; `onia_core_approval_requests` = 0 |
+      | Circuito aprobar→enviar | **Construido entero y JAMÁS ejecutado en producción** — 0 aprobaciones desde que existe |
+
+      **Por qué 0 propuestas, contado hoy y no en septiembre:** las dos orgs con agentes tienen
+      **0 citas y 0 facturas** (la dental tiene 1 paciente y ninguna cita). Recall exige una cita
+      completada hace ≥180 días sin cita futura; Cobrador, una factura emitida y vencida. Con esos
+      datos, `propuestas 0` es la respuesta **correcta** del motor, no un fallo. El diagnóstico del
+      04-sep decía lo mismo y **se volvió a contar** en vez de heredarse.
+
+      🔴 **El defecto real estaba en otro lado, y ningún gate podía verlo: el disparador.** El cron
+      `0 11 * * *` disparó los 11 días del mes, pero las corridas quedaron los días **04, 05, 07,
+      09 y 11** — los días **06, 08 y 10** todos los agentes contestaron `skippedReason: "not_due"`.
+      La causa es aritmética: `intervalMinutes` vale **1440**, exactamente la cadencia del
+      disparador, y `shouldRunAgent` exigía `elapsed >= interval` contra el `startedAt` de la
+      corrida anterior. El cron nunca arranca en el mismo milisegundo (11:00:01 un día, 11:00:02
+      el otro) y la fila se sella **después** de la llamada HTTP, así que el disparo siguiente
+      llega unos segundos **antes** de cumplir las 24 h → no corre, y recién al otro día (48 h)
+      vuelve a entrar. **El producto entregaba la mitad de la frecuencia que promete.**
+
+      **LA CLASE, para buscarla en otro lado:** cuando la cadencia declarada de un trabajo IGUALA
+      la del reloj que lo despierta, el jitter del reloj se come un disparo de cada dos. No falla
+      nunca del todo —lo que lo hace invisible—, sólo entrega la mitad. Cada pieza tenía razón por
+      separado: el cron corrió, el runtime contestó 200, la corrida cerró `completed`, y
+      `agents-cadencia.ts` ya topeaba lo que la pantalla **dice** contra el disparador real. Lo que
+      faltaba era que el **scheduler cumpliera esa misma promesa**. Vale para todo cron con
+      intervalo propio: barridos del bot, drips, recordatorios.
+
+      Arreglo: `margenDeJitter()` en `lib/onia-core/modules/agents-logic.ts` — 5 % del intervalo,
+      **topeado a 60 min**. Proporcional para que valga igual en media hora que en un día; topeado
+      para que no se vuelva «corre cuando quiera» (un agente mensual no puede adelantarse día y
+      medio). Gate `lib/onia-core/modules/agents-corre-en-cada-disparo.test.ts`: el sujeto es el
+      **cruce** de los dos módulos (lo que se promete y lo que el runtime deja correr), con el
+      universo derivado de `AGENT_KINDS` — el rol que se agregue mañana entra solo. Validado por
+      mutación en **cuatro** direcciones y cada una cae en SU caso: revertir el arreglo (7 rojos),
+      margen 0 (7), quitar el tope (1) y frontera estricta `>` (1).
+      Gates verdes en las dos máquinas: `tsc` 0 · **4727** tests · `eslint` 0 errores.
+
+      ⚠️ **Lo que queda abierto y NO es de este ítem:** el circuito aprobar→enviar está entero
+      (CAS anti-doble-clic, `approvalId` UNIQUE, no finge entrega, y `/pending` ofrece «enviar» y
+      «preparar link para mandarlo yo»), pero **nunca se ejecutó con un caso real** porque nunca
+      hubo una propuesta que aprobar. Probarlo de punta a punta exige sembrar una cita vieja en
+      una org de QA y mirar el despacho — ítem propio, no una línea de éste.
+
+- [x] ✅ **EJECUTADO EN PRODUCCIÓN el 2026-09-12 04:15-04:17 UTC: aprobar→enviar funciona de
+      punta a punta. Es la PRIMERA aprobación de la historia del producto.** Era la mitad del
+      pedido de Sergio Urcullo del 11-sep que quedaba sin cumplir: el circuito estaba construido
+      entero y **nunca se había ejecutado** (0 aprobaciones desde que existe).
+
+      **Estado de partida, contado, no heredado:** `onia_agents_actions` 0 · `onia_core_approval_requests` 0
+      · `onia_core_dispatches` 0 · 4 agentes · 22 corridas.
+
+      **Lo que se hizo, y por qué NO en una org `zz-qa` como decía este ítem.** Crear una org de
+      QA funcional exige pasar por el alta real (usuario de Supabase Auth + perfil + onboarding),
+      porque sin perfil no hay magic link y sin onboarding completo la app redirige a `/onboarding`
+      y **ninguna pantalla se puede mirar**. Eso es media vuelta para poder apretar UN botón. Se
+      sembró en `clinica-sergio-p2ljs` (dental, `professional` vigente, onboarding hecho) sólo
+      **dos filas**, selladas por corrida: paciente `zzqa20260912pac1` y cita `zzqa20260912cit1`
+      COMPLETADA hace 200 días. Todo borrado por id EXACTO al terminar.
+
+      🔴 **La trampa que casi invalida la prueba, y que este ítem no preveía: la CADENCIA.** El
+      cron dispara `0 11 * * *` y `shouldRunAgent` exige 1440 min contra el `startedAt` anterior;
+      la última corrida era de las 11:00 del 11-sep, así que a las 04:15 faltaban ~2 h 40 y el
+      agente contestaba `not_due` — no hay parámetro para forzar (`app/api/cron/onia-agents/route.ts`
+      no acepta ninguno). Se movió el `startedAt` de la corrida `cmtwuh6a5007801rwcgx3q7lo`, **anotado
+      antes de tocarlo** (`2026-09-11 11:00:04.202+00`) y devuelto al cerrar. Es la misma clase que
+      arregló `ea80ada` un rato antes, vista desde el otro lado: mientras ese arreglo no esté
+      desplegado, **producción sigue con la regla estricta**.
+
+      **Las dos corridas, y las dos importan:**
+
+      | | teléfono | resultado |
+      |---|---|---|
+      | 1.ª | `+59100000000` | **rechazado**: `numeroParaWhatsapp` exige móvil boliviano (8 dígitos que empiezan en 6 o 7). Despacho `failed`, la pantalla dijo *"Aprobado, pero el envío NO salió… Reintentalo abajo, en «Envíos fallidos»"* y ofreció **Reintentar** con el texto a la vista |
+      | 2.ª | `70000000` | **`sent`** con `waLink` `https://wa.me/59170000000?text=…`, `entregaManual: true`, `pendienteDeEnvioHumano: true`, `providerMessageId` NULL |
+
+      El camino de fallo **no era un accidente de la prueba: es la mitad que casi nadie mira**, y
+      salió honesta — no fingió entrega, nombró la causa exacta con el valor recibido, y dejó el
+      reintento a mano. Se probó sin querer y por eso vale.
+
+      **HECHO, mirado renderizado y contado en la base:** acción `cmtxvii5t002701rwd4xhey4y` →
+      `executed` (`executedAt` 04:17:06), aprobación → `approved`, despacho
+      `cmtxvis9y002a01rw3zom8z9j` → `sent`. La pantalla dice *"Mensaje listo para … El sistema NO
+      lo envió: abrí el link y envialo desde TU WhatsApp"* con **Abrir WhatsApp con el mensaje** y
+      **Copiar link**, y la cola de aprobaciones queda vacía. Captura:
+      `hermes-content/docs/historial/2026-09-12-aprobar-enviar-punta-a-punta.png`.
+
+      ⚠️ **El botón NO se llama «preparar link»** —como decía este ítem— sino **«Enviar yo mismo
+      por WhatsApp»** (`app/(dashboard)/pending/pending-client.tsx:263`). Un texto de botón citado
+      de memoria en una cola manda a buscar un ancla que no existe.
+
+      **Limpieza verificada, no declarada:** `onia_agents_actions` 0 · `onia_core_approval_requests` 0
+      · `onia_core_dispatches` 0 · paciente 0 · cita 0 · corridas **22** (las mismas que al arrancar:
+      se borraron las 3 que generó esta prueba) · 4 agentes intactos · `startedAt` devuelto a
+      `2026-09-11 11:00:04.202+00`.
 
 - [ ] 🔴 **Dos propuestas de diseño para el dashboard del producto** (Sergio Urcullo, 11-sep:
       *"ese color que hay ahorita no es nada intuitivo y no hay botones que resalten, que se
