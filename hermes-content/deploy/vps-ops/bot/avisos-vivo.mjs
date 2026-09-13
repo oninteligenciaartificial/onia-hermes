@@ -41,6 +41,14 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 
+// El juicio "¿esta conversacion somos nosotros?" tiene UNA sola fuente en el repo: cruza los
+// telefonos propios con el patron de nombre de prueba, y su comentario cita la conv 11 como
+// caso medido. Este modulo tenia su propia version pobre (un `inbox === 7` pelado) y por eso
+// contaba al dueño como lead. Se importa; copiarlo es como este par volvio a divergir.
+// ⚠️ Ruta al repo, no al arbol desplegado: esto es un GATE, no codigo que corra en el bot
+// (`webhook-server.sh` copia `/opt/onia/bot/*.mjs` plano y nada de aca lo carga en runtime).
+import { esNuestra } from "../../../../scripts/objetivo_visible.mjs";
+
 export const BOT_DIR = "/opt/onia/bot";
 export const CONTENEDOR = "onia-center";
 
@@ -215,17 +223,27 @@ export function conversacionesDeAvisos(lineas = []) {
 export const INBOX_BANCO_DE_PRUEBAS = 7;
 
 /**
- * Separa los avisos del banco de pruebas de los que vienen de afuera.
+ * Separa los avisos que somos NOSOTROS de los que vienen de afuera.
  *
  * `inboxPorConv` es un Map conv->inbox, o `null` cuando no se pudo preguntar. Es TRI-ESTADO
  * a proposito: sin poder consultar la base, "esto es un lead real" es una suposicion, y la
  * suposicion optimista es justo la que dejo pasar el agujero. Un conv que la base no conoce
  * queda en `sinUbicar`, nunca en `reales`.
+ *
+ * ⚠️ El sujeto NO es el numero de inbox. Esa fue la primera version y fallaba abierto en las
+ * dos mitades, medido en produccion el 2026-09-13: el inbox 3 (`ONIA Demo`) esta vivo con 8
+ * conversaciones nuestras y no estaba en la lista, y el DUEÑO probando desde su celular entra
+ * por el inbox 5 —el de los leads de verdad— asi que ningun inbox lo delata. El objetivo del
+ * carril lo dice con todas las letras: *"una persona que no somos nosotros — ni una org QA, ni
+ * el probador, ni Sergio desde su celular"*. Por eso se preguntan las DOS cosas: el inbox del
+ * banco de pruebas (que alcanza cuando el contacto no tiene ni nombre) y `esNuestra`, que
+ * cruza telefono propio con nombre de prueba. Cualquiera de las dos vuelve la conversacion
+ * nuestra; el sesgo es el correcto para un gate, porque el falso VERDE es el que apaga.
  */
 export function clasificarEventos(eventos = [], inboxPorConv = null) {
   const lista = Array.isArray(eventos) ? eventos : [];
   const medido = inboxPorConv instanceof Map;
-  const prueba = [];
+  const nuestros = [];
   const reales = [];
   const sinUbicar = [];
   const contactos = new Map();
@@ -240,17 +258,19 @@ export function clasificarEventos(eventos = [], inboxPorConv = null) {
       sinUbicar.push(conv);
       continue;
     }
-    // El mapa acepta el inbox pelado o `{inbox, contacto}`: el NOMBRE es lo unico que
-    // distingue un lead de nosotros mismos probando, y adivinarlo por heuristica falla
-    // abierto en las dos direcciones (un lead real tambien puede llamarse Sergio).
+    // El mapa acepta el inbox pelado o `{inbox, contacto, telefono}`. El inbox por si solo no
+    // alcanza (ver arriba); el contacto es lo que delata al dueño y a las sondas viejas.
     const dato = inboxPorConv.get(conv);
-    const inbox = dato && typeof dato === "object" ? dato.inbox : dato;
-    if (dato && typeof dato === "object" && dato.contacto) contactos.set(conv, dato.contacto);
+    const esObjeto = dato && typeof dato === "object";
+    const inbox = esObjeto ? dato.inbox : dato;
+    if (esObjeto && dato.contacto) contactos.set(conv, dato.contacto);
     if (inbox === undefined || inbox === null) sinUbicar.push(conv);
-    else if (inbox === INBOX_BANCO_DE_PRUEBAS) prueba.push(conv);
+    else if (inbox === INBOX_BANCO_DE_PRUEBAS) nuestros.push(conv);
+    else if (!esObjeto) sinUbicar.push(conv); // dato incompleto: sin contacto no hay con que descartarnos
+    else if (esNuestra({ contacto: dato.contacto, telefono: dato.telefono })) nuestros.push(conv);
     else reales.push(conv);
   }
-  return { medido, prueba, reales, sinUbicar, contactos };
+  return { medido, nuestros, reales, sinUbicar, contactos };
 }
 
 /**
@@ -273,8 +293,8 @@ export function lecturaDeEventos({ veredicto, eventos, circuitoSano, origen } = 
   if (ev.enviados === 0) return "circuito sano, sin eventos reales todavia";
   // Hay envios. La pregunta que faltaba: ¿alguno fue de alguien de AFUERA?
   if (origen?.medido && origen.reales.length === 0) {
-    const delBanco = origen.prueba.length;
-    return `circuito sano, pero NINGUN aviso es de un lead: ${delBanco} del banco de pruebas${
+    const delBanco = origen.nuestros.length;
+    return `circuito sano, pero NINGUN aviso es de un lead: ${delBanco} nuestro(s)${
       origen.sinUbicar.length ? ` y ${origen.sinUbicar.length} sin ubicar` : ""
     } — nunca se probo con un desconocido`;
   }
@@ -554,17 +574,20 @@ export function inboxPorConversacion(convs = []) {
   const nombres = sh("docker", ["ps", "--format", "{{.Names}}"], 20000);
   const db = (nombres || "").split("\n").find((n) => n.includes("chatwoot-db"));
   if (!db) return null;
-  // El nombre del contacto viaja con el inbox: el inbox dice si es el banco de pruebas, el
-  // nombre dice si el "lead" somos nosotros. Aplanado por si trae saltos de linea.
+  // El contacto viaja con el inbox: el inbox dice si es el banco de pruebas, y el NOMBRE Y EL
+  // TELEFONO dicen si el "lead" somos nosotros. El telefono no es un adorno — es la unica
+  // prueba dura que tiene `esNuestra` del dueño probando (conv 11, `+59171654992`), y sin el
+  // esta funcion le entrega a `clasificarEventos` un dato incompleto que la hace fallar EN
+  // VERDE. Aplanado por si trae saltos de linea.
   const sql =
-    "select c.id, c.inbox_id, replace(coalesce(ct.name,'-'), E'\\n', ' ') from conversations c " +
-    `left join contacts ct on ct.id = c.contact_id where c.id in (${ids.join(",")});`;
+    "select c.id, c.inbox_id, replace(coalesce(ct.name,'-'), E'\\n', ' '), coalesce(ct.phone_number,'') " +
+    `from conversations c left join contacts ct on ct.id = c.contact_id where c.id in (${ids.join(",")});`;
   const out = sh("docker", ["exec", db, "psql", "-U", "postgres", "-d", "onia-chatbot", "-tAc", sql], 30000);
   if (out === null) return null;
   const mapa = new Map();
   for (const linea of out.split("\n")) {
-    const [id, inbox, contacto] = linea.trim().split("|");
-    if (id && inbox) mapa.set(Number(id), { inbox: Number(inbox), contacto: contacto || null });
+    const [id, inbox, contacto, telefono] = linea.trim().split("|");
+    if (id && inbox) mapa.set(Number(id), { inbox: Number(inbox), contacto: contacto || null, telefono: telefono || null });
   }
   return mapa;
 }
@@ -648,14 +671,14 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   // De quien son. Se imprime SIEMPRE que haya avisos: el dia que aparezca el primer lead de
   // verdad, esta linea es la que lo dice — y hasta entonces dice que todavia no paso.
   if (eventos.total > 0) {
-    const o = origen || { medido: false, prueba: [], reales: [], sinUbicar: [] };
+    const o = origen || { medido: false, nuestros: [], reales: [], sinUbicar: [] };
     console.log(
       o.medido
         ? `de quien: leads ${o.reales.length}${
             o.reales.length
               ? ` (${o.reales.map((c) => `conv ${c}${o.contactos?.get(c) ? ` · ${o.contactos.get(c)}` : ""}`).join(", ")})`
               : ""
-          } · banco de pruebas ${o.prueba.length}${o.sinUbicar.length ? ` · sin ubicar ${o.sinUbicar.length}` : ""}`
+          } · nuestros ${o.nuestros.length}${o.sinUbicar.length ? ` · sin ubicar ${o.sinUbicar.length}` : ""}`
         : "de quien: no se pudo preguntar a la base de Chatwoot (no medido, NO es cero)",
     );
   }
