@@ -177,9 +177,59 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       de CSV). Validado **por mutación**: con las dos celdas devueltas a mano, 3 tests en rojo
       nombrando las tres celdas. Gates: `tsc --noEmit` limpio, `eslint` 0, suite completa verde.
       **Falta mergear y desplegar** para que el cliente lo vea.
-      📌 **Hueco anotado, no cerrado (no es esta vuelta):** la comparativa tiene cuatro columnas
-      (Básico/Profesional/Completo/Grupo) y la escalera C agregó **`crece`**, que no tiene
-      columna; y **`agentsIncluded`** no tiene fila, aunque el salto a agentes es lo que se vende
+      ✅ **CERRADO el 2026-09-13: el panel de «Mi plan» no conocía el plan Crece, y por eso le
+      ofrecía al que paga Bs 550 el plan de Bs 320 como MEJORA** (`onia-platform`, rama
+      `claude/chatbots-platform-review-0d1d09`). Salió de ir a cerrar el hueco de la comparativa
+      y encontrar, dos pantallas más arriba, **dos listas tipeadas a mano que la escalera C
+      nunca tocó**:
+      1. `PLAN_ORDER = ["free","basic","professional","clinic","enterprise"]` con el rank por
+         `indexOf` ⇒ **`planRank("crece") === -1`**. Con `-1`, `isUpgrade = planRank(plan) >
+         currentRank` daba **true para TODAS las tarjetas**, así que el dueño de un Crece leía el
+         botón primario lleno **«Pagar Plan Básico»** sobre el plan de Bs 320 — una bajada vendida
+         como mejora, en la pantalla donde se decide pagar — y **ninguna tarjeta** decía
+         «✓ Plan actual», porque `isCurrent = currentPlan === plan.key` tampoco tenía con qué
+         coincidir. El `-1` no falla: miente en silencio.
+      2. `planesDe` devolvía cuatro tarjetas y **Crece no era ninguna**, o sea que a los rubros
+         clínicos (dental, estética, servicios profesionales — la rama `esDental`) el panel les
+         escondía el escalón de Bs 550 y les dejaba el salto de Bs 570 hasta Profesional, que es
+         **exactamente el 2,3x que la escalera C existe para borrar** (lo dice el comentario de
+         `DEFAULT_PLAN_AMOUNTS`). `/checkout` sí lo vendía desde el día uno, y `PlanesNeutros`
+         (comercio/importadora) también, porque **deriva su lista de `CHECKOUT_PLANS`**: media
+         familia derivada se lee como familia derivada.
+      🔴 **Y en las tarjetas estaba viva la MISMA mentira que se acababa de cerrar en la tabla de
+      abajo:** el Básico listaba *«Exportación CSV»* con `included: false` mientras
+      `csvExportEnabled` es `true` desde Básico a propósito. Las tarjetas son la **tercera**
+      representación de los mismos booleanos, en el mismo archivo, a dos centímetros de la tabla.
+      Entró: `lib/subscription/escalon-de-plan.ts` (módulo puro) — **el escalón de un plan es lo
+      que CUESTA**, derivado de `DEFAULT_PLAN_AMOUNTS`, así que no hay lista que actualizar y el
+      plan que venga entra solo; `esSubida()` devuelve **false ante un plan desconocido** (la otra
+      mitad del `-1`: la columna `plan` es String y puede traer un id legado — ante la duda no se
+      llama «subida» a nada, en vez de llamarle subida a todo); la tarjeta de Crece con cada
+      bullet correspondido contra `PLAN_LIMITS.crece` (agentes y agenda pública SÍ, reportes y
+      recurrentes NO — ésos son el motivo de subir a Profesional); y el `upgradeReason` del Básico
+      apuntando a Crece y no a Profesional.
+      **El sujeto del gate no es «crece»: son los planes que el checkout VENDE** (`CHECKOUT_PLANS`,
+      la fuente de otro circuito), cruzados contra las tarjetas que esta pantalla pinta
+      (`app/(dashboard)/settings/el-panel-conoce-los-planes-que-vende.test.ts`). **Validado por
+      mutación, tres veces:** escalón ciego a `crece` → 4 rojos; tarjeta de Crece fuera → 2 rojos;
+      CSV de vuelta en `included: false` → 1 rojo; árbol restaurado → 7 verdes. Gates:
+      `tsc --noEmit` limpio, `vitest` 4.895/4.895 (0 rojos), `eslint` 0 errores. Commit
+      `130b1e8`.
+      ⚠️ **Intento fallido que vale anotar: el primer arreglo agregaba DOS listas a mano más**, y
+      lo atajaron gates que ya existían, no yo — `lib/plan-catalogo-es-la-fuente.test.ts` cazó el
+      `currentPlan === "crece"` que le sumé a la cascada de color del chip (sacado: el chip neutro
+      ya dice «Crece» porque el rótulo sale de `nombreDePlan`), y
+      `lib/platform/nombre-de-plan-a-mano.test.ts` cazó `"Subí a Crece…"` tipeado en vez de
+      `PLAN_LABELS.crece`. La línea `plan === "free"` de `escalonDe` sí quedó, **declarada en
+      `EXENTAS` con su motivo**: pone al trial en el piso de la escalera y no decide ninguna
+      capacidad. La escalera C entró por la puerta que estos gates cubren; el orden de los planes
+      no lo cubría nadie.
+      ⚠️ **No se abrió renderizada**: el cambio está en la rama, así que producción todavía sirve
+      la pantalla vieja y mirarla ahí no probaría nada. Se mira **después del deploy**, y hasta
+      entonces esto no está terminado.
+      📌 **Hueco anotado, no cerrado:** la **tabla comparativa** de más abajo (otra cosa que las
+      tarjetas) sigue con cuatro columnas Básico/Profesional/Completo/Grupo y **`crece` no tiene
+      columna**; y **`agentsIncluded`** no tiene fila, aunque el salto a agentes es lo que se vende
       desde Crece. Los dos quedan declarados con su motivo en `CAMPO_EN_LA_COMPARATIVA`.
 
       Falta de la fase 2: **avisos al 70/90/100 % del cupo** y la **recarga de recordatorios**
