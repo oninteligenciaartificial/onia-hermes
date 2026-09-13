@@ -234,9 +234,13 @@ async function mirar(base, out) {
   const informe = [];
 
   for (const pantalla of PANTALLAS) {
+    // reducedMotion: una captura tomada a mitad de animacion congela un frame
+    // que el cliente nunca ve —numeros a medio contar incluidos—. Ver
+    // scripts/navegador-sin-animacion.test.ts (Bs 364 fantasma, 2026-09-12).
     const contexto = await navegador.newContext({
       viewport: { width: pantalla.width, height: pantalla.height },
       deviceScaleFactor: 2,
+      reducedMotion: "reduce",
     });
     for (const ruta of RUTAS) {
       const pagina = await contexto.newPage();

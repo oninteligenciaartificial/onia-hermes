@@ -187,12 +187,17 @@ const avisos = [];
 const informe = [];
 
 for (const vista of VISTAS) {
+  // reducedMotion: estas capturas son las que se MIRAN para aprobar una pieza.
+  // Sin esto el PNG puede congelar un numero a medio contar y se aprueba (o se
+  // rechaza) un precio que el sitio no pinta. Ver
+  // scripts/navegador-sin-animacion.test.ts (Bs 364 fantasma, 2026-09-12).
   const ctx = await navegador.newContext({
     viewport: { width: vista.width, height: vista.height },
     deviceScaleFactor: vista.movil ? 2 : 1,
     isMobile: vista.movil,
     hasTouch: vista.movil,
     userAgent: vista.movil ? UA_IPHONE : undefined,
+    reducedMotion: 'reduce',
   });
 
   for (const pantalla of PANTALLAS) {

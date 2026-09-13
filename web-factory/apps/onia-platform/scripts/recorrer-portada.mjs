@@ -38,7 +38,13 @@ mkdirSync(out, { recursive: true });
 const navegador = await chromium.launch({
   executablePath: process.env.CHROME_PATH || undefined,
 });
-const pagina = await navegador.newPage({ viewport: { width: ancho, height: alto } });
+// reducedMotion: el recorrido va sacando capturas mientras baja, o sea justo
+// cuando las animaciones estan corriendo. Ver
+// scripts/navegador-sin-animacion.test.ts (Bs 364 fantasma, 2026-09-12).
+const pagina = await navegador.newPage({
+  viewport: { width: ancho, height: alto },
+  reducedMotion: "reduce",
+});
 
 const rotos = [];
 pagina.on("response", (r) => {

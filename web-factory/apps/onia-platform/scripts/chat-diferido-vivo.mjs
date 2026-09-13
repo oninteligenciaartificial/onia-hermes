@@ -42,7 +42,12 @@ const kb = (n) => `${Math.round(n / 1024)} KB`;
 
 async function medir() {
   const navegador = await chromium.launch();
-  const pagina = await navegador.newPage({ viewport: { width: 390, height: 844 } });
+  // reducedMotion: lo que se lee de un DOM animado son valores a medio camino.
+  // Ver scripts/navegador-sin-animacion.test.ts (Bs 364 fantasma, 2026-09-12).
+  const pagina = await navegador.newPage({
+    viewport: { width: 390, height: 844 },
+    reducedMotion: "reduce",
+  });
 
   const arranque = Date.now();
   const pedidosChat = [];

@@ -35,7 +35,13 @@ const ok = (cond, msg) => {
 };
 
 const navegador = await chromium.launch();
-const p = await navegador.newPage({ viewport: { width: 390, height: 844 } });
+// reducedMotion en todas las pantallas de este guion: lo que se lee de un DOM
+// animado son estados intermedios que el cliente nunca ve fijos. Ver
+// scripts/navegador-sin-animacion.test.ts (Bs 364 fantasma, 2026-09-12).
+const p = await navegador.newPage({
+  viewport: { width: 390, height: 844 },
+  reducedMotion: "reduce",
+});
 await p.goto(`${BASE}/guia-facturacion?src=guia-siat-dm`, {
   waitUntil: "domcontentloaded",
 });
@@ -81,7 +87,10 @@ ok(
 );
 
 /* 4 · sin ?src= la fuente sigue siendo distinguible del resto del sitio */
-const p2 = await navegador.newPage({ viewport: { width: 390, height: 844 } });
+const p2 = await navegador.newPage({
+  viewport: { width: 390, height: 844 },
+  reducedMotion: "reduce",
+});
 let cuerpo2 = null;
 p2.on("request", (r) => {
   if (r.url().includes("/api/agenda-intake")) cuerpo2 = r.postData();
@@ -97,7 +106,7 @@ ok(
 );
 
 /* 5 · enlace cruzado en las dos direcciones (canibalización SEO) */
-const p3 = await navegador.newPage();
+const p3 = await navegador.newPage({ reducedMotion: "reduce" });
 await p3.goto(`${BASE}/facturacion`, { waitUntil: "domcontentloaded" });
 await p3.waitForTimeout(800);
 ok(
@@ -136,6 +145,7 @@ ok(
  */
 const hoja = await navegador.newPage({
   viewport: { width: 794 - 98, height: 1123 - 72 },
+  reducedMotion: "reduce",
 });
 await hoja.goto(`${BASE}/guia-facturacion`, { waitUntil: "domcontentloaded" });
 await hoja.waitForTimeout(1200);

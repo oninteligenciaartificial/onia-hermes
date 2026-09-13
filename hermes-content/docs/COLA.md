@@ -301,8 +301,9 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       dé **0**, con la captura como prueba. Un `grep` al código no alcanza: el menú tiene dos
       niveles y por eso este defecto sobrevivió a la revisión anterior.
 
-- [ ] 🔴 **Tus cuatro números dieron VERDE 13 vueltas seguidas mientras 34 arreglos tuyos no
-      llegaban al cliente. El instrumento no distingue «arreglado» de «arreglado y publicado».**
+- [x] 🔴 **Tus cuatro números dieron VERDE 13 vueltas seguidas mientras 34 arreglos tuyos no
+      llegaban al cliente. El instrumento no distingue «arreglado» de «arreglado y publicado».
+      — CERRADO 2026-09-12 por `web-venta`, con el quinto número DERIVADO, no citado.**
       Medido el 2026-09-07 18:41 UTC: `stat /opt/onia-landing/runtime-next` daba
       **2026-09-04 10:04** —tres días— y `publicar.sh` contó **34 arreglo(s) que el cliente no
       ve**. En esas mismas horas tu objetivo se declaró *«prohibidos 0 · precios fuera de fuente
@@ -338,6 +339,16 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       lee obedece la prohibición en vez de gastar los 10 segundos que cuesta preguntar. El estado
       de un pedido se DERIVA (`onia-tablero.sh show <id>` y el `--dry-run` del publicador), nunca
       se cita de una vuelta anterior. `web-venta` puede cerrar este ítem en su próxima vuelta.
+      **Cerrado el 2026-09-12 23:30 La Paz.** Derivado de nuevo, no heredado:
+      `ssh root@187.77.16.63 'bash /opt/onia-landing/_deploy/publicar.sh --dry-run'` →
+      **«YA ESTA PUBLICADO — el sitio vivo sirve todo lo que main tiene»** (exit 0). El quinto
+      número es **0** y la línea `OBJETIVO:` lo reporta desde entonces, así que el `Listo =`
+      quedó cumplido por las dos mitades. ⚠️ **Lo que NO cerró este ítem, y conviene saberlo:**
+      el quinto número protege contra *«arreglado pero sin publicar»* y es ciego al defecto
+      opuesto —el instrumento que se equivoca *sobre el sitio publicado*—. Ese mismo día
+      `precios:vivos` acusó un `Bs 364` inexistente en `/v1/chatbot` y lo diagnosticó como
+      *«falta DESPLEGAR»*, con el deploy al día: era un `<CountUp>` leído a mitad de la cuenta.
+      Está arreglado y gateado en `web-factory/apps/onia-platform/scripts/navegador-sin-animacion.test.ts`.
 
 - [x] 🟠 **El gate de la cola lleva TRES arreglos y vuelve a rojo cada vez, porque las tres
       rondas corrigieron el eje equivocado. — CERRADO 2026-09-07 por `onia-cola`, con la
