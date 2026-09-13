@@ -466,6 +466,54 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       Reproducir: derivar las tablas de `information_schema`, contar por `organizationId` y
       cruzar contra `organizations`; los conteos de arriba son de `supabase-db` el 2026-09-13.
 
+      ✅ **CERRADO el 2026-09-13: la SÉPTIMA superficie era la única que COBRA — al que tiene el
+      chatbot incluido en su plan se le reclamaba el add-on, por tres canales y con un formulario
+      de pago** (`onia-platform` `a38cabc`, rama `claude/chatbots-platform-review-0d1d09`).
+      Las seis anteriores mostraban un número de más; ésta manda correo, push y notificación
+      in-app, y termina en «Total a pagar Bs 390» con la caja para subir el comprobante.
+      **La causa, en una línea:** `addonHabilitado` resuelve `incluidoPorPlan` **primera** y sale
+      (`if (incluidoPorPlan) return true`), pero `vencimientoDelAddon` —la función que contesta
+      *«¿cuándo se apaga?»*— se quedó con **dos** de las tres fuentes. Su propia cabecera lo dice:
+      *«la habilitacion tiene DOS fuentes»*. Era cierto el 11-sep y dejó de serlo el 12.
+      **A quién le pasa:** al dueño de un **Completo (Bs 1.290, chatbot adentro)** que **antes**
+      compraba el add-on aparte — conserva su capacidad `addon.whatsapp` con `validUntil`, así que
+      `app/api/cron/renewal-reminders` le manda **D-7, D-3, D-1 y vencido** diciéndole que el
+      `<fecha>` su asistente deja de contestar (no deja: su plan lo incluye y `addonHabilitado`
+      devuelve `true` para siempre), y `/settings/addon-chatbot` cae en la rama de **RENOVACIÓN**
+      con «Total a pagar Bs 390». Es **exactamente el camino que la comparativa de planes le
+      vende** («subiendo dejás de pagarlo», cerrado dos ítems más arriba el mismo día): el cliente
+      hace lo que le pedimos y el producto le cobra por eso.
+      🔴 **Y es la misma clase que `addon-que-no-vence-no-avisa.test.ts` cerró el 11-sep.** Ese
+      archivo escribió la regla con todas las letras —*«un aviso que anuncia un EFECTO deriva su
+      fecha de las MISMAS fuentes que producen ese efecto»*— y después la **fijó sobre las dos
+      fuentes de ese día**: cerró la instancia. Su sección «la premisa se re-mide» pregunta si la
+      columna sigue siendo fuente, **no cuántas hay**, así que la tercera entró en verde y el gate
+      pasó a defender el hueco.
+      Entró: `incluidoPorPlan` **obligatorio** en `vencimientoDelAddon` (`tsc` nombró a los 6
+      llamadores); `lib/subscription/chatbot-incluido-en-el-plan.ts` con la condición **mudada tal
+      cual** desde `fuentesDelAddonWhatsApp` —que es `async` y consulta Prisma, así que el cron,
+      que ya trae la org en memoria, habría tenido que re-escribirla al lado, y de dos copias la
+      primera en quedarse vieja es la del aviso—; `trialEnd` en el `select` del cron (sin él
+      `derivePlanStatus` lee «sin fecha» = vigente y la inclusión falla **abierta**); y la pantalla
+      derivando **un solo valor** para sus dos preguntas (el rótulo y la fecha) en vez de
+      consultarlo dos veces.
+      **El gate no fija el caso de hoy:** deriva las fuentes leyendo los campos de
+      `FuentesDelAddon` **del disco** y cruza `vencimientoDelAddon` contra `addonHabilitado` sobre
+      las combinaciones del mundo — *si se anuncia un corte, el add-on tiene que estar apagado
+      después de esa fecha*. La **cuarta** fuente lo pone rojo antes de existir
+      (`lib/subscription/incluido-en-el-plan-no-se-reclama.test.ts`).
+      **Validado por mutación, cinco veces** (rojo por el motivo correcto, árbol restaurado con
+      `cp`): esquivar la tercera fuente → 3 rojos; `return null` siempre —la cura exagerada, que
+      callaría también los avisos **ciertos**— → 3 rojos, incluida la baranda `anunciados > 0`;
+      el cron acallándolo con literal → 1 rojo; la pantalla clavándolo en `false` → 1 rojo; una
+      cuarta fuente en el tipo → 1 rojo **nombrándola**. Gates: `tsc` limpio, `eslint` 0 errores,
+      `vitest` **4.920/4.920** — y los tres **re-corridos en el VPS** sobre el árbol publicado.
+      ⚠️ **Hoy no es alcanzable en producción y por eso se arregla ahora:** medido en `supabase-db`
+      el 2026-09-13, ninguna org tiene plan `clinic`/`enterprise` y las dos con capacidad
+      `addon.whatsapp` la tienen `validUntil NULL`. El defecto se enciende solo el día que alguien
+      **suba de plan**, que es el día que menos ganas hay de descubrirlo.
+      **Falta mergear y desplegar** para que el cliente lo vea.
+
 - [ ] 🔴 **Estado real de los agentes IA del producto** (Sergio Urcullo, 11-sep: *"mira también
       cómo están los agentes ai"*). **MEDIDO el 2026-09-11 en la base de prod** (supabase-db,
       tablas `onia_agents_*`): 4 agentes definidos, el cron corre y completa (22 corridas
