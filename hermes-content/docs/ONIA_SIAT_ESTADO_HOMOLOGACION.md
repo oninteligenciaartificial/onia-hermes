@@ -99,6 +99,12 @@ Fase 1 completa"):
 
 **Porcentaje General del portal: 0%** (ninguna etapa cerrada al 100%).
 
+> 📌 **13-sep:** la fila VIII quedó vieja — esa madrugada se corrieron los **690/690 de
+> la etapa VIII completos, todos 908 VALIDADA** (checkpoint `fase1-state-viii.json` +
+> log `fase1-viii.ndjson` en el VPS; cero reintentos, mediana 162 ms). El árbitro sigue
+> siendo el portal (login de Sergio Urcullo): leer el Listado de Etapas y cotejar.
+> Detalle en §6.
+
 > La etapa **X (emisión masiva IEHD)** no figura para nuestro perfil: es del sector
 > hidrocarburos. Son 10 etapas, no 11.
 
@@ -165,8 +171,11 @@ certificación**. Lo que sí valida, con su código de rechazo exacto:
 
 Un **autofirmado** con `serialNumber = 5371375010` pasó entero: **908 VALIDADA en los 6
 combos** (sectores 1 → ServicioFacturacionCompraVenta, 17 → ServicioFacturacionElectronica,
-24 → ServicioFacturacionDocumentoAjuste; PdV 0 y 1), y el volumen de los 690 quedó
-corriendo esa misma noche. La Fase 1 ya no depende de ningún trámite para la VIII.
+24 → ServicioFacturacionDocumentoAjuste; PdV 0 y 1), y esa misma madrugada corrió el
+volumen completo: **690/690 en 908 VALIDADA** (460 `recepcionFactura` + 230
+`recepcionDocumentoAjuste`), **cero reintentos, cero errores de red**, latencia
+142/162/652 ms (min/mediana/max). La Fase 1 ya no depende de ningún trámite para la
+VIII; falta solo cotejar el marcador en el portal (login de Sergio Urcullo).
 
 | Certificado | Cuándo hace falta | Dónde |
 |---|---|---|

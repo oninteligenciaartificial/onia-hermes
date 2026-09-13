@@ -44,9 +44,10 @@ completa. El código ya la corre solo (`--etapa VIII` del runner; firma XMLDSig
 implementada y verificada). **Medido contra el piloto el 13-sep de madrugada:** el
 piloto NO valida la cadena del certificado — acepta uno **autofirmado** siempre que el
 `serialNumber` del subject lleve el NIT `5371375010` (sin él responde `902/922 LA FIRMA
-DEL XML NO CORRESPONDE AL CONTRIBUYENTE`). El humo devolvió **908 VALIDADA en los 6
-combos** (sectores 1, 17 y 24, PdV 0 y 1) y el volumen de los 690 quedó corriendo. O
-sea: **la Fase 1 ya no espera ningún trámite tuyo.**
+DEL XML NO CORRESPONDE AL CONTRIBUYENTE`). Esa madrugada corrió la etapa ENTERA:
+**690/690 en 908 VALIDADA** (sectores 1, 17 y 24, PdV 0 y 1; cero reintentos). O sea:
+**la Fase 1 ya no espera ningún trámite tuyo** — solo falta cotejar el marcador en el
+portal (paso 1).
 Lo que SÍ es de ustedes — y todo acto legal lo firma **Leslie** (titular SEPREC):
 - **Certificado de PRODUCCIÓN** (obligatorio recién para emitir facturas reales; NO
   bloquea la Fase 1): en [solicitud.firmadigital.bo](https://solicitud.firmadigital.bo)
