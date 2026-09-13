@@ -262,6 +262,39 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       (b) ✅ **purgadas el 2026-09-12**, las 12 filas, con respaldo y re-auditoría en cero;
       (c) construir los 3 agentes nuevos de abajo.
 
+      ✅ **(v) CERRADA el 2026-09-13 — la misma pantalla se contradecía a sí misma, y se
+      ve HOY en la cuenta real de Sergio Urcullo.** No estaba en la lista de fricciones:
+      apareció MIRANDO `/agents` renderizada en producción
+      (`mirar_bandeja_dueno.mjs --email sergio@onia.com.bo --ruta /agents`, captura
+      `/root/agents-escritorio.png`). Arriba, Recall y Cobrador dicen **"propuestas 1"**;
+      abajo, la sección de acciones dice **"Todavía no hay propuestas. Cuando un agente
+      detecte algo […] su sugerencia va a aparecer acá"**. Los dos números salen de tablas
+      distintas y el dueño no puede saber cuál creer.
+      **La causa NO era la purga de QA — es del producto y le pasa a cualquier cliente.**
+      `VISIBLE_ACTION_STATUSES` en `agents-view.tsx` lista cuatro estados
+      (`pending_approval`, `approved`, `executed`, `auto_executed`) y el motor sella **tres
+      más** que quedan afuera: `proposed`, `rejected` y `discarded`. O sea que **el dueño
+      que RECHAZA su única propuesta —una acción que el producto le ofrece— la ve
+      desaparecer y después lee que el agente todavía no detectó nada.** Es la clase «una
+      lectura que devuelve `[]` y el texto del caso vacío AFIRMA una causa falsa».
+      Verificado en la base (`supabase-db`, org `clinica-sergio-p2ljs`):
+      `onia_agents_runs` tiene la corrida del 12-sep con `itemsProduced 1` y summary
+      "propuestas 1 · auto 0 · descartadas 0", y `onia_agents_actions` tiene **0 filas en
+      toda la base**.
+      **Cómo se cerró** (rama `claude/chatbots-platform-review-0d1d09`, `onia-platform`):
+      módulo puro `lib/onia-core/modules/agents-lista-vacia.ts` como única fuente del
+      párrafo — se **condiciona** la promesa, no se borra: con 0 propuestas el texto de
+      siempre sigue siendo el correcto; con propuestas hechas dice lo que de verdad les
+      pasó. La pregunta se le hace a las **corridas** (`itemsProduced`), que es una fuente
+      distinta de la lista de acciones: preguntarle a la misma tabla habría sido una
+      tautología. Gate `agents-lista-vacia.test.ts`: **caso ancla derivado del disco** que
+      exige que `rejected` y `discarded` sigan siendo estados que el motor escribe y la
+      pantalla esconde —si algún día la lista los mostrara, el gate se pondría rojo en vez
+      de apagarse solo— más el cableado (la pantalla no puede volver a tener su propio
+      párrafo). **Visto en ROJO antes** (3 casos), y **validado por mutación en dos puntos
+      después del arreglo**: esquive de la condición → 2 rojos; descableado de la pantalla
+      → 1 rojo. `tsc` limpio, `eslint` 0 errores. **Commiteado, NO desplegado.**
+
       **DECIDIDO por Sergio Urcullo (11-sep, eligió las 4 opciones) y TODAVÍA SIN CONSTRUIR:
       los TRES agentes nuevos** (nota del merge del 12-sep: dos carriles reescribieron este
       ítem a la vez — la parte MEDIDA es sucesora, la DECISIÓN de los tres no se pierde).
