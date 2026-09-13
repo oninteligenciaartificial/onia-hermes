@@ -991,7 +991,11 @@ test("db: inbox sin org (404) degrada a archivo/codigo y NO vuelve a esperar red
   // seria a "file" — lo que se prueba aca es que la fuente db no aporta nada, no que archivo haya.
   const opts = { ...DB_OPTS, fetch, inboxId: "99", path: "/no/existe/knowledge.json" };
   const state = await ensureKnowledge({ ...opts, nowMs: NOW_MS });
-  assert.equal(state.source, "code", "inbox que no es de ningun cliente = bot de Onia, como siempre");
+  assert.equal(state.source, "code", "sin fila y sin archivo no queda documento: el motor usa su config");
+  // OJO: esto NO dice "y entonces vende Onia". Eso era lo que decia hasta el 2026-09-13 y era el
+  // bug — ver el caso "panel: un inbox HUERFANO (404) no come del panel global". Un 404 sobre un
+  // inbox se DECLARA huerfano y `withKnowledge` lo degrada a recepcionista neutro.
+  assert.equal(state.huerfano, true, "404 sobre un inbox = no es de ninguna org, y se declara");
   assert.equal(state.error ?? null, null, "404 no es un error que gritar");
   await ensureKnowledge({ ...opts, nowMs: NOW_MS + 1000 });
   assert.equal(fetch.calls.length, 1, "el intento fallido tambien deja huella: una sola espera por proceso");
@@ -1559,6 +1563,71 @@ test("panel: un inbox CON fila propia come de SU fila, nunca del panel global de
     "Onia — plataforma de gestión",
     "el panel global es del alcance del PROCESO, no de un inbox ajeno",
   );
+});
+
+// LA MITAD QUE FALTABA, medida en produccion el 2026-09-13: el inbox que nace HUERFANO.
+// Preguntandole al proceso vivo por la via del camino de respuesta, `?inboxId=99` —un inbox que
+// NO EXISTE— contestaba `source: "panel"`, o sea el guion de venta de Onia con sus precios y sus
+// horarios de demo. El dia que se destrabe el Embedded Signup (S1), el inbox del cliente nace
+// huerfano y hasta que alguien lo registre en `clinic_settings.chatwootInboxId` el bot le cotiza
+// ONIA a los clientes de ESE negocio.
+//
+// La causa es que `fetchOrgKnowledge` aplanaba DOS respuestas distintas en el mismo `missing`:
+// "es la org interna" (correcto: cae al panel, que es el guion de Onia, y ese inbox ES de Onia) y
+// "404, no es de ninguna org" (huerfano). Con las dos indistinguibles, el huerfano heredaba la
+// cara de Onia. Es la MISMA clase de bug que ya se curo al lado: sin `humanName` del cliente, el
+// fallback heredado era "Sergio" delante del cliente final (asRecepcionista, 2026-08-29).
+//
+// Degradacion elegida: recepcionista NEUTRO. No vende Onia, no cotiza, no ofrece demo con Sergio
+// y deriva a "el equipo". Un canal nuevo DE ONIA sigue vendiendo Onia sin cambiar nada: sus
+// inboxes se registran en la org interna igual que el 4 y el 5, y entonces no son huerfanos.
+test("panel: un inbox HUERFANO (404) no come del panel global — no le vende Onia a los clientes de nadie", async () => {
+  resetKnowledgeCache();
+  resetOrgKnowledgeCache();
+  // El mismo fetch de produccion: el panel global (org interna clavada en la query) contesta 200;
+  // el inbox desconocido contesta 404 — "ese inbox no es de ninguna org".
+  const fetch = async (url, init) => {
+    fetch.calls.push({ url: String(url), init });
+    if (!String(url).includes("organizationId=org_onia_interna")) {
+      return { ok: false, status: 404, json: async () => ({}) };
+    }
+    return {
+      ok: true,
+      status: 200,
+      json: async () => ({
+        organizationId: "org_onia_interna",
+        data: valido({ identity: { productName: "Onia — plataforma de gestión", humanName: "Sergio" } }),
+        version: 1,
+        updatedBy: "panel-venta",
+      }),
+    };
+  };
+  fetch.calls = [];
+
+  const opts = {
+    ...DB_OPTS,
+    panelUrl: "http://producto/api/chatbot-knowledge/published?organizationId=org_onia_interna",
+    panelSecret: "s3cr3t",
+    inboxId: "99",
+    fetch,
+    nowMs: NOW_MS,
+    path: "/no/existe/knowledge.json",
+  };
+
+  const state = await ensureKnowledge(opts);
+  assert.equal(state.huerfano, true, "el producto dijo 404: ese inbox no es de nadie, y se DECLARA");
+  assert.equal(state.error ?? null, null, "404 sigue sin ser un error que gritar");
+  assert.equal(state.data ?? null, null, "y no se le sirve el documento de otra org");
+
+  const config = withKnowledge(DEFAULT_CONFIG, opts);
+  assert.equal(config.modo, "recepcionista", "inbox de nadie = jamas el funnel de venta de Onia");
+  assert.notEqual(config.identity.productName, "Onia — plataforma de gestión");
+  assert.equal(config.identity.humanName, "el equipo", "ni 'Sergio' delante del cliente de otro");
+
+  // Y el turno que recibe esa persona no cotiza Onia ni le ofrece una demo con Sergio.
+  const result = step(createState(), { text: "hola", receivedAt: T0 }, { config });
+  assert.doesNotMatch(result.replies[0].text, /Sergio/i, "el humano de Onia no se nombra en un canal ajeno");
+  assert.doesNotMatch(result.replies[0].text, /plataforma por módulos/i, "ni el pitch de venta de Onia");
 });
 
 test("applyKnowledge: las FAQ 'negocio' viajan en config.faq para el modo venta y NO pisan el guion", () => {

@@ -654,7 +654,11 @@ async function fetchOrgKnowledge(key, options = {}) {
     } finally {
       clearTimeout(timer);
     }
-    if (res.status === 404) return { data: null, error: null, missing: true }; // org sin fila publicada
+    // 404 = el producto no reconoce esa clave. Para un `inbox:<id>` eso significa HUERFANO —
+    // ese inbox no es de NINGUNA org— y hay que distinguirlo del `missing` de la org interna de
+    // aca abajo: aplanados en el mismo booleano, el huerfano heredaba el guion de venta de Onia
+    // (medido en prod 2026-09-13: `?inboxId=99`, que no existe, contestaba source "panel").
+    if (res.status === 404) return { data: null, error: null, missing: true, huerfano: key.startsWith("inbox:") };
     if (!res.ok) return { data: null, error: `la db contesto HTTP ${res.status}` };
     const body = await res.json();
     // LA ORG INTERNA NO ES UN CLIENTE (medido en prod 2026-09-13). El producto resuelve
@@ -736,6 +740,11 @@ function nextOrgCache(prev, result, organizationId, nowMs) {
     source: base.data ? base.source : "code",
     checkedAt: nowMs,
     path: `db:${organizationId}`,
+    // "ese inbox no es de nadie" viaja con el estado: es lo unico que distingue al huerfano de
+    // un inbox de Onia, y sin el dato el fallback le sirve el guion de venta a un canal ajeno.
+    // Se RE-DERIVA en cada lectura (nunca se hereda): el dia que alguien registre ese inbox, la
+    // lectura siguiente trae fila y el huerfano deja de serlo sin reiniciar el proceso.
+    huerfano: result.huerfano === true,
     error: result.missing ? null : result.error || base.error,
   });
 }
@@ -1050,6 +1059,11 @@ export function getKnowledge(options = {}) {
         scheduleOrgRefresh(orgKey, orgNow, options);
       }
       if (org?.data) return org;
+      // EL INBOX QUE NO ES DE NADIE NO SIGUE DE LARGO. Abajo esperan el panel y el archivo, que
+      // son los dos el guion de venta de ONIA: servirselos a un inbox huerfano es cotizarle Onia
+      // a los clientes del negocio que acaba de conectar su WhatsApp. Se corta ACA, con el dato
+      // que el producto ya dio (404), y `withKnowledge` lo degrada a recepcionista neutro.
+      if (org?.huerfano) return org;
       // sin copia db todavia: sigue el camino del panel/archivo/codigo de siempre
     }
     // EL ARCHIVO SE RESUELVE SIEMPRE, aunque el panel este sirviendo: la fuente panel se sirve
@@ -1123,6 +1137,10 @@ function healthFromState(state, options = {}) {
     loadedAt: state.loadedAt,
     path: state.path,
     lastError: state.error,
+    // El unico canal por el que se puede MIRAR el huerfano sin leerle la memoria al proceso.
+    // Asi se midio el bug (`/health?inboxId=99` contestaba source "panel"), y asi se verifica
+    // el arreglo despues del deploy — el mismo comando, sin tocar una conversacion real.
+    huerfano: state.huerfano === true,
   };
   // Con la fuente panel CONFIGURADA, /health tiene que contar su estado aunque hoy no sirva:
   // "edite en el panel y el bot no lo tomo" se diagnostica aca, no adivinando.
@@ -1261,6 +1279,12 @@ export function asRecepcionista(config, data, orgSlug = null, cuota = null) {
 export function withKnowledge(config = DEFAULT_CONFIG, options = {}) {
   try {
     const state = getKnowledge(options);
+    // INBOX HUERFANO: el producto dijo que no es de ninguna org. Devolver `config` seria el
+    // funnel de VENTA de Onia (DEFAULT_CONFIG lo es), asi que se degrada a recepcionista NEUTRO:
+    // sin conocimiento de nadie, sin precios, sin horarios de demo, y con "el equipo" en vez de
+    // "Sergio" — la misma cura que ya se aplico al humanName heredado (asRecepcionista).
+    // El corte NUNCA es silencio: el bot sigue atendiendo y derivando, sólo que no como Onia.
+    if (state.huerfano) return asRecepcionista(config, null);
     if (!state.data) return config;
     const applied = applyKnowledge(config, state.data, options);
     return state.source === "db" ? asRecepcionista(applied, state.data, state.orgSlug, state.cuota) : applied;

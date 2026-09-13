@@ -2882,8 +2882,47 @@ decisión de Sergio, no código.
       terminar** — toda sonda que siembre en producción cierra lo suyo en `finally`, o el
       barrido hay que repetirlo para siempre.
 
-- [ ] 🟡 **El inbox que nazca huérfano le habla a los clientes del CLIENTE con la cara de Onia
-      — medido el 2026-09-13, sin víctima hoy porque ninguna org menos la interna tiene inbox.**
+- [x] 🟡 **~~El inbox que nazca huérfano le habla a los clientes del CLIENTE con la cara de
+      Onia~~ — CERRADO EN CÓDIGO el 2026-09-13 02:55 La Paz.
+      ⚠️ COMMITEADO, NO DESPLEGADO: el bot vivo sigue sirviéndole el panel a cualquier inbox.**
+      **Peor de lo que decía este ítem, recontado en vivo antes de tocar nada:** no son «los
+      cuatro inboxes», es **cualquier número**. `?inboxId=99` —un inbox que no existe— contestaba
+      igual `source: "panel"`, o sea el guion de venta de Onia con sus precios y sus horarios de
+      demo. La lista de sujetos no era 4: era infinita.
+      **La causa, y por qué ningún gate la veía.** `fetchOrgKnowledge` aplanaba DOS respuestas
+      distintas en el mismo `missing: true`: *«es la org interna»* (correcto — ese inbox ES de
+      Onia y debe caer al panel) y *«404, no es de ninguna org»* (huérfano). Indistinguibles, el
+      huérfano heredaba la cara de Onia. Es la misma clase que ya se había curado al lado: sin
+      `humanName` del cliente, el fallback heredado era **«Sergio»** delante del cliente final
+      (`asRecepcionista`, visto en prod el 2026-08-29).
+      **La decisión que pedía este ítem, tomada acá:** el fallback de un `inbox:<id>` deja de
+      heredar la cara de Onia. Un 404 sobre un inbox se **declara** huérfano (`huerfano: true`,
+      re-derivado en cada lectura: el día que alguien lo registre, deja de serlo sin reiniciar el
+      proceso), `getKnowledge` corta ANTES del panel y del archivo —que son los dos el guion de
+      Onia— y `withKnowledge` lo degrada a **recepcionista neutro**: sin precios, sin demo con
+      Sergio, y derivando a «el equipo». **El corte no es silencio:** el bot sigue atendiendo.
+      **Por qué NO rompe «un canal nuevo de Onia sigue vendiendo Onia»** (la decisión que el
+      test viejo defendía): los inboxes de Onia se registran en la org interna igual que el 4 y
+      el 5, y entonces no son huérfanos — el producto los resuelve y caen al panel como siempre.
+      Lo que cambió es el default: antes era «vendé Onia salvo que sepas de quién es»; ahora es
+      «vendé Onia sólo si sabés que es de Onia». El test viejo (*«db: inbox sin org (404) degrada
+      a archivo/código»*) decía en su aserción *"inbox que no es de ningún cliente = bot de Onia,
+      como siempre"* — eso era exactamente el bug escrito como garantía, y se corrigió con su
+      motivo, no se borró.
+      **Prueba.** Caso nuevo en `knowledge.test.mjs` (*«panel: un inbox HUERFANO (404) no come del
+      panel global»*), en ROJO antes del arreglo y validado por **mutación en las dos piezas**:
+      esquivar el corte de `getKnowledge` → 2 fallos; esquivar la degradación de `withKnowledge`
+      → 1 fallo. Cadena entera del repo en verde (`npm test`, exit 0, cero `not ok`).
+      **Cómo se verifica después del deploy**, sin tocar una conversación real — el mismo comando
+      con el que se midió el bug, porque `/health` ahora publica el dato:
+      `docker exec onia-center wget -qO- 'http://127.0.0.1:3020/health?inboxId=99'` → tiene que
+      decir `"huerfano":true` y **no** `source:"panel"`; y `?inboxId=4` tiene que seguir diciendo
+      `source:"panel"` con `"huerfano":false`.
+      **Lo que este carril NO tocó:** la otra mitad de la decisión —que el alta del inbox registre
+      la org en el mismo paso— es del Embedded Signup (`t_6bf938b7`, bloqueada). Con esto, que
+      siga bloqueada ya no muerde: el inbox que nazca huérfano no vende Onia.
+
+      <details><summary>Lo medido el 2026-09-13 antes del arreglo</summary>
       Preguntándole al proceso vivo por la MISMA vía del camino de respuesta, los CUATRO inboxes
       de Chatwoot devuelven el MISMO documento — el de `onia-interna`:
 
@@ -2907,6 +2946,7 @@ decisión de Sergio, no código.
       (`knowledge.test.mjs`, *«panel: un inbox CON fila propia come de SU fila»*, validado por
       mutación — el panel F2.1 llegó después de la resolución por inbox y se aplica a todos los
       alcances, así que nada más lo sujetaba).
+      </details>
 
 - [ ] **Limpieza de la data QA NUEVA.** La del 29-ago ya se ejecutó; después se generó más:
       las conversaciones QA 39, 43 y 44 (`Cliente Prueba Bandeja`, `Cliente Insistencia Tres`,
