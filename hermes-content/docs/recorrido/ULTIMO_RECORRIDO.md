@@ -12,6 +12,31 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-13 02:09 La Paz — dental 9/9 (rutina) + auditoría de los 4 CTA "Empezar con el <plan>", sin hallazgo reportable
+
+Dental (`zz-qa-2026-09-13-0209`): recorrido completo, 9/9, cita 2026-09-14 09:00 vista en
+`/appointments` (`cmtz6iy5c003e01rwsv5hza45`), factura con ítem visible en
+`/billing/cmtz6j92t003g01rw3kwuglly` (frenada sin pagar). `completo: true`, 0 filas `zz-qa-`
+al cerrar.
+
+Siguiendo el escalón 3: los 4 botones de `/precios` y de la home — "Empezar con el Básico",
+"…Crece", "…Pro", "…Full" — apuntan **los cuatro al mismo** `https://app.onia.com.bo/register`,
+sin query param (medido con Playwright leyendo `a.href` en vivo). `SignupForm.tsx` sólo lee
+`from` y `notice`/`error` de `searchParams`: el plan que motivó el clic se descarta. Confirmado
+contra el árbol `onia-platform` (`app/api/auth/register/route.ts:306`): TODA cuenta nueva nace
+con `plan: TRIAL_PLAN` = `"professional"` (nivel "Pro" de la escalera C), **sin importar cuál de
+los 4 botones se apretó**. Consecuencia real: quien hace clic en "Empezar con el Full" para
+probar el chatbot incluido (`whatsappIncluded` sólo es `true` en `clinic`/`enterprise`) no lo ve
+en su trial — tiene el nivel Pro, no Full.
+
+**No lo reporto como hallazgo de producto**: es el patrón estándar de "un solo trial genérico,
+elegís y pagás el plan después" (ver `settings/PlanClient.tsx`), no una pantalla que promete y
+no entrega en el momento en que promete. Lo dejo escrito para que la próxima vuelta no vuelva a
+investigar esto desde cero — si algún día el trial se vende como "probá el plan que elegiste",
+esto sí se vuelve un hallazgo real.
+
+---
+
 ## 2026-09-13 00:10 La Paz — dental 9/9 (rutina) + auditoría promesa-vs-entrega en la home, sin hallazgos
 
 Dental (`zz-qa-2026-09-13-0010`): recorrido completo, 9/9, cita 2026-09-14 09:00 vista en
