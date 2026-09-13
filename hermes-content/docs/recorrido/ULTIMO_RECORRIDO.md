@@ -12,6 +12,33 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-13 06:09 La Paz — dental 9/9 (rutina), sin hallazgo nuevo
+
+Al arrancar: `select count(*) from organizations where name like 'zz-qa-%'` dio 0, sin huérfanos.
+
+Dental (`zz-qa-2026-09-13-0609`): recorrido completo, 9/9 — cuenta creada, correo confirmado,
+onboarding en 6 pantallas, paciente `zz-qa-2026-09-13-0609-paciente` cargado y visto en
+`/patients`, cita 2026-09-14 09:00 vista en `/appointments` (`cmtzf328s006f01rwhwhsqqkp`),
+factura con ítem visible en `/billing/cmtzf3cw2006h01rwpuqvihn6` (frenada sin pagar).
+`completo: true`, 0 filas `zz-qa-` al cerrar. Sin hallazgo nuevo — dental ya cubierto varias
+veces seguidas.
+
+Escalón 3, superficie nueva (checkout de PLAN de suscripción — `/checkout`, distinto de la
+factura por paciente del paso 8): con una cuenta `zz-qa-` nueva se recorrió `/checkout` a
+fondo, con `reducedMotion:'reduce'` (para no leer un `<CountUp>` a mitad de animar). Se ve
+la escalera C completa (Básico Bs 320, Crece Bs 550, Profesional Bs 890 — plan de prueba por
+defecto —, Completo Bs 1.290, todas con su anual "2 meses gratis" y en USD aprox.), sin
+"muy pronto" ni obra a la vista. Se avanzó hasta la pantalla de pago del plan Básico (paso 2
+de 3, "Pagá y subí el comprobante") y se FRENÓ ahí sin subir comprobante: confirma monto
+Bs 320,00, sin QR (`MENCIONA_QR` false), y el texto real es "Escribinos y te pasamos los
+datos de pago de OniaAgency — NIT 5371375010. Cuando pagues, subí la captura del
+comprobante" — coincide con la memoria (no hay QR, el camino es WhatsApp) y con
+`subscription-plans.ts`. El plan Completo declara correctamente "Chatbot de WhatsApp
+incluido (comprado aparte vale Bs 390/mes)". Sano, sin hallazgo. Cuenta, org y perfil
+`zz-qa-2026-...-checkout` verificados en 0 al cerrar (org, profiles, auth.users).
+
+---
+
 ## 2026-09-13 05:09 La Paz — dental 9/9 (rutina) + recuperación de contraseña auditada, sano
 
 Al arrancar: `select count(*) from organizations where name like 'zz-qa-%'` dio 0, sin huérfanos.
