@@ -869,6 +869,25 @@ function epochBuildLanding() {
 }
 
 /**
+ * El sha del build que sirve `onia.com.bo`. Local si hay `/opt`, por SSH desde el nodo de casa
+ * si no — misma degradación que `epochBuildLanding`, y `null` (NO MEDIDO) ante cualquier salida
+ * que no sea un sha: una cita inventada manda a verificar contra un commit que no existe.
+ *
+ * No sirve para decidir si un pedido está entregado —para eso está `epochBuildLanding`, porque
+ * la landing se mide por FECHA— sino sólo para CITAR contra qué build se midió.
+ */
+function shaVivoLanding() {
+  const ruta = '/opt/onia-landing/runtime-next/.commit';
+  const crudo = existsSync(ruta)
+    ? sh('cat', [ruta])
+    : existsSync(VPS)
+      ? sh('ssh', ['-o', 'BatchMode=yes', '-o', 'ConnectTimeout=20', 'root@187.77.16.63', `cat ${ruta}`], { timeout: 120_000 })
+      : null;
+  const sha = crudo && crudo.trim();
+  return sha && /^[0-9a-f]{7,40}$/.test(sha) ? sha : null;
+}
+
+/**
  * Lo que el `ok` de un pedido de `landing` publicaría de verdad: los commits de la zona del
  * sitio posteriores al build vivo, ya filtrados por si le cambian algo al lead.
  *
@@ -1079,16 +1098,33 @@ export function cadenaPorPedido({ ids, acumuladores, correr }) {
 }
 
 /**
+ * La cita «(produccion corre X)» del build que corre en EL DESTINO de ese pedido.
+ *
+ * 🔴 Nace del 2026-09-12 (t_da62bade). Esto era UNA constante —el `vivo` de
+ * `shaVivoPlataforma()`— pero el acumulador `entregados` recibe pedidos de los DOS destinos,
+ * así que el rojo de la landing `t_a840b237` salió justificado con `a888b5b`, un sha de
+ * `onia-platform`; la landing corría `bd90e8af2`. El VEREDICTO era correcto: lo que mentía era
+ * la cita, y manda a verificar contra un repo donde ese sha ni siquiera existe.
+ *
+ * Sin sha del destino la cita se OMITE: no se cae a la del vecino ni se inventa una. El
+ * veredicto se imprime igual, que es lo único que el lector necesita para actuar.
+ */
+function citaDelVivo(destino, vivoPorDestino) {
+  const sha = destino ? (vivoPorDestino ?? {})[destino] : null;
+  return sha ? ` (produccion corre ${sha})` : '';
+}
+
+/**
  * La cadena de prioridad de un pedido: imprime su rojo más caro y devuelve 1, o 0 si no tiene.
  * Se llama desde `cadenaPorPedido`, nunca con los acumuladores crudos — ver el porqué ahí.
  */
 export function imprimirCadena({
   entregados, entregadosSiat, mudos, punteros, cortosSiat, incompletos, vencidos, cortos,
-  inmedibles, vivo,
+  inmedibles, vivoPorDestino,
 }) {
   if (entregados.length > 0) {
     for (const e of entregados) {
-      console.log(`\nROJO ${e.id}: TODO lo que promete ya esta publicado (produccion corre ${vivo}).`);
+      console.log(`\nROJO ${e.id}: TODO lo que promete ya esta publicado${citaDelVivo(e.destino, vivoPorDestino)}.`);
       console.log('  Le esta pidiendo un ok a Sergio Urcullo por trabajo hecho. Cerralo con su');
       console.log('  evidencia y, si quedo algo sin publicar despues, hace un pedido NUEVO: el');
       console.log('  cuerpo del viejo no lo describe, y el cuerpo es lo unico que el lee.');
@@ -1170,7 +1206,7 @@ export function imprimirCadena({
 
   if (vencidos.length > 0) {
     for (const v of vencidos) {
-      console.log(`\nROJO ${v.id}: su CUERPO esta entero publicado (produccion corre ${vivo}).`);
+      console.log(`\nROJO ${v.id}: su CUERPO esta entero publicado${citaDelVivo(v.destino, vivoPorDestino)}.`);
       console.log(`  Lo unico que su ok publica de verdad vive en un comentario: ${v.mudos.join(', ')}.`);
       console.log('  El titulo es lo unico que se ve en la lista y el cuerpo lo primero que lee:');
       console.log('  hoy los dos describen trabajo hecho. El comentario N+1 no lo arregla y el');
@@ -1360,7 +1396,7 @@ async function medirEnVivo() {
         shas: shasPrometidos(p.texto),
         publicado: (s) => publicadoPorFecha({ epochCommit: epochCommitHermes(s), epochBuild: buildLanding }),
       });
-      if (r.estado === 'ENTREGADO') entregados.push(r);
+      if (r.estado === 'ENTREGADO') entregados.push({ ...r, destino: 'landing' });
       else if (r.causa === 'SIN_DECLARAR') inmedibles.push({ id: p.id, destino: 'landing' });
       else if (r.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (landing): ${r.motivo}`);
       else {
@@ -1420,7 +1456,7 @@ async function medirEnVivo() {
       continue;
     }
     const r = clasificarPedido({ id: p.id, shas: shasPrometidos(p.texto), publicado: esPublicado });
-    if (r.estado === 'ENTREGADO') entregados.push(r);
+    if (r.estado === 'ENTREGADO') entregados.push({ ...r, destino: 'plataforma' });
     else if (r.causa === 'SIN_DECLARAR') inmedibles.push({ id: p.id, destino: 'plataforma' });
     else if (r.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (plataforma): ${r.motivo}`);
     else {
@@ -1442,7 +1478,7 @@ async function medirEnVivo() {
       // puede estar vigente, nombrar todo lo que publica, y aun asi tener el cuerpo entero
       // vencido — que es lo que Sergio Urcullo lee para decidir.
       const v = cuerpoVencido({ texto: p.texto, publicado: esPublicado });
-      if (v.estado === 'VENCIDO') vencidos.push({ id: p.id, mudos: v.mudos });
+      if (v.estado === 'VENCIDO') vencidos.push({ id: p.id, destino: 'plataforma', mudos: v.mudos });
       else if (v.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (plataforma, cuerpo vigente): ${v.motivo}`);
 
       // Y la simétrica de esa, que hasta el 2026-09-11 tampoco tenía dueño: el cuerpo puede
@@ -1458,6 +1494,14 @@ async function medirEnVivo() {
   for (const n of noMedidos) console.log(`NO MEDIDO ${n}`);
   for (const s of sinCubrir) console.log(`SIN INSTRUMENTO ${s}`);
 
+  // Cada destino cita SU build. El de la landing se pide sólo si hay un pedido suyo —es un SSH—
+  // y si no contesta queda `null`: la cita se omite, nunca se cae a la del vecino. Ver
+  // `citaDelVivo`.
+  const vivoPorDestino = {
+    plataforma: vivo,
+    landing: entregados.some((e) => e.destino === 'landing') ? shaVivoLanding() : null,
+  };
+
   // La cadena de prioridad de `imprimirCadena` corre UNA VEZ POR PEDIDO. Correrla una sola vez
   // para todos —como hasta el 2026-09-12— hacía que el `return 1` del primer bloque con
   // contenido tapara a los pedidos de los OTROS destinos, sin dejar señal de que existían. Ver
@@ -1468,7 +1512,7 @@ async function medirEnVivo() {
       entregados, entregadosSiat, mudos, punteros, cortosSiat, incompletos, vencidos, cortos,
       inmedibles,
     },
-    correr: (propios) => imprimirCadena({ ...propios, vivo }),
+    correr: (propios) => imprimirCadena({ ...propios, vivoPorDestino }),
   });
   if (corta === 1) return 1;
 

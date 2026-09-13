@@ -1180,9 +1180,70 @@ test('cableado: el main corre la cadena POR PEDIDO, no una vez con todo', () => 
   assert.match(src, /cadenaPorPedido\(\{/, 'el main tiene que repartir la cadena por pedido');
 });
 
+// ── el sha que justifica un rojo es el del DESTINO del pedido ──────────────────────────
+//
+// 🔴 Medido el 2026-09-12 (t_da62bade): el rojo de la landing `t_a840b237` imprimio
+// «produccion corre a888b5b», que es el sha de onia-platform; la landing corria bd90e8af2
+// (`/opt/onia-landing/runtime-next/.commit`). El VEREDICTO era correcto — lo que estaba mal
+// era el sha que lo justifica, y es de OTRO sistema: el que lo lea va a verificar contra el
+// repo equivocado, donde ese sha ni siquiera existe. `entregados` recibe pedidos de los DOS
+// destinos (ramas `landing` y `plataforma` del main) y los dos se imprimian con el de
+// plataforma, porque `vivo` era UNA constante derivada de `shaVivoPlataforma()`.
+test('el rojo de un pedido de landing se justifica con el sha vivo de LA LANDING', () => {
+  const { texto } = correrCadena({
+    ids: ['t_landing'],
+    entregados: [{ id: 't_landing', destino: 'landing' }],
+  });
+  assert.match(texto, /bd90e8a/,
+    'el rojo de landing tiene que citar el build que sirve onia.com.bo');
+  assert.doesNotMatch(texto, /a888b5b/,
+    'justifico el rojo de la landing con el sha de la PLATAFORMA: manda a verificar contra '
+    + 'el repo equivocado, donde ese sha no existe');
+});
+
+// El caso que YA cumple, para que el de arriba no pase por el motivo equivocado.
+test('el rojo de un pedido de plataforma sigue citando el sha de la plataforma', () => {
+  const { texto } = correrCadena({
+    ids: ['t_plataforma'],
+    entregados: [{ id: 't_plataforma', destino: 'plataforma' }],
+  });
+  assert.match(texto, /a888b5b/);
+  assert.doesNotMatch(texto, /bd90e8a/);
+});
+
+// Y la direccion que no puede fallar abierto: sin sha del destino NO se inventa uno ni se
+// cae al del vecino. El veredicto se sigue imprimiendo —es correcto— pero sin cita falsa.
+test('sin sha vivo del destino, el rojo no cita el del otro sistema', () => {
+  const { texto } = correrCadena({
+    ids: ['t_landing'],
+    entregados: [{ id: 't_landing', destino: 'landing' }],
+    vivoPorDestino: { plataforma: 'a888b5b', landing: null },
+  });
+  assert.match(texto, /ROJO t_landing/, 'el veredicto sigue siendo correcto: se imprime igual');
+  assert.doesNotMatch(texto, /a888b5b/,
+    'sin poder leer el build de la landing cayo al de la plataforma: una cita inventada');
+});
+
+// Cableado: los casos de arriba le pasan `vivoPorDestino` a mano, asi que NO pueden ver de
+// donde lo saca el main. El esquive barato es `landing: vivo` —una linea, sin tocar nada mas—
+// y con el vuelve el bug entero en verde. El sujeto es la CLAVE, no la mencion del helper:
+// nombrar a `shaVivoLanding` en cualquier otro lado del archivo no alcanza.
+test('cableado: el sha de landing sale de shaVivoLanding, no del de plataforma', () => {
+  const src = readFileSync(new URL('./pedido_deploy_entregado.mjs', import.meta.url), 'utf8')
+    .split('\n').filter((l) => !/^\s*(\/\/|\*|\/\*)/.test(l)).join('\n');
+  const clave = src.match(/landing:\s*([^\n]*)/g) ?? [];
+  const enVivoPorDestino = clave.filter((l) => /shaVivoLanding|vivo\b/.test(l));
+  assert.ok(enVivoPorDestino.length > 0, 'nadie deriva el sha vivo de la landing');
+  for (const l of enVivoPorDestino) {
+    assert.match(l, /shaVivoLanding\(\)/,
+      `la clave landing se deriva de otra cosa (${l.trim()}): si sale del sha de plataforma, `
+      + 'el rojo de la landing vuelve a citar el repo equivocado');
+  }
+});
+
 /** Corre la cadena REAL capturando lo que imprime. Los acumuladores que el caso no nombra van
  *  vacios, igual que en el main. */
-function correrCadena({ ids, ...listas }) {
+function correrCadena({ ids, vivoPorDestino, ...listas }) {
   const dicho = [];
   const orig = console.log;
   console.log = (...a) => dicho.push(a.join(' '));
@@ -1193,7 +1254,10 @@ function correrCadena({ ids, ...listas }) {
         entregados: [], entregadosSiat: [], mudos: [], punteros: [], cortosSiat: [],
         incompletos: [], vencidos: [], cortos: [], inmedibles: [], ...listas,
       },
-      correr: (propios) => imprimirCadena({ ...propios, vivo: 'abc1234' }),
+      correr: (propios) => imprimirCadena({
+        ...propios,
+        vivoPorDestino: vivoPorDestino ?? { plataforma: 'a888b5b', landing: 'bd90e8a' },
+      }),
     });
     return { texto: dicho.join('\n'), corta };
   } finally {
