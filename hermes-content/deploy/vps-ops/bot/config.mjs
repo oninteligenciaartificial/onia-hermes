@@ -7,6 +7,14 @@
 // la reserva CAS y la bitacora completa.
 // Spec: hermes-content/docs/ONIA_CHATBOT_PROPIO_SPEC_20260725.md
 
+import {
+  diasDeAtencion,
+  envolventeDeAtencion,
+  franjasDeAtencion,
+  fraseDeAtencion,
+  fueraDeAtencion,
+} from "./ventanas-de-atencion.mjs";
+
 // ---------------------------------------------------------------------------
 // Horarios de demo
 // ---------------------------------------------------------------------------
@@ -330,7 +338,10 @@ export const SCRIPT = Object.freeze({
   M6: "Listo, no te escribo más. Si algún día querés verlo, escribí DEMO y arrancamos de nuevo. ¡Éxitos con el negocio!",
 
   // M7 — fuera de horario. Se APENDEA a la respuesta que corresponda, no la reemplaza.
-  M7: "_(Estoy respondiendo automático fuera de horario de oficina. {{humano}} te confirma en la mañana.)_",
+  // "te confirma en la mañana" era falso: entre semana Sergio Urcullo atiende 14-17 y 20-22, no
+  // por la mañana. Al que escribe un lunes a las 9:30 se le prometia una respuesta que no iba a
+  // llegar. Ahora la ventana se DICE, derivada de la misma fuente que decide si es "fuera".
+  M7: "_(Estoy respondiendo automático fuera de horario de atención. {{humano}} te confirma apenas vuelva: {{horario_frase}}.)_",
 
   // SIAT / fiscal — respuesta fija segura (spec §2.3). Solo lo que es publico, cero promesa.
   //
@@ -629,12 +640,26 @@ export const DEFAULT_CONFIG = Object.freeze({
   demo: DEMO,
 
   businessHours: Object.freeze({
-    days: Object.freeze([1, 2, 3, 4, 5]), // lun-vie (0 = domingo)
-    startHour: 9,
-    endHour: 18,
-    // Como se DICE el horario en el guion ({{horario_frase}}). Sale del mismo bloque que los
-    // numeros de arriba para que no puedan decir una cosa y hacer otra.
-    frase: "lun-vie, 9:00-18:00",
+    // TODO esto se DERIVA de `ventanas-de-atencion.mjs`, que es la misma fuente que usa el .py
+    // para calcular los horarios de demo que el bot OFRECE. Tipeado a mano decia
+    // "lun-vie, 9:00-18:00" mientras el bot ofrecia demos a las 14:00 y los sabados: prometia
+    // atencion a las 9:30 de un lunes (no hay nadie) y mandaba a esperar al lunes al que
+    // escribia un sabado a las 10 (si hay). Ver ventanas-de-atencion.test.mjs.
+    days: Object.freeze(diasDeAtencion()),
+    // Las franjas REALES, que son las que deciden. `startHour`/`endHour` de abajo son la
+    // ENVOLVENTE de la semana y existen solo para el override de un cliente (ver knowledge.mjs).
+    franjas: Object.freeze(
+      Object.fromEntries(
+        Object.entries(franjasDeAtencion()).map(([dia, franjas]) => [
+          dia,
+          Object.freeze(franjas.map((f) => Object.freeze(f))),
+        ]),
+      ),
+    ),
+    ...envolventeDeAtencion(),
+    // Como se DICE el horario en el guion ({{horario_frase}}). Derivado de las MISMAS ventanas
+    // para que no puedan decir una cosa y hacer otra.
+    frase: fraseDeAtencion(),
     tzLabel: "America/La_Paz",
     tzOffsetMinutes: -240, // Bolivia no tiene horario de verano: siempre UTC-4
   }),
@@ -818,6 +843,9 @@ export function isOutsideBusinessHours(isoInstant, config = DEFAULT_CONFIG) {
   const ms = Date.parse(isoInstant);
   if (Number.isNaN(ms)) return false;
   const bh = config.businessHours;
+  // Con franjas (el default de Onia: dos por dia de semana, una el sabado) decide la fuente
+  // unica; sin ellas —un CLIENTE que declaro su horario corrido— decide el rango que declaro.
+  if (bh.franjas) return fueraDeAtencion(isoInstant, config);
   const local = new Date(ms + bh.tzOffsetMinutes * 60000);
   if (!bh.days.includes(local.getUTCDay())) return true;
   const hour = local.getUTCHours() + local.getUTCMinutes() / 60;

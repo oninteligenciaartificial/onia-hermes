@@ -1184,6 +1184,16 @@ export function applyKnowledge(base = DEFAULT_CONFIG, data = null, options = {})
   const horario = data.empresa?.horario;
   if (isPlainObject(horario)) {
     const businessHours = { ...base.businessHours };
+    // Un negocio declara su horario como RANGO (dias + desde + hasta). Las `franjas` del base
+    // son las de Sergio Urcullo (lun-vie 14-17 y 20-22, sab 9-15) y deciden por encima del
+    // rango, asi que heredarlas le cerraria el negocio al cliente a las 17:00 y se lo abriria
+    // a las 20:00. Quien declara su horario se queda con el suyo, entero.
+    // `null` y no `delete`: `createBotConfig` fusiona con `{ ...base[key], ...value }`, asi que
+    // una clave BORRADA del override vuelve a aparecer desde la base. La ausencia no se puede
+    // expresar quitando: hay que escribirla.
+    if (Number.isInteger(horario.desde) || Number.isInteger(horario.hasta) || Array.isArray(horario.dias)) {
+      businessHours.franjas = null;
+    }
     if (Array.isArray(horario.dias)) businessHours.days = [...horario.dias];
     if (Number.isInteger(horario.desde)) businessHours.startHour = horario.desde;
     if (Number.isInteger(horario.hasta)) businessHours.endHour = horario.hasta;
