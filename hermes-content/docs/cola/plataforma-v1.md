@@ -121,6 +121,30 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       la advertencia vieja frena un deploy por un peligro que no está, o le cuelga un
       `DESPUES-DE:` a un pedido que no lo necesita.**
 
+      ✅ **CERRADO el 2026-09-13: la TERCERA superficie de `whatsappIncluded` le cobraba en
+      pantalla al que ya lo tiene incluido** (`onia-platform` `5344eae`). El booleano nuevo lo
+      calcula bien `fuentesDelAddonWhatsApp` como `incluidoPorPlan`, pero `addonHabilitado` lo
+      **colapsa**: desde ahí abajo "lo trae mi plan" y "lo pagué aparte" son indistinguibles, y
+      las pantallas le ponían precio a los dos. Medido en `/settings/addon-chatbot`: el dueño de
+      un plan **Completo (Bs 1.290, que YA incluye el chatbot)** leía *"Add-on activo"* arriba y
+      **"Abono mensual — Bs 390/mes"** en 2xl extrabold abajo — le decía que paga 1.680 cuando
+      paga 1.290. Lo mantuvo invisible el add-on **hermano sano**: la reserva pública ya
+      distingue `publicBookingIncluded` y rotula "Incluido"; media familia cubierta se lee como
+      familia cubierta. Las otras dos superficies de esta clase ya estaban cerradas contra el
+      mismo booleano —el bot (`promesa-inclusion.mjs`) y la landing (`inclusion-chatbot.mjs`)—
+      y **el producto era la única que nadie había mirado, y la única donde el número lo lee el
+      cliente que YA PAGA.** Entró: `lib/chatbot/como-lo-paga-el-dueno.ts` (módulo puro, tres
+      modos), `isWhatsAppIncludedInPlan` en `lib/plan-limits.ts`, prop **obligatoria** para que
+      `tsc` nombre al llamador que se olvide (nombró los 8 estados de la galería), y la tarjeta
+      `4e` en `app/dev/addon-chatbot` con el estado que nadie había mirado — sin ella no se mira
+      nunca, que es como llegó a producción. Gates: `tsc` limpio, `eslint` 0 errores, 4.879
+      tests, **corridos también en el VPS** sobre el árbol publicado.
+      ⚠️ **Intento fallido que vale anotar: el primer gate pasó EN VERDE con la mutación puesta.**
+      Exigía que el archivo *nombrara* `comoLoPagaElDueno`, y con la condición cambiada a
+      `{true ? (` el símbolo seguía importado para el rótulo. El sujeto es la **guarda del
+      monto**, no la mención: el gate vigente ancla `muestraAbono ?|&&` y exige que esté **antes**
+      del monto. **Falta el deploy** para que el cliente lo vea.
+
       Falta de la fase 2: **avisos al 70/90/100 % del cupo** y la **recarga de recordatorios**
       (la de conversaciones ya existe). ⚠️ Lo del 70/90/100 **no lo puede cerrar este carril
       solo, y el motivo es concreto**: hoy hay UN umbral (`UMBRAL_AVISO = 0.8` en

@@ -131,6 +131,8 @@
     "puerta:alta": "node hermes-content/deploy/vps-ops/bot/puerta-del-alta.mjs",
     "test:puerta-alta": "node hermes-content/deploy/vps-ops/bot/puerta-del-alta.mjs --self-check",
     "test:onia-center": "node scripts/onia-center-tests.mjs",
-    "test:onia-center-cableado": "node --test scripts/onia-center-tests.test.mjs"
+    "test:onia-center-cableado": "node --test scripts/onia-center-tests.test.mjs",
+    "whatsapp:vivo": "node hermes-content/deploy/vps-ops/bot/canal-whatsapp-vivo.mjs",
+    "test:canal-whatsapp": "node --test hermes-content/deploy/vps-ops/bot/canal-whatsapp-vivo.test.mjs"
   }
 }

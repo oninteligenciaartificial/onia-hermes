@@ -278,6 +278,56 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~La definición de hecho del carril mide UN canal y firma por los DOS: en WhatsApp
+      el bot nunca le contestó a un desconocido~~ — CERRADO el 2026-09-13 06:1x La Paz
+      (`canal-whatsapp-vivo.mjs`, `npm run whatsapp:vivo`).**
+      La mitad «el bot contesta» la sostiene `npm run sonda:widget`, que prueba el **widget web
+      (inbox 4)** y firma `EL BOT CONTESTO LOS 2`. La otra mitad (`objetivo:visible`) ya miraba
+      los inboxes 4 **y 5**; ésta no. Contado en la base de Chatwoot al arrancar la vuelta:
+
+          inbox 5 (Onia WhatsApp) · 3 conversaciones
+            #11 Sergio       +59171654992   11 entrantes · 15 salientes   <- el DUEÑO
+            #35 F            +59173232758    1 entrante  ·  0 salientes   25-ago, sigue open
+            #37 mariohassen  +59173021804    1 entrante  ·  0 salientes   28-ago, sigue open
+
+      **En el canal donde llega un lead boliviano, el bot le contestó a una sola persona en
+      toda su historia, y es el dueño.** Los dos desconocidos nunca recibieron respuesta y
+      siguen abiertas 18 días después. Es la misma clase que el 12-sep dejó a `avisos-vivo`
+      firmando «circuito sano y avisando» contando a Sergio Urcullo como lead: **se cerró sobre
+      el módulo y quedó abierta sobre el carril** — el instrumento nunca vio a su sujeto, y no
+      lo decía.
+      **Se AUDITA, no se sondea, y eso es una decisión con motivo:** una sonda que siembra en el
+      canal de los leads los tapa en la bandeja (ya pasó con la del widget) y en WhatsApp un
+      envío sale a un teléfono de verdad y lo factura Meta. El medidor sólo hace `SELECT` y un
+      GET al `/health` del proceso vivo; no escribe nada en producción.
+      **Dos mitades separadas a propósito** — contar respuestas no distingue «circuito roto» de
+      «día sin eventos», y por este canal hace dos semanas no escribe nadie: · **circuito**,
+      ¿puede contestar hoy? (`/health?inboxId=<id>`, la MISMA vía que el camino de respuesta,
+      más «¿el canal SALE?»); · **eventos**, de los desconocidos que escribieron, ¿a cuántos se
+      les contestó?
+      **El exit lo decide el circuito, no el pasivo.** Los dos mudos son de agosto —del bug ya
+      arreglado— y contestarles es *contactar personas*: decisión de Sergio Urcullo, ya bloqueada
+      en `t_43868cdb`. Un gate rojo para siempre por algo que sólo él puede cerrar se aprende a
+      ignorar; uno que lo esconde es el falso verde. Entonces el pasivo se **imprime siempre**,
+      con nombre y fecha, y el código de salida mide si el canal puede contestar hoy. La
+      curación es la ya conocida (¿hubo una saliente POSTERIOR por ese inbox?) con su salvedad
+      escrita: cura causas **globales** del canal, no al sujeto — la persona sigue sin respuesta.
+      **Contra producción, hoy:** `ok · el canal sale y el bot resuelve documento, pero NUNCA le
+      contestó a un desconocido por WhatsApp · desconocidos contestados 0/2 · nuestras 1 ·
+      2 desconocido(s) SIN RESPUESTA: #35 F (2026-08-25), #37 mariohassen (2026-08-28)`.
+      **El inbox se deriva por `channel_type`, nunca por el número 5** — el Embedded Signup
+      multi-tenant crea uno POR CLIENTE y una lista a mano falla abierto justo en el del cliente
+      que paga. `esNuestra()` se **importa** de `objetivo_visible.mjs`, no se copia.
+      ⚠️ **Y el caso de cableado nació fallando EN VERDE, en mi propio test.** El `psql` falso
+      preguntaba `/phone_number/` sobre el SQL **entero**, y `ct.phone_number` también está en el
+      `group by`: sacarle la columna al `SELECT` pasaba con los 10 casos verdes. Corregido a leer
+      **la lista del SELECT**; con eso la mutación produce el falso verde exacto —`el bot contesta
+      por WhatsApp · contestados 1/2 · nuestras 0`, el dueño contado como lead— y queda roja.
+      **Validado por mutación en las tres piezas** (rojo visto DESPUÉS del arreglo, con la
+      mutación confirmada en el archivo): SQL sin teléfono → 1 rojo; `false && esNuestra(f)` →
+      3 rojos; `canalHabloDespues` clavado en `true` → 1 rojo. Suite **10/10**, y entra sola a la
+      cadena (`test:bot` recorre la carpeta: 1.005 verdes, 0 rojos).
+
 - [x] 🔴 **~~El gate del AVISO contaba al DUEÑO como lead y firmaba «circuito sano y
       avisando»~~ — CERRADO el 2026-09-13 05:5x La Paz (`avisos-vivo.mjs`, `clasificarEventos`).**
       La tercera pata del objetivo del carril (*"cada demo agendada o handoff le llega a
