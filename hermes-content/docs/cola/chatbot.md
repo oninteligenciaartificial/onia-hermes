@@ -278,6 +278,45 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~La propia sonda del carril quedó contada como un lead real, para siempre y sin
+      forma de distinguirla~~ — CERRADO el 2026-09-13 07:5x La Paz (`scripts/sonda_widget.mjs`,
+      barrido `reclamarRastros` + predicado `esRastroDeSonda`).**
+      Medido en la base de Chatwoot al arrancar la vuelta: la conversación **48 del inbox 4**
+      (`cold-pond-731`, 2-sep 17:21) son **los dos mensajes textuales del guion de la sonda**,
+      pero su contacto se quedó con el nombre anónimo que Chatwoot le pone a cualquier
+      visitante. El inbox 4 es el de los **leads de verdad**, y los desconocidos reales llegan
+      con nombres de la misma forma (`delicate-glitter-674`, `icy-lake-546`) y tampoco traen
+      teléfono: desde ahí es **indistinguible de una persona**. Por eso `objetivo:visible` —el
+      instrumento que declara cumplido el objetivo del carril— decía **7 desconocidos** cuando
+      eran **6**.
+      **Por qué no se arregla del lado que LEE:** la bandeja sólo entrega `ultimoMensaje`, que
+      en una conversación de la sonda es **la respuesta del bot**, no el guion. El texto que
+      delata al rastro no llega nunca al instrumento, así que la marca tiene que ponerse **en el
+      dato**, y la pone la sonda.
+      **Y no es un artefacto viejo: es una ventana que sigue abierta.** El `update contacts set
+      name` de la sonda corre **después** de mandar los dos mensajes y de `navegador.close()`;
+      toda corrida que muera en el medio —timeout, 429, tope de tiempo, cuota— deja una
+      conversación anónima más. Por eso el barrido corre **ANTES de medir**: la corrida que deja
+      el rastro no puede ser la que lo limpie, es la **siguiente**.
+      **El predicado no se puede contestar solo:** reclama únicamente lo que cumple las DOS, y
+      las dos vienen de fuentes distintas — que `esNuestra()` (importada de
+      `scripts/objetivo_visible.mjs`, **un solo criterio para los dos instrumentos**, no una
+      copia) todavía NO lo dé por nuestro, y que sus mensajes de cliente sean el guion
+      **exacto y completo**. El sesgo está elegido: reclamar de menos deja un falso verde viejo,
+      reclamar de más borraría un lead.
+      **Caso ancla con la fila real, no con la que yo hubiera inventado:** la conv **36**
+      (`icy-lake-546`) manda **dos** mensajes, igual que el guion — si el predicado contara
+      turnos en vez de leer el texto, se comería justo al único de los leads mudos al que se le
+      puede escribir hoy, porque dejó su correo.
+      **Validado por mutación en cuatro puntos** (todas rojas por el caso correcto, `exit 1`):
+      esquivar `esNuestra` → 1 rojo; predicado que sólo cuenta mensajes → 3 rojos; `length !==`
+      por `length <` (o sea «contiene el guion») → 1 rojo; caerse la baranda de deps inyectadas
+      → 1 rojo. Self-check **53/53**, cableado en `npm test` vía `npm run test:sonda-widget`.
+      **Corrido de verdad contra producción**, no sólo en casos: la sonda imprimió
+      `AVISO — 1 rastro(s) … quedaron marcados como nuestros: 48`, siguió midiendo
+      `EL BOT CONTESTO LOS 2`, y `objetivo:visible` pasó de **7 a 6** con la 48 fuera de la
+      lista.
+
 - [x] 🔴 **~~La definición de hecho del carril mide UN canal y firma por los DOS: en WhatsApp
       el bot nunca le contestó a un desconocido~~ — CERRADO el 2026-09-13 06:1x La Paz
       (`canal-whatsapp-vivo.mjs`, `npm run whatsapp:vivo`).**
