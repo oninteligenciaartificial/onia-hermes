@@ -535,6 +535,13 @@ export function archivosDelDryRun(salida) {
   const archivos = [];
   for (const l of lineas.slice(i + 1)) {
     if (!l.trim()) break; // el publicador cierra la lista con una línea vacía
+    // …y también la cierra cualquier línea SIN SANGRÍA. El publicador sangra cada archivo con
+    // tres espacios y arranca sus mensajes en la columna 0 (`ERR: hay una corrida de Fase 1 EN
+    // CURSO…`), así que la sangría es lo que distingue un archivo de una frase. Sin esta
+    // segunda salida, el día que el publicador no deje la línea en blanco de por medio, el
+    // gate cuenta su mensaje de error como un archivo más y le exige al pedido que lo nombre.
+    // Apareció en el fixture de un ERR real, no en teoría.
+    if (!/^\s/.test(l)) break;
     archivos.push(l.trim());
   }
   // «Cambia:» con la lista vacía no es «al día» —para eso está la marca de arriba—: es un
@@ -882,16 +889,46 @@ export function secoDeProduccion(ruta, { local = secoLocal, remoto = secoPorSsh 
   return null;
 }
 
+/**
+ * Corre un comando y devuelve su stdout AUNQUE salga distinto de 0; `null` sólo si no se
+ * pudo ejecutar (no existe, o lo mató el timeout y la salida quedó a medias).
+ *
+ * ⚠️ POR QUÉ NO ALCANZA `sh`. Un publicador en seco sale ≠ 0 por condiciones OPERATIVAS del
+ * destino después de haber impreso su recuento entero. Medido el 2026-09-12 sobre el único
+ * pedido vivo (`t_053da636`, siat): imprimió «hay que publicar: 2 arreglo(s)» con los dos
+ * nombres y salió 1 porque había una corrida de Fase 1 en curso y se niega a pisar código
+ * bajo un runner vivo. `sh` devuelve `null` ante cualquier status ≠ 0, así que el gate tiró
+ * esa salida y firmó «no pude correr el publicador en seco (¿SSH al VPS?)» — mandando a
+ * diagnosticar una red que andaba perfecta, y dejando sin medir al único pedido que había.
+ *
+ * La negativa a publicar es una respuesta; no haber llegado a preguntar es otra cosa.
+ */
+function salidaAunqueFalle(cmd, args, opts = {}) {
+  try {
+    return execFileSync(cmd, args, { encoding: 'utf8', timeout: 180_000, stdio: ['ignore', 'pipe', 'ignore'], ...opts }).trim();
+  } catch (e) {
+    // Un timeout mata al proceso a mitad de frase: lo que haya impreso está INCOMPLETO, y un
+    // recuento a medias se leería como un recuento. Eso es no medido.
+    if (e?.signal || e?.code === 'ENOENT' || typeof e?.status !== 'number') return null;
+    // Falló Y no imprimió nada: eso NO es una respuesta. Es el caso del shim que sale por SSH
+    // contra un publicador que no está en el VPS — status 127 y stdout vacía. Devolver `''`
+    // acá sería el falso verde entero de este archivo: `''` se lee como «el publicador no
+    // tiene nada que publicar». Un recuento existe o no llegué a preguntar; no hay medio.
+    const salida = typeof e.stdout === 'string' ? e.stdout.trim() : '';
+    return salida === '' ? null : salida;
+  }
+}
+
 function secoLocal(ruta) {
   if (!existsSync(ruta)) return null;
-  return sh('bash', [ruta, '--dry-run'], { timeout: 180_000 });
+  return salidaAunqueFalle('bash', [ruta, '--dry-run']);
 }
 
 /** Por el MISMO shim que ya usa `shaVivoPlataforma`: un segundo camino al VPS es una segunda
  *  respuesta posible a «a qué máquina le pregunto». */
 function secoPorSsh(ruta, shim = VPS) {
   if (!existsSync(shim)) return null;
-  return sh('bash', [shim, 'bash', '-lc', `bash ${ruta} --dry-run`], { timeout: 180_000 });
+  return salidaAunqueFalle('bash', [shim, 'bash', '-lc', `bash ${ruta} --dry-run`]);
 }
 
 /**

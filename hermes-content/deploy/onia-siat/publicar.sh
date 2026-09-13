@@ -114,9 +114,18 @@ SRC="$REPO/$SUB"
 ARCHIVOS=$(cd "$SRC" && git ls-files . | grep -E '^(src|test|xsd)/|^(README\.md|package\.json)$')
 [ -n "$ARCHIVOS" ] || { echo "ERR: no encontré archivos del emisor en $SRC"; exit 2; }
 
-# Lo que va un nivel más arriba (/opt/onia-siat/), donde vive el estado que lee.
-ARRIBA=$(cd "$SRC" && git ls-files . | grep -E '^run-fase1-volumen\.sh$')
-[ -n "$ARRIBA" ] || { echo "ERR: no encontré el orquestador de volumen en $SRC"; exit 2; }
+# Lo que va un nivel más arriba (/opt/onia-siat/), donde vive el estado que lee:
+# TODO script del primer nivel del subárbol, derivado del disco.
+#
+# ⚠️ Acá decía '^run-fase1-volumen\.sh$' — un nombre a dedo, y por eso el hermano
+# `run-fase1-pdv1.sh` (12-sep) nació huérfano: ningún destino lo copiaba, aunque
+# su propio encabezado documenta correrlo como `/opt/onia-siat/run-fase1-pdv1.sh`.
+# Es la misma clase que este publicador ya pagó una vez con `run-fase1-volumen.sh`,
+# sólo que con el motivo escrito adentro de un regex en vez de un comentario: una
+# lista blanca por NOMBRE falla abierto en el sujeto nuevo, siempre. El sujeto se
+# deriva ahora, así que el próximo `run-*.sh` nace cubierto.
+ARRIBA=$(cd "$SRC" && git ls-files . | grep -E '^[^/]+\.sh$')
+[ -n "$ARRIBA" ] || { echo "ERR: no encontré los orquestadores (*.sh) en $SRC"; exit 2; }
 DEST_ARRIBA=$(dirname "$DEST")
 
 # El diff se hace SIN los retornos de carro: la copia de /opt llegó por scp desde

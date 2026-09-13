@@ -1273,6 +1273,15 @@ Los cinco están corridos con el instrumento de 9 pasos, todos `completo: true` 
 cobertura nueva — la próxima vuelta que llegue acá con el objetivo en meta debe ir directo al
 escalón 3 (promesa vs. entrega en la home / otras superficies), no repetir dental otra vez.
 
+## Reverificado 2026-09-12 23:10 La Paz — Estética y spa, 9/9 completo
+
+`RECORRIDO_RUBRO='Estética y spa' node scripts/recorrido_cliente.mjs --escribir`: los 9 pasos
+OK, `completo: true`, 0 filas `zz-qa-` al cerrar (cuenta, org, paciente, cita 2026-09-14 09:00
+vista en `/appointments`, factura con ítem visible en `/billing/<id>`, frenada sin pagar). No
+suma cobertura nueva (ya estaba cubierto) — confirma que sigue sano. Próxima vuelta: no repetir
+un rubro, ir directo al escalón 3 (promesa vs. entrega en la home / otras superficies), como ya
+quedó anotado antes.
+
 ## Verificado 2026-09-11 03:13 La Paz — promesa "14 días gratis, sin tarjeta" (home)
 
 `(sitio)/page.tsx` promete `PRUEBA.dias` días gratis sin tarjeta; `PRUEBA_DIAS = 14` en

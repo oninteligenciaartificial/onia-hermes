@@ -77,9 +77,15 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
-- [ ] 🟡 **`precios-vivos.mjs` acusa al CÓDIGO por un precio que sólo está en producción:
+- [x] 🟡 **`precios-vivos.mjs` acusa al CÓDIGO por un precio que sólo está en producción:
       `apareceEnElCodigo()` no distingue un precio de un milisegundo.** Abierto por `web-venta`
-      el 2026-09-12, en la misma vuelta que le dio vista al barrido. El script diagnostica bien
+      el 2026-09-12, en la misma vuelta que le dio vista al barrido. **CERRADO el 2026-09-12
+      18:52 La Paz por `web-venta`** (`47591c95`, `scripts/monto-en-el-codigo.mjs`): el criterio
+      pasó a ser el monto **con su unidad**, importado del módulo que ya la contesta sobre el DOM.
+      Corrido hoy, `Bs 1.500` sale «Ninguna fuente de esta rama lo escribe como precio →
+      produccion corre un build viejo. Falta DESPLEGAR», y agrega en su propia línea «el numero
+      1.500 aparece sin moneda en `src/app/v1/empezar/data.ts`, `src/lib/pricing.ts`,
+      `src/motion/agent-scene.tsx` — no es un precio: NO tocar». El script diagnostica bien
       la mitad cara —si el monto no está en el árbol, falta DESPLEGAR— pero busca el NÚMERO
       pelado en todo `.ts`/`.tsx`, así que cualquier constante que valga lo mismo lo invierte.
       **El caso vivo:** `Bs 1.500` (escalera retirada, hoy en producción por build viejo) sale
@@ -97,9 +103,22 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       pedir el monto pegado a su moneda (`Bs`) o dentro de un campo de las fuentes declaradas,
       igual que `montos-en-pantalla.mjs` ya hace del lado de la pantalla.
 
-- [ ] 🟡 **`app/cobertura-citada.test.ts` no puede ver una afirmación de cobertura FALSA escrita
+- [x] 🟡 **`app/cobertura-citada.test.ts` no puede ver una afirmación de cobertura FALSA escrita
       dentro de un `.test.ts`, y así sobrevivió una cuatro días.** Abierto por `web-venta` el
-      2026-09-11. El gate existe para cazar el puntero muerto —un comentario que dice «esto lo
+      2026-09-11. **CERRADO el 2026-09-12 19:05 La Paz por `web-venta`**: el barrido pasó a
+      incluir los `.test.ts` y el corte va por CONTEXTO, con la ventana en el **PÁRRAFO** de la
+      aparición y la marca en su ORACIÓN — las mismas marcas que `verificar_cola.js`, para no
+      inventar un segundo criterio. 3 → **8 casos**, y las bitácoras salen por un canal de
+      **AVISO** que se imprime y no cuenta para el rojo. Mutado en las cuatro direcciones que
+      importan: **(1)** re-inyectada la afirmación REAL que sobrevivió los cuatro días («Va como
+      script aparte: `scripts/limites-vivos.mjs`» en `(sitio)/limite-que-corta.test.ts:51`) →
+      **1 failed**, nombrando archivo y script; **(2)** sacar los `.test.ts` del universo → rojo
+      el caso ancla; **(3)** dar todo por bitácora → 3 rojos; **(4)** abrir la ventana al archivo
+      entero → rojo el caso que prueba que un párrafo no absuelve al de al lado. La bitácora de
+      la cabecera quedó **verde**, como pedía este ítem. Salió además un sujeto que no estaba
+      previsto: `scripts/X.mjs` es un **molde** con el que se explica la regla, no una ruta que
+      alguien tenga que crear —mismo indulto que ya tenía la raíz—. El gate existe para cazar el
+      puntero muerto —un comentario que dice «esto lo
       cruza `scripts/X.mjs`» sobre un archivo que nunca se escribió, que **detiene la auditoría**
       porque quien lo lee le cree— y deja los `.test.ts` fuera **a propósito y con razón**: una
       bitácora que narra el defecto tiene que poder nombrar el archivo inexistente sin que el

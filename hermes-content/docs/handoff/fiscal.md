@@ -1,5 +1,13 @@
 # Handoff — carril fiscal
 
+> ⚡ **ACTUALIZACIÓN 2026-09-13 (sesión de control):** el **Punto de Venta 1 YA EXISTE** —
+> creado por SOAP `registroPuntoVenta` (tipo 5 · CAJEROS, `transaccion:true`, verificado con
+> `consultaPuntoVenta`; CUIS del PdV 1: `35B2967A`). El runner corre la matriz completa
+> (`/opt/onia-siat/run-fase1-pdv1.sh`, log `/var/log/onia-siat-runner-20260912.log`): IX pv0
+> cerró 80/80 y la pasada 2 recorre los combos pv1. Todo párrafo de abajo que diga «el PdV 1
+> lo crea Sergio» o «bloquea la mitad de la matriz» es HISTORIA. Quedan: la decisión de la
+> etapa VIII (llamada de Sergio al 800 10 3444) y leer el marcador del portal al terminar.
+
 **Repo:** `onia-hermes` · **carpeta:** `hermes-content/integrations/siat/` · **rama:** `claude/git-status-935f47`
 **Copia desplegada:** `/opt/onia-siat/emisor/` en el VPS (piloto del SIN, `codigoAmbiente=2`)
 **Última sesión:** 2026-09-03 (noche, La Paz)

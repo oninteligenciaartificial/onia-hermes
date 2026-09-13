@@ -373,6 +373,40 @@ La historia completa queda acá abajo para no perderla.
 
 </details>
 
+- [x] ✅ **CERRADO el 2026-09-12 23:23 UTC (`851eddff`): los gates del carril estaban CIEGOS en
+      el nodo-casa — cinco tests rojos, el self-check de la sonda en 41/42, y `bloqueos:vencidos`
+      diciendo «no-medido» sobre un bloqueo YA satisfecho.** Todos por el mismo molde: código
+      escrito para POSIX corrido en Windows, que es donde trabajan las sesiones de este carril.
+
+      **Lo que estaba roto, medido corriendo (no leyendo):**
+      - `scripts/sonda_widget.mjs` — `CONFIG_DEL_BOT` con `URL.pathname` arma `C:\C:\…` (ENOENT):
+        el caso «las frases de derivación siguen existiendo en el config» llevaba rojo sin que
+        nadie lo viera. Fix: `fileURLToPath`. Self-check **41/42 → 42/42**.
+      - `lanzador-pasa-env.test.mjs` — `/bin/sh` hardcodeado no existe en win32; cae al `sh` de
+        Git en PATH. El test «el aviso a Sergio viene ENCENDIDO de fábrica» vuelve a medir.
+      - `precios-publicos.test.mjs` — `repoPlataforma()` no encontraba `onia-platform` desde un
+        worktree (`.claude/worktrees/…`): fallaba CERRADO (correcto) pero fallaba SIEMPRE acá,
+        o sea que la correa con la fuente única no corría nunca en el nodo-casa. Candidato nuevo
+        derivado de `git rev-parse --git-common-dir` → vecino del checkout principal.
+      - `avisos-vivo.test.mjs` — los 2 tests del lector inyectan un `docker` falso (script bash
+        por PATH con `:`), inejecutable en win32 por construcción; y re-simularlo en `.cmd`
+        mediría MI copia del comando, que el propio test prohíbe. **Skip explícito y contado**
+        (`skipped 2` en el resumen), siguen corriendo en VPS/WSL donde vive el sujeto.
+      - `scripts/bloqueos_vencidos.mjs` — spawneaba `npm` pelado; en win32 npm es `.cmd` y Node
+        no lo spawnea sin shell (CVE-2024-27980) → **TODOS los verificadores `npm run` salían
+        `no-medido`**, el molde exacto por el que S16 venció en silencio. Traducido a
+        `node npm-cli.js` (sin shell, guarda intacta) + 5 casos nuevos en su self-check (32).
+
+      **Y el gate arreglado MORDIÓ en la primera corrida:** `bloqueos:vencidos` destapó
+      **S17 VENCIDO** — `precios:vivos` sale 0 desde que el bot se publicó a las 06:44 UTC,
+      y la fila seguía pidiéndole el deploy a Sergio Urcullo. Cerrada abajo con la evidencia.
+
+      **Gates:** suite del bot **949 pass / 0 fail / 2 skip** (los dos skips son los explícitos
+      de arriba; el conteo anterior «951/951» se midió con `ONIA_PLATFORM_DIR` o en POSIX —
+      pelado en este nodo eran 946/5) · sonda `--self-check` 42/42 · `bloqueos_vencidos.mjs
+      --self-check` 32/32 · `verificar_cola` 0. **No toca el motor ni nada desplegado: son los
+      instrumentos.**
+
 - [x] ✅ **CERRADO el 2026-09-12 17:5x: el SIMULADOR prometía más que el bot — imprimía «Listo,
       agendado» pelado mientras el prospecto recibe una salvedad.** La vuelta anterior lo midió y
       lo dejó anotado en la memoria compartida **sin arreglarlo**; escribirlo no lo cierra.
@@ -2587,6 +2621,12 @@ decisión de Sergio, no código.
       anterior pero **su LISTO exigía dos corridas seguidas y nadie las había corrido**: eso es
       lo que se hizo acá.
 
+      🔁 **Re-verificado en vivo el 2026-09-12 23:22 UTC**, ~20 h y ~40 vueltas del cron
+      (`13,43 * * * *`) después del cierre: conv 49 sigue `status=1` (resolved) y las ABIERTAS
+      del inbox 4 siguen siendo exactamente los 4 desconocidos reales (34, 36, 40, 48), ni una
+      «Sonda QA». El cierre en `finally` aguanta en producción, no sólo en las dos corridas
+      del LISTO.
+
       **La prueba, releyendo la base después de cada corrida** (`conversations` del inbox 4,
       por `docker exec … psql`): corrida 1 → `EL BOT CONTESTO LOS 2 — conversacion 49`, y la
       conv 49 quedó `status=1` (resolved); la lista de ABIERTAS del inbox 4 quedó en **los 4
@@ -2921,6 +2961,11 @@ archivos.**
       **320 · 550 · 890 · 1.290 · 390** — la escalera C entera, con el plan Crece incluido. El
       `/health` del daemon confirma que lo está sirviendo: `source:"file"`,
       `path:"/tmp/onia-bot/knowledge.json"`, `lastError:null`, `version 2026-09-02.2`.
+
+      ⚠️ **El campo `version` sigue diciendo `2026-09-02.2`**: `ee247780` corrigió los montos sin
+      subir el sello, así que la versión **NO distingue** el texto viejo del nuevo — la prueba es
+      el contenido (`npm run precios:vivos`), nunca el sello. **El próximo que edite el knowledge
+      sube `version` en el MISMO commit.**
 
       ⚠️ **Lo que sigue abierto y NO se cierra con esto** — el bot le contestó
       *"el número exacto te lo pasa Sergio en la demo"* a la conv 49 el 2026-09-12 **22:48:35 UTC**,
