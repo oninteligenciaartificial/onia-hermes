@@ -99,6 +99,12 @@ Fase 1 completa"):
 
 **Porcentaje General del portal: 0%** (ninguna etapa cerrada al 100%).
 
+> 📌 **13-sep:** la fila VIII quedó vieja — esa madrugada se corrieron los **690/690 de
+> la etapa VIII completos, todos 908 VALIDADA** (checkpoint `fase1-state-viii.json` +
+> log `fase1-viii.ndjson` en el VPS; cero reintentos, mediana 162 ms). El árbitro sigue
+> siendo el portal (login de Sergio Urcullo): leer el Listado de Etapas y cotejar.
+> Detalle en §6.
+
 > La etapa **X (emisión masiva IEHD)** no figura para nuestro perfil: es del sector
 > hidrocarburos. Son 10 etapas, no 11.
 
@@ -145,19 +151,37 @@ exige certificado digital.
 
 ## 6. La etapa VIII y el certificado
 
-690 casos de emisión firmada. Necesita un certificado del **sujeto pasivo emitido por
-AGETIC** (ADSIB fue cerrada por el DS 5519 y sus competencias pasaron a AGETIC el
-15-ene-2026) o por DIGICERT SRL. Para las pruebas: generar el CSR con los campos de AGETIC
-y enviarlo al SIN por correo, que devuelve certificados de prueba.
+690 casos de emisión firmada (modalidad electrónica). **Decisión de Sergio Urcullo
+(12-sep): la modalidad electrónica NO se quita de la solicitud 9473 — la etapa VIII se
+completa.** La firma es **XMLDSig enveloped RSA-SHA256 (NO XAdES)**, implementada en
+`integrations/siat/src/xml-signer.mjs` (node:crypto puro, verificada contra el
+SignatureSchema y la referencia Java de siatinfo) y cableada como etapa VIII del runner
+(`--etapa VIII` / humo `--etapa gate-viii`, combos `*-m1`).
 
-**Dos salidas, y la barata es la primera:**
+**Medido EN el piloto (madrugada del 13-sep):** el piloto **no valida la cadena de
+certificación**. Lo que sí valida, con su código de rechazo exacto:
 
-| Camino | Qué implica |
-|---|---|
-| **Reducir la solicitud a Computarizada en Línea** | Elimina los 690 casos. La electrónica **no agrega capacidad vendible**: solo suma la firma XMLDSig. Queda para una v2.00 del sistema — cada versión se autoriza aparte |
-| Conseguir el certificado | CSR → SIN → certificados de prueba → correr la etapa VIII. Sin el certificado real de AGETIC no se opera en producción |
+1. El CUFD del request/CUF debe haberse pedido con `codigoModalidad=1` — con el CUFD de
+   la computarizada (vigente y todo) responde `902 · SIN 914 CUFD INVALIDO`. **El CUFD
+   es por modalidad**, no solo por PdV.
+2. El certificado embebido en la firma debe llevar el **NIT en el `serialNumber` del
+   subject** (perfil ATT: CI+complemento, ej. oficial `serialNumber = 4455667018`) — sin
+   él: `902 · SIN 922 LA FIRMA DEL XML NO CORRESPONDE AL CONTRIBUYENTE NIT esperado
+   5371375010, enviado null`.
 
-Sin resolver esto, el sistema **no puede llegar al 100%** de la Fase 1.
+Un **autofirmado** con `serialNumber = 5371375010` pasó entero: **908 VALIDADA en los 6
+combos** (sectores 1 → ServicioFacturacionCompraVenta, 17 → ServicioFacturacionElectronica,
+24 → ServicioFacturacionDocumentoAjuste; PdV 0 y 1), y esa misma madrugada corrió el
+volumen completo: **690/690 en 908 VALIDADA** (460 `recepcionFactura` + 230
+`recepcionDocumentoAjuste`), **cero reintentos, cero errores de red**, latencia
+142/162/652 ms (min/mediana/max). La Fase 1 ya no depende de ningún trámite para la
+VIII; falta solo cotejar el marcador en el portal (login de Sergio Urcullo).
+
+| Certificado | Cuándo hace falta | Dónde |
+|---|---|---|
+| Autofirmado con NIT en `serialNumber` | Piloto — medido: alcanza | `openssl` en `/opt/onia-siat/certs/` (fuera de git) |
+| De PRUEBA oficial (gratis) | Plan B si el SIN lo exigiera en pruebas | desarrollo.adsib.gob.bo/desa_solicitudes |
+| De PRODUCCIÓN (Bs 70, trámite de **Leslie**) | Emisión real, día de la autorización | solicitud.firmadigital.bo (AGETIC) o DigiCert SRL |
 
 ---
 

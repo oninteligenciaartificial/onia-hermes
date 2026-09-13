@@ -106,9 +106,11 @@ arquitectura, cronograma). Esto es el arranque tecnico del servicio.
 - ~~Validacion del XML contra el XSD oficial~~ **hecho 2026-09-03**: los 6 XSD del
   SIN viven en `xsd/` (sectores 1, 17 y 24, computarizada y electronica);
   `DOC_SECTOR_SCHEMAS` en `xml-builder.mjs` sale de ahi y el test los coteja
-  leyendo los archivos. Los tres sectores emiten 908 en el piloto. Queda la
-  **firma XMLDSig** para la modalidad electronica en linea (la computarizada usa
-  solo la huella SHA-256). El XML se arma con el **CUF verificado del emisor**
+  leyendo los archivos. Los tres sectores emiten 908 en el piloto. La **firma
+  XMLDSig** de la modalidad electronica esta implementada (`src/xml-signer.mjs`,
+  node:crypto puro, verificada contra SignatureSchema + referencia Java del SIN)
+  y cableada en la etapa VIII del runner; falta solo el certificado de prueba de
+  AGETIC (tramite de Leslie). El XML se arma con el **CUF verificado del emisor**
   (`src/cuf.mjs`), no con el `buildCuf` de referencia del core.
 - **Store de catalogos sincronizados** (parametricas: productos/servicios,
   unidades de medida, tipos de documento, leyendas, motivos de anulacion) —
@@ -162,14 +164,27 @@ Consecuencias de diseno:
   Un test verifica que `target x casos == total` en las 9 etapas: si el SIN
   cambia un volumen, se caza antes de quemar una corrida.
 
-Etapa **VIII (firma digital, 690 casos)**: solo modalidad electronica, necesita
-certificado AGETIC. Este runner no la corre. Etapa **X** (masiva IEHD) no aplica
-a nuestro perfil — son 10 etapas, no 11.
+Etapa **VIII (firma digital, 690 casos)**: los mismos 6 combos en modalidad
+**electronica** (codigoModalidad 1), con el XML **firmado XMLDSig**
+(`src/xml-signer.mjs`, estandar verificado contra la doc del SIN — no XAdES).
+Cableada en el runner el 2026-09-12: combos `*-m1`, servicios del mapa
+`SERVICIO_POR_DOC_SECTOR_ELECTRONICA`, y el certificado entra por env como
+RUTAS: `SIAT_FIRMA_KEY_FILE` + `SIAT_FIRMA_CERT_FILE` (en el VPS bajo
+`/opt/onia-siat/certs/`, chmod 600, jamas en git). Sin esos env la etapa se
+**salta con log** (la corrida de volumen no revienta); pedirla explicita sin
+certificado corta con error. ⚠️ El piloto exige el certificado **de prueba
+emitido por la certificadora** ("el otorgado por nosotros para pruebas", pagina
+de firma invalida de siatinfo): uno autofirmado sirve para probar el circuito
+pero el SIN lo rechaza — el de prueba es gratis en
+`desarrollo.adsib.gob.bo/desa_solicitudes` (tramite de Leslie; pasos exactos en
+`docs/ONIA_SIAT_TU_PARTE_DEL_TRAMITE.md`). Etapa **X** (masiva IEHD) no aplica
+a nuestro perfil.
 
 ```bash
-node src/fase1-runner.mjs --etapa gate   # humo: 1 por combo. SIEMPRE primero
-node src/fase1-runner.mjs                # todas las etapas en orden
-node src/fase1-runner.mjs --etapa IV     # una sola
+node src/fase1-runner.mjs --etapa gate       # humo: 1 por combo. SIEMPRE primero
+node src/fase1-runner.mjs                    # todas las etapas en orden
+node src/fase1-runner.mjs --etapa IV         # una sola
+node src/fase1-runner.mjs --etapa gate-viii  # humo etapa VIII: 1 emision firmada por combo
 ```
 
 Flags: `--pace ms` (default 500) · `--state file` · `--log file` ·

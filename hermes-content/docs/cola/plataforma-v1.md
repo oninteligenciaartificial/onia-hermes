@@ -38,7 +38,7 @@ LISTO medible; el estado es del 10-sep y se re-mide, no se hereda:
 | 2 | Recorrido de los 5 rubros | cada rubro cierra su flujo core sin romperse | 🟡 `recorrido-cliente` patrulla diario (hoy 13:12 exit 0) |
 | 3 | Cobro | comprobante → APPROVED → plan activo solo | ✅ probado 10-sep; 12-sep: escalera C (320/550/890/1.290, bot en Full) DESPLEGADA — el checkout valida los montos nuevos |
 | 4 | El plan manda | trial vencido bloquea; topes se cumplen | ✅ modal + topes (`f05b2fc` «el tope que nadie aplicaba») + reservas de cuenta apagada cerradas (`ba2270b`) |
-| 5 | Factura SIAT | la suscripción cobrada emite factura | 🟡 13-sep 01:20: **MATRIZ SECA — 5042/5042 (100 %)** de todas las etapas menos la VIII (checkpoint local del runner, 3 pasadas, log `/var/log/onia-siat-runner-20260913.log`; etapa VI cerró 560/560 en la pasada 3). **Wrapper F1.4 DESPLEGADO**: systemd `onia-siat-wrapper` health verde en :8517 (la unit carga `siat-piloto.env` + `siat-wrapper.env`). Etapa VIII: Sergio decidió el 12-sep **completar Electrónica** (no quitarla) → firma digital en desarrollo (rama `claude/siat-firma-viii`). Queda: leer el marcador del PORTAL (la sesión Keycloak de Leslie venció; login = Sergio, 2 min: launcher → Seguimiento → 9473 → Listado de Etapas) — el árbitro es el portal, y la VIII. Guía: `hermes-content/docs/ONIA_SIAT_TU_PARTE_DEL_TRAMITE.md` |
+| 5 | Factura SIAT | la suscripción cobrada emite factura | 🟢 13-sep 03:00: **FASE 1 COMPLETA AL 100 % (checkpoint local): 5.732/5.732** — matriz base 5042/5042 (VI cerró 560/560 en la pasada 3) **+ etapa VIII 690/690 en `908 VALIDADA`** con firma XMLDSig propia (node:crypto, cero deps) y certificado autofirmado con NIT en `serialNumber` — el piloto no valida cadena, medido en vivo (SIN 922/914 como guardas). Wrapper F1.4 desplegado (health verde :8517). Quedan, y son de Sergio: (1) cotejar el marcador del portal (2 min, login suyo); (2) si da 100 %: **solicitar Fase 2 (inspección), pedir VIRTUAL** (15 min); (3) Leslie: certificado de PRODUCCIÓN Bs 70 en solicitud.firmadigital.bo — no bloquea la Fase 1. Guía: `ONIA_SIAT_TU_PARTE_DEL_TRAMITE.md` |
 | 6 | Chatbot atiende solo (web + WhatsApp) | responde, califica y agenda demo | 🟢 12-sep: reinicio-por-vencimiento DESPLEGADO (deploy-bot 16 archivos, backup 224551Z) — las conversaciones viejas reviven; conocimiento con escalera C vivo (951 tests). Los 3 prospectos de agosto: ORDEN de Sergio 12-sep — se escriben SOLO con el chatbot perfeccionado y la 1.0 lista; si no, no |
 | 7 | Panel del dueño estilo Hostinger | pestañas agrupadas y cada sección cierra su flujo | ✅ estructura VIVA (grupos + Primeros pasos + fecha La Paz + 2FA); queda `feat/canal-meta` (App Review = Sergio Urcullo) |
 | 8 | Cero promesas falsas | lo que cada pantalla promete por rubro/plan se abre | 🟡 barridos 8-sep y 9-sep (`e843507` estética/dental) + 10-sep el NOMBRE del plan (`fe6eb65`, gate `nombre-de-plan-a-mano`); el recorrido caza el resto |
@@ -201,10 +201,20 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       en `onia_agents_actions`, visibles en la pantalla Agentes de la clínica de Sergio para
       que él apruebe. **El misterio del "0 acciones en la historia" quedó explicado: motor
       sano + cadencia diaria + orgs sin datos disparadores** (`not_due` / feeds vacíos).
-      Pendiente de este ítem: (a) la demostración para Sergio Urcullo se hace **sobre datos
-      reales de su clínica o sobre una org de prueba, NO sembrando en su cuenta** — ver el ítem
-      de abajo: los dos borradores sembrados se le mostraban como reclamos de cobro a pacientes
-      que no existen, y aprobarlos habría intentado escribirle a un teléfono inventado;
+      Pendiente de este ítem: (a) ✅ **HECHO el 2026-09-13 (madrugada): circuito E2E entero
+      en la org QA "ZZ QA Bandeja 1.0"** (Sergio delegó: "tú haz la prueba"). Semillas
+      `e2e-agentes2-*` → cron → 2 borradores `pending_approval` (Cobrador Bs 370 con texto
+      completo, Recall 6 meses) → aprobado el del Cobrador POR PANTALLA como admin de la QA
+      → `executed` + dispatch `manual/sent` con link wa.me — **se usó "Enviar yo mismo" a
+      propósito**: el botón "Aprobar y enviar" SÍ dispara WhatsApp Cloud API real
+      (dispatcher → adapter whatsapp), verificado leyendo el código ANTES de apretar.
+      Purga con respaldo (`/root/respaldos/e2e-agentes2-purga-20260913.json`), re-auditoría
+      en cero. **4 fricciones de UI anotadas para F4**: (i) la barra "Preguntá por tu
+      negocio" tapa la última tarjeta de /agents; (ii) tras envío manual el panel rotula
+      "Ejecutada" aunque nadie abrió el link (`pendienteDeEnvioHumano` no se muestra —
+      honestidad del panel, la más seria); (iii) el aviso con el link wa.me desaparece al
+      navegar y no hay dónde reabrirlo; (iv) la tarjeta de /pending dice "Propuesta de
+      agente" genérico.
       (b) ✅ **purgadas el 2026-09-12**, las 12 filas, con respaldo y re-auditoría en cero;
       (c) construir los 3 agentes nuevos de abajo.
 

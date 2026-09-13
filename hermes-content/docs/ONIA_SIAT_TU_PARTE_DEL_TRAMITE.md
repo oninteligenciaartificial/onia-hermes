@@ -37,16 +37,35 @@ logueado.* Si NO encontrás la opción: avisá y listo — existe la operación 
 **Desbloquea:** la mitad de la matriz — los 3 combos `pv1-*` y la mitad de las etapas
 I, II, III, V, VI y IX. En cuanto exista, el runner sigue solo.
 
-**3. Decidí la etapa VIII (firma digital, 690 casos) — 20-30 min + respuesta del SIN**
-Sin decisión, el sistema **no puede llegar al 100 % nunca**. La barata: **reducir la
-solicitud a solo "Computarizada en Línea"** — la electrónica no agrega nada vendible,
-solo la firma; una v2.00 se autoriza aparte. En el Seguimiento, abrí los 3 botones de la
-columna Opciones y el menú ≡ ▾ de "Datos de Autorización" buscando "modificar
-solicitud". Si no está, preguntá directo si se puede quitar la modalidad electrónica
-conservando los casos ya enviados: **800 10 3444** (8:30-16:30) o
-**siat.soporte@impuestos.gob.bo**, GD Santa Cruz II. La alternativa (certificado AGETIC
-+ CSR + certificados de prueba) cuesta días y no suma capacidad.
-**Desbloquea:** que el 100 % de la Fase 1 sea alcanzable dentro del plazo.
+**3. Etapa VIII (firma digital, 690 casos): DECIDIDA y en marcha — lo tuyo es el
+certificado de PRODUCCIÓN (~30 min, no urgente)**
+Decidiste el 12-sep **no quitar** la modalidad "Electrónica en línea": la etapa VIII se
+completa. El código ya la corre solo (`--etapa VIII` del runner; firma XMLDSig
+implementada y verificada). **Medido contra el piloto el 13-sep de madrugada:** el
+piloto NO valida la cadena del certificado — acepta uno **autofirmado** siempre que el
+`serialNumber` del subject lleve el NIT `5371375010` (sin él responde `902/922 LA FIRMA
+DEL XML NO CORRESPONDE AL CONTRIBUYENTE`). Esa madrugada corrió la etapa ENTERA:
+**690/690 en 908 VALIDADA** (sectores 1, 17 y 24, PdV 0 y 1; cero reintentos). O sea:
+**la Fase 1 ya no espera ningún trámite tuyo** — solo falta cotejar el marcador en el
+portal (paso 1).
+Lo que SÍ es de ustedes — y todo acto legal lo firma **Leslie** (titular SEPREC):
+- **Certificado de PRODUCCIÓN** (obligatorio recién para emitir facturas reales; NO
+  bloquea la Fase 1): en [solicitud.firmadigital.bo](https://solicitud.firmadigital.bo)
+  (AGETIC; alternativa: DigiCert SRL, digicert.bo). Se pide como **persona natural /
+  empresa unipersonal** a nombre de Leslie. ⚠️ El campo **NIT** del formulario va con
+  **5371375010**: el procedimiento oficial dice que "debe ser llenado con el Número de
+  Identificación Tributaria que se utilizará para reportar las facturas"
+  ([procedimiento AGETIC](https://facturacion.firmadigital.bo/procedimientos/solicitar-certificado/)).
+  Requisitos del [trámite](https://tramitesv2-revision.agetic.gob.bo/tramites/certificado-digital-para-firma-digital):
+  CI vigente (anverso/reverso a color) + última factura de luz o agua; costo **Bs 70**.
+  El CSR se genera con **Jacobitus Total** (el portal te guía).
+- **(Plan B, gratis, por si el SIN endurece las pruebas)** Certificado de PRUEBA
+  oficial en [desarrollo.adsib.gob.bo/desa_solicitudes](https://desarrollo.adsib.gob.bo/desa_solicitudes)
+  — "el servicio no tiene ningún costo"
+  ([facturacion.firmadigital.bo](https://facturacion.firmadigital.bo/procedimientos/solicitar-certificado/)).
+  Hoy, medido, el piloto no lo exige, aunque su doc de [firma inválida](https://siatinfo.impuestos.gob.bo/index.php/facturacion-en-linea/firma-digital/firma-invalida)
+  hable de "el certificado otorgado por nosotros para pruebas".
+**Desbloquea:** emitir facturas electrónicas REALES el día de la autorización.
 
 **4. Cuando la Fase 1 marque 100 %: solicitá la Fase 2 (inspección) — 15 min + agenda**
 En el mismo módulo. El SIN verifica funcionalidades (nominatividad, sin monto cero,
@@ -77,9 +96,11 @@ Pedila ANTES de que venza el plazo.
    Hay red: la prórroga da +60 días (hasta ~inicios de enero 2027), pero si vence
    prórroga incluida sin completar, **la solicitud se cancela automáticamente** y el
    trámite arranca de cero, con otro código de sistema y re-corriendo todo.
-2. **La etapa VIII sin decidir hace el plazo incumplible por diseño.** Son 690 casos
-   (12 % del total) hoy en 0 que no pueden arrancar sin certificado AGETIC. Cada semana
-   sin decidir come el plazo del riesgo 1. Bonus comercial: el **01/10/2026** el último
+2. **~~La etapa VIII sin decidir hace el plazo incumplible~~ — RESUELTO el 12/13-sep.**
+   Decidiste completar la electrónica, y medido en el piloto: la VIII corre con un
+   certificado autofirmado (el piloto solo valida el NIT del subject), así que los 690
+   casos ya no dependen de ningún trámite. El certificado AGETIC queda solo para
+   producción (paso 3). Bonus comercial (sigue vigente): el **01/10/2026** el último
    tramo del padrón queda obligado a facturar en línea — la autorización no llega para
    ese rush; lo que se vende para esa fecha es lo que la landing ya dice (portal
    gratuito + datos listos), que no depende de este trámite.

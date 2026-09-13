@@ -12,10 +12,19 @@
  *   V    eventos signif.     70   = 7 motivos x 5 x 2 PdV
  *   VI   paquetes           560   = 280 x 2 PdV      (recepcionPaquete + validacion)
  *   VII  anulacion          750   = 125 x 6 combos   (anulacionFactura)
+ *   VIII firma digital      690   = 115 x 6 combos   (emision FIRMADA, modalidad 1)
  *   IX   emision masiva     160   = 80 x 2 PdV       (recepcionMasiva + validacion)
  *   XI   reversion          750   = 125 x 6 combos   (reversionAnulacionFactura)
- * (VIII firma digital: 690, SOLO modalidad electronica -> necesita certificado
- *  AGETIC, este runner no la corre. X = masiva IEHD: no aplica a nuestro perfil.)
+ * (X = masiva IEHD: no aplica a nuestro perfil.)
+ *
+ * ETAPA VIII (2026-09-12): emision en modalidad ELECTRONICA EN LINEA
+ * (codigoModalidad 1) con el XML firmado XMLDSig (xml-signer.mjs). Necesita el
+ * certificado + llave por env (SIAT_FIRMA_KEY_FILE / SIAT_FIRMA_CERT_FILE,
+ * rutas bajo /opt/onia-siat/certs/, chmod 600, JAMAS en git). El piloto exige
+ * "el certificado otorgado por nosotros para pruebas" (siatinfo, pagina de
+ * firma invalida): el de prueba lo emite AGETIC gratis en
+ * desarrollo.adsib.gob.bo/desa_solicitudes — tramite de Leslie. Sin los env
+ * files la etapa se SALTA con log (una corrida de volumen no revienta).
  *
  * POR QUE LOS CASOS IMPORTAN: el SIN cuenta COBERTURA, no volumen. La corrida
  * del 6-ago mando 750 emisiones y el portal contabilizo 125, porque las 750
@@ -50,7 +59,9 @@ import { readFileSync, writeFileSync, appendFileSync, existsSync } from "node:fs
 import { gzipSync } from "node:zlib";
 
 import { buildCuf } from "./cuf.mjs";
+import { MODALITIES } from "./constants.mjs";
 import { buildInvoiceXml } from "./xml-builder.mjs";
+import { signInvoiceXml } from "./xml-signer.mjs";
 import { buildInvoicePayload, round2 } from "./invoice-payload.mjs";
 import { assembleEmission, toSinDateString } from "./emission.mjs";
 import {
@@ -115,9 +126,27 @@ export const EMISION_CASES = DOC_SECTOR_CASES.flatMap((ds) =>
   PUNTOS_VENTA.map((pv) => ({ codigoPuntoVenta: pv, ...ds })),
 );
 
-/** Id estable de un combo, usado como caseId del checkpoint y en el log. */
+/** codigoModalidad de la modalidad ELECTRONICA EN LINEA (la de la etapa VIII). */
+export const MODALIDAD_ELECTRONICA = 1;
+
+/**
+ * Etapa VIII: los MISMOS 6 combos pero en modalidad electronica (XML firmado).
+ * 690 del portal = 115 x 6 [VERIFICAR el desglose en el Listado de Pruebas de la
+ * VIII: inferido por la misma aritmetica que la IV (125 x 6 = 750)].
+ */
+export const EMISION_CASES_VIII = EMISION_CASES.map((c) => ({
+  ...c,
+  codigoModalidad: MODALIDAD_ELECTRONICA,
+}));
+
+/**
+ * Id estable de un combo, usado como caseId del checkpoint y en el log. Los
+ * combos electronica llevan sufijo -m1: sin el, una factura firmada de la VIII
+ * seria candidata a anulacion del caso computarizado en la VII.
+ */
 export function comboId(combo) {
-  return `pv${combo.codigoPuntoVenta}-ds${combo.codigoDocumentoSector}-tf${combo.tipoFacturaDocumento}`;
+  const base = `pv${combo.codigoPuntoVenta}-ds${combo.codigoDocumentoSector}-tf${combo.tipoFacturaDocumento}`;
+  return combo.codigoModalidad === MODALIDAD_ELECTRONICA ? `${base}-m1` : base;
 }
 
 /** Combo por defecto (el unico que corrio el 6-ago): PdV 0, compra-venta. */
@@ -134,6 +163,20 @@ export const SERVICIO_POR_DOC_SECTOR = {
   1: "FACTURACION_COMPRA_VENTA", // ServicioFacturacionCompraVenta
   17: "FACTURACION_COMPUTARIZADA", // ServicioFacturacionComputarizada
   24: "FACTURACION_DOCUMENTO_AJUSTE", // ServicioFacturacionDocumentoAjuste
+};
+
+/**
+ * Servicios de la modalidad ELECTRONICA (etapa VIII), espejo del mapa
+ * computarizado: compra-venta y ajuste comparten servicio entre modalidades
+ * (el 995 del 2026-08-27 decia "Para la modalidad 2 y/o sector N": la
+ * disponibilidad se decide por modalidad+sector) y el generico es
+ * ServicioFacturacionElectronica. [VERIFICAR en vivo: un 995 aca se corrige
+ * moviendo el sector a otro servicio, igual que se hizo con el 17 y el 24.]
+ */
+export const SERVICIO_POR_DOC_SECTOR_ELECTRONICA = {
+  1: "FACTURACION_COMPRA_VENTA",
+  17: "FACTURACION_ELECTRONICA", // ServicioFacturacionElectronica
+  24: "FACTURACION_DOCUMENTO_AJUSTE",
 };
 
 /** Documento de AJUSTE: va por ServicioFacturacionDocumentoAjuste (OPS_AJUSTE). */
@@ -337,6 +380,7 @@ export const STAGE_TARGETS = {
   V: 5, // por motivo x PdV   -> 7 * 5 * 2 = 70
   VI: 280, // por PdV            -> 560   [VERIFICAR el desglose en el portal]
   VII: 125, // por combo          -> 750
+  VIII: 115, // por combo          -> 690   [VERIFICAR el desglose en el portal]
   IX: 80, // por PdV            -> 160   [VERIFICAR el desglose en el portal]
   XI: 125, // por combo          -> 750
 };
@@ -358,6 +402,7 @@ export const STAGE_PLAN = {
   V: "motivo-pv",
   VI: "pv",
   VII: "combo",
+  VIII: "combo",
   IX: "pv",
   XI: "combo",
 };
@@ -371,11 +416,12 @@ export const STAGE_TOTALS = {
   V: 70,
   VI: 560,
   VII: 750,
+  VIII: 690,
   IX: 160,
   XI: 750,
 };
 
-export const STAGE_ORDER = ["I", "II", "III", "IV", "V", "VI", "VII", "IX", "XI"];
+export const STAGE_ORDER = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "XI"];
 
 // ----------------------------- parsers puros --------------------------------
 
@@ -796,13 +842,15 @@ export function parseArgs(argv) {
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 class Runner {
-  constructor({ token, nit, codigoSistema, stateFile, logFile, pace }) {
+  constructor({ token, nit, codigoSistema, stateFile, logFile, pace, firma = null }) {
     this.token = token;
     this.nit = nit;
     this.codigoSistema = codigoSistema;
     this.stateFile = stateFile;
     this.logFile = logFile;
     this.pace = pace;
+    // { privateKeyPem, certificatePem } para la etapa VIII. NUNCA se loguea.
+    this.firma = firma;
     this.state = loadState(stateFile);
     // Combo (PdV + documento sector + tipo de factura) que se esta corriendo.
     // Las etapas lo cambian con withCombo(); todo lo demas lo LEE de aca.
@@ -832,9 +880,20 @@ class Runner {
     return String(this.combo.codigoPuntoVenta);
   }
 
-  /** Servicio SOAP que corresponde al documento sector del combo actual. */
+  /** true si el combo actual es de la modalidad electronica (etapa VIII). */
+  get esElectronica() {
+    return this.combo.codigoModalidad === MODALIDAD_ELECTRONICA;
+  }
+
+  /** codigoModalidad del combo actual (default: computarizada del piloto). */
+  get modalidadCode() {
+    return this.combo.codigoModalidad ?? PILOT.codigoModalidad;
+  }
+
+  /** Servicio SOAP que corresponde al documento sector Y modalidad del combo actual. */
   get servicio() {
-    const key = SERVICIO_POR_DOC_SECTOR[this.combo.codigoDocumentoSector];
+    const mapa = this.esElectronica ? SERVICIO_POR_DOC_SECTOR_ELECTRONICA : SERVICIO_POR_DOC_SECTOR;
+    const key = mapa[this.combo.codigoDocumentoSector];
     if (!key) {
       throw new Error(
         `sin servicio SOAP mapeado para el documento sector ${this.combo.codigoDocumentoSector}`,
@@ -918,7 +977,7 @@ class Runner {
       ...this.baseParams(),
       codigoDocumentoSector: this.combo.codigoDocumentoSector,
       codigoEmision,
-      codigoModalidad: PILOT.codigoModalidad,
+      codigoModalidad: this.modalidadCode,
       cufd: this.cufd?.codigo,
       cuis: this.cuis,
       tipoFacturaDocumento: this.combo.tipoFacturaDocumento,
@@ -1046,7 +1105,7 @@ class Runner {
           async () => {
             const envelope = buildCuisRequest({
               ...this.baseParams(),
-              codigoModalidad: PILOT.codigoModalidad,
+              codigoModalidad: this.modalidadCode,
             });
             const raw = await this.post("FACTURACION_CODIGOS", envelope, {
               etapa: "I",
@@ -1121,7 +1180,7 @@ class Runner {
     }
     const envelope = buildCufdRequest({
       ...this.baseParams(),
-      codigoModalidad: PILOT.codigoModalidad,
+      codigoModalidad: this.modalidadCode,
       cuis: this.cuis,
     });
     const result = await this.post("FACTURACION_CODIGOS", envelope, {
@@ -1153,7 +1212,7 @@ class Runner {
           async () => {
             const envelope = buildCufdRequest({
               ...this.baseParams(),
-              codigoModalidad: PILOT.codigoModalidad,
+              codigoModalidad: this.modalidadCode,
               cuis: this.cuis,
             });
             const result = await this.post("FACTURACION_CODIGOS", envelope, {
@@ -1179,6 +1238,21 @@ class Runner {
     }
   }
 
+  /**
+   * Firma el XML del material (etapa VIII) y re-deriva el archivo gzip+base64.
+   * El hashArchivo lo recalcula recepcionRequestFor sobre el XML FIRMADO: lo
+   * que viaja y lo que se hashea son los mismos bytes.
+   */
+  signMaterial(material) {
+    if (!this.firma) {
+      throw new Error(
+        "modalidad electronica sin certificado: definir SIAT_FIRMA_KEY_FILE y SIAT_FIRMA_CERT_FILE",
+      );
+    }
+    const xml = signInvoiceXml(material.xml, this.firma);
+    return { ...material, xml, archivo: gzipSync(Buffer.from(xml, "utf8")).toString("base64") };
+  }
+
   buildEmisionMaterial(index, { fechaEmision } = {}) {
     const { payload, leyenda, codigoMetodoPago } = buildTestInvoice({
       catalogs: this.state.catalogs,
@@ -1189,9 +1263,12 @@ class Runner {
     });
     const numeroFactura = ++this.state.numeroFactura;
     const fecha = fechaEmision ?? this.sinNow();
-    const material = assembleEmission({
+    // La modalidad del combo manda: assembleEmission deriva de ella el digito
+    // del CUF, la raiz del XML (facturaElectronica*) y el codigoModalidad.
+    const modalidad = this.esElectronica ? MODALITIES.ELECTRONICA_EN_LINEA : undefined;
+    let material = assembleEmission({
       payload,
-      tenant: { emisor: { nit: this.nit, codigoSistema: this.codigoSistema, ...EMISOR_PRUEBA } },
+      tenant: { emisor: { nit: this.nit, codigoSistema: this.codigoSistema, ...EMISOR_PRUEBA, ...(modalidad ? { modalidad } : {}) } },
       cufd: this.cufd,
       cuis: this.cuis,
       numeroFactura,
@@ -1201,6 +1278,9 @@ class Runner {
       codigoMetodoPago,
       usuario: "onia",
     });
+    if (this.esElectronica) {
+      material = this.signMaterial(material);
+    }
     // `datos` es lo que una nota de ajuste (sector 24) necesita de su factura
     // original: sin esto las facturas viejas del estado no sirven de original.
     const datos = { fechaEmision: fecha, receptor: payload.receptor, items: payload.items, montoTotal: payload.montoTotal, leyenda };
@@ -1213,7 +1293,13 @@ class Runner {
    * cuenta en el caso pv-ds1-tf1, que topea en 125: no molesta).
    */
   async originalParaNota() {
-    const comboOriginal = { codigoPuntoVenta: this.combo.codigoPuntoVenta, ...DOC_SECTOR_CASES[0] };
+    // La original hereda la MODALIDAD de la nota: una nota electronica ajusta
+    // una compra-venta electronica (y su emision suma al caso ds1 de la VIII).
+    const comboOriginal = {
+      codigoPuntoVenta: this.combo.codigoPuntoVenta,
+      ...DOC_SECTOR_CASES[0],
+      ...(this.esElectronica ? { codigoModalidad: MODALIDAD_ELECTRONICA } : {}),
+    };
     const libre = (f) =>
       f.combo === comboId(comboOriginal) && !f.anulada && !f.ajustada && f.datos && (f.estado === 908 || f.estado === 901);
     if (!this.state.invoices.some(libre)) {
@@ -1248,7 +1334,7 @@ class Runner {
         nit: this.nit,
         fechaHora: fecha.replace(/[-T:.]/g, ""),
         sucursal: PILOT.codigoSucursal,
-        modalidad: PILOT.codigoModalidad,
+        modalidad: this.modalidadCode,
         tipoEmision: 1,
         tipoFactura: this.combo.tipoFacturaDocumento,
         tipoDocumentoSector: this.combo.codigoDocumentoSector,
@@ -1295,9 +1381,17 @@ class Runner {
       codigoDocumentoSector: this.combo.codigoDocumentoSector,
     };
     const detalle = [...d.items.map((i) => linea(i, 1)), ...d.items.map((i) => linea(i, 2))];
-    const xml = buildInvoiceXml({ cabecera, detalle });
+    const xml = buildInvoiceXml(
+      { cabecera, detalle },
+      { modality: this.esElectronica ? MODALITIES.ELECTRONICA_EN_LINEA : "computarizada_en_linea" },
+    );
     const archivo = gzipSync(Buffer.from(xml, "utf8")).toString("base64");
-    return { material: { cuf, xml, archivo }, numeroFactura: numero, original };
+    const material = { cuf, xml, archivo };
+    return {
+      material: this.esElectronica ? this.signMaterial(material) : material,
+      numeroFactura: numero,
+      original,
+    };
   }
 
   /** Material del combo actual: factura (sectores 1 y 17) o nota de ajuste (24). */
@@ -1321,9 +1415,10 @@ class Runner {
 
   async emitOne(index) {
     await this.ensureCufd();
+    const etapa = this.esElectronica ? "VIII" : "IV";
     const { material, numeroFactura, datos, original } = await this.buildMaterialFor(index);
     const result = await this.post(this.servicio, this.recepcionRequestFor(material), {
-      etapa: "IV",
+      etapa,
       op: this.ops.recepcion.op,
       numeroFactura,
     });
@@ -1335,7 +1430,7 @@ class Runner {
       (result.parsed?.mensajes ?? []).some((m) => /HASH/i.test(m.descripcion ?? ""))
     ) {
       this.state.hashMode = "gzip";
-      this.log({ etapa: "IV", op: "hash_mode_switch", to: "gzip" });
+      this.log({ etapa, op: "hash_mode_switch", to: "gzip" });
       return this.emitOne(index);
     }
     if (result.ok && result.parsed?.transaccion === true) {
@@ -1614,6 +1709,27 @@ class Runner {
     }
   }
 
+  /**
+   * Firma digital: emision en modalidad ELECTRONICA con el XML firmado.
+   * 115 por combo -> 690 [VERIFICAR]. Sin certificado se SALTA con log (asi la
+   * corrida de volumen completa no revienta); pedir la etapa explicita sin
+   * certificado si falla (main lo corta antes).
+   */
+  async etapaVIII(target = STAGE_TARGETS.VIII) {
+    if (!this.firma) {
+      this.log({
+        etapa: "VIII",
+        skipped: "sin certificado (SIAT_FIRMA_KEY_FILE / SIAT_FIRMA_CERT_FILE): etapa saltada",
+      });
+      return;
+    }
+    for (const combo of EMISION_CASES_VIII) {
+      await this.withCombo(combo, () =>
+        this.loop("VIII", target, (done) => this.emitOne(done), { caseId: comboId(combo) }),
+      );
+    }
+  }
+
   async etapaIX(target = STAGE_TARGETS.IX) {
     // SIN 916 (verificado en vivo 2026-08-06): la masiva exige tipo de emision
     // 3 (MASIVA) tanto en el request como en el CUF de las facturas del lote.
@@ -1710,6 +1826,18 @@ class Runner {
     await this.etapaXI(1);
   }
 
+  /**
+   * Humo de la etapa VIII: CUIS + sync esencial + 1 emision FIRMADA por combo
+   * electronica. Correr SIEMPRE antes del volumen de la VIII — y es la sonda
+   * barata para medir que dice el piloto de un certificado dado (6 requests).
+   */
+  async gateVIII() {
+    await this.etapaI(1);
+    await this.syncEssentials();
+    this.checkpoint();
+    await this.etapaVIII(1);
+  }
+
   async runStage(id, count) {
     const map = {
       I: (n) => this.etapaI(n ?? STAGE_TARGETS.I),
@@ -1719,9 +1847,11 @@ class Runner {
       V: (n) => this.etapaV(n ?? STAGE_TARGETS.V),
       VI: (n) => this.etapaVI(n ?? STAGE_TARGETS.VI),
       VII: (n) => this.etapaVII(n ?? STAGE_TARGETS.VII),
+      VIII: (n) => this.etapaVIII(n ?? STAGE_TARGETS.VIII),
       IX: (n) => this.etapaIX(n ?? STAGE_TARGETS.IX),
       XI: (n) => this.etapaXI(n ?? STAGE_TARGETS.XI),
       gate: () => this.gate(),
+      "gate-viii": () => this.gateVIII(),
     };
     if (!map[id]) {
       throw new Error(`etapa desconocida: "${id}" (validas: ${Object.keys(map).join(", ")})`);
@@ -1777,6 +1907,20 @@ if (isMain) {
     console.error("faltan SIAT_PILOT_TOKEN / SIAT_NIT / SIAT_CODIGO_SISTEMA en el ambiente");
     process.exit(1);
   }
+  // Certificado de la etapa VIII: RUTAS a archivos PEM (nunca el contenido en
+  // env, nunca en git; en el VPS viven bajo /opt/onia-siat/certs/, chmod 600).
+  const keyFile = process.env.SIAT_FIRMA_KEY_FILE;
+  const certFile = process.env.SIAT_FIRMA_CERT_FILE;
+  const firma =
+    keyFile && certFile
+      ? { privateKeyPem: readFileSync(keyFile, "utf8"), certificatePem: readFileSync(certFile, "utf8") }
+      : null;
+  if (!firma && args.etapa && args.etapa.toLowerCase().includes("viii")) {
+    console.error(
+      "la etapa VIII necesita SIAT_FIRMA_KEY_FILE y SIAT_FIRMA_CERT_FILE (rutas a la llave y el certificado PEM)",
+    );
+    process.exit(1);
+  }
   const runner = new Runner({
     token,
     nit,
@@ -1784,6 +1928,7 @@ if (isMain) {
     stateFile: args.state,
     logFile: args.log,
     pace: args.pace,
+    firma,
   });
   const stages = args.etapa ? [args.etapa] : STAGE_ORDER;
   if (args.retryBlocked) {

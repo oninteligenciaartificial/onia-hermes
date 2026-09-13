@@ -274,6 +274,15 @@ poner "$RAIZ/scripts/postiz_schedule.mjs"          "$DESTINO_BIN/onia-postiz-sch
 # sobre t_4cd13524 (codigo 2, "no era una pieza"), con 30 arreglos esperando.
 poner "$RAIZ/scripts/kanban/desplegar-en-segundo-plano.sh" "$DESTINO_BIN/onia-desplegar-fondo.sh"
 
+# El publicador AUTOMATICO (cron `50 */3`), que publica solo lo que NO toca una fuente de
+# precio. Estaba en el repo y en /root/bin del VPS, pero nadie lo copiaba: la que ejecutaba
+# era una copia a mano. Lo destapo `npm run test:herramientas-desplegadas` el 2026-09-12, en
+# cuanto `deploy_sin_pedido.mjs` empezo a NOMBRARLO para preguntarle si un destino se publica
+# solo — o sea que la herramienta se volvio sujeto del gate recien cuando alguien la cito.
+# Hoy las dos copias son identicas (mismo md5), asi que cablearlo no revierte nada; manana,
+# sin esta linea, un arreglo suyo se quedaria en el repo mientras el cron corre el fosil.
+poner "$FUENTE/extras/publicar-solo.sh"            "$DESTINO_BIN/onia-publicar-solo.sh"
+
 # La memoria compartida: el corredor la inyecta y los loops le escriben por estos
 # dos. Si no se despliegan solos, el corredor de main llama a un script que no
 # existe en /root/bin y los 15 loops fallan mudos en la primera linea.
