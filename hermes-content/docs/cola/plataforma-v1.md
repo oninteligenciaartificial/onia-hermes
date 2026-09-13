@@ -225,11 +225,40 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       (dispatcher → adapter whatsapp), verificado leyendo el código ANTES de apretar.
       Purga con respaldo (`/root/respaldos/e2e-agentes2-purga-20260913.json`), re-auditoría
       en cero. **4 fricciones de UI anotadas para F4**: (i) la barra "Preguntá por tu
-      negocio" tapa la última tarjeta de /agents; (ii) tras envío manual el panel rotula
-      "Ejecutada" aunque nadie abrió el link (`pendienteDeEnvioHumano` no se muestra —
-      honestidad del panel, la más seria); (iii) el aviso con el link wa.me desaparece al
-      navegar y no hay dónde reabrirlo; (iv) la tarjeta de /pending dice "Propuesta de
-      agente" genérico.
+      negocio" tapa la última tarjeta de /agents; (ii) ✅ **CERRADA el 2026-09-13** tras envío
+      manual el panel rotulaba "Ejecutada" aunque nadie abrió el link; (iii) ✅ **CERRADA el
+      2026-09-13** el aviso con el link wa.me desaparecía al navegar; (iv) la tarjeta de
+      /pending dice "Propuesta de agente" genérico.
+
+      ✅ **(ii) + (iii) CERRADAS el 2026-09-13 — y el hallazgo era más grande que la
+      fricción anotada.** El dispatcher declara una **regla dura en su propia cabecera**:
+      *"2. NO SE FINGE UN ENVIO. […] La accion del agente solo pasa a `executed` cuando el
+      mensaje SALIO."* El canal `manual` la rompe sin querer: por diseño **no manda nada por
+      la red** (devuelve un link `wa.me` para que la persona lo toque), así que el adapter no
+      tira, el despacho queda `sent` y la acción `executed` — idéntico a un envío real. La
+      distinción la asienta `metadata.pendienteDeEnvioHumano`, y el propio canal escribe
+      textual *"Quien lea el registro tiene que poder distinguirlo de un envio real"*.
+      **Medido: ningún `.tsx` lo leía.** El dueño veía "Ejecutada" sobre un reclamo de deuda
+      que nunca se mandó, y el único lugar con el link era un aviso efímero que se borraba al
+      navegar — o sea que perdía el mensaje Y le quedaba un panel diciéndole que ya estaba
+      hecho. Es la clase «escrituras ↔ LECTURAS»: un campo que se escribe y nadie lee es
+      código muerto con cara de vivo.
+      **Cómo se cerró** (rama `claude/chatbots-platform-review-0d1d09`, `onia-platform`):
+      módulo puro `lib/onia-core/modules/agents-envio-humano.ts` como **única fuente** del
+      rótulo (las pantallas ya no tienen su propio diccionario de estados: tener dos era lo
+      que permitía que una dijera la verdad y la otra no) + `agents-view.tsx` rotula
+      **"Falta que la envíes"** con el link `wa.me` persistente en la tarjeta, y
+      `comercio-hoy.tsx` **descuenta del tick de "hecho"** lo que todavía espera el dedo.
+      **Gate de CLASE** `lib/platform/panel-no-finge-un-envio.test.ts`: sujeto derivado del
+      disco —superficie que lee `oniaAgentsAction` **y** nombra un estado terminado—, elegido
+      a propósito para que **sobreviva al arreglo** (derivarlo del diccionario de rótulos era
+      más fácil y se habría apagado solo, porque el arreglo consiste justamente en sacar ese
+      diccionario de la pantalla). **Visto en ROJO antes**, nombrando `agents-view.tsx`; 20
+      casos de unidad validados **por mutación en dos puntos** (esquive del despacho → 2
+      rojos; puerta de estado del despacho → 2 rojos). `tsc` limpio, `eslint` 0 errores.
+      ⚠️ **NO se miró renderizada:** el banco `/dev/demo` necesita base local sembrada
+      (`prisma/seed-demo.ts`) y un `next dev`, que no entraban en la vuelta. Falta esa foto
+      antes de darla por mirada. **Commiteado, NO desplegado.**
       (b) ✅ **purgadas el 2026-09-12**, las 12 filas, con respaldo y re-auditoría en cero;
       (c) construir los 3 agentes nuevos de abajo.
 
