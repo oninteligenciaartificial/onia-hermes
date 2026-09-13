@@ -77,25 +77,59 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
-- [ ] 🟡 **Nada impide que la regla de «envolver en vez de cortar» del panel vuelva a meterse
+- [x] 🟡 **Nada impide que la regla de «envolver en vez de cortar» del panel vuelva a meterse
       dentro de un `@media`, que es exactamente como nació este defecto.** Abierto por
       `web-venta` el 2026-09-13, en la misma vuelta que arregló la instancia (`7878342f`).
-      **Qué pasó:** el arreglo original puso `white-space: normal` para `.panelTitle`,
-      `.panelTxt`, `.panelBarLbl` y `.panelPillTxt` dentro de `@media (max-width: 767px)`.
-      Cerró 320 y 390 —los anchos que se miraron— y dejó vivo el corte en 768, 1440 y 1920:
-      6 y 5 textos cortados en la banda «Tres cosas que vas a usar todos los días» de la home,
-      con el título del panel del chatbot en «WhatsA…» (91px perdidos de 20 caracteres) y las
-      filas de agentes en «Recordar citas …», «Avisar los pago…», «Invitar a quien …».
-      **Reproducción del defecto (40 s, ya no da rojo porque está arreglado):**
-      `cd web-factory/apps/onia-platform && node scripts/mirar-venta.mjs --out=/tmp/venta` →
-      hoy sale «Sin fallas»; antes del arreglo salía `home @ tablet-768`, `home @ ancha-1440` y
-      `home @ ancha-1920: texto recortado`.
-      **Lo que falta:** un test de unidad que lea `sitio.module.css` y exija que esas cuatro
-      clases declaren `white-space: normal` **fuera de toda media query** — el gate que hay
-      (`mirar-venta.mjs`) mide el síntoma con un navegador, se corre a mano y no está en
-      `prebuild`, así que la regresión puede vivir días. Validar por mutación: devolver la
-      regla adentro del `@media` tiene que dar **rojo nombrando las cuatro clases**.
-      **Por qué importa:** es la clase, no la instancia. La cura ya se escribió dos veces
+      **CERRADO el 2026-09-13 07:20 La Paz por `web-venta`** (`e2e32a78`,
+      `web-factory/apps/onia-platform/src/app/(sitio)/panel-envuelve-en-vez-de-cortar.test.ts`):
+      el gate corre en `npm test`, o sea también en `prebuild`, que era el punto — no en un
+      alias suelto que no corre nadie. **Los sujetos se derivan del DISCO** (toda regla de
+      cualquier CSS de `src/` que declare `text-overflow: ellipsis`, que es la forma en que
+      una clase declara «voy a cortar este texto»), nunca de la lista de nombres que este ítem
+      pedía: una lista de inclusión falla abierto el día que aparece el panel siguiente. Hoy
+      devuelve `.panelTitle`, `.panelTxt` y `.panelPillTxt`. Cuatro aserciones: el universo no
+      puede quedar vacío (`MINIMO_SUJETOS`), el caso ancla exige que las tres clases MEDIDAS
+      cortadas estén en él, la cura tiene que vivir fuera de toda media query **y después** de
+      la regla que corta (con igual especificidad manda el orden), y la simétrica: ninguna
+      media query puede devolverle `white-space: nowrap` a una clase ya curada.
+      ⚠️ **`.panelBarLbl` NO quedó como sujeto, aunque el ítem pedía las cuatro.** Verificado
+      en el CSS: no declara `text-overflow` ni `overflow: hidden`, y ningún ancestro suyo
+      declara `white-space: nowrap` —que es una propiedad heredada—, así que ya envuelve por
+      defecto y su `white-space: normal` es un cinturón, no un arreglo. Incluirlo exigía
+      nombrarlo a mano, que es justo la lista que el gate existe para no tener; si algún día
+      gana un `nowrap`, entra solo por la aserción simétrica.
+      **Validado por mutación, cuatro direcciones, restaurando con `cp`:** (1) la cura de
+      vuelta adentro del `@media` → **rojo** nombrando las tres clases con archivo y línea
+      (`:472`, `:530`, `:659`); (2) un `@media` que reimpone `nowrap` → **rojo** nombrando la
+      media query; (3) arrancar el blanqueo de comentarios → **rojo**; (4) cegar el marcador
+      de sujetos → **rojo** por `MINIMO_SUJETOS` y por el ancla, en vez de aprobar la nada.
+      Y se probó que la CADENA lo corre y no sólo que el archivo existe: con el CSS mutado,
+      `npm test` sale 1 y lo nombra (82 archivos, 81 pasan).
+      ⚠️ **Lo que enseñó la validación:** la mutación (3) pasó **VERDE la primera vez**, o sea
+      que el blanqueo de comentarios era una guarda **decorativa**. El archivo real la esquiva
+      por casualidad: su bitácora cita `@media (max-width: 767px)` **antes** de citar una regla
+      con llaves, así que el `@` nunca queda primero después de un `}` y el parser no llega a
+      apilar el envoltorio fantasma. Se le escribió su caso propio con fixture, que invierte
+      ese orden —la forma normal de una bitácora, «antes esto vivía acá y la cura estaba
+      allá»—, y recién ahí la mutación da rojo. Una guarda sin su caso propio es una hipótesis.
+      ⚠️ **La reproducción que decía este ítem era FALSA y por eso se corrige acá:** afirmaba
+      que `node scripts/mirar-venta.mjs --out=/tmp/venta` «hoy sale Sin fallas». Ese cero se
+      había medido contra el build local (`next start`), no contra producción. Corrido hoy
+      contra `onia.com.bo`, que es lo que ve un lead: **5 textos cortados a 768, 5 a 1440 y 5
+      a 1920** («WhatsApp del negocio», «Para aprobar», «Recordar citas de mañana», «Avisar los
+      pagos vencidos», «Invitar a quien no vino», y «Contabilidad» sólo a 768).
+      **No es una regresión ni un defecto nuevo: falta DESPLEGAR.** `7878342f` está en
+      `origin/main` pero no en el build vivo (`/opt/onia-landing/runtime-next/.commit` →
+      `bd90e8af2`, del 2026-09-12 22:52; `git merge-base --is-ancestor 7878342f bd90e8af2` da
+      1). La landing **no se publica sola a propósito** porque lo pendiente toca
+      `src/lib/pricing.ts`, que es fuente de precio (`onia-publicar-solo.sh --dry-run` →
+      «landing: NO publico solo — toca una fuente de precio»). **Ya está pedido y bloqueado en
+      Sergio Urcullo** en el pedido de deploy vivo de la landing, que nombra `7878342f` entre
+      sus cuatro arreglos: **no se vuelve a pedir ni se re-mide hasta que vuelva a `ready`.**
+      Este commit no lo deja corto: es un `.test.ts` y `llegaAlCliente()` de
+      `scripts/deploy-vivo.mjs` no lo cuenta como arreglo varado (verificado en
+      `NO_LLEGA_AL_CLIENTE`).
+      **Por qué importaba:** es la clase, no la instancia. La cura ya se escribió dos veces
       para la misma familia de textos y las dos veces cerró sólo el viewport que alguien miró.
 
 - [x] 🟡 **`precios-vivos.mjs` acusa al CÓDIGO por un precio que sólo está en producción:
