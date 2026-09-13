@@ -12,6 +12,21 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-13 07:09 La Paz — Estética y spa 9/9, sin hallazgo nuevo
+
+Al arrancar: `select count(*) from organizations where name like 'zz-qa-%'` dio 0, sin huérfanos.
+
+Rotando rubro (dental venía cubierto varias veces seguidas): `RECORRIDO_RUBRO='Estética y spa'`.
+Recorrido completo, 9/9 — cuenta creada, correo confirmado, onboarding en 6 pantallas (pregunta →
+negocio → horarios → servicios → equipo → listo), cliente `zz-qa-2026-09-13-0709-paciente`
+cargado y visto en `/patients` (grupo "Clientas"), cita 2026-09-14 09:00 vista en
+`/appointments` (`cmtzh8fj2000k01rwryvam0wm`), factura con ítem visible en
+`/billing/cmtzh8qme000m01rw1fpq99nz` (frenada sin pagar). El panel `/dashboard` no lista el
+dato del paso 6 — no es un fallo, esa pantalla no muestra esa lista. `completo: true`, 0 filas
+`zz-qa-` al cerrar (organizations, appointments). Sin hallazgo nuevo.
+
+---
+
 ## 2026-09-13 06:09 La Paz — dental 9/9 (rutina), sin hallazgo nuevo
 
 Al arrancar: `select count(*) from organizations where name like 'zz-qa-%'` dio 0, sin huérfanos.
