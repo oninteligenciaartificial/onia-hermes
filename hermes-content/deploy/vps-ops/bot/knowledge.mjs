@@ -796,10 +796,33 @@ export function getKnowledge(options = {}) {
   }
 }
 
-/** Lo que /health tiene que decir para que "edite y no pasó nada" no tarde dias en descubrirse. */
-export function knowledgeHealth(options = {}) {
-  const state = getKnowledge(options);
+/**
+ * Lo que /health tiene que decir para que "edite y no pasó nada" no tarde dias en descubrirse,
+ * resuelto con la MISMA funcion que el camino de respuesta (`ensureKnowledge`) para que conteste
+ * sobre el documento que le toca al lead y no sobre otro.
+ *
+ * ⚠️ ES ASINCRONICA A PROPOSITO, y acá vivía el defecto. Hasta el 2026-09-12 esto era
+ * `knowledgeHealth()`, sincronica: con cache fria por inbox NO espera el primer fetch, asi que
+ * reportaba el ARCHIVO del proceso aunque existiera una fila publicada para ese inbox. Mientras
+ * no hubo filas publicadas los dos coincidian y no se vio; el dia que se publique una, el gate
+ * de precios que le pregunta a /health habria fallado EN VERDE sobre el documento equivocado.
+ * La hermana sincronica se BORRO en vez de dejarse "por si acaso": era exactamente el pie de
+ * banco con el que se vuelve a pisar el mismo agujero. Ver el bloque 0.a-bis de
+ * webhook-server.test.mjs.
+ */
+export async function ensureKnowledgeHealth(options = {}) {
+  return healthFromState(await ensureKnowledge(options), options);
+}
+
+/**
+ * `alcance` NO es decoracion: es lo que hace que el que pregunta pueda distinguir "te contesto
+ * por el inbox 4" de "te contesto por el archivo del proceso". Los dos JSON son iguales en todo
+ * lo demas, y esa ambiguedad ES el defecto que este campo cierra.
+ */
+function healthFromState(state, options = {}) {
+  const key = cacheKeyOf(options);
   return {
+    alcance: key || "proceso",
     source: state.source,
     version: state.version,
     updatedBy: state.updatedBy,

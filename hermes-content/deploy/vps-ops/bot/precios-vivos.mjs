@@ -247,11 +247,17 @@ export function juzgar(crudo, cargado) {
 // que compro un cliente": el inbox ES la clave. Y la fuente esta ENCENDIDA en produccion —
 // el proceso vivo declara `ONIA_BOT_KNOWLEDGE_URL` y `BOT_KNOWLEDGE_SECRET`.
 //
-// Mientras tanto `/health` llama `knowledgeHealth()` SIN inbox (`webhook-server.mjs:189`), asi
-// que reporta el ARCHIVO. O sea: el dia que alguien publique la fila del inbox 4, el lead cotiza
-// de esa fila y este gate seguiria firmando "EL BOT VIVO COTIZA SOLO PRECIOS DE LA FUENTE UNICA"
-// sin haberla mirado nunca. Hoy `/published?inboxId=4` da 404 y por eso el lead cae al archivo:
-// el agujero esta a UNA fila de distancia, y falla EN VERDE, que es el peor modo.
+// `/health` llamaba `knowledgeHealth()` SIN inbox, o sea reportaba el ARCHIVO: el dia que
+// alguien publicara la fila del inbox 4, el lead cotizaria de esa fila y este gate seguiria
+// firmando "EL BOT VIVO COTIZA SOLO PRECIOS DE LA FUENTE UNICA" sin haberla mirado nunca — falla
+// EN VERDE, que es el peor modo. Desde el 2026-09-12 `/health` acepta `?inboxId=N` y resuelve con
+// `ensureKnowledgeHealth`, la MISMA funcion que el camino de respuesta, y declara en `alcance`
+// que documento midio (`inbox:4` vs `proceso`). ⚠️ Commiteado, NO DESPLEGADO: el bot vivo todavia
+// corre el build sin eso, asi que lo de abajo sigue siendo necesario.
+//
+// Y aunque se despliegue, este gate sigue preguntandole al PRODUCTO directo en vez de creerle a
+// /health: son dos fuentes distintas, y un gate que le pregunta al mismo proceso que audita se
+// queda sin forma de detectar que ese proceso se equivoca.
 
 /** El contenedor de la base de Chatwoot: Swarm le pega un sufijo, asi que no se puede nombrar. */
 export function contenedorChatwootDb({ correr = spawnSync } = {}) {

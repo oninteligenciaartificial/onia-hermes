@@ -283,8 +283,30 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 da **exit 0** contra el contenedor. No le queda ningún `ok` pendiente a Sergio Urcullo.
 La historia completa queda acá abajo para no perderla.
 
-- [ ] 🔴 **`/health` contesta sobre el ARCHIVO y el lead recibe la fila POR INBOX: el gate de
-      precios puede fallar en verde.** Medido el 2026-09-12 19:50 La Paz. Toda conversación pasa
+- [x] 🔴 **~~`/health` contesta sobre el ARCHIVO y el lead recibe la fila POR INBOX~~ — CERRADO EN
+      CÓDIGO el 2026-09-12 20:20 La Paz. ⚠️ COMMITEADO, NO DESPLEGADO: el bot vivo todavía corre el
+      build sin esto, así que en producción `/health` sigue jurando por el archivo.**
+      `/health` acepta `?inboxId=N` y resuelve con **`ensureKnowledgeHealth`**, que es
+      `ensureKnowledge` — la MISMA función que el camino de respuesta — y no la hermana sincrónica
+      que se saltea el primer fetch. Además la respuesta **declara `alcance`** (`inbox:4` vs
+      `proceso`): sin ese campo los dos JSON son idénticos y el que pregunta no puede distinguir
+      qué documento le contestaron, que era el defecto de fondo. Un `inboxId` que no es un número
+      **no** se convierte en una medición por inbox disfrazada: se mide el proceso y `alcance` lo
+      dice.
+      **La hermana sincrónica `knowledgeHealth` se BORRÓ**, no se dejó "por si acaso": quedaba
+      exportada sin un solo llamador de producción, que es exactamente el pie de banco con el que
+      se vuelve a pisar el mismo agujero.
+      Prueba: 4 casos nuevos en `webhook-server.test.mjs` (bloque 0.a-bis), uno de ellos por HTTP
+      real; **validados por mutación** — quitar `...alcanceDeConsulta(consulta)` y clavar
+      `alcance: "proceso"` ponen 2 en rojo cada uno. Suite del bot completa: 943 → verde.
+      **Lo que sigue faltando y NO lo puede hacer este carril:** `DESPLEGAR: bot` (y el `knowledge`
+      es un segundo comando aparte). Mientras tanto `precios-vivos.mjs` compensa desde afuera, y su
+      comentario ya dice por qué va a seguir compensando aunque se despliegue: preguntarle al
+      mismo proceso que se audita deja sin forma de detectar que ese proceso se equivoca.
+
+<details><summary>Diagnóstico original del 2026-09-12 19:50 (cómo se encontró)</summary>
+
+      Medido el 2026-09-12 19:50 La Paz. Toda conversación pasa
       por `ensureKnowledge({ inboxId })` (`run-turn.mjs:147`) y `getKnowledge` devuelve la copia
       `db` de esa clave apenas exista (`cacheKeyOf` keyea `inbox:<id>`). Pero `/health` llama
       `knowledgeHealth()` **sin inbox** (`webhook-server.mjs:189`), así que reporta el archivo.
@@ -301,6 +323,8 @@ La historia completa queda acá abajo para no perderla.
       Mientras no esté, el gate compensa desde afuera preguntándole al producto directo.
       Reproducción: `npm run precios:vivos` (hoy exit 0, imprime la línea «filas publicadas por
       inbox»).
+
+</details>
 
 - [ ] 🟡 **El bot tuvo una ventana sirviendo el M4_BODY SIN precios, y no sé por qué.**
       Medido el 2026-09-12: a las **22:48:35 UTC** la conv 49 preguntó *"Cuanto cuesta el sistema?

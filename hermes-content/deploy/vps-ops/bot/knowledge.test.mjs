@@ -27,7 +27,7 @@ import {
   ensureKnowledge,
   getKnowledge,
   getOrgKnowledge,
-  knowledgeHealth,
+  ensureKnowledgeHealth,
   parseKnowledge,
   readKnowledgeFile,
   resetKnowledgeCache,
@@ -123,12 +123,12 @@ test("archivo AUSENTE: el bot sigue contestando el guion completo, sin un solo {
   });
 });
 
-test("JSON ROTO: se rechaza entero, se sigue con codigo y el error queda a la vista en /health", () => {
-  conArchivo("{ esto no es json", (path) => {
+test("JSON ROTO: se rechaza entero, se sigue con codigo y el error queda a la vista en /health", async () => {
+  await conArchivo("{ esto no es json", async (path) => {
     const config = withKnowledge(DEFAULT_CONFIG, { path, nowMs: NOW_MS });
     assert.equal(config, DEFAULT_CONFIG);
 
-    const salud = knowledgeHealth({ path, nowMs: NOW_MS });
+    const salud = await ensureKnowledgeHealth({ path, nowMs: NOW_MS });
     assert.equal(salud.source, "code");
     assert.match(salud.lastError, /JSON invalido/);
   });
@@ -449,13 +449,14 @@ test("checkCli: devuelve 0 con el ejemplo, 1 y el motivo exacto con un archivo r
   });
 });
 
-test("/health dice de donde salio lo que el bot esta diciendo (si no, 'edite y no paso nada' tarda dias)", () => {
-  conArchivo(valido({ version: "2026-08-06.9" }), (path) => {
-    const salud = knowledgeHealth({ path, nowMs: NOW_MS });
+test("/health dice de donde salio lo que el bot esta diciendo (si no, 'edite y no paso nada' tarda dias)", async () => {
+  await conArchivo(valido({ version: "2026-08-06.9" }), async (path) => {
+    const salud = await ensureKnowledgeHealth({ path, nowMs: NOW_MS });
     assert.equal(salud.source, "file");
     assert.equal(salud.version, "2026-08-06.9");
     assert.equal(salud.lastError, null);
     assert.equal(salud.path, path);
+    assert.equal(salud.alcance, "proceso", "sin inbox se midio el proceso, y hay que decirlo");
   });
 });
 
