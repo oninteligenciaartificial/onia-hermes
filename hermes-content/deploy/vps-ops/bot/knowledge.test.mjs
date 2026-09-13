@@ -1197,6 +1197,76 @@ test("panel: /health dice source:'panel' con la version y el autor del editor", 
   assert.deepEqual(salud.panel, { configurado: true, sirviendo: true, descartes: 0, lastError: null });
 });
 
+test("panel: publicar NO puede APAGAR una respuesta que el archivo ya daba", async () => {
+  // El defecto es ESTRUCTURAL y se lee en el codigo; no hace falta que le haya pasado a un lead.
+  // Encontrado el 2026-09-13 sembrando una fila de prueba en el panel de `onia-interna` (el bot
+  // de VENTA) — fila propia, en borrador, que NUNCA sirvio a un desconocido: no es un incidente
+  // vivo y no se cuenta como tal.
+  //
+  // Lo que la fila dejo a la vista es una cadena que se cierra sola:
+  //   1. `editor-sugerir.mjs` le dicta al LLM un solo id posible — 'faq: lista de { id:
+  //      "negocio", ... }' — y ademas le exige (regla 1) devolver el DOCUMENTO COMPLETO;
+  //   2. el bot de VENTA no consume `negocio`: FAQ_TEMPLATE mapea `precios` -> M4_BODY y
+  //      `siat` -> M_SIAT_BODY, mientras `negocio` -> R_FAQ_NEGOCIO lo sirve el recepcionista;
+  //   3. el panel reemplazaba el documento ENTERO.
+  // O sea que CUALQUIER edicion hecha desde el panel reescribia las FAQ bajo `negocio` y apagaba
+  // `precios` y `siat`, devolviendo al bot al M4_BODY por defecto de config.mjs ("no te quiero
+  // tirar una cifra") — contra la decision de Sergio Urcullo del 2026-09-03 de que el bot diga
+  // los precios publicos. Sin una sola señal: /health informa `descartes: 0, lastError: null`,
+  // o sea SANO, porque cada entrada que llego es valida. Lo que se pierde es lo que NO llego.
+  // La fila sembrada lo muestra literal: sus dos FAQ son de precios y de SIAT por su texto, y
+  // las dos quedaron con id `negocio`.
+  //
+  // La fuente panel ya se declaraba tolerante POR ENTRADA para no dejar al editor sin nada
+  // ("castigarle el documento entero por una entrada lo deja sin nada"). Este es el mismo
+  // principio en la otra dimension: lo que el panel NO trae se HEREDA del archivo, en vez de
+  // apagarse. Editar una FAQ no puede ser una forma de borrar las demas.
+  const archivo = valido({
+    faq: [
+      {
+        id: "precios",
+        title: "Precios",
+        body: "El sistema arranca en Bs 320 al mes con el plan Básico.",
+        tags: ["precio", "cuanto"],
+        status: "publicado",
+      },
+    ],
+  });
+  const panel = valido({
+    version: "v1",
+    faq: [
+      {
+        id: "negocio",
+        title: "Planes y precios",
+        body: "La lista completa y al día está en onia.com.bo/precios.",
+        tags: ["precio", "planes"],
+        status: "publicado",
+      },
+    ],
+  });
+  await conArchivo(archivo, async (path) => {
+    const fetch = fetchFalso(panel);
+    const state = await getPanelKnowledge({ ...PANEL_OPTS, fetch, path, nowMs: NOW_MS });
+    assert.equal(state.source, "panel", "la fila publicada manda: es lo que el editor acaba de guardar");
+
+    const config = withKnowledge(DEFAULT_CONFIG, { ...PANEL_OPTS, fetch, path, nowMs: NOW_MS });
+    const texto = step(
+      createState({ channel: "sim", contactRef: "t" }),
+      { text: "cuanto cuesta el sistema?", receivedAt: T0 },
+      { config },
+    )
+      .replies.map((reply) => reply.text)
+      .join("\n");
+
+    assert.match(texto, /Bs 320/, "el panel no trajo FAQ `precios`: la del archivo se conserva y el bot SIGUE cotizando");
+    assert.doesNotMatch(
+      texto,
+      /no te quiero tirar una cifra/i,
+      "volver al M4_BODY por defecto es la regresion: el bot de venta dejaria de dar el precio",
+    );
+  });
+});
+
 test("panel: mapPanelDoc y sanitizePanelKnowledge son puros y defensivos", () => {
   assert.equal(mapPanelDoc(null), null);
   assert.equal(mapPanelDoc({ data: "no-objeto" }), null);

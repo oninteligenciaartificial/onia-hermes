@@ -856,6 +856,53 @@ export function sanitizePanelKnowledge(data) {
   return { data: podado, descartes: primero.errors, errors: [] };
 }
 
+/**
+ * Las FAQ del panel ENCIMA de las del archivo, por `id`. Un `id` que el panel trae se queda con
+ * la version del panel (incluido `negocio`, que es una LISTA y la administra entera el editor);
+ * un `id` que el panel NO trae se HEREDA del archivo. Asi editar una FAQ no borra las demas.
+ */
+function fusionarFaq(base, encima) {
+  if (!Array.isArray(encima) || !encima.length) return Array.isArray(base) ? base : undefined;
+  if (!Array.isArray(base) || !base.length) return encima;
+  const tocados = new Set(encima.map((faq) => faq?.id).filter((id) => typeof id === "string"));
+  return [...encima, ...base.filter((faq) => !tocados.has(faq?.id))];
+}
+
+/**
+ * BASE DEL PANEL (2026-09-13): lo que el panel NO trae se hereda del ARCHIVO, en vez de apagarse.
+ *
+ * Nace de un defecto ESTRUCTURAL, visto sembrando una fila de prueba en el panel de
+ * `onia-interna` (fila propia, en borrador, que nunca sirvio a un lead). `editor-sugerir.mjs` le
+ * dicta al LLM un unico id posible (`negocio`) y le exige devolver el DOCUMENTO COMPLETO, pero el
+ * bot de VENTA consume `precios` (-> M4_BODY) y `siat` (-> M_SIAT_BODY), no `negocio`. Con el
+ * documento reemplazado entero, cualquier edicion desde el panel apagaba la cotizacion y devolvia
+ * al bot al M4_BODY por defecto ("no te quiero tirar una cifra"), contra la decision de Sergio
+ * Urcullo del 2026-09-03. Sin una sola señal: /health decia `descartes: 0, lastError: null,
+ * sirviendo: true` — porque lo que llego era valido; lo que se perdia es lo que NO llego.
+ *
+ * Es el MISMO principio que ya justificaba rechazar por entrada y no todo-o-nada ("castigarle el
+ * documento entero por una entrada lo deja sin nada"), aplicado a la otra dimension: guardar en
+ * el panel no puede ser una forma de BORRAR en silencio lo que el editor no estaba mirando.
+ *
+ * Sigue siendo el panel el que manda en lo que SI trae (y en schema/version/updatedBy: son de la
+ * fila que el editor guardo). Si el archivo falta, esta roto o la fusion no valida, se sirve el
+ * panel puro — nunca peor que antes de este cambio. La fuente "db" (clientes con add-on) NO pasa
+ * por aca: el archivo es el guion de VENTA de Onia y heredarlo cruzaria el bot de otro dueño.
+ */
+function conBaseDelArchivo(data, options = {}) {
+  try {
+    const base = readKnowledgeFile(knowledgePath(options), options).data;
+    if (!base || typeof base !== "object") return data;
+    const fusionado = { ...base, ...data };
+    const faq = fusionarFaq(base.faq, data.faq);
+    if (faq) fusionado.faq = faq;
+    else delete fusionado.faq;
+    return validateKnowledge(fusionado).ok ? fusionado : data;
+  } catch {
+    return data;
+  }
+}
+
 async function fetchPanelKnowledge(options = {}) {
   const { url, secret, timeoutMs, fetch: doFetch } = panelConfig(options);
   if (!url || !secret || typeof doFetch !== "function") return { data: null, error: null, missing: true };
@@ -884,7 +931,7 @@ async function fetchPanelKnowledge(options = {}) {
       // no salio y por que, sin que eso tumbe al resto del documento ni al bot.
       console.error(`[knowledge:panel] ${descartes.length} entrada(s) descartada(s): ${descartes.join(" · ")}`.slice(0, 600));
     }
-    return { data, descartes, error: null };
+    return { data: conBaseDelArchivo(data, options), descartes, error: null };
   } catch (error) {
     return { data: null, error: `no se pudo leer el panel: ${String(error?.message || error).slice(0, 160)}` };
   }
