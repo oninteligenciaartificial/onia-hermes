@@ -1,5 +1,21 @@
 # Handoff — carril fiscal
 
+> ⚡⚡ **ACTUALIZACIÓN 2026-09-13 madrugada (carril `claude/siat-firma-viii`): la etapa
+> VIII está CORRIDA ENTERA — 690/690 en 908 VALIDADA.** Sergio Urcullo decidió NO quitar
+> la modalidad electrónica; la firma XMLDSig (no XAdES) ya estaba en
+> `src/xml-signer.mjs` y esta sesión la cableó como etapa VIII del runner (combos
+> `*-m1`, `--etapa VIII` / `--etapa gate-viii`, cert por `SIAT_FIRMA_KEY_FILE`/`SIAT_FIRMA_CERT_FILE`).
+> **Medido en el piloto:** (1) el CUFD es POR MODALIDAD — con el de la computarizada:
+> `902/914 CUFD INVALIDO`; (2) el piloto NO valida la cadena del certificado, solo que el
+> subject lleve el NIT en `serialNumber` — sin él: `902/922 ... NIT esperado 5371375010,
+> enviado null`; (3) un AUTOFIRMADO con el NIT pasa: 690/690 validadas, cero reintentos,
+> mediana 162 ms (checkpoint `/opt/onia-siat/fase1-state-viii.json`, log
+> `fase1-viii.ndjson`; cert autofirmado en `/opt/onia-siat/certs/`, chmod 600, fuera de
+> git). **Toda mención de abajo a "decisión de la etapa VIII" o "llamada al 800 10 3444"
+> es HISTORIA.** Queda: leer el marcador del portal (login de Sergio) y, para PRODUCCIÓN,
+> el certificado AGETIC real (trámite de Leslie, Bs 70 — pasos exactos en
+> `ONIA_SIAT_TU_PARTE_DEL_TRAMITE.md` paso 3).
+>
 > ⚡ **ACTUALIZACIÓN 2026-09-13 (sesión de control):** el **Punto de Venta 1 YA EXISTE** —
 > creado por SOAP `registroPuntoVenta` (tipo 5 · CAJEROS, `transaccion:true`, verificado con
 > `consultaPuntoVenta`; CUIS del PdV 1: `35B2967A`). El runner corre la matriz completa
