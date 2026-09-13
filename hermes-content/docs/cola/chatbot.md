@@ -3352,6 +3352,23 @@ archivos.**
 
 ## Cerrado — no rehacer
 
+- [x] **El gate que define el «hecho» del carril firmaba VERDE con cinco personas sin contestar.**
+      Cerrado el 2026-09-13 09:05 La Paz (`4c84ccf4`). `scripts/objetivo_visible.mjs` mide que la
+      conversación de un desconocido SE VEA en la bandeja — y eso estaba bien. Lo que callaba es
+      que **5 de las 6 que nombraba como prueba del objetivo llevaban 15-20 días sin respuesta**,
+      entre ellas `mariohassen` y `F`, que son los dos contactos del fixture *"respuesta REAL de
+      producción"* de su propio self-check: el gate usaba como prueba de éxito exactamente a las
+      personas que el sistema abandonó. **El código de salida NO cambia a propósito** (contestarles
+      no está en manos de un loop, y un rojo acá quedaría rojo para siempre); lo que cambia es el
+      silencio: el verde nombra cuántas siguen colgadas, cuáles y hace cuánto, derivándolo del
+      vigía en vez de reimplementar el criterio. Corrido **en vivo**: `⚠️ Pero 5 de ellas sigue(n)
+      SIN respuesta (#40, #37, #36, #35, #34; la mas vieja hace 20 d)`.
+      **Trampa que costó la parte difícil:** el vigía importa `esNuestra` de ese archivo, así que
+      pedirle el dato desde dentro de un `await` de nivel superior cierra un ciclo de ESM y el
+      proceso muere con `exit 13` / *"Detected unsettled top-level await"* sin pasar por ninguna
+      traza de error. Se corrige con `main().then(...)`. 51 casos y dos mutaciones en rojo.
+
+
 - [x] **El vigía del desconocido colgado avisó UNA vez y calló 10 días con cinco personas
       esperando.** Cerrado el 2026-09-13 09:40 La Paz. Medido en el log vivo del VPS
       (`/var/log/onia-vigia-sin-respuesta.log`): el vigía corre cada 2 h, detecta bien a los 5,
