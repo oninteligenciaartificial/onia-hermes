@@ -326,8 +326,16 @@ La historia completa queda acá abajo para no perderla.
 
 </details>
 
-- [ ] 🟠 **F2.1 — el bot de ventas se configura desde el PANEL: código listo y probado, falta el
-      deploy (OK de Sergio Urcullo) y que él publique una vez desde el editor.**
+- [x] 🟠 **F2.1 — el bot de ventas se configura desde el PANEL. ~~falta el deploy~~ CUMPLIDO Y
+      VIVO; el pendiente estaba VENCIDO, y además el ítem estaba DUPLICADO en esta cola.**
+      ✅ Cerrado el 2026-09-12 23:20 La Paz, medido en el contenedor, no heredado:
+      `docker exec onia-center wget -qO- http://127.0.0.1:3020/health` →
+      `knowledge.source:"panel"`, `version:"v2"`, `updatedBy:"carril-brecha-panel-venta"`,
+      `panel:{configurado:true, sirviendo:true, descartes:0, lastError:null}`. O sea que el deploy
+      ya ocurrió **y** alguien ya publicó desde el editor (fila del `2026-09-13T02:38:53Z`), que
+      eran las dos condiciones que este ítem pedía. La copia duplicada de este mismo ítem, con el
+      mismo texto y el mismo estado falso, se borró en la misma vuelta — la delató
+      `node scripts/verificar_cola.js`, que la reportaba como repetida.
       Escrito el 2026-09-12 en `hermes-content/deploy/vps-ops/bot/` (rama
       `claude/cobro-e2e-punto-1-25ba65`): `knowledge.mjs` ganó la **fuente "panel"** — con
       `ONIA_KNOWLEDGE_URL` apuntando a la fila publicada de la org interna
@@ -406,72 +414,6 @@ La historia completa queda acá abajo para no perderla.
       intacto. **Lo que la probaría:** una línea por recopia en el log de `webhook-server.sh`, o
       un `stat` del archivo durante un `knowledge`/deploy. Si es eso, el arreglo es que la recopia
       sea atómica (escribir al lado y `mv`), no que el motor reintente.
-
-- [ ] 🟠 **F2.1 — el bot de ventas se configura desde el PANEL: código listo y probado, falta el
-      deploy (OK de Sergio Urcullo) y que él publique una vez desde el editor.**
-      Escrito el 2026-09-12 en `hermes-content/deploy/vps-ops/bot/` (rama
-      `claude/cobro-e2e-punto-1-25ba65`): `knowledge.mjs` ganó la **fuente "panel"** — con
-      `ONIA_KNOWLEDGE_URL` apuntando a la fila publicada de la org interna
-      (`GET /api/chatbot-knowledge/published?organizationId=…`, Bearer `BOT_KNOWLEDGE_SECRET`),
-      el loader la trae con el **mismo TTL de 5 min** y el **mismo validador N1**, `/health` dice
-      `knowledge.source:"panel"` con la versión y el autor del editor, y si la URL falla o no hay
-      nada publicado **cae al archivo de siempre** (jamás mudo). Diferencias deliberadas con la
-      fuente por org: NO enciende el modo recepcionista (es la cara de venta), y una **entrada
-      inválida se descarta SOLA con log** (`[knowledge:panel] … descartada(s)`) en vez de tumbar
-      el documento entero — un precio metido en una FAQ rechaza ESA FAQ, los precios siguen
-      saliendo solo de las fuentes. Un error estructural sí rechaza entero.
-
-      **Evidencia, medida:**
-      · Tests: `node --test` en el árbol del bot → **959 pass / 0 fail** (9 tests nuevos de la
-        fuente panel en `knowledge.test.mjs`: mapeo del sobre del producto, TTL, URL caída →
-        archivo, precio inválido → descarte individual, health).
-      · VPS (SSH solo lectura, 2026-09-12): org `onia-interna` = id c956c02fccd8573cd6fcc5b35,
-        entitlement `addon.whatsapp` **active** (validUntil NULL) → el gate del endpoint pasa;
-        `chatbot_knowledge` está **vacía** → el endpoint contesta hoy
-        `404 {"error":"Sin conocimiento publicado"}` (probado con el Bearer real desde el
-        contenedor `onia-platform`), que la fuente trata como "nada publicado" y sigue con el
-        archivo. El admin de esa org es `superadmin@onia.com.bo` (SUPERADMIN) — Sergio entra con
-        el método del magic link ya documentado.
-
-      **Para encender (deploy, necesita OK):** agregar a `/opt/onia/bot/webhook.env` la línea
-      `ONIA_KNOWLEDGE_URL=http://onia-platform:3000/api/chatbot-knowledge/published?organizationId=c956c02fccd8573cd6fcc5b35`
-      (el Bearer ya está: `BOT_KNOWLEDGE_SECRET`), y correr
-      `/opt/onia/bot/deploy-bot.sh --aplicar` (lleva `knowledge.mjs`, `webhook-server.sh` con el
-      `-e` nuevo y reinicia). **LISTO =** Sergio Urcullo edita una respuesta en el editor del
-      panel de `onia-interna`, y `/health` del bot dice `source:"panel"` con su versión — y el
-      bot la contesta, sin tocar el repo.
-
-<details><summary>Diagnóstico completo del 2026-09-12 (tablero `t_e45a24ff`, instrumento `97e466fa`)</summary>
-
-      **Lo que el bot MANDÓ**, no lo que podría mandar — `messages` de Chatwoot, textual:
-      *"el sistema arranca en Bs 320 al mes con el plan Básico, Bs 750 el Profesional y Bs 1.500
-      el Completo. El chatbot de WhatsApp va aparte, Bs 390 al mes."* Tres defectos en una
-      oración: dos montos muertos, el plan **Crece** no existe para el bot, y cobra aparte un
-      chatbot que el plan Completo ahora **incluye**.
-
-      **Por qué sobrevivió a la escalera C.** El simulador (`simulate.mjs`) y el gate
-      (`test:precios-bot`) leen el **repo**, y el repo está bien. El bot lee
-      `/tmp/onia-bot/knowledge.json`, que está en `.gitignore` **a propósito** porque se publica
-      a mano. Arreglar el repo no toca producción, y ningún gate miraba la copia viva: la
-      escalera C barrió landing y plataforma —los dos con pedido de deploy— y dejó al bot afuera,
-      callado. Mi propia línea de arranque decía `simulador 3/3` mientras pasaba esto.
-
-      **Cerrado de este carril:** `npm run precios:vivos` — mide la copia que el PROCESO lee y la
-      ata a la fuente única. Deriva los sujetos del artefacto (todo string, a cualquier
-      profundidad) y es tri-estado. Hoy sale **exit 1**; cuando esté publicado, exit 0.
-
-      🔴 **FALTA, y NO lo puede hacer este carril: publicar.** `DESPLEGAR: bot` publica el
-      código pero **no el texto** (`publicar.sh` preserva `knowledge.json` a propósito), así que
-      hace falta además un comando:
-      `ONIA_BOT_KNOWLEDGE_FILE=/opt/onia/bot/knowledge.onia.json /opt/onia/bot/webhook-server.sh knowledge`.
-      Va `DESPUES-DE: plataforma`: si el bot sale primero cotiza 890 mientras la caja cobra 750.
-
-      **Su causa raíz ya está cerrada en el repo** — ítem de abajo, `deploy-bot.sh` +
-      `webhook-server.sh`. No tocó `publicar.sh` (el compartido con `onia-cola`): el agujero
-      estaba un nivel más adentro. Este ítem sigue abierto igual porque lo que falta es
-      **publicar**, y eso es el `ok` de Sergio Urcullo.
-
-</details>
 
 - [x] ✅ **CERRADO el 2026-09-12 23:23 UTC (`851eddff`): los gates del carril estaban CIEGOS en
       el nodo-casa — cinco tests rojos, el self-check de la sonda en 41/42, y `bloqueos:vencidos`
@@ -3049,6 +2991,30 @@ archivos.**
 ---
 
 ## Cerrado — no rehacer
+
+- [x] **Dos arreglos hermanos para el MISMO defecto, y el mío iba a REVERTIR el que está vivo.**
+      Cerrado el 2026-09-12 23:15 La Paz (`bb1ae124`). Anoche escribí `conBaseDelArchivo` para que
+      publicar desde el panel no apagara la cotización (`1f63864c`). Hoy, midiendo, resultó que
+      `origin/main` ya traía **`mergePanelKnowledge` (F2.2, `1b0bdcf4`)** para lo mismo — y es el
+      que corre en producción. Mi rama no lo tenía: mergear así **borraba F2.2** y dejaba la
+      versión más débil.
+
+      **F2.2 es sucesora probada, no empate:** cubre todo lo mío (merge nivel 1 + FAQ por `id`) y
+      además objetos anidados por sub-campo, `triggersExtra.demo` por UNIÓN, y es **pura y
+      exportada** (la mía leía disco). Resuelto quedándome con F2.2 y **borrando** mis dos
+      funciones — no se dejan "por si acaso": una hermana viva es como el agujero vuelve.
+      Mis 70 líneas de test sobrevivieron y son la prueba: pasan por la vía pública
+      (`getPanelKnowledge`), **82/82 verdes** contra la implementación de main.
+
+      ⚠️ **El rojo que me trajo acá era MÍO, no del producto.** `npm run precios:vivos` en el
+      worktree atrasado decía *"EL BOT NO ESTA SIRVIENDO NINGUN ARCHIVO … manda al lead a la demo
+      en vez de darle el precio"*. Falso: el bot vivo, preguntado de verdad, contestó
+      **"Bs 320 Básico, Bs 550 Crece, Bs 890 Profesional, Bs 1.290 Completo · chatbot Bs 390"**
+      (conv 49, mensaje `1108`, `message_type=1`, leído en `messages` de Chatwoot). Con el
+      worktree al día el mismo gate da verde — `1b0bdcf4` decía "gate sin rojo falso" en su propio
+      asunto. **Un worktree atrasado produce rojos coherentes que mandan a deshacer arreglos
+      vivos:** antes de creerle a un gate propio, `git merge origin/main` y re-medir; y antes de
+      creerle a un `/health`, preguntarle al bot lo que el lead le preguntaría.
 
 - [x] **S17 — publicar el texto del bot. CUMPLIDO en producción; el bloqueo estaba VENCIDO.**
       Cerrado el 2026-09-12 19:20 La Paz. Era el último 🔴 de esta cola y pedía un `ok` de Sergio
