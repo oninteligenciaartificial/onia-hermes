@@ -279,6 +279,47 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       agentes es lo que se vende desde Crece. Queda declarado con su motivo en
       `CAMPO_EN_LA_COMPARATIVA`.
 
+      ✅ **CERRADO el 2026-09-13: la QUINTA superficie era el GATE, y no estaba ciego al plan
+      nuevo — lo ratificaba** (`onia-platform` `d0be692`, rama
+      `claude/chatbots-platform-review-0d1d09`). La ayuda del producto (`/help`,
+      `lib/ayuda/faq.ts`) ya tenía un gate cruzándola contra `PLAN_LIMITS`
+      (`lib/ayuda/capacidad-en-el-plan-correcto.test.ts`, escrito para que la ayuda no mande a
+      subir de plan por algo que el plan más barato ya trae). Ese gate tenía **su propio orden de
+      planes tipeado a mano** —`["free","basic","professional","clinic","enterprise"]`, el mismo
+      `PLAN_ORDER` que se cerró dos ítems más arriba— y se quedó sin `crece` con la escalera C.
+      **No falló abierto en silencio, que es lo que uno espera de una lista a mano:** al saltar de
+      `basic` a `professional`, `primerPlanCon("publicBookingIncluded")` contestaba
+      `professional`, así que el gate **firmaba como correcta** la frase de la ayuda —*"Profesional
+      (Bs 890/mes): suma agenda pública incluida"*— que le dice al dueño de un **Crece (Bs 550)**
+      que pague Bs 340 más por la agenda pública que su plan **ya incluye**
+      (`crece.publicBookingIncluded: true`). El instrumento defendía el cobro que existe para
+      impedir; por eso las cuatro superficies anteriores se encontraron a mano y ésta no.
+      **Y la enumeración se saltaba a Crece entero:** al que venía del Básico le escondía el
+      escalón de Bs 550 y le dejaba a la vista el salto de 2,3x hasta Profesional. Miente en las
+      dos direcciones del negocio, en la pantalla que el dueño abre **justo cuando duda**.
+      Entró: `planesPorEscalon()` y `primerPlanCon()` en `lib/subscription/escalon-de-plan.ts`
+      (el mismo módulo donde ya vivía *"el escalón de un plan es lo que CUESTA"*) — universo de
+      `PLAN_LIMITS`, orden del precio, **ninguna lista que actualizar**; la respuesta la afirma el
+      **producto** y no el test, así que gate y pantalla le piden el mismo dato a la misma
+      función; `BooleanaDePlan`, porque el mapa de capacidades decía en un comentario *"cada clave
+      es un campo booleano REAL"* y el tipo **no lo exigía** (`tsc` lo exige ahora, y cazó tres
+      usos); Crece nombrado con lo que es el **primero** en traer (agenda pública y agentes), y el
+      chatbot de WhatsApp declarado en Completo — **quinta superficie de `whatsappIncluded`**, con
+      su patrón sumado al mapa vigilado.
+      **La mitad que no miraba nadie:** el gate sólo juzgaba los planes que el texto **sí**
+      nombraba, que es exactamente cómo Crece desapareció sin ponerse rojo. El caso nuevo exige
+      que ningún plan que el checkout **vende** falte en la enumeración, con el sujeto derivado de
+      `CHECKOUT_PLANS` — la fuente de **otro** circuito, no una lista de acá.
+      **Validado por mutación, tres veces:** Crece fuera de la enumeración → **8 rojos** (uno por
+      rubro, nombrando «Bs 550/mes, que el checkout vende»); agenda pública devuelta a Profesional
+      → **8 rojos**; orden a mano sin `crece` → rojo. Árbol restaurado con `cp` → verde.
+      Gates: `tsc --noEmit` limpio, `vitest` **4.906/4.906**, `eslint` 0 errores — **corridos
+      también en el VPS** sobre el árbol publicado (`d0be692`).
+      📌 **Anotado, no abierto:** la enumeración dice *"agenda pública"* también en los rubros sin
+      agenda (comercio, importadora — `tieneAgenda()` falso). **No es regresión de este arreglo**
+      —el texto viejo lo decía igual, en Profesional— pero es un rubro×capacidad legítimo para la
+      próxima vuelta, y el gate de hoy no lo mira.
+
       Falta de la fase 2: **avisos al 70/90/100 % del cupo** y la **recarga de recordatorios**
       (la de conversaciones ya existe). ⚠️ Lo del 70/90/100 **no lo puede cerrar este carril
       solo, y el motivo es concreto**: hoy hay UN umbral (`UMBRAL_AVISO = 0.8` en
