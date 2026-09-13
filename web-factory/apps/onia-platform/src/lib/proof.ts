@@ -36,6 +36,67 @@ import {
   bs,
 } from "@/lib/pricing";
 
+/**
+ * TIEMPO HASTA OPERAR y TIEMPO HASTA EL PRIMER VALOR — medidos, no estimados.
+ *
+ * Nota de Sergio Urcullo (plan de cierre 1.0, F3.2): «tiempo 1: hasta
+ * producción; tiempo 2: hasta el primer valor — mostrar cuánto tarda».
+ *
+ * MÉTODO (medido el 2026-09-12, 20:15–20:22 hora La Paz, contra PRODUCCIÓN
+ * app.onia.com.bo):
+ *  - Org QA real «ZZ QA Bandeja 1.0» (slug zz-qa-bandeja-10, rubro dental,
+ *    id cmtyzhm15000201rwvurbplhg), creada ese mismo día con el alta E2E real.
+ *  - Playwright Chromium 1440×1000 conduciendo la UI verdadera con la sesión
+ *    del dueño. Tipeo a 60 ms/caracter y pausas fijas de 0,5 s por campo: es el
+ *    PISO de interacción efectiva — NO incluye tiempo de lectura ni de decisión
+ *    humana, así que un dueño real tarda más. Por eso el copy vendible redondea
+ *    con margen (25 s medidos → «menos de 5 minutos»: un humano 10× más lento
+ *    que la máquina sigue adentro de la promesa).
+ *  - TIEMPO 1 = 24,2 s. Desde aterrizar en /onboarding (donde cae el dueño
+ *    tras el alta) hasta el panel renderizado. Pasos cronometrados: confirmar
+ *    nombre (0,7 s) → datos del negocio, 3 campos (5,3 s) → horarios lun–vie
+ *    (3,2 s) → 3 servicios con precio (9,8 s — el paso más caro) → primera
+ *    persona del equipo + aplicar (3,0 s) → pantalla «ya está en Onia» → panel
+ *    (1,6 s).
+ *  - TIEMPO 2 = 21,4 s. Desde el panel (guía de inicio incluida, 3,0 s en
+ *    cerrarla) hasta la primera cita creada: pantalla de citas (1,9 s) → modal
+ *    (1,4 s) → paciente nuevo inline (7,1 s) → profesional + fecha +
+ *    disponibilidad (2,9 s) → horario + motivo + confirmar (5,1 s). El
+ *    recordatorio queda programado EN ese mismo instante: columnas
+ *    reminder24hSentAt/reminder2hSentAt en NULL y el cron del VPS (cada 15 min)
+ *    lo envía solo — verificado en la base y en el crontab.
+ *  - Evidencia: capturas de los 16 hitos + timestamps en
+ *    /root/capturas-tiempo-valor/ del VPS (tiempos.json).
+ *
+ * Regla del archivo aplicada: el dato tiene fuente (la medición, con capturas
+ * re-ejecutables), y lo que NO se midió no se afirma — el alta previa
+ * (registro de la cuenta) no está incluida en TIEMPO 1.
+ */
+export const TIEMPO_HASTA_OPERAR = {
+  /** Piso medido de interacción efectiva, en segundos (24,2 redondeado ↑). */
+  medidoSegundos: 25,
+  /** PROPUESTA de redondeo vendible — la elige Sergio Urcullo al ver esto. */
+  vendible: "menos de 5 minutos",
+} as const;
+
+export const TIEMPO_HASTA_PRIMER_VALOR = {
+  /** Piso medido, en segundos, ADICIONAL al tiempo 1 (21,4 redondeado ↑). */
+  medidoSegundos: 22,
+  vendible: "2 minutos más",
+} as const;
+
+/**
+ * COPY SUGERIDO — SIN CABLEAR a ninguna página: qué número publicar y dónde lo
+ * decide Sergio Urcullo viendo la medición. Dos variantes porque la cita es una
+ * capacidad que no llega a todos los rubros (`tieneAgenda`): en una página que
+ * YA es de un rubro con citas va la directa; en una superficie genérica la
+ * salvedad se interpola de `ALCANCE_CON_AGENDA` (pricing.ts), nunca tipeada.
+ */
+export const COPY_TIEMPO_VALOR = {
+  rubroConCitas: `Operando en ${TIEMPO_HASTA_OPERAR.vendible}. Tu primera cita, con su recordatorio programado, en ${TIEMPO_HASTA_PRIMER_VALOR.vendible}.`,
+  generica: `Operando en ${TIEMPO_HASTA_OPERAR.vendible}. Y ${ALCANCE_CON_AGENDA}, tu primera cita queda con recordatorio programado en ${TIEMPO_HASTA_PRIMER_VALOR.vendible}.`,
+} as const;
+
 /** Fecha en que se consultaron todos los precios de la comparacion. */
 export const FECHA_CONSULTA = "30 de julio de 2026";
 
