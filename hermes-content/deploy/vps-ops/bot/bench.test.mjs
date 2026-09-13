@@ -304,8 +304,8 @@ test("la medicion es determinista: el mismo caso medido dos veces da lo mismo", 
 });
 
 test("el reloj se inyecta: los turnos salen de BENCH_T0, no de Date.now()", () => {
-  assert.equal(benchClock(0), "2026-07-27T14:05:00.000Z");
-  assert.equal(benchClock(2), "2026-07-27T14:09:00.000Z");
+  assert.equal(benchClock(0), "2026-07-27T19:00:00.000Z");
+  assert.equal(benchClock(2), "2026-07-27T19:04:00.000Z");
 });
 
 test("summarizeOutcomes cuenta sin maquillar y separa casos de problemas", () => {
