@@ -4,17 +4,69 @@ Produccion = contenedor `onia-center` en el VPS (187.77.16.63), sirviendo un **N
 standalone** en `/opt/onia-center/runtime-next` (bind-mount → `/app`, `node server.js`,
 PORT=3012, `--env-file /opt/onia-center/.env`). El deploy es por **tarball** (no git).
 
+## ⚠️ Esta superficie NO tiene ruta publica — medido el 2026-09-13
+
+Antes de desplegar aca, saber que hoy **nadie de afuera puede ver lo que publiques**:
+
+- `curl https://center.onia.com.bo/` → **404**.
+- En la config ACTIVA de traefik (`/etc/easypanel/traefik/config/onia-manual-routes.yaml`)
+  el **servicio** `onia-center-manual` existe, pero de los **19 routers** **ninguno** lo
+  usa. Al lado quedo el respaldo `onia-manual-routes.yaml.bak-bajar-center-20260829165348`:
+  Sergio Urcullo bajo la ruta el **29-ago** a proposito.
+- El contenedor no tiene labels de traefik ni puerto publicado al host; adentro corre
+  `next-server` como PID 1, pero a oscuras.
+
+El contenedor **igual no se apaga**: el bot de Onia vive adentro (`/tmp/onia-bot/`, puerto
+interno 3020) y el auditor diario lo usa como runtime de node. **Bajar el deploy y bajar el
+servicio son cosas distintas.**
+
+Y **el sha vivo de esta superficie no se puede leer del disco**: `/opt/onia-center/runtime-next`
+no tiene `.commit` ni `BUILD_ID` (a diferencia de landing y plataforma, que si los tienen y
+por eso su deploy se puede medir). Lo unico que fecha el ultimo deploy es el nombre del
+backup: `runtime-next.bak-deploy-20260901214144` → **1-sep-2026**. Es la tercera razon para
+no cablearla al `ok`: un destino que no se puede medir no se puede verificar despues.
+
+**Por eso `onia-center` NO se cablea como destino del `ok`** (la lista blanca de
+`scripts/kanban/desplegar-en-segundo-plano.sh` tiene cuatro: landing, plataforma, bot,
+SIAT). Cablear un quinto destino publicaria una superficie que nadie puede pedir. Se queda
+**manual**, con este runbook. Si algun dia vuelve a haber un router apuntando a
+`onia-center-manual`, esta decision vence y hay que rehacerla.
+
+⚠️ **Y no confundir esta app con el intake de leads de `onia.com.bo`.** El intake es
+`/api/agenda-intake` y vive en la app de la **landing** (`web-factory/apps/onia-platform`),
+viva en produccion (`GET https://onia.com.bo/api/agenda-intake` → **405**, o sea la ruta
+existe y solo acepta POST). Esta otra app es `web-factory/apps/site`.
+
 ## Constraint (por qué NO se buildea en cualquier lado)
 - **NO buildear en el VPS**: swap al 100% → un build de Next puede OOM y tumbar prod.
 - **NO buildear en Windows**: `web-factory` usa `sharp` (binario nativo).
 - **Buildear en Linux glibc**: CI **ubuntu-latest** (o un host/contenedor Linux).
 
-## Automatico (el arreglo de fondo)
-GitHub Action **`.github/workflows/deploy-onia-center.yml`**:
-- **push a `main` que toca `web-factory/**`** → build en ubuntu + deploy con swap
-  automatico. Asi prod no vuelve a quedar atras de main.
-- **manual** (`workflow_dispatch`): input `swap` — `false` = solo build+stage (no toca
-  prod), `true` = promueve. Avisa el resultado a Sergio por Telegram.
+## SOLO MANUAL (y por que)
+GitHub Action **`.github/workflows/deploy-onia-center.yml`**, **`workflow_dispatch`
+unicamente**: input `swap` — `false` = solo build+stage (no toca prod), `true` = promueve.
+Avisa el resultado a Sergio Urcullo por Telegram.
+
+⚠️ **Corregido el 2026-09-13.** Aca decia que un **push a `main` que tocara
+`web-factory/**`** disparaba build + swap automatico, y que «asi prod no vuelve a quedar
+atras de main». Eso es **falso desde el 2026-08-31**, cuando se saco ese disparador — y el
+motivo esta escrito en la cabecera del propio workflow: el Action publicaba **dos cosas
+seguidas**, center y despues `onia.com.bo`, asi que cuando el paso de center murio, el paso
+del landing **nunca corrio** y el sitio que ve un cliente quedo sin publicar desde el
+**22-ago, con 77 commits acumulados**, sin que nada de su app estuviera roto. La frase vieja
+prometia justo la garantia que ese incidente rompio, y hacia creer que pushear publica.
+**Pushear no publica nada**: `onia.com.bo` se publica por su propio publicador
+(`/opt/onia-landing/_deploy/publicar.sh`), no por este Action.
+
+Volver al deploy automatico exige decidir antes que hacer con el paso de center — sacarlo,
+o arreglarlo — y ademas devolverle la ruta (ver el bloque de arriba).
+
+⚠️ **Los 4 archivos de esta carpeta tambien viven en `/opt/onia-center/_deploy/` y NADIE los
+sincroniza.** Medido el 2026-09-13: `build-and-stage.sh`, `swap-and-verify.sh`,
+`briefing-dryrun.js` y `maintenance-cleanup.js` tienen el **mismo md5** en los dos lados —
+pero coinciden **por diligencia, no por construccion**. `scripts/loops/sincronizar.sh` solo
+mantiene los `publicar.sh` de los destinos cableados, y aca no hay ninguno. Antes de correr
+algo de `/opt/onia-center/_deploy/`, comparar md5 contra esta carpeta.
 
 Correr manual:
 ```bash
