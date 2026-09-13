@@ -8,7 +8,7 @@ import { ModulePower, PressableCta, Reveal, springs } from "@/motion";
 import { APP_URL } from "@/lib/site";
 import {
   FALTA_COPY,
-  FALTA_TAG,
+  tagDeFalta,
   NOTA_CUADERNO,
   NOTA_DOWNSELL,
   NOTA_FACTURACION,
@@ -214,7 +214,7 @@ function VarianteDental({
                 <ModulePower on={on[i]}>
                   <h3 className={styles.modName}>{FALTA_COPY[f].nombre}</h3>
                   <p className={styles.modCopy}>{FALTA_COPY[f].copy}</p>
-                  <p className={`mono ${styles.modTag}`}>{FALTA_TAG}</p>
+                  <p className={`mono ${styles.modTag}`}>{tagDeFalta(f, rec.plan.id)}</p>
                 </ModulePower>
               </article>
             ))}

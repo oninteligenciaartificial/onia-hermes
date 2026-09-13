@@ -17,6 +17,7 @@
     "precios:fuente": "node scripts/precios-fuente.mjs",
     "privacidad:viva": "node scripts/privacidad-viva.mjs",
     "precios:vivos": "node scripts/precios-vivos.mjs",
+    "inclusion:chatbot": "node scripts/inclusion-chatbot.mjs",
     "deploy:vivo": "node scripts/deploy-vivo.mjs",
     "enlaces:vivos": "node scripts/enlaces-vivos.mjs",
     "rubros:vivos": "node scripts/rubros-vivos.mjs",

@@ -94,6 +94,19 @@ export interface Plan {
   incluye: readonly string[];
   /** Lo que este nivel NO trae. Se dice acá, no en la letra chica. */
   sinEsto: readonly string[];
+  /**
+   * ¿El chatbot de WhatsApp viene pagado ADENTRO de este plan?
+   *
+   * Espejo de `whatsappIncluded` (`onia-platform/lib/plan-catalogo.ts`), que es la fuente. Hasta el
+   * 2026-09-13 este dato vivía sólo en PROSA y en un comentario, y por eso nadie lo cruzaba: los
+   * gates de plata atan CIFRAS, y Bs 390 sigue siendo un monto legítimo mientras el texto miente.
+   * Con la FAQ diciendo "No: es un servicio aparte" a secas, el cliente de Full leía que tenía que
+   * pagar Bs 390/mes por algo que su plan ya le daba.
+   *
+   * Obligatorio en el tipo a propósito: un plan nuevo no puede nacer sin contestarlo. Lo cruza
+   * `scripts/inclusion-chatbot.mjs` contra el ref publicado del producto.
+   */
+  chatbotIncluido: boolean;
   destacado?: boolean;
   cuando: string;
 }
@@ -307,6 +320,7 @@ export const PLANES: readonly Plan[] = [
       "Exportás tus datos en CSV cuando quieras",
       `Topes: 300 fichas · 2 usuarios (hasta ${USUARIO_EXTRA_ADDON.maxEnBasico} más a Bs ${bs(USUARIO_EXTRA_ADDON.mensualAddon)}/mes) · 200 recordatorios por email/mes`,
     ],
+    chatbotIncluido: false,
     sinEsto: [
       "Agentes de IA (vienen desde Crece)",
       `Reservas online — como add-on a Bs ${bs(AGENDA_ADDON.mensualAddon)}/mes, o incluidas desde Crece`,
@@ -330,6 +344,7 @@ export const PLANES: readonly Plan[] = [
       `Reservas online incluidas, ${ALCANCE_CON_AGENDA}: link público para que te pidan cita`,
       "Topes: 800 fichas · 3 usuarios · 400 recordatorios por email/mes",
     ],
+    chatbotIncluido: false,
     sinEsto: [
       `Reportes completos, facturas recurrentes y contabilidad completa (${ALCANCE_CLINICO}) — vienen en Pro`,
     ],
@@ -351,8 +366,9 @@ export const PLANES: readonly Plan[] = [
       "Contabilidad completa (RCV, balance y export) y planilla del mes",
       "Topes: 1.500 fichas · 5 usuarios · 800 recordatorios por email/mes",
     ],
+    chatbotIncluido: false,
     sinEsto: [
-      `El chatbot de WhatsApp — incluido solo en Full, o aparte a Bs ${bs(CHATBOT_MENSUAL)}/mes`,
+      `El chatbot de WhatsApp — Full ya lo trae incluido; acá va aparte, Bs ${bs(CHATBOT_MENSUAL)}/mes`,
     ],
     destacado: true,
     cuando: "El negocio ya factura todos los días y querés los números al día.",
@@ -373,10 +389,26 @@ export const PLANES: readonly Plan[] = [
       "Fichas y usuarios sin tope; recordatorios por email sin tope mensual",
       "Te lo entregamos configurado para tu rubro",
     ],
+    chatbotIncluido: true,
     sinEsto: [],
     cuando: "Equipo grande, base de clientes que no entra en 1.500 fichas, o WhatsApp con movimiento.",
   },
 ] as const;
+
+/**
+ * Los planes que traen el chatbot pagado adentro, nombrados como los lee el cliente.
+ *
+ * Existe para que ninguna pantalla tipee "Full" a mano al contestar si el chatbot está incluido:
+ * ése es el dato que se mueve (`whatsappIncluded` en el producto) y el que, tipeado, deja la
+ * respuesta vieja cobrándole el add-on a quien ya lo tiene. Devuelve la frase armada porque el día
+ * que sean dos planes hay que decir "Full y Grupo", no "Full".
+ */
+export function nombresConChatbot(planes: readonly Plan[] = PLANES): string {
+  const nombres = planes.filter((p) => p.chatbotIncluido).map((p) => p.nombre);
+  if (nombres.length === 0) return "Ningún plan";
+  if (nombres.length === 1) return nombres[0];
+  return `${nombres.slice(0, -1).join(", ")} y ${nombres[nombres.length - 1]}`;
+}
 
 /**
  * Grupo / Empresarial (`enterprise` en el codigo). Existe y tiene precio, pero
@@ -385,6 +417,10 @@ export const PLANES: readonly Plan[] = [
  */
 export const GRUPO = {
   nombre: "Grupo / Empresarial",
+  // `enterprise` también trae el chatbot pagado adentro (`whatsappIncluded` en el catálogo del
+  // producto). Se declara acá porque el recomendador puede proponer Grupo, y sin el dato la
+  // pantalla le vendía el add-on aparte a quien ya lo tiene.
+  chatbotIncluido: true,
   mensual: 2900,
   anual: 29000,
   implementacionDesde: 3500,
