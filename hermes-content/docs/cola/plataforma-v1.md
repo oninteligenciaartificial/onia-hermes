@@ -227,10 +227,57 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       ⚠️ **No se abrió renderizada**: el cambio está en la rama, así que producción todavía sirve
       la pantalla vieja y mirarla ahí no probaría nada. Se mira **después del deploy**, y hasta
       entonces esto no está terminado.
-      📌 **Hueco anotado, no cerrado:** la **tabla comparativa** de más abajo (otra cosa que las
-      tarjetas) sigue con cuatro columnas Básico/Profesional/Completo/Grupo y **`crece` no tiene
-      columna**; y **`agentsIncluded`** no tiene fila, aunque el salto a agentes es lo que se vende
-      desde Crece. Los dos quedan declarados con su motivo en `CAMPO_EN_LA_COMPARATIVA`.
+      ✅ **CERRADO el 2026-09-13: ese hueco escondía algo peor que una columna faltante — cada
+      botón «Contratar» de la comparativa pedía el plan de la columna ANTERIOR** (`onia-platform`
+      `a9b2d27`, rama `claude/chatbots-platform-review-0d1d09`). La tabla se pinta en **tres**
+      franjas que tienen que coincidir columna por columna, y sólo una era derivada: el `thead`
+      (rótulos) y cada fila del `tbody` estaban tipeados con cuatro columnas, mientras el `tfoot`
+      mapea `planesDe`. Al sumarle `crece` a las tarjetas (`419b819`, el arreglo de acá arriba, ya
+      en `master`) el pie pasó a pintar **cinco** botones bajo **cuatro** columnas:
+
+      ```
+      header:  Característica | Básico | Profesional | Completo    | Grupo
+      pie:     Contratar...   | Básico | Crece       | Profesional | Completo | Grupo
+      ```
+
+      O sea que el dueño que apretaba «Contratar» bajo el rótulo **Profesional (Bs 890)** mandaba
+      un WhatsApp pidiendo el **Crece (Bs 550)**, y el de «Completo» pedía el Profesional —
+      en la pantalla donde se decide pagar, y con una celda de más en la tabla. **No llegó a
+      producción por poco:** `419b819` está en `origin/master` pero NO en el build vivo
+      (`BUILD_ID OFd4xCDzoTbQdThUbfzDv` = `/opt/onia-platform/build-f078373`, y
+      `git merge-base --is-ancestor 419b819 f078373` da falso), así que el defecto habría salido
+      con el próximo swap.
+      **Y la mitad que el hueco sí nombraba:** el plan de Bs 550 era invisible para el que lo
+      paga — ninguna celda lo nombraba, ninguna columna se le resaltaba, y el Básico seguía
+      mostrando el salto de Bs 570 hasta Profesional, justo el 2,3x que la escalera C existe
+      para borrar.
+      Entró: `celdaDeFila` con un `Record<PlanKey, …>` (un plan nuevo **no compila** hasta que
+      alguien diga qué celda le toca) y las tres franjas pintadas desde `PLANS`, así que no
+      pueden volver a desalinearse; columna `crece` **obligatoria** en `FilaComparativa` y en las
+      19 filas, con los topes (clientes/usuarios/emails) **derivados de `PLAN_LIMITS`** en vez de
+      tipeados al lado del catálogo —que es como la fila de CSV llegó a mentir—; `crece` en las
+      seis filas de `PLAN_COMPARISON_ADDON_ROWS`; y `PlanDef.acento`, porque el resalte de columna
+      es una propiedad DEL PLAN y no un `plan.key === "…"` en el JSX (comparar claves a mano es
+      exactamente como una lista se separa del catálogo: lo prohíbe
+      `lib/plan-catalogo-es-la-fuente.test.ts`, que **cazó las cinco** que había escrito). Con eso
+      se borraron además las 5 exenciones cosméticas que quedaron sin sujeto.
+      **`COLUMNAS_DE_LA_COMPARATIVA` suma `crece` y también `enterprise`:** una columna que se
+      pinta y no está declarada ahí entra **pre-aprobada** al gate de honestidad. La de Grupo no
+      tiene celda propia en casi ninguna fila —cae al valor del Completo— y ahora el gate mide esa
+      caída (`?? celdaDeFila`): hoy es honesta porque sus booleanos coinciden, y el día que se
+      separen deja de serlo **ruidosamente**.
+      **El sujeto del gate no es «crece»: son los planes que la pantalla VENDE** (`planesDe`) —
+      `app/(dashboard)/settings/la-comparativa-se-pinta-desde-los-planes-que-vende.test.ts`.
+      **Validado por mutación en las dos direcciones:** sacar `crece` de las columnas declaradas →
+      1 rojo nombrándola; hacer que la columna Crece pinte la celda del Profesional → rojo
+      *«debería mostrar 550 y muestra "Bs 890"»*. Árbol restaurado con `cp` → verde.
+      Gates: `tsc --noEmit` limpio, `vitest` **4.898/4.898**, `eslint` 0 errores — **corridos
+      también en el VPS** sobre el árbol publicado.
+      ⚠️ **No se abrió renderizada**, y decirlo importa: el cambio está en la rama y producción
+      sirve el build viejo, así que mirar ahí no probaría nada. Se mira **después del deploy**.
+      📌 **Lo que del hueco sigue abierto:** `agentsIncluded` no tiene fila, aunque el salto a
+      agentes es lo que se vende desde Crece. Queda declarado con su motivo en
+      `CAMPO_EN_LA_COMPARATIVA`.
 
       Falta de la fase 2: **avisos al 70/90/100 % del cupo** y la **recarga de recordatorios**
       (la de conversaciones ya existe). ⚠️ Lo del 70/90/100 **no lo puede cerrar este carril
