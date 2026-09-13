@@ -1198,8 +1198,15 @@ export function imprimirCadena({
       console.log(`\nROJO ${i.id}: su ok publica ${i.mudos.length} arreglo(s) que el pedido NO nombra.`);
       for (const m of i.mudos) console.log(`    ${m.sha}  ${m.titulo}`);
       console.log('  El cuerpo es lo unico que Sergio Urcullo lee: hoy aprobaria codigo que nadie');
-      console.log('  le mostro. Comenta el recuento DERIVADO (no rehagas la tarea: el comando ya');
-      console.log('  deriva el sha al ejecutarse y no caduca).');
+      console.log('  le mostro. NO ALCANZA con agregarlos en un comentario: esto se limpiaria,');
+      console.log('  pero `cortos` —mas abajo en esta misma cadena— lee el cuerpo y nada mas, y');
+      console.log('  quedaria rojo pidiendo lo contrario. Se cura rehaciendo el pedido con el');
+      console.log('  cuerpo derivado de');
+      // La ruta sale de la tabla, como en los hermanos: escrita a mano, el pedido de la landing
+      // mandaba a correr el publicador de la plataforma, que no publica nada suyo. La guarda deja
+      // pasar al sujeto sin destino en vez de imprimir `undefined` como si fuera una ruta.
+      if (SECO_POR_SHA[i.destino]) console.log(`    bash ${SECO_POR_SHA[i.destino]} --dry-run`);
+      console.log('  y ARCHIVANDO el viejo en la misma vuelta.');
     }
     return 1;
   }
@@ -1408,7 +1415,7 @@ async function medirEnVivo() {
         // de los shas del pedido: recorrer lo que el pedido enumera no puede ver al que falta.
         const viajanLanding = soloLosQueViajan(publicariaLanding(buildLanding));
         const c = promesaCompleta({ shas: shasDelTexto(p.texto), publicaria: viajanLanding });
-        if (c.estado === 'SUB_DESCRIBE') incompletos.push({ id: p.id, mudos: c.mudos });
+        if (c.estado === 'SUB_DESCRIBE') incompletos.push({ id: p.id, destino: p.destino, mudos: c.mudos });
         else if (c.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (landing, promesa completa): ${c.motivo}`);
         // Y la del cuerpo, que hasta el 2026-09-12 sólo tenían los otros tres destinos: la de
         // arriba lee cuerpo Y comentarios como un texto, así que un comentario con los shas que
@@ -1471,7 +1478,7 @@ async function medirEnVivo() {
       // La dirección del error también manda: acá perdonar de más sólo calla un rojo, y un
       // rojo falso haría comentar el pedido otra vez — el ruido que lo vuelve ilegible.
       const c = promesaCompleta({ shas: shasDelTexto(p.texto), publicaria: publicariaPlataforma });
-      if (c.estado === 'SUB_DESCRIBE') incompletos.push({ id: p.id, mudos: c.mudos });
+      if (c.estado === 'SUB_DESCRIBE') incompletos.push({ id: p.id, destino: p.destino, mudos: c.mudos });
       else if (c.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (plataforma, promesa completa): ${c.motivo}`);
       // Y la tercera pregunta, que hasta el 2026-09-10 no tenia dueno: las dos de arriba leen
       // cuerpo y comentarios como UN texto, asi que los comentarios TAPAN al cuerpo. Un pedido

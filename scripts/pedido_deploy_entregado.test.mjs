@@ -1264,3 +1264,76 @@ function correrCadena({ ids, vivoPorDestino, ...listas }) {
     console.log = orig;
   }
 }
+
+// ── un remedio no manda a comentar si hay un control de CUERPO esperando debajo ───────────
+//
+// 🔴 La misma clase que `67f22b71` cerro el 2026-09-12, y el cierre quedo corto: aquel gate
+// deriva su universo de los controles que LEEN solo el cuerpo, y `incompletos` no es uno —
+// pregunta con `promesaCompleta`, que lee cuerpo MAS comentarios. Por eso quedo afuera, y su
+// remedio siguio diciendo «Comenta el recuento DERIVADO (no rehagas la tarea)».
+//
+// Lo pague hoy, 2026-09-13, integrando dos carriles: mergee DESPUES de que existiera el pedido
+// de plataforma, el gate dio ROJO por `incompletos`, y obedecer ese texto habria limpiado ese
+// rojo y destapado `cortos` —que esta 23 lineas mas abajo en la misma cadena y lee
+// `partirPedido(texto).cuerpo` y NADA MAS—, con el remedio contrario escrito al lado. Una
+// vuelta entera para llegar a la cura que ya estaba impresa dos bloques despues.
+//
+// LA PROPIEDAD NO ES «este control lee el cuerpo», que es la que derivaba el gate anterior:
+// es «este control tiene DEBAJO otro que lee solo el cuerpo». Comentar limpia al de arriba y
+// destapa al de abajo SIEMPRE, porque el comentario absuelve a quien lee cuerpo+comentarios y
+// es invisible para quien lee el cuerpo solo. El sujeto se deriva del disco — el orden real de
+// la cadena y que acumuladores son de cuerpo—, asi que el control numero once lo hereda.
+//
+// Se exige solo el NO-comentar, no el «rehace»: `entregados` y `entregadosSiat` tambien tienen
+// controles de cuerpo debajo y su cura legitima es cerrar o archivar la tarea, no rehacerla.
+// Exigirles la palabra los pondria rojos por un remedio que esta bien.
+test('un control con un control de CUERPO debajo no manda a comentar', () => {
+  const src = readFileSync(new URL('./pedido_deploy_entregado.mjs', import.meta.url), 'utf8')
+    .split('\n').filter((l) => !/^\s*(\/\/|\*|\/\*)/.test(l)).join('\n');
+
+  // Los controles de cuerpo, derivados igual que sus dos hermanos: los que parten el pedido y
+  // se quedan con el cuerpo. Escribir los nombres a mano dejaria fuera al proximo.
+  const soloCuerpo = [...src.matchAll(/export function (\w+)\(/g)]
+    .map((m) => ({ nombre: m[1], cuerpo: src.slice(m.index, m.index + 400) }))
+    .filter((f) => f.cuerpo.includes('partirPedido(') && f.nombre !== 'partirPedido')
+    .map((f) => f.nombre);
+  assert.ok(soloCuerpo.length >= 3, `esperaba los controles de cuerpo, derive ${soloCuerpo}`);
+
+  // A que acumulador empuja cada uno. Es lo que ata «lee solo el cuerpo» con «corta en la
+  // cadena»: sin esto el test compararia nombres de funcion contra nombres de acumulador.
+  const deCuerpo = new Set();
+  for (const nombre of soloCuerpo) {
+    for (const m of src.matchAll(new RegExp(`=\\s*${nombre}\\(\\{`, 'g'))) {
+      const push = /(\w+)\.push\(/.exec(src.slice(m.index, m.index + 500));
+      assert.ok(push, `${nombre} se llama y su resultado no empuja a ningun acumulador`);
+      deCuerpo.add(push[1]);
+    }
+  }
+  assert.ok(deCuerpo.size >= 3, `derive ${deCuerpo.size} acumuladores de cuerpo: ${[...deCuerpo]}`);
+
+  // El ORDEN de la cadena sale del archivo, no de una lista: es lo que decide quien tapa a
+  // quien. `imprimirCadena` corta en el primero que tenga sujetos, asi que «debajo» es
+  // literalmente «mas adelante en el fuente».
+  const cadena = [...src.matchAll(/if \((\w+)\.length > 0\)/g)]
+    .map((m) => ({ nombre: m[1], i: m.index }));
+  assert.ok(cadena.length >= 8, `esperaba la cadena entera, derive ${cadena.length} controles`);
+  assert.ok(cadena.some(({ nombre }) => deCuerpo.has(nombre)),
+    'ningun acumulador de cuerpo corta en la cadena: el universo quedo vacio y el gate se apago solo');
+
+  const tapados = cadena.filter(({ nombre, i }) => cadena
+    .some((o) => o.i > i && deCuerpo.has(o.nombre) && o.nombre !== nombre));
+  assert.ok(tapados.length > 0,
+    'ningun control tiene un control de cuerpo debajo: el gate no esta mirando nada');
+
+  for (const { nombre, i } of tapados) {
+    const fin = src.indexOf('return 1;', i);
+    assert.ok(fin > i, `${nombre} imprime su veredicto y nunca corta`);
+    const bloque = src.slice(i, fin);
+    // Mismo patron que el gate hermano: la INSTRUCCION de comentar, no la palabra suelta.
+    // Explicar por que el pedido salio VIGENTE nombrando los comentarios sigue valiendo.
+    assert.doesNotMatch(bloque, /coment(a|ando)\b/i,
+      `el remedio de ${nombre} manda a comentar, y debajo suyo en la cadena hay un control que `
+      + `lee SOLO el cuerpo: comentar limpia este rojo y destapa aquel, con el remedio contrario. `
+      + `Se cura rehaciendo el pedido y archivando el viejo en la misma vuelta.`);
+  }
+});
