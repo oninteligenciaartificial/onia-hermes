@@ -12,6 +12,29 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-13 04:10 La Paz — huérfano zz-qa- limpiado al arrancar + dental 9/9 (rutina), sin hallazgo nuevo
+
+Al arrancar la vuelta, `select count(*) from organizations where name like 'zz-qa-%'` dio **1**:
+`zz-qa-2026-09-13-0310-negocio` (org `cmtz8lcqf003n01rw68vj8oi7`), de una corrida anterior que
+murió a mitad de camino sin dejar rastro en este archivo ni en el tablero (0 `patients`, 0
+`appointments`, sólo `organization_entitlements`, 2 `profiles` y 1 fila en `audit_logs`, más el
+`auth.users` con ese email). Se borró completo antes de correr nada nuevo: `audit_logs` →
+`organization_entitlements` → `profiles` → `organizations` → `auth.users`. Verificado en 0 tras
+el borrado.
+
+Dental (`zz-qa-2026-09-13-0410`): recorrido completo, 9/9 — cuenta creada, correo confirmado,
+onboarding completado, paciente `zz-qa-2026-09-13-0410-paciente` cargado y visto en `/patients`,
+cita 2026-09-14 09:00 vista en `/appointments` (`cmtzaulv6004t01rw92os8avd`), factura con ítem
+visible en `/billing/cmtzauwlb004v01rwrxbtq5ie` (frenada sin pagar). `completo: true`, 0 filas
+`zz-qa-` al cerrar (orgs, appointments, auth.users verificados en 0).
+
+Los 5 rubros y el escalón 3 (promesa vs entrega en home/precios) ya están auditados en vueltas
+previas sin hallazgo pendiente. Próxima vuelta: si dental sigue sano, ir a otra superficie del
+escalón 3 no tocada aún (checkout/cobro a fondo, `/precios` con `--reducedMotion`, o el flujo de
+recuperación de contraseña) en vez de repetir rubro.
+
+---
+
 ## 2026-09-13 02:09 La Paz — dental 9/9 (rutina) + auditoría de los 4 CTA "Empezar con el <plan>", sin hallazgo reportable
 
 Dental (`zz-qa-2026-09-13-0209`): recorrido completo, 9/9, cita 2026-09-14 09:00 vista en
