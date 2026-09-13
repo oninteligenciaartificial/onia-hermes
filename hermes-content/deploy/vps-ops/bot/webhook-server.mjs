@@ -44,7 +44,7 @@ import { shouldProcessMessage, releaseMessage } from "./message-dedup.mjs";
 import { buildBotTurnEvent, fireN8nBotTurnEvent, getN8nEventConfig } from "./n8n-event.mjs";
 import { construirAviso, dispararAvisoTelegram, getAvisoTelegramConfig } from "./aviso-telegram.mjs";
 import { esEntranteReal, dispararUsoPlataforma, getUsoConfig } from "./uso-plataforma.mjs";
-import { knowledgeHealth } from "./knowledge.mjs";
+import { ensureKnowledgeHealth } from "./knowledge.mjs";
 import { createStore } from "./persistence.mjs";
 import { handlePreviewRequest } from "./preview-route.mjs";
 import { handleEditorRequest } from "./editor-sugerir.mjs";
@@ -165,6 +165,17 @@ export async function checkDatabaseHealth(deps = {}) {
 }
 
 /**
+ * `?inboxId=N` -> el alcance con el que resuelve el camino de respuesta. Sólo dígitos: un valor
+ * que no es un inbox NO se convierte en una medición por inbox disfrazada — se mide el proceso,
+ * y `alcance` lo dice. (Devolver un alcance que no se midió sería el mismo falso verde que esto
+ * viene a cerrar, con otra cara.)
+ */
+export function alcanceDeConsulta(consulta = {}) {
+  const crudo = String(consulta.inboxId ?? "").trim();
+  return /^[0-9]+$/.test(crudo) ? { inboxId: crudo } : {};
+}
+
+/**
  * Estado para `GET /health`. NUNCA devuelve un secreto: sólo si está o no está.
  * `knowledge` es obligatorio y no decorativo: sin ver la FUENTE y la VERSIÓN que el bot está
  * usando, "edité el JSON y no pasó nada" tarda días en descubrirse — que es exactamente el modo
@@ -183,10 +194,14 @@ export async function checkDatabaseHealth(deps = {}) {
  * Se verificó que ningún automatismo reinicia el contenedor por `ok:false` — `webhook-watchdog.sh`
  * mira si /health CONTESTA (código de salida de wget), no el cuerpo — así que esto alerta, no
  * apaga: durante una caída de base el bot degradado sigue en pie.
+ *
+ * `consulta` es el querystring de la ruta: con `inboxId` resuelve por la MISMA vía que el camino
+ * de respuesta, y el `alcance` de `knowledge` declara cuál de las dos se midió.
  */
-export async function getHealthStatus(config = getServerConfig(), n8nConfig = getN8nEventConfig(), deps = {}) {
+export async function getHealthStatus(config = getServerConfig(), n8nConfig = getN8nEventConfig(), deps = {}, consulta = {}) {
   const auth = getAuthHealth(config);
-  const knowledge = deps.knowledge || knowledgeHealth();
+  const knowledge =
+    deps.knowledge || (await ensureKnowledgeHealth({ ...(deps.knowledgeOptions || {}), ...alcanceDeConsulta(consulta) }));
   const checkDb = typeof deps.checkDb === "function" ? deps.checkDb : checkDatabaseHealth;
   const db = await checkDb(deps);
   return {
@@ -196,7 +211,8 @@ export async function getHealthStatus(config = getServerConfig(), n8nConfig = ge
     // `ok:false` acá = el bot contesta pero NO GUARDA NADA (ni estado, ni dedup, ni lead).
     db,
     n8n: { enabled: n8nConfig.enabled, configurado: Boolean(n8nConfig.url && n8nConfig.secret) },
-    // source: "file" = manda knowledge.json · "code" = se cayó a los valores del código.
+    // source: "panel" = manda la fila publicada del panel (ONIA_KNOWLEDGE_URL) ·
+    // "file" = manda knowledge.json · "code" = se cayó a los valores del código.
     // Caer a "code" después de haber sido "file" es la alarma: alguien editó y el bot no lo tomó.
     knowledge,
   };
@@ -585,7 +601,11 @@ export function createWebhookServer(deps = {}) {
       // rejection, y el proceso caído deja al bot mudo para TODOS.
       let estado;
       try {
-        estado = await getHealthStatus(config, n8nConfig, deps);
+        // La query SÍ se lee acá (al revés que en /webhook/chatwoot, donde se descarta porque un
+        // secreto en la query termina logueado): `inboxId` no es un secreto, y sin él /health
+        // contesta sobre un documento distinto del que recibe el lead de ese inbox.
+        const consulta = Object.fromEntries(new URL(url, "http://interno").searchParams);
+        estado = await getHealthStatus(config, n8nConfig, deps, consulta);
       } catch (error) {
         estado = { ok: false, service: "onia-chatbot-webhook", error: String(error?.message || error).slice(0, 200) };
       }

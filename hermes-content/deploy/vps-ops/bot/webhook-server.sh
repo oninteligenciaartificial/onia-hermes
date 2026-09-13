@@ -222,6 +222,7 @@ docker exec -d \
   -e TG_BOT_TOKEN="${TG_BOT_TOKEN:-}" \
   -e TG_CHAT_ID="${TG_CHAT_ID:-}" \
   -e ONIA_BOT_KNOWLEDGE_URL="${ONIA_BOT_KNOWLEDGE_URL:-http://onia-platform:3000/api/chatbot-knowledge/published}" \
+  -e ONIA_KNOWLEDGE_URL="${ONIA_KNOWLEDGE_URL:-}" \
   -e BOT_KNOWLEDGE_SECRET="${BOT_KNOWLEDGE_SECRET:-}" \
   -e ONIA_PLATFORM_URL="${ONIA_PLATFORM_URL:-}" \
   -e CHATWOOT_WEBHOOK_SECRET="${CHATWOOT_WEBHOOK_SECRET:-}" \

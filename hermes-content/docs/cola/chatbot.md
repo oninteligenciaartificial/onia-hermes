@@ -283,6 +283,91 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 da **exit 0** contra el contenedor. No le queda ningún `ok` pendiente a Sergio Urcullo.
 La historia completa queda acá abajo para no perderla.
 
+- [x] 🔴 **~~`/health` contesta sobre el ARCHIVO y el lead recibe la fila POR INBOX~~ — CERRADO EN
+      CÓDIGO el 2026-09-12 20:20 La Paz. ⚠️ COMMITEADO, NO DESPLEGADO: el bot vivo todavía corre el
+      build sin esto, así que en producción `/health` sigue jurando por el archivo.**
+      `/health` acepta `?inboxId=N` y resuelve con **`ensureKnowledgeHealth`**, que es
+      `ensureKnowledge` — la MISMA función que el camino de respuesta — y no la hermana sincrónica
+      que se saltea el primer fetch. Además la respuesta **declara `alcance`** (`inbox:4` vs
+      `proceso`): sin ese campo los dos JSON son idénticos y el que pregunta no puede distinguir
+      qué documento le contestaron, que era el defecto de fondo. Un `inboxId` que no es un número
+      **no** se convierte en una medición por inbox disfrazada: se mide el proceso y `alcance` lo
+      dice.
+      **La hermana sincrónica `knowledgeHealth` se BORRÓ**, no se dejó "por si acaso": quedaba
+      exportada sin un solo llamador de producción, que es exactamente el pie de banco con el que
+      se vuelve a pisar el mismo agujero.
+      Prueba: 4 casos nuevos en `webhook-server.test.mjs` (bloque 0.a-bis), uno de ellos por HTTP
+      real; **validados por mutación** — quitar `...alcanceDeConsulta(consulta)` y clavar
+      `alcance: "proceso"` ponen 2 en rojo cada uno. Suite del bot completa: 943 → verde.
+      **Lo que sigue faltando y NO lo puede hacer este carril:** `DESPLEGAR: bot` (y el `knowledge`
+      es un segundo comando aparte). Mientras tanto `precios-vivos.mjs` compensa desde afuera, y su
+      comentario ya dice por qué va a seguir compensando aunque se despliegue: preguntarle al
+      mismo proceso que se audita deja sin forma de detectar que ese proceso se equivoca.
+
+<details><summary>Diagnóstico original del 2026-09-12 19:50 (cómo se encontró)</summary>
+
+      Medido el 2026-09-12 19:50 La Paz. Toda conversación pasa
+      por `ensureKnowledge({ inboxId })` (`run-turn.mjs:147`) y `getKnowledge` devuelve la copia
+      `db` de esa clave apenas exista (`cacheKeyOf` keyea `inbox:<id>`). Pero `/health` llama
+      `knowledgeHealth()` **sin inbox** (`webhook-server.mjs:189`), así que reporta el archivo.
+      La fuente está **encendida**: el proceso vivo declara `ONIA_BOT_KNOWLEDGE_URL` y
+      `BOT_KNOWLEDGE_SECRET`. Hoy `/published?inboxId=N` da **404 en los 4 inboxes (3, 4, 5, 7)**,
+      así que el lead cae al archivo — **el agujero está a UNA fila publicada de distancia**.
+      **Hecho la mitad (commit `30c27165`, sin deploy):** `precios-vivos.mjs` ahora mide las DOS
+      fuentes — deriva los inboxes de Chatwoot (`select id from inboxes`, por eso apareció el 3,
+      que la lista a mano "4 y 5" salteaba), pide cada fila con la URL y el secreto **del proceso
+      vivo**, y la juzga con el mismo `montosVencidos` que el archivo. Tri-estado: 404 = el lead
+      cae al archivo; 500 o timeout = NO MEDIDO, nunca verde.
+      **Falta (necesita deploy del bot):** que `/health` acepte `?inboxId=N` y conteste con
+      `ensureKnowledge({inboxId})` — o sea, con la MISMA resolución que el camino de respuesta.
+      Mientras no esté, el gate compensa desde afuera preguntándole al producto directo.
+      Reproducción: `npm run precios:vivos` (hoy exit 0, imprime la línea «filas publicadas por
+      inbox»).
+
+</details>
+
+- [ ] 🟠 **F2.1 — el bot de ventas se configura desde el PANEL: código listo y probado, falta el
+      deploy (OK de Sergio Urcullo) y que él publique una vez desde el editor.**
+      Escrito el 2026-09-12 en `hermes-content/deploy/vps-ops/bot/` (rama
+      `claude/cobro-e2e-punto-1-25ba65`): `knowledge.mjs` ganó la **fuente "panel"** — con
+      `ONIA_KNOWLEDGE_URL` apuntando a la fila publicada de la org interna
+      (`GET /api/chatbot-knowledge/published?organizationId=…`, Bearer `BOT_KNOWLEDGE_SECRET`),
+      el loader la trae con el **mismo TTL de 5 min** y el **mismo validador N1**, `/health` dice
+      `knowledge.source:"panel"` con la versión y el autor del editor, y si la URL falla o no hay
+      nada publicado **cae al archivo de siempre** (jamás mudo). Diferencias deliberadas con la
+      fuente por org: NO enciende el modo recepcionista (es la cara de venta), y una **entrada
+      inválida se descarta SOLA con log** (`[knowledge:panel] … descartada(s)`) en vez de tumbar
+      el documento entero — un precio metido en una FAQ rechaza ESA FAQ, los precios siguen
+      saliendo solo de las fuentes. Un error estructural sí rechaza entero.
+
+      **Evidencia, medida:**
+      · Tests: `node --test` en el árbol del bot → **959 pass / 0 fail** (9 tests nuevos de la
+        fuente panel en `knowledge.test.mjs`: mapeo del sobre del producto, TTL, URL caída →
+        archivo, precio inválido → descarte individual, health).
+      · VPS (SSH solo lectura, 2026-09-12): org `onia-interna` = id c956c02fccd8573cd6fcc5b35,
+        entitlement `addon.whatsapp` **active** (validUntil NULL) → el gate del endpoint pasa;
+        `chatbot_knowledge` está **vacía** → el endpoint contesta hoy
+        `404 {"error":"Sin conocimiento publicado"}` (probado con el Bearer real desde el
+        contenedor `onia-platform`), que la fuente trata como "nada publicado" y sigue con el
+        archivo. El admin de esa org es `superadmin@onia.com.bo` (SUPERADMIN) — Sergio entra con
+        el método del magic link ya documentado.
+
+      **Para encender (deploy, necesita OK):** agregar a `/opt/onia/bot/webhook.env` la línea
+      `ONIA_KNOWLEDGE_URL=http://onia-platform:3000/api/chatbot-knowledge/published?organizationId=c956c02fccd8573cd6fcc5b35`
+      (el Bearer ya está: `BOT_KNOWLEDGE_SECRET`), y correr
+      `/opt/onia/bot/deploy-bot.sh --aplicar` (lleva `knowledge.mjs`, `webhook-server.sh` con el
+      `-e` nuevo y reinicia). **LISTO =** Sergio Urcullo edita una respuesta en el editor del
+      panel de `onia-interna`, y `/health` del bot dice `source:"panel"` con su versión — y el
+      bot la contesta, sin tocar el repo.
+
+      ✅ **Ya se preguntó si la fuente `panel` hereda el hueco de `/health` que se cerró el
+      2026-09-12, y NO lo hereda — medido, no supuesto.** `ensureKnowledge` calienta la clave por
+      inbox pero **no** el panel, así que con caché fría los dos —`/health` y el camino de
+      respuesta— sirven el archivo y **coinciden**, que es el invariante que importa (`/health`
+      no puede reportar un documento distinto del que recibe el lead). Que el primer turno tras
+      un reinicio salga del archivo es deliberado y acá es inocuo: el panel es la cara de VENTA
+      de Onia, o sea la misma voz que el archivo. No hay nada que arreglar; no reabrirlo.
+
 - [ ] 🟡 **El bot tuvo una ventana sirviendo el M4_BODY SIN precios, y no sé por qué.**
       Medido el 2026-09-12: a las **22:48:35 UTC** la conv 49 preguntó *"Cuanto cuesta el sistema?
       pasame los precios"* y el bot contestó *"el número exacto te lo pasa Sergio en la demo…
@@ -305,11 +390,56 @@ La historia completa queda acá abajo para no perderla.
       el texto sin precios durante ~5 min **después de cada reinicio**, y se cura solo. No se
       anuncia como causa hasta reproducirlo.
 
-      **Reproducción, ~2 min:** reiniciar el webhook y preguntar el precio dentro del primer
-      minuto, mirando `docker exec onia-center wget -qO- http://127.0.0.1:3020/health` — si
-      `knowledge.source` dice `"code"` en esa ventana, la hipótesis queda probada y el arreglo es
-      cargar el archivo en el arranque (hoy `main()` no lo toca). El gate ya sabe verlo: con
-      `source:"code"` `npm run precios:vivos` da **exit 1**.
+      ⚠️ **Esa hipótesis la REFUTA el código, leído el 2026-09-12 19:35 La Paz** — no gastar la
+      vuelta en reproducirla. En caché fría `getKnowledge` **no** espera al TTL: la rama
+      `CACHE.checkedAt === null` hace `readKnowledgeFile(path)` **sincrónico** antes de contestar
+      (`knowledge.mjs:788`). O sea que el primer mensaje después de un reinicio YA lee el archivo,
+      y el TTL de 5 min sólo gobierna las **re**lecturas, que además sirven la copia vieja
+      mientras refrescan. Una ventana de 5 min tras el arranque no puede existir por esta vía.
+
+      **Hipótesis que queda en pie, NO probada:** lo que faltó no fue el lector sino **el
+      archivo**. `webhook-server.sh` hace `rm -rf` del destino y recopia entero cuando cambia el
+      stamp; durante esa ventana `/tmp/onia-bot/knowledge.json` **no existe**, `readKnowledgeFile`
+      vuelve `missing`, y el motor sirve el `M4_BODY` — sin `lastError`, porque un archivo ausente
+      «no es un error que haya que gritar» (`knowledge.mjs:533`). Encaja con que el `mtime` siga
+      diciendo 06:44: `rsync`/`cp -a` **preservan mtime**, así que un archivo recopiado parece
+      intacto. **Lo que la probaría:** una línea por recopia en el log de `webhook-server.sh`, o
+      un `stat` del archivo durante un `knowledge`/deploy. Si es eso, el arreglo es que la recopia
+      sea atómica (escribir al lado y `mv`), no que el motor reintente.
+
+- [ ] 🟠 **F2.1 — el bot de ventas se configura desde el PANEL: código listo y probado, falta el
+      deploy (OK de Sergio Urcullo) y que él publique una vez desde el editor.**
+      Escrito el 2026-09-12 en `hermes-content/deploy/vps-ops/bot/` (rama
+      `claude/cobro-e2e-punto-1-25ba65`): `knowledge.mjs` ganó la **fuente "panel"** — con
+      `ONIA_KNOWLEDGE_URL` apuntando a la fila publicada de la org interna
+      (`GET /api/chatbot-knowledge/published?organizationId=…`, Bearer `BOT_KNOWLEDGE_SECRET`),
+      el loader la trae con el **mismo TTL de 5 min** y el **mismo validador N1**, `/health` dice
+      `knowledge.source:"panel"` con la versión y el autor del editor, y si la URL falla o no hay
+      nada publicado **cae al archivo de siempre** (jamás mudo). Diferencias deliberadas con la
+      fuente por org: NO enciende el modo recepcionista (es la cara de venta), y una **entrada
+      inválida se descarta SOLA con log** (`[knowledge:panel] … descartada(s)`) en vez de tumbar
+      el documento entero — un precio metido en una FAQ rechaza ESA FAQ, los precios siguen
+      saliendo solo de las fuentes. Un error estructural sí rechaza entero.
+
+      **Evidencia, medida:**
+      · Tests: `node --test` en el árbol del bot → **959 pass / 0 fail** (9 tests nuevos de la
+        fuente panel en `knowledge.test.mjs`: mapeo del sobre del producto, TTL, URL caída →
+        archivo, precio inválido → descarte individual, health).
+      · VPS (SSH solo lectura, 2026-09-12): org `onia-interna` = id c956c02fccd8573cd6fcc5b35,
+        entitlement `addon.whatsapp` **active** (validUntil NULL) → el gate del endpoint pasa;
+        `chatbot_knowledge` está **vacía** → el endpoint contesta hoy
+        `404 {"error":"Sin conocimiento publicado"}` (probado con el Bearer real desde el
+        contenedor `onia-platform`), que la fuente trata como "nada publicado" y sigue con el
+        archivo. El admin de esa org es `superadmin@onia.com.bo` (SUPERADMIN) — Sergio entra con
+        el método del magic link ya documentado.
+
+      **Para encender (deploy, necesita OK):** agregar a `/opt/onia/bot/webhook.env` la línea
+      `ONIA_KNOWLEDGE_URL=http://onia-platform:3000/api/chatbot-knowledge/published?organizationId=c956c02fccd8573cd6fcc5b35`
+      (el Bearer ya está: `BOT_KNOWLEDGE_SECRET`), y correr
+      `/opt/onia/bot/deploy-bot.sh --aplicar` (lleva `knowledge.mjs`, `webhook-server.sh` con el
+      `-e` nuevo y reinicia). **LISTO =** Sergio Urcullo edita una respuesta en el editor del
+      panel de `onia-interna`, y `/health` del bot dice `source:"panel"` con su versión — y el
+      bot la contesta, sin tocar el repo.
 
 <details><summary>Diagnóstico completo del 2026-09-12 (tablero `t_e45a24ff`, instrumento `97e466fa`)</summary>
 

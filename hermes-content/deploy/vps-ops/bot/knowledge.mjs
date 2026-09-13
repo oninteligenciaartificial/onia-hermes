@@ -476,7 +476,10 @@ export function readKnowledgeFile(path, deps = {}) {
 
 const EMPTY = Object.freeze({
   data: null,
-  source: "code", // "db" | "file" | "code". "db" = la fila publicada POR ORG (paso b), delante del archivo.
+  // "db" | "panel" | "file" | "code". "db" = la fila publicada POR ORG (paso b), delante de todo.
+  // "panel" = la fila publicada de la ORG INTERNA de Onia (F2.1): el conocimiento del bot de
+  // VENTAS editado en el panel, delante del archivo y detras de la fila por org.
+  source: "code",
   // Solo lo trae la fuente "db": el slug de la agenda publica de esa org. null = sin agenda.
   orgSlug: null,
   // Solo la fuente "db": { agotada, usadas, limite } de la cuota mensual. null = no se sabe = atender.
@@ -496,6 +499,8 @@ let refreshing = false;
 export function resetKnowledgeCache() {
   CACHE = EMPTY;
   refreshing = false;
+  PANEL_CACHE = EMPTY;
+  panelRefreshing = false;
 }
 
 function knowledgePath(options = {}) {
@@ -758,6 +763,198 @@ export async function ensureKnowledge(options = {}) {
   }
 }
 
+// ---------------------------------------------------------------------------
+// Fuente "panel" (F2.1): el conocimiento del BOT DE VENTAS editado en el panel
+// ---------------------------------------------------------------------------
+// El bot de ventas de Onia leia su conocimiento de `knowledge.onia.json` publicado A MANO
+// (deploy-bot.sh, paso 7). Con `ONIA_KNOWLEDGE_URL` apuntando a la fila publicada de la org
+// interna de Onia (GET /published?organizationId=<onia-interna>), Sergio edita en el panel y el
+// bot lo toma solo, con el MISMO TTL y el MISMO validador N1. Sin la variable, nada cambia.
+//
+// DIFERENCIA DELIBERADA con la fuente "db": esta fuente NO enciende el modo recepcionista
+// (es la cara de VENTA de Onia, no un cliente) y RECHAZA POR ENTRADA, no todo-o-nada: si el
+// editor mete una cifra en una FAQ, se descarta ESA FAQ, se loguea, y el resto se publica.
+// El archivo sigue siendo todo-o-nada porque su editor es un commit; el del panel es un humano
+// a las 10 de la noche, y castigarle el documento entero por una entrada lo deja sin nada.
+// Un error ESTRUCTURAL (schema ajeno, clave desconocida arriba, demo incoherente) sigue
+// rechazando el documento entero: eso no es una entrada, es otro contrato.
+
+let PANEL_CACHE = EMPTY;
+let panelRefreshing = false;
+
+/** Sin URL o sin secreto la fuente esta APAGADA y eso NO es un error: es el estado de hoy. */
+function panelConfig(options = {}) {
+  return {
+    // URL COMPLETA, query incluida: el loader no sabe (ni debe saber) cual es la org interna.
+    url: String(options.panelUrl ?? process.env.ONIA_KNOWLEDGE_URL ?? "").trim(),
+    // El mismo endpoint /published que la fuente db => el mismo Bearer.
+    secret: String(options.panelSecret ?? process.env.BOT_KNOWLEDGE_SECRET ?? "").trim(),
+    timeoutMs: Number.isFinite(options.dbTimeoutMs) ? options.dbTimeoutMs : DB_TIMEOUT_MS,
+    fetch: options.fetch || globalThis.fetch,
+  };
+}
+
+/**
+ * El sobre del producto -> el documento "onia.bot.knowledge/1". El producto YA guarda el mismo
+ * esquema (su editor valida con el validador espejo), asi que el mapeo es fino: se toma
+ * `body.data` y, si el documento no trae version/updatedBy propios, se estampan los de la fila
+ * (`row.version` numerico -> "vN"). Lo que no sea ese esquema lo rechaza el validador de siempre.
+ */
+export function mapPanelDoc(body) {
+  if (!isPlainObject(body?.data)) return null;
+  const doc = { ...body.data };
+  if (typeof doc.version !== "string" && (typeof body.version === "number" || typeof body.version === "string")) {
+    doc.version = `v${body.version}`.slice(0, 40);
+  }
+  if (typeof doc.updatedBy !== "string" && typeof body.updatedBy === "string" && body.updatedBy.trim()) {
+    doc.updatedBy = body.updatedBy.slice(0, 60);
+  }
+  return doc;
+}
+
+/**
+ * Rechazo POR ENTRADA. Corre el MISMO validateKnowledge; si todos los errores apuntan a items
+ * de una lista (faq[i], campanas[i], productos[i], rubrosExtra[i], triggersExtra.demo[i]) se
+ * descartan ESOS items y se revalida. Cualquier error que no sea de un item (clave desconocida
+ * arriba, demo incoherente, schema ajeno) rechaza el documento ENTERO, como siempre.
+ * Los precios siguen saliendo SOLO de las fuentes: la cifra invalida no entra ni recortada.
+ */
+export function sanitizePanelKnowledge(data) {
+  const primero = validateKnowledge(data);
+  if (primero.ok) return { data, descartes: [], errors: [] };
+
+  const listas = { faq: new Set(), campanas: new Set(), productos: new Set(), rubrosExtra: new Set() };
+  const triggersDemo = new Set();
+  const fatales = [];
+  for (const error of primero.errors) {
+    const item = /^(faq|campanas|productos|rubrosExtra)\[(\d+)\]/.exec(error);
+    if (item) {
+      listas[item[1]].add(Number(item[2]));
+      continue;
+    }
+    const trigger = /^triggersExtra\.demo\[(\d+)\]/.exec(error);
+    if (trigger) {
+      triggersDemo.add(Number(trigger[1]));
+      continue;
+    }
+    fatales.push(error);
+  }
+  if (fatales.length) return { data: null, descartes: [], errors: primero.errors };
+
+  const podado = { ...data };
+  for (const [key, indices] of Object.entries(listas)) {
+    if (indices.size && Array.isArray(podado[key])) podado[key] = podado[key].filter((_, i) => !indices.has(i));
+  }
+  if (triggersDemo.size && Array.isArray(podado.triggersExtra?.demo)) {
+    podado.triggersExtra = { ...podado.triggersExtra, demo: podado.triggersExtra.demo.filter((_, i) => !triggersDemo.has(i)) };
+  }
+
+  // Una sola poda: los errores de item no dependen unos de otros. Si despues de podar sigue
+  // invalido, el documento tiene algo mas de fondo y se rechaza entero (fallback, jamas mudo).
+  const segundo = validateKnowledge(podado);
+  if (!segundo.ok) return { data: null, descartes: [], errors: segundo.errors };
+  return { data: podado, descartes: primero.errors, errors: [] };
+}
+
+async function fetchPanelKnowledge(options = {}) {
+  const { url, secret, timeoutMs, fetch: doFetch } = panelConfig(options);
+  if (!url || !secret || typeof doFetch !== "function") return { data: null, error: null, missing: true };
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    let res;
+    try {
+      res = await doFetch(url, { headers: { authorization: `Bearer ${secret}` }, signal: controller.signal });
+    } finally {
+      clearTimeout(timer);
+    }
+    // 404 = la org interna todavia no publico nada (o el add-on esta apagado): NO es un error,
+    // es el estado de hoy — se sigue con el archivo del deploy.
+    if (res.status === 404) return { data: null, error: null, missing: true };
+    if (!res.ok) return { data: null, error: `el panel contesto HTTP ${res.status}` };
+    const body = await res.json();
+    const doc = mapPanelDoc(body);
+    if (!doc) return { data: null, error: "el panel mando una respuesta sin `data`" };
+    const { data, descartes, errors } = sanitizePanelKnowledge(doc);
+    if (!data) {
+      return { data: null, error: `RECHAZADO (${errors.length}): ${errors.join(" · ")}`.slice(0, 600) };
+    }
+    if (descartes.length) {
+      // Se loguea CADA descarte con su motivo: el editor tiene que poder ver que su entrada
+      // no salio y por que, sin que eso tumbe al resto del documento ni al bot.
+      console.error(`[knowledge:panel] ${descartes.length} entrada(s) descartada(s): ${descartes.join(" · ")}`.slice(0, 600));
+    }
+    return { data, descartes, error: null };
+  } catch (error) {
+    return { data: null, error: `no se pudo leer el panel: ${String(error?.message || error).slice(0, 160)}` };
+  }
+}
+
+/** Igual que nextCache: una lectura fallida CONSERVA la ultima copia buena del panel. */
+function nextPanelCache(result, url, nowMs) {
+  if (result.data) {
+    return Object.freeze({
+      ...EMPTY,
+      data: result.data,
+      source: "panel",
+      descartes: Array.isArray(result.descartes) && result.descartes.length ? result.descartes : null,
+      version: typeof result.data.version === "string" ? result.data.version : null,
+      updatedBy: typeof result.data.updatedBy === "string" ? result.data.updatedBy : null,
+      loadedAt: new Date(nowMs).toISOString(),
+      checkedAt: nowMs,
+      path: `panel:${url}`,
+      error: null,
+    });
+  }
+  return Object.freeze({
+    ...PANEL_CACHE,
+    source: PANEL_CACHE.data ? PANEL_CACHE.source : "code",
+    checkedAt: nowMs,
+    path: `panel:${url}`,
+    error: result.missing ? null : result.error || PANEL_CACHE.error,
+  });
+}
+
+function schedulePanelRefresh(url, nowMs, options = {}) {
+  if (panelRefreshing) return;
+  panelRefreshing = true;
+  Promise.resolve()
+    .then(() => fetchPanelKnowledge(options))
+    .then((result) => {
+      PANEL_CACHE = nextPanelCache(result, url, nowMs);
+    })
+    .catch(() => {})
+    .finally(() => {
+      panelRefreshing = false;
+    });
+}
+
+/** Si cambio la URL, lo cacheado era de OTRO panel y no se hereda (mismo trato que el archivo). */
+function panelCacheVigente(url) {
+  if (PANEL_CACHE.path !== null && PANEL_CACHE.path !== `panel:${url}`) PANEL_CACHE = EMPTY;
+  return PANEL_CACHE;
+}
+
+/**
+ * La copia del panel ESPERANDO la red si hace falta (tests, prewarm). El camino del turno usa
+ * getKnowledge(), que jamas espera: sirve la copia vieja y refresca aparte. Degradacion: sin
+ * datos del panel (fuente apagada, 404, HTTP roto, documento rechazado) cae al archivo/codigo.
+ */
+export async function getPanelKnowledge(options = {}) {
+  try {
+    const { url } = panelConfig(options);
+    if (!url) return getKnowledge(options);
+    const nowMs = Number.isFinite(options.nowMs) ? options.nowMs : Date.now();
+    const prev = panelCacheVigente(url);
+    if (prev.checkedAt === null || nowMs - prev.checkedAt >= ttlMs(options)) {
+      PANEL_CACHE = nextPanelCache(await fetchPanelKnowledge(options), url, nowMs);
+    }
+    return PANEL_CACHE.data ? PANEL_CACHE : getKnowledge(options);
+  } catch {
+    return getKnowledge(options);
+  }
+}
+
 /**
  * El conocimiento vigente. SINCRONICO y tolerante: nunca tira y nunca espera red.
  *   - con `options.organizationId` (o `options.inboxId`) y copia db en cache: la copia
@@ -777,7 +974,18 @@ export function getKnowledge(options = {}) {
         scheduleOrgRefresh(orgKey, orgNow, options);
       }
       if (org?.data) return org;
-      // sin copia db todavia: sigue el camino del archivo/codigo de siempre
+      // sin copia db todavia: sigue el camino del panel/archivo/codigo de siempre
+    }
+    const { url: panelUrl } = panelConfig(options);
+    if (panelUrl) {
+      const panelNow = Number.isFinite(options.nowMs) ? options.nowMs : Date.now();
+      const panel = panelCacheVigente(panelUrl);
+      if (panel.checkedAt === null || panelNow - panel.checkedAt >= ttlMs(options)) {
+        schedulePanelRefresh(panelUrl, panelNow, options);
+      }
+      if (panel.data) return panel;
+      // sin copia del panel todavia (fria, 404 o rechazada): sigue el archivo/codigo — fail-open
+      // al conocimiento anterior, JAMAS mudo.
     }
     const path = knowledgePath(options);
     const nowMs = Number.isFinite(options.nowMs) ? options.nowMs : Date.now();
@@ -796,10 +1004,32 @@ export function getKnowledge(options = {}) {
   }
 }
 
-/** Lo que /health tiene que decir para que "edite y no pasó nada" no tarde dias en descubrirse. */
-export function knowledgeHealth(options = {}) {
-  const state = getKnowledge(options);
-  return {
+/**
+ * Lo que /health tiene que decir para que "edite y no pasó nada" no tarde dias en descubrirse,
+ * resuelto con la MISMA funcion que el camino de respuesta (`ensureKnowledge`) para que conteste
+ * sobre el documento que le toca al lead y no sobre otro.
+ *
+ * ⚠️ ES ASINCRONICA A PROPOSITO, y acá vivía el defecto. Hasta el 2026-09-12 esto era
+ * `knowledgeHealth()`, sincronica: con cache fria por inbox NO espera el primer fetch, asi que
+ * reportaba el ARCHIVO del proceso aunque existiera una fila publicada para ese inbox. Mientras
+ * no hubo filas publicadas los dos coincidian y no se vio; el dia que se publique una, el gate
+ * de precios que le pregunta a /health habria fallado EN VERDE sobre el documento equivocado.
+ * La hermana sincronica se BORRO en vez de dejarse "por si acaso": era exactamente el pie de
+ * banco con el que se vuelve a pisar el mismo agujero. Ver el bloque 0.a-bis de
+ * webhook-server.test.mjs.
+ */
+export async function ensureKnowledgeHealth(options = {}) {
+  return healthFromState(await ensureKnowledge(options), options);
+}
+
+/**
+ * `alcance` NO es decoracion: es lo que hace que el que pregunta pueda distinguir "te contesto
+ * por el inbox 4" de "te contesto por el archivo del proceso". Los dos JSON son iguales en todo
+ * lo demas, y esa ambiguedad ES el defecto que este campo cierra.
+ */
+function healthFromState(state, options = {}) {
+  const salud = {
+    alcance: cacheKeyOf(options) || "proceso",
     source: state.source,
     version: state.version,
     updatedBy: state.updatedBy,
@@ -811,6 +1041,18 @@ export function knowledgeHealth(options = {}) {
     path: state.path,
     lastError: state.error,
   };
+  // Con la fuente panel CONFIGURADA, /health tiene que contar su estado aunque hoy no sirva:
+  // "edite en el panel y el bot no lo tomo" se diagnostica aca, no adivinando.
+  const { url } = panelConfig(options);
+  if (url) {
+    salud.panel = {
+      configurado: true,
+      sirviendo: state.source === "panel",
+      descartes: Array.isArray(state.descartes) ? state.descartes.length : 0,
+      lastError: PANEL_CACHE.error,
+    };
+  }
+  return salud;
 }
 
 // ---------------------------------------------------------------------------

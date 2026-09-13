@@ -25,15 +25,19 @@
 // de `onia-center`, que es de donde corre el bot (rsync desde `/opt/onia/bot`)— y no el repo.
 // Un repo verde con produccion vieja es exactamente el falso verde que costo esta vuelta.
 //
-// ⚠️ CUAL DE LAS DOS CAPAS DE CONOCIMIENTO SE MIDE, porque confundirlas manda a arreglar el
-// archivo equivocado (casi pasa el 2026-09-12). El bot tiene DOS fuentes y NO compiten:
-//   - `ONIA_BOT_KNOWLEDGE_URL` → `/api/chatbot-knowledge/published?<org>`: el conocimiento POR
-//     ORGANIZACION, o sea el bot que un CLIENTE le compro como add-on. Sale de la base.
-//   - `/tmp/onia-bot/knowledge.json`: el conocimiento del bot DE VENTA de Onia — el que atiende
-//     los inboxes 4 y 5, por donde entra todo desconocido. Es un archivo, y es el sujeto de aca.
-// Que la capa correcta es el archivo se verifico MIRANDO lo que el bot mando de verdad, no
-// razonandolo: `select content from messages where content like '%Te los paso derecho%'` en la
-// base de Chatwoot devolvia el texto con Bs 750 y Bs 1.500, palabra por palabra.
+// ⚠️ SON DOS CAPAS Y SI COMPITEN — corregido el 2026-09-12, midiendo. Aca decia que la fila por
+// organizacion era "el bot que un CLIENTE le compro como add-on" y que el archivo era "el que
+// atiende los inboxes 4 y 5", o sea que no se pisaban. Es FALSO, y esa frase apagaba la unica
+// pregunta que importa: `run-turn.mjs:147` hace `ensureKnowledge({ inboxId })` en TODA
+// conversacion y `getKnowledge` devuelve la copia `db` de esa clave apenas exista — `cacheKeyOf`
+// keyea `inbox:<id>`, no hay rama "solo add-on". La fila del inbox 4 le gana al archivo para el
+// lead de venta.
+//   - `ONIA_BOT_KNOWLEDGE_URL` → `/api/chatbot-knowledge/published?inboxId=<n>`: gana si existe.
+//     ENCENDIDA en produccion (el proceso vivo declara URL y secreto). Hoy da 404 en 4 y 5, y
+//     por eso el lead cae al archivo — el agujero esta a UNA fila publicada de distancia.
+//   - `/tmp/onia-bot/knowledge.json`: el archivo, que es lo que se sirve cuando no hay fila.
+// Este gate mide LAS DOS. Medir solo el archivo es lo que dejaba la otra firmada en verde sin
+// mirarla; y un comentario que AFIRMA que algo no hace falta mirarse es una hipotesis con fecha.
 //
 // Y el archivo vivo NO viaja con `DESPLEGAR: bot`: `publicar.sh` lo preserva a proposito
 // ("nunca borra knowledge.json"). Instalarlo es un segundo comando, a mano:
@@ -235,6 +239,144 @@ export function juzgar(crudo, cargado) {
 }
 
 // ---------------------------------------------------------------------------
+// La OTRA fuente: la fila publicada POR INBOX, que es la que el lead resuelve primero
+// ---------------------------------------------------------------------------
+// Medido el 2026-09-12 (carril chatbot-cola). Toda conversacion pasa por
+// `run-turn.mjs:147` → `ensureKnowledge({ inboxId })`, y `getKnowledge` devuelve la copia `db`
+// de esa clave apenas exista (`cacheKeyOf` keyea `inbox:<id>`). No hay rama "solo para el bot
+// que compro un cliente": el inbox ES la clave. Y la fuente esta ENCENDIDA en produccion —
+// el proceso vivo declara `ONIA_BOT_KNOWLEDGE_URL` y `BOT_KNOWLEDGE_SECRET`.
+//
+// `/health` llamaba `knowledgeHealth()` SIN inbox, o sea reportaba el ARCHIVO: el dia que
+// alguien publicara la fila del inbox 4, el lead cotizaria de esa fila y este gate seguiria
+// firmando "EL BOT VIVO COTIZA SOLO PRECIOS DE LA FUENTE UNICA" sin haberla mirado nunca — falla
+// EN VERDE, que es el peor modo. Desde el 2026-09-12 `/health` acepta `?inboxId=N` y resuelve con
+// `ensureKnowledgeHealth`, la MISMA funcion que el camino de respuesta, y declara en `alcance`
+// que documento midio (`inbox:4` vs `proceso`). ⚠️ Commiteado, NO DESPLEGADO: el bot vivo todavia
+// corre el build sin eso, asi que lo de abajo sigue siendo necesario.
+//
+// Y aunque se despliegue, este gate sigue preguntandole al PRODUCTO directo en vez de creerle a
+// /health: son dos fuentes distintas, y un gate que le pregunta al mismo proceso que audita se
+// queda sin forma de detectar que ese proceso se equivoca.
+
+/** El contenedor de la base de Chatwoot: Swarm le pega un sufijo, asi que no se puede nombrar. */
+export function contenedorChatwootDb({ correr = spawnSync } = {}) {
+  const r = correr("docker", ["ps", "--format", "{{.Names}}"], { encoding: "utf8", timeout: 60_000 });
+  if (!r || r.error || r.status !== 0 || typeof r.stdout !== "string") return null;
+  return r.stdout.split("\n").map((l) => l.trim()).find((l) => l.includes("chatwoot-db")) || null;
+}
+
+/**
+ * Los inboxes que EXISTEN, derivados de Chatwoot. El universo no puede ser una lista a mano
+ * ("4 y 5"): el inbox que alguien cree manana es justo el que nadie iria a mirar. `null` = no
+ * pude derivarlo, que no es lo mismo que "no hay ninguno".
+ */
+export function inboxesVivos({ correr = spawnSync, contenedor } = {}) {
+  const db = contenedor ?? contenedorChatwootDb({ correr });
+  if (!db) return null;
+  const r = correr(
+    "docker",
+    ["exec", db, "psql", "-U", "postgres", "-d", "onia-chatbot", "-A", "-t", "-c", "select id from inboxes order by id"],
+    { encoding: "utf8", timeout: 60_000 },
+  );
+  if (!r || r.error || r.status !== 0 || typeof r.stdout !== "string") return null;
+  const ids = r.stdout.split("\n").map((l) => l.trim()).filter((l) => /^[0-9]+$/.test(l)).map(Number);
+  return ids.length > 0 ? ids : null;
+}
+
+/**
+ * Lo que el producto le contesta al bot para ESE inbox, preguntado con la URL y el secreto del
+ * PROCESO VIVO — no con los del repo: si el gate trajera su propia credencial podria medir un
+ * destino que el bot no consulta.
+ *
+ * Tri-estado, porque los tres van a lugares distintos:
+ *   `apagada`  el proceso no declara URL/secreto → la fuente no existe, y eso NO es un error
+ *   `ausente`  404: no hay fila para ese inbox   → el lead cae al archivo, que ya se mide
+ *   `doc`      hay fila                          → ES lo que el lead recibe: hay que medirla
+ *   `null`     cualquier otra cosa               → no pude preguntar, y eso nunca es verde
+ */
+export function filaPublicada({ inbox, contenedor = CONTENEDOR, correr = spawnSync } = {}) {
+  const guion =
+    'P=$(pgrep -f webhook-server | head -1); [ -n "$P" ] || exit 9; ' +
+    "E=$(tr '\\0' '\\n' < /proc/$P/environ); " +
+    'U=$(printf %s "$E" | sed -n "s/^ONIA_BOT_KNOWLEDGE_URL=//p" | head -1); ' +
+    'S=$(printf %s "$E" | sed -n "s/^BOT_KNOWLEDGE_SECRET=//p" | head -1); ' +
+    '[ -n "$U" ] && [ -n "$S" ] || exit 8; ' +
+    `wget -O - --header="authorization: Bearer $S" "$U?inboxId=${encodeURIComponent(String(inbox))}" 2>&1`;
+  const r = correr("docker", ["exec", contenedor, "sh", "-c", guion], { encoding: "utf8", timeout: 60_000 });
+  if (!r || r.error) return { inbox, estado: null };
+  const salida = typeof r.stdout === "string" ? r.stdout : "";
+  if (r.status === 8) return { inbox, estado: "apagada" };
+  if (r.status === 0 && salida.trim() !== "") return { inbox, estado: "doc", crudo: salida };
+  // wget devuelve != 0 tanto por 404 como por un 500 o un timeout. Aplanarlos a "no hay fila"
+  // convertiria una medicion fallida en un verde, que es la familia de bug que este gate persigue.
+  if (/server returned error.*\b404\b/i.test(salida)) return { inbox, estado: "ausente" };
+  return { inbox, estado: null };
+}
+
+/**
+ * El veredicto de las filas publicadas. Mide cada una con el MISMO `montosVencidos` que el
+ * archivo: dos lectores distintos para el mismo hecho es como uno de los dos queda verde solo.
+ * El peor estado manda — un inbox sano no absuelve al de al lado.
+ */
+export function juzgarInboxes(filas) {
+  if (!Array.isArray(filas) || filas.length === 0) {
+    return {
+      codigo: 2,
+      texto:
+        "NO SE PUDO MEDIR — no pude derivar que inboxes existen en Chatwoot, asi que no se que " +
+        "fila publicada recibiria un lead. Una lista vacia no es 'ninguna fila'.",
+      porInbox: [],
+    };
+  }
+  const porInbox = [];
+  for (const fila of filas) {
+    if (!fila || fila.estado === null || fila.estado === undefined) {
+      porInbox.push({ inbox: fila?.inbox, estado: "no-medido" });
+      continue;
+    }
+    if (fila.estado === "apagada" || fila.estado === "ausente") {
+      porInbox.push({ inbox: fila.inbox, estado: fila.estado });
+      continue;
+    }
+    let doc;
+    try {
+      doc = JSON.parse(fila.crudo);
+    } catch {
+      porInbox.push({ inbox: fila.inbox, estado: "ilegible" });
+      continue;
+    }
+    porInbox.push({ inbox: fila.inbox, estado: "doc", vencidos: montosVencidos(doc) });
+  }
+  const conMontosMuertos = porInbox.filter((p) => p.estado === "doc" && p.vencidos.length > 0);
+  if (conMontosMuertos.length > 0) {
+    const detalle = conMontosMuertos
+      .map((p) => `inbox ${p.inbox}: ${p.vencidos.map((v) => `Bs ${v.monto} ("${v.ejemplo}…")`).join(" · ")}`)
+      .join(" | ");
+    return {
+      codigo: 1,
+      texto:
+        `LA FILA PUBLICADA QUE RECIBE EL LEAD COTIZA MONTOS QUE YA NO EXISTEN — ${detalle}. ` +
+        `Esta fila GANA sobre ${RUTA_VIVA}: el motor resuelve por inbox antes que por archivo ` +
+        `(run-turn.mjs → ensureKnowledge({inboxId})). Arreglar el archivo no la toca.`,
+      porInbox,
+    };
+  }
+  const sinMedir = porInbox.filter((p) => p.estado === "no-medido" || p.estado === "ilegible");
+  if (sinMedir.length > 0) {
+    return {
+      codigo: 2,
+      texto:
+        `NO SE PUDO MEDIR — ${sinMedir.length} inbox(es) sin veredicto ` +
+        `(${sinMedir.map((p) => `${p.inbox}:${p.estado}`).join(", ")}). Una fila que no pude leer ` +
+        `puede ser la que le esta cotizando al lead.`,
+      porInbox,
+    };
+  }
+  return { codigo: 0, texto: "", porInbox };
+}
+
+// ---------------------------------------------------------------------------
 // Self-check: puro, sin red ni docker, para que pueda vivir en la cadena.
 // ---------------------------------------------------------------------------
 
@@ -352,6 +494,70 @@ function selfCheck() {
     "un proceso que sirve el codigo se reporta como tal",
   );
 
+  // -------------------------------------------------------------------------
+  // LA OTRA FUENTE, la que el lead resuelve PRIMERO (agregado 2026-09-12).
+  // -------------------------------------------------------------------------
+  // El bloque ⚠️ de la cabecera afirmaba que las dos capas "NO compiten" y que la fila por
+  // organizacion es "el bot que un CLIENTE le compro". El codigo lo desmiente: `run-turn.mjs:147`
+  // hace `ensureKnowledge({ inboxId })` en TODA conversacion, y `getKnowledge` devuelve la copia
+  // `db` de esa clave apenas exista — el inbox ES la clave, no hay rama "solo para add-on". O sea
+  // que una fila publicada para el inbox 4 le cambia el precio al lead de venta, y este gate,
+  // por su propio diseño declarado, no la miraba nunca.
+  const conFila = (crudo) => [{ inbox: 4, estado: "doc", crudo }];
+  ok(
+    juzgarInboxes(conFila(JSON.stringify(vivoViejo))).codigo === 1,
+    "una fila publicada con montos muertos es ROJO: es la que el lead recibe",
+  );
+  ok(
+    juzgarInboxes(conFila(JSON.stringify(vivoNuevo))).codigo === 0,
+    "la fila publicada con la escalera C es VERDE (la direccion simetrica)",
+  );
+  ok(
+    juzgarInboxes([{ inbox: 4, estado: "ausente" }]).codigo === 0,
+    "sin fila publicada el lead cae al archivo, que ya se mide aparte: no es rojo",
+  );
+  ok(
+    juzgarInboxes([{ inbox: 4, estado: "apagada" }]).codigo === 0,
+    "la fuente db apagada no es un error: es el estado de hoy",
+  );
+  ok(juzgarInboxes([{ inbox: 4, estado: null }]).codigo === 2, "no poder preguntar por un inbox es 2, nunca 0");
+  ok(juzgarInboxes(null).codigo === 2, "no poder derivar el universo de inboxes es 2, nunca 0");
+  ok(juzgarInboxes([]).codigo === 2, "un universo VACIO no es 'todo bien': es no haber medido");
+  // El peor de todos manda: un inbox sano no puede absolver al de al lado.
+  ok(
+    juzgarInboxes([{ inbox: 4, estado: "doc", crudo: JSON.stringify(vivoNuevo) }, { inbox: 5, estado: "doc", crudo: JSON.stringify(vivoViejo) }]).codigo === 1,
+    "un inbox sano NO absuelve al hermano con montos muertos",
+  );
+  ok(
+    juzgarInboxes(conFila("{ esto no es json")).codigo === 2,
+    "una fila ilegible es 2: no se midio, y no se puede inventar verde",
+  );
+
+  // El universo sale de Chatwoot, no de una lista a mano: un inbox nuevo entra solo.
+  const psql = (stdout) => ({ status: 0, stdout });
+  ok(inboxesVivos({ correr: () => ({ status: 1, stdout: "" }) }) === null, "docker que falla es null, no lista vacia");
+  ok(
+    JSON.stringify(inboxesVivos({ contenedor: "db", correr: () => psql("4\n5\n7\n") })) === "[4,5,7]",
+    "los inboxes se derivan de la tabla, incluido el que nadie previo",
+  );
+  ok(inboxesVivos({ contenedor: "db", correr: () => psql("   \n") }) === null, "salida sin ids es null, nunca []");
+
+  // `filaPublicada` tri-estado: 404 (no hay fila) y "no pude preguntar" NO son lo mismo.
+  const wget = (status, stdout) => ({ status, stdout });
+  ok(
+    filaPublicada({ inbox: 4, correr: () => wget(1, "wget: server returned error: HTTP/1.1 404 Not Found") }).estado === "ausente",
+    "un 404 es 'no hay fila publicada', no un fallo de medicion",
+  );
+  ok(
+    filaPublicada({ inbox: 4, correr: () => wget(1, "wget: server returned error: HTTP/1.1 500 Internal") }).estado === null,
+    "un 500 es NO MEDIDO: no se puede leer como ausencia de fila",
+  );
+  ok(filaPublicada({ inbox: 4, correr: () => wget(8, "") }).estado === "apagada", "sin URL ni secreto la fuente esta apagada");
+  ok(
+    filaPublicada({ inbox: 4, correr: () => wget(0, '{"faq":[]}') }).crudo === '{"faq":[]}',
+    "una fila publicada vuelve cruda, para medirla con el MISMO lector que el archivo",
+  );
+
   const fallaron = casos.filter((c) => !c.ok);
   for (const c of fallaron) console.error(`  FAIL  ${c.nombre}`);
   console.log(`self-check precios-vivos: ${casos.length - fallaron.length}/${casos.length}`);
@@ -364,6 +570,19 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     process.exit(selfCheck());
   }
   const veredicto = juzgar(leerKnowledgeVivo(), conocimientoDelProceso());
+  // Las DOS fuentes, porque el lead resuelve la fila por inbox ANTES que el archivo. Medir una
+  // sola deja la otra firmada en verde sin haberla mirado.
+  const inboxes = inboxesVivos();
+  const porInbox = juzgarInboxes(inboxes === null ? null : inboxes.map((inbox) => filaPublicada({ inbox })));
   console.log(veredicto.texto);
-  process.exit(veredicto.codigo);
+  if (porInbox.texto) console.log(porInbox.texto);
+  if (porInbox.codigo === 0) {
+    const ausentes = porInbox.porInbox.filter((p) => p.estado === "ausente").map((p) => p.inbox);
+    const conDoc = porInbox.porInbox.filter((p) => p.estado === "doc").map((p) => p.inbox);
+    console.log(
+      `filas publicadas por inbox: ${conDoc.length} con fila (${conDoc.join(", ") || "-"}) · ` +
+        `${ausentes.length} sin fila (${ausentes.join(", ") || "-"}) → esos caen al archivo.`,
+    );
+  }
+  process.exit(Math.max(veredicto.codigo, porInbox.codigo));
 }
