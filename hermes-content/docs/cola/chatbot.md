@@ -315,21 +315,40 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       esquive del corte (`false &&`) → 2 rojos; techo devuelto al `24` tipeado y firma vieja →
       1 rojo; árbol restaurado con `cp` → 10/10. Suite del bot completa: **1014/1014**.
 
-      📌 **Lo que queda abierto, y es la mitad que el dueño VE** (`onia-platform`, otro repo —
-      no entró en esta vuelta y se deja con la reproducción exacta para no re-investigarlo):
-      1. `ChatbotClient.tsx:28` — `HORAS_SEGUIMIENTO = [1, 2, 3, 5, 12, 24]`: **la última
-         opción del desplegable es la opción muerta.** El tope que el motor puede cumplir es
-         `windowClosesAtHours - 1`.
-      2. `lib/chatbot/knowledge.ts:110` — `horas: { kind: "int", min: 1, max: 48 }`, y
-         `editor-sugerir.mjs:23` le dicta al LLM *"horas (numero 1-48)"*: por ahí entra un 30
-         sin pasar por el desplegable.
-      3. `ChatbotClient.tsx:596` — el párrafo afirma *"Dentro de las 24 horas del último
-         mensaje, sin costo extra"* **tipeado al lado del control que lo puede volver falso**.
-         Es la clase ya conocida: la promesa se **condiciona** (derivarla de lo que el dueño
-         eligió), no se borra.
-      ⚠️ **Y una fecha que vence en 18 días:** ese *"sin costo extra"* depende de Meta, que
-      empieza a cobrar la respuesta dentro de la ventana de 24 h el **1-oct-2026**. Toda
-      promesa sobre el costo de un tercero lleva su fecha.
+      ✅ **La mitad que el dueño VE quedó CERRADA el 2026-09-13**, misma clase y en la misma
+      vuelta que las dos puntas del bot: `onia-platform` `75d8925` y `onia-hermes` (abajo).
+      ⚠️ **COMMITEADO, NO DESPLEGADO — y la pantalla NO se miró renderizada con el cambio:**
+      producción corre el build viejo y `onia-platform` no tiene render testing, así que
+      `mirar_bandeja_dueno.mjs` mostraría la versión vieja. **Se mira cuando se publique** —
+      hasta entonces el defecto sigue vivo para el cliente.
+      Las **cinco** superficies tipeaban el rango y ninguna derivaba del techo real; ahora hay
+      dos dueños, uno por repo, y los dos lo derivan de `followUp.windowClosesAtHours`:
+      1. `lib/chatbot/espera-que-el-motor-cumple.ts` (producto) — `MAX_ESPERA_HORAS = 23`.
+         El desplegable pinta `ESPERAS_OFRECIDAS`: **se cae la opción muerta y entra el techo
+         real**, para que el que quería "casi un día" siga teniendo su opción — y ésa sí
+         escribe. El validador pasó de `min 1 / max 48` tipeado a derivarlo (el comentario de
+         arriba se declaraba *"espejo EXACTO del motor"* y era justo lo que no era).
+      2. `bot/knowledge.mjs` — `MAX_ESPERA_INSISTENCIA_HORAS`, y `editor-sugerir.mjs` **deja de
+         dictarle "1-48" al LLM**: interpola el rango, que es por donde entraba un 30 sin pasar
+         por el desplegable.
+      3. El párrafo de la promesa se **deriva de lo elegido** (`promesaDeInsistencia`), y con
+         una espera que no se cumple deja de prometer. **Se le sacó el "sin costo extra":** es
+         una promesa sobre un tercero que **vence el 1-oct-2026** (Meta empieza a cobrar la
+         respuesta dentro de la ventana de 24 h) y este copy se congela en el build. Redacción
+         que no caduca, no una fecha que haya que acordarse de barrer.
+      **Un efecto que hay que saber:** el validador ahora rechaza 24-48 h **al leer**, y es
+      TODO O NADA — un doc legado con esa espera se caería entero. **Medido antes de tocar:**
+      ninguna org tiene el campo hoy (una sola fila, `onia-interna`, sin `seguimiento`), así
+      que el riesgo real es cero. El corte del motor se queda igual como red, y por eso pasó a
+      ser función propia (`esperaFueraDeVentana`): sus dos casos ya no podían construir el
+      escenario por el camino del doc publicado — **el fixture se apoyaba en el defecto que el
+      test decía cubrir**.
+      **Gates:** `espera-que-el-motor-cumple.test.ts` cruza lo que el validador ACEPTA contra
+      lo que el motor CUMPLE (1..60 h) y deriva sus sujetos **caminando el disco**, sin
+      absolución por mención; `espera-que-el-barrido-cumple.test.mjs` ata las TRES puntas del
+      bot. **Validados por mutación, 7 direcciones en total** (4 en el producto, 3 en el bot);
+      el caso ancla caza el universo vaciado. `tsc` 0 · vitest 4938 · eslint 0 errores · bot
+      1020/1020 — y los tres re-corridos **en el VPS** antes de publicar la rama.
 
 - [x] 🔴 **~~El bot OFRECE un horario y PROMETE otro: los dos salían de fuentes distintas~~ —
       CERRADO el 2026-09-13 en el repo (`62336825`, `hermes-content/deploy/vps-ops/bot/ventanas-de-atencion.mjs`).

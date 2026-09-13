@@ -42,6 +42,20 @@ export const KNOWLEDGE_SCHEMA = "onia.bot.knowledge/1";
 /** 5 minutos. Vencido, se sirve la copia vieja y se relee aparte. */
 export const DEFAULT_TTL_MS = 300_000;
 
+export const MIN_ESPERA_INSISTENCIA_HORAS = 1;
+
+/**
+ * La espera mas larga que el barrido de la insistencia alcanza a EJECUTAR.
+ *
+ * No es una decision de diseño: `sweepInsistenciaCandidates` (persistence.mjs) solo
+ * mira las filas que siguen dentro de la ventana de servicio del canal, porque
+ * pasada esa ventana al negocio solo le queda la plantilla aprobada. Una espera de
+ * `windowClosesAtHours` o mas sale del rango antes de volverse elegible: no produce
+ * envio nunca, y sin dejar rastro. Por eso el techo se DERIVA de la ventana y no se
+ * tipea — mover una sola de las dos puntas es como nacio este bug (2026-09-13).
+ */
+export const MAX_ESPERA_INSISTENCIA_HORAS = DEFAULT_CONFIG.followUp.windowClosesAtHours - 1;
+
 /**
  * En el contenedor esto es `/tmp/onia-bot/knowledge.json` (el modulo vive al lado). En el repo
  * el archivo NO existe a proposito: la copia viva vive en el VPS, en `/opt/onia/bot/knowledge.json`,
@@ -126,11 +140,14 @@ const SHAPE = Object.freeze({
   // cliente deja de responder, el asistente insiste UNA vez pasadas `horas`.
   // La ausencia del campo = encendida con 2 horas (el default vive en quien lo lee,
   // no aca — un doc viejo sin el campo no debe fallar la validacion).
+  // El techo se DERIVA de la ventana de servicio (ver MAX_ESPERA_INSISTENCIA_HORAS):
+  // hasta el 2026-09-13 era un 48 tipeado y aceptaba esperas que el barrido no
+  // alcanza a ejecutar jamas — el dueño creia tener insistencia y no tenia nada.
   seguimiento: {
     kind: "object",
     fields: {
       activo: { kind: "bool" },
-      horas: { kind: "int", min: 1, max: 48 },
+      horas: { kind: "int", min: MIN_ESPERA_INSISTENCIA_HORAS, max: MAX_ESPERA_INSISTENCIA_HORAS },
     },
   },
 

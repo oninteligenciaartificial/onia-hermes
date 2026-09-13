@@ -38,6 +38,37 @@ export function politicaDeSeguimiento(doc) {
   };
 }
 
+/**
+ * UNA POLITICA QUE EL CANAL NO PUEDE CUMPLIR SE DICE, NO SE CALLA.
+ *
+ * El barrido solo ve lo que sigue DENTRO de la ventana de servicio: pedir
+ * `windowClosesAtHours` o mas es pedir un envio que nunca va a ocurrir — la fila
+ * sale del rango antes de volverse elegible. Hasta el 2026-09-13 eso era silencio
+ * perfecto (ni envio, ni skip, ni warning), asi que el dueño encendia la
+ * insistencia, elegia el tope del desplegable y su asistente no escribia jamas.
+ *
+ * Desde hoy el validador (knowledge.mjs, MAX_ESPERA_INSISTENCIA_HORAS) rechaza esos
+ * valores en la PUERTA, asi que por el panel ya no entran. Este corte se queda
+ * igual, y por eso se prueba aparte: defiende los documentos LEGADOS —los que se
+ * guardaron cuando el schema aceptaba hasta 48— y cualquier camino nuevo que
+ * escriba la fila sin pasar por el validador.
+ *
+ * No se corrige el valor por las suyas: insistir antes de lo que el dueño pidio es
+ * decidir por el. Se saltea nombrando los dos numeros, que es lo que deja arreglarlo.
+ *
+ * @returns {{reason: string, warning: string}|null} null si la espera es cumplible.
+ */
+export function esperaFueraDeVentana(horas, config, key = "") {
+  const ventana = config?.followUp?.windowClosesAtHours ?? DEFAULT_VENTANA_HORAS;
+  if (!(horas >= ventana)) return null;
+  return {
+    reason: `politica_fuera_de_ventana:${horas}h`,
+    warning:
+      `insistencia ${key}: el seguimiento esta configurado a ${horas} h y la ventana de WhatsApp cierra a las ${ventana} h` +
+      ` — a esa altura ya no se puede escribir, asi que no se insiste nunca. Bajalo a menos de ${ventana} h.`,
+  };
+}
+
 export function insistenciaMessageKey(conversationKey) {
   return `insistencia:${conversationKey}`;
 }
@@ -111,12 +142,10 @@ export async function runInsistenciaSweep(options = {}, deps = {}) {
     //
     // No se corrige el valor por las suyas: insistir antes de lo que el dueño pidio es
     // decidir por el. Se saltea nombrando los dos numeros, que es lo que deja arreglarlo.
-    const ventana = config?.followUp?.windowClosesAtHours ?? DEFAULT_VENTANA_HORAS;
-    if (politica.horas >= ventana) {
-      result.skipped.push({ key, reason: `politica_fuera_de_ventana:${politica.horas}h` });
-      store.warnings.push(
-        `insistencia ${key}: el seguimiento esta configurado a ${politica.horas} h y la ventana de WhatsApp cierra a las ${ventana} h — a esa altura ya no se puede escribir, asi que no se insiste nunca. Bajalo a menos de ${ventana} h.`,
-      );
+    const corte = esperaFueraDeVentana(politica.horas, config, key);
+    if (corte) {
+      result.skipped.push({ key, reason: corte.reason });
+      store.warnings.push(corte.warning);
       continue;
     }
 
