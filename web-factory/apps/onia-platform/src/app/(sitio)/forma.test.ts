@@ -209,50 +209,98 @@ describe("cada ruta del sitio se comparte con su tarjeta social", () => {
   const APP = dirname(AQUI);
 
   /**
-   * La lista sale del SITEMAP, no de la carpeta `(sitio)`.
+   * La lista sale del DISCO: toda carpeta con `page.tsx` bajo `src/app`.
    *
-   * ⚠️ Enumerar la carpeta fue el segundo agujero del mismo defecto, medido el
-   * 2026-09-02: al arreglar las doce rutas de `(sitio)` este guard se escribió
-   * recorriendo ese directorio, así que quedó ciego a las publicadas FUERA del
-   * grupo. Cuatro seguían compartiéndose sin imagen —`/servicios/consultoria`,
-   * `/servicios/marketing-ia`, `/terminos` y `/privacidad`— y el guard pasaba
-   * en verde igual, porque no las miraba. El sitemap es la lista de lo que
-   * publicamos ("nunca una página publicada sin su entrada"), así que es la
-   * fuente correcta: una página nueva entra al sitemap y este test le exige su
-   * tarjeta, esté en el grupo que esté.
+   * ⚠️ QUINTO agujero del mismo defecto, medido en producción el 2026-09-13.
+   * Este guard sacaba sus sujetos del SITEMAP con el argumento de que es "la
+   * lista de lo que publicamos". Es falso, y el comentario de arriba en este
+   * mismo archivo ya lo decía sin sacar la conclusión: `noindex` manda sobre
+   * buscadores, NO apaga la pantalla. Una ruta fuera del sitemap se sirve con
+   * 200 y el fetcher de WhatsApp le lee el `og:image` igual.
+   *
+   * Medido con `curl` contra `onia.com.bo`, no de memoria: SEIS páginas de
+   * venta vivas —`/v1/precios`, `/v1/chatbot`, `/v1/empezar`,
+   * `/v1/prueba-gratis`, `/v1/comparativa` y `/v1/modulos/dental`— respondían
+   * 200 y salían con `og:title` y `og:description` pero SIN una sola imagen,
+   * mientras `/v1` (que sí tiene su archivo) se compartía con la tarjeta. O
+   * sea: exactamente el defecto que este guard existe para cazar, en el único
+   * grupo de rutas que su universo no miraba.
+   *
+   * El sitemap describe qué INDEXAMOS; el disco describe qué SERVIMOS, y es lo
+   * segundo lo que ve quien recibe el link. Por eso ahora se camina la carpeta
+   * (y no `git ls-files`: una página recién escrita y sin commitear es justo el
+   * sujeto que no se puede perder).
    */
-  const paths = [
-    ...readFileSync(join(APP, "sitemap.ts"), "utf8").matchAll(/\{\s*path:\s*"([^"]*)"/g),
-  ].map((m) => m[1]);
+  function carpetasConPagina(dir: string): string[] {
+    return readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+      if (!e.isDirectory()) return [];
+      const ruta = join(dir, e.name);
+      const hijas = carpetasConPagina(ruta);
+      return existsSync(join(ruta, "page.tsx")) ? [ruta, ...hijas] : hijas;
+    });
+  }
 
-  /** Una ruta del sitemap puede vivir dentro o fuera de `(sitio)`. */
-  const dirDe = (path: string) =>
-    [join(AQUI, path), join(APP, path)].find((d) => existsSync(join(d, "page.tsx")));
+  /**
+   * La única página servida que NO vende: banco interno de patrones de scroll,
+   * para mirar los componentes del kit contra el diseño real. La exención va
+   * por ruta exacta y se RE-MIDE abajo — si `/patrones` deja de ser `noindex`
+   * o entra al sitemap, deja de estar exenta y este guard le exige su tarjeta.
+   *
+   * No se exime por "ser noindex": ese criterio se derramaría sobre `/v1`, que
+   * también lo es y sí se comparte.
+   */
+  const SIN_TARJETA = ["patrones"];
 
-  it("lee las rutas publicadas del sitemap", () => {
-    // Ancla anti-lista-vacía: si el barrido de arriba se rompe (regex, archivo
-    // renombrado), el `it.each` correría sobre cero casos y pasaría en verde.
-    //
-    // El piso era 14 y baja a 9 el 2026-09-08: el sitemap pasó de 15 rutas a 12
-    // cuando `/servicios/webs`, `/marketing-ia` y `/consultoria` salieron del
-    // índice por decisión de Sergio Urcullo (`t_30b1711d` — la navegación pública
-    // es el sistema, no una agencia; ver `robots.ts`). O sea que lo que cayó no
-    // fue el barrido sino el sujeto. Queda en el mismo piso que sus hermanos
-    // (`alcance.test.ts`, y el ancla de arriba de este archivo), que es la
-    // distancia sana: cubre el barrido roto sin volver a caducar cada vez que el
-    // sitio publica una página menos.
-    expect(paths.length).toBeGreaterThan(9);
+  const raiz = existsSync(join(APP, "page.tsx")) ? [APP] : [];
+  const servidas = [...raiz, ...carpetasConPagina(APP)];
+  const sujetos = servidas.filter((d) => !SIN_TARJETA.includes(d.slice(APP.length + 1)));
+
+  const rotulo = (d: string) => (d === APP ? "/" : d.slice(APP.length + 1));
+
+  it("encuentra las páginas servidas", () => {
+    // Ancla anti-lista-vacía: si el walk se rompe, el `it.each` correría sobre
+    // cero casos y firmaría verde. Hoy son 25 entre `(sitio)`, `/v1`,
+    // `/servicios` y las legales; el piso queda a la distancia sana de sus
+    // hermanos (`alcance.test.ts`), que cubre el barrido roto sin caducar cada
+    // vez que el sitio publica una página menos.
+    expect(sujetos.length).toBeGreaterThan(18);
   });
 
-  it.each(paths.map((p) => [p === "" ? "/" : p, p]))(
+  it("la excusa de `/patrones` sigue siendo cierta", () => {
+    // Una excusa nombrada que nadie vuelve a medir queda PRE-APROBADA: el día
+    // que `/patrones` se publique, seguiría exenta por inercia.
+    const pagina = readFileSync(join(APP, "patrones", "page.tsx"), "utf8");
+    expect(pagina, "`/patrones` ya no se declara noindex: o vuelve a serlo, o le toca tarjeta").toMatch(
+      /index:\s*false/,
+    );
+    expect(
+      readFileSync(join(APP, "sitemap.ts"), "utf8"),
+      "`/patrones` entró al sitemap: es una página publicada y le toca tarjeta",
+    ).not.toMatch(/"patrones"/);
+  });
+
+  it.each(sujetos.map((d) => [rotulo(d), d]))(
     "%s tiene su opengraph-image.tsx",
-    (_rotulo, path) => {
-      const dir = dirDe(path as string);
-      expect(dir, `no encuentro el page.tsx de ${path} — ¿sitemap desactualizado?`).toBeTruthy();
+    (_r, dir) => {
       expect(
         existsSync(join(dir as string, "opengraph-image.tsx")),
         "sin este archivo la ruta se comparte por WhatsApp sin una sola imagen",
       ).toBe(true);
     },
   );
+
+  it.each(
+    [...readFileSync(join(APP, "sitemap.ts"), "utf8").matchAll(/\{\s*path:\s*"([^"]*)"/g)]
+      .map((m) => m[1])
+      .map((p) => [p === "" ? "/" : p, p]),
+  )("%s del sitemap existe en el disco", (_r, path) => {
+    // El sitemap dejó de ser el universo, pero sigue sin poder nombrar rutas
+    // que no existen: una entrada huérfana publica un 404 a los buscadores.
+    expect(
+      [join(AQUI, path as string), join(APP, path as string)].some((d) =>
+        existsSync(join(d, "page.tsx")),
+      ),
+      `no encuentro el page.tsx de ${path} — ¿sitemap desactualizado?`,
+    ).toBe(true);
+  });
 });
