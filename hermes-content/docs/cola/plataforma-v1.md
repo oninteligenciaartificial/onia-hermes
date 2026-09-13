@@ -145,6 +145,43 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       monto**, no la mención: el gate vigente ancla `muestraAbono ?|&&` y exige que esté **antes**
       del monto. **Falta el deploy** para que el cliente lo vea.
 
+      ✅ **CERRADO el 2026-09-13: la CUARTA superficie — la comparativa de planes de `/settings`
+      le ponía el precio del chatbot al plan que ya lo incluye** (`onia-platform`, rama
+      `claude/chatbots-platform-review-0d1d09`). `PLAN_COMPARISON_ADDON_ROWS.whatsapp`
+      (`lib/pricing.ts`) tenía las tres columnas tipeadas con `WHATSAPP_ADDON.shortLabel`, así
+      que la fila *"Chatbot WhatsApp (add-on)"* de la tabla que renderiza
+      `filasComparativaDe` (`app/(dashboard)/settings/PlanClient.tsx:321`) decía **"Bs 390/mes"
+      también en la columna del Completo**, que lo trae adentro desde la escalera C. Miente en
+      las dos direcciones del negocio: **le cobra de nuevo al que ya lo paga en su plan**, y al
+      que evalúa subir **le esconde que subiendo deja de pagarlo** — un argumento de venta real,
+      escondido en la pantalla donde se decide. Las filas hermanas (`booking`, `extraUser`) sí
+      distinguían con "Incluida"/"Incluido": media familia correcta se lee como familia correcta,
+      igual que en la tercera superficie.
+      🔴 **Y al medirlo apareció una hermana peor, que no tiene nada que ver con la escalera:**
+      la fila **"Exportación CSV"** decía *"No incluido"* en **Básico y Profesional** mientras
+      `csvExportEnabled` es `true` desde Básico **a propósito** — el comentario del catálogo lo
+      dice con todas las letras (*"tus datos son tuyos: el export de SUS datos no puede ser rehén
+      del plan"*, auditoría de promesas 2026-08-06). O sea que el producto **le negaba en
+      pantalla un derecho que ya tiene** y le insinuaba pagar más caro para conseguirlo.
+      Entró: `lib/plan-comparativa/comparativa-vs-catalogo.ts` (módulo puro, sin prisma: lo
+      importa una pantalla `"use client"`) con `celdaSegunElPlan` y `celdaContradiceAlCatalogo`,
+      las seis filas booleanas derivadas de `PLAN_LIMITS` en vez de tipeadas, y el mapa
+      `CAMPO_EN_LA_COMPARATIVA` **en el producto**: un booleano nuevo del catálogo no compila
+      hasta que alguien decida si la comparativa tiene que nombrarlo — que es exactamente la
+      decisión que nadie tomó cuando entró `whatsappIncluded`.
+      **El sujeto del gate no es una fila: son los campos booleanos de `PLAN_LIMITS` derivados
+      del dato vivo** (`lib/plan-comparativa/la-comparativa-no-contradice-al-catalogo.test.ts`).
+      Anti-tautología: ahora que las celdas se derivan del catálogo, cruzar tabla contra catálogo
+      leería el mismo espejo, así que el gate **además afirma contra el literal** que el dueño
+      lee ("Incluido" en la columna del Completo, "390" en las otras dos, "Incluido" en las tres
+      de CSV). Validado **por mutación**: con las dos celdas devueltas a mano, 3 tests en rojo
+      nombrando las tres celdas. Gates: `tsc --noEmit` limpio, `eslint` 0, suite completa verde.
+      **Falta mergear y desplegar** para que el cliente lo vea.
+      📌 **Hueco anotado, no cerrado (no es esta vuelta):** la comparativa tiene cuatro columnas
+      (Básico/Profesional/Completo/Grupo) y la escalera C agregó **`crece`**, que no tiene
+      columna; y **`agentsIncluded`** no tiene fila, aunque el salto a agentes es lo que se vende
+      desde Crece. Los dos quedan declarados con su motivo en `CAMPO_EN_LA_COMPARATIVA`.
+
       Falta de la fase 2: **avisos al 70/90/100 % del cupo** y la **recarga de recordatorios**
       (la de conversaciones ya existe). ⚠️ Lo del 70/90/100 **no lo puede cerrar este carril
       solo, y el motivo es concreto**: hoy hay UN umbral (`UMBRAL_AVISO = 0.8` en
