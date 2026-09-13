@@ -34,6 +34,7 @@ import {
   RAMAS_QUE_AVISAN,
   asegurarTransporteQueAguanta,
   lineasDelLog,
+  inboxPorConversacion,
   BOT_DIR,
 } from "./avisos-vivo.mjs";
 
@@ -532,12 +533,18 @@ test("conversacionesDeAvisos deja conv en null cuando no hay de donde sacarlo, n
   assert.equal(ev[0].conv, null, "atribuir un aviso a la conversacion equivocada es peor que no atribuirlo");
 });
 
-test("clasificarEventos separa el banco de pruebas de los leads, y no adivina el que no puede ubicar", () => {
-  const eventos = [{ conv: 53 }, { conv: 11 }, { conv: 777 }];
-  // inbox 7 es `ZZ QA Clinica Chatbot`; 5 es `Onia WhatsApp`, por donde entran los leads.
-  const c = clasificarEventos(eventos, new Map([[53, 7], [11, 5]]));
-  assert.deepEqual(c.prueba, [53]);
-  assert.deepEqual(c.reales, [11]);
+test("clasificarEventos separa lo nuestro de los leads, y no adivina el que no puede ubicar", () => {
+  const eventos = [{ conv: 53 }, { conv: 48 }, { conv: 777 }];
+  // inbox 7 es `ZZ QA Clinica Chatbot`; 4 es `Onia Web`, por donde entran los leads del widget.
+  const c = clasificarEventos(
+    eventos,
+    new Map([
+      [53, { inbox: 7, contacto: null, telefono: null }],
+      [48, { inbox: 4, contacto: "cold-pond-731", telefono: null }],
+    ]),
+  );
+  assert.deepEqual(c.nuestros, [53]);
+  assert.deepEqual(c.reales, [48]);
   assert.deepEqual(c.sinUbicar, [777], "un conv que la base no conoce no es un lead: es no medido");
 });
 
@@ -556,11 +563,13 @@ test("la lectura del veredicto no dice 'avisando' cuando todos los avisos son de
     veredicto: "ok",
     eventos,
     circuitoSano: true,
-    origen: { medido: true, prueba: [57, 11], reales: [], sinUbicar: [] },
+    origen: { medido: true, nuestros: [57, 11], reales: [], sinUbicar: [] },
   });
+  // El assert es sobre la NEGACION, no sobre el rotulo: lo que no puede pasar es que la linea
+  // afirme que el circuito esta avisando cuando ningun aviso vino de afuera.
   assert.match(
     soloPruebas,
-    /banco de pruebas|ningun lead|sin leads/i,
+    /ningun (aviso es de un lead|lead)|sin leads|nunca se probo/i,
     "con 2 envios y 0 leads reales, 'circuito sano y avisando' esconde que nunca se probo con un desconocido",
   );
 
@@ -568,7 +577,7 @@ test("la lectura del veredicto no dice 'avisando' cuando todos los avisos son de
     veredicto: "ok",
     eventos,
     circuitoSano: true,
-    origen: { medido: true, prueba: [57], reales: [11], sinUbicar: [] },
+    origen: { medido: true, nuestros: [57], reales: [11], sinUbicar: [] },
   });
   assert.match(conLeadReal, /avisando/, "con un lead real de verdad, el gate si puede decir que esta avisando");
 });
@@ -576,17 +585,141 @@ test("la lectura del veredicto no dice 'avisando' cuando todos los avisos son de
 test("clasificarEventos cuenta CONVERSACIONES, no eventos: dos avisos de la misma no son dos leads", () => {
   // Medido el 2026-09-12: la primera version imprimio `leads 2 (conv 11, 11)` — un solo
   // interesado, que ademas era Sergio Urcullo probando su bot, contado dos veces.
-  const c = clasificarEventos([{ conv: 11 }, { conv: 11 }, { conv: 53 }, { conv: 53 }], new Map([[11, 5], [53, 7]]));
-  assert.deepEqual(c.reales, [11]);
-  assert.deepEqual(c.prueba, [53]);
+  const c = clasificarEventos(
+    [{ conv: 48 }, { conv: 48 }, { conv: 53 }, { conv: 53 }],
+    new Map([
+      [48, { inbox: 4, contacto: "cold-pond-731", telefono: null }],
+      [53, { inbox: 7, contacto: null, telefono: null }],
+    ]),
+  );
+  assert.deepEqual(c.reales, [48]);
+  assert.deepEqual(c.nuestros, [53]);
+});
+
+test("un mapa sin contacto ya no alcanza para llamar lead a nadie fuera del banco de pruebas", () => {
+  // La forma vieja del mapa (`conv -> inbox` pelado) es la que hacia que el criterio fuera el
+  // numero de inbox. Se sigue aceptando, pero un dato incompleto no puede AFIRMAR que hay un
+  // lead: sin contacto no hay con que descartar que seamos nosotros. Fixture a proposito con
+  // la conv 11, que es el caso que estuvo mal clasificado en produccion.
+  const c = clasificarEventos([{ conv: 11 }], new Map([[11, 5]]));
+  assert.deepEqual(c.reales, [], "sin el contacto, 'es un lead' vuelve a ser la suposicion optimista");
+  assert.deepEqual(c.sinUbicar, [11], "no medido no es cero, y tampoco es un lead");
 });
 
 test("clasificarEventos entiende el mapa con contacto y lo conserva para que se pueda leer de quien es", () => {
   // El inbox dice si es del banco de pruebas; el NOMBRE dice si es un desconocido. Conv 11
   // es `Sergio` (+59171654992) y sin el nombre la linea dice "1 lead" sobre el propio dueño.
-  const c = clasificarEventos([{ conv: 11 }], new Map([[11, { inbox: 5, contacto: "Sergio" }]]));
-  assert.deepEqual(c.reales, [11]);
+  const c = clasificarEventos([{ conv: 11 }], new Map([[11, { inbox: 5, contacto: "Sergio", telefono: "+59171654992" }]]));
   assert.equal(c.contactos.get(11), "Sergio", "el nombre viaja: es lo unico que distingue un lead de una prueba propia");
+});
+
+// ───────────────────────────────────────────────────────────────────────────────────────
+// "¿SOMOS NOSOTROS?" SE PREGUNTA UNA SOLA VEZ, Y NO ES UN NUMERO DE INBOX
+//
+// Medido en produccion el 2026-09-13, con este gate en verde:
+//
+//   de quien: leads 1 (conv 11 · Sergio) · banco de pruebas 3
+//   VEREDICTO: ok · avisos enviados 3 — circuito sano y avisando
+//
+// La conv 11 es `Sergio` / `+59171654992`: el DUEÑO probando su propio bot. O sea que el
+// unico "lead" que sostenia el "y avisando" no existe, y la linea que corresponde es la que
+// este mismo archivo ya sabe escribir — *"NINGUN aviso es de un lead ... nunca se probo con
+// un desconocido"*. Es el falso verde que `clasificarEventos` nacio para no dar (ver la
+// cabecera del modulo), cerrado sobre la INSTANCIA (inbox 7) y abierto sobre la CLASE.
+//
+// La clase tiene dos mitades y las dos estaban abiertas:
+//   1. `inbox === 7` es una lista de inclusion de UN elemento. Produccion tiene CUATRO
+//      inboxes: el 3 es `ONIA Demo` (Channel::Api) y sus 8 conversaciones son todas
+//      nuestras (`Prospecto Prueba ONIA`, `Prueba Audio Prod`, `Prueba Final`...). Un aviso
+//      de ahi se cuenta como lead real y nada se pone rojo.
+//   2. El dueño escribiendo desde su celular no esta en NINGUN inbox de pruebas, y el
+//      objetivo del carril lo excluye con todas las letras: *"una persona que no somos
+//      nosotros — ni una org QA, ni el probador, ni Sergio desde su celular"*.
+//
+// Y la respuesta ya estaba escrita en el repo: `esNuestra()` de `scripts/objetivo_visible.mjs`
+// cruza telefono propio Y nombre de prueba, con la conv 11 citada en su comentario como
+// caso medido. Este modulo tenia su propia version pobre del mismo juicio — el par clasico
+// que diverge y se arregla de un solo lado. Se importa, no se copia.
+test("el dueño probando su propio bot NO es un lead, aunque escriba por el inbox de leads", () => {
+  // Conv 11 del inbox 5 (`Onia WhatsApp`, por donde entran los leads de verdad).
+  const c = clasificarEventos([{ conv: 11 }], new Map([[11, { inbox: 5, contacto: "Sergio", telefono: "+59171654992" }]]));
+  assert.deepEqual(c.reales, [], "el telefono es NUESTRO: contarlo como lead es el falso verde que este gate existe para no dar");
+  assert.deepEqual(c.nuestros, [11]);
+});
+
+test("un inbox de pruebas que no es el 7 tampoco produce leads: el criterio no es el numero de inbox", () => {
+  // Inbox 3 = `ONIA Demo` (Channel::Api), vivo en produccion con 8 conversaciones nuestras.
+  // Si el sujeto fuera el inbox, este caso pasa como lead y el gate firma verde.
+  const c = clasificarEventos([{ conv: 4 }], new Map([[4, { inbox: 3, contacto: "Prueba En Vivo", telefono: null }]]));
+  assert.deepEqual(c.reales, [], "una lista de inclusion de inboxes falla abierto en el inbox nuevo");
+  assert.deepEqual(c.nuestros, [4]);
+});
+
+test("un desconocido de verdad SI es un lead: el arreglo no puede fallar cerrado", () => {
+  // La direccion contraria. `cold-pond-731` es un visitante real del widget (conv 48,
+  // 2-sep): si el gate lo contara como nuestro, apagaria el unico dato que el carril busca.
+  const c = clasificarEventos(
+    [{ conv: 48 }, { conv: 53 }],
+    new Map([
+      [48, { inbox: 4, contacto: "cold-pond-731", telefono: null }],
+      [53, { inbox: 7, contacto: null, telefono: null }],
+    ]),
+  );
+  assert.deepEqual(c.reales, [48], "un desconocido en un inbox de leads, sin marca nuestra, es exactamente lo que el carril persigue");
+  assert.deepEqual(c.nuestros, [53], "el inbox del banco de pruebas sigue alcanzando cuando el contacto no tiene nombre");
+});
+
+test("el juicio '¿somos nosotros?' se importa de una sola fuente, no se reimplementa aca", () => {
+  // Anti-duplicacion. Dos detectores del MISMO hecho divergen y se arreglan de un solo lado:
+  // eso es lo que dejo a `avisos-vivo` clasificando por inbox mientras `objetivo_visible` ya
+  // cruzaba telefono y nombre. Si alguien vuelve a escribir el criterio aca, esto se pone rojo.
+  const fuente = readFileSync(join(DIR_BOT, "avisos-vivo.mjs"), "utf8");
+  assert.match(fuente, /import\s*\{[^}]*\besNuestra\b[^}]*\}\s*from\s*["'][^"']*objetivo_visible\.mjs["']/,
+    "el criterio vive en scripts/objetivo_visible.mjs — aca se importa");
+  const sinComentarios = fuente.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+  assert.doesNotMatch(sinComentarios, /NUESTROS_TELEFONOS\s*=|NOMBRE_DE_PRUEBA\s*=/,
+    "una copia local de la lista es la forma en que este par vuelve a divergir");
+});
+
+test("la consulta a la base trae lo que el criterio necesita para descartarnos", { skip: SOLO_POSIX }, () => {
+  // El gate del CABLEADO, hermano del de `lineasDelLog` que esta abajo. `clasificarEventos`
+  // sabe que el telefono delata al dueño, pero si el SQL no lo pide el dato llega `null`, el
+  // criterio no tiene con que descartarnos y la conv 11 vuelve a contar como lead — con la
+  // suite ENTERA en verde. Medido por mutacion el 2026-09-13: sacarle `ct.phone_number` a la
+  // consulta dejaba los 38 tests pasando. El nucleo puro y su lector se prueban juntos.
+  //
+  // El `docker` falso se comporta como psql y por eso el caso no es tautologico: devuelve las
+  // columnas QUE EL SQL PIDE. Un SQL sin telefono produce aca la misma fila corta que
+  // produciria la base de verdad.
+  const tmp = mkdtempSync(join(tmpdir(), "avisos-inbox-"));
+  const PATH_ORIGINAL = process.env.PATH;
+  try {
+    const bin = join(tmp, "bin");
+    mkdirSync(bin);
+    // Datos REALES de produccion: conv 11 del inbox 5 es `Sergio` / `+59171654992`.
+    const falso = [
+      "#!/usr/bin/env bash",
+      '[ "$1" = ps ] && { echo onia-chatbot_chatwoot-db.1.abc; exit 0; }',
+      '[ "$1" = exec ] || exit 0',
+      'sql="${@: -1}"',
+      'case "$sql" in',
+      '  *phone_number*) echo "11|5|Sergio|+59171654992" ;;',
+      '  *) echo "11|5|Sergio" ;;',
+      "esac",
+      "",
+    ].join("\n");
+    writeFileSync(join(bin, "docker"), falso, { mode: 0o755 });
+    process.env.PATH = `${bin}:${PATH_ORIGINAL}`;
+
+    const mapa = inboxPorConversacion([11]);
+    assert.ok(mapa instanceof Map, "sin mapa no hay nada que clasificar");
+    const c = clasificarEventos([{ conv: 11 }], mapa);
+    assert.deepEqual(c.reales, [], "el dueño llego a `reales`: la consulta no trajo con que descartarlo");
+    assert.deepEqual(c.nuestros, [11]);
+  } finally {
+    process.env.PATH = PATH_ORIGINAL;
+    rmSync(tmp, { recursive: true, force: true });
+  }
 });
 
 test("lineasDelLog trae la linea que produjo cada aviso, o el conv no se puede recuperar", { skip: SOLO_POSIX }, () => {

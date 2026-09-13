@@ -278,6 +278,50 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El gate del AVISO contaba al DUEÑO como lead y firmaba «circuito sano y
+      avisando»~~ — CERRADO el 2026-09-13 05:5x La Paz (`avisos-vivo.mjs`, `clasificarEventos`).**
+      La tercera pata del objetivo del carril (*"cada demo agendada o handoff le llega a
+      Sergio"*) la sostiene `npm run avisos:vivo`. Medido al arrancar esta vuelta, textual:
+
+          de quien: leads 1 (conv 11 · Sergio) · banco de pruebas 3
+          VEREDICTO: ok · avisos enviados 3 — circuito sano y avisando
+
+      **La conv 11 es `Sergio` / `+59171654992`: el dueño probando su propio bot.** O sea que el
+      único "lead" que sostenía el «y avisando» no existía, y la línea correcta —que este mismo
+      módulo ya sabía escribir— es *"NINGUN aviso es de un lead … nunca se probó con un
+      desconocido"*. Es exactamente el falso verde que `clasificarEventos` nació para no dar
+      (12-sep): se cerró sobre la INSTANCIA (inbox 7) y quedó abierto sobre la CLASE.
+      **Lo que lo destapó fue medir producción por un eje que ningún gate mira:** conté
+      conversaciones × mensajes **por inbox** en la base de Chatwoot, en vez de correr los
+      instrumentos del carril otra vez. Ahí apareció un **inbox 3 (`ONIA Demo`, `Channel::Api`)**
+      que ningún doc ni gate de este carril nombra, vivo, con 8 conversaciones **todas nuestras**
+      (`Prospecto Prueba ONIA`, `Prueba Audio Prod`, `Prueba Final`…). Un aviso de ahí también se
+      contaba como lead real.
+      **Las dos mitades de la clase, y por qué ninguna se cierra con el número de inbox:** una
+      lista de inclusión de inboxes falla abierto en el inbox nuevo (mitad 1), y **el dueño entra
+      por el inbox 5 — el de los leads de verdad —, así que ningún inbox lo delata** (mitad 2).
+      El objetivo del carril ya lo decía con todas las letras: *"una persona que no somos
+      nosotros — ni una org QA, ni el probador, ni Sergio desde su celular"*.
+      **La respuesta ya estaba escrita en el repo y este módulo tenía su propia versión pobre:**
+      `esNuestra()` de `scripts/objetivo_visible.mjs` cruza teléfono propio **y** nombre de
+      prueba, y su comentario **cita la conv 11 como caso medido**. El par clásico que diverge y
+      se arregla de un solo lado. Ahora se **importa**, no se copia, y un caso ancla se pone rojo
+      si alguien vuelve a escribir el criterio acá.
+      ⚠️ **El test viejo defendía el defecto.** Hacía viajar el nombre del contacto, afirmaba en
+      su comentario que *"el nombre es lo único que distingue un lead de una prueba propia"* …
+      y después clasificaba ignorándolo (`assert.deepEqual(c.reales, [11])` sobre `Sergio`).
+      **Rojo por el motivo correcto ANTES del arreglo** (`reales: [11]` donde va `[]`), verde
+      después. **Validado por mutación en las DOS piezas** — y la segunda es la que importa:
+      esquivar el criterio (`false && esNuestra(...)`) → 2 rojos; **sacarle `ct.phone_number` al
+      SQL dejaba los 38 tests EN VERDE**, porque el núcleo puro estaba probado y su lector no.
+      Por eso se agregó el gate del cableado (`docker` falso que se comporta como psql:
+      devuelve **las columnas que el SQL pide**, así que no es tautológico) — con él, esa misma
+      mutación es roja. Suite: **39/39**.
+      **Contra producción, el veredicto cambió:** `de quien: leads 0 · nuestros 4` →
+      *"circuito sano, pero NINGUN aviso es de un lead: 4 nuestro(s) — nunca se probó con un
+      desconocido"*. El circuito de avisos **funciona**; lo que nunca pasó es que avisara por
+      alguien de afuera. Eso ahora se ve, que es lo que este gate existe para hacer.
+
 - [x] 🔴 **~~El log del bot no dice POR QUÉ CANAL entró el mensaje, y el canal es lo que decide
       qué documento le contesta al lead~~ — CERRADO EN CÓDIGO el 2026-09-13 02:20 La Paz.
       ⚠️ COMMITEADO, NO DESPLEGADO: el bot vivo sigue escribiendo la línea sin `inbox=`.**
