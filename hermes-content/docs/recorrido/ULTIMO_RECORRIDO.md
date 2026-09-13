@@ -12,6 +12,25 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-13 11:14 La Paz — respondida la pregunta abierta desde el 2026-09-04: saltar "equipo" en el onboarding NO rompe agendar
+
+Al arrancar: `select count(*) from organizations where name like 'zz-qa-%'` dio 0, sin huérfanos.
+
+`RECORRIDO_SALTAR_EQUIPO=1 node scripts/recorrido_cliente.mjs --escribir` (dental,
+`zz-qa-2026-09-13-1114`): el onboarding se cerró apretando "Saltar por ahora" en la pantalla
+de equipo, SIN cargar ningún profesional (`profesionalCargado: false`). El paso 7 (agendar)
+salió igual **OK**: el desplegable de "profesional" del formulario de cita ofrece al DUEÑO
+mismo como opción — apareció `zz-qa-2026-09-13-1114` (el nombre de la cuenta) en la lista — y
+la cita entró con `201`, `doctorId: cmtzpwe3t001601rwtf97o65c` (el `profiles.id` del dueño).
+Recorrido completo, 9/9, `completo: true`, 0 filas `zz-qa-` al cerrar.
+
+**No es un hallazgo, es la respuesta**: un negocio de una sola persona (la mayoría en el alta,
+medido en `RUBROS_ACTIVOS`) puede agendar desde el primer día sin tener que dar de alta a nadie
+más — el propio dueño hace de "profesional" por defecto. Cerrado el comentario que lo dejaba
+abierto en `scripts/recorrido_cliente.mjs` (línea del `SALTAR_EQUIPO`).
+
+---
+
 ## 2026-09-13 10:09 La Paz — dental 9/9 (rutina) + `/precios` auditado con reducedMotion, sano
 
 Al arrancar: `select count(*) from organizations where name like 'zz-qa-%'` dio 0, sin huérfanos.

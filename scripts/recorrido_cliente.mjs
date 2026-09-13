@@ -51,10 +51,12 @@ const SOLO_LIMPIAR = process.argv.includes('--solo-limpiar');
 // va a usar esto la primera vez.
 const MOVIL = process.env.RECORRIDO_MOVIL === '1';
 const VIEWPORT = MOVIL ? { width: 390, height: 844 } : { width: 1440, height: 900 };
-// Pregunta abierta desde 2026-09-04 (ver ULTIMO_RECORRIDO.md, "próximo escalón del carril"):
+// Pregunta que estuvo abierta desde 2026-09-04 hasta el 2026-09-13 (ver ULTIMO_RECORRIDO.md):
 // si el dueño aprieta "Saltar por ahora" en la pantalla de equipo (sin cargar ningún
-// profesional), nadie comprobó si puede agendar después. RECORRIDO_SALTAR_EQUIPO=1 reproduce
-// exactamente ese camino incluso con --escribir, para que el paso 7 (agenda) mida la verdad.
+// profesional), ¿puede agendar después? Medido en producción (dental): SÍ — el desplegable
+// de "profesional" del paso 7 ofrece al DUEÑO mismo (su propio nombre) como opción por
+// defecto, y la cita entra con 201 usando su `doctorId`. RECORRIDO_SALTAR_EQUIPO=1 reproduce
+// ese camino incluso con --escribir, para volver a medirlo si el onboarding cambia.
 const SALTAR_EQUIPO = process.env.RECORRIDO_SALTAR_EQUIPO === '1';
 
 /**
