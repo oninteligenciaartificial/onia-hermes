@@ -81,6 +81,11 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+// El criterio "¿esta conversacion somos nosotros?" se IMPORTA del otro instrumento del carril en
+// vez de reescribirse. Son los dos lados de la misma pregunta —`objetivo_visible` la LEE para
+// contar desconocidos, la sonda la usa para no ensuciar esa cuenta— y dos copias del criterio es
+// exactamente como se separan.
+import { esNuestra } from './objetivo_visible.mjs';
 
 const HOST = process.env.ONIA_WIDGET_URL || 'https://onia-chatbot-chatwoot.hqdqgh.easypanel.host';
 const WEBSITE_TOKEN = process.env.ONIA_WIDGET_TOKEN || '9k5i7xnAgCbSse1EZwVChZLw';
@@ -117,6 +122,32 @@ export function leerGuion(crudo, porDefecto = GUION_POR_DEFECTO) {
 }
 
 export const MENSAJES = leerGuion(process.env.ONIA_SONDA_GUION);
+
+/**
+ * ¿Los mensajes de cliente de esta conversacion son EL GUION de la sonda, y nada mas?
+ *
+ * Nace del 2026-09-13, medido en produccion: la conversacion 48 del inbox 4 (`cold-pond-731`,
+ * 2-sep 17:21) son **nuestros dos mensajes textuales**, pero su contacto quedo con el nombre
+ * anonimo que Chatwoot le pone a cualquier visitante. Desde ahi es INDISTINGUIBLE de un lead: el
+ * inbox 4 es el de los leads de verdad, y los desconocidos reales (`delicate-glitter-674`,
+ * `icy-lake-546`) llegan con nombres de la misma forma y tampoco traen telefono. O sea que
+ * `objetivo_visible.mjs` —el instrumento que declara cumplido el objetivo del carril— la cuenta
+ * como "un desconocido escribio", para siempre. Un falso verde que nada puede deshacer.
+ *
+ * La marca no puede ponerse al LEER (la bandeja solo entrega `ultimoMensaje`, que es la respuesta
+ * del bot): tiene que ponerse en el dato. Por eso la sonda barre sus propios rastros.
+ *
+ * Se exige el guion COMPLETO y EXACTO, no "contiene": una persona de verdad que siga escribiendo
+ * despues del segundo mensaje deja de calificar, y el sesgo queda del lado seguro — reclamar de
+ * menos deja un falso verde viejo, reclamar de mas borraria un lead.
+ */
+export function esRastroDeSonda(mensajesDelCliente, guion = MENSAJES) {
+  const limpiar = (s) => String(s ?? '').replace(/\s+/g, ' ').trim();
+  const mios = Array.isArray(mensajesDelCliente) ? mensajesDelCliente : null;
+  if (!mios || mios.length === 0) return false;
+  if (mios.length !== guion.length) return false;
+  return guion.every((esperado, i) => limpiar(mios[i]) === limpiar(esperado) && limpiar(esperado) !== '');
+}
 
 /** Chatwoot: 0 entrante · 1 saliente (respuesta de verdad) · 2 actividad · 3 enlatado del pre-chat. */
 export const ENTRANTE = 0;
@@ -569,6 +600,48 @@ function desarmar(conversacionId) {
  * un caso que se lo olvide correria el `docker exec … rails runner` contra produccion y pasaria
  * verde. Sin la dep, esto tira.
  */
+/**
+ * Barre los rastros que dejo la propia sonda en el inbox de los leads reales y los MARCA como
+ * nuestros. Corre ANTES de medir, no despues: el rastro nace cuando una corrida muere entre el
+ * primer mensaje y el `update contacts set name` del final, asi que la corrida que lo dejo no
+ * puede ser la que lo limpie — es la SIGUIENTE.
+ *
+ * Reclama solo lo que cumple las DOS: que el criterio compartido con `objetivo_visible.mjs`
+ * todavia NO lo reconozca como nuestro, y que sus mensajes de cliente sean el guion exacto. Las
+ * dos preguntas vienen de fuentes distintas (nombre/telefono una, texto la otra), asi que el
+ * gate no se puede contestar solo.
+ *
+ * Un fallo barriendo NO tumba la medicion: avisa y sigue. La medicion es lo que el carril
+ * necesita; tragarse el aviso, en cambio, es como nacio este bug.
+ */
+export function reclamarRastros({ listar, renombrar, avisar = console.error } = {}) {
+  if (typeof listar !== 'function' || typeof renombrar !== 'function') {
+    throw new TypeError(
+      'reclamarRastros() exige `listar` y `renombrar` inyectados: un default al efecto real haria ' +
+        'que un caso distraido renombre contactos en la Chatwoot de produccion y pase en verde.',
+    );
+  }
+  let candidatas;
+  try {
+    candidatas = listar();
+  } catch (e) {
+    avisar(`AVISO — no se pudo barrer los rastros de la sonda: ${e.message}`);
+    return [];
+  }
+  const reclamadas = [];
+  for (const c of Array.isArray(candidatas) ? candidatas : []) {
+    if (esNuestra(c)) continue;
+    if (!esRastroDeSonda(c?.mensajesDelCliente)) continue;
+    try {
+      renombrar(c.id);
+      reclamadas.push(c.id);
+    } catch (e) {
+      avisar(`AVISO — la conversacion ${c?.id} es un rastro de la sonda y sigue contando como lead: ${e.message}`);
+    }
+  }
+  return reclamadas;
+}
+
 export function cerrarSujeto({ resolver, conversacion, avisar = console.error } = {}) {
   if (typeof resolver !== 'function' || typeof conversacion !== 'function') {
     throw new TypeError(
@@ -647,7 +720,63 @@ function bootstrapear() {
   return tokenDeSalida(salida);
 }
 
+/** El inbox de la sonda, DERIVADO del website token — no un `4` escrito a mano. */
+function inboxDeLaSonda() {
+  const id = sql(
+    `select i.id from inboxes i join channel_web_widgets w on w.id = i.channel_id ` +
+      `and i.channel_type = 'Channel::WebWidget' where w.website_token = '${WEBSITE_TOKEN.replace(/'/g, "''")}';`,
+  );
+  if (!id) throw new Error(`no hay inbox para el website_token ${WEBSITE_TOKEN}`);
+  return Number(id);
+}
+
+/**
+ * Las conversaciones del inbox de la sonda con sus mensajes de cliente, para el barrido.
+ * Los saltos de linea se aplanan EN EL SQL: `psql -tAc` separa filas por `\n`, asi que un mensaje
+ * multilinea parte la fila y corre los campos.
+ */
+function candidatasABarrer() {
+  const inbox = inboxDeLaSonda();
+  const filas = sql(
+    `select c.id || E'\\x02' || coalesce(ct.name, '') || E'\\x02' || coalesce(ct.phone_number, '') ` +
+      `|| E'\\x02' || coalesce(string_agg(replace(m.content, E'\\n', ' '), E'\\x01' order by m.id), '') ` +
+      `from conversations c join contacts ct on ct.id = c.contact_id ` +
+      `left join messages m on m.conversation_id = c.id and m.message_type = ${ENTRANTE} ` +
+      `where c.inbox_id = ${inbox} group by c.id, ct.name, ct.phone_number order by c.id;`,
+  );
+  return filas
+    .split('\n')
+    .filter(Boolean)
+    .map((linea) => {
+      const [id, contacto, telefono, cuerpo] = linea.split('\x02');
+      return {
+        id: Number(id),
+        contacto,
+        telefono: telefono || null,
+        mensajesDelCliente: cuerpo ? cuerpo.split('\x01') : [],
+      };
+    });
+}
+
+/** Le pone el nombre de la sonda al contacto de una conversacion que resulto ser un rastro. */
+function marcarComoNuestra(conversacionId) {
+  sql(
+    `update contacts set name = '${NOMBRE_SONDA}' where id = ` +
+      `(select contact_id from conversations where id = ${Number(conversacionId)});`,
+  );
+}
+
 async function correr() {
+  // BARRER LO PROPIO ANTES DE MEDIR (ver `reclamarRastros`): el rastro lo deja una corrida que
+  // murio a mitad, asi que solo la SIGUIENTE puede limpiarlo.
+  const reclamadas = reclamarRastros({ listar: candidatasABarrer, renombrar: marcarComoNuestra });
+  if (reclamadas.length > 0) {
+    console.error(
+      `AVISO — ${reclamadas.length} rastro(s) de esta sonda estaban contando como leads reales en ` +
+        `\`objetivo:visible\` y quedaron marcados como nuestros: ${reclamadas.join(', ')}`,
+    );
+  }
+
   const { chromium } = await import('/root/node_modules/playwright/index.mjs');
   const estado = leerEstado();
 
@@ -1258,6 +1387,96 @@ async function selfCheck() {
     assert.throws(() => cerrarSujeto(), /exige/);
     assert.throws(() => cerrarSujeto({ resolver: () => {} }), /exige/);
     assert.rejects(() => correrConCierre({ medir: async () => ({}) }), /exige/);
+  });
+
+  // ── el barrido de los rastros propios ──
+  // Los fixtures son las filas REALES del inbox 4 el 2026-09-13, copiadas de la consulta del
+  // barrido. Inventarlas seria medir el caso que uno previo; estas son las que ya estaban ahi.
+  const CONV48 = {
+    id: 48,
+    contacto: 'cold-pond-731',
+    telefono: null,
+    mensajesDelCliente: ['Hola, quiero informacion sobre el sistema', 'Tengo una clinica dental en Santa Cruz, somos 4 personas'],
+  };
+  const CONV36 = {
+    id: 36,
+    contacto: 'icy-lake-546',
+    telefono: null,
+    mensajesDelCliente: ['Quiero información ', 'Saguilera@ds-santacruz.bo'],
+  };
+
+  caso('el guion exacto es un rastro de la sonda', () => {
+    assert.strictEqual(esRastroDeSonda(CONV48.mensajesDelCliente), true);
+  });
+  caso('un desconocido real con la MISMA cantidad de mensajes NO es un rastro', () => {
+    // Conv 36 manda dos mensajes, igual que el guion. Si el predicado contara turnos en vez de
+    // leer el texto, este lead se perderia — y es el unico de los mudos al que se le puede
+    // escribir hoy, porque dejo su correo.
+    assert.strictEqual(esRastroDeSonda(CONV36.mensajesDelCliente), false);
+  });
+  caso('una conversacion que SIGUIO despues del guion ya no es un rastro', () => {
+    assert.strictEqual(esRastroDeSonda([...CONV48.mensajesDelCliente, 'y cuanto sale?']), false);
+  });
+  caso('sin mensajes de cliente no hay rastro', () => {
+    assert.strictEqual(esRastroDeSonda([]), false);
+    assert.strictEqual(esRastroDeSonda(null), false);
+  });
+  caso('el rastro se reconoce aunque el SQL haya aplanado saltos de linea', () => {
+    assert.strictEqual(esRastroDeSonda(['Hola, quiero  informacion sobre el sistema ', ' Tengo una clinica dental en Santa Cruz, somos 4 personas']), true);
+  });
+  caso('un guion vacio no convierte a todos en rastro', () => {
+    assert.strictEqual(esRastroDeSonda([''], ['']), false);
+  });
+
+  caso('el barrido reclama el rastro anonimo y deja en paz al lead', () => {
+    const renombradas = [];
+    const reclamadas = reclamarRastros({
+      listar: () => [CONV36, CONV48],
+      renombrar: (id) => renombradas.push(id),
+    });
+    assert.deepStrictEqual(reclamadas, [48], 'solo la 48 es nuestra');
+    assert.deepStrictEqual(renombradas, [48], 'y el efecto cayo solo sobre ella');
+  });
+  caso('el barrido NO re-reclama lo que el criterio compartido ya da por nuestro', () => {
+    // Mismo guion que la 48, pero ya bautizada. Si esto reclamara, el barrido escribiria en
+    // produccion una vez por hora, para siempre, sin cambiar nada.
+    const renombradas = [];
+    reclamarRastros({
+      listar: () => [{ ...CONV48, id: 47, contacto: 'Sonda QA' }],
+      renombrar: (id) => renombradas.push(id),
+    });
+    assert.deepStrictEqual(renombradas, [], 'el nombre de prueba ya lo excluia');
+  });
+  caso('un fallo renombrando avisa y sigue con las demas', () => {
+    const avisos = [];
+    const renombradas = [];
+    const reclamadas = reclamarRastros({
+      listar: () => [{ ...CONV48, id: 48 }, { ...CONV48, id: 99 }],
+      renombrar: (id) => {
+        if (id === 48) throw new Error('psql se cayo');
+        renombradas.push(id);
+      },
+      avisar: (m) => avisos.push(m),
+    });
+    assert.deepStrictEqual(reclamadas, [99], 'la que si se pudo marcar cuenta');
+    assert.strictEqual(avisos.length, 1, 'y la que no, avisa');
+    assert.match(avisos[0], /48/);
+  });
+  caso('si no se puede listar, el barrido avisa y NO tumba la medicion', () => {
+    const avisos = [];
+    const reclamadas = reclamarRastros({
+      listar: () => {
+        throw new Error('docker no responde');
+      },
+      renombrar: () => assert.fail('no deberia renombrar nada'),
+      avisar: (m) => avisos.push(m),
+    });
+    assert.deepStrictEqual(reclamadas, []);
+    assert.strictEqual(avisos.length, 1);
+  });
+  caso('el barrido sin deps inyectadas TIRA, en vez de escribir en produccion', () => {
+    assert.throws(() => reclamarRastros(), /exige/);
+    assert.throws(() => reclamarRastros({ listar: () => [] }), /exige/);
   });
 
   let fallados = 0;
