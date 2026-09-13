@@ -16,16 +16,33 @@ promesa falsa — y el sistema **factura SIAT** (Sergio la metió a la 1.0 el 12
 ✅ 1 alta E2E (correo en Recibidos→clic→panel) · ✅ 3 cobro (escalera C viva) · ✅ 4 topes ·
 ✅ 7 panel · ✅ 9 opera sola · 🟢 2 rubros (dental 9/9, comercio 8/8 post-deploy; 3 en
 rotación del loop) · 🟢 8 promesas (escalera barrida en las 3 superficies) · 🟢 6 chatbot
-(cola sin rojos técnicos; falta el OK VISUAL de Sergio — ver F2) · 🔴 5 SIAT (PdV 1 creado,
-runner corriendo; faltan etapa VIII y Fase 2).
+(cola sin rojos técnicos; falta el OK VISUAL de Sergio — ver F2) · 🟡 5 SIAT (PdV 1 creado;
+Fase 1 al **89 %** — todo 100 % salvo VI 22/560 re-corriendo; wrapper F1.4 **desplegado**
+con health verde en :8517; etapa VIII: Sergio decidió el 12-sep **mantener Electrónica** →
+firma digital en desarrollo; falta Fase 2).
+
+**Cerrado en la madrugada del 13-sep:** F1.4 wrapper en systemd (`onia-siat-wrapper`,
+carga `siat-piloto.env` + `siat-wrapper.env`) · F1.5 y F3.5 vigías n8n ACTIVOS y probados
+con mensajes reales · F2.1 **desplegado** (bot lee el editor del panel vía
+`ONIA_KNOWLEDGE_URL`; health `panel.configurado:true`, fail-open al archivo hasta la
+primera publicación) · F3.2 medido en prod (T1 0:24, T2 0:21 a máquina; copy propuesto en
+rama `claude/tiempo-valor`, número lo elige Sergio) · F2.2+F3.3 construidos en rama
+`claude/f2-f3-panel` (capturas enviadas a Sergio; su ok = merge+deploy) · Verificado en
+Meta MIRANDO: WABA vivo "Onia" (4429061034078857, portfolio OniaAgency) **Verificado +
+Aprobado + VISA \*4028** — la "cuenta inhabilitada" que asusta en WhatsApp Manager es el
+WABA viejo (+591 75470140), legado, no bloquea nada · Horarios de demo propuestos de su
+Cal.com: **lun 15 19:30 y mar 16 14:30** (esperan su ok).
 
 ## Fase 1 — SIAT hasta el final (el único 🔴 estructural)
 
 1. **[IA]** Runner de la matriz completa hasta secarla (corre AHORA; vigilarlo y relanzar
    si corta). Listo = todas las etapas menos la VIII al 100 % en el portal.
-2. **[S]** Llamada al SIN por la **etapa VIII**: 800 10 3444 — ¿se puede quitar la
-   modalidad Electrónica conservando los casos? (la vía del portal está caída). Listo =
-   respuesta del SIN; si es no, decidimos certificado AGETIC con la cuenta delante.
+2. ~~Quitar la modalidad Electrónica~~ **CAMBIÓ el 12-sep — decisión de Sergio Urcullo:
+   "hazlo también con electrónica en línea"**. La etapa VIII se COMPLETA: **[IA]**
+   investigar certificado para piloto (¿de prueba/autofirmado?) + implementar la firma
+   XML del emisor (subagente en rama `claude/siat-firma-viii`); **[S/Leslie]** si ADSIB
+   exige certificado emitido con trámite, lo tramita Leslie (titular) — pasos y costo
+   quedarán en `ONIA_SIAT_TU_PARTE_DEL_TRAMITE.md`.
 3. **[S]** Cuando el marcador dé 100 %: **solicitar Fase 2 (inspección), pedir VIRTUAL**.
 4. **[IA]** El wrapper HTTP del emisor (`POST /fiscal/invoices` → `emitInvoice()`) para
    que el día de la autorización sea cambiar una env var. Se hace en paralelo, no bloquea.
@@ -89,6 +106,9 @@ en `ONIA_TEMAS_CHARLA_CONTESTADOS.md`.
 
 ## Dependencias vivas de Sergio (todas en su pantalla Hermes)
 
-Llamada etapa VIII · crédito OpenAI (capa libre del bot + Hermes VPS) · tarjeta Meta
-antes del 1-oct · 2 horarios de demo (S12) · aprobar los 2 borradores de agentes ·
-declaración NIT (día 13) · su "ok" final del bot (Fase 2.3).
+Su prueba del bot al llegar a casa (F2.3) · confirmar los 2 horarios de demo propuestos
+(lun 15 19:30 / mar 16 14:30) · crédito OpenAI (dijo: lunes 15).
+**Cerradas el 12/13-sep:** declaración NIT ✓ (la hizo él) · tarjeta Meta ✓ (verificada
+mirando: VISA \*4028 en el WABA vivo, negocio Verificado) · borradores de agentes → los
+prueba la IA en org QA (él delegó: "tú haz la prueba") · llamada VIII → reemplazada por
+la decisión de completar Electrónica.
