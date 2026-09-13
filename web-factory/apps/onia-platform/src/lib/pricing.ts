@@ -107,8 +107,84 @@ export interface Plan {
    * `scripts/inclusion-chatbot.mjs` contra el ref publicado del producto.
    */
   chatbotIncluido: boolean;
+  /**
+   * ¿Los agentes de IA (Recall y Cobrador) vienen adentro de este plan?
+   *
+   * Espejo de `agentsIncluded` (`onia-platform/lib/plan-catalogo.ts`), que es la fuente.
+   */
+  agentesIncluidos: boolean;
+  /**
+   * ¿Las reservas online (el link público de citas) vienen adentro de este plan?
+   *
+   * Espejo de `publicBookingIncluded` (`onia-platform/lib/plan-catalogo.ts`), que es la fuente.
+   */
+  reservasIncluidas: boolean;
   destacado?: boolean;
   cuando: string;
+}
+
+/**
+ * Los dos booleanos de arriba son hermanos de `chatbotIncluido` y nacen el 2026-09-13 por el
+ * MISMO defecto, encontrado tres superficies más allá.
+ *
+ * QUE PASO. La escalera C (2026-09-12) metió el plan Crece entre Básico y Pro, y el catálogo del
+ * producto le dio `agentsIncluded: true` y `publicBookingIncluded: true` — las dos capacidades
+ * bajaron un escalón, de Bs 890 a Bs 550. Las tarjetas de plan siguieron (dicen "desde Crece"),
+ * pero las superficies que afirmaban lo MISMO con el nombre del plan TIPEADO a mano no se
+ * enteraron, y quedaron mintiendo al revés — cobrando de más:
+ *
+ *   - el `copy` del add-on Reservas online (acá abajo): "Incluida en Pro y Full"
+ *   - `/agentes`, la página entera: "Los agentes vienen incluidos desde el plan Pro", en el H2,
+ *     en el párrafo, en la `description` que viaja a Google y a WhatsApp, y en un comentario del
+ *     archivo que lo daba por verificado
+ *
+ * O sea: al que evaluaba el Crece se le decía que pagara Bs 340/mes de más por lo que ese plan ya
+ * trae, y `/precios` se contradecía a sí misma en la misma pantalla (la tarjeta del Crece decía
+ * "Reservas online incluidas" y la sección de add-ons de más abajo, "Incluida en Pro y Full").
+ *
+ * POR QUE NINGUN GATE LO VIO, que es la parte que importa. `scripts/precios-fuente.mjs` SI cruza
+ * estos dos booleanos contra el producto y salía VERDE: su detector del lado del sitio lee el
+ * campo `incluye` de las tarjetas de plan, y ahí el dato estaba bien. Un gate que le pregunta a
+ * UNA representación firma por todas las demás — el `copy` de un add-on y una página propia
+ * afirman lo mismo y no eran sujeto de nadie.
+ *
+ * Por eso el arreglo no es escribir "Crece" en los tres lugares: eso reintroduce la clase el día
+ * que el booleano vuelva a moverse. Se DERIVA con `primerPlanCon`, y lo vigilan DOS gates, uno
+ * por cada mitad del problema:
+ *
+ *   - `src/lib/capacidad-incluida.test.ts` — que ningún texto del sitio tipee el plan a mano.
+ *     Camina `src/` entero, así que una pantalla nueva nace cubierta.
+ *   - `scripts/precios-fuente.mjs` — que estos booleanos digan lo MISMO que el catálogo del
+ *     producto (`primer plan con agentes de IA · por campo`, y su hermano de reservas). Sin esa
+ *     correa el error se muda del texto al booleano, que es adonde ahora apunta todo el copy.
+ */
+
+/** Las capacidades que un plan puede traer adentro, y el campo que lo contesta. */
+export const CAPACIDADES_INCLUIDAS = {
+  agentes: "agentesIncluidos",
+  reservas: "reservasIncluidas",
+  chatbot: "chatbotIncluido",
+} as const satisfies Record<string, keyof Plan>;
+
+export type CapacidadIncluida = keyof typeof CAPACIDADES_INCLUIDAS;
+
+/**
+ * El nombre del plan MAS BARATO que trae esa capacidad adentro — el "desde X" que lee el cliente.
+ *
+ * El orden sale del PRECIO, no del orden del array ni del campo `paso`: un plan nuevo insertado en
+ * el lugar equivocado tiene que dar la respuesta correcta igual. Devuelve `null` cuando ningún plan
+ * la trae, para que el llamador diga lo suyo en vez de comerse un "undefined" en pantalla.
+ */
+export function primerPlanCon(
+  capacidad: CapacidadIncluida,
+  planes: readonly Plan[] = PLANES,
+): string | null {
+  const campo = CAPACIDADES_INCLUIDAS[capacidad];
+  const conLaCapacidad = planes.filter((p) => p[campo] === true);
+  if (conLaCapacidad.length === 0) return null;
+  return conLaCapacidad.reduce((masBarato, p) =>
+    p.mensual < masBarato.mensual ? p : masBarato,
+  ).nombre;
 }
 
 /**
@@ -303,7 +379,7 @@ export const USUARIO_EXTRA_ADDON = {
  * muestra. Los topes mensuales (recordatorios) se renuevan cada mes y no se
  * acumulan. Espejo de onia-platform/lib/subscription-plans.ts.
  */
-export const PLANES: readonly Plan[] = [
+const ESCALERA: readonly Plan[] = [
   {
     id: "basico",
     paso: "01",
@@ -321,10 +397,11 @@ export const PLANES: readonly Plan[] = [
       `Topes: 300 fichas · 2 usuarios (hasta ${USUARIO_EXTRA_ADDON.maxEnBasico} más a Bs ${bs(USUARIO_EXTRA_ADDON.mensualAddon)}/mes) · 200 recordatorios por email/mes`,
     ],
     chatbotIncluido: false,
-    sinEsto: [
-      "Agentes de IA (vienen desde Crece)",
-      `Reservas online — como add-on a Bs ${bs(AGENDA_ADDON.mensualAddon)}/mes, o incluidas desde Crece`,
-    ],
+    agentesIncluidos: false,
+    reservasIncluidas: false,
+    // El `sinEsto` del Básico se DERIVA más abajo: nombra los planes donde esas dos capacidades
+    // sí están, y ese nombre no se tipea (ver `PLANES`).
+    sinEsto: [],
     cuando: "Negocio de 1 o 2 personas que hoy trabaja con cuaderno o Excel.",
   },
   {
@@ -345,6 +422,8 @@ export const PLANES: readonly Plan[] = [
       "Topes: 800 fichas · 3 usuarios · 400 recordatorios por email/mes",
     ],
     chatbotIncluido: false,
+    agentesIncluidos: true,
+    reservasIncluidas: true,
     sinEsto: [
       `Reportes completos, facturas recurrentes y contabilidad completa (${ALCANCE_CLINICO}) — vienen en Pro`,
     ],
@@ -367,6 +446,8 @@ export const PLANES: readonly Plan[] = [
       "Topes: 1.500 fichas · 5 usuarios · 800 recordatorios por email/mes",
     ],
     chatbotIncluido: false,
+    agentesIncluidos: true,
+    reservasIncluidas: true,
     sinEsto: [
       `El chatbot de WhatsApp — Full ya lo trae incluido; acá va aparte, Bs ${bs(CHATBOT_MENSUAL)}/mes`,
     ],
@@ -390,10 +471,31 @@ export const PLANES: readonly Plan[] = [
       "Te lo entregamos configurado para tu rubro",
     ],
     chatbotIncluido: true,
+    agentesIncluidos: true,
+    reservasIncluidas: true,
     sinEsto: [],
     cuando: "Equipo grande, base de clientes que no entra en 1.500 fichas, o WhatsApp con movimiento.",
   },
 ] as const;
+
+/**
+ * La escalera publicada. El `sinEsto` del Básico se arma ACA y no adentro del literal por una
+ * razón concreta: nombra el plan desde el que esas capacidades sí vienen, y ese nombre se deriva
+ * de la propia escalera — pedírselo a `PLANES` mientras `PLANES` se construye es un ciclo (lo
+ * cazó el gate nuevo con un `Cannot access 'PLANES' before initialization`, no una revisión a
+ * ojo). Se le pasa `ESCALERA`, que en este punto ya está inicializada.
+ */
+export const PLANES: readonly Plan[] = ESCALERA.map((plan) =>
+  plan.id === "basico"
+    ? {
+        ...plan,
+        sinEsto: [
+          `Agentes de IA (vienen desde ${primerPlanCon("agentes", ESCALERA)})`,
+          `Reservas online — como add-on a Bs ${bs(AGENDA_ADDON.mensualAddon)}/mes, o incluidas desde ${primerPlanCon("reservas", ESCALERA)}`,
+        ],
+      }
+    : plan,
+);
 
 /**
  * Los planes que traen el chatbot pagado adentro, nombrados como los lee el cliente.
@@ -594,7 +696,9 @@ export const ADDONS: readonly AddOn[] = [
   },
   {
     nombre: AGENDA_ADDON.nombre,
-    copy: `Te piden cita solos por tu link público, ${ALCANCE_CON_AGENDA}. Incluida en Pro y Full.`,
+    // "Incluida en Pro y Full" hasta el 2026-09-13: quedó mintiendo cuando la escalera C le dio
+    // `publicBookingIncluded` al Crece. El plan NO se tipea — sale de `primerPlanCon`.
+    copy: `Te piden cita solos por tu link público, ${ALCANCE_CON_AGENDA}. Incluida desde ${primerPlanCon("reservas")}.`,
     precio: `Bs ${bs(AGENDA_ADDON.mensualAddon)}/mes en Básico`,
   },
   {
