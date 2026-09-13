@@ -692,7 +692,35 @@
    sus filas (`.panelRows { flex: 1 1 auto }`), así que el título envuelto a dos
    líneas entra en el hueco que ya existía. Verificado con la cura inyectada
    contra onia.com.bo en los tres anchos: cortados 6→0, 5→0 y 5→0, con el
-   desborde basal INTACTO (3 en las dos direcciones) y cero scroll horizontal. */
+   desborde basal INTACTO (3 en las dos direcciones) y cero scroll horizontal.
+
+   ⚠️ **`scrollWidth > clientWidth` DEJA DE SIGNIFICAR «cortado» en cuanto esta
+   regla pone `overflow: visible`.** Vale la pena decirlo acá porque es la
+   medición con la que se descubrió el defecto y la que va a repetir el que
+   venga. Con `overflow: hidden` ese número es el texto que el usuario NO ve; con
+   `overflow: visible` el texto se pinta igual, hacia el padding, y se lee entero.
+   Medido el 2026-09-13 con la cura inyectada sobre producción: quedaban 4
+   «desbordes» a 320px y 1 a 1280/1440/1920 — y de todos ésos, el ÚNICO que se
+   pinta fuera de su caja visible es «Contabilidad», 8px afuera de su pastilla, y
+   sólo a 320 y 768. Los demás los absorbe el padding del panel. La pregunta que
+   sí distingue es si el texto se pinta fuera de la caja que tiene FONDO, no si
+   excede su caja de contenido.
+
+   Y ese residuo de 8px SE DEJA A PROPÓSITO: «Contabilidad» es UNA palabra más
+   ancha que media grilla, así que `white-space: normal` no puede envolverla.
+   Las tres salidas se probaron inyectadas contra producción y se MIRARON
+   renderizadas — las tres son peores, y por eso no se vuelven a intentar:
+     · `overflow-wrap: anywhere` → parte «Contabilida/d», la pastilla pasa a dos
+       líneas y desalinea la fila entera.
+     · `grid-template-columns: repeat(auto-fit, minmax(9em, 1fr))` en `.panelGrid`
+       → a 1280/1440/1920 la grilla pasa de 2 columnas a CINCO. Eso es un
+       rediseño de la portada, no el arreglo de un defecto.
+     · devolverle `overflow: hidden` a `.panelPillTxt` (dejar el «…» sólo en la
+       pastilla, que es la única caja con fondo propio) → a 768px la pastilla
+       dice «Contabi…»: el nombre de la capacidad borrado, que es EXACTAMENTE el
+       defecto que esta cura vino a matar.
+   Entre las cuatro, la de arriba es la que menos le saca al lead: la palabra se
+   lee completa. */
 .panelTitle,
 .panelTxt,
 .panelBarLbl,
