@@ -108,13 +108,38 @@ Telegram. El mismo mensaje que a las 19:28 daba `rama=MUDO` ahora recorre el gui
   Commits `55e669a6` + `22546797` (rama `claude/cobro-e2e-punto-1-25ba65`). Tarea en el
   tablero pidiéndole a Sergio Urcullo el "hola" de cierre.
 
-## 🔴 Cal.com NO EXISTE — las demos del bot no entran a ningún calendario (medido 11-sep)
+## ✅ CERRADO 2026-09-13 — Cal.com no existe, la decisión ya estaba tomada (c), y el turno del prospecto ya no espera 5 s
 
 Pregunta directa de Sergio Urcullo ("¿está funcionando el cal de onia?"). Medido en vivo:
 **cero contenedores de Cal.com en el VPS** (`docker ps` completo, ninguno), cal.onia.com.bo
-redirige a onia.com.bo/empezar, y el env del bot no tiene `CALCOM_BASE_URL` — por eso
-`createBooking` (`hermes-content/deploy/vps-ops/bot/calcom-booking.mjs`) devuelve
-`sin_config` SIEMPRE y la demo de prueba del 10-sep quedó con `calendar_event_id` VACÍO.
+redirige a onia.com.bo/empezar, y la demo de prueba del 10-sep quedó con `calendar_event_id`
+VACÍO.
+
+⚠️ **Media frase de acá era FALSA y mandaba al diagnóstico contrario — corregido 2026-09-13.**
+Decía *"el env del bot no tiene `CALCOM_BASE_URL` — por eso `createBooking` devuelve
+`sin_config` SIEMPRE"*. Contado en el proceso vivo (`/proc/<pid>/environ` del webhook dentro de
+`onia-center`, no el `.env`): **la config SÍ está** — `CALCOM_BASE_URL=http://calcom:3000`,
+`CALCOM_BOT_EVENT_TYPE_ID=5`, `CALCOM_USERNAME=onia`. O sea que la rama que corre **no** es
+`sin_config` (ésa se deriva del entorno **sin tocar la red**, y es la que el código da por
+supuesta en sus comentarios): es la que **SÍ sale a la red**, contra un host que no existe.
+Medido desde el contenedor: `wget -qO- --timeout=8 http://calcom:3000/api/book/event` →
+`bad address 'calcom:3000'` en **5,00 s**.
+
+**Esos 5 s los esperaba el PROSPECTO**, en el turno más caro que tiene el bot: el que acaba de
+elegir su horario. Y 5 s era el piso, no el techo — lo puso el resolvedor de DNS, que fue quien
+cortó; un Cal.com que resolviera y no contestara colgaba el turno **sin límite**, porque
+`createBooking` no tenía reloj propio (pasaba `signal: deps.signal` y **ningún** llamador de
+producción le pasa uno). Su hermano ya lo sabía: `aviso-telegram.mjs` sale a la red en el mismo
+turno con `AVISO_TIMEOUT_MS = 5000` y su `AbortController`. La asimetría era el defecto.
+
+✅ **ARREGLADO el 2026-09-13** (`calcom-booking.mjs`, `BOOKING_TIMEOUT_MS`): reloj propio que se
+**suma** al signal del llamador en vez de reemplazarlo, y el timeout se **nombra** en el motivo
+(un `error` genérico manda a diagnosticar la red del prospecto cuando el problema es nuestro).
+Gate `calcom-booking.test.mjs` (3 casos nuevos), **validado por mutación en tres puntos**.
+⚠️ Y la primera versión del gate **no cazaba el defecto**: con `signal: deps.signal` de vuelta,
+el caso se **colgaba** y `node --test` decía `pass 18 / fail 0` — la ausencia de FAIL leída como
+verde. Con el `race` que lo vuelve ruidoso, esa misma mutación da `fail 2, exit 1`.
+**Commiteado, NO desplegado.**
 
 **Lo que SÍ funciona (flujo degradado honesto, por diseño):** el bot ofrece los horarios de
 `ONIA_BOT_SLOTS` (los renueva el cron python diario, independiente de Cal), el prospecto
@@ -122,12 +147,27 @@ elige, la fila queda en la base, el aviso de `demo_agendada` LLEGA al Telegram d
 Urcullo, y el texto agrega "(Estoy confirmando ese horario con Sergio…)". Lo que NO pasa:
 evento en calendario ni link de videollamada (M2_LINK solo sale con booking ok — diseñado).
 
-**Decisión de Sergio Urcullo (opciones cotizadas):**
+**Decisión (opciones cotizadas):**
 (a) redesplegar Cal.com self-hosted (investigar por qué desapareció el contenedor);
 (b) cuenta Cal.com cloud gratis + adaptar `calcom-booking.mjs` a su API;
 (c) seguir sin calendario mientras el volumen sea ~1 demo/semana — el aviso por Telegram +
-confirmación por WhatsApp alcanza y el bot ya es honesto. Recomendada HOY: (c), y (a/b)
-cuando haya volumen real.
+confirmación por WhatsApp alcanza y el bot ya es honesto.
+
+✅ **YA ESTÁ DECIDIDA, y es (c) — no hay que preguntarle nada.** Este bloque decía *"Decisión de
+Sergio Urcullo"* y lo dejaba 🔴 esperando, pero **él ya contestó el 2026-09-03** (tablero
+`t_b18ca430`, citado en `aviso-telegram.mjs:23-24`): *"opción (c) = Telegram YA, y Cal.com
+**cuando moleste anotar a mano**"*. Repetirle una decisión que ya tomó es peor que no
+preguntarle. Contado el 2026-09-13, además, la tarea nunca existió en el tablero: `list | grep
+-i calcom` sólo devuelve dos `done` — o sea que esta pregunta escrita en un `.md` no le llegó
+**jamás**, y el 🔴 habría esperado para siempre.
+
+**Condición de vencimiento** (lo que reabre (a)/(b), sin volver a preguntar): que anotar a mano
+empiece a molestar, es decir **más de ~1 demo agendada por semana**. Se cuenta sin instrumento
+nuevo: `demo_agendada` en el log del bot, o `scheduled_at` en `onia_center.bot_conversations`.
+Hoy el volumen es de una demo por semana y el prospecto no ve ningún síntoma: el bot no promete
+calendario ni link (M2_LINK sólo sale con `booking ok`) y agrega su salvedad
+(`run-turn.mjs:493`, `cierreDeReservaFallida`) — verificado leyendo el ejecutor, no el
+simulador, que es ciego a lo que el ejecutor agrega.
 
 ## Objetivo único
 
