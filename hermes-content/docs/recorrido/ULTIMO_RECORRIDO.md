@@ -1549,3 +1549,35 @@ TODO lead con `nextAction: "Confirmar demo"` y `meetingStatus: "solicitada"`, si
 El endpoint se escribió para el `agenda-form` (que sí pide una reunión) y quedó compartido
 tal cual: el pipeline de Sergio Urcullo mezcla gente que pidió una demo con gente que sólo
 quiso el PDF, las dos con la misma etiqueta "Confirmar demo".
+
+## Reverificado 2026-09-13 14:10 La Paz — dental, 9/9 completo (con limpieza de una org huérfana)
+
+`node scripts/recorrido_cliente.mjs --escribir` (sin `RECORRIDO_RUBRO`, default dental): los 9
+pasos OK, `completo: true`, 0 filas `zz-qa-` al cerrar. Antes de correrlo, el chequeo de arranque
+encontró **1 organización `zz-qa-` huérfana** (`zz-qa-2026-09-13-1309-negocio`, de una corrida
+anterior que murió a mitad de camino — mismo patrón ya documentado el 2026-09-13 más arriba en
+esta memoria compartida): tenía `profiles`, `organization_entitlements` y 1 `patient`, cero
+`appointments`. Se imprimió cada fila y se borró (`organizations`, `profiles`,
+`organization_entitlements`, `patients`, `auth.identities`, `auth.users`) antes de correr el
+recorrido nuevo. Conteo final: `0` orgs `zz-qa-`.
+
+## Verificado 2026-09-13 14:20 La Paz — `/precios` con `reducedMotion:'reduce'`
+
+Cargada la pantalla servida (`onia.com.bo/precios`) con Chromium y `reducedMotion:'reduce'`
+(para no leer un `<CountUp>` a mitad de animar, trampa ya conocida de este carril). Todos los
+montos en pantalla coinciden con la fuente: planes Básico 320/89/3.200, Crece 550/145/5.500,
+Pro 890/229/8.900, Full 1.290/12.900 y Grupo 2.900/mes — contra `DEFAULT_PLAN_AMOUNTS` de
+`onia-platform/lib/subscription-plans.ts`. Add-on chatbot Bs 390/mes · Bs 3.900/año contra
+`WHATSAPP_ADDON` de `onia-platform/lib/pricing.ts`. Reservas online Bs 150/mes y usuario
+adicional Bs 70/mes también coinciden.
+
+**Hallazgo, reportado en el tablero (`t_5ad92d30`, prioridad 2, para el dueño del sitio):** la
+tarjeta del add-on "Reservas online" en la sección "LO DEMÁS QUE SE SUMA" dice *"Incluida en
+Pro y Full"*, omitiendo que también viene incluida en **Crece** — mientras la tarjeta del plan
+Crece, más arriba en la MISMA página, sí dice "Reservas online incluidas, si trabajás con
+citas", y el catálogo (`plan-catalogo.ts`) tiene `publicBookingIncluded=true` desde `crece`. La
+copy vive en `web-factory/apps/onia-platform/src/lib/pricing.ts` (`ADDONS`, ítem "Reservas
+online", campo `copy`), y el propio comentario del archivo (líneas 34-35) ya documenta el dato
+correcto ("publicBookingIncluded desde crece") — la copy de venta no lo lee. Un prospecto que
+entra directo a esa sección (o no llega a leer la tarjeta de Crece) puede creer que tiene que
+pagar Bs 150/mes de más en un plan que ya lo incluye.
