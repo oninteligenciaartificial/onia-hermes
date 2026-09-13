@@ -28,6 +28,15 @@ Instrumento: `scripts/recorrido_cliente.mjs`.
 
 ## Cerrado
 
+- **`/precios`: "Reservas online" dice "Incluida en Pro y Full" y omite Crece** — reportado el
+  2026-09-13 14:20 La Paz al dueño del sitio (`t_5ad92d30`, prioridad 2). Verificado en vivo con
+  `reducedMotion:'reduce'`: todos los montos de `/precios` (planes, add-on chatbot, reservas,
+  usuario extra) coinciden con `subscription-plans.ts`/`pricing.ts`. El único desajuste es esa
+  frase: la tarjeta de Crece, más arriba en la misma página, ya dice que trae reservas online
+  incluidas, y el propio comentario del código (`pricing.ts:34-35`) documenta
+  `publicBookingIncluded desde crece` — la copy del add-on no lo refleja. Detalle en
+  `../recorrido/ULTIMO_RECORRIDO.md`.
+
 - **`t_3f352044` (cruce de tenant en Importadora) — REFUTADO, no era del producto.** Verificado el
   2026-09-12: `/api/patients` escribe `audit_logs` siempre y no hubo ningún `PATIENT_CREATED` en
   48h para esa fila — nadie la creó por UI. La sembró otro carril (chatbot-cola) con un `INSERT`
