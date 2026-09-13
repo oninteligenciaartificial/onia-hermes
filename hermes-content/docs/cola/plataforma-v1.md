@@ -201,10 +201,20 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       en `onia_agents_actions`, visibles en la pantalla Agentes de la clínica de Sergio para
       que él apruebe. **El misterio del "0 acciones en la historia" quedó explicado: motor
       sano + cadencia diaria + orgs sin datos disparadores** (`not_due` / feeds vacíos).
-      Pendiente de este ítem: (a) la demostración para Sergio Urcullo se hace **sobre datos
-      reales de su clínica o sobre una org de prueba, NO sembrando en su cuenta** — ver el ítem
-      de abajo: los dos borradores sembrados se le mostraban como reclamos de cobro a pacientes
-      que no existen, y aprobarlos habría intentado escribirle a un teléfono inventado;
+      Pendiente de este ítem: (a) ✅ **HECHO el 2026-09-13 (madrugada): circuito E2E entero
+      en la org QA "ZZ QA Bandeja 1.0"** (Sergio delegó: "tú haz la prueba"). Semillas
+      `e2e-agentes2-*` → cron → 2 borradores `pending_approval` (Cobrador Bs 370 con texto
+      completo, Recall 6 meses) → aprobado el del Cobrador POR PANTALLA como admin de la QA
+      → `executed` + dispatch `manual/sent` con link wa.me — **se usó "Enviar yo mismo" a
+      propósito**: el botón "Aprobar y enviar" SÍ dispara WhatsApp Cloud API real
+      (dispatcher → adapter whatsapp), verificado leyendo el código ANTES de apretar.
+      Purga con respaldo (`/root/respaldos/e2e-agentes2-purga-20260913.json`), re-auditoría
+      en cero. **4 fricciones de UI anotadas para F4**: (i) la barra "Preguntá por tu
+      negocio" tapa la última tarjeta de /agents; (ii) tras envío manual el panel rotula
+      "Ejecutada" aunque nadie abrió el link (`pendienteDeEnvioHumano` no se muestra —
+      honestidad del panel, la más seria); (iii) el aviso con el link wa.me desaparece al
+      navegar y no hay dónde reabrirlo; (iv) la tarjeta de /pending dice "Propuesta de
+      agente" genérico.
       (b) ✅ **purgadas el 2026-09-12**, las 12 filas, con respaldo y re-auditoría en cero;
       (c) construir los 3 agentes nuevos de abajo.
 
