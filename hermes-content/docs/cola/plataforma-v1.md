@@ -298,6 +298,44 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       tiene celda propia en casi ninguna fila —cae al valor del Completo— y ahora el gate mide esa
       caída (`?? celdaDeFila`): hoy es honesta porque sus booleanos coinciden, y el día que se
       separen deja de serlo **ruidosamente**.
+
+      ✅ **CERRADO el 2026-09-13: la QUINTA superficie — la tarjeta de «Add-ons disponibles» de
+      esa misma pantalla le listaba Bs 390 al plan que ya trae el chatbot** (`onia-platform`
+      `2aa82b4`, publicado; los tres gates re-corridos EN EL VPS sobre el árbol con
+      `origin/master` mergeado: `tsc` 0 · 4.931 tests · `eslint` 0 errores). El dueño de un
+      **Completo (Bs 1.290)** abría `/settings`, bajaba dos secciones y leía la píldora
+      **«Activo»**, la lista **«Bs 390/mes o Bs 3.900/año»** y el pie **«Add-on activo»** — los
+      tres, sobre el chatbot que su plan trae adentro: le decía que paga **1.680** cuando paga
+      1.290. La tarjeta recibía sólo `isWhatsAppAddonActive`, que colapsa «lo incluye mi plan»
+      con «lo compré aparte».
+
+      **Por qué sobrevivió a las cuatro vueltas anteriores, incluidas las DOS de hoy sobre este
+      mismo archivo:** el add-on **hermano de la misma grilla** ya lo hace bien — la agenda
+      pública rotula «Incluido» y dice «Incluida en este plan» **40 líneas más abajo**, con el
+      dato (`getLimits(currentPlan).publicBookingIncluded`) resuelto **una línea** al lado del
+      que faltaba. Media familia correcta se lee como familia correcta: es la misma firma que
+      escondió la tercera superficie, repetida dentro del mismo archivo.
+
+      🔴 **Y lo segundo, que es peor: el gate de la clase no podía verla.**
+      `lib/chatbot/como-lo-paga-el-dueno.test.ts` (escrito esta misma mañana) **derivaba sus
+      sujetos caminando el disco** — y después los filtraba con un predicado escrito a mano que
+      preguntaba por `monthly`. Esta pantalla pinta **el mismo monto** como `tier.shortLabel`
+      («Bs 390/mes o Bs 3.900/año»), así que quedaba **fuera del universo** y el gate firmaba
+      verde sobre la pantalla rota. *Derivar los sujetos del disco no alcanza si después se los
+      filtra con un predicado a mano: un monto tiene varias representaciones y el predicado se
+      ata a una.*
+      Entró: los campos con plata **salen del dato** (`Object.entries` del nivel del chatbot:
+      un número, o un texto con «Bs» — si mañana gana `weeklyLabel`, entra solo); la atribución
+      del monto al chatbot es por el **identificador gritado anterior** y no por «el primero del
+      archivo», porque `EXTRA_USER_ADDON_PRICE.shortLabel` vive **600 líneas antes** en el mismo
+      archivo y acusaría a la tarjeta equivocada; y un **caso ancla** exige que `PlanClient.tsx`
+      esté en el universo, que es la pieza que impide volver al predicado angosto.
+      `chatbotIncluidoEnElPlan` entra como prop **obligatoria** y `tsc` nombró a los **7**
+      llamadores. **Tarjeta 10** en `app/dev/addon-chatbot` con el estado que nadie había
+      mirado — sin ella no se mira nunca, que es exactamente cómo llegó a producción.
+      **Validado por mutación, dos veces:** guarda fuera → 1 rojo nombrando la pantalla;
+      predicado angosto de vuelta → 2 rojos (los campos y el ancla).
+      ⚠️ **Falta mergear y desplegar** para que el cliente lo vea.
       **El sujeto del gate no es «crece»: son los planes que la pantalla VENDE** (`planesDe`) —
       `app/(dashboard)/settings/la-comparativa-se-pinta-desde-los-planes-que-vende.test.ts`.
       **Validado por mutación en las dos direcciones:** sacar `crece` de las columnas declaradas →

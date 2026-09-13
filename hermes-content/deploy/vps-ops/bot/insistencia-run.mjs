@@ -5,6 +5,13 @@
 // de 24 h de Meta (texto libre gratis; fuera de ventana NO se manda nada: el
 // recepcionista no tiene plantilla aprobada).
 //
+// ⚠️ 2026-09-13: ese "SIEMPRE" era cierto y se leia al reves. Lo garantizaba el
+// RANGO del barrido SQL, no una decision de este archivo — y por eso una politica
+// de 24 h o mas (el panel acepta hasta 48) no producia un envio tardio: no producia
+// NINGUNO, sin dejar rastro. Un comentario que afirma una garantia desactiva la
+// auditoria del que lo lee. Ahora el caso se saltea con `politica_fuera_de_ventana`
+// y un warning que nombra los dos numeros.
+//
 // Reusa las piezas probadas del followup del funnel: el CAS reserveFollowUp
 // (followup_step 0→1: reintentar el barrido no duplica), deliver() para el
 // envio real y el dedup por message_key de insertOutbound. Solo toca
@@ -13,11 +20,14 @@
 //
 //   node insistencia-run.mjs --now 2026-08-30T15:00:00Z [--emit] [--limit 50]
 import { createStore } from "./persistence.mjs";
-import { createBotConfig, renderTemplate } from "./config.mjs";
+import { createBotConfig, DEFAULT_CONFIG, renderTemplate } from "./config.mjs";
 import { getOrgKnowledge } from "./knowledge.mjs";
 import { deliver, hoursBetween } from "./followup-run.mjs";
 
 export const DEFAULT_HORAS = 2;
+
+/** Ultimo recurso si llega un config sin `followUp` — el hecho del canal vive en config.mjs. */
+const DEFAULT_VENTANA_HORAS = DEFAULT_CONFIG.followUp.windowClosesAtHours;
 
 /** Politica por org: encendida salvo que el doc diga lo contrario. */
 export function politicaDeSeguimiento(doc) {
@@ -52,7 +62,7 @@ export async function runInsistenciaSweep(options = {}, deps = {}) {
     return result;
   }
 
-  const rows = await store.sweepInsistenciaCandidates(nowIso, limit);
+  const rows = await store.sweepInsistenciaCandidates(nowIso, config, limit);
   if (!rows) {
     result.skipped.push({ reason: "barrido_sin_resultado" });
     return result;
@@ -90,6 +100,26 @@ export async function runInsistenciaSweep(options = {}, deps = {}) {
       result.skipped.push({ key, reason: "apagada_por_el_dueno" });
       continue;
     }
+
+    // UNA POLITICA QUE EL CANAL NO PUEDE CUMPLIR SE DICE, NO SE CALLA.
+    //
+    // El panel acepta hasta 48 h, pero el barrido solo ve lo que sigue DENTRO de la
+    // ventana de servicio de Meta: pedir 24 h o mas es pedir un envio que nunca va a
+    // ocurrir — la fila sale del rango antes de volverse elegible. Hasta hoy eso era
+    // silencio perfecto (ni envio, ni skip, ni warning), asi que el dueño encendia la
+    // insistencia, elegia el tope del desplegable y su asistente no escribia jamas.
+    //
+    // No se corrige el valor por las suyas: insistir antes de lo que el dueño pidio es
+    // decidir por el. Se saltea nombrando los dos numeros, que es lo que deja arreglarlo.
+    const ventana = config?.followUp?.windowClosesAtHours ?? DEFAULT_VENTANA_HORAS;
+    if (politica.horas >= ventana) {
+      result.skipped.push({ key, reason: `politica_fuera_de_ventana:${politica.horas}h` });
+      store.warnings.push(
+        `insistencia ${key}: el seguimiento esta configurado a ${politica.horas} h y la ventana de WhatsApp cierra a las ${ventana} h — a esa altura ya no se puede escribir, asi que no se insiste nunca. Bajalo a menos de ${ventana} h.`,
+      );
+      continue;
+    }
+
     const elapsed = hoursBetween(row.last_inbound_at, nowIso);
     if (elapsed === null || elapsed < politica.horas) {
       result.skipped.push({ key, reason: `demasiado_pronto:${elapsed === null ? "s/fecha" : elapsed.toFixed(1) + "h"}` });

@@ -278,6 +278,59 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El dueño podía encender la insistencia, elegir el tope del desplegable y su
+      asistente no escribía NUNCA — sin un envío, sin un skip, sin un warning~~ — CERRADO el
+      2026-09-13 en el repo (`hermes-content/deploy/vps-ops/bot/insistencia-run.mjs` +
+      `persistence.mjs`). ⚠️ COMMITEADO, NO DESPLEGADO.**
+      El panel (`onia-platform/app/(dashboard)/settings/chatbot/ChatbotClient.tsx`) vende
+      *"Si el cliente deja de responder, tu asistente le escribe UNA sola vez para retomar"* y
+      deja elegir cada cuánto insistir. El barrido que lo ejecuta, en cambio, sólo ve lo que
+      sigue **dentro de la ventana de servicio de 24 h de Meta**: `sweepInsistenciaCandidates`
+      acota `last_inbound_at` entre `now-24h` y `now-1h`. Una política de **24 h o más no puede
+      producir un envío jamás** — la fila sale del rango antes de volverse elegible.
+      **Y el silencio era perfecto:** ni envío, ni `skipped`, ni `warning`. La conversación
+      simplemente no aparecía en el barrido, así que no había nada que mirar ni dónde mirarlo.
+      **Lo tapaba un comentario que afirmaba la garantía:** la cabecera decía *"SIEMPRE dentro
+      de la ventana de 24 h de Meta"* — cierto, y se lee al revés. Lo garantizaba el RANGO del
+      SQL, no una decisión del archivo; el que lo leía daba el tema por resuelto. Es la clase
+      *«un comentario que afirma una garantía desactiva la auditoría»*, y acá la desactivó.
+      **Y eran dos números para el mismo hecho:** `24 * 3600000` tipeado en `persistence.mjs`
+      y `followUp.windowClosesAtHours` en `config.mjs` — que dice de sí mismo, con todas las
+      letras, que esa duplicación *"es la trampa que este archivo ya pagó una vez con la
+      duración de la demo (15 en el texto / 45 en el calendario)"*. Mover la ventana en el
+      config dejaba el barrido en el valor viejo.
+      Entró: el techo del barrido **derivado** de `config.followUp.windowClosesAtHours`
+      (`sweepInsistenciaCandidates(nowIso, config, limit)`, firma alineada con su hermano
+      `sweepDemoReminders`), y el corte explícito `politica_fuera_de_ventana:<horas>h` con un
+      warning que nombra **los dos números** y qué hacer (*"bajalo a menos de 24 h"*). **No se
+      corrige el valor por las suyas:** insistir antes de lo que el dueño pidió es decidir por
+      él; se saltea nombrando el problema, que es lo que permite arreglarlo.
+      **Medido antes de tocar nada:** hoy ninguna org lo tiene configurado —
+      `select o.slug, k.data->>'seguimiento' from chatbot_knowledge k join organizations o …`
+      devuelve una sola fila (`onia-interna`, `publicado`, **sin el campo**) — así que **el
+      defecto es latente, no está sangrando**. Se cierra igual porque lo pisa el primer cliente
+      que use la pantalla, y la opción que lo dispara es la que el desplegable muestra última.
+      **Gate:** tres casos en `insistencia-run.test.mjs` (skip con motivo · warning con los dos
+      números · el barrido recibe el config). **Validado por mutación en las dos direcciones:**
+      esquive del corte (`false &&`) → 2 rojos; techo devuelto al `24` tipeado y firma vieja →
+      1 rojo; árbol restaurado con `cp` → 10/10. Suite del bot completa: **1014/1014**.
+
+      📌 **Lo que queda abierto, y es la mitad que el dueño VE** (`onia-platform`, otro repo —
+      no entró en esta vuelta y se deja con la reproducción exacta para no re-investigarlo):
+      1. `ChatbotClient.tsx:28` — `HORAS_SEGUIMIENTO = [1, 2, 3, 5, 12, 24]`: **la última
+         opción del desplegable es la opción muerta.** El tope que el motor puede cumplir es
+         `windowClosesAtHours - 1`.
+      2. `lib/chatbot/knowledge.ts:110` — `horas: { kind: "int", min: 1, max: 48 }`, y
+         `editor-sugerir.mjs:23` le dicta al LLM *"horas (numero 1-48)"*: por ahí entra un 30
+         sin pasar por el desplegable.
+      3. `ChatbotClient.tsx:596` — el párrafo afirma *"Dentro de las 24 horas del último
+         mensaje, sin costo extra"* **tipeado al lado del control que lo puede volver falso**.
+         Es la clase ya conocida: la promesa se **condiciona** (derivarla de lo que el dueño
+         eligió), no se borra.
+      ⚠️ **Y una fecha que vence en 18 días:** ese *"sin costo extra"* depende de Meta, que
+      empieza a cobrar la respuesta dentro de la ventana de 24 h el **1-oct-2026**. Toda
+      promesa sobre el costo de un tercero lleva su fecha.
+
 - [x] 🔴 **~~El bot OFRECE un horario y PROMETE otro: los dos salían de fuentes distintas~~ —
       CERRADO el 2026-09-13 en el repo (`62336825`, `hermes-content/deploy/vps-ops/bot/ventanas-de-atencion.mjs`).
       ⚠️ COMMITEADO, NO DESPLEGADO — y con un segundo paso que casi nadie hace, abajo.**

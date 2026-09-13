@@ -117,3 +117,59 @@ test("dry-run: lista lo que mandaria sin reservar ni mandar", async () => {
   assert.equal(out.send[0].mode, "dry-run");
   assert.equal(reservas.length, 0);
 });
+
+// ---------------------------------------------------------------------------
+// LA POLITICA QUE EL BARRIDO NO PUEDE CUMPLIR (2026-09-13).
+//
+// El panel deja al dueño elegir hasta 48 h (`horas: { min: 1, max: 48 }` en el
+// schema de knowledge.ts, y el editor conversacional le dicta "1-48" al LLM),
+// pero el barrido SQL solo trae conversaciones cuyo ultimo inbound cae DENTRO de
+// la ventana de servicio de Meta. Una politica de 24 h o mas no puede producir
+// NUNCA un envio: la fila sale del rango antes de volverse elegible.
+//
+// Hasta hoy eso era silencio perfecto — ni envio, ni skip, ni warning: la fila
+// simplemente no aparecia. El dueño encendia "tu asistente le escribe UNA sola
+// vez para retomar", elegia el tope del desplegable y su asistente no escribia
+// jamas, sin una linea en ningun lado.
+// ---------------------------------------------------------------------------
+
+test("politica >= ventana de Meta: se saltea CON MOTIVO, no en silencio", async () => {
+  const reservas = [];
+  const store = fakeStore([fila()], { reservas });
+  const out = await runInsistenciaSweep({ nowIso: NOW, emit: true }, {
+    store,
+    knowledge: conocimientoDe({ ...DOC, seguimiento: { activo: true, horas: 24 } }),
+  });
+  assert.equal(out.send.length, 0, "no puede mandar: la fila ya salio de la ventana");
+  assert.equal(reservas.length, 0, "no reserva lo que no va a mandar");
+  assert.match(
+    String(out.skipped[0]?.reason),
+    /politica_fuera_de_ventana/,
+    "el motivo tiene que NOMBRAR que la politica pide mas que la ventana",
+  );
+});
+
+test("politica >= ventana: el warning se lo dice al dueño, con los dos numeros", async () => {
+  const store = fakeStore([fila()]);
+  await runInsistenciaSweep({ nowIso: NOW, emit: true }, {
+    store,
+    knowledge: conocimientoDe({ ...DOC, seguimiento: { activo: true, horas: 30 } }),
+  });
+  const w = store.warnings.join(" | ");
+  assert.match(w, /30/, "nombra lo que el dueño eligio");
+  assert.match(w, /24/, "y la ventana real, que es el tope que manda");
+});
+
+test("el techo del barrido es la ventana del config, no un 24 tipeado aparte", async () => {
+  // Dos numeros para el mismo hecho es la trampa que config.mjs ya pago una vez.
+  // Si alguien mueve `windowClosesAtHours`, el barrido tiene que moverse con el.
+  const pedidos = [];
+  const store = fakeStore([]);
+  store.sweepInsistenciaCandidates = async (nowIso, config) => { pedidos.push(config); return []; };
+  await runInsistenciaSweep({ nowIso: NOW, emit: false }, { store, knowledge: conocimientoDe(DOC) });
+  assert.equal(
+    pedidos[0]?.followUp?.windowClosesAtHours,
+    createBotConfig({}).followUp.windowClosesAtHours,
+    "el barrido recibe el config para derivar su ventana",
+  );
+});
