@@ -58,6 +58,12 @@ const VIEWPORT = MOVIL ? { width: 390, height: 844 } : { width: 1440, height: 90
 // defecto, y la cita entra con 201 usando su `doctorId`. RECORRIDO_SALTAR_EQUIPO=1 reproduce
 // ese camino incluso con --escribir, para volver a medirlo si el onboarding cambia.
 const SALTAR_EQUIPO = process.env.RECORRIDO_SALTAR_EQUIPO === '1';
+// La recuperación de contraseña ya se había probado hasta "pedí el enlace, la pantalla dijo que
+// lo mandó" (2026-09-13 05:09), pero nunca con un TOKEN real: quedaba anotado como hueco
+// ("no se pudo verificar... el flujo de /update-password con un token real"). RECORRIDO_PROBAR_RECOVERY=1
+// cierra ese hueco reusando el mismo patrón que confirmarComoElCliente() — leer el token de la
+// base con un SELECT acotado a zz-qa- y abrir el enlace real, nunca escribir la columna a mano.
+const PROBAR_RECOVERY = process.env.RECORRIDO_PROBAR_RECOVERY === '1';
 
 /**
  * La ruta con la que se REPORTA una captura en `resumen.json`, relativa a la raíz del repo.
@@ -459,6 +465,102 @@ async function confirmarComoElCliente(page, email) {
       : `el enlace de confirmación no confirmó la cuenta; quedó en ${page.url()}`,
     url: page.url(),
   };
+}
+
+/**
+ * Recuperación de contraseña, con un TOKEN REAL — no sólo "la pantalla dijo que mandó el
+ * correo" (eso ya se había medido el 2026-09-13 05:09 y quedó anotado como hueco).
+ *
+ * Pide el link desde /login ("Olvidé mi contraseña"), lee `recovery_token` de la base con un
+ * SELECT acotado a zz-qa- (nunca escribe la columna a mano — sería fingir el paso que se mide,
+ * igual que confirmarComoElCliente), abre el enlace real de GoTrue, define una contraseña nueva
+ * en /update-password y verifica ENTRANDO con la contraseña nueva — la única prueba de que el
+ * cambio quedó vivo, no sólo que el formulario mandó un 200.
+ *
+ * 🔴 Corre en un CONTEXTO DE NAVEGADOR APARTE, nunca en `page` (la de los pasos 1-9). La
+ * primera versión reusaba `page` y borraba sus cookies para poder ver el formulario de
+ * "Olvidé mi contraseña" (con sesión activa, /login redirige antes de renderizarlo) — y un
+ * fallo a mitad de esta prueba dejaba `page` deslogueada, tumbando los pasos 5-9 que siguen
+ * después. La cuenta zz-qa- del recorrido es un efecto secundario, no el sujeto: si esto
+ * rompe, no puede llevarse puesto el recorrido que la creó.
+ */
+async function probarRecuperacionDeContrasena(navegador, email, passwordOriginal) {
+  if (!email.startsWith('zz-qa-')) return { ok: false, detalle: 'sólo se prueba con una cuenta zz-qa-' };
+
+  const contexto = await navegador.newContext({ viewport: VIEWPORT, locale: 'es-BO' });
+  const page = await contexto.newPage();
+  try {
+    await ir(page, `${APP}/login`);
+    const abrirOlvide = page.getByText(/olvid[eé]|recuperar/i).first();
+    if (!(await abrirOlvide.count())) return { ok: false, detalle: 'no se encontró el botón/enlace "Olvidé mi contraseña" en /login' };
+    await abrirOlvide.click().catch(() => {});
+    await page.waitForTimeout(500);
+    // El formulario de recuperación se despliega EN LA MISMA pantalla, con su propio input de
+    // correo (medido 2026-09-13 05:09) — no reusar el input de la password del login de al lado.
+    const campoCorreo = page.locator('input[type=email], input[name=email]').last();
+    await campoCorreo.fill(email).catch(() => {});
+    await mirar(page, 'extra-recovery-00-formulario.png');
+    const submit = page.locator('button[type=submit]').last();
+    await submit.click().catch(() => {});
+    await page.waitForTimeout(3000);
+    await mirar(page, 'extra-recovery-01-pedido.png');
+
+    const nuevaPass = `Zzqa!${Date.now()}x`;
+    let token = '';
+    try {
+      token = execFileSync('docker', [
+        'exec', '-i', 'supabase-db', 'psql', '-U', 'postgres', '-d', 'postgres', '-tAc',
+        `SELECT recovery_token FROM auth.users WHERE email = '${email}' AND email LIKE 'zz-qa-%'`,
+      ], { encoding: 'utf8', timeout: 20_000 }).trim();
+    } catch (e) {
+      return { ok: false, detalle: `no se pudo leer el recovery_token: ${e.message}` };
+    }
+    if (!token) return { ok: false, detalle: 'la cuenta no tiene recovery_token pendiente — el pedido de recuperación no lo generó' };
+
+    const enlace = `${APP}/supabase/auth/v1/verify?token=${encodeURIComponent(token)}&type=recovery&redirect_to=${encodeURIComponent(APP + '/update-password')}`;
+    await page.goto(enlace, { waitUntil: 'domcontentloaded', timeout: TIMEOUT }).catch(() => {});
+    await page.waitForTimeout(3000);
+    await mirar(page, 'extra-recovery-02-update-password.png');
+    const destino = new URL(page.url()).pathname;
+    if (!/update-password/i.test(destino)) {
+      return { ok: false, detalle: `el enlace de recuperación no llevó a /update-password: quedó en ${destino}` };
+    }
+
+    const campos = page.locator('input[type=password]');
+    const nCampos = await campos.count();
+    if (!nCampos) return { ok: false, detalle: `/update-password no tiene ningún input de contraseña (quedó en ${destino})` };
+    for (let i = 0; i < nCampos; i++) await campos.nth(i).fill(nuevaPass).catch(() => {});
+    await page.locator('button[type=submit]').first().click().catch(() => {});
+    await page.waitForTimeout(4000);
+    await mirar(page, 'extra-recovery-03-contrasena-cambiada.png');
+
+    // La única prueba real: ENTRAR con la contraseña nueva. Un 200 en el submit no dice que la
+    // columna haya cambiado — GoTrue puede rechazar la nueva password en silencio.
+    await ir(page, `${APP}/login`);
+    await page.fill('input[type=email], input[name=email]', email).catch(() => {});
+    await page.fill('input[type=password], input[name=password]', nuevaPass).catch(() => {});
+    await page.click('button[type=submit]').catch(() => {});
+    await page.waitForTimeout(6000);
+    const entroConNueva = !/\/login\b/.test(page.url());
+    await mirar(page, 'extra-recovery-04-login-con-nueva.png');
+
+    return {
+      ok: entroConNueva,
+      detalle: entroConNueva
+        ? 'token real de recuperación funcionó de punta a punta: se cambió la contraseña en /update-password y se entró con la nueva'
+        : `se cambió la contraseña pero el login con la nueva password rebotó en ${page.url()}`,
+      url: page.url(),
+      // GoTrue invalida la sesión vieja cuando la contraseña cambia (correcto por seguridad),
+      // así que la `page` PRINCIPAL del recorrido —que entró con la password original antes de
+      // llamar a esta prueba— queda deslogueada apenas esto corre, aunque corra en un contexto
+      // aparte. El llamador tiene que re-loguear `page` con la contraseña NUEVA para poder
+      // seguir con los pasos 5-9.
+      nuevaPass,
+      contrasenaCambiada: true,
+    };
+  } finally {
+    await contexto.close().catch(() => {});
+  }
 }
 
 /**
@@ -1176,10 +1278,34 @@ const PASOS = [
           ctx.conSesion = true;
           ctx.comoEntro = llave.de;
           page.off('response', oirToken);
+          let extraRecovery = '';
+          if (PROBAR_RECOVERY && llave.user === QA.email) {
+            // Se prueba DESPUÉS de que el login normal ya funcionó (para no arriesgar el resto
+            // del recorrido si la recuperación falla). Cambia la password de la cuenta zz-qa-
+            // y vuelve a dejar la sesión abierta con la contraseña NUEVA — la limpieza al final
+            // borra la cuenta entera, así que la password vieja no hace falta para nada más.
+            const recovery = await probarRecuperacionDeContrasena(page.context().browser(), QA.email, QA.password);
+            ctx.recoveryProbado = recovery;
+            extraRecovery = ` — recuperación de contraseña con token real: ${recovery.ok ? 'OK' : 'ROTO'} (${recovery.detalle})`;
+            if (recovery.contrasenaCambiada) {
+              // La prueba de recuperación corrió en OTRO contexto pero cambió la password del
+              // lado del servidor: GoTrue revoca la sesión vieja, así que esta `page` —que
+              // entró antes, con la password original— quedó deslogueada. Hay que volver a
+              // entrar con la NUEVA antes de seguir a los pasos 5-9, o el recorrido entero
+              // corta ahí por una causa que no es del producto.
+              await ir(page, `${APP}/login`);
+              await page.fill('input[type=email], input[name=email]', QA.email).catch(() => {});
+              await page.fill('input[type=password], input[name=password]', recovery.nuevaPass).catch(() => {});
+              await page.click('button[type=submit]').catch(() => {});
+              await page.waitForTimeout(6000);
+              extraRecovery += `; re-logueado con la password nueva para seguir el recorrido: ${/\/login\b/.test(page.url()) ? 'FALLÓ' : 'OK'}`;
+            }
+          }
           return {
             estado: 'ok',
-            detalle: `entró con ${llave.de}; quedó en ${page.url()}${ctx.confirmoCorreo?.ok ? ' — hizo falta confirmar el correo primero, como haría el cliente con el enlace del mail' : ''}`,
+            detalle: `entró con ${llave.de}; quedó en ${page.url()}${ctx.confirmoCorreo?.ok ? ' — hizo falta confirmar el correo primero, como haría el cliente con el enlace del mail' : ''}${extraRecovery}`,
             confirmoCorreo: ctx.confirmoCorreo || null,
+            recoveryProbado: ctx.recoveryProbado || null,
             ...vista,
           };
         }
@@ -1927,6 +2053,7 @@ async function main() {
     rubroPromesa: ctx.rubroPromesa || null,
     escribio: ESCRIBIR,
     saltoEquipo: SALTAR_EQUIPO,
+    recoveryProbado: ctx.recoveryProbado || null,
     borrado,
     zzQaRestantes: borrado ? (borrado.restantes ?? null) : 0,
     // Filas con el prefijo `zz-qa-` que NO son de este carril. Van al resumen para que el

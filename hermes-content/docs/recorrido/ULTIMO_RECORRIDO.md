@@ -12,6 +12,44 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-13 12:27 UTC (08:27 La Paz) — cerrado el hueco: recuperación de contraseña con TOKEN REAL, de punta a punta
+
+Al arrancar: `select count(*) from organizations where name like 'zz-qa-%'` dio 0, sin huérfanos.
+
+La vuelta del 2026-09-13 05:09 había probado la recuperación sólo hasta "la pantalla dijo que
+mandó el correo" y dejó anotado el hueco: *"no se pudo verificar... ni el flujo de
+`/update-password` con un token real"*. El instrumento (`scripts/recorrido_cliente.mjs`) ganó
+`RECORRIDO_PROBAR_RECOVERY=1`, que ahora prueba el camino ENTERO, igual que
+`confirmarComoElCliente()` prueba la confirmación de correo: pide el enlace desde
+"Olvidé mi contraseña" en `/login`, lee `recovery_token` de `auth.users` con un SELECT acotado
+a `zz-qa-` (nunca escribe la columna a mano), abre el enlace real de GoTrue
+(`type=recovery`), llega a `/update-password`, define una contraseña nueva y **verifica
+entrando con ella** — la única prueba de que el cambio quedó vivo, no sólo que el formulario
+mandó un 200.
+
+`RECORRIDO_PROBAR_RECOVERY=1 node scripts/recorrido_cliente.mjs --escribir` (dental,
+`zz-qa-2026-09-13-1227`): recuperación **OK** de punta a punta — enlace con token real →
+`/update-password` (formulario "Definí una nueva contraseña para tu clínica", ver
+`capturas/extra-recovery-02-update-password.png`) → contraseña cambiada → login con la nueva
+**entró** (ver `capturas/extra-recovery-04-login-con-nueva.png`, que muestra la pantalla de
+onboarding, no el login). Recorrido completo, 9/9, `completo: true`, 0 filas `zz-qa-` al
+cerrar.
+
+**Trampa del instrumento cazada en el camino (dos intentos):** la prueba corre DESPUÉS del
+login del paso 4, con la sesión ya abierta. Primer intento: reusar la misma `page` y
+`clearCookies()` para poder ver el botón "Olvidé mi contraseña" (con sesión activa, `/login`
+redirige antes de renderizarlo) — y como el submit de recuperación no generó token en ese
+intento (el input de correo del login, no el del formulario de recuperación, recibió el
+`fill`), la `page` quedó deslogueada y tumbó los pasos 5-9 con "la sesión se cayó a mitad del
+recorrido", un corte que no era del producto. Segundo intento, más de fondo: la prueba corre
+en un **contexto de navegador aparte** (nunca toca `page`) — pero GoTrue invalida la sesión
+VIEJA en el servidor apenas la contraseña cambia (correcto por seguridad), así que aun en
+contexto aparte la `page` principal quedó deslogueada igual. La cura final: el llamador
+re-loguea `page` con la contraseña NUEVA antes de seguir a los pasos 5-9. Ningún intento fallido
+llegó a publicarse: los dos se cazaron corriendo el instrumento antes de cerrar la vuelta.
+
+---
+
 ## 2026-09-13 11:14 La Paz — respondida la pregunta abierta desde el 2026-09-04: saltar "equipo" en el onboarding NO rompe agendar
 
 Al arrancar: `select count(*) from organizations where name like 'zz-qa-%'` dio 0, sin huérfanos.
