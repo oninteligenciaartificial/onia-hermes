@@ -347,6 +347,39 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       noten las limitaciones para que quieran subir el plan y ordená las funciones dependiendo
       del plan"*).
 
+      ✅ **CERRADO el 2026-09-13: el PANEL DEL OPERADOR no conocía el plan Crece — y le cobraba
+      de nuevo la reserva pública al plan que ya la trae** (`onia-platform` `07c97f6`, rama
+      `claude/chatbots-platform-review-0d1d09`). Método nuevo, y por eso apareció: en vez de
+      buscar la siguiente pantalla a mano —como en las cuatro superficies anteriores de
+      `whatsappIncluded`—, se **derivó del disco la clase entera**: toda lista de planes tipeada
+      a mano. Cuatro sujetos, los cuatro rotos por la misma causa (la escalera C sumó `crece` a
+      `PLAN_LIMITS` el 12-sep y ninguna lista se enteró):
+      1. `app/api/admin/clinics/route.ts:144` — `validPlans` sin `crece` ⇒ el `PATCH` contestaba
+         **400 «Plan inválido»** al plan que se vende a Bs 550: **el operador no se lo podía
+         asignar a ningún cliente que lo pagara**.
+      2. `app/(dashboard)/admin/page.tsx:347` y `:469` — los dos `<select>` ni ofrecían la opción.
+      3. `app/(dashboard)/admin/page.tsx:40` — `PAID_PUBLIC_BOOKING_PLANS` omitía `crece`, que
+         tiene **`publicBookingIncluded: true`** en el catálogo: el panel mostraba **«BK OFF»** y
+         dejaba **ACTIVAR (cobrar) un add-on que ese plan ya incluye adentro**. Es la misma clase
+         de las cuatro superficies de `whatsappIncluded` —cobrarle al que ya lo paga—, ahora en
+         `publicBookingIncluded` y del lado del que opera la cuenta.
+      4. `lib/asientos.ts:122` — `tablaDeAsientos()` salteaba la **fila entera** del Crece: el
+         dueño buscaba a partir de qué persona empieza a pagar y su plan no estaba.
+
+      Entró: `PLAN_IDS` derivado de `PLAN_LIMITS` (`lib/plan-catalogo.ts`) y
+      `lib/subscription/planes-del-operador.ts` (módulo puro — lo importa una pantalla
+      `"use client"`, así que no arrastra prisma al navegador) con `PLANES_DEL_OPERADOR`,
+      `esPlanDelOperador` y `traeReservaPublicaIncluida`, que **filtra por el predicado del
+      catálogo** en vez de enumerar. **El sujeto del gate no es la fila de `crece`**: son los ids
+      del catálogo vivo más el **disco** para lo que no se puede importar
+      (`lib/subscription/el-operador-conoce-todos-los-planes.test.ts`), con caso ancla que se cae
+      si `crece` desaparece del catálogo —para que el gate no se apague en silencio— y un caso
+      que exige que el detector no acuse a la lista derivada ni a un comentario que nombre la
+      vieja. **Validado en rojo antes del arreglo**: 2 tests, nombrando la tabla de asientos y los
+      3 literales del panel. Gates: `tsc --noEmit` limpio, `eslint` 0, 439 tests del área —
+      **corridos también en el VPS** sobre el árbol con `origin/master` mergeado (436 verdes).
+      **Falta mergear y desplegar** para que el operador lo vea.
+
 - [x] 🔴 **~~Funciones que las empresas usan DE VERDAD — recorte de superficie~~ — MEDIDO el
       2026-09-13, y la medición REFUTA la premisa del ítem: no se puede recortar por uso,
       porque NO HAY USO.** (Sergio Urcullo, 11-sep: *"mirar qué funciones vamos a usar

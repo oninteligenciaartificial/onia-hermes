@@ -196,22 +196,80 @@ export function seleccionarEsperandoHumano(filas, { ahoraMs, umbralMs = UMBRAL_M
 }
 
 /**
+ * Los escalones de antiguedad, en dias. Pasado el mes se re-avisa una vez por mes.
+ *
+ * No son "cada cuanto se mira" (eso lo manda el cron, cada 2 h): son los momentos en que un
+ * colgado YA avisado vuelve a valer un mensaje. Estan espaciados a proposito — un lead que lleva
+ * 20 dias no mejora porque se lo repitan 12 veces por dia, y saturar el canal de Sergio Urcullo
+ * es la forma conocida de apagarlo.
+ */
+const ESCALONES_DIAS = [0, 1, 3, 7, 14, 30];
+
+/** El mayor escalon que un colgado ya cruzo. Despues del mes, multiplos de 30. */
+export function escalonDe(esperaMin) {
+  const dias = Number(esperaMin) / (60 * 24);
+  if (!Number.isFinite(dias) || dias <= 0) return 0;
+  if (dias >= 30) return Math.floor(dias / 30) * 30;
+  let mayor = 0;
+  for (const e of ESCALONES_DIAS) if (dias >= e) mayor = e;
+  return mayor;
+}
+
+/**
+ * El estado guardado por conversacion fue un numero plano (el `messageId`) hasta el 13-sep.
+ * Estas dos lo leen en los DOS formatos: el archivo vivo del VPS tiene el viejo, y si el codigo
+ * nuevo no lo entiende, o se cree que nunca aviso a nadie, o tira. Ninguna de las dos es
+ * aceptable sobre un vigia cuyo trabajo es que no se pierda una persona.
+ */
+export function mensajeAvisado(valor) {
+  if (valor && typeof valor === 'object') return Number(valor.mensaje || 0);
+  return Number(valor || 0);
+}
+
+export function escalonAvisado(valor) {
+  if (valor && typeof valor === 'object') return Number(valor.escalon || 0);
+  return 0; // formato viejo: no sabemos en que escalon aviso, y suponer el peor lo dejaria mudo
+}
+
+/**
  * Los que todavia no se avisaron.
  *
- * La clave es la conversacion + el id del ULTIMO mensaje, no la conversacion sola: si la
- * persona vuelve a insistir hay que volver a avisar, porque cada insistencia es un lead mas
- * caliente y mas cerca de irse. Un vigia que avisa una vez por conversacion y calla para
- * siempre repite el bug que vino a vigilar.
+ * Dos motivos para volver a avisar, y el segundo nacio de un fallo medido:
+ *
+ * 1. **Insistio.** Llego un `messageId` mas nuevo: cada insistencia es un lead mas caliente.
+ * 2. **Se pudrio mas.** Cruzo un escalon de antiguedad (`escalonDe`) que todavia no se aviso.
+ *
+ * El (2) falta hasta el 2026-09-13 y por eso el vigia paso 10 dias mudo con CINCO personas
+ * esperando: medido en `/var/log/onia-vigia-sin-respuesta.log`, detectaba a los 5 en cada
+ * corrida, el contador de dias subia (14, 16, 17, 19, 20 d) y firmaba `0 sin avisar` siempre.
+ * Con la clave puesta solo en el mensaje, el UNICO evento capaz de reactivar el aviso es que el
+ * prospecto escriba de nuevo — y al que ignoras deja de escribir. El vigia se volvia mas
+ * silencioso cuanto peor estaba la situacion.
  */
 export function nuevosParaAvisar(colgados, estadoPrevio) {
   const avisados = estadoPrevio?.avisados || {};
-  return (colgados || []).filter((c) => Number(avisados[String(c.conversationId)] || 0) < Number(c.messageId));
+  const nuevos = [];
+  for (const c of colgados || []) {
+    const previo = avisados[String(c.conversationId)];
+    const visto = previo !== undefined && previo !== null;
+    const insistio = mensajeAvisado(previo) < Number(c.messageId);
+    const sePudrio = escalonDe(c.esperaMin) > escalonAvisado(previo);
+    if (!insistio && !sePudrio) continue;
+    // `reaviso` es lo que deja que el texto no lo presente como un lead que acaba de entrar.
+    nuevos.push(visto ? { ...c, reaviso: true } : c);
+  }
+  return nuevos;
 }
 
 /** El estado nuevo, conservando lo que ya habia de otras conversaciones. */
 export function armarEstado(estadoPrevio, colgados) {
   const avisados = { ...(estadoPrevio?.avisados || {}) };
-  for (const c of colgados || []) avisados[String(c.conversationId)] = Number(c.messageId);
+  for (const c of colgados || []) {
+    avisados[String(c.conversationId)] = {
+      mensaje: Number(c.messageId),
+      escalon: escalonDe(c.esperaMin),
+    };
+  }
   return { ...(estadoPrevio || {}), avisados };
 }
 
@@ -238,7 +296,11 @@ export function armarAviso(colgados) {
   const linea = (c) => {
     const canal = Number(c.inboxId) === 5 ? 'WhatsApp' : 'web';
     const derivado = !c.esperandoHumano && String(c.botStage || '') === 'handoff_humano' ? ' · derivado a humano' : '';
-    return `conv ${c.conversationId} (${canal}${derivado}) — ${espera(c.esperaMin)} esperando — ${escapar(c.contacto || 'sin nombre')}: ${escapar(String(c.content || '').slice(0, 70))}`;
+    // Un re-aviso se nombra: Sergio Urcullo lee esto en el telefono entre decenas de tareas, y si
+    // el que lleva 20 dias se ve igual que uno que entro recien, le hace creer que hoy llegaron
+    // cinco desconocidos nuevos — y actua sobre un hecho falso.
+    const cuanto = c.reaviso ? `${espera(c.esperaMin)} y sigue esperando` : `${espera(c.esperaMin)} esperando`;
+    return `conv ${c.conversationId} (${canal}${derivado}) — ${cuanto} — ${escapar(c.contacto || 'sin nombre')}: ${escapar(String(c.content || '').slice(0, 70))}`;
   };
 
   const sinRespuesta = (colgados || []).filter((c) => !c.esperandoHumano);

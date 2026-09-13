@@ -13,6 +13,8 @@ import {
   armarAviso,
   UMBRAL_MS,
   correrVigia,
+  escalonDe,
+  mensajeAvisado,
 } from './vigia_sin_respuesta.mjs';
 
 const AHORA = Date.parse('2026-09-03T12:00:00Z');
@@ -108,7 +110,82 @@ test('avisa una sola vez por mensaje, pero vuelve a avisar si la persona insiste
 test('el estado viejo de otras conversaciones se conserva', () => {
   const estado = armarEstado({ avisados: { 55: 9 } }, seleccionarColgados([fila()], { ahoraMs: AHORA }));
   assert.equal(estado.avisados['55'], 9);
-  assert.equal(estado.avisados['100'], 1);
+  assert.equal(mensajeAvisado(estado.avisados['100']), 1);
+});
+
+// ── El que se cansa y no vuelve a escribir ──────────────────────────────────────────────
+//
+// Medido el 2026-09-13 en el log vivo del VPS (`/var/log/onia-vigia-sin-respuesta.log`): el
+// vigia corre cada 2 h, detecta bien a los 5 colgados, el contador de dias SUBE en cada corrida
+// (14, 16, 17, 19, 20 d) y firma `0 sin avisar` en todas. Aviso una vez el 3-sep y no volvio a
+// abrir la boca nunca.
+//
+// La causa es la clave del dedup: `conversationId -> messageId`. El UNICO evento que puede
+// reactivar el aviso es que el prospecto escriba de nuevo — y un prospecto al que ignoras, por
+// definicion, deja de escribir. O sea que el sistema se vuelve MAS silencioso cuanto peor esta
+// la situacion, que es exactamente la inversion que el comentario de `nuevosParaAvisar` decia
+// evitar ("un vigia que avisa una vez y calla para siempre repite el bug que vino a vigilar"):
+// la cura de ahi cubre al que INSISTE, que es el caso raro.
+//
+// La cura es que la ANTIGUEDAD entre en la clave. No se re-avisa en cada corrida —eso serian 12
+// mensajes diarios en un canal que ya esta saturado, y saturar un canal es apagarlo—: se
+// re-avisa solo cuando el sujeto cruza un escalon nuevo.
+test('el que NO insiste vuelve a avisar al cruzar un escalon de dias, sin repetir dentro del mismo', () => {
+  const recien = seleccionarColgados([fila({ createdAtMs: haceMin(120) })], { ahoraMs: AHORA });
+  assert.equal(nuevosParaAvisar(recien, {}).length, 1, 'la primera vez avisa');
+  const estado = armarEstado({}, nuevosParaAvisar(recien, {}));
+
+  // Mismo mensaje, 3 h mas tarde: sigue en el escalon 0. Callar aca es lo correcto.
+  const tresHoras = seleccionarColgados([fila({ createdAtMs: haceMin(120) })], { ahoraMs: AHORA + 3 * 3600e3 });
+  assert.deepEqual(nuevosParaAvisar(tresHoras, estado), [], 'dentro del mismo escalon NO repite');
+
+  // Al dia siguiente cruza el escalon de 1 dia: el lead se pudrio mas y hay que volver a decirlo,
+  // aunque la persona no haya escrito una sola letra mas.
+  const unDia = seleccionarColgados([fila({ createdAtMs: haceMin(120) })], { ahoraMs: AHORA + 25 * 3600e3 });
+  assert.equal(nuevosParaAvisar(unDia, estado).length, 1, 'al cruzar 1 dia vuelve a avisar');
+
+  // Y no se queda gritando: guardado el escalon de 1 dia, a las 2 dias calla hasta el de 3.
+  const estado1d = armarEstado(estado, nuevosParaAvisar(unDia, estado));
+  const dosDias = seleccionarColgados([fila({ createdAtMs: haceMin(120) })], { ahoraMs: AHORA + 49 * 3600e3 });
+  assert.deepEqual(nuevosParaAvisar(dosDias, estado1d), [], 'a los 2 dias sigue callado');
+  const tresDias = seleccionarColgados([fila({ createdAtMs: haceMin(120) })], { ahoraMs: AHORA + 73 * 3600e3 });
+  assert.equal(nuevosParaAvisar(tresDias, estado1d).length, 1, 'a los 3 dias vuelve');
+});
+
+// El estado que HOY esta vivo en el VPS guarda un numero plano. Si el formato nuevo no lo sabe
+// leer, el vigia arranca creyendo que nunca aviso a nadie... o peor, tira. Los 5 que llevan
+// 14-20 dias tienen que salir UNA vez con el formato nuevo, no quedar enterrados otra vez.
+test('lee el estado viejo (numero plano) y rescata al que lleva semanas colgado', () => {
+  const viejo = { avisados: { 100: 1 } };
+  const veinteDias = seleccionarColgados([fila({ createdAtMs: haceMin(120) })], {
+    ahoraMs: AHORA + 20 * 24 * 3600e3,
+  });
+  const nuevos = nuevosParaAvisar(veinteDias, viejo);
+  assert.equal(nuevos.length, 1, 'el formato viejo no lo deja enterrado');
+  assert.equal(nuevos[0].reaviso, true, 'y se marca como re-aviso, no como lead nuevo');
+});
+
+// Sergio Urcullo lee el aviso en el telefono entre otras 80 tareas. Si un re-aviso se ve igual
+// que un lead que acaba de entrar, lo hace actuar mal: creeria que entraron 5 desconocidos hoy.
+test('el aviso distingue un re-aviso de un lead nuevo', () => {
+  const colgado = seleccionarColgados([fila()], { ahoraMs: AHORA });
+  assert.equal(armarAviso(colgado).includes('sigue esperando'), false, 'un lead nuevo no dice eso');
+  const reavisado = colgado.map((c) => ({ ...c, reaviso: true }));
+  assert.equal(armarAviso(reavisado).includes('sigue esperando'), true, 'un re-aviso se nombra');
+});
+
+test('escalonDe: los umbrales, y despues del mes sigue avisando una vez por mes', () => {
+  const dias = (d) => escalonDe(d * 24 * 60);
+  assert.equal(dias(0.1), 0);
+  assert.equal(dias(1), 1);
+  assert.equal(dias(2.9), 1);
+  assert.equal(dias(3), 3);
+  assert.equal(dias(7), 7);
+  assert.equal(dias(14), 14);
+  assert.equal(dias(29), 14, 'el mes todavia no se cumplio');
+  assert.equal(dias(30), 30);
+  assert.equal(dias(59), 30, 'no grita todos los dias despues del mes');
+  assert.equal(dias(60), 60, 'pero tampoco se muere: vuelve cada mes');
 });
 
 test('el aviso escapa el HTML: un contacto con < rompe el mensaje de Telegram', () => {

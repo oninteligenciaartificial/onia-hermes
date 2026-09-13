@@ -3352,6 +3352,43 @@ archivos.**
 
 ## Cerrado — no rehacer
 
+- [x] **El gate que define el «hecho» del carril firmaba VERDE con cinco personas sin contestar.**
+      Cerrado el 2026-09-13 09:05 La Paz (`4c84ccf4`). `scripts/objetivo_visible.mjs` mide que la
+      conversación de un desconocido SE VEA en la bandeja — y eso estaba bien. Lo que callaba es
+      que **5 de las 6 que nombraba como prueba del objetivo llevaban 15-20 días sin respuesta**,
+      entre ellas `mariohassen` y `F`, que son los dos contactos del fixture *"respuesta REAL de
+      producción"* de su propio self-check: el gate usaba como prueba de éxito exactamente a las
+      personas que el sistema abandonó. **El código de salida NO cambia a propósito** (contestarles
+      no está en manos de un loop, y un rojo acá quedaría rojo para siempre); lo que cambia es el
+      silencio: el verde nombra cuántas siguen colgadas, cuáles y hace cuánto, derivándolo del
+      vigía en vez de reimplementar el criterio. Corrido **en vivo**: `⚠️ Pero 5 de ellas sigue(n)
+      SIN respuesta (#40, #37, #36, #35, #34; la mas vieja hace 20 d)`.
+      **Trampa que costó la parte difícil:** el vigía importa `esNuestra` de ese archivo, así que
+      pedirle el dato desde dentro de un `await` de nivel superior cierra un ciclo de ESM y el
+      proceso muere con `exit 13` / *"Detected unsettled top-level await"* sin pasar por ninguna
+      traza de error. Se corrige con `main().then(...)`. 51 casos y dos mutaciones en rojo.
+
+
+- [x] **El vigía del desconocido colgado avisó UNA vez y calló 10 días con cinco personas
+      esperando.** Cerrado el 2026-09-13 09:40 La Paz. Medido en el log vivo del VPS
+      (`/var/log/onia-vigia-sin-respuesta.log`): el vigía corre cada 2 h, detecta bien a los 5,
+      el contador de días SUBE en cada corrida (15, 16, 17, 19, 20 d) y firma **`0 sin avisar`
+      en todas**. La causa era la clave del dedup en `scripts/vigia_sin_respuesta.mjs`:
+      `conversationId → messageId`, así que el ÚNICO evento capaz de reactivar el aviso era que
+      el prospecto volviera a escribir — y al que ignorás deja de escribir. El vigía se volvía
+      más silencioso cuanto peor estaba la situación, que es justo la inversión que el comentario
+      de `nuevosParaAvisar` decía evitar: su cura cubría al que INSISTE, el caso raro.
+      **Arreglo:** la antigüedad entra en la clave (`escalonDe`: 1, 3, 7, 14, 30 d y después una
+      vez por mes), con `reaviso` marcado para que un lead de 20 días no se lea como uno que
+      entró hoy. No se re-avisa en cada corrida a propósito: 12 mensajes diarios en el canal de
+      Sergio Urcullo lo apagan. **Verificado contra el estado REAL de producción**
+      (`/root/loops/estado/vigia-sin-respuesta.json`, formato viejo de números planos, que el
+      código nuevo lee sin romper): pasa de `0 sin avisar` a **5 avisos**, la corrida siguiente
+      calla, y al mes vuelve. 37/37 tests y **tres mutaciones** (esquivar el escalón, no marcar
+      `reaviso`, leer mal el formato viejo) confirmadas en rojo.
+      **Lo que NO arregla esto y es de Sergio Urcullo:** contestarles. Tarea `t_c3b9aa8f`.
+
+
 - [x] **Dos arreglos hermanos para el MISMO defecto, y el mío iba a REVERTIR el que está vivo.**
       Cerrado el 2026-09-12 23:15 La Paz (`bb1ae124`). Anoche escribí `conBaseDelArchivo` para que
       publicar desde el panel no apagara la cotización (`1f63864c`). Hoy, midiendo, resultó que

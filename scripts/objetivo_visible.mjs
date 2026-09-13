@@ -190,7 +190,7 @@ export function esNuestra(conversacion) {
  * El veredicto, separado de la red a proposito: es lo que se prueba sin docker, sin sesion y
  * sin produccion. `respuesta` es `{ status, cuerpo }` tal como sale de `/api/bandeja`.
  */
-export function juzgar(respuesta) {
+export function juzgar(respuesta, { colgados } = {}) {
   const { status, cuerpo } = respuesta ?? {};
 
   if (status === 403) {
@@ -258,12 +258,34 @@ export function juzgar(respuesta) {
   const detalle = desconocidas
     .map((c) => `#${c.id} ${c.contacto || '(sin nombre)'}${c.telefono ? ` ${c.telefono}` : ''}`)
     .join(' · ');
+
+  // Lo que este gate mide —que la conversacion de un desconocido SE VEA en la bandeja— puede
+  // estar cumplido mientras esa misma persona lleva tres semanas sin que nadie le conteste. Paso:
+  // el 2026-09-13 los dos desconocidos del fixture de aca (`mariohassen`, `F`) llevaban 16 y 19
+  // dias colgados y este gate firmaba verde nombrandolos como prueba del objetivo cumplido.
+  //
+  // El codigo de salida NO cambia a proposito: contestarles no esta en manos de ningun loop, y un
+  // rojo aca quedaria rojo para siempre, que es como se apaga un gate. Lo que cambia es el
+  // silencio — un verde que nombra su propia herida sigue siendo util, uno que la esconde miente.
+  // Sin el dato no se afirma nada: callar por no saber no es lo mismo que callar por estar bien.
+  const vistas = new Set(desconocidas.map((c) => String(c.id)));
+  const colgadas = (colgados || []).filter((c) => vistas.has(String(c.conversationId)));
+  let herida = '';
+  if (colgadas.length) {
+    const peor = Math.max(...colgadas.map((c) => Number(c.esperaMin) || 0));
+    const dias = Math.round(peor / (60 * 24));
+    const quienes = colgadas.map((c) => `#${c.conversationId}`).join(', ');
+    herida =
+      ` ⚠️ Pero ${colgadas.length} de ellas sigue(n) SIN respuesta (${quienes}; la mas vieja hace ` +
+      `${dias} d): se ven, y nadie les contesto.`;
+  }
+
   return {
     codigo: 0,
     mensaje:
       `OBJETIVO VISIBLE — la bandeja del dueño trae ${desconocidas.length} conversacion(es) de ` +
       `gente que no somos nosotros: ${detalle}. Camino completo comprobado por HTTP ` +
-      '(sesion → /api/bandeja → Chatwoot → lista), no solo la columna de la base.',
+      '(sesion → /api/bandeja → Chatwoot → lista), no solo la columna de la base.' + herida,
   };
 }
 
@@ -390,6 +412,36 @@ function selfCheck() {
   afirmar(juzgar(hoy).codigo === 0, 'con la bandeja de hoy sale 0');
   afirmar(juzgar(hoy).mensaje.includes('mariohassen'), 'y nombra a los desconocidos que ve');
   afirmar(!juzgar(hoy).mensaje.includes('#11'), 'y NO cuenta a Sergio como desconocido');
+
+  // ── El verde que tapaba a cinco personas ──────────────────────────────────────────────
+  //
+  // Los dos desconocidos de ese fixture "real" son `mariohassen` y `F`: los MISMOS que el
+  // 2026-09-13 llevaban 16 y 19 dias sin recibir una sola respuesta. O sea que este gate
+  // celebraba como objetivo cumplido exactamente a las personas que el sistema abandono.
+  //
+  // El veredicto no cambia —que la conversacion SE VEA en la bandeja es lo que este gate mide, y
+  // contestarles no esta en manos de ningun loop; un rojo aca quedaria rojo para siempre—, pero
+  // un verde mudo sobre eso es el falso verde que dejo pasar 20 dias. Un verde que nombra su
+  // propia herida sigue siendo util; uno que la esconde miente.
+  afirmar(
+    juzgar(hoy, { colgados: [] }).codigo === 0,
+    'sin colgados el verde sigue siendo verde',
+  );
+  const conColgados = juzgar(hoy, {
+    colgados: [
+      { conversationId: 37, esperaMin: 16 * 24 * 60 },
+      { conversationId: 35, esperaMin: 19 * 24 * 60 },
+    ],
+  });
+  afirmar(conColgados.codigo === 0, 'el veredicto NO cambia: lo que este gate mide sigue cumplido');
+  afirmar(conColgados.mensaje.toLowerCase().includes('sin respuesta'), 'pero el verde deja de ser mudo');
+  afirmar(conColgados.mensaje.includes('19 d'), 'y dice hace cuanto espera el mas viejo');
+  afirmar(conColgados.mensaje.includes('2'), 'y cuantos son');
+  // Un colgado que NO esta en la bandeja mirada no se cuenta: el veredicto habla de lo que vio.
+  const ajeno = juzgar(hoy, { colgados: [{ conversationId: 999, esperaMin: 5 * 24 * 60 }] });
+  afirmar(!ajeno.mensaje.toLowerCase().includes('sin respuesta'), 'un colgado ajeno a esta bandeja no se cuenta');
+  // Y sin el dato no se inventa nada: callar por no saber es distinto de callar por estar bien.
+  afirmar(!juzgar(hoy).mensaje.toLowerCase().includes('sin respuesta'), 'sin el dato no afirma nada');
   afirmar(juzgar(hoy).mensaje.includes('2 conversacion'), 'cuenta dos, no tres');
 
   // LAS TRES FALLAS MUDAS — las que devuelven 200 y hoy no las mira nadie.
@@ -583,7 +635,23 @@ async function main() {
     return 2;
   }
 
-  const veredicto = juzgar(respuesta);
+  // Quien de los que SE VEN sigue sin respuesta. Se le pregunta al vigia, que es el modulo que ya
+  // sabe decidirlo, en vez de reimplementar el criterio aca (dos copias del mismo juicio divergen).
+  //
+  // Best-effort a proposito: si esto no se puede derivar, el veredicto sale como salia siempre. Un
+  // gate que mide "la bandeja se ve" no se puede tumbar porque una consulta ACCESORIA fallo — pero
+  // tampoco puede inventar tranquilidad, y por eso el mensaje solo nombra la herida cuando el dato
+  // existe de verdad.
+  let colgados;
+  try {
+    const vigia = await import('./vigia_sin_respuesta.mjs');
+    const filas = await vigia.leerFilasDeChatwoot();
+    colgados = vigia.seleccionarColgados(filas, { ahoraMs: Date.now() });
+  } catch {
+    colgados = undefined;
+  }
+
+  const veredicto = juzgar(respuesta, { colgados });
   console[veredicto.codigo === 0 ? 'log' : 'error'](`[dueño: ${respuesta.dueño}] ${veredicto.mensaje}`);
   return veredicto.codigo;
 }
@@ -594,5 +662,18 @@ async function main() {
 // el `argv[1]` es el ARGUMENTO y no una ruta, y concatenarlo tira `ERR_INVALID_URL`.
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   if (process.argv.includes('--self-check')) selfCheck();
-  else process.exit(await main());
+  // `main().then(...)` y NO `await main()`, que es lo que decia hasta el 2026-09-13. Con el await
+  // de nivel superior, el modulo se queda EVALUANDOSE mientras corre la medicion — y el vigia, que
+  // importa `esNuestra` de aca, forma un ciclo: su `import()` esperaba a que este modulo terminara
+  // de evaluarse, y este modulo esperaba al `import()`. Deadlock, con una pinta muy enganosa: el
+  // proceso muere solo con `exit 13` y "Detected unsettled top-level await", sin tocar ninguna de
+  // las trazas de error del gate. Corriendo asi, la evaluacion termina antes de que main() pida
+  // nada y el ciclo se resuelve al instante.
+  else main().then(
+    (codigo) => process.exit(codigo),
+    (e) => {
+      console.error(`NO MEDIDO — ${String(e?.message || e).split('\n')[0]}`);
+      process.exit(2);
+    },
+  );
 }
