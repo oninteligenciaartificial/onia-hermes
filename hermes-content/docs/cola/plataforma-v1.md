@@ -4674,6 +4674,40 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] 🔴 **CERRADO el 2026-09-13: un cron que no entregó NADA contestaba «ok» y su lanzador
+      salía 0.** ⚠️ COMMITEADO Y PUBLICADO (`b5cae43`, rama
+      `claude/chatbots-platform-review-0d1d09` de `onia-platform`), **falta mergear y desplegar**.
+      **Salió de medir producción, no de leer la cola:** el ítem de arriba pedía medir qué
+      módulos usan de verdad las empresas, y al contar `audit_logs` apareció que la cuenta de la
+      importadora (`bolivian-electricidad-e6t21`) nunca completó el onboarding y su prueba vence
+      el 14-sep. Al ir a ver si el drip que existe para eso corría, el log lo dijo:
+      `/var/log/onia-trial-drip.log` tiene **ocho corridas seguidas** con todos los envíos
+      rechazados (`Invalid login: 535 5.7.8 Authentication failed`) y `sent:0`, contestando
+      **HTTP 200 con `ok:true`**. El lanzador del host es `curl -fsS`, y `-f` sólo falla con
+      HTTP ≥ 400: el cron salió 0 los ocho días y ningún vigía tuvo de qué agarrarse.
+      **Por qué se paga en clientes:** el drip es el único canal que recupera al lead que se
+      registró y no volvió, y el objetivo del sistema es cerrar cinco.
+      **Era una clase, no un archivo.** `renewal-reminders` ya devolvía `ok: errors.length === 0`
+      y sus **cuatro** hermanos clavaban `ok: true` al lado del contador de sus propios fallos —
+      el par que diverge y se arregla de un solo lado. Ahora el juicio vive en
+      `lib/cron/veredicto-de-corrida.ts` y lo usan los **seis**: sin fallos 200; con algo
+      entregado, `ok:false` en 200 (queda auditado y no despierta a nadie); con **cero**
+      entregado, **500** — el único caso que describe un canal caído entero y el único que el
+      `curl -f` puede ver.
+      **El gate se equivocó dos veces antes de servir, y las dos quedaron escritas en él:**
+      pedir que el nombre APARECIERA absolvía al que importa el helper y no lo llama, y buscar
+      contadores por nombre (`errors|fallidos|failed`) absolvía a `{ ok: true, ...totals }`,
+      que esconde su propio `errors` en el spread. Hoy pregunta tres cosas —que el veredicto se
+      LLAME, que ningún cuerpo afirme un `ok` literal sin medirlo (salvo los `skipped:`, que
+      declaran que no se intentó nada), y que el veredicto suba al **código HTTP**— con el
+      universo derivado del disco caminando la carpeta, no `git ls-files`.
+      **Validado por mutación en cuatro puntos**, rojo por el motivo correcto en los cuatro.
+      Gates en casa y **re-corridos en el VPS antes de publicar**: `tsc` 0, `eslint` 0,
+      **4.873 tests verdes**.
+      Lo que NO cierra este carril: el `run-onia-*.sh` del host sigue siendo `curl -fsS` sin
+      mirar el cuerpo — con el 500 ya le alcanza para salir ≠ 0, pero **quién lee ese exit** es
+      del dueño de los crons del VPS.
+
 - [x] **CERRADO el 2026-09-11: un mes pago del add-on del chatbot valía PARA SIEMPRE**
       (`app/api/admin/subscription-payments/route.ts` · `lib/subscription/addon-vigencia.ts`,
       commit `5011003`).
