@@ -12,6 +12,21 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-13 09:09 La Paz — Servicios profesionales 9/9, primera vez con este rubro, sin hallazgo nuevo
+
+Al arrancar: `select count(*) from organizations where name like 'zz-qa-%'` dio 0, sin huérfanos.
+
+Rotando rubro (dental y Estética ya cubiertos varias veces): `RECORRIDO_RUBRO='Servicios
+profesionales'`. Recorrido completo, 9/9 — cuenta `zz-qa-2026-09-13-0909@onia.com.bo` creada,
+correo confirmado, onboarding en 6 pantallas (pregunta → negocio → horarios → servicios →
+equipo → listo), cliente `zz-qa-2026-09-13-0909-paciente` cargado en group Clientes y visto en
+`/patients`, cita 2026-09-14 09:00 vista en `/appointments` (`cmtzliyw1002i01rwm7ikh668`),
+pantalla de cobro vista en `/comercio/caja` (frenada sin cobrar). El panel `/dashboard` no
+lista el dato del paso 6 — no es un fallo, esa pantalla no muestra esa lista. `completo: true`,
+0 filas `zz-qa-` al cerrar (organizations, appointments). Sin hallazgo nuevo.
+
+---
+
 ## 2026-09-13 07:09 La Paz — Estética y spa 9/9, sin hallazgo nuevo
 
 Al arrancar: `select count(*) from organizations where name like 'zz-qa-%'` dio 0, sin huérfanos.
