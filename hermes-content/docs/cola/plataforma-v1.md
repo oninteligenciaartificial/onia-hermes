@@ -227,8 +227,8 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       en cero. **4 fricciones de UI anotadas para F4**: (i) ✅ **CERRADA el 2026-09-13 — NO se
       reproduce, medida en producción**; (ii) ✅ **CERRADA el 2026-09-13** tras envío
       manual el panel rotulaba "Ejecutada" aunque nadie abrió el link; (iii) ✅ **CERRADA el
-      2026-09-13** el aviso con el link wa.me desaparecía al navegar; (iv) la tarjeta de
-      /pending dice "Propuesta de agente" genérico — **acotada y ubicada abajo**.
+      2026-09-13** el aviso con el link wa.me desaparecía al navegar; (iv) ✅ **CERRADA el
+      2026-09-13** la tarjeta de /pending decía "Propuesta de agente" genérico.
 
       ✅ **(i) CERRADA el 2026-09-13: la barra no tapa nada, y el contenedor ya se defiende
       solo.** Medida contra producción en la cuenta real (`sergio@onia.com.bo`, `/agents`),
@@ -249,8 +249,51 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       instrumento vivo que queda de alias suelto no lo corre nadie, y lo que medía ya está
       escrito acá. Se rehace en 10 minutos si alguna pantalla vuelve a sospecharse.
 
-      🔎 **(iv) ACOTADA el 2026-09-13 — y la mitad cara ya está bien, medido antes de
-      "arreglarla".** La sospecha razonable era que la tarjeta mandara a aprobar a ciegas:
+      ✅ **(iv) CERRADA el 2026-09-13 — la cola de aprobaciones NOMBRA al agente.**
+      Era la clase «escrituras ↔ LECTURAS», la misma de (ii)/(iii):
+      `agents-runtime.ts:1185-1190` escribe `metadata.agentName` / `agentRole` / `agentId`
+      en cada approval **desde que existe el módulo**, y el rótulo no los leía —
+      `approval-labels.ts` devolvía la constante `"Propuesta de agente"` para todo
+      `agent_action`. Con los seis agentes del catálogo (`ROLES_CON_ROTULO`: recall,
+      cobrador, captador, confirmador, reponedor, seguidor) son **seis productores y una
+      etiqueta**: el dueño abre `/pending`, ve seis tarjetas que dicen lo mismo y tiene que
+      entrar una por una para saber cuál es cuál. Ahora dicen *"Propuesta de Cobrador"*,
+      *"Propuesta de Recall"*, etc.
+      **Corrección de lo que esta misma cola daba por medido:** decía que los consumidores
+      del rótulo eran DOS y que *"van juntos"*. Contados contra el código de hoy, el panel
+      **no es sujeto**: `onia-platform/app/(dashboard)/dashboard/page.tsx:380` filtra
+      `requestType !== "agent_action"`
+      antes de rotular, y pinta los borradores de agente por otra vía, con
+      `accion.summary` (que ya es específico). El único que mostraba la etiqueta genérica es
+      `/pending`. Igual el panel recibe la metadata, con el motivo escrito al lado: el día
+      que deje de filtrar, el rótulo nombra al agente solo en vez de entrar mudo.
+      **El nombre se LEE, no se mapea de nuevo.** `nombreCortoDeAgente` corta `agentName` en
+      la raya larga ("Cobrador — saldos vencidos" → "Cobrador"); un segundo diccionario
+      `agentRole → nombre` era más fácil y es justo lo que dejó a una pantalla diciendo la
+      verdad y a la otra no en (ii). Si el dueño renombró su agente y no hay raya, se muestra
+      entero; sin `agentName` (approvals viejos) cae a la etiqueta genérica, nunca a la clave.
+      **Y el rótulo se arma en el SERVIDOR** (`pending-view.tsx`), que de paso saca un import
+      de `lib/` de un `"use client"` — la cadena que el 2026-09-12 dejó una pantalla en 500.
+      **Dos gates, los dos validados por mutación** (rojo visto ANTES en los tres casos de
+      unidad, con el motivo correcto): `lib/onia-core/approval-labels.test.ts` deriva el
+      sujeto de `ROLES_CON_ROTULO` y exige **seis rótulos DISTINTOS** —el agente número siete
+      nace cubierto—; y `lib/onia-core/approval-labels-en-pantalla.test.ts` cierra el agujero
+      que `tsc` no ve: el parámetro `metadata` es obligatorio, así que el llamador que lo
+      **olvida** no compila, pero el que le pasa `null` para callarlo sí. Ese gate camina el
+      disco (no `git ls-files`: un archivo nuevo sin commitear sería invisible) buscando quién
+      llama a la función, y exige que ninguno la acalle. Mutaciones: `null` literal en el
+      panel → rojo; un solo argumento en `pending-view` → rojo; el rótulo de vuelta a la
+      constante → 3 rojos de unidad.
+      Commit `9aa0cd5` (`onia-platform`, rama `claude/chatbots-platform-review-0d1d09`),
+      gates re-corridos EN EL VPS antes de publicar la rama: `tsc` 0, **4.849 tests verdes**.
+      ⚠️ **COMMITEADO, NO DESPLEGADO, y NO se miró renderizado** — por lo mismo que (ii)/(iii):
+      el banco `/dev/demo` pide base local sembrada + `next dev`, y en producción no hay hoy
+      ningún approval pendiente que mirar (los `e2e-agentes2-*` se purgaron en la vuelta
+      anterior). Falta esa foto cuando haya un borrador vivo.
+
+      <details><summary>Lo que se midió antes de tocar nada — la mitad cara ya estaba bien</summary>
+
+      La sospecha razonable era que la tarjeta mandara a aprobar a ciegas:
       encabeza *"Al aprobar, esto sale de verdad. Revisá el texto antes"* sobre un botón
       ("Aprobar y enviar") que dispara WhatsApp Cloud API real. **Falso: el texto SÍ está.**
       `app/(dashboard)/pending/pending-client.tsx:282-291` pinta el sobre completo —
