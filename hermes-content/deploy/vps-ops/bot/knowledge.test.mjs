@@ -126,6 +126,53 @@ test("archivo AUSENTE: el bot sigue contestando el guion completo, sin un solo {
   });
 });
 
+// --- La VENTANA del deploy: el archivo desaparece unos segundos y vuelve --------------------
+//
+// `webhook-server.sh` sincroniza el codigo con `rm -rf /tmp/onia-bot` + `docker cp` y el proceso
+// vivo corre DESDE ahi: durante esa ventana `knowledge.json` NO EXISTE. Eso solo deberia costar
+// los segundos del `cp` — pero una lectura fallida por ausencia marcaba la cache como "ya mire"
+// y congelaba el estado "sin conocimiento" el TTL ENTERO (5 min), aunque el archivo volviera dos
+// segundos despues. Medido el 2026-09-12 en produccion: a las 22:48 UTC el bot le contesto a un
+// desconocido que preguntaba el precio "no te quiero tirar una cifra" (el M4_BODY sin cotizacion)
+// y a las 23:15 el MISMO proceso, sin reiniciar, ya servia la escalera entera.
+test("el archivo que DESAPARECE durante un deploy no deja al bot sin cotizar 5 minutos: el turno siguiente lo relee", () => {
+  conArchivo(null, (path) => {
+    const durante = getKnowledge({ path, nowMs: NOW_MS });
+    assert.equal(durante.data, null, "durante el `rm -rf` no hay nada que leer");
+    assert.equal(durante.error, null, "un archivo ausente no grita: puede ser el estado normal");
+
+    // El `docker cp` termina dos segundos despues y el archivo vuelve.
+    writeFileSync(path, JSON.stringify(valido({ version: "vuelta" })));
+
+    const despues = getKnowledge({ path, nowMs: NOW_MS + 2_000 });
+    assert.equal(
+      despues.data?.version,
+      "vuelta",
+      "apenas el archivo vuelve, el mensaje siguiente tiene que cotizar — esperar el TTL son 5 min de prospectos sin precio",
+    );
+    assert.equal(despues.source, "file");
+  });
+});
+
+test("archivo ausente CON copia buena en memoria: se sigue sirviendo esa copia y NO se relee en cada turno", () => {
+  conArchivo(valido({ version: "publicada" }), (path) => {
+    assert.equal(getKnowledge({ path, nowMs: NOW_MS }).data.version, "publicada");
+
+    let lecturas = 0;
+    const readFileSync = () => {
+      lecturas += 1;
+      const error = new Error("no existe");
+      error.code = "ENOENT";
+      throw error;
+    };
+    for (const salto of [1_000, 2_000, 3_000]) {
+      const estado = getKnowledge({ path, nowMs: NOW_MS + salto, readFileSync });
+      assert.equal(estado.data.version, "publicada", "lo ultimo bueno no se pierde porque el archivo desaparezca");
+    }
+    assert.equal(lecturas, 0, "con copia buena manda el TTL: releer por turno seria pagar disco en el camino de la respuesta");
+  });
+});
+
 test("JSON ROTO: se rechaza entero, se sigue con codigo y el error queda a la vista en /health", async () => {
   await conArchivo("{ esto no es json", async (path) => {
     const config = withKnowledge(DEFAULT_CONFIG, { path, nowMs: NOW_MS });
@@ -1195,6 +1242,76 @@ test("panel: /health dice source:'panel' con la version y el autor del editor", 
   assert.equal(salud.version, "v7");
   assert.equal(salud.updatedBy, "Sergio Urcullo");
   assert.deepEqual(salud.panel, { configurado: true, sirviendo: true, descartes: 0, lastError: null });
+});
+
+test("panel: publicar NO puede APAGAR una respuesta que el archivo ya daba", async () => {
+  // El defecto es ESTRUCTURAL y se lee en el codigo; no hace falta que le haya pasado a un lead.
+  // Encontrado el 2026-09-13 sembrando una fila de prueba en el panel de `onia-interna` (el bot
+  // de VENTA) — fila propia, en borrador, que NUNCA sirvio a un desconocido: no es un incidente
+  // vivo y no se cuenta como tal.
+  //
+  // Lo que la fila dejo a la vista es una cadena que se cierra sola:
+  //   1. `editor-sugerir.mjs` le dicta al LLM un solo id posible — 'faq: lista de { id:
+  //      "negocio", ... }' — y ademas le exige (regla 1) devolver el DOCUMENTO COMPLETO;
+  //   2. el bot de VENTA no consume `negocio`: FAQ_TEMPLATE mapea `precios` -> M4_BODY y
+  //      `siat` -> M_SIAT_BODY, mientras `negocio` -> R_FAQ_NEGOCIO lo sirve el recepcionista;
+  //   3. el panel reemplazaba el documento ENTERO.
+  // O sea que CUALQUIER edicion hecha desde el panel reescribia las FAQ bajo `negocio` y apagaba
+  // `precios` y `siat`, devolviendo al bot al M4_BODY por defecto de config.mjs ("no te quiero
+  // tirar una cifra") — contra la decision de Sergio Urcullo del 2026-09-03 de que el bot diga
+  // los precios publicos. Sin una sola señal: /health informa `descartes: 0, lastError: null`,
+  // o sea SANO, porque cada entrada que llego es valida. Lo que se pierde es lo que NO llego.
+  // La fila sembrada lo muestra literal: sus dos FAQ son de precios y de SIAT por su texto, y
+  // las dos quedaron con id `negocio`.
+  //
+  // La fuente panel ya se declaraba tolerante POR ENTRADA para no dejar al editor sin nada
+  // ("castigarle el documento entero por una entrada lo deja sin nada"). Este es el mismo
+  // principio en la otra dimension: lo que el panel NO trae se HEREDA del archivo, en vez de
+  // apagarse. Editar una FAQ no puede ser una forma de borrar las demas.
+  const archivo = valido({
+    faq: [
+      {
+        id: "precios",
+        title: "Precios",
+        body: "El sistema arranca en Bs 320 al mes con el plan Básico.",
+        tags: ["precio", "cuanto"],
+        status: "publicado",
+      },
+    ],
+  });
+  const panel = valido({
+    version: "v1",
+    faq: [
+      {
+        id: "negocio",
+        title: "Planes y precios",
+        body: "La lista completa y al día está en onia.com.bo/precios.",
+        tags: ["precio", "planes"],
+        status: "publicado",
+      },
+    ],
+  });
+  await conArchivo(archivo, async (path) => {
+    const fetch = fetchFalso(panel);
+    const state = await getPanelKnowledge({ ...PANEL_OPTS, fetch, path, nowMs: NOW_MS });
+    assert.equal(state.source, "panel", "la fila publicada manda: es lo que el editor acaba de guardar");
+
+    const config = withKnowledge(DEFAULT_CONFIG, { ...PANEL_OPTS, fetch, path, nowMs: NOW_MS });
+    const texto = step(
+      createState({ channel: "sim", contactRef: "t" }),
+      { text: "cuanto cuesta el sistema?", receivedAt: T0 },
+      { config },
+    )
+      .replies.map((reply) => reply.text)
+      .join("\n");
+
+    assert.match(texto, /Bs 320/, "el panel no trajo FAQ `precios`: la del archivo se conserva y el bot SIGUE cotizando");
+    assert.doesNotMatch(
+      texto,
+      /no te quiero tirar una cifra/i,
+      "volver al M4_BODY por defecto es la regresion: el bot de venta dejaria de dar el precio",
+    );
+  });
 });
 
 test("panel: mapPanelDoc y sanitizePanelKnowledge son puros y defensivos", () => {
