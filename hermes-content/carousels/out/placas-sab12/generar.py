@@ -6,13 +6,13 @@ AQUI = os.path.dirname(os.path.abspath(__file__))
 FONTS = os.path.abspath(os.path.join(AQUI, '../../../references/ui-patterns/apple-editorial/fonts')).replace(os.sep, '/')
 
 placas = [
-    ("1-bolivia-dolar", "EL PROBLEMA · EL DÓLAR", "$7 <span class='v'>→</span> $11", "mi gasto fijo en dólares: UNA sola suscripción"),
-    ("2-skills", "CLAUDE CODE · SKILLS", "Se lo enseñás<br><span class='v'>una vez.</span>", "una skill = tu forma de trabajar, escrita en un archivo"),
+    ("1-atajo-precio", "WHATSAPP BUSINESS · GRATIS", "<span class='v'>/precio</span>", "escribís barra, elegís, y salió — Respuestas rápidas"),
+    ("2b-claude-mem", "REPO GRATIS · GITHUB", "claude-mem:<br><span class='v'>tu IA con memoria</span>", "se acuerda de ayer — vos no le repetís nada"),
     ("3-claude-vs-claudecode", "LA DIFERENCIA", "Claude te explica.<br><span class='v'>Claude Code lo hace.</span>", "misma suscripción · dos herramientas"),
     ("4-broll-cierre", "DETRÁS DE ESCENA", "6 videos.<br><span class='v'>Una tarde.</span>", "las guías completas: sergiourcullo.vercel.app"),
-    ("5-loops", "MIS LOOPS", "cada noche, 3:00<br><span class='v'>→ respaldar todo</span>", "un loop: una tarea por horario, escrita una vez"),
-    ("6-veces-minutos", "LA CUENTA", "veces <span class='v'>×</span> minutos", "eso es lo que estás pagando con tu vida"),
-    ("7-cierro", "LA SEXTA RESPUESTA", "<span class='v'>/cierro</span>", "la respuesta que pide la decisión — casi nadie la tiene"),
+    ("5b-loop-8am", "TU PRIMER LOOP · n8n", "cada día, 8:00<br><span class='v'>→ tu resumen</span>", "dos cajitas: el horario y el mensaje. Nada más"),
+    ("6b-calcom", "APP GRATIS · CAL.COM", "Tu agenda<br><span class='v'>se llena sola</span>", "un link, el cliente elige, cae a tu calendario"),
+    ("7b-claude-foto", "CLAUDE · EL CHAT", "Sacale foto.<br><span class='v'>Que la lea él.</span>", "contratos, facturas, la letra chica que nadie lee"),
     ("8-cta-comunidad", "GRATIS · LINK EN EL PERFIL", "Onia<br><span class='v'>Community</span>", "cada día un recurso real, listo para copiar"),
 ]
 
