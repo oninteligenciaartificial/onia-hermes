@@ -674,16 +674,34 @@
    Bajar el piso para que entren los devolvía a 8px, que es el defecto que el
    piso vino a arreglar: entre cortar la frase y partirla en dos líneas, se
    parte. Además vuelve el panel inmune a la métrica de la fuente: si Archivo
-   no carga y entra la de sistema, esto envuelve en vez de truncar. */
+   no carga y entra la de sistema, esto envuelve en vez de truncar.
+
+   ⚠️ **Esto NACIÓ dentro de `@media (max-width: 767px)` y ahí dejó la clase
+   abierta justo en las vistas de escritorio.** Medido en PRODUCCIÓN el
+   2026-09-13 con `scrollWidth > clientWidth`: a 768px se cortaban SEIS textos y
+   a 1440/1920 CINCO, en la banda «Tres cosas que vas a usar todos los días» de
+   la home — el título del panel del chatbot salía «WhatsA…» (perdía 91px de
+   20 caracteres; a 768, 118px) y las tres filas de agentes quedaban en
+   «Recordar citas …», «Avisar los pago…», «Invitar a quien …». Un lead en
+   escritorio leía la tarjeta que explica QUÉ HACE el sistema con el nombre de
+   la capacidad borrado. A 320 y 390 estaba impecable: el arreglo anterior
+   cerró la instancia que se miró y el `@media` escondió el resto.
+
+   Por qué la protección tampoco hacía falta acá: el mat de escritorio conserva
+   su `aspect-ratio`, pero el cuerpo del panel ya reparte el aire sobrante entre
+   sus filas (`.panelRows { flex: 1 1 auto }`), así que el título envuelto a dos
+   líneas entra en el hueco que ya existía. Verificado con la cura inyectada
+   contra onia.com.bo en los tres anchos: cortados 6→0, 5→0 y 5→0, con el
+   desborde basal INTACTO (3 en las dos direcciones) y cero scroll horizontal. */
+.panelTitle,
+.panelTxt,
+.panelBarLbl,
+.panelPillTxt {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
 @media (max-width: 767px) {
-  .panelTitle,
-  .panelTxt,
-  .panelBarLbl,
-  .panelPillTxt {
-    white-space: normal;
-    overflow: visible;
-    text-overflow: clip;
-  }
   /* la etiqueta de la barra deja de ser una columna fija: envuelta, 5.4em la
      dejaban con una palabra por línea */
   .panelBarLbl {
