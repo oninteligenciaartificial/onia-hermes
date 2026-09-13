@@ -282,7 +282,24 @@ describe("una enumeración de lo que trae el sistema dice el alcance de lo acota
       expect(archivos, `sobra la exención de ${pagina.prefijo}: ya no hay archivos ahí`).not.toEqual(
         [],
       );
-      for (const archivo of archivos) {
+
+      /**
+       * Se le exige nombrar el rubro a quien USA el salvoconducto, que es el
+       * que enumera: el filtro de `enumeracionesSinAlcance` saltea por prefijo
+       * sólo a los trozos que son enumeración, así que un archivo sin ninguna
+       * nunca queda exento de nada y pedirle la palabra es un rojo falso.
+       *
+       * Medido el 2026-09-13: `v1/modulos/dental/opengraph-image.tsx` —tres
+       * líneas que re-exportan la tarjeta social del sitio, cero copy— puso
+       * rojo este guard por no decir «dental», y la única cura disponible era
+       * tipearle la palabra al pedo o dejar la ruta compartiéndose sin imagen.
+       * Un guard que obliga a eso empuja al arreglo equivocado.
+       */
+      const queEnumeran = archivos.filter((archivo) =>
+        trozos.some((t) => t.archivo === archivo && esEnumeracion(t.texto)),
+      );
+
+      for (const archivo of queEnumeran) {
         const fuente = sinComentarios(readFileSync(join(SRC, archivo), "utf8"));
         expect(
           fuente.toLowerCase(),
