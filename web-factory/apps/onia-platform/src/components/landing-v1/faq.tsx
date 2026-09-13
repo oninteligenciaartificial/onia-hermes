@@ -1,5 +1,5 @@
 import { SplitTextReveal, StaggerGrid, StaggerItem } from "@/motion";
-import { PRUEBA } from "@/lib/pricing";
+import { PRUEBA, nombresConChatbot } from "@/lib/pricing";
 import { WA_URL_LANDING } from "@/lib/site";
 import { precioStack } from "@/content/chatbot-precios";
 import { MEDIO_DE_PAGO } from "@/content/medio-de-pago";
@@ -37,7 +37,10 @@ export const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "¿El chatbot de WhatsApp está incluido?",
-    a: `No, y no viene incluido en ningún plan: es un servicio aparte, ${precioStack()}. El botón de WhatsApp de tu web sí va gratis. Antes de contratarlo publicamos los requisitos: necesitás un número dedicado, y los mensajes que tu negocio inicia se los pagás directo a Meta.`,
+    // Depende del plan. Decía "no viene incluido en ningún plan" y era falso para Full desde la
+    // escalera C: le cobraba Bs 390/mes a quien ya lo tenía pagado adentro. Quién lo trae sale del
+    // catálogo (`chatbotIncluido`), no se tipea — lo ata `scripts/inclusion-chatbot.mjs`.
+    a: `${nombresConChatbot()} ya trae el chatbot de WhatsApp incluido. En los demás planes va aparte, ${precioStack()}. El botón de WhatsApp de tu web sí va gratis. Antes de contratarlo publicamos los requisitos: necesitás un número dedicado, y los mensajes que tu negocio inicia se los pagás directo a Meta.`,
   },
   {
     // Sin condición de plan a propósito: el export integral es un derecho del

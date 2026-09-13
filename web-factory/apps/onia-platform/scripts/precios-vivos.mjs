@@ -220,7 +220,7 @@ const RE_MONTO = /(?:Bs\.?\s*\d|\d\s*Bs\b)/;
  * -1 = la ultima). Dos recorridos distintos tocan ramas distintas de `recommend.ts`.
  */
 async function recorrer(nav, cual, etiqueta) {
-  const pag = await nav.newPage({ viewport: { width: 1280, height: 1000 } });
+  const pag = await nav.newPage({ viewport: { width: 1280, height: 1000 }, reducedMotion: 'reduce' });
   const rotos = [];
   pag.on('response', (r) => {
     if (r.status() >= 400) rotos.push(`${r.status()} ${r.url()}`);
@@ -271,9 +271,17 @@ async function recorrer(nav, cual, etiqueta) {
  * distintos, y los acentos salen escapados en el build. `innerText` resuelve los
  * tres de una; el HTML crudo obliga a normalizar a mano y ahi es donde un monto se
  * escapa. Medido en esta misma familia de gates.
+ *
+ * ⚠️ **Y con las animaciones APAGADAS.** `<CountUp>` escribe en el DOM cada frame
+ * mientras sube, asi que leer `innerText` a los 600 ms devuelve el precio a medio
+ * contar. El 2026-09-12 este gate salio en ROJO por `Bs 364` en `/v1/chatbot`
+ * —que no esta en ninguna fuente ni en el HTML servido, porque es `390` a mitad
+ * de camino— y encima diagnostico "falta DESPLEGAR", invirtiendo la causa. Con
+ * `reducedMotion` esa pantalla pinta `190 390 3.900` y nada mas. El detalle, con
+ * los 29 valores fantasma medidos, en `scripts/navegador-sin-animacion.test.ts`.
  */
 async function mirarPantalla(nav, ruta) {
-  const pag = await nav.newPage({ viewport: { width: 1280, height: 1000 } });
+  const pag = await nav.newPage({ viewport: { width: 1280, height: 1000 }, reducedMotion: 'reduce' });
   const rotos = [];
   pag.on('response', (r) => {
     if (r.status() >= 400) rotos.push(`${r.status()} ${r.url()}`);

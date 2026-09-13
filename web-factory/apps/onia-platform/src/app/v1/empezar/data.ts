@@ -5,10 +5,10 @@
  */
 
 import { waLink } from "@/lib/site";
-import type { Equipo, Precio, Rubro, Tiene } from "./recommend";
+import type { Equipo, PlanId, Precio, Rubro, Tiene } from "./recommend";
 import { precioStack } from "@/content/chatbot-precios";
 import { precioWebDesde } from "@/content/webs";
-import { bs, GRUPO, plan, type Plan } from "@/lib/pricing";
+import { bs, GRUPO, plan, PLANES, type Plan } from "@/lib/pricing";
 
 /**
  * Un rubro que el wizard OFRECE. Estar en la lista significa que se contrata
@@ -209,7 +209,26 @@ export const FALTA_COPY: Record<"web" | "chatbot", { nombre: string; copy: strin
   },
 };
 
-export const FALTA_TAG = "servicio aparte, con su propio precio";
+// Dice "con su propio precio", no "servicio aparte": esta etiqueta la comparten la web y el
+// chatbot, y "aparte" es una negación de inclusión que para el chatbot ya no es cierta siempre
+// (Full lo trae adentro). Quién lo trae lo decide `tagDeFalta`, abajo.
+export const FALTA_TAG = "con su propio precio, pago aparte del plan";
+
+/**
+ * Qué dice la etiqueta de un módulo que falta, SEGÚN EL PLAN que se recomendó.
+ *
+ * `FALTA_TAG` es genérico y para la web es cierto siempre (es pago único, no entra en ningún
+ * plan). Para el chatbot depende: desde la escalera C, Full lo trae pagado adentro
+ * (`chatbotIncluido`), así que pintarle "servicio aparte, con su propio precio" a quien acaba de
+ * recibir la recomendación de Full le cobra Bs 390/mes por algo que ese plan ya le da — y es el
+ * último clic antes de contratar. Lo ata `scripts/inclusion-chatbot.mjs`.
+ */
+export function tagDeFalta(falta: "web" | "chatbot", plan: PlanId): string {
+  if (falta !== "chatbot") return FALTA_TAG;
+  const elegido =
+    plan === "grupo" ? GRUPO : PLANES.find((p) => p.id === plan);
+  return elegido?.chatbotIncluido ? `incluido en ${elegido.nombre}, sin costo aparte` : FALTA_TAG;
+}
 
 /* ---- labels para el mensaje de WhatsApp (spec §4) ---- */
 
