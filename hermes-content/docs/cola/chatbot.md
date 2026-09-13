@@ -278,6 +278,36 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~La promesa «el Completo ya trae el chatbot adentro» no estaba atada a nada~~ —
+      CERRADO el 2026-09-12 23:5x La Paz.** La escalera C le dio al producto un booleano por plan
+      (`whatsappIncluded`, `onia-platform/lib/plan-catalogo.ts`: hoy `clinic` y `enterprise` en
+      `true`) y el bot afirma eso mismo en su knowledge, palabra por palabra. **Medido: ningún
+      `.mjs` del bot leía ese booleano.** `precios-publicos.test.mjs` ata las CIFRAS —cada monto
+      se relee del ref publicado y salta si cambió—, pero la inclusión no es una cifra: es un
+      booleano en otro repo, invisible para todo gate que busque montos o patrones de texto.
+      **Qué costaba:** mover ese booleano —agregarle el chatbot al Profesional es exactamente el
+      movimiento que la escalera C invita— dejaba al bot diciendo *"en los otros planes va aparte,
+      Bs 390"* y **cobrándole el add-on a un cliente que ya lo tiene incluido**, con todos los
+      gates en verde, porque 390 sigue siendo un monto legítimo de `pricing.ts`. Es la misma
+      familia que ya mordió dos veces este mes (el bot cotizando 750/1.500 con la fuente en
+      890/1.290); lo que cambia es la FORMA del dato.
+      **Cómo se cerró:** `promesa-inclusion.mjs` (módulo puro) + `promesa-inclusion.test.mjs`
+      cruzan CAPACIDAD contra PROMESA — el catálogo desde `origin/master` del repo hermano contra
+      el texto del knowledge—, dos fuentes distintas de repos distintos, así que no puede volverse
+      tautológico. La ventana es la **cláusula**, no la oración: el texto nombra los cuatro planes
+      en una sola frase, y lo que decide si una marca de inclusión arrastra al plan vecino es el
+      **número del verbo** (`trae` habla de uno, `traen` de dos) — juzgar por puntuación marcaba
+      al Profesional como incluido (medido: rompía 6 de 9 casos). Una redacción que el detector no
+      reconozca **acusa, no absuelve**. Un plan incluido que el bot no nombra es AVISO (hoy:
+      `Empresa`) — no miente, pero no lo vende.
+      Prueba: 9 casos, **validados por mutación en las DOS direcciones** sobre el cruce real —
+      quitarle la marca al Completo → *"le estamos cobrando el add-on aparte por algo que su plan
+      ya le da"*; ponérsela al Profesional → *"es una promesa que el producto no cumple y se
+      descubre cobrando"*. Cableado en la cadena como `test:inclusion-bot` (un gate suelto no lo
+      corre nadie). De paso, `repoPlataforma`/`fuenteDePlataforma` se mudaron a
+      `fuente-plataforma.mjs`: al ganar un segundo consumidor, copiarlas era el clásico par que
+      diverge y se arregla de un solo lado. Su self-check se re-apuntó al módulo donde viven.
+
 ✅ **CERRADO el 2026-09-12 19:20 La Paz** (ver «Cerrado — no rehacer»). El bloqueo estaba
 **vencido**: el pedido de deploy ya está `done`, el texto se publicó, y `npm run precios:vivos`
 da **exit 0** contra el contenedor. No le queda ningún `ok` pendiente a Sergio Urcullo.

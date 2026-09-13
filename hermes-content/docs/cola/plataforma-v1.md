@@ -111,10 +111,25 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       vigencia del PLAN), Crece en `CHECKOUT_PLANS`, tests re-anclados (suite 4.687 verdes;
       los 13 rojos son artefactos Windows idénticos en master limpio, medidos en worktree).
       Landing en `main` (`a9e11c47`): 4 tarjetas con topes visibles y "Cuatro escalones".
-      ⚠️ **Hasta que el PRODUCTO se despliegue, el checkout vivo valida los montos viejos
-      (750/1500): si la landing sale sola, muestra 890 y el pago exige otra cifra.** Falta
-      además (fase 2): avisos al 70/90/100 % del cupo con la cuenta "recargar vs subir" y la
-      recarga de recordatorios (la de conversaciones ya existe).
+      ✅ **Ese desfase YA NO EXISTE — medido en producción el 2026-09-12 23:5x.** Acá decía
+      *"hasta que el PRODUCTO se despliegue, el checkout vivo valida los montos viejos
+      (750/1500)"*, y hoy los dos destinos corren la escalera C:
+      `docker exec onia-platform grep -rhoE 'monthly:[0-9]+' /app/.next/server` → 320, 550, 890,
+      1290 (+ add-ons 70/150/390/2900), **sin rastro de 750 ni 1500**; y `npm run precios:vivos`
+      de `web-factory/apps/onia-platform` los ve pintados en las 24 pantallas de onia.com.bo.
+      Se publicaron solos, como ya sabíamos que pasa. **Queda escrito porque un carril que lea
+      la advertencia vieja frena un deploy por un peligro que no está, o le cuelga un
+      `DESPUES-DE:` a un pedido que no lo necesita.**
+
+      Falta de la fase 2: **avisos al 70/90/100 % del cupo** y la **recarga de recordatorios**
+      (la de conversaciones ya existe). ⚠️ Lo del 70/90/100 **no lo puede cerrar este carril
+      solo, y el motivo es concreto**: hoy hay UN umbral (`UMBRAL_AVISO = 0.8` en
+      `onia-platform/lib/chatbot/cupo.ts`) con su marcador `avisado80At`, y el reclamo atómico
+      que evita el aviso duplicado es `where: { ..., avisado80At: null }`. Tres umbrales piden
+      tres marcadores ⇒ **migración Prisma** — y las migraciones no viajan con el deploy (el
+      publicador no las aplica, y ningún gate las ve). Empujar el código sin aplicarla deja al
+      chatbot leyendo una columna inexistente. O se hace junto con quien pueda aplicarla en
+      `supabase-db`, o no se empieza.
 
       ⚠️ **La cuenta "recargar vs subir" NO SE PUEDE ESCRIBIR TODAVÍA, y al medirlo apareció un
       defecto vivo que ya se arregló** (2026-09-12, `310bae6` en `onia-platform`, rama
@@ -205,7 +220,7 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       en la org QA "ZZ QA Bandeja 1.0"** (Sergio delegó: "tú haz la prueba"). Semillas
       `e2e-agentes2-*` → cron → 2 borradores `pending_approval` (Cobrador Bs 370 con texto
       completo, Recall 6 meses) → aprobado el del Cobrador POR PANTALLA como admin de la QA
-      → `executed` + dispatch `manual/sent` con link wa.me — **se usó "Enviar yo mismo" a
+      → `executed` + dispatch `manual` en estado `sent` con link wa.me — **se usó "Enviar yo mismo" a
       propósito**: el botón "Aprobar y enviar" SÍ dispara WhatsApp Cloud API real
       (dispatcher → adapter whatsapp), verificado leyendo el código ANTES de apretar.
       Purga con respaldo (`/root/respaldos/e2e-agentes2-purga-20260913.json`), re-auditoría
