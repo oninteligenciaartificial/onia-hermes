@@ -49,9 +49,12 @@
 //   1  el bot vivo cotiza un monto que ya no existe             → es plata, y la ve el cliente
 //   2  no se pudo medir                                         → no medir NO es estar bien
 import { spawnSync } from "node:child_process";
+import { pathToFileURL } from "node:url";
 
+import { DEFAULT_CONFIG } from "./config.mjs";
 import { normalize } from "./guardrails.mjs";
-import { MONTOS_PERMITIDOS, PRECIOS_PUBLICOS, montosEnTexto } from "./precios-publicos.mjs";
+import { applyKnowledge, mergePanelKnowledge } from "./knowledge.mjs";
+import { MONTOS_PERMITIDOS, PRECIOS_PUBLICOS, montosEnTexto, soloPreciosPublicos } from "./precios-publicos.mjs";
 
 /** El contenedor donde corre el bot, y la ruta que su proceso lee de verdad. */
 export const CONTENEDOR = process.env.ONIA_BOT_CONTENEDOR ?? "onia-center";
@@ -159,9 +162,9 @@ export function conocimientoDelProceso({ contenedor = CONTENEDOR, puerto = PUERT
  * proposito: un parametro opcional habria dejado que el proximo llamador se olvidara de preguntar
  * que sirve el proceso, que es el agujero por el que este gate firmo verde un bot mudo de precios.
  */
-export function juzgar(crudo, cargado) {
-  if (cargado === undefined) {
-    throw new TypeError("juzgar(crudo, cargado): falta el estado de conocimientoDelProceso()");
+export function juzgar(crudo, cargado, panel) {
+  if (cargado === undefined || panel === undefined) {
+    throw new TypeError("juzgar(crudo, cargado, panel): faltan conocimientoDelProceso() y/o filaPanel()");
   }
   if (crudo === null) {
     return { codigo: 2, texto: `NO SE PUDO MEDIR — no pude leer ${RUTA_VIVA} en ${CONTENEDOR}` };
@@ -184,6 +187,38 @@ export function juzgar(crudo, cargado) {
       vencidos,
     };
   }
+  // LA FILA DEL PANEL (org interna, F2.1) es PARTE de lo que el lead recibe: el motor la sirve
+  // MERGEADA por campo sobre el archivo (knowledge.mjs, mergePanelKnowledge). Se mide con el
+  // MISMO lector que el archivo — dos lectores distintos para el mismo hecho es como uno de los
+  // dos queda verde solo. `apagada` y `ausente` no son un error: son el estado sin fila.
+  let panelDoc = null;
+  if (panel.estado === null) {
+    return {
+      codigo: 2,
+      texto:
+        `NO SE PUDO MEDIR — no pude preguntar si la org interna tiene fila publicada ` +
+        `(ONIA_KNOWLEDGE_URL). Esa fila, si existe, es parte de lo que el lead recibe.`,
+      vencidos,
+    };
+  }
+  if (panel.estado === "doc") {
+    try {
+      panelDoc = JSON.parse(panel.crudo);
+    } catch {
+      return { codigo: 2, texto: "NO SE PUDO MEDIR — la fila publicada del panel no es JSON valido.", vencidos };
+    }
+    const vencidosPanel = montosVencidos(panelDoc);
+    if (vencidosPanel.length > 0) {
+      const detalle = vencidosPanel.map((v) => `Bs ${v.monto} ("${v.ejemplo}…")`).join(" · ");
+      return {
+        codigo: 1,
+        texto:
+          `LA FILA PUBLICADA DEL PANEL COTIZA ${vencidosPanel.length} MONTO(S) QUE YA NO EXISTEN: ${detalle}. ` +
+          `El motor la sirve mergeada sobre ${RUTA_VIVA}: arreglar el archivo no la toca — se corrige en el editor.`,
+        vencidos: vencidosPanel,
+      };
+    }
+  }
   // Un artefacto sano que el proceso no abre no le da el precio a NADIE. Se pregunta DESPUES del
   // contenido a proposito: un monto muerto es rojo aunque nadie lo lea, pero "sano" solo vale si
   // alguien lo lee. Este es el orden que hace que el gate no pueda firmar verde sin lector.
@@ -197,11 +232,16 @@ export function juzgar(crudo, cargado) {
       vencidos,
     };
   }
-  if (cargado.source !== "file") {
+  // LO QUE IMPORTA NO ES LA FUENTE (corregido 2026-09-13): exigir source:"file" convertia
+  // cualquier publicacion del panel en rojo falso — y el rollback de la v1 nacio de eso. Las
+  // fuentes que sirven conocimiento real son "file" (el artefacto) y "panel" (la fila del editor
+  // mergeada sobre el artefacto). Lo que sigue siendo rojo es "code": ahi el motor sirve el
+  // M4_BODY por defecto de config.mjs, que manda al lead a la demo en vez de darle el precio.
+  if (cargado.source !== "file" && cargado.source !== "panel") {
     return {
       codigo: 1,
       texto:
-        `EL BOT NO ESTA SIRVIENDO NINGUN ARCHIVO: su /health dice source="${cargado.source}". ` +
+        `EL BOT NO ESTA SIRVIENDO NINGUN CONOCIMIENTO: su /health dice source="${cargado.source}". ` +
         `Con eso el motor sirve el M4_BODY por defecto de config.mjs, que manda al lead a la demo ` +
         `en vez de darle el precio. Publicar ${RUTA_VIVA} no alcanza si el proceso no lo carga: ` +
         `mirar lastError en /health y reiniciar el webhook.`,
@@ -209,7 +249,7 @@ export function juzgar(crudo, cargado) {
       noLoLee: true,
     };
   }
-  if (cargado.path !== RUTA_VIVA) {
+  if (cargado.source === "file" && cargado.path !== RUTA_VIVA) {
     return {
       codigo: 1,
       texto:
@@ -223,17 +263,35 @@ export function juzgar(crudo, cargado) {
     return {
       codigo: 1,
       texto:
-        `EL BOT LEYO ${RUTA_VIVA} Y LO RECHAZO: ${String(cargado.lastError).slice(0, 300)}. ` +
+        `EL BOT CARGO SU CONOCIMIENTO CON ERROR: ${String(cargado.lastError).slice(0, 300)}. ` +
         `Sirve lo ultimo bueno que tuviera, o el texto de config.mjs, que no cotiza.`,
       vencidos,
       noLoLee: true,
+    };
+  }
+  // Y EL FONDO DEL ASUNTO: ¿la respuesta de precios que este conocimiento produce COTIZA, y solo
+  // con cifras de la fuente unica? Se reconstruye el documento EFECTIVO igual que el motor
+  // (merge archivo+panel si la fuente es panel) y se le pregunta al MISMO applyKnowledge por el
+  // M4_BODY. Un M4 sin cifras es exactamente la conv 49: "no te quiero tirar una cifra" al lead.
+  const efectivo = cargado.source === "panel" ? mergePanelKnowledge(knowledge, panelDoc) : knowledge;
+  const m4 = String(applyKnowledge(DEFAULT_CONFIG, efectivo)?.script?.M4_BODY ?? "");
+  if (!soloPreciosPublicos(normalize(m4)).ok) {
+    return {
+      codigo: 1,
+      texto:
+        `EL BOT CONTESTA EL PRECIO SIN CIFRAS: el M4_BODY efectivo (fuente "${cargado.source}") no ` +
+        `trae ni un monto de la fuente unica. El lead pregunta "¿cuanto cuesta?" y se va sin precio ` +
+        `(conv 49). Falta (o vencio) la FAQ "precios" con la escalera vigente.`,
+      vencidos,
+      sinCifras: true,
     };
   }
   return {
     codigo: 0,
     texto:
       `EL BOT VIVO COTIZA SOLO PRECIOS DE LA FUENTE UNICA — ${PRECIOS_PUBLICOS.length} montos ` +
-      `vigentes, y su proceso SIRVE ${RUTA_VIVA}${cargado.version ? ` (version ${cargado.version})` : ""}.`,
+      `vigentes, y su proceso SIRVE la fuente "${cargado.source}"` +
+      `${cargado.version ? ` (version ${cargado.version})` : ""}.`,
     vencidos,
   };
 }
@@ -295,23 +353,44 @@ export function inboxesVivos({ correr = spawnSync, contenedor } = {}) {
  *   `doc`      hay fila                          → ES lo que el lead recibe: hay que medirla
  *   `null`     cualquier otra cosa               → no pude preguntar, y eso nunca es verde
  */
-export function filaPublicada({ inbox, contenedor = CONTENEDOR, correr = spawnSync } = {}) {
+function filaDelProducto({ envUrl, sufijo = "", contenedor = CONTENEDOR, correr = spawnSync }) {
   const guion =
     'P=$(pgrep -f webhook-server | head -1); [ -n "$P" ] || exit 9; ' +
     "E=$(tr '\\0' '\\n' < /proc/$P/environ); " +
-    'U=$(printf %s "$E" | sed -n "s/^ONIA_BOT_KNOWLEDGE_URL=//p" | head -1); ' +
+    `U=$(printf %s "$E" | sed -n "s/^${envUrl}=//p" | head -1); ` +
     'S=$(printf %s "$E" | sed -n "s/^BOT_KNOWLEDGE_SECRET=//p" | head -1); ' +
     '[ -n "$U" ] && [ -n "$S" ] || exit 8; ' +
-    `wget -O - --header="authorization: Bearer $S" "$U?inboxId=${encodeURIComponent(String(inbox))}" 2>&1`;
+    `wget -O - --header="authorization: Bearer $S" "$U${sufijo}" 2>&1`;
   const r = correr("docker", ["exec", contenedor, "sh", "-c", guion], { encoding: "utf8", timeout: 60_000 });
-  if (!r || r.error) return { inbox, estado: null };
+  if (!r || r.error) return { estado: null };
   const salida = typeof r.stdout === "string" ? r.stdout : "";
-  if (r.status === 8) return { inbox, estado: "apagada" };
-  if (r.status === 0 && salida.trim() !== "") return { inbox, estado: "doc", crudo: salida };
+  if (r.status === 8) return { estado: "apagada" };
+  if (r.status === 0 && salida.trim() !== "") return { estado: "doc", crudo: salida };
   // wget devuelve != 0 tanto por 404 como por un 500 o un timeout. Aplanarlos a "no hay fila"
   // convertiria una medicion fallida en un verde, que es la familia de bug que este gate persigue.
-  if (/server returned error.*\b404\b/i.test(salida)) return { inbox, estado: "ausente" };
-  return { inbox, estado: null };
+  if (/server returned error.*\b404\b/i.test(salida)) return { estado: "ausente" };
+  return { estado: null };
+}
+
+export function filaPublicada({ inbox, contenedor = CONTENEDOR, correr = spawnSync } = {}) {
+  return {
+    inbox,
+    ...filaDelProducto({
+      envUrl: "ONIA_BOT_KNOWLEDGE_URL",
+      sufijo: `?inboxId=${encodeURIComponent(String(inbox))}`,
+      contenedor,
+      correr,
+    }),
+  };
+}
+
+/**
+ * La fila publicada de la ORG INTERNA (fuente "panel", F2.1), pedida con la URL COMPLETA que el
+ * proceso vivo declara en `ONIA_KNOWLEDGE_URL` — query incluida, sin agregar nada. Mismo
+ * tri-estado que `filaPublicada`: `apagada` (sin variable) y `ausente` (404) no son errores.
+ */
+export function filaPanel({ contenedor = CONTENEDOR, correr = spawnSync } = {}) {
+  return filaDelProducto({ envUrl: "ONIA_KNOWLEDGE_URL", contenedor, correr });
 }
 
 /**
@@ -385,12 +464,16 @@ function selfCheck() {
   const ok = (cond, nombre) => casos.push({ nombre, ok: Boolean(cond) });
   /** El estado que `/health` reporta cuando el proceso SI esta sirviendo el archivo medido. */
   const cargado = (extra = {}) => ({ source: "file", path: RUTA_VIVA, lastError: null, ...extra });
+  /** El estado de la fila del panel cuando la fuente no esta encendida (el default historico). */
+  const sinPanel = { estado: "apagada" };
 
   // El caso REAL que este gate nacio para ver, textual del contenedor el 2026-09-12.
+  // `status` va porque el motor solo sirve FAQ publicadas: el fixture imita el artefacto real.
   const vivoViejo = {
     faq: [
       {
         id: "precios",
+        status: "publicado",
         body:
           "Te los paso derecho, son públicos: el sistema arranca en Bs 320 al mes con el plan " +
           "Básico, Bs 750 el Profesional y Bs 1.500 el Completo. El chatbot de WhatsApp va " +
@@ -398,7 +481,7 @@ function selfCheck() {
       },
     ],
   };
-  const viejo = juzgar(JSON.stringify(vivoViejo), cargado());
+  const viejo = juzgar(JSON.stringify(vivoViejo), cargado(), sinPanel);
   ok(viejo.codigo === 1, "el artefacto viejo de produccion tiene que dar ROJO");
   ok(
     viejo.vencidos.some((v) => v.monto === 750) && viejo.vencidos.some((v) => v.monto === 1500),
@@ -411,6 +494,7 @@ function selfCheck() {
     faq: [
       {
         id: "precios",
+        status: "publicado",
         body:
           "Te los paso derecho, son públicos: el sistema arranca en Bs 320 al mes con el plan " +
           "Básico, Bs 550 el Crece, Bs 890 el Profesional y Bs 1.290 el Completo, que ya trae " +
@@ -418,15 +502,15 @@ function selfCheck() {
       },
     ],
   };
-  ok(juzgar(JSON.stringify(vivoNuevo), cargado()).codigo === 0, "el artefacto de la escalera C tiene que dar VERDE");
+  ok(juzgar(JSON.stringify(vivoNuevo), cargado(), sinPanel).codigo === 0, "el artefacto de la escalera C tiene que dar VERDE");
 
   // El sujeto se deriva del archivo: un monto muerto en un campo que nadie previo tambien cae.
   const campoNuevo = { secciones: { promos: [{ titulo: "Bs 999 por mes" }] } };
-  ok(juzgar(JSON.stringify(campoNuevo), cargado()).codigo === 1, "un monto muerto en un campo nuevo tiene que caer");
+  ok(juzgar(JSON.stringify(campoNuevo), cargado(), sinPanel).codigo === 1, "un monto muerto en un campo nuevo tiene que caer");
 
   // Tri-estado: no poder preguntar no es estar bien, y no es lo mismo que estar mal.
-  ok(juzgar(null, cargado()).codigo === 2, "no poder leer el artefacto es 2, nunca 0");
-  ok(juzgar("{ esto no es json", cargado()).codigo === 2, "un artefacto ilegible es 2, nunca 0");
+  ok(juzgar(null, cargado(), sinPanel).codigo === 2, "no poder leer el artefacto es 2, nunca 0");
+  ok(juzgar("{ esto no es json", cargado(), sinPanel).codigo === 2, "un artefacto ilegible es 2, nunca 0");
 
   // `leerKnowledgeVivo` devuelve null —no cadena vacia, no excepcion— cuando docker no contesta.
   ok(leerKnowledgeVivo({ correr: () => ({ status: 1, stdout: "" }) }) === null, "docker que falla es null");
@@ -436,23 +520,31 @@ function selfCheck() {
     "docker que contesta tiene que devolver el crudo",
   );
 
-  // Un texto sin cifras no puede inventar un rojo.
-  ok(juzgar(JSON.stringify({ faq: [{ body: "el precio depende de tu volumen" }] }), cargado()).codigo === 0,
-    "un texto sin montos no es un rojo");
+  // LO QUE IMPORTA (2026-09-13): un artefacto que deja el M4 SIN CIFRAS es la conv 49 — el lead
+  // pregunta el precio y se va sin precio. Antes este caso firmaba VERDE ("un texto sin montos no
+  // es un rojo"); el rojo por montos muertos sigue siendo de `montosVencidos`, que no lo inventa.
+  const mudo = juzgar(JSON.stringify({ faq: [{ id: "precios", status: "publicado", body: "el precio depende de tu volumen" }] }), cargado(), sinPanel);
+  ok(mudo.codigo === 1 && mudo.sinCifras === true, "un M4 efectivo sin cifras es ROJO (la conv 49), no verde");
+  ok(montosVencidos({ faq: [{ body: "el precio depende de tu volumen" }] }).length === 0,
+    "montosVencidos no inventa montos donde no los hay");
 
   // EL CASO REAL DEL 2026-09-12: artefacto impecable, y el bot sin leerlo. Antes de este bloque
   // salia 0 y firmaba "17 montos vigentes" mientras el lead se iba sin precio.
   const sano = JSON.stringify(vivoNuevo);
-  ok(juzgar(sano, cargado({ source: "code" })).codigo === 1, "artefacto sano que el proceso NO cargo tiene que dar ROJO");
-  ok(juzgar(sano, cargado({ path: "/otro/knowledge.json" })).codigo === 1, "si el proceso cargo OTRA ruta, medir esta no sirve");
-  ok(juzgar(sano, null).codigo === 2, "no poder preguntar que cargo es 2, nunca 0");
-  ok(juzgar(sano, cargado()).codigo === 0, "con el proceso sirviendo el archivo medido, verde");
+  ok(juzgar(sano, cargado({ source: "code" }), sinPanel).codigo === 1, "artefacto sano que el proceso NO cargo tiene que dar ROJO");
+  ok(juzgar(sano, cargado({ path: "/otro/knowledge.json" }), sinPanel).codigo === 1, "si el proceso cargo OTRA ruta, medir esta no sirve");
+  ok(juzgar(sano, null, sinPanel).codigo === 2, "no poder preguntar que cargo es 2, nunca 0");
+  ok(juzgar(sano, cargado(), sinPanel).codigo === 0, "con el proceso sirviendo el archivo medido, verde");
   // El contenido manda sobre el lector: un monto muerto es rojo aunque nadie abra el archivo.
-  ok(juzgar(JSON.stringify(vivoViejo), cargado({ source: "code" })).codigo === 1, "monto muerto sigue siendo rojo sin lector");
-  // Nadie puede saltearse la pregunta: sin el estado cargado el gate TIRA en vez de pasar verde.
+  ok(juzgar(JSON.stringify(vivoViejo), cargado({ source: "code" }), sinPanel).codigo === 1, "monto muerto sigue siendo rojo sin lector");
+  // Nadie puede saltearse la pregunta: sin el estado cargado (o sin la fila del panel) el gate
+  // TIRA en vez de pasar verde.
   let tiro = false;
   try { juzgar(sano); } catch { tiro = true; }
   ok(tiro, "juzgar sin el estado cargado TIRA — un llamador no puede olvidarse de preguntar");
+  tiro = false;
+  try { juzgar(sano, cargado()); } catch { tiro = true; }
+  ok(tiro, "juzgar sin la fila del panel TIRA — la fuente panel no se puede dejar de mirar");
 
   // EL FALSO ROJO DEL 2026-09-12, que es por lo que este bloque dejo de preguntar por la variable
   // de entorno. `knowledge.mjs` resuelve `DEFAULT_KNOWLEDGE_FILE` contra `import.meta.url`, y el
@@ -462,14 +554,62 @@ function selfCheck() {
   // nada y que TAPA la causa real. Medido: /health del daemon decia source:"file" y el M4_BODY
   // vivo cotizaba la escalera C. La pregunta que si distingue es QUE ARCHIVO CARGO.
   ok(
-    juzgar(sano, cargado()).codigo === 0,
+    juzgar(sano, cargado(), sinPanel).codigo === 0,
     "proceso que cargo el archivo SIN declarar la variable es VERDE (el falso rojo del 12-sep)",
   );
   // Y el simetrico que no se puede perder: leerlo y RECHAZARLO no es tenerlo.
   ok(
-    juzgar(sano, cargado({ lastError: "RECHAZADO (1): faq[0].body vacio" })).codigo === 1,
+    juzgar(sano, cargado({ lastError: "RECHAZADO (1): faq[0].body vacio" }), sinPanel).codigo === 1,
     "archivo cargado con lastError es ROJO: el proceso no lo esta sirviendo",
   );
+
+  // -------------------------------------------------------------------------
+  // LA FUENTE "PANEL" (2026-09-13): publicar del editor NO puede ser un rojo falso.
+  // -------------------------------------------------------------------------
+  // El gate exigia source:"file", asi que la PRIMERA fila publicada del panel lo puso rojo con el
+  // bot sano — y el rollback de la v1 nacio de ese rojo. Lo que importa no es la fuente: es que el
+  // conocimiento EFECTIVO (merge archivo+panel, el mismo del motor) cotice con la fuente unica.
+  const filaNegocio = {
+    estado: "doc",
+    crudo: JSON.stringify({
+      schema: "onia.bot.knowledge/1",
+      faq: [{ id: "negocio", body: "Tenes 14 dias de prueba", status: "publicado", tags: ["prueba"] }],
+    }),
+  };
+  const sirvePanel = cargado({ source: "panel", path: "panel:http://producto/published" });
+  ok(juzgar(sano, sirvePanel, filaNegocio).codigo === 0,
+    "fuente panel + fila sana = VERDE: los precios los pone el archivo via merge (el rojo falso del 13-sep)");
+  ok(juzgar(sano, sirvePanel, { estado: "ausente" }).codigo === 0,
+    "panel sirviendo su ultima copia buena con la fila ya despublicada sigue verde: el merge cae al archivo");
+  const filaConMuertos = {
+    estado: "doc",
+    crudo: JSON.stringify({ faq: [{ id: "negocio", body: "el plan cuesta Bs 750", status: "publicado", tags: ["plan"] }] }),
+  };
+  ok(juzgar(sano, sirvePanel, filaConMuertos).codigo === 1,
+    "una fila del panel con montos muertos es ROJO: el motor la sirve mergeada, arreglar el archivo no la toca");
+  ok(juzgar(sano, sirvePanel, { estado: null }).codigo === 2,
+    "no poder preguntar por la fila del panel es 2, nunca 0");
+  ok(juzgar(sano, sirvePanel, { estado: "doc", crudo: "{ roto" }).codigo === 2,
+    "una fila del panel ilegible es 2: no se midio, no se inventa verde");
+  ok(juzgar(sano, cargado({ source: "panel", lastError: "RECHAZADO (1): x" }), filaNegocio).codigo === 1,
+    "fuente panel con lastError es ROJO igual que el archivo");
+  // Y el M4 efectivo se mide MERGEADO: si el archivo pierde la FAQ de precios, ni una fila sana
+  // del panel lo salva — el lead se queda sin precio y eso es rojo.
+  ok(juzgar(JSON.stringify({ faq: [] }), sirvePanel, filaNegocio).codigo === 1,
+    "archivo sin FAQ de precios + panel sin precios = M4 sin cifras = ROJO");
+
+  // `filaPanel` tri-estado, sin red: mismos veredictos que su hermana por inbox.
+  const wgetPanel = (status, stdout) => ({ status, stdout });
+  ok(filaPanel({ correr: () => wgetPanel(8, "") }).estado === "apagada", "sin ONIA_KNOWLEDGE_URL la fuente esta apagada");
+  ok(
+    filaPanel({ correr: () => wgetPanel(1, "wget: server returned error: HTTP/1.1 404 Not Found") }).estado === "ausente",
+    "un 404 es 'la org interna no publico nada', no un fallo",
+  );
+  ok(
+    filaPanel({ correr: () => wgetPanel(1, "wget: server returned error: HTTP/1.1 500 Internal") }).estado === null,
+    "un 500 del panel es NO MEDIDO, nunca ausencia",
+  );
+  ok(filaPanel({ correr: () => wgetPanel(0, '{"faq":[]}') }).crudo === '{"faq":[]}', "la fila del panel vuelve cruda");
 
   // `conocimientoDelProceso` tri-estado, sin red: los caminos van a veredictos distintos.
   const salud = (knowledge) => ({ status: 0, stdout: JSON.stringify({ ok: true, knowledge }) });
@@ -488,7 +628,7 @@ function selfCheck() {
     correr: () => salud({ source: "file", version: "2026-09-02.2", path: RUTA_VIVA, lastError: null }),
   });
   ok(vivo?.source === "file" && vivo?.path === RUTA_VIVA, "el /health real de produccion se lee tal cual");
-  ok(juzgar(sano, vivo).codigo === 0, "y con ese /health el veredicto es VERDE");
+  ok(juzgar(sano, vivo, sinPanel).codigo === 0, "y con ese /health el veredicto es VERDE");
   ok(
     conocimientoDelProceso({ correr: () => salud({ source: "code", path: RUTA_VIVA, lastError: null }) })?.source === "code",
     "un proceso que sirve el codigo se reporta como tal",
@@ -565,11 +705,13 @@ function selfCheck() {
 }
 
 // La guarda evita que importar el modulo (el self-check, otro gate) dispare la medicion viva.
-if (import.meta.url === `file://${process.argv[1]}`) {
+// `pathToFileURL` y no `file://${argv[1]}` (mismo motivo que espejo-check.mjs): en Windows argv[1]
+// viene con `C:\` y la concatenacion no matchea NUNCA — el self-check salia 0 sin correr un caso.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   if (process.argv.includes("--self-check")) {
     process.exit(selfCheck());
   }
-  const veredicto = juzgar(leerKnowledgeVivo(), conocimientoDelProceso());
+  const veredicto = juzgar(leerKnowledgeVivo(), conocimientoDelProceso(), filaPanel());
   // Las DOS fuentes, porque el lead resuelve la fila por inbox ANTES que el archivo. Medir una
   // sola deja la otra firmada en verde sin haberla mirado.
   const inboxes = inboxesVivos();

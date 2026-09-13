@@ -20,7 +20,7 @@ import {
 } from "./config.mjs";
 import { enforceGuardrails, normalize, SAFE_REPLY } from "./guardrails.mjs";
 import * as intents from "./intents.mjs";
-import { campanaExacta, recepcionistaStep } from "./recepcionista.mjs";
+import { campanaExacta, faqNegocioVigente, recepcionistaStep } from "./recepcionista.mjs";
 // COMO se escribe cada respuesta vive en reply-builder.mjs; aca queda QUE rama se toma.
 import {
   ESPERA_HORARIO_STAGES,
@@ -657,7 +657,17 @@ export function step(state, incoming, options = {}) {
 
   if (intents.isClinicalOrLegal(msg.norm)) return handoffResult(ctx, withData, "consulta_clinica_o_legal");
 
-  if (intents.isProductDetail(msg.norm)) return handoffResult(ctx, withData, "detalle_tecnico_de_producto");
+  // La FAQ editable del dueño (id "negocio") TAMBIEN contesta en venta (F2.2): publicada en el
+  // panel, matchea por sus tags igual que en el recepcionista. Se resuelve ACA (despues de los
+  // candados de plata y ley: opt-out, queja, soporte, precio, SIAT, clinico) pero se SIRVE mas
+  // abajo, para que "que hacen" y "quiero hablar con una persona" sigan ganando.
+  const faqNegocio = faqNegocioVigente(config, msg.norm, msg.receivedAt);
+
+  // El handoff por detalle tecnico existe porque el bot NO tiene la respuesta. Si el dueño la
+  // PUBLICO en el panel, la tiene: derivar igual seria ignorar la edicion (el fallo silencioso).
+  if (intents.isProductDetail(msg.norm) && !faqNegocio) {
+    return handoffResult(ctx, withData, "detalle_tecnico_de_producto");
+  }
 
   // "¿Que hacen?" — va DESPUES de lo especifico (precio, SIAT, clinico, tecnico) porque es la
   // generica: si el mensaje traia algo mas concreto, eso ya se contesto. El catalogo sale de
@@ -666,6 +676,13 @@ export function step(state, incoming, options = {}) {
 
   // Pidio un humano con todas las letras (N3): el bot no puede contestarlo el mismo.
   if (intents.wantsHuman(msg.norm)) return handoffResult(ctx, withData, "pidio_hablar_con_humano");
+
+  // La FAQ del dueño se sirve recien aca: ningun candado de arriba la reclamo, y la pregunta
+  // SI tiene respuesta publicada — contestar un dato editable no puede robarle el turno a una
+  // rama de plata, pero tampoco puede caer al descarte o al handoff generico teniendo respuesta.
+  if (faqNegocio) {
+    return composeWithFunnel(ctx, withData, "R_FAQ_NEGOCIO", "faq_negocio", { faq_respuesta: faqNegocio.body });
+  }
 
   // Descarte suave. Va al final del router (era lo ultimo que se juzgaba en la calificacion) y en
   // 'nuevo' NO se evalua: el primer mensaje siempre es la bienvenida, que es donde el bot se
