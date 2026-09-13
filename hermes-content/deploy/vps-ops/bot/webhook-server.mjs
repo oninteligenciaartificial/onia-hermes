@@ -211,7 +211,8 @@ export async function getHealthStatus(config = getServerConfig(), n8nConfig = ge
     // `ok:false` acá = el bot contesta pero NO GUARDA NADA (ni estado, ni dedup, ni lead).
     db,
     n8n: { enabled: n8nConfig.enabled, configurado: Boolean(n8nConfig.url && n8nConfig.secret) },
-    // source: "file" = manda knowledge.json · "code" = se cayó a los valores del código.
+    // source: "panel" = manda la fila publicada del panel (ONIA_KNOWLEDGE_URL) ·
+    // "file" = manda knowledge.json · "code" = se cayó a los valores del código.
     // Caer a "code" después de haber sido "file" es la alarma: alguien editó y el bot no lo tomó.
     knowledge,
   };

@@ -326,6 +326,40 @@ La historia completa queda acá abajo para no perderla.
 
 </details>
 
+- [ ] 🟠 **F2.1 — el bot de ventas se configura desde el PANEL: código listo y probado, falta el
+      deploy (OK de Sergio Urcullo) y que él publique una vez desde el editor.**
+      Escrito el 2026-09-12 en `hermes-content/deploy/vps-ops/bot/` (rama
+      `claude/cobro-e2e-punto-1-25ba65`): `knowledge.mjs` ganó la **fuente "panel"** — con
+      `ONIA_KNOWLEDGE_URL` apuntando a la fila publicada de la org interna
+      (`GET /api/chatbot-knowledge/published?organizationId=…`, Bearer `BOT_KNOWLEDGE_SECRET`),
+      el loader la trae con el **mismo TTL de 5 min** y el **mismo validador N1**, `/health` dice
+      `knowledge.source:"panel"` con la versión y el autor del editor, y si la URL falla o no hay
+      nada publicado **cae al archivo de siempre** (jamás mudo). Diferencias deliberadas con la
+      fuente por org: NO enciende el modo recepcionista (es la cara de venta), y una **entrada
+      inválida se descarta SOLA con log** (`[knowledge:panel] … descartada(s)`) en vez de tumbar
+      el documento entero — un precio metido en una FAQ rechaza ESA FAQ, los precios siguen
+      saliendo solo de las fuentes. Un error estructural sí rechaza entero.
+
+      **Evidencia, medida:**
+      · Tests: `node --test` en el árbol del bot → **959 pass / 0 fail** (9 tests nuevos de la
+        fuente panel en `knowledge.test.mjs`: mapeo del sobre del producto, TTL, URL caída →
+        archivo, precio inválido → descarte individual, health).
+      · VPS (SSH solo lectura, 2026-09-12): org `onia-interna` = id c956c02fccd8573cd6fcc5b35,
+        entitlement `addon.whatsapp` **active** (validUntil NULL) → el gate del endpoint pasa;
+        `chatbot_knowledge` está **vacía** → el endpoint contesta hoy
+        `404 {"error":"Sin conocimiento publicado"}` (probado con el Bearer real desde el
+        contenedor `onia-platform`), que la fuente trata como "nada publicado" y sigue con el
+        archivo. El admin de esa org es `superadmin@onia.com.bo` (SUPERADMIN) — Sergio entra con
+        el método del magic link ya documentado.
+
+      **Para encender (deploy, necesita OK):** agregar a `/opt/onia/bot/webhook.env` la línea
+      `ONIA_KNOWLEDGE_URL=http://onia-platform:3000/api/chatbot-knowledge/published?organizationId=c956c02fccd8573cd6fcc5b35`
+      (el Bearer ya está: `BOT_KNOWLEDGE_SECRET`), y correr
+      `/opt/onia/bot/deploy-bot.sh --aplicar` (lleva `knowledge.mjs`, `webhook-server.sh` con el
+      `-e` nuevo y reinicia). **LISTO =** Sergio Urcullo edita una respuesta en el editor del
+      panel de `onia-interna`, y `/health` del bot dice `source:"panel"` con su versión — y el
+      bot la contesta, sin tocar el repo.
+
 - [ ] 🟡 **El bot tuvo una ventana sirviendo el M4_BODY SIN precios, y no sé por qué.**
       Medido el 2026-09-12: a las **22:48:35 UTC** la conv 49 preguntó *"Cuanto cuesta el sistema?
       pasame los precios"* y el bot contestó *"el número exacto te lo pasa Sergio en la demo…

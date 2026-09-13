@@ -179,6 +179,74 @@ que **tarda 36-43 s por respuesta** (timeout propio de 120 s en
 `TIMEOUT_MS_POR_SERVICIO`) y necesita una compra-venta original del mismo PdV:
 el runner la emite solo si no hay una libre con `datos`.
 
+## Wrapper HTTP — lo que Onia Platform llama (F1.4 del plan 1.0)
+
+`src/http-wrapper.mjs` sirve el emisor por HTTP con el contrato que YA espera
+`onia-platform/lib/fiscal/siat-client.ts` (el contrato lo define el caller):
+
+```
+POST /fiscal/invoices
+  Authorization: Bearer <SIAT_WRAPPER_TOKEN>      # el SIAT_SERVICE_TOKEN del producto
+  Idempotency-Key: invoice:<id>                   # obligatorio (sin el, 400)
+  { organizationId, invoice, environment }        # invoice = NormalizedInvoicePayload
+→ 200 { estado, cuf, cufd, controlCode, authorizationNumber, codigoRecepcion,
+        codigoEstado, qrUrl, leyenda, delivered }
+GET /health                                       # sin auth
+```
+
+Semantica de status calzada con el caller: **5xx** = el producto deja la factura
+`queued` y reintenta (SIN caido, CUFD no disponible) · **4xx sin codigoEstado** =
+`rejected` (entrada invalida, fail-closed) · **200** = estado derivado de
+`codigoEstado` (908 validada / 904 observada / 901 pendiente / null rechazo del
+SIN, con el motivo en `leyenda`).
+
+Que hace por dentro: mapea el payload del producto al normalizado (la
+homologacion sale de env: `SIAT_ACTIVIDAD_ECONOMICA` / `SIAT_CODIGO_PRODUCTO_SIN`
+/ `SIAT_UNIDAD_MEDIDA`; `lineTotal < cantidad*precio` se traduce a `descuento`;
+`taxId` va como CI del receptor — el producto manda `patient.ci` —, sin `taxId`
+es consumidor final), renueva el **CUFD** solo (FacturacionCodigos, con el reloj
+del SIN via `sincronizarFechaHora`), lleva el **correlativo** (no quema numeros
+si el SIN no vio la factura) y persiste la **idempotencia** en
+`wrapper-state.json` (una misma Idempotency-Key nunca emite dos veces, ni tras
+reinicio; los rechazos NO se cachean para permitir reintentar con datos
+corregidos). El ambiente es SIEMPRE `SIAT_ENV` (default `piloto`; el
+`environment` del request debe coincidir o es 400) — nada de produccion
+hardcodeada.
+
+**Deploy (lo corre la sesion de control, NO esta deployado):**
+
+```bash
+# 1. Copiar el codigo al VPS (mismo rsync que el emisor) y crear el env:
+rsync -a hermes-content/integrations/siat/ root@VPS:/opt/onia-siat/emisor/
+#    /opt/onia-siat/siat-wrapper.env con el bloque del wrapper de .env.example
+#    (CUIS y homologacion salen del checkpoint: comandos jq en .env.example).
+# 2. Probar a mano:
+ssh root@VPS 'cd /opt/onia-siat/emisor && ./run-wrapper.sh'   # Ctrl+C tras ver "escuchando"
+# 3. Dejarlo como servicio (systemd):
+#    /etc/systemd/system/onia-siat-wrapper.service
+#      [Unit]
+#      Description=Onia SIAT wrapper (emisor fiscal)
+#      After=network-online.target
+#      [Service]
+#      ExecStart=/opt/onia-siat/emisor/run-wrapper.sh
+#      Restart=always
+#      RestartSec=5
+#      [Install]
+#      WantedBy=multi-user.target
+systemctl daemon-reload && systemctl enable --now onia-siat-wrapper
+# 4. Verificar MIRANDO: curl -s http://127.0.0.1:8517/health
+# 5. El dia de la autorizacion, en onia-platform (recrear el contenedor):
+#    SIAT_SERVICE_URL=http://<ip-alcanzable-desde-el-contenedor>:8517
+#    SIAT_SERVICE_TOKEN=<el mismo SIAT_WRAPPER_TOKEN>
+#    SIAT_EMISSION=1
+#    ⚠️ el firewall del VPS corta contenedor→host: probar el puerto DESDE el
+#    contenedor antes de dar por conectado (memoria: vps-firewall-bloquea-3000).
+```
+
+Pendiente conocido (documentado, no bloquea el piloto): un receptor con NIT
+viaja como CI porque el contrato del producto no distingue el tipo de documento;
+cuando el producto lo mande, el mapeo se extiende aca.
+
 ## Regla de secretos
 
 NIT, tokens delegados y credenciales SIAT viven SOLO en el env/vault del VPS
@@ -191,4 +259,6 @@ organizacion (lo genera el cliente en SIAT) y se guarda cifrado.
 node --test hermes-content/integrations/siat/test/*.test.mjs
 ```
 
-333 tests, todos sin red: transporte y `fetch` son inyectables.
+407 tests, todos sin red: transporte y `fetch` son inyectables. (En Windows
+falla 1 solo test del runner que crea un symlink — EPERM sin modo developer;
+en el VPS pasa completo.)

@@ -28,10 +28,13 @@ import {
   getKnowledge,
   getOrgKnowledge,
   ensureKnowledgeHealth,
+  getPanelKnowledge,
+  mapPanelDoc,
   parseKnowledge,
   readKnowledgeFile,
   resetKnowledgeCache,
   resetOrgKnowledgeCache,
+  sanitizePanelKnowledge,
   validateKnowledge,
   withKnowledge,
 } from "./knowledge.mjs";
@@ -1067,4 +1070,138 @@ test("seguimiento (v6.6): activo bool + horas 1-48; tipos malos rechazan entero"
   assert.equal(mal.ok, false);
   const rango = validateKnowledge({ schema: "onia.bot.knowledge/1", seguimiento: { activo: true, horas: 99 } });
   assert.equal(rango.ok, false);
+});
+
+// ---------------------------------------------------------------------------
+// FUENTE "PANEL" (F2.1): el conocimiento del bot de VENTAS editado en el panel
+// ---------------------------------------------------------------------------
+// El contrato: mismo TTL y mismo validador N1 que el archivo, pero (a) NO enciende el modo
+// recepcionista (es la cara de venta de Onia) y (b) una entrada invalida se descarta SOLA,
+// con log, en vez de tumbar el documento entero. URL caida => se sigue con el archivo/codigo
+// (fail-open al conocimiento anterior, jamas mudo).
+
+const PANEL_OPTS = {
+  panelUrl: "http://producto/api/chatbot-knowledge/published?organizationId=org_onia_interna",
+  panelSecret: "s3cr3t",
+};
+
+test("panel: el sobre del producto se mapea al doc del bot, source dice 'panel' y viaja el Bearer", async () => {
+  // El doc del editor SIN version/updatedBy propios: se estampan los de la fila (v1 / test).
+  const doc = valido({ identity: { productName: "Onia editada en el panel" } });
+  delete doc.version;
+  delete doc.updatedBy;
+  const fetch = fetchFalso(doc);
+  const state = await getPanelKnowledge({ ...PANEL_OPTS, fetch, nowMs: NOW_MS });
+
+  assert.equal(state.source, "panel");
+  assert.equal(state.version, "v1", "la version de la fila del producto llega al /health");
+  assert.equal(state.updatedBy, "test", "el autor del editor llega al /health");
+  assert.equal(fetch.calls[0].url, PANEL_OPTS.panelUrl, "la URL viaja COMPLETA, sin query agregada");
+  assert.equal(fetch.calls[0].init.headers.authorization, "Bearer s3cr3t");
+
+  // Y NO es el modo recepcionista: el panel edita la cara de VENTA de Onia.
+  const config = withKnowledge(DEFAULT_CONFIG, { ...PANEL_OPTS, fetch, nowMs: NOW_MS });
+  assert.notEqual(config.modo, "recepcionista");
+  assert.equal(config.identity.productName, "Onia editada en el panel");
+});
+
+test("panel: dentro del TTL NO se vuelve a pedir; vencido, se relee (mismo TTL que el archivo)", async () => {
+  const fetch = fetchFalso(valido());
+  await getPanelKnowledge({ ...PANEL_OPTS, fetch, nowMs: NOW_MS });
+  await getPanelKnowledge({ ...PANEL_OPTS, fetch, nowMs: NOW_MS + 1000 });
+  assert.equal(fetch.calls.length, 1, "la red no esta en el camino de la respuesta");
+  await getPanelKnowledge({ ...PANEL_OPTS, fetch, nowMs: NOW_MS + DEFAULT_TTL_MS + 1 });
+  assert.equal(fetch.calls.length, 2, "vencido el TTL se relee");
+});
+
+test("panel: getKnowledge (sincronico) sirve la copia cacheada sin tocar la red", async () => {
+  await getPanelKnowledge({ ...PANEL_OPTS, fetch: fetchFalso(valido()), nowMs: NOW_MS });
+  const frio = fetchFalso(valido());
+  const state = getKnowledge({ ...PANEL_OPTS, fetch: frio, nowMs: NOW_MS + 1000 });
+  assert.equal(state.source, "panel");
+  assert.equal(frio.calls.length, 0);
+});
+
+test("panel: URL caida o HTTP roto degradan al ARCHIVO local, sin tirar y sin quedar mudo", async () => {
+  await conArchivo(valido({ identity: { productName: "Onia del archivo" } }), async (path) => {
+    for (const opts of [{ fetch: fetchFalso(null, { fallar: true }) }, { fetch: fetchFalso(null, { status: 500 }) }]) {
+      resetKnowledgeCache();
+      const state = await getPanelKnowledge({ ...PANEL_OPTS, ...opts, path, nowMs: NOW_MS });
+      assert.equal(state.source, "file", "sin panel se sigue con el conocimiento anterior");
+      assert.equal(state.data.identity.productName, "Onia del archivo");
+    }
+    // 404 = la org interna todavia no publico nada: NO es un error que gritar.
+    resetKnowledgeCache();
+    const state = await getPanelKnowledge({ ...PANEL_OPTS, fetch: fetchFalso(null, { status: 404 }), path, nowMs: NOW_MS });
+    assert.equal(state.source, "file");
+    assert.equal(state.error, null);
+  });
+});
+
+test("panel: un fetch roto CONSERVA la ultima copia buena (y el fallo queda a la vista)", async () => {
+  await getPanelKnowledge({ ...PANEL_OPTS, fetch: fetchFalso(valido({ identity: { productName: "Onia v1" } })), nowMs: NOW_MS });
+  const state = await getPanelKnowledge({
+    ...PANEL_OPTS,
+    fetch: fetchFalso(null, { fallar: true }),
+    nowMs: NOW_MS + DEFAULT_TTL_MS + 1,
+  });
+  assert.equal(state.source, "panel");
+  assert.equal(state.data.identity.productName, "Onia v1", "lo publicado no se borra por una red caida");
+  assert.match(state.error, /no se pudo leer el panel/);
+});
+
+test("panel: una entrada con PRECIO invalido se descarta SOLA — el resto se publica igual", async () => {
+  // El editor guardo dos FAQs del negocio: una sana y una con una cifra de plata (N1).
+  // Todo-o-nada castigaria al documento entero; aca cae SOLO la entrada con la cifra.
+  const doc = valido({
+    faq: [
+      { id: "negocio", body: "Aceptamos pagos por QR y transferencia", status: "publicado", tags: ["pagos"] },
+      { id: "negocio", body: "El plan cuesta Bs 500 al mes", status: "publicado", tags: ["planes"] },
+    ],
+  });
+  const state = await getPanelKnowledge({ ...PANEL_OPTS, fetch: fetchFalso(doc), nowMs: NOW_MS });
+  assert.equal(state.source, "panel", "el documento NO se rechazo entero");
+  assert.equal(state.data.faq.length, 1, "la entrada con la cifra se descarto sola");
+  assert.equal(state.data.faq[0].body, "Aceptamos pagos por QR y transferencia");
+  assert.ok(Array.isArray(state.descartes) && state.descartes.length >= 1, "el descarte queda registrado");
+  assert.match(state.descartes.join(" "), /faq\[1\]/);
+});
+
+test("panel: un error ESTRUCTURAL (clave desconocida arriba) rechaza el doc ENTERO y cae al archivo", async () => {
+  await conArchivo(valido({ identity: { productName: "Onia del archivo" } }), async (path) => {
+    const state = await getPanelKnowledge({
+      ...PANEL_OPTS,
+      fetch: fetchFalso(valido({ inventada: true })),
+      path,
+      nowMs: NOW_MS,
+    });
+    assert.equal(state.source, "file", "un doc de otro contrato no entra ni recortado");
+    assert.match((await ensureKnowledgeHealth({ ...PANEL_OPTS, path, nowMs: NOW_MS })).panel.lastError, /RECHAZADO/);
+  });
+});
+
+test("panel: sin ONIA_KNOWLEDGE_URL la fuente esta APAGADA y nada cambia", async () => {
+  const fetch = fetchFalso(valido());
+  const state = await getPanelKnowledge({ panelUrl: "", panelSecret: "x", fetch, nowMs: NOW_MS, path: "/no/existe.json" });
+  assert.equal(state.source, "code");
+  assert.equal(fetch.calls.length, 0);
+});
+
+test("panel: /health dice source:'panel' con la version y el autor del editor", async () => {
+  const fetch = fetchFalso(valido({ version: "v7", updatedBy: "Sergio Urcullo" }));
+  await getPanelKnowledge({ ...PANEL_OPTS, fetch, nowMs: NOW_MS });
+  const salud = await ensureKnowledgeHealth({ ...PANEL_OPTS, fetch, nowMs: NOW_MS + 1000 });
+  assert.equal(salud.source, "panel");
+  assert.equal(salud.version, "v7");
+  assert.equal(salud.updatedBy, "Sergio Urcullo");
+  assert.deepEqual(salud.panel, { configurado: true, sirviendo: true, descartes: 0, lastError: null });
+});
+
+test("panel: mapPanelDoc y sanitizePanelKnowledge son puros y defensivos", () => {
+  assert.equal(mapPanelDoc(null), null);
+  assert.equal(mapPanelDoc({ data: "no-objeto" }), null);
+  const doc = valido();
+  const limpio = sanitizePanelKnowledge(doc);
+  assert.equal(limpio.data, doc, "un doc valido pasa identico, sin clonar de mas");
+  assert.deepEqual(limpio.descartes, []);
 });
