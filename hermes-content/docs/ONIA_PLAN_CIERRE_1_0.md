@@ -17,9 +17,10 @@ promesa falsa — y el sistema **factura SIAT** (Sergio la metió a la 1.0 el 12
 ✅ 7 panel · ✅ 9 opera sola · 🟢 2 rubros (dental 9/9, comercio 8/8 post-deploy; 3 en
 rotación del loop) · 🟢 8 promesas (escalera barrida en las 3 superficies) · 🟢 6 chatbot
 (cola sin rojos técnicos; falta el OK VISUAL de Sergio — ver F2) · 🟡 5 SIAT (PdV 1 creado;
-Fase 1 al **89 %** — todo 100 % salvo VI 22/560 re-corriendo; wrapper F1.4 **desplegado**
-con health verde en :8517; etapa VIII: Sergio decidió el 12-sep **mantener Electrónica** →
-firma digital en desarrollo; falta Fase 2).
+**MATRIZ SECA: 5042/5042 (100 %)** en todo salvo la VIII — la VI cerró 560/560 en la
+pasada 3 del 13-sep; wrapper F1.4 **desplegado** con health verde en :8517; etapa VIII:
+Sergio decidió el 12-sep **mantener Electrónica** → firma digital en desarrollo; falta
+leer el marcador del portal con su login y la Fase 2).
 
 **Cerrado en la madrugada del 13-sep:** F1.4 wrapper en systemd (`onia-siat-wrapper`,
 carga `siat-piloto.env` + `siat-wrapper.env`) · F1.5 y F3.5 vigías n8n ACTIVOS y probados
