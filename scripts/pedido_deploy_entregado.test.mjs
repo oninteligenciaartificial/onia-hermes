@@ -9,7 +9,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { archivosDelDryRun, archivosDelDryRunBot, archivosNombrados, secoDeProduccion, barrerPedidos, buildQueCorre, clasificarPedido, cuerpoCortoArchivos, inmediblesSinDeclarar, publicariaPorCopia, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
+import { archivosDelDryRun, archivosDelDryRunBot, archivosNombrados, secoDeProduccion, barrerPedidos, buildQueCorre, clasificarPedido, cuerpoCortoArchivos, cuerpoNoEjecuta, inmediblesSinDeclarar, publicariaPorCopia, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
 import { DESTINOS } from './kanban/publicar-aprobado.mjs';
 
 // El caso que me costo la vuelta del 2026-09-06: los 13 shas prometidos por t_0268567b
@@ -900,4 +900,49 @@ test('siat: un mensaje pegado a la lista no se cuenta como archivo', () => {
   const salida = ['hay que publicar: 1 arreglo(s)', 'Cambia:', '   run-fase1-pdv1.sh',
     'ERR: hay una corrida de Fase 1 EN CURSO. No se pisa el codigo bajo un runner vivo'].join('\n');
   assert.deepEqual(archivosDelDryRun(salida), ['run-fase1-pdv1.sh']);
+});
+
+// ── ¿el ok EJECUTA lo que el cuerpo promete? ───────────────────────────────────────────
+//
+// Estan en ESTA cadena, y no solo en el --self-check, por el motivo de arriba: es la que
+// corre el integrador antes de tocar `main`.
+//
+// Medido el 2026-09-12 sobre el pedido de la plataforma (t_60c884c6, archivado). El metodo
+// vigente EXIGE citar textual el recuento del publicador, que dice "hay que publicar: N
+// arreglo(s)". Al envolver el parrafo, "publicar:" cae al principio de un renglon, el filtro
+// /^PUBLICAR:/i del brazo lo lee como una orden de publicar una PIEZA, y el deploy nunca se
+// intenta: sale "la linea PUBLICAR: no trae cuenta, imagenes, texto" y no publica nada.
+// Nadie escribio esa linea a proposito — alcanzo con obedecer el metodo y que el wrap
+// cayera mal.
+//
+// El resto del gate lee el CUERPO; este le pregunta al BRAZO con la misma funcion que corre
+// cuando Sergio Urcullo aprieta el boton. Por eso un modo de falla nuevo nace cazado, y por
+// eso este caso se pone rojo si alguien revierte `elegirCamino`.
+test('ejecuta: una cita "publicar:" envuelta no puede dejar mudo al ok', () => {
+  const cuerpo = 'Pedido de deploy.\n\nRecuento citado: hay que\npublicar: 3 arreglo(s)\n\nDESPLEGAR: plataforma';
+  assert.equal(cuerpoNoEjecuta({ texto: cuerpo }).estado, 'DESPLIEGA');
+});
+
+// El caso que YA cumple. Sin el, un detector que diga SIEMPRE «despliega» pasa el de arriba
+// por el motivo equivocado y el control queda mudo.
+test('ejecuta: el caso que YA cumple: un DESPLEGAR: limpio despliega', () => {
+  assert.equal(cuerpoNoEjecuta({ texto: 'Pedido.\n\nDESPLEGAR: landing' }).estado, 'DESPLIEGA');
+});
+
+// Y la direccion que el control existe para cazar: que el brazo elija OTRA cosa.
+test('ejecuta: si el brazo publica una pieza en vez de desplegar, es NO_EJECUTA', () => {
+  const r = cuerpoNoEjecuta({ texto: 'DESPLEGAR: landing', elegir: () => ({ modo: 'pieza', pieza: {} }) });
+  assert.equal(r.estado, 'NO_EJECUTA');
+});
+
+test('ejecuta: si el brazo se cae leyendo el cuerpo, es NO_EJECUTA y dice por que', () => {
+  const r = cuerpoNoEjecuta({ texto: 'DESPLEGAR: landing', elegir: () => { throw new Error('x roto'); } });
+  assert.equal(r.estado, 'NO_EJECUTA');
+  assert.match(r.motivo, /x roto/);
+});
+
+// Sujeto: un pedido que no pide deploy no es asunto de este control.
+test('ejecuta: un cuerpo sin DESPLEGAR: no es sujeto', () => {
+  const pieza = 'PUBLICAR: cuenta=lucia imagenes=/tmp/a.png texto=/tmp/b.json';
+  assert.equal(cuerpoNoEjecuta({ texto: pieza }).estado, 'SIN_ORDEN');
 });

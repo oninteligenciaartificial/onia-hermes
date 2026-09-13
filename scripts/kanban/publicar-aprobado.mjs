@@ -154,6 +154,41 @@ export function parsearLinea(cuerpo) {
   return { cuenta: campos.cuenta, integracion: CUENTAS[campos.cuenta], imagenes: campos.imagenes, texto: campos.texto, varias: lineas.length > 1 };
 }
 
+/**
+ * Elige QUÉ hace el `ok`: publicar una pieza, desplegar un destino, o nada.
+ *
+ * Vive aparte de `main()` porque la decisión es lo único que se puede probar sin
+ * tocar producción: `main()` spawnea el deploy o sube láminas de verdad.
+ */
+export function elegirCamino(cuerpo) {
+  // Las DOS se preguntan antes de decidir. Hasta el 2026-09-12 esto era
+  // `parsearLinea()` a secas y su excepcion se llevaba puesto el deploy: una CITA
+  // del recuento envuelta ("hay que\npublicar: 3 arreglo(s)") entraba por el
+  // filtro /^PUBLICAR:/i y el `ok` de Sergio Urcullo no publicaba nada. Ver el
+  // autotest "UNA CITA NO ES UNA ORDEN".
+  let pieza = null;
+  let errPieza = null;
+  try { pieza = parsearLinea(cuerpo); } catch (e) { errPieza = e; }
+
+  let deploy = null;
+  let errDeploy = null;
+  try { deploy = parsearDespliegue(cuerpo); } catch (e) { errDeploy = e; }
+
+  // Una PUBLICAR: bien formada es deliberada: nadie cita por accidente una linea
+  // con cuenta=, imagenes= y texto=. Gana, como siempre.
+  if (pieza) return { modo: 'pieza', pieza };
+
+  // Una PUBLICAR: que NO parsea, con una orden de destino valida al lado, es una
+  // cita. La orden explicita gana — pero el descarte se DEVUELVE, para que quien
+  // si quiso publicar una pieza y la escribio mal lo lea en la salida.
+  if (deploy) return { modo: 'deploy', deploy, citaIgnorada: errPieza?.message || null };
+
+  // Sin destino que atender, una orden mal escrita vuelve a ser un error ruidoso.
+  if (errPieza) throw errPieza;
+  if (errDeploy) throw errDeploy;
+  return { modo: 'nada' };
+}
+
 export function validarEnDisco(pieza) {
   if (!existsSync(pieza.texto)) throw new Error(`no existe el brief ${pieza.texto}`);
   const brief = JSON.parse(readFileSync(pieza.texto, 'utf8'));
@@ -343,6 +378,52 @@ function autotest() {
   ok(parsearLinea('DESPLEGAR: landing') === null, 'DESPLEGAR no es una pieza');
   ok(parsearDespliegue('DESPLEGAR: landing') !== null, 'DESPLEGAR: landing tenia que parsear');
 
+  // ── UNA CITA NO ES UNA ORDEN ───────────────────────────────────────────────
+  // Medido el 2026-09-12 sobre el pedido de la plataforma (t_60c884c6, archivado).
+  // El metodo vigente de pedidos de deploy EXIGE citar textual el recuento del
+  // publicador, y ese recuento dice "hay que publicar: N arreglo(s)...". Al
+  // envolver el parrafo, "publicar:" cae al principio de un renglon — y el filtro
+  // /^PUBLICAR:/i no distingue una cita envuelta de una orden. Resultado: el
+  // camino de piezas ganaba, moria con "no trae cuenta, imagenes, texto" y el
+  // deploy NUNCA se intentaba. Nadie escribio una linea PUBLICAR: a proposito:
+  // alcanzo con obedecer el metodo y que el wrap cayera mal.
+  //
+  // Es caro porque falla EN VERDE hacia arriba: `npm run pedido:entregado` da el
+  // pedido por vigente y completo (mide el CUERPO, no lo que el brazo ejecuta),
+  // Sergio Urcullo aprieta el ok, no pasa nada — y los pedidos que lo esperan por
+  // DESPUES-DE quedan trabados detras de un paso que el cree dado.
+  const conCita = [
+    'Pedido de deploy de la plataforma.',
+    '',
+    'Recuento citado del publicador: hay que',
+    'publicar: 3 arreglo(s) que el cliente ve.',
+    '',
+    'DESPLEGAR: plataforma',
+  ].join('\n');
+  ok(parsearDespliegue(conCita)?.destino === 'plataforma', 'la orden DESPLEGAR: estaba y era valida');
+  const camino = elegirCamino(conCita);
+  ok(camino.modo === 'deploy', `una cita "publicar:" no puede secuestrar un DESPLEGAR: valido (dio "${camino.modo}")`);
+  ok(camino.deploy.destino === 'plataforma', 'tenia que desplegar la plataforma');
+  // Y la cita ignorada se DICE, no se traga en silencio: si alguien de verdad
+  // quiso publicar una pieza y la escribio mal, tiene que enterarse.
+  ok(/cuenta, imagenes, texto/.test(camino.citaIgnorada || ''), 'tenia que reportar por que descarto la linea PUBLICAR:');
+
+  // La simetrica, que es la que evita curar de mas: una PUBLICAR: bien formada
+  // SIGUE ganando. Nadie cita por accidente una linea con cuenta=, imagenes= y
+  // texto= — eso es una orden deliberada.
+  const lasDos = 'PUBLICAR: cuenta=lucia imagenes=/tmp/a.png texto=/tmp/b.json\nDESPLEGAR: landing';
+  ok(elegirCamino(lasDos).modo === 'pieza', 'una PUBLICAR: bien formada le gana a DESPLEGAR:');
+
+  // Y sin DESPLEGAR: al lado, una PUBLICAR: rota sigue siendo un error ruidoso:
+  // curar el secuestro no puede volver mudo el caso de la orden mal escrita.
+  try {
+    elegirCamino('PUBLICAR: cuenta=lucia texto=/tmp/b.json');
+    throw new Error('AUTOTEST: una PUBLICAR: rota SIN deploy al lado tenia que tirar');
+  } catch (e) {
+    ok(String(e.message).includes('imagenes'), `esperaba el error de imagenes, dio "${e.message}"`);
+  }
+  ok(elegirCamino('sin nada aca').modo === 'nada', 'un cuerpo sin ordenes no elige ningun camino');
+
   // ── GUARDA DE ESTADO: el `ok` de una tarea CERRADA no ejecuta nada ─────────
   // El caso que importa: una tarea archivada cuyo Telegram sigue en el telefono.
   ok(motivoParaNoEjecutar('archived') !== null, 'una tarea ARCHIVADA no puede ejecutar su ok');
@@ -485,12 +566,14 @@ const main = () => {
     process.exit(3); // 3 = "no ejecuto porque la tarea esta cerrada". Distinto del 2 ("no habia nada que hacer").
   }
 
-  const pieza = parsearLinea(cuerpo);
+  // La otra cosa que Sergio Urcullo aprueba por Telegram es un DEPLOY. Sin esto,
+  // `ok <id>` sobre un pedido de publicar el sitio desbloquea la tarea y no
+  // despliega nada. `elegirCamino` es la que decide, y la que sabe que una CITA
+  // del recuento no es una orden de publicar una pieza.
+  const camino = elegirCamino(cuerpo);
+  const pieza = camino.modo === 'pieza' ? camino.pieza : null;
   if (!pieza) {
-    // Antes de rendirse: la otra cosa que Sergio aprueba por Telegram es un
-    // DEPLOY. Sin esto, `ok <id>` sobre un pedido de publicar el sitio desbloquea
-    // la tarea y no despliega nada.
-    const deploy = parsearDespliegue(cuerpo);
+    const deploy = camino.modo === 'deploy' ? camino.deploy : null;
     if (deploy) {
       // Acople: si este pedido declara ir DESPUES de otro destino y ese hermano
       // sigue esperando su ok, no se despliega nada. Va ANTES del spawn a
@@ -518,6 +601,11 @@ const main = () => {
         motivo: `arranco el deploy de ${deploy.destino} en segundo plano (tarda minutos); te aviso por Telegram como termino`,
         log: '/var/log/onia-deploy-aprobado.log',
         aviso: deploy.varias ? 'la tarea traia mas de una linea DESPLEGAR: se uso la primera' : undefined,
+        // El descarte se dice en el canal, no se traga: si alguien quiso publicar
+        // una pieza y la escribio mal, esto es lo unico que se lo cuenta.
+        citaIgnorada: camino.citaIgnorada
+          ? `habia un renglon que empieza con "publicar:" y no es una orden valida (${camino.citaIgnorada}): lo tome como cita y desplegue igual`
+          : undefined,
       }));
       return;
     }

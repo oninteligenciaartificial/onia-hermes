@@ -78,6 +78,10 @@ import { dirname, join } from 'node:path';
 // publicador de landing aplica. Reescribirlo acá sería una segunda copia del mismo juicio,
 // que es como el gate termina midiendo algo distinto de lo que el destino hace.
 import { llegaAlCliente } from '../web-factory/apps/onia-platform/scripts/deploy-vivo.mjs';
+// El BRAZO que ejecuta el `ok`. Se importa su decisión —pura, con guarda `import.meta.url`—
+// en vez de reimplementarla: dos derivaciones de «qué hace el ok» se contradicen el día que
+// una cambia, y este gate existe justamente para que el cuerpo y el botón digan lo mismo.
+import { elegirCamino } from './kanban/publicar-aprobado.mjs';
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..');
 /** La zona de `main` que arma el sitio de venta. Anclada con `:/` a propósito: un pathspec
@@ -686,6 +690,43 @@ export function cuerpoCortoArchivos({ texto, publicaria }) {
  *
  * @param {{texto:string, idPropio:string, idsVivos:Set<string>|null}} args
  */
+/**
+ * PURA: ¿el `ok` de este pedido EJECUTA el deploy que su cuerpo promete?
+ *
+ * Todos los controles de acá arriba miden qué DESCRIBE el cuerpo. Ninguno preguntaba lo
+ * otro —si el brazo, leyendo ese mismo cuerpo, va a desplegar algo—, y por eso el
+ * 2026-09-12 un pedido de la plataforma salió VIGENTE y completo mientras su `ok` moría
+ * con «la linea PUBLICAR: no trae cuenta, imagenes, texto» sin publicar nada.
+ *
+ * La causa está curada en el brazo (`elegirCamino`: una cita del recuento ya no le gana a
+ * una orden `DESPLEGAR:`), pero curar la instancia no cierra la clase: el cuerpo lo escribe
+ * un LLM y el brazo tiene más formas de no ejecutar que las que uno puede enumerar. Por eso
+ * esto no busca el defecto conocido —no grepea «publicar:»— sino que le PREGUNTA AL BRAZO,
+ * con la misma función que corre cuando Sergio Urcullo aprieta el botón. Un modo de falla
+ * nuevo nace cazado.
+ *
+ * `elegir` se inyecta para poder probar el control sin el brazo; el default es el brazo real,
+ * que es puro (decide, no publica).
+ */
+export function cuerpoNoEjecuta({ texto, elegir = elegirCamino }) {
+  const { cuerpo } = partirPedido(texto);
+  // Sujeto: sólo los pedidos que PIDEN un deploy. Uno de piezas no promete desplegar nada.
+  if (!/^DESPLEGAR:/im.test(String(cuerpo))) return { estado: 'SIN_ORDEN' };
+  let camino;
+  try {
+    camino = elegir(cuerpo);
+  } catch (e) {
+    return { estado: 'NO_EJECUTA', motivo: `el brazo se cae leyendo el cuerpo: ${e?.message || e}` };
+  }
+  if (camino?.modo === 'deploy') return { estado: 'DESPLIEGA', destino: camino.deploy.destino };
+  return {
+    estado: 'NO_EJECUTA',
+    motivo: camino?.modo === 'pieza'
+      ? 'el cuerpo trae una orden PUBLICAR: valida y el brazo publica esa PIEZA en vez de desplegar'
+      : `el brazo no eligio ningun camino (modo "${camino?.modo}")`,
+  };
+}
+
 export function cuerpoPunteroMuerto({ texto, idPropio, idsVivos }) {
   const { cuerpo } = partirPedido(texto);
   const citados = [...new Set(
@@ -1085,10 +1126,14 @@ async function medirEnVivo() {
   // tarea, y el daño no depende de si se publica por sha, por fecha o por copia. Por eso se
   // barre aparte del `for` de destinos, y no adentro de una de sus ramas.
   const punteros = [];
+  /** Pedidos cuyo `ok` no despliega nada aunque su cuerpo lo prometa. Ver `cuerpoNoEjecuta`. */
+  const mudos = [];
   for (const p of pedidos) {
     const r = cuerpoPunteroMuerto({ texto: p.texto, idPropio: p.id, idsVivos: abiertos });
     if (r.estado === 'PUNTERO_MUERTO') punteros.push({ id: p.id, destino: p.destino, muertos: r.muertos });
     else if (r.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (${p.destino}, punteros): ${r.motivo}`);
+    const e = cuerpoNoEjecuta({ texto: p.texto });
+    if (e.estado === 'NO_EJECUTA') mudos.push({ id: p.id, destino: p.destino, motivo: e.motivo });
   }
   // `landing` no nombra su sha, pero su artefacto tiene FECHA: alcanza para la dirección cara
   // (¿pide un ok por trabajo hecho?). Se deriva UNA vez, no por pedido: si el SSH no contesta
@@ -1223,6 +1268,24 @@ async function medirEnVivo() {
   // Sergio Urcullo menos de lo que publica, pero su `ok` PUBLICA. Éste no: lo manda a apretar
   // algo que no ejecuta nada, y como lo pide como prerrequisito, deja los DOS deploys trabados
   // esperando un paso que él ya dio.
+  // Va ANTES de los controles de cuerpo a proposito: que el pedido describa bien lo que
+  // publica importa menos que el hecho de que su ok NO PUBLIQUE NADA. Este es el unico
+  // control que le pregunta al brazo en vez de leer el texto.
+  if (mudos.length > 0) {
+    for (const m of mudos) {
+      console.log(`\nROJO ${m.id}: su cuerpo pide desplegar ${m.destino}, pero su ok NO DESPLIEGA NADA.`);
+      console.log(`  ${m.motivo}`);
+      console.log('  Sergio Urcullo aprieta, no pasa nada, y los pedidos que esperan a este por');
+      console.log('  DESPUES-DE quedan trabados detras de un paso que el cree dado. El gate no lo');
+      console.log('  veia porque todos los demas controles leen el CUERPO; este le pregunta al brazo.');
+      console.log('  Verificalo vos mismo, en seco y sin tocar produccion:');
+      console.log(`    ONIA_DESPLEGAR_DRY=1 node /root/bin/onia-publicar-aprobado.mjs ${m.id}`);
+      console.log('  Se cura rehaciendo el pedido con el cuerpo derivado y ARCHIVANDO el viejo en la');
+      console.log('  misma vuelta: el `edit` del tablero no cambia el cuerpo.');
+    }
+    return 1;
+  }
+
   if (punteros.length > 0) {
     for (const p of punteros) {
       console.log(`\nROJO ${p.id}: su cuerpo manda a apretar un ok sobre ${p.muertos.join(', ')}, que ya no esta abierta (${p.destino}).`);
@@ -1515,6 +1578,27 @@ function selfCheck() {
           && /if\s*\(r\.estado === 'PUNTERO_MUERTO'\)\s*punteros\.push\(/.test(fuente)
           && /if\s*\(\s*punteros\.length\s*>\s*0\s*\)/.test(fuente)
           && /idsVivos:\s*abiertos/.test(fuente);
+      })()],
+
+    // ── ¿el ok EJECUTA lo que el cuerpo promete? ──────────────────────────────────────
+    // Los casos de la FUNCION viven en `pedido_deploy_entregado.test.mjs`, que es la cadena
+    // que corre el integrador antes de tocar `main` — un caso que vive solo acá no lo corre
+    // nadie. Acá queda unicamente lo que ese archivo no puede ver: el CABLEADO.
+    //
+    // Y hay un segundo motivo, medido al escribir esto: llamar a la funcion acá con
+    // `const r = cuerpoNoEjecuta({...})` pone ROJO al gate derivado «un control que lee SOLO
+    // el cuerpo no manda a comentar», que exige que toda llamada de esa forma empuje a un
+    // acumulador. El gate tiene razon: una llamada que no acumula es un control muerto.
+    //
+    // CABLEADO, por el mismo motivo que los dos de arriba: los casos prueban la función y
+    // los esquives baratos —llamarla y tirar el resultado, o `false &&` en la guarda— dejan
+    // los literales intactos y pasan en verde con el control muerto.
+    ['ejecuta: `medirEnVivo` lo llama, acumula y CORTA',
+      (() => {
+        const fuente = readFileSync(fileURLToPath(import.meta.url), 'utf8');
+        return /const\s+e\s*=\s*cuerpoNoEjecuta\(\{/.test(fuente)
+          && /if\s*\(e\.estado === 'NO_EJECUTA'\)\s*mudos\.push\(/.test(fuente)
+          && /if\s*\(\s*mudos\.length\s*>\s*0\s*\)/.test(fuente);
       })()],
 
     // ── los refs con los que se mide, que hasta hoy nadie actualizaba ─────────────────
