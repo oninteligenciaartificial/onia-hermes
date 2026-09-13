@@ -278,6 +278,46 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El bot OFRECE un horario y PROMETE otro: los dos salían de fuentes distintas~~ —
+      CERRADO el 2026-09-13 en el repo (`62336825`, `hermes-content/deploy/vps-ops/bot/ventanas-de-atencion.mjs`).
+      ⚠️ COMMITEADO, NO DESPLEGADO — y con un segundo paso que casi nadie hace, abajo.**
+      El bot hace dos cosas con el mismo dato —cuándo está Sergio Urcullo— y las hacía con dos
+      fuentes. Los horarios de demo que **ofrece** los calcula `scripts/loops/renovar-slots-bot.py`
+      desde su dict `VENTANAS`, escrito con la cita textual de Sergio Urcullo del 2026-09-02:
+      **lun-vie 14:00-17:00 y 20:00-22:00, sábado 09:00-15:00**. El horario que **promete** al
+      derivar a un humano salía de `config.mjs` `businessHours`, tipeado a mano: *"lun-vie,
+      9:00-18:00"*. Un mismo mensaje podía ofrecer *"martes 15, 14:00"* y prometer atención
+      desde las 9:00.
+      **Miente en las dos direcciones, y las dos cuestan leads.** De más: al que escribe un lunes
+      9:30 le dice *"te escribe él en horario de oficina (9:00-18:00)"* y no hay nadie hasta las
+      14:00 — y si contesta "urgente", peor, porque el bot lo marca y nadie lo mira. De menos: al
+      que escribe un **sábado a las 10** —hora de trabajo— le dice *"lun-vie"*, o sea que se va
+      creyendo que no hay nadie hasta el lunes; la franja **20:00-22:00** tampoco se nombraba.
+      Y `M7` remataba con *"{{humano}} te confirma **en la mañana**"*, que entre semana es
+      exactamente cuando NO está.
+      Ahora la fuente es **una** y de ahí se derivan los días, las franjas y la **frase**;
+      `isOutsideBusinessHours` decide por franjas, así que el hueco 17:00-20:00 existe para el
+      motor igual que para él. La frase quedó *"lun-vie 14:00-17:00 y 20:00-22:00, sáb 9:00-15:00"*.
+      El gate cruza contra el **`.py`** —el lado con respaldo—, no contra `config.mjs`: cruzarlo
+      contra el espejo propio sería leer el mismo dato dos veces.
+      ⚠️ **Dos trampas medidas, las dos del tipo que pasa en verde.** (1) `knowledge.mjs`: un
+      CLIENTE declara su horario como rango, y heredar las franjas de Onia **le cerraba el negocio
+      a las 17:00 y se lo abría a las 20:00**; el guard va con `franjas = null`, **no con
+      `delete`**, porque `createBotConfig` fusiona con `{ ...base[key], ...value }` y una clave
+      borrada del override **vuelve a aparecer desde la base** — la ausencia hay que escribirla.
+      Lo descubrió el test, que siguió rojo con el `delete` puesto. (2) `knowledge.example.json` y
+      `knowledge.onia.json` tenían **su propia copia** del horario viejo: una tercera fuente que,
+      instalada, devolvía la mentira entera.
+      🔴 **FALTA, y NO alcanza con el deploy del bot:** el `knowledge.json` **vivo** trae hoy
+      `empresa.horario = {dias:[1..5], desde:9, hasta:18, frase:"lun-vie, 9:00-18:00"}` — medido
+      con `docker exec onia-center cat /tmp/onia-bot/knowledge.json`. Como el archivo pisa a la
+      config, **desplegar sólo el código deja la promesa vieja viva** (y encima mi guard le pone
+      `franjas = null` y lo devuelve al rango 9-18). Hace falta el segundo paso, el del texto:
+      `webhook-server.sh knowledge` con `knowledge.onia.json` ya sin ese bloque. Sin eso, esto
+      **no está terminado** por más que el deploy diga verde.
+      Validado por mutación en las dos direcciones (sacar el sábado → 3 rojos; sacar el guard del
+      override → 1 rojo). Suite del bot **1011/1011**, cadena del repo verde.
+
 - [x] 🔴 **~~La propia sonda del carril quedó contada como un lead real, para siempre y sin
       forma de distinguirla~~ — CERRADO el 2026-09-13 07:5x La Paz (`scripts/sonda_widget.mjs`,
       barrido `reclamarRastros` + predicado `esRastroDeSonda`).**
