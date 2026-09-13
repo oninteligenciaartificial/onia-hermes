@@ -533,7 +533,17 @@ function nextCache(result, path, nowMs) {
   return Object.freeze({
     ...CACHE,
     source: CACHE.data ? CACHE.source : "code",
-    checkedAt: nowMs,
+    // Un archivo AUSENTE sin copia buena en memoria NO cuenta como "ya lo mire": se deja la cache
+    // fria para que el turno siguiente vuelva a mirar. Si se marcaba, una ausencia de dos segundos
+    // —la ventana en que `webhook-server.sh` hace `rm -rf /tmp/onia-bot` antes del `docker cp`, con
+    // el proceso vivo corriendo DESDE ahi— congelaba al bot SIN CONOCIMIENTO el TTL entero: cinco
+    // minutos contestandole "no te quiero tirar una cifra" a quien pregunta el precio, y curandose
+    // solo, que es exactamente el sintoma medido el 2026-09-12 (conv 49, 22:48 UTC, mismo PID).
+    // Cuesta un ENOENT por turno mientras no haya archivo, y ni eso apenas aparece.
+    // ⚠️ NO se derrama a las fuentes `db`/`panel` (nextOrgCache, nextPanelCache) y es deliberado:
+    // ahi "ausente" es un 404 por RED, reintentarlo por turno pone un fetch en el camino de la
+    // respuesta, y su degradacion cae a este archivo — que sigue teniendo los precios.
+    checkedAt: result.missing && !CACHE.data ? null : nowMs,
     path,
     // Archivo ausente no es un error que haya que gritar; roto o invalido, SI.
     error: result.missing ? null : result.error || CACHE.error,

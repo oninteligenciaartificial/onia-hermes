@@ -117,7 +117,9 @@ export function clasificarCobertura({ destinos, pendiente, pedidos, seAutoPublic
     const cubiertoPor = (pedidos || []).filter((p) => p.destino === destino).map((p) => p.id);
     const p = pendiente(destino);
     if (p === null || p === undefined) {
-      filas.push({ destino, estado: 'NO_MEDIDO', motivo: 'no pude preguntarle si le falta publicar', pedidos: cubiertoPor });
+      // `fuente` dice QUIÉN no contestó, para que el que imprime pueda buscar la causa sin
+      // adivinarla del texto del motivo: los dos NO_MEDIDO vienen de instrumentos distintos.
+      filas.push({ destino, estado: 'NO_MEDIDO', fuente: 'detector', motivo: 'no pude preguntarle si le falta publicar', pedidos: cubiertoPor });
       continue;
     }
     if (p === false) {
@@ -139,6 +141,7 @@ export function clasificarCobertura({ destinos, pendiente, pedidos, seAutoPublic
       filas.push({
         destino,
         estado: 'NO_MEDIDO',
+        fuente: 'publicador',
         motivo: 'le falta publicar y no pude preguntarle al publicador automatico si lo hace solo',
         pedidos: [],
       });
@@ -181,6 +184,37 @@ export function leerPublicadorSolo(salida) {
  * para el desacuerdo —él dice «al dia» y nuestro detector dice que falta—, porque ahí los
  * dos instrumentos no pueden tener razón y absolver sería creerle al que no mide el sujeto.
  */
+/**
+ * PURA: por qué no se pudo preguntar, en UNA línea. `null` si no hay nada que decir.
+ *
+ * NACE DEL 2026-09-13 04:50 UTC, y de que el `null` no sabía explicarse. Esa vuelta el
+ * integrador mergeó 8 commits del carril del chatbot y esto contestó «NO MEDIDO bot: no
+ * pude preguntarle si le falta publicar». Dos corridas después el mismo comando contestó
+ * perfecto, y seis corridas sueltas del detector dieron 6/6 iguales: el fallo no se pudo
+ * reproducir NUNCA, porque `sh()` mandaba la stderr a `'ignore'` y la única evidencia se
+ * tiraba a la basura en el mismo `catch` que devolvía el `null`.
+ *
+ * Y la dirección del daño no es simétrica. `NO_MEDIDO` es el veredicto que este gate usa
+ * para NO molestar a Sergio Urcullo, así que un destino que falla al azar y no sabe decir
+ * por qué **se calla un pedido de deploy que hacía falta**, que es exactamente el agujero
+ * que este archivo existe para tapar. Un rojo que no se puede diagnosticar se termina
+ * ignorando; uno que nombra su causa se arregla en la vuelta siguiente.
+ */
+export function describirFallo({ status, signal, stderr } = {}) {
+  const linea = String(stderr ?? '')
+    .split('\n')
+    .map((l) => l.trim())
+    // Un stack de node pone el mensaje ARRIBA y los frames abajo; el `^` es del recuadro
+    // que dibuja al citar la línea. Sacándolos, lo último que queda es la causa.
+    .filter((l) => l && !/^at\s/.test(l) && !/^\^+$/.test(l))
+    .pop();
+  const partes = [];
+  if (signal) partes.push(`cortado por ${signal}`);
+  else if (Number.isInteger(status)) partes.push(`salio ${status}`);
+  if (linea) partes.push(linea.slice(0, 160));
+  return partes.length ? partes.join(': ') : null;
+}
+
 export function seAutoPublicaSegun(verdictos, destino) {
   if (!verdictos) return null;
   const v = verdictos[destino];
@@ -241,24 +275,58 @@ export function leerPendienteDelEspejo(salida) {
 
 // ── medición viva ──────────────────────────────────────────────────────────────────────
 
-function sh(cmd, args, opts = {}) {
+/**
+ * Por qué falló lo último que preguntamos, indexado por quién preguntaba. Es lo que
+ * convierte un `null` mudo en un rojo diagnosticable — ver `describirFallo`.
+ */
+const CAUSAS = new Map();
+
+function sh(cmd, args, { clave, ...opts } = {}) {
   try {
-    return execFileSync(cmd, args, { encoding: 'utf8', timeout: 60_000, stdio: ['ignore', 'pipe', 'ignore'], ...opts }).trim();
+    const salida = execFileSync(cmd, args, {
+      encoding: 'utf8',
+      timeout: 60_000,
+      // stderr se CAPTURA, no se ignora: es la única evidencia de por qué no se pudo
+      // preguntar, y es justo la que hace falta cuando el veredicto sale NO MEDIDO.
+      stdio: ['ignore', 'pipe', 'pipe'],
+      ...opts,
+    }).trim();
+    if (clave) CAUSAS.delete(clave);
+    return salida;
   } catch (e) {
     // Un publicador en seco puede salir con código != 0 y aun así haber dicho lo que hace
     // falta. Se conserva su salida: descartarla nos dejaría en NO_MEDIDO por un detalle.
     const out = e && (e.stdout || e.output?.[1]);
-    return out ? String(out).trim() : null;
+    if (out) {
+      if (clave) CAUSAS.delete(clave);
+      return String(out).trim();
+    }
+    if (clave) {
+      CAUSAS.set(clave, describirFallo({ status: e?.status, signal: e?.signal, stderr: e?.stderr ?? e?.output?.[2] }));
+    }
+    return null;
   }
 }
 
+/**
+ * Sólo para el self-check, y no es adorno: la parte que de verdad se rompió es el CABLEADO
+ * (`stdio` mandando la stderr a `'ignore'`), y ningún caso puro puede verlo. Sin esta
+ * costura, volver a poner `'ignore'` deja el archivo entero en verde.
+ */
+export function _preguntarParaPruebas(cmd, args, clave) {
+  return { salida: sh(cmd, args, { clave }), causa: CAUSAS.get(clave) ?? null };
+}
+
 /** Corre un comando donde vive `/opt`: acá si existe, y si no, en el VPS por SSH. */
-function dondeVive(guion, timeout = 300_000) {
+function dondeVive(guion, { timeout = 300_000, clave } = {}) {
   if (existsSync('/opt/onia-landing') || existsSync('/opt/onia-platform')) {
-    return sh('bash', ['-lc', guion], { timeout });
+    return sh('bash', ['-lc', guion], { timeout, clave });
   }
-  if (!existsSync(VPS)) return null;
-  return sh('bash', [VPS, 'bash', '-lc', guion], { timeout });
+  if (!existsSync(VPS)) {
+    if (clave) CAUSAS.set(clave, `no hay /opt local ni el puente al VPS (${VPS})`);
+    return null;
+  }
+  return sh('bash', [VPS, 'bash', '-lc', guion], { timeout, clave });
 }
 
 /**
@@ -266,16 +334,16 @@ function dondeVive(guion, timeout = 300_000) {
  * NOMBRADO: un destino de la lista blanca que no esté acá sale NO_MEDIDO con su nombre.
  */
 const DETECTORES = {
-  landing: () => leerPendienteDelSeco(dondeVive(`bash ${DESTINOS.landing} --dry-run 2>&1`)),
-  plataforma: () => leerPendienteDelSeco(dondeVive(`bash ${DESTINOS.plataforma} --dry-run 2>&1`)),
+  landing: () => leerPendienteDelSeco(dondeVive(`bash ${DESTINOS.landing} --dry-run 2>&1`, { clave: 'landing' })),
+  plataforma: () => leerPendienteDelSeco(dondeVive(`bash ${DESTINOS.plataforma} --dry-run 2>&1`, { clave: 'plataforma' })),
   bot: () => leerPendienteDelEspejo(
-    dondeVive('node /root/loops/onia-hermes/hermes-content/deploy/vps-ops/bot/espejo-check.mjs 2>&1'),
+    dondeVive('node /root/loops/onia-hermes/hermes-content/deploy/vps-ops/bot/espejo-check.mjs 2>&1', { clave: 'bot' }),
   ),
   // El emisor SIAT se despliega copiando archivos, como el bot, pero su publicador
   // imprime el MISMO formato que los de landing y plataforma ("YA ESTA PUBLICADO" /
   // "hay que publicar: N arreglo(s)") justamente para reusar este parser: un
   // detector nuevo por destino es otra fuente que se desincroniza.
-  siat: () => leerPendienteDelSeco(dondeVive(`bash ${DESTINOS.siat} --dry-run 2>&1`)),
+  siat: () => leerPendienteDelSeco(dondeVive(`bash ${DESTINOS.siat} --dry-run 2>&1`, { clave: 'siat' })),
 };
 
 const MARCA_LOG = '___LOG_DEL_PUBLICADOR___';
@@ -290,6 +358,7 @@ function verdictosDelPublicadorSolo() {
   if (verdictosCache !== undefined) return verdictosCache;
   const salida = dondeVive(
     `bash ${PUBLICADOR_SOLO} --dry-run 2>&1; echo "${MARCA_LOG}"; tail -60 ${LOG_SOLO} 2>/dev/null`,
+    { clave: 'publicador' },
   );
   if (salida === null) return (verdictosCache = null);
   const [seco = '', log = ''] = String(salida).split(MARCA_LOG);
@@ -298,7 +367,7 @@ function verdictosDelPublicadorSolo() {
 }
 
 function pedidosVivos() {
-  const lista = sh('bash', [TABLERO, 'list'], { timeout: 180_000 });
+  const lista = sh('bash', [TABLERO, 'list'], { timeout: 180_000, clave: 'tablero' });
   if (lista === null) return null;
   return barrerPedidos({
     lista,
@@ -310,6 +379,8 @@ function medirEnVivo() {
   const barrido = pedidosVivos();
   if (barrido === null) {
     console.log(`NO MEDIDO: no pude leer el tablero (${TABLERO})`);
+    const causa = CAUSAS.get('tablero');
+    if (causa) console.log(`  causa: ${causa}`);
     return 2;
   }
   const { pedidos, ilegibles } = barrido;
@@ -336,6 +407,10 @@ function medirEnVivo() {
       console.log(`DESCUBIERTO ${f.destino}: tiene arreglos sin publicar y NINGUN pedido vivo los pide.`);
     } else if (f.estado === 'NO_MEDIDO') {
       console.log(`NO MEDIDO ${f.destino}: ${f.motivo}${quien}`);
+      // `fuente` dice a cuál de los dos instrumentos preguntarle la causa. Sin esta línea,
+      // el rojo es irreproducible: ya pasó una vez y costó la vuelta entera.
+      const causa = CAUSAS.get(f.fuente === 'publicador' ? 'publicador' : f.destino);
+      if (causa) console.log(`  causa: ${causa}`);
     } else if (f.estado === 'AL_DIA') {
       console.log(`OK ${f.destino}: al dia, no hay nada que pedir${quien}`);
     } else if (f.estado === 'SE_PUBLICA_SOLO') {
@@ -398,6 +473,59 @@ function selfCheck() {
     clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => null, seAutoPublica: nadieLoPublicaSolo })[0].estado === 'NO_MEDIDO',
     'sin poder medir NO puede salir DESCUBIERTO',
   );
+
+  // ── que un NO MEDIDO sepa decir POR QUÉ (2026-09-13) ────────────────────────────────
+  // Los dos NO_MEDIDO vienen de instrumentos distintos, y el que imprime tiene que poder
+  // buscar la causa del que falló SIN adivinarla del texto del motivo.
+  ok(
+    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => null, seAutoPublica: nadieLoPublicaSolo })[0].fuente === 'detector',
+    'el NO_MEDIDO del detector se declara "detector"',
+  );
+  ok(
+    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: () => null })[0].fuente === 'publicador',
+    'el NO_MEDIDO del publicador automatico se declara "publicador"',
+  );
+  // Los dos NO_MEDIDO tienen que ser DISTINGUIBLES: si los dos dijeran lo mismo, el que
+  // imprime le pediría la causa al instrumento que sí contestó y la línea saldría vacía.
+  ok(
+    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => null, seAutoPublica: nadieLoPublicaSolo })[0].fuente
+      !== clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: () => null })[0].fuente,
+    'los dos NO_MEDIDO no pueden nombrar la misma fuente',
+  );
+
+  // `describirFallo`: las formas reales con las que muere una pregunta por SSH.
+  ok(
+    describirFallo({ status: 255, stderr: 'ssh: connect to host 187.77.16.63 port 22: Connection timed out\n' })
+      === 'salio 255: ssh: connect to host 187.77.16.63 port 22: Connection timed out',
+    'un SSH caido nombra su codigo y su linea',
+  );
+  ok(
+    describirFallo({ signal: 'SIGTERM', stderr: '' }) === 'cortado por SIGTERM',
+    'un timeout se nombra por su senal aunque no haya escrito nada',
+  );
+  // Un stack de node pone el mensaje ARRIBA: quedarse con la última línea a secas devuelve
+  // un frame («at Object.<anonymous>…»), que no dice NADA de la causa.
+  ok(
+    describirFallo({ status: 1, stderr: '/opt/x.mjs:12\n  throw new Error("no existe el espejo")\n  ^\n\nError: no existe el espejo\n    at Object.<anonymous> (/opt/x.mjs:12:9)\n' })
+      === 'salio 1: Error: no existe el espejo',
+    'un stack de node se resume en su mensaje, no en un frame',
+  );
+  // Sin NADA que decir devuelve null, y el que imprime no dibuja una línea «causa:» vacía.
+  ok(describirFallo({}) === null, 'sin status, senal ni stderr no hay causa que inventar');
+  ok(describirFallo({ status: 0, stderr: '   \n\n' }) === 'salio 0', 'stderr en blanco no es una causa');
+
+  // El CABLEADO, con procesos de verdad (locales, sin red): es la mitad que se rompió.
+  const mudo = _preguntarParaPruebas('bash', ['-c', 'echo "no pude abrir el espejo" >&2; exit 3'], 'zz-prueba-muda');
+  ok(mudo.salida === null, 'un comando que no dice nada por stdout sigue devolviendo null');
+  ok(
+    mudo.causa === 'salio 3: no pude abrir el espejo',
+    'y la causa conserva lo que escribio por stderr — si stdio la ignora, esto se cae',
+  );
+  // La otra mitad, ya medida el 2026-09-12: una negativa INFORMADA del destino no es una
+  // falla de red. Si se tirara, el veredicto volveria a ser NO MEDIDO por un detalle.
+  const informado = _preguntarParaPruebas('bash', ['-c', 'echo "hay que publicar: 2 arreglo(s)"; echo ruido >&2; exit 1'], 'zz-prueba-informado');
+  ok(informado.salida === 'hay que publicar: 2 arreglo(s)', 'corrio y dijo algo: su salida NO se tira');
+  ok(informado.causa === null, 'y no deja causa colgada: no hubo nada que diagnosticar');
   // Un pedido de OTRO destino no cubre a éste.
   ok(
     clasificarCobertura({ destinos: ['landing'], pedidos: [{ id: 't_y', destino: 'bot' }], pendiente: () => true, seAutoPublica: nadieLoPublicaSolo })[0].estado === 'DESCUBIERTO',

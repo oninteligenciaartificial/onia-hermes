@@ -799,6 +799,24 @@ test('cableado: el comando de cura de un cuerpo corto se DERIVA del destino', ()
     'la ruta del publicador sale de la tabla, no de un literal');
   assert.doesNotMatch(bloque, /onia-siat\/_deploy/,
     'una ruta a mano manda al carril equivocado en cuanto hay mas de un destino por copia');
+
+  // Y el CIERRE DE CLASE, que el de arriba dejaba abierto por estar escrito para UN bloque:
+  // `cortos` acaba de ganar un segundo destino (`landing`, 2026-09-12) y su remedio seguia
+  // citando la ruta de `plataforma` a mano — el mismo defecto, en el bloque de al lado. Medido
+  // por mutacion ese dia: con el literal puesto, los 69 casos pasaban en verde.
+  //
+  // ⚠️ El universo son TODOS los bloques de veredicto, y NO «los que mencionan un publicador»,
+  // que fue el primer intento: derivar asi lo apaga solo, porque un bloque deja de nombrar
+  // `publicar.sh` EXACTAMENTE cuando se arregla (la ruta se muda a la tabla). Un gate cuyo
+  // sujeto sale del universo al curarse firma verde sobre cero sujetos.
+  const conRuta = [...src.matchAll(/if \((\w+)\.length > 0\)/g)]
+    .map((m) => ({ acc: m[1], bloque: src.slice(m.index, src.indexOf('return 1;', m.index)) }));
+  assert.ok(conRuta.length >= 4, `esperaba los bloques de veredicto, derive ${conRuta.length}`);
+  for (const { acc, bloque: b } of conRuta) {
+    assert.doesNotMatch(b, /\/opt\/[\w.\/-]*publicar\.sh/,
+      `el remedio de ${acc} escribe la ruta del publicador a mano: en cuanto el acumulador `
+      + `junta mas de un destino, manda al carril a correr el publicador del otro`);
+  }
 });
 
 // ── el remedio impreso tiene que poder limpiar el rojo ─────────────────────────────────
@@ -849,6 +867,86 @@ test('un control que lee SOLO el cuerpo no manda a comentar', () => {
     // si no queda el bueno escrito.
     assert.match(bloque, /rehac(e|iendo)/i, `el remedio de ${acc} no dice como se cura`);
   }
+});
+
+// Y el CIERRE DE CLASE de los dos de arriba, que hasta hoy no tenia dueno. Los dos anteriores
+// preguntan por el remedio y por la ruta; ninguno pregunta si la rama del destino LLAMA a un
+// control de cuerpo. Por eso `landing` paso desde el 2026-09-10 con la mitad cruda: preguntaba
+// `promesaCompleta({ shas: shasDelTexto(p.texto) })` —cuerpo MAS comentarios— y nada mas,
+// mientras sus tres hermanos ya tenian su control de cuerpo al lado, en el mismo archivo.
+// Medido el 2026-09-12 sobre t_fd5b30c4: cuerpo con 7 shas, un comentario con los 3 que
+// faltaban, veredicto «sigue VIGENTE» y ni un rojo de cuerpo corto. El cuerpo es lo unico que
+// Sergio Urcullo lee para decidir, y el comentario no viaja a esa pantalla.
+//
+// EL SUJETO SE DERIVA DEL DISCO, y la ventana es la RAMA, no el `for`: cada rama del bucle de
+// `medirEnVivo` que le pregunte al TEXTO ENTERO (`shasDelTexto(p.texto)`) tiene que preguntarle
+// tambien al cuerpo. Partir por `continue;` es lo que lo hace honesto — con la ventana puesta en
+// el bucle entero, el `cuerpoCortoArchivos` de la rama de al lado (siat) absolveria a `landing`
+// sin tocarla, que es justo la forma en que esta familia de gates falla en verde.
+test('toda rama que le pregunta al TEXTO ENTERO le pregunta tambien al cuerpo', () => {
+  const src = readFileSync(new URL('./pedido_deploy_entregado.mjs', import.meta.url), 'utf8')
+    .split('\n').filter((l) => !/^\s*(\/\/|\*|\/\*)/.test(l)).join('\n');
+
+  // Los controles de cuerpo, derivados igual que en el test de arriba: los que parten el pedido
+  // y se quedan con el cuerpo. Escribir los nombres a mano dejaria fuera al proximo.
+  const soloCuerpo = [...src.matchAll(/export function (\w+)\(/g)]
+    .map((m) => ({ nombre: m[1], cuerpo: src.slice(m.index, m.index + 400) }))
+    .filter((f) => f.cuerpo.includes('partirPedido(') && f.nombre !== 'partirPedido')
+    .map((f) => f.nombre);
+  assert.ok(soloCuerpo.length >= 3, `esperaba los controles de cuerpo, derive ${soloCuerpo}`);
+
+  const desde = src.indexOf('for (const p of pedidos) {\n    if (p.destino === ');
+  assert.ok(desde > 0, 'no encontre el bucle que juzga cada pedido');
+  const bucle = src.slice(desde, src.indexOf('\n  for (const n of noMedidos)', desde));
+
+  // Una rama termina donde el bucle pasa al pedido siguiente. La ultima no lleva `continue;`
+  // (cae por el final), y por eso se queda como ultimo segmento del split.
+  const crudas = bucle.split('continue;');
+  const sujetos = crudas
+    .map((rama, i) => ({ rama, nombre: `rama #${i + 1} del bucle` }))
+    .filter(({ rama }) => rama.includes('shasDelTexto(p.texto)'));
+
+  const mudas = sujetos
+    .filter(({ rama }) => !soloCuerpo.some((n) => rama.includes(`${n}({`)))
+    .map(({ nombre }) => nombre);
+  assert.deepEqual(mudas, [],
+    `estas ramas juzgan el texto entero (cuerpo + comentarios) y nunca miran el cuerpo solo, `
+    + `asi que un comentario les tapa un cuerpo corto: ${mudas.join(', ')}`);
+
+  // 🔴 Y el veredicto tiene que SALIR de la rama. Pedir solo que el control aparezca se
+  // satisface con el esquive mas barato que existe —anteponerle `false &&` a la guarda del
+  // push—, que deja la llamada y el push intactos en el fuente y tira el resultado a la basura.
+  //
+  // Y anclar `if (<var>.estado === ...) <algo>.push(` TAMPOCO alcanza, medido hoy: la rama
+  // tiene un hermano que absuelve —`else if (k.estado === 'NO_MEDIDO') noMedidos.push(...)`—
+  // y con el `false &&` puesto la mutacion volvia a pasar en verde. `noMedidos` se IMPRIME
+  // pero no corta: un control cuyo unico push va ahi deja al gate saliendo 0. Por eso el
+  // sujeto es el acumulador que CORTA, derivado de los que tienen bloque de veredicto.
+  const cortan = new Set([...src.matchAll(/if \((\w+)\.length > 0\)/g)].map((m) => m[1]));
+  assert.ok(cortan.size >= 3, `esperaba los acumuladores que cortan, derive ${[...cortan]}`);
+
+  for (const { rama, nombre } of sujetos) {
+    for (const n of soloCuerpo) {
+      const asignacion = new RegExp(`const (\\w+) = ${n}\\(\\{`).exec(rama);
+      if (!asignacion) continue;
+      const v = asignacion[1];
+      // El estado se deja abierto a proposito: `cuerpoVencido` empuja por 'VENCIDO' y
+      // `cuerpoCorto` por 'SUB_DESCRIBE'. Lo que se exige es que ALGUN push de esa variable
+      // llegue a un acumulador que hace salir al gate con codigo 1.
+      const destinos = [...rama.matchAll(new RegExp(`if \\(\\s*${v}\\.estado === '[A-Z_]+'\\s*\\)\\s*\\{?\\s*(\\w+)\\.push\\(`, 'g'))]
+        .map((m) => m[1]);
+      assert.ok(destinos.some((acc) => cortan.has(acc)),
+        `${nombre} llama a ${n} y su veredicto no llega a ningun acumulador que corte `
+        + `(empuja a: ${destinos.join(', ') || 'ninguno'}). El push tiene que colgar directo de `
+        + `la comparacion de ${v}.estado, o la rama queda muda con el gate en verde`);
+    }
+  }
+
+  // El caso que YA cumple, para que el gate no quede tautologico: alguna rama tiene que caer en
+  // el universo. Si `shasDelTexto(p.texto)` desaparece del bucle, esto se pone rojo en vez de
+  // firmar verde sobre un universo vacio.
+  assert.ok(crudas.some((r) => r.includes('shasDelTexto(p.texto)')),
+    'ninguna rama pregunta por el texto entero: el universo quedo vacio y el gate no mide nada');
 });
 
 // ── un publicador que CONTESTA y sale !=0 no es «no pude preguntar» ────────────────────
