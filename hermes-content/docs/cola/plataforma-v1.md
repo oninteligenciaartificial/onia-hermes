@@ -63,6 +63,38 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [x] 🔴 **~~El correo de «mitad de camino» del trial afirmaba días que no derivaba de nada~~ —
+      CERRADO el 2026-09-13 (`onia-platform` `1ef035f`, en la rama del carril; los tres gates
+      verdes acá Y re-corridos en el VPS sobre el árbol con `origin/master` mergeado: tsc 0 ·
+      4927 tests · eslint 0).** El paso 7 del drip afirma **dos** cosas —la posición (*«vas por
+      la mitad de tu prueba»*) y cuánto falta (*«quedan 7 días»*)— y las dos estaban **tipeadas**,
+      ciertas sólo para el trial estándar de 14.
+
+      **El largo NO es fijo:** `PATCH /api/admin/clinics` acepta `trialDays` libre y ya se usó
+      para extender pruebas a mano. La cadencia ya se había recortado contra el largo real el
+      11-sep (`cadencia-vs-largo-del-trial.test.ts`: los pasos 12 y 14 cuelgan del vencimiento
+      *porque afirman cuánto FALTA*) — **el arreglo no viajó al paso 7, que afirma lo mismo**:
+      con 30 días de prueba el dueño leía *«quedan 7 días»* con 23 por delante; con 10, *«quedan
+      7»* teniendo 3, y 48 h después el paso 12 le decía *«te quedan 2 días»* — dos correos
+      nuestros contradiciéndose, en el único canal que recupera al que se registró y no volvió.
+
+      **De qué cuelga cada paso lo decide ahora lo que su TEXTO afirma:** el 3 son días
+      transcurridos (del alta), el 7 es posición + cuánto falta (de la mitad del largo real), el
+      12 y el 14 cuánto falta (del vencimiento). Con los 14 estándar el disparador da 7: **cero
+      cambio en el caso vivo**. `diasQueFaltan` entra como campo **requerido** de
+      `TrialDripEmailData` — y `tsc` cazó al llamador que lo olvidaba
+      (`app/components/trial-vencido-cumple-la-promesa.test.ts`).
+
+      **Gate:** `lib/subscription/el-aviso-de-mitad-no-inventa-lo-que-falta.test.ts`, con los
+      días esperados como **literal** (no calculados con el mismo helper que el producto usa
+      para escribirlos) y el universo del último caso caminado **desde el disco**, no con
+      `git ls-files`. Validado por **tres** mutaciones: el texto de las dos ramas (3 rojos),
+      sólo la rama con actividad (2 rojos) y el disparador clavado en 7 (1 rojo, el caso del
+      disparador).
+
+      ⚠️ **Commiteado y publicado en la rama del carril, NO desplegado:** lo merge `onia-cola` y
+      el publicador automático swapea solo (no toca fuente de precio).
+
 - [ ] 🔴 **Punto nuevo de Sergio Urcullo (12-sep): ¿Onia Platform personalizable POR CLIENTE
       para empresas grandes?** Textual: *"que se pueda hacer in-house su trabajo y no ellos
       moldearse al sistema sino el sistema a ellos — analizá"*. Análisis en curso con medición
