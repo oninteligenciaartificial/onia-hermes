@@ -23,6 +23,7 @@ import { test } from "node:test";
 
 import { createState, step } from "./bot-engine.mjs";
 import { DEFAULT_CONFIG } from "./config.mjs";
+import { fuenteDePlataforma, repoPlataforma } from "./fuente-plataforma.mjs";
 import { checkGuardrails } from "./guardrails.mjs";
 import { isPriceQuestion } from "./intents.mjs";
 import { applyKnowledge, validateKnowledge } from "./knowledge.mjs";
@@ -141,82 +142,10 @@ test("el guardrail no se rompe con texto raro ni es stateful", () => {
 // 2. La correa: cada cifra vuelve a leerse de onia-platform
 // ---------------------------------------------------------------------------
 
-/**
- * onia-platform es OTRO repo. Se busca por env var y despues en las rutas del VPS.
- * Si no aparece, este test FALLA — no se saltea. Un gate que se apaga solo cuando no encuentra a
- * su sujeto falla ABIERTO, y el dia que alguien cambie un precio nadie se entera.
- *
- * Esto devuelve la CARPETA. Lo que se lee de adentro sale de `fuenteDePlataforma`, nunca del
- * working tree — ver el porque ahi abajo.
- */
-function vecinoDelCheckoutPrincipal() {
-  // En el nodo-casa este repo corre en un WORKTREE (`.claude/worktrees/...`), asi que ni cwd ni
-  // la ruta del test llevan al vecino `onia-platform`. Se le pregunta a git por el checkout
-  // primario (`--git-common-dir` apunta al `.git` del principal aun desde un worktree) y se
-  // prueba su hermano. Si git no esta o no es repo, es un candidato menos, no un error.
-  try {
-    const gitDir = execFileSync("git", ["rev-parse", "--path-format=absolute", "--git-common-dir"], {
-      encoding: "utf8",
-    }).trim();
-    return path.join(path.dirname(gitDir), "..", "onia-platform");
-  } catch {
-    return null;
-  }
-}
-
-function repoPlataforma() {
-  const candidatos = [
-    process.env.ONIA_PLATFORM_DIR,
-    "/root/loops/onia-platform-chatbot",
-    "/root/loops/onia-platform",
-    path.join(process.cwd(), "..", "onia-platform"),
-    vecinoDelCheckoutPrincipal(),
-  ].filter(Boolean);
-  const encontrado = candidatos.find((dir) => existsSync(path.join(dir, "lib", "subscription-plans.ts")));
-  assert.ok(
-    encontrado,
-    `no encontre onia-platform (probe: ${candidatos.join(", ")}). ` +
-      "Pasa ONIA_PLATFORM_DIR=<ruta>. NO se saltea: sin leer la fuente, este gate no vale nada.",
-  );
-  return encontrado;
-}
-
-/**
- * Lee un archivo de onia-platform desde `origin/master`. NO del working tree, y esa es toda la
- * diferencia entre un gate y un adorno.
- *
- * POR QUE, medido el 2026-09-12: este gate paso VERDE mientras el bot le cotizaba a los leads
- * "Bs 750 el Profesional y Bs 1.500 el Completo" y la fuente ya decia 890 y 1.290 (escalera C,
- * commit 4bff903). La causa no fue el gate en si: leia `<repo>/lib/subscription-plans.ts` del
- * disco, y los DOS clones del nodo estaban atras de origin/master (1 y 15 commits). O sea
- * comparaba la copia del bot contra un FOSIL del mismo dia en que se copio — y dos fotos del
- * mismo pasado coinciden siempre.
- *
- * Un worktree atrasado es el estado NORMAL de un carril, no una anomalia que se pueda pedir que
- * no ocurra: por eso el sujeto es el ref publicado y no la carpeta donde uno esta parado.
- */
-function fuenteDePlataforma(repo, archivo) {
-  try {
-    execFileSync("git", ["fetch", "origin", "--quiet"], { cwd: repo, stdio: "ignore", timeout: 60_000 });
-  } catch {
-    // Sin red se sigue con el ref que ya este en disco: refrescar es deseable, no imprescindible,
-    // y este gate corre en la cadena `npm test` de todos los carriles. Lo que NO se hace nunca es
-    // caer al working tree — que es, exactamente, el bug que este bloque existe para no repetir.
-  }
-  try {
-    return execFileSync("git", ["show", `origin/master:lib/${archivo}`], {
-      cwd: repo,
-      encoding: "utf8",
-      maxBuffer: 8 * 1024 * 1024,
-    });
-  } catch (error) {
-    assert.fail(
-      `no pude leer lib/${archivo} desde origin/master en ${repo}: ${error.message}. ` +
-        "Sin la fuente publicada este gate no vale nada, asi que cae en ROJO en vez de mirar el " +
-        "archivo del disco (que es el fosil que dejo pasar la escalera C).",
-    );
-  }
-}
+// `repoPlataforma` y `fuenteDePlataforma` vivian aca. Se mudaron a `fuente-plataforma.mjs` cuando
+// dejaron de tener un solo consumidor (`promesa-inclusion.test.mjs` cruza el mismo repo hermano
+// para otra pregunta): dos copias que divergen es como nace el gate que se arregla de un lado.
+// El porque de cada regla que sostienen —no saltearse, no leer el working tree— esta alla.
 
 /** Lee un simbolo tipo "DEFAULT_PLAN_AMOUNTS.basic.monthly" del texto de un .ts. */
 function leerSimbolo(fuente, simbolo) {
@@ -302,9 +231,13 @@ test("la correa lee la fuente PUBLICADA, no el archivo del disco", () => {
   // La baranda del instrumento, no del producto. Sin esto, el arreglo del 2026-09-12 dura hasta
   // que alguien vuelva a poner un readFileSync "porque es mas simple" — y el gate se apaga en
   // verde otra vez, que es como un worktree 15 commits atras dejo al bot cotizando Bs 750.
-  // Se mide sobre el codigo con los comentarios EN BLANCO: este mismo archivo NOMBRA la ruta
-  // prohibida varias veces al explicar el bug, y un detector que lea prosa se acusa solo.
-  const propio = readFileSync(new URL(import.meta.url), "utf8")
+  // Se mide sobre el codigo con los comentarios EN BLANCO: el archivo NOMBRA la ruta prohibida
+  // varias veces al explicar el bug, y un detector que lea prosa se acusa solo.
+  //
+  // El sujeto es `fuente-plataforma.mjs`, que es donde la funcion VIVE desde que la comparten dos
+  // gates. La ruta se arma desde este archivo, no se escribe suelta: si el modulo se mueve o se
+  // renombra, esto explota en vez de mirar un archivo que ya no manda.
+  const propio = readFileSync(new URL("./fuente-plataforma.mjs", import.meta.url), "utf8")
     .replace(/\/\*[\s\S]*?\*\//g, (bloque) => bloque.replace(/[^\n]/g, " "))
     .replace(/\/\/[^\n]*/g, (linea) => linea.replace(/./g, " "));
 

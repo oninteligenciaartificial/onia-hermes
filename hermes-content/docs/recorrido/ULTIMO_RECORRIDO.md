@@ -12,6 +12,70 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-13 02:09 La Paz — dental 9/9 (rutina) + auditoría de los 4 CTA "Empezar con el <plan>", sin hallazgo reportable
+
+Dental (`zz-qa-2026-09-13-0209`): recorrido completo, 9/9, cita 2026-09-14 09:00 vista en
+`/appointments` (`cmtz6iy5c003e01rwsv5hza45`), factura con ítem visible en
+`/billing/cmtz6j92t003g01rw3kwuglly` (frenada sin pagar). `completo: true`, 0 filas `zz-qa-`
+al cerrar.
+
+Siguiendo el escalón 3: los 4 botones de `/precios` y de la home — "Empezar con el Básico",
+"…Crece", "…Pro", "…Full" — apuntan **los cuatro al mismo** `https://app.onia.com.bo/register`,
+sin query param (medido con Playwright leyendo `a.href` en vivo). `SignupForm.tsx` sólo lee
+`from` y `notice`/`error` de `searchParams`: el plan que motivó el clic se descarta. Confirmado
+contra el árbol `onia-platform` (`app/api/auth/register/route.ts:306`): TODA cuenta nueva nace
+con `plan: TRIAL_PLAN` = `"professional"` (nivel "Pro" de la escalera C), **sin importar cuál de
+los 4 botones se apretó**. Consecuencia real: quien hace clic en "Empezar con el Full" para
+probar el chatbot incluido (`whatsappIncluded` sólo es `true` en `clinic`/`enterprise`) no lo ve
+en su trial — tiene el nivel Pro, no Full.
+
+**No lo reporto como hallazgo de producto**: es el patrón estándar de "un solo trial genérico,
+elegís y pagás el plan después" (ver `settings/PlanClient.tsx`), no una pantalla que promete y
+no entrega en el momento en que promete. Lo dejo escrito para que la próxima vuelta no vuelva a
+investigar esto desde cero — si algún día el trial se vende como "probá el plan que elegiste",
+esto sí se vuelve un hallazgo real.
+
+---
+
+## 2026-09-13 00:10 La Paz — dental 9/9 (rutina) + auditoría promesa-vs-entrega en la home, sin hallazgos
+
+Dental (`zz-qa-2026-09-13-0010`): recorrido completo, 9/9, cita 2026-09-14 09:00 vista en
+`/appointments` (`cmtz290mr001j01rwcpel0kzm`), factura con ítem visible en
+`/billing/cmtz29bso001l01rwnpsrimqb` (frenada sin pagar). `completo: true`, 0 filas `zz-qa-`
+en `appointments` ni `organizations` al cerrar.
+
+Con los 5 rubros ya cubiertos (lección de la vuelta pasada: no repetir rubro), el resto de la
+vuelta fue el escalón 3: comparar lo que promete `onia.com.bo` contra la fuente y contra el
+build vivo del contenedor `onia-platform`.
+
+- **Precios de planes (Básico 320 / Crece 550 / Pro 890 / Full 1.290, anuales con -16%):**
+  coinciden EXACTO con `docker exec onia-platform grep -rhoE 'monthly:[0-9]+' /app/.next/server`
+  (320/550/890/1290/150/70/390/2900/0) y con `lib/plan-catalogo.ts` /
+  `lib/pricing.ts` del árbol `onia-platform`. La escalera C (320/550/890/1290 + Crece,
+  desplegada el 2026-09-12) está viva en el sitio Y en la plataforma — sin desfase.
+- **Chatbot Bs 390/mes, "se suma a cualquier plan", incluido solo en Full:** coincide con
+  `WHATSAPP_ADDON.entryMonthly=390` y `whatsappIncluded` en `plan-catalogo.ts` (`true` solo en
+  `clinic`/`enterprise`=Full/Grupo, `false` en basic/crece/professional).
+  "Chatbot de WhatsApp incluido (aparte vale Bs 390/mes)" en la tarjeta Full: exacto.
+- **"Agente Recall solo en dentales, estética y servicios profesionales" (tarjeta Crece):**
+  coincide con `guardaClientesEnPatients` (dental/estética/serv. profesionales — veterinaria ya
+  no está en `RUBROS_ACTIVOS`, comercio/importadora no tienen `patients`).
+- **Reservas online: add-on Bs 150/mes en Básico, incluidas desde Crece:** coincide con
+  `publicBookingIncluded` (`false` en `free`/`basic`, `true` desde `crece`).
+- **FAQ "¿Y si dejo de pagar, pierdo todo?"** ("la suspensión nunca implica borrarlos… podés
+  exportar en CSV cuando quieras") es cita casi literal de `terminos.md` §3.4 ("La suspensión
+  nunca implica borrar datos") y §4.2 (elimina "recién después de los plazos de retención") —
+  no exhibe obra, no promete de más, no oculta el plazo real.
+- **FAQ "¿La factura al SIN ya funciona?"**: dice homologación "en trámite", sin fecha vencida
+  ni "muy pronto" — consistente con el estado fiscal vigente (plazo 1-oct-2026, sin la fecha
+  falsa "30 de septiembre" que ya se corrigió en otras superficies).
+
+Sin hallazgo nuevo. Próxima vuelta: seguir el escalón 3 en otra superficie (p.ej. `/precios`,
+`/empezar`, o el flujo de checkout/cobro) en vez de repetir la home, o rotar de nuevo por rubro
+si ya pasó bastante tiempo desde la última vez que se tocó cada uno.
+
+---
+
 ## 2026-09-12 22:09-22:14 La Paz — dental 9/9 y Comercio 8/8, dos corridas seguidas, sin hallazgos
 
 Rotando como quedó anotado la vuelta pasada (dental venía sano corrida tras corrida). Dental
