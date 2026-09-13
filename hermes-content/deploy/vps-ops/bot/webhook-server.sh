@@ -143,13 +143,32 @@ esac
 # SILENCIO — o sea el editor creia haber publicado algo que el bot nunca dijo.
 STAMP="$(cat "$BOT_DIR"/*.mjs "$BOT_DIR"/*.json 2>/dev/null | md5sum | cut -c1-12)"
 CURRENT="$(docker exec "$CONTAINER" cat "$DEST/.stamp" 2>/dev/null || true)"
+# La copia se arma AL LADO y se publica con un `mv`, en vez de `rm -rf $DEST` + `docker cp`.
+# Por que: este sync corre tambien en `start`, o sea CON EL PROCESO VIVO, y el bot corre DESDE
+# $DEST (`node $DEST/webhook-server.mjs`). Borrar el destino primero dejaba al bot sin
+# `knowledge.json` durante todo el `docker cp` — y en esa ventana el que preguntaba el precio
+# recibia el texto sin cotizacion, porque un archivo ausente no es un error que el cargador grite.
+# Medido el 2026-09-12 (conv 49, 22:48 UTC). Peor todavia: si el `cp` FALLABA, el destino ya
+# estaba borrado y el proceso vivo se quedaba sin archivos, con el script saliendo en error.
+# Asi la ventana pasa de durar el `cp` entero a durar dos `mv` (el rename no es atomico entre los
+# dos, pero son microsegundos), y un `cp` fallido NO toca lo que esta sirviendo.
 if [ "$CURRENT" != "$STAMP" ]; then
-  docker exec "$CONTAINER" rm -rf "$DEST" >/dev/null 2>&1
-  if ! docker cp "$BOT_DIR" "$CONTAINER:$DEST" >/dev/null 2>&1; then
-    echo "ERROR: no se pudo copiar el bot al contenedor" >&2
+  docker exec "$CONTAINER" rm -rf "$DEST.new" "$DEST.old" >/dev/null 2>&1
+  if ! docker cp "$BOT_DIR" "$CONTAINER:$DEST.new" >/dev/null 2>&1; then
+    docker exec "$CONTAINER" rm -rf "$DEST.new" >/dev/null 2>&1
+    echo "ERROR: no se pudo copiar el bot al contenedor (lo que estaba sirviendo quedo intacto)" >&2
     exit 1
   fi
-  docker exec "$CONTAINER" sh -c "printf '%s' '$STAMP' > $DEST/.stamp" >/dev/null 2>&1
+  # El stamp viaja DENTRO de la copia nueva: asi el `mv` publica codigo y stamp de una, y no puede
+  # quedar un destino con codigo nuevo y stamp viejo (que haria recopiar todo en la corrida que viene).
+  docker exec "$CONTAINER" sh -c "printf '%s' '$STAMP' > $DEST.new/.stamp" >/dev/null 2>&1
+  docker exec "$CONTAINER" mv "$DEST" "$DEST.old" >/dev/null 2>&1   # la primera vez no existe: se tolera
+  if ! docker exec "$CONTAINER" mv "$DEST.new" "$DEST" >/dev/null 2>&1; then
+    docker exec "$CONTAINER" mv "$DEST.old" "$DEST" >/dev/null 2>&1
+    echo "ERROR: no se pudo publicar la copia nueva del bot (se restauro la anterior)" >&2
+    exit 1
+  fi
+  docker exec "$CONTAINER" rm -rf "$DEST.old" >/dev/null 2>&1
 fi
 
 # ---------------------------------------------------------------------------

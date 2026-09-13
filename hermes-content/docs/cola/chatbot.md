@@ -376,7 +376,50 @@ La historia completa queda acá abajo para no perderla.
       un reinicio salga del archivo es deliberado y acá es inocuo: el panel es la cara de VENTA
       de Onia, o sea la misma voz que el archivo. No hay nada que arreglar; no reabrirlo.
 
-- [ ] 🟡 **El bot tuvo una ventana sirviendo el M4_BODY SIN precios, y no sé por qué.**
+- [x] 🟡 **~~El bot tuvo una ventana sirviendo el M4_BODY SIN precios, y no sé por qué~~ — EL
+      MECANISMO ESTÁ IDENTIFICADO Y CERRADO POR LOS DOS LADOS EN CÓDIGO, el 2026-09-13 00:05
+      La Paz. ⚠️ COMMITEADO, NO DESPLEGADO: el bot vivo todavía corre el build sin esto.**
+
+      **Lo que se encontró, leyendo el código y probándolo — ya no es hipótesis:**
+
+      1. **La ventana existe y la abre el propio deploy.** `webhook-server.sh` sincronizaba con
+         `rm -rf $DEST` **y después** `docker cp`, y ese sync corre también en `start`, o sea
+         **con el proceso vivo**, que ejecuta `node $DEST/webhook-server.mjs`. Durante todo el
+         `cp` el bot no tiene `knowledge.json`. Peor: si el `cp` **fallaba**, el destino ya
+         estaba borrado y el bot quedaba sin archivos, con el script saliendo en error.
+      2. **Y algo peor, que es lo que convierte segundos en minutos:** una lectura fallida *por
+         ausencia* marcaba la caché como «ya miré» (`checkedAt: nowMs`), así que el bot quedaba
+         **sin conocimiento el TTL entero — 5 minutos** — aunque el archivo volviera dos segundos
+         después. Eso explica el síntoma que no cerraba: **el mismo proceso**, sin reiniciar,
+         mudo un rato y cotizando bien después.
+
+      **El arreglo, por los dos lados** (`knowledge.mjs` + `webhook-server.sh`):
+      · `nextCache` **no marca** la caché cuando el archivo estaba ausente y no hay copia buena:
+        el turno siguiente vuelve a mirar. Cuesta un `ENOENT` por turno mientras no haya archivo,
+        y ni eso apenas aparece. Con copia buena en memoria manda el TTL, como hasta hoy — no se
+        paga disco en el camino de la respuesta.
+      · el sync arma la copia en `$DEST.new` y la **publica con `mv`**, con el `.stamp` adentro
+        (código y stamp se publican de una); un `cp` fallido ya no toca lo que está sirviendo.
+        La ventana pasa de durar el `cp` entero a durar dos renames.
+      · **No se derramó a las fuentes `db`/`panel`**, y está escrito por qué: ahí «ausente» es un
+        404 por red, reintentarlo por turno pone un `fetch` en el camino de la respuesta, y su
+        degradación cae a este archivo, que sí tiene los precios.
+
+      **Prueba (no es un `grep`):** 2 casos nuevos en `knowledge.test.mjs` — el que reproduce la
+      ventana (archivo ausente → vuelve → el turno siguiente cotiza) **estaba en ROJO antes del
+      arreglo**, con `undefined` donde va la versión; y su hermano afirma que con copia buena NO
+      se relee por turno. Y `sync-no-deja-al-bot-sin-archivos.test.mjs` (nuevo) corre el script de
+      verdad contra un `docker` falso y mide el EFECTO: deja un testigo de si el destino vivo
+      seguía completo durante el `cp`, y prueba el caso del `cp` fallido. **Validado por
+      mutación:** devolver el bloque a `rm -rf $DEST` + `cp` pone los DOS en rojo. Suite del bot:
+      **965 pass / 0 fail**.
+
+      **Lo que NO se probó y por eso no se afirma:** la traza del evento concreto de las 22:48
+      (qué corrida del sync abrió esa ventana) no existe — el script no dejaba una línea por
+      recopia. Lo que sí está demostrado es el mecanismo y que ya no puede durar minutos.
+
+      <details><summary>Diagnóstico original del 2026-09-12 (cómo se encontró)</summary>
+
       Medido el 2026-09-12: a las **22:48:35 UTC** la conv 49 preguntó *"Cuanto cuesta el sistema?
       pasame los precios"* y el bot contestó *"el número exacto te lo pasa Sergio en la demo…
       no te quiero tirar una cifra"* — el `M4_BODY` de `config.mjs`, que **no cotiza**. A las
@@ -414,6 +457,8 @@ La historia completa queda acá abajo para no perderla.
       intacto. **Lo que la probaría:** una línea por recopia en el log de `webhook-server.sh`, o
       un `stat` del archivo durante un `knowledge`/deploy. Si es eso, el arreglo es que la recopia
       sea atómica (escribir al lado y `mv`), no que el motor reintente.
+
+      </details>
 
 - [x] ✅ **CERRADO el 2026-09-12 23:23 UTC (`851eddff`): los gates del carril estaban CIEGOS en
       el nodo-casa — cinco tests rojos, el self-check de la sonda en 41/42, y `bloqueos:vencidos`

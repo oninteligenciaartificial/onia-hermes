@@ -126,6 +126,53 @@ test("archivo AUSENTE: el bot sigue contestando el guion completo, sin un solo {
   });
 });
 
+// --- La VENTANA del deploy: el archivo desaparece unos segundos y vuelve --------------------
+//
+// `webhook-server.sh` sincroniza el codigo con `rm -rf /tmp/onia-bot` + `docker cp` y el proceso
+// vivo corre DESDE ahi: durante esa ventana `knowledge.json` NO EXISTE. Eso solo deberia costar
+// los segundos del `cp` — pero una lectura fallida por ausencia marcaba la cache como "ya mire"
+// y congelaba el estado "sin conocimiento" el TTL ENTERO (5 min), aunque el archivo volviera dos
+// segundos despues. Medido el 2026-09-12 en produccion: a las 22:48 UTC el bot le contesto a un
+// desconocido que preguntaba el precio "no te quiero tirar una cifra" (el M4_BODY sin cotizacion)
+// y a las 23:15 el MISMO proceso, sin reiniciar, ya servia la escalera entera.
+test("el archivo que DESAPARECE durante un deploy no deja al bot sin cotizar 5 minutos: el turno siguiente lo relee", () => {
+  conArchivo(null, (path) => {
+    const durante = getKnowledge({ path, nowMs: NOW_MS });
+    assert.equal(durante.data, null, "durante el `rm -rf` no hay nada que leer");
+    assert.equal(durante.error, null, "un archivo ausente no grita: puede ser el estado normal");
+
+    // El `docker cp` termina dos segundos despues y el archivo vuelve.
+    writeFileSync(path, JSON.stringify(valido({ version: "vuelta" })));
+
+    const despues = getKnowledge({ path, nowMs: NOW_MS + 2_000 });
+    assert.equal(
+      despues.data?.version,
+      "vuelta",
+      "apenas el archivo vuelve, el mensaje siguiente tiene que cotizar — esperar el TTL son 5 min de prospectos sin precio",
+    );
+    assert.equal(despues.source, "file");
+  });
+});
+
+test("archivo ausente CON copia buena en memoria: se sigue sirviendo esa copia y NO se relee en cada turno", () => {
+  conArchivo(valido({ version: "publicada" }), (path) => {
+    assert.equal(getKnowledge({ path, nowMs: NOW_MS }).data.version, "publicada");
+
+    let lecturas = 0;
+    const readFileSync = () => {
+      lecturas += 1;
+      const error = new Error("no existe");
+      error.code = "ENOENT";
+      throw error;
+    };
+    for (const salto of [1_000, 2_000, 3_000]) {
+      const estado = getKnowledge({ path, nowMs: NOW_MS + salto, readFileSync });
+      assert.equal(estado.data.version, "publicada", "lo ultimo bueno no se pierde porque el archivo desaparezca");
+    }
+    assert.equal(lecturas, 0, "con copia buena manda el TTL: releer por turno seria pagar disco en el camino de la respuesta");
+  });
+});
+
 test("JSON ROTO: se rechaza entero, se sigue con codigo y el error queda a la vista en /health", async () => {
   await conArchivo("{ esto no es json", async (path) => {
     const config = withKnowledge(DEFAULT_CONFIG, { path, nowMs: NOW_MS });
