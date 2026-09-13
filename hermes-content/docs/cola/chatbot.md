@@ -278,6 +278,43 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El log del bot no dice POR QUÉ CANAL entró el mensaje, y el canal es lo que decide
+      qué documento le contesta al lead~~ — CERRADO EN CÓDIGO el 2026-09-13 02:20 La Paz.
+      ⚠️ COMMITEADO, NO DESPLEGADO: el bot vivo sigue escribiendo la línea sin `inbox=`.**
+      **Lo que lo destapó, midiendo producción y no leyendo docs:** crucé `conversations` de
+      Chatwoot con el log vivo y conté, por conversación, entrantes contra respuestas. De los
+      **7 desconocidos reales** que escribieron alguna vez, **4 no recibieron ni una respuesta**
+      (convs 34 y 36 del inbox 4; **35 `F` y 37 `mariohassen` del inbox 5, el de WhatsApp**) y
+      **1 murió en el segundo turno** (conv 40: 2 entrantes, 1 saliente). Los mudos son todos
+      del 24-28 de agosto —el período del bug ya arreglado, no uno nuevo—; lo que sí sigue vivo
+      es que **esa distinción no se puede hacer desde el log**: hubo que ir a cruzar la base a
+      mano. El log vivo tiene 46.323 líneas y **ninguna dice el inbox**.
+      **Por qué no es cosmético.** El inbox ES la clave con la que el bot elige qué documento le
+      contesta al lead (`cacheKeyOf` keyea `inbox:<id>`, y la fuente del panel se aplica a TODOS
+      los alcances — medido el 12-sep). Dos líneas idénticas del log pueden estar cotizando
+      precios distintos, y hoy no hay forma de saberlo. Y mi propia definición de hecho mide
+      **un solo canal**: la sonda prueba el widget web (inbox 4) y firma 2/2 en verde aunque
+      WhatsApp —el canal de leads reales— esté mudo. El instrumento no podía ver la mitad del
+      negocio.
+      **Cómo se cerró.** `inbox=` va en **todas** las ramas, y siempre — también cuando no se
+      sabe (`inbox=?`): si apareciera sólo cuando se conoce, un `grep inbox=5` perdería justo
+      las líneas que hay que mirar (la ausencia de una clave codifica una creencia). La rama
+      `ignorado` fue la primera en cubrirse porque es la más frecuente (**863 de 1.312** líneas
+      con `rama=`) y la única que no pasa por el parser, o sea la que no puede deducir nada sola.
+      De paso se cerró la causa de raíz: Chatwoot pone el inbox en **tres** lugares distintos
+      según el evento y **cada rama del adapter lo extraía por su cuenta, con un orden propio** —
+      el par clásico que diverge y se arregla de un solo lado. Ahora hay **una sola función
+      exportada** (`inboxDelPayload`, `chatwoot-adapter.mjs`), superset de los tres casos, usada
+      por las tres ramas y por el log.
+      **Rojo por el motivo correcto ANTES del arreglo** (`rama=ignorado` sin canal, con la línea
+      real pegada en el assert), verde después. **Validado por mutación en las DOS piezas:**
+      esquivar el aporte del skip (`inbox: undefined`) → rojo en *«un evento ignorado sin canal
+      no se puede atribuir»*; devolver la extracción al orden viejo de `message_created` → rojo
+      en *«el payload plano de `conversation_created` también tiene canal»*. Suite del bot
+      completa: **976/976 verde**.
+      **Lo que queda y NO lo puede hacer este carril:** `DESPLEGAR: bot`. Hasta entonces el
+      campo existe en el repo y no en el log que se lee para diagnosticar.
+
 - [x] 🔴 **~~El bot le prometía a los leads reales «creás tu cuenta y entrás al toque», y el
       producto exige confirmar el correo~~ — CERRADO EN PRODUCCIÓN el 2026-09-13 01:20 La Paz.**
       La mitad «contesta el precio correcto» del objetivo tiene instrumento vivo desde el 12-sep
@@ -2845,8 +2882,47 @@ decisión de Sergio, no código.
       terminar** — toda sonda que siembre en producción cierra lo suyo en `finally`, o el
       barrido hay que repetirlo para siempre.
 
-- [ ] 🟡 **El inbox que nazca huérfano le habla a los clientes del CLIENTE con la cara de Onia
-      — medido el 2026-09-13, sin víctima hoy porque ninguna org menos la interna tiene inbox.**
+- [x] 🟡 **~~El inbox que nazca huérfano le habla a los clientes del CLIENTE con la cara de
+      Onia~~ — CERRADO EN CÓDIGO el 2026-09-13 02:55 La Paz.
+      ⚠️ COMMITEADO, NO DESPLEGADO: el bot vivo sigue sirviéndole el panel a cualquier inbox.**
+      **Peor de lo que decía este ítem, recontado en vivo antes de tocar nada:** no son «los
+      cuatro inboxes», es **cualquier número**. `?inboxId=99` —un inbox que no existe— contestaba
+      igual `source: "panel"`, o sea el guion de venta de Onia con sus precios y sus horarios de
+      demo. La lista de sujetos no era 4: era infinita.
+      **La causa, y por qué ningún gate la veía.** `fetchOrgKnowledge` aplanaba DOS respuestas
+      distintas en el mismo `missing: true`: *«es la org interna»* (correcto — ese inbox ES de
+      Onia y debe caer al panel) y *«404, no es de ninguna org»* (huérfano). Indistinguibles, el
+      huérfano heredaba la cara de Onia. Es la misma clase que ya se había curado al lado: sin
+      `humanName` del cliente, el fallback heredado era **«Sergio»** delante del cliente final
+      (`asRecepcionista`, visto en prod el 2026-08-29).
+      **La decisión que pedía este ítem, tomada acá:** el fallback de un `inbox:<id>` deja de
+      heredar la cara de Onia. Un 404 sobre un inbox se **declara** huérfano (`huerfano: true`,
+      re-derivado en cada lectura: el día que alguien lo registre, deja de serlo sin reiniciar el
+      proceso), `getKnowledge` corta ANTES del panel y del archivo —que son los dos el guion de
+      Onia— y `withKnowledge` lo degrada a **recepcionista neutro**: sin precios, sin demo con
+      Sergio, y derivando a «el equipo». **El corte no es silencio:** el bot sigue atendiendo.
+      **Por qué NO rompe «un canal nuevo de Onia sigue vendiendo Onia»** (la decisión que el
+      test viejo defendía): los inboxes de Onia se registran en la org interna igual que el 4 y
+      el 5, y entonces no son huérfanos — el producto los resuelve y caen al panel como siempre.
+      Lo que cambió es el default: antes era «vendé Onia salvo que sepas de quién es»; ahora es
+      «vendé Onia sólo si sabés que es de Onia». El test viejo (*«db: inbox sin org (404) degrada
+      a archivo/código»*) decía en su aserción *"inbox que no es de ningún cliente = bot de Onia,
+      como siempre"* — eso era exactamente el bug escrito como garantía, y se corrigió con su
+      motivo, no se borró.
+      **Prueba.** Caso nuevo en `knowledge.test.mjs` (*«panel: un inbox HUERFANO (404) no come del
+      panel global»*), en ROJO antes del arreglo y validado por **mutación en las dos piezas**:
+      esquivar el corte de `getKnowledge` → 2 fallos; esquivar la degradación de `withKnowledge`
+      → 1 fallo. Cadena entera del repo en verde (`npm test`, exit 0, cero `not ok`).
+      **Cómo se verifica después del deploy**, sin tocar una conversación real — el mismo comando
+      con el que se midió el bug, porque `/health` ahora publica el dato:
+      `docker exec onia-center wget -qO- 'http://127.0.0.1:3020/health?inboxId=99'` → tiene que
+      decir `"huerfano":true` y **no** `source:"panel"`; y `?inboxId=4` tiene que seguir diciendo
+      `source:"panel"` con `"huerfano":false`.
+      **Lo que este carril NO tocó:** la otra mitad de la decisión —que el alta del inbox registre
+      la org en el mismo paso— es del Embedded Signup (`t_6bf938b7`, bloqueada). Con esto, que
+      siga bloqueada ya no muerde: el inbox que nazca huérfano no vende Onia.
+
+      <details><summary>Lo medido el 2026-09-13 antes del arreglo</summary>
       Preguntándole al proceso vivo por la MISMA vía del camino de respuesta, los CUATRO inboxes
       de Chatwoot devuelven el MISMO documento — el de `onia-interna`:
 
@@ -2870,6 +2946,7 @@ decisión de Sergio, no código.
       (`knowledge.test.mjs`, *«panel: un inbox CON fila propia come de SU fila»*, validado por
       mutación — el panel F2.1 llegó después de la resolución por inbox y se aplica a todos los
       alcances, así que nada más lo sujetaba).
+      </details>
 
 - [ ] **Limpieza de la data QA NUEVA.** La del 29-ago ya se ejecutó; después se generó más:
       las conversaciones QA 39, 43 y 44 (`Cliente Prueba Bandeja`, `Cliente Insistencia Tres`,

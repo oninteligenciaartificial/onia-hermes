@@ -844,6 +844,69 @@ test("TRAZA: skip, dedup y error tienen cada uno su rama y su motivo", () => {
   assert.match(rechazado, /estado=401/);
 });
 
+test("TRAZA: la linea dice POR QUE CANAL entro, incluso cuando el evento se ignora", async () => {
+  // Medido el 2026-09-13 en produccion, cruzando `conversations` de Chatwoot con el log vivo:
+  // de los 7 desconocidos reales que escribieron, 4 no recibieron ni una respuesta y 1 murio en
+  // el segundo turno — y DOS de los mudos son del inbox 5, el de WhatsApp, que es el canal de
+  // leads reales. El log del webhook (46.323 lineas) no trae el inbox en ninguna rama, asi que
+  // esa distincion solo se pudo hacer yendo a la base a cruzarla a mano.
+  //
+  // Por que importa y no es cosmetico: el inbox ES la clave con la que el bot elige QUE
+  // documento le contesta al lead (`cacheKeyOf` keyea `inbox:<id>`, y la fuente del panel se
+  // aplica a TODOS los alcances). Dos conversaciones con lineas identicas pueden estar
+  // cotizando precios distintos, y hoy no hay forma de saberlo desde el log.
+  //
+  // El `ignorado` es el caso que mas duele y por eso va primero: es la rama mas frecuente (863
+  // de 1.312 lineas con `rama=`), la que se descarta sin llamar al motor, y la unica que hoy no
+  // pasa por el parser — o sea la que no puede deducir nada sola.
+  const saliente = mensajeEntrante({ message_type: "outgoing", inbox: { id: 5 } });
+  const ignorado = await handleChatwootWebhook(pedido(saliente, sign(saliente)), {
+    config: CONFIG,
+    runChatwootTurn: motorMock({ sent: [] }),
+    nowMs: NOW_MS,
+  });
+  assert.match(
+    formatearTraza(ignorado.traza),
+    /inbox=5/,
+    "un evento ignorado sin canal no se puede atribuir: es la rama mas frecuente del log",
+  );
+
+  // El camino feliz, por el pipeline entero: la propiedad depende de lo que entrega el PARSER
+  // (`turn.inbox_id`), no de como se formatea despues.
+  const deWhatsapp = mensajeEntrante({ content: "hola, me interesa", inbox: { id: 5 } });
+  const feliz = await handleChatwootWebhook(pedido(deWhatsapp, sign(deWhatsapp)), {
+    config: CONFIG,
+    runChatwootTurn: motorMock({ sent: [{ text: "hola", posted: true }] }),
+    nowMs: NOW_MS,
+  });
+  assert.match(formatearTraza(feliz.traza), /inbox=5/, "el canal del lead que SI fue atendido tambien se nombra");
+
+  // `conversation_created` trae el payload PLANO (`inbox_id` top-level), no anidado: es la forma
+  // que las otras dos ramas del adapter no miran, y la que se pierde si cada una extrae por su
+  // cuenta.
+  const creada = JSON.stringify({
+    event: "conversation_created",
+    id: 88,
+    inbox_id: 7,
+    messages: [{ id: 5150, content: "hola", message_type: "incoming", created_at: "2026-07-30T18:00:00Z", sender: { id: 9 } }],
+  });
+  const nueva = await handleChatwootWebhook(pedido(creada, sign(creada)), {
+    config: CONFIG,
+    runChatwootTurn: motorMock({ sent: [] }),
+    nowMs: NOW_MS,
+  });
+  assert.match(formatearTraza(nueva.traza), /inbox=7/, "el payload plano de conversation_created tambien tiene canal");
+
+  // Y cuando NO se sabe, el campo va igual: si apareciera solo cuando se conoce, un grep por
+  // inbox perderia justo las lineas que hay que mirar. La ausencia de una clave codifica una
+  // creencia, y aca la creencia seria falsa.
+  assert.match(
+    formatearTraza({ conversacion: "77", estado: 200, cuerpo: { ok: true, sent: [], warnings: [] } }),
+    /inbox=\?/,
+    "sin canal conocido el campo sigue presente, con el signo de pregunta",
+  );
+});
+
 test("TRAZA: la entrada va en UNA linea y acotada (un log multilinea no se puede grepear)", () => {
   const linea = formatearTraza({
     conversacion: "77",
