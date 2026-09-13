@@ -9,7 +9,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { archivosDelDryRun, archivosDelDryRunBot, archivosNombrados, secoDeProduccion, barrerPedidos, buildQueCorre, clasificarPedido, cuerpoCortoArchivos, cuerpoNoEjecuta, inmediblesSinDeclarar, publicariaPorCopia, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
+import { archivosDelDryRun, archivosDelDryRunBot, archivosNombrados, secoDeProduccion, barrerPedidos, buildQueCorre, cadenaPorPedido, clasificarPedido, imprimirCadena, cuerpoCortoArchivos, cuerpoNoEjecuta, inmediblesSinDeclarar, publicariaPorCopia, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
 import { DESTINOS } from './kanban/publicar-aprobado.mjs';
 
 // El caso que me costo la vuelta del 2026-09-06: los 13 shas prometidos por t_0268567b
@@ -1044,3 +1044,92 @@ test('ejecuta: un cuerpo sin DESPLEGAR: no es sujeto', () => {
   const pieza = 'PUBLICAR: cuenta=lucia imagenes=/tmp/a.png texto=/tmp/b.json';
   assert.equal(cuerpoNoEjecuta({ texto: pieza }).estado, 'SIN_ORDEN');
 });
+
+// ── ningun pedido queda mudo por culpa de otro ─────────────────────────────────────────
+//
+// 🔴 Medido el 2026-09-12, tres corridas seguidas de `npm run pedido:entregado`:
+//   corrida 1: OK siat / OK bot / OK landing / OK plataforma
+//   corrida 2: OK siat / OK landing / ROJO plataforma   <- el BOT no sale ni OK ni rojo
+//   corrida 3: OK siat / ROJO landing                   <- sigue sin aparecer el bot
+// La cadena de `imprimirCadena` corria UNA sola vez para TODOS los pedidos, asi que el
+// `return 1` del primer bloque con contenido se llevaba puesto a los pedidos de los OTROS
+// destinos. El del bot (t_2baef483) quedo blocked pidiendole un ok a Sergio Urcullo por
+// trabajo YA publicado y el gate no lo dijo — que es justo el modo de falla que caza.
+//
+// Tapar el segundo control DEL MISMO pedido es el diseno (se cura el de arriba y en la
+// corrida siguiente aparece el de abajo); tapar un pedido ENTERO de otro destino es el bug.
+// ⚠️ El `correr` NO puede ser un espia propio que recorra todas las listas: con esa copia
+// benevola la mutacion «corre una sola vez con todo» pasaba en VERDE, medido hoy. Lo que
+// produce el tapado es el `return` del primer control, asi que el sujeto tiene que ser
+// `imprimirCadena`, que es la que lo tiene.
+test('dos pedidos en rojo por controles distintos: los DOS se imprimen', () => {
+  const { texto, corta } = correrCadena({
+    ids: ['t_plataforma', 't_bot'],
+    entregados: [{ id: 't_plataforma' }],
+    entregadosSiat: [{ id: 't_bot', destino: 'bot' }],
+  });
+  assert.match(texto, /ROJO t_plataforma/);
+  assert.match(texto, /ROJO t_bot/,
+    'un pedido de otro destino quedo invisible: ni OK ni rojo, que es como sobrevivio el bug');
+  assert.equal(corta, 1);
+});
+
+// El caso que YA cumple, para que el de arriba no pase por el motivo equivocado: con un solo
+// pedido la cadena sigue siendo UNA, y el rojo de mayor prioridad tapa al de abajo A PROPOSITO.
+test('un pedido con dos rojos sigue imprimiendo SOLO el mas caro', () => {
+  const { texto } = correrCadena({
+    ids: ['t_uno'],
+    entregados: [{ id: 't_uno' }],
+    cortos: [{ id: 't_uno', destino: 'plataforma', mudos: [{ sha: 'abc1234', titulo: 'x' }] }],
+  });
+  assert.match(texto, /ya esta publicado/);
+  assert.doesNotMatch(texto, /no nombra 1 arreglo/);
+});
+
+// Y la direccion sana: sin rojos no corta, o el gate da rojo siempre y se termina apagando.
+test('sin rojos, la cadena por pedido no corta', () => {
+  assert.equal(cadenaPorPedido({
+    ids: ['t_uno', 't_dos'],
+    acumuladores: { entregados: [], cortos: [] },
+    correr: () => 0,
+  }), 0);
+});
+
+// Cableado: el defecto vuelve entero si alguien le pasa los acumuladores CRUDOS a la cadena.
+// El sujeto se deriva del fuente: toda llamada a `imprimirCadena(` que no sea su declaracion
+// tiene que colgar del `correr:` de `cadenaPorPedido`.
+test('cableado: el main corre la cadena POR PEDIDO, no una vez con todo', () => {
+  const src = readFileSync(new URL('./pedido_deploy_entregado.mjs', import.meta.url), 'utf8')
+    .split('\n').filter((l) => !/^\s*(\/\/|\*|\/\*)/.test(l)).join('\n');
+  const llamadas = [...src.matchAll(/(.{0,40})imprimirCadena\(/g)]
+    .map((m) => m[1])
+    .filter((antes) => !/export function $/.test(antes));
+  assert.ok(llamadas.length > 0, 'nadie llama a la cadena: el gate no imprime ningun rojo');
+  for (const antes of llamadas) {
+    assert.match(antes, /correr:\s*\([\w\s,{}]*\)\s*=>\s*$/,
+      'una llamada a imprimirCadena fuera del correr: de cadenaPorPedido vuelve a tapar '
+      + 'los pedidos de los otros destinos');
+  }
+  assert.match(src, /cadenaPorPedido\(\{/, 'el main tiene que repartir la cadena por pedido');
+});
+
+/** Corre la cadena REAL capturando lo que imprime. Los acumuladores que el caso no nombra van
+ *  vacios, igual que en el main. */
+function correrCadena({ ids, ...listas }) {
+  const dicho = [];
+  const orig = console.log;
+  console.log = (...a) => dicho.push(a.join(' '));
+  try {
+    const corta = cadenaPorPedido({
+      ids,
+      acumuladores: {
+        entregados: [], entregadosSiat: [], mudos: [], punteros: [], cortosSiat: [],
+        incompletos: [], vencidos: [], cortos: [], inmedibles: [], ...listas,
+      },
+      correr: (propios) => imprimirCadena({ ...propios, vivo: 'abc1234' }),
+    });
+    return { texto: dicho.join('\n'), corta };
+  } finally {
+    console.log = orig;
+  }
+}

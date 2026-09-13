@@ -1017,6 +1017,171 @@ function pedidosVivos() {
   };
 }
 
+/**
+ * Corre `correr` UNA VEZ POR PEDIDO, con cada acumulador recortado a ese pedido. Devuelve 1 si
+ * alguno tuvo rojo.
+ *
+ * 🔴 Nace del 2026-09-12. La cadena de prioridad de `imprimirCadena` es DELIBERADA —un pedido
+ * con dos rojos imprime el más caro, se cura, y en la corrida siguiente aparece el de abajo—,
+ * pero corría UNA sola vez para TODOS los pedidos: el `return 1` del primer bloque con contenido
+ * se llevaba puesto a los pedidos de los OTROS destinos, sin dejar señal de que existían. Medido
+ * ese día en tres corridas seguidas: con un pedido de plataforma entregado, el del bot
+ * (`t_2baef483`, también entregado y también pidiéndole un `ok` a Sergio Urcullo por trabajo ya
+ * publicado) no salía ni OK ni rojo — o sea que el gate tapaba justo el modo de falla que existe
+ * para cazar. Se notó de casualidad, comparando dos corridas.
+ *
+ * Tapar el segundo control DEL MISMO pedido es el diseño; tapar un pedido ENTERO de otro destino
+ * es el bug. Por eso la prioridad se mantiene, pero se aplica por pedido.
+ */
+export function cadenaPorPedido({ ids, acumuladores, correr }) {
+  let corta = 0;
+  for (const id of ids) {
+    const propios = {};
+    for (const [nombre, lista] of Object.entries(acumuladores)) {
+      propios[nombre] = lista.filter((e) => e.id === id);
+    }
+    if (correr(propios) === 1) corta = 1;
+  }
+  return corta;
+}
+
+/**
+ * La cadena de prioridad de un pedido: imprime su rojo más caro y devuelve 1, o 0 si no tiene.
+ * Se llama desde `cadenaPorPedido`, nunca con los acumuladores crudos — ver el porqué ahí.
+ */
+export function imprimirCadena({
+  entregados, entregadosSiat, mudos, punteros, cortosSiat, incompletos, vencidos, cortos,
+  inmedibles, vivo,
+}) {
+  if (entregados.length > 0) {
+    for (const e of entregados) {
+      console.log(`\nROJO ${e.id}: TODO lo que promete ya esta publicado (produccion corre ${vivo}).`);
+      console.log('  Le esta pidiendo un ok a Sergio Urcullo por trabajo hecho. Cerralo con su');
+      console.log('  evidencia y, si quedo algo sin publicar despues, hace un pedido NUEVO: el');
+      console.log('  cuerpo del viejo no lo describe, y el cuerpo es lo unico que el lee.');
+    }
+    return 1;
+  }
+
+  if (entregadosSiat.length > 0) {
+    for (const e of entregadosSiat) {
+      console.log(`\nROJO ${e.id}: su publicador en seco dice que YA ESTA PUBLICADO (${e.destino}).`);
+      console.log('  Le esta pidiendo un ok a Sergio Urcullo por trabajo hecho. Cerralo con su');
+      console.log('  evidencia y, si quedo algo sin publicar despues, hace un pedido NUEVO: el');
+      console.log('  cuerpo del viejo no lo describe, y el cuerpo es lo unico que el lee.');
+    }
+    return 1;
+  }
+
+  // Tercero en la cadena, y arriba de los que describen de menos: un cuerpo corto le muestra a
+  // Sergio Urcullo menos de lo que publica, pero su `ok` PUBLICA. Éste no: lo manda a apretar
+  // algo que no ejecuta nada, y como lo pide como prerrequisito, deja los DOS deploys trabados
+  // esperando un paso que él ya dio.
+  // Va ANTES de los controles de cuerpo a proposito: que el pedido describa bien lo que
+  // publica importa menos que el hecho de que su ok NO PUBLIQUE NADA. Este es el unico
+  // control que le pregunta al brazo en vez de leer el texto.
+  if (mudos.length > 0) {
+    for (const m of mudos) {
+      console.log(`\nROJO ${m.id}: su cuerpo pide desplegar ${m.destino}, pero su ok NO DESPLIEGA NADA.`);
+      console.log(`  ${m.motivo}`);
+      console.log('  Sergio Urcullo aprieta, no pasa nada, y los pedidos que esperan a este por');
+      console.log('  DESPUES-DE quedan trabados detras de un paso que el cree dado. El gate no lo');
+      console.log('  veia porque todos los demas controles leen el CUERPO; este le pregunta al brazo.');
+      console.log('  Verificalo vos mismo, en seco y sin tocar produccion:');
+      console.log(`    ONIA_DESPLEGAR_DRY=1 node /root/bin/onia-publicar-aprobado.mjs ${m.id}`);
+      console.log('  Se cura rehaciendo el pedido con el cuerpo derivado y ARCHIVANDO el viejo en la');
+      console.log('  misma vuelta: el `edit` del tablero no cambia el cuerpo.');
+    }
+    return 1;
+  }
+
+  if (punteros.length > 0) {
+    for (const p of punteros) {
+      console.log(`\nROJO ${p.id}: su cuerpo manda a apretar un ok sobre ${p.muertos.join(', ')}, que ya no esta abierta (${p.destino}).`);
+      console.log('  Una tarea archivada o terminada NO ejecuta: el brazo la rechaza y no publica');
+      console.log('  nada. Sergio Urcullo aprieta, no pasa nada, y se queda esperando ese paso.');
+      console.log('  El pedido vivo del otro destino se DERIVA, nunca se copia:');
+      console.log("    /root/bin/onia-tablero.sh list | grep -E '^[⊘▶]' | grep -iE 'deploy|publicar'");
+      console.log('  Se cura rehaciendo el pedido con el id vigente y ARCHIVANDO el viejo en la');
+      console.log('  misma vuelta. El cuerpo no se puede editar, y el cuerpo es lo que el lee.');
+    }
+    return 1;
+  }
+
+  if (cortosSiat.length > 0) {
+    for (const c of cortosSiat) {
+      console.log(`\nROJO ${c.id}: su CUERPO no nombra ${c.mudos.length} archivo(s) que su ok publica.`);
+      for (const m of c.mudos) console.log(`    ${m}`);
+      console.log('  El cuerpo es lo unico que Sergio Urcullo lee para decidir, y hoy describe');
+      console.log('  menos de lo que su ok publica. COMENTAR NO LO LIMPIA: este control lee el');
+      console.log('  cuerpo y nada mas, y el `edit` del tablero no cambia el cuerpo. Se cura');
+      console.log('  rehaciendo el pedido con el cuerpo derivado de');
+      // El comando lo DERIVA la tabla: escribir acá la ruta de `siat` mandaba al carril del
+      // bot a correr el publicador del emisor fiscal, que no publica nada suyo.
+      console.log(`    bash ${DESTINOS_POR_COPIA[c.destino].seco} --dry-run`);
+      console.log('  y ARCHIVANDO el viejo en la misma vuelta.');
+    }
+    return 1;
+  }
+
+  if (incompletos.length > 0) {
+    for (const i of incompletos) {
+      console.log(`\nROJO ${i.id}: su ok publica ${i.mudos.length} arreglo(s) que el pedido NO nombra.`);
+      for (const m of i.mudos) console.log(`    ${m.sha}  ${m.titulo}`);
+      console.log('  El cuerpo es lo unico que Sergio Urcullo lee: hoy aprobaria codigo que nadie');
+      console.log('  le mostro. Comenta el recuento DERIVADO (no rehagas la tarea: el comando ya');
+      console.log('  deriva el sha al ejecutarse y no caduca).');
+    }
+    return 1;
+  }
+
+  if (vencidos.length > 0) {
+    for (const v of vencidos) {
+      console.log(`\nROJO ${v.id}: su CUERPO esta entero publicado (produccion corre ${vivo}).`);
+      console.log(`  Lo unico que su ok publica de verdad vive en un comentario: ${v.mudos.join(', ')}.`);
+      console.log('  El titulo es lo unico que se ve en la lista y el cuerpo lo primero que lee:');
+      console.log('  hoy los dos describen trabajo hecho. El comentario N+1 no lo arregla y el');
+      console.log('  `edit` del tablero no cambia el cuerpo: rehace el pedido con el cuerpo');
+      console.log('  derivado de `publicar.sh --dry-run` y ARCHIVA el viejo en la misma vuelta.');
+    }
+    return 1;
+  }
+
+  if (cortos.length > 0) {
+    for (const c of cortos) {
+      console.log(`\nROJO ${c.id}: su CUERPO no nombra ${c.mudos.length} arreglo(s) que su ok publica.`);
+      for (const m of c.mudos) console.log(`    ${m.sha}  ${m.titulo}`);
+      console.log('  Los comentarios pueden nombrarlos —por eso el pedido sale VIGENTE y completo—');
+      console.log('  pero el cuerpo es lo que Sergio Urcullo lee para decidir, y hoy describe menos');
+      console.log('  de lo que su ok publica. COMENTAR NO LO LIMPIA: este control lee el cuerpo y');
+      console.log('  nada mas, y el `edit` del tablero no cambia el cuerpo. Se cura rehaciendo el');
+      console.log('  pedido con el cuerpo derivado de');
+      // La ruta sale de la tabla: con el literal de `plataforma` escrito aca, el pedido de la
+      // landing mandaba a correr el publicador del otro destino, que no publica nada suyo.
+      console.log(`    bash ${SECO_POR_SHA[c.destino]} --dry-run`);
+      console.log('  y ARCHIVANDO el viejo en la misma vuelta.');
+    }
+    return 1;
+  }
+
+  // Va ÚLTIMO en la cadena a propósito: los rojos de arriba son de pedidos que SÍ se pudieron
+  // juzgar, y son más caros (uno le está pidiendo un `ok` por trabajo hecho ahora mismo). Este
+  // dice que a otro pedido ni siquiera se le pudo preguntar — importa, pero después.
+  if (inmedibles.length > 0) {
+    for (const m of inmedibles) {
+      console.log(`\nROJO ${m.id}: no declara ni un sha, asi que NO SE PUEDE JUZGAR (destino ${m.destino}).`);
+      console.log('  Su destino tiene instrumento; lo que falta es la marca. Mientras siga asi, si');
+      console.log('  produccion publica sola este pedido va a seguir pidiendo un ok por trabajo');
+      console.log('  hecho y nada se va a poner rojo — que es el unico caso que este gate caza.');
+      console.log(`  Se cura con un comentario, sin rehacer la tarea ni tocar el cuerpo que el lee:`);
+      console.log(`    /root/bin/onia-tablero.sh comment ${m.id} "DEPLOY PEDIDO <sha> — <que arregla>"`);
+    }
+    return 1;
+  }
+
+  return 0;
+}
+
 async function medirEnVivo() {
   const barrido = pedidosVivos();
   if (barrido === null) {
@@ -1260,131 +1425,19 @@ async function medirEnVivo() {
   for (const n of noMedidos) console.log(`NO MEDIDO ${n}`);
   for (const s of sinCubrir) console.log(`SIN INSTRUMENTO ${s}`);
 
-  if (entregados.length > 0) {
-    for (const e of entregados) {
-      console.log(`\nROJO ${e.id}: TODO lo que promete ya esta publicado (produccion corre ${vivo}).`);
-      console.log('  Le esta pidiendo un ok a Sergio Urcullo por trabajo hecho. Cerralo con su');
-      console.log('  evidencia y, si quedo algo sin publicar despues, hace un pedido NUEVO: el');
-      console.log('  cuerpo del viejo no lo describe, y el cuerpo es lo unico que el lee.');
-    }
-    return 1;
-  }
-
-  if (entregadosSiat.length > 0) {
-    for (const e of entregadosSiat) {
-      console.log(`\nROJO ${e.id}: su publicador en seco dice que YA ESTA PUBLICADO (${e.destino}).`);
-      console.log('  Le esta pidiendo un ok a Sergio Urcullo por trabajo hecho. Cerralo con su');
-      console.log('  evidencia y, si quedo algo sin publicar despues, hace un pedido NUEVO: el');
-      console.log('  cuerpo del viejo no lo describe, y el cuerpo es lo unico que el lee.');
-    }
-    return 1;
-  }
-
-  // Tercero en la cadena, y arriba de los que describen de menos: un cuerpo corto le muestra a
-  // Sergio Urcullo menos de lo que publica, pero su `ok` PUBLICA. Éste no: lo manda a apretar
-  // algo que no ejecuta nada, y como lo pide como prerrequisito, deja los DOS deploys trabados
-  // esperando un paso que él ya dio.
-  // Va ANTES de los controles de cuerpo a proposito: que el pedido describa bien lo que
-  // publica importa menos que el hecho de que su ok NO PUBLIQUE NADA. Este es el unico
-  // control que le pregunta al brazo en vez de leer el texto.
-  if (mudos.length > 0) {
-    for (const m of mudos) {
-      console.log(`\nROJO ${m.id}: su cuerpo pide desplegar ${m.destino}, pero su ok NO DESPLIEGA NADA.`);
-      console.log(`  ${m.motivo}`);
-      console.log('  Sergio Urcullo aprieta, no pasa nada, y los pedidos que esperan a este por');
-      console.log('  DESPUES-DE quedan trabados detras de un paso que el cree dado. El gate no lo');
-      console.log('  veia porque todos los demas controles leen el CUERPO; este le pregunta al brazo.');
-      console.log('  Verificalo vos mismo, en seco y sin tocar produccion:');
-      console.log(`    ONIA_DESPLEGAR_DRY=1 node /root/bin/onia-publicar-aprobado.mjs ${m.id}`);
-      console.log('  Se cura rehaciendo el pedido con el cuerpo derivado y ARCHIVANDO el viejo en la');
-      console.log('  misma vuelta: el `edit` del tablero no cambia el cuerpo.');
-    }
-    return 1;
-  }
-
-  if (punteros.length > 0) {
-    for (const p of punteros) {
-      console.log(`\nROJO ${p.id}: su cuerpo manda a apretar un ok sobre ${p.muertos.join(', ')}, que ya no esta abierta (${p.destino}).`);
-      console.log('  Una tarea archivada o terminada NO ejecuta: el brazo la rechaza y no publica');
-      console.log('  nada. Sergio Urcullo aprieta, no pasa nada, y se queda esperando ese paso.');
-      console.log('  El pedido vivo del otro destino se DERIVA, nunca se copia:');
-      console.log("    /root/bin/onia-tablero.sh list | grep -E '^[⊘▶]' | grep -iE 'deploy|publicar'");
-      console.log('  Se cura rehaciendo el pedido con el id vigente y ARCHIVANDO el viejo en la');
-      console.log('  misma vuelta. El cuerpo no se puede editar, y el cuerpo es lo que el lee.');
-    }
-    return 1;
-  }
-
-  if (cortosSiat.length > 0) {
-    for (const c of cortosSiat) {
-      console.log(`\nROJO ${c.id}: su CUERPO no nombra ${c.mudos.length} archivo(s) que su ok publica.`);
-      for (const m of c.mudos) console.log(`    ${m}`);
-      console.log('  El cuerpo es lo unico que Sergio Urcullo lee para decidir, y hoy describe');
-      console.log('  menos de lo que su ok publica. COMENTAR NO LO LIMPIA: este control lee el');
-      console.log('  cuerpo y nada mas, y el `edit` del tablero no cambia el cuerpo. Se cura');
-      console.log('  rehaciendo el pedido con el cuerpo derivado de');
-      // El comando lo DERIVA la tabla: escribir acá la ruta de `siat` mandaba al carril del
-      // bot a correr el publicador del emisor fiscal, que no publica nada suyo.
-      console.log(`    bash ${DESTINOS_POR_COPIA[c.destino].seco} --dry-run`);
-      console.log('  y ARCHIVANDO el viejo en la misma vuelta.');
-    }
-    return 1;
-  }
-
-  if (incompletos.length > 0) {
-    for (const i of incompletos) {
-      console.log(`\nROJO ${i.id}: su ok publica ${i.mudos.length} arreglo(s) que el pedido NO nombra.`);
-      for (const m of i.mudos) console.log(`    ${m.sha}  ${m.titulo}`);
-      console.log('  El cuerpo es lo unico que Sergio Urcullo lee: hoy aprobaria codigo que nadie');
-      console.log('  le mostro. Comenta el recuento DERIVADO (no rehagas la tarea: el comando ya');
-      console.log('  deriva el sha al ejecutarse y no caduca).');
-    }
-    return 1;
-  }
-
-  if (vencidos.length > 0) {
-    for (const v of vencidos) {
-      console.log(`\nROJO ${v.id}: su CUERPO esta entero publicado (produccion corre ${vivo}).`);
-      console.log(`  Lo unico que su ok publica de verdad vive en un comentario: ${v.mudos.join(', ')}.`);
-      console.log('  El titulo es lo unico que se ve en la lista y el cuerpo lo primero que lee:');
-      console.log('  hoy los dos describen trabajo hecho. El comentario N+1 no lo arregla y el');
-      console.log('  `edit` del tablero no cambia el cuerpo: rehace el pedido con el cuerpo');
-      console.log('  derivado de `publicar.sh --dry-run` y ARCHIVA el viejo en la misma vuelta.');
-    }
-    return 1;
-  }
-
-  if (cortos.length > 0) {
-    for (const c of cortos) {
-      console.log(`\nROJO ${c.id}: su CUERPO no nombra ${c.mudos.length} arreglo(s) que su ok publica.`);
-      for (const m of c.mudos) console.log(`    ${m.sha}  ${m.titulo}`);
-      console.log('  Los comentarios pueden nombrarlos —por eso el pedido sale VIGENTE y completo—');
-      console.log('  pero el cuerpo es lo que Sergio Urcullo lee para decidir, y hoy describe menos');
-      console.log('  de lo que su ok publica. COMENTAR NO LO LIMPIA: este control lee el cuerpo y');
-      console.log('  nada mas, y el `edit` del tablero no cambia el cuerpo. Se cura rehaciendo el');
-      console.log('  pedido con el cuerpo derivado de');
-      // La ruta sale de la tabla: con el literal de `plataforma` escrito aca, el pedido de la
-      // landing mandaba a correr el publicador del otro destino, que no publica nada suyo.
-      console.log(`    bash ${SECO_POR_SHA[c.destino]} --dry-run`);
-      console.log('  y ARCHIVANDO el viejo en la misma vuelta.');
-    }
-    return 1;
-  }
-
-  // Va ÚLTIMO en la cadena a propósito: los rojos de arriba son de pedidos que SÍ se pudieron
-  // juzgar, y son más caros (uno le está pidiendo un `ok` por trabajo hecho ahora mismo). Este
-  // dice que a otro pedido ni siquiera se le pudo preguntar — importa, pero después.
-  if (inmedibles.length > 0) {
-    for (const m of inmedibles) {
-      console.log(`\nROJO ${m.id}: no declara ni un sha, asi que NO SE PUEDE JUZGAR (destino ${m.destino}).`);
-      console.log('  Su destino tiene instrumento; lo que falta es la marca. Mientras siga asi, si');
-      console.log('  produccion publica sola este pedido va a seguir pidiendo un ok por trabajo');
-      console.log('  hecho y nada se va a poner rojo — que es el unico caso que este gate caza.');
-      console.log(`  Se cura con un comentario, sin rehacer la tarea ni tocar el cuerpo que el lee:`);
-      console.log(`    /root/bin/onia-tablero.sh comment ${m.id} "DEPLOY PEDIDO <sha> — <que arregla>"`);
-    }
-    return 1;
-  }
+  // La cadena de prioridad de `imprimirCadena` corre UNA VEZ POR PEDIDO. Correrla una sola vez
+  // para todos —como hasta el 2026-09-12— hacía que el `return 1` del primer bloque con
+  // contenido tapara a los pedidos de los OTROS destinos, sin dejar señal de que existían. Ver
+  // `cadenaPorPedido`.
+  const corta = cadenaPorPedido({
+    ids: pedidos.map((p) => p.id),
+    acumuladores: {
+      entregados, entregadosSiat, mudos, punteros, cortosSiat, incompletos, vencidos, cortos,
+      inmedibles,
+    },
+    correr: (propios) => imprimirCadena({ ...propios, vivo }),
+  });
+  if (corta === 1) return 1;
 
   // 2 = NO MEDIDO, y sólo cuando NINGÚN pedido se pudo juzgar. Un solo veredicto real vale
   // más que la queja: con exit 2 el carril sabe que el gate no vio nada, y con 0 que sí.
