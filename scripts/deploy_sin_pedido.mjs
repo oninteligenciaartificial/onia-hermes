@@ -80,7 +80,7 @@ import { existsSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
 import { DESTINOS } from './kanban/publicar-aprobado.mjs';
-import { barrerPedidos } from './pedido_deploy_entregado.mjs';
+import { barrerTablero, barrerTableroJson } from './pedido_deploy_entregado.mjs';
 
 const TABLERO = '/root/bin/onia-tablero.sh';
 /** El nodo de casa no tiene `/opt`, pero sí llega al VPS por SSH. Ver `pendienteEnVivo`. */
@@ -366,13 +366,18 @@ function verdictosDelPublicadorSolo() {
   return (verdictosCache = leerPublicadorSolo(seco));
 }
 
+/**
+ * 🔴 MISMO AGUJERO QUE EL HERMANO, y por eso se cura en la misma vuelta. Esto pedía la lista
+ * y después un `show` POR TAREA: en el nodo de casa cada uno es un handshake SSH, o sea que el
+ * gate tardaba lo que midiera el tablero (~7 min con 72 tareas el 2026-09-13) y su universo
+ * salía de una lista de símbolos escrita a mano que no incluía `running`. Un pedido RECLAMADO
+ * era invisible acá también — y este gate es justo el que decide si se abre un pedido: no
+ * verlo es abrir un DUPLICADO por un destino que ya tenía el suyo.
+ */
 function pedidosVivos() {
-  const lista = sh('bash', [TABLERO, 'list'], { timeout: 180_000, clave: 'tablero' });
-  if (lista === null) return null;
-  return barrerPedidos({
-    lista,
-    leerCuerpo: (id) => sh('bash', [TABLERO, 'show', id], { timeout: 60_000 }),
-  });
+  return barrerTableroJson(
+    sh('bash', [TABLERO, 'list', '--json'], { timeout: 180_000, clave: 'tablero' }),
+  );
 }
 
 function medirEnVivo() {
@@ -603,12 +608,22 @@ function selfCheck() {
   ok(leerPendienteDelEspejo('') === null, 'espejo: sin salida es NO se sabe');
 
   // El barrido del tablero es el del hermano, no una copia: si cambia allá, se ve acá.
-  const b = barrerPedidos({
-    lista: '⊘ t_a  blocked  Publicar\n▶ t_b  ready  Otra cosa\n',
-    leerCuerpo: (id) => (id === 't_a' ? 'DESPLEGAR: landing' : 'sin nada'),
+  const b = barrerTablero({
+    tareas: [
+      { id: 't_a', status: 'blocked', body: 'DESPLEGAR: landing' },
+      { id: 't_b', status: 'ready', body: 'sin nada' },
+    ],
   });
   ok(b.pedidos.length === 1 && b.pedidos[0].destino === 'landing', 'el barrido compartido tiene que reconocer el pedido');
   ok(b.ilegibles.length === 0, 'sin fallos de lectura no puede haber ilegibles');
+  // Un pedido RECLAMADO cuenta acá también: si no, este gate lo da por inexistente y manda a
+  // abrir un pedido duplicado para un destino que ya tiene el suyo, en manos de alguien.
+  ok(
+    barrerTablero({ tareas: [{ id: 't_c', status: 'running', body: 'DESPLEGAR: bot' }] }).pedidos.length === 1,
+    'un pedido running es un pedido vivo: el ok ejecuta sobre el',
+  );
+  // Y el tri-estado del parseo: un JSON truncado NO es un tablero sin pedidos.
+  ok(barrerTableroJson('[{"id":"t_1","status":"rea') === null, 'un JSON truncado es NO MEDIDO');
 
   console.log(fallos === 0 ? 'self-check OK' : `self-check con ${fallos} fallo(s)`);
   return fallos === 0 ? 0 : 1;

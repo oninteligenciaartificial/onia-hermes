@@ -81,7 +81,10 @@ import { llegaAlCliente } from '../web-factory/apps/onia-platform/scripts/deploy
 // El BRAZO que ejecuta el `ok`. Se importa su decisión —pura, con guarda `import.meta.url`—
 // en vez de reimplementarla: dos derivaciones de «qué hace el ok» se contradicen el día que
 // una cambia, y este gate existe justamente para que el cuerpo y el botón digan lo mismo.
-import { elegirCamino } from './kanban/publicar-aprobado.mjs';
+// Y por el mismo motivo, QUÉ tareas siguen vivas. `motivoParaNoEjecutar` es la función con la
+// que el brazo decide si el `ok` de Sergio Urcullo ejecuta algo: preguntarle a ELLA es lo único
+// que garantiza que «pedido vivo» signifique acá lo mismo que allá.
+import { elegirCamino, motivoParaNoEjecutar } from './kanban/publicar-aprobado.mjs';
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..');
 /** La zona de `main` que arma el sitio de venta. Anclada con `:/` a propósito: un pathspec
@@ -146,62 +149,70 @@ export function shasPrometidos(texto) {
 }
 
 /**
- * PURA: barre la lista del tablero y separa los pedidos de deploy de lo que NO se pudo leer.
- * `leerCuerpo(id)` devuelve el texto de la tarea, o `null` si el `show` no contestó.
+ * ¿Sigue viva esta tarea? Se lo pregunto al BRAZO, no a una lista propia.
+ *
+ * 🔴 ACÁ VIVÍA UNA LISTA DE INCLUSIÓN ESCRITA A MANO, y falló abierto igual que todas.
+ * Era `/^[⊘▶◻]/` sobre los SÍMBOLOS que imprime `list`: blocked, ready y todo. Medido el
+ * 2026-09-13 cruzando `list` contra `list --json` sobre el tablero real, los símbolos son
+ * CINCO y el ejecutor declara SIETE estados vivos (`ESTADOS_VIVOS`): faltaban `running`
+ * —que imprime `●`—, `triage`, `review` y `scheduled`.
+ *
+ * O sea que un pedido de deploy RECLAMADO era invisible para este gate mientras su `ok`
+ * seguía ejecutando perfectamente. Las dos direcciones del daño, en el mismo agujero:
+ *   · no sale en `pedidos` → «este destino no tiene pedido vivo» → se abre un DUPLICADO;
+ *   · no sale en `abiertos` → `cuerpoPunteroMuerto` acusa de muerto a un puntero VIVO.
+ *
+ * La cabecera de este archivo ya prometía derivar el universo de la lista blanca del
+ * ejecutor; en este punto no lo hacía. Ahora sí, y por la misma función que decide el `ok`:
+ * un estado nuevo en el tablero lo heredan los dos a la vez o ninguno.
+ */
+export function tareaAbierta(status) {
+  return motivoParaNoEjecutar(status) === null;
+}
+
+/**
+ * PURA: separa los pedidos de deploy de las tareas del tablero, y NOMBRA lo que no se pudo
+ * leer. `tareas` es lo que devuelve `list --json`: objetos con `id`, `status` y `body`.
  *
  * ⚠️ LOS `ilegibles` SON LA MITAD DEL VALOR, y su ausencia es el bug que este barrido tenía.
- * La versión anterior hacía `if (!cuerpo) continue`: un `show` que fallaba se descartaba
+ * La versión anterior hacía `if (!cuerpo) continue`: un cuerpo que fallaba se descartaba
  * EXACTAMENTE igual que una tarea sin línea `DESPLEGAR:`, así que el pedido desaparecía del
- * barrido y el gate seguía hablando como si hubiera mirado el tablero entero. Desde que el
- * integrador corre en el nodo de casa cada `show` es una llamada SSH —88 en un barrido—, o
- * sea que un timeout suelto alcanza.
+ * barrido y el gate seguía hablando como si hubiera mirado el tablero entero.
  *
  * La dirección del daño importa: un barrido incompleto se ve IDÉNTICO a un tablero sin
  * pedidos, y de ahí sale la conclusión cara —«este destino no tiene pedido vivo»— que hace
  * abrir un pedido DUPLICADO. Ese duplicado es el ruido que hace que Sergio Urcullo deje de
  * creerle a los avisos. Medido a mano el 2026-09-07: un barrido leído a mitad de camino
  * reportó 2 pedidos de 3 y ocultó justo el de `plataforma`.
+ *
+ * Un `status` que no se pudo leer cae en `ilegibles` Y en `abiertos`: no sé si está viva, y
+ * las dos salidas conservadoras son no callar el pedido y no acusar al puntero.
  */
-/**
- * Las tareas ABIERTAS del tablero, por su símbolo de estado. `list` NO imprime las
- * archivadas —medido el 2026-09-12: `list | grep -c t_bd62e5a0` da 0 estando la tarea ahí—,
- * así que «no está en esta lista» significa archivada o inexistente, y «está con ✓ done»
- * significa terminada: en los tres casos un `ok` sobre ella no ejecuta nada.
- */
-const ABIERTA = /^[⊘▶◻]/;
-
-/**
- * PURA: los ids de las tareas abiertas. Es el MISMO universo que recorre `barrerPedidos`,
- * y comparten la constante a propósito: dos nociones distintas de «vivo» dentro del mismo
- * archivo se desincronizan, y la que quedara atrás acusaría a un pedido sano.
- */
-export function idsAbiertos(lista) {
-  const out = new Set();
-  for (const linea of String(lista).split('\n')) {
-    if (!ABIERTA.test(linea)) continue;
-    const id = linea.trim().split(/\s+/)[1];
-    if (id) out.add(id);
-  }
-  return out;
-}
-
-export function barrerPedidos({ lista, leerCuerpo }) {
+export function barrerTablero({ tareas }) {
   const pedidos = [];
   const ilegibles = [];
-  for (const linea of String(lista).split('\n')) {
-    if (!ABIERTA.test(linea)) continue;
-    const id = linea.trim().split(/\s+/)[1];
+  const abiertos = new Set();
+  for (const t of Array.isArray(tareas) ? tareas : []) {
+    const id = typeof t?.id === 'string' ? t.id.trim() : '';
     if (!id) continue;
-    const cuerpo = leerCuerpo(id);
-    if (cuerpo === null || cuerpo === undefined) {
+    const estado = typeof t?.status === 'string' ? t.status.trim() : '';
+    if (estado === '') {
+      abiertos.add(id);
       ilegibles.push(id);
       continue;
     }
-    const m = String(cuerpo).match(/^DESPLEGAR:\s*(\S+)/im);
+    if (!tareaAbierta(estado)) continue;
+    abiertos.add(id);
+    const cuerpo = t?.body;
+    if (typeof cuerpo !== 'string') {
+      ilegibles.push(id);
+      continue;
+    }
+    const m = cuerpo.match(/^DESPLEGAR:\s*(\S+)/im);
     if (!m) continue;
-    pedidos.push({ id, destino: m[1].toLowerCase(), texto: String(cuerpo) });
+    pedidos.push({ id, destino: m[1].toLowerCase(), texto: cuerpo });
   }
-  return { pedidos, ilegibles };
+  return { pedidos, ilegibles, abiertos };
 }
 
 /**
@@ -998,23 +1009,45 @@ export function publicariaPorCopia(destino, io = {}) {
 }
 
 /**
+ * PURA: el barrido a partir del texto crudo de `list --json`. `null` = no se pudo leer.
+ *
+ * El parseo va separado del proceso a propósito: es el único punto donde una respuesta
+ * TRUNCADA (un SSH cortado a mitad del JSON) se distingue de un tablero vacío, y esa
+ * distinción es la que sostiene el `NO MEDIDO` de todo este archivo. `JSON.parse` de medio
+ * documento tira, y ese tirón tiene que salir como `null`, nunca como `[]`.
+ */
+export function barrerTableroJson(crudo) {
+  if (typeof crudo !== 'string' || crudo.trim() === '') return null;
+  let tareas;
+  try {
+    tareas = JSON.parse(crudo);
+  } catch {
+    return null;
+  }
+  if (!Array.isArray(tareas)) return null;
+  return barrerTablero({ tareas });
+}
+
+/**
  * Los pedidos vivos del tablero. Devuelve `null` si NO se pudo leer la lista, y el barrido
- * con sus `ilegibles` si se pudo — ver `barrerPedidos`: un `show` que no contesta se NOMBRA,
- * no se descarta.
+ * con sus `ilegibles` si se pudo — ver `barrerTablero`: un cuerpo que no llega se NOMBRA.
+ *
+ * 🔴 UNA SOLA LECTURA, y el motivo es que el gate se apagaba solo. Hasta el 2026-09-13 esto
+ * pedía `list` y después un `show` POR CADA TAREA ABIERTA. En el nodo de casa `onia-tablero.sh`
+ * es un shim que hace `exec ssh` al VPS, así que eso era un handshake SSH por tarea: con 72
+ * tareas abiertas, ~7 minutos —medido ese día, con el gate corriendo en background y su hijo
+ * `ssh ... show t_9d970ada` a la vista en `ps`—, y creciendo con el tablero. O sea un
+ * instrumento sin tope de tiempo: el día que el tablero tenga 200 tareas no contesta dentro
+ * de la vuelta, y un gate que no contesta es indistinguible de uno que no existe (fue
+ * exactamente el reclamo de `t_e768cae3`, que lo había atribuido a un SSH sin timeout —
+ * todos los timeouts estaban puestos; lo que fallaba era la CANTIDAD de llamadas).
+ *
+ * `list --json` trae `body` para las 262 tareas en una sola respuesta. Y de paso cierra la
+ * ventana que el comentario viejo cuidaba a mano: los cuerpos y los estados salen de la
+ * MISMA foto, así que ninguna tarea puede archivarse entre dos lecturas.
  */
 function pedidosVivos() {
-  const lista = sh('bash', [TABLERO, 'list'], { timeout: 180_000 });
-  if (lista === null) return null;
-  return {
-    ...barrerPedidos({
-      lista,
-      leerCuerpo: (id) => sh('bash', [TABLERO, 'show', id], { timeout: 60_000 }),
-    }),
-    // De la MISMA lectura de la lista: pedirla dos veces abriría una ventana en la que una
-    // tarea se archiva entre las dos llamadas y el gate acusaría un puntero que estaba vivo
-    // cuando se leyó el cuerpo.
-    abiertos: idsAbiertos(lista),
-  };
+  return barrerTableroJson(sh('bash', [TABLERO, 'list', '--json'], { timeout: 180_000 }));
 }
 
 /**
@@ -1626,12 +1659,17 @@ function selfCheck() {
         idPropio: 't_fd5b30c4',
         idsVivos: new Set(),
       }).estado === 'NO_MEDIDO'],
-    // `idsAbiertos` es el otro lado del control: si contara las terminadas, un `ok` sobre una
-    // tarea `done` —que tampoco ejecuta— pasaria por vivo.
-    ['idsAbiertos toma las abiertas y NO las terminadas',
-      [...idsAbiertos('▶ t_aaaaaaaa  ready     x\n⊘ t_bbbbbbbb  blocked   y\n✓ t_cccccccc  done      z')].join() === 't_aaaaaaaa,t_bbbbbbbb'],
-    ['idsAbiertos sobre una lista vacia no inventa nada',
-      idsAbiertos('').size === 0],
+    // `abiertos` es el otro lado del control: si contara las terminadas, un `ok` sobre una
+    // tarea `done` —que tampoco ejecuta— pasaria por vivo. Y si NO contara las reclamadas,
+    // acusaria de muerto a un puntero que el brazo si ejecuta (el agujero del 2026-09-13).
+    ['las abiertas incluyen la RECLAMADA y no las terminadas',
+      [...barrerTablero({ tareas: [
+        { id: 't_aaaaaaaa', status: 'ready', body: '' },
+        { id: 't_bbbbbbbb', status: 'running', body: '' },
+        { id: 't_cccccccc', status: 'done', body: '' },
+      ] }).abiertos].join() === 't_aaaaaaaa,t_bbbbbbbb'],
+    ['un tablero vacio no inventa abiertas',
+      barrerTablero({ tareas: [] }).abiertos.size === 0],
 
     // CABLEADO, por el mismo motivo que el de `refsAlDia`: los casos de arriba prueban la
     // funcion, y los esquives baratos dejan los literales intactos y pasan en verde con el

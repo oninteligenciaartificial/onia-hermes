@@ -9,8 +9,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { archivosDelDryRun, archivosDelDryRunBot, archivosNombrados, secoDeProduccion, barrerPedidos, buildQueCorre, cadenaPorPedido, clasificarPedido, imprimirCadena, cuerpoCortoArchivos, cuerpoNoEjecuta, inmediblesSinDeclarar, publicariaPorCopia, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
-import { DESTINOS } from './kanban/publicar-aprobado.mjs';
+import { archivosDelDryRun, archivosDelDryRunBot, archivosNombrados, secoDeProduccion, barrerTablero, barrerTableroJson, buildQueCorre, cadenaPorPedido, clasificarPedido, imprimirCadena, cuerpoCortoArchivos, cuerpoNoEjecuta, inmediblesSinDeclarar, publicariaPorCopia, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
+import { DESTINOS, ESTADOS_VIVOS } from './kanban/publicar-aprobado.mjs';
 
 // El caso que me costo la vuelta del 2026-09-06: los 13 shas prometidos por t_0268567b
 // estaban TODOS dentro del build vivo y el pedido seguia blocked pidiendo un ok por
@@ -102,49 +102,116 @@ test('del rango del cuerpo se promete la punta derecha, no el punto de partida',
 // EL BARRIDO. Distinto del sujeto: aca los shas y el patron estan bien, y lo que puede
 // fallar es que la lista de pedidos salga INCOMPLETA y se lea como completa.
 
-const LISTA = [
-  'Board: onia',
-  '⊘ t_340bd6e2  blocked   (unassigned)          Desplegar el bot',
-  '▶ t_8baa5891  ready     (unassigned)          Probar si el tablero sostiene un carril',
-  '⊘ t_deddf471  blocked   (unassigned)          Publicar app.onia.com.bo',
-  '✓ t_558eaec1  done      default               Ya cerrada',
-].join('\n');
+const TAREAS = [
+  { id: 't_340bd6e2', status: 'blocked', body: 'DESPLEGAR: bot\nle dice en construccion a 2 rubros' },
+  { id: 't_8baa5891', status: 'ready', body: 'nada que ver con deploys' },
+  { id: 't_deddf471', status: 'blocked', body: 'DESPLEGAR: plataforma\nDEPLOY PEDIDO 77d0867' },
+  { id: 't_558eaec1', status: 'done', body: 'DESPLEGAR: landing\nya cerrada' },
+];
 
 test('el barrido encuentra un pedido por cada tarea abierta que declara DESPLEGAR', () => {
-  const cuerpos = {
-    t_340bd6e2: 'DESPLEGAR: bot\nle dice en construccion a 2 rubros',
-    t_8baa5891: 'nada que ver con deploys',
-    t_deddf471: 'DESPLEGAR: plataforma\nDEPLOY PEDIDO 77d0867',
-  };
-  const { pedidos, ilegibles } = barrerPedidos({ lista: LISTA, leerCuerpo: (id) => cuerpos[id] });
+  const { pedidos, ilegibles } = barrerTablero({ tareas: TAREAS });
   assert.deepEqual(pedidos.map((p) => p.destino), ['bot', 'plataforma']);
   assert.deepEqual(ilegibles, []);
 });
 
-// EL AGUJERO QUE ME COSTO ESTA VUELTA, en su forma de codigo. `pedidosVivos` hacia
-// `if (!cuerpo) continue`: un `show` que NO contesta se descartaba igual que una tarea sin
-// linea DESPLEGAR. Desde que el integrador corre en el nodo de casa cada `show` es una
-// llamada SSH — 88 en un barrido —, asi que un timeout suelto borra un pedido entero y el
-// gate sigue hablando como si hubiera mirado todo. Es la misma firma que me engano a mano:
-// una foto parcial no se distingue de un resultado completo.
+// Una tarea CERRADA no es un pedido vivo: su `ok` ya no ejecuta (el brazo sale 3). Contarla
+// haria que el gate exija desplegar algo que nadie puede disparar.
+test('una tarea done NO cuenta como pedido vivo aunque declare DESPLEGAR', () => {
+  const { pedidos, abiertos } = barrerTablero({ tareas: TAREAS });
+  assert.ok(!pedidos.some((p) => p.id === 't_558eaec1'), 'la done no puede entrar');
+  assert.ok(!abiertos.has('t_558eaec1'), 'y tampoco cuenta como puntero vivo');
+});
+
+// 🔴 EL AGUJERO DE ESTA VUELTA, medido el 2026-09-13 contra el tablero real. El barrido
+// filtraba por los SIMBOLOS de `list` con `/^[⊘▶◻]/` — blocked, ready, todo — y el ejecutor
+// declara SIETE estados vivos. Un pedido RECLAMADO (`running`, que imprime `●`) era invisible
+// para el gate mientras su `ok` desplegaba perfecto: no salia en `pedidos` (-> se abre un
+// pedido DUPLICADO para ese destino) ni en `abiertos` (-> `cuerpoPunteroMuerto` acusa de
+// muerto a un puntero vivo). Las dos direcciones del dano en el mismo agujero.
+test('un pedido RECLAMADO (running) es un pedido vivo: el ok ejecuta sobre el', () => {
+  const { pedidos, abiertos } = barrerTablero({
+    tareas: [{ id: 't_running1', status: 'running', body: 'DESPLEGAR: landing' }],
+  });
+  assert.deepEqual(pedidos.map((p) => p.destino), ['landing']);
+  assert.ok(abiertos.has('t_running1'), 'y su puntero no se puede leer como muerto');
+});
+
+// El cierre de CLASE, y lo que evita que esto vuelva con el proximo estado que agregue el
+// tablero: el universo no es una lista propia, es la del brazo. Si manana `ESTADOS_VIVOS`
+// gana uno, este caso lo exige aca sin que nadie se acuerde de venir.
+test('todo estado que el ok EJECUTA cuenta como pedido vivo para el gate', () => {
+  for (const estado of ESTADOS_VIVOS) {
+    const { pedidos } = barrerTablero({
+      tareas: [{ id: `t_${estado}`, status: estado, body: 'DESPLEGAR: bot' }],
+    });
+    assert.deepEqual(
+      pedidos.map((p) => p.id), [`t_${estado}`],
+      `el brazo ejecuta sobre "${estado}", asi que el gate tiene que verlo`,
+    );
+  }
+});
+
+// EL OTRO AGUJERO, en su forma de codigo. `pedidosVivos` hacia `if (!cuerpo) continue`: un
+// cuerpo que NO llega se descartaba igual que una tarea sin linea DESPLEGAR, asi que el
+// pedido desaparecia y el gate seguia hablando como si hubiera mirado todo. Es la misma
+// firma que engana a mano: una foto parcial no se distingue de un resultado completo.
 test('un cuerpo que NO se pudo leer no se descarta en silencio: queda como ilegible', () => {
-  const cuerpos = {
-    t_340bd6e2: 'DESPLEGAR: bot',
-    t_8baa5891: 'sin deploy',
-    t_deddf471: null, // el `show` no contesto
-  };
-  const { pedidos, ilegibles } = barrerPedidos({ lista: LISTA, leerCuerpo: (id) => cuerpos[id] });
+  const { pedidos, ilegibles } = barrerTablero({
+    tareas: TAREAS.map((t) => (t.id === 't_deddf471' ? { ...t, body: null } : t)),
+  });
   assert.deepEqual(pedidos.map((p) => p.id), ['t_340bd6e2']);
   assert.deepEqual(ilegibles, ['t_deddf471'], 'el pedido ilegible tiene que quedar NOMBRADO');
+});
+
+// Un estado que no se pudo leer no es «cerrada»: es «no se». Las dos salidas conservadoras
+// son no callar el pedido (ilegible) y no acusar al puntero (abierto).
+test('una tarea sin status legible se NOMBRA y no se da por cerrada', () => {
+  const { ilegibles, abiertos } = barrerTablero({
+    tareas: [{ id: 't_sinestado', body: 'DESPLEGAR: bot' }],
+  });
+  assert.deepEqual(ilegibles, ['t_sinestado']);
+  assert.ok(abiertos.has('t_sinestado'), 'ante la duda NO se acusa al puntero');
 });
 
 // La direccion cara: con TODOS los cuerpos ilegibles el barrido sale vacio, que es
 // exactamente lo que dice un tablero sin pedidos. Uno es «no hay nada que desplegar» y el
 // otro es «no vi nada». Sin esta distincion el gate firma verde sobre un tablero que no leyo.
 test('un barrido que no pudo leer NADA no se confunde con un tablero sin pedidos', () => {
-  const { pedidos, ilegibles } = barrerPedidos({ lista: LISTA, leerCuerpo: () => null });
+  const { pedidos, ilegibles } = barrerTablero({
+    tareas: TAREAS.map((t) => ({ ...t, body: null })),
+  });
   assert.deepEqual(pedidos, []);
   assert.equal(ilegibles.length, 3, 'las 3 tareas abiertas quedan nombradas como ilegibles');
+});
+
+// Cableado: el gate se APAGABA SOLO y nada se ponia rojo. `pedidosVivos` pedia la lista y
+// despues un `show` POR CADA TAREA ABIERTA; en el nodo de casa `onia-tablero.sh` hace `exec
+// ssh`, o sea un handshake por tarea: ~7 minutos con 72 tareas (medido 2026-09-13), creciendo
+// con el tablero, hasta no contestar dentro de la vuelta. Un gate que no contesta es
+// indistinguible de uno que no existe. El sujeto se deriva del fuente: si vuelve un `show`
+// por tarea, este caso lo dice — que es lo unico que impide que el arreglo se revierta solo.
+test('cableado: el tablero se lee UNA vez, no un show por tarea', () => {
+  const src = readFileSync(new URL('./pedido_deploy_entregado.mjs', import.meta.url), 'utf8')
+    .split('\n').filter((l) => !/^\s*(\/\/|\*|\/\*)/.test(l)).join('\n');
+  assert.ok(
+    !/TABLERO,\s*'show'/.test(src),
+    'un `show` por tarea es un SSH por tarea: el gate deja de contestar dentro de la vuelta',
+  );
+  assert.match(src, /TABLERO,\s*'list',\s*'--json'/,
+    'el barrido sale de `list --json`, que trae los cuerpos de todas las tareas de una');
+  const lecturas = [...src.matchAll(/\[TABLERO[^\]]*\]/g)];
+  assert.equal(lecturas.length, 1, `el tablero se consulta una sola vez, no ${lecturas.length}`);
+});
+
+// TRI-ESTADO en el parseo, que es donde un SSH cortado a mitad del JSON se disfraza de
+// tablero vacio. `[]` diria «no hay pedidos» y borraria un pedido real; tiene que ser `null`.
+test('un JSON truncado es NO MEDIDO, nunca un tablero sin pedidos', () => {
+  assert.equal(barrerTableroJson('[{"id":"t_1","status":"ready","body":"DESPLE'), null);
+  assert.equal(barrerTableroJson(''), null, 'una respuesta vacia tampoco es un tablero vacio');
+  assert.equal(barrerTableroJson(null), null, 'ni el fallo del propio comando');
+  assert.equal(barrerTableroJson('{"tareas":[]}'), null, 'ni un JSON que no sea la lista');
+  assert.deepEqual(barrerTableroJson('[]').pedidos, [], 'un tablero REALMENTE vacio si es []');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────────────
