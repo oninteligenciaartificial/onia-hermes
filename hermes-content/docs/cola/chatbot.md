@@ -360,6 +360,14 @@ La historia completa queda acá abajo para no perderla.
       panel de `onia-interna`, y `/health` del bot dice `source:"panel"` con su versión — y el
       bot la contesta, sin tocar el repo.
 
+      ✅ **Ya se preguntó si la fuente `panel` hereda el hueco de `/health` que se cerró el
+      2026-09-12, y NO lo hereda — medido, no supuesto.** `ensureKnowledge` calienta la clave por
+      inbox pero **no** el panel, así que con caché fría los dos —`/health` y el camino de
+      respuesta— sirven el archivo y **coinciden**, que es el invariante que importa (`/health`
+      no puede reportar un documento distinto del que recibe el lead). Que el primer turno tras
+      un reinicio salga del archivo es deliberado y acá es inocuo: el panel es la cara de VENTA
+      de Onia, o sea la misma voz que el archivo. No hay nada que arreglar; no reabrirlo.
+
 - [ ] 🟡 **El bot tuvo una ventana sirviendo el M4_BODY SIN precios, y no sé por qué.**
       Medido el 2026-09-12: a las **22:48:35 UTC** la conv 49 preguntó *"Cuanto cuesta el sistema?
       pasame los precios"* y el bot contestó *"el número exacto te lo pasa Sergio en la demo…
