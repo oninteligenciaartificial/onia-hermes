@@ -224,11 +224,51 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       propósito**: el botón "Aprobar y enviar" SÍ dispara WhatsApp Cloud API real
       (dispatcher → adapter whatsapp), verificado leyendo el código ANTES de apretar.
       Purga con respaldo (`/root/respaldos/e2e-agentes2-purga-20260913.json`), re-auditoría
-      en cero. **4 fricciones de UI anotadas para F4**: (i) la barra "Preguntá por tu
-      negocio" tapa la última tarjeta de /agents; (ii) ✅ **CERRADA el 2026-09-13** tras envío
+      en cero. **4 fricciones de UI anotadas para F4**: (i) ✅ **CERRADA el 2026-09-13 — NO se
+      reproduce, medida en producción**; (ii) ✅ **CERRADA el 2026-09-13** tras envío
       manual el panel rotulaba "Ejecutada" aunque nadie abrió el link; (iii) ✅ **CERRADA el
       2026-09-13** el aviso con el link wa.me desaparecía al navegar; (iv) la tarjeta de
-      /pending dice "Propuesta de agente" genérico.
+      /pending dice "Propuesta de agente" genérico — **acotada y ubicada abajo**.
+
+      ✅ **(i) CERRADA el 2026-09-13: la barra no tapa nada, y el contenedor ya se defiende
+      solo.** Medida contra producción en la cuenta real (`sergio@onia.com.bo`, `/agents`),
+      **en los DOS viewports**, con `reducedMotion:"reduce"` y scrolleando al fondo antes de
+      leer los rects (un rect leído a medio animar es el falso positivo conocido de esta
+      familia). Escritorio 1440×900: el contenedor de la pantalla es
+      `pt-20 md:pt-24 **pb-40 md:pb-28** px-4 …`, documento 922 px contra viewport 900 → el
+      fondo se alcanza con `scrollY 22` y lo único fijo abajo es la banda del plan `be-raiz`
+      (870→900), que apoya sobre el padding y no pisa ninguna tarjeta. Móvil 390×844: la barra
+      de abajo es la **navegación** (`fixed bottom-0 … md:hidden`, 64 px de alto, 779→844), y
+      con `pb-40` (160 px) el contenido termina bien por encima; documento 1142 = `scrollY 298`
+      + 844, o sea fondo alcanzado y nada debajo de la barra salvo la barra misma.
+      **Y no es una cura frágil que se rompa al crecer la lista:** el `padding-bottom` es del
+      contenedor de la pantalla, no del último hijo, así que los 3 agentes nuevos (cuando se
+      desplieguen, 6 tarjetas) alargan el documento sin acercar nada a la barra.
+      Instrumento: medidor efímero de una vuelta (rects de todo lo `fixed`/`sticky` anclado
+      abajo + `elementsFromPoint` para ver QUÉ queda debajo), **borrado a propósito** — un
+      instrumento vivo que queda de alias suelto no lo corre nadie, y lo que medía ya está
+      escrito acá. Se rehace en 10 minutos si alguna pantalla vuelve a sospecharse.
+
+      🔎 **(iv) ACOTADA el 2026-09-13 — y la mitad cara ya está bien, medido antes de
+      "arreglarla".** La sospecha razonable era que la tarjeta mandara a aprobar a ciegas:
+      encabeza *"Al aprobar, esto sale de verdad. Revisá el texto antes"* sobre un botón
+      ("Aprobar y enviar") que dispara WhatsApp Cloud API real. **Falso: el texto SÍ está.**
+      `app/(dashboard)/pending/pending-client.tsx:282-291` pinta el sobre completo —
+      *"Se envía por {canal} a {destinatario} ({dirección})"* más `approval.body`
+      (el campo está documentado en el tipo como *"Texto EXACTO que se va a enviar"*) — y
+      `blockedReason` avisa cuando hoy no podría salir. Queda sólo el rótulo, y su arreglo ya
+      está ubicado, así que la próxima vuelta no lo investiga de cero:
+      **es la clase «escrituras ↔ LECTURAS», la misma de (ii)/(iii).**
+      `agents-runtime.ts:1185-1190` ya escribe `metadata.agentName` / `agentRole` / `agentId`
+      en el approval, y el rótulo no los lee: `approval-labels.ts:18` devuelve la constante
+      `"Propuesta de agente"` para todo `agent_action`. Con los 3 agentes nuevos son **seis**
+      productores y **una** etiqueta: la cola de aprobaciones queda con seis tarjetas que
+      dicen lo mismo y el dueño no sabe cuál es cuál sin abrir cada una.
+      Al hacerlo: los consumidores del rótulo son DOS (`pending-client.tsx:244` y el panel
+      `onia-platform/app/(dashboard)/dashboard/page.tsx` línea 546) y van juntos — dos diccionarios de estado
+      fue exactamente lo que permitió que una pantalla dijera la verdad y la otra no en (ii).
+      No se empezó en esta vuelta por tiempo: son ~4 archivos más gates, y medio arreglo
+      commiteado es peor que ninguno.
 
       ✅ **(ii) + (iii) CERRADAS el 2026-09-13 — y el hallazgo era más grande que la
       fricción anotada.** El dispatcher declara una **regla dura en su propia cabecera**:
@@ -261,6 +301,39 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       antes de darla por mirada. **Commiteado, NO desplegado.**
       (b) ✅ **purgadas el 2026-09-12**, las 12 filas, con respaldo y re-auditoría en cero;
       (c) construir los 3 agentes nuevos de abajo.
+
+      ✅ **(v) CERRADA el 2026-09-13 — la misma pantalla se contradecía a sí misma, y se
+      ve HOY en la cuenta real de Sergio Urcullo.** No estaba en la lista de fricciones:
+      apareció MIRANDO `/agents` renderizada en producción
+      (`mirar_bandeja_dueno.mjs --email sergio@onia.com.bo --ruta /agents`, captura
+      `/root/agents-escritorio.png`). Arriba, Recall y Cobrador dicen **"propuestas 1"**;
+      abajo, la sección de acciones dice **"Todavía no hay propuestas. Cuando un agente
+      detecte algo […] su sugerencia va a aparecer acá"**. Los dos números salen de tablas
+      distintas y el dueño no puede saber cuál creer.
+      **La causa NO era la purga de QA — es del producto y le pasa a cualquier cliente.**
+      `VISIBLE_ACTION_STATUSES` en `agents-view.tsx` lista cuatro estados
+      (`pending_approval`, `approved`, `executed`, `auto_executed`) y el motor sella **tres
+      más** que quedan afuera: `proposed`, `rejected` y `discarded`. O sea que **el dueño
+      que RECHAZA su única propuesta —una acción que el producto le ofrece— la ve
+      desaparecer y después lee que el agente todavía no detectó nada.** Es la clase «una
+      lectura que devuelve `[]` y el texto del caso vacío AFIRMA una causa falsa».
+      Verificado en la base (`supabase-db`, org `clinica-sergio-p2ljs`):
+      `onia_agents_runs` tiene la corrida del 12-sep con `itemsProduced 1` y summary
+      "propuestas 1 · auto 0 · descartadas 0", y `onia_agents_actions` tiene **0 filas en
+      toda la base**.
+      **Cómo se cerró** (rama `claude/chatbots-platform-review-0d1d09`, `onia-platform`):
+      módulo puro `lib/onia-core/modules/agents-lista-vacia.ts` como única fuente del
+      párrafo — se **condiciona** la promesa, no se borra: con 0 propuestas el texto de
+      siempre sigue siendo el correcto; con propuestas hechas dice lo que de verdad les
+      pasó. La pregunta se le hace a las **corridas** (`itemsProduced`), que es una fuente
+      distinta de la lista de acciones: preguntarle a la misma tabla habría sido una
+      tautología. Gate `agents-lista-vacia.test.ts`: **caso ancla derivado del disco** que
+      exige que `rejected` y `discarded` sigan siendo estados que el motor escribe y la
+      pantalla esconde —si algún día la lista los mostrara, el gate se pondría rojo en vez
+      de apagarse solo— más el cableado (la pantalla no puede volver a tener su propio
+      párrafo). **Visto en ROJO antes** (3 casos), y **validado por mutación en dos puntos
+      después del arreglo**: esquive de la condición → 2 rojos; descableado de la pantalla
+      → 1 rojo. `tsc` limpio, `eslint` 0 errores. **Commiteado, NO desplegado.**
 
       **DECIDIDO por Sergio Urcullo (11-sep, eligió las 4 opciones) y TODAVÍA SIN CONSTRUIR:
       los TRES agentes nuevos** (nota del merge del 12-sep: dos carriles reescribieron este
