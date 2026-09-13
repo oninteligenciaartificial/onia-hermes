@@ -278,6 +278,54 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El bot le prometía a los leads reales «creás tu cuenta y entrás al toque», y el
+      producto exige confirmar el correo~~ — CERRADO EN PRODUCCIÓN el 2026-09-13 01:20 La Paz.**
+      La mitad «contesta el precio correcto» del objetivo tiene instrumento vivo desde el 12-sep
+      (`precios-vivos.mjs`); la mitad **«no promete lo que el producto no hace» no tenía
+      ninguno**. Lo que el bot le decía a los inboxes 4 (web) y 5 (WhatsApp), textual de la fila
+      publicada: *«Sí — podés probar el sistema 14 días gratis: creás tu cuenta en
+      app.onia.com.bo/register y entrás al toque.»*
+      **Medido en producción el mismo día, esa última frase es FALSA:**
+      `docker exec onia-platform env | grep ONIA_REGISTRO_CONFIRMA_CORREO` → `si`, y
+      `docker exec supabase-auth2 env | grep GOTRUE_MAILER_AUTOCONFIRM` → `false`. Con esa
+      conjunción —la que el propio `lib/registration.ts` documenta— `app/api/auth/login/route.ts`
+      contesta **403 `email_not_confirmed`** hasta que la persona hace clic en el correo. **El
+      producto era honesto y el bot no:** su propia pantalla de alta dice *«Tu cuenta ya fue
+      creada. Revisá tu correo… y confirma tu cuenta antes de iniciar sesión»*
+      (`app/(auth)/register/SignupForm.tsx:294`). El lead creaba la cuenta creyendo que entraba,
+      no podía, y la entrega de ese correo **ni siquiera está probada** (tarea `t_040684cb`, en
+      Sergio Urcullo). Es la fricción más cara que existe: en el último clic, después de
+      convencerlo.
+      **Por qué no lo veía ningún gate:** esa frase **no está en el repo**. Vive en una fila
+      publicada desde el panel (`chatbot_knowledge` de la org interna, `updatedBy:
+      carril-brecha-panel-venta`) que el motor sirve **por encima** del archivo. Misma familia que
+      dejó al bot cotizando Bs 750/1.500 una semana: un artefacto que se publica a mano es
+      invisible para todo gate de repo.
+      **Cómo se cerró.** `puerta-del-alta.mjs` cruza **dos fuentes independientes**: lo que el
+      producto HACE (los dos interruptores vivos, leídos de los contenedores que los ejecutan) y
+      lo que el bot DICE (el archivo vivo + la fila del panel + la fila de **cada inbox derivado
+      de Chatwoot**, por la misma vía del camino de respuesta). Si las dos salieran del mismo
+      lado sería tautológico y daría verde con el lead afuera. Ventana = la **oración**, con la
+      salvedad admitida en esa oración o en la **siguiente** (hasta donde llega un lector antes de
+      hacer clic); el punto de `app.onia.com.bo` no puede partirla, porque partida ninguna mitad
+      tiene alta + inmediatez a la vez.
+      **Rojo por el motivo correcto ANTES del arreglo** (exit 1, citando la frase en la fila panel
+      y en los inboxes 4 y 5), verde después (exit 0, 4 documentos mirados). Self-check 16/16
+      **validado por mutación en las dos piezas**: el esquive del detector (`return []`) → 12/16,
+      y romper la conjunción (ignorar `GOTRUE_MAILER_AUTOCONFIRM`) → 15/16 exit 1. Cableado en la
+      cadena como `test:puerta-alta`; el vivo es `npm run puerta:alta`.
+      **El arreglo es en la FILA, no en el repo** (arreglar el repo no la toca): `UPDATE`
+      guardado por `faq[0].id='negocio'` y `body LIKE '%al toque%'`, con backup del JSON previo,
+      `version` 2→3 y `updatedBy: carril-chatbot-cola`. Texto vivo hoy: *«…creás tu cuenta en
+      app.onia.com.bo/register, confirmás el correo que te llega y entrás…»* — decirlo entero no
+      saca la promesa, la completa.
+      **Barrida la clase en la misma vuelta:** pasado el detector sobre los 281 archivos de
+      `hermes-content/deploy/vps-ops/bot` y `web-factory/apps/onia-platform/src`, **ninguna otra
+      superficie** repite la promesa (los únicos hits son los fixtures de este gate).
+      ⚠️ **Lo que queda abierto y no lo cierra este carril:** nada impide que el panel vuelva a
+      publicar mañana la misma frase. El gate la caza, pero recién cuando alguien lo corre.
+      Validar la promesa **en el panel, al publicar**, es trabajo de `onia-platform`.
+
 - [x] 🔴 **~~La promesa «el Completo ya trae el chatbot adentro» no estaba atada a nada~~ —
       CERRADO el 2026-09-12 23:5x La Paz.** La escalera C le dio al producto un booleano por plan
       (`whatsappIncluded`, `onia-platform/lib/plan-catalogo.ts`: hoy `clinic` y `enterprise` en
