@@ -77,6 +77,27 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [ ] 🟡 **Nada impide que la regla de «envolver en vez de cortar» del panel vuelva a meterse
+      dentro de un `@media`, que es exactamente como nació este defecto.** Abierto por
+      `web-venta` el 2026-09-13, en la misma vuelta que arregló la instancia (`7878342f`).
+      **Qué pasó:** el arreglo original puso `white-space: normal` para `.panelTitle`,
+      `.panelTxt`, `.panelBarLbl` y `.panelPillTxt` dentro de `@media (max-width: 767px)`.
+      Cerró 320 y 390 —los anchos que se miraron— y dejó vivo el corte en 768, 1440 y 1920:
+      6 y 5 textos cortados en la banda «Tres cosas que vas a usar todos los días» de la home,
+      con el título del panel del chatbot en «WhatsA…» (91px perdidos de 20 caracteres) y las
+      filas de agentes en «Recordar citas …», «Avisar los pago…», «Invitar a quien …».
+      **Reproducción del defecto (40 s, ya no da rojo porque está arreglado):**
+      `cd web-factory/apps/onia-platform && node scripts/mirar-venta.mjs --out=/tmp/venta` →
+      hoy sale «Sin fallas»; antes del arreglo salía `home @ tablet-768`, `home @ ancha-1440` y
+      `home @ ancha-1920: texto recortado`.
+      **Lo que falta:** un test de unidad que lea `sitio.module.css` y exija que esas cuatro
+      clases declaren `white-space: normal` **fuera de toda media query** — el gate que hay
+      (`mirar-venta.mjs`) mide el síntoma con un navegador, se corre a mano y no está en
+      `prebuild`, así que la regresión puede vivir días. Validar por mutación: devolver la
+      regla adentro del `@media` tiene que dar **rojo nombrando las cuatro clases**.
+      **Por qué importa:** es la clase, no la instancia. La cura ya se escribió dos veces
+      para la misma familia de textos y las dos veces cerró sólo el viewport que alguien miró.
+
 - [x] 🟡 **`precios-vivos.mjs` acusa al CÓDIGO por un precio que sólo está en producción:
       `apareceEnElCodigo()` no distingue un precio de un milisegundo.** Abierto por `web-venta`
       el 2026-09-12, en la misma vuelta que le dio vista al barrido. **CERRADO el 2026-09-12
