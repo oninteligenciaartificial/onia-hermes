@@ -189,11 +189,50 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       noten las limitaciones para que quieran subir el plan y ordená las funciones dependiendo
       del plan"*).
 
-- [ ] 🔴 **Funciones que las empresas usan DE VERDAD — recorte de superficie** (Sergio Urcullo,
-      11-sep: *"mirar qué funciones vamos a usar realmente para las empresas"*). Medir contra
-      las 3 orgs vivas y el catálogo (`hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md`): qué
-      módulo se usa, cuál nadie tocó, y qué se esconde/simplifica para que la 1.0 sea corta.
-      El techo son horas de soporte, no features (estrategia §9).
+- [x] 🔴 **~~Funciones que las empresas usan DE VERDAD — recorte de superficie~~ — MEDIDO el
+      2026-09-13, y la medición REFUTA la premisa del ítem: no se puede recortar por uso,
+      porque NO HAY USO.** (Sergio Urcullo, 11-sep: *"mirar qué funciones vamos a usar
+      realmente para las empresas"*.)
+
+      **Cómo se midió, sin lista a mano.** El universo se derivó de la propia base
+      (`information_schema.columns where column_name='organizationId'` → **73 tablas**) y se
+      contaron filas por org con un `UNION ALL` generado, contra `supabase-db` de producción.
+      Una lista de módulos escrita a dedo habría dejado fuera justo el módulo nuevo.
+
+      **Las orgs son 4, no 3** (el ítem decía 3): `clinica-sergio-p2ljs` (dental),
+      `bolivian-electricidad-e6t21` (importadora, **onboarding sin terminar**),
+      `onia-interna` y `zz-qa-bandeja-10` (banco de QA, se excluye del conteo).
+
+      **El resultado: 59 de las 73 tablas están en CERO en las tres orgs reales.** Las 14 con
+      filas son casi todas de configuración o del sistema — `audit_logs` (60), `profiles` (3),
+      `clinic_settings` (3), `organization_entitlements` (4), `onia_agents_agents` (7, los crea
+      el alta), `onia_agents_runs` (26, las escribe el cron), `onia_trial_drip_sends` (4, el
+      cron), `chatbot_knowledge`, `chatbot_uso_mensual`, `notifications`,
+      `onia_core_role_assignments`, una tabla de backup. **Dato de negocio cargado por una
+      persona hay exactamente dos cosas: 1 ficha de paciente y 6 horarios de doctor.**
+
+      **En CERO histórico, en las tres orgs:** citas (`appointments`), tratamientos aplicados,
+      recetas, odontograma, facturas (`onia_invoicing_*`), pagos, facturas recurrentes,
+      inventario y almacenes (`onia_commerce_*`), gastos/comisiones/colaboradores
+      (`onia_empresa_*`), documentos, despachos, aprobaciones y agenda del core
+      (`onia_core_*`), planillas, alertas médicas, `whatsapp_sessions`, `push_subscriptions`,
+      `subscription_payments`.
+
+      **Por qué esto CAMBIA el próximo paso, en vez de darle datos.** El ítem asumía que el
+      uso podía decir qué módulo sobra. No puede: con cero clientes pagando, un módulo sin
+      filas no está de más — está **sin estrenar**. Recortar por este dato apagaría el producto
+      entero. El criterio ya decidido en `ONIA_ESTRATEGIA_DE_EMPRESA.md` §9 sigue siendo el
+      único aplicable: **lo que se recorta es lo que sube las horas de soporte por cliente**,
+      no lo que nadie tocó. La misma medición vuelve a tener sentido recién con clientes
+      reales adentro; hasta entonces, repetirla es gastar una vuelta.
+
+      **De paso, dos hechos que sirven a otros carriles** (los dos medidos, no supuestos):
+      · `subscription_payments` en cero confirma que **jamás entró un cobro** por el producto;
+      · `zz-qa-bandeja-10` conserva su dato de banco (1 cita, 3 tratamientos, 10 horarios) y
+      `npm run qa:sin-rastro` da **REALES: 0** — el E2E de agentes del 13-sep no dejó residuo
+      dentro de la cuenta de Sergio Urcullo.
+      Reproducir: derivar las tablas de `information_schema`, contar por `organizationId` y
+      cruzar contra `organizations`; los conteos de arriba son de `supabase-db` el 2026-09-13.
 
 - [ ] 🔴 **Estado real de los agentes IA del producto** (Sergio Urcullo, 11-sep: *"mira también
       cómo están los agentes ai"*). **MEDIDO el 2026-09-11 en la base de prod** (supabase-db,
