@@ -7,6 +7,7 @@
  */
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
+import { generateKeyPairSync } from "node:crypto";
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -29,7 +30,10 @@ import {
   DOC_SECTOR_CASES,
   EMISION_CASES,
   EMISION_CASES_SOPORTADOS,
+  EMISION_CASES_VIII,
+  MODALIDAD_ELECTRONICA,
   SERVICIO_POR_DOC_SECTOR,
+  SERVICIO_POR_DOC_SECTOR_ELECTRONICA,
   DOC_SECTOR_SIN_SOPORTE,
   timeoutFor,
   DEFAULT_COMBO,
@@ -54,6 +58,7 @@ import {
   tagText,
   updateStreak,
 } from "../src/fase1-runner.mjs";
+import { verifySignedInvoiceXml } from "../src/xml-signer.mjs";
 
 function inOrder(xml, tags) {
   const positions = tags.map((t) => xml.indexOf(t));
@@ -477,18 +482,18 @@ describe("normalizeCuisResult (SIN 980 con CUIS vigente, verificado en vivo 2026
 });
 
 describe("plan de etapas", () => {
-  it("los targets son POR CASO, no totales (VIII y X no aplican)", () => {
+  it("los targets son POR CASO, no totales (X no aplica; VIII entro el 12-sep)", () => {
     assert.deepEqual(STAGE_TARGETS, {
-      I: 1, II: 50, III: 100, IV: 125, V: 5, VI: 280, VII: 125, IX: 80, XI: 125,
+      I: 1, II: 50, III: 100, IV: 125, V: 5, VI: 280, VII: 125, VIII: 115, IX: 80, XI: 125,
     });
-    assert.deepEqual(STAGE_ORDER, ["I", "II", "III", "IV", "V", "VI", "VII", "IX", "XI"]);
+    assert.deepEqual(STAGE_ORDER, ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "XI"]);
   });
 
   it("target x casos = el total que muestra el portal del SIN", () => {
     // Lo que el "Listado de Etapas" mostraba el 2026-08-27. Si el SIN cambia
     // un total, este test lo caza antes de quemar una corrida entera.
     assert.deepEqual(STAGE_TOTALS, {
-      I: 2, II: 1800, III: 200, IV: 750, V: 70, VI: 560, VII: 750, IX: 160, XI: 750,
+      I: 2, II: 1800, III: 200, IV: 750, V: 70, VI: 560, VII: 750, VIII: 690, IX: 160, XI: 750,
     });
     const pv = PUNTOS_VENTA.length;
     const combos = EMISION_CASES.length;
@@ -500,6 +505,7 @@ describe("plan de etapas", () => {
     assert.equal(STAGE_TARGETS.V * motivos * pv, STAGE_TOTALS.V);
     assert.equal(STAGE_TARGETS.VI * pv, STAGE_TOTALS.VI);
     assert.equal(STAGE_TARGETS.VII * combos, STAGE_TOTALS.VII);
+    assert.equal(STAGE_TARGETS.VIII * EMISION_CASES_VIII.length, STAGE_TOTALS.VIII);
     assert.equal(STAGE_TARGETS.IX * pv, STAGE_TOTALS.IX);
     assert.equal(STAGE_TARGETS.XI * combos, STAGE_TOTALS.XI);
     assert.deepEqual(Object.keys(STAGE_PLAN).sort(), [...STAGE_ORDER].sort());
@@ -583,6 +589,34 @@ describe("matriz de casos del SIN (etapa IV, leida del portal 2026-08-27)", () =
 
   it("los comboId son unicos (sirven de caseId del checkpoint)", () => {
     assert.equal(new Set(EMISION_CASES.map(comboId)).size, EMISION_CASES.length);
+  });
+});
+
+describe("matriz de la etapa VIII (firma digital, modalidad electronica)", () => {
+  it("son los mismos 6 combos en modalidad 1, con ids -m1 que NO chocan con los computarizados", () => {
+    assert.equal(EMISION_CASES_VIII.length, 6);
+    for (const c of EMISION_CASES_VIII) {
+      assert.equal(c.codigoModalidad, MODALIDAD_ELECTRONICA);
+    }
+    const ids = EMISION_CASES_VIII.map(comboId);
+    assert.deepEqual(new Set(ids), new Set([
+      "pv0-ds1-tf1-m1", "pv1-ds1-tf1-m1",
+      "pv0-ds17-tf1-m1", "pv1-ds17-tf1-m1",
+      "pv0-ds24-tf3-m1", "pv1-ds24-tf3-m1",
+    ]));
+    const computarizados = new Set(EMISION_CASES.map(comboId));
+    for (const id of ids) {
+      assert.ok(!computarizados.has(id), `el caseId electronica ${id} pisa uno computarizado`);
+    }
+  });
+
+  it("cada sector electronica tiene su servicio SOAP mapeado", () => {
+    for (const { codigoDocumentoSector } of DOC_SECTOR_CASES) {
+      assert.ok(
+        SERVICIO_POR_DOC_SECTOR_ELECTRONICA[codigoDocumentoSector],
+        `sector ${codigoDocumentoSector} sin servicio electronica`,
+      );
+    }
   });
 });
 
@@ -867,6 +901,77 @@ describe("cobertura de casos end-to-end (el bug que costo la corrida del 6-ago)"
     };
     await r.etapaIII(1);
     assert.deepEqual(Object.keys(r.state.cufdByPv).sort(), ["0", "1"]);
+  });
+
+  // ------------------------- etapa VIII (firma digital) ----------------------
+
+  // Par RSA efimero. El "certificado" es de relleno: el firmador lo embebe sin
+  // validarlo (el real de pruebas lo emite AGETIC) y se verifica con la publica.
+  const claves = generateKeyPairSync("rsa", { modulusLength: 2048 });
+  const publicKeyPem = claves.publicKey.export({ type: "spki", format: "pem" });
+  const firmaDePrueba = {
+    privateKeyPem: claves.privateKey.export({ type: "pkcs8", format: "pem" }),
+    certificatePem: Buffer.from("certificado-de-prueba").toString("base64"),
+  };
+
+  it("la etapa VIII recorre los 6 combos electronica con el XML FIRMADO y verificable", async () => {
+    const r = runnerEspia();
+    r.firma = firmaDePrueba;
+    await r.etapaVIII(1);
+    const vistos = r.vistos.filter((v) => v.etapa === "VIII");
+    assert.deepEqual(new Set(vistos.map((v) => v.combo)), new Set(EMISION_CASES_VIII.map(comboId)));
+    for (const v of vistos) {
+      assert.ok(
+        v.envelope.includes("<codigoModalidad>1</codigoModalidad>"),
+        `el request de ${v.combo} no lleva modalidad electronica`,
+      );
+      const xml = xmlEnviado(v.envelope);
+      assert.match(xml, /<(facturaElectronica|notaFiscalElectronica)/, `raiz electronica en ${v.combo}`);
+      const check = verifySignedInvoiceXml(xml, { publicKeyPem });
+      assert.deepEqual(
+        check,
+        { digestValid: true, signatureValid: true, valid: true },
+        `firma invalida en ${v.combo}`,
+      );
+    }
+  });
+
+  it("cada sector de la VIII viaja por su servicio electronica", async () => {
+    const r = runnerEspia();
+    r.firma = firmaDePrueba;
+    await r.etapaVIII(1);
+    const porSector = {};
+    for (const v of r.vistos.filter((x) => x.etapa === "VIII")) {
+      porSector[/-ds(\d+)-/.exec(v.combo)[1]] = v.service;
+    }
+    assert.deepEqual(porSector, {
+      1: "FACTURACION_COMPRA_VENTA",
+      17: "FACTURACION_ELECTRONICA",
+      24: "FACTURACION_DOCUMENTO_AJUSTE",
+    });
+  });
+
+  it("la nota electronica ajusta una original ELECTRONICA del mismo PdV", async () => {
+    const r = runnerEspia();
+    r.firma = firmaDePrueba;
+    await r.withCombo(EMISION_CASES_VIII[4], () => r.emitOne(0)); // pv0-ds24-tf3-m1
+    assert.deepEqual(
+      r.vistos.map((v) => [v.combo, v.op]),
+      [["pv0-ds1-tf1-m1", "recepcionFactura"], ["pv0-ds24-tf3-m1", "recepcionDocumentoAjuste"]],
+    );
+  });
+
+  it("sin certificado la VIII se salta con log (cero red) y el material lanza claro", async () => {
+    const r = runnerEspia();
+    const logs = [];
+    r.log = (e) => logs.push(e);
+    await r.etapaVIII(1);
+    assert.equal(r.vistos.length, 0, "una corrida sin certificado no debe tocar la red");
+    assert.ok(logs.some((l) => l.etapa === "VIII" && /sin certificado/.test(l.skipped ?? "")));
+    await assert.rejects(
+      r.withCombo(EMISION_CASES_VIII[0], () => r.emitOne(0)),
+      /SIAT_FIRMA_KEY_FILE/,
+    );
   });
 });
 
