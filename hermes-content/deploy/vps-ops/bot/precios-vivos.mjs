@@ -354,13 +354,21 @@ export function inboxesVivos({ correr = spawnSync, contenedor } = {}) {
  *   `null`     cualquier otra cosa               → no pude preguntar, y eso nunca es verde
  */
 function filaDelProducto({ envUrl, sufijo = "", contenedor = CONTENEDOR, correr = spawnSync }) {
+  // El wget NO puede mezclar stderr con el body (era `wget -O - ... 2>&1`): con una fila REAL,
+  // el "Connecting to..." de busybox quedaba pegado al JSON y el gate la declaraba ILEGIBLE —
+  // latente mientras todo daba 404, mordio el 2026-09-13 con la primera fila publicada. El body
+  // va a un archivo; el stderr solo se muestra cuando wget FALLA (ahi vive el "404 Not Found"
+  // que distingue 'ausente' de 'no medido').
   const guion =
     'P=$(pgrep -f webhook-server | head -1); [ -n "$P" ] || exit 9; ' +
     "E=$(tr '\\0' '\\n' < /proc/$P/environ); " +
     `U=$(printf %s "$E" | sed -n "s/^${envUrl}=//p" | head -1); ` +
     'S=$(printf %s "$E" | sed -n "s/^BOT_KNOWLEDGE_SECRET=//p" | head -1); ' +
     '[ -n "$U" ] && [ -n "$S" ] || exit 8; ' +
-    `wget -O - --header="authorization: Bearer $S" "$U${sufijo}" 2>&1`;
+    'T="/tmp/.fila-gate.$$"; ' +
+    `ERR=$(wget -O "$T" --header="authorization: Bearer $S" "$U${sufijo}" 2>&1); RC=$?; ` +
+    'if [ "$RC" = 0 ]; then cat "$T"; rm -f "$T"; exit 0; fi; ' +
+    'rm -f "$T"; printf %s "$ERR"; exit "$RC"';
   const r = correr("docker", ["exec", contenedor, "sh", "-c", guion], { encoding: "utf8", timeout: 60_000 });
   if (!r || r.error) return { estado: null };
   const salida = typeof r.stdout === "string" ? r.stdout : "";

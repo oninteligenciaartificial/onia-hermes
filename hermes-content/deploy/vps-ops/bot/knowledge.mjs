@@ -604,6 +604,21 @@ export function resetOrgKnowledgeCache() {
   orgRefreshing.clear();
 }
 
+/**
+ * El organizationId de la org interna de Onia, leido de la URL de la fuente "panel"
+ * (`ONIA_KNOWLEDGE_URL`), que es el UNICO lugar que lo declara. Sin la fuente panel
+ * configurada no hay org interna que distinguir y la guarda no aplica.
+ */
+function orgInternaDe(options = {}) {
+  const { url } = panelConfig(options);
+  if (!url) return null;
+  try {
+    return new URL(url).searchParams.get("organizationId") || null;
+  } catch {
+    return null;
+  }
+}
+
 function dbConfig(options = {}) {
   return {
     url: String(options.dbUrl ?? process.env.ONIA_BOT_KNOWLEDGE_URL ?? "").trim(),
@@ -632,6 +647,16 @@ async function fetchOrgKnowledge(key, options = {}) {
     if (res.status === 404) return { data: null, error: null, missing: true }; // org sin fila publicada
     if (!res.ok) return { data: null, error: `la db contesto HTTP ${res.status}` };
     const body = await res.json();
+    // LA ORG INTERNA NO ES UN CLIENTE (medido en prod 2026-09-13). El producto resuelve
+    // inbox->org, y los inboxes de VENTA (4 web, 5 WhatsApp) resuelven a la org interna de
+    // Onia: con su fila del panel publicada, esta fuente la devolvia como "db" y
+    // asRecepcionista le ponia el menu de recepcion a los leads del widget. Esa fila entra
+    // SOLO por la fuente "panel" (mergeada sobre el archivo, modo venta): por aca se trata
+    // como "sin fila" para que el flujo caiga exactamente ahi.
+    const interna = orgInternaDe(options);
+    if (interna && String(body?.organizationId || "") === interna) {
+      return { data: null, error: null, missing: true };
+    }
     const verdict = validateKnowledge(body?.data);
     if (!verdict.ok) {
       return { data: null, error: `RECHAZADO (${verdict.errors.length}): ${verdict.errors.join(" · ")}`.slice(0, 600) };

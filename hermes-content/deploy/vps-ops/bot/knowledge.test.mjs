@@ -1333,6 +1333,46 @@ test("panel: los candados del guion le GANAN a la FAQ del panel — 'cuanto cues
   });
 });
 
+test("db: la fila de la ORG INTERNA (la del panel) NO enciende el recepcionista — el lead de venta sigue en venta", async () => {
+  // Medido en prod el 2026-09-13: el producto resuelve inbox->org y los inboxes de VENTA (4 web,
+  // 5 WhatsApp) resuelven a la org interna de Onia. Con la fila del panel publicada, la fuente
+  // "db" la devolvia como si fuera una org cliente y asRecepcionista le ponia el menu de
+  // recepcion ("horarios, servicios, pedido") a los leads del widget. La fila interna entra SOLO
+  // por la fuente "panel" (mergeada, modo venta); por inbox se trata como "sin fila".
+  const doc = valido({
+    faq: [{ id: "negocio", body: "Tenés 14 días de prueba", status: "publicado", tags: ["prueba"] }],
+  });
+  const sobreInterno = async () => ({
+    ok: true,
+    status: 200,
+    json: async () => ({ organizationId: "org_onia_interna", data: doc, version: 2, updatedBy: "panel" }),
+  });
+  const opts = {
+    dbUrl: "http://producto/api/chatbot-knowledge/published",
+    dbSecret: "s3cr3t",
+    panelUrl: "http://producto/api/chatbot-knowledge/published?organizationId=org_onia_interna",
+    panelSecret: "s3cr3t",
+    inboxId: "4",
+    fetch: sobreInterno,
+    nowMs: NOW_MS,
+  };
+  const state = await ensureKnowledge(opts);
+  assert.notEqual(state.source, "db", "la fila interna no es una org cliente");
+  const config = withKnowledge(DEFAULT_CONFIG, opts);
+  assert.notEqual(config.modo, "recepcionista", "el lead de venta NUNCA ve el menu de recepcion");
+
+  // Y una org CLIENTE de verdad sigue encendiendo el recepcionista: la guarda no rompe clientes.
+  resetOrgKnowledgeCache();
+  const sobreCliente = async () => ({
+    ok: true,
+    status: 200,
+    json: async () => ({ organizationId: "org_ferreteria", data: valido(), version: 1, updatedBy: "x" }),
+  });
+  await getOrgKnowledge("org_ferreteria", { ...opts, inboxId: undefined, fetch: sobreCliente });
+  const cliente = withKnowledge(DEFAULT_CONFIG, { organizationId: "org_ferreteria", nowMs: NOW_MS + 1000 });
+  assert.equal(cliente.modo, "recepcionista", "una org cliente sigue siendo el bot del negocio");
+});
+
 test("applyKnowledge: las FAQ 'negocio' viajan en config.faq para el modo venta y NO pisan el guion", () => {
   const data = valido({
     faq: [
