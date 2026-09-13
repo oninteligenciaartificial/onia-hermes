@@ -27,8 +27,8 @@ import {
   ensureKnowledge,
   getKnowledge,
   getOrgKnowledge,
+  ensureKnowledgeHealth,
   getPanelKnowledge,
-  knowledgeHealth,
   mapPanelDoc,
   parseKnowledge,
   readKnowledgeFile,
@@ -126,12 +126,12 @@ test("archivo AUSENTE: el bot sigue contestando el guion completo, sin un solo {
   });
 });
 
-test("JSON ROTO: se rechaza entero, se sigue con codigo y el error queda a la vista en /health", () => {
-  conArchivo("{ esto no es json", (path) => {
+test("JSON ROTO: se rechaza entero, se sigue con codigo y el error queda a la vista en /health", async () => {
+  await conArchivo("{ esto no es json", async (path) => {
     const config = withKnowledge(DEFAULT_CONFIG, { path, nowMs: NOW_MS });
     assert.equal(config, DEFAULT_CONFIG);
 
-    const salud = knowledgeHealth({ path, nowMs: NOW_MS });
+    const salud = await ensureKnowledgeHealth({ path, nowMs: NOW_MS });
     assert.equal(salud.source, "code");
     assert.match(salud.lastError, /JSON invalido/);
   });
@@ -452,13 +452,14 @@ test("checkCli: devuelve 0 con el ejemplo, 1 y el motivo exacto con un archivo r
   });
 });
 
-test("/health dice de donde salio lo que el bot esta diciendo (si no, 'edite y no paso nada' tarda dias)", () => {
-  conArchivo(valido({ version: "2026-08-06.9" }), (path) => {
-    const salud = knowledgeHealth({ path, nowMs: NOW_MS });
+test("/health dice de donde salio lo que el bot esta diciendo (si no, 'edite y no paso nada' tarda dias)", async () => {
+  await conArchivo(valido({ version: "2026-08-06.9" }), async (path) => {
+    const salud = await ensureKnowledgeHealth({ path, nowMs: NOW_MS });
     assert.equal(salud.source, "file");
     assert.equal(salud.version, "2026-08-06.9");
     assert.equal(salud.lastError, null);
     assert.equal(salud.path, path);
+    assert.equal(salud.alcance, "proceso", "sin inbox se midio el proceso, y hay que decirlo");
   });
 });
 
@@ -1175,7 +1176,7 @@ test("panel: un error ESTRUCTURAL (clave desconocida arriba) rechaza el doc ENTE
       nowMs: NOW_MS,
     });
     assert.equal(state.source, "file", "un doc de otro contrato no entra ni recortado");
-    assert.match(knowledgeHealth({ ...PANEL_OPTS, path, nowMs: NOW_MS }).panel.lastError, /RECHAZADO/);
+    assert.match((await ensureKnowledgeHealth({ ...PANEL_OPTS, path, nowMs: NOW_MS })).panel.lastError, /RECHAZADO/);
   });
 });
 
@@ -1189,7 +1190,7 @@ test("panel: sin ONIA_KNOWLEDGE_URL la fuente esta APAGADA y nada cambia", async
 test("panel: /health dice source:'panel' con la version y el autor del editor", async () => {
   const fetch = fetchFalso(valido({ version: "v7", updatedBy: "Sergio Urcullo" }));
   await getPanelKnowledge({ ...PANEL_OPTS, fetch, nowMs: NOW_MS });
-  const salud = knowledgeHealth({ ...PANEL_OPTS, fetch, nowMs: NOW_MS + 1000 });
+  const salud = await ensureKnowledgeHealth({ ...PANEL_OPTS, fetch, nowMs: NOW_MS + 1000 });
   assert.equal(salud.source, "panel");
   assert.equal(salud.version, "v7");
   assert.equal(salud.updatedBy, "Sergio Urcullo");

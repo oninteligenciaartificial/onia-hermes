@@ -33,6 +33,7 @@ import {
   WEBHOOK_PATH,
 } from "./webhook-server.mjs";
 import { _resetDedup } from "./message-dedup.mjs";
+import { resetOrgKnowledgeCache, KNOWLEDGE_SCHEMA } from "./knowledge.mjs";
 
 const SECRET = "secreto-de-prueba-no-va-al-repo";
 const NOW_MS = Date.UTC(2026, 6, 30, 18, 0, 0);
@@ -134,6 +135,105 @@ test("getHealthStatus grita cuando falta el secreto y NUNCA devuelve su valor", 
   assert.equal(bueno.auth.firma, true);
   assert.equal(bueno.auth.aviso, undefined);
   assert.ok(!JSON.stringify(bueno).includes(SECRET), "el secreto no se filtra por /health");
+});
+
+// ---------------------------------------------------------------------------
+// 0.a-bis /health CONTESTA SOBRE EL DOCUMENTO QUE LE TOCA AL LEAD, NO SOBRE OTRO
+//
+// Medido el 2026-09-12: toda conversacion resuelve su conocimiento con
+// `ensureKnowledge({ inboxId })` (run-turn.mjs), que sirve la fila PUBLICADA de ese inbox
+// apenas exista. `/health` llamaba `knowledgeHealth()` SIN inbox, o sea reportaba el archivo
+// del proceso. Mientras no haya filas publicadas los dos coinciden y nada se ve; el dia que
+// alguien publique una, /health sigue jurando por el archivo y el gate de precios que le
+// pregunta FALLA EN VERDE sobre el documento equivocado.
+//
+// La cura tiene DOS mitades y las dos se prueban aca:
+//   1. `?inboxId=N` resuelve con la MISMA funcion que el camino de respuesta (ensureKnowledge),
+//      no con la hermana sincronica que se saltea el primer fetch.
+//   2. la respuesta DECLARA el alcance que realmente midio. Sin eso no hay forma de que el que
+//      pregunta distinga "te contesto por el inbox 4" de "te contesto por el archivo": es el
+//      mismo JSON, y esa ambiguedad ES el defecto.
+// ---------------------------------------------------------------------------
+
+/** Un doc minimo y valido, igual que el fixture de knowledge.test.mjs. */
+function docValido(extra = {}) {
+  return {
+    schema: KNOWLEDGE_SCHEMA,
+    version: "test.1",
+    updatedBy: "test",
+    identity: { humanName: "Sergio" },
+    ...extra,
+  };
+}
+
+/** El /published del producto, mockeado: responde con fila SOLO para los inboxes pedidos. */
+function publishedDe(porInbox) {
+  const pedidos = [];
+  const doFetch = async (url) => {
+    pedidos.push(String(url));
+    const inbox = new URL(String(url)).searchParams.get("inboxId");
+    const fila = porInbox[String(inbox)];
+    if (!fila) return { status: 404, ok: false, json: async () => ({}) };
+    return { status: 200, ok: true, json: async () => ({ data: fila }) };
+  };
+  return { pedidos, opciones: { dbUrl: "https://prod/published", dbSecret: "s3cr3t", fetch: doFetch } };
+}
+
+test("/health?inboxId=N contesta por la fila PUBLICADA de ese inbox, igual que el camino de respuesta", async () => {
+  resetOrgKnowledgeCache();
+  const { pedidos, opciones } = publishedDe({ 4: docValido({ version: "fila-del-inbox-4" }) });
+
+  const salud = await getHealthStatus(CONFIG, { enabled: false }, { ...DB_SANA, knowledgeOptions: opciones }, { inboxId: "4" });
+
+  assert.equal(salud.knowledge.version, "fila-del-inbox-4", "reporto otro documento que el que recibe el lead");
+  assert.equal(salud.knowledge.source, "db");
+  assert.equal(salud.knowledge.alcance, "inbox:4", "la respuesta tiene que DECLARAR que midio el inbox");
+  assert.equal(pedidos.length, 1, "tiene que PREGUNTARLE al producto, no deducirlo de la cache");
+  assert.match(pedidos[0], /inboxId=4/);
+  resetOrgKnowledgeCache();
+});
+
+test("/health sin inbox DECLARA que midio el proceso — no se puede confundir con una fila por inbox", async () => {
+  resetOrgKnowledgeCache();
+  const salud = await getHealthStatus(CONFIG, { enabled: false }, DB_SANA);
+  assert.equal(salud.knowledge.alcance, "proceso", "sin alcance declarado, el que pregunta no sabe que le contestaron");
+});
+
+test("/health con un inboxId que no es un numero declara el alcance que REALMENTE midio", async () => {
+  resetOrgKnowledgeCache();
+  const { pedidos, opciones } = publishedDe({});
+  // Un inbox basura no puede hacerse pasar por una medicion por inbox: seria el mismo falso
+  // verde de arriba con otra cara. Se mide el proceso y se dice que se midio el proceso.
+  const salud = await getHealthStatus(CONFIG, { enabled: false }, { ...DB_SANA, knowledgeOptions: opciones }, { inboxId: "'; drop--" });
+  assert.equal(salud.knowledge.alcance, "proceso");
+  assert.equal(pedidos.length, 0, "un inbox invalido no sale a preguntarle nada al producto");
+});
+
+test("HTTP REAL: /health?inboxId=N llega hasta la resolucion por inbox por la red", async () => {
+  resetOrgKnowledgeCache();
+  const { pedidos, opciones } = publishedDe({ 7: docValido({ version: "fila-del-inbox-7" }) });
+  const server = createWebhookServer({
+    config: CONFIG,
+    n8nConfig: { enabled: false },
+    runChatwootTurn: motorMock(),
+    nowMs: NOW_MS,
+    store: { warnings: [], loadConversation: async () => null },
+    log: () => {},
+    knowledgeOptions: opciones,
+  });
+  server.listen(0);
+  await once(server, "listening");
+  const { port } = server.address();
+  try {
+    const estado = await (await fetch(`http://127.0.0.1:${port}/health?inboxId=7`)).json();
+    assert.equal(estado.knowledge.alcance, "inbox:7");
+    assert.equal(estado.knowledge.version, "fila-del-inbox-7");
+    assert.equal(pedidos.length, 1);
+  } finally {
+    server.close();
+    await once(server, "close");
+    resetOrgKnowledgeCache();
+  }
 });
 
 // ---------------------------------------------------------------------------
