@@ -910,6 +910,17 @@ const DESTINOS_POR_COPIA = {
 };
 
 /**
+ * Los dos destinos que se identifican por SHA (`plataforma`) y por FECHA (`landing`), con el
+ * publicador del que sale el cuerpo derivado cuando quedan cortos. Es una tabla por el mismo
+ * motivo que la de arriba: con la ruta escrita a mano en el veredicto, el carril de la landing
+ * salía a correr el publicador de la plataforma, que no publica nada suyo.
+ */
+const SECO_POR_SHA = {
+  plataforma: '/opt/onia-platform/_deploy/publicar.sh',
+  landing: '/opt/onia-landing/_deploy/publicar.sh',
+};
+
+/**
  * Corre un publicador en seco y devuelve su stdout, del disco local o del VPS. `null` = no
  * pude preguntar.
  *
@@ -1161,12 +1172,17 @@ async function medirEnVivo() {
         // se publica sin nombrar es justo lo que Sergio Urcullo no leyó. El universo se
         // DERIVA (commits de la zona posteriores al build, los que le llegan al lead), nunca
         // de los shas del pedido: recorrer lo que el pedido enumera no puede ver al que falta.
-        const c = promesaCompleta({
-          shas: shasDelTexto(p.texto),
-          publicaria: soloLosQueViajan(publicariaLanding(buildLanding)),
-        });
+        const viajanLanding = soloLosQueViajan(publicariaLanding(buildLanding));
+        const c = promesaCompleta({ shas: shasDelTexto(p.texto), publicaria: viajanLanding });
         if (c.estado === 'SUB_DESCRIBE') incompletos.push({ id: p.id, mudos: c.mudos });
         else if (c.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (landing, promesa completa): ${c.motivo}`);
+        // Y la del cuerpo, que hasta el 2026-09-12 sólo tenían los otros tres destinos: la de
+        // arriba lee cuerpo Y comentarios como un texto, así que un comentario con los shas que
+        // faltan la deja satisfecha — y el comentario no viaja a la pantalla donde Sergio
+        // Urcullo decide. Misma pregunta que `cuerpoCorto` le hace a `plataforma`.
+        const k = cuerpoCorto({ texto: p.texto, publicaria: viajanLanding });
+        if (k.estado === 'SUB_DESCRIBE') cortos.push({ id: p.id, destino: 'landing', mudos: k.mudos });
+        else if (k.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (landing, cuerpo completo): ${k.motivo}`);
       }
       continue;
     }
@@ -1236,7 +1252,7 @@ async function medirEnVivo() {
       // comentario con el recuento derivado la deja satisfecha — pero el cuerpo es lo que él
       // lee para decidir. Ver `cuerpoCorto`.
       const k = cuerpoCorto({ texto: p.texto, publicaria: publicariaPlataforma });
-      if (k.estado === 'SUB_DESCRIBE') cortos.push({ id: p.id, mudos: k.mudos });
+      if (k.estado === 'SUB_DESCRIBE') cortos.push({ id: p.id, destino: 'plataforma', mudos: k.mudos });
       else if (k.estado === 'NO_MEDIDO') noMedidos.push(`${p.id} (plataforma, cuerpo completo): ${k.motivo}`);
     }
   }
@@ -1347,7 +1363,9 @@ async function medirEnVivo() {
       console.log('  de lo que su ok publica. COMENTAR NO LO LIMPIA: este control lee el cuerpo y');
       console.log('  nada mas, y el `edit` del tablero no cambia el cuerpo. Se cura rehaciendo el');
       console.log('  pedido con el cuerpo derivado de');
-      console.log('    bash /opt/onia-platform/_deploy/publicar.sh --dry-run');
+      // La ruta sale de la tabla: con el literal de `plataforma` escrito aca, el pedido de la
+      // landing mandaba a correr el publicador del otro destino, que no publica nada suyo.
+      console.log(`    bash ${SECO_POR_SHA[c.destino]} --dry-run`);
       console.log('  y ARCHIVANDO el viejo en la misma vuelta.');
     }
     return 1;
