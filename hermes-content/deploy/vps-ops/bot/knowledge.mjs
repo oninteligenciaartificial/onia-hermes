@@ -604,6 +604,21 @@ export function resetOrgKnowledgeCache() {
   orgRefreshing.clear();
 }
 
+/**
+ * El organizationId de la org interna de Onia, leido de la URL de la fuente "panel"
+ * (`ONIA_KNOWLEDGE_URL`), que es el UNICO lugar que lo declara. Sin la fuente panel
+ * configurada no hay org interna que distinguir y la guarda no aplica.
+ */
+function orgInternaDe(options = {}) {
+  const { url } = panelConfig(options);
+  if (!url) return null;
+  try {
+    return new URL(url).searchParams.get("organizationId") || null;
+  } catch {
+    return null;
+  }
+}
+
 function dbConfig(options = {}) {
   return {
     url: String(options.dbUrl ?? process.env.ONIA_BOT_KNOWLEDGE_URL ?? "").trim(),
@@ -632,6 +647,16 @@ async function fetchOrgKnowledge(key, options = {}) {
     if (res.status === 404) return { data: null, error: null, missing: true }; // org sin fila publicada
     if (!res.ok) return { data: null, error: `la db contesto HTTP ${res.status}` };
     const body = await res.json();
+    // LA ORG INTERNA NO ES UN CLIENTE (medido en prod 2026-09-13). El producto resuelve
+    // inbox->org, y los inboxes de VENTA (4 web, 5 WhatsApp) resuelven a la org interna de
+    // Onia: con su fila del panel publicada, esta fuente la devolvia como "db" y
+    // asRecepcionista le ponia el menu de recepcion a los leads del widget. Esa fila entra
+    // SOLO por la fuente "panel" (mergeada sobre el archivo, modo venta): por aca se trata
+    // como "sin fila" para que el flujo caiga exactamente ahi.
+    const interna = orgInternaDe(options);
+    if (interna && String(body?.organizationId || "") === interna) {
+      return { data: null, error: null, missing: true };
+    }
     const verdict = validateKnowledge(body?.data);
     if (!verdict.ok) {
       return { data: null, error: `RECHAZADO (${verdict.errors.length}): ${verdict.errors.join(" · ")}`.slice(0, 600) };
@@ -856,6 +881,45 @@ export function sanitizePanelKnowledge(data) {
   return { data: podado, descartes: primero.errors, errors: [] };
 }
 
+/**
+ * MERGE POR CAMPO archivo+panel (F2.2). El doc del panel NO reemplaza al archivo: lo pisa solo
+ * en lo que TRAE. Nace del 2026-09-13: la v1 publicada desde el panel (sin FAQ `precios` ni
+ * `triggersExtra`) dejo al bot sin precios y sin los 9 disparadores del archivo — el lead
+ * preguntaba "¿cuanto cuesta?" y recibia el M4 default sin cifras. Reglas:
+ *   - campo simple / lista plana: el panel manda SI lo trae; si no, queda el del archivo;
+ *   - objetos (identity, demo, empresa.horario, seguimiento): por sub-campo;
+ *   - `triggersExtra.demo`: UNION (la direccion segura: agregar si, sacar no);
+ *   - `faq`: por ID — el panel manda sobre los ids que trae; los que no trae (precios, siat)
+ *     se conservan del archivo, que es de donde salen las cifras.
+ * Puro: no lee caches ni archivos. Los DOS docs ya pasaron su validador.
+ */
+export function mergePanelKnowledge(archivo, panel) {
+  if (!archivo) return panel;
+  if (!panel) return archivo;
+  const out = { ...archivo, ...panel };
+  for (const key of ["identity", "demo", "seguimiento"]) {
+    if (isPlainObject(archivo[key]) && isPlainObject(panel[key])) out[key] = { ...archivo[key], ...panel[key] };
+  }
+  if (isPlainObject(archivo.empresa) && isPlainObject(panel.empresa)) {
+    out.empresa = { ...archivo.empresa, ...panel.empresa };
+    if (isPlainObject(archivo.empresa.horario) && isPlainObject(panel.empresa.horario)) {
+      out.empresa.horario = { ...archivo.empresa.horario, ...panel.empresa.horario };
+    }
+  }
+  const demoArchivo = Array.isArray(archivo.triggersExtra?.demo) ? archivo.triggersExtra.demo : [];
+  const demoPanel = Array.isArray(panel.triggersExtra?.demo) ? panel.triggersExtra.demo : [];
+  if (demoArchivo.length || demoPanel.length) {
+    out.triggersExtra = { demo: [...new Set([...demoArchivo, ...demoPanel])] };
+  }
+  const faqArchivo = Array.isArray(archivo.faq) ? archivo.faq : [];
+  const faqPanel = Array.isArray(panel.faq) ? panel.faq : [];
+  if (faqArchivo.length || faqPanel.length) {
+    const idsPanel = new Set(faqPanel.map((item) => item?.id));
+    out.faq = [...faqPanel, ...faqArchivo.filter((item) => !idsPanel.has(item?.id))];
+  }
+  return out;
+}
+
 async function fetchPanelKnowledge(options = {}) {
   const { url, secret, timeoutMs, fetch: doFetch } = panelConfig(options);
   if (!url || !secret || typeof doFetch !== "function") return { data: null, error: null, missing: true };
@@ -949,7 +1013,9 @@ export async function getPanelKnowledge(options = {}) {
     if (prev.checkedAt === null || nowMs - prev.checkedAt >= ttlMs(options)) {
       PANEL_CACHE = nextPanelCache(await fetchPanelKnowledge(options), url, nowMs);
     }
-    return PANEL_CACHE.data ? PANEL_CACHE : getKnowledge(options);
+    // getKnowledge es quien sabe SERVIR: resuelve el archivo y devuelve el panel MERGEADO
+    // por campo sobre el (o degrada a archivo/codigo si el panel no tiene datos).
+    return getKnowledge(options);
   } catch {
     return getKnowledge(options);
   }
@@ -976,17 +1042,9 @@ export function getKnowledge(options = {}) {
       if (org?.data) return org;
       // sin copia db todavia: sigue el camino del panel/archivo/codigo de siempre
     }
-    const { url: panelUrl } = panelConfig(options);
-    if (panelUrl) {
-      const panelNow = Number.isFinite(options.nowMs) ? options.nowMs : Date.now();
-      const panel = panelCacheVigente(panelUrl);
-      if (panel.checkedAt === null || panelNow - panel.checkedAt >= ttlMs(options)) {
-        schedulePanelRefresh(panelUrl, panelNow, options);
-      }
-      if (panel.data) return panel;
-      // sin copia del panel todavia (fria, 404 o rechazada): sigue el archivo/codigo — fail-open
-      // al conocimiento anterior, JAMAS mudo.
-    }
+    // EL ARCHIVO SE RESUELVE SIEMPRE, aunque el panel este sirviendo: la fuente panel se sirve
+    // MERGEADA por campo sobre el archivo (mergePanelKnowledge) — lo que el panel no trae
+    // (la FAQ `precios` con sus cifras, los triggersExtra.demo) NO se pierde.
     const path = knowledgePath(options);
     const nowMs = Number.isFinite(options.nowMs) ? options.nowMs : Date.now();
     if (CACHE.path !== path) {
@@ -997,6 +1055,21 @@ export function getKnowledge(options = {}) {
       CACHE = nextCache(readKnowledgeFile(path, options), path, nowMs);
     } else if (nowMs - CACHE.checkedAt >= ttlMs(options)) {
       scheduleRefresh(path, nowMs, options);
+    }
+    const { url: panelUrl } = panelConfig(options);
+    if (panelUrl) {
+      const panelNow = Number.isFinite(options.nowMs) ? options.nowMs : Date.now();
+      const panel = panelCacheVigente(panelUrl);
+      if (panel.checkedAt === null || panelNow - panel.checkedAt >= ttlMs(options)) {
+        schedulePanelRefresh(panelUrl, panelNow, options);
+      }
+      if (panel.data) {
+        return CACHE.data
+          ? Object.freeze({ ...panel, data: mergePanelKnowledge(CACHE.data, panel.data) })
+          : panel;
+      }
+      // sin copia del panel todavia (fria, 404 o rechazada): sigue el archivo/codigo — fail-open
+      // al conocimiento anterior, JAMAS mudo.
     }
     return CACHE;
   } catch {
@@ -1122,14 +1195,22 @@ export function applyKnowledge(base = DEFAULT_CONFIG, data = null, options = {})
   }
 
   const script = {};
+  const negocio = [];
   for (const item of Array.isArray(data.faq) ? data.faq : []) {
     // "negocio" NO pisa el guion: son N entradas y las consume el recepcionista como lista
     // (recepcionista.mjs, faqNegocioVigente). Pisar script[R_FAQ_NEGOCIO] dejaria solo la ultima.
-    if (item?.id === "negocio") continue;
+    if (item?.id === "negocio") {
+      negocio.push(item);
+      continue;
+    }
     const templateKey = FAQ_TEMPLATE[item?.id];
     if (templateKey && faqVigente(item, nowIso)) script[templateKey] = item.body;
   }
   if (Object.keys(script).length) overrides.script = { ...base.script, ...script };
+  // Las FAQ del dueño viajan TAMBIEN a la config del modo venta (F2.2): el embudo las contesta
+  // por sus tags (bot-engine → faqNegocioVigente), igual que el recepcionista. La vigencia se
+  // decide AL SERVIR, contra msg.receivedAt (fail-closed sin fecha), no aca — por eso van crudas.
+  if (negocio.length) overrides.faq = negocio;
 
   return Object.keys(overrides).length ? createBotConfig(overrides, base) : base;
 }

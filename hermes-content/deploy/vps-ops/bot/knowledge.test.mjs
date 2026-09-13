@@ -13,7 +13,7 @@
 
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -1204,4 +1204,183 @@ test("panel: mapPanelDoc y sanitizePanelKnowledge son puros y defensivos", () =>
   const limpio = sanitizePanelKnowledge(doc);
   assert.equal(limpio.data, doc, "un doc valido pasa identico, sin clonar de mas");
   assert.deepEqual(limpio.descartes, []);
+});
+
+// ---------------------------------------------------------------------------
+// FUENTE "PANEL" + ARCHIVO: MERGE POR CAMPO (F2.2) — publicar del panel no degrada nada
+// ---------------------------------------------------------------------------
+// Medido el 2026-09-13 (v1 publicada desde el panel, con rollback): el doc del panel
+// REEMPLAZABA al archivo entero. Sin su FAQ `precios`, M4_BODY volvia al default SIN cifras
+// (el bot dejo de dar precios); los 9 triggersExtra.demo del archivo se perdian; y el modo
+// venta ignoraba las FAQ `negocio` del editor. Estos tests son el contrato de la reparacion:
+// lo que el panel no trae SE CONSERVA del archivo, y lo que trae se sirve tambien en venta.
+
+const ARCHIVO_ONIA = JSON.parse(readFileSync(join(HERE, "knowledge.onia.json"), "utf8"));
+
+/** El doc tipico del editor del panel: UNA FAQ del dueño, sin precios ni triggers. */
+function panelNegocio(extra = {}) {
+  return valido({
+    faq: [
+      {
+        id: "negocio",
+        title: "Garantía",
+        body: "Tenés 14 días de prueba y soporte directo por WhatsApp",
+        status: "publicado",
+        tags: ["garantia", "prueba"],
+      },
+    ],
+    ...extra,
+  });
+}
+
+test("panel: los PRECIOS no dependen de la fuente — sin FAQ `precios` en el panel, la del archivo sigue con cifras y link", async () => {
+  await conArchivo(ARCHIVO_ONIA, async (path) => {
+    const state = await getPanelKnowledge({ ...PANEL_OPTS, fetch: fetchFalso(panelNegocio()), path, nowMs: NOW_MS });
+    assert.equal(state.source, "panel", "el panel esta sirviendo (no se degrado)");
+    const ids = state.data.faq.map((f) => f.id).sort();
+    assert.deepEqual(ids, ["negocio", "precios", "siat"], "el merge conserva las FAQ del archivo que el panel no trae");
+
+    const config = withKnowledge(DEFAULT_CONFIG, { ...PANEL_OPTS, path, nowMs: NOW_MS });
+    assert.match(config.script.M4_BODY, /Bs 320/, "la respuesta de precios sigue COTIZANDO");
+    assert.match(config.script.M4_BODY, /onia\.com\.bo\/precios/, "y sigue mandando a la lista publica");
+
+    const result = step(
+      createState({ channel: "sim", contactRef: "merge-precio" }),
+      { text: "¿cuánto cuesta?", receivedAt: T0 },
+      { config: conHorarios(config) },
+    );
+    const texto = result.replies.map((r) => r.text).join("\n");
+    assert.match(texto, /Bs 320/, "el embudo contesta el precio con la escalera C");
+    assert.match(texto, /890/);
+    assert.match(texto, /1\.290/);
+  });
+});
+
+test("panel: los triggersExtra.demo del archivo SOBREVIVEN al cambio de fuente (union, nunca resta)", async () => {
+  await conArchivo(ARCHIVO_ONIA, async (path) => {
+    const fetch = fetchFalso(panelNegocio({ triggersExtra: { demo: ["disparador del panel"] } }));
+    const state = await getPanelKnowledge({ ...PANEL_OPTS, fetch, path, nowMs: NOW_MS });
+    assert.equal(state.source, "panel");
+    const esperados = ARCHIVO_ONIA.triggersExtra.demo.length + 1;
+    assert.equal(state.data.triggersExtra.demo.length, esperados, "union archivo+panel, sin perder ninguno");
+
+    const salud = await ensureKnowledgeHealth({ ...PANEL_OPTS, path, nowMs: NOW_MS });
+    assert.equal(salud.source, "panel");
+    assert.equal(salud.triggersDemo, esperados, "/health cuenta lo SERVIDO (el merge), no el doc pelado del panel");
+
+    const config = withKnowledge(DEFAULT_CONFIG, { ...PANEL_OPTS, path, nowMs: NOW_MS });
+    assert.ok(config.triggers.demo.includes("quiero contratar"), "el disparador del archivo sigue vivo");
+    assert.ok(config.triggers.demo.includes("disparador del panel"), "y el del panel se suma");
+  });
+});
+
+test("panel: si el panel SI trae una FAQ de un id del archivo, la suya manda (merge por id)", async () => {
+  await conArchivo(ARCHIVO_ONIA, async (path) => {
+    const doc = panelNegocio();
+    doc.faq.push({
+      id: "siat",
+      body: "Sobre facturación te contesto en la demo, con tu NIT delante.",
+      status: "publicado",
+      tags: ["fiscal"],
+    });
+    const state = await getPanelKnowledge({ ...PANEL_OPTS, fetch: fetchFalso(doc), path, nowMs: NOW_MS });
+    assert.equal(state.source, "panel");
+    const siat = state.data.faq.filter((f) => f.id === "siat");
+    assert.equal(siat.length, 1, "no quedan dos versiones del mismo id");
+    assert.match(siat[0].body, /con tu NIT delante/, "gana la del panel");
+    assert.ok(state.data.faq.some((f) => f.id === "precios"), "y la de precios del archivo sigue");
+  });
+});
+
+test("panel: una FAQ del editor (id 'negocio') SE CONTESTA en el embudo de VENTA por sus tags", async () => {
+  await conArchivo(ARCHIVO_ONIA, async (path) => {
+    await getPanelKnowledge({ ...PANEL_OPTS, fetch: fetchFalso(panelNegocio()), path, nowMs: NOW_MS });
+    const config = conHorarios(withKnowledge(DEFAULT_CONFIG, { ...PANEL_OPTS, path, nowMs: NOW_MS }));
+    assert.notEqual(config.modo, "recepcionista", "sigue siendo la cara de VENTA de Onia");
+
+    // En frio ('nuevo'): la bienvenida manda (D2) y la respuesta editable va atras.
+    const r1 = step(
+      createState({ channel: "sim", contactRef: "faq-venta" }),
+      { text: "¿me dan garantía?", receivedAt: T0 },
+      { config },
+    );
+    const texto1 = r1.replies.map((r) => r.text).join("\n");
+    assert.match(texto1, /14 días de prueba y soporte directo/, "la FAQ del panel se sirve en venta");
+
+    // Y en medio del embudo tambien, sin abandonar el guion.
+    const r2 = step(r1.nextState, { text: "y la garantia?", receivedAt: T0 }, { config });
+    const texto2 = r2.replies.map((r) => r.text).join("\n");
+    assert.match(texto2, /14 días de prueba/, "tambien fuera de la bienvenida");
+  });
+});
+
+test("panel: los candados del guion le GANAN a la FAQ del panel — 'cuanto cuesta' sigue siendo M4 con cifras", async () => {
+  await conArchivo(ARCHIVO_ONIA, async (path) => {
+    // El tag del dueño pisa una palabra de plata a proposito: el candado tiene que ganar.
+    const doc = valido({
+      faq: [{ id: "negocio", body: "Trabajamos con todos los planes de las telefónicas", status: "publicado", tags: ["planes"] }],
+    });
+    await getPanelKnowledge({ ...PANEL_OPTS, fetch: fetchFalso(doc), path, nowMs: NOW_MS });
+    const config = conHorarios(withKnowledge(DEFAULT_CONFIG, { ...PANEL_OPTS, path, nowMs: NOW_MS }));
+    const result = step(
+      createState({ channel: "sim", contactRef: "candado" }),
+      { text: "¿cuánto cuesta el plan?", receivedAt: T0 },
+      { config },
+    );
+    const texto = result.replies.map((r) => r.text).join("\n");
+    assert.match(texto, /Bs 320/, "pregunta de plata => M4 con cifras, no la FAQ del dueño");
+    assert.doesNotMatch(texto, /telefónicas/);
+  });
+});
+
+test("db: la fila de la ORG INTERNA (la del panel) NO enciende el recepcionista — el lead de venta sigue en venta", async () => {
+  // Medido en prod el 2026-09-13: el producto resuelve inbox->org y los inboxes de VENTA (4 web,
+  // 5 WhatsApp) resuelven a la org interna de Onia. Con la fila del panel publicada, la fuente
+  // "db" la devolvia como si fuera una org cliente y asRecepcionista le ponia el menu de
+  // recepcion ("horarios, servicios, pedido") a los leads del widget. La fila interna entra SOLO
+  // por la fuente "panel" (mergeada, modo venta); por inbox se trata como "sin fila".
+  const doc = valido({
+    faq: [{ id: "negocio", body: "Tenés 14 días de prueba", status: "publicado", tags: ["prueba"] }],
+  });
+  const sobreInterno = async () => ({
+    ok: true,
+    status: 200,
+    json: async () => ({ organizationId: "org_onia_interna", data: doc, version: 2, updatedBy: "panel" }),
+  });
+  const opts = {
+    dbUrl: "http://producto/api/chatbot-knowledge/published",
+    dbSecret: "s3cr3t",
+    panelUrl: "http://producto/api/chatbot-knowledge/published?organizationId=org_onia_interna",
+    panelSecret: "s3cr3t",
+    inboxId: "4",
+    fetch: sobreInterno,
+    nowMs: NOW_MS,
+  };
+  const state = await ensureKnowledge(opts);
+  assert.notEqual(state.source, "db", "la fila interna no es una org cliente");
+  const config = withKnowledge(DEFAULT_CONFIG, opts);
+  assert.notEqual(config.modo, "recepcionista", "el lead de venta NUNCA ve el menu de recepcion");
+
+  // Y una org CLIENTE de verdad sigue encendiendo el recepcionista: la guarda no rompe clientes.
+  resetOrgKnowledgeCache();
+  const sobreCliente = async () => ({
+    ok: true,
+    status: 200,
+    json: async () => ({ organizationId: "org_ferreteria", data: valido(), version: 1, updatedBy: "x" }),
+  });
+  await getOrgKnowledge("org_ferreteria", { ...opts, inboxId: undefined, fetch: sobreCliente });
+  const cliente = withKnowledge(DEFAULT_CONFIG, { organizationId: "org_ferreteria", nowMs: NOW_MS + 1000 });
+  assert.equal(cliente.modo, "recepcionista", "una org cliente sigue siendo el bot del negocio");
+});
+
+test("applyKnowledge: las FAQ 'negocio' viajan en config.faq para el modo venta y NO pisan el guion", () => {
+  const data = valido({
+    faq: [
+      { id: "negocio", body: "Aceptamos pagos por QR", status: "publicado", tags: ["pagos"] },
+      { id: "negocio", body: "Hacemos envíos a todo el país", status: "publicado", tags: ["envios"] },
+    ],
+  });
+  const config = applyKnowledge(DEFAULT_CONFIG, data, { nowIso: T0 });
+  assert.equal(config.faq.length, 2, "las DOS viajan (no gana solo la ultima)");
+  assert.equal(config.script.R_FAQ_NEGOCIO, DEFAULT_CONFIG.script.R_FAQ_NEGOCIO, "el guion no se pisa");
 });
