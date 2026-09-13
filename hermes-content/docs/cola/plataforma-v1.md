@@ -145,6 +145,93 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       monto**, no la mención: el gate vigente ancla `muestraAbono ?|&&` y exige que esté **antes**
       del monto. **Falta el deploy** para que el cliente lo vea.
 
+      ✅ **CERRADO el 2026-09-13: la CUARTA superficie — la comparativa de planes de `/settings`
+      le ponía el precio del chatbot al plan que ya lo incluye** (`onia-platform`, rama
+      `claude/chatbots-platform-review-0d1d09`). `PLAN_COMPARISON_ADDON_ROWS.whatsapp`
+      (`lib/pricing.ts`) tenía las tres columnas tipeadas con `WHATSAPP_ADDON.shortLabel`, así
+      que la fila *"Chatbot WhatsApp (add-on)"* de la tabla que renderiza
+      `filasComparativaDe` (`app/(dashboard)/settings/PlanClient.tsx:321`) decía **"Bs 390/mes"
+      también en la columna del Completo**, que lo trae adentro desde la escalera C. Miente en
+      las dos direcciones del negocio: **le cobra de nuevo al que ya lo paga en su plan**, y al
+      que evalúa subir **le esconde que subiendo deja de pagarlo** — un argumento de venta real,
+      escondido en la pantalla donde se decide. Las filas hermanas (`booking`, `extraUser`) sí
+      distinguían con "Incluida"/"Incluido": media familia correcta se lee como familia correcta,
+      igual que en la tercera superficie.
+      🔴 **Y al medirlo apareció una hermana peor, que no tiene nada que ver con la escalera:**
+      la fila **"Exportación CSV"** decía *"No incluido"* en **Básico y Profesional** mientras
+      `csvExportEnabled` es `true` desde Básico **a propósito** — el comentario del catálogo lo
+      dice con todas las letras (*"tus datos son tuyos: el export de SUS datos no puede ser rehén
+      del plan"*, auditoría de promesas 2026-08-06). O sea que el producto **le negaba en
+      pantalla un derecho que ya tiene** y le insinuaba pagar más caro para conseguirlo.
+      Entró: `lib/plan-comparativa/comparativa-vs-catalogo.ts` (módulo puro, sin prisma: lo
+      importa una pantalla `"use client"`) con `celdaSegunElPlan` y `celdaContradiceAlCatalogo`,
+      las seis filas booleanas derivadas de `PLAN_LIMITS` en vez de tipeadas, y el mapa
+      `CAMPO_EN_LA_COMPARATIVA` **en el producto**: un booleano nuevo del catálogo no compila
+      hasta que alguien decida si la comparativa tiene que nombrarlo — que es exactamente la
+      decisión que nadie tomó cuando entró `whatsappIncluded`.
+      **El sujeto del gate no es una fila: son los campos booleanos de `PLAN_LIMITS` derivados
+      del dato vivo** (`lib/plan-comparativa/la-comparativa-no-contradice-al-catalogo.test.ts`).
+      Anti-tautología: ahora que las celdas se derivan del catálogo, cruzar tabla contra catálogo
+      leería el mismo espejo, así que el gate **además afirma contra el literal** que el dueño
+      lee ("Incluido" en la columna del Completo, "390" en las otras dos, "Incluido" en las tres
+      de CSV). Validado **por mutación**: con las dos celdas devueltas a mano, 3 tests en rojo
+      nombrando las tres celdas. Gates: `tsc --noEmit` limpio, `eslint` 0, suite completa verde.
+      **Falta mergear y desplegar** para que el cliente lo vea.
+      ✅ **CERRADO el 2026-09-13: el panel de «Mi plan» no conocía el plan Crece, y por eso le
+      ofrecía al que paga Bs 550 el plan de Bs 320 como MEJORA** (`onia-platform`, rama
+      `claude/chatbots-platform-review-0d1d09`). Salió de ir a cerrar el hueco de la comparativa
+      y encontrar, dos pantallas más arriba, **dos listas tipeadas a mano que la escalera C
+      nunca tocó**:
+      1. `PLAN_ORDER = ["free","basic","professional","clinic","enterprise"]` con el rank por
+         `indexOf` ⇒ **`planRank("crece") === -1`**. Con `-1`, `isUpgrade = planRank(plan) >
+         currentRank` daba **true para TODAS las tarjetas**, así que el dueño de un Crece leía el
+         botón primario lleno **«Pagar Plan Básico»** sobre el plan de Bs 320 — una bajada vendida
+         como mejora, en la pantalla donde se decide pagar — y **ninguna tarjeta** decía
+         «✓ Plan actual», porque `isCurrent = currentPlan === plan.key` tampoco tenía con qué
+         coincidir. El `-1` no falla: miente en silencio.
+      2. `planesDe` devolvía cuatro tarjetas y **Crece no era ninguna**, o sea que a los rubros
+         clínicos (dental, estética, servicios profesionales — la rama `esDental`) el panel les
+         escondía el escalón de Bs 550 y les dejaba el salto de Bs 570 hasta Profesional, que es
+         **exactamente el 2,3x que la escalera C existe para borrar** (lo dice el comentario de
+         `DEFAULT_PLAN_AMOUNTS`). `/checkout` sí lo vendía desde el día uno, y `PlanesNeutros`
+         (comercio/importadora) también, porque **deriva su lista de `CHECKOUT_PLANS`**: media
+         familia derivada se lee como familia derivada.
+      🔴 **Y en las tarjetas estaba viva la MISMA mentira que se acababa de cerrar en la tabla de
+      abajo:** el Básico listaba *«Exportación CSV»* con `included: false` mientras
+      `csvExportEnabled` es `true` desde Básico a propósito. Las tarjetas son la **tercera**
+      representación de los mismos booleanos, en el mismo archivo, a dos centímetros de la tabla.
+      Entró: `lib/subscription/escalon-de-plan.ts` (módulo puro) — **el escalón de un plan es lo
+      que CUESTA**, derivado de `DEFAULT_PLAN_AMOUNTS`, así que no hay lista que actualizar y el
+      plan que venga entra solo; `esSubida()` devuelve **false ante un plan desconocido** (la otra
+      mitad del `-1`: la columna `plan` es String y puede traer un id legado — ante la duda no se
+      llama «subida» a nada, en vez de llamarle subida a todo); la tarjeta de Crece con cada
+      bullet correspondido contra `PLAN_LIMITS.crece` (agentes y agenda pública SÍ, reportes y
+      recurrentes NO — ésos son el motivo de subir a Profesional); y el `upgradeReason` del Básico
+      apuntando a Crece y no a Profesional.
+      **El sujeto del gate no es «crece»: son los planes que el checkout VENDE** (`CHECKOUT_PLANS`,
+      la fuente de otro circuito), cruzados contra las tarjetas que esta pantalla pinta
+      (`app/(dashboard)/settings/el-panel-conoce-los-planes-que-vende.test.ts`). **Validado por
+      mutación, tres veces:** escalón ciego a `crece` → 4 rojos; tarjeta de Crece fuera → 2 rojos;
+      CSV de vuelta en `included: false` → 1 rojo; árbol restaurado → 7 verdes. Gates:
+      `tsc --noEmit` limpio, `vitest` 4.895/4.895 (0 rojos), `eslint` 0 errores. Commit
+      `419b819` (publicado; los gates se re-corrieron en el VPS sobre ese árbol: `vitest` 4.895/4.895, `eslint` 0 errores, `tsc` limpio).
+      ⚠️ **Intento fallido que vale anotar: el primer arreglo agregaba DOS listas a mano más**, y
+      lo atajaron gates que ya existían, no yo — `lib/plan-catalogo-es-la-fuente.test.ts` cazó el
+      `currentPlan === "crece"` que le sumé a la cascada de color del chip (sacado: el chip neutro
+      ya dice «Crece» porque el rótulo sale de `nombreDePlan`), y
+      `lib/platform/nombre-de-plan-a-mano.test.ts` cazó `"Subí a Crece…"` tipeado en vez de
+      `PLAN_LABELS.crece`. La línea `plan === "free"` de `escalonDe` sí quedó, **declarada en
+      `EXENTAS` con su motivo**: pone al trial en el piso de la escalera y no decide ninguna
+      capacidad. La escalera C entró por la puerta que estos gates cubren; el orden de los planes
+      no lo cubría nadie.
+      ⚠️ **No se abrió renderizada**: el cambio está en la rama, así que producción todavía sirve
+      la pantalla vieja y mirarla ahí no probaría nada. Se mira **después del deploy**, y hasta
+      entonces esto no está terminado.
+      📌 **Hueco anotado, no cerrado:** la **tabla comparativa** de más abajo (otra cosa que las
+      tarjetas) sigue con cuatro columnas Básico/Profesional/Completo/Grupo y **`crece` no tiene
+      columna**; y **`agentsIncluded`** no tiene fila, aunque el salto a agentes es lo que se vende
+      desde Crece. Los dos quedan declarados con su motivo en `CAMPO_EN_LA_COMPARATIVA`.
+
       Falta de la fase 2: **avisos al 70/90/100 % del cupo** y la **recarga de recordatorios**
       (la de conversaciones ya existe). ⚠️ Lo del 70/90/100 **no lo puede cerrar este carril
       solo, y el motivo es concreto**: hoy hay UN umbral (`UMBRAL_AVISO = 0.8` en
