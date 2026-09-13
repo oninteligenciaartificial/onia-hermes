@@ -2797,6 +2797,32 @@ decisión de Sergio, no código.
       terminar** — toda sonda que siembre en producción cierra lo suyo en `finally`, o el
       barrido hay que repetirlo para siempre.
 
+- [ ] 🟡 **El inbox que nazca huérfano le habla a los clientes del CLIENTE con la cara de Onia
+      — medido el 2026-09-13, sin víctima hoy porque ninguna org menos la interna tiene inbox.**
+      Preguntándole al proceso vivo por la MISMA vía del camino de respuesta, los CUATRO inboxes
+      de Chatwoot devuelven el MISMO documento — el de `onia-interna`:
+
+      ```
+      docker exec onia-center wget -qO- 'http://127.0.0.1:3020/health?inboxId=7'
+      # -> alcance "inbox:7" · source "panel" · path panel:…?organizationId=c956c02fccd8573cd6fcc5b35
+      docker exec onia-center wget -qO- --header='Authorization: Bearer <BOT_KNOWLEDGE_SECRET>' \
+        'http://onia-platform:3000/api/chatbot-knowledge/published?inboxId=7'   # -> HTTP 404
+      ```
+
+      O sea: el producto dice «ese inbox no es de nadie» y el cargador igual sirve el guion de
+      venta de Onia, con sus precios y sus horarios de demo. **Eso es una decisión tomada, no un
+      bug suelto** (`knowledge.test.mjs`, caso *«db: inbox sin org (404) degrada a archivo/código»*:
+      un canal nuevo de Onia debe seguir vendiendo Onia). Muerde el día que se destrabe **S1**:
+      el ítem de Embedded Signup ya avisa que *«hoy el inbox que nazca queda huérfano»*, y hasta
+      que alguien lo registre en `clinic_settings.chatwootInboxId` el bot del cliente atiende a
+      SUS clientes cotizando Onia. **Decisión a tomar acá, no por Sergio Urcullo:** o el alta del
+      inbox registra la org en el mismo paso, o el fallback de un inbox con `inboxId` deja de
+      heredar la cara de Onia. Lo que ya NO puede volverse atrás sin ponerse rojo es la frontera
+      de al lado: un inbox **con** fila propia jamás come del panel global
+      (`knowledge.test.mjs`, *«panel: un inbox CON fila propia come de SU fila»*, validado por
+      mutación — el panel F2.1 llegó después de la resolución por inbox y se aplica a todos los
+      alcances, así que nada más lo sujetaba).
+
 - [ ] **Limpieza de la data QA NUEVA.** La del 29-ago ya se ejecutó; después se generó más:
       las conversaciones QA 39, 43 y 44 (`Cliente Prueba Bandeja`, `Cliente Insistencia Tres`,
       `Cliente Comprobante`). **No borrar todavía**: son la evidencia de cuatro ítems cerrados,

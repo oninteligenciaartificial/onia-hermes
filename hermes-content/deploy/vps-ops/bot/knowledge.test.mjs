@@ -1490,6 +1490,77 @@ test("db: la fila de la ORG INTERNA (la del panel) NO enciende el recepcionista 
   assert.equal(cliente.modo, "recepcionista", "una org cliente sigue siendo el bot del negocio");
 });
 
+// La frontera de ARRIBA la fija por MODO (recepcionista si/no). Esta la fija por CONTENIDO, que
+// es lo que el cliente lee. Nace de medir produccion el 2026-09-13: preguntandole al proceso vivo
+// por la MISMA via del camino de respuesta, los CUATRO inboxes de Chatwoot devolvian el mismo
+// documento — `path: panel:...?organizationId=c956c02fccd8573cd6fcc5b35`, que es `onia-interna` —
+// incluido el inbox 7, para el que el producto contesta 404 (no es de ninguna org):
+//
+//   docker exec onia-center wget -qO- 'http://127.0.0.1:3020/health?inboxId=7'
+//   docker exec onia-center wget -qO- --header='Authorization: Bearer <BOT_KNOWLEDGE_SECRET>' \
+//     'http://onia-platform:3000/api/chatbot-knowledge/published?inboxId=7'   # -> 404
+//
+// Que un inbox DESCONOCIDO reciba el bot de Onia es una decision tomada y con test ("db: inbox
+// sin org (404) degrada a archivo/codigo"): un canal nuevo de Onia debe seguir vendiendo Onia.
+// Lo que NO puede pasar nunca es lo de aca abajo: que un inbox CON fila propia igual coma del
+// panel global. Hoy no pasa porque `getKnowledge` devuelve la copia db ANTES de mirar el panel,
+// pero nada lo sujeta: la fuente panel (F2.1) llego DESPUES de la resolucion por inbox y se
+// aplica a todos los alcances, asi que mover su bloque unas lineas arriba le serviria el guion
+// de venta de Onia —con sus precios y sus horarios de demo— a los clientes de un cliente, y
+// ningun gate se pondria rojo. Validado por mutacion: con el bloque del panel movido antes del
+// `if (org?.data)`, este caso sale en ROJO.
+test("panel: un inbox CON fila propia come de SU fila, nunca del panel global de la interna", async () => {
+  resetKnowledgeCache();
+  resetOrgKnowledgeCache();
+  // El MISMO fetch contesta las dos rutas, como en produccion (mismo endpoint, mismo Bearer):
+  // por inbox devuelve la ferreteria; la URL del panel lleva la org interna clavada en la query.
+  const fetch = async (url, init) => {
+    const calls = fetch.calls;
+    calls.push({ url: String(url), init });
+    const esPanelGlobal = String(url).includes("organizationId=org_onia_interna");
+    return {
+      ok: true,
+      status: 200,
+      json: async () => ({
+        organizationId: esPanelGlobal ? "org_onia_interna" : "org_ferreteria",
+        data: valido({
+          identity: {
+            productName: esPanelGlobal ? "Onia — plataforma de gestión" : "Ferretería El Tornillo",
+          },
+        }),
+        version: 1,
+        updatedBy: esPanelGlobal ? "panel-venta" : "dueno-ferreteria",
+      }),
+    };
+  };
+  fetch.calls = [];
+
+  const opts = {
+    dbUrl: "http://producto/api/chatbot-knowledge/published",
+    dbSecret: "s3cr3t",
+    panelUrl: "http://producto/api/chatbot-knowledge/published?organizationId=org_onia_interna",
+    panelSecret: "s3cr3t",
+    inboxId: "31",
+    fetch,
+    nowMs: NOW_MS,
+    path: "/no/existe/knowledge.json",
+  };
+
+  const state = await ensureKnowledge(opts);
+  assert.equal(state.source, "db", "el inbox del cliente tiene fila propia: esa es su fuente");
+  assert.equal(state.data.identity.productName, "Ferretería El Tornillo");
+
+  // Y el turno que lee el cliente tampoco sale con la cara de Onia.
+  const config = withKnowledge(DEFAULT_CONFIG, opts);
+  assert.equal(config.identity.productName, "Ferretería El Tornillo");
+  assert.equal(config.modo, "recepcionista", "org cliente = el bot del negocio");
+  assert.notEqual(
+    config.identity.productName,
+    "Onia — plataforma de gestión",
+    "el panel global es del alcance del PROCESO, no de un inbox ajeno",
+  );
+});
+
 test("applyKnowledge: las FAQ 'negocio' viajan en config.faq para el modo venta y NO pisan el guion", () => {
   const data = valido({
     faq: [
