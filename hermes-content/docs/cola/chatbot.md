@@ -879,7 +879,8 @@ La historia completa queda acá abajo para no perderla.
       `tsc` resuelve y **tipa** el import por el alias `@/` (control negativo: pedirle
       `"cancelada"` da `TS2322`, o sea que no está pasando como `any`).
 
-      Gate `intencion-del-lead.test.mjs` (`npm run test:intencion-lead`, cableado a la cadena),
+      Gate `intencion-del-lead.test.mjs` (`npm run test:onia-center`, cableado a la cadena
+      — el 2026-09-13 dejó de nombrarse a mano: lo corre el corredor que deriva del disco),
       en **dos mitades porque ninguna ve lo de la otra**: comportamiento (lo que la función
       DEVUELVE) y cableado (que el route lo USE, anclando la **asignación** — el esquive barato
       es llamarlo y tirar el resultado). **Validado por mutación en seis direcciones**, las seis
