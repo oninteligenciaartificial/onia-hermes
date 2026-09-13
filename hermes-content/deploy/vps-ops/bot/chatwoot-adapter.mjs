@@ -167,6 +167,26 @@ function kindOf(text, attachments) {
   return pickAudioAttachment(list) ? "voice" : "attachment";
 }
 
+/**
+ * DE QUE INBOX vino un payload de Chatwoot, mire donde mire el evento.
+ *
+ * Chatwoot lo pone en TRES lugares distintos segun el evento, y hasta el 2026-09-13 cada rama lo
+ * extraia por su cuenta con un orden propio: `message_created` mira `inbox.id` (top-level,
+ * capturado en vivo el 2026-07-26) con `conversation.inbox_id` de respaldo, y
+ * `conversation_created` mira `inbox_id` PLANO, porque ahi el payload ES la conversacion. Tres
+ * copias del mismo dato es el par clasico que diverge y se arregla de un solo lado — y el que
+ * quedaba afuera era el log del webhook, que no podia deducirlo solo.
+ *
+ * El orden va de lo mas especifico a lo mas general y es superset de los tres casos: donde habia
+ * un solo origen posible, el resultado no cambia.
+ *
+ * @returns {string|null} el id como string, o `null` si el evento no lo trae.
+ */
+export function inboxDelPayload(payload) {
+  const crudo = payload?.inbox?.id ?? payload?.inbox_id ?? payload?.conversation?.inbox_id ?? null;
+  return crudo === undefined || crudo === null || crudo === "" ? null : String(crudo);
+}
+
 function buildTurn({ conversationId, messageId, content, attachments, sender, createdAtIso, conversation, inboxId }) {
   const text = String(content || "").trim();
   const atribucion = attributionFrom(conversation);
@@ -180,7 +200,7 @@ function buildTurn({ conversationId, messageId, content, attachments, sender, cr
       // DE QUE INBOX vino: es lo que resuelve "de que cliente es esta conversación" (el
       // cargador de knowledge keyea por inbox y el producto lo traduce a organización).
       // null = comportamiento de siempre (conocimiento de Onia, archivo/código).
-      inbox_id: inboxId === undefined || inboxId === null || inboxId === "" ? null : String(inboxId),
+      inbox_id: inboxId,
       public_contact: phoneOf(sender),
       display_name: displayNameOf(sender),
       kind: kindOf(text, attachments),
@@ -294,9 +314,7 @@ function fromMessageCreated(payload) {
     // La atribución vive en la CONVERSACIÓN, no en el mensaje: `payload.additional_attributes` de
     // este nivel es del mensaje (campaign_id / template_params de Chatwoot) y no sirve para esto.
     conversation: payload.conversation,
-    // En message_created el inbox viene TOP-LEVEL ({ inbox: { id } }, capturado en vivo el
-    // 2026-07-26); `conversation.inbox_id` es el respaldo por si algún evento no lo trae.
-    inboxId: payload?.inbox?.id ?? payload?.conversation?.inbox_id ?? null,
+    inboxId: inboxDelPayload(payload),
   });
 }
 
@@ -347,7 +365,7 @@ function fromConversationCreated(payload) {
     // En `conversation_created` el payload ES la conversación, así que se pasa entero.
     conversation: payload,
     // ... y el inbox es el de la conversación misma (`inbox_id` plano en push_event_data).
-    inboxId: payload?.inbox_id ?? payload?.inbox?.id ?? null,
+    inboxId: inboxDelPayload(payload),
   });
 }
 
@@ -384,13 +402,13 @@ function fromMessageUpdated(payload) {
   if (!texto) return { skip: true, reason: "eleccion_vacia" };
 
   const atribucion = attributionFrom(payload.conversation);
-  const inboxId = payload?.inbox?.id ?? payload?.conversation?.inbox_id ?? null;
+  const inboxId = inboxDelPayload(payload);
   return {
     skip: false,
     turn: {
       channel: "chatwoot",
       contact_ref: String(conversationId),
-      inbox_id: inboxId === undefined || inboxId === null || inboxId === "" ? null : String(inboxId),
+      inbox_id: inboxId,
       kind: "text",
       text: texto,
       message_key: `chatwoot:${conversationId}:${payload.id}:select:${String(eleccion.value || eleccion.title).slice(0, 100)}`,

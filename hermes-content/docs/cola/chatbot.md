@@ -278,6 +278,43 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El log del bot no dice POR QUÉ CANAL entró el mensaje, y el canal es lo que decide
+      qué documento le contesta al lead~~ — CERRADO EN CÓDIGO el 2026-09-13 02:20 La Paz.
+      ⚠️ COMMITEADO, NO DESPLEGADO: el bot vivo sigue escribiendo la línea sin `inbox=`.**
+      **Lo que lo destapó, midiendo producción y no leyendo docs:** crucé `conversations` de
+      Chatwoot con el log vivo y conté, por conversación, entrantes contra respuestas. De los
+      **7 desconocidos reales** que escribieron alguna vez, **4 no recibieron ni una respuesta**
+      (convs 34 y 36 del inbox 4; **35 `F` y 37 `mariohassen` del inbox 5, el de WhatsApp**) y
+      **1 murió en el segundo turno** (conv 40: 2 entrantes, 1 saliente). Los mudos son todos
+      del 24-28 de agosto —el período del bug ya arreglado, no uno nuevo—; lo que sí sigue vivo
+      es que **esa distinción no se puede hacer desde el log**: hubo que ir a cruzar la base a
+      mano. El log vivo tiene 46.323 líneas y **ninguna dice el inbox**.
+      **Por qué no es cosmético.** El inbox ES la clave con la que el bot elige qué documento le
+      contesta al lead (`cacheKeyOf` keyea `inbox:<id>`, y la fuente del panel se aplica a TODOS
+      los alcances — medido el 12-sep). Dos líneas idénticas del log pueden estar cotizando
+      precios distintos, y hoy no hay forma de saberlo. Y mi propia definición de hecho mide
+      **un solo canal**: la sonda prueba el widget web (inbox 4) y firma 2/2 en verde aunque
+      WhatsApp —el canal de leads reales— esté mudo. El instrumento no podía ver la mitad del
+      negocio.
+      **Cómo se cerró.** `inbox=` va en **todas** las ramas, y siempre — también cuando no se
+      sabe (`inbox=?`): si apareciera sólo cuando se conoce, un `grep inbox=5` perdería justo
+      las líneas que hay que mirar (la ausencia de una clave codifica una creencia). La rama
+      `ignorado` fue la primera en cubrirse porque es la más frecuente (**863 de 1.312** líneas
+      con `rama=`) y la única que no pasa por el parser, o sea la que no puede deducir nada sola.
+      De paso se cerró la causa de raíz: Chatwoot pone el inbox en **tres** lugares distintos
+      según el evento y **cada rama del adapter lo extraía por su cuenta, con un orden propio** —
+      el par clásico que diverge y se arregla de un solo lado. Ahora hay **una sola función
+      exportada** (`inboxDelPayload`, `chatwoot-adapter.mjs`), superset de los tres casos, usada
+      por las tres ramas y por el log.
+      **Rojo por el motivo correcto ANTES del arreglo** (`rama=ignorado` sin canal, con la línea
+      real pegada en el assert), verde después. **Validado por mutación en las DOS piezas:**
+      esquivar el aporte del skip (`inbox: undefined`) → rojo en *«un evento ignorado sin canal
+      no se puede atribuir»*; devolver la extracción al orden viejo de `message_created` → rojo
+      en *«el payload plano de `conversation_created` también tiene canal»*. Suite del bot
+      completa: **976/976 verde**.
+      **Lo que queda y NO lo puede hacer este carril:** `DESPLEGAR: bot`. Hasta entonces el
+      campo existe en el repo y no en el log que se lee para diagnosticar.
+
 - [x] 🔴 **~~El bot le prometía a los leads reales «creás tu cuenta y entrás al toque», y el
       producto exige confirmar el correo~~ — CERRADO EN PRODUCCIÓN el 2026-09-13 01:20 La Paz.**
       La mitad «contesta el precio correcto» del objetivo tiene instrumento vivo desde el 12-sep

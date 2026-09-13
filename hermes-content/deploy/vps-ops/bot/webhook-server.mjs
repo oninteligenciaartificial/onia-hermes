@@ -38,7 +38,7 @@
 import { createServer } from "node:http";
 import { pathToFileURL } from "node:url";
 
-import { parseChatwootWebhook, runChatwootTurn } from "./chatwoot-adapter.mjs";
+import { inboxDelPayload, parseChatwootWebhook, runChatwootTurn } from "./chatwoot-adapter.mjs";
 import { authenticateChatwootRequest, DEFAULT_TOLERANCE_SECONDS } from "./webhook-security.mjs";
 import { shouldProcessMessage, releaseMessage } from "./message-dedup.mjs";
 import { buildBotTurnEvent, fireN8nBotTurnEvent, getN8nEventConfig } from "./n8n-event.mjs";
@@ -317,6 +317,13 @@ export function formatearTraza(traza = {}) {
   const campos = [
     `[onia-webhook] ${traza.iso || new Date().toISOString()}`,
     `conv=${traza.conversacion || "?"}`,
+    // POR QUE CANAL entro. Va SIEMPRE, aunque no se sepa: si apareciera solo cuando se conoce,
+    // un `grep inbox=5` perderia justo las lineas que hay que mirar. Y no es cosmetico — el
+    // inbox es la clave con la que el bot elige QUE documento le contesta al lead
+    // (`cacheKeyOf` keyea `inbox:<id>`), asi que dos lineas identicas pueden estar cotizando
+    // precios distintos. Hasta el 2026-09-13 distinguir "el bot esta mudo en WhatsApp" de "esta
+    // mudo en la web" exigia ir a cruzar la base de Chatwoot a mano.
+    `inbox=${traza.inbox || "?"}`,
     // `-` es "no hay mensaje" y `?` es "no sé cuál": en un evento sin mensaje el payload ES la
     // conversación, así que `traza.mensaje` trae su id y la línea afirmaba un mensaje inexistente
     // (`msg=49 conv=49`) que manda a buscar a la base algo que no está.
@@ -346,6 +353,10 @@ function datosDelPayload(payload) {
     conversacion: conversacion == null ? undefined : String(conversacion),
     mensaje: payload.id == null ? undefined : String(payload.id),
     entrada: typeof payload.content === "string" ? payload.content : undefined,
+    // El canal se saca del payload CRUDO y con la misma funcion que usa el adapter: un `skip`
+    // no pasa por el parser, y la rama `ignorado` —la mas frecuente del log— es justo la que
+    // no puede deducir su canal sola.
+    inbox: inboxDelPayload(payload) ?? undefined,
   };
 }
 
@@ -422,6 +433,9 @@ async function procesarWebhook(request, deps, datos) {
   if (parsed.meta?.conversationId) datos.conversacion = String(parsed.meta.conversationId);
   if (parsed.meta?.messageId) datos.mensaje = String(parsed.meta.messageId);
   if (parsed.turn?.text) datos.entrada = parsed.turn.text;
+  // El canal que el motor VA A USAR para elegir el documento es el del turno, no el que se
+  // adivino del payload crudo: si alguna vez difieren, la linea tiene que mostrar el que decide.
+  if (parsed.turn?.inbox_id) datos.inbox = String(parsed.turn.inbox_id);
   // Un turno que entra SIN mensaje del prospecto no tiene nada que contestar: su silencio es
   // correcto. Hoy es sólo `conversation_resolved`, que nada más desarma el takeover. Se anota acá
   // —donde todavía se ve el evento— porque abajo la traza no lo puede deducir, y sin esto su línea
