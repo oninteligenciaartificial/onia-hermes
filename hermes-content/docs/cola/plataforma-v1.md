@@ -214,7 +214,7 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       mutación, tres veces:** escalón ciego a `crece` → 4 rojos; tarjeta de Crece fuera → 2 rojos;
       CSV de vuelta en `included: false` → 1 rojo; árbol restaurado → 7 verdes. Gates:
       `tsc --noEmit` limpio, `vitest` 4.895/4.895 (0 rojos), `eslint` 0 errores. Commit
-      `130b1e8`.
+      `419b819` (publicado; los gates se re-corrieron en el VPS sobre ese árbol: `vitest` 4.895/4.895, `eslint` 0 errores, `tsc` limpio).
       ⚠️ **Intento fallido que vale anotar: el primer arreglo agregaba DOS listas a mano más**, y
       lo atajaron gates que ya existían, no yo — `lib/plan-catalogo-es-la-fuente.test.ts` cazó el
       `currentPlan === "crece"` que le sumé a la cascada de color del chip (sacado: el chip neutro
