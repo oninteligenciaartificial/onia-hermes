@@ -12,6 +12,26 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-13 10:09 La Paz — dental 9/9 (rutina) + `/precios` auditado con reducedMotion, sano
+
+Al arrancar: `select count(*) from organizations where name like 'zz-qa-%'` dio 0, sin huérfanos.
+
+Dental (`zz-qa-2026-09-13-1009`): recorrido completo, 9/9 — cuenta creada, correo confirmado,
+onboarding en 6 pantallas, paciente `zz-qa-2026-09-13-1009-paciente` cargado y visto en
+`/patients`, cita 2026-09-14 09:00 vista en `/appointments` (`cmtznnnsj000k01rwqya1kixp`),
+factura con ítem visible en `/billing/cmtznnyhs000m01rwvkua2xtg` (frenada sin pagar).
+`completo: true`, 0 filas `zz-qa-` al cerrar (orgs, appointments verificados en 0).
+
+Escalón 3, pendiente de la vuelta anterior: `onia.com.bo/precios` con `reducedMotion:'reduce'`
+(para descartar un `<CountUp>` fotografiado a mitad de animar, la misma trampa que ya se cazó en
+`/v1/chatbot`). Los cuatro planes muestran 320/550/890/1.290 y el add-on de WhatsApp 390 —
+coincide EXACTO con `docker exec onia-platform grep -rhoE 'monthly:[0-9]+' /app/.next/server`
+(320/550/890/1290/150/70/390/2900/0). Sin "muy pronto" ni obra a la vista, sin QR de pago, el
+plan Full declara correctamente el chatbot incluido y el resto lo ofrece aparte a Bs 390/mes.
+Sano, sin hallazgo.
+
+---
+
 ## 2026-09-13 09:09 La Paz — Servicios profesionales 9/9, primera vez con este rubro, sin hallazgo nuevo
 
 Al arrancar: `select count(*) from organizations where name like 'zz-qa-%'` dio 0, sin huérfanos.

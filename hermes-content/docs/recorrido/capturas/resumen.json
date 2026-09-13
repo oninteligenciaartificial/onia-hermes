@@ -1,7 +1,7 @@
 {
-  "cuando": "2026-09-13T09:13:32.562Z",
-  "rubro": "Servicios profesionales",
-  "rubroPromesa": "work Servicios profesionales Agenda, citas, cobros y contabilidad",
+  "cuando": "2026-09-13T10:13:17.029Z",
+  "rubro": "Clínica dental",
+  "rubroPromesa": "dentistry Clínica dental Pacientes, citas, tratamientos y cobros",
   "escribio": true,
   "saltoEquipo": false,
   "borrado": {
@@ -15,10 +15,11 @@
         "usuarios": 1
       },
       "filas": [
-        "appointments cmtzliyw1002i01rwm7ikh668 zz-qa-2026-09-13-0909-cita",
-        "patients cmtzlimdt002g01rwl7ljkuim zz-qa-2026-09-13-0909-paciente",
-        "organizations cmtzlfsyd002301rwm36fqs7q zz-qa-2026-09-13-0909",
-        "auth.users 2f17bf1c-a01d-4772-91b7-fdcc3ad38748 zz-qa-2026-09-13-0909@onia.com.bo"
+        "appointments cmtznnnsj000k01rwqya1kixp zz-qa-2026-09-13-1009-cita",
+        "patients cmtznnb4b000i01rwyfk1hjd8 zz-qa-2026-09-13-1009-paciente",
+        "organizations cmtznkjvn000001rwyufqdcjz zz-qa-2026-09-13-1009-negocio",
+        "auth.users 1a8cc1a2-b959-4838-b0e6-6c0022d47b78 zz-qa-2026-09-13-1009@onia.com.bo",
+        "invoices cmtznnyhs000m01rwvkua2xtg 2026-0001 10.00"
       ],
       "ajenas": []
     },
@@ -42,16 +43,16 @@
   "agujeros": [],
   "noAplican": [],
   "datosQA": {
-    "nombre": "zz-qa-2026-09-13-0909",
-    "negocio": "zz-qa-2026-09-13-0909-negocio",
-    "email": "zz-qa-2026-09-13-0909@onia.com.bo",
+    "nombre": "zz-qa-2026-09-13-1009",
+    "negocio": "zz-qa-2026-09-13-1009-negocio",
+    "email": "zz-qa-2026-09-13-1009@onia.com.bo",
     "whatsapp": "59170000000",
     "ciudad": "zz-qa-ciudad",
     "password": "zz-qa-2026-09-13-Passw0rd!",
-    "paciente": "zz-qa-2026-09-13-0909-paciente",
-    "profesional": "zz-qa-2026-09-13-0909-profesional",
-    "cita": "zz-qa-2026-09-13-0909-cita",
-    "itemFactura": "zz-qa-2026-09-13-0909-item"
+    "paciente": "zz-qa-2026-09-13-1009-paciente",
+    "profesional": "zz-qa-2026-09-13-1009-profesional",
+    "cita": "zz-qa-2026-09-13-1009-cita",
+    "itemFactura": "zz-qa-2026-09-13-1009-item"
   },
   "pasos": [
     {
@@ -59,7 +60,7 @@
       "nombre": "home",
       "que": "Entrar a onia.com.bo y que se VEA",
       "estado": "ok",
-      "detalle": "cargó en 2042 ms, 8655 caracteres visibles",
+      "detalle": "cargó en 2041 ms, 8655 caracteres visibles",
       "captura": "hermes-content/docs/recorrido/capturas/paso-01-home.png",
       "dom": {
         "textoVisible": 8655,
@@ -124,7 +125,7 @@
       "nombre": "pedir-acceso",
       "que": "Pedir acceso / registrarse con datos zz-qa-",
       "estado": "ok",
-      "detalle": "cuenta zz-qa-2026-09-13-0909@onia.com.bo creada; el alta pide CONFIRMAR EL CORREO antes del primer login — la pantalla dice: \"Tu negocio completo, en un solo sistema. bolt Activación acompañada Entregamos tu sistema con la configuración de tu rub\"",
+      "detalle": "cuenta zz-qa-2026-09-13-1009@onia.com.bo creada; el alta pide CONFIRMAR EL CORREO antes del primer login — la pantalla dice: \"Tu negocio completo, en un solo sistema. bolt Activación acompañada Entregamos tu sistema con la configuración de tu rub\"",
       "campos": [
         {
           "tag": "input",
@@ -139,7 +140,7 @@
           "tipo": "text",
           "name": "",
           "id": "",
-          "placeholder": "María Fernanda Paz",
+          "placeholder": "Dr. Juan Pérez",
           "requerido": true
         },
         {
@@ -147,7 +148,7 @@
           "tipo": "email",
           "name": "",
           "id": "",
-          "placeholder": "contacto@estudio.bo",
+          "placeholder": "doctor@clinica.bo",
           "requerido": true
         },
         {
@@ -163,7 +164,7 @@
           "tipo": "text",
           "name": "",
           "id": "",
-          "placeholder": "Estudio Contable Rojas",
+          "placeholder": "Clínica Dental Sonrisa",
           "requerido": true
         },
         {
@@ -218,7 +219,7 @@
       "nombre": "elegir-rubro",
       "que": "Elegir rubro y terminar el onboarding",
       "estado": "ok",
-      "detalle": "onboarding COMPLETADO en 6 pantallas (pregunta → negocio → horarios → servicios → equipo → listo); /dashboard ya no rebota; horarios cargados, 5 fila(s) de agenda",
+      "detalle": "onboarding COMPLETADO en 6 pantallas (pregunta → negocio → horarios → servicios → equipo → listo); /dashboard ya no rebota; horarios cargados, 10 fila(s) de agenda",
       "traza": [
         {
           "pantalla": "pregunta",
@@ -243,25 +244,25 @@
         {
           "pantalla": "equipo",
           "vio": "¿Quién más trabaja con vos?",
-          "apreto": "Terminar (profesional zz-qa-2026-09-13-0909-profesional; cierra el alta)"
+          "apreto": "Terminar (profesional zz-qa-2026-09-13-1009-profesional; cierra el alta)"
         },
         {
           "pantalla": "listo",
-          "vio": "zz-qa-2026-09-13-0909 ya está en Onia",
+          "vio": "zz-qa-2026-09-13-1009-negocio ya está en Onia",
           "apreto": "—"
         }
       ],
       "horariosCargados": true,
       "profesionalCargado": true,
-      "agendas": 5,
+      "agendas": 10,
       "capturaAsistente": "hermes-content/docs/recorrido/capturas/paso-05b-onboarding-listo.png",
       "status": 200,
-      "ms": 2894,
+      "ms": 4376,
       "urlFinal": "https://app.onia.com.bo/dashboard",
       "captura": "hermes-content/docs/recorrido/capturas/paso-05c-gate-levantado.png",
       "dom": {
-        "textoVisible": 1603,
-        "secciones": 6,
+        "textoVisible": 1477,
+        "secciones": 9,
         "seccionesInvisibles": 0,
         "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
       },
@@ -276,7 +277,7 @@
       "nombre": "cargar-dato",
       "que": "Cargar un dato real del rubro (un cliente, un paciente, un producto)",
       "estado": "ok",
-      "detalle": "\"zz-qa-2026-09-13-0909-paciente\" cargado en group Clientes (/patients) y encontrado de vuelta en la lista",
+      "detalle": "\"zz-qa-2026-09-13-1009-paciente\" cargado en group Pacientes (/patients) y encontrado de vuelta en la lista",
       "capturaAlta": "hermes-content/docs/recorrido/capturas/paso-06b-alta-dato.png",
       "campos": [
         {
@@ -302,6 +303,16 @@
         {
           "i": 2,
           "tag": "input",
+          "tipo": "date",
+          "name": "",
+          "placeholder": "",
+          "etiqueta": "",
+          "requerido": false,
+          "visible": true
+        },
+        {
+          "i": 3,
+          "tag": "input",
           "tipo": "text",
           "name": "",
           "placeholder": "+591 70000000",
@@ -310,17 +321,47 @@
           "visible": true
         },
         {
-          "i": 3,
+          "i": 4,
           "tag": "input",
           "tipo": "email",
           "name": "",
-          "placeholder": "cliente@email.com",
+          "placeholder": "paciente@email.com",
           "etiqueta": "",
           "requerido": false,
           "visible": true
         },
         {
-          "i": 4,
+          "i": 5,
+          "tag": "input",
+          "tipo": "text",
+          "name": "",
+          "placeholder": "Nombre del familiar",
+          "etiqueta": "",
+          "requerido": false,
+          "visible": true
+        },
+        {
+          "i": 6,
+          "tag": "input",
+          "tipo": "text",
+          "name": "",
+          "placeholder": "+591 60000000",
+          "etiqueta": "",
+          "requerido": false,
+          "visible": true
+        },
+        {
+          "i": 7,
+          "tag": "textarea",
+          "tipo": "textarea",
+          "name": "",
+          "placeholder": "Penicilina, látex, etc.",
+          "etiqueta": "",
+          "requerido": false,
+          "visible": true
+        },
+        {
+          "i": 8,
           "tag": "textarea",
           "tipo": "textarea",
           "name": "",
@@ -331,11 +372,11 @@
         }
       ],
       "status": 200,
-      "ms": 2275,
+      "ms": 2344,
       "urlFinal": "https://app.onia.com.bo/patients",
       "captura": "hermes-content/docs/recorrido/capturas/paso-06c-dato-en-la-lista.png",
       "dom": {
-        "textoVisible": 743,
+        "textoVisible": 777,
         "secciones": 4,
         "seccionesInvisibles": 0,
         "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
@@ -351,10 +392,10 @@
       "nombre": "cita",
       "que": "Agendar una cita zz-qa- con el paciente del paso 6 y VERLA en la agenda",
       "estado": "ok",
-      "detalle": "cita 2026-09-14 09:00 con zz-qa-2026-09-13-0909-paciente agendada (201, id cmtzliyw1002i01rwm7ikh668) y VISTA en la agenda de https://app.onia.com.bo/appointments",
+      "detalle": "cita 2026-09-14 09:00 con zz-qa-2026-09-13-1009-paciente agendada (201, id cmtznnnsj000k01rwqya1kixp) y VISTA en la agenda de https://app.onia.com.bo/appointments",
       "elegido": {
-        "paciente": "zz-qa-2026-09-13-0909-paciente",
-        "profesional": "zz-qa-2026-09-13-0909",
+        "paciente": "zz-qa-2026-09-13-1009-paciente",
+        "profesional": "zz-qa-2026-09-13-1009",
         "motivo": "Consulta general",
         "hora": "09:00"
       },
@@ -363,11 +404,11 @@
       "botonSinNombre": false,
       "capturaFormulario": "hermes-content/docs/recorrido/capturas/paso-07b-cita-formulario.png",
       "status": 200,
-      "ms": 2733,
+      "ms": 2385,
       "urlFinal": "https://app.onia.com.bo/appointments",
       "captura": "hermes-content/docs/recorrido/capturas/paso-07d-cita-en-agenda.png",
       "dom": {
-        "textoVisible": 821,
+        "textoVisible": 850,
         "secciones": 3,
         "seccionesInvisibles": 0,
         "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
@@ -379,12 +420,12 @@
       "despejo": false,
       "agenda": {
         "ruta": "/appointments",
-        "texto": "event Citas"
+        "texto": "calendar_month Citas"
       },
       "red": {
         "post": {
           "status": 201,
-          "body": "{\"id\":\"cmtzliyw1002i01rwm7ikh668\",\"organizationId\":\"cmtzlfsyd002301rwm36fqs7q\",\"patientId\":\"cmtzlimdt002g01rwl7ljkuim\",\"doctorId\":\"cmtzlfsyj002401rw3nnr373l\",\"dateTime\":\"2026-09-14T13:00:00.000Z\",\"durationMin\":30,\"status\":\"PENDIENTE\",\"reason\":\"Consulta general\",\"notes\":\"zz-qa-2026-09-13-0909-cita\",\""
+          "body": "{\"id\":\"cmtznnnsj000k01rwqya1kixp\",\"organizationId\":\"cmtznkjvn000001rwyufqdcjz\",\"patientId\":\"cmtznnb4b000i01rwyfk1hjd8\",\"doctorId\":\"cmtznkjw0000101rw94xhn10n\",\"dateTime\":\"2026-09-14T13:00:00.000Z\",\"durationMin\":30,\"status\":\"PENDIENTE\",\"reason\":\"Consulta general\",\"notes\":\"zz-qa-2026-09-13-1009-cita\",\""
         },
         "disponibilidad": {
           "status": 200,
@@ -398,41 +439,35 @@
       "nombre": "cobro",
       "que": "Llegar a la pantalla de cobro y MIRARLA. Frenar ahí",
       "estado": "ok",
-      "detalle": "la pantalla de cobro (Caja) a la vista en https://app.onia.com.bo/comercio/caja — FRENADO acá a propósito",
-      "menuCobro": {
-        "ruta": "/comercio/caja",
-        "texto": "point_of_sale Caja"
-      },
-      "status": 200,
-      "ms": 1976,
-      "urlFinal": "https://app.onia.com.bo/comercio/caja",
-      "captura": "hermes-content/docs/recorrido/capturas/paso-08-cobro.png",
+      "detalle": "factura zz-qa- creada (/billing/cmtznnyhs000m01rwvkua2xtg) con el ítem \"zz-qa-2026-09-13-1009-item\" visible en su pantalla de cobro — FRENADO acá a propósito, sin marcarla pagada",
+      "facturaUrl": "https://app.onia.com.bo/billing/cmtznnyhs000m01rwvkua2xtg",
+      "itemVisible": true,
+      "captura": "hermes-content/docs/recorrido/capturas/paso-08c-factura-creada.png",
       "dom": {
-        "textoVisible": 972,
+        "textoVisible": 1229,
         "secciones": 3,
         "seccionesInvisibles": 0,
         "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
       },
-      "destino": "/comercio/caja",
-      "pedida": "/comercio/caja",
-      "llego": true,
-      "tapa": null,
-      "despejo": false
+      "menuCobro": {
+        "ruta": "/billing",
+        "texto": "paymentsCobros"
+      }
     },
     {
       "n": 9,
       "nombre": "bandeja",
       "que": "Abrir la bandeja / el panel y ver si el dato del paso 6 aparece",
       "estado": "ok",
-      "detalle": "panel en https://app.onia.com.bo/dashboard: el dato \"zz-qa-2026-09-13-0909-paciente\" NO figura en el panel — sí quedó guardado y visible en group Clientes (paso 6). El panel no lista group clientes: no es un fallo, es lo que muestra",
+      "detalle": "panel en https://app.onia.com.bo/dashboard: el dato \"zz-qa-2026-09-13-1009-paciente\" NO figura en el panel — sí quedó guardado y visible en group Pacientes (paso 6). El panel no lista group pacientes: no es un fallo, es lo que muestra",
       "datoEnElPanel": false,
       "status": 200,
-      "ms": 2005,
+      "ms": 3483,
       "urlFinal": "https://app.onia.com.bo/dashboard",
       "captura": "hermes-content/docs/recorrido/capturas/paso-09-bandeja.png",
       "dom": {
-        "textoVisible": 1605,
-        "secciones": 6,
+        "textoVisible": 1647,
+        "secciones": 9,
         "seccionesInvisibles": 0,
         "titulo": "Onia | El sistema con IA que maneja tu negocio en Bolivia"
       },
