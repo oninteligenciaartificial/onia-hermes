@@ -12,6 +12,42 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-17 18:09-18:35 La Paz — mismo bloqueo de deploy; `/servicios/webs` auditado, sano
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue en
+`OFd4xCDzoTbQdThUbfzDv` (sin cambios). `t_a91f564e` (plataforma, 28 arreglos) y sus hermanos de
+landing/bot siguen `blocked` esperando el `ok` de Sergio Urcullo. No repetí el recorrido completo
+ni la sonda de MFA — método vigente.
+
+Escalón 3 en una superficie nueva: `/servicios/webs` (el configurador de venta de webs de
+cliente, fuera de los 9 pasos del onboarding). Escritorio y móvil (375px, `reducedMotion:
+'reduce'`): cero texto cortado, cero respuestas HTTP ≥400, y la promesa central de la pantalla
+("el preview usa los datos que escribís") se probó ENVIANDO un dato `zz-qa-` al campo real de
+"Nombre del negocio" — el preview lo reflejó de inmediato. Precios de la escalera (Bs 2.000 /
+4.500, add-ons Bs 790 y mantenimiento 190/390/690) no tienen fuente única versionada (ya
+ratificado en una vuelta anterior que esto es así a propósito, no un hallazgo), y no encontré
+ninguno de esos montos contradicho en otra parte del sitio.
+
+De paso miré `/nosotros` y `/comparativa` (sacadas del menú superior por `t_e1e7bda4` pero
+accesibles por URL/footer a propósito). `/comparativa` muestra un badge literal "EN TRÁMITE"
+para la factura SIAT de Onia, y `/nosotros` dice textual "lo que está en trámite lo publicamos
+como en trámite" — roza la regla de CLAUDE.md de no exhibir estado de obra en venta, pero es
+una decisión ya tomada y enmarcada como diferenciador de "honestidad primero" (fecha, resolución
+y alternativa concretas, mismo patrón que `/facturacion`, ya evaluada como sana). No lo reporto
+como hallazgo nuevo: sería re-litigar una decisión ya escrita.
+
+`completo: false`, `llegoHasta: 4/9` (sin cambios, sigue bloqueado por el mismo deploy).
+
+RAZÓN: el camino completo sigue bloqueado por el mismo deploy pendiente (`t_a91f564e`), esperando
+ok de Sergio Urcullo.
+LECCIÓN: quinta vuelta seguida sin repetir el recorrido completo — correcto. Superficies ya
+auditadas sanas: home, /precios, /rubros, /facturacion, /guia-facturacion, /contact, /agentes,
+recuperación de contraseña, checkout de plan, /servicios/webs, /nosotros, /comparativa. Si el
+deploy sigue sin moverse, la próxima vuelta ya no tiene superficies nuevas obvias que auditar —
+conviene revisar el tablero por si el `ok` llegó, o escanear con más profundidad una superficie
+ya "sana" pero con una interacción distinta (ej. enviar el formulario de `/servicios/webs` de
+punta a punta, sin completarlo de verdad).
+
 ## 2026-09-17 17:09-17:35 La Paz — mismo bloqueo de deploy; tres superficies nunca auditadas, todas sanas
 
 Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta` (`ONIA_ALTA_AUTOMATICA`), `BUILD_ID`
