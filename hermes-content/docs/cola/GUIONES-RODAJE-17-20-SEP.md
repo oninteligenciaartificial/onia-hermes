@@ -268,12 +268,21 @@ el grafo generándose sobre un proyecto real. Cierre: 📌 primer comentario.
 
 # Capa YouTube — las presentaciones explicativas, ordenadas
 
+> 🔴 **Actualizado el 17-sep: YouTube pasa a DIARIO** (decisión de Sergio Urcullo).
+> La serie se termina esta misma semana, un largo por día. Los tres restantes se
+> **graban en lote en UNA sentada** (acapela mirando el deck); solo los números marcados
+> en cada GUION.md se recuentan el día que toca publicar.
+
 | Video | Estado | Cuándo | Guion |
 |---|---|---|---|
-| **03** «Hago que la IA trabaje mientras duermo» | grabado, deck+guion ✅ | **se publica JUE 17** | `yt-claude-code-automatizacion/GUION.md` |
-| **04** «La IA te dice "listo" y te está mintiendo» | deck+guion ✅ | grabar este finde · **publica jue 24** | `yt-04-verificar/GUION.md` (11 láminas, ≈8:00) |
-| **05** «No escribas nada: casi todo ya está hecho» | deck ✅ · **guion escrito HOY** | semana del 28 | `yt-05-no-construyas/GUION.md` |
-| **06** «Tengo 16 años y mi empresa corre con IA» | deck ✅ · **guion escrito HOY** | cierre de serie | `yt-06-mi-empresa/GUION.md` |
+| **03** «Hago que la IA trabaje mientras duermo» | grabado, deck+guion ✅ | **publica JUE 17** | `yt-claude-code-automatizacion/GUION.md` |
+| **04** «La IA te dice "listo" y te está mintiendo» | deck+guion ✅ | **publica VIE 18** | `yt-04-verificar/GUION.md` (11 láminas, ≈8:00) |
+| **05** «No escribas nada: casi todo ya está hecho» | deck ✅ · guion ✅ (17-sep) | **publica SÁB 19** | `yt-05-no-construyas/GUION.md` |
+| **06** «Tengo 16 años y mi empresa corre con IA» | deck ✅ · guion ✅ (17-sep) | **publica DOM 20** — cierre; se fija en el canal y se corta en vertical | `yt-06-mi-empresa/GUION.md` |
+
+Desde el **lun 21** el diario lo alimenta la escalera (corto que pegó → largo), en orden
+de madurez: «Qué automatizar primero» (7 drops de reserva) → «Un agente que te avisa» →
+«IA local» → «Escribí tu primera skill».
 
 Reglas que no se negocian (de `SERIE_CLAUDE_CODE.md`): números recontados el día de
 grabar · acapela mirando el deck (tecla N apaga chuletas) · «La parte honesta» penúltima

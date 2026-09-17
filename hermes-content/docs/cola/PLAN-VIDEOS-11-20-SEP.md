@@ -1,5 +1,10 @@
 # Plan de videos día por día · vie 11 → dom 20 sep
 
+> 🔴 **La estructura de reparto se movió a doc sin fecha el 17-sep:**
+> [`ONIA_ESTRUCTURA_PUBLICACION_DIARIA.md`](../ONIA_ESTRUCTURA_PUBLICACION_DIARIA.md)
+> — Feed 3 (pilar Samuel · b-roll Sergio-Samuel · normal Sergio) + Trial 4 (los 3 + yap
+> Samuel) + Trial v2 3-5 (Sergio a cámara) = **10-13/día**. Y **YouTube pasa a DIARIO**.
+>
 > Estructura de contenido de Sergio Urcullo (10-sep) + corrección del 11-sep:
 >
 > - **Feed** (3/día): pilar · b-roll (o carrusel, cuando toca) · video normal.
@@ -213,8 +218,8 @@ guion listos) · 04 deck+guion listos · 05 y 06 deck listo. **La web ya tiene
 | Cuándo | Qué pasa con YouTube |
 |---|---|
 | **vie 11** | se **graba el 03** acapela mirando el deck (≈8:10). Antes: recontar los números del README — regla de la serie |
-| **jue 17** | se **publica el 03** — el jueves es el día Claude Code de la semana: el corto del día le manda tráfico, y da 6 días para editarlo |
-| después | **uno por semana**: 04 en la semana del 21, 05 en la del 28, 06 cierra — la cadencia del mapa de temas |
+| **jue 17** | se **publica el 03** — el jueves es el día Claude Code de la semana: el corto del día le manda tráfico |
+| después | ⚠️ **CAMBIÓ el 17-sep: YouTube DIARIO** (decisión de Sergio Urcullo, reemplaza el «uno por semana»): **04 el vie 18 · 05 el sáb 19 · 06 el dom 20** — los tres se graban en lote, acapela, con sus GUION.md listos. Desde el lun 21, la escalera alimenta el diario («Qué automatizar primero» primero). Detalle: [`ONIA_ESTRUCTURA_PUBLICACION_DIARIA.md`](../ONIA_ESTRUCTURA_PUBLICACION_DIARIA.md) |
 | siempre | cada video publicado se **embebe en `/claude-code`** el mismo día y genera un **drop exclusivo** en la comunidad (lo que quedó fuera + lo que salió mal grabándolo) |
 
 ## La escalera a YouTube (por qué estos temas y no otros)
