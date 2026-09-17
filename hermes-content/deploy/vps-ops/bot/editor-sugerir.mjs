@@ -9,7 +9,11 @@
 // Vive en el motor (y no en la plataforma) a propósito: acá YA están la key de
 // LiteLLM, la red interna y el validador real — cero cirugía de infra.
 
-import { validateKnowledge } from "./knowledge.mjs";
+import {
+  validateKnowledge,
+  MIN_ESPERA_INSISTENCIA_HORAS,
+  MAX_ESPERA_INSISTENCIA_HORAS,
+} from "./knowledge.mjs";
 
 export const DEFAULT_EDITOR_TIMEOUT_MS = 20_000;
 
@@ -20,7 +24,9 @@ const SYSTEM = [
   "- identity: { productName, humanName, botName } (todos texto, opcionales)",
   "- empresa: { horario: { frase (texto humano), dias (lista de numeros 0=Lunes..6=Domingo), desde (hora numero), hasta (hora numero) } }",
   "- demo: { duracionMinutos (numero), duracionFrase (texto), modalidad (texto) } — la cita o visita",
-  "- seguimiento: { activo (true/false), horas (numero 1-48) } — si el asistente insiste cuando el cliente no responde",
+  // El rango se DERIVA del techo que el barrido cumple: dictarle al LLM un numero
+  // mas alto es pedirle que escriba una espera que el motor no ejecuta nunca.
+  `- seguimiento: { activo (true/false), horas (numero ${MIN_ESPERA_INSISTENCIA_HORAS}-${MAX_ESPERA_INSISTENCIA_HORAS}) } — si el asistente insiste cuando el cliente no responde`,
   '- campanas: lista de { frase (el texto EXACTO que el cliente mandara, ej. de un link o anuncio), respuesta (que contesta el asistente) } max 10',
   "- rubrosExtra: lista de { key (slug), label, fuerte (lista de palabras), debil (lista de palabras) }",
   "- productos: lista de { key (slug), tipo (\"modulo\" o \"servicio\"), nombre, queResuelve (texto) }",

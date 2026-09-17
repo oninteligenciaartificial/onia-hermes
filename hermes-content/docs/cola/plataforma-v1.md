@@ -5063,6 +5063,74 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] 🔴 **CERRADO el 2026-09-17: los tres correos que convierten la prueba en cliente ofrecían
+      Bs 890 como único precio, con Bs 320 disponible.** ⚠️ COMMITEADO Y PUBLICADO (`109ee15`,
+      rama `claude/chatbots-platform-review-0d1d09` de `onia-platform`), **falta mergear y
+      desplegar** — pedido anotado en `t_0de82d2f`.
+      Los pasos 12, 14 y 15 del drip del trial son los únicos correos que le piden plata al dueño,
+      y `trialDripPriceLine()` (`onia-platform/lib/email.ts:1233`) tenía el plan TIPEADO:
+      `getPlanAmount("professional", ...)`. La escalera C (12-sep) metió el plan Crece (Bs 550)
+      entre Básico y Profesional y este correo nunca se enteró — el monto se derivaba bien, así
+      que ningún cruce de cifras se ponía rojo: lo que estaba clavado era el SUJETO, no el número.
+      Y la segunda mitad se contradecía sola: «o si preferís empezar suave, Bs 229 por semana» son
+      ~Bs 991/mes, más caro que los Bs 890 que la misma frase nombra dos palabras antes.
+      **Prueba:** la línea pasó al módulo puro `lib/subscription/precio-para-el-correo.ts`, que
+      deriva el piso de `planesPorEscalon()`. El correo del paso 14 emite hoy, leído renderizado
+      desde `trialDripCopy`: «Los planes arrancan en Bs 320/mes (plan Básico). El que estuviste
+      usando en la prueba, Profesional, es Bs 890/mes.» Gate
+      `lib/subscription/precio-para-el-correo.test.ts` (10 casos), **validado por mutación**:
+      restaurando el literal `"professional"` y el semanal «suave» caen 6 de 10 por el motivo
+      correcto. `tsc --noEmit` limpio y `vitest run lib/subscription/` en 364/364, corridos en el
+      VPS sobre el árbol que se publica.
+      **De paso, un bug que destapó el gate nuevo:** `getPlanAmount` (`lib/subscription-plans.ts`,
+      la fuente única de montos) **tiraba** `TypeError` con un plan desconocido en vez de devolver
+      `null`, porque su guarda `if (base === undefined)` estaba DESPUÉS del acceso
+      `DEFAULT_PLAN_AMOUNTS[plan][cycle]`. Es alcanzable: `organizations.plan` es String y
+      `planesPorEscalon()` incluye `free`, que no está en la tabla de precios porque no se cobra.
+
+- [x] 🔴 **CERRADO el 2026-09-17: cinco frases mandaban al plan de Bs 890 por la agenda que el
+      de Bs 550 ya trae.** ⚠️ COMMITEADO Y PUBLICADO (`dd03c75`, rama
+      `claude/chatbots-platform-review-0d1d09` de `onia-platform`), **falta mergear y desplegar**.
+      La escalera C (12-sep) le dio `publicBookingIncluded` al plan `crece` (Bs 550) y las frases
+      que dicen DÓNDE viene incluida la agenda pública estaban tipeadas desde antes: seguían
+      diciendo *«incluida en Profesional y Completo»*. Medido contra el catálogo el 17-sep: la
+      traen **cuatro** planes (`crece`, `professional`, `clinic`, `enterprise`), no dos.
+
+      **A quién le costaba plata:** al dueño de un Básico (Bs 320) que quería la agenda se le
+      decía que para tenerla incluida hay que llegar a Profesional (Bs 890), cuando el escalón
+      de al lado ya la trae — Bs 340/mes de más, o un add-on de Bs 150 que no necesitaría. Y al
+      que YA está en Crece, la tarjeta de `/settings` le rotulaba «Incluido» arriba y le decía
+      lo contrario en el párrafo de abajo.
+
+      **Las cinco superficies:** `BOOKING_ADDON_PRICE.publicLabel` y `.heroLabel`, el `summary`
+      de `PUBLIC_PRICING_ADDONS`, el `limit` de `ADMIN_ADDON_INFO` (los cuatro en
+      `onia-platform/lib/pricing.ts`) y el párrafo de la tarjeta en
+      `onia-platform/app/(dashboard)/settings/PlanClient.tsx`. Las cinco preguntan ahora
+      `primerPlanCon("publicBookingIncluded")` y dicen «desde el plan Crece»: **un umbral no
+      envejece cuando entra un escalón arriba; una enumeración sí.**
+
+      **Cómo apareció, que es lo transferible:** el rótulo de esa tarjeta ya derivaba del
+      catálogo y por eso el 13-sep quedó anotada como sana — lo que no derivaba era la PROSA de
+      al lado. Por cada booleano de plan hay que preguntar **quién más lo AFIRMA en texto**, no
+      sólo quién lo consulta.
+
+      **Gate:** `onia-platform/lib/subscription/donde-esta-incluida-no-se-tipea.test.ts`. Afirma
+      la CLASE, no el texto viejo: prohibir «Profesional y Completo» se apagaría solo el día que
+      esa sea la respuesta correcta, así que prohíbe la **forma** (`<Plan> y <Plan>` en un
+      literal o en texto JSX) sobre un universo caminado del DISCO — `git ls-files` no ve el
+      archivo nuevo sin commitear, que es justo el sujeto a cazar. Validado por mutación:
+      devolver la frase vieja → 2 rojos; vaciar el universo → 1 rojo.
+
+      **Lo PREVENTIVO, dicho como tal:** el MRR decidía si cobrar el add-on con
+      `org.plan === "basic"` — cierto por casualidad, porque hasta la escalera C Básico era el
+      único plan pago sin la reserva. Ahora le pregunta al catálogo. La mutación lo confirma:
+      volver a `=== "basic"` deja los 7 casos en verde, **hoy son equivalentes**, así que esto
+      no arregla un bug vivo. La guarda `isSubscriptionPlan` sí hace falta: `free` tampoco la
+      trae y cobrársela inflaría el MRR con una cuenta que no paga (sacarla pone el gate rojo).
+
+      Gates: `tsc` 0 · `vitest` 4945 pass / 0 fail · `eslint` 0 errores, corridos **también en
+      el VPS** sobre el árbol publicado.
+
 - [x] 🔴 **CERRADO el 2026-09-13: un cron que no entregó NADA contestaba «ok» y su lanzador
       salía 0.** ⚠️ COMMITEADO Y PUBLICADO (`b5cae43`, rama
       `claude/chatbots-platform-review-0d1d09` de `onia-platform`), **falta mergear y desplegar**.
@@ -6618,3 +6686,23 @@ y sin operar. Acá se opera, con verificación por ítem.
       `ok` de Sergio Urcullo no publicaría. Entra cuando `onia-cola` mergee.
 
 *(vacío — esta cola se abrió el 2026-09-05)*
+
+## 🔴 Bug crítico en producción — bloquea a TODO cliente nuevo desde 2026-09-17 (tarea t_82251f19)
+
+Encontrado por `recorrido-cliente`, 2026-09-17 08:12 UTC. `lib/mfa/policy.ts:16`:
+`MFA_ENFORCE_FROM` es una fecha ABSOLUTA fija (`2026-09-17T04:00:00Z`, escrita el 03-sep como
+"hoy + 14 días" de gracia para ADMIN/SUPERADMIN que YA existían), no relativa al alta de cada
+cuenta. Desde hoy, un cliente que se registra AHORA (rol ADMIN, cero gracia real) termina el
+onboarding OK y queda bloqueado: `app/(dashboard)/layout.tsx:89` lo redirige a `/profile` en
+TODA ruta (`/dashboard`, `/patients`, `/billing`, agenda) hasta que active un authenticator app.
+
+Reproducido con `zz-qa-2026-09-17-0809@onia.com.bo`: onboarding cerrado
+(`hermes-content/docs/recorrido/capturas/paso-05b-onboarding-listo.png`) pero
+`/dashboard`→`/profile` con banner "La verificación en dos pasos es obligatoria para tu rol"
+(`paso-05c-gate-levantado.png`).
+
+**Efecto: cada alta nueva desde hoy es inutilizable de punta a punta**, sin aviso durante el
+onboarding de que hace falta una app externa. Posible arreglo: gracia relativa a
+`organizations.createdAt` (o `profile.createdAt`), no a una constante de fecha absoluta.
+
+Detalle completo y tarea: `/root/bin/onia-tablero.sh show t_82251f19`.
