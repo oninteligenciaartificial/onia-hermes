@@ -6686,3 +6686,23 @@ y sin operar. Acá se opera, con verificación por ítem.
       `ok` de Sergio Urcullo no publicaría. Entra cuando `onia-cola` mergee.
 
 *(vacío — esta cola se abrió el 2026-09-05)*
+
+## 🔴 Bug crítico en producción — bloquea a TODO cliente nuevo desde 2026-09-17 (tarea t_82251f19)
+
+Encontrado por `recorrido-cliente`, 2026-09-17 08:12 UTC. `lib/mfa/policy.ts:16`:
+`MFA_ENFORCE_FROM` es una fecha ABSOLUTA fija (`2026-09-17T04:00:00Z`, escrita el 03-sep como
+"hoy + 14 días" de gracia para ADMIN/SUPERADMIN que YA existían), no relativa al alta de cada
+cuenta. Desde hoy, un cliente que se registra AHORA (rol ADMIN, cero gracia real) termina el
+onboarding OK y queda bloqueado: `app/(dashboard)/layout.tsx:89` lo redirige a `/profile` en
+TODA ruta (`/dashboard`, `/patients`, `/billing`, agenda) hasta que active un authenticator app.
+
+Reproducido con `zz-qa-2026-09-17-0809@onia.com.bo`: onboarding cerrado
+(`hermes-content/docs/recorrido/capturas/paso-05b-onboarding-listo.png`) pero
+`/dashboard`→`/profile` con banner "La verificación en dos pasos es obligatoria para tu rol"
+(`paso-05c-gate-levantado.png`).
+
+**Efecto: cada alta nueva desde hoy es inutilizable de punta a punta**, sin aviso durante el
+onboarding de que hace falta una app externa. Posible arreglo: gracia relativa a
+`organizations.createdAt` (o `profile.createdAt`), no a una constante de fecha absoluta.
+
+Detalle completo y tarea: `/root/bin/onia-tablero.sh show t_82251f19`.
