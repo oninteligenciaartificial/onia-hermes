@@ -318,6 +318,49 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El watchdog del bot declaraba «bot MUDO» con UN parpadeo de 5 s, y su log no sabía
+      decir que se había recuperado~~ — CERRADO el 2026-09-17, commiteado y PENDIENTE DE
+      DESPLIEGUE del bot (pedido vivo `t_933c5f7b`).**
+
+      **Cómo apareció.** Leyendo `/var/log/onia-bot-watchdog.log` del VPS, la última línea era
+      `[2026-09-17T02:00:02+00:00] ERROR: el bot NO llega a Chatwoot (respuestas mudas aunque
+      /health este ok)` — y de ahí concluí, en esta misma vuelta, que el bot llevaba 19 h mudo.
+      **Era falso.** Medido acto seguido: `/var/lib/onia-bot-watchdog.incidente-chatwoot` **no
+      existe** (o sea el incidente se cerró solo) y el camino contestó **3 de 3** sondas
+      (`docker exec onia-center sh -c "timeout 5 wget -qO- http://onia-chatbot_chatwoot:3000/"`).
+
+      **Los dos defectos, con su medición.**
+
+      1. **Un parpadeo no es una caída.** La sonda del camino a Chatwoot es un único
+         `timeout 5`, y fallarla una vez dispara la alarma 🚨 máxima. Las **tres** apariciones
+         del `ERROR` en 15 días (03-sep, 05-sep, 17-sep) son de **una línea cada una** — con el
+         cron cada 2 minutos, una caída de verdad escribe una línea cada 2 minutos. Tres
+         parpadeos, **seis** mensajes al Telegram de Sergio Urcullo (el 🚨 y su ✅) y cero
+         incidentes, en el canal que él mismo pidió ordenar.
+      2. **El log registraba las fallas y callaba los desenlaces.** Las **tres** ramas de
+         recuperación llamaban a `tg_error` y ninguna a `log`. Con un log append-only que solo
+         escribe cuando algo se rompe, **la última línea miente para siempre** — y el que
+         diagnostica lee esa línea. Es la asimetría «aviso del problema ↔ aviso del DESENLACE».
+
+      **Qué cambió** (`hermes-content/deploy/vps-ops/bot/webhook-watchdog.sh`): el incidente de
+      Chatwoot se declara recién en la **segunda corrida seguida** que falla (marcador
+      `strike-chatwoot`, que un éxito borra para que dos parpadeos lejanos no se sumen), y las
+      tres ramas de recuperación escriben el log. Cuesta 2 minutos de detección sobre una caída
+      que en agosto duró 4 días, y le saca los falsos positivos al único canal por el que
+      avisamos algo grave. Los marcadores de producción **no cambian de ruta**: el prefijo se
+      volvió inyectable (`ONIA_WATCHDOG_ESTADO`) con el default de siempre, así que un incidente
+      ya declarado se sigue reconociendo.
+
+      **Gate:** `webhook-watchdog.test.mjs` (7 casos), que **ejecuta el script de verdad** con
+      `docker`/`iptables`/`curl` stubeados en el `PATH` — un grep del `.sh` no vería cuántas
+      corridas hacen falta para que suene la alarma, que es justo lo que se fija. Su caso de
+      **clase** deriva los sujetos del disco (cada `tg_error "✅…"` del script), así que la rama
+      de recuperación que se escriba mañana nace adentro del universo. Validado por **mutación**,
+      tres esquives: volver a la sonda única (`fail 2`), dejar muda la recuperación de Chatwoot
+      (`fail 2`) y no limpiar el strike (`fail 1`). Entra a la cadena por `test:bot`, y que la
+      cadena lo **ejecute** se comprobó por mutación también (un caso que falla apareció como
+      `not ok 1097`), no por grep.
+
 - [x] 🔴 **~~El asistente seguía atendiendo a los clientes de un negocio con la cuenta VENCIDA:
       la puerta que alimenta al motor del VPS nunca preguntaba~~ — CERRADO el 2026-09-17 en
       `onia-platform`, commiteado y PENDIENTE DE MERGE + DESPLIEGUE.**
