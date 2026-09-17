@@ -53,14 +53,14 @@ de conectores abierta en otra ventana para el tramo 9.
 > Vos no estás. El programa se abre solo.
 
 **8 · Mi caso (5:30–6:00)**
-> Lo que tengo andando: cuatro hooks, cuatro subagentes, siete conectores y cuatro trabajos por horario.
+> Lo que tengo andando: cuatro hooks, tres subagentes, seis conectores y cuatro trabajos por horario.
 > Y esto es lo que quiero que te lleves: todo eso vive en una PC de escritorio prendida en mi casa. No es un servidor especial ni nada caro.
 
 **9 · La parte honesta (6:00–7:00)** — *el tercero se graba en vivo*
 > Lo que ningún video de automatización te cuenta: lo que corre solo, falla solo.
 > Uno. Mi hook de cierre subió doscientas líneas de código antes de que existiera lo que las usaba. No rompió nada de pura casualidad.
 > Dos. Tuve un servicio corriendo todos los días durante tres semanas sin publicar nada. Nadie se enteró — porque no fallaba. Simplemente no hacía nada.
-> Y tres, esto es de hoy: de mis siete conectores, hay cuatro que no andan. Dos se cayeron y dos perdieron el permiso. Mirá. *[abrí la lista]*
+> Y tres, esto es de hoy: de mis seis conectores, hay cuatro que no andan. Dos se cayeron y dos perdieron el permiso. Mirá. *[abrí la lista]*
 > No me avisó ninguno. Me enteré porque fui a mirar.
 
 **10 · Las tres reglas (7:00–7:50)**
