@@ -6,7 +6,8 @@
 
 import test from "node:test";
 import assert from "node:assert/strict";
-import { leerDeProduccion, listarDeProduccion } from "./vps-o-local.mjs";
+import { spawnSync } from "node:child_process";
+import { citarParaShell, leerDeProduccion, listarDeProduccion } from "./vps-o-local.mjs";
 
 test("si el disco local lo tiene, contesta local y NO sale a la red", () => {
   let preguntasAlVps = 0;
@@ -83,4 +84,26 @@ test("listar: sin disco y sin VPS devuelve null", () => {
     remoto: () => null,
   });
   assert.equal(r, null);
+});
+
+test("la ruta viaja CITADA al shell remoto: los route groups de Next tienen paréntesis", () => {
+  // `ssh` concatena sus argumentos en UNA cadena que el shell del otro lado
+  // vuelve a interpretar. Sin citar, `app/(dashboard)/layout.tsx` revienta ALLÁ y
+  // el fallo vuelve como `status != 0` — indistinguible de «el archivo no existe»,
+  // así que el gate se declara ciego sobre un archivo que está ahí. Medido el
+  // 2026-09-17: `puerta:alta` salió «no pude leer app/(dashboard)/layout.tsx del
+  // build vivo» con el archivo de 13.032 bytes en su lugar.
+  assert.equal(citarParaShell("app/(dashboard)/layout.tsx"), "'app/(dashboard)/layout.tsx'");
+  assert.equal(citarParaShell("con espacio.tsx"), "'con espacio.tsx'");
+  // Una comilla simple adentro no puede cerrar la cita y dejar el resto suelto:
+  // eso sería ejecución remota de lo que venga después.
+  assert.equal(citarParaShell("a'b"), `'a'\\''b'`);
+  // Y no por heuristica: se le PREGUNTA a un shell de verdad si lo que recibe es
+  // exactamente la ruta que pedimos. Un patron sobre la cadena citada se equivoca
+  // justo en el caso que importa (`a'\''b` esta bien citado y parece roto).
+  for (const crudo of ["app/(dashboard)/layout.tsx", "a'b", "con espacio.tsx", "$(whoami)", "`id`", "x; rm -rf /tmp/no"]) {
+    const r = spawnSync("sh", ["-c", `printf %s ${citarParaShell(crudo)}`], { encoding: "utf8" });
+    assert.equal(r.status, 0, `${crudo}: el shell tiene que poder parsearlo`);
+    assert.equal(r.stdout, crudo, `${crudo}: al shell le tiene que llegar la cadena TAL CUAL`);
+  }
 });

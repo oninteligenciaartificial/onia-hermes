@@ -6706,3 +6706,21 @@ onboarding de que hace falta una app externa. Posible arreglo: gracia relativa a
 `organizations.createdAt` (o `profile.createdAt`), no a una constante de fecha absoluta.
 
 Detalle completo y tarea: `/root/bin/onia-tablero.sh show t_82251f19`.
+
+✅ **ARREGLADO EN `master` el 2026-09-17 04:54 La Paz (chatbot-cola, `b1247fb`) — lo que falta es
+PUBLICARLO, no volver a arreglarlo.** `lib/mfa/policy.ts`: la gracia dejó de ser una fecha sola y
+pasó a colgar del alta de cada cuenta — `fechaExigenciaMfa(cuentaCreadaEl) = max(piso, alta + 14
+días)`, con `MFA_ENFORCE_FROM` degradado a **piso** (lo prometido a las cuentas que ya existían el
+03-sep) y un alta inválida (`NaN`) cayendo al piso, nunca apagando la política. El llamador real
+(`app/(dashboard)/layout.tsx:97`) le pasa `profile.createdAt` a las DOS funciones —la que corta y
+la que cuenta los días del banner—, y eso lo sostiene `lib/mfa/gracia-cuelga-del-alta.test.ts`.
+Una cuenta creada hoy queda exigida el 1-oct, y **las que ya cayeron en la trampa se destraban
+solas con el deploy** (su `max` las manda a alta + 14).
+
+🔴 **Pero el defecto SIGUE VIVO PARA EL CLIENTE**, y eso es lo que hay que leer acá: producción
+corre el build `f078373`, anterior al arreglo — medido el 17-sep 07:30 La Paz casando `BUILD_ID`
+(`docker exec onia-platform cat /app/.next/BUILD_ID` → `OFd4xCDzoTbQdThUbfzDv` =
+`/opt/onia-platform/build-f078373/…`), y en ese árbol `grep -c fechaExigenciaMfa
+lib/mfa/policy.ts` da **0**. El pedido de deploy ya existe y está `blocked` esperando el `ok` de
+Sergio Urcullo (*«Publicar app.onia.com.bo: 13 arreglos…»*, `t_db98ee26`). **Ningún carril lo
+destraba**: no se abre otro pedido ni se despliega a mano.

@@ -318,6 +318,190 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~La lista de puertas del alta era de INCLUSIÓN: la tercera iba a entrar absuelta, igual
+      que la segunda~~ — CERRADO el 2026-09-17** (`hermes-content/deploy/vps-ops/bot/puerta-del-alta.mjs`,
+      `npm run puerta:alta`).
+
+      **Por qué se abrió.** El ítem de abajo cerró la instancia (faltaba la puerta de la 2FA) y
+      dejó la clase abierta. Este archivo lleva **dos** rondas del mismo modo de falla: nació el
+      13-sep conociendo una puerta (confirmar el correo) y el 17-sep apareció la segunda (la 2FA)
+      — y las dos veces el gate **estuvo verde** hasta que un humano la escribió a mano. Su propio
+      comentario decía *«el universo sale de `PUERTAS`, no de los medidores que hay»*: eso protege
+      contra la puerta **declarada sin medidor**, y es ciego contra la que el producto ya pone y
+      **nadie declaró**, que es la que mordió las dos veces.
+
+      **El universo sí es derivable, y estaba a la vista:** las puertas entre *«creé mi cuenta»* y
+      *«uso el sistema»* son los `redirect(...)` del gate del panel, que corre en TODA ruta. Se
+      leen del **árbol del build vivo** (el mismo contra el que ya se mide la 2FA; el repo diría
+      que no hay ninguna, porque el arreglo está en `master` y sin publicar). Hoy son cinco:
+      `/login`, `/register`, `/onboarding`, `/profile` y `access.redirectTo` — y sólo UNO estaba
+      declarado como puerta.
+
+      **Cómo quedó.** Cada redirect tiene que estar declarado en `PUERTAS` (ahora con el campo
+      `redirect` que lo ata) o excusado con su motivo en `EXCUSAS_DE_REDIRECT`; el que no esté cae
+      como puerta **ciega** (`estado: null`) y `juzgarPuerta` ya se niega a concluir — reutiliza el
+      mecanismo que existía en vez de agregarle una rama. `/login`, `/register`, `/onboarding` y el
+      gate por plan quedan excusados con el motivo escrito; la del correo declara `redirect: null`
+      a propósito, porque corta antes, en el login. Extras que la familia pedía: los comentarios se
+      blanquean antes de parsear (un `redirect(` narrado en un comentario no es una puerta), no
+      poder leer el layout es `null` y **nunca** una lista vacía, y las excusas se **re-miden**
+      cada corrida (`excusasHuerfanas`): si el destino cambia debajo, la excusa vieja se reporta en
+      vez de seguir absolviendo a nadie.
+
+      **Validado por mutación, las dos mitades** (el detector puro y su cableado al medidor de
+      producción): descablear `puertasNoDeclaradas` del medidor → 1 rojo; hacer que el detector no
+      acuse a nadie (`.filter(() => false)`) → 4 rojos, incluido *«con una puerta sin declarar el
+      gate se NIEGA a concluir»*. Restaurado: **50/50**. El caso preexistente *«se mide UNA puerta
+      por cada una declarada»* se puso rojo por el motivo correcto y se actualizó: sin el layout
+      del build vivo ya no se puede afirmar que las declaradas sean todas.
+
+- [x] 🔴 **~~El gate que vigila «el bot promete una puerta que el producto no abre» conocía UNA
+      sola puerta, y hoy hay DOS vivas en producción~~ — CERRADO el 2026-09-17**
+      (`hermes-content/deploy/vps-ops/bot/puerta-del-alta.mjs`, `npm run puerta:alta`).
+
+      **Qué pasaba.** El archivo nació el 13-sep con una lista de causas escrita a mano: la única
+      puerta entre *"creá tu cuenta"* y *"usá el sistema"* era confirmar el correo. Esa forma ya
+      tiene su lección —un gate que fija su invariante sobre una lista escrita el día que se
+      escribió cierra la instancia y después **defiende** el hueco— y la causa N+1 llegó cuatro
+      días después, peor que la primera.
+
+      **La causa N+1, medida contra el build que producción SIRVE** (no contra el repo, que acá
+      diría que no hay ninguna puerta): `onia-platform/lib/mfa/policy.ts` del build vivo declara
+      `MFA_ENFORCE_FROM = "2026-09-17T04:00:00.000Z"` y un `requiresMfaNow(role, hasVerifiedFactor,
+      now)` sin nada que cuelgue del alta; `MFA_REQUIRED_ROLES` trae `ADMIN`; y
+      `onia-platform/app/api/auth/register/route.ts` le da `role: "ADMIN"` a todo el que se
+      registra. O sea que **desde las 00:00 del 17-sep (La Paz) el que crea su cuenta confirma el
+      correo, termina el onboarding y el panel lo manda a `/profile` en TODA ruta** hasta que
+      instale una app externa de códigos. Lo reprodujo `recorrido-cliente` en producción
+      (`t_82251f19`), y el bot es justo quien manda leads a `/register`.
+
+      **Qué se hizo.** Las puertas son ahora una lista (`PUERTAS`), cada una con **su propia
+      salvedad**: nombrar el correo ya no absuelve a la de dos pasos. `puertasDelAlta()` deriva su
+      universo de `PUERTAS`, así que una puerta declarada **sin medidor sale `null`** y el gate se
+      niega a concluir — al revés (derivar la lista de los medidores que hay) la puerta nueva
+      entraría absuelta, que es como esta familia falla en verde. El árbol de fuentes del build
+      vivo se **casa por `BUILD_ID`**, nunca por un sha escrito a mano, y se lee con
+      `scripts/lib/vps-o-local.mjs` para que también mida desde nodo-casa.
+
+      **Medición viva de hoy** (`npm run puerta:alta`, exit 0): *"NINGUN TEXTO SERVIDO PROMETE
+      ENTRAR SIN LOS PASOS QUE EL PRODUCTO EXIGE — 4 documento(s) mirados … con **2 puerta(s)
+      viva(s)**: confirmar el correo (`ONIA_REGISTRO_CONFIRMA_CORREO=si` ·
+      `GOTRUE_MAILER_AUTOCONFIRM=false`) · activar la verificación en dos pasos
+      (`MFA_ENFORCE_FROM=2026-09-17T04:00:00.000Z` es una fecha absoluta y sola, y ya venció — el
+      alta crea `ADMIN`, que está en `MFA_REQUIRED_ROLES`)"*. Verde porque ningún texto servido
+      promete inmediatez, **y ahora el veredicto NOMBRA las dos puertas aunque esté verde**: antes
+      la segunda era invisible incluso mirando la salida.
+
+      **Validado por MUTACIÓN, las dos direcciones** (self-check 38/38 en limpio):
+      (1) que la salvedad de *cualquier* puerta absuelva a todas —la forma vieja, de una sola
+      causa— pone en rojo exactamente *"nombrar el correo NO absuelve la puerta de dos pasos"* y
+      *"la que acusa tiene que ser la de dos pasos"* (36/38); (2) clavar `vencio = false` en la
+      política viva pone en rojo *"fecha absoluta ya vencida => el recién llegado choca contra el
+      muro"* (37/38). Restaurado con `cp`, nunca con `git checkout`.
+
+      ⚠️ **El arreglo del PRODUCTO ya está en `master`** (`onia-platform` `b1247fb`, de esta misma
+      mañana: la gracia cuelga del alta de cada cuenta, con el piso viejo para no acortarle nada a
+      las que ya estaban). **No está desplegado:** producción corre el build `f078373` del 13-sep
+      —casado por `BUILD_ID` `OFd4xCDzoTbQdThUbfzDv`— con **21 commits de `master` sin publicar**.
+      Hay pedido de deploy vivo (`t_db98ee26`, `blocked`, encabezado por ese mismo arreglo) y el
+      publicador automático se niega por diseño (`/var/log/onia-publicar-solo.log`: *"plataforma:
+      NO publico solo — toca una fuente de precio"*, todos los días desde el 15-sep). **Este gate
+      se pone en verde sobre esa puerta solo, el día del swap** — no hay nada más que escribir.
+
+- [x] 🔴 **~~Contestarle a un lead de WhatsApp fuera de las 24 h se perdía EN SILENCIO: el dueño
+      veía su respuesta enviada y el prospecto no recibía nada~~ — CERRADO el 2026-09-17**
+      (`onia-platform` `76ebe12`, rama `claude/chatbots-platform-review-0d1d09`).
+      **⚠️ Commiteado y con gates verdes, NO desplegado:** falta el merge del integrador y el
+      swap; hasta entonces el defecto sigue vivo en producción.
+
+      **Qué pasaba.** `POST /api/bandeja/[id]` con `accion:"responder"` llamaba a
+      `sendAgentMessage` sin preguntar si la conversación admite texto libre. En el canal web
+      da igual. En WhatsApp no: pasadas las 24 h del último mensaje del prospecto, Meta cierra
+      la ventana de servicio y Chatwoot cambia solo de carril
+      (`should_send_template_message = template_params.present? || !conversation.can_reply?`,
+      línea 9 de `send_on_whatsapp_service.rb` en el fuente de Chatwoot 4.12.1 — código de
+      terceros, no de este repo; ya estaba leído y escrito en `chatwoot-adapter.mjs:454` del
+      bot). Como nadie le dice CUÁL plantilla, marca el mensaje `failed` con *"Template not
+      found or invalid template name"* (línea 27 del mismo archivo). **Y la
+      API contesta 200 igual**, así que la ruta devolvía `{ok:true}`, la pantalla limpiaba el
+      textarea y el dueño quedaba convencido de que contestó.
+
+      **Por qué no era teórico** — medido en producción el 2026-09-17 preguntándole a Chatwoot
+      por las **5 conversaciones de desconocidos** que hay hoy en la bandeja:
+
+      | conv | canal | espera | `can_reply` |
+      |---|---|---|---|
+      | 35 "F" | WhatsApp | 22,5 d | **false** |
+      | 37 "mariohassen" | WhatsApp | 20,3 d | **false** |
+      | 34 · 36 · 40 | web | 18-23 d | true |
+
+      Son **2 de los 5 únicos prospectos que tiene el negocio**, los dos esperando respuesta, y
+      los dos inalcanzables desde la única pantalla que el producto ofrece para contestarles.
+      El canal web no tiene ventana: a los 23 días sigue en `true`, o sea que el problema no es
+      "la conversación es vieja" sino el canal.
+
+      **Se PREGUNTA, no se calcula.** `can_reply` es el MISMO campo con el que Chatwoot decide;
+      contar 24 h por nuestra cuenta sería opinar donde ya hay un dato, y las dos cuentas se
+      separarían el día que Meta mueva la ventana.
+
+      **Lo que entró:** `lib/chatbot/ventana-de-respuesta.ts` (predicado puro, con las dos
+      causas de "no se puede" SEPARADAS — `ventana_cerrada` y `sin_dato`: aplanarlas en un
+      booleano le manda al dueño a buscar una ventana de 24 h que nunca existió) · la ruta
+      corta con **409 antes** de llamar a Chatwoot (409 y no 502 a propósito: *"probá de nuevo
+      en un momento"* invita a un reintento que no puede funcionar nunca) · la pantalla avisa
+      **antes** de que escriba, con el MISMO módulo, y el texto nombra la salida que sí
+      funciona (escribirle desde su propio WhatsApp) · sin el campo **no promete entrega**: la
+      dirección cara es prometer donde no hay, la barata es bloquear de más, que el dueño VE.
+
+      **Un comentario defendía el bug.** `InboxClient.tsx` decía *"por WhatsApp le puede
+      escribir después, por el widget sólo mientras la pestaña siga abierta"* — exactamente al
+      revés de lo medido. Así sobrevivió: el que lo leía daba el tema por resuelto. Corregido
+      con la medición pegada.
+
+      **Gates:** `tsc` 0, `eslint` 0, suite completa **4.972 verdes**, corridos también en el
+      VPS sobre el árbol publicado. **Validado por mutación en tres direcciones** (el módulo
+      deja pasar la ventana cerrada → 2 rojos; la ruta esquiva la guarda con `false &&` → 1
+      rojo; la pantalla deja de consultar el módulo → 1 rojo).
+      ⚠️ **Intento fallido que vale anotar:** la primera versión del gate de la guarda pasaba
+      **VERDE con el esquive puesto**, porque exigía que la ruta *nombrara* el predicado y que
+      la llamada estuviera antes del envío — `false && !respuesta.puede` cumple las dos cosas
+      con la guarda muerta. El sujeto de un gate de guarda no es la mención sino la GUARDA:
+      ahora ancla `if (!<var>.puede)` **y** el `return` dentro de la rebanada entre consultar y
+      enviar. Y el fixture de `route.test.ts` nació sin `can_reply` y se apoyaba en el default
+      —un fixture apoyado en el default defiende el defecto—: va explícito y con su caso
+      hermano de 409.
+
+- [x] 🔴 **~~El horario que el bot PROMETE en producción no lo mide nadie: se arregló en el repo
+      y el documento que producción sirve siguió mintiendo~~ — CERRADO el 2026-09-17
+      (`hermes-content/deploy/vps-ops/bot/horario-vivo.mjs`, `npm run horario:vivo`).**
+      La mitad que faltaba del arreglo del 13-sep. Ese día se unificó la disponibilidad de Sergio
+      Urcullo en `ventanas-de-atencion.mjs` y se cruzó contra el `.py` — **pero los dos lados de
+      ese cruce viven en el repo**. Cuatro días después, medido en la conversación 49 del inbox 4
+      (el de los leads reales), el bot vivo mandó, en el mismo mensaje: *"B) **sábado** 19 de
+      septiembre, 09:00"* y *"(Estoy respondiendo automático fuera de horario de oficina. Sergio
+      te confirma **en la mañana**.)"* — ofrece un sábado y promete lunes a viernes.
+      **Por qué ningún gate lo veía:** la promesa no está en el repo. `knowledge.json` está
+      gitignoreado a propósito y la fila del panel vive en la base; los dos pisan al código por
+      `knowledge.mjs:1203-1218`, que copia `empresa.horario` sobre `businessHours` —días, desde,
+      hasta y **la frase**— antes de que el motor hable. Misma familia que dejó al bot cotizando
+      Bs 750/1.500 una semana con `test:precios-bot` en 12/12.
+      El sujeto son los **documentos servidos**, los dos derivados y no nombrados: el archivo vivo
+      y la fila que el proceso pide con su propia `ONIA_KNOWLEDGE_URL`. La fila de un **cliente**
+      no es sujeto: su negocio declara su horario y contradecir el de Sergio Urcullo ahí es lo
+      correcto. Tri-estado: cero documentos o uno ilegible es **2**, nunca verde.
+      **Hoy sale ROJO y dice la verdad** (`exit 1`): el archivo vivo difiere en tres campos
+      —`dias [1..5]` vs `[1..6]`, `cierra 18` vs `22`, y la frase entera—. Se pone verde con la
+      publicación que ya espera el ok de Sergio Urcullo, sin tocar nada a mano.
+      Validado por **mutación en cinco direcciones** (no mirar la frase → 3 rojos; aplanar el
+      documento ilegible a sano → 2; lista vacía en verde → 3; mirar sólo el primer documento →
+      3; sacar la fila del panel del universo → 2). Self-check **29/29** y en la cadena como
+      `test:horario-instrumento`; la medición viva queda como alias suelto, que es lo que
+      corresponde a un gate que toca producción. Suite del bot **1024/1024**.
+      ⚠️ El propio self-check corrigió mi expectativa: de los cuatro campos del horario viejo sólo
+      **tres** difieren — `desde: 9` coincide con la fuente, porque la envolvente abre a las 9 y
+      la que abre es el sábado. Un gate que cortara en la primera diferencia, o que exigiera que
+      difieran todas, habría contado mal el mismo documento.
+
 - [x] 🔴 **~~El dueño podía encender la insistencia, elegir el tope del desplegable y su
       asistente no escribía NUNCA — sin un envío, sin un skip, sin un warning~~ — CERRADO el
       2026-09-13 en el repo (`hermes-content/deploy/vps-ops/bot/insistencia-run.mjs` +
@@ -420,13 +604,21 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       Lo descubrió el test, que siguió rojo con el `delete` puesto. (2) `knowledge.example.json` y
       `knowledge.onia.json` tenían **su propia copia** del horario viejo: una tercera fuente que,
       instalada, devolvía la mentira entera.
-      🔴 **FALTA, y NO alcanza con el deploy del bot:** el `knowledge.json` **vivo** trae hoy
-      `empresa.horario = {dias:[1..5], desde:9, hasta:18, frase:"lun-vie, 9:00-18:00"}` — medido
-      con `docker exec onia-center cat /tmp/onia-bot/knowledge.json`. Como el archivo pisa a la
-      config, **desplegar sólo el código deja la promesa vieja viva** (y encima mi guard le pone
-      `franjas = null` y lo devuelve al rango 9-18). Hace falta el segundo paso, el del texto:
-      `webhook-server.sh knowledge` con `knowledge.onia.json` ya sin ese bloque. Sin eso, esto
-      **no está terminado** por más que el deploy diga verde.
+      🔴 **FALTA — ESPERA PUBLICACIÓN:** el `knowledge.json` **vivo** sigue trayendo
+      `empresa.horario = {dias:[1..5], desde:9, hasta:18, frase:"lun-vie, 9:00-18:00"}` (remedido
+      el 2026-09-17 con `docker exec onia-center cat /tmp/onia-bot/knowledge.json`). Como el
+      archivo pisa a la config por `knowledge.mjs:1203-1218`, mientras no se publique el lead lee
+      la promesa vieja.
+      ⚠️ **Corregido el 2026-09-17: la parte de arriba que decía "NO alcanza con el deploy del
+      bot, hace falta un segundo paso a mano" es FALSA, y mandaba a hacer a mano algo ya
+      cableado.** Medido leyendo los dos scripts: el `ok` corre
+      `/opt/onia/bot/_deploy/publicar.sh`, que en su línea 126 llama a `deploy-bot.sh --aplicar`,
+      y el **paso 7** de ése (línea 146) es exactamente
+      `ONIA_BOT_KNOWLEDGE_FILE=$DEST/knowledge.onia.json webhook-server.sh knowledge`. O sea que
+      el texto viaja **con** el deploy desde `a1af0c58`, y `knowledge.onia.json` en el repo ya
+      tiene `empresa: {}` (verificado: `horario: null`). Un pendiente escrito al revés es peor
+      que un fantasma: le pedía a la próxima vuelta un paso manual sobre producción que el
+      circuito ya hace solo.
       Validado por mutación en las dos direcciones (sacar el sábado → 3 rojos; sacar el guard del
       override → 1 rojo). Suite del bot **1011/1011**, cadena del repo verde.
 

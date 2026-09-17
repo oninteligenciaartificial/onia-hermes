@@ -47,8 +47,19 @@ export function leerLocal(ruta) {
 }
 
 /** Le pregunta al VPS. `null` = no pude preguntar O no está allá; las dos son «no medí». */
+/**
+ * Cita para el shell REMOTO. `ssh` concatena sus argumentos en UNA cadena que el
+ * shell del otro lado vuelve a interpretar, asi que una ruta con parentesis,
+ * espacios o comillas no llega: revienta alla y el fallo vuelve como `status != 0`,
+ * indistinguible de "el archivo no existe". Mordio con los route groups de Next
+ * (`app/(dashboard)/layout.tsx`), que son la convencion de TODA pantalla del panel.
+ */
+export function citarParaShell(s) {
+  return `'${String(s).replace(/'/g, `'\\''`)}'`;
+}
+
 export function leerPorSsh(ruta, destino = VPS) {
-  const r = spawnSync("ssh", [...SSH_ARGS, destino, "cat", "--", ruta], {
+  const r = spawnSync("ssh", [...SSH_ARGS, destino, "cat", "--", citarParaShell(ruta)], {
     encoding: "utf8",
     timeout: 60_000,
   });
