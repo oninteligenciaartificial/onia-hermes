@@ -1352,11 +1352,54 @@ const PASOS = [
         })
         : null;
       if (!prueba.llego) {
+        // 🔴 2026-09-17: /dashboard rebota a /profile?mfa=obligatorio (MFA_ENFORCE_FROM
+        // vencido, b1247fb sin publicar — ver ULTIMO_RECORRIDO.md). Reportado y bloqueado
+        // hace 4 vueltas seguidas SIN saber si es un muro de verdad o si hay una salida:
+        // ¿el propio /profile deja ENROLAR el 2FA y seguir? Si no hay salida, la severidad
+        // real es "todo cliente nuevo queda afuera del producto", no sólo "un aviso molesto".
+        let escapatoria = null;
+        if (/^\/profile/.test(prueba.destino)) {
+          const sondaMfa = await page.evaluate(() => {
+            const texto = (document.body.innerText || '').replace(/\s+/g, ' ');
+            const botones = [...document.querySelectorAll('button, a[href]')]
+              .map((el) => (el.innerText || '').replace(/\s+/g, ' ').trim())
+              .filter(Boolean);
+            return {
+              textoVisible: texto.slice(0, 400),
+              hayQr: !!document.querySelector('img[src*="qr" i], canvas'),
+              hayInputCodigo: !!document.querySelector('input[inputmode="numeric"], input[maxlength="6"], input[autocomplete="one-time-code"]'),
+              botonActivar: botones.find((b) => /activ|habilit|configur|verificar|enrol/i.test(b)) || null,
+              botones,
+            };
+          });
+          const capturaMfa = await mirar(page, 'paso-05d-mfa-obligatorio.png');
+          if (sondaMfa.botonActivar) {
+            await page.click(`text="${sondaMfa.botonActivar}"`, { timeout: 5000 }).catch(() => {});
+            await page.waitForTimeout(1000);
+            const sondaTrasClic = await page.evaluate(() => ({
+              hayQr: !!document.querySelector('img[src*="qr" i], canvas'),
+              hayInputCodigo: !!document.querySelector('input[inputmode="numeric"], input[maxlength="6"], input[autocomplete="one-time-code"]'),
+            }));
+            const capturaTrasClic = await mirar(page, 'paso-05e-mfa-tras-clic.png');
+            escapatoria = {
+              ofreceEnrolar: true,
+              boton: sondaMfa.botonActivar,
+              // Sin poder decodificar un QR real ni generar un TOTP válido, lo que SÍ se puede
+              // afirmar es si el producto entrega el material para enrolar (QR o secreto +
+              // campo de código). Si ninguno aparece tras el clic, el botón es decorativo.
+              entregaMaterialParaEnrolar: sondaTrasClic.hayQr || sondaTrasClic.hayInputCodigo,
+              captura: capturaTrasClic.captura,
+            };
+          } else {
+            escapatoria = { ofreceEnrolar: false, botones: sondaMfa.botones, captura: capturaMfa.captura };
+          }
+        }
         return {
           estado: 'roto',
-          detalle: `el onboarding NO quedó cerrado: ${motivo || 'el asistente dijo haber terminado'}, pero /dashboard sigue rebotando a ${prueba.destino}. Traza: ${traza.map((t) => t.pantalla).join(' → ')}`,
+          detalle: `el onboarding NO quedó cerrado: ${motivo || 'el asistente dijo haber terminado'}, pero /dashboard sigue rebotando a ${prueba.destino}. Traza: ${traza.map((t) => t.pantalla).join(' → ')}${escapatoria ? ` — MFA: ${escapatoria.ofreceEnrolar ? `ofrece "${escapatoria.boton}", ${escapatoria.entregaMaterialParaEnrolar ? 'SÍ entrega QR/código para enrolar' : 'NO entregó QR ni campo de código tras apretarlo — botón decorativo, camino sin salida'}` : `NO ofrece ningún botón para activar/enrolar (botones vistos: ${(escapatoria.botones || []).slice(0, 8).join(' | ') || 'ninguno'}) — callejón sin salida`}` : ''}`,
           traza, horariosCargados, profesionalCargado, agendas,
           capturaAsistente: despues.captura,
+          escapatoriaMfa: escapatoria,
           ...prueba,
         };
       }
