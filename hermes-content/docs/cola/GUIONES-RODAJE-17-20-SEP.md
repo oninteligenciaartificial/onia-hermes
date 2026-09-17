@@ -18,6 +18,10 @@
 25-35 s  CIERRE       UN recurso + comentario O comunidad (alternado)
 ```
 
+> 🔴 **Reparto de Sergio Urcullo (17-sep): la EDICIÓN se hace en OTRA sesión.** Este
+> carril entrega solo contenido: guiones, decks, estructuras y captions. La receta de
+> abajo queda como referencia para la sesión de edición, no como tarea de ésta.
+
 ## La receta de edición — método verificado en la sesión «edicion» de Codex (14-sep)
 
 Codex editó el reel **Fable 5.1 vs GPT-6 Astra** con este pipeline, y es el molde de
