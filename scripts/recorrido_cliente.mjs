@@ -1368,7 +1368,16 @@ const PASOS = [
               textoVisible: texto.slice(0, 400),
               hayQr: !!document.querySelector('img[src*="qr" i], canvas'),
               hayInputCodigo: !!document.querySelector('input[inputmode="numeric"], input[maxlength="6"], input[autocomplete="one-time-code"]'),
-              botonActivar: botones.find((b) => /activ|habilit|configur|verificar|enrol/i.test(b)) || null,
+              // El botón real (visto en captura 2026-09-17) dice "Activar" o "Activar ahora",
+              // pegado al texto "Verificación en dos pasos" / "verificación en dos pasos es
+              // obligatoria". Un regex ancho (que también matchee "Configuración") agarra el
+              // primer botón del sidebar y clickea el link equivocado — falso negativo ya
+              // medido: reportó "botón decorativo" cuando el real ni se tocó. Priorizar el
+              // texto exacto ANTES de caer a algo más ancho.
+              botonActivar:
+                botones.find((b) => /^activar( ahora)?$/i.test(b.trim())) ||
+                botones.find((b) => /\bhabilit\w*\s+(el\s+)?(2fa|verificaci[oó]n|autenticaci[oó]n)/i.test(b)) ||
+                null,
               botones,
             };
           });
