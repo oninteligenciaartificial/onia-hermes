@@ -25,6 +25,7 @@ FUENTES = [
     ("Spline Sans Mono", "SplineSansMono-var-latin.woff2", "100 700"),
 ]
 LOGO = "claude.png"
+ARTE = "arte-hook.jpg"
 
 INICIO = "<!-- ASSETS_INLINE -->"
 FIN = "<!-- /ASSETS_INLINE -->"
@@ -50,7 +51,8 @@ def main() -> None:
     logo = ("img[src='claude.png']{background:url(data:image/png;base64,%s) "
             "center/contain no-repeat;content:url(data:image/png;base64,%s)}" % (b64(LOGO), b64(LOGO)))
 
-    bloque = "%s\n<style>\n%s\n%s\n</style>\n%s" % (INICIO, caras, logo, FIN)
+    arte = ("img[src='arte-hook.jpg']{content:url(data:image/jpeg;base64,%s)}" % b64(ARTE))
+    bloque = "%s\n<style>\n%s\n%s\n%s\n</style>\n%s" % (INICIO, caras, logo, arte, FIN)
 
     if FIN in html:  # ya estaba incrustado: se reemplaza, no se acumula
         html = re.sub(re.escape(INICIO) + r".*?" + re.escape(FIN), lambda _: bloque, html, flags=re.S)
@@ -62,7 +64,7 @@ def main() -> None:
     # Un deck que "quedo bien" pero perdio un asset es justo el bug que esto viene a
     # arreglar. Se verifica que los cuatro esten adentro, no que el script no exploto.
     final = DECK.read_text(encoding="utf-8")
-    assert final.count("base64,") == len(FUENTES) + 2, "falta algun asset incrustado"
+    assert final.count("base64,") == len(FUENTES) + 3, "falta algun asset incrustado"
     print("deck.html autocontenido · %d KB" % (DECK.stat().st_size // 1024))
 
 
