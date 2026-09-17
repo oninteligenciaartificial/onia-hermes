@@ -318,6 +318,69 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~Contestarle a un lead de WhatsApp fuera de las 24 h se perdía EN SILENCIO: el dueño
+      veía su respuesta enviada y el prospecto no recibía nada~~ — CERRADO el 2026-09-17**
+      (`onia-platform` `76ebe12`, rama `claude/chatbots-platform-review-0d1d09`).
+      **⚠️ Commiteado y con gates verdes, NO desplegado:** falta el merge del integrador y el
+      swap; hasta entonces el defecto sigue vivo en producción.
+
+      **Qué pasaba.** `POST /api/bandeja/[id]` con `accion:"responder"` llamaba a
+      `sendAgentMessage` sin preguntar si la conversación admite texto libre. En el canal web
+      da igual. En WhatsApp no: pasadas las 24 h del último mensaje del prospecto, Meta cierra
+      la ventana de servicio y Chatwoot cambia solo de carril
+      (`should_send_template_message = template_params.present? || !conversation.can_reply?`,
+      línea 9 de `send_on_whatsapp_service.rb` en el fuente de Chatwoot 4.12.1 — código de
+      terceros, no de este repo; ya estaba leído y escrito en `chatwoot-adapter.mjs:454` del
+      bot). Como nadie le dice CUÁL plantilla, marca el mensaje `failed` con *"Template not
+      found or invalid template name"* (línea 27 del mismo archivo). **Y la
+      API contesta 200 igual**, así que la ruta devolvía `{ok:true}`, la pantalla limpiaba el
+      textarea y el dueño quedaba convencido de que contestó.
+
+      **Por qué no era teórico** — medido en producción el 2026-09-17 preguntándole a Chatwoot
+      por las **5 conversaciones de desconocidos** que hay hoy en la bandeja:
+
+      | conv | canal | espera | `can_reply` |
+      |---|---|---|---|
+      | 35 "F" | WhatsApp | 22,5 d | **false** |
+      | 37 "mariohassen" | WhatsApp | 20,3 d | **false** |
+      | 34 · 36 · 40 | web | 18-23 d | true |
+
+      Son **2 de los 5 únicos prospectos que tiene el negocio**, los dos esperando respuesta, y
+      los dos inalcanzables desde la única pantalla que el producto ofrece para contestarles.
+      El canal web no tiene ventana: a los 23 días sigue en `true`, o sea que el problema no es
+      "la conversación es vieja" sino el canal.
+
+      **Se PREGUNTA, no se calcula.** `can_reply` es el MISMO campo con el que Chatwoot decide;
+      contar 24 h por nuestra cuenta sería opinar donde ya hay un dato, y las dos cuentas se
+      separarían el día que Meta mueva la ventana.
+
+      **Lo que entró:** `lib/chatbot/ventana-de-respuesta.ts` (predicado puro, con las dos
+      causas de "no se puede" SEPARADAS — `ventana_cerrada` y `sin_dato`: aplanarlas en un
+      booleano le manda al dueño a buscar una ventana de 24 h que nunca existió) · la ruta
+      corta con **409 antes** de llamar a Chatwoot (409 y no 502 a propósito: *"probá de nuevo
+      en un momento"* invita a un reintento que no puede funcionar nunca) · la pantalla avisa
+      **antes** de que escriba, con el MISMO módulo, y el texto nombra la salida que sí
+      funciona (escribirle desde su propio WhatsApp) · sin el campo **no promete entrega**: la
+      dirección cara es prometer donde no hay, la barata es bloquear de más, que el dueño VE.
+
+      **Un comentario defendía el bug.** `InboxClient.tsx` decía *"por WhatsApp le puede
+      escribir después, por el widget sólo mientras la pestaña siga abierta"* — exactamente al
+      revés de lo medido. Así sobrevivió: el que lo leía daba el tema por resuelto. Corregido
+      con la medición pegada.
+
+      **Gates:** `tsc` 0, `eslint` 0, suite completa **4.972 verdes**, corridos también en el
+      VPS sobre el árbol publicado. **Validado por mutación en tres direcciones** (el módulo
+      deja pasar la ventana cerrada → 2 rojos; la ruta esquiva la guarda con `false &&` → 1
+      rojo; la pantalla deja de consultar el módulo → 1 rojo).
+      ⚠️ **Intento fallido que vale anotar:** la primera versión del gate de la guarda pasaba
+      **VERDE con el esquive puesto**, porque exigía que la ruta *nombrara* el predicado y que
+      la llamada estuviera antes del envío — `false && !respuesta.puede` cumple las dos cosas
+      con la guarda muerta. El sujeto de un gate de guarda no es la mención sino la GUARDA:
+      ahora ancla `if (!<var>.puede)` **y** el `return` dentro de la rebanada entre consultar y
+      enviar. Y el fixture de `route.test.ts` nació sin `can_reply` y se apoyaba en el default
+      —un fixture apoyado en el default defiende el defecto—: va explícito y con su caso
+      hermano de 409.
+
 - [x] 🔴 **~~El horario que el bot PROMETE en producción no lo mide nadie: se arregló en el repo
       y el documento que producción sirve siguió mintiendo~~ — CERRADO el 2026-09-17
       (`hermes-content/deploy/vps-ops/bot/horario-vivo.mjs`, `npm run horario:vivo`).**
