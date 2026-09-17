@@ -25,9 +25,10 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs'
-import { createHash } from 'node:crypto'
+import { spawnSync } from 'node:child_process'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { leerDeProduccion, VPS, SSH_ARGS, citarParaShell } from './lib/vps-o-local.mjs'
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const EJECUTOR = path.join(RAIZ, 'scripts/kanban/desplegar-en-segundo-plano.sh')
@@ -38,9 +39,17 @@ const SINCRONIZADOR = path.join(RAIZ, 'scripts/loops/sincronizar.sh')
 // exencion vencida no puede tapar al publicador siguiente.
 const EXCLUIDOS = []
 
-// El VPS es la unica maquina donde /opt/... puede existir. Se pregunta por un
-// archivo, nunca por hostname ni IP (un hostname se renombra, una IP se mueve).
-const EN_EL_VPS = existsSync('/usr/local/lib/hermes-agent/venv/bin/python')
+// ⚠️ Este gate se quedo MUDO al mudarse el carril de maquina, y por eso ahora
+// pregunta por SSH. El caso que compara produccion contra el repo —el UNICO que
+// mira /opt, o sea el unico que puede ver un desvio— se salteaba con "no es el
+// VPS", y desde el 2026-09-07 el integrador (que es quien corre esta cadena
+// antes de CADA merge) vive en nodo-casa: diez dias saltandose en cada merge,
+// con los otros cinco casos en verde cruzando textos del repo contra el repo.
+// Un gate vivo que cambia de maquina no falla: deja de medir, y el tri-estado
+// honesto se lee igual que "no hay desvio". `leerDeProduccion` pregunta al disco
+// local y, si no esta, al VPS por SSH — y devuelve `null` cuando NINGUNA de las
+// dos contesto, que es lo unico que distingue "no pude preguntar" de "no hay
+// desvio".
 
 /** Las rutas de produccion que el `ok <id>` de Sergio puede ejecutar. */
 export function destinosDeLaListaBlanca (textoEjecutor) {
@@ -73,7 +82,31 @@ export function publicadoresDelRepo (raiz = RAIZ) {
   return hallados.sort()
 }
 
-const md5 = (p) => createHash('md5').update(readFileSync(p)).digest('hex')
+/**
+ * ¿El archivo de produccion tiene el bit de ejecucion? TRI-ESTADO: `null` es "no
+ * pude preguntar", nunca `false`. Un `cp` sobre un archivo que ya existia NO pone
+ * el bit, asi que un publicador puede tener el contenido correcto y no poder
+ * ejecutarse — el `ok <id>` de Sergio Urcullo falla y el aviso dice "desplegado".
+ */
+export function esEjecutableEnProduccion (ruta, { local = statSync, remoto = preguntarPorSsh } = {}) {
+  if (existsSync(ruta)) {
+    try { return Boolean(local(ruta).mode & 0o111) } catch { return null }
+  }
+  return remoto(ruta)
+}
+
+function preguntarPorSsh (ruta) {
+  const r = spawnSync(
+    'ssh',
+    [...SSH_ARGS, VPS, `test -x ${citarParaShell(ruta)} && echo si || echo no`],
+    { encoding: 'utf8', timeout: 60_000 }
+  )
+  if (r.error || r.status !== 0) return null
+  const dijo = r.stdout.trim()
+  if (dijo === 'si') return true
+  if (dijo === 'no') return false
+  return null
+}
 
 const textoEjecutor = readFileSync(EJECUTOR, 'utf8')
 const textoSync = readFileSync(SINCRONIZADOR, 'utf8')
@@ -118,17 +151,37 @@ test('el caso que YA cumple: el publicador del bot esta cubierto', () => {
   assert.match(bot.origen, /vps-ops\/bot\/publicar\.sh$/)
 })
 
-test('en el VPS, lo que corre produccion es lo que dice el repo', { skip: !EN_EL_VPS && 'no es el VPS' }, () => {
+test('lo que corre produccion es lo que dice el repo', (t) => {
   const desviados = []
+  const noMedidos = []
   for (const destino of destinos) {
     const copia = copias.find((c) => c.destino === destino)
     if (!copia) continue // ya lo reporta el test de huerfanos; no dupliquemos el rojo
     const origen = copia.origen.replace(/^\$RAIZ\//, '').replace(/^\$FUENTE\//, 'scripts/loops/')
     const enRepo = path.join(RAIZ, origen)
     if (!existsSync(enRepo)) { desviados.push(`${destino}: el origen ${origen} no existe en el repo`); continue }
-    if (!existsSync(destino)) { desviados.push(`${destino}: NO existe en produccion (el \`ok\` no lo puede correr)`); continue }
-    if (md5(enRepo) !== md5(destino)) desviados.push(`${destino}: difiere del repo (${origen})`)
-    else if (!(statSync(destino).mode & 0o111)) desviados.push(`${destino}: no es ejecutable`)
+
+    const vivo = leerDeProduccion(destino)
+    if (vivo === null) {
+      // NI disco local NI SSH. No es "no hay desvio": es que no llegue a mirar.
+      noMedidos.push(`${destino}: no pude leerlo ni en disco local ni por SSH al VPS`)
+      continue
+    }
+    if (vivo.contenido !== readFileSync(enRepo, 'utf8')) {
+      desviados.push(`${destino}: difiere del repo (${origen}) [leido ${vivo.origen}]`)
+      continue
+    }
+    const ejecutable = esEjecutableEnProduccion(destino)
+    if (ejecutable === false) desviados.push(`${destino}: no es ejecutable`)
+    else if (ejecutable === null) noMedidos.push(`${destino}: no pude ver si es ejecutable`)
   }
+
+  // El rojo va PRIMERO: un desvio medido no se puede tapar con lo que no se midio.
   assert.deepEqual(desviados, [], `produccion no corre lo que dice main:\n  ${desviados.join('\n  ')}`)
+
+  // Y lo que no se pudo medir se DICE. Sin esto, una maquina sin SSH al VPS deja
+  // este caso en verde sin haber mirado produccion, que es como quedo mudo diez dias.
+  if (noMedidos.length > 0) {
+    t.skip(`NO MEDIDO (no es un verde):\n  ${noMedidos.join('\n  ')}`)
+  }
 })

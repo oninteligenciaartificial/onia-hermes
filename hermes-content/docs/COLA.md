@@ -77,6 +77,49 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [x] 🔴 **El único gate que mira si producción corre el publicador que dice `main` llevaba DIEZ
+      DÍAS salteándose en cada merge, porque el carril cambió de máquina. CERRADO el 2026-09-17
+      15:0x La Paz por `onia-cola`.**
+      **De dónde salió, y no de la cola:** la cola había quedado sin ítems abiertos, así que
+      escalón 2 — auditar. En vez de auditar un `[x]` releyéndolo, medí la cadena por un eje que
+      ningún gate mira: **cableado ≠ ejecutado**. Sobre el log de la corrida real de `npm test`
+      (`# tests` sumados: 2.482 de `node:test` + 1.201 de vitest, 0 fallos) aparecieron **2
+      salteados**, y los dos eran de la misma familia: `scripts/publicadores-desplegados.test.mjs`
+      y `hermes-content/deploy/postiz/healthcheck.test.mjs` se saltean con «no es el VPS».
+      **Por qué importa y no es cosmético:** ese caso es el ÚNICO de los seis de ese archivo que
+      mira `/opt`; los otros cinco cruzan textos del repo contra el repo. Lo que vigila es que el
+      `ok <id>` de Sergio Urcullo ejecute el publicador que está en `main` — y el costo es mudo en
+      las dos direcciones: un carril arregla el publicador, los gates dan verde, y el `ok` sigue
+      corriendo la copia vieja de `/opt`. Desde el **2026-09-07** el integrador —el único que corre
+      esta cadena antes de CADA merge— vive en `nodo-casa`, así que el caso venía saltándose en
+      todos los merges de estos diez días. **Un gate vivo que cambia de máquina no falla: deja de
+      medir, y su tri-estado honesto se lee igual que «no hay desvío».**
+      **Cura:** pregunta con `scripts/lib/vps-o-local.mjs` (disco local, y si no está, SSH al VPS),
+      que ya existía justo para esto y este archivo no usaba. Se agregó
+      `esEjecutableEnProduccion()` tri-estado, porque un `cp` sobre un archivo que ya existía **no
+      pone el bit de ejecución**: el publicador puede tener el contenido correcto y no poder
+      correrse. El rojo se afirma ANTES que el `skip`, para que un desvío medido no lo tape lo que
+      no se midió.
+      **Medido en producción antes de encenderlo** (un gate nuevo en la cadena traba el merge de
+      todos los carriles si nace rojo): los cuatro publicadores del `ok`
+      —`/opt/onia-landing`, `/opt/onia-platform`, `/opt/onia-siat` y `/opt/onia/bot`— tienen hoy el
+      mismo `md5` que `hermes-content/deploy/**/publicar.sh` y los cuatro son `-rwxr-xr-x`.
+      **Validado por mutación, las dos direcciones:** con una línea de más en
+      `hermes-content/deploy/onia-landing/publicar.sh` → `not ok … difiere del repo … [leido
+      remoto]`, `# fail 1` (y el `[leido remoto]` prueba que leyó producción, no el repo); con
+      `ONIA_VPS_SSH` apuntando a un host inalcanzable → `# SKIP NO MEDIDO` nombrando los cuatro,
+      exit 0, nunca un verde silencioso. Restaurado con `cp` (nunca `git checkout`): 6/6 y 0
+      salteados, 32 s.
+      **La cura no viaja sola al gemelo, así que se hizo en la MISMA vuelta:** los 2 salteados
+      eran dos, no uno. `hermes-content/deploy/postiz/healthcheck.test.mjs` tenía el mismo agujero
+      —preguntaba `existsSync` del disco local— y vigila que el healthcheck desplegado de Postiz
+      no se despegue de `healthcheck.js`, que es lo único que evita que el contenedor figure
+      «Up (healthy)» con el backend muerto. Misma cura, medido antes de encender (el override vivo
+      del VPS **sí** contiene el cuerpo) y validado por mutación en las dos direcciones: con un
+      `void 0;` de más en `healthcheck.js` → `not ok 8 … se despegó … (leído remoto)`, `# fail 1`;
+      con `ONIA_VPS_SSH` inalcanzable → `# SKIP NO MEDIDO`, exit 0. Ahora los dos archivos corren
+      **0 salteados** y la cadena entera queda sin un solo `# skipped` de los que mienten.
+
 - [x] 🔴 **El sitio llamaba «Pro» y «Full» a los planes que el checkout cobra como «Profesional»
       y «Completo»: el lead elegía un plan con un nombre y pagaba otro. CERRADO el 2026-09-17
       12:5x La Paz por `web-venta` (`cf19a28e`, rama `claude/web-venta`).**
@@ -111,8 +154,9 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       y no en este repo) **no la publica solo** (hoy contesta «landing: al día» sólo porque el
       commit está en la rama, no en `main`).
 
-- [ ] 🔴 **La cadena `npm test` —la que el integrador corre antes de CADA merge— es una lista de
-      69 scripts tipeados a mano, y por eso dejaba 951 pruebas verdes sin ejecutar.** Medido el
+- [x] 🔴 **La cadena `npm test` —la que el integrador corre antes de CADA merge— era una lista de
+      69 scripts tipeados a mano, y por eso dejaba 951 pruebas verdes sin ejecutar. CERRADO el
+      2026-09-17 14:5x La Paz por `onia-cola`.** Medido el
       2026-09-17 10:05 La Paz por `onia-cola` derivando el universo del DISCO (`readdirSync`, no
       `git ls-files`: el archivo nuevo sin commitear es justo el sujeto). `validate:onia-core`
       corre el validador del CONTRATO, no los tests del núcleo, y `test:siat-fase1` corría **un
@@ -122,12 +166,20 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       **Cerrado a medias en esta vuelta** (`package.json`: `test:onia-core-logica` y
       `test:siat-todo` entran a la cadena; las 951 corren verdes, así que cablearlas no traba a
       nadie). El instrumento quedó en `scripts/tests_fuera_de_la_cadena.mjs`.
-      **Lo que FALTA, y es el ítem:** ese instrumento es un alias suelto que no corre nadie, así
-      que la lista vuelve a fallar abierto con el próximo test nuevo. Hay que convertirlo en gate
-      de la cadena, validado por mutación, y decidir los **15** que siguen fuera
-      (`video-factory/test/` y `hermes-content/channels/ciencia-cuerpo/`): no se cablean a ciegas
-      —un rojo ahí traba el merge de TODOS los carriles—, se corren primero y recién entonces
-      entran o se excusan con motivo escrito.
+      **Cerrado del todo en `b5cb613d`:** el instrumento dejó de ser un alias suelto — vive como
+      gate de la cadena en `scripts/guards-cableados.test.mjs`, que lo **importa** en vez de
+      copiarlo (un gate con su propia copia de la expresión del producto puede tener la copia bien
+      y el producto mal, y coincidir para siempre) y entra por `test:guards-cableados`. Los **15**
+      que quedaban afuera se corrieron primero y después se cablearon: `test:video-factory` y
+      `test:ciencia-cuerpo`, los dos en la cadena y los dos verdes, así que no traban a nadie.
+      **Validado por mutación el 2026-09-17 14:52 La Paz**, que es lo único que prueba que el gate
+      todavía ve un sujeto NUEVO: se sembró un `.test.mjs` dentro de `hermes-content/docs/` —una
+      carpeta que ningún glob de la cadena toca—, el universo pasó de 144 a 145, el instrumento
+      salió `FUERA de la cadena: 1` con exit 1 nombrándolo, y el gate de la cadena fue a **`#
+      pass 6 # fail 1`** con el mensaje que nombra el archivo. El sujeto se llamaba
+      `hermes-content/docs/zz-mutacion-onia-cola.test.mjs` y **ya no existe**: se borró al
+      terminar, y con el árbol restaurado el instrumento volvió a 144 con exit 0 y el gate a
+      `# pass 7 # fail 0`.
       ⚠️ **Trampa ya pagada:** el instrumento leía `existsSync` de cada argumento, y un glob
       entrecomillado no existe como ruta — con eso reportaba el cableado recién hecho como
       ausente (59 "fuera" cuando eran 15). Todo barrido de "¿está cableado?" expande globs o

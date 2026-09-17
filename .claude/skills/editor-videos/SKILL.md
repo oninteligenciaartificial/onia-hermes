@@ -283,6 +283,31 @@ generado, y sale a 1080p contra 720p. El video generado se reserva para cuando e
 ES el punto (algo que gira, fluye o se arma) — y hay que pedir la imagen fuente YA en 9:16 o
 el modelo la deforma.
 
+## 🎬 Layout "tutorial vertical partido" (reel DdE7wYbxjPK, 2026-09-17)
+
+Segundo estilo catalogado (pedido de Sergio: "aprende esta manera de edicion"). Ficha completa
+con tabla medida y receta de 7 pasos:
+`hermes-content/references/video-intake/2026-09-17-reel-santiago-astra-davinci-estilo-edicion.md`.
+
+Lo esencial: **cabeza hablante ABAJO (~45%) anclada y fija; zona de apoyo ARRIBA (~55%) que
+rota cada 1-3 s** (screencast con zoom focal, b-roll relámpago ≤1,5 s por herramienta
+nombrada, ecuaciones de logos flotantes "X + Y = 💰", fotos con ken burns). Subtítulos blanco
+bold 2-5 palabras con keyword en AMARILLO, en la zona de la cabeza. Jump cuts cada ~2 s.
+CTA final = fondo desenfocado total + texto centrado con la keyword en amarillo.
+
+**La composición partida ya es pieza propia: `scripts/split-layout.mjs`** (probada 2026-09-17
+con material real de Sergio — deck en `contain`, zoom focal por `crop` del fuente, huecos =
+cabeza en blur oscuro). El karaoke le va encima con `karaoke-captions.mjs`
+**con `--style apple`** — decisión de Sergio 17-sep: activa VERDE de marca (el default) y
+"apple style, sin bordeado negro". El preset pone outline 0 y una capa de sombra difusa
+(`{\blur7}` en negro translúcido, un evento por frase en la capa de abajo) — NUNCA el
+Shadow duro de ASS, que se lee como texto fantasma. El amarillo `--active-color "#FFE600"`
+queda solo para imitar 1:1 el reel de referencia.
+Orden: cortar → split-layout → karaoke → SFX → master. Falta solo la ecuación de logos
+("X + Y = 💰") como pieza HyperFrames — se hace cuando un guion la pida.
+⚠ El crudo tiene que traer la CÁMARA como toma aparte full-frame (como `clip 1 video 2.mp4`);
+la burbujita de OBS incrustada en la esquina no da resolución para la zona de cabeza.
+
 ## Quick reference
 | Necesito | Herramienta | Costo |
 | --- | --- | --- |
