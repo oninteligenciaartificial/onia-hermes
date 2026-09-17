@@ -1779,3 +1779,26 @@ texto tipeado del sitio (no tiene fuente en `pricing.ts`) pero coincide con la c
 ratificada por Sergio Urcullo el 2026-08-23. Nada para reportar.
 
 `completo: false`, `llegoHasta: 4/9` (sin cambios, sigue bloqueado por el mismo deploy).
+
+## 2026-09-17 14:09-14:35 La Paz — BUILD_ID sin cambios, mismo bloqueo; escalón 3 en superficie nueva: `/guia-facturacion`
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, `BUILD_ID` sigue en `OFd4xCDzoTbQdThUbfzDv`, los tres
+pedidos de deploy vigentes (`t_4f4e4071` plataforma, `t_75f4fac3` landing, `t_234cfe6a` bot)
+siguen `blocked` esperando el `ok` de Sergio Urcullo (confirmado con `show` en los tres: sin
+comentarios nuevos de él, sólo simulacros en seco). No repetí el recorrido completo ni la sonda
+de MFA — método vigente, nada cambió ahí.
+
+Escalón 3 en una superficie que este carril nunca había mirado: `/facturacion` y
+`/guia-facturacion` (el lead magnet fiscal). `/facturacion` está sana — el título dice "1 de
+octubre de 2026" y el cuerpo explica correctamente "30 de septiembre = último día de transición,
+desde el 1 de octubre rige la modalidad nueva" (dato correcto con matiz, no contradicción).
+
+**Hallazgo en `/guia-facturacion`** (reportado, `t_c53fe39c`, prioridad 2): el `Kicker` de la
+pantalla dice "Plazo · 30-09-2026", tipeado a mano en `page.tsx:125` — el ÚNICO texto de plazo
+en las dos páginas fiscales que no sale de `lib/siat.ts`, pese a que el comentario del propio
+archivo garantiza que todo el contenido sale de esa fuente única. Dos líneas abajo, el texto que
+SÍ viene de la fuente dice "cómo saber si te toca el 1 de octubre". Mismo dato, misma pantalla,
+dos fechas. Captura: `capturas/hallazgo-plazo-guia-facturacion.png`. No lo arreglo — no es mi
+zona (código del sitio, carril web-venta).
+
+`completo: false`, `llegoHasta: 4/9` (sin cambios, sigue bloqueado por el mismo deploy).
