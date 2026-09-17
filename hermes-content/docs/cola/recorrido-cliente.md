@@ -6,6 +6,20 @@ Instrumento: `scripts/recorrido_cliente.mjs`.
 > Antes de trabajar un ítem de acá, **reproducilo en vivo**. Medido en este repo: entre el 25 %
 > y el 46 % de lo que las colas declaraban pendiente ya no existía.
 
+## Reportado a otro carril (nuevo)
+
+- **`/guia-facturacion`: el badge "Plazo · 30-09-2026" contradice a su propia bajada** —
+  reportado el 2026-09-17 14:26 La Paz (`t_c53fe39c`, prioridad 2, para el dueño del sitio).
+  Escalón 3 (promesa vs. entrega), superficie nueva no auditada antes por este carril. El
+  `Kicker` de esa página (`src/app/(sitio)/guia-facturacion/page.tsx:125`) es un string tipeado
+  a mano — el único texto de plazo en `/facturacion` y `/guia-facturacion` que NO sale de
+  `lib/siat.ts`, pese a que el comentario de ese mismo archivo asegura que "el texto sale
+  entero de `lib/siat.ts`... si el SIN mueve la fecha se corrige ese archivo y las dos páginas
+  se enteran solas". Dos líneas más abajo, `SIAT_GUIA_BAJADA` (que sí sale de la fuente) dice
+  "cómo saber si te toca el **1 de octubre**" — el mismo dato, en la misma pantalla, con dos
+  fechas distintas como si fueran la misma cosa. Captura:
+  `../recorrido/capturas/hallazgo-plazo-guia-facturacion.png`.
+
 ## Abierto
 
 > Los cinco rubros que `RUBROS_ACTIVOS` ofrece hoy (`onia-platform/lib/platform/rubros-activos.ts`)
