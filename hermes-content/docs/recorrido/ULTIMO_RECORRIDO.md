@@ -12,28 +12,24 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
-## 2026-09-17 08:12 UTC (04:12 La Paz) — ROTO: el 2FA obligatorio bloquea a TODO cliente nuevo desde hoy
+## 2026-09-17 09:09 La Paz — SIGUE ROTO: el 2FA obligatorio bloquea a TODO cliente nuevo, fix escrito pero sin mergear
 
-Al arrancar encontré una org `zz-qa-2026-09-13-1710-negocio` huérfana de una corrida anterior
-que había muerto a mitad de camino (perfiles, entitlements, sin patients/appointments). La
-borré antes de empezar (organization_entitlements → profiles → organizations → auth.users, por
-id exacto).
+Al arrancar: `select count(*) from organizations where name like 'zz-qa-%'` dio 0, sin huérfanos.
 
-Dental (`zz-qa-2026-09-17-0809`): recorrido llegó hasta el paso 4/9. El onboarding se completa
-y muestra "ya está en Onia" (`capturas/paso-05b-onboarding-listo.png`), pero **toda ruta
-protegida (`/dashboard`, `/patients`, `/billing`) rebota a `/profile`** con el banner "La
-verificación en dos pasos es obligatoria para tu rol. Activala para seguir usando el sistema."
-(`capturas/paso-05c-gate-levantado.png`). Causa: `onia-platform/lib/mfa/policy.ts` fija
-`MFA_ENFORCE_FROM = "2026-09-17T04:00:00.000Z"` como fecha ABSOLUTA (escrita el 03-sep como
-"hoy + 14 días" de gracia para los ADMIN que YA existían), y hoy es esa fecha — así que una
-cuenta creada HOY, con cero gracia real, también cae bloqueada. **Cualquier cliente que se
-registre desde hoy no puede usar el sistema**, ni cargar un paciente, ni ver la agenda, ni
-llegar a cobro, hasta configurar un authenticator app.
+Dental (`zz-qa-2026-09-17-0909`): mismo corte que la vuelta de las 08:12 UTC — el onboarding se
+completa y muestra "ya está en Onia", pero **toda ruta protegida (`/dashboard`, `/patients`,
+`/billing`) rebota a `/profile`** con el banner "La verificación en dos pasos es obligatoria
+para tu rol". Causa ya diagnosticada: `onia-platform/lib/mfa/policy.ts`,
+`MFA_ENFORCE_FROM` como fecha ABSOLUTA sin gracia relativa al alta.
 
-Reportado: tarea `t_82251f19` (prioridad 1) e ítem en
-`hermes-content/docs/cola/plataforma-v1.md`, con la reproducción y las dos capturas — el código
-es de `onia-platform`, no de este carril. `completo: false`, `llegoHasta: 4/9`, 0 filas `zz-qa-`
-al cerrar (verificado antes y después).
+**El fix YA está escrito** (commit `b1247fb`, rama `origin/claude/chatbots-platform-review-0d1d09`
+de `onia-platform`, gates verdes) **pero sigue sin mergear a `master`**: verificado con
+`git merge-base --is-ancestor b1247fb origin/master` → NO, sobre `origin/master@4ccae18e`
+(13-sep). Comenté la reconfirmación en la tarea ya abierta `t_82251f19` (no abrí una nueva —
+archivé mi duplicado `t_df6fba50`). El bloqueo real hoy es el merge + deploy de `onia-platform`,
+no el diagnóstico.
+
+`completo: false`, `llegoHasta: 4/9`, 0 filas `zz-qa-` al cerrar (verificado antes y después).
 
 ---
 
