@@ -44,6 +44,13 @@ pnpm design:auto <slug> -t <template>
 pnpm generate <slug> --template <template>
 #    → out/<slug>/index.html + site.css
 
+# 0) Pedido del CONFIGURADOR de onia.com.bo/servicios/webs (el mensaje de WhatsApp, pegado
+#    tal cual en un .txt) → intake → perfil → receta → out/, en UN comando (2026-09-17):
+pnpm from-configurador <mensaje.txt> --build [--force] [--slug x]
+#    Parsea NUESTRO formato (etiqueta: valor). Lo que el mensaje no trae (fotos, logo,
+#    dominio, una frase por servicio) sale como «pendientes que se le piden al cliente».
+#    No inventa: la bajada y las descripciones son hechos (oferta, rubro, ciudad).
+
 # Todo lo anterior de una pasada (acepta intake o slug ya existente):
 pnpm factory:build <slug> -t <template> [--force]
 pnpm factory:build --input data/intakes/<archivo>.intake.json [--force]

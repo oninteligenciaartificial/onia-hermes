@@ -1,0 +1,109 @@
+{
+  "nombre": "Clínica Amanecer",
+  "slug": "clinica-amanecer",
+  "tagline": "Tu sonrisa, atendida con calma y sin esperas",
+  "descripcion": "Tu sonrisa, atendida con calma y sin esperas. Clínica dental en Santa Cruz.",
+  "logo": "CA",
+  "logoIcon": "",
+  "logoWide": "",
+  "heroVideo": "",
+  "heroPoster": "",
+  "imagenSecundaria": "",
+  "colores": {
+    "primary": "#1769AA",
+    "secondary": "#102A43",
+    "accent": "#1769AA",
+    "bg": "#EEF4FA",
+    "fg": "#102A43"
+  },
+  "tipografia": {
+    "heading": "Archivo",
+    "body": "Inter"
+  },
+  "contacto": {
+    "email": "",
+    "tel": "+591 70000000",
+    "whatsapp": "+591 70000000",
+    "direccion": "Santa Cruz, Bolivia"
+  },
+  "redes": {
+    "ig": "",
+    "fb": "",
+    "linkedin": "",
+    "x": ""
+  },
+  "servicios": [
+    {
+      "titulo": "Limpieza y prevención",
+      "desc": "Limpieza y prevención en Clínica Amanecer.",
+      "icono": "sparkles",
+      "url": ""
+    },
+    {
+      "titulo": "Ortodoncia",
+      "desc": "Ortodoncia en Clínica Amanecer.",
+      "icono": "sparkles",
+      "url": ""
+    },
+    {
+      "titulo": "Implantes",
+      "desc": "Implantes en Clínica Amanecer.",
+      "icono": "sparkles",
+      "url": ""
+    }
+  ],
+  "statement": "",
+  "statementAccent": "",
+  "statementPantalla": false,
+  "statementFondo": "base",
+  "statementCta": {
+    "texto": "",
+    "url": ""
+  },
+  "footerLegal": "",
+  "newsletter": {
+    "titulo": "",
+    "texto": "",
+    "accion": "",
+    "boton": "Suscribirme",
+    "nota": ""
+  },
+  "metricas": [],
+  "cotizacion": {
+    "titulo": "",
+    "texto": "",
+    "accion": "",
+    "boton": "Pedir cotizacion",
+    "nota": "",
+    "campos": []
+  },
+  "categorias": [],
+  "productos": [],
+  "beneficios": [],
+  "credenciales": [],
+  "proceso": [],
+  "faq": [],
+  "referencias": [],
+  "cta": {
+    "texto": "Reservar un turno",
+    "url": "https://wa.me/59170000000"
+  },
+  "seo": {
+    "title": "Clínica Amanecer — Clínica dental",
+    "description": "Tu sonrisa, atendida con calma y sin esperas",
+    "ogImage": ""
+  },
+  "dashboard": {
+    "title": "Panel de control",
+    "subtitle": "",
+    "nav": [],
+    "filters": [],
+    "kpis": [],
+    "charts": [],
+    "table": {
+      "title": "Detalle",
+      "columns": [],
+      "rows": []
+    }
+  }
+}
