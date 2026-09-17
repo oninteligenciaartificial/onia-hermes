@@ -1,0 +1,6 @@
+{ "zooms": [
+  { "start": 275.72, "end": 355.0,  "from": 1.36, "to": 1.40, "anchor": "top-left" },
+  { "start": 355.01, "end": 365.5,  "from": 1.40, "to": 1.0,  "anchor": "top-left" },
+  { "start": 381.3,  "end": 391.0,  "from": 1.0,  "to": 1.38, "anchor": "top-left" },
+  { "start": 391.01, "end": 405.16, "from": 1.38, "to": 1.38, "anchor": "top-left" }
+] }

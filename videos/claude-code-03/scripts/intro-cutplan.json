@@ -1,0 +1,156 @@
+{
+ "video": "E:/ONIA-YouTube/grabaciones/ONIA-YT-2026-09-17-16-15-14.mp4",
+ "modo": "audio",
+ "noise": "-32dB",
+ "minSil": 0.45,
+ "pad": 0.08,
+ "origDur": 50.4,
+ "finalDur": 42.35,
+ "silences": [
+  {
+   "start": 0,
+   "end": 2.280167
+  },
+  {
+   "start": 9.059729,
+   "end": 9.565583
+  },
+  {
+   "start": 13.835812,
+   "end": 14.357563
+  },
+  {
+   "start": 27.207333,
+   "end": 28.470583
+  },
+  {
+   "start": 31.242521,
+   "end": 31.836958
+  },
+  {
+   "start": 32.713875,
+   "end": 33.333667
+  },
+  {
+   "start": 36.474312,
+   "end": 37.431
+  },
+  {
+   "start": 39.8115,
+   "end": 40.388125
+  },
+  {
+   "start": 48.404083,
+   "end": 50.346667
+  }
+ ],
+ "keep": [
+  {
+   "start": 2.2,
+   "end": 9.14
+  },
+  {
+   "start": 9.49,
+   "end": 13.92
+  },
+  {
+   "start": 14.28,
+   "end": 26.3
+  },
+  {
+   "start": 40.31,
+   "end": 48.48
+  }
+ ],
+ "ffmpeg": "ffmpeg -y -i \"E:/ONIA-YouTube/grabaciones/ONIA-YT-2026-09-17-16-15-14.mp4\" -vf \"select='between(t,2.2,9.14)+between(t,9.49,13.92)+between(t,14.28,27.29)+between(t,28.39,31.32)+between(t,31.76,32.79)+between(t,33.25,36.55)+between(t,37.35,39.89)+between(t,40.31,48.48)',setpts=N/FRAME_RATE/TB\" -af \"aselect='between(t,2.2,9.14)+between(t,9.49,13.92)+between(t,14.28,27.29)+between(t,28.39,31.32)+between(t,31.76,32.79)+between(t,33.25,36.55)+between(t,37.35,39.89)+between(t,40.31,48.48)',asetpts=N/SR/TB\" \"renders/cut.mp4\"",
+ "rows": [
+  {
+   "i": 0,
+   "start": 1.98,
+   "end": 6.22,
+   "text": "Hola, mi nombre es Sergio, tengo 16 años y toda mi empresa de Inteligencia Artificial",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 1,
+   "start": 6.22,
+   "end": 10.1,
+   "text": "corre con estas cuatro funciones que el día de hoy te voy a mostrar. Son funciones que",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 2,
+   "start": 10.1,
+   "end": 14.68,
+   "text": "nos ayuda a hacer que nuestro Cloud trabaje sin autorización nuestra. Bueno, que mejor",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 3,
+   "start": 14.68,
+   "end": 19.36,
+   "text": "que funcione sin que nosotros tengamos que estar encima de él y nos ayude a desarrollar",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 4,
+   "start": 19.36,
+   "end": 23.44,
+   "text": "en tiempos muertos. Por ejemplo, cuando estamos durmiendo, cuando estamos al gimnasio",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 5,
+   "start": 23.44,
+   "end": 29.38,
+   "text": "o cuando no estamos pendientes de la computadora. Así hacemos que, así podemos hacer",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 6,
+   "start": 29.38,
+   "end": 34.24,
+   "text": "que nuestro Cloud funcione sin que estemos dentro de la... Así hacemos que nuestro Cloud",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 7,
+   "start": 34.24,
+   "end": 39.42,
+   "text": "funcione sin que estemos en la habitación, así podemos hacer que nuestro Cloud funcione",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 8,
+   "start": 39.42,
+   "end": 43.64,
+   "text": "sin que... Así podemos hacer que nuestro Cloud funcione sin que estemos en nuestra oficina",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 9,
+   "start": 43.64,
+   "end": 47.52,
+   "text": "y estemos afuera y funcione por él mismo. Así que, vamos a la pantalla y te enseño",
+   "keep": true,
+   "reason": "contenido"
+  },
+  {
+   "i": 10,
+   "start": 47.52,
+   "end": 48.06,
+   "text": "cómo funciona.",
+   "keep": true,
+   "reason": "contenido"
+  }
+ ]
+}

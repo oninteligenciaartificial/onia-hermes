@@ -1,0 +1,15 @@
+<!doctype html>
+<meta charset="utf-8"><title>handle</title>
+<!-- Solo el handle. La tapa de las notas se hace estirando una fila del propio deck
+     (asi respeta las bandas negras de los lados); esto repone lo unico que esa tapa
+     se lleva por delante. Se compone SOLO donde el deck esta a pantalla completa:
+     en ventana el handle cae en otra posicion y aca quedaria descolocado. -->
+<style>
+@font-face{font-family:'Spline Sans Mono';src:url('fonts/SplineSansMono-var-latin.woff2')format('woff2');font-weight:300 700;font-display:block}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;background:transparent;overflow:hidden}
+.handle{position:absolute;left:112px;bottom:75px;
+        font-family:'Spline Sans Mono',monospace;font-size:20px;font-weight:500;
+        letter-spacing:.1em;color:#6E6E73;line-height:1}
+</style>
+<div class="handle">@sergiourcullo</div>
