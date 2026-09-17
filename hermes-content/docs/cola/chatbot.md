@@ -318,6 +318,54 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El generador de horarios de demo decidía renovar con una regla MÁS FLOJA que la que
+      el bot usa para ofrecerlos: en esa banda decía «VIGENTES, no toco nada» mientras el bot le
+      contestaba a todo prospecto «justo ahora no tengo horarios libres»~~ — CERRADO el 2026-09-17**
+      (`hermes-content/deploy/vps-ops/bot/slots-rodantes.mjs`, `node --test slots-rodantes.test.mjs`
+      7/7).
+
+      **Dónde estaba.** `slots-rodantes.mjs` (cron `41 11 * * *` → `/opt/onia/bot/slots-run.sh`)
+      preguntaba `t > ahora` — *"son futuros"*. El motor decide OFRECER con
+      `t >= ahora + ANTICIPACION_MINIMA_MS` (`config.mjs`, las 24 h que pidió Sergio Urcullo el
+      2026-09-02). **La banda de 24 h entre las dos reglas es el agujero**: ahí el generador
+      escribe en su log «VIGENTES: los horarios puestos todavía son futuros, no toco nada» y
+      `parseSlotsSpec` marca los dos horarios `pending` → `M0_SIN_HORARIOS`. Es *exactamente* el
+      fallo que este archivo se escribió para evitar el 2026-09-08 (lo dice su propia cabecera:
+      *«el día 11 el bot volvía a decirle a TODO prospecto, en el primer mensaje, "justo ahora no
+      tengo horarios libres"»*). **Un generador que se declara innecesario justo el día que hace
+      falta no falla ruidoso: falla en su propio log, diciendo que todo está bien.**
+
+      **La mitad hermana, misma causa:** `proximosSlots` generaba «a partir de mañana»
+      (`inicioUtc > ahora`), o sea que cuando SÍ renovaba escribía horarios que el bot tampoco
+      iba a ofrecer. Generar lo que el consumidor descarta es peor que no generar: el log dice
+      que se renovó y el prospecto lee que no hay horarios.
+
+      **Por qué no saltó hasta hoy, y por qué no es un fantasma.** Hay **DOS generadores vivos**
+      escribiendo el mismo `ONIA_BOT_SLOTS`, 78 min aparte: `renovar-slots-bot.py` (`23 10 * * *`,
+      con las ventanas reales de Sergio Urcullo y su margen de 48 h) y éste (`41 11 * * *`). El
+      Python corre PRIMERO y deja los horarios frescos, así que éste encuentra todo futuro y se
+      abstiene — medido hoy en `/var/log/onia-bot-slots.log`: seis días seguidos de «VIGENTES».
+      Sólo actúa el día que el Python falla, que es el único día en que importa.
+
+      **Cura:** las dos mitades preguntan con la constante del motor, importada de `config.mjs`
+      (no reimplementada: tenerla por duplicado es como nació esto). `proximosSlots` arranca en
+      `ahora + ANTICIPACION + VIGENCIA_MS` — misma doctrina que el generador de Python, porque el
+      valor se sirve 24 h sin recalcularse y el margen se gasta solo mientras está publicado: se
+      garantiza el PEOR momento de la ventana, no el mejor.
+
+      **Medido con el spec vivo** (`sábado 19, 09:00 | lunes 21, 14:00`): sigue vigente, no hay
+      renovación espuria ni reinicio del bot. Y el caso que costaba plata —el otro generador
+      caído, a 3 h del primer horario— pasó de `VIGENTES` a `RENUEVA`, escribiendo
+      `lunes 21 14:00 | martes 22 14:00`.
+
+      **Validado por mutación, una por vez** (`cp`, nunca `git checkout`): volver a `t > ahora`
+      pone rojo sólo el caso de `siguenVigentes`; volver a `inicioUtc <= ahora` pone rojo sólo el
+      caso del cruce. Los dos casos cruzan contra `parseSlotsSpec`, **la función real del motor**
+      — reimplementar el corte en el test sería compararlo consigo mismo.
+
+      ⚠️ **Commiteado en la rama del carril, NO desplegado.** `/opt/onia/bot` no es un checkout:
+      el cron sigue corriendo la copia vieja hasta que se publique el bot.
+
 - [x] 🔴 **~~La lista de puertas del alta era de INCLUSIÓN: la tercera iba a entrar absuelta, igual
       que la segunda~~ — CERRADO el 2026-09-17** (`hermes-content/deploy/vps-ops/bot/puerta-del-alta.mjs`,
       `npm run puerta:alta`).

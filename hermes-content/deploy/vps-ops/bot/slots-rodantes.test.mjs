@@ -8,6 +8,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 
 import { proximosSlots, comoSpec, siguenVigentes } from "./slots-rodantes.mjs";
+import { ANTICIPACION_MINIMA_MS, parseSlotsSpec } from "./config.mjs";
 
 /** El dia real, calculado aparte del codigo que se prueba. */
 const DIA_REAL = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
@@ -45,4 +46,44 @@ test("siguenVigentes: futuro si, pasado no", () => {
   assert.equal(siguenVigentes(spec, new Date("2026-09-08T12:00:00Z")), true);
   assert.equal(siguenVigentes(spec, new Date("2026-09-11T12:00:00Z")), false);
   assert.equal(siguenVigentes("", new Date()), false);
+});
+
+// ---------------------------------------------------------------------------
+// «Vigente» lo decide el MOTOR, no el reloj
+// ---------------------------------------------------------------------------
+// Este script existe (cabecera, 2026-09-08) para que el bot no le diga a TODO
+// prospecto «justo ahora no tengo horarios libres». Decidia renovar con
+// `t > ahora` —"son futuros"— mientras el motor decide OFRECER con
+// `t >= ahora + ANTICIPACION_MINIMA_MS` (config.mjs, las 24 h que pidio Sergio
+// Urcullo el 2026-09-02). En esa banda de 24 h el generador escribe «VIGENTES,
+// no toco nada» en su log y el bot exhibe la carencia: el unico dia que este
+// script hace falta es el dia que se declara innecesario.
+//
+// Los dos casos de abajo cruzan contra la funcion REAL del motor a proposito.
+// Reimplementar el corte aca seria compararlo consigo mismo.
+
+test("siguenVigentes exige la anticipacion del MOTOR, no solo que sean futuros", () => {
+  const spec = "jueves 17 de septiembre, 14:00@2026-09-17T18:00:00Z";
+  // 30 h antes: el motor lo ofrece, no hay nada que renovar.
+  assert.equal(siguenVigentes(spec, new Date("2026-09-16T12:00:00Z")), true);
+  // 3 h antes: sigue siendo futuro, pero el motor ya NO lo ofrece.
+  assert.equal(siguenVigentes(spec, new Date("2026-09-17T15:00:00Z")), false);
+});
+
+test("lo que genera, el motor lo puede OFRECER durante toda su vigencia", () => {
+  // Un miercoles a la manana, un viernes a la noche y un sabado: dias con forma
+  // distinta (fin de semana en el medio, y el caso en que en La Paz todavia es
+  // ayer respecto de UTC).
+  for (const desde of ["2026-09-16T13:00:00Z", "2026-09-18T23:00:00Z", "2026-09-19T13:00:00Z"]) {
+    const ahora = new Date(desde);
+    const spec = comoSpec(proximosSlots(ahora));
+    // Al escribirlo, y tambien al final de las 24 h que se sirve sin recalcular:
+    // el margen tiene que alcanzar hasta el ULTIMO prospecto que lo lea.
+    for (const alLeer of [ahora, new Date(ahora.getTime() + ANTICIPACION_MINIMA_MS)]) {
+      for (const slot of parseSlotsSpec(spec, { now: alLeer }) || []) {
+        assert.equal(slot.pending, false, `${slot.label} (generado ${desde}, leido ${alLeer.toISOString()})`);
+      }
+    }
+    assert.equal(siguenVigentes(spec, ahora), true, `recien generado y ya pide renovacion: ${spec}`);
+  }
 });
