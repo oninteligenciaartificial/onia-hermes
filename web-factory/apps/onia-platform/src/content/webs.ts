@@ -24,6 +24,15 @@
  * checkout por WhatsApp/email de la tienda. Lo que no está construido está en
  * "no incluye": panel de edición, sitio en dos idiomas, blog y pasarela.
  *
+ * DECISIÓN 2026-09-17 (Sergio Urcullo): los planes básicos SÍ tienen precio
+ * publicado —Landing 2.000 y Web Profesional 4.500, lo que el configurador
+ * arma solo—; lo que no se puede armar ahí (Web Pro a medida, tienda) se
+ * cierra en una llamada. Fuente: ONIA_WEB_COMO_SE_VENDE.md §8.
+ * Mismo día: ecommerce SOBRE PLATAFORMA (Shopify, Hotmart, Whop) entra como
+ * quinto alcance, sin precio publicado — «los precios dependen del frontend
+ * y del backend necesario» — para que el que vende online nos lo compre en
+ * vez de armarlo él.
+ *
  * PRECIOS RATIFICADOS 2026-08-23 por Sergio: 2.000 / 4.500 / desde 7.500.
  * Antes decían 790/1.500/2.900, que era una **oferta de arranque vencida el
  * 31-jul-2026** y que nadie estaba cobrando: las propuestas reales (AW
@@ -33,7 +42,7 @@
  * Fuente y tabla comparativa: hermes-content/docs/ONIA_WEB_COMO_SE_VENDE.md §8.
  */
 
-export type WebStackId = "landing" | "profesional" | "pro" | "tienda";
+export type WebStackId = "landing" | "profesional" | "pro" | "tienda" | "ecommerce";
 
 export interface WebStack {
   readonly id: WebStackId;
@@ -157,7 +166,9 @@ export const WEB_STACKS: readonly WebStack[] = [
   {
     id: "pro",
     nombre: "Web Pro Onia",
-    precio: 7500,
+    // Sin lista desde el 2026-09-17: dirección de arte propia no se arma en
+    // el configurador, se cierra en una llamada. Referencia interna: desde 7.500.
+    precio: null,
     paraQuien:
       "El que compite por imagen y no puede parecerse a nadie, o el que va a invertir en pauta y quiere seguirle el rastro a los contactos.",
     resuelve:
@@ -210,11 +221,37 @@ export const WEB_STACKS: readonly WebStack[] = [
     ],
     mensual: cuidadoWeb("Crecimiento", "Pro"),
   },
+  {
+    id: "ecommerce",
+    nombre: "Ecommerce sobre Shopify, Hotmart o Whop",
+    precio: null,
+    paraQuien:
+      "El que vende online —productos físicos, cursos o membresías— y no quiere armarlo ni sostenerlo él mismo.",
+    resuelve:
+      "Una tienda que cobra, entrega y escala sobre la plataforma que ya lo hace bien, con un frontend que es tuyo y no la plantilla de la plataforma.",
+    incluye: [
+      "Frontend a medida, con tu marca, conectado a Shopify, Hotmart o Whop",
+      "Catálogo, carrito y checkout que resuelve la plataforma: tarjeta, suscripciones y entrega digital",
+      "Página de producto, colecciones y landing de campaña",
+      "Configuración inicial de la tienda: productos, pagos y envíos",
+    ],
+    noIncluye: [
+      "El plan y las comisiones de la plataforma: van a tu nombre y los pagás vos",
+      "Fotografía de producto y redacción de fichas (se cotizan aparte)",
+      "Migración de un catálogo grande (se cotiza aparte)",
+    ],
+    necesitasVos: [
+      "Una cuenta en la plataforma a tu nombre (te guiamos para abrirla)",
+      "Tu lista de productos, cursos o planes, con precio",
+      "Tus políticas de envío, devolución y acceso",
+    ],
+    mensual: cuidadoWeb("Crecimiento", "Pro"),
+  },
 ] as const;
 
 export function precioWeb(stack: WebStack): string {
   return stack.precio === null
-    ? "Se cotiza con tu catálogo"
+    ? "Lo vemos en una llamada"
     : `Bs ${stack.precio.toLocaleString("es-BO")} · pago único`;
 }
 
@@ -240,3 +277,25 @@ export function precioWebDesde(): number {
 
   return Math.min(...conPrecio);
 }
+
+export interface WebAddon {
+  readonly id: "crm-formulario";
+  readonly nombre: string;
+  /** Bs, setup único. */
+  readonly precio: number;
+  readonly descripcion: string;
+}
+
+/**
+ * Extras del configurador (/servicios/webs). Un solo add-on hoy: registrar
+ * cada formulario en un flujo de seguimiento. Tarifa de
+ * hermes-content/propuestas/ONIA_CATALOGO_PRECIOS_2026.md §4.
+ */
+export const WEB_ADDONS: readonly WebAddon[] = [
+  {
+    id: "crm-formulario",
+    nombre: "Registro de contactos en CRM / n8n",
+    precio: 790,
+    descripcion: "Guarda cada formulario en un flujo de seguimiento. Setup único.",
+  },
+] as const;

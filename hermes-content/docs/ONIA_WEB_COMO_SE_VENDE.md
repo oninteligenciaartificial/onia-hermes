@@ -279,7 +279,30 @@ va a oler a agencia.
 
 ## 8. Decisiones que dependen de Sergio (nada de esto se decide solo)
 
-> ## ✅ DECIDIDO 2026-08-24 — la línea de webs NO tiene lista de precios
+> ## ✅ DECIDIDO 2026-09-17 — planes básicos CON precio; lo demás, en una llamada
+>
+> Sergio Urcullo, 17-sep, textual: *"podemos hacer planes básicos que sí tengan precio, pero
+> luego si quieren cosas que no puedan armar ahí para tener algo visual que les guste,
+> hacemos llamada y los ayudamos"*.
+>
+> **Qué cambia respecto del 24-ago (abajo):** vuelve a haber lista, pero SOLO para lo que el
+> configurador de `/servicios/webs` arma solo: **Landing de Captación Bs 2.000** y **Web
+> Profesional Bs 4.500** (los montos ratificados el 23-ago, que producción ya publicaba).
+> **Web Pro (a medida) y Tienda no tienen precio publicado**: el configurador dice «Lo vemos
+> en una llamada» y el pedido por WhatsApp pide esa llamada. La referencia interna para
+> cotizarlas sigue siendo la tabla de §8.2 (desde 7.500 / según catálogo).
+>
+> **Mismo día, quinto alcance: ecommerce SOBRE plataforma (Shopify, Hotmart, Whop).** Sergio
+> Urcullo: *"los precios dependen del frontend y el backend necesario, para que los ecommerces
+> nos la compren y no la desarrollen ellos mismos"*. Sin precio publicado → llamada. Lo que se
+> vende es el frontend con marca propia + la configuración; el cobro, la entrega y las
+> comisiones son de la plataforma y van a nombre del cliente.
+>
+> **Fuente única de esos dos montos: `web-factory/apps/onia-platform/src/content/webs.ts`**
+> (`WEB_STACKS`). La web personal de Sergio Urcullo NO tiene catálogo propio (se eliminó el
+> mismo día: «esa UI habíamos quedado que no»): `/webs` redirige al configurador de Onia.
+>
+> ## ✅ DECIDIDO 2026-08-24 — la línea de webs NO tiene lista de precios *(vigente para Pro y Tienda)*
 >
 > **Cada web se cotiza caso por caso.** No hay ni va a haber un archivo que defina
 > `790/1.500/2.900` ni `2.000/4.500/7.500` como lista vigente. Eso resuelve §8.1 y §8.2 de

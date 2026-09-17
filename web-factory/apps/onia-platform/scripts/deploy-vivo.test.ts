@@ -1,6 +1,7 @@
 import { spawnSync } from "node:child_process";
-import { readFileSync } from "node:fs";
-import { dirname } from "node:path";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
@@ -15,6 +16,7 @@ import {
   STAGED_PREFIX,
   STAGED_VIEJO,
   ZONA,
+  baseDelBuild,
   commitsDesde,
   diagnosticar,
   evaluarStaged,
@@ -65,12 +67,16 @@ describe("deploy-vivo: el diagnóstico", () => {
     expect(r.varados[0].subject).toContain("CTA");
   });
 
-  it("da VERDE cuando el build vivo es posterior a todo commit de la zona", () => {
-    const r = diagnosticar({
-      buildIdMtimeMs: ms(3_000),
-      commits: [commit(seg(1_000)), commit(seg(2_000))],
-      homeStatus: 200,
-    });
+  /**
+   * ⚠️ Este caso le pasaba dos commits ANTERIORES al build y exigía verde,
+   * porque `diagnosticar` los filtraba por fecha. Ese corte se mudó a
+   * `baseDelBuild` el 2026-09-17: quién entra al conjunto lo decide
+   * `commitsDesde` por ancestría, y `diagnosticar` sólo pregunta si lo que
+   * recibe llega al cliente. La propiedad que este caso protege —sin sujetos,
+   * verde— sigue viva; el corte por fecha se prueba ahora donde vive.
+   */
+  it("da VERDE cuando no hay ni un commit que el build no traiga", () => {
+    const r = diagnosticar({ buildIdMtimeMs: ms(3_000), commits: [], homeStatus: 200 });
 
     expect(r.codigo).toBe(AL_DIA);
     expect(r.varados).toHaveLength(0);
@@ -135,11 +141,12 @@ describe("deploy-vivo: el diagnóstico", () => {
    * llega a Sergio igual que uno real.
    */
   it("un commit del mismo segundo que el build NO está varado", () => {
-    const r = diagnosticar({
-      buildIdMtimeMs: ms(5_000),
-      commits: [commit(seg(5_000))],
-      homeStatus: 200,
-    });
+    // El empate lo resuelve `baseDelBuild`, que es quien corta por fecha desde
+    // el 2026-09-17: el caso que lo prueba contra un repo real está abajo, en
+    // «el empate: un commit del mismo segundo que el build ya está adentro».
+    // Acá queda la mitad que sigue siendo de `diagnosticar`: si el conjunto
+    // llegó vacío, el veredicto es verde y no otra cosa.
+    const r = diagnosticar({ buildIdMtimeMs: ms(5_000), commits: [], homeStatus: 200 });
     expect(r.codigo).toBe(AL_DIA);
   });
 });
@@ -716,6 +723,175 @@ describe("deploy-vivo: mide el sitio vivo aunque no corra en el VPS", () => {
     it("sin ninguna carpeta contesta con la lista vacía, no con null", () => {
       expect(parsearStagedRemoto("")).toEqual([]);
       expect(parsearStagedRemoto("\n \n")).toEqual([]);
+    });
+  });
+});
+
+/**
+ * La tercera forma en que este medidor puede fallar ABIERTO — y la más cara,
+ * porque no deja rastro: el sujeto no se pierde por un pathspec ni por un
+ * filtro, se pierde por la FECHA.
+ *
+ * EL SUCESO, medido el 2026-09-17 21:39 UTC. `publicar.sh --dry-run` de la
+ * landing contestó «YA ESTA PUBLICADO — el sitio vivo sirve todo lo que main
+ * tiene» mientras el arreglo del IVA/IT del rubro Servicios NO estaba ni en el
+ * build vivo (`grep -rl "IVA del mes" /opt/onia-landing/runtime-next/…` vacío)
+ * ni en el sitio servido (`curl https://onia.com.bo/rubros | grep -c` dio 0).
+ *
+ * La causa son dos decisiones correctas POR SEPARADO que juntas abren el hueco:
+ *   · `--since=@<mtime del BUILD_ID>` acota por la fecha de cada commit;
+ *   · `--no-merges` saca los merges del conjunto, para no contar dos veces.
+ * Un commit de una rama de carril SIEMPRE tiene fecha anterior al merge que lo
+ * trae. Acá el arreglo era de las 20:55 y el build de las 21:06, así que entró
+ * a `main` a las 21:37 por un merge — y el commit quedó fuera por viejo, el
+ * merge fuera por merge, y no quedó nadie que lo nombrara.
+ *
+ * Falla hacia el lado caro en los dos pasos: el publicador se declara al día, y
+ * el gate de pedidos —que se apoya en este mismo medidor— imprime «cerralo, le
+ * estás pidiendo un ok por trabajo hecho» sobre el ÚNICO pedido que publicaba
+ * ese arreglo. Obedecerlo borra el pedido correcto.
+ *
+ * Y no se recupera solo: `--since` nunca vuelve a mirar hacia atrás, así que
+ * ese commit queda invisible PARA SIEMPRE.
+ *
+ * La pregunta que sí se puede contestar no es «¿hay commits más nuevos que el
+ * build?» sino «¿qué tiene `main` que el build no contiene?» — ancestría, no
+ * tiempo. La fecha sigue siendo el único proxy disponible (la landing no deja
+ * escrito el sha que publicó), pero se usa UNA vez, para elegir el punto de
+ * `main` por el que el build pasó, y de ahí en adelante manda el grafo.
+ */
+describe("un arreglo que entra a main por un merge posterior al build NO se pierde", () => {
+  const ZONA_REL = `${ZONA}/src/app/(sitio)`;
+
+  /** Instante del build vivo: entre el commit del arreglo y el merge que lo trae. */
+  const BUILD = Date.parse("2026-09-17T21:06:00Z");
+  const FECHA_BASE = "2026-09-17T18:00:00Z";
+  const FECHA_ARREGLO = "2026-09-17T20:55:10Z"; // ANTERIOR al build
+  const FECHA_MERGE = "2026-09-17T21:37:43Z"; //  POSTERIOR al build
+
+  /**
+   * Siembra su propio sujeto, sellado por corrida y borrado en el `finally`: un
+   * sujeto prestado del repo real muere en rojo acusando al producto el día que
+   * alguien mergea, o deja de calificar.
+   */
+  function conRepoSembrado(fn: (cwd: string) => void) {
+    const raiz = mkdtempSync(join(tmpdir(), "deploy-vivo-"));
+    const git = (args: string[], fecha?: string) => {
+      const r = spawnSync("git", args, {
+        cwd: raiz,
+        encoding: "utf8",
+        env: fecha
+          ? { ...process.env, GIT_AUTHOR_DATE: fecha, GIT_COMMITTER_DATE: fecha }
+          : process.env,
+      });
+      // Sembrar es PREPARAR: si el escenario no se pudo armar, el caso no puede
+      // concluir — se rompe acá, no se convierte en un rojo contra el producto.
+      if (r.status !== 0) {
+        throw new Error(`no pude sembrar el repo (git ${args.join(" ")}): ${r.stderr}`);
+      }
+      return r.stdout.trim();
+    };
+    const escribir = (rel: string, texto: string) => {
+      mkdirSync(dirname(join(raiz, rel)), { recursive: true });
+      writeFileSync(join(raiz, rel), texto);
+    };
+
+    try {
+      git(["init", "--quiet", "--initial-branch=main"]);
+      git(["config", "user.email", "gate@onia.test"]);
+      git(["config", "user.name", "gate"]);
+      git(["config", "commit.gpgsign", "false"]);
+
+      escribir(`${ZONA_REL}/base.tsx`, "export const base = 1;\n");
+      git(["add", "-A"]);
+      git(["commit", "--quiet", "-m", "base"], FECHA_BASE);
+
+      git(["checkout", "--quiet", "-b", "carril"]);
+      escribir(`${ZONA_REL}/rubros.tsx`, 'export const fila = "IVA del mes";\n');
+      git(["add", "-A"]);
+      git(["commit", "--quiet", "-m", "fix(web-venta): el IVA y el IT que el producto SI arma"], FECHA_ARREGLO);
+
+      git(["checkout", "--quiet", "main"]);
+      git(["merge", "--quiet", "--no-ff", "--no-edit", "carril"], FECHA_MERGE);
+
+      fn(raiz);
+    } finally {
+      rmSync(raiz, { recursive: true, force: true });
+    }
+  }
+
+  it("lo cuenta: entró DESPUÉS del build aunque su fecha sea ANTERIOR", () => {
+    conRepoSembrado((cwd) => {
+      const arreglo = spawnSync("git", ["rev-parse", "carril"], { cwd, encoding: "utf8" }).stdout.trim();
+      const commits = commitsDesde(BUILD, ZONA, { cwd, ref: "main" });
+
+      expect(commits, "git no contestó: el caso no puede concluir").not.toBeNull();
+      expect(
+        commits!.map((c) => c.sha),
+        "el arreglo entró a main después del build y el medidor no lo nombra: " +
+          "el publicador va a firmar «ya está publicado» sobre un sitio que no lo tiene",
+      ).toContain(arreglo.slice(0, 9));
+    });
+  });
+
+  /**
+   * La dirección simétrica, y la que impide que la cura sea «contar todo
+   * `main`»: lo que el build YA trae no se cuenta, o cada pedido de deploy le
+   * pediría a Sergio Urcullo un ok por trabajo publicado hace meses.
+   */
+  it("y NO cuenta lo que el build ya traía", () => {
+    conRepoSembrado((cwd) => {
+      const base = spawnSync("git", ["rev-parse", "main~1"], { cwd, encoding: "utf8" }).stdout.trim();
+      const commits = commitsDesde(BUILD, ZONA, { cwd, ref: "main" });
+
+      expect(commits).not.toBeNull();
+      expect(
+        commits!.map((c) => c.sha),
+        "un commit anterior al build se cuenta como varado: el pedido infla lo que publica",
+      ).not.toContain(base.slice(0, 9));
+    });
+  });
+
+  /**
+   * El corte por fecha NO desapareció: se mudó de `diagnosticar` a
+   * `baseDelBuild`, que es el único lugar donde el tiempo puede decidir algo —
+   * elegir el punto de `main` por el que pasó el build. Estos dos casos son los
+   * que antes vivían sobre `diagnosticar`, con el mismo contrato.
+   */
+  it("elige como base el punto de main por el que pasó el build, no uno posterior", () => {
+    conRepoSembrado((cwd) => {
+      const base = baseDelBuild(BUILD, { cwd, ref: "main" });
+      const esperado = spawnSync("git", ["rev-parse", "main~1"], { cwd, encoding: "utf8" }).stdout.trim();
+
+      expect(base, "git no contestó: el caso no puede concluir").not.toBeNull();
+      expect(base!.sha).toBe(esperado);
+    });
+  });
+
+  /**
+   * El empate importa, y por el mismo motivo de siempre: `next build` escribe el
+   * BUILD_ID cuando TERMINA, así que un commit del mismo segundo ya está
+   * adentro. Tratarlo como varado haría pedir un deploy que no hace falta — y
+   * un pedido inventado le llega a Sergio Urcullo igual que uno real.
+   */
+  it("el empate: un commit del mismo segundo que el build ya está adentro", () => {
+    conRepoSembrado((cwd) => {
+      const base = baseDelBuild(Date.parse(FECHA_MERGE), { cwd, ref: "main" });
+      const merge = spawnSync("git", ["rev-parse", "main"], { cwd, encoding: "utf8" }).stdout.trim();
+
+      expect(base).not.toBeNull();
+      expect(base!.sha, "el commit del mismo segundo quedó afuera: pediría un deploy que no hace falta").toBe(merge);
+    });
+  });
+
+  /** Que el merge siga sin colarse: la cura no puede revivir el conteo doble. */
+  it("sin contar el merge que lo trajo", () => {
+    conRepoSembrado((cwd) => {
+      const merge = spawnSync("git", ["rev-parse", "main"], { cwd, encoding: "utf8" }).stdout.trim();
+      const commits = commitsDesde(BUILD, ZONA, { cwd, ref: "main" });
+
+      expect(commits).not.toBeNull();
+      expect(commits!.map((c) => c.sha)).not.toContain(merge.slice(0, 9));
     });
   });
 });

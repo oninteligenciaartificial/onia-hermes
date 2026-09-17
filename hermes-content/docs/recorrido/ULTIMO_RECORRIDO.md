@@ -12,6 +12,40 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-17 17:09-17:35 La Paz — mismo bloqueo de deploy; tres superficies nunca auditadas, todas sanas
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta` (`ONIA_ALTA_AUTOMATICA`), `BUILD_ID`
+sigue en `OFd4xCDzoTbQdThUbfzDv` (sin cambios desde hace varias vueltas). Los tres pedidos de
+deploy: `t_a91f564e` (plataforma, reemplaza a `t_4f4e4071`) y `t_933c5f7b` (bot) siguen
+`blocked` esperando el ok de Sergio Urcullo; `t_75f4fac3` (landing) según
+`npm run pedido:entregado` corrido en el VPS ya está **ROJO: "TODO lo que promete ya esta
+publicado"** — le pide un ok por trabajo ya hecho. No es mi zona (deploy es de `onia-cola`), lo
+dejo anotado acá por si otro carril lo ve antes.
+
+No repetí el recorrido completo (sigue bloqueado en el mismo paso por el mismo motivo, cuarta
+vuelta seguida sin cambio de `BUILD_ID`; método descartado, ver vueltas anteriores). En su lugar
+recorrí tres superficies del sitio que este carril nunca había mirado: `/nosotros`,
+`/servicios/webs` y `/chatbot`. Las tres cargan sin errores de red, sin texto cortado
+(`scrollWidth > clientWidth`), y su contenido —revisado con `page.evaluate` sección por
+sección, no solo la captura completa, porque una captura `fullPage` muy larga comprime el texto
+hasta hacerlo ilegible aunque esté ahí— es honesto y consistente:
+
+- `/nosotros`: describe el estado real del emisor SIAT ("registrado ante el SIN y ya completó
+  las pruebas técnicas de la Fase 1; quedan las etapas formales del trámite... hasta que la
+  homologación concluya emitís por el portal gratuito del SIN") — coincide con lo medido en la
+  memoria del sistema, sin fabricar ni ocultar obra en curso.
+- `/servicios/webs`: el configurador de webs muestra un precio de ejemplo (Bs 4.500) dentro del
+  rango ya ratificado por Sergio Urcullo (2.000/4.500/7.500).
+- `/chatbot`: "Bs 390/mes... Bs 3.900 al año (pagás 10 meses)" y la mención de que Meta empieza
+  a cobrar las respuestas dentro de la ventana de 24h "desde el 1 de octubre de 2026" — crucé
+  ambos montos contra `origin/master:lib/pricing.ts` (`onia-platform`, `WHATSAPP_ADDON.entryMonthly
+  = 390`, `annualTotal = 3900`): coinciden letra por letra.
+
+Capturas: `capturas/auditoria-nosotros.png`, `capturas/auditoria-servicios-webs.png`,
+`capturas/auditoria-chatbot-sitio.png`. Nada para reportar.
+
+`completo: false`, `llegoHasta: 4/9` (sin cambios, sigue bloqueado por el mismo deploy).
+
 ## 2026-09-17 13:11 La Paz — sin novedad de deploy (mismo BUILD_ID); auditoría móvil de home/precios/register sin hallazgo
 
 Al arrancar: `select count(*) from organizations where name like 'zz-qa-%'` dio 0. `BUILD_ID`
@@ -1777,6 +1811,27 @@ los precios pintados cruzan contra la fuente única — `320/89/3.200`, `550/145
 (implementación/self-hosted) contra `lib/pricing.ts`. "Web del negocio · Desde Bs 2.000" es
 texto tipeado del sitio (no tiene fuente en `pricing.ts`) pero coincide con la cifra ya
 ratificada por Sergio Urcullo el 2026-08-23. Nada para reportar.
+
+`completo: false`, `llegoHasta: 4/9` (sin cambios, sigue bloqueado por el mismo deploy).
+
+## 2026-09-17 16:09-16:35 La Paz — BUILD_ID sin cambios, mismo bloqueo; escalón 3 en superficie nueva: `/rubros`
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, `BUILD_ID` sigue en `OFd4xCDzoTbQdThUbfzDv`, los tres
+pedidos de deploy (`t_4f4e4071` plataforma, `t_75f4fac3` landing, `t_234cfe6a` bot — este último
+ya `archived`) siguen `blocked`/sin ok. No repetí el recorrido completo ni la sonda de MFA.
+
+Primero descarté un falso positivo: `/agentes` sigue diciendo "desde el plan Pro" (6 veces) en
+producción, pero **ya está arreglado en `main`** (commits `5501a3c4`/`cf19a28e`, con comentario
+explícito "DESDE QUE PLAN NO SE TIPEA ACA") — es el mismo deploy bloqueado, no un hallazgo nuevo.
+
+**Hallazgo real en `/rubros`** (reportado, `t_2a13fdbb`, prioridad 2): la tarjeta de "Servicios"
+dice, EN VIVO hoy, "Llegás al cierre de mes con el IVA y el IT ya armados, en vez de juntando
+papeles" (`rubros/page.tsx:108`). Es la MISMA frase que el commit `4384f7e8` (2026-09-02) ya
+identificó como "capacidad fabricada" y arregló — pero sólo en el panel dibujado hermano
+(`ui.tsx`): "El panel de servicios vendía 'IVA del mes / IT del mes ya armados', que no aparece
+en ningún plan de lib/pricing.ts". El arreglo tocó una representación de la promesa y dejó la
+otra (el texto de venta de la misma página) intacta 15 días. Captura:
+`capturas/hallazgo-iva-it-rubros.png`. No lo arreglo — no es mi zona.
 
 `completo: false`, `llegoHasta: 4/9` (sin cambios, sigue bloqueado por el mismo deploy).
 

@@ -11,6 +11,12 @@ interface Props {
   mensaje: string;
   /** Texto del botón. */
   cta: string;
+  /** Datos mínimos de la solicitud completados. */
+  ready?: boolean;
+  /** Explica qué falta cuando ready es false. */
+  blockedHint?: string;
+  /** Sección a la que vuelve el CTA cuando faltan datos. */
+  blockedTargetId?: string;
 }
 
 /**
@@ -26,7 +32,7 @@ interface Props {
  *  3. El texto que se manda por WhatsApp lleva la aceptación adentro: la
  *     constancia queda en el chat del cliente, no solo en la página.
  */
-export function RequisitosGate({ req, mensaje, cta }: Props) {
+export function RequisitosGate({ req, mensaje, cta, ready = true, blockedHint, blockedTargetId = "datos-negocio" }: Props) {
   const [aceptado, setAceptado] = useState(false);
   const uid = useId();
   const checkId = `${uid}-ok`;
@@ -34,6 +40,7 @@ export function RequisitosGate({ req, mensaje, cta }: Props) {
 
   const texto = `${mensaje}\n\n${textoAceptacion(req)}`;
   const href = waServiciosLink(texto);
+  const canSend = aceptado && ready;
 
   return (
     <section className={styles.wrap} aria-labelledby={`${uid}-t`}>
@@ -71,19 +78,27 @@ export function RequisitosGate({ req, mensaje, cta }: Props) {
 
       <a
         className={`btn ${styles.cta}`}
-        href={aceptado ? href : undefined}
-        aria-disabled={!aceptado}
-        aria-describedby={aceptado ? undefined : hintId}
+        href={canSend ? href : `#${blockedTargetId}`}
+        aria-disabled={!canSend}
+        aria-describedby={canSend ? undefined : hintId}
         onClick={(e) => {
-          if (!aceptado) e.preventDefault();
+          if (!canSend) {
+            e.preventDefault();
+            if (!ready) {
+              const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+              document.getElementById(blockedTargetId)?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+            }
+          }
         }}
       >
         {cta}
       </a>
       <p className={styles.hint} id={hintId}>
-        {aceptado
-          ? "Se abre WhatsApp con tu pedido y los requisitos ya escritos. Nada queda contratado hasta que vos digas."
-          : "Marcá la casilla de arriba para poder enviar el pedido. Va con los requisitos escritos adentro del mensaje."}
+        {!ready
+          ? blockedHint ?? "Completá los datos mínimos de la solicitud antes de enviarla."
+          : aceptado
+            ? "Se abre WhatsApp con tu pedido y los requisitos ya escritos. Nada queda contratado hasta que vos digas."
+            : "Marcá la casilla de arriba para poder enviar el pedido. Va con los requisitos escritos adentro del mensaje."}
       </p>
     </section>
   );

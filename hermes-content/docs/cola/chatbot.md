@@ -318,6 +318,109 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El watchdog del bot declaraba «bot MUDO» con UN parpadeo de 5 s, y su log no sabía
+      decir que se había recuperado~~ — CERRADO el 2026-09-17, commiteado y PENDIENTE DE
+      DESPLIEGUE del bot (pedido vivo `t_933c5f7b`).**
+
+      **Cómo apareció.** Leyendo `/var/log/onia-bot-watchdog.log` del VPS, la última línea era
+      `[2026-09-17T02:00:02+00:00] ERROR: el bot NO llega a Chatwoot (respuestas mudas aunque
+      /health este ok)` — y de ahí concluí, en esta misma vuelta, que el bot llevaba 19 h mudo.
+      **Era falso.** Medido acto seguido: `/var/lib/onia-bot-watchdog.incidente-chatwoot` **no
+      existe** (o sea el incidente se cerró solo) y el camino contestó **3 de 3** sondas
+      (`docker exec onia-center sh -c "timeout 5 wget -qO- http://onia-chatbot_chatwoot:3000/"`).
+
+      **Los dos defectos, con su medición.**
+
+      1. **Un parpadeo no es una caída.** La sonda del camino a Chatwoot es un único
+         `timeout 5`, y fallarla una vez dispara la alarma 🚨 máxima. Las **tres** apariciones
+         del `ERROR` en 15 días (03-sep, 05-sep, 17-sep) son de **una línea cada una** — con el
+         cron cada 2 minutos, una caída de verdad escribe una línea cada 2 minutos. Tres
+         parpadeos, **seis** mensajes al Telegram de Sergio Urcullo (el 🚨 y su ✅) y cero
+         incidentes, en el canal que él mismo pidió ordenar.
+      2. **El log registraba las fallas y callaba los desenlaces.** Las **tres** ramas de
+         recuperación llamaban a `tg_error` y ninguna a `log`. Con un log append-only que solo
+         escribe cuando algo se rompe, **la última línea miente para siempre** — y el que
+         diagnostica lee esa línea. Es la asimetría «aviso del problema ↔ aviso del DESENLACE».
+
+      **Qué cambió** (`hermes-content/deploy/vps-ops/bot/webhook-watchdog.sh`): el incidente de
+      Chatwoot se declara recién en la **segunda corrida seguida** que falla (marcador
+      `strike-chatwoot`, que un éxito borra para que dos parpadeos lejanos no se sumen), y las
+      tres ramas de recuperación escriben el log. Cuesta 2 minutos de detección sobre una caída
+      que en agosto duró 4 días, y le saca los falsos positivos al único canal por el que
+      avisamos algo grave. Los marcadores de producción **no cambian de ruta**: el prefijo se
+      volvió inyectable (`ONIA_WATCHDOG_ESTADO`) con el default de siempre, así que un incidente
+      ya declarado se sigue reconociendo.
+
+      **Gate:** `webhook-watchdog.test.mjs` (7 casos), que **ejecuta el script de verdad** con
+      `docker`/`iptables`/`curl` stubeados en el `PATH` — un grep del `.sh` no vería cuántas
+      corridas hacen falta para que suene la alarma, que es justo lo que se fija. Su caso de
+      **clase** deriva los sujetos del disco (cada `tg_error "✅…"` del script), así que la rama
+      de recuperación que se escriba mañana nace adentro del universo. Validado por **mutación**,
+      tres esquives: volver a la sonda única (`fail 2`), dejar muda la recuperación de Chatwoot
+      (`fail 2`) y no limpiar el strike (`fail 1`). Entra a la cadena por `test:bot`, y que la
+      cadena lo **ejecute** se comprobó por mutación también (un caso que falla apareció como
+      `not ok 1097`), no por grep.
+
+- [x] 🔴 **~~El asistente seguía atendiendo a los clientes de un negocio con la cuenta VENCIDA:
+      la puerta que alimenta al motor del VPS nunca preguntaba~~ — CERRADO el 2026-09-17 en
+      `onia-platform`, commiteado y PENDIENTE DE MERGE + DESPLIEGUE.**
+
+      **Dónde:** `onia-platform/app/api/chatbot-knowledge/published/route.ts` — el endpoint
+      server-to-server del que el motor del bot (el que corre en el VPS y atiende los inboxes de
+      Chatwoot) saca el conocimiento de cada organización. Con la cuenta vencida seguía
+      sirviéndolo, así que el asistente le contestaba a los clientes de un negocio que dejó de
+      pagar, gastando Meta y OpenAI nuestros, mientras su dueño no podía ni escribir en su panel.
+
+      **Por qué nadie lo veía.** El eje VENCIDA estaba cerrado en la puerta HERMANA
+      (`lib/whatsapp/atiende-el-bot.ts`, 11-sep), que gatea al bot que corre DENTRO de la
+      plataforma (`lib/whatsapp-bot.ts`) — y media familia cubierta se lee como familia cubierta.
+      Peor: el hermano sano vive en ESTE MISMO archivo. Dos líneas más abajo el slug de la agenda
+      ya era fail-closed por vencimiento (`puedeRecibirReservasPublicas` → `isWriteBlocked`, desde
+      el 08-sep), o sea que **media respuesta preguntaba y la otra media no**. Lo sostenía
+      `organizations.whatsappAddon`, la columna vieja de otorgamiento a mano, que **no vence
+      nunca** (`lib/subscription/addon-habilitado.ts` lo dice con todas las letras): con ella en
+      `true`, `isWhatsAppAddonActive` devuelve `true` para siempre, plan muerto incluido.
+
+      **Alcanzable y con fecha, medido en `supabase-db` (no deducido):**
+      `select slug, plan, "whatsappAddon", "trialEnd", "planEnd" from organizations;` →
+      `clinica-sergio-p2ljs | professional | t | 2026-09-17 20:20:36 | NULL`. Es la única org con
+      el add-on encendido y es la clínica REAL. Sin `planEnd`, `derivePlanStatus` la pasa a
+      `past_due` al vencer el trial y `graceDeadline` le da 1 día: queda en solo lectura el
+      **2026-09-18 20:20 UTC (16:20 La Paz)**. O sea que el defecto mordía dentro de las 24 h.
+
+      **El arreglo:** se pregunta con la MISMA función que la otra puerta
+      (`motivoSinAtencionDelBot`), no con una prima — así la gracia del trial vale igual acá y a
+      quien paga un día tarde no se le apaga el bot que compró, y un alta manual del operador
+      (sin fechas) sigue atendiendo. El 404 tiene la MISMA forma que el del add-on apagado (el
+      estado de facturación de una org no se filtra por la forma de la respuesta) y por inbox
+      viaja el `organizationId`, para que el motor conteste un aviso neutro en vez de caer al
+      funnel de venta de Onia adentro del WhatsApp de un cliente.
+
+      **Rojo primero, por el motivo correcto:** 2 de los 4 casos nuevos fallaron con
+      `expected 200 to be 404` (por `organizationId` y por `inboxId`), y los otros dos —gracia del
+      trial y alta sin fechas— pasaban **desde antes**, que es lo que prueba que la guarda no se
+      pasa de ancha. Y validado por **mutación**: llamar a `motivoSinAtencionDelBot` y tirar el
+      resultado deja los mismos dos en rojo, o sea que la mitad que trabaja es la función
+      compartida y no la guarda defensiva de al lado. Después: los 32 casos de ese archivo en
+      verde, `tsc --noEmit` y `eslint` limpios.
+
+      ⚠️ **Es el repo `onia-platform`, no éste** — rama `claude/chatbots-platform-review-0d1d09`,
+      publicada en `880b8d6`. Commitear no lo despliega, y **no se abrió pedido de deploy a
+      propósito**: el sha todavía no está en `master`, así que un `DEPLOY PEDIDO` hoy le pediría a
+      Sergio Urcullo un OK por algo que el publicador no puede publicar. El merge lo hace
+      `onia-cola`; después queda para el pedido vivo de `plataforma`, que no se duplica.
+
+      ⚠️ **Los gates que valen son los del VPS, no los de casa.** Al entregar, `origin/master` se
+      había movido debajo (mi base era `23f86b9`, la real `e02288f`), así que el parche se aplicó
+      en el gemelo `/root/loops/onia-platform-chatbot` del VPS **sobre esa base** y ahí se
+      re-corrieron: `tsc --noEmit` limpio y **5.564 tests verdes**.
+
+      **Clase, hasta dónde se cerró:** las tres puertas que atienden al cliente final en nombre
+      de un negocio ya preguntan — reserva pública (08-sep), bot interno (11-sep) y ésta. Queda
+      mirada y NO tocada `app/cita/acciones.ts` (el paciente confirma o cancela SU cita ya
+      agendada desde el link del correo): ahí bloquear por vencimiento dejaría plantado a un
+      paciente que no tiene la culpa, y decidirlo no es parte de este ítem.
+
 - [x] 🔴 **~~Los TRES barridos del embudo corrían en seco en producción: ningún prospecto recibió
       jamás su follow-up ni el recordatorio de su demo~~ — CERRADO el 2026-09-17, commiteado y
       PENDIENTE DE DESPLIEGUE del bot.**
@@ -3575,18 +3678,32 @@ decisión de Sergio, no código.
 
 ## Después
 
-- [ ] **El simulador miente sobre el horario: su reloj está clavado en julio.** Medido el
-      2026-09-17 a las 14:13 de La Paz —**dentro** del horario de atención de un miércoles—, las
-      tres respuestas del simulador salieron con la coletilla *"Estoy respondiendo automático
-      fuera de horario de atención"* y la nota `fuera_de_horario`. El motor está bien:
-      `isOutsideBusinessHours(ahora)` devuelve `false` con la config real. Lo que está clavado es
-      el reloj del modo interactivo, `simulate.mjs:450` (`let clock = "2026-07-27T14:05:00Z"`, un
-      lunes a las 10:05 de Bolivia: fuera de las franjas). Importa porque es el instrumento con el
-      que este carril mide su definición de hecho: mientras diga eso, nadie puede distinguir el
-      artefacto del bug real (que el bot avise "fuera de horario" estando dentro), y encima
-      convive con slots calculados contra el reloj de HOY — dos relojes en la misma pantalla.
-      Arreglo: que el reloj interactivo arranque en `new Date().toISOString()` salvo que se pase
-      uno explícito, igual que hacen los wrappers de los barridos con `--now`.
+- [x] ✅ **CERRADO el 2026-09-17 18:45 UTC — el simulador ya no miente sobre el horario, y el
+      agujero era el DOBLE de grande que lo anotado.** Lo anotado era el reloj del modo
+      interactivo; contado de nuevo antes de tocar nada, los **once** guiones de `--all` estaban
+      clavados en `2026-07-27T14:05:00Z` con el comentario *"lunes 10:05 en La Paz: dentro de
+      horario"*. Ese comentario fue cierto: lo era cuando `config.mjs` tipeaba `businessHours`
+      como *"lun-vie, 9:00-18:00"*. Al unificar la promesa con las ventanas reales de demo el
+      2026-09-13 (`62336825`, lun-vie 14-17 y 20-22), las 10:05 quedaron **afuera** y los once
+      guiones se pasaron a la rama de FUERA a la vez, sin que nada se pusiera rojo. Consecuencias
+      medidas: la rama de DENTRO —la que ve un lead que escribe con Sergio Urcullo sentado, que es
+      cuando se cierra una demo— se quedó **sin un solo guion**, y `3-siat`, que existe para probar
+      la coletilla de fuera de horario, quedó igual a sus diez hermanos y dejó de probar nada.
+      Verificado con el motor, no con el comentario: `fueraDeAtencion("2026-07-27T14:05:00Z")` →
+      `true`.
+      **Arreglo:** el instante se **deriva** del lado que el guion declara (`horario: "dentro" |
+      "fuera"` → `instanteDeAtencion()` en `ventanas-de-atencion.mjs`), así mover una ventana mueve
+      los guiones con ella; y el reloj interactivo arranca en `new Date().toISOString()`.
+      **Prueba mirada:** `node simulate.mjs --script 1-feliz` → **0** menciones de fuera de horario;
+      `--script 3-siat` → **7**. Antes los dos daban >0. Y la definición de hecho del carril,
+      re-corrida a las 14:45 de La Paz de un jueves (dentro de la franja): 3/3 con la escalera C
+      (320/550/890/1.290 + 390) y **sin** la coletilla, notas `pregunta_precio`, `pregunta_siat`,
+      `repregunta:horario`.
+      **Gate:** `guion-no-miente-sobre-el-horario.test.mjs` (7 casos) — exige que las **dos** ramas
+      tengan guion y prohíbe la FORMA que envejece (un ISO tipeado), no el valor viejo. Validado
+      por mutación en las dos direcciones: con los once del mismo lado cae `not ok 4`; con el reloj
+      clavado de vuelta cae `not ok 6`, exit 1. **No toca producción**: `fueraDeAtencion` y las
+      ventanas quedaron intactas, sólo se agregó un derivador para los fixtures.
 
 - [x] ✅ **CERRADO el 2026-09-12 03:48 UTC — la sonda ya cierra su propia conversación al
       terminar, y la bandeja de leads reales quedó limpia. Verificado en vivo, no por el código.**

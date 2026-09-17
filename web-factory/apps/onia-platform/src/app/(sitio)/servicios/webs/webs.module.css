@@ -176,3 +176,10 @@
     transition: none;
   }
 }
+
+/* Pestaña «Más información» del configurador: las tarjetas + Cuidado Web,
+   una debajo de la otra con el aire de una sección. */
+.especificaciones {
+  display: grid;
+  gap: clamp(2rem, 4vw, 3.2rem);
+}

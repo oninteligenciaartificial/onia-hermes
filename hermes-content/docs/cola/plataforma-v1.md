@@ -63,6 +63,50 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-17 — el tablero decía que `master` de `onia-platform` estaba roto
+      y NO lo está: los cinco gates del CI, corridos a mano sobre el commit que el pedido de
+      deploy pide publicar, están en verde** (medición, sin cambio de código).
+
+      **Por qué importaba medirlo:** dos tareas del tablero (`t_64aa6738` · CI, `t_db5cffd4` ·
+      Security) decían *"mientras siga así, `master` está roto y el deploy va a fallar"*. Si
+      fuera cierto, el pedido de deploy vivo de la plataforma (`t_a91f564e`, que cita
+      `DEPLOY PEDIDO e43c590`) publicaría un árbol que no compila, y además el rojo traba el
+      merge de **todos** los carriles. Es el hecho más caro que había sin verificar.
+
+      **Las dos tareas apuntan a commits ya superados, y eso se puede decir sin el token de
+      GitHub.** La de CI reporta `b176eb9` (17-sep 16:52 UTC) y la de Security `545dd28` (del 5
+      de septiembre, 12 días antes). `git merge-base --is-ancestor b176eb9 origin/master` → sí:
+      ya superado. El HEAD real de `master` es `e43c590` (17-sep 20:34 UTC), **12 commits
+      adelante** del que la tarea llama «roto».
+
+      **Medido sobre `e43c590`, los cinco pasos que corre `.github/workflows/ci.yml`:**
+      `check:onia-core` → `OK: mirror + catalog match contract v1.0.0 (12 packs, 9 modules)` ·
+      `lint` → 0 errores (107 warnings) · `typecheck` (`tsc --noEmit`) → 0 ·
+      `test` → **454 archivos, 5.564 pruebas pasadas**, 0 falladas ·
+      `build` con las MISMAS variables del CI → `✓ Compiled successfully`.
+      El lockfile también está sano: `npm ci` reinstaló los 684 paquetes sin quejarse.
+
+      🔴 **Y la trampa que casi me hace reportar lo contrario, que es la parte que le sirve a
+      otros carriles: `npm ci --dry-run` BORRA `node_modules`.** Lo lancé para validar el
+      lockfile *mientras el build corría en segundo plano*, y le arrancó los módulos por debajo
+      al proceso: el build murió con `TypeError: _webpack.WebpackError is not a constructor` y
+      `Build failed because of webpack errors`. Ese mensaje **no nombra la causa** — es el
+      manejador de errores de Next fallando al construir el error real —, así que se lee como
+      «el código de `master` está roto». `ls node_modules | wc -l` daba **0**. O sea: el rojo
+      era mío, no del repo. `--dry-run` en `npm ci` no es de sólo lectura: `npm ci` borra el
+      árbol **antes** de simular nada, y encima ejecuta el `postinstall` (`prisma: not found`).
+      Dos reglas que salen de acá: nunca correr `npm ci` (ni con `--dry-run`) mientras algo
+      compila en ese árbol, y ante un fallo de webpack sin archivo nombrado, **preguntarle al
+      instrumento antes que al producto**.
+
+      ⚠️ **Ojo con el exit code:** `... | tail -30; echo $?` devuelve el exit de `tail`, no el
+      del build — daba `BUILD_EXIT=0` con el build fallado. El veredicto se leyó de la salida
+      (`Build failed…`) y después con `> log 2>&1; echo $?` sin pipe.
+
+      **Lo que NO cambia:** las dos tareas de CI siguen abiertas porque juzgarlas del todo pide
+      abrir el run en GitHub y el `GITHUB_TOKEN` de `/root/.hermes/.env` está comentado; lo que
+      sí queda medido y escrito es que **el árbol que el deploy va a publicar compila**.
+
 - [x] ✅ **CERRADO el 2026-09-17 — el mismo filtro, seis horas después: no veía nuestros correos
       PERSONALES, y el drip seguía vendiéndole Onia a Sergio Urcullo** (`onia-platform`
       `316476e`, publicado en la rama del carril como `2d5695a`; **commiteado y mergeado a la
