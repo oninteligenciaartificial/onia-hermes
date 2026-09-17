@@ -12,6 +12,31 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-17 13:11 La Paz — sin novedad de deploy (mismo BUILD_ID); auditoría móvil de home/precios/register sin hallazgo
+
+Al arrancar: `select count(*) from organizations where name like 'zz-qa-%'` dio 0. `BUILD_ID`
+sigue en `OFd4xCDzoTbQdThUbfzDv` (sin cambios), y el pedido de deploy vigente pasó de
+`t_db98ee26`/`t_62888ea2` (archivados) a **`t_ada95aaf`** (22 arreglos, mismo bloqueo: el `ok`
+de Sergio Urcullo sobre precios), así que no repetí el recorrido completo — el corte del paso 5
+(2FA obligatorio) es universal y ya está confirmado tres veces con el mismo build.
+
+En su lugar, escalón 3 en una combinación no auditada: **viewport móvil (375×812, `isMobile`,
+`reducedMotion:'reduce'`) en `onia.com.bo/`, `onia.com.bo/precios` y `app.onia.com.bo/register`**
+(sólo lectura, sin crear cuenta). `document.documentElement.scrollWidth` = `innerWidth` = 375 en
+las tres — **sin scroll horizontal**. Un primer barrido con `scrollWidth > clientWidth` marcó
+texto "cortado" en el hero y en el H1 de `/precios`, pero al mirar la captura el texto se ve
+completo (sin elipsis ni recorte visual) y las franjas oscuras que parecían "vacías" en la imagen
+comprimida resultaron ser artefacto de la propia captura (una imagen de 375×16.716px reducida a
+2000px de alto genera bandas de moiré) — verificado leyendo `getComputedStyle` en esos puntos de
+scroll: fondos blancos/transparentes normales, nada negro de verdad. Descartado como el mismo
+tipo de falso positivo del rasterizador que ya está anotado en este prompt (no un hallazgo).
+
+Sin hallazgo nuevo. Próxima vuelta: si el `BUILD_ID` sigue igual, no repetir este chequeo móvil
+(ya cubierto) — buscar otra superficie del escalón 3 (p.ej. `/agentes` o `/comparativa` en móvil,
+o el flujo de reserva pública `/book` de un rubro con `publicBookingIncluded`).
+
+---
+
 ## 2026-09-17 12:15 UTC (08:15 La Paz) — SIGUE ROTO, sin novedad: mismo bug, mismo build viejo
 
 Al arrancar encontré 1 org huérfana (`zz-qa-2026-09-17-1109-negocio`, de una corrida anterior
