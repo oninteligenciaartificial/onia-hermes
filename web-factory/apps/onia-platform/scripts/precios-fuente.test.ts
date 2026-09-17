@@ -29,6 +29,9 @@ import {
   planesDelSitio,
   primerPlanCon,
   publicadosSinCruzar,
+  mapaLiteral,
+  nombresCruzados,
+  nombresDelSitio,
 } from "./precios-fuente.mjs";
 
 /**
@@ -228,7 +231,7 @@ export const CONDICIONES: readonly string[] = [
 
   it("una promesa SIN condición de plan se le hace a todos: también el más barato", () => {
     // Es la lectura estricta y la que puede desmentirla: si no dice "desde el
-    // Pro", el que paga el plan más chico la va a cobrar igual.
+    // Profesional", el que paga el plan más chico la va a cobrar igual.
     expect(
       planQueElSitioPrometeParaExportar(condiciones("Tus datos son tuyos: los exportás en CSV.")),
     ).toBe("basic");
@@ -237,7 +240,7 @@ export const CONDICIONES: readonly string[] = [
   it("si la frase nombra un plan, ése — y ahí el cruce lo compara contra el producto", () => {
     expect(
       planQueElSitioPrometeParaExportar(
-        condiciones("Tus datos son tuyos: los exportás en CSV desde el plan Pro."),
+        condiciones("Tus datos son tuyos: los exportás en CSV desde el plan Profesional."),
       ),
     ).toBe("professional");
   });
@@ -629,14 +632,14 @@ describe("los ciclos que el sitio ofrece son los que el producto cobra", () => {
     // La dirección que hoy NO ve nadie: sin clave en CIFRAS, `comparar` sigue
     // verde y el sitio le esconde al lead la forma más barata de entrar al Full.
     const { difieren } = ciclosCruzados(producto(349), sitio);
-    expect(difieren).toEqual([{ plan: "Full", producto: true, sitio: false }]);
+    expect(difieren).toEqual([{ plan: "Completo", producto: true, sitio: false }]);
   });
 
   it("y al revés: si el producto deja de fraccionar el Pro, el sitio lo sigue ofreciendo", () => {
     const p = producto(null);
     p.professional.semanal = null;
     const { difieren } = ciclosCruzados(p, sitio);
-    expect(difieren).toEqual([{ plan: "Pro", producto: false, sitio: true }]);
+    expect(difieren).toEqual([{ plan: "Profesional", producto: false, sitio: true }]);
   });
 
   it("un plan que no se pudo LEER no se cuenta como «no tiene semanal»", () => {
@@ -646,7 +649,7 @@ describe("los ciclos que el sitio ofrece son los que el producto cobra", () => {
     const p = producto(null) as Planes;
     delete p.clinic;
     const { ilegibles, difieren } = ciclosCruzados(p, sitio);
-    expect(ilegibles).toEqual([{ plan: "Full", lados: ["producto"] }]);
+    expect(ilegibles).toEqual([{ plan: "Completo", lados: ["producto"] }]);
     expect(difieren).toEqual([]);
   });
 
@@ -665,5 +668,93 @@ describe("los ciclos que el sitio ofrece son los que el producto cobra", () => {
       'export const GRUPO = {\n  semanal: 799,',
     );
     expect(excusaDeGrupoSigueValiendo(conSemanal).vale).toBe(false);
+  });
+});
+
+describe("las dos pantallas de la compra le dan el MISMO nombre a cada plan", () => {
+  const real = readFileSync(PRECIOS_SITIO, "utf8");
+
+  /**
+   * Nace de un desacuerdo vivo (2026-09-17): `onia.com.bo` decía "Pro" y "Full" y
+   * `app.onia.com.bo` —donde se paga— "Profesional" y "Completo". Ningún gate lo vio porque
+   * todos los cruces de plata atan CIFRAS, y el sitio publicaba los Bs correctos.
+   */
+  it("lee el nombre de los cuatro planes del archivo REAL del sitio", () => {
+    const nombres = nombresDelSitio(real) as Record<string, string | null>;
+    expect(Object.keys(nombres).sort()).toEqual(
+      PLANES_EN_ORDEN.map((p) => p.sitio).sort(),
+    );
+    for (const p of PLANES_EN_ORDEN) {
+      expect(nombres[p.sitio], `no pude leer el nombre del plan ${p.sitio}`).toBeTruthy();
+    }
+    // El ancla del PARSER, no de los nombres: el trozo del último plan llega hasta el final del
+    // archivo, donde vive `GRUPO`, que también tiene `nombre`. Con la forma literal buscada
+    // aparte, GRUPO le ganaba y el gate acusaba al sitio de llamar al Full "Grupo /
+    // Empresarial" — un rojo falso que manda a "arreglar" un sitio sano.
+    expect(nombres.full).not.toBe("Grupo / Empresarial");
+  });
+
+  it("lee las DOS formas de escribir el nombre, no sólo la de hoy", () => {
+    const conMapa = nombresDelSitio(real) as Record<string, string | null>;
+    // La forma vieja (literal) tiene que seguir leyéndose: es justo la que el gate existe para
+    // cazar. Un lector que sólo entiende la forma de hoy devuelve `null` ante el defecto.
+    const tipeado = real.replace("nombre: NOMBRE_DE_PLAN.pro,", 'nombre: "Pro",');
+    expect((nombresDelSitio(tipeado) as Record<string, string>).pro).toBe("Pro");
+    expect(conMapa.pro).toBe("Profesional");
+  });
+
+  it("se pone ROJO cuando el sitio llama distinto al plan que el producto cobra", () => {
+    const producto = { basic: "Básico", crece: "Crece", professional: "Profesional", clinic: "Completo" };
+    const { difieren, ilegibles } = nombresCruzados(producto, {
+      basico: "Básico",
+      crece: "Crece",
+      pro: "Pro",
+      full: "Completo",
+    });
+    expect(ilegibles).toEqual([]);
+    expect(difieren).toEqual([
+      { plan: "pro", producto: "Profesional", sitio: "Pro", donde: "el sitio" },
+    ]);
+  });
+
+  it("el gate también es sujeto: su propia etiqueta entra al cruce", () => {
+    // `PLANES_EN_ORDEN[].etiqueta` decide a qué plan se refiere una frase del sitio
+    // (`planQueElSitioPrometeParaExportar`). Con la etiqueta vieja, ese detector busca "Pro" en
+    // un sitio que ya dice "Profesional" y no encuentra nada: el gate envejece solo.
+    const producto = { basic: "Básico", crece: "Crece", professional: "Profesional", clinic: "Completo" };
+    const sitio = { basico: "Básico", crece: "Crece", pro: "Profesional", full: "Completo" };
+    const conEtiquetaVieja = PLANES_EN_ORDEN.map((p) =>
+      p.sitio === "pro" ? { ...p, etiqueta: "Pro" } : p,
+    );
+    expect(nombresCruzados(producto, sitio, conEtiquetaVieja).difieren).toEqual([
+      {
+        plan: "pro",
+        producto: "Profesional",
+        sitio: "Pro",
+        donde: "este gate (PLANES_EN_ORDEN.etiqueta)",
+      },
+    ]);
+    // Y con las etiquetas de hoy, el mismo cruce no inventa diferencias.
+    expect(nombresCruzados(producto, sitio).difieren).toEqual([]);
+  });
+
+  it("no poder leer un nombre NO es que coincidan", () => {
+    const { difieren, ilegibles } = nombresCruzados(
+      { basic: "Básico", crece: "Crece", professional: "Profesional", clinic: "Completo" },
+      { basico: "Básico", crece: "Crece", pro: null, full: "Completo" },
+    );
+    expect(difieren).toEqual([]);
+    expect(ilegibles).toEqual([{ plan: "pro", lados: ["el sitio"] }]);
+  });
+
+  it("el nombre del plan de la prueba se resuelve aunque pase por el mapa", () => {
+    // `PRUEBA.planQueCorre` → `PRUEBA_PLAN` → `NOMBRE_DE_PLAN.pro`: dos saltos. Sin el segundo,
+    // el cruce sale NO PUDE MEDIR por un cambio que no mueve ni un dato (medido al escribirlo).
+    expect(mapaLiteral(real, "NOMBRE_DE_PLAN")).toMatchObject({ pro: "Profesional" });
+    const cifras = cifrasDelSitio({
+      precios: real,
+      chatbot: readFileSync(CHATBOT_SITIO, "utf8"),
+    }) as Cifras;
+    expect(cifras["prueba gratis · plan que corre"]).toBe("professional");
   });
 });

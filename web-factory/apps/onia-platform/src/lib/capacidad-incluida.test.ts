@@ -99,8 +99,8 @@ const CAMPOS_DE_CIFRA = Object.entries(PLANES[0])
   .join("|");
 
 /**
- * Las DOS formas de señalar un plan concreto a mano. Las dos son la misma decisión tipeada; la
- * segunda apenas la esconde un escalón más adentro.
+ * Las TRES formas de señalar un plan concreto a mano. Las tres son la misma decisión tipeada; la
+ * segunda y la tercera apenas la esconden un escalón más adentro.
  *
  * ⚠️ **Corregido el 2026-09-17: este gate nació viendo sólo la primera y firmó verde tres
  * superficies vivas.** Su propia bitácora ya decía que lo prohibido es «TIPEAR cualquier nombre
@@ -115,11 +115,19 @@ const CAMPOS_DE_CIFRA = Object.entries(PLANES[0])
  * Y las tres vivían en páginas cuyo CUERPO decía «vienen desde Crece», derivado y correcto: la
  * misma pantalla se contradecía consigo misma, y la mitad falsa es justo la que no se ve
  * renderizada. Interpolar el nombre no es derivarlo — la pregunta es de dónde sale el ID.
+ *
+ * ⚠️ **La tercera entró el 2026-09-17 con `NOMBRE_DE_PLAN`**, el mapa que dejó de tipear los
+ * nombres en `lib/pricing.ts` para que el sitio deje de llamar «Pro» y «Full» a lo que el
+ * checkout cobra como «Profesional» y «Completo». Es una vía NUEVA de escribir el mismo defecto
+ * —interpolar `NOMBRE_DE_PLAN.pro` pinta el mismo texto que `plan("pro").nombre`— y si el
+ * barrido no la conoce, el gate se apaga solo justo donde su sujeto se mudó. Una cura que crea
+ * una forma nueva de nombrar tiene que enseñársela, en la misma vuelta, a los gates de la clase.
  */
 function referenciasAUnPlan(plan: (typeof PLANES)[number]): RegExp[] {
   return [
     new RegExp(`\\b${plan.nombre}\\b`, "g"),
     new RegExp(`plan\\(\\s*["'\`]${plan.id}["'\`]\\s*\\)\\s*\\.\\s*(?!${CAMPOS_DE_CIFRA})\\w`, "g"),
+    new RegExp(`NOMBRE_DE_PLAN\\.${plan.id}\\b`, "g"),
   ];
 }
 
@@ -131,9 +139,9 @@ function referenciasAUnPlan(plan: (typeof PLANES)[number]): RegExp[] {
 const EXENTOS: ReadonlyArray<{ archivo: string; fragmento: string; motivo: string }> = [
   {
     archivo: join("lib", "pricing.ts"),
-    fragmento: "El chatbot de WhatsApp — Full ya lo trae incluido",
+    fragmento: "El chatbot de WhatsApp — ${NOMBRE_DE_PLAN.full} ya lo trae incluido",
     motivo:
-      "es el `sinEsto` del Pro y lo deriva `nombresConChatbot()` en las superficies que contestan la pregunta; acá el nombre está en la línea que el propio plan declara con `chatbotIncluido`",
+      "es el `sinEsto` del Profesional y lo deriva `nombresConChatbot()` en las superficies que contestan la pregunta; acá el nombre está en la línea que el propio plan declara con `chatbotIncluido`",
   },
 ];
 
@@ -304,7 +312,10 @@ describe("desde qué plan viene una capacidad: se deriva, no se tipea", () => {
     // rojo ANTES de que el falso verde llegue a producción.
     const pro = PLANES.find((p) => p.id === "pro")!;
     const conIdTipeado = `Agentes con IA, desde el plan \${plan("pro").nombre}.`;
-    const conNombreTipeado = "Agentes con IA, incluidos desde Pro.";
+    // El nombre literal se DERIVA del plan: tipearlo acá ataba el caso al nombre de ese día
+    // («Pro»), y dejaba al gate sin ancla el día que ese plan pasó a llamarse «Profesional».
+    const conNombreTipeado = `Agentes con IA, incluidos desde ${pro.nombre}.`;
+    const conMapaDeNombres = "Agentes con IA, incluidos desde ${NOMBRE_DE_PLAN.pro}.";
     const soloElPrecio = `Agentes con IA. Desde Bs \${bs(plan("basico").mensual)}/mes.`;
 
     const caza = (texto: string) =>
@@ -315,6 +326,10 @@ describe("desde qué plan viene una capacidad: se deriva, no se tipea", () => {
 
     expect(caza(conIdTipeado), "`plan(\"pro\").nombre` tiene que ser sujeto").toBe(true);
     expect(caza(conNombreTipeado), "el nombre literal tiene que seguir siendo sujeto").toBe(true);
+    expect(
+      caza(conMapaDeNombres),
+      "`NOMBRE_DE_PLAN.pro` pinta el mismo texto en pantalla: es sujeto",
+    ).toBe(true);
 
     // Y la otra dirección: pedirle el MONTO a un plan no es nombrarlo. Sin esto, el gate se
     // vuelve ruidoso contra el `Desde Bs …` que abre casi todas estas frases y termina exento

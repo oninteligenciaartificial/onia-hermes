@@ -370,6 +370,29 @@ export const USUARIO_EXTRA_ADDON = {
 } as const;
 
 /**
+ * Cómo se LLAMA cada plan para el cliente — el mismo nombre que le va a leer en el checkout.
+ *
+ * Nace de un desacuerdo vivo medido el 2026-09-17 contra las dos pantallas de la MISMA compra:
+ * `onia.com.bo` decía «Pro» y «Full» (62 veces entre la home y `/precios`) mientras
+ * `app.onia.com.bo` —donde se paga— los llama «Profesional» y «Completo»
+ * (`PLAN_LABELS` de `onia-platform/lib/pricing.ts`, lo que pinta el checkout, la tab «Mi plan»,
+ * los correos y los recibos). El lead elegía un plan con un nombre y pagaba otro; el que
+ * escribía por WhatsApp pedía «el Full», que en el producto no existe. Ningún gate lo veía: los
+ * cruces de plata comparan CIFRAS, y un nombre no es una cifra.
+ *
+ * Los `id` NO cambian: son internos de este archivo y no viajan a ninguna URL. Lo que el cliente
+ * lee sale de acá, y `scripts/precios-fuente.mjs` lo cruza contra `PLAN_LABELS` del ref publicado
+ * del producto, igual que los montos. Escribir el nombre en la prosa —«vienen en Pro»— es como
+ * volvió la última vez: se interpola, no se tipea.
+ */
+const NOMBRE_DE_PLAN = {
+  basico: "Básico",
+  crece: "Crece",
+  pro: "Profesional",
+  full: "Completo",
+} as const;
+
+/**
  * Escalera C — ratificada por Sergio Urcullo el 2026-09-12 ("la C pero que
  * tenga restricciones y que tengan que estar pagando si quieren mejorar su
  * plan... que se noten las limitaciones para que quieran subir"). Cuatro
@@ -383,7 +406,7 @@ const ESCALERA: readonly Plan[] = [
   {
     id: "basico",
     paso: "01",
-    nombre: "Básico",
+    nombre: NOMBRE_DE_PLAN.basico,
     salto: "Ordenar",
     resultado: "Tu negocio deja de vivir en el cuaderno y en la memoria de la recepcionista.",
     mensual: 320,
@@ -407,7 +430,7 @@ const ESCALERA: readonly Plan[] = [
   {
     id: "crece",
     paso: "02",
-    nombre: "Crece",
+    nombre: NOMBRE_DE_PLAN.crece,
     salto: "Recuperar",
     resultado:
       "Los agentes te devuelven clientes que se estaban yendo: proponen a quién contactar y vos aprobás.",
@@ -415,7 +438,7 @@ const ESCALERA: readonly Plan[] = [
     semanal: 145,
     anual: 5500,
     incluye: [
-      "Todo lo del Básico",
+      `Todo lo del ${NOMBRE_DE_PLAN.basico}`,
       `Agente Recall: te propone a quién hace rato que no ves (${ALCANCE_CON_FICHA})`,
       "Agente Cobrador: te propone a quién reclamarle la deuda vencida",
       `Reservas online incluidas, ${ALCANCE_CON_AGENDA}: link público para que te pidan cita`,
@@ -425,14 +448,14 @@ const ESCALERA: readonly Plan[] = [
     agentesIncluidos: true,
     reservasIncluidas: true,
     sinEsto: [
-      `Reportes completos, facturas recurrentes y contabilidad completa (${ALCANCE_CLINICO}) — vienen en Pro`,
+      `Reportes completos, facturas recurrentes y contabilidad completa (${ALCANCE_CLINICO}) — vienen en ${NOMBRE_DE_PLAN.pro}`,
     ],
     cuando: "Ya tenés movimiento y se te escapan clientes por falta de seguimiento.",
   },
   {
     id: "pro",
     paso: "03",
-    nombre: "Pro",
+    nombre: NOMBRE_DE_PLAN.pro,
     salto: "Operar completo",
     resultado:
       "El negocio entero en el sistema: reportes, contabilidad completa y planilla, sin planillas aparte.",
@@ -440,7 +463,7 @@ const ESCALERA: readonly Plan[] = [
     semanal: 229,
     anual: 8900,
     incluye: [
-      "Todo lo del Crece",
+      `Todo lo del ${NOMBRE_DE_PLAN.crece}`,
       `Reportes completos y facturas recurrentes (${ALCANCE_CLINICO})`,
       "Contabilidad completa (RCV, balance y export) y planilla del mes",
       "Topes: 1.500 fichas · 5 usuarios · 800 recordatorios por email/mes",
@@ -449,7 +472,7 @@ const ESCALERA: readonly Plan[] = [
     agentesIncluidos: true,
     reservasIncluidas: true,
     sinEsto: [
-      `El chatbot de WhatsApp — Full ya lo trae incluido; acá va aparte, Bs ${bs(CHATBOT_MENSUAL)}/mes`,
+      `El chatbot de WhatsApp — ${NOMBRE_DE_PLAN.full} ya lo trae incluido; acá va aparte, Bs ${bs(CHATBOT_MENSUAL)}/mes`,
     ],
     destacado: true,
     cuando: "El negocio ya factura todos los días y querés los números al día.",
@@ -457,16 +480,16 @@ const ESCALERA: readonly Plan[] = [
   {
     id: "full",
     paso: "04",
-    nombre: "Full",
+    nombre: NOMBRE_DE_PLAN.full,
     salto: "Todo incluido",
     resultado:
-      "Sin techos y con el chatbot de WhatsApp incluido: la cuenta gana comparada con Pro más el add-on.",
+      `Sin techos y con el chatbot de WhatsApp incluido: la cuenta gana comparada con ${NOMBRE_DE_PLAN.pro} más el add-on.`,
     mensual: 1290,
     semanal: null,
     anual: 12900,
     incluye: [
       `Chatbot de WhatsApp incluido (aparte vale Bs ${bs(CHATBOT_MENSUAL)}/mes)`,
-      "Todo lo del Pro, sin límites",
+      `Todo lo del ${NOMBRE_DE_PLAN.pro}, sin límites`,
       "Fichas y usuarios sin tope; recordatorios por email sin tope mensual",
       "Te lo entregamos configurado para tu rubro",
     ],
@@ -547,7 +570,7 @@ export const GRUPO = {
   anual: 29000,
   implementacionDesde: 3500,
   copy:
-    "Para varias razones sociales o un grupo de negocios: mismos límites del Full más una implementación acompañada. No se compra en línea — se cotiza con tu caso.",
+    `Para varias razones sociales o un grupo de negocios: mismos límites del ${NOMBRE_DE_PLAN.full} más una implementación acompañada. No se compra en línea — se cotiza con tu caso.`,
 } as const;
 
 /** Prueba gratis: lib/subscription/plan-state.ts (TRIAL_DAYS / TRIAL_PLAN). */
@@ -560,7 +583,7 @@ const PRUEBA_DIAS = 14;
  * apriete. Si esto cambia allá, cambia acá — y `prueba-vs-plan.test.ts` obliga
  * a que las tres tarjetas se enteren.
  */
-const PRUEBA_PLAN = "Pro";
+const PRUEBA_PLAN = NOMBRE_DE_PLAN.pro;
 
 /**
  * La nota de prueba de CADA tarjeta, porque el botón de las tres arranca la
@@ -579,7 +602,7 @@ const NOTA_PRUEBA_POR_PLAN: Record<string, string> = {
   basico: `${PRUEBA_DIAS} días de prueba sin tarjeta, con el plan ${PRUEBA_PLAN} completo. Al pasar a Básico quedás con lo de esta tarjeta.`,
   crece: `${PRUEBA_DIAS} días de prueba sin tarjeta, con el plan ${PRUEBA_PLAN} completo. Al pasar a Crece quedás con lo de esta tarjeta.`,
   pro: `${PRUEBA_DIAS} días de prueba sin tarjeta, corriendo con este mismo plan.`,
-  full: `${PRUEBA_DIAS} días de prueba sin tarjeta, con el plan ${PRUEBA_PLAN}. Al pasar a Full se van los topes.`,
+  full: `${PRUEBA_DIAS} días de prueba sin tarjeta, con el plan ${PRUEBA_PLAN}. Al pasar a ${NOMBRE_DE_PLAN.full} se van los topes.`,
 };
 
 /**

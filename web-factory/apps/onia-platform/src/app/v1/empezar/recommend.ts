@@ -1,7 +1,12 @@
 /**
  * Lógica de recomendación del wizard /empezar — determinista, sin IA.
  * Fuente: ONIA_WIZARD_EMPEZAR_SPEC_2026.md §3. Misma entrada, misma salida.
+ *
+ * El NOMBRE del plan recomendado se lee del catálogo (`plan(id).nombre`) y no se tipea: acá
+ * decía "Plan Pro" y "Plan Full" mientras el checkout —la pantalla siguiente— los llamaba
+ * "Profesional" y "Completo". Un nombre tipeado no lo ve ningún cruce de precios.
  */
+import { plan as planDelCatalogo } from "@/lib/pricing";
 
 
 export type Rubro = "dental" | "comercio" | "servicios" | "proveedores" | "estetica";
@@ -65,12 +70,12 @@ export function recomendar(
       : equipo === "6-15"
         ? {
             id: "full" as const,
-            nombre: "Plan Full",
+            nombre: `Plan ${planDelCatalogo("full").nombre}`,
             precio: "full" as const,
           }
         : {
             id: "pro" as const,
-            nombre: "Plan Pro",
+            nombre: `Plan ${planDelCatalogo("pro").nombre}`,
             precio: "pro" as const,
           };
 

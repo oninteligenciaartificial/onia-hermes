@@ -111,8 +111,8 @@ export const FUENTE_LIMITES = "lib/plan-catalogo.ts";
 export const PLANES_EN_ORDEN = [
   { producto: "basic", sitio: "basico", etiqueta: "Básico" },
   { producto: "crece", sitio: "crece", etiqueta: "Crece" },
-  { producto: "professional", sitio: "pro", etiqueta: "Pro" },
-  { producto: "clinic", sitio: "full", etiqueta: "Full" },
+  { producto: "professional", sitio: "pro", etiqueta: "Profesional" },
+  { producto: "clinic", sitio: "full", etiqueta: "Completo" },
 ];
 
 /**
@@ -316,8 +316,31 @@ function valorResuelto(trozo, clave, archivo, { texto = false } = {}) {
   const decl = archivo?.match(
     new RegExp(`\\bconst\\s+${porNombre[1]}\\s*=\\s*${literal}`),
   );
-  if (!decl) return null;
-  return texto ? decl[1] : Number(decl[1]);
+  if (decl) return texto ? decl[1] : Number(decl[1]);
+
+  // Segundo salto: `const PRUEBA_PLAN = NOMBRE_DE_PLAN.pro`. Entro el 2026-09-17, cuando los
+  // nombres de plan pasaron a un mapa unico para que dejaran de tipearse. Sin este salto el
+  // lector devuelve `null` —y el cruce sale NO PUDE MEDIR— por un cambio que no mueve ni un
+  // dato: es el mismo modo de falla que trajo el primero, un archivo que cambia de FORMA.
+  const porMapa = archivo?.match(
+    new RegExp(`\\bconst\\s+${porNombre[1]}\\s*=\\s*([A-Za-z_$][\\w$]*)\\.([A-Za-z_$][\\w$]*)`),
+  );
+  if (!porMapa) return null;
+  const valor = mapaLiteral(archivo, porMapa[1])[porMapa[2]];
+  if (valor === undefined) return null;
+  return texto ? valor : Number(valor);
+}
+
+/**
+ * Un `const <nombre> = { clave: "valor", ... }` del archivo, como objeto. `{}` si no esta —
+ * quien lo use decide si eso es NO PUDE MEDIR; nunca significa "no hay nombres".
+ */
+export function mapaLiteral(archivo, nombre) {
+  const decl = archivo?.match(new RegExp(`\\bconst\\s+${nombre}\\s*=\\s*\\{([^}]*)\\}`));
+  if (!decl) return {};
+  const salida = {};
+  for (const m of decl[1].matchAll(/\b([A-Za-z_$][\w$]*):\s*"([^"]*)"/g)) salida[m[1]] = m[2];
+  return salida;
 }
 
 /**
@@ -507,6 +530,102 @@ export function planesDelSitio(fuente) {
 }
 
 /**
+ * Cómo llama el PRODUCTO a cada plan: `PLAN_LABELS` de `lib/pricing.ts`, que es lo que pinta el
+ * checkout, la tab "Mi plan", los correos y los recibos. Devuelve `{}` si el bloque no está —el
+ * llamador lo trata como NO PUDE MEDIR, nunca como "coinciden".
+ */
+export function etiquetasDelProducto(fuente) {
+  const bloque = bloqueExportado(fuente, "PLAN_LABELS");
+  if (!bloque) return {};
+  const salida = {};
+  for (const m of bloque.matchAll(/\b([A-Za-z_$][\w$]*):\s*"([^"]*)"/g)) salida[m[1]] = m[2];
+  return salida;
+}
+
+/**
+ * Cómo llama el SITIO a cada plan, resolviendo la indirección.
+ *
+ * El `nombre` puede estar escrito de dos formas y las dos tienen que leerse: literal
+ * (`nombre: "Pro"`, que es como estuvo hasta el 2026-09-17) o apuntando al mapa de nombres
+ * (`nombre: NOMBRE_DE_PLAN.pro`, que es la forma de hoy). Un lector que entienda sólo la de hoy
+ * devuelve `null` el día que alguien vuelva a tipear el nombre — o sea se queda ciego JUSTO en el
+ * defecto que existe para cazar, y encima en verde. Es el mismo modo de falla que ya le costó una
+ * vuelta a `valorResuelto` acá arriba.
+ */
+export function nombresDelSitio(fuente) {
+  const mapa = mapaLiteral(fuente, "NOMBRE_DE_PLAN");
+  const marcas = [...fuente.matchAll(IDS_DEL_SITIO())];
+  const salida = {};
+  marcas.forEach((m, i) => {
+    const hasta = i + 1 < marcas.length ? marcas[i + 1].index : fuente.length;
+    const trozo = fuente.slice(m.index, hasta);
+    // El PRIMER `nombre:` del trozo y las dos formas en la MISMA expresion, a proposito: el
+    // trozo del ultimo plan llega hasta el final del archivo, y ahi abajo vive `GRUPO`, que
+    // tambien tiene `nombre`. Buscando cada forma por separado, la literal de GRUPO le ganaba a
+    // la del plan y el gate acusaba al sitio de llamar "Grupo / Empresarial" al plan Full.
+    const hallado = trozo.match(
+      /\bnombre:\s*(?:"([^"]*)"|NOMBRE_DE_PLAN\.([A-Za-z_$][\w$]*))/,
+    );
+    salida[m[1]] = !hallado
+      ? null
+      : hallado[1] !== undefined
+        ? hallado[1]
+        : (mapa[hallado[2]] ?? null);
+  });
+  return salida;
+}
+
+/**
+ * ¿Los dos lados de la MISMA compra le dan el mismo nombre a cada plan?
+ *
+ * Nace de un desacuerdo vivo, medido el 2026-09-17 contra las dos pantallas: `onia.com.bo` decía
+ * "Pro" y "Full" (62 veces entre la home y `/precios`) y `app.onia.com.bo` —donde se paga— decía
+ * "Profesional" y "Completo". El lead elegía un plan con un nombre y pagaba otro, y el que
+ * escribía por WhatsApp pedía "el Full", que en el producto no existe.
+ *
+ * Ningún gate lo veía y el motivo es la lección: los cruces de plata atan CIFRAS, y un NOMBRE no
+ * es una cifra — el sitio publicaba Bs 890 correctos con la etiqueta equivocada y todo salía
+ * verde. Por eso el sujeto son los tres nombres de cada plan y no sólo dos:
+ *
+ *   · el del PRODUCTO (`PLAN_LABELS`), que manda;
+ *   · el del SITIO (`src/lib/pricing.ts`), que es lo que lee el lead;
+ *   · el de ESTE INSTRUMENTO (`PLANES_EN_ORDEN[].etiqueta`), que es su copia propia y se usa para
+ *     decidir a qué plan se refiere una frase del sitio (`planQueElSitioPrometeParaExportar`).
+ *     Dejarlo fuera del cruce es dejar que el gate envejezca solo: con la etiqueta vieja, ese
+ *     detector busca "Pro" en un sitio que ya dice "Profesional" y no encuentra nada.
+ *
+ * `ilegibles` va aparte de `difieren` por la regla de siempre: no poder leer un nombre no es que
+ * coincidan.
+ */
+export function nombresCruzados(etiquetasProducto, nombresSitio, planes = PLANES_EN_ORDEN) {
+  const difieren = [];
+  const ilegibles = [];
+  for (const p of planes) {
+    const delProducto = etiquetasProducto?.[p.producto] ?? null;
+    const delSitio = nombresSitio?.[p.sitio] ?? null;
+    if (falta(delProducto) || falta(delSitio)) {
+      ilegibles.push({
+        plan: p.sitio,
+        lados: [falta(delProducto) && "el producto", falta(delSitio) && "el sitio"].filter(Boolean),
+      });
+      continue;
+    }
+    if (delProducto !== delSitio) {
+      difieren.push({ plan: p.sitio, producto: delProducto, sitio: delSitio, donde: "el sitio" });
+    }
+    if (delProducto !== p.etiqueta) {
+      difieren.push({
+        plan: p.sitio,
+        producto: delProducto,
+        sitio: p.etiqueta,
+        donde: "este gate (PLANES_EN_ORDEN.etiqueta)",
+      });
+    }
+  }
+  return { difieren, ilegibles };
+}
+
+/**
  * Lo que el plan DICE que incluye, sin su `sinEsto`.
  *
  * El corte importa: el Básico nombra "Agentes de IA" y "Reservas online" en su
@@ -690,6 +809,12 @@ export const CONSTANTES_VERIFICADAS_APARTE = [
     porque:
       "tampoco es un tope: es a que rubros les llega la agenda, y con ella la reserva publica — comercio e importadora no tienen una sola ruta de citas en su pack",
     cruzadaPor: "src/app/capacidad-en-la-enumeracion.test.ts",
+  },
+  {
+    valor: "NOMBRE_DE_PLAN",
+    porque:
+      "no es una cifra: es como se LLAMA cada plan («Todo lo del ${NOMBRE_DE_PLAN.crece}»). Se interpola justamente para que el nombre no se tipee en la prosa, que es como el sitio termino diciendo «Pro» y «Full» mientras el checkout cobraba «Profesional» y «Completo»",
+    cruzadaPor: "scripts/precios-fuente.mjs",
   },
 ];
 
@@ -1116,7 +1241,24 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     planesDelProducto(planes),
     planesDelSitio(preciosSitio),
   );
+  const nombres = nombresCruzados(
+    etiquetasDelProducto(addons),
+    nombresDelSitio(preciosSitio),
+  );
   const excusaGrupo = excusaDeGrupoSigueValiendo(preciosSitio);
+
+  if (nombres.ilegibles.length > 0) {
+    console.error(
+      `NO PUDE MEDIR: no pude leer de los dos lados como se LLAMA cada plan:\n` +
+        nombres.ilegibles
+          .map((i) => `  · plan ${i.plan} — no lo pude leer en: ${i.lados.join(" y ")}`)
+          .join("\n") +
+        `\nSin eso no se puede decir si el lead elige un plan con un nombre y paga otro. ` +
+        `Los nombres salen de PLAN_LABELS (${FUENTE_ADDONS} del producto) y de NOMBRE_DE_PLAN ` +
+        `(src/lib/pricing.ts): si alguno cambio de forma, arreglar el parser ANTES de creerle a un verde.`,
+    );
+    process.exit(NO_PUDE_MEDIR);
+  }
 
   if (ciclos.ilegibles.length > 0 || !excusaGrupo.vale) {
     console.error(
@@ -1130,13 +1272,23 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     process.exit(NO_PUDE_MEDIR);
   }
 
-  if (difieren.length === 0 && ciclos.difieren.length === 0) {
+  if (difieren.length === 0 && ciclos.difieren.length === 0 && nombres.difieren.length === 0) {
     console.log(
       `VERDE: las ${CIFRAS.length} cifras que publica el sitio son las que cobra el producto, ` +
         `las ${numerosPublicados(preciosSitio).length} del \`incluye\` de los planes estan todas cruzadas, ` +
-        `y los ${CICLOS_EQUIVALENCIA.length} planes comprables ofrecen los mismos ciclos en los dos lados.`,
+        `los ${CICLOS_EQUIVALENCIA.length} planes comprables ofrecen los mismos ciclos en los dos lados ` +
+        `y se llaman igual en las dos pantallas de la compra.`,
     );
     process.exit(COINCIDEN);
+  }
+
+  for (const n of nombres.difieren) {
+    console.error(
+      `ROJO: plan ${n.plan} — el producto lo llama "${n.producto}" y ${n.donde} lo llama "${n.sitio}".\n` +
+        `  El lead elige un plan con un nombre y en el checkout paga otro: "${n.sitio}" no existe ` +
+        `en app.onia.com.bo. Manda el producto (CLAUDE.md): se corrige NOMBRE_DE_PLAN en ` +
+        `src/lib/pricing.ts — el nombre NO se tipea en la prosa, se interpola.`,
+    );
   }
 
   for (const c of ciclos.difieren) {
