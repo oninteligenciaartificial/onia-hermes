@@ -1,0 +1,817 @@
+{
+ "ok": true,
+ "segments": [
+  {
+   "start": 1.98,
+   "end": 6.22,
+   "text": " Hola, mi nombre es Sergio, tengo 16 años y toda mi empresa de Inteligencia Artificial"
+  },
+  {
+   "start": 6.22,
+   "end": 10.1,
+   "text": " corre con estas cuatro funciones que el día de hoy te voy a mostrar. Son funciones que"
+  },
+  {
+   "start": 10.1,
+   "end": 14.68,
+   "text": " nos ayuda a hacer que nuestro Cloud trabaje sin autorización nuestra. Bueno, que mejor"
+  },
+  {
+   "start": 14.68,
+   "end": 19.36,
+   "text": " que funcione sin que nosotros tengamos que estar encima de él y nos ayude a desarrollar"
+  },
+  {
+   "start": 19.36,
+   "end": 23.44,
+   "text": " en tiempos muertos. Por ejemplo, cuando estamos durmiendo, cuando estamos al gimnasio"
+  },
+  {
+   "start": 23.44,
+   "end": 29.38,
+   "text": " o cuando no estamos pendientes de la computadora. Así hacemos que, así podemos hacer"
+  },
+  {
+   "start": 29.38,
+   "end": 34.24,
+   "text": " que nuestro Cloud funcione sin que estemos dentro de la... Así hacemos que nuestro Cloud"
+  },
+  {
+   "start": 34.24,
+   "end": 39.42,
+   "text": " funcione sin que estemos en la habitación, así podemos hacer que nuestro Cloud funcione"
+  },
+  {
+   "start": 39.42,
+   "end": 43.64,
+   "text": " sin que... Así podemos hacer que nuestro Cloud funcione sin que estemos en nuestra oficina"
+  },
+  {
+   "start": 43.64,
+   "end": 47.52,
+   "text": " y estemos afuera y funcione por él mismo. Así que, vamos a la pantalla y te enseño"
+  },
+  {
+   "start": 47.52,
+   "end": 48.06,
+   "text": " cómo funciona."
+  }
+ ],
+ "words": [
+  {
+   "start": 1.98,
+   "end": 2.44,
+   "word": " Hola,"
+  },
+  {
+   "start": 2.56,
+   "end": 2.64,
+   "word": " mi"
+  },
+  {
+   "start": 2.64,
+   "end": 2.82,
+   "word": " nombre"
+  },
+  {
+   "start": 2.82,
+   "end": 2.98,
+   "word": " es"
+  },
+  {
+   "start": 2.98,
+   "end": 3.14,
+   "word": " Sergio,"
+  },
+  {
+   "start": 3.24,
+   "end": 3.46,
+   "word": " tengo"
+  },
+  {
+   "start": 3.46,
+   "end": 3.74,
+   "word": " 16"
+  },
+  {
+   "start": 3.74,
+   "end": 4.12,
+   "word": " años"
+  },
+  {
+   "start": 4.12,
+   "end": 4.6,
+   "word": " y"
+  },
+  {
+   "start": 4.6,
+   "end": 4.78,
+   "word": " toda"
+  },
+  {
+   "start": 4.78,
+   "end": 4.94,
+   "word": " mi"
+  },
+  {
+   "start": 4.94,
+   "end": 5.2,
+   "word": " empresa"
+  },
+  {
+   "start": 5.2,
+   "end": 5.36,
+   "word": " de"
+  },
+  {
+   "start": 5.36,
+   "end": 5.78,
+   "word": " Inteligencia"
+  },
+  {
+   "start": 5.78,
+   "end": 6.22,
+   "word": " Artificial"
+  },
+  {
+   "start": 6.22,
+   "end": 6.8,
+   "word": " corre"
+  },
+  {
+   "start": 6.8,
+   "end": 7.04,
+   "word": " con"
+  },
+  {
+   "start": 7.04,
+   "end": 7.24,
+   "word": " estas"
+  },
+  {
+   "start": 7.24,
+   "end": 7.44,
+   "word": " cuatro"
+  },
+  {
+   "start": 7.44,
+   "end": 7.9,
+   "word": " funciones"
+  },
+  {
+   "start": 7.9,
+   "end": 8.1,
+   "word": " que"
+  },
+  {
+   "start": 8.1,
+   "end": 8.2,
+   "word": " el"
+  },
+  {
+   "start": 8.2,
+   "end": 8.28,
+   "word": " día"
+  },
+  {
+   "start": 8.28,
+   "end": 8.48,
+   "word": " de"
+  },
+  {
+   "start": 8.48,
+   "end": 8.48,
+   "word": " hoy"
+  },
+  {
+   "start": 8.48,
+   "end": 8.6,
+   "word": " te"
+  },
+  {
+   "start": 8.6,
+   "end": 8.64,
+   "word": " voy"
+  },
+  {
+   "start": 8.64,
+   "end": 8.68,
+   "word": " a"
+  },
+  {
+   "start": 8.68,
+   "end": 8.98,
+   "word": " mostrar."
+  },
+  {
+   "start": 9.46,
+   "end": 9.6,
+   "word": " Son"
+  },
+  {
+   "start": 9.6,
+   "end": 9.94,
+   "word": " funciones"
+  },
+  {
+   "start": 9.94,
+   "end": 10.1,
+   "word": " que"
+  },
+  {
+   "start": 10.1,
+   "end": 10.22,
+   "word": " nos"
+  },
+  {
+   "start": 10.22,
+   "end": 10.48,
+   "word": " ayuda"
+  },
+  {
+   "start": 10.48,
+   "end": 10.64,
+   "word": " a"
+  },
+  {
+   "start": 10.64,
+   "end": 10.74,
+   "word": " hacer"
+  },
+  {
+   "start": 10.74,
+   "end": 10.84,
+   "word": " que"
+  },
+  {
+   "start": 10.84,
+   "end": 11.04,
+   "word": " nuestro"
+  },
+  {
+   "start": 11.04,
+   "end": 11.4,
+   "word": " Cloud"
+  },
+  {
+   "start": 11.4,
+   "end": 12.06,
+   "word": " trabaje"
+  },
+  {
+   "start": 12.06,
+   "end": 12.28,
+   "word": " sin"
+  },
+  {
+   "start": 12.28,
+   "end": 12.8,
+   "word": " autorización"
+  },
+  {
+   "start": 12.8,
+   "end": 13.26,
+   "word": " nuestra."
+  },
+  {
+   "start": 13.66,
+   "end": 13.74,
+   "word": " Bueno,"
+  },
+  {
+   "start": 14.28,
+   "end": 14.4,
+   "word": " que"
+  },
+  {
+   "start": 14.4,
+   "end": 14.68,
+   "word": " mejor"
+  },
+  {
+   "start": 14.68,
+   "end": 15.14,
+   "word": " que"
+  },
+  {
+   "start": 15.14,
+   "end": 15.72,
+   "word": " funcione"
+  },
+  {
+   "start": 15.72,
+   "end": 16.0,
+   "word": " sin"
+  },
+  {
+   "start": 16.0,
+   "end": 16.14,
+   "word": " que"
+  },
+  {
+   "start": 16.14,
+   "end": 16.34,
+   "word": " nosotros"
+  },
+  {
+   "start": 16.34,
+   "end": 16.8,
+   "word": " tengamos"
+  },
+  {
+   "start": 16.8,
+   "end": 16.94,
+   "word": " que"
+  },
+  {
+   "start": 16.94,
+   "end": 17.04,
+   "word": " estar"
+  },
+  {
+   "start": 17.04,
+   "end": 17.38,
+   "word": " encima"
+  },
+  {
+   "start": 17.38,
+   "end": 17.6,
+   "word": " de"
+  },
+  {
+   "start": 17.6,
+   "end": 17.76,
+   "word": " él"
+  },
+  {
+   "start": 17.76,
+   "end": 18.14,
+   "word": " y"
+  },
+  {
+   "start": 18.14,
+   "end": 18.3,
+   "word": " nos"
+  },
+  {
+   "start": 18.3,
+   "end": 18.54,
+   "word": " ayude"
+  },
+  {
+   "start": 18.54,
+   "end": 18.84,
+   "word": " a"
+  },
+  {
+   "start": 18.84,
+   "end": 19.36,
+   "word": " desarrollar"
+  },
+  {
+   "start": 19.36,
+   "end": 19.52,
+   "word": " en"
+  },
+  {
+   "start": 19.52,
+   "end": 19.98,
+   "word": " tiempos"
+  },
+  {
+   "start": 19.98,
+   "end": 20.34,
+   "word": " muertos."
+  },
+  {
+   "start": 20.64,
+   "end": 20.88,
+   "word": " Por"
+  },
+  {
+   "start": 20.88,
+   "end": 21.1,
+   "word": " ejemplo,"
+  },
+  {
+   "start": 21.22,
+   "end": 21.32,
+   "word": " cuando"
+  },
+  {
+   "start": 21.32,
+   "end": 21.58,
+   "word": " estamos"
+  },
+  {
+   "start": 21.58,
+   "end": 22.1,
+   "word": " durmiendo,"
+  },
+  {
+   "start": 22.22,
+   "end": 22.56,
+   "word": " cuando"
+  },
+  {
+   "start": 22.56,
+   "end": 22.78,
+   "word": " estamos"
+  },
+  {
+   "start": 22.78,
+   "end": 22.96,
+   "word": " al"
+  },
+  {
+   "start": 22.96,
+   "end": 23.44,
+   "word": " gimnasio"
+  },
+  {
+   "start": 23.44,
+   "end": 23.86,
+   "word": " o"
+  },
+  {
+   "start": 23.86,
+   "end": 24.06,
+   "word": " cuando"
+  },
+  {
+   "start": 24.06,
+   "end": 24.4,
+   "word": " no"
+  },
+  {
+   "start": 24.4,
+   "end": 24.6,
+   "word": " estamos"
+  },
+  {
+   "start": 24.6,
+   "end": 25.08,
+   "word": " pendientes"
+  },
+  {
+   "start": 25.08,
+   "end": 25.2,
+   "word": " de"
+  },
+  {
+   "start": 25.2,
+   "end": 25.26,
+   "word": " la"
+  },
+  {
+   "start": 25.26,
+   "end": 25.8,
+   "word": " computadora."
+  },
+  {
+   "start": 26.36,
+   "end": 26.36,
+   "word": " Así"
+  },
+  {
+   "start": 26.36,
+   "end": 26.94,
+   "word": " hacemos"
+  },
+  {
+   "start": 26.94,
+   "end": 27.16,
+   "word": " que,"
+  },
+  {
+   "start": 27.96,
+   "end": 28.66,
+   "word": " así"
+  },
+  {
+   "start": 28.66,
+   "end": 29.12,
+   "word": " podemos"
+  },
+  {
+   "start": 29.12,
+   "end": 29.38,
+   "word": " hacer"
+  },
+  {
+   "start": 29.38,
+   "end": 29.52,
+   "word": " que"
+  },
+  {
+   "start": 29.52,
+   "end": 29.64,
+   "word": " nuestro"
+  },
+  {
+   "start": 29.64,
+   "end": 30.04,
+   "word": " Cloud"
+  },
+  {
+   "start": 30.04,
+   "end": 30.56,
+   "word": " funcione"
+  },
+  {
+   "start": 30.56,
+   "end": 30.76,
+   "word": " sin"
+  },
+  {
+   "start": 30.76,
+   "end": 30.84,
+   "word": " que"
+  },
+  {
+   "start": 30.84,
+   "end": 31.14,
+   "word": " estemos"
+  },
+  {
+   "start": 31.14,
+   "end": 32.04,
+   "word": " dentro"
+  },
+  {
+   "start": 32.04,
+   "end": 32.3,
+   "word": " de"
+  },
+  {
+   "start": 32.3,
+   "end": 33.18,
+   "word": " la..."
+  },
+  {
+   "start": 33.18,
+   "end": 33.48,
+   "word": " Así"
+  },
+  {
+   "start": 33.48,
+   "end": 33.7,
+   "word": " hacemos"
+  },
+  {
+   "start": 33.7,
+   "end": 33.86,
+   "word": " que"
+  },
+  {
+   "start": 33.86,
+   "end": 33.96,
+   "word": " nuestro"
+  },
+  {
+   "start": 33.96,
+   "end": 34.24,
+   "word": " Cloud"
+  },
+  {
+   "start": 34.24,
+   "end": 34.64,
+   "word": " funcione"
+  },
+  {
+   "start": 34.64,
+   "end": 34.82,
+   "word": " sin"
+  },
+  {
+   "start": 34.82,
+   "end": 34.9,
+   "word": " que"
+  },
+  {
+   "start": 34.9,
+   "end": 35.14,
+   "word": " estemos"
+  },
+  {
+   "start": 35.14,
+   "end": 35.32,
+   "word": " en"
+  },
+  {
+   "start": 35.32,
+   "end": 35.44,
+   "word": " la"
+  },
+  {
+   "start": 35.44,
+   "end": 35.9,
+   "word": " habitación,"
+  },
+  {
+   "start": 36.22,
+   "end": 36.7,
+   "word": " así"
+  },
+  {
+   "start": 36.7,
+   "end": 37.92,
+   "word": " podemos"
+  },
+  {
+   "start": 37.92,
+   "end": 38.14,
+   "word": " hacer"
+  },
+  {
+   "start": 38.14,
+   "end": 38.26,
+   "word": " que"
+  },
+  {
+   "start": 38.26,
+   "end": 38.36,
+   "word": " nuestro"
+  },
+  {
+   "start": 38.36,
+   "end": 38.78,
+   "word": " Cloud"
+  },
+  {
+   "start": 38.78,
+   "end": 39.42,
+   "word": " funcione"
+  },
+  {
+   "start": 39.42,
+   "end": 39.58,
+   "word": " sin"
+  },
+  {
+   "start": 39.58,
+   "end": 40.2,
+   "word": " que..."
+  },
+  {
+   "start": 40.2,
+   "end": 40.56,
+   "word": " Así"
+  },
+  {
+   "start": 40.56,
+   "end": 40.86,
+   "word": " podemos"
+  },
+  {
+   "start": 40.86,
+   "end": 41.1,
+   "word": " hacer"
+  },
+  {
+   "start": 41.1,
+   "end": 41.22,
+   "word": " que"
+  },
+  {
+   "start": 41.22,
+   "end": 41.36,
+   "word": " nuestro"
+  },
+  {
+   "start": 41.36,
+   "end": 41.7,
+   "word": " Cloud"
+  },
+  {
+   "start": 41.7,
+   "end": 42.34,
+   "word": " funcione"
+  },
+  {
+   "start": 42.34,
+   "end": 42.52,
+   "word": " sin"
+  },
+  {
+   "start": 42.52,
+   "end": 42.62,
+   "word": " que"
+  },
+  {
+   "start": 42.62,
+   "end": 42.88,
+   "word": " estemos"
+  },
+  {
+   "start": 42.88,
+   "end": 43.02,
+   "word": " en"
+  },
+  {
+   "start": 43.02,
+   "end": 43.16,
+   "word": " nuestra"
+  },
+  {
+   "start": 43.16,
+   "end": 43.64,
+   "word": " oficina"
+  },
+  {
+   "start": 43.64,
+   "end": 44.1,
+   "word": " y"
+  },
+  {
+   "start": 44.1,
+   "end": 44.46,
+   "word": " estemos"
+  },
+  {
+   "start": 44.46,
+   "end": 44.8,
+   "word": " afuera"
+  },
+  {
+   "start": 44.8,
+   "end": 44.88,
+   "word": " y"
+  },
+  {
+   "start": 44.88,
+   "end": 45.24,
+   "word": " funcione"
+  },
+  {
+   "start": 45.24,
+   "end": 45.42,
+   "word": " por"
+  },
+  {
+   "start": 45.42,
+   "end": 45.52,
+   "word": " él"
+  },
+  {
+   "start": 45.52,
+   "end": 45.76,
+   "word": " mismo."
+  },
+  {
+   "start": 45.92,
+   "end": 45.94,
+   "word": " Así"
+  },
+  {
+   "start": 45.94,
+   "end": 46.14,
+   "word": " que,"
+  },
+  {
+   "start": 46.24,
+   "end": 46.52,
+   "word": " vamos"
+  },
+  {
+   "start": 46.52,
+   "end": 46.64,
+   "word": " a"
+  },
+  {
+   "start": 46.64,
+   "end": 46.7,
+   "word": " la"
+  },
+  {
+   "start": 46.7,
+   "end": 46.94,
+   "word": " pantalla"
+  },
+  {
+   "start": 46.94,
+   "end": 47.18,
+   "word": " y"
+  },
+  {
+   "start": 47.18,
+   "end": 47.26,
+   "word": " te"
+  },
+  {
+   "start": 47.26,
+   "end": 47.52,
+   "word": " enseño"
+  },
+  {
+   "start": 47.52,
+   "end": 47.7,
+   "word": " cómo"
+  },
+  {
+   "start": 47.7,
+   "end": 48.06,
+   "word": " funciona."
+  }
+ ]
+}
