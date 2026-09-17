@@ -35,9 +35,10 @@
  * es de donde salen y adonde van los `ok` de Sergio Urcullo): ¿hay trabajo sin publicar? y
  * ¿hay un pedido vivo con `DESPLEGAR: <ese destino>`?
  *
- *   trabajo > 0 y sin pedido → DESCUBIERTO. Es el ítem: hay que abrir el pedido.
- *   trabajo > 0 y con pedido → cubierto.
- *   trabajo 0                → cubierto (no hay nada que pedir).
+ *   trabajo > 0 y sin pedido            → DESCUBIERTO. Es el ítem: hay que abrir el pedido.
+ *   trabajo > 0 y con pedido de hoy     → cubierto.
+ *   trabajo > 0 y con pedido de +24 h   → CUBIERTO_VIEJO. No falta un pedido: falta el `ok`.
+ *   trabajo 0                           → cubierto (no hay nada que pedir).
  *
  * ─────────────────────────────────────────────────────────────────────────────────────
  * LA TERCERA PREGUNTA, Y POR QUÉ NO ESTABA — medido el 2026-09-12 20:44 La Paz.
@@ -96,25 +97,64 @@ const LA_PAZ_UTC = -4;
 // ── núcleo puro ────────────────────────────────────────────────────────────────────────
 
 /**
+ * A partir de cuántas horas un pedido de deploy vivo deja de ser «recién pedido» y pasa a
+ * ser trabajo varado. 24 h, por dos motivos medidos y no por gusto: el mismo umbral con el
+ * que este carril juzga una rama sin mergear, y Sergio Urcullo mira los bloqueos del tablero
+ * a lo sumo una vez por día. Debajo de eso, avisar es apurarlo; encima, el silencio es lo
+ * que dejó al bot cuatro días sin publicar.
+ */
+export const HORAS_PARA_ENVEJECER = 24;
+
+/**
+ * PURA: cuántas horas lleva esperando el pedido MÁS VIEJO de los que cubren un destino, o
+ * `null` si ninguno trae fecha legible.
+ *
+ * Un pedido sin fecha no cuenta como 0: eso lo declararía recién abierto y lo absolvería
+ * para siempre, que es justo la dirección que este gate no puede permitirse.
+ */
+export function esperaDelMasViejo(pedidos, ahora) {
+  const fechas = (pedidos || [])
+    .map((p) => p?.creado)
+    .filter((c) => typeof c === 'number' && Number.isFinite(c));
+  if (fechas.length === 0) return null;
+  return Math.floor((ahora - Math.min(...fechas) * 1000) / 3_600_000);
+}
+
+/**
  * PURA: el veredicto por destino.
  *
  * @param destinos  nombres de la lista blanca (`Object.keys(DESTINOS)`).
  * @param pendiente `(destino) => true | false | null` — null es «no se sabe».
- * @param pedidos   los del barrido del tablero: `[{ id, destino }]`.
+ * @param pedidos   los del barrido del tablero: `[{ id, destino, creado }]`.
+ * @param ahora     epoch en ms; con él se decide si un pedido vivo ya ENVEJECIÓ.
  *
  * ⚠️ El sujeto son los DESTINOS, no los pedidos. Recorrer los pedidos —que es lo natural
  * cuando ya tenés el barrido en la mano— hace que un destino sin ninguna tarea no tenga
  * fila, y ése es exactamente el caso que este gate existe para cazar: el que no deja rastro.
+ *
+ * ⚠️ LA CUARTA PREGUNTA, del 2026-09-17: **¿hace cuánto que está pedido?**. `CUBIERTO`
+ * absolvía a un destino por el solo hecho de que existiera un pedido, sin mirar su edad, y
+ * eso es exactamente lo que este gate dijo durante los CUATRO días que el bot estuvo sin
+ * publicar 17 archivos de arreglos (su publicador decía `FALLO` ocho veces por día en un log
+ * que no escala a nadie). El veredicto era cierto —había pedido— y aun así el cliente no
+ * recibía nada: la firma de la familia es «verde mientras el trabajo no llega».
  */
-export function clasificarCobertura({ destinos, pendiente, pedidos, seAutoPublica }) {
+export function clasificarCobertura({ destinos, pendiente, pedidos, seAutoPublica, ahora }) {
   // EXIGIDA, no opcional con default: un llamador que se olvide de la tercera pregunta
   // volvería a mandar a abrir pedidos que el cron cumple solo, y lo haría en silencio.
   if (typeof seAutoPublica !== 'function') {
     throw new TypeError('clasificarCobertura necesita seAutoPublica(destino) → true | false | null');
   }
+  // EXIGIDA por el mismo motivo, y con un default sería peor todavía: `Date.now()` adentro
+  // vuelve la función impura y sus casos irrepetibles, y un llamador que se olvide del reloj
+  // dejaría de preguntar por la CUARTA pregunta sin que nada se pusiera rojo.
+  if (!Number.isFinite(ahora)) {
+    throw new TypeError('clasificarCobertura necesita ahora (epoch ms) para saber si un pedido envejecio');
+  }
   const filas = [];
   for (const destino of destinos) {
-    const cubiertoPor = (pedidos || []).filter((p) => p.destino === destino).map((p) => p.id);
+    const delDestino = (pedidos || []).filter((p) => p.destino === destino);
+    const cubiertoPor = delDestino.map((p) => p.id);
     const p = pendiente(destino);
     if (p === null || p === undefined) {
       // `fuente` dice QUIÉN no contestó, para que el que imprime pueda buscar la causa sin
@@ -127,7 +167,16 @@ export function clasificarCobertura({ destinos, pendiente, pedidos, seAutoPublic
       continue;
     }
     if (cubiertoPor.length > 0) {
-      filas.push({ destino, estado: 'CUBIERTO', pedidos: cubiertoPor });
+      // El pedido MÁS VIEJO, no el último: lo que se mide es hace cuánto que el arreglo no
+      // le llega al cliente, y eso arranca con el primer pedido que lo pidió. Abrir uno
+      // nuevo para el mismo destino no rejuvenece el trabajo varado.
+      const esperaH = esperaDelMasViejo(delDestino, ahora);
+      filas.push({
+        destino,
+        estado: esperaH !== null && esperaH >= HORAS_PARA_ENVEJECER ? 'CUBIERTO_VIEJO' : 'CUBIERTO',
+        pedidos: cubiertoPor,
+        esperaH,
+      });
       continue;
     }
     // Falta publicar y nadie lo pidió. Antes de mandar a molestar a Sergio Urcullo:
@@ -404,6 +453,7 @@ function medirEnVivo() {
     pedidos,
     pendiente: (d) => (DETECTORES[d] ? DETECTORES[d]() : null),
     seAutoPublica: (d) => seAutoPublicaSegun(verdictosDelPublicadorSolo(), d),
+    ahora: Date.now(),
   });
 
   for (const f of filas) {
@@ -420,8 +470,12 @@ function medirEnVivo() {
       console.log(`OK ${f.destino}: al dia, no hay nada que pedir${quien}`);
     } else if (f.estado === 'SE_PUBLICA_SOLO') {
       console.log(`OK ${f.destino}: falta publicar, pero el publicador automatico lo hace solo (<=3 h) — no hay que pedir ok.`);
+    } else if (f.estado === 'CUBIERTO_VIEJO') {
+      console.log(`AVISO ${f.destino}: el pedido lleva ${f.esperaH} h sin resolver — el arreglo sigue sin llegar al cliente${quien}`);
+      console.log('  No es un pedido que falte: es uno que nadie apreto. Abrir otro seria un duplicado.');
     } else {
-      console.log(`OK ${f.destino}: falta publicar y ya hay pedido${quien}`);
+      const desde = f.esperaH === null ? '' : ` (pedido hace ${f.esperaH} h)`;
+      console.log(`OK ${f.destino}: falta publicar y ya hay pedido${quien}${desde}`);
     }
   }
 
@@ -432,6 +486,12 @@ function medirEnVivo() {
     return 1;
   }
   if (filas.some((f) => f.estado === 'NO_MEDIDO')) return 2;
+  // ⚠️ `CUBIERTO_VIEJO` NO cambia el código de salida, y es una decisión, no un olvido. Este
+  // gate está en la cadena `npm test` que el integrador corre antes de cada merge: ponerlo
+  // rojo por un pedido que sólo Sergio Urcullo puede destrabar trabaría el merge de TODOS los
+  // carriles hasta que él apriete un botón, y la cura sería saltearse el gate — que es como
+  // esta familia de gates se muere. El aviso va donde lo lee quien puede hacer algo: la
+  // salida que mira la vuelta del integrador.
   return 0;
 }
 
@@ -450,9 +510,37 @@ function selfCheck() {
   /** El publicador automático no cubre a `landing`: es el caso viejo, sin tercera pregunta. */
   const nadieLoPublicaSolo = () => false;
 
+  // ── Un pedido que ENVEJECE no es lo mismo que un pedido recién abierto ────────────────
+  // Ver la cabecera: mientras el pedido del bot esperaba 4 días, esto decía `CUBIERTO` y
+  // salía 0. Los casos van con `ahora` y una fecha de creación, que es lo único que
+  // distingue las dos situaciones.
+  const AHORA = Date.parse('2026-09-17T10:00:00Z');
+  const hace = (horas) => Math.floor((AHORA - horas * 3_600_000) / 1000);
+  const cubrir = (creado) => [{ id: 't_x', destino: 'landing', creado }];
+  const estadoDe = (pedidos, ahora = AHORA) =>
+    clasificarCobertura({ destinos: ['landing'], pedidos, pendiente: () => true, seAutoPublica: nadieLoPublicaSolo, ahora })[0];
+
+  ok(estadoDe(cubrir(hace(2))).estado === 'CUBIERTO', 'un pedido de hace 2 h es cobertura normal');
+  ok(estadoDe(cubrir(hace(96))).estado === 'CUBIERTO_VIEJO', 'un pedido de hace 4 dias ya no puede salir como cobertura normal');
+  ok(estadoDe(cubrir(hace(96))).esperaH === 96, 'el veredicto tiene que decir CUANTAS horas lleva esperando');
+  // El borde, escrito de los dos lados: sin esto, mover el umbral no rompe nada.
+  ok(estadoDe(cubrir(hace(23))).estado === 'CUBIERTO', 'debajo del umbral sigue siendo cobertura normal');
+  ok(estadoDe(cubrir(hace(25))).estado === 'CUBIERTO_VIEJO', 'pasado el umbral es CUBIERTO_VIEJO');
+  // Tri-estado: un pedido sin fecha legible NO se declara viejo ni se declara fresco.
+  ok(estadoDe(cubrir(null)).estado === 'CUBIERTO', 'sin fecha de creacion no se puede afirmar que envejecio');
+  ok(estadoDe(cubrir(null)).esperaH === null, 'sin fecha, la espera es null y no 0');
+  // Con dos pedidos del mismo destino manda el MÁS VIEJO: lo que se mide es hace cuánto que
+  // el arreglo no llega al cliente, y eso arranca con el primero, no con el último.
+  ok(
+    estadoDe([{ id: 't_viejo', destino: 'landing', creado: hace(96) }, { id: 't_nuevo', destino: 'landing', creado: hace(1) }]).estado === 'CUBIERTO_VIEJO',
+    'abrir un pedido nuevo no rejuvenece el trabajo que lleva 4 dias sin publicar',
+  );
+  // Y no puede tapar al DESCUBIERTO, que es el motivo por el que este gate existe.
+  ok(estadoDe(sinPedidos).estado === 'DESCUBIERTO', 'la pregunta nueva no puede cambiar el veredicto sin pedido');
+
   // El caso que motivó el gate: falta publicar y no hay pedido.
   ok(
-    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: nadieLoPublicaSolo })[0].estado === 'DESCUBIERTO',
+    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: nadieLoPublicaSolo, ahora: AHORA })[0].estado === 'DESCUBIERTO',
     'falta publicar y sin pedido tiene que ser DESCUBIERTO',
   );
   // El caso que YA CUMPLE. Sin él, un gate que devolviera DESCUBIERTO siempre pasaría.
@@ -465,17 +553,18 @@ function selfCheck() {
       pedidos: conLanding,
       pendiente: () => true,
       seAutoPublica: (d) => { preguntas.push(d); return false; },
+      ahora: AHORA,
     })[0].estado === 'CUBIERTO',
     'falta publicar y con pedido vivo NO puede ser DESCUBIERTO',
   );
   ok(preguntas.length === 0, 'con pedido vivo no hay que ir a preguntarle al publicador automatico');
   ok(
-    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => false, seAutoPublica: nadieLoPublicaSolo })[0].estado === 'AL_DIA',
+    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => false, seAutoPublica: nadieLoPublicaSolo, ahora: AHORA })[0].estado === 'AL_DIA',
     'sin trabajo pendiente no hay nada que pedir',
   );
   // No se sabe nunca puede acusar: es la dirección que hace abrir pedidos duplicados.
   ok(
-    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => null, seAutoPublica: nadieLoPublicaSolo })[0].estado === 'NO_MEDIDO',
+    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => null, seAutoPublica: nadieLoPublicaSolo, ahora: AHORA })[0].estado === 'NO_MEDIDO',
     'sin poder medir NO puede salir DESCUBIERTO',
   );
 
@@ -483,18 +572,18 @@ function selfCheck() {
   // Los dos NO_MEDIDO vienen de instrumentos distintos, y el que imprime tiene que poder
   // buscar la causa del que falló SIN adivinarla del texto del motivo.
   ok(
-    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => null, seAutoPublica: nadieLoPublicaSolo })[0].fuente === 'detector',
+    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => null, seAutoPublica: nadieLoPublicaSolo, ahora: AHORA })[0].fuente === 'detector',
     'el NO_MEDIDO del detector se declara "detector"',
   );
   ok(
-    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: () => null })[0].fuente === 'publicador',
+    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: () => null, ahora: AHORA })[0].fuente === 'publicador',
     'el NO_MEDIDO del publicador automatico se declara "publicador"',
   );
   // Los dos NO_MEDIDO tienen que ser DISTINGUIBLES: si los dos dijeran lo mismo, el que
   // imprime le pediría la causa al instrumento que sí contestó y la línea saldría vacía.
   ok(
-    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => null, seAutoPublica: nadieLoPublicaSolo })[0].fuente
-      !== clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: () => null })[0].fuente,
+    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => null, seAutoPublica: nadieLoPublicaSolo, ahora: AHORA })[0].fuente
+      !== clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: () => null, ahora: AHORA })[0].fuente,
     'los dos NO_MEDIDO no pueden nombrar la misma fuente',
   );
 
@@ -533,11 +622,11 @@ function selfCheck() {
   ok(informado.causa === null, 'y no deja causa colgada: no hubo nada que diagnosticar');
   // Un pedido de OTRO destino no cubre a éste.
   ok(
-    clasificarCobertura({ destinos: ['landing'], pedidos: [{ id: 't_y', destino: 'bot' }], pendiente: () => true, seAutoPublica: nadieLoPublicaSolo })[0].estado === 'DESCUBIERTO',
+    clasificarCobertura({ destinos: ['landing'], pedidos: [{ id: 't_y', destino: 'bot' }], pendiente: () => true, seAutoPublica: nadieLoPublicaSolo, ahora: AHORA })[0].estado === 'DESCUBIERTO',
     'un pedido de otro destino no cubre a landing',
   );
   // El sujeto son los DESTINOS: uno sin ninguna tarea tiene que tener fila igual.
-  const filas = clasificarCobertura({ destinos: ['landing', 'plataforma', 'bot'], pedidos: conLanding, pendiente: () => true, seAutoPublica: nadieLoPublicaSolo });
+  const filas = clasificarCobertura({ destinos: ['landing', 'plataforma', 'bot'], pedidos: conLanding, pendiente: () => true, seAutoPublica: nadieLoPublicaSolo, ahora: AHORA });
   ok(filas.length === 3, 'tiene que haber una fila por destino, tenga tareas o no');
   ok(filas.filter((f) => f.estado === 'DESCUBIERTO').length === 2, 'los dos destinos sin pedido tienen que salir descubiertos');
 
@@ -545,28 +634,37 @@ function selfCheck() {
   // Falta publicar, no hay pedido, PERO el cron lo publica solo en <=3 h: pedirle un `ok`
   // a Sergio Urcullo por eso es el pedido que nace cumplido.
   ok(
-    clasificarCobertura({ destinos: ['bot'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: () => true })[0].estado === 'SE_PUBLICA_SOLO',
+    clasificarCobertura({ destinos: ['bot'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: () => true, ahora: AHORA })[0].estado === 'SE_PUBLICA_SOLO',
     'lo que el publicador automatico hace solo NO puede salir DESCUBIERTO',
   );
   // El caso que YA CUMPLE: sin auto-publicacion, el veredicto de siempre.
   ok(
-    clasificarCobertura({ destinos: ['bot'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: () => false })[0].estado === 'DESCUBIERTO',
+    clasificarCobertura({ destinos: ['bot'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: () => false, ahora: AHORA })[0].estado === 'DESCUBIERTO',
     'lo que el publicador automatico NO toca sigue siendo DESCUBIERTO',
   );
   // No poder preguntarle tampoco absuelve: absolver a ciegas esconde un arreglo varado.
   ok(
-    clasificarCobertura({ destinos: ['bot'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: () => null })[0].estado === 'NO_MEDIDO',
+    clasificarCobertura({ destinos: ['bot'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: () => null, ahora: AHORA })[0].estado === 'NO_MEDIDO',
     'sin saber si se publica solo NO puede salir ni DESCUBIERTO ni absuelto',
   );
   // La pregunta es OBLIGATORIA: un llamador que se la olvide tiene que romperse, no
   // heredar el veredicto viejo en silencio.
+  // Cada una se prueba con la OTRA puesta: si al caso le faltan las dos, el `catch` se lo
+  // come el primer `throw` y el segundo parámetro queda sin probar, opcional y en verde.
   let exigida = false;
   try {
-    clasificarCobertura({ destinos: ['bot'], pedidos: sinPedidos, pendiente: () => true });
+    clasificarCobertura({ destinos: ['bot'], pedidos: sinPedidos, pendiente: () => true, ahora: AHORA });
   } catch {
     exigida = true;
   }
   ok(exigida, 'clasificarCobertura tiene que EXIGIR seAutoPublica, no darla por default');
+  let exigeAhora = false;
+  try {
+    clasificarCobertura({ destinos: ['bot'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: nadieLoPublicaSolo });
+  } catch {
+    exigeAhora = true;
+  }
+  ok(exigeAhora, 'clasificarCobertura tiene que EXIGIR ahora: sin reloj no puede decir si un pedido envejecio');
 
   // Lectura de la salida real del publicador automatico (sus cinco veredictos).
   const seco = [

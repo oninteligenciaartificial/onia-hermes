@@ -9,7 +9,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { archivosDelDryRun, archivosDelDryRunBot, archivosNombrados, secoDeProduccion, barrerTablero, barrerTableroJson, buildQueCorre, cadenaPorPedido, clasificarPedido, imprimirCadena, cuerpoCortoArchivos, cuerpoNoEjecuta, inmediblesSinDeclarar, publicariaPorCopia, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
+import { archivosDelDryRun, archivosDelDryRunBot, archivosNombrados, secoDeProduccion, barrerTablero, creadoEnSegundos, barrerTableroJson, buildQueCorre, cadenaPorPedido, clasificarPedido, imprimirCadena, cuerpoCortoArchivos, cuerpoNoEjecuta, inmediblesSinDeclarar, publicariaPorCopia, shasDelTexto, shasPrometidos, soloLosQueViajan } from './pedido_deploy_entregado.mjs';
 import { DESTINOS, ESTADOS_VIVOS } from './kanban/publicar-aprobado.mjs';
 
 // El caso que me costo la vuelta del 2026-09-06: los 13 shas prometidos por t_0268567b
@@ -113,6 +113,36 @@ test('el barrido encuentra un pedido por cada tarea abierta que declara DESPLEGA
   const { pedidos, ilegibles } = barrerTablero({ tareas: TAREAS });
   assert.deepEqual(pedidos.map((p) => p.destino), ['bot', 'plataforma']);
   assert.deepEqual(ilegibles, []);
+});
+
+// La EDAD del pedido viaja en el barrido porque su consumidor (deploy_sin_pedido.mjs) la
+// necesita para distinguir un pedido recien abierto de uno que lleva dias sin que nadie lo
+// apriete. Sin este campo, ese gate absuelve igual a los dos.
+test('el barrido trae CUANDO nacio cada pedido, en segundos epoch', () => {
+  const { pedidos } = barrerTablero({
+    tareas: [{ id: 't_a', status: 'blocked', body: 'DESPLEGAR: bot', created_at: 1789638115 }],
+  });
+  assert.equal(pedidos[0].creado, 1789638115);
+});
+
+// Tri-estado: sin fecha legible es `null`, nunca 0 ni la fecha de hoy. Inventarla declararia
+// fresco a un pedido de la semana pasada, que es la direccion que calla trabajo varado.
+test('un pedido sin fecha legible trae creado null, no un numero inventado', () => {
+  for (const tarea of [
+    { id: 't_a', status: 'blocked', body: 'DESPLEGAR: bot' },
+    { id: 't_b', status: 'blocked', body: 'DESPLEGAR: bot', created_at: null },
+    { id: 't_c', status: 'blocked', body: 'DESPLEGAR: bot', created_at: 'ayer' },
+  ]) {
+    const { pedidos } = barrerTablero({ tareas: [tarea] });
+    assert.equal(pedidos[0].creado, null, `${tarea.id} no puede inventar fecha`);
+  }
+});
+
+test('creadoEnSegundos acepta las formas que el tablero ya usa', () => {
+  assert.equal(creadoEnSegundos({ created_at: 1789638115 }), 1789638115);
+  assert.equal(creadoEnSegundos({ created_at: '1789638115' }), 1789638115);
+  assert.equal(creadoEnSegundos({ createdAt: 1789638115 }), 1789638115);
+  assert.equal(creadoEnSegundos({ created_at: '2026-09-17T09:41:55Z' }), 1789638115);
 });
 
 // Una tarea CERRADA no es un pedido vivo: su `ok` ya no ejecuta (el brazo sale 3). Contarla

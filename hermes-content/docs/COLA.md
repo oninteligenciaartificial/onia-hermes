@@ -77,6 +77,42 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [x] 🔴 **`deploy_sin_pedido.mjs` daba VERDE por el solo hecho de que el pedido EXISTIERA, sin
+      mirar hace cuánto — que es exactamente lo que dijo durante los cuatro días que el bot
+      estuvo sin publicar. CERRADO el 2026-09-17 07:5x La Paz por `onia-cola`.**
+      **De dónde salió, y no de la cola:** midiendo mi propio objetivo esta vuelta. Los cuatro
+      destinos daban `OK … falta publicar y ya hay pedido`, exit 0 — el mismo texto que habrían
+      dado el 13, el 14, el 15 y el 16 de septiembre, mientras el bot acumulaba **17 archivos**
+      de arreglos sin llegar al cliente y su única señal era `bot: FALLO` ocho veces por día en
+      `/var/log/onia-publicar-solo.log`, un log que no escala a nadie. El veredicto era **cierto**
+      —había pedido— y aun así el cliente no recibía nada: es la firma «verde mientras el trabajo
+      no llega», la misma que ya había costado 34 arreglos varados con los cuatro números en verde.
+      **La cuarta pregunta que faltaba:** no «¿hay pedido?» sino **«¿hace cuánto que está pedido?»**.
+      La edad viaja desde el barrido del tablero (`creadoEnSegundos` en
+      `scripts/pedido_deploy_entregado.mjs`, tri-estado: sin fecha legible es `null`, nunca 0 —
+      inventarla declararía fresco a un pedido de la semana pasada), y `clasificarCobertura`
+      separa `CUBIERTO` de `CUBIERTO_VIEJO` a las **24 h**, el mismo umbral con el que este carril
+      juzga una rama sin mergear. Manda el pedido **más viejo** del destino: abrir uno nuevo no
+      rejuvenece el trabajo varado.
+      **Lo que NO hace, y es la decisión del ítem:** `CUBIERTO_VIEJO` **no cambia el código de
+      salida**. Este gate está en la cadena `npm test` que el integrador corre antes de cada merge;
+      ponerlo rojo por un pedido que sólo Sergio Urcullo puede destrabar trabaría el merge de
+      **todos** los carriles hasta que él apriete un botón, y la cura sería saltearse el gate —
+      que es como esta familia se muere. El aviso va a la salida que lee la vuelta del integrador,
+      y dice que **no falta un pedido: falta el `ok`**, para que nadie abra un duplicado.
+      **`ahora` es EXIGIDA** (`TypeError`, como `seAutoPublica`): con `Date.now()` adentro la
+      función sería impura y sus casos irrepetibles, y un llamador que se olvidara del reloj
+      dejaría de hacer la pregunta nueva sin que nada se pusiera rojo. Los dos casos que prueban
+      cada exigencia pasan **la otra puesta** — si al caso le faltan las dos, el `catch` se lo come
+      el primer `throw` y el segundo parámetro queda opcional y en verde.
+      **Validado por mutación, las cuatro en rojo cada una por su razón**, restaurando con `cp` y
+      nunca con `git checkout`: esquivar el umbral (`false ? …`) → 3 fallos; `Math.max` por
+      `Math.min` → cae sólo el caso de los dos pedidos; `return 0` por `return null` sin fechas →
+      cae sólo el del tri-estado; y sacar `creado` del barrido → `pedido_deploy_entregado.test.mjs`
+      pasa de 87/87 a **85 pass, 2 fail**. Restaurado: `self-check OK`, 87/87 y `npm test` exit 0.
+      **Medido en vivo** contra el tablero real: `npm run deploy:sin-pedido` imprime hoy
+      `OK plataforma: falta publicar y ya hay pedido — pedido t_db98ee26 (pedido hace 1 h)`.
+
 - [x] 🔴 **El sitio prometía «en los TRES planes no cobramos implementación ni migración»
       mientras pintaba CUATRO tarjetas comprables.** Encontrado y **CERRADO el 2026-09-13
       12:55 La Paz por `web-venta`** (`b43c1f12`). Medido contra producción: `onia.com.bo/`
