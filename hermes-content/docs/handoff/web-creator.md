@@ -1,7 +1,7 @@
 # Handoff — carril `web-creator` (configurador de webs + web personal)
 
 > Formato: `hermes-content/docs/handoff/README.md`. Se sobrescribe; es el estado ACTUAL.
-> Última escritura: **2026-09-17**, rama `claude/web-creator-personal-site-eed2f3`, worktree
+> Última escritura: **2026-09-17 (2ª pasada, con el asistente)**, rama `claude/web-creator-personal-site-eed2f3`, worktree
 > `.claude/worktrees/web-creator-personal-site-eed2f3`. Puertos locales: 3011 (sitio Onia),
 > 8099 (web personal).
 >
@@ -49,6 +49,8 @@ auto-sync lo pushea)
 | `requisitos-gate.tsx` | `src/components/` | versión de Codex: props `ready/blockedHint/blockedTargetId`, compatibles hacia atrás |
 | `PedirWeb.tsx` + `webs.module.css` | `(sitio)/servicios/webs/` | **muertos** (nadie los importa) pero 9 tests los nombran por ruta; no se borraron |
 | **Web personal portada al repo** | `hermes-content/sitio-sergiourcullo/**` | `abcbb7f` (catálogo `/webs`, sin pushear) + diff sin commitear de Codex (CTAs en hero, «Agendar 1 a 1» en la barra, cifras como franja, links al configurador, swipe horizontal en móvil). Renderizada y MIRADA a 390 y 1440, sin desborde |
+| **Asistente (paso 00)** — cuestionario nombre · rubro · objetivo · sentir · color → arma toda la selección y salta al preview | `src/content/web-assistant.ts` (reglas puras, 10 rubros) · `src/components/web-configurator/WebAssistant.tsx` · CSS al pie del módulo · `web-assistant.test.ts` (4 casos) | **Recorrido con Playwright a 390 y 1440**: «Clínica Amanecer» + Clínica dental + Premium → Portada editorial · Editorial, titular del rubro, CTA «Reservar un turno», 0 errores de consola. Son REGLAS, no un modelo (costo de API cero); un LLM entraría después sólo para copy |
+| **Precios aplicados (decisión 17-sep)** | `webs.ts`: Landing 2.000 · Profesional 4.500 con precio; **Pro → `precio: null`**, `precioWeb()` dice «Lo vemos en una llamada»; configurador y WhatsApp piden la llamada cuando no hay precio. `sitio-sergiourcullo/webs/index.html` alineado (2.000 / 4.500 / «En una llamada» ×2). Doc: `ONIA_WEB_COMO_SE_VENDE.md` §8 | hecho, sin publicar |
 | `PRODUCT.md` + `web-layout-examples.png` (2,5 MB) | `apps/onia-platform/` | de Codex; el PNG lo usa `website-preview.module.css` |
 
 Capturas de esta sesión: scratchpad `…/4efc96b0…/scratchpad/{personal,onia}/*.png`.
@@ -88,14 +90,15 @@ hermes-content/sitio-sergiourcullo/**          (+ scripts/publicar-sitio.py, sin
 
 | | Bloquea |
 |---|---|
-| 🔴 **Precio de las webs.** `ONIA_WEB_COMO_SE_VENDE.md` §8: **DECIDIDO 24-ago, sin lista, se cotiza caso por caso.** Hoy conviven 3 listas: prod 2.000/4.500 · configurador dinámico + 50/50 · `/webs` personal 790/1.500/2.900. **Dos salidas:** (a) mantener la decisión → el configurador muestra «a cotizar» y el catálogo personal saca montos; (b) revertirla → un solo archivo manda (`webs.ts`) y el catálogo personal lee de ahí. | publicar cualquiera de las dos superficies |
+| ✅ ~~Precio de las webs~~ **Decidido 17-sep**: básicos con precio (Landing 2.000, Profesional 4.500), Pro y Tienda en una llamada. Aplicado en código y doc. | — |
+| 🟡 **Mirar el asistente** (`localhost:3011/servicios/webs`, o las capturas `flow/asistente-*.png`) y decir si los 10 rubros y sus defaults (dirección, paleta, titular) son los que querés. Las fotos del preview son por dirección visual, no por rubro: una dental «premium» sale con foto de boutique. | pulir antes de publicar |
 | 🔴 **Mirar las dos piezas** (capturas del scratchpad o `localhost:3011/servicios/webs` y `localhost:8099/webs/`) y decir si la página de Onia se queda con tarjetas + configurador o sólo configurador (Codex la dejó sólo configurador: 9.601 px en móvil; hoy 15.297 px). | el diseño final |
 | 🟡 La propuesta de Codex «Página Base Conectada» incluida en planes ANUALES (Profesional/Completo) — es una decisión de packaging; no se implementó. | nada hoy |
 | 🟡 Confirmar que `WA_PHONE` de `src/lib/site.ts` es el WhatsApp comercial definitivo. | el envío real |
 
 ## 7 · Próximos pasos (en orden)
 
-1. Sergio Urcullo decide precio (§6). Aplicar en `webs.ts` / configurador / `webs/index.html`.
+1. ~~Precio~~ hecho. Fotos del preview por rubro (hoy por dirección) si Sergio Urcullo lo pide.
 2. Decidir tarjetas+configurador vs sólo configurador; si «sólo», quitar los bloques `stacks` y
    `cuidado` de la página y ajustar los tests que los miran.
 3. Correr la suite en Linux. **El 17-sep no se pudo**: WSL Ubuntu no tiene Node, Docker

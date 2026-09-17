@@ -24,6 +24,11 @@
  * checkout por WhatsApp/email de la tienda. Lo que no está construido está en
  * "no incluye": panel de edición, sitio en dos idiomas, blog y pasarela.
  *
+ * DECISIÓN 2026-09-17 (Sergio Urcullo): los planes básicos SÍ tienen precio
+ * publicado —Landing 2.000 y Web Profesional 4.500, lo que el configurador
+ * arma solo—; lo que no se puede armar ahí (Web Pro a medida, tienda) se
+ * cierra en una llamada. Fuente: ONIA_WEB_COMO_SE_VENDE.md §8.
+ *
  * PRECIOS RATIFICADOS 2026-08-23 por Sergio: 2.000 / 4.500 / desde 7.500.
  * Antes decían 790/1.500/2.900, que era una **oferta de arranque vencida el
  * 31-jul-2026** y que nadie estaba cobrando: las propuestas reales (AW
@@ -157,7 +162,9 @@ export const WEB_STACKS: readonly WebStack[] = [
   {
     id: "pro",
     nombre: "Web Pro Onia",
-    precio: 7500,
+    // Sin lista desde el 2026-09-17: dirección de arte propia no se arma en
+    // el configurador, se cierra en una llamada. Referencia interna: desde 7.500.
+    precio: null,
     paraQuien:
       "El que compite por imagen y no puede parecerse a nadie, o el que va a invertir en pauta y quiere seguirle el rastro a los contactos.",
     resuelve:
@@ -214,7 +221,7 @@ export const WEB_STACKS: readonly WebStack[] = [
 
 export function precioWeb(stack: WebStack): string {
   return stack.precio === null
-    ? "Se cotiza con tu catálogo"
+    ? "Lo vemos en una llamada"
     : `Bs ${stack.precio.toLocaleString("es-BO")} · pago único`;
 }
 

@@ -598,3 +598,78 @@
     transform: none;
   }
 }
+
+/* ---------- paso 00: el asistente ---------- */
+.assistantStep {
+  display: grid;
+  gap: 0.9rem;
+  border-color: var(--accent);
+  background: linear-gradient(180deg, var(--accent-soft), var(--surface) 55%);
+}
+
+.assistantQuestion {
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.assistantLegend {
+  padding: 0;
+  color: var(--ink);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.chipGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 40px;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease);
+}
+
+.chip:hover {
+  border-color: var(--ink-soft);
+}
+
+.chipSwatch {
+  inline-size: 14px;
+  block-size: 14px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.12);
+}
+
+.assistantActions {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+}
+
+.assistantActions .btn[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.assistantDone {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}

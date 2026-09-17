@@ -27,6 +27,8 @@ import {
   type WebIntakeDraft,
 } from "@/content/web-intake";
 import { CUIDADO_WEB, WEB_ADDONS, WEB_STACKS, precioWeb, type WebStackId } from "@/content/webs";
+import type { AssistantPlan } from "@/content/web-assistant";
+import { WebAssistant } from "./WebAssistant";
 import { WebPreviewIntake, WebRequestDetails } from "./WebIntakeForm";
 import { WebsitePreview, type WebsitePreviewContent } from "./WebsitePreview";
 import styles from "./web-configurator.module.css";
@@ -146,6 +148,26 @@ export function WebConfigurator() {
     setIntake((current) => ({ ...current, [field]: value }));
   }
 
+  /** El asistente (paso 00) deja todos los pasos elegidos y lleva al preview. */
+  function applyPlan(plan: AssistantPlan) {
+    const chosenPalette = WEB_PALETTES.find((item) => item.id === plan.palette) ?? WEB_PALETTES[0];
+    setDirectionId(plan.direction);
+    setLayoutId(plan.layout);
+    setPaletteId(chosenPalette.id);
+    setAccent(chosenPalette.accent);
+    setFontId(plan.font);
+    setGoalId(plan.goal);
+    setStackId(plan.stack);
+    setIntake((current) => ({
+      ...current,
+      businessName: plan.intake.businessName,
+      industry: plan.intake.industry || current.industry,
+      offer: plan.intake.offer,
+      services: plan.intake.services || current.services,
+    }));
+    showMobilePane("preview");
+  }
+
   const previewStyle = useMemo<PreviewStyle>(
     () => ({
       "--preview-bg": palette.background,
@@ -162,7 +184,9 @@ export function WebConfigurator() {
   );
 
   const mensaje = [
-    "Hola, vengo del configurador de webs de ONIA.",
+    estimatedTotal === null
+      ? "Hola, vengo del configurador de webs de ONIA y quiero agendar una llamada para cerrar mi web."
+      : "Hola, vengo del configurador de webs de ONIA.",
     ...(origin === "sergio" ? ["Llegué desde la página de Sergio."] : []),
     "DATOS DEL NEGOCIO",
     `Contacto: ${intake.contactName}.`,
@@ -181,7 +205,7 @@ export function WebConfigurator() {
     `Nivel: ${SCOPE_COPY[stack.id].label}, ${stack.nombre}.`,
     `Precio base: ${precioWeb(stack)}.`,
     ...(crmAddon ? [`Extra: ${crm.nombre}, ${formatBs(crm.precio)} setup.`] : []),
-    `Estimado de construcción: ${estimatedTotal === null ? "a cotizar después de revisar el catálogo" : formatBs(estimatedTotal)}.`,
+    `Estimado de construcción: ${estimatedTotal === null ? "lo cerramos en una llamada" : formatBs(estimatedTotal)}.`,
     ...(estimatedTotal === null ? [] : [`Forma de pago 50/50: ${formatBs(estimatedTotal / 2)} para comenzar y ${formatBs(estimatedTotal / 2)} contra entrega.`]),
     `Cuidado web: ${care ? `${care.nombre}, ${formatBs(care.mensual)}/mes` : "sin plan mensual por ahora"}.`,
     "",
@@ -210,6 +234,8 @@ export function WebConfigurator() {
 
       <div className={styles.workspace} data-mobile-pane={mobilePane} id="configurador-vistas">
         <div className={styles.controls} aria-label="Opciones de diseño web">
+          <WebAssistant onApply={applyPlan} />
+
           <fieldset className={`${styles.step} ${styles.scopeStep}`}>
             <legend className={styles.stepTitle}>
               <span className={styles.stepNumber}>01</span>
@@ -259,7 +285,7 @@ export function WebConfigurator() {
               <span>Estimado de construcción</span>
               <strong>{estimatedTotal === null ? "A cotizar" : formatBs(estimatedTotal)}</strong>
               {estimatedTotal === null ? (
-                <p>Revisamos cantidad de productos, carga inicial y funciones antes de darte una cifra.</p>
+                <p>Esto no se arma solo: lo vemos con vos en una llamada, con el preview delante, y te damos precio cerrado.</p>
               ) : (
                 <div className={styles.paymentSplit}>
                   <span><b>{formatBs(estimatedTotal / 2)}</b> para comenzar</span>
@@ -444,7 +470,7 @@ export function WebConfigurator() {
           <RequisitosGate
             req={REQUISITOS_WEB}
             mensaje={mensaje}
-            cta={`Pedir mi ${stack.nombre} por WhatsApp`}
+            cta={estimatedTotal === null ? "Pedir una llamada por WhatsApp" : `Pedir mi ${stack.nombre} por WhatsApp`}
             ready={missingIntake.length === 0}
             blockedHint={`Completá estos datos antes de enviar: ${missingIntake.join(", ")}.`}
             blockedTargetId={missingPreviewBasics ? "datos-preview" : "datos-solicitud"}
