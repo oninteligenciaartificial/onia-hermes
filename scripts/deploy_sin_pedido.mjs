@@ -379,20 +379,64 @@ function dondeVive(guion, { timeout = 300_000, clave } = {}) {
 }
 
 /**
+ * PURA: la causa de un `null` que NO viene de no poder ejecutar, sino de no poder LEER.
+ *
+ * ⚠️ Un detector devuelve `null` por dos motivos que desde afuera se ven idénticos: no se
+ * pudo ejecutar (lo explica el `catch` de `sh`, con su código de salida) o **corrió, contestó
+ * y el parser no supo leer la respuesta**. El segundo no dejaba rastro: `sh` borraba la clave
+ * de `CAUSAS` al volver con éxito, así que el `NO MEDIDO` salía MUDO y sólo se podía
+ * diagnosticar corriendo el gate hasta que volviera a fallar. Medido el 2026-09-17 sobre el
+ * bot, con las dos corridas siguientes en verde.
+ *
+ * Devuelve `null` cuando no hay nada que contar —sin salida, el `catch` ya puso su causa—,
+ * para no pisar una explicación mejor con una peor.
+ */
+export function describirRespuestaIlegible(salida) {
+  const t = String(salida ?? '').trim();
+  if (!t) return null;
+  const linea = t.split('\n').map((l) => l.trim()).filter(Boolean)[0] ?? '';
+  return `corrio y contesto algo que no se sabe leer: "${linea.slice(0, 160)}"`;
+}
+
+/**
+ * Corre un detector y deja anotado POR QUÉ no se sabe, sea cual sea el motivo.
+ *
+ * `correr` es inyectable sólo para el self-check: la costura que de verdad se rompió es el
+ * cableado entre el que ejecuta y el que lee, y ningún caso sobre las funciones puras puede
+ * verla. Su default es el camino real.
+ */
+export function detectar({ clave, guion, leer, correr = dondeVive }) {
+  const salida = correr(guion, { clave });
+  const valor = leer(salida);
+  if (valor === null || valor === undefined) {
+    const porIlegible = describirRespuestaIlegible(salida);
+    if (porIlegible && !CAUSAS.has(clave)) CAUSAS.set(clave, porIlegible);
+  }
+  return valor;
+}
+
+/** Sólo para el self-check: leer lo que quedó anotado sin exponer el Map. */
+export function _causaParaPruebas(clave) {
+  return CAUSAS.get(clave) ?? null;
+}
+
+/**
  * Cómo se le pregunta a cada destino si le falta publicar. Escrito a mano a propósito y
  * NOMBRADO: un destino de la lista blanca que no esté acá sale NO_MEDIDO con su nombre.
  */
 const DETECTORES = {
-  landing: () => leerPendienteDelSeco(dondeVive(`bash ${DESTINOS.landing} --dry-run 2>&1`, { clave: 'landing' })),
-  plataforma: () => leerPendienteDelSeco(dondeVive(`bash ${DESTINOS.plataforma} --dry-run 2>&1`, { clave: 'plataforma' })),
-  bot: () => leerPendienteDelEspejo(
-    dondeVive('node /root/loops/onia-hermes/hermes-content/deploy/vps-ops/bot/espejo-check.mjs 2>&1', { clave: 'bot' }),
-  ),
+  landing: () => detectar({ clave: 'landing', guion: `bash ${DESTINOS.landing} --dry-run 2>&1`, leer: leerPendienteDelSeco }),
+  plataforma: () => detectar({ clave: 'plataforma', guion: `bash ${DESTINOS.plataforma} --dry-run 2>&1`, leer: leerPendienteDelSeco }),
+  bot: () => detectar({
+    clave: 'bot',
+    guion: 'node /root/loops/onia-hermes/hermes-content/deploy/vps-ops/bot/espejo-check.mjs 2>&1',
+    leer: leerPendienteDelEspejo,
+  }),
   // El emisor SIAT se despliega copiando archivos, como el bot, pero su publicador
   // imprime el MISMO formato que los de landing y plataforma ("YA ESTA PUBLICADO" /
   // "hay que publicar: N arreglo(s)") justamente para reusar este parser: un
   // detector nuevo por destino es otra fuente que se desincroniza.
-  siat: () => leerPendienteDelSeco(dondeVive(`bash ${DESTINOS.siat} --dry-run 2>&1`, { clave: 'siat' })),
+  siat: () => detectar({ clave: 'siat', guion: `bash ${DESTINOS.siat} --dry-run 2>&1`, leer: leerPendienteDelSeco }),
 };
 
 const MARCA_LOG = '___LOG_DEL_PUBLICADOR___';
@@ -722,6 +766,42 @@ function selfCheck() {
   );
   // Y el tri-estado del parseo: un JSON truncado NO es un tablero sin pedidos.
   ok(barrerTableroJson('[{"id":"t_1","status":"rea') === null, 'un JSON truncado es NO MEDIDO');
+
+  // ── La TERCERA causa de un `null`, del 2026-09-17 ─────────────────────────────────────
+  // `CAUSAS` sólo se llenaba cuando el comando NO SE PUDO EJECUTAR. Pero un detector
+  // devuelve `null` por dos motivos distintos, y el segundo no dejaba rastro: el comando
+  // corrió, contestó, y el parser no supo leer la respuesta. Medido esa mañana: el bot salió
+  // `NO MEDIDO ... — pedido t_64f64647` SIN línea de causa, y las dos corridas siguientes
+  // del mismo detector dieron `OK`. Sin la salida guardada, el rojo es irreproducible y se
+  // diagnostica corriendo el gate hasta que vuelva a fallar.
+  ok(describirRespuestaIlegible('') === null, 'sin salida no hay nada que citar: eso ya lo explica el catch');
+  ok(describirRespuestaIlegible(null) === null, 'un null de ejecucion no es una respuesta ilegible');
+  const ileg = describirRespuestaIlegible('ssh: connect to host 187.77.16.63 port 22: Connection timed out');
+  ok(/Connection timed out/.test(String(ileg)), 'la causa tiene que CITAR lo que contesto, o no sirve para reproducir');
+  ok(/no se sabe leer/i.test(String(ileg)), 'y tiene que decir que el problema es de LECTURA, no de ejecucion');
+
+  // La costura: que `detectar` ANOTE esa causa. Un caso sobre la función pura sola dejaría
+  // pasar el cableado, que es justo la mitad que estuvo rota.
+  const leerEspejo = (s) => leerPendienteDelEspejo(s);
+  ok(
+    detectar({ clave: 'zz_test_ok', guion: 'x', leer: leerEspejo, correr: () => 'ESPEJO OK' }) === false,
+    'una respuesta que SI se entiende sigue devolviendo su valor',
+  );
+  ok(_causaParaPruebas('zz_test_ok') === null, 'y no deja causa: no hubo problema que explicar');
+  ok(
+    detectar({ clave: 'zz_test_ileg', guion: 'x', leer: leerEspejo, correr: () => 'ssh: Connection timed out' }) === null,
+    'una respuesta ilegible sigue siendo NO se sabe',
+  );
+  ok(
+    /Connection timed out/.test(String(_causaParaPruebas('zz_test_ileg'))),
+    'pero ahora DEJA la causa: sin esto el NO MEDIDO sale mudo y es irreproducible',
+  );
+  // Y no pisa la causa del catch, que es más precisa (trae el código de salida).
+  ok(
+    detectar({ clave: 'zz_test_nulo', guion: 'x', leer: leerEspejo, correr: () => null }) === null,
+    'si no se pudo ejecutar, sigue siendo null',
+  );
+  ok(_causaParaPruebas('zz_test_nulo') === null, 'y la causa la pone el catch, no el lector');
 
   console.log(fallos === 0 ? 'self-check OK' : `self-check con ${fallos} fallo(s)`);
   return fallos === 0 ? 0 : 1;
