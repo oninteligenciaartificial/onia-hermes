@@ -12,6 +12,26 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-17 19:09-19:14 La Paz — recorrido completo re-corrido: mismo bloqueo, confirmado con `--escribir`
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue `OFd4xCDzoTbQdThUbfzDv`
+(sin cambios). `t_a91f564e` (plataforma, 28 arreglos, incluye el arreglo del botón MFA "Activar
+ahora") sigue `blocked` esperando el `ok` de Sergio Urcullo.
+
+Corrí el recorrido completo con `--escribir` (no una sonda parcial): llegó hasta el **paso 4/9**
+en "Clínica dental" — cuenta creada, correo confirmado, entró a `/onboarding`, completó las 5
+pantallas del asistente (negocio, horarios, servicios, equipo) y el asistente dijo "ya está en
+Onia". Se corta en el **paso 5**: el onboarding no queda cerrado — `/dashboard` sigue rebotando
+a `/profile`, con el aviso de MFA obligatorio. El botón "Activar ahora" de ese aviso no disparó
+ni un `fetch`: es decorativo, sin salida. Esto es EXACTAMENTE el defecto `52a3dd0` que ya está en
+el pedido de deploy bloqueado — no es un hallazgo nuevo, es la confirmación en vivo de que sigue
+sin desplegarse. Limpieza: cuenta y org `zz-qa-2026-09-17-2309*` borradas en la misma corrida,
+0 filas mías al cerrar.
+
+`completo: false`, `llegoHasta: 4/9` (sin cambios, sigue bloqueado por el mismo deploy).
+
+---
+
 ## 2026-09-17 18:09-18:35 La Paz — mismo bloqueo de deploy; `/servicios/webs` auditado, sano
 
 Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue en
