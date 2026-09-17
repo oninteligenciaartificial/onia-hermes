@@ -3575,6 +3575,19 @@ decisión de Sergio, no código.
 
 ## Después
 
+- [ ] **El simulador miente sobre el horario: su reloj está clavado en julio.** Medido el
+      2026-09-17 a las 14:13 de La Paz —**dentro** del horario de atención de un miércoles—, las
+      tres respuestas del simulador salieron con la coletilla *"Estoy respondiendo automático
+      fuera de horario de atención"* y la nota `fuera_de_horario`. El motor está bien:
+      `isOutsideBusinessHours(ahora)` devuelve `false` con la config real. Lo que está clavado es
+      el reloj del modo interactivo, `simulate.mjs:450` (`let clock = "2026-07-27T14:05:00Z"`, un
+      lunes a las 10:05 de Bolivia: fuera de las franjas). Importa porque es el instrumento con el
+      que este carril mide su definición de hecho: mientras diga eso, nadie puede distinguir el
+      artefacto del bug real (que el bot avise "fuera de horario" estando dentro), y encima
+      convive con slots calculados contra el reloj de HOY — dos relojes en la misma pantalla.
+      Arreglo: que el reloj interactivo arranque en `new Date().toISOString()` salvo que se pase
+      uno explícito, igual que hacen los wrappers de los barridos con `--now`.
+
 - [x] ✅ **CERRADO el 2026-09-12 03:48 UTC — la sonda ya cierra su propia conversación al
       terminar, y la bandeja de leads reales quedó limpia. Verificado en vivo, no por el código.**
       El arreglo (`2a6b6389`, `scripts/sonda_widget.mjs`) estaba commiteado desde la vuelta
