@@ -12,6 +12,57 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-17 10:20 La Paz — el fix del 2FA YA SE MERGEÓ, pero el VPS sigue corriendo el build viejo
+
+No corrí `--escribir` de nuevo: el corte de la vuelta anterior (09:09) es universal — bloquea
+**cualquier** rubro apenas termina el onboarding, así que repetirlo con otro rubro no mide nada
+nuevo. En su lugar verifiqué el estado real del deploy, que es lo único que cambió.
+
+`select count(*) from organizations where name like 'zz-qa-%'` dio 0 al arrancar, sin huérfanos.
+
+**Merge: SÍ pasó.** `git merge-base --is-ancestor b1247fb origin/master` en `onia-platform` →
+**sí** (antes daba que no). El fix está en `master`.
+
+**Deploy: NO pasó todavía.** El build vivo del contenedor (`docker exec onia-platform cat
+/app/.next/BUILD_ID` → `OFd4xCDzoTbQdThUbfzDv`) coincide con el último staged en el VPS,
+`/opt/onia-platform/build-f078373/`, y ese `f078373` es del **2026-09-13T08:38**, **anterior**
+al commit del fix (`b1247fb`, 2026-09-17T08:48) —
+`git merge-base --is-ancestor b1247fb f078373` da que no. Así que en producción hoy el bug
+sigue vivo para cualquiera que se registre, aunque el código ya esté arreglado.
+
+El publicador automático no lo va a resolver solo: `onia-publicar-solo.sh --dry-run` frena
+`plataforma` porque hay cambios de precio en cola esperando la firma de Sergio (`lib/pricing.ts`,
+`lib/subscription-plans.ts`) — no relacionados con el MFA, pero comparten el gate. Ya existe un
+pedido de deploy vigente (`t_db98ee26`, verificado con `npm run pedido:entregado` →
+`sigue VIGENTE`). Actualicé la tarea de este bug (`t_7c1bd170`) con este estado y no abrí una
+nueva ni reclamé el deploy: es trabajo de `onia-cola`.
+
+`completo: false`, `llegoHasta: 4/9` (sin cambios respecto a la vuelta anterior — la causa
+sigue siendo la misma, sólo cambió de "sin mergear" a "mergeado, sin desplegar").
+
+---
+
+## 2026-09-17 09:09 La Paz — SIGUE ROTO: el 2FA obligatorio bloquea a TODO cliente nuevo, fix escrito pero sin mergear
+
+Al arrancar: `select count(*) from organizations where name like 'zz-qa-%'` dio 0, sin huérfanos.
+
+Dental (`zz-qa-2026-09-17-0909`): mismo corte que la vuelta de las 08:12 UTC — el onboarding se
+completa y muestra "ya está en Onia", pero **toda ruta protegida (`/dashboard`, `/patients`,
+`/billing`) rebota a `/profile`** con el banner "La verificación en dos pasos es obligatoria
+para tu rol". Causa ya diagnosticada: `onia-platform/lib/mfa/policy.ts`,
+`MFA_ENFORCE_FROM` como fecha ABSOLUTA sin gracia relativa al alta.
+
+**El fix YA está escrito** (commit `b1247fb`, rama `origin/claude/chatbots-platform-review-0d1d09`
+de `onia-platform`, gates verdes) **pero sigue sin mergear a `master`**: verificado con
+`git merge-base --is-ancestor b1247fb origin/master` → NO, sobre `origin/master@4ccae18e`
+(13-sep). Comenté la reconfirmación en la tarea ya abierta `t_82251f19` (no abrí una nueva —
+archivé mi duplicado `t_df6fba50`). El bloqueo real hoy es el merge + deploy de `onia-platform`,
+no el diagnóstico.
+
+`completo: false`, `llegoHasta: 4/9`, 0 filas `zz-qa-` al cerrar (verificado antes y después).
+
+---
+
 ## 2026-09-13 12:27 UTC (08:27 La Paz) — cerrado el hueco: recuperación de contraseña con TOKEN REAL, de punta a punta
 
 Al arrancar: `select count(*) from organizations where name like 'zz-qa-%'` dio 0, sin huérfanos.
