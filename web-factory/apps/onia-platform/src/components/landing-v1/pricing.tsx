@@ -15,7 +15,7 @@ import styles from "./landing.module.css";
 const REGISTRO_URL = `${APP_URL}/register`;
 
 /**
- * Precios — 3 planes, en bolivianos, y CADA UNO dice qué lleva con los números
+ * Precios — la escalera entera, en bolivianos, y CADA UNO dice qué lleva con los números
  * que el sistema aplica de verdad (usuarios, fichas, recordatorios). La letra
  * chica existe entera, pero PLEGADA: nada se elimina, se pliega.
  *

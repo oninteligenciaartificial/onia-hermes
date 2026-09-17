@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { RefObject } from "react";
 import { ModulePower, PressableCta, Reveal, springs } from "@/motion";
 import { APP_URL } from "@/lib/site";
+import { cuantosPlanes } from "@/lib/pricing";
 import {
   FALTA_COPY,
   tagDeFalta,
@@ -197,7 +198,10 @@ function VarianteDental({
         ) : null}
         <p className={styles.planNote}>
           {/* /#v4-precios: la portada nueva no tiene id="precios" (A6). */}
-          <a href="/#v4-precios">Ver los tres planes con todo lo que incluyen</a> —
+          <a href="/#v4-precios">
+            Ver los {cuantosPlanes()} planes con todo lo que incluyen
+          </a>{" "}
+          —
           los precios están publicados, no hay que pedirlos.
         </p>
       </m.section>

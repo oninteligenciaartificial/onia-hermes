@@ -512,10 +512,30 @@ export function nombresConChatbot(planes: readonly Plan[] = PLANES): string {
   return `${nombres.slice(0, -1).join(", ")} y ${nombres[nombres.length - 1]}`;
 }
 
+/** Numerales en palabras, para escribir la cantidad sin tipear el dígito. */
+const NUMERAL = ["cero", "un", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho"] as const;
+
+/**
+ * Cuántos planes se compran en línea, en palabras: "los ${cuantosPlanes()} planes".
+ *
+ * Existe porque el sitio afirmaba "en los TRES planes no cobramos implementación" en cuatro
+ * lugares —la FAQ de la home, la letra chica de `/precios` y dos pantallas de `/v1`— mientras la
+ * escalera C (2026-09-12) sumaba el plan Crece y dejaba CUATRO tarjetas comprables a la vista.
+ * La promesa es de plata y la contaba mal: el lead parado en el Crece de Bs 550 leía una
+ * enumeración que no lo incluía, justo debajo de las cuatro tarjetas.
+ *
+ * La cantidad de planes es un dato DERIVADO del catálogo, igual que los montos: ninguna frase la
+ * tipea, la lee. Y se devuelve en palabras porque es lo que la prosa necesita — con el dígito
+ * suelto el gate que lo vigila no podría distinguir la cura de la recaída.
+ */
+export function cuantosPlanes(planes: readonly Plan[] = PLANES): string {
+  return NUMERAL[planes.length] ?? String(planes.length);
+}
+
 /**
  * Grupo / Empresarial (`enterprise` en el codigo). Existe y tiene precio, pero
- * queda FUERA del checkout (CHECKOUT_PLANS = basic, professional, clinic): se
- * cotiza. No se publica como cuarta tarjeta comprable.
+ * queda FUERA del checkout (CHECKOUT_PLANS = basic, professional, clinic, crece): se
+ * cotiza. No se publica como una tarjeta comprable más.
  */
 export const GRUPO = {
   nombre: "Grupo / Empresarial",
@@ -758,7 +778,10 @@ export const CONDICIONES: readonly string[] = [
   // las CONSTANTES, no las copias, así que el día que el trial cambie esta
   // frase sigue en verde diciendo el número viejo.
   `${PRUEBA_DIAS} días de prueba sin tarjeta, con el ${PRUEBA_PLAN} completo. Al vencer, la cuenta queda en solo lectura: nada se borra de inmediato y tenés ${RETENCION.diasParaExportar} días para exportar tus datos.`,
-  "En los tres planes de arriba no cobramos implementación ni migración: el checkout cobra solo el plan. Grupo / Empresarial sí lleva implementación acompañada y se cotiza aparte.",
+  // Mismo caso que las dos líneas de arriba, y no viajó: la cantidad de planes también estaba
+  // tipeada ("los tres planes") teniendo el catálogo dos pantallas más arriba. La escalera C
+  // sumó el Crece y esta frase siguió enumerando tres.
+  `En los ${cuantosPlanes()} planes de arriba no cobramos implementación ni migración: el checkout cobra solo el plan. Grupo / Empresarial sí lleva implementación acompañada y se cotiza aparte.`,
   // Decía "desde el plan más chico", que ponía a la salida detrás de un pago:
   // el export integral NO se gatea por plan (el producto lo llama "derecho del
   // titular", `app/api/settings/export/route.ts:14`) y la prueba corre con Pro.
