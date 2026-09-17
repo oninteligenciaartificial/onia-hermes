@@ -63,6 +63,41 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [x] 🔴 **~~La página PÚBLICA de contacto comercial escondía el escalón de Bs 550~~ — CERRADO
+      el 2026-09-17 (`onia-platform` `03f4955`, rama del carril; tsc 0 · eslint 0 ·
+      `lib/subscription` 393 tests verdes, re-corridos EN EL VPS sobre el árbol que se publica).**
+      `app/contact/page.tsx` —viva en `app.onia.com.bo/contact`, HTTP 200 en 1,08 s— pintaba
+      **tres** tarjetas escritas a mano (Básico 320 · Profesional 890 · Completo 1.290) y no
+      nombraba a `crece` ni una vez: `curl -s https://app.onia.com.bo/contact | grep -c Crece`
+      → **0**. La escalera C sumó ese escalón el 12-sep y esta vitrina nunca se enteró, así que
+      el prospecto que entra por la página de contacto ve un salto de Bs 320 a Bs 890 sin saber
+      que existe el del medio.
+      **El segundo defecto vivía en la misma tarjeta y le cuesta plata también al que ya es
+      cliente:** la del Profesional decía *"Para activar agenda pública, recurrentes y reportes
+      completos"*, y `publicBookingIncluded` es `true` en `crece` desde la escalera C. El mismo
+      error estaba en el `upgradeReason` del Profesional en `/settings`
+      (*"Desbloquea agenda pública, …"*): al dueño de un Básico se le vende por Bs 890 algo que
+      el escalón de Bs 550 ya trae.
+      **Por qué no lo cazó el gate hermano:** `donde-esta-incluida-no-se-tipea` busca el par
+      `<Plan> y <Plan>` DENTRO de un texto, y una vitrina es una **estructura** —un arreglo de
+      tarjetas—, que no tiene esa forma. Pasaba en verde escondiendo un escalón entero.
+      Ahora la lista sale de `CHECKOUT_PLANS` y las columnas de su largo; el copy va en un
+      `Record` por plan, para que un escalón nuevo **no compile** hasta que alguien escriba qué
+      vende, en vez de nacer invisible.
+      Gate derivado del disco: `lib/subscription/la-vitrina-de-planes-no-se-tipea.test.ts`.
+      **Validado por mutación en las dos direcciones, y la segunda pasó VERDE en el primer
+      intento** — el ancla de la tarjeta era el precio, y en `PlanClient.tsx` el `upgradeReason`
+      está ARRIBA de `DEFAULT_PLAN_AMOUNTS.professional`, así que la promesa caía en la ventana
+      del plan anterior y se absolvía sola; el ancla toma ahora la PRIMERA marca que grita el
+      sujeto (precio, clave de `Record` o `key: "<plan>"`).
+      **Mirada renderizada** en 1440×900 y 390×844 con `reducedMotion:"reduce"`: cuatro
+      tarjetas (320 · 550 · 890 · 1.290), cero respuestas ≥400, ningún texto cortado.
+      🔴 **FALTA PUBLICARLO:** el pedido de deploy de la plataforma ya existe y está `blocked`
+      esperando el `ok` de Sergio Urcullo. Ningún carril lo destraba.
+      ⚠️ **Anotado de paso, NO tocado** (un ítem por vuelta): el header de esa misma página
+      dice *"Pedí tu acceso"* apuntando a `/register`, copy del alta cerrada — el alta está
+      ABIERTA desde el 29-ago y las demás superficies dicen *"Creá tu cuenta"*.
+
 - [x] 🔴 **~~El panel del operador no conocía el plan que se vende: `/admin/plans` no mostraba
       ni ofrecía `crece`~~ — CERRADO el 2026-09-17 (`onia-platform`, rama del carril; los cinco
       gates del CI verdes: tsc 0 · 4976 tests · eslint 0 errores · check:onia-core · build).**
