@@ -5063,6 +5063,49 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] 🔴 **CERRADO el 2026-09-17: cinco frases mandaban al plan de Bs 890 por la agenda que el
+      de Bs 550 ya trae.** ⚠️ COMMITEADO Y PUBLICADO (`dd03c75`, rama
+      `claude/chatbots-platform-review-0d1d09` de `onia-platform`), **falta mergear y desplegar**.
+      La escalera C (12-sep) le dio `publicBookingIncluded` al plan `crece` (Bs 550) y las frases
+      que dicen DÓNDE viene incluida la agenda pública estaban tipeadas desde antes: seguían
+      diciendo *«incluida en Profesional y Completo»*. Medido contra el catálogo el 17-sep: la
+      traen **cuatro** planes (`crece`, `professional`, `clinic`, `enterprise`), no dos.
+
+      **A quién le costaba plata:** al dueño de un Básico (Bs 320) que quería la agenda se le
+      decía que para tenerla incluida hay que llegar a Profesional (Bs 890), cuando el escalón
+      de al lado ya la trae — Bs 340/mes de más, o un add-on de Bs 150 que no necesitaría. Y al
+      que YA está en Crece, la tarjeta de `/settings` le rotulaba «Incluido» arriba y le decía
+      lo contrario en el párrafo de abajo.
+
+      **Las cinco superficies:** `BOOKING_ADDON_PRICE.publicLabel` y `.heroLabel`, el `summary`
+      de `PUBLIC_PRICING_ADDONS`, el `limit` de `ADMIN_ADDON_INFO` (los cuatro en
+      `onia-platform/lib/pricing.ts`) y el párrafo de la tarjeta en
+      `onia-platform/app/(dashboard)/settings/PlanClient.tsx`. Las cinco preguntan ahora
+      `primerPlanCon("publicBookingIncluded")` y dicen «desde el plan Crece»: **un umbral no
+      envejece cuando entra un escalón arriba; una enumeración sí.**
+
+      **Cómo apareció, que es lo transferible:** el rótulo de esa tarjeta ya derivaba del
+      catálogo y por eso el 13-sep quedó anotada como sana — lo que no derivaba era la PROSA de
+      al lado. Por cada booleano de plan hay que preguntar **quién más lo AFIRMA en texto**, no
+      sólo quién lo consulta.
+
+      **Gate:** `onia-platform/lib/subscription/donde-esta-incluida-no-se-tipea.test.ts`. Afirma
+      la CLASE, no el texto viejo: prohibir «Profesional y Completo» se apagaría solo el día que
+      esa sea la respuesta correcta, así que prohíbe la **forma** (`<Plan> y <Plan>` en un
+      literal o en texto JSX) sobre un universo caminado del DISCO — `git ls-files` no ve el
+      archivo nuevo sin commitear, que es justo el sujeto a cazar. Validado por mutación:
+      devolver la frase vieja → 2 rojos; vaciar el universo → 1 rojo.
+
+      **Lo PREVENTIVO, dicho como tal:** el MRR decidía si cobrar el add-on con
+      `org.plan === "basic"` — cierto por casualidad, porque hasta la escalera C Básico era el
+      único plan pago sin la reserva. Ahora le pregunta al catálogo. La mutación lo confirma:
+      volver a `=== "basic"` deja los 7 casos en verde, **hoy son equivalentes**, así que esto
+      no arregla un bug vivo. La guarda `isSubscriptionPlan` sí hace falta: `free` tampoco la
+      trae y cobrársela inflaría el MRR con una cuenta que no paga (sacarla pone el gate rojo).
+
+      Gates: `tsc` 0 · `vitest` 4945 pass / 0 fail · `eslint` 0 errores, corridos **también en
+      el VPS** sobre el árbol publicado.
+
 - [x] 🔴 **CERRADO el 2026-09-13: un cron que no entregó NADA contestaba «ok» y su lanzador
       salía 0.** ⚠️ COMMITEADO Y PUBLICADO (`b5cae43`, rama
       `claude/chatbots-platform-review-0d1d09` de `onia-platform`), **falta mergear y desplegar**.
