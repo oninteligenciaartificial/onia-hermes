@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
 import { RequisitosGate } from "@/components/requisitos-gate";
 import { REQUISITOS_WEB } from "@/content/requisitos";
 import {
@@ -87,7 +87,13 @@ function contrastText(hex: string): string {
   return 1.05 / (luminance + 0.05) >= 4.5 ? "#ffffff" : "#000000";
 }
 
-export function WebConfigurator() {
+type Props = {
+  /** Pestaña «Más información»: las especificaciones exactas de cada web. */
+  especificaciones?: ReactNode;
+};
+
+export function WebConfigurator({ especificaciones }: Props) {
+  const [tab, setTab] = useState<"configurador" | "info">("configurador");
   const [directionId, setDirectionId] = useState<WebDirectionId>("minimalista");
   const [layoutId, setLayoutId] = useState<WebLayoutId>("centrada");
   const [paletteId, setPaletteId] = useState<WebPaletteId>("papel-verde");
@@ -220,6 +226,26 @@ export function WebConfigurator() {
 
   return (
     <div className={styles.shell} id="configurador">
+      {especificaciones && (
+        <div className={styles.tabs} role="tablist" aria-label="Configurador o especificaciones">
+          <button type="button" role="tab" id="tab-configurador" aria-selected={tab === "configurador"} aria-controls="panel-configurador" className={`${styles.tab} ${tab === "configurador" ? styles.tabOn : ""}`} onClick={() => setTab("configurador")}>
+            Armá tu web
+          </button>
+          <button type="button" role="tab" id="tab-info" aria-selected={tab === "info"} aria-controls="panel-info" className={`${styles.tab} ${tab === "info" ? styles.tabOn : ""}`} onClick={() => setTab("info")}>
+            Más información
+          </button>
+        </div>
+      )}
+
+      {/* Siempre en el HTML servido (precios y especificaciones indexables);
+          sólo se oculta con `hidden` cuando la pestaña activa es la otra. */}
+      {especificaciones && (
+        <div id="panel-info" role="tabpanel" aria-labelledby="tab-info" hidden={tab !== "info"}>
+          {especificaciones}
+        </div>
+      )}
+
+      <div id="panel-configurador" role="tabpanel" aria-labelledby="tab-configurador" hidden={tab !== "configurador"}>
       <div className={styles.intro}>
         <p className="kicker">Configurador en vivo</p>
         <h2 className="h2">Tu idea toma forma aquí.</h2>
@@ -477,6 +503,7 @@ export function WebConfigurator() {
             blockedTargetId={missingPreviewBasics ? "datos-preview" : "datos-solicitud"}
           />
         </div>
+      </div>
       </div>
     </div>
   );

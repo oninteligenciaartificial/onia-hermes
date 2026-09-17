@@ -43,7 +43,7 @@ auto-sync lo pushea)
 
 | Qué | Dónde | Estado |
 |---|---|---|
-| **Configurador integrado en la página v3** | `apps/onia-platform/src/app/(sitio)/servicios/webs/page.tsx` | `<WebConfigurator />` reemplaza a `<PedirWeb />`; el resto de la página (4 tarjetas de stack + Cuidado Web) se conservó → **duplica el paso 1 del configurador**. Decisión de diseño pendiente (ver §6) |
+| **Configurador integrado en la página v3** | `apps/onia-platform/src/app/(sitio)/servicios/webs/page.tsx` | `<WebConfigurator />` reemplaza a `<PedirWeb />`. **Decidido 17-sep**: la página muestra SOLO el configurador; las tarjetas «Los stacks» + Cuidado Web pasaron a la pestaña **«Más información»** (`Especificaciones.tsx`, prop `especificaciones`; panel siempre en el HTML servido, oculto con `hidden`). Móvil: 12.172 px (antes 17.878) |
 | Los 5 archivos del configurador + `web-configurator.ts` + `web-intake.ts` | `src/components/web-configurator/`, `src/content/` | traídos del commit `91c1d9fc` SOLO esos (no los 38 ajenos). `tsc` verde salvo `vitest.config.ts` (entorno) |
 | `webs.ts` | `src/content/webs.ts` | **restaurado a `main`** (Codex venía de una rama vieja con 790/1.500/2.900); se le re-agregó `WEB_ADDONS` (CRM/n8n Bs 790, catálogo §4) |
 | `requisitos-gate.tsx` | `src/components/` | versión de Codex: props `ready/blockedHint/blockedTargetId`, compatibles hacia atrás |
@@ -94,14 +94,14 @@ hermes-content/sitio-sergiourcullo/**          (+ scripts/publicar-sitio.py, sin
 |---|---|
 | ✅ ~~Precio de las webs~~ **Decidido 17-sep**: básicos con precio (Landing 2.000, Profesional 4.500), Pro y Tienda en una llamada. Aplicado en código y doc. | — |
 | 🟡 **Mirar el asistente** (`localhost:3011/servicios/webs`, o las capturas `flow/asistente-*.png`) y decir si los 10 rubros y sus defaults (dirección, paleta, titular) son los que querés. Las fotos del preview son por dirección visual, no por rubro: una dental «premium» sale con foto de boutique. | pulir antes de publicar |
-| 🔴 **Mirar las dos piezas** (capturas del scratchpad o `localhost:3011/servicios/webs` y `localhost:8099/webs/`) y decir si la página de Onia se queda con tarjetas + configurador o sólo configurador (Codex la dejó sólo configurador: 9.601 px en móvil; hoy 15.297 px). | el diseño final |
+| ✅ ~~Tarjetas + configurador o sólo configurador~~ **Decidido 17-sep: sólo configurador; las especificaciones en la pestaña «Más información».** Hecho. | — |
 | 🟡 La propuesta de Codex «Página Base Conectada» incluida en planes ANUALES (Profesional/Completo) — es una decisión de packaging; no se implementó. | nada hoy |
 | 🟡 Confirmar que `WA_PHONE` de `src/lib/site.ts` es el WhatsApp comercial definitivo. | el envío real |
 
 ## 7 · Próximos pasos (en orden)
 
 1. ~~Precio~~ hecho. Fotos del preview por rubro (hoy por dirección) si Sergio Urcullo lo pide.
-2. Decidir tarjetas+configurador vs sólo configurador; si «sólo», quitar los bloques `stacks` y
+2. ~~Tarjetas vs sólo configurador~~ hecho (pestaña «Más información»). Quitar los bloques `stacks` y
    `cuidado` de la página y ajustar los tests que los miran.
 3. Correr la suite en Linux. **El 17-sep no se pudo**: WSL Ubuntu no tiene Node, Docker
    Desktop estaba apagado. Con Docker encendido:
