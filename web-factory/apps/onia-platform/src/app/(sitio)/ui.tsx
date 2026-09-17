@@ -78,7 +78,7 @@ const panelLabel: Record<PanelId, string> = {
   estetica:
     "Paquetes en curso de un centro de estética: cada tratamiento con las sesiones ya hechas y las que faltan, y el control post-tratamiento ya puesto en la agenda.",
   servicios:
-    "Cierre de mes de un estudio profesional: las ventas y las compras del mes al día, y el reporte del mes esperando revisión.",
+    "Cierre de mes de un estudio profesional: el IVA y el IT del mes ya armados, y el reporte del mes esperando revisión.",
 };
 
 /**
@@ -335,25 +335,46 @@ function PanelCuerpo({ panel }: { panel: PanelId }) {
         </>
       );
 
-    /* ⚠️ Este panel decía "Registro de ventas · IVA del mes · IT del mes", con
-       el remate "Llegás al cierre con el IVA y el IT ya armados". Ninguna de
-       las dos declaraciones aparece en lib/pricing.ts: el Básico promete
-       "contabilidad básica de compras y ventas" y el Pro "contabilidad completa
-       (RCV, balance y export)" — el IVA y el IT son formularios que se derivan
-       de eso, y no un producto que ningún plan diga entregar armado. Era una
-       capacidad fabricada dentro de una interfaz creíble. Ahora dice lo que la
-       fuente dice, y la única pastilla verde es la que espera a la persona. */
+    /* El IVA y el IT del mes SON del producto, y el panel los nombra: medido el
+       2026-09-17 contra `origin/master` de onia-platform, no contra pricing.ts.
+       `lib/onia-core/modules/accounting-logic.ts` calcula débito y crédito
+       fiscal al 13 %, el IT al 3 % y el vencimiento por último dígito de NIT
+       (D.S. 25619); `app/(dashboard)/contabilidad/page.tsx` los pinta —
+       "Resumen IVA/IT del mes", "Saldo IVA a pagar"— y su cabecera declara que
+       el escalón `basic` ya trae "resumen basico de impuestos del mes +
+       vencimiento por NIT", o sea desde el plan más barato. Y llega a ESTE
+       rubro: `lib/platform/contabilidad-transversal.test.ts` demuestra que
+       /contabilidad es segmento COMÚN, no de un pack.
+
+       ⚠️ Entre el 2026-09-02 (4384f7e8) y hoy el panel decía "Ventas del mes ·
+       Compras del mes", borrado por fabricado con este razonamiento: que la
+       promesa "no aparece en lib/pricing.ts". La premisa es cierta y la
+       conclusión no —pricing.ts vende el MÓDULO ("contabilidad básica de
+       compras y ventas", "contabilidad completa (RCV, balance y export)") y no
+       enumera las salidas—, así que no encontrar ahí la palabra IVA no prueba
+       que el sistema no lo arme: hay que preguntárselo al motor. El costo fue
+       de la otra dirección, la que casi nadie mira: ofrecer de MENOS. Quedaron
+       quince días con la cabecera de este mismo archivo (arriba) diciendo que
+       el estudio "ve el IVA y el IT del mes", /rubros, /nosotros,
+       /v1/modulos/dental y lib/siat.ts prometiéndolo, y sólo este panel —el
+       dibujo, lo único que el lead MIRA— callándolo.
+
+       Que las dos superficies del mismo rubro no puedan volver a separarse lo
+       vigila `(sitio)/el-panel-dibuja-lo-que-la-pagina-promete.test.ts`.
+
+       La pastilla verde sigue siendo una sola (la regla de `Fila`): lo armado
+       queda apagado y lo que espera a la persona es el reporte. */
     case "servicios":
       return (
         <>
           <Head titulo="Cierre del mes" sello="Servicios" />
           <ul className={s.panelRows}>
-            <Fila txt="Ventas del mes" pill="Al día" hecho />
-            <Fila txt="Compras del mes" pill="Al día" hecho />
+            <Fila txt="IVA del mes" pill="Armado" hecho />
+            <Fila txt="IT del mes" pill="Armado" hecho />
             <Fila txt="Reporte del mes" pill="Revisar" />
           </ul>
           <p className={s.panelFoot}>
-            Llegás al cierre con las compras y las ventas ordenadas.
+            Llegás al cierre con el IVA y el IT ya armados.
           </p>
         </>
       );
