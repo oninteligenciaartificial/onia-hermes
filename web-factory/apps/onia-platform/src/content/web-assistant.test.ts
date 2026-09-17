@@ -51,4 +51,12 @@ describe("el asistente arma una web coherente con cuatro respuestas", () => {
     expect(plan.layout).toBe("vitrina");
     expect(plan.stack).toBe("tienda");
   });
+
+  it("el ecommerce sobre plataforma conserva su alcance aunque el objetivo sea catálogo", () => {
+    const plan = buildAssistantPlan({ ...EMPTY_ASSISTANT_ANSWERS, businessName: "X", rubro: "ecommerce" });
+    expect(plan.goal).toBe("catalogo");
+    expect(plan.layout).toBe("vitrina");
+    expect(plan.stack).toBe("ecommerce");
+    expect(WEB_STACKS.find((s) => s.id === "ecommerce")?.precio).toBeNull();
+  });
 });

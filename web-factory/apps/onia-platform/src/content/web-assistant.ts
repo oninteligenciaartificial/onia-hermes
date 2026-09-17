@@ -33,6 +33,7 @@ export type AssistantRubroId =
   | "construccion"
   | "educacion"
   | "salud"
+  | "ecommerce"
   | "otro";
 
 export interface AssistantRubro {
@@ -162,6 +163,18 @@ export const ASSISTANT_RUBROS: readonly AssistantRubro[] = [
     services: "Consultas\nEstudios\nSeguimiento",
   },
   {
+    id: "ecommerce",
+    label: "Ecommerce (Shopify, Hotmart, Whop)",
+    industry: "Tienda online",
+    direction: "catalogo",
+    palette: "carbón-lima",
+    font: "archivo",
+    goal: "catalogo",
+    stack: "ecommerce",
+    offer: "Vendé online sin armarlo vos.",
+    services: "Productos, cursos o membresías\nPagos y entregas automáticos\nTu marca, no una plantilla",
+  },
+  {
     id: "otro",
     label: "Otro",
     industry: "",
@@ -254,8 +267,9 @@ export function findAssistantRubro(id: AssistantRubroId): AssistantRubro {
 
 /**
  * Las respuestas mandan; el rubro rellena lo que no se contestó.
- * - Objetivo «catálogo» fuerza la estructura vitrina y el alcance tienda,
- *   elija lo que elija el rubro: no hay catálogo sin productos a la vista.
+ * - Objetivo «catálogo» fuerza la estructura vitrina y un alcance con
+ *   productos a la vista: tienda, o ecommerce sobre plataforma si el rubro ya
+ *   lo es. No hay catálogo sin productos.
  * - Si el dueño eligió cómo se siente, la tipografía sigue a esa dirección,
  *   no a la del rubro; si no, se queda la del rubro.
  */
@@ -268,7 +282,8 @@ export function buildAssistantPlan(answers: AssistantAnswers): AssistantPlan {
   const layout: WebLayoutId = DEFAULT_LAYOUT_BY_DIRECTION[direction];
   const palette: WebPaletteId = answers.color === "rubro" ? rubro.palette : answers.color;
   const font: WebFontId = feel?.direction ? FONT_BY_DIRECTION[direction] : rubro.font;
-  const stack: WebStackId = goal === "catalogo" ? "tienda" : rubro.stack;
+  const stack: WebStackId =
+    goal === "catalogo" ? (rubro.stack === "ecommerce" ? "ecommerce" : "tienda") : rubro.stack;
 
   return {
     direction,

@@ -62,7 +62,7 @@ const JSON_LD = {
       name: "Diseño y desarrollo de sitios web",
       serviceType: "Diseño web para negocios",
       description:
-        "Landing de captación, web profesional, web con dirección de arte a medida y tienda con pedido por WhatsApp. Dominio y hosting a nombre del cliente.",
+        "Landing de captación, web profesional, web con dirección de arte a medida, tienda con pedido por WhatsApp y ecommerce sobre Shopify, Hotmart o Whop. Dominio y hosting a nombre del cliente.",
       provider: { "@type": "Organization", name: "Onia", url: `${SITE_URL}/` },
       areaServed: { "@type": "Country", name: "Bolivia" },
       url: `${SITE_URL}/servicios/webs`,
@@ -90,7 +90,7 @@ export default function Webs() {
             comprar.
           </h1>
           <p className={s.lead}>
-            Cuatro stacks, del más simple al más completo. De cada uno decimos
+            Cinco stacks, del más simple al más completo. De cada uno decimos
             qué lleva, qué NO lleva y qué tenés que poner vos — porque una web
             se atrasa por el contenido, casi nunca por el diseño. El dominio y
             el hosting van siempre a tu nombre.
@@ -98,9 +98,8 @@ export default function Webs() {
         </Reveal>
       </Block>
 
-      {/* Los stacks. La grilla es propia y no la `.plans` de la v3: son CUATRO
-          tarjetas y la de precios es de tres columnas — el cuarto quedaba
-          huérfano. */}
+      {/* Los stacks. La grilla es propia y no la `.plans` de la v3: son CINCO
+          tarjetas (auto-fit) y la de precios es de tres columnas fijas. */}
       <Block surface="paperDim" labelledBy="stacks">
         <Reveal>
           <Kicker>Los stacks</Kicker>

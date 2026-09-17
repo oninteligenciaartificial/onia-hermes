@@ -47,6 +47,7 @@ const SCOPE_COPY: Record<WebStackId, { label: string; description: string }> = {
   profesional: { label: "Completa", description: "Servicios, credenciales, proceso, preguntas y contacto." },
   pro: { label: "A medida", description: "Dirección de arte, copy de ONIA y seguimiento básico." },
   tienda: { label: "Catálogo", description: "Productos, carrito y pedido armado por WhatsApp." },
+  ecommerce: { label: "Plataforma", description: "Shopify, Hotmart o Whop: frontend tuyo; cobro y entrega de la plataforma." },
 };
 
 const NEUTRAL_PREVIEW_CARDS = [

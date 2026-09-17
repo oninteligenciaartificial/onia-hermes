@@ -28,6 +28,10 @@
  * publicado —Landing 2.000 y Web Profesional 4.500, lo que el configurador
  * arma solo—; lo que no se puede armar ahí (Web Pro a medida, tienda) se
  * cierra en una llamada. Fuente: ONIA_WEB_COMO_SE_VENDE.md §8.
+ * Mismo día: ecommerce SOBRE PLATAFORMA (Shopify, Hotmart, Whop) entra como
+ * quinto alcance, sin precio publicado — «los precios dependen del frontend
+ * y del backend necesario» — para que el que vende online nos lo compre en
+ * vez de armarlo él.
  *
  * PRECIOS RATIFICADOS 2026-08-23 por Sergio: 2.000 / 4.500 / desde 7.500.
  * Antes decían 790/1.500/2.900, que era una **oferta de arranque vencida el
@@ -38,7 +42,7 @@
  * Fuente y tabla comparativa: hermes-content/docs/ONIA_WEB_COMO_SE_VENDE.md §8.
  */
 
-export type WebStackId = "landing" | "profesional" | "pro" | "tienda";
+export type WebStackId = "landing" | "profesional" | "pro" | "tienda" | "ecommerce";
 
 export interface WebStack {
   readonly id: WebStackId;
@@ -214,6 +218,32 @@ export const WEB_STACKS: readonly WebStack[] = [
       "Tu lista de productos con nombre, categoría, precio y descripción",
       "Una foto por producto",
       "Tus métodos de pago y tus políticas de envío y devolución",
+    ],
+    mensual: cuidadoWeb("Crecimiento", "Pro"),
+  },
+  {
+    id: "ecommerce",
+    nombre: "Ecommerce sobre Shopify, Hotmart o Whop",
+    precio: null,
+    paraQuien:
+      "El que vende online —productos físicos, cursos o membresías— y no quiere armarlo ni sostenerlo él mismo.",
+    resuelve:
+      "Una tienda que cobra, entrega y escala sobre la plataforma que ya lo hace bien, con un frontend que es tuyo y no la plantilla de la plataforma.",
+    incluye: [
+      "Frontend a medida, con tu marca, conectado a Shopify, Hotmart o Whop",
+      "Catálogo, carrito y checkout que resuelve la plataforma: tarjeta, suscripciones y entrega digital",
+      "Página de producto, colecciones y landing de campaña",
+      "Configuración inicial de la tienda: productos, pagos y envíos",
+    ],
+    noIncluye: [
+      "El plan y las comisiones de la plataforma: van a tu nombre y los pagás vos",
+      "Fotografía de producto y redacción de fichas (se cotizan aparte)",
+      "Migración de un catálogo grande (se cotiza aparte)",
+    ],
+    necesitasVos: [
+      "Una cuenta en la plataforma a tu nombre (te guiamos para abrirla)",
+      "Tu lista de productos, cursos o planes, con precio",
+      "Tus políticas de envío, devolución y acceso",
     ],
     mensual: cuidadoWeb("Crecimiento", "Pro"),
   },

@@ -73,6 +73,11 @@
   margin-top: 0.85rem;
 }
 
+/* Cinco alcances en dos columnas: el último ocupa la fila entera, sin huérfano. */
+.scopeGrid > :nth-child(odd):last-child {
+  grid-column: 1 / -1;
+}
+
 .option,
 .layoutOption,
 .goalOption,

@@ -292,6 +292,12 @@ va a oler a agencia.
 > en una llamada» y el pedido por WhatsApp pide esa llamada. La referencia interna para
 > cotizarlas sigue siendo la tabla de §8.2 (desde 7.500 / según catálogo).
 >
+> **Mismo día, quinto alcance: ecommerce SOBRE plataforma (Shopify, Hotmart, Whop).** Sergio
+> Urcullo: *"los precios dependen del frontend y el backend necesario, para que los ecommerces
+> nos la compren y no la desarrollen ellos mismos"*. Sin precio publicado → llamada. Lo que se
+> vende es el frontend con marca propia + la configuración; el cobro, la entrega y las
+> comisiones son de la plataforma y van a nombre del cliente.
+>
 > **Fuente única de esos dos montos: `web-factory/apps/onia-platform/src/content/webs.ts`**
 > (`WEB_STACKS`). El catálogo de la web personal (`hermes-content/sitio-sergiourcullo/webs/`)
 > los copia a mano y se alinea cuando cambian — es un espejo, no una fuente.

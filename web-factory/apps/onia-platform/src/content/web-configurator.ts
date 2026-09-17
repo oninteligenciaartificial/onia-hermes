@@ -379,5 +379,5 @@ export function isWebLayoutId(value: string | null): value is WebLayoutId {
 }
 
 export function isWebStackId(value: string | null): value is WebStackId {
-  return value === "landing" || value === "profesional" || value === "pro" || value === "tienda";
+  return value === "landing" || value === "profesional" || value === "pro" || value === "tienda" || value === "ecommerce";
 }
