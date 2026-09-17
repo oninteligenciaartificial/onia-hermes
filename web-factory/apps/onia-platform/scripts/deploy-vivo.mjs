@@ -418,6 +418,16 @@ export function fechaBuildVivo(ruta = BUILD_ID_VIVO, { local = mtimeLocal, remot
  * cada merge lleva la fecha en que se integró—, así que sí es monótona respecto
  * de la entrada. La fecha se usa UNA vez, para elegir este punto; de ahí en
  * adelante manda el grafo.
+ *
+ * ⚠️ `cwd` se declara acá aunque producción nunca lo pase: es la costura por la
+ * que los casos siembran un repo temporal con la topología que cada uno
+ * necesita. Un parámetro que el runtime acepta y el tipo no declara compila en
+ * `.mjs` y rompe en el `.test.ts` que lo usa — y ese rojo no lo ve la cadena
+ * `npm test`, sólo el `prebuild` del publicador, que se niega a publicar sin
+ * escalarle a nadie. Pasó el 2026-09-17: la landing quedó sin publicar.
+ *
+ * @param {number} desdeMs
+ * @param {{cwd?: string, ref?: string}} [opciones]
  */
 export function baseDelBuild(desdeMs, { cwd, ref = "origin/main" } = {}) {
   const r = spawnSync("git", ["log", "--first-parent", "--format=%H%x09%ct", ref], {
@@ -465,6 +475,11 @@ export function baseDelBuild(desdeMs, { cwd, ref = "origin/main" } = {}) {
  * `archivos: []` y caían en el «ante la duda, sí viaja» —que es el sesgo
  * correcto para un commit normal y hay que conservar—. Se los saca del conjunto
  * antes de clasificar, en vez de enseñarle a `llegaAlCliente` a fallar cerrado.
+ *
+ * @param {number} desdeMs
+ * @param {string} [zona]
+ * @param {{cwd?: string, ref?: string}} [opciones] la misma costura de
+ *   `baseDelBuild`: sólo la usan los casos, y va declarada por el mismo motivo.
  */
 export function commitsDesde(desdeMs, zona = ZONA, { cwd, ref = "origin/main" } = {}) {
   const base = baseDelBuild(desdeMs, { cwd, ref });
