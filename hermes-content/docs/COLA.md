@@ -77,6 +77,40 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [x] 🔴 **El sitio llamaba «Pro» y «Full» a los planes que el checkout cobra como «Profesional»
+      y «Completo»: el lead elegía un plan con un nombre y pagaba otro. CERRADO el 2026-09-17
+      12:5x La Paz por `web-venta` (`cf19a28e`, rama `claude/web-venta`).**
+      **De dónde salió, y no de la cola:** midiendo el objetivo del carril contra las dos
+      pantallas de la MISMA compra. `onia.com.bo/` y `/precios` decían «Pro»/«Full» **70 veces**
+      (12+30 y 6+22, contadas sobre el HTML servido) y **cero** veces los nombres que el producto
+      le pone al plan — `PLAN_LABELS` del ref publicado de `onia-platform/lib/pricing.ts`
+      (`professional: "Profesional"`, `clinic: "Completo"`), que es lo que pintan el checkout, la
+      tab «Mi plan», los correos y los recibos. El que escribía por WhatsApp pedía «el Full», que
+      en el producto no existe.
+      **Por qué ningún gate lo vio:** los cruces de plata comparan **cifras**, y un nombre no es
+      una cifra. `precios-fuente.mjs` cruzaba 40 montos y ninguna etiqueta — es más, su propia
+      tabla `PLANES_EN_ORDEN` **tenía tipeado** `etiqueta: "Pro"` / `"Full"`, o sea el
+      instrumento afirmaba el defecto que existía para cazar.
+      **Qué quedó:** los nombres salen de un mapa único (`NOMBRE_DE_PLAN` en `src/lib/pricing.ts`)
+      que la prosa **interpola**, y `precios-fuente.mjs` los cruza contra `PLAN_LABELS` del ref
+      publicado igual que los montos (`nombresDelSitio` / `etiquetasDelProducto`, leyendo las
+      **dos** formas —literal y por mapa— para no quedar ciego el día que alguien vuelva a
+      tipear). `capacidad-incluida.test.ts` aprendió la vía nueva en la misma vuelta:
+      interpolar `NOMBRE_DE_PLAN.pro` pinta el mismo texto que `plan("pro").nombre`.
+      **Evidencia mirada, no grepeada:** build de la rama servido en `:3411`, capturado a 1440,
+      1920 y 768 con `reducedMotion:'reduce'` — los cuatro botones dicen «Empezar con el
+      Básico/Crece/Profesional/Completo» y **0 desbordan** (`/tmp/tarjetas-1440.png`).
+      ⚠️ **La cura arrastró su propio efecto de layout, y por eso se mira en vez de grepear:** el
+      nombre viaja DENTRO del botón, así que el largo de esa etiqueta lo decide el **catálogo** y
+      no el diseño. Con `.btn` en `nowrap`, «Empezar con el Profesional» pidió 219px en una
+      pastilla de 214 y la última letra se pintaba **fuera del verde** a 1440 y 1920. Ahí el
+      texto envuelve; achicar el padding sólo compraba 5px que el próximo nombre gasta de nuevo.
+      **Falta para que le llegue al cliente:** merge a `main` (es de `onia-cola`) y **pedido de
+      deploy de la landing** — toca `src/lib/pricing.ts`, que es fuente de precio, así que el
+      publicador automático del VPS (`onia-publicar-solo`, cron `50 */3`, que vive en `/root/bin`
+      y no en este repo) **no la publica solo** (hoy contesta «landing: al día» sólo porque el
+      commit está en la rama, no en `main`).
+
 - [ ] 🔴 **La cadena `npm test` —la que el integrador corre antes de CADA merge— es una lista de
       69 scripts tipeados a mano, y por eso dejaba 951 pruebas verdes sin ejecutar.** Medido el
       2026-09-17 10:05 La Paz por `onia-cola` derivando el universo del DISCO (`readdirSync`, no
