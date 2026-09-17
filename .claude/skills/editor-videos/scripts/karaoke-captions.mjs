@@ -117,7 +117,13 @@ const audioCodec = (probe("stream=codec_name", "a:0") || [])[0] || null;
 // el resto del scroll, leía chico y sin presencia. El rail de karaoke es el titular
 // del reel — tiene que pesar.
 const FONT_SIZE = Math.round(Number(flag("font-size", String(Math.max(18, Math.round(H * 0.042))))));
-const OUTLINE = Number(flag("outline", String(Math.max(2, Math.round(FONT_SIZE / 18)))));   // 4 @ 72px
+// --style apple (Sergio, 17-sep: "apple style, sin bordeado negro"): CERO outline.
+// La legibilidad no la da un borde sino una SEGUNDA capa del mismo texto en negro
+// translúcido con \blur — una sombra difusa real, no el Shadow duro de ASS (que es
+// una copia desplazada con el mismo borde y se lee como texto fantasma).
+const STYLE = flag("style", "");
+const APPLE = STYLE === "apple";
+const OUTLINE = APPLE ? 0 : Number(flag("outline", String(Math.max(2, Math.round(FONT_SIZE / 18)))));   // 4 @ 72px
 // SIN sombra por defecto (Sergio, 22-ago: "hay subtitulos por detras de los subtitulos").
 // Con outline grueso + Shadow 2 la copia desplazada se lee como un SEGUNDO texto
 // fantasma detras del real. El outline negro ya da toda la legibilidad necesaria;
@@ -231,6 +237,11 @@ const header = [
   "[V4+ Styles]",
   "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
   `Style: K,${FONT},${FONT_SIZE},${BASE_COLOR},${ACTIVE_COLOR},&H00000000&,&H80000000&,${BOLD},0,0,0,100,100,0,0,1,${OUTLINE},${SHADOW},2,${MARGIN_H},${MARGIN_H},${MARGIN_V},1`,
+  // Capa de sombra del preset apple: mismo texto, negro translúcido, 3px más abajo
+  // (MarginV menor = más cerca del borde), difuminado por evento con {\blur}.
+  ...(APPLE
+    ? [`Style: Ksombra,${FONT},${FONT_SIZE},&H60000000&,&H60000000&,&H00000000&,&H00000000&,${BOLD},0,0,0,100,100,0,0,1,0,0,2,${MARGIN_H},${MARGIN_H},${Math.max(0, MARGIN_V - 3)},1`]
+    : []),
   "",
   "[Events]",
   // OJO: MarginV va en el Format de Dialogue (10 campos). Si falta, un campo se corre al Text
@@ -249,6 +260,15 @@ for (let p = 0; p < phrases.length; p++) {
   if (phraseEnd > nextPhraseStart) phraseEnd = nextPhraseStart;
   phraseEnd = Math.max(phraseEnd, last.start + MIN_LINE_DUR);
 
+  // Preset apple: la sombra es UN evento por frase (capa 0, debajo de las palabras),
+  // texto plano sin karaoke — no cambia de color, solo sostiene la legibilidad.
+  if (APPLE) {
+    const plano = joinWords(ws, (word) => escAss(word));
+    events.push(
+      `Dialogue: 0,${assTime(ws[0].start)},${assTime(phraseEnd)},Ksombra,,0,0,0,,{\\blur7}${plano}`,
+    );
+  }
+
   for (let i = 0; i < ws.length; i++) {
     const start = ws[i].start;
     // Dentro de la frase el rango llega hasta el arranque de la palabra siguiente: el highlight
@@ -266,7 +286,7 @@ for (let p = 0; p < phrases.length; p++) {
     // (re-centra la línea y hace saltar las palabras).
     const text = joinWords(ws, (word, j) =>
       j === i ? `{\\1c${ACTIVE_COLOR}}${escAss(word)}{\\1c${BASE_COLOR}}` : escAss(word));
-    events.push(`Dialogue: 0,${assTime(start)},${assTime(end)},K,,0,0,0,,${text}`);
+    events.push(`Dialogue: ${APPLE ? 1 : 0},${assTime(start)},${assTime(end)},K,,0,0,0,,${text}`);
   }
 }
 const ass = header + "\n" + events.join("\n") + "\n";
