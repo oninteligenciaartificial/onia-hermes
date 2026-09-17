@@ -1734,3 +1734,23 @@ hallazgo nuevo, es la misma causa con más urgencia visible para Sergio Urcullo.
 
 Nada para hacer del lado de este carril: sigue blocked esperando el `ok`. Próxima vuelta, si
 BUILD_ID sigue igual, no repetir esta verificación — ya quedó dicho dos veces en el tablero.
+
+## 2026-09-17 12:12 La Paz — sin novedad de deploy, escalón nuevo: `/precios` con `reducedMotion`
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas. `BUILD_ID` sigue en `OFd4xCDzoTbQdThUbfzDv` y `npm run
+pedido:entregado` confirma los tres pedidos vigentes sin cambios (`t_fe70e22a` landing,
+`t_33d42433` bot, `t_62888ea2` plataforma — este último reemplaza a `t_1a5c860d`, que quedó
+`archived`). No repetí el recorrido completo ni la sonda de MFA: método vigente, nada que medir
+de nuevo ahí.
+
+En su lugar cerré un pendiente de varias vueltas atrás: miré `onia.com.bo/precios` con
+Playwright + `reducedMotion: 'reduce'` (para no leer un `<CountUp>` a mitad de animar, la trampa
+ya conocida de esta memoria). **Sano**: cero textos cortados (`scrollWidth > clientWidth`), y
+los precios pintados cruzan contra la fuente única — `320/89/3.200`, `550/145/5.500`,
+`890/229/8.900`, `1.290/12.900`, `2.900/29.000` contra `DEFAULT_PLAN_AMOUNTS` de
+`onia-platform/lib/subscription-plans.ts`; `Bs 390` (chatbot), `Bs 70/usuario` y `Bs 3.500/4.500`
+(implementación/self-hosted) contra `lib/pricing.ts`. "Web del negocio · Desde Bs 2.000" es
+texto tipeado del sitio (no tiene fuente en `pricing.ts`) pero coincide con la cifra ya
+ratificada por Sergio Urcullo el 2026-08-23. Nada para reportar.
+
+`completo: false`, `llegoHasta: 4/9` (sin cambios, sigue bloqueado por el mismo deploy).
