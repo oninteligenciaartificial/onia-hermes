@@ -11,7 +11,7 @@
 
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { mkdirSync, writeFileSync, existsSync, statSync } from 'node:fs';
+import { mkdirSync, writeFileSync, existsSync, statSync, copyFileSync } from 'node:fs';
 import path from 'node:path';
 
 const run = promisify(execFile);
@@ -54,6 +54,10 @@ async function readProfileCookies({ headed = false } = {}) {
   const opts = {
     headless: !headed,
     viewport: headed ? null : { width: 1280, height: 800 },
+    // Con el flag --enable-automation puesto, reCAPTCHA se niega a validar y el
+    // login queda trabado en el captcha (medido 2026-09-17).
+    ignoreDefaultArgs: ['--enable-automation'],
+    args: ['--disable-blink-features=AutomationControlled'],
   };
   // Perfil PROPIO, aparte del Chrome del usuario: las cookies se leen por CDP,
   // asi que no importa el cifrado en disco (DPAPI / App-Bound Encryption).
@@ -63,8 +67,11 @@ async function readProfileCookies({ headed = false } = {}) {
     .catch(() => chromium.launchPersistentContext(PROFILE_DIR, opts));
   try {
     if (headed) {
+      // Un sessionid REVOCADO por el servidor sigue viviendo en el perfil y el
+      // poll de abajo lo tomaria por login exitoso. Limpiar antes, siempre.
+      await ctx.clearCookies();
       const page = ctx.pages()[0] || (await ctx.newPage());
-      await page.goto('https://www.instagram.com/accounts/login/').catch(() => {});
+      await page.goto('https://www.instagram.com/').catch(() => {});
       process.stderr.write(
         'Login de Instagram: entra en la ventana que se abrio. Espero hasta 5 min...\n',
       );
@@ -92,8 +99,11 @@ async function ensureJar({ force = false } = {}) {
     !force && existsSync(JAR) && Date.now() - statSync(JAR).mtimeMs < JAR_MAX_AGE_MS;
   if (fresh) return JAR;
 
-  let cookies = await readProfileCookies();
-  if (!cookies.some((c) => c.name === 'sessionid' && c.value)) {
+  // Con --login se abre la ventana SIEMPRE: un sessionid presente no prueba nada
+  // (IG revoca sesiones server-side y el cookie queda en el perfil como zombie;
+  // el 2026-09-17 eso dejo el "--login" saliendo sin abrir ventana).
+  let cookies = force ? null : await readProfileCookies();
+  if (!cookies?.some((c) => c.name === 'sessionid' && c.value)) {
     if (!force) {
       throw new Error(
         'No hay sesion de Instagram en el perfil de Playwright.\n' +
@@ -124,7 +134,14 @@ async function download(url, jar) {
     '--quiet',
     '--no-warnings',
   ];
-  if (jar) flags.push('--cookies', jar, '--sleep-requests', '2');
+  if (jar) {
+    // Copia descartable: yt-dlp REESCRIBE el archivo de cookies al salir, y en un
+    // intento fallido guarda el estado post-rechazo SIN sessionid (IG lo borra via
+    // Set-Cookie). Asi nos vacio el jar dos veces el 2026-09-17.
+    const tmp = jar + '.ytdlp';
+    copyFileSync(jar, tmp);
+    flags.push('--cookies', tmp, '--sleep-requests', '2');
+  }
   const { stdout } = await run('yt-dlp', [...flags, url], { maxBuffer: 1 << 24 });
   return stdout.trim().split('\n').filter(Boolean).pop();
 }
