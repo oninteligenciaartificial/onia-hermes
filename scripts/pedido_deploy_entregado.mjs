@@ -188,6 +188,25 @@ export function tareaAbierta(status) {
  * Un `status` que no se pudo leer cae en `ilegibles` Y en `abiertos`: no sé si está viva, y
  * las dos salidas conservadoras son no callar el pedido y no acusar al puntero.
  */
+/**
+ * PURA: cuándo nació la tarea, en segundos epoch, o `null` si no se puede saber.
+ *
+ * `null` no es un adorno del tri-estado: quien lo consume decide con él si un pedido
+ * ENVEJECIÓ, y una fecha inventada (hoy, 0, el epoch) declararía viejo a un pedido de hace
+ * cinco minutos o fresco a uno de la semana pasada. Las dos direcciones cuestan: una manda
+ * a escalar de más, la otra calla trabajo que no llega al cliente.
+ */
+export function creadoEnSegundos(tarea) {
+  const crudo = tarea?.created_at ?? tarea?.createdAt;
+  if (typeof crudo === 'number' && Number.isFinite(crudo)) return crudo;
+  if (typeof crudo === 'string' && /^\d+$/.test(crudo.trim())) return Number(crudo.trim());
+  if (typeof crudo === 'string' && crudo.trim() !== '') {
+    const t = Date.parse(crudo);
+    return Number.isFinite(t) ? Math.floor(t / 1000) : null;
+  }
+  return null;
+}
+
 export function barrerTablero({ tareas }) {
   const pedidos = [];
   const ilegibles = [];
@@ -210,7 +229,7 @@ export function barrerTablero({ tareas }) {
     }
     const m = cuerpo.match(/^DESPLEGAR:\s*(\S+)/im);
     if (!m) continue;
-    pedidos.push({ id, destino: m[1].toLowerCase(), texto: cuerpo });
+    pedidos.push({ id, destino: m[1].toLowerCase(), texto: cuerpo, creado: creadoEnSegundos(t) });
   }
   return { pedidos, ilegibles, abiertos };
 }
