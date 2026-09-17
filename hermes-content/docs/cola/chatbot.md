@@ -318,9 +318,89 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~Los TRES barridos del embudo corrían en seco en producción: ningún prospecto recibió
+      jamás su follow-up ni el recordatorio de su demo~~ — CERRADO el 2026-09-17, commiteado y
+      PENDIENTE DE DESPLIEGUE del bot.**
+
+      **Medido en los logs del VPS, no deducido.** `grep -c "modo dry-run"` sobre
+      los tres logs de barrido del bot en `/var/log/` (followup, reminder y postdemo) da
+      **667 / 670 / 670**;
+      `grep -c "modo envio"` da **0 / 0 / 0**. Los tres crons (`17 * * * *`, `32 * * * *`,
+      `47 * * * *`) invocan el wrapper **pelado**, y sin `--emit` el `.mjs` ni reserva ni manda.
+      O sea, en toda la historia del bot: el prospecto que quedó a medias nunca recibió el M3 que
+      lo rescata, el que agendó nunca recibió su recordatorio, y ninguna demo se cerró sola.
+
+      **Y el interruptor de producción decía lo contrario:** `/opt/onia/bot/webhook.env` tiene
+      `ONIA_BOT_DRY_RUN=false`. El único barrido que sí manda es `insistencia`, y no por mérito
+      propio: su línea de cron trae el `--emit` **escrito a mano**. Cuatro hermanos, uno solo
+      encendido, por una diferencia que vive fuera de git. Lo confirma un testigo independiente:
+      el comentario de `followUp.windowClosesAtHours` en `config.mjs` cuenta que al encender el
+      barrido a mano aparecieron *"2 conversaciones de 124 h y 131 h esperando, acumuladas porque
+      el cron nunca existió"*.
+
+      **La clase.** El wrapper afirmaba en un comentario que *"el interruptor de 'manda de verdad'
+      vive en UN SOLO lugar: webhook.env"* — y era falso: había **dos en serie** y ese archivo no
+      podía encender el segundo. Un interruptor que no puede encender nada por sí mismo es
+      decorativo, y quien lo lee cree que decidió algo. **Lo que cambió:** los cuatro wrappers
+      derivan `--emit` de ese interruptor (`EMIT_ARGS`), así que el comentario ahora es verdad y
+      el cron no hay que tocarlo. Quien llama sigue mandando: `--emit`, `--dry-run` y `--json`
+      ganan (un `--json` pide **formato**, no autoriza a escribirle a nadie).
+
+      **Encender no dispara ningún aluvión:** medido el mismo día contra producción, los tres
+      barridos en seco dan `MANDARIA (0)` / `(ninguno)` / `CERRARIA (0)` — cero candidatas, porque
+      cada uno mira una ventana acotada (20-24 h y 7 días el follow-up, 4 h antes el recordatorio,
+      1 h después el cierre).
+
+      **Gate:** `barridos-corren-en-el-modo-que-dice-el-interruptor.test.mjs` — ejecuta cada
+      wrapper de verdad con `docker` stubbeado y mira la línea con la que invoca a `node`; el
+      universo se deriva del disco (todo `*-run.sh` cuyo `.mjs` acepte `--emit`), así que el
+      barrido nuevo nace adentro. Validado por mutación (sacar `EMIT_ARGS` de la invocación,
+      clavar la condición, y quitar `--json` de la guarda del llamador: los tres ponen rojo el
+      caso que les toca), y confirmado por mutación que la cadena `npm run test:bot` lo corre.
+
+- [x] 🔴 **~~Al encender el follow-up, el barrido le habría escrito a las 06:00 de la mañana~~ —
+      CERRADO el 2026-09-17, en el mismo commit que lo enciende.**
+
+      Cerrar una puerta puede abrir la de al lado. A quién se le escribe lo elige el **silencio**
+      del prospecto (`followUp.afterHours` = 20 h desde su último mensaje), así que la hora de
+      salida es la de entrada corrida 20 h: **quien escribe a las 10:00 recibe el seguimiento a
+      las 06:00**, y el cron corre las 24 horas sin franja. Mientras el barrido estaba en seco eso
+      no pasaba nunca; encenderlo lo volvía real.
+
+      **Sus dos hermanos ya lo sabían, por eso es un olvido y no una decisión:** `reminder` frena
+      antes de las 08:00 con `reminder.quietBeforeHour` (*"un WhatsApp a esa hora molesta y
+      castiga el quality rating"*, dice su propia config) e `insistencia` queda acotado por la
+      franja de su cron (`*/30 12-23` UTC = 08:00-19:59 de Bolivia). El follow-up era el único de
+      los tres sin ninguna.
+
+      **Lo que cambió:** `followUp.quietBeforeHour: 8` / `quietAfterHour: 21`, y la guarda va al
+      **final** de `skipReason` porque es transitoria — la fila sigue elegible y sale en el primer
+      barrido de la mañana, nunca quema la reserva del CAS. La hora local se mudó a `config.mjs`
+      (`localHour`, re-exportada por `reminder-run.mjs`): dos copias de esa cuenta serían dos
+      políticas de "no molestar" que se separan sin que nada se ponga rojo.
+
+      **Qué cuesta esperar, dicho de frente:** posponer puede cerrar la ventana de servicio de
+      24 h de Meta, y entonces el mensaje sale por la plantilla aprobada `seguimiento_demo`
+      (~0,074 USD) en vez de texto libre. No se pierde ningún follow-up: se encarece el caso peor
+      en medio boliviano. La alternativa era escribirle a las 5 de la mañana.
+
+      **Gate:** `followup-no-escribe-de-madrugada.test.mjs`, validado por mutación (esquivar la
+      guarda y olvidar el techo rompen los casos que les tocan).
+
+      ⚠️ **Lo que queda anotado, medido y NO arreglado:** la franja de `insistencia` vive en el
+      **crontab del VPS**, fuera de git. Hoy no tiene el defecto, pero el día que alguien
+      reescriba esa línea el barrido manda a cualquier hora, mudo. Moverla a `config.mjs` como la
+      del follow-up es una vuelta futura.
+
 - [x] 🔴 **~~El cierre post-demo le avisaba a un canal TAPIADO: una demo que ocurre no se cierra
       ni le llega a Sergio Urcullo~~ — CERRADO el 2026-09-17, commiteado y PENDIENTE DE
       DESPLIEGUE** (`d58b95f3`; pedido de deploy vivo del bot: `t_234cfe6a`).
+
+      ⚠️ **Corregido el mismo día: este diagnóstico estaba a MEDIAS.** El `CERRARIA (0)` del log
+      tenía **dos** causas, no una — el canal tapiado (lo de abajo) **y** que el cron corre el
+      wrapper sin `--emit` (el ítem de arriba). Arreglar sólo el canal no habría encendido nada, y
+      la vuelta habría reportado un cierre que el cliente no ve. Por eso un `0` en un log se
+      pregunta hasta el final: la primera causa que explica el síntoma no siempre es la única.
 
       **Medido en producción, no deducido:** el cron de las `:47` corre `postdemo-run.sh` cada
       hora y `/var/log/onia-bot-postdemo.log` dice `CERRARIA (0)` — dry-run — en todas las

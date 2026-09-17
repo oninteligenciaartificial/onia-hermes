@@ -61,6 +61,19 @@ if [ -z "${ONIA_BOT_DRY_RUN:-}" ] && [ -f "$BOT_DIR/webhook.env" ]; then
   ONIA_BOT_DRY_RUN="$(sed -n 's/^ONIA_BOT_DRY_RUN=//p' "$BOT_DIR/webhook.env" | head -n1 | tr -d "\"' \r")"
 fi
 
+# EL MODO SE DERIVA DE ESE INTERRUPTOR, no del argumento que el llamador se acuerde de escribir.
+# Heredar la variable no alcanzaba: este cron (`47 * * * *`) llama al wrapper PELADO y sin
+# `--emit` el .mjs ni reserva ni cierra — 670 corridas, todas en dry-run. Por eso el `CERRARIA (0)`
+# del log tenia DOS causas y arreglar solo el canal del aviso no lo habria encendido. La historia
+# completa esta en followup-run.sh. Quien llama sigue mandando.
+EMIT_ARGS=()
+case " $* " in
+  *" --emit "*|*" --dry-run "*|*" --json "*) ;;
+  *)
+    if [ "${ONIA_BOT_DRY_RUN:-true}" = "false" ]; then EMIT_ARGS=(--emit); fi
+    ;;
+esac
+
 # CREDENCIALES DEL AVISO. Mismo patrón y mismo archivo que `webhook-server.sh`: el secreto vive
 # donde ya vivía y nadie lo copia a mano. Hace falta acá porque `docker exec` hereda el entorno del
 # CONTENEDOR, no el del webhook — medido el 2026-09-17, `onia-center` no tiene `TG_BOT_TOKEN`
@@ -85,6 +98,6 @@ docker exec \
   -e ONIA_BOT_TG_AVISO="$TG_AVISO" \
   -e TG_BOT_TOKEN="${TG_BOT_TOKEN:-}" \
   -e TG_CHAT_ID="${TG_CHAT_ID:-}" \
-  "$CONTAINER" node "$DEST/postdemo-run.mjs" ${NOW_ARGS[@]+"${NOW_ARGS[@]}"} "$@"
+  "$CONTAINER" node "$DEST/postdemo-run.mjs" ${NOW_ARGS[@]+"${NOW_ARGS[@]}"} ${EMIT_ARGS[@]+"${EMIT_ARGS[@]}"} "$@"
 
 exit 0

@@ -75,6 +75,19 @@ if [ -z "${ONIA_BOT_DRY_RUN:-}" ] && [ -f "$BOT_DIR/webhook.env" ]; then
   ONIA_BOT_DRY_RUN="$(sed -n 's/^ONIA_BOT_DRY_RUN=//p' "$BOT_DIR/webhook.env" | head -n1 | tr -d "\"' \r")"
 fi
 
+# EL MODO SE DERIVA DE ESE INTERRUPTOR, no del argumento que el llamador se acuerde de escribir.
+# Este barrido es el UNICO de los cuatro que hoy manda de verdad, y no por merito propio: su linea
+# de cron trae el `--emit` escrito a mano. Esa diferencia vive fuera de git, asi que el dia que
+# alguien reescriba el cron el barrido se apaga mudo, como sus tres hermanos. La historia completa
+# esta en followup-run.sh. Quien llama sigue mandando.
+EMIT_ARGS=()
+case " $* " in
+  *" --emit "*|*" --dry-run "*|*" --json "*) ;;
+  *)
+    if [ "${ONIA_BOT_DRY_RUN:-true}" = "false" ]; then EMIT_ARGS=(--emit); fi
+    ;;
+esac
+
 # Token de Chatwoot — el barrido MANDA el mensaje, no solo lo reserva. Sale de la base de Chatwoot
 # igual que en webhook-server.sh: nunca se escribe en un archivo ni viaja a n8n.
 CWDB="$(docker ps -qf name=onia-chatbot_chatwoot-db | head -n1)"
@@ -99,6 +112,6 @@ docker exec \
   -e BOT_KNOWLEDGE_SECRET="${BOT_KNOWLEDGE_SECRET:-}" \
   -e SUPABASE_URL="${SUPABASE_URL:-}" \
   -e SUPABASE_SERVICE_ROLE_KEY="${SUPABASE_SERVICE_ROLE_KEY:-}" \
-  "$CONTAINER" node "$DEST/insistencia-run.mjs" ${NOW_ARGS[@]+"${NOW_ARGS[@]}"} "$@"
+  "$CONTAINER" node "$DEST/insistencia-run.mjs" ${NOW_ARGS[@]+"${NOW_ARGS[@]}"} ${EMIT_ARGS[@]+"${EMIT_ARGS[@]}"} "$@"
 
 exit 0
