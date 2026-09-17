@@ -574,11 +574,17 @@ export function createStore(options = {}) {
    * y < 24 h (ventana de Meta: fuera no hay plantilla del recepcionista, no se manda).
    * El refinamiento por org (doc.seguimiento activo/horas) lo hace el runner, que
    * igual necesita leer el doc. Reusa followup_step + reserveFollowUp como CAS.
+   *
+   * El techo lo DERIVA de `config.followUp.windowClosesAtHours`, no de un 24 propio:
+   * la ventana de Meta es UN hecho del canal y ya vive ahi (lo dice config.mjs, que
+   * ya pago una vez la trampa de dos numeros para el mismo hecho). Con el 24 tipeado
+   * aca, mover la ventana en el config dejaba este barrido en el valor viejo.
    */
-  async function sweepInsistenciaCandidates(nowIso, limit = 50) {
+  async function sweepInsistenciaCandidates(nowIso, config = DEFAULT_CONFIG, limit = 50) {
     const now = Date.parse(nowIso);
     if (!Number.isFinite(now)) return warn("sweepInsistenciaCandidates", `nowIso invalido: ${nowIso}`);
-    const from = new Date(now - 24 * 3600000).toISOString();
+    const ventana = config?.followUp?.windowClosesAtHours ?? DEFAULT_CONFIG.followUp.windowClosesAtHours;
+    const from = new Date(now - ventana * 3600000).toISOString();
     const to = new Date(now - 1 * 3600000).toISOString();
     const filter = [
       "followup_step=eq.0",

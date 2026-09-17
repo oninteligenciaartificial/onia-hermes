@@ -39,8 +39,13 @@ import { normalize } from "./guardrails.mjs";
 // Reloj y config del banco
 // ---------------------------------------------------------------------------
 
-/** Lunes 10:05 en La Paz: dentro del horario de atencion, para que M7 no ensucie las respuestas. */
-export const BENCH_T0 = "2026-07-27T14:05:00Z";
+/**
+ * Lunes 15:00 en La Paz: dentro del horario de atencion, para que M7 no ensucie las respuestas.
+ * Era 10:05, que estaba dentro del "lun-vie 9:00-18:00" tipeado a mano y quedo FUERA cuando el
+ * horario paso a derivarse de las ventanas reales de Sergio Urcullo (14-17 y 20-22). El margen
+ * hasta las 17:00 da 60 pasos de `benchClock`, muy por encima del caso mas largo.
+ */
+export const BENCH_T0 = "2026-07-27T19:00:00Z";
 
 export function benchClock(index) {
   return new Date(Date.parse(BENCH_T0) + index * 120000).toISOString();

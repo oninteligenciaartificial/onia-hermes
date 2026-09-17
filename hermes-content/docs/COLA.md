@@ -77,6 +77,31 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [x] 🔴 **El sitio prometía «en los TRES planes no cobramos implementación ni migración»
+      mientras pintaba CUATRO tarjetas comprables.** Encontrado y **CERRADO el 2026-09-13
+      12:55 La Paz por `web-venta`** (`b43c1f12`). Medido contra producción: `onia.com.bo/`
+      y `/precios` devuelven 200 e imprimen la frase **dos veces cada una** —cuerpo y JSON-LD
+      de la FAQ, o sea que también viaja a Google— con las cuatro tarjetas a la vista
+      (Bs 320 · 550 · 890 · 1.290). La escalera C sumó el plan Crece el 12-sep y cuatro frases
+      se quedaron contando tres: `web-factory/apps/onia-platform/src/lib/pricing.ts`
+      (CONDICIONES, la letra chica de `/precios`),
+      `web-factory/apps/onia-platform/src/app/(sitio)/faq-datos.ts` (la FAQ de la portada),
+      `web-factory/apps/onia-platform/src/app/v1/precios/page.tsx` (que además enumeraba TRES
+      saltos de valor) y `web-factory/apps/onia-platform/src/app/v1/empezar/resultado.tsx`.
+      **Por qué importaba:** la promesa es de PLATA. El lead parado en el Crece de Bs 550 —el
+      escalón nuevo, el que se vende como el salto a los agentes— leía una enumeración que no
+      lo nombraba. **Cura:** la cantidad se cuenta (`cuantosPlanes()`), no se tipea; los saltos
+      de `/v1/precios` se derivan igual. El gate
+      `web-factory/apps/onia-platform/src/app/(sitio)/cuantos-planes.test.ts` prohíbe la FORMA
+      —un numeral pegado a «planes»— y no el número equivocado, que se apagaría solo el día que
+      la respuesta correcta sea «cuatro»; validado por mutación en tres direcciones.
+      **Evidencia en el artefacto servido, no en la fuente:** el build prerenderiza «En los
+      cuatro planes» 7 veces y «Son cuatro planes … ordenar, recuperar, operar completo y todo
+      incluido», con cero «tres planes» en todo `.next`.
+      ⚠️ **Todavía no lo ve el cliente:** la landing vive `bd90e8af2` (12-sep 22:52) y este
+      arreglo es el commit 11 de los que esperan el pedido de deploy ya bloqueado en Sergio
+      Urcullo — no se vuelve a pedir.
+
 - [x] 🟡 **Nada impide que la regla de «envolver en vez de cortar» del panel vuelva a meterse
       dentro de un `@media`, que es exactamente como nació este defecto.** Abierto por
       `web-venta` el 2026-09-13, en la misma vuelta que arregló la instancia (`7878342f`).

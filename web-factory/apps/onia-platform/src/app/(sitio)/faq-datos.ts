@@ -5,7 +5,7 @@
 // cifras — que se desincroniza en la primera edicion. Un dato que se muestra
 // en dos pantallas vive en un archivo, no en dos.
 
-import { PRUEBA, bs, nombresConChatbot } from "@/lib/pricing";
+import { PRUEBA, bs, cuantosPlanes, nombresConChatbot } from "@/lib/pricing";
 
 import { CHATBOT_PLAN, precioStack } from "@/content/chatbot-precios";
 
@@ -43,7 +43,10 @@ export const FAQ = [
     // con la herramienta que existe de verdad (app/api/patients/import y
     // app/api/comercio/products/import: CSV con asistente de columnas).
     q: "¿Los datos del Excel o del cuaderno los cargo yo?",
-    a: "Sí, los cargás vos, y no a mano uno por uno: hay importación por CSV con un asistente que te va diciendo qué columna es cada cosa. No arrancás con la pantalla vacía — la cuenta llega con la configuración de tu rubro puesta. En los tres planes no cobramos implementación ni migración: el checkout cobra solo el plan. Grupo / Empresarial sí lleva implementación acompañada y se cotiza aparte.",
+    // La cantidad de planes tampoco se tipea: sale de `cuantosPlanes()`. Decía "los tres planes"
+    // y la escalera C (12-sep) ya vendía cuatro — el lead parado en el Crece leía una promesa de
+    // plata que no lo nombraba, con las cuatro tarjetas a la vista.
+    a: `Sí, los cargás vos, y no a mano uno por uno: hay importación por CSV con un asistente que te va diciendo qué columna es cada cosa. No arrancás con la pantalla vacía — la cuenta llega con la configuración de tu rubro puesta. En los ${cuantosPlanes()} planes no cobramos implementación ni migración: el checkout cobra solo el plan. Grupo / Empresarial sí lleva implementación acompañada y se cotiza aparte.`,
   },
   {
     // Acá decía "alguien que te la explica", y ese alguien no existe: el alta es

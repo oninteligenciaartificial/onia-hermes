@@ -278,6 +278,99 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El dueño podía encender la insistencia, elegir el tope del desplegable y su
+      asistente no escribía NUNCA — sin un envío, sin un skip, sin un warning~~ — CERRADO el
+      2026-09-13 en el repo (`hermes-content/deploy/vps-ops/bot/insistencia-run.mjs` +
+      `persistence.mjs`). ⚠️ COMMITEADO, NO DESPLEGADO.**
+      El panel (`onia-platform/app/(dashboard)/settings/chatbot/ChatbotClient.tsx`) vende
+      *"Si el cliente deja de responder, tu asistente le escribe UNA sola vez para retomar"* y
+      deja elegir cada cuánto insistir. El barrido que lo ejecuta, en cambio, sólo ve lo que
+      sigue **dentro de la ventana de servicio de 24 h de Meta**: `sweepInsistenciaCandidates`
+      acota `last_inbound_at` entre `now-24h` y `now-1h`. Una política de **24 h o más no puede
+      producir un envío jamás** — la fila sale del rango antes de volverse elegible.
+      **Y el silencio era perfecto:** ni envío, ni `skipped`, ni `warning`. La conversación
+      simplemente no aparecía en el barrido, así que no había nada que mirar ni dónde mirarlo.
+      **Lo tapaba un comentario que afirmaba la garantía:** la cabecera decía *"SIEMPRE dentro
+      de la ventana de 24 h de Meta"* — cierto, y se lee al revés. Lo garantizaba el RANGO del
+      SQL, no una decisión del archivo; el que lo leía daba el tema por resuelto. Es la clase
+      *«un comentario que afirma una garantía desactiva la auditoría»*, y acá la desactivó.
+      **Y eran dos números para el mismo hecho:** `24 * 3600000` tipeado en `persistence.mjs`
+      y `followUp.windowClosesAtHours` en `config.mjs` — que dice de sí mismo, con todas las
+      letras, que esa duplicación *"es la trampa que este archivo ya pagó una vez con la
+      duración de la demo (15 en el texto / 45 en el calendario)"*. Mover la ventana en el
+      config dejaba el barrido en el valor viejo.
+      Entró: el techo del barrido **derivado** de `config.followUp.windowClosesAtHours`
+      (`sweepInsistenciaCandidates(nowIso, config, limit)`, firma alineada con su hermano
+      `sweepDemoReminders`), y el corte explícito `politica_fuera_de_ventana:<horas>h` con un
+      warning que nombra **los dos números** y qué hacer (*"bajalo a menos de 24 h"*). **No se
+      corrige el valor por las suyas:** insistir antes de lo que el dueño pidió es decidir por
+      él; se saltea nombrando el problema, que es lo que permite arreglarlo.
+      **Medido antes de tocar nada:** hoy ninguna org lo tiene configurado —
+      `select o.slug, k.data->>'seguimiento' from chatbot_knowledge k join organizations o …`
+      devuelve una sola fila (`onia-interna`, `publicado`, **sin el campo**) — así que **el
+      defecto es latente, no está sangrando**. Se cierra igual porque lo pisa el primer cliente
+      que use la pantalla, y la opción que lo dispara es la que el desplegable muestra última.
+      **Gate:** tres casos en `insistencia-run.test.mjs` (skip con motivo · warning con los dos
+      números · el barrido recibe el config). **Validado por mutación en las dos direcciones:**
+      esquive del corte (`false &&`) → 2 rojos; techo devuelto al `24` tipeado y firma vieja →
+      1 rojo; árbol restaurado con `cp` → 10/10. Suite del bot completa: **1014/1014**.
+
+      📌 **Lo que queda abierto, y es la mitad que el dueño VE** (`onia-platform`, otro repo —
+      no entró en esta vuelta y se deja con la reproducción exacta para no re-investigarlo):
+      1. `ChatbotClient.tsx:28` — `HORAS_SEGUIMIENTO = [1, 2, 3, 5, 12, 24]`: **la última
+         opción del desplegable es la opción muerta.** El tope que el motor puede cumplir es
+         `windowClosesAtHours - 1`.
+      2. `lib/chatbot/knowledge.ts:110` — `horas: { kind: "int", min: 1, max: 48 }`, y
+         `editor-sugerir.mjs:23` le dicta al LLM *"horas (numero 1-48)"*: por ahí entra un 30
+         sin pasar por el desplegable.
+      3. `ChatbotClient.tsx:596` — el párrafo afirma *"Dentro de las 24 horas del último
+         mensaje, sin costo extra"* **tipeado al lado del control que lo puede volver falso**.
+         Es la clase ya conocida: la promesa se **condiciona** (derivarla de lo que el dueño
+         eligió), no se borra.
+      ⚠️ **Y una fecha que vence en 18 días:** ese *"sin costo extra"* depende de Meta, que
+      empieza a cobrar la respuesta dentro de la ventana de 24 h el **1-oct-2026**. Toda
+      promesa sobre el costo de un tercero lleva su fecha.
+
+- [x] 🔴 **~~El bot OFRECE un horario y PROMETE otro: los dos salían de fuentes distintas~~ —
+      CERRADO el 2026-09-13 en el repo (`62336825`, `hermes-content/deploy/vps-ops/bot/ventanas-de-atencion.mjs`).
+      ⚠️ COMMITEADO, NO DESPLEGADO — y con un segundo paso que casi nadie hace, abajo.**
+      El bot hace dos cosas con el mismo dato —cuándo está Sergio Urcullo— y las hacía con dos
+      fuentes. Los horarios de demo que **ofrece** los calcula `scripts/loops/renovar-slots-bot.py`
+      desde su dict `VENTANAS`, escrito con la cita textual de Sergio Urcullo del 2026-09-02:
+      **lun-vie 14:00-17:00 y 20:00-22:00, sábado 09:00-15:00**. El horario que **promete** al
+      derivar a un humano salía de `config.mjs` `businessHours`, tipeado a mano: *"lun-vie,
+      9:00-18:00"*. Un mismo mensaje podía ofrecer *"martes 15, 14:00"* y prometer atención
+      desde las 9:00.
+      **Miente en las dos direcciones, y las dos cuestan leads.** De más: al que escribe un lunes
+      9:30 le dice *"te escribe él en horario de oficina (9:00-18:00)"* y no hay nadie hasta las
+      14:00 — y si contesta "urgente", peor, porque el bot lo marca y nadie lo mira. De menos: al
+      que escribe un **sábado a las 10** —hora de trabajo— le dice *"lun-vie"*, o sea que se va
+      creyendo que no hay nadie hasta el lunes; la franja **20:00-22:00** tampoco se nombraba.
+      Y `M7` remataba con *"{{humano}} te confirma **en la mañana**"*, que entre semana es
+      exactamente cuando NO está.
+      Ahora la fuente es **una** y de ahí se derivan los días, las franjas y la **frase**;
+      `isOutsideBusinessHours` decide por franjas, así que el hueco 17:00-20:00 existe para el
+      motor igual que para él. La frase quedó *"lun-vie 14:00-17:00 y 20:00-22:00, sáb 9:00-15:00"*.
+      El gate cruza contra el **`.py`** —el lado con respaldo—, no contra `config.mjs`: cruzarlo
+      contra el espejo propio sería leer el mismo dato dos veces.
+      ⚠️ **Dos trampas medidas, las dos del tipo que pasa en verde.** (1) `knowledge.mjs`: un
+      CLIENTE declara su horario como rango, y heredar las franjas de Onia **le cerraba el negocio
+      a las 17:00 y se lo abría a las 20:00**; el guard va con `franjas = null`, **no con
+      `delete`**, porque `createBotConfig` fusiona con `{ ...base[key], ...value }` y una clave
+      borrada del override **vuelve a aparecer desde la base** — la ausencia hay que escribirla.
+      Lo descubrió el test, que siguió rojo con el `delete` puesto. (2) `knowledge.example.json` y
+      `knowledge.onia.json` tenían **su propia copia** del horario viejo: una tercera fuente que,
+      instalada, devolvía la mentira entera.
+      🔴 **FALTA, y NO alcanza con el deploy del bot:** el `knowledge.json` **vivo** trae hoy
+      `empresa.horario = {dias:[1..5], desde:9, hasta:18, frase:"lun-vie, 9:00-18:00"}` — medido
+      con `docker exec onia-center cat /tmp/onia-bot/knowledge.json`. Como el archivo pisa a la
+      config, **desplegar sólo el código deja la promesa vieja viva** (y encima mi guard le pone
+      `franjas = null` y lo devuelve al rango 9-18). Hace falta el segundo paso, el del texto:
+      `webhook-server.sh knowledge` con `knowledge.onia.json` ya sin ese bloque. Sin eso, esto
+      **no está terminado** por más que el deploy diga verde.
+      Validado por mutación en las dos direcciones (sacar el sábado → 3 rojos; sacar el guard del
+      override → 1 rojo). Suite del bot **1011/1011**, cadena del repo verde.
+
 - [x] 🔴 **~~La propia sonda del carril quedó contada como un lead real, para siempre y sin
       forma de distinguirla~~ — CERRADO el 2026-09-13 07:5x La Paz (`scripts/sonda_widget.mjs`,
       barrido `reclamarRastros` + predicado `esRastroDeSonda`).**

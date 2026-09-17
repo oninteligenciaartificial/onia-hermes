@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
 import { Reveal } from "@/motion";
-import { ALCANCE_CON_FICHA, PRUEBA } from "@/lib/pricing";
+import { ALCANCE_CON_FICHA, PRUEBA, primerPlanCon } from "@/lib/pricing";
 import { EMPEZAR_URL } from "../nav";
 import { CTA_ALTA } from "../alta";
 import { Block, Shape, Btn, Kicker } from "../ui";
 import s from "../sitio.module.css";
 
+const PLAN_CON_AGENTES = primerPlanCon("agentes");
+
 export const metadata: Metadata = {
   title: "Agentes con IA que proponen y esperan tu aprobación | Onia",
-  description: `Recall detecta al cliente que no vuelve (${ALCANCE_CON_FICHA}) y Cobrador detecta la deuda vencida, en todos los rubros: los dos redactan el mensaje y lo dejan en Pendientes. Nada sale sin tu OK. Incluidos desde el plan Pro.`,
+  description: `Recall detecta al cliente que no vuelve (${ALCANCE_CON_FICHA}) y Cobrador detecta la deuda vencida, en todos los rubros: los dos redactan el mensaje y lo dejan en Pendientes. Nada sale sin tu OK. Incluidos desde el plan ${PLAN_CON_AGENTES}.`,
   alternates: { canonical: "/agentes" },
   openGraph: {
     type: "website",
@@ -23,8 +25,15 @@ export const metadata: Metadata = {
 /**
  * Apartado de AGENTES. Copy verificado contra la pantalla real de Agentes del
  * producto (Recall y Cobrador, cada 24h, PROPONEN y nunca envían solos). Nada
- * de esto es promesa: existe. Los agentes vienen desde el plan Pro
- * (lib/pricing.ts → Pro.incluye). Sin imágenes.
+ * de esto es promesa: existe. Sin imágenes.
+ *
+ * DESDE QUE PLAN NO SE TIPEA ACA. Hasta el 2026-09-13 esta página decía "desde el plan Pro" en
+ * cuatro lugares —el H2, el párrafo, la `description` que viaja a Google y a WhatsApp, y este
+ * mismo comentario, que lo daba por verificado contra `Pro.incluye`— y las cuatro eran falsas
+ * desde la escalera C (2026-09-12), que le dio `agentsIncluded` al Crece. Al lead se le pedían
+ * Bs 890 por lo que ya trae un plan de Bs 550, mientras `/precios` decía bien "vienen desde
+ * Crece": un comentario que afirma una verificación es lo que apaga la auditoría del que pasa
+ * después. El nombre sale de `primerPlanCon("agentes")`, que lo deriva del booleano espejo.
  *
  * El alcance del Recall NO se tipea acá: sale de `ALCANCE_CON_FICHA`, que se
  * deriva de `ALCANCE_POR_DATOS` (lib/pricing.ts, con la medición contra el
@@ -108,12 +117,12 @@ export default function Agentes() {
         <Reveal>
           <Kicker>Desde qué plan</Kicker>
           <p id="plan" className={s.h2} style={{ maxWidth: "22ch" }}>
-            Los agentes vienen incluidos desde el plan Pro.
+            Los agentes vienen incluidos desde el plan {PLAN_CON_AGENTES}.
           </p>
           <p className={s.body} style={{ maxWidth: "46em" }}>
-            El plan Básico ordena tu negocio; el Pro le suma los agentes que te
-            proponen a quién contactar y a quién cobrarle. No es un cobro extra:
-            está adentro del plan.
+            El plan Básico ordena tu negocio; el {PLAN_CON_AGENTES} le suma los
+            agentes que te proponen a quién contactar y a quién cobrarle. No es
+            un cobro extra: está adentro del plan.
           </p>
           <div className={s.actions}>
             <a className={s.link} href="/precios">

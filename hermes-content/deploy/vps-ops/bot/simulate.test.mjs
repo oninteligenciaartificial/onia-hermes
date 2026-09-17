@@ -366,7 +366,13 @@ test("el guion feliz del simulador cierra con la MISMA salvedad que recibe el pr
   const env = { ...process.env };
   delete env.CALCOM_BASE_URL;
   delete env.CALCOM_BOT_EVENT_TYPE_ID;
-  env.ONIA_BOT_SLOTS = "lun 14:00@2026-09-14T18:00:00Z|mar 14:00@2026-09-15T18:00:00Z";
+  // Los horarios se DERIVAN de ahora (SPEC_PROD), no se tipean: `parseSlotsSpec` descarta todo
+  // lo que caiga antes de ANTICIPACION_MINIMA_MS (24 h), asi que un ISO literal convierte este
+  // caso en una bomba de tiempo. Estaba clavado en 2026-09-14/15 y el 17-sep el guion dejo de
+  // llegar a agendar: el gate se puso rojo con el bot vivo SANO y, al vivir en la cadena
+  // `npm test`, trabo el merge de todos los carriles. El helper ya existia arriba; estos dos
+  // casos eran los unicos del archivo que no lo usaban.
+  env.ONIA_BOT_SLOTS = SPEC_PROD;
 
   const corrida = spawnSync(process.execPath, [simulador, "--script", "1-feliz"], {
     encoding: "utf8",
@@ -394,7 +400,7 @@ test("y el modo INTERACTIVO tambien — es el que usa la medicion de arranque de
   const env = { ...process.env };
   delete env.CALCOM_BASE_URL;
   delete env.CALCOM_BOT_EVENT_TYPE_ID;
-  env.ONIA_BOT_SLOTS = "lun 14:00@2026-09-14T18:00:00Z|mar 14:00@2026-09-15T18:00:00Z";
+  env.ONIA_BOT_SLOTS = SPEC_PROD; // derivado de ahora, por el mismo motivo que el caso de arriba
 
   const corrida = spawnSync(process.execPath, [simulador], {
     encoding: "utf8",

@@ -63,6 +63,38 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [x] 🔴 **~~El correo de «mitad de camino» del trial afirmaba días que no derivaba de nada~~ —
+      CERRADO el 2026-09-13 (`onia-platform` `1ef035f`, en la rama del carril; los tres gates
+      verdes acá Y re-corridos en el VPS sobre el árbol con `origin/master` mergeado: tsc 0 ·
+      4927 tests · eslint 0).** El paso 7 del drip afirma **dos** cosas —la posición (*«vas por
+      la mitad de tu prueba»*) y cuánto falta (*«quedan 7 días»*)— y las dos estaban **tipeadas**,
+      ciertas sólo para el trial estándar de 14.
+
+      **El largo NO es fijo:** `PATCH /api/admin/clinics` acepta `trialDays` libre y ya se usó
+      para extender pruebas a mano. La cadencia ya se había recortado contra el largo real el
+      11-sep (`cadencia-vs-largo-del-trial.test.ts`: los pasos 12 y 14 cuelgan del vencimiento
+      *porque afirman cuánto FALTA*) — **el arreglo no viajó al paso 7, que afirma lo mismo**:
+      con 30 días de prueba el dueño leía *«quedan 7 días»* con 23 por delante; con 10, *«quedan
+      7»* teniendo 3, y 48 h después el paso 12 le decía *«te quedan 2 días»* — dos correos
+      nuestros contradiciéndose, en el único canal que recupera al que se registró y no volvió.
+
+      **De qué cuelga cada paso lo decide ahora lo que su TEXTO afirma:** el 3 son días
+      transcurridos (del alta), el 7 es posición + cuánto falta (de la mitad del largo real), el
+      12 y el 14 cuánto falta (del vencimiento). Con los 14 estándar el disparador da 7: **cero
+      cambio en el caso vivo**. `diasQueFaltan` entra como campo **requerido** de
+      `TrialDripEmailData` — y `tsc` cazó al llamador que lo olvidaba
+      (`app/components/trial-vencido-cumple-la-promesa.test.ts`).
+
+      **Gate:** `lib/subscription/el-aviso-de-mitad-no-inventa-lo-que-falta.test.ts`, con los
+      días esperados como **literal** (no calculados con el mismo helper que el producto usa
+      para escribirlos) y el universo del último caso caminado **desde el disco**, no con
+      `git ls-files`. Validado por **tres** mutaciones: el texto de las dos ramas (3 rojos),
+      sólo la rama con actividad (2 rojos) y el disparador clavado en 7 (1 rojo, el caso del
+      disparador).
+
+      ⚠️ **Commiteado y publicado en la rama del carril, NO desplegado:** lo merge `onia-cola` y
+      el publicador automático swapea solo (no toca fuente de precio).
+
 - [ ] 🔴 **Punto nuevo de Sergio Urcullo (12-sep): ¿Onia Platform personalizable POR CLIENTE
       para empresas grandes?** Textual: *"que se pueda hacer in-house su trabajo y no ellos
       moldearse al sistema sino el sistema a ellos — analizá"*. Análisis en curso con medición
@@ -266,6 +298,44 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       tiene celda propia en casi ninguna fila —cae al valor del Completo— y ahora el gate mide esa
       caída (`?? celdaDeFila`): hoy es honesta porque sus booleanos coinciden, y el día que se
       separen deja de serlo **ruidosamente**.
+
+      ✅ **CERRADO el 2026-09-13: la QUINTA superficie — la tarjeta de «Add-ons disponibles» de
+      esa misma pantalla le listaba Bs 390 al plan que ya trae el chatbot** (`onia-platform`
+      `2aa82b4`, publicado; los tres gates re-corridos EN EL VPS sobre el árbol con
+      `origin/master` mergeado: `tsc` 0 · 4.931 tests · `eslint` 0 errores). El dueño de un
+      **Completo (Bs 1.290)** abría `/settings`, bajaba dos secciones y leía la píldora
+      **«Activo»**, la lista **«Bs 390/mes o Bs 3.900/año»** y el pie **«Add-on activo»** — los
+      tres, sobre el chatbot que su plan trae adentro: le decía que paga **1.680** cuando paga
+      1.290. La tarjeta recibía sólo `isWhatsAppAddonActive`, que colapsa «lo incluye mi plan»
+      con «lo compré aparte».
+
+      **Por qué sobrevivió a las cuatro vueltas anteriores, incluidas las DOS de hoy sobre este
+      mismo archivo:** el add-on **hermano de la misma grilla** ya lo hace bien — la agenda
+      pública rotula «Incluido» y dice «Incluida en este plan» **40 líneas más abajo**, con el
+      dato (`getLimits(currentPlan).publicBookingIncluded`) resuelto **una línea** al lado del
+      que faltaba. Media familia correcta se lee como familia correcta: es la misma firma que
+      escondió la tercera superficie, repetida dentro del mismo archivo.
+
+      🔴 **Y lo segundo, que es peor: el gate de la clase no podía verla.**
+      `lib/chatbot/como-lo-paga-el-dueno.test.ts` (escrito esta misma mañana) **derivaba sus
+      sujetos caminando el disco** — y después los filtraba con un predicado escrito a mano que
+      preguntaba por `monthly`. Esta pantalla pinta **el mismo monto** como `tier.shortLabel`
+      («Bs 390/mes o Bs 3.900/año»), así que quedaba **fuera del universo** y el gate firmaba
+      verde sobre la pantalla rota. *Derivar los sujetos del disco no alcanza si después se los
+      filtra con un predicado a mano: un monto tiene varias representaciones y el predicado se
+      ata a una.*
+      Entró: los campos con plata **salen del dato** (`Object.entries` del nivel del chatbot:
+      un número, o un texto con «Bs» — si mañana gana `weeklyLabel`, entra solo); la atribución
+      del monto al chatbot es por el **identificador gritado anterior** y no por «el primero del
+      archivo», porque `EXTRA_USER_ADDON_PRICE.shortLabel` vive **600 líneas antes** en el mismo
+      archivo y acusaría a la tarjeta equivocada; y un **caso ancla** exige que `PlanClient.tsx`
+      esté en el universo, que es la pieza que impide volver al predicado angosto.
+      `chatbotIncluidoEnElPlan` entra como prop **obligatoria** y `tsc` nombró a los **7**
+      llamadores. **Tarjeta 10** en `app/dev/addon-chatbot` con el estado que nadie había
+      mirado — sin ella no se mira nunca, que es exactamente cómo llegó a producción.
+      **Validado por mutación, dos veces:** guarda fuera → 1 rojo nombrando la pantalla;
+      predicado angosto de vuelta → 2 rojos (los campos y el ancla).
+      ⚠️ **Falta mergear y desplegar** para que el cliente lo vea.
       **El sujeto del gate no es «crece»: son los planes que la pantalla VENDE** (`planesDe`) —
       `app/(dashboard)/settings/la-comparativa-se-pinta-desde-los-planes-que-vende.test.ts`.
       **Validado por mutación en las dos direcciones:** sacar `crece` de las columnas declaradas →

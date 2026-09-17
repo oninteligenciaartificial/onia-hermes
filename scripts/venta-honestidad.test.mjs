@@ -84,6 +84,56 @@ function bloque(src, nombre) {
 }
 
 /**
+ * El archivo con los comentarios en BLANCO, conservando los saltos de linea: un
+ * comentario acusa y absuelve igual que el codigo. Este archivo explica sus propios
+ * precios en prosa —"`Bs 70` en el `incluye` del Basico"— y contar esa linea como copy
+ * de venta es un rojo que manda a borrar el registro de por que algo se decidio.
+ */
+function sinComentarios(src) {
+  return src
+    .replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, " "))
+    .replace(/([^:"'`\\])\/\/[^\n]*/g, (m, antes) => antes + " ".repeat(m.length - antes.length));
+}
+
+/** Desde el `=` de una declaracion hasta el `;` que la cierra, contando anidamiento. */
+function finDeLaDeclaracion(src, desde) {
+  let nivel = 0;
+  for (let i = desde; i < src.length; i += 1) {
+    const c = src[i];
+    if ("([{".includes(c)) nivel += 1;
+    else if (")]}".includes(c)) nivel -= 1;
+    else if (c === ";" && nivel === 0) return i;
+  }
+  return src.length;
+}
+
+/**
+ * El texto de TODAS las listas de planes del archivo, derivado del TIPO que el
+ * compilador obliga (`readonly Plan[]`) y NO del nombre de la constante.
+ *
+ * POR QUE ASI, medido el 2026-09-13 integrando `claude/web-venta` (5501a3c4): ese commit
+ * partio las tarjetas en dos —`ESCALERA`, con el `incluye` de cada plan, y `PLANES`, un
+ * `.map()` derivado— y los dos tests de abajo pedian `bloque(..., "PLANES")`. El de
+ * PRESENCIA se puso rojo, que es honesto; el de AUSENCIA —el que busca un cobro de
+ * inventario escondido en la letra chica— paso VERDE sobre un tramo donde ya no queda ni
+ * un plan. Un universo tipeado a mano falla ABIERTO justo del lado que importa, y el
+ * renombre que lo apaga no se parece a un bug: se parece a un refactor prolijo.
+ *
+ * El tipo es lo unico que no se puede renombrar sin que `tsc` lo persiga: una lista de
+ * planes nueva entra sola, y si `Plan` desaparece el gate se queda SIN sujetos y lo dice
+ * (lo exige el caso ancla de mas abajo), nunca en verde.
+ */
+function listasDePlanes(src) {
+  const limpio = sinComentarios(src);
+  const declara = /\bconst\s+[A-Za-z_$][\w$]*\s*:\s*readonly\s+Plan\[\]\s*=/g;
+  const listas = [];
+  for (let m = declara.exec(limpio); m; m = declara.exec(limpio)) {
+    listas.push(limpio.slice(m.index, finDeLaDeclaracion(limpio, m.index + m[0].length)));
+  }
+  return listas.join("\n");
+}
+
+/**
  * Las CUATRO capacidades que el add-on retirado cobraba, con el vocabulario con
  * el que se las puede nombrar. El guard se ata a ESTO y no a la palabra
  * "inventario": filtrar por el nombre dejaba pasar la MISMA fila renombrada a
@@ -117,7 +167,7 @@ test("ningun plan cotiza el inventario en la letra chica", () => {
   // plan ya usa la forma "Reservas online — se agrega como add-on a Bs 150/mes".
   // Una capacidad de inventario junto a una cifra en Bs, en la misma linea, es
   // el mismo cobro entrando por la puerta de atras.
-  const culpables = bloque(leer(PRICING), "PLANES")
+  const culpables = listasDePlanes(leer(PRICING))
     .split("\n")
     .filter((linea) => /\bBs\s*\d/.test(linea))
     .filter((linea) => CAPACIDADES_INVENTARIO.some(([, patron]) => patron.test(linea)));
@@ -130,10 +180,26 @@ test("el inventario sigue contandose como valor incluido, capacidad por capacida
   // minimo" de antes — y ese "simple" era justo lo que justificaba vender un
   // "avanzado". Los cuatro terminos son los cuatro campos que InventoryClient.tsx
   // muestra de verdad.
-  const planes = bloque(leer(PRICING), "PLANES");
+  const planes = listasDePlanes(leer(PRICING));
   for (const termino of [/\bexistencias\b/i, /\bcosto\b/i, /\bproveedor/i, /stock m[ií]nimo/i]) {
     assert.match(planes, termino, `el \`incluye\` del plan dejo de nombrar ${termino}`);
   }
+});
+
+test("los planes se derivan del TIPO: renombrar la constante no puede apagar el gate", () => {
+  // El caso ancla de los dos tests de arriba. Sin esto, el dia que alguien vuelva a
+  // mover las tarjetas de constante los dos se quedan sin sujetos y firman verde: el
+  // de AUSENCIA porque no encuentra culpables donde no hay nada, y el de PRESENCIA
+  // porque bastaria con que el recorte agarrara CUALQUIER tramo que nombre inventario.
+  const src = leer(PRICING);
+  const texto = listasDePlanes(src);
+  assert.notEqual(texto, "", `no hay ninguna lista \`readonly Plan[]\` en ${PRICING}`);
+  assert.match(texto, /id:\s*"basico"/, "el recorte no alcanza al plan mas barato");
+  assert.match(texto, /incluye:\s*\[/, "el recorte no trae ni un `incluye`");
+
+  // Y la prueba de que el nombre no manda: con la constante renombrada sale lo mismo.
+  const aplanar = (t) => t.replace(/\bESCALERA\b/g, "OTRA_COSA").replace(/\s+/g, " ").trim();
+  assert.equal(aplanar(listasDePlanes(src.replace(/\bESCALERA\b/g, "OTRA_COSA"))), aplanar(texto));
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

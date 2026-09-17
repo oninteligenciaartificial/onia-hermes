@@ -1,5 +1,16 @@
 import type { Metadata } from "next";
-import { PLANES, bs, plan, semanalDesde, PRUEBA } from "@/lib/pricing";
+import { PLANES, bs, cuantosPlanes, plan, semanalDesde, PRUEBA } from "@/lib/pricing";
+
+/**
+ * Los saltos de valor, en el orden de la escalera y en minúscula: "ordenar,
+ * recuperar, operar completo y todo incluido". Se derivan por el mismo motivo
+ * que la cantidad — un plan nuevo entra solo, tipeados se quedan atrás.
+ */
+function saltosDeLaEscalera(): string {
+  const saltos = PLANES.map((p) => p.salto.toLowerCase());
+  if (saltos.length <= 1) return saltos.join("");
+  return `${saltos.slice(0, -1).join(", ")} y ${saltos[saltos.length - 1]}`;
+}
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Pricing } from "@/components/landing-v1/pricing";
@@ -97,9 +108,12 @@ export default function PreciosPage() {
             </Reveal>
             <Reveal delay={0.12}>
               <p className="lead">
-                Tres planes que se distinguen por el salto de valor — ordenar,
-                recuperar, crecer sin techo. Cada uno dice exactamente qué lleva
-                y qué no, con los números que el sistema aplica de verdad:
+                {/* Ni la cantidad ni los saltos se tipean: los dos salen de la escalera. Decía
+                    "Tres planes — ordenar, recuperar, crecer sin techo" y la escalera C sumó un
+                    cuarto salto, así que la bajada contaba un plan menos de los que se ven. */}
+                Son {cuantosPlanes()} planes que se distinguen por el salto de
+                valor — {saltosDeLaEscalera()}. Cada uno dice exactamente qué
+                lleva y qué no, con los números que el sistema aplica de verdad:
                 usuarios, fichas de clientes y recordatorios. Pagás por
                 adelantado el ciclo que elijas y no renovás cuando quieras: sin
                 permanencia y sin penalidad.

@@ -428,6 +428,15 @@ export function cifrasDelProducto({ planes, addons, prueba, limites }) {
     ...topesAplanados(l),
     "primer plan con agentes de IA": primerPlanCon(l, "agentes"),
     "primer plan con reservas online incluidas": primerPlanCon(l, "reservas"),
+    // El mismo hecho del producto, contra la lectura POR CAMPO del sitio (ver
+    // `agentesPorCampo` / `reservasPorCampo` en `limitesDelSitio`). Misma fuente de
+    // este lado —`agentsIncluded` / `publicBookingIncluded`— y dos lecturas distintas
+    // del otro: prosa y booleano tienen que dar lo mismo.
+    "primer plan con agentes de IA · por campo": primerPlanCon(l, "agentes"),
+    "primer plan con reservas online incluidas · por campo": primerPlanCon(
+      l,
+      "reservas",
+    ),
     "primer plan con reportes completos": primerPlanCon(l, "reportes"),
     "primer plan que exporta en CSV": primerPlanCon(l, "exportaCsv"),
     "primer plan con facturas recurrentes": primerPlanCon(
@@ -530,7 +539,8 @@ export function limitesDelSitio(fuente) {
   const salida = {};
   marcas.forEach((m, i) => {
     const hasta = i + 1 < marcas.length ? marcas[i + 1].index : fuente.length;
-    const inc = incluyeDelSitio(fuente.slice(m.index, hasta));
+    const trozo = fuente.slice(m.index, hasta);
+    const inc = incluyeDelSitio(trozo);
     salida[m[1]] = {
       /**
        * "sin tope" es la OTRA forma de decir ilimitado, y entro el 2026-09-12:
@@ -558,6 +568,19 @@ export function limitesDelSitio(fuente) {
        *  ("Todo lo del Pro") no estorba porque solo importa el primero. */
       agentes: /\bAgente\s+[A-Z]/.test(inc ?? "") || null,
       reservas: /Reservas\s+online\s+incluidas/i.test(inc ?? "") || null,
+      /**
+       * Los mismos dos hechos, leidos del BOOLEANO que el sitio declara por plan
+       * (`agentesIncluidos` / `reservasIncluidas`, espejo de `agentsIncluded` y
+       * `publicBookingIncluded`). No es una segunda copia del dato de arriba: la de
+       * arriba sale de la PROSA del `incluye` y esta del campo, y las dos se cruzan
+       * contra el producto. Entraron el 2026-09-13, cuando se midio que la prosa
+       * estaba bien y otras superficies del sitio —el `copy` de un add-on y la
+       * pagina /agentes— afirmaban lo contrario con el plan tipeado a mano; el
+       * campo es lo que ahora derivan esas superficies, asi que si nadie lo cruza
+       * contra el producto el error se muda del texto al booleano.
+       */
+      agentesPorCampo: /agentesIncluidos:\s*true/.test(trozo) || null,
+      reservasPorCampo: /reservasIncluidas:\s*true/.test(trozo) || null,
       reportes: /Reportes\s+completos/i.test(inc ?? "") || null,
       /**
        * El Basico la nombra en su `sinEsto` («Reportes completos y facturas
@@ -811,6 +834,12 @@ export function cifrasDelSitio({ precios, chatbot }) {
       ls,
       "reservas",
     ),
+    "primer plan con agentes de IA · por campo": primerPlanDelSitioCon(
+      ls,
+      "agentesPorCampo",
+    ),
+    "primer plan con reservas online incluidas · por campo":
+      primerPlanDelSitioCon(ls, "reservasPorCampo"),
     "primer plan con reportes completos": primerPlanDelSitioCon(ls, "reportes"),
     "primer plan con facturas recurrentes": primerPlanDelSitioCon(
       ls,

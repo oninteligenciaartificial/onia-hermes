@@ -343,7 +343,7 @@ test("fuera de horario se APENDEA el aviso, no reemplaza la respuesta", () => {
   const result = step(state, { text: "DEMO", receivedAt: "2026-07-28T03:30:00Z" }, { config: CONFIG });
   assert.deepEqual(keysOf(result), ["M0"]);
   assert.match(result.replies[0].text, /¿Cuál te va mejor\?/);
-  assert.match(result.replies[0].text, /fuera de horario de oficina/);
+  assert.match(result.replies[0].text, /fuera de horario de atención/);
   assert.ok(result.notes.includes("fuera_de_horario"));
 });
 
