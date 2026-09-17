@@ -318,6 +318,37 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El horario que el bot PROMETE en producción no lo mide nadie: se arregló en el repo
+      y el documento que producción sirve siguió mintiendo~~ — CERRADO el 2026-09-17
+      (`hermes-content/deploy/vps-ops/bot/horario-vivo.mjs`, `npm run horario:vivo`).**
+      La mitad que faltaba del arreglo del 13-sep. Ese día se unificó la disponibilidad de Sergio
+      Urcullo en `ventanas-de-atencion.mjs` y se cruzó contra el `.py` — **pero los dos lados de
+      ese cruce viven en el repo**. Cuatro días después, medido en la conversación 49 del inbox 4
+      (el de los leads reales), el bot vivo mandó, en el mismo mensaje: *"B) **sábado** 19 de
+      septiembre, 09:00"* y *"(Estoy respondiendo automático fuera de horario de oficina. Sergio
+      te confirma **en la mañana**.)"* — ofrece un sábado y promete lunes a viernes.
+      **Por qué ningún gate lo veía:** la promesa no está en el repo. `knowledge.json` está
+      gitignoreado a propósito y la fila del panel vive en la base; los dos pisan al código por
+      `knowledge.mjs:1203-1218`, que copia `empresa.horario` sobre `businessHours` —días, desde,
+      hasta y **la frase**— antes de que el motor hable. Misma familia que dejó al bot cotizando
+      Bs 750/1.500 una semana con `test:precios-bot` en 12/12.
+      El sujeto son los **documentos servidos**, los dos derivados y no nombrados: el archivo vivo
+      y la fila que el proceso pide con su propia `ONIA_KNOWLEDGE_URL`. La fila de un **cliente**
+      no es sujeto: su negocio declara su horario y contradecir el de Sergio Urcullo ahí es lo
+      correcto. Tri-estado: cero documentos o uno ilegible es **2**, nunca verde.
+      **Hoy sale ROJO y dice la verdad** (`exit 1`): el archivo vivo difiere en tres campos
+      —`dias [1..5]` vs `[1..6]`, `cierra 18` vs `22`, y la frase entera—. Se pone verde con la
+      publicación que ya espera el ok de Sergio Urcullo, sin tocar nada a mano.
+      Validado por **mutación en cinco direcciones** (no mirar la frase → 3 rojos; aplanar el
+      documento ilegible a sano → 2; lista vacía en verde → 3; mirar sólo el primer documento →
+      3; sacar la fila del panel del universo → 2). Self-check **29/29** y en la cadena como
+      `test:horario-instrumento`; la medición viva queda como alias suelto, que es lo que
+      corresponde a un gate que toca producción. Suite del bot **1024/1024**.
+      ⚠️ El propio self-check corrigió mi expectativa: de los cuatro campos del horario viejo sólo
+      **tres** difieren — `desde: 9` coincide con la fuente, porque la envolvente abre a las 9 y
+      la que abre es el sábado. Un gate que cortara en la primera diferencia, o que exigiera que
+      difieran todas, habría contado mal el mismo documento.
+
 - [x] 🔴 **~~El dueño podía encender la insistencia, elegir el tope del desplegable y su
       asistente no escribía NUNCA — sin un envío, sin un skip, sin un warning~~ — CERRADO el
       2026-09-13 en el repo (`hermes-content/deploy/vps-ops/bot/insistencia-run.mjs` +
@@ -420,13 +451,21 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       Lo descubrió el test, que siguió rojo con el `delete` puesto. (2) `knowledge.example.json` y
       `knowledge.onia.json` tenían **su propia copia** del horario viejo: una tercera fuente que,
       instalada, devolvía la mentira entera.
-      🔴 **FALTA, y NO alcanza con el deploy del bot:** el `knowledge.json` **vivo** trae hoy
-      `empresa.horario = {dias:[1..5], desde:9, hasta:18, frase:"lun-vie, 9:00-18:00"}` — medido
-      con `docker exec onia-center cat /tmp/onia-bot/knowledge.json`. Como el archivo pisa a la
-      config, **desplegar sólo el código deja la promesa vieja viva** (y encima mi guard le pone
-      `franjas = null` y lo devuelve al rango 9-18). Hace falta el segundo paso, el del texto:
-      `webhook-server.sh knowledge` con `knowledge.onia.json` ya sin ese bloque. Sin eso, esto
-      **no está terminado** por más que el deploy diga verde.
+      🔴 **FALTA — ESPERA PUBLICACIÓN:** el `knowledge.json` **vivo** sigue trayendo
+      `empresa.horario = {dias:[1..5], desde:9, hasta:18, frase:"lun-vie, 9:00-18:00"}` (remedido
+      el 2026-09-17 con `docker exec onia-center cat /tmp/onia-bot/knowledge.json`). Como el
+      archivo pisa a la config por `knowledge.mjs:1203-1218`, mientras no se publique el lead lee
+      la promesa vieja.
+      ⚠️ **Corregido el 2026-09-17: la parte de arriba que decía "NO alcanza con el deploy del
+      bot, hace falta un segundo paso a mano" es FALSA, y mandaba a hacer a mano algo ya
+      cableado.** Medido leyendo los dos scripts: el `ok` corre
+      `/opt/onia/bot/_deploy/publicar.sh`, que en su línea 126 llama a `deploy-bot.sh --aplicar`,
+      y el **paso 7** de ése (línea 146) es exactamente
+      `ONIA_BOT_KNOWLEDGE_FILE=$DEST/knowledge.onia.json webhook-server.sh knowledge`. O sea que
+      el texto viaja **con** el deploy desde `a1af0c58`, y `knowledge.onia.json` en el repo ya
+      tiene `empresa: {}` (verificado: `horario: null`). Un pendiente escrito al revés es peor
+      que un fantasma: le pedía a la próxima vuelta un paso manual sobre producción que el
+      circuito ya hace solo.
       Validado por mutación en las dos direcciones (sacar el sábado → 3 rojos; sacar el guard del
       override → 1 rojo). Suite del bot **1011/1011**, cadena del repo verde.
 
