@@ -346,6 +346,35 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       de CSV). Validado **por mutación**: con las dos celdas devueltas a mano, 3 tests en rojo
       nombrando las tres celdas. Gates: `tsc --noEmit` limpio, `eslint` 0, suite completa verde.
       **Falta mergear y desplegar** para que el cliente lo vea.
+
+      ✅ **CERRADO el 2026-09-17: el recorte que protege a este cliente estaba CLAVADO en «no»,
+      y su gate no podía verlo porque tenía una copia propia de la expresión** (`onia-platform`,
+      rama `claude/chatbots-platform-review-0d1d09`). `hayNivelConMasCupo()`
+      (`lib/chatbot/cupo.ts`) es de donde cuelgan el párrafo del cupo y el botón **«Ver niveles»**
+      de `/settings/chatbot`, y estaba escrita
+      `new Set(Object.keys(PLAN_LIMITS).map(() => cuotaDe(true, 0)))`: **la flecha descarta el
+      plan**, así que el `Set` tiene siempre un elemento y la función devuelve `false` pase lo que
+      pase en el catálogo. El comentario de al lado promete lo contrario con todas las letras
+      —*"el día que un plan traiga su propio cupo, esto devuelve true y los textos vuelven a
+      ofrecer subir solos"*— y ese día **no llegaba nunca**: el recorte quedaba pegado y el
+      producto le escondería al dueño la salida **más barata** que su propio catálogo ya tendría,
+      mandándolo a la recarga (Bs 190) en vez de al plan que le sirve. Es la dirección simétrica
+      de las cuatro superficies de arriba: aquéllas **cobraban de más**, ésta **ofrece de menos**.
+      🔴 **Por qué sobrevivió, que es lo transferible:** el gate
+      (`cupo-no-ofrece-un-nivel-que-no-existe.test.ts`) derivaba su veredicto con **su propia
+      copia** de la expresión —`new Set(PLANES.map(cupoDeUnPlanConChatbot)).size > 1`, que **sí**
+      mapea el plan— y **nunca llamaba a la función del producto**. La copia estaba bien y el
+      producto mal; las dos daban `false` y coincidían, porque `false` es la respuesta correcta
+      **hoy**. Una tautología no se ve rota mientras la realidad le dé la razón.
+      Entró: el `map` toma el plan de verdad, `cuotaDe` recibe `plan` (hoy ignorado a propósito:
+      el cupo lo trae el add-on, pero sin ese dato la pregunta *"¿algún plan da más?"* no tiene
+      con qué contestarse), y `hayNivelConMasCupo` acepta la fuente de cupo **inyectable** para
+      que el caso `true` —hoy inalcanzable con el catálogo real— sea exigible. El gate ahora le
+      pregunta **al producto** en las tres ramas de texto. Validado **por mutación**: devuelto el
+      `map(() => …)`, 1 de 10 en rojo nombrando el caso. Gates: `tsc --noEmit` limpio, `eslint`
+      0 errores, **664 tests** de `lib/chatbot` + `lib/subscription` + `lib/plan-comparativa`
+      verdes. **Falta mergear y desplegar** para que el cliente lo vea.
+
       ✅ **CERRADO el 2026-09-13: el panel de «Mi plan» no conocía el plan Crece, y por eso le
       ofrecía al que paga Bs 550 el plan de Bs 320 como MEJORA** (`onia-platform`, rama
       `claude/chatbots-platform-review-0d1d09`). Salió de ir a cerrar el hueco de la comparativa
