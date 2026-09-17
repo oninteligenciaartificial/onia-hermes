@@ -1,0 +1,105 @@
+{
+  "project": {
+    "slug": "clinica-amanecer",
+    "template": "landing-clinic",
+    "package": "web",
+    "owner": "ONIA"
+  },
+  "business": {
+    "name": "Clínica Amanecer",
+    "industry": "clínica dental",
+    "offer": "Tu sonrisa, atendida con calma y sin esperas",
+    "tagline": "",
+    "description": "Tu sonrisa, atendida con calma y sin esperas. Clínica dental en Santa Cruz.",
+    "location": "Santa Cruz, Bolivia",
+    "hours": "",
+    "trustProofs": []
+  },
+  "brand": {
+    "logoText": "CA",
+    "colors": {
+      "primary": "#1769AA",
+      "secondary": "#102A43",
+      "accent": "#1769AA",
+      "bg": "#EEF4FA",
+      "fg": "#102A43"
+    },
+    "typography": {
+      "heading": "Archivo",
+      "body": "Inter"
+    },
+    "styleKeywords": [
+      "minimalista",
+      "esencial",
+      "conversion"
+    ],
+    "references": [],
+    "antiReferences": []
+  },
+  "media": {
+    "heroVideo": "",
+    "heroPoster": "",
+    "heroImage": "",
+    "assetPermission": "client-owned",
+    "notes": "Del configurador (Completa, Web Profesional). Fotografías: Tengo fotos propias y permiso para usarlas."
+  },
+  "content": {
+    "services": [
+      {
+        "title": "Limpieza y prevención",
+        "description": "Limpieza y prevención en Clínica Amanecer.",
+        "icon": "sparkles"
+      },
+      {
+        "title": "Ortodoncia",
+        "description": "Ortodoncia en Clínica Amanecer.",
+        "icon": "sparkles"
+      },
+      {
+        "title": "Implantes",
+        "description": "Implantes en Clínica Amanecer.",
+        "icon": "sparkles"
+      }
+    ],
+    "benefits": [],
+    "categories": [],
+    "products": []
+  },
+  "conversion": {
+    "primaryCtaText": "Reservar un turno",
+    "primaryCtaUrl": "https://wa.me/59170000000",
+    "whatsappMessage": "Hola, vengo de la web de Clínica Amanecer."
+  },
+  "contact": {
+    "email": "",
+    "phone": "+591 70000000",
+    "whatsapp": "+591 70000000",
+    "address": ""
+  },
+  "social": {
+    "instagram": "",
+    "facebook": "",
+    "linkedin": "",
+    "x": "",
+    "tiktok": ""
+  },
+  "seo": {
+    "title": "Clínica Amanecer — Clínica dental",
+    "description": "Tu sonrisa, atendida con calma y sin esperas",
+    "keywords": [
+      "clínica dental",
+      "santa cruz"
+    ],
+    "ogImage": ""
+  },
+  "operations": {
+    "domain": "",
+    "hosting": "",
+    "paymentMethods": [],
+    "legalName": "",
+    "taxId": "",
+    "missing": [
+      "Una frase por servicio: qué incluye y qué resuelve (hoy sólo el nombre)"
+    ]
+  }
+}

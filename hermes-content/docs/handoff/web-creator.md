@@ -96,6 +96,16 @@ WhatsApp → inbox de Chatwoot del bot de Onia. Nada se guarda en la plataforma 
   city, src) — un lead de web podría entrar ahí con `src=configurador-web`, pero
   `verticalTrackId` es enum de rubros activos (ecommerce/otro no mapean).
 
+**✅ Cómo se DESARROLLA una web a partir del pedido (hecho 17-sep, «¿y vos cómo desarrollarías
+una?»):** `pnpm from-configurador <mensaje.txt> --build` en `web-factory/`. Parsea el mensaje
+del configurador (formato nuestro), escribe `data/intakes/<slug>.intake.json`, corre el mismo
+`factory:build` de cualquier cliente y deja `out/<slug>/`. Probado con el mensaje REAL del
+recorrido de producción → `out/clinica-amanecer/` (template `landing-clinic`, paleta azul
+elegida, CTA «Reservar un turno» → `wa.me/59170000000`), mirado a 1440. Test
+`generate/from-configurador.test.ts` (5 casos, incluye validar el intake contra el schema del
+motor). Los pendientes que imprime (fotos, dominio, una frase por servicio) son el checklist
+que se le pide al cliente. Demo commiteada en `data/{intakes,clients}/clinica-amanecer.*`.
+
 **Qué falta para que sea un circuito, en orden de valor/costo:**
 1. 🔴 **Bot: intent `lead_web`** (carril chatbot, ~30 líneas + test + `deploy-bot.sh`): si el
    texto empieza con «vengo del configurador de webs» → confirmar recepción nombrando el
