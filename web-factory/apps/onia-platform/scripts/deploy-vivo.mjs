@@ -176,10 +176,18 @@ export function diagnosticar({ buildIdMtimeMs, commits, homeStatus }) {
     };
   }
 
-  // Estricto: `next build` escribe el BUILD_ID al TERMINAR, así que un commit
-  // del mismo segundo ya está adentro.
-  const posteriores = commits.filter((c) => c.ct * 1000 > buildIdMtimeMs);
-  // …y de esos, sólo los que un lead podría notar. Un commit al instrumento del
+  // ⚠️ Acá vivía una SEGUNDA copia del filtro por fecha
+  // (`commits.filter(c => c.ct * 1000 > buildIdMtimeMs)`), y por eso arreglar
+  // `commitsDesde` no alcanzó: el conjunto llegaba entero y se volvía a perder
+  // acá mismo. Medido el 2026-09-17 — con la cura puesta, `commitsDesde` ya
+  // devolvía los 3 commits y esta línea los dejaba en 0 varados, con el
+  // publicador firmando «al día» igual que antes.
+  //
+  // Quién decide QUÉ entra es `commitsDesde`, que lo acota por ancestría
+  // (`base..origin/main`). Re-filtrar por fecha acá es preguntar de nuevo lo
+  // que ya se contestó bien, con el instrumento que se contestaba mal.
+  const posteriores = commits;
+  // De esos, sólo los que un lead podría notar. Un commit al instrumento del
   // carril es trabajo real, pero publicarlo no le cambia la pantalla a nadie:
   // contarlo invalidaba el build armado en cada vuelta y el deploy no salía
   // nunca (medido el 2026-09-04, tres pedidos vencidos el mismo día).

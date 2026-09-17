@@ -16,6 +16,7 @@ import {
   STAGED_PREFIX,
   STAGED_VIEJO,
   ZONA,
+  baseDelBuild,
   commitsDesde,
   diagnosticar,
   evaluarStaged,
@@ -66,12 +67,16 @@ describe("deploy-vivo: el diagnóstico", () => {
     expect(r.varados[0].subject).toContain("CTA");
   });
 
-  it("da VERDE cuando el build vivo es posterior a todo commit de la zona", () => {
-    const r = diagnosticar({
-      buildIdMtimeMs: ms(3_000),
-      commits: [commit(seg(1_000)), commit(seg(2_000))],
-      homeStatus: 200,
-    });
+  /**
+   * ⚠️ Este caso le pasaba dos commits ANTERIORES al build y exigía verde,
+   * porque `diagnosticar` los filtraba por fecha. Ese corte se mudó a
+   * `baseDelBuild` el 2026-09-17: quién entra al conjunto lo decide
+   * `commitsDesde` por ancestría, y `diagnosticar` sólo pregunta si lo que
+   * recibe llega al cliente. La propiedad que este caso protege —sin sujetos,
+   * verde— sigue viva; el corte por fecha se prueba ahora donde vive.
+   */
+  it("da VERDE cuando no hay ni un commit que el build no traiga", () => {
+    const r = diagnosticar({ buildIdMtimeMs: ms(3_000), commits: [], homeStatus: 200 });
 
     expect(r.codigo).toBe(AL_DIA);
     expect(r.varados).toHaveLength(0);
@@ -136,11 +141,12 @@ describe("deploy-vivo: el diagnóstico", () => {
    * llega a Sergio igual que uno real.
    */
   it("un commit del mismo segundo que el build NO está varado", () => {
-    const r = diagnosticar({
-      buildIdMtimeMs: ms(5_000),
-      commits: [commit(seg(5_000))],
-      homeStatus: 200,
-    });
+    // El empate lo resuelve `baseDelBuild`, que es quien corta por fecha desde
+    // el 2026-09-17: el caso que lo prueba contra un repo real está abajo, en
+    // «el empate: un commit del mismo segundo que el build ya está adentro».
+    // Acá queda la mitad que sigue siendo de `diagnosticar`: si el conjunto
+    // llegó vacío, el veredicto es verde y no otra cosa.
+    const r = diagnosticar({ buildIdMtimeMs: ms(5_000), commits: [], homeStatus: 200 });
     expect(r.codigo).toBe(AL_DIA);
   });
 });
@@ -843,6 +849,38 @@ describe("un arreglo que entra a main por un merge posterior al build NO se pier
         commits!.map((c) => c.sha),
         "un commit anterior al build se cuenta como varado: el pedido infla lo que publica",
       ).not.toContain(base.slice(0, 9));
+    });
+  });
+
+  /**
+   * El corte por fecha NO desapareció: se mudó de `diagnosticar` a
+   * `baseDelBuild`, que es el único lugar donde el tiempo puede decidir algo —
+   * elegir el punto de `main` por el que pasó el build. Estos dos casos son los
+   * que antes vivían sobre `diagnosticar`, con el mismo contrato.
+   */
+  it("elige como base el punto de main por el que pasó el build, no uno posterior", () => {
+    conRepoSembrado((cwd) => {
+      const base = baseDelBuild(BUILD, { cwd, ref: "main" });
+      const esperado = spawnSync("git", ["rev-parse", "main~1"], { cwd, encoding: "utf8" }).stdout.trim();
+
+      expect(base, "git no contestó: el caso no puede concluir").not.toBeNull();
+      expect(base!.sha).toBe(esperado);
+    });
+  });
+
+  /**
+   * El empate importa, y por el mismo motivo de siempre: `next build` escribe el
+   * BUILD_ID cuando TERMINA, así que un commit del mismo segundo ya está
+   * adentro. Tratarlo como varado haría pedir un deploy que no hace falta — y
+   * un pedido inventado le llega a Sergio Urcullo igual que uno real.
+   */
+  it("el empate: un commit del mismo segundo que el build ya está adentro", () => {
+    conRepoSembrado((cwd) => {
+      const base = baseDelBuild(Date.parse(FECHA_MERGE), { cwd, ref: "main" });
+      const merge = spawnSync("git", ["rev-parse", "main"], { cwd, encoding: "utf8" }).stdout.trim();
+
+      expect(base).not.toBeNull();
+      expect(base!.sha, "el commit del mismo segundo quedó afuera: pediría un deploy que no hace falta").toBe(merge);
     });
   });
 
