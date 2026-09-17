@@ -266,6 +266,9 @@ export const PUERTAS = [
     nombre: "confirmar el correo",
     salvedad: SALVEDAD,
     consecuencia: "el login contesta 403 email_not_confirmed hasta que la persona haga clic",
+    // Esta puerta NO es un redirect del panel: corta antes, en el login (403
+    // email_not_confirmed). Por eso no tiene par en `redirectsDelGate`.
+    redirect: null,
   },
   {
     id: "dos-pasos",
@@ -273,8 +276,104 @@ export const PUERTAS = [
     salvedad: SALVEDAD_DOS_PASOS,
     consecuencia:
       "el panel lo manda a /profile en TODA ruta hasta que instale una app externa de codigos",
+    redirect: "/profile",
   },
 ];
+
+// ---------------------------------------------------------------------------
+// LA LISTA DE PUERTAS SE DERIVA DEL DISCO (2026-09-17, tercera vuelta del mismo
+// archivo). Arriba dice que el universo sale de `PUERTAS` "y no de los medidores
+// que hay". Es cierto contra UNA forma de fallar —la puerta declarada sin
+// medidor— y ciego contra la que ya mordio DOS VECES: la puerta que existe en el
+// producto y NADIE declaro. El 13-sep este archivo conocia una sola puerta (el
+// correo); el 17-sep aparecio la segunda (la 2FA) y el gate la absolvio hasta que
+// un humano la escribio a mano. Una lista de inclusion falla abierto en el sujeto
+// nuevo, y la tercera iba a entrar igual.
+//
+// El universo REAL es enumerable: las puertas entre "cree mi cuenta" y "uso el
+// sistema" son los `redirect(...)` del gate del panel, que corre en TODA ruta
+// (`app/(dashboard)/layout.tsx` del ARBOL DEL BUILD VIVO, el mismo que ya se usa
+// para medir la 2FA). Cada redirect tiene que estar declarado como puerta o
+// EXCUSADO con motivo; el que no este cae como puerta ciega y el gate se niega a
+// concluir. Asi la puerta N+1 nace siendo sujeto en vez de nacer absuelta.
+
+/**
+ * Destinos del gate del panel que NO son una puerta del alta, cada uno con el
+ * motivo por el que no lo es. Se RE-MIDEN cada corrida contra el disco: una
+ * excusa que ya no corresponde a ningun redirect se reporta, porque el destino
+ * pudo haber cambiado debajo (y entonces la excusa esta absolviendo a nadie).
+ */
+export const EXCUSAS_DE_REDIRECT = {
+  "/login": "no tener sesion no es una puerta del alta: es no haber entrado todavia",
+  "/register": "el perfil ausente es el borde de Google (cuenta a medio crear), no un paso que se le exija al que ya se registro",
+  "/onboarding": "el onboarding es parte del alta misma y se resuelve adentro del producto: no le pide nada externo a la persona",
+  "access.redirectTo": "el gate por plan/pack decide sobre lo CONTRATADO, no sobre el alta: un plan sin un modulo no es una puerta entre crear la cuenta y usar el sistema",
+};
+
+/** Blanquea comentarios conservando los saltos de linea: un `redirect(` narrado en un comentario no es un redirect. */
+export function sinComentarios(fuente) {
+  return String(fuente)
+    .replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, " "))
+    .replace(/\/\/[^\n]*/g, (m) => m.replace(/[^\n]/g, " "));
+}
+
+/**
+ * Los destinos a los que el gate del panel manda, derivados del disco.
+ * `null` = no pude leer el archivo (nunca una lista vacia, que se leeria como
+ * "el panel no manda a ningun lado" y absolveria todo).
+ */
+export function redirectsDelGate(fuenteLayout) {
+  if (typeof fuenteLayout !== "string" || fuenteLayout === "") return null;
+  const limpio = sinComentarios(fuenteLayout);
+  const destinos = new Set();
+  for (const m of limpio.matchAll(/\bredirect\(\s*([^)]+?)\s*\)/g)) {
+    const crudo = m[1].trim();
+    const literal = crudo.match(/^["'`](.*)["'`]$/);
+    // Un literal se normaliza a su ruta (sin query): `/profile?mfa=obligatorio`
+    // y `/profile` son la misma puerta para la persona que la choca.
+    destinos.add(literal ? literal[1].split("?")[0] : crudo);
+  }
+  return [...destinos];
+}
+
+/**
+ * Cruza el disco contra lo declarado. Devuelve las puertas que el producto tiene
+ * y nadie midio, ya con la forma de una puerta ciega (`estado: null`), para que
+ * `juzgarPuerta` se niegue a concluir sin tocar su logica.
+ */
+export function puertasNoDeclaradas(fuenteLayout, puertas = PUERTAS, excusas = EXCUSAS_DE_REDIRECT) {
+  const destinos = redirectsDelGate(fuenteLayout);
+  if (destinos === null) {
+    return [{
+      id: "gate-del-panel",
+      nombre: "las puertas que pone el panel",
+      salvedad: SALVEDAD,
+      consecuencia: "no se sabe",
+      estado: null,
+      motivo: "no pude leer app/(dashboard)/layout.tsx del build vivo, asi que no pude derivar que puertas pone el panel",
+    }];
+  }
+  const declarados = new Set(puertas.map((p) => p.redirect).filter(Boolean));
+  return destinos
+    .filter((d) => !declarados.has(d) && !(d in excusas))
+    .map((d) => ({
+      id: `sin-declarar:${d}`,
+      nombre: `un paso nuevo que el panel exige (manda a ${d})`,
+      salvedad: SALVEDAD,
+      consecuencia: `el panel lo manda a ${d} y nadie midio si eso frena al que recien se registro`,
+      estado: null,
+      motivo:
+        `el gate del panel manda a ${d} y eso no esta ni declarado como puerta ni excusado. ` +
+        "Si frena al recien llegado, declaralo en PUERTAS con su medidor; si no, excusalo con su motivo en EXCUSAS_DE_REDIRECT",
+    }));
+}
+
+/** Excusas que ya no corresponden a ningun redirect vivo: el destino pudo cambiar debajo. */
+export function excusasHuerfanas(fuenteLayout, excusas = EXCUSAS_DE_REDIRECT) {
+  const destinos = redirectsDelGate(fuenteLayout);
+  if (destinos === null) return [];
+  return Object.keys(excusas).filter((d) => !destinos.includes(d));
+}
 
 /** Corta en oraciones sin partir `app.onia.com.bo/register` (los puntos de un dominio no llevan espacio). */
 export function oraciones(texto) {
@@ -442,13 +541,19 @@ export function puertasDelAlta({
     correo: () => confirmacionExigida({ correr }),
     "dos-pasos": () => dosPasosExigido({ correr, leer, listar, now }),
   };
-  return PUERTAS.map((puerta) => {
+  const declaradas = PUERTAS.map((puerta) => {
     const medir = medidores[puerta.id];
     if (!medir) {
       return { ...puerta, estado: null, motivo: `la puerta "${puerta.id}" esta declarada y no tiene medidor` };
     }
     return { ...puerta, ...medir() };
   });
+  // Y las que el producto pone sin que nadie las haya declarado. El arbol es el
+  // del build VIVO, el mismo contra el que se mide la 2FA: el repo diria que no
+  // hay ninguna puerta, porque el arreglo ya esta en master y sin publicar.
+  const arbol = arbolDelBuildVivo({ correr, leer, listar });
+  const layout = arbol ? leer(`${arbol}/app/(dashboard)/layout.tsx`)?.contenido ?? null : null;
+  return [...declaradas, ...puertasNoDeclaradas(layout)];
 }
 
 async function medirVivo() {
@@ -544,9 +649,16 @@ function selfCheck() {
   ok(juzgarPuerta(doc(conLasDos), lasDos).codigo === 0, "nombrar las DOS puertas es VERDE");
   ok(juzgarPuerta(doc(corregido), lasDos).codigo === 0, "un texto sin promesa de inmediatez no es sujeto de ninguna puerta");
 
-  // El universo son `PUERTAS`: una puerta declarada sin medidor no se absuelve sola.
+  // El universo es `PUERTAS` MAS lo que revele el disco: una puerta declarada sin
+  // medidor no se absuelve sola, y sin poder leer el layout tampoco se concluye
+  // que las declaradas sean todas (eso seria volver a la lista de inclusion).
   const inventada = puertasDelAlta({ correr: () => ({ status: 1, stdout: "" }) });
-  ok(inventada.length === PUERTAS.length, "se mide UNA puerta por cada una declarada");
+  ok(
+    inventada.length === PUERTAS.length + 1 &&
+      inventada.at(-1).estado === null &&
+      String(inventada.at(-1).motivo).includes("layout.tsx"),
+    "se mide UNA por cada declarada, y sin el layout del build vivo queda una ciega en vez de darse por completo",
+  );
   ok(
     inventada.every((p) => p.estado === null || p.estado === true || p.estado === false),
     "toda puerta declarada sale medida o explicitamente sin medir",
@@ -660,6 +772,72 @@ function selfCheck() {
   ok(
     confirmacionExigida({ correr: () => ({ status: 1, stdout: "" }) }).estado === null,
     "no poder leer el env es null, nunca false",
+  );
+
+  // -------------------------------------------------------------------------
+  // La lista de puertas se DERIVA del disco (2026-09-17). El caso que importa es
+  // el de la puerta N+1: la que el producto ya pone y nadie declaro.
+  // -------------------------------------------------------------------------
+  const LAYOUT_HOY = `
+    async function DashboardGate({ children }) {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) redirect("/login");
+      if (!profile) redirect("/register?from=google&error=google_profile_missing");
+      if (!profile.organization.onboardingCompletedAt) redirect("/onboarding");
+      if (mfaPendiente && requiresMfaNow({ ... })) redirect("/profile?mfa=obligatorio");
+      if (isRouteBlocked(access)) redirect(access.redirectTo);
+    }`;
+
+  ok(
+    JSON.stringify(redirectsDelGate(LAYOUT_HOY).sort()) ===
+      JSON.stringify(["/login", "/onboarding", "/profile", "/register", "access.redirectTo"].sort()),
+    "los destinos del gate salen del disco, con la query recortada",
+  );
+  ok(redirectsDelGate("") === null && redirectsDelGate(null) === null, "no poder leer el layout es null, nunca una lista vacia");
+  ok(
+    puertasNoDeclaradas(LAYOUT_HOY).length === 0,
+    "el layout de HOY esta entero: cada redirect o es puerta declarada o tiene su excusa",
+  );
+
+  // El sujeto del gate: manana el panel agrega un paso y NADIE toca este archivo.
+  const LAYOUT_CON_PUERTA_NUEVA = LAYOUT_HOY.replace(
+    'if (isRouteBlocked(access)) redirect(access.redirectTo);',
+    'if (!profile.telefonoVerificado) redirect("/verificar-telefono");\n      if (isRouteBlocked(access)) redirect(access.redirectTo);',
+  );
+  const nuevas = puertasNoDeclaradas(LAYOUT_CON_PUERTA_NUEVA);
+  ok(nuevas.length === 1, "una puerta que el producto pone y nadie declaro tiene que aparecer");
+  ok(nuevas[0]?.estado === null, "y tiene que aparecer CIEGA: sin medir no se absuelve");
+  ok(
+    String(nuevas[0]?.motivo ?? "").includes("/verificar-telefono"),
+    "y tiene que nombrar el destino, o no se sabe que declarar",
+  );
+  ok(
+    juzgarPuerta(doc("lo que sea"), [...lasDos, ...nuevas]).codigo === 2,
+    "con una puerta sin declarar el gate se NIEGA a concluir, aunque las declaradas esten medidas",
+  );
+
+  // Una puerta declarada NO se cuenta dos veces: su redirect ya esta atado.
+  ok(
+    PUERTAS.some((p) => p.redirect === "/profile"),
+    "la puerta de dos pasos tiene que declarar el redirect que la produce, o el derivado la acusa sola",
+  );
+  // Y la del correo no es un redirect del panel: corta en el login.
+  ok(
+    PUERTAS.find((p) => p.id === "correo")?.redirect === null,
+    "la puerta del correo no tiene par en el panel a proposito, y eso se declara",
+  );
+
+  // Un `redirect(` narrado en un comentario no es una puerta.
+  ok(
+    (redirectsDelGate('// antes esto hacia redirect("/viejo")\nif (!user) redirect("/login");') ?? []).join() === "/login",
+    "un redirect nombrado en un comentario no cuenta como puerta",
+  );
+
+  // Las excusas se re-miden: si el destino cambio debajo, la excusa quedo absolviendo a nadie.
+  ok(excusasHuerfanas(LAYOUT_HOY).length === 0, "hoy ninguna excusa esta huerfana");
+  ok(
+    excusasHuerfanas(LAYOUT_HOY.replace('redirect("/onboarding")', 'redirect("/primeros-pasos")')).includes("/onboarding"),
+    "si el destino cambia debajo, la excusa vieja se reporta en vez de seguir absolviendo",
   );
 
   const fallan = casos.filter((c) => !c.ok);

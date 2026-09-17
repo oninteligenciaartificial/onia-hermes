@@ -318,6 +318,43 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~La lista de puertas del alta era de INCLUSIÓN: la tercera iba a entrar absuelta, igual
+      que la segunda~~ — CERRADO el 2026-09-17** (`hermes-content/deploy/vps-ops/bot/puerta-del-alta.mjs`,
+      `npm run puerta:alta`).
+
+      **Por qué se abrió.** El ítem de abajo cerró la instancia (faltaba la puerta de la 2FA) y
+      dejó la clase abierta. Este archivo lleva **dos** rondas del mismo modo de falla: nació el
+      13-sep conociendo una puerta (confirmar el correo) y el 17-sep apareció la segunda (la 2FA)
+      — y las dos veces el gate **estuvo verde** hasta que un humano la escribió a mano. Su propio
+      comentario decía *«el universo sale de `PUERTAS`, no de los medidores que hay»*: eso protege
+      contra la puerta **declarada sin medidor**, y es ciego contra la que el producto ya pone y
+      **nadie declaró**, que es la que mordió las dos veces.
+
+      **El universo sí es derivable, y estaba a la vista:** las puertas entre *«creé mi cuenta»* y
+      *«uso el sistema»* son los `redirect(...)` del gate del panel, que corre en TODA ruta. Se
+      leen del **árbol del build vivo** (el mismo contra el que ya se mide la 2FA; el repo diría
+      que no hay ninguna, porque el arreglo está en `master` y sin publicar). Hoy son cinco:
+      `/login`, `/register`, `/onboarding`, `/profile` y `access.redirectTo` — y sólo UNO estaba
+      declarado como puerta.
+
+      **Cómo quedó.** Cada redirect tiene que estar declarado en `PUERTAS` (ahora con el campo
+      `redirect` que lo ata) o excusado con su motivo en `EXCUSAS_DE_REDIRECT`; el que no esté cae
+      como puerta **ciega** (`estado: null`) y `juzgarPuerta` ya se niega a concluir — reutiliza el
+      mecanismo que existía en vez de agregarle una rama. `/login`, `/register`, `/onboarding` y el
+      gate por plan quedan excusados con el motivo escrito; la del correo declara `redirect: null`
+      a propósito, porque corta antes, en el login. Extras que la familia pedía: los comentarios se
+      blanquean antes de parsear (un `redirect(` narrado en un comentario no es una puerta), no
+      poder leer el layout es `null` y **nunca** una lista vacía, y las excusas se **re-miden**
+      cada corrida (`excusasHuerfanas`): si el destino cambia debajo, la excusa vieja se reporta en
+      vez de seguir absolviendo a nadie.
+
+      **Validado por mutación, las dos mitades** (el detector puro y su cableado al medidor de
+      producción): descablear `puertasNoDeclaradas` del medidor → 1 rojo; hacer que el detector no
+      acuse a nadie (`.filter(() => false)`) → 4 rojos, incluido *«con una puerta sin declarar el
+      gate se NIEGA a concluir»*. Restaurado: **50/50**. El caso preexistente *«se mide UNA puerta
+      por cada una declarada»* se puso rojo por el motivo correcto y se actualizó: sin el layout
+      del build vivo ya no se puede afirmar que las declaradas sean todas.
+
 - [x] 🔴 **~~El gate que vigila «el bot promete una puerta que el producto no abre» conocía UNA
       sola puerta, y hoy hay DOS vivas en producción~~ — CERRADO el 2026-09-17**
       (`hermes-content/deploy/vps-ops/bot/puerta-del-alta.mjs`, `npm run puerta:alta`).
