@@ -110,9 +110,15 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
       `ONIA_VPS_SSH` apuntando a un host inalcanzable → `# SKIP NO MEDIDO` nombrando los cuatro,
       exit 0, nunca un verde silencioso. Restaurado con `cp` (nunca `git checkout`): 6/6 y 0
       salteados, 32 s.
-      **Queda anotado, no hecho:** `hermes-content/deploy/postiz/healthcheck.test.mjs` tiene el
-      mismo agujero (se saltea con «no estoy en el VPS») y la misma cura de una línea. No entra
-      en esta vuelta: es de otro carril y su sujeto es Postiz, no el deploy.
+      **La cura no viaja sola al gemelo, así que se hizo en la MISMA vuelta:** los 2 salteados
+      eran dos, no uno. `hermes-content/deploy/postiz/healthcheck.test.mjs` tenía el mismo agujero
+      —preguntaba `existsSync` del disco local— y vigila que el healthcheck desplegado de Postiz
+      no se despegue de `healthcheck.js`, que es lo único que evita que el contenedor figure
+      «Up (healthy)» con el backend muerto. Misma cura, medido antes de encender (el override vivo
+      del VPS **sí** contiene el cuerpo) y validado por mutación en las dos direcciones: con un
+      `void 0;` de más en `healthcheck.js` → `not ok 8 … se despegó … (leído remoto)`, `# fail 1`;
+      con `ONIA_VPS_SSH` inalcanzable → `# SKIP NO MEDIDO`, exit 0. Ahora los dos archivos corren
+      **0 salteados** y la cadena entera queda sin un solo `# skipped` de los que mienten.
 
 - [x] 🔴 **El sitio llamaba «Pro» y «Full» a los planes que el checkout cobra como «Profesional»
       y «Completo»: el lead elegía un plan con un nombre y pagaba otro. CERRADO el 2026-09-17

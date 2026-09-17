@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { Reveal } from "@/motion";
-import { CUIDADO_WEB, WEB_STACKS, precioWeb } from "@/content/webs";
+import { WEB_STACKS } from "@/content/webs";
 import { SITE_URL } from "@/lib/site";
 import { EMPEZAR_URL } from "../../nav";
 import { CTA_ALTA } from "../../alta";
 import { Block, Btn, Kicker, JsonLd } from "../../ui";
 import s from "../../sitio.module.css";
-import { PedirWeb } from "./PedirWeb";
-import styles from "./webs.module.css";
+import { WebConfigurator } from "@/components/web-configurator/WebConfigurator";
+import { Especificaciones } from "./Especificaciones";
 
 /**
  * /servicios/webs — los stacks de web con lo que lleva cada uno, lo que NO
@@ -62,7 +62,7 @@ const JSON_LD = {
       name: "Diseño y desarrollo de sitios web",
       serviceType: "Diseño web para negocios",
       description:
-        "Landing de captación, web profesional, web con dirección de arte a medida y tienda con pedido por WhatsApp. Dominio y hosting a nombre del cliente.",
+        "Landing de captación, web profesional, web con dirección de arte a medida, tienda con pedido por WhatsApp y ecommerce sobre Shopify, Hotmart o Whop. Dominio y hosting a nombre del cliente.",
       provider: { "@type": "Organization", name: "Onia", url: `${SITE_URL}/` },
       areaServed: { "@type": "Country", name: "Bolivia" },
       url: `${SITE_URL}/servicios/webs`,
@@ -90,100 +90,27 @@ export default function Webs() {
             comprar.
           </h1>
           <p className={s.lead}>
-            Cuatro stacks, del más simple al más completo. De cada uno decimos
-            qué lleva, qué NO lleva y qué tenés que poner vos — porque una web
-            se atrasa por el contenido, casi nunca por el diseño. El dominio y
-            el hosting van siempre a tu nombre.
+            Contestás cuatro preguntas y ves tu web antes de pedirla. De cada
+            alcance decimos qué lleva, qué NO lleva y qué tenés que poner vos,
+            en «Más información» — porque una web se atrasa por el contenido,
+            casi nunca por el diseño. El dominio y el hosting van siempre a tu
+            nombre.
           </p>
         </Reveal>
       </Block>
 
-      {/* Los stacks. La grilla es propia y no la `.plans` de la v3: son CUATRO
-          tarjetas y la de precios es de tres columnas — el cuarto quedaba
-          huérfano. */}
-      <Block surface="paperDim" labelledBy="stacks">
-        <Reveal>
-          <Kicker>Los stacks</Kicker>
-          <h2 id="stacks" className={s.h2}>
-            Elegís por el problema que tenés, no por cuántas páginas son.
-          </h2>
-        </Reveal>
-        <div className={styles.stacks}>
-          {WEB_STACKS.map((stack) => (
-            <Reveal
-              key={stack.id}
-              className={`${styles.stack} ${stack.destacado ? styles.stackFeat : ""}`}
-            >
-              <h3 className={styles.stackNombre}>{stack.nombre}</h3>
-              <p className={styles.stackPrecio}>{precioWeb(stack)}</p>
-              <p className={styles.stackLinea}>
-                <strong>Para quién es.</strong> {stack.paraQuien}
-              </p>
-              <p className={styles.stackLinea}>
-                <strong>Qué resuelve.</strong> {stack.resuelve}
-              </p>
-
-              <p className={styles.stackTitulo}>Qué incluye</p>
-              <ul className={styles.lista}>
-                {stack.incluye.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-
-              <p className={styles.stackTitulo}>Qué NO incluye</p>
-              <ul className={styles.lista}>
-                {stack.noIncluye.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-
-              <p className={styles.stackTitulo}>Qué necesitás vos</p>
-              <ul className={styles.lista}>
-                {stack.necesitasVos.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-
-              <p className={styles.stackMensual}>{stack.mensual}</p>
-            </Reveal>
-          ))}
-        </div>
-      </Block>
-
-      <Block surface="paper" labelledBy="cuidado">
-        <Reveal>
-          <Kicker>Después de publicarla</Kicker>
-          <h2 id="cuidado" className={s.h2}>
-            Cuidado Web.
-          </h2>
-          <p className={s.body} style={{ maxWidth: "48em" }}>
-            Una web que nadie toca envejece. El mensual es opcional y lo elegís
-            vos. No incluye un panel para que edites: los cambios los hacemos
-            nosotros, y cuántos entran por mes queda escrito en tu propuesta
-            antes de arrancar.
-          </p>
-          <div className={styles.cuidado}>
-            {CUIDADO_WEB.map((plan) => (
-              <div key={plan.nombre} className={styles.cuidadoItem}>
-                <p className={styles.cuidadoPrecio}>
-                  Bs {plan.mensual.toLocaleString("es-BO")}
-                  <span className={s.planUnit}> /mes</span>
-                </p>
-                <p className={styles.stackLinea} style={{ marginTop: "0.3rem" }}>
-                  <strong>{plan.nombre}.</strong> {plan.que}
-                </p>
-              </div>
-            ))}
-          </div>
-        </Reveal>
-      </Block>
-
-      {/* `Reveal` SOLO sobre el titular. Envolviendo también a <PedirWeb /> el
-          bloque quedaba INVISIBLE en teléfono: `viewportOnce` es
+      {/* `Reveal` SOLO sobre el titular. Envolviendo también al configurador
+          el bloque quedaba INVISIBLE en teléfono: `viewportOnce` es
           `amount: 0.3`, así que un Reveal más alto que ~3,3 pantallas nunca
           llega al 30% visible y se queda en opacity 0 para siempre. El punto de
-          compra entero (picker + requisitos) mide unos 5.000px a 390 de ancho.
-          Visto renderizado con Playwright a 390x844. */}
+          compra entero (configurador + requisitos) mide varias pantallas a 390
+          de ancho. Visto renderizado con Playwright a 390x844.
+          El configurador reemplaza a <PedirWeb /> desde 2026-09-17: alcance,
+          preview en vivo, extras y requisitos en un solo recorrido, y la
+          selección viaja escrita en el mensaje de WhatsApp. Las tarjetas con
+          las especificaciones exactas («Los stacks» + Cuidado Web) viven en su
+          pestaña «Más información» (Sergio Urcullo, mismo día: «solo quiero
+          el configurador; la otra que salga de una pestaña»). */}
       <Block surface="paperDim" labelledBy="pedir">
         <Reveal>
           <Kicker>Pedila</Kicker>
@@ -191,7 +118,7 @@ export default function Webs() {
             ¿Cuál querés?
           </h2>
         </Reveal>
-        <PedirWeb />
+        <WebConfigurator especificaciones={<Especificaciones />} />
       </Block>
 
       {/* Camino de vuelta: la web es un add-on del sistema, no una isla. Antes

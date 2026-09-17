@@ -50,6 +50,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # deploy-vivo.test.ts (prebuild de onia-platform) mide merges en una
+          # ventana de git; con el checkout superficial "git no contesta" y el
+          # gate falla. Medido el 2026-09-17 (run 35273222431).
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4

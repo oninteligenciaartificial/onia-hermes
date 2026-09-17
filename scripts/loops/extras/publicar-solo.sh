@@ -98,27 +98,57 @@ echo "== $(TZ=America/La_Paz date '+%F %H:%M') La Paz =="
 # ve como salud es peor que una caida.
 hay_varados() { case "$1" in *"hay que publicar"*) return 0 ;; *) return 1 ;; esac; }
 
-SALIDA_PLAT=$(bash /opt/onia-platform/_deploy/publicar.sh --dry-run 2>&1) || true
-if hay_varados "$SALIDA_PLAT"; then
-  publicar_destino plataforma /opt/onia-platform/_deploy/publicar.sh \
-    "$(archivos_varados "$REPO_HERMES" hermes-content/deploy/onia-platform/deploy-vivo.mjs "$REPO_PLATFORM")"
-else
-  echo "  plataforma: al dia"
+# LA MISMA TRAMPA, ENTRANDO POR LA OTRA PUERTA. Arriba se cerro el caso "el grep
+# no encontro el texto"; faltaba el caso "el publicador nunca llego a correr".
+# `hay_varados` devuelve 1 con lo mismo cuando no hay nada varado y cuando nadie
+# miro, y el `|| true` se come la unica senal. Medido el 2026-09-17 desde
+# nodo-casa —donde /opt NO existe, y donde corren los carriles desde el
+# 2026-09-07—: este guion contesto "plataforma: al dia" y "landing: al dia" con
+# 28 arreglos varados delante, y "bot: publicaria" por la razon opuesta (salida
+# vacia, que tampoco dice "nada que desplegar"). Es el instrumento con el que el
+# integrador decide si ABRIR un pedido de deploy: falla abierto hacia el lado
+# caro, el de no pedir el deploy que hacia falta.
+# No se pudo preguntar NO es "me dijeron que no": va NO MEDIDO y exit 2.
+NO_MEDIDO=0
+puede_medir() {  # $1 = publicador, $2 = nombre del destino
+  [ -r "$1" ] && return 0
+  echo "  $2: NO MEDIDO — no puedo ejecutar $1 en esta maquina. No digo 'al dia': no mire."
+  NO_MEDIDO=1
+  return 1
+}
+
+if puede_medir /opt/onia-platform/_deploy/publicar.sh plataforma; then
+  SALIDA_PLAT=$(bash /opt/onia-platform/_deploy/publicar.sh --dry-run 2>&1) || true
+  if hay_varados "$SALIDA_PLAT"; then
+    publicar_destino plataforma /opt/onia-platform/_deploy/publicar.sh \
+      "$(archivos_varados "$REPO_HERMES" hermes-content/deploy/onia-platform/deploy-vivo.mjs "$REPO_PLATFORM")"
+  else
+    echo "  plataforma: al dia"
+  fi
 fi
 
-SALIDA_LAND=$(bash /opt/onia-landing/_deploy/publicar.sh --dry-run 2>&1) || true
-if hay_varados "$SALIDA_LAND"; then
-  publicar_destino landing /opt/onia-landing/_deploy/publicar.sh \
-    "$(archivos_varados "$REPO_HERMES" web-factory/apps/onia-platform/scripts/deploy-vivo.mjs "$REPO_HERMES")"
-else
-  echo "  landing: al dia"
+if puede_medir /opt/onia-landing/_deploy/publicar.sh landing; then
+  SALIDA_LAND=$(bash /opt/onia-landing/_deploy/publicar.sh --dry-run 2>&1) || true
+  if hay_varados "$SALIDA_LAND"; then
+    publicar_destino landing /opt/onia-landing/_deploy/publicar.sh \
+      "$(archivos_varados "$REPO_HERMES" web-factory/apps/onia-platform/scripts/deploy-vivo.mjs "$REPO_HERMES")"
+  else
+    echo "  landing: al dia"
+  fi
 fi
 
 # El bot no tiene medidor por commits: su publicador lista los archivos que
 # cambian, asi que la guarda se aplica sobre esa lista tal cual.
-SALIDA_BOT=$(bash /opt/onia/bot/_deploy/publicar.sh --dry-run 2>&1)
-if echo "$SALIDA_BOT" | grep -q "nada que desplegar"; then
-  echo "  bot: al dia"
-else
-  publicar_destino bot /opt/onia/bot/_deploy/publicar.sh "$SALIDA_BOT"
+if puede_medir /opt/onia/bot/_deploy/publicar.sh bot; then
+  SALIDA_BOT=$(bash /opt/onia/bot/_deploy/publicar.sh --dry-run 2>&1)
+  if echo "$SALIDA_BOT" | grep -q "nada que desplegar"; then
+    echo "  bot: al dia"
+  else
+    publicar_destino bot /opt/onia/bot/_deploy/publicar.sh "$SALIDA_BOT"
+  fi
 fi
+
+# Un veredicto a medias no se entrega en verde: el que lo lee tiene que poder
+# distinguir "no hay nada que publicar" de "no pude preguntarlo".
+[ "$NO_MEDIDO" = 1 ] && exit 2
+exit 0

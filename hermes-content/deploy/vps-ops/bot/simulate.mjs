@@ -33,6 +33,7 @@ import { createBotConfig, DEFAULT_CONFIG, parseSlotsSpec } from "./config.mjs";
 import { createState, step, markHumanTakeover, buildFollowUp, LLM_PENDING } from "./bot-engine.mjs";
 import { applyKnowledge, asRecepcionista, readKnowledgeFile } from "./knowledge.mjs";
 import { cierreSinReservar } from "./calcom-booking.mjs";
+import { instanteDeAtencion } from "./ventanas-de-atencion.mjs";
 
 /**
  * El documento PUBLICADO del bot de venta de Onia — el mismo `knowledge.onia.json` que se instala
@@ -67,10 +68,10 @@ const CONOCIMIENTO_FERRETERIA = {
 // Los 10 guiones de prueba (spec §8, fase 1 + rama por rubro y soporte)
 // ---------------------------------------------------------------------------
 
-const SCRIPTS = {
+export const SCRIPTS = {
   "1-feliz": {
     title: "Camino feliz — elige horario, agenda y RECIEN AHI contesta las 3 preguntas",
-    startAt: "2026-07-27T14:05:00Z", // lunes 10:05 en La Paz: dentro de horario
+    horario: "dentro",
     turns: [
       { text: "DEMO" },
       { text: "A" },
@@ -80,7 +81,7 @@ const SCRIPTS = {
   },
   "2-precio": {
     title: "Pregunta el precio — el bot NUNCA cotiza (M4)",
-    startAt: "2026-07-27T14:05:00Z",
+    horario: "dentro",
     turns: [
       { text: "hola, cuanto cuesta?" },
       { text: "tengo un restaurante, somos 8, cochabamba" },
@@ -90,7 +91,7 @@ const SCRIPTS = {
   },
   "3-siat": {
     title: "Pregunta por SIAT/facturacion — respuesta segura + fuera de horario (M7)",
-    startAt: "2026-07-28T03:30:00Z", // lunes 23:30 en La Paz: fuera de horario
+    horario: "fuera",
     turns: [
       { text: "DEMO" },
       { text: "ya emite factura al SIAT?" },
@@ -99,7 +100,7 @@ const SCRIPTS = {
   },
   "4-descalificado": {
     title: "Descarte cortes — no es un negocio (M1c)",
-    startAt: "2026-07-27T14:05:00Z",
+    horario: "dentro",
     turns: [
       { text: "DEMO" },
       { text: "soy estudiante todavia, busco trabajo, les mando mi cv?" },
@@ -107,7 +108,7 @@ const SCRIPTS = {
   },
   "5-offscript": {
     title: "Dos malentendidos seguidos — el bot entrega la conversacion (M5)",
-    startAt: "2026-07-27T14:05:00Z",
+    horario: "dentro",
     turns: [
       { text: "DEMO" },
       { text: "mmm depende" },
@@ -116,7 +117,7 @@ const SCRIPTS = {
   },
   "6-optout": {
     title: "Opt-out (M6), silencio total, y reapertura solo con DEMO",
-    startAt: "2026-07-27T14:05:00Z",
+    horario: "dentro",
     turns: [
       { text: "DEMO" },
       { text: "STOP" },
@@ -126,7 +127,7 @@ const SCRIPTS = {
   },
   "7-audio": {
     title: "Nota de voz — sin transcripcion pide texto; con transcripcion sigue el embudo",
-    startAt: "2026-07-27T14:05:00Z",
+    horario: "dentro",
     turns: [
       { text: "DEMO" },
       { kind: "voice", transcript: "" },
@@ -136,7 +137,7 @@ const SCRIPTS = {
   },
   "8-humano": {
     title: "Sergio contesta — el bot se calla PARA SIEMPRE en esa conversacion",
-    startAt: "2026-07-27T14:05:00Z",
+    horario: "dentro",
     turns: [
       { text: "DEMO" },
       { op: "human_takeover" },
@@ -146,7 +147,7 @@ const SCRIPTS = {
   },
   "9-rama-dental": {
     title: "Ramificacion por rubro — odontologia es el unico que suma la pregunta de los sillones",
-    startAt: "2026-07-27T14:05:00Z",
+    horario: "dentro",
     turns: [
       { text: "DEMO" },
       { text: "A" },
@@ -156,7 +157,7 @@ const SCRIPTS = {
   },
   "10-soporte": {
     title: "Segundo camino — YA es cliente: soporte y humano, NUNCA la demo comercial",
-    startAt: "2026-07-27T14:05:00Z",
+    horario: "dentro",
     turns: [
       { text: "DEMO" },
       { text: "ya soy cliente y el sistema no me anda, como configuro los recordatorios?" },
@@ -164,7 +165,7 @@ const SCRIPTS = {
   },
   "recepcionista-ferreteria": {
     title: "MODO RECEPCIONISTA — el bot de un CLIENTE: saludo del negocio, FAQ del knowledge, pedido -> humano",
-    startAt: "2026-07-27T14:05:00Z",
+    horario: "dentro",
     conocimiento: CONOCIMIENTO_FERRETERIA,
     turns: [
       { text: "hola" }, // M0R con el menu de BOTONES (input_select: Horarios/Servicios/humano)
@@ -386,7 +387,9 @@ function runScript(name, baseConfig, basePelada) {
   const config = configParaGuion(name, baseConfig, basePelada);
   const events = [];
   let state = createState({ channel: "sim", contactRef: `sim-${name}`, pieceKey: "lucia-d03-reel-siat", sourceCampaign: "lucia-dentalgest-jul2026" });
-  let clock = script.startAt;
+  // DERIVADO del lado que el guion declara, nunca tipeado: ver `instanteDeAtencion`. Un guion
+  // sin `horario` no arranca — asi una rama nueva tiene que decir en cual de las dos corre.
+  let clock = instanteDeAtencion(script.horario);
 
   for (const turn of script.turns) {
     if (turn.op === "human_takeover") {
@@ -447,7 +450,11 @@ function printScript(run) {
 
 async function interactive(config, contactRef) {
   let state = createState({ channel: "sim", contactRef });
-  let clock = "2026-07-27T14:05:00Z";
+  // AHORA, no una fecha fija: el modo interactivo es con lo que este carril mira si el bot esta
+  // vivo, y un reloj clavado en julio le colgaba "estoy respondiendo fuera de horario" a las
+  // respuestas aunque el que mira estuviera sentado adentro de la franja. Ademas convivia con los
+  // slots, que SI se calculan contra hoy: dos relojes en la misma pantalla.
+  let clock = new Date().toISOString();
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout, prompt: "vos > " });
   console.log("Simulador del chatbot de ONIA. Escribi 'DEMO' para arrancar. '/salir' para terminar,");
   console.log("'/humano' para simular que Sergio contesta, '/estado' para ver la fila.\n");
