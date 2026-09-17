@@ -63,6 +63,54 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [x] 🔴 **~~El panel del operador no conocía el plan que se vende: `/admin/plans` no mostraba
+      ni ofrecía `crece`~~ — CERRADO el 2026-09-17 (`onia-platform`, rama del carril; los cinco
+      gates del CI verdes: tsc 0 · 4976 tests · eslint 0 errores · check:onia-core · build).**
+      La pantalla que se llama «Planes» enumeraba los planes con **cuatro tablas escritas a
+      mano** —`PLAN_INFO` en `page.tsx`, `PLAN_COLORS`/`PLAN_BORDER`/`PLAN_BADGE` en
+      `PlansClient.tsx`— más un **quinto** lugar: el `<select>` de la edición inline. La
+      escalera C del 12-sep sumó `crece` (Bs 550) y **no entró en ninguna**.
+
+      **Lo que veía Sergio Urcullo**: en «Planes disponibles» el escalón que se vende no
+      existía, y el `<select>` para asignarle un plan a un cliente **no lo ofrecía** — aunque
+      `PATCH /api/admin/clinics` ya lo acepta desde el 13-sep (`07c97f6`). Permiso concedido,
+      camino ausente: se podía cobrar un plan que el panel no sabía asignar. El mismo `<select>`
+      rotulaba **«Clínica»** un plan que se llama **«Completo»**.
+
+      **Y dos afirmaciones falsas que se arreglaron solas al derivar:** la tarjeta listaba
+      «Exportación CSV» sólo en el plan más caro (`csvExportEnabled` es `true` desde Básico **a
+      propósito** — el export de SUS datos no es rehén del plan; es el mismo defecto que ya
+      había mordido en la comparativa de `/settings`), y ninguna tarjeta decía que Full y Grupo
+      **traen el chatbot adentro** (`whatsappIncluded`), que es justo lo que evita cobrarle el
+      add-on a quien ya lo paga en su plan.
+
+      **Bomba con fecha, medida:** hoy no hay ninguna org en `crece`
+      (`select plan, count(*) from organizations` → `professional` 4, `free` 1), así que el
+      conteo todavía no miente. El día que se venda el escalón, esa cuenta no suma en **ninguna**
+      tarjeta de la fila de stats —se pintan con las mismas claves— con el «Total clínicas» de
+      al lado contándola.
+
+      **Cura:** `lib/subscription/panel-de-planes.ts` deriva las tarjetas de `PLAN_IDS` +
+      `PLAN_LIMITS`; lo que hay que **decidir** (texto comercial, estilo, si el precio es piso)
+      va en `Record<PlanId, …>`, así **un plan nuevo no compila** hasta que alguien lo decida. El
+      `<select>` sale de `PLANES_DEL_OPERADOR` con `nombreDePlan`. De paso, `plan === "enterprise"`
+      no quedó como comparación suelta (la habría acusado `plan-catalogo-es-la-fuente.test.ts`):
+      es un campo `precioEsPiso` tipado por plan.
+
+      **Gate:** `lib/subscription/el-panel-de-planes-conoce-todos-los-planes.test.ts`, con dos
+      mitades — que el módulo derive, y que la pantalla **no vuelva a tipear su propia lista**
+      (universo caminado del **disco**, no `git ls-files`, y comentarios en blanco para que
+      nombrar los ids explicando el bug no se acuse solo). Validado por **tres** mutaciones:
+      una tabla a mano nueva en la pantalla (rojo nombrando archivo e ids), la tarjeta dejando
+      de afirmar el export (`basic: exportacion de datos incluida y no dicha`) y un plan sin
+      estilo (rojo **doble**: `tsc` TS2741 y el caso ancla).
+
+      ⚠️ **Commiteado en la rama del carril, NO desplegado:** lo mergea `onia-cola`. **No se
+      pudo mirar renderizada en producción**: `/admin/plans` con la sesión del superadmin
+      termina en `/profile?mfa=obligatorio` — el bug de MFA de más abajo, ya arreglado en
+      `master` y esperando el `ok` del pedido de deploy, **también deja afuera al operador**.
+      En su lugar se verificaron las seis tarjetas derivadas, una por una, contra el catálogo.
+
 - [x] 🔴 **~~El correo de «mitad de camino» del trial afirmaba días que no derivaba de nada~~ —
       CERRADO el 2026-09-13 (`onia-platform` `1ef035f`, en la rama del carril; los tres gates
       verdes acá Y re-corridos en el VPS sobre el árbol con `origin/master` mergeado: tsc 0 ·
