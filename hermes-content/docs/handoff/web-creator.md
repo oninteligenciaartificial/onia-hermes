@@ -33,10 +33,27 @@ etapa: el configurador vende y ordena; no se construye nada de entrega automáti
 
 ## 2 · Qué quedó EN PRODUCCIÓN
 
-**Nada nuevo.** Producción hoy:
-- `onia.com.bo/servicios/webs` → la página vieja con `PedirWeb` y precios **2.000 / 4.500**.
-- `sergiourcullo.vercel.app` → home con bloque 1:1 (commits del 11-sep, ya en el repo).
-  `/webs` → **404**.
+✅ **Las dos superficies, publicadas el 17-sep ~17:10 La Paz y verificadas por texto exacto:**
+- `onia.com.bo/servicios/webs` → configurador con asistente (paso 00), pestañas «Armá tu web» /
+  «Más información», cinco alcances (Ecommerce sobre Shopify/Hotmart/Whop incluido), Pro y
+  Tienda «Lo vemos en una llamada». BUILD_ID `sDG3TshBsw1rXdpKvgdDF`, ref `f04af0a4`;
+  backup previo en `/opt/onia-landing/runtime-next.bak-deploy-20260917210756`.
+  Verificado: `curl … | grep -c "Armá tu web en un minuto"` → 1; `"Cuatro stacks"` → 0.
+- `sergiourcullo.vercel.app` → home con CTAs al configurador y «Agendar 1 a 1» en la barra;
+  `/webs` → **307** a `onia.com.bo/servicios/webs?origen=sergio`. Publicado con
+  `publicar-sitio.py` (commit `fdd4f19` del buzón).
+- `main` = `05b67ad1` (fast-forward a la rama después de mergear el commit ajeno que entró).
+
+**Receta que FUNCIONÓ para publicar la landing (la primera vez que el workflow da verde
+desde el 1-sep):**
+1. `gh workflow run deploy-onia-center.yml --ref <rama> -f swap=false` → builda en Ubuntu,
+   corre `tsc` + la suite (prebuild) en Linux, y deja el runtime en stage en el VPS.
+   Es el gate de Linux que no se puede correr en Windows.
+2. Con el run verde: FF de `main` a ese commit.
+3. `scp` de `hermes-content/deploy/onia-landing/swap-and-verify.sh` al VPS + `sed` CRLF, y
+   `bash /opt/onia-landing/_deploy/swap-and-verify.sh /opt/onia-landing/runtime-next.new-<TS>`
+   (la ruta sale del log del run: `STAGED_ONLY=`). Backup + restart + healthcheck + rollback.
+4. Verificar por TEXTO exacto del cambio, nunca por 200.
 
 ## 3 · Qué quedó a medias, y dónde (todo en esta rama, SIN pushear al cerrar el turno — el
 auto-sync lo pushea)
@@ -50,7 +67,7 @@ auto-sync lo pushea)
 | `PedirWeb.tsx` + `webs.module.css` | `(sitio)/servicios/webs/` | **muertos** (nadie los importa) pero 9 tests los nombran por ruta; no se borraron |
 | **Web personal portada al repo** | `hermes-content/sitio-sergiourcullo/**` | `abcbb7f` (catálogo `/webs`, sin pushear) + diff sin commitear de Codex (CTAs en hero, «Agendar 1 a 1» en la barra, cifras como franja, links al configurador, swipe horizontal en móvil). Renderizada y MIRADA a 390 y 1440, sin desborde |
 | **Asistente (paso 00)** — cuestionario nombre · rubro · objetivo · sentir · color → arma toda la selección y salta al preview | `src/content/web-assistant.ts` (reglas puras, 5 rubros del alta + ecommerce + otro; restaurante/construcción/educación/salud salieron por `rubros-del-alta.test.ts`) · `src/components/web-configurator/WebAssistant.tsx` · CSS al pie del módulo · `web-assistant.test.ts` (4 casos) | **Recorrido con Playwright a 390 y 1440**: «Clínica Amanecer» + Clínica dental + Premium → Portada editorial · Editorial, titular del rubro, CTA «Reservar un turno», 0 errores de consola. Son REGLAS, no un modelo (costo de API cero); un LLM entraría después sólo para copy |
-| **Precios aplicados (decisión 17-sep)** | `webs.ts`: Landing 2.000 · Profesional 4.500 con precio; **Pro → `precio: null`**, `precioWeb()` dice «Lo vemos en una llamada»; configurador y WhatsApp piden la llamada cuando no hay precio. `sitio-sergiourcullo/webs/index.html` alineado (2.000 / 4.500 / «En una llamada» ×2). Doc: `ONIA_WEB_COMO_SE_VENDE.md` §8 | hecho, sin publicar |
+| **Precios aplicados (decisión 17-sep), EN PROD** | `webs.ts`: Landing 2.000 · Profesional 4.500 con precio; **Pro → `precio: null`**, `precioWeb()` dice «Lo vemos en una llamada»; configurador y WhatsApp piden la llamada cuando no hay precio. `sitio-sergiourcullo/webs/index.html` alineado (2.000 / 4.500 / «En una llamada» ×2). Doc: `ONIA_WEB_COMO_SE_VENDE.md` §8 | hecho, sin publicar |
 | **Catálogo estático `/webs` de la web personal: ELIMINADO** (Sergio Urcullo, 17-sep: «esa UI habíamos quedado que no; la función es para onia.com.bo»). `/webs` → redirect a `onia.com.bo/servicios/webs?origen=sergio`; barra, hero y teaser de la home apuntan directo al configurador | `sitio-sergiourcullo/{vercel.json,index.html,*/index.html}` | hecho |
 | **Quinto alcance: Ecommerce sobre Shopify / Hotmart / Whop** (pedido 17-sep) | `webs.ts` (entrada `ecommerce`, `precio: null`) · `isWebStackId` · `SCOPE_COPY` · rubro `ecommerce` en el asistente (fuerza alcance ecommerce aunque el objetivo sea catálogo) · tarjeta en `sitio-sergiourcullo/webs/` (grilla 2+3) · copy «Cinco stacks / Cinco paquetes» · doc §8 | hecho, mirado a 1440 en las dos superficies; test unitario agregado |
 | `PRODUCT.md` + `web-layout-examples.png` (2,5 MB) | `apps/onia-platform/` | de Codex; el PNG lo usa `website-preview.module.css` |
