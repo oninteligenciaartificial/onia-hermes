@@ -70,6 +70,22 @@ audio) en **1,7 s**. Ambos sin abrir el navegador.
 no volcar el video en base64 al contexto; nunca escribir la contrasena de IG — el login
 lo hace Sergio en la ventana.
 
+**Trampas medidas 2026-09-17 (las tres ya fixeadas en el script — no deshacer):**
+- **yt-dlp REESCRIBE el archivo `--cookies` al salir.** En un intento fallido guarda el
+  estado post-rechazo SIN `sessionid` (IG lo borra via Set-Cookie al negar la sesion) y
+  deja el jar vacio para todo lo demas. Por eso el script le pasa una COPIA descartable
+  (`cookies.txt.ytdlp`), nunca el jar real.
+- **IG revoca sesiones server-side y el cookie queda ZOMBIE en el perfil** (expira 2027
+  client-side, pero el server responde 302 al login y mata el sessionid). Sintoma: "Failed
+  to parse JSON" en yt-dlp o "redirect count exceeded" en fetch directo. Diagnostico en
+  10 s: fetch a `/api/v1/media/<id>/info/` con `redirect:'manual'` y mirar si el Location
+  es `/accounts/login/`. Por eso `--login` ahora SIEMPRE abre la ventana y limpia cookies
+  antes (si no, el poll toma el zombie por login exitoso y sale sin abrir nada).
+- **El captcha del login se rompe con el flag `--enable-automation`** de Playwright:
+  reCAPTCHA se niega a validar y Sergio queda trabado. El script lanza con
+  `ignoreDefaultArgs: ['--enable-automation']` + `--disable-blink-features=AutomationControlled`
+  y arranca en la portada (no en `/accounts/login/`).
+
 ## Carruseles de imágenes — `scripts/ig-carousel.mjs` (2026-08-11)
 
 **yt-dlp NO puede con ellos**: falla con `No video formats found!` porque solo entiende de

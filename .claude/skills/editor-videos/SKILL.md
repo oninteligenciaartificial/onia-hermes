@@ -283,6 +283,21 @@ generado, y sale a 1080p contra 720p. El video generado se reserva para cuando e
 ES el punto (algo que gira, fluye o se arma) — y hay que pedir la imagen fuente YA en 9:16 o
 el modelo la deforma.
 
+## 🎬 Layout "tutorial vertical partido" (reel DdE7wYbxjPK, 2026-09-17)
+
+Segundo estilo catalogado (pedido de Sergio: "aprende esta manera de edicion"). Ficha completa
+con tabla medida y receta de 7 pasos:
+`hermes-content/references/video-intake/2026-09-17-reel-santiago-astra-davinci-estilo-edicion.md`.
+
+Lo esencial: **cabeza hablante ABAJO (~45%) anclada y fija; zona de apoyo ARRIBA (~55%) que
+rota cada 1-3 s** (screencast con zoom focal, b-roll relámpago ≤1,5 s por herramienta
+nombrada, ecuaciones de logos flotantes "X + Y = 💰", fotos con ken burns). Subtítulos blanco
+bold 2-5 palabras con keyword en AMARILLO, en la zona de la cabeza. Jump cuts cada ~2 s.
+CTA final = fondo desenfocado total + texto centrado con la keyword en amarillo.
+
+Qué nos falta para replicarlo (lo demás ya está en el pipeline): la composición partida con
+cabeza anclada (hoy editamos full-frame) y la ecuación de logos como pieza HyperFrames.
+
 ## Quick reference
 | Necesito | Herramienta | Costo |
 | --- | --- | --- |
