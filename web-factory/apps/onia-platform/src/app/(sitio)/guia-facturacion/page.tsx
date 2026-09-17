@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Reveal } from "@/motion";
 import {
+  SIAT_GUIA_KICKER,
   SIAT_GUIA_TITULAR,
   SIAT_GUIA_BAJADA,
   SIAT_GUIA_PASO_0,
@@ -28,6 +29,13 @@ import g from "./guia.module.css";
  * El texto NO se redactó acá: sale entero de `lib/siat.ts`, que ya era la
  * fuente única del contenido fiscal. Si el SIN mueve la fecha por tercera vez
  * se corrige ese archivo y las dos páginas se enteran solas.
+ *
+ * Esto de arriba era FALSO hasta el 2026-09-17 y por eso ahora tiene un gate:
+ * el Kicker del hero tenía la fecha escrita a mano y decía `Plazo · 30-09-2026`
+ * mientras la bajada, dos líneas abajo, decía «el 1 de octubre» — el lead leía
+ * la contradicción en la misma pantalla. Era el único texto de plazo de las dos
+ * páginas que no venía de `lib/siat.ts`, justo el que las encabeza. Lo vigila
+ * `(sitio)/plazo-no-se-tipea.test.ts`, sobre TODAS las `page.tsx` del disco.
  *
  * La guía se lee SIN dejar nada: es indexable y ese es medio punto del
  * ejercicio. El correo compra la HOJA IMPRIMIBLE (esta misma página con
@@ -122,7 +130,7 @@ export default function GuiaFacturacion() {
           <div className={g.hero}>
             <Reveal>
               <div>
-                <Kicker>Plazo · 30-09-2026</Kicker>
+                <Kicker>{SIAT_GUIA_KICKER}</Kicker>
                 <h1 className={s.display} style={{ maxWidth: "14ch" }}>
                   {SIAT_GUIA_TITULAR}
                 </h1>
