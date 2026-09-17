@@ -5427,6 +5427,33 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] 🔴 **CERRADO el 2026-09-17: el dueño no podía quitarle el acceso de administrador a un
+      empleado que se fue.** ⚠️ COMMITEADO Y PUBLICADO (`9f103875`, rama
+      `claude/chatbots-platform-review-0d1d09` de `onia-platform`), **falta mergear y desplegar**.
+      El producto sabía COBRAR el segundo administrador —DG-043 cerró las dos puertas que lo
+      crean— y no tenía **ninguna** puerta para sacarlo. Las tres vías del cliente contestaban
+      403: `PATCH /api/admin/users/[id]` ("Superadmin access required for admin roles", encima en
+      inglés), `DELETE /api/admin/users/[id]` ("Cannot remove admin users") y `DELETE
+      /api/team/[id]` ("No podés eliminar administradores desde Equipo"); y la ficha del miembro
+      (`app/(dashboard)/team/[id]/UserActions.tsx`) **escondía** la zona de peligro cuando la
+      persona era `ADMIN`, así que el botón de eliminar ni aparecía y el de cambiar rol fallaba
+      siempre. Resultado: un empleado que renunciaba conservaba acceso total a la cuenta y el
+      dueño tenía que escribirle a Onia — agujero de seguridad **y** horas de soporte por
+      cliente, que es el techo real del negocio (`ONIA_ESTRATEGIA_DE_EMPRESA.md` §9).
+      Es la dirección simétrica de la clase cerrada cinco veces esta semana: **un permiso
+      concedido sin su CAMINO de vuelta.**
+      La decisión vive en UNA función pura (`lib/platform/quitar-administrador.ts`) porque son
+      tres puertas y una cura que no viaja a todas deja la clase abierta. Única baranda: la
+      organización nunca queda sin administrador; el conteo sale de la base en el momento y un
+      conteo que no se pudo hacer NO habilita. `SUPERADMIN` lo sigue administrando Onia.
+      **Intento fallido / trampa:** dos casos existentes (`"impide que un ADMIN cambie a otro
+      ADMIN"` y `"no deja borrar a otro ADMIN"`) eran fixtures que **defendían el defecto** —
+      obedecerlos habría cerrado la vuelta sin arreglar nada. Ahora sostienen la baranda.
+      Gate: `lib/platform/quitar-administrador.test.ts` ancla la **guarda**, no la mención del
+      helper, y exige que su índice sea MENOR que el de la escritura que protege; validado por
+      mutación (`false &&` en la condición → rojo, restaurado → verde). tsc y eslint limpios,
+      5.554 tests en verde (corridos también en el gemelo del VPS antes de publicar).
+
 - [x] 🔴 **CERRADO el 2026-09-17: los tres correos que convierten la prueba en cliente ofrecían
       Bs 890 como único precio, con Bs 320 disponible.** ⚠️ COMMITEADO Y PUBLICADO (`109ee15`,
       rama `claude/chatbots-platform-review-0d1d09` de `onia-platform`), **falta mergear y
