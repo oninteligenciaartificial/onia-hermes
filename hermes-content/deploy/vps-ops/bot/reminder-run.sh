@@ -70,6 +70,18 @@ if [ -z "${ONIA_BOT_DRY_RUN:-}" ] && [ -f "$BOT_DIR/webhook.env" ]; then
   ONIA_BOT_DRY_RUN="$(sed -n 's/^ONIA_BOT_DRY_RUN=//p' "$BOT_DIR/webhook.env" | head -n1 | tr -d "\"' \r")"
 fi
 
+# EL MODO SE DERIVA DE ESE INTERRUPTOR, no del argumento que el llamador se acuerde de escribir.
+# Este cron (`32 * * * *`) llamaba al wrapper PELADO y sin `--emit` el .mjs ni reserva ni manda:
+# 670 corridas, todas en dry-run, o sea que ningun prospecto que agendo una demo recibio jamas su
+# recordatorio. La historia completa esta en followup-run.sh. Quien llama sigue mandando.
+EMIT_ARGS=()
+case " $* " in
+  *" --emit "*|*" --dry-run "*|*" --json "*) ;;
+  *)
+    if [ "${ONIA_BOT_DRY_RUN:-true}" = "false" ]; then EMIT_ARGS=(--emit); fi
+    ;;
+esac
+
 # Token de Chatwoot — el barrido MANDA el recordatorio, no solo lo reserva (mismo patron que
 # webhook-server.sh: sale de la base de Chatwoot, nunca de un archivo ni de n8n).
 CWDB="$(docker ps -qf name=onia-chatbot_chatwoot-db | head -n1)"
@@ -90,6 +102,6 @@ docker exec \
   -e CHATWOOT_ACCOUNT_ID="${CHATWOOT_ACCOUNT_ID:-2}" \
   -e CHATWOOT_API_TOKEN="$CW_TOKEN" \
   -e CHATWOOT_BOT_AGENT_ID="$CW_AGENT_ID" \
-  "$CONTAINER" node "$DEST/reminder-run.mjs" ${NOW_ARGS[@]+"${NOW_ARGS[@]}"} "$@"
+  "$CONTAINER" node "$DEST/reminder-run.mjs" ${NOW_ARGS[@]+"${NOW_ARGS[@]}"} ${EMIT_ARGS[@]+"${EMIT_ARGS[@]}"} "$@"
 
 exit 0

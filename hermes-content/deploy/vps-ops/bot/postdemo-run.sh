@@ -13,8 +13,13 @@
 # manda como parámetro. La lógica de postdemo-run.mjs nunca mira el reloj (determinismo).
 #
 # NO NECESITA TOKEN DE CHATWOOT ni la URL pública de Cal.com, a diferencia de los otros dos
-# wrappers: este barrido NO le manda nada al prospecto. Sólo cierra el estado y devuelve el aviso
-# para Sergio, que lo entrega n8n por Telegram.
+# wrappers: este barrido NO le manda nada al prospecto. Sólo cierra el estado y le avisa a Sergio.
+#
+# ⚠️ Acá decía que el aviso "lo entrega n8n por Telegram" — y n8n está tapiado desde antes de que
+# esa línea se escribiera (`ONIA_N8N_ENABLED=false` y `ONIA_N8N_EVENT_URL` vacío, medido el
+# 2026-09-17 en `/proc/<pid>/environ` del webhook vivo). O sea que el cierre post-demo no le
+# llegaba a nadie. Desde hoy el aviso sale por el MISMO Telegram que ya usa el webhook, y por eso
+# este wrapper le pasa las credenciales al `docker exec`.
 #
 # Uso local (ver qué demos cerraría, sin escribir nada):
 #   ./postdemo-run.sh
@@ -56,6 +61,31 @@ if [ -z "${ONIA_BOT_DRY_RUN:-}" ] && [ -f "$BOT_DIR/webhook.env" ]; then
   ONIA_BOT_DRY_RUN="$(sed -n 's/^ONIA_BOT_DRY_RUN=//p' "$BOT_DIR/webhook.env" | head -n1 | tr -d "\"' \r")"
 fi
 
+# EL MODO SE DERIVA DE ESE INTERRUPTOR, no del argumento que el llamador se acuerde de escribir.
+# Heredar la variable no alcanzaba: este cron (`47 * * * *`) llama al wrapper PELADO y sin
+# `--emit` el .mjs ni reserva ni cierra — 670 corridas, todas en dry-run. Por eso el `CERRARIA (0)`
+# del log tenia DOS causas y arreglar solo el canal del aviso no lo habria encendido. La historia
+# completa esta en followup-run.sh. Quien llama sigue mandando.
+EMIT_ARGS=()
+case " $* " in
+  *" --emit "*|*" --dry-run "*|*" --json "*) ;;
+  *)
+    if [ "${ONIA_BOT_DRY_RUN:-true}" = "false" ]; then EMIT_ARGS=(--emit); fi
+    ;;
+esac
+
+# CREDENCIALES DEL AVISO. Mismo patrón y mismo archivo que `webhook-server.sh`: el secreto vive
+# donde ya vivía y nadie lo copia a mano. Hace falta acá porque `docker exec` hereda el entorno del
+# CONTENEDOR, no el del webhook — medido el 2026-09-17, `onia-center` no tiene `TG_BOT_TOKEN`
+# (0 coincidencias), lo tiene el PROCESO del webhook porque su lanzador se lo pasó con `-e`.
+# Sin estas tres líneas el barrido no puede avisar, y como no puede avisar no cierra ninguna demo.
+TG_AVISO="${ONIA_BOT_TG_AVISO:-true}"
+TG_ENV_FILE="${ONIA_TG_ENV_FILE:-/root/.config/onia/backup.env}"
+if [ -f "$TG_ENV_FILE" ]; then
+  TG_BOT_TOKEN="${TG_BOT_TOKEN:-$(sed -n 's/^TG_BOT_TOKEN=//p' "$TG_ENV_FILE" | tr -d '\"'\''' | tr -d ' \t\r\n' || true)}"
+  TG_CHAT_ID="${TG_CHAT_ID:-$(sed -n 's/^TG_CHAT_ID=//p' "$TG_ENV_FILE" | tr -d '\"'\''' | tr -d ' \t\r\n' || true)}"
+fi
+
 # Si quien llama no fijó el instante, se sella acá y viaja como parámetro explícito.
 NOW_ARGS=()
 case " $* " in
@@ -65,6 +95,9 @@ esac
 
 docker exec \
   -e ONIA_BOT_DRY_RUN="${ONIA_BOT_DRY_RUN:-true}" \
-  "$CONTAINER" node "$DEST/postdemo-run.mjs" ${NOW_ARGS[@]+"${NOW_ARGS[@]}"} "$@"
+  -e ONIA_BOT_TG_AVISO="$TG_AVISO" \
+  -e TG_BOT_TOKEN="${TG_BOT_TOKEN:-}" \
+  -e TG_CHAT_ID="${TG_CHAT_ID:-}" \
+  "$CONTAINER" node "$DEST/postdemo-run.mjs" ${NOW_ARGS[@]+"${NOW_ARGS[@]}"} ${EMIT_ARGS[@]+"${EMIT_ARGS[@]}"} "$@"
 
 exit 0

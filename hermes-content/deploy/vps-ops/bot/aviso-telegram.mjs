@@ -55,6 +55,10 @@ export const ETIQUETAS = Object.freeze({
   demo_agendada: "DEMO AGENDADA — anotala",
   descarte_tras_agendar: "se cayo una demo ya agendada — liberá el horario",
   sin_horarios: "no habia horario que ofrecerle",
+  // Lo emite el BARRIDO (`postdemo-run.mjs`), no el motor, y por eso no tenía etiqueta: el gate
+  // que vigila esta lista derivaba su universo de `bot-engine.mjs` y sólo. Ver
+  // `postdemo-avisa-por-el-canal-vivo.test.mjs`, que camina la carpeta entera.
+  demo_realizada: "DEMO TERMINADA — contá cómo fue",
 });
 
 export function getAvisoTelegramConfig(env = process.env) {

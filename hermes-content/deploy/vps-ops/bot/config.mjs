@@ -700,6 +700,15 @@ export const DEFAULT_CONFIG = Object.freeze({
     // acumuladas porque el cron nunca existio. Si el mensaje no sale dentro de la ventana, no sale.
     windowClosesAtHours: 24,
     staleAfterDays: 7,
+    // HORA SILENCIOSA. A quien se le escribe lo elige el SILENCIO del prospecto, asi que la hora
+    // de salida es la de entrada corrida 20 h: el que escribe a las 10:00 recibiria el seguimiento
+    // a las 06:00, y el cron corre las 24 horas. Mismo piso que el recordatorio M9 (y por el mismo
+    // motivo, que su config ya explica: molesta y castiga el quality rating), mas un techo, porque
+    // aca la hora mala tambien puede ser la noche. Esperar no pierde el mensaje: la fila sigue
+    // elegible y sale a las 08:00 — a lo sumo la ventana de Meta se cerro y sale la plantilla
+    // `seguimiento_demo`, que cuesta ~0,074 USD. Escribirle a las 5 de la mañana cuesta la linea.
+    quietBeforeHour: 8,
+    quietAfterHour: 21,
   }),
 
   // Recordatorio del dia de la demo (M9). La ventana de Meta NO se repite aca: es UN solo hecho
@@ -852,6 +861,21 @@ export function joinEs(items) {
   if (list.length === 0) return "";
   if (list.length === 1) return list[0];
   return `${list.slice(0, -1).join(", ")} y ${list[list.length - 1]}`;
+}
+
+/**
+ * Hora local de Bolivia (0-23) del instante recibido, o null si el ISO no se puede leer.
+ * Determinista: solo lee el ISO inyectado, nunca Date.now().
+ *
+ * Vive aca —y no en el barrido que la estreno— porque la usan DOS barridos para decidir lo
+ * mismo (si es hora de escribirle a una persona), y dos copias de esa cuenta son dos politicas
+ * de "no molestar" que pueden separarse sin que nada se ponga rojo.
+ */
+export function localHour(isoInstant, config = DEFAULT_CONFIG) {
+  const ms = Date.parse(isoInstant);
+  if (!Number.isFinite(ms)) return null;
+  const offset = config?.businessHours?.tzOffsetMinutes ?? DEFAULT_CONFIG.businessHours.tzOffsetMinutes;
+  return new Date(ms + offset * 60000).getUTCHours();
 }
 
 /**

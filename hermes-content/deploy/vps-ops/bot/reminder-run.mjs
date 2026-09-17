@@ -42,7 +42,7 @@
 
 import { pathToFileURL } from "node:url";
 
-import { DEFAULT_CONFIG, createBotConfig, renderTemplate } from "./config.mjs";
+import { DEFAULT_CONFIG, createBotConfig, localHour, renderTemplate } from "./config.mjs";
 import { cuotaAgotada, withKnowledge } from "./knowledge.mjs";
 import { createStore, stateFromRow } from "./persistence.mjs";
 import { whatsappTemplate } from "./chatwoot-adapter.mjs";
@@ -90,13 +90,10 @@ export function buildConfig() {
 // Helpers puros
 // ---------------------------------------------------------------------------
 
-/** Hora local de Bolivia (0-23) del instante recibido. Determinista: solo lee el ISO inyectado. */
-export function localHour(nowIso, config = DEFAULT_CONFIG) {
-  const ms = Date.parse(nowIso);
-  if (!Number.isFinite(ms)) return null;
-  const offset = config.businessHours?.tzOffsetMinutes ?? DEFAULT_CONFIG.businessHours.tzOffsetMinutes;
-  return new Date(ms + offset * 60000).getUTCHours();
-}
+// La hora local se mudo a config.mjs cuando el follow-up necesito la MISMA cuenta para decidir lo
+// mismo (si es hora de escribirle a una persona). Se re-exporta para no romper a quien la importa
+// de aca; la definicion es una sola.
+export { localHour };
 
 /**
  * Por que ESTA demo no recibe recordatorio. El barrido en SQL ya filtra, pero la fila se vuelve a

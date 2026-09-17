@@ -103,10 +103,22 @@ function memoryStore(rows, options = {}) {
   };
 }
 
+/**
+ * Canal de aviso de mentira, SIEMPRE listo.
+ *
+ * Hace falta desde que el barrido manda el aviso de verdad: sin canal no cierra ninguna fila (ver
+ * `postdemo-avisa-por-el-canal-vivo.test.mjs`), que es justamente la guarda que impide quemar la
+ * reserva. Los casos de abajo miden el FILTRO y el CAS, no el canal, así que se lo damos por
+ * puesto — pero se lo damos EXPLÍCITO: caer al canal real del entorno los haría depender de que
+ * la máquina que corre los tests tenga (o no) un token de Telegram.
+ */
+const canalListo = () => ({ listo: true, motivo: null, async enviar() { return { ok: true, status: "sent", reason: "aviso enviado" }; } });
+
 const sweep = (rows, options = {}, config = CONFIG) =>
   runPostDemoSweep({ nowIso: options.nowIso || NOW, emit: options.emit !== false, limit: options.limit }, {
     config,
     store: options.store || memoryStore(rows, options).store,
+    aviso: options.aviso || canalListo(),
   });
 
 // ---------------------------------------------------------------------------
@@ -124,7 +136,7 @@ test("el barrido pide demos agendadas que YA TERMINARON (inicio + duracion + gra
     },
   });
 
-  await runPostDemoSweep({ nowIso: NOW, emit: true, limit: 20 }, { config: CONFIG, store });
+  await runPostDemoSweep({ nowIso: NOW, emit: true, limit: 20 }, { config: CONFIG, store, aviso: canalListo() });
   const url = requests[0];
 
   assert.match(url, /bot_stage=eq\.demo_agendada/, "1) la demo esta reservada y sin cerrar");
@@ -319,7 +331,7 @@ test("con la demo mas larga, la misma fila todavia no se cierra", async () => {
 
 test("sin base: no tira, devuelve listas vacias y el motivo", async () => {
   const store = createStore({ url: "", key: "" });
-  const result = await runPostDemoSweep({ nowIso: NOW, emit: true }, { config: CONFIG, store });
+  const result = await runPostDemoSweep({ nowIso: NOW, emit: true }, { config: CONFIG, store, aviso: canalListo() });
 
   assert.equal(result.ok, true);
   assert.equal(result.scanned, 0);
@@ -358,9 +370,9 @@ test("skipReason no mira el reloj del sistema: el mismo estado y el mismo ahora 
 // ---------------------------------------------------------------------------
 
 test("parseArgs: --emit, --now, --limit (y el limite absurdo cae al default)", () => {
-  assert.deepEqual(parseArgs([]), { now: null, emit: false, json: false, limit: 50 });
-  assert.deepEqual(parseArgs(["--emit", "--now", NOW, "--limit", "10"]), { now: NOW, emit: true, json: false, limit: 10 });
-  assert.deepEqual(parseArgs([`--now=${NOW}`, "--limit=0"]), { now: NOW, emit: false, json: false, limit: 50 });
+  assert.deepEqual(parseArgs([]), { now: null, emit: false, dryRunExplicito: false, json: false, limit: 50 });
+  assert.deepEqual(parseArgs(["--emit", "--now", NOW, "--limit", "10"]), { now: NOW, emit: true, dryRunExplicito: false, json: false, limit: 10 });
+  assert.deepEqual(parseArgs([`--now=${NOW}`, "--limit=0"]), { now: NOW, emit: false, dryRunExplicito: false, json: false, limit: 50 });
   assert.equal(parseArgs(["--emit", "--dry-run"]).emit, false, "--dry-run gana si viene despues");
 });
 

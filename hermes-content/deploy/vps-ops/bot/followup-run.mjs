@@ -45,7 +45,7 @@
 
 import { pathToFileURL } from "node:url";
 
-import { DEFAULT_CONFIG, createBotConfig, parseSlotsSpec, renderTemplate, slotsPending } from "./config.mjs";
+import { DEFAULT_CONFIG, createBotConfig, localHour, parseSlotsSpec, renderTemplate, slotsPending } from "./config.mjs";
 import { cuotaAgotada, withKnowledge } from "./knowledge.mjs";
 import { buildFollowUp, followUpDue } from "./bot-engine.mjs";
 import { activeSlots, slotLabel } from "./reply-builder.mjs";
@@ -151,6 +151,17 @@ export function skipReason(state, nowIso, config = DEFAULT_CONFIG) {
   // `seguimiento_demo` esta aprobada, asi que fuera de la ventana se manda ESA (ver outsideWindow).
   // Lo que sigue mandando es `conversacion_muerta`, arriba: a los 8 dias no se escribe ni con
   // plantilla — eso ya no es un seguimiento, es spam.
+
+  // TRANSITORIO y por eso va al FINAL: la hora se arregla esperando, y confundirla con un
+  // descarte definitivo haria que el barrido mire esta fila para siempre. A quien se le escribe
+  // lo elige el silencio del prospecto, asi que la hora de salida es la de entrada corrida 20 h:
+  // el que escribe a las 10:00 recibiria el seguimiento a las 06:00, y el cron corre las 24 horas.
+  // La fila sigue elegible y sale en el primer barrido de la mañana (ver config.followUp).
+  const hora = localHour(nowIso, config);
+  const desde = config.followUp?.quietBeforeHour ?? DEFAULT_CONFIG.followUp.quietBeforeHour;
+  const hasta = config.followUp?.quietAfterHour ?? DEFAULT_CONFIG.followUp.quietAfterHour;
+  if (hora !== null && (hora < desde || hora >= hasta)) return `horario_silencioso:${hora}h`;
+
   return null;
 }
 
