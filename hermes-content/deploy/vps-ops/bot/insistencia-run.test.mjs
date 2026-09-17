@@ -3,9 +3,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { politicaDeSeguimiento, runInsistenciaSweep } from "./insistencia-run.mjs";
+import { politicaDeSeguimiento, runInsistenciaSweep, esperaFueraDeVentana } from "./insistencia-run.mjs";
 import { createBotConfig } from "./config.mjs";
-import { resetOrgKnowledgeCache } from "./knowledge.mjs";
+import { resetOrgKnowledgeCache, validateKnowledge } from "./knowledge.mjs";
 
 const NOW = "2026-08-30T15:00:00Z";
 const DOC = { schema: "onia.bot.knowledge/1", identity: { productName: "Ferreteria", humanName: "Marta" } };
@@ -121,43 +121,47 @@ test("dry-run: lista lo que mandaria sin reservar ni mandar", async () => {
 // ---------------------------------------------------------------------------
 // LA POLITICA QUE EL BARRIDO NO PUEDE CUMPLIR (2026-09-13).
 //
-// El panel deja al dueño elegir hasta 48 h (`horas: { min: 1, max: 48 }` en el
-// schema de knowledge.ts, y el editor conversacional le dicta "1-48" al LLM),
-// pero el barrido SQL solo trae conversaciones cuyo ultimo inbound cae DENTRO de
-// la ventana de servicio de Meta. Una politica de 24 h o mas no puede producir
-// NUNCA un envio: la fila sale del rango antes de volverse elegible.
+// ESTO ES HISTORIA, no el estado de hoy. HASTA el 2026-09-13 el panel dejaba
+// elegir hasta 48 h (`horas: { min: 1, max: 48 }`, y el editor conversacional le
+// dictaba "1-48" al LLM) mientras el barrido SQL solo trae conversaciones cuyo
+// ultimo inbound cae DENTRO de la ventana de servicio. Una politica de 24 h o mas
+// no podia producir NUNCA un envio: la fila sale del rango antes de volverse
+// elegible, y era silencio perfecto — ni envio, ni skip, ni warning. El dueño
+// encendia "tu asistente le escribe UNA sola vez para retomar", elegia el tope del
+// desplegable y su asistente no escribia jamas.
 //
-// Hasta hoy eso era silencio perfecto — ni envio, ni skip, ni warning: la fila
-// simplemente no aparecia. El dueño encendia "tu asistente le escribe UNA sola
-// vez para retomar", elegia el tope del desplegable y su asistente no escribia
-// jamas, sin una linea en ningun lado.
+// HOY el techo se DERIVA de la ventana en las tres puntas
+// (MAX_ESPERA_INSISTENCIA_HORAS = windowClosesAtHours - 1) y el validador rechaza
+// esas esperas en la PUERTA, asi que por el panel ya no entran. Este corte se queda
+// y se prueba donde vive: defiende los documentos LEGADOS —guardados cuando el
+// schema aceptaba hasta 48— y todo camino que escriba la fila sin validar.
 // ---------------------------------------------------------------------------
 
-test("politica >= ventana de Meta: se saltea CON MOTIVO, no en silencio", async () => {
-  const reservas = [];
-  const store = fakeStore([fila()], { reservas });
-  const out = await runInsistenciaSweep({ nowIso: NOW, emit: true }, {
-    store,
-    knowledge: conocimientoDe({ ...DOC, seguimiento: { activo: true, horas: 24 } }),
-  });
-  assert.equal(out.send.length, 0, "no puede mandar: la fila ya salio de la ventana");
-  assert.equal(reservas.length, 0, "no reserva lo que no va a mandar");
+test("politica >= ventana de Meta: se saltea CON MOTIVO, no en silencio", () => {
+  const config = createBotConfig({});
+  const corte = esperaFueraDeVentana(24, config, "chatwoot:1");
+  assert.ok(corte, "una espera de 24 h tiene que cortar: la fila ya salio de la ventana");
   assert.match(
-    String(out.skipped[0]?.reason),
+    corte.reason,
     /politica_fuera_de_ventana/,
     "el motivo tiene que NOMBRAR que la politica pide mas que la ventana",
   );
+  // Y lo cumplible NO corta: el gate tiene que fallar en las dos direcciones.
+  assert.equal(esperaFueraDeVentana(23, config, "chatwoot:1"), null);
+  assert.equal(esperaFueraDeVentana(2, config, "chatwoot:1"), null);
 });
 
-test("politica >= ventana: el warning se lo dice al dueño, con los dos numeros", async () => {
-  const store = fakeStore([fila()]);
-  await runInsistenciaSweep({ nowIso: NOW, emit: true }, {
-    store,
-    knowledge: conocimientoDe({ ...DOC, seguimiento: { activo: true, horas: 30 } }),
-  });
-  const w = store.warnings.join(" | ");
+test("politica >= ventana: el warning se lo dice al dueño, con los dos numeros", () => {
+  const w = esperaFueraDeVentana(30, createBotConfig({}), "chatwoot:1").warning;
   assert.match(w, /30/, "nombra lo que el dueño eligio");
   assert.match(w, /24/, "y la ventana real, que es el tope que manda");
+});
+
+test("un doc legado con una espera muerta ya no se puede volver a publicar", () => {
+  // La otra mitad: el corte de arriba es la red, pero la puerta tiene que estar
+  // cerrada — si no, el dueño la vuelve a elegir mañana.
+  assert.equal(validateKnowledge({ ...DOC, seguimiento: { activo: true, horas: 24 } }).ok, false);
+  assert.equal(validateKnowledge({ ...DOC, seguimiento: { activo: true, horas: 23 } }).ok, true);
 });
 
 test("el techo del barrido es la ventana del config, no un 24 tipeado aparte", async () => {
