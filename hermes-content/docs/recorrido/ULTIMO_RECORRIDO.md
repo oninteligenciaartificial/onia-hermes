@@ -1714,3 +1714,23 @@ el DOM con ese rol aunque esté cerrado — "SÍ entrega QR/código" con la capt
 pantalla sin cambios. Corregido exigiendo `offsetParent !== null`. Las dos trampas se vieron
 recién comparando la captura contra el veredicto del propio script — el método de esta memoria
 ("verificar es mirar") atrapó al propio instrumento dos veces en la misma vuelta.
+
+## 2026-09-17 15:00-15:20 La Paz — no repetir el recorrido: BUILD_ID sin cambios, mismo bloqueo
+
+`docker exec onia-platform cat /app/.next/BUILD_ID` sigue en `OFd4xCDzoTbQdThUbfzDv` (igual que
+la vuelta anterior) y la tarea de deploy `t_1a5c860d` sigue `blocked`. Método vigente: no
+re-correr el recorrido completo hasta que cambie uno de los dos.
+
+**Verificación nueva, con `scripts/mirar_bandeja_dueno.mjs` (sesión real, sin escribir nada):**
+el bloqueo de 2FA no es sólo para clientes nuevos — **la cuenta real de Sergio Urcullo
+(`sergio@onia.com.bo`, org "Clínica Sergio") ya está bloqueada HOY.** Pedido `/dashboard` con su
+sesión → la app terminó en `/profile?mfa=obligatorio`, con el banner rojo y el botón "Activar
+ahora" que ya se sabe que no hace nada. Confirmado también por SQL que `superadmin@onia.com.bo` y
+`sergio.urcullo.m@gmail.com` (Bolivian Electric) tienen 0 factores MFA verificados y su gracia ya
+venció. Esto ya estaba anotado en un comentario de `t_82251f19` (otra sesión, 08:51 La Paz) pero
+enterrado en un párrafo largo — se agregó un comentario corto y directo en `t_1a5c860d`
+explicándolo así: "ni vos podés usar el sistema hasta que se publique este pedido". No es un
+hallazgo nuevo, es la misma causa con más urgencia visible para Sergio Urcullo.
+
+Nada para hacer del lado de este carril: sigue blocked esperando el `ok`. Próxima vuelta, si
+BUILD_ID sigue igual, no repetir esta verificación — ya quedó dicho dos veces en el tablero.
