@@ -63,6 +63,47 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-17 — el negocio de cualquier plan podía crearse un segundo
+      administrador gratis: la misma pantalla tenía DOS botones y sólo uno preguntaba el plan.**
+
+      **Qué pasaba.** El 17-sep entró `multiAdminIncluded` (decisión de Sergio Urcullo: los
+      coadministradores vienen en los paquetes caros, dentro de un solo pago). Se cerraron tres
+      superficies — `POST /api/team`, `PATCH /api/admin/users/[id]` y el selector de `/settings` —
+      y quedó abierta la cuarta, que es justo la que el dueño usa: el modal de **Equipo**
+      (`app/(dashboard)/team/InviteModal.tsx`) ofrece el rol "Administrador" sin mirar el plan, y
+      tiene dos caminos con el MISMO selector: *crear con contraseña* postea a `/api/team` (403,
+      correcto) e *invitar por correo* postea a **`/api/admin/users`, que no preguntaba nada** y
+      devolvía 201 — con invitación real de Supabase, o sea el segundo admin podía entrar. La ruta
+      ya consultaba el plan para otras dos cosas (`checkPlanExpiry`, `checkUserLimit`): la pregunta
+      que faltaba era exactamente la que se cobra.
+
+      **Prueba.** Test en ROJO primero por el motivo correcto (`plan free: expected 201 to be 403`,
+      2 fallando de 7) en `app/api/admin/users/route.test.ts`, y verde después del arreglo; el caso
+      anti-tautología recorre `PLAN_IDS` del catálogo y exige `201 ⇔ multiAdminIncluido(plan)`, así
+      que la puerta no puede volver a decidir con una lista tipeada. Gates: `npx tsc --noEmit` 0
+      errores (los 4 que salían eran la carpeta de tipos generada de Next, stale, acusando la ruta
+      del webhook legado de WhatsApp que el commit `abf6cb5b` borró hoy — se curan borrando esa
+      carpeta generada), `eslint` limpio, `vitest` completo verde. Commit en `onia-platform`, rama
+      `claude/chatbots-platform-review-0d1d09`.
+
+      **Lo que NO cierra este ítem, con su reproducción exacta —** dos superficies más de la misma
+      clase, las dos SIN acceso real (por eso no bloquean): (1) `app/onboarding/pasos/paso-equipo.tsx`
+      ofrece "Administrador" en el paso 4 del alta sin filtrar por plan — recibe `vocabulario` por
+      prop y **no recibe el plan**, hay que pasárselo desde su llamador; (2) `POST /api/onboarding/aplicar`
+      (línea ~182, `role: equipo.rol`) crea esa ficha con rol ADMIN sin preguntar. La ficha nace con
+      `userId: pendiente-<uuid>`, así que **no puede loguear**: el daño aparecía al invitarla después,
+      y esa puerta ya quedó cerrada acá. Se ve con
+      `grep -n "rolesEquipo" app/onboarding/pasos/paso-equipo.tsx`.
+
+      **Y el gate que dejó la clase abierta está identificado:**
+      `lib/subscription/coadministradores.test.ts:72` exige el filtro nombrando **a mano** un solo
+      archivo (`SettingsClient.tsx`), así que ninguna otra pantalla que ofrezca `rolesEquipo` es
+      sujeto de nadie. Cerrarlo pide derivar el universo **caminando la carpeta** (`readdirSync`, no
+      `git ls-files`: el archivo nuevo sin commitear es justo el sujeto que se quiere cazar) y exigir
+      `rolesOfrecidosPorPlan` en cada pantalla que ofrezca esos roles. No se escribió en esta vuelta
+      porque saldría ROJO por `paso-equipo.tsx` y ese gate está en la cadena: trabaría el merge de
+      **todos** los carriles hasta que (1) esté arreglado. Los dos van juntos, en la misma vuelta.
+
 - [x] ✅ **CERRADO el 2026-09-17 — el tablero decía que `master` de `onia-platform` estaba roto
       y NO lo está: los cinco gates del CI, corridos a mano sobre el commit que el pedido de
       deploy pide publicar, están en verde** (medición, sin cambio de código).
