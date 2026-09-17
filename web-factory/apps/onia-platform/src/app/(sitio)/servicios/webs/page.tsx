@@ -6,7 +6,7 @@ import { EMPEZAR_URL } from "../../nav";
 import { CTA_ALTA } from "../../alta";
 import { Block, Btn, Kicker, JsonLd } from "../../ui";
 import s from "../../sitio.module.css";
-import { PedirWeb } from "./PedirWeb";
+import { WebConfigurator } from "@/components/web-configurator/WebConfigurator";
 import styles from "./webs.module.css";
 
 /**
@@ -178,12 +178,15 @@ export default function Webs() {
         </Reveal>
       </Block>
 
-      {/* `Reveal` SOLO sobre el titular. Envolviendo también a <PedirWeb /> el
-          bloque quedaba INVISIBLE en teléfono: `viewportOnce` es
+      {/* `Reveal` SOLO sobre el titular. Envolviendo también al configurador
+          el bloque quedaba INVISIBLE en teléfono: `viewportOnce` es
           `amount: 0.3`, así que un Reveal más alto que ~3,3 pantallas nunca
           llega al 30% visible y se queda en opacity 0 para siempre. El punto de
-          compra entero (picker + requisitos) mide unos 5.000px a 390 de ancho.
-          Visto renderizado con Playwright a 390x844. */}
+          compra entero (configurador + requisitos) mide varias pantallas a 390
+          de ancho. Visto renderizado con Playwright a 390x844.
+          El configurador reemplaza a <PedirWeb /> desde 2026-09-17: alcance,
+          preview en vivo, extras y requisitos en un solo recorrido, y la
+          selección viaja escrita en el mensaje de WhatsApp. */}
       <Block surface="paperDim" labelledBy="pedir">
         <Reveal>
           <Kicker>Pedila</Kicker>
@@ -191,7 +194,7 @@ export default function Webs() {
             ¿Cuál querés?
           </h2>
         </Reveal>
-        <PedirWeb />
+        <WebConfigurator />
       </Block>
 
       {/* Camino de vuelta: la web es un add-on del sistema, no una isla. Antes

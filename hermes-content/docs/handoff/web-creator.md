@@ -1,0 +1,109 @@
+# Handoff — carril `web-creator` (configurador de webs + web personal)
+
+> Formato: `hermes-content/docs/handoff/README.md`. Se sobrescribe; es el estado ACTUAL.
+> Última escritura: **2026-09-17**, rama `claude/web-creator-personal-site-eed2f3`, worktree
+> `.claude/worktrees/web-creator-personal-site-eed2f3`. Puertos locales: 3011 (sitio Onia),
+> 8099 (web personal).
+>
+> Nace de la sesión de Codex «Ubica y ajusta llamadas 1:1» (14-sep, id `01a0a1ab…`), que dejó
+> el configurador SIN commitear (lo commiteó el auto-sync del 17-sep en la rama
+> `claude/ads-creatividades-publicos`, mezclado con 38 archivos ajenos) y la web personal
+> editada DIRECTO en el buzón de deploy.
+
+---
+
+## 1 · Objetivo
+
+**El configurador de webs vive en `onia.com.bo/servicios/webs` y la web personal lo enlaza
+desde `/webs`, ambos publicados desde el repo canónico.**
+
+Definición de hecho:
+1. `onia.com.bo/servicios/webs` responde 200 con el configurador y el mensaje de WhatsApp
+   sale con la selección escrita (probado en vivo, mirado).
+2. `sergiourcullo.vercel.app/webs` responde 200 y sus botones llegan al configurador.
+3. `python scripts/publicar-sitio.py --dry` lista lo mismo que sirve Vercel (el buzón sin
+   «ahead» ni modificados).
+4. `tsc --noEmit` verde en `apps/onia-platform` y la suite del sitio verde en Linux.
+
+⚠️ **Tensión con la etapa vigente**, dicha de frente: `ONIA_ESTRATEGIA_DE_EMPRESA.md` §7 fija
+Etapa 1 = Onia Platform + chatbot, y §10 dice que **la web falla el test de las tres
+preguntas** (no se entrega sin horas de Sergio Urcullo por cliente). Este carril existe porque
+Sergio Urcullo lo pidió el 17-sep y hay un prospecto real (ABDES, vía Codex). No cambia la
+etapa: el configurador vende y ordena; no se construye nada de entrega automática.
+
+## 2 · Qué quedó EN PRODUCCIÓN
+
+**Nada nuevo.** Producción hoy:
+- `onia.com.bo/servicios/webs` → la página vieja con `PedirWeb` y precios **2.000 / 4.500**.
+- `sergiourcullo.vercel.app` → home con bloque 1:1 (commits del 11-sep, ya en el repo).
+  `/webs` → **404**.
+
+## 3 · Qué quedó a medias, y dónde (todo en esta rama, SIN pushear al cerrar el turno — el
+auto-sync lo pushea)
+
+| Qué | Dónde | Estado |
+|---|---|---|
+| **Configurador integrado en la página v3** | `apps/onia-platform/src/app/(sitio)/servicios/webs/page.tsx` | `<WebConfigurator />` reemplaza a `<PedirWeb />`; el resto de la página (4 tarjetas de stack + Cuidado Web) se conservó → **duplica el paso 1 del configurador**. Decisión de diseño pendiente (ver §6) |
+| Los 5 archivos del configurador + `web-configurator.ts` + `web-intake.ts` | `src/components/web-configurator/`, `src/content/` | traídos del commit `91c1d9fc` SOLO esos (no los 38 ajenos). `tsc` verde salvo `vitest.config.ts` (entorno) |
+| `webs.ts` | `src/content/webs.ts` | **restaurado a `main`** (Codex venía de una rama vieja con 790/1.500/2.900); se le re-agregó `WEB_ADDONS` (CRM/n8n Bs 790, catálogo §4) |
+| `requisitos-gate.tsx` | `src/components/` | versión de Codex: props `ready/blockedHint/blockedTargetId`, compatibles hacia atrás |
+| `PedirWeb.tsx` + `webs.module.css` | `(sitio)/servicios/webs/` | **muertos** (nadie los importa) pero 9 tests los nombran por ruta; no se borraron |
+| **Web personal portada al repo** | `hermes-content/sitio-sergiourcullo/**` | `abcbb7f` (catálogo `/webs`, sin pushear) + diff sin commitear de Codex (CTAs en hero, «Agendar 1 a 1» en la barra, cifras como franja, links al configurador, swipe horizontal en móvil). Renderizada y MIRADA a 390 y 1440, sin desborde |
+| `PRODUCT.md` + `web-layout-examples.png` (2,5 MB) | `apps/onia-platform/` | de Codex; el PNG lo usa `website-preview.module.css` |
+
+Capturas de esta sesión: scratchpad `…/4efc96b0…/scratchpad/{personal,onia}/*.png`.
+
+## 4 · Archivos que toca este carril
+
+```
+web-factory/apps/onia-platform/src/app/(sitio)/servicios/webs/**
+web-factory/apps/onia-platform/src/components/web-configurator/**
+web-factory/apps/onia-platform/src/components/requisitos-gate.tsx
+web-factory/apps/onia-platform/src/content/{webs,web-configurator,web-intake}.ts
+web-factory/apps/onia-platform/PRODUCT.md · public/web-layout-examples.png
+web-factory/docs/WEB_CONFIGURATOR_SALES_FLOW_2026.md
+hermes-content/sitio-sergiourcullo/**          (+ scripts/publicar-sitio.py, sin cambios)
+```
+
+## 5 · Intentos fallidos y trampas (no repetir)
+
+- **`git checkout <commit> -- src/app/servicios/webs/page.tsx` creó una ruta DUPLICADA**:
+  `main` ya movió el sitio al grupo `(sitio)/` y Codex trabajó en la ruta vieja. Next se
+  rompe con dos `page.tsx` para `/servicios/webs`. Y al borrar `src/app/servicios` de un
+  `rm -rf` me llevé `consultoria` y `marketing-ia` (vivas en prod) — restauradas de `HEAD`.
+- **El checkout pisó `webs.ts` de `main` con precios vencidos.** Un archivo compartido que
+  Codex tocó desde una rama vieja NO se trae entero: se aplica su diff (`git diff c^ c -- f`)
+  sobre `main`.
+- **La suite del sitio no corre en Windows**: arma rutas `C:\C:\…`, espera
+  `node_modules/.bin/vitest` con barras, y 9 archivos dan `SyntaxError`. Correr en WSL/VPS.
+- **`pnpm install --offline --filter ./apps/onia-platform` en el worktree escribe a través de
+  la unión** `apps/onia-platform/node_modules → checkout principal`. Salió bien (agregó
+  `vitest` que faltaba), pero es un efecto sobre OTRO árbol.
+- **Playwright desde Git Bash**: el argumento `/` se convierte en `C:/Program Files/Git/`.
+  `MSYS_NO_PATHCONV=1`.
+- Codex reportó «Validación 18/20» y «build 22/22 rutas» sobre la rama VIEJA; nada de eso
+  vale para `main`.
+
+## 6 · Qué depende de Sergio Urcullo
+
+| | Bloquea |
+|---|---|
+| 🔴 **Precio de las webs.** `ONIA_WEB_COMO_SE_VENDE.md` §8: **DECIDIDO 24-ago, sin lista, se cotiza caso por caso.** Hoy conviven 3 listas: prod 2.000/4.500 · configurador dinámico + 50/50 · `/webs` personal 790/1.500/2.900. **Dos salidas:** (a) mantener la decisión → el configurador muestra «a cotizar» y el catálogo personal saca montos; (b) revertirla → un solo archivo manda (`webs.ts`) y el catálogo personal lee de ahí. | publicar cualquiera de las dos superficies |
+| 🔴 **Mirar las dos piezas** (capturas del scratchpad o `localhost:3011/servicios/webs` y `localhost:8099/webs/`) y decir si la página de Onia se queda con tarjetas + configurador o sólo configurador (Codex la dejó sólo configurador: 9.601 px en móvil; hoy 15.297 px). | el diseño final |
+| 🟡 La propuesta de Codex «Página Base Conectada» incluida en planes ANUALES (Profesional/Completo) — es una decisión de packaging; no se implementó. | nada hoy |
+| 🟡 Confirmar que `WA_PHONE` de `src/lib/site.ts` es el WhatsApp comercial definitivo. | el envío real |
+
+## 7 · Próximos pasos (en orden)
+
+1. Sergio Urcullo decide precio (§6). Aplicar en `webs.ts` / configurador / `webs/index.html`.
+2. Decidir tarjetas+configurador vs sólo configurador; si «sólo», quitar los bloques `stacks` y
+   `cuidado` de la página y ajustar los tests que los miran.
+3. Correr la suite en Linux. **El 17-sep no se pudo**: WSL Ubuntu no tiene Node, Docker
+   Desktop estaba apagado. Con Docker encendido:
+   `docker run --rm -v "<ruta al worktree>/web-factory/apps/onia-platform:/app" -w /app node:22-alpine node node_modules/vitest/vitest.mjs run`.
+   Las opciones «Básico, Bs 190/mes» que Codex tipeó en `WebConfigurator.tsx` ya se derivan
+   de `CUIDADO_WEB` (17-sep); igual mirar `precios*.test.ts` y `montos-en-pantalla`.
+4. Merge a `main` (gates verdes) → deploy VPS `scripts/deploy-onia-landing.sh` → MIRAR
+   `onia.com.bo/servicios/webs`.
+5. `python scripts/publicar-sitio.py -m "..."` → MIRAR `sergiourcullo.vercel.app/webs`.
+6. Borrar `PedirWeb.tsx` + `webs.module.css` cuando los tests dejen de nombrarlos.

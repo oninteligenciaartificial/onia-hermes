@@ -240,3 +240,25 @@ export function precioWebDesde(): number {
 
   return Math.min(...conPrecio);
 }
+
+export interface WebAddon {
+  readonly id: "crm-formulario";
+  readonly nombre: string;
+  /** Bs, setup único. */
+  readonly precio: number;
+  readonly descripcion: string;
+}
+
+/**
+ * Extras del configurador (/servicios/webs). Un solo add-on hoy: registrar
+ * cada formulario en un flujo de seguimiento. Tarifa de
+ * hermes-content/propuestas/ONIA_CATALOGO_PRECIOS_2026.md §4.
+ */
+export const WEB_ADDONS: readonly WebAddon[] = [
+  {
+    id: "crm-formulario",
+    nombre: "Registro de contactos en CRM / n8n",
+    precio: 790,
+    descripcion: "Guarda cada formulario en un flujo de seguimiento. Setup único.",
+  },
+] as const;
