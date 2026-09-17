@@ -318,6 +318,59 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El gate que vigila «el bot promete una puerta que el producto no abre» conocía UNA
+      sola puerta, y hoy hay DOS vivas en producción~~ — CERRADO el 2026-09-17**
+      (`hermes-content/deploy/vps-ops/bot/puerta-del-alta.mjs`, `npm run puerta:alta`).
+
+      **Qué pasaba.** El archivo nació el 13-sep con una lista de causas escrita a mano: la única
+      puerta entre *"creá tu cuenta"* y *"usá el sistema"* era confirmar el correo. Esa forma ya
+      tiene su lección —un gate que fija su invariante sobre una lista escrita el día que se
+      escribió cierra la instancia y después **defiende** el hueco— y la causa N+1 llegó cuatro
+      días después, peor que la primera.
+
+      **La causa N+1, medida contra el build que producción SIRVE** (no contra el repo, que acá
+      diría que no hay ninguna puerta): `onia-platform/lib/mfa/policy.ts` del build vivo declara
+      `MFA_ENFORCE_FROM = "2026-09-17T04:00:00.000Z"` y un `requiresMfaNow(role, hasVerifiedFactor,
+      now)` sin nada que cuelgue del alta; `MFA_REQUIRED_ROLES` trae `ADMIN`; y
+      `onia-platform/app/api/auth/register/route.ts` le da `role: "ADMIN"` a todo el que se
+      registra. O sea que **desde las 00:00 del 17-sep (La Paz) el que crea su cuenta confirma el
+      correo, termina el onboarding y el panel lo manda a `/profile` en TODA ruta** hasta que
+      instale una app externa de códigos. Lo reprodujo `recorrido-cliente` en producción
+      (`t_82251f19`), y el bot es justo quien manda leads a `/register`.
+
+      **Qué se hizo.** Las puertas son ahora una lista (`PUERTAS`), cada una con **su propia
+      salvedad**: nombrar el correo ya no absuelve a la de dos pasos. `puertasDelAlta()` deriva su
+      universo de `PUERTAS`, así que una puerta declarada **sin medidor sale `null`** y el gate se
+      niega a concluir — al revés (derivar la lista de los medidores que hay) la puerta nueva
+      entraría absuelta, que es como esta familia falla en verde. El árbol de fuentes del build
+      vivo se **casa por `BUILD_ID`**, nunca por un sha escrito a mano, y se lee con
+      `scripts/lib/vps-o-local.mjs` para que también mida desde nodo-casa.
+
+      **Medición viva de hoy** (`npm run puerta:alta`, exit 0): *"NINGUN TEXTO SERVIDO PROMETE
+      ENTRAR SIN LOS PASOS QUE EL PRODUCTO EXIGE — 4 documento(s) mirados … con **2 puerta(s)
+      viva(s)**: confirmar el correo (`ONIA_REGISTRO_CONFIRMA_CORREO=si` ·
+      `GOTRUE_MAILER_AUTOCONFIRM=false`) · activar la verificación en dos pasos
+      (`MFA_ENFORCE_FROM=2026-09-17T04:00:00.000Z` es una fecha absoluta y sola, y ya venció — el
+      alta crea `ADMIN`, que está en `MFA_REQUIRED_ROLES`)"*. Verde porque ningún texto servido
+      promete inmediatez, **y ahora el veredicto NOMBRA las dos puertas aunque esté verde**: antes
+      la segunda era invisible incluso mirando la salida.
+
+      **Validado por MUTACIÓN, las dos direcciones** (self-check 38/38 en limpio):
+      (1) que la salvedad de *cualquier* puerta absuelva a todas —la forma vieja, de una sola
+      causa— pone en rojo exactamente *"nombrar el correo NO absuelve la puerta de dos pasos"* y
+      *"la que acusa tiene que ser la de dos pasos"* (36/38); (2) clavar `vencio = false` en la
+      política viva pone en rojo *"fecha absoluta ya vencida => el recién llegado choca contra el
+      muro"* (37/38). Restaurado con `cp`, nunca con `git checkout`.
+
+      ⚠️ **El arreglo del PRODUCTO ya está en `master`** (`onia-platform` `b1247fb`, de esta misma
+      mañana: la gracia cuelga del alta de cada cuenta, con el piso viejo para no acortarle nada a
+      las que ya estaban). **No está desplegado:** producción corre el build `f078373` del 13-sep
+      —casado por `BUILD_ID` `OFd4xCDzoTbQdThUbfzDv`— con **21 commits de `master` sin publicar**.
+      Hay pedido de deploy vivo (`t_db98ee26`, `blocked`, encabezado por ese mismo arreglo) y el
+      publicador automático se niega por diseño (`/var/log/onia-publicar-solo.log`: *"plataforma:
+      NO publico solo — toca una fuente de precio"*, todos los días desde el 15-sep). **Este gate
+      se pone en verde sobre esa puerta solo, el día del swap** — no hay nada más que escribir.
+
 - [x] 🔴 **~~Contestarle a un lead de WhatsApp fuera de las 24 h se perdía EN SILENCIO: el dueño
       veía su respuesta enviada y el prospecto no recibía nada~~ — CERRADO el 2026-09-17**
       (`onia-platform` `76ebe12`, rama `claude/chatbots-platform-review-0d1d09`).
