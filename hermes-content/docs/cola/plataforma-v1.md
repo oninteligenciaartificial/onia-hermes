@@ -5063,6 +5063,31 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] 🔴 **CERRADO el 2026-09-17: los tres correos que convierten la prueba en cliente ofrecían
+      Bs 890 como único precio, con Bs 320 disponible.** ⚠️ COMMITEADO Y PUBLICADO (`109ee15`,
+      rama `claude/chatbots-platform-review-0d1d09` de `onia-platform`), **falta mergear y
+      desplegar** — pedido anotado en `t_0de82d2f`.
+      Los pasos 12, 14 y 15 del drip del trial son los únicos correos que le piden plata al dueño,
+      y `trialDripPriceLine()` (`onia-platform/lib/email.ts:1233`) tenía el plan TIPEADO:
+      `getPlanAmount("professional", ...)`. La escalera C (12-sep) metió el plan Crece (Bs 550)
+      entre Básico y Profesional y este correo nunca se enteró — el monto se derivaba bien, así
+      que ningún cruce de cifras se ponía rojo: lo que estaba clavado era el SUJETO, no el número.
+      Y la segunda mitad se contradecía sola: «o si preferís empezar suave, Bs 229 por semana» son
+      ~Bs 991/mes, más caro que los Bs 890 que la misma frase nombra dos palabras antes.
+      **Prueba:** la línea pasó al módulo puro `lib/subscription/precio-para-el-correo.ts`, que
+      deriva el piso de `planesPorEscalon()`. El correo del paso 14 emite hoy, leído renderizado
+      desde `trialDripCopy`: «Los planes arrancan en Bs 320/mes (plan Básico). El que estuviste
+      usando en la prueba, Profesional, es Bs 890/mes.» Gate
+      `lib/subscription/precio-para-el-correo.test.ts` (10 casos), **validado por mutación**:
+      restaurando el literal `"professional"` y el semanal «suave» caen 6 de 10 por el motivo
+      correcto. `tsc --noEmit` limpio y `vitest run lib/subscription/` en 364/364, corridos en el
+      VPS sobre el árbol que se publica.
+      **De paso, un bug que destapó el gate nuevo:** `getPlanAmount` (`lib/subscription-plans.ts`,
+      la fuente única de montos) **tiraba** `TypeError` con un plan desconocido en vez de devolver
+      `null`, porque su guarda `if (base === undefined)` estaba DESPUÉS del acceso
+      `DEFAULT_PLAN_AMOUNTS[plan][cycle]`. Es alcanzable: `organizations.plan` es String y
+      `planesPorEscalon()` incluye `free`, que no está en la tabla de precios porque no se cobra.
+
 - [x] 🔴 **CERRADO el 2026-09-17: cinco frases mandaban al plan de Bs 890 por la agenda que el
       de Bs 550 ya trae.** ⚠️ COMMITEADO Y PUBLICADO (`dd03c75`, rama
       `claude/chatbots-platform-review-0d1d09` de `onia-platform`), **falta mergear y desplegar**.
