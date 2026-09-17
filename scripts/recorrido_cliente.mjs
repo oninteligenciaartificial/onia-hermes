@@ -1401,7 +1401,11 @@ const PASOS = [
             const sondaTrasClic = await page.evaluate(() => ({
               hayQr: !!document.querySelector('img[src*="qr" i], canvas'),
               hayInputCodigo: !!document.querySelector('input[inputmode="numeric"], input[maxlength="6"], input[autocomplete="one-time-code"]'),
-              hayModal: !!document.querySelector('[role="dialog"]'),
+              // 🔴 [role="dialog"] SOLO, sin exigir visibilidad, dio un falso positivo medido
+              // 2026-09-17: el widget del asistente ("Preguntá por tu negocio") vive en el DOM
+              // con ese rol aunque esté cerrado, y "detectaba" un modal de MFA que la captura
+              // de pantalla muestra que nunca se abrió. offsetParent !== null descarta lo oculto.
+              hayModal: [...document.querySelectorAll('[role="dialog"]')].some((el) => el.offsetParent !== null),
             }));
             const capturaTrasClic = await mirar(page, 'paso-05e-mfa-tras-clic.png');
             escapatoria = {
