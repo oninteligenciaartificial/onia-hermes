@@ -3575,18 +3575,32 @@ decisión de Sergio, no código.
 
 ## Después
 
-- [ ] **El simulador miente sobre el horario: su reloj está clavado en julio.** Medido el
-      2026-09-17 a las 14:13 de La Paz —**dentro** del horario de atención de un miércoles—, las
-      tres respuestas del simulador salieron con la coletilla *"Estoy respondiendo automático
-      fuera de horario de atención"* y la nota `fuera_de_horario`. El motor está bien:
-      `isOutsideBusinessHours(ahora)` devuelve `false` con la config real. Lo que está clavado es
-      el reloj del modo interactivo, `simulate.mjs:450` (`let clock = "2026-07-27T14:05:00Z"`, un
-      lunes a las 10:05 de Bolivia: fuera de las franjas). Importa porque es el instrumento con el
-      que este carril mide su definición de hecho: mientras diga eso, nadie puede distinguir el
-      artefacto del bug real (que el bot avise "fuera de horario" estando dentro), y encima
-      convive con slots calculados contra el reloj de HOY — dos relojes en la misma pantalla.
-      Arreglo: que el reloj interactivo arranque en `new Date().toISOString()` salvo que se pase
-      uno explícito, igual que hacen los wrappers de los barridos con `--now`.
+- [x] ✅ **CERRADO el 2026-09-17 18:45 UTC — el simulador ya no miente sobre el horario, y el
+      agujero era el DOBLE de grande que lo anotado.** Lo anotado era el reloj del modo
+      interactivo; contado de nuevo antes de tocar nada, los **once** guiones de `--all` estaban
+      clavados en `2026-07-27T14:05:00Z` con el comentario *"lunes 10:05 en La Paz: dentro de
+      horario"*. Ese comentario fue cierto: lo era cuando `config.mjs` tipeaba `businessHours`
+      como *"lun-vie, 9:00-18:00"*. Al unificar la promesa con las ventanas reales de demo el
+      2026-09-13 (`62336825`, lun-vie 14-17 y 20-22), las 10:05 quedaron **afuera** y los once
+      guiones se pasaron a la rama de FUERA a la vez, sin que nada se pusiera rojo. Consecuencias
+      medidas: la rama de DENTRO —la que ve un lead que escribe con Sergio Urcullo sentado, que es
+      cuando se cierra una demo— se quedó **sin un solo guion**, y `3-siat`, que existe para probar
+      la coletilla de fuera de horario, quedó igual a sus diez hermanos y dejó de probar nada.
+      Verificado con el motor, no con el comentario: `fueraDeAtencion("2026-07-27T14:05:00Z")` →
+      `true`.
+      **Arreglo:** el instante se **deriva** del lado que el guion declara (`horario: "dentro" |
+      "fuera"` → `instanteDeAtencion()` en `ventanas-de-atencion.mjs`), así mover una ventana mueve
+      los guiones con ella; y el reloj interactivo arranca en `new Date().toISOString()`.
+      **Prueba mirada:** `node simulate.mjs --script 1-feliz` → **0** menciones de fuera de horario;
+      `--script 3-siat` → **7**. Antes los dos daban >0. Y la definición de hecho del carril,
+      re-corrida a las 14:45 de La Paz de un jueves (dentro de la franja): 3/3 con la escalera C
+      (320/550/890/1.290 + 390) y **sin** la coletilla, notas `pregunta_precio`, `pregunta_siat`,
+      `repregunta:horario`.
+      **Gate:** `guion-no-miente-sobre-el-horario.test.mjs` (7 casos) — exige que las **dos** ramas
+      tengan guion y prohíbe la FORMA que envejece (un ISO tipeado), no el valor viejo. Validado
+      por mutación en las dos direcciones: con los once del mismo lado cae `not ok 4`; con el reloj
+      clavado de vuelta cae `not ok 6`, exit 1. **No toca producción**: `fueraDeAtencion` y las
+      ventanas quedaron intactas, sólo se agregó un derivador para los fixtures.
 
 - [x] ✅ **CERRADO el 2026-09-12 03:48 UTC — la sonda ya cierra su propia conversación al
       terminar, y la bandeja de leads reales quedó limpia. Verificado en vivo, no por el código.**
