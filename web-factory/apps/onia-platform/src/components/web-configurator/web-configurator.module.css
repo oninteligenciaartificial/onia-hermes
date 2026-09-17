@@ -708,7 +708,10 @@
   color: var(--ink);
 }
 
-.tabOn {
+/* `.tab:hover` es más específico que `.tabOn`: sin esta regla, la pestaña recién
+   tocada quedaba negra con el texto negro mientras el puntero seguía encima. */
+.tabOn,
+.tabOn:hover {
   background: var(--ink);
   color: var(--bg);
 }
