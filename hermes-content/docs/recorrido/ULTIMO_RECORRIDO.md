@@ -1682,3 +1682,35 @@ tarea se apruebe y publique, este recorrido va a pasar el paso 5 solo.
 `OFd4xCDzoTbQdThUbfzDv`) o hasta que `t_89a137f1` salga de `blocked`. Mientras tanto, usar la
 vuelta para otra superficie que no dependa de ese deploy (ya descartado hoy: `/contact` no tiene
 tarjetas de plan tipeadas — la mención vieja de esta cola ya no aplica, sólo hay meta tags).
+
+## 2026-09-17 14:12-14:26 La Paz — nueva sonda: ¿la pantalla de MFA obligatorio tiene SALIDA?
+
+El corte de arriba (`t_1a5c860d`, reemplaza a `t_89a137f1`, sigue `blocked` — `BUILD_ID` sin
+cambios) ya venía reportado 4 vueltas seguidas. Esta vuelta no lo repitió: agregó al script una
+sonda nueva que faltaba — cuando `/dashboard` rebota a `/profile?mfa=obligatorio`, ¿el botón
+"Activar" ofrece una salida real, o es un callejón?
+
+**Hallazgo, reportado en el tablero (`t_faa550af`, prioridad 1, para el dueño de la
+plataforma):** el botón "Activar ahora" (banner) / "Activar" (tarjeta) de `/profile` **no hace
+nada**. Apretado con Playwright real y medido con captura de red/consola durante el clic:
+**cero pedidos a `/api/`**, cero errores de consola, captura antes/después **pixel a pixel
+idéntica** — ni modal, ni QR, ni campo de código. El botón no tiene handler funcional. Confirmado
+en 2 corridas seguidas tras corregir el propio instrumento (ver "trampa del instrumento" abajo).
+
+**Por qué importa más que el bug ya conocido:** `b1247fb` (la corrección de la fecha fija
+vencida) sólo MUEVE el problema en el tiempo — cuelga el plazo de la gracia del alta de cada
+cliente en vez de una fecha global. El día que a un cliente real se le venza esa gracia, cae en
+esta MISMA pantalla rota y **no tiene ningún camino de salida**: la función de activar 2FA está
+rota de raíz, no es sólo "falta un aviso". `b1247fb` sin este arreglo pospone el accidente, no
+lo evita.
+
+**Trampa del instrumento, para quien reuse este patrón:** la primera corrida clickeó el botón
+EQUIVOCADO — un regex ancho (`/activ|habilit|configur|verificar|enrol/i`) matcheó un link de
+"Configuración" del menú antes que el botón real "Activar", y reportó "decorativo" sin haber
+tocado el botón correcto. Corregido a match exacto (`/^activar( ahora)?$/i`). La SEGUNDA corrida
+con el botón correcto dio un FALSO POSITIVO al revés: `document.querySelector('[role="dialog"]')`
+sin exigir visibilidad detectó el widget del asistente ("Preguntá por tu negocio"), que vive en
+el DOM con ese rol aunque esté cerrado — "SÍ entrega QR/código" con la captura mostrando la
+pantalla sin cambios. Corregido exigiendo `offsetParent !== null`. Las dos trampas se vieron
+recién comparando la captura contra el veredicto del propio script — el método de esta memoria
+("verificar es mirar") atrapó al propio instrumento dos veces en la misma vuelta.

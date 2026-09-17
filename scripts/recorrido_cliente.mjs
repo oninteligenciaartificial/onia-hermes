@@ -1352,11 +1352,84 @@ const PASOS = [
         })
         : null;
       if (!prueba.llego) {
+        // 🔴 2026-09-17: /dashboard rebota a /profile?mfa=obligatorio (MFA_ENFORCE_FROM
+        // vencido, b1247fb sin publicar — ver ULTIMO_RECORRIDO.md). Reportado y bloqueado
+        // hace 4 vueltas seguidas SIN saber si es un muro de verdad o si hay una salida:
+        // ¿el propio /profile deja ENROLAR el 2FA y seguir? Si no hay salida, la severidad
+        // real es "todo cliente nuevo queda afuera del producto", no sólo "un aviso molesto".
+        let escapatoria = null;
+        if (/^\/profile/.test(prueba.destino)) {
+          const sondaMfa = await page.evaluate(() => {
+            const texto = (document.body.innerText || '').replace(/\s+/g, ' ');
+            const botones = [...document.querySelectorAll('button, a[href]')]
+              .map((el) => (el.innerText || '').replace(/\s+/g, ' ').trim())
+              .filter(Boolean);
+            return {
+              textoVisible: texto.slice(0, 400),
+              hayQr: !!document.querySelector('img[src*="qr" i], canvas'),
+              hayInputCodigo: !!document.querySelector('input[inputmode="numeric"], input[maxlength="6"], input[autocomplete="one-time-code"]'),
+              // El botón real (visto en captura 2026-09-17) dice "Activar" o "Activar ahora",
+              // pegado al texto "Verificación en dos pasos" / "verificación en dos pasos es
+              // obligatoria". Un regex ancho (que también matchee "Configuración") agarra el
+              // primer botón del sidebar y clickea el link equivocado — falso negativo ya
+              // medido: reportó "botón decorativo" cuando el real ni se tocó. Priorizar el
+              // texto exacto ANTES de caer a algo más ancho.
+              botonActivar:
+                botones.find((b) => /^activar( ahora)?$/i.test(b.trim())) ||
+                botones.find((b) => /\bhabilit\w*\s+(el\s+)?(2fa|verificaci[oó]n|autenticaci[oó]n)/i.test(b)) ||
+                null,
+              botones,
+            };
+          });
+          const capturaMfa = await mirar(page, 'paso-05d-mfa-obligatorio.png');
+          if (sondaMfa.botonActivar) {
+            // Red y consola durante el clic: si el botón dispara un fetch que falla, eso
+            // apunta al backend; si no dispara NADA, el handler del botón está roto o ausente.
+            const pedidos = [];
+            const erroresConsola = [];
+            const onRequest = (req) => { if (/\/api\//.test(req.url())) pedidos.push({ url: req.url(), method: req.method() }); };
+            const onResponse = (res) => { if (/\/api\//.test(res.url())) { const p = pedidos.find((x) => x.url === res.url() && !('status' in x)); if (p) p.status = res.status(); } };
+            const onConsole = (msg) => { if (msg.type() === 'error') erroresConsola.push(msg.text().slice(0, 200)); };
+            page.on('request', onRequest);
+            page.on('response', onResponse);
+            page.on('console', onConsole);
+            const clicOk = await page.click(`text="${sondaMfa.botonActivar}"`, { timeout: 5000 }).then(() => true).catch(() => false);
+            await page.waitForTimeout(1500);
+            page.off('request', onRequest);
+            page.off('response', onResponse);
+            page.off('console', onConsole);
+            const sondaTrasClic = await page.evaluate(() => ({
+              hayQr: !!document.querySelector('img[src*="qr" i], canvas'),
+              hayInputCodigo: !!document.querySelector('input[inputmode="numeric"], input[maxlength="6"], input[autocomplete="one-time-code"]'),
+              // 🔴 [role="dialog"] SOLO, sin exigir visibilidad, dio un falso positivo medido
+              // 2026-09-17: el widget del asistente ("Preguntá por tu negocio") vive en el DOM
+              // con ese rol aunque esté cerrado, y "detectaba" un modal de MFA que la captura
+              // de pantalla muestra que nunca se abrió. offsetParent !== null descarta lo oculto.
+              hayModal: [...document.querySelectorAll('[role="dialog"]')].some((el) => el.offsetParent !== null),
+            }));
+            const capturaTrasClic = await mirar(page, 'paso-05e-mfa-tras-clic.png');
+            escapatoria = {
+              ofreceEnrolar: true,
+              boton: sondaMfa.botonActivar,
+              clicOk,
+              // Sin poder decodificar un QR real ni generar un TOTP válido, lo que SÍ se puede
+              // afirmar es si el producto entrega el material para enrolar (QR o secreto +
+              // campo de código). Si ninguno aparece tras el clic, el botón es decorativo.
+              entregaMaterialParaEnrolar: sondaTrasClic.hayQr || sondaTrasClic.hayInputCodigo || sondaTrasClic.hayModal,
+              pedidosApi: pedidos,
+              erroresConsola,
+              captura: capturaTrasClic.captura,
+            };
+          } else {
+            escapatoria = { ofreceEnrolar: false, botones: sondaMfa.botones, captura: capturaMfa.captura };
+          }
+        }
         return {
           estado: 'roto',
-          detalle: `el onboarding NO quedó cerrado: ${motivo || 'el asistente dijo haber terminado'}, pero /dashboard sigue rebotando a ${prueba.destino}. Traza: ${traza.map((t) => t.pantalla).join(' → ')}`,
+          detalle: `el onboarding NO quedó cerrado: ${motivo || 'el asistente dijo haber terminado'}, pero /dashboard sigue rebotando a ${prueba.destino}. Traza: ${traza.map((t) => t.pantalla).join(' → ')}${escapatoria ? ` — MFA: ${escapatoria.ofreceEnrolar ? `ofrece "${escapatoria.boton}" (clic ${escapatoria.clicOk ? 'OK' : 'FALLÓ'}), ${escapatoria.entregaMaterialParaEnrolar ? 'SÍ entrega QR/código para enrolar' : `NO entregó QR ni campo de código tras apretarlo — botón decorativo, camino sin salida (pedidos /api/ durante el clic: ${escapatoria.pedidosApi?.length ? escapatoria.pedidosApi.map((p) => `${p.method} ${p.url.replace(APP,'')} → ${p.status ?? 'sin respuesta'}`).join(', ') : 'NINGUNO — el botón no disparó ni un fetch'}${escapatoria.erroresConsola?.length ? `; consola: ${escapatoria.erroresConsola.join(' | ')}` : ''})`}` : `NO ofrece ningún botón para activar/enrolar (botones vistos: ${(escapatoria.botones || []).slice(0, 8).join(' | ') || 'ninguno'}) — callejón sin salida`}` : ''}`,
           traza, horariosCargados, profesionalCargado, agendas,
           capturaAsistente: despues.captura,
+          escapatoriaMfa: escapatoria,
           ...prueba,
         };
       }
