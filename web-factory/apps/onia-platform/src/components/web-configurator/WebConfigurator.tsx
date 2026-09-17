@@ -201,7 +201,7 @@ export function WebConfigurator({ especificaciones }: Props) {
     `Rubro y ciudad: ${intake.industry}${intake.city ? `, ${intake.city}` : ""}.`,
     `WhatsApp: ${intake.whatsapp}.`,
     ...(intake.email ? [`Email: ${intake.email}.`] : []),
-    `Oferta principal: ${intake.offer}.`,
+    `Oferta principal: ${intake.offer.replace(/\.\s*$/, "")}.`,
     ...(intake.description ? [`Descripción: ${intake.description}`] : []),
     ...(intake.services ? [`Servicios o productos: ${intake.services.replace(/\r?\n/g, "; ")}`] : []),
     `Fotografías: ${ASSET_PERMISSION_LABELS[intake.assetPermission]}.`,
