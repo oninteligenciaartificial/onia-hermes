@@ -58,6 +58,7 @@ import { createStore, stateFromRow } from "./persistence.mjs";
 import { industryLabel } from "./intents.mjs";
 import { formatSlotLabel } from "./calcom-availability.mjs";
 import { hoursBetween } from "./followup-run.mjs";
+import { construirAviso, enviarAvisoTelegram, getAvisoTelegramConfig } from "./aviso-telegram.mjs";
 
 /** De donde sale una demo que se cierra, y a donde va. */
 export const OPEN_STAGE = "demo_agendada";
@@ -80,12 +81,18 @@ export const GRACIA_MINUTOS = 30;
 // ---------------------------------------------------------------------------
 
 export function parseArgs(argv = []) {
-  const args = { now: null, emit: false, json: false, limit: 50 };
+  // `dryRunExplicito` existe porque `emit:false` tiene DOS causas — "me lo pidieron" y "nadie dijo
+  // nada" — y el entorno sólo puede decidir la segunda. Aplanarlas dejaba al cron sin forma de
+  // encender el cierre sin editar el crontab. Ver el bloque de `main`.
+  const args = { now: null, emit: false, dryRunExplicito: false, json: false, limit: 50 };
   for (let index = 0; index < argv.length; index += 1) {
     const arg = String(argv[index]);
     const value = () => argv[++index] ?? null;
     if (arg === "--emit") args.emit = true;
-    else if (arg === "--dry-run") args.emit = false;
+    else if (arg === "--dry-run") {
+      args.emit = false;
+      args.dryRunExplicito = true;
+    }
     else if (arg === "--json") args.json = true;
     else if (arg === "--now") args.now = value();
     else if (arg.startsWith("--now=")) args.now = arg.slice("--now=".length);
@@ -106,6 +113,32 @@ export function buildConfig() {
   if (envDry === "false") overrides.dryRun = false;
   else if (envDry === "true") overrides.dryRun = true;
   return withKnowledge(Object.keys(overrides).length ? createBotConfig(overrides) : DEFAULT_CONFIG);
+}
+
+/**
+ * Por donde sale el aviso, y si se puede.
+ *
+ * Las TRES condiciones se preguntan por separado y el motivo NOMBRA la que falta: "no se puede
+ * avisar" a secas manda a revisar el barrido, cuando lo que falta es una variable que el wrapper
+ * tiene que pasarle al `docker exec` — medido el 2026-09-17, el contenedor `onia-center` no tiene
+ * `TG_BOT_TOKEN` en su entorno (0 coincidencias), lo tiene el PROCESO del webhook.
+ */
+export function canalDeAviso(env = process.env) {
+  const config = getAvisoTelegramConfig(env);
+  const falta = !config.enabled
+    ? "el aviso por Telegram esta apagado (ONIA_BOT_TG_AVISO)"
+    : !config.token
+      ? "falta TG_BOT_TOKEN"
+      : !config.chatId
+        ? "falta TG_CHAT_ID"
+        : null;
+
+  return {
+    listo: falta === null,
+    motivo: falta,
+    config,
+    enviar: (aviso) => enviarAvisoTelegram(aviso, config),
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -231,7 +264,7 @@ export function composeNotice(key, state, nowIso, config = DEFAULT_CONFIG) {
  * @returns {Promise<{skip: object}|{send: object}>}
  */
 async function sweepRow(row, ctx) {
-  const { nowIso, emit, config, store } = ctx;
+  const { nowIso, emit, config, store, aviso } = ctx;
   const state = stateFromRow(row);
   const key = state?.conversationKey || row?.conversation_key || null;
 
@@ -247,7 +280,23 @@ async function sweepRow(row, ctx) {
   if (reserved !== true) {
     return { skip: { conversationKey: key, reason: reserved === false ? "ya_cerrada" : "reserva_fallida" } };
   }
-  return { send: { ...item, reserved: true } };
+
+  // El aviso va DESPUES de la reserva y por eso es el ultimo tren: la fila ya quedo en
+  // `demo_realizada` y ninguna corrida futura la va a volver a mirar. Si el envio falla, no se
+  // puede reintentar sin arriesgar el doble aviso — asi que se registra con nombre propio y el
+  // barrido lo sube a `warnings`, que es lo que mira un humano. Callarlo seria perder la demo.
+  const entrega = await aviso.enviar(
+    construirAviso({ notify: [item], conversationId: item.conversationKey, stageAfter: item.stageAfter }),
+  );
+
+  return {
+    send: {
+      ...item,
+      reserved: true,
+      deliveryStatus: entrega?.status ?? "failed",
+      deliveryReason: entrega?.reason ?? "el canal no contesto",
+    },
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -264,15 +313,22 @@ export async function runPostDemoSweep(options = {}, deps = {}) {
   const store = deps.store || createStore();
   const nowIso = options.nowIso;
   const emit = options.emit === true;
+  const aviso = deps.aviso || canalDeAviso();
   const limit = Number.isFinite(options.limit) && options.limit > 0 ? Math.floor(options.limit) : 50;
 
   const result = {
     ok: true,
     now: nowIso || null,
     mode: emit ? "emit" : "dry-run",
-    // Se reporta por consistencia con los otros dos barridos, pero aca NO gatea nada: `dryRun`
-    // gobierna ENVIOS al prospecto y este barrido no envia ninguno. Gatear el CAS con esto dejaria
-    // el cron encendido y mudo, que es el hueco que vino a tapar.
+    // `dryRun` se reporta por consistencia con los otros dos barridos y NO gatea el CAS: acá el
+    // gate es `emit`, porque este barrido no le envía nada al prospecto.
+    //
+    // ⚠️ Acá decía además que gatear el CAS con `dryRun` "dejaría el cron encendido y MUDO, que es
+    // el hueco que vino a tapar". Era CIERTO mientras la única salida fuera una línea JSON para
+    // n8n — y n8n está tapiado (`ONIA_N8N_ENABLED=false`, URL vacía, medido el 2026-09-17 en el
+    // proceso vivo). Lo que cambió es la premisa, no la regla: el barrido ahora manda por el mismo
+    // Telegram encendido que usa el webhook, así que "encendido y mudo" ya no es un estado posible
+    // — si no hay canal, no barre.
     dryRun: Boolean(config.dryRun),
     closedAfterHours: closedAfterHours(config),
     scanned: 0,
@@ -288,6 +344,16 @@ export async function runPostDemoSweep(options = {}, deps = {}) {
     return result;
   }
 
+  // PREPARAR ES PREPARAR: cerrar la fila es irreversible y el aviso es su única razón de ser, así
+  // que el canal se pregunta ANTES de tocar la base. Un barrido que cierra sin poder avisar deja la
+  // demo marcada como atendida y a Sergio Urcullo sin enterarse nunca — el modo de falla más caro
+  // de este archivo. El dry-run no necesita canal: mira y no consume nada.
+  if (emit && !aviso.listo) {
+    result.ok = false;
+    result.error = `sin canal para avisar, no se cierra ninguna demo: ${aviso.motivo || "motivo desconocido"}`;
+    return result;
+  }
+
   const rows = await store.sweepDemosTerminadas(endedBefore(nowIso, config), limit);
   if (!rows) {
     // Sin base o base caida: lista vacia. El motivo ya quedo en store.warnings.
@@ -296,11 +362,22 @@ export async function runPostDemoSweep(options = {}, deps = {}) {
   }
   result.scanned = rows.length;
 
-  const ctx = { nowIso, emit, config, store };
+  const ctx = { nowIso, emit, config, store, aviso };
   for (const row of rows) {
     const outcome = await sweepRow(row, ctx);
     if (outcome.skip) result.skipped.push(outcome.skip);
     else result.send.push(outcome.send);
+  }
+
+  // Un aviso que no salió después de cerrar la fila NO puede quedar sólo adentro del item: los
+  // `warnings` son lo que el wrapper deja en el log y lo que mira un humano. Sin esto, la línea del
+  // cron diría "CERRADAS (1)" sobre una demo de la que nadie se enteró.
+  for (const item of result.send) {
+    if (item.reserved && item.deliveryStatus !== "sent") {
+      result.warnings.push(
+        `aviso NO entregado para ${item.conversationKey} (${item.deliveryReason}): la demo quedó cerrada y nadie avisó`,
+      );
+    }
   }
 
   return result;
@@ -321,8 +398,12 @@ export function renderHuman(result) {
   lines.push(`${result.mode === "emit" ? "CERRADAS — AVISO A SERGIO" : "CERRARIA"} (${result.send.length})`);
   if (result.send.length === 0) lines.push("  (ninguna)");
   for (const item of result.send) {
+    // La entrega se imprime al lado del cierre y no al final: el log del cron es lo único que
+    // queda de esta corrida, y "CERRADAS (1)" sin decir si el aviso salió es el mismo falso verde
+    // que este barrido tuvo durante meses.
+    const entrega = item.reserved ? ` · aviso: ${item.deliveryStatus || "sin dato"}` : "";
     lines.push(
-      `  ${item.conversationKey} [${item.channel}] ${item.displayName || "sin nombre"} — demo ${item.scheduledLabel}, hace ${item.hoursSince} h`,
+      `  ${item.conversationKey} [${item.channel}] ${item.displayName || "sin nombre"} — demo ${item.scheduledLabel}, hace ${item.hoursSince} h${entrega}`,
     );
     for (const line of String(item.text).split("\n")) lines.push(`      | ${line}`);
     lines.push("");
@@ -349,7 +430,15 @@ export async function main(argv = process.argv.slice(2)) {
     // UNICO Date.now() del archivo, y en el borde: si no vino --now, se sella aca y viaja como
     // parametro. La logica de adentro nunca mira el reloj.
     const nowIso = args.now || new Date().toISOString();
-    const result = await runPostDemoSweep({ nowIso, emit: args.emit, limit: args.limit }, { config: buildConfig() });
+    const config = buildConfig();
+
+    // El cron de las :47 llama al wrapper SIN `--emit`, y el wrapper le pasa `ONIA_BOT_DRY_RUN`
+    // leído de `webhook.env` (hoy `false`) con el comentario de que sin eso "el cierre post-demo
+    // quedaba registrado como 'skipped' para siempre". Ese arreglo nunca funcionó porque este
+    // archivo miraba sólo el flag: medido el 2026-09-17, el log dice `CERRARIA (0)` en todas las
+    // corridas. Precedencia de siempre: un `--dry-run` explícito le gana al entorno.
+    const emit = args.emit || (!args.dryRunExplicito && config.dryRun === false);
+    const result = await runPostDemoSweep({ nowIso, emit, limit: args.limit }, { config });
     const asJson = args.emit || args.json;
     process.stdout.write(`${asJson ? JSON.stringify(result) : renderHuman(result)}\n`);
   } catch (error) {
