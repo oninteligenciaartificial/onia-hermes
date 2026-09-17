@@ -1306,6 +1306,15 @@
 }
 .planFoot .btn {
   width: 100%;
+  /* El nombre del plan viaja DENTRO de la etiqueta ("Empezar con el Profesional"), así que el
+     largo de este texto lo decide el CATALOGO y no el diseño — y el catálogo cambia solo: el
+     2026-09-17, al llamar a los planes como los llama el checkout, "Pro" pasó a "Profesional"
+     y la etiqueta pidió 219px de contenido en una pastilla de 214. Como `.btn` es
+     `white-space: nowrap` con `overflow: visible`, la última letra se pintaba FUERA del verde
+     (medido a 1440 y 1920, los dos anchos donde la grilla pone las cuatro tarjetas en fila).
+     El `nowrap` de la casa es seguro donde el texto no puede crecer; acá puede, así que acá
+     envuelve. Achicar el padding sólo compraba 5px — un nombre más largo lo gasta de nuevo. */
+  white-space: normal;
 }
 
 /* fila de datos (add-ons, no incluye, condiciones) */

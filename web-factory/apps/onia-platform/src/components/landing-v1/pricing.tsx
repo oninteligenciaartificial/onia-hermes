@@ -106,7 +106,7 @@ export function Pricing({ sinEncabezado = false }: { sinEncabezado?: boolean }) 
                   prueba va ARRIBA del boton para no descolgarlo.
 
                   La nota la lleva CADA tarjeta, no sólo la destacada: el boton
-                  de las tres arranca la misma prueba, que corre con el plan Pro
+                  de las tres arranca la misma prueba, que corre con el plan Profesional
                   (TRIAL_PLAN del producto), asi que "este mismo plan" sólo es
                   cierto en una. El texto sale de PRUEBA.notaPorPlan — tipearlo
                   acá es como llegó a contradecir a su propia fuente. */}
