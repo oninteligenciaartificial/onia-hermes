@@ -74,6 +74,44 @@ auto-sync lo pushea)
 
 Capturas de esta sesión: scratchpad `…/4efc96b0…/scratchpad/{personal,onia}/*.png`.
 
+## 3b · Revisión funcional en producción (17-sep, después del deploy)
+
+**Recorrido con Playwright sobre `onia.com.bo/servicios/webs?origen=sergio`, a 1440 y 390:**
+asistente → «Clínica Amanecer» + dental + reservas → preview armado → botón bloqueado
+(`aria-disabled`, `href=#datos-solicitud`) hasta completar nombre + WhatsApp y aceptar
+requisitos → `wa.me/59175414930` con el mensaje completo (datos, alcance, Bs 4.500, 50/50,
+diseño, requisitos). 0 errores de consola. **Funciona.** Corregido el punto doble de la oferta.
+
+**Cómo se conecta HOY con Onia Platform: NO se conecta.** El único circuito vivo es
+WhatsApp → inbox de Chatwoot del bot de Onia. Nada se guarda en la plataforma ni en n8n.
+- Medido con `step()` de `bot-engine.mjs` (la misma función de producción, config del bench): el
+  mensaje «Hola, vengo del configurador de webs…» se enruta como **`pregunta_precio`** y el bot
+  contesta el pitch del chatbot («esto que estás viendo es justo lo que vendemos…») + oferta de
+  demo + «el número exacto te lo pasa Sergio en la demo». **Ni una palabra sobre la web.**
+  Califica `industry: dental` y lo mete en el embudo de la plataforma.
+- No existe intent de «lead de web» en `intents.mjs`, ni FAQ en `knowledge`, ni workflow n8n
+  `web-lead`, ni endpoint `/api/n8n/web-leads` en el producto (el blueprint está en
+  `web-factory/docs/CONEXION_WEB_SISTEMA_API.md`). Lo más cercano en la plataforma es
+  `AccessRequest` (`access_requests`: name, businessName, verticalTrackId, whatsapp, email,
+  city, src) — un lead de web podría entrar ahí con `src=configurador-web`, pero
+  `verticalTrackId` es enum de rubros activos (ecommerce/otro no mapean).
+
+**Qué falta para que sea un circuito, en orden de valor/costo:**
+1. 🔴 **Bot: intent `lead_web`** (carril chatbot, ~30 líneas + test + `deploy-bot.sh`): si el
+   texto empieza con «vengo del configurador de webs» → confirmar recepción nombrando el
+   negocio y el alcance, avisar que Sergio Urcullo escribe en <N> horas, **handoff a humano** y
+   etiqueta `web` en Chatwoot. Sin esto, cada lead de web recibe una demo de otro producto.
+2. 🟡 **Registro del pedido antes de abrir WhatsApp**: `POST /api/web-intake` (server-side,
+   best-effort, sin bloquear) → hoy no hay tabla; o reusar `access_requests` con `src`. Da
+   trazabilidad aunque el lead no mande el WhatsApp.
+3. 🟡 **Link compartible del preview** (`?nombre=&rubro=&estilo=…`): Sergio le manda a un
+   prospecto (ABDES) «mirá cómo quedaría tu web» ya armado. Barato: los params `estilo`,
+   `estructura`, `paquete` ya existen; faltan nombre/rubro.
+4. 🟡 Fotos del preview por rubro (hoy por dirección visual).
+5. 🟢 Copy con modelo de lenguaje (titular/bajada desde las respuestas): costo de API, decisión
+   de Sergio Urcullo; el asistente hoy es reglas, costo cero.
+6. 🟢 Barrido del embudo (`followup-run`) también para leads de web.
+
 ## 4 · Archivos que toca este carril
 
 ```

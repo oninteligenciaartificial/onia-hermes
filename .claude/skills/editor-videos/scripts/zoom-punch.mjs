@@ -25,7 +25,9 @@ import { spawnSync } from "node:child_process";
 import { dirname, resolve } from "node:path";
 
 export const MAX_Z = 2.0; // más que esto es un crop, no un zoom: se ve la pérdida
-export const ANCHORS = { center: [0.5, 0.5], top: [0.5, 0.22], bottom: [0.5, 0.78], left: [0.22, 0.5], right: [0.78, 0.5] };
+// top-left [0,0]: esquina exacta — con un deck 16:9 que lleva la camarita de OBS
+// abajo-derecha, z ≥ 1.35 la deja FUERA del encuadre (pantalla completa sin tapas).
+export const ANCHORS = { center: [0.5, 0.5], top: [0.5, 0.22], bottom: [0.5, 0.78], left: [0.22, 0.5], right: [0.78, 0.5], "top-left": [0, 0] };
 
 const n3 = (v) => Math.round(Number(v) * 1000) / 1000;
 
