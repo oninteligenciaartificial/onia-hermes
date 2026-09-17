@@ -739,6 +739,37 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       **corridos también en el VPS** sobre el árbol con `origin/master` mergeado (436 verdes).
       **Falta mergear y desplegar** para que el operador lo vea.
 
+      ✅ **CERRADO el 2026-09-17: la QUINTA lista tipeada a mano de esta clase estaba en el
+      catálogo mismo, y era la única que no falla con un error** (`onia-platform` `ccc845c`,
+      rama `claude/chatbots-platform-review-0d1d09`). `getPlanId` decidía con
+      `plan === "basic" || "crece" || "professional" || "clinic" || "enterprise"`, **una línea
+      debajo de `PLAN_IDS`**, que sí se deriva de `PLAN_LIMITS`. De esa función cuelga
+      `getLimits`, o sea la puerta pública de reservas (`lib/agenda/reserva-publica.ts`), la
+      comparativa de `/settings`, el texto de `/help` y los topes que el producto aplica.
+      **Lo caro es que el modo de falla es silencioso:** un id que la lista no nombra no tira
+      ni avisa — cae a `free`, así que el cliente que paga se queda con los topes del plan
+      gratis y ninguna pantalla se pone roja. Las cuatro hermanas de esta clase rompían fuerte
+      (400 "Plan inválido", un `<select>` sin la opción, "BK OFF"); ésta no rompe nada.
+      **Hoy no había ningún plan caído y se arregló igual, porque es la PLANTILLA**: medido en
+      producción, `select plan, count(*) from organizations` da `free 1` y `professional 3`, y
+      las dos listas coincidían. Se cura la forma antes de que muerda, no la instancia.
+      ⚠️ **El motivo de su exención era CIERTO y aun así tapaba el agujero.**
+      `plan-catalogo-es-la-fuente.test.ts` la eximía con *"es el propio catálogo normalizando
+      el id (getPlanId): la fuente"* — verdad, y no la eximía de **derivarse** de esa fuente.
+      Al curar, ese gate se puso rojo solo por exención huérfana: está bien construido (re-mide
+      sus excusas en cada corrida) y fue el único aviso de que la excusa había perdido sujeto.
+      Entró `PLAN_IDS.includes(plan)` — **no `plan in PLAN_LIMITS`**, porque con `in` las
+      claves del prototipo (`constructor`, `toString`) darían verdadero y se colarían como ids;
+      hay un caso que lo ancla. Gate:
+      `lib/subscription/el-catalogo-se-reconoce-a-si-mismo.test.ts`, con **dos mitades y las
+      dos hacen falta** — la de comportamiento (round-trip de `PLAN_IDS`) prueba que hoy no hay
+      ningún plan caído, y la **estructural** prohíbe la FORMA que envejece (decidir con
+      literales), porque la primera sola vuelve a verde el día que alguien agregue el plan a
+      las dos listas y el agujero reaparece con el siguiente. **Validado por mutación**
+      (lista a mano sin `crece`): 3 casos en rojo. Gates: `tsc` 0, `eslint` 0 errores,
+      **5.017 tests verdes**, corridos también **en el VPS** sobre el árbol con `origin/master`
+      mergeado. **Falta mergear y desplegar** para que llegue al cliente.
+
 - [x] 🔴 **~~Funciones que las empresas usan DE VERDAD — recorte de superficie~~ — MEDIDO el
       2026-09-13, y la medición REFUTA la premisa del ítem: no se puede recortar por uso,
       porque NO HAY USO.** (Sergio Urcullo, 11-sep: *"mirar qué funciones vamos a usar

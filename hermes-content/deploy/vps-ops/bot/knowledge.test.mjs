@@ -1641,3 +1641,71 @@ test("applyKnowledge: las FAQ 'negocio' viajan en config.faq para el modo venta 
   assert.equal(config.faq.length, 2, "las DOS viajan (no gana solo la ultima)");
   assert.equal(config.script.R_FAQ_NEGOCIO, DEFAULT_CONFIG.script.R_FAQ_NEGOCIO, "el guion no se pisa");
 });
+
+// EL 404 DEL PRODUCTO TIENE DOS SIGNIFICADOS, Y EL MOTOR LOS APLANABA EN UNO.
+// `published/route.ts` contesta 404 en cuatro situaciones y las separa A PROPOSITO por el
+// cuerpo: manda `organizationId` cuando el inbox SI resolvio a una org — add-on apagado,
+// nada publicado todavia, o borrador sin publicar — y lo OMITE solo cuando ningun
+// `clinic_settings` reclama ese inbox ("Inbox sin organizacion"). Su comentario lo dice
+// textual: "Un 404 SIN organizationId sigue significando 'inbox sin org'".
+//
+// `fetchOrgKnowledge` no leia el cuerpo: `huerfano: key.startsWith("inbox:")` declaraba "ese
+// inbox no es de NINGUNA org" tambien sobre el WhatsApp de un cliente que paga Bs 390. El
+// efecto COINCIDIA (los dos cortan el fallback de venta), y por eso sobrevivio: lo que mentia
+// era el estado, no la respuesta. Pero ese estado se publica —`/health?inboxId=N` lo sirve, y
+// el item S1 de la cola razona con el— asi que el operador que mira el inbox recien nacido del
+// Embedded Signup lee "no es de nadie" sobre un cliente real y lo trata como basura.
+//
+// LAS DOS MITADES VAN JUNTAS. Corregir el flag sin ampliar el corte es la regresion cara: el
+// `if (org?.huerfano) return org` de getKnowledge dejaria de aplicar y la org cliente caeria al
+// archivo, que es el guion de venta de ONIA — cotizarle Onia a los clientes del negocio que
+// acaba de conectar su WhatsApp. Por eso este test afirma el estado Y la degradacion.
+test("404 CON organizationId = org cliente sin conocimiento, NO un inbox de nadie", async () => {
+  resetKnowledgeCache();
+  resetOrgKnowledgeCache();
+  // Produccion exacta: el inbox 77 es el WhatsApp de un cliente (resuelve a su org), pero hoy
+  // no se le sirve conocimiento. El producto lo dice mandando el organizationId en el 404.
+  const fetch = async (url, init) => {
+    fetch.calls.push({ url: String(url), init });
+    if (String(url).includes("organizationId=org_onia_interna")) {
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({
+          organizationId: "org_onia_interna",
+          data: valido({ identity: { productName: "Onia — plataforma de gestión", humanName: "Sergio" } }),
+          version: 1,
+          updatedBy: "panel-venta",
+        }),
+      };
+    }
+    return {
+      ok: false,
+      status: 404,
+      json: async () => ({ error: "Sin conocimiento publicado", organizationId: "org_cliente_dental" }),
+    };
+  };
+  fetch.calls = [];
+
+  const opts = {
+    ...DB_OPTS,
+    panelUrl: "http://producto/api/chatbot-knowledge/published?organizationId=org_onia_interna",
+    panelSecret: "s3cr3t",
+    inboxId: "77",
+    fetch,
+    nowMs: NOW_MS,
+    path: "/no/existe/knowledge.json",
+  };
+
+  const state = await ensureKnowledge(opts);
+  assert.equal(state.huerfano, false, "ese inbox SI es de una org: llamarlo huerfano es falso");
+  assert.equal(state.organizationId, "org_cliente_dental", "de quien es viaja: el producto ya lo dijo");
+  assert.equal(state.error ?? null, null, "404 sigue sin ser un error que gritar");
+  assert.equal(state.data ?? null, null, "y no se le sirve el documento de otra org");
+
+  // LA MITAD QUE PROTEGE: sin conocimiento propio NO se hereda el guion de venta de Onia.
+  const config = withKnowledge(DEFAULT_CONFIG, opts);
+  assert.equal(config.modo, "recepcionista", "el WhatsApp de un cliente jamas es el funnel de Onia");
+  assert.notEqual(config.identity.productName, "Onia — plataforma de gestión");
+  assert.equal(config.identity.humanName, "el equipo", "ni 'Sergio' delante del cliente de otro");
+});

@@ -318,6 +318,49 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El motor declaraba «ese inbox no es de NINGUNA org» sobre el WhatsApp de un cliente
+      que paga: el 404 del producto tiene DOS significados y los aplanaba en uno~~ — CERRADO
+      el 2026-09-17, commiteado y PENDIENTE DE DESPLIEGUE**
+      (`hermes-content/deploy/vps-ops/bot/knowledge.mjs`, `knowledge.test.mjs` 87/87,
+      suite del bot **1021/1021**).
+
+      **Dónde estaba.** `onia-platform/app/api/chatbot-knowledge/published/route.ts` contesta
+      404 en CUATRO situaciones y las separa a propósito por el cuerpo: manda `organizationId`
+      cuando el inbox sí resolvió a una org —add-on apagado, nada publicado todavía, o borrador
+      sin publicar— y lo **omite** sólo cuando ningún `clinic_settings` reclama ese inbox. Su
+      comentario es textual: *«Un 404 SIN organizationId sigue significando "inbox sin org"»*.
+      `fetchOrgKnowledge` no leía el cuerpo: `huerfano: key.startsWith("inbox:")` declaraba «no
+      es de nadie» también sobre el WhatsApp de un cliente que paga Bs 390.
+
+      **Por qué sobrevivió: funcionaba por accidente.** Las dos causas cortan el fallback, así
+      que la RESPUESTA al cliente final era la correcta (recepcionista neutro) — lo que mentía
+      era el estado. Y ese estado se publica: `/health?inboxId=N` lo sirve, y el ítem **S1** de
+      esta cola razona con él (*«hoy el inbox que nazca queda huérfano»*). O sea que el operador
+      que mire el inbox recién nacido de un Embedded Signup lee «no es de nadie» sobre un cliente
+      real, y lo trata como basura en vez de ir a publicarle el documento desde el panel.
+
+      **Las dos mitades fueron juntas, y ésa era la trampa.** Corregir el flag sin ampliar el
+      corte es la regresión cara: el `if (org?.huerfano) return org` de `getKnowledge` dejaba de
+      aplicar y la org cliente caía al archivo, que es el **guión de venta de ONIA** — cotizarle
+      Onia a los clientes del negocio que acaba de conectar su WhatsApp. El test lo atrapó en
+      vivo: con el flag ya corregido y el corte sin tocar, `config.modo` salió `undefined` en vez
+      de `recepcionista`. Había **dos** guardias del mismo hecho (`getKnowledge` y
+      `withKnowledge`) y ahora los dos preguntan por el mismo helper exportado, `esAjenoAOnia`.
+
+      **Atado por mutación:** el test nuevo se vio en ROJO con el código viejo por el motivo
+      correcto (`huerfano` esperado `false`, actual `true`), y volver `esAjenoAOnia` a preguntar
+      sólo por `huerfano` lo pone rojo otra vez (`# fail 1`) — la mitad del corte no se puede
+      deshacer sin que el gate lo denuncie.
+
+      **De paso, `/health` dejó de contestar media verdad:** ahora publica `huerfano`, `ajena` y
+      `organizationId`, porque la pregunta del operador no es una sola — «¿por qué este inbox no
+      contesta como el negocio?» se resuelve **registrándolo** si no es de nadie, y **publicando
+      desde el panel / revisando el add-on** si es de un cliente.
+
+      ⚠️ **Lo que ve el cliente no cambia todavía:** esto viaja con el deploy del bot, que sigue
+      esperando el `ok` de la tarea de publicación. Se verifica después del swap con
+      `docker exec onia-center wget -qO- 'http://127.0.0.1:3020/health?inboxId=<N>'`.
+
 - [x] 🔴 **~~El bot le daba al prospecto turno para PASADO MAÑANA teniendo mañana libre: el
       generador se guardaba 48 h de margen cuando la regla de Sergio Urcullo es 24~~ — CERRADO
       el 2026-09-17, commiteado y PENDIENTE DE DESPLIEGUE** (`scripts/loops/renovar-slots-bot.py`,
