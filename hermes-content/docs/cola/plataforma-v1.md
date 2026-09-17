@@ -63,6 +63,46 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-17 — el mismo filtro, seis horas después: no veía nuestros correos
+      PERSONALES, y el drip seguía vendiéndole Onia a Sergio Urcullo** (`onia-platform`
+      `316476e`, publicado en la rama del carril como `2d5695a`; **commiteado y mergeado a la
+      rama, NO desplegado** — entra al pedido de la plataforma cuando el integrador lo junte).
+
+      **Medido en producción.** `/var/log/onia-trial-drip.log` del VPS: la org
+      `bolivian-electricidad-e6t21` recibió la secuencia de venta **completa** — pasos 3, 7, 12,
+      14 y 15 —, y en `supabase-db` su dueño es `sergio.urcullo.m@gmail.com`, el correo personal
+      de Sergio Urcullo. Bolivian Electric es **otro proyecto de Onia** (repo y deploy propios):
+      no hay un cliente pagando detrás. La cuarta org de la base, `zz-qa-bandeja-10`, usa
+      `oninteligenciaartificial+prueba10@gmail.com` — la casilla del **operador**, que el propio
+      producto usa de `ADMIN_NOTIFICATION_EMAIL` por defecto
+      (`onia-platform/app/api/subscription-payment/route.ts`).
+
+      **Por qué el arreglo de la mañana no alcanzó, y es la parte que sirve a otros carriles:**
+      la identidad se estaba deduciendo de una **firma** — un prefijo de slug, un dominio —, y
+      una firma sólo reconoce lo que **nosotros marcamos al sembrar**. Las cuentas propias no se
+      siembran: se usan, y no tienen marca. Hay que **nombrarlas**. De las cuatro organizaciones
+      de la base, la regla del dominio veía dos.
+
+      **Y el test volvió a afirmar el defecto, en el mismo archivo y el mismo día.** El de la
+      mañana listaba `clinica-sergio-p2ljs` como cliente; el arreglo lo sacó de ahí… y dejó en
+      la lista de «clientes de verdad» a `bolivian-electricidad-e6t21`, con su motivo redactado
+      («otro negocio de Sergio Urcullo… es un cliente»). Corregir la instancia no cerró la clase
+      porque el instrumento se reescribió con el mismo supuesto.
+
+      **Cómo quedó:** `CORREOS_PROPIOS` nombra las dos direcciones nuestras fuera del dominio y
+      se compara la dirección **entera** — `sergio.urcullo.m@outlook.com` y
+      `sergio.urcullo.martinez@gmail.com` son de otra persona y siguen siendo clientes, porque
+      excluir de más deja a un cliente sin el aviso de que su plan se corta. El subaddressing
+      (`+prueba10`) entra porque es la misma casilla; los puntos de Gmail quedan afuera a
+      propósito, porque el `where` de Prisma no los puede expresar y una capacidad que tenga el
+      que juzga en memoria y no tenga la consulta es **como esos dos lados se separan**. Los dos
+      consumidores (`app/api/cron/trial-drip` y `app/api/cron/renewal-reminders`) leen el mismo
+      `filtroPrismaSoloClientes()`.
+
+      **Prueba:** test en rojo primero (2 de 10) y **validado por mutación** — cegar el predicado
+      da 2/10 rojo, sacar las cláusulas de la consulta da 2/10 rojo. Gates en el VPS: `tsc` 0,
+      `vitest` 5011 passed, `eslint` 0 errores.
+
 - [x] ✅ **CERRADO el 2026-09-17 — Onia le vendía Onia a Sergio Urcullo: el circuito de correos
       no reconocía sus propias cuentas** (`onia-platform` `a467002`,
       `lib/platform/cuentas-que-no-son-clientes.ts` + su test).
