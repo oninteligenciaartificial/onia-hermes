@@ -295,8 +295,18 @@ nombrada, ecuaciones de logos flotantes "X + Y = 💰", fotos con ken burns). Su
 bold 2-5 palabras con keyword en AMARILLO, en la zona de la cabeza. Jump cuts cada ~2 s.
 CTA final = fondo desenfocado total + texto centrado con la keyword en amarillo.
 
-Qué nos falta para replicarlo (lo demás ya está en el pipeline): la composición partida con
-cabeza anclada (hoy editamos full-frame) y la ecuación de logos como pieza HyperFrames.
+**La composición partida ya es pieza propia: `scripts/split-layout.mjs`** (probada 2026-09-17
+con material real de Sergio — deck en `contain`, zoom focal por `crop` del fuente, huecos =
+cabeza en blur oscuro). El karaoke le va encima con `karaoke-captions.mjs`
+**con `--style apple`** — decisión de Sergio 17-sep: activa VERDE de marca (el default) y
+"apple style, sin bordeado negro". El preset pone outline 0 y una capa de sombra difusa
+(`{\blur7}` en negro translúcido, un evento por frase en la capa de abajo) — NUNCA el
+Shadow duro de ASS, que se lee como texto fantasma. El amarillo `--active-color "#FFE600"`
+queda solo para imitar 1:1 el reel de referencia.
+Orden: cortar → split-layout → karaoke → SFX → master. Falta solo la ecuación de logos
+("X + Y = 💰") como pieza HyperFrames — se hace cuando un guion la pida.
+⚠ El crudo tiene que traer la CÁMARA como toma aparte full-frame (como `clip 1 video 2.mp4`);
+la burbujita de OBS incrustada en la esquina no da resolución para la zona de cabeza.
 
 ## Quick reference
 | Necesito | Herramienta | Costo |
