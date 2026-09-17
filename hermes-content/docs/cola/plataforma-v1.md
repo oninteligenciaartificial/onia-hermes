@@ -5427,6 +5427,48 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 ## Cerrado
 
+- [x] 🔴 **CERRADO el 2026-09-17: los avisos de vencimiento mandaban al dueño de un plan
+      Empresa a una pantalla que NO puede cobrarle.** ⚠️ COMMITEADO Y PUSHEADO (`c399caaa`,
+      rama `claude/chatbots-platform-review-0d1d09` de `onia-platform`), **falta mergear y
+      desplegar**.
+
+      El mismo día, `06036905` cerró el callejón de «Renovar Empresa» en `/settings`: el
+      checkout DESCARTA `enterprise` (`CHECKOUT_PLANS` no lo trae), así que el botón dejaba al
+      dueño en un selector de cuatro tarjetas donde la suya no está. Esa cura tapó la puerta a
+      la que el dueño VA y dejó abiertas las que el producto usa para ir a buscarlo a ÉL.
+
+      El barrido derivado del disco encontró **seis** superficies, no las cuatro que se ven a
+      ojo: la banda grande del panel (`components/AvisoRenovacion.tsx`), el banner de solo
+      lectura (`lib/subscription/aviso-solo-lectura.ts`), el aviso in-app/push
+      (`lib/subscription/vencimientos.ts`), el correo
+      (`onia-platform/app/api/cron/renewal-reminders/route.ts`) y —la que no estaba en la
+      lista escrita a mano— el aviso de pago **RECHAZADO**
+      (`lib/subscription/aviso-de-pago-resuelto.ts`), que mandaba a reintentar al mismo
+      callejón. La sexta (`trial-drip`) queda exenta con su motivo **re-medido**: el plan de la
+      prueba sí lo cobra el checkout, y si `TRIAL_PLAN` cambia el gate lo dice.
+
+      **Cura:** el destino se DERIVA de lo que el checkout puede cobrar
+      (`lib/subscription/donde-se-renueva.ts`), nunca de un `plan === "enterprise"` al lado.
+      El mensaje de WhatsApp reusa `ENTERPRISE_PLAN_PRICE.activationMessage` — la misma fuente
+      que `PlanClient`, para que el dueño no le escriba a Sergio Urcullo dos cosas distintas
+      según por dónde entró.
+
+      **Gate:** `lib/subscription/el-aviso-manda-donde-si-se-renueva.test.ts`, que cruza contra
+      `planesVendibles` —la que PINTA las tarjetas— y no contra `CHECKOUT_PLANS`, que es la
+      lista que el router ya lee (eso sería el espejo comparándose consigo mismo). Validado por
+      mutación en las dos mitades: reponer el hardcode en la banda → rojo nombrando el archivo;
+      hacer que el router deje de distinguir → rojo nombrando los 4 rubros × `enterprise`.
+
+      **Alcance, medido y dicho como es:** hoy **ninguna** org está en `enterprise`
+      (`select plan, count(*) from organizations` → 1 `free`, 3 `professional`), así que esto
+      no le muerde a nadie AÚN. Pero `PLANES_DEL_OPERADOR = PLAN_IDS` lo incluye y Sergio
+      Urcullo lo declaró vendible el 17-sep: el primer cliente de Empresa —el más caro,
+      Bs 2.900/mes— es el que se comía el callejón, y por el correo, que es el canal que
+      alcanza a quien no está mirando el panel.
+
+      Gates verdes en `/root/loops/onia-platform-chatbot`: `npx tsc --noEmit` (0),
+      `npx vitest run` (5.562 pasan), `npx eslint .` (0 errores).
+
 - [x] 🔴 **CERRADO el 2026-09-17: el dueño no podía quitarle el acceso de administrador a un
       empleado que se fue.** ⚠️ COMMITEADO Y PUBLICADO (`9f103875`, rama
       `claude/chatbots-platform-review-0d1d09` de `onia-platform`), **falta mergear y desplegar**.
