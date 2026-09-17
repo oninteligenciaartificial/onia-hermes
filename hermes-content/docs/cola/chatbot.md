@@ -318,6 +318,66 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El asistente seguía atendiendo a los clientes de un negocio con la cuenta VENCIDA:
+      la puerta que alimenta al motor del VPS nunca preguntaba~~ — CERRADO el 2026-09-17 en
+      `onia-platform`, commiteado y PENDIENTE DE MERGE + DESPLIEGUE.**
+
+      **Dónde:** `onia-platform/app/api/chatbot-knowledge/published/route.ts` — el endpoint
+      server-to-server del que el motor del bot (el que corre en el VPS y atiende los inboxes de
+      Chatwoot) saca el conocimiento de cada organización. Con la cuenta vencida seguía
+      sirviéndolo, así que el asistente le contestaba a los clientes de un negocio que dejó de
+      pagar, gastando Meta y OpenAI nuestros, mientras su dueño no podía ni escribir en su panel.
+
+      **Por qué nadie lo veía.** El eje VENCIDA estaba cerrado en la puerta HERMANA
+      (`lib/whatsapp/atiende-el-bot.ts`, 11-sep), que gatea al bot que corre DENTRO de la
+      plataforma (`lib/whatsapp-bot.ts`) — y media familia cubierta se lee como familia cubierta.
+      Peor: el hermano sano vive en ESTE MISMO archivo. Dos líneas más abajo el slug de la agenda
+      ya era fail-closed por vencimiento (`puedeRecibirReservasPublicas` → `isWriteBlocked`, desde
+      el 08-sep), o sea que **media respuesta preguntaba y la otra media no**. Lo sostenía
+      `organizations.whatsappAddon`, la columna vieja de otorgamiento a mano, que **no vence
+      nunca** (`lib/subscription/addon-habilitado.ts` lo dice con todas las letras): con ella en
+      `true`, `isWhatsAppAddonActive` devuelve `true` para siempre, plan muerto incluido.
+
+      **Alcanzable y con fecha, medido en `supabase-db` (no deducido):**
+      `select slug, plan, "whatsappAddon", "trialEnd", "planEnd" from organizations;` →
+      `clinica-sergio-p2ljs | professional | t | 2026-09-17 20:20:36 | NULL`. Es la única org con
+      el add-on encendido y es la clínica REAL. Sin `planEnd`, `derivePlanStatus` la pasa a
+      `past_due` al vencer el trial y `graceDeadline` le da 1 día: queda en solo lectura el
+      **2026-09-18 20:20 UTC (16:20 La Paz)**. O sea que el defecto mordía dentro de las 24 h.
+
+      **El arreglo:** se pregunta con la MISMA función que la otra puerta
+      (`motivoSinAtencionDelBot`), no con una prima — así la gracia del trial vale igual acá y a
+      quien paga un día tarde no se le apaga el bot que compró, y un alta manual del operador
+      (sin fechas) sigue atendiendo. El 404 tiene la MISMA forma que el del add-on apagado (el
+      estado de facturación de una org no se filtra por la forma de la respuesta) y por inbox
+      viaja el `organizationId`, para que el motor conteste un aviso neutro en vez de caer al
+      funnel de venta de Onia adentro del WhatsApp de un cliente.
+
+      **Rojo primero, por el motivo correcto:** 2 de los 4 casos nuevos fallaron con
+      `expected 200 to be 404` (por `organizationId` y por `inboxId`), y los otros dos —gracia del
+      trial y alta sin fechas— pasaban **desde antes**, que es lo que prueba que la guarda no se
+      pasa de ancha. Y validado por **mutación**: llamar a `motivoSinAtencionDelBot` y tirar el
+      resultado deja los mismos dos en rojo, o sea que la mitad que trabaja es la función
+      compartida y no la guarda defensiva de al lado. Después: los 32 casos de ese archivo en
+      verde, `tsc --noEmit` y `eslint` limpios.
+
+      ⚠️ **Es el repo `onia-platform`, no éste** — rama `claude/chatbots-platform-review-0d1d09`,
+      publicada en `880b8d6`. Commitear no lo despliega, y **no se abrió pedido de deploy a
+      propósito**: el sha todavía no está en `master`, así que un `DEPLOY PEDIDO` hoy le pediría a
+      Sergio Urcullo un OK por algo que el publicador no puede publicar. El merge lo hace
+      `onia-cola`; después queda para el pedido vivo de `plataforma`, que no se duplica.
+
+      ⚠️ **Los gates que valen son los del VPS, no los de casa.** Al entregar, `origin/master` se
+      había movido debajo (mi base era `23f86b9`, la real `e02288f`), así que el parche se aplicó
+      en el gemelo `/root/loops/onia-platform-chatbot` del VPS **sobre esa base** y ahí se
+      re-corrieron: `tsc --noEmit` limpio y **5.564 tests verdes**.
+
+      **Clase, hasta dónde se cerró:** las tres puertas que atienden al cliente final en nombre
+      de un negocio ya preguntan — reserva pública (08-sep), bot interno (11-sep) y ésta. Queda
+      mirada y NO tocada `app/cita/acciones.ts` (el paciente confirma o cancela SU cita ya
+      agendada desde el link del correo): ahí bloquear por vencimiento dejaría plantado a un
+      paciente que no tiene la culpa, y decidirlo no es parte de este ítem.
+
 - [x] 🔴 **~~Los TRES barridos del embudo corrían en seco en producción: ningún prospecto recibió
       jamás su follow-up ni el recordatorio de su demo~~ — CERRADO el 2026-09-17, commiteado y
       PENDIENTE DE DESPLIEGUE del bot.**
