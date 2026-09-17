@@ -13,9 +13,13 @@
 
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync } from "node:fs";
+import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import {
+  testsFueraDeLaCadena,
+  SUBARBOLES_CON_CORREDOR_PROPIO,
+} from "./tests_fuera_de_la_cadena.mjs";
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), "..");
 const scripts = JSON.parse(readFileSync(join(raiz, "package.json"), "utf8")).scripts ?? {};
@@ -125,6 +129,63 @@ test("todo archivo de test de `scripts/` lo corre `npm test`", () => {
     [],
     `estos tests estan en scripts/ y NO los corre \`npm test\`: ${huerfanos.join(", ")}.\n` +
       "Cablealos al script `test` de package.json, borralos, o agregalos a EXCLUIDOS con su motivo.",
+  );
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// La MISMA pregunta, para TODO el repo y no solo `scripts/`.
+//
+// El 2026-09-17 se cablearon 951 pruebas que la cadena no corria. Al dia
+// siguiente habia 15 mas (`video-factory/`, `ciencia-cuerpo`): verdes, en disco,
+// y sin correr — porque la guarda de arriba solo mira `scripts/`, y el ALCANCE
+// escrito en su comentario se leia como "esto ya esta cubierto". Un test nuevo
+// en cualquier otra carpeta nacia invisible.
+//
+// El universo lo deriva `tests_fuera_de_la_cadena.mjs`, que este gate IMPORTA en
+// vez de copiar: un gate con su propia copia de la expresion del producto puede
+// tener la copia bien y el producto mal, y coincidir para siempre.
+
+test("ningun test del repo queda fuera de `npm test`", () => {
+  const { universo, fuera } = testsFueraDeLaCadena();
+
+  assert.ok(universo.length > 0, "universo vacio — el instrumento dejo de ver el disco");
+
+  assert.deepEqual(
+    fuera,
+    [],
+    `estas pruebas existen en disco y NO las corre \`npm test\`: ${fuera.join(", ")}.\n` +
+      "Cablealas al script `test`, borralas, o declara su subarbol en\n" +
+      "SUBARBOLES_CON_CORREDOR_PROPIO (scripts/tests_fuera_de_la_cadena.mjs) con su motivo.",
+  );
+});
+
+test("el universo incluye los sujetos que motivaron la guarda, fuera de scripts/", () => {
+  // Caso ancla. Sin el, un filtro de mas deja el universo vacio de lo que importa
+  // y el gate firma verde midiendo nada — que es como se cuela cada vez.
+  const { universo } = testsFueraDeLaCadena();
+  const anclas = [
+    "onia-core/modules/agents-logic.test.mjs",
+    "hermes-content/integrations/siat/test/fase1-runner.test.mjs",
+    "video-factory/test/formats.test.mjs",
+  ];
+  for (const a of anclas) {
+    if (!existsSync(join(raiz, a))) continue; // el ancla se movio: no inventamos rojo
+    assert.ok(
+      universo.includes(a),
+      `el universo no ve ${a} — un filtro lo dejo afuera y el gate mide menos de lo que dice`,
+    );
+  }
+});
+
+test("una exclusion de subarbol vencida no puede tapar nada: la carpeta tiene que existir", () => {
+  const vencidas = [...SUBARBOLES_CON_CORREDOR_PROPIO.keys()]
+    .filter((c) => !existsSync(join(raiz, c)))
+    .sort();
+
+  assert.deepEqual(
+    vencidas,
+    [],
+    `SUBARBOLES_CON_CORREDOR_PROPIO nombra carpetas que ya no existen: ${vencidas.join(", ")}.`,
   );
 });
 
