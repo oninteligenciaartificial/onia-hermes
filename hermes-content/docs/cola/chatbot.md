@@ -328,7 +328,7 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       *"dejaría el cron encendido y MUDO"*, y tenía razón, porque su única salida era una línea
       JSON *"para n8n"*. Y n8n está tapiado: `ONIA_N8N_ENABLED=false` y `ONIA_N8N_EVENT_URL`
       **vacío**, leídos de `/proc/<pid>/environ` del webhook vivo dentro de `onia-center` (no del
-      `webhook.env`, que es un residuo).
+      archivo de entorno del bot, que es un residuo vencido y fuera de git).
 
       **La premisa era cierta y la conclusión quedó vieja.** El circuito ganó un canal vivo
       (`aviso-telegram.mjs`, `ONIA_BOT_TG_AVISO=true` con token y chat en el mismo proceso) para
