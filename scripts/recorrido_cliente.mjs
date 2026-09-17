@@ -1383,20 +1383,37 @@ const PASOS = [
           });
           const capturaMfa = await mirar(page, 'paso-05d-mfa-obligatorio.png');
           if (sondaMfa.botonActivar) {
-            await page.click(`text="${sondaMfa.botonActivar}"`, { timeout: 5000 }).catch(() => {});
-            await page.waitForTimeout(1000);
+            // Red y consola durante el clic: si el botón dispara un fetch que falla, eso
+            // apunta al backend; si no dispara NADA, el handler del botón está roto o ausente.
+            const pedidos = [];
+            const erroresConsola = [];
+            const onRequest = (req) => { if (/\/api\//.test(req.url())) pedidos.push({ url: req.url(), method: req.method() }); };
+            const onResponse = (res) => { if (/\/api\//.test(res.url())) { const p = pedidos.find((x) => x.url === res.url() && !('status' in x)); if (p) p.status = res.status(); } };
+            const onConsole = (msg) => { if (msg.type() === 'error') erroresConsola.push(msg.text().slice(0, 200)); };
+            page.on('request', onRequest);
+            page.on('response', onResponse);
+            page.on('console', onConsole);
+            const clicOk = await page.click(`text="${sondaMfa.botonActivar}"`, { timeout: 5000 }).then(() => true).catch(() => false);
+            await page.waitForTimeout(1500);
+            page.off('request', onRequest);
+            page.off('response', onResponse);
+            page.off('console', onConsole);
             const sondaTrasClic = await page.evaluate(() => ({
               hayQr: !!document.querySelector('img[src*="qr" i], canvas'),
               hayInputCodigo: !!document.querySelector('input[inputmode="numeric"], input[maxlength="6"], input[autocomplete="one-time-code"]'),
+              hayModal: !!document.querySelector('[role="dialog"]'),
             }));
             const capturaTrasClic = await mirar(page, 'paso-05e-mfa-tras-clic.png');
             escapatoria = {
               ofreceEnrolar: true,
               boton: sondaMfa.botonActivar,
+              clicOk,
               // Sin poder decodificar un QR real ni generar un TOTP válido, lo que SÍ se puede
               // afirmar es si el producto entrega el material para enrolar (QR o secreto +
               // campo de código). Si ninguno aparece tras el clic, el botón es decorativo.
-              entregaMaterialParaEnrolar: sondaTrasClic.hayQr || sondaTrasClic.hayInputCodigo,
+              entregaMaterialParaEnrolar: sondaTrasClic.hayQr || sondaTrasClic.hayInputCodigo || sondaTrasClic.hayModal,
+              pedidosApi: pedidos,
+              erroresConsola,
               captura: capturaTrasClic.captura,
             };
           } else {
@@ -1405,7 +1422,7 @@ const PASOS = [
         }
         return {
           estado: 'roto',
-          detalle: `el onboarding NO quedó cerrado: ${motivo || 'el asistente dijo haber terminado'}, pero /dashboard sigue rebotando a ${prueba.destino}. Traza: ${traza.map((t) => t.pantalla).join(' → ')}${escapatoria ? ` — MFA: ${escapatoria.ofreceEnrolar ? `ofrece "${escapatoria.boton}", ${escapatoria.entregaMaterialParaEnrolar ? 'SÍ entrega QR/código para enrolar' : 'NO entregó QR ni campo de código tras apretarlo — botón decorativo, camino sin salida'}` : `NO ofrece ningún botón para activar/enrolar (botones vistos: ${(escapatoria.botones || []).slice(0, 8).join(' | ') || 'ninguno'}) — callejón sin salida`}` : ''}`,
+          detalle: `el onboarding NO quedó cerrado: ${motivo || 'el asistente dijo haber terminado'}, pero /dashboard sigue rebotando a ${prueba.destino}. Traza: ${traza.map((t) => t.pantalla).join(' → ')}${escapatoria ? ` — MFA: ${escapatoria.ofreceEnrolar ? `ofrece "${escapatoria.boton}" (clic ${escapatoria.clicOk ? 'OK' : 'FALLÓ'}), ${escapatoria.entregaMaterialParaEnrolar ? 'SÍ entrega QR/código para enrolar' : `NO entregó QR ni campo de código tras apretarlo — botón decorativo, camino sin salida (pedidos /api/ durante el clic: ${escapatoria.pedidosApi?.length ? escapatoria.pedidosApi.map((p) => `${p.method} ${p.url.replace(APP,'')} → ${p.status ?? 'sin respuesta'}`).join(', ') : 'NINGUNO — el botón no disparó ni un fetch'}${escapatoria.erroresConsola?.length ? `; consola: ${escapatoria.erroresConsola.join(' | ')}` : ''})`}` : `NO ofrece ningún botón para activar/enrolar (botones vistos: ${(escapatoria.botones || []).slice(0, 8).join(' | ') || 'ninguno'}) — callejón sin salida`}` : ''}`,
           traza, horariosCargados, profesionalCargado, agendas,
           capturaAsistente: despues.captura,
           escapatoriaMfa: escapatoria,
