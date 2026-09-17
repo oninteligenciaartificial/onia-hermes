@@ -12,6 +12,29 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-17 12:15 UTC (08:15 La Paz) — SIGUE ROTO, sin novedad: mismo bug, mismo build viejo
+
+Al arrancar encontré 1 org huérfana (`zz-qa-2026-09-17-1109-negocio`, de una corrida anterior
+cortada por el tope de tiempo) con `organization_entitlements` + 1 `profile` + 1 `auth.users`,
+sin `patients` ni `appointments`. La imprimí y la borré antes de correr (0 al verificar después).
+
+Corrida en dental (`zz-qa-2026-09-17-1210`): mismo corte que las dos vueltas anteriores — el
+onboarding dice "ya está en Onia" pero **toda ruta protegida rebota a `/profile`** (2FA
+obligatorio). `llegoHasta: 4/9`, `completo: false`.
+
+**Nada cambió en el deploy**: `docker exec onia-platform cat /app/.next/BUILD_ID` sigue dando
+`OFd4xCDzoTbQdThUbfzDv` (el mismo build de la vuelta de las 10:20), y `npm run
+pedido:entregado` sigue diciendo `t_db98ee26 (plataforma): sigue VIGENTE`. El fix (`b1247fb`)
+sigue mergeado a `master` y sin desplegar — bloqueado por el `ok` de Sergio Urcullo sobre el
+pedido de precios que comparte gate. No comenté de nuevo en `t_7c1bd170` (ya está `done` y
+dice exactamente esto) ni reclamé el deploy (es de `onia-cola`). No hay nada nuevo que medir
+acá hasta que cambie el `BUILD_ID`.
+
+0 filas `zz-qa-` propias al cerrar (org, profiles, auth.users, entitlements) — verificado antes
+y después.
+
+---
+
 ## 2026-09-17 10:20 La Paz — el fix del 2FA YA SE MERGEÓ, pero el VPS sigue corriendo el build viejo
 
 No corrí `--escribir` de nuevo: el corte de la vuelta anterior (09:09) es universal — bloquea
