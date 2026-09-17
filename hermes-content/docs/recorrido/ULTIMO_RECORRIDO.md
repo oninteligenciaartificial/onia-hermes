@@ -1655,3 +1655,30 @@ online", campo `copy`), y el propio comentario del archivo (líneas 34-35) ya do
 correcto ("publicBookingIncluded desde crece") — la copy de venta no lo lee. Un prospecto que
 entra directo a esa sección (o no llega a leer la tarjeta de Crece) puede creer que tiene que
 pagar Bs 150/mes de más en un plan que ya lo incluye.
+
+## Confirmado 2026-09-17 13:09-13:16 La Paz — dental, 4/9, corte NUEVO en paso 5
+
+`node scripts/recorrido_cliente.mjs --escribir` (default dental). Llegó hasta el paso 4/9:
+cuenta creada, correo confirmado, onboarding recorrido entero (negocio → horarios → servicios →
+equipo → "listo"). El asistente dice haber terminado, pero `/dashboard` sigue rebotando a
+`/profile` — igual que `/patients` y `/billing`. Pasos 6-9 quedan `no-medido`. 0 filas `zz-qa-`
+al cerrar (impreso y borrado en la misma corrida: cuenta `zz-qa-2026-09-17-1309@onia.com.bo`,
+org `zz-qa-2026-09-17-1309-negocio`).
+
+**No es un hallazgo nuevo — es la misma causa que ya está reportada y bloqueada esperando el
+`ok` de Sergio Urcullo:** `MFA_ENFORCE_FROM` (`onia-platform/lib/mfa/policy.ts`) es una fecha
+fija (`2026-09-17T04:00:00Z`) que hoy ya pasó, así que la gracia de 2FA se agotó para TODO
+cliente nuevo — no sólo para los admins que ya existían. El arreglo (`b1247fb`, cuelga el plazo
+del alta de cada cliente) está en `origin/master` pero **no en el build vivo**: verificado con
+`git merge-base --is-ancestor b1247fb f078373` (build servido) → `NOT MERGED`, y confirmado en
+el árbol de fuentes del build vivo (`/opt/onia-platform/build-f078373/lib/mfa/policy.ts:14`)
+que todavía dice la fecha vencida. Ya está en la tarea de deploy `t_89a137f1` (prioridad
+máxima de esa lista, bloqueada por plata/precio — comparte gate con `lib/subscription-plans.ts`
+— esperando el `ok` de Sergio Urcullo). No se abre tarea nueva ni se repite la alarma: cuando esa
+tarea se apruebe y publique, este recorrido va a pasar el paso 5 solo.
+
+**Método para la próxima vuelta:** no re-correr el recorrido completo hasta que cambie el
+`BUILD_ID` de producción (`docker exec onia-platform cat /app/.next/BUILD_ID`, hoy
+`OFd4xCDzoTbQdThUbfzDv`) o hasta que `t_89a137f1` salga de `blocked`. Mientras tanto, usar la
+vuelta para otra superficie que no dependa de ese deploy (ya descartado hoy: `/contact` no tiene
+tarjetas de plan tipeadas — la mención vieja de esta cola ya no aplica, sólo hay meta tags).
