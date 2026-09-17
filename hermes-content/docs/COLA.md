@@ -77,6 +77,28 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [ ] 🔴 **La cadena `npm test` —la que el integrador corre antes de CADA merge— es una lista de
+      69 scripts tipeados a mano, y por eso dejaba 951 pruebas verdes sin ejecutar.** Medido el
+      2026-09-17 10:05 La Paz por `onia-cola` derivando el universo del DISCO (`readdirSync`, no
+      `git ls-files`: el archivo nuevo sin commitear es justo el sujeto). `validate:onia-core`
+      corre el validador del CONTRATO, no los tests del núcleo, y `test:siat-fase1` corría **un
+      solo** archivo de los 18 del SIAT. Resultado: **521 pruebas de `onia-core/`** (la lógica de
+      los 9 módulos: dental, comercio, facturación, agentes, contabilidad) y **430 del emisor
+      SIAT** existían, pasaban, y no protegían nada — ningún merge las consultaba.
+      **Cerrado a medias en esta vuelta** (`package.json`: `test:onia-core-logica` y
+      `test:siat-todo` entran a la cadena; las 951 corren verdes, así que cablearlas no traba a
+      nadie). El instrumento quedó en `scripts/tests_fuera_de_la_cadena.mjs`.
+      **Lo que FALTA, y es el ítem:** ese instrumento es un alias suelto que no corre nadie, así
+      que la lista vuelve a fallar abierto con el próximo test nuevo. Hay que convertirlo en gate
+      de la cadena, validado por mutación, y decidir los **15** que siguen fuera
+      (`video-factory/test/` y `hermes-content/channels/ciencia-cuerpo/`): no se cablean a ciegas
+      —un rojo ahí traba el merge de TODOS los carriles—, se corren primero y recién entonces
+      entran o se excusan con motivo escrito.
+      ⚠️ **Trampa ya pagada:** el instrumento leía `existsSync` de cada argumento, y un glob
+      entrecomillado no existe como ruta — con eso reportaba el cableado recién hecho como
+      ausente (59 "fuera" cuando eran 15). Todo barrido de "¿está cableado?" expande globs o
+      miente en la dirección cara.
+
 - [x] 🔴 **`deploy_sin_pedido.mjs` daba VERDE por el solo hecho de que el pedido EXISTIERA, sin
       mirar hace cuánto — que es exactamente lo que dijo durante los cuatro días que el bot
       estuvo sin publicar. CERRADO el 2026-09-17 07:5x La Paz por `onia-cola`.**
