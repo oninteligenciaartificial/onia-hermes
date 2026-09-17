@@ -69,11 +69,59 @@ const COMO_SE_DICE: Record<CapacidadIncluida, RegExp> = {
   chatbot: /\bchatbot\b|\brecepcionista\b/i,
 };
 
-/** Las palabras que convierten una mención en una afirmación de INCLUSIÓN por plan. */
-const AFIRMA_INCLUSION = /incluid[oa]s?|viene[n]?\s+(?:desde|en|con)|adentro\s+del\s+plan|ya\s+trae/i;
+/**
+ * Las palabras que convierten una mención en una afirmación de INCLUSIÓN por plan.
+ *
+ * ⚠️ `desde el plan …` / `a partir del plan …` entraron el 2026-09-17, y hasta ese día eran el
+ * OTRO filtro a mano que tapaba el mismo defecto: aun viendo `plan("pro")` como sujeto, las tres
+ * `description` falsas no afirmaban «incluidos» ni «vienen desde» — decían «desde el plan Pro»,
+ * la forma más corta de decirlo, y quedaban absueltas. Dos predicados escritos a dedo, cada uno
+ * dejando pasar lo que el otro no miraba.
+ */
+const AFIRMA_INCLUSION =
+  /incluid[oa]s?|viene[n]?\s+(?:desde|en|con)|adentro\s+del\s+plan|ya\s+trae|desde\s+el\s+plan|a\s+partir\s+del\s+plan/i;
 
 /** Los nombres de plan, como los lee el cliente. Salen del dato, no tipeados. */
 const NOMBRES_DE_PLAN = PLANES.map((p) => p.nombre);
+
+/**
+ * Los campos de un plan que son una CIFRA, derivados del catálogo y no tipeados.
+ *
+ * Pedirle a un plan su monto (`plan("basico").mensual`) cotiza un precio — y esas cifras ya las
+ * cruza `scripts/precios-fuente.mjs` contra el producto, cada vuelta. Pedirle su `nombre` es otra
+ * cosa: pone el nombre de un plan CONCRETO en la pantalla del lead. Sin esta distinción el
+ * barrido acusaba al `Desde Bs …` que abre la misma frase, porque la ventana los junta; y un
+ * carve-out por archivo habría tapado el defecto real que vivía dos renglones después.
+ */
+const CAMPOS_DE_CIFRA = Object.entries(PLANES[0])
+  .filter(([, valor]) => typeof valor === "number")
+  .map(([campo]) => campo)
+  .join("|");
+
+/**
+ * Las DOS formas de señalar un plan concreto a mano. Las dos son la misma decisión tipeada; la
+ * segunda apenas la esconde un escalón más adentro.
+ *
+ * ⚠️ **Corregido el 2026-09-17: este gate nació viendo sólo la primera y firmó verde tres
+ * superficies vivas.** Su propia bitácora ya decía que lo prohibido es «TIPEAR cualquier nombre
+ * de plan junto a la capacidad», pero el barrido buscaba el literal `\bPro\b`, así que
+ * `plan("pro").nombre` —que produce exactamente ese texto en pantalla— era invisible. Medido
+ * sobre `onia.com.bo` SERVIDA ese día, las tres decían «desde el plan Pro» (Bs 890) con el
+ * Crece (Bs 550) trayendo `agentesIncluidos: true` desde la escalera C:
+ *
+ *   - `/v1`, `description` — la que viaja al preview de WhatsApp.
+ *   - `/v1/modulos/dental`, `description` y `openGraph.description`.
+ *
+ * Y las tres vivían en páginas cuyo CUERPO decía «vienen desde Crece», derivado y correcto: la
+ * misma pantalla se contradecía consigo misma, y la mitad falsa es justo la que no se ve
+ * renderizada. Interpolar el nombre no es derivarlo — la pregunta es de dónde sale el ID.
+ */
+function referenciasAUnPlan(plan: (typeof PLANES)[number]): RegExp[] {
+  return [
+    new RegExp(`\\b${plan.nombre}\\b`, "g"),
+    new RegExp(`plan\\(\\s*["'\`]${plan.id}["'\`]\\s*\\)\\s*\\.\\s*(?!${CAMPOS_DE_CIFRA})\\w`, "g"),
+  ];
+}
 
 /**
  * Menciones que NO afirman desde qué plan viene la capacidad. Cada entrada se RE-MIDE contra el
@@ -204,25 +252,26 @@ function tipeanElPlan(): Hallazgo[] {
     const declarandoLaEscalera = (i: number) =>
       declaraDesde >= 0 && declaraHasta > declaraDesde && i > declaraDesde && i < declaraHasta;
 
-    for (const plan of NOMBRES_DE_PLAN) {
-      const buscador = new RegExp(`\\b${plan}\\b`, "g");
-      let m: RegExpExecArray | null;
-      while ((m = buscador.exec(codigo)) !== null) {
-        if (declarandoLaEscalera(m.index)) continue;
-        const desde = Math.max(0, m.index - VENTANA);
-        const ventana = codigo.slice(desde, m.index + VENTANA);
-        if (!AFIRMA_INCLUSION.test(ventana)) continue;
+    for (const plan of PLANES) {
+      for (const buscador of referenciasAUnPlan(plan)) {
+        let m: RegExpExecArray | null;
+        while ((m = buscador.exec(codigo)) !== null) {
+          if (declarandoLaEscalera(m.index)) continue;
+          const desde = Math.max(0, m.index - VENTANA);
+          const ventana = codigo.slice(desde, m.index + VENTANA);
+          if (!AFIRMA_INCLUSION.test(ventana)) continue;
 
-        for (const capacidad of Object.keys(COMO_SE_DICE) as CapacidadIncluida[]) {
-          if (!COMO_SE_DICE[capacidad].test(ventana)) continue;
-          if (exentosDeAqui.some((e) => ventana.includes(e.fragmento))) continue;
-          hallazgos.push({
-            archivo: rel,
-            linea: codigo.slice(0, m.index).split("\n").length,
-            capacidad,
-            plan,
-            contexto: ventana.replace(/\s+/g, " ").trim(),
-          });
+          for (const capacidad of Object.keys(COMO_SE_DICE) as CapacidadIncluida[]) {
+            if (!COMO_SE_DICE[capacidad].test(ventana)) continue;
+            if (exentosDeAqui.some((e) => ventana.includes(e.fragmento))) continue;
+            hallazgos.push({
+              archivo: rel,
+              linea: codigo.slice(0, m.index).split("\n").length,
+              capacidad,
+              plan: plan.nombre,
+              contexto: ventana.replace(/\s+/g, " ").trim(),
+            });
+          }
         }
       }
     }
@@ -246,6 +295,37 @@ describe("desde qué plan viene una capacidad: se deriva, no se tipea", () => {
       expect(plan, `${capacidad} no tiene ningún plan que la incluya`).toBeTruthy();
       expect(NOMBRES_DE_PLAN).toContain(plan);
     }
+  });
+
+  it("el barrido reconoce las DOS formas de tipear un plan, no sólo el nombre literal", () => {
+    // Caso ancla contra la regresión que este gate ya tuvo: durante cuatro días buscó únicamente
+    // `\bPro\b` y firmó verde tres `description` vivas que decían «desde el plan Pro» vía
+    // `plan("pro").nombre`. Si alguien vuelve a simplificar `referenciasAUnPlan`, esto se pone
+    // rojo ANTES de que el falso verde llegue a producción.
+    const pro = PLANES.find((p) => p.id === "pro")!;
+    const conIdTipeado = `Agentes con IA, desde el plan \${plan("pro").nombre}.`;
+    const conNombreTipeado = "Agentes con IA, incluidos desde Pro.";
+    const soloElPrecio = `Agentes con IA. Desde Bs \${bs(plan("basico").mensual)}/mes.`;
+
+    const caza = (texto: string) =>
+      referenciasAUnPlan(pro).some((re) => {
+        re.lastIndex = 0;
+        return re.test(texto);
+      });
+
+    expect(caza(conIdTipeado), "`plan(\"pro\").nombre` tiene que ser sujeto").toBe(true);
+    expect(caza(conNombreTipeado), "el nombre literal tiene que seguir siendo sujeto").toBe(true);
+
+    // Y la otra dirección: pedirle el MONTO a un plan no es nombrarlo. Sin esto, el gate se
+    // vuelve ruidoso contra el `Desde Bs …` que abre casi todas estas frases y termina exento
+    // por archivo, que es como esta familia deja de mirar el defecto real.
+    const basico = PLANES.find((p) => p.id === "basico")!;
+    const cazaBasico = referenciasAUnPlan(basico).some((re) => {
+      re.lastIndex = 0;
+      return re.test(soloElPrecio);
+    });
+    expect(cazaBasico, "cotizar un precio no es atribuir una capacidad a un plan").toBe(false);
+    expect(CAMPOS_DE_CIFRA.split("|")).toContain("mensual");
   });
 
   it("`primerPlanCon` responde por PRECIO, no por el orden del array", () => {
