@@ -5,3 +5,6 @@
 */final/
 */raw/
 */scripts/*.wav
+# El pad de musica se SINTETIZA (scripts/pad-musica.sh): 148 MB que GitHub rechaza
+# (>100 MB) — dejarlo entrar deja la rama entera IMPUSHEABLE, como paso el 10-sep.
+*/assets/pad.wav
