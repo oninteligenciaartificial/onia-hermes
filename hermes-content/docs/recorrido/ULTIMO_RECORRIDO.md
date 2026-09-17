@@ -1714,3 +1714,43 @@ el DOM con ese rol aunque esté cerrado — "SÍ entrega QR/código" con la capt
 pantalla sin cambios. Corregido exigiendo `offsetParent !== null`. Las dos trampas se vieron
 recién comparando la captura contra el veredicto del propio script — el método de esta memoria
 ("verificar es mirar") atrapó al propio instrumento dos veces en la misma vuelta.
+
+## 2026-09-17 15:00-15:20 La Paz — no repetir el recorrido: BUILD_ID sin cambios, mismo bloqueo
+
+`docker exec onia-platform cat /app/.next/BUILD_ID` sigue en `OFd4xCDzoTbQdThUbfzDv` (igual que
+la vuelta anterior) y la tarea de deploy `t_1a5c860d` sigue `blocked`. Método vigente: no
+re-correr el recorrido completo hasta que cambie uno de los dos.
+
+**Verificación nueva, con `scripts/mirar_bandeja_dueno.mjs` (sesión real, sin escribir nada):**
+el bloqueo de 2FA no es sólo para clientes nuevos — **la cuenta real de Sergio Urcullo
+(`sergio@onia.com.bo`, org "Clínica Sergio") ya está bloqueada HOY.** Pedido `/dashboard` con su
+sesión → la app terminó en `/profile?mfa=obligatorio`, con el banner rojo y el botón "Activar
+ahora" que ya se sabe que no hace nada. Confirmado también por SQL que `superadmin@onia.com.bo` y
+`sergio.urcullo.m@gmail.com` (Bolivian Electric) tienen 0 factores MFA verificados y su gracia ya
+venció. Esto ya estaba anotado en un comentario de `t_82251f19` (otra sesión, 08:51 La Paz) pero
+enterrado en un párrafo largo — se agregó un comentario corto y directo en `t_1a5c860d`
+explicándolo así: "ni vos podés usar el sistema hasta que se publique este pedido". No es un
+hallazgo nuevo, es la misma causa con más urgencia visible para Sergio Urcullo.
+
+Nada para hacer del lado de este carril: sigue blocked esperando el `ok`. Próxima vuelta, si
+BUILD_ID sigue igual, no repetir esta verificación — ya quedó dicho dos veces en el tablero.
+
+## 2026-09-17 12:12 La Paz — sin novedad de deploy, escalón nuevo: `/precios` con `reducedMotion`
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas. `BUILD_ID` sigue en `OFd4xCDzoTbQdThUbfzDv` y `npm run
+pedido:entregado` confirma los tres pedidos vigentes sin cambios (`t_fe70e22a` landing,
+`t_33d42433` bot, `t_62888ea2` plataforma — este último reemplaza a `t_1a5c860d`, que quedó
+`archived`). No repetí el recorrido completo ni la sonda de MFA: método vigente, nada que medir
+de nuevo ahí.
+
+En su lugar cerré un pendiente de varias vueltas atrás: miré `onia.com.bo/precios` con
+Playwright + `reducedMotion: 'reduce'` (para no leer un `<CountUp>` a mitad de animar, la trampa
+ya conocida de esta memoria). **Sano**: cero textos cortados (`scrollWidth > clientWidth`), y
+los precios pintados cruzan contra la fuente única — `320/89/3.200`, `550/145/5.500`,
+`890/229/8.900`, `1.290/12.900`, `2.900/29.000` contra `DEFAULT_PLAN_AMOUNTS` de
+`onia-platform/lib/subscription-plans.ts`; `Bs 390` (chatbot), `Bs 70/usuario` y `Bs 3.500/4.500`
+(implementación/self-hosted) contra `lib/pricing.ts`. "Web del negocio · Desde Bs 2.000" es
+texto tipeado del sitio (no tiene fuente en `pricing.ts`) pero coincide con la cifra ya
+ratificada por Sergio Urcullo el 2026-08-23. Nada para reportar.
+
+`completo: false`, `llegoHasta: 4/9` (sin cambios, sigue bloqueado por el mismo deploy).

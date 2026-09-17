@@ -63,6 +63,88 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-17 — el mismo filtro, seis horas después: no veía nuestros correos
+      PERSONALES, y el drip seguía vendiéndole Onia a Sergio Urcullo** (`onia-platform`
+      `316476e`, publicado en la rama del carril como `2d5695a`; **commiteado y mergeado a la
+      rama, NO desplegado** — entra al pedido de la plataforma cuando el integrador lo junte).
+
+      **Medido en producción.** `/var/log/onia-trial-drip.log` del VPS: la org
+      `bolivian-electricidad-e6t21` recibió la secuencia de venta **completa** — pasos 3, 7, 12,
+      14 y 15 —, y en `supabase-db` su dueño es `sergio.urcullo.m@gmail.com`, el correo personal
+      de Sergio Urcullo. Bolivian Electric es **otro proyecto de Onia** (repo y deploy propios):
+      no hay un cliente pagando detrás. La cuarta org de la base, `zz-qa-bandeja-10`, usa
+      `oninteligenciaartificial+prueba10@gmail.com` — la casilla del **operador**, que el propio
+      producto usa de `ADMIN_NOTIFICATION_EMAIL` por defecto
+      (`onia-platform/app/api/subscription-payment/route.ts`).
+
+      **Por qué el arreglo de la mañana no alcanzó, y es la parte que sirve a otros carriles:**
+      la identidad se estaba deduciendo de una **firma** — un prefijo de slug, un dominio —, y
+      una firma sólo reconoce lo que **nosotros marcamos al sembrar**. Las cuentas propias no se
+      siembran: se usan, y no tienen marca. Hay que **nombrarlas**. De las cuatro organizaciones
+      de la base, la regla del dominio veía dos.
+
+      **Y el test volvió a afirmar el defecto, en el mismo archivo y el mismo día.** El de la
+      mañana listaba `clinica-sergio-p2ljs` como cliente; el arreglo lo sacó de ahí… y dejó en
+      la lista de «clientes de verdad» a `bolivian-electricidad-e6t21`, con su motivo redactado
+      («otro negocio de Sergio Urcullo… es un cliente»). Corregir la instancia no cerró la clase
+      porque el instrumento se reescribió con el mismo supuesto.
+
+      **Cómo quedó:** `CORREOS_PROPIOS` nombra las dos direcciones nuestras fuera del dominio y
+      se compara la dirección **entera** — `sergio.urcullo.m@outlook.com` y
+      `sergio.urcullo.martinez@gmail.com` son de otra persona y siguen siendo clientes, porque
+      excluir de más deja a un cliente sin el aviso de que su plan se corta. El subaddressing
+      (`+prueba10`) entra porque es la misma casilla; los puntos de Gmail quedan afuera a
+      propósito, porque el `where` de Prisma no los puede expresar y una capacidad que tenga el
+      que juzga en memoria y no tenga la consulta es **como esos dos lados se separan**. Los dos
+      consumidores (`app/api/cron/trial-drip` y `app/api/cron/renewal-reminders`) leen el mismo
+      `filtroPrismaSoloClientes()`.
+
+      **Prueba:** test en rojo primero (2 de 10) y **validado por mutación** — cegar el predicado
+      da 2/10 rojo, sacar las cláusulas de la consulta da 2/10 rojo. Gates en el VPS: `tsc` 0,
+      `vitest` 5011 passed, `eslint` 0 errores.
+
+- [x] ✅ **CERRADO el 2026-09-17 — Onia le vendía Onia a Sergio Urcullo: el circuito de correos
+      no reconocía sus propias cuentas** (`onia-platform` `a467002`,
+      `lib/platform/cuentas-que-no-son-clientes.ts` + su test).
+
+      **Medido en producción, no deducido.** Contadas en `supabase-db` esa tarde, en TODA la
+      base hay **cuatro organizaciones y ninguna es un cliente**. `clinica-sergio-p2ljs`
+      (`sergio@onia.com.bo`, con el trial venciendo ese mismo día) venía recibiendo la secuencia
+      de venta completa — pasos 3, 7, 12 y 14, visibles en `/var/log/onia-trial-drip.log` del
+      VPS —, en el canal que Sergio Urcullo pidió ordenar.
+
+      **Por qué ningún gate lo vio: el instrumento afirmaba el defecto.** El filtro se escribió
+      el 2026-09-17 a la mañana (`1ef24c6`) con PREFIJOS de slug, que es la marca que ponemos al
+      **sembrar**; las cuentas de Onia no se siembran, se **usan**. Y el test de ese mismo
+      archivo listaba `clinica-sergio-p2ljs` y `onia-interna` como **clientes a los que sí había
+      que escribirles**, con el nombre del dueño al lado. Un gate cuya lista de sujetos está
+      tipeada a mano no siempre falla abierto: cuando **calcula** la respuesta a partir de esa
+      lista, contesta mal y **ratifica** el bug que existe para impedir.
+
+      **El daño no es sólo ruido en una bandeja nuestra.** Mientras el producto no pueda separar
+      un envío a un lead de uno a sí mismo, el `sent: N` del log se lee como N prospectos
+      trabajados cuando pueden ser **cero** — así es como no se ve que el canal está muerto el
+      día que importe. (Ya pasó: ocho corridas seguidas con `535 Authentication failed`.)
+
+      **El criterio** es el dominio propio `@onia.com.bo`, y cumple la misma vara asimétrica que
+      `zz-qa-`: esas direcciones las emitimos nosotros, así que ningún cliente puede tener una
+      por accidente. Se compara el **final** del correo, no «lo contiene» — un cliente puede
+      nombrarnos en su dirección (`onia.com.bo@gmail.com`) o vivir en `@onia.com.bo.mx`, y
+      excluirlo lo dejaría sin el aviso de que su plan se corta.
+
+      **Efecto medido contra la base:** de las 3 orgs que hoy entran al drip queda **1**
+      (`bolivian-electricidad`, un negocio de verdad) y salen las 2 nuestras. Cura de una vez a
+      los **dos** consumidores del filtro (`trial-drip` y `renewal-reminders`).
+
+      **Gate validado por mutación:** sacar la pregunta del predicado → 2 rojos; sacar la
+      cláusula de la consulta de Prisma → 2 rojos; cambiar «termina en» por «lo contiene» → 1
+      rojo. Gates verdes en el VPS (el árbol que se publica): `tsc` 0, 5.010 pruebas, `eslint` 0
+      errores.
+
+      ⚠️ **Commiteado y publicado en su rama; NO mergeado ni desplegado** — el merge es de
+      `onia-cola`.
+
+
 - [x] 🔴 **~~El drip de venta le escribía a las cuentas de QA que los carriles siembran en
       producción — y una de ellas es la bandeja real de Sergio Urcullo~~ — CERRADO el 2026-09-17
       (`onia-platform` `1ef24c6`, rama del carril; tsc 0 · vitest 5003/5003 · eslint 0 errores,
