@@ -12,6 +12,13 @@
  *
  * Los ids de dirección, paleta y fuente son los de `web-configurator.ts`; los
  * de alcance, los de `webs.ts`. Si uno desaparece, TypeScript lo dice acá.
+ *
+ * ⚠️ SOLO los rubros que el alta entrega (+ ecommerce sobre plataforma, pedido
+ * el 17-sep, + «Otro»). Sergio Urcullo, 21-ago: «aún no terminemos los que ya
+ * tenemos» — vender un rubro que el registro no ofrece pierde al lead en el
+ * último clic. `rubros-del-alta.test.ts` lo vigila; restaurante, construcción,
+ * educación y salud salieron por eso el 17-sep. «Otro» los cubre con defaults
+ * neutros.
  */
 import {
   DEFAULT_LAYOUT_BY_DIRECTION,
@@ -29,10 +36,6 @@ export type AssistantRubroId =
   | "comercio"
   | "importadora"
   | "servicios"
-  | "restaurante"
-  | "construccion"
-  | "educacion"
-  | "salud"
   | "ecommerce"
   | "otro";
 
@@ -113,54 +116,6 @@ export const ASSISTANT_RUBROS: readonly AssistantRubro[] = [
     stack: "profesional",
     offer: "Asesoría clara para decidir con tranquilidad.",
     services: "Consulta inicial\nAsesoría continua\nTrámites y gestiones",
-  },
-  {
-    id: "restaurante",
-    label: "Restaurante / cafetería",
-    industry: "Restaurante",
-    direction: "cercano",
-    palette: "terracota-crema",
-    font: "humana",
-    goal: "reservas",
-    stack: "landing",
-    offer: "Comé rico. Volvé feliz.",
-    services: "Menú del día\nReservas\nDelivery",
-  },
-  {
-    id: "construccion",
-    label: "Construcción / ingeniería",
-    industry: "Construcción",
-    direction: "empresarial",
-    palette: "noche-cobre",
-    font: "archivo",
-    goal: "cotizaciones",
-    stack: "profesional",
-    offer: "Obras bien hechas, a tiempo y con respaldo.",
-    services: "Proyectos\nObras civiles\nMantenimiento",
-  },
-  {
-    id: "educacion",
-    label: "Academia / cursos",
-    industry: "Educación",
-    direction: "impacto",
-    palette: "violeta-claro",
-    font: "archivo",
-    goal: "contactos",
-    stack: "profesional",
-    offer: "Aprendé lo que de verdad te sirve.",
-    services: "Cursos\nTalleres\nInscripciones",
-  },
-  {
-    id: "salud",
-    label: "Consultorio / salud",
-    industry: "Consultorio",
-    direction: "minimalista",
-    palette: "azul-confianza",
-    font: "humana",
-    goal: "reservas",
-    stack: "profesional",
-    offer: "Atención cercana, cuando la necesitás.",
-    services: "Consultas\nEstudios\nSeguimiento",
   },
   {
     id: "ecommerce",
