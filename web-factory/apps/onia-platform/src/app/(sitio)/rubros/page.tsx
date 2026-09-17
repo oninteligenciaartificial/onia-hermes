@@ -101,7 +101,7 @@ const RUBROS: readonly {
     h: 960,
   },
   {
-    // panel "servicios" (ui.tsx) — IVA e IT del mes y registro de ventas.
+    // panel "servicios" (ui.tsx) — el IVA y el IT del mes, y el reporte por revisar.
     id: "servicios",
     nombre: "Servicios",
     resultado:

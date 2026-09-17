@@ -176,10 +176,18 @@ export function diagnosticar({ buildIdMtimeMs, commits, homeStatus }) {
     };
   }
 
-  // Estricto: `next build` escribe el BUILD_ID al TERMINAR, así que un commit
-  // del mismo segundo ya está adentro.
-  const posteriores = commits.filter((c) => c.ct * 1000 > buildIdMtimeMs);
-  // …y de esos, sólo los que un lead podría notar. Un commit al instrumento del
+  // ⚠️ Acá vivía una SEGUNDA copia del filtro por fecha
+  // (`commits.filter(c => c.ct * 1000 > buildIdMtimeMs)`), y por eso arreglar
+  // `commitsDesde` no alcanzó: el conjunto llegaba entero y se volvía a perder
+  // acá mismo. Medido el 2026-09-17 — con la cura puesta, `commitsDesde` ya
+  // devolvía los 3 commits y esta línea los dejaba en 0 varados, con el
+  // publicador firmando «al día» igual que antes.
+  //
+  // Quién decide QUÉ entra es `commitsDesde`, que lo acota por ancestría
+  // (`base..origin/main`). Re-filtrar por fecha acá es preguntar de nuevo lo
+  // que ya se contestó bien, con el instrumento que se contestaba mal.
+  const posteriores = commits;
+  // De esos, sólo los que un lead podría notar. Un commit al instrumento del
   // carril es trabajo real, pero publicarlo no le cambia la pantalla a nadie:
   // contarlo invalidaba el build armado en cada vuelta y el deploy no salía
   // nunca (medido el 2026-09-04, tres pedidos vencidos el mismo día).
@@ -396,8 +404,49 @@ export function fechaBuildVivo(ruta = BUILD_ID_VIVO, { local = mtimeLocal, remot
 }
 
 /**
- * Commits de la zona en `origin/main` posteriores a `desdeMs`. `null` si git
+ * El punto de `main` por el que pasó el build vivo: el commit más nuevo de la
+ * cadena `--first-parent` con fecha ≤ la del build.
+ *
+ * Devuelve `{ sha }` si lo encontró · `{ sha: null }` si NINGÚN commit de `ref`
+ * es anterior al build (todo `ref` está varado) · `null` si git no contestó,
+ * que es «no pude medir» y nunca «no hay nada».
+ *
+ * ⚠️ Por qué `--first-parent` y no las fechas de todos los commits: la fecha de
+ * un commit es CUÁNDO SE ESCRIBIÓ, no cuándo entró a `main`. Un commit de una
+ * rama de carril es siempre anterior al merge que lo trae. La cadena
+ * first-parent, en cambio, son los puntos por los que `main` realmente pasó —
+ * cada merge lleva la fecha en que se integró—, así que sí es monótona respecto
+ * de la entrada. La fecha se usa UNA vez, para elegir este punto; de ahí en
+ * adelante manda el grafo.
+ */
+export function baseDelBuild(desdeMs, { cwd, ref = "origin/main" } = {}) {
+  const r = spawnSync("git", ["log", "--first-parent", "--format=%H%x09%ct", ref], {
+    encoding: "utf8",
+    cwd,
+  });
+  if (r.status !== 0) return null;
+
+  const limite = Math.floor(desdeMs / 1000);
+  for (const linea of r.stdout.split("\n")) {
+    if (!linea) continue;
+    const [sha, ct] = linea.split("\t");
+    if (Number.isFinite(Number(ct)) && Number(ct) <= limite) return { sha };
+  }
+  return { sha: null };
+}
+
+/**
+ * Commits de la zona que `origin/main` tiene y el build vivo NO. `null` si git
  * falla — que es distinto de «no hay ninguno».
+ *
+ * ⚠️ Acá decía «posteriores a `desdeMs`» y se medía con `--since`. Eso perdía
+ * el sujeto en silencio y para siempre; el suceso y la cura están contados en
+ * el caso «un arreglo que entra a main por un merge posterior al build NO se
+ * pierde» de `deploy-vivo.test.ts`. En una línea: un commit de rama tiene fecha
+ * anterior al merge que lo trae, así que `--since` lo descartaba por viejo y
+ * `--no-merges` descartaba al merge que lo hacía visible. La pregunta correcta
+ * no es «¿qué hay más nuevo que el build?» sino «¿qué tiene `main` que el build
+ * no contiene?».
  *
  * ⚠️ El pathspec va anclado con `:/`, que es «desde la raíz del repo». Sin eso,
  * `git log -- web-factory/apps/onia-platform` lo interpreta relativo al CWD, y
@@ -417,7 +466,10 @@ export function fechaBuildVivo(ruta = BUILD_ID_VIVO, { local = mtimeLocal, remot
  * correcto para un commit normal y hay que conservar—. Se los saca del conjunto
  * antes de clasificar, en vez de enseñarle a `llegaAlCliente` a fallar cerrado.
  */
-export function commitsDesde(desdeMs, zona = ZONA) {
+export function commitsDesde(desdeMs, zona = ZONA, { cwd, ref = "origin/main" } = {}) {
+  const base = baseDelBuild(desdeMs, { cwd, ref });
+  if (base === null) return null;
+
   const r = spawnSync(
     "git",
     [
@@ -428,12 +480,12 @@ export function commitsDesde(desdeMs, zona = ZONA) {
       "--format=%x00%H%x09%ct%x09%s",
       "--name-only",
       "--no-merges",
-      `--since=@${Math.floor(desdeMs / 1000)}`,
-      "origin/main",
+      // Ancestría, NO fecha: `base..ref` es «lo que ref tiene y el build no».
+      base.sha ? `${base.sha}..${ref}` : ref,
       "--",
       `:/${zona}`,
     ],
-    { encoding: "utf8" },
+    { encoding: "utf8", cwd },
   );
   if (r.status !== 0) return null;
 

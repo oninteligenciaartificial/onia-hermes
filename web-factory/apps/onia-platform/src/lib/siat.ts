@@ -148,6 +148,28 @@ export const SIAT_FUENTES =
  *  · UNA sola línea comercial, al final, después de haber sido útil.
  */
 
+/**
+ * El plazo en formato corto, para rótulos donde no entra la oración entera.
+ *
+ * Es el 1 de octubre, no el 30 de septiembre. Los DOS son ciertos —la RND
+ * 102600000007 fija el 30-09 como último día de transición y el 01-10 como
+ * primer día de obligación— pero sueltos significan cosas opuestas: un rótulo
+ * de una línea se lee como LA fecha límite, y todo el resto del sitio (y
+ * `CLAUDE.md`, que lo prohíbe por nombre) titula el 1 de octubre. El matiz
+ * completo tiene su lugar y es `SIAT_BAJADA`, que lo explica entero.
+ *
+ * Existe porque `/guia-facturacion` tipeaba «Plazo · 30-09-2026» en su Kicker
+ * mientras su propia bajada, dos líneas abajo, decía «el 1 de octubre»: la
+ * pantalla se contradecía a la vista del lead. Era el único texto de plazo de
+ * las dos páginas que no salía de este archivo, justo el que encabeza la
+ * pantalla, y sobrevivió al gate de tiempo verbal porque no tiene verbo.
+ * Vigilado por `(sitio)/plazo-no-se-tipea.test.ts`.
+ */
+export const SIAT_PLAZO_CORTO = "01-10-2026";
+
+/** Rótulo del plazo. La fecha sale de arriba: acá no se tipea ninguna. */
+export const SIAT_GUIA_KICKER = `Plazo · ${SIAT_PLAZO_CORTO}`;
+
 /** Titular de la guía. La promesa entera cabe acá. */
 export const SIAT_GUIA_TITULAR =
   "Habilitate para facturar en línea, gratis, en 6 pasos.";

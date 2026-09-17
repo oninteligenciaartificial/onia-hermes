@@ -17,7 +17,7 @@ set -uo pipefail
 
 CONTAINER="${ONIA_BOT_CONTAINER:-onia-center}"
 PORT="${ONIA_WEBHOOK_PORT:-3020}"
-BOT_DIR="/opt/onia/bot"
+BOT_DIR="${ONIA_BOT_DIR:-/opt/onia/bot}"
 STAMP="$(date -Iseconds)"
 
 log() { echo "[$STAMP] $*"; }
@@ -25,8 +25,13 @@ log() { echo "[$STAMP] $*"; }
 # --- Telegram: SOLO errores (decision Sergio 2026-08-28) ---------------------
 # Un incidente = UN aviso de caida + UN aviso de recuperacion. El marcador evita
 # 30 mensajes/hora mientras dure la caida (el cron corre cada 2 min).
-ALERT_ENV="/root/.config/onia/backup.env"
-INCIDENTE="/var/lib/onia-bot-watchdog.incidente"
+ALERT_ENV="${ONIA_WATCHDOG_ALERT_ENV:-/root/.config/onia/backup.env}"
+# Prefijo de los marcadores de estado. Inyectable SOLO para poder ejecutar este
+# script de verdad en un test (ver webhook-watchdog.test.mjs); el default es el
+# de produccion y no cambia, asi que un incidente ya declarado se sigue
+# reconociendo despues de este cambio.
+ESTADO="${ONIA_WATCHDOG_ESTADO:-/var/lib/onia-bot-watchdog}"
+INCIDENTE="$ESTADO.incidente"
 tg_error() {
   [ -f "$ALERT_ENV" ] && . "$ALERT_ENV"
   [ -n "${TG_BOT_TOKEN:-}" ] && [ -n "${TG_CHAT_ID:-}" ] || return 0
@@ -53,18 +58,34 @@ fi
 if docker exec "$CONTAINER" sh -c "wget -qO- --timeout=5 http://127.0.0.1:$PORT/health" >/dev/null 2>&1; then
   if [ -f "$INCIDENTE" ]; then
     rm -f "$INCIDENTE"
+    log "OK: el webhook volvio a responder solo — incidente cerrado"
     tg_error "✅ <b>Bot Onia recuperado</b> — el webhook volvio a responder."
   fi
   # 2.b. El /health NO ve el camino bot->Chatwoot (la base va por otro puerto): el 2026-08-28
   # el bot estuvo 4 dias calculando respuestas que Chatwoot nunca recibio (attachment overlay
   # rancio tras el reboot). Chequeo directo; fix manual documentado en el handoff del carril:
   # docker network disconnect easypanel onia-center && docker network connect --alias onia-center easypanel onia-center
-  INCIDENTE_CW="/var/lib/onia-bot-watchdog.incidente-chatwoot"
+  #
+  # DOS CORRIDAS, NO UNA (2026-09-17). Esta sonda es un unico `timeout 5` y el que la
+  # falla dispara la alarma 🚨 maxima. Medido en el log de produccion: los tres ERROR de
+  # los ultimos 15 dias (03-sep, 05-sep, 17-sep) son de UNA linea cada uno — con el cron
+  # cada 2 min, una caida de verdad escribe una linea cada 2 min. O sea, tres parpadeos,
+  # seis mensajes al Telegram de Sergio Urcullo y cero incidentes. Un strike de una
+  # corrida cuesta 2 minutos de deteccion sobre una caida que ya duro 4 dias, y le saca
+  # los falsos positivos al unico canal por el que avisamos algo grave.
+  INCIDENTE_CW="$ESTADO.incidente-chatwoot"
+  STRIKE_CW="$ESTADO.strike-chatwoot"
   if docker exec "$CONTAINER" sh -c "timeout 5 wget -qO- http://onia-chatbot_chatwoot:3000/ >/dev/null 2>&1"; then
+    # El strike no se acumula entre parpadeos lejanos: un exito lo borra.
+    rm -f "$STRIKE_CW"
     if [ -f "$INCIDENTE_CW" ]; then
       rm -f "$INCIDENTE_CW"
+      log "OK: el camino a Chatwoot volvio — las respuestas salen de nuevo"
       tg_error "✅ <b>Bot Onia</b> — el camino a Chatwoot volvio: las respuestas salen de nuevo."
     fi
+  elif [ ! -f "$STRIKE_CW" ] && [ ! -f "$INCIDENTE_CW" ]; then
+    touch "$STRIKE_CW"
+    log "AVISO: una sonda al camino a Chatwoot fallo — espero la corrida siguiente antes de declarar el incidente"
   else
     log "ERROR: el bot NO llega a Chatwoot (respuestas mudas aunque /health este ok)"
     if [ ! -f "$INCIDENTE_CW" ]; then
@@ -90,6 +111,7 @@ if docker exec "$CONTAINER" sh -c "wget -qO- --timeout=5 http://127.0.0.1:$PORT/
   log "OK: webhook de vuelta arriba"
   if [ -f "$INCIDENTE" ]; then
     rm -f "$INCIDENTE"
+    log "OK: incidente cerrado — el watchdog lo levanto"
     tg_error "✅ <b>Bot Onia recuperado</b> — el watchdog lo levanto y responde de nuevo."
   fi
 else
