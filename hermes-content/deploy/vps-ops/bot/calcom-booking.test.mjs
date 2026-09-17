@@ -16,6 +16,7 @@ import {
   meetingLink,
   DEFAULT_DURATION_MINUTES,
   DEFAULT_PUBLIC_URL,
+  BOOKING_TIMEOUT_MS,
 } from "./calcom-booking.mjs";
 
 const CONFIG = { baseUrl: "http://calcom:3000", eventTypeId: 5, durationMinutes: 45, timeZone: "America/La_Paz" };
@@ -194,4 +195,113 @@ test("FECHA INVALIDA: se corta antes de llamar a Cal.com", async () => {
   const r = await createBooking({ config: CONFIG, startAt: "cuando puedas" }, { fetch: f });
   assert.equal(r.reason, "inicio_invalido");
   assert.equal(f.llamadas.length, 0);
+});
+
+// ---------------------------------------------------------------------------
+// TIMEOUT — el turno del prospecto no se cuelga esperando al calendario.
+//
+// POR QUE EXISTE, medido el 2026-09-13 en produccion. El proceso vivo del bot declara
+// `CALCOM_BASE_URL=http://calcom:3000` (leido de /proc/<pid>/environ dentro de `onia-center`)
+// y en el VPS **no hay ningun contenedor `calcom`** — `docker ps | grep -i cal` da vacio.
+// O sea que la rama que corre NO es `sin_config` (que se deriva del entorno sin tocar la red):
+// es la que SI sale a la red, contra un host que no resuelve. Medido desde el contenedor:
+// `wget -qO- --timeout=8 http://calcom:3000/api/book/event` -> `bad address` en **5,00 s**.
+//
+// Esos 5 s los espera el PROSPECTO, en el turno mas caro que tiene el bot: el que acaba de
+// elegir su horario de demo. Y 5 s es el piso, no el techo — lo puso el resolvedor de DNS,
+// que es quien corto. Un host que resolviera y no contestara (el caso del dia que alguien
+// levante Cal.com a medias) se queda esperando SIN LIMITE, porque `createBooking` no tenia
+// reloj propio: pasaba `signal: deps.signal` y ningun llamador de produccion le pasa uno.
+//
+// Su HERMANO ya sabia esto: `aviso-telegram.mjs` manda en el mismo turno y tiene
+// `AVISO_TIMEOUT_MS = 5000` con su `AbortController`. Dos llamadas de red en el mismo turno,
+// una con reloj y la otra sin: la asimetria era el defecto.
+// ---------------------------------------------------------------------------
+
+test("TIMEOUT: la reserva corta sola y el prospecto no espera para siempre", async () => {
+  // Un Cal.com que resuelve y no contesta nunca: sin reloj propio, esto no termina jamas.
+  const f = async (_url, init) =>
+    new Promise((_resolve, reject) => {
+      init?.signal?.addEventListener("abort", () => {
+        const e = new Error("The operation was aborted");
+        e.name = "AbortError";
+        reject(e);
+      });
+    });
+
+  // ⚠️ El `race` NO es decorativo, y esta escrito asi porque la primera version de este gate
+  // NO cazaba el defecto que existe para cazar. Validado por mutacion el 2026-09-13: al
+  // devolverle a `createBooking` su `signal: deps.signal` original —el defecto exacto de
+  // produccion— este caso no se ponia rojo, se COLGABA, y `node --test` lo reportaba como
+  // "pass 18 / fail 0" en vez de "fail 1". Un test que se cuelga ante el bug se lee igual que
+  // uno que pasa: la ausencia de FAIL no es verde. El reloj del test lo vuelve ruidoso.
+  const arranque = Date.now();
+  const r = await Promise.race([
+    createBooking({ config: CONFIG, startAt: START }, { fetch: f, timeoutMs: 40 }),
+    new Promise((_r, reject) =>
+      setTimeout(
+        () => reject(new Error("createBooking no volvio en 3 s: la reserva NO tiene reloj propio")),
+        3000,
+      ),
+    ),
+  ]);
+  const tardo = Date.now() - arranque;
+
+  assert.equal(r.ok, false);
+  assert.equal(r.reason, "error");
+  assert.match(r.warnings.join(" "), /timeout/i, "el motivo tiene que NOMBRAR al timeout: un 'error' generico manda a diagnosticar la red del prospecto");
+  assert.ok(tardo < 2000, `la reserva tardo ${tardo}ms: corto sola, no se colgo`);
+});
+
+test("TIMEOUT: hay un tope por defecto — no depende de que el llamador se acuerde", async () => {
+  // El defecto real de produccion es justamente que NINGUN llamador pasa `signal` ni `timeoutMs`.
+  // Un tope que solo existe si te acordas de pedirlo no protege el turno de nadie.
+  assert.ok(Number(BOOKING_TIMEOUT_MS) > 0, "tiene que haber un tope por defecto");
+  assert.ok(Number(BOOKING_TIMEOUT_MS) <= 10000, "un tope mas largo que 10 s ya es una conversacion muerta");
+
+  const f = async (_url, init) => {
+    assert.ok(init?.signal, "el fetch tiene que recibir un signal aunque el llamador no pase ninguno");
+    return ok({ uid: "abc", startTime: START });
+  };
+  const r = await createBooking({ config: CONFIG, startAt: START }, { fetch: f });
+  assert.equal(r.ok, true);
+});
+
+// El reloj se SUMA al signal del llamador, no lo reemplaza: si algun dia un llamador quiere
+// cancelar la reserva antes (porque el prospecto escribio otra cosa), tiene que poder.
+test("TIMEOUT: el llamador que aborta DURANTE el fetch corta la reserva igual", async () => {
+  const propio = new AbortController();
+  const f = async (_url, init) =>
+    new Promise((_resolve, reject) => {
+      init?.signal?.addEventListener("abort", () => {
+        const e = new Error("The operation was aborted");
+        e.name = "AbortError";
+        reject(e);
+      });
+      // El prospecto se arrepiente mientras Cal.com piensa.
+      setTimeout(() => propio.abort(), 10);
+    });
+
+  const r = await createBooking(
+    { config: CONFIG, startAt: START },
+    { fetch: f, signal: propio.signal, timeoutMs: 30000 },
+  );
+  assert.equal(r.ok, false, "abortar desde el llamador tiene que cortar la reserva");
+  assert.equal(r.reason, "error");
+});
+
+test("TIMEOUT: un signal que YA venia abortado no dispara la reserva a ciegas", async () => {
+  const propio = new AbortController();
+  propio.abort();
+  let salioALaRed = false;
+  const f = async (_url, init) => {
+    salioALaRed = true;
+    assert.ok(init?.signal?.aborted, "si el llamador ya cancelo, el signal tiene que llegar abortado");
+    const e = new Error("The operation was aborted");
+    e.name = "AbortError";
+    throw e;
+  };
+  const r = await createBooking({ config: CONFIG, startAt: START }, { fetch: f, signal: propio.signal });
+  assert.equal(r.ok, false);
+  assert.ok(salioALaRed === false || r.reason === "error");
 });

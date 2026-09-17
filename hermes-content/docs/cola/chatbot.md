@@ -108,13 +108,38 @@ Telegram. El mismo mensaje que a las 19:28 daba `rama=MUDO` ahora recorre el gui
   Commits `55e669a6` + `22546797` (rama `claude/cobro-e2e-punto-1-25ba65`). Tarea en el
   tablero pidiéndole a Sergio Urcullo el "hola" de cierre.
 
-## 🔴 Cal.com NO EXISTE — las demos del bot no entran a ningún calendario (medido 11-sep)
+## ✅ CERRADO 2026-09-13 — Cal.com no existe, la decisión ya estaba tomada (c), y el turno del prospecto ya no espera 5 s
 
 Pregunta directa de Sergio Urcullo ("¿está funcionando el cal de onia?"). Medido en vivo:
 **cero contenedores de Cal.com en el VPS** (`docker ps` completo, ninguno), cal.onia.com.bo
-redirige a onia.com.bo/empezar, y el env del bot no tiene `CALCOM_BASE_URL` — por eso
-`createBooking` (`hermes-content/deploy/vps-ops/bot/calcom-booking.mjs`) devuelve
-`sin_config` SIEMPRE y la demo de prueba del 10-sep quedó con `calendar_event_id` VACÍO.
+redirige a onia.com.bo/empezar, y la demo de prueba del 10-sep quedó con `calendar_event_id`
+VACÍO.
+
+⚠️ **Media frase de acá era FALSA y mandaba al diagnóstico contrario — corregido 2026-09-13.**
+Decía *"el env del bot no tiene `CALCOM_BASE_URL` — por eso `createBooking` devuelve
+`sin_config` SIEMPRE"*. Contado en el proceso vivo (`/proc/<pid>/environ` del webhook dentro de
+`onia-center`, no el `.env`): **la config SÍ está** — `CALCOM_BASE_URL=http://calcom:3000`,
+`CALCOM_BOT_EVENT_TYPE_ID=5`, `CALCOM_USERNAME=onia`. O sea que la rama que corre **no** es
+`sin_config` (ésa se deriva del entorno **sin tocar la red**, y es la que el código da por
+supuesta en sus comentarios): es la que **SÍ sale a la red**, contra un host que no existe.
+Medido desde el contenedor: `wget -qO- --timeout=8 http://calcom:3000/api/book/event` →
+`bad address 'calcom:3000'` en **5,00 s**.
+
+**Esos 5 s los esperaba el PROSPECTO**, en el turno más caro que tiene el bot: el que acaba de
+elegir su horario. Y 5 s era el piso, no el techo — lo puso el resolvedor de DNS, que fue quien
+cortó; un Cal.com que resolviera y no contestara colgaba el turno **sin límite**, porque
+`createBooking` no tenía reloj propio (pasaba `signal: deps.signal` y **ningún** llamador de
+producción le pasa uno). Su hermano ya lo sabía: `aviso-telegram.mjs` sale a la red en el mismo
+turno con `AVISO_TIMEOUT_MS = 5000` y su `AbortController`. La asimetría era el defecto.
+
+✅ **ARREGLADO el 2026-09-13** (`calcom-booking.mjs`, `BOOKING_TIMEOUT_MS`): reloj propio que se
+**suma** al signal del llamador en vez de reemplazarlo, y el timeout se **nombra** en el motivo
+(un `error` genérico manda a diagnosticar la red del prospecto cuando el problema es nuestro).
+Gate `calcom-booking.test.mjs` (3 casos nuevos), **validado por mutación en tres puntos**.
+⚠️ Y la primera versión del gate **no cazaba el defecto**: con `signal: deps.signal` de vuelta,
+el caso se **colgaba** y `node --test` decía `pass 18 / fail 0` — la ausencia de FAIL leída como
+verde. Con el `race` que lo vuelve ruidoso, esa misma mutación da `fail 2, exit 1`.
+**Commiteado, NO desplegado.**
 
 **Lo que SÍ funciona (flujo degradado honesto, por diseño):** el bot ofrece los horarios de
 `ONIA_BOT_SLOTS` (los renueva el cron python diario, independiente de Cal), el prospecto
@@ -122,12 +147,27 @@ elige, la fila queda en la base, el aviso de `demo_agendada` LLEGA al Telegram d
 Urcullo, y el texto agrega "(Estoy confirmando ese horario con Sergio…)". Lo que NO pasa:
 evento en calendario ni link de videollamada (M2_LINK solo sale con booking ok — diseñado).
 
-**Decisión de Sergio Urcullo (opciones cotizadas):**
+**Decisión (opciones cotizadas):**
 (a) redesplegar Cal.com self-hosted (investigar por qué desapareció el contenedor);
 (b) cuenta Cal.com cloud gratis + adaptar `calcom-booking.mjs` a su API;
 (c) seguir sin calendario mientras el volumen sea ~1 demo/semana — el aviso por Telegram +
-confirmación por WhatsApp alcanza y el bot ya es honesto. Recomendada HOY: (c), y (a/b)
-cuando haya volumen real.
+confirmación por WhatsApp alcanza y el bot ya es honesto.
+
+✅ **YA ESTÁ DECIDIDA, y es (c) — no hay que preguntarle nada.** Este bloque decía *"Decisión de
+Sergio Urcullo"* y lo dejaba 🔴 esperando, pero **él ya contestó el 2026-09-03** (tablero
+`t_b18ca430`, citado en `aviso-telegram.mjs:23-24`): *"opción (c) = Telegram YA, y Cal.com
+**cuando moleste anotar a mano**"*. Repetirle una decisión que ya tomó es peor que no
+preguntarle. Contado el 2026-09-13, además, la tarea nunca existió en el tablero: `list | grep
+-i calcom` sólo devuelve dos `done` — o sea que esta pregunta escrita en un `.md` no le llegó
+**jamás**, y el 🔴 habría esperado para siempre.
+
+**Condición de vencimiento** (lo que reabre (a)/(b), sin volver a preguntar): que anotar a mano
+empiece a molestar, es decir **más de ~1 demo agendada por semana**. Se cuenta sin instrumento
+nuevo: `demo_agendada` en el log del bot, o `scheduled_at` en `onia_center.bot_conversations`.
+Hoy el volumen es de una demo por semana y el prospecto no ve ningún síntoma: el bot no promete
+calendario ni link (M2_LINK sólo sale con `booking ok`) y agrega su salvedad
+(`run-turn.mjs:493`, `cierreDeReservaFallida`) — verificado leyendo el ejecutor, no el
+simulador, que es ciego a lo que el ejecutor agrega.
 
 ## Objetivo único
 
@@ -315,21 +355,40 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       esquive del corte (`false &&`) → 2 rojos; techo devuelto al `24` tipeado y firma vieja →
       1 rojo; árbol restaurado con `cp` → 10/10. Suite del bot completa: **1014/1014**.
 
-      📌 **Lo que queda abierto, y es la mitad que el dueño VE** (`onia-platform`, otro repo —
-      no entró en esta vuelta y se deja con la reproducción exacta para no re-investigarlo):
-      1. `ChatbotClient.tsx:28` — `HORAS_SEGUIMIENTO = [1, 2, 3, 5, 12, 24]`: **la última
-         opción del desplegable es la opción muerta.** El tope que el motor puede cumplir es
-         `windowClosesAtHours - 1`.
-      2. `lib/chatbot/knowledge.ts:110` — `horas: { kind: "int", min: 1, max: 48 }`, y
-         `editor-sugerir.mjs:23` le dicta al LLM *"horas (numero 1-48)"*: por ahí entra un 30
-         sin pasar por el desplegable.
-      3. `ChatbotClient.tsx:596` — el párrafo afirma *"Dentro de las 24 horas del último
-         mensaje, sin costo extra"* **tipeado al lado del control que lo puede volver falso**.
-         Es la clase ya conocida: la promesa se **condiciona** (derivarla de lo que el dueño
-         eligió), no se borra.
-      ⚠️ **Y una fecha que vence en 18 días:** ese *"sin costo extra"* depende de Meta, que
-      empieza a cobrar la respuesta dentro de la ventana de 24 h el **1-oct-2026**. Toda
-      promesa sobre el costo de un tercero lleva su fecha.
+      ✅ **La mitad que el dueño VE quedó CERRADA el 2026-09-13**, misma clase y en la misma
+      vuelta que las dos puntas del bot: `onia-platform` `75d8925` y `onia-hermes` (abajo).
+      ⚠️ **COMMITEADO, NO DESPLEGADO — y la pantalla NO se miró renderizada con el cambio:**
+      producción corre el build viejo y `onia-platform` no tiene render testing, así que
+      `mirar_bandeja_dueno.mjs` mostraría la versión vieja. **Se mira cuando se publique** —
+      hasta entonces el defecto sigue vivo para el cliente.
+      Las **cinco** superficies tipeaban el rango y ninguna derivaba del techo real; ahora hay
+      dos dueños, uno por repo, y los dos lo derivan de `followUp.windowClosesAtHours`:
+      1. `lib/chatbot/espera-que-el-motor-cumple.ts` (producto) — `MAX_ESPERA_HORAS = 23`.
+         El desplegable pinta `ESPERAS_OFRECIDAS`: **se cae la opción muerta y entra el techo
+         real**, para que el que quería "casi un día" siga teniendo su opción — y ésa sí
+         escribe. El validador pasó de `min 1 / max 48` tipeado a derivarlo (el comentario de
+         arriba se declaraba *"espejo EXACTO del motor"* y era justo lo que no era).
+      2. `bot/knowledge.mjs` — `MAX_ESPERA_INSISTENCIA_HORAS`, y `editor-sugerir.mjs` **deja de
+         dictarle "1-48" al LLM**: interpola el rango, que es por donde entraba un 30 sin pasar
+         por el desplegable.
+      3. El párrafo de la promesa se **deriva de lo elegido** (`promesaDeInsistencia`), y con
+         una espera que no se cumple deja de prometer. **Se le sacó el "sin costo extra":** es
+         una promesa sobre un tercero que **vence el 1-oct-2026** (Meta empieza a cobrar la
+         respuesta dentro de la ventana de 24 h) y este copy se congela en el build. Redacción
+         que no caduca, no una fecha que haya que acordarse de barrer.
+      **Un efecto que hay que saber:** el validador ahora rechaza 24-48 h **al leer**, y es
+      TODO O NADA — un doc legado con esa espera se caería entero. **Medido antes de tocar:**
+      ninguna org tiene el campo hoy (una sola fila, `onia-interna`, sin `seguimiento`), así
+      que el riesgo real es cero. El corte del motor se queda igual como red, y por eso pasó a
+      ser función propia (`esperaFueraDeVentana`): sus dos casos ya no podían construir el
+      escenario por el camino del doc publicado — **el fixture se apoyaba en el defecto que el
+      test decía cubrir**.
+      **Gates:** `espera-que-el-motor-cumple.test.ts` cruza lo que el validador ACEPTA contra
+      lo que el motor CUMPLE (1..60 h) y deriva sus sujetos **caminando el disco**, sin
+      absolución por mención; `espera-que-el-barrido-cumple.test.mjs` ata las TRES puntas del
+      bot. **Validados por mutación, 7 direcciones en total** (4 en el producto, 3 en el bot);
+      el caso ancla caza el universo vaciado. `tsc` 0 · vitest 4938 · eslint 0 errores · bot
+      1020/1020 — y los tres re-corridos **en el VPS** antes de publicar la rama.
 
 - [x] 🔴 **~~El bot OFRECE un horario y PROMETE otro: los dos salían de fuentes distintas~~ —
       CERRADO el 2026-09-13 en el repo (`62336825`, `hermes-content/deploy/vps-ops/bot/ventanas-de-atencion.mjs`).

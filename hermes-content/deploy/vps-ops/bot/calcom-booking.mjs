@@ -180,6 +180,15 @@ export function cierreSinReservar({ stageBefore, stageAfter, scheduledAt, calend
 }
 
 /**
+ * Tope de la reserva, en ms.
+ *
+ * Mismo numero que `AVISO_TIMEOUT_MS` de `aviso-telegram.mjs` y por el mismo motivo: las dos
+ * salen a la red DENTRO del turno de un prospecto que esta esperando una respuesta. La
+ * diferencia era que el aviso tenia reloj y la reserva no.
+ */
+export const BOOKING_TIMEOUT_MS = 5000;
+
+/**
  * Crea la reserva.
  *
  * @returns {Promise<{ok: boolean, uid: string|null, reason: string, warnings: string[]}>}
@@ -211,16 +220,38 @@ export async function createBooking(options = {}, deps = {}) {
     return { ok: false, uid: null, reason: "inicio_invalido", warnings: [`calcom: startAt invalido: ${options.startAt}`] };
   }
 
+  // El reloj es del PRODUCTO, no del llamador. Ninguno de los tres caminos que reservan pasa
+  // `signal`, asi que `signal: deps.signal` era `undefined` en el 100% del trafico real y el
+  // turno del prospecto quedaba atado a lo que tardara la red. Con el signal del llamador
+  // presente se respeta: el reloj se suma, no lo reemplaza.
+  const timeoutMs = Number(deps.timeoutMs) > 0 ? Number(deps.timeoutMs) : BOOKING_TIMEOUT_MS;
+  const reloj = new AbortController();
+  const alarma = setTimeout(() => reloj.abort(), timeoutMs);
+  const cancelarConElLlamador = () => reloj.abort();
+  if (deps.signal) {
+    if (deps.signal.aborted) reloj.abort();
+    else deps.signal.addEventListener("abort", cancelarConElLlamador, { once: true });
+  }
+
   let response;
   try {
     response = await doFetch(`${config.baseUrl}/api/book/event`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
-      signal: deps.signal,
+      signal: reloj.signal,
     });
   } catch (error) {
-    return { ok: false, uid: null, reason: "error", warnings: [`calcom: la reserva no salio: ${String(error?.message || error).slice(0, 200)}`] };
+    // El timeout se NOMBRA. Un "error" generico manda a diagnosticar la red del prospecto
+    // cuando el problema es nuestro: el calendario no contesto a tiempo.
+    const detalle =
+      error?.name === "AbortError"
+        ? `no contesto en ${timeoutMs}ms (timeout)`
+        : String(error?.message || error).slice(0, 200);
+    return { ok: false, uid: null, reason: "error", warnings: [`calcom: la reserva no salio: ${detalle}`] };
+  } finally {
+    clearTimeout(alarma);
+    if (deps.signal) deps.signal.removeEventListener?.("abort", cancelarConElLlamador);
   }
 
   // 409 = el horario se ocupo entre que se ofrecio y que el prospecto contesto. NO es un bug:
