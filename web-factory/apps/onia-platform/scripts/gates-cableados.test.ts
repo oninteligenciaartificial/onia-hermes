@@ -56,6 +56,9 @@ const EXENTOS: Record<string, string> = {
   "monto-en-el-codigo.mjs":
     "modulo puro sin medicion propia: lo importa precios-vivos.mjs y lo cubre monto-en-el-codigo.test.ts. " +
     "Correrlo solo no mide nada — un alias suyo seria decorativo.",
+  "recortados.mjs":
+    "modulo puro sin medicion propia: lo importa mirar-venta.mjs y lo cubre recortados.test.ts. " +
+    "Correrlo solo no mide nada — un alias suyo seria decorativo.",
 };
 
 /**

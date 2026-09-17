@@ -132,6 +132,61 @@ describe("la cantidad de planes se cuenta, no se tipea", () => {
     ).toEqual([]);
   });
 
+  it("ninguna frase enumera los planes con su precio y deja alguno afuera", () => {
+    // La hermana del caso de arriba, y el otro modo de falla del mismo día. Contar mal («los
+    // TRES planes») ya se vigilaba; ENUMERAR de menos no, y es peor: no dice un número falso,
+    // simplemente el plan no existe para el lead.
+    //
+    // Medido el 2026-09-17 sobre `onia.com.bo/v1/precios` SERVIDA — «Básico Bs 320, Pro Bs 890
+    // y Full Bs 1.290», en la `description` y otra vez en la `og:description`, con el Crece de
+    // Bs 550 vivo en la tabla de esa misma pantalla. Las cifras estaban interpoladas desde el
+    // 2026-09-04 (por eso `precios-fuente.mjs` las cruzaba en verde: las tres eran ciertas), y
+    // los IDS seguían tipeados, así que el plan nuevo no entró.
+    //
+    // El sujeto es la LÍNEA que nombra dos o más planes con su monto: eso es la tabla de
+    // precios escrita en prosa, y una tabla que se saltea una fila miente por omisión. Nombrar
+    // un solo plan («el Básico cuesta Bs 320») no es enumerar, y comparar dos sin precio
+    // tampoco — por eso el corte pide plan Y cifra.
+    // Las TRES formas de señalar un plan a mano. La del índice (`PLANES[0]`) la descubrió una
+    // mutación al validar este mismo caso: escrita así, la enumeración incompleta pasaba en
+    // verde. Un gate que sólo conoce las formas que ya vio es la lista de inclusión de siempre.
+    const cita = (p: (typeof PLANES)[number], i: number) =>
+      new RegExp(
+        `(\\b${p.nombre}\\b|plan\\(\\s*["'\`]${p.id}["'\`]\\s*\\)|PLANES\\[\\s*${i}\\s*\\])`,
+      );
+    const conSuMonto = (linea: string, p: (typeof PLANES)[number], i: number) =>
+      cita(p, i).test(linea) &&
+      (new RegExp(`plan\\(\\s*["'\`]${p.id}["'\`]\\s*\\)\\s*\\.\\s*mensual`).test(linea) ||
+        new RegExp(`PLANES\\[\\s*${i}\\s*\\]\\s*\\.\\s*mensual`).test(linea) ||
+        new RegExp(`\\b${p.nombre}\\b[^.]{0,20}\\b${p.mensual}\\b`).test(linea) ||
+        new RegExp(`\\b${p.nombre}\\b[^.]{0,24}Bs`).test(linea));
+
+    const incompletas: string[] = [];
+    for (const abs of archivosDe(SRC)) {
+      const rel = path.relative(SRC, abs);
+      sinComentarios(fs.readFileSync(abs, "utf8"))
+        .split("\n")
+        .forEach((linea, i) => {
+          const conMonto = PLANES.filter((p, idx) => conSuMonto(linea, p, idx));
+          if (conMonto.length < 2 || conMonto.length === PLANES.length) return;
+          const faltan = PLANES.filter((p) => !conMonto.includes(p)).map((p) => p.nombre);
+          incompletas.push(
+            `  ${rel}:${i + 1}  enumera ${conMonto.map((p) => p.nombre).join(", ")} ` +
+              `y deja afuera a ${faltan.join(", ")}\n      ${linea.trim().slice(0, 160)}`,
+          );
+        });
+    }
+
+    expect(
+      incompletas,
+      `hay frases que listan planes con su precio y se saltean alguno. La lista sale de ` +
+        `PLANES (lib/pricing.ts): derivala, como ya hace saltosDeLaEscalera() en ` +
+        `app/v1/precios/page.tsx. Interpolar la cifra no alcanza — el que se queda afuera es ` +
+        `el plan cuyo ID nadie tipeó.\n` +
+        incompletas.join("\n"),
+    ).toEqual([]);
+  });
+
   it("las dos frases que cuentan planes siguen contándolos", () => {
     // Un gate que sólo PROHÍBE se satisface borrando lo que vigila: sin este caso, arrancar la
     // frase de la FAQ dejaría el de arriba en verde. Las dos son promesas de plata —"no

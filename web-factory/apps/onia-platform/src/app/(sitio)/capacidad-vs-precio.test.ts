@@ -210,6 +210,14 @@ function tieneSalvedad(ventana: string): boolean {
   // rojo sobre un hero que ya dice con qué plan corre la prueba, y mandaría a
   // tipear a mano el nombre que `prueba-vs-plan.test.ts` prohíbe tipear.
   if (/planquecorre/.test(v)) return true;
+  // Por el MISMO motivo, `primerPlanCon("agentes")` renderiza «Crece». Es más:
+  // es la única forma que no envejece, y desde el 2026-09-17 es obligatoria —
+  // `lib/capacidad-incluida.test.ts` prohíbe tipear el plan del que viene una
+  // capacidad. Sin esta línea los dos gates se contradicen: uno manda a derivar
+  // el nombre y el otro se pone rojo porque ya no lo lee escrito. Que la
+  // capacidad interpolada sea la correcta lo vigila aquel, que es su dueño;
+  // acá sólo se pregunta si la promesa viaja CON su plan.
+  if (/primerplancon\s*\(/.test(v)) return true;
   // Con LÍMITE DE PALABRA, y no es cosmética: «Pro» como subcadena vive dentro
   // de «aprobación» y «aprobás», que es como termina CADA frase que habla de
   // los agentes en este sitio. Sin el límite el gate se absolvía solo justo en

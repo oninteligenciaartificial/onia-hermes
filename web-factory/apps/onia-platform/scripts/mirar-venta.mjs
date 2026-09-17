@@ -32,6 +32,8 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import { join } from 'node:path';
 
+import { TOPE_RECORTADOS, fallasDeRecortados } from './recortados.mjs';
+
 /**
  * `playwright` no es dependencia de esta app a proposito: es una herramienta de
  * verificacion, no del producto, y no tiene que viajar al contenedor que sirve el sitio.
@@ -108,7 +110,7 @@ const UA_IPHONE =
  * pagina y no el pie — que es exactamente como se veia la franja clara bajo el pie negro.
  * Se sortean tres x porque el globo del chat es fijo y vive en la esquina derecha.
  */
-function sonda(vw) {
+function sonda({ vw, tope }) {
   const doc = document.documentElement;
   const desborde = doc.scrollWidth - vw;
   const puntos = [0.2, 0.5, 0.8].map((f) => {
@@ -127,7 +129,11 @@ function sonda(vw) {
   return {
     desborde,
     alPie: puntos,
-    recortados: recortados.slice(0, 5),
+    // El tope recorta la lista que viaja al informe, pero el TOTAL viaja igual:
+    // lo que no entra se declara con su cuenta en vez de desaparecer. Ver
+    // scripts/recortados.mjs.
+    recortados: recortados.slice(0, tope),
+    recortadosTotal: recortados.length,
     scrolleable: doc.scrollHeight > window.innerHeight + 2,
     // Cuanto falta para el fondo real. Si esto no es ~0, la sonda de arriba midio a
     // mitad de la pagina y NO vio el pie: ver `bajarHastaElFondo`.
@@ -214,7 +220,7 @@ for (const vista of VISTAS) {
     await page.waitForTimeout(900);
     await bajarHastaElFondo(page);
 
-    const m = await page.evaluate(sonda, vista.width);
+    const m = await page.evaluate(sonda, { vw: vista.width, tope: TOPE_RECORTADOS });
     const captura = join(OUT, `${pantalla.nombre}-${vista.nombre}-pie.png`);
     await page.screenshot({ path: captura });
 
@@ -222,8 +228,12 @@ for (const vista of VISTAS) {
     const status = resp?.status() ?? 0;
     if (status !== 200) falla(id, 'status', `${id}: respondio ${status}`);
     if (m.desborde > 0) falla(id, 'desborde', `${id}: desborde horizontal de ${m.desborde}px`);
-    if (m.recortados.length) {
-      falla(id, 'recortado', `${id}: texto recortado — "${m.recortados[0].txt}"`);
+    // UNA falla por TEXTO recortado, no una por vista: la clave de la falla es
+    // lo que `--comparar-con` compara, y con la clase pelada los cinco textos
+    // recortados de una vista comparten identidad con el único que sobrevive en
+    // la rama. Ver scripts/recortados.mjs.
+    for (const f of fallasDeRecortados(id, m.recortados, m.recortadosTotal)) {
+      falla(id, f.clase, f.texto);
     }
     if (m.scrolleable) {
       /**

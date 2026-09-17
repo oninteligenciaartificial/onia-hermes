@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PLANES, bs, cuantosPlanes, plan, semanalDesde, PRUEBA } from "@/lib/pricing";
+import { PLANES, bs, cuantosPlanes, semanalDesde, PRUEBA } from "@/lib/pricing";
 
 /**
  * Los saltos de valor, en el orden de la escalera y en minúscula: "ordenar,
@@ -10,6 +10,28 @@ function saltosDeLaEscalera(): string {
   const saltos = PLANES.map((p) => p.salto.toLowerCase());
   if (saltos.length <= 1) return saltos.join("");
   return `${saltos.slice(0, -1).join(", ")} y ${saltos[saltos.length - 1]}`;
+}
+
+/**
+ * Los planes con su precio, TODOS, en el orden de la escalera.
+ *
+ * ⚠️ La razón por la que existe está escrita doce renglones más arriba, para los `salto`, desde
+ * el 2026-09-12 — y no viajó a las dos `description` de acá abajo, que seguían nombrando
+ * `plan("basico")`, `plan("pro")` y `plan("full")` a mano. Medido el 2026-09-17 sobre
+ * `onia.com.bo/v1/precios` SERVIDA: «Básico Bs 320, Pro Bs 890 y Full Bs 1.290», con el plan
+ * **Crece (Bs 550)** vendiéndose en la tabla de esa misma pantalla y ausente del único renglón
+ * que viaja al buscador y al preview de WhatsApp. Interpolar la CIFRA (la cura del 2026-09-04)
+ * no alcanzó: el id seguía tipeado, así que el plan nuevo no entró en ninguna de las dos.
+ */
+function preciosDeLaEscalera({ separador }: { separador: "prosa" | "puntos" }): string {
+  const partes = PLANES.map((p) =>
+    separador === "prosa"
+      ? `${p.nombre} Bs ${bs(p.mensual)}`
+      : `${p.nombre} ${bs(p.mensual)}`,
+  );
+  if (separador === "puntos") return partes.join(" · ");
+  if (partes.length <= 1) return partes.join("");
+  return `${partes.slice(0, -1).join(", ")} y ${partes[partes.length - 1]}`;
 }
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -33,14 +55,14 @@ export const metadata: Metadata = {
   metadataBase: new URL(`${SITE_URL}/`),
   title: "Precios de Onia Platform — planes en bolivianos, publicados",
   description:
-    `${plan("basico").nombre} Bs ${bs(plan("basico").mensual)}, ${plan("pro").nombre} Bs ${bs(plan("pro").mensual)} y ${plan("full").nombre} Bs ${bs(plan("full").mensual)} al mes${DESDE_SEMANAL}. Sin tarjeta para probar, sin contratos de permanencia y con la letra chica publicada. ${PRUEBA.dias} días gratis.`,
+    `${preciosDeLaEscalera({ separador: "prosa" })} al mes${DESDE_SEMANAL}. Sin tarjeta para probar, sin contratos de permanencia y con la letra chica publicada. ${PRUEBA.dias} días gratis.`,
   alternates: { canonical: "/precios" },
   openGraph: {
     type: "website",
     locale: "es_BO",
     title: "Precios de Onia Platform — en bolivianos, publicados",
     description:
-      `${plan("basico").nombre} ${bs(plan("basico").mensual)} · ${plan("pro").nombre} ${bs(plan("pro").mensual)} · ${plan("full").nombre} ${bs(plan("full").mensual)} Bs/mes. ${PRUEBA.dias} días gratis sin tarjeta, sin permanencia.`,
+      `${preciosDeLaEscalera({ separador: "puntos" })} Bs/mes. ${PRUEBA.dias} días gratis sin tarjeta, sin permanencia.`,
     url: "/precios",
   },
 };
