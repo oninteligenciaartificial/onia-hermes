@@ -21,5 +21,12 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/webs",
+      "destination": "https://onia.com.bo/servicios/webs?origen=sergio",
+      "permanent": false
+    }
   ]
 }

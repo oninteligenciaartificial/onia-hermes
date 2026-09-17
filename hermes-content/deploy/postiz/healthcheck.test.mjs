@@ -8,7 +8,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import http from 'node:http';
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
+import { leerDeProduccion } from '../../../scripts/lib/vps-o-local.mjs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -94,18 +95,23 @@ test('el cuerpo no lleva comillas dobles: rompería el YAML del docker-compose',
 });
 
 // ── Que lo DESPLEGADO no se despegue de este archivo ───────────────────────────────────────
-// Se mide contra /opt del VPS. Fuera del VPS (nodo de casa) no se puede: en ese caso dice
-// NO MEDIDO en voz alta, nunca verde — un gate que no puede medir no aprueba.
+// Se mide contra /opt del VPS. Antes preguntaba `existsSync` del disco LOCAL, así que fuera
+// del VPS decía NO MEDIDO y se quedaba ahí — honesto, y mudo para siempre: desde el
+// 2026-09-07 los loops corren en nodo-casa, o sea que este caso no medía nunca. Un gate vivo
+// que cambia de máquina no falla, deja de medir, y en el log de la cadena un `# SKIP` se lee
+// igual que un `pass`. Ahora pregunta al disco local y, si no está, al VPS por SSH; el
+// NO MEDIDO queda para cuando NINGUNA de las dos vías contesta, que es lo único que no se
+// puede confundir con "no hay desvío".
 const OVERRIDE = '/opt/postiz/postiz-docker-compose/docker-compose.override.yaml';
 
 test('lo desplegado en el VPS es exactamente este cuerpo', (t) => {
-  if (!existsSync(OVERRIDE)) {
-    t.skip(`NO MEDIDO: no existe ${OVERRIDE} (no estoy en el VPS). El sondeo NO quedó verificado.`);
+  const vivo = leerDeProduccion(OVERRIDE);
+  if (vivo === null) {
+    t.skip(`NO MEDIDO: no pude leer ${OVERRIDE} ni en disco local ni por SSH al VPS. El sondeo NO quedó verificado.`);
     return;
   }
-  const yaml = readFileSync(OVERRIDE, 'utf8');
   assert.ok(
-    yaml.includes(CUERPO),
-    'el healthcheck del VPS se despegó de healthcheck.js — volvé a aplicarlo al override',
+    vivo.contenido.includes(CUERPO),
+    `el healthcheck del VPS se despegó de healthcheck.js — volvé a aplicarlo al override (leído ${vivo.origen})`,
   );
 });

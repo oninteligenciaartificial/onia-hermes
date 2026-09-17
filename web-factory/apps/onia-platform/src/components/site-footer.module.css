@@ -43,6 +43,7 @@
 .brand {
   display: inline-flex;
   align-items: center;
+  min-width: 44px;
   min-height: 44px;
 }
 
@@ -78,7 +79,8 @@
   font-size: max(0.9rem, var(--fs-micro-min));
   display: inline-flex;
   align-items: center;
-  min-height: 40px;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .col a:hover {
@@ -98,6 +100,9 @@
 }
 
 .legalId a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   color: inherit;
   text-decoration: none;
   border-bottom: 1px solid color-mix(in oklab, currentColor 30%, transparent);
@@ -106,13 +111,4 @@
 .legalId a:hover,
 .legalId a:focus-visible {
   color: var(--ink);
-}
-
-/* En el telefono el mail se toca con el pulgar: 44px de area tactil. */
-@media (max-width: 899px) {
-  .legalId a {
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-  }
 }
