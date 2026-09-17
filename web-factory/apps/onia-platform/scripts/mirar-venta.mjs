@@ -33,6 +33,7 @@ import { pathToFileURL } from 'node:url';
 import { join } from 'node:path';
 
 import { TOPE_RECORTADOS, fallasDeRecortados } from './recortados.mjs';
+import { superficiesDeVenta } from './rutas-de-venta.mjs';
 
 /**
  * `playwright` no es dependencia de esta app a proposito: es una herramienta de
@@ -80,11 +81,52 @@ const arg = (nombre, porDefecto) => {
 const BASE = arg('base', 'https://onia.com.bo').replace(/\/$/, '');
 const OUT = arg('out', '/tmp/mirar-venta');
 
-/** Las dos pantallas del carril. Si se suma una tercera, va acá y en el prompt del loop. */
-const PANTALLAS = [
-  { nombre: 'home', ruta: '/' },
-  { nombre: 'empezar', ruta: '/empezar' },
-];
+/**
+ * Las pantallas a mirar, DERIVADAS DEL DISCO — no una lista escrita a mano.
+ *
+ * POR QUE CAMBIO. Hasta el 2026-09-17 esto era `[{home}, {empezar}]` con el
+ * comentario *"si se suma una tercera, va aca y en el prompt del loop"*: una
+ * lista de inclusion, que es la forma exacta en que esta familia de gates falla
+ * abierto — el sujeto nuevo nace invisible y nadie se entera. Medido ese dia:
+ * `superficiesDeVenta()` deriva VEINTICUATRO rutas vivas del sitio y este
+ * instrumento —el unico que ABRE las paginas, y el que encontro los 16 textos
+ * recortados de la home— miraba DOS. Las otras veintidos no las mira nadie
+ * renderizadas, incluidas `/precios` y `/chatbot`, que son donde esta el precio.
+ *
+ * El derivador ya existia en esta misma carpeta, con su test al lado, y lo usa
+ * `enlaces-vivos.mjs`. O sea: el universo correcto estaba a un import, y cada
+ * gate tenia razon por separado — que es como sobrevive este agujero.
+ *
+ * El nombre sale de la ruta y `/` sigue siendo `home`: la clave de una falla es
+ * `${id} | ${clase}` y `--comparar-con` decide con ella, asi que renombrar las
+ * dos de siempre romperia la comparacion contra los informes ya escritos.
+ */
+const nombreDeRuta = (r) => (r === '/' ? 'home' : r.replace(/^\//, '').replace(/\//g, '-'));
+
+const TODAS = superficiesDeVenta().map((ruta) => ({ nombre: nombreDeRuta(ruta), ruta }));
+
+/**
+ * `--rutas=/,/precios` acota el barrido a una tanda. Existe porque el universo
+ * entero son 24 rutas x 5 vistas = 120 navegaciones (~70 min contra produccion)
+ * y la vuelta del loop tiene tope de 50: sin una forma de partirlo, el gate
+ * ampliado no lo corre nadie y la cobertura vuelve a ser dos pantallas, pero
+ * ahora sin que nadie lo diga.
+ *
+ * ⚠️ Y por eso el recorte HABLA: el resumen dice siempre cuantas del universo se
+ * miraron y cuantas quedaron. Un tope mudo es una lista de inclusion disfrazada
+ * —es el `slice(0, 5)` que este mismo carril se encontro el 2026-09-17, donde al
+ * levantarlo aparecio un sexto texto cortado que no estaba ni en el informe—.
+ */
+const SOLO = arg('rutas', '');
+const PEDIDAS = SOLO.split(',').map((s) => s.trim()).filter(Boolean);
+const PANTALLAS = PEDIDAS.length ? TODAS.filter((p) => PEDIDAS.includes(p.ruta)) : TODAS;
+
+/** Una ruta pedida que no existe en el disco es un error del que llama, no cero fallas. */
+const INEXISTENTES = PEDIDAS.filter((r) => !TODAS.some((p) => p.ruta === r));
+if (INEXISTENTES.length) {
+  console.error(`--rutas nombra ruta(s) que no existen en el disco: ${INEXISTENTES.join(', ')}`);
+  process.exit(2);
+}
 
 /**
  * 320 es el iPhone SE (el mas angosto que sigue vivo) y 390 el iPhone mas comun.
@@ -188,7 +230,18 @@ const navegador = await abrirNavegador();
  * la rama. Sin eso, `--comparar-con` no puede decidir nada.
  */
 const fallas = [];
-const falla = (id, clase, texto) => fallas.push({ id, clase, texto, clave: `${id} | ${clase}` });
+/** Nombre de pantalla → ruta, para que cada falla sepa de que ruta salio. */
+const RUTA_DE = new Map(TODAS.map((p) => [p.nombre, p.ruta]));
+const falla = (id, clase, texto) =>
+  fallas.push({
+    id,
+    clase,
+    texto,
+    // El id es `${pantalla} @ ${vista}`: la ruta se deriva de ahi en vez de
+    // pedirsela a cada llamador, que es como se olvida en el sujeto nuevo.
+    ruta: RUTA_DE.get(String(id).split(' @ ')[0]) ?? null,
+    clave: `${id} | ${clase}`,
+  });
 const avisos = [];
 const informe = [];
 
@@ -285,9 +338,28 @@ for (const vista of VISTAS) {
 }
 
 await navegador.close();
-writeFileSync(join(OUT, 'informe.json'), JSON.stringify({ base: BASE, fallas, informe }, null, 2));
+// `rutas` va en el informe porque `--comparar-con` NO puede decidir sin saber
+// que miro la referencia: una falla en una ruta que la rama no abrio no esta
+// «ya arreglada», esta SIN MEDIR, y confundirlas invierte el veredicto hacia el
+// lado caro (manda a no tocar codigo que si esta roto).
+writeFileSync(
+  join(OUT, 'informe.json'),
+  JSON.stringify({ base: BASE, rutas: PANTALLAS.map((p) => p.ruta), fallas, informe }, null, 2),
+);
 
 console.log(`Mirado: ${BASE} — ${PANTALLAS.length} pantallas x ${VISTAS.length} vistas`);
+// La cobertura se dice SIEMPRE, mirado todo o no: es la unica linea que separa
+// «no hay fallas» de «no busque». Sin ella, acotar con `--rutas` produce un
+// verde identico al de un barrido completo.
+const SIN_MIRAR = TODAS.length - PANTALLAS.length;
+console.log(
+  SIN_MIRAR === 0
+    ? `Cobertura: las ${TODAS.length} rutas de venta del disco, ninguna sin mirar.`
+    : `Cobertura: ${PANTALLAS.length} de ${TODAS.length} rutas de venta — ${SIN_MIRAR} SIN MIRAR: ` +
+        TODAS.filter((p) => !PANTALLAS.includes(p))
+          .map((p) => p.ruta)
+          .join(' '),
+);
 console.log(`Capturas y informe: ${OUT}`);
 if (avisos.length) {
   console.log(`\n${avisos.length} aviso(s) de fuera de esta zona:`);
@@ -316,10 +388,28 @@ if (avisos.length) {
  */
 const REF = arg('comparar-con', '');
 if (REF && fallas.length) {
-  const previas = new Set((JSON.parse(readFileSync(REF, 'utf8')).fallas ?? []).map((f) => f.clave));
-  const deCodigo = fallas.filter((f) => previas.has(f.clave));
-  const soloAca = fallas.filter((f) => !previas.has(f.clave));
+  const ref = JSON.parse(readFileSync(REF, 'utf8'));
+  const previas = new Set((ref.fallas ?? []).map((f) => f.clave));
 
+  // Que rutas abrio la referencia. Un informe viejo no trae el campo: ahi no se
+  // puede saber, y la unica respuesta que no miente es tratarlo como completo
+  // (es lo que era cuando se escribio) — el caso nuevo y peligroso es el
+  // informe ACOTADO, que si lo declara.
+  const rutasRef = Array.isArray(ref.rutas) ? new Set(ref.rutas) : null;
+  const mirada = (f) => !rutasRef || rutasRef.has(f.ruta);
+
+  const sinMedir = fallas.filter((f) => !mirada(f));
+  const comparables = fallas.filter(mirada);
+  const deCodigo = comparables.filter((f) => previas.has(f.clave));
+  const soloAca = comparables.filter((f) => !previas.has(f.clave));
+
+  if (sinMedir.length) {
+    console.error(
+      `\n${sinMedir.length} falla(s) en rutas que la referencia NO abrio: no se sabe de quien es el trabajo.`,
+    );
+    for (const f of sinMedir) console.error(`  · ${f.texto}`);
+    console.error(`Volve a medir la rama incluyendolas: --rutas=${[...new Set(sinMedir.map((f) => f.ruta))].join(',')}`);
+  }
   if (soloAca.length) {
     console.error(`\n${soloAca.length} falla(s) YA ARREGLADAS en la rama — falta PUBLICAR, no tocar codigo:`);
     for (const f of soloAca) console.error(`  · ${f.texto}`);
@@ -328,6 +418,13 @@ if (REF && fallas.length) {
     console.error(`\n${deCodigo.length} falla(s) que TAMBIEN fallan en la rama — esto si es codigo:`);
     for (const f of deCodigo) console.error(`  · ${f.texto}`);
     process.exit(1);
+  }
+  // Con fallas sin medir no se puede afirmar que el arreglo este escrito: eso
+  // seria leer «la rama no lo reporto» como «la rama lo arreglo», que es el
+  // veredicto invertido y caro (manda a NO tocar codigo que si esta roto).
+  if (sinMedir.length) {
+    console.error(`\nNO PUDE DECIDIR: la referencia no abrio todas las rutas donde produccion falla.`);
+    process.exit(2);
   }
   // Produccion sigue rota para el lead, asi que no es un verde. Pero el trabajo
   // no es de este carril: un exit propio lo dice sin disfrazarlo de exito.
