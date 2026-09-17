@@ -63,6 +63,48 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [x] ✅ **CERRADO el 2026-09-17 — Onia le vendía Onia a Sergio Urcullo: el circuito de correos
+      no reconocía sus propias cuentas** (`onia-platform` `a467002`,
+      `lib/platform/cuentas-que-no-son-clientes.ts` + su test).
+
+      **Medido en producción, no deducido.** Contadas en `supabase-db` esa tarde, en TODA la
+      base hay **cuatro organizaciones y ninguna es un cliente**. `clinica-sergio-p2ljs`
+      (`sergio@onia.com.bo`, con el trial venciendo ese mismo día) venía recibiendo la secuencia
+      de venta completa — pasos 3, 7, 12 y 14, visibles en `/var/log/onia-trial-drip.log` del
+      VPS —, en el canal que Sergio Urcullo pidió ordenar.
+
+      **Por qué ningún gate lo vio: el instrumento afirmaba el defecto.** El filtro se escribió
+      el 2026-09-17 a la mañana (`1ef24c6`) con PREFIJOS de slug, que es la marca que ponemos al
+      **sembrar**; las cuentas de Onia no se siembran, se **usan**. Y el test de ese mismo
+      archivo listaba `clinica-sergio-p2ljs` y `onia-interna` como **clientes a los que sí había
+      que escribirles**, con el nombre del dueño al lado. Un gate cuya lista de sujetos está
+      tipeada a mano no siempre falla abierto: cuando **calcula** la respuesta a partir de esa
+      lista, contesta mal y **ratifica** el bug que existe para impedir.
+
+      **El daño no es sólo ruido en una bandeja nuestra.** Mientras el producto no pueda separar
+      un envío a un lead de uno a sí mismo, el `sent: N` del log se lee como N prospectos
+      trabajados cuando pueden ser **cero** — así es como no se ve que el canal está muerto el
+      día que importe. (Ya pasó: ocho corridas seguidas con `535 Authentication failed`.)
+
+      **El criterio** es el dominio propio `@onia.com.bo`, y cumple la misma vara asimétrica que
+      `zz-qa-`: esas direcciones las emitimos nosotros, así que ningún cliente puede tener una
+      por accidente. Se compara el **final** del correo, no «lo contiene» — un cliente puede
+      nombrarnos en su dirección (`onia.com.bo@gmail.com`) o vivir en `@onia.com.bo.mx`, y
+      excluirlo lo dejaría sin el aviso de que su plan se corta.
+
+      **Efecto medido contra la base:** de las 3 orgs que hoy entran al drip queda **1**
+      (`bolivian-electricidad`, un negocio de verdad) y salen las 2 nuestras. Cura de una vez a
+      los **dos** consumidores del filtro (`trial-drip` y `renewal-reminders`).
+
+      **Gate validado por mutación:** sacar la pregunta del predicado → 2 rojos; sacar la
+      cláusula de la consulta de Prisma → 2 rojos; cambiar «termina en» por «lo contiene» → 1
+      rojo. Gates verdes en el VPS (el árbol que se publica): `tsc` 0, 5.010 pruebas, `eslint` 0
+      errores.
+
+      ⚠️ **Commiteado y publicado en su rama; NO mergeado ni desplegado** — el merge es de
+      `onia-cola`.
+
+
 - [x] 🔴 **~~El drip de venta le escribía a las cuentas de QA que los carriles siembran en
       producción — y una de ellas es la bandeja real de Sergio Urcullo~~ — CERRADO el 2026-09-17
       (`onia-platform` `1ef24c6`, rama del carril; tsc 0 · vitest 5003/5003 · eslint 0 errores,
