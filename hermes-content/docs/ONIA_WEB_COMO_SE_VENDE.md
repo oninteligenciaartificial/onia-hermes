@@ -299,8 +299,8 @@ va a oler a agencia.
 > comisiones son de la plataforma y van a nombre del cliente.
 >
 > **Fuente única de esos dos montos: `web-factory/apps/onia-platform/src/content/webs.ts`**
-> (`WEB_STACKS`). El catálogo de la web personal (`hermes-content/sitio-sergiourcullo/webs/`)
-> los copia a mano y se alinea cuando cambian — es un espejo, no una fuente.
+> (`WEB_STACKS`). La web personal de Sergio Urcullo NO tiene catálogo propio (se eliminó el
+> mismo día: «esa UI habíamos quedado que no»): `/webs` redirige al configurador de Onia.
 >
 > ## ✅ DECIDIDO 2026-08-24 — la línea de webs NO tiene lista de precios *(vigente para Pro y Tienda)*
 >

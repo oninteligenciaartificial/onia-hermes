@@ -20,7 +20,7 @@ desde `/webs`, ambos publicados desde el repo canónico.**
 Definición de hecho:
 1. `onia.com.bo/servicios/webs` responde 200 con el configurador y el mensaje de WhatsApp
    sale con la selección escrita (probado en vivo, mirado).
-2. `sergiourcullo.vercel.app/webs` responde 200 y sus botones llegan al configurador.
+2. `sergiourcullo.vercel.app/webs` redirige (302, `vercel.json`) al configurador de Onia; la web personal es sólo entrada.
 3. `python scripts/publicar-sitio.py --dry` lista lo mismo que sirve Vercel (el buzón sin
    «ahead» ni modificados).
 4. `tsc --noEmit` verde en `apps/onia-platform` y la suite del sitio verde en Linux.
@@ -51,6 +51,7 @@ auto-sync lo pushea)
 | **Web personal portada al repo** | `hermes-content/sitio-sergiourcullo/**` | `abcbb7f` (catálogo `/webs`, sin pushear) + diff sin commitear de Codex (CTAs en hero, «Agendar 1 a 1» en la barra, cifras como franja, links al configurador, swipe horizontal en móvil). Renderizada y MIRADA a 390 y 1440, sin desborde |
 | **Asistente (paso 00)** — cuestionario nombre · rubro · objetivo · sentir · color → arma toda la selección y salta al preview | `src/content/web-assistant.ts` (reglas puras, 10 rubros) · `src/components/web-configurator/WebAssistant.tsx` · CSS al pie del módulo · `web-assistant.test.ts` (4 casos) | **Recorrido con Playwright a 390 y 1440**: «Clínica Amanecer» + Clínica dental + Premium → Portada editorial · Editorial, titular del rubro, CTA «Reservar un turno», 0 errores de consola. Son REGLAS, no un modelo (costo de API cero); un LLM entraría después sólo para copy |
 | **Precios aplicados (decisión 17-sep)** | `webs.ts`: Landing 2.000 · Profesional 4.500 con precio; **Pro → `precio: null`**, `precioWeb()` dice «Lo vemos en una llamada»; configurador y WhatsApp piden la llamada cuando no hay precio. `sitio-sergiourcullo/webs/index.html` alineado (2.000 / 4.500 / «En una llamada» ×2). Doc: `ONIA_WEB_COMO_SE_VENDE.md` §8 | hecho, sin publicar |
+| **Catálogo estático `/webs` de la web personal: ELIMINADO** (Sergio Urcullo, 17-sep: «esa UI habíamos quedado que no; la función es para onia.com.bo»). `/webs` → redirect a `onia.com.bo/servicios/webs?origen=sergio`; barra, hero y teaser de la home apuntan directo al configurador | `sitio-sergiourcullo/{vercel.json,index.html,*/index.html}` | hecho |
 | **Quinto alcance: Ecommerce sobre Shopify / Hotmart / Whop** (pedido 17-sep) | `webs.ts` (entrada `ecommerce`, `precio: null`) · `isWebStackId` · `SCOPE_COPY` · rubro `ecommerce` en el asistente (fuerza alcance ecommerce aunque el objetivo sea catálogo) · tarjeta en `sitio-sergiourcullo/webs/` (grilla 2+3) · copy «Cinco stacks / Cinco paquetes» · doc §8 | hecho, mirado a 1440 en las dos superficies; test unitario agregado |
 | `PRODUCT.md` + `web-layout-examples.png` (2,5 MB) | `apps/onia-platform/` | de Codex; el PNG lo usa `website-preview.module.css` |
 
