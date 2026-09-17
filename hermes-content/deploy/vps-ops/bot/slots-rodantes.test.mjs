@@ -8,7 +8,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 
 import { proximosSlots, comoSpec, siguenVigentes } from "./slots-rodantes.mjs";
-import { ANTICIPACION_MINIMA_MS, parseSlotsSpec } from "./config.mjs";
+import { ANTICIPACION_MINIMA_MS, parseSlotsSpec, slotsPending } from "./config.mjs";
 
 /** El dia real, calculado aparte del codigo que se prueba. */
 const DIA_REAL = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
@@ -37,8 +37,19 @@ test("todo horario ofrecido es FUTURO", () => {
 });
 
 test("el spec sale en el formato que parsea run-turn (etiqueta@ISO|...)", () => {
-  const spec = comoSpec(proximosSlots(new Date("2026-09-08T13:00:00Z")));
-  assert.match(spec, /^[^@|]+@\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z\|[^@|]+@\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/);
+  const ahora = new Date("2026-09-08T13:00:00Z");
+  const spec = comoSpec(proximosSlots(ahora));
+  // El sujeto es el FORMATO de cada par, no cuantos hay: desde que se generan candidatos de
+  // mas para que el motor elija (CUANTOS), anclar la cantidad convertia este test en un tope
+  // silencioso — se ponia rojo por un cambio deliberado sin decir nada del formato.
+  assert.match(spec, /^([^@|]+@\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)(\|[^@|]+@\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)*$/);
+
+  // Y la prueba que de verdad importa: que el MOTOR lo entienda y salga con dos para
+  // ofrecer. Comparar contra una regex escrita a mano es una copia del parseo real; esto
+  // pregunta al consumidor, que es quien decide si el prospecto ve horarios o no.
+  const leidos = parseSlotsSpec(spec, { now: ahora });
+  assert.equal(leidos.length, 2, "el guion recibe el par A/B, no los candidatos crudos");
+  assert.ok(!slotsPending({ slots: leidos }), "y los dos son ofrecibles de verdad");
 });
 
 test("siguenVigentes: futuro si, pasado no", () => {

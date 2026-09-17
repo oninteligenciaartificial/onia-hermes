@@ -27,7 +27,7 @@ import { execFileSync } from "node:child_process";
 // La anticipacion NO se reimplementa aca: es la MISMA constante con la que el
 // motor decide si ofrece un horario (`parseSlotsSpec`). Tenerla por duplicado es
 // como nacio el bug que este archivo arrastraba — ver `siguenVigentes`.
-import { ANTICIPACION_MINIMA_MS } from "./config.mjs";
+import { ANTICIPACION_MINIMA_MS, parseSlotsSpec, slotsPending } from "./config.mjs";
 
 const ENV_FILE = process.env.ONIA_WEBHOOK_ENV_FILE || "/opt/onia/bot/webhook.env";
 const KNOWLEDGE = "/opt/onia/bot/knowledge.json";
@@ -35,18 +35,18 @@ const KNOWLEDGE = "/opt/onia/bot/knowledge.json";
 const OFFSET_LA_PAZ = 4;
 /** Hora local de la demo. La misma que Sergio venia poniendo a mano. */
 const HORA_LOCAL = Number(process.env.ONIA_SLOTS_HORA || 14);
-/** Cuantos horarios ofrece el bot. El guion muestra dos: A y B. */
-const CUANTOS = 2;
 /**
- * Cuanto tiempo se SIRVE lo que se escribe sin volver a calcularse: el periodo
- * del cron (`41 11 * * * /opt/onia/bot/slots-run.sh`).
+ * Cuantos horarios se ESCRIBEN. El guion muestra dos (A y B), pero se generan de mas
+ * a proposito: `parseSlotsSpec` elige los 2 que todavia se sostienen, asi que los
+ * primeros se van cayendo solos a lo largo de la vigencia y siempre quedan dos enteros.
  *
- * Entra en el calculo porque la anticipacion se gasta sola mientras el valor
- * esta publicado: con el margen justo, el primer prospecto del dia recibia sus
- * 24 h y el ultimo, cero. Lo que se garantiza es el PEOR momento de la ventana.
- * Misma doctrina que `scripts/loops/renovar-slots-bot.py`, el otro generador.
+ * Esto es lo que reemplaza al margen de VIGENCIA que este generador sumaba antes (ver
+ * `proximosSlots`): en vez de alejar el primer horario para que aguante todo el dia, se
+ * mandan candidatos para que el motor tenga de donde elegir. Cinco cubren la vigencia de
+ * 24 h con sobra —en ese lapso caducan a lo sumo dos— y encima aguantan que el cron no
+ * corra un dia. Misma doctrina que `scripts/loops/renovar-slots-bot.py`, el otro generador.
  */
-const VIGENCIA_MS = 24 * 60 * 60 * 1000;
+const CUANTOS = 5;
 
 const MESES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
 const DIAS = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
@@ -65,16 +65,26 @@ function diasHabiles() {
  * Los proximos `cuantos` dias habiles que el MOTOR va a poder ofrecer durante
  * toda la vigencia de lo que se escribe.
  *
- * El piso no es "manana": es `ahora + ANTICIPACION + VIGENCIA`. Antes se pedia
- * solo que el horario no hubiera pasado (`inicioUtc > ahora`), y con eso este
- * generador escribia horarios que el bot despues NO ofrece — `parseSlotsSpec`
- * los marca `pending` por debajo de las 24 h y el guion cae en M0_SIN_HORARIOS.
- * Generar algo que el consumidor descarta es peor que no generar nada: el log
- * dice que se renovo y el prospecto lee que no hay horarios.
+ * El piso es `ahora + ANTICIPACION`, la regla que pidio Sergio Urcullo ("que se agenden
+ * un dia antes"), y NO se le suma nada: antes llevaba ademas la VIGENCIA entera, y eso le
+ * costaba al prospecto un dia completo de espera. Medido el 2026-09-17 09:15 La Paz: el
+ * proceso vivo ofrecia "sábado 19, 09:00" teniendo el viernes 18 a las 14:00 —28 h de
+ * aviso, dentro de la regla— disponible. El que escribia hoy recibia turno para pasado
+ * manana.
+ *
+ * El margen existia por una razon real: lo escrito se sirve 24 h sin recalcularse, y con
+ * el piso justo el primer prospecto del dia recibia sus 24 h y el ultimo, cero. Lo que lo
+ * vuelve innecesario es generar de MAS (`CUANTOS`): el motor elige los 2 que todavia se
+ * sostienen, asi que los de adelante se caen solos y el par sigue entero hasta el final de
+ * la ventana. Se garantiza el mismo peor momento, sin alejar el primer horario.
+ *
+ * Lo que NO cambia: sigue prohibido escribir algo que el consumidor descarta. Antes se
+ * pedia solo que el horario no hubiera pasado (`inicioUtc > ahora`) y el bot no lo ofrecia
+ * igual — el log decia que se renovo y el prospecto leia que no hay horarios.
  */
 export function proximosSlots(ahora = new Date(), cuantos = CUANTOS, habiles = diasHabiles()) {
   const salida = [];
-  const desde = ahora.getTime() + ANTICIPACION_MINIMA_MS + VIGENCIA_MS;
+  const desde = ahora.getTime() + ANTICIPACION_MINIMA_MS;
   // Medianoche del dia LOCAL de hoy: a las 21:00 de La Paz ya es manana en UTC,
   // y sin esto el «a partir de manana» se corre un dia.
   const cursor = new Date(ahora.getTime() - OFFSET_LA_PAZ * 3600_000);
@@ -118,12 +128,12 @@ export function comoSpec(slots) {
 export function siguenVigentes(spec, ahora = new Date()) {
   const partes = String(spec || "").split("|").filter(Boolean);
   if (!partes.length) return false;
-  const limite = ahora.getTime() + ANTICIPACION_MINIMA_MS;
-  return partes.every((p) => {
-    const iso = (p.split("@")[1] || "").trim();
-    const t = Date.parse(iso);
-    return Number.isFinite(t) && t >= limite;
-  });
+  // Se le pregunta al MOTOR, literalmente: `parseSlotsSpec` elige los 2 que se sostienen
+  // y `slotsPending` es lo que el guion consulta para decidir si ofrece. Reimplementar el
+  // criterio aca es como nacio el bug de la cabecera — y desde que se generan candidatos
+  // de mas, un `every` sobre TODOS pediria renovar por el primero que caduca, teniendo el
+  // par entero. La pregunta correcta es la del prospecto: ¿hay dos para ofrecerle ahora?
+  return !slotsPending({ slots: parseSlotsSpec(spec, { now: ahora }) || [] });
 }
 
 function main() {

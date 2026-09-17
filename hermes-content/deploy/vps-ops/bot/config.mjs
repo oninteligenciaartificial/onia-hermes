@@ -56,27 +56,47 @@ export function parseSlotsSpec(raw, { now = Date.now() } = {}) {
   // 4 h 57 min. El generador ya reserva margen para toda su vigencia; esto es el
   // corte que sobrevive a que ese generador no haya corrido.
   const limite = (now instanceof Date ? now.getTime() : Number(now)) + ANTICIPACION_MINIMA_MS;
-  return text
-    .split("|")
-    .slice(0, 2)
-    .map((part, index) => {
-      const [label, startAt] = part.split("@").map((piece) => (piece || "").trim());
-      const iso = startAt || null;
-      // Sin ISO no se puede verificar NI reservar, pero eso ya era asi antes de este
-      // corte y lo decide el que arma la cadena: no se toca aca. Con ISO manda el
-      // reloj, y un ISO ilegible cuenta como no sostenible: la comparacion contra
-      // NaN da false sola, y esa es la direccion segura (antes callarse que prometer).
-      const sostenible = iso === null || Date.parse(iso) >= limite;
-      return {
-        key: index === 0 ? "A" : "B",
-        label: label || `opción ${index === 0 ? "A" : "B"}`,
-        startAt: iso,
-        // `pending` y no un descarte: es el estado que el motor ya sabe contar
-        // (slotsPending -> M0_SIN_HORARIOS) y que detectSlotChoice ya ignora. Un
-        // horario que no se puede sostener es, para el guion, uno sin definir.
-        pending: !sostenible,
-      };
-    });
+  const candidatos = text.split("|").map((part) => {
+    const [label, startAt] = part.split("@").map((piece) => (piece || "").trim());
+    const iso = startAt || null;
+    // Sin ISO no se puede verificar NI reservar, pero eso ya era asi antes de este
+    // corte y lo decide el que arma la cadena: no se toca aca. Con ISO manda el
+    // reloj, y un ISO ilegible cuenta como no sostenible: la comparacion contra
+    // NaN da false sola, y esa es la direccion segura (antes callarse que prometer).
+    const sostenible = iso === null || Date.parse(iso) >= limite;
+    // `pending` y no un descarte: es el estado que el motor ya sabe contar
+    // (slotsPending -> M0_SIN_HORARIOS) y que detectSlotChoice ya ignora. Un
+    // horario que no se puede sostener es, para el guion, uno sin definir.
+    return { label, startAt: iso, pending: !sostenible };
+  });
+
+  // Se eligen los 2 que SE SOSTIENEN, no los 2 primeros: el recorte va DESPUES del
+  // juicio. Mientras fue al reves, los candidatos 3 y 4 no se miraban nunca, asi que la
+  // unica forma de que el par llegara entero era que el generador reservara margen para
+  // toda su vigencia (ANTICIPACION + VIGENCIA = 48 h) y le diera al prospecto turno para
+  // pasado manana. Con el orden corregido, el generador puede mandar candidatos de mas:
+  // los que caducan se caen solos y siempre quedan dos enteros.
+  const elegidos = candidatos.filter((slot) => !slot.pending).slice(0, 2);
+  // Fail-safe: el guion necesita el par COMPLETO ({{slot_a}} y {{slot_b}} en la misma
+  // frase, ver `hayHorarioReal` en reply-builder.mjs), asi que cuando no hay dos
+  // ofrecibles se completa con los caidos. Salen `pending` y el guion cae a
+  // SIN_HORARIOS — la misma rama de antes, que no es silencio: sigue el embudo.
+  for (const slot of candidatos) {
+    if (elegidos.length >= 2) break;
+    if (!elegidos.includes(slot)) elegidos.push(slot);
+  }
+  // A y B se reparten en orden CRONOLOGICO, que es el de la lista: elegir no es reordenar.
+  // Sin esto, un par que no se puede ofrecer entero salia dado vuelta (el caido de segundo),
+  // cambiando la etiqueta que va al log sin cambiar lo que ve el prospecto — un movimiento
+  // invisible en produccion y visible solo cuando alguien lee el log para entender un fallo.
+  elegidos.sort((uno, otro) => candidatos.indexOf(uno) - candidatos.indexOf(otro));
+
+  return elegidos.slice(0, 2).map((slot, index) => ({
+    key: index === 0 ? "A" : "B",
+    label: slot.label || `opción ${index === 0 ? "A" : "B"}`,
+    startAt: slot.startAt,
+    pending: slot.pending,
+  }));
 }
 
 // ---------------------------------------------------------------------------

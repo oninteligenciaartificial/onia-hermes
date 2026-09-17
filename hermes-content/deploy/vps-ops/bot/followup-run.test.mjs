@@ -704,6 +704,49 @@ test("parseSlotsSpec: un horario que ya no da 24 h de aviso NO se ofrece, sale p
   assert.ok(slotsPending({ slots: [a, b] }), "con A caido, el bot pide horario en vez de inventar");
 });
 
+test("parseSlotsSpec: elige los 2 que SE SOSTIENEN, no los 2 primeros de la lista", () => {
+  // El corte por anticipacion convirtio a `pending` en un estado POR horario, pero el
+  // recorte seguia siendo por POSICION: `.slice(0, 2)` cortaba ANTES de juzgar, asi que
+  // los candidatos 3 y 4 no se miraban nunca aunque fueran los unicos ofrecibles. Con eso,
+  // la unica forma de que el par llegara entero al prospecto era que el generador reservara
+  // margen para TODA su vigencia (ANTICIPACION + VIGENCIA = 48 h en
+  // scripts/loops/renovar-slots-bot.py), y el costo lo pagaba la venta: medido el 2026-09-17
+  // 09:15 La Paz, el proceso vivo ofrecia "sábado 19, 09:00" y "lunes 21, 14:00" teniendo el
+  // viernes 18 a las 14:00 —28 h de aviso, dentro de la regla de Sergio Urcullo— disponible.
+  // Al prospecto que escribe hoy se le daba turno para pasado manana.
+  //
+  // Filtrar y DESPUES cortar es lo que le permite al generador mandar candidatos de mas: los
+  // que caducan se caen solos y siempre quedan dos enteros, sin tocar el guion (que sigue
+  // necesitando el par completo, ver `hayHorarioReal` en reply-builder.mjs).
+  const ahora = Date.parse("2026-09-17T13:15:00Z"); // jueves 09:15 La Paz, la medicion viva
+
+  const [a, b] = parseSlotsSpec(
+    [
+      "jueves 17 de septiembre, 20:00@2026-09-18T00:00:00Z", // ya no da 24 h: se cae
+      "viernes 18 de septiembre, 14:00@2026-09-18T18:00:00Z", // tampoco (28 h... si da)
+      "sábado 19 de septiembre, 09:00@2026-09-19T13:00:00Z",
+      "lunes 21 de septiembre, 14:00@2026-09-21T18:00:00Z",
+    ].join("|"),
+    { now: ahora },
+  );
+
+  assert.equal(a.label, "viernes 18 de septiembre, 14:00", "el primero OFRECIBLE es A, no el primero de la lista");
+  assert.equal(a.pending, false, "y se ofrece de verdad");
+  assert.equal(b.label, "sábado 19 de septiembre, 09:00", "el segundo ofrecible es B");
+  assert.equal(b.pending, false);
+  assert.equal(a.key, "A", "las claves se reasignan sobre los elegidos, no sobre la posicion original");
+  assert.equal(b.key, "B");
+
+  // Y no se pierde el fail-safe: si NINGUNO se sostiene, siguen saliendo 2 marcados
+  // `pending` para que el guion caiga a SIN_HORARIOS en vez de quedarse sin par.
+  const caidos = parseSlotsSpec(
+    "jueves 17, 20:00@2026-09-18T00:00:00Z|viernes 18, 09:00@2026-09-18T13:00:00Z",
+    { now: ahora },
+  );
+  assert.equal(caidos.length, 2, "con todo vencido igual entrega el par");
+  assert.ok(slotsPending({ slots: caidos }), "y el guion lo lee como 'sin horarios'");
+});
+
 // ---------------------------------------------------------------------------
 // 7. resolveConfig: Cal.com destraba el placeholder de los 2 horarios, solo en main() real
 // ---------------------------------------------------------------------------

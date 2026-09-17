@@ -318,6 +318,77 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El bot le daba al prospecto turno para PASADO MAÑANA teniendo mañana libre: el
+      generador se guardaba 48 h de margen cuando la regla de Sergio Urcullo es 24~~ — CERRADO
+      el 2026-09-17, commiteado y PENDIENTE DE DESPLIEGUE** (`scripts/loops/renovar-slots-bot.py`,
+      `hermes-content/deploy/vps-ops/bot/config.mjs`, `hermes-content/deploy/vps-ops/bot/slots-rodantes.mjs`).
+
+      **Medido en el proceso vivo, no en el repo.** El 2026-09-17 09:15 La Paz (jueves),
+      `docker exec onia-center` sobre `/proc/<pid>/environ` devolvía
+      `ONIA_BOT_SLOTS=sábado 19 de septiembre, 09:00@…|lunes 21 de septiembre, 14:00@…`. El
+      **viernes 18 a las 14:00** estaba dentro de las ventanas de atención y a **28 h de aviso**
+      —o sea cumplía la regla— y el bot no lo ofrecía. Al lead que escribe un jueves a la mañana
+      se le daba turno para el sábado; al que escribe un viernes, para el lunes o martes.
+
+      **La causa no estaba en el generador, estaba en el ORDEN del consumidor.**
+      `parseSlotsSpec` hacía `.split("|").slice(0, 2)` y recién después juzgaba si cada horario
+      se sostenía: cortaba por POSICIÓN antes de mirar. Con eso el generador no podía mandar
+      candidatos de más —el 3.º y el 4.º no se miraban nunca— y su única defensa contra que el
+      par se venciera a mitad del día era alejar el primer horario: `ANTICIPACION_H + VIGENCIA_H`
+      = 48 h. El margen atacaba un problema **real** (lo escrito se sirve 24 h sin recalcularse,
+      así que el primer prospecto del día recibía sus 24 h y el último, cero), y lo pagaba la
+      venta entera para cubrir el peor momento.
+
+      **Arreglo: filtrar y DESPUÉS cortar.** `parseSlotsSpec` elige los 2 que se sostienen entre
+      todos los candidatos, conservando el orden cronológico (elegir no es reordenar: sin eso, un
+      par que no se puede ofrecer entero salía dado vuelta y cambiaba la etiqueta que va al log).
+
+      🔴 **El piso de 48 h del `.py` NO se bajó en esta vuelta, y NO es un olvido: bajarlo ahora
+      rompe producción.** Ese archivo y el motor viajan por caminos DISTINTOS — a `/root/bin` lo
+      copia `scripts/loops/sincronizar.sh` (cron `44 * * * *`, desde `origin/main`) y el motor se
+      despliega aparte. Medido el 2026-09-17 en `/var/log/onia-publicar-solo.log`: **«bot: NO
+      publico solo — toca una fuente de precio»** (y seis `bot: FALLO` antes), o sea el motor
+      espera un `ok` que puede tardar días. En esa ventana el generador nuevo con el consumidor
+      viejo le daría al bot un primer horario que caduca **a los minutos**, y el bot le diría a
+      todo prospecto «justo ahora no tengo horarios libres» — el fallo exacto que costó una
+      semana. Lo que sí viaja seguro con AMBOS consumidores son los **5 candidatos**
+      (el viejo corta los 2 primeros, que son los de siempre), y eso ya paga solo: el bot pasa a
+      aguantar que el cron no corra **varios días** sin quedarse mudo.
+      **Paso siguiente, una línea, cuando el motor nuevo esté vivo**
+      (`docker exec onia-center grep -c "SE SOSTIENEN" /tmp/onia-bot/config.mjs` ≥ 1):
+      en `renovar-slots-bot.py`, `desde = ahora_lapaz + dt.timedelta(hours=ANTICIPACION_H)`.
+      Ahí el prospecto que escribe a la mañana pasa a recibir turno para **mañana**.
+
+      **No se tocó el guion ni las plantillas, a propósito.** `hayHorarioReal` exige el par
+      completo (`{{slot_a}}` y `{{slot_b}}` van en la misma frase) y esa decisión está razonada
+      en `reply-builder.mjs`: con uno solo, el otro sale igual con su etiqueta. La primera
+      hipótesis de esta vuelta fue que el `.some` de `slotsPending` era el bug —*"el bot calla
+      teniendo un horario"*— y **era falsa**: no calla, cae a `SIN_HORARIOS`, que sigue el embudo
+      pidiendo el contacto. Leer la razón escrita antes de tocar evitó romper una decisión sana.
+      Generar de más cura el mismo síntoma sin discutirla.
+
+      **La garantía del peor momento quedó igual de cubierta, y medida:** con el spec nuevo, el
+      par sigue entero a las +0, +6, +12, +18, +23, +24 h **y hasta +47 h** — o sea ahora también
+      sobrevive a que el cron no corra un día, cosa que con 2 horarios no pasaba.
+
+      **Atado por mutación en las dos direcciones:** el test nuevo
+      (`followup-run.test.mjs`, «elige los 2 que SE SOSTIENEN») se vio en ROJO con el código
+      viejo, por el motivo correcto (devolvía el jueves vencido en vez del viernes ofrecible); y
+      volver `CUANTOS` a 2 dejando el piso en 24 h pone rojo a
+      «lo que genera, el motor lo puede OFRECER durante toda su vigencia» — **ninguna de las dos
+      mitades se puede deshacer sin que la otra lo denuncie**. Suite del bot **1015/1015**.
+
+      De paso, dos instrumentos que medían de menos: `siguenVigentes` ahora le pregunta al MOTOR
+      (`parseSlotsSpec` + `slotsPending`) en vez de reimplementar el corte —que es como nació el
+      bug que ese archivo arrastraba—, y el test del formato del spec anclaba la CANTIDAD en 2,
+      así que se ponía rojo por un cambio deliberado sin decir nada del formato que dice medir.
+
+      ⚠️ **Lo que ve el cliente no cambió todavía:** el proceso vivo sigue con los 2 horarios
+      viejos hasta que esto se despliegue y el cron vuelva a generar. El día que baje el piso
+      (arriba), el efecto ya está comprobado: con el spec de piso 24 h,
+      `ONIA_BOT_SLOTS=… node simulate.mjs` ofrece **«A) viernes 18, 14:00 · B) sábado 19,
+      09:00»** en vez de sábado y lunes.
+
 - [x] 🔴 **~~El generador de horarios de demo decidía renovar con una regla MÁS FLOJA que la que
       el bot usa para ofrecerlos: en esa banda decía «VIGENTES, no toco nada» mientras el bot le
       contestaba a todo prospecto «justo ahora no tengo horarios libres»~~ — CERRADO el 2026-09-17**
