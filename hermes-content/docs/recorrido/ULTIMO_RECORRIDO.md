@@ -1780,6 +1780,27 @@ ratificada por Sergio Urcullo el 2026-08-23. Nada para reportar.
 
 `completo: false`, `llegoHasta: 4/9` (sin cambios, sigue bloqueado por el mismo deploy).
 
+## 2026-09-17 16:09-16:35 La Paz — BUILD_ID sin cambios, mismo bloqueo; escalón 3 en superficie nueva: `/rubros`
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, `BUILD_ID` sigue en `OFd4xCDzoTbQdThUbfzDv`, los tres
+pedidos de deploy (`t_4f4e4071` plataforma, `t_75f4fac3` landing, `t_234cfe6a` bot — este último
+ya `archived`) siguen `blocked`/sin ok. No repetí el recorrido completo ni la sonda de MFA.
+
+Primero descarté un falso positivo: `/agentes` sigue diciendo "desde el plan Pro" (6 veces) en
+producción, pero **ya está arreglado en `main`** (commits `5501a3c4`/`cf19a28e`, con comentario
+explícito "DESDE QUE PLAN NO SE TIPEA ACA") — es el mismo deploy bloqueado, no un hallazgo nuevo.
+
+**Hallazgo real en `/rubros`** (reportado, `t_2a13fdbb`, prioridad 2): la tarjeta de "Servicios"
+dice, EN VIVO hoy, "Llegás al cierre de mes con el IVA y el IT ya armados, en vez de juntando
+papeles" (`rubros/page.tsx:108`). Es la MISMA frase que el commit `4384f7e8` (2026-09-02) ya
+identificó como "capacidad fabricada" y arregló — pero sólo en el panel dibujado hermano
+(`ui.tsx`): "El panel de servicios vendía 'IVA del mes / IT del mes ya armados', que no aparece
+en ningún plan de lib/pricing.ts". El arreglo tocó una representación de la promesa y dejó la
+otra (el texto de venta de la misma página) intacta 15 días. Captura:
+`capturas/hallazgo-iva-it-rubros.png`. No lo arreglo — no es mi zona.
+
+`completo: false`, `llegoHasta: 4/9` (sin cambios, sigue bloqueado por el mismo deploy).
+
 ## 2026-09-17 14:09-14:35 La Paz — BUILD_ID sin cambios, mismo bloqueo; escalón 3 en superficie nueva: `/guia-facturacion`
 
 Al arrancar: 0 orgs `zz-qa-` huérfanas, `BUILD_ID` sigue en `OFd4xCDzoTbQdThUbfzDv`, los tres
