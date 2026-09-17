@@ -318,6 +318,44 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El cierre post-demo le avisaba a un canal TAPIADO: una demo que ocurre no se cierra
+      ni le llega a Sergio Urcullo~~ — CERRADO el 2026-09-17, commiteado y PENDIENTE DE
+      DESPLIEGUE** (`d58b95f3`; pedido de deploy vivo del bot: `t_234cfe6a`).
+
+      **Medido en producción, no deducido:** el cron de las `:47` corre `postdemo-run.sh` cada
+      hora y `/var/log/onia-bot-postdemo.log` dice `CERRARIA (0)` — dry-run — en todas las
+      corridas. No era un olvido: `postdemo-run.mjs:273` decía que gatear el CAS con `dryRun`
+      *"dejaría el cron encendido y MUDO"*, y tenía razón, porque su única salida era una línea
+      JSON *"para n8n"*. Y n8n está tapiado: `ONIA_N8N_ENABLED=false` y `ONIA_N8N_EVENT_URL`
+      **vacío**, leídos de `/proc/<pid>/environ` del webhook vivo dentro de `onia-center` (no del
+      `webhook.env`, que es un residuo).
+
+      **La premisa era cierta y la conclusión quedó vieja.** El circuito ganó un canal vivo
+      (`aviso-telegram.mjs`, `ONIA_BOT_TG_AVISO=true` con token y chat en el mismo proceso) para
+      el camino del webhook, y el barrido —la otra superficie del MISMO circuito— nunca lo
+      adoptó. Ningún gate podía verlo: el de `ETIQUETAS` deriva su universo de `bot-engine.mjs`
+      y sólo, así que el `kind` de un barrido no era sujeto de nadie (`demo_realizada` nunca
+      tuvo etiqueta: Sergio Urcullo habría recibido el slug interno en negrita).
+
+      **Lo que cambió:** el barrido manda por Telegram y registra `deliveryStatus` (un aviso
+      perdido sube a `warnings`, que es lo que queda en el log); **sin canal no cierra NINGUNA
+      fila** — cerrar es un CAS irreversible y cerrar sin poder avisar deja la demo marcada como
+      atendida y a nadie enterado; `ONIA_BOT_DRY_RUN=false` enciende el cierre, que es lo que el
+      wrapper YA le mandaba desde que alguien intentó arreglar esto (su comentario lo documenta)
+      sin que el `.mjs` lo leyera; y el wrapper le pasa las credenciales al `docker exec`, que
+      hereda el entorno del **contenedor** — `onia-center` no tiene `TG_BOT_TOKEN` (0
+      coincidencias), lo tiene el proceso del webhook porque su lanzador se lo pasó con `-e`.
+
+      **Gate nuevo** `postdemo-avisa-por-el-canal-vivo.test.mjs`: camina la CARPETA (no
+      `git ls-files`, que no ve el archivo nuevo sin commitear — justo el sujeto a cazar) y exige
+      etiqueta a todo emisor, del motor o de un barrido. Validado por mutación: quitar el envío,
+      desactivar la guarda, renombrar la etiqueta y sacar el `-e` del wrapper dan rojo; restaurado
+      vuelve a 14/14. Suite del bot **1035/1035**.
+
+      ⚠️ **Los fixtures hermanos se apoyaban en el defecto** (`sweep` cerraba sin avisar): ahora
+      inyectan el canal explícito, y no cayendo al del entorno, para que no dependan de si la
+      máquina que corre los tests tiene un token de Telegram.
+
 - [x] 🔴 **~~El motor declaraba «ese inbox no es de NINGUNA org» sobre el WhatsApp de un cliente
       que paga: el 404 del producto tiene DOS significados y los aplanaba en uno~~ — CERRADO
       el 2026-09-17, commiteado y PENDIENTE DE DESPLIEGUE**
