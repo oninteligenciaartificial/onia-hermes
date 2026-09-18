@@ -64,8 +64,9 @@ export function Closing() {
           <div>
             <h3>Sin tarjeta</h3>
             <p>
-              Entrás, elegís tu rubro y usás el sistema completo {PRUEBA.dias} días, sin
-              poner un peso ni dejar una tarjeta.
+              Entrás, elegís tu rubro y usás el plan {PRUEBA.planQueCorre}{" "}
+              completo {PRUEBA.dias} días, sin poner un peso ni dejar una
+              tarjeta.
             </p>
           </div>
           <div>

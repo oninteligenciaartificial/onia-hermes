@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   // uso del sistema como si fueran seguidos, y el producto exige confirmar el
   // correo en el medio. Es la copia que además se lee en el buscador.
   description:
-    `Registrate en minutos, ${PASO_CONFIRMAR_CORREO_IMPERATIVO}, elegí tu rubro y usá el sistema completo ${PRUEBA.dias} días: clientes, caja, inventario, contabilidad Bolivia y agentes con IA —y agenda ${ALCANCE_CON_AGENDA}—. Sin tarjeta y sin permanencia.`,
+    `Registrate en minutos, ${PASO_CONFIRMAR_CORREO_IMPERATIVO}, elegí tu rubro y usá el plan ${PRUEBA.planQueCorre} completo ${PRUEBA.dias} días: clientes, caja, inventario, contabilidad Bolivia y agentes con IA —y agenda ${ALCANCE_CON_AGENDA}—. Sin tarjeta y sin permanencia.`,
   alternates: { canonical: "/prueba-gratis" },
   openGraph: {
     type: "website",
@@ -98,7 +98,8 @@ export default function PruebaGratisPage() {
           <div className="container">
             <p className="kicker">Prueba gratis</p>
             <h1 className="h2">
-              {PRUEBA.dias} días con el sistema completo. Sin tarjeta.
+              {PRUEBA.dias} días con el plan {PRUEBA.planQueCorre} completo. Sin
+              tarjeta.
             </h1>
             <p className="lead">
               No es una demo recortada: es tu cuenta real, con todos los

@@ -35,7 +35,7 @@ import s from "../sitio.module.css";
 
 export const metadata: Metadata = {
   title: `Prueba gratis de ${PRUEBA.dias} días — Onia, sin tarjeta`,
-  description: `${CTA_ALTA}, elegí tu rubro y usá el sistema completo ${PRUEBA.dias} días: clientes, caja, inventario, contabilidad Bolivia y agentes con IA —y agenda ${ALCANCE_CON_AGENDA}—. Sin tarjeta y sin permanencia.`,
+  description: `${CTA_ALTA}, elegí tu rubro y usá el plan ${PRUEBA.planQueCorre} completo ${PRUEBA.dias} días: clientes, caja, inventario, contabilidad Bolivia y agentes con IA —y agenda ${ALCANCE_CON_AGENDA}—. Sin tarjeta y sin permanencia.`,
   alternates: { canonical: "/empezar" },
   openGraph: {
     type: "website",
