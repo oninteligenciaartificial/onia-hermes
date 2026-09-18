@@ -263,12 +263,35 @@ export function WebConfigurator({ especificaciones }: Props) {
         <div className={styles.controls} aria-label="Opciones de diseño web">
           <WebAssistant onApply={applyPlan} />
 
+          <WebPreviewIntake value={intake} onChange={updateIntake} />
+
+          <fieldset className={styles.step}>
+            <legend className={styles.stepTitle}>
+              <span className={styles.stepNumber}>02</span>
+              ¿Qué tiene que lograr?
+            </legend>
+            <div className={styles.goalGrid}>
+              {WEB_GOALS.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={`${styles.goalOption} ${item.id === goalId ? styles.optionOn : ""}`}
+                  aria-pressed={item.id === goalId}
+                  onClick={() => setGoalId(item.id)}
+                >
+                  <span className={styles.optionName}>{item.nombre}</span>
+                  <span className={styles.optionDescription}>{item.descripcion}</span>
+                </button>
+              ))}
+            </div>
+          </fieldset>
+
           <fieldset className={`${styles.step} ${styles.scopeStep}`}>
             <legend className={styles.stepTitle}>
-              <span className={styles.stepNumber}>01</span>
-              ¿Qué tan completa será?
+              <span className={styles.stepNumber}>03</span>
+              ¿Cuánta web?
             </legend>
-            <p className={styles.stepHint}>Elegí el nivel más cercano. Si pedís algo fuera del alcance, lo confirmamos antes de empezar.</p>
+            <p className={styles.stepHint}>El preview cambia con cada nivel: una pantalla, una web completa, una a medida, una tienda. Si pedís algo fuera del alcance, lo confirmamos antes de empezar.</p>
             <div className={styles.scopeGrid}>
               {WEB_STACKS.map((item) => (
                 <button
@@ -326,17 +349,17 @@ export function WebConfigurator({ especificaciones }: Props) {
 
           <fieldset className={styles.step}>
             <legend className={styles.stepTitle}>
-              <span className={styles.stepNumber}>02</span>
-              ¿Qué tiene que lograr?
+              <span className={styles.stepNumber}>04</span>
+              La vibe: cómo se siente
             </legend>
-            <div className={styles.goalGrid}>
-              {WEB_GOALS.map((item) => (
+            <div className={styles.optionGrid}>
+              {WEB_DIRECTIONS.map((item) => (
                 <button
                   key={item.id}
                   type="button"
-                  className={`${styles.goalOption} ${item.id === goalId ? styles.optionOn : ""}`}
-                  aria-pressed={item.id === goalId}
-                  onClick={() => setGoalId(item.id)}
+                  className={`${styles.option} ${item.id === directionId ? styles.optionOn : ""}`}
+                  aria-pressed={item.id === directionId}
+                  onClick={() => { setDirectionId(item.id); setLayoutId(DEFAULT_LAYOUT_BY_DIRECTION[item.id]); }}
                 >
                   <span className={styles.optionName}>{item.nombre}</span>
                   <span className={styles.optionDescription}>{item.descripcion}</span>
@@ -345,14 +368,12 @@ export function WebConfigurator({ especificaciones }: Props) {
             </div>
           </fieldset>
 
-          <WebPreviewIntake value={intake} onChange={updateIntake} />
-
           <fieldset className={styles.step}>
             <legend className={styles.stepTitle}>
-              <span className={styles.stepNumber}>04</span>
+              <span className={styles.stepNumber}>05</span>
               Estructura de la página
             </legend>
-            <p className={styles.stepHint}>Cambia dónde aparece la imagen y en qué orden se cuenta tu oferta.</p>
+            <p className={styles.stepHint}>Cómo arranca la página: dónde va la foto y cómo entra el titular. La vibe elige una; podés cambiarla.</p>
             <div className={styles.layoutGrid}>
               {WEB_LAYOUTS.map((item) => (
                 <button
@@ -368,27 +389,6 @@ export function WebConfigurator({ especificaciones }: Props) {
               ))}
             </div>
             <p className={styles.sectionOrder}>Orden: {layout.orden.join(" → ")}</p>
-          </fieldset>
-
-          <fieldset className={styles.step}>
-            <legend className={styles.stepTitle}>
-              <span className={styles.stepNumber}>05</span>
-              Dirección visual
-            </legend>
-            <div className={styles.optionGrid}>
-              {WEB_DIRECTIONS.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  className={`${styles.option} ${item.id === directionId ? styles.optionOn : ""}`}
-                  aria-pressed={item.id === directionId}
-                  onClick={() => setDirectionId(item.id)}
-                >
-                  <span className={styles.optionName}>{item.nombre}</span>
-                  <span className={styles.optionDescription}>{item.descripcion}</span>
-                </button>
-              ))}
-            </div>
           </fieldset>
 
           <fieldset className={styles.step}>
@@ -464,9 +464,9 @@ export function WebConfigurator({ especificaciones }: Props) {
           <div className={styles.previewFrame}>
             <div className={styles.previewToolbar}>
               <span className={styles.previewLive}><i /> Preview vivo</span>
-              <span>Así podría sentirse tu web</span>
+              <span>{stack.nombre} · {direction.nombre}</span>
             </div>
-            <WebsitePreview direction={direction} layout={layout} goal={goal} previewStyle={previewStyle} content={previewContent} />
+            <WebsitePreview direction={direction} layout={layout} goal={goal} stack={stack.id} previewStyle={previewStyle} content={previewContent} />
           </div>
 
           <div className={styles.selection} aria-live="polite">
