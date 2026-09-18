@@ -44,6 +44,54 @@
  */
 export const TOPE_RECORTADOS = 20;
 
+/**
+ * ¿Este elemento le está cortando texto **a una persona**?
+ *
+ * Es la decisión entera del detector, en un solo lugar y con test al lado. La
+ * sonda de `mirar-venta.mjs` corre dentro del navegador (`page.evaluate`
+ * serializa la función, así que no puede importar nada), y por eso le manda
+ * esta función como FUENTE y la reconstruye allá: una sola implementación, no
+ * dos que coinciden mientras la realidad les dé la razón a las dos.
+ *
+ * ⚠️ **HISTORIA, porque la regla sin ella se desobedece.** Medido el
+ * 2026-09-17 contra producción: `npm run mirar:venta` devolvía **56 fallas y
+ * 55 eran falsas**. Once textos × cinco vistas, todos con la misma firma —
+ * `clientWidth: 1, clientHeight: 1, scrollWidth: 274, white-space: nowrap`—,
+ * o sea los `span.srOnly` de la comparativa del home, el del configurador de
+ * `/v1/chatbot` y el `<legend>` del asistente de `/v1/empezar`: texto que
+ * existe para el LECTOR DE PANTALLA y que ningún lead ve nunca. Son un patrón
+ * de accesibilidad correcto; no se van a "arreglar" jamás.
+ *
+ * El daño no es el informe largo: es que la única falla real de esa corrida
+ * —un desborde horizontal de 13px en `/v1/funciones/facturacion-electronica-siat`
+ * a 320px— entraba al carril enterrada entre 55 líneas de ruido, y un
+ * instrumento que grita todas las vueltas se deja de mirar. Un gate con 98% de
+ * falsos positivos es un gate apagado con cara de encendido.
+ *
+ * El criterio NO es la clase `.srOnly` (eso sería una lista de inclusión
+ * pegada al CSS module, que falla abierto con el sr-only del archivo de al
+ * lado — ya son tres, con tres hashes distintos). Es geométrico y lo decide la
+ * realidad: **una caja de 1px no muestra texto**. Un recorte que le importa a
+ * un lead ocurre en una caja de decenas de px.
+ *
+ * ⚠️ **Dirección simétrica que esto NO cubre, y queda nombrada:** un bloque
+ * que un bug de layout colapse a 1px también sale de acá en silencio. Hoy
+ * salía igual de invisible —se reportaba como "recortado", ahogado entre los
+ * 55—, así que esto no pierde cobertura; pero *"el texto que debería verse y
+ * no se ve"* es otra clase y le falta su gate.
+ *
+ * @param {{clientWidth: number, clientHeight: number, scrollWidth: number, overflow: string}} caja
+ */
+export function textoRecortadoALaVista(caja) {
+  const { clientWidth, clientHeight, scrollWidth, overflow } = caja;
+  // `overflow: visible` no corta nada: el texto se pinta afuera y se lee.
+  if (overflow === "visible") return false;
+  // Nadie lee un texto metido en una caja de 1px: es sr-only, no un recorte.
+  if (clientWidth <= 1 || clientHeight <= 1) return false;
+  // +2 de tolerancia: el subpíxel del layout no es un defecto.
+  return scrollWidth > clientWidth + 2;
+}
+
 /** Clase (y por lo tanto identidad) de la falla de un texto recortado. */
 export const claseDeRecortado = (txt) => `recortado: ${txt}`;
 

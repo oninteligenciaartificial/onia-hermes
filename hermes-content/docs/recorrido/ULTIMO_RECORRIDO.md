@@ -12,6 +12,131 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-18 (segunda vuelta del día) — no repito el recorrido completo (BUILD_ID igual, bloqueo no es mío); auditada `/contacto`, sana
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue `OFd4xCDzoTbQdThUbfzDv`
+(sin cambios desde la vuelta anterior). `t_62759602` ("rehacer los 3 pedidos de deploy") sigue
+`ready` sin asignar — no es mi zona (`onia-cola`). Confirmé también que el bloqueo del paso 5 no
+es sólo de las cuentas `zz-qa-`: probé con la sesión real de `sergio@onia.com.bo` pidiendo
+`/team/roles` (`mirar_bandeja_dueno.mjs`) y también rebota a `/profile?mfa=obligatorio` — el
+gate de MFA sin salida atrapa cualquier sesión, no sólo las de prueba, así que **todo el panel
+`(dashboard)` está inaccesible para auditar** hasta que se despliegue.
+
+Con eso, no re-corrí el recorrido completo por octava vez seguida sin novedad — el método
+vigente (anotado la vuelta pasada) es esperar el `BUILD_ID`. Usé la vuelta para escalón 3 en una
+superficie del sitio público que nunca se había mirado: **`/contacto`** (la landing, distinta de
+`/contact` en `app.onia.com.bo`, que sí estaba auditada). Es una página de sólo enlaces a
+WhatsApp (+591 75414930), sin formulario nativo: "Agendar 20 minutos", "Agendar la demo",
+"Escribir por WhatsApp", más nav y footer. Medido en tres viewports (375/768/1440, todos con
+`reducedMotion:'reduce'`): 0px de desborde horizontal, 0 elementos con `scrollWidth > clientWidth`,
+0 apariciones de "muy pronto"/"en construcción"/"próximamente"/"beta". Sana.
+
+`completo: false` (no corrí el recorrido esta vuelta), `llegoHasta: 4/9` (sin cambios respecto de
+la última corrida real).
+
+RAZÓN: el corte de siempre (paso 5, MFA) sigue esperando que `onia-cola` rehaga el pedido de
+deploy — no depende de esta vuelta.
+LECCIÓN: cuando el bloqueo es ajeno y el `BUILD_ID` no se mueve, repetir el recorrido completo no
+suma nada; la vuelta rinde más auditando una superficie nueva del sitio público. Ya quedan pocas
+sin tocar: de las páginas de `(sitio)` sólo faltarían `/patrones` y el detalle interno de
+`/servicios` (ya se miró `/servicios/webs`, no la raíz `/servicios`).
+
+---
+
+## 2026-09-18 00:11-00:16 La Paz — recorrido completo re-corrido: mismo bloqueo; `t_a91f564e` ya no existe como tal (archivada, reemplazada); `/agentes` y `/comparativa` en móvil, sanos
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue `OFd4xCDzoTbQdThUbfzDv`
+(sin cambios desde varias vueltas). **Dato nuevo:** `t_a91f564e` (el pedido de plataforma con
+28 arreglos que este carril venía citando) pasó a `status: archived` — no está `blocked`
+esperando un `ok`, está **cerrada y reemplazada**. La tarea viva ahora es `t_62759602`
+("Rehacer los 3 pedidos de deploy: quedaron cortos y el medidor recién se arregló", `ready`,
+sin asignar), que dice que `t_a91f564e` publica 4 arreglos más de los que su cuerpo nombraba y
+por eso hay que rehacerlo — **no es mi zona** (deploy es de `onia-cola`), lo dejo anotado para
+que ese carril lo vea. Mientras esa tarea siga `ready` sin cerrarse, el `ok` de Sergio Urcullo
+no tiene un pedido válido al que responder, así que el corte del paso 5 sigue igual de bloqueado
+que antes, por una razón nueva (pedido a rehacer, no pedido esperando aprobación).
+
+Corrí el recorrido completo con `--escribir` de todos modos (es la definición de "hecho" de
+este carril, y hacía 5 horas que no se re-confirmaba): mismo resultado exacto — llegó al
+**paso 4/9**, se corta en el **paso 5**: `/dashboard` rebota a `/profile`, botón "Activar ahora"
+de MFA sigue sin disparar ningún `fetch`. Limpieza: cuenta y org `zz-qa-2026-09-18-0011*`
+borradas en la misma corrida, 0 filas mías al cerrar (confirmado por SQL).
+
+Con el resto de la vuelta, escalón 3 en una combinación no auditada todavía: **`/agentes` y
+`/comparativa` en viewport móvil (375×812, `reducedMotion:'reduce'`)** — ya estaban auditadas en
+escritorio. Las dos: `scrollWidth === innerWidth === 375` (sin scroll horizontal), 0 respuestas
+HTTP ≥400, 0 candidatos a texto cortado (medido elemento por elemento con
+`scrollWidth > clientWidth`, no por captura). Sin hallazgo.
+
+`completo: false`, `llegoHasta: 4/9`.
+
+RAZÓN: mismo corte de siempre (paso 5, MFA sin salida) — el pedido de deploy que lo arregla ya
+no está `blocked` esperando aprobación, está `ready` esperando que `onia-cola` lo rehaga.
+LECCIÓN: séptima vuelta con el mismo hallazgo del recorrido completo. La novedad real de esta
+vuelta no salió de re-correrlo sino de mirar el ESTADO del tablero: la tarea que este carril
+venía citando como "esperando el ok de Sergio" ya no existe en esa forma. Próxima vuelta: si
+`BUILD_ID` sigue igual, chequear primero si `t_62759602` avanzó (o si nació un pedido nuevo para
+plataforma) antes de asumir que sigue "esperando aprobación" — puede estar esperando que alguien
+lo rehaga, que es un bloqueo distinto y no depende de Sergio Urcullo.
+
+---
+
+## 2026-09-17 19:09-19:14 La Paz — recorrido completo re-corrido: mismo bloqueo, confirmado con `--escribir`
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue `OFd4xCDzoTbQdThUbfzDv`
+(sin cambios). `t_a91f564e` (plataforma, 28 arreglos, incluye el arreglo del botón MFA "Activar
+ahora") sigue `blocked` esperando el `ok` de Sergio Urcullo.
+
+Corrí el recorrido completo con `--escribir` (no una sonda parcial): llegó hasta el **paso 4/9**
+en "Clínica dental" — cuenta creada, correo confirmado, entró a `/onboarding`, completó las 5
+pantallas del asistente (negocio, horarios, servicios, equipo) y el asistente dijo "ya está en
+Onia". Se corta en el **paso 5**: el onboarding no queda cerrado — `/dashboard` sigue rebotando
+a `/profile`, con el aviso de MFA obligatorio. El botón "Activar ahora" de ese aviso no disparó
+ni un `fetch`: es decorativo, sin salida. Esto es EXACTAMENTE el defecto `52a3dd0` que ya está en
+el pedido de deploy bloqueado — no es un hallazgo nuevo, es la confirmación en vivo de que sigue
+sin desplegarse. Limpieza: cuenta y org `zz-qa-2026-09-17-2309*` borradas en la misma corrida,
+0 filas mías al cerrar.
+
+`completo: false`, `llegoHasta: 4/9` (sin cambios, sigue bloqueado por el mismo deploy).
+
+---
+
+## 2026-09-17 18:09-18:35 La Paz — mismo bloqueo de deploy; `/servicios/webs` auditado, sano
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue en
+`OFd4xCDzoTbQdThUbfzDv` (sin cambios). `t_a91f564e` (plataforma, 28 arreglos) y sus hermanos de
+landing/bot siguen `blocked` esperando el `ok` de Sergio Urcullo. No repetí el recorrido completo
+ni la sonda de MFA — método vigente.
+
+Escalón 3 en una superficie nueva: `/servicios/webs` (el configurador de venta de webs de
+cliente, fuera de los 9 pasos del onboarding). Escritorio y móvil (375px, `reducedMotion:
+'reduce'`): cero texto cortado, cero respuestas HTTP ≥400, y la promesa central de la pantalla
+("el preview usa los datos que escribís") se probó ENVIANDO un dato `zz-qa-` al campo real de
+"Nombre del negocio" — el preview lo reflejó de inmediato. Precios de la escalera (Bs 2.000 /
+4.500, add-ons Bs 790 y mantenimiento 190/390/690) no tienen fuente única versionada (ya
+ratificado en una vuelta anterior que esto es así a propósito, no un hallazgo), y no encontré
+ninguno de esos montos contradicho en otra parte del sitio.
+
+De paso miré `/nosotros` y `/comparativa` (sacadas del menú superior por `t_e1e7bda4` pero
+accesibles por URL/footer a propósito). `/comparativa` muestra un badge literal "EN TRÁMITE"
+para la factura SIAT de Onia, y `/nosotros` dice textual "lo que está en trámite lo publicamos
+como en trámite" — roza la regla de CLAUDE.md de no exhibir estado de obra en venta, pero es
+una decisión ya tomada y enmarcada como diferenciador de "honestidad primero" (fecha, resolución
+y alternativa concretas, mismo patrón que `/facturacion`, ya evaluada como sana). No lo reporto
+como hallazgo nuevo: sería re-litigar una decisión ya escrita.
+
+`completo: false`, `llegoHasta: 4/9` (sin cambios, sigue bloqueado por el mismo deploy).
+
+RAZÓN: el camino completo sigue bloqueado por el mismo deploy pendiente (`t_a91f564e`), esperando
+ok de Sergio Urcullo.
+LECCIÓN: quinta vuelta seguida sin repetir el recorrido completo — correcto. Superficies ya
+auditadas sanas: home, /precios, /rubros, /facturacion, /guia-facturacion, /contact, /agentes,
+recuperación de contraseña, checkout de plan, /servicios/webs, /nosotros, /comparativa. Si el
+deploy sigue sin moverse, la próxima vuelta ya no tiene superficies nuevas obvias que auditar —
+conviene revisar el tablero por si el `ok` llegó, o escanear con más profundidad una superficie
+ya "sana" pero con una interacción distinta (ej. enviar el formulario de `/servicios/webs` de
+punta a punta, sin completarlo de verdad).
+
 ## 2026-09-17 17:09-17:35 La Paz — mismo bloqueo de deploy; tres superficies nunca auditadas, todas sanas
 
 Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta` (`ONIA_ALTA_AUTOMATICA`), `BUILD_ID`
