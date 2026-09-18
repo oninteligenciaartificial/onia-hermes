@@ -56,7 +56,7 @@ RAMA=$(git -C "$REPO" branch --show-current 2>/dev/null)
 # espacio, mudo, por el 2>/dev/null de abajo. Medido: 5,4 GB y minutos -> 4,2 MB
 # y 0 s. Si alguna vez agregas un `poner "$RAIZ/..."` de otra carpeta, sumala aca
 # o el archivo no va a existir y `poner` va a avisar que falta.
-RUTAS_SYNC="scripts/loops scripts/kanban scripts/postiz_schedule.mjs hermes-content/deploy"
+RUTAS_SYNC="scripts/loops scripts/kanban scripts/postiz_schedule.mjs scripts/cerebro hermes-content/deploy"
 TARERR="/tmp/onia-sync-tar.$$.err"
 
 RAIZ="$REPO"
