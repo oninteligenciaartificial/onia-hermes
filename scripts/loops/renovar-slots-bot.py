@@ -79,27 +79,34 @@ def proximos_slots(ahora_lapaz, cuantos=CUANTOS):
     Dias distintos a proposito: ofrecerle a alguien "hoy 14:00 o hoy 14:30" no es
     darle una opcion, es darle la misma. Dos dias separados es una eleccion real.
     """
-    # ANTICIPACION + VIGENCIA, no solo ANTICIPACION: estos horarios se sirven las
-    # VIGENCIA_H siguientes sin volver a calcularse, asi que el margen tiene que
-    # alcanzar hasta el ULTIMO prospecto que los lea, no solo el primero.
+    # El piso es ANTICIPACION_H a secas. La vigencia NO se le suma: quien cubre al
+    # ULTIMO prospecto del dia es el motor, que juzga antes de recortar.
     #
-    # ⚠️ ESE MARGEN YA NO HACE FALTA, y sigue aca a proposito UNA VUELTA MAS. Desde el
-    # 2026-09-17 el motor elige los 2 candidatos que se sostienen (`parseSlotsSpec` en
-    # config.mjs) en vez de cortar los 2 primeros a ciegas, asi que generar de MAS cubre
-    # el peor momento sin alejarle el turno a nadie — y el margen le cuesta a la venta un
-    # dia entero: medido ese dia 09:15 La Paz, el bot ofrecia "sábado 19, 09:00" teniendo
-    # libre el viernes 18 a las 14:00, con 28 h de aviso.
+    # Hasta el 2026-09-18 aca decia `ANTICIPACION_H + VIGENCIA_H`, con el motivo
+    # correcto para el motor VIEJO: ese cortaba los 2 primeros a ciegas, asi que la
+    # unica forma de que el par llegara entero al final de la vigencia era reservar
+    # margen aca. El 17-sep el motor paso a elegir los 2 que SE SOSTIENEN
+    # (`parseSlotsSpec` en config.mjs), y el margen quedo cobrandose sin comprar nada.
     #
-    # No se baja TODAVIA porque este archivo y el motor viajan por caminos DISTINTOS: a
-    # /root/bin lo copia scripts/loops/sincronizar.sh (cron 44 * * * *, desde origin/main)
-    # y al motor hay que desplegarlo aparte — y medido el 2026-09-17,
-    # /var/log/onia-publicar-solo.log dice "bot: NO publico solo, toca una fuente de
-    # precio", o sea espera un ok. Con el piso en 24 h y el motor viejo, el consumidor
-    # tomaria los 2 primeros sin filtrar, el primero caduca a los minutos y el bot le dice
-    # a TODO prospecto «justo ahora no tengo horarios libres»: el fallo que costo una
-    # semana. Bajarlo a ANTICIPACION_H es un cambio de una linea CUANDO el motor nuevo
-    # este vivo (docker exec onia-center grep -c "SE SOSTIENEN" /tmp/onia-bot/config.mjs).
-    desde = ahora_lapaz + dt.timedelta(hours=ANTICIPACION_H + VIGENCIA_H)
+    # Se baja recien hoy porque este archivo y el motor viajan por caminos DISTINTOS
+    # —a /root/bin lo copia scripts/loops/sincronizar.sh (cron 44, desde origin/main)
+    # y al motor hay que desplegarlo aparte—, asi que el margen se dejo puesto hasta
+    # poder VERIFICAR el consumidor vivo. La condicion de vencimiento estaba escrita
+    # aca y se corrio literal el 2026-09-18:
+    #
+    #     docker exec onia-center grep -c "SE SOSTIENEN" /tmp/onia-bot/config.mjs  -> 1
+    #
+    # Lo que costaba el margen, medido ese dia (viernes) sobre el proceso vivo:
+    # `ONIA_BOT_SLOTS` arrancaba en "lunes 21" con el sabado 19 libre. Tres dias de
+    # espera para quien escribia ese viernes, y ningun sabado en la lista mientras la
+    # coletilla del propio mensaje promete "sáb 9:00-15:00". Con el piso en 24 h el
+    # primero pasa a ser "sábado 19, 09:00".
+    #
+    # ⚠️ El piso NO es redundante con el filtro del motor, y su gate lo exige aparte
+    # (`test_el_generador_solo_tampoco_escribe_un_horario_a_minutos_vista`): el dia
+    # que el motor vuelva a una version sin filtro —deploy revertido, rsync viejo—
+    # esto es lo unico que queda entre el prospecto y un turno a minutos vista.
+    desde = ahora_lapaz + dt.timedelta(hours=ANTICIPACION_H)
     slots, dias_usados = [], set()
     dia = desde.date()
     for _ in range(21):  # tres semanas de margen: suficiente para cualquier feriado
