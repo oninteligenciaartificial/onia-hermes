@@ -32,7 +32,10 @@ TG=${ONIA_TG:-/root/bin/onia-tg.sh}
 LOCK=${ONIA_PUBLICAR_LOCK:-/var/lock/onia-publicar-solo.lock}
 REPO_HERMES=${ONIA_LOOPS_REPO:-/root/loops/onia-hermes}
 REPO_PLATFORM=${ONIA_PLATFORM_REPO:-/root/loops/onia-platform}
-SECO=""
+# El modo seco tambien se puede forzar por entorno, y no es un lujo: es lo que
+# deja que un caso de prueba ejecute este guion sin que un flag mal escrito
+# termine publicando los tres destinos de verdad.
+SECO=${ONIA_PUBLICAR_SECO:-}
 [ "${1:-}" = "--dry-run" ] && SECO=1
 
 # Fuentes de precio. CLAUDE.md nombra DOS archivos y cada uno manda sobre lo
@@ -114,9 +117,43 @@ montos_que_cambian() {  # $1=repo-del-codigo  $2=archivo  $3..=shas
   return 1
 }
 
+# El RENGLON del log cuando el freno detiene un destino. Lleva SU CITA —que
+# numero cambia, o que archivo no se pudo mirar—, no solo el motivo.
+#
+# Nace de la tarea t_c441fba9 (2026-09-18). El detalle se calculaba bien y salia
+# UNICAMENTE por Telegram, que para este aviso no entrega: medido ese dia sobre
+# /var/log/onia-tg.log hay 136 emisiones de "publicacion detenida a proposito" y
+# CERO con `OK message_id=`, sobre 1.403 entregas reales — o sea el log si
+# distingue, y este aviso no llego nunca. El unico canal que alguien lee es el
+# log del publicador, y decia el motivo a secas.
+#
+# Por que eso no es cosmetico: un veredicto sin cita NO SE PUEDE REFUTAR. Con esa
+# linea sola, otra sesion diagnostico que el freno contaba los numeros de los
+# COMENTARIOS —que ya descarta desde d9f6a303— y propuso como cura algo que ya
+# estaba escrito hacia horas; lo que de verdad cambiaba eran `0` y `1`, los
+# indices de un helper nuevo de `pricing.ts`. Con la cita al lado, eso se ve de
+# un vistazo y sin abrir el diff, que es justo lo que la cabecera promete.
+#
+# Se rinde en UN solo lugar a proposito: un destino que arme la frase por su
+# cuenta vuelve a quedar sin cita el dia que lo agreguen.
+renglon_detenido() {  # $1=nombre  $2=motivo  $3=detalle
+  local detalle motivo=$2
+  detalle=$(printf '%s' "$3" | tr '\n' ' ' | sed 's/[[:space:]]\{1,\}/ /g; s/^ //; s/ *$//')
+  # Sin detalle no se cuelga un `:` vacio, que se lee como cita perdida.
+  [ -n "$detalle" ] && motivo="$motivo: $detalle"
+  printf '  %s: NO publico solo — %s\n' "$1" "$motivo"
+}
+
 # Se puede preguntar desde afuera, que es la unica forma de PROBAR la decision:
 # adentro del guion entero hace falta /opt, y en la maquina donde corren los
 # carriles /opt no existe. Va ANTES del lock: preguntar no publica nada.
+if [ "${1:-}" = "--renglon" ]; then
+  shift
+  [ "$#" -ge 2 ] || { echo "uso: publicar-solo.sh --renglon <nombre> <motivo> [detalle]" >&2; exit 2; }
+  renglon_detenido "$1" "$2" "${3:-}"
+  exit 0
+fi
+
 if [ "${1:-}" = "--montos" ]; then
   shift
   [ "$#" -ge 2 ] || { echo "uso: publicar-solo.sh --montos <repo> <archivo> <sha>..." >&2; exit 2; }
@@ -128,6 +165,21 @@ if [ "${1:-}" = "--montos" ]; then
     *) echo "NO MEDIDO: no pude leer el repo o alguno de los commits"; exit 2 ;;
   esac
 fi
+
+# Un argumento que no se reconoce NO puede caer en "publicar de verdad". Hasta
+# hoy `--dry-run` era el unico que este guion miraba y cualquier otra cosa seguia
+# de largo: un typo (`--dryrun`), o un modo de consulta que alguien agregue
+# mañana y quede mal escrito en quien lo llama, publicaba los TRES destinos sin
+# decir una palabra. Los modos de consulta ya salieron mas arriba.
+case "${1:-}" in
+  ""|--dry-run) ;;
+  *)
+    echo "uso: publicar-solo.sh [--dry-run]" >&2
+    echo "     publicar-solo.sh --montos <repo> <archivo> <sha>..." >&2
+    echo "     publicar-solo.sh --renglon <nombre> <motivo> [detalle]" >&2
+    exit 2
+    ;;
+esac
 
 avisar() {
   if [ -n "$SECO" ]; then echo "  [seco] avisaria: $1"; return; fi
@@ -199,7 +251,7 @@ publicar_destino() {  # $1=nombre $2=publicar.sh $3=archivos-tocados $4=repo-del
       # "un NUMERO", no "un monto": el freno detiene ante cualquier numero que
       # cambie porque no adivina cual es plata (ver la cabecera). Decirle monto a
       # un `0` de indice le haria creer al que lee el log que cambio un precio.
-      echo "  $nombre: NO publico solo — cambia un numero en una fuente de precio"
+      renglon_detenido "$nombre" "cambia un numero en una fuente de precio" "$detalle"
       avisar "<b>Onia — publicacion detenida a proposito</b>
 <b>$nombre</b> tiene un arreglo que CAMBIA un numero en una fuente de PRECIO:
 <code>$detalle</code>
@@ -208,7 +260,7 @@ Eso no sale sin tu firma. El resto se publico solo."
     fi
     if [ -n "$nomedido" ]; then
       detalle=$(printf '%s' "$nomedido" | head -3)
-      echo "  $nombre: NO publico solo — toca una fuente de precio y no pude medir si cambia"
+      renglon_detenido "$nombre" "toca una fuente de precio y no pude medir si cambia" "$detalle"
       avisar "<b>Onia — publicacion detenida a proposito</b>
 <b>$nombre</b> toca una fuente de PRECIO y <b>no pude comprobar</b> si algun monto cambia:
 <code>$detalle</code>

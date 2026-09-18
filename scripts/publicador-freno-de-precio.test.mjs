@@ -27,7 +27,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -189,4 +189,109 @@ test("si no se puede mirar, NO dice que esta limpio: falla CERRADO", () => {
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+/* -------------------------------------------------------------------------
+ * El VEREDICTO tiene que llegar con su CITA por el canal que alguien lee.
+ *
+ * Medido el 2026-09-18 (tarea t_c441fba9): el detalle —que numero cambia— se
+ * calculaba bien y salia UNICAMENTE por Telegram, un canal que no entrega
+ * (`/var/log/onia-tg.log`: 136 emisiones de "publicacion detenida a proposito",
+ * CERO con `OK message_id=`, sobre 1.403 entregas reales, o sea el log si
+ * distingue). El log del publicador, que es lo que se lee al arrancar cada
+ * vuelta, decia el motivo a secas. Con eso el freno no se puede refutar: otra
+ * sesion abrio esa tarea afirmando que contaba los numeros de los COMENTARIOS
+ * —que ya descarta— cuando lo que cambiaba eran `0` y `1`, los indices de un
+ * helper nuevo, y su cura propuesta ya estaba escrita hacia horas.
+ * ---------------------------------------------------------------------- */
+
+/**
+ * Le pregunta al guion REAL como queda el renglon del log cuando detiene.
+ *
+ * `ONIA_PUBLICAR_SECO` no es adorno: si el modo de consulta desapareciera, el
+ * guion seguiria de largo, y en el VPS eso publica los tres destinos de verdad.
+ * Un caso de prueba no puede tener ese final ni cuando falla.
+ */
+function correr(...args) {
+  const r = spawnSync("bash", [GUION, ...args], {
+    encoding: "utf8",
+    timeout: 60_000,
+    env: { ...process.env, ONIA_PUBLICAR_SECO: "1" },
+  });
+  return { codigo: r.status, salida: `${r.stdout ?? ""}${r.stderr ?? ""}`.trim() };
+}
+
+const renglon = (nombre, motivo, detalle) => correr("--renglon", nombre, motivo, detalle);
+
+test("el renglon del log NOMBRA el numero que cambia, no solo el motivo", () => {
+  const r = renglon("landing", "cambia un numero en una fuente de precio", `${ARCHIVO}: 330`);
+  assert.equal(r.codigo, 0, "el guion no sabe rendir el renglon del log. Salida: " + r.salida);
+  assert.match(
+    r.salida,
+    /330/,
+    "el renglon no dice QUE numero cambia, y ese detalle solo sale por un canal que no entrega: " +
+      "el que lee el log no puede distinguir un precio nuevo de un indice de array. Salida: " + r.salida,
+  );
+  assert.match(r.salida, /landing/, "el renglon no nombra el destino. Salida: " + r.salida);
+  assert.match(r.salida, new RegExp(ARCHIVO.replace(/[.]/g, "\\.")), "el renglon no nombra el archivo. Salida: " + r.salida);
+});
+
+test("el renglon del NO MEDIDO tambien nombra lo que no se pudo mirar", () => {
+  const r = renglon("bot", "toca una fuente de precio y no pude medir si cambia", ARCHIVO);
+  assert.equal(r.codigo, 0, "el guion no sabe rendir el renglon del NO MEDIDO. Salida: " + r.salida);
+  assert.match(
+    r.salida,
+    new RegExp(ARCHIVO.replace(/[.]/g, "\\.")),
+    "el NO MEDIDO no dice QUE archivo no se pudo mirar: los dos remedios son opuestos " +
+      "(mirar el repo vs mirar el acceso) y sin el nombre no se elige. Salida: " + r.salida,
+  );
+});
+
+test("sin detalle el renglon no inventa un `:` colgando", () => {
+  const r = renglon("bot", "toca una fuente de precio y no pude medir si cambia", "");
+  assert.equal(r.codigo, 0, "Salida: " + r.salida);
+  assert.doesNotMatch(
+    r.salida,
+    /:\s*$/,
+    "queda un dos puntos sin nada atras, que se lee como detalle perdido. Salida: " + r.salida,
+  );
+});
+
+test("un flag mal escrito NO cae en publicar de verdad: sale con error", () => {
+  // `--dryrun` es el typo que importa: hasta el 2026-09-18 este guion solo miraba
+  // `--dry-run` y cualquier otra cosa seguia de largo hasta publicar los tres
+  // destinos, sin decir una palabra.
+  const r = correr("--dryrun");
+  // El codigo 2 SOLO no alcanza y se midio por que: si el guion sigue de largo,
+  // en la maquina de los carriles termina en NO MEDIDO, que tambien es 2. Lo que
+  // distingue es QUIEN contesto — el uso, o el publicador arrancando su corrida.
+  assert.match(
+    r.salida,
+    /^uso: /m,
+    "un argumento que el guion no reconoce siguio de largo en vez de salir con el uso. " +
+      "En el VPS eso publica produccion por un typo. Salida: " + r.salida,
+  );
+  assert.doesNotMatch(
+    r.salida,
+    /La Paz ==/,
+    "el guion llego a arrancar su corrida con un flag que no reconoce. Salida: " + r.salida,
+  );
+  assert.equal(r.codigo, 2, "no salio con codigo de error. Salida: " + r.salida);
+});
+
+test("la frase del veredicto tiene UNA sola fuente: nadie la escribe por su cuenta", () => {
+  // Sobre el guion con los COMENTARIOS en blanco: esta misma explicacion la cita,
+  // y un gate que se acusa a si mismo por su propia documentacion es ruido.
+  const codigo = readFileSync(GUION, "utf8")
+    .split("\n")
+    .filter((l) => !/^\s*#/.test(l))
+    .join("\n");
+  const veces = codigo.split("NO publico solo").length - 1;
+  assert.equal(
+    veces,
+    1,
+    `la frase "NO publico solo" se arma en ${veces} lugares. Si un destino la escribe por su ` +
+      "cuenta vuelve a quedar sin cita, y este gate no lo vería: el renglon se rinde en un solo " +
+      "lugar para que agregar un destino no pueda perder el detalle.",
+  );
 });
