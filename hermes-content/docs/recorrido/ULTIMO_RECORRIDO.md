@@ -12,6 +12,29 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-18 11:09-11:17 La Paz — deploy nuevo (BUILD_ID `4AefpemDeSbQXrDmTbhoy`, antes `HiLa5P_MF3e3iK6KUSfli`): dental 9/9 de nuevo
+
+BUILD_ID cambió desde la vuelta anterior, así que tocaba re-correr el recorrido completo (no
+solo confiar en el resultado viejo). Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`. Corrí
+`--escribir` en dental (default): **9/9, `completo: true`**. Cuenta
+`zz-qa-2026-09-18-1509@onia.com.bo` creada → correo confirmado → onboarding (6 pantallas) →
+paciente `zz-qa-2026-09-18-1509-paciente` cargado y visto en `/patients` → cita 2026-09-21 09:00
+agendada (201, `cmu73kxw5001h01rw0ahvacw0`) y vista en `/appointments` → factura con ítem visible
+en `/billing/cmu73l997001j01rwtedccemt` (frenada sin pagar) → panel revisado (no lista pacientes,
+esperado). El bloqueo de MFA que había frenado el recorrido el 17-sep sigue sin reaparecer. 0
+filas `zz-qa-` al cerrar (verificado por `SELECT`).
+
+`completo: true`, `llegoHasta: 9/9`.
+
+RAZÓN: la medida ya estaba en el techo (9/9); esta vuelta confirma que el deploy nuevo no rompió
+nada, que es la pregunta que un cambio de BUILD_ID obliga a hacer.
+LECCIÓN: ninguna nueva — el método "re-correr entero SOLO cuando cambia BUILD_ID, si no usar el
+resto en escalón 3" sigue siendo correcto. Próxima vuelta: si el BUILD_ID no cambió, ir directo a
+escalón 3 en superficie no auditada (o revisar si algún pedido de deploy sigue esperando el ok de
+Sergio Urcullo).
+
+---
+
 ## 2026-09-18 08:09-08:16 La Paz (novena vuelta del día) — dental 9/9 (rutina); superficie del día agotada, se descarta `/ayuda`
 
 Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`. Corrí el recorrido completo con
