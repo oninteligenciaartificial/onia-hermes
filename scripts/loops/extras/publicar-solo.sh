@@ -196,7 +196,10 @@ publicar_destino() {  # $1=nombre $2=publicar.sh $3=archivos-tocados $4=repo-del
     done
     if [ -n "$cambian" ]; then
       detalle=$(printf '%s' "$cambian" | head -3)
-      echo "  $nombre: NO publico solo — cambia un monto"
+      # "un NUMERO", no "un monto": el freno detiene ante cualquier numero que
+      # cambie porque no adivina cual es plata (ver la cabecera). Decirle monto a
+      # un `0` de indice le haria creer al que lee el log que cambio un precio.
+      echo "  $nombre: NO publico solo — cambia un numero en una fuente de precio"
       avisar "<b>Onia — publicacion detenida a proposito</b>
 <b>$nombre</b> tiene un arreglo que CAMBIA un numero en una fuente de PRECIO:
 <code>$detalle</code>
