@@ -2265,8 +2265,21 @@ y sin operar. Acá se opera, con verificación por ítem.
       `layout.tsx`, con `scroll` adentro): lo reemplazó este módulo al integrar, y la espera
       vigente es **12 s**. Se corrigió acá al mergear para que el resumen no contradiga al
       código que corre;
-      (b) 🔴 LCP móvil 3,1 s (> presupuesto 2,5 s): `dueno-duerme.webp` (107 KB, 1600×900) está
-      lazy — pasar a fetchpriority=high + srcset 800w para móvil;
+      (b) ⚠️ **CORREGIDO 2026-09-18: la primera mitad de este ítem era FALSA y su remedio una
+      regresión.** Decía *"LCP móvil 3,1 s: `dueno-duerme.webp` está lazy — pasar a
+      fetchpriority=high"*. Medido contra `onia.com.bo` con Playwright + `PerformanceObserver`
+      (`largest-contentful-paint`, `buffered:true`, `reducedMotion:'reduce'`): **el elemento LCP
+      es TEXTO del hero en los dos viewports** — `<P>` a 1.256 ms en móvil 390×844, `<H1>` a
+      896 ms en escritorio 1440×900 —, y esa foto está a **3.109 px** de scroll en móvil (2.602
+      en escritorio), o sea casi cuatro pantallas abajo: **no puede ser el LCP por definición**.
+      Ponerle `fetchpriority=high` a 104 KB que nadie ve todavía sólo los pone a competir por
+      ancho de banda contra el hero, que sí es el LCP; el `loading=lazy` de ahí es correcto y se
+      deja. **La segunda mitad (srcset 800w) sí era cierta**: está escrita en `claude/web-venta`
+      (`0df2a089`, gate validado por mutación, 104 → 31 KB) pero **todavía NO publicada** — el
+      `img` vivo de hoy trae `srcset` vacío. Medición y porqué en la cabecera de
+      `web-factory/apps/onia-platform/src/fotos-de-venta-con-srcset.test.ts`; tarea `t_21723822`.
+      ⚠️ El presupuesto de LCP del **LISTO** sigue abierto, pero se persigue por (d) TTFB y el
+      render delay del h1, **no por esta foto**;
       (c) 🟡 JS propio 197,7 KB gz (> presupuesto 150): el chunk de polyfills legacy (39,6 KB gz)
       se elimina fijando browserslist moderno;
       (d) 🟡 TTFB 0,5-1,05 s en páginas estáticas de venta: cache de HTML en Cloudflare/ISR

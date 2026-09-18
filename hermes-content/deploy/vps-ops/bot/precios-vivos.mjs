@@ -51,9 +51,12 @@
 import { spawnSync } from "node:child_process";
 import { pathToFileURL } from "node:url";
 
+import { leerCatalogoDeInclusion } from "./catalogo-inclusion.mjs";
 import { DEFAULT_CONFIG } from "./config.mjs";
+import { fuenteDePlataforma, repoPlataforma } from "./fuente-plataforma.mjs";
 import { normalize } from "./guardrails.mjs";
 import { applyKnowledge, mergePanelKnowledge } from "./knowledge.mjs";
+import { revisarPromesaDeInclusion } from "./promesa-inclusion.mjs";
 import { MONTOS_PERMITIDOS, PRECIOS_PUBLICOS, montosEnTexto, soloPreciosPublicos } from "./precios-publicos.mjs";
 
 /** El contenedor donde corre el bot, y la ruta que su proceso lee de verdad. */
@@ -284,6 +287,7 @@ export function juzgar(crudo, cargado, panel) {
         `(conv 49). Falta (o vencio) la FAQ "precios" con la escalera vigente.`,
       vencidos,
       sinCifras: true,
+      m4,
     };
   }
   return {
@@ -293,6 +297,85 @@ export function juzgar(crudo, cargado, panel) {
       `vigentes, y su proceso SIRVE la fuente "${cargado.source}"` +
       `${cargado.version ? ` (version ${cargado.version})` : ""}.`,
     vencidos,
+    // El M4_BODY EFECTIVO viaja afuera a proposito: es el unico lugar del repo donde existe el
+    // texto de precios que el lead recibe de verdad (archivo + fila del panel, resuelto por el
+    // MISMO applyKnowledge del motor). `juzgarInclusion` lo cruza contra el catalogo publicado
+    // en vez de volver a derivarlo: dos derivaciones del mismo hecho coinciden solas.
+    m4,
+  };
+}
+
+/**
+ * ¿Lo que el bot VIVO dice de "el chatbot ya viene adentro" coincide con el catalogo publicado?
+ *
+ * POR QUE VIVE ACA Y NO EN `promesa-inclusion.test.mjs`. Ese test ata la misma promesa, pero
+ * contra `knowledge.onia.json`, EL ARCHIVO DEL REPO — y el archivo no es lo que el lead recibe:
+ * el motor sirve el documento EFECTIVO, con la fila del panel mergeada encima. Medido el
+ * 2026-09-18: `/health` del webhook declara `source:"panel"`, o sea que la promesa que llega al
+ * lead pasa por una fila de base que ningun gate de repo puede ver. Hoy esa fila trae una sola
+ * FAQ (`negocio`) que no habla de planes, asi que las dos fuentes coinciden; el dia que alguien
+ * escriba precios desde el panel —que es para lo que el panel existe— la frase del panel GANA,
+ * se sirve a los cuatro inboxes, y el test del repo sigue verde.
+ *
+ * Y la inclusion es justo la promesa que NO se puede atar con cifras: es un booleano
+ * (`whatsappIncluded`). Bs 390 sigue siendo un monto legitimo de `pricing.ts` el dia que el
+ * Profesional pase a traer el chatbot adentro — el gate de montos no se entera y le cobramos el
+ * add-on a quien ya lo paga en su plan.
+ *
+ * `catalogo` es OBLIGATORIO y `null` NO es verde: un catalogo que no se pudo leer no absuelve a
+ * nadie. El llamador que quiera callarlo tiene que pasar `null`, y eso sale NO MEDIDO (2).
+ *
+ * @param {string|null|undefined} m4 el `m4` que devolvio `juzgar` (el texto vivo, ya resuelto)
+ * @param {{incluidoPorPlan:Record<string,boolean>|null, labels:Record<string,string>|null, motivo:string|null}} catalogo
+ */
+export function juzgarInclusion(m4, catalogo) {
+  if (catalogo === undefined) {
+    throw new TypeError("juzgarInclusion(m4, catalogo): falta leerCatalogoDeInclusion()");
+  }
+  // Sin `m4` no hay sujeto — y eso SOLO pasa cuando `juzgar` ya corto por otra causa, que ya
+  // grita con su propio codigo. Un caso del self-check ata ese invariante para que esto no se
+  // pueda apagar en silencio el dia que alguien agregue una salida temprana con `codigo: 0`.
+  if (!m4) return { codigo: 0, texto: null, sinSujeto: true };
+
+  if (!catalogo || catalogo.incluidoPorPlan === null || catalogo.labels === null) {
+    return {
+      codigo: 2,
+      texto:
+        `NO SE PUDO MEDIR LA INCLUSION — no pude leer el catalogo publicado de onia-platform: ` +
+        `${catalogo?.motivo ?? "sin motivo"}. Sin el, "el Completo ya lo trae adentro" no se ` +
+        `puede cruzar contra nada.`,
+    };
+  }
+
+  const { problemas, avisos, nombrados } = revisarPromesaDeInclusion({
+    incluidoPorPlan: catalogo.incluidoPorPlan,
+    labels: catalogo.labels,
+    texto: m4,
+  });
+
+  if (problemas.length > 0) {
+    return {
+      codigo: 1,
+      texto:
+        `EL BOT VIVO PROMETE UNA INCLUSION QUE EL CATALOGO NO HACE:\n  - ${problemas.join("\n  - ")}\n` +
+        `Se arregla en el texto que el bot SIRVE, que puede ser la fila del panel y no ` +
+        `knowledge.onia.json (mirar la fuente que declara /health).`,
+    };
+  }
+  // Cero menciones es cero valor: el cruce se quedo sin sujeto y hay que decirlo, no firmarlo.
+  if (nombrados.length === 0) {
+    return {
+      codigo: 1,
+      texto:
+        `EL M4 VIVO NO NOMBRA UN SOLO PLAN DEL CATALOGO: el cruce de inclusion se quedo sin ` +
+        `sujeto, asi que no esta midiendo lo que cree medir (¿renombraron los planes?).`,
+    };
+  }
+  return {
+    codigo: 0,
+    texto:
+      `inclusion del chatbot: coincide con el catalogo publicado (${nombrados.length} plan(es) ` +
+      `nombrado(s))` + (avisos.length > 0 ? `\n  aviso: ${avisos.join("\n  aviso: ")}` : "") + ".",
   };
 }
 
@@ -706,6 +789,67 @@ function selfCheck() {
     "una fila publicada vuelve cruda, para medirla con el MISMO lector que el archivo",
   );
 
+  // -------------------------------------------------------------------------
+  // La INCLUSION del chatbot sobre el texto VIVO. Puro: el catalogo se inyecta.
+  // -------------------------------------------------------------------------
+  const LABELS = { basic: "Básico", crece: "Crece", professional: "Profesional", clinic: "Completo" };
+  const cat = (incluidoPorPlan) => ({ incluidoPorPlan, labels: LABELS, motivo: null });
+  // Textual del bot vivo. El Completo lo trae adentro y los otros tres no: el catalogo de hoy.
+  const M4_VIVO =
+    "el sistema arranca en Bs 320 al mes con el plan Básico, Bs 550 el Crece, Bs 890 el " +
+    "Profesional y Bs 1.290 el Completo, que ya trae el chatbot de WhatsApp adentro. " +
+    "En los otros planes el chatbot va aparte, Bs 390 al mes.";
+  const catHoy = cat({ basic: false, crece: false, professional: false, clinic: true });
+
+  ok(juzgarInclusion(M4_VIVO, catHoy).codigo === 0, "el texto vivo contra el catalogo de hoy: verde");
+  ok(
+    juzgarInclusion(M4_VIVO, cat({ basic: false, crece: false, professional: true, clinic: true })).codigo === 1,
+    "si el Profesional pasa a traerlo adentro, el texto vivo le sigue cobrando Bs 390: ROJO",
+  );
+  ok(
+    juzgarInclusion(M4_VIVO, cat({ basic: false, crece: false, professional: false, clinic: false })).codigo === 1,
+    "si el Completo deja de traerlo, el texto vivo promete algo que el producto no da: ROJO",
+  );
+  ok(
+    juzgarInclusion(M4_VIVO, { incluidoPorPlan: null, labels: null, motivo: "no encontre el repo" }).codigo === 2,
+    "un catalogo ilegible es 2, NUNCA 0: no puede absolver a nadie",
+  );
+  ok(juzgarInclusion(M4_VIVO, null).codigo === 2, "pasarle null para callarlo tambien es 2, nunca 0");
+  ok(
+    juzgarInclusion("el precio te lo pasa Sergio en la demo", catHoy).codigo === 1,
+    "un M4 que no nombra un solo plan deja el cruce sin sujeto: rojo, no verde",
+  );
+  let tiroInclusion = false;
+  try { juzgarInclusion(M4_VIVO); } catch { tiroInclusion = true; }
+  ok(tiroInclusion, "llamarla sin catalogo TIRA: el llamador olvidadizo no puede pasar de largo");
+
+  // EL INVARIANTE que impide que esto se apague en silencio: `juzgarInclusion` se abstiene cuando
+  // no hay `m4`, y eso solo es aceptable mientras TODA salida de `juzgar` sin `m4` ya sea != 0.
+  // El dia que alguien agregue una salida temprana verde sin `m4`, la inclusion dejaria de
+  // medirse sin que nada se ponga rojo — y este caso cae.
+  const salidasDeJuzgar = [
+    juzgar(JSON.stringify(vivoViejo), cargado(), sinPanel),
+    juzgar(JSON.stringify(vivoNuevo), cargado(), sinPanel),
+    juzgar(null, cargado(), sinPanel),
+    juzgar("{ esto no es json", cargado(), sinPanel),
+    juzgar(sano, cargado({ source: "code" }), sinPanel),
+    juzgar(sano, cargado({ path: "/otro/knowledge.json" }), sinPanel),
+    juzgar(sano, null, sinPanel),
+    juzgar(sano, cargado(), sinPanel),
+    juzgar(sano, cargado({ lastError: "RECHAZADO (1): faq[0].body vacio" }), sinPanel),
+    juzgar(sano, sirvePanel, { estado: null }),
+    juzgar(sano, sirvePanel, { estado: "doc", crudo: "{ roto" }),
+    juzgar(JSON.stringify({ faq: [] }), sirvePanel, filaNegocio),
+  ];
+  ok(
+    salidasDeJuzgar.every((r) => r.m4 || r.codigo !== 0),
+    "ninguna salida VERDE de juzgar puede venir sin m4: ahi la inclusion se apagaria muda",
+  );
+  ok(
+    juzgarInclusion(salidasDeJuzgar.find((r) => !r.m4)?.m4, catHoy).sinSujeto === true,
+    "sin m4 la inclusion se abstiene (y el otro veredicto ya grita)",
+  );
+
   const fallaron = casos.filter((c) => !c.ok);
   for (const c of fallaron) console.error(`  FAIL  ${c.nombre}`);
   console.log(`self-check precios-vivos: ${casos.length - fallaron.length}/${casos.length}`);
@@ -720,11 +864,16 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     process.exit(selfCheck());
   }
   const veredicto = juzgar(leerKnowledgeVivo(), conocimientoDelProceso(), filaPanel());
+  // La promesa de INCLUSION del mismo texto vivo. Va acá y no en la cadena `npm test` porque
+  // necesita producción (docker + la fila del panel): un gate que exige el entorno pone rojo el
+  // merge de todos los carriles por ambiente. Acá ya estamos hablando con producción.
+  const inclusion = juzgarInclusion(veredicto.m4, leerCatalogoDeInclusion({ repoPlataforma, fuenteDePlataforma }));
   // Las DOS fuentes, porque el lead resuelve la fila por inbox ANTES que el archivo. Medir una
   // sola deja la otra firmada en verde sin haberla mirado.
   const inboxes = inboxesVivos();
   const porInbox = juzgarInboxes(inboxes === null ? null : inboxes.map((inbox) => filaPublicada({ inbox })));
   console.log(veredicto.texto);
+  if (inclusion.texto) console.log(inclusion.texto);
   if (porInbox.texto) console.log(porInbox.texto);
   if (porInbox.codigo === 0) {
     const ausentes = porInbox.porInbox.filter((p) => p.estado === "ausente").map((p) => p.inbox);
@@ -734,5 +883,5 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
         `${ausentes.length} sin fila (${ausentes.join(", ") || "-"}) → esos caen al archivo.`,
     );
   }
-  process.exit(Math.max(veredicto.codigo, porInbox.codigo));
+  process.exit(Math.max(veredicto.codigo, inclusion.codigo, porInbox.codigo));
 }
