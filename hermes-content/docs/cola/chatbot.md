@@ -4947,6 +4947,27 @@ archivos.**
 
 ## Cerrado — no rehacer
 
+- [x] **~~El asistente de configuración aplanaba el horario del dueño sin decírselo~~** — cerrado el
+      2026-09-18 (`onia-platform` 9c509b3c, rama del carril; **commiteado, NO desplegado**).
+      El wizard de 6 preguntas de `/settings/chatbot` nació ese mismo día (`f5e32220`, 20 min
+      antes de esta vuelta) y es la superficie nueva por donde el dueño carga lo que su bot le
+      dice a SUS clientes. El esquema del bot (`empresa.horario`) sólo sabe de **un** rango
+      (`dias + desde + hasta`), así que el corte del mediodía y el sábado con horario propio no
+      se pueden expresar y el asistente los aplana — eso está bien; hacerlo **mudo** no.
+      Medido corriendo `aplicarRespuestas` con lo que escribe un dueño boliviano de verdad —
+      *«Lunes a viernes de 8:00 a 12:00 y de 14:00 a 18:30, sábados de 9 a 13»*— sale
+      `dias [1..6], desde 8, hasta 19` y **`avisos: []`**: el dueño lee que quedó listo y su bot
+      le dice al cliente que el sábado atiende de 8:00 a 19:00 y que al mediodía está abierto.
+      Cerrar al mediodía es lo normal acá, no el borde. Ahora el aviso dice el rango que quedó y
+      la causa **derivada del dato** (no inventa el corte si no lo hay), y el ancla del test
+      exige que un horario que entra entero **no avise nada** — sobre-avisar apaga el aviso.
+      ⚠️ **Y cerrar esa mitad casi rompe la otra:** la pantalla decidía *«No se entendió — queda
+      el de antes»* con `avisos.some(a => a.includes('horario'))`, así que el aviso nuevo le
+      habría pintado *«Todavía no lo entiendo»* en rojo con el horario ya guardado. La causa
+      ahora se **declara** (`sinEntender`), no se deduce del texto de un aviso.
+      Gates: `tsc` 0 · `vitest` 5703 · `eslint` 0 errores, y validado por mutación en las dos
+      direcciones (no avisar nunca → 3 rojos; avisar siempre → cae el ancla).
+
 - [x] **~~El generador de respaldo de horarios no podía ofrecer un sábado NUNCA~~** — cerrado el
       2026-09-18 (`hermes-content/deploy/vps-ops/bot/slots-rodantes.mjs`). Los horarios de demo
       los escriben **dos** generadores en la MISMA variable (`ONIA_BOT_SLOTS`):
