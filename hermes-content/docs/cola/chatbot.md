@@ -318,6 +318,70 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~La insistencia podía escribirle a los clientes de un cliente a las 3 de la mañana:
+      su única franja horaria vivía en el crontab del VPS, y el gate de ayer la citó como si
+      fuera la garantía~~ — CERRADO el 2026-09-18 en el repo.** Commiteado, **NO desplegado**
+      (el bot no toca fuente de precio, así que publica solo tras el merge del integrador).
+
+      **Cómo apareció.** No de la cola —no le quedaban 🔴 abiertos— sino de preguntarle a
+      producción **qué mandaron de verdad los cuatro barridos del embudo desde que los encendí
+      ayer**. Respuesta: nada, nunca (456 corridas de insistencia, `send: []` en todas). Pero al
+      mirar sus crons apareció la asimetría: los otros tres corren `* * * *` y se frenan **por
+      código**; `insistencia` corre `*/30 12-23` y **no se frena por ningún lado más**.
+
+          for f in *-run.mjs; do ... grep -c 'deliver(' / grep -c 'localHour'; done
+          followup-run.mjs      deliver:3  localHour:2
+          insistencia-run.mjs   deliver:3  localHour:0     ← el hueco
+          reminder-run.mjs      deliver:2  localHour:3
+
+      **Por qué nada estaba rojo, y es lo más transferible.** El gate que cerró este mismo defecto
+      ayer en el follow-up (`followup-no-escribe-de-madrugada`) **enumeró a sus dos hermanos a
+      mano** para explicar que el olvido era sólo suyo, y escribió que `insistencia` *"queda
+      acotado por la franja de SU cron"*. La frase **era cierta** y absolvió al sujeto equivocado.
+      Una enumeración de hermanos escrita en el comentario del propio arreglo es una **lista de
+      inclusión**, y el que la lee después la toma por verificada. Ese comentario ya está
+      corregido en su archivo, que es donde desactivaba la auditoría.
+
+      **Por qué un crontab no puede ser la guarda** (tres razones, y la tercera es la que manda):
+
+      1. Es una franja **de arranque, no de decisión**: `insistencia-run.sh` es ejecutable y se
+         corre a mano para depurar — a las 3 de la mañana manda igual.
+      2. Vive **fuera de git**, y su línea ya fue editada a mano (lleva el `--emit` escrito ahí),
+         así que perderla no deja ni una señal. Ese mismo modo de falla se cerró **ayer** para el
+         **modo** de estos barridos, derivándolo del interruptor versionado. Quedó la hora.
+      3. `insistencia` es el **único barrido multi-org**: le escribe a los clientes **del
+         cliente** (los pacientes de una clínica), y la hora decente es la del negocio. **Un
+         crontab sólo sabe decir UTC** — la hora local no se puede expresar ahí ni queriendo.
+
+      **Qué se pagaba.** Un WhatsApp de madrugada al paciente de una clínica lo paga **la clínica**
+      con el quality rating de SU línea, y la culpa es nuestra.
+
+      **El arreglo.** `config.insistencia.quietBeforeHour/quietAfterHour` (8–21) + la guarda en
+      `insistencia-run.mjs`, con `localHour`, **la misma pieza que usan sus dos hermanos**. Dos
+      decisiones:
+
+      - Va **última** y **antes del CAS**: el motivo es transitorio (la hora se arregla
+        esperando) y la reserva es de **un solo uso**, así que gastarla porque son las 3 AM
+        perdería la insistencia entera. Hay un caso que lo ata mirando el array de reservas.
+      - Los tres números salen de **un solo par de constantes** (`HORA_SILENCIOSA_DESDE` y
+        `HORA_SILENCIOSA_HASTA`, en `config.mjs`): tres pares sueltos serían tres políticas para
+        el mismo hecho, que es la trampa que ese archivo ya pagó con la duración de la demo.
+
+      **El gate de clase** (`barridos-no-escriben-de-madrugada.test.mjs`) **camina el disco** en
+      vez de citar la lista del comentario anterior: sujeto = todo `*-run.mjs` que llame a
+      `deliver(`. Con caso ancla que exige que los tres conocidos estén en el universo.
+
+      **Prueba — cuatro mutaciones, las cuatro en rojo**, y ninguna mitad sobra:
+
+          M1 quitar la guarda (el defecto original) ....... fail 5
+          M2 esquivar la condición (false &&) ............. fail 3   ← el gate de TEXTO pasa; caen los de comportamiento
+          M3 romper el predicado del universo ............. fail 1   ← lo caza el caso ancla
+          M4 sacar el bloque de config ................... fail 5
+          restaurado ..................................... pass 8 / fail 0
+
+      Suite entera del bot: **1151/1151**. Y la cadena lo ejecuta de verdad, confirmado por
+      mutación (`npm run test:bot` → 1152 tests, `fail 1`), no por mirar el glob.
+
 - [x] 🔴 **~~El gate de anticipación medía sólo el PISO y firmaba `ok` sobre el defecto de
       enfrente: el bot alejaba el turno tres días teniendo el sábado libre~~ — CERRADO el
       2026-09-18.** Gate cableado (commit en la rama) **y el valor vivo ya curado en producción**.

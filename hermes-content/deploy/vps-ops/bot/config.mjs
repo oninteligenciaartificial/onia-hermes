@@ -579,6 +579,24 @@ export const MODULOS_LISTOS = Object.freeze(
   new Set(["dental", "comercio", "proveedores", "servicios", "estetica"]),
 );
 
+/**
+ * HORA SILENCIOSA — un solo hecho, un solo par de numeros.
+ *
+ * Los TRES barridos que le mandan un mensaje a una persona (follow-up M3,
+ * recordatorio M9, insistencia) comparten la misma pregunta: a esta hora, ¿molesto?
+ * Cada uno la contesta en SU bloque de config, pero leyendo de aca: tres numeros
+ * sueltos serian tres politicas para el mismo hecho, que es la trampa que este
+ * archivo ya pago una vez con la duracion de la demo (15 en el texto / 45 en el
+ * calendario).
+ *
+ * El motivo es el mismo en los tres: un WhatsApp a las 5 de la mañana molesta y
+ * castiga el quality rating de la linea, que es lo unico que no se repone. Y no
+ * pierde el mensaje: el descarte es TRANSITORIO, la fila sigue elegible y sale en
+ * el primer barrido de la mañana.
+ */
+const HORA_SILENCIOSA_DESDE = 8;
+const HORA_SILENCIOSA_HASTA = 21;
+
 // ---------------------------------------------------------------------------
 // Config completa
 // ---------------------------------------------------------------------------
@@ -719,8 +737,8 @@ export const DEFAULT_CONFIG = Object.freeze({
     // aca la hora mala tambien puede ser la noche. Esperar no pierde el mensaje: la fila sigue
     // elegible y sale a las 08:00 — a lo sumo la ventana de Meta se cerro y sale la plantilla
     // `seguimiento_demo`, que cuesta ~0,074 USD. Escribirle a las 5 de la mañana cuesta la linea.
-    quietBeforeHour: 8,
-    quietAfterHour: 21,
+    quietBeforeHour: HORA_SILENCIOSA_DESDE,
+    quietAfterHour: HORA_SILENCIOSA_HASTA,
   }),
 
   // Recordatorio del dia de la demo (M9). La ventana de Meta NO se repite aca: es UN solo hecho
@@ -737,7 +755,26 @@ export const DEFAULT_CONFIG = Object.freeze({
     // Nunca antes de las 08:00 de Bolivia. Una demo a las 09:00 caeria en un barrido de las 05:00
     // y un WhatsApp a esa hora molesta y castiga el quality rating. No pierde el recordatorio: la
     // fila sigue elegible y sale en el barrido de las 08:00, todavia con una hora de antelacion.
-    quietBeforeHour: 8,
+    quietBeforeHour: HORA_SILENCIOSA_DESDE,
+  }),
+
+  // Insistencia del RECEPCIONISTA (el asistente de un cliente le insiste UNA vez a alguien
+  // que dejo de contestar). Su franja llego ultima, el 2026-09-18, y no por olvido: hasta
+  // hoy la unica que tenia era la de su linea de cron (`*/30 12-23` UTC), y el gate que cerro
+  // este mismo defecto en el follow-up la CITO como si fuera la garantia. Tres razones por las
+  // que un crontab no puede serlo:
+  //
+  //   1. Es una franja de ARRANQUE, no de decision: `insistencia-run.sh` se corre a mano para
+  //      depurar y a las 3 de la mañana manda igual.
+  //   2. Vive fuera de git —su linea ya fue editada a mano— asi que perderla no deja senal.
+  //   3. Y la de fondo: este es el UNICO barrido MULTI-ORG. Le escribe a los clientes DEL
+  //      CLIENTE, y la hora decente es la del negocio; un crontab solo sabe decir UTC.
+  //
+  // Techo ademas de piso, igual que el follow-up y por el mismo motivo: aca la hora mala
+  // tambien puede ser la noche. La franja del cron queda como segunda red, no como la unica.
+  insistencia: Object.freeze({
+    quietBeforeHour: HORA_SILENCIOSA_DESDE,
+    quietAfterHour: HORA_SILENCIOSA_HASTA,
   }),
 
   // Conversacion VENCIDA: si nadie (ni el prospecto, ni el bot, ni un humano) escribio en

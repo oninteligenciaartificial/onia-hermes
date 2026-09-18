@@ -59,6 +59,13 @@ const OFFSET_LA_PAZ = 4;
  * corra un dia. Misma doctrina que `scripts/loops/renovar-slots-bot.py`, el otro generador.
  */
 const CUANTOS = 5;
+/**
+ * Cuanto se SIRVE lo que se escribe sin recalcularse: el periodo del cron que corre
+ * este generador. No es un margen que se le sume al piso —eso ya se probo y le costaba
+ * un dia de espera al prospecto—, es el plazo con el que `ponerDelDia` decide QUE HORA
+ * del dia elegir para que el dia no se caiga de la oferta a mitad de camino.
+ */
+const VIGENCIA_MS = 24 * 3600_000;
 
 const MESES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
 const DIAS = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
@@ -104,21 +111,40 @@ export function proximosSlots(ahora = new Date(), cuantos = CUANTOS, franjas = f
     local.setUTCDate(local.getUTCDate() + i);
     // UN candidato por dia, igual que el .py: los de mas son para que el motor tenga
     // de donde elegir a lo largo de la vigencia, no para amontonar el mismo dia.
-    const puesto = ponerDelDia(local, franjas[local.getUTCDay()] || [], desde);
+    const puesto = ponerDelDia(local, franjas[local.getUTCDay()] || [], desde, desde + VIGENCIA_MS);
     if (puesto) salida.push(puesto);
   }
   return salida;
 }
 
 /**
- * El primer horario OFRECIBLE de un dia: se propone el comienzo de cada franja y,
- * si ya paso, la hora en punto siguiente que todavia entre. Misma regla que el .py.
+ * El horario del dia que el motor va a poder ofrecer durante MAS tiempo.
  *
  * La hora sale de la franja y no de una constante: la del sabado abre 09:00 y la
  * nocturna 20:00, asi que clavar 14:00 no era "la hora de la demo", era ofrecer un
  * horario fuera de la ventana o —lo que pasaba— descartar el dia entero.
+ *
+ * 🔴 Y de las horas de la franja NO siempre va la primera. Como se manda UN
+ * candidato por dia, la hora elegida decide cuanto vive el DIA en la oferta, y la
+ * mas temprana es tambien la primera en caerse: cuando se cae no se pierde un
+ * horario, se pierde el dia entero y el prospecto salta al dia habil siguiente.
+ * Medido en produccion el 2026-09-18 11:13 La Paz — el cron de las 06:23 habia
+ * escrito "sábado 19, 11:00" (28,6 h de aviso, correcto al generarse) y cinco horas
+ * despues ya no llegaba a 24 h: el bot le ofrecia LUNES 21 a quien escribia ese
+ * viernes, con el sabado 19 a las 12:00, 13:00 y 14:00 libres, y prometiendole
+ * "sáb 9:00-15:00" en la coletilla del MISMO mensaje.
+ *
+ * Asi que se elige por VIDA UTIL, en dos pasos:
+ *   1. la hora mas TEMPRANA que aguanta toda la vigencia (`hastaElFinal`). Para los
+ *      dias lejanos eso es el comienzo de la franja: no les cambia nada.
+ *   2. si ninguna aguanta —solo pasa con el dia mas cercano, el que cruza el borde
+ *      de la anticipacion—, la mas TARDIA que todavia entra, que es la que mantiene
+ *      el dia ofrecible mas horas.
+ * El paso 2 mueve el horario dentro del dia (el sabado pasa de 11:00 a 14:00) y eso
+ * es barato; perder el dia cuesta el salto al siguiente, que hoy son dos dias.
  */
-function ponerDelDia(local, delDia, desde) {
+function ponerDelDia(local, delDia, desde, hastaElFinal) {
+  let tardio = null;
   for (const [horaDesde, horaHasta] of delDia) {
     for (let hora = horaDesde; hora < horaHasta; hora += 1) {
       // hora + 4 puede pasar de 24 (la franja de las 20:00 cae al dia UTC siguiente):
@@ -128,10 +154,12 @@ function ponerDelDia(local, delDia, desde) {
       ));
       if (inicioUtc.getTime() < desde) continue; // el motor no lo ofreceria
       const etiqueta = `${DIAS[local.getUTCDay()]} ${local.getUTCDate()} de ${MESES[local.getUTCMonth()]}, ${String(hora).padStart(2, "0")}:00`;
-      return { label: etiqueta, startAt: inicioUtc.toISOString().replace(".000Z", "Z") };
+      const puesto = { label: etiqueta, startAt: inicioUtc.toISOString().replace(".000Z", "Z") };
+      if (inicioUtc.getTime() >= hastaElFinal) return puesto; // aguanta toda la vigencia
+      tardio = puesto; // todavia no: me quedo con el ultimo que entre
     }
   }
-  return null;
+  return tardio;
 }
 
 /** El formato exacto que parsea run-turn.mjs: `etiqueta@ISO`, separados por `|`. */
