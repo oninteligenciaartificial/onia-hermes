@@ -14,10 +14,10 @@ export function WebPreviewIntake({ value, onChange }: Props) {
   return (
     <fieldset className={`${styles.step} ${styles.intakeStep}`} id="datos-preview">
       <legend className={styles.stepTitle}>
-        <span className={styles.stepNumber}>03</span>
+        <span className={styles.stepNumber}>01</span>
         Poné tu negocio en el preview
       </legend>
-      <p className={styles.stepHint}>Nombre, rubro y oferta cambian la vista al instante. Los campos con * son necesarios para enviar.</p>
+      <p className={styles.stepHint}>Nombre, rubro y oferta cambian el preview al instante. Los campos con * son necesarios para enviar.</p>
 
       <div className={styles.formGrid}>
         <label className={styles.formField}>

@@ -86,9 +86,16 @@ SERIE «CLAUDE CODE DE CERO»
 
 ## 03 · Hago que la IA trabaje mientras duermo — así está armado
 
+> Actualizada el 17-sep con el recurso web: los ejemplos del video (hook, subagente,
+> conector y trabajo por horario) viven en `/claude-code`, listos para copiar.
+> ⚠️ Los minutos de los capítulos se completan con el render final antes de pegar.
+
 ```
 En el primer video mostré cuatro programas trabajando de madrugada. Hoy muestro cómo.
 Son cuatro piezas, y las cuatro se configuran escribiendo texto.
+
+Los ejemplos del video, listos para copiar (hook, subagente y trabajo por horario):
+https://sergiourcullo.vercel.app/claude-code
 
 CAPÍTULOS
 0:00 Que trabaje sin vos
@@ -104,8 +111,12 @@ Las tres reglas que me salvan
 En una línea
 
 SERIE «CLAUDE CODE DE CERO»
-02 · Instalarlo en 2 minutos →
-04 · Cuando te dice "listo" y miente →
+01 · Claude y Claude Code no son lo mismo → https://www.youtube.com/watch?v=kAsAhGe6zyA
+02 · Instalarlo y tu primera skill → https://www.youtube.com/watch?v=oXaqV-HDufA
+04 · Cuando te dice "listo" y miente → sale mañana
+
+Mi archivo de reglas de ejemplo y los archivos de la serie, gratis, en la comunidad:
+https://chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu
 
 @sergiourcullo
 ```
