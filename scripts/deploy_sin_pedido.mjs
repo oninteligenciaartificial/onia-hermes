@@ -38,6 +38,7 @@
  *   trabajo > 0 y sin pedido            → DESCUBIERTO. Es el ítem: hay que abrir el pedido.
  *   trabajo > 0 y con pedido de hoy     → cubierto.
  *   trabajo > 0 y con pedido de +24 h   → CUBIERTO_VIEJO. No falta un pedido: falta el `ok`.
+ *   trabajo > 0 y con pedido que DESCRIBE MENOS → CUBIERTO_CORTO. Ver la quinta pregunta.
  *   trabajo 0                           → cubierto (no hay nada que pedir).
  *
  * ─────────────────────────────────────────────────────────────────────────────────────
@@ -69,6 +70,42 @@
  * NO_MEDIDO **y con su nombre**: es la única forma de que la lista escrita a mano no se
  * vuelva una lista de inclusión que falla abierto un nivel más arriba.
  *
+ * ─────────────────────────────────────────────────────────────────────────────────────
+ * LA QUINTA PREGUNTA, del 2026-09-18: **¿el pedido DESCRIBE lo que hoy publicaría?**
+ *
+ * Las cuatro anteriores absuelven a un destino por la EXISTENCIA de un pedido vivo, y el que
+ * los deja cortos es este mismo carril: el integrador mergea DESPUÉS de que el pedido existe,
+ * que es el caso normal y no el excepcional. Medido en vivo ese día: con `t_5053480f` (landing)
+ * abierto con seis arreglos, integré tres carriles y `e9dca736` —los coadministradores por
+ * plan— entró al universo que su `ok` publica sin estar en el cuerpo. Los dos gates hermanos,
+ * corridos seguidos, se contradecían:
+ *
+ *     node scripts/deploy_sin_pedido.mjs   → OK landing: falta publicar y ya hay pedido
+ *     npm run pedido:entregado             → ROJO: su ok publica 1 arreglo que el pedido NO nombra
+ *
+ * **El cuerpo es lo único que Sergio Urcullo lee**, así que ese botón le hace aprobar un
+ * cambio que nadie le mostró. La quinta pregunta la contestaba sólo el hermano, que es un
+ * alias suelto: si una vuelta del integrador mergea y no lo corre, el pedido queda corto EN
+ * VERDE — la misma firma de siempre, «verde mientras el trabajo no llega bien».
+ *
+ * CÓMO SE CONTESTA SIN PAGAR EL CAMINO CARO. `publicaria` —el universo de arreglos que el `ok`
+ * mandaría— sólo lo sabe derivar el hermano, con su maquinaria de SSH + git. No hace falta: el
+ * método vigente ya obliga a que el cuerpo **cite textual** el recuento del publicador en seco
+ * (`hay que publicar: N arreglo(s)`), y ese mismo seco es el que este gate YA corrió para
+ * contestar la primera pregunta. O sea que la quinta son dos números leídos de dos artefactos
+ * DISTINTOS —el cuerpo que escribió el que abrió el pedido, y la salida viva de hoy— con cero
+ * SSH extra. `seco > citado` ⇒ `CUBIERTO_CORTO`.
+ *
+ * DIRECCIÓN DEL ERROR, y es asimétrica a propósito: `seco < citado` NO se acusa (ésa es la
+ * otra familia, `cuerpoVencido`, y tiene dueño en el hermano), y un cuerpo sin recuento legible
+ * sale `null` con su causa, nunca rojo. Acusar de más hace rehacer un pedido sano, que es el
+ * daño caro de este control.
+ *
+ * ⚠️ Igual que `CUBIERTO_VIEJO`, **no cambia el código de salida**. Sólo Sergio Urcullo destraba
+ * un pedido, y este gate está en la cadena `npm test` que el integrador corre antes de CADA
+ * merge: un rojo acá trabaría el merge de todos los carriles hasta que él apriete un botón, y
+ * la cura sería saltearse el gate — que es como esta familia se muere.
+ *
  * FALLA CONSERVADOR HACIA «NO MEDIDO», y la dirección importa por un motivo que ya está
  * medido: un barrido incompleto del tablero se ve IDÉNTICO a un tablero sin pedidos, y de
  * ahí sale la conclusión cara —«este destino no tiene pedido»— que hace abrir un pedido
@@ -81,7 +118,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
 import { DESTINOS } from './kanban/publicar-aprobado.mjs';
-import { barrerTablero, barrerTableroJson } from './pedido_deploy_entregado.mjs';
+import { barrerTablero, barrerTableroJson, partirPedido } from './pedido_deploy_entregado.mjs';
 
 const TABLERO = '/root/bin/onia-tablero.sh';
 /** El nodo de casa no tiene `/opt`, pero sí llega al VPS por SSH. Ver `pendienteEnVivo`. */
@@ -121,6 +158,67 @@ export function esperaDelMasViejo(pedidos, ahora) {
 }
 
 /**
+ * PURA: el recuento de arreglos que un texto declara con la marca del publicador en seco
+ * (`hay que publicar: N arreglo(s)`), o `null` si no trae ninguna.
+ *
+ * Sirve para los DOS lados de la quinta pregunta y a propósito: el método vigente obliga a que
+ * el cuerpo del pedido CITE textual esa línea, así que el mismo formato se lee del cuerpo y de
+ * la salida viva. No es una tautología —son dos artefactos distintos, uno escrito cuando se
+ * abrió el pedido y otro medido hoy—; lo que sería tautológico es derivar los dos del seco.
+ *
+ * Con VARIAS apariciones devuelve la MAYOR, que es la dirección que no acusa de más: un cuerpo
+ * que cita su recuento y además menciona otro número (el de un destino hermano, el de una
+ * corrida anterior) no puede hacer que este gate mande a rehacer un pedido sano.
+ */
+export function recuentoDeArreglos(texto) {
+  const hallados = [...String(texto ?? '').matchAll(/hay que publicar:\s*(\d+)\s*arreglo/gi)]
+    .map((m) => Number(m[1]))
+    .filter((n) => Number.isFinite(n));
+  return hallados.length === 0 ? null : Math.max(...hallados);
+}
+
+/**
+ * PURA: ¿el CUERPO de un pedido describe al menos tantos arreglos como los que su `ok`
+ * publicaría hoy? `null` = no se puede juzgar.
+ *
+ * ⚠️ El cuerpo, no el texto entero. Es la misma razón por la que existe `cuerpoCorto` en el
+ * hermano: los comentarios se apilan abajo y tapan al cuerpo, así que un recuento comentado
+ * dejaría satisfecha la pregunta mientras Sergio Urcullo sigue leyendo un cuerpo corto. Y
+ * `partirPedido` se IMPORTA, no se copia: dos versiones del mismo corte divergen.
+ *
+ * @param {{texto:string, seco:number|null}} args  `seco` es el recuento que el publicador
+ *   imprime HOY; sin él no hay con qué comparar y sale `null`.
+ */
+export function cuerpoDescribeElRecuento({ texto, seco }) {
+  if (!Number.isFinite(seco)) return null;
+  const citado = recuentoDeArreglos(partirPedido(texto).cuerpo);
+  if (citado === null) return null;
+  // `>=` y no `===`: que el cuerpo describa de MÁS es la otra familia (`cuerpoVencido`, con
+  // dueño en el hermano), y acusarla desde acá haría rehacer pedidos por el lado barato.
+  return citado >= seco;
+}
+
+/**
+ * PURA: el veredicto de la quinta pregunta para UN destino, agregando sus pedidos vivos.
+ *
+ * Basta que UNO esté corto para que el destino salga corto, y no es pesimismo: el botón que
+ * Sergio Urcullo aprieta puede ser justo ése, y su `ok` publica el universo entero igual.
+ * Todos ilegibles ⇒ `null`; ninguno corto y al menos uno legible ⇒ `true`.
+ */
+export function pedidosQueDescribenDeMenos(pedidosDelDestino, seco) {
+  const cortos = [];
+  let algunoLegible = false;
+  for (const p of pedidosDelDestino || []) {
+    const v = cuerpoDescribeElRecuento({ texto: p?.texto, seco });
+    if (v === null) continue;
+    algunoLegible = true;
+    if (v === false) cortos.push(p.id);
+  }
+  if (!algunoLegible) return null;
+  return cortos;
+}
+
+/**
  * PURA: el veredicto por destino.
  *
  * @param destinos  nombres de la lista blanca (`Object.keys(DESTINOS)`).
@@ -139,11 +237,17 @@ export function esperaDelMasViejo(pedidos, ahora) {
  * que no escala a nadie). El veredicto era cierto —había pedido— y aun así el cliente no
  * recibía nada: la firma de la familia es «verde mientras el trabajo no llega».
  */
-export function clasificarCobertura({ destinos, pendiente, pedidos, seAutoPublica, ahora }) {
+export function clasificarCobertura({ destinos, pendiente, pedidos, seAutoPublica, describeLoQuePublica, ahora }) {
   // EXIGIDA, no opcional con default: un llamador que se olvide de la tercera pregunta
   // volvería a mandar a abrir pedidos que el cron cumple solo, y lo haría en silencio.
   if (typeof seAutoPublica !== 'function') {
     throw new TypeError('clasificarCobertura necesita seAutoPublica(destino) → true | false | null');
+  }
+  // EXIGIDA por el mismo motivo, y es la quinta pregunta: con un default (`() => null`) un
+  // llamador que la olvide absolvería a todo pedido corto sin que nada se pusiera rojo, que
+  // es exactamente el agujero que esto vino a cerrar. Que no compile es el punto.
+  if (typeof describeLoQuePublica !== 'function') {
+    throw new TypeError('clasificarCobertura necesita describeLoQuePublica(destino, pedidos) → string[] | null');
   }
   // EXIGIDA por el mismo motivo, y con un default sería peor todavía: `Date.now()` adentro
   // vuelve la función impura y sus casos irrepetibles, y un llamador que se olvide del reloj
@@ -171,11 +275,24 @@ export function clasificarCobertura({ destinos, pendiente, pedidos, seAutoPublic
       // le llega al cliente, y eso arranca con el primer pedido que lo pidió. Abrir uno
       // nuevo para el mismo destino no rejuvenece el trabajo varado.
       const esperaH = esperaDelMasViejo(delDestino, ahora);
+      const viejo = esperaH !== null && esperaH >= HORAS_PARA_ENVEJECER;
+      // LA QUINTA PREGUNTA. `null` = no se pudo juzgar; `[]` = el cuerpo alcanza; con ids,
+      // esos pedidos describen menos de lo que su `ok` publica.
+      const cortos = describeLoQuePublica(destino, delDestino);
+      // El corto GANA al viejo, y no es arbitrario: su remedio —rehacer el pedido con el
+      // cuerpo derivado y archivar el viejo— cura las dos cosas a la vez (el pedido nuevo
+      // nace con la edad en cero), mientras que el remedio del viejo —esperar el `ok`— deja
+      // el cuerpo corto intacto. Imprimir primero el que NO limpia al otro haría gastar la
+      // vuelta siguiente, que es como esta cadena de controles ya falló una vez.
+      const corto = Array.isArray(cortos) && cortos.length > 0;
       filas.push({
         destino,
-        estado: esperaH !== null && esperaH >= HORAS_PARA_ENVEJECER ? 'CUBIERTO_VIEJO' : 'CUBIERTO',
+        estado: corto ? 'CUBIERTO_CORTO' : viejo ? 'CUBIERTO_VIEJO' : 'CUBIERTO',
         pedidos: cubiertoPor,
         esperaH,
+        // Tri-estado explícito para el que imprime: sin esto, «no pude juzgarlo» y «lo juzgué
+        // y está bien» salen iguales, que es la distinción que sostiene todo este archivo.
+        cortos: Array.isArray(cortos) ? cortos : null,
       });
       continue;
     }
@@ -334,6 +451,13 @@ export function leerPendienteDelEspejo(salida) {
  * convierte un `null` mudo en un rojo diagnosticable — ver `describirFallo`.
  */
 const CAUSAS = new Map();
+
+/**
+ * La salida CRUDA de cada detector, indexada por destino. La primera pregunta («¿le falta
+ * publicar?») la reduce a un booleano y tira el resto; la quinta necesita el RECUENTO que la
+ * misma salida ya traía. Guardarla es lo que hace que la quinta pregunta cueste cero SSH.
+ */
+const SALIDAS = new Map();
 
 function sh(cmd, args, { clave, ...opts } = {}) {
   try {
@@ -498,6 +622,10 @@ function anotarCausa(clave, causa) {
  */
 export function detectar({ clave, guion, leer, correr = dondeVive }) {
   const salida = correr(guion, { clave });
+  // La salida CRUDA se guarda porque la quinta pregunta la necesita y correr el seco otra vez
+  // sería un SSH de más por destino. Se guarda acá y no en el llamador por la misma razón que
+  // `CAUSAS`: es el único punto por el que pasan los cuatro detectores.
+  if (typeof salida === 'string') SALIDAS.set(clave, salida);
   const valor = leer(salida);
   if (valor === null || valor === undefined) {
     const porIlegible = describirRespuestaIlegible(salida);
@@ -509,6 +637,37 @@ export function detectar({ clave, guion, leer, correr = dondeVive }) {
 /** Sólo para el self-check: leer lo que quedó anotado sin exponer el Map. */
 export function _causaParaPruebas(clave) {
   return CAUSAS.get(clave) ?? null;
+}
+
+/** Ídem para la salida cruda que la quinta pregunta reusa. */
+export function _salidaParaPruebas(clave) {
+  return SALIDAS.get(clave) ?? null;
+}
+
+/**
+ * LA QUINTA PREGUNTA para un destino, ya con la salida cruda de SU detector en la mano.
+ *
+ * Vive acá y no como closure de `medirEnVivo` para que el self-check pueda ejercerla entera:
+ * la costura que de verdad importa es «de dónde sale el recuento del seco», y una closure la
+ * dejaría sin sujeto. Devuelve lo que `clasificarCobertura` espera: `null` = no se pudo
+ * juzgar, `[]` = el cuerpo alcanza, ids = pedidos que describen de menos.
+ */
+export function quintaPregunta(destino, delDestino, { salida, anotar = anotarCausa } = {}) {
+  const seco = recuentoDeArreglos(salida);
+  if (seco === null) {
+    // El bot no entra por acá: su detector es el espejo, que no imprime recuento. Decirlo con
+    // el nombre del destino es lo que impide que «no sé preguntarle» se lea como «lo pregunté
+    // y está bien» — la distinción que sostiene todo este archivo.
+    anotar(`cuerpo:${destino}`, 'su detector no imprime "hay que publicar: N arreglo(s)", asi que no hay con que comparar el cuerpo');
+    return null;
+  }
+  const cortos = pedidosQueDescribenDeMenos(delDestino, seco);
+  if (cortos === null) {
+    anotar(`cuerpo:${destino}`, `ningun pedido vivo cita el recuento del publicador en seco (hoy: ${seco})`);
+    return null;
+  }
+  if (cortos.length > 0) anotar(`cuerpo:${destino}`, `el publicador en seco dice ${seco} arreglo(s) y el cuerpo cita menos`);
+  return cortos;
 }
 
 /**
@@ -619,6 +778,8 @@ function medirEnVivo() {
       if (solo === null && verdictos) anotarCausa(`publicador:${d}`, describirDesacuerdo(d, verdictos[d]));
       return solo;
     },
+    // LA QUINTA PREGUNTA, contra la salida que el detector YA corrió — cero SSH extra.
+    describeLoQuePublica: (d, delDestino) => quintaPregunta(d, delDestino, { salida: SALIDAS.get(d) }),
     ahora: Date.now(),
   });
 
@@ -643,9 +804,18 @@ function medirEnVivo() {
     } else if (f.estado === 'CUBIERTO_VIEJO') {
       console.log(`AVISO ${f.destino}: el pedido lleva ${f.esperaH} h sin resolver — el arreglo sigue sin llegar al cliente${quien}`);
       console.log('  No es un pedido que falte: es uno que nadie apreto. Abrir otro seria un duplicado.');
+    } else if (f.estado === 'CUBIERTO_CORTO') {
+      console.log(`AVISO ${f.destino}: el pedido existe pero su CUERPO describe menos de lo que su ok publicaria — ${f.cortos.join(', ')}`);
+      const causa = CAUSAS.get(`cuerpo:${f.destino}`);
+      if (causa) console.log(`  causa: ${causa}`);
+      console.log('  El cuerpo es lo unico que Sergio Urcullo lee: rehacer el pedido con el recuento');
+      console.log('  derivado del publicador en seco y ARCHIVAR el viejo en la misma vuelta (comentar no alcanza).');
     } else {
       const desde = f.esperaH === null ? '' : ` (pedido hace ${f.esperaH} h)`;
-      console.log(`OK ${f.destino}: falta publicar y ya hay pedido${quien}${desde}`);
+      // Un `cortos: null` es «no pude juzgar la quinta pregunta», y se dice: callarlo lo
+      // volvería indistinguible de «la juzgué y el cuerpo alcanza».
+      const dudoso = f.cortos === null ? ` — sin juzgar si el cuerpo lo describe (${CAUSAS.get(`cuerpo:${f.destino}`) ?? 'sin causa anotada'})` : '';
+      console.log(`OK ${f.destino}: falta publicar y ya hay pedido${quien}${desde}${dudoso}`);
     }
   }
 
@@ -656,7 +826,8 @@ function medirEnVivo() {
     return 1;
   }
   if (filas.some((f) => f.estado === 'NO_MEDIDO')) return 2;
-  // ⚠️ `CUBIERTO_VIEJO` NO cambia el código de salida, y es una decisión, no un olvido. Este
+  // ⚠️ Ni `CUBIERTO_VIEJO` ni `CUBIERTO_CORTO` cambian el código de salida, y es una decisión,
+  // no un olvido — los dos se curan con algo que sólo pasa fuera de esta vuelta. Este
   // gate está en la cadena `npm test` que el integrador corre antes de cada merge: ponerlo
   // rojo por un pedido que sólo Sergio Urcullo puede destrabar trabaría el merge de TODOS los
   // carriles hasta que él apriete un botón, y la cura sería saltearse el gate — que es como
@@ -679,6 +850,8 @@ function selfCheck() {
   const conLanding = [{ id: 't_x', destino: 'landing' }];
   /** El publicador automático no cubre a `landing`: es el caso viejo, sin tercera pregunta. */
   const nadieLoPublicaSolo = () => false;
+  /** Ídem para la quinta: `[]` es «la juzgué y ningún cuerpo describe de menos». */
+  const nadieEstaCorto = () => [];
 
   // ── Un pedido que ENVEJECE no es lo mismo que un pedido recién abierto ────────────────
   // Ver la cabecera: mientras el pedido del bot esperaba 4 días, esto decía `CUBIERTO` y
@@ -688,7 +861,7 @@ function selfCheck() {
   const hace = (horas) => Math.floor((AHORA - horas * 3_600_000) / 1000);
   const cubrir = (creado) => [{ id: 't_x', destino: 'landing', creado }];
   const estadoDe = (pedidos, ahora = AHORA) =>
-    clasificarCobertura({ destinos: ['landing'], pedidos, pendiente: () => true, seAutoPublica: nadieLoPublicaSolo, ahora })[0];
+    clasificarCobertura({ destinos: ['landing'], pedidos, pendiente: () => true, seAutoPublica: nadieLoPublicaSolo, describeLoQuePublica: nadieEstaCorto, ahora })[0];
 
   ok(estadoDe(cubrir(hace(2))).estado === 'CUBIERTO', 'un pedido de hace 2 h es cobertura normal');
   ok(estadoDe(cubrir(hace(96))).estado === 'CUBIERTO_VIEJO', 'un pedido de hace 4 dias ya no puede salir como cobertura normal');
@@ -710,7 +883,7 @@ function selfCheck() {
 
   // El caso que motivó el gate: falta publicar y no hay pedido.
   ok(
-    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: nadieLoPublicaSolo, ahora: AHORA })[0].estado === 'DESCUBIERTO',
+    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: nadieLoPublicaSolo, describeLoQuePublica: nadieEstaCorto, ahora: AHORA })[0].estado === 'DESCUBIERTO',
     'falta publicar y sin pedido tiene que ser DESCUBIERTO',
   );
   // El caso que YA CUMPLE. Sin él, un gate que devolviera DESCUBIERTO siempre pasaría.
@@ -723,18 +896,19 @@ function selfCheck() {
       pedidos: conLanding,
       pendiente: () => true,
       seAutoPublica: (d) => { preguntas.push(d); return false; },
+      describeLoQuePublica: nadieEstaCorto,
       ahora: AHORA,
     })[0].estado === 'CUBIERTO',
     'falta publicar y con pedido vivo NO puede ser DESCUBIERTO',
   );
   ok(preguntas.length === 0, 'con pedido vivo no hay que ir a preguntarle al publicador automatico');
   ok(
-    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => false, seAutoPublica: nadieLoPublicaSolo, ahora: AHORA })[0].estado === 'AL_DIA',
+    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => false, seAutoPublica: nadieLoPublicaSolo, describeLoQuePublica: nadieEstaCorto, ahora: AHORA })[0].estado === 'AL_DIA',
     'sin trabajo pendiente no hay nada que pedir',
   );
   // No se sabe nunca puede acusar: es la dirección que hace abrir pedidos duplicados.
   ok(
-    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => null, seAutoPublica: nadieLoPublicaSolo, ahora: AHORA })[0].estado === 'NO_MEDIDO',
+    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => null, seAutoPublica: nadieLoPublicaSolo, describeLoQuePublica: nadieEstaCorto, ahora: AHORA })[0].estado === 'NO_MEDIDO',
     'sin poder medir NO puede salir DESCUBIERTO',
   );
 
@@ -742,18 +916,18 @@ function selfCheck() {
   // Los dos NO_MEDIDO vienen de instrumentos distintos, y el que imprime tiene que poder
   // buscar la causa del que falló SIN adivinarla del texto del motivo.
   ok(
-    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => null, seAutoPublica: nadieLoPublicaSolo, ahora: AHORA })[0].fuente === 'detector',
+    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => null, seAutoPublica: nadieLoPublicaSolo, describeLoQuePublica: nadieEstaCorto, ahora: AHORA })[0].fuente === 'detector',
     'el NO_MEDIDO del detector se declara "detector"',
   );
   ok(
-    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: () => null, ahora: AHORA })[0].fuente === 'publicador',
+    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: () => null, describeLoQuePublica: nadieEstaCorto, ahora: AHORA })[0].fuente === 'publicador',
     'el NO_MEDIDO del publicador automatico se declara "publicador"',
   );
   // Los dos NO_MEDIDO tienen que ser DISTINGUIBLES: si los dos dijeran lo mismo, el que
   // imprime le pediría la causa al instrumento que sí contestó y la línea saldría vacía.
   ok(
-    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => null, seAutoPublica: nadieLoPublicaSolo, ahora: AHORA })[0].fuente
-      !== clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: () => null, ahora: AHORA })[0].fuente,
+    clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => null, seAutoPublica: nadieLoPublicaSolo, describeLoQuePublica: nadieEstaCorto, ahora: AHORA })[0].fuente
+      !== clasificarCobertura({ destinos: ['landing'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: () => null, describeLoQuePublica: nadieEstaCorto, ahora: AHORA })[0].fuente,
     'los dos NO_MEDIDO no pueden nombrar la misma fuente',
   );
 
@@ -792,11 +966,11 @@ function selfCheck() {
   ok(informado.causa === null, 'y no deja causa colgada: no hubo nada que diagnosticar');
   // Un pedido de OTRO destino no cubre a éste.
   ok(
-    clasificarCobertura({ destinos: ['landing'], pedidos: [{ id: 't_y', destino: 'bot' }], pendiente: () => true, seAutoPublica: nadieLoPublicaSolo, ahora: AHORA })[0].estado === 'DESCUBIERTO',
+    clasificarCobertura({ destinos: ['landing'], pedidos: [{ id: 't_y', destino: 'bot' }], pendiente: () => true, seAutoPublica: nadieLoPublicaSolo, describeLoQuePublica: nadieEstaCorto, ahora: AHORA })[0].estado === 'DESCUBIERTO',
     'un pedido de otro destino no cubre a landing',
   );
   // El sujeto son los DESTINOS: uno sin ninguna tarea tiene que tener fila igual.
-  const filas = clasificarCobertura({ destinos: ['landing', 'plataforma', 'bot'], pedidos: conLanding, pendiente: () => true, seAutoPublica: nadieLoPublicaSolo, ahora: AHORA });
+  const filas = clasificarCobertura({ destinos: ['landing', 'plataforma', 'bot'], pedidos: conLanding, pendiente: () => true, seAutoPublica: nadieLoPublicaSolo, describeLoQuePublica: nadieEstaCorto, ahora: AHORA });
   ok(filas.length === 3, 'tiene que haber una fila por destino, tenga tareas o no');
   ok(filas.filter((f) => f.estado === 'DESCUBIERTO').length === 2, 'los dos destinos sin pedido tienen que salir descubiertos');
 
@@ -804,17 +978,17 @@ function selfCheck() {
   // Falta publicar, no hay pedido, PERO el cron lo publica solo en <=3 h: pedirle un `ok`
   // a Sergio Urcullo por eso es el pedido que nace cumplido.
   ok(
-    clasificarCobertura({ destinos: ['bot'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: () => true, ahora: AHORA })[0].estado === 'SE_PUBLICA_SOLO',
+    clasificarCobertura({ destinos: ['bot'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: () => true, describeLoQuePublica: nadieEstaCorto, ahora: AHORA })[0].estado === 'SE_PUBLICA_SOLO',
     'lo que el publicador automatico hace solo NO puede salir DESCUBIERTO',
   );
   // El caso que YA CUMPLE: sin auto-publicacion, el veredicto de siempre.
   ok(
-    clasificarCobertura({ destinos: ['bot'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: () => false, ahora: AHORA })[0].estado === 'DESCUBIERTO',
+    clasificarCobertura({ destinos: ['bot'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: () => false, describeLoQuePublica: nadieEstaCorto, ahora: AHORA })[0].estado === 'DESCUBIERTO',
     'lo que el publicador automatico NO toca sigue siendo DESCUBIERTO',
   );
   // No poder preguntarle tampoco absuelve: absolver a ciegas esconde un arreglo varado.
   ok(
-    clasificarCobertura({ destinos: ['bot'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: () => null, ahora: AHORA })[0].estado === 'NO_MEDIDO',
+    clasificarCobertura({ destinos: ['bot'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: () => null, describeLoQuePublica: nadieEstaCorto, ahora: AHORA })[0].estado === 'NO_MEDIDO',
     'sin saber si se publica solo NO puede salir ni DESCUBIERTO ni absuelto',
   );
   // La pregunta es OBLIGATORIA: un llamador que se la olvide tiene que romperse, no
@@ -823,18 +997,98 @@ function selfCheck() {
   // come el primer `throw` y el segundo parámetro queda sin probar, opcional y en verde.
   let exigida = false;
   try {
-    clasificarCobertura({ destinos: ['bot'], pedidos: sinPedidos, pendiente: () => true, ahora: AHORA });
+    clasificarCobertura({ destinos: ['bot'], pedidos: sinPedidos, pendiente: () => true, describeLoQuePublica: nadieEstaCorto, ahora: AHORA });
   } catch {
     exigida = true;
   }
   ok(exigida, 'clasificarCobertura tiene que EXIGIR seAutoPublica, no darla por default');
   let exigeAhora = false;
   try {
-    clasificarCobertura({ destinos: ['bot'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: nadieLoPublicaSolo });
+    clasificarCobertura({ destinos: ['bot'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: nadieLoPublicaSolo, describeLoQuePublica: nadieEstaCorto });
   } catch {
     exigeAhora = true;
   }
   ok(exigeAhora, 'clasificarCobertura tiene que EXIGIR ahora: sin reloj no puede decir si un pedido envejecio');
+  let exigeDescribe = false;
+  try {
+    clasificarCobertura({ destinos: ['bot'], pedidos: sinPedidos, pendiente: () => true, seAutoPublica: nadieLoPublicaSolo, ahora: AHORA });
+  } catch {
+    exigeDescribe = true;
+  }
+  ok(exigeDescribe, 'clasificarCobertura tiene que EXIGIR describeLoQuePublica: con default, todo pedido corto se absuelve solo');
+
+  // ── LA QUINTA PREGUNTA: ¿el pedido DESCRIBE lo que hoy publicaria? ──────────────────
+  // Ver la cabecera. El caso medido el 2026-09-18: pedido abierto con 6 arreglos, el
+  // integrador mergea, el seco pasa a 7 y el cuerpo sigue diciendo 6.
+  const SECO7 = '== hay que publicar: 7 arreglo(s) que el cliente no ve ==';
+  const cuerpoCon = (n) => `DESPLEGAR: landing\nhay que publicar: ${n} arreglo(s) que el cliente no ve`;
+  const conCuerpo = (texto, creado = hace(1)) => [{ id: 't_x', destino: 'landing', texto, creado }];
+  const quinta = (pedidosDelDestino, seco = recuentoDeArreglos(SECO7)) =>
+    clasificarCobertura({
+      destinos: ['landing'],
+      pedidos: pedidosDelDestino,
+      pendiente: () => true,
+      seAutoPublica: nadieLoPublicaSolo,
+      describeLoQuePublica: (_d, del) => pedidosQueDescribenDeMenos(del, seco),
+      ahora: AHORA,
+    })[0];
+
+  ok(quinta(conCuerpo(cuerpoCon(6))).estado === 'CUBIERTO_CORTO', 'un cuerpo que cita 6 con el seco en 7 describe de menos');
+  ok(quinta(conCuerpo(cuerpoCon(6))).cortos.join() === 't_x', 'y el veredicto NOMBRA al pedido corto, que es lo que hay que rehacer');
+  // El caso que YA CUMPLE. Sin él, un gate que devolviera CUBIERTO_CORTO siempre pasaría.
+  ok(quinta(conCuerpo(cuerpoCon(7))).estado === 'CUBIERTO', 'un cuerpo que cita lo mismo que el seco es cobertura normal');
+  // La dirección asimétrica, escrita: describir de MÁS es la otra familia (`cuerpoVencido`),
+  // y acusarla desde acá haría rehacer pedidos sanos por el lado barato.
+  ok(quinta(conCuerpo(cuerpoCon(9))).estado === 'CUBIERTO', 'un cuerpo que cita de mas NO se acusa acá: ésa es la familia del hermano');
+  // Tri-estado: un cuerpo sin recuento legible no se puede juzgar, y eso NO es «está bien».
+  ok(quinta(conCuerpo('DESPLEGAR: landing\nhay unos arreglos')).cortos === null, 'un cuerpo sin recuento sale null, no aprobado');
+  ok(quinta(conCuerpo('DESPLEGAR: landing\nhay unos arreglos')).estado === 'CUBIERTO', 'y sin poder juzgarlo NO se acusa');
+  // Sin recuento del seco tampoco hay con qué comparar (es el caso del bot, que se mide por espejo).
+  ok(quinta(conCuerpo(cuerpoCon(6)), null).cortos === null, 'sin recuento del seco no se puede juzgar el cuerpo');
+  // El COMENTARIO no puede tapar al cuerpo: es el motivo por el que se parte el texto.
+  const conComentario = `${cuerpoCon(6)}\n\nComments (1):\n- hay que publicar: 7 arreglo(s) que el cliente no ve\n`;
+  ok(quinta(conCuerpo(conComentario)).estado === 'CUBIERTO_CORTO', 'un recuento COMENTADO no alcanza: Sergio Urcullo lee el cuerpo');
+  // Basta que UNO de los pedidos vivos del destino esté corto: el boton que se aprieta puede ser ese.
+  ok(
+    quinta([
+      { id: 't_bien', destino: 'landing', texto: cuerpoCon(7), creado: hace(1) },
+      { id: 't_corto', destino: 'landing', texto: cuerpoCon(6), creado: hace(1) },
+    ]).cortos.join() === 't_corto',
+    'con dos pedidos vivos, el corto se nombra y no lo absuelve el hermano completo',
+  );
+  // El corto GANA al viejo: su remedio (rehacer + archivar) cura los dos; el del viejo, no.
+  ok(quinta(conCuerpo(cuerpoCon(6), hace(96))).estado === 'CUBIERTO_CORTO', 'un pedido viejo Y corto se imprime como corto: rehacerlo cura las dos cosas');
+  // Y la quinta NO puede tapar al DESCUBIERTO, que es el motivo por el que este gate existe.
+  ok(quinta([]).estado === 'DESCUBIERTO', 'la pregunta nueva no puede cambiar el veredicto sin pedido');
+
+  // Las dos funciones puras, aparte del veredicto que las usa.
+  ok(recuentoDeArreglos(SECO7) === 7, 'el recuento se lee de la marca del publicador');
+  ok(recuentoDeArreglos('YA ESTA PUBLICADO — produccion corre 2045ff1') === null, 'sin la marca no hay recuento que inventar');
+  ok(recuentoDeArreglos('hay que publicar: 2 arreglo(s)\nhay que publicar: 9 arreglo(s)') === 9, 'con varias apariciones manda la MAYOR: no acusar de mas');
+  ok(cuerpoDescribeElRecuento({ texto: cuerpoCon(7), seco: 7 }) === true, 'cuerpo al dia');
+  ok(cuerpoDescribeElRecuento({ texto: cuerpoCon(6), seco: 7 }) === false, 'cuerpo corto');
+  ok(cuerpoDescribeElRecuento({ texto: cuerpoCon(6), seco: null }) === null, 'sin seco no se juzga');
+
+  // La COSTURA: de dónde sale el recuento del seco, y que cada `null` deje su causa. Ningún
+  // caso sobre `cuerpoDescribeElRecuento` la ve, y es donde se rompería sin hacer ruido.
+  const causasQuinta = new Map();
+  const anotar = (k, v) => causasQuinta.set(k, v);
+  ok(
+    quintaPregunta('landing', conCuerpo(cuerpoCon(6)), { salida: SECO7, anotar }).join() === 't_x',
+    'la quinta pregunta saca su recuento de la salida CRUDA del detector, no de otro lado',
+  );
+  ok(/dice 7 arreglo/.test(String(causasQuinta.get('cuerpo:landing'))), 'y deja la causa con el numero que midio');
+  ok(
+    quintaPregunta('bot', conCuerpo(cuerpoCon(6)), { salida: 'ESPEJO DESINCRONIZADO — 28 archivos', anotar }) === null,
+    'un detector sin recuento (el espejo del bot) no se puede juzgar: null, no aprobado',
+  );
+  ok(/no imprime/.test(String(causasQuinta.get('cuerpo:bot'))), 'y ese null tambien dice por que, o el rojo seria irreproducible');
+  ok(
+    quintaPregunta('landing', conCuerpo('DESPLEGAR: landing\nsin recuento'), { salida: SECO7, anotar }) === null,
+    'un cuerpo sin recuento citado tampoco se juzga',
+  );
+  ok(/ningun pedido vivo cita/.test(String(causasQuinta.get('cuerpo:landing'))), 'con su causa propia, distinta de la del detector mudo');
+  ok(quintaPregunta('landing', conCuerpo(cuerpoCon(7)), { salida: SECO7, anotar }).length === 0, 'y el caso que YA CUMPLE devuelve lista vacia, no null');
 
   // Lectura de la salida real del publicador automatico (sus cinco veredictos).
   const seco = [
@@ -918,7 +1172,7 @@ function selfCheck() {
   // El motivo que se imprime NO puede volver a afirmar que no se preguntó: tres de los
   // cuatro caminos sí preguntaron. Si alguien lo revierte, este caso lo caza.
   const noMedido = clasificarCobertura({
-    destinos: ['landing'], pedidos: [], pendiente: () => true, seAutoPublica: () => null, ahora: AHORA,
+    destinos: ['landing'], pedidos: [], pendiente: () => true, seAutoPublica: () => null, describeLoQuePublica: nadieEstaCorto, ahora: AHORA,
   })[0];
   ok(
     !/no pude preguntarle/.test(noMedido.motivo),
@@ -1028,6 +1282,20 @@ function selfCheck() {
   const iMide = fuente.indexOf('const filas = clasificarCobertura({');
   ok(iPrepara > 0, 'medirEnVivo prepara el árbol de los detectores');
   ok(iPrepara < iMide, 'y lo prepara ANTES de preguntarle a los detectores, no después');
+
+  // CABLEADO de la quinta pregunta, por el mismo motivo: si el llamador vivo la contesta con
+  // un `[]` fijo en vez de mirar la salida del detector, todos los casos de arriba siguen
+  // verdes y el pedido corto vuelve a absolverse solo.
+  ok(
+    /describeLoQuePublica: \(d, delDestino\) => quintaPregunta\(d, delDestino, \{ salida: SALIDAS\.get\(d\) \}\)/.test(fuente),
+    'medirEnVivo contesta la quinta pregunta con quintaPregunta y la salida cruda del detector',
+  );
+  // Y que esa salida cruda quede DISPONIBLE: sin ella `quintaPregunta` recibe `undefined` y
+  // devuelve `null` para todos — mudo y en verde. El sujeto es el EFECTO, no la línea: con
+  // un `/SALIDAS\.set\(/` sobre el fuente, envolverla en `if (false)` pasaba verde (probado).
+  detectar({ clave: 'zz_quinta', guion: 'x', leer: leerPendienteDelSeco, correr: () => SECO7 });
+  ok(_salidaParaPruebas('zz_quinta') === SECO7, 'detectar deja la salida CRUDA disponible para la quinta pregunta');
+  ok(recuentoDeArreglos(_salidaParaPruebas('zz_quinta')) === 7, 'y de ahi sale el recuento con el que se juzga el cuerpo');
 
   console.log(fallos === 0 ? 'self-check OK' : `self-check con ${fallos} fallo(s)`);
   return fallos === 0 ? 0 : 1;
