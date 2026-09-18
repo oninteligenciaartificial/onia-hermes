@@ -3,6 +3,11 @@
 > Pedido de Sergio Urcullo: *"dame los nuevos para que grabe"* con el reparto del día:
 > 1 carrusel (08:00) · pilar de Samuel 1 · el importante para mí 1 · trials 2 · trials v2 3.
 >
+> 🔴 **Los 2 "trials" NO se graban: son los RESUBIDOS del feed** (aclarado por Sergio
+> Urcullo) — el pilar de Samuel ② y el importante ③ se vuelven a subir a la cuenta trial.
+> **Se graban 5 piezas:** ② (Samuel) · ③ (Sergio) · ⑥⑦⑧ (trials v2, Sergio).
+> Los guiones ④ y ⑤ quedan como **pool de reserva** para el próximo día.
+>
 > **No repiten** los 4 ya agendados (skills · CLAUDE.md 3 reglas · cómo funciona por dentro ·
 > repo anthropics/skills).
 >
@@ -57,7 +62,15 @@
 
 ---
 
-## ④ TRIAL 1 — «El error que te va a pasar cuando automatices»
+## TRIALS (los 2) — resubidos, sin grabar
+- **Trial A** = ② el pilar de Samuel, mismo archivo.
+- **Trial B** = ③ el importante de Sergio, mismo archivo.
+
+---
+
+# POOL DE RESERVA (no son del día; ya escritos para cuando hagan falta)
+
+## ④ El error que te va a pasar cuando automatices»
 
 | Seg | HABLA | EN PANTALLA | OVERLAY |
 |---|---|---|---|
@@ -70,7 +83,7 @@
 
 ---
 
-## ⑤ TRIAL 2 — «El comando que revisa tu proyecto entero antes de tocarlo»
+## ⑤ El comando que revisa tu proyecto entero antes de tocarlo»
 
 *Enseña UNA función concreta: los hooks previos.*
 
@@ -122,8 +135,9 @@
 ---
 
 ## Orden de rodaje sugerido (una sentada, mismo set)
-Trials v2 primero (⑥⑦⑧, cero edición, salen en 10 minutos) → el importante ③ → trials ④⑤ →
-pilar ② lo graba Samuel aparte. El carrusel ① se arma sin cámara.
+**Se graban 5.** Trials v2 primero (⑥⑦⑧, cero edición, salen en 10 minutos) → el importante
+③ (el más largo, con pantalla) → pilar ② lo graba Samuel aparte. El carrusel ① se arma sin
+cámara y los 2 trials son resubidos de ② y ③.
 
 **Al grabar:** cámara full-frame como pista aparte si querés clip vertical con pantalla
 dividida, y llevá los tres puntos escritos a la vista — los retakes de cierre fueron lo
