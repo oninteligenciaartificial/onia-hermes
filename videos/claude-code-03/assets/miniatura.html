@@ -1,0 +1,46 @@
+<!doctype html>
+<meta charset="utf-8">
+<!-- Miniatura video 03, calcada del diseño de Sergio: fondo marrón oscuro con
+     resplandor naranja, sujeto con rim, titular blanco 900, tile de Claude real
+     + tarjetita de terminal "03:00 a.m. ✓✓✓✓ sin mí". Tokens: {{SUJETO}} {{TILE}} -->
+<style>
+@font-face{font-family:'Inter';src:url('fonts/Inter-var-latin.woff2')format('woff2');font-weight:100 900}
+@font-face{font-family:'Spline Sans Mono';src:url('fonts/SplineSansMono-var-latin.woff2')format('woff2');font-weight:300 700}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1280px;height:720px;overflow:hidden}
+#stage{position:relative;width:1280px;height:720px;font-family:'Inter',sans-serif;
+       background:radial-gradient(120% 130% at 78% 45%, #7a3d12 0%, #46220c 42%, #221208 78%, #180d06 100%)}
+.sujeto{position:absolute;right:-40px;top:96px;width:660px;
+        filter:drop-shadow(0 0 34px rgba(255,122,43,.55)) drop-shadow(-6px 0 2px rgba(255,255,255,.75))}
+.sujeto img{width:100%;display:block}
+.tile{position:absolute;left:38px;top:44px;width:196px;border-radius:22%;overflow:hidden;
+      box-shadow:0 16px 34px rgba(0,0,0,.5)}
+.tile img{width:100%;display:block}
+.term{position:absolute;left:258px;top:44px;width:300px;background:#1D1D1F;border-radius:20px;
+      box-shadow:0 16px 34px rgba(0,0,0,.5);overflow:hidden}
+.term .barra{display:flex;align-items:center;gap:8px;padding:14px 16px;
+             border-bottom:1px solid rgba(255,255,255,.12)}
+.term .barra i{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.25)}
+.term .barra span{font-family:'Spline Sans Mono',monospace;color:#C9C4BA;font-size:26px;font-weight:500;margin-left:6px}
+.term .cuerpo{padding:16px 20px 20px;font-family:'Spline Sans Mono',monospace}
+.term .checks{color:#2ECC71;font-size:38px;letter-spacing:.28em;font-weight:700}
+.term .linea{color:#C9C4BA;font-size:34px;margin-top:6px}
+.titulo{position:absolute;left:44px;top:436px;color:#fff;font-weight:900;
+        font-size:96px;line-height:1.02;letter-spacing:-0.015em;
+        text-shadow:0 8px 30px rgba(0,0,0,.6)}
+.sub{position:relative;display:inline-block}
+.sub .raya{position:absolute;left:4px;right:4px;bottom:-12px;height:9px;
+           background:#FF6A2B;border-radius:6px}
+</style>
+<div id="stage">
+  <div class="sujeto"><img src="{{SUJETO}}"></div>
+  <div class="tile"><img src="{{TILE}}"></div>
+  <div class="term">
+    <div class="barra"><i></i><i></i><i></i><span>03:00 a.m.</span></div>
+    <div class="cuerpo">
+      <div class="checks">&#10003; &#10003; &#10003; &#10003;</div>
+      <div class="linea">sin m&iacute;</div>
+    </div>
+  </div>
+  <div class="titulo">TRABAJA<br>MIENTRAS <span class="sub">DUERMO<span class="raya"></span></span></div>
+</div>
