@@ -7,10 +7,11 @@ import { zoomExpr, autoWindowsFromKeep, ANCHORS } from "file:///C:/dev/proyectos
 const S = "C:/Users/PC/AppData/Local/Temp/claude/C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb/1b27764e-a5b2-4fe6-997b-aecc00d784a6/scratchpad/tiktok";
 const W = 1080, H = 1920, FPS = 30;
 
+// full:true = pantalla COMPLETA (tapa todo el cuadro)
 const CLIPS = {
-  IMG_4573: [ ["s1", 9.0, 21.5], ["s2", 48.5, 58.0] ],
-  IMG_4595: [ ["r1", 8.0, 17.0], ["r2", 22.5, 31.0], ["r3", 31.5, 42.5] ],
-  IMG_4572: [ ["f1", 9.0, 16.5], ["f2", 17.0, 24.0], ["f3", 28.5, 36.0] ],
+  IMG_4573: [ ["s1", 9.0, 21.5], ["fs-skillmd", 30.5, 36.5, true], ["fs-slash", 50.0, 56.0, true] ],
+  IMG_4595: [ ["r1", 8.0, 17.0], ["r2", 22.5, 31.0], ["r3", 31.5, 42.5], ["fs-claudemd", 62.5, 68.5, true] ],
+  IMG_4572: [ ["f1", 9.0, 16.5], ["fs-diff", 17.3, 23.5, true], ["f3", 28.5, 36.0], ["fs-noche", 38.8, 44.0, true] ],
 };
 
 const clip = process.argv[2];
@@ -29,18 +30,19 @@ const filtro = [
     `zoompan=z='${zoomExpr(wins)}':d=1:x='(iw-iw/zoom)*${ax}':y='(ih-ih/zoom)*${ay}':s=${W}x${H}:fps=${FPS.toFixed(6)}[base0]`,
 ];
 let base = "base0";
-CLIPS[clip].forEach(([card, sa, sb], i) => {
+CLIPS[clip].forEach(([card, sa, sb, full], i) => {
   const a = +map(sa).toFixed(2), b = +map(sb).toFixed(2);
   const dur = +(b - a).toFixed(3);
   if (dur < 0.8) return;
   inputs.push("-loop", "1", "-t", String(dur + 0.1), "-i", `${S}/card-${card}.png`);
-  const wpx = Math.round(W * 0.82);
+  const esc = full ? `${W}:${H}` : `${Math.round(W * 0.82)}:-1`;
+  const oy = full ? 0 : Math.round(H * 0.06);
   filtro.push(
-    `[${i + 1}:v]scale=${wpx}:-1,format=argb,` +
+    `[${i + 1}:v]scale=${esc},format=argb,` +
       `fade=in:st=0:d=0.22:alpha=1,fade=out:st=${(dur - 0.22).toFixed(3)}:d=0.22:alpha=1,` +
       `setpts=PTS-STARTPTS+${a}/TB[ov${i}]`,
   );
-  filtro.push(`[${base}][ov${i}]overlay=(${W}-w)/2:${Math.round(H * 0.06)}:enable='between(t,${a},${b})'[b${i + 1}]`);
+  filtro.push(`[${base}][ov${i}]overlay=(${W}-w)/2:${oy}:enable='between(t,${a},${b})'[b${i + 1}]`);
   base = `b${i + 1}`;
 });
 filtro.push(`[0:a]aselect='${sel}',asetpts=N/SR/TB[aud]`);
