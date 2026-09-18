@@ -37,6 +37,7 @@
 // fallar — la que quede vieja entra igual y mide otra cosa.
 import { acunarSesion } from "./lib/sesion_dueno.mjs";
 import { cargarPlaywright } from "./lib/playwright-que-arranca.mjs";
+import { veredictoDePantalla } from "./lib/pantalla-servida.mjs";
 
 function arg(nombre, porDefecto) {
   const i = process.argv.indexOf(`--${nombre}`);
@@ -95,12 +96,20 @@ pagina.on("response", (r) => { if (r.status() >= 400) fallos.push(`${r.status()}
 // y deja de ser fatal: si no llega, se cae a `load` y se DICE, porque una captura degradada no
 // se puede leer como una asentada.
 let asentada = "networkidle";
+// `goto` DEVUELVE la respuesta del documento principal y este script la tiraba. El
+// listener de arriba tampoco la alcanza: mide subrecursos. Medido el 2026-09-17
+// pidiendo /dev/shell con sesion real — la pantalla era un 404 de cuerpo entero
+// ("ERROR 404 · Página no encontrada", capturado y MIRADO) y el instrumento imprimio
+// "URL final: .../dev/shell" y "respuestas >=400: ninguna", o sea las dos lineas que
+// un carril lee para concluir que la pantalla esta sana. El guard de abajo no lo
+// tapa: compara PATHNAME contra PATHNAME y Next sirve el 404 en la MISMA URL.
+let respuestaPrincipal = null;
 try {
-  await pagina.goto(`https://${host}${RUTA}`, { waitUntil: "networkidle", timeout: 45000 });
+  respuestaPrincipal = await pagina.goto(`https://${host}${RUTA}`, { waitUntil: "networkidle", timeout: 45000 });
 } catch (e) {
   if (e?.name !== "TimeoutError") throw e;
   asentada = "load (networkidle no llego: la pantalla tiene conexion persistente)";
-  await pagina.goto(`https://${host}${RUTA}`, { waitUntil: "load", timeout: 45000 });
+  respuestaPrincipal = await pagina.goto(`https://${host}${RUTA}`, { waitUntil: "load", timeout: 45000 });
 }
 console.log("espera:", asentada);
 await pagina.waitForTimeout(2500);
@@ -110,6 +119,23 @@ await pagina.addStyleTag({ content: "*{scroll-behavior:auto !important}" });
 const urlFinal = pagina.url();
 console.log("URL final:", urlFinal);
 console.log("respuestas >=400:", fallos.length ? `\n  ${fallos.slice(0, 8).join("\n  ")}` : "ninguna");
+
+// El documento principal, que es lo que la captura va a mostrar. Va ANTES del guard
+// de pathname a proposito: una pagina de error se sirve en la MISMA URL que se pidio,
+// asi que ese guard la deja pasar entera.
+const veredicto = veredictoDePantalla({
+  status: respuestaPrincipal?.status() ?? null,
+  textoVisible: await pagina.evaluate(() => document.body?.innerText ?? "").catch(() => ""),
+});
+console.log("documento principal:", veredicto.motivo);
+if (veredicto.sirve !== true) {
+  console.error(
+    `NO se saca la captura: ${veredicto.motivo}. La pantalla que se pidió (${RUTA}) no es la que ` +
+      `el servidor entregó, y una captura de una página de error tiene la misma cara que una buena.`
+  );
+  await navegador.close();
+  process.exit(2);
+}
 // Exigir la ruta PEDIDA, no "cualquier cosa que no sea /login": la app rebota a /register, a
 // /onboarding o a la portada segun por que no entro la sesion, y todas esas pasaban el filtro
 // viejo y se llevaban un exit 0 con una captura que no prueba nada.
