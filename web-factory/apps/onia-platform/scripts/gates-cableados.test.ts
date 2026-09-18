@@ -59,6 +59,12 @@ const EXENTOS: Record<string, string> = {
   "recortados.mjs":
     "modulo puro sin medicion propia: lo importa mirar-venta.mjs y lo cubre recortados.test.ts. " +
     "Correrlo solo no mide nada — un alias suyo seria decorativo.",
+  "promesa-inclusion.mjs":
+    "modulo puro sin medicion propia: lo importa inclusion-chatbot.mjs. Es el ESPEJO byte a byte de " +
+    "hermes-content/deploy/vps-ops/bot/promesa-inclusion.mjs, y vive de este lado porque el publicador " +
+    "de la landing empaqueta solo web-factory/ — un import hacia el otro subarbol resuelve en el repo " +
+    "y NO en el stage. Lo cruzan promesa-inclusion-espejo.test.ts (que las dos copias sean identicas) " +
+    "e imports-que-viajan-al-stage.test.ts (que nadie vuelva a importar hacia afuera).",
 };
 
 /**
