@@ -462,25 +462,63 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
       Gates: `npx tsc --noEmit` 0 · vitest de los dos archivos 36/36 · `eslint` 0.
 
-- [ ] **La misma salida falta en los otros DOS canales** (`chatbot-canal-web`,
-      `chatbot-canal-meta`) — la clase quedó cerrada en uno solo, a propósito, por tiempo de
-      vuelta.
+- [x] **~~La misma salida falta en los otros DOS canales~~ — LO CERRÓ OTRO CARRIL el
+      2026-09-18 (`onia-platform` `3a61c3ea`), y esta línea era un pendiente FANTASMA.**
 
-      Reproducción en 30 s, desde `/root/loops/onia-platform-chatbot`:
+      Contado, no supuesto — los TRES canales exportan `DELETE`, incluido
+      `onia-platform/app/api/chatbot-canal-web/route.ts`:
 
       ```bash
+      cd /root/loops/onia-platform-chatbot
       for f in app/api/chatbot-canal-*/route.ts; do echo "--- $f"; \
         grep -nE '^export async function (GET|POST|PATCH|DELETE|PUT)' "$f"; done
       ```
 
-      Hoy `canal-web` y `canal-meta` siguen sin `DELETE`. **No son urgentes como el de WhatsApp
-      y el motivo se mide, no se supone:** el de Meta está detrás de la bandera
-      `META_PAGES_PUBLIC`, apagada hasta el App Review (lo fija
-      `onia-platform/app/(dashboard)/settings/chatbot/canal-meta-bandera.test.ts`), así que hoy no se lo
-      muestra a ningún
-      cliente; el web es el widget del sitio del propio cliente. El patrón a copiar es
-      `apagarCanalWhatsapp` en `onia-platform/lib/chatbot/canal-whatsapp.ts` — incluida la baranda de no
-      preguntar por el add-on en la salida.
+      Copió también la baranda que era la mitad que importaba: el `DELETE` se gatea por el ROL
+      y **no** por el add-on, con el motivo escrito al lado.
+
+- [x] 🔴 **~~Una org se llevaba el inbox —y las conversaciones— que otra había APAGADO~~ —
+      CERRADO el 2026-09-18 en `onia-platform` `abe6a2c3` (rama
+      `claude/chatbots-platform-review-0d1d09`, pusheada), PENDIENTE DE DESPLIEGUE.**
+
+      **Cómo apareció.** Auditando el commit de arriba con la pregunta de esta clase: *cerrar
+      una mitad, ¿rompe a la otra?* El camino de vuelta es nuevo; el ENCENDIDO es viejo y fue
+      escrito **bajo una premisa que el apagado acababa de invalidar**, y que estaba escrita
+      en el propio código: adoptaba cualquier inbox homónimo *LIBRE* porque *«es, por
+      definición, el único que pudo haber quedado a medias para esta org»*. Cierto mientras la
+      única forma de que un inbox quedara suelto fuera un alta abortada.
+
+      **El defecto.** Apagar suelta `clinic_settings.chatwootInboxId` y deja el inbox vivo en
+      Chatwoot — a propósito, porque las conversaciones son del cliente. Queda **libre y con el
+      nombre del negocio**. La siguiente org homónima (*«Clinica Dental» hay muchas*, lo dice
+      el comentario del producto) lo adoptaba al encender el suyo: veía en su bandeja las
+      conversaciones de los clientes del otro, y el motor le resolvía a **ella** lo que entrara
+      por el widget que el primero todavía tiene pegado en su sitio. El `@@unique` de la
+      columna no protege: la fila quedó en `null`.
+
+      **La cura: la identidad del dueño viaja EN EL DATO.** El inbox nace sellado
+      (`<nombre> [onia:<orgId>]`) y sólo se adopta el que lleva **mi** sello → falla CERRADO.
+      Apagar sella el legado antes de soltarlo, y ese paso es *best-effort* a propósito: la
+      salida nunca depende de la red (si Chatwoot no contesta, el dueño queda desconectado
+      igual y sólo pierde recuperar ESA bandeja — campo `sellado`).
+
+      **Lo que se paga, dicho:** ya no se readopta un alta abortada anterior al sello. Cuesta
+      un inbox vacío huérfano, contra una fuga entre inquilinos. Y el nombre sellado no lo ve
+      nadie: el único lector es `canal-web.ts`.
+
+      Rojo primero por el motivo correcto (`expected 4 not to be 4`) y validado por mutación:
+      reponer `i.name === org.name` deja en rojo 1 caso, el de la fuga.
+      Gate: `onia-platform/lib/chatbot/inbox-apagado-no-se-lo-lleva-otra-org.test.ts`.
+      Gates: `tsc` 0 · vitest 5602 · `eslint` 0 errores.
+
+      **Hermano curado en la misma vuelta:** `onia-platform/lib/subscription/donde-esta-incluida-no-se-tipea.test.ts`
+      caminaba el disco y enumeraba la **siembra efímera de un gate vecino** (la carpeta
+      `__sonda-url-muerta__` que crea y borra
+      `onia-platform/lib/platform/no-mandamos-a-una-url-que-no-existe.test.ts`), leyéndola
+      después de que su `finally` la borró:
+      `ENOENT` intermitente, en rojo, sobre producto sano — y con la cadena trabando el merge
+      de TODOS los carriles. Un sujeto que desaparece mientras lo leés no es superficie de
+      cliente.
 
 - [x] 🔴 **~~El watchdog del bot declaraba «bot MUDO» con UN parpadeo de 5 s, y su log no sabía
       decir que se había recuperado~~ — CERRADO el 2026-09-17, commiteado y PENDIENTE DE
