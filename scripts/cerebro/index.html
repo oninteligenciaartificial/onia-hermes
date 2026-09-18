@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cerebro Onia</title>
+<style>
+  :root{
+    --bg:#07111f; --panel:#102139; --panel-2:#132a42;
+    --line:rgba(158,183,208,.22); --text:#f4f7f5; --muted:#9db0c8;
+    --green:#00e676; --green-soft:rgba(0,230,118,.14);
+    --amber:#ffc857; --red:#ff647c; --cyan:#59d7ff;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font:15px/1.55 ui-sans-serif,system-ui,"Segoe UI",Roboto,sans-serif;
+    padding:20px 16px 60px}
+  header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
+    max-width:1180px;margin:0 auto 18px}
+  h1{font-size:26px;margin:0;letter-spacing:-.02em}
+  h1 b{color:var(--green)}
+  #meta{color:var(--muted);font-size:13px}
+  #stale{display:none;background:var(--red);color:#1a0505;font-weight:600;
+    padding:6px 12px;border-radius:8px;font-size:13px}
+  #player{margin-left:auto;display:flex;align-items:center;gap:8px}
+  audio{height:34px}
+  main{display:grid;gap:14px;max-width:1180px;margin:0 auto;
+    grid-template-columns:repeat(12,1fr)}
+  .card{background:var(--panel);border:1px solid var(--line);
+    border-radius:var(--radius);padding:16px 18px;min-width:0}
+  .card h2{margin:0 0 4px;font-size:13px;text-transform:uppercase;
+    letter-spacing:.08em;color:var(--muted);font-weight:600}
+  .card h2 .dot{display:inline-block;width:8px;height:8px;border-radius:50%;
+    background:var(--green);margin-right:7px;vertical-align:1px}
+  .card.err h2 .dot{background:var(--red)}
+  .card.warn h2 .dot{background:var(--amber)}
+  .fresh{font-size:11px;color:var(--muted);margin-bottom:10px}
+  pre{white-space:pre-wrap;word-break:break-word;margin:0;
+    font:13px/1.5 ui-monospace,Consolas,monospace;color:#dbe6f2;
+    max-height:420px;overflow:auto}
+  .s12{grid-column:span 12}.s7{grid-column:span 7}.s5{grid-column:span 5}
+  .s6{grid-column:span 6}.s4{grid-column:span 4}
+  @media(max-width:900px){.s7,.s5,.s6,.s4{grid-column:span 12}}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  td,th{text-align:left;padding:4px 8px 4px 0;border-bottom:1px solid var(--line);
+    vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;
+    letter-spacing:.06em}
+  .ok{color:var(--green)} .bad{color:var(--red)} .med{color:var(--amber)}
+  .pill{display:inline-block;background:var(--green-soft);color:var(--green);
+    border-radius:6px;padding:1px 8px;font-size:12px;font-weight:600}
+  .decision{background:var(--panel-2);border-left:3px solid var(--amber);
+    border-radius:8px;padding:8px 12px;margin:6px 0;
+    font:12.5px/1.5 ui-monospace,Consolas,monospace}
+  .vacio{color:var(--muted);font-style:italic}
+</style>
+</head>
+<body>
+<header>
+  <h1><b>Cerebro</b> Onia</h1>
+  <span id="meta">cargando…</span>
+  <span id="stale">DATOS VIEJOS — el agregador no corre</span>
+  <span id="player"></span>
+</header>
+<main id="main"></main>
+<script>
+const $=(s)=>document.querySelector(s);
+const esc=(t)=>String(t??"").replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const mins=(epoch)=>epoch?Math.round((Date.now()/1000-epoch)/60):null;
+const hace=(epoch)=>{const m=mins(epoch);return m==null?"sin dato":m<2?"recién":`hace ${m} min`};
+
+function card(cls,size,titulo,frescura,html){
+  return `<section class="card ${cls} ${size}"><h2><span class="dot"></span>${titulo}</h2>
+  <div class="fresh">${frescura}</div>${html}</section>`;
+}
+
+async function pintar(){
+  let d;
+  try{ d = await (await fetch("data.json?cb="+Date.now())).json(); }
+  catch(e){ $("#meta").textContent="no pude leer data.json"; return; }
+
+  const edad = mins(d.generado_epoch);
+  $("#meta").textContent = `actualizado ${hace(d.generado_epoch)}`;
+  $("#stale").style.display = edad>40 ? "inline-block" : "none";
+  if(d.audio_hoy) $("#player").innerHTML =
+    `<span class="pill">resumen de hoy</span><audio controls src="resumen-hoy.mp3"></audio>`;
+
+  let h="";
+
+  // Agenda
+  const a=d.agenda||{};
+  h+=card(a.texto?(a.de_hoy?"":"warn"):"err","s7","Agenda de hoy",
+    a.mtime?`escrita ${hace(a.mtime)}${a.de_hoy?"":" — NO es de hoy"}`:"sin archivo",
+    a.texto?`<pre>${esc(a.texto)}</pre>`:`<p class="vacio">El job de las 08:00 todavía no escribió.</p>`);
+
+  // Decisiones
+  const t=d.tablero||{};
+  const dec=t.decisiones||[];
+  h+=card(t.error?"err":(dec.length?"warn":""),"s5","Decisiones que te esperan","del tablero",
+    t.error?`<p class="bad">${esc(t.error)}</p>`
+    :dec.length?dec.map(x=>`<div class="decision">${esc(x)}</div>`).join("")
+    :`<p class="vacio">Ninguna. Nada espera tu ok/block.</p>`);
+
+  // Grabar hoy
+  const v=d.video||{};
+  h+=card(v.texto?(v.de_hoy?"":"warn"):"err","s7","Grabar hoy — guiones",
+    v.mtime?`escrito ${hace(v.mtime)}${v.de_hoy?"":" — NO es de hoy"}`:"sin archivo",
+    v.texto?`<pre>${esc(v.texto)}</pre>`:`<p class="vacio">El job de las 08:10 todavía no escribió.</p>`);
+
+  // Publicador + dominios + docker en columna
+  const p=(d.publicador||{}).ultimo_bloque||[];
+  const frenado=p.some(l=>l.includes("NO publico")||l.includes("FALLO"));
+  let col = card(frenado?"warn":"","s5","Publicador","último ciclo (cada 3 h)",
+    p.length?`<pre>${esc(p.join("\n"))}</pre>`:`<p class="vacio">sin log</p>`);
+
+  const dom=(d.dominios||{}).checks||[];
+  const dk=(d.docker||{}).contenedores||[];
+  const domBad=dom.some(x=>!String(x.resultado||"").startsWith("200"));
+  const dkBad=dk.some(x=>x.estado!=="running");
+  col+=card((domBad||dkBad)?"err":"","s5","Salud de producción","medido desde el VPS",
+    `<table><tr><th>qué</th><th>estado</th></tr>`+
+    dom.map(x=>`<tr><td>${esc(x.dominio)}</td><td class="${String(x.resultado||"").startsWith("200")?"ok":"bad"}">${esc(x.resultado||"—")}</td></tr>`).join("")+
+    dk.map(x=>`<tr><td>${esc(x.contenedor)}</td><td class="${x.estado==="running"?"ok":"bad"}">${esc(x.estado)}</td></tr>`).join("")+`</table>`);
+
+  // Hermes
+  const hj=(d.hermes||{}).jobs||[];
+  h+=card(d.hermes&&d.hermes.error?"err":"","s6","Hermes — trabajos activos","de cron/jobs.json",
+    hj.length?`<table><tr><th>trabajo</th><th>último</th><th>próximo</th></tr>`+
+    hj.map(j=>`<tr><td>${esc(j.name)}<br><span class="fresh">${esc(j.model||"")}</span></td>
+      <td class="${j.last_status==="ok"?"ok":"bad"}">${esc(j.last_status||"—")}${j.last_error?`<br><span class="fresh">${esc(j.last_error)}</span>`:""}</td>
+      <td>${esc((j.next_run_at||"").slice(5,16).replace("T"," "))}</td></tr>`).join("")+`</table>`
+    :`<p class="vacio">sin jobs activos</p>`);
+
+  // Loops de casa
+  const lp=(d.loops_casa||{}).loops||[];
+  h+=card("","s6","Loops de nodo-casa","última vuelta vista por el VPS (rsync)",
+    lp.length?`<table><tr><th>loop</th><th>última señal</th></tr>`+
+    lp.map(l=>{const viejo=mins(l.rsync_mtime)>90;
+      return `<tr><td>${esc(l.loop)}</td><td class="${viejo?"med":"ok"}">${esc((l.ultimo||"sin vuelta").slice(0,110))}<br><span class="fresh">rsync ${hace(l.rsync_mtime)}</span></td></tr>`}).join("")+`</table>`
+    :`<p class="vacio">sin copias rsync</p>`)
+  + col;
+
+  $("#main").innerHTML=h;
+}
+pintar();
+setInterval(pintar, 5*60*1000);
+</script>
+</body>
+</html>

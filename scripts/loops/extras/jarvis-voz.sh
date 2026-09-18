@@ -69,5 +69,9 @@ if ! printf '%s' "$RESP" | grep -q '"ok":true'; then
 fi
 
 touch "$MARCA"
+# Copia para el panel Cerebro (boton de escuchar en el navegador).
+if [ -d /opt/onia-cerebro/www ]; then
+  cp -f "$MP3" /opt/onia-cerebro/www/resumen-hoy.mp3 || true
+fi
 find "$STATE_DIR" -type f -mtime +14 -delete
 echo "$(date -u +%FT%TZ) narrado y enviado ($HASH, ${#TEXTO} chars)"
