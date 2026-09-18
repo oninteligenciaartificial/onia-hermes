@@ -12,6 +12,54 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-18 23:0x-23:2x La Paz — reconfirmación redundante + reconocimiento de escalón 3 (equipo)
+
+**Corrección de método, no de dato.** Al arrancar leí el final del archivo (con `tail`) en vez
+del tope, y con eso pensé que el `BUILD_ID` anterior medido era `4AefpemDeSbQXrDmTbhoy` (una
+entrada vieja). El tope real ya tenía `NIRA4pNJ8fJVouaUsyu1E` confirmado por la vuelta anterior
+(commit `486742c0`) — el mismo que acabo de medir de nuevo. Corrí el recorrido completo entero
+otra vez sin que hiciera falta: **9/9, `completo: true`, `agujeros: []`**, 0 filas `zz-qa-` al
+cerrar — mismo resultado sano, repetido. Dato correcto, vuelta parcialmente desperdiciada por no
+mirar el TOPE del archivo antes de decidir.
+
+**Con el resto de la vuelta, until 3 de la lección de la vuelta anterior (invitar/quitar
+coadministrador desde `/settings`).** Reconocimiento SIN escribir nada, con la sesión real de
+`sergio@onia.com.bo` (solo lectura — nunca se apretó "Darle acceso"):
+
+- `/settings/equipo` no existe (404). El camino real es `/settings` → tarjeta "Equipo — Quién
+  entra al sistema" → botón **"Agregar a alguien"** (`getByRole('button', {name:'Agregar a
+  alguien'})`), que despliega un formulario INLINE (no modal, no ruta nueva): Nombre completo,
+  Correo electrónico, Contraseña (min. 8 caract.) y un `<select>` de rol.
+- El `<select>` de rol en el plan **Profesional** de Sergio sólo ofrece dos opciones:
+  `DOCTOR` ("Profesional — Atiende y tiene agenda propia") y `STAFF` ("Recepción — Agenda y
+  cobra, no atiende"). **No hay opción ADMIN visible en este formulario/plan** — consistente
+  con la memoria compartida sobre DG-043 (`multiAdminIncluded` en falso para `professional`).
+  Esto es la MISMA pantalla que el paso "equipo" del onboarding ya toca (carga un profesional
+  sin invitar por correo); no alcanza para probar el camino de co-administrador que DG-043
+  gatea, que aparentemente vive en otra superficie o requiere un plan con `multiAdminIncluded`.
+- No se probó el camino de invitación por correo (`/api/admin/users`, el que la memoria dice que
+  crea un ADMIN real) porque no apareció en esta pantalla con este plan: hace falta un rubro/plan
+  con `multiAdminIncluded` para verlo, o localizar la ruta exacta antes de automatizarlo.
+
+**Sin hallazgo de producto esta vuelta.** El escalón 3 queda con selectores concretos para
+armarlo la próxima vez, en vez del "pendiente por costo de armar el probe" de las últimas
+vueltas: falta decidir con qué rubro/plan de prueba se ve el rol ADMIN antes de escribir el
+paso automatizado, para no automatizar a ciegas sobre una pantalla que no muestra lo que se
+quiere probar.
+
+`completo: true`, `llegoHasta: 9/9` (sin cambios).
+
+RAZÓN: no avanzó la medida porque el `BUILD_ID` no había cambiado de verdad (error de lectura
+propio, corregido arriba) — la vuelta se gastó en una reconfirmación innecesaria y en
+reconocimiento de escalón 3.
+LECCIÓN: antes de decidir "hay que re-medir", leer el TOPE de `ULTIMO_RECORRIDO.md` (las
+entradas más nuevas van arriba), no el final con `tail`. Y para escalón 3: el rol ADMIN/
+co-administrador no aparece en el formulario de "Agregar a alguien" con el plan Profesional —
+antes de automatizar el probe, crear (o encontrar) una cuenta `zz-qa-` con un plan/rubro que
+tenga `multiAdminIncluded` para ver la superficie real que DG-043 gatea.
+
+---
+
 ## 2026-09-18 22:09-22:1x La Paz — deploy nuevo (BUILD_ID `NIRA4pNJ8fJVouaUsyu1E`, antes `zMQBlf7IEQ_xT2qTWyMmQ`): dental 9/9 de nuevo
 
 Al arrancar: alta `abierta`, 0 orgs `zz-qa-` huérfanas, 0 citas `zz-qa-` huérfanas, sin tareas
