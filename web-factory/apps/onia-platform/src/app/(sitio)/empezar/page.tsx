@@ -41,8 +41,10 @@ export const metadata: Metadata = {
     type: "website",
     locale: "es_BO",
     title: `Probá Onia gratis ${PRUEBA.dias} días`,
-    description:
-      "Sistema completo, sin tarjeta. Elegís tu rubro y te lo entregamos configurado.",
+    // El plan se DERIVA: «Sistema completo» nombraba sin querer el plan de
+    // arriba (Bs 1.290), y esto es lo que se pinta en el preview de WhatsApp,
+    // antes de que el lead abra la página.
+    description: `El plan ${PRUEBA.planQueCorre} completo, sin tarjeta. Elegís tu rubro y te lo entregamos configurado.`,
     url: "/empezar",
   },
 };
