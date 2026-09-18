@@ -50,6 +50,7 @@ import { cuotaAgotada, withKnowledge } from "./knowledge.mjs";
 import { buildFollowUp, followUpDue } from "./bot-engine.mjs";
 import { activeSlots, slotLabel } from "./reply-builder.mjs";
 import { createStore, stateFromRow } from "./persistence.mjs";
+import { MOTIVO_NUESTRA, esConversacionNuestra } from "./es-nuestra.mjs";
 import { createChatwootClient, whatsappTemplate } from "./chatwoot-adapter.mjs";
 import { getAvailableSlots as getAvailableSlotsFromCalcom } from "./calcom-availability.mjs";
 
@@ -137,6 +138,10 @@ export function hoursBetween(fromIso, toIso) {
  */
 export function skipReason(state, nowIso, config = DEFAULT_CONFIG) {
   if (!state) return "fila_ilegible";
+  // DEFINITIVO y por eso va arriba de todo: quien es el contacto no cambia esperando. Sin esta
+  // pregunta el barrido le escribe a nuestras propias sondas — el 2026-09-18, DOS de las tres
+  // filas que iba a tomar eran nuestras (ver `es-nuestra.mjs`).
+  if (esConversacionNuestra(state)) return MOTIVO_NUESTRA;
   if (state.humanTookOver) return "humano_a_cargo";
   if (state.optOutAt) return "opt_out";
   if (state.followupStep >= config.followUp.maxSteps) return "ya_tiene_followup";

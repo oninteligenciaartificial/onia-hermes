@@ -45,6 +45,7 @@ import { pathToFileURL } from "node:url";
 import { DEFAULT_CONFIG, createBotConfig, localHour, renderTemplate } from "./config.mjs";
 import { cuotaAgotada, withKnowledge } from "./knowledge.mjs";
 import { createStore, stateFromRow } from "./persistence.mjs";
+import { MOTIVO_NUESTRA, esConversacionNuestra } from "./es-nuestra.mjs";
 import { whatsappTemplate } from "./chatwoot-adapter.mjs";
 import { meetingLink } from "./calcom-booking.mjs";
 import { formatSlotLabel } from "./calcom-availability.mjs";
@@ -103,6 +104,9 @@ export { localHour };
  */
 export function skipReason(state, nowIso, config = DEFAULT_CONFIG) {
   if (!state) return "fila_ilegible";
+  // DEFINITIVO: quien es el contacto no se arregla esperando. Una demo "agendada" contra nuestra
+  // propia sonda no lleva recordatorio (ver `es-nuestra.mjs`).
+  if (esConversacionNuestra(state)) return MOTIVO_NUESTRA;
   if (state.humanTookOver) return "humano_a_cargo";
   if (state.optOutAt) return "opt_out";
   if (state.botStage !== REMINDER_STAGE) return `estado_no_aplica:${state.botStage}`;
