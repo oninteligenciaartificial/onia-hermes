@@ -379,6 +379,38 @@ test("el guion NO puede volver a traer la duracion ni el horario escritos a mano
   }
 });
 
+// El horario del negocio es un RANGO, y un rango se valida CRUZANDO sus extremos. Hasta el
+// 2026-09-18 `desde` y `hasta` se validaban por separado (`desde` 0..23, `hasta` 1..24) y nadie
+// los comparaba nunca: un bar que declara 18 -> 02 pasaba, y el motor lo lee como
+// `startHour: 18, endHour: 2`, o sea un rango VACIO — el bot contesta lo contrario de su horario
+// las 24 h. La mitad hermana es peor porque no se ve: declarar UN solo extremo hereda el otro del
+// base (`startHour: 9, endHour: 22`, los de Sergio Urcullo), asi que `desde: 23` solo tambien da
+// un rango vacio y el documento ni siquiera trae el campo que lo delata.
+test("el horario del negocio se valida CRUZANDO sus extremos, no de a uno", () => {
+  const normal = validateKnowledge(valido({ empresa: { horario: { dias: [1, 2, 3, 4, 5], desde: 9, hasta: 18 } } }));
+  assert.equal(normal.ok, true, "el horario corriente de un negocio tiene que seguir pasando");
+
+  const cruzaMedianoche = validateKnowledge(valido({ empresa: { horario: { dias: [1], desde: 18, hasta: 2 } } }));
+  assert.equal(cruzaMedianoche.ok, false, "18 -> 02 es un rango vacio para el motor: no se guarda");
+  assert.match(cruzaMedianoche.errors.join(" "), /cierra antes de abrir|no atiende ninguna hora/);
+
+  const vacio = validateKnowledge(valido({ empresa: { horario: { desde: 9, hasta: 9 } } }));
+  assert.equal(vacio.ok, false, "abrir y cerrar a la misma hora no es un horario");
+
+  // El hermano que no se ve: un solo extremo hereda el otro del base y produce el MISMO rango vacio.
+  const soloDesde = validateKnowledge(valido({ empresa: { horario: { desde: 23 } } }));
+  assert.equal(soloDesde.ok, false, "`desde: 23` solo hereda endHour 22 del base: rango vacio");
+  assert.match(soloDesde.errors.join(" "), /van juntos/);
+
+  const soloHasta = validateKnowledge(valido({ empresa: { horario: { hasta: 2 } } }));
+  assert.equal(soloHasta.ok, false, "`hasta: 2` solo hereda startHour 9 del base: rango vacio");
+  assert.match(soloHasta.errors.join(" "), /van juntos/);
+
+  // Tocar SOLO los dias no declara ningun extremo: no es el sujeto de esta regla.
+  const soloDias = validateKnowledge(valido({ empresa: { horario: { dias: [1, 2] } } }));
+  assert.equal(soloDias.ok, true, "los dias se pueden tocar sin volver a declarar el rango");
+});
+
 test("la capa editable no puede CREAR la contradiccion: si toca la duracion, va entera y coherente", () => {
   const soloFrase = validateKnowledge(valido({ demo: { duracionFrase: "10 minutos" } }));
   assert.equal(soloFrase.ok, false);

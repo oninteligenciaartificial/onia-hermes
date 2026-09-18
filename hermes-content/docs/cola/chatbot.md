@@ -318,29 +318,43 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
-- [ ] 🔴 **El formulario del chatbot deja tipear un horario al revés y el validador lo acepta.**
-      Hermano NO cubierto del arreglo de abajo (`onia-platform` `5bc7747f`), medido el
-      2026-09-18 en la misma vuelta: el asistente ya no publica un tramo que cruza la
-      medianoche, pero el **formulario** de `/settings/chatbot` tiene `desde` y `hasta` como
-      dos campos numéricos libres, y `validarConocimiento` los valida **por separado**
-      (`desde: int 0..23`, `hasta: int 1..24`) sin cruzarlos nunca.
+- [x] 🔴 **~~El formulario del chatbot deja tipear un horario al revés y el validador lo
+      acepta~~ — CERRADO el 2026-09-18** (motor: `checkHorario` en
+      `hermes-content/deploy/vps-ops/bot/knowledge.mjs`; espejo: `onia-platform`
+      `lib/chatbot/knowledge.ts`, rama del carril, **falta merge de `onia-cola` y deploy del
+      bot**). El asistente de 6 preguntas ya estaba tapado (`5bc7747f`), pero el **formulario**
+      de `/settings/chatbot` tiene `desde` y `hasta` como dos campos numéricos libres y
+      `validarConocimiento` los validaba **por separado** (`desde: int 0..23`, `hasta: int
+      1..24`) sin cruzarlos nunca. `applyKnowledge` copia eso a `startHour: 18, endHour: 2` —
+      un rango **vacío**: el bot del dueño contesta lo contrario de su horario las 24 h.
 
-      **Reproducción exacta** (30 s, sin navegador):
-      ```bash
-      cd /root/loops/onia-platform-chatbot
-      npx vitest run -t "horario" "app/(dashboard)/settings/chatbot/"   # verde: el asistente ya está tapado
-      node -e "…"  # o: validarConocimiento({schema:'onia.bot.knowledge/1',empresa:{horario:{dias:[1],desde:18,hasta:2}}}) → ok:true
-      ```
-      Del otro lado, el motor lo lee como `startHour: 18, endHour: 2` (`knowledge.mjs`, bloque
-      del horario: `businessHours.startHour = horario.desde`), o sea un rango vacío — el bot
-      del dueño contesta lo contrario de su horario, las 24 h.
+      **La mitad hermana, que no estaba en el ítem y es peor porque no se ve:** declarar UN
+      solo extremo hereda el otro del base, que son los horarios de **Onia**
+      (`DEFAULT_CONFIG.businessHours` = `startHour: 9, endHour: 22`, medido). Así `desde: 23`
+      a secas también da un rango vacío, y el documento ni siquiera trae el campo que lo
+      delataría. Por eso la regla quedó igual que `checkDemo`: **los dos extremos van juntos**
+      y `hasta > desde`.
 
-      **Por qué no entró en esta vuelta:** la cura correcta es del validador, y ese archivo se
-      declara *"port EXACTO del allowlist del motor"* — hay que tocarlo en los DOS lados
-      (`onia-platform/lib/chatbot/knowledge.ts` y `hermes-content/deploy/vps-ops/bot/knowledge.mjs`,
-      `checkHorario`) en la misma vuelta, con su gate espejo, y el del motor pide deploy del bot.
-      No entraba en el tope. **Sujeto del gate:** `hasta <= desde` rechaza el documento entero,
-      con el caso ancla del horario normal (9→18) que tiene que seguir pasando.
+      **Riesgo de endurecer un validador que también corre AL LEER, medido antes de tocar
+      nada** (no supuesto): `select "organizationId", status, (data->'empresa'->'horario')` en
+      `chatbot_knowledge` de `supabase-db` devuelve **una sola fila publicada y SIN horario**,
+      así que ningún documento legado deja de cargar.
+
+      **Prueba.** Tests escritos primero y en rojo por el motivo correcto (`18 -> 02` pasaba:
+      `true !== false`), y los dos gates validados **por mutación** — con
+      `if (false) checkHorario(...)` el del motor cae 1/1 y el de la plataforma 3 de 28; con la
+      cura, `npm run test:bot` 1176/1176, `npx vitest run` 5708/5708, `npx tsc --noEmit` 0,
+      `eslint` 0 errores. Gates: `knowledge.test.mjs` («el horario del negocio se valida
+      CRUZANDO sus extremos, no de a uno») y `lib/chatbot/knowledge.test.ts` (4 casos), los dos
+      con el caso ancla del horario corriente 9→18 y el de tocar **sólo los días**, que sigue
+      pasando porque no declara ningún extremo.
+
+      **Y la mitad que el dueño ve:** el error del rango llega como `campo: "empresa.horario"`
+      —el objeto entero, igual que `demo`—, y el mapa de etiquetas de `ChatbotClient.tsx` sólo
+      tenía los subcampos, así que caía al fallback `return campo` y le mostraba
+      «empresa.horario:» en una pantalla que traduce todo lo demás al castellano. Agregada su
+      fila («Horario de atención»). `etiquetaDeCampo` no está exportada y no tiene gate propio:
+      queda anotado abajo, en «Después».
 
 - [x] 🔴 **~~El asistente de 6 preguntas publicaba AL REVÉS el horario de un negocio
       nocturno~~ — CERRADO el 2026-09-18** (`onia-platform` `5bc7747f`, rama del carril;
@@ -4559,6 +4573,17 @@ decisión de Sergio, no código.
       `La encargada` en la conversación nueva.
 
 ## Después
+
+- [ ] **`etiquetaDeCampo` traduce los errores del validador al castellano y no tiene gate: su
+      mapa es una lista de inclusión y falla abierto.** Anotado el 2026-09-18 al cerrar el 🔴 del
+      horario invertido. Vive dentro de `app/(dashboard)/settings/chatbot/ChatbotClient.tsx:136`,
+      no se exporta, y el fallback es `return campo` — así que cada campo nuevo que el validador
+      aprenda a rechazar le muestra al dueño la ruta cruda (`empresa.horario:`) en una pantalla
+      donde todo lo demás está en castellano. Hoy faltaba justo la fila del objeto `empresa.horario`
+      (la de `demo` sí estaba). **Sujeto del gate:** exportar la función y cruzar su universo contra
+      los `campo` que `validarConocimiento` puede emitir, derivados del SHAPE + las reglas cruzadas
+      (`checkHorario`, `checkDemo`, `checkProductos`, `checkRubros`, `checkFaqNegocio`) — no contra
+      una lista tipeada, que es el mismo modo de falla.
 
 - [x] ✅ **CERRADO el 2026-09-17 18:45 UTC — el simulador ya no miente sobre el horario, y el
       agujero era el DOBLE de grande que lo anotado.** Lo anotado era el reloj del modo

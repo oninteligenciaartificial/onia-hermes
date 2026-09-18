@@ -358,6 +358,40 @@ function checkObject(value, fields, path, errors, opciones = {}) {
 }
 
 /**
+ * El horario del negocio es un RANGO, y un rango se valida cruzando sus extremos. El SHAPE los
+ * mira de a uno (`desde` 0..23, `hasta` 1..24) y asi entraba 18 -> 02: `applyKnowledge` lo copia
+ * a `startHour: 18, endHour: 2`, que para el motor es un rango VACIO — el bot del cliente contesta
+ * lo contrario de su horario las 24 h, y el dueño no tiene forma de enterarse.
+ *
+ * Los dos extremos van JUNTOS por la misma razon que `duracionMinutos`/`duracionFrase`: declarar
+ * uno solo hereda el otro del base (`startHour: 9, endHour: 22`, que son los de Sergio Urcullo),
+ * asi que `desde: 23` a secas produce el mismo rango vacio sin traer el campo que lo delataria.
+ *
+ * Cruzar la medianoche es un horario legitimo (un bar, una farmacia de turno) y el motor todavia
+ * no sabe representarlo: mientras no sepa, se RECHAZA en vez de guardarse al reves.
+ */
+function checkHorario(empresa, errors) {
+  if (!isPlainObject(empresa)) return;
+  const horario = empresa.horario;
+  if (!isPlainObject(horario)) return;
+  const tieneDesde = horario.desde !== undefined;
+  const tieneHasta = horario.hasta !== undefined;
+  if (!tieneDesde && !tieneHasta) return;
+  if (!tieneDesde || !tieneHasta) {
+    errors.push(
+      "empresa.horario: `desde` y `hasta` van juntos — declarar uno solo hereda el otro del horario de Onia y te deja un horario que no es el tuyo",
+    );
+    return;
+  }
+  if (!Number.isInteger(horario.desde) || !Number.isInteger(horario.hasta)) return; // ya lo dijo el SHAPE
+  if (horario.hasta <= horario.desde) {
+    errors.push(
+      `empresa.horario: cierra antes de abrir (${horario.desde} -> ${horario.hasta}), asi no atiende ninguna hora del dia. Un horario que cruza la medianoche todavia no se puede cargar: parti el dia o escribilo en \`frase\`.`,
+    );
+  }
+}
+
+/**
  * La duracion no puede volver a decir dos cosas. Si el archivo toca la duracion, tiene que traer
  * los DOS campos y decir el mismo numero: asi la capa editable no puede prometer 15 minutos
  * mientras reserva 45.
@@ -447,6 +481,7 @@ export function validateKnowledge(data) {
   try {
     if (!isPlainObject(data)) return { ok: false, errors: ["el archivo no es un objeto JSON"] };
     checkObject(data, SHAPE, "", errors);
+    checkHorario(data.empresa, errors);
     checkDemo(data.demo, errors);
     checkProductos(data.productos, errors);
     checkRubros(data.rubrosExtra, errors);
