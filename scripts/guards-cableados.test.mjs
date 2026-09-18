@@ -13,8 +13,9 @@
 
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync, existsSync } from "node:fs";
+import { readFileSync, readdirSync, existsSync, mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import {
   testsFueraDeLaCadena,
@@ -199,4 +200,81 @@ test("una exclusion vencida no puede tapar nada: el archivo excluido tiene que e
     `EXCLUIDOS nombra archivos que ya no existen: ${vencidas.join(", ")}.\n` +
       "Sacalos: una exclusion que no apunta a nada solo sirve para esconder la proxima.",
   );
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Un paso de la cadena puede vivir en OTRO package.json, y hasta hoy el
+// instrumento no podia seguirlo.
+//
+// `test:sitio-venta` es `cd web-factory/apps/onia-platform && npm run prebuild`,
+// y esa forma la instalo la leccion del 2026-09-17: la cadena corria `npm test`
+// del sitio —mas flojo que el `prebuild` (tsc --noEmit + tests) que corre el
+// publicador—, asi que 5 errores de tipo entraron verdes a `main` y mataron la
+// publicacion de onia.com.bo dos corridas seguidas.
+//
+// El instrumento resolvia ese `npm run prebuild` contra el package.json de la
+// RAIZ, donde no existe, y lo listaba como "prebuild (script inexistente)". Dos
+// fallas opuestas con la misma causa: un nombre fantasma que se lee como "este
+// paso de la cadena esta roto" —y cuyo arreglo natural es volver al gate flojo—,
+// y, del otro lado, que todo test del subarbol anidado quede fuera de
+// `ejecutados`: si ese subarbol no estuviera excluido, la cadena entera saldria
+// reportada como huerfana. La exclusion `web-factory` dice textual "la app que se
+// publica entra por `test:sitio-venta`": sin seguir el `cd`, el instrumento no
+// podia verificar su propio motivo.
+test("un `cd <dir> && npm run <x>` se resuelve en el package.json de ESE dir", () => {
+  // Se siembra FUERA del repo: un sujeto sembrado adentro lo levanta el gate de
+  // aca arriba —que camina el mismo disco— y lo deja rojo acusando al producto.
+  const semilla = mkdtempSync(join(tmpdir(), "onia-cadena-anidada-"));
+  try {
+    mkdirSync(join(semilla, "sub"), { recursive: true });
+    writeFileSync(
+      join(semilla, "package.json"),
+      JSON.stringify({ scripts: { test: "npm run test:sub", "test:sub": "cd sub && npm run prebuild" } }),
+    );
+    writeFileSync(
+      join(semilla, "sub", "package.json"),
+      JSON.stringify({ scripts: { prebuild: "tsc --noEmit && node --test gate.test.mjs" } }),
+    );
+    writeFileSync(join(semilla, "sub", "gate.test.mjs"), "");
+
+    const { universo, ejecutados, fuera, noEntendidos } = testsFueraDeLaCadena({ raiz: semilla });
+
+    assert.deepEqual(universo, ["sub/gate.test.mjs"], "el universo dejo de ver el disco sembrado");
+    assert.deepEqual(
+      ejecutados,
+      ["sub/gate.test.mjs"],
+      "la cadena SI corre esa prueba, por un `npm run` de otro package.json: no seguir el `cd` la da por huerfana",
+    );
+    assert.deepEqual(fuera, [], "reporto como fuera de la cadena algo que la cadena corre");
+    assert.deepEqual(
+      noEntendidos,
+      [],
+      "nombro un script como inexistente porque lo busco en la raiz en vez del dir del `cd`",
+    );
+  } finally {
+    rmSync(semilla, { recursive: true, force: true });
+  }
+});
+
+test("un `cd <dir>` hacia una carpeta sin package.json se DENUNCIA, no se calla", () => {
+  // La direccion simetrica: seguir el `cd` no puede volverse una forma de tragar
+  // silencio. Si el paso apunta a un dir sin package.json, no hay nada que correr.
+  const semilla = mkdtempSync(join(tmpdir(), "onia-cadena-sin-pkg-"));
+  try {
+    mkdirSync(join(semilla, "sub"), { recursive: true });
+    writeFileSync(
+      join(semilla, "package.json"),
+      JSON.stringify({ scripts: { test: "cd sub && npm run prebuild" } }),
+    );
+    writeFileSync(join(semilla, "sub", "gate.test.mjs"), "");
+
+    const { noEntendidos } = testsFueraDeLaCadena({ raiz: semilla });
+
+    assert.ok(
+      noEntendidos.some((n) => n.includes("sub")),
+      `un paso que apunta a un dir sin package.json tiene que salir nombrado; salio: ${JSON.stringify(noEntendidos)}`,
+    );
+  } finally {
+    rmSync(semilla, { recursive: true, force: true });
+  }
 });
