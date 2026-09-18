@@ -9,6 +9,7 @@ import assert from "node:assert/strict";
 
 import { proximosSlots, comoSpec, siguenVigentes } from "./slots-rodantes.mjs";
 import { ANTICIPACION_MINIMA_MS, parseSlotsSpec, slotsPending } from "./config.mjs";
+import { franjasDeAtencion } from "./ventanas-de-atencion.mjs";
 
 /** El dia real, calculado aparte del codigo que se prueba. */
 const DIA_REAL = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
@@ -22,11 +23,68 @@ test("la etiqueta nombra el mismo dia que su ISO", () => {
   }
 });
 
-test("nunca ofrece sabado ni domingo", () => {
-  for (const desde of ["2026-09-11T13:00:00Z", "2026-09-12T13:00:00Z", "2026-09-13T13:00:00Z"]) {
+// ---------------------------------------------------------------------------
+// La disponibilidad es UNA, y no vive aca
+// ---------------------------------------------------------------------------
+// Hasta el 2026-09-18 este bloque se llamaba «nunca ofrece sabado ni domingo» y
+// AFIRMABA EL DEFECTO: el sabado 09:00-15:00 es horario de atencion declarado
+// por Sergio Urcullo (cita textual del 2026-09-02, `VENTANAS_ATENCION`), el otro
+// generador lo ofrece y la coletilla que el bot manda en el MISMO mensaje lo
+// promete. Lo que se sostiene es la baranda —no ofrecer un dia en el que no hay
+// nadie, que es el domingo—, no la prohibicion del sabado.
+//
+// El costo, medido el 2026-09-18 09:43 La Paz con los dos generadores corridos
+// sobre el MISMO instante: el .py daba «sábado 19, 10:00» y este daba «lunes 21,
+// 14:00». Dos dias de espera de diferencia escribiendo los dos la MISMA variable
+// (`ONIA_BOT_SLOTS`), y este es el que corre DESPUES (07:41 vs 06:23 La Paz), o
+// sea el que tiene la ultima palabra el dia que el otro falla — que es el unico
+// dia para el que existe.
+
+test("todo horario ofrecido cae DENTRO de una franja de atencion", () => {
+  const franjas = franjasDeAtencion();
+  for (const desde of ["2026-09-11T13:00:00Z", "2026-09-12T13:00:00Z", "2026-09-13T13:00:00Z", "2026-09-18T13:43:00Z"]) {
+    const slots = proximosSlots(new Date(desde));
+    assert.ok(slots.length > 0, `sin candidatos desde ${desde}`);
+    for (const s of slots) {
+      // El dia y la hora LOCALES del slot, calculados aparte del codigo que se prueba.
+      const local = new Date(Date.parse(s.startAt) - 4 * 3600_000);
+      const delDia = franjas[local.getUTCDay()] || [];
+      assert.ok(
+        delDia.some(([ini, fin]) => local.getUTCHours() >= ini && local.getUTCHours() < fin),
+        `${s.label} (${s.startAt}) no cae en ninguna franja de atencion: el bot ofreceria un horario en el que no hay nadie`,
+      );
+    }
+  }
+});
+
+test("el sabado se OFRECE: es horario de atencion, no fin de semana muerto", () => {
+  // Viernes 18 de septiembre, 09:43 La Paz. El sabado 19 esta a mas de 24 h y su
+  // ventana (09:00-15:00) esta abierta. Con la disponibilidad propia que tenia este
+  // archivo —lun-vie a las 14:00 y nada mas— el primero era «lunes 21»: tres dias de
+  // espera para el prospecto que escribe un viernes, con el sabado libre.
+  const primero = proximosSlots(new Date("2026-09-18T13:43:00Z"))[0];
+  assert.equal(diaDe(primero.startAt), "sábado", `el primero fue ${primero.label}`);
+});
+
+test("la HORA sale de la franja, no de una constante", () => {
+  // El dia tambien se puede perder por la hora: con las 14:00 clavadas —como estaba—
+  // un dia cuya franja de tarde ya arranco, o que solo tiene la nocturna abierta, se
+  // descarta ENTERO y el prospecto salta al siguiente.
+  const casos = [
+    // Jueves 15:30 La Paz -> el piso cae el viernes 15:30: 14:00 ya paso, 16:00 entra.
+    ["2026-09-17T19:30:00Z", "viernes 18 de septiembre, 16:00"],
+    // Jueves 17:30 -> el viernes ya cerro la franja de tarde (14-17); queda la de 20-22.
+    ["2026-09-17T21:30:00Z", "viernes 18 de septiembre, 20:00"],
+  ];
+  for (const [iso, esperado] of casos) {
+    assert.equal(proximosSlots(new Date(iso))[0].label, esperado, `desde ${iso}`);
+  }
+});
+
+test("el domingo no se ofrece nunca: no hay nadie del otro lado", () => {
+  for (const desde of ["2026-09-11T13:00:00Z", "2026-09-18T13:43:00Z", "2026-09-19T13:00:00Z"]) {
     for (const s of proximosSlots(new Date(desde))) {
-      const d = diaDe(s.startAt);
-      assert.ok(d !== "sábado" && d !== "domingo", `${s.label} cae en fin de semana`);
+      assert.notEqual(diaDe(s.startAt), "domingo", `${s.label} cae un domingo`);
     }
   }
 });
