@@ -19,7 +19,8 @@
 // el funnel de venta de Onia tiene SU propio followup y no pasa por aca.
 //
 //   node insistencia-run.mjs --now 2026-08-30T15:00:00Z [--emit] [--limit 50]
-import { createStore } from "./persistence.mjs";
+import { createStore, stateFromRow } from "./persistence.mjs";
+import { MOTIVO_NUESTRA, esConversacionNuestra } from "./es-nuestra.mjs";
 import { createBotConfig, DEFAULT_CONFIG, renderTemplate } from "./config.mjs";
 import { getOrgKnowledge } from "./knowledge.mjs";
 import { deliver, hoursBetween } from "./followup-run.mjs";
@@ -102,6 +103,15 @@ export async function runInsistenciaSweep(options = {}, deps = {}) {
 
   for (const row of rows) {
     const key = row.conversation_key;
+
+    // DEFINITIVO y primero: quien es el contacto no cambia esperando, y este es el UNICO barrido
+    // que ya corre con `--emit` en produccion (crontab `*/30 12-23`). Sin esta pregunta le insiste
+    // a nuestras propias sondas — y en el inbox de WhatsApp cada saliente lo cobra Meta.
+    if (esConversacionNuestra(stateFromRow(row))) {
+      result.skipped.push({ key, reason: MOTIVO_NUESTRA });
+      continue;
+    }
+
     const inboxId = row?.raw?.inboxId || null;
     if (!inboxId) {
       result.skipped.push({ key, reason: "sin_inbox" });
