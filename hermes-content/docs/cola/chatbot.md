@@ -647,6 +647,61 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       cadena lo **ejecute** se comprobó por mutación también (un caso que falla apareció como
       `not ok 1097`), no por grep.
 
+- [x] 🔴 **~~La puerta que MANDA el WhatsApp le seguía escribiendo a los clientes de un negocio
+      con la cuenta vencida — y era la QUINTA, no la cuarta~~ — CERRADO el 2026-09-18 en
+      `onia-platform` (`5bf5f675`), commiteado y PENDIENTE DE MERGE + DESPLIEGUE.**
+
+      **Dónde:** `onia-platform/app/api/n8n/whatsapp/send/route.ts`, el proxy multi-tenant por el
+      que los workflows de n8n (`wf11-followup`, `wf05-birthday`) mandan WhatsApp a los clientes
+      del negocio. Preguntaba **sólo** por el add-on, nunca por la vigencia del plan.
+
+      **Por qué nadie lo veía — y es la lección, no el bug.** El cron de recordatorios
+      (`onia-platform/app/api/cron/appointment-reminders/route.ts`) cerró su caso el 11-sep y se
+      declaró en un comentario *«LA CUARTA PUERTA que escribe en nombre del negocio sin sesión del
+      dueño»*, enumerando las otras tres: el panel con `checkPlanExpiry`, la reserva pública y el
+      bot. Esa enumeración es una **lista escrita a mano**, y falló abierto justo en la puerta más
+      cara: la que efectivamente manda el mensaje. Su gate
+      (`onia-platform/app/api/cron/appointment-reminders/cuenta-viva.test.ts`) mira ESE archivo y
+      nada más, así que la clase quedó abierta con todo en verde.
+
+      **Por qué el add-on no alcanzaba.** `isWhatsAppAddonActive` colapsa dos fuentes, y una es
+      `organizations.whatsappAddon` — otorgamiento a mano **sin columna de fecha**, o sea que
+      devuelve `true` para siempre. Exactamente el mismo motivo del ítem de abajo.
+
+      **Alcanzable, medido en producción el 2026-09-18 12:16 UTC** (`docker exec supabase-db psql
+      -U postgres -d postgres -tAc 'select slug, plan, "whatsappAddon", "planEnd", "trialEnd" from
+      organizations;'`): `clinica-sergio-p2ljs` es la **única** org con el add-on, `whatsappAddon=t`,
+      `planEnd` vacío y `trialEnd` `2026-09-17 20:20` — con la gracia de un día, corta **hoy
+      20:20 UTC**. Cada mensaje suyo lleva plantilla de Meta pagada por nosotros, firma con el
+      nombre de un negocio que dejó de pagar, y lo invita a responderle a un bot que desde el
+      11-sep ya no atiende.
+
+      **El corte va ANTES de `reclamarEnvio`**: ese claim es un CAS de un solo uso, y cortar
+      después quemaría la clave idempotente — el cliente se quedaría sin el mensaje también el día
+      que el dueño renueve.
+
+      **Se cerró la CLASE, no la instancia.** Gate nuevo:
+      `onia-platform/app/api/puertas-sin-sesion-preguntan-si-la-cuenta-vive.test.ts`. Camina el
+      disco (no `git ls-files`: el sujeto que existe para no perder es el archivo nuevo sin
+      commitear) y exige el corte a toda puerta que autentica con secreto de servidor y despacha a
+      un tercero. Las dos exentas (`onia-platform/app/api/cron/trial-drip/route.ts` y
+      `onia-platform/app/api/cron/renewal-reminders/route.ts`) le escriben al
+      **dueño** sobre su propia cuenta — cortarlas apagaría el único aviso que lo recupera — y su
+      exención se **re-mide** cada corrida: si el archivo desaparece, o si algún día despacha
+      WhatsApp, vuelve a ser sujeto.
+
+      **Validado por mutación, y la primera mutación lo encontró falso verde:** nombrar
+      `isWriteBlocked` NO es tenerlo — con `false &&` delante, los cuatro casos de fuente seguían
+      verdes. Por eso el gate exige además que cada puerta tenga al lado una prueba que la
+      **ejecute** con una cuenta vencida. Las otras dos mutaciones (puerta nueva sembrada sin
+      commitear → 2 rojos; quitarle la prueba funcional a la puerta → 1 rojo) confirmadas por
+      `Tests N failed`, no por ausencia de `FAIL`.
+
+      ⚠️ **Un fixture pegado al vencimiento mide el reloj, no el corte.** El primer caso usó el
+      `trialEnd` real de producción (ayer 20:20) y dio rojo con el producto **sano**: esa cuenta
+      está en su día de gracia. Se fijó una fecha con margen y se agregó el caso contrario, que
+      prueba que dentro de la gracia todavía manda.
+
 - [x] 🔴 **~~El asistente seguía atendiendo a los clientes de un negocio con la cuenta VENCIDA:
       la puerta que alimenta al motor del VPS nunca preguntaba~~ — CERRADO el 2026-09-17 en
       `onia-platform`, commiteado y PENDIENTE DE MERGE + DESPLIEGUE.**
