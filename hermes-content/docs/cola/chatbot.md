@@ -318,9 +318,35 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
-- [ ] 🔴 **El guardia que impide que dos orgs reclamen el mismo inbox mira UNA columna, y el
-      que lee mira TRES: el conflicto se crea con un solo número mal tipeado.** Medido el
-      2026-09-18 leyendo la fuente, no supuesto:
+- [x] 🔴 **~~El guardia que impide que dos orgs reclamen el mismo inbox mira UNA columna, y el
+      que lee mira TRES: el conflicto se crea con un solo número mal tipeado~~ — CERRADO el
+      2026-09-18** (`onia-platform` `0c360387`, rama del carril; falta merge de `onia-cola`).
+      La pregunta se centralizó en `onia-platform/lib/chatbot/otra-org-reclama.ts` —plural,
+      porque el alta web evalúa varios candidatos de una— y los CUATRO guardias quedaron
+      cableados ahí. Devuelve **quién** lo reclama, así el 409 nombra al dueño ajeno: un error
+      que dice de quién es el inbox se resuelve solo, uno que dice "ocupado" es un ticket.
+
+      **Prueba.** El gate nuevo
+      `onia-platform/lib/chatbot/ningun-guardia-mira-una-sola-columna.test.ts` estuvo **en rojo
+      primero por el motivo correcto**: el PATCH del superadmin devolvía `200` donde debe dar
+      `409`, y `encenderCanalWeb` **adoptaba el inbox 5** que otra org tenía como WhatsApp.
+      Validado por mutación en tres direcciones, las tres rojas: recortar el helper a una
+      columna, revertir el cableado del guardia admin, y sacarle la guarda al alta web.
+      Gates verdes en las dos máquinas (`tsc` 0 · `vitest` 5664 · `eslint` 0), re-medidos
+      después de mergear `origin/master` — que se había movido y tocaba estos mismos archivos.
+
+      **Dos gates vecinos se tocaron en la misma vuelta, y por qué:** `route.test.ts` clavaba la
+      forma INTERNA de la consulta (se pasó a afirmar lo que le importa al llamador), y
+      `todo-canal-se-puede-volver-a-encender.test.ts` detectaba la guarda por su forma literal
+      — se le enseñó la vía nueva, porque si no se apagaba **en silencio** el día que un canal
+      se cablea al helper, que es justo el arreglo bueno. Se verificó que sigue vivo: la
+      mutación que le saca la guarda al alta web lo deja rojo a él también.
+
+      Lo que sigue midiendo el universo es el disco (`readdirSync`, no `git ls-files`): el
+      guardia nuevo es justamente el archivo que todavía no está commiteado.
+
+      <sub>Lo de abajo es el diagnóstico original, que quedó fiel:</sub>
+      Medido el 2026-09-18 leyendo la fuente, no supuesto:
       `onia-platform/app/api/admin/organizations/[id]/whatsapp/route.ts` pregunta
       `where: { chatwootInboxId, organizationId: { not: id } }` — sólo el slot WEB — mientras
       `onia-platform/lib/chatbot/org-del-inbox.ts` resuelve por los tres
