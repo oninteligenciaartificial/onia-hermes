@@ -42,7 +42,11 @@ etapa: el configurador vende y ordena; no se construye nada de entrega automáti
 - `sergiourcullo.vercel.app` → home con CTAs al configurador y «Agendar 1 a 1» en la barra;
   `/webs` → **307** a `onia.com.bo/servicios/webs?origen=sergio`. Publicado con
   `publicar-sitio.py` (commit `fdd4f19` del buzón).
-- `main` = `05b67ad1` (fast-forward a la rama después de mergear el commit ajeno que entró).
+- **2º deploy, 17-sep ~22:33 La Paz:** preview con tres ejes (alcance / vibe / objetivo) y pasos
+  reordenados. Run `35299301003` (89/89 archivos de test en Linux), stage
+  `runtime-next.new-20260918023044`, backup `runtime-next.bak-deploy-20260918023314`.
+  Verificado por texto: «La vibe: cómo se siente», «¿Cuánta web?», «Pago con tarjeta, seguro».
+- `main` sigue a la rama por fast-forward (último: `1bc742cb`).
 
 **Receta que FUNCIONÓ para publicar la landing (la primera vez que el workflow da verde
 desde el 1-sep):**
