@@ -12,6 +12,33 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-18 05:09-05:20 La Paz (séptima vuelta del día) — rotación de rubro: Importadora, sana 8/8 (paso 7 no aplica)
+
+Al arrancar encontré 1 org `zz-qa-` huérfana (`zz-qa-2026-09-18-0810-negocio`, de una corrida
+anterior que murió a mitad de camino — sin `patients` ni `appointments`, patrón ya conocido) y la
+borré (`organizations`, `profiles`, `organization_entitlements`, `auth.users`) antes de arrancar.
+Alta `abierta`, `BUILD_ID` sigue en `HiLa5P_MF3e3iK6KUSfli` (sin cambios desde la vuelta
+anterior; dental y comercio ya reconfirmados sanos dos veces cada uno).
+
+Rotando según lo anotado la vuelta pasada: `RECORRIDO_RUBRO=Importadora` con `--escribir`.
+**Sano: 8/8** (paso 7 — agendar cita — NO-APLICA: "Importadora" no vende agenda, coherente con
+su propia tarjeta de `/register` y su menú, que no tiene `/appointments`). Cuenta
+`zz-qa-2026-09-18-0910@onia.com.bo` creada → correo confirmado → onboarding (6 pantallas,
+`/dashboard` no rebotó) → producto `zz-qa-2026-09-18-0910-paciente` cargado en storefront
+Catálogo (`/comercio`) y visto de vuelta en la lista → pantalla de cobro (`/comercio/fiados`,
+Créditos) a la vista, frenada sin cobrar → panel revisado (no lista storefront catálogo, esperado
+— cada rubro muestra lo que le corresponde). 0 filas `zz-qa-` al cerrar (orgs y appointments
+verificados por `SELECT`).
+
+`completo: true`, `llegoHasta: 9/9` (resumen.json vigente, corrida de Importadora).
+
+RAZÓN: N/A — objetivo cumplido.
+LECCIÓN: ninguna nueva — Importadora ya llevaba varios días sin recheck y salió sana; quedan
+estética y servicios profesionales sin re-verificar hace días para la próxima rotación, o
+escalón 3 en superficie nueva si ya están frescos.
+
+---
+
 ## 2026-09-18 02:09-02:16 La Paz (sexta vuelta del día) — recorrido completo sigue sano; reconfirmado también en Comercio
 
 Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue en
