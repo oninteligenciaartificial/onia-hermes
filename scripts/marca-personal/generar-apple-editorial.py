@@ -786,6 +786,13 @@ ONIA_CUATRO = [
 # LEE antes de instalar. Los 10 repos: los del video 05, re-verificados vivos por la API
 # de GitHub el 2026-09-17 (mismos nombres que el 10-sep). Sin estrellas: envejecen.
 # Trailer del YT 05 «No escribas nada» — publicar con su salida (sab 19).
+F_QUIEN_SOY = {
+    "layout": "F",
+    "nombre": "Soy Sergio Urcullo,",
+    "sub": "y automatizo negocios bolivianos\npara que dejen de hacer todo a mano.",
+    "foto": "sergio-chroma.png",
+}
+
 REPOS = [
     {
         "layout": "D",
@@ -862,6 +869,7 @@ REPOS = [
         "cta_hl": "¿Cuál probás primero?",
         "cta_gris": "Respondo todos los comentarios.",
     },
+    F_QUIEN_SOY,
 ]
 
 DIA = [
@@ -890,6 +898,7 @@ DIA = [
         ],
         "rem": 'Los <span class="vd">verdes ✓</span> corren solos. Yo no estoy ahí.',
     },
+    F_QUIEN_SOY,
 ]
 
 # Variante FOUNDER de la pieza dia (pedida 17-sep: "similar, pero mas founder").
@@ -923,6 +932,7 @@ DIA_FOUNDER = [
         ],
         "rem": 'Los <span class="vd">verdes ✓</span> corren solos. Yo hago lo que no se delega: <b>vender y decidir</b>.',
     },
+    F_QUIEN_SOY,
 ]
 
 # Tres piezas nuevas del 17-sep (cola de carruseles de las 8:00). Datos propios y ya
@@ -1053,6 +1063,166 @@ FALLA_SOLO = [
     },
 ]
 
+# Lamina de presentacion (pedida 17-sep: "a cada post... el que tenga mi cara con mi
+# nombre"). Es el layout F ya aprobado (PORTADA_F), como ULTIMA lamina de cada pieza.
+
+
+# ── Cola de ENSEÑANZA del 17-sep. Correccion de Sergio Urcullo: "los 3 nuevos no
+# enseñan nada interesante, busca cosas interesantes, noticias". Una tesis no es una
+# pieza: cada carrusel enseña una NOTICIA, una FUNCION o una APP.
+# NOTICIA-WHATSAPP: fuente OFICIAL leida el 17-sep (developers.facebook.com/docs/
+# whatsapp/pricing, "Updated: 10 sep 2026"): cambios de precios el 1-oct-2026; solo
+# se cobran mensajes de plantilla; sin plantilla dentro de la ventana de servicio =
+# gratis; 72h gratis desde punto de acceso (anuncios). CADUCA: publicar ANTES del 1-oct.
+NOTICIA_WHATSAPP = [
+    {
+        "layout": "D",
+        "contexto": "Si vend\u00e9s por WhatsApp, esto te toca:",
+        "remate": "1 de octubre",
+        "pie": "cambian los precios de",
+        "pie_hl": "WhatsApp Business",
+        "gancho": True,
+    },
+    {
+        "layout": "R",
+        "term_titulo": "lo que sigue GRATIS",
+        "badge": "dato 1",
+        "term": ['<span class="p">&gt;</span> el cliente te escribe',
+                 '<span class="p">&gt;</span> le respond\u00e9s en la ventana',
+                 '<span class="ok">\u2713</span> costo: $0'],
+        "titular": "Responder es gratis.",
+        "linea": "Los mensajes sin plantilla, dentro de la ventana\nde servicio, no se cobran. Contest\u00e1 r\u00e1pido.",
+        "etiqueta": "fuente: meta \u00b7 le\u00eddo 17-sep",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "lo que se cobra",
+        "badge": "dato 2",
+        "term": ['<span class="p">&gt;</span> VOS inici\u00e1s la conversaci\u00f3n',
+                 '<span class="no">\u2717</span> plantilla = se paga',
+                 '<span class="g">y el precio cambia el 1-oct</span>'],
+        "titular": "Iniciar se paga.",
+        "linea": "Solo se cobran los mensajes de plantilla \u2014 los\nque mand\u00e1s vos primero: promos, recordatorios.",
+        "etiqueta": "fuente: meta \u00b7 le\u00eddo 17-sep",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "el truco que nadie usa",
+        "badge": "dato 3",
+        "term": ['<span class="p">&gt;</span> cliente entra por tu anuncio',
+                 '<span class="ok">\u2713</span> 72 horas: TODO gratis'],
+        "titular": "72 horas gratis.",
+        "linea": "Si la conversaci\u00f3n arranca desde un anuncio,\ntodos los mensajes son gratis por 72 horas.",
+        "etiqueta": "fuente: meta \u00b7 le\u00eddo 17-sep",
+    },
+    {
+        "layout": "D",
+        "contexto": "Antes del 1 de octubre:",
+        "remate": "Revis\u00e1 tus\nplantillas.",
+        "sub": "Lo que hoy mand\u00e1s como plantilla y podr\u00eda ser\nrespuesta dentro de la ventana, es plata que\nse va desde octubre.",
+        "cta_hl": "\u00bfVend\u00e9s por WhatsApp?",
+        "cta_gris": "Contame qu\u00e9 mand\u00e1s m\u00e1s: \u00bfpromos o respuestas?",
+    },
+    F_QUIEN_SOY,
+]
+
+# CUADERNO-EXCEL: funcion que impresiona y se puede copiar HOY. El prompt es la pieza.
+CUADERNO_EXCEL = [
+    {
+        "layout": "D",
+        "contexto": "Tu cuaderno de ventas, tal cual est\u00e1:",
+        "remate": "Sacale\nuna foto.",
+        "pie": "Claude lo convierte en",
+        "pie_hl": "una planilla",
+        "gancho": True,
+    },
+    {
+        "layout": "R",
+        "term_titulo": "c\u00f3mo funciona",
+        "badge": "gratis",
+        "term": ['<span class="p">&gt;</span> [foto del cuaderno]',
+                 '<span class="ok">\u2713</span> tabla: fecha \u00b7 cliente \u00b7 monto',
+                 '<span class="ok">\u2713</span> fiado total: sumado'],
+        "titular": "Lee tu letra.",
+        "linea": "Le sac\u00e1s la foto, se la peg\u00e1s al chat de Claude\ny le ped\u00eds la tabla. Eso es todo.",
+        "etiqueta": "funciona en el plan gratis",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "el prompt \u00b7 copialo",
+        "badge": "",
+        "term": ['<span class="g">Pas\u00e1 esta foto a una tabla:</span>',
+                 '<span class="g">fecha, cliente, monto. Si dice</span>',
+                 '<span class="g">\u00abdebe\u00bb, marcalo. Sum\u00e1 el fiado.</span>'],
+        "titular": "El prompt exacto.",
+        "linea": "As\u00ed, literal. La palabra \u00abmarcalo\u00bb hace que\nte separe el fiado de lo cobrado.",
+        "etiqueta": "guardalo",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "lo que NO hace",
+        "badge": "",
+        "term": ['<span class="no">\u2717</span> letra imposible: inventa',
+                 '<span class="p">&gt;</span> revis\u00e1 los montos vos'],
+        "titular": "No le creas ciego.",
+        "linea": "Si tu letra es muy mala, puede leer mal un n\u00famero.\nLa tabla se revisa antes de usarla. Siempre.",
+        "etiqueta": "la parte honesta",
+    },
+    {
+        "layout": "D",
+        "contexto": "Probalo hoy con una p\u00e1gina",
+        "remate": "2 minutos.",
+        "sub": "Una foto, el prompt de arriba, y tu primer\nregistro digital sin cambiar de cuaderno.",
+        "cta_hl": "\u00bfQu\u00e9 anot\u00e1s a mano todos los d\u00edas?",
+        "cta_gris": "Contame y te digo si una foto lo resuelve.",
+    },
+    F_QUIEN_SOY,
+]
+
+# APP-ESCRITORIO: dato verificado contra la doc oficial (10-sep, drop D4): existe la
+# app de escritorio de Claude Code para macOS, Windows y Linux.
+APP_ESCRITORIO = [
+    {
+        "layout": "D",
+        "contexto": "\u00abYo eso de la terminal no lo toco\u00bb",
+        "remate": "Ya no\nhace falta.",
+        "pie": "Claude Code tiene",
+        "pie_hl": "app de escritorio",
+        "gancho": True,
+    },
+    {
+        "layout": "R",
+        "term_titulo": "antes \u00b7 la terminal",
+        "badge": "",
+        "term": ['<span class="p">&gt;</span> npm install -g ...',
+                 '<span class="g">pantalla negra, comandos,</span>',
+                 '<span class="g">miedo de romper algo</span>'],
+        "titular": "Esto asustaba.",
+        "linea": "La terminal frena a la mitad de la gente\nantes de empezar. Con raz\u00f3n.",
+        "etiqueta": "el problema",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "ahora \u00b7 la app",
+        "badge": "",
+        "term": ['<span class="ok">\u2713</span> ventanas, botones, chat',
+                 '<span class="ok">\u2713</span> mismos poderes',
+                 '<span class="ok">\u2713</span> Mac \u00b7 Windows \u00b7 Linux'],
+        "titular": "La app hace lo mismo.",
+        "linea": "Toca tus archivos, construye y automatiza igual\nque la terminal \u2014 con ventanas normales.",
+        "etiqueta": "claude.com \u00b7 verificado en la doc",
+    },
+    {
+        "layout": "D",
+        "contexto": "El detalle que importa:",
+        "remate": "Plan pago,\nno gratis.",
+        "sub": "El plan gratis de Claude NO incluye Claude Code\n\u2014 ni en terminal ni en app. Te lo digo antes\nde que pierdas la tarde.",
+        "cta_hl": "\u00bfTerminal o ventanas, vos?",
+        "cta_gris": "Yo arranqu\u00e9 con miedo tambi\u00e9n.",
+    },
+    F_QUIEN_SOY,
+]
+
 PIEZAS = {
     "mi-stack": None,
     "fable": FABLE,
@@ -1069,6 +1239,9 @@ PIEZAS = {
     "regla-74": REGLA_74,
     "tres-preguntas": TRES_PREGUNTAS,
     "falla-solo": FALLA_SOLO,
+    "noticia-whatsapp": NOTICIA_WHATSAPP,
+    "cuaderno-excel": CUADERNO_EXCEL,
+    "app-escritorio": APP_ESCRITORIO,
 }  # mi-stack se resuelve a LAMINAS abajo
 
 # Piel por pieza: una clase extra en el lienzo que habilita el acento de esa marca.

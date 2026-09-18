@@ -1,71 +1,89 @@
-# Cola de carruseles · semana del 22 — tres piezas nuevas (17-sep)
+# Cola de carruseles · semana del 22 — piezas de ENSEÑANZA (v2, 17-sep)
 
-Tres piezas para las mañanas de las 8:00 de la semana próxima, hechas con datos
-propios ya verificados (decks 03/06). Todas con gate verde Y miradas. Cuenta:
-`@sergiourcullo`. Paquetes en `carousels/out/`:
-`9-IG-REGLA-74` · `10-IG-TRES-PREGUNTAS` · `11-IG-FALLA-SOLO`.
+> 🔴 **Corrección de Sergio Urcullo sobre la v1:** *"los 3 nuevos no enseñan nada
+> interesante, busca cosas interesantes, noticias"*. Una tesis no es una pieza: cada
+> carrusel enseña una NOTICIA, una FUNCIÓN o una APP. Los tres de tesis (regla-74,
+> tres-preguntas, falla-solo) quedan rendidos en `carousels/out/` pero FUERA de la
+> cola — sus datos se reciclan como láminas de apoyo en piezas futuras que enseñen.
+>
+> **Además, desde hoy TODA pieza cierra con la lámina F de presentación**
+> («Soy Sergio Urcullo, y automatizo negocios bolivianos…», con su foto). Ya está
+> agregada también a REPOS, DIA y DIA-FOUNDER.
 
-Calendario sugerido: **mié 24 REGLA-74 · jue 25 TRES-PREGUNTAS (día Claude Code — el
-04 ya lleva días arriba) · vie 26 FALLA-SOLO.**
+## La cola
 
----
+| Cuándo | Pieza | Qué enseña | Paquete |
+|---|---|---|---|
+| **esta semana, ANTES del 1-oct** | NOTICIA-WHATSAPP (6 lám) | los precios de WhatsApp Business cambian el 1-oct: qué es gratis, qué se cobra, el truco de las 72 h | `12-IG-NOTICIA-WHATSAPP` |
+| semana del 22 | CUADERNO-EXCEL (6 lám) | foto del cuaderno → planilla, con EL PROMPT literal para copiar | `13-IG-CUADERNO-EXCEL` |
+| semana del 22 | APP-ESCRITORIO (5 lám) | Claude Code tiene app con ventanas (Mac/Win/Linux) — y la advertencia del plan pago | `14-IG-APP-ESCRITORIO` |
 
-## 9 · REGLA-74 (4 láminas) — caption
+**Fuentes:** WhatsApp = developers.facebook.com/docs/whatsapp/pricing, leída el
+**17-sep-2026** (página "Updated: 10 sep 2026"): cambios el 1-ago y 1-oct-2026; sin
+plantilla dentro de la ventana de servicio = gratis; solo plantillas se cobran; 72 h
+gratis desde punto de acceso. ⚠️ **Releer la fuente el día de publicar** (regla Fable).
+App escritorio = doc oficial de Claude Code (verificada 10-sep para el drop D4).
+Cuaderno = función probada; el prompt es instrucción propia.
 
-Mi gasto de IA se disparó un mes. El instinto dice: cortá todo,
-o subí el tope y listo. Hice otra cosa: fui a mirar.
+## Captions
 
-El 74% del pico era UN solo trabajo mal configurado. Uno.
-Lo arreglé, y todo lo demás siguió andando como si nada.
+### 12 · NOTICIA-WHATSAPP
 
-De ahí salió la regla que uso desde entonces:
-1. Primero, ¿QUIÉN gastó? (atribuir, no adivinar)
-2. Después, arreglar ÉSE. Nada más.
-3. Subir el tope es lo último — si lo subís sin mirar,
-   el gasto solo aprende a crecer.
+Si vendés por WhatsApp, esto te toca: el 1 de octubre cambian
+los precios de WhatsApp Business.
 
-¿Tu factura de IA subió este mes? Contame y la miramos.
+Lo que un negocio tiene que saber, sin humo:
 
-## 10 · TRES-PREGUNTAS (5 láminas) — caption
+1. RESPONDER es gratis. Si el cliente te escribe y contestás
+   dentro de la ventana de servicio, esos mensajes no se cobran.
+2. INICIAR se paga. Las plantillas — promos, recordatorios, lo
+   que mandás vos primero — son lo que se cobra, y su precio
+   es lo que cambia.
+3. El truco que casi nadie usa: si la conversación arranca desde
+   un anuncio, TODO es gratis por 72 horas.
 
-La IA me dijo «listo». La pantalla estuvo rota días. En producción.
+Antes del 1 de octubre: revisá tus plantillas. Lo que hoy mandás
+como plantilla y podría ser respuesta, es plata que se va.
 
-Desde entonces, tres preguntas antes de creerle — a la IA
-o a cualquiera:
+Fuente: documentación oficial de Meta, leída esta semana.
 
-1. ¿Lo MIRÉ? Si lo ve una persona, se abre y se mira.
-   Una búsqueda descarta; nunca confirma.
-2. ¿Cuánto SALIÓ? Un número, no un «listo».
-3. ¿Lo conté HOY? Un dato viejo es una suposición con cara de dato.
+¿Vendés por WhatsApp? Contame qué mandás más: ¿promos o respuestas?
 
-Comprobar cuesta dos minutos. Creerle a ciegas me costó días.
+### 13 · CUADERNO-EXCEL
 
-El video completo está en mi canal de YouTube — link en el perfil.
-¿Cuál de las tres te salteás siempre?
+Tu cuaderno de ventas puede seguir siendo tu cuaderno.
+Pero sacale una foto.
 
-## 11 · FALLA-SOLO (5 láminas) — caption
+Se la pegás al chat de Claude con este prompt, literal:
 
-Automaticé media empresa. Estas tres me las comí:
+«Pasá esta foto a una tabla: fecha, cliente, monto.
+Si dice "debe", marcalo. Sumá el fiado.»
 
-· Un hook subió 200 líneas de código antes de que existiera
-  lo que las usaba. No rompió nada de pura casualidad.
-· Un servicio corrió 3 semanas todos los días sin publicar nada.
-  No fallaba: no hacía nada. Y nada avisa cuando algo no hace nada.
-· 4 de mis 6 conectores estaban caídos. Me enteré porque fui a mirar.
+Te devuelve la tabla con el fiado separado y sumado.
+Funciona en el plan gratis, desde el teléfono.
 
-Lo que corre solo, falla solo. Las tres reglas que me salvan:
-que AVISE cuando falla (no cuando funciona) · que MIDA el resultado
-· y techo al gasto, siempre.
+La parte honesta: si tu letra es muy mala, puede leer mal un
+número. La tabla se revisa antes de usarla. Siempre.
 
-¿Qué corre solo en tu negocio? ¿Y quién lo mira?
+Probalo hoy con una página. Dos minutos.
 
----
+¿Qué anotás a mano todos los días? Contame y te digo si una
+foto lo resuelve.
 
-## De dónde sale cada dato
+### 14 · APP-ESCRITORIO
 
-| Dato | Fuente |
-|---|---|
-| 74% · un trabajo | memoria `hermes-gasto-bajar-no-subir`, deck 06 lámina 6 |
-| pantalla rota días / listo mentiroso | deck 04 (el caso del login), guion 04 |
-| correo a lista de 0 clientes | guion 04, tramo 3 |
-| 200 líneas · 3 semanas · 4 de 6 | deck 03 lámina 9 (parte honesta), recontado 17-sep |
+«Yo eso de la terminal no lo toco.»
+
+Ya no hace falta. Claude Code — la IA que trabaja sobre tus
+archivos de verdad — tiene app de escritorio: ventanas, botones,
+chat. Mac, Windows y Linux. Hace exactamente lo mismo que la
+versión de terminal.
+
+El detalle que te digo antes de que pierdas la tarde: el plan
+gratis de Claude NO incluye Claude Code — ni en terminal ni en
+app. Hace falta un plan pago.
+
+El paso a paso completo de la instalación está en mi web:
+sergiourcullo.vercel.app/claude-code
+
+¿Vos sos de terminal o de ventanas? Yo arranqué con miedo también.
