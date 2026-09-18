@@ -318,29 +318,101 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
-- [ ] 🔴 **El formulario del chatbot deja tipear un horario al revés y el validador lo acepta.**
-      Hermano NO cubierto del arreglo de abajo (`onia-platform` `5bc7747f`), medido el
-      2026-09-18 en la misma vuelta: el asistente ya no publica un tramo que cruza la
-      medianoche, pero el **formulario** de `/settings/chatbot` tiene `desde` y `hasta` como
-      dos campos numéricos libres, y `validarConocimiento` los valida **por separado**
-      (`desde: int 0..23`, `hasta: int 1..24`) sin cruzarlos nunca.
+- [ ] 🔴 **El bot de venta de Onia promete un horario que Sergio Urcullo NO atiende** — dato
+      del panel, no código, y por eso ningún gate de repo lo puede arreglar solo.
+      `npm run horario:vivo` (rojo, medido el 2026-09-18 18:4x La Paz): de los 2 documentos que
+      sirve producción, la **fila del panel de la org interna** pisa `businessHours` y dice
+      *«Lunes a viernes de 9:00 a 19:00, sábados de 9 a 13»* con `hasta: 19`, mientras la fuente
+      —`VENTANAS_ATENCION` en
+      `hermes-content/deploy/vps-ops/bot/ventanas-de-atencion.mjs`, citada textual de Sergio
+      Urcullo el 2026-09-02 y repetida en la memoria del sistema— es **lun-vie 14:00-17:00 y 20:00-22:00,
+      sáb 9:00-15:00**. O sea: un lead que escribe un martes a las 10:00 lee que le contestan y
+      Sergio recién empieza a las 14:00, y el sábado se le promete hasta las 13:00 cuando atiende
+      hasta las 15:00. **Es preexistente y ajeno al arreglo del motor de abajo**: `horario-vivo.mjs`
+      lee el documento CRUDO servido (línea 104), no pasa por `applyKnowledge`.
+      **Qué falta, y por qué no lo cierro yo:** la cura es editar la fila de `chatbot_knowledge`
+      de la org interna (o `knowledge.onia.json` + `webhook-server.sh knowledge`), o sea escribir
+      un dato de disponibilidad en producción. Cuál de los dos horarios es el vigente HOY lo dice
+      Sergio Urcullo, no la sesión: si cambió su disponibilidad, la que hay que corregir es la
+      fuente y no la fila.
 
-      **Reproducción exacta** (30 s, sin navegador):
-      ```bash
-      cd /root/loops/onia-platform-chatbot
-      npx vitest run -t "horario" "app/(dashboard)/settings/chatbot/"   # verde: el asistente ya está tapado
-      node -e "…"  # o: validarConocimiento({schema:'onia.bot.knowledge/1',empresa:{horario:{dias:[1],desde:18,hasta:2}}}) → ok:true
-      ```
-      Del otro lado, el motor lo lee como `startHour: 18, endHour: 2` (`knowledge.mjs`, bloque
-      del horario: `businessHours.startHour = horario.desde`), o sea un rango vacío — el bot
-      del dueño contesta lo contrario de su horario, las 24 h.
+- [x] 🔴 **~~El bot del cliente decidía con el horario del cliente y DECÍA el de Onia~~ —
+      CERRADO el 2026-09-18** (motor: `applyKnowledge` en
+      `hermes-content/deploy/vps-ops/bot/knowledge.mjs`; **commiteado, NO desplegado**).
+      Es la mitad hermana del ítem de abajo, que cerró la herencia de **un extremo** del rango y
+      dejó viva la de la **frase**. En `/settings/chatbot` los días y las horas son campos
+      estructurados y la frase es un texto libre **opcional**
+      (`onia-platform/app/(dashboard)/settings/chatbot/ChatbotClient.tsx:317`:
+      `if (form.frase.trim()) horario.frase = …`), así que el camino normal —llenar los campos y
+      dejar el texto vacío— publicaba un documento sin frase y `businessHours.frase` se heredaba
+      del base, que son **los horarios de Sergio Urcullo**. Y esa frase es la que el bot
+      **pronuncia**: `{{horario_frase}}` viaja a `R_HORARIO` («Atendemos …»), a la coletilla `M7`
+      de fuera de horario y a los **cuatro** acuses de handoff (`config.mjs` 343/353/363/373/383/482).
+      Medido con el motor, no supuesto: `dias:[1..5], desde:8, hasta:20` sin frase daba
+      `startHour 8` (decide bien) y `frase: "lun-vie 14:00-17:00 y 20:00-22:00, sáb 9:00-15:00"`
+      (dice el horario de Onia) — y encima le promete sábado a un negocio cerrado el sábado.
 
-      **Por qué no entró en esta vuelta:** la cura correcta es del validador, y ese archivo se
-      declara *"port EXACTO del allowlist del motor"* — hay que tocarlo en los DOS lados
-      (`onia-platform/lib/chatbot/knowledge.ts` y `hermes-content/deploy/vps-ops/bot/knowledge.mjs`,
-      `checkHorario`) en la misma vuelta, con su gate espejo, y el del motor pide deploy del bot.
-      No entraba en el tope. **Sujeto del gate:** `hasta <= desde` rechaza el documento entero,
-      con el caso ancla del horario normal (9→18) que tiene que seguir pasando.
+      **La mitad hermana, que el comentario del propio archivo ya declaraba cubierta y no lo
+      estaba:** la guarda que pone `franjas = null` miraba `dias`/`desde`/`hasta` y **no** `frase`,
+      así que declarar sólo la frase dejaba vivas las franjas de Sergio Urcullo, que deciden POR
+      ENCIMA del rango. El comentario decía textual que heredarlas *«le cerraría el negocio al
+      cliente a las 17:00 y se lo abriría a las 20:00»* — cierto, y la condición no lo evitaba.
+
+      **La cura no tipea nada:** la frase se **deriva** de lo que el bot va a hacer
+      (`fraseDeAtencion`, la misma función que arma la de Onia), así que mover el rango cambia la
+      promesa sola. Sigue mandando la del dueño si la escribe.
+
+      **Prueba.** Dos casos escritos primero y **en rojo por el motivo correcto** — el primero
+      falló con `expected` y `actual` idénticos (`'lun-vie 14:00-17:00 y 20:00-22:00, sáb
+      9:00-15:00'`), que es literalmente el bug: la frase «del cliente» era la de Onia. Validados
+      **por mutación en las dos direcciones**, cada una cazada por su caso y sólo por el suyo:
+      revertir la derivación de la frase deja rojo el 24; revertir la guarda de `franjas` deja
+      rojo el 25. `npm run test:bot` **1178/1178**, `npm run test:horario-instrumento` 29/29,
+      simulador 3/3.
+      **El espejo de `onia-platform` (`lib/chatbot/knowledge.ts`) NO necesita cambio**: es sólo el
+      validador, no tiene `applyKnowledge` (verificado con grep, no supuesto).
+      <sub>El fixture que lo escondía: el test hermano
+      («horario: cambia el texto del guion Y la ventana real») **siempre** pasaba `frase`
+      explícita, así que nunca ejercitaba la herencia — un fixture apoyado en el defecto que el
+      test dice cubrir.</sub>
+
+- [x] 🔴 **~~El formulario del chatbot deja tipear un horario al revés y el validador lo
+      acepta~~ — CERRADO el 2026-09-18** (motor: `checkHorario` en
+      `hermes-content/deploy/vps-ops/bot/knowledge.mjs`; espejo: `onia-platform`
+      `lib/chatbot/knowledge.ts`, rama del carril, **falta merge de `onia-cola` y deploy del
+      bot**). El asistente de 6 preguntas ya estaba tapado (`5bc7747f`), pero el **formulario**
+      de `/settings/chatbot` tiene `desde` y `hasta` como dos campos numéricos libres y
+      `validarConocimiento` los validaba **por separado** (`desde: int 0..23`, `hasta: int
+      1..24`) sin cruzarlos nunca. `applyKnowledge` copia eso a `startHour: 18, endHour: 2` —
+      un rango **vacío**: el bot del dueño contesta lo contrario de su horario las 24 h.
+
+      **La mitad hermana, que no estaba en el ítem y es peor porque no se ve:** declarar UN
+      solo extremo hereda el otro del base, que son los horarios de **Onia**
+      (`DEFAULT_CONFIG.businessHours` = `startHour: 9, endHour: 22`, medido). Así `desde: 23`
+      a secas también da un rango vacío, y el documento ni siquiera trae el campo que lo
+      delataría. Por eso la regla quedó igual que `checkDemo`: **los dos extremos van juntos**
+      y `hasta > desde`.
+
+      **Riesgo de endurecer un validador que también corre AL LEER, medido antes de tocar
+      nada** (no supuesto): `select "organizationId", status, (data->'empresa'->'horario')` en
+      `chatbot_knowledge` de `supabase-db` devuelve **una sola fila publicada y SIN horario**,
+      así que ningún documento legado deja de cargar.
+
+      **Prueba.** Tests escritos primero y en rojo por el motivo correcto (`18 -> 02` pasaba:
+      `true !== false`), y los dos gates validados **por mutación** — con
+      `if (false) checkHorario(...)` el del motor cae 1/1 y el de la plataforma 3 de 28; con la
+      cura, `npm run test:bot` 1176/1176, `npx vitest run` 5708/5708, `npx tsc --noEmit` 0,
+      `eslint` 0 errores. Gates: `knowledge.test.mjs` («el horario del negocio se valida
+      CRUZANDO sus extremos, no de a uno») y `lib/chatbot/knowledge.test.ts` (4 casos), los dos
+      con el caso ancla del horario corriente 9→18 y el de tocar **sólo los días**, que sigue
+      pasando porque no declara ningún extremo.
+
+      **Y la mitad que el dueño ve:** el error del rango llega como `campo: "empresa.horario"`
+      —el objeto entero, igual que `demo`—, y el mapa de etiquetas de `ChatbotClient.tsx` sólo
+      tenía los subcampos, así que caía al fallback `return campo` y le mostraba
+      «empresa.horario:» en una pantalla que traduce todo lo demás al castellano. Agregada su
+      fila («Horario de atención»). `etiquetaDeCampo` no está exportada y no tiene gate propio:
+      queda anotado abajo, en «Después».
 
 - [x] 🔴 **~~El asistente de 6 preguntas publicaba AL REVÉS el horario de un negocio
       nocturno~~ — CERRADO el 2026-09-18** (`onia-platform` `5bc7747f`, rama del carril;
@@ -4559,6 +4631,17 @@ decisión de Sergio, no código.
       `La encargada` en la conversación nueva.
 
 ## Después
+
+- [ ] **`etiquetaDeCampo` traduce los errores del validador al castellano y no tiene gate: su
+      mapa es una lista de inclusión y falla abierto.** Anotado el 2026-09-18 al cerrar el 🔴 del
+      horario invertido. Vive dentro de `app/(dashboard)/settings/chatbot/ChatbotClient.tsx:136`,
+      no se exporta, y el fallback es `return campo` — así que cada campo nuevo que el validador
+      aprenda a rechazar le muestra al dueño la ruta cruda (`empresa.horario:`) en una pantalla
+      donde todo lo demás está en castellano. Hoy faltaba justo la fila del objeto `empresa.horario`
+      (la de `demo` sí estaba). **Sujeto del gate:** exportar la función y cruzar su universo contra
+      los `campo` que `validarConocimiento` puede emitir, derivados del SHAPE + las reglas cruzadas
+      (`checkHorario`, `checkDemo`, `checkProductos`, `checkRubros`, `checkFaqNegocio`) — no contra
+      una lista tipeada, que es el mismo modo de falla.
 
 - [x] ✅ **CERRADO el 2026-09-17 18:45 UTC — el simulador ya no miente sobre el horario, y el
       agujero era el DOBLE de grande que lo anotado.** Lo anotado era el reloj del modo
