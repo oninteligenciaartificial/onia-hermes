@@ -318,6 +318,56 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~Un módulo del bot, importado por el sitio, trababa la publicación de onia.com.bo:
+      el import resuelve en el repo y NO en el stage~~ — CERRADO el 2026-09-17 en el repo
+      (`web-factory/apps/onia-platform/scripts/promesa-inclusion.mjs` + dos gates). Llega solo al
+      mergear a `main`: la landing la publica el cron `50 */3` del VPS, no hace falta pedir deploy.**
+
+      **Cómo apareció.** Midiendo producción al arrancar la vuelta, no leyendo la cola:
+      `/var/log/onia-publicar-solo.log` decía `landing: FALLO` en las dos últimas corridas
+      (17:50 y 20:50 La Paz del 17-sep). El `--dry-run` del publicador, en cambio, contestaba
+      *"YA ESTA PUBLICADO"* — la contradicción era la pista.
+
+      **La causa.** `scripts/inclusion-chatbot.mjs` (del carril `web-venta`) importaba, con cuatro
+      saltos de directorio hacia arriba, el archivo
+      `hermes-content/deploy/vps-ops/bot/promesa-inclusion.mjs`, que es **mío**
+      (`943735cb`). Pero el publicador arma el stage con
+      `git archive origin/main web-factory/apps web-factory/packages …`: al stage viaja **sólo**
+      el subárbol `web-factory/`. El import resuelve perfecto en el repo y no existe en el stage,
+      así que el `prebuild` moría con `ERR_MODULE_NOT_FOUND` y el publicador salía por
+      `ERR: el build falló, no publico`.
+
+      **Falla EN VERDE para todos los carriles**, que es lo caro: la cadena de `onia-hermes` y el
+      CI corren donde el hermano existe, así que nadie ve nada. El único testigo es una línea
+      `landing: FALLO` en un log del VPS que no escala a nadie — la misma forma en que el bot
+      estuvo cuatro días sin publicar.
+
+      **Lo que estaba escrito mandaba al revés.** El módulo del sitio decía, textual, *"Se IMPORTA,
+      no se copia: dos detectores hermanos que divergen es la falla que este repo ya pagó"*. El
+      miedo es real, pero el remedio elegido era imposible en producción. Corregido: el detector
+      es un **espejo byte a byte** dentro de `web-factory/`, y la divergencia la impide un gate en
+      vez de una frase.
+
+      **Reproducción en un comando** (sin `node_modules`, 3 s):
+      ```
+      rm -rf /tmp/s && mkdir -p /tmp/s && git archive --format=tar origin/main \
+        web-factory/apps/onia-platform/scripts web-factory/apps/onia-platform/src | tar -x -C /tmp/s
+      cd /tmp/s/web-factory/apps/onia-platform && node -e "import('./scripts/inclusion-chatbot.mjs')"
+      ```
+
+      **Prueba de que está cerrado.** El mismo `npm run prebuild` que corre el publicador, sobre un
+      stage armado con las rutas del `git archive` y **sin** `hermes-content`: `91 passed`,
+      `1322 passed | 4 skipped`, cero fallos. Antes, ahí, moría.
+
+      **Los dos gates, validados por mutación** (las tres dieron rojo, no ausencia de rojo):
+      - `promesa-inclusion-espejo.test.ts` — exige que las dos copias sean idénticas. Vive del lado
+        del espejo porque es el único lado que viaja al stage; donde no puede medir (falta el
+        subárbol hermano) lo dice, y la condición la deriva del disco, no de un env.
+      - `imports-que-viajan-al-stage.test.ts` — **cierra la clase**: ningún archivo de
+        `web-factory/` puede importar hacia afuera del subárbol. Universo caminado del disco
+        (`readdirSync`, no `git ls-files`: el archivo recién escrito y sin commitear es justo el
+        sujeto que hay que cazar). Mutación 2 lo confirmó sembrando un `.mjs` sin commitear.
+
 - [x] 🔴 **~~Un desconocido escribía, el bot lo atendía bien, y NADIE en Onia se enteraba de que
       existió~~ — CERRADO el 2026-09-17, `scripts/vigia_sin_respuesta.mjs`, llega solo al
       mergear a `main` (el cron del VPS lo lee del clon de main, no necesita deploy).**
