@@ -1,0 +1,28 @@
+{
+ "supports": [
+  {
+   "asset": "C:/Users/PC/AppData/Local/Temp/claude/C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb/1b27764e-a5b2-4fe6-997b-aecc00d784a6/scratchpad/tiktok/caps/repo-home-crop.png",
+   "start": 0,
+   "end": 14.33,
+   "fit": "cover"
+  },
+  {
+   "asset": "C:/Users/PC/AppData/Local/Temp/claude/C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb/1b27764e-a5b2-4fe6-997b-aecc00d784a6/scratchpad/tiktok/caps/repo-listado-crop.png",
+   "start": 14.46,
+   "end": 25.61,
+   "fit": "cover"
+  },
+  {
+   "asset": "C:/Users/PC/AppData/Local/Temp/claude/C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb/1b27764e-a5b2-4fe6-997b-aecc00d784a6/scratchpad/tiktok/caps/repo-skillmd-crop.png",
+   "start": 25.81,
+   "end": 41.4,
+   "fit": "cover"
+  },
+  {
+   "asset": "C:/Users/PC/AppData/Local/Temp/claude/C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb/1b27764e-a5b2-4fe6-997b-aecc00d784a6/scratchpad/tiktok/caps/repo-home-crop.png",
+   "start": 41.6,
+   "end": 50.17,
+   "fit": "cover"
+  }
+ ]
+}
