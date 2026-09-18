@@ -12,6 +12,35 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-18 02:09-02:16 La Paz (sexta vuelta del día) — recorrido completo sigue sano; reconfirmado también en Comercio
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue en
+`HiLa5P_MF3e3iK6KUSfli` (mismo build del arreglo de MFA de la vuelta anterior — no hay deploy
+nuevo). Corrí el recorrido completo con `--escribir` en dental: **9/9, `completo: true`, 0
+agujeros** — mismo resultado que la vuelta anterior, confirma que el arreglo del MFA sostiene, no
+fue casualidad de una sola corrida. Cuenta `zz-qa-2026-09-18-0609@onia.com.bo` creada → correo
+confirmado → onboarding (Clínica dental) → paciente cargado y visto → cita 2026-09-21 09:00
+agendada y vista en `/appointments` → factura frenada sin pagar → panel revisado. 0 filas
+`zz-qa-` al cerrar.
+
+Con el resto de la vuelta reconfirmé el rubro **Comercio** (`RECORRIDO_RUBRO=Comercio`), que no
+se re-verificaba desde hace varios días: **sano, 8/8** (el paso 7 — agendar cita — no aplica:
+"Comercio" no vende agenda, coherente con su propio menú y con `tieneAgenda()` de
+`rubros-activos.ts`). Onboarding completo, producto cargado en `/comercio` (storefront Catálogo),
+visto en la lista, pantalla de Caja (cobro) frenada sin cobrar, y el dato del paso 6 sí aparece
+en el panel esta vez (a diferencia de dental, donde el panel no lista pacientes — cada rubro
+muestra lo que le corresponde). 0 filas `zz-qa-` al cerrar (verificado con `SELECT`).
+
+`completo: true`, `llegoHasta: 9/9` (dental, el resumen.json vigente).
+
+RAZÓN: N/A — objetivo cumplido, más rotación de rubro sana.
+LECCIÓN: no hace falta re-correr dos veces el mismo rubro para confirmar que un arreglo sostiene
+si ya se confirmó una vez; el rendimiento mayor está en rotar a un rubro no verificado en días.
+Próxima vuelta: seguir rotando (importadora, estética o servicios profesionales llevan varios
+días sin re-chequeo) o volver a escalón 3 en una superficie nueva.
+
+---
+
 ## 2026-09-18 00:09-00:16 La Paz (quinta vuelta del día) — 🟢 SE ARREGLÓ: recorrido COMPLETO 9/9 por primera vez desde el 17-sep, el bloqueo de MFA quedó atrás
 
 Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`. **`BUILD_ID` CAMBIÓ**: de
