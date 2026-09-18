@@ -112,6 +112,51 @@ def contenedores():
     return {"contenedores": res}
 
 
+def vista(data):
+    """Bloque pre-digerido para los templates de Glance: cero logica en el YAML."""
+    dec = []
+    for l in (data["tablero"].get("decisiones") or []):
+        m = re.search(r"t_[0-9a-f]{8}", l)
+        txt = re.sub(r"^[^A-Za-z0-9\U0001F300-\U0001FAFF]*t_[0-9a-f]+\s+\S+\s+\(?\S*\)?\s*", "", l)
+        dec.append({"id": m.group(0) if m else "", "texto": txt[:140]})
+
+    loops = data["loops_casa"].get("loops") or []
+    vivos = sum(1 for l in loops
+                if (l.get("ultimo") or "")[:10] == datetime.now(timezone.utc).strftime("%Y-%m-%d"))
+    dom_ok = all(str(c.get("resultado", "")).startswith("200")
+                 for c in data["dominios"].get("checks") or [])
+    dk_mal = [c["contenedor"] for c in data["docker"].get("contenedores") or []
+              if c.get("estado") != "running"]
+    hj = data["hermes"].get("jobs") or []
+    hj_mal = [j["name"] for j in hj if j.get("last_status") not in (None, "ok")]
+    frenado = any("NO publico" in l or "FALLO" in l
+                  for l in data["publicador"].get("ultimo_bloque") or [])
+
+    sistema = [
+        {"q": "Produccion", "estado": "ok" if dom_ok else "bad",
+         "d": "onia.com.bo y app responden 200" if dom_ok else "algo no responde"},
+        {"q": "Contenedores", "estado": "bad" if dk_mal else "ok",
+         "d": ", ".join(dk_mal) if dk_mal else "todos corriendo"},
+        {"q": "Loops de casa", "estado": "ok" if vivos else "warn",
+         "d": "%d trabajaron hoy" % vivos},
+        {"q": "Hermes", "estado": "bad" if hj_mal else "ok",
+         "d": ", ".join(hj_mal) if hj_mal else "%d trabajos en verde" % len(hj)},
+        {"q": "Publicador", "estado": "warn" if frenado else "ok",
+         "d": "frenado - espera tu firma de precios" if frenado else "publicando solo"},
+    ]
+
+    frase = ("La web y la app responden bien. " if dom_ok else "HAY ALGO CAIDO EN PRODUCCION. ")
+    frase += "Los loops hicieron %d vueltas hoy, " % vivos
+    frase += ("te esperan %d decisiones" % len(dec)) if dec else "no hay decisiones pendientes"
+    frase += " y el publicador esta frenado." if frenado else "."
+
+    return {"frase": frase, "decisiones": dec, "sistema": sistema,
+            "agenda_texto": (data["agenda"].get("texto") or "")[:5000]
+            if data["agenda"].get("de_hoy") else "",
+            "video_texto": (data["video"].get("texto") or "")[:7000]
+            if data["video"].get("de_hoy") else ""}
+
+
 def main():
     os.makedirs(WWW, exist_ok=True)
     data = {
@@ -129,6 +174,7 @@ def main():
         "dominios": dominios(),
         "docker": contenedores(),
     }
+    data["vista"] = vista(data)
     tmp = OUT + ".tmp"
     with open(tmp, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False)

@@ -1,0 +1,118 @@
+# ONIA Cerebro - superficie sobre Glance (estructura: hermes-content/docs/ONIA_CEREBRO.md)
+# Deploy: /opt/onia-cerebro/glance/glance.yml, contenedor onia-glance con network host.
+# Solo escucha en 127.0.0.1:9201 del VPS; se ve por tunel SSH.
+
+server:
+  host: 127.0.0.1
+  port: 9201
+
+# Tema claro con los tonos de la direccion "Hoy" aprobada (papel #F9FBFA, verde #027650).
+theme:
+  light: true
+  background-color: 150 17 98
+  primary-color: 160 97 24
+  positive-color: 152 100 41
+  negative-color: 4 75 42
+  contrast-multiplier: 1.1
+
+pages:
+  - name: Hoy
+    columns:
+      - size: small
+        widgets:
+          - type: custom-api
+            title: Decisiones que te esperan
+            url: http://127.0.0.1:9200/data.json
+            cache: 5m
+            template: |
+              {{ $dec := .JSON.Array "vista.decisiones" }}
+              {{ if eq (len $dec) 0 }}
+                <div class="text-secondary">Nada espera tu ok. Segui con tu dia.</div>
+              {{ end }}
+              <ul class="list list-gap-10">
+                {{ range $dec }}
+                <li>
+                  <div class="color-highlight">{{ .String "texto" }}</div>
+                  <div class="text-secondary size-h6">{{ .String "id" }} - responde por Telegram: ok {{ .String "id" }}</div>
+                </li>
+                {{ end }}
+              </ul>
+
+          - type: custom-api
+            title: Como esta el sistema
+            url: http://127.0.0.1:9200/data.json
+            cache: 5m
+            template: |
+              <ul class="list list-gap-10">
+                {{ range .JSON.Array "vista.sistema" }}
+                <li>
+                  <div{{ if eq (.String "estado") "bad" }} class="color-negative"{{ else if eq (.String "estado") "warn" }} class="color-primary"{{ end }}>{{ .String "q" }}</div>
+                  <div class="text-secondary size-h6">{{ .String "d" }}</div>
+                </li>
+                {{ end }}
+              </ul>
+
+          - type: monitor
+            title: Produccion
+            cache: 5m
+            sites:
+              - title: onia.com.bo
+                url: https://onia.com.bo
+              - title: app.onia.com.bo
+                url: https://app.onia.com.bo
+              - title: chat (Chatwoot)
+                url: https://chat.onia.com.bo
+
+      - size: full
+        widgets:
+          - type: custom-api
+            title: Resumen del dia
+            url: http://127.0.0.1:9200/data.json
+            cache: 5m
+            template: |
+              <div class="size-h4">{{ .JSON.String "vista.frase" }}</div>
+
+          - type: custom-api
+            title: Agenda de hoy
+            url: http://127.0.0.1:9200/data.json
+            cache: 15m
+            template: |
+              {{ $t := .JSON.String "vista.agenda_texto" }}
+              {{ if eq $t "" }}<div class="text-secondary">El job de las 08:00 todavia no escribio la agenda.</div>
+              {{ else }}<div style="white-space:pre-wrap">{{ $t }}</div>{{ end }}
+
+          - type: custom-api
+            title: Grabar hoy - guiones
+            url: http://127.0.0.1:9200/data.json
+            cache: 15m
+            collapse-after: 12
+            template: |
+              {{ $t := .JSON.String "vista.video_texto" }}
+              {{ if eq $t "" }}<div class="text-secondary">El job de las 08:10 todavia no escribio los guiones.</div>
+              {{ else }}<div style="white-space:pre-wrap">{{ $t }}</div>{{ end }}
+
+      - size: small
+        widgets:
+          - type: rss
+            title: Noticias IA
+            limit: 10
+            collapse-after: 5
+            cache: 3h
+            feeds:
+              - url: https://techcrunch.com/category/artificial-intelligence/feed/
+                title: TechCrunch AI
+              - url: https://www.artificialintelligence-news.com/feed/
+                title: AI News
+
+          - type: bookmarks
+            title: Accesos
+            groups:
+              - links:
+                  - title: App (producto)
+                    url: https://app.onia.com.bo
+                  - title: Chatwoot
+                    url: https://chat.onia.com.bo
+                  - title: n8n
+                    url: https://n8n-sergio-n8n.hqdqgh.easypanel.host
+                  - title: Web
+                    url: https://onia.com.bo
