@@ -1,0 +1,40 @@
+{
+ "sfx": [
+  {
+   "asset": "C:/dev/proyectos/onia-hermes/.claude/worktrees/video-editing-silence-removal-073acb/videos/claude-code-03/assets/sfx/pop.wav",
+   "at": 0.05,
+   "gain": 0.6,
+   "duck": true
+  },
+  {
+   "asset": "C:/dev/proyectos/onia-hermes/.claude/worktrees/video-editing-silence-removal-073acb/videos/claude-code-03/assets/sfx/pop.wav",
+   "at": 5.37,
+   "gain": 0.5,
+   "duck": true
+  },
+  {
+   "asset": "C:/dev/proyectos/onia-hermes/.claude/worktrees/video-editing-silence-removal-073acb/videos/claude-code-03/assets/sfx/pop.wav",
+   "at": 15.42,
+   "gain": 0.5,
+   "duck": true
+  },
+  {
+   "asset": "C:/dev/proyectos/onia-hermes/.claude/worktrees/video-editing-silence-removal-073acb/videos/claude-code-03/assets/sfx/pop.wav",
+   "at": 23.88,
+   "gain": 0.5,
+   "duck": true
+  },
+  {
+   "asset": "C:/dev/proyectos/onia-hermes/.claude/worktrees/video-editing-silence-removal-073acb/videos/claude-code-03/assets/sfx/whoosh.wav",
+   "at": 45.07,
+   "gain": 0.55,
+   "duck": true
+  },
+  {
+   "asset": "C:/dev/proyectos/onia-hermes/.claude/worktrees/video-editing-silence-removal-073acb/videos/claude-code-03/assets/sfx/pop.wav",
+   "at": 48.89,
+   "gain": 0.6,
+   "duck": true
+  }
+ ]
+}

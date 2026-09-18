@@ -1,5 +1,11 @@
 # Video 03 — serie Claude Code: "Que trabaje sin vos" (hooks · subagentes · conectores · horarios)
 
+> ⚠️ **ESTADO 18-sep: Sergio REGRABA este video.** El master en `editado/` es la edición
+> del crudo viejo — NO subir. Al llegar el crudo nuevo: mismo pipeline (transcribir →
+> corte fino 0,4s + muletillas voz-sin-palabra → zooms SOLO funcionales → portada/tarjetas
+> /endcard de assets/ reusables → sin música → subagente por pieza). Miniatura y caption
+> siguen válidas salvo timestamps de capítulos (recalcular con el mapa del corte nuevo).
+
 Crudos (E:\ONIA-YouTube\grabaciones\, 2026-09-17):
 | crudo | qué es | dura |
 |---|---|---|

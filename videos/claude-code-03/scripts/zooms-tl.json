@@ -1,29 +1,29 @@
 {
  "zooms": [
   {
-   "start": 261.31,
-   "end": 337.76,
+   "start": 243.93,
+   "end": 315.82,
    "from": 1.36,
    "to": 1.4,
    "anchor": "top-left"
   },
   {
-   "start": 337.77,
-   "end": 347.56,
+   "start": 315.83,
+   "end": 325.4,
    "from": 1.4,
    "to": 1,
    "anchor": "top-left"
   },
   {
-   "start": 363.01,
-   "end": 372.53,
+   "start": 340.29,
+   "end": 348.54,
    "from": 1,
    "to": 1.38,
    "anchor": "top-left"
   },
   {
-   "start": 372.54,
-   "end": 386.47,
+   "start": 348.55,
+   "end": 360.89,
    "from": 1.38,
    "to": 1.38,
    "anchor": "top-left"
