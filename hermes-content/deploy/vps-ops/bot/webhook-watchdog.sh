@@ -38,10 +38,34 @@ tg_error() {
   curl -sf -m 20 -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage"     -d chat_id="${TG_CHAT_ID}" -d parse_mode=HTML --data-urlencode text="$1" >/dev/null || true
 }
 
-# 1. ¿Existe el contenedor? Sin el, no hay nada que levantar.
+# 1. ¿Existe el contenedor? Sin el no hay nada que levantar — y el bot esta 100% mudo, en el
+# widget Y en WhatsApp. Hasta el 2026-09-18 esta rama solo escribia el log y salia 0 (que para
+# el cron es exito), asi que el dano MAYOR era el unico que no le llegaba a nadie, mientras el
+# webhook caido con el contenedor vivo si disparaba la alarma 🚨.
+#
+# Strike de una corrida, mismo criterio que el camino a Chatwoot: durante un reinicio de docker
+# el contenedor desaparece unos segundos y eso no es un incidente.
+INCIDENTE_CONT="$ESTADO.incidente-contenedor"
+STRIKE_CONT="$ESTADO.strike-contenedor"
 if ! docker ps --format '{{.Names}}' | grep -qx "$CONTAINER"; then
-  log "AVISO: el contenedor $CONTAINER no esta corriendo — el watchdog no puede hacer nada"
+  if [ ! -f "$STRIKE_CONT" ] && [ ! -f "$INCIDENTE_CONT" ]; then
+    touch "$STRIKE_CONT"
+    log "AVISO: no veo el contenedor $CONTAINER — espero la corrida siguiente antes de declarar el incidente"
+  else
+    log "ERROR: el contenedor $CONTAINER no esta corriendo — el bot esta mudo y no hay que levantar"
+    if [ ! -f "$INCIDENTE_CONT" ]; then
+      touch "$INCIDENTE_CONT"
+      tg_error "🚨 <b>Bot Onia SIN CONTENEDOR</b> — $CONTAINER no esta corriendo: el chatbot esta mudo en el widget Y en WhatsApp, y el watchdog no tiene nada que levantar. Hay que arrancarlo a mano. Log: /var/log/onia-bot-watchdog.log"
+    fi
+  fi
   exit 0
+fi
+# El strike no se acumula entre parpadeos lejanos: un exito lo borra.
+rm -f "$STRIKE_CONT"
+if [ -f "$INCIDENTE_CONT" ]; then
+  rm -f "$INCIDENTE_CONT"
+  log "OK: el contenedor $CONTAINER volvio a estar corriendo"
+  tg_error "✅ <b>Bot Onia</b> — el contenedor $CONTAINER volvio: el chatbot puede recibir mensajes de nuevo."
 fi
 
 
@@ -98,8 +122,16 @@ fi
 
 # 3. No contesta: levantarlo.
 log "el webhook NO responde en :$PORT — reiniciando"
+# Se llega aca con el webhook YA caido, asi que rendirse en silencio deja al bot mudo sin que
+# nadie se entere. El 2026-09-18 el deploy de las 03:47 UTC dejo en 644 a reminder-run.sh,
+# postdemo-run.sh y a este mismo watchdog: el mismo accidente sobre webhook-server.sh cae justo
+# en esta rama. Por eso el aviso nombra la causa probable, que es la que se arregla en 5 s.
 if [ ! -x "$BOT_DIR/webhook-server.sh" ]; then
-  log "ERROR: falta $BOT_DIR/webhook-server.sh"
+  log "ERROR: no puedo ejecutar $BOT_DIR/webhook-server.sh (falta, o viajo sin el bit de ejecucion)"
+  if [ ! -f "$INCIDENTE" ]; then
+    touch "$INCIDENTE"
+    tg_error "🚨 <b>Bot Onia CAIDO</b> — el webhook no responde y el watchdog NO puede levantarlo: $BOT_DIR/webhook-server.sh no se puede ejecutar (suele ser un deploy que lo dejo en 644). El chatbot esta mudo hasta que alguien mire."
+  fi
   exit 1
 fi
 

@@ -318,6 +318,46 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El watchdog del bot callaba justo en las dos situaciones donde el bot está MÁS
+      muerto~~ — CERRADO el 2026-09-18 en el repo** (`webhook-watchdog.sh` + 7 casos nuevos en
+      `webhook-watchdog.test.mjs`, validados por 3 mutaciones). Commiteado, **NO desplegado** —
+      el watchdog vivo sigue mudo en esas dos ramas hasta que se publique el bot.
+
+      **Cómo apareció.** Midiendo producción por un eje que ningún gate mira: el log
+      `/var/log/onia-bot-watchdog.log` del VPS tenía **76 líneas seguidas de `Permission
+      denied`** — 2,5 h con el watchdog muerto, y nadie se enteró. Lo curó el deploy de las
+      06:18 UTC (`ctime` de los tres `.sh`), no una persona. Eso destapó lo de abajo, que es
+      peor que la causa.
+
+      **Qué era.** Las dos ramas en las que el watchdog se rinde escribían el log y **no
+      avisaban a nadie**:
+
+      - **El contenedor `onia-center` no está corriendo** → `log "AVISO: …el watchdog no puede
+        hacer nada"` y `exit 0`, que para el cron es éxito. El bot está mudo en el widget **y**
+        en WhatsApp, y es el daño mayor: con el contenedor vivo y el webhook caído **sí** sonaba
+        la alarma 🚨. El peor caso era el único callado.
+      - **`webhook-server.sh` sin bit de ejecución** → `log "ERROR: falta …"` y `exit 1`. Se
+        llega ahí sólo con el `/health` ya caído, así que es el bot mudo sin nadie que lo
+        levante — y es exactamente el accidente que el deploy de las 03:47 UTC provocó en sus
+        tres hermanos ese mismo día.
+
+      **La cura.** Las dos ramas avisan por Telegram con el molde que el archivo ya usaba para
+      Chatwoot: **strike de una corrida** (un reinicio de docker hace desaparecer el contenedor
+      unos segundos y eso no es un incidente), marcador propio `incidente-contenedor` —para que
+      la recuperación de un incidente no cierre la del vecino— y su ✅ de desenlace escrito
+      también en el log. La rama del contenedor pasa de `AVISO:` a `ERROR:`, que es lo que
+      siempre fue.
+
+      **El gate cierra la clase, no la instancia.** `CLASE: todo ERROR del log llega a Telegram`
+      deriva sus sujetos del disco (cada `log "ERROR:` del script) y es la **dirección
+      simétrica** del gate que ya existía (`todo ✅ de Telegram escribe el log`). La distinción
+      `AVISO:`/`ERROR:` queda con significado real y sin una sola exención a mano: `ERROR` = el
+      bot está roto y Sergio Urcullo se entera; `AVISO` = observación que no escala (el parpadeo
+      de una sonda, el firewall re-insertado). La rama que se escriba mañana nace adentro.
+
+      **Prueba:** `npm run test:bot` → 1134/1134. Las 3 mutaciones (sacar el `tg_error` de cada
+      rama; hacer que los dos incidentes compartan marcador) ponen rojos 3, 3 y 2 casos.
+
 - [x] 🔴 **~~El barrido de rescate perdía un prospecto y el log decía lo mismo que un día
       tranquilo: `scanned: 0`~~ — CERRADO el 2026-09-18 en el repo (`persistence.mjs` +
       `followup-run.mjs` + gate `followup-cuenta-los-colgados.test.mjs`, 7 casos). Commiteado,
