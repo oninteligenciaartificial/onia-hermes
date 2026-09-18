@@ -22,6 +22,8 @@ export function Closing() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/fotos/duena-telefono.webp"
+          srcSet="/fotos/duena-telefono-480.webp 480w, /fotos/duena-telefono-960.webp 960w, /fotos/duena-telefono.webp 1344w"
+          sizes="100vw"
           alt=""
           width={1344}
           height={768}

@@ -61,6 +61,8 @@ export function NocheFoto() {
               {/* eslint-disable-next-line @next/next/no-img-element -- standalone sin sharp: next/image no optimiza en el VPS */}
               <img
                 src="/fotos/dueno-duerme.webp"
+                srcSet="/fotos/dueno-duerme-480.webp 480w, /fotos/dueno-duerme-960.webp 960w, /fotos/dueno-duerme.webp 1600w"
+                sizes="(min-width: 1024px) 501px, (min-width: 560px) 85vw, 75vw"
                 alt="El dueño de un negocio durmiendo de noche, con la luz de una lámpara encendida."
                 width={1600}
                 height={900}
