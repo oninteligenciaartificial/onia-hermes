@@ -2,8 +2,15 @@
 
 11 láminas · ≈ 8:00 · se graba acapela mirando el deck (tecla **N** apaga las chuletas).
 
-**Los números de este video NO cambian.** Los doce errores salen del registro de una
-sesión concreta, no de un conteo en vivo como los del 03. No hace falta recontarlos.
+⚠️ **RECONTADO EL 18-SEP, Y EL NÚMERO ESTABA MAL.** Acá decía *"los números de este video
+no cambian, no hace falta recontarlos"* — y por no recontarlos, el dato central del video
+era falso. Los errores de esa sesión (`handoff/onia-dev-node-setup.md` §5) son **18**, no
+12: 4 en §5.1 + 9 en §5.2 + 5 en §5.3. Contados en las **seis** versiones del archivo:
+siempre fueron 18. El «12» no sale de ninguna parte.
+
+**Y el reparto también estaba mal.** Los 18 los encontró él revisando su propio trabajo;
+en §5 no hay ni uno atribuido a Sergio Urcullo. El que encontró Sergio Urcullo es **el de
+la pantalla de entrar** — otra sesión, otro día, y el único que llegó a producción.
 
 ---
 
@@ -20,6 +27,11 @@ sesión concreta, no de un conteo en vivo como los del 03. No hace falta reconta
 > La tercera: pregunté si estaba bien, y me dijeron que sí.
 > Nunca la abrí.
 > Cuando alguien la abrió, los íconos se veían como palabras sueltas. En la pantalla de entrar. En producción. Días.
+>
+> *[DEMO EN VIVO — `demo-falso-verde/demo.sh`. Corrés las tres pruebas en pantalla:
+> el grep encuentra los cuatro textos → verde. La página responde 200 → verde.
+> Y al abrirla dice «credit_card_off» donde va un candado.]*
+> Mirá. Los dos primeros me dijeron que estaba bien. Ninguno de los dos la había mirado.
 
 **3 · Por qué pasa (1:25–2:15)**
 > ¿Y por qué pasa esto? Porque terminar y lograr no son lo mismo.
@@ -65,11 +77,16 @@ sesión concreta, no de un conteo en vivo como los del 03. No hace falta reconta
 
 **9 · Mi caso (6:05–6:40)**
 > Te doy el número, y es incómodo.
-> En una sola sesión de trabajo mía quedaron anotados doce errores.
-> Once los encontró él mismo, revisando su propio trabajo.
-> Uno lo encontré yo.
-> Y ese uno es todo el punto: si no revisás, no te enterás.
+> En una sola sesión de trabajo mía quedaron anotados dieciocho errores.
+> Y acá está lo que no me esperaba: los dieciocho los encontró él. Revisando su propio trabajo, solo.
+> Se corrige muchísimo más de lo que la gente cree.
+> Pero el de la pantalla de entrar no está en esa lista. Ese se le escapó, y lo encontré yo — en producción, días después.
+> Y ese es todo el punto: el que se le escapa es justo el que llega al cliente.
 > Casi ninguno era un error de código. Eran comprobaciones que no comprobaban nada.
+>
+> Y de los dieciocho hay uno que los resume a todos. Lo escribió él mismo al final del registro:
+> **si el instrumento puede dar verde con la cosa rota, el instrumento está roto.**
+> El favicon en vez del contenido. La fecha del archivo en vez del archivo. El «terminó sin error» en vez de lo que entregó.
 
 **10 · La parte honesta (6:40–7:35)** — *no la suavices*
 > Ahora te voy a decir algo que me deja mal parado.
