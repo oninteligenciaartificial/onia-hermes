@@ -12,6 +12,37 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-18 (segunda vuelta del día) — no repito el recorrido completo (BUILD_ID igual, bloqueo no es mío); auditada `/contacto`, sana
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue `OFd4xCDzoTbQdThUbfzDv`
+(sin cambios desde la vuelta anterior). `t_62759602` ("rehacer los 3 pedidos de deploy") sigue
+`ready` sin asignar — no es mi zona (`onia-cola`). Confirmé también que el bloqueo del paso 5 no
+es sólo de las cuentas `zz-qa-`: probé con la sesión real de `sergio@onia.com.bo` pidiendo
+`/team/roles` (`mirar_bandeja_dueno.mjs`) y también rebota a `/profile?mfa=obligatorio` — el
+gate de MFA sin salida atrapa cualquier sesión, no sólo las de prueba, así que **todo el panel
+`(dashboard)` está inaccesible para auditar** hasta que se despliegue.
+
+Con eso, no re-corrí el recorrido completo por octava vez seguida sin novedad — el método
+vigente (anotado la vuelta pasada) es esperar el `BUILD_ID`. Usé la vuelta para escalón 3 en una
+superficie del sitio público que nunca se había mirado: **`/contacto`** (la landing, distinta de
+`/contact` en `app.onia.com.bo`, que sí estaba auditada). Es una página de sólo enlaces a
+WhatsApp (+591 75414930), sin formulario nativo: "Agendar 20 minutos", "Agendar la demo",
+"Escribir por WhatsApp", más nav y footer. Medido en tres viewports (375/768/1440, todos con
+`reducedMotion:'reduce'`): 0px de desborde horizontal, 0 elementos con `scrollWidth > clientWidth`,
+0 apariciones de "muy pronto"/"en construcción"/"próximamente"/"beta". Sana.
+
+`completo: false` (no corrí el recorrido esta vuelta), `llegoHasta: 4/9` (sin cambios respecto de
+la última corrida real).
+
+RAZÓN: el corte de siempre (paso 5, MFA) sigue esperando que `onia-cola` rehaga el pedido de
+deploy — no depende de esta vuelta.
+LECCIÓN: cuando el bloqueo es ajeno y el `BUILD_ID` no se mueve, repetir el recorrido completo no
+suma nada; la vuelta rinde más auditando una superficie nueva del sitio público. Ya quedan pocas
+sin tocar: de las páginas de `(sitio)` sólo faltarían `/patrones` y el detalle interno de
+`/servicios` (ya se miró `/servicios/webs`, no la raíz `/servicios`).
+
+---
+
 ## 2026-09-18 00:11-00:16 La Paz — recorrido completo re-corrido: mismo bloqueo; `t_a91f564e` ya no existe como tal (archivada, reemplazada); `/agentes` y `/comparativa` en móvil, sanos
 
 Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue `OFd4xCDzoTbQdThUbfzDv`
