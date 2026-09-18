@@ -24,9 +24,18 @@ import { normalize } from "./guardrails.mjs";
 // "la demanda esta baja este mes" — por eso "baja" solo cuenta como mensaje entero o en
 // "dar de baja". Y `\bno me interesa\b` seguido de un sustantivo ("no me interesa el precio")
 // habla de ESE tema, no pide la baja.
+//
+// "no gracias" esta aca porque el guion lo PROMETE: R_SEGUIMIENTO (el mensaje del barrido de
+// insistencia) cierra con «si preferis que no te escribamos, decinos "no gracias" y listo», y
+// hasta el 2026-09-18 el motor no lo reconocia — el prospecto pedia la baja con las palabras
+// que le dictamos y le seguiamos escribiendo. Va como MENSAJE ENTERO, igual que "stop": suelto
+// es una baja, pero "no gracias a esa hora, mejor el martes" es una respuesta al guion y
+// apagar ahi cuesta el lead. Lo ata palabra-que-el-bot-promete.test.mjs, que cruza el guion
+// contra el motor y no deja agregar una instruccion nueva sin su deteccion.
 const RE_OPT_OUT = new RegExp(
   [
     "^\\s*(?:stop|baja|unsubscribe|bajarme)\\s*[!.]*$",
+    "^\\s*no,?\\s*gracias\\s*[!.]*$",
     "\\bstop\\b",
     "\\b(?:desuscrib\\w+|dar de baja|darme de baja|dame de baja|borrame)\\b",
     "\\bno me (?:escribas|escriban|escriba|contactes|contacten|molestes|molesten|molestar|mandes|manden|mandeis|envies|envien|llames|llamen)\\b",
