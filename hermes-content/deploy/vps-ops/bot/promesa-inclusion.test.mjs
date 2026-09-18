@@ -12,6 +12,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { test } from "node:test";
 
+import { incluidoPorPlanDelCatalogo, labelsDelProducto } from "./catalogo-inclusion.mjs";
 import { fuenteDePlataforma, repoPlataforma } from "./fuente-plataforma.mjs";
 import {
   mencionesDePlanes,
@@ -130,37 +131,9 @@ test("un plan incluido del que el bot ni habla es AVISO, no rojo — no miente, 
 // 3. La correa: contra el catálogo PUBLICADO y el knowledge REAL
 // ---------------------------------------------------------------------------
 
-/** `PLAN_LIMITS` del catálogo publicado → `{ [planId]: whatsappIncluded }`. Derivado, no a mano. */
-function incluidoPorPlanDelCatalogo(fuente) {
-  const desde = fuente.indexOf("export const PLAN_LIMITS");
-  assert.notEqual(desde, -1, "no existe «export const PLAN_LIMITS» — lo renombraron o lo borraron");
-  const bloque = fuente.slice(desde, indiceDelSiguienteExport(fuente, desde));
-
-  const porPlan = {};
-  for (const m of bloque.matchAll(/^ {2}(\w+): \{([\s\S]*?)^ {2}\},/gm)) {
-    const incluido = /whatsappIncluded:\s*(true|false)/.exec(m[2]);
-    assert.ok(incluido, `el plan "${m[1]}" no declara whatsappIncluded: el gate no puede juzgarlo`);
-    porPlan[m[1]] = incluido[1] === "true";
-  }
-  assert.ok(Object.keys(porPlan).length >= 4, `lei ${Object.keys(porPlan).length} planes, es muy poco`);
-  return porPlan;
-}
-
-/** `PLAN_LABELS` de `pricing.ts` → `{ [planId]: "nombre que lee el cliente" }`. */
-function labelsDelProducto(fuente) {
-  const desde = fuente.indexOf("export const PLAN_LABELS");
-  assert.notEqual(desde, -1, "no existe «export const PLAN_LABELS»");
-  const bloque = fuente.slice(desde, indiceDelSiguienteExport(fuente, desde));
-  const labels = {};
-  for (const m of bloque.matchAll(/^ {2}(\w+): "([^"]+)",/gm)) labels[m[1]] = m[2];
-  assert.ok(Object.keys(labels).length >= 4, `lei ${Object.keys(labels).length} labels, es muy poco`);
-  return labels;
-}
-
-function indiceDelSiguienteExport(fuente, desde) {
-  const siguiente = fuente.indexOf("\nexport ", desde + 1);
-  return siguiente === -1 ? undefined : siguiente;
-}
+// Los dos parsers del catálogo ya NO viven acá: los importa este test y también `precios-vivos.mjs`,
+// que es el que puede cruzar el documento VIVO (fila del panel mergeada sobre el archivo). Tenerlos
+// adentro del test era lo que ataba este cruce al archivo del repo y sólo al archivo del repo.
 
 /** Todo string del knowledge, venga del campo que venga: el universo sale del artefacto. */
 function textosDelKnowledge(valor, salida = []) {
