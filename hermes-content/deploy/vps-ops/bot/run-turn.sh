@@ -48,6 +48,18 @@ if [ "$CURRENT" != "$STAMP" ]; then
   docker exec "$CONTAINER" sh -c "printf '%s' '$STAMP' > $DEST/.stamp" >/dev/null 2>&1
 fi
 
+# LOS HORARIOS DE DEMO SE DERIVAN DE webhook.env, no del entorno del que llama. El cron invoca
+# estos wrappers PELADOS, asi que `${ONIA_BOT_SLOTS:-}` viajaba VACIO y el barrido concluia
+# "slots_sin_definir" con los cinco horarios vivos en el proceso del webhook. Es el mismo agujero
+# que ONIA_BOT_DRY_RUN tuvo hasta el 2026-09-17, en el mismo archivo y tres lineas mas abajo: la
+# cura no viajo al hermano. Ojo con el lector: el valor LLEVA ESPACIOS ("sabado 19 de septiembre,
+# 14:00@..."), asi que el `tr -d "\"' \r"` que usa ONIA_BOT_DRY_RUN lo DESTROZARIA — aca solo se
+# saca el CR y las comillas que envuelven.
+if [ -z "${ONIA_BOT_SLOTS:-}" ] && [ -f "$BOT_DIR/webhook.env" ]; then
+  ONIA_BOT_SLOTS="$(sed -n 's/^ONIA_BOT_SLOTS=//p' "$BOT_DIR/webhook.env" | head -n1 |
+    sed -e 's/\r$//' -e 's/^"\(.*\)"$/\1/' -e "s/^'\(.*\)'$/\1/")"
+fi
+
 # La master key de LiteLLM se lee de su propio contenedor (nunca se hardcodea ni va por $env).
 MK="$(docker exec onia_selfhosted-litellm-1 printenv LITELLM_MASTER_KEY 2>/dev/null || true)"
 
