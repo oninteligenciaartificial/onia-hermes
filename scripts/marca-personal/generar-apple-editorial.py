@@ -955,16 +955,25 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
   letter-spacing:.08em;text-transform:uppercase;color:#A1A1A6;margin-top:24px}}
 /* Layout R (repo) — el term de los decks yt-* traido al carrusel: el mock MUESTRA el
    mecanismo y el titular es el NOMBRE del repo (correccion 17-sep, tercera igual). */
-.term-r{{width:850px;border-radius:30px;background:#1D1D1F;overflow:hidden;text-align:left;
-  box-shadow:0 30px 60px rgba(0,0,0,.18)}}
+.term-r{{width:850px;border-radius:30px;text-align:left;overflow:hidden;position:relative;
+  background:linear-gradient(160deg,#26221F 0%,#1B1815 55%,#141210 100%);
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:0 34px 64px rgba(0,0,0,.30),0 0 70px rgba(217,119,87,.28)}}
 .term-r-barra{{height:64px;display:flex;align-items:center;gap:13px;padding:0 28px;
   border-bottom:1px solid rgba(255,255,255,.12)}}
-.term-r-barra i{{width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,.24);flex:none}}
+.term-r-barra i{{width:17px;height:17px;border-radius:50%;flex:none}}
+.term-r-barra i:nth-child(1){{background:#FF5F57}}
+.term-r-barra i:nth-child(2){{background:#FEBC2E}}
+.term-r-barra i:nth-child(3){{background:#28C840}}
+.term-r-barra .badge{{margin-left:auto;font-family:'OniaMono',monospace;font-size:23px;
+  font-weight:700;color:#0A2A18;background:#3ECF6E;border-radius:999px;padding:6px 18px}}
 .term-r-barra em{{font-style:normal;font-family:'OniaMono',monospace;font-size:26px;
   color:rgba(255,255,255,.52);margin-left:8px}}
-.term-r pre{{font-family:'OniaMono',monospace;font-size:42px;font-weight:600;line-height:1.55;
-  padding:34px 40px 40px;color:#F0EDE6;margin:0;white-space:pre-line}}
-.term-r .p{{color:#D97757}}
+.term-r pre{{font-family:'OniaMono',monospace;font-size:38px;font-weight:500;line-height:1.7;
+  padding:36px 42px 42px;color:#F2EFE9;margin:0;white-space:pre-line;letter-spacing:.01em}}
+.term-r .cur{{display:inline-block;width:21px;height:44px;background:#FF8A5C;border-radius:4px;
+  vertical-align:-8px;margin-left:10px;box-shadow:0 0 16px rgba(255,138,92,.8)}}
+.term-r .p{{color:#FF8A5C;font-weight:700}}
 .term-r .ok{{color:#3ECF6E}}
 .term-r .g{{color:rgba(255,255,255,.45);font-weight:400}}
 .repo-r{{display:flex;align-items:center;gap:22px;margin-top:56px;
@@ -1261,8 +1270,8 @@ def markup(lamina):
         lineas = "\n".join(lamina["term"])
         return (
             f'<div class="term-r"><div class="term-r-barra"><i></i><i></i><i></i>'
-            f'<em>{lamina["term_titulo"]}</em></div>'
-            f'<pre>{lineas}</pre></div>'
+            f'<em>{lamina["term_titulo"]}</em><span class="badge">gratis</span></div>'
+            f'<pre>{lineas}<span class="cur"></span></pre></div>'
             f'<div class="repo-r{" chico" if lamina.get("chico") else ""}"><svg class="gh-mark" viewBox="0 0 256 256">'
             f'{_marca("github", "#1D1D1F")}</svg><span>'
             f'<b class="own">{lamina["own"]}/</b>{lamina["repo"]}</span></div>'
