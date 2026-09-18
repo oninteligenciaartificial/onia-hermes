@@ -140,3 +140,166 @@ test("aviso: apps con prebuild que la cadena no corre", () => {
   const afuera = appsConPrebuild().filter((d) => !corridas.has(d));
   if (afuera.length > 0) console.log(`AVISO · apps con prebuild que la cadena no corre: ${afuera.join(", ")}`);
 });
+
+/* ──────────────────────────────────────────────────────────────────────────
+ * LA SEGUNDA FAMILIA DE PUBLICADORES — los que corren `node --test`
+ *
+ * ⚠️ Lo de arriba nació de la landing y quedó con el universo atado a
+ * `web-factory/apps/*` + `prebuild`. Pero el `ok` de Sergio Urcullo dispara
+ * CUATRO publicadores, y dos de ellos —el bot y el emisor SIAT— corren su
+ * gate con `node --test` sobre SU propio subárbol, no con `npm run build`:
+ *
+ *   hermes-content/deploy/vps-ops/bot/deploy-bot.sh:45  ( cd $REPO_DIR && node --test )
+ *   hermes-content/deploy/onia-siat/publicar.sh:189     ( cd $SRC && node --test test/*.test.mjs )
+ *
+ * Medido el 2026-09-18 por `onia-cola`: los dos COINCIDEN hoy con su paso de
+ * la cadena (`test:bot`, `test:siat-todo`) — y nada lo sostiene. Coincidir por
+ * accidente es la forma en que esta clase se reabre: el gate de arriba no los
+ * puede ver (no son apps de web-factory y no tienen `prebuild`), así que el
+ * día que alguien toque un lado, la cadena mergea en verde lo que después
+ * impide publicar. El costo ya está medido y no es teórico: el bot estuvo
+ * CUATRO DÍAS sin publicar con 17 archivos de arreglos listos en `main` por un
+ * test con fechas clavadas, y la única señal fue `bot: FALLO` repetido en
+ * /var/log/onia-publicar-solo.log, que no escala a nadie.
+ *
+ * El universo sale del DISCO (se camina `hermes-content/deploy`), no de una
+ * lista escrita acá: un publicador nuevo, o uno que recién gana su gate, es
+ * justo el sujeto que se quiere cazar. Y falla CERRADO: un `cd` que este
+ * archivo no sepa resolver sale rojo nombrándose, nunca verde.
+ * ────────────────────────────────────────────────────────────────────────── */
+
+const DEPLOY = "hermes-content/deploy";
+
+/** El ancla de esta familia: el gate cuyo rojo ya costó cuatro días de bot sin publicar. */
+const ANCLA_NODE_TEST = `${DEPLOY}/vps-ops/bot/deploy-bot.sh`;
+
+function shsDeDeploy(raiz, dir = DEPLOY, acc = []) {
+  const base = join(raiz, dir);
+  if (!existsSync(base)) return acc;
+  for (const e of readdirSync(base, { withFileTypes: true })) {
+    if (e.name === "node_modules" || /^__.+__$/.test(e.name)) continue;
+    const rel = `${dir}/${e.name}`;
+    if (e.isDirectory()) shsDeDeploy(raiz, rel, acc);
+    else if (e.name.endsWith(".sh")) acc.push(rel);
+  }
+  return acc;
+}
+
+/**
+ * Resuelve a qué carpeta del repo apunta el `cd "$VAR"` de un gate, leyendo la
+ * asignación de esa variable en el MISMO script. Devuelve null si no la sabe
+ * resolver — y null es rojo, no permiso.
+ */
+export function resolverCwd(variable, fuente, archivoSh) {
+  if (!variable) return "."; // sin `cd`: corre desde la raíz del repo
+  const asignacion = new RegExp(`^\\s*${variable}=(.+)$`, "m").exec(fuente);
+  if (!asignacion) return null;
+  const valor = asignacion[1].trim();
+  // `VAR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"` → la carpeta del script
+  if (/dirname\s+"?\$\{?BASH_SOURCE/.test(valor)) return dirname(archivoSh);
+  // `VAR="$REPO/$SUB"` → se resuelve con el literal de SUB, que es relativo al repo
+  const compuesto = /^"\$\{?[A-Z_]+\}?\/\$\{?([A-Z_]+)\}?"$/.exec(valor);
+  if (compuesto) {
+    const sub = new RegExp(`^\\s*${compuesto[1]}=(.+)$`, "m").exec(fuente);
+    if (sub) return sub[1].trim().replace(/^["']|["']$/g, "");
+  }
+  return null;
+}
+
+/** Canoniza `{cwd, args}` a UN alcance comparable: la carpeta, o el glob resuelto. */
+export function alcanceDe(cwd, args) {
+  const raiz = cwd === "." || cwd === "" ? "" : cwd.replace(/\/+$/, "");
+  if (args.length === 0) return raiz || ".";
+  return args
+    .map((a) => a.replace(/^["']|["']$/g, ""))
+    .map((a) => (raiz ? `${raiz}/${a}` : a))
+    .sort()
+    .join(" ");
+}
+
+/** Los gates `node --test` de los scripts de deploy, derivados del disco. */
+export function gatesNodeTestDeDeploy(raiz = RAIZ) {
+  const gates = [];
+  for (const sh of shsDeDeploy(raiz)) {
+    const fuente = readFileSync(join(raiz, sh), "utf8");
+    for (const linea of fuente.split("\n")) {
+      // Un `echo` o un comentario NOMBRAN el gate sin correrlo: no son sujetos.
+      if (/^\s*(#|echo\b)/.test(linea)) continue;
+      const m = /(?:cd\s+"?\$\{?([A-Za-z_][A-Za-z0-9_]*)\}?"?\s*&&\s*)?\bnode\s+--test\b([^>|)]*)/.exec(linea);
+      if (!m) continue;
+      const cwd = resolverCwd(m[1], fuente, sh);
+      const args = (m[2] ?? "").trim().split(/\s+/).filter(Boolean);
+      gates.push({ archivo: sh, variable: m[1] ?? null, cwd, args });
+    }
+  }
+  return gates;
+}
+
+/** Los pasos de la cadena que corren `node --test`, con su alcance canónico. */
+export function pasosNodeTest(scripts) {
+  const pasos = [];
+  for (const [paso, valor] of Object.entries(scripts ?? {})) {
+    if (paso === "test") continue;
+    const v = String(valor);
+    const m = /(?:cd\s+(\S+)\s*&&\s*)?\bnode\s+--test\b(.*)$/.exec(v);
+    if (!m) continue;
+    const args = (m[2] ?? "").trim().split(/\s+/).filter(Boolean);
+    pasos.push({ paso, alcance: alcanceDe(m[1] ?? ".", args) });
+  }
+  return pasos;
+}
+
+test("el ancla: la derivación ve el gate del bot, cuyo rojo ya costó cuatro días", () => {
+  const archivos = gatesNodeTestDeDeploy().map((g) => g.archivo);
+  assert.ok(
+    archivos.includes(ANCLA_NODE_TEST),
+    `${ANCLA_NODE_TEST} corre «node --test» como gate y la derivación no lo ve: el universo quedó vacío y este gate se apagó en silencio`,
+  );
+});
+
+test("todo gate de un publicador tiene su carpeta resuelta: un `cd` desconocido es rojo, no permiso", () => {
+  const ciegos = gatesNodeTestDeDeploy()
+    .filter((g) => g.cwd === null)
+    .map((g) => `${g.archivo} corre «node --test» desde $${g.variable}, que este gate no sabe resolver`);
+
+  assert.deepEqual(
+    ciegos,
+    [],
+    "no puedo saber qué tests corre un publicador, así que no puedo saber si la cadena los corre:\n" +
+      ciegos.map((c) => `  · ${c}`).join("\n"),
+  );
+});
+
+test("la cadena corre el MISMO alcance que cada gate de publicador, no uno más flojo", () => {
+  const scripts = JSON.parse(readFileSync(join(RAIZ, "package.json"), "utf8")).scripts;
+  const deLaCadena = pasosNodeTest(scripts);
+  const enCadena = new Set(
+    deLaCadena.filter((p) => String(scripts.test).includes(`npm run ${p.paso}`)).map((p) => p.alcance),
+  );
+
+  const descubiertos = gatesNodeTestDeDeploy()
+    .filter((g) => g.cwd !== null)
+    .map((g) => ({ ...g, alcance: alcanceDe(g.cwd, g.args) }))
+    .filter((g) => !enCadena.has(g.alcance))
+    .map((g) => `${g.archivo} corre «${g.alcance}» y ningún paso de la cadena lo corre`);
+
+  assert.deepEqual(
+    descubiertos,
+    [],
+    "un publicador corre un gate que la cadena NO corre: se va a mergear en verde lo que después impide publicar, " +
+      "y la única señal va a ser un FALLO en /var/log/onia-publicar-solo.log que no escala a nadie\n" +
+      descubiertos.map((d) => `  · ${d}`).join("\n"),
+  );
+});
+
+test("alcanceDe distingue la carpeta entera de una mitad, que es como se reabre esta clase", () => {
+  const carpeta = `${DEPLOY}/vps-ops/bot`;
+  assert.equal(alcanceDe(carpeta, []), carpeta, "sin argumentos, `node --test` corre la carpeta entera");
+  assert.notEqual(
+    alcanceDe(carpeta, ["*.test.mjs"]),
+    alcanceDe(carpeta, []),
+    "un glob NO es la carpeta entera: acotar el paso de la cadena deja tests que el publicador sí corre",
+  );
+  assert.equal(alcanceDe("hermes-content/integrations/siat", ["test/*.test.mjs"]), "hermes-content/integrations/siat/test/*.test.mjs");
+  assert.equal(alcanceDe(".", ['"hermes-content/integrations/siat/test/*.test.mjs"']), "hermes-content/integrations/siat/test/*.test.mjs", "la cadena lo escribe entrecomillado y desde la raíz: es el MISMO alcance");
+});
