@@ -1009,11 +1009,27 @@ export function sanitizePanelKnowledge(data) {
  * `triggersExtra`) dejo al bot sin precios y sin los 9 disparadores del archivo — el lead
  * preguntaba "¿cuanto cuesta?" y recibia el M4 default sin cifras. Reglas:
  *   - campo simple / lista plana: el panel manda SI lo trae; si no, queda el del archivo;
- *   - objetos (identity, demo, empresa.horario, seguimiento): por sub-campo;
+ *   - objetos (identity, demo, seguimiento): por sub-campo;
+ *   - `empresa.horario`: NO — ver abajo, es el unico campo que el panel no puede mover;
  *   - `triggersExtra.demo`: UNION (la direccion segura: agregar si, sacar no);
  *   - `faq`: por ID — el panel manda sobre los ids que trae; los que no trae (precios, siat)
  *     se conservan del archivo, que es de donde salen las cifras.
- * Puro: no lee caches ni archivos. Los DOS docs ya pasaron su validador.
+ * Los DOS docs ya pasaron su validador. No lee caches ni archivos (el unico efecto es el aviso
+ * de abajo, que existe para que un descarte no sea invisible).
+ *
+ * ⚠️ `empresa.horario` NO SE MERGEA, y es a proposito (2026-09-18). Los dos lados de este merge
+ * hablan EN NOMBRE DE ONIA, asi que el horario de aca es la disponibilidad de Sergio Urcullo — y
+ * esa ya tiene dueno: `VENTANAS_ATENCION` en `ventanas-de-atencion.mjs`, la MISMA constante de la
+ * que `renovar-slots-bot.py` saca los horarios de demo que el bot OFRECE. Dejar que el panel
+ * moviera solo la mitad PROMETIDA es como se separaron la primera vez: hasta el 13-sep el bot
+ * ofrecia un sabado a las 14:00 y prometia "lun-vie 9:00-18:00" en el mismo mensaje. Medido vivo
+ * el 2026-09-18 (`npm run horario:vivo`): la fila del panel decia `hasta: 19` y "Lunes a viernes
+ * de 9:00 a 19:00, sabados de 9 a 13", o sea le prometia atencion a las 10:00 de un martes a un
+ * lead que Sergio recien atiende a las 14:00. Mover la disponibilidad se hace en la constante,
+ * donde mueve las dos mitades juntas.
+ *
+ * Esto NO le toca el horario a un CLIENTE: su fila llega por `fetchOrgKnowledge` (por org) y se
+ * aplica sin pasar por aca, que es el camino exclusivo del documento de venta de Onia.
  */
 export function mergePanelKnowledge(archivo, panel) {
   if (!archivo) return panel;
@@ -1022,10 +1038,18 @@ export function mergePanelKnowledge(archivo, panel) {
   for (const key of ["identity", "demo", "seguimiento"]) {
     if (isPlainObject(archivo[key]) && isPlainObject(panel[key])) out[key] = { ...archivo[key], ...panel[key] };
   }
-  if (isPlainObject(archivo.empresa) && isPlainObject(panel.empresa)) {
-    out.empresa = { ...archivo.empresa, ...panel.empresa };
-    if (isPlainObject(archivo.empresa.horario) && isPlainObject(panel.empresa.horario)) {
-      out.empresa.horario = { ...archivo.empresa.horario, ...panel.empresa.horario };
+  if (isPlainObject(archivo.empresa) || isPlainObject(panel.empresa)) {
+    out.empresa = { ...(archivo.empresa || {}), ...(panel.empresa || {}) };
+    // El horario del ARCHIVO se conserva (es del repo, y hoy no lo declara: hereda del codigo);
+    // el del PANEL se descarta con constancia. Un descarte mudo es como esta familia se esconde.
+    if (isPlainObject(panel.empresa?.horario)) {
+      console.warn(
+        "[knowledge:panel] ignoro `empresa.horario` de la fila del panel: la disponibilidad de " +
+          "Onia la manda ventanas-de-atencion.mjs (es la misma de la que salen los horarios de " +
+          "demo que el bot ofrece). Para cambiarla, se edita esa constante.",
+      );
+      if (isPlainObject(archivo.empresa?.horario)) out.empresa.horario = archivo.empresa.horario;
+      else delete out.empresa.horario;
     }
   }
   const demoArchivo = Array.isArray(archivo.triggersExtra?.demo) ? archivo.triggersExtra.demo : [];
