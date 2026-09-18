@@ -22,8 +22,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "es_BO",
     title: `Probá Onia Platform gratis ${PRUEBA.dias} días`,
-    description:
-      "Sistema completo, sin tarjeta. Elegís tu rubro y quedás andando en un día.",
+    // Hermano del de `/empezar`: el preview se lee antes que la página, así que
+    // el plan va nombrado acá también y sale de la fuente.
+    description: `El plan ${PRUEBA.planQueCorre} completo, sin tarjeta. Elegís tu rubro y quedás andando en un día.`,
     url: "/prueba-gratis",
   },
 };

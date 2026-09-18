@@ -260,6 +260,20 @@ describe("la prueba entrega un plan y la tarjeta vende otro: se dice antes de pa
    * SISTEMA; la forma honesta —«el plan <X> completo», que es la que
    * `PRUEBA.copy` ya usaba— no matchea, así que el gate no se apaga solo el día
    * que alguien reescriba la frase.
+   *
+   * EL ARTÍCULO NO ERA PARTE DE LA PROMESA — ampliado 2026-09-18, medido en
+   * `onia.com.bo` servida. Las tres formas de abajo nacieron exigiendo «**el**
+   * sistema completo», y un título de preview no lleva artículo: los dos
+   * `openGraph.description` del trial decían «**Sistema completo**, sin
+   * tarjeta» y el gate los daba por limpios el mismo día que se escribió para
+   * esa frase. La mitad que quedó abierta es la peor de las dos: el `<head>`
+   * no lo ve ninguna captura ni ningún barrido del cuerpo, y es exactamente lo
+   * que se pinta en el preview de WhatsApp —por donde en Bolivia se comparte
+   * todo— y en el resultado de Google. El lead lee «Sistema completo» ANTES de
+   * abrir la página, que es donde decide si la abre.
+   *
+   * Por eso el artículo es opcional: lo que promete de más es el sustantivo
+   * con su alcance, no el determinante que lo precede.
    */
   /**
    * El tope se DERIVA del precio, no del orden del arreglo ni de un id a mano:
@@ -268,7 +282,8 @@ describe("la prueba entrega un plan y la tarjeta vende otro: se dice antes de pa
   const PLAN_TOPE = PLANES.reduce((a, b) => (b.mensual > a.mensual ? b : a));
 
   const ALCANCE_TOTAL_DEL_SISTEMA = [
-    /\bel\s+sistema\s+(completo|entero)\b/i,
+    /\bsistema\s+(completo|entero)\b/i,
+    /\bplataforma\s+completa\b/i,
     /\btodo\s+el\s+sistema\b/i,
     /\blo\s+us[áa]s?\s+completo\b/i,
   ];
