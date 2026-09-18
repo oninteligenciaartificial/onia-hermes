@@ -89,6 +89,7 @@ Eso se rompe en el primer comentario.
 
 | Slug | Recurso | Estado | Lo promete | Archivos para comunidad |
 |---|---|---|---|---|
+| [`/vps`](https://sergiourcullo.vercel.app/vps) | **Qué es un VPS** — qué es y qué no, cuánto cuesta el mío (Bs 220/mes, KVM 4), VPS vs homelab, cómo se arma en 5 pasos, los 4 errores (la penalidad de Hostinger del 24-ago) | 🟢 **público** (17-sep) | Lo comenta Sergio Urcullo en un video (link pendiente) | — sin archivos todavía |
 | [`/homelab`](https://sergiourcullo.vercel.app/homelab) | **El homelab** — qué es, cuánto gasta de luz, qué corre adentro, cómo armarlo. Ocho preguntas del video contestadas | 🟢 **público** | Reel del 07-sep (`HOMELAB`) — ⚠️ la promesa salió ANTES que el recurso | 🟢 [`/homelab/archivos`](https://sergiourcullo.vercel.app/homelab/archivos) — primer arranque, respaldo automático, lista de la BIOS |
 | [`/stack`](https://sergiourcullo.vercel.app/stack) | **El stack de $200** — las 6 herramientas, qué hace cada una, qué no hace, cómo instalarla | 🟡 **en comunidad** | Carrusel «Mi stack», lámina 11 (`COMENTÁ STACK`) | 🟢 [`/stack/archivos`](https://sergiourcullo.vercel.app/stack/archivos) — `docker-compose` de n8n, las 6 respuestas de WhatsApp, plantilla del `SOUL.md` |
 

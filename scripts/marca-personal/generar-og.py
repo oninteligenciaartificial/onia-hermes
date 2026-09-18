@@ -55,6 +55,13 @@ PIEZAS = {
         "bajada": "Las seis herramientas con las que corre mi negocio, en el orden en que conviene instalarlas.",
         "pie": "Cinco son gratis · qué hace y qué NO hace cada una",
     },
+    "vps": {
+        "salida": "vps/og.png",
+        "rotulo": "Guía · sergiourcullo.com",
+        "titulo": 'Qué es un <span class="v">VPS</span>',
+        "bajada": "Una computadora alquilada, prendida siempre. Cuánto cuesta el mío y cómo se arma.",
+        "pie": "VPS o servidor en casa · qué poner adentro · 4 errores",
+    },
     "homelab": {
         "salida": "homelab/og.png",
         "rotulo": "Guía · sergiourcullo.com",

@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Qué es un VPS — Sergio Urcullo</title>
+<meta name="description" content="Un VPS es una computadora alquilada en un centro de datos, prendida siempre y con dirección pública. Qué es, cuánto cuesta el mío, cuándo conviene contra un servidor en casa y cómo se arma.">
+<meta property="og:title" content="Qué es un VPS">
+<meta property="og:description" content="Una computadora alquilada, prendida siempre. Cuánto cuesta el mío, cuándo conviene y cómo se arma.">
+<meta property="og:image" content="https://sergiourcullo.vercel.app/vps/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Qué es un VPS">
+<meta property="og:url" content="https://sergiourcullo.vercel.app/vps">
+<meta property="og:site_name" content="sergiourcullo">
+<meta property="og:locale" content="es_BO">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://sergiourcullo.vercel.app/vps/og.png">
+<meta property="og:type" content="article">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%2300C661'/><text x='16' y='23' font-family='Arial,sans-serif' font-size='18' font-weight='bold' text-anchor='middle' fill='%230A2A18'>S</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/estilo.css">
+</head>
+<body>
+
+<div class="cinta">
+  <a href="https://chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu">
+    <span>Esta guía salió antes en Onia Community · entrá gratis</span>
+    <span class="flecha">→</span>
+  </a>
+</div>
+
+<div class="barra">
+  <a class="marca" href="/">sergiourcullo<span class="punto">.</span></a>
+  <span class="barra-acciones">
+    <a class="barra-oferta" href="https://onia.com.bo/servicios/webs?origen=sergio">Webs para tu negocio</a>
+    <a class="vuelta" href="/">← todas las guías</a>
+  </span>
+</div>
+
+<div class="wrap">
+
+<header class="top">
+  <p class="eyebrow">Guía · publicada 17·09·2026</p>
+  <h1>Qué es un <span class="num">VPS</span></h1>
+  <p class="bajada">Una computadora alquilada en un centro de datos, prendida las 24 horas y
+  con una dirección en internet. Es donde vive todo lo que tiene que atender cuando yo no estoy:
+  qué es, qué no es, cuánto cuesta el mío, cuándo conviene contra el <a href="/homelab">servidor
+  en casa</a> y cómo se arma.</p>
+
+  <div class="terminal">
+    <div class="cab">
+      <span class="luz"></span><span class="luz"></span><span class="luz viva"></span>
+      <span class="ruta">root@vps:~</span>
+    </div>
+<pre><span class="p">$</span> nproc; free -g | grep Mem; df -h / | tail -1
+4                                <span class="c">4 núcleos</span>
+Mem: 15G                         <span class="c">15 GB de memoria</span>
+/    193G  167G                  <span class="c">193 GB de disco</span>
+
+<span class="p">$</span> docker ps --format "table {{.Names}}\t{{.Status}}"
+
+NOMBRE          ESTADO
+n8n             <span class="up">Up 2 weeks</span>       <span class="c">las automatizaciones</span>
+chatwoot        <span class="up">Up 2 weeks</span>       <span class="c">el WhatsApp que atiende solo</span>
+supabase-db     <span class="up">Up 2 weeks</span>       <span class="c">la base de datos del sistema</span>
+onia-platform   <span class="up">Up 4 days</span>        <span class="c">el sistema que vendo</span>
+onia-landing    <span class="up">Up 5 hours</span>       <span class="c">onia.com.bo</span>
+onia-mail       <span class="up">Up 2 weeks</span>       <span class="c">el correo propio</span>
+
+<span class="p">$</span> uptime -p
+up 3 weeks, 3 days              <span class="c">Bs 220 al mes. Nunca se apaga.</span></pre>
+  </div>
+
+  <div class="honesto">
+    <h2>Antes que nada: qué es y qué no es</h2>
+    <p><strong>Un VPS es un pedazo de una computadora grande, en un centro de datos, que
+    alquilás por mes.</strong> Las siglas son <em>Virtual Private Server</em>: servidor
+    privado virtual. Te dan una máquina con sus núcleos, su memoria, su disco y una dirección
+    pública en internet. Entrás desde tu computadora, instalás lo que quieras y queda prendido
+    aunque vos apagues todo.</p>
+    <p><strong>No es "hosting".</strong> El hosting compartido te da un lugar para una página
+    y nada más. En un VPS podés correr lo que quieras: un WhatsApp que contesta solo, una base
+    de datos, un sistema entero. Y también podés romperlo, porque es tuyo.</p>
+    <p><strong>No es "la nube" de la publicidad.</strong> Es una computadora concreta, en un
+    edificio concreto, que otra empresa mantiene prendida y conectada. Lo que ganás es que no
+    depende de tu luz ni de tu internet. Lo que perdés es que la máquina no está en tu casa.</p>
+    <p><strong>Y no hace falta para empezar.</strong> Yo arranqué con una <a href="/homelab">PC
+    vieja en un armario</a>. Pasé al VPS cuando lo que corría adentro empezó a atender clientes
+    de verdad y un corte de luz ya costaba plata.</p>
+  </div>
+</header>
+
+<!-- LLAMADA 1 A 1 -->
+<section class="cierre">
+  <div class="cierre-intro">
+    <p class="cierre-rot">Llamada 1 a 1 · gratis</p>
+    <h2>¿Te trabaste? Hablemos, uno a uno</h2>
+    <p>Una llamada con tu caso delante: si te conviene VPS o servidor en casa, qué plan, y qué no vale la pena. Sin costo y sin venta.</p>
+  </div>
+  <div class="cierre-agenda">
+    <div class="cierre-datos" aria-label="Detalles de la llamada">
+      <div class="cierre-dato"><strong>30</strong><span>minutos</span></div>
+      <div class="cierre-dato"><strong>3 h</strong><span>anticipación</span></div>
+    </div>
+    <table class="calculo">
+      <thead><tr><th>Día</th><th>Horario (Bolivia)</th></tr></thead>
+      <tbody>
+        <tr><td>Lunes a viernes</td><td>14:00-16:00 · 19:00-22:00</td></tr>
+        <tr><td>Sábado</td><td>10:00-17:00</td></tr>
+      </tbody>
+    </table>
+    <a class="boton" href="https://cal.com/sergiourcullo/30min">Agendá tu llamada <span aria-hidden="true">→</span></a>
+    <span class="chico">Elegís día y hora y queda agendada · con 3 horas de anticipación</span>
+  </div>
+</section>
+
+<!-- LAS PREGUNTAS -->
+<article class="paso">
+  <div class="paso-cab">
+    <div class="paso-num">01</div>
+    <div class="paso-tit">
+      <h2>Lo que más me preguntaron</h2>
+      <p class="autor">Las dudas que más me llegaron, contestadas</p>
+    </div>
+  </div>
+  <div class="cuerpo">
+    <div class="faq">
+
+      <details open>
+        <summary>¿VPS o servidor en casa?</summary>
+        <div class="resp">
+          <p>Las dos cosas sirven, para etapas distintas. La regla que uso:</p>
+          <table class="calculo">
+            <thead><tr><th>Si…</th><th>Entonces</th></tr></thead>
+            <tbody>
+              <tr><td>estás aprendiendo o automatizando cosas tuyas</td><td><span class="destaca">servidor en casa</span>: gratis si ya tenés la máquina</td></tr>
+              <tr><td>hay clientes esperando una respuesta a las 3 de la mañana</td><td><span class="destaca">VPS</span>: no depende de tu luz ni de tu internet</td></tr>
+              <tr><td>necesitás una dirección pública (WhatsApp, webhooks, una web)</td><td><span class="destaca">VPS</span>: la trae de fábrica; en casa hay que armarla</td></tr>
+              <tr><td>vas a correr modelos de IA pesados</td><td>ninguno de los dos: eso pide GPU, y un VPS barato no la tiene</td></tr>
+            </tbody>
+          </table>
+          <p style="margin-top:14px">Yo tengo los dos. En casa lo que es mío; en el VPS lo que
+          atiende a otros.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>¿Cuánto cuesta?</summary>
+        <div class="resp">
+          <p>El mío: <strong>Bs 220 al mes</strong> (unos 21 dólares), plan KVM 4 de Hostinger:
+          4 núcleos, 16 GB de memoria, 200 GB de disco. Ahí corre <strong>todo</strong> lo que
+          ves en la terminal de arriba, y le sobra.</p>
+          <p>Hay planes más chicos, con 1 o 2 núcleos y 4 u 8 GB, por bastante menos. Para empezar con n8n y
+          un par de cosas alcanza. Lo que no conviene es el más chico de todos: te quedás sin
+          memoria en el primer mes y migrar es más trabajo que pagar la diferencia.</p>
+          <p>El precio que ves en la publicidad suele ser <strong>por contratar 1 o 2 años
+          adelantados</strong>. Mes a mes sale más. Leé la letra chica antes de comparar.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>¿Qué proveedor?</summary>
+        <div class="resp">
+          <p>Uso Hostinger porque el plan que necesitaba estaba a un precio razonable y el panel
+          es simple. No es el único ni el mejor para todo: Hetzner es más barato en Europa,
+          DigitalOcean tiene más documentación, Contabo regala disco. Cualquiera de esos sirve.</p>
+          <p>Lo que sí miraría, esté donde esté: que te dejen elegir Ubuntu, que la CPU sea
+          "dedicada" o al menos que digan cuánto podés usarla sostenido (ver el error 1 más
+          abajo), y que tengan un botón de reinstalar desde cero por si lo rompés.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>¿Me lo pueden hackear?</summary>
+        <div class="resp">
+          <p>Lo van a intentar el mismo día. Un VPS recién creado recibe intentos de entrada
+          automáticos a toda hora, de robots que prueban contraseñas. No es personal: le
+          pasa a todos.</p>
+          <p>Con tres cosas dejás de ser un blanco fácil: <strong>entrar con llave y no con
+          contraseña</strong> (paso 3 de abajo), <strong>un firewall que sólo abra lo que
+          usás</strong> (<code>ufw</code>, viene en Ubuntu) y <strong>fail2ban</strong>, que
+          bloquea a quien insiste. Las tres son gratis y llevan diez minutos. Yo las tengo puestas
+          y lo verifiqué.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>¿Qué pasa si se cae?</summary>
+        <div class="resp">
+          <p>Se cae menos que tu casa, pero se cae. Desde que lo tengo me pasó una vez en serio,
+          y fue culpa mía (error 1). Lo que te salva no es que nunca se caiga: es que tengas
+          <strong>un respaldo automático fuera del VPS</strong> y sepas <strong>levantar todo
+          desde cero</strong> en una hora. Si no podés hacer las dos cosas, todavía no estás
+          listo para poner clientes ahí.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>¿Necesito saber Linux?</summary>
+        <div class="resp">
+          <p>Lo básico, sí: entrar por SSH, moverte entre carpetas, ver qué está corriendo,
+          reiniciar un servicio. Son diez comandos. Con un panel como Easypanel o Coolify el
+          resto se hace con clics, y para lo demás está Claude Code, que en el VPS es el mismo
+          que en tu computadora.</p>
+        </div>
+      </details>
+
+    </div>
+  </div>
+</article>
+
+<!-- CÓMO SE ARMA -->
+<article class="paso">
+  <div class="paso-cab">
+    <div class="paso-num">02</div>
+    <div class="paso-tit">
+      <h2>Cómo se arma, de cero</h2>
+      <p class="autor">Una hora la primera vez · Ubuntu + Docker + un panel</p>
+    </div>
+  </div>
+  <div class="meta">
+    <span class="chip">Bs 220 al mes el mío</span>
+    <span class="chip">una hora</span>
+    <span class="chip">4 GB de memoria como piso</span>
+    <span class="chip">Ubuntu 24.04</span>
+  </div>
+  <div class="cuerpo">
+    <p class="rotulo">Qué no hace</p>
+    <div class="nohace">
+      <p>Contratar el VPS no automatiza nada. Es alquilar la casa vacía. Lo que trabaja es lo
+      que instalás adentro, y eso es la <a href="/stack">guía del stack</a>: acá sólo dejamos
+      la casa lista y cerrada con llave.</p>
+    </div>
+
+    <p class="rotulo">Los cinco pasos</p>
+    <ol class="pasitos">
+      <li><strong>Contratá el plan.</strong> Ubuntu 24.04 como sistema. Elegí la ubicación más
+      cercana a tus clientes; para Bolivia, Brasil o Estados Unidos. Anotá la IP que te dan.</li>
+      <li><strong>Entrá por primera vez.</strong> Desde tu computadora:
+      <code>ssh root@LA-IP</code> con la contraseña que te mandaron. Es la última vez que la
+      vas a usar.</li>
+      <li><strong>Cambiá la contraseña por una llave.</strong> En tu computadora
+      <code>ssh-keygen</code> crea un par de llaves; subís la pública con
+      <code>ssh-copy-id root@LA-IP</code> y apagás la entrada por contraseña. Sin esto, el
+      resto no vale.</li>
+      <li><strong>Cerrá lo que no usás.</strong> <code>ufw allow 22 80 443</code> y
+      <code>ufw enable</code>. Después <code>apt install fail2ban</code>. Diez minutos, y
+      los robots pasan de largo.</li>
+      <li><strong>Instalá Docker y un panel.</strong> Yo uso Easypanel: un comando y tenés una
+      pantalla donde cada cosa que instalás es un botón, con su dominio y su certificado.
+      Desde ahí, n8n es el primer botón que apretás.</li>
+    </ol>
+
+    <div class="nota"><strong>Regla de oro.</strong> Todo lo que instales, con Docker. Así el
+    día que cambiés de proveedor te llevás los contenedores y sus datos, y no un servidor que
+    nadie recuerda cómo se armó.</div>
+  </div>
+</article>
+
+<!-- QUÉ PONER ADENTRO -->
+<article class="paso">
+  <div class="paso-cab">
+    <div class="paso-num">03</div>
+    <div class="paso-tit">
+      <h2>Qué poner adentro</h2>
+      <p class="autor">Lo que corre en el mío hoy, en el orden en que lo instalé</p>
+    </div>
+  </div>
+  <div class="cuerpo">
+    <ol class="pasitos">
+      <li><strong>n8n.</strong> Las automatizaciones. Es lo primero, y con esto solo ya se
+      paga el alquiler.</li>
+      <li><strong>Chatwoot.</strong> La bandeja de WhatsApp. Ahí vive el bot que contesta
+      cuando yo no estoy.</li>
+      <li><strong>Supabase.</strong> La base de datos y el login del sistema, instalados en el
+      VPS en vez de pagarlos aparte.</li>
+      <li><strong>Un servidor de correo</strong> para mandar los avisos desde mi dominio.</li>
+      <li><strong>Las webs.</strong> La de venta y el sistema mismo, como contenedores, con el
+      certificado que el panel renueva solo.</li>
+    </ol>
+    <p>Lo que <strong>no</strong> está: modelos de IA corriendo en la máquina. Los probé y es
+    el error 1. Para eso pago una API.</p>
+
+    <p class="rotulo">Ejemplos de lo que podés instalar</p>
+    <p>Todo esto es gratis y de código abierto, y se instala con un clic desde el panel.
+    Agrupado por lo que resuelve, no por lo técnico. La última columna dice si corre en el mío.</p>
+    <div class="tabla-scroll">
+    <table class="calculo">
+      <thead><tr><th>Para…</th><th>Herramienta</th><th>Qué hace</th><th>¿En el mío?</th></tr></thead>
+      <tbody>
+        <tr><td>automatizar</td><td><strong>n8n</strong></td><td>flujos que hacen solos el trabajo repetido: avisos, seguimientos, pasar datos de un lado a otro</td><td><span class="destaca">sí</span></td></tr>
+        <tr><td>atender</td><td><strong>Chatwoot</strong></td><td>bandeja de WhatsApp, Instagram y web en un solo lugar, con bot y con personas</td><td><span class="destaca">sí</span></td></tr>
+        <tr><td>atender</td><td><strong>Typebot</strong></td><td>armar un bot de preguntas y respuestas arrastrando bloques, sin programar</td><td>no</td></tr>
+        <tr><td>guardar datos</td><td><strong>Supabase</strong></td><td>base de datos y login para tu propio sistema, sin pagar la versión en la nube</td><td><span class="destaca">sí</span></td></tr>
+        <tr><td>guardar archivos</td><td><strong>Nextcloud</strong></td><td>tu propio Drive: archivos, fotos y carpetas compartidas en tu máquina</td><td>no</td></tr>
+        <tr><td>publicar</td><td><strong>WordPress</strong></td><td>la web o el blog de siempre, pero en un servidor tuyo y sin límite de plugins</td><td>no</td></tr>
+        <tr><td>publicar</td><td><strong>Ghost</strong></td><td>blog y newsletter con suscriptores, más liviano que WordPress</td><td>no</td></tr>
+        <tr><td>redes</td><td><strong>Postiz</strong></td><td>programar publicaciones en varias redes desde un solo lugar</td><td><span class="destaca">sí</span></td></tr>
+        <tr><td>medir</td><td><strong>Umami</strong></td><td>cuánta gente entra a tu web y de dónde, sin cookies ni Google</td><td>no</td></tr>
+        <tr><td>vigilar</td><td><strong>Uptime Kuma</strong></td><td>te avisa por WhatsApp o Telegram cuando algo tuyo se cae</td><td>no</td></tr>
+        <tr><td>contraseñas</td><td><strong>Vaultwarden</strong></td><td>gestor de contraseñas para vos y tu equipo, en tu máquina</td><td>no</td></tr>
+        <tr><td>correo</td><td><strong>Postfix</strong></td><td>mandar los avisos y correos desde tu propio dominio</td><td><span class="destaca">sí</span></td></tr>
+        <tr><td>IA</td><td><strong>LiteLLM</strong></td><td>una sola puerta a varias APIs de IA, con límite de gasto y registro de cada llamada</td><td><span class="destaca">sí</span></td></tr>
+        <tr><td>IA</td><td><strong>Ollama</strong></td><td>modelos de IA corriendo en la máquina. <em>No</em> en un VPS sin GPU: error 1</td><td>lo saqué</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="nota"><strong>La regla para decidir.</strong> Si viene como imagen de Docker,
+    corre con menos de 1 GB de memoria y le pega gente desde afuera (clientes, webhooks, tu
+    web), va en el VPS. Si pide GPU o va a estar al 100 % de CPU todo el día, no va: eso es
+    una API pagada o una máquina aparte. Y si sólo lo usás vos y no necesita dirección pública,
+    va en el <a href="/homelab">servidor de casa</a>, que es gratis.</div>
+  </div>
+</article>
+
+<!-- ERRORES -->
+<article class="paso">
+  <div class="paso-cab">
+    <div class="paso-num">04</div>
+    <div class="paso-tit">
+      <h2>Los cuatro errores que vas a querer evitar</h2>
+      <p class="autor">El primero me costó una noche entera</p>
+    </div>
+  </div>
+  <div class="cuerpo">
+    <ol class="pasitos">
+      <li><strong>Correr un modelo de IA en la CPU del VPS.</strong> Puse uno chico "para
+      probar" y quedó clavando dos de los cuatro núcleos las 24 horas. El proveedor, que comparte
+      esa CPU con otros clientes, me la estranguló: la máquina quedó con el 7 % de su
+      capacidad y se cayó <em>todo</em>, hasta el WhatsApp. Y la penalidad no se levanta sola al
+      apagar el proceso. Un VPS barato es para atender, no para pensar.</li>
+      <li><strong>Seguir entrando con contraseña.</strong> Es la puerta que los robots golpean
+      todo el día. Llave, firewall y fail2ban antes de instalar nada.</li>
+      <li><strong>Sin respaldo fuera de la máquina.</strong> El disco del VPS es un disco; se
+      puede perder. Un respaldo que se copia solo a otro lado, todas las noches, es la
+      diferencia entre un susto y volver a empezar.</li>
+      <li><strong>Instalar sin Docker.</strong> Tres meses después nadie sabe qué versión de
+      qué está dónde, y migrar es imposible. Con contenedores, cambiar de VPS es copiar una
+      carpeta.</li>
+    </ol>
+  </div>
+</article>
+
+<section class="cierre">
+  <h2>Lo que esta guía no cubre</h2>
+  <ul>
+    <li>Dominio propio y DNS. Lo nombro, pero merece su guía.</li>
+    <li>Cómo se instala cada herramienta adentro. Eso está en la <a href="/stack">guía del
+    stack</a>, paso por paso.</li>
+    <li>Kubernetes, alta disponibilidad, varias máquinas. Para un negocio que arranca, una
+    sola bien cuidada alcanza.</li>
+  </ul>
+  <p>Si te trabás con el tuyo, escribime y lo vemos. Contesto a todos.</p>
+</section>
+
+<section class="comunidad">
+  <p class="rot">Onia Community · WhatsApp · gratis</p>
+  <h2>Las guías salen acá primero</h2>
+  <p>Acá leíste qué es y cómo se arma. Adentro está <strong>el tuyo</strong>: me decís qué
+  querés correr y cuántos clientes atiende, y te digo qué plan, qué proveedor y en qué orden
+  instalar.</p>
+  <a class="boton" href="https://chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu">Entrar a la comunidad</a>
+  <span class="chico">Entrás directo, sin pedir permiso · publico sólo yo en el canal · las preguntas van a General</span>
+</section>
+
+<p class="firma">
+  <a href="/">← Todas las guías</a>
+  <a href="https://www.instagram.com/sergiourcullo/">@sergiourcullo</a>
+</p>
+
+</div>
+</body>
+</html>
