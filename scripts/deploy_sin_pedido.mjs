@@ -207,9 +207,12 @@ export function clasificarCobertura({ destinos, pendiente, pedidos, seAutoPublic
  * PURA: los veredictos del publicador automático, uno por destino, leídos de su salida.
  * `null` si no dijo ni uno (no llegó a medir, otra corrida tenía el candado, no existe).
  *
- * Sus cinco formas, tal cual las imprime `publicar_destino`: `al dia`, `publicaria (nada
- * toca precio)` (modo seco), `PUBLICADO`, `FALLO`, `NO publico solo — toca una fuente de
- * precio`.
+ * Sus formas, tal cual las imprime `publicar_destino`: `al dia`, `publicaria (…)` (modo
+ * seco), `PUBLICADO`, `FALLO`, y las que piden firma, que desde el 2026-09-18 son DOS
+ * —`NO publico solo — cambia un monto` y `NO publico solo — toca una fuente de precio y no
+ * pude medir si cambia`—. Por eso lo que se ancla es el PREFIJO (`NO publico solo`) y no la
+ * frase entera: el motivo se afina cada vez que el freno aprende a distinguir mejor, y un
+ * lector atado al texto completo se queda mudo justo el día que eso pasa.
  */
 export function leerPublicadorSolo(salida) {
   const verdictos = {};
