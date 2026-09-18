@@ -13,6 +13,8 @@ export interface WebIntakeDraft {
   readonly whatsapp: string;
   readonly email: string;
   readonly referenceUrl: string;
+  /** «¿Ya tenés web? Pegá el link»: 10Web arranca desde una URL; acá viaja en el pedido y el motor la toma como referencia. */
+  readonly currentUrl: string;
   readonly assetPermission: AssetPermission;
   readonly notes: string;
 }
@@ -28,6 +30,7 @@ export const EMPTY_WEB_INTAKE: WebIntakeDraft = {
   whatsapp: "",
   email: "",
   referenceUrl: "",
+  currentUrl: "",
   assetPermission: "pendiente",
   notes: "",
 };

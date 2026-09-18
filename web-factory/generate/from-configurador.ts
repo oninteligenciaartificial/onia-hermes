@@ -38,6 +38,8 @@ export interface ConfiguradorPedido {
   readonly servicios: readonly string[];
   readonly fotografias: string;
   readonly referencia: string;
+  /** «¿Ya tenés web? Pegá el link»: la web que el cliente tiene hoy. */
+  readonly webActual: string;
   readonly notas: string;
   readonly nivel: string;
   readonly precioBase: string;
@@ -58,6 +60,7 @@ const LABELS: Record<string, keyof ConfiguradorPedido> = {
   "Oferta principal": "oferta",
   "Descripción": "descripcion",
   "Fotografías": "fotografias",
+  "Web actual": "webActual",
   "Referencia": "referencia",
   "Necesidades adicionales": "notas",
   "Nivel": "nivel",
@@ -116,6 +119,7 @@ export function parseConfiguradorMessage(text: string): ConfiguradorPedido {
     servicios,
     fotografias: fields.fotografias ?? "",
     referencia: fields.referencia ?? "",
+    webActual: fields.webActual ?? "",
     notas: fields.notas ?? "",
     nivel: fields.nivel ?? "",
     precioBase: fields.precioBase ?? "",
@@ -203,9 +207,16 @@ export function intakeFromPedido(pedido: ConfiguradorPedido, slugOverride?: stri
       },
       typography: fonts,
       styleKeywords: [pedido.direccion.toLowerCase(), pedido.estructura.split(" (")[0].toLowerCase(), "conversion"].filter(Boolean),
-      references: pedido.referencia
-        ? [{ title: "Referencia del cliente", url: pedido.referencia, type: "visual", use: "lo que le gusta al cliente", avoid: "" }]
-        : [],
+      references: [
+        // La web que ya tiene: de ahí salen textos, fotos y estructura antes de
+        // pedirle nada (scripts/alta-por-extraccion.py). 10Web arranca desde una URL.
+        ...(pedido.webActual
+          ? [{ title: "Web actual del cliente", url: pedido.webActual, type: "copy", use: "textos, fotos y estructura que ya tiene publicados; extraer con scripts/alta-por-extraccion.py antes de pedirle contenido", avoid: "copiar su diseño actual" }]
+          : []),
+        ...(pedido.referencia
+          ? [{ title: "Referencia del cliente", url: pedido.referencia, type: "visual", use: "lo que le gusta al cliente", avoid: "" }]
+          : []),
+      ],
       antiReferences: [],
     },
     media: {

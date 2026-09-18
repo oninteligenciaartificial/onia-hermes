@@ -48,7 +48,19 @@ etapa: el configurador vende y ordena; no se construye nada de entrega automáti
   Verificado por texto: «La vibe: cómo se siente», «¿Cuánta web?», «Pago con tarjeta, seguro».
 - **3er deploy, 17-sep ~22:42 La Paz:** burbuja de WhatsApp legible en Impacto. Run `35299917788`
   (89/89), stage `runtime-next.new-20260918023915`, backup `runtime-next.bak-deploy-20260918024157`.
-- `main` sigue a la rama por fast-forward (último: `7ea932c9`).
+- **4º deploy, 18-sep ~16:17 La Paz — las seis ideas de la competencia** (Sergio Urcullo:
+  «copiá las ideas que viste»): frase de entrada que elige rubro y ciudad, titular «Ves tu web
+  antes de dejar un solo dato», brief «Entendí: …» con «Corregir», diferencial del alcance
+  nombrado en el paso 03, «¿Ya tenés web? Pegá el link» (viaja como «Web actual:» y el puente lo
+  vuelve referencia del intake), «Pago único: la web es tuya» en «Más información». Commit
+  `302586f1` + merge `0edd8b83` (trae 13 commits de otros carriles, ninguno toca el
+  configurador). Run `35389946389` (95/95 en Linux), stage `runtime-next.new-20260918201403`,
+  BUILD_ID `dnyLOPPyKA0mSd3yVy3yK`, backup `runtime-next.bak-deploy-20260918201708`. Verificado
+  en prod por texto exacto (los seis, más el BUILD_ID en el HTML) y con Playwright a 1440 y 390:
+  la frase selecciona el chip, el brief aparece y «Corregir» lo saca, «Web actual» llega al
+  mensaje, la pestaña muestra el pago único, 0 errores de consola. La web personal se publicó con
+  `publicar-sitio.py` y sirve el mismo titular en el teaser (mirado a 390 y 1440).
+- `main` sigue a la rama por fast-forward (último: `0edd8b83`).
 
 **Receta que FUNCIONÓ para publicar la landing (la primera vez que el workflow da verde
 desde el 1-sep):**
@@ -179,6 +191,25 @@ hermes-content/sitio-sergiourcullo/**          (+ scripts/publicar-sitio.py, sin
   `MSYS_NO_PATHCONV=1`.
 - Codex reportó «Validación 18/20» y «build 22/22 rutas» sobre la rama VIEJA; nada de eso
   vale para `main`.
+- **El runner de GitHub se quedó sin disco dos veces el 18-sep** (runs `35387801812` y
+  `35388443587`, «No space left on device» al llegar al segundo build, sin log del job). No era
+  el código: `.git` pesa **11 GB** (videos, capturas, renders) y el `fetch-depth: 0` que se puso
+  el 17-sep para `deploy-vivo.test.ts` lo baja entero. Arreglo: `filter: blob:none` en el
+  checkout (commit `652358d1`): todos los commits y árboles, blobs sólo del HEAD; el gate sigue
+  contestando y la corrida siguiente salió verde en 6 min. Si vuelve a pasar, lo siguiente es
+  `df -h` como primer paso del job.
+- **`main` se movió DOS veces mientras corría el CI** (13 commits y luego 2). El build de stage
+  es del commit que se disparó, no del `main` de después: se mergeó `origin/main`, se rebuildeó
+  y se promovió ESE build, así prod quedó igual a `main`. Antes de promover: `git rev-list
+  --count HEAD..origin/main` y `git diff --name-only HEAD...origin/main` (tres puntos; con dos
+  puntos el diff lista tus propios archivos y asusta al pedo).
+- **Vitest SÍ corre en Windows si se lo llama directo** (`npx vitest run <archivos>` dentro de
+  `apps/onia-platform`, con `MSYS_NO_PATHCONV=1`): los tests unitarios y los gates de copy dan
+  verde local. Lo que no corre acá son los `scripts/*-vivo` y los que recorren `src/` con rutas
+  POSIX (20 archivos en rojo por `\` vs `/`), o sea que **la suite entera sigue siendo del CI**.
+- **El gate `rubros-del-alta` lee las PALABRAS del código, no sólo los chips**: «farmacia» en
+  una regex de palabras clave del asistente lo puso en rojo. Los rubros ajenos (veterinaria,
+  farmacia, restaurante, hotel, gimnasio, inmobiliaria) no pueden aparecer ni como sinónimo.
 - **Ver un reel de IG desde esta sesión (18-sep)**: `fetch-video.mjs` bajó el MP4 (desde el
   checkout principal, donde vive la sesión de IG), pero `gemini-see-video.mjs`, el caption y
   `transcribe.sh` (Speaches por SSH) fallaron con `fetch failed`; `text-frames.mjs` no existe.
@@ -199,15 +230,17 @@ hermes-content/sitio-sergiourcullo/**          (+ scripts/publicar-sitio.py, sin
 
 ## 7 · Próximos pasos (en orden)
 
-1. ~~Precio~~ hecho. Fotos del preview por rubro (hoy por dirección) si Sergio Urcullo lo pide.
-2. ~~Tarjetas vs sólo configurador~~ hecho (pestaña «Más información»). Quitar los bloques `stacks` y
-   `cuidado` de la página y ajustar los tests que los miran.
-3. Correr la suite en Linux. **El 17-sep no se pudo**: WSL Ubuntu no tiene Node, Docker
-   Desktop estaba apagado. Con Docker encendido:
-   `docker run --rm -v "<ruta al worktree>/web-factory/apps/onia-platform:/app" -w /app node:22-alpine node node_modules/vitest/vitest.mjs run`.
-   Las opciones «Básico, Bs 190/mes» que Codex tipeó en `WebConfigurator.tsx` ya se derivan
-   de `CUIDADO_WEB` (17-sep); igual mirar `precios*.test.ts` y `montos-en-pantalla`.
-4. Merge a `main` (gates verdes) → deploy VPS `scripts/deploy-onia-landing.sh` → MIRAR
-   `onia.com.bo/servicios/webs`.
-5. `python scripts/publicar-sitio.py -m "..."` → MIRAR `sergiourcullo.vercel.app/webs`.
+1. ~~Precio~~ · ~~tarjetas vs configurador~~ · ~~suite en Linux~~ · ~~deploy~~ · ~~web personal~~ ·
+   ~~las seis ideas de la competencia~~: todo hecho y en producción (§2, 4º deploy).
+2. **Intent `lead_web` en el bot** (memoria `web-lead-bot-lo-trata-como-pregunta-precio`): el
+   pedido del configurador llega a WhatsApp y el bot le contesta con el pitch del chatbot. Es del
+   carril chatbot (tiene dueño activo); coordinar, no tocar desde acá.
+3. **Registrar el pedido en la plataforma antes de abrir WhatsApp** (server-side): con eso
+   aparecen el link compartible del preview y el prellenado desde «Web actual» con
+   `scripts/alta-por-extraccion.py` (hoy el link sólo viaja en el mensaje y lo corre una persona).
+4. Fotos del preview por rubro (hoy por dirección visual): una dental «premium» sale con foto de
+   boutique. Regla de la casa: la interfaz nunca la dibuja la IA; la foto de contexto sí puede.
+5. `/vps` de la web personal: enlazar el video cuando Sergio Urcullo pase el link.
 6. Borrar `PedirWeb.tsx` + `webs.module.css` cuando los tests dejen de nombrarlos.
+7. Si el runner vuelve a quedarse sin disco: `df -h` como primer paso del job y revisar qué
+   entró pesado a `.git` (§5).

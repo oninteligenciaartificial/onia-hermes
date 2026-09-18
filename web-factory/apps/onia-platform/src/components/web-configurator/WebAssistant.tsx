@@ -6,7 +6,9 @@ import {
   ASSISTANT_FEELS,
   ASSISTANT_RUBROS,
   buildAssistantPlan,
+  describeAssistantPlan,
   EMPTY_ASSISTANT_ANSWERS,
+  inferRubro,
   type AssistantAnswers,
   type AssistantPlan,
 } from "@/content/web-assistant";
@@ -18,18 +20,35 @@ type Props = {
 };
 
 /**
- * Paso 00 del configurador: el cuestionario. Cuatro respuestas → `onApply`
- * recibe el plan y el configurador lo aplica a todos sus pasos. Nada se
- * guarda ni se manda: es la misma pantalla, con los controles ya elegidos.
+ * Paso 00 del configurador: el cuestionario. Una frase sobre el negocio (o
+ * cuatro respuestas) → `onApply` recibe el plan y el configurador lo aplica a
+ * todos sus pasos. Nada se guarda ni se manda: es la misma pantalla, con los
+ * controles ya elegidos.
+ *
+ * De la competencia mirada el 17-sep (Durable, Hostinger, Wix, 10Web): la
+ * entrada es UNA frase, no un formulario, y Wix muestra «el brief» —lo que
+ * entendió— antes de personalizar. Acá la frase elige rubro y ciudad sin
+ * modelo, y después de armar se muestra «Entendí: …» con «Corregir» al lado.
  */
 export function WebAssistant({ onApply }: Props) {
   const [answers, setAnswers] = useState<AssistantAnswers>(EMPTY_ASSISTANT_ANSWERS);
-  const [applied, setApplied] = useState(false);
+  const [plan, setPlan] = useState<AssistantPlan | null>(null);
   const ready = answers.businessName.trim().length > 0;
 
   function set<K extends keyof AssistantAnswers>(key: K, value: AssistantAnswers[K]) {
     setAnswers((current) => ({ ...current, [key]: value }));
-    setApplied(false);
+    setPlan(null);
+  }
+
+  /** La frase elige el rubro si reconoce uno; si no, queda el que estaba. */
+  function setPhrase(value: string) {
+    setAnswers((current) => ({ ...current, phrase: value, rubro: inferRubro(value) ?? current.rubro }));
+    setPlan(null);
+  }
+
+  function corregir() {
+    setPlan(null);
+    document.getElementById("asistente-rubro")?.scrollIntoView({ block: "center" });
   }
 
   function chip(active: boolean) {
@@ -44,8 +63,9 @@ export function WebAssistant({ onApply }: Props) {
       onSubmit={(event) => {
         event.preventDefault();
         if (!ready) return;
-        onApply(buildAssistantPlan(answers));
-        setApplied(true);
+        const next = buildAssistantPlan(answers);
+        onApply(next);
+        setPlan(next);
       }}
     >
       <p className={styles.stepTitle} id="asistente-titulo">
@@ -53,8 +73,19 @@ export function WebAssistant({ onApply }: Props) {
         Armá tu web en un minuto
       </p>
       <p className={styles.stepHint}>
-        Cuatro respuestas y el asistente elige estructura, estilo, colores y tipografía. Después ajustás lo que quieras en los pasos de abajo.
+        Una frase sobre tu negocio, o cuatro respuestas, y el asistente elige estructura, estilo, colores y tipografía. Después ajustás lo que quieras en los pasos de abajo.
       </p>
+
+      <label className={`${styles.formField} ${styles.formFieldWide}`}>
+        <span>Contanos tu negocio en una frase</span>
+        <input
+          type="text"
+          value={answers.phrase}
+          onChange={(event) => setPhrase(event.target.value)}
+          placeholder="Ej. Clínica dental en Santa Cruz, atendemos urgencias"
+        />
+        <small>Con la frase el asistente reconoce el rubro y la ciudad, y la usa de bajada en el preview.</small>
+      </label>
 
       <label className={styles.formField}>
         <span>¿Cómo se llama tu negocio?</span>
@@ -67,7 +98,7 @@ export function WebAssistant({ onApply }: Props) {
         />
       </label>
 
-      <fieldset className={styles.assistantQuestion}>
+      <fieldset className={styles.assistantQuestion} id="asistente-rubro">
         <legend className={styles.assistantLegend}>¿A qué se dedica?</legend>
         <div className={styles.chipGrid}>
           {ASSISTANT_RUBROS.map((item) => (
@@ -126,14 +157,22 @@ export function WebAssistant({ onApply }: Props) {
         <button type="submit" className="btn" disabled={!ready} aria-disabled={!ready}>
           Armar mi web <span aria-hidden="true">→</span>
         </button>
-        <p className={styles.assistantDone} aria-live="polite">
-          {applied
-            ? "Listo: mirá el preview. Lo que no te convenza lo cambiás en los pasos de abajo."
-            : ready
-              ? "Con esto alcanza. Podés contestar el resto o armarla ya."
-              : "Empezá por el nombre."}
-        </p>
+        {!plan && (
+          <p className={styles.assistantDone} aria-live="polite">
+            {ready ? "Con esto alcanza. Podés contestar el resto o armarla ya." : "Empezá por el nombre."}
+          </p>
+        )}
       </div>
+
+      {plan && (
+        <div className={styles.assistantBrief} aria-live="polite">
+          <span>{describeAssistantPlan(answers, plan)}</span>
+          <span>Mirá el preview. Lo que no te convenza lo cambiás acá o en los pasos de abajo.</span>
+          <button type="button" className={styles.chip} onClick={corregir}>
+            Corregir
+          </button>
+        </div>
+      )}
     </form>
   );
 }

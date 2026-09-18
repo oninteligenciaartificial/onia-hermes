@@ -77,6 +77,11 @@ export function WebRequestDetails({ value, missing, onChange }: RequestProps) {
           <input type="text" autoComplete="address-level2" value={value.city} onChange={(event) => onChange("city", event.target.value)} placeholder="Ej. Santa Cruz" />
         </label>
         <label className={`${styles.formField} ${styles.formFieldWide}`}>
+          <span>¿Ya tenés web? Pegá el link</span>
+          <input type="url" inputMode="url" value={value.currentUrl} onChange={(event) => onChange("currentUrl", event.target.value)} placeholder="https://tu-web-actual.com" />
+          <small>Para no pedirte lo que ya está publicado.</small>
+        </label>
+        <label className={`${styles.formField} ${styles.formFieldWide}`}>
           <span>Web de referencia</span>
           <input type="url" inputMode="url" value={value.referenceUrl} onChange={(event) => onChange("referenceUrl", event.target.value)} placeholder="https://una-web-que-me-gusta.com" />
         </label>
