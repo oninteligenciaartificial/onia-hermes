@@ -12,6 +12,31 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-18 22:09-22:1x La Paz — deploy nuevo (BUILD_ID `NIRA4pNJ8fJVouaUsyu1E`, antes `zMQBlf7IEQ_xT2qTWyMmQ`): dental 9/9 de nuevo
+
+Al arrancar: alta `abierta`, 0 orgs `zz-qa-` huérfanas, 0 citas `zz-qa-` huérfanas, sin tareas
+sin reclamar en mi zona del tablero. `BUILD_ID` había cambiado desde la última medición
+(`zMQBlf7IEQ_xT2qTWyMmQ` → `NIRA4pNJ8fJVouaUsyu1E`), así que tocaba re-medir el camino completo
+en vez de saltar directo al escalón 3.
+
+Corrí `--escribir` en dental (default): **9/9, `completo: true`, `agujeros: []`**. Cuenta
+`zz-qa-2026-09-18-2209@onia.com.bo` creada → correo confirmado → onboarding (6 pantallas) →
+paciente `zz-qa-2026-09-18-2209-paciente` cargado y visto en `/patients` → cita 2026-09-21 09:00
+agendada (201, `cmu7ilebm000k01rwd9d3u6kb`) y vista en `/appointments` → factura con ítem visible
+en `/billing/cmu7ilq7g000m01rwf8hbov8q` (frenada sin pagar) → panel revisado (no lista pacientes,
+esperado). 0 filas `zz-qa-` al cerrar (verificado por `SELECT` en `organizations` y
+`appointments`).
+
+`completo: true`, `llegoHasta: 9/9`.
+
+RAZÓN: BUILD_ID cambió desde la vuelta anterior (deploy nuevo) — corresponde re-medir el camino
+completo antes de saltar a otro escalón.
+LECCIÓN: cuarta corrida seguida sana en dental tras un cambio de BUILD_ID. El escalón 3
+(invitar/quitar coadministrador desde `/settings`, DG-043) sigue pendiente de instrumentar — si
+la próxima vuelta encuentra el mismo BUILD_ID, es el candidato en vez de repetir dental.
+
+---
+
 ## 2026-09-18 21:09-21:2x La Paz — deploy nuevo (BUILD_ID `zMQBlf7IEQ_xT2qTWyMmQ`, antes `2BTQrq-Q9Ts3o-YxQykbg`): dental 9/9 de nuevo
 
 Al arrancar: alta `abierta`, 0 orgs `zz-qa-` huérfanas, 0 citas `zz-qa-` huérfanas, sin tareas
