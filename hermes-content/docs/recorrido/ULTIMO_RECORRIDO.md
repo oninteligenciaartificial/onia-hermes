@@ -12,6 +12,45 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-18 (tercera vuelta del día) — no repito el recorrido completo (BUILD_ID igual, bloqueo no es mío); auditadas `/patrones` y `/servicios` (raíz), sanas
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue `OFd4xCDzoTbQdThUbfzDv`
+(misma que las últimas ocho corridas). El pedido de deploy de plataforma cambió de forma otra
+vez: `t_4f4e4071` (23 arreglos) quedó `archived` y fue reemplazado por `t_b8d00627` (36
+arreglos) — sigue `blocked`, sigue sin `ok`, no es mi zona (`onia-cola`). El gate
+`npm run pedido:entregado` marca ese pedido nuevo como ROJO (4 commits mergeados después de
+crearlo que su `ok` publicaría sin nombrar) — lo dejo anotado acá porque ya es la zona de otro
+carril, no abro tarea nueva: es el mismo patrón que `t_62759602` ya señalaba.
+
+Con el corte del paso 5 (MFA) intacto, usé la vuelta para cerrar las dos últimas superficies de
+`(sitio)` que quedaban sin auditar (la vuelta anterior las había dejado anotadas como pendientes):
+
+- **`/patrones`**: sana en los tres viewports (375/768/1440, `reducedMotion:'reduce'`) — 200,
+  0 elementos con `scrollWidth > clientWidth`, 0 apariciones de "muy pronto"/"en
+  construcción"/"próximamente"/"beta".
+- **`/servicios`** (la raíz, distinta de `/servicios/webs` que ya estaba auditada): da **404**
+  en los tres viewports. Verificado que NO es un hallazgo: no existe ningún `href="/servicios"`
+  ni `'/servicios'` en el código del sitio (`grep` en
+  `web-factory/apps/onia-platform/src`), y en el filesystem de rutas sólo existe
+  `app/(sitio)/servicios/webs/`, sin `page.tsx` en `servicios/` a secas. Nadie promete esa URL:
+  el 404 es correcto, no una promesa rota.
+
+Con esto quedan agotadas las superficies de `(sitio)` que este carril tenía identificadas como
+sin auditar. Próxima vuelta, si el `BUILD_ID` sigue igual: no queda escalón 3 obvio nuevo en
+`(sitio)` — conviene, en cambio, profundizar una interacción de punta a punta en una superficie
+ya "sana" (enviar de verdad el formulario de `/servicios/webs`, con datos `zz-qa-`, y ver si se
+recibe del lado del intake) en vez de sólo mirar y no enviar.
+
+`completo: false` (no corrí el recorrido esta vuelta), `llegoHasta: 4/9` (sin cambios).
+
+RAZÓN: el corte de siempre (paso 5, MFA) sigue esperando que `onia-cola` cierre el pedido de
+deploy — no depende de esta vuelta.
+LECCIÓN: con `(sitio)` ya barrido entero, seguir escaneando páginas sueltas del sitio público
+deja de rendir; el próximo escalón que sí suma es probar una interacción real (enviar, no sólo
+mirar) en una superficie ya marcada sana.
+
+---
+
 ## 2026-09-18 (segunda vuelta del día) — no repito el recorrido completo (BUILD_ID igual, bloqueo no es mío); auditada `/contacto`, sana
 
 Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue `OFd4xCDzoTbQdThUbfzDv`
