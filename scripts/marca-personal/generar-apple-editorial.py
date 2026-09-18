@@ -864,6 +864,34 @@ REPOS = [
     },
 ]
 
+DIA = [
+    {
+        "layout": "H",
+        "titulo": "«Y a qué hora hacés todo?»",
+        "sub": "Mi día, con las dos agendas a la vez:",
+        "yo": [
+            (8, 9, "leo lo que dejó el sistema", "#BFD7F2", False),
+            (9, 13, "construyo, una cosa por vez", "#DCD3F2", False),
+            (13, 14, "almuerzo", "#F2E2B8", False),
+            (14, 16, "llamadas 1 a 1", "#F2C9C4", False),
+            (16.5, 18.5, "grabo los videos del día", "#F2E2B8", False),
+            (19, 22, "llamadas 1 a 1", "#F2C9C4", False),
+        ],
+        "sistema": [
+            (6, 6.8, "revisa web y docs", "", True),
+            (8, 8.8, "cola de tareas", "", True),
+            (10, 10.8, "entra como cliente", "", True),
+            (12, 12.8, "cola de tareas", "", True),
+            (14, 14.8, "revisa la web de venta", "", True),
+            (16, 16.8, "cola de tareas", "", True),
+            (18, 18.8, "entra como cliente", "", True),
+            (20, 20.8, "revisa la web de venta", "", True),
+            (22, 22.8, "cola de tareas", "", True),
+        ],
+        "rem": 'Los <span class="vd">verdes ✓</span> corren solos. Yo no estoy ahí.',
+    },
+]
+
 PIEZAS = {
     "mi-stack": None,
     "fable": FABLE,
@@ -875,6 +903,7 @@ PIEZAS = {
     "comunidad-semana": COMUNIDAD_SEMANA,
     "onia-cuatro": ONIA_CUATRO,
     "repos": REPOS,
+    "dia": DIA,
 }  # mi-stack se resuelve a LAMINAS abajo
 
 # Piel por pieza: una clase extra en el lienzo que habilita el acento de esa marca.
@@ -981,6 +1010,28 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 .repo-r .gh-mark{{width:76px;height:76px;flex:none}}
 .repo-r .own{{color:#A1A1A6;font-weight:500}}
 .repo-r.chico{{font-size:36px}}
+/* Layout H (horario) — referencia @iampascio 17-sep: el calendario de bloques ES el
+   contenido. El giro propio: DOS agendas en paralelo, la mia y la del sistema. */
+.lienzo.h{{justify-content:flex-start;padding-top:88px}}
+.h .tit-h{{font-size:64px;font-weight:800;letter-spacing:-.03em;line-height:1.06}}
+.h .sub-h{{font-size:31px;color:var(--muted);margin-top:14px}}
+.h .cal{{display:flex;gap:18px;margin-top:56px;width:100%;height:760px;flex:none}}
+.h .horas{{width:88px;position:relative;flex:none}}
+.h .hora{{position:absolute;right:10px;font-family:'OniaMono',monospace;font-size:21px;
+  color:#A1A1A6;transform:translateY(-50%)}}
+.h .col{{flex:1;position:relative;border-left:1px solid #E3E3E8}}
+.h .col-tit{{position:absolute;top:-40px;left:0;right:0;text-align:center;
+  font-family:'OniaMono',monospace;font-size:22px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:#6E6E73}}
+.h .blq{{position:absolute;left:10px;right:6px;border-radius:14px;padding:10px 16px;
+  overflow:hidden;text-align:left}}
+.h .blq b i{{font-style:normal;color:#1B8A4C}}
+.h .blq b{{display:block;font-size:24px;font-weight:700;letter-spacing:-.01em;line-height:1.15}}
+.h .blq span{{display:block;font-family:'OniaMono',monospace;font-size:18px;color:rgba(0,0,0,.45);margin-top:2px}}
+.h .blq.sys{{border:2px solid #2FBF71;background:#D9F2E2}}
+.h .rem-h{{margin-top:40px;font-size:37px;font-weight:700;letter-spacing:-.02em}}
+.h .rem-h .vd{{background:#2FBF71;color:#08210F;border-radius:12px;padding:2px 14px}}
+
 .repo-r.chico .gh-mark{{width:60px;height:60px}}
 .linea-r{{font-size:33px;color:var(--muted);line-height:1.42;margin-top:24px;
   white-space:pre-line;max-width:850px}}
@@ -1158,7 +1209,7 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 def _clases(lamina):
     """Clases del lienzo: el layout (los que traen grilla propia) y el fondo de la pieza."""
     c = ["lienzo"]
-    if lamina["layout"] in ("A", "B", "C", "F", "G"):
+    if lamina["layout"] in ("A", "B", "C", "F", "G", "H"):
         c.append(lamina["layout"].lower())
     if lamina.get("fondo"):
         c.append(lamina["fondo"])
@@ -1262,6 +1313,29 @@ def markup(lamina):
             cuerpo += (f'<div class="cta"><span class="hl">{lamina["cta_hl"]}</span>'
                        f'<span class="cta-gris">{lamina["cta_gris"]}</span></div>')
         return cuerpo
+    if lamina["layout"] == "H":
+        def _col(bloques):
+            html = ""
+            for ini, fin, txt, color, es_sys in bloques:
+                top = (ini - 6) * 42          # escala: 06:00 arriba, 52px por hora
+                alto = max((fin - ini) * 42 - 6, 40)
+                clase = "blq sys" if es_sys else "blq"
+                estilo = f"top:{top}px;height:{alto}px"
+                if not es_sys:
+                    estilo += f";background:{color}"
+                horas_txt = f"{int(ini):02d}:{int(ini % 1 * 60):02d} – {int(fin):02d}:{int(fin % 1 * 60):02d}"
+                tick = " <i>✓</i>" if es_sys else ""
+                html += (f'<div class="{clase}" style="{estilo}">'
+                         f"<b>{txt}{tick}</b><span>{horas_txt}</span></div>")
+            return html
+        horas = "".join(f'<div class="hora" style="top:{(h-6)*42}px">{h:02d}:00</div>'
+                        for h in range(6, 25, 3))
+        return (f'<div class="tit-h">{lamina["titulo"]}</div>'
+                f'<div class="sub-h">{lamina["sub"]}</div>'
+                f'<div class="cal"><div class="horas">{horas}</div>'
+                f'<div class="col"><div class="col-tit">yo</div>{_col(lamina["yo"])}</div>'
+                f'<div class="col"><div class="col-tit">el sistema</div>{_col(lamina["sistema"])}</div>'
+                f'</div><div class="rem-h">{lamina["rem"]}</div>')
     if lamina["layout"] == "R":
         # Layout R (repo) — correccion de Sergio Urcullo del 17-sep, la TERCERA igual:
         # "en lugar de 'lo oficial' directo el nombre, y cosas que muestren de que se
