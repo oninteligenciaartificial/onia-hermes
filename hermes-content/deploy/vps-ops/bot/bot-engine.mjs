@@ -986,9 +986,40 @@ export function followUpDue(state, nowIso, config = DEFAULT_CONFIG) {
   return elapsedHours >= config.followUp.afterHours && elapsedHours <= config.followUp.staleAfterDays * 24;
 }
 
-/** Mensaje M3 + el estado con el paso reservado. Si no corresponde, devuelve null. */
+/**
+ * Mensaje M3 + el estado con el paso reservado. Si no corresponde, devuelve null.
+ *
+ * LOS HORARIOS SE REFRESCAN, y por eso `slotsOffered` se pisa con los del config.
+ *
+ * El M3 es el unico mensaje del guion que sale un DIA DESPUES del turno que lo origino, y en el
+ * medio corre el generador (`scripts/loops/renovar-slots-bot.py`, cron diario): los horarios que
+ * la conversacion guardo cuando nacio ya no son los que Sergio tiene reservados, y el primero
+ * suele haber cruzado el piso de anticipacion. `activeSlots` prefiere `state.slotsOffered` —
+ * correcto para el turno en vivo, donde "A" tiene que seguir siendo la A que se ofrecio hace tres
+ * minutos, y exactamente al reves aca, donde el texto promete "dos opciones NUEVAS".
+ *
+ * Era el mismo hecho con dos fuentes dentro del MISMO camino: el barrido ya decide si manda
+ * mirando los vigentes (`blocked = slotsPending(config)`, followup-run.mjs) y despues escribia el
+ * texto con los viejos, o sea la fuente que decide se re-mide y la que habla no.
+ *
+ * Medido contra produccion el 2026-09-18 19:17 UTC con un desconocido real esperando
+ * (`chatwoot:58`): el rescate ofrecia "sábado 19 de septiembre, 09:00" — un horario que el
+ * generador no publico (habia puesto el de las 14:00) y que quedaba a 17,7 h, debajo de las 24 h
+ * que el propio `parseSlotsSpec` exige y que la coletilla del mismo mensaje promete. Si el
+ * prospecto lo elegia, el bot le agendaba algo que Sergio no tenia libre.
+ *
+ * Pisar `slotsOffered` es la mitad que hace que el arreglo no sea peor que el bug: sin eso el
+ * texto ofrece los nuevos y la respuesta "A" reserva el viejo. Si no hay vigentes, quedan los
+ * placeholders `pending` y el guion cae solo a la rama SIN_HORARIOS — que es lo que el barrido ya
+ * espera (`slots_sin_definir`, sin quemar la reserva).
+ */
 export function buildFollowUp(state, nowIso, config = DEFAULT_CONFIG) {
   if (!followUpDue(state, nowIso, config)) return null;
-  const next = { ...state, followupStep: state.followupStep + 1, lastOutboundAt: nowIso };
+  const next = {
+    ...state,
+    slotsOffered: config.slots,
+    followupStep: state.followupStep + 1,
+    lastOutboundAt: nowIso,
+  };
   return { nextState: next, reply: say("M3", next, config) };
 }

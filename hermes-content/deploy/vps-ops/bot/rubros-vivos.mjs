@@ -23,6 +23,9 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { dirname, resolve } from "node:path";
 
 import { MODULOS_LISTOS, PRODUCTOS } from "./config.mjs";
+// El lector del documento que produccion SIRVE. Se IMPORTA, no se copia: dos lectores del mismo
+// hecho es como uno de los dos queda verde solo (ya mordio en `montosVencidos`).
+import { filaPublicada, inboxesVivos } from "./precios-vivos.mjs";
 
 const AQUI = dirname(fileURLToPath(import.meta.url));
 
@@ -114,12 +117,85 @@ function medir() {
   for (const track of sobrevendidos) console.log(`  SOBREVENDE ${track} — el bot lo ofrece y el alta no lo acepta`);
   for (const track of sinMapear) console.log(`  SIN MAPEAR ${track} — rubro nuevo: decidir su modulo en TRACK_POR_MODULO`);
 
-  const roto = subvendidos.length + sobrevendidos.length + sinMapear.length;
+  // La capa EDITABLE, que le gana al archivo para el inbox que la tiene publicada.
+  const { medido, porInbox } = leerEditables();
+  const editables = editablesSobrevendidos(activos, porInbox);
+  for (const r of editables) {
+    console.log(`  SOBREVENDE ${r.key} ("${r.label}") — tipeado en el panel, inbox ${r.inbox}, y el alta no lo acepta`);
+  }
+  if (!medido) {
+    const ciegos = porInbox.filter((f) => f.estado === "no-medido" || f.estado === "ilegible");
+    console.log(
+      ciegos.length
+        ? `NO MEDIDO: no pude leer el documento publicado de ${ciegos.length} inbox(es) (${ciegos.map((f) => f.inbox).join(", ")}).`
+        : "NO MEDIDO: no pude derivar que inboxes existen en Chatwoot.",
+    );
+    console.log("  La capa editable le GANA al archivo: sin leerla, este veredicto solo cubre el repo.");
+    return 2;
+  }
+  const conFila = porInbox.filter((f) => f.estado === "doc");
+  console.log(`capa editable: ${conFila.length} inbox(es) con fila publicada de ${porInbox.length} — el resto cae al archivo.`);
+
+  const roto = subvendidos.length + sobrevendidos.length + sinMapear.length + editables.length;
   console.log(roto ? `VEREDICTO: divergen en ${roto}` : "VEREDICTO: ok — el bot ofrece exactamente lo que se vende");
   return roto ? 1 : 0;
 }
 
 /** El instrumento probado en las DOS direcciones: uno que solo sabe decir "ok" no sirve de gate. */
+/**
+ * Los rubros que la capa EDITABLE agrega en el documento de UN inbox.
+ *
+ * `rubrosExtra` es el unico campo del esquema que suma rubros — `knowledge.mjs` lo dice: "es A
+ * QUIEN le vendemos". Su comentario declara que la capa editable "solo se mueve en la direccion
+ * segura: agrega", y para disparadores es cierto; para RUBROS agregar es justo SOBREVENDER, que
+ * es la direccion cara: el bot engancha a un lead cuyo rubro el alta rechaza.
+ *
+ * Tri-estado, y el `null` nunca es verde: `apagada`/`ausente` son respuestas ("ese inbox cae al
+ * archivo, que ya se mide"), pero "no pude preguntar" es NO MEDIDO.
+ */
+export function rubrosDeLaFila(fila) {
+  if (!fila || fila.estado === null || fila.estado === undefined) return { estado: "no-medido", rubros: [] };
+  if (fila.estado === "apagada" || fila.estado === "ausente") return { estado: fila.estado, rubros: [] };
+  let doc;
+  try {
+    doc = JSON.parse(fila.crudo);
+  } catch {
+    return { estado: "ilegible", rubros: [] };
+  }
+  const lista = Array.isArray(doc?.rubrosExtra) ? doc.rubrosExtra : [];
+  // La `key` es el slug con el que el rubro se compara contra el alta; el `label` es lo que el
+  // lead lee. Se guardan los dos: acusar por slug y no poder NOMBRAR lo que el bot dijo obliga a
+  // ir a la base a mano.
+  const rubros = lista
+    .map((r) => ({ key: String(r?.key ?? "").trim(), label: String(r?.label ?? "").trim() }))
+    .filter((r) => r.key !== "");
+  return { estado: "doc", rubros };
+}
+
+/**
+ * El cruce que faltaba: lo que la capa editable OFRECE, por cada inbox que existe de verdad.
+ * El universo de inboxes se deriva de Chatwoot (`inboxesVivos`), nunca de una lista a mano: el
+ * inbox que alguien cree manana es justo el que nadie iria a mirar.
+ */
+export function editablesSobrevendidos(activos, porInbox) {
+  const permitidos = new Set(activos);
+  const sobrevendidos = [];
+  for (const { inbox, estado, rubros } of porInbox) {
+    if (estado !== "doc") continue;
+    for (const rubro of rubros) {
+      if (!permitidos.has(rubro.key)) sobrevendidos.push({ inbox, ...rubro });
+    }
+  }
+  return sobrevendidos;
+}
+
+export function leerEditables({ leerInboxes = inboxesVivos, leerFila = filaPublicada } = {}) {
+  const inboxes = leerInboxes();
+  if (!Array.isArray(inboxes) || inboxes.length === 0) return { medido: false, porInbox: [] };
+  const porInbox = inboxes.map((inbox) => ({ inbox, ...rubrosDeLaFila(leerFila({ inbox })) }));
+  return { medido: !porInbox.some((f) => f.estado === "no-medido" || f.estado === "ilegible"), porInbox };
+}
+
 function selfCheck() {
   const casos = [
     ["ok", ["dentagest-clinical"], new Set(["dental"]), { subvendidos: 0, sobrevendidos: 0 }],
@@ -152,6 +228,46 @@ function selfCheck() {
   const huerfanos = Object.keys(TRACK_POR_MODULO).filter((key) => !PRODUCTOS.some((p) => p.key === key));
   console.log(`  ${huerfanos.length ? "FALLA" : "ok  "} el mapa no inventa modulos${huerfanos.length ? `: sobra ${huerfanos}` : ""}`);
   if (huerfanos.length) fallos++;
+
+  // LA CAPA EDITABLE. Estos casos existen porque los dos lados que cruzaba este gate eran del
+  // REPO (`MODULOS_LISTOS` contra `RUBROS_ACTIVOS`), y el documento que produccion SIRVE le gana
+  // al archivo. Hoy la fila trae `rubrosExtra` vacio, asi que el gate acertaba por casualidad.
+  const fila = (crudo) => ({ estado: "doc", crudo: JSON.stringify(crudo) });
+  const editables = [
+    ["lee los rubros que la capa editable agrega", fila({ rubrosExtra: [{ key: "vetgest-clinical", label: "Veterinaria" }] }), "doc", 1],
+    ["un documento sin rubrosExtra no agrega ninguno", fila({ faq: [] }), "doc", 0],
+    ["un 404 es respuesta, no ceguera", { estado: "ausente" }, "ausente", 0],
+    ["no poder preguntar NO es 'no agrega nada'", { estado: null }, "no-medido", 0],
+    ["un cuerpo ilegible no se aplana a vacio", { estado: "doc", crudo: "<html>502" }, "ilegible", 0],
+  ];
+  for (const [nombre, entrada, estado, cuantos] of editables) {
+    const r = rubrosDeLaFila(entrada);
+    const ok = r.estado === estado && r.rubros.length === cuantos;
+    console.log(`  ${ok ? "ok  " : "FALLA"} ${nombre}`);
+    if (!ok) fallos++;
+  }
+
+  // El caso que paga el gate: un rubro tipeado en el panel que el alta NO acepta.
+  const sobre = editablesSobrevendidos(
+    ["dentagest-clinical"],
+    [{ inbox: 4, estado: "doc", rubros: [{ key: "vetgest-clinical", label: "Veterinaria" }] }],
+  );
+  const okSobre = sobre.length === 1 && sobre[0].inbox === 4 && sobre[0].label === "Veterinaria";
+  console.log(`  ${okSobre ? "ok  " : "FALLA"} acusa el rubro editable que el alta rechaza, con su inbox`);
+  if (!okSobre) fallos++;
+
+  // Y el que evita el rojo falso: lo editable que SI se vende no es un hallazgo.
+  const sano = editablesSobrevendidos(
+    ["dentagest-clinical"],
+    [{ inbox: 4, estado: "doc", rubros: [{ key: "dentagest-clinical", label: "Dental" }] }],
+  );
+  console.log(`  ${sano.length === 0 ? "ok  " : "FALLA"} no acusa un rubro editable que el alta acepta`);
+  if (sano.length) fallos++;
+
+  // Sin inboxes derivados no hay veredicto: una lista vacia no es "ningun inbox publica nada".
+  const ciego = leerEditables({ leerInboxes: () => null, leerFila: () => ({ estado: "doc", crudo: "{}" }) });
+  console.log(`  ${ciego.medido === false ? "ok  " : "FALLA"} sin universo de inboxes sale NO MEDIDO`);
+  if (ciego.medido !== false) fallos++;
 
   console.log(fallos ? `SELF-CHECK: ${fallos} fallo(s)` : "SELF-CHECK: ok");
   return fallos ? 1 : 0;
