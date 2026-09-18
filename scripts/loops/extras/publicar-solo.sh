@@ -216,7 +216,14 @@ Eso no sale sin tu firma. El resto se publico solo."
     nota="
 Toco una fuente de precio y <b>ningun monto cambio</b> (por eso salio solo)."
   fi
-  if [ -n "$SECO" ]; then echo "  $nombre: publicaria (ningun monto cambia)"; return 0; fi
+  if [ -n "$SECO" ]; then
+    if [ -n "$precio" ]; then
+      echo "  $nombre: publicaria (toca una fuente de precio y ningun monto cambia)"
+    else
+      echo "  $nombre: publicaria (nada toca precio)"
+    fi
+    return 0
+  fi
   if bash "$guion" >"/tmp/pub-$nombre.log" 2>&1; then
     echo "  $nombre: PUBLICADO"
     avisar "<b>Onia — publicado solo</b>
