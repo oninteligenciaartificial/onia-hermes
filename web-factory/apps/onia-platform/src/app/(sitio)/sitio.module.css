@@ -295,7 +295,16 @@
   line-height: 1.2;
   text-decoration: none;
   cursor: pointer;
-  white-space: nowrap;
+  /* Cuarto hermano del `.btn` de globals.css, y el que más importa: éste es el
+     de la HOME. Lo destapó el gate `app/boton-no-empuja-la-pagina.test.ts` — a
+     mano se habían encontrado tres. Acá la causa ya había mordido una vez: el
+     2026-09-17, al renombrar el plan, «Empezar con el Profesional» pidió 219px
+     en una pastilla de 214 y la última letra se pintó fuera del verde a 1440 y
+     1920 (`cf19a28e`). Se curó el TEXTO y la causa quedó viva: con `nowrap` y
+     sin `max-width`, el ancho del botón lo decide el catálogo. */
+  max-width: 100%;
+  white-space: normal;
+  text-wrap: balance;
   /* CTA de la casa: verde señal sobre tinta (9,2:1) */
   background: var(--signal);
   color: var(--tinta);

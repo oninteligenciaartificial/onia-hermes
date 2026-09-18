@@ -512,7 +512,18 @@ svg {
   line-height: 1.2;
   text-decoration: none;
   cursor: pointer;
-  white-space: nowrap;
+  /* Un boton NUNCA es mas ancho que su lugar. Con `white-space: nowrap` a
+     secas, un CTA largo empuja la pagina ENTERA de costado: medido el
+     2026-09-17 contra produccion, «Deja tu operacion lista — 14 dias gratis»
+     pedia 338px en un iPhone SE de 320 y /v1/funciones/facturacion-electronica-siat
+     se movia 30px de lado. `normal` no cambia nada donde el texto entra —solo
+     parte cuando NO entra—, y `balance` reparte las dos lineas parejo en vez
+     de dejar una viuda. Probado inyectando esta misma regla con addStyleTag
+     sobre las 6 pantallas x 5 vistas: 30→0px ahi, 8→0px en /v1/chatbot y cero
+     desbordes nuevos en las otras 28 mediciones. */
+  max-width: 100%;
+  white-space: normal;
+  text-wrap: balance;
   /* el CTA de la casa: verde senal sobre tinta (9,2:1). Sin esto, un
      `class="btn"` pelado salia transparente y cada pagina se pintaba el verde
      con un style inline — de ahi que unas se vieran encendidas y otras no. */

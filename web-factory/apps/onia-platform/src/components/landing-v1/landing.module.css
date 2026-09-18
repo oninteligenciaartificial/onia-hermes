@@ -180,7 +180,13 @@
   line-height: 1.2;
   text-decoration: none;
   cursor: pointer;
-  white-space: nowrap;
+  /* Hermano del `.btn` de globals.css, curado en la misma vuelta: un boton no
+     puede ser mas ancho que su lugar. El largo de una etiqueta la decide el
+     CATALOGO (un plan que se renombra alarga el CTA) y `nowrap` convierte eso
+     en un desborde de la pagina entera. Ver el porque completo alla. */
+  max-width: 100%;
+  white-space: normal;
+  text-wrap: balance;
   transition:
     transform 0.18s var(--ease),
     background-color 0.18s var(--ease),
