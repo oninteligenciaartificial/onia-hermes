@@ -171,6 +171,8 @@ export function WebConfigurator({ especificaciones }: Props) {
       industry: plan.intake.industry || current.industry,
       offer: plan.intake.offer,
       services: plan.intake.services || current.services,
+      description: plan.intake.description || current.description,
+      city: plan.intake.city || current.city,
     }));
     showMobilePane("preview");
   }
@@ -205,6 +207,7 @@ export function WebConfigurator({ especificaciones }: Props) {
     ...(intake.description ? [`Descripción: ${intake.description}`] : []),
     ...(intake.services ? [`Servicios o productos: ${intake.services.replace(/\r?\n/g, "; ")}`] : []),
     `Fotografías: ${ASSET_PERMISSION_LABELS[intake.assetPermission]}.`,
+    ...(intake.currentUrl ? [`Web actual: ${intake.currentUrl}`] : []),
     ...(intake.referenceUrl ? [`Referencia: ${intake.referenceUrl}`] : []),
     ...(intake.notes ? [`Necesidades adicionales: ${intake.notes}`] : []),
     "",
@@ -291,7 +294,7 @@ export function WebConfigurator({ especificaciones }: Props) {
               <span className={styles.stepNumber}>03</span>
               ¿Cuánta web?
             </legend>
-            <p className={styles.stepHint}>El preview cambia con cada nivel: una pantalla, una web completa, una a medida, una tienda. Si pedís algo fuera del alcance, lo confirmamos antes de empezar.</p>
+            <p className={styles.stepHint}>Elegís cuánta web, y la ves antes de pagar: el preview cambia con cada nivel. Una pantalla, una web completa, una a medida, una tienda, un ecommerce. Si pedís algo fuera del alcance, lo confirmamos antes de empezar.</p>
             <div className={styles.scopeGrid}>
               {WEB_STACKS.map((item) => (
                 <button

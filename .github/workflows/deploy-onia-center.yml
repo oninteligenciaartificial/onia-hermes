@@ -55,6 +55,12 @@ jobs:
           # ventana de git; con el checkout superficial "git no contesta" y el
           # gate falla. Medido el 2026-09-17 (run 35273222431).
           fetch-depth: 0
+          # …pero el historial COMPLETO de este repo pesa 11 GB (videos, capturas,
+          # renders) y el runner se quedó sin disco dos veces el 2026-09-18 (runs
+          # 35387801812 y 35388443587: "No space left on device" al segundo
+          # build). Clone parcial: todos los commits y árboles (lo que `git log
+          # --name-only` necesita), los blobs sólo del HEAD.
+          filter: blob:none
 
       - name: Setup Node
         uses: actions/setup-node@v4

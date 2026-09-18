@@ -22,6 +22,11 @@ export function Especificaciones() {
         <h3 className={s.h2}>
           Qué lleva cada web, qué no lleva y qué tenés que poner vos.
         </h3>
+        <p className={s.body} style={{ maxWidth: "48em" }}>
+          Pago único: la web es tuya, con el dominio y el hosting a tu nombre.
+          Sin mensualidad obligatoria; el Cuidado Web de abajo es opcional y lo
+          elegís vos.
+        </p>
       </Reveal>
       <div className={styles.stacks}>
         {WEB_STACKS.map((stack) => (

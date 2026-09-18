@@ -8,6 +8,12 @@
   },
   {
    "asset": "C:/dev/proyectos/onia-hermes/.claude/worktrees/video-editing-silence-removal-073acb/videos/claude-code-03/assets/sfx/pop.wav",
+   "at": 3.77,
+   "gain": 0.5,
+   "duck": true
+  },
+  {
+   "asset": "C:/dev/proyectos/onia-hermes/.claude/worktrees/video-editing-silence-removal-073acb/videos/claude-code-03/assets/sfx/pop.wav",
    "at": 6.42,
    "gain": 0.5,
    "duck": true

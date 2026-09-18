@@ -75,16 +75,16 @@
 - **«$2.99/mes» con asterisco.** Nuestro precio es el que se cobra.
 - **Cifras de ahorro inventadas** («$5.000+ saved»). No.
 
-## Lo que haría con esto (para decidir, no está hecho)
+## Lo que se hizo con esto (Sergio Urcullo, 18-sep: «copiá las ideas que viste» — commit `302586f1`)
 
-| # | Cambio | Costo | Toca |
-|---|---|---|---|
-| 1 | Caja «Contanos tu negocio en una frase» como primer campo del asistente; rellena nombre + rubro por palabras clave | chico | `WebAssistant.tsx`, `web-assistant.ts` (tabla de sinónimos por rubro) |
-| 2 | Titular del configurador: «Ves tu web antes de dejar un solo dato» + la misma promesa en la web personal | trivial | `page.tsx`, `index.html` personal |
-| 3 | «Entendí: …» después de armar, con «corregir» | chico | `WebAssistant.tsx` |
-| 4 | Nombrar el diferencial del alcance: «Elegís cuánta web, y la ves antes de pagar» | trivial | `WebConfigurator.tsx` (hint del paso 03) |
-| 5 | «¿Ya tenés web? Pegá el link» → intake prellenado con `alta-por-extraccion.py` | medio | endpoint server-side + n8n; carril producto/infra |
-| 6 | Frase en «Más información»: pago único, la web es tuya, sin mensualidad obligatoria | trivial | `Especificaciones.tsx` |
+| # | Cambio | Estado |
+|---|---|---|
+| 1 | Caja «Contanos tu negocio en una frase» como primer campo del asistente; elige rubro por palabras clave (`inferRubro`), saca la ciudad (`inferCity`) y es la bajada del hero | ✅ `WebAssistant.tsx`, `web-assistant.ts`. El nombre sigue en su campo: sacarlo de una frase sin modelo adivina mal |
+| 2 | Titular «Ves tu web antes de dejar un solo dato» + la misma promesa en la web personal | ✅ `page.tsx`, `index.html` personal |
+| 3 | «Entendí: …» después de armar, con «Corregir» | ✅ `describeAssistantPlan` + caja `.assistantBrief` |
+| 4 | Nombrar el diferencial del alcance: «Elegís cuánta web, y la ves antes de pagar» | ✅ hint del paso 03 |
+| 5 | «¿Ya tenés web? Pegá el link» | ✅ la versión sin servidor: el link viaja en el pedido («Web actual:») y `from-configurador` lo vuelve referencia de copy del intake con la nota de correr `alta-por-extraccion.py`. El prellenado automático en pantalla (10Web) queda para cuando exista el registro del pedido server-side |
+| 6 | «Pago único: la web es tuya» en «Más información» | ✅ `Especificaciones.tsx` |
 
 Fuentes vistas: durable.com/ai-website-builder · hostinger.com/website-builder y
 /ai-website-builder · es.wix.com/ai-website-builder · 10web.io/ai-website-builder ·

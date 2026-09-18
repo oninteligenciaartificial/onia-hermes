@@ -76,4 +76,16 @@ describe("el mensaje del configurador se vuelve un intake del motor sin inventar
   it("un texto que no es del configurador no fabrica un negocio", () => {
     expect(parseConfiguradorMessage("hola, quiero una web").negocio).toBe("");
   });
+
+  it("«Web actual» viaja como referencia de copy del motor, antes que la referencia visual", () => {
+    const conWeb = parseConfiguradorMessage(MENSAJE.replace("Fotografías:", "Web actual: https://abdes.org.bo\nReferencia: https://una-web-que-me-gusta.com\nFotografías:"));
+    expect(conWeb.webActual).toBe("https://abdes.org.bo");
+    const intake = intakeFromPedido(conWeb);
+    expect(intake.brand.references.map((r) => [r.type, r.url])).toEqual([
+      ["copy", "https://abdes.org.bo"],
+      ["visual", "https://una-web-que-me-gusta.com"],
+    ]);
+    expect(webFactoryIntakeSchema.safeParse(intake).success).toBe(true);
+    expect(pedido.webActual).toBe("");
+  });
 });
