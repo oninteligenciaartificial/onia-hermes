@@ -24,6 +24,17 @@
  * ESTE MODULO ES PURO a propósito: recibe el catálogo ya leído y el texto ya resuelto, y no toca
  * red, disco ni `process`. Quien lo llama con las fuentes REALES —el catálogo desde el ref
  * publicado de onia-platform, el knowledge desde el JSON— es `promesa-inclusion.test.mjs`.
+ *
+ * 🔴 TIENE UN ESPEJO, y editar acá sin copiarlo pone la cadena en rojo a propósito.
+ * `web-factory/apps/onia-platform/scripts/promesa-inclusion.mjs` es una copia BYTE A BYTE de este
+ * archivo. No es desprolijidad: el sitio lo necesita en su `prebuild`, y el publicador de la
+ * landing empaqueta con `git archive` SOLO el subárbol `web-factory/` — así que un `import` que
+ * salga de ahí resuelve en el repo y NO resuelve en el stage. Medido el 2026-09-17: el sitio
+ * importaba este archivo con `../../../../hermes-content/...`, la cadena y el CI pasaban verdes
+ * (acá el hermano existe) y la publicación de onia.com.bo murió dos corridas seguidas con
+ * `ERR_MODULE_NOT_FOUND` — trabajo verde de todos los carriles sin llegar al cliente.
+ * Los cruza `promesa-inclusion-espejo.test.ts`, que vive del lado del espejo porque es el único
+ * lado que viaja al stage.
  */
 
 /**

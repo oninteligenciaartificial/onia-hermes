@@ -1709,3 +1709,61 @@ test("404 CON organizationId = org cliente sin conocimiento, NO un inbox de nadi
   assert.notEqual(config.identity.productName, "Onia — plataforma de gestión");
   assert.equal(config.identity.humanName, "el equipo", "ni 'Sergio' delante del cliente de otro");
 });
+
+// EL INBOX EN CONFLICTO NO TIENE DUEÑO QUE EL BOT PUEDA ELEGIR (DG-047).
+// `clinic_settings` no hace unicos los tres slots de inbox: dos orgs pueden reclamar el mismo
+// numero por un error de alta. Hasta hoy /published elegia la fila mas antigua (determinista)
+// y este motor le contestaba al cliente de un negocio con el conocimiento de OTRO — fuga entre
+// tenants con cara de respuesta normal. El contrato nuevo: el producto DECLARA el conflicto con
+// 409 y este motor lo trata como inbox ajeno — aviso neutro, jamas el archivo (que es el guion
+// de venta de Onia), y jamas elegir una org por su cuenta.
+test("409 del producto (inbox en conflicto entre orgs) = ajeno: neutro, sin funnel y sin elegir org", async () => {
+  resetKnowledgeCache();
+  resetOrgKnowledgeCache();
+  const fetch = async (url, init) => {
+    fetch.calls.push({ url: String(url), init });
+    if (String(url).includes("organizationId=org_onia_interna")) {
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({
+          organizationId: "org_onia_interna",
+          data: valido({ identity: { productName: "Onia — plataforma de gestión", humanName: "Sergio" } }),
+          version: 1,
+          updatedBy: "panel-venta",
+        }),
+      };
+    }
+    return {
+      ok: false,
+      status: 409,
+      json: async () => ({ error: "Inbox en conflicto entre organizaciones", conflicto: true }),
+    };
+  };
+  fetch.calls = [];
+
+  const opts = {
+    ...DB_OPTS,
+    panelUrl: "http://producto/api/chatbot-knowledge/published?organizationId=org_onia_interna",
+    panelSecret: "s3cr3t",
+    inboxId: "88",
+    fetch,
+    nowMs: NOW_MS,
+    path: "/no/existe/knowledge.json",
+  };
+
+  const state = await ensureKnowledge(opts);
+  assert.equal(state.error ?? null, null, "el conflicto es un estado declarado, no un error que gritar");
+  assert.equal(state.data ?? null, null, "sin dueño claro no se sirve el documento de NINGUNA org");
+  assert.equal(state.ajena, true, "conflicto = de alguien que no es Onia, aunque no se sepa de quien");
+  assert.equal(state.huerfano, false, "dos orgs lo reclaman: 'de nadie' seria mentira");
+
+  const config = withKnowledge(DEFAULT_CONFIG, opts);
+  assert.equal(config.modo, "recepcionista", "inbox en conflicto jamas es el funnel de venta de Onia");
+  assert.notEqual(config.identity.productName, "Onia — plataforma de gestión");
+  assert.equal(config.identity.humanName, "el equipo", "ni 'Sergio' delante del cliente de otro");
+
+  const result = step(createState(), { text: "hola", receivedAt: T0 }, { config });
+  assert.doesNotMatch(result.replies[0].text, /Sergio/i, "el humano de Onia no se nombra en un canal en disputa");
+  assert.doesNotMatch(result.replies[0].text, /plataforma por módulos/i, "ni el pitch de venta de Onia");
+});

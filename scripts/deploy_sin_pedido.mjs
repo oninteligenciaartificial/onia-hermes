@@ -77,7 +77,7 @@
  */
 
 import { execFileSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
 import { DESTINOS } from './kanban/publicar-aprobado.mjs';
@@ -366,6 +366,47 @@ export function _preguntarParaPruebas(cmd, args, clave) {
   return { salida: sh(cmd, args, { clave }), causa: CAUSAS.get(clave) ?? null };
 }
 
+/**
+ * El clon donde corren los detectores. No es una ruta cualquiera: es el árbol que
+ * `espejo-check.mjs` compara contra `/opt/onia/bot`, y el que se atrasa.
+ */
+const CLON_DE_LOS_DETECTORES = '/root/loops/onia-hermes';
+
+/**
+ * PREPARAR el árbol donde se va a medir — no es medir, y por eso vive acá y no en el detector.
+ *
+ * ⚠️ El que se negaba a contestar era el bot, y su detector tiene RAZÓN en negarse:
+ * `espejo-check.mjs` declara en su encabezado que lee y no escribe, porque un instrumento que
+ * muta lo que mide deja de ser instrumento (y el 2026-09-10 un clon atrasado ya hizo cantar
+ * DESINCRONIZADO con producción ADELANTE: obedecerlo revertía un arreglo vivo). Así que la
+ * cura NO es que el detector se ponga al día: es que QUIEN PREGUNTA deje el árbol en
+ * condiciones de contestar, igual que ya hacen `publicar.sh` del bot y del SIAT (los dos con
+ * su `merge --ff-only` antes de comparar) y el sincronizador de las :44.
+ *
+ * Medido el 2026-09-18: el integrador corre en nodo-casa, así que los detectores corren por
+ * SSH en el clon del VPS. Pushear a `main` lo deja atrasado al instante, y la corrida
+ * siguiente contesta «ESPEJO SIN VEREDICTO — difieren promesa-inclusion.mjs» sobre el archivo
+ * recién pusheado. O sea que el integrador se cegaba SOLO, cada vuelta, justo después de
+ * mergear — y la dirección del daño es la cara: NO_MEDIDO es el veredicto que se usa para no
+ * molestar a Sergio Urcullo, así que un destino mudo CALLA un pedido de deploy que hacía falta.
+ * Esa corrida tenía 28 archivos del bot desincronizados con producción.
+ *
+ * `--ff-only` es lo único que se permite: no puede crear un commit ni perder trabajo local. Si
+ * el clon tiene algo propio, el fast-forward no procede, el detector sigue viendo un árbol
+ * dudoso y se sigue negando — que es exactamente lo que debe pasar.
+ */
+export function ponerElEspejoAlDia({ correr = dondeVive, repo = CLON_DE_LOS_DETECTORES } = {}) {
+  const salida = correr(
+    `git -C ${repo} fetch origin --quiet; git -C ${repo} merge --ff-only --quiet origin/main 2>&1 && echo AL_DIA`,
+    { clave: 'espejo' },
+  );
+  if (salida === null) return { puesto: false, motivo: 'no pude ejecutar el fast-forward' };
+  if (!String(salida).split('\n').map((l) => l.trim()).includes('AL_DIA')) {
+    return { puesto: false, motivo: `el fast-forward no procedió: ${String(salida).trim().split('\n')[0] || 'sin salida'}` };
+  }
+  return { puesto: true, motivo: null };
+}
+
 /** Corre un comando donde vive `/opt`: acá si existe, y si no, en el VPS por SSH. */
 function dondeVive(guion, { timeout = 300_000, clave } = {}) {
   if (existsSync('/opt/onia-landing') || existsSync('/opt/onia-platform')) {
@@ -490,6 +531,11 @@ function medirEnVivo() {
     console.log('  Con el barrido incompleto no puedo decir que a un destino le falte pedido.');
     return 2;
   }
+
+  // Antes de preguntarle a nadie: dejar el clon donde corren los detectores en `origin/main`.
+  // Se hace ACÁ y no dentro de un detector porque preparar no es medir — ver `ponerElEspejoAlDia`.
+  const alDia = ponerElEspejoAlDia();
+  if (!alDia.puesto) console.log(`aviso: el árbol de los detectores quedó como estaba (${alDia.motivo})`);
 
   const destinos = Object.keys(DESTINOS);
   const filas = clasificarCobertura({
@@ -802,6 +848,42 @@ function selfCheck() {
     'si no se pudo ejecutar, sigue siendo null',
   );
   ok(_causaParaPruebas('zz_test_nulo') === null, 'y la causa la pone el catch, no el lector');
+
+  // ── preparar el árbol de los detectores ─────────────────────────────────────────────
+  // El bot se cegaba solo cada vez que el integrador pusheaba: el clon donde corren los
+  // detectores quedaba atrás y `espejo-check.mjs` se negaba a concluir (con razón).
+  ok(
+    ponerElEspejoAlDia({ correr: () => 'AL_DIA' }).puesto === true,
+    'si el fast-forward procede, el árbol quedó al día',
+  );
+  ok(
+    ponerElEspejoAlDia({ correr: () => null }).puesto === false,
+    'si no se pudo ejecutar, NO se declara al día',
+  );
+  const noProcede = ponerElEspejoAlDia({ correr: () => 'fatal: Not possible to fast-forward, aborting.' });
+  ok(noProcede.puesto === false, 'un fast-forward que no procede deja el árbol como estaba');
+  ok(
+    /fast-forward no procedió/.test(noProcede.motivo || ''),
+    'y lo dice, para que el NO MEDIDO del detector no salga mudo',
+  );
+
+  // ANTI-MUTACIÓN: el comando tiene que ser un fast-forward y nada más. Un `merge` pelado
+  // acá crearía un commit de merge en el clon del VPS a espaldas de todos, y un `reset
+  // --hard` le borraría trabajo local a quien lo tuviera. Sin este caso, cambiar la bandera
+  // deja el archivo entero en verde.
+  let pedido = '';
+  ponerElEspejoAlDia({ correr: (guion) => { pedido = guion; return 'AL_DIA'; } });
+  ok(/merge --ff-only/.test(pedido), 'el árbol se adelanta sólo por fast-forward');
+  ok(!/reset|--hard|checkout|clean/.test(pedido), 'nunca se le tira trabajo local al clon');
+  ok(/fetch origin/.test(pedido), 'y se fetchea antes, o el ff compararía contra un ref viejo');
+
+  // CABLEADO: preparar y después medir. Si la llamada desaparece —o queda DESPUÉS de los
+  // detectores— el defecto vuelve entero y ningún caso puro lo ve.
+  const fuente = readFileSync(new URL(import.meta.url), 'utf8');
+  const iPrepara = fuente.indexOf('const alDia = ponerElEspejoAlDia()');
+  const iMide = fuente.indexOf('const filas = clasificarCobertura({');
+  ok(iPrepara > 0, 'medirEnVivo prepara el árbol de los detectores');
+  ok(iPrepara < iMide, 'y lo prepara ANTES de preguntarle a los detectores, no después');
 
   console.log(fallos === 0 ? 'self-check OK' : `self-check con ${fallos} fallo(s)`);
   return fallos === 0 ? 0 : 1;

@@ -196,6 +196,66 @@ export function seleccionarEsperandoHumano(filas, { ahoraMs, umbralMs = UMBRAL_M
 }
 
 /**
+ * Quien escribio, fue atendido SOLO POR LA MAQUINA, y no volvio — y nadie de Onia se entero.
+ *
+ * Pura y sin I/O. Es el agujero que comparten las dos miradas de arriba, y las dos lo tienen
+ * por el mismo motivo: ambas exigen que el bot se haya CALLADO. `seleccionarColgados` descarta
+ * toda conversacion cuyo ultimo mensaje sea saliente, y `seleccionarEsperandoHumano` solo mira
+ * las que traen la promesa de M5. Una conversacion en la que el bot hizo bien su trabajo
+ * —contesto, ofrecio dos horarios— y la persona no eligio ninguno no la ve NINGUNA de las dos.
+ *
+ * MEDIDO el 2026-09-17 contra la base de Chatwoot, con dos desconocidos reales:
+ *   conv 58 (WhatsApp, 3 h) entro por el boton `wa.me` de onia.com.bo; conv 38 (web, 20 DIAS)
+ *   escribio "hola" el 29-ago. De ninguna de las dos se entero nadie jamas.
+ *
+ * Y lo que lo vuelve grave es la direccion del cambio: **el bot apago el unico aviso de lead
+ * nuevo que habia**. Antes de que contestara, ese desconocido quedaba sin respuesta y disparaba
+ * el vigia de arriba. Ahora el bot contesta SIEMPRE, asi que ese vigia no se dispara NUNCA. Una
+ * capacidad nueva se llevo puesta la cobertura de la superficie que ya existia, en silencio.
+ *
+ * No hay techo de edad ni piso de "ya es tarde": con cero clientes pagando, el unico que vende
+ * quiere saber que alguien apreto el boton de WhatsApp en su web. Quien decide es Sergio Urcullo.
+ *
+ * @param {object[]} filas
+ * @param {{ahoraMs:number, umbralMs?:number, frase:string|null}} opciones  `frase` sale de
+ *   `frasePromesaHandoff()` y aca se usa al reves que en la mirada de al lado: para EXCLUIR lo
+ *   que ya es de ella. Sin guion legible se mira igual — perder el guion no puede apagar esto.
+ */
+export function seleccionarEsperandoDecision(filas, { ahoraMs, umbralMs = UMBRAL_MS, frase } = {}) {
+  const buscada = sinAdornos(frase).trim();
+  const esperando = [];
+
+  for (const lista of agruparPorConversacion(filas).values()) {
+    const ultimo = lista[lista.length - 1];
+    if (Number(ultimo.messageType) !== ENTRANTE) {
+      // El ultimo es saliente: el bot (o alguien) hablo ultimo. Ese es el caso de esta mirada.
+    } else continue; // le toca contestar a Onia: es del vigia de arriba
+
+    const iSuyo = lista.findLastIndex((m) => Number(m.messageType) === ENTRANTE);
+    if (iSuyo < 0) continue; // nunca escribio nadie: es un saliente que arrancamos nosotros
+
+    // Todo lo que se dijo DESPUES de que la persona hablo por ultima vez. Si ahi hay una
+    // promesa de humano, la conversacion es de `seleccionarEsperandoHumano` y no se duplica:
+    // dos avisos por la misma conversacion es como se le deja de creer a un vigia.
+    const atencion = lista.slice(iSuyo + 1);
+    if (buscada.length >= 20 && atencion.some((m) => sinAdornos(m.content).includes(buscada))) continue;
+
+    if (ahoraMs - ultimo.createdAtMs < umbralMs) continue; // todavia lo esta leyendo
+    if (esNuestra({ contacto: ultimo.contacto, telefono: ultimo.telefono })) continue;
+
+    // Lo que se muestra es lo ULTIMO QUE DIJO LA PERSONA, por el mismo motivo que arriba: la
+    // oferta del bot no le dice a Sergio Urcullo a que le tiene que contestar.
+    esperando.push({
+      ...ultimo,
+      content: lista[iSuyo].content,
+      esperandoDecision: true,
+      esperaMin: Math.round((ahoraMs - ultimo.createdAtMs) / 60000),
+    });
+  }
+  return esperando.sort((a, b) => a.esperaMin - b.esperaMin);
+}
+
+/**
  * Los escalones de antiguedad, en dias. Pasado el mes se re-avisa una vez por mes.
  *
  * No son "cada cuanto se mira" (eso lo manda el cron, cada 2 h): son los momentos en que un
@@ -287,10 +347,11 @@ function espera(min) {
 /**
  * El aviso: cuantos son, quien, hace cuanto y por donde entro.
  *
- * Los dos casos van SEPARADOS porque piden cosas distintas de Sergio: al que nadie contesto hay
- * que contestarle, y al que espera un humano el bot YA le prometio que le escriben. Sumarlos
- * bajo el mismo titulo ("escribieron y nadie contesto") diria algo falso del segundo grupo, y un
- * vigia que grita mal no molesta: inutiliza.
+ * Los TRES casos van SEPARADOS porque piden cosas distintas de Sergio: al que nadie contesto hay
+ * que contestarle, al que espera un humano el bot YA le prometio que le escriben, y al que el bot
+ * atendio bien nadie le debe nada — lo unico que pasa es que Sergio Urcullo no sabia que existia.
+ * Sumarlos bajo el mismo titulo ("escribieron y nadie contesto") diria algo falso de dos de los
+ * tres grupos, y un vigia que grita mal no molesta: inutiliza.
  */
 export function armarAviso(colgados) {
   const linea = (c) => {
@@ -300,17 +361,24 @@ export function armarAviso(colgados) {
     // el que lleva 20 dias se ve igual que uno que entro recien, le hace creer que hoy llegaron
     // cinco desconocidos nuevos — y actua sobre un hecho falso.
     const cuanto = c.reaviso ? `${espera(c.esperaMin)} y sigue esperando` : `${espera(c.esperaMin)} esperando`;
-    return `conv ${c.conversationId} (${canal}${derivado}) — ${cuanto} — ${escapar(c.contacto || 'sin nombre')}: ${escapar(String(c.content || '').slice(0, 70))}`;
+    // La salvedad va PEGADA a la linea del sujeto que no se pudo medir, no en el titulo: una
+    // salvedad suelta arriba absuelve al grupo entero y deja de decir de QUIEN no se sabe.
+    const sinMedir = c.esperandoDecision && c.humanoTomo === null ? ' · no pude confirmar si ya le escribiste' : '';
+    return `conv ${c.conversationId} (${canal}${derivado}) — ${cuanto}${sinMedir} — ${escapar(c.contacto || 'sin nombre')}: ${escapar(String(c.content || '').slice(0, 70))}`;
   };
 
-  const sinRespuesta = (colgados || []).filter((c) => !c.esperandoHumano);
+  const sinRespuesta = (colgados || []).filter((c) => !c.esperandoHumano && !c.esperandoDecision);
   const esperanHumano = (colgados || []).filter((c) => c.esperandoHumano);
+  const sinQueSepas = (colgados || []).filter((c) => c.esperandoDecision);
   const bloques = [];
   if (sinRespuesta.length) {
     bloques.push(`🔴 <b>${sinRespuesta.length} desconocido(s) escribieron y nadie contesto</b>\n<pre>${sinRespuesta.map(linea).join('\n')}</pre>`);
   }
   if (esperanHumano.length) {
     bloques.push(`🔴 <b>${esperanHumano.length} espera(n) que le escribas vos — el bot ya se lo prometio</b>\n<pre>${esperanHumano.map(linea).join('\n')}</pre>`);
+  }
+  if (sinQueSepas.length) {
+    bloques.push(`🔴 <b>${sinQueSepas.length} escribio(eron), el bot lo(s) atendio y no volvio(eron) — no lo sabia nadie mas</b>\n<pre>${sinQueSepas.map(linea).join('\n')}</pre>`);
   }
   return bloques.join('\n');
 }
@@ -376,13 +444,24 @@ async function enriquecerConEstadoDelBot(colgados) {
     const { stdout } = await run('docker', [
       'exec', process.env.ONIA_BOT_ESTADO_DB || 'supabase-db',
       'psql', '-U', 'postgres', '-d', 'postgres', '-tAF\t', '-c',
-      `select conversation_key, coalesce(bot_stage,'') from onia_center.bot_conversations where conversation_key in (${claves});`,
+      `select conversation_key, coalesce(bot_stage,''), coalesce(human_took_over,false) from onia_center.bot_conversations where conversation_key in (${claves});`,
     ]);
-    const porClave = new Map(stdout.split('\n').map((l) => l.split('\t')).filter((c) => c.length >= 2).map((c) => [c[0], c[1]]));
-    for (const c of colgados) c.botStage = porClave.get(`chatwoot:${c.conversationId}`) || '';
+    const porClave = new Map(stdout.split('\n').map((l) => l.split('\t')).filter((c) => c.length >= 3).map((c) => [c[0], c]));
+    for (const c of colgados) {
+      const fila = porClave.get(`chatwoot:${c.conversationId}`);
+      c.botStage = fila?.[1] || '';
+      // `humanoTomo` es TRI-ESTADO y su `null` decide un aviso, asi que no puede aplanarse a
+      // `false`: una conversacion que el motor no conoce (no hay fila) tampoco es "nadie la
+      // tomo" — es "no se sabe". Aplanarla diria que Sergio Urcullo nunca la vio, que es
+      // exactamente la afirmacion que este vigia existe para no inventar.
+      c.humanoTomo = fila ? fila[2] === 't' : null;
+    }
   } catch {
-    // sin estado del motor el aviso sigue siendo cierto, solo menos detallado
+    // Sin estado del motor los dos primeros avisos siguen siendo ciertos, solo menos
+    // detallados; el tercero sale con su salvedad. `humanoTomo` queda undefined -> se
+    // normaliza a null abajo, nunca a false.
   }
+  for (const c of colgados) if (c.humanoTomo === undefined) c.humanoTomo = null;
   return colgados;
 }
 
@@ -434,10 +513,21 @@ export async function correrVigia(opciones = {}, deps = {}) {
     frase = frasePromesaHandoff(readFileSync(deps.configDelBot || CONFIG_DEL_BOT, 'utf8'));
   } catch { /* sin guion legible no se miran los handoff */ }
 
-  const colgados = await (deps.enriquecer || enriquecerConEstadoDelBot)([
+  const vistos = await (deps.enriquecer || enriquecerConEstadoDelBot)([
     ...seleccionarColgados(filas, { ahoraMs, umbralMs: opciones.umbralMs }),
     ...seleccionarEsperandoHumano(filas, { ahoraMs, umbralMs: opciones.umbralMs, frase }),
+    ...seleccionarEsperandoDecision(filas, { ahoraMs, umbralMs: opciones.umbralMs, frase }),
   ]);
+
+  // El filtro de la tercera mirada corre DESPUES de enriquecer porque `human_took_over` lo
+  // escribe el motor, no Chatwoot: es el unico dato que sabe si una PERSONA de Onia tomo la
+  // conversacion. Reclamarle un lead que el ya contesto es como se apaga un vigia.
+  //
+  // Los otros dos grupos NO se filtran por esto a proposito: en ellos el silencio es del lado
+  // de Onia, asi que un humano que paso por ahi y aun asi dejo a la persona esperando sigue
+  // siendo el aviso. Y el `null` (no se pudo preguntar) avisa igual, con la salvedad escrita en
+  // su linea: callarse por no haber podido medir es perder el lead, que es el lado caro.
+  const colgados = vistos.filter((c) => !(c.esperandoDecision && c.humanoTomo === true));
   const estadoPrevio = leerEstado(rutaEstado);
   const nuevos = nuevosParaAvisar(colgados, estadoPrevio);
 
@@ -461,13 +551,20 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     umbralMs: Number.isFinite(umbralMin) && umbralMin > 0 ? umbralMin * 60000 : undefined,
   })
     .then(({ colgados, nuevos }) => {
+      // La CLI dice lo MISMO que el Telegram, y con las mismas tres categorias. Cuando el
+      // aviso gano la tercera mirada esta salida se quedo con dos y llamaba «esperando
+      // respuesta» a alguien a quien el bot SI le habia contestado: quien lee la CLI para
+      // diagnosticar se lleva un hecho falso, que es justo lo que el aviso evita.
       for (const c of colgados) {
         const canal = Number(c.inboxId) === 5 ? 'WhatsApp' : 'web';
-        const que = c.esperandoHumano ? 'esperando que le escriba una persona' : 'esperando respuesta';
+        const que = c.esperandoHumano ? 'esperando que le escriba una persona'
+          : c.esperandoDecision ? 'atendido por el bot y no volvio — no lo sabe nadie'
+            : 'esperando respuesta';
         console.log(`conv ${c.conversationId} (${canal}) — ${espera(c.esperaMin)} ${que} — ${c.contacto || 'sin nombre'}: ${String(c.content || '').slice(0, 60)}`);
       }
       const conHumano = colgados.filter((c) => c.esperandoHumano).length;
-      console.log(`${colgados.length} colgado(s) — ${colgados.length - conHumano} sin respuesta · ${conHumano} esperando a un humano prometido · ${nuevos.length} sin avisar${argv.includes('--emit') ? '' : ' (SECO — agregar --emit)'}`);
+      const sinQueSepas = colgados.filter((c) => c.esperandoDecision).length;
+      console.log(`${colgados.length} colgado(s) — ${colgados.length - conHumano - sinQueSepas} sin respuesta · ${conHumano} esperando a un humano prometido · ${sinQueSepas} atendido(s) por el bot que nadie mas vio · ${nuevos.length} sin avisar${argv.includes('--emit') ? '' : ' (SECO — agregar --emit)'}`);
       process.exit(0);
     })
     .catch((error) => {
