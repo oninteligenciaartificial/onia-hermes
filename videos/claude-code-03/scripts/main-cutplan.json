@@ -391,10 +391,34 @@
  "keep": [
   {
    "start": 1.01,
-   "end": 29.99
+   "end": 9.82
+  },
+  {
+   "start": 10.16,
+   "end": 18.94
+  },
+  {
+   "start": 19.82,
+   "end": 21.76
+  },
+  {
+   "start": 21.96,
+   "end": 23.26
+  },
+  {
+   "start": 23.66,
+   "end": 27.66
+  },
+  {
+   "start": 28.1,
+   "end": 29.8
   },
   {
    "start": 30.73,
+   "end": 42.62
+  },
+  {
+   "start": 42.88,
    "end": 50.45
   },
   {
@@ -403,26 +427,122 @@
   },
   {
    "start": 54.36,
+   "end": 54.76
+  },
+  {
+   "start": 55.2,
+   "end": 55.86
+  },
+  {
+   "start": 56.12,
+   "end": 57.7
+  },
+  {
+   "start": 58.04,
+   "end": 62.4
+  },
+  {
+   "start": 62.56,
+   "end": 64.54
+  },
+  {
+   "start": 64.82,
+   "end": 72.12
+  },
+  {
+   "start": 72.44,
+   "end": 78.12
+  },
+  {
+   "start": 78.32,
+   "end": 82.98
+  },
+  {
+   "start": 83.5,
+   "end": 83.76
+  },
+  {
+   "start": 84.32,
    "end": 84.68
   },
   {
    "start": 85.74,
+   "end": 86.48
+  },
+  {
+   "start": 86.8,
+   "end": 93.46
+  },
+  {
+   "start": 93.74,
    "end": 106.45
   },
   {
    "start": 109.34,
+   "end": 109.7
+  },
+  {
+   "start": 110.24,
    "end": 113.27
   },
   {
    "start": 114.37,
+   "end": 116.92
+  },
+  {
+   "start": 117.14,
+   "end": 118.02
+  },
+  {
+   "start": 118.32,
    "end": 123.68
   },
   {
    "start": 124.9,
+   "end": 128.14
+  },
+  {
+   "start": 128.28,
+   "end": 130.94
+  },
+  {
+   "start": 131.08,
+   "end": 132.14
+  },
+  {
+   "start": 132.26,
+   "end": 132.68
+  },
+  {
+   "start": 132.88,
+   "end": 133.8
+  },
+  {
+   "start": 134.16,
+   "end": 157.9
+  },
+  {
+   "start": 158.36,
+   "end": 159.74
+  },
+  {
+   "start": 160.08,
    "end": 165.44
   },
   {
    "start": 166.56,
+   "end": 170.26
+  },
+  {
+   "start": 170.38,
+   "end": 174.48
+  },
+  {
+   "start": 174.74,
+   "end": 181.3
+  },
+  {
+   "start": 182.28,
    "end": 186.16
   },
   {
@@ -439,18 +559,34 @@
   },
   {
    "start": 226.9,
+   "end": 228.9
+  },
+  {
+   "start": 229.24,
    "end": 232.36
   },
   {
    "start": 234.01,
+   "end": 238.98
+  },
+  {
+   "start": 239.26,
    "end": 241.79
   },
   {
    "start": 242.68,
-   "end": 259.6
+   "end": 253.64
   },
   {
-   "start": 268,
+   "start": 253.86,
+   "end": 259.26
+  },
+  {
+   "start": 268.08,
+   "end": 271.86
+  },
+  {
+   "start": 272.02,
    "end": 278.4
   },
   {
@@ -459,14 +595,54 @@
   },
   {
    "start": 305.83,
+   "end": 322.28
+  },
+  {
+   "start": 322.46,
+   "end": 326.26
+  },
+  {
+   "start": 326.44,
+   "end": 327.22
+  },
+  {
+   "start": 327.66,
+   "end": 328.86
+  },
+  {
+   "start": 329.2,
+   "end": 330.96
+  },
+  {
+   "start": 331.26,
+   "end": 335.2
+  },
+  {
+   "start": 335.62,
+   "end": 336.22
+  },
+  {
+   "start": 336.52,
    "end": 337.3
   },
   {
    "start": 338.95,
+   "end": 347.5
+  },
+  {
+   "start": 347.76,
    "end": 350.66
   },
   {
    "start": 393.9,
+   "end": 399.0
+  },
+  {
+   "start": 399.36,
+   "end": 407.58
+  },
+  {
+   "start": 407.72,
    "end": 413.65
   },
   {
@@ -475,15 +651,43 @@
   },
   {
    "start": 423.56,
+   "end": 424.74
+  },
+  {
+   "start": 424.88,
+   "end": 425.84
+  },
+  {
+   "start": 426.0,
+   "end": 429.42
+  },
+  {
+   "start": 429.54,
+   "end": 431.14
+  },
+  {
+   "start": 431.32,
+   "end": 433.08
+  },
+  {
+   "start": 433.2,
    "end": 438.49
   },
   {
    "start": 440.21,
+   "end": 442.24
+  },
+  {
+   "start": 442.4,
    "end": 444.98
   },
   {
    "start": 445.62,
-   "end": 459.4
+   "end": 456.96
+  },
+  {
+   "start": 457.16,
+   "end": 459.06
   },
   {
    "start": 461.5,
@@ -491,10 +695,38 @@
   },
   {
    "start": 545.98,
+   "end": 560.88
+  },
+  {
+   "start": 561.08,
    "end": 564.59
   },
   {
    "start": 568.46,
+   "end": 574.88
+  },
+  {
+   "start": 575.4,
+   "end": 578.62
+  },
+  {
+   "start": 578.84,
+   "end": 579.48
+  },
+  {
+   "start": 579.82,
+   "end": 580.42
+  },
+  {
+   "start": 580.8,
+   "end": 581.44
+  },
+  {
+   "start": 581.66,
+   "end": 584.94
+  },
+  {
+   "start": 585.42,
    "end": 601.73
   },
   {
@@ -502,15 +734,35 @@
    "end": 614.56
   },
   {
-   "start": 620.2,
-   "end": 639.95
+   "start": 620.24,
+   "end": 631.84
   },
   {
-   "start": 646.5,
+   "start": 632.04,
+   "end": 638.3
+  },
+  {
+   "start": 638.44,
+   "end": 639.58
+  },
+  {
+   "start": 646.56,
+   "end": 661.56
+  },
+  {
+   "start": 661.84,
+   "end": 664.84
+  },
+  {
+   "start": 664.98,
    "end": 669.2
   },
   {
    "start": 682.3,
+   "end": 690.34
+  },
+  {
+   "start": 690.72,
    "end": 696.05
   },
   {
@@ -523,7 +775,35 @@
   },
   {
    "start": 775.07,
-   "end": 819.5
+   "end": 775.79
+  },
+  {
+   "start": 775.95,
+   "end": 777.69
+  },
+  {
+   "start": 777.83,
+   "end": 787.01
+  },
+  {
+   "start": 787.29,
+   "end": 791.91
+  },
+  {
+   "start": 792.25,
+   "end": 804.99
+  },
+  {
+   "start": 805.49,
+   "end": 807.27
+  },
+  {
+   "start": 807.53,
+   "end": 808.69
+  },
+  {
+   "start": 809.11,
+   "end": 819.35
   },
   {
    "start": 828.6,
@@ -531,6 +811,10 @@
   },
   {
    "start": 840.24,
+   "end": 848.17
+  },
+  {
+   "start": 848.27,
    "end": 849.32
   },
   {
@@ -539,6 +823,14 @@
   },
   {
    "start": 867.03,
+   "end": 880.27
+  },
+  {
+   "start": 880.65,
+   "end": 885.25
+  },
+  {
+   "start": 885.73,
    "end": 886.45
   },
   {
@@ -547,6 +839,10 @@
   },
   {
    "start": 1105.62,
+   "end": 1106.83
+  },
+  {
+   "start": 1107.05,
    "end": 1119.7
   },
   {
@@ -560,7 +856,7 @@
    "i": 0,
    "start": 0.82,
    "end": 4.9,
-   "text": "Bueno, en el anterior video te expliqué más o menos qué serían, pero funciona en base",
+   "text": "Bueno, en el anterior video te expliqu\u00c3\u00a9 m\u00c3\u00a1s o menos qu\u00c3\u00a9 ser\u00c3\u00adan, pero funciona en base",
    "keep": true,
    "reason": "contenido"
   },
@@ -576,7 +872,7 @@
    "i": 2,
    "start": 7.26,
    "end": 9.76,
-   "text": "¿Cómo podemos hacer que nuestros claudos funcione sin nosotros?",
+   "text": "\u00c2\u00bfC\u00c3\u00b3mo podemos hacer que nuestros claudos funcione sin nosotros?",
    "keep": true,
    "reason": "contenido"
   },
@@ -584,7 +880,7 @@
    "i": 3,
    "start": 10.22,
    "end": 14,
-   "text": "Obviamente que nosotros tenemos que ahora a autorización absolutamente todo y no podemos",
+   "text": "Obviamente que nosotros tenemos que ahora a autorizaci\u00c3\u00b3n absolutamente todo y no podemos",
    "keep": true,
    "reason": "contenido"
   },
@@ -608,7 +904,7 @@
    "i": 6,
    "start": 19.88,
    "end": 21.7,
-   "text": "Primero, ¿cómo es la estructura?",
+   "text": "Primero, \u00c2\u00bfc\u00c3\u00b3mo es la estructura?",
    "keep": true,
    "reason": "contenido"
   },
@@ -632,7 +928,7 @@
    "i": 9,
    "start": 28.84,
    "end": 35.24,
-   "text": "agentes que haría que, si le entregamos una tarea que la divida en subtareas con los subagentes",
+   "text": "agentes que har\u00c3\u00ada que, si le entregamos una tarea que la divida en subtareas con los subagentes",
    "keep": true,
    "reason": "contenido"
   },
@@ -640,7 +936,7 @@
    "i": 10,
    "start": 35.24,
    "end": 38.9,
-   "text": "y haríamos que la desarrollemos más rápido que vamos a ver cómo funciona más adelante.",
+   "text": "y har\u00c3\u00adamos que la desarrollemos m\u00c3\u00a1s r\u00c3\u00a1pido que vamos a ver c\u00c3\u00b3mo funciona m\u00c3\u00a1s adelante.",
    "keep": true,
    "reason": "contenido"
   },
@@ -648,7 +944,7 @@
    "i": 11,
    "start": 39.5,
    "end": 42.56,
-   "text": "Luego los conectores y por último el horario.",
+   "text": "Luego los conectores y por \u00c3\u00baltimo el horario.",
    "keep": true,
    "reason": "contenido"
   },
@@ -656,7 +952,7 @@
    "i": 12,
    "start": 42.94,
    "end": 48.66,
-   "text": "Y los cuatro se configuran simplemente con un prompt o vos dándole la instrucción como",
+   "text": "Y los cuatro se configuran simplemente con un prompt o vos d\u00c3\u00a1ndole la instrucci\u00c3\u00b3n como",
    "keep": true,
    "reason": "contenido"
   },
@@ -664,7 +960,7 @@
    "i": 13,
    "start": 48.66,
    "end": 52.32,
-   "text": "más se te haga más cómodo, como se te haga más cómodo.",
+   "text": "m\u00c3\u00a1s se te haga m\u00c3\u00a1s c\u00c3\u00b3modo, como se te haga m\u00c3\u00a1s c\u00c3\u00b3modo.",
    "keep": true,
    "reason": "contenido"
   },
@@ -672,7 +968,7 @@
    "i": 14,
    "start": 54.18,
    "end": 55.8,
-   "text": "Ahora, ¿qué es un hook?",
+   "text": "Ahora, \u00c2\u00bfqu\u00c3\u00a9 es un hook?",
    "keep": true,
    "reason": "contenido"
   },
@@ -680,7 +976,7 @@
    "i": 15,
    "start": 56.18,
    "end": 60.78,
-   "text": "Cada vez que pase esto, él hace aquello, por ejemplo, aquí hemos un ejemplo que sería",
+   "text": "Cada vez que pase esto, \u00c3\u00a9l hace aquello, por ejemplo, aqu\u00c3\u00ad hemos un ejemplo que ser\u00c3\u00ada",
    "keep": true,
    "reason": "contenido"
   },
@@ -688,7 +984,7 @@
    "i": 16,
    "start": 60.78,
    "end": 64.48,
-   "text": "antes de escribir un archivo, revisar que no rompa la configuración.",
+   "text": "antes de escribir un archivo, revisar que no rompa la configuraci\u00c3\u00b3n.",
    "keep": true,
    "reason": "contenido"
   },
@@ -696,7 +992,7 @@
    "i": 17,
    "start": 64.88,
    "end": 70.84,
-   "text": "Eso es un hook, cada que está a punto de escribir un archivo, él va a revisar que",
+   "text": "Eso es un hook, cada que est\u00c3\u00a1 a punto de escribir un archivo, \u00c3\u00a9l va a revisar que",
    "keep": true,
    "reason": "contenido"
   },
@@ -704,7 +1000,7 @@
    "i": 18,
    "start": 70.84,
    "end": 75.02,
-   "text": "no rompa la configuración, entonces vos puedes darle una regla tan simple como es",
+   "text": "no rompa la configuraci\u00c3\u00b3n, entonces vos puedes darle una regla tan simple como es",
    "keep": true,
    "reason": "contenido"
   },
@@ -712,7 +1008,7 @@
    "i": 19,
    "start": 75.02,
    "end": 80.84,
-   "text": "que antes de que empiece a crear un proyecto nuevo, que revise si realmente está funcionando",
+   "text": "que antes de que empiece a crear un proyecto nuevo, que revise si realmente est\u00c3\u00a1 funcionando",
    "keep": true,
    "reason": "contenido"
   },
@@ -720,7 +1016,7 @@
    "i": 20,
    "start": 80.84,
    "end": 82.92,
-   "text": "y que la configuración no se esté rompiendo.",
+   "text": "y que la configuraci\u00c3\u00b3n no se est\u00c3\u00a9 rompiendo.",
    "keep": true,
    "reason": "contenido"
   },
@@ -728,7 +1024,7 @@
    "i": 21,
    "start": 83.56,
    "end": 91.16,
-   "text": "Luego, luego por ejemplo, después de escribir un archivo, anotar que tocó al terminar de",
+   "text": "Luego, luego por ejemplo, despu\u00c3\u00a9s de escribir un archivo, anotar que toc\u00c3\u00b3 al terminar de",
    "keep": true,
    "reason": "contenido"
   },
@@ -752,7 +1048,7 @@
    "i": 24,
    "start": 101.9,
    "end": 106.24,
-   "text": "mejor y que no cometas errores tan simples como que te rompa la configuración.",
+   "text": "mejor y que no cometas errores tan simples como que te rompa la configuraci\u00c3\u00b3n.",
    "keep": true,
    "reason": "contenido"
   },
@@ -760,7 +1056,7 @@
    "i": 25,
    "start": 109.12,
    "end": 114.92,
-   "text": "Ahora, ¿qué son los sub-pagentes? Aquí hemos un ejemplo igual como que, igual aquí",
+   "text": "Ahora, \u00c2\u00bfqu\u00c3\u00a9 son los sub-pagentes? Aqu\u00c3\u00ad hemos un ejemplo igual como que, igual aqu\u00c3\u00ad",
    "keep": true,
    "reason": "contenido"
   },
@@ -776,7 +1072,7 @@
    "i": 27,
    "start": 120.92,
    "end": 130.3,
-   "text": "parte en subtareas para que lleguen al mismo resultado, pero mucho más limpio ya que tocan",
+   "text": "parte en subtareas para que lleguen al mismo resultado, pero mucho m\u00c3\u00a1s limpio ya que tocan",
    "keep": true,
    "reason": "contenido"
   },
@@ -784,7 +1080,7 @@
    "i": 28,
    "start": 130.3,
    "end": 135.5,
-   "text": "más a fondo, pero divididamente, por ejemplo, le entreamos una tarea, uno revisa la seguridad,",
+   "text": "m\u00c3\u00a1s a fondo, pero divididamente, por ejemplo, le entreamos una tarea, uno revisa la seguridad,",
    "keep": true,
    "reason": "contenido"
   },
@@ -792,7 +1088,7 @@
    "i": 29,
    "start": 135.5,
    "end": 143.04,
-   "text": "otro corre las pruebas y otro re-lee lo que están haciendo los demás y llegan al mismo lugar,",
+   "text": "otro corre las pruebas y otro re-lee lo que est\u00c3\u00a1n haciendo los dem\u00c3\u00a1s y llegan al mismo lugar,",
    "keep": true,
    "reason": "contenido"
   },
@@ -800,7 +1096,7 @@
    "i": 30,
    "start": 143.18,
    "end": 149.3,
-   "text": "pero uno más limpio porque tocaron en diferentes frentes, pero uno específicamente es como",
+   "text": "pero uno m\u00c3\u00a1s limpio porque tocaron en diferentes frentes, pero uno espec\u00c3\u00adficamente es como",
    "keep": true,
    "reason": "contenido"
   },
@@ -808,7 +1104,7 @@
    "i": 31,
    "start": 149.3,
    "end": 154.74,
-   "text": "una oficina, en una oficina el jefe que sería la tarea no se encarga de hacer absolutamente",
+   "text": "una oficina, en una oficina el jefe que ser\u00c3\u00ada la tarea no se encarga de hacer absolutamente",
    "keep": true,
    "reason": "contenido"
   },
@@ -824,7 +1120,7 @@
    "i": 33,
    "start": 161.46,
    "end": 169.84,
-   "text": "humanos y por último uno lo ejecuta, luego trabajan en paralelo, mientras uno revisa la",
+   "text": "humanos y por \u00c3\u00baltimo uno lo ejecuta, luego trabajan en paralelo, mientras uno revisa la",
    "keep": true,
    "reason": "contenido"
   },
@@ -840,7 +1136,7 @@
    "i": 35,
    "start": 174.94,
    "end": 180.2,
-   "text": "uno abre limpio el que revisa tu codio no es el mismo que lo escribió y por eso ve lo",
+   "text": "uno abre limpio el que revisa tu codio no es el mismo que lo escribi\u00c3\u00b3 y por eso ve lo",
    "keep": true,
    "reason": "contenido"
   },
@@ -864,7 +1160,7 @@
    "i": 38,
    "start": 208.32,
    "end": 213.9,
-   "text": "último se los describe en texto, un archivo por agente que hace cuando llamarlo, yo no tengo",
+   "text": "\u00c3\u00baltimo se los describe en texto, un archivo por agente que hace cuando llamarlo, yo no tengo",
    "keep": true,
    "reason": "contenido"
   },
@@ -872,7 +1168,7 @@
    "i": 39,
    "start": 213.9,
    "end": 226.98,
-   "text": "que estar y por último, un archivo por agente que hace y cuando lo tienen que llamarlo y",
+   "text": "que estar y por \u00c3\u00baltimo, un archivo por agente que hace y cuando lo tienen que llamarlo y",
    "keep": true,
    "reason": "contenido"
   },
@@ -880,7 +1176,7 @@
    "i": 40,
    "start": 226.98,
    "end": 232.48,
-   "text": "por último se los describe en texto, un archivo por agente que hace y cuando llamarlo,",
+   "text": "por \u00c3\u00baltimo se los describe en texto, un archivo por agente que hace y cuando llamarlo,",
    "keep": true,
    "reason": "contenido"
   },
@@ -896,7 +1192,7 @@
    "i": 42,
    "start": 239.32,
    "end": 246.16,
-   "text": "por ejemplo en un conector puede ser, es algo así como una API, una API es algo que llama",
+   "text": "por ejemplo en un conector puede ser, es algo as\u00c3\u00ad como una API, una API es algo que llama",
    "keep": true,
    "reason": "contenido"
   },
@@ -904,7 +1200,7 @@
    "i": 43,
    "start": 246.16,
    "end": 250.56,
-   "text": "desde nuestra aplicación a otra aplicación, es el intermediario, por ejemplo podemos conectar",
+   "text": "desde nuestra aplicaci\u00c3\u00b3n a otra aplicaci\u00c3\u00b3n, es el intermediario, por ejemplo podemos conectar",
    "keep": true,
    "reason": "contenido"
   },
@@ -928,7 +1224,7 @@
    "i": 46,
    "start": 264.74,
    "end": 271.8,
-   "text": "en telegram que me revisa cada día, como por ejemplo una automatización que yo tengo,",
+   "text": "en telegram que me revisa cada d\u00c3\u00ada, como por ejemplo una automatizaci\u00c3\u00b3n que yo tengo,",
    "keep": true,
    "reason": "contenido"
   },
@@ -936,7 +1232,7 @@
    "i": 47,
    "start": 272.08,
    "end": 279.58,
-   "text": "es una que me revisa todo mi proyecto y me envía un resumen por telegram, luego que",
+   "text": "es una que me revisa todo mi proyecto y me env\u00c3\u00ada un resumen por telegram, luego que",
    "keep": true,
    "reason": "contenido"
   },
@@ -944,7 +1240,7 @@
    "i": 48,
    "start": 279.58,
    "end": 286.5,
-   "text": "es cloudflare, es algo así como cloudflare es una nube virtual en donde viven todos mis",
+   "text": "es cloudflare, es algo as\u00c3\u00ad como cloudflare es una nube virtual en donde viven todos mis",
    "keep": true,
    "reason": "contenido"
   },
@@ -952,7 +1248,7 @@
    "i": 49,
    "start": 286.5,
    "end": 291.74,
-   "text": "dominios y algunos proyectos que tengo subidos, es gratis y si les gustaría acá un vídeo sobre",
+   "text": "dominios y algunos proyectos que tengo subidos, es gratis y si les gustar\u00c3\u00ada ac\u00c3\u00a1 un v\u00c3\u00addeo sobre",
    "keep": true,
    "reason": "contenido"
   },
@@ -960,7 +1256,7 @@
    "i": 50,
    "start": 291.74,
    "end": 301.18,
-   "text": "él, déjalo en los comentarios, y que es cloudflare es una nave y que es cloudflare es una nube",
+   "text": "\u00c3\u00a9l, d\u00c3\u00a9jalo en los comentarios, y que es cloudflare es una nave y que es cloudflare es una nube",
    "keep": true,
    "reason": "contenido"
   },
@@ -968,7 +1264,7 @@
    "i": 51,
    "start": 301.18,
    "end": 308.5,
-   "text": "virtual en donde tengo la mayoría de mis dominios y que es cloudflare es una nube",
+   "text": "virtual en donde tengo la mayor\u00c3\u00ada de mis dominios y que es cloudflare es una nube",
    "keep": true,
    "reason": "contenido"
   },
@@ -984,7 +1280,7 @@
    "i": 53,
    "start": 314.18,
    "end": 319.04,
-   "text": "plans desde 5 dólares que te pueden hacer desarrollar una empresa completamente desde",
+   "text": "plans desde 5 d\u00c3\u00b3lares que te pueden hacer desarrollar una empresa completamente desde",
    "keep": true,
    "reason": "contenido"
   },
@@ -992,7 +1288,7 @@
    "i": 54,
    "start": 319.04,
    "end": 324.88,
-   "text": "ahí sin tener que pagar tarjetas gráficas caras, servidores y demás, si les gustaría acá un vídeo",
+   "text": "ah\u00c3\u00ad sin tener que pagar tarjetas gr\u00c3\u00a1ficas caras, servidores y dem\u00c3\u00a1s, si les gustar\u00c3\u00ada ac\u00c3\u00a1 un v\u00c3\u00addeo",
    "keep": true,
    "reason": "contenido"
   },
@@ -1000,7 +1296,7 @@
    "i": 55,
    "start": 324.88,
    "end": 329.68,
-   "text": "sobre estos tres conectadores, déjalo en los comentarios, y luego que es meta, es en donde",
+   "text": "sobre estos tres conectadores, d\u00c3\u00a9jalo en los comentarios, y luego que es meta, es en donde",
    "keep": true,
    "reason": "contenido"
   },
@@ -1008,7 +1304,7 @@
    "i": 56,
    "start": 329.68,
    "end": 334.82,
-   "text": "manejo mis anuncios, mi mensajería y absolutamente todo el ecosistema de meta como",
+   "text": "manejo mis anuncios, mi mensajer\u00c3\u00ada y absolutamente todo el ecosistema de meta como",
    "keep": true,
    "reason": "contenido"
   },
@@ -1016,7 +1312,7 @@
    "i": 57,
    "start": 334.82,
    "end": 343.08,
-   "text": "instagram, whatsapp, facebook y demás, y aquí vemos un ejemplo tan simple como le preguntas por",
+   "text": "instagram, whatsapp, facebook y dem\u00c3\u00a1s, y aqu\u00c3\u00ad vemos un ejemplo tan simple como le preguntas por",
    "keep": true,
    "reason": "contenido"
   },
@@ -1024,7 +1320,7 @@
    "i": 58,
    "start": 343.08,
    "end": 348.38,
-   "text": "tu negocio y va a mirar de verdad, va a entrar directamente a las aplicaciones, estos son sólo",
+   "text": "tu negocio y va a mirar de verdad, va a entrar directamente a las aplicaciones, estos son s\u00c3\u00b3lo",
    "keep": true,
    "reason": "contenido"
   },
@@ -1032,7 +1328,7 @@
    "i": 59,
    "start": 348.38,
    "end": 357.22,
-   "text": "tres ejemplos pero hay muchísimos más, ahora todo esto ya empaquetado, un blogging trae todos",
+   "text": "tres ejemplos pero hay much\u00c3\u00adsimos m\u00c3\u00a1s, ahora todo esto ya empaquetado, un blogging trae todos",
    "keep": true,
    "reason": "contenido"
   },
@@ -1064,7 +1360,7 @@
    "i": 63,
    "start": 408.08,
    "end": 412.7,
-   "text": "plugins que son creados por la comunidad pero antes de ensalarlos tenés que revisar que no",
+   "text": "plugins que son creados por la comunidad pero antes de ensalarlos ten\u00c3\u00a9s que revisar que no",
    "keep": true,
    "reason": "contenido"
   },
@@ -1072,7 +1368,7 @@
    "i": 64,
    "start": 412.7,
    "end": 417.2,
-   "text": "rompa tu computadora y qué procesos maliciosos pueden, y qué procesos maliciosos pueden",
+   "text": "rompa tu computadora y qu\u00c3\u00a9 procesos maliciosos pueden, y qu\u00c3\u00a9 procesos maliciosos pueden",
    "keep": true,
    "reason": "contenido"
   },
@@ -1080,7 +1376,7 @@
    "i": 65,
    "start": 417.2,
    "end": 421.72,
-   "text": "llegar a coger en tu computadora, así que tenés que tener mucho cuidado con lo que descargar.",
+   "text": "llegar a coger en tu computadora, as\u00c3\u00ad que ten\u00c3\u00a9s que tener mucho cuidado con lo que descargar.",
    "keep": true,
    "reason": "contenido"
   },
@@ -1088,7 +1384,7 @@
    "i": 66,
    "start": 423.32,
    "end": 429.2,
-   "text": "Y aquí lo puedes ver, son archivos de texto, no cajas negra, luego yo tengo no ensalados de",
+   "text": "Y aqu\u00c3\u00ad lo puedes ver, son archivos de texto, no cajas negra, luego yo tengo no ensalados de",
    "keep": true,
    "reason": "contenido"
   },
@@ -1096,7 +1392,7 @@
    "i": 67,
    "start": 429.2,
    "end": 434.1,
-   "text": "ello, ninguno lo escribí yo, es la forma más rápida de arrancar, sin construir absolutamente",
+   "text": "ello, ninguno lo escrib\u00c3\u00ad yo, es la forma m\u00c3\u00a1s r\u00c3\u00a1pida de arrancar, sin construir absolutamente",
    "keep": true,
    "reason": "contenido"
   },
@@ -1112,7 +1408,7 @@
    "i": 69,
    "start": 440.62,
    "end": 448.98,
-   "text": "Ahora el horario, el único que no te necesita por ejemplo, cada hora Cloud revisa la cola de tareas,",
+   "text": "Ahora el horario, el \u00c3\u00banico que no te necesita por ejemplo, cada hora Cloud revisa la cola de tareas,",
    "keep": true,
    "reason": "contenido"
   },
@@ -1128,7 +1424,7 @@
    "i": 71,
    "start": 455.94,
    "end": 462.66,
-   "text": "algo se rompió, bueno está el programa se abre solo, esto puede funcionar, esto puede funcionar",
+   "text": "algo se rompi\u00c3\u00b3, bueno est\u00c3\u00a1 el programa se abre solo, esto puede funcionar, esto puede funcionar",
    "keep": true,
    "reason": "contenido"
   },
@@ -1144,7 +1440,7 @@
    "i": 73,
    "start": 469.16,
    "end": 473.88,
-   "text": "lo expliqué en el anterior vídeo de donde instalar Cloud para ver cómo funciona de verdad.",
+   "text": "lo expliqu\u00c3\u00a9 en el anterior v\u00c3\u00addeo de donde instalar Cloud para ver c\u00c3\u00b3mo funciona de verdad.",
    "keep": true,
    "reason": "contenido"
   },
@@ -1168,7 +1464,7 @@
    "i": 76,
    "start": 539.7,
    "end": 544.12,
-   "text": "Y aquí podemos ver un ejemplo tan simple como los tres escalones anteriores.",
+   "text": "Y aqu\u00c3\u00ad podemos ver un ejemplo tan simple como los tres escalones anteriores.",
    "keep": false,
    "reason": "trabada/repetida (me quedo con la 2da)"
   },
@@ -1176,7 +1472,7 @@
    "i": 77,
    "start": 545.62,
    "end": 549.9,
-   "text": "Y aquí podemos ver un ejemplo tan simple como los tres escalones anteriores si,",
+   "text": "Y aqu\u00c3\u00ad podemos ver un ejemplo tan simple como los tres escalones anteriores si,",
    "keep": true,
    "reason": "contenido"
   },
@@ -1192,7 +1488,7 @@
    "i": 79,
    "start": 557.2,
    "end": 562.92,
-   "text": "y corre sin utilización tuya porque vos ya le delegaste esa tarea, así que simplemente corre",
+   "text": "y corre sin utilizaci\u00c3\u00b3n tuya porque vos ya le delegaste esa tarea, as\u00c3\u00ad que simplemente corre",
    "keep": true,
    "reason": "contenido"
   },
@@ -1224,7 +1520,7 @@
    "i": 83,
    "start": 588.18,
    "end": 592.72,
-   "text": "tengo es que a las 6 de la mañana me tienen que enviar una revisión de todo lo que estaba",
+   "text": "tengo es que a las 6 de la ma\u00c3\u00b1ana me tienen que enviar una revisi\u00c3\u00b3n de todo lo que estaba",
    "keep": true,
    "reason": "contenido"
   },
@@ -1232,7 +1528,7 @@
    "i": 84,
    "start": 592.72,
    "end": 601.2,
-   "text": "construyendo Cloud durante las sesiones anteriores y me envía un resumen durante la",
+   "text": "construyendo Cloud durante las sesiones anteriores y me env\u00c3\u00ada un resumen durante la",
    "keep": true,
    "reason": "contenido"
   },
@@ -1240,7 +1536,7 @@
    "i": 85,
    "start": 601.2,
    "end": 612.76,
-   "text": "mañana. Y todo esto puede correr o en tu computadora de escritorio o simplemente desde tu servidor sin",
+   "text": "ma\u00c3\u00b1ana. Y todo esto puede correr o en tu computadora de escritorio o simplemente desde tu servidor sin",
    "keep": true,
    "reason": "contenido"
   },
@@ -1256,7 +1552,7 @@
    "i": 87,
    "start": 622.66,
    "end": 630.34,
-   "text": "lo que corre solo vaya solo, publicó algo a medias, mi hook de cierre subió 200 líneas antes de",
+   "text": "lo que corre solo vaya solo, public\u00c3\u00b3 algo a medias, mi hook de cierre subi\u00c3\u00b3 200 l\u00c3\u00adneas antes de",
    "keep": true,
    "reason": "contenido"
   },
@@ -1264,7 +1560,7 @@
    "i": 88,
    "start": 630.34,
    "end": 636.18,
-   "text": "que existiera lo que usaba, no rompió nada de casualidad, eso puede ser porque simplemente no",
+   "text": "que existiera lo que usaba, no rompi\u00c3\u00b3 nada de casualidad, eso puede ser porque simplemente no",
    "keep": true,
    "reason": "contenido"
   },
@@ -1272,7 +1568,7 @@
    "i": 89,
    "start": 636.18,
    "end": 646.08,
-   "text": "le delegaste bien la tarea al hook, o sea le diste una tarea, pero el hook subió algo que ni si,",
+   "text": "le delegaste bien la tarea al hook, o sea le diste una tarea, pero el hook subi\u00c3\u00b3 algo que ni si,",
    "keep": true,
    "reason": "contenido"
   },
@@ -1280,7 +1576,7 @@
    "i": 90,
    "start": 646.62,
    "end": 651.9,
-   "text": "pero el hook subió algo que ni siquiera existía, es un error tan tan simple que lo puedes corregir",
+   "text": "pero el hook subi\u00c3\u00b3 algo que ni siquiera exist\u00c3\u00ada, es un error tan tan simple que lo puedes corregir",
    "keep": true,
    "reason": "contenido"
   },
@@ -1288,7 +1584,7 @@
    "i": 91,
    "start": 651.9,
    "end": 656.22,
-   "text": "con una skill que lo puedes ver en el video anterior de cómo construir una y eso nos",
+   "text": "con una skill que lo puedes ver en el video anterior de c\u00c3\u00b3mo construir una y eso nos",
    "keep": true,
    "reason": "contenido"
   },
@@ -1296,7 +1592,7 @@
    "i": 92,
    "start": 656.22,
    "end": 661.3,
-   "text": "puede ayudar a que nuestro cloud no comeste este tipo de errores. Luego trabajó tres semanas para",
+   "text": "puede ayudar a que nuestro cloud no comeste este tipo de errores. Luego trabaj\u00c3\u00b3 tres semanas para",
    "keep": true,
    "reason": "contenido"
   },
@@ -1304,7 +1600,7 @@
    "i": 93,
    "start": 661.3,
    "end": 667.12,
-   "text": "nada, un servicio mío corrió todos los días sin publicar nada, nadie se enteró porque no fallaba,",
+   "text": "nada, un servicio m\u00c3\u00ado corri\u00c3\u00b3 todos los d\u00c3\u00adas sin publicar nada, nadie se enter\u00c3\u00b3 porque no fallaba,",
    "keep": true,
    "reason": "contenido"
   },
@@ -1312,7 +1608,7 @@
    "i": 94,
    "start": 667.26,
    "end": 672.52,
-   "text": "simplemente no hacía nada, por ejemplo en mi caso la tarea que supuestamente se tiene que",
+   "text": "simplemente no hac\u00c3\u00ada nada, por ejemplo en mi caso la tarea que supuestamente se tiene que",
    "keep": true,
    "reason": "contenido"
   },
@@ -1320,7 +1616,7 @@
    "i": 95,
    "start": 672.52,
    "end": 679.06,
-   "text": "enviar a las 6 de la mañana no corrió por una semana, no porque no me di cuenta, es porque",
+   "text": "enviar a las 6 de la ma\u00c3\u00b1ana no corri\u00c3\u00b3 por una semana, no porque no me di cuenta, es porque",
    "keep": true,
    "reason": "contenido"
   },
@@ -1328,7 +1624,7 @@
    "i": 96,
    "start": 679.06,
    "end": 687.72,
-   "text": "simplemente no existía, por ejemplo en mi caso la tarea que se supone que se tiene que hacer a las",
+   "text": "simplemente no exist\u00c3\u00ada, por ejemplo en mi caso la tarea que se supone que se tiene que hacer a las",
    "keep": true,
    "reason": "contenido"
   },
@@ -1336,7 +1632,7 @@
    "i": 97,
    "start": 687.72,
    "end": 693.68,
-   "text": "6 de la mañana no me daba cuenta que no funcionaba, porque simplemente lo olvide, pero todos los días",
+   "text": "6 de la ma\u00c3\u00b1ana no me daba cuenta que no funcionaba, porque simplemente lo olvide, pero todos los d\u00c3\u00adas",
    "keep": true,
    "reason": "contenido"
   },
@@ -1352,7 +1648,7 @@
    "i": 99,
    "start": 700.16,
    "end": 706.12,
-   "text": "conectores no andan, dos se cayeron y dos perdieron el premiso, no me avisó ninguno,",
+   "text": "conectores no andan, dos se cayeron y dos perdieron el premiso, no me avis\u00c3\u00b3 ninguno,",
    "keep": true,
    "reason": "contenido"
   },
@@ -1360,7 +1656,7 @@
    "i": 100,
    "start": 706.12,
    "end": 712.74,
-   "text": "esta es la parte complicada, vos tenés que revisar si tus conectores están con",
+   "text": "esta es la parte complicada, vos ten\u00c3\u00a9s que revisar si tus conectores est\u00c3\u00a1n con",
    "keep": true,
    "reason": "contenido"
   },
@@ -1368,7 +1664,7 @@
    "i": 101,
    "start": 715.6,
    "end": 721.34,
-   "text": "esta es la parte que nadie le gusta, cuando algo falla vos tenés que revisar si tus conectores",
+   "text": "esta es la parte que nadie le gusta, cuando algo falla vos ten\u00c3\u00a9s que revisar si tus conectores",
    "keep": true,
    "reason": "contenido"
   },
@@ -1384,7 +1680,7 @@
    "i": 103,
    "start": 728.62,
    "end": 733.76,
-   "text": "a la hora de que se caen tus conectores vos tenés que revisar si siguen funcionando o no,",
+   "text": "a la hora de que se caen tus conectores vos ten\u00c3\u00a9s que revisar si siguen funcionando o no,",
    "keep": true,
    "reason": "contenido"
   },
@@ -1392,7 +1688,7 @@
    "i": 104,
    "start": 733.76,
    "end": 740.66,
-   "text": "así que tenés que entrar en, así que tenés que entrar en, esta es la parte que nadie,",
+   "text": "as\u00c3\u00ad que ten\u00c3\u00a9s que entrar en, as\u00c3\u00ad que ten\u00c3\u00a9s que entrar en, esta es la parte que nadie,",
    "keep": true,
    "reason": "contenido"
   },
@@ -1408,7 +1704,7 @@
    "i": 106,
    "start": 752.68,
    "end": 757.7,
-   "text": "y dos perdieron el permiso, no me avisó ninguno, esta es la parte que nadie le gusta,",
+   "text": "y dos perdieron el permiso, no me avis\u00c3\u00b3 ninguno, esta es la parte que nadie le gusta,",
    "keep": true,
    "reason": "contenido"
   },
@@ -1416,7 +1712,7 @@
    "i": 107,
    "start": 758.02,
    "end": 762.44,
-   "text": "a la hora de que se caen tus conectores no te avisa nadie, así que tenés que entrar en",
+   "text": "a la hora de que se caen tus conectores no te avisa nadie, as\u00c3\u00ad que ten\u00c3\u00a9s que entrar en",
    "keep": true,
    "reason": "contenido"
   },
@@ -1424,7 +1720,7 @@
    "i": 108,
    "start": 762.53,
    "end": 769.31,
-   "text": "cloud, revisar si realmente siguen funcionando o no, y los volvés a conectar en el caso que no sean conectados.",
+   "text": "cloud, revisar si realmente siguen funcionando o no, y los volv\u00c3\u00a9s a conectar en el caso que no sean conectados.",
    "keep": true,
    "reason": "contenido"
   },
@@ -1448,7 +1744,7 @@
    "i": 111,
    "start": 786.25,
    "end": 793.55,
-   "text": "semana, si tenés una automatización que te avisa cada vez que algo funciona, te vas a olvidar porque",
+   "text": "semana, si ten\u00c3\u00a9s una automatizaci\u00c3\u00b3n que te avisa cada vez que algo funciona, te vas a olvidar porque",
    "keep": true,
    "reason": "contenido"
   },
@@ -1456,7 +1752,7 @@
    "i": 112,
    "start": 793.55,
    "end": 798.71,
-   "text": "en una semana vas a ver que todo está funcionando correctamente, lo que deberías construir es una",
+   "text": "en una semana vas a ver que todo est\u00c3\u00a1 funcionando correctamente, lo que deber\u00c3\u00adas construir es una",
    "keep": true,
    "reason": "contenido"
   },
@@ -1464,7 +1760,7 @@
    "i": 113,
    "start": 798.71,
    "end": 804.33,
-   "text": "que te avise cuando falla, así puedes ver cuando se están rompiendo realmente las cosas y cómo lo",
+   "text": "que te avise cuando falla, as\u00c3\u00ad puedes ver cuando se est\u00c3\u00a1n rompiendo realmente las cosas y c\u00c3\u00b3mo lo",
    "keep": true,
    "reason": "contenido"
   },
@@ -1472,7 +1768,7 @@
    "i": 114,
    "start": 804.33,
    "end": 810.77,
-   "text": "están haciendo, luego que mida el resultado, que termine sin error, no prueba que haya hecho algo,",
+   "text": "est\u00c3\u00a1n haciendo, luego que mida el resultado, que termine sin error, no prueba que haya hecho algo,",
    "keep": true,
    "reason": "contenido"
   },
@@ -1480,7 +1776,7 @@
    "i": 115,
    "start": 810.77,
    "end": 818.57,
-   "text": "contar lo que salió, no lo que corrió, por ejemplo en mi caso había automatizaciones que corrían y decían",
+   "text": "contar lo que sali\u00c3\u00b3, no lo que corri\u00c3\u00b3, por ejemplo en mi caso hab\u00c3\u00ada automatizaciones que corr\u00c3\u00adan y dec\u00c3\u00adan",
    "keep": true,
    "reason": "contenido"
   },
@@ -1488,7 +1784,7 @@
    "i": 116,
    "start": 818.57,
    "end": 830.69,
-   "text": "que todo estaba bien, pero decían que estaba todo bien porque simplemente no corría nada,",
+   "text": "que todo estaba bien, pero dec\u00c3\u00adan que estaba todo bien porque simplemente no corr\u00c3\u00ada nada,",
    "keep": true,
    "reason": "contenido"
   },
@@ -1496,7 +1792,7 @@
    "i": 117,
    "start": 830.85,
    "end": 837.05,
-   "text": "entonces salía todo verde y me decían que estaba funcionando todo correctamente cuando no estaban",
+   "text": "entonces sal\u00c3\u00ada todo verde y me dec\u00c3\u00adan que estaba funcionando todo correctamente cuando no estaban",
    "keep": true,
    "reason": "contenido"
   },
@@ -1504,7 +1800,7 @@
    "i": 118,
    "start": 837.05,
    "end": 844.25,
-   "text": "haciendo en realidad nada. Poner el techo al gasto, cuando el mío se disparó el 74%",
+   "text": "haciendo en realidad nada. Poner el techo al gasto, cuando el m\u00c3\u00ado se dispar\u00c3\u00b3 el 74%",
    "keep": true,
    "reason": "contenido"
   },
@@ -1520,7 +1816,7 @@
    "i": 120,
    "start": 856.57,
    "end": 862.91,
-   "text": "Ahora, en una simple línea, primero le enseñás, después lo soltás, hooks,",
+   "text": "Ahora, en una simple l\u00c3\u00adnea, primero le ense\u00c3\u00b1\u00c3\u00a1s, despu\u00c3\u00a9s lo solt\u00c3\u00a1s, hooks,",
    "keep": true,
    "reason": "contenido"
   },
@@ -1528,7 +1824,7 @@
    "i": 121,
    "start": 872.57,
    "end": 878.89,
-   "text": "reacciona solo, que es un supagente, se reparte el trabajo entre pequeñas minitareas,",
+   "text": "reacciona solo, que es un supagente, se reparte el trabajo entre peque\u00c3\u00b1as minitareas,",
    "keep": true,
    "reason": "contenido"
   },
@@ -1536,7 +1832,7 @@
    "i": 122,
    "start": 879.17,
    "end": 885.19,
-   "text": "que es un conector, es una conexión que sale de tu computadora hacia otra aplicación,",
+   "text": "que es un conector, es una conexi\u00c3\u00b3n que sale de tu computadora hacia otra aplicaci\u00c3\u00b3n,",
    "keep": true,
    "reason": "contenido"
   },
@@ -1544,7 +1840,7 @@
    "i": 123,
    "start": 885.79,
    "end": 894.59,
-   "text": "horario, que es un horario, es una tarea que corre en un horario específico y no te necesita",
+   "text": "horario, que es un horario, es una tarea que corre en un horario espec\u00c3\u00adfico y no te necesita",
    "keep": true,
    "reason": "contenido"
   },
@@ -1552,7 +1848,7 @@
    "i": 124,
    "start": 894.59,
    "end": 897.03,
-   "text": "para funcionar. En el próximo, en el próximo, en el próximo, en el próximo, en el próximo,",
+   "text": "para funcionar. En el pr\u00c3\u00b3ximo, en el pr\u00c3\u00b3ximo, en el pr\u00c3\u00b3ximo, en el pr\u00c3\u00b3ximo, en el pr\u00c3\u00b3ximo,",
    "keep": true,
    "reason": "contenido"
   },
@@ -1560,7 +1856,7 @@
    "i": 125,
    "start": 897.03,
    "end": 900.97,
-   "text": "como saber qué es realmente desarrollo cloud para vos.",
+   "text": "como saber qu\u00c3\u00a9 es realmente desarrollo cloud para vos.",
    "keep": true,
    "reason": "contenido"
   },
@@ -1568,7 +1864,7 @@
    "i": 126,
    "start": 933.17,
    "end": 938.39,
-   "text": "Ahora, en el próximo vídeo, vamos a ver cómo saber qué es realmente de...",
+   "text": "Ahora, en el pr\u00c3\u00b3ximo v\u00c3\u00addeo, vamos a ver c\u00c3\u00b3mo saber qu\u00c3\u00a9 es realmente de...",
    "keep": true,
    "reason": "contenido"
   },
@@ -1576,7 +1872,7 @@
    "i": 127,
    "start": 941.99,
    "end": 948.99,
-   "text": "Ahora, en el próximo vídeo, vamos a ver cómo saber si cloud realmente desarrolló lo que nos está",
+   "text": "Ahora, en el pr\u00c3\u00b3ximo v\u00c3\u00addeo, vamos a ver c\u00c3\u00b3mo saber si cloud realmente desarroll\u00c3\u00b3 lo que nos est\u00c3\u00a1",
    "keep": true,
    "reason": "contenido"
   },
@@ -1584,7 +1880,7 @@
    "i": 128,
    "start": 948.99,
    "end": 956.25,
-   "text": "diciendo y saber cómo lo hizo, así que si no te lo querés. Ahora, en el próximo vídeo,",
+   "text": "diciendo y saber c\u00c3\u00b3mo lo hizo, as\u00c3\u00ad que si no te lo quer\u00c3\u00a9s. Ahora, en el pr\u00c3\u00b3ximo v\u00c3\u00addeo,",
    "keep": true,
    "reason": "contenido"
   },
@@ -1592,7 +1888,7 @@
    "i": 129,
    "start": 956.25,
    "end": 964.01,
-   "text": "vamos a ver cómo ver qué realmente nos desarrolló cloud y cómo lo hizo. Ahora, en el próximo vídeo...",
+   "text": "vamos a ver c\u00c3\u00b3mo ver qu\u00c3\u00a9 realmente nos desarroll\u00c3\u00b3 cloud y c\u00c3\u00b3mo lo hizo. Ahora, en el pr\u00c3\u00b3ximo v\u00c3\u00addeo...",
    "keep": true,
    "reason": "contenido"
   },
@@ -1600,7 +1896,7 @@
    "i": 130,
    "start": 967.97,
    "end": 974.45,
-   "text": "Ahora, en el próximo vídeo, vamos a ver qué hizo cloud y cómo realmente desarrolló la tarea",
+   "text": "Ahora, en el pr\u00c3\u00b3ximo v\u00c3\u00addeo, vamos a ver qu\u00c3\u00a9 hizo cloud y c\u00c3\u00b3mo realmente desarroll\u00c3\u00b3 la tarea",
    "keep": true,
    "reason": "contenido"
   },
@@ -1608,7 +1904,7 @@
    "i": 131,
    "start": 974.45,
    "end": 978.79,
-   "text": "que nos está entregando, así que si no te lo querés, perder, comentar.",
+   "text": "que nos est\u00c3\u00a1 entregando, as\u00c3\u00ad que si no te lo quer\u00c3\u00a9s, perder, comentar.",
    "keep": true,
    "reason": "contenido"
   },
@@ -1616,7 +1912,7 @@
    "i": 132,
    "start": 988.05,
    "end": 991.45,
-   "text": "Ahora, en el próximo vídeo, vamos a ver...",
+   "text": "Ahora, en el pr\u00c3\u00b3ximo v\u00c3\u00addeo, vamos a ver...",
    "keep": false,
    "reason": "trabada/repetida (me quedo con la 2da)"
   },
@@ -1624,7 +1920,7 @@
    "i": 133,
    "start": 994.67,
    "end": 997.65,
-   "text": "Ahora, en el próximo vídeo, vamos a ver cómo...",
+   "text": "Ahora, en el pr\u00c3\u00b3ximo v\u00c3\u00addeo, vamos a ver c\u00c3\u00b3mo...",
    "keep": true,
    "reason": "contenido"
   },
@@ -1632,7 +1928,7 @@
    "i": 134,
    "start": 998.47,
    "end": 1004.77,
-   "text": "Ahora, en el próximo vídeo, vamos a ver cómo saber qué realmente hizo cloud y cómo lo hizo.",
+   "text": "Ahora, en el pr\u00c3\u00b3ximo v\u00c3\u00addeo, vamos a ver c\u00c3\u00b3mo saber qu\u00c3\u00a9 realmente hizo cloud y c\u00c3\u00b3mo lo hizo.",
    "keep": false,
    "reason": "trabada/repetida (me quedo con la 2da)"
   },
@@ -1640,7 +1936,7 @@
    "i": 135,
    "start": 1010.19,
    "end": 1016.19,
-   "text": "Ahora, en el próximo vídeo vamos a ver cómo saber qué realmente hizo Cloud y cómo lo hizo,",
+   "text": "Ahora, en el pr\u00c3\u00b3ximo v\u00c3\u00addeo vamos a ver c\u00c3\u00b3mo saber qu\u00c3\u00a9 realmente hizo Cloud y c\u00c3\u00b3mo lo hizo,",
    "keep": true,
    "reason": "contenido"
   },
@@ -1648,7 +1944,7 @@
    "i": 136,
    "start": 1016.33,
    "end": 1023.31,
-   "text": "si lo hizo de buena manera o de mala manera. No. Ahora, en el próximo vídeo vamos a ver cómo,",
+   "text": "si lo hizo de buena manera o de mala manera. No. Ahora, en el pr\u00c3\u00b3ximo v\u00c3\u00addeo vamos a ver c\u00c3\u00b3mo,",
    "keep": true,
    "reason": "contenido"
   },
@@ -1656,7 +1952,7 @@
    "i": 137,
    "start": 1024.09,
    "end": 1029.81,
-   "text": "ahora en el próximo vídeo vamos a ver cómo saber qué hizo Cloud y cómo lo hizo. Así que,",
+   "text": "ahora en el pr\u00c3\u00b3ximo v\u00c3\u00addeo vamos a ver c\u00c3\u00b3mo saber qu\u00c3\u00a9 hizo Cloud y c\u00c3\u00b3mo lo hizo. As\u00c3\u00ad que,",
    "keep": true,
    "reason": "contenido"
   },
@@ -1664,7 +1960,7 @@
    "i": 138,
    "start": 1029.81,
    "end": 1033.05,
-   "text": "si no te lo querés perder, suscríbete, deja un like.",
+   "text": "si no te lo quer\u00c3\u00a9s perder, suscr\u00c3\u00adbete, deja un like.",
    "keep": true,
    "reason": "contenido"
   },
@@ -1672,7 +1968,7 @@
    "i": 139,
    "start": 1040.61,
    "end": 1046.07,
-   "text": "Ahora, ahora, y para terminar con el vídeo,",
+   "text": "Ahora, ahora, y para terminar con el v\u00c3\u00addeo,",
    "keep": true,
    "reason": "contenido"
   },
@@ -1680,7 +1976,7 @@
    "i": 140,
    "start": 1050.91,
    "end": 1055.93,
-   "text": "y para terminar con el vídeo, toda la información que estoy usando para entrar.",
+   "text": "y para terminar con el v\u00c3\u00addeo, toda la informaci\u00c3\u00b3n que estoy usando para entrar.",
    "keep": true,
    "reason": "contenido"
   },
@@ -1688,7 +1984,7 @@
    "i": 141,
    "start": 1060.59,
    "end": 1066.75,
-   "text": "Ahora, para terminar con el vídeo, si querés la información más detallada, va a estar en",
+   "text": "Ahora, para terminar con el v\u00c3\u00addeo, si quer\u00c3\u00a9s la informaci\u00c3\u00b3n m\u00c3\u00a1s detallada, va a estar en",
    "keep": true,
    "reason": "contenido"
   },
@@ -1696,7 +1992,7 @@
    "i": 142,
    "start": 1066.75,
    "end": 1073.25,
-   "text": "la descripción en mi página web, con absolutamente todos los datos más específicos y si tienes alguna",
+   "text": "la descripci\u00c3\u00b3n en mi p\u00c3\u00a1gina web, con absolutamente todos los datos m\u00c3\u00a1s espec\u00c3\u00adficos y si tienes alguna",
    "keep": true,
    "reason": "contenido"
   },
@@ -1712,7 +2008,7 @@
    "i": 144,
    "start": 1079.63,
    "end": 1086.29,
-   "text": "sin ningún tipo de problema. Ahora, en el próximo vídeo vamos a ver cómo, a ver qué hizo Cloud y si...",
+   "text": "sin ning\u00c3\u00ban tipo de problema. Ahora, en el pr\u00c3\u00b3ximo v\u00c3\u00addeo vamos a ver c\u00c3\u00b3mo, a ver qu\u00c3\u00a9 hizo Cloud y si...",
    "keep": true,
    "reason": "contenido"
   },
@@ -1720,7 +2016,7 @@
    "i": 145,
    "start": 1091.91,
    "end": 1097.13,
-   "text": "Para terminar con el vídeo, en la parte de la descripción te voy a dejar absolutamente toda la",
+   "text": "Para terminar con el v\u00c3\u00addeo, en la parte de la descripci\u00c3\u00b3n te voy a dejar absolutamente toda la",
    "keep": true,
    "reason": "contenido"
   },
@@ -1728,7 +2024,7 @@
    "i": 146,
    "start": 1097.13,
    "end": 1106.77,
-   "text": "información sobre esta diapositiva más detallada en mi página. Para terminar con el vídeo,",
+   "text": "informaci\u00c3\u00b3n sobre esta diapositiva m\u00c3\u00a1s detallada en mi p\u00c3\u00a1gina. Para terminar con el v\u00c3\u00addeo,",
    "keep": true,
    "reason": "contenido"
   },
@@ -1736,7 +2032,7 @@
    "i": 147,
    "start": 1107.11,
    "end": 1112.15,
-   "text": "en la parte de la descripción te voy a dejar la información más detallada y si tenés alguna",
+   "text": "en la parte de la descripci\u00c3\u00b3n te voy a dejar la informaci\u00c3\u00b3n m\u00c3\u00a1s detallada y si ten\u00c3\u00a9s alguna",
    "keep": true,
    "reason": "contenido"
   },
@@ -1752,7 +2048,7 @@
    "i": 149,
    "start": 1117.69,
    "end": 1126.97,
-   "text": "directamente en el link de la descripción. Y el próximo vídeo va a ser cómo saber qué",
+   "text": "directamente en el link de la descripci\u00c3\u00b3n. Y el pr\u00c3\u00b3ximo v\u00c3\u00addeo va a ser c\u00c3\u00b3mo saber qu\u00c3\u00a9",
    "keep": true,
    "reason": "contenido"
   },
@@ -1760,7 +2056,7 @@
    "i": 150,
    "start": 1126.97,
    "end": 1136.19,
-   "text": "hizo Cloud y si lo hizo de buena manera o cómo lo hizo. Y en el próximo vídeo vamos a tener cómo",
+   "text": "hizo Cloud y si lo hizo de buena manera o c\u00c3\u00b3mo lo hizo. Y en el pr\u00c3\u00b3ximo v\u00c3\u00addeo vamos a tener c\u00c3\u00b3mo",
    "keep": true,
    "reason": "contenido"
   },
@@ -1768,7 +2064,7 @@
    "i": 151,
    "start": 1136.19,
    "end": 1145.63,
-   "text": "saber qué hizo Cloud y ahora en el próximo vídeo vamos a ver cómo saber qué hizo Cloud",
+   "text": "saber qu\u00c3\u00a9 hizo Cloud y ahora en el pr\u00c3\u00b3ximo v\u00c3\u00addeo vamos a ver c\u00c3\u00b3mo saber qu\u00c3\u00a9 hizo Cloud",
    "keep": true,
    "reason": "contenido"
   },
@@ -1776,7 +2072,7 @@
    "i": 152,
    "start": 1152.21,
    "end": 1158.85,
-   "text": "ahora en el próximo vídeo vamos a... ahora en el próximo vídeo vamos a ver cómo saber qué",
+   "text": "ahora en el pr\u00c3\u00b3ximo v\u00c3\u00addeo vamos a... ahora en el pr\u00c3\u00b3ximo v\u00c3\u00addeo vamos a ver c\u00c3\u00b3mo saber qu\u00c3\u00a9",
    "keep": true,
    "reason": "contenido"
   },
@@ -1784,7 +2080,7 @@
    "i": 153,
    "start": 1158.85,
    "end": 1164.97,
-   "text": "hizo Cloud y cómo saber que realmente lo hizo. Así que suscríbete, déjame un like.",
+   "text": "hizo Cloud y c\u00c3\u00b3mo saber que realmente lo hizo. As\u00c3\u00ad que suscr\u00c3\u00adbete, d\u00c3\u00a9jame un like.",
    "keep": true,
    "reason": "contenido"
   },
@@ -1792,7 +2088,7 @@
    "i": 154,
    "start": 1167.85,
    "end": 1172.89,
-   "text": "Ahora en el próximo vídeo vamos a ver cómo saber qué hizo lo que...",
+   "text": "Ahora en el pr\u00c3\u00b3ximo v\u00c3\u00addeo vamos a ver c\u00c3\u00b3mo saber qu\u00c3\u00a9 hizo lo que...",
    "keep": true,
    "reason": "contenido"
   },
@@ -1800,7 +2096,7 @@
    "i": 155,
    "start": 1173.88,
    "end": 1177.26,
-   "text": "y ahora en el próximo vídeo vamos a ver cómo Cloud...",
+   "text": "y ahora en el pr\u00c3\u00b3ximo v\u00c3\u00addeo vamos a ver c\u00c3\u00b3mo Cloud...",
    "keep": true,
    "reason": "contenido"
   },
@@ -1808,7 +2104,7 @@
    "i": 156,
    "start": 1178.58,
    "end": 1185,
-   "text": "ahora en el próximo vídeo vamos a ver cómo saber qué Cloud hizo lo que nos está diciendo que",
+   "text": "ahora en el pr\u00c3\u00b3ximo v\u00c3\u00addeo vamos a ver c\u00c3\u00b3mo saber qu\u00c3\u00a9 Cloud hizo lo que nos est\u00c3\u00a1 diciendo que",
    "keep": true,
    "reason": "contenido"
   },
@@ -1816,7 +2112,7 @@
    "i": 157,
    "start": 1185,
    "end": 1191.38,
-   "text": "realmente desarrolló parte por parte cómo realmente ver si el desarrollo fue como realmente nosotros",
+   "text": "realmente desarroll\u00c3\u00b3 parte por parte c\u00c3\u00b3mo realmente ver si el desarrollo fue como realmente nosotros",
    "keep": true,
    "reason": "contenido"
   },
@@ -1824,7 +2120,7 @@
    "i": 158,
    "start": 1191.38,
    "end": 1195.08,
-   "text": "queríamos. Así que suscríbete y nos vemos en el próximo vídeo.",
+   "text": "quer\u00c3\u00adamos. As\u00c3\u00ad que suscr\u00c3\u00adbete y nos vemos en el pr\u00c3\u00b3ximo v\u00c3\u00addeo.",
    "keep": true,
    "reason": "contenido"
   }

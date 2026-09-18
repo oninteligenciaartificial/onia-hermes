@@ -1,0 +1,861 @@
+{
+ "ok": true,
+ "segments": [],
+ "words": [
+  {
+   "start": 0.03,
+   "end": 0.18,
+   "word": " Mi"
+  },
+  {
+   "start": 0.18,
+   "end": 0.44,
+   "word": " Claude"
+  },
+  {
+   "start": 0.44,
+   "end": 0.64,
+   "word": " Code"
+  },
+  {
+   "start": 0.64,
+   "end": 1.22,
+   "word": " tiene"
+  },
+  {
+   "start": 1.22,
+   "end": 1.32,
+   "word": " un"
+  },
+  {
+   "start": 1.32,
+   "end": 1.78,
+   "word": " contrato"
+  },
+  {
+   "start": 1.78,
+   "end": 2.04,
+   "word": " con"
+  },
+  {
+   "start": 2.04,
+   "end": 2.26,
+   "word": " tres"
+  },
+  {
+   "start": 2.26,
+   "end": 2.62,
+   "word": " reglas"
+  },
+  {
+   "start": 2.62,
+   "end": 2.94,
+   "word": " muy"
+  },
+  {
+   "start": 2.94,
+   "end": 3.62,
+   "word": " especificas"
+  },
+  {
+   "start": 3.62,
+   "end": 3.74,
+   "word": " que"
+  },
+  {
+   "start": 3.74,
+   "end": 3.86,
+   "word": " no"
+  },
+  {
+   "start": 3.86,
+   "end": 4.1,
+   "word": " puedes"
+  },
+  {
+   "start": 4.1,
+   "end": 4.48,
+   "word": " romper,"
+  },
+  {
+   "start": 4.68,
+   "end": 4.88,
+   "word": " te"
+  },
+  {
+   "start": 4.88,
+   "end": 5.02,
+   "word": " las"
+  },
+  {
+   "start": 5.02,
+   "end": 5.17,
+   "word": " leo."
+  },
+  {
+   "start": 5.29,
+   "end": 5.44,
+   "word": " Por"
+  },
+  {
+   "start": 5.44,
+   "end": 5.66,
+   "word": " ejemplo,"
+  },
+  {
+   "start": 5.86,
+   "end": 6.02,
+   "word": " una"
+  },
+  {
+   "start": 6.02,
+   "end": 6.26,
+   "word": " vez"
+  },
+  {
+   "start": 6.26,
+   "end": 6.44,
+   "word": " que"
+  },
+  {
+   "start": 6.44,
+   "end": 6.6,
+   "word": " no"
+  },
+  {
+   "start": 6.6,
+   "end": 6.96,
+   "word": " puedes"
+  },
+  {
+   "start": 6.96,
+   "end": 7.92,
+   "word": " gastar"
+  },
+  {
+   "start": 7.92,
+   "end": 8.16,
+   "word": " ni"
+  },
+  {
+   "start": 8.16,
+   "end": 8.38,
+   "word": " tocar"
+  },
+  {
+   "start": 8.38,
+   "end": 8.82,
+   "word": " plata,"
+  },
+  {
+   "start": 8.98,
+   "end": 9.16,
+   "word": " yo"
+  },
+  {
+   "start": 9.16,
+   "end": 10.12,
+   "word": " apruebo"
+  },
+  {
+   "start": 10.12,
+   "end": 10.44,
+   "word": " y"
+  },
+  {
+   "start": 10.44,
+   "end": 11.04,
+   "word": " deniego"
+  },
+  {
+   "start": 11.04,
+   "end": 11.42,
+   "word": " todos"
+  },
+  {
+   "start": 11.42,
+   "end": 11.68,
+   "word": " los"
+  },
+  {
+   "start": 11.68,
+   "end": 12.18,
+   "word": " gastos"
+  },
+  {
+   "start": 12.18,
+   "end": 12.42,
+   "word": " o"
+  },
+  {
+   "start": 12.42,
+   "end": 12.68,
+   "word": " cobros"
+  },
+  {
+   "start": 12.68,
+   "end": 12.92,
+   "word": " que"
+  },
+  {
+   "start": 12.92,
+   "end": 13.14,
+   "word": " la"
+  },
+  {
+   "start": 13.14,
+   "end": 13.29,
+   "word": " haga."
+  },
+  {
+   "start": 13.37,
+   "end": 13.89,
+   "word": " A"
+  },
+  {
+   "start": 13.89,
+   "end": 13.99,
+   "word": " la"
+  },
+  {
+   "start": 13.99,
+   "end": 14.19,
+   "word": " hora"
+  },
+  {
+   "start": 14.19,
+   "end": 14.47,
+   "word": " de"
+  },
+  {
+   "start": 14.47,
+   "end": 15.21,
+   "word": " verificar"
+  },
+  {
+   "start": 15.21,
+   "end": 15.47,
+   "word": " si"
+  },
+  {
+   "start": 15.47,
+   "end": 15.77,
+   "word": " realmente"
+  },
+  {
+   "start": 15.77,
+   "end": 16.29,
+   "word": " hizo"
+  },
+  {
+   "start": 16.29,
+   "end": 16.63,
+   "word": " bien"
+  },
+  {
+   "start": 16.63,
+   "end": 16.81,
+   "word": " o"
+  },
+  {
+   "start": 16.81,
+   "end": 16.89,
+   "word": " no"
+  },
+  {
+   "start": 16.89,
+   "end": 17.15,
+   "word": " hizo"
+  },
+  {
+   "start": 17.15,
+   "end": 17.29,
+   "word": " bien"
+  },
+  {
+   "start": 17.29,
+   "end": 17.53,
+   "word": " algo,"
+  },
+  {
+   "start": 17.63,
+   "end": 18.01,
+   "word": " tiene"
+  },
+  {
+   "start": 18.01,
+   "end": 18.21,
+   "word": " que"
+  },
+  {
+   "start": 18.21,
+   "end": 18.65,
+   "word": " mirar"
+  },
+  {
+   "start": 18.65,
+   "end": 19.01,
+   "word": " la"
+  },
+  {
+   "start": 19.01,
+   "end": 19.45,
+   "word": " pantalla"
+  },
+  {
+   "start": 19.45,
+   "end": 19.83,
+   "word": " y"
+  },
+  {
+   "start": 19.83,
+   "end": 20.23,
+   "word": " verificar"
+  },
+  {
+   "start": 20.23,
+   "end": 20.41,
+   "word": " el"
+  },
+  {
+   "start": 20.41,
+   "end": 20.75,
+   "word": " código,"
+  },
+  {
+   "start": 20.85,
+   "end": 20.97,
+   "word": " con"
+  },
+  {
+   "start": 20.97,
+   "end": 21.23,
+   "word": " solo"
+  },
+  {
+   "start": 21.23,
+   "end": 21.83,
+   "word": " verlo"
+  },
+  {
+   "start": 21.83,
+   "end": 22.01,
+   "word": " por"
+  },
+  {
+   "start": 22.01,
+   "end": 22.39,
+   "word": " encima"
+  },
+  {
+   "start": 22.39,
+   "end": 22.93,
+   "word": " no"
+  },
+  {
+   "start": 22.93,
+   "end": 23.03,
+   "word": " es"
+  },
+  {
+   "start": 23.03,
+   "end": 23.41,
+   "word": " suficiente,"
+  },
+  {
+   "start": 23.53,
+   "end": 23.71,
+   "word": " tiene"
+  },
+  {
+   "start": 23.71,
+   "end": 23.89,
+   "word": " que"
+  },
+  {
+   "start": 23.89,
+   "end": 24.45,
+   "word": " adentrarse"
+  },
+  {
+   "start": 24.45,
+   "end": 24.53,
+   "word": " en"
+  },
+  {
+   "start": 24.53,
+   "end": 24.63,
+   "word": " el"
+  },
+  {
+   "start": 24.63,
+   "end": 24.97,
+   "word": " código."
+  },
+  {
+   "start": 25.11,
+   "end": 25.43,
+   "word": " Y"
+  },
+  {
+   "start": 25.43,
+   "end": 25.78,
+   "word": " por"
+  },
+  {
+   "start": 25.78,
+   "end": 26.14,
+   "word": " ultimo,"
+  },
+  {
+   "start": 26.18,
+   "end": 26.36,
+   "word": " cada"
+  },
+  {
+   "start": 26.36,
+   "end": 26.84,
+   "word": " regla"
+  },
+  {
+   "start": 26.84,
+   "end": 27.1,
+   "word": " que"
+  },
+  {
+   "start": 27.1,
+   "end": 27.42,
+   "word": " cree"
+  },
+  {
+   "start": 27.42,
+   "end": 27.9,
+   "word": " tiene"
+  },
+  {
+   "start": 27.9,
+   "end": 28.0,
+   "word": " que"
+  },
+  {
+   "start": 28.0,
+   "end": 28.24,
+   "word": " tener"
+  },
+  {
+   "start": 28.24,
+   "end": 28.62,
+   "word": " la"
+  },
+  {
+   "start": 28.62,
+   "end": 28.88,
+   "word": " historia"
+  },
+  {
+   "start": 28.88,
+   "end": 29.26,
+   "word": " de"
+  },
+  {
+   "start": 29.26,
+   "end": 29.42,
+   "word": " por"
+  },
+  {
+   "start": 29.42,
+   "end": 29.56,
+   "word": " que"
+  },
+  {
+   "start": 29.56,
+   "end": 29.72,
+   "word": " se"
+  },
+  {
+   "start": 29.72,
+   "end": 30.04,
+   "word": " creo."
+  },
+  {
+   "start": 30.12,
+   "end": 30.32,
+   "word": " Una"
+  },
+  {
+   "start": 30.32,
+   "end": 30.64,
+   "word": " regla"
+  },
+  {
+   "start": 30.64,
+   "end": 30.86,
+   "word": " sin"
+  },
+  {
+   "start": 30.86,
+   "end": 31.28,
+   "word": " historia"
+  },
+  {
+   "start": 31.28,
+   "end": 31.8,
+   "word": " se"
+  },
+  {
+   "start": 31.8,
+   "end": 32.62,
+   "word": " desobedece"
+  },
+  {
+   "start": 32.62,
+   "end": 32.84,
+   "word": " muy"
+  },
+  {
+   "start": 32.84,
+   "end": 32.99,
+   "word": " facilmente."
+  },
+  {
+   "start": 33.41,
+   "end": 33.56,
+   "word": " Y"
+  },
+  {
+   "start": 33.56,
+   "end": 33.72,
+   "word": " tiene"
+  },
+  {
+   "start": 33.72,
+   "end": 33.84,
+   "word": " que"
+  },
+  {
+   "start": 33.84,
+   "end": 34.04,
+   "word": " tener"
+  },
+  {
+   "start": 34.04,
+   "end": 34.3,
+   "word": " igual"
+  },
+  {
+   "start": 34.3,
+   "end": 35.42,
+   "word": " documentado"
+  },
+  {
+   "start": 35.42,
+   "end": 35.74,
+   "word": " por"
+  },
+  {
+   "start": 35.74,
+   "end": 36.04,
+   "word": " que"
+  },
+  {
+   "start": 36.04,
+   "end": 36.76,
+   "word": " sucedió"
+  },
+  {
+   "start": 36.76,
+   "end": 37.08,
+   "word": " ese"
+  },
+  {
+   "start": 37.08,
+   "end": 37.36,
+   "word": " error."
+  },
+  {
+   "start": 37.45,
+   "end": 37.55,
+   "word": " La"
+  },
+  {
+   "start": 37.55,
+   "end": 37.93,
+   "word": " inteligencia"
+  },
+  {
+   "start": 37.93,
+   "end": 38.43,
+   "word": " artificial"
+  },
+  {
+   "start": 38.43,
+   "end": 38.97,
+   "word": " no"
+  },
+  {
+   "start": 38.97,
+   "end": 39.13,
+   "word": " es"
+  },
+  {
+   "start": 39.13,
+   "end": 39.39,
+   "word": " super"
+  },
+  {
+   "start": 39.39,
+   "end": 39.99,
+   "word": " inteligente,"
+  },
+  {
+   "start": 40.19,
+   "end": 40.49,
+   "word": " tiene"
+  },
+  {
+   "start": 40.49,
+   "end": 40.63,
+   "word": " que"
+  },
+  {
+   "start": 40.63,
+   "end": 40.87,
+   "word": " saber"
+  },
+  {
+   "start": 40.87,
+   "end": 41.15,
+   "word": " por"
+  },
+  {
+   "start": 41.15,
+   "end": 41.35,
+   "word": " que"
+  },
+  {
+   "start": 41.35,
+   "end": 42.01,
+   "word": " sucedió"
+  },
+  {
+   "start": 42.01,
+   "end": 42.29,
+   "word": " cada"
+  },
+  {
+   "start": 42.29,
+   "end": 42.61,
+   "word": " cosa,"
+  },
+  {
+   "start": 42.81,
+   "end": 42.93,
+   "word": " así"
+  },
+  {
+   "start": 42.93,
+   "end": 43.15,
+   "word": " que"
+  },
+  {
+   "start": 43.15,
+   "end": 43.47,
+   "word": " la"
+  },
+  {
+   "start": 43.47,
+   "end": 43.71,
+   "word": " regla"
+  },
+  {
+   "start": 43.71,
+   "end": 44.25,
+   "word": " número 3"
+  },
+  {
+   "start": 44.25,
+   "end": 44.47,
+   "word": " es"
+  },
+  {
+   "start": 44.47,
+   "end": 44.69,
+   "word": " esa"
+  },
+  {
+   "start": 44.69,
+   "end": 44.97,
+   "word": " tambien."
+  },
+  {
+   "start": 45.23,
+   "end": 45.38,
+   "word": " Y"
+  },
+  {
+   "start": 45.38,
+   "end": 45.54,
+   "word": " todo"
+  },
+  {
+   "start": 45.54,
+   "end": 45.78,
+   "word": " este"
+  },
+  {
+   "start": 45.78,
+   "end": 46.1,
+   "word": " archivo"
+  },
+  {
+   "start": 46.1,
+   "end": 46.28,
+   "word": " se"
+  },
+  {
+   "start": 46.28,
+   "end": 46.44,
+   "word": " llama"
+  },
+  {
+   "start": 46.44,
+   "end": 46.94,
+   "word": " Claude"
+  },
+  {
+   "start": 46.94,
+   "end": 47.72,
+   "word": ".md"
+  },
+  {
+   "start": 47.72,
+   "end": 48.06,
+   "word": " y"
+  },
+  {
+   "start": 48.06,
+   "end": 48.18,
+   "word": " si"
+  },
+  {
+   "start": 48.18,
+   "end": 48.46,
+   "word": " querés"
+  },
+  {
+   "start": 48.46,
+   "end": 48.6,
+   "word": " ver"
+  },
+  {
+   "start": 48.6,
+   "end": 48.92,
+   "word": " como"
+  },
+  {
+   "start": 48.92,
+   "end": 49.04,
+   "word": " es"
+  },
+  {
+   "start": 49.04,
+   "end": 49.14,
+   "word": " el"
+  },
+  {
+   "start": 49.14,
+   "end": 49.34,
+   "word": " mio,"
+  },
+  {
+   "start": 49.44,
+   "end": 49.82,
+   "word": " comentá"
+  },
+  {
+   "start": 49.82,
+   "end": 50.1,
+   "word": " la"
+  },
+  {
+   "start": 50.1,
+   "end": 50.34,
+   "word": " palabra"
+  },
+  {
+   "start": 50.34,
+   "end": 50.92,
+   "word": " comunidad"
+  },
+  {
+   "start": 50.92,
+   "end": 51.42,
+   "word": " y"
+  },
+  {
+   "start": 51.42,
+   "end": 51.56,
+   "word": " te"
+  },
+  {
+   "start": 51.56,
+   "end": 51.66,
+   "word": " envío"
+  },
+  {
+   "start": 51.66,
+   "end": 51.74,
+   "word": " un"
+  },
+  {
+   "start": 51.74,
+   "end": 51.94,
+   "word": " enlace"
+  },
+  {
+   "start": 51.94,
+   "end": 52.06,
+   "word": " a"
+  },
+  {
+   "start": 52.06,
+   "end": 52.12,
+   "word": " mi"
+  },
+  {
+   "start": 52.12,
+   "end": 52.62,
+   "word": " comunidad"
+  },
+  {
+   "start": 52.62,
+   "end": 52.88,
+   "word": " en"
+  },
+  {
+   "start": 52.88,
+   "end": 52.98,
+   "word": " donde"
+  },
+  {
+   "start": 52.98,
+   "end": 53.32,
+   "word": " dejé"
+  },
+  {
+   "start": 53.32,
+   "end": 53.84,
+   "word": " documentado"
+  },
+  {
+   "start": 53.84,
+   "end": 54.06,
+   "word": " todo"
+  },
+  {
+   "start": 54.06,
+   "end": 54.32,
+   "word": " esto."
+  }
+ ]
+}
