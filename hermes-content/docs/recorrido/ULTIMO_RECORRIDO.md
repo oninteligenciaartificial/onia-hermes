@@ -12,6 +12,37 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-18 00:09-00:16 La Paz (quinta vuelta del día) — 🟢 SE ARREGLÓ: recorrido COMPLETO 9/9 por primera vez desde el 17-sep, el bloqueo de MFA quedó atrás
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`. **`BUILD_ID` CAMBIÓ**: de
+`OFd4xCDzoTbQdThUbfzDv` (el mismo desde hacía más de un día) a **`HiLa5P_MF3e3iK6KUSfli`** —
+hubo deploy nuevo. `t_b8d00627` (plataforma, 36 arreglos, incluye el fix de MFA `b1247fb`) sigue
+`blocked` en el tablero (no es mi zona, la actualiza `onia-cola`), pero el build vivo ya lo tiene.
+
+Corrí el recorrido completo con `--escribir`: **los 9/9 pasos pasaron, `completo: true`, 0
+agujeros.** El corte que venía repitiéndose desde el 2026-09-17 (`/dashboard` rebotaba a
+`/profile?mfa=obligatorio` con el botón "Activar ahora" sin disparar ningún `fetch`) **ya no
+aparece** — el onboarding se completó en 6 pantallas y el `/dashboard` no rebotó. Camino completo:
+cuenta `zz-qa-2026-09-18-0409@onia.com.bo` creada → correo confirmado → onboarding (Clínica
+dental) → paciente `zz-qa-2026-09-18-0409-paciente` cargado y visto en `/patients` → cita
+2026-09-21 09:00 agendada (201, `cmu6g06w6000k01rwofyi0ejw`) y **vista** en `/appointments` →
+factura `/billing/cmu6g0isv000m01rw76z4uu60` con el ítem visible (frenada sin pagar) → panel
+revisado (no lista pacientes, esperado). Limpieza en la misma corrida: 0 filas `zz-qa-` al cerrar
+(orgs y appointments verificados por `SELECT`).
+
+`completo: true`, `llegoHasta: 9/9`.
+
+RAZÓN: N/A — el objetivo se cumplió esta vuelta.
+LECCIÓN: el bloqueo llevaba 8+ vueltas seguidas citando el mismo `BUILD_ID`; en cuanto cambió, el
+recorrido volvió a pasar sin tocar el instrumento. Confirma que el método de "no repetir el
+recorrido completo mientras el `BUILD_ID` no cambie, usar el resto en escalón 3" fue el correcto —
+la próxima vez que un carril quede bloqueado por deploy ajeno, seguir ese patrón en vez de
+re-correr a ciegas cada vuelta. Próxima vuelta: con el camino base sano de nuevo, retomar rotación
+de rubros (dental sobre-cubierto; importadora/comercio/estética/servicios no se re-verifican desde
+hace días) o seguir escalón 3 en superficies nuevas.
+
+---
+
 ## 2026-09-18 23:09-23:50 La Paz (cuarta vuelta del día) — mismo corte (paso 5, MFA); escalón 3 con interacción real: `/servicios/webs` hasta el clic final, sano
 
 Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue `OFd4xCDzoTbQdThUbfzDv`.
