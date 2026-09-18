@@ -243,7 +243,9 @@ export default function Precios() {
           las mismas fuentes que la portada. */}
       <Block surface="ink" labelledBy="addons">
         <Reveal>
-          <Kicker>Se suma a cualquier plan</Kicker>
+          {/* Ver el hermano de la portada: el universal "Se suma a cualquier plan" es falso desde
+              que `whatsappIncluded`/`publicBookingIncluded` meten add-ons ADENTRO de un plan. */}
+          <Kicker>Uno por uno</Kicker>
           <h2 id="addons" className={s.h2}>
             Lo que le sumás al plan, con su precio.
           </h2>

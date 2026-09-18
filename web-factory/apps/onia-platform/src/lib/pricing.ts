@@ -756,7 +756,11 @@ export interface AddOn {
 export const ADDONS: readonly AddOn[] = [
   {
     nombre: "Chatbot de WhatsApp",
-    copy: "Contesta al instante a cualquier hora con la información real de tu negocio, y pasa a una persona lo que necesite decisión. Se suma a cualquier plan.",
+    // "Se suma a cualquier plan" hasta el 2026-09-18: un universal que la escalera C volvió falso
+    // el 12-sep, cuando `whatsappIncluded` le dio el chatbot ADENTRO a Full y Grupo. Al dueño de un
+    // Completo (Bs 1.290) le cobraba Bs 390 por lo que ya paga, y al que evaluaba subir le escondía
+    // el mejor argumento: subiendo Bs 400 deja de pagar 390. El plan NO se tipea —sale del catálogo.
+    copy: `Contesta al instante a cualquier hora con la información real de tu negocio, y pasa a una persona lo que necesite decisión. Viene incluido en ${nombresConChatbot()}; sobre los demás planes se suma aparte.`,
     precio: precioAddonChatbot(),
     href: "/chatbot",
   },
