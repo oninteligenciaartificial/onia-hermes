@@ -12,6 +12,44 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-18 00:11-00:16 La Paz — recorrido completo re-corrido: mismo bloqueo; `t_a91f564e` ya no existe como tal (archivada, reemplazada); `/agentes` y `/comparativa` en móvil, sanos
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue `OFd4xCDzoTbQdThUbfzDv`
+(sin cambios desde varias vueltas). **Dato nuevo:** `t_a91f564e` (el pedido de plataforma con
+28 arreglos que este carril venía citando) pasó a `status: archived` — no está `blocked`
+esperando un `ok`, está **cerrada y reemplazada**. La tarea viva ahora es `t_62759602`
+("Rehacer los 3 pedidos de deploy: quedaron cortos y el medidor recién se arregló", `ready`,
+sin asignar), que dice que `t_a91f564e` publica 4 arreglos más de los que su cuerpo nombraba y
+por eso hay que rehacerlo — **no es mi zona** (deploy es de `onia-cola`), lo dejo anotado para
+que ese carril lo vea. Mientras esa tarea siga `ready` sin cerrarse, el `ok` de Sergio Urcullo
+no tiene un pedido válido al que responder, así que el corte del paso 5 sigue igual de bloqueado
+que antes, por una razón nueva (pedido a rehacer, no pedido esperando aprobación).
+
+Corrí el recorrido completo con `--escribir` de todos modos (es la definición de "hecho" de
+este carril, y hacía 5 horas que no se re-confirmaba): mismo resultado exacto — llegó al
+**paso 4/9**, se corta en el **paso 5**: `/dashboard` rebota a `/profile`, botón "Activar ahora"
+de MFA sigue sin disparar ningún `fetch`. Limpieza: cuenta y org `zz-qa-2026-09-18-0011*`
+borradas en la misma corrida, 0 filas mías al cerrar (confirmado por SQL).
+
+Con el resto de la vuelta, escalón 3 en una combinación no auditada todavía: **`/agentes` y
+`/comparativa` en viewport móvil (375×812, `reducedMotion:'reduce'`)** — ya estaban auditadas en
+escritorio. Las dos: `scrollWidth === innerWidth === 375` (sin scroll horizontal), 0 respuestas
+HTTP ≥400, 0 candidatos a texto cortado (medido elemento por elemento con
+`scrollWidth > clientWidth`, no por captura). Sin hallazgo.
+
+`completo: false`, `llegoHasta: 4/9`.
+
+RAZÓN: mismo corte de siempre (paso 5, MFA sin salida) — el pedido de deploy que lo arregla ya
+no está `blocked` esperando aprobación, está `ready` esperando que `onia-cola` lo rehaga.
+LECCIÓN: séptima vuelta con el mismo hallazgo del recorrido completo. La novedad real de esta
+vuelta no salió de re-correrlo sino de mirar el ESTADO del tablero: la tarea que este carril
+venía citando como "esperando el ok de Sergio" ya no existe en esa forma. Próxima vuelta: si
+`BUILD_ID` sigue igual, chequear primero si `t_62759602` avanzó (o si nació un pedido nuevo para
+plataforma) antes de asumir que sigue "esperando aprobación" — puede estar esperando que alguien
+lo rehaga, que es un bloqueo distinto y no depende de Sergio Urcullo.
+
+---
+
 ## 2026-09-17 19:09-19:14 La Paz — recorrido completo re-corrido: mismo bloqueo, confirmado con `--escribir`
 
 Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue `OFd4xCDzoTbQdThUbfzDv`
