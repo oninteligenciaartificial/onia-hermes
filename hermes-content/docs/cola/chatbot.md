@@ -318,6 +318,50 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El barrido de rescate perdía un prospecto y el log decía lo mismo que un día
+      tranquilo: `scanned: 0`~~ — CERRADO el 2026-09-18 en el repo (`persistence.mjs` +
+      `followup-run.mjs` + gate `followup-cuenta-los-colgados.test.mjs`, 7 casos). Commiteado,
+      **NO desplegado** — el bot vivo sigue con el barrido viejo hasta que se publique.**
+
+      **Cómo apareció.** Midiendo producción, no leyendo la cola: los cuatro barridos del embudo
+      corren en `mode:emit` desde el 17-sep (`02505ade`) y las cuatro corridas del día decían
+      `scanned: 0`. La memoria del sistema avisa que *"un 0 repetido en un log se pregunta hasta
+      el final"*, así que se preguntó.
+
+      **Qué era.** `skipReason` YA sabe llamar `conversacion_muerta` a la conversación que se
+      pasó del piso de 7 días — pero esa rama es **inalcanzable desde el barrido real**: la
+      consulta SQL la descarta con `last_inbound_at=gte.<hoy-7d>` **antes** de que el runner
+      pueda juzgarla. El consumidor recorta antes de juzgar, y lo que queda en el log es
+      `scanned: 0`, que es exactamente la misma cara que *"no hay nadie a quien escribirle"*.
+
+      **Medido en la base (`onia_center.bot_conversations`):** NUEVE conversaciones en
+      `esperando_horario`, `followup_step=0`, sin opt-out y sin humano a cargo, colgadas por
+      encima del piso (de 8 a 54 días). Cruzadas contra Chatwoot una por una, las nueve son
+      **nuestras** — seis pruebas del inbox 3 (`ONIA Demo`), las dos sondas del carril
+      (conv 48 y 50) y la fila sintética `chatwoot:999999`. **O sea: hoy el número de leads
+      reales perdidos es CERO**, y eso se dice porque se contó, no porque el log estuviera en 0.
+
+      **Por qué se arregló igual.** El barrido corrió en dry-run hasta el 17-sep: el piso de 7
+      días **nunca se ejerció con un desconocido**. El día que un prospecto real quede colgado
+      se cae por el mismo agujero y el log dice lo mismo que hoy. Con cero clientes pagando, el
+      que pidió una demo y no eligió horario es el lead que más importa. Que se pierda está
+      decidido (a los 8 días escribir ya es spam, y **no se reabrió**: hay un caso que ata que
+      las vencidas NO entran al bucle de envío); que se pierda **en silencio** no lo decidió nadie.
+
+      **Qué cambió.** El tope ahora habla con su cuenta: `colgadas: {medido, total, desconocidas,
+      nuestras, quienes[]}` en el JSON y una línea en el texto que **nombra** al desconocido.
+      Tri-estado a propósito — sin dato es `medido:false`/`total:null`, nunca `0`: aplanarlos hace
+      que el barrido diga *"no se perdió ningún lead"* justo cuando está ciego, que es el lado caro.
+      Las dos consultas comparten `FILTROS_FOLLOWUP` y `pisoFollowUp()`: difieren **sólo** en la
+      ventana, así una condición nueva escrita de un solo lado no deja filas que no sean de
+      ninguna de las dos (ni enviadas ni contadas).
+
+      **Validado por mutación, tres veces:** aplanar el tri-estado a `0` → 1 rojo; dejar de separar
+      lo nuestro (`false &&`) → 2 rojos; volver a tipear el predicado en una sola consulta → 1 rojo.
+      Y el cableado a la cadena se probó **por mutación, no por grep** (`node --test <carpeta>` no
+      nombra los archivos que corre): con un assert falso, `npm run test:bot` dio `fail 1` sobre
+      1127. Restaurado: **1127/1127 verde**.
+
 - [x] 🔴 **~~Un módulo del bot, importado por el sitio, trababa la publicación de onia.com.bo:
       el import resuelve en el repo y NO en el stage~~ — CERRADO el 2026-09-17 en el repo
       (`web-factory/apps/onia-platform/scripts/promesa-inclusion.mjs` + dos gates). Llega solo al

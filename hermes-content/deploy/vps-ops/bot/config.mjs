@@ -553,7 +553,7 @@ export const PRODUCTOS = Object.freeze([
  * Agregar un producto "en construccion" si es libre: eso no promete nada.
  */
 // 2026-08-13: pasa de {dental} a tres. Evidencia, no opinion: la app REAL en produccion
-// (app.onia.com.bo/registro) dice con todas las letras "Clinicas dentales · Comercios ·
+// (app.onia.com.bo/register) dice con todas las letras "Clinicas dentales · Comercios ·
 // Importadoras" y deja registrarse en los tres con 14 dias gratis. El bot estaba SUBVENDIENDO —
 // le decia "en construccion, sin humo" a dos rubros que el producto ya atiende, o sea que
 // regalaba dos de cada tres prospectos.
