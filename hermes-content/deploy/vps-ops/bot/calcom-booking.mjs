@@ -153,6 +153,50 @@ export function cierreDeReservaFallida(reason) {
 }
 
 /**
+ * El `kind` del aviso que DESDICE al "DEMO AGENDADA — anotala" que el motor emite en el mismo
+ * turno. Va exportado porque lo nombran tres lados que no se pueden desincronizar: quien lo
+ * emite (`run-turn.mjs`), quien lo rotula (`ETIQUETAS` de `aviso-telegram.mjs`) y quien lo
+ * verifica.
+ */
+export const KIND_RESERVA_SIN_CONFIRMAR = "reserva_sin_confirmar";
+
+/**
+ * El aviso del DESENLACE de una reserva que no salio — SOLO cuando el desenlace contradice al
+ * aviso que el motor ya mando.
+ *
+ * QUE NO ES. No es "avisar cada reserva fallida". Correr sin calendario es una decision TOMADA
+ * y vigente (opcion (c), tablero `t_b18ca430`, 2026-09-03: Telegram ya, Cal.com cuando moleste
+ * anotar a mano). En ese flujo degradado el fallo es el camino NORMAL: el prospecto elige, la
+ * fila queda en la base, Sergio Urcullo recibe "DEMO AGENDADA — anotala" y confirma por
+ * WhatsApp. Un aviso extra por cada demo seria ruido sobre un canal que ya se pidio limpio, y
+ * encima le discutiria una decision que el ya tomo.
+ *
+ * QUE SI ES. `cierreDeReservaFallida` tiene DOS textos y solo uno promete una accion humana
+ * INMEDIATA y excepcional: con `horario_tomado` (409, carrera real) el bot le dice al prospecto
+ * "Sergio te escribe ahora para acomodarlo". Ahi el unico aviso que sale dice "DEMO AGENDADA —
+ * anotala", que es lo CONTRARIO de lo que pasa: ese horario NO quedo libre para el, y anotarlo
+ * manda a Sergio Urcullo a una reunion que choca. Una instruccion que el bot le da al usuario es
+ * un contrato: el otro lado tiene que existir.
+ *
+ * El horario viaja en el texto porque es lo unico accionable.
+ *
+ * @returns {{kind: string, reason: string, conversationKey: string|null, text: string}|null}
+ *          `null` cuando el fallo es el esperado y el aviso del motor ya alcanza.
+ */
+export function avisoDeReservaFallida({ conversationKey, reason, scheduledLabel, scheduledAt } = {}) {
+  if (reason !== "horario_tomado") return null;
+  const cuando = String(scheduledLabel || scheduledAt || "").trim();
+  return {
+    kind: KIND_RESERVA_SIN_CONFIRMAR,
+    reason: String(reason),
+    conversationKey: conversationKey || null,
+    text: cuando
+      ? `Pidió ${cuando} y ese horario YA ESTABA TOMADO: no lo anotes, choca. Le dijimos que vos le escribís ahora para acomodarlo.`
+      : `El horario que pidió YA ESTABA TOMADO: no lo anotes, choca. Le dijimos que vos le escribís ahora para acomodarlo.`,
+  };
+}
+
+/**
  * QUE le agrega al texto un camino que NO reserva, y por que.
  *
  * La comparten los dos consumidores del modo seco, que son caminos distintos del mismo
@@ -164,8 +208,18 @@ export function cierreDeReservaFallida(reason) {
  * regresion que mas le importa.
  *
  * Tri-estado a proposito: `sin_config` se DERIVA del entorno sin tocar la red, asi que ahi el
- * desenlace se sabe con certeza (y hoy es el 100% del trafico: no hay Cal.com en el VPS); con
- * Cal.com configurado NO se sabe, y eso se reporta como ignorancia en vez de inventar un final.
+ * desenlace se sabe con certeza; con Cal.com configurado NO se sabe, y eso se reporta como
+ * ignorancia en vez de inventar un final.
+ *
+ * OJO con la premisa: aca decia "y hoy es el 100% del trafico: no hay Cal.com en el VPS", y
+ * medido el 2026-09-18 es al reves. El proceso vivo SI declara `CALCOM_BASE_URL=http://calcom:3000`
+ * y `CALCOM_BOT_EVENT_TYPE_ID=5` (leido de `/proc/<pid>/environ` dentro de `onia-center`), asi que
+ * en produccion `sin_config` es el 0% y esta rama no se toca nunca. Lo que no existe es el
+ * DESTINO: `docker ps` no lista un contenedor `calcom` ni parado, y desde `onia-center` el
+ * hostname ni resuelve (`wget: bad address 'calcom:3000'`). O sea que el 100% real cae en
+ * `reason: "error"` despues de agotar `BOOKING_TIMEOUT_MS` — 5 s de espera DENTRO del turno de un
+ * prospecto, no una derivacion gratis. Un comentario que afirma el estado del VPS es una
+ * hipotesis con fecha: se vuelve a medir antes de apoyarse en el.
  *
  * @returns {{texto: string, motivo: "sin_config"|"depende_de_la_reserva"|null}}
  */

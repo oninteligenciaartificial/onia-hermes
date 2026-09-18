@@ -54,6 +54,7 @@ import {
   createBooking,
   buildBookingNotes,
   meetingLink,
+  avisoDeReservaFallida,
   cierreDeReservaFallida,
   cierreSinReservar,
 } from "./calcom-booking.mjs";
@@ -290,7 +291,7 @@ function duplicateResponse(state, stageBefore, warnings) {
   };
 }
 
-function buildResponse({ state, stageBefore, config, replies, result, applied, saved, wrote, warnings }) {
+function buildResponse({ state, stageBefore, config, replies, result, applied, saved, wrote, warnings, extraNotify }) {
   const deferred = applied.deferred || [];
   return {
     ok: true,
@@ -315,7 +316,14 @@ function buildResponse({ state, stageBefore, config, replies, result, applied, s
       // Botones (input_select): el adapter de Chatwoot los postea; los demas canales los ignoran.
       ...(reply.options ? { options: reply.options } : {}),
     })),
-    notify: deferred.filter((effect) => effect.type === "notify_sergio").map((effect) => effect.payload),
+    // Los del MOTOR primero y los del EJECUTOR despues, y el orden es la garantia: el ejecutor
+    // solo agrega avisos que CORRIGEN algo que el motor ya afirmo (hoy: la reserva que no salio),
+    // y `construirAviso` pega las lineas en este orden. Al reves, Sergio Urcullo lee la version
+    // optimista primero.
+    notify: [
+      ...deferred.filter((effect) => effect.type === "notify_sergio").map((effect) => effect.payload),
+      ...(Array.isArray(extraNotify) ? extraNotify : []),
+    ],
     calendar: deferred.filter((effect) => effect.type === "calendar_event").map((effect) => effect.payload),
     leadKey: state.leadKey || null,
     reviewKeys: applied.reviewKeys || [],
@@ -429,6 +437,7 @@ export async function runTurn(input, deps = {}) {
   // la demo no aparecia en el calendario de Sergio. Va DESPUES del motor (que es puro y no hace
   // I/O) y ANTES de guardar, para que el uid quede persistido en el mismo estado.
   const bookingWarnings = [];
+  const bookingNotify = [];
   const recienAgendada = stageBefore !== "demo_agendada" && nextState.botStage === "demo_agendada";
   if (recienAgendada && nextState.scheduledAt && !nextState.calendarEventId) {
     if (config.dryRun) {
@@ -487,11 +496,27 @@ export async function runTurn(input, deps = {}) {
         }
       } else {
         // No se puede desdecir el "Listo, agendado" que el motor ya redacto, asi que se le agrega
-        // una linea honesta y se deja el aviso: sin esto el prospecto se presenta a una reunion
-        // que no existe.
+        // una linea honesta al prospecto Y se avisa: sin esto el prospecto se presenta a una
+        // reunion que no existe.
+        //
+        // El aviso es la mitad que faltaba, y era la cara: este comentario decia "y se deja el
+        // aviso" desde que se escribio, pero lo unico que salia de aca era un `warnings[]`, que
+        // no es un efecto y no lo lee nadie (`construirAviso` se arma de `notify`). Mientras
+        // tanto el motor YA emitio `demo_agendada` en este mismo turno, asi que el unico mensaje
+        // que le llegaba a Sergio Urcullo decia "DEMO AGENDADA — anotala" de una demo que no
+        // quedo en ningun calendario. Va DESPUES para que la correccion se lea ultima.
         const ultima = replies[replies.length - 1];
         if (ultima && ultima.text) ultima.text += cierreDeReservaFallida(booking.reason);
         bookingWarnings.push(`calcom: la demo NO quedo reservada (${booking.reason})`);
+        // `null` cuando el fallo es el ESPERADO (correr sin calendario es la opcion (c), ya
+        // decidida): ahi el aviso del motor alcanza y uno extra seria ruido por cada demo.
+        const desdice = avisoDeReservaFallida({
+          conversationKey: nextState.conversationKey,
+          reason: booking.reason,
+          scheduledLabel: nextState.scheduledLabel,
+          scheduledAt: nextState.scheduledAt,
+        });
+        if (desdice) bookingNotify.push(desdice);
       }
     }
   }
@@ -510,6 +535,7 @@ export async function runTurn(input, deps = {}) {
     saved,
     wrote,
     warnings: [...store.warnings, ...bookingWarnings],
+    extraNotify: bookingNotify,
   });
 }
 

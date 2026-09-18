@@ -34,18 +34,39 @@ _spec.loader.exec_module(renovar)
 class AnticipacionRealTest(unittest.TestCase):
     """La anticipacion se mide cuando el prospecto LEE el horario, no cuando se calcula."""
 
-    def _peor_anticipacion(self, ahora):
-        """Horas de aviso que recibe el ULTIMO prospecto que ve estos horarios.
+    # QUE OFRECE EL BOT, que NO es lo que este script genera. El motor recorta
+    # DESPUES de juzgar: `parseSlotsSpec` (config.mjs) marca `pending` a todo
+    # candidato que no llegue a `ANTICIPACION_MINIMA_MS` y recien ahi toma 2
+    # (`candidatos.filter((slot) => !slot.pending).slice(0, 2)`). Verificado vivo el
+    # 2026-09-18 en /tmp/onia-bot/config.mjs:79, que es la condicion de vencimiento
+    # que el generador dejo escrita.
+    #
+    # Por eso la propiedad que le importa al prospecto no es "ningun candidato baja
+    # de 24 h" —esa era la del motor VIEJO, que cortaba los 2 primeros a ciegas— sino
+    # "en el peor momento todavia QUEDAN DOS por encima de las 24 h". Los de adelante
+    # se caen solos y el guion sigue teniendo su A y su B enteros.
+    #
+    # La diferencia no es academica: sostener la garantia con margen del generador le
+    # costaba a la venta un dia entero. Medido el 2026-09-18 (viernes) en el proceso
+    # vivo, `ONIA_BOT_SLOTS` arrancaba en "lunes 21" con el sabado 19 libre — tres
+    # dias de espera para quien escribia ese viernes, y encima el mismo mensaje
+    # promete "sáb 9:00-15:00" en su coletilla de fuera de horario.
+    def _cuantos_se_sostienen(self, ahora):
+        """Los horarios que el motor todavia ofreceria en el PEOR momento.
 
-        El peor caso es el instante justo antes de la proxima renovacion: el
-        horario lleva `VIGENCIA_H` publicado y no se movio.
+        El peor caso es el instante justo antes de la proxima renovacion: el valor
+        lleva `VIGENCIA_H` publicado y no se movio.
         """
         slots = renovar.proximos_slots(ahora)
         self.assertEqual(len(slots), renovar.CUANTOS, f"faltaron horarios para {ahora}")
         fin_de_vigencia = ahora + dt.timedelta(hours=renovar.VIGENCIA_H)
-        return min((s - fin_de_vigencia).total_seconds() / 3600 for s in slots)
+        return [
+            s
+            for s in slots
+            if (s - fin_de_vigencia).total_seconds() / 3600 >= renovar.ANTICIPACION_H
+        ]
 
-    def test_ningun_horario_baja_de_24h_de_aviso_mientras_esta_publicado(self):
+    def test_el_guion_sigue_teniendo_sus_dos_horarios_con_24h_de_aviso(self):
         # Una semana entera, hora por hora: cubre el sabado (ventana 09-15), el
         # domingo (sin ventanas) y el salto de fin de semana, que es donde el
         # calendario se deforma y un off-by-one se esconde.
@@ -54,18 +75,58 @@ class AnticipacionRealTest(unittest.TestCase):
             ahora = arranque + dt.timedelta(hours=h)
             with self.subTest(ahora=ahora.isoformat()):
                 self.assertGreaterEqual(
-                    self._peor_anticipacion(ahora),
-                    renovar.ANTICIPACION_H,
-                    "un prospecto recibiria menos aviso del que Sergio pidio",
+                    len(self._cuantos_se_sostienen(ahora)),
+                    2,
+                    "el guion ofrece A y B: al ultimo prospecto del dia le queda menos "
+                    "de un par por encima del aviso que pidio Sergio Urcullo",
                 )
+
+    def test_el_generador_solo_tampoco_escribe_un_horario_a_minutos_vista(self):
+        """La garantia no puede quedar SOLO del lado del motor.
+
+        Al pasar la propiedad de arriba a "quedan dos sostenibles", el piso del
+        generador se volvio invisible para el gate: mutando `desde` a `ahora + 0`
+        los cuatro casos seguian VERDE, porque el motor descarta los caducados y
+        siempre quedaban dos mas adelante. Visible-correcto, y sin embargo el
+        productor habria vuelto a escribir "hoy 14:00" a minutos vista.
+
+        Importa porque los dos lados viajan al VPS por caminos DISTINTOS: a este
+        script lo copia scripts/loops/sincronizar.sh (cron 44, desde origin/main) y
+        al motor hay que desplegarlo aparte. El dia que /tmp/onia-bot/config.mjs
+        vuelva a una version sin el filtro —un deploy revertido, un rsync viejo— el
+        unico que queda protegiendo al prospecto es este piso.
+        """
+        arranque = dt.datetime(2026, 9, 1, 0, 0, tzinfo=renovar.TZ_LAPAZ)
+        for h in range(7 * 24):
+            ahora = arranque + dt.timedelta(hours=h)
+            with self.subTest(ahora=ahora.isoformat()):
+                for s in renovar.proximos_slots(ahora):
+                    aviso_h = (s - ahora).total_seconds() / 3600
+                    self.assertGreaterEqual(
+                        aviso_h, renovar.ANTICIPACION_H,
+                        f"escribio un horario a {aviso_h:.1f} h de su propio calculo",
+                    )
 
     def test_el_caso_medido_en_produccion(self):
         # Reproduce el defecto exacto: el cron del 4-sep 06:23 publico "sábado 5,
         # 09:00" y a las 04:03 del 5-sep seguia ofreciendolo, a 4 h 57 min vista.
+        #
+        # Se mide sobre el PRIMERO QUE SE SOSTIENE, no sobre `slots[0]`: ese indice
+        # era el primero que el prospecto veia con el motor viejo, y hoy es el que el
+        # motor descarta. Pedirle 24 h a un candidato que ya nadie ve deja el gate
+        # afirmando el margen del generador en vez de la promesa del bot.
         genera = dt.datetime(2026, 9, 4, 6, 23, tzinfo=renovar.TZ_LAPAZ)
         lee = dt.datetime(2026, 9, 5, 4, 3, tzinfo=renovar.TZ_LAPAZ)
-        primero = renovar.proximos_slots(genera)[0]
-        aviso_h = (primero - lee).total_seconds() / 3600
+        ofrecidos = [
+            s
+            for s in renovar.proximos_slots(genera)
+            if (s - lee).total_seconds() / 3600 >= renovar.ANTICIPACION_H
+        ]
+        self.assertGreaterEqual(
+            len(ofrecidos), 2,
+            "el prospecto de las 04:03 se quedaria sin un par de horarios con aviso",
+        )
+        aviso_h = (ofrecidos[0] - lee).total_seconds() / 3600
         self.assertGreaterEqual(
             aviso_h, renovar.ANTICIPACION_H,
             f"el prospecto de las 04:03 recibiria {aviso_h:.1f} h de aviso",

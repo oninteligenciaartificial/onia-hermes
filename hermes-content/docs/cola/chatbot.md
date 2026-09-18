@@ -318,6 +318,58 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El bot le promete al prospecto que "Sergio te escribe AHORA" y a Sergio Urcullo le
+      dice "DEMO AGENDADA — anotala": el aviso afirma lo contrario de lo que pasó~~ — CERRADO el
+      2026-09-18 en el repo.** Commiteado, **NO desplegado** (el bot no toca fuente de precio,
+      así que el publicador automático del VPS —fuente en `scripts/loops/extras/publicar-solo.sh`— lo
+      saca solo dentro de su ventana de 3 h).
+
+      **Cómo apareció.** Midiendo el embudo por el estado que el motor ESCRIBE, no por lo que
+      contesta: `select bot_stage, count(*), count(calendar_event_id) from
+      onia_center.bot_conversations` → **43 conversaciones, 0 con `calendar_event_id`**, y de
+      las que eligieron horario, 1 de 1 sin reserva. Eso es lo ESPERADO y ya está decidido
+      (opción (c), ver el bloque cerrado del 13-sep más arriba) — pero al tirar del hilo apareció
+      lo que la decisión NO cubre.
+
+      **El defecto.** `cierreDeReservaFallida` tiene DOS textos y sólo uno promete acción humana
+      inmediata: con `horario_tomado` (409, carrera real) el bot le dice al prospecto *"Sergio te
+      escribe ahora para acomodarlo"*. El único aviso que salía era el del motor —
+      `demo_agendada` → **"DEMO AGENDADA — anotala"** — o sea que a Sergio Urcullo se le pedía
+      anotar un horario **ocupado**, mandándolo a una reunión que choca. El comentario de
+      `run-turn.mjs` decía, al lado del código, *"se le agrega una línea honesta **y se deja el
+      aviso**"*: lo primero era cierto y lo segundo no — lo único que salía de ahí era un
+      `bookingWarnings.push(...)`, y los warnings **no son un efecto** (`construirAviso` se arma
+      de `notify`, que viene de los `deferred` del motor). Nadie los leía: `grep calcom` sobre el
+      log vivo de 2,7 MB dentro de `onia-center` da **0**.
+      Y el test hermano se llama *"solo el aviso honesto"* afirmando la misma garantía que
+      tampoco comprobaba: miraba el texto del prospecto y nada más.
+
+      **Arreglo** (`calcom-booking.mjs` `avisoDeReservaFallida` + `KIND_RESERVA_SIN_CONFIRMAR`,
+      `run-turn.mjs`, etiqueta en `aviso-telegram.mjs`): el fallo que CONTRADICE al aviso del
+      motor emite su propio `notify_sergio`, **después** del que corrige (`construirAviso` pega
+      las líneas en orden, así que al revés se lee la versión optimista y se para de leer). El
+      fallo **esperado** devuelve `null` a propósito: correr sin calendario ya está decidido y un
+      aviso por cada demo sería ruido en el canal que Sergio Urcullo pidió limpio. Las dos
+      direcciones tienen su caso y **las dos mutaciones caen en rojo, cada una en el suyo**.
+
+      **Y la clase, no sólo la instancia.** El gate de etiquetas
+      (`aviso-nombra-todo-lo-que-el-motor-emite.test.mjs`) derivaba su universo de **un solo
+      archivo** (`bot-engine.mjs`) y buscaba `kind: "literal"`: un aviso emitido desde otro
+      archivo, o con el kind en una constante, no era sujeto de nadie — la misma familia que ese
+      gate existe para cazar, un escalón más arriba. Ahora camina la carpeta y, para la forma con
+      constante, le pregunta a la **función que construye el payload** en vez de al texto.
+      Mutación: sin la línea de `ETIQUETAS`, rojo.
+
+      ⚠️ **Dos premisas vencidas corregidas en el camino** (`calcom-booking.mjs` y
+      `persistence.test.mjs`): los dos comentarios afirmaban que *"hoy no hay Cal.com en el VPS
+      (sin `CALCOM_BASE_URL`), así que `sin_config` es el 100% del tráfico real"*. Medido el
+      2026-09-18 en `/proc/<pid>/environ` dentro de `onia-center`: la config **sí está**
+      (`CALCOM_BASE_URL=http://calcom:3000`, `CALCOM_BOT_EVENT_TYPE_ID=5`), así que `sin_config`
+      es el **0%**; lo que no existe es el destino (`docker ps` no lista `calcom` ni parado, y el
+      hostname ni resuelve). El 100% real cae en `reason: "error"` tras agotar
+      `BOOKING_TIMEOUT_MS`. La cola ya lo había medido bien el 13-sep; los comentarios del código
+      nunca se enteraron, y mandaban a diagnosticar la rama que no se ejecuta.
+
 - [x] 🔴 **~~El watchdog del bot callaba justo en las dos situaciones donde el bot está MÁS
       muerto~~ — CERRADO el 2026-09-18 en el repo** (`webhook-watchdog.sh` + 7 casos nuevos en
       `webhook-watchdog.test.mjs`, validados por 3 mutaciones). Commiteado, **NO desplegado** —
