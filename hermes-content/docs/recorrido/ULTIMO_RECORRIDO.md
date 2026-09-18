@@ -2204,6 +2204,28 @@ zona (código del sitio, carril web-venta).
 
 `completo: false`, `llegoHasta: 4/9` (sin cambios, sigue bloqueado por el mismo deploy).
 
+## Reverificado 2026-09-18 09:09-09:35 La Paz — dental 9/9, BUILD_ID nuevo tras los tres pedidos de deploy cerrados
+
+`BUILD_ID` cambió de nuevo (`HiLa5P_MF3e3iK6KUSfli` → `4AefpemDeSbQXrDmTbhoy`) y los tres pedidos
+de deploy que quedaban abiertos ya están `done`/`archived` (`t_4f4e4071` plataforma, `t_75f4fac3`
+landing, `t_234cfe6a` bot — ninguno sigue `blocked`). Con esa señal, repetí el recorrido completo
+en dental (`RECORRIDO_RUBRO` sin pasar = default): **9/9 pasos, `completo: true`**, cuenta →
+onboarding (6 pantallas) → paciente `zz-qa-2026-09-18-1309-paciente` guardado y visible → cita
+2026-09-21 09:00 agendada y VISTA en `/appointments` → factura con ítem visible en `/billing/...`
+(frenado sin pagar) → panel revisado. Limpieza verificada: `organizations`/`appointments` con
+`zz-qa-%` en 0 al cerrar (contados antes y después).
+
+Con eso confirmado, intenté escalón 3 en una superficie nueva: el formulario de
+`/servicios/webs` (wizard largo de una sola página: rubro, objetivo, plan, estilo, tipografía,
+color, contacto — con botón "Armar mi web →" `disabled` hasta completar todo). Enviarlo de
+punta a punta quedó **inconcluso**: el botón sigue habilitado=false tras llenar los campos de
+texto y algunas de las secciones de botones, y otras secciones (p. ej. "Minimalista") dejaron de
+encontrarse por selector — probablemente dependen de una elección anterior (plan/objetivo) para
+aparecer. No alcanza para reportar un hallazgo (no se descartó error propio del instrumento); lo
+dejo anotado en la cola para retomarlo con un mapeo paso a paso del formulario, no a ciegas.
+
+`completo: true`, `llegoHasta: 9/9`.
+
 ## Reverificado 2026-09-18 07:09-07:20 La Paz — Estética y spa, 9/9 completo (deploy del bloqueo de MFA ya resuelto)
 
 El bloqueo de MFA obligatorio que cortaba el recorrido en el paso 5 desde el 17-sep ya se
