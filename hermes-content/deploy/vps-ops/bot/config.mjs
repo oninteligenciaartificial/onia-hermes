@@ -45,6 +45,28 @@ export const DEMO_SLOTS = Object.freeze([
  */
 export const ANTICIPACION_MINIMA_MS = 24 * 60 * 60 * 1000;
 
+/**
+ * ¿Este horario todavia se puede OFRECER en este instante?
+ *
+ * Es una propiedad del INSTANTE, no del horario: por eso no se puede guardar. `slotsOffered`
+ * se persiste con el `pending` que el horario tenia el dia que se ofrecio, y al rehidratarlo
+ * un horario del pasado vuelve con `pending: false` — ofrecible para todo el motor. Esta
+ * funcion es la UNICA fuente de la regla, y la comparten los dos que la necesitan:
+ * `parseSlotsSpec`, que la aplica al publicar, y `handleHorario`, que la aplica al ACEPTAR.
+ * Mientras la regla vivio solo en el parseo, el camino interactivo agendaba lo caducado.
+ *
+ * Sin ISO no se puede verificar NI reservar, pero eso lo decide el que arma la cadena y ya
+ * era asi: se considera sostenible. Con ISO manda el reloj, y un ISO ilegible cuenta como no
+ * sostenible — la comparacion contra NaN da false sola, que es la direccion segura (antes
+ * callarse que prometer).
+ */
+export function slotSostenible(slot, now = Date.now()) {
+  const iso = slot?.startAt ?? null;
+  if (iso === null) return true;
+  const limite = (now instanceof Date ? now.getTime() : Number(now)) + ANTICIPACION_MINIMA_MS;
+  return Date.parse(iso) >= limite;
+}
+
 export function parseSlotsSpec(raw, { now = Date.now() } = {}) {
   const text = String(raw || "").trim();
   if (!text) return null;
@@ -55,15 +77,12 @@ export function parseSlotsSpec(raw, { now = Date.now() } = {}) {
   // Medido el 2026-09-05 04:03 La Paz: el bot vivo ofrecia "sábado 5, 09:00", a
   // 4 h 57 min. El generador ya reserva margen para toda su vigencia; esto es el
   // corte que sobrevive a que ese generador no haya corrido.
-  const limite = (now instanceof Date ? now.getTime() : Number(now)) + ANTICIPACION_MINIMA_MS;
   const candidatos = text.split("|").map((part) => {
     const [label, startAt] = part.split("@").map((piece) => (piece || "").trim());
     const iso = startAt || null;
-    // Sin ISO no se puede verificar NI reservar, pero eso ya era asi antes de este
-    // corte y lo decide el que arma la cadena: no se toca aca. Con ISO manda el
-    // reloj, y un ISO ilegible cuenta como no sostenible: la comparacion contra
-    // NaN da false sola, y esa es la direccion segura (antes callarse que prometer).
-    const sostenible = iso === null || Date.parse(iso) >= limite;
+    // La regla vive en `slotSostenible`, que es la misma que aplica el motor al ACEPTAR una
+    // eleccion. Reimplementarla aca fue lo que dejo agendar horarios ya caducados.
+    const sostenible = slotSostenible({ startAt: iso }, now);
     // `pending` y no un descarte: es el estado que el motor ya sabe contar
     // (slotsPending -> M0_SIN_HORARIOS) y que detectSlotChoice ya ignora. Un
     // horario que no se puede sostener es, para el guion, uno sin definir.
@@ -417,6 +436,19 @@ export const SCRIPT = Object.freeze({
   // (precio / SIAT / archivo) vuelve al embudo sin saltear la calificacion.
   PENDING_CALIFICACION: "Volviendo a lo nuestro: me falta {{dato_faltante}} — ¿me lo pasás?",
   PENDING_HORARIO: "¿Te reservo **{{slot_a}}** o **{{slot_b}}**?",
+  // Eligio un horario que ya no se puede sostener (paso, o dejo de dar el dia de aviso que le
+  // prometimos en ese mismo mensaje). No se le confirma, y tampoco se le asigna en silencio
+  // uno de los nuevos: el "A" de hoy no es el "A" que el vio. Se le dice y elige de nuevo.
+  M0_HORARIO_CADUCO: [
+    "Uy, **{{slot_elegido}}** ya no lo tengo disponible — pasó el tiempo desde que te lo ofrecí y no quiero confirmarte algo que no puedo sostener.",
+    "",
+    "Estos son los horarios que tengo ahora:",
+    "",
+    "**A)** {{slot_a}}",
+    "**B)** {{slot_b}}",
+    "",
+    "¿Cuál te sirve? (o escribime \"otro\" y lo coordinamos)",
+  ].join("\n"),
   // PENDING_HORARIO_SIN_HORARIOS — la misma re-pregunta cuando `slots` sigue en "pendiente de
   // definir". PENDING_HORARIO pide elegir entre {{slot_a}} y {{slot_b}}, y sin horarios reales eso
   // salio a produccion como "¿Te reservo HORARIO A (pendiente de definir) o HORARIO B (pendiente de

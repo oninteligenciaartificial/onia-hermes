@@ -17,6 +17,7 @@ import {
   joinEs,
   isOutsideBusinessHours,
   slotsPending,
+  slotSostenible,
 } from "./config.mjs";
 import { enforceGuardrails, normalize, SAFE_REPLY } from "./guardrails.mjs";
 import * as intents from "./intents.mjs";
@@ -800,6 +801,27 @@ function handleHorario(ctx, base) {
       return finalize(ctx, base, [reply], effects, ["repregunta:horario"]);
     }
     return offScriptResult(ctx, base);
+  }
+
+  // EL HORARIO ELEGIDO SE RE-MIDE EN ESTE INSTANTE, no en el que se ofrecio. `slots` puede venir
+  // de `state.slotsOffered`, que es una FOTO: la guarda `persistence.mjs` con el `pending` que el
+  // horario tenia aquel dia y ese booleano no se recalcula nunca, asi que un horario del pasado
+  // vuelve marcado como ofrecible y todo el camino lo acepta. Medido el 2026-09-18 en produccion:
+  // doce conversaciones en `esperando_horario` guardaban horarios ya vencidos. A las viejas las
+  // salva `conversacionVencida` (14 dias), pero la ventana normal no: el generador publica a
+  // 24-48 h de anticipacion, asi que alcanza con que la persona conteste dos dias despues para
+  // que "A" confirme una reunion de anteayer y dispare la reserva.
+  //
+  // No se le asigna en silencio uno de los vigentes: el "A" de hoy no es el "A" que el vio, y
+  // confirmarle una reunion que nunca eligio seria peor que el bug. Se le dice, se le ponen los
+  // de hoy sobre la mesa y elige de nuevo. `slotsOffered` se pisa con los vigentes — es la mitad
+  // que evita que el proximo "A" vuelva a reservar el viejo.
+  if (!slotSostenible(chosen, msg.receivedAt ? Date.parse(msg.receivedAt) : Date.now())) {
+    const reOfrecido = { ...base, slotsOffered: config.slots.map((slot) => ({ ...slot })) };
+    const reply = slotsPending(config)
+      ? say("PENDING_HORARIO_SIN_HORARIOS", reOfrecido, config)
+      : say("M0_HORARIO_CADUCO", reOfrecido, config, { slot_elegido: chosen.label });
+    return finalize(ctx, reOfrecido, [reply], [], ["horario_caduco"]);
   }
 
   const next = {
