@@ -27,7 +27,9 @@
 set -uo pipefail
 
 TG=${ONIA_TG:-/root/bin/onia-tg.sh}
-LOCK=/var/lock/onia-publicar-solo.lock
+# El lock se puede apuntar a otro lado SOLO para poder probar la rama de
+# "no consegui el lock" sin tocar el de produccion. El default es el de siempre.
+LOCK=${ONIA_PUBLICAR_LOCK:-/var/lock/onia-publicar-solo.lock}
 REPO_HERMES=${ONIA_LOOPS_REPO:-/root/loops/onia-hermes}
 REPO_PLATFORM=${ONIA_PLATFORM_REPO:-/root/loops/onia-platform}
 SECO=""
@@ -39,17 +41,38 @@ SECO=""
 # del bot lleva los precios que el bot dice en voz alta.
 FIRMA_HUMANA='lib/pricing\.ts|lib/subscription-plans\.ts|ONIA_CATALOGO_DE_VENTA\.md|knowledge\.onia\.json'
 
-# Un solo publicador a la vez. La leccion de los builds encimados que tumbaron el
-# VPS el 2026-08-22 (load 18, npm de 40 min) vale igual cuando el que encima los
-# builds es un cron y no una persona.
-exec 9>"$LOCK"
-flock -n 9 || { echo "ya hay una corrida en curso; salgo"; exit 0; }
-
 avisar() {
   if [ -n "$SECO" ]; then echo "  [seco] avisaria: $1"; return; fi
   # HTML, nunca Markdown: un guion bajo suelto hace que el mensaje NO llegue.
   "$TG" "$1" >/dev/null 2>&1 || true
 }
+
+# Un solo publicador a la vez. La leccion de los builds encimados que tumbaron el
+# VPS el 2026-08-22 (load 18, npm de 40 min) vale igual cuando el que encima los
+# builds es un cron y no una persona.
+#
+# 🔴 ESPERA, no se rinde — y el cron corre cada 3 HORAS, esa es toda la razon.
+# Hasta el 2026-09-18 aca decia `flock -n`, que se rinde en el acto: quien no
+# consigue el lock pierde la ventana ENTERA y los tres destinos se quedan sin
+# publicar 3 h mas. Medido ese dia: la corrida de las 06:50:01 UTC se salteo
+# completa porque un `--dry-run` de DOS SEGUNDOS, disparado a mano 66 s antes
+# para probar un pedido de deploy, todavia tenia tomado el lock por su deploy
+# en segundo plano. Nadie se entero: salia `exit 0`, o sea el cron lo leia como
+# exito, y la linea del log no llevaba FECHA, asi que en un log append-only no
+# se podia atribuir a ninguna corrida (hubo que deducirla por el mtime).
+# El que espera no encima nada: al entrar vuelve a MEDIR, y si el otro ya
+# publico lo que habia, este dice "al dia" y no toca nada.
+exec 9>"$LOCK"
+if ! flock -w "${ONIA_PUBLICAR_ESPERA:-900}" 9; then
+  # Aca ya no es una colision de segundos: algo lleva 15 min con el lock.
+  # Eso SI es anormal y se avisa, con fecha, para poder atribuirlo despues.
+  echo "== $(TZ=America/La_Paz date '+%F %H:%M') La Paz =="
+  echo "  me rendi: otra publicacion lleva mas de ${ONIA_PUBLICAR_ESPERA:-900}s con el lock ($LOCK)"
+  avisar "<b>Onia — publicacion salteada</b>
+El publicador automatico no pudo arrancar: otra publicacion lleva mas de ${ONIA_PUBLICAR_ESPERA:-900}s con el lock.
+Los tres destinos esperan hasta la proxima corrida (3 h)."
+  exit 0
+fi
 
 # Los archivos que tocan los commits varados de un destino. Se le PREGUNTA al
 # mismo medidor que usa el publicador: dos derivaciones distintas de "que falta"
