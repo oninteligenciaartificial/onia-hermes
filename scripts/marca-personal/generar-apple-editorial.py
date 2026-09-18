@@ -925,6 +925,134 @@ DIA_FOUNDER = [
     },
 ]
 
+# Tres piezas nuevas del 17-sep (cola de carruseles de las 8:00). Datos propios y ya
+# verificados en los decks 03/06 (el 74 %, las fallas, el caso del correo). Regla:
+# cada una entrega UN dato que el lector no sabia; los term MUESTRAN el mecanismo.
+REGLA_74 = [
+    {
+        "layout": "D",
+        "contexto": "Mi gasto de IA se dispar\u00f3.\nAntes de cortar nada, fui a mirar:",
+        "remate": "74%",
+        "pie": "del pico era UN solo trabajo",
+        "pie_hl": "mal configurado",
+        "gancho": True,
+    },
+    {
+        "layout": "R",
+        "term_titulo": "qui\u00e9n gast\u00f3",
+        "badge": "paso 1",
+        "term": ['<span class="p">&gt;</span> \u00bfqui\u00e9n gast\u00f3?',
+                 '<span class="ok">\u2713</span> atribuido: UN trabajo',
+                 '<span class="g">los dem\u00e1s: normales</span>'],
+        "titular": "Primero, atribuir.",
+        "linea": "No apagu\u00e9s todo: con arreglar \u00e9se alcanz\u00f3,\ny lo dem\u00e1s sigui\u00f3 andando.",
+        "etiqueta": "la regla del 74%",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "la trampa",
+        "badge": "paso 2",
+        "term": ['<span class="p">&gt;</span> \u00bfsubo el tope?',
+                 '<span class="no">\u2717</span> el mes que viene: el doble'],
+        "titular": "El tope, al final.",
+        "linea": "Si sub\u00eds el tope sin mirar,\nel gasto solo aprende a crecer.",
+        "etiqueta": "la regla del 74%",
+    },
+    {
+        "layout": "D",
+        "contexto": "La regla entera:",
+        "remate": "Se baja el consumo.\nNo se sube el tope.",
+        "sub": "Primero qui\u00e9n. Despu\u00e9s \u00e9se. El tope, al final.",
+        "cta_hl": "\u00bfTu factura de IA subi\u00f3 este mes?",
+        "cta_gris": "Contame y la miramos.",
+    },
+]
+
+TRES_PREGUNTAS = [
+    {
+        "layout": "D",
+        "contexto": "La IA me dijo \u00ablisto\u00bb.\nLa pantalla estuvo rota d\u00edas.",
+        "remate": "Mentira.",
+        "pie": "Tres preguntas para que no te pase",
+        "pie_hl": "a vos",
+        "gancho": True,
+    },
+    {
+        "layout": "R",
+        "term_titulo": "lo que te dice",
+        "badge": "1 de 3",
+        "term": ['<span class="ok">\u2713</span> Listo. Cambi\u00e9 3 archivos.',
+                 '<span class="g">(no estaba listo)</span>'],
+        "titular": "\u00bfLo mir\u00e9?",
+        "linea": "Si lo ve una persona, se abre y se mira.\nUna b\u00fasqueda descarta; nunca confirma.",
+        "etiqueta": "mirar",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "el n\u00famero",
+        "badge": "2 de 3",
+        "term": ['<span class="p">&gt;</span> mand\u00e1 el correo a todos',
+                 '<span class="ok">\u2713</span> terminado sin errores',
+                 '<span class="no">lista: 0 clientes</span>'],
+        "titular": "\u00bfCu\u00e1nto sali\u00f3?",
+        "linea": "Un n\u00famero, no un \u00ablisto\u00bb: cu\u00e1ntos correos,\ncu\u00e1ntas filas, cu\u00e1ntos segundos.",
+        "etiqueta": "medir",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "la fecha",
+        "badge": "3 de 3",
+        "term": ['<span class="p">&gt;</span> dato de la semana pasada',
+                 '<span class="no">\u2717</span> hoy ya cambi\u00f3'],
+        "titular": "\u00bfLo cont\u00e9 hoy?",
+        "linea": "Un dato viejo es una suposici\u00f3n\ncon cara de dato.",
+        "etiqueta": "volver a contar",
+    },
+    {
+        "layout": "D",
+        "contexto": "Mirar \u00b7 medir \u00b7 volver a contar",
+        "remate": "2 minutos.",
+        "sub": "Eso cuesta comprobar en vez de creer.\nEl video completo est\u00e1 en mi canal.",
+        "cta_hl": "\u00bfCu\u00e1l de las tres te salte\u00e1s?",
+        "cta_gris": "Yo me salteaba la primera.",
+    },
+]
+
+FALLA_SOLO = [
+    {
+        "layout": "D",
+        "contexto": "Automatic\u00e9 media empresa.\nY esto lo aprend\u00ed a los golpes:",
+        "remate": "Lo que corre solo,\nfalla solo.",
+        "gancho": True,
+    },
+    {
+        "layout": "D",
+        "contexto": "Falla 1",
+        "remate": "200 l\u00edneas",
+        "sub": "Mi hook de cierre subi\u00f3 c\u00f3digo antes de que\nexistiera lo que lo usaba. No rompi\u00f3 nada\nde pura casualidad.",
+    },
+    {
+        "layout": "D",
+        "contexto": "Falla 2",
+        "remate": "3 semanas",
+        "sub": "Un servicio corri\u00f3 todos los d\u00edas sin publicar\nnada. No fallaba: no hac\u00eda nada. Y nada avisa\ncuando algo no hace nada.",
+    },
+    {
+        "layout": "D",
+        "contexto": "Falla 3",
+        "remate": "4 de 6",
+        "sub": "Cuatro de mis seis conectores no andaban.\nNo me avis\u00f3 ninguno: me enter\u00e9\nporque fui a mirar.",
+    },
+    {
+        "layout": "D",
+        "contexto": "Las tres reglas que me salvan",
+        "remate": "Que avise\ncuando falla.",
+        "sub": "Que mida el resultado, no el \u00ablisto\u00bb.\nY techo al gasto \u2014 siempre.",
+        "cta_hl": "\u00bfQu\u00e9 corre solo en tu negocio?",
+        "cta_gris": "\u00bfY qui\u00e9n lo mira?",
+    },
+]
+
 PIEZAS = {
     "mi-stack": None,
     "fable": FABLE,
@@ -938,6 +1066,9 @@ PIEZAS = {
     "repos": REPOS,
     "dia": DIA,
     "dia-founder": DIA_FOUNDER,
+    "regla-74": REGLA_74,
+    "tres-preguntas": TRES_PREGUNTAS,
+    "falla-solo": FALLA_SOLO,
 }  # mi-stack se resuelve a LAMINAS abajo
 
 # Piel por pieza: una clase extra en el lienzo que habilita el acento de esa marca.
@@ -1039,6 +1170,7 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 .term-r .p{{color:#FF8A5C;font-weight:700}}
 .term-r .ok{{color:#3ECF6E}}
 .term-r .g{{color:rgba(255,255,255,.45);font-weight:400}}
+.term-r .no{{color:#FF6B63}}
 .repo-r{{display:flex;align-items:center;gap:22px;margin-top:56px;
   font-family:'OniaMono',monospace;font-size:57px;font-weight:700;letter-spacing:-.02em}}
 .repo-r .gh-mark{{width:76px;height:76px;flex:none}}
@@ -1067,6 +1199,7 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 .h .rem-h .vd{{background:#2FBF71;color:#08210F;border-radius:12px;padding:2px 14px}}
 
 .repo-r.chico .gh-mark{{width:60px;height:60px}}
+.tit-r{{font-size:64px;font-weight:800;letter-spacing:-.03em;margin-top:52px}}
 .linea-r{{font-size:33px;color:var(--muted);line-height:1.42;margin-top:24px;
   white-space:pre-line;max-width:850px}}
 .sub{{font-size:38px;color:var(--muted);line-height:1.4;margin-top:30px;
@@ -1376,15 +1509,20 @@ def markup(lamina):
         # refieren; se ve muy simple". El titular es el NOMBRE del repo y arriba va un
         # mock de terminal que MUESTRA el mecanismo (el mismo term de los decks yt-*).
         lineas = "\n".join(lamina["term"])
-        return (
-            f'<div class="term-r"><div class="term-r-barra"><i></i><i></i><i></i>'
-            f'<em>{lamina["term_titulo"]}</em><span class="badge">gratis</span></div>'
-            f'<pre>{lineas}<span class="cur"></span></pre></div>'
-            f'<div class="repo-r{" chico" if lamina.get("chico") else ""}"><svg class="gh-mark" viewBox="0 0 256 256">'
-            f'{_marca("github", "#1D1D1F")}</svg><span>'
-            f'<b class="own">{lamina["own"]}/</b>{lamina["repo"]}</span></div>'
-            f'<div class="linea-r">{lamina["linea"]}</div>'
-            f'<div class="etiqueta">{lamina["etiqueta"]}</div>')
+        badge = lamina.get("badge", "gratis")
+        cab = (f'<div class="term-r"><div class="term-r-barra"><i></i><i></i><i></i>'
+               f'<em>{lamina["term_titulo"]}</em>')
+        if badge:
+            cab += f'<span class="badge">{badge}</span>'
+        cab += f'</div><pre>{lineas}<span class="cur"></span></pre></div>'
+        if lamina.get("own"):
+            cab += (f'<div class="repo-r{" chico" if lamina.get("chico") else ""}">'
+                    f'<svg class="gh-mark" viewBox="0 0 256 256">{_marca("github", "#1D1D1F")}</svg>'
+                    f'<span><b class="own">{lamina["own"]}/</b>{lamina["repo"]}</span></div>')
+        else:
+            cab += f'<div class="tit-r">{lamina["titular"]}</div>'
+        return (cab + f'<div class="linea-r">{lamina["linea"]}</div>'
+                f'<div class="etiqueta">{lamina["etiqueta"]}</div>')
     etiqueta = (f'<div class="etiqueta">{lamina["etiqueta"]}</div>'
                 if lamina.get("etiqueta") else "")
     return (f'<div class="obj">{ICONOS[lamina["icono"]]}</div>'
