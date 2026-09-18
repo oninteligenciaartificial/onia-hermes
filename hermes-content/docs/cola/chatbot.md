@@ -318,6 +318,120 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [ ] 🔴 **El guardia que impide que dos orgs reclamen el mismo inbox mira UNA columna, y el
+      que lee mira TRES: el conflicto se crea con un solo número mal tipeado.** Medido el
+      2026-09-18 leyendo la fuente, no supuesto:
+      `onia-platform/app/api/admin/organizations/[id]/whatsapp/route.ts` pregunta
+      `where: { chatwootInboxId, organizationId: { not: id } }` — sólo el slot WEB — mientras
+      `onia-platform/lib/chatbot/org-del-inbox.ts` resuelve por los tres
+      (`chatwootInboxId`, `chatwootWhatsappInboxId`, `chatwootMetaInboxId`). O sea: el operador
+      escribe `5` en el slot web de la org A, `5` es el inbox de **WhatsApp** de la org B, el
+      guardia no ve nada y el conflicto queda creado. Y `5` no es un número inventado: es
+      literalmente el inbox de WhatsApp de producción.
+
+      Los otros tres guardias del alta tienen el mismo recorte de una columna —
+      `onia-platform/lib/chatbot/canal-web.ts` (`chatwootInboxId: { in: mios }`),
+      `onia-platform/lib/chatbot/canal-whatsapp.ts` (`chatwootWhatsappInboxId: previo.id`) y
+      `onia-platform/lib/chatbot/canal-meta.ts` (`chatwootMetaInboxId: previo.id`) — así que el
+      arreglo es de CLASE, no de archivo: un helper `otraOrgReclama(inboxId, orgId)` sobre las
+      tres columnas, y el gate de `onia-platform/lib/chatbot/inbox-en-conflicto-no-se-lo-lleva-nadie.test.ts`
+      ya sabe separar guardias de resoluciones por estructura (el guardia excluye una org), así
+      que la mitad cara está escrita.
+
+      **No es lo mismo que el ítem cerrado de abajo.** Ése cierra el daño cuando el conflicto YA
+      existe (nadie escribe, nadie avisa, nadie cobra, nadie contesta); éste cierra la puerta
+      por la que se crea. Los dos hacen falta: DG-047 probó el conflicto **vivo contra el
+      Postgres de producción**, o sea que la puerta está abierta hoy.
+
+      **Por qué no se hizo en la misma vuelta:** son cuatro archivos del camino de alta y el
+      tiempo alcanzaba para escribirlo pero no para validarlo por mutación. Media baranda en el
+      alta es peor que la deuda anotada.
+
+- [x] 🔴 **~~Dos caminos más elegían dueño de un inbox en conflicto — y son los que
+      ESCRIBEN~~ — CERRADO el 2026-09-18.**
+      (`onia-platform/lib/chatbot/contacto-desde-chatwoot.ts`,
+      `onia-platform/lib/chatbot/push-te-escribieron.ts`, resolver
+      `onia-platform/lib/chatbot/org-del-inbox.ts`, gate
+      `onia-platform/lib/chatbot/inbox-en-conflicto-no-se-lo-lleva-nadie.test.ts`;
+      suite 5657/5657, `tsc` 0, `eslint` 0 errores. Publicado en la rama: `4bc6dad1`.)
+
+      **Cómo apareció.** No de la cola —sus 🔴 estaban cerrados— sino de cruzar lo que otro
+      carril mergeó hoy contra una clase que este carril ya cerró cinco veces. DG-047
+      (`f3082204`, 17-sep) escribió LA resolución inbox→org porque `clinic_settings` no hace
+      únicos sus tres slots, y su comentario **enumera** los consumidores que cableó: servir
+      conocimiento y contar el cupo. Caminado el disco, el universo era de **cuatro**.
+
+      **Los dos que faltaban son los que actúan sobre el dato, no los que lo leen.**
+      `registrarContactoEntrante` **CREA un `Patient`** —nombre, teléfono, correo— en la org que
+      eligió: una escritura cruzada de tenant que nadie deshace. `notificarMensajeEntrante`
+      manda un push **con el texto del mensaje adentro** al dueño de la org que eligió; su
+      comentario afirmaba que el `where` por `organizationId` *"garantiza que OTRA org jamás
+      recibe este push"* — garantía cierta sólo si la resolución de arriba acertó, o sea una
+      hipótesis con fecha escrita al lado del código que la rompe. Los dos usaban `findFirst`,
+      que devuelve UNA fila: **el conflicto es invisible desde adentro**, así que ninguno de los
+      dos podía fallar ruidoso.
+
+      **El gate cierra la clase, no las dos instancias.** Camina el DISCO (no `git ls-files`: el
+      archivo nuevo sin commitear es justo el sujeto que hay que cazar) y juzga por la FORMA de
+      la consulta: todo `prisma.clinicSettings.findFirst|findMany` cuyo `where` nombre una
+      columna de inbox está resolviendo inbox→org. La única familia hermana legítima son los
+      guardias del alta, y se distinguen **por estructura y no por una lista a mano** — excluyen
+      una org (`organizationId: { not: … }`), o sea preguntan quién MÁS. Un caso ancla prohíbe
+      que esa excusa se afloje hasta absolver al propio resolver, que es como este gate se
+      apagaría solo en verde.
+
+      **Validado por mutación, las cuatro:** revertir cada consumidor a su copia → 2 rojos
+      (comportamiento + clase); sembrar un quinto consumidor en un archivo nuevo sin commitear →
+      1 rojo; aflojar la excusa de «guardia» hasta absolver todo → 1 rojo.
+
+      **De paso:** `onia-platform/lib/chatbot/cupo.test.ts` y
+      `onia-platform/app/api/chatbot-knowledge/published/route.test.ts` clavaban el `select` **interno**
+      del resolver, así que crecerle una columna ponía rojas dos suites ajenas con el producto
+      intacto — y eso traba el merge de todos los carriles. Ahora afirman la resolución (los
+      tres canales, `take: 2`), no su forma.
+
+      **En vuelo:** commiteado y pusheado a la rama; **falta el merge a `master` (de `onia-cola`)
+      y el deploy**. No cuenta como llegado al cliente.
+
+- [x] 🔴 **~~El aviso a Sergio Urcullo no dice si la conversación somos NOSOTROS: la primera
+      demo REAL iba a llegar idéntica a las sondas~~ — CERRADO el 2026-09-18.**
+      (`hermes-content/deploy/vps-ops/bot/aviso-telegram.mjs`, gate
+      `hermes-content/deploy/vps-ops/bot/aviso-dice-si-somos-nosotros.test.mjs`, suite 1175/1175)
+
+      **Cómo apareció.** No de la cola —no le quedaban 🔴 abiertos— sino de correr
+      `npm run avisos:vivo` y leer el renglón que el gate ya imprimía y nadie había usado:
+      `de quien: leads 0 · nuestros 4`. O sea que los únicos avisos que Sergio Urcullo recibió
+      en su vida por este canal fueron por sondas y pruebas nuestras —incluido
+      `DEMO AGENDADA — anotala`, que le pide ANOTAR algo en su calendario— y ninguno lo decía.
+      Con **cero clientes pagando**, el aviso de la primera demo real es el evento más
+      importante del negocio, y venía envuelto igual que los que ya aprendió a ignorar.
+
+      **Por qué ningún gate lo vio.** `esConversacionNuestra()` (`es-nuestra.mjs`) se cableó el
+      mismo día a los CUATRO barridos del embudo (`48637b11`) porque le escriben al PROSPECTO.
+      El aviso le escribe a SERGIO, viaja por otro camino (motor → `run-turn.mjs` →
+      `chatwoot-adapter.mjs` → `webhook-server.mjs` → `aviso-telegram.mjs`) y quedó afuera: un
+      `grep` de `esNuestra` en esos cuatro archivos daba **cero**. La cura no viaja sola al
+      hermano. Y el gate que vigila el circuito (`avisos-vivo.mjs`) no podía verlo porque llama
+      a `construirAviso` con `conversationId: 4242` escrito a mano: probaba al redactor y nunca
+      al llamador real — una tautología con forma de cobertura.
+
+      **El sesgo se invierte respecto de los barridos, y por eso esto MARCA en vez de callar.**
+      En un barrido, confundir a un desconocido con nosotros deja a un prospecto real sin
+      seguimiento. Acá el error caro es el otro: marcar a un lead REAL como prueba lo vuelve
+      ignorable. Así que el aviso sale **siempre y completo**, la marca es aditiva
+      (`🧪 PRUEBA NUESTRA — no es un lead, no anotes nada`, arriba de todo para que se lea en la
+      notificación del celular sin abrirla) y `esNuestra` ausente o falso se trata como lead.
+      Falla hacia el lado barato. Viaja como **booleano y no como teléfono**: `n8n-event.mjs` se
+      arma del mismo resultado y manda analítica fuera del sistema.
+
+      **Validado por mutación, las tres:** quitar el `esNuestra` del webhook → rojo 3 y 5;
+      que el adapter se coma el dato → rojo 4; que `postdemo-run.mjs` deje de descartar las
+      nuestras → rojo 5. El universo del gate se camina del **disco** (no `git ls-files`: el
+      archivo nuevo sin commitear es justo el sujeto que caza) y son los que arman un aviso **y
+      lo mandan**, así el redactor y el medidor quedan fuera solos, sin lista a mano.
+
+      **En vuelo:** commiteado, **NO desplegado** — `/opt/onia/bot` no es un checkout de git.
+
 - [x] 🔴 **~~El prospecto que vuelve dos días después y NO elige recibía los horarios ya
       vencidos en pantalla~~ — CERRADO el 2026-09-18.**
       (`hermes-content/deploy/vps-ops/bot/bot-engine.mjs` `handleHorario`, suite 1157/1157)
