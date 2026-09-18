@@ -438,10 +438,14 @@ test("a los 8 dias no se escribe NI con plantilla: eso ya no es seguimiento", as
   assert.match(result.skipped[0].reason, /^conversacion_muerta/);
 });
 
-test("fuera de la ventana y SIN horarios reales: no se manda nada, ni plantilla ni texto", async () => {
-  // Los horarios placeholder pueden venir de la propia conversacion (`slots_offered` viejo), no
-  // solo del config. Mandar "HORARIO A (pendiente de definir)" en una plantilla PAGA es lo peor
-  // de los dos mundos: se gasta plata y se le escribe una pavada a un prospecto real.
+// Lo que NO se manda nunca es el placeholder, y esa baranda cuelga del CONFIG, que es la fuente
+// que el barrido re-mide en cada corrida ("si Sergio todavia no definio los 2 horarios", arriba).
+//
+// Hasta el 2026-09-18 este caso exigia lo contrario — que una conversacion con `slots_offered`
+// placeholder no recibiera rescate NUNCA, ni con horarios ya publicados — y eso defendia el
+// defecto: el dato viejo de la fila le costaba el rescate a un prospecto real. El sujeto correcto
+// es que el texto que SALE no lleve el placeholder, no que la conversacion quede excluida.
+test("un `slots_offered` placeholder viejo no le cuesta el rescate al prospecto: salen los vigentes", async () => {
   const fake = memoryStore([
     row({
       conversation_key: "chatwoot:42",
@@ -455,9 +459,16 @@ test("fuera de la ventana y SIN horarios reales: no se manda nada, ni plantilla 
   ]);
   const result = await runFollowUpSweep({ nowIso: NOW_FUERA, emit: true }, { config: CONFIG, store: fake.store });
 
-  assert.deepEqual(result.send, []);
-  assert.equal(result.skipped[0].reason, "slots_sin_definir");
-  assert.ok(!fake.calls.some((call) => call.startsWith("reserve")), "no se quema la reserva: sale cuando haya horarios");
+  assert.equal(result.send.length, 1, "con horarios vigentes publicados, el rescate sale");
+  assert.equal(result.send[0].templateKey, "M3_PLANTILLA", "fuera de la ventana va la plantilla aprobada");
+  // La preocupacion original, intacta: se gasta plata en esta plantilla y Meta la mide.
+  assert.ok(
+    !result.send[0].text.includes("pendiente de definir"),
+    "jamas sale un placeholder en una plantilla PAGA",
+  );
+  for (const slot of CONFIG.slots) {
+    assert.ok(result.send[0].text.includes(slot.label), `ofrece el vigente "${slot.label}"`);
+  }
 });
 
 test("outsideWindow y followUpTemplate son puros y no adivinan", () => {

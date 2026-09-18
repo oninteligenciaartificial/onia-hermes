@@ -423,6 +423,45 @@ test("no hay follow-up si hubo opt-out o si un humano tomo la conversacion", () 
   assert.equal(followUpDue(markHumanTakeover(state), "2026-07-28T12:10:00Z", CONFIG), false);
 });
 
+// El M3 dice "dos opciones NUEVAS", y el rescate sale un dia DESPUES del turno que guardo los
+// horarios: para entonces el generador (`scripts/loops/renovar-slots-bot.py`) ya publico otros y
+// los de la conversacion pueden estar vencidos. El barrido ya decide MANDAR mirando los vigentes
+// (`blocked = slotsPending(config)`, followup-run.mjs), asi que leer el texto del estado es el
+// mismo hecho con dos fuentes — y la que escribe es la que no se re-mide.
+//
+// Medido contra produccion el 2026-09-18 19:17 UTC, con un desconocido real esperando
+// (`chatwoot:58`): `bash /opt/onia/bot/followup-run.sh --dry-run --now ... --json` ofrecia
+// "sábado 19 de septiembre, 09:00" con `ONIA_BOT_SLOTS` trayendo el de las 14:00 de ese dia — un
+// horario que Sergio NO tiene reservado y que ademas quedaba a 17,7 h, debajo de las 24 h que el
+// propio motor exige y que la coletilla del mismo mensaje promete.
+test("el rescate ofrece los horarios VIGENTES, no los que la conversacion guardo el dia que nacio", () => {
+  const { state } = run(["DEMO", "tengo una ferreteria"]);
+  // Lo que el prospecto vio ayer. El de las 09:00 ya no lo publica nadie.
+  const viejos = [
+    { key: "A", label: "sábado 09:00", startAt: "2026-07-29T13:00:00Z", pending: false },
+    { key: "B", label: "viernes 10:00", startAt: "2026-07-31T14:00:00Z", pending: false },
+  ];
+  const built = buildFollowUp({ ...state, slotsOffered: viejos }, "2026-07-28T12:10:00Z", CONFIG);
+  assert.ok(built, "22 h despues corresponde");
+
+  const vigentes = CONFIG.slots.map((slot) => slot.label);
+  for (const label of vigentes) {
+    assert.ok(built.reply.text.includes(label), `el M3 tiene que ofrecer el vigente "${label}"`);
+  }
+  assert.ok(
+    !built.reply.text.includes("sábado 09:00"),
+    "el M3 no puede ofrecer un horario que el generador ya no publica",
+  );
+
+  // La otra mitad, y sin ella el arreglo es peor que el bug: el prospecto contesta "A" y el motor
+  // tiene que reservar el horario que ACABA de ofrecer, no el que la fila traia.
+  assert.deepEqual(
+    (built.nextState.slotsOffered || []).map((slot) => slot.label),
+    vigentes,
+    "el estado que se persiste guarda los horarios que el M3 puso sobre la mesa",
+  );
+});
+
 test("mismo estado + mismo mensaje = misma salida (sin Date.now ni Math.random)", () => {
   const turns = ["DEMO", "tengo una ferreteria, somos 5, santa cruz", "B", "los cobros"];
   const a = run(turns);

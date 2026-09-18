@@ -395,16 +395,65 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
       el lector que come espacios—: `# fail 1` en las dos, y la primera **seguía nombrando**
       `/opt/onia/bot/webhook.env` para el otro flag, o sea el gate no se esquiva nombrando el helper.
 
-- [ ] **El M3 ofrece un horario que el generador no publicó, y con menos aviso del que promete.**
-      En la corrida de arriba el rescate ofrece *"sábado 19 de septiembre, **09:00**"*, y
-      `ONIA_BOT_SLOTS` sólo tiene el de las **14:00** de ese día. A las 19:17 UTC del viernes,
-      las 09:00 del sábado quedan a ~14 h — debajo de las 24 h de anticipación que el propio
-      motor exige y que la coletilla promete. Sale del segundo par de horarios que arma
-      `buildFollowUp` (`hermes-content/deploy/vps-ops/bot/bot-engine.mjs`), no del que eligió el
-      generador (`scripts/loops/renovar-slots-bot.py`). **Reproducción:** el segundo comando del
-      ítem de arriba, mirando `send[0].text`. Es la misma familia que los dos ítems de
-      anticipación ya cerrados, pero en el rescate, que nadie había mirado porque hasta hoy
-      nunca llegó a construir un M3.
+- [x] 🔴 **~~El M3 ofrece un horario que el generador no publicó, y con menos aviso del que
+      promete~~ — CERRADO el 2026-09-18 en el repo.** Commiteado, **NO desplegado** (el bot no
+      toca fuente de precio, así que publica solo tras el merge del integrador).
+
+      **Medido contra producción, con un desconocido real esperando.** `chatwoot:58`:
+
+      ```bash
+      export ONIA_BOT_SLOTS="$(sed -n 's/^ONIA_BOT_SLOTS=//p' /opt/onia/bot/webhook.env | head -n1 \
+        | sed -e 's/\r$//' -e 's/^"\(.*\)"$/\1/')"
+      bash /opt/onia/bot/followup-run.sh --dry-run --now 2026-09-18T19:17:01Z --json
+      #  -> text: "Te dejo dos opciones nuevas ... **sábado 19 de septiembre, 09:00** o **lunes 21 ...**"
+      #  -> y ONIA_BOT_SLOTS trae el de las 14:00 de ese sábado, NO el de las 09:00
+      ```
+
+      Las 09:00 del sábado quedaban a **17,7 h** del viernes 19:17 UTC — debajo de las 24 h que el
+      propio `parseSlotsSpec` exige y que la coletilla del mismo mensaje promete. Y el horario **no
+      lo tenía reservado nadie**: si el prospecto lo elegía, se le agendaba algo que Sergio Urcullo
+      no tenía libre.
+
+      **La causa.** `activeSlots` (`reply-builder.mjs`) prefiere `state.slotsOffered` — correcto
+      para el turno en vivo, donde "A" tiene que seguir siendo la A que se ofreció hace tres
+      minutos, y exactamente al revés en el M3, que es el **único mensaje del guion que sale un día
+      después** del turno que lo originó, y en el medio corre el generador. El texto dice "dos
+      opciones **nuevas**" y eran las viejas.
+
+      **Por qué nada estaba rojo.** Era el mismo hecho con **dos fuentes dentro del mismo camino**:
+      el barrido ya decide si manda mirando los vigentes (`blocked = slotsPending(config)`,
+      `followup-run.mjs:351`) y después escribía el texto con los del estado. La fuente que
+      **decide** se re-mide en cada corrida; la que **habla**, no. Nunca se había visto porque
+      hasta ayer el barrido jamás llegó a construir un M3.
+
+      **La cura** (`bot-engine.mjs`, `buildFollowUp`): el estado del rescate se arma pisando
+      `slotsOffered` con `config.slots`. Cubre de una los **dos** caminos —texto libre y plantilla
+      paga de Meta, que leen los mismos horarios a propósito— y `simulate.mjs`, que también llama
+      ahí. La segunda mitad es la que evita que el arreglo sea peor que el bug: sin pisar el
+      estado, el texto ofrece los nuevos y la respuesta "A" reserva el **viejo**. Si no hay
+      vigentes quedan los `pending` y el guion cae solo a SIN_HORARIOS, que es lo que el barrido ya
+      espera (`slots_sin_definir`, sin quemar la reserva).
+
+      **Un test que defendía el defecto.** `followup-run.test.mjs` exigía que una conversación con
+      `slots_offered` placeholder **no recibiera rescate nunca**, ni con horarios ya publicados —
+      o sea un dato viejo de la fila le costaba el rescate a un prospecto real. Lo que se sostiene
+      es la **baranda** (que no salga un placeholder en una plantilla paga), no la prohibición; esa
+      baranda ya tiene su propio caso, que cuelga del `config`, la fuente que sí se re-mide.
+
+      **Prueba — tres mutaciones sobre la cura, las tres en rojo**, y ninguna mitad sobra:
+
+          M1 quitar el refresco (el defecto original) ........ fail 2
+          M2 refrescar el TEXTO y persistir los viejos ....... fail 2   ← lo caza el assert de persistencia
+          restaurado ........................................ pass 135 / fail 0
+
+      **El gate de clase** (`rescate-ofrece-horarios-vigentes.test.mjs`) impide que la clase vuelva
+      por otro barrido: cruza los `*-run.mjs` que llaman a `deliver(` contra las plantillas que de
+      verdad ofrecen un horario (las que llevan la marca `{{slot_…}}`, leída del guion, no del
+      nombre), y exige que quien ofrezca uno pase por `buildFollowUp`. Los dos lados se derivan del
+      disco. Validado por mutación: hacer que `R_SEGUIMIENTO` ofrezca un horario → `fail 2`, con el
+      mensaje nombrando `insistencia-run.mjs`; sacar el refresco → `fail 1`; universo vacío → lo
+      caza el caso ancla. Suite del bot **1163/1163**, y la cadena lo ejecuta de verdad (mutación
+      adentro del archivo nuevo → `npm run test:bot` = `fail 1`).
 
 - [x] 🔴 **~~La insistencia podía escribirle a los clientes de un cliente a las 3 de la mañana:
       su única franja horaria vivía en el crontab del VPS, y el gate de ayer la citó como si
