@@ -62,3 +62,57 @@ export const RUBROS_EN_PROSA: string = (() => {
   const plurales = RUBROS_VIVOS.map((rubro) => rubro.plural);
   return `${plurales.slice(0, -1).join(", ")} y ${plurales[plurales.length - 1]}`;
 })();
+
+/**
+ * "cinco" — CUÁNTOS son, en palabras y derivado.
+ *
+ * POR QUÉ HACE FALTA UNA TERCERA CONSTANTE — medido el 2026-09-18.
+ *
+ * El mismo hecho vive en el sitio en TRES representaciones, y hasta hoy sólo
+ * dos tenían dueño: el `chip` de cada rubro, la enumeración de `plural` que
+ * arma `RUBROS_EN_PROSA`… y el CARDINAL, que estaba tipeado en seis textos de
+ * venta — la FAQ de la home (que además viaja al JSON-LD que lee Google), la
+ * FAQ de la landing v1, `/rubros`, `/nosotros`, el `alt` de `how-it-works` y
+ * el cuadro comparativo de `proof.ts`.
+ *
+ * El día que entre el sexto rubro, las dos primeras representaciones se
+ * corrigen SOLAS y el gate de enumeración se pone rojo si alguna se queda
+ * corta; las seis frases que dicen "cinco rubros" siguen diciéndolo, ciertas
+ * ayer y falsas hoy, **sin que nada se ponga rojo**. Es exactamente lo que
+ * costó "en los TRES planes" cuando entró el Crece (escalera C, 2026-09-12):
+ * quedó vivo en la portada, en /precios y en el JSON-LD de la FAQ, y ningún
+ * cruce de precios lo vio porque una cantidad escrita en palabras no es un
+ * monto.
+ *
+ * Y no es hipotético: este repo ya registra DOS instancias arregladas a mano
+ * —la portada enumeraba cuatro con cinco vivos (2026-09-11, arriba), y
+ * `v1/empezar/resultado.tsx` decía "para seis rubros" cuando el sitio vendía
+ * cinco—. Dos instancias curadas de a una es la firma de una clase abierta.
+ *
+ * Va en PALABRAS porque así lo escribe la prosa de venta ("Cinco rubros vivos
+ * y vendibles hoy"), no en dígito. Si algún día hay más rubros que nombres en
+ * la tabla, es preferible el dígito a una frase muda: por eso el fallback.
+ */
+const CARDINALES = ["cero", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho"];
+
+/**
+ * Se exporta la FUNCIÓN, no sólo el valor de hoy, y ése es el punto.
+ *
+ * Su caso interesante es INALCANZABLE desde la tabla: mientras haya cinco
+ * rubros, un `CUANTOS_RUBROS` clavado a mano en `"cinco"` es indistinguible del
+ * derivado — coinciden, y coincidirían para siempre. Un gate que comparara los
+ * dos valores sería una tautología con cara de ancla (se midió: la mutación que
+ * clava el literal pasaba VERDE). Con la función aparte, el gate puede
+ * preguntarle por los cardinales que la tabla todavía no produce —`cardinalDe(6)`
+ * el día que entre el sexto rubro— y además exigir, leyendo este archivo, que la
+ * constante se DERIVE en vez de asignarse un literal.
+ */
+export function cardinalDe(cantidad: number): string {
+  return CARDINALES[cantidad] ?? String(cantidad);
+}
+
+export const CUANTOS_RUBROS: string = cardinalDe(RUBROS_VIVOS.length);
+
+/** "Cinco" — el mismo cardinal cuando abre una oración. */
+export const CUANTOS_RUBROS_CAPITAL: string =
+  CUANTOS_RUBROS.charAt(0).toUpperCase() + CUANTOS_RUBROS.slice(1);

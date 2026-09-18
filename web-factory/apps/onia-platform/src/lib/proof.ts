@@ -35,6 +35,7 @@ import {
   PLANES,
   bs,
 } from "@/lib/pricing";
+import { CUANTOS_RUBROS } from "@/content/rubros";
 
 /**
  * TIEMPO HASTA OPERAR y TIEMPO HASTA EL PRIMER VALOR — medidos, no estimados.
@@ -211,7 +212,7 @@ export const CONTENDIENTES: readonly Contendiente[] = [
     // «cinco rubros» y no «el rubro dental»: /rubros y /nosotros publican
     // cinco vivos; tres páginas indexables no pueden contestar distinto a la
     // pregunta que decide la compra (auditoría 2026-09-11, R3).
-    ejemplos: "una plataforma, cinco rubros andando hoy",
+    ejemplos: `una plataforma, ${CUANTOS_RUBROS} rubros andando hoy`,
     // Nuestra propia fila de la comparativa: el rango sale de PLANES. Escrito a
     // mano quedaba viejo el día que cambia un plan, justo en la tabla que un
     // lead usa para compararnos con la competencia.
