@@ -12,6 +12,26 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-18 19:09-19:12 La Paz — deploy nuevo (BUILD_ID `NpGVRgOBKvg2C3R5Upr9B`, antes `4AefpemDeSbQXrDmTbhoy`): dental 9/9 de nuevo
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas (limpio). Alta `abierta`. Corrí `--escribir` en dental
+(default): **9/9, `completo: true`**. Cuenta `zz-qa-2026-09-18-1909@onia.com.bo` creada → correo
+confirmado → onboarding (6 pantallas) → paciente `zz-qa-2026-09-18-1909-paciente` cargado y visto
+en `/patients` → cita 2026-09-21 09:00 agendada (201, `cmu7c76be000k01rwoua1ppz4`) y vista en
+`/appointments` → factura con ítem visible en `/billing/cmu7c7m91000m01rw6y55ixmw` (frenada sin
+pagar) → panel revisado (no lista pacientes, esperado). 0 filas `zz-qa-` al cerrar (verificado por
+`SELECT`).
+
+`completo: true`, `llegoHasta: 9/9`.
+
+RAZÓN: BUILD_ID cambió desde la vuelta anterior (deploy nuevo) — corresponde re-medir el camino
+completo antes de saltar a otro escalón.
+LECCIÓN: ninguna nueva. El escalón 3 (invitar/quitar coadministrador desde `/settings`, DG-043)
+sigue pendiente de instrumentar — no entró en esta vuelta por el tiempo que toma armar un probe
+de UI nuevo con limpieza propia; queda anotado para cuando el BUILD_ID vuelva a repetirse.
+
+---
+
 ## 2026-09-18 17:09-17:17 La Paz — mismo BUILD_ID (`4AefpemDeSbQXrDmTbhoy`), pero había una org `zz-qa-` huérfana al arrancar: limpiada y dental 9/9 de nuevo
 
 Al arrancar: 1 org `zz-qa-` huérfana (`zz-qa-2026-09-18-1609-negocio`, creada 16:10, con 2
