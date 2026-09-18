@@ -63,6 +63,59 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
 
 ## Ahora
 
+- [x] 🔴 **CERRADO el 2026-09-18 — un negocio del plan más barato salía del alta con un
+      administrador de más, gratis** (`onia-platform` `e25eadd6`, rama del carril; los tres gates
+      verdes en el VPS sobre el árbol con `origin/master` ya mergeado: tsc 0 · 465 archivos de
+      test · eslint 0).
+
+      **Era la CUARTA puerta de DG-043, y la dejó escrita este mismo carril ayer** como *"lo que
+      NO cierra este ítem"*. De las dos superficies que ese párrafo nombraba, **una ya no existía**
+      (`paso-equipo.tsx` la cerró `1705269d`: hoy recibe `plan` y filtra) — o sea era un pendiente
+      medio fantasma, y por eso se re-midió antes de tocar nada. La que **sí** seguía viva es la
+      que importa: `POST /api/onboarding/aplicar` escribía el `rol` que venía **en el cuerpo**.
+
+      **Por qué el filtro de la pantalla no alcanzaba.** El rol viaja en el JSON que manda el
+      cliente, así que la pantalla es una *sugerencia*: quien postea directo elegía `ADMIN` en
+      cualquier plan y la ficha nacía con ese rol. Las otras tres puertas ya preguntaban
+      (`POST /api/team`, `POST /api/admin/users`, `PATCH /api/admin/users/[id]`) — ésta no, y es
+      justo la del alta, que la recorre **todo** cliente nuevo.
+
+      **Decisiones que el arreglo fija:** el rol se deriva con la MISMA función que filtra la
+      pantalla (`rolGuardableSegunPlan`, junto a sus hermanas en `coadministradores.ts`), y **una
+      sola vez** — abajo había dos lecturas más del rol pedido, la agenda del miembro y lo que la
+      pantalla de cierre promete, que con el valor sin filtrar decían otra cosa que la ficha
+      guardada. **Degrada en vez de rechazar, a propósito:** sus hermanas contestan 403 porque son
+      acciones sueltas, pero ésta vive dentro de la transacción del alta, y un 403 ahí deja al
+      cliente nuevo sin `onboardingCompletedAt` —sin poder mirar **nada**— por el rol de un
+      miembro **opcional**. Cae al mejor rol que su plan permite, derivado del **rubro**: en
+      comercio, que no tiene profesional con agenda (`rolesEquipo` = STAFF, ADMIN), el piso es
+      STAFF, y entonces nadie le promete agenda ni le escribe horarios. Un `"DOCTOR"` tipeado en
+      la cura rompía ese caso.
+
+      **Cierra la CLASE, que es lo que venía fallando:** las cuatro puertas se encontraron **a
+      mano, una por día**. `lib/subscription/puertas-que-escriben-un-rol.test.ts` camina el
+      **disco** (`readdirSync`, no `git ls-files`: la puerta nueva es el archivo aún sin
+      commitear), acota la escritura con **llaves balanceadas** —`data: { role: role as Role }`
+      viaja en una sola línea y un detector por renglón perdía `/api/admin/users/[id]`— y
+      **deriva** la exención: un rol literal que no es ADMIN, como el `"DOCTOR"` fijo de
+      `/api/doctors`, no tiene nada que preguntar, y entra al universo solo el día que reciba el
+      rol por parámetro.
+
+      **Validado por 6 mutaciones**, en las dos direcciones: guardar el rol pedido · el `select`
+      sin `plan` · la promesa de agenda y la escritura de horarios con el rol sin filtrar · una
+      puerta **nueva** que no pregunta · una puerta viva que deja de preguntar — todas en rojo
+      nombrando su sujeto; y la puerta de rol literal **no** se acusa.
+
+      ⚠️ **Dos falsos verdes PROPIOS, encontrados por la mutación y corregidos:** el mock de
+      `organization.update` no respetaba el `select` (sin eso, olvidarse `plan: true` pasaba el
+      gate en verde y en producción llegaba `undefined`, que cae a `free` y degradaba a **todo el
+      mundo**), y ningún caso distinguía el rol pedido del guardado hasta que entró el de comercio
+      — los dos primeros intentos de mutación salieron verdes contra un gate que ya estaba escrito.
+
+      ⚠️ **Commiteado y publicado en la rama del carril, NO desplegado:** lo mergea `onia-cola`.
+      No se pudo mirar renderizado con sesión real — sigue vivo el corte de 2FA que manda toda
+      ruta del panel a `/profile?mfa=obligatorio` (tarea `t_3bb6b9ee`, depende de Sergio Urcullo).
+
 - [x] 🔴 **CERRADO el 2026-09-18 — el dueño que conectaba su Instagram o el chat de su web no
       podía apagarlos nunca** (`onia-platform` `3a61c3ea`, rama del carril; los tres gates
       verdes acá Y re-corridos en el VPS sobre el árbol con `origin/master` mergeado: tsc 0 ·
