@@ -18,6 +18,7 @@ import assert from "node:assert/strict";
 
 import { createBotConfig } from "./config.mjs";
 import { createState, toConversationRow } from "./bot-engine.mjs";
+import { KIND_RESERVA_SIN_CONFIRMAR } from "./calcom-booking.mjs";
 import { runTurn } from "./run-turn.mjs";
 import { RUBRO_SIN_DEFINIR,
   DELIVERY_STATUSES,
@@ -321,6 +322,95 @@ test("si la reserva NO sale, no se manda un link inventado: solo el aviso honest
 });
 
 // ---------------------------------------------------------------------------
+// EL AVISO DEL DESENLACE — sin esto, el unico aviso que le llega a Sergio Urcullo MIENTE
+// ---------------------------------------------------------------------------
+//
+// QUE FIJA. Cuando la reserva falla, el turno emite un `notify_sergio` que DESDICE al
+// "DEMO AGENDADA — anotala" que el motor ya emitio en el MISMO turno, y lo hace DESPUES
+// (`construirAviso` pega las lineas en orden, asi que la correccion tiene que ir ultima o
+// Sergio Urcullo lee la version optimista y para de leer).
+//
+// POR QUE EXISTE. `run-turn.mjs` decia en su comentario, al lado del codigo, que se le agrega
+// al prospecto "una linea honesta y se deja el aviso". Lo primero era cierto; lo segundo no:
+// lo unico que hacia era `bookingWarnings.push(...)`, y los warnings no son un efecto —
+// `construirAviso` se arma de `notify`, que sale de los `deferred` del MOTOR. Nadie los leia.
+// Y el test hermano de arriba se llama "solo el aviso honesto" afirmando la misma garantia que
+// tampoco comprobaba: miraba el texto del prospecto y nada mas.
+//
+// CUAL es el caso, y cual NO. Correr sin calendario es una decision TOMADA y vigente (opcion
+// (c), tablero `t_b18ca430`): ahi el fallo es el camino normal, el aviso `demo_agendada` es
+// justo lo que Sergio Urcullo necesita ("anotala") y un aviso extra por cada demo seria ruido.
+// El caso que SI queda descubierto es `horario_tomado` (409): ahi el bot le promete al
+// prospecto que "Sergio te escribe AHORA para acomodarlo" y el unico aviso que sale le dice
+// que anote un horario que esta OCUPADO — o sea lo manda a una reunion que choca. Es la
+// direccion simetrica ya conocida (aviso del EVENTO sin aviso del DESENLACE) en el unico punto
+// donde el desenlace CONTRADICE al evento.
+test("si la reserva NO sale, el aviso a Sergio Urcullo DESDICE al 'DEMO AGENDADA' del mismo turno", async () => {
+  const fake = memoryStore();
+  const enVivo = createBotConfig({ slots: CONFIG.slots, dryRun: false });
+  const deps = {
+    store: fake.store,
+    config: enVivo,
+    nowIso: T0,
+    llm: async () => "",
+    env: { CALCOM_PUBLIC_URL: "https://cal.test" },
+    createBooking: async () => ({ ok: false, uid: null, reason: "horario_tomado", warnings: [] }),
+  };
+
+  await runTurn(turn(), deps);
+  const agendada = await runTurn(turn({ text: "A", message_key: "telegram:2" }), deps);
+
+  const kinds = agendada.notify.map((n) => n.kind);
+  // Ancla del instrumento: si el motor dejara de avisar "demo_agendada", este caso no probaria
+  // nada y pasaria verde por el motivo equivocado.
+  assert.ok(kinds.includes("demo_agendada"), "ancla: el motor avisa que se agendo");
+  assert.ok(
+    kinds.includes(KIND_RESERVA_SIN_CONFIRMAR),
+    "la reserva fallo y nada desdice el aviso: Sergio Urcullo queda creyendo que tiene una demo",
+  );
+  assert.ok(
+    kinds.lastIndexOf(KIND_RESERVA_SIN_CONFIRMAR) > kinds.indexOf("demo_agendada"),
+    "la correccion va DESPUES del aviso que corrige, o se lee la version optimista primero",
+  );
+
+  const correccion = agendada.notify.find((n) => n.kind === KIND_RESERVA_SIN_CONFIRMAR);
+  // Nombrar el horario NO es decorativo: es lo unico que Sergio Urcullo necesita para cumplir
+  // lo que el bot acaba de prometerle al prospecto ("Sergio te escribe ahora para acomodarlo").
+  assert.match(correccion.text, /jueves 15:00/, "el aviso nombra el horario que hay que acomodar a mano");
+  assert.equal(correccion.conversationKey, fake.state.conversationKey, "y a quien hay que escribirle");
+});
+
+// La direccion simetrica, y la que evita que la cura se vuelva ruido: el fallo ESPERADO —correr
+// sin calendario, que es la opcion (c) ya decidida— NO agrega un aviso. Sin este caso, cualquiera
+// "mejora" el de arriba sacandole la condicion y le mete a Sergio Urcullo una linea extra por
+// cada demo, en el canal que pidio limpio.
+test("el fallo ESPERADO (sin calendario, decision vigente) no le agrega ruido al aviso", async () => {
+  const fake = memoryStore();
+  const enVivo = createBotConfig({ slots: CONFIG.slots, dryRun: false });
+  const deps = {
+    store: fake.store,
+    config: enVivo,
+    nowIso: T0,
+    llm: async () => "",
+    env: { CALCOM_PUBLIC_URL: "https://cal.test" },
+    // `error` es la rama REAL de produccion: el fetch contra `calcom:3000`, que no resuelve.
+    createBooking: async () => ({ ok: false, uid: null, reason: "error", warnings: [] }),
+  };
+
+  await runTurn(turn(), deps);
+  const agendada = await runTurn(turn({ text: "A", message_key: "telegram:2" }), deps);
+
+  const kinds = agendada.notify.map((n) => n.kind);
+  assert.ok(kinds.includes("demo_agendada"), "el aviso del motor sigue saliendo: es el que Sergio Urcullo usa");
+  assert.ok(
+    !kinds.includes(KIND_RESERVA_SIN_CONFIRMAR),
+    "no hace falta desdecir nada: sin calendario, anotar a mano ES el flujo acordado",
+  );
+  // Y el prospecto sigue leyendo la salvedad honesta.
+  assert.match(agendada.send[0].text, /Estoy confirmando ese horario con Sergio/);
+});
+
+// ---------------------------------------------------------------------------
 // EL MODO SECO NO PUEDE PROMETER MAS QUE EL VIVO
 //
 // Medido el 2026-09-12: `simulate.mjs` imprimia "Listo, agendado: lunes 14, 14:00" PELADO,
@@ -335,8 +425,14 @@ test("si la reserva NO sale, no se manda un link inventado: solo el aviso honest
 //
 // El invariante NO es tautologico: compara DOS CAMINOS DISTINTOS del mismo codigo (el seco,
 // que no hace I/O, y el vivo con `createBooking` real sin configurar) y exige que prometan lo
-// mismo. Hoy Cal.com no existe en el VPS (sin CALCOM_BASE_URL), asi que ese "sin_config" es
-// el 100% del trafico real, no un caso de borde.
+// mismo.
+//
+// CORREGIDO 2026-09-18: aca decia que ese "sin_config" era "el 100% del trafico real". Es falso
+// y manda a diagnosticar al lugar equivocado. El proceso vivo SI tiene `CALCOM_BASE_URL` y
+// `CALCOM_BOT_EVENT_TYPE_ID` (medido en `/proc/<pid>/environ` dentro de `onia-center`); lo que
+// no existe es el contenedor `calcom`, asi que el trafico real cae en `reason: "error"` tras 5 s
+// de timeout. Este caso sigue siendo valido —compara dos caminos y son distintos— pero cubre una
+// rama que HOY no se ejecuta en produccion; la que si se ejecuta es la de mas abajo.
 // ---------------------------------------------------------------------------
 
 test("en seco y sin Cal.com configurado, el texto es el MISMO que recibe el prospecto (con la salvedad)", async () => {

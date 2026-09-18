@@ -37,6 +37,10 @@
 // ---------------------------------------------------------------------------
 
 /** Timeout del POST a Telegram. Corto: el prospecto ya fue atendido, esto es fire-and-forget. */
+// El `kind` se IMPORTA de donde se emite en vez de tipearlo: la unica forma de que la etiqueta
+// y la emision se desincronicen es que sean dos literales distintos.
+import { KIND_RESERVA_SIN_CONFIRMAR } from "./calcom-booking.mjs";
+
 export const AVISO_TIMEOUT_MS = 5000;
 
 /** Telegram corta en 4096; dejamos aire para el encabezado y el pie. */
@@ -59,6 +63,9 @@ export const ETIQUETAS = Object.freeze({
   // que vigila esta lista derivaba su universo de `bot-engine.mjs` y sólo. Ver
   // `postdemo-avisa-por-el-canal-vivo.test.mjs`, que camina la carpeta entera.
   demo_realizada: "DEMO TERMINADA — contá cómo fue",
+  // Lo emite el EJECUTOR DEL TURNO (`run-turn.mjs`), no el motor, y es el unico de esta lista
+  // que existe para DESDECIR a otro: viaja en el mismo aviso que `demo_agendada`, debajo.
+  [KIND_RESERVA_SIN_CONFIRMAR]: "⚠️ NO quedó agendada de verdad — acomodala vos",
 });
 
 export function getAvisoTelegramConfig(env = process.env) {

@@ -27,14 +27,27 @@
 
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 import { ETIQUETAS, construirAviso } from "./aviso-telegram.mjs";
+import { avisoDeReservaFallida } from "./calcom-booking.mjs";
 
 const AQUI = dirname(fileURLToPath(import.meta.url));
 const MOTOR = join(AQUI, "bot-engine.mjs");
+
+/**
+ * Los archivos que pueden emitir un aviso: la CARPETA, no una lista.
+ *
+ * Nace del 2026-09-18: este gate leia `bot-engine.mjs` y nada mas, asi que el aviso que agrega
+ * `run-turn.mjs` cuando la reserva falla no era sujeto de nadie — la misma familia que el gate
+ * viene a cazar, un escalon mas arriba. Se camina el disco y no `git ls-files`, porque el sujeto
+ * que mas importa es justo el archivo recien escrito y sin commitear.
+ */
+const EMISORES = readdirSync(AQUI)
+  .filter((n) => n.endsWith(".mjs") && !n.endsWith(".test.mjs"))
+  .sort();
 
 /**
  * Comentarios en BLANCO conservando los saltos de linea: los comentarios acusan
@@ -94,6 +107,11 @@ export function emisionesDeAviso(codigo) {
 const CODIGO = readFileSync(MOTOR, "utf8");
 const EMISIONES = emisionesDeAviso(CODIGO);
 
+/** Lo mismo, pero de TODA la carpeta, con el archivo puesto para poder nombrar al culpable. */
+const EMISIONES_DE_LA_CARPETA = EMISORES.flatMap((archivo) =>
+  emisionesDeAviso(readFileSync(join(AQUI, archivo), "utf8")).map((e) => ({ ...e, archivo })),
+);
+
 // ---------------------------------------------------------------------------
 // 1. Caso ancla del INSTRUMENTO: la derivacion ve los kinds conocidos
 // ---------------------------------------------------------------------------
@@ -128,6 +146,47 @@ test("todo kind que el motor emite tiene su linea en ETIQUETAS", () => {
     [],
     "el motor emite kinds que el aviso no sabe nombrar: Sergio Urcullo recibiria el slug interno en negrita",
   );
+});
+
+// ---------------------------------------------------------------------------
+// 2b. La clase, en TODA la carpeta — y en la forma que no es un literal
+// ---------------------------------------------------------------------------
+// El caso de arriba mira `bot-engine.mjs`. Estos dos cierran las dos fugas que
+// dejaba: emitir desde OTRO archivo, y emitir con el kind en una CONSTANTE (que
+// ningun regex de `kind: "..."` puede ver).
+
+test("ningun archivo de la carpeta emite un kind que el aviso no sepa nombrar", () => {
+  const huerfanos = EMISIONES_DE_LA_CARPETA.filter((e) => e.kind && !ETIQUETAS[e.kind]);
+  assert.deepEqual(
+    huerfanos.map((e) => `${e.kind} (${e.archivo}:${e.linea})`),
+    [],
+    "hay un notify_sergio fuera del motor cuyo kind no esta en ETIQUETAS",
+  );
+  assert.ok(
+    EMISIONES_DE_LA_CARPETA.length >= EMISIONES.length,
+    "la derivacion de la carpeta ve menos que la del motor solo: se rompio",
+  );
+});
+
+test("el aviso que DESDICE a la demo agendada tambien tiene etiqueta", () => {
+  // Se le pregunta a la FUNCION que lo construye, no al texto del archivo: su `kind` viaja en
+  // una constante importada, asi que scrapear `kind: "..."` no lo ve nunca. Y el payload real es
+  // ademas lo unico que prueba que el kind que se EMITE es el que esta rotulado.
+  // `horario_tomado` es el unico motivo que emite: los demas devuelven `null` a proposito
+  // (correr sin calendario es la opcion (c) ya decidida y el aviso del motor alcanza).
+  const payload = avisoDeReservaFallida({
+    conversationKey: "chatwoot:1",
+    reason: "horario_tomado",
+    scheduledLabel: "jueves 15:00",
+  });
+  assert.ok(payload, "el caso que CONTRADICE al aviso del motor tiene que emitir");
+  assert.ok(payload.kind, "el aviso de reserva fallida viaja sin kind");
+  assert.ok(
+    ETIQUETAS[payload.kind],
+    `el ejecutor emite "${payload.kind}" y ETIQUETAS no lo nombra: Sergio Urcullo leeria el slug en negrita`,
+  );
+  // Y que el aviso sirva: tiene que nombrar el horario que hay que acomodar a mano.
+  assert.match(payload.text, /jueves 15:00/);
 });
 
 test("ninguna emision viaja SIN kind", () => {
