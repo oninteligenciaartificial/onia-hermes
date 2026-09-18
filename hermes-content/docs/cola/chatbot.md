@@ -318,6 +318,47 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [ ] 🔴 **El formulario del chatbot deja tipear un horario al revés y el validador lo acepta.**
+      Hermano NO cubierto del arreglo de abajo (`onia-platform` `5bc7747f`), medido el
+      2026-09-18 en la misma vuelta: el asistente ya no publica un tramo que cruza la
+      medianoche, pero el **formulario** de `/settings/chatbot` tiene `desde` y `hasta` como
+      dos campos numéricos libres, y `validarConocimiento` los valida **por separado**
+      (`desde: int 0..23`, `hasta: int 1..24`) sin cruzarlos nunca.
+
+      **Reproducción exacta** (30 s, sin navegador):
+      ```bash
+      cd /root/loops/onia-platform-chatbot
+      npx vitest run -t "horario" "app/(dashboard)/settings/chatbot/"   # verde: el asistente ya está tapado
+      node -e "…"  # o: validarConocimiento({schema:'onia.bot.knowledge/1',empresa:{horario:{dias:[1],desde:18,hasta:2}}}) → ok:true
+      ```
+      Del otro lado, el motor lo lee como `startHour: 18, endHour: 2` (`knowledge.mjs`, bloque
+      del horario: `businessHours.startHour = horario.desde`), o sea un rango vacío — el bot
+      del dueño contesta lo contrario de su horario, las 24 h.
+
+      **Por qué no entró en esta vuelta:** la cura correcta es del validador, y ese archivo se
+      declara *"port EXACTO del allowlist del motor"* — hay que tocarlo en los DOS lados
+      (`onia-platform/lib/chatbot/knowledge.ts` y `hermes-content/deploy/vps-ops/bot/knowledge.mjs`,
+      `checkHorario`) en la misma vuelta, con su gate espejo, y el del motor pide deploy del bot.
+      No entraba en el tope. **Sujeto del gate:** `hasta <= desde` rechaza el documento entero,
+      con el caso ancla del horario normal (9→18) que tiene que seguir pasando.
+
+- [x] 🔴 **~~El asistente de 6 preguntas publicaba AL REVÉS el horario de un negocio
+      nocturno~~ — CERRADO el 2026-09-18** (`onia-platform` `5bc7747f`, rama del carril;
+      falta merge de `onia-cola`). El asistente estrenado ese mismo día (master `f5e32220`,
+      16:18) convierte el horario a `empresa.horario`, que es UN tramo `dias + desde + hasta`.
+      Con *«Lunes a sábado de 18:00 a 02:00»* —un bar, una farmacia de turno, un comercio
+      nocturno— `desde` salía del mínimo de los `abre` (18) y `hasta` del máximo de los
+      `cierra` (2): publicaba `desde: 18, hasta: 2`. Medido con el test en rojo antes del
+      arreglo: `Received: {"dias":[1,2,3,4,5,6],"desde":18,"hasta":2,…}`.
+      **No es el aplanamiento que el archivo ya avisa** (ahí el rango es cierto y más ancho):
+      acá sale invertido, así que no se publica nada y se dice por qué — la rama `sinEntender`
+      que la UI ya sabe pintar. Caso en `asistente-respuestas.test.ts`
+      (`el horario que cruza la medianoche no se publica al reves`), validado por mutación:
+      sin `cruzaLaMedianoche` queda rojo, y el ANCLA (9:00–18:00, sin avisos) sigue verde.
+      **Cómo apareció.** No de la cola —no le quedaban 🔴 abiertos— sino de auditar lo que
+      otro carril mergeó a `master` **hoy** contra la clase que este carril ya cerró cinco
+      veces: una pantalla que le pide un dato al dueño, le dice «listo» y publica otra cosa.
+
 - [x] 🔴 **~~El guardia que impide que dos orgs reclamen el mismo inbox mira UNA columna, y el
       que lee mira TRES: el conflicto se crea con un solo número mal tipeado~~ — CERRADO el
       2026-09-18** (`onia-platform` `0c360387`, rama del carril; falta merge de `onia-cola`).
