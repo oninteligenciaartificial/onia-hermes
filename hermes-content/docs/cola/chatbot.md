@@ -318,6 +318,60 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El dueño que conectaba su WhatsApp no tenía NINGUNA forma de desconectarlo~~ —
+      CERRADO el 2026-09-17 en `onia-platform`, rama `claude/chatbots-platform-review-0d1d09`,
+      PENDIENTE DE DESPLIEGUE de la plataforma.**
+
+      **Cómo apareció.** Auditando el batch que otro carril mergeó ese día (`ed8a0a2b`, canales
+      de Meta) contra la clase que este carril ya había cerrado en Equipo la vuelta anterior:
+      *por cada permiso que se concede o se cobra, ¿cuál es su camino de vuelta?*
+
+      **Medido derivando del disco, no a ojo.** Las TRES rutas de canal exportan sólo `GET` y
+      `POST` — `grep -E '^export async function (GET|POST|PATCH|DELETE|PUT)'` sobre
+      `app/api/chatbot-canal-*/route.ts` — y un `grep -rniE 'desconect|apagar|dar de baja|desvincul'` sobre la carpeta de la
+      pantalla (la de `onia-platform/app/(dashboard)/settings/chatbot/page.tsx`) y sobre la de
+      `onia-platform/lib/chatbot/canal-whatsapp.ts` no devolvía una sola línea. La tarjeta, en el
+      estado `conectado`, ofrecía «Ver mi bandeja» y nada más.
+
+      **Por qué importa más de lo que parece.** La única salida era escribirle a Onia: el que se
+      va de vacaciones, el que quiere atender él mismo, el que conectó el número equivocado y el
+      que se da de baja, todos. Eso es soporte por cliente, que es el techo real del negocio
+      (`ONIA_ESTRATEGIA_DE_EMPRESA.md` §9) — no una feature que falte.
+
+      **La baranda, que es la mitad que importa:** el `DELETE` **no** pregunta por el add-on. Ese
+      gate es de la puerta de ENTRADA; exigirlo en la salida le dejaría el canal encendido para
+      siempre al que dio de baja el add-on o se le venció el plan. Validado por mutación:
+      agregarle el gate del add-on al `DELETE` deja en rojo el caso «sin add-on TAMBIÉN puede
+      desconectar», y sólo ése.
+
+      **Qué apaga y qué no.** Corta el vínculo (`clinicSettings.chatwootWhatsappInboxId = null`),
+      no la bandeja: el inbox de Chatwoot y el historial del dueño con sus clientes quedan
+      intactos. Alcanza para apagar la atención, porque el motor resuelve la org de un inbox por
+      esa misma columna (`/api/chatbot-knowledge/published?inboxId=N` → 404 → avisa neutro).
+      Borrar el inbox se llevaría puestas conversaciones que son del cliente.
+
+      Gates: `npx tsc --noEmit` 0 · vitest de los dos archivos 36/36 · `eslint` 0.
+
+- [ ] **La misma salida falta en los otros DOS canales** (`chatbot-canal-web`,
+      `chatbot-canal-meta`) — la clase quedó cerrada en uno solo, a propósito, por tiempo de
+      vuelta.
+
+      Reproducción en 30 s, desde `/root/loops/onia-platform-chatbot`:
+
+      ```bash
+      for f in app/api/chatbot-canal-*/route.ts; do echo "--- $f"; \
+        grep -nE '^export async function (GET|POST|PATCH|DELETE|PUT)' "$f"; done
+      ```
+
+      Hoy `canal-web` y `canal-meta` siguen sin `DELETE`. **No son urgentes como el de WhatsApp
+      y el motivo se mide, no se supone:** el de Meta está detrás de la bandera
+      `META_PAGES_PUBLIC`, apagada hasta el App Review (lo fija
+      `onia-platform/app/(dashboard)/settings/chatbot/canal-meta-bandera.test.ts`), así que hoy no se lo
+      muestra a ningún
+      cliente; el web es el widget del sitio del propio cliente. El patrón a copiar es
+      `apagarCanalWhatsapp` en `onia-platform/lib/chatbot/canal-whatsapp.ts` — incluida la baranda de no
+      preguntar por el add-on en la salida.
+
 - [x] 🔴 **~~El watchdog del bot declaraba «bot MUDO» con UN parpadeo de 5 s, y su log no sabía
       decir que se había recuperado~~ — CERRADO el 2026-09-17, commiteado y PENDIENTE DE
       DESPLIEGUE del bot (pedido vivo `t_933c5f7b`).**
