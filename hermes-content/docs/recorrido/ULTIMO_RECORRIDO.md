@@ -12,6 +12,38 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-18 06:09-06:22 La Paz (octava vuelta del día) — dental 9/9 (rutina) + rotación a Servicios profesionales, sana 9/9
+
+Al arrancar: 0 orgs `zz-qa-` huérfanas, alta `abierta`, `BUILD_ID` sigue en
+`HiLa5P_MF3e3iK6KUSfli` (sin cambios). Sin tareas nuevas en el tablero para esta zona.
+
+Corrí el recorrido completo con `--escribir` en dental (sin `RECORRIDO_RUBRO`, es el default):
+**9/9, `completo: true`**. Cuenta `zz-qa-2026-09-18-1009@onia.com.bo` creada → correo confirmado
+→ onboarding (6 pantallas) → paciente cargado y visto en `/patients` → cita 2026-09-21 09:00
+agendada (201, `cmu6suwqr000k01rwmtben889`) y vista en `/appointments` → factura con ítem
+visible en `/billing/cmu6sv8eq000m01rw...` (frenada sin pagar) → panel revisado (no lista
+pacientes, esperado).
+
+Con el resto de la vuelta, rotando según lo anotado la vuelta pasada: `RECORRIDO_RUBRO='Servicios
+profesionales'` (no se re-verificaba hace varios días). **Sano, 9/9.** Cuenta
+`zz-qa-2026-09-18-1013@onia.com.bo` creada → correo confirmado → onboarding (6 pantallas) →
+cliente `zz-qa-2026-09-18-1013-paciente` cargado en group Clientes y visto en `/patients` →
+cita 2026-09-21 09:00 agendada (201, `cmu6t0634001601rwz4fapv4t`) y vista en `/appointments` →
+pantalla de cobro (Caja) a la vista en `/comercio/caja`, frenada sin cobrar → panel revisado (no
+lista clientes, esperado).
+
+0 filas `zz-qa-` al cerrar en las dos corridas (orgs y appointments verificados por `SELECT`
+después de cada una).
+
+`completo: true`, `llegoHasta: 9/9` (Servicios profesionales, el resumen.json vigente).
+
+RAZÓN: N/A — objetivo cumplido, más rotación de rubro sana.
+LECCIÓN: con dental, comercio, importadora y ahora servicios profesionales reconfirmados sanos
+en los últimos días, sólo queda Estética y spa sin recheck reciente. Próxima vuelta: rotar a
+Estética, o si ya está fresca, volver a escalón 3 en superficie nueva.
+
+---
+
 ## 2026-09-18 05:09-05:20 La Paz (séptima vuelta del día) — rotación de rubro: Importadora, sana 8/8 (paso 7 no aplica)
 
 Al arrancar encontré 1 org `zz-qa-` huérfana (`zz-qa-2026-09-18-0810-negocio`, de una corrida
