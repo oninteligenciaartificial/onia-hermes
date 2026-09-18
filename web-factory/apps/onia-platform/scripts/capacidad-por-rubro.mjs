@@ -17,7 +17,7 @@
  * Uso:  npm run capacidad:por-rubro          (0 = verde, 1 = defecto, 2 = no medido)
  *       node scripts/capacidad-por-rubro.mjs --self-check
  */
-import { execFileSync } from "node:child_process";
+import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -38,19 +38,25 @@ const CANDIDATOS = [
  * otro carril, en una rama de carril y atrasado: veredicto verde contra un árbol
  * viejo, sin que nadie viera que había otro candidato.
  */
-function elegirRepo() {
+function elegirRepo({ correr = gitCrudo, candidatos = CANDIDATOS, existe = existeElRepo } = {}) {
   const vistos = [];
-  for (const ruta of CANDIDATOS) {
-    if (!existsSync(join(ruta, "lib/platform/vertical-pack.ts"))) continue;
-    let rama = "?";
-    let atraso = Number.POSITIVE_INFINITY;
-    try {
-      rama = git(ruta, ["rev-parse", "--abbrev-ref", "HEAD"]).trim();
-      atraso = Number(git(ruta, ["rev-list", "--count", "HEAD..origin/master"]).trim());
-    } catch {
-      /* un clon sin remoto sigue sirviendo, sólo que no sabemos su atraso */
-    }
-    vistos.push({ ruta, rama, atraso });
+  for (const ruta of candidatos) {
+    if (!existe(ruta)) continue;
+    // El fetch va ANTES de cualquier lectura, incluida la del atraso: `origin/master`
+    // es una ref de DISCO y sin esto vale lo que valía el último fetch de ese clon.
+    const fresco = correr(ruta, ["fetch", "origin", "--quiet"]).status === 0;
+    const leer = (args) => {
+      const r = correr(ruta, args);
+      return r.status === 0 ? r.stdout.trim() : null;
+    };
+    const rama = leer(["rev-parse", "--abbrev-ref", "HEAD"]) ?? "?";
+    const contados = leer(["rev-list", "--count", `HEAD..${REF}`]);
+    vistos.push({
+      ruta,
+      rama,
+      fresco,
+      atraso: contados === null ? Number.POSITIVE_INFINITY : Number(contados),
+    });
   }
   if (vistos.length === 0) return { repo: null, vistos };
   vistos.sort((a, b) => {
@@ -60,18 +66,28 @@ function elegirRepo() {
   return { repo: vistos[0], vistos };
 }
 
-function git(cwd, args) {
-  return execFileSync("git", args, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
+const REF = "origin/master";
+
+const existeElRepo = (ruta) => existsSync(join(ruta, "lib/platform/vertical-pack.ts"));
+
+/** Corre git y DEVUELVE el resultado: un throw no distingue «falló» de «no hay». */
+function gitCrudo(cwd, args) {
+  const r = spawnSync("git", args, { cwd, encoding: "utf8", timeout: 60_000 });
+  return { status: r.status ?? 1, stdout: r.stdout ?? "" };
 }
 
-/** Lee un archivo del repo hermano por su ref remota: el working tree puede estar sucio o viejo. */
-function leerDelHermano(repo, ruta) {
-  try {
-    return git(repo, ["show", `origin/master:${ruta}`]);
-  } catch {
-    const local = join(repo, ruta);
-    return existsSync(local) ? readFileSync(local, "utf8") : null;
-  }
+/**
+ * Lee un archivo del repo hermano POR SU REF, sin red de respaldo.
+ *
+ * Caía al working tree cuando el ref no traía el archivo, y eso es justo lo que
+ * no se puede medir: el clon de un carril está en SU rama y con cambios sin
+ * publicar, así que el respaldo convertía «esto todavía no está en master» en
+ * «lo leí igual», midiendo trabajo que nadie mergeó. Si el ref no lo tiene, la
+ * respuesta honesta es que no se puede medir.
+ */
+export function leerDelHermano(repo, ruta, { correr = gitCrudo } = {}) {
+  const r = correr(repo, ["show", `${REF}:${ruta}`]);
+  return r.status === 0 && r.stdout ? r.stdout : null;
 }
 
 /** Los `href` de un array nombrado, desde su declaración hasta el `];` que la cierra. */
@@ -96,21 +112,32 @@ export function alcanza({ pantalla, navDelRubro, comunes }) {
   return navDelRubro.some((href) => segmento(href) === seg);
 }
 
-function medir() {
-  const { repo, vistos } = elegirRepo();
+export function medir({ correr = gitCrudo, candidatos = CANDIDATOS, existe = existeElRepo } = {}) {
+  const { repo, vistos } = elegirRepo({ correr, candidatos, existe });
   if (!repo) {
-    return { medido: false, motivo: `no encontré el repo hermano (probé: ${CANDIDATOS.join(", ")})` };
+    return { medido: false, motivo: `no encontré el repo hermano (probé: ${candidatos.join(", ")})` };
   }
   const descartados = vistos
     .filter((v) => v.ruta !== repo.ruta)
     .map((v) => `${v.ruta} (${v.rama}, ${v.atraso} atrás)`);
 
-  const vp = leerDelHermano(repo.ruta, "lib/platform/vertical-pack.ts");
-  const nav = leerDelHermano(repo.ruta, "components/layout/navigation.ts");
-  const ra = leerDelHermano(repo.ruta, "lib/platform/route-access.ts");
-  const activos = leerDelHermano(repo.ruta, "lib/platform/rubros-activos.ts");
+  // Un ref que no se pudo refrescar se ve IDÉNTICO a uno fresco, y el `atraso`
+  // sale de él, así que tampoco puede delatarlo. Se dice, no se mide.
+  if (!repo.fresco) {
+    return {
+      medido: false,
+      motivo: `no pude poner al día ${REF} en ${repo.ruta}: mediría contra la ref que quedó en disco, que se ve igual que una fresca`,
+      descartados,
+    };
+  }
+
+  const del = (ruta) => leerDelHermano(repo.ruta, ruta, { correr });
+  const vp = del("lib/platform/vertical-pack.ts");
+  const nav = del("components/layout/navigation.ts");
+  const ra = del("lib/platform/route-access.ts");
+  const activos = del("lib/platform/rubros-activos.ts");
   if (!vp || !nav || !ra || !activos) {
-    return { medido: false, motivo: `${repo.ruta} no tiene los 4 archivos que hacen falta`, descartados };
+    return { medido: false, motivo: `${REF} de ${repo.ruta} no trae los 4 archivos que hacen falta`, descartados };
   }
 
   // COMMON_SEGMENTS: las rutas del shell, que ningún pack puede bloquear.
@@ -212,7 +239,11 @@ if (!r.medido) {
   if (r.descartados?.length) console.log(`  candidatos descartados: ${r.descartados.join(" · ")}`);
   process.exit(2);
 }
-console.log(`Medido contra ${r.repo} (${r.rama}, ${r.atraso} commits atrás)`);
+// El atraso es del working tree y NO entra en la medición: el contenido sale de
+// `origin/master` recién fetcheado. Se imprime para que se vea la diferencia —
+// leer «62 commits atrás» sin esta aclaración hace dudar de un veredicto sano.
+console.log(`Medido contra ${REF} de ${r.repo}, recién puesto al día`);
+console.log(`  (su working tree está en ${r.rama}, ${r.atraso} commits atrás — no se lee)`);
 if (r.descartados.length) console.log(`  descartados: ${r.descartados.join(" · ")}`);
 console.log(`Rubros activos leídos: ${r.rubros.length} · pantallas declaradas acotadas: ${r.declaradas.length}`);
 for (const pantalla of new Set(r.declaradas)) {
