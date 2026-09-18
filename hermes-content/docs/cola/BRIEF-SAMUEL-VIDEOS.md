@@ -38,11 +38,18 @@ Shot list común: el lienzo de n8n armando el flujo cajita por cajita, el toggle
 activar, y el mensaje llegando al teléfono EN CÁMARA. ⚠️ Sin credenciales en pantalla:
 los nodos de credencial se muestran ya configurados, nunca abiertos.
 
-## 6-7 · Roadmap 1-1 (2 videos) — ⛔ FALTA DEFINIR
+## 6-7 · Llamadas 1 a 1 (2 videos) — ✅ DEFINIDO (Sergio, 17-sep)
 
-No existe «Roadmap 1-1» en ningún doc del sistema. Preguntarle a Samuel qué es:
-¿el recorrido de las llamadas 1 a 1 (la agenda Cal)? ¿un roadmap personal? Hasta tener
-la definición, no hay nada que preparar. **No se fabrica.**
+«Roadmap 1-1» = las llamadas uno a uno con Sergio (la oferta real: 30 min, gratis,
+cal.com/sergiourcullo/30min, con 3 h de anticipación).
+
+| Video | Ángulo | Shot list |
+|---|---|---|
+| **A · «Qué te llevás de la llamada»** | el roadmap que sale de ahí: qué instalar PRIMERO en TU negocio, dónde estás trabado, qué no vale la pena | 1) la pantalla de Cal con los horarios reales 2) un roadmap de ejemplo en pantalla (3 pasos numerados para un negocio tipo) 3) el CTA: «agendá en mi web» |
+| **B · «Cómo agendar en 30 segundos»** | el recorrido de reserva completo | 1) sergiourcullo.vercel.app → botón de agenda 2) elegir día/hora en Cal 3) la confirmación llegando al correo — EN CÁMARA |
+
+Regla: sin promesas de resultado — la llamada es diagnóstico y orden, no consultoría
+mágica. Y los horarios que se muestren son los reales de la web.
 
 ## 8 · Campaña con Pomelli — ⛔ PROBAR ANTES DE ENSEÑAR
 
@@ -64,12 +71,18 @@ Las 5 del ranking, todas instaladas y usadas acá (sin estrellas en pantalla —
 Shot list: pedirle a Claude Code una sección de landing CON y SIN skills cargadas, y
 mostrar la diferencia lado a lado. Ésa es la prueba que convence.
 
-## 10 · Cómo crear tu avatar con Higgsfield — ⚠️ BLOQUEADO POR REGLA
+## 10 · Cómo crear tu avatar con Higgsfield — ✅ DESBLOQUEADO (Sergio, 17-sep)
 
-Regla escrita del 11-sep, vigente: **«Nada de Higgsfield»** en contenido (cobro anual
-en reclamo). Además, si algún día va: el método real es Soul+texto (único que da
-consistencia) y toda cuenta con avatar IA lleva etiqueta de IA obligatoria.
-**Levantar la regla es decisión de Sergio Urcullo, no de este brief.**
+Sergio levantó la regla del 11-sep («podemos higgsfield»). Condiciones que SÍ siguen:
+
+- **El método que se enseña es el real: Soul + texto** — es el ÚNICO que da
+  consistencia de cara entre generaciones (probado acá; los métodos de referencia por
+  imagen degradan). No enseñar atajos que no usamos.
+- **Etiqueta de IA obligatoria** si el avatar publica en una cuenta propia.
+- Shot list: 1) crear el Soul con las fotos base 2) el prompt de texto con la
+  descripción fija del personaje 3) DOS generaciones distintas mostrando la MISMA cara
+  4) el «qué NO hace»: cambiar de método a mitad de camino rompe la consistencia.
+- Costo honesto en el video: se genera con créditos — decir que es de pago.
 
 ---
 
