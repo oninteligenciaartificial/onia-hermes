@@ -119,6 +119,16 @@ Instrucciones de proyecto. Override sobre defaults.
   equivocado — justo el error que esta regla existe para evitar.
 - **Qué se vende: manda `hermes-content/docs/ONIA_CATALOGO_DE_VENTA.md`**, con el estado
   real (vivo / construido sin probar / futuro).
+- **A QUIÉN se le vende: manda `hermes-content/docs/ONIA_CLIENTE_IDEAL.md`.** Clínica de
+  Santa Cruz con 2-6 profesionales y recepción; el dolor de entrada es el paciente con
+  tratamiento a medias que no volvió, NO la facturación. Trae las 5 preguntas de
+  calificación y a qué plan corresponde cada tamaño.
+
+  ⚠️ **Nace de un fallo de siete semanas (2026-09-18):** la única definición de cliente
+  vivía en `historial/ONIA_ENFOQUE_20260727.md` y se citaba como fuente desde la memoria,
+  cuando `historial/` por esta misma regla NO es fuente. Un doc archivado que nadie marca
+  como archivado se sigue leyendo como presente, y mandaba a vender con el perfil, los
+  dolores y los planes viejos.
 - **Un tema = un archivo sin fecha.** Si cambia, se EDITA ese archivo; no se crea uno
   nuevo con la fecha de hoy.
 - **Fecha en el nombre = historia.** `hermes-content/docs/historial/` son fotos de un día
