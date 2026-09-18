@@ -318,23 +318,31 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
-- [ ] 🔴 **El bot de venta de Onia promete un horario que Sergio Urcullo NO atiende** — dato
-      del panel, no código, y por eso ningún gate de repo lo puede arreglar solo.
-      `npm run horario:vivo` (rojo, medido el 2026-09-18 18:4x La Paz): de los 2 documentos que
-      sirve producción, la **fila del panel de la org interna** pisa `businessHours` y dice
-      *«Lunes a viernes de 9:00 a 19:00, sábados de 9 a 13»* con `hasta: 19`, mientras la fuente
-      —`VENTANAS_ATENCION` en
-      `hermes-content/deploy/vps-ops/bot/ventanas-de-atencion.mjs`, citada textual de Sergio
-      Urcullo el 2026-09-02 y repetida en la memoria del sistema— es **lun-vie 14:00-17:00 y 20:00-22:00,
-      sáb 9:00-15:00**. O sea: un lead que escribe un martes a las 10:00 lee que le contestan y
-      Sergio recién empieza a las 14:00, y el sábado se le promete hasta las 13:00 cuando atiende
-      hasta las 15:00. **Es preexistente y ajeno al arreglo del motor de abajo**: `horario-vivo.mjs`
-      lee el documento CRUDO servido (línea 104), no pasa por `applyKnowledge`.
-      **Qué falta, y por qué no lo cierro yo:** la cura es editar la fila de `chatbot_knowledge`
-      de la org interna (o `knowledge.onia.json` + `webhook-server.sh knowledge`), o sea escribir
-      un dato de disponibilidad en producción. Cuál de los dos horarios es el vigente HOY lo dice
-      Sergio Urcullo, no la sesión: si cambió su disponibilidad, la que hay que corregir es la
-      fuente y no la fila.
+- [x] 🔴 **~~El bot de venta de Onia promete un horario que Sergio Urcullo NO atiende~~ —
+      CERRADO el 2026-09-18** (`mergePanelKnowledge` en
+      `hermes-content/deploy/vps-ops/bot/knowledge.mjs`; **commiteado, NO desplegado**).
+      **No era una decisión de Sergio Urcullo**, y por eso el bloqueo anterior estaba mal puesto:
+      la disponibilidad de Onia ya tiene dueño en el repo —`VENTANAS_ATENCION` en
+      `ventanas-de-atencion.mjs`, citada textual de él el 2026-09-02 y repetida en la memoria del
+      sistema— y es la **misma** constante de la que `renovar-slots-bot.py` saca los horarios de
+      demo que el bot OFRECE. Lo que estaba roto no era *cuál* de los dos valores vale: era que el
+      panel pudiera mover **sólo la mitad prometida**, que es exactamente cómo se separaron la
+      primera vez (hasta el 13-sep el bot ofrecía un sábado y prometía "lun-vie 9:00-18:00").
+      Pedirle que arbitrara dos valores le habría pedido una decisión que ya tomó.
+      **La cura:** el documento de venta de Onia deja de aceptar `empresa.horario` del panel —lo
+      descarta con un `console.warn`, no en silencio— y hereda el del código. El horario de un
+      **cliente** no se toca: llega por `fetchOrgKnowledge` (fila por org) y sigue ganando, que es
+      lo correcto; hay un caso que se pone rojo si esa cura se va de tema.
+      Test: `panel-no-mueve-la-disponibilidad-de-onia.test.mjs` (5 casos; estaba en ROJO por el
+      ancla y por el descarte mudo antes del arreglo). Suite del bot 1183/1183.
+      ⚠️ **Y el gate se arregló en la misma vuelta, porque se volvía un verde falso.**
+      `horario-vivo.mjs` juzgaba el campo crudo de la fila; con la cura puesta habría firmado
+      *«ninguno lo contradice»* mientras producción —que todavía corre el código viejo— le sigue
+      prometiendo 9:00-19:00 a un lead. Ahora la exención cuelga del **deploy**, no del repo:
+      pregunta al bot vivo (`docker exec onia-center grep … /tmp/onia-bot/knowledge.mjs`) si la
+      guarda está corriendo, y si no puede preguntar **no exime** (fail-closed). Medido después
+      del arreglo: sigue **rojo** con su motivo, y se pone verde solo cuando el deploy llegue.
+      Self-check 43/43.
 
 - [x] 🔴 **~~El bot del cliente decidía con el horario del cliente y DECÍA el de Onia~~ —
       CERRADO el 2026-09-18** (motor: `applyKnowledge` en
