@@ -23,11 +23,16 @@ config del CLI; vive como conector de la app).
 | **3** subagentes (+7 retirados) | `.claude/agents/`: onia-core-guardian, onia-creative-radar, onia-crm-prospeccion |
 | **6** conectores MCP | `~/.claude.json`: image-gen, stitch (globales) + meta_developer_tools, cloudflare, cloudflare-docs, postiz (proyecto) |
 | 9 plugins | `ls -d ~/.claude/plugins/cache/*/` → 9, misma lista del 10-sep |
-| 4 trabajos por horario | ⚠️ NO reconfirmado el 17-sep (cron del nodo-casa; vía `casa.sh` desde el VPS). Confirmar antes del tramo 8 o decir «cuatro» solo si el crontab lo muestra |
+| ~~4 trabajos por horario~~ → **40 en el VPS · 0 en casa** | 🔴 **RESUELTO Y CORREGIDO el 18-sep.** `crontab -l` en el VPS (187.77.16.63) = **40 líneas**, uptime 25 días. El nodo-casa: `casa.sh "crontab -l"` → **`no crontab for compu_pc_casa_sergio`**, vacío. Los 4 loops (web-venta 120 · onia-cola 60 · chatbot-cola 60 · recorrido-cliente 180) están en `/root/.config/onia/loops-*.txt` pero **no instalados en ningún cron**. Y `onia-vigia-loops-remotos.log` está **vacío**: el vigía que debía avisarlo tampoco corrió. WSL local = `Stopped` |
 | **4 conectores sin andar hoy** | reconfirmado 17-sep: 2 caídos (image-gen, postiz 502) + 2 sin autorización (cloudflare, meta) |
 
 **Los números se recuentan antes de grabar.** Ya pasó con el video 2: la versión de
-Claude Code cambió en tres días.
+Claude Code cambió en tres días. Y volvió a pasar acá: el recuento del **18-sep** tumbó la
+afirmación central de la lámina 8 — *"todo eso vive en una PC de escritorio prendida"* era
+**falsa**. Lo que corre vive en un VPS alquilado; lo de casa está apagado y sin cron.
+
+🔴 **La lámina 8 del `deck.html` todavía dice el texto viejo.** Hay que regenerarla antes de
+grabar (ver "Rehacer los PNG"). El `GUION.md` ya está corregido.
 
 ## Las 11 láminas
 
@@ -40,8 +45,8 @@ Claude Code cambió en tres días.
 | 5 | Escalón 3 · conectores | diagrama: manos fuera de la computadora |
 | 6 | El atajo · plugins | no hace falta construirlo para empezar |
 | 7 | Escalón 4 · horario | el único que no te necesita |
-| 8 | Mi caso | 4 · 4 · 7 · 4, en una PC de escritorio |
-| 9 | **La parte honesta** | tres fallas suyas, una en vivo |
+| 8 | Mi caso | 4 · 3 · 6 · **40** — y la aclaración de que corre en un VPS pagado, no en casa |
+| 9 | **La parte honesta** | **cuatro** fallas suyas, dos en vivo (la 4ª: los loops de casa y su vigía, ambos muertos) |
 | 10 | Las tres reglas | la conclusión útil del video |
 | 11 | Cierre | la escalera resumida + CTA |
 
