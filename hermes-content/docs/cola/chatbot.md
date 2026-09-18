@@ -318,6 +318,38 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El gate que vigila qué rubros ofrece el bot cruzaba dos lados del REPO, y el
+      documento que producción SIRVE le gana al archivo~~ — CERRADO el 2026-09-18.**
+      (`hermes-content/deploy/vps-ops/bot/rubros-vivos.mjs`)
+
+      `rubros-vivos.mjs` existe porque el catálogo del bot ya se desincronizó del alta dos veces.
+      Comparaba `MODULOS_LISTOS` (`config.mjs`, repo) contra `RUBROS_ACTIVOS` (onia-platform,
+      repo) — **los dos lados del repo**, y nunca consultaba la capa `panel`, que es la que
+      producción sirve (`/health` del webhook: `source:"panel"`). Medido: `grep` de
+      `filaPublicada|panel|health|docker` en ese archivo daba **cero**.
+
+      **Por qué importaba.** `rubrosExtra` es el único campo del esquema que suma rubros
+      (`knowledge.mjs`: *"es A QUIEN le vendemos"*), se tipea desde el panel y **gana sobre el
+      archivo** para el inbox que lo tenga publicado. Su comentario declara que la capa editable
+      *"sólo se mueve en la dirección segura: agrega"* — cierto para disparadores, **falso para
+      rubros**: agregar uno es SOBREVENDER, o sea enganchar a un lead cuyo rubro el alta rechaza.
+      Hoy la fila trae `rubrosExtra` vacío, así que el gate acertaba **por casualidad** — la misma
+      forma que ya mordió el 2026-09-12 (el bot cotizando Bs 750/1.500 a leads reales con
+      `test:precios-bot` en verde, porque los dos lados leían el repo).
+
+      **Cómo se cerró.** El lector del documento vivo se **importa** de `precios-vivos.mjs`
+      (`filaPublicada`, `inboxesVivos`) en vez de copiarse — dos lectores del mismo hecho es como
+      uno queda verde solo. El universo de inboxes se deriva de Chatwoot, no de una lista a mano.
+      Tri-estado: `apagada`/`ausente` son respuestas ("ese inbox cae al archivo, que ya se mide"),
+      pero "no pude preguntar" sale **exit 2**, nunca verde.
+
+      **Prueba.** 8 casos nuevos en `--self-check` (14 en total, verde) y **validado por mutación
+      en las dos direcciones**, con el exit leído sin pipe (el de un pipe es el de `tail`):
+      ignorar `rubrosExtra` → `exit 1`, 1 FALLA; aplanar "no pude preguntar" a "no agrega nada"
+      → `exit 1`, FALLA en el caso del tri-estado. Medición viva contra producción: `exit 0` —
+      *"produccion vende 5 · el bot ofrece 5 · capa editable: 2 inbox(es) con fila publicada de 4"*,
+      ninguno agrega un rubro que el alta no acepte.
+
 - [x] 🔴 **~~Los horarios de demo NO le llegaban a los barridos: el follow-up salteaba a TODOS
       los prospectos con `slots_sin_definir` — teniendo los cinco horarios vivos~~ — CERRADO el
       2026-09-18 en el repo.** Commiteado, **NO desplegado**.
