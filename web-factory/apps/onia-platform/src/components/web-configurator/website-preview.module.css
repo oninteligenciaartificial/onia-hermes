@@ -214,6 +214,8 @@
 .fieldTall { min-height: 3rem; }
 .bubble { position: relative; max-width: 26ch; border-radius: var(--pv-radius); background: var(--preview-surface); padding: 0.6rem 0.75rem; font-size: 0.66rem; line-height: 1.4; }
 .site[data-direction="cercano"] .bubble { border-radius: 18px 18px 18px 4px; }
+/* En Impacto el bloque es de tinta y el texto hereda el color claro: la burbuja es blanca, así que vuelve a tinta. */
+.site[data-direction="impacto"] .bubble { color: var(--preview-ink); }
 .chips { grid-template-columns: repeat(3, auto); }
 .chips .actionWide { grid-column: 1 / -1; }
 
