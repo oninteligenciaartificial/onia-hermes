@@ -44,6 +44,13 @@ pnpm design:auto <slug> -t <template>
 pnpm generate <slug> --template <template>
 #    → out/<slug>/index.html + site.css
 
+# 0) Pedido del CONFIGURADOR de onia.com.bo/servicios/webs (el mensaje de WhatsApp, pegado
+#    tal cual en un .txt) → intake → perfil → receta → out/, en UN comando (2026-09-17):
+pnpm from-configurador <mensaje.txt> --build [--force] [--slug x]
+#    Parsea NUESTRO formato (etiqueta: valor). Lo que el mensaje no trae (fotos, logo,
+#    dominio, una frase por servicio) sale como «pendientes que se le piden al cliente».
+#    No inventa: la bajada y las descripciones son hechos (oferta, rubro, ciudad).
+
 # Todo lo anterior de una pasada (acepta intake o slug ya existente):
 pnpm factory:build <slug> -t <template> [--force]
 pnpm factory:build --input data/intakes/<archivo>.intake.json [--force]
@@ -137,7 +144,11 @@ Reglas de motion que salieron de reconstruirlos, y que aplican a TODA web nueva:
 4. **Construcción:** para sitios de cliente = editar bloques/templates del generador.
    Para superficies Next (onia-center, onia-platform): `frontend-design` · `frontend-patterns` ·
    `react-components` · `shadcn-ui` · `ui-styling` · `nextjs-turbopack`.
-5. **Revisión:** `design-review` + preview en navegador (verificar en vivo, no pedirle a
+5. **Copy:** todo texto que generamos (titulares por rubro, bajadas de fallback, servicios sin
+   descripción) pasa por `humanizer` o `stop-slop` antes de quedar. `web-factory/generate/slop.test.ts`
+   vigila una lista en español. El motor escribe `data/clients/<slug>.DESIGN.md` (tokens con rol,
+   contraste medido, componentes, voz): es lo que lee cualquier agente para repetir el estilo.
+6. **Revisión:** `design-review` + preview en navegador (verificar en vivo, no pedirle a
    Sergio que revise a mano).
 
 ## Piso de calidad / benchmark
