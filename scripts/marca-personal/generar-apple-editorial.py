@@ -276,6 +276,9 @@ ICONOS = {
     # La regla que deja esto: para una marca conocida, el asset oficial del producto
     # gana siempre; una libreria de iconos sirve para la FORMA, nunca para el color.
     "chatgpt": _squircle("#0A0A0A", _marca("chatgpt", "#FFFFFF")),
+    # GitHub: el mark oficial (octocat) en su uso canonico — blanco sobre negro.
+    # La forma de la libreria ES la marca real; el color se verifico contra github.com.
+    "github": _squircle("#0A0A0A", _marca("github", "#FFFFFF")),
     "gemini": _squircle("#FFFFFF", _imagen("gemini-oficial", alto=150), borde="#E8E8ED"),
     "usdt": _squircle("#26A17B", _marca("usdt", "#FFFFFF")),
     # Sin logo oficial en simple-icons: se dibujan.
@@ -775,6 +778,65 @@ ONIA_CUATRO = [
     },
 ]
 
+# REPOS — pedida por Sergio Urcullo el 17-sep con la referencia de @soyenriquerocha
+# («Que no se vea hecho con IA · 10 repos», 3,1k likes en un dia). Se extrae la
+# ESTRUCTURA (portada statement → repos agrupados por tarea, 2-4 por lamina, nombre
+# exacto → una linea → cierre con criterio), no la identidad. El dato que el lector no
+# sabia: el ORDEN de confianza (oficial → empresa dueña → comunidad) y que una skill se
+# LEE antes de instalar. Los 10 repos: los del video 05, re-verificados vivos por la API
+# de GitHub el 2026-09-17 (mismos nombres que el 10-sep). Sin estrellas: envejecen.
+# Trailer del YT 05 «No escribas nada» — publicar con su salida (sab 19).
+REPOS = [
+    {
+        "layout": "D",
+        "contexto": "Escribí 197 piezas para mi empresa.\nDespués aprendí a buscar primero:",
+        "remate": "10 repos",
+        "pie": "hacen casi todo lo que necesito. Cuestan",
+        "pie_hl": "$0",
+        "gancho": True,
+    },
+    {
+        "layout": "E",
+        "icono": "github",
+        "etiqueta": "1 · Por acá se empieza",
+        "nombre": "Lo oficial",
+        "desc": "anthropics/skills — el primero al que hay que ir.\nanthropics/claude-plugins-official — el directorio\noficial: desde acá se llega a casi todo lo demás.",
+        "precio": "$0",
+    },
+    {
+        "layout": "E",
+        "icono": "github",
+        "etiqueta": "2 · Las publica el dueño",
+        "nombre": "Las empresas",
+        "desc": "cloudflare/skills — para construir sobre Cloudflare.\ngreensock/gsap-skills — animación, por GreenSock.\nSi usás una herramienta conocida, buscá la suya.",
+        "precio": "$0",
+    },
+    {
+        "layout": "E",
+        "icono": "github",
+        "etiqueta": "3 · La comunidad · los uso yo",
+        "nombre": "Memoria y mapa",
+        "desc": "thedotmack/claude-mem — se acuerda de lo de ayer.\nEgonex-AI/Understand-Anything — un proyecto\nentero convertido en un mapa que se recorre.",
+        "precio": "$0",
+    },
+    {
+        "layout": "E",
+        "icono": "github",
+        "etiqueta": "3 · La comunidad · leé antes de instalar",
+        "nombre": "Personalidad",
+        "desc": "DietrichGebert/ponytail — escribe menos código.\nJuliusBrussee/caveman — respuestas sin relleno.\nY dos más: andrej-karpathy-skills · affaan-m/ECC.",
+        "precio": "$0",
+    },
+    {
+        "layout": "D",
+        "contexto": "El orden ES el consejo:",
+        "remate": "Buscá.\nDespués escribí.",
+        "sub": "Oficial → empresa dueña → comunidad.\nY leela antes de instalar: es texto plano.",
+        "cta_hl": "¿Cuál probás primero?",
+        "cta_gris": "Respondo todos los comentarios.",
+    },
+]
+
 PIEZAS = {
     "mi-stack": None,
     "fable": FABLE,
@@ -785,6 +847,7 @@ PIEZAS = {
     "respuestas": RESPUESTAS,
     "comunidad-semana": COMUNIDAD_SEMANA,
     "onia-cuatro": ONIA_CUATRO,
+    "repos": REPOS,
 }  # mi-stack se resuelve a LAMINAS abajo
 
 # Piel por pieza: una clase extra en el lienzo que habilita el acento de esa marca.
