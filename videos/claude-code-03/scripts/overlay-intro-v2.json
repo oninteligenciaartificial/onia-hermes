@@ -1,0 +1,76 @@
+{
+ "overlays": [
+  {
+   "asset": "C:/Users/PC/AppData/Local/Temp/claude/C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb/1b27764e-a5b2-4fe6-997b-aecc00d784a6/scratchpad/v03/assets2/portada.png",
+   "start": 0.0,
+   "end": 3.2,
+   "position": "center",
+   "scale": 1.0,
+   "fade": 0.4
+  },
+  {
+   "asset": "C:/Users/PC/AppData/Local/Temp/claude/C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb/1b27764e-a5b2-4fe6-997b-aecc00d784a6/scratchpad/v03/assets2/tag-16.png",
+   "start": 3.3,
+   "end": 5.0,
+   "position": "top-left",
+   "scale": 0.3,
+   "fade": 0.22
+  },
+  {
+   "asset": "C:/Users/PC/AppData/Local/Temp/claude/C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb/1b27764e-a5b2-4fe6-997b-aecc00d784a6/scratchpad/v03/assets2/card-ia.png",
+   "start": 3.5,
+   "end": 5.0,
+   "position": "top-right",
+   "scale": 0.3,
+   "fade": 0.22
+  },
+  {
+   "asset": "C:/Users/PC/AppData/Local/Temp/claude/C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb/1b27764e-a5b2-4fe6-997b-aecc00d784a6/scratchpad/v03/assets2/card-4f.png",
+   "start": 5.1,
+   "end": 11.2,
+   "position": "right",
+   "scale": 0.3,
+   "fade": 0.22
+  },
+  {
+   "asset": "C:/Users/PC/AppData/Local/Temp/claude/C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb/1b27764e-a5b2-4fe6-997b-aecc00d784a6/scratchpad/v03/assets2/tag-sinauto.png",
+   "start": 9.8,
+   "end": 11.2,
+   "position": "top-left",
+   "scale": 0.32,
+   "fade": 0.2
+  },
+  {
+   "asset": "C:/Users/PC/AppData/Local/Temp/claude/C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb/1b27764e-a5b2-4fe6-997b-aecc00d784a6/scratchpad/v03/assets2/tag-dormis.png",
+   "start": 18.5,
+   "end": 20.0,
+   "position": "top-left",
+   "scale": 0.3,
+   "fade": 0.18
+  },
+  {
+   "asset": "C:/Users/PC/AppData/Local/Temp/claude/C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb/1b27764e-a5b2-4fe6-997b-aecc00d784a6/scratchpad/v03/assets2/clawd-rosa.png",
+   "start": 18.5,
+   "end": 20.0,
+   "position": "top-right",
+   "scale": 0.15,
+   "fade": 0.18
+  },
+  {
+   "asset": "C:/Users/PC/AppData/Local/Temp/claude/C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb/1b27764e-a5b2-4fe6-997b-aecc00d784a6/scratchpad/v03/assets2/tag-gym.png",
+   "start": 20.1,
+   "end": 22.4,
+   "position": "top-left",
+   "scale": 0.28,
+   "fade": 0.18
+  },
+  {
+   "asset": "C:/Users/PC/AppData/Local/Temp/claude/C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb/1b27764e-a5b2-4fe6-997b-aecc00d784a6/scratchpad/v03/assets2/clawd-verde.png",
+   "start": 20.1,
+   "end": 22.4,
+   "position": "top-right",
+   "scale": 0.16,
+   "fade": 0.18
+  }
+ ]
+}
