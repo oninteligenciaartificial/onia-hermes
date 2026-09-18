@@ -276,6 +276,9 @@ ICONOS = {
     # La regla que deja esto: para una marca conocida, el asset oficial del producto
     # gana siempre; una libreria de iconos sirve para la FORMA, nunca para el color.
     "chatgpt": _squircle("#0A0A0A", _marca("chatgpt", "#FFFFFF")),
+    # GitHub: el mark oficial (octocat) en su uso canonico — blanco sobre negro.
+    # La forma de la libreria ES la marca real; el color se verifico contra github.com.
+    "github": _squircle("#0A0A0A", _marca("github", "#FFFFFF")),
     "gemini": _squircle("#FFFFFF", _imagen("gemini-oficial", alto=150), borde="#E8E8ED"),
     "usdt": _squircle("#26A17B", _marca("usdt", "#FFFFFF")),
     # Sin logo oficial en simple-icons: se dibujan.
@@ -775,6 +778,153 @@ ONIA_CUATRO = [
     },
 ]
 
+# REPOS — pedida por Sergio Urcullo el 17-sep con la referencia de @soyenriquerocha
+# («Que no se vea hecho con IA · 10 repos», 3,1k likes en un dia). Se extrae la
+# ESTRUCTURA (portada statement → repos agrupados por tarea, 2-4 por lamina, nombre
+# exacto → una linea → cierre con criterio), no la identidad. El dato que el lector no
+# sabia: el ORDEN de confianza (oficial → empresa dueña → comunidad) y que una skill se
+# LEE antes de instalar. Los 10 repos: los del video 05, re-verificados vivos por la API
+# de GitHub el 2026-09-17 (mismos nombres que el 10-sep). Sin estrellas: envejecen.
+# Trailer del YT 05 «No escribas nada» — publicar con su salida (sab 19).
+REPOS = [
+    {
+        "layout": "D",
+        "marca": "github",
+        "contexto": "Escribí 197 piezas para mi empresa.\nDespués aprendí a buscar primero:",
+        "remate": "10 repos",
+        "pie": "hacen casi todo lo que necesito. Cuestan",
+        "pie_hl": "$0",
+        "gancho": True,
+    },
+    {
+        "layout": "R",
+        "term_titulo": "es texto: se lee",
+        "term": ['<span class="p">&gt;</span> abrí una skill oficial',
+                 '<span class="g">instrucciones, en texto plano</span>',
+                 '<span class="ok">✓</span> la leíste ANTES de instalar'],
+        "own": "anthropics", "repo": "skills",
+        "linea": "Las skills oficiales de Anthropic.\nEl primero al que hay que ir.",
+        "etiqueta": "1 · oficial · por acá se empieza",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "el directorio",
+        "term": ['<span class="p">&gt;</span> buscá "memoria"',
+                 '<span class="ok">✓</span> instalado en 10 segundos',
+                 '<span class="g">queda en todos tus proyectos</span>'],
+        "own": "anthropics", "repo": "claude-plugins-official",
+        "chico": True,
+        "linea": "El directorio oficial de plugins:" + chr(10) + "desde acá se llega a casi todo lo demás.",
+        "etiqueta": "1 · oficial",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "la publica el dueño",
+        "term": ['<span class="p">&gt;</span> construí sobre Cloudflare',
+                 '<span class="ok">✓</span> sin inventarte la mitad'],
+        "own": "cloudflare", "repo": "skills",
+        "linea": "La escribió la empresa dueña de la herramienta.\nGreenSock hace igual: greensock/gsap-skills.",
+        "etiqueta": "2 · empresa dueña",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "memoria",
+        "term": ['<span class="p">&gt;</span> ¿en qué quedamos ayer?',
+                 '<span class="ok">✓</span> se acuerda. De todo.'],
+        "own": "thedotmack", "repo": "claude-mem",
+        "linea": "Memoria entre sesiones: dejás de contarle\ntu proyecto cada vez que lo abrís.",
+        "etiqueta": "3 · comunidad · lo uso yo",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "el mapa",
+        "term": ['<span class="p">&gt;</span> leete este proyecto entero',
+                 '<span class="ok">✓</span> mapa listo: recorrelo'],
+        "own": "Egonex-AI", "repo": "Understand-Anything",
+        "chico": True,
+        "linea": "Convierte un proyecto entero en un mapa que se recorre.\nPara entender código ajeno no conozco nada igual.",
+        "etiqueta": "3 · comunidad · lo uso yo",
+    },
+    {
+        "layout": "R",
+        "term_titulo": "personalidad",
+        "term": ['<span class="p">&gt;</span> antes: 200 líneas de código',
+                 '<span class="ok">✓</span> ahora: 20. Y funcionan.'],
+        "own": "DietrichGebert", "repo": "ponytail",
+        "linea": "Lo vuelve un senior vago: menos código, menos roturas.\nSu dupla: JuliusBrussee/caveman — respuestas sin relleno.",
+        "etiqueta": "3 · comunidad · uso los dos",
+    },
+    {
+        "layout": "D",
+        "contexto": "El orden ES el consejo:",
+        "remate": "Buscá.\nDespués escribí.",
+        "sub": "Oficial → empresa dueña → comunidad.\nY dos más que uso: multica-ai/andrej-karpathy-skills\ny affaan-m/ECC. Leelos antes: son texto plano.",
+        "cta_hl": "¿Cuál probás primero?",
+        "cta_gris": "Respondo todos los comentarios.",
+    },
+]
+
+DIA = [
+    {
+        "layout": "H",
+        "titulo": "«Y a qué hora hacés todo?»",
+        "sub": "Mi día, con las dos agendas a la vez:",
+        "yo": [
+            (8, 9, "leo lo que dejó el sistema", "#BFD7F2", False),
+            (9, 13, "construyo, una cosa por vez", "#DCD3F2", False),
+            (13, 14, "almuerzo", "#F2E2B8", False),
+            (14, 16, "llamadas 1 a 1", "#F2C9C4", False),
+            (16.5, 18.5, "grabo los videos del día", "#F2E2B8", False),
+            (19, 22, "llamadas 1 a 1", "#F2C9C4", False),
+        ],
+        "sistema": [
+            (6, 6.8, "revisa web y docs", "", True),
+            (8, 8.8, "cola de tareas", "", True),
+            (10, 10.8, "entra como cliente", "", True),
+            (12, 12.8, "cola de tareas", "", True),
+            (14, 14.8, "revisa la web de venta", "", True),
+            (16, 16.8, "cola de tareas", "", True),
+            (18, 18.8, "entra como cliente", "", True),
+            (20, 20.8, "revisa la web de venta", "", True),
+            (22, 22.8, "cola de tareas", "", True),
+        ],
+        "rem": 'Los <span class="vd">verdes ✓</span> corren solos. Yo no estoy ahí.',
+    },
+]
+
+# Variante FOUNDER de la pieza dia (pedida 17-sep: "similar, pero mas founder").
+# Mismo layout H; el angulo cambia: construir POCO y vender/decidir MUCHO. Bloques
+# reales: llamadas Cal (14-16 y 19-22), prospectos de WhatsApp (existen y esperan),
+# la 1.0 como objetivo vigente, grabacion en lote real. Los verdes: crons del deck 03.
+DIA_FOUNDER = [
+    {
+        "layout": "H",
+        "titulo": "«¿Cómo es ser founder a los 16?»",
+        "sub": "Construir · vender · contar. Lo repetido no me toca:",
+        "yo": [
+            (8, 9, "números y avisos de ayer", "#BFD7F2", False),
+            (9, 12, "producto: la 1.0", "#DCD3F2", False),
+            (12, 13, "prospectos de WhatsApp", "#D7E8F0", False),
+            (13, 14, "almuerzo", "#F2E2B8", False),
+            (14, 16, "llamadas con clientes", "#F2C9C4", False),
+            (16.5, 18.5, "contenido: el video del día", "#F2E2B8", False),
+            (19, 22, "llamadas y demos", "#F2C9C4", False),
+        ],
+        "sistema": [
+            (6, 6.8, "revisa web y docs", "", True),
+            (8, 8.8, "cola de tareas", "", True),
+            (10, 10.8, "prueba el producto", "", True),
+            (12, 12.8, "cola de tareas", "", True),
+            (14, 14.8, "vigila la web de venta", "", True),
+            (16, 16.8, "cola de tareas", "", True),
+            (18, 18.8, "prueba el producto", "", True),
+            (20, 20.8, "vigila la web de venta", "", True),
+            (22, 22.8, "cola de tareas", "", True),
+        ],
+        "rem": 'Los <span class="vd">verdes ✓</span> corren solos. Yo hago lo que no se delega: <b>vender y decidir</b>.',
+    },
+]
+
 PIEZAS = {
     "mi-stack": None,
     "fable": FABLE,
@@ -785,6 +935,9 @@ PIEZAS = {
     "respuestas": RESPUESTAS,
     "comunidad-semana": COMUNIDAD_SEMANA,
     "onia-cuatro": ONIA_CUATRO,
+    "repos": REPOS,
+    "dia": DIA,
+    "dia-founder": DIA_FOUNDER,
 }  # mi-stack se resuelve a LAMINAS abajo
 
 # Piel por pieza: una clase extra en el lienzo que habilita el acento de esa marca.
@@ -863,6 +1016,59 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
    —mono, mayuscula, gris— para que lea como dato tecnico y no compita con el precio. */
 .etiqueta{{font-family:'OniaMono',monospace;font-size:25px;font-weight:500;
   letter-spacing:.08em;text-transform:uppercase;color:#A1A1A6;margin-top:24px}}
+/* Layout R (repo) — el term de los decks yt-* traido al carrusel: el mock MUESTRA el
+   mecanismo y el titular es el NOMBRE del repo (correccion 17-sep, tercera igual). */
+.term-r{{width:850px;border-radius:30px;text-align:left;overflow:hidden;position:relative;
+  background:linear-gradient(160deg,#26221F 0%,#1B1815 55%,#141210 100%);
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:0 34px 64px rgba(0,0,0,.30),0 0 70px rgba(217,119,87,.28)}}
+.term-r-barra{{height:64px;display:flex;align-items:center;gap:13px;padding:0 28px;
+  border-bottom:1px solid rgba(255,255,255,.12)}}
+.term-r-barra i{{width:17px;height:17px;border-radius:50%;flex:none}}
+.term-r-barra i:nth-child(1){{background:#FF5F57}}
+.term-r-barra i:nth-child(2){{background:#FEBC2E}}
+.term-r-barra i:nth-child(3){{background:#28C840}}
+.term-r-barra .badge{{margin-left:auto;font-family:'OniaMono',monospace;font-size:23px;
+  font-weight:700;color:#0A2A18;background:#3ECF6E;border-radius:999px;padding:6px 18px}}
+.term-r-barra em{{font-style:normal;font-family:'OniaMono',monospace;font-size:26px;
+  color:rgba(255,255,255,.52);margin-left:8px}}
+.term-r pre{{font-family:'OniaMono',monospace;font-size:38px;font-weight:500;line-height:1.7;
+  padding:36px 42px 42px;color:#F2EFE9;margin:0;white-space:pre-line;letter-spacing:.01em}}
+.term-r .cur{{display:inline-block;width:21px;height:44px;background:#FF8A5C;border-radius:4px;
+  vertical-align:-8px;margin-left:10px;box-shadow:0 0 16px rgba(255,138,92,.8)}}
+.term-r .p{{color:#FF8A5C;font-weight:700}}
+.term-r .ok{{color:#3ECF6E}}
+.term-r .g{{color:rgba(255,255,255,.45);font-weight:400}}
+.repo-r{{display:flex;align-items:center;gap:22px;margin-top:56px;
+  font-family:'OniaMono',monospace;font-size:57px;font-weight:700;letter-spacing:-.02em}}
+.repo-r .gh-mark{{width:76px;height:76px;flex:none}}
+.repo-r .own{{color:#A1A1A6;font-weight:500}}
+.repo-r.chico{{font-size:36px}}
+/* Layout H (horario) — referencia @iampascio 17-sep: el calendario de bloques ES el
+   contenido. El giro propio: DOS agendas en paralelo, la mia y la del sistema. */
+.lienzo.h{{justify-content:flex-start;padding-top:88px}}
+.h .tit-h{{font-size:64px;font-weight:800;letter-spacing:-.03em;line-height:1.06}}
+.h .sub-h{{font-size:31px;color:var(--muted);margin-top:14px}}
+.h .cal{{display:flex;gap:18px;margin-top:56px;width:100%;height:760px;flex:none}}
+.h .horas{{width:88px;position:relative;flex:none}}
+.h .hora{{position:absolute;right:10px;font-family:'OniaMono',monospace;font-size:21px;
+  color:#A1A1A6;transform:translateY(-50%)}}
+.h .col{{flex:1;position:relative;border-left:1px solid #E3E3E8}}
+.h .col-tit{{position:absolute;top:-40px;left:0;right:0;text-align:center;
+  font-family:'OniaMono',monospace;font-size:22px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:#6E6E73}}
+.h .blq{{position:absolute;left:10px;right:6px;border-radius:14px;padding:10px 16px;
+  overflow:hidden;text-align:left}}
+.h .blq b i{{font-style:normal;color:#1B8A4C}}
+.h .blq b{{display:block;font-size:24px;font-weight:700;letter-spacing:-.01em;line-height:1.15}}
+.h .blq span{{display:block;font-family:'OniaMono',monospace;font-size:18px;color:rgba(0,0,0,.45);margin-top:2px}}
+.h .blq.sys{{border:2px solid #2FBF71;background:#D9F2E2}}
+.h .rem-h{{margin-top:40px;font-size:37px;font-weight:700;letter-spacing:-.02em}}
+.h .rem-h .vd{{background:#2FBF71;color:#08210F;border-radius:12px;padding:2px 14px}}
+
+.repo-r.chico .gh-mark{{width:60px;height:60px}}
+.linea-r{{font-size:33px;color:var(--muted);line-height:1.42;margin-top:24px;
+  white-space:pre-line;max-width:850px}}
 .sub{{font-size:38px;color:var(--muted);line-height:1.4;margin-top:30px;
   white-space:pre-line;letter-spacing:-.01em}}
 /* chip en su propia linea: en linea con el texto gris la frase se partia en dos y el
@@ -1037,7 +1243,7 @@ body{{background:var(--bg);font-family:'{nombre}',sans-serif;font-weight:400;ove
 def _clases(lamina):
     """Clases del lienzo: el layout (los que traen grilla propia) y el fondo de la pieza."""
     c = ["lienzo"]
-    if lamina["layout"] in ("A", "B", "C", "F", "G"):
+    if lamina["layout"] in ("A", "B", "C", "F", "G", "H"):
         c.append(lamina["layout"].lower())
     if lamina.get("fondo"):
         c.append(lamina["fondo"])
@@ -1141,6 +1347,44 @@ def markup(lamina):
             cuerpo += (f'<div class="cta"><span class="hl">{lamina["cta_hl"]}</span>'
                        f'<span class="cta-gris">{lamina["cta_gris"]}</span></div>')
         return cuerpo
+    if lamina["layout"] == "H":
+        def _col(bloques):
+            html = ""
+            for ini, fin, txt, color, es_sys in bloques:
+                top = (ini - 6) * 42          # escala: 06:00 arriba, 52px por hora
+                alto = max((fin - ini) * 42 - 6, 40)
+                clase = "blq sys" if es_sys else "blq"
+                estilo = f"top:{top}px;height:{alto}px"
+                if not es_sys:
+                    estilo += f";background:{color}"
+                horas_txt = f"{int(ini):02d}:{int(ini % 1 * 60):02d} – {int(fin):02d}:{int(fin % 1 * 60):02d}"
+                tick = " <i>✓</i>" if es_sys else ""
+                html += (f'<div class="{clase}" style="{estilo}">'
+                         f"<b>{txt}{tick}</b><span>{horas_txt}</span></div>")
+            return html
+        horas = "".join(f'<div class="hora" style="top:{(h-6)*42}px">{h:02d}:00</div>'
+                        for h in range(6, 25, 3))
+        return (f'<div class="tit-h">{lamina["titulo"]}</div>'
+                f'<div class="sub-h">{lamina["sub"]}</div>'
+                f'<div class="cal"><div class="horas">{horas}</div>'
+                f'<div class="col"><div class="col-tit">yo</div>{_col(lamina["yo"])}</div>'
+                f'<div class="col"><div class="col-tit">el sistema</div>{_col(lamina["sistema"])}</div>'
+                f'</div><div class="rem-h">{lamina["rem"]}</div>')
+    if lamina["layout"] == "R":
+        # Layout R (repo) — correccion de Sergio Urcullo del 17-sep, la TERCERA igual:
+        # "en lugar de 'lo oficial' directo el nombre, y cosas que muestren de que se
+        # refieren; se ve muy simple". El titular es el NOMBRE del repo y arriba va un
+        # mock de terminal que MUESTRA el mecanismo (el mismo term de los decks yt-*).
+        lineas = "\n".join(lamina["term"])
+        return (
+            f'<div class="term-r"><div class="term-r-barra"><i></i><i></i><i></i>'
+            f'<em>{lamina["term_titulo"]}</em><span class="badge">gratis</span></div>'
+            f'<pre>{lineas}<span class="cur"></span></pre></div>'
+            f'<div class="repo-r{" chico" if lamina.get("chico") else ""}"><svg class="gh-mark" viewBox="0 0 256 256">'
+            f'{_marca("github", "#1D1D1F")}</svg><span>'
+            f'<b class="own">{lamina["own"]}/</b>{lamina["repo"]}</span></div>'
+            f'<div class="linea-r">{lamina["linea"]}</div>'
+            f'<div class="etiqueta">{lamina["etiqueta"]}</div>')
     etiqueta = (f'<div class="etiqueta">{lamina["etiqueta"]}</div>'
                 if lamina.get("etiqueta") else "")
     return (f'<div class="obj">{ICONOS[lamina["icono"]]}</div>'
