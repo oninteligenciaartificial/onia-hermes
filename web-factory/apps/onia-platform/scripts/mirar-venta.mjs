@@ -32,7 +32,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import { join } from 'node:path';
 
-import { TOPE_RECORTADOS, fallasDeRecortados } from './recortados.mjs';
+import { TOPE_RECORTADOS, fallasDeRecortados, textoRecortadoALaVista } from './recortados.mjs';
 import { superficiesDeVenta } from './rutas-de-venta.mjs';
 
 /**
@@ -152,7 +152,13 @@ const UA_IPHONE =
  * pagina y no el pie — que es exactamente como se veia la franja clara bajo el pie negro.
  * Se sortean tres x porque el globo del chat es fijo y vive en la esquina derecha.
  */
-function sonda({ vw, tope }) {
+function sonda({ vw, tope, fuenteDelPredicado }) {
+  // `page.evaluate` serializa esta función: acá adentro no existen los imports
+  // del módulo. El predicado viaja como FUENTE (`textoRecortadoALaVista` de
+  // scripts/recortados.mjs) y se reconstruye, en vez de copiarse — una copia
+  // benévola coincidiría con el original mientras la realidad les diera la
+  // razón a las dos, y el test estaría probando la copia.
+  const recorta = new Function(`return (${fuenteDelPredicado})`)();
   const doc = document.documentElement;
   const desborde = doc.scrollWidth - vw;
   const puntos = [0.2, 0.5, 0.8].map((f) => {
@@ -163,8 +169,13 @@ function sonda({ vw, tope }) {
   for (const e of document.querySelectorAll('body *')) {
     if (e.children.length || !e.textContent?.trim()) continue;
     const st = getComputedStyle(e);
-    if (st.overflow === 'visible') continue;
-    if (e.scrollWidth > e.clientWidth + 2) {
+    const caja = {
+      clientWidth: e.clientWidth,
+      clientHeight: e.clientHeight,
+      scrollWidth: e.scrollWidth,
+      overflow: st.overflow,
+    };
+    if (recorta(caja)) {
       recortados.push({ tag: e.tagName, txt: e.textContent.trim().slice(0, 60) });
     }
   }
@@ -273,7 +284,11 @@ for (const vista of VISTAS) {
     await page.waitForTimeout(900);
     await bajarHastaElFondo(page);
 
-    const m = await page.evaluate(sonda, { vw: vista.width, tope: TOPE_RECORTADOS });
+    const m = await page.evaluate(sonda, {
+      vw: vista.width,
+      tope: TOPE_RECORTADOS,
+      fuenteDelPredicado: textoRecortadoALaVista.toString(),
+    });
     const captura = join(OUT, `${pantalla.nombre}-${vista.nombre}-pie.png`);
     await page.screenshot({ path: captura });
 

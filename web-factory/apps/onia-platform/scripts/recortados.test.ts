@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { TOPE_RECORTADOS, fallasDeRecortados } from "./recortados.mjs";
+import { TOPE_RECORTADOS, fallasDeRecortados, textoRecortadoALaVista } from "./recortados.mjs";
 
 /**
  * El sujeto de una falla por texto recortado es el TEXTO, no la vista.
@@ -126,5 +126,119 @@ describe("una falla por texto recortado, no una por vista", () => {
   it("no declara sobrantes cuando el barrido los nombró a todos", () => {
     const fallas = fallasDeRecortados("home @ tablet-768", PRODUCCION_768, 5);
     expect(fallas.every((f: { clase: string }) => !f.clase.includes("sin nombrar"))).toBe(true);
+  });
+});
+
+/**
+ * Qué cuenta como "texto recortado" — la decisión que antes vivía suelta
+ * dentro de la sonda del navegador, donde ningún test la podía mirar.
+ *
+ * Las cajas de acá no están inventadas: son la medición del 2026-09-17 contra
+ * https://onia.com.bo, viewport 320, leyendo `clientWidth`/`scrollWidth` y el
+ * `getComputedStyle` de cada elemento que el detector viejo acusaba.
+ */
+describe("qué cuenta como texto recortado a la vista", () => {
+  /** Los tres sr-only reales, con sus tres hashes de CSS module distintos. */
+  const SR_ONLY_DE_PRODUCCION = [
+    {
+      donde: "/v1 · span.landing_srOnly — «Agentes que trabajan solos: no lo tiene»",
+      caja: { clientWidth: 1, clientHeight: 1, scrollWidth: 290, overflow: "hidden" },
+    },
+    {
+      donde: "/v1/chatbot · span.configurador_srOnly — «WhatsApp, No pierdo al que escribe…»",
+      caja: { clientWidth: 1, clientHeight: 1, scrollWidth: 616, overflow: "hidden" },
+    },
+    {
+      donde: "/v1/empezar · legend.wizard_srOnly — «¿De qué es tu negocio?»",
+      caja: { clientWidth: 1, clientHeight: 1, scrollWidth: 173, overflow: "hidden" },
+    },
+  ];
+
+  it.each(SR_ONLY_DE_PRODUCCION)(
+    "no acusa el texto que sólo lee un lector de pantalla: $donde",
+    ({ caja }) => {
+      expect(textoRecortadoALaVista(caja)).toBe(false);
+    },
+  );
+
+  /**
+   * El caso ancla del sujeto que el gate existe para cazar: «Contabilidad»,
+   * los 8px que se pintan fuera de su pastilla en la home a 320px.
+   */
+  it("acusa el texto que una caja de tamaño real sí corta", () => {
+    expect(
+      textoRecortadoALaVista({
+        clientWidth: 96,
+        clientHeight: 20,
+        scrollWidth: 104,
+        overflow: "hidden",
+      }),
+    ).toBe(true);
+  });
+
+  it("no acusa una caja que muestra su texto entero", () => {
+    expect(
+      textoRecortadoALaVista({
+        clientWidth: 240,
+        clientHeight: 20,
+        scrollWidth: 240,
+        overflow: "hidden",
+      }),
+    ).toBe(false);
+  });
+
+  it("no acusa lo que se desborda con overflow visible: eso se lee igual", () => {
+    expect(
+      textoRecortadoALaVista({
+        clientWidth: 96,
+        clientHeight: 20,
+        scrollWidth: 300,
+        overflow: "visible",
+      }),
+    ).toBe(false);
+  });
+
+  it("deja pasar el subpixel: 2px de diferencia no son un defecto", () => {
+    expect(
+      textoRecortadoALaVista({
+        clientWidth: 200,
+        clientHeight: 20,
+        scrollWidth: 202,
+        overflow: "hidden",
+      }),
+    ).toBe(false);
+  });
+
+  /**
+   * La franja de 1px de ALTO es la mitad hermana del sr-only: ancho real,
+   * alto colapsado. Tampoco la lee nadie.
+   */
+  it("no acusa una franja de 1px de alto", () => {
+    expect(
+      textoRecortadoALaVista({
+        clientWidth: 300,
+        clientHeight: 1,
+        scrollWidth: 480,
+        overflow: "hidden",
+      }),
+    ).toBe(false);
+  });
+
+  /**
+   * La sonda corre dentro del navegador y no puede importar: el predicado le
+   * llega como fuente. Si deja de poder reconstruirse —una arrow asignada a
+   * una const, un helper de módulo adentro— el detector se cae en producción y
+   * no acá. Esto es esa juntura, probada del mismo modo que `mirar-venta.mjs`
+   * la usa.
+   */
+  it("se puede reconstruir desde su fuente, que es como viaja al navegador", () => {
+    const reconstruido = new Function(`return (${textoRecortadoALaVista.toString()})`)();
+
+    expect(reconstruido({ clientWidth: 1, clientHeight: 1, scrollWidth: 290, overflow: "hidden" })).toBe(
+      false,
+    );
+    expect(reconstruido({ clientWidth: 96, clientHeight: 20, scrollWidth: 104, overflow: "hidden" })).toBe(
+      true,
+    );
   });
 });
