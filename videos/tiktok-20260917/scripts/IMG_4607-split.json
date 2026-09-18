@@ -1,28 +1,46 @@
 {
  "supports": [
   {
-   "asset": "C:/Users/PC/AppData/Local/Temp/claude/C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb/1b27764e-a5b2-4fe6-997b-aecc00d784a6/scratchpad/tiktok/caps/repo-home-crop.png",
+   "asset": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb\\1b27764e-a5b2-4fe6-997b-aecc00d784a6\\scratchpad\\tiktok/caps/repo-home-c125.png",
    "start": 0,
    "end": 14.33,
    "fit": "cover"
   },
   {
-   "asset": "C:/Users/PC/AppData/Local/Temp/claude/C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb/1b27764e-a5b2-4fe6-997b-aecc00d784a6/scratchpad/tiktok/caps/repo-listado-crop.png",
-   "start": 14.46,
-   "end": 25.61,
+   "asset": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb\\1b27764e-a5b2-4fe6-997b-aecc00d784a6\\scratchpad\\tiktok/mk-pdf.png",
+   "start": 14.36,
+   "end": 17.06,
+   "fit": "contain"
+  },
+  {
+   "asset": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb\\1b27764e-a5b2-4fe6-997b-aecc00d784a6\\scratchpad\\tiktok/mk-docx.png",
+   "start": 17.06,
+   "end": 20.05,
+   "fit": "contain"
+  },
+  {
+   "asset": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb\\1b27764e-a5b2-4fe6-997b-aecc00d784a6\\scratchpad\\tiktok/mk-frontend.png",
+   "start": 20.05,
+   "end": 22.35,
+   "fit": "contain"
+  },
+  {
+   "asset": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb\\1b27764e-a5b2-4fe6-997b-aecc00d784a6\\scratchpad\\tiktok/caps/repo-listado-c125.png",
+   "start": 22.45,
+   "end": 25.71,
    "fit": "cover"
   },
   {
-   "asset": "C:/Users/PC/AppData/Local/Temp/claude/C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb/1b27764e-a5b2-4fe6-997b-aecc00d784a6/scratchpad/tiktok/caps/repo-skillmd-crop.png",
+   "asset": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb\\1b27764e-a5b2-4fe6-997b-aecc00d784a6\\scratchpad\\tiktok/caps/repo-skillmd-c125.png",
    "start": 25.81,
-   "end": 41.4,
+   "end": 41.6,
    "fit": "cover"
   },
   {
-   "asset": "C:/Users/PC/AppData/Local/Temp/claude/C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb/1b27764e-a5b2-4fe6-997b-aecc00d784a6/scratchpad/tiktok/caps/repo-home-crop.png",
-   "start": 41.6,
+   "asset": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb\\1b27764e-a5b2-4fe6-997b-aecc00d784a6\\scratchpad\\tiktok/mk-term.png",
+   "start": 41.61,
    "end": 50.17,
-   "fit": "cover"
+   "fit": "contain"
   }
  ]
 }
