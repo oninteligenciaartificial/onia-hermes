@@ -92,6 +92,11 @@ HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
 - **SIN música de cama: la pone Sergio.** Entregar con voz + SFX solamente.
 - **El karaoke es el rail; lo IMPORTANTE se resalta ADEMÁS** con keyword grande en pantalla
   (blanca 900 + subrayado naranja) cuando se dice — no basta transcribir.
+- **Mención hablada de una marca → su logo ORIGINAL en pantalla** (Sergio, 18-sep: "cuando
+  digo 'esto es Claude Code', colocá logos de Claude Code"). Nunca recrear el logo: bajarlo
+  de fuente oficial (Claude Code = criaturita pixel + wordmark; lockup listo en
+  `videos/tiktok-20260917/assets/card-cc-wordmark.png`, SVG oficial al lado). La primera
+  versión recreada en pixel-art fue rechazada con "poné la original".
 
 ## Pipeline
 1. **Setup + NORMALIZAR el crudo** (pieza propia, PROBADA). `videos/<name>/` con `raw/ scripts/ renders/ final/`.
