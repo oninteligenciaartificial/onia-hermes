@@ -668,6 +668,29 @@ export function plan(id: PlanId): Plan {
   return encontrado;
 }
 
+/**
+ * El escalón inmediatamente ANTERIOR a un plan. `null` si es el primero.
+ *
+ * La jerarquía se deriva del PRECIO, no del orden del array ni del campo `paso`: un plan
+ * nuevo entra por lo que cuesta, y un array reordenado no puede cambiar quién está abajo
+ * de quién. Es la misma cura que `onia-platform/lib/subscription/escalon-de-plan.ts`.
+ *
+ * Existe desde el 2026-09-17: el downsell del wizard `/empezar` tenía el escalón de abajo
+ * TIPEADO en `basico` desde que había tres planes, y la escalera C (2026-09-12) metió el
+ * Crece en el medio. El lead al que le quedaba grande el Profesional (Bs 890) leía «hay un
+ * plan de entrada de Bs 320 … los agentes de IA no vienen ahí» y nunca se enteraba del
+ * escalón de Bs 550 que SÍ los trae. Ningún cruce de precios lo vio nunca: los dos montos
+ * salen de esta misma tabla, así que son legítimos — lo tipeado era el sujeto.
+ */
+export function escalonAnterior(id: PlanId): Plan | null {
+  const porPrecio = [...PLANES].sort((a, b) => a.mensual - b.mensual);
+  const i = porPrecio.findIndex((p) => p.id === id);
+  if (i === -1) {
+    throw new Error(`No existe el plan "${id}" en PLANES (lib/pricing.ts).`);
+  }
+  return i === 0 ? null : porPrecio[i - 1];
+}
+
 /* ---------- lo que se suma sobre la suscripcion ----------
  *
  * ⚠️ VUELVE "Web del negocio" (2026-08-22). El 2026-08-21 la habia sacado de
