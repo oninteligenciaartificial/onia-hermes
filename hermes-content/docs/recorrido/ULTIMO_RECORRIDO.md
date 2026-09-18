@@ -12,6 +12,27 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-18 20:09-20:26 La Paz — deploy nuevo (BUILD_ID `2BTQrq-Q9Ts3o-YxQykbg`, antes `NpGVRgOBKvg2C3R5Upr9B`): dental 9/9 de nuevo
+
+Al arrancar: alta `abierta`, 0 orgs `zz-qa-` huérfanas, 0 citas `zz-qa-` huérfanas. Corrí
+`--escribir` en dental (default): **9/9, `completo: true`**. Cuenta
+`zz-qa-2026-09-18-2009@onia.com.bo` creada → correo confirmado → onboarding (6 pantallas) →
+paciente `zz-qa-2026-09-18-2009-paciente` cargado y visto en `/patients` → cita 2026-09-21 09:00
+agendada (201, `cmu7eb4xb000k01rwxt43b9cp`) y vista en `/appointments` → factura con ítem visible
+en `/billing/cmu7ebht2000m01rwy8llaebg` (frenada sin pagar) → panel revisado (no lista pacientes,
+esperado). 0 filas `zz-qa-` al cerrar (verificado por `SELECT`).
+
+`completo: true`, `llegoHasta: 9/9`.
+
+RAZÓN: BUILD_ID cambió desde la vuelta anterior (deploy nuevo) — corresponde re-medir el camino
+completo antes de saltar a otro escalón.
+LECCIÓN: ninguna nueva. El escalón 3 (invitar/quitar coadministrador desde `/settings`, DG-043)
+sigue pendiente de instrumentar — sigue sin entrar por el costo de armar un probe de UI nuevo con
+limpieza propia. Si la próxima vuelta encuentra el mismo BUILD_ID (sin deploy nuevo), ese es el
+candidato a construir en vez de repetir dental una tercera vez seguida.
+
+---
+
 ## 2026-09-18 19:09-19:12 La Paz — deploy nuevo (BUILD_ID `NpGVRgOBKvg2C3R5Upr9B`, antes `4AefpemDeSbQXrDmTbhoy`): dental 9/9 de nuevo
 
 Al arrancar: 0 orgs `zz-qa-` huérfanas (limpio). Alta `abierta`. Corrí `--escribir` en dental
