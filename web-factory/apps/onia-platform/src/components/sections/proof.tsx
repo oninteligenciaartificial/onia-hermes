@@ -123,8 +123,8 @@ export function Proof() {
                 precios y capacidades publicados por cada proveedor
               </strong>
               , con nombre y fecha de consulta. Y si querés probar el nuestro
-              en vez de leerlo, son {PRUEBA.dias} días con el sistema completo, sin
-              tarjeta y sin permanencia.
+              en vez de leerlo, son {PRUEBA.dias} días con el plan{" "}
+              {PRUEBA.planQueCorre} completo, sin tarjeta y sin permanencia.
             </p>
           </Reveal>
         </div>

@@ -34,7 +34,7 @@ export const FAQ = [
     // El paso del medio NO se tipea: sale de `alta.ts`, que sigue a lo que el
     // producto exige. Faltaba, y es el último clic del embudo: sin confirmar, el
     // login contesta 403 y el lead no tiene cómo saber qué le faltó.
-    a: `No. La prueba de ${PRUEBA.dias} días no pide tarjeta ni pago: ${ALTA_VERBO_VOS}, ${PASO_CONFIRMAR_CORREO} ${DE_DONDE_LLEGA_EL_ENLACE}, elegís tu rubro y usás el sistema completo esos ${PRUEBA.dias} días.`,
+    a: `No. La prueba de ${PRUEBA.dias} días no pide tarjeta ni pago: ${ALTA_VERBO_VOS}, ${PASO_CONFIRMAR_CORREO} ${DE_DONDE_LLEGA_EL_ENLACE}, elegís tu rubro y usás el plan ${PRUEBA.planQueCorre} completo esos ${PRUEBA.dias} días.`,
   },
   {
     // lib/pricing.ts:283 (CONDICIONES) + (sitio)/empezar/page.tsx (paso 02).
