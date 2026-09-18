@@ -150,6 +150,48 @@ camino se rompa, y lo que un cliente ve nunca contradice lo que el producto hace
       porque saldría ROJO por `paso-equipo.tsx` y ese gate está en la cadena: trabaría el merge de
       **todos** los carriles hasta que (1) esté arreglado. Los dos van juntos, en la misma vuelta.
 
+- [x] ✅ **CERRADO el 2026-09-18 — el CI de `master` está VERDE, medido en GitHub; el token que
+      la vuelta del 17-sep dio por inexistente SÍ existe. Y el vigía que avisaba no decía CUÁNDO
+      fue el fallo: arreglado** (`scripts/loops/vigia-ci.sh` + 3 casos nuevos en su prueba).
+
+      **El desbloqueo es el token.** El ítem de abajo (17-sep) cerró con *«juzgarlas del todo pide
+      abrir el run en GitHub y el `GITHUB_TOKEN` de `/root/.hermes/.env` está comentado»*. Es
+      cierto de ESE archivo y falso del sistema: el vigía de CI tiene el suyo, fine-grained con
+      **Actions: Read-only**, en **`/root/.config/onia/github-token` del VPS** (existe desde el
+      6-sep, `chmod 600`). Con él la pregunta se contesta en un comando:
+
+          T=$(cat /root/.config/onia/github-token)
+          curl -s -H "Authorization: Bearer $T" \
+            "https://api.github.com/repos/oninteligenciaartificial/onia-platform/actions/runs?branch=master&per_page=30"
+
+      **Veredicto medido (2026-09-18 10:46 UTC):** `Security | completed | success | 8bf65db` y
+      `CI | completed | success | 8bf65db` — el HEAD de `master`. Los 14 runs más recientes son
+      **todos `success`**; los únicos `failure` de Security son del 17-sep 20:11/20:12
+      (`2465969`, `736a1f3`), ya superados. **`master` no está roto.**
+
+      **La tarea `t_8e76db40` citaba un run del 5 de septiembre** (`545dd28`, run
+      `33992799604`), curado el **6-sep** por `.gitleaks.toml` (`0c54d656`). Reproducido en un
+      clon **completo** (el del VPS es parcial y no sirve para esto): sobre el árbol de
+      `545dd288` el paso 1 da `leaks found: 2` y exit 1 — dos ejemplos de `curl` de la pantalla de
+      API keys de `onia-platform` (`ApiKeysClient.tsx`, líneas 279 y 284), falsos positivos de la regla
+      `curl-auth-header`; sobre el árbol de hoy da `no leaks found`, exit 0.
+
+      🔴 **El arreglo, porque la clase se repite: el aviso no llevaba la fecha del run.** Un rojo
+      de hace trece días y uno de hace cinco minutos se leían idénticos, y los dos decían
+      *«mientras siga así, `master` está roto y el deploy va a fallar»*. Eso ya costó una vuelta
+      entera (la del 17-sep, que corrió los cinco gates a mano y aun así no pudo juzgarlo). Ahora
+      el aviso agrega `Corrida del <fecha> (hace N d)`, y sólo cuando aporta — un rojo de hoy no
+      dice «hace 0 días». Validado **por mutación**: quitándole `created_at` al parser, la prueba
+      sale exit 1 con exactamente esas 2 fallas.
+
+      ⚠️ **Dos trampas medidas, por si otro carril repite el camino.** (1) Reproducir el escaneo
+      en el clon del VPS da falsos: es parcial (`blob:none`), así que gitleaks no alcanza los
+      blobs y escribe `ERR ... ssh: Could not resolve hostname gh-platform` en rangos largos.
+      (2) `0 commits scanned` **no** es siempre el falso verde que `rango-gitleaks.sh` cierra:
+      `545dd288` cambia **sólo un binario** (`app/favicon.ico`), y un diff sin texto no tiene
+      nada que escanear. Se descarta mirando los padres (`git rev-list --parents -n 1`) y el
+      `--stat`, no asumiendo.
+
 - [x] ✅ **CERRADO el 2026-09-17 — el tablero decía que `master` de `onia-platform` estaba roto
       y NO lo está: los cinco gates del CI, corridos a mano sobre el commit que el pedido de
       deploy pide publicar, están en verde** (medición, sin cambio de código).
