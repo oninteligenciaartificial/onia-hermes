@@ -39,9 +39,10 @@ run() {
   return $RC
 }
 
-corridas() {  # corridas <conclusion> [status]
-  printf '{"workflow_runs":[{"name":"CI","status":"%s","conclusion":%s,"head_sha":"0c54d65abc","html_url":"https://x/1"}]}' \
-    "${2:-completed}" "$([ "$1" = "null" ] && echo null || printf '"%s"' "$1")"
+corridas() {  # corridas <conclusion> [status] [created_at]
+  printf '{"workflow_runs":[{"name":"CI","status":"%s","conclusion":%s,"head_sha":"0c54d65abc","html_url":"https://x/1","created_at":"%s"}]}' \
+    "${2:-completed}" "$([ "$1" = "null" ] && echo null || printf '"%s"' "$1")" \
+    "${3:-$(date -u +%Y-%m-%dT%H:%M:%SZ)}"
 }
 
 echo "vigia-ci — maquina de estados"
@@ -90,6 +91,42 @@ case "$MSGS" in *"Vigia de CI sin token"*) ok "sin token: avisa que le falta" ;;
 TMP_MENSAJES="$TMP/mensajes.txt" ONIA_TG="$TMP/tg.sh" ONIA_CI_MARCA_DIR="$TMP" \
   ONIA_CI_TOKEN_FILE="$TMP/no-existe" bash "$SUT"
 [ -z "$(cat "$TMP/mensajes.txt")" ] && ok "sin token: no vuelve a insistir" || falla "sin token repite" "(nada)" "$(cat "$TMP/mensajes.txt")"
+
+# 9. EL AVISO DICE CUANDO FUE EL FALLO.
+#
+# Nace del 2026-09-18: la tarea `t_8e76db40` decia «CI en ROJO ... failure en
+# 545dd28 / Mientras siga asi, master esta roto y el deploy va a fallar», y ese
+# run era del **5 de septiembre**, ya curado el 6 por `.gitleaks.toml`. El CI de
+# master estaba VERDE (medido por la API: `Security success` en `8bf65db`).
+# Sin la fecha adentro, el que lee no puede distinguir un rojo de hace cinco
+# minutos de uno de hace trece dias — y el 17-sep un carril gasto una vuelta
+# ENTERA corriendo los cinco gates a mano para terminar escribiendo que igual no
+# podia juzgarlo. Un aviso sin fecha convierte cada lectura en una investigacion.
+rm -f "$TMP"/onia-ci-*.rojo
+VIEJA=$(date -u -d "-13 days" +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u -v-13d +%Y-%m-%dT%H:%M:%SZ)
+fixture "$(corridas failure completed "$VIEJA")"; run
+case "$MSGS" in
+  *"${VIEJA%%T*}"*) ok "el aviso rojo nombra la FECHA del run" ;;
+  *) falla "fecha en el aviso" "la fecha del run ($VIEJA)" "$MSGS" ;;
+esac
+
+# 10. Y si el fallo es VIEJO, lo dice con todas las letras.
+# «hace 13 dias» es lo que separa «andá a arreglarlo ahora» de «esto ya se curó
+# y nadie cerró el aviso». La antiguedad es el dato, no el adorno.
+case "$MSGS" in
+  *"hace 13 d"*) ok "un fallo viejo se anuncia como viejo" ;;
+  *) falla "antiguedad del fallo" "hace 13 d..." "$MSGS" ;;
+esac
+
+# 11. Un rojo RECIEN salido no se disfraza de viejo.
+# Sin este caso, poner la palabra "hace" siempre pasaria el 10 y el aviso diria
+# "hace 0 dias" en el unico momento en que la antiguedad no aporta nada.
+rm -f "$TMP"/onia-ci-*.rojo
+fixture "$(corridas failure)"; run
+case "$MSGS" in
+  *"hace "*" d"*) falla "rojo reciente" "sin antiguedad" "$MSGS" ;;
+  *) ok "rojo de hoy: no agrega antiguedad" ;;
+esac
 
 echo
 if [ "$FALLOS" = "0" ]; then echo "vigia-ci: TODO VERDE"; exit 0; fi

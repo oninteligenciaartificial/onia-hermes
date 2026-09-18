@@ -71,7 +71,7 @@ Mientras tanto este vigia sale 0 y no vuelve a insistir."
 fi
 
 # ── Traer el estado de cada objetivo ────────────────────────────────────────
-# Salida normalizada, una linea por workflow:  <workflow>\t<conclusion>\t<sha>\t<url>
+# Salida normalizada, una linea por workflow:  <workflow>\t<conclusion>\t<sha>\t<url>\t<created_at>
 estado_de() {  # estado_de <owner/repo> <rama>
   local repo="$1" rama="$2" json
   if [ -n "$FIXTURE" ]; then
@@ -102,7 +102,7 @@ let e = ""; process.stdin.on("data", c => e += c); process.stdin.on("end", () =>
     const c = r.conclusion;
     if (!c || ["cancelled", "skipped", "neutral"].includes(c)) continue;  // no son veredictos sobre el codigo
     visto.add(n);
-    console.log([n, c, (r.head_sha || "").slice(0, 7), r.html_url || ""].join("\t"));
+    console.log([n, c, (r.head_sha || "").slice(0, 7), r.html_url || "", r.created_at || ""].join("\t"));
   }
 });
 ' 2>/dev/null
@@ -115,7 +115,7 @@ for objetivo in $OBJETIVOS; do
   SALIDA=$(estado_de "$REPO" "$RAMA")
   [ -z "$SALIDA" ] && continue
 
-  while IFS=$'\t' read -r WF CONCL SHA URL; do
+  while IFS=$'\t' read -r WF CONCL SHA URL CREADO; do
     [ -n "${WF:-}" ] || continue
 
     # La API contesto un error (token vencido, permiso quitado, repo movido). Es
@@ -148,8 +148,32 @@ Verde en <code>$SHA</code>."
     # failure / timed_out / startup_failure / action_required
     [ -f "$MARCA" ] && continue      # ya avisamos de este episodio
 
+    # CUANDO fue el fallo va ADENTRO del aviso.
+    #
+    # Medido el 2026-09-18: la tarea `t_8e76db40` decia «failure en 545dd28 /
+    # mientras siga asi master esta roto y el deploy va a fallar» y ese run era
+    # del 5 de septiembre, ya curado el 6 con `.gitleaks.toml`; el CI de master
+    # estaba VERDE. Sin la fecha, un rojo de hace trece dias y uno de hace cinco
+    # minutos se leen igual — y el 17-sep un carril gasto una vuelta entera
+    # corriendo los cinco gates a mano para terminar escribiendo que aun asi no
+    # podia juzgarlo. La antiguedad es lo que separa «anda a arreglarlo» de
+    # «esto ya se curo y nadie cerro el aviso».
+    #
+    # Se agrega solo cuando aporta: en un rojo de hoy «hace 0 dias» es ruido, y
+    # el caso 11 de la prueba existe para que nadie lo ponga siempre.
+    CUANDO=""
+    if [ -n "${CREADO:-}" ]; then
+      CUANDO="
+Corrida del <code>${CREADO%%T*}</code>"
+      if T_RUN=$(date -u -d "$CREADO" +%s 2>/dev/null); then
+        DIAS=$(( ( $(date -u +%s) - T_RUN ) / 86400 ))
+        [ "$DIAS" -ge 1 ] && CUANDO="$CUANDO (hace $DIAS d)"
+      fi
+      CUANDO="$CUANDO."
+    fi
+
     avisar "🔴 <b>CI en ROJO</b> — <code>$REPO</code> · <b>$WF</b>
-Resultado: <code>$CONCL</code> en <code>$SHA</code> (rama <code>$RAMA</code>).
+Resultado: <code>$CONCL</code> en <code>$SHA</code> (rama <code>$RAMA</code>).$CUANDO
 
 Mientras siga asi, <code>$RAMA</code> esta roto y el deploy va a fallar.
 $URL"
