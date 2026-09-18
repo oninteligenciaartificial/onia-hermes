@@ -77,6 +77,45 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [ ] 🟠 **El runtime vivo de la landing perdió su `.commit`, así que «qué corre `onia.com.bo`»
+      volvió a ser a mano — que es exactamente lo que su propio publicador dice haber curado el
+      2026-09-03. Medido el 2026-09-18 18:3x La Paz por `onia-cola`.**
+      **Qué se midió, y contra qué:** `ls -la /opt/onia-landing/runtime-next/` devuelve sólo
+      `apps`, `node_modules` y `package.json` — **sin `.commit`** —, mientras
+      `find /opt/onia-landing -maxdepth 3 -name .commit` lo encuentra en los respaldos
+      (`/opt/onia-landing/runtime-next.bak-deploy-20260917210756`) y en los builds armados
+      (`/opt/onia-landing/_deploy/build-20260918005015`). El runtime que corre HOY es el único sin él.
+      `hermes-content/deploy/onia-landing/build-and-stage.sh:77-80` lo dice con todas las letras:
+      *«El .commit va en el STAGE (lo que se publica), no solo en $BUILD, que se borra al final:
+      medido 2026-09-03, el runtime vivo quedaba "sin .commit" y saber que corre volvia a ser a
+      mano.»* La cura está escrita y volvió a pasar.
+      **No es que la fuente se haya desviado, y eso descarta la sospecha barata:** los tres
+      publicadores de `/opt/onia-landing/_deploy/` coinciden **byte a byte** con
+      `hermes-content/deploy/onia-landing/` (mismo `md5sum` en los tres), y
+      `grep -c "STAGE/.commit" /opt/onia-landing/_deploy/build-and-stage.sh` da `1`. El swap
+      tampoco filtra: `swap-and-verify.sh:19-20` mueve el **directorio entero**
+      (`mv "$STAGE" "$ROOT/runtime-next"`), así que un stage con `.commit` lo conserva. Queda que
+      el stage que entró a las **20:08 UTC** ya venía sin él — o que ese `mv` fue el rollback de
+      `swap-and-verify.sh:36-37`, que restaura un runtime anterior.
+      **Qué NO cuesta, para no inflarlo:** `shaVivoLanding()`
+      (`scripts/pedido_deploy_entregado.mjs:899`) devuelve `null` y eso es **correcto** — su
+      propio comentario aclara que sólo sirve para CITAR, y que el veredicto lo da
+      `epochBuildLanding` por FECHA. Así que ningún pedido se decide mal por esto: lo que se
+      pierde es la cita, que es la diferencia entre refutar un veredicto en dos segundos y
+      volver a medirlo a mano.
+      **Reproducción en 30 segundos:**
+
+          ssh root@187.77.16.63 'ls -la /opt/onia-landing/runtime-next/; find /opt/onia-landing -maxdepth 3 -name .commit | head'
+
+      **Cómo se cierra, y por qué no entró en la vuelta que lo encontró:** se cura solo en la
+      próxima publicación (el stage siguiente trae su `.commit`), así que arreglarlo a mano en
+      producción sería escribir un sha que nadie derivó — el anti-patrón de esta familia. Lo que
+      falta es el **gate que lo note**: hoy la ausencia es muda porque `shaVivoLanding` degrada a
+      `null` sin decir que el archivo no está. La forma es tri-estado —«no pude preguntar» vs
+      «pregunté y el runtime no lo tiene»—, que es la distinción que `detectar()` de
+      `scripts/deploy_sin_pedido.mjs` ya sabe hacer. La vuelta que lo midió llevaba dos carriles
+      integrados y ~10 min: un gate a medias, sin validar por mutación, es peor que ninguno.
+
 - [x] 🟠 **El ÚNICO camino para entregar `onia-platform` desde nodo-casa vivía FUERA de git, en
       un archivo suelto de `/root/tmp` del VPS. Medido y CERRADO el 2026-09-18 17:5x La Paz por
       `onia-cola` (`2516f393`).**
