@@ -1,110 +1,64 @@
-# Auto Design Recipe - Clínica Amanecer
+# DESIGN.md — Clínica Amanecer
 
-Generated: 2026-09-17T22:17:53.736Z
+> Sistema de diseño de Clínica Amanecer (clinica-amanecer). Lo lee cualquier agente antes de
+> generar una pantalla, un banner o un post: todo lo de abajo sale del perfil del cliente
+> (`data/clients/clinica-amanecer.json`); si el perfil cambia, este archivo se regenera.
 
-## Decision
+## Marca
 
-- Slug: `clinica-amanecer`
-- Template: `landing-clinic`
-- Rubro inferido: Clinic / health (clinic-health)
-- Confianza vertical: 0.29
-- Objetivo: Generar confianza suficiente para agendar consulta sin exagerar promesas.
-- Direccion visual: Jerarquia sobria, pruebas reales, servicios entendibles, equipo/instalaciones y agenda visible.
-- Tesis de conversion: La salud requiere confianza y claridad; el CTA funciona cuando el usuario entiende especialidad, ubicacion y proceso.
-- Riesgo generico a evitar: Parecer plantilla medica stock sin equipo, ubicacion ni limites profesionales.
+- Nombre: **Clínica Amanecer** · logotipo de texto: `CA`
+- Promesa (tagline): Tu sonrisa, atendida con calma y sin esperas
+- Descripción: Tu sonrisa, atendida con calma y sin esperas. Clínica dental en Santa Cruz.
+- Contacto principal: +591 70000000 · Santa Cruz, Bolivia
 
-## Dials
+## Colores
 
-- Conversion: medium
-- Densidad visual: medium
-- Motion: low
-- Tono de confianza: profesional, preciso y seguro
-
-## Referencias Seleccionadas
-
-| Rol | Fuente | Titulo | URL | Licencia | Por que | Screenshots |
-|---|---|---|---|---|---|---|
-| structure | SaaSFrame Landing Pages | Slite UX/UI Design and Copywrinting Examples - SaaSFrame | https://www.saasframe.io/saas/slite | inspiration-only | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; aporta links o bloques de codigo para estudiar; fuente fuerte para patrones web | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/285-landing-page-4197935a/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/285-landing-page-4197935a/mobile.png |
-| structure | Landingfolio | HeadshotPro Landing Page Inspiration and More \| Landingfolio | https://www.landingfolio.com/inspiration/post/headshotpro-1 | inspiration-only | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; aporta links o bloques de codigo para estudiar; fuente fuerte para patrones web | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/landingfolio/091-headshotpro-a3943c9a/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/landingfolio/091-headshotpro-a3943c9a/mobile.png |
-| structure | Recent Design | App Store Screenshot Inspiration — Recent | https://recent.design/app-store-screenshots | inspiration-only | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; fuente fuerte para patrones web | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/004-app-screenshots-6eff42f4/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/004-app-screenshots-6eff42f4/mobile.png |
-| structure | Awwwards Winning Websites | Wolverine Worldwide - Awwwards SOTD | https://www.awwwards.com/sites/wolverine-worldwide | inspiration-only-high-overdesign-risk | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; fuente fuerte para patrones web; requiere simplificar para ONIA | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/awwwards-winning-websites/476-locomotive-040978f6/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/awwwards-winning-websites/476-locomotive-040978f6/mobile.png |
-| structure | Dribbble Axion Shot | Axion - Futuristic Electric Car Landing Page Website by Rylic Studio on Dribbble | https://dribbble.com/shots/27129126-Axion-Futuristic-Electric-Car-Landing-Page-Website | screenshot-and-mood-only | tiene screenshot desktop; tiene screenshot mobile; aporta CTAs reales | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/dribbble-axion/dribbble-axion-shot/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/dribbble-axion/dribbble-axion-shot/mobile.png |
-| structure | Tabler | Tabler Icons: 6100+ free vector icons for web design | https://tabler.io/icons | mit-open-source | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; aporta links o bloques de codigo para estudiar; tiene pista de codigo reusable con review | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/tabler-admin-dashboard/234-tabler-icons-c0300d9f/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/tabler-admin-dashboard/234-tabler-icons-c0300d9f/mobile.png |
-| typography | Magic UI | Kinetic Text \| React Components & Templates | https://magicui.design/docs/components/kinetic-text | mit-open-source-reference | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; aporta links o bloques de codigo para estudiar; fuente fuerte para patrones web; tiene pista de codigo reusable con review | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/007-introducing-kinetic-text-fbd94463/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/007-introducing-kinetic-text-fbd94463/mobile.png |
-| component | shadcn/ui | Building Blocks for the Web - shadcn/ui | https://ui.shadcn.com/blocks/sidebar | mit-repo-available | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; aporta links o bloques de codigo para estudiar; fuente fuerte para patrones web; tiene pista de codigo reusable con review | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/034-browse-more-blocks-11813c15/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/034-browse-more-blocks-11813c15/mobile.png |
-
-## Codigo Referencial Permitido
-
-| Repo | Archivo | Licencia | Senales | Por que |
-|---|---|---|---|---|
-| nolly-studio__cult-ui | apps/www/components/block-copy-button.tsx | MIT | react-component, tailwind, shadcn | licencia MIT; compatible con Tailwind/tokenizacion; patron shadcn revisable; match de componente: button |
-| shadcn-ui__ui | apps/v4/registry/bases/base/blocks/dashboard-01/components/section-cards.tsx | MIT | react-component, tailwind, shadcn | licencia MIT; compatible con Tailwind/tokenizacion; patron shadcn revisable; match de componente: card |
-| tremorlabs__tremor | src/components/Accordion/accordion.stories.tsx | MIT | react-component, tailwind, shadcn | licencia MIT; compatible con Tailwind/tokenizacion; patron shadcn revisable; match de componente: accordion |
-| tremorlabs__tremor | src/components/Button/button.stories.tsx | MIT | react-component, tailwind, shadcn | licencia MIT; compatible con Tailwind/tokenizacion; patron shadcn revisable; match de componente: button |
-| tremorlabs__tremor | src/components/Button/Button.tsx | MIT | react-component, tailwind, shadcn | licencia MIT; compatible con Tailwind/tokenizacion; patron shadcn revisable; match de componente: button |
-| ibelick__motion-primitives | components/website/card-example-landing.tsx | MIT | react-component, tailwind | licencia MIT; compatible con Tailwind/tokenizacion; match de componente: card |
-| launch-ui__launch-ui | components/ui/accordion.tsx | MIT | react-component, tailwind | licencia MIT; compatible con Tailwind/tokenizacion; match de componente: accordion |
-| magicuidesign__magicui | apps/www/components/ui/accordion.tsx | MIT | react-component, tailwind | licencia MIT; compatible con Tailwind/tokenizacion; match de componente: accordion |
-| magicuidesign__magicui | apps/www/components/ui/calendar.tsx | MIT | react-component, tailwind, shadcn | licencia MIT; compatible con Tailwind/tokenizacion; patron shadcn revisable; match de componente: calendar |
-| serafimcloud__21st | apps/web/components/ui/accordion.tsx | MIT | react-component, tailwind | licencia MIT; compatible con Tailwind/tokenizacion; match de componente: accordion |
-
-Regla: usar estos archivos solo como referencia compatible despues de review, retokenizacion, accessibility check y responsive QA.
-
-## Plan De Secciones
-
-| Seccion | Objetivo | Patron | Datos necesarios |
+| Rol | Hex | Uso | Contraste |
 |---|---|---|---|
-| Hero de confianza | Explicar especialidad, ubicacion y agenda. | Copy directo, foto real/equipo, CTA agendar. | especialidad, ubicacion, foto, contacto |
-| Servicios | Organizar tratamientos sin sobreprometer resultados. | Lista con para quien es, duracion/rango si existe y CTA. | servicios, restricciones, precios si aplica |
-| Agenda y FAQ | Resolver dudas de primera visita. | Pasos de agenda, documentos, horarios, FAQ. | horarios, politicas, canal |
+| Fondo | `#EEF4FA` | fondo de página y secciones claras | — |
+| Tinta | `#102A43` | texto principal | 13.2:1 sobre fondo ✓ |
+| Primario | `#1769AA` | botones, enlaces, acentos de marca | 5.2:1 sobre fondo — sirve como texto sobre fondo |
+| Secundario | `#102A43` | superficies oscuras, pies, titulares sobre claro | 13.2:1 sobre fondo |
+| Acento | `#1769AA` | detalles, iconos, estados | 5.2:1 sobre fondo |
 
-## Tokens
+- Texto sobre primario: `#FFFFFF` (5.8:1).
+- Un solo primario por pantalla. El acento nunca compite con el botón principal.
 
-- Heading: Archivo
-- Body: Inter
-- Senales de fuentes: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif, Montserrat, sans-serif, "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", Inter, -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", sans-serif, "Inter Tight", Inter, "Inter Fallback", system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, Geist, sans-serif, "Geist Mono", monospace
-- Paleta: primary #1769AA, secondary #102A43, accent #1769AA, bg #EEF4FA, fg #102A43
+## Tipografía
 
-## Media
+- Titulares: **Archivo**, peso 700–800, interletrado −0,02em, líneas cortas (máx. 12 palabras).
+- Texto: **Inter**, 16–18px, interlineado 1,5. Nunca menos de 14px.
+- Escala: hero 48–64px · h2 32–40px · h3 22–24px · cuerpo 16–18px · etiqueta 12–13px en mayúsculas con +0,08em.
 
-### Requerida
-- Foto de equipo, consultorio o hero generado aprobado
+## Espacio y forma
 
-### Opcional
-- Iconografia simple por servicio
-- Testimonios con permiso
+- Ritmo de 8px. Secciones separadas por 64–96px en escritorio y 40–56px en móvil.
+- Radio: 6px en botones y campos, 12px en tarjetas. Sin esquinas mezcladas en una misma vista.
+- Sombras suaves y sólo en elementos que flotan (tarjeta destacada, botón fijo). Nada de sombras en todo.
 
-### Pedidos De Generacion
-- Pedir o generar asset hero para Clínica Amanecer: visual real del rubro, limpio, con espacio para copy y sin logos de terceros.
+## Componentes
 
-## Implementacion
-- Abrir screenshots desktop y mobile seleccionados antes de tocar layout.
-- Elegir una referencia para estructura, una para tipografia/densidad, una para motion o componentes.
-- Reconstruir patrones con tokens de ONIA; no pegar HTML/CSS cerrado de referencias inspiration-only.
-- Usar solo codigo de repos `allowed-after-review` y registrar archivo exacto usado.
-- Mapear cada seccion del plan a datos reales del cliente; eliminar secciones sin dato util.
-- Validar hero, servicios, prueba/confianza y CTA principal.
-- Aplicar direccion del rubro: Jerarquia sobria, pruebas reales, servicios entendibles, equipo/instalaciones y agenda visible.
+- **Botón principal**: fondo `#1769AA`, texto `#FFFFFF`, 44px de alto mínimo, radio 6px. Uno por vista.
+- **Botón secundario**: borde 1px `#102A43` al 20%, texto `#102A43`, fondo transparente.
+- **Tarjeta**: fondo blanco o `#EEF4FA`, borde 1px al 10%, radio 12px, título + una frase + acción.
+- **Chip / etiqueta**: fondo `#1769AA` al 12%, texto `#102A43`, mayúsculas 12px.
+- **Enlace de WhatsApp**: siempre con el mensaje prellenado y el número del cliente, nunca el del estudio.
 
-## Guardrails
-- No copiar identidad, copy, imagenes, videos, logos, claims ni estructura reconocible de terceros.
-- No usar tres cards iguales si no cambian la decision del cliente.
-- No usar gradientes genericos ni paletas de un solo tono como solucion visual principal.
-- Primer viewport debe tener una senal real del negocio: producto, lugar, equipo, dashboard, proyecto o resultado.
-- Todo video debe tener poster, carga diferida y respeto a `prefers-reduced-motion`.
-- Cada bloque debe justificar venta, confianza, entendimiento de alcance o siguiente paso.
-- No inventar metricas, clientes, testimonios ni resultados.
-- Riesgo especifico: Parecer plantilla medica stock sin equipo, ubicacion ni limites profesionales.
+## Movimiento
 
-## QA
-- Correr `pnpm test`.
-- Generar preview con `pnpm generate <slug> --template <landing|store>` o `pnpm factory:build`.
-- Revisar desktop y mobile con screenshot antes de enviar a cliente.
-- Confirmar que no hay imagenes rotas ni videos con carga inmediata pesada.
-- Confirmar contraste, foco visible, labels en forms y CTA accesible.
-- Confirmar que cada URL externa abre y que WhatsApp/email funcionan.
-- Probar nav, CTA primario y secciones de servicio/contacto.
+- Sólo `transform` y `opacity`. Entradas 0,6–0,9s con `cubic-bezier(0.16, 1, 0.3, 1)`.
+- Respetar `prefers-reduced-motion`. Nada que se mueva solo sin que el usuario haga algo.
 
-## Warnings
-- El cliente no tiene referencias exactas registradas.
-- Faltan assets visuales; pedirlos o generarlos antes de entrega profesional.
+## Voz y copy
+
+- Voseo boliviano, presente, segunda persona: «reservá», «escribinos», «pedí».
+- Titulares de 3 a 8 palabras. Sin raya (—) ni dos puntos dramáticos en titulares.
+- Un hecho por frase. Nada de «llevá tu negocio al siguiente nivel», «soluciones integrales», «experiencia única», «sin esfuerzo».
+- Sin tríadas forzadas ni «no es X, es Y». Sin adverbios de relleno («realmente», «simplemente»).
+- Precios y plazos sólo si el cliente los dio. Si falta un dato, se pide; no se rellena.
+- Sin autobombo del estudio: la web habla del negocio del cliente, nunca de quién la hizo.
+
+## Sí / No
+
+- Sí: fotos reales del negocio, una acción clara por pantalla, precios sólo si el cliente los dio.
+- No: stock de gente sonriendo a cámara, degradados y brillos sin función, tarjetas idénticas en grilla uniforme, texto sobre foto sin contraste, cualquier frase que suene a IA.

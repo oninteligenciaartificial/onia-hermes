@@ -106,6 +106,11 @@ elegida, CTA «Reservar un turno» → `wa.me/59170000000`), mirado a 1440. Test
 motor). Los pendientes que imprime (fotos, dominio, una frase por servicio) son el checklist
 que se le pide al cliente. Demo commiteada en `data/{intakes,clients}/clinica-amanecer.*`.
 
+**Del carrusel «Stop AI slop» (17-sep, IG `p/DdXM8-Nmxey`):** instaladas `humanizer` y `stop-slop`
+(MIT, globales); el motor ahora escribe `data/clients/<slug>.DESIGN.md` (formato Stitch/VoltAgent,
+contraste WCAG medido) en cada `factory:build`; `generate/slop.test.ts` = gate en español para el
+copy generado (hoy 0 hallazgos). Inventario completo en `web-factory/DESIGN_STACK.md`.
+
 **Qué falta para que sea un circuito, en orden de valor/costo:**
 1. 🔴 **Bot: intent `lead_web`** (carril chatbot, ~30 líneas + test + `deploy-bot.sh`): si el
    texto empieza con «vengo del configurador de webs» → confirmar recepción nombrando el

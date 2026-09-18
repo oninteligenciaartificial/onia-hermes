@@ -6,6 +6,7 @@ import { parseTemplate, WEB_FACTORY_TEMPLATES, type WebFactoryTemplate } from ".
 import { writeAutoDesignRecipe } from "../design/auto-designer";
 import { sanitizeCliArgv } from "./argv";
 import { createClientFromIntake } from "./create-client";
+import { writeDesignMd } from "./design-md";
 import { generateSite } from "./generate";
 
 export type FactoryBuildOptions = {
@@ -100,6 +101,12 @@ export async function runFactoryBuild(options: FactoryBuildOptions): Promise<Fac
 
   const generated = await generateSite(slug, { rootDir, template });
 
+  // DESIGN.md por cliente: el sistema (tokens, componentes, voz) que cualquier
+
+  // agente lee para repetir el estilo. Sale del perfil ya escrito.
+
+  const designMdPath = await writeDesignMd(rootDir, slug);
+
   return {
     slug,
     template,
@@ -108,7 +115,7 @@ export async function runFactoryBuild(options: FactoryBuildOptions): Promise<Fac
     designJsonPath: design.jsonPath,
     designMarkdownPath: design.markdownPath,
     outputDir: generated.outputDir,
-    files: generated.files,
+    files: [...generated.files, designMdPath],
     missingInputs,
     warnings: design.recipe.warnings,
   };
