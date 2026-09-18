@@ -13,9 +13,22 @@
 // instalar y operar un servicio nuevo en un VPS que ya se saturo una vez.
 // Esto resuelve el problema real —que los horarios caduquen— sin dependencias.
 //
-// Los dias y las horas NO se inventan: salen de `knowledge.json`
-// (`empresa.horario`), que es el mismo dato que el bot ya usa para decir cuando
-// atiende. Si Sergio cambia el horario ahi, esto lo sigue.
+// Los dias y las horas NO se inventan: salen de `ventanas-de-atencion.mjs`, la
+// MISMA fuente con la que el otro generador (`scripts/loops/renovar-slots-bot.py`)
+// calcula y con la que el bot arma la coletilla que promete cuando atiende.
+//
+// ⚠️ Hasta el 2026-09-18 salian de `knowledge.json` (`empresa.horario`) con el
+// motivo escrito al lado —"es el mismo dato que el bot ya usa"—, y era una
+// hipotesis CON FECHA que vencio dos veces:
+//   1. el 13-sep la disponibilidad se unifico en `ventanas-de-atencion.mjs` justo
+//      porque habia dos copias contradiciendose, y la cura no viajo hasta aca;
+//   2. medido el 2026-09-18 en el knowledge VIVO, `empresa.horario` es `null`, o
+//      sea que la lectura caia SIEMPRE al default `[1..5]` y el archivo que este
+//      decia seguir no tiene el dato. Fuente muerta con cara de viva.
+// El efecto: este generador no podia ofrecer un sabado (09:00-15:00) ni una
+// franja nocturna (20:00-22:00) NUNCA. Corridos los dos sobre el mismo instante
+// —viernes 18-sep 09:43 La Paz— el .py daba "sábado 19, 10:00" y este "lunes 21,
+// 14:00": dos dias de espera de diferencia escribiendo la MISMA variable.
 //
 // Uso:  node slots-rodantes.mjs [--escribir]
 // Sin `--escribir` solo dice que haria. Con el flag toca webhook.env (con backup)
@@ -28,13 +41,12 @@ import { execFileSync } from "node:child_process";
 // motor decide si ofrece un horario (`parseSlotsSpec`). Tenerla por duplicado es
 // como nacio el bug que este archivo arrastraba — ver `siguenVigentes`.
 import { ANTICIPACION_MINIMA_MS, parseSlotsSpec, slotsPending } from "./config.mjs";
+// La disponibilidad tampoco se reimplementa: misma doctrina que la anticipacion.
+import { franjasDeAtencion } from "./ventanas-de-atencion.mjs";
 
 const ENV_FILE = process.env.ONIA_WEBHOOK_ENV_FILE || "/opt/onia/bot/webhook.env";
-const KNOWLEDGE = "/opt/onia/bot/knowledge.json";
 /** La Paz es UTC-4 todo el año (Bolivia no mueve la hora). */
 const OFFSET_LA_PAZ = 4;
-/** Hora local de la demo. La misma que Sergio venia poniendo a mano. */
-const HORA_LOCAL = Number(process.env.ONIA_SLOTS_HORA || 14);
 /**
  * Cuantos horarios se ESCRIBEN. El guion muestra dos (A y B), pero se generan de mas
  * a proposito: `parseSlotsSpec` elige los 2 que todavia se sostienen, asi que los
@@ -51,15 +63,9 @@ const CUANTOS = 5;
 const MESES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
 const DIAS = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
 
-/** Los dias habiles del negocio, del conocimiento publicado. 1=lunes … 5=viernes. */
-function diasHabiles() {
-  try {
-    const k = JSON.parse(readFileSync(KNOWLEDGE, "utf8"));
-    const dias = k?.empresa?.horario?.dias;
-    if (Array.isArray(dias) && dias.length) return dias;
-  } catch { /* sin archivo: el default de abajo */ }
-  return [1, 2, 3, 4, 5];
-}
+// `diasHabiles()` vivia aca y se borro el 2026-09-18 junto con `HORA_LOCAL`: mientras
+// siguiera exportando una disponibilidad propia, el proximo cambio la volvia a usar y el
+// agujero reaparecia el mismo dia sin que nada se pusiera rojo.
 
 /**
  * Los proximos `cuantos` dias habiles que el MOTOR va a poder ofrecer durante
@@ -82,7 +88,7 @@ function diasHabiles() {
  * pedia solo que el horario no hubiera pasado (`inicioUtc > ahora`) y el bot no lo ofrecia
  * igual — el log decia que se renovo y el prospecto leia que no hay horarios.
  */
-export function proximosSlots(ahora = new Date(), cuantos = CUANTOS, habiles = diasHabiles()) {
+export function proximosSlots(ahora = new Date(), cuantos = CUANTOS, franjas = franjasDeAtencion()) {
   const salida = [];
   const desde = ahora.getTime() + ANTICIPACION_MINIMA_MS;
   // Medianoche del dia LOCAL de hoy: a las 21:00 de La Paz ya es manana en UTC,
@@ -96,15 +102,36 @@ export function proximosSlots(ahora = new Date(), cuantos = CUANTOS, habiles = d
     // como «viernes 12». Un nombre de dia equivocado manda al prospecto el dia que no es.
     const local = new Date(cursor);
     local.setUTCDate(local.getUTCDate() + i);
-    if (!habiles.includes(local.getUTCDay())) continue;
-    const inicioUtc = new Date(Date.UTC(
-      local.getUTCFullYear(), local.getUTCMonth(), local.getUTCDate(), HORA_LOCAL + OFFSET_LA_PAZ, 0, 0,
-    ));
-    if (inicioUtc.getTime() < desde) continue; // el motor no lo ofreceria
-    const etiqueta = `${DIAS[local.getUTCDay()]} ${local.getUTCDate()} de ${MESES[local.getUTCMonth()]}, ${String(HORA_LOCAL).padStart(2, "0")}:00`;
-    salida.push({ label: etiqueta, startAt: inicioUtc.toISOString().replace(".000Z", "Z") });
+    // UN candidato por dia, igual que el .py: los de mas son para que el motor tenga
+    // de donde elegir a lo largo de la vigencia, no para amontonar el mismo dia.
+    const puesto = ponerDelDia(local, franjas[local.getUTCDay()] || [], desde);
+    if (puesto) salida.push(puesto);
   }
   return salida;
+}
+
+/**
+ * El primer horario OFRECIBLE de un dia: se propone el comienzo de cada franja y,
+ * si ya paso, la hora en punto siguiente que todavia entre. Misma regla que el .py.
+ *
+ * La hora sale de la franja y no de una constante: la del sabado abre 09:00 y la
+ * nocturna 20:00, asi que clavar 14:00 no era "la hora de la demo", era ofrecer un
+ * horario fuera de la ventana o —lo que pasaba— descartar el dia entero.
+ */
+function ponerDelDia(local, delDia, desde) {
+  for (const [horaDesde, horaHasta] of delDia) {
+    for (let hora = horaDesde; hora < horaHasta; hora += 1) {
+      // hora + 4 puede pasar de 24 (la franja de las 20:00 cae al dia UTC siguiente):
+      // Date.UTC lo resuelve solo, y la ETIQUETA sigue nombrando el dia LOCAL.
+      const inicioUtc = new Date(Date.UTC(
+        local.getUTCFullYear(), local.getUTCMonth(), local.getUTCDate(), hora + OFFSET_LA_PAZ, 0, 0,
+      ));
+      if (inicioUtc.getTime() < desde) continue; // el motor no lo ofreceria
+      const etiqueta = `${DIAS[local.getUTCDay()]} ${local.getUTCDate()} de ${MESES[local.getUTCMonth()]}, ${String(hora).padStart(2, "0")}:00`;
+      return { label: etiqueta, startAt: inicioUtc.toISOString().replace(".000Z", "Z") };
+    }
+  }
+  return null;
 }
 
 /** El formato exacto que parsea run-turn.mjs: `etiqueta@ISO`, separados por `|`. */

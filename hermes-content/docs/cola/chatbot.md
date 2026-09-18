@@ -4499,6 +4499,28 @@ archivos.**
 
 ## Cerrado — no rehacer
 
+- [x] **~~El generador de respaldo de horarios no podía ofrecer un sábado NUNCA~~** — cerrado el
+      2026-09-18 (`hermes-content/deploy/vps-ops/bot/slots-rodantes.mjs`). Los horarios de demo
+      los escriben **dos** generadores en la MISMA variable (`ONIA_BOT_SLOTS`):
+      `scripts/loops/renovar-slots-bot.py` (06:23 La Paz) y este, el respaldo (07:41). El 13-sep
+      la disponibilidad se unificó en `ventanas-de-atencion.mjs` justo porque había dos copias
+      contradiciéndose — **y la cura no viajó hasta acá**: el respaldo seguía con días propios
+      (`knowledge.json` → `empresa.horario`) y la hora clavada en una constante, así que no podía
+      proponer ni el sábado 09:00-15:00 ni la franja nocturna 20:00-22:00, **que la coletilla del
+      mismo mensaje le promete al prospecto**. Y la premisa escrita al lado (*"es el mismo dato
+      que el bot ya usa"*) era una hipótesis **con fecha**, vencida dos veces: medido en el
+      knowledge VIVO, `empresa.horario` es **`null`**, o sea que la lectura caía siempre al
+      default `[1..5]` — fuente muerta con cara de viva. Medido corriendo los dos generadores
+      sobre los MISMOS 336 instantes (dos semanas, hora por hora): el primer horario difería en
+      **104**, hasta **3 días de más** (jueves 15:00 → ofrecible `viernes 18, 15:00`, ofrecía
+      `lunes 21, 14:00`). Ahora los dos derivan de `VENTANAS_ATENCION` y coinciden en **336/336**.
+      `diasHabiles()` y `HORA_LOCAL` **borrados**, no dejados "por si acaso": mientras siguieran
+      ahí, el próximo cambio los volvía a usar. El gate que lo tapaba se llamaba literalmente
+      `"nunca ofrece sabado ni domingo"` — **afirmaba el defecto**; lo que se sostiene es la
+      baranda (el domingo, que no tiene atención), no la prohibición del sábado. Validado por
+      mutación en las dos mitades: días propios → 1 rojo, hora clavada → 1 rojo.
+      ⚠️ **Commiteado y en la rama, NO desplegado** (`slots-rodantes.mjs` viaja con `deploy-bot.sh`).
+
 - [x] **~~El dueño que APAGABA su WhatsApp no podía reconectarlo nunca más~~** — cerrado el
       2026-09-18, sha `21ac3e3` en `onia-platform` (`lib/chatbot/canal-whatsapp.ts`,
       `lib/chatwoot.ts`). `apagarCanalWhatsapp` (17-sep) deja vivos el inbox y el historial **a
