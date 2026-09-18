@@ -6,7 +6,7 @@
  * decía "Plan Pro" y "Plan Full" mientras el checkout —la pantalla siguiente— los llamaba
  * "Profesional" y "Completo". Un nombre tipeado no lo ve ningún cruce de precios.
  */
-import { plan as planDelCatalogo } from "@/lib/pricing";
+import { GRUPO, plan as planDelCatalogo, type PlanId as PlanDelCatalogo } from "@/lib/pricing";
 
 
 export type Rubro = "dental" | "comercio" | "servicios" | "proveedores" | "estetica";
@@ -20,7 +20,14 @@ export type Tiene =
   | "nada";
 
 export type Precio = "pro" | "full" | "a-medida";
-export type PlanId = "pro" | "full" | "grupo";
+/**
+ * El wizard NO tiene su propia lista de planes: los ids salen del catálogo, más el grupal,
+ * que no es un escalón de la escalera (no se compra en línea, se cotiza).
+ *
+ * Tipeada a mano, esta lista se quedó sin el Crece cuando entró la escalera C (2026-09-12) y
+ * el downsell siguió mandando al Básico como si fuera el escalón de abajo del Profesional.
+ */
+export type PlanId = PlanDelCatalogo | "grupo";
 export type Falta = "web" | "chatbot";
 export type Nota =
   | "cuaderno"
@@ -64,7 +71,11 @@ export function recomendar(
     equipo === "15+"
       ? {
           id: "grupo" as const,
-          nombre: "Grupo clínico",
+          // El nombre sale del catálogo: acá decía "Grupo clínico" mientras la línea de
+          // precio de abajo, derivada, decía "Grupo / Empresarial" — dos nombres del mismo
+          // plan en la misma tarjeta, y el tipeado con vocabulario dental servido a los
+          // cinco rubros (un centro de estética de 15+ personas lo leía así en producción).
+          nombre: GRUPO.nombre,
           precio: "a-medida" as const,
         }
       : equipo === "6-15"
