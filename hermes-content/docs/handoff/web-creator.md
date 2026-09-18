@@ -46,7 +46,9 @@ etapa: el configurador vende y ordena; no se construye nada de entrega automáti
   reordenados. Run `35299301003` (89/89 archivos de test en Linux), stage
   `runtime-next.new-20260918023044`, backup `runtime-next.bak-deploy-20260918023314`.
   Verificado por texto: «La vibe: cómo se siente», «¿Cuánta web?», «Pago con tarjeta, seguro».
-- `main` sigue a la rama por fast-forward (último: `1bc742cb`).
+- **3er deploy, 17-sep ~22:42 La Paz:** burbuja de WhatsApp legible en Impacto. Run `35299917788`
+  (89/89), stage `runtime-next.new-20260918023915`, backup `runtime-next.bak-deploy-20260918024157`.
+- `main` sigue a la rama por fast-forward (último: `7ea932c9`).
 
 **Receta que FUNCIONÓ para publicar la landing (la primera vez que el workflow da verde
 desde el 1-sep):**
