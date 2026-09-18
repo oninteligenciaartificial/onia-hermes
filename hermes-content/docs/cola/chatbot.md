@@ -318,6 +318,57 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~El instrumento que mide la DEFINICIÓN DE HECHO del carril imprimía un remedio que
+      no se podía tipear — y de ese texto salió una pregunta falsa a Sergio Urcullo~~ — CERRADO
+      el 2026-09-18** (`scripts/objetivo_visible.mjs`, commit `14851e61`).
+
+      **Cómo apareció.** No de la cola —no le quedaban 🔴 abiertos— sino de correr la definición
+      de hecho del carril y **no aceptar su `NO MEDIDO`**. El veredicto cerraba así:
+
+          El objetivo TAMPOCO se ve mientras la puerta corte —el dueño rebota igual al abrir
+          `/inbox`—. Tambien se puede medir con una cuenta que ya lo cumpla (`--email`).
+
+      Las dos mitades de esa frase estaban mal. **`--email` no existía**: el único
+      `process.argv` del archivo era el de `--self-check`. Quien obedecía el remedio veía el
+      mismo veredicto, sin nada con que refutarlo — por eso el objetivo quedó `NO MEDIDO` vuelta
+      tras vuelta. Y **«el dueño rebota igual» generalizaba**: medido hoy contra producción son
+      dos hechos distintos y los dos ciertos a la vez —
+
+      | cuenta | rol | `/inbox` |
+      |---|---|---|
+      | `superadmin@onia.com.bo` (dueño DERIVADO de los inboxes 4/5) | `SUPERADMIN` | cortado |
+      | `sergio@onia.com.bo` | `ADMIN` | **HTTP 200**, captura mirada |
+
+      `MFA_REQUIRED_ROLES` es `["SUPERADMIN"]` desde la decisión de Sergio Urcullo del 17/18-sep,
+      así que el corte es **correcto por diseño** y no dice nada de las demás cuentas.
+
+      **Lo que costó.** De ese texto salió `t_3bb6b9ee`, bloqueada esperándolo, afirmando que su
+      cuenta personal tampoco entraba y ofreciéndole una **opción B: «te la sacamos a vos, y tu
+      panel queda con una sola llave»** — bajarle la seguridad a una cuenta que no tenía el
+      problema. Rehecha como `t_15d4855d` (sin esa opción) y la vieja archivada; verificado que
+      queda **una sola** pregunta viva del tema. La org `onia-interna` tiene **un solo perfil** y
+      es SUPERADMIN (medido), así que no hay salida técnica: la 2FA de esa cuenta es suya.
+
+      **El arreglo.** `--email <correo>` existe de verdad (las dos formas), y se le exige perfil
+      en la base **antes de emitir**: `generate_link` crea la cuenta si el correo no existe y
+      devuelve 200 igual, así que un dedazo daría de alta un usuario en producción. El veredicto
+      **nombra el rol** del dueño cortado —o dice que no lo midió— y manda a la fuente que decide
+      a quién alcanza, en vez de tipear la política.
+
+      **El caso ancla es de CLASE:** toda bandera que los mensajes de `juzgar()` recomienden
+      tiene que estar implementada, con el universo derivado del disco. Prohibir el literal viejo
+      cerraba la instancia.
+
+      ⚠️ **Y el gate nació midiéndose A SÍ MISMO**, que es lo que hay que contar: la ventana
+      arrancaba en `indexOf('export function juzgar(')`, que encuentra primero **la mención
+      dentro del propio gate**, así que el `--email` del universo salía de su propio regex. 97
+      casos en verde y **la mutación que reintroduce el bug pasando limpia**. Se ancla a la
+      DEFINICIÓN (`/^export function juzgar\(/m`) y un caso nuevo exige que borrarle la bandera
+      al MENSAJE vacíe el universo. Validado por mutación (7), todas en rojo.
+
+      En vivo: sin bandera nombra `rol SUPERADMIN`; con `--email sergio@onia.com.bo` pasa de 403
+      de puerta a 200 con veredicto de bandeja (`sinCanal:true` — esa org no tiene los inboxes).
+
 - [x] 🔴 **~~El bot de venta de Onia promete un horario que Sergio Urcullo NO atiende~~ —
       CERRADO el 2026-09-18** (`mergePanelKnowledge` en
       `hermes-content/deploy/vps-ops/bot/knowledge.mjs`; **commiteado, NO desplegado**).
