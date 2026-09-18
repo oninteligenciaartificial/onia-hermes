@@ -64,6 +64,12 @@ herramienta que no sabe verificar.
 **Duración:** 5–7 min el 01. 7–9 min del 02 al 05. El 06 puede ir a 12 y está bien: es el
 caso, no una lección.
 
+> 🔴 **Cadencia — cambiada por Sergio Urcullo el 17-sep: YouTube DIARIO.** La serie se
+> termina en la misma semana: 03 jue 17 · 04 vie 18 · 05 sáb 19 · 06 dom 20. Los tres
+> restantes se graban en lote (los cuatro tienen `GUION.md`). Después, la escalera de
+> cortos alimenta el diario. Reparto completo del día:
+> [`ONIA_ESTRUCTURA_PUBLICACION_DIARIA.md`](ONIA_ESTRUCTURA_PUBLICACION_DIARIA.md).
+
 ---
 
 ## Qué carga cada uno, y qué NO

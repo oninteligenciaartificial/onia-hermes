@@ -1,0 +1,49 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>miniatura 05</title>
+<!-- Miniatura de YouTube (1280x720), gramatica de la del video 01: fondo oscuro con luz
+     calida, cara REAL grande al borde derecho (frame puntuado, nada generado con IA),
+     titular blanco enorme con subrayado naranja, objetos del tema flotando. -->
+<style>
+:root{--naranja:#FF6A2B;--tile:#EDE7D8;--term:#161615;--tr:-0.04em}
+@font-face{font-family:'Inter';src:url('Inter-var-latin.woff2')format('woff2');font-weight:100 900;font-display:block}
+@font-face{font-family:'Spline Sans Mono';src:url('SplineSansMono-var-latin.woff2')format('woff2');font-weight:300 700;font-display:block}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1280px;height:720px;overflow:hidden}
+body{font-family:'Inter',system-ui,sans-serif;position:relative;background:
+  radial-gradient(130% 120% at 78% 30%, #3a2312 0%, #241708 34%, #17110c 62%, #0d0a07 100%)}
+body::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg, transparent 40%, rgba(255,116,48,.16) 78%, rgba(255,138,62,.26) 100%)}
+#sujeto{position:absolute;right:-26px;bottom:0;height:680px;z-index:2;
+  filter:drop-shadow(0 0 34px rgba(255,106,43,.55)) drop-shadow(-14px 0 60px rgba(0,0,0,.65))
+         brightness(1.06) contrast(1.04)}
+#duo{position:absolute;left:36px;top:56px;display:flex;align-items:center;gap:24px;z-index:3}
+.tile{width:196px;height:196px;border-radius:23%;background:var(--tile);overflow:hidden;flex:none;
+  box-shadow:0 24px 48px rgba(0,0,0,.60),0 0 44px rgba(255,138,62,.42)}
+.tile img{width:100%;height:100%;display:block}
+.term{width:300px;height:196px;border-radius:24px;background:var(--term);overflow:hidden;flex:none;
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 24px 48px rgba(0,0,0,.60),0 0 44px rgba(255,138,62,.36)}
+.term .barra{height:46px;display:flex;align-items:center;gap:11px;padding:0 19px;
+  border-bottom:1px solid rgba(255,255,255,.12)}
+.term .barra i{width:13px;height:13px;border-radius:50%;background:rgba(255,255,255,.26);flex:none}
+.term .barra em{font-style:normal;font-family:'Spline Sans Mono',monospace;font-size:24px;
+  color:rgba(255,255,255,.55)}
+.term pre{font-family:'Spline Sans Mono',monospace;font-size:42px;line-height:1.3;
+  padding:22px 0 0 26px;color:var(--naranja);font-weight:700}
+.term pre .g{color:rgba(255,255,255,.42);font-weight:400}
+.term pre .ok{color:#3ECF6E}
+#tit{position:absolute;left:36px;bottom:44px;color:#fff;font-weight:800;z-index:3;
+  font-size:104px;line-height:.97;letter-spacing:-.045em;
+  text-shadow:0 6px 26px rgba(0,0,0,.85),0 2px 6px rgba(0,0,0,.9)}
+#tit .dos{display:inline-block;position:relative}
+#tit .dos::after{content:'';position:absolute;left:0;right:-6px;bottom:-14px;height:9px;
+  background:var(--naranja);border-radius:5px;box-shadow:0 0 20px rgba(255,106,43,.85)}
+</style>
+<img id="sujeto" src="sergio-sonrisa.png" alt="">
+<div id="duo">
+  <div class="tile"><img src="claude.png" alt=""></div>
+  <div class="term"><div class="barra"><i></i><i></i><i></i><em>buscando…</em></div><pre><span class="ok">✓</span> ya hecho
+<span class="g">gratis</span></pre></div>
+</div>
+<div id="tit">NO ESCRIBAS<br><span class="dos">NADA.</span></div>

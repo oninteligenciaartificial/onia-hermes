@@ -428,6 +428,16 @@ Cada transición **acorta** el video su propia duración: los dos bloques se sol
 | `circleopen` | **Reservar para el remate / CTA final.** |
 
 ## Common mistakes
+- **Encadenar los pasos como encodes SEPARADOS para el render final.** El pipeline se
+  DESARROLLA por pasos (cut → zoom → apoyos, cada uno verificable), pero renderizar así
+  apila generaciones y ablanda la cámara — pasó en el video 2 (0,78 Mbps) y OTRA VEZ en el
+  video 3 (4 encodes → 5,5 Mbps; Sergio lo vio a ojo). Para el final: **una pasada por
+  pieza** — select(corte) + zoompan(s) + overlays con fade en UN filter_complex, CRF 13
+  preset slow, supersample ×2 — y la única segunda generación es el empalme (xfade). SFX,
+  música y master copian el video. Builder de referencia probado:
+  `videos/claude-code-03/scripts/una-pasada.mjs` (importa `zoomExpr`/`autoWindowsFromKeep`
+  de `zoom-punch.mjs`; dos anchors = dos zoompan encadenados en el MISMO grafo).
+  Medido: cámara 5,5 → 6,6 Mbps y la textura de piel volvió.
 - **Correr `cut-plan.mjs` sin `--video`.** Mide el silencio en los huecos del transcript, que en
   un talking-head real son CERO: sale una cut-list que no corta nada y parece que "no había
   silencios". Si el panel está caído, el preview igual se genera local (`preview.mjs`).
