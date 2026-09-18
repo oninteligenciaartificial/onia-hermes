@@ -263,6 +263,57 @@ export const HUECO_PARTIDO =
   "El que te factura en Bolivia no te agenda. El que te agenda no factura en Bolivia.";
 
 /**
+ * El titular del cuadro, DERIVADO de la tabla que va justo debajo.
+ *
+ * 🔴 **El defecto que lo trajo**, medido el 2026-09-18 sobre `onia.com.bo`
+ * servido (build 2026-09-18 02:41 UTC): `/comparativa` abría el cuadro con un
+ * `<h2>` tipeado a mano —
+ *
+ *   «Tres ejes. El que los cruza es uno solo.»
+ *
+ * — diez líneas arriba de la tabla que lo refuta. Ninguna fila de
+ * `CONTENDIENTES` tiene los tres ejes en `"si"`: la nuestra dice
+ * `siat: "tramite"`. O sea que la pantalla que existe **para que nos crean**
+ * afirmaba un cruce que ella misma desmentía en la fila de al lado, y el lead
+ * que leía el titular entendía que el único era Onia.
+ *
+ * ⚠️ **Por qué ningún gate podía verlo.** `promesa-en-el-cuerpo.test.ts` exime
+ * a `/comparativa` a propósito, y su motivo es CIERTO: ahí el lector ve el
+ * estado real. Pero esa exención vale para la TABLA —y para `HUECO`, que habla
+ * del mercado y se comprueba mirándola—, no para una afirmación de unicidad
+ * tipeada al lado, que la tabla no puede corregir. Una exención cuyo motivo es
+ * cierto tapa el agujero igual.
+ *
+ * ⚠️ **La forma que envejece es el CONTEO**, no el texto: «uno solo» no es un
+ * precio, ni un nombre de plan, ni la mención de una capacidad, así que es
+ * invisible para las tres familias de gates del sitio. Por eso el número sale
+ * de acá y no se tipea en ninguna página.
+ *
+ * Se apaga solo: el día que el emisor se homologue y `siat` pase a `"si"` en
+ * nuestra fila, el conteo da 1 y el titular vuelve a ser el de antes sin que
+ * nadie toque este archivo. Si mañana alguien del mercado cruza los tres,
+ * también.
+ */
+export function cuantosCruzanTodosLosEjes(
+  contendientes: readonly Contendiente[] = CONTENDIENTES,
+  ejes: readonly { id: EjeId }[] = EJES,
+): number {
+  return contendientes.filter((c) => ejes.every((e) => c.estados[e.id] === "si"))
+    .length;
+}
+
+export function tituloDelCuadro(
+  contendientes: readonly Contendiente[] = CONTENDIENTES,
+  ejes: readonly { id: EjeId }[] = EJES,
+): string {
+  const cuantos = cuantosCruzanTodosLosEjes(contendientes, ejes);
+  const cantidad = ejes.length === 3 ? "Tres ejes." : `${ejes.length} ejes.`;
+  if (cuantos === 0) return `${cantidad} Hoy no los cruza ninguno.`;
+  if (cuantos === 1) return `${cantidad} El que los cruza es uno solo.`;
+  return `${cantidad} Los cruzan ${cuantos}.`;
+}
+
+/**
  * El ledger de honestidad, INTERNO: cada linea es una cosa DEL PRODUCTO que
  * HOY no funciona. Verificado contra ONIA_PLATFORM_ESTRUCTURA_20260730 §3.
  *
