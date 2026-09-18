@@ -1260,17 +1260,47 @@ test('sin sha vivo del destino, el rojo no cita el del otro sistema', () => {
 // donde lo saca el main. El esquive barato es `landing: vivo` —una linea, sin tocar nada mas—
 // y con el vuelve el bug entero en verde. El sujeto es la CLAVE, no la mencion del helper:
 // nombrar a `shaVivoLanding` en cualquier otro lado del archivo no alcanza.
+// ⚠️ El ancla era `/landing:\s*(.*)/` sobre el fuente con los comentarios sacados, y eso lo
+// acusaba una PROSA cualquiera que dijera «landing: … vivo …» (paso el 2026-09-18 con el texto
+// del aviso del `.commit`: el producto intacto y el gate rojo). Ahora se miden las CADENAS en
+// blanco ademas de los comentarios —una prosa no puede acusar ni absolver— y el valor de la
+// clave se sigue hasta su asignacion, porque la derivacion legitima hoy son dos lineas.
 test('cableado: el sha de landing sale de shaVivoLanding, no del de plataforma', () => {
   const src = readFileSync(new URL('./pedido_deploy_entregado.mjs', import.meta.url), 'utf8')
+    .split('\n').filter((l) => !/^\s*(\/\/|\*|\/\*)/.test(l)).join('\n')
+    .replace(/'(?:[^'\\\n]|\\.)*'|`(?:[^`\\]|\\.)*`/g, "''");
+  // El sujeto es la clave `landing` DE `vivoPorDestino`, nombrada: el archivo tiene otros mapas
+  // con esa misma clave (los publicadores en seco) y quedarse con «la primera del archivo»
+  // juzga al vecino — la trampa de atribuir por cercania que esta cola ya tiene escrita.
+  const obj = (src.match(/vivoPorDestino\s*=\s*\{([^}]*)\}/) ?? [])[1];
+  assert.ok(obj, 'no encontre la definicion de vivoPorDestino: sin ella no se puede juzgar la cita');
+  const valor = (obj.match(/landing:\s*([^,;}\n]*)/) ?? [])[1]?.trim();
+  assert.ok(valor, 'nadie deriva el sha vivo de la landing');
+
+  // `shaVivoLanding()` en la clave, o una variable cuya asignacion lo llame. Lo que NO vale es
+  // el esquive barato de una linea —`landing: vivo`— que devuelve el sha de la PLATAFORMA.
+  const directo = /shaVivoLanding\(/.test(valor);
+  const porVariable = /^[A-Za-z_$][\w$]*$/.test(valor)
+    && new RegExp(`\\b(?:const|let|var)\\s+${valor}\\s*=[^;]*shaVivoLanding\\(`).test(src);
+  assert.ok(directo || porVariable,
+    `la clave landing se deriva de otra cosa (${valor}): si sale del sha de plataforma, `
+    + 'el rojo de la landing vuelve a citar el repo equivocado');
+});
+
+// La otra mitad del mismo cableado, y la que hace UTIL al tri-estado: a quien se le pregunta.
+// Hasta el 2026-09-18 el sha de la landing se pedia solo si su pedido estaba ENTREGADO —el
+// unico camino que imprime cita—, asi que en el caso normal (un pedido VIGENTE, que es casi
+// toda corrida) nadie preguntaba, y un runtime sin `.commit` no lo notaba nadie. Acotarlo de
+// nuevo a `entregados` es una sola palabra y deja el tri-estado entero en verde.
+test('cableado: al runtime de la landing se le pregunta por TODO pedido suyo, no solo por los entregados', () => {
+  const src = readFileSync(new URL('./pedido_deploy_entregado.mjs', import.meta.url), 'utf8')
     .split('\n').filter((l) => !/^\s*(\/\/|\*|\/\*)/.test(l)).join('\n');
-  const clave = src.match(/landing:\s*([^\n]*)/g) ?? [];
-  const enVivoPorDestino = clave.filter((l) => /shaVivoLanding|vivo\b/.test(l));
-  assert.ok(enVivoPorDestino.length > 0, 'nadie deriva el sha vivo de la landing');
-  for (const l of enVivoPorDestino) {
-    assert.match(l, /shaVivoLanding\(\)/,
-      `la clave landing se deriva de otra cosa (${l.trim()}): si sale del sha de plataforma, `
-      + 'el rojo de la landing vuelve a citar el repo equivocado');
-  }
+  const condicion = (src.match(/=\s*([^\n?]*)\?\s*shaVivoLanding\(/) ?? [])[1]?.trim();
+  assert.ok(condicion, 'nadie decide cuando preguntarle al runtime de la landing');
+  assert.match(condicion, /\bpedidos\b/,
+    `se le pregunta bajo "${condicion}": el universo son los PEDIDOS de landing, no un subconjunto`);
+  assert.doesNotMatch(condicion, /\bentregados\b/,
+    'acotarlo a los entregados deja la ausencia del .commit invisible en el caso normal');
 });
 
 /** Corre la cadena REAL capturando lo que imprime. Los acumuladores que el caso no nombra van
@@ -1443,6 +1473,79 @@ test('un arreglo que entra a main por un merge posterior al build NO se pierde',
       + 'asi que el ok publicaria un commit que el pedido no le nombro a nadie y los controles '
       + 'de completitud salen NO_MEDIDO en vez de rojo');
     assert.match(r[0].titulo, /el arreglo que el pedido tiene que nombrar/);
+  } finally {
+    rmSync(raiz, { recursive: true, force: true });
+  }
+});
+
+// ── el .commit del runtime vivo de la landing: ausente NO es lo mismo que no medido ──────
+//
+// Nace del 2026-09-18: `/opt/onia-landing/runtime-next/` quedo SIN `.commit` (los respaldos y
+// los builds armados si lo tienen), asi que «que corre onia.com.bo» volvio a ser a mano — que
+// es exactamente lo que su propio publicador dice haber curado el 2026-09-03. La ausencia era
+// MUDA porque `shaVivoLanding` degradaba a `null` igual que un SSH caido.
+import { clasificarShaVivo, avisoDelCommitAusente, citaDelVivo, guionDelCommit, SIN_COMMIT } from './pedido_deploy_entregado.mjs';
+
+// El caso que YA cumple. Sin el, «devolver siempre SIN_COMMIT» pasa verde y el gate avisa
+// todos los dias sobre un runtime sano, que es como se apaga un aviso: por ruido.
+test('el .commit esta y trae un sha -> MEDIDO, y se puede citar', () => {
+  const r = clasificarShaVivo('bd90e8af2\n');
+  assert.equal(r.estado, 'MEDIDO');
+  assert.equal(r.sha, 'bd90e8af2');
+  assert.equal(citaDelVivo('landing', { landing: r }), ' (produccion corre bd90e8af2)');
+});
+
+test('pregunte y el runtime NO lo tiene -> SIN_COMMIT, no NO_MEDIDO', () => {
+  const r = clasificarShaVivo(SIN_COMMIT);
+  assert.equal(r.estado, 'SIN_COMMIT',
+    'aplanar la ausencia en NO_MEDIDO es el bug: el remedio de uno es mirar el acceso y el del '
+    + 'otro mirar el stage que se publico, y son opuestos');
+  assert.equal(r.sha, null);
+});
+
+test('no pude preguntar -> NO_MEDIDO, y su motivo NO es el de la ausencia', () => {
+  const mudo = clasificarShaVivo(null);
+  assert.equal(mudo.estado, 'NO_MEDIDO');
+  assert.notEqual(mudo.motivo, clasificarShaVivo(SIN_COMMIT).motivo,
+    'los dos null se distinguen por el MOTIVO: si dicen lo mismo, el tri-estado es decorativo');
+});
+
+test('una respuesta que no es un sha no se cita nunca', () => {
+  const r = clasificarShaVivo('bash: cat: command not found');
+  assert.equal(r.estado, 'NO_MEDIDO');
+  assert.equal(citaDelVivo('landing', { landing: r }), '',
+    'una cita inventada manda a verificar contra un commit que no existe');
+});
+
+test('el aviso habla SOLO cuando el runtime esta sin .commit', () => {
+  assert.equal(avisoDelCommitAusente(clasificarShaVivo('bd90e8af2')), null);
+  assert.equal(avisoDelCommitAusente(clasificarShaVivo(null)), null,
+    'un SSH caido no es un runtime sin .commit: avisarlo ahi manda a mirar el stage equivocado');
+  assert.match(String(avisoDelCommitAusente(clasificarShaVivo(SIN_COMMIT))), /SIN \.commit/);
+});
+
+test('la cita de la plataforma (sha pelado) sigue andando con la forma nueva', () => {
+  assert.equal(citaDelVivo('plataforma', { plataforma: 'a888b5b', landing: null }),
+    ' (produccion corre a888b5b)');
+  assert.equal(citaDelVivo('landing', { plataforma: 'a888b5b', landing: null }), '',
+    'sin dato del destino la cita se OMITE: no se cae a la del vecino');
+});
+
+// Lo que ningun caso puro ve: que el LECTOR distinga de verdad. Un `cat` a secas falla igual
+// con el archivo ausente y con el SSH caido, asi que la distincion vive en el guion — y un
+// guion se prueba corriendolo en un shell de verdad, no leyendolo.
+test('el guion distingue en un shell de verdad: con archivo y sin archivo', () => {
+  const raiz = mkdtempSync(join(tmpdir(), 'commit-landing-'));
+  try {
+    const ruta = join(raiz, '.commit');
+    const correr = () => spawnSync('bash', ['-lc', guionDelCommit(ruta)], { encoding: 'utf8' });
+
+    const ausente = correr();
+    assert.equal(ausente.status, 0, 'el shell tiene que CONTESTAR, no fallar: fallar es "no pude preguntar"');
+    assert.equal(clasificarShaVivo(ausente.stdout).estado, 'SIN_COMMIT');
+
+    writeFileSync(ruta, 'bd90e8af2\n');
+    assert.equal(clasificarShaVivo(correr().stdout).estado, 'MEDIDO');
   } finally {
     rmSync(raiz, { recursive: true, force: true });
   }
