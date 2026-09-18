@@ -259,6 +259,49 @@ export async function deliver(state, text, config, deps = {}, templateParams = n
  * @param {object} [deps]   { store, config } — inyectables para test
  * @returns {Promise<object>} { ok, now, mode, scanned, send[], skipped[], warnings[], notes[] }
  */
+/**
+ * Cuenta a los que quedaron esperando por encima del piso de rescate, y separa al desconocido.
+ *
+ * No les escribe: a los 8 dias eso ya es spam, y esa decision esta tomada (`conversacion_muerta`).
+ * Lo que arregla es el SILENCIO — hasta hoy la consulta los recortaba antes de que el runner
+ * pudiera nombrarlos, asi que un lead perdido y un dia tranquilo se leian los dos `scanned: 0`.
+ *
+ * La clasificacion usa el MISMO criterio que el salteo del bucle de envio (`esConversacionNuestra`),
+ * no uno propio: con cero clientes pagando, casi todo lo que hay en la base lo sembramos nosotros,
+ * y un contador que mezcle las dos cosas grita todos los dias hasta que nadie lo mire.
+ */
+async function contarColgadas(result, store, nowIso, config, limit) {
+  if (typeof store.sweepFollowUpVencidas !== "function") return;
+  const filas = await store.sweepFollowUpVencidas(nowIso, config, limit);
+  if (!filas) return; // el motivo ya quedo en store.warnings; sigue en "no medido", no en cero
+
+  const quienes = [];
+  let nuestras = 0;
+  for (const row of filas) {
+    const state = stateFromRow(row);
+    if (esConversacionNuestra(state)) {
+      nuestras += 1;
+      continue;
+    }
+    const silentHours = hoursBetween(state?.lastInboundAt, nowIso);
+    quienes.push({
+      conversationKey: state?.conversationKey || row?.conversation_key || null,
+      displayName: state?.displayName || null,
+      botStage: state?.botStage || null,
+      silentHours: silentHours === null ? null : Math.round(silentHours),
+    });
+  }
+
+  result.colgadas = {
+    medido: true,
+    total: filas.length,
+    desconocidas: quienes.length,
+    nuestras,
+    quienes,
+  };
+  if (quienes.length > 0) result.notes.push("colgadas_sin_rescate");
+}
+
 export async function runFollowUpSweep(options = {}, deps = {}) {
   const config = deps.config || DEFAULT_CONFIG;
   const store = deps.store || createStore();
@@ -276,6 +319,10 @@ export async function runFollowUpSweep(options = {}, deps = {}) {
     send: [],
     skipped: [],
     notes: [],
+    // Tri-estado a proposito: `null` es "nadie pudo preguntar", `0` es "mire y no hay ninguna".
+    // Aplanarlos en 0 hace que el barrido diga "no se perdio ningun lead" justo cuando esta ciego,
+    // y falla hacia el lado caro: el que calla el aviso.
+    colgadas: { medido: false, total: null, desconocidas: null, nuestras: null, quienes: [] },
     warnings: store.warnings,
   };
 
@@ -292,6 +339,11 @@ export async function runFollowUpSweep(options = {}, deps = {}) {
     return result;
   }
   result.scanned = rows.length;
+
+  // Despues del barrido a proposito: primero el trabajo, despues la cuenta de lo que ya no se
+  // alcanza. Si la base esta caida el sweep de arriba ya corto, y entonces esto queda en NO MEDIDO,
+  // que es la verdad — no habria con que contar.
+  await contarColgadas(result, store, nowIso, config, limit);
 
   // Sergio todavia no definio los 2 bloques de demo: M3 saldria con "HORARIO A (pendiente de
   // definir)". Se bloquea el envio ANTES del CAS (no se quema la unica reserva) y se dice quien
@@ -465,6 +517,22 @@ export function renderHuman(result) {
   lines.push(`NO SE MANDA (${result.skipped.length})`);
   if (result.skipped.length === 0) lines.push("  (ninguna)");
   for (const item of result.skipped) lines.push(`  ${item.conversationKey} — ${item.reason}`);
+
+  // El tope habla con su cuenta: sin esto, un lead colgado y un dia sin nadie se leen igual.
+  const colgadas = result.colgadas || {};
+  lines.push("");
+  if (!colgadas.medido) {
+    lines.push("COLGADAS (por encima del piso): NO MEDIDO — no pude preguntar");
+  } else {
+    lines.push(
+      `COLGADAS (por encima del piso): ${colgadas.total} · desconocidas: ${colgadas.desconocidas} · nuestras: ${colgadas.nuestras}`,
+    );
+    for (const item of colgadas.quienes || []) {
+      lines.push(
+        `  ${item.conversationKey} ${item.displayName || "sin nombre"} — ${item.botStage}, esperando hace ${item.silentHours} h · YA NO SE RESCATA`,
+      );
+    }
+  }
 
   if (result.warnings.length) {
     lines.push("", "WARNINGS");
