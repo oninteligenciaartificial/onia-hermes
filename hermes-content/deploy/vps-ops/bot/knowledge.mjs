@@ -713,6 +713,14 @@ async function fetchOrgKnowledge(key, options = {}) {
         organizationId: orgDelCuerpo || null,
       };
     }
+    // 409 = el producto DETECTO el inbox reclamado por DOS organizaciones a la vez (conflicto
+    // de alta, DG-047). Hasta hoy /published elegia la fila mas antigua y este motor le
+    // contestaba al cliente de un negocio con el conocimiento de OTRO. Sin dueño claro no se
+    // elige: misma consecuencia que `ajena` (aviso neutro, nunca el archivo — que es el guion
+    // de venta de Onia), y NO viaja como `error` porque el camino de error cae justo ahi.
+    if (res.status === 409) {
+      return { data: null, error: null, missing: true, huerfano: false, ajena: true, conflicto: true };
+    }
     if (!res.ok) return { data: null, error: `la db contesto HTTP ${res.status}` };
     const body = await res.json();
     // LA ORG INTERNA NO ES UN CLIENTE (medido en prod 2026-09-13). El producto resuelve
