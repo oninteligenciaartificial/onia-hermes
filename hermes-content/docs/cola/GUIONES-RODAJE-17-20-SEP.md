@@ -333,12 +333,16 @@ logs, en vivo) → qué hizo MAL o no hizo (sin cortar) → cuánto costó la no
 las tres reglas → ¿lo dejarías correr en tu negocio? El más compartible: es el 03
 convertido en prueba con testigo.
 
-## Variantes extendidas (60-90 s) de los cortos — cuando el tema lo banca
+## Variantes largas (60-90 s) — CORRECCIÓN del 17-sep
 
-La estructura corta (0-3 gancho · 3-25 concreto · 25-35 cierre) se estira SOLO
-metiendo una PRUEBA en vivo en el medio: gancho (0-5) → contexto mínimo (5-15) →
-**la prueba en vivo con resultado visible (15-60)** → moraleja honesta (60-75) →
-cierre (75-90). Nada de estirar hablando: se estira MOSTRANDO.
+⚠️ Sergio Urcullo: él graba SOLO cara a cámara; las pantallas y pruebas las pone
+LA EDICIÓN sobre su voz. Entonces un video largo = MÁS HABLA con historia y detalle
+(60-90 s de texto corrido, ~200 palabras), no una demo grabada por él. La estructura
+larga hablada: gancho → desarrollo con detalles CONCRETOS (números, el caso, la
+anécdota) → giro honesto → cierre. Los guiones largos del vie 18 están en el
+mensaje de la sesión del 17-sep; las marcas [EDICIÓN: ...] van aparte del habla.
+Regla: corto = 30 s para lo puntual (pool, descubrimiento); largo = 60-90 s cuando
+hay historia o cuenta que desarrollar.
 
 - **18.1 extendido (~90 s):** «Mi feed lo produce un sistema» + [en vivo] corro el
   script y las 8 placas aparecen una por una en la carpeta, con reloj.
