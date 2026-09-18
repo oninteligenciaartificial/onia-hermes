@@ -298,3 +298,51 @@ por buena 3 veces) → Por qué pasa (terminar ≠ lograr) → Lado a lado (pare
 verificado) → Las tres preguntas (¿lo miré? ¿cuánto salió? ¿lo conté hoy?) → El puente →
 Regla + historia → Los 3 errores del primer mes → Mi caso (12 errores) → La parte
 honesta → En una línea.
+
+---
+
+# Formato EXPERIMENTO — referencia Erik Taveras (pedida el 17-sep)
+
+> Sergio Urcullo: *"intenta que algunos videos sean mas largos, revisa erik taveras,
+> me gusta su contenido"*. Mirado el 17-sep: @eriktaveras (136k IG) · @ErikTaverasT
+> (18,5k YT). Nicho IDÉNTICO (n8n, WhatsApp API, agentes, IA local, homelab — hasta
+> tiene un short de «Hermes orquestando Codex y Claude Code»). Su fórmula de largos:
+> **el video ES un experimento en vivo** — Prueba 1/2/3 numeradas, monitoreo en tiempo
+> real, revisión final del resultado, cierre «¿vale la pena?», 11-12 capítulos,
+> números concretos en el título. Se extrae la estructura, no la identidad.
+
+## Los 3 largos formato experimento (cola YT, después del 06 — semana del 21+)
+
+### E1 · «Le pido una página web a la IA y la cronometramos» (~8-12 min)
+Capítulos: el reto y el reloj → el prompt completo en pantalla → [en vivo] lee mis
+archivos → propone y apruebo → primer error EN VIVO y cómo lo arregla → el reloj para:
+X minutos → la revisamos juntos en el navegador → lo que NO hizo bien → ¿cuánto habría
+costado encargarla? → ¿vale la pena? Asciende del corto «la hizo delante mío».
+
+### E2 · «Mi servidor es una PC vieja de $0: la abrimos y la medimos» (~10-15 min)
+Capítulos: qué corre ahí adentro (la lista real) → la abrimos: specs a cámara → htop
+en vivo: RAM y CPU con todo corriendo → le tiro carga: qué aguanta → cuánto gasta de
+luz (medido, no estimado) → qué NO puede hacer → armala vos: el orden → ¿PC vieja o
+nube? la cuenta → guía /homelab. Es el «Tesla P40» de Erik en versión $0. Cruza con
+la serie homelab.
+
+### E3 · «Dejo a la IA trabajando toda la noche y revisamos qué hizo» (~10-12 min)
+Capítulos: 22:00 — le dejo la cola escrita EN VIVO → cómo queda el cron armado →
+[corte] 7:00 — abrimos los avisos SIN editar la sorpresa → qué hizo bien (commits,
+logs, en vivo) → qué hizo MAL o no hizo (sin cortar) → cuánto costó la noche →
+las tres reglas → ¿lo dejarías correr en tu negocio? El más compartible: es el 03
+convertido en prueba con testigo.
+
+## Variantes extendidas (60-90 s) de los cortos — cuando el tema lo banca
+
+La estructura corta (0-3 gancho · 3-25 concreto · 25-35 cierre) se estira SOLO
+metiendo una PRUEBA en vivo en el medio: gancho (0-5) → contexto mínimo (5-15) →
+**la prueba en vivo con resultado visible (15-60)** → moraleja honesta (60-75) →
+cierre (75-90). Nada de estirar hablando: se estira MOSTRANDO.
+
+- **18.1 extendido (~90 s):** «Mi feed lo produce un sistema» + [en vivo] corro el
+  script y las 8 placas aparecen una por una en la carpeta, con reloj.
+- **18.3 extendido (~75 s):** la cuenta del empleado $200 + [en vivo] abro el panel
+  de uso del mes y muestro el número real en pantalla.
+- **Sáb 19.1 extendido (~90 s):** el aviso de las 3:01 + [en vivo] tiro un servicio
+  a propósito y esperamos el aviso EN CÁMARA con el teléfono al lado.
