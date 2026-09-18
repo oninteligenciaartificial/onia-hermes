@@ -77,9 +77,25 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
-- [ ] 🔴 **`scripts/deploy_sin_pedido.mjs` absuelve un destino porque EXISTE un pedido, sin
+- [x] 🔴 **`scripts/deploy_sin_pedido.mjs` absolvía un destino porque EXISTÍA un pedido, sin
       preguntar si ese pedido DESCRIBE lo que hoy publicaría — y el que los deja cortos es el
-      integrador. Medido en vivo el 2026-09-18 ~11:5x La Paz por `onia-cola`.**
+      integrador. Medido en vivo el 2026-09-18 ~11:5x La Paz por `onia-cola`. CERRADO el
+      2026-09-18 15:0x La Paz por `onia-cola` (`f2e66f97`).**
+      **Cómo quedó:** `clasificarCobertura` tiene su quinta pregunta, `describeLoQuePublica`,
+      **exigida** igual que `seAutoPublica` y `ahora`, con estado propio `CUBIERTO_CORTO` que
+      **no cambia el código de salida** (un rojo acá trabaría el merge de todos los carriles
+      hasta que Sergio Urcullo apriete un botón). El camino barato funcionó tal como decía el
+      párrafo de abajo: `recuentoDeArreglos` lee `hay que publicar: N arreglo(s)` de los DOS
+      lados —el cuerpo del pedido, recortado con `partirPedido` importado del hermano, y la
+      salida viva que el detector ya había corrido—, así que la pregunta cuesta **cero SSH**;
+      `detectar()` guarda su salida cruda en `SALIDAS` y `quintaPregunta` la consume.
+      `CUBIERTO_CORTO` le gana a `CUBIERTO_VIEJO` porque rehacer el pedido cura las dos cosas
+      y esperar el `ok` no cura el cuerpo.
+      **Validado por mutación: 9 de 9.** La novena pasó **verde** al primer intento y vale
+      anotarla — el caso del cableado anclaba la MENCIÓN (`/SALIDAS\.set\(/` sobre el propio
+      fuente) y envolver esa línea en `if (false)` deja el literal intacto. Se cerró midiendo
+      el EFECTO: llamar a `detectar()` con `correr` inyectado y leer `_salidaParaPruebas`.
+      Es la trampa que esta cola ya tenía escrita para los gates de guarda, ahora medida acá.
       **Cómo se reproduce en 30 segundos** (no hay que volver a investigarlo): con un pedido de
       deploy vivo, mergear cualquier commit que viaje a ese destino y correr los dos gates
       hermanos seguidos:
