@@ -188,3 +188,81 @@ test("cuando el elegido caduco, el prospecto recibe los horarios vigentes para e
     "el estado tiene que quedar con los horarios que se acaban de ofrecer, o el proximo 'A' vuelve a reservar el viejo",
   );
 });
+
+// ---------------------------------------------------------------------------
+// 5. LA MITAD QUE FALTABA: curamos al que ELIGE y dejamos al que solo MIRA.
+//
+//    Los casos 1-4 entran por `ctx.slotChoice`, o sea exigen que el prospecto escriba "A".
+//    Pero volver a la conversacion dos dias despues y contestar cualquier OTRA cosa —contar el
+//    negocio, que es la rama mas comun del guion— cae en M0b, que RE-OFRECE los dos horarios
+//    con `{{slot_a}}`/`{{slot_b}}`. Ese texto sale de `activeSlots`, que prefiere la foto.
+//
+//    Es la misma firma que ya se arreglo dos veces en este carril, y sigue intacta aca: lo que
+//    DECIDE la rama se re-mide contra los vigentes (`slotsPending(config)`) y lo que HABLA lee
+//    el estado. El prospecto ve dos horarios muertos, elige uno, y recien ahi el caso 1 le
+//    contesta que caduco: le pusimos la promesa falsa en pantalla primero.
+// ---------------------------------------------------------------------------
+
+test("el que vuelve y NO elige tampoco recibe horarios vencidos: M0b re-ofrece los vigentes", () => {
+  const state = dormidaCon(
+    [
+      { key: "A", label: "martes 15 de septiembre, 14:00", startAt: "2026-09-15T18:00:00Z", pending: false },
+      { key: "B", label: "martes 15 de septiembre, 16:00", startAt: "2026-09-15T20:00:00Z", pending: false },
+    ],
+    AYER,
+  );
+
+  // Cuenta su negocio en vez de elegir: la rama `found > 0` de `handleHorario`.
+  const result = step(state, { text: "somos una clinica dental en Santa Cruz, 4 personas", receivedAt: AHORA }, { config: CONFIG });
+  const texto = textOf(result);
+
+  assert.ok(
+    !texto.includes("martes 15 de septiembre"),
+    `se le volvieron a ofrecer horarios ya vencidos:\n${texto}`,
+  );
+  assert.ok(
+    texto.includes("lunes 21 de septiembre, 14:00") && texto.includes("martes 22 de septiembre, 14:00"),
+    `no se le ofrecieron los horarios vigentes:\n${texto}`,
+  );
+  assert.deepEqual(
+    (result.nextState.slotsOffered || []).map((slot) => slot.label),
+    ["lunes 21 de septiembre, 14:00", "martes 22 de septiembre, 14:00"],
+    "el estado quedo con la foto vieja: el proximo 'A' reserva un horario que ya no existe",
+  );
+});
+
+// ---------------------------------------------------------------------------
+// 6. LA DIRECCION SIMETRICA del caso 5, y la que sostiene la CONDICION.
+//
+//    Refrescar siempre seria un bug distinto y peor de ver: dentro de la MISMA charla el cron
+//    diario puede rotar los horarios, y entonces el "A" que la persona leyo hace tres minutos
+//    pasaria a ser otro dia sin que nada se lo diga. Esa es la propiedad que `activeSlots`
+//    existe para preservar, y por eso el refresco cuelga de que la foto ya NO se sostenga.
+//
+//    Sin este caso la condicion queda sin dueño: medido por mutacion el 2026-09-18, cambiarla
+//    por `true` dejaba las 1156 pruebas del bot en verde.
+// ---------------------------------------------------------------------------
+
+test("si los horarios guardados SIGUEN vigentes, M0b repite los que la persona ya vio", () => {
+  // La foto esta vigente (mas lejos que el config) y el generador ya publico otros dos.
+  const state = dormidaCon(
+    [
+      { key: "A", label: "jueves 24 de septiembre, 14:00", startAt: "2026-09-24T18:00:00Z", pending: false },
+      { key: "B", label: "viernes 25 de septiembre, 14:00", startAt: "2026-09-25T18:00:00Z", pending: false },
+    ],
+    AYER,
+  );
+
+  const result = step(state, { text: "somos una clinica dental en Santa Cruz, 4 personas", receivedAt: AHORA }, { config: CONFIG });
+  const texto = textOf(result);
+
+  assert.ok(
+    texto.includes("jueves 24 de septiembre, 14:00") && texto.includes("viernes 25 de septiembre, 14:00"),
+    `le cambiaron los horarios bajo los pies dentro de la misma charla:\n${texto}`,
+  );
+  assert.deepEqual(
+    (result.nextState.slotsOffered || []).map((slot) => slot.label),
+    ["jueves 24 de septiembre, 14:00", "viernes 25 de septiembre, 14:00"],
+    "el estado se piso con los del config aunque la foto seguia vigente",
+  );
+});
