@@ -318,6 +318,62 @@ Hoy sale **0** — mariohassen y F, por el camino completo.
 
 ## Ahora
 
+- [x] 🔴 **~~Los horarios de demo NO le llegaban a los barridos: el follow-up salteaba a TODOS
+      los prospectos con `slots_sin_definir` — teniendo los cinco horarios vivos~~ — CERRADO el
+      2026-09-18 en el repo.** Commiteado, **NO desplegado**.
+
+      **Costo medido, con un desconocido real esperando.** `chatwoot:58` escribió por WhatsApp el
+      17-sep 22:50 UTC desde el botón de la web, el bot le contestó bien y no volvió. El rescate
+      (M3) le tocaba hoy 19:17 UTC, dentro de la ventana de 24 h de Meta. No iba a salir:
+
+      ```bash
+      # contra producción, en seco — el lead entra al barrido y se saltea:
+      bash /opt/onia/bot/followup-run.sh --dry-run --now 2026-09-18T19:17:01Z --json
+      #  -> "scanned":1, "skipped":[{"chatwoot:58","slots_sin_definir"}]
+
+      # el MISMO barrido con los horarios que ya viven en el entorno del bot (fuera de git):
+      export ONIA_BOT_SLOTS="$(sed -n 's/^ONIA_BOT_SLOTS=//p' /opt/onia/bot/webhook.env | head -n1 \
+        | sed -e 's/\r$//' -e 's/^"\(.*\)"$/\1/')"
+      bash /opt/onia/bot/followup-run.sh --dry-run --now 2026-09-18T19:17:01Z --json
+      #  -> "send":[{"chatwoot:58", templateKey "M3", sendKind "texto_libre"}]
+      ```
+
+      **La causa.** Los wrappers pasaban `-e ONIA_BOT_SLOTS="${ONIA_BOT_SLOTS:-}"`, o sea la
+      tomaban del entorno del que llama, y el cron los invoca **pelados**. El archivo de entorno
+      del bot vive **fuera de git** (no existe en este repo; se edita en el VPS). Es la misma clase que
+      `ONIA_BOT_DRY_RUN` tuvo hasta ayer —dos interruptores en serie, uno decorativo— y la cura
+      quedó a unas líneas de distancia **en el mismo archivo**, sin viajar al hermano. Por eso
+      encender los barridos ayer no alcanzó: pasaron a `mode: emit` y siguen sin rescatar a nadie,
+      ahora en verde.
+
+      **La cura.** Los cuatro wrappers que le pasan la variable al contenedor
+      (`hermes-content/deploy/vps-ops/bot/followup-run.sh`, `insistencia-run.sh`, `run-turn.sh`,
+      `chatwoot-adapter.sh`) la derivan de ese archivo —fuera de git— cuando el llamador no la trae. El lector **no puede** ser el de
+      `ONIA_BOT_DRY_RUN`: ese limpia con `tr -d` y el valor de los horarios **lleva
+      espacios** (`sábado 19 de septiembre, 14:00@...`), así que lo dejaría irreconocible.
+
+      **El gate EJECUTA, no lee**
+      (`hermes-content/deploy/vps-ops/bot/slots-viajan-al-barrido.test.mjs`): deriva el universo
+      del disco (`readdirSync`, no `git ls-files`: el wrapper nuevo sin commitear es justo el
+      sujeto) y corre cada wrapper contra un `docker` **falso** que graba sus argumentos, con el
+      entorno limpio, exigiendo que el valor llegue entero. Se satisface de dos maneras, las dos
+      mecánicas: cargar ese archivo entero (así hace
+      `hermes-content/deploy/vps-ops/bot/webhook-server.sh`) o pasar esa prueba.
+      Validado por mutación en las dos formas conocidas de romperlo —sacar la derivación y usar
+      el lector que come espacios—: `# fail 1` en las dos, y la primera **seguía nombrando**
+      `/opt/onia/bot/webhook.env` para el otro flag, o sea el gate no se esquiva nombrando el helper.
+
+- [ ] **El M3 ofrece un horario que el generador no publicó, y con menos aviso del que promete.**
+      En la corrida de arriba el rescate ofrece *"sábado 19 de septiembre, **09:00**"*, y
+      `ONIA_BOT_SLOTS` sólo tiene el de las **14:00** de ese día. A las 19:17 UTC del viernes,
+      las 09:00 del sábado quedan a ~14 h — debajo de las 24 h de anticipación que el propio
+      motor exige y que la coletilla promete. Sale del segundo par de horarios que arma
+      `buildFollowUp` (`hermes-content/deploy/vps-ops/bot/bot-engine.mjs`), no del que eligió el
+      generador (`scripts/loops/renovar-slots-bot.py`). **Reproducción:** el segundo comando del
+      ítem de arriba, mirando `send[0].text`. Es la misma familia que los dos ítems de
+      anticipación ya cerrados, pero en el rescate, que nadie había mirado porque hasta hoy
+      nunca llegó a construir un M3.
+
 - [x] 🔴 **~~La insistencia podía escribirle a los clientes de un cliente a las 3 de la mañana:
       su única franja horaria vivía en el crontab del VPS, y el gate de ayer la citó como si
       fuera la garantía~~ — CERRADO el 2026-09-18 en el repo.** Commiteado, **NO desplegado**
