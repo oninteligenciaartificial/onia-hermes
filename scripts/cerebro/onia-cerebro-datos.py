@@ -150,7 +150,13 @@ def vista(data):
     frase += ("te esperan %d decisiones" % len(dec)) if dec else "no hay decisiones pendientes"
     frase += " y el publicador esta frenado." if frenado else "."
 
+    loops_v = [{"loop": l["loop"],
+                "detalle": (l.get("ultimo") or "sin vuelta registrada")[:130]}
+               for l in loops]
+
     return {"frase": frase, "decisiones": dec, "sistema": sistema,
+            "loops": loops_v,
+            "publicador_texto": "\n".join(data["publicador"].get("ultimo_bloque") or []),
             "agenda_texto": (data["agenda"].get("texto") or "")[:5000]
             if data["agenda"].get("de_hoy") else "",
             "video_texto": (data["video"].get("texto") or "")[:7000]

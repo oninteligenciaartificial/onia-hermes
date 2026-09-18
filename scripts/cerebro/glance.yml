@@ -1,6 +1,8 @@
 # ONIA Cerebro - superficie sobre Glance (estructura: hermes-content/docs/ONIA_CEREBRO.md)
 # Deploy: /opt/onia-cerebro/glance/glance.yml, contenedor onia-glance con network host.
 # Solo escucha en 127.0.0.1:9201 del VPS; se ve por tunel SSH.
+# Secciones separadas por barra de navegacion (pedido Sergio Urcullo 2026-09-17):
+# Hoy · Agenda · Grabar · Noticias · Sistema.
 
 server:
   host: 127.0.0.1
@@ -21,24 +23,6 @@ pages:
       - size: small
         widgets:
           - type: custom-api
-            title: Decisiones que te esperan
-            url: http://127.0.0.1:9200/data.json
-            cache: 5m
-            template: |
-              {{ $dec := .JSON.Array "vista.decisiones" }}
-              {{ if eq (len $dec) 0 }}
-                <div class="text-secondary">Nada espera tu ok. Segui con tu dia.</div>
-              {{ end }}
-              <ul class="list list-gap-10">
-                {{ range $dec }}
-                <li>
-                  <div class="color-highlight">{{ .String "texto" }}</div>
-                  <div class="text-secondary size-h6">{{ .String "id" }} - responde por Telegram: ok {{ .String "id" }}</div>
-                </li>
-                {{ end }}
-              </ul>
-
-          - type: custom-api
             title: Como esta el sistema
             url: http://127.0.0.1:9200/data.json
             cache: 5m
@@ -52,17 +36,6 @@ pages:
                 {{ end }}
               </ul>
 
-          - type: monitor
-            title: Produccion
-            cache: 5m
-            sites:
-              - title: onia.com.bo
-                url: https://onia.com.bo
-              - title: app.onia.com.bo
-                url: https://app.onia.com.bo
-              - title: chat (Chatwoot)
-                url: https://chat.onia.com.bo
-
       - size: full
         widgets:
           - type: custom-api
@@ -73,37 +46,25 @@ pages:
               <div class="size-h4">{{ .JSON.String "vista.frase" }}</div>
 
           - type: custom-api
-            title: Agenda de hoy
+            title: Decisiones que te esperan
             url: http://127.0.0.1:9200/data.json
-            cache: 15m
+            cache: 5m
             template: |
-              {{ $t := .JSON.String "vista.agenda_texto" }}
-              {{ if eq $t "" }}<div class="text-secondary">El job de las 08:00 todavia no escribio la agenda.</div>
-              {{ else }}<div style="white-space:pre-wrap">{{ $t }}</div>{{ end }}
-
-          - type: custom-api
-            title: Grabar hoy - guiones
-            url: http://127.0.0.1:9200/data.json
-            cache: 15m
-            collapse-after: 12
-            template: |
-              {{ $t := .JSON.String "vista.video_texto" }}
-              {{ if eq $t "" }}<div class="text-secondary">El job de las 08:10 todavia no escribio los guiones.</div>
-              {{ else }}<div style="white-space:pre-wrap">{{ $t }}</div>{{ end }}
+              {{ $dec := .JSON.Array "vista.decisiones" }}
+              {{ if eq (len $dec) 0 }}
+                <div class="text-secondary">Nada espera tu ok. Segui con tu dia.</div>
+              {{ end }}
+              <ul class="list list-gap-14">
+                {{ range $dec }}
+                <li>
+                  <div class="color-highlight">{{ .String "texto" }}</div>
+                  <div class="text-secondary size-h6">{{ .String "id" }} - responde por Telegram: ok {{ .String "id" }}</div>
+                </li>
+                {{ end }}
+              </ul>
 
       - size: small
         widgets:
-          - type: rss
-            title: Noticias IA
-            limit: 10
-            collapse-after: 5
-            cache: 3h
-            feeds:
-              - url: https://techcrunch.com/category/artificial-intelligence/feed/
-                title: TechCrunch AI
-              - url: https://www.artificialintelligence-news.com/feed/
-                title: AI News
-
           - type: bookmarks
             title: Accesos
             groups:
@@ -116,3 +77,113 @@ pages:
                     url: https://n8n-sergio-n8n.hqdqgh.easypanel.host
                   - title: Web
                     url: https://onia.com.bo
+
+  - name: Agenda
+    columns:
+      - size: full
+        widgets:
+          - type: custom-api
+            title: Agenda de hoy
+            url: http://127.0.0.1:9200/data.json
+            cache: 15m
+            template: |
+              {{ $t := .JSON.String "vista.agenda_texto" }}
+              {{ if eq $t "" }}<div class="text-secondary">El job de las 08:00 todavia no escribio la agenda (corre lunes a viernes).</div>
+              {{ else }}<div style="white-space:pre-wrap">{{ $t }}</div>{{ end }}
+
+      - size: small
+        widgets:
+          - type: calendar
+            first-day-of-week: monday
+
+  - name: Grabar
+    columns:
+      - size: full
+        widgets:
+          - type: custom-api
+            title: Guiones del dia
+            url: http://127.0.0.1:9200/data.json
+            cache: 15m
+            template: |
+              {{ $t := .JSON.String "vista.video_texto" }}
+              {{ if eq $t "" }}<div class="text-secondary">El job de las 08:10 todavia no escribio los guiones.</div>
+              {{ else }}<div style="white-space:pre-wrap">{{ $t }}</div>{{ end }}
+
+  - name: Noticias
+    columns:
+      - size: full
+        widgets:
+          - type: rss
+            title: Inteligencia artificial
+            style: detailed-list
+            limit: 14
+            collapse-after: 8
+            cache: 3h
+            feeds:
+              - url: https://techcrunch.com/category/artificial-intelligence/feed/
+                title: TechCrunch AI
+              - url: https://www.artificialintelligence-news.com/feed/
+                title: AI News
+
+      - size: small
+        widgets:
+          - type: rss
+            title: Startups y negocio
+            limit: 10
+            collapse-after: 6
+            cache: 3h
+            feeds:
+              - url: https://techcrunch.com/category/startups/feed/
+                title: TC Startups
+
+  - name: Sistema
+    columns:
+      - size: small
+        widgets:
+          - type: monitor
+            title: Produccion
+            cache: 5m
+            sites:
+              - title: onia.com.bo
+                url: https://onia.com.bo
+              - title: app.onia.com.bo
+                url: https://app.onia.com.bo
+              - title: chat (Chatwoot)
+                url: https://chat.onia.com.bo
+
+          - type: custom-api
+            title: Publicador - ultimo ciclo
+            url: http://127.0.0.1:9200/data.json
+            cache: 15m
+            template: |
+              <div class="size-h6" style="white-space:pre-wrap">{{ .JSON.String "vista.publicador_texto" }}</div>
+
+      - size: full
+        widgets:
+          - type: custom-api
+            title: Hermes - trabajos programados
+            url: http://127.0.0.1:9200/data.json
+            cache: 15m
+            template: |
+              <ul class="list list-gap-10">
+                {{ range .JSON.Array "hermes.jobs" }}
+                <li>
+                  <div>{{ .String "name" }} <span class="text-secondary size-h6">({{ .String "model" }})</span></div>
+                  <div class="size-h6 {{ if eq (.String "last_status") "ok" }}color-positive{{ else }}color-negative{{ end }}">ultimo: {{ .String "last_status" }} - proximo: {{ .String "next_run_at" }}</div>
+                </li>
+                {{ end }}
+              </ul>
+
+          - type: custom-api
+            title: Loops de nodo-casa (ultima vuelta vista por el VPS)
+            url: http://127.0.0.1:9200/data.json
+            cache: 15m
+            template: |
+              <ul class="list list-gap-10">
+                {{ range .JSON.Array "vista.loops" }}
+                <li>
+                  <div>{{ .String "loop" }}</div>
+                  <div class="text-secondary size-h6">{{ .String "detalle" }}</div>
+                </li>
+                {{ end }}
+              </ul>
