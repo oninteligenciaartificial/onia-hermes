@@ -3,6 +3,7 @@ import { PRUEBA } from "@/lib/pricing";
 import { Reveal } from "@/motion";
 import { WA_URL_LANDING, SITE_URL, CORREO_CONTACTO } from "@/lib/site";
 import { SIAT_ESTADO_ONIA } from "@/lib/siat";
+import { CUANTOS_RUBROS_CAPITAL } from "@/content/rubros";
 import { EMPEZAR_URL } from "../nav";
 import { CTA_ALTA } from "../alta";
 import { Block, Btn, Kicker, JsonLd } from "../ui";
@@ -149,8 +150,8 @@ export default function Nosotros() {
             El sistema corre en producción.
           </h2>
           <p className={s.body} style={{ maxWidth: "48em" }}>
-            Cinco rubros disponibles — clínicas dentales, comercios,
-            importadoras, estéticas y servicios profesionales — y{" "}
+            {CUANTOS_RUBROS_CAPITAL} rubros disponibles — clínicas dentales,
+            comercios, importadoras, estéticas y servicios profesionales — y{" "}
             {SIAT_ESTADO_ONIA}. Lo probás tal como está hoy: {PRUEBA.dias} días con el
             plan {PRUEBA.planQueCorre} completo, sin tarjeta y sin contrato de
             permanencia. Si no
