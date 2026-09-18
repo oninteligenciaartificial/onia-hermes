@@ -12,6 +12,30 @@ no hay nada detrás. Para recorrerlo entero, ver *"Cómo se corre entero"* al fi
 
 ---
 
+## 2026-09-18 17:09-17:17 La Paz — mismo BUILD_ID (`4AefpemDeSbQXrDmTbhoy`), pero había una org `zz-qa-` huérfana al arrancar: limpiada y dental 9/9 de nuevo
+
+Al arrancar: 1 org `zz-qa-` huérfana (`zz-qa-2026-09-18-1609-negocio`, creada 16:10, con 2
+`profiles` y 1 `organization_entitlements`, sin paciente ni cita — se cortó a mitad de una corrida
+anterior, entre el paso 4 y el 6). La borré a mano (entitlements → profiles → organization →
+auth.users) antes de correr el recorrido nuevo. Alta `abierta`. Corrí `--escribir` en dental
+(default): **9/9, `completo: true`**. Cuenta `zz-qa-2026-09-18-1709@onia.com.bo` creada → correo
+confirmado → onboarding (6 pantallas) → paciente `zz-qa-2026-09-18-1709-paciente` cargado y visto
+en `/patients` → cita 2026-09-21 09:00 agendada (201, `cmu77viis002s01rw9w4ewlui`) y vista en
+`/appointments` → factura con ítem visible en `/billing/cmu77vuo2002u01rwiq73qeu9` (frenada sin
+pagar) → panel revisado (no lista pacientes, esperado). 0 filas `zz-qa-` al cerrar (verificado por
+`SELECT`, las dos veces).
+
+`completo: true`, `llegoHasta: 9/9`.
+
+RAZÓN: BUILD_ID no cambió desde la vuelta anterior — esta corrida fue la medición obligatoria de
+arranque (`--escribir` va siempre), no una repetición elegida.
+LECCIÓN: el modo de falla "corrida cortada a mitad deja una org huérfana" sigue vivo aunque nadie
+lo repitió esta semana — el chequeo de conteo `zz-qa-` al ARRANCAR (antes de correr nada) sigue
+siendo obligatorio, no un caso aislado. Próxima vuelta: si el BUILD_ID sigue igual, escalón 3 en
+superficie no auditada, no repetir dental.
+
+---
+
 ## 2026-09-18 11:09-11:17 La Paz — deploy nuevo (BUILD_ID `4AefpemDeSbQXrDmTbhoy`, antes `HiLa5P_MF3e3iK6KUSfli`): dental 9/9 de nuevo
 
 BUILD_ID cambió desde la vuelta anterior, así que tocaba re-correr el recorrido completo (no
