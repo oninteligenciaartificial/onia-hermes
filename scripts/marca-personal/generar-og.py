@@ -60,7 +60,7 @@ PIEZAS = {
         "rotulo": "Guía · sergiourcullo.com",
         "titulo": 'Qué es un <span class="v">VPS</span>',
         "bajada": "Una computadora alquilada, prendida siempre. Cuánto cuesta el mío y cómo se arma.",
-        "pie": "VPS o servidor en casa · qué poner adentro · el error que me costó una noche",
+        "pie": "VPS o servidor en casa · qué poner adentro · 4 errores",
     },
     "homelab": {
         "salida": "homelab/og.png",
