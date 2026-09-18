@@ -2308,3 +2308,32 @@ este carril no toca. Sin hallazgo; cerrado en la cola con la reproducción compl
 `completo: true` (sin cambios desde la última corrida completa), `llegoHasta: 9/9`. Próxima
 vuelta: escalón 3 en `/precios` con `reducedMotion` (pendiente hace varias vueltas) o repetir el
 recorrido completo si cambia el `BUILD_ID`.
+
+## Reverificado 2026-09-18 14:09-14:20 La Paz — dental 9/9 con `BUILD_ID` sin cambios; `/precios` re-chequeado tras la escalera de precios
+
+`ONIA_ALTA_AUTOMATICA=abierta`, `zz-qa-` orgs en 0 al arrancar (chequeo obligatorio, sin
+huérfanas esta vez). Corrí el recorrido completo (`--escribir`) igual, porque es la medición de
+arranque obligatoria de este carril, no una repetición optativa: `BUILD_ID` resultó
+`4AefpemDeSbQXrDmTbhoy`, el mismo que ya venía sano desde la reverificación de las 09:35 del
+2026-09-18 — sin cambios de deploy.
+
+**Recorrido dental: 9/9, `completo: true`, `agujeros: []`.** Los 9 pasos completos (cuenta
+`zz-qa-2026-09-18-1809@onia.com.bo`, confirmación de correo real, onboarding, paciente cargado
+y encontrado, cita `2026-09-21 09:00` vista en `/appointments`, factura con ítem manual servida
+en `/billing/<id>` y frenada sin pagar, panel mirado). Las 6 filas propias (`auth.users`,
+`auth.identities`, `organizations`, `profiles`, `organization_entitlements`, `patients`) se
+imprimieron y se borraron en la misma corrida: 0 filas `zz-qa-` al cerrar.
+
+El pendiente propio de la nota anterior ("escalón 3 en `/precios`") ya estaba resuelto desde el
+2026-09-13 (`t_5ad92d30`, arreglado y desplegado el mismo día en `5501a3c4`), pero como la
+escalera de precios siguió moviéndose después (plan Crece, `whatsappIncluded` en Completo), lo
+re-chequeé en vivo contra `https://onia.com.bo/precios` con `reducedMotion:'reduce'`: la tarjeta
+de "Reservas online" hoy dice *"como add-on a Bs 150/mes, o incluidas desde Crece"* y la del
+chatbot de WhatsApp dice *"Completo ya lo trae incluido; acá va aparte, Bs 390/mes"` — las dos
+correctas, derivadas del catálogo, sin ningún plan tipeado a mano. Sin hallazgo.
+
+`completo: true`, `llegoHasta: 9/9`. Sin novedad de producto esta vuelta. Próxima vuelta: si
+`BUILD_ID` sigue igual, escalón 3 en una superficie todavía no auditada por este carril — el
+flujo de invitar/quitar un coadministrador desde `/settings` (equipo), que hoy el recorrido
+sólo toca en el onboarding (alta de un profesional del staff, sin invitar por correo) y que
+`onia-platform` cambió varias veces esta semana (DG-043).
