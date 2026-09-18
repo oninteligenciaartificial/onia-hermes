@@ -1,40 +1,40 @@
 {
  "overlays": [
   {
-   "asset": "C:/Users/PC/AppData/Local/Temp/claude/C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb/1b27764e-a5b2-4fe6-997b-aecc00d784a6/scratchpad/tiktok/card-kw-gratis.png",
-   "start": 0.38,
-   "end": 3.2,
-   "scale": 0.62,
-   "fade": 0.2,
-   "x": "(W-w)/2",
-   "y": "1084"
-  },
-  {
-   "asset": "C:/Users/PC/AppData/Local/Temp/claude/C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb/1b27764e-a5b2-4fe6-997b-aecc00d784a6/scratchpad/tiktok/card-cc-wordmark.png",
-   "start": 4.2,
-   "end": 8.08,
+   "asset": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb\\1b27764e-a5b2-4fe6-997b-aecc00d784a6\\scratchpad\\tiktok/card-kw-gratis.png",
+   "start": 3.6,
+   "end": 6.3,
    "scale": 0.6,
    "fade": 0.2,
    "x": "(W-w)/2",
-   "y": "1084"
+   "y": "864-h-16"
   },
   {
-   "asset": "C:/Users/PC/AppData/Local/Temp/claude/C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb/1b27764e-a5b2-4fe6-997b-aecc00d784a6/scratchpad/tiktok/card-kw-oficiales.png",
-   "start": 22.5,
-   "end": 25.4,
+   "asset": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb\\1b27764e-a5b2-4fe6-997b-aecc00d784a6\\scratchpad\\tiktok/card-cc-wordmark.png",
+   "start": 6.6,
+   "end": 8.08,
+   "scale": 0.58,
+   "fade": 0.2,
+   "x": "(W-w)/2",
+   "y": "864-h-16"
+  },
+  {
+   "asset": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb\\1b27764e-a5b2-4fe6-997b-aecc00d784a6\\scratchpad\\tiktok/card-kw-oficiales.png",
+   "start": 22.45,
+   "end": 25.05,
+   "scale": 0.6,
+   "fade": 0.2,
+   "x": "(W-w)/2",
+   "y": "864-h-16"
+  },
+  {
+   "asset": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb\\1b27764e-a5b2-4fe6-997b-aecc00d784a6\\scratchpad\\tiktok/card-kw-enlace.png",
+   "start": 48.17,
+   "end": 50.17,
    "scale": 0.62,
    "fade": 0.2,
    "x": "(W-w)/2",
-   "y": "1084"
-  },
-  {
-   "asset": "C:/Users/PC/AppData/Local/Temp/claude/C--dev-proyectos-onia-hermes--claude-worktrees-video-editing-silence-removal-073acb/1b27764e-a5b2-4fe6-997b-aecc00d784a6/scratchpad/tiktok/card-kw-enlace.png",
-   "start": 45.67,
-   "end": 50.1,
-   "scale": 0.52,
-   "fade": 0.2,
-   "x": "(W-w)/2",
-   "y": "1070"
+   "y": "864-h-16"
   }
  ]
 }
