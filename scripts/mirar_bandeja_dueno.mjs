@@ -37,7 +37,7 @@
 // fallar — la que quede vieja entra igual y mide otra cosa.
 import { acunarSesion } from "./lib/sesion_dueno.mjs";
 import { cargarPlaywright } from "./lib/playwright-que-arranca.mjs";
-import { veredictoDePantalla } from "./lib/pantalla-servida.mjs";
+import { porQueRebote, veredictoDePantalla } from "./lib/pantalla-servida.mjs";
 
 function arg(nombre, porDefecto) {
   const i = process.argv.indexOf(`--${nombre}`);
@@ -143,8 +143,12 @@ if (veredicto.sirve !== true) {
 // ruta de API con ?doctorId=&date=) y compararla cruda contra el pathname da un
 // falso negativo — la sesion entro perfecto y el guard la declaraba rechazada.
 const rutaPedida = new URL(RUTA, `https://${host}`).pathname;
-if (new URL(urlFinal).pathname !== rutaPedida) {
-  console.error(`La sesión NO entró: se pidió ${rutaPedida} y la app terminó en ${new URL(urlFinal).pathname}.`);
+// Y el DESTINO se lee entero, con su query: ahí es donde el producto publica POR QUÉ
+// rebotó (`/profile?mfa=obligatorio`). Este script tiraba la query y afirmaba «la sesión
+// NO entró» para cualquier rebote — dos cosas falsas a la vez, ver `porQueRebote`.
+const rebotada = porQueRebote({ rutaPedida, urlFinal });
+if (rebotada.reboto) {
+  console.error(`${rebotada.motivo}.`);
   await navegador.close();
   process.exit(2);
 }

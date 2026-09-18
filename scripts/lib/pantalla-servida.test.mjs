@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
-import { veredictoDePantalla } from "./pantalla-servida.mjs";
+import { porQueRebote, veredictoDePantalla } from "./pantalla-servida.mjs";
 
 const INSTRUMENTO = fileURLToPath(new URL("../mirar_bandeja_dueno.mjs", import.meta.url));
 
@@ -99,8 +99,11 @@ test("la palabra suelta 'error' en una pantalla sana no la condena", () => {
 test("el instrumento canónico CONSULTA el veredicto y corta antes de la captura", () => {
   // Sin esto el módulo queda escrito y nadie lo llama: el defecto vuelve entero.
   const fuente = readFileSync(INSTRUMENTO, "utf8");
+  // El ancla NO puede ser la línea de import entera: el día que ese import gane un
+  // segundo símbolo (pasó el 2026-09-18 con `porQueRebote`) este caso se pone rojo con
+  // el instrumento intacto, y el rojo acusa a un archivo sano.
   assert.ok(
-    /import \{ veredictoDePantalla \}/.test(fuente),
+    /import \{[^}]*veredictoDePantalla/.test(fuente),
     "mirar_bandeja_dueno.mjs tiene que importar el veredicto"
   );
   const usa = fuente.indexOf("veredictoDePantalla({");
@@ -111,4 +114,64 @@ test("el instrumento canónico CONSULTA el veredicto y corta antes de la captura
   const captura = fuente.indexOf("screenshot(");
   assert.ok(corta > usa, "tiene que cortar por el resultado, no sólo imprimirlo");
   assert.ok(captura > corta, "la guarda tiene que estar ANTES de la captura");
+});
+
+// ── El rebote: qué dice que la app haya terminado en otra ruta ─────────────────────────
+//
+// El caso de abajo es el REAL del 2026-09-18: `/inbox` con sesión del dueño terminó en
+// `/profile?mfa=obligatorio` y el instrumento imprimió «La sesión NO entró». En la misma
+// corrida `/api/me` contestó 200 con el perfil entero.
+test("un rebote con causa en la query NO se lee como sesión rechazada", () => {
+  const r = porQueRebote({
+    rutaPedida: "/inbox",
+    urlFinal: "https://app.onia.com.bo/profile?mfa=obligatorio",
+  });
+  assert.equal(r.reboto, true);
+  assert.equal(r.sesion, true, "sin sesión el proxy manda a /login: otro destino prueba que entró");
+  assert.equal(r.causa, "mfa=obligatorio");
+  assert.ok(r.destino.includes("?mfa=obligatorio"), "el destino conserva la query, que es la causa");
+  assert.ok(r.motivo.includes("mfa=obligatorio"), "y el motivo la nombra");
+  assert.ok(!/sesión NO entró/i.test(r.motivo), "y NO afirma lo que /api/me refuta");
+});
+
+test("el login pelado SÍ es sesión rechazada, y /login/2fa no", () => {
+  const login = porQueRebote({ rutaPedida: "/inbox", urlFinal: "https://app.onia.com.bo/login" });
+  assert.equal(login.sesion, false);
+  assert.ok(/sesión NO entró/i.test(login.motivo));
+  // Acá la sesión existe y le falta confirmar el segundo factor: meterlos en la misma
+  // bolsa manda a buscar el bug a la emisión de la sesión, que está sana.
+  const dosPasos = porQueRebote({ rutaPedida: "/inbox", urlFinal: "https://app.onia.com.bo/login/2fa" });
+  assert.equal(dosPasos.sesion, true);
+  assert.ok(!/sesión NO entró/i.test(dosPasos.motivo));
+});
+
+test("sin rebote no inventa nada, y una URL ilegible no es un rebote", () => {
+  const igual = porQueRebote({ rutaPedida: "/inbox", urlFinal: "https://app.onia.com.bo/inbox" });
+  assert.equal(igual.reboto, false);
+  assert.equal(igual.sesion, null);
+  const rota = porQueRebote({ rutaPedida: "/inbox", urlFinal: "no-es-una-url" });
+  assert.equal(rota.reboto, false, "no se puede afirmar un rebote sobre algo que no se pudo leer");
+  assert.ok(/ilegible/i.test(rota.motivo));
+});
+
+test("un rebote SIN causa en la query no se disfraza de diagnóstico", () => {
+  const r = porQueRebote({ rutaPedida: "/inbox", urlFinal: "https://app.onia.com.bo/onboarding" });
+  assert.equal(r.reboto, true);
+  assert.equal(r.causa, "");
+  assert.ok(/no trae causa/i.test(r.motivo), "decir que no se sabe es distinto de inventar la causa");
+});
+
+test("el instrumento canónico CONSULTA el rebote: no imprime su propio diagnóstico", () => {
+  const fuente = readFileSync(INSTRUMENTO, "utf8");
+  assert.ok(/import \{[^}]*porQueRebote/.test(fuente), "tiene que importar porQueRebote");
+  const usa = fuente.indexOf("porQueRebote({");
+  assert.ok(usa > 0, "y LLAMARLO, no sólo importarlo");
+  const corta = fuente.indexOf(".reboto", usa);
+  assert.ok(corta > usa, "tiene que cortar por el resultado");
+  // La frase vieja afirmaba una causa que la propia medición refuta: si vuelve al archivo,
+  // vuelve el diagnóstico que manda a arreglar la emisión de la sesión, que está sana.
+  assert.ok(
+    !/La sesi[oó]n NO entr[oó]: se pidi[oó] \$\{/.test(fuente),
+    "y no puede volver a afirmar 'la sesión NO entró' para cualquier rebote"
+  );
 });
