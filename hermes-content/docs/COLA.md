@@ -77,6 +77,44 @@ superficie viva. Mergear a master **sí** está pre-autorizado con gates verdes 
 
 ## Ahora — plan de features (revisado 2026-08-30, con Gate 1 corrido)
 
+- [ ] 🔴 **`scripts/deploy_sin_pedido.mjs` absuelve un destino porque EXISTE un pedido, sin
+      preguntar si ese pedido DESCRIBE lo que hoy publicaría — y el que los deja cortos es el
+      integrador. Medido en vivo el 2026-09-18 ~11:5x La Paz por `onia-cola`.**
+      **Cómo se reproduce en 30 segundos** (no hay que volver a investigarlo): con un pedido de
+      deploy vivo, mergear cualquier commit que viaje a ese destino y correr los dos gates
+      hermanos seguidos:
+
+          node scripts/deploy_sin_pedido.mjs   # dice: OK landing: falta publicar y ya hay pedido
+          npm run pedido:entregado             # dice: ROJO — su ok publica 1 arreglo que el pedido NO nombra
+
+      Hoy pasó exactamente eso: el pedido `t_5053480f` (landing) se creó a las ~10:5x con seis
+      arreglos; integré tres carriles, y `e9dca736` (los coadministradores por plan) entró al
+      universo que su `ok` publica sin estar en el cuerpo. **El cuerpo es lo único que Sergio
+      Urcullo lee**, así que ese botón le habría hecho aprobar un cambio de precio-percibido que
+      nadie le mostró. Se curó a mano rehaciendo el pedido (`t_7800ded3`, siete arreglos, cuerpo
+      derivado del seco) y archivando el viejo.
+      **Por qué es un agujero y no una anécdota:** `deploy_sin_pedido.mjs` es el gate cuyo verde
+      se usa para **no molestar a Sergio Urcullo**, y ya aprendió a hacer cuatro preguntas
+      (¿falta publicar? · ¿hay pedido? · ¿se publica solo? · ¿hace cuánto está pedido?). La
+      quinta —**¿el pedido describe lo que publica?**— la contesta sólo el gate hermano, que es
+      un alias suelto: si una vuelta del integrador mergea y no lo corre, el pedido queda corto
+      **en verde**. Y el modo de falla no es raro: el integrador mergea DESPUÉS de que el pedido
+      existe, que es el caso normal, no el excepcional.
+      **La cura, y por qué no entró en esa vuelta:** `cuerpoCorto({ texto, publicaria })` de
+      `scripts/pedido_deploy_entregado.mjs` ya es una función **pura y exportada** — se importa,
+      no se copia (dos copias del mismo juicio es como nacen las tautologías de esta familia).
+      Lo caro es el otro argumento: `publicaria` es el universo de arreglos que el `ok` mandaría,
+      y hoy sólo lo sabe derivar `pedido_deploy_entregado.mjs` con su maquinaria de SSH + git
+      (`soloLosQueViajan`, `archivosDelDryRun`). El detector de `deploy_sin_pedido.mjs` devuelve
+      un booleano, no la lista: `leerPendienteDelSeco` sólo lee «hay que publicar: N». O sea que
+      la cura es mudar esa derivación a un módulo que los dos importen, y eso no entra en el
+      resto de una vuelta — empezarlo y soltarlo dejaría el gate a medias.
+      **Cómo se cierra:** quinta pregunta en `clasificarCobertura`, **exigida** como ya lo son
+      `seAutoPublica` y `ahora` (un llamador que la olvide tiene que no compilar, no callar), con
+      estado propio `CUBIERTO_CORTO`. ⚠️ Igual que `CUBIERTO_VIEJO`, **no debe cambiar el código
+      de salida**: sólo Sergio Urcullo destraba un pedido, y un rojo ahí trabaría el merge de
+      todos los carriles hasta que apriete un botón — que es como esta familia de gates se muere.
+
 - [x] 🔴 **El único gate que mira si producción corre el publicador que dice `main` llevaba DIEZ
       DÍAS salteándose en cada merge, porque el carril cambió de máquina. CERRADO el 2026-09-17
       15:0x La Paz por `onia-cola`.**
